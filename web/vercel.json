@@ -1,0 +1,24 @@
+{
+  "crons": [
+    {
+      "path": "/api/internal/pipeline-run",
+      "schedule": "20 0 * * 1-5"
+    },
+    {
+      "path": "/api/internal/pipeline-run?retry=1",
+      "schedule": "21 0 * * 1-5"
+    },
+    {
+      "path": "/api/internal/pipeline-run?retry=2",
+      "schedule": "25 0 * * 1-5"
+    },
+    {
+      "path": "/api/internal/pipeline-run?retry=3",
+      "schedule": "35 0 * * 1-5"
+    },
+    {
+      "path": "/api/internal/monitoring-check",
+      "schedule": "50 0 * * 1-5"
+    }
+  ]
+}

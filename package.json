@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "pg": "^8.18.0"
+  },
+  "scripts": {
+    "db:apply-schema": "node apply_schema.js",
+    "db:migrate": "node apply_migrations.js",
+    "db:verify": "node scripts/verify_db_release_readiness.js",
+    "test:scraper": "PYTHONPATH=scraper python3 -m unittest discover -s scraper/tests",
+    "opsx:test": "node .agent/scripts/opsx-test.js",
+    "opsx:test:quick": "node .agent/scripts/opsx-test.js --quick",
+    "opsx:test:report": "node .agent/scripts/opsx-test.js --report-only"
+  }
+}

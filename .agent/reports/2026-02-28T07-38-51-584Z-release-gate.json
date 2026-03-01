@@ -1,0 +1,58 @@
+{
+  "overall_status": "pass",
+  "mode": "full",
+  "change": "stock-insider-opportunity-engine",
+  "started_at": "2026-02-28T07:38:51.585Z",
+  "finished_at": "2026-02-28T07:39:02.369Z",
+  "checks": [
+    {
+      "name": "openspec validate --all",
+      "status": "pass",
+      "duration": 999,
+      "error_summary": null
+    },
+    {
+      "name": "openspec apply progress (stock-insider-opportunity-engine)",
+      "status": "pass",
+      "duration": 1100,
+      "error_summary": null
+    },
+    {
+      "name": "npm run test:scraper",
+      "status": "pass",
+      "duration": 1241,
+      "error_summary": null
+    },
+    {
+      "name": "python compile checks",
+      "status": "pass",
+      "duration": 86,
+      "error_summary": null
+    },
+    {
+      "name": "web lint",
+      "status": "pass",
+      "duration": 1507,
+      "error_summary": null
+    },
+    {
+      "name": "web build",
+      "status": "pass",
+      "duration": 3423,
+      "error_summary": null
+    }
+  ],
+  "blocking_issues": [],
+  "non_blocking_warnings": [
+    "Next.js workspace root warning due to multiple lockfiles"
+  ],
+  "artifacts": {
+    "json_report": "/Users/kaerchen/Desktop/20_stock/StockInsider/.agent/reports/2026-02-28T07-38-51-584Z-release-gate.json",
+    "markdown_report": "/Users/kaerchen/Desktop/20_stock/StockInsider/.agent/reports/2026-02-28T07-38-51-584Z-release-gate.md",
+    "logs": [
+      "/Users/kaerchen/Desktop/20_stock/StockInsider/.agent/reports/2026-02-28T07-38-51-584Z-web-dev.log"
+    ],
+    "git_commit": null,
+    "generated_at": "2026-02-28T07:39:02.369Z"
+  }
+}

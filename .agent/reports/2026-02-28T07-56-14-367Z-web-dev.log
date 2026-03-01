@@ -1,0 +1,43 @@
+
+> web@0.1.0 dev
+> next dev --port 3005
+
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of /Users/kaerchen/package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * /Users/kaerchen/Desktop/20_stock/StockInsider/web/package-lock.json
+   * /Users/kaerchen/Desktop/20_stock/StockInsider/package-lock.json
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3005
+- Network:       http://192.168.0.190:3005
+
+✓ Starting...
+Creating turbopack project {
+  dir: '/Users/kaerchen/Desktop/20_stock/StockInsider/web',
+  testMode: true
+}
+✓ Ready in 385ms
+⨯ Error: Missing SUPABASE URL/key for server client
+    at getSupabaseServerClient (src/lib/supabase-server.ts:7:11)
+    at getDailyDashboardData (src/lib/domain.ts:35:49)
+    at Home (src/app/page.tsx:7:87)
+   5 |   const serviceKey = process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+   6 |   if (!url || !serviceKey) {
+>  7 |     throw new Error('Missing SUPABASE URL/key for server client');
+     |           ^
+   8 |   }
+   9 |
+  10 |   return createClient(url, serviceKey, { {
+  digest: '3010942472'
+}
+ GET / 500 in 895ms (compile: 791ms, render: 104ms)
+ GET /api/dashboard/daily 500 in 161ms (compile: 155ms, render: 6ms)
+ GET /api/recommendations 500 in 49ms (compile: 47ms, render: 2ms)
+ POST /api/internal/recommendation-run 500 in 44ms (compile: 41ms, render: 2ms)
+ POST /api/internal/line-dispatch 500 in 46ms (compile: 44ms, render: 2ms)
+ POST /api/internal/monitoring-check 500 in 37ms (compile: 35ms, render: 1894µs)
+ POST /api/internal/pipeline-run 500 in 40ms (compile: 37ms, render: 2ms)
+[?25h

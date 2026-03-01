@@ -1,0 +1,72 @@
+{
+  "overall_status": "pass",
+  "mode": "full",
+  "change": "stock-insider-opportunity-engine",
+  "started_at": "2026-02-28T07:56:14.368Z",
+  "finished_at": "2026-02-28T07:56:23.520Z",
+  "checks": [
+    {
+      "name": "openspec validate --all",
+      "status": "pass",
+      "duration": 993,
+      "error_summary": null
+    },
+    {
+      "name": "openspec apply progress (stock-insider-opportunity-engine)",
+      "status": "pass",
+      "duration": 0,
+      "error_summary": null
+    },
+    {
+      "name": "npm run test:scraper",
+      "status": "pass",
+      "duration": 782,
+      "error_summary": null
+    },
+    {
+      "name": "python compile checks",
+      "status": "pass",
+      "duration": 93,
+      "error_summary": null
+    },
+    {
+      "name": "db verify (staging/prod)",
+      "status": "pass",
+      "duration": 0,
+      "error_summary": null
+    },
+    {
+      "name": "web lint",
+      "status": "pass",
+      "duration": 1454,
+      "error_summary": null
+    },
+    {
+      "name": "web build",
+      "status": "pass",
+      "duration": 3259,
+      "error_summary": null
+    }
+  ],
+  "blocking_issues": [],
+  "non_blocking_warnings": [
+    "Change 'stock-insider-opportunity-engine' is archived; skipped 22/22 active-change progress check",
+    "Skipped db verify (missing SUPABASE_PROJECT_REF/SUPABASE_DB_PASSWORD)",
+    "Next.js workspace root warning due to multiple lockfiles",
+    "API smoke: GET /api/dashboard/daily returned 500",
+    "API smoke: GET /api/recommendations returned 500",
+    "API smoke: POST /api/internal/recommendation-run returned 500",
+    "API smoke: POST /api/internal/line-dispatch returned 500",
+    "API smoke: POST /api/internal/monitoring-check returned 500",
+    "API smoke: POST /api/internal/pipeline-run returned 500"
+  ],
+  "artifacts": {
+    "json_report": "/Users/kaerchen/Desktop/20_stock/StockInsider/.agent/reports/2026-02-28T07-56-14-367Z-release-gate.json",
+    "markdown_report": "/Users/kaerchen/Desktop/20_stock/StockInsider/.agent/reports/2026-02-28T07-56-14-367Z-release-gate.md",
+    "logs": [
+      "/Users/kaerchen/Desktop/20_stock/StockInsider/.agent/reports/2026-02-28T07-56-14-367Z-web-dev.log"
+    ],
+    "git_commit": null,
+    "generated_at": "2026-02-28T07:56:23.520Z"
+  }
+}

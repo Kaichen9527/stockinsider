@@ -1,0 +1,52 @@
+{
+  "overall_status": "fail",
+  "mode": "quick",
+  "change": "stock-insider-opportunity-engine",
+  "started_at": "2026-02-28T07:39:40.827Z",
+  "finished_at": "2026-02-28T07:39:46.124Z",
+  "checks": [
+    {
+      "name": "openspec validate --all",
+      "status": "pass",
+      "duration": 994,
+      "error_summary": null
+    },
+    {
+      "name": "openspec apply progress (stock-insider-opportunity-engine)",
+      "status": "fail",
+      "duration": 133,
+      "error_summary": "- Generating apply instructions...\n✖ Error: Change 'stock-insider-opportunity-engine' not found. Available changes:\n  stock-insider-mvp"
+    },
+    {
+      "name": "npm run test:scraper",
+      "status": "pass",
+      "duration": 236,
+      "error_summary": null
+    },
+    {
+      "name": "python compile checks",
+      "status": "pass",
+      "duration": 84,
+      "error_summary": null
+    },
+    {
+      "name": "web lint",
+      "status": "pass",
+      "duration": 1447,
+      "error_summary": null
+    }
+  ],
+  "blocking_issues": [
+    "openspec apply progress (stock-insider-opportunity-engine) failed"
+  ],
+  "non_blocking_warnings": [],
+  "artifacts": {
+    "json_report": "/Users/kaerchen/Desktop/20_stock/StockInsider/.agent/reports/2026-02-28T07-39-40-826Z-release-gate.json",
+    "markdown_report": "/Users/kaerchen/Desktop/20_stock/StockInsider/.agent/reports/2026-02-28T07-39-40-826Z-release-gate.md",
+    "logs": [
+      "/Users/kaerchen/Desktop/20_stock/StockInsider/.agent/reports/2026-02-28T07-39-40-826Z-web-dev.log"
+    ],
+    "git_commit": null,
+    "generated_at": "2026-02-28T07:39:46.124Z"
+  }
+}

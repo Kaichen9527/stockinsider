@@ -1,0 +1,52 @@
+{
+  "overall_status": "pass",
+  "mode": "quick",
+  "change": "stock-insider-opportunity-engine",
+  "started_at": "2026-02-28T07:40:09.675Z",
+  "finished_at": "2026-02-28T07:40:14.790Z",
+  "checks": [
+    {
+      "name": "openspec validate --all",
+      "status": "pass",
+      "duration": 977,
+      "error_summary": null
+    },
+    {
+      "name": "openspec apply progress (stock-insider-opportunity-engine)",
+      "status": "pass",
+      "duration": 0,
+      "error_summary": null
+    },
+    {
+      "name": "npm run test:scraper",
+      "status": "pass",
+      "duration": 232,
+      "error_summary": null
+    },
+    {
+      "name": "python compile checks",
+      "status": "pass",
+      "duration": 87,
+      "error_summary": null
+    },
+    {
+      "name": "web lint",
+      "status": "pass",
+      "duration": 1455,
+      "error_summary": null
+    }
+  ],
+  "blocking_issues": [],
+  "non_blocking_warnings": [
+    "Change 'stock-insider-opportunity-engine' is archived; skipped 22/22 active-change progress check"
+  ],
+  "artifacts": {
+    "json_report": "/Users/kaerchen/Desktop/20_stock/StockInsider/.agent/reports/2026-02-28T07-40-09-675Z-release-gate.json",
+    "markdown_report": "/Users/kaerchen/Desktop/20_stock/StockInsider/.agent/reports/2026-02-28T07-40-09-675Z-release-gate.md",
+    "logs": [
+      "/Users/kaerchen/Desktop/20_stock/StockInsider/.agent/reports/2026-02-28T07-40-09-675Z-web-dev.log"
+    ],
+    "git_commit": null,
+    "generated_at": "2026-02-28T07:40:14.790Z"
+  }
+}
