@@ -40,8 +40,15 @@ export default function StockChart({ data }: ChartProps) {
             wickDownColor: '#F87171',
         });
 
-        // Sort data by time ascending just in case
-        newSeries.setData(data);
+        // lightweight-charts requires strictly ascending timestamps.
+        // Keep the last candle for duplicated timestamps to avoid runtime assertions.
+        const normalized = [...data]
+            .sort((a, b) => String(a.time).localeCompare(String(b.time)))
+            .reduce<Map<string, CandlestickData>>((acc, candle) => {
+                acc.set(String(candle.time), candle);
+                return acc;
+            }, new Map<string, CandlestickData>());
+        newSeries.setData(Array.from(normalized.values()));
 
         window.addEventListener('resize', handleResize);
 

@@ -146,7 +146,9 @@ CREATE TABLE IF NOT EXISTS strategy_actions (
 
 CREATE TABLE IF NOT EXISTS line_subscriptions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID REFERENCES profiles(id) ON DELETE SET NULL,
+    -- Keep user_id nullable and unconstrained to support existing projects
+    -- where `profiles` may not use `id` as PK.
+    user_id UUID,
     line_user_id VARCHAR(255) NOT NULL UNIQUE,
     watchlist JSONB NOT NULL DEFAULT '[]'::jsonb,
     event_preferences JSONB NOT NULL DEFAULT '{"hit_target":true,"hit_stop_loss":true,"daily_digest":true}'::jsonb,
@@ -174,6 +176,13 @@ CREATE TABLE IF NOT EXISTS pipeline_runs (
     started_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     finished_at TIMESTAMPTZ
 );
+
+ALTER TABLE IF EXISTS pipeline_runs
+    ADD COLUMN IF NOT EXISTS run_type VARCHAR(30),
+    ADD COLUMN IF NOT EXISTS status VARCHAR(20),
+    ADD COLUMN IF NOT EXISTS details JSONB DEFAULT '{}'::jsonb,
+    ADD COLUMN IF NOT EXISTS started_at TIMESTAMPTZ DEFAULT NOW(),
+    ADD COLUMN IF NOT EXISTS finished_at TIMESTAMPTZ;
 
 CREATE INDEX IF NOT EXISTS idx_stocks_symbol_market ON stocks(symbol, market);
 CREATE INDEX IF NOT EXISTS idx_market_snapshots_market_asof ON market_snapshots(market, as_of DESC);

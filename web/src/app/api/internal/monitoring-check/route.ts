@@ -3,6 +3,11 @@ import { runMonitoringChecks } from '@/lib/domain';
 import { requireInternalAuth } from '@/lib/internal-auth';
 import { sendOpsAlert } from '@/lib/alerts';
 
+// Vercel cron triggers via GET
+export async function GET(req: Request) {
+  return POST(req);
+}
+
 export async function POST(req: Request) {
   const auth = requireInternalAuth(req);
   if (!auth.ok) {

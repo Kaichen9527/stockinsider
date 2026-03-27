@@ -3,7 +3,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'StockInsider',
-  description: 'StockInsider opportunity engine dashboard',
+  description: 'Taiwan story-driven opportunity radar for underpriced 1-3 month setups',
 };
 
 export default function RootLayout({
@@ -12,7 +12,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="zh-Hant">
       <body className="antialiased">{children}</body>
     </html>
   );

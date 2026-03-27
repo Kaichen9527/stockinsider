@@ -1,0 +1,276 @@
+name: AI Night-Shift Agent
+
+on:
+  schedule:
+    # UTC 18:00 = Taiwan 02:00 AM (daily)
+    - cron: '0 18 * * *'
+  workflow_dispatch:
+    inputs:
+      task:
+        description: 'Override task prompt (leave empty for default)'
+        required: false
+        type: string
+      agent_role:
+        description: 'Agent role to run'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - 'all'
+          - 'theme-scout'
+          - 'story-scout'
+          - 'evidence-verifier'
+          - 'code-quality'
+          - 'data-gap-scanner'
+          - 'stock-discovery'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  theme-scout:
+    name: Theme Scout Agent
+    if: ${{ inputs.agent_role == 'all' || inputs.agent_role == 'theme-scout' || github.event_name == 'schedule' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run Theme Scout
+        run: |
+          REPORT_FILE=".agent/reports/$(date -u +%Y-%m-%dT%H-%M-%S)-theme-scout.md"
+          claude --print --dangerously-skip-permissions \
+            "You are the StockInsider Theme Scout Agent. Read CLAUDE.md for project context.
+
+             Your mission: Analyze TW_STORY_RESEARCH_SEEDS in web/src/lib/domain.ts and identify:
+             1. Which themes have sufficient coverage (social signals, broker reports, revenue data)
+             2. Which themes are under-researched and need more data sources
+             3. Suggest new stock candidates that should be added to existing themes
+             4. Check if any theme's heat score calculation might produce NaN or invalid values
+
+             Write your findings to ${REPORT_FILE}
+             Format: Markdown with sections for each theme, coverage status, and recommendations.
+             ${{ inputs.task }}" || true
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: theme-scout-${{ github.run_id }}
+          path: .agent/reports/*theme-scout*.md
+          retention-days: 14
+
+  story-scout:
+    name: Story Scout Agent
+    if: ${{ inputs.agent_role == 'all' || inputs.agent_role == 'story-scout' || github.event_name == 'schedule' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run Story Scout
+        run: |
+          REPORT_FILE=".agent/reports/$(date -u +%Y-%m-%dT%H-%M-%S)-story-scout.md"
+          claude --print --dangerously-skip-permissions \
+            "You are the StockInsider Story Scout Agent. Read CLAUDE.md for project context.
+
+             Your mission: Review the research pipeline code and data flow:
+             1. Check runStoryScan() and runStoryVerify() in domain.ts for correctness
+             2. Verify that story_candidates are properly linked to stocks and themes
+             3. Check if any API routes in web/src/app/api/internal/ have issues
+             4. Review the pipeline step ordering in runPipelineFlow()
+
+             Write your findings to ${REPORT_FILE}
+             ${{ inputs.task }}" || true
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: story-scout-${{ github.run_id }}
+          path: .agent/reports/*story-scout*.md
+          retention-days: 14
+
+  evidence-verifier:
+    name: Evidence Verifier Agent
+    if: ${{ inputs.agent_role == 'all' || inputs.agent_role == 'evidence-verifier' || github.event_name == 'schedule' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run Evidence Verifier
+        run: |
+          REPORT_FILE=".agent/reports/$(date -u +%Y-%m-%dT%H-%M-%S)-evidence-verifier.md"
+          claude --print --dangerously-skip-permissions \
+            "You are the StockInsider Evidence Verifier Agent. Read CLAUDE.md for project context.
+
+             Your mission: Audit data quality and evidence chain:
+             1. Check that runThesisRefresh() in research-v2.ts correctly integrates all data sources
+             2. Verify broker_report_ingest properly writes to broker_report_documents + broker_report_sections
+             3. Check that dynamic-mention-scan correctly parses symbols from source_raw_documents
+             4. Ensure revenue/fundamental data flows into thesis_models
+             5. Verify the Supabase schema in supabase_schema.sql matches code usage
+
+             Write your findings to ${REPORT_FILE}
+             ${{ inputs.task }}" || true
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-verifier-${{ github.run_id }}
+          path: .agent/reports/*evidence-verifier*.md
+          retention-days: 14
+
+  code-quality:
+    name: Code Quality Sweep
+    if: ${{ inputs.agent_role == 'all' || inputs.agent_role == 'code-quality' || github.event_name == 'schedule' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: cd web && npm ci
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run Code Quality Sweep
+        run: |
+          REPORT_FILE=".agent/reports/$(date -u +%Y-%m-%dT%H-%M-%S)-code-quality.md"
+          claude --print --dangerously-skip-permissions \
+            "You are the StockInsider Code Quality Agent. Read CLAUDE.md for project context.
+
+             Your mission:
+             1. Run 'cd web && npm run build' and report any TypeScript errors
+             2. Check for potential NaN/undefined issues in domain.ts calculations
+             3. Review error handling in all API routes under web/src/app/api/internal/
+             4. Check for any hardcoded values that should be configurable
+             5. If you find fixable issues, create a new branch, fix them, and create a PR
+
+             Write your findings to ${REPORT_FILE}
+             After writing the report, if fixes were made:
+               git checkout -b fix/night-shift-$(date -u +%Y%m%d)
+               git add -A && git commit -m 'fix: night-shift code quality improvements'
+               git push -u origin HEAD
+             ${{ inputs.task }}" || true
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-quality-${{ github.run_id }}
+          path: .agent/reports/*code-quality*.md
+          retention-days: 14
+
+  data-gap-scanner:
+    name: Data Gap Scanner
+    if: ${{ inputs.agent_role == 'all' || inputs.agent_role == 'data-gap-scanner' || github.event_name == 'schedule' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run Data Gap Scanner
+        run: |
+          SKILL=$(cat .agent/skills/data-gap-scanner.md)
+          claude --print --dangerously-skip-permissions \
+            "Read CLAUDE.md for project context. Execute the following skill:
+
+             ${SKILL}
+
+             ${{ inputs.task }}" || true
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: data-gap-scanner-${{ github.run_id }}
+          path: .agent/reports/*data-gap*.md
+          retention-days: 14
+
+  stock-discovery:
+    name: Stock Discovery Agent
+    if: ${{ inputs.agent_role == 'all' || inputs.agent_role == 'stock-discovery' || github.event_name == 'schedule' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run Stock Discovery
+        run: |
+          SKILL=$(cat .agent/skills/stock-discovery-agent.md)
+          claude --print --dangerously-skip-permissions \
+            "Read CLAUDE.md for project context. Execute the following skill:
+
+             ${SKILL}
+
+             ${{ inputs.task }}" || true
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stock-discovery-${{ github.run_id }}
+          path: .agent/reports/*stock-discovery*.md
+          retention-days: 14

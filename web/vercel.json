@@ -1,24 +1,104 @@
 {
   "crons": [
     {
+      "path": "/api/internal/ingestion-run",
+      "schedule": "18 0 * * 1-5"
+    },
+    {
       "path": "/api/internal/pipeline-run",
       "schedule": "20 0 * * 1-5"
     },
     {
-      "path": "/api/internal/pipeline-run?retry=1",
+      "path": "/api/internal/recommendation-run",
       "schedule": "21 0 * * 1-5"
     },
     {
-      "path": "/api/internal/pipeline-run?retry=2",
-      "schedule": "25 0 * * 1-5"
+      "path": "/api/internal/pipeline-dispatch-run",
+      "schedule": "40 0 * * 1-5"
     },
     {
-      "path": "/api/internal/pipeline-run?retry=3",
-      "schedule": "35 0 * * 1-5"
+      "path": "/api/internal/pipeline-run?dryRun=true",
+      "schedule": "45 0 * * 1-5"
+    },
+    {
+      "path": "/api/internal/pipeline-research-run",
+      "schedule": "20 18 * * *"
     },
     {
       "path": "/api/internal/monitoring-check",
       "schedule": "50 0 * * 1-5"
+    },
+    {
+      "path": "/api/internal/source-sync?connector=investanchors",
+      "schedule": "0 17 * * *"
+    },
+    {
+      "path": "/api/internal/source-sync?connector=threads",
+      "schedule": "5 17 * * *"
+    },
+    {
+      "path": "/api/internal/source-sync?connector=instagram",
+      "schedule": "10 17 * * *"
+    },
+    {
+      "path": "/api/internal/source-sync?connector=telegram",
+      "schedule": "15 17 * * *"
+    },
+    {
+      "path": "/api/internal/source-sync?connector=ptt",
+      "schedule": "20 17 * * *"
+    },
+    {
+      "path": "/api/internal/source-sync?connector=bulltalk",
+      "schedule": "25 17 * * *"
+    },
+    {
+      "path": "/api/internal/source-sync?connector=googlenews",
+      "schedule": "27 17 * * *"
+    },
+    {
+      "path": "/api/internal/source-sync?connector=udn",
+      "schedule": "29 17 * * *"
+    },
+    {
+      "path": "/api/internal/source-sync?connector=mobile01",
+      "schedule": "31 17 * * *"
+    },
+    {
+      "path": "/api/internal/source-discovery",
+      "schedule": "35 17 * * *"
+    },
+    {
+      "path": "/api/internal/podcast-sync",
+      "schedule": "45 17 * * *"
+    },
+    {
+      "path": "/api/internal/podcast-transcribe",
+      "schedule": "55 17 * * *"
+    },
+    {
+      "path": "/api/internal/dynamic-mention-scan",
+      "schedule": "15 0 * * 1-5"
+    },
+    {
+      "path": "/api/internal/broker-report-ingest",
+      "schedule": "0 1 * * 1,4"
+    },
+    {
+      "path": "/api/internal/thesis-refresh",
+      "schedule": "10 18 * * *"
+    },
+    {
+      "path": "/api/internal/research-report-build",
+      "schedule": "30 18 * * *"
+    },
+    {
+      "path": "/api/internal/earnings-call-ingest",
+      "schedule": "0 2 * * 1-5"
+    },
+    {
+      "path": "/api/internal/mops-filing-ingest",
+      "schedule": "30 2 * * 1-5"
     }
   ]
 }

@@ -1,0 +1,167 @@
+name: Night-Shift Research Runtime
+
+on:
+  schedule:
+    # UTC 16:30 = Taiwan time 00:30 AM (daily)
+    - cron: '30 16 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (no writes to DB)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+
+jobs:
+  source-sync:
+    name: Source Sync Pipeline
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      APP_URL: ${{ secrets.APP_URL }}
+      INTERNAL_API_KEY: ${{ secrets.INTERNAL_API_KEY }}
+      DRY_RUN: ${{ inputs.dry_run || 'false' }}
+
+    steps:
+      - name: source-sync - investanchors
+        run: |
+          curl -sf -X POST "$APP_URL/api/internal/source-sync" \
+            -H "Authorization: Bearer $INTERNAL_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"connector\":\"investanchors\",\"dryRun\":$DRY_RUN}" \
+            | tee /tmp/investanchors.json
+          echo "Exit: $?"
+
+      - name: source-sync - threads
+        run: |
+          curl -sf -X POST "$APP_URL/api/internal/source-sync" \
+            -H "Authorization: Bearer $INTERNAL_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"connector\":\"threads\",\"dryRun\":$DRY_RUN}" \
+            | tee /tmp/threads.json
+
+      - name: source-sync - instagram
+        run: |
+          curl -sf -X POST "$APP_URL/api/internal/source-sync" \
+            -H "Authorization: Bearer $INTERNAL_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"connector\":\"instagram\",\"dryRun\":$DRY_RUN}" \
+            | tee /tmp/instagram.json
+
+      - name: source-sync - telegram
+        run: |
+          curl -sf -X POST "$APP_URL/api/internal/source-sync" \
+            -H "Authorization: Bearer $INTERNAL_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"connector\":\"telegram\",\"dryRun\":$DRY_RUN}" \
+            | tee /tmp/telegram.json
+
+      - name: source-sync - ptt
+        run: |
+          curl -sf -X POST "$APP_URL/api/internal/source-sync" \
+            -H "Authorization: Bearer $INTERNAL_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"connector\":\"ptt\",\"dryRun\":$DRY_RUN}" \
+            | tee /tmp/ptt.json
+
+      - name: source-sync - bulltalk
+        run: |
+          curl -sf -X POST "$APP_URL/api/internal/source-sync" \
+            -H "Authorization: Bearer $INTERNAL_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"connector\":\"bulltalk\",\"dryRun\":$DRY_RUN}" \
+            | tee /tmp/bulltalk.json
+
+  research-pipeline:
+    name: Research & Analysis Pipeline
+    runs-on: ubuntu-latest
+    needs: source-sync
+    timeout-minutes: 30
+    env:
+      APP_URL: ${{ secrets.APP_URL }}
+      INTERNAL_API_KEY: ${{ secrets.INTERNAL_API_KEY }}
+      DRY_RUN: ${{ inputs.dry_run || 'false' }}
+
+    steps:
+      - name: dynamic-mention-scan (社群股票提及反饋)
+        run: |
+          curl -sf -X POST "$APP_URL/api/internal/dynamic-mention-scan" \
+            -H "Authorization: Bearer $INTERNAL_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"dryRun\":$DRY_RUN}" \
+            | tee /tmp/dynamic-mention-scan.json
+
+      - name: broker-report-ingest (Anue 投顧摘要)
+        run: |
+          curl -sf -X POST "$APP_URL/api/internal/broker-report-ingest" \
+            -H "Authorization: Bearer $INTERNAL_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"dryRun\":$DRY_RUN}" \
+            | tee /tmp/broker-report-ingest.json
+
+      - name: source-discovery (KOL ranking)
+        run: |
+          curl -sf -X POST "$APP_URL/api/internal/source-discovery" \
+            -H "Authorization: Bearer $INTERNAL_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"dryRun\":$DRY_RUN}" \
+            | tee /tmp/source-discovery.json
+
+      - name: podcast-sync
+        run: |
+          curl -sf -X POST "$APP_URL/api/internal/podcast-sync" \
+            -H "Authorization: Bearer $INTERNAL_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"dryRun\":$DRY_RUN}" \
+            | tee /tmp/podcast-sync.json
+
+      - name: podcast-transcribe
+        run: |
+          curl -sf -X POST "$APP_URL/api/internal/podcast-transcribe" \
+            -H "Authorization: Bearer $INTERNAL_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"dryRun\":$DRY_RUN}" \
+            | tee /tmp/podcast-transcribe.json
+
+      - name: thesis-refresh
+        run: |
+          curl -sf -X POST "$APP_URL/api/internal/thesis-refresh" \
+            -H "Authorization: Bearer $INTERNAL_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"dryRun\":$DRY_RUN}" \
+            | tee /tmp/thesis-refresh.json
+
+      - name: research-report-build
+        run: |
+          curl -sf -X POST "$APP_URL/api/internal/research-report-build" \
+            -H "Authorization: Bearer $INTERNAL_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"dryRun\":$DRY_RUN}" \
+            | tee /tmp/research-report-build.json
+
+      - name: earnings-call-ingest (法說會資料)
+        run: |
+          curl -sf -X POST "$APP_URL/api/internal/earnings-call-ingest" \
+            -H "Authorization: Bearer $INTERNAL_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"dryRun\":$DRY_RUN}" \
+            | tee /tmp/earnings-call-ingest.json
+
+      - name: mops-filing-ingest (重大訊息公告)
+        run: |
+          curl -sf -X POST "$APP_URL/api/internal/mops-filing-ingest" \
+            -H "Authorization: Bearer $INTERNAL_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"dryRun\":$DRY_RUN}" \
+            | tee /tmp/mops-filing-ingest.json
+
+      - name: Upload run logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: night-shift-logs-${{ github.run_id }}
+          path: /tmp/*.json
+          retention-days: 7

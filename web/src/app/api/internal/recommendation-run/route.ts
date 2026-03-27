@@ -11,8 +11,8 @@ export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}));
     const dryRun = Boolean(body?.dryRun);
-    const ingestion = await getLatestIngestionState();
-    if (!ingestion.ok) {
+    const ingestion = dryRun ? null : await getLatestIngestionState();
+    if (ingestion && !ingestion.ok) {
       return NextResponse.json(
         { ok: false, error: `ingestion precheck failed: ${ingestion.reason}`, meta: { runId: null, dryRun } },
         { status: 409 }
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     }
 
     const result = await runRecommendationBatch({ dryRun });
-    return NextResponse.json({ ok: true, result, meta: { runId: result.runId, dryRun } });
+    return NextResponse.json({ ok: true, result, meta: { runId: result.runId, dryRun, startedRoles: result.startedRoles } });
   } catch (error) {
     return NextResponse.json({ ok: false, error: (error as Error).message, meta: { runId: null, dryRun: false } }, { status: 500 });
   }

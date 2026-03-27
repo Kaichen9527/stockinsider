@@ -1,11 +1,17 @@
 import { NextResponse } from 'next/server';
-import { bindLinePreference } from '@/lib/domain';
+import { bindLinePreference, isValidLineUserId } from '@/lib/domain';
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
     if (!body?.lineUserId) {
       return NextResponse.json({ error: 'lineUserId is required' }, { status: 400 });
+    }
+    if (!isValidLineUserId(String(body.lineUserId))) {
+      return NextResponse.json(
+        { error: 'lineUserId format invalid, expected LINE user id like Uxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' },
+        { status: 400 }
+      );
     }
 
     const result = await bindLinePreference({
