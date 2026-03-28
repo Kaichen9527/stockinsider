@@ -1301,7 +1301,12 @@ async function scrapeBullTalk() {
 }
 
 async function scrapeGoogleNewsTW() {
-  const queries = ['台股+分析', '台股+投資報告', '半導體+台股', 'AI+伺服器+台股', '台股+法人買賣'];
+  const queries = [
+    '台股+分析', '台股+投資報告', '半導體+台股', 'AI+伺服器+台股', '台股+法人買賣',
+    '外資+買超+台股', '投信+買超+台股', '台股+法說會', '台股+財報+超預期',
+    '台股+漲停+主力', '台股+突破+季線', '台股+轉機股', '電動車+台股概念股',
+    '台積電+分析', '聯發科+展望', '台股+小型股+飆漲',
+  ];
   const headers = { 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' };
 
   const entity = await upsertSourceEntity({
@@ -1368,6 +1373,67 @@ async function scrapeGoogleNewsTW() {
 
   const count = await upsertSourceRawDocuments(docs);
   return { connector: 'googlenews', recordsWritten: count, entityId: String(entity.id) };
+}
+
+async function scrapeAnueNews() {
+  const entity = await upsertSourceEntity({
+    platform: 'anue',
+    entityType: 'site',
+    displayName: '鉅亨網台股新聞',
+    sourceKey: 'site.anue.tw_stock',
+    profileUrl: 'https://news.cnyes.com/news/cat/tw_stock',
+  });
+
+  const docs: Array<{
+    sourceEntityId: string; platform: string; documentUrl: string;
+    title: string; summary: string; contentText: string;
+    symbols: string[]; sentimentLabel: string; confidence: number; metadata: Record<string, unknown>;
+    publishedAt?: string;
+  }> = [];
+
+  // Anue REST API — tw_stock category + analyst picks
+  const categories = ['tw_stock', 'tw_stock_news', 'tw_report'];
+  for (const cat of categories) {
+    try {
+      const url = `https://news.cnyes.com/api/v3/news/category/${cat}?limit=30`;
+      const res = await fetch(url, {
+        headers: { 'User-Agent': 'Mozilla/5.0 StockInsiderBot/1.0', 'Accept': 'application/json' },
+        signal: AbortSignal.timeout(10_000),
+      });
+      if (!res.ok) continue;
+      const data = await res.json();
+      const items: Array<Record<string, unknown>> = data?.items?.data || [];
+      for (const item of items) {
+        const title = compactText(String(item.title || ''));
+        if (!title) continue;
+        const docUrl = String(item.url || `https://news.cnyes.com/news/id/${item.newsId}`);
+        const summary = compactText(String(item.summary || item.intro || ''));
+        const symbols = unique((Array.isArray(item.stocks) ? item.stocks : []).map((s: Record<string, unknown>) => String(s.code || '')).filter(Boolean));
+        const allText = `${title} ${summary}`;
+        const sentimentLabel = /利多|漲|看好|買進|強勢|突破|創高/.test(allText) ? 'bullish'
+          : /利空|跌|看壞|賣出|破底|警示|下修/.test(allText) ? 'bearish' : 'neutral';
+        const pubAt = item.publishAt ? new Date(Number(item.publishAt) * 1000).toISOString() : undefined;
+        docs.push({
+          sourceEntityId: String(entity.id),
+          platform: 'anue',
+          documentUrl: docUrl,
+          title,
+          summary: summary || title,
+          contentText: allText.slice(0, 3000),
+          symbols,
+          sentimentLabel,
+          confidence: symbols.length > 0 ? 0.65 : 0.50,
+          metadata: { connector: 'http', category: cat },
+          ...(pubAt ? { publishedAt: pubAt } : {}),
+        });
+      }
+    } catch {
+      // Non-fatal per category
+    }
+  }
+
+  const count = await upsertSourceRawDocuments(docs);
+  return { connector: 'anue', recordsWritten: count, entityId: String(entity.id) };
 }
 
 async function scrapeUdnFinance() {
@@ -1969,6 +2035,7 @@ export async function runSourceSync(options?: { connector?: string; dryRun?: boo
     ptt: scrapePttStock,
     bulltalk: scrapeBullTalk,
     googlenews: scrapeGoogleNewsTW,
+    anue: scrapeAnueNews,
     udn: scrapeUdnFinance,
     mobile01: scrapeMobile01Finance,
     threads: scrapeThreads,

@@ -57,6 +57,10 @@
       "schedule": "27 17 * * *"
     },
     {
+      "path": "/api/internal/source-sync?connector=anue",
+      "schedule": "28 17 * * *"
+    },
+    {
       "path": "/api/internal/source-sync?connector=udn",
       "schedule": "29 17 * * *"
     },

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.stockinsider.playwright-sync</string>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/kaerchen/Desktop/20_stock/StockInsider</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/kaerchen/Desktop/20_stock/StockInsider/scripts/playwright-sync.sh</string>
+    </array>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/Users/kaerchen/.nvm/versions/node/v20.19.0/bin:/usr/local/bin:/usr/bin:/bin</string>
+        <key>PORT</key>
+        <string>3020</string>
+    </dict>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>8</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>/Users/kaerchen/Desktop/20_stock/StockInsider/.agent/reports/playwright-sync-stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/kaerchen/Desktop/20_stock/StockInsider/.agent/reports/playwright-sync-stderr.log</string>
+
+    <key>RunAtLoad</key>
+    <false/>
+</dict>
+</plist>
