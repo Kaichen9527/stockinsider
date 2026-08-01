@@ -1,0 +1,43 @@
+name: Source-led opportunity V3 protected gate root
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review]
+
+permissions:
+  contents: read
+
+jobs:
+  stockinsider-v3-gate-root:
+    name: stockinsider-v3-gate-root
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - name: Checkout only the protected pull-request base
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.base.sha }}
+      - name: Fetch subject object without executing subject files
+        env:
+          SUBJECT_COMMIT: ${{ github.event.pull_request.head.sha }}
+        run: git fetch --no-tags origin "$SUBJECT_COMMIT"
+      - name: Issue base-owned bootstrap attestation
+        env:
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+          SUBJECT_COMMIT: ${{ github.event.pull_request.head.sha }}
+        run: >-
+          node scripts/run-node22.js scripts/opportunity-v3/protected-gate-root.mjs
+          --github-event "$GITHUB_EVENT_PATH"
+          --subject-commit "$SUBJECT_COMMIT"
+          --output "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap-attestation.json"
+      - name: Publish immutable bootstrap handoff
+        uses: actions/upload-artifact@v4
+        with:
+          name: stockinsider-v3-gate-bootstrap-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/stockinsider-v3-gate-bootstrap-attestation.json
+          if-no-files-found: error
+          retention-days: 90
