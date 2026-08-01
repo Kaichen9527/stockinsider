@@ -60,7 +60,9 @@ function assertCleanBaseRoot(baseCommitSha) {
 }
 
 function validateEvent(event, subjectCommitSha, baseCommitSha) {
-  exactKeys(event, ['action', 'number', 'pull_request', 'repository'], 'GitHub pull-request event');
+  // GitHub's pull_request_target payload includes the actor in `sender`. Keep the
+  // envelope closed while accepting that stable platform-owned field.
+  exactKeys(event, ['action', 'number', 'pull_request', 'repository', 'sender'], 'GitHub pull-request event');
   assert.ok(['opened', 'ready_for_review', 'reopened', 'synchronize'].includes(event.action), 'closed pull-request action');
   exactKeys(event.repository, ['full_name'], 'GitHub repository');
   assert.equal(event.repository.full_name, 'Kaichen9527/stockinsider', 'protected repository');
