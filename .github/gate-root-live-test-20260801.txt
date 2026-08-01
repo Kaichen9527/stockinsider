@@ -1,0 +1,1 @@
+Protected gate bootstrap smoke-test marker. This file is intentionally not merged.
