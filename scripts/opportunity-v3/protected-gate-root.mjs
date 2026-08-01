@@ -37,6 +37,11 @@ function exactKeys(value, keys, label) {
   assert.deepEqual(Object.keys(value).sort(), [...keys].sort(), `${label} keys`);
 }
 
+function requiredKeys(value, keys, label) {
+  assert.ok(value !== null && typeof value === 'object' && !Array.isArray(value), `${label} object`);
+  for (const key of keys) assert.ok(Object.prototype.hasOwnProperty.call(value, key), `${label}.${key} required`);
+}
+
 function assertSha(value, label) {
   assert.match(value, /^[0-9a-f]{40}$/u, label);
 }
@@ -60,15 +65,15 @@ function assertCleanBaseRoot(baseCommitSha) {
 }
 
 function validateEvent(event, subjectCommitSha, baseCommitSha) {
-  // GitHub's pull_request_target payload includes the actor in `sender`. Keep the
-  // envelope closed while accepting that stable platform-owned field.
-  exactKeys(event, ['action', 'number', 'pull_request', 'repository', 'sender'], 'GitHub pull-request event');
+  // GitHub adds platform-owned fields to these objects over time. Bind every
+  // security-relevant identity field exactly while accepting unrelated payload fields.
+  requiredKeys(event, ['action', 'number', 'pull_request', 'repository'], 'GitHub pull-request event');
   assert.ok(['opened', 'ready_for_review', 'reopened', 'synchronize'].includes(event.action), 'closed pull-request action');
-  exactKeys(event.repository, ['full_name'], 'GitHub repository');
+  requiredKeys(event.repository, ['full_name'], 'GitHub repository');
   assert.equal(event.repository.full_name, 'Kaichen9527/stockinsider', 'protected repository');
-  exactKeys(event.pull_request, ['base', 'head'], 'pull request');
-  exactKeys(event.pull_request.base, ['sha'], 'pull request base');
-  exactKeys(event.pull_request.head, ['sha'], 'pull request head');
+  requiredKeys(event.pull_request, ['base', 'head'], 'pull request');
+  requiredKeys(event.pull_request.base, ['sha'], 'pull request base');
+  requiredKeys(event.pull_request.head, ['sha'], 'pull request head');
   assert.equal(event.pull_request.base.sha, baseCommitSha, 'event base must equal protected checkout');
   assert.equal(event.pull_request.head.sha, subjectCommitSha, 'event head must equal attested subject');
 }
