@@ -396,7 +396,10 @@ function prepare(attestation, subjectRoot) {
   assert.equal(git(baseRoot, ['status', '--porcelain=v1', '--untracked-files=all']), '', 'prepare base clean');
   const targets = [
     attestation.subjectCommitSha,
-    ...Object.values(reviewSources).map(({ ref }) => ref.replace('refs/remotes/origin/', 'refs/heads/')),
+    ...Object.values(reviewSources).map(({ ref }) => {
+      const remoteBranch = ref.replace('refs/remotes/origin/', 'refs/heads/');
+      return `${remoteBranch}:${ref}`;
+    }),
   ];
   execFileSync('/usr/bin/git', ['fetch', '--no-tags', 'origin', ...targets], { cwd: baseRoot, stdio: 'inherit' });
   const target = absolute(subjectRoot, 'subject root');
