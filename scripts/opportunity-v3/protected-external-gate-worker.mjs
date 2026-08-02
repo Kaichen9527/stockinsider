@@ -36,7 +36,7 @@ const reviewSources = Object.freeze({
     ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-architecture-evidence-v2',
     path: `${changeRelative}/architecture-review-round-11.md`,
     finalLine: 'Final repair-closure commit/tree',
-    rangeLine: 'Full reviewed range',
+    rangeLine: 'Full reviewed implementation range',
   },
   'exact-review': {
     ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-exact-review-evidence',
