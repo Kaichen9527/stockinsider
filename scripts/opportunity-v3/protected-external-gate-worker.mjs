@@ -220,6 +220,12 @@ function captureReview(subjectRoot, check, identity, attestation) {
   const reviewedHeadOrTreeSha = rangeMatch[1].slice(42);
   assert.equal(reviewedHeadOrTreeSha, finalMatch[1], `${check} reviewed range head`);
   assert.equal(git(subjectRoot, ['rev-parse', `${reviewedHeadOrTreeSha}^{tree}`]), finalMatch[2], `${check} reviewed head tree`);
+  if (check === 'exact-review') {
+    // A review of an equal tree is not a review of an equal implementation
+    // commit: parentage and immutable range provenance are part of the claim.
+    assert.equal(reviewedHeadOrTreeSha, attestation.subjectCommitSha, 'exact-review reviewed subject commit');
+    assert.equal(finalMatch[2], attestation.subjectTreeSha, 'exact-review reviewed subject tree');
+  }
   const evidenceOnlyPaths = git(subjectRoot, ['diff-tree', '--no-commit-id', '--name-only', '-r', finalMatch[2], evidenceTreeSha])
     .split('\n').filter(Boolean).toSorted();
   assert.ok(evidenceOnlyPaths.includes(source.path), `${check} evidence path changed`);
