@@ -277,7 +277,11 @@ function run(subjectRoot, executable, args, environment, label) {
   const stdout = Buffer.from(result.stdout ?? '');
   const stderr = Buffer.from(result.stderr ?? '');
   assert.equal(result.signal, null, `${label} signal`);
-  assert.equal(result.status, 0, `${label} failed:\n${stderr.toString('utf8')}`);
+  assert.equal(
+    result.status,
+    0,
+    `${label} failed:\nstdout:\n${stdout.toString('utf8')}\nstderr:\n${stderr.toString('utf8')}`,
+  );
   return { stdout, stderr };
 }
 
