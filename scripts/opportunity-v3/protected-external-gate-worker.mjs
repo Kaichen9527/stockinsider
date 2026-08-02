@@ -303,9 +303,9 @@ function executeTrack(subjectRoot, track, identity, attestation) {
   // their locked dependencies before either traceability run; no lifecycle scripts
   // or credentials are inherited into this detached checkout.
   execute('npm', ['--prefix', 'web', 'ci', '--ignore-scripts'], 'web dependency preparation');
-  if (track === 'product_runtime') {
-    execute(path.join(subjectRoot, 'web/node_modules/.bin/playwright'), ['install', '--with-deps', 'chromium'], 'project-local Chromium preparation');
-  }
+  // PCR-024 is an explicit acceptance-owner probe in both partitions, so its
+  // project-local browser binary is part of each isolated trace's prerequisites.
+  execute(path.join(subjectRoot, 'web/node_modules/.bin/playwright'), ['install', '--with-deps', 'chromium'], 'project-local Chromium preparation');
   cleanTree(subjectRoot, attestation.subjectCommitSha, attestation.subjectTreeSha);
   execute(process.execPath, ['--experimental-strip-types', 'scripts/opportunity-v3/acceptance-gate-runner.mjs', '--track', track], `${track} traceability`);
   if (track === 'product_runtime') {
