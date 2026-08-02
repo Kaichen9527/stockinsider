@@ -41,3 +41,222 @@ jobs:
           path: ${{ runner.temp }}/stockinsider-v3-gate-bootstrap-attestation.json
           if-no-files-found: error
           retention-days: 90
+
+  requirements:
+    name: requirements
+    needs: stockinsider-v3-gate-root
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - name: Checkout only the protected pull-request base
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.base.sha }}
+      - name: Retrieve bootstrap and prepare detached subject
+        uses: ./.github/actions/prepare-source-led-external-subject
+        with:
+          bootstrap-artifact-name: stockinsider-v3-gate-bootstrap-${{ github.event.pull_request.head.sha }}
+          subject-root: ${{ runner.temp }}/stockinsider-v3-subject
+      - name: Emit protected Requirements envelope
+        run: >-
+          node scripts/opportunity-v3/protected-external-gate-worker.mjs review
+          --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json"
+          --subject-root "$RUNNER_TEMP/stockinsider-v3-subject"
+          --check requirements
+          --output "$RUNNER_TEMP/opportunity-gate-result-requirements-${{ github.event.pull_request.head.sha }}.json"
+      - name: Publish immutable Requirements envelope
+        uses: actions/upload-artifact@v4
+        with:
+          name: opportunity-gate-result-requirements-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/opportunity-gate-result-requirements-${{ github.event.pull_request.head.sha }}.json
+          if-no-files-found: error
+          retention-days: 90
+
+  architecture:
+    name: architecture
+    needs: stockinsider-v3-gate-root
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - name: Checkout only the protected pull-request base
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.base.sha }}
+      - name: Retrieve bootstrap and prepare detached subject
+        uses: ./.github/actions/prepare-source-led-external-subject
+        with:
+          bootstrap-artifact-name: stockinsider-v3-gate-bootstrap-${{ github.event.pull_request.head.sha }}
+          subject-root: ${{ runner.temp }}/stockinsider-v3-subject
+      - name: Emit protected Architecture envelope
+        run: >-
+          node scripts/opportunity-v3/protected-external-gate-worker.mjs review
+          --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json"
+          --subject-root "$RUNNER_TEMP/stockinsider-v3-subject"
+          --check architecture
+          --output "$RUNNER_TEMP/opportunity-gate-result-architecture-${{ github.event.pull_request.head.sha }}.json"
+      - name: Publish immutable Architecture envelope
+        uses: actions/upload-artifact@v4
+        with:
+          name: opportunity-gate-result-architecture-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/opportunity-gate-result-architecture-${{ github.event.pull_request.head.sha }}.json
+          if-no-files-found: error
+          retention-days: 90
+
+  product-runtime-code-gate:
+    name: product-runtime-code-gate
+    needs: stockinsider-v3-gate-root
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - name: Checkout only the protected pull-request base
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.base.sha }}
+      - name: Retrieve bootstrap and prepare detached subject
+        uses: ./.github/actions/prepare-source-led-external-subject
+        with:
+          bootstrap-artifact-name: stockinsider-v3-gate-bootstrap-${{ github.event.pull_request.head.sha }}
+          subject-root: ${{ runner.temp }}/stockinsider-v3-subject
+      - name: Execute full protected product/runtime track and emit envelope
+        run: >-
+          node scripts/opportunity-v3/protected-external-gate-worker.mjs track
+          --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json"
+          --subject-root "$RUNNER_TEMP/stockinsider-v3-subject"
+          --track product_runtime
+          --output "$RUNNER_TEMP/opportunity-gate-result-product-runtime-code-gate-${{ github.event.pull_request.head.sha }}.json"
+      - name: Publish immutable product/runtime envelope
+        uses: actions/upload-artifact@v4
+        with:
+          name: opportunity-gate-result-product-runtime-code-gate-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/opportunity-gate-result-product-runtime-code-gate-${{ github.event.pull_request.head.sha }}.json
+          if-no-files-found: error
+          retention-days: 90
+
+  model-runner-code-gate:
+    name: model-runner-code-gate
+    needs: stockinsider-v3-gate-root
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.user.login == github.repository_owner
+    runs-on: [self-hosted, macOS, ARM64]
+    timeout-minutes: 45
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - name: Checkout only the protected pull-request base
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.base.sha }}
+      - name: Retrieve bootstrap and prepare detached subject
+        uses: ./.github/actions/prepare-source-led-external-subject
+        with:
+          bootstrap-artifact-name: stockinsider-v3-gate-bootstrap-${{ github.event.pull_request.head.sha }}
+          subject-root: ${{ runner.temp }}/stockinsider-v3-subject
+      - name: Execute pinned protected model-runner track and emit envelope
+        run: >-
+          node scripts/opportunity-v3/protected-external-gate-worker.mjs track
+          --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json"
+          --subject-root "$RUNNER_TEMP/stockinsider-v3-subject"
+          --track model_runner
+          --output "$RUNNER_TEMP/opportunity-gate-result-model-runner-code-gate-${{ github.event.pull_request.head.sha }}.json"
+      - name: Publish immutable model-runner envelope
+        uses: actions/upload-artifact@v4
+        with:
+          name: opportunity-gate-result-model-runner-code-gate-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/opportunity-gate-result-model-runner-code-gate-${{ github.event.pull_request.head.sha }}.json
+          if-no-files-found: error
+          retention-days: 90
+
+  exact-review:
+    name: exact-review
+    needs: stockinsider-v3-gate-root
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - name: Checkout only the protected pull-request base
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.base.sha }}
+      - name: Retrieve bootstrap and prepare detached subject
+        uses: ./.github/actions/prepare-source-led-external-subject
+        with:
+          bootstrap-artifact-name: stockinsider-v3-gate-bootstrap-${{ github.event.pull_request.head.sha }}
+          subject-root: ${{ runner.temp }}/stockinsider-v3-subject
+      - name: Emit protected exact-review envelope
+        run: >-
+          node scripts/opportunity-v3/protected-external-gate-worker.mjs review
+          --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json"
+          --subject-root "$RUNNER_TEMP/stockinsider-v3-subject"
+          --check exact-review
+          --output "$RUNNER_TEMP/opportunity-gate-result-exact-review-${{ github.event.pull_request.head.sha }}.json"
+      - name: Publish immutable exact-review envelope
+        uses: actions/upload-artifact@v4
+        with:
+          name: opportunity-gate-result-exact-review-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/opportunity-gate-result-exact-review-${{ github.event.pull_request.head.sha }}.json
+          if-no-files-found: error
+          retention-days: 90
+
+  code-gate-aggregate:
+    name: code-gate-aggregate
+    needs: [requirements, architecture, product-runtime-code-gate, model-runner-code-gate, exact-review]
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - name: Checkout only the protected pull-request base
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.base.sha }}
+      - name: Retrieve bootstrap and prepare detached subject
+        uses: ./.github/actions/prepare-source-led-external-subject
+        with:
+          bootstrap-artifact-name: stockinsider-v3-gate-bootstrap-${{ github.event.pull_request.head.sha }}
+          subject-root: ${{ runner.temp }}/stockinsider-v3-subject
+      - name: Retrieve the five immutable external envelopes
+        uses: actions/download-artifact@v4
+        with:
+          pattern: opportunity-gate-result-*-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/opportunity-gate-results
+          merge-multiple: true
+      - name: Assemble protected authoritative Code Gate aggregate
+        run: >-
+          node scripts/opportunity-v3/protected-external-gate-worker.mjs aggregate
+          --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json"
+          --subject-root "$RUNNER_TEMP/stockinsider-v3-subject"
+          --input "$RUNNER_TEMP/opportunity-gate-results/opportunity-gate-result-requirements-${{ github.event.pull_request.head.sha }}.json"
+          --input "$RUNNER_TEMP/opportunity-gate-results/opportunity-gate-result-architecture-${{ github.event.pull_request.head.sha }}.json"
+          --input "$RUNNER_TEMP/opportunity-gate-results/opportunity-gate-result-product-runtime-code-gate-${{ github.event.pull_request.head.sha }}.json"
+          --input "$RUNNER_TEMP/opportunity-gate-results/opportunity-gate-result-model-runner-code-gate-${{ github.event.pull_request.head.sha }}.json"
+          --input "$RUNNER_TEMP/opportunity-gate-results/opportunity-gate-result-exact-review-${{ github.event.pull_request.head.sha }}.json"
+          --output "$RUNNER_TEMP/opportunity-gate-result-code-gate-aggregate-${{ github.event.pull_request.head.sha }}.json"
+      - name: Publish immutable authoritative Code Gate aggregate
+        uses: actions/upload-artifact@v4
+        with:
+          name: opportunity-gate-result-code-gate-aggregate-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/opportunity-gate-result-code-gate-aggregate-${{ github.event.pull_request.head.sha }}.json
+          if-no-files-found: error
+          retention-days: 90

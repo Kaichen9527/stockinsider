@@ -1,0 +1,24 @@
+name: Prepare source-led external subject
+description: Retrieve the base-owned bootstrap artifact and create a detached credential-free subject checkout.
+inputs:
+  bootstrap-artifact-name:
+    required: true
+  subject-root:
+    required: true
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version-file: '.nvmrc'
+        cache: npm
+        cache-dependency-path: package-lock.json
+    - uses: actions/download-artifact@v4
+      with:
+        name: ${{ inputs.bootstrap-artifact-name }}
+        path: ${{ runner.temp }}/stockinsider-v3-gate-bootstrap
+    - shell: bash
+      run: >-
+        node scripts/opportunity-v3/protected-external-gate-worker.mjs prepare
+        --attestation "$RUNNER_TEMP/stockinsider-v3-gate-bootstrap/stockinsider-v3-gate-bootstrap-attestation.json"
+        --subject-root "${{ inputs.subject-root }}"
