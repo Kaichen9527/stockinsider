@@ -288,7 +288,10 @@ function executeTrack(subjectRoot, track, identity, attestation) {
       ? { check: 'model-runner-code-gate', count: 28, name: 'model-runner-track' }
       : null;
   assert.ok(descriptor, 'closed executable track');
-  const environment = sanitizedEnvironment(attestation, { OPPORTUNITY_V3_ACCEPTANCE_TRACK: track });
+  const environment = sanitizedEnvironment(attestation, {
+    OPPORTUNITY_V3_ACCEPTANCE_TRACK: track,
+    OPPORTUNITY_V3_GATE_ROOT: subjectRoot,
+  });
   const outputs = [];
   const execute = (executable, args, label) => outputs.push(run(subjectRoot, executable, args, environment, label));
   execute('npm', ['ci', '--ignore-scripts'], 'root dependency preparation');
