@@ -299,8 +299,11 @@ function executeTrack(subjectRoot, track, identity, attestation) {
   const outputs = [];
   const execute = (executable, args, label) => outputs.push(run(subjectRoot, executable, args, environment, label));
   execute('npm', ['ci', '--ignore-scripts'], 'root dependency preparation');
+  // Acceptance ownership tests exercise shared Web modules for both tracks. Install
+  // their locked dependencies before either traceability run; no lifecycle scripts
+  // or credentials are inherited into this detached checkout.
+  execute('npm', ['--prefix', 'web', 'ci', '--ignore-scripts'], 'web dependency preparation');
   if (track === 'product_runtime') {
-    execute('npm', ['--prefix', 'web', 'ci', '--ignore-scripts'], 'web dependency preparation');
     execute(path.join(subjectRoot, 'web/node_modules/.bin/playwright'), ['install', '--with-deps', 'chromium'], 'project-local Chromium preparation');
   }
   cleanTree(subjectRoot, attestation.subjectCommitSha, attestation.subjectTreeSha);
