@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -290,7 +290,7 @@ function executeTrack(subjectRoot, track, identity, attestation) {
   assert.ok(descriptor, 'closed executable track');
   const environment = sanitizedEnvironment(attestation, {
     OPPORTUNITY_V3_ACCEPTANCE_TRACK: track,
-    OPPORTUNITY_V3_GATE_ROOT: subjectRoot,
+    OPPORTUNITY_V3_GATE_ROOT: realpathSync(subjectRoot),
   });
   const outputs = [];
   const execute = (executable, args, label) => outputs.push(run(subjectRoot, executable, args, environment, label));
