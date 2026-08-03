@@ -53,7 +53,7 @@ test('candidate execution waits for exact review and persistent execution is own
 
 test('every third-party action is pinned to an immutable commit', () => {
   const combined = `${workflow}\n${action}`;
-  const uses = [...combined.matchAll(/uses:\s+(actions\/[A-Za-z0-9_-]+)@([^\s#]+)/gu)];
+  const uses = [...combined.matchAll(/uses:\s+([^@\s]+)@([^\s#]+)/gu)];
   assert.ok(uses.length >= 16, 'all expected action invocations discovered');
   for (const [, name, reference] of uses) {
     assert.match(reference, /^[0-9a-f]{40}$/u, `${name} immutable pin`);
