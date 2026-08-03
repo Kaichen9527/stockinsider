@@ -69,6 +69,12 @@ test('the base worker owns validation and performs the final exclusive envelope 
   assert.doesNotMatch(worker.slice(write, completion), /(?:spawnSync|execFileSync|run\()/u);
 });
 
+test('each candidate command is isolated in a process group that is cleared on return', () => {
+  assert.match(worker, /const detached = process\.platform !== 'win32';/u);
+  assert.match(worker, /process\.kill\(-result\.pid, 'SIGKILL'\);/u);
+  assert.match(worker, /error\?\.code, 'ESRCH'/u);
+});
+
 test('model authentication is staged with no-follow and removed after the track', () => {
   assert.match(worker, /fsConstants\.O_RDONLY \| fsConstants\.O_NOFOLLOW/u);
   assert.match(worker, /before\.mode & 0o077/u);

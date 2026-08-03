@@ -352,12 +352,21 @@ function sanitizedEnvironment(attestation, track, extra = {}) {
 }
 
 function run(subjectRoot, executable, args, environment, label) {
+  const detached = process.platform !== 'win32';
   const result = spawnSync(executable, args, {
     cwd: subjectRoot,
+    detached,
     encoding: null,
     env: environment,
     maxBuffer: 128 * 1024 * 1024,
   });
+  if (detached && Number.isSafeInteger(result.pid) && result.pid > 1) {
+    try {
+      process.kill(-result.pid, 'SIGKILL');
+    } catch (error) {
+      assert.equal(error?.code, 'ESRCH', `${label} candidate process-group cleanup`);
+    }
+  }
   if (result.error) throw result.error;
   const stdout = Buffer.from(result.stdout ?? '');
   const stderr = Buffer.from(result.stderr ?? '');
