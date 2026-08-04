@@ -381,12 +381,31 @@ function trustedNodeToolchainRoot() {
   return toolchainRoot;
 }
 
+function trustedAppleGitToolchainRoot() {
+  assert.equal(process.platform, 'darwin', 'protected external model runner requires macOS');
+  const developerRoot = realpathSync(execFileSync('/usr/bin/xcode-select', ['-p'], {
+    encoding: 'utf8',
+  }).trim());
+  const gitExecutable = realpathSync(execFileSync('/usr/bin/xcrun', ['--find', 'git'], {
+    encoding: 'utf8',
+  }).trim());
+  const toolchainRoot = realpathSync(path.join(developerRoot, 'usr'));
+  const gitRelative = path.relative(toolchainRoot, gitExecutable);
+  assert.equal(
+    gitRelative.length > 0 && gitRelative !== '..' && !gitRelative.startsWith(`..${path.sep}`) && !path.isAbsolute(gitRelative),
+    true,
+    'protected git resolves inside the selected Apple developer usr root',
+  );
+  return toolchainRoot;
+}
+
 function candidateSandbox(subjectRoot, scratch, environment, executable, args, { writableSource = false, network = false } = {}) {
   const fixture = JSON.parse(treeBlob(baseRoot, git(baseRoot, ['rev-parse', 'HEAD^{tree}']),
     `${changeRelative}/model-runner-host-pins-v3.json`, 'protected host pin fixture'));
   const codex = fixture.executables.find(({ name }) => name === 'codex');
   assert.ok(codex && path.isAbsolute(codex.path), 'protected Codex path');
   const nodeToolchainRoot = trustedNodeToolchainRoot();
+  const appleGitToolchainRoot = trustedAppleGitToolchainRoot();
   const policyRoot = mkdtempSync(path.join(os.tmpdir(), 'stockinsider-v3-candidate-policy-'));
   try {
     const escaped = (value) => value.replaceAll('\\', '\\\\').replaceAll('"', '\\"');
@@ -398,6 +417,7 @@ function candidateSandbox(subjectRoot, scratch, environment, executable, args, {
       `"${escaped(scratch)}" = "write"`,
       `"${escaped(policyRoot)}" = "read"`,
       `"${escaped(nodeToolchainRoot)}" = "read"`,
+      `"${escaped(appleGitToolchainRoot)}" = "read"`,
       '"/System/Library/OpenSSL" = "read"',
       '"/Applications/ChatGPT.app" = "read"', '',
       '[permissions.external-gate-candidate.network]',
