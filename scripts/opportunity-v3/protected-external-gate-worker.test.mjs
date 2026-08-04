@@ -63,6 +63,12 @@ test('every third-party action is pinned to an immutable commit', () => {
 test('subject preparation pins Node from the protected base', () => {
   assert.match(action, /node-version: '22\.14\.0'/u);
   assert.doesNotMatch(action, /node-version-file:/u);
+  assert.match(worker, /\['init', target\]/u);
+  assert.match(worker, /\['fetch', '--no-tags', baseRoot, [.]\.\.localTargets\]/u);
+  assert.match(worker, /subject checkout has no configured remote/u);
+  assert.match(worker, /subject checkout has no credential-bearing Git config/u);
+  assert.doesNotMatch(worker, /\['worktree', 'add'/u);
+  assert.doesNotMatch(worker, /\['remote', 'remove', 'origin'\]/u);
 });
 
 test('the base worker owns validation and performs the final exclusive envelope write', () => {
@@ -74,15 +80,32 @@ test('the base worker owns validation and performs the final exclusive envelope 
   assert.doesNotMatch(worker.slice(write, completion), /(?:spawnSync|execFileSync|run\()/u);
 });
 
+test('review envelopes require reviewed-parent evidence with an exact closed diff and bound attestation', () => {
+  assert.match(worker, /evidence must be its reviewed commit's unique direct child/u);
+  assert.match(worker, /evidence-only diff must exactly match its closed path set/u);
+  assert.match(worker, /exact-review attestation canonical/u);
+  assert.match(worker, /exact-review attestation evidence binding/u);
+  assert.doesNotMatch(worker, /evidenceOnlyPaths\.includes\(source\.path\)/u);
+});
+
 test('each candidate command is isolated in a process group that is cleared on return', () => {
   assert.match(worker, /const detached = process\.platform !== 'win32';/u);
   assert.match(worker, /process\.kill\(-result\.pid, 'SIGKILL'\);/u);
   assert.match(worker, /error\?\.code, 'ESRCH'/u);
 });
 
-test('model authentication is staged with no-follow and removed after the track', () => {
-  assert.match(worker, /fsConstants\.O_RDONLY \| fsConstants\.O_NOFOLLOW/u);
-  assert.match(worker, /before\.mode & 0o077/u);
-  assert.match(worker, /mode: 0o600/u);
+test('candidate model code receives no credential and is enclosed by a base-owned filesystem/network sandbox', () => {
+  assert.match(worker, /non-credential-placeholder/u);
+  assert.match(worker, /OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH/u);
+  assert.match(worker, /external-gate-candidate/u);
+  assert.match(worker, /":root" = "deny"/u);
+  assert.match(worker, /trustedHostModelOracle/u);
+  assert.match(worker, /OPPORTUNITY_V3_PROTECTED_LIVE_ONLY: '1'/u);
+  assert.match(worker, /assertSubjectModelOracleEqualsProtectedBase/u);
+  assert.match(worker, /credentialed model oracle must execute protected-base bytes identical to the exact subject/u);
+  assert.match(worker, /measuredResult/u);
+  assert.match(worker, /measured \$\{track\} execution must close the registered partition/u);
+  assert.match(worker, /passed: totals[.]passed/u);
+  assert.doesNotMatch(worker, /writeFileSync\(path\.join\(codexDirectory, 'auth\.json'\), bytes/u);
   assert.match(worker, /rmSync\(scratch, \{ force: true, recursive: true \}\)/u);
 });
