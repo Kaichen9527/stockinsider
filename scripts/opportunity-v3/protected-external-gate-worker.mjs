@@ -2,13 +2,9 @@ import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import {
-  closeSync,
-  constants as fsConstants,
-  fstatSync,
   lstatSync,
   mkdirSync,
   mkdtempSync,
-  openSync,
   readFileSync,
   realpathSync,
   rmSync,
@@ -180,20 +176,24 @@ function validateAttestation(attestation, subjectRoot) {
   cleanTree(subjectRoot, attestation.subjectCommitSha, attestation.subjectTreeSha);
 }
 
-function subjectIdentity(subjectRoot, attestation) {
+function treeIdentity(subjectRoot, treeSha) {
   const catalogPath = `${changeRelative}/active-artifact-catalog-v3.json`;
-  const catalogBytes = treeBlob(subjectRoot, attestation.subjectTreeSha, catalogPath, 'active catalog');
+  const catalogBytes = treeBlob(subjectRoot, treeSha, catalogPath, 'active catalog');
   const catalog = JSON.parse(catalogBytes);
   const rows = catalog.activeFiles.map((file) => {
     const repositoryPath = `${changeRelative}/${file}`;
-    const bytes = treeBlob(subjectRoot, attestation.subjectTreeSha, repositoryPath, `active artifact ${file}`);
-    return [file, git(subjectRoot, ['rev-parse', `${attestation.subjectTreeSha}:${repositoryPath}`]), bytes.length, sha256(bytes)];
+    const bytes = treeBlob(subjectRoot, treeSha, repositoryPath, `active artifact ${file}`);
+    return [file, git(subjectRoot, ['rev-parse', `${treeSha}:${repositoryPath}`]), bytes.length, sha256(bytes)];
   });
-  const inventory = JSON.parse(treeBlob(subjectRoot, attestation.subjectTreeSha, `${changeRelative}/acceptance-tests.json`, 'acceptance inventory'));
+  const inventory = JSON.parse(treeBlob(subjectRoot, treeSha, `${changeRelative}/acceptance-tests.json`, 'acceptance inventory'));
   return {
     activeGraphSha256: sha256(canonicalJson(['opportunity-active-graph-v1', sha256(catalogBytes), rows])),
     inventory,
   };
+}
+
+function subjectIdentity(subjectRoot, attestation) {
+  return treeIdentity(subjectRoot, attestation.subjectTreeSha);
 }
 
 function timestamp() {
@@ -262,15 +262,35 @@ function captureReview(subjectRoot, check, identity, attestation) {
   const reviewedHeadOrTreeSha = rangeMatch[1].slice(42);
   assert.equal(reviewedHeadOrTreeSha, finalMatch[1], `${check} reviewed range head`);
   assert.equal(git(subjectRoot, ['rev-parse', `${reviewedHeadOrTreeSha}^{tree}`]), finalMatch[2], `${check} reviewed head tree`);
+  const evidenceParent = check === 'exact-review' ? attestation.subjectCommitSha : reviewedHeadOrTreeSha;
+  assert.deepEqual(git(subjectRoot, ['show', '-s', '--format=%P', evidenceCommitSha]).split(/\s+/u).filter(Boolean),
+    [evidenceParent], `${check} evidence must be its reviewed commit's unique direct child`);
   if (check === 'exact-review') {
     // A review of an equal tree is not a review of an equal implementation
     // commit: parentage and immutable range provenance are part of the claim.
     assert.equal(reviewedHeadOrTreeSha, attestation.subjectCommitSha, 'exact-review reviewed subject commit');
     assert.equal(finalMatch[2], attestation.subjectTreeSha, 'exact-review reviewed subject tree');
   }
-  const evidenceOnlyPaths = git(subjectRoot, ['diff-tree', '--no-commit-id', '--name-only', '-r', finalMatch[2], evidenceTreeSha])
-    .split('\n').filter(Boolean).toSorted();
-  assert.ok(evidenceOnlyPaths.includes(source.path), `${check} evidence path changed`);
+  const exactReviewPaths = [
+    `${changeRelative}/exact-commit-review-final.md`,
+    `${changeRelative}/pcr-fulfillment-record-v1.json`,
+    `${changeRelative}/runtime-review-attestation.json`,
+  ].toSorted();
+  const allowedPaths = check === 'exact-review' ? exactReviewPaths : [source.path];
+  const changedRows = git(subjectRoot, ['diff-tree', '--no-commit-id', '--name-status', '-r',
+    evidenceParent, evidenceCommitSha]).split('\n').filter(Boolean).map((line) => line.split('\t'));
+  if (check === 'exact-review') {
+    assert.deepEqual(changedRows, allowedPaths.map((repositoryPath) => ['A', repositoryPath]),
+      `${check} evidence-only diff must exactly match its closed path set`);
+  } else {
+    assert.deepEqual(changedRows.map((row) => row[1]), allowedPaths, `${check} evidence-only path set`);
+    assert.ok(['A', 'M'].includes(changedRows[0][0]), `${check} evidence path status`);
+    assert.ok(treeBlob(subjectRoot, attestation.subjectTreeSha, source.path, `${check} carried evidence`).equals(bytes),
+      `${check} evidence bytes must be carried by subject`);
+    assert.equal(treeIdentity(subjectRoot, finalMatch[2]).activeGraphSha256, identity.activeGraphSha256,
+      `${check} reviewed graph reusable by subject`);
+  }
+  const evidenceOnlyPaths = changedRows.map((row) => row[1]);
   const review = {
     evidenceCommitSha,
     evidenceFileSha256: sha256(bytes),
@@ -291,44 +311,32 @@ function captureReview(subjectRoot, check, identity, attestation) {
   if (check === 'exact-review') {
     const pcrFulfillmentPath = `${changeRelative}/pcr-fulfillment-record-v1.json`;
     const fulfillment = treeBlob(subjectRoot, evidenceTreeSha, pcrFulfillmentPath, 'exact-review PCR fulfillment');
+    const attestationPath = `${changeRelative}/runtime-review-attestation.json`;
+    const reviewAttestationBytes = treeBlob(subjectRoot, evidenceTreeSha, attestationPath, 'exact-review runtime attestation');
+    const reviewAttestationText = reviewAttestationBytes.toString('utf8');
+    assert.equal(reviewAttestationText.endsWith('\n'), true, 'exact-review attestation final LF');
+    const reviewAttestation = JSON.parse(reviewAttestationText);
+    exactKeys(reviewAttestation, ['baseSha','evidenceSha256','headSha','p0','p1','range','reviewedAt','schema','treeSha','verdict'],
+      'exact-review runtime attestation');
+    assert.equal(`${canonicalJson(reviewAttestation)}\n`, reviewAttestationText, 'exact-review attestation canonical');
+    assert.equal(reviewAttestation.schema, 'stockinsider-exact-review-attestation-v1', 'exact-review attestation schema');
+    assert.equal(reviewAttestation.baseSha, reviewedBaseSha, 'exact-review attestation base');
+    assert.equal(reviewAttestation.headSha, attestation.subjectCommitSha, 'exact-review attestation subject');
+    assert.equal(reviewAttestation.treeSha, attestation.subjectTreeSha, 'exact-review attestation tree');
+    assert.equal(reviewAttestation.range, rangeMatch[1], 'exact-review attestation range');
+    assert.equal(reviewAttestation.verdict, 'PASS', 'exact-review attestation verdict');
+    assert.equal(reviewAttestation.p0, 0, 'exact-review attestation P0');
+    assert.equal(reviewAttestation.p1, 0, 'exact-review attestation P1');
+    assert.equal(reviewAttestation.evidenceSha256, sha256(bytes), 'exact-review attestation evidence binding');
     review.pcrFulfillmentPath = pcrFulfillmentPath;
     review.pcrFulfillmentSha256 = sha256(fulfillment);
   }
   return review;
 }
 
-function stageModelAuthentication(scratch) {
-  const runnerHome = process.env.HOME;
-  assert.equal(typeof runnerHome, 'string', 'runner HOME required for model authentication');
-  const source = path.join(absolute(runnerHome, 'runner HOME'), '.codex', 'auth.json');
-  const before = lstatSync(source);
-  assert.equal(before.isSymbolicLink(), false, 'model authentication cannot be a symbolic link');
-  assert.equal(before.isFile(), true, 'model authentication must be a regular file');
-  assert.equal(before.uid, process.getuid(), 'model authentication owned by runner user');
-  assert.equal(before.mode & 0o077, 0, 'model authentication cannot grant group/other access');
-  assert.ok(before.size > 0 && before.size <= 1024 * 1024, 'model authentication bounded size');
-  const descriptor = openSync(source, fsConstants.O_RDONLY | fsConstants.O_NOFOLLOW);
-  try {
-    const opened = fstatSync(descriptor);
-    assert.equal(opened.isFile(), true, 'opened model authentication regular file');
-    assert.equal(opened.dev, before.dev, 'model authentication device stable');
-    assert.equal(opened.ino, before.ino, 'model authentication inode stable');
-    assert.equal(opened.uid, before.uid, 'model authentication owner stable');
-    assert.equal(opened.mode & 0o077, 0, 'opened model authentication permissions');
-    const bytes = readFileSync(descriptor);
-    JSON.parse(bytes.toString('utf8'));
-    const codexDirectory = path.join(scratch, '.codex');
-    mkdirSync(codexDirectory, { mode: 0o700 });
-    writeFileSync(path.join(codexDirectory, 'auth.json'), bytes, { flag: 'wx', mode: 0o600 });
-  } finally {
-    closeSync(descriptor);
-  }
-}
-
 function sanitizedEnvironment(attestation, track, extra = {}) {
   const scratch = mkdtempSync(path.join(os.tmpdir(), 'stockinsider-v3-external-gate-'));
   try {
-    if (track === 'model_runner') stageModelAuthentication(scratch);
     return {
       environment: {
         HOME: scratch,
@@ -349,6 +357,91 @@ function sanitizedEnvironment(attestation, track, extra = {}) {
     rmSync(scratch, { force: true, recursive: true });
     throw error;
   }
+}
+
+function stageNonCredentialModelHome(scratch) {
+  const codexDirectory = path.join(scratch, '.codex');
+  mkdirSync(codexDirectory, { mode: 0o700 });
+  writeFileSync(path.join(codexDirectory, 'auth.json'), '{"externalGate":"non-credential-placeholder"}\n',
+    { flag: 'wx', mode: 0o600 });
+}
+
+function candidateSandbox(subjectRoot, scratch, environment, executable, args, { writableSource = false, network = false } = {}) {
+  const fixture = JSON.parse(treeBlob(baseRoot, git(baseRoot, ['rev-parse', 'HEAD^{tree}']),
+    `${changeRelative}/model-runner-host-pins-v3.json`, 'protected host pin fixture'));
+  const codex = fixture.executables.find(({ name }) => name === 'codex');
+  assert.ok(codex && path.isAbsolute(codex.path), 'protected Codex path');
+  const policyRoot = mkdtempSync(path.join(os.tmpdir(), 'stockinsider-v3-candidate-policy-'));
+  try {
+    const escaped = (value) => value.replaceAll('\\', '\\\\').replaceAll('"', '\\"');
+    const profile = [
+      'default_permissions = "external-gate-candidate"', '',
+      '[permissions.external-gate-candidate.filesystem]',
+      '":root" = "deny"', '":minimal" = "read"',
+      `"${escaped(subjectRoot)}" = "${writableSource ? 'write' : 'read'}"`,
+      `"${escaped(scratch)}" = "write"`,
+      `"${escaped(policyRoot)}" = "read"`,
+      '"/Applications/ChatGPT.app" = "read"', '',
+      '[permissions.external-gate-candidate.network]',
+      `enabled = ${network ? 'true' : 'false'}`, '',
+    ].join('\n');
+    writeFileSync(path.join(policyRoot, 'config.toml'), profile, { flag: 'wx', mode: 0o600 });
+    return run(subjectRoot, codex.path, [
+      'sandbox', '--profile', 'external-gate-candidate', '--permission-profile', 'external-gate-candidate',
+      '-C', subjectRoot, '--', executable, ...args,
+    ], { ...environment, CODEX_HOME: policyRoot }, `sandboxed ${executable} ${args.join(' ')}`);
+  } finally {
+    rmSync(policyRoot, { force: true, recursive: true });
+  }
+}
+
+const MODEL_ORACLE_PATHS = Object.freeze([
+  '.loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json',
+  'scripts/loop-model-runner-v3.js',
+  'scripts/model-runner-v3',
+]);
+
+function assertSubjectModelOracleEqualsProtectedBase(subjectRoot, subjectCommitSha) {
+  const listing = (root, commit) => git(root, [
+    'ls-tree', '-r', '--full-tree', commit, '--', ...MODEL_ORACLE_PATHS,
+  ]);
+  assert.equal(
+    listing(subjectRoot, subjectCommitSha),
+    listing(baseRoot, 'HEAD'),
+    'the credentialed model oracle must execute protected-base bytes identical to the exact subject',
+  );
+}
+
+function trustedHostModelOracle(subjectRoot, attestation) {
+  assertSubjectModelOracleEqualsProtectedBase(subjectRoot, attestation.subjectCommitSha);
+  const runnerHome = process.env.HOME;
+  assert.equal(typeof runnerHome, 'string', 'runner HOME required for trusted host oracle');
+  const authentication = path.join(absolute(runnerHome, 'runner HOME'), '.codex', 'auth.json');
+  const stat = lstatSync(authentication);
+  assert.equal(stat.isFile() && !stat.isSymbolicLink() && stat.uid === process.getuid() && (stat.mode & 0o077) === 0,
+    true, 'trusted host oracle authentication boundary');
+  return run(baseRoot, process.execPath, [
+    '--test', 'scripts/model-runner-v3/model-runner-v3.test.js',
+  ], { ...process.env, OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH: '0', OPPORTUNITY_V3_PROTECTED_LIVE_ONLY: '1' },
+  'trusted protected-base host model oracle');
+}
+
+function measuredResult(output, label) {
+  const text = Buffer.from(output.stdout ?? '').toString('utf8');
+  const tapPass = [...text.matchAll(/^# pass (\d+)$/gmu)].at(-1);
+  const tapFail = [...text.matchAll(/^# fail (\d+)$/gmu)].at(-1);
+  const tapSkipped = [...text.matchAll(/^# skipped (\d+)$/gmu)].at(-1);
+  if (tapPass) {
+    return {
+      label,
+      passed: Number(tapPass[1]),
+      failed: Number(tapFail?.[1] ?? 0),
+      skipped: Number(tapSkipped?.[1] ?? 0),
+      todo: Number([...text.matchAll(/^# todo (\d+)$/gmu)].at(-1)?.[1] ?? 0),
+    };
+  }
+  const playwright = [...text.matchAll(/(?:^|\s)(\d+) passed(?:\s|$)/gmu)].at(-1);
+  return { label, passed: playwright ? Number(playwright[1]) : 1, failed: 0, skipped: 0, todo: 0 };
 }
 
 function run(subjectRoot, executable, args, environment, label) {
@@ -381,9 +474,9 @@ function run(subjectRoot, executable, args, environment, label) {
 
 function executeTrack(subjectRoot, track, identity, attestation) {
   const descriptor = track === 'product_runtime'
-    ? { check: 'product-runtime-code-gate', count: 249, name: 'product-runtime-track' }
+    ? { check: 'product-runtime-code-gate', registeredCount: 249, name: 'product-runtime-track' }
     : track === 'model_runner'
-      ? { check: 'model-runner-code-gate', count: 28, name: 'model-runner-track' }
+      ? { check: 'model-runner-code-gate', registeredCount: 28, name: 'model-runner-track' }
       : null;
   assert.ok(descriptor, 'closed executable track');
   const { environment, scratch } = sanitizedEnvironment(attestation, track, {
@@ -392,17 +485,38 @@ function executeTrack(subjectRoot, track, identity, attestation) {
   });
   try {
     const outputs = [];
+    const measured = [];
     const execute = (executable, args, label) => outputs.push(run(subjectRoot, executable, args, environment, label));
-    execute('npm', ['ci', '--ignore-scripts'], 'root dependency preparation');
+    const executeCandidate = track === 'model_runner'
+      ? (executable, args, label, options) => outputs.push(candidateSandbox(subjectRoot, scratch, environment,
+        executable, args, options ?? {}))
+      : (executable, args, label) => execute(executable, args, label);
+    if (track === 'model_runner') stageNonCredentialModelHome(scratch);
+    executeCandidate('npm', ['ci', '--ignore-scripts'], 'root dependency preparation',
+      { writableSource: true, network: true });
     // Acceptance ownership tests exercise shared Web modules for both tracks. Install
     // their locked dependencies before either traceability run; no lifecycle scripts
     // or ambient credentials are inherited into this detached checkout.
-    execute('npm', ['--prefix', 'web', 'ci', '--ignore-scripts'], 'web dependency preparation');
+    executeCandidate('npm', ['--prefix', 'web', 'ci', '--ignore-scripts'], 'web dependency preparation',
+      { writableSource: true, network: true });
     // PCR-024 is an explicit acceptance-owner probe in both partitions, so its
     // project-local browser binary is part of each isolated trace's prerequisites.
-    execute(path.join(subjectRoot, 'web/node_modules/.bin/playwright'), ['install', '--with-deps', 'chromium'], 'project-local Chromium preparation');
+    executeCandidate(path.join(subjectRoot, 'web/node_modules/.bin/playwright'), ['install', '--with-deps', 'chromium'],
+      'project-local Chromium preparation', { writableSource: true, network: true });
     cleanTree(subjectRoot, attestation.subjectCommitSha, attestation.subjectTreeSha);
-    execute(process.execPath, ['--experimental-strip-types', 'scripts/opportunity-v3/acceptance-gate-runner.mjs', '--track', track], `${track} traceability`);
+    const candidateEnvironment = track === 'model_runner'
+      ? { ...environment, OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH: '1' } : environment;
+    const executeClosedCandidate = track === 'model_runner'
+      ? (executable, args, label) => outputs.push(candidateSandbox(subjectRoot, scratch, candidateEnvironment,
+        executable, args, { writableSource: false, network: false }))
+      : execute;
+    const verify = (executeCommand, executable, args, label, ownsPartitionCount = false) => {
+      const before = outputs.length;
+      executeCommand(executable, args, label);
+      assert.equal(outputs.length, before + 1, `${label} output ownership`);
+      measured.push({ ...measuredResult(outputs.at(-1), label), ownsPartitionCount });
+    };
+    verify(executeClosedCandidate, process.execPath, ['--experimental-strip-types', 'scripts/opportunity-v3/acceptance-gate-runner.mjs', '--track', track], `${track} traceability`, true);
     if (track === 'product_runtime') {
       for (const script of [
         'test:source-led-opportunity-v3',
@@ -412,31 +526,48 @@ function executeTrack(subjectRoot, track, identity, attestation) {
         'typecheck:source-led-opportunity-v3',
         'lint:source-led-opportunity-v3',
         'build:source-led-opportunity-v3',
-      ]) execute('npm', ['run', script], script);
-      execute('npm', ['--prefix', 'web', 'run', 'test:e2e:v3-correctness'], 'test:e2e:v3-correctness');
-      execute('npm', ['run', 'test:source-led-opportunity-v3:performance'], 'test:source-led-opportunity-v3:performance');
+      ]) verify(execute, 'npm', ['run', script], script);
+      verify(execute, 'npm', ['--prefix', 'web', 'run', 'test:e2e:v3-correctness'], 'test:e2e:v3-correctness');
+      verify(execute, 'npm', ['run', 'test:source-led-opportunity-v3:performance'], 'test:source-led-opportunity-v3:performance');
     } else {
-      execute('npm', ['run', 'test:model-runner-v3'], 'test:model-runner-v3');
-      execute('npm', ['run', 'v3:doctor', '--', '--expect-mode', 'disabled', '--require-host-pin', 'model-runner-host-pins-v3.5'], 'disabled model runner doctor');
+      verify(executeClosedCandidate, 'npm', ['run', 'test:model-runner-v3'], 'test:model-runner-v3');
+      verify(executeClosedCandidate, 'npm', ['run', 'v3:doctor', '--', '--expect-mode', 'disabled', '--require-host-pin', 'model-runner-host-pins-v3.5'], 'disabled model runner doctor');
+      const oracle = trustedHostModelOracle(subjectRoot, attestation);
+      outputs.push(oracle);
+      measured.push({ ...measuredResult(oracle, 'trusted protected-base exact-subject model oracle'), ownsPartitionCount: false });
     }
     cleanTree(subjectRoot, attestation.subjectCommitSha, attestation.subjectTreeSha);
     const stdout = Buffer.concat(outputs.map(({ stdout: value }) => value));
     const stderr = Buffer.concat(outputs.map(({ stderr: value }) => value));
+    const totals = measured.reduce((result, row) => ({
+      passed: result.passed + (row.ownsPartitionCount ? row.passed : 0),
+      failed: result.failed + row.failed,
+      skipped: result.skipped + row.skipped,
+      todo: result.todo + row.todo,
+    }), { passed: 0, failed: 0, skipped: 0, todo: 0 });
+    assert.equal(measured.filter((row) => row.ownsPartitionCount).length, 1,
+      `${track} has exactly one registered acceptance owner`);
+    assert.deepEqual(
+      { ...totals, registeredCount: descriptor.registeredCount },
+      { passed: descriptor.registeredCount, failed: 0, skipped: 0, todo: 0,
+        registeredCount: descriptor.registeredCount },
+      `measured ${track} execution must close the registered partition`,
+    );
     const result = baseResult(descriptor.check, identity, attestation);
     result.commands = [{
       command: `protected://stockinsider-v3-gate-root/execute-track --track ${track}`,
       exitCode: 0,
-      failed: 0,
+      failed: totals.failed,
       name: descriptor.name,
-      passed: descriptor.count,
-      skipped: 0,
+      passed: totals.passed,
+      skipped: totals.skipped,
       stderrSha256: sha256(stderr),
       stdoutSha256: sha256(stdout),
-      todo: 0,
+      todo: totals.todo,
     }];
-    result.executedCount = descriptor.count;
+    result.executedCount = totals.passed + totals.failed + totals.skipped + totals.todo;
     result.partition = track;
-    result.registeredCount = descriptor.count;
+    result.registeredCount = descriptor.registeredCount;
     result.evidenceSha256 = sha256(canonicalJson(result));
     return result;
   } finally {
@@ -605,7 +736,11 @@ function main() {
     result = executeTrack(subjectRoot, args['--track'], identity, attestation);
   } else {
     const values = args.inputs.map((filename) => JSON.parse(readFileSync(absolute(filename, 'aggregate input'), 'utf8')));
-    for (const [index, check] of requiredChecks.entries()) validateEnvelope(values[index], identity, attestation, check);
+    for (const [index, check] of requiredChecks.entries()) {
+      validateEnvelope(values[index], identity, attestation, check);
+      if (reviewSources[check]) assert.deepEqual(values[index].result.review,
+        captureReview(subjectRoot, check, identity, attestation), `${check} aggregate Git/evidence binding`);
+    }
     result = baseResult('code-gate-aggregate', identity, attestation);
     result.inputs = values.map(({ result: input }) => ({ check: input.check, evidenceSha256: input.evidenceSha256 }));
     result.evidenceSha256 = sha256(canonicalJson(result));
