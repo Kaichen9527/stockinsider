@@ -366,6 +366,18 @@ function stageNonCredentialModelHome(scratch) {
     { flag: 'wx', mode: 0o600 });
 }
 
+function protectedHostPinFixture() {
+  return JSON.parse(treeBlob(baseRoot, git(baseRoot, ['rev-parse', 'HEAD^{tree}']),
+    `${changeRelative}/model-runner-host-pins-v3.json`, 'protected host pin fixture'));
+}
+
+function trustedPinnedNodeExecutable() {
+  const node = protectedHostPinFixture().executables.find(({ name }) => name === 'node');
+  assert.ok(node && path.isAbsolute(node.path), 'protected pinned Node path');
+  assert.equal(realpathSync(node.path), node.realpath, 'protected pinned Node realpath');
+  return node.path;
+}
+
 function trustedNodeToolchainRoot() {
   const nodeExecutable = realpathSync(process.execPath);
   const binDirectory = path.dirname(nodeExecutable);
@@ -399,10 +411,10 @@ function trustedAppleDeveloperToolchainRoot() {
 }
 
 function candidateSandbox(subjectRoot, scratch, environment, executable, args, { writableSource = false, network = false } = {}) {
-  const fixture = JSON.parse(treeBlob(baseRoot, git(baseRoot, ['rev-parse', 'HEAD^{tree}']),
-    `${changeRelative}/model-runner-host-pins-v3.json`, 'protected host pin fixture'));
+  const fixture = protectedHostPinFixture();
   const codex = fixture.executables.find(({ name }) => name === 'codex');
   assert.ok(codex && path.isAbsolute(codex.path), 'protected Codex path');
+  const pinnedNodeExecutable = trustedPinnedNodeExecutable();
   const nodeToolchainRoot = trustedNodeToolchainRoot();
   const appleDeveloperToolchain = trustedAppleDeveloperToolchainRoot();
   const policyRoot = mkdtempSync(path.join(os.tmpdir(), 'stockinsider-v3-candidate-policy-'));
@@ -416,6 +428,7 @@ function candidateSandbox(subjectRoot, scratch, environment, executable, args, {
       `"${escaped(scratch)}" = "write"`,
       `"${escaped(policyRoot)}" = "read"`,
       `"${escaped(nodeToolchainRoot)}" = "read"`,
+      `"${escaped(pinnedNodeExecutable)}" = "read"`,
       `"${escaped(appleDeveloperToolchain.root)}" = "read"`,
       '"/System/Library/OpenSSL" = "read"',
       '"/Applications/ChatGPT.app" = "read"', '',
@@ -453,7 +466,7 @@ function assertSubjectModelOracleEqualsProtectedBase(subjectRoot, subjectCommitS
   );
 }
 
-function trustedHostModelOracle(subjectRoot, attestation) {
+function trustedHostModelOracle(subjectRoot, attestation, nodeExecutable) {
   assertSubjectModelOracleEqualsProtectedBase(subjectRoot, attestation.subjectCommitSha);
   const runnerHome = process.env.HOME;
   assert.equal(typeof runnerHome, 'string', 'runner HOME required for trusted host oracle');
@@ -461,7 +474,7 @@ function trustedHostModelOracle(subjectRoot, attestation) {
   const stat = lstatSync(authentication);
   assert.equal(stat.isFile() && !stat.isSymbolicLink() && stat.uid === process.getuid() && (stat.mode & 0o077) === 0,
     true, 'trusted host oracle authentication boundary');
-  return run(baseRoot, process.execPath, [
+  return run(baseRoot, nodeExecutable, [
     '--test', 'scripts/model-runner-v3/model-runner-v3.test.js',
   ], { ...process.env, OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH: '0', OPPORTUNITY_V3_PROTECTED_LIVE_ONLY: '1' },
   'trusted protected-base host model oracle');
@@ -527,6 +540,7 @@ function executeTrack(subjectRoot, track, identity, attestation) {
   try {
     const outputs = [];
     const measured = [];
+    const modelNodeExecutable = track === 'model_runner' ? trustedPinnedNodeExecutable() : process.execPath;
     const execute = (executable, args, label) => outputs.push(run(subjectRoot, executable, args, environment, label));
     const executeCandidate = track === 'model_runner'
       ? (executable, args, label, options) => outputs.push(candidateSandbox(subjectRoot, scratch, environment,
@@ -557,7 +571,7 @@ function executeTrack(subjectRoot, track, identity, attestation) {
       assert.equal(outputs.length, before + 1, `${label} output ownership`);
       measured.push({ ...measuredResult(outputs.at(-1), label), ownsPartitionCount });
     };
-    verify(executeClosedCandidate, process.execPath, ['--experimental-strip-types', 'scripts/opportunity-v3/acceptance-gate-runner.mjs', '--track', track], `${track} traceability`, true);
+    verify(executeClosedCandidate, modelNodeExecutable, ['--experimental-strip-types', 'scripts/opportunity-v3/acceptance-gate-runner.mjs', '--track', track], `${track} traceability`, true);
     if (track === 'product_runtime') {
       for (const script of [
         'test:source-led-opportunity-v3',
@@ -571,9 +585,12 @@ function executeTrack(subjectRoot, track, identity, attestation) {
       verify(execute, 'npm', ['--prefix', 'web', 'run', 'test:e2e:v3-correctness'], 'test:e2e:v3-correctness');
       verify(execute, 'npm', ['run', 'test:source-led-opportunity-v3:performance'], 'test:source-led-opportunity-v3:performance');
     } else {
-      verify(executeClosedCandidate, 'npm', ['run', 'test:model-runner-v3'], 'test:model-runner-v3');
-      verify(executeClosedCandidate, 'npm', ['run', 'v3:doctor', '--', '--expect-mode', 'disabled', '--require-host-pin', 'model-runner-host-pins-v3.5'], 'disabled model runner doctor');
-      const oracle = trustedHostModelOracle(subjectRoot, attestation);
+      verify(executeClosedCandidate, modelNodeExecutable, ['scripts/run-node22.js', '--test',
+        'scripts/model-runner-v3/model-runner-v3.test.js'], 'test:model-runner-v3');
+      verify(executeClosedCandidate, modelNodeExecutable, ['scripts/run-node22.js', '--experimental-strip-types',
+        'scripts/opportunity-v3/doctor.mjs', '--expect-mode', 'disabled', '--require-host-pin',
+        'model-runner-host-pins-v3.5'], 'disabled model runner doctor');
+      const oracle = trustedHostModelOracle(subjectRoot, attestation, modelNodeExecutable);
       outputs.push(oracle);
       measured.push({ ...measuredResult(oracle, 'trusted protected-base exact-subject model oracle'), ownsPartitionCount: false });
     }
