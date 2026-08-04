@@ -100,10 +100,18 @@ test('candidate model code receives no credential and is enclosed by a base-owne
   assert.match(worker, /external-gate-candidate/u);
   assert.match(worker, /":root" = "deny"/u);
   assert.match(worker, /function trustedNodeToolchainRoot\(\)/u);
+  assert.match(worker, /function trustedPinnedNodeExecutable\(\)/u);
+  assert.match(worker, /protected pinned Node realpath/u);
+  assert.match(worker, /`"\$\{escaped\(pinnedNodeExecutable\)\}" = "read"`/u);
   assert.match(worker, /protected npm resolves inside the setup-node toolchain root/u);
   assert.match(worker, /`"\$\{escaped\(nodeToolchainRoot\)\}" = "read"`/u);
+  assert.match(worker, /function trustedAppleDeveloperToolchainRoot\(\)/u);
+  assert.match(worker, /protected git resolves inside the selected Apple developer root/u);
+  assert.match(worker, /`"\$\{escaped\(appleDeveloperToolchain[.]root\)\}" = "read"`/u);
+  assert.match(worker, /PATH: `\$\{appleDeveloperToolchain[.]gitBin\}\$\{path[.]delimiter\}\$\{environment[.]PATH\}`/u);
   assert.match(worker, /'"\/System\/Library\/OpenSSL" = "read"'/u);
   assert.match(worker, /trustedHostModelOracle/u);
+  assert.match(worker, /run\(baseRoot, nodeExecutable,/u);
   assert.match(worker, /OPPORTUNITY_V3_PROTECTED_LIVE_ONLY: '1'/u);
   assert.match(worker, /assertSubjectModelOracleEqualsProtectedBase/u);
   assert.match(worker, /credentialed model oracle must execute protected-base bytes identical to the exact subject/u);
