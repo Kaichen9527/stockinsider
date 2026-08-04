@@ -11,12 +11,15 @@ StockInsider 是一個以 Supabase + Next.js + Python pipeline 為核心的投�
 
 ## 1. 先決條件
 
-- Node.js 20+
+- Node.js 22.14.0（以 `.nvmrc` 為準）
 - npm 10+
 - Python 3.9+
 - Supabase 專案（含 Service Role Key）
 - LINE Messaging API Channel
 - (選配) Vercel for deployment
+
+Source-led Opportunity V3 的獨立本機驗證、環境契約與三條 release track 請見
+[docs/source-led-opportunity-v3.md](docs/source-led-opportunity-v3.md)。
 
 ## 2. 環境變數
 
@@ -50,11 +53,25 @@ cp .env.example .env
 - `OPENROUTER_API_KEY`
 - `PREFECT_API_URL`
 - `OPSX_MUTATING_SMOKE`
+- `THREADS_USERNAME` / `THREADS_PASSWORD` / `THREADS_SESSION_STATE`
+- `INVESTANCHORS_ACCOUNT` / `INVESTANCHORS_PASSWORD`
+- `TELEGRAM_BOT_TOKEN`
+- `YOUTUBE_API_KEY`
 
 ### 變數用途
 
 - `INTERNAL_API_KEY` / `CRON_SECRET`：保護 `/api/internal/*` 端點
 - `OPSX_MUTATING_SMOKE=true`：讓 `opsx:test` 額外跑 non-dry-run smoke
+- `THREADS_USERNAME` / `THREADS_PASSWORD`：Threads 專用登入帳號
+- `THREADS_SESSION_STATE`：持久 session JSON 路徑；預設會落在 `.agent/vendor/threads-session.json`
+- `THREADS_COOKIE_FALLBACK_*`：只作人工救援，不建議當主路徑
+- `INVESTANCHORS_ACCOUNT` / `INVESTANCHORS_PASSWORD`：定錨投筆登入帳密
+
+### Meta / Threads 注意事項
+
+- 不要再把 Threads 與 Instagram 共用同名 `sessionid/csrftoken/...` 當主配置。
+- 若 `.env` 內重複宣告 legacy Meta cookie，health-check 會回報 `env.metaCookieConfig.*.configError`。
+- 目前 runtime 仍會盡量從 `.env` 的 `#Thread` / `#Instagram` 區塊救援，但正式配置應改成 namespaced `THREADS_*` / `INSTAGRAM_*`。
 
 ## 3. 安裝依賴
 
@@ -99,12 +116,102 @@ PORT=3000 ./scripts/local-live-up.sh
 PORT=3010 ./scripts/local-live-up.sh
 ```
 
+- 若某些來源同步較慢（例如 `investanchors` 首輪），可調整 job timeout（秒）：
+
+```bash
+JOB_TIMEOUT_SECONDS=420 PORT=3010 ./scripts/local-live-up.sh
+```
+
 這個腳本會自動做：
 - 載入 `.env` 並強制 `DATA_MODE=live`
-- 啟動 `web` 開發伺服器
+- 啟動 `web` 開發伺服器（啟動前會先清掉同埠舊程序）
 - 檢查 `/api/internal/health-check`（必須 `fallbackUsed=false`）
-- 執行 `report-ingest -> thesis-refresh -> thesis-rank -> research-report-build`
+- 執行完整刷新鏈：
+  `source-sync(all) -> source-discovery -> theme-scan -> story-scan -> story-verify -> report-ingest -> thesis-refresh -> thesis-rank -> research-report-build -> report-build`
 - 驗證 `radar daily/hot/weekly` 為當日資料
+- 執行 `npm run test:e2e:investor`（預設啟用，失敗就中止，避免帶錯資料上線）
+
+若臨時只想先刷新資料、不跑 E2E：
+
+```bash
+RUN_E2E_INVESTOR=0 PORT=3010 ./scripts/local-live-up.sh
+```
+
+### 5.1.1 Reviewed runtime preparation（尚未授權 activation）
+
+正式 runtime 的安裝來源固定為 reviewed commit，不得從目前 worktree 或
+ignored `.agent` 內容安裝。目前這個 PR 的預設路徑只執行非啟用的 release
+preparation，不修改 `current`、launchd、正式資料庫或 runtime mode。程式另包含
+完整但預設不可達的 atomic activation/rollback adapter，只有獨立 production
+authority 才能進入。
+
+準備前先取得 exact-review 的 direct-child attestation commit，然後執行：
+
+```bash
+cd /Users/kaerchen/Desktop/20_stock/StockInsider
+npm run agent:runtime:prepare -- \
+  --source-commit <reviewed-40-hex-commit> \
+  --attestation-commit <direct-child-40-hex-evidence-commit>
+```
+
+preparation 會建立 installer-owned detached clean worktree，只複製 closed tracked
+runtime bundle、固定 config 與 lockfile，執行 `npm ci --omit=dev --ignore-scripts`，
+並重新驗證每一個 prepared byte（含 production dependencies）與 worker/config
+hashes。它不複製 `.env`。直接執行 `npm run agent:runtime:install` 會 fail closed；
+正式 activation 必須使用 `agent:runtime:activate-reviewed`，並同時提供 canonical
+`--authority-file`；該檔必須是 15 分鐘內有效、nonce 未使用且以固定 Keychain
+authority key 簽署的 v2 authority。Doctor 不接受 caller observation，而是直接
+讀取 release/launchd、read-only PostgreSQL 與 authenticated consumer health。該路徑會先封存三個舊 scheduler、
+建立 rollback package/manifest/journal、atomic 切換 `current`，doctor 未 PASS 即逆序
+復原。目前任務沒有提供或使用該 production authority。
+
+目前不得以舊的 `agent:runtime:status` 或 localhost Web 當作已啟用證據；正式
+activation 完成後才依 runtime installation contract 執行 doctor 與 internal health。
+
+啟用後唯一允許的 producer DAG 是：來源同步 → mention/claim extraction →
+candidate funnel → facts refresh → analysis revision → compact radar projection。
+
+### 5.1.2 舊版一條龍 daemon（fallback）
+
+```bash
+cd /Users/kaerchen/Desktop/20_stock/StockInsider
+PORT=3010 INTERVAL_SECONDS=14400 ./scripts/local-research-daemon.sh
+```
+
+- 週期流程（每輪）：
+  `source-sync(threads,instagram,telegram,investanchors) -> source-discovery -> story-scan -> story-verify -> thesis-refresh -> thesis-rank -> research-report-build(top10) -> report-build`
+- Log 檔案：
+  - `.agent/research-daemon.log`
+  - `.agent/research-daemon-web.log`
+- macOS `launchd` 版本範本：`scripts/com.stockinsider.research-daemon.plist`
+
+### 5.1.3 Authenticated Source Worker（手動）
+
+```bash
+cd /Users/kaerchen/Desktop/20_stock/StockInsider
+npm run worker:auth-sources
+```
+
+- 單次 smoke：
+
+```bash
+npm run worker:auth-sources:once
+```
+
+- 只看排程與 payload、不實際呼叫 API：
+
+```bash
+npm run worker:auth-sources:dry
+```
+
+`dry` 只驗證固定 config，不寫資料。其他命令必須同時具備 reviewed
+`STOCKINSIDER_REVIEWED_COMMIT_SHA`、`STOCKINSIDER_DATABASE_URL` 與
+`INTERNAL_API_KEY`；正式 runtime 尚未 activation 時不得把手動執行當成替代排程。
+
+### 5.1.4 Linux Virtual Server Runbook
+
+- 若你要在 Linux Virtual Server 上做一次性全量回補，並用 `systemd` 常駐跑 authenticated source worker，直接看：
+  [docs/virtual-server-auth-source-worker.md](/Users/kaerchen/Desktop/20_stock/StockInsider/docs/virtual-server-auth-source-worker.md)
 
 ### 5.2 手動啟動（進階）
 
@@ -177,7 +284,34 @@ export BASE_URL="http://127.0.0.1:3000"  # production 改成正式網域
 export AUTH_TOKEN="${INTERNAL_API_KEY:-$CRON_SECRET}"
 ```
 
-### 7.1 綁定 LINE
+## 7.1 固定投資者視角 E2E
+
+```bash
+cd web
+E2E_BASE_URL=http://127.0.0.1:3010 PLAYWRIGHT_SKIP_WEBSERVER=1 npm run test:e2e:investor
+```
+
+驗證項目：
+- 推薦區至少有正式/近7日補位/90日候補/早期觀察其中一區有資料
+- memo 標題為 `[代碼] 中文名｜標題`
+- 深度頁首屏有「投資結論 / 關鍵假設 / 驗證結果 / 估值區間」
+- K 線存在 MA5~MA240 指標
+- Threads 來源頁可看到來源連結或明確錯誤訊息
+
+### 7.1.1 治理契約驗證
+
+```bash
+cd web
+E2E_BASE_URL=http://127.0.0.1:3010 PLAYWRIGHT_SKIP_WEBSERVER=1 npm run test:e2e:governance
+```
+
+驗證項目：
+- 已發布 recommendation 必須可追溯到 `story_candidates`、`story_evidence_items`、`valuation_cases`
+- social/forum-only 題材不得升級成正式 recommendation
+- contradiction 必須進 `agent_review_queue`
+- `/api/radar/hot` 必須維持對應 canonical `three_day` window
+
+### 7.2 綁定 LINE
 
 ```bash
 curl -sS -X POST "$BASE_URL/api/line/bind" \
@@ -191,7 +325,7 @@ curl -sS -X POST "$BASE_URL/api/line/bind" \
   }'
 ```
 
-### 7.2 ingestion
+### 7.3 ingestion
 
 ```bash
 curl -sS -X POST "$BASE_URL/api/internal/ingestion-run" \
@@ -200,7 +334,7 @@ curl -sS -X POST "$BASE_URL/api/internal/ingestion-run" \
   -d '{"dryRun":false}'
 ```
 
-### 7.3 pipeline
+### 7.4 pipeline
 
 ```bash
 curl -sS -X POST "$BASE_URL/api/internal/pipeline-run" \
@@ -209,7 +343,7 @@ curl -sS -X POST "$BASE_URL/api/internal/pipeline-run" \
   -d '{"dryRun":false}'
 ```
 
-### 7.4 line-dispatch
+### 7.5 line-dispatch
 
 ```bash
 curl -sS -X POST "$BASE_URL/api/internal/line-dispatch" \
@@ -229,13 +363,88 @@ curl -sS "$BASE_URL/api/internal/line-diagnostics?hours=24" \
   -H "authorization: Bearer $AUTH_TOKEN"
 ```
 
-## 8. Production 部署流程（direct production）
+### 7.6 全量來源搜尋（Sources Explorer）
+
+前台頁面：
+
+`http://localhost:3000/sources`
+
+API：
+
+```bash
+curl -sS "$BASE_URL/api/sources/search?q=AI&symbol=2330&platform=threads&page=1&pageSize=25"
+
+# 依題材 key / run id / 證據層級查詢
+curl -sS "$BASE_URL/api/sources/search?themeKey=ai_servers&evidenceLevel=佐證層&page=1&pageSize=25"
+curl -sS "$BASE_URL/api/sources/search?runId=<connector_run_id>&platform=threads&page=1&pageSize=25"
+```
+
+來源稽核中心（包含 connector runs + source audits）：
+- 前台：`/sources`
+- 可以直接看到每個 connector 最近成功時間、最近錯誤、抓取筆數，以及本輪抓到的目標 URL/摘要證據。
+
+可用參數：
+- `q`：關鍵字（title/summary/content_text）
+- `symbol`：股票代號
+- `platform`：來源平台（`investanchors|threads|instagram|telegram|ptt|bulltalk|googlenews|anue|udn|mobile01|twse_insider`）
+- `verificationStatus`：`未證實|部分證實|已證實`
+- `from` / `to`：日期範圍（`YYYY-MM-DD`）
+- `page` / `pageSize`：分頁
+
+## 8. Vercel Preview / Production 部署流程
+
+### Preview（建議先跑）
+
+```bash
+cd web
+npm ci
+npm run lint
+npm run build
+npx vercel pull --yes --environment=preview
+npx vercel build
+npx vercel deploy --prebuilt
+```
+
+Preview smoke checklist：
+
+- `/api/internal/health-check`
+- `/sources`
+- `/stock/2454`
+- `/api/stocks/2454/deep-dive`
+- `/api/internal/stock-research-refresh`
+
+### Production
 
 1. `npm run db:migrate`
 2. `npm run db:verify`
-3. 部署 web（Vercel）
-4. 打 internal endpoints smoke（ingestion/pipeline/dispatch）
-5. 驗證 LINE dispatch 至少一次 `sent >= 1`
+3. 部署 web（Vercel，使用 `npx`，不需全域安裝）
+
+```bash
+cd web
+npm ci
+npm run lint
+npm run build
+npx vercel pull --yes --environment=production
+npx vercel build --prod
+npx vercel deploy --prebuilt --prod
+```
+
+4. production smoke（替換 `AUTH_TOKEN`）
+
+```bash
+export PROD_BASE_URL="https://stockinsider-three.vercel.app"
+export AUTH_TOKEN="<INTERNAL_API_KEY_OR_CRON_SECRET>"
+
+curl -i "$PROD_BASE_URL/"
+curl -i "$PROD_BASE_URL/api/radar/daily"
+curl -i "$PROD_BASE_URL/api/radar/hot"
+curl -i "$PROD_BASE_URL/api/radar/weekly"
+curl -i "$PROD_BASE_URL/api/internal/health-check" \
+  -H "authorization: Bearer $AUTH_TOKEN"
+```
+
+5. 打 internal endpoints smoke（ingestion/pipeline/dispatch）
+6. 驗證 LINE dispatch 至少一次 `sent >= 1`
 
 Rollback 參考：`docs/release_note_template.md`
 

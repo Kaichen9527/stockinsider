@@ -1,7 +1,8 @@
 # recommendation-strategy-engine Specification
 
 ## Purpose
-TBD - created by archiving change stock-insider-opportunity-engine. Update Purpose after archive.
+Produce deterministic, explainable daily recommendations and map them into actionable strategy states/events for execution and notification layers.
+
 ## Requirements
 ### Requirement: Generate Rule-Based Recommendation Score
 The system SHALL generate daily stock recommendations using a deterministic weighted score and confidence output.
@@ -23,4 +24,3 @@ The system SHALL evaluate strategy state transitions and emit line alert events 
 #### Scenario: Target hit transition
 - **WHEN** latest price crosses target threshold for an active strategy
 - **THEN** the system updates strategy state and inserts pending `line_alert_events` event
-

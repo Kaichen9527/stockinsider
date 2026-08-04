@@ -1,0 +1,17 @@
+{
+  "version": "source-led-eval-v3.3",
+  "legacyCodeRef": "12c131aa50ca53268878e9f025973533ac100c49",
+  "datasetManifestSha256": null,
+  "evaluatorSha256": null,
+  "selectionRule": "most_recent_120_metric_qualifying_dates_from_prior_252_at_evaluation_cutoff",
+  "runDateCount": 0,
+  "liveMaturedCohortCount": 0,
+  "metrics": {
+    "precisionAt20": null,
+    "ndcgAt20": null,
+    "worstDecileMae20Pct": null
+  },
+  "status": "unavailable_until_red_baseline_task",
+  "promotionAllowed": false,
+  "rule": "Fail closed until a reviewed point-in-time dataset manifest and deterministic evaluator populate and reproduce this lock."
+}

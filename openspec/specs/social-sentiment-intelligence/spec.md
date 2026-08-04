@@ -1,7 +1,8 @@
 # social-sentiment-intelligence Specification
 
 ## Purpose
-TBD - created by archiving change stock-insider-opportunity-engine. Update Purpose after archive.
+Capture noisy social signals (PTT/Threads/KOL) and normalize them into weighted sentiment features that are usable for deterministic recommendation scoring.
+
 ## Requirements
 ### Requirement: Ingest PTT/Threads/KOL Sentiment
 The system SHALL ingest sentiment for tracked symbols from PTT Stock, Threads, and configured KOLs.
@@ -16,4 +17,3 @@ The system SHALL aggregate social signals using source weights and confidence to
 #### Scenario: Daily social aggregation runs
 - **WHEN** recommendation scoring requests social features
 - **THEN** the system returns source-weighted sentiment score per symbol
-

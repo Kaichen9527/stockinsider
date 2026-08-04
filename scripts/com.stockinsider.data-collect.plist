@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.stockinsider.data-collect</string>
+
+    <key>ProgramArguments</key>
+    <array>
+      <string>/bin/bash</string>
+      <string>/Users/kaerchen/Desktop/20_stock/StockInsider/scripts/launchd-wrapper.sh</string>
+      <string>data-collect</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/kaerchen/Desktop/20_stock/StockInsider</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+      <key>PORT</key>
+      <string>3010</string>
+      <key>BASE_URL</key>
+      <string>http://127.0.0.1:3010</string>
+    </dict>
+
+    <key>StartCalendarInterval</key>
+    <array>
+      <dict>
+        <key>Hour</key>
+        <integer>7</integer>
+        <key>Minute</key>
+        <integer>30</integer>
+      </dict>
+      <dict>
+        <key>Hour</key>
+        <integer>15</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+      </dict>
+    </array>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/kaerchen/Desktop/20_stock/StockInsider/.agent/runtime/data-collect.launchd.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/kaerchen/Desktop/20_stock/StockInsider/.agent/runtime/data-collect.launchd.err.log</string>
+  </dict>
+</plist>

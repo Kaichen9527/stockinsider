@@ -2,18 +2,29 @@
   "name": "web",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:e2e": "playwright test"
+    "typecheck": "tsc --noEmit --pretty false",
+    "test:e2e": "playwright test",
+    "test:e2e:investor": "playwright test investor.spec.ts",
+    "test:e2e:governance": "playwright test governance-contracts.spec.ts",
+    "test:e2e:radar": "playwright test radar-buckets.spec.ts",
+    "test:e2e:deep-dive": "playwright test deep-dive-story.spec.ts",
+    "test:e2e:threads": "playwright test threads-quality.spec.ts",
+    "test:e2e:v3-correctness": "playwright test --config playwright.v3-correctness.config.ts"
   },
   "dependencies": {
     "@line/bot-sdk": "^10.6.0",
     "@supabase/supabase-js": "^2.97.0",
     "lightweight-charts": "^5.1.0",
-    "next": "16.1.6",
+    "next": "16.2.12",
+    "node-twstock": "^2.2.0",
     "pdf-parse": "^2.4.5",
     "pdfjs-dist": "^5.5.207",
     "playwright": "^1.58.2",
@@ -27,8 +38,17 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.1.6",
+    "eslint-config-next": "16.2.12",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "overrides": {
+    "axios": "1.19.0",
+    "follow-redirects": "1.16.0",
+    "form-data": "4.0.6",
+    "postcss": "8.5.25",
+    "sharp": "0.35.3",
+    "undici": "7.28.0",
+    "ws": "8.21.1"
   }
 }

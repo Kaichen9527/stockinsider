@@ -1,0 +1,117 @@
+name: Source-led opportunity V3
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/source-led-opportunity-v3.yml'
+      - '.loop-engineering/state/changes/source-led-opportunity-engine-v3/**'
+      - 'migrations/20260724_source_led_opportunity_engine_v3.sql'
+      - 'scripts/model-runner-v3/**'
+      - 'scripts/opportunity-v3/**'
+      - 'scripts/runtime/**'
+      - 'scripts/local-auth-source-worker.sh'
+      - 'scripts/runtime_doctor.js'
+      - 'scripts/run-node22.js'
+      - 'web/src/app/api/internal/financial-fact-v3/**'
+      - 'web/src/app/api/internal/instrument-roster-v3/**'
+      - 'web/src/app/api/internal/market-observation-v3/**'
+      - 'web/src/app/api/internal/opportunity-*/**'
+      - 'web/src/app/api/internal/peer-*-v3/**'
+      - 'web/src/app/api/internal/price-authority-v3/**'
+      - 'web/src/app/api/internal/publisher-verification-authority-v3/**'
+      - 'web/src/app/api/internal/source-*-v3/**'
+      - 'web/src/app/api/internal/stock-*-v3/**'
+      - 'web/src/app/api/internal/trading-session-v3/**'
+      - 'web/src/app/api/internal/valuation-verification-v3/**'
+      - 'web/src/app/api/opportunity-v3/**'
+      - 'web/src/app/api/radar/**'
+      - 'web/src/app/opportunity-v3/**'
+      - 'web/src/app/components/RadarTabs.tsx'
+      - 'web/src/lib/types.ts'
+      - 'web/src/app/components/ShadowOpportunityV3.tsx'
+      - 'web/src/lib/opportunity-v3/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'web/package.json'
+      - 'web/package-lock.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  product-runtime:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: "0"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            web/package-lock.json
+      - name: Install PostgreSQL
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes postgresql
+          postgres_bin="$(pg_config --bindir)"
+          test -x "$postgres_bin/initdb"
+          test -x "$postgres_bin/pg_ctl"
+          echo "$postgres_bin" >> "$GITHUB_PATH"
+      - name: Install root dependencies
+        run: npm ci
+      - name: Install web dependencies
+        working-directory: web
+        run: npm ci
+      - name: Install project-local Playwright Chromium
+        working-directory: web
+        run: ./node_modules/.bin/playwright install --with-deps chromium
+      - name: Run diagnostic product/runtime suite (not authoritative Code Gate evidence)
+        run: npm run diagnostic:source-led-opportunity-v3:product-runtime
+
+  evaluation-governance:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - name: Install root dependencies
+        run: npm ci
+      - name: Run evaluation/governance diagnostic (promotion evidence only)
+        run: node scripts/run-node22.js --experimental-strip-types --test --test-name-pattern="evaluation and product-value readiness|hybrid verified-change product boundary" web/src/lib/opportunity-v3/opportunity-v3.test.ts && node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/evaluation-governance-gate.mjs --require-backtest-dates 120 --require-live-dates 20 --require-attempt-roster 252
+
+  model-runner:
+    if: github.event_name == 'workflow_dispatch' && vars.OPPORTUNITY_V3_RUNNER_TRACK == 'true'
+    runs-on: [self-hosted, macOS, ARM64]
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+      - name: Install root dependencies
+        run: npm ci
+      - name: Verify pinned macOS model-runner track
+        run: npm run verify:source-led-opportunity-v3:model-runner
+
+  pr-product-runtime-gate:
+    name: stockinsider-v3-diagnostic-product-runtime
+    if: always()
+    needs: [product-runtime]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Require executable PR product/runtime evidence only
+        env:
+          PRODUCT_RUNTIME_RESULT: ${{ needs.product-runtime.result }}
+        run: |
+          test "$PRODUCT_RUNTIME_RESULT" = success

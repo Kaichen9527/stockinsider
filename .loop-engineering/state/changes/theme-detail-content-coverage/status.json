@@ -1,0 +1,13 @@
+{
+  "changeId": "theme-detail-content-coverage",
+  "requirementsStatus": "approved",
+  "designStatus": "approved",
+  "implementationStatus": "ready_for_full_verification",
+  "verificationStatus": "pass",
+  "releaseStatus": "not_started",
+  "loopStage": "ready_for_release",
+  "notes": [
+    "Constitution file .specify/memory/constitution.md is missing in this repo; AGENTS.md and Loop policy are used as active constraints.",
+    "No Supabase migration or Vercel deployment is included."
+  ]
+}

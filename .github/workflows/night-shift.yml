@@ -31,7 +31,7 @@ jobs:
           curl -sf -X POST "$APP_URL/api/internal/source-sync" \
             -H "Authorization: Bearer $INTERNAL_API_KEY" \
             -H "Content-Type: application/json" \
-            -d "{\"connector\":\"investanchors\",\"dryRun\":$DRY_RUN}" \
+            -d "{\"connector\":\"investanchors\",\"dryRun\":$DRY_RUN,\"statusOnly\":true}" \
             | tee /tmp/investanchors.json
           echo "Exit: $?"
 
@@ -40,7 +40,7 @@ jobs:
           curl -sf -X POST "$APP_URL/api/internal/source-sync" \
             -H "Authorization: Bearer $INTERNAL_API_KEY" \
             -H "Content-Type: application/json" \
-            -d "{\"connector\":\"threads\",\"dryRun\":$DRY_RUN}" \
+            -d "{\"connector\":\"threads\",\"dryRun\":$DRY_RUN,\"statusOnly\":true}" \
             | tee /tmp/threads.json
 
       - name: source-sync - instagram
@@ -48,7 +48,7 @@ jobs:
           curl -sf -X POST "$APP_URL/api/internal/source-sync" \
             -H "Authorization: Bearer $INTERNAL_API_KEY" \
             -H "Content-Type: application/json" \
-            -d "{\"connector\":\"instagram\",\"dryRun\":$DRY_RUN}" \
+            -d "{\"connector\":\"instagram\",\"dryRun\":$DRY_RUN,\"statusOnly\":true}" \
             | tee /tmp/instagram.json
 
       - name: source-sync - telegram
@@ -56,7 +56,7 @@ jobs:
           curl -sf -X POST "$APP_URL/api/internal/source-sync" \
             -H "Authorization: Bearer $INTERNAL_API_KEY" \
             -H "Content-Type: application/json" \
-            -d "{\"connector\":\"telegram\",\"dryRun\":$DRY_RUN}" \
+            -d "{\"connector\":\"telegram\",\"dryRun\":$DRY_RUN,\"statusOnly\":true}" \
             | tee /tmp/telegram.json
 
       - name: source-sync - ptt
@@ -64,7 +64,7 @@ jobs:
           curl -sf -X POST "$APP_URL/api/internal/source-sync" \
             -H "Authorization: Bearer $INTERNAL_API_KEY" \
             -H "Content-Type: application/json" \
-            -d "{\"connector\":\"ptt\",\"dryRun\":$DRY_RUN}" \
+            -d "{\"connector\":\"ptt\",\"dryRun\":$DRY_RUN,\"statusOnly\":true}" \
             | tee /tmp/ptt.json
 
       - name: source-sync - bulltalk
@@ -72,7 +72,7 @@ jobs:
           curl -sf -X POST "$APP_URL/api/internal/source-sync" \
             -H "Authorization: Bearer $INTERNAL_API_KEY" \
             -H "Content-Type: application/json" \
-            -d "{\"connector\":\"bulltalk\",\"dryRun\":$DRY_RUN}" \
+            -d "{\"connector\":\"bulltalk\",\"dryRun\":$DRY_RUN,\"statusOnly\":true}" \
             | tee /tmp/bulltalk.json
 
   research-pipeline:

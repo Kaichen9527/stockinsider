@@ -1,0 +1,29 @@
+{
+  "changeId": "actionable-entry-revaluation-broker-upgrade",
+  "loopStage": "ready_for_release",
+  "requirementsStatus": "approved",
+  "designStatus": "approved",
+  "implementationStatus": "complete",
+  "verificationStatus": "pass",
+  "releaseStatus": "deployed_production",
+  "createdAt": "2026-06-23T00:00:00+08:00",
+  "updatedAt": "2026-06-23T21:19:28+08:00",
+  "scope": [
+    "entry decision v2 actionability",
+    "revaluation SLA visibility",
+    "broker evidence radar status",
+    "non-deploy verification audits"
+  ],
+  "nonGoals": [
+    "production deployment",
+    "Supabase migration",
+    "secrets or environment changes",
+    "formal recommendation gate relaxation"
+  ],
+  "notes": [
+    "User supplied approved change plan. Implement in-place using existing domain/read-model structures.",
+    "No automatic deploy; release remains manual.",
+    "Verification passed locally against http://127.0.0.1:3012: lint, build, entry-buy-actionability-v2, revaluation-sla-v2, scenario-promote-to-base-v2, broker-evidence-radar-v2, recommendation-gates, valuation-sanity, revaluation-loop, source-health.",
+    "Production deployed to https://stockinsider-three.vercel.app via dpl_BAddKy53xohc1ojTfPDwmAdWccef. Production smoke passed: radar/deep-dive 2356 200, entry-buy-actionability-v2, revaluation-sla-v2, broker-evidence-radar-v2, recommendation-gates."
+  ]
+}

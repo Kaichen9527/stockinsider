@@ -2,6 +2,18 @@
 .env.*
 !.env.example
 
+# Local agent/runtime artifacts
+.agent/
+.codex/
+test-results/
+web/test-results/
+materials/
+loop-engineering-starter-kit-v5/
+*.log
+
+# V3 runner durable state (never source-controlled)
+.loop-engineering/runtime/model-runner-v3/
+
 # Node
 node_modules/
 npm-debug.log*
@@ -12,6 +24,7 @@ pnpm-debug.log*
 # Next.js
 .next/
 out/
+web/.vercel/
 
 # Python
 __pycache__/
@@ -23,3 +36,11 @@ __pycache__/
 .DS_Store
 .idea/
 .vscode/
+node_modules
+node_modules
+node_modules
+.vercel
+node_modules
+node_modules
+node_modules
+.gstack/
