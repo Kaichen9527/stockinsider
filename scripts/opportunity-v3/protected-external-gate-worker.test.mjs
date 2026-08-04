@@ -99,6 +99,10 @@ test('candidate model code receives no credential and is enclosed by a base-owne
   assert.match(worker, /OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH/u);
   assert.match(worker, /external-gate-candidate/u);
   assert.match(worker, /":root" = "deny"/u);
+  assert.match(worker, /function trustedNodeToolchainRoot\(\)/u);
+  assert.match(worker, /protected npm resolves inside the setup-node toolchain root/u);
+  assert.match(worker, /`"\$\{escaped\(nodeToolchainRoot\)\}" = "read"`/u);
+  assert.match(worker, /'"\/System\/Library\/OpenSSL" = "read"'/u);
   assert.match(worker, /trustedHostModelOracle/u);
   assert.match(worker, /OPPORTUNITY_V3_PROTECTED_LIVE_ONLY: '1'/u);
   assert.match(worker, /assertSubjectModelOracleEqualsProtectedBase/u);
