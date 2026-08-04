@@ -60,6 +60,11 @@ test('every third-party action is pinned to an immutable commit', () => {
   }
 });
 
+test('subject preparation pins Node from the protected base', () => {
+  assert.match(action, /node-version: '22\.14\.0'/u);
+  assert.doesNotMatch(action, /node-version-file:/u);
+});
+
 test('the base worker owns validation and performs the final exclusive envelope write', () => {
   assert.doesNotMatch(worker, /candidateCompatibility/u);
   const validation = worker.lastIndexOf('validateEnvelope(produced, identity, attestation, result.check);');

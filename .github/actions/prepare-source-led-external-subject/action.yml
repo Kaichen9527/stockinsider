@@ -10,7 +10,9 @@ runs:
   steps:
     - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
       with:
-        node-version-file: '.nvmrc'
+        # This action executes from the protected base before the detached subject is
+        # prepared, so its runtime pin must not depend on a candidate-owned file.
+        node-version: '22.14.0'
         cache: npm
         cache-dependency-path: package-lock.json
     - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
