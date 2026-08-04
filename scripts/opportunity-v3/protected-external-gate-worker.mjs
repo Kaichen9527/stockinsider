@@ -366,11 +366,27 @@ function stageNonCredentialModelHome(scratch) {
     { flag: 'wx', mode: 0o600 });
 }
 
+function trustedNodeToolchainRoot() {
+  const nodeExecutable = realpathSync(process.execPath);
+  const binDirectory = path.dirname(nodeExecutable);
+  assert.equal(path.basename(binDirectory), 'bin', 'protected Node executable lives in a bin directory');
+  const toolchainRoot = realpathSync(path.dirname(binDirectory));
+  const npmExecutable = realpathSync(path.join(binDirectory, 'npm'));
+  const npmRelative = path.relative(toolchainRoot, npmExecutable);
+  assert.equal(
+    npmRelative.length > 0 && npmRelative !== '..' && !npmRelative.startsWith(`..${path.sep}`) && !path.isAbsolute(npmRelative),
+    true,
+    'protected npm resolves inside the setup-node toolchain root',
+  );
+  return toolchainRoot;
+}
+
 function candidateSandbox(subjectRoot, scratch, environment, executable, args, { writableSource = false, network = false } = {}) {
   const fixture = JSON.parse(treeBlob(baseRoot, git(baseRoot, ['rev-parse', 'HEAD^{tree}']),
     `${changeRelative}/model-runner-host-pins-v3.json`, 'protected host pin fixture'));
   const codex = fixture.executables.find(({ name }) => name === 'codex');
   assert.ok(codex && path.isAbsolute(codex.path), 'protected Codex path');
+  const nodeToolchainRoot = trustedNodeToolchainRoot();
   const policyRoot = mkdtempSync(path.join(os.tmpdir(), 'stockinsider-v3-candidate-policy-'));
   try {
     const escaped = (value) => value.replaceAll('\\', '\\\\').replaceAll('"', '\\"');
@@ -381,6 +397,8 @@ function candidateSandbox(subjectRoot, scratch, environment, executable, args, {
       `"${escaped(subjectRoot)}" = "${writableSource ? 'write' : 'read'}"`,
       `"${escaped(scratch)}" = "write"`,
       `"${escaped(policyRoot)}" = "read"`,
+      `"${escaped(nodeToolchainRoot)}" = "read"`,
+      '"/System/Library/OpenSSL" = "read"',
       '"/Applications/ChatGPT.app" = "read"', '',
       '[permissions.external-gate-candidate.network]',
       `enabled = ${network ? 'true' : 'false'}`, '',
