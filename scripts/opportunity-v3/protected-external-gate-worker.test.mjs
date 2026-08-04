@@ -49,6 +49,13 @@ test('candidate execution waits for exact review and persistent execution is own
   assert.match(model, /github\.actor == github\.repository_owner/u);
   assert.match(model, /github\.triggering_actor == github\.repository_owner/u);
   assert.match(model, /^    runs-on: \[self-hosted, macOS, ARM64\]$/mu);
+  for (const token of [
+    'sudo apt-get install --yes postgresql',
+    'postgres_bin="$(pg_config --bindir)"',
+    'test -x "$postgres_bin/initdb"',
+    'test -x "$postgres_bin/pg_ctl"',
+  ]) assert.ok(product.includes(token), `product prerequisite: ${token}`);
+  assert.doesNotMatch(model, /(?:apt-get|postgres_bin|playwright install)/u);
 });
 
 test('every third-party action is pinned to an immutable commit', () => {
@@ -115,6 +122,8 @@ test('candidate model code receives no credential and is enclosed by a base-owne
   assert.match(worker, /OPPORTUNITY_V3_PROTECTED_LIVE_ONLY: '1'/u);
   assert.match(worker, /assertSubjectModelOracleEqualsProtectedBase/u);
   assert.match(worker, /credentialed model oracle must execute protected-base bytes identical to the exact subject/u);
+  assert.match(worker, /if \(track === 'product_runtime'\) \{\s+executeCandidate\('npm', \['--prefix', 'web', 'ci'/u);
+  assert.doesNotMatch(worker, /PCR-024 is an explicit acceptance-owner probe in both partitions/u);
   assert.match(worker, /measuredResult/u);
   assert.match(worker, /measured \$\{track\} execution must close the registered partition/u);
   assert.match(worker, /passed: totals[.]passed/u);

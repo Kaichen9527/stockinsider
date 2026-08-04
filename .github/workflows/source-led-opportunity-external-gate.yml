@@ -127,6 +127,14 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
           ref: ${{ github.event.pull_request.base.sha }}
+      - name: Install PostgreSQL tools required by the product acceptance owner
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes postgresql
+          postgres_bin="$(pg_config --bindir)"
+          test -x "$postgres_bin/initdb"
+          test -x "$postgres_bin/pg_ctl"
+          echo "$postgres_bin" >> "$GITHUB_PATH"
       - name: Retrieve bootstrap and prepare detached subject
         uses: ./.github/actions/prepare-source-led-external-subject
         with:
