@@ -395,7 +395,7 @@ function trustedAppleDeveloperToolchainRoot() {
     true,
     'protected git resolves inside the selected Apple developer root',
   );
-  return developerRoot;
+  return { gitBin: path.dirname(gitExecutable), root: developerRoot };
 }
 
 function candidateSandbox(subjectRoot, scratch, environment, executable, args, { writableSource = false, network = false } = {}) {
@@ -404,7 +404,7 @@ function candidateSandbox(subjectRoot, scratch, environment, executable, args, {
   const codex = fixture.executables.find(({ name }) => name === 'codex');
   assert.ok(codex && path.isAbsolute(codex.path), 'protected Codex path');
   const nodeToolchainRoot = trustedNodeToolchainRoot();
-  const appleDeveloperToolchainRoot = trustedAppleDeveloperToolchainRoot();
+  const appleDeveloperToolchain = trustedAppleDeveloperToolchainRoot();
   const policyRoot = mkdtempSync(path.join(os.tmpdir(), 'stockinsider-v3-candidate-policy-'));
   try {
     const escaped = (value) => value.replaceAll('\\', '\\\\').replaceAll('"', '\\"');
@@ -416,7 +416,7 @@ function candidateSandbox(subjectRoot, scratch, environment, executable, args, {
       `"${escaped(scratch)}" = "write"`,
       `"${escaped(policyRoot)}" = "read"`,
       `"${escaped(nodeToolchainRoot)}" = "read"`,
-      `"${escaped(appleDeveloperToolchainRoot)}" = "read"`,
+      `"${escaped(appleDeveloperToolchain.root)}" = "read"`,
       '"/System/Library/OpenSSL" = "read"',
       '"/Applications/ChatGPT.app" = "read"', '',
       '[permissions.external-gate-candidate.network]',
@@ -426,7 +426,11 @@ function candidateSandbox(subjectRoot, scratch, environment, executable, args, {
     return run(subjectRoot, codex.path, [
       'sandbox', '--profile', 'external-gate-candidate', '--permission-profile', 'external-gate-candidate',
       '-C', subjectRoot, '--', executable, ...args,
-    ], { ...environment, CODEX_HOME: policyRoot }, `sandboxed ${executable} ${args.join(' ')}`);
+    ], {
+      ...environment,
+      CODEX_HOME: policyRoot,
+      PATH: `${appleDeveloperToolchain.gitBin}${path.delimiter}${environment.PATH}`,
+    }, `sandboxed ${executable} ${args.join(' ')}`);
   } finally {
     rmSync(policyRoot, { force: true, recursive: true });
   }

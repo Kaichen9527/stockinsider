@@ -104,7 +104,8 @@ test('candidate model code receives no credential and is enclosed by a base-owne
   assert.match(worker, /`"\$\{escaped\(nodeToolchainRoot\)\}" = "read"`/u);
   assert.match(worker, /function trustedAppleDeveloperToolchainRoot\(\)/u);
   assert.match(worker, /protected git resolves inside the selected Apple developer root/u);
-  assert.match(worker, /`"\$\{escaped\(appleDeveloperToolchainRoot\)\}" = "read"`/u);
+  assert.match(worker, /`"\$\{escaped\(appleDeveloperToolchain[.]root\)\}" = "read"`/u);
+  assert.match(worker, /PATH: `\$\{appleDeveloperToolchain[.]gitBin\}\$\{path[.]delimiter\}\$\{environment[.]PATH\}`/u);
   assert.match(worker, /'"\/System\/Library\/OpenSSL" = "read"'/u);
   assert.match(worker, /trustedHostModelOracle/u);
   assert.match(worker, /OPPORTUNITY_V3_PROTECTED_LIVE_ONLY: '1'/u);
