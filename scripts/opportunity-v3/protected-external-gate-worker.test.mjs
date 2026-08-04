@@ -63,6 +63,12 @@ test('every third-party action is pinned to an immutable commit', () => {
 test('subject preparation pins Node from the protected base', () => {
   assert.match(action, /node-version: '22\.14\.0'/u);
   assert.doesNotMatch(action, /node-version-file:/u);
+  assert.match(worker, /\['init', target\]/u);
+  assert.match(worker, /\['fetch', '--no-tags', baseRoot, [.]\.\.localTargets\]/u);
+  assert.match(worker, /subject checkout has no configured remote/u);
+  assert.match(worker, /subject checkout has no credential-bearing Git config/u);
+  assert.doesNotMatch(worker, /\['worktree', 'add'/u);
+  assert.doesNotMatch(worker, /\['remote', 'remove', 'origin'\]/u);
 });
 
 test('the base worker owns validation and performs the final exclusive envelope write', () => {

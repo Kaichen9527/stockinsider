@@ -696,23 +696,28 @@ function parseArguments(argv) {
 function prepare(attestation, subjectRoot) {
   assert.equal(git(baseRoot, ['rev-parse', 'HEAD']), attestation.baseCommitSha, 'prepare from protected base');
   assert.equal(git(baseRoot, ['status', '--porcelain=v1', '--untracked-files=all']), '', 'prepare base clean');
-  const targets = [
+  const remoteTargets = [
     attestation.subjectCommitSha,
     ...Object.values(reviewSources).map(({ ref }) => {
       const remoteBranch = ref.replace('refs/remotes/origin/', 'refs/heads/');
       return `${remoteBranch}:${ref}`;
     }),
   ];
-  execFileSync('/usr/bin/git', ['fetch', '--no-tags', 'origin', ...targets], { cwd: baseRoot, stdio: 'inherit' });
+  execFileSync('/usr/bin/git', ['fetch', '--no-tags', 'origin', ...remoteTargets], { cwd: baseRoot, stdio: 'inherit' });
   const target = absolute(subjectRoot, 'subject root');
-  execFileSync('/usr/bin/git', ['worktree', 'add', '--detach', target, attestation.subjectCommitSha], { cwd: baseRoot, stdio: 'inherit' });
-  for (const command of [
-    ['remote', 'remove', 'origin'],
-    ['config', '--unset-all', 'http.https://github.com/.extraheader'],
-  ]) {
-    const result = spawnSync('/usr/bin/git', command, { cwd: target, encoding: 'utf8' });
-    assert.ok(result.status === 0 || command[1] === '--unset-all', `sanitize subject Git config: ${command.join(' ')}`);
-  }
+  execFileSync('/usr/bin/git', ['init', target], { cwd: baseRoot, stdio: 'inherit' });
+  const localTargets = [
+    attestation.subjectCommitSha,
+    ...Object.values(reviewSources).map(({ ref }) => `${ref}:${ref}`),
+  ];
+  execFileSync('/usr/bin/git', ['fetch', '--no-tags', baseRoot, ...localTargets], { cwd: target, stdio: 'inherit' });
+  execFileSync('/usr/bin/git', ['checkout', '--detach', attestation.subjectCommitSha], { cwd: target, stdio: 'inherit' });
+  assert.equal(git(target, ['remote']), '', 'subject checkout has no configured remote');
+  const credentialConfig = spawnSync('/usr/bin/git', ['config', '--local', '--get-regexp', '^http[.].*[.]extraheader$'], {
+    cwd: target,
+    encoding: 'utf8',
+  });
+  assert.equal(credentialConfig.status, 1, 'subject checkout has no credential-bearing Git config');
   validateAttestation(attestation, target);
 }
 
