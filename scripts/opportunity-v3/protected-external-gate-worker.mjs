@@ -549,15 +549,15 @@ function executeTrack(subjectRoot, track, identity, attestation) {
     if (track === 'model_runner') stageNonCredentialModelHome(scratch);
     executeCandidate('npm', ['ci', '--ignore-scripts'], 'root dependency preparation',
       { writableSource: true, network: true });
-    // Acceptance ownership tests exercise shared Web modules for both tracks. Install
-    // their locked dependencies before either traceability run; no lifecycle scripts
-    // or ambient credentials are inherited into this detached checkout.
-    executeCandidate('npm', ['--prefix', 'web', 'ci', '--ignore-scripts'], 'web dependency preparation',
-      { writableSource: true, network: true });
-    // PCR-024 is an explicit acceptance-owner probe in both partitions, so its
-    // project-local browser binary is part of each isolated trace's prerequisites.
-    executeCandidate(path.join(subjectRoot, 'web/node_modules/.bin/playwright'), ['install', '--with-deps', 'chromium'],
-      'project-local Chromium preparation', { writableSource: true, network: true });
+    // Only the product partition owns Web and PCR cases. The model partition owns
+    // exactly MR3 and must not download Web dependencies or a browser before its
+    // credential-free trace and two-case protected host oracle.
+    if (track === 'product_runtime') {
+      executeCandidate('npm', ['--prefix', 'web', 'ci', '--ignore-scripts'], 'web dependency preparation',
+        { writableSource: true, network: true });
+      executeCandidate(path.join(subjectRoot, 'web/node_modules/.bin/playwright'), ['install', '--with-deps', 'chromium'],
+        'project-local Chromium preparation', { writableSource: true, network: true });
+    }
     cleanTree(subjectRoot, attestation.subjectCommitSha, attestation.subjectTreeSha);
     const candidateEnvironment = track === 'model_runner'
       ? { ...environment, OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH: '1' } : environment;
