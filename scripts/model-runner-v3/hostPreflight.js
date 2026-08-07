@@ -120,6 +120,29 @@ function checkedCommand(command, args) {
   return `${result.stdout || ''}${result.stderr || ''}`;
 }
 
+const appleGitSandboxCacheDenial = /^git: error: couldn't create cache file '\/var\/folders\/[A-Za-z0-9_/-]+\/T\/xcrun_db-[A-Za-z0-9]+' \(errno=Operation not permitted\)$/u;
+
+function validatedVersionOutput(command, stdout, stderr) {
+  assert(typeof stdout === 'string' && typeof stderr === 'string', 5);
+  if (stderr === '') return stdout;
+  const lines = stderr.endsWith('\n') ? stderr.slice(0, -1).split('\n') : [];
+  assert(command === '/usr/bin/git' && lines.length === 2
+    && lines.every((line) => appleGitSandboxCacheDenial.test(line)), 5);
+  return stdout;
+}
+
+function checkedVersion(command, args) {
+  const result = spawnSync(command, args, {
+    encoding: 'utf8',
+    env: { PATH: '/usr/bin:/bin:/usr/sbin:/sbin', LANG: 'C', LC_ALL: 'C' },
+    shell: false,
+    timeout: 30_000,
+    maxBuffer: 2 * 1024 * 1024,
+  });
+  assert(result.status === 0 && result.signal === null, 5);
+  return validatedVersionOutput(command, result.stdout || '', result.stderr || '');
+}
+
 function verifySignature(filename, expected, bundle = false) {
   const verbose = checkedCommand('/usr/bin/codesign', ['-d', '--verbose=4', filename]);
   assert(verbose.includes(`CandidateCDHashFull sha256=${expected.cdHashFullSha256}`), 5);
@@ -152,7 +175,7 @@ function verifyCurrentNode(fixture) {
     assert(hashFile(executable.path) === executable.sha256, 5);
     const version = name === 'node'
       ? process.version
-      : checkedCommand(executable.path, ['--version']).trim();
+      : checkedVersion(executable.path, ['--version']).trim();
     assert(version === executable.version, 5);
     if (name === 'codex') verifySignature(executable.path, executable.signing);
   }
@@ -176,4 +199,5 @@ module.exports = {
   modeString,
   ancestorIdentity,
   assertAncestorIdentity,
+  validatedVersionOutput,
 };
