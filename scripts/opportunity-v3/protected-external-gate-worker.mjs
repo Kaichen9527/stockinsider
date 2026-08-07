@@ -549,12 +549,12 @@ function executeTrack(subjectRoot, track, identity, attestation) {
     if (track === 'model_runner') stageNonCredentialModelHome(scratch);
     executeCandidate('npm', ['ci', '--ignore-scripts'], 'root dependency preparation',
       { writableSource: true, network: true });
-    // Only the product partition owns Web and PCR cases. The model partition owns
-    // exactly MR3 and must not download Web dependencies or a browser before its
-    // credential-free trace and two-case protected host oracle.
+    // Both partition traces import the shared Web TypeScript graph, so both need
+    // its JavaScript dependencies. Only the product partition owns browser cases
+    // and may download Chromium or its operating-system dependencies.
+    executeCandidate('npm', ['--prefix', 'web', 'ci', '--ignore-scripts'], 'web dependency preparation',
+      { writableSource: true, network: true });
     if (track === 'product_runtime') {
-      executeCandidate('npm', ['--prefix', 'web', 'ci', '--ignore-scripts'], 'web dependency preparation',
-        { writableSource: true, network: true });
       executeCandidate(path.join(subjectRoot, 'web/node_modules/.bin/playwright'), ['install', '--with-deps', 'chromium'],
         'project-local Chromium preparation', { writableSource: true, network: true });
     }
