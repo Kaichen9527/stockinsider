@@ -122,7 +122,11 @@ test('candidate model code receives no credential and is enclosed by a base-owne
   assert.match(worker, /OPPORTUNITY_V3_PROTECTED_LIVE_ONLY: '1'/u);
   assert.match(worker, /assertSubjectModelOracleEqualsProtectedBase/u);
   assert.match(worker, /credentialed model oracle must execute protected-base bytes identical to the exact subject/u);
-  assert.match(worker, /if \(track === 'product_runtime'\) \{\s+executeCandidate\('npm', \['--prefix', 'web', 'ci'/u);
+  const webDependencies = worker.indexOf("executeCandidate('npm', ['--prefix', 'web', 'ci'");
+  const browserBoundary = worker.indexOf("if (track === 'product_runtime') {", webDependencies);
+  const browserInstall = worker.indexOf("executeCandidate(path.join(subjectRoot, 'web/node_modules/.bin/playwright')", browserBoundary);
+  assert.ok(webDependencies >= 0 && webDependencies < browserBoundary && browserBoundary < browserInstall,
+    'both tracks install Web dependencies before the product-only browser boundary');
   assert.doesNotMatch(worker, /PCR-024 is an explicit acceptance-owner probe in both partitions/u);
   assert.match(worker, /measuredResult/u);
   assert.match(worker, /measured \$\{track\} execution must close the registered partition/u);
