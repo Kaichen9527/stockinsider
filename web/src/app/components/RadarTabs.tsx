@@ -158,6 +158,8 @@ type TabKey = 'stocks' | 'themes' | 'discovery';
 
 export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrimary: boolean }) {
   const cardTitleId = `stock-card-${rec.recommendationId.replace(/[^A-Za-z0-9_-]/gu, '-')}`;
+  const researchDecision = rec.researchDecision;
+  const availableResearchDecision = researchDecision?.availability === 'unavailable' ? null : researchDecision;
   const stateBadge =
     rec.displayBucket === 'hot_tracking'
       ? { label: '熱股追蹤', cls: 'bg-orange-500/12 text-orange-700 dark:text-orange-300' }
@@ -256,57 +258,65 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
         ) : null}
       </div>
 
-      {rec.researchDecision ? (
+      {availableResearchDecision ? (
         <section aria-label="研究與進場判斷" className="mt-3 rounded-xl border border-line bg-surface p-3 text-xs">
           <div className="flex flex-wrap gap-2">
-            <span className="rounded-full bg-slate-950/8 px-2.5 py-1 dark:bg-emerald-100/10">研究：{rec.researchDecision.researchMaturity}</span>
-            <span className="rounded-full bg-amber-500/12 px-2.5 py-1 text-amber-800 dark:text-amber-300">動作：{rec.researchDecision.newPositionAction}</span>
-            <span className="rounded-full bg-sky-500/12 px-2.5 py-1 text-sky-800 dark:text-sky-300">技術：{rec.researchDecision.technical.state || '資料不足'}</span>
-            {rec.researchDecision.technical.maDeviation != null ? (
-              <span className="rounded-full bg-violet-500/12 px-2.5 py-1 text-violet-800 dark:text-violet-300">MA20 乖離 {(rec.researchDecision.technical.maDeviation * 100).toFixed(1)}%</span>
+            <span className="rounded-full bg-slate-950/8 px-2.5 py-1 dark:bg-emerald-100/10">研究：{availableResearchDecision.researchMaturity}</span>
+            <span className="rounded-full bg-amber-500/12 px-2.5 py-1 text-amber-800 dark:text-amber-300">動作：{availableResearchDecision.newPositionAction}</span>
+            <span className="rounded-full bg-sky-500/12 px-2.5 py-1 text-sky-800 dark:text-sky-300">技術：{availableResearchDecision.technical.state || '資料不足'}</span>
+            {availableResearchDecision.technical.maDeviation != null ? (
+              <span className="rounded-full bg-violet-500/12 px-2.5 py-1 text-violet-800 dark:text-violet-300">MA20 乖離 {(availableResearchDecision.technical.maDeviation * 100).toFixed(1)}%</span>
             ) : null}
-            <span className="rounded-full bg-slate-950/8 px-2.5 py-1 dark:bg-emerald-100/10">估值：{rec.researchDecision.valuation.status === 'normal' ? '可用' : '待覆核'}</span>
+            <span className="rounded-full bg-slate-950/8 px-2.5 py-1 dark:bg-emerald-100/10">估值：{availableResearchDecision.valuation.status === 'normal' ? '可用' : '待覆核'}</span>
           </div>
-          {rec.researchDecision.technical.state === 'reclaim_required' ? (
+          {availableResearchDecision.technical.state === 'reclaim_required' ? (
             <p className="mt-2 text-amber-800 dark:text-amber-300">已跌破支撐，原支撐現為收復觸發；未收復前不把它顯示成回測買點。</p>
           ) : null}
           <div aria-label="四軸研究評分" className="mt-3 grid min-w-0 grid-cols-2 gap-2 sm:grid-cols-4">
-            {rec.researchDecision.factorAxes?.availability === 'available'
-              ? Object.entries(rec.researchDecision.factorAxes.axes).map(([axis, score]) => (
+            {availableResearchDecision.factorAxes?.availability === 'available'
+              ? Object.entries(availableResearchDecision.factorAxes.axes).map(([axis, score]) => (
                 <div key={axis} className="min-w-0 break-words rounded-lg bg-slate-950/5 px-2 py-2 dark:bg-emerald-100/5">
                   <p className="text-slate-500 dark:text-emerald-100/60">{{ discovery: '發現', quality: '基本面品質', valuation: '估值', timingRisk: '時機風險' }[axis] || axis}</p>
                   <p className="mt-1 font-semibold tabular-nums">{Number(score).toFixed(0)} / 100</p>
                 </div>
               ))
-              : <p className="col-span-full break-words text-slate-500 dark:text-emerald-100/60">四軸評分：{rec.researchDecision.factorAxes?.reason || '資料不足'}</p>}
+              : <p className="col-span-full break-words text-slate-500 dark:text-emerald-100/60">四軸評分：{availableResearchDecision.factorAxes?.reason || '資料不足'}</p>}
           </div>
           <div aria-label="乖離率與本益比脈絡" className="mt-3 grid min-w-0 gap-2 sm:grid-cols-2">
             <div className="min-w-0 break-words rounded-lg bg-violet-500/8 px-3 py-2">
               <p className="font-medium">乖離率（BIAS）</p>
-              {rec.researchDecision.technical.bias?.availability === 'available' ? (
+              {availableResearchDecision.technical.bias?.availability === 'available' ? (
                 <p className="mt-1 text-slate-600 dark:text-emerald-100/70">
-                  MA20 {rec.researchDecision.technical.bias.bias20Pct.toFixed(1)}%
-                  {rec.researchDecision.technical.bias.bias60Pct != null ? ` · MA60 ${rec.researchDecision.technical.bias.bias60Pct.toFixed(1)}%` : ''}
-                  {rec.researchDecision.technical.bias.ownHistory?.label ? ` · 個股歷史 ${rec.researchDecision.technical.bias.ownHistory.label}` : ''}
+                  MA20 {availableResearchDecision.technical.bias.bias20Pct.toFixed(1)}%
+                  {availableResearchDecision.technical.bias.bias60Pct != null ? ` · MA60 ${availableResearchDecision.technical.bias.bias60Pct.toFixed(1)}%` : ''}
+                  {availableResearchDecision.technical.bias.ownHistory?.label ? ` · 個股歷史 ${availableResearchDecision.technical.bias.ownHistory.label}` : ''}
                 </p>
-              ) : <p className="mt-1 text-slate-500 dark:text-emerald-100/60">{rec.researchDecision.technical.bias?.reason || '乖離率歷史不足'}</p>}
+              ) : <p className="mt-1 text-slate-500 dark:text-emerald-100/60">{availableResearchDecision.technical.bias?.reason || '乖離率歷史不足'}</p>}
             </div>
             <div className="min-w-0 break-words rounded-lg bg-sky-500/8 px-3 py-2">
               <p className="font-medium">本益比比較（官方／模型分列）</p>
               <p className="mt-1 text-slate-600 dark:text-emerald-100/70">
-                {rec.researchDecision.valuation.exchangeReportedPe?.availability === 'available'
-                  ? `交易所 ${rec.researchDecision.valuation.exchangeReportedPe.current ?? rec.researchDecision.valuation.exchangeReportedPe.value ?? '—'}`
-                  : `交易所：${rec.researchDecision.valuation.exchangeReportedPe?.reason || '資料不足'}`}
+                {availableResearchDecision.valuation.exchangeReportedPe?.availability === 'available'
+                  ? `交易所 ${availableResearchDecision.valuation.exchangeReportedPe.current ?? availableResearchDecision.valuation.exchangeReportedPe.value ?? '—'}`
+                  : `交易所：${availableResearchDecision.valuation.exchangeReportedPe?.reason || '資料不足'}`}
                 {' · '}
-                {rec.researchDecision.valuation.modelComparablePe && rec.researchDecision.valuation.modelComparablePe.value != null
-                  ? `模型 ${rec.researchDecision.valuation.modelComparablePe.value}`
-                  : `模型：${rec.researchDecision.valuation.modelComparablePe?.reason || '不適用'}`}
+                {availableResearchDecision.valuation.modelComparablePe && availableResearchDecision.valuation.modelComparablePe.value != null
+                  ? `模型 ${availableResearchDecision.valuation.modelComparablePe.value}`
+                  : `模型：${availableResearchDecision.valuation.modelComparablePe?.reason || '不適用'}`}
               </p>
             </div>
           </div>
-          {rec.researchDecision.materialChangedBecause.length === 0 && rec.researchDecision.lastEvaluatedAt ? (
-            <p className="mt-2 text-slate-500 dark:text-emerald-100/60">已於 {formatTaipeiDateTime(rec.researchDecision.lastEvaluatedAt, 'compact')} 檢查，沒有重大變化。</p>
+          {availableResearchDecision.materialChangedBecause.length === 0 && availableResearchDecision.lastEvaluatedAt ? (
+            <p className="mt-2 text-slate-500 dark:text-emerald-100/60">已於 {formatTaipeiDateTime(availableResearchDecision.lastEvaluatedAt, 'compact')} 檢查，沒有重大變化。</p>
           ) : null}
+        </section>
+      ) : researchDecision?.availability === 'unavailable' ? (
+        <section aria-label="研究與進場判斷" className="mt-3 rounded-xl border border-amber-500/25 bg-amber-500/8 p-3 text-xs">
+          <div className="flex flex-wrap gap-2">
+            <span className="rounded-full bg-slate-950/8 px-2.5 py-1 dark:bg-emerald-100/10">研究：{researchDecision.researchMaturity}</span>
+            <span className="rounded-full bg-amber-500/12 px-2.5 py-1 text-amber-800 dark:text-amber-300">動作：{researchDecision.newPositionAction}</span>
+          </div>
+          <p className="mt-2 break-words text-amber-800 dark:text-amber-300">研究資料待補：{researchDecision.reason}</p>
         </section>
       ) : null}
 

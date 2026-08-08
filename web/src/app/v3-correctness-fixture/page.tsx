@@ -49,6 +49,18 @@ const cards = [
   card('fixture-reclaim', '9003', { ...baseDecision, technical: { ...baseDecision.technical, state: 'reclaim_required', trigger: { kind: 'reclaim', threshold: 102, volumeRatioMinimum: 1.3 }, entryZone: { kind: 'trigger_zone', lower: 102, upper: 104 }, invalidation: { stop: 96, thesisLevel: 97 } } }),
   card('fixture-unavailable', '9004', { ...baseDecision, newPositionAction: 'wait_trigger', technical: { availability: 'unavailable', state: null, bias: { availability: 'unavailable', reason: 'insufficient_adjusted_history' } }, factorAxes: { availability: 'unavailable', reason: 'factor_inputs_unavailable' } }),
   card('fixture-no-change', '9005', baseDecision),
+  card('fixture-decision-unavailable', '9006', {
+    version: 'legacy-research-decision-v3.11.0',
+    availability: 'unavailable',
+    reason: 'financial_inputs_missing',
+    researchMaturity: 'source_signal',
+    newPositionAction: 'valuation_review',
+    lastEvaluatedAt: '2026-08-01T00:00:00Z',
+    analysisGeneratedAt: null,
+    materialChangeHash: null,
+    materialChangedBecause: [],
+    noChangeMessage: null,
+  }),
 ];
 
 export default function V3CorrectnessFixturePage() {

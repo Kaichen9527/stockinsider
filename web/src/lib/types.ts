@@ -895,9 +895,19 @@ export interface DailyMarketFocus {
   freshness: SignalFreshness;
 }
 
-export interface ResearchDecisionV311 {
+interface ResearchDecisionCommonV311 {
   researchMaturity: 'source_signal' | 'fundamental_review' | 'decision_ready';
   newPositionAction: 'avoid' | 'valuation_review' | 'wait_trigger' | 'event_starter' | 'starter_now';
+  lastEvaluatedAt: string | null;
+  analysisGeneratedAt: string | null;
+  materialChangeHash: string | null;
+  materialChangedBecause: string[];
+  noChangeMessage?: string | null;
+}
+
+export interface AvailableResearchDecisionV311 extends ResearchDecisionCommonV311 {
+  version?: 'legacy-research-decision-v3.11.0';
+  availability?: 'available';
   technical: {
     availability: 'available' | 'unavailable';
     state: 'below_support' | 'reclaim_required' | 'at_support' | 'breakout_pending' | 'breakout_confirmed' | 'extended' | 'invalidated' | null;
@@ -929,11 +939,15 @@ export interface ResearchDecisionV311 {
     valuation: number;
     timingRisk: number;
   }} | { availability: 'unavailable'; reason: string } | null;
-  lastEvaluatedAt: string | null;
-  analysisGeneratedAt: string | null;
-  materialChangeHash: string | null;
-  materialChangedBecause: string[];
 }
+
+export interface UnavailableResearchDecisionV311 extends ResearchDecisionCommonV311 {
+  version: 'legacy-research-decision-v3.11.0';
+  availability: 'unavailable';
+  reason: string;
+}
+
+export type ResearchDecisionV311 = AvailableResearchDecisionV311 | UnavailableResearchDecisionV311;
 
 export interface RecommendationCard {
   recommendationId: string;

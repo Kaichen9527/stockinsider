@@ -18,19 +18,23 @@ test('disabled correctness surface preserves public legacy reads and V3 exact 40
 });
 
 test('PCR-024 exercises the decision matrix at 320px, 200% zoom, keyboard, reduced motion and both themes', async ({ page }) => {
+  const pageErrors: Error[] = [];
+  page.on('pageerror', (error) => pageErrors.push(error));
   await page.setViewportSize({ width: 320, height: 900 });
   await page.emulateMedia({ reducedMotion: 'reduce', colorScheme: 'light' });
   await page.goto('/v3-correctness-fixture');
   await page.evaluate(() => { document.documentElement.style.zoom = '2'; });
 
   const articles = page.getByRole('article');
-  await expect(articles).toHaveCount(5);
+  await expect(articles).toHaveCount(6);
   await expect(page.getByRole('region', { name: '研究與進場判斷' }).first()).toBeVisible();
   await expect(page.getByText('已跌破支撐，原支撐現為收復觸發；未收復前不把它顯示成回測買點。')).toBeVisible();
   await expect(page.getByLabel('四軸研究評分').first()).toBeAttached();
   await expect(page.getByText(/MA20 -4\.2%/u).first()).toBeVisible();
   await expect(page.getByText(/交易所 12\.8 · 模型 13\.4/u).first()).toBeVisible();
   await expect(page.getByText(/沒有重大變化/u).first()).toBeVisible();
+  await expect(page.getByText(/研究資料待補：financial_inputs_missing/u)).toBeVisible();
+  expect(pageErrors).toEqual([]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
 
   await page.evaluate(() => { document.body.tabIndex = -1; document.body.focus(); });
