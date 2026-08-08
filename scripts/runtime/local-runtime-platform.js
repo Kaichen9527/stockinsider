@@ -131,6 +131,19 @@ async function startOwnerAndWait(label, maximumSeconds = 1500, dependencies = {}
   }
   fail('scheduler_activation_failed');
 }
+async function replaceOwnerAndWait(label, target, proposedPlistBytes, priorOwnerState, dependencies = {}) {
+  const invokeLaunchctl = dependencies.launchctl ?? launchctl;
+  const installFile = dependencies.atomicOwnedFile ?? atomicOwnedFile;
+  const waitForOwner = dependencies.startOwnerAndWait ?? startOwnerAndWait;
+  if (typeof invokeLaunchctl !== 'function' || typeof installFile !== 'function' ||
+    typeof waitForOwner !== 'function' || !priorOwnerState || typeof priorOwnerState.enabled !== 'boolean') {
+    fail('scheduler_activation_failed');
+  }
+  if (priorOwnerState.enabled) invokeLaunchctl(['unload', target]);
+  installFile(target, proposedPlistBytes);
+  invokeLaunchctl(['load', target]);
+  await waitForOwner(label);
+}
 function schedulerRow(label) {
   const filename = plistPath(label);
   const bytes = ownedRegularBytes(filename, true);
@@ -377,9 +390,8 @@ function createLocalRuntimePlatform({ runtimeRoot, preparedRoot, manifest, revie
         fail('scheduler_snapshot_changed');
       }
       const target = plistPath(OWNER_LABEL);
-      atomicOwnedFile(target, proposedPlistBytes);
-      launchctl(['load', target]);
-      await startOwnerAndWait(OWNER_LABEL);
+      await replaceOwnerAndWait(OWNER_LABEL, target, proposedPlistBytes,
+        rollbackPackage.value.newOwnerPriorState);
     },
     doctor: async () => {
       const schedulerRows = [...PRIOR_LABELS, OWNER_LABEL].map(schedulerRow);
@@ -420,5 +432,5 @@ function createLocalRuntimePlatform({ runtimeRoot, preparedRoot, manifest, revie
 }
 
 module.exports = { OWNER_LABEL, PRIOR_LABELS, acquireActivationLock, atomicCanonical, captureSchedulerRollback,
-  createLocalRuntimePlatform, ownedRegularBytes, recoverInterruptedActivation, startOwnerAndWait,
+  createLocalRuntimePlatform, ownedRegularBytes, recoverInterruptedActivation, replaceOwnerAndWait, startOwnerAndWait,
   validateActivationJournal, validateRollbackPackage };
