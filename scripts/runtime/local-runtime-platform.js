@@ -7,7 +7,7 @@ const path = require('path');
 const crypto = require('crypto');
 const { canonicalJson, sha256 } = require('./codec');
 const { runtimeBundleSha256 } = require('./tracked-runtime-bundle');
-const { observeRuntimeHealth } = require('./runtime-health-observer');
+const { observeRuntimeHealth, publishRuntimeHealthObservation } = require('./runtime-health-observer');
 
 const PRIOR_LABELS = Object.freeze([
   'com.stockinsider.data-collect', 'com.stockinsider.night-shift', 'com.stockinsider.research-daemon',
@@ -355,7 +355,10 @@ function createLocalRuntimePlatform({ runtimeRoot, preparedRoot, manifest, revie
       fs.renameSync(next, current);
       fsyncDirectory(runtimeRoot);
     },
-    writeHealthObservation: async (observation) => atomicCanonical(path.join(current, 'runtime-health-observation.json'), observation),
+    writeHealthObservation: async (observation) => {
+      atomicCanonical(path.join(current, 'runtime-health-observation.json'), observation);
+      await publishRuntimeHealthObservation({ releaseRoot, observation });
+    },
     restoreActivePointer: async (pointer) => {
       const next = path.join(runtimeRoot, 'current.next');
       if (fs.existsSync(next)) fail('scheduler_rollback_failed');

@@ -439,6 +439,25 @@ const checks = {
       () => 'test-internal-key-000000', async () => ({ ok: true, json: async () => ({
         sourceLedRuntime: { consumer: { commitSha: 'd'.repeat(40) } },
       }) })), 'd'.repeat(40));
+    const publicationQueries = [];
+    class HealthPublicationClient {
+      async connect() { publicationQueries.push('connect'); }
+      async end() { publicationQueries.push('end'); }
+      async query(statement, values) {
+        publicationQueries.push([statement, values]);
+        if (statement === 'BEGIN' || statement === 'COMMIT' || statement === 'ROLLBACK') return { rows: [] };
+        if (statement.includes('to_regclass')) return { rows: [{ observations: 'legacy_runtime_health_observations_v3_11' }] };
+        if (statement.includes('INSERT INTO public.legacy_runtime_health_observations_v3_11')) return { rows: [] };
+        throw new Error(`unexpected health publication query: ${statement}`);
+      }
+    }
+    const publication = await observer.publishRuntimeHealthObservation({ releaseRoot: root,
+      observation: { producerCommitSha: 'a'.repeat(40), workerSha256: 'b'.repeat(64),
+        schedulerConfigSha256: 'c'.repeat(64), projectionFreshness: 'fresh' },
+      resolver: () => 'postgresql://health-publication', clientFactory: HealthPublicationClient });
+    assert.match(publication.observationSha256, /^[0-9a-f]{64}$/u);
+    assert.ok(publicationQueries.some((entry) => Array.isArray(entry) &&
+      entry[0].includes('legacy_runtime_health_observations_v3_11')));
   },
   'PCR-005': async () => {
     const config = readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')); const selected = runtime('source-run-config.js').validateAuthSourceDagConfig(config);
@@ -574,6 +593,40 @@ const checks = {
     const revisions = Array.from({ length: 2549 }, (_, index) => ({ identityKey: String(index).padStart(4, '0') })); let cursor = null; let seen = 0;
     do { const page = runtime('source-revision-pagination.js').pageSelectedRevisionCursor({ revisions, after: cursor }); seen += page.rows.length; cursor = page.nextCursor; assert.equal(page.selectedCount, 1000); } while (cursor);
     assert.equal(seen, 1000); assert.throws(() => runtime('source-revision-pagination.js').pageSelectedRevisionCursor({ revisions, after: '9999' }), /cursor must exist/u);
+    const bootstrap = runtime('production-authority-bootstrap.js');
+    const twse = Array.from({ length: 900 }, (_, index) => ({ 出表日期: '1150807', 公司代號: String(1000 + index),
+      公司名稱: `上市公司${index}股份有限公司`, 公司簡稱: `上市${index}`, 產業別: '24', 上市日期: '20200101' }));
+    const tpex = Array.from({ length: 800 }, (_, index) => ({ Date: '1150807', SecuritiesCompanyCode: String(2000 + index),
+      CompanyName: `上櫃公司${index}股份有限公司`, CompanyAbbreviation: `上櫃${index}`,
+      SecuritiesIndustryCode: '30', DateOfListing: '20200101' }));
+    const roster = bootstrap.normalizeOfficialRoster(twse, tpex);
+    assert.equal(roster.length, 1700); assert.deepEqual([roster[0].exchange, roster.at(-1).exchange], ['TWSE','TPEX']);
+    const document = bootstrap.prepareLegacyDocument({ platform: 'ptt', id: 'document-1', external_id: null,
+      title: '6239 股票', summary: '', content_text: '力成財報更新', document_url: 'https://example.test/post/1',
+      published_at: '2026-08-07T01:00:00Z', collected_at: '2026-08-07T01:01:00Z' },
+    '00000000-0000-4000-8000-000000000001');
+    assert.equal(document.sourceKey, 'ptt'); assert.equal(document.acquisitionStatus, 'complete');
+    assert.match(document.ingestionContentRevisionSha256, /^[0-9a-f]{64}$/u);
+    assert.match(document.ingestionCanonicalContentHashV3, /^[0-9a-f]{64}$/u);
+    const sourceCommit = 'a'.repeat(40); const attestationCommit = 'b'.repeat(40);
+    const unsignedAuthority = { approvedAt: '2026-08-08T01:00:00Z', approvedBy: 'repository-owner',
+      attestationCommit, commitSha: sourceCommit, expiresAt: '2026-08-08T01:15:00Z',
+      mutation: 'production_authority_bootstrap', nonce: 'c'.repeat(32),
+      schema: 'stockinsider-production-authority-bootstrap-v1' };
+    const authorityKey = 'bootstrap-test-hmac-key';
+    const authority = { ...unsignedAuthority,
+      signature: createHmac('sha256', authorityKey).update(canonicalJson(unsignedAuthority)).digest('hex') };
+    assert.equal(bootstrap.validateBootstrapAuthority(authority, { sourceCommit, attestationCommit },
+      new Date('2026-08-08T01:05:00Z'), () => authorityKey), authority);
+    assert.throws(() => bootstrap.validateBootstrapAuthority({ ...authority, commitSha: 'd'.repeat(40) },
+      { sourceCommit, attestationCommit }, new Date('2026-08-08T01:05:00Z'), () => authorityKey),
+    /production_authority_bootstrap_required/u);
+    const bootstrapRuntime = mkdtempSync(path.join(os.tmpdir(), 'bootstrap-authority-nonce-'));
+    try {
+      bootstrap.consumeBootstrapNonce(bootstrapRuntime, authority);
+      assert.throws(() => bootstrap.consumeBootstrapNonce(bootstrapRuntime, authority),
+        /production_authority_bootstrap_required/u);
+    } finally { rmSync(bootstrapRuntime, { recursive: true, force: true }); }
   },
   'PCR-008': () => {
     const join = runtime('instrument-authority-join.js').resolveInstrumentAuthorityJoin; const roster = [{ stockId: '00000000-0000-4000-8000-000000002337', symbol: '2337', officialName: '旺宏', status: 'active' }];

@@ -64,19 +64,48 @@ export async function GET(request: Request) {
 
     const { data: runtimeProjectionRows } = await supabase
       .from('legacy_radar_projections_v3_11')
-      .select('payload_json,payload_sha256,as_of')
+      .select('payload_json,payload_sha256,as_of,producer_commit_sha,worker_sha256')
       .eq('window', 'daily')
       .order('as_of', { ascending: false })
       .limit(1);
+    const [{ data: runtimeRunRows }, { count: stuckRunCount }, { data: runtimeObservationRows }] = await Promise.all([
+      supabase.from('legacy_producer_runs_v3_11')
+        .select('owner_label,producer_commit_sha,worker_sha256,scheduler_config_sha256,status,started_at,terminal_at,lease_expires_at')
+        .order('started_at', { ascending: false })
+        .limit(1),
+      supabase.from('legacy_producer_runs_v3_11')
+        .select('run_id', { count: 'exact', head: true })
+        .eq('status', 'running')
+        .lt('lease_expires_at', new Date().toISOString()),
+      supabase.from('legacy_runtime_health_observations_v3_11')
+        .select('observation_json,recorded_at')
+        .order('recorded_at', { ascending: false })
+        .limit(1),
+    ]);
     const runtimeProjection = runtimeProjectionRows?.[0] as Row | undefined;
+    const runtimeRun = runtimeRunRows?.[0] as Row | undefined;
     const runtimePayload = runtimeProjection?.payload_json as Row | undefined;
     const sourceCorrectness = runtimePayload?.sourceLedCorrectness as Row | undefined;
     const producerIdentity = sourceCorrectness?.producerIdentity as Row | undefined;
-    const recordedObservation = producerIdentity?.runtimeHealthObservation as Partial<RuntimeHealthObservation> | undefined;
+    const durableObservation = (runtimeObservationRows?.[0] as Row | undefined)?.observation_json;
+    const recordedObservation = (durableObservation && typeof durableObservation === 'object'
+      ? durableObservation : producerIdentity?.runtimeHealthObservation) as Partial<RuntimeHealthObservation> | undefined;
     const projectionAsOf = typeof runtimeProjection?.as_of === 'string' ? runtimeProjection.as_of : null;
     const projectionChecksum = typeof runtimeProjection?.payload_sha256 === 'string' ? runtimeProjection.payload_sha256 : null;
     const checksumMatches = Boolean(runtimePayload && projectionChecksum && sha256Canonical(runtimePayload) === projectionChecksum);
     const projectionAgeMs = projectionAsOf ? Date.now() - new Date(projectionAsOf).getTime() : Number.POSITIVE_INFINITY;
+    const directProducerCommit = typeof runtimeRun?.producer_commit_sha === 'string'
+      ? runtimeRun.producer_commit_sha
+      : typeof runtimeProjection?.producer_commit_sha === 'string' ? runtimeProjection.producer_commit_sha : null;
+    const directWorkerSha = typeof runtimeRun?.worker_sha256 === 'string'
+      ? runtimeRun.worker_sha256
+      : typeof runtimeProjection?.worker_sha256 === 'string' ? runtimeProjection.worker_sha256 : null;
+    const directConfigSha = typeof runtimeRun?.scheduler_config_sha256 === 'string'
+      ? runtimeRun.scheduler_config_sha256 : null;
+    const directStatus = ['success', 'failed', 'cancelled'].includes(String(runtimeRun?.status))
+      ? runtimeRun?.status as 'success' | 'failed' | 'cancelled' : null;
+    const directCompatibility = directProducerCommit && process.env.VERCEL_GIT_COMMIT_SHA === directProducerCommit
+      ? 'compatible' as const : 'unknown' as const;
     if (recordedObservation && typeof recordedObservation === 'object') {
       sourceLedRuntime = assessTrackedRuntimeHealth({
         manifestPresent: recordedObservation.manifestPresent === true,
@@ -94,21 +123,45 @@ export async function GET(request: Request) {
         competingOwners: Array.isArray(recordedObservation.competingOwners) ? recordedObservation.competingOwners.filter((item): item is string => typeof item === 'string') : [],
         leaseStatus: recordedObservation.leaseStatus ?? 'invalid',
         stateSchema: recordedObservation.stateSchema === 'stockinsider-producer-state-v1' ? recordedObservation.stateSchema : null,
-        lastTerminalRunAt: recordedObservation.lastTerminalRunAt ?? null,
-        lastTerminalStatus: recordedObservation.lastTerminalStatus ?? null,
-        lastRunNonterminal: recordedObservation.lastRunNonterminal,
+        lastTerminalRunAt: directStatus ? String(runtimeRun?.terminal_at ?? recordedObservation.lastTerminalRunAt ?? '') || null
+          : recordedObservation.lastTerminalRunAt ?? null,
+        lastTerminalStatus: directStatus ?? recordedObservation.lastTerminalStatus ?? null,
+        lastRunNonterminal: runtimeRun?.status === 'running' || recordedObservation.lastRunNonterminal,
         negativeRunDuration: recordedObservation.negativeRunDuration,
-        stuckRunCount: recordedObservation.stuckRunCount,
+        stuckRunCount: stuckRunCount ?? recordedObservation.stuckRunCount,
         projectionAsOf, projectionChecksum,
         projectionFreshness: !checksumMatches ? 'invalid' : projectionAgeMs <= 36 * 60 * 60 * 1000 ? 'fresh' : 'stale',
         consumerCommitSha: process.env.VERCEL_GIT_COMMIT_SHA ?? null,
-        consumerCompatibility: recordedObservation.producerCommitSha && process.env.VERCEL_GIT_COMMIT_SHA === recordedObservation.producerCommitSha ? 'compatible' : 'unknown',
-        producerCommitSha: recordedObservation.producerCommitSha ?? null,
+        consumerCompatibility: directCompatibility,
+        producerCommitSha: directProducerCommit ?? recordedObservation.producerCommitSha ?? null,
         reviewedTreeSha: recordedObservation.reviewedTreeSha ?? null,
-        workerSha256: recordedObservation.workerSha256 ?? null,
-        schedulerConfigSha256: recordedObservation.schedulerConfigSha256 ?? null,
+        workerSha256: directWorkerSha ?? recordedObservation.workerSha256 ?? null,
+        schedulerConfigSha256: directConfigSha ?? recordedObservation.schedulerConfigSha256 ?? null,
         schedulerRollbackPackageSha256: recordedObservation.schedulerRollbackPackageSha256 ?? null,
         manifestSha256: recordedObservation.manifestSha256 ?? null,
+      });
+    } else if (directProducerCommit) {
+      sourceLedRuntime = assessTrackedRuntimeHealth({
+        manifestPresent: false, manifestCanonical: false, reviewBindingValid: false,
+        workerHashMatches: false, configHashMatches: false,
+        schedulerRollbackPackagePresent: false, schedulerRollbackHashMatches: false,
+        activationJournalComplete: false, activePointerValid: false, schedulerPlistMatches: false,
+        schedulerOwner: runtimeRun?.owner_label === 'com.stockinsider.auth-source-worker'
+          ? 'com.stockinsider.auth-source-worker' : null,
+        competingOwners: [], leaseStatus: runtimeRun?.status === 'running'
+          ? (Date.parse(String(runtimeRun?.lease_expires_at ?? '')) >= Date.now() ? 'active' : 'expired') : 'absent',
+        stateSchema: 'stockinsider-producer-state-v1',
+        lastTerminalRunAt: directStatus ? String(runtimeRun?.terminal_at ?? '') || null : null,
+        lastTerminalStatus: directStatus,
+        lastRunNonterminal: runtimeRun?.status === 'running', negativeRunDuration: false,
+        stuckRunCount: stuckRunCount ?? 0,
+        projectionAsOf, projectionChecksum,
+        projectionFreshness: !checksumMatches ? 'invalid' : projectionAgeMs <= 36 * 60 * 60 * 1000 ? 'fresh' : 'stale',
+        consumerCommitSha: process.env.VERCEL_GIT_COMMIT_SHA ?? null,
+        consumerCompatibility: directCompatibility,
+        producerCommitSha: directProducerCommit, reviewedTreeSha: null,
+        workerSha256: directWorkerSha, schedulerConfigSha256: directConfigSha,
+        schedulerRollbackPackageSha256: null, manifestSha256: null,
       });
     }
 

@@ -17274,6 +17274,23 @@ CREATE TABLE IF NOT EXISTS legacy_radar_projections_v3_11 (
   CHECK(convert_from(payload_canonical,'utf8')::jsonb=payload_json),CHECK(encode(extensions.digest(payload_canonical,'sha256'),'hex')=payload_sha256)
 );
 CREATE INDEX IF NOT EXISTS legacy_radar_projections_v3_11_window_read_idx ON legacy_radar_projections_v3_11("window",as_of DESC,created_at DESC,projection_id ASC);
+CREATE TABLE IF NOT EXISTS legacy_runtime_health_observations_v3_11 (
+  observation_id uuid PRIMARY KEY DEFAULT extensions.gen_random_uuid(),
+  producer_commit_sha text NOT NULL CHECK(producer_commit_sha ~ '^[0-9a-f]{40}$'),
+  worker_sha256 text NOT NULL CHECK(worker_sha256 ~ '^[0-9a-f]{64}$'),
+  scheduler_config_sha256 text NOT NULL CHECK(scheduler_config_sha256 ~ '^[0-9a-f]{64}$'),
+  observation_canonical bytea NOT NULL CHECK(octet_length(observation_canonical) BETWEEN 2 AND 65536),
+  observation_json jsonb NOT NULL,observation_sha256 text NOT NULL CHECK(observation_sha256 ~ '^[0-9a-f]{64}$'),
+  observed_at timestamptz NOT NULL,recorded_at timestamptz NOT NULL DEFAULT clock_timestamp(),
+  UNIQUE(producer_commit_sha,observation_sha256),
+  CHECK(convert_from(observation_canonical,'utf8')::jsonb=observation_json),
+  CHECK(encode(extensions.digest(observation_canonical,'sha256'),'hex')=observation_sha256),
+  CHECK(observation_json->>'producerCommitSha'=producer_commit_sha),
+  CHECK(observation_json->>'workerSha256'=worker_sha256),
+  CHECK(observation_json->>'schedulerConfigSha256'=scheduler_config_sha256)
+);
+CREATE INDEX IF NOT EXISTS legacy_runtime_health_observations_v3_11_latest_idx
+  ON legacy_runtime_health_observations_v3_11(recorded_at DESC,observation_id);
 
 CREATE OR REPLACE FUNCTION legacy_correctness_immutable_v3_11() RETURNS trigger LANGUAGE plpgsql SET search_path='' AS $$
 BEGIN
@@ -17283,7 +17300,7 @@ END $$;
 DO $legacy_immutable_triggers$
 DECLARE v_table text;
 BEGIN
-  FOREACH v_table IN ARRAY ARRAY['legacy_producer_authority_pages_v3_11','legacy_frozen_source_revisions_v3_11','legacy_producer_job_payloads_v3_11','legacy_producer_job_results_v3_11','legacy_candidate_discovery_ledger_v3_11','legacy_analysis_revisions_v3_11','legacy_analysis_evaluations_v3_11','legacy_radar_projections_v3_11'] LOOP
+  FOREACH v_table IN ARRAY ARRAY['legacy_producer_authority_pages_v3_11','legacy_frozen_source_revisions_v3_11','legacy_producer_job_payloads_v3_11','legacy_producer_job_results_v3_11','legacy_candidate_discovery_ledger_v3_11','legacy_analysis_revisions_v3_11','legacy_analysis_evaluations_v3_11','legacy_radar_projections_v3_11','legacy_runtime_health_observations_v3_11'] LOOP
     IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname=v_table||'_immutable') THEN
       EXECUTE format('CREATE TRIGGER %I BEFORE UPDATE OR DELETE ON public.%I FOR EACH ROW EXECUTE FUNCTION public.legacy_correctness_immutable_v3_11()',v_table||'_immutable',v_table);
     END IF;
@@ -17293,18 +17310,35 @@ $legacy_immutable_triggers$;
 
 CREATE OR REPLACE FUNCTION resolve_legacy_scheduled_occurrence_v3_11(p_owner_label text,p_config_hash text)
 RETURNS legacy_scheduled_occurrence_v3_11 LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path='' AS $$
-DECLARE v_now timestamptz:=date_trunc('second',clock_timestamp());v_local timestamp;v_date date;v_cutoff timestamptz;v_id text;v_session_hash text;
+DECLARE
+  v_now timestamptz:=date_trunc('second',clock_timestamp());v_local timestamp;v_date date;
+  v_cutoff timestamptz;v_material_recorded_at timestamptz;v_material_cutoff timestamptz;
+  v_id text;v_session_hash text;v_occurrence_kind text:='scheduled';
 BEGIN
   IF p_owner_label<>'com.stockinsider.auth-source-worker' OR p_config_hash<>'1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2' THEN RETURN NULL; END IF;
   v_local:=v_now AT TIME ZONE 'Asia/Taipei';v_date:=v_local::date;
   IF extract(isodow FROM v_date)>5 OR v_local::time<time '18:20:00' THEN v_date:=v_date-1;END IF;
   WHILE extract(isodow FROM v_date)>5 LOOP v_date:=v_date-1;END LOOP;
   v_cutoff:=(v_date+time '18:20:00') AT TIME ZONE 'Asia/Taipei';
+  SELECT max(recorded_at) INTO v_material_recorded_at FROM (
+    SELECT max(recorded_at) recorded_at FROM public.stock_instruments_v3
+      WHERE instrument_type='common_stock' AND listing_status='active'
+    UNION ALL SELECT max(recorded_at) FROM public.stock_aliases_v3 WHERE status='active'
+    UNION ALL SELECT max(recorded_at) FROM public.stock_sector_assignments_v3 WHERE status='active'
+    UNION ALL SELECT max(recorded_at) FROM public.source_identity_authorities_v3 WHERE status='active'
+    UNION ALL SELECT max(recorded_at) FROM public.source_document_revisions_v3 WHERE acquisition_status='complete'
+  ) material;
+  v_material_cutoff:=date_trunc('second',v_material_recorded_at)+interval '1 second';
+  IF v_material_recorded_at>v_cutoff AND v_material_cutoff<=v_now THEN
+    v_cutoff:=v_material_cutoff;
+    v_occurrence_kind:='material-authority-refresh';
+  END IF;
   SELECT session.taiwan_session_authority_hash INTO v_session_hash
   FROM public.opportunity_effective_taiwan_sessions_v3 session
   WHERE session.session_id=v_date AND session.canonical_cutoff<=v_cutoff;
   v_id:=encode(extensions.digest(convert_to(regexp_replace(jsonb_build_array(
-    'legacy-producer-scheduled-occurrence-v1',p_owner_label,v_date,'18:20:00','Asia/Taipei',p_config_hash
+    'legacy-producer-scheduled-occurrence-v2',p_owner_label,v_date,'18:20:00','Asia/Taipei',
+    v_occurrence_kind,to_char(v_cutoff AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS"Z"'),p_config_hash
   )::text,', ', ',', 'g'),'utf8'),'sha256'),'hex');
   RETURN ROW(v_id,v_cutoff,CASE WHEN v_session_hash IS NULL THEN NULL ELSE v_date END,v_session_hash)::public.legacy_scheduled_occurrence_v3_11;
 END $$;
@@ -17322,13 +17356,19 @@ BEGIN
     v_size:=CASE WHEN v_kind='selected_revision' THEN 200 ELSE 500 END;
     IF v_kind='roster' THEN
       SELECT coalesce(jsonb_agg(jsonb_build_array(stock_id,symbol,exchange,instrument_type,listing_status,official_legal_name,official_short_name) ORDER BY symbol,stock_id),'[]'::jsonb)
-      INTO v_all FROM public.stock_instruments_v3 WHERE instrument_type='common_stock' AND listing_status='active' AND valid_from<=v_run.source_cutoff AND (valid_to IS NULL OR valid_to>v_run.source_cutoff);
+      INTO v_all FROM public.stock_instruments_v3 WHERE instrument_type='common_stock' AND listing_status='active'
+        AND source_timestamp<=v_run.source_cutoff AND recorded_at<=v_run.source_cutoff
+        AND valid_from<=v_run.source_cutoff AND (valid_to IS NULL OR valid_to>v_run.source_cutoff);
     ELSIF v_kind='alias' THEN
       SELECT coalesce(jsonb_agg(jsonb_build_array(stock_id,normalized_alias,source) ORDER BY normalized_alias,stock_id),'[]'::jsonb)
-      INTO v_all FROM public.stock_aliases_v3 WHERE status='active' AND valid_from<=v_run.source_cutoff AND (valid_to IS NULL OR valid_to>v_run.source_cutoff);
+      INTO v_all FROM public.stock_aliases_v3 WHERE status='active'
+        AND source_timestamp<=v_run.source_cutoff AND approved_at<=v_run.source_cutoff AND recorded_at<=v_run.source_cutoff
+        AND valid_from<=v_run.source_cutoff AND (valid_to IS NULL OR valid_to>v_run.source_cutoff);
     ELSIF v_kind='taxonomy' THEN
       SELECT coalesce(jsonb_agg(jsonb_build_array(stock_id,market,official_industry_code,canonical_sector_key) ORDER BY stock_id,canonical_sector_key),'[]'::jsonb)
-      INTO v_all FROM public.stock_sector_assignments_v3 WHERE status='active' AND valid_from<=v_run.source_cutoff AND (valid_to IS NULL OR valid_to>v_run.source_cutoff);
+      INTO v_all FROM public.stock_sector_assignments_v3 WHERE status='active'
+        AND source_timestamp<=v_run.source_cutoff AND recorded_at<=v_run.source_cutoff
+        AND valid_from<=v_run.source_cutoff AND (valid_to IS NULL OR valid_to>v_run.source_cutoff);
     ELSE
       WITH family_heads AS (
         SELECT d.*,row_number() OVER(PARTITION BY d.source_key,d.revision_family_key ORDER BY d.collected_at DESC,d.recorded_at DESC,d.revision_id) AS family_rank
@@ -17338,7 +17378,8 @@ BEGIN
         JOIN public.source_identity_authorities_v3 authority ON authority.authority_id=d.source_identity_authority_id
           AND authority.source_identity_id=d.approved_source_identity_id AND authority.source_key=d.source_key
         WHERE d.acquisition_status='complete' AND d.collected_at<=v_run.source_cutoff AND d.recorded_at<=v_run.source_cutoff
-          AND authority.status='active' AND authority.valid_from<=v_run.source_cutoff AND (authority.valid_to IS NULL OR authority.valid_to>v_run.source_cutoff)
+          AND authority.status='active' AND authority.approved_at<=v_run.source_cutoff AND authority.recorded_at<=v_run.source_cutoff
+          AND authority.valid_from<=v_run.source_cutoff AND (authority.valid_to IS NULL OR authority.valid_to>v_run.source_cutoff)
       ), connector_bound AS (
         SELECT f.*,row_number() OVER(PARTITION BY f.source_key ORDER BY f.collected_at DESC,f.revision_family_key,f.revision_id) AS connector_rank
         FROM family_heads f WHERE f.family_rank=1
@@ -17353,7 +17394,8 @@ BEGIN
           FROM public.source_document_revisions_v3 d
           JOIN public.source_identity_authorities_v3 authority ON authority.authority_id=d.source_identity_authority_id
           WHERE d.acquisition_status='complete' AND d.collected_at<=v_run.source_cutoff AND d.recorded_at<=v_run.source_cutoff
-            AND authority.status='active' AND authority.valid_from<=v_run.source_cutoff AND (authority.valid_to IS NULL OR authority.valid_to>v_run.source_cutoff)
+            AND authority.status='active' AND authority.approved_at<=v_run.source_cutoff AND authority.recorded_at<=v_run.source_cutoff
+            AND authority.valid_from<=v_run.source_cutoff AND (authority.valid_to IS NULL OR authority.valid_to>v_run.source_cutoff)
         ), connector_bound AS (
           SELECT row_number() OVER(PARTITION BY source_key ORDER BY collected_at DESC,revision_family_key,revision_id) connector_rank
           FROM family_heads WHERE family_rank=1
@@ -17874,7 +17916,7 @@ END $$;
 DO $legacy_correctness_security$
 DECLARE v_table text;v_signature text;
 BEGIN
-  FOREACH v_table IN ARRAY ARRAY['legacy_producer_runs_v3_11','legacy_producer_authority_pages_v3_11','legacy_frozen_source_revisions_v3_11','legacy_producer_jobs_v3_11','legacy_producer_job_payloads_v3_11','legacy_producer_job_results_v3_11','legacy_candidate_discovery_ledger_v3_11','legacy_analysis_revisions_v3_11','legacy_analysis_evaluations_v3_11','legacy_radar_projections_v3_11'] LOOP
+  FOREACH v_table IN ARRAY ARRAY['legacy_producer_runs_v3_11','legacy_producer_authority_pages_v3_11','legacy_frozen_source_revisions_v3_11','legacy_producer_jobs_v3_11','legacy_producer_job_payloads_v3_11','legacy_producer_job_results_v3_11','legacy_candidate_discovery_ledger_v3_11','legacy_analysis_revisions_v3_11','legacy_analysis_evaluations_v3_11','legacy_radar_projections_v3_11','legacy_runtime_health_observations_v3_11'] LOOP
     EXECUTE format('ALTER TABLE public.%I OWNER TO legacy_correctness_rpc_owner',v_table);EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY',v_table);EXECUTE format('ALTER TABLE public.%I NO FORCE ROW LEVEL SECURITY',v_table);EXECUTE format('REVOKE ALL ON TABLE public.%I FROM PUBLIC,anon,authenticated,service_role',v_table);
   END LOOP;
   ALTER FUNCTION public.legacy_correctness_immutable_v3_11() OWNER TO legacy_correctness_rpc_owner;
@@ -17900,6 +17942,7 @@ BEGIN
 END
 $legacy_helper_read_policies$;
 GRANT SELECT ON TABLE public.legacy_radar_projections_v3_11 TO service_role;
+GRANT SELECT ON TABLE public.legacy_runtime_health_observations_v3_11 TO service_role;
 GRANT SELECT ON TABLE public.legacy_producer_runs_v3_11,public.legacy_producer_jobs_v3_11,public.legacy_frozen_source_revisions_v3_11 TO opportunity_v3_rpc_owner;
 ALTER FUNCTION public.resolve_legacy_scheduled_occurrence_v3_11(text,text) OWNER TO opportunity_v3_rpc_owner;
 ALTER FUNCTION public.read_legacy_discovery_authority_v3_11(uuid,text,text) OWNER TO opportunity_v3_rpc_owner;

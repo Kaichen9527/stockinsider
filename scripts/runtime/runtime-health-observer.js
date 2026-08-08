@@ -71,6 +71,31 @@ async function observeConsumer(config, resolver, fetchImpl = globalThis.fetch) {
   return typeof commitSha === 'string' && /^[0-9a-f]{40}$/u.test(commitSha) ? commitSha : null;
 }
 
+async function publishRuntimeHealthObservation({ releaseRoot, observation, resolver = resolveCredentialReference,
+  clientFactory }) {
+  const connectionString = resolver('keychain:stockinsider-runtime:database-url');
+  const Client = clientFactory ?? require(path.join(releaseRoot, 'node_modules/pg')).Client;
+  const client = new Client({ connectionString, application_name: 'stockinsider-runtime-health-publisher',
+    statement_timeout: 10000, query_timeout: 10000 });
+  const canonical = canonicalJson(observation); const digest = sha256(canonical);
+  await client.connect();
+  try {
+    await client.query('BEGIN');
+    const table = await client.query("SELECT to_regclass('public.legacy_runtime_health_observations_v3_11') AS observations");
+    if (!table.rows[0]?.observations) throw new Error('runtime_health_schema_missing');
+    await client.query(`INSERT INTO public.legacy_runtime_health_observations_v3_11(
+      producer_commit_sha,worker_sha256,scheduler_config_sha256,observation_canonical,observation_json,
+      observation_sha256,observed_at) VALUES($1,$2,$3,$4,$5,$6,clock_timestamp())
+      ON CONFLICT(producer_commit_sha,observation_sha256) DO NOTHING`, [observation.producerCommitSha,
+      observation.workerSha256, observation.schedulerConfigSha256, Buffer.from(canonical), observation, digest]);
+    await client.query('COMMIT');
+    return Object.freeze({ observationSha256: digest });
+  } catch (error) {
+    try { await client.query('ROLLBACK'); } catch { /* preserve publication failure */ }
+    throw error;
+  } finally { await client.end(); }
+}
+
 async function observeRuntimeHealth({ releaseRoot, runtimeRoot, manifest, reviewedRelease, proposedPlistBytes,
   rollbackPackage, schedulerRows, resolver = resolveCredentialReference, clientFactory, fetchImpl }) {
   const installation = canonicalFile(path.join(releaseRoot, 'installation-manifest.json'));
@@ -115,4 +140,4 @@ async function observeRuntimeHealth({ releaseRoot, runtimeRoot, manifest, review
   };
 }
 
-module.exports = { observeConsumer, observeDatabase, observeRuntimeHealth };
+module.exports = { observeConsumer, observeDatabase, observeRuntimeHealth, publishRuntimeHealthObservation };

@@ -104,6 +104,7 @@
     "agent:runtime:install": "node scripts/runtime/reviewed-runtime-installer-cli.js",
     "agent:runtime:prepare": "node scripts/runtime/reviewed-runtime-installer-cli.js --prepare-only",
     "agent:runtime:activate-reviewed": "node scripts/runtime/reviewed-runtime-installer-cli.js --activate",
+    "agent:runtime:bootstrap-production-authority": "node scripts/runtime/production-authority-bootstrap-cli.js --apply",
     "agent:runtime:status": "launchctl list | grep -E 'com[.]stockinsider[.](web|auth-source-worker|data-collect)'",
     "agent:runtime:doctor": "node scripts/runtime_doctor.js",
     "agent:install": "cp .agent/scripts/com.stockinsider.data-collect.plist ~/Library/LaunchAgents/ && launchctl load ~/Library/LaunchAgents/com.stockinsider.data-collect.plist; cp .agent/scripts/com.stockinsider.night-shift.plist ~/Library/LaunchAgents/ && launchctl load ~/Library/LaunchAgents/com.stockinsider.night-shift.plist; echo 'Both launchd jobs installed'",
