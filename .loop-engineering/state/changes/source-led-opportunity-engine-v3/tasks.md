@@ -135,10 +135,14 @@
   (`143 semantic_automated / 148 semantic_suite_backed / 6 structural_meta`) and is not
   an open next task.
 
-## Later checkpoints — not authorized here
+## Production completion checkpoint — explicitly authorized 2026-08-08
 
 - [ ] Apply reviewed production migration.
-- [ ] Enable shadow scheduler in production.
+- [ ] Bootstrap the official TWSE/TPEx roster and tracked legacy source authority from the exact reviewed commit.
+- [ ] Publish durable runtime health and verify exact Vercel consumer/local producer compatibility.
+- [ ] Verify a material-authority refresh produces bounded dynamic discovery and truthful `source_signal` output.
+- [ ] Deploy and activate the same reviewed implementation commit; complete public read-only smoke and rollback rehearsal evidence.
+- [ ] Enable shadow scheduler only after its separate Shadow Activation Gate passes.
 - [ ] Promote V3 homepage ordering only after the 120-date backtest and 20 matured live 20-session cohorts pass every conjunctive rule.
 - [ ] Approve a specific model artifact for any non-shadow influence.
 

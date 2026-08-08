@@ -41,6 +41,7 @@ import {
   serializeBlindedReviewSuccess,
 } from './blinded-review.ts';
 import { isPreFunctionCredentialRejectionV3 } from './remote-credential.ts';
+import { runtimeObservationMatchesProducer } from './runtime-health.ts';
 import {
   validateBlindedReviewValuesV3,
   validateHumanAuthorityValuesV3,
@@ -161,6 +162,19 @@ const sectorCycleFixture: SectorCycleV3 = {
   levelScore: null, changeScore: null, marketScore: null, matchedRule: 'unavailable',
   inputs: [], reasons: ['missing_level_inputs'], asOf: '2026-07-01T00:00:00Z',
 };
+
+describe('durable runtime health identity', () => {
+  it('accepts only an observation bound to the latest producer commit, worker and config', () => {
+    const producer = { commitSha: 'a'.repeat(40), workerSha256: 'b'.repeat(64),
+      schedulerConfigSha256: 'c'.repeat(64) };
+    const observation = { producerCommitSha: producer.commitSha, workerSha256: producer.workerSha256,
+      schedulerConfigSha256: producer.schedulerConfigSha256 };
+    assert.equal(runtimeObservationMatchesProducer(observation, producer), true);
+    assert.equal(runtimeObservationMatchesProducer({ ...observation, producerCommitSha: 'd'.repeat(40) }, producer), false);
+    assert.equal(runtimeObservationMatchesProducer({ ...observation, workerSha256: 'e'.repeat(64) }, producer), false);
+    assert.equal(runtimeObservationMatchesProducer({ ...observation, schedulerConfigSha256: 'f'.repeat(64) }, producer), false);
+  });
+});
 
 describe('canonical boundary', () => {
   it('sorts object members and rejects non-finite values', () => {

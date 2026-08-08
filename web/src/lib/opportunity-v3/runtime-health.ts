@@ -16,6 +16,14 @@ export type RuntimeHealthObservation = {
   schedulerConfigSha256?: string | null; schedulerRollbackPackageSha256?: string | null; manifestSha256?: string | null;
 };
 
+export function runtimeObservationMatchesProducer(observation: Partial<RuntimeHealthObservation> | undefined,
+  producer: { commitSha: string | null; workerSha256: string | null; schedulerConfigSha256: string | null }) {
+  if (!observation || typeof observation !== 'object') return false;
+  return (!producer.commitSha || observation.producerCommitSha === producer.commitSha) &&
+    (!producer.workerSha256 || observation.workerSha256 === producer.workerSha256) &&
+    (!producer.schedulerConfigSha256 || observation.schedulerConfigSha256 === producer.schedulerConfigSha256);
+}
+
 const REASON_ORDER = [
   'manifest_missing','manifest_noncanonical','review_binding_invalid','worker_hash_mismatch','config_hash_mismatch',
   'scheduler_rollback_package_missing','scheduler_rollback_hash_mismatch','activation_journal_incomplete','active_pointer_invalid',

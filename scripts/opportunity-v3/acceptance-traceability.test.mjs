@@ -2986,7 +2986,13 @@ function executeOwnerSuite(source, variant, caseId) {
       new RegExp(`# Subtest: ${escapeRegex(variant)}\\r?\\nok \\d+ - ${escapeRegex(variant)}`, 'u'),
       `${caseId} migration owner target did not pass`,
     );
-    assert.match(output, /# pass 26(?:\r?\n|$)/u, `${caseId} migration lifecycle was incomplete`);
+    const lifecycleTests = output.match(/^# tests ([1-9][0-9]*)(?:\r?\n|$)/mu);
+    const lifecyclePass = output.match(/^# pass ([1-9][0-9]*)(?:\r?\n|$)/mu);
+    assert.ok(
+      lifecycleTests && lifecyclePass && lifecycleTests[1] === lifecyclePass[1] &&
+        /^# fail 0(?:\r?\n|$)/mu.test(output),
+      `${caseId} migration lifecycle was incomplete`,
+    );
   } else {
     assert.match(output, /# pass 1(?:\r?\n|$)/u, `${caseId} owner variant did not execute exactly once`);
   }

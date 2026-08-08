@@ -641,6 +641,46 @@ test('legacy producer resolves one scheduled occurrence and resumes the same det
   assert.ok(Number(result.weekday) >= 1 && Number(result.weekday) <= 5);
 });
 
+test('legacy producer advances exactly once for newly recorded material authority outside the scheduled cutoff', () => {
+  const result = JSON.parse(psql(`
+    BEGIN;
+    INSERT INTO public.stocks(id,symbol)
+    VALUES('59000000-0000-4000-8000-000000000001','9998');
+    INSERT INTO public.stock_instruments_v3(
+      instrument_authority_id,stock_id,symbol,exchange,instrument_type,listing_status,
+      official_legal_name,official_short_name,provider,source_timestamp,valid_from,
+      valid_to,roster_version,recorded_at
+    ) VALUES(
+      '59000000-0000-4000-8000-000000000002',
+      '59000000-0000-4000-8000-000000000001','9998','TWSE','common_stock','active',
+      'Material Refresh Fixture','MRF','twse',date_trunc('second',clock_timestamp())-interval '2 seconds',
+      '2020-01-01T00:00:00Z',NULL,'tw-instrument-roster-v3.0',
+      date_trunc('second',clock_timestamp())-interval '2 seconds'
+    );
+    WITH first AS MATERIALIZED (
+      SELECT * FROM public.resolve_legacy_scheduled_occurrence_v3_11(
+        'com.stockinsider.auth-source-worker','1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2'
+      )
+    ), second AS MATERIALIZED (
+      SELECT * FROM public.resolve_legacy_scheduled_occurrence_v3_11(
+        'com.stockinsider.auth-source-worker','1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2'
+      )
+    ) SELECT jsonb_build_object(
+      'sameOccurrence',first.scheduled_occurrence_id=second.scheduled_occurrence_id,
+      'sameCutoff',first.source_cutoff=second.source_cutoff,
+      'includesMaterial',first.source_cutoff>(SELECT recorded_at FROM public.stock_instruments_v3 WHERE symbol='9998'),
+      'wholeSecond',date_trunc('second',first.source_cutoff)=first.source_cutoff
+    )::text FROM first CROSS JOIN second;
+    ROLLBACK;
+  `, ['-At']).split('\n').find((line) => line.startsWith('{')));
+  assert.deepEqual(result, {
+    sameOccurrence: true,
+    sameCutoff: true,
+    includesMaterial: true,
+    wholeSecond: true,
+  });
+});
+
 test('legacy fact-plane benchmark reads the market observation timestamp contract', () => {
   const benchmarkRows = psql(`
     SELECT (public.read_legacy_candidate_fact_plane_v3_11(

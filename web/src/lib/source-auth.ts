@@ -54,8 +54,9 @@ type ResolveMetaAuthConfigOptions = {
   ignoreFallbackCookies?: boolean;
 };
 
-const ROOT_DIR = path.resolve(process.cwd(), '..');
-const ENV_FILES = [path.join(ROOT_DIR, '.env'), path.join(ROOT_DIR, '.env.local')];
+const ROOT_DIR = path.join(/*turbopackIgnore: true*/ process.cwd(), '..');
+const ENV_FILES = [path.join(/*turbopackIgnore: true*/ ROOT_DIR, '.env'),
+  path.join(/*turbopackIgnore: true*/ ROOT_DIR, '.env.local')];
 const LEGACY_META_COOKIE_KEYS = ['sessionid', 'csrftoken', 'ds_user_id', 'ig_did', 'mid', 'datr', 'ps_l', 'ps_n'] as const;
 
 type LegacyEnvSnapshot = {
@@ -90,16 +91,16 @@ function parseEnvFileSections(): LegacyEnvSnapshot {
   let envLastModifiedAt: string | null = null;
 
   for (const filePath of ENV_FILES) {
-    if (!fs.existsSync(filePath)) continue;
+    if (!fs.existsSync(/*turbopackIgnore: true*/ filePath)) continue;
     try {
-      const mtime = fs.statSync(filePath).mtime;
+      const mtime = fs.statSync(/*turbopackIgnore: true*/ filePath).mtime;
       if (!envLastModifiedAt || mtime.getTime() > new Date(envLastModifiedAt).getTime()) {
         envLastModifiedAt = mtime.toISOString();
       }
     } catch {
       // best-effort diagnostics only
     }
-    const content = fs.readFileSync(filePath, 'utf8');
+    const content = fs.readFileSync(/*turbopackIgnore: true*/ filePath, 'utf8');
     for (const rawLine of content.split('\n')) {
       const line = rawLine.trim();
       if (!line) continue;
@@ -224,7 +225,7 @@ export function resolveMetaAuthConfig(platform: MetaPlatform, options?: ResolveM
 
   const sessionStatePath = firstNonEmpty(
     platform === 'threads' ? process.env.THREADS_SESSION_STATE : process.env.INSTAGRAM_SESSION_STATE,
-    path.join(ROOT_DIR, '.agent', 'vendor', `${platform}-session.json`),
+    path.join(/*turbopackIgnore: true*/ ROOT_DIR, '.agent', 'vendor', `${platform}-session.json`),
   );
 
   return {
@@ -367,8 +368,8 @@ export function createMetaSessionStore(platform: MetaPlatform, sessionStatePath:
   const store = {
     load(): PersistedMetaSessionState | null {
       try {
-        if (!fs.existsSync(sessionStatePath)) return null;
-        const raw = fs.readFileSync(sessionStatePath, 'utf8');
+        if (!fs.existsSync(/*turbopackIgnore: true*/ sessionStatePath)) return null;
+        const raw = fs.readFileSync(/*turbopackIgnore: true*/ sessionStatePath, 'utf8');
         const parsed = JSON.parse(raw) as PersistedMetaSessionState;
         if (!parsed || parsed.platform !== platform || !Array.isArray(parsed.cookies)) return null;
         return parsed;
@@ -378,12 +379,12 @@ export function createMetaSessionStore(platform: MetaPlatform, sessionStatePath:
     },
     persist(state: PersistedMetaSessionState) {
       const dir = path.dirname(sessionStatePath);
-      fs.mkdirSync(dir, { recursive: true });
-      fs.writeFileSync(sessionStatePath, JSON.stringify(state, null, 2));
+      fs.mkdirSync(/*turbopackIgnore: true*/ dir, { recursive: true });
+      fs.writeFileSync(/*turbopackIgnore: true*/ sessionStatePath, JSON.stringify(state, null, 2));
     },
     clear() {
       try {
-        if (fs.existsSync(sessionStatePath)) fs.unlinkSync(sessionStatePath);
+        if (fs.existsSync(/*turbopackIgnore: true*/ sessionStatePath)) fs.unlinkSync(/*turbopackIgnore: true*/ sessionStatePath);
       } catch {
         // ignore cleanup failure
       }
@@ -482,7 +483,7 @@ export function createMetaSessionStore(platform: MetaPlatform, sessionStatePath:
       // Supabase is now the preferred durable session store. Keep the old file as
       // migration fallback only if deletion fails silently.
       try {
-        if (fs.existsSync(sessionStatePath)) fs.unlinkSync(sessionStatePath);
+        if (fs.existsSync(/*turbopackIgnore: true*/ sessionStatePath)) fs.unlinkSync(/*turbopackIgnore: true*/ sessionStatePath);
       } catch {
         // ignore
       }
