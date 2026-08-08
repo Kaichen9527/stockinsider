@@ -17651,13 +17651,13 @@ RETURNS TABLE(status text,next_job jsonb) LANGUAGE plpgsql SECURITY DEFINER SET 
 DECLARE v_job public.legacy_producer_jobs_v3_11%ROWTYPE;v_run public.legacy_producer_runs_v3_11%ROWTYPE;v_frozen public.legacy_frozen_source_revisions_v3_11%ROWTYPE;v_now timestamptz:=date_trunc('second',clock_timestamp());v_next uuid;v_stage public.opportunity_legacy_producer_stage_v3_11;v_kind public.opportunity_legacy_producer_job_kind_v3_11:='stage_barrier';v_payload bytea;v_payload_json jsonb;v_payload_hash text;v_shard integer;v_revision uuid;v_item jsonb;v_revision_id uuid;v_prior_revision_id uuid;v_revision_created boolean;v_projection jsonb;v_projection_bytes bytea;v_uuid_hash text;v_prior_json jsonb;v_expected_symbols text[];v_actual_symbols text[];v_expected_deep text[];v_actual_deep text[];v_expected_shallow text[];v_actual_shallow text[];v_expected_source text[];v_actual_source text[];
 BEGIN
   IF octet_length(p_result)>3145728 OR convert_from(p_result,'utf8')::jsonb<>p_json OR encode(extensions.digest(p_result,'sha256'),'hex')<>p_hash THEN RAISE EXCEPTION 'data_integrity_failure'; END IF;
-  SELECT * INTO v_run FROM public.legacy_producer_runs_v3_11 WHERE run_id=p_run AND status='running'
-    AND owner_token_hash=encode(extensions.digest(convert_to(p_token::text,'utf8'),'sha256'),'hex')
-    AND lease_expires_at>=v_now FOR UPDATE;
+  SELECT run.* INTO v_run FROM public.legacy_producer_runs_v3_11 run WHERE run.run_id=p_run AND run.status='running'
+    AND run.owner_token_hash=encode(extensions.digest(convert_to(p_token::text,'utf8'),'sha256'),'hex')
+    AND run.lease_expires_at>=v_now FOR UPDATE;
   IF NOT FOUND THEN RETURN; END IF;
-  SELECT * INTO v_job FROM public.legacy_producer_jobs_v3_11 WHERE run_id=p_run AND job_id=p_job AND status='leased'
-    AND owner_token_hash=encode(extensions.digest(convert_to(p_token::text,'utf8'),'sha256'),'hex')
-    AND lease_expires_at>=v_now FOR UPDATE;
+  SELECT job.* INTO v_job FROM public.legacy_producer_jobs_v3_11 job WHERE job.run_id=p_run AND job.job_id=p_job AND job.status='leased'
+    AND job.owner_token_hash=encode(extensions.digest(convert_to(p_token::text,'utf8'),'sha256'),'hex')
+    AND job.lease_expires_at>=v_now FOR UPDATE;
   IF NOT FOUND THEN RETURN; END IF;
   IF v_job.predecessor_job_id IS NOT NULL THEN
     SELECT result_json INTO STRICT v_prior_json FROM public.legacy_producer_job_results_v3_11 WHERE job_id=v_job.predecessor_job_id;
@@ -17794,11 +17794,11 @@ CREATE OR REPLACE FUNCTION fail_legacy_producer_job_v3_11(p_run uuid,p_job uuid,
 RETURNS TABLE(status text) LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $$
 DECLARE v_job public.legacy_producer_jobs_v3_11%ROWTYPE;v_run public.legacy_producer_runs_v3_11%ROWTYPE;v_now timestamptz:=date_trunc('second',clock_timestamp());v_token_hash text:=encode(extensions.digest(convert_to(p_token::text,'utf8'),'sha256'),'hex');
 BEGIN
-  SELECT * INTO v_run FROM public.legacy_producer_runs_v3_11 WHERE run_id=p_run AND status='running'
-    AND owner_token_hash=v_token_hash AND lease_expires_at>=v_now FOR UPDATE;
+  SELECT run.* INTO v_run FROM public.legacy_producer_runs_v3_11 run WHERE run.run_id=p_run AND run.status='running'
+    AND run.owner_token_hash=v_token_hash AND run.lease_expires_at>=v_now FOR UPDATE;
   IF NOT FOUND THEN RETURN; END IF;
-  SELECT * INTO v_job FROM public.legacy_producer_jobs_v3_11 WHERE run_id=p_run AND job_id=p_job AND status='leased'
-    AND owner_token_hash=v_token_hash AND lease_expires_at>=v_now FOR UPDATE;
+  SELECT job.* INTO v_job FROM public.legacy_producer_jobs_v3_11 job WHERE job.run_id=p_run AND job.job_id=p_job AND job.status='leased'
+    AND job.owner_token_hash=v_token_hash AND job.lease_expires_at>=v_now FOR UPDATE;
   IF NOT FOUND THEN RETURN; END IF;
   IF p_failure='provider_unavailable' AND v_job.attempt<5 THEN UPDATE public.legacy_producer_jobs_v3_11 SET status='retryable',owner_token_hash=NULL,leased_at=NULL,heartbeat_at=NULL,lease_expires_at=NULL WHERE job_id=p_job;status:='running';
   ELSE UPDATE public.legacy_producer_jobs_v3_11 SET status=CASE WHEN p_failure='cancelled' THEN 'cancelled' ELSE 'failed' END,terminal_at=v_now,failure_code=p_failure,owner_token_hash=NULL,leased_at=NULL,heartbeat_at=NULL,lease_expires_at=NULL WHERE job_id=p_job;
