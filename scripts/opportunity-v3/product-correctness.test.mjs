@@ -242,6 +242,24 @@ const checks = {
     const localPlatform = runtime('local-runtime-platform.js');
     assert.equal(typeof localPlatform.captureSchedulerRollback, 'function');
     assert.equal(typeof localPlatform.createLocalRuntimePlatform, 'function');
+    const transientLaunchctlRows = ['', '"LastExitStatus" = 0;'];
+    const launchctlCalls = [];
+    await localPlatform.startOwnerAndWait('com.stockinsider.test-owner', 1, {
+      launchctl: (args) => {
+        launchctlCalls.push(args);
+        return { status: 0, stdout: args[0] === 'start' ? '' : transientLaunchctlRows.shift() };
+      },
+      waitOneSecond: async () => {},
+    });
+    assert.deepEqual(launchctlCalls, [
+      ['start', 'com.stockinsider.test-owner'],
+      ['list', 'com.stockinsider.test-owner'],
+      ['list', 'com.stockinsider.test-owner'],
+    ]);
+    await assert.rejects(localPlatform.startOwnerAndWait('com.stockinsider.test-owner', 0, {
+      launchctl: (args) => ({ status: 0, stdout: args[0] === 'start' ? '' : '"LastExitStatus" = 78;' }),
+      waitOneSecond: async () => {},
+    }), { code: 'scheduler_activation_failed' });
     const schedulerCaptureRoot = mkdtempSync(path.join(os.tmpdir(), 'scheduler-capture-nofollow-'));
     try {
       const plistPath = path.join(schedulerCaptureRoot, 'legacy.plist');

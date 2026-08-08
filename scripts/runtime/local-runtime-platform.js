@@ -112,16 +112,22 @@ function launchctl(args, tolerateMissing = false) {
   return result;
 }
 function plistPath(label) { return path.join(os.homedir(), 'Library', 'LaunchAgents', `${label}.plist`); }
-async function startOwnerAndWait(label, maximumSeconds = 1500) {
-  launchctl(['start', label]);
+async function startOwnerAndWait(label, maximumSeconds = 1500, dependencies = {}) {
+  const invokeLaunchctl = dependencies.launchctl ?? launchctl;
+  const waitOneSecond = dependencies.waitOneSecond ?? (() => new Promise((resolve) => setTimeout(resolve, 1000)));
+  if (typeof invokeLaunchctl !== 'function' || typeof waitOneSecond !== 'function') fail('scheduler_activation_failed');
+  invokeLaunchctl(['start', label]);
   for (let elapsed = 0; elapsed <= maximumSeconds; elapsed += 1) {
-    const state = launchctl(['list', label]);
+    const state = invokeLaunchctl(['list', label]);
     const output = state.stdout ?? '';
     if (!/"PID"\s*=\s*\d+/u.test(output)) {
-      if (/"LastExitStatus"\s*=\s*0/u.test(output)) return;
-      fail('scheduler_activation_failed');
+      const exitStatus = output.match(/"LastExitStatus"\s*=\s*(-?\d+)/u);
+      if (exitStatus) {
+        if (Number(exitStatus[1]) === 0) return;
+        fail('scheduler_activation_failed');
+      }
     }
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    if (elapsed < maximumSeconds) await waitOneSecond();
   }
   fail('scheduler_activation_failed');
 }
