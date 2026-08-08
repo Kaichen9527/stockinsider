@@ -478,6 +478,7 @@ function validateSourceRevision(value: Record<string, unknown>): boolean {
           ? value.rawCodePointCount === 100_001
           : (value.rawCodePointCount as number) <= 100_000)) &&
     validTrimmedText(value.stableConnectorDocumentId, 512) &&
+    (value.publishedAt === null || (value.publishedAt as string) <= (value.collectedAt as string)) &&
     value.rawFieldPayloadAlgorithmVersion === 'raw-field-payload-v3.0' &&
     value.canonicalContentAlgorithmVersion === 'canonical-content-v3.0'
   );

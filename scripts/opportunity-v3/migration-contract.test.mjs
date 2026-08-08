@@ -846,6 +846,8 @@ test('legacy producer claim plane carries prior discovery and analysis lineage a
   assert.match(acquireBody, /producer_commit_sha<>p_commit OR worker_sha256<>p_worker OR scheduler_config_sha256<>p_config_hash[\s\S]*status='cancelled'/u);
   assert.match(claimBody, /UPDATE public[.]legacy_producer_runs_v3_11 SET heartbeat_at=v_now,lease_expires_at=v_now\+interval '120 seconds'/u);
   assert.match(claimBody, /current_setting\('stockinsider[.]legacy_authority_hash',true\) IS DISTINCT FROM v_run[.]authority_hash/u);
+  assert.match(claimBody, /jsonb_array_length\(selected_revision_row_json\)=11[\s\S]*?ELSE \(selected_revision_row_json->>5\)::timestamptz/u,
+    'claim decoder preserves resumability for pre-migration ten-member frozen rows');
   assert.match(claimBody, /ORDER BY prior_run[.]source_cutoff DESC,prior_run[.]terminal_at DESC,prior_run[.]run_id LIMIT 1/u);
   assert.match(claimBody, /'priorRevisions'[\s\S]*legacy_analysis_revisions_v3_11[\s\S]*revision[.]source_cutoff<v_run[.]source_cutoff/u);
   assert.match(completionBody,

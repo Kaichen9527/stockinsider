@@ -12469,6 +12469,7 @@ BEGIN
       AND ($1).raw_code_point_count>100000
     )
     OR ($1).collected_at>v_now
+    OR (($1).published_at IS NOT NULL AND ($1).published_at>($1).collected_at)
   THEN RAISE EXCEPTION USING ERRCODE='PT422',MESSAGE='invalid_authority_request'; END IF;
   IF ($1).acquisition_status='complete' THEN
     IF ($1).raw_field_payload IS NULL
@@ -17406,7 +17407,8 @@ BEGIN
           AND registry.approved_source_identity_id=d.approved_source_identity_id AND registry.stable_connector_document_id=d.stable_connector_document_id
         JOIN public.source_identity_authorities_v3 authority ON authority.authority_id=d.source_identity_authority_id
           AND authority.source_identity_id=d.approved_source_identity_id AND authority.source_key=d.source_key
-        WHERE d.acquisition_status='complete' AND d.collected_at<=v_run.source_cutoff AND d.recorded_at<=v_run.source_cutoff
+        WHERE d.acquisition_status='complete' AND (d.published_at IS NULL OR d.published_at<=d.collected_at)
+          AND d.collected_at<=v_run.source_cutoff AND d.recorded_at<=v_run.source_cutoff
           AND authority.status='active' AND authority.approved_at<=v_run.source_cutoff AND authority.recorded_at<=v_run.source_cutoff
           AND authority.valid_from<=v_run.source_cutoff AND (authority.valid_to IS NULL OR authority.valid_to>v_run.source_cutoff)
       ), connector_bound AS (
@@ -17422,7 +17424,8 @@ BEGIN
             row_number() OVER(PARTITION BY d.source_key,d.revision_family_key ORDER BY d.collected_at DESC,d.recorded_at DESC,d.revision_id) family_rank
           FROM public.source_document_revisions_v3 d
           JOIN public.source_identity_authorities_v3 authority ON authority.authority_id=d.source_identity_authority_id
-          WHERE d.acquisition_status='complete' AND d.collected_at<=v_run.source_cutoff AND d.recorded_at<=v_run.source_cutoff
+          WHERE d.acquisition_status='complete' AND (d.published_at IS NULL OR d.published_at<=d.collected_at)
+            AND d.collected_at<=v_run.source_cutoff AND d.recorded_at<=v_run.source_cutoff
             AND authority.status='active' AND authority.approved_at<=v_run.source_cutoff AND authority.recorded_at<=v_run.source_cutoff
             AND authority.valid_from<=v_run.source_cutoff AND (authority.valid_to IS NULL OR authority.valid_to>v_run.source_cutoff)
         ), connector_bound AS (
@@ -17615,7 +17618,9 @@ BEGIN
   SELECT * INTO v_payload FROM public.legacy_producer_job_payloads_v3_11 WHERE job_id=p_job;
   IF v_job.predecessor_job_id IS NOT NULL THEN SELECT * INTO v_prior FROM public.legacy_producer_job_results_v3_11 WHERE job_id=v_job.predecessor_job_id; END IF;
   IF v_job.job_kind='revision_shard' THEN
-    SELECT selected_revision_row_hash,(selected_revision_row_json->>5)::timestamptz,(selected_revision_row_json->>6)::timestamptz
+    SELECT selected_revision_row_hash,
+      CASE WHEN jsonb_array_length(selected_revision_row_json)=11 THEN (selected_revision_row_json->>5)::timestamptz ELSE NULL END,
+      CASE WHEN jsonb_array_length(selected_revision_row_json)=11 THEN (selected_revision_row_json->>6)::timestamptz ELSE (selected_revision_row_json->>5)::timestamptz END
     INTO v_selected_hash,v_source_published_at,v_source_collected_at FROM public.legacy_frozen_source_revisions_v3_11 WHERE run_id=p_run AND revision_id=v_job.revision_id;
     v_frozen:=public.read_legacy_frozen_revision_v3_11(p_run,p_job,v_hash,v_job.revision_id,v_selected_hash);
     IF v_frozen IS NULL THEN RAISE EXCEPTION 'data_integrity_failure';END IF;

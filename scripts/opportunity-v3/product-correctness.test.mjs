@@ -10,6 +10,7 @@ import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { canonicalJson } from '../../web/src/lib/opportunity-v3/canonical.ts';
 import { compactRadarEtag, selectCompactRadarProjectionRows, validateCompactRadarProjectionRow } from '../../web/src/lib/opportunity-v3/compact-radar-validation.ts';
+import { validateIngestionValuesV3 } from '../../web/src/lib/opportunity-v3/request-values.ts';
 import { runControlledProjectionPerformanceOracle } from './performance-harness.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
@@ -500,6 +501,13 @@ const checks = {
     }, authorityPages });
     assert.equal(effectiveSource.candidates[0].claimAsOf, '2026-07-31T20:00:00Z',
       'published time is the source effective time when collection is delayed');
+    const invalidPublication = parser.extractRevisionCandidates({ frozenRevision: {
+      revisionId: '00000000-0000-4000-8000-000000000008', sourceKey: 'threads',
+      sourcePublishedAt: '2026-08-01T11:00:00Z', sourceCollectedAt: '2026-08-01T10:00:00Z',
+      rawFieldPayload: { text: '台積電 2330 股價轉強。' },
+    }, authorityPages });
+    assert.equal(invalidPublication.candidates[0].claimAsOf, '2026-08-01T10:00:00Z',
+      'legacy invalid publication ordering falls back to collection time');
     const aliasPages = [...authorityPages, ['alias', null, null, [[
       '00000000-0000-4000-8000-000000002330', '世界',
     ]]]];
@@ -961,6 +969,15 @@ test('public fundamental provenance remains bounded and fail-closed outside the 
   ]));
   assert.notEqual(empty.materialChangeHash, priorAlgorithmMaterialHash,
     'the provenance algorithm transition must force a new immutable analysis revision');
+  const sourceRevision = {
+    sourceIdentityAuthorityId: '00000000-0000-4000-8000-000000000001', stableConnectorDocumentId: 'doc',
+    canonicalUrlCandidate: null, publishedAt: '2026-08-01T11:00:00Z', collectedAt: '2026-08-01T10:00:00Z',
+    adapterVersion: 'source-adapter-v3.3', acquisitionStatus: 'required_field_missing', rawFieldPayload: null,
+    rawCodePointCount: 0, rawFieldPayloadAlgorithmVersion: 'raw-field-payload-v3.0', ingestionContentRevisionSha256: null,
+    canonicalContentAlgorithmVersion: 'canonical-content-v3.0', ingestionCanonicalContentHashV3: null, supersedesRevisionId: null,
+  };
+  assert.equal(validateIngestionValuesV3('append_source_document_revision_v3', sourceRevision), false,
+    'ingestion rejects publication timestamps after collection');
 });
 
 for (const fixture of fixtures) {

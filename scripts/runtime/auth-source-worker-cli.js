@@ -146,6 +146,12 @@ function extractRevisionCandidates(bundle) {
   }
   const sectorByStock = new Map(rowsByKind('taxonomy').filter(Array.isArray).map((row) => [row[0], row[3]]));
   const text = sourceText(frozen.rawFieldPayload);
+  const collectedAt = typeof frozen.sourceCollectedAt === 'string'
+    ? canonicalUtc(frozen.sourceCollectedAt, 'frozen source collected-at') : null;
+  const publishedAt = typeof frozen.sourcePublishedAt === 'string'
+    ? canonicalUtc(frozen.sourcePublishedAt, 'frozen source published-at') : null;
+  const sourceEffectiveAt = publishedAt && collectedAt && Date.parse(publishedAt) <= Date.parse(collectedAt)
+    ? publishedAt : collectedAt;
   const matches = roster.flatMap((row) => {
     const [stockId, symbol, exchange, , , legalName, shortName] = row;
     const aliases = aliasByStock.get(stockId) ?? [];
@@ -156,9 +162,7 @@ function extractRevisionCandidates(bundle) {
     const claimId = uuidFromHash(`claim:${frozen.revisionId}:${stockId}:${raw}`);
     return [{ sourceKey: frozen.sourceKey, revisionId: frozen.revisionId, stockId, symbol, exchange,
       canonicalSector: sectorByStock.get(stockId) ?? 'unknown', raw, claimId,
-      claimAsOf: typeof frozen.sourcePublishedAt === 'string'
-        ? canonicalUtc(frozen.sourcePublishedAt, 'frozen source published-at')
-        : typeof frozen.sourceCollectedAt === 'string' ? canonicalUtc(frozen.sourceCollectedAt, 'frozen source collected-at') : null,
+      claimAsOf: sourceEffectiveAt,
       mentionId: uuidFromHash(`mention:${frozen.revisionId}:${stockId}:${raw}`), claimEligible: true,
       link: { disposition: 'linked', stockId, symbol },
       sourceClass: SOURCE_CLASS_BY_KEY[frozen.sourceKey] ?? 'community' }];
@@ -268,7 +272,7 @@ function buildLegacyCandidateDecision({ candidate, facts, history, benchmark, so
     : { ...actionDecision.technical, plane: { ...plane, bias: plane.availability === 'available'
       ? { ...plane.bias, ownHistory: biasHistory.availability === 'available' ? { ...biasHistory.quantiles, label: biasHistory.current.label } : null }
       : null } };
-  const fundamentalSnapshot = ['legacy-fundamental-provenance-v2', fundamental];
+  const fundamentalSnapshot = ['legacy-fundamental-provenance-v2', fundamental.evidenceRefs, fundamental.asOf];
   const materialChangeHash = sha256(canonicalJson([candidate.materialEvidenceHash, facts, history.at(-1) ?? null,
     benchmark.at(-1) ?? null, valuation, technical, factorAxes, fundamentalSnapshot]));
   return { ...candidate, researchMaturity: valuation.status === 'normal' && quality.qualityActionEligible ? 'decision_ready'
