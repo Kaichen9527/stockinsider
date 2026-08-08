@@ -54,8 +54,18 @@ test('candidate execution waits for exact review and persistent execution is own
     'postgres_bin="$(pg_config --bindir)"',
     'test -x "$postgres_bin/initdb"',
     'test -x "$postgres_bin/pg_ctl"',
+    'echo "OPPORTUNITY_V3_POSTGRES_BIN=$postgres_bin" >> "$GITHUB_ENV"',
   ]) assert.ok(product.includes(token), `product prerequisite: ${token}`);
-  assert.doesNotMatch(model, /(?:apt-get|postgres_bin|playwright install)/u);
+  assert.doesNotMatch(model, /(?:apt-get|postgres_bin|OPPORTUNITY_V3_POSTGRES_BIN|playwright install)/u);
+  assert.match(worker, /function trustedPostgresBin\(\)/u);
+  assert.ok(
+    worker.includes('/^\\/usr\\/lib\\/postgresql\\/[0-9]+\\/bin$/u'),
+    'worker pins a closed PostgreSQL package bin path',
+  );
+  assert.match(worker, /protected PostgreSQL bin is non-world-writable/u);
+  assert.match(worker, /for \(const name of \['initdb', 'pg_ctl', 'psql'\]\)/u);
+  assert.match(worker, /OPPORTUNITY_V3_POSTGRES_BIN: postgresBin/u);
+  assert.match(worker, /PATH: `\$\{postgresBin\}\$\{path[.]delimiter\}/u);
 });
 
 test('every third-party action is pinned to an immutable commit', () => {

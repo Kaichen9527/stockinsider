@@ -359,6 +359,25 @@ function sanitizedEnvironment(attestation, track, extra = {}) {
   }
 }
 
+function trustedPostgresBin() {
+  assert.equal(process.platform, 'linux', 'protected PostgreSQL fixture requires Linux');
+  const directory = process.env.OPPORTUNITY_V3_POSTGRES_BIN;
+  assert.match(directory ?? '', /^\/usr\/lib\/postgresql\/[0-9]+\/bin$/u,
+    'protected PostgreSQL bin uses the package-owned path');
+  assert.equal(realpathSync(directory), directory, 'protected PostgreSQL bin realpath');
+  const stat = lstatSync(directory);
+  assert.equal(stat.isDirectory() && !stat.isSymbolicLink() && (stat.mode & 0o002) === 0,
+    true, 'protected PostgreSQL bin is non-world-writable');
+  for (const name of ['initdb', 'pg_ctl', 'psql']) {
+    const executable = path.join(directory, name);
+    const executableStat = lstatSync(executable);
+    assert.equal(realpathSync(executable), executable, `protected PostgreSQL ${name} realpath`);
+    assert.equal(executableStat.isFile() && !executableStat.isSymbolicLink() && (executableStat.mode & 0o111) !== 0,
+      true, `protected PostgreSQL ${name} executable`);
+  }
+  return directory;
+}
+
 function stageNonCredentialModelHome(scratch) {
   const codexDirectory = path.join(scratch, '.codex');
   mkdirSync(codexDirectory, { mode: 0o700 });
@@ -533,9 +552,14 @@ function executeTrack(subjectRoot, track, identity, attestation) {
       ? { check: 'model-runner-code-gate', registeredCount: 28, name: 'model-runner-track' }
       : null;
   assert.ok(descriptor, 'closed executable track');
+  const postgresBin = track === 'product_runtime' ? trustedPostgresBin() : null;
   const { environment, scratch } = sanitizedEnvironment(attestation, track, {
     OPPORTUNITY_V3_ACCEPTANCE_TRACK: track,
     OPPORTUNITY_V3_GATE_ROOT: realpathSync(subjectRoot),
+    ...(postgresBin === null ? {} : {
+      OPPORTUNITY_V3_POSTGRES_BIN: postgresBin,
+      PATH: `${postgresBin}${path.delimiter}${process.env.PATH ?? '/usr/local/bin:/usr/bin:/bin'}`,
+    }),
   });
   try {
     const outputs = [];
