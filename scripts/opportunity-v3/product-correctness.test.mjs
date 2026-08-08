@@ -493,6 +493,16 @@ const checks = {
     assert.equal(parse('今天指數收在 2330 點，沒有提到任何個股。').candidates.length, 0);
     const explicitStock = parse('台積電 2330 股價轉強，列入觀察。');
     assert.equal(explicitStock.candidates.length, 1);
+    assert.equal(explicitStock.candidates[0].name, '台積電',
+      'official roster name remains attached through the source-led candidate funnel');
+    assert.equal(explicitStock.candidates[0].sourceSummary, '台積電 2330 股價轉強,列入觀察。');
+    const longNamePages = [['roster', null, null, [[
+      '00000000-0000-4000-8000-000000002330', '2330', 'TWSE', 'common_stock', 'active', '超過四十字的官方公司完整名稱不應被送進公開短名稱欄位以免破壞公開契約而造成整批投影無法發布', null,
+    ]]]];
+    assert.equal(parser.extractRevisionCandidates({ frozenRevision: {
+      revisionId: '00000000-0000-4000-8000-000000000009', sourceKey: 'threads',
+      rawFieldPayload: { text: '2330 股票轉強。' },
+    }, authorityPages: longNamePages }).candidates[0].name, null, 'public name remains within its 40-character contract');
     assert.match(explicitStock.candidates[0].claimId, /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/u);
     const effectiveSource = parser.extractRevisionCandidates({ frozenRevision: {
       revisionId: '00000000-0000-4000-8000-000000000007', sourceKey: 'threads',
@@ -549,7 +559,9 @@ const checks = {
     await assert.rejects(() => handlers.mention_claim_extraction({ jobKind: 'revision_shard',
       readKind: 'frozen_revision_authority', readCanonical: uncachedRead.canonical,
       readJson: uncachedRead.json, readHash: uncachedRead.hash }), /frozen authority cache unavailable/u);
-    const retryRead = runtime('codec.js').immutableBundle('compact_projection_input', { analysisResult: { decisions: [] },
+    const retryRead = runtime('codec.js').immutableBundle('compact_projection_input', { analysisResult: { decisions: [],
+      sourceCandidates: [{ symbol: '2330', name: '台積電', disposition: 'promoted', reason: 'new_source_evidence',
+        sourceClass: 'official', raw: '2330', sourceSummary: '台積電財報更新', lastEvaluatedAt: '2026-08-01T10:20:00Z' }] },
       sourceCutoff: '2026-08-01T10:20:00Z', legacyPayloads: captured.json.legacyPayloads,
       legacyPayloadHashes: captured.json.legacyPayloadHashes, legacySourceResultHash: captured.hash });
     const projected = await handlers.compact_radar_projection({ readKind: 'compact_projection_input',
@@ -558,6 +570,10 @@ const checks = {
       'a compact retry reuses the persisted source result and never refetches changed public payloads');
     assert.deepEqual(projected.json.projections[0].payload.discoveryDelta,
       { added: [], exited: [], continued: [], unchangedReasons: [] });
+    assert.equal(projected.json.projections[0].payload.sourceSignals[0].chineseName, '台積電',
+      'compact public projection carries the official source-signal name');
+    assert.equal(projected.json.projections[0].payload.sourceSignals[0].sourceSummary, '台積電財報更新',
+      'compact public projection carries bounded source context instead of repeating the ticker');
     const candidateInput = { mentionResult: { candidates: [{ stockId: '00000000-0000-4000-8000-000000009999', symbol: '9999',
       raw: '新公司', claimId: 'claim-9999', mentionId: 'mention-9999', sourceKey: 'threads', revisionId: null }] }, seedSymbols: seeds() };
     const firstCandidateRead = runtime('codec.js').immutableBundle('candidate_funnel_input', candidateInput);
@@ -698,6 +714,12 @@ const checks = {
   'PCR-009': () => {
     const disposition = runtime('discovery-disposition.js').deriveDiscoveryDisposition({ linked: { disposition: 'linked', stockId: 's', symbol: '9999' }, seedSymbols: seeds(), priorLedger: [], evidenceHash: 'x' });
     assert.deepEqual([disposition.reason, disposition.researchDisposition, disposition.seedMembership], ['new_out_of_seed_symbol','source_signal_only','out_of_seed']);
+    const funnel = runtime('candidate-funnel.js').buildCandidateFunnel({ outcomes: [{
+      name: '新公司', sourceSummary: '新公司 9999 財報轉強。', raw: '9999', claimId: 'c', mentionId: 'm',
+      sourceClass: 'official', link: { disposition: 'linked', stockId: 's', symbol: '9999' },
+    }], seedSymbols: seeds(), priorLedger: [] });
+    assert.deepEqual([funnel.candidateLedger[0].name, funnel.candidateLedger[0].sourceSummary],
+      ['新公司', '新公司 9999 財報轉強。'], 'official identity and source context survive funnel ranking');
   },
   'PCR-010': () => {
     const select = runtime('candidate-funnel.js').selectLiveDiscoveryCards;
