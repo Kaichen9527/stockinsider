@@ -188,13 +188,23 @@ const technicalStateLabels = {
   invalidated: '技術條件失效',
 } as const;
 
+function formalResearchPresentationReady(rec: RecommendationCard) {
+  const decision = rec.researchDecision;
+  if (!decision) return true;
+  return decision.availability === 'available'
+    && decision.researchMaturity === 'decision_ready'
+    && decision.valuation.status === 'normal'
+    && !['avoid', 'valuation_review'].includes(decision.newPositionAction);
+}
+
 export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrimary: boolean }) {
   const cardTitleId = `stock-card-${rec.recommendationId.replace(/[^A-Za-z0-9_-]/gu, '-')}`;
   const researchDecision = rec.researchDecision;
   const unavailableResearchDecision = researchDecision?.availability === 'unavailable' ? researchDecision : null;
   const availableResearchDecision = researchDecision?.availability === 'available' ? researchDecision : null;
+  const researchFailClosed = Boolean(researchDecision) && !formalResearchPresentationReady(rec);
   const stateBadge =
-    unavailableResearchDecision
+    researchFailClosed
       ? { label: '研究待補', cls: 'bg-amber-500/12 text-amber-700 dark:text-amber-300' }
       : rec.displayBucket === 'hot_tracking'
       ? { label: '熱股追蹤', cls: 'bg-orange-500/12 text-orange-700 dark:text-orange-300' }
@@ -225,7 +235,7 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
           <h3 id={cardTitleId} className="text-lg font-semibold truncate">{stockDisplayName(rec)}</h3>
           <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs ${stateBadge.cls}`}>{stateBadge.label}</span>
         </div>
-        {unavailableResearchDecision ? (
+        {researchFailClosed ? (
           <div className="shrink-0 text-right">
             <p className="text-[11px] tracking-[0.18em] text-slate-500 dark:text-emerald-100/55">估值狀態</p>
             <span className="text-sm font-bold text-amber-700 dark:text-amber-300">暫停估值</span>
@@ -258,7 +268,7 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
         )}
       </div>
 
-      {!unavailableResearchDecision && valuationLine(rec) && (
+      {!researchFailClosed && valuationLine(rec) && (
         <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/68">
           {valuationLine(rec)}
         </p>
@@ -270,14 +280,14 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
         </span>
         <span
           className={`rounded-full px-3 py-1 ${
-            unavailableResearchDecision || rec.targetCoverageStatus === 'over_base_and_scenario' || rec.displayTargetMode === 'hidden_over_target'
+            researchFailClosed || rec.targetCoverageStatus === 'over_base_and_scenario' || rec.displayTargetMode === 'hidden_over_target'
               ? 'bg-slate-950/8 text-slate-600 dark:text-emerald-100/65'
               : rec.targetCoverageStatus === 'scenario_only'
                 ? 'bg-sky-600/12 text-sky-700 dark:text-sky-300'
                 : 'bg-emerald-600/12 text-emerald-700 dark:text-emerald-300'
           }`}
         >
-          {unavailableResearchDecision ? '研究證據待補，暫不判斷估值空間' : targetCoverageLine(rec)}
+          {researchFailClosed ? '研究證據待補，暫不判斷估值空間' : targetCoverageLine(rec)}
         </span>
         {rec.priceRefreshStatus && rec.priceRefreshStatus !== 'fresh' ? (
           <span className="rounded-full bg-amber-500/12 px-3 py-1 text-amber-700 dark:text-amber-300">股價待更新</span>
@@ -364,22 +374,22 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
 		      <div className="mt-3 grid gap-2 sm:grid-cols-3">
 	        <div className="rounded-xl border border-line bg-surface px-3 py-2">
 	          <p className="text-[10px] tracking-[0.14em] text-slate-500 dark:text-emerald-100/50">推薦指數</p>
-	          <p className="mt-1 text-sm font-semibold">{confidenceLabel(rec.recommendationIndex)} {rec.recommendationIndex != null ? `${rec.recommendationIndex}` : ''}</p>
+		          <p className="mt-1 text-sm font-semibold">{researchFailClosed ? '暫不評分' : `${confidenceLabel(rec.recommendationIndex)} ${rec.recommendationIndex ?? ''}`}</p>
 	        </div>
 	        <div className="rounded-xl border border-line bg-surface px-3 py-2">
 	          <p className="text-[10px] tracking-[0.14em] text-slate-500 dark:text-emerald-100/50">情境達成率</p>
-	          <p className="mt-1 text-sm font-semibold">{rec.scenarioChecklistProgress != null ? `${rec.scenarioChecklistProgress}%` : '待補'}</p>
-	          <p className="mt-1 text-[11px] leading-4 text-slate-500 dark:text-emerald-100/60">{scenarioBreakdownLine(rec)}</p>
+		          <p className="mt-1 text-sm font-semibold">{researchFailClosed ? '暫不評分' : rec.scenarioChecklistProgress != null ? `${rec.scenarioChecklistProgress}%` : '待補'}</p>
+		          <p className="mt-1 text-[11px] leading-4 text-slate-500 dark:text-emerald-100/60">{researchFailClosed ? '待研究證據補齊後再評估' : scenarioBreakdownLine(rec)}</p>
 	        </div>
 		        <div className="rounded-xl border border-line bg-surface px-3 py-2">
 		          <p className="text-[10px] tracking-[0.14em] text-slate-500 dark:text-emerald-100/50">進場狀態</p>
 		          <p className="mt-1 text-sm font-semibold">
-                {researchDecision?.availability === 'unavailable'
+                {researchFailClosed
                   ? '暫不提供進場建議'
                   : rec.tradeDecision?.action || rec.entryActionLabel || rec.entryReadinessLabel || '等待量價確認'}
               </p>
               <p className="mt-1 text-[11px] leading-4 text-slate-500 dark:text-emerald-100/60">
-                {researchDecision?.availability === 'unavailable'
+                {researchFailClosed
                   ? '待研究證據補齊後再評估'
                   : rec.tradeDecision?.positionSize || rec.marketIndexSignal?.riskBudget || '依大盤與個股 Gate 決定'}
               </p>
@@ -388,7 +398,9 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
 
 	      <div className="mt-3 flex items-center justify-between gap-2">
 	        <p className="text-xs text-slate-500 dark:text-emerald-100/60">
-	          {rec.displayTargetMode === 'early_potential'
+		          {researchFailClosed
+		            ? '研究證據待補 · 非正式'
+		            : rec.displayTargetMode === 'early_potential'
 	            ? '未正式 · 待 gate 補齊'
 	            : rec.displayBucket === 'hot_tracking'
 	              ? `熱股追蹤 · ${rec.nextRevaluationAt ? `下次重估 ${formatTaipeiDateTime(rec.nextRevaluationAt, 'compact')}` : '等重估'}`
@@ -415,7 +427,7 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
   const namedScenario = (radar.scenarioUpsideCandidates || []).filter((r) => Boolean(r.chineseName));
   const namedEarly = (radar.earlyWatchlist ?? []).filter((r) => Boolean(r.chineseName));
   const namedHot = (radar.hotTracking || []).filter((r) => Boolean(r.chineseName));
-  const decisionAvailable = (card: RecommendationCard) => card.researchDecision?.availability !== 'unavailable';
+  const decisionAvailable = (card: RecommendationCard) => formalResearchPresentationReady(card);
   const researchPendingBySymbol = new Map<string, RecommendationCard>();
   for (const card of [...namedFormal, ...namedScenario, ...namedEarly, ...namedHot]) {
     if (!decisionAvailable(card) && !researchPendingBySymbol.has(card.symbol)) researchPendingBySymbol.set(card.symbol, card);

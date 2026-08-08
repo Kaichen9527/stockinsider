@@ -70,10 +70,12 @@ const unavailableCard = card('fixture-decision-unavailable', '9006', {
   recommendationBucket: 'high_conviction', displayBucket: 'formal', displayTargetMode: 'actionable',
   targetPrice: 200, baseTarget: 200, expectedUpsidePct: 42, displayBaseUpsidePct: 42,
   cardPrimaryUpsidePct: 42, cardPrimaryUpsideLabel: 'Base 空間', targetCoverageStatus: 'base_upside',
+  recommendationIndex: 90, scenarioChecklistProgress: 80,
 });
 
 const cards = [
-  card('fixture-discovery', '9001', { ...baseDecision, researchMaturity: 'source_signal', newPositionAction: 'valuation_review', valuation: { status: 'valuation_review', exchangeReportedPe: { availability: 'unavailable', reason: 'official_pe_unavailable' }, modelComparablePe: { value: null, reason: 'valuation_review' } } }),
+  card('fixture-discovery', '9001', { ...baseDecision, researchMaturity: 'source_signal', newPositionAction: 'valuation_review', valuation: { status: 'valuation_review', exchangeReportedPe: { availability: 'unavailable', reason: 'official_pe_unavailable' }, modelComparablePe: { value: null, reason: 'valuation_review' } } },
+    { recommendationBucket: 'high_conviction', displayBucket: 'formal', targetPrice: 180, expectedUpsidePct: 50, cardPrimaryUpsidePct: 50, recommendationIndex: 92 }),
   card('fixture-valuation', '9002', { ...baseDecision, newPositionAction: 'valuation_review', valuation: { status: 'valuation_review', exchangeReportedPe: { availability: 'unavailable', reason: 'authority_conflict' }, modelComparablePe: { value: null, reason: 'method_divergence' } } }),
   card('fixture-reclaim', '9003', { ...baseDecision, technical: { ...baseDecision.technical, state: 'reclaim_required', trigger: { kind: 'reclaim', threshold: 102, volumeRatioMinimum: 1.3 }, entryZone: { kind: 'trigger_zone', lower: 102, upper: 104 }, invalidation: { stop: 96, thesisLevel: 97 } } }),
   card('fixture-unavailable', '9004', { ...baseDecision, newPositionAction: 'wait_trigger', technical: { availability: 'unavailable', state: null, bias: { availability: 'unavailable', reason: 'insufficient_adjusted_history' } }, factorAxes: { availability: 'unavailable', reason: 'factor_inputs_unavailable' } }),
@@ -81,7 +83,7 @@ const cards = [
 ];
 
 const groupingRadar = {
-  opportunities: [unavailableCard], scenarioUpsideCandidates: [], earlyWatchlist: [],
+  opportunities: [unavailableCard, cards[0]], scenarioUpsideCandidates: [], earlyWatchlist: [],
   hotTracking: [{ ...unavailableCard, recommendationId: 'hot-fixture-decision-unavailable', displayBucket: 'hot_tracking' }],
   hotThemes: [], discoveredStocks: [], sourceSignals: [],
 } as unknown as RadarDailyPayload;

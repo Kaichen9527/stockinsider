@@ -28,7 +28,7 @@ function stripCorrectnessAdditions(payload) {
 function unavailableResearchDecision(lastEvaluatedAt) {
   return Object.freeze({
     version: 'legacy-research-decision-v3.11.0', availability: 'unavailable',
-    reason: 'financial_inputs_missing', researchMaturity: 'source_signal',
+    reason: 'projection_missing', researchMaturity: 'source_signal',
     newPositionAction: 'valuation_review', lastEvaluatedAt,
     analysisGeneratedAt: null, materialChangeHash: null,
     materialChangedBecause: [], noChangeMessage: null,

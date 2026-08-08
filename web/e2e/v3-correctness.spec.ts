@@ -26,7 +26,7 @@ test('PCR-024 exercises the decision matrix at 320px, 200% zoom, keyboard, reduc
   await page.evaluate(() => { document.documentElement.style.zoom = '2'; });
 
   const articles = page.getByRole('article');
-  await expect(articles).toHaveCount(6);
+  await expect(articles).toHaveCount(7);
   await expect(page.getByRole('region', { name: '研究與進場判斷' }).first()).toBeVisible();
   await expect(page.getByText('已跌破支撐，原支撐現為收復觸發；未收復前不把它顯示成回測買點。')).toBeVisible();
   await expect(page.getByLabel('四軸研究評分').first()).toBeAttached();
@@ -42,6 +42,9 @@ test('PCR-024 exercises the decision matrix at 320px, 200% zoom, keyboard, reduc
   await expect(page.getByRole('heading', { name: '研究證據待補（非建議）' })).toBeVisible();
   await expect(page.getByRole('heading', { name: '高信念正式推薦' })).toHaveCount(0);
   await expect(unavailableCard).toHaveCount(1);
+  const incompleteAvailableCard = page.getByRole('article', { name: /9001/u }).last();
+  await expect(incompleteAvailableCard.getByText('研究待補', { exact: true })).toBeVisible();
+  await expect(incompleteAvailableCard.getByText('+50.0%')).toHaveCount(0);
   await expect(unavailableCard.getByText('研究：來源訊號')).toBeVisible();
   await expect(unavailableCard.getByText('動作：估值待覆核')).toBeVisible();
   await expect(unavailableCard.getByText('研究資料待補：財務資料尚未完整，暫不產生估值或買進建議')).toBeVisible();
@@ -51,8 +54,11 @@ test('PCR-024 exercises the decision matrix at 320px, 200% zoom, keyboard, reduc
   await expect(unavailableCard.getByText('高信念正式推薦')).toHaveCount(0);
   await expect(unavailableCard.getByText('+42.0%')).toHaveCount(0);
   await expect(unavailableCard.getByText(/Base 200/u)).toHaveCount(0);
+  await expect(unavailableCard.getByText('高 90')).toHaveCount(0);
+  await expect(unavailableCard.getByText('80%')).toHaveCount(0);
+  await expect(unavailableCard.getByText('暫不評分')).toHaveCount(2);
   await expect(unavailableCard.getByText('暫不提供進場建議')).toBeVisible();
-  await expect(unavailableCard.getByText('待研究證據補齊後再評估')).toBeVisible();
+  await expect(unavailableCard.getByText('待研究證據補齊後再評估')).toHaveCount(2);
   await expect(unavailableCard.getByText('等待量價確認')).toHaveCount(0);
   expect(pageErrors).toEqual([]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
