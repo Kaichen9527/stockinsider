@@ -11,6 +11,36 @@ function closedUnavailable(value, fallbackReason) {
   return { availability: 'unavailable', reason: value?.reason || fallbackReason };
 }
 
+function canonicalSingleLine(value, maximum) {
+  return typeof value === 'string' && [...value].length >= 1 && [...value].length <= maximum
+    && value === value.normalize('NFC') && value === value.trim()
+    && !/[\r\n\u0000-\u001f\u007f]/u.test(value);
+}
+
+function opaqueEvidenceReference(value) {
+  return typeof value === 'string' && [...value].length >= 1 && [...value].length <= 120
+    && value === value.trim();
+}
+
+function serializeFundamental(value, lastEvaluatedAt) {
+  invariant(value && typeof value === 'object' && !Array.isArray(value), 'fundamental narrative unavailable');
+  invariant(canonicalSingleLine(value.thesis, 240), 'fundamental thesis unavailable');
+  invariant(canonicalSingleLine(value.latestChange, 200), 'fundamental latest change unavailable');
+  invariant(Array.isArray(value.risks) && value.risks.length >= 1 && value.risks.length <= 4
+    && value.risks.every((risk) => canonicalSingleLine(risk, 160)), 'fundamental risks unavailable');
+  invariant(Array.isArray(value.evidenceRefs) && value.evidenceRefs.length >= 1 && value.evidenceRefs.length <= 8
+    && value.evidenceRefs.every(opaqueEvidenceReference)
+    && new Set(value.evidenceRefs).size === value.evidenceRefs.length, 'fundamental evidence unavailable');
+  invariant(typeof lastEvaluatedAt === 'string'
+    && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:[.]\d{3})?Z$/u.test(lastEvaluatedAt)
+    && Number.isFinite(Date.parse(lastEvaluatedAt)), 'fundamental evaluation cutoff unavailable');
+  invariant(typeof value.asOf === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:[.]\d{3})?Z$/u.test(value.asOf)
+    && Number.isFinite(Date.parse(value.asOf))
+    && Date.parse(value.asOf) <= Date.parse(lastEvaluatedAt), 'fundamental as-of unavailable');
+  return { thesis: value.thesis, latestChange: value.latestChange, risks: [...value.risks],
+    evidenceRefs: [...value.evidenceRefs], asOf: value.asOf };
+}
+
 function serializeFactorAxes(value) {
   if (value?.availability !== 'available') return closedUnavailable(value, 'factor_unavailable');
   const axes = Object.fromEntries(Object.entries(value.axes || {}).map(([key, axis]) => [key,
@@ -34,7 +64,7 @@ function serializeCorrectnessPublicUnion(decision) {
     ...(decision?.name ? { name: decision.name } : {}),
     researchMaturity: MATURITY.has(decision?.researchMaturity) ? decision.researchMaturity : 'source_signal',
     newPositionAction: action,
-    fundamental: closedUnavailable(decision?.fundamental, 'fundamental_unavailable'),
+    fundamental: serializeFundamental(decision?.fundamental, decision?.lastEvaluatedAt),
     technical: {
       availability: state ? 'available' : 'unavailable',
       state,

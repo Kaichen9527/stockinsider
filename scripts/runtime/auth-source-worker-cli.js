@@ -125,6 +125,11 @@ function uuidFromHash(value) {
   return `${digest.slice(0, 8)}-${digest.slice(8, 12)}-${digest.slice(12, 16)}-${digest.slice(16, 20)}-${digest.slice(20, 32)}`;
 }
 
+function canonicalUtc(value, label) {
+  invariant(typeof value === 'string' && Number.isFinite(Date.parse(value)), `${label} unavailable`);
+  return new Date(value).toISOString().replace('.000Z', 'Z');
+}
+
 function extractRevisionCandidates(bundle) {
   const frozen = bundle.frozenRevision;
   invariant(frozen && typeof frozen.revisionId === 'string', 'frozen revision unavailable');
@@ -141,6 +146,12 @@ function extractRevisionCandidates(bundle) {
   }
   const sectorByStock = new Map(rowsByKind('taxonomy').filter(Array.isArray).map((row) => [row[0], row[3]]));
   const text = sourceText(frozen.rawFieldPayload);
+  const collectedAt = typeof frozen.sourceCollectedAt === 'string'
+    ? canonicalUtc(frozen.sourceCollectedAt, 'frozen source collected-at') : null;
+  const publishedAt = typeof frozen.sourcePublishedAt === 'string'
+    ? canonicalUtc(frozen.sourcePublishedAt, 'frozen source published-at') : null;
+  const sourceEffectiveAt = publishedAt && collectedAt && Date.parse(publishedAt) <= Date.parse(collectedAt)
+    ? publishedAt : collectedAt;
   const matches = roster.flatMap((row) => {
     const [stockId, symbol, exchange, , , legalName, shortName] = row;
     const aliases = aliasByStock.get(stockId) ?? [];
@@ -151,6 +162,7 @@ function extractRevisionCandidates(bundle) {
     const claimId = uuidFromHash(`claim:${frozen.revisionId}:${stockId}:${raw}`);
     return [{ sourceKey: frozen.sourceKey, revisionId: frozen.revisionId, stockId, symbol, exchange,
       canonicalSector: sectorByStock.get(stockId) ?? 'unknown', raw, claimId,
+      claimAsOf: sourceEffectiveAt,
       mentionId: uuidFromHash(`mention:${frozen.revisionId}:${stockId}:${raw}`), claimEligible: true,
       link: { disposition: 'linked', stockId, symbol },
       sourceClass: SOURCE_CLASS_BY_KEY[frozen.sourceKey] ?? 'community' }];
@@ -172,21 +184,70 @@ function legacyFactInput(rows) {
   };
 }
 
-function legacyQualityInput(facts) {
-  const value = (key) => facts.find((row) => Array.isArray(row) && row[1] === key)?.[5];
-  const revenue = value('quarterly_revenue'); const operating = value('quarterly_operating_income');
-  const netIncome = value('quarterly_net_income_attributable_to_common') ?? value('quarterly_net_income');
-  const ocf = value('operating_cash_flow'); const capex = value('capital_expenditure');
-  const ebitda = value('quarterly_ebitda'); const debt = value('total_debt'); const cash = value('cash_and_equivalents');
-  const interest = value('interest_expense');
-  return { roe: value('roe'), operatingMargin: Number.isFinite(revenue) && revenue !== 0 && Number.isFinite(operating) ? operating / revenue : null,
+function legacyQualityMaterial(facts) {
+  const row = (key) => facts.find((item) => Array.isArray(item) && item[1] === key && Number.isFinite(item[5]));
+  const value = (item) => item?.[5];
+  const roeRow = row('roe'); const revenueRow = row('quarterly_revenue');
+  const operatingRow = row('quarterly_operating_income');
+  const attributableIncomeRow = row('quarterly_net_income_attributable_to_common');
+  const netIncomeRow = attributableIncomeRow ?? row('quarterly_net_income');
+  const ocfRow = row('operating_cash_flow'); const capexRow = row('capital_expenditure');
+  const ebitdaRow = row('quarterly_ebitda'); const debtRow = row('total_debt');
+  const cashRow = row('cash_and_equivalents'); const interestRow = row('interest_expense');
+  const revenue = value(revenueRow); const operating = value(operatingRow);
+  const netIncome = value(netIncomeRow); const ocf = value(ocfRow); const capex = value(capexRow);
+  const ebitda = value(ebitdaRow); const debt = value(debtRow); const cash = value(cashRow);
+  const interest = value(interestRow);
+  const usedRows = [roeRow];
+  if (Number.isFinite(revenue) && revenue !== 0 && Number.isFinite(operating)) usedRows.push(revenueRow, operatingRow);
+  if (Number.isFinite(netIncome) && netIncome !== 0 && Number.isFinite(ocf) && Number.isFinite(capex)) usedRows.push(netIncomeRow, ocfRow, capexRow);
+  if (Number.isFinite(ebitda) && ebitda > 0 && Number.isFinite(debt)) usedRows.push(ebitdaRow, debtRow, ...(Number.isFinite(cash) ? [cashRow] : []));
+  if (Number.isFinite(interest) && interest > 0 && Number.isFinite(operating)) usedRows.push(interestRow, operatingRow);
+  return { input: { roe: value(roeRow), operatingMargin: Number.isFinite(revenue) && revenue !== 0 && Number.isFinite(operating) ? operating / revenue : null,
     freeCashFlowConversion: Number.isFinite(netIncome) && netIncome !== 0 && Number.isFinite(ocf) && Number.isFinite(capex) ? (ocf - Math.abs(capex)) / Math.abs(netIncome) : null,
     netDebtToEbitda: Number.isFinite(ebitda) && ebitda > 0 && Number.isFinite(debt) ? (debt - (Number.isFinite(cash) ? cash : 0)) / ebitda : null,
-    interestCoverage: Number.isFinite(interest) && interest > 0 && Number.isFinite(operating) ? operating / interest : null };
+    interestCoverage: Number.isFinite(interest) && interest > 0 && Number.isFinite(operating) ? operating / interest : null },
+  usedRows: [...new Set(usedRows.filter(Boolean))] };
+}
+
+function legacyQualityInput(facts) {
+  return legacyQualityMaterial(facts).input;
+}
+
+function legacyFundamentalNarrative(candidate, usedRows, quality, sourceCutoff) {
+  const score = Number.isFinite(quality.score) ? Math.round(quality.score) : null;
+  invariant(usedRows.every((row) => typeof row[12] === 'string' && row[12].length > 0), 'quality fact evidence unavailable');
+  const directRefs = [...new Set(usedRows.map((row) => row[12])
+    .filter((value) => typeof value === 'string' && value.length > 0))];
+  const qualityEvidence = usedRows.map((row) => [row[1], row[5], canonicalUtc(row[9], 'quality fact as-of'), row[12]]);
+  const evidenceRefs = score === null ? [candidate.claimId].filter((value) => typeof value === 'string' && value.length > 0)
+    : directRefs.length <= 8 ? directRefs : [`fundamental-input-set:${sha256(canonicalJson(qualityEvidence))}`];
+  invariant(evidenceRefs.length > 0, 'legacy fundamental evidence unavailable');
+  const factAsOf = usedRows.map((row) => canonicalUtc(row[9], 'quality fact as-of'))
+    .sort((left, right) => Date.parse(left) - Date.parse(right)).at(-1);
+  const narrativeAsOf = score === null ? canonicalUtc(candidate.claimAsOf, 'candidate claim as-of') : factAsOf;
+  invariant(typeof narrativeAsOf === 'string' && Date.parse(narrativeAsOf) <= Date.parse(sourceCutoff), 'fundamental evidence after cutoff');
+  const thesis = score === null
+    ? `${candidate.symbol} 已有可追溯來源訊號，但 point-in-time 基本面輸入尚不足。`
+    : `${candidate.symbol} 的 point-in-time 基本面品質分數為 ${score}，仍須結合估值與技術狀態判斷。`;
+  const risks = [
+    quality.availableWeight < 0.65 ? '基本面品質輸入覆蓋不足，不能形成買進型建議。' : null,
+    quality.qualityActionEligible !== true ? '基本面品質尚未達到新倉動作門檻。' : null,
+    '財務與來源證據仍須依最新公告持續更新。',
+  ].filter((value) => value !== null).slice(0, 4);
+  return Object.freeze({
+    thesis,
+    latestChange: '本次依最新可用的 point-in-time 財務與來源證據重新檢查基本面品質。',
+    risks,
+    evidenceRefs,
+    asOf: narrativeAsOf,
+  });
 }
 
 function buildLegacyCandidateDecision({ candidate, facts, history, benchmark, sourceCutoff, valuationInput = {} }) {
-  const quality = calculateFundamentalQualityAxes(legacyQualityInput(facts));
+  const qualityMaterial = legacyQualityMaterial(facts);
+  const quality = calculateFundamentalQualityAxes(qualityMaterial.input);
+  const fundamental = legacyFundamentalNarrative(candidate, qualityMaterial.usedRows, quality, sourceCutoff);
   const plane = calculateAdjustedTechnicalPlane({ rows: history, asOf: sourceCutoff, benchmark });
   const biasHistory = selectBiasTechnicalHistory({ rows: history, asOf: sourceCutoff });
   const valuation = evaluateCandidateValuation({ stockId: candidate.stockId, subjectStockId: candidate.stockId,
@@ -211,11 +272,12 @@ function buildLegacyCandidateDecision({ candidate, facts, history, benchmark, so
     : { ...actionDecision.technical, plane: { ...plane, bias: plane.availability === 'available'
       ? { ...plane.bias, ownHistory: biasHistory.availability === 'available' ? { ...biasHistory.quantiles, label: biasHistory.current.label } : null }
       : null } };
+  const fundamentalSnapshot = ['legacy-fundamental-provenance-v2', fundamental.evidenceRefs, fundamental.asOf];
   const materialChangeHash = sha256(canonicalJson([candidate.materialEvidenceHash, facts, history.at(-1) ?? null,
-    benchmark.at(-1) ?? null, valuation, technical, factorAxes]));
+    benchmark.at(-1) ?? null, valuation, technical, factorAxes, fundamentalSnapshot]));
   return { ...candidate, researchMaturity: valuation.status === 'normal' && quality.qualityActionEligible ? 'decision_ready'
     : quality.availability === 'available' ? 'fundamental_review' : 'source_signal',
-    action: actionDecision.action, fundamental: quality, technical, geometry: actionDecision.geometry,
+    action: actionDecision.action, fundamental, technical, geometry: actionDecision.geometry,
     valuation, factorAxes, reason: actionDecision.reason, lastEvaluatedAt: sourceCutoff,
     materialChangeHash, materialChangedBecause: ['factor_correctness_changed'] };
 }

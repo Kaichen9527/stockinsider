@@ -12469,6 +12469,7 @@ BEGIN
       AND ($1).raw_code_point_count>100000
     )
     OR ($1).collected_at>v_now
+    OR (($1).published_at IS NOT NULL AND ($1).published_at>($1).collected_at)
   THEN RAISE EXCEPTION USING ERRCODE='PT422',MESSAGE='invalid_authority_request'; END IF;
   IF ($1).acquisition_status='complete' THEN
     IF ($1).raw_field_payload IS NULL
@@ -17406,14 +17407,15 @@ BEGIN
           AND registry.approved_source_identity_id=d.approved_source_identity_id AND registry.stable_connector_document_id=d.stable_connector_document_id
         JOIN public.source_identity_authorities_v3 authority ON authority.authority_id=d.source_identity_authority_id
           AND authority.source_identity_id=d.approved_source_identity_id AND authority.source_key=d.source_key
-        WHERE d.acquisition_status='complete' AND d.collected_at<=v_run.source_cutoff AND d.recorded_at<=v_run.source_cutoff
+        WHERE d.acquisition_status='complete' AND (d.published_at IS NULL OR d.published_at<=d.collected_at)
+          AND d.collected_at<=v_run.source_cutoff AND d.recorded_at<=v_run.source_cutoff
           AND authority.status='active' AND authority.approved_at<=v_run.source_cutoff AND authority.recorded_at<=v_run.source_cutoff
           AND authority.valid_from<=v_run.source_cutoff AND (authority.valid_to IS NULL OR authority.valid_to>v_run.source_cutoff)
       ), connector_bound AS (
         SELECT f.*,row_number() OVER(PARTITION BY f.source_key ORDER BY f.collected_at DESC,f.revision_family_key,f.revision_id) AS connector_rank
         FROM family_heads f WHERE f.family_rank=1
       )
-      SELECT coalesce(jsonb_agg(jsonb_build_array(source_key,revision_id,revision_family_key,approved_source_identity_id,stable_connector_document_id,collected_at,
+      SELECT coalesce(jsonb_agg(jsonb_build_array(source_key,revision_id,revision_family_key,approved_source_identity_id,stable_connector_document_id,published_at,collected_at,
         raw_field_payload_algorithm_version,ingestion_content_revision_sha256,canonical_content_algorithm_version,ingestion_canonical_content_hash_v3)
       ORDER BY source_key,collected_at DESC,revision_family_key,revision_id),'[]'::jsonb) INTO v_all FROM connector_bound WHERE connector_rank<=1000;
       IF EXISTS(
@@ -17422,7 +17424,8 @@ BEGIN
             row_number() OVER(PARTITION BY d.source_key,d.revision_family_key ORDER BY d.collected_at DESC,d.recorded_at DESC,d.revision_id) family_rank
           FROM public.source_document_revisions_v3 d
           JOIN public.source_identity_authorities_v3 authority ON authority.authority_id=d.source_identity_authority_id
-          WHERE d.acquisition_status='complete' AND d.collected_at<=v_run.source_cutoff AND d.recorded_at<=v_run.source_cutoff
+          WHERE d.acquisition_status='complete' AND (d.published_at IS NULL OR d.published_at<=d.collected_at)
+            AND d.collected_at<=v_run.source_cutoff AND d.recorded_at<=v_run.source_cutoff
             AND authority.status='active' AND authority.approved_at<=v_run.source_cutoff AND authority.recorded_at<=v_run.source_cutoff
             AND authority.valid_from<=v_run.source_cutoff AND (authority.valid_to IS NULL OR authority.valid_to>v_run.source_cutoff)
         ), connector_bound AS (
@@ -17583,10 +17586,10 @@ BEGIN
     v_pages:=v_pages||jsonb_build_array(jsonb_build_array(v_page.page_kind,v_page.page_ordinal,v_page.row_count,v_page.page_hash,v_page.kind_row_count,v_page.kind_page_count,v_page.kind_root_hash));
     IF v_page.page_kind='selected_revision' THEN
       FOR v_selected,v_selected_ordinal IN SELECT value,ordinality FROM jsonb_array_elements(v_page.page_json) WITH ORDINALITY AS selected(value,ordinality) LOOP
-        IF jsonb_typeof(v_selected)<>'array' OR jsonb_array_length(v_selected)<>10 THEN RAISE EXCEPTION 'data_integrity_failure';END IF;
+        IF jsonb_typeof(v_selected)<>'array' OR jsonb_array_length(v_selected)<>11 THEN RAISE EXCEPTION 'data_integrity_failure';END IF;
         v_selected_bytes:=convert_to(v_selected::text,'utf8');
         INSERT INTO public.legacy_frozen_source_revisions_v3_11(run_id,selection_ordinal,source_key,revision_id,selected_revision_row_canonical,selected_revision_row_json,selected_revision_row_hash,raw_field_payload_algorithm_version,ingestion_content_revision_sha256,canonical_content_algorithm_version,canonical_content_sha256,recorded_at)
-        VALUES(v_run,v_page.first_row_ordinal+v_selected_ordinal-1,(v_selected->>0)::public.source_key_v3,(v_selected->>1)::uuid,v_selected_bytes,v_selected,encode(extensions.digest(v_selected_bytes,'sha256'),'hex'),v_selected->>6,v_selected->>7,v_selected->>8,v_selected->>9,v_now);
+        VALUES(v_run,v_page.first_row_ordinal+v_selected_ordinal-1,(v_selected->>0)::public.source_key_v3,(v_selected->>1)::uuid,v_selected_bytes,v_selected,encode(extensions.digest(v_selected_bytes,'sha256'),'hex'),v_selected->>7,v_selected->>8,v_selected->>9,v_selected->>10,v_now);
       END LOOP;
     END IF;
   END LOOP;
@@ -17603,7 +17606,7 @@ END $$;
 
 CREATE OR REPLACE FUNCTION claim_legacy_producer_job_v3_11(p_run uuid,p_job uuid,p_token uuid,p_lease integer)
 RETURNS legacy_producer_claim_v3_11 LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $$
-DECLARE v_job public.legacy_producer_jobs_v3_11%ROWTYPE;v_run public.legacy_producer_runs_v3_11%ROWTYPE;v_payload public.legacy_producer_job_payloads_v3_11%ROWTYPE;v_prior public.legacy_producer_job_results_v3_11%ROWTYPE;v_source_result public.legacy_producer_job_results_v3_11%ROWTYPE;v_frozen public.legacy_frozen_revision_read_v3_11;v_frozen_json jsonb;v_frozen_bytes bytea;v_frozen_hash text;v_now timestamptz:=date_trunc('second',clock_timestamp());v_hash text;v_selected_hash text;v_read_kind text;v_read_json jsonb;v_read_bytes bytea;v_read_hash text;v_read_count integer;v_include_authority boolean:=false;
+DECLARE v_job public.legacy_producer_jobs_v3_11%ROWTYPE;v_run public.legacy_producer_runs_v3_11%ROWTYPE;v_payload public.legacy_producer_job_payloads_v3_11%ROWTYPE;v_prior public.legacy_producer_job_results_v3_11%ROWTYPE;v_source_result public.legacy_producer_job_results_v3_11%ROWTYPE;v_frozen public.legacy_frozen_revision_read_v3_11;v_frozen_json jsonb;v_frozen_bytes bytea;v_frozen_hash text;v_now timestamptz:=date_trunc('second',clock_timestamp());v_hash text;v_selected_hash text;v_source_published_at timestamptz;v_source_collected_at timestamptz;v_read_kind text;v_read_json jsonb;v_read_bytes bytea;v_read_hash text;v_read_count integer;v_include_authority boolean:=false;
 BEGIN
   IF p_lease<>120 THEN RETURN NULL; END IF;v_hash:=encode(extensions.digest(convert_to(p_token::text,'utf8'),'sha256'),'hex');
   SELECT * INTO v_run FROM public.legacy_producer_runs_v3_11 WHERE run_id=p_run AND status='running' AND owner_token_hash=v_hash AND lease_expires_at>=v_now FOR UPDATE;
@@ -17615,10 +17618,13 @@ BEGIN
   SELECT * INTO v_payload FROM public.legacy_producer_job_payloads_v3_11 WHERE job_id=p_job;
   IF v_job.predecessor_job_id IS NOT NULL THEN SELECT * INTO v_prior FROM public.legacy_producer_job_results_v3_11 WHERE job_id=v_job.predecessor_job_id; END IF;
   IF v_job.job_kind='revision_shard' THEN
-    SELECT selected_revision_row_hash INTO v_selected_hash FROM public.legacy_frozen_source_revisions_v3_11 WHERE run_id=p_run AND revision_id=v_job.revision_id;
+    SELECT selected_revision_row_hash,
+      CASE WHEN jsonb_array_length(selected_revision_row_json)=11 THEN (selected_revision_row_json->>5)::timestamptz ELSE NULL END,
+      CASE WHEN jsonb_array_length(selected_revision_row_json)=11 THEN (selected_revision_row_json->>6)::timestamptz ELSE (selected_revision_row_json->>5)::timestamptz END
+    INTO v_selected_hash,v_source_published_at,v_source_collected_at FROM public.legacy_frozen_source_revisions_v3_11 WHERE run_id=p_run AND revision_id=v_job.revision_id;
     v_frozen:=public.read_legacy_frozen_revision_v3_11(p_run,p_job,v_hash,v_job.revision_id,v_selected_hash);
     IF v_frozen IS NULL THEN RAISE EXCEPTION 'data_integrity_failure';END IF;
-    v_frozen_json:=jsonb_build_object('runId',(v_frozen).run_id,'jobId',(v_frozen).job_id,'selectionOrdinal',(v_frozen).selection_ordinal,'sourceKey',(v_frozen).source_key,'revisionId',(v_frozen).revision_id,'selectedRevisionRowHash',(v_frozen).selected_revision_row_hash,'rawFieldPayload',(v_frozen).raw_field_payload,'rawCodePointCount',(v_frozen).raw_code_point_count,'rawFieldPayloadAlgorithmVersion',(v_frozen).raw_field_payload_algorithm_version,'ingestionContentRevisionSha256',(v_frozen).ingestion_content_revision_sha256,'canonicalContentAlgorithmVersion',(v_frozen).canonical_content_algorithm_version,'ingestionCanonicalContentHashV3',(v_frozen).ingestion_canonical_content_hash_v3);
+    v_frozen_json:=jsonb_build_object('runId',(v_frozen).run_id,'jobId',(v_frozen).job_id,'selectionOrdinal',(v_frozen).selection_ordinal,'sourceKey',(v_frozen).source_key,'revisionId',(v_frozen).revision_id,'sourcePublishedAt',CASE WHEN v_source_published_at IS NULL THEN NULL ELSE to_char(v_source_published_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS"Z"') END,'sourceCollectedAt',to_char(v_source_collected_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS"Z"'),'selectedRevisionRowHash',(v_frozen).selected_revision_row_hash,'rawFieldPayload',(v_frozen).raw_field_payload,'rawCodePointCount',(v_frozen).raw_code_point_count,'rawFieldPayloadAlgorithmVersion',(v_frozen).raw_field_payload_algorithm_version,'ingestionContentRevisionSha256',(v_frozen).ingestion_content_revision_sha256,'canonicalContentAlgorithmVersion',(v_frozen).canonical_content_algorithm_version,'ingestionCanonicalContentHashV3',(v_frozen).ingestion_canonical_content_hash_v3);
     v_frozen_bytes:=convert_to(v_frozen_json::text,'utf8');v_frozen_hash:=encode(extensions.digest(v_frozen_bytes,'sha256'),'hex');
   END IF;
   IF v_job.stage<>'source_sync' THEN

@@ -10,6 +10,7 @@ import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { canonicalJson } from '../../web/src/lib/opportunity-v3/canonical.ts';
 import { compactRadarEtag, selectCompactRadarProjectionRows, validateCompactRadarProjectionRow } from '../../web/src/lib/opportunity-v3/compact-radar-validation.ts';
+import { validateIngestionValuesV3 } from '../../web/src/lib/opportunity-v3/request-values.ts';
 import { runControlledProjectionPerformanceOracle } from './performance-harness.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
@@ -493,6 +494,20 @@ const checks = {
     const explicitStock = parse('台積電 2330 股價轉強，列入觀察。');
     assert.equal(explicitStock.candidates.length, 1);
     assert.match(explicitStock.candidates[0].claimId, /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/u);
+    const effectiveSource = parser.extractRevisionCandidates({ frozenRevision: {
+      revisionId: '00000000-0000-4000-8000-000000000007', sourceKey: 'threads',
+      sourcePublishedAt: '2026-07-31T20:00:00Z', sourceCollectedAt: '2026-08-01T10:00:00Z',
+      rawFieldPayload: { text: '台積電 2330 股價轉強。' },
+    }, authorityPages });
+    assert.equal(effectiveSource.candidates[0].claimAsOf, '2026-07-31T20:00:00Z',
+      'published time is the source effective time when collection is delayed');
+    const invalidPublication = parser.extractRevisionCandidates({ frozenRevision: {
+      revisionId: '00000000-0000-4000-8000-000000000008', sourceKey: 'threads',
+      sourcePublishedAt: '2026-08-01T11:00:00Z', sourceCollectedAt: '2026-08-01T10:00:00Z',
+      rawFieldPayload: { text: '台積電 2330 股價轉強。' },
+    }, authorityPages });
+    assert.equal(invalidPublication.candidates[0].claimAsOf, '2026-08-01T10:00:00Z',
+      'legacy invalid publication ordering falls back to collection time');
     const aliasPages = [...authorityPages, ['alias', null, null, [[
       '00000000-0000-4000-8000-000000002330', '世界',
     ]]]];
@@ -557,6 +572,8 @@ const checks = {
     const provenanceInput = runtime('codec.js').immutableBundle('candidate_funnel_input', { mentionResult: { candidates: [
       { stockId: '00000000-0000-4000-8000-000000008888', symbol: '8888', raw: 'older', claimId: 'claim-first', mentionId: 'mention-first', sourceKey: 'threads', revisionId: 'rev-first', sourceClass: 'community', sourcePriority: 40 },
       { stockId: '00000000-0000-4000-8000-000000008888', symbol: '8888', raw: 'newer', claimId: 'claim-last', mentionId: 'mention-last', sourceKey: 'mops', revisionId: 'rev-last', sourceClass: 'official', sourcePriority: 95 },
+      { stockId: '00000000-0000-4000-8000-000000007777', symbol: '7777', raw: 'older equal priority', claimId: 'claim-older-equal', claimAsOf: '2026-07-31T10:00:00Z', mentionId: 'mention-older-equal', sourceKey: 'threads', revisionId: 'zzzz-older', sourceClass: 'community', sourcePriority: 50 },
+      { stockId: '00000000-0000-4000-8000-000000007777', symbol: '7777', raw: 'newer equal priority', claimId: 'claim-newer-equal', claimAsOf: '2026-08-01T10:00:00Z', mentionId: 'mention-newer-equal', sourceKey: 'threads', revisionId: 'aaaa-newer', sourceClass: 'community', sourcePriority: 50 },
       { stockId: '00000000-0000-4000-8000-000000001111', symbol: '1111', raw: 'low', claimId: 'claim-low', mentionId: 'mention-low', sourceKey: 'threads', revisionId: 'rev-low', sourceClass: 'community', sourcePriority: 10 },
     ] }, seedSymbols: seeds() });
     const provenance = await handlers.candidate_funnel({ readKind: 'candidate_funnel_input', readCanonical: provenanceInput.canonical,
@@ -565,10 +582,15 @@ const checks = {
       provenance.json.candidates[0].revisionId], ['8888', 'claim-last', 'rev-last']);
     assert.ok(provenance.json.candidates[0].sourcePriority > provenance.json.candidates.at(-1).sourcePriority,
       'official evidence outranks community evidence');
-    assert.deepEqual(provenance.json.discoveryDelta.added.sort(), ['1111','8888']);
+    const equalPriority = provenance.json.candidates.find((candidate) => candidate.symbol === '7777');
+    assert.deepEqual([equalPriority.claimId, equalPriority.claimAsOf, equalPriority.revisionId],
+      ['claim-newer-equal', '2026-08-01T10:00:00Z', 'aaaa-newer'],
+      'newest effective claim wins before an arbitrary revision identifier');
+    assert.deepEqual(provenance.json.discoveryDelta.added.sort(), ['1111','7777','8888']);
     const sixtyCandidates = Array.from({ length: 60 }, (_, index) => ({
       stockId: `00000000-0000-4000-8000-${String(index).padStart(12, '0')}`,
       symbol: String(1000 + index), raw: `stock-${index}`, claimId: `claim-${index}`,
+      claimAsOf: '2026-08-01T10:00:00Z',
       mentionId: `mention-${index}`, sourceKey: 'threads', sourceClass: 'community', sourcePriority: 60 - index,
       disposition: 'promoted', reason: 'new_out_of_seed_symbol', researchDisposition: 'source_signal_only',
       materialEvidenceHash: String(index).padStart(64, '0'), shallowSelected: index < 30, deepSelected: index < 20,
@@ -798,7 +820,10 @@ const checks = {
   'PCR-021': () => {
     const serialize = runtime('public-projection.js').serializeOpportunityPublicProjection;
     assert.equal(serialize({ mode: 'disabled' }), null); assert.equal(serialize({ mode: 'drain' }), null);
-    const shadow = serialize({ mode: 'shadow', legacy: { legacyField: 7 }, cards: [{ symbol: '9999', action: 'valuation_review' }] });
+    const fundamental = { thesis: '9999 已有可追溯基本面證據。', latestChange: '本次重新檢查基本面品質。',
+      risks: ['仍須持續追蹤財務風險。'], evidenceRefs: ['official-9999'], asOf: '2026-08-01T00:00:00Z' };
+    const shadow = serialize({ mode: 'shadow', legacy: { legacyField: 7 }, cards: [{ symbol: '9999', action: 'valuation_review',
+      fundamental, lastEvaluatedAt: '2026-08-01T00:00:00Z' }] });
     assert.equal(shadow.legacyField, 7); assert.equal(shadow.cards[0].symbol, '9999');
   },
   'PCR-022': async () => {
@@ -898,7 +923,9 @@ const checks = {
   },
   'PCR-030': () => {
     const serialize = runtime('public-projection.js').serializeCorrectnessPublicUnion;
-    const value = serialize({ symbol: '2337', action: 'wait_trigger', researchMaturity: 'fundamental_review', technical: { technicalState: 'reclaim_required', trigger: { kind: 'reclaim', threshold: 100, volumeRatioMinimum: 1 }, plane: { maDeviation: -0.08, bias: { availability: 'available', bias20Pct: -8 } } },
+    const fundamental = { thesis: '2337 已有可追溯基本面證據。', latestChange: '本次重新檢查基本面品質。',
+      risks: ['仍須持續追蹤財務風險。'], evidenceRefs: ['official-2337'], asOf: '2026-08-01T00:00:00Z' };
+    const value = serialize({ symbol: '2337', action: 'wait_trigger', researchMaturity: 'fundamental_review', fundamental, technical: { technicalState: 'reclaim_required', trigger: { kind: 'reclaim', threshold: 100, volumeRatioMinimum: 1 }, plane: { maDeviation: -0.08, bias: { availability: 'available', bias20Pct: -8 } } },
       valuation: { status: 'valuation_review', reportedPe: { availability: 'unavailable', reason: 'authority_conflict' } }, evaluationDisposition: 'unchanged', lastEvaluatedAt: '2026-08-01T00:00:00Z', materialChangedBecause: [] });
     assert.equal(value.valuation.exchangeReportedPe.reason, 'authority_conflict'); assert.equal(value.timingRisk.reason, 'reclaim_required'); assert.match(value.noChangeMessage, /無重大變化/u); assert.deepEqual(value.materialChangedBecause, []);
   },
@@ -909,6 +936,66 @@ const checks = {
     assert.throws(() => identity.buildComparableRunIdentity({ asOf: 'x', universeManifestHash: 'x', staticIdentityOverrides: { factorCorrectnessContractVersion: null } }), /invalid static identity/u);
   },
 };
+
+test('public fundamental provenance remains bounded and fail-closed outside the approved PCR expectation registry', () => {
+  const serialize = runtime('public-projection.js').serializeCorrectnessPublicUnion;
+  const fundamental = { thesis: '2337 已有可追溯基本面證據。', latestChange: '本次重新檢查基本面品質。',
+    risks: ['仍須持續追蹤財務風險。'], evidenceRefs: ['official-2337'], asOf: '2026-08-01T00:00:00Z' };
+  for (const malformed of [
+    { ...fundamental, thesis: 'x'.repeat(241) }, { ...fundamental, thesis: 'line one\nline two' },
+    { ...fundamental, thesis: 'e\u0301' }, { ...fundamental, latestChange: 'x'.repeat(201) },
+    { ...fundamental, risks: ['x'.repeat(161)] }, { ...fundamental, evidenceRefs: ['official-2337', 'official-2337'] },
+    { ...fundamental, asOf: '2026-08-02T00:00:00Z' },
+  ]) assert.throws(() => serialize({ symbol: '2337', fundamental: malformed,
+    lastEvaluatedAt: '2026-08-01T00:00:00Z' }), /fundamental/u);
+  for (const lastEvaluatedAt of [undefined, null, 'not-a-timestamp', '2026-08-01T08:00:00+08:00']) {
+    assert.throws(() => serialize({ symbol: '2337', fundamental, lastEvaluatedAt }),
+      /fundamental evaluation cutoff unavailable/u);
+  }
+  assert.throws(() => serialize({ symbol: '2337', fundamental: { ...fundamental, asOf: '2099-01-01T00:00:00Z' } }),
+    /fundamental evaluation cutoff unavailable/u);
+  const opaqueEvidenceRef = 'official-e\u0301vidence\nrevision';
+  assert.deepEqual(serialize({ symbol: '2337', fundamental: { ...fundamental, evidenceRefs: [opaqueEvidenceRef] },
+    lastEvaluatedAt: '2026-08-01T00:00:00Z' }).fundamental.evidenceRefs, [opaqueEvidenceRef],
+  'accepted opaque evidence identifiers remain byte-preserving at the public projection boundary');
+  const candidate = { stockId: 'stock-2337', symbol: '2337', name: '旺宏', canonicalSector: 'semiconductor',
+    claimId: 'claim-2337', claimAsOf: '2026-06-01T08:00:00+08:00', sourcePriority: 70, materialEvidenceHash: 'a'.repeat(64) };
+  const empty = runtime('auth-source-worker-cli.js').buildLegacyCandidateDecision({ candidate,
+    facts: [], history: ohlcv(130), benchmark: ohlcv(130), sourceCutoff: '2030-01-01T00:00:00Z' });
+  assert.deepEqual(empty.fundamental.evidenceRefs, ['claim-2337']);
+  assert.equal(empty.fundamental.asOf, '2026-06-01T00:00:00Z');
+  const row = (key, value, asOf, ref) => ['stock-2337', key, null, null, null, value, null, null, null, asOf, null, null, ref];
+  const unrelated = Array.from({ length: 8 }, (_, index) => row('diluted_shares', 100 + index, '2026-07-01T00:00:00Z', `unrelated-${index}`));
+  const factBacked = runtime('auth-source-worker-cli.js').buildLegacyCandidateDecision({ candidate,
+    facts: [...unrelated, row('roe', 0.2, '2026-06-01T08:00:00+08:00', 'official-roe')],
+    history: ohlcv(130), benchmark: ohlcv(130), sourceCutoff: '2030-01-01T00:00:00Z' });
+  assert.deepEqual(factBacked.fundamental.evidenceRefs, ['official-roe']);
+  assert.equal(factBacked.fundamental.asOf, '2026-06-01T00:00:00Z');
+  const complete = [row('roe', .2, '2026-01-01T00:00:00Z', 'r1'), row('quarterly_revenue', 100, '2026-01-01T00:00:00Z', 'r2'),
+    row('quarterly_operating_income', 20, '2026-01-01T00:00:00Z', 'r3'), row('quarterly_net_income', 10, '2026-01-01T00:00:00Z', 'r4'),
+    row('operating_cash_flow', 20, '2026-01-01T00:00:00Z', 'r5'), row('capital_expenditure', 5, '2026-01-01T00:00:00Z', 'r6'),
+    row('quarterly_ebitda', 30, '2026-01-01T00:00:00Z', 'r7'), row('total_debt', 20, '2026-01-01T00:00:00Z', 'r8'),
+    row('cash_and_equivalents', 5, '2026-01-01T00:00:00Z', 'r9'), row('interest_expense', 2, '2026-01-01T00:00:00Z', 'r10')];
+  const bounded = runtime('auth-source-worker-cli.js').buildLegacyCandidateDecision({ candidate, facts: complete,
+    history: ohlcv(130), benchmark: ohlcv(130), sourceCutoff: '2030-01-01T00:00:00Z' });
+  assert.equal(bounded.fundamental.evidenceRefs.length, 1);
+  assert.match(bounded.fundamental.evidenceRefs[0], /^fundamental-input-set:[0-9a-f]{64}$/u);
+  const priorAlgorithmMaterialHash = runtime('codec.js').sha256(runtime('codec.js').canonicalJson([
+    candidate.materialEvidenceHash, [], ohlcv(130).at(-1), ohlcv(130).at(-1), empty.valuation,
+    empty.technical, empty.factorAxes,
+  ]));
+  assert.notEqual(empty.materialChangeHash, priorAlgorithmMaterialHash,
+    'the provenance algorithm transition must force a new immutable analysis revision');
+  const sourceRevision = {
+    sourceIdentityAuthorityId: '00000000-0000-4000-8000-000000000001', stableConnectorDocumentId: 'doc',
+    canonicalUrlCandidate: null, publishedAt: '2026-08-01T11:00:00Z', collectedAt: '2026-08-01T10:00:00Z',
+    adapterVersion: 'source-adapter-v3.3', acquisitionStatus: 'required_field_missing', rawFieldPayload: null,
+    rawCodePointCount: 0, rawFieldPayloadAlgorithmVersion: 'raw-field-payload-v3.0', ingestionContentRevisionSha256: null,
+    canonicalContentAlgorithmVersion: 'canonical-content-v3.0', ingestionCanonicalContentHashV3: null, supersedesRevisionId: null,
+  };
+  assert.equal(validateIngestionValuesV3('append_source_document_revision_v3', sourceRevision), false,
+    'ingestion rejects publication timestamps after collection');
+});
 
 for (const fixture of fixtures) {
   test(`acceptance ${fixture.id}`, async () => {

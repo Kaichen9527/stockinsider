@@ -895,9 +895,29 @@ export interface DailyMarketFocus {
   freshness: SignalFreshness;
 }
 
-export interface ResearchDecisionV311 {
+type ResearchDecisionChangeReasonV311 =
+  | 'source_evidence_changed'
+  | 'financial_fact_changed'
+  | 'price_trigger_changed'
+  | 'technical_state_changed'
+  | 'valuation_changed'
+  | 'risk_changed'
+  | 'factor_correctness_changed';
+
+export interface AvailableResearchDecisionV311 {
+  version: 'legacy-research-decision-v3.11.0';
+  availability: 'available';
+  symbol?: string;
+  name?: string;
   researchMaturity: 'source_signal' | 'fundamental_review' | 'decision_ready';
   newPositionAction: 'avoid' | 'valuation_review' | 'wait_trigger' | 'event_starter' | 'starter_now';
+  fundamental: {
+    thesis: string;
+    latestChange: string;
+    risks: string[];
+    evidenceRefs: string[];
+    asOf: string;
+  };
   technical: {
     availability: 'available' | 'unavailable';
     state: 'below_support' | 'reclaim_required' | 'at_support' | 'breakout_pending' | 'breakout_confirmed' | 'extended' | 'invalidated' | null;
@@ -917,6 +937,8 @@ export interface ResearchDecisionV311 {
   };
   valuation: {
     status: 'normal' | 'valuation_review';
+    targetPrice?: number | null;
+    valuationRange?: { bear: number; base: number; bull: number } | null;
     relativeMultiple?: { current: number; reference: number; ratio: number } | { availability: 'unavailable'; reason: string } | null;
     exchangeReportedPe?: { availability: 'available'; current?: number; value?: number; ownReference?: { p50?: number; percentile?: number }; sectorReference?: { capWeighted?: number; count?: number } }
       | { availability: 'unavailable'; reason: string } | null;
@@ -929,11 +951,36 @@ export interface ResearchDecisionV311 {
     valuation: number;
     timingRisk: number;
   }} | { availability: 'unavailable'; reason: string } | null;
-  lastEvaluatedAt: string | null;
-  analysisGeneratedAt: string | null;
-  materialChangeHash: string | null;
-  materialChangedBecause: string[];
+  timingRisk: {
+    status: 'blocked' | 'observe_only' | 'eligible' | 'unavailable';
+    reason: string | null;
+  };
+  lastEvaluatedAt: string;
+  analysisGeneratedAt: string;
+  materialChangeHash: string;
+  materialChangedBecause: ResearchDecisionChangeReasonV311[];
+  noChangeMessage: string | null;
 }
+
+export interface UnavailableResearchDecisionV311 {
+  version: 'legacy-research-decision-v3.11.0';
+  availability: 'unavailable';
+  reason:
+    | 'projection_missing'
+    | 'projection_stale'
+    | 'source_unavailable'
+    | 'insufficient_adjusted_history'
+    | 'financial_inputs_missing';
+  researchMaturity: 'source_signal';
+  newPositionAction: 'valuation_review';
+  lastEvaluatedAt: string | null;
+  analysisGeneratedAt: null;
+  materialChangeHash: null;
+  materialChangedBecause: [];
+  noChangeMessage: string | null;
+}
+
+export type ResearchDecisionV311 = AvailableResearchDecisionV311 | UnavailableResearchDecisionV311;
 
 export interface RecommendationCard {
   recommendationId: string;

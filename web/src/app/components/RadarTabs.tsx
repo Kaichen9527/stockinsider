@@ -156,10 +156,63 @@ function formatTaipeiDateTime(value: string | null | undefined, mode: 'full' | '
 
 type TabKey = 'stocks' | 'themes' | 'discovery';
 
+const researchMaturityLabels = {
+  source_signal: '來源訊號',
+  fundamental_review: '基本面待覆核',
+  decision_ready: '決策資料完整',
+} as const;
+
+const newPositionActionLabels = {
+  avoid: '暫時避開',
+  valuation_review: '估值待覆核',
+  wait_trigger: '等待技術觸發',
+  event_starter: '事件型試單',
+  starter_now: '可評估試單',
+} as const;
+
+const unavailableResearchDecisionLabels = {
+  projection_missing: '研究投影尚未建立，系統會在下一輪補齊',
+  projection_stale: '研究資料已過期，等待重新整理',
+  source_unavailable: '研究來源暫時無法取得，等待來源恢復',
+  insufficient_adjusted_history: '還原權息歷史不足，暫不產生進場判斷',
+  financial_inputs_missing: '財務資料尚未完整，暫不產生估值或買進建議',
+} as const;
+
+const technicalStateLabels = {
+  below_support: '股價低於支撐',
+  reclaim_required: '需先收復支撐',
+  at_support: '位於支撐區',
+  breakout_pending: '等待突破確認',
+  breakout_confirmed: '突破已確認',
+  extended: '漲幅已延伸',
+  invalidated: '技術條件失效',
+} as const;
+
+function researchDecisionComplete(rec: RecommendationCard) {
+  const decision = rec.researchDecision;
+  if (!decision) return true;
+  return decision.availability === 'available'
+    && decision.researchMaturity === 'decision_ready'
+    && decision.valuation.status === 'normal'
+    && decision.newPositionAction !== 'valuation_review';
+}
+
+function formalResearchPresentationReady(rec: RecommendationCard) {
+  return researchDecisionComplete(rec) && rec.researchDecision?.newPositionAction !== 'avoid';
+}
+
 export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrimary: boolean }) {
   const cardTitleId = `stock-card-${rec.recommendationId.replace(/[^A-Za-z0-9_-]/gu, '-')}`;
+  const researchDecision = rec.researchDecision;
+  const availableResearchDecision = researchDecision?.availability === 'available' ? researchDecision : null;
+  const researchFailClosed = Boolean(researchDecision) && !researchDecisionComplete(rec);
+  const actionBlocked = researchDecisionComplete(rec) && researchDecision?.newPositionAction === 'avoid';
   const stateBadge =
-    rec.displayBucket === 'hot_tracking'
+    researchFailClosed
+      ? { label: '研究待補', cls: 'bg-amber-500/12 text-amber-700 dark:text-amber-300' }
+      : actionBlocked
+        ? { label: '暫不進場', cls: 'bg-slate-950/8 text-slate-600 dark:text-emerald-100/65' }
+      : rec.displayBucket === 'hot_tracking'
       ? { label: '熱股追蹤', cls: 'bg-orange-500/12 text-orange-700 dark:text-orange-300' }
       : rec.displayBucket === 'archived_over_target' || rec.displayBucket === 'valuation_reflected_archive' || rec.displayTargetMode === 'hidden_over_target'
       ? { label: '估值已反映', cls: 'bg-slate-950/8 text-slate-600 dark:text-emerald-100/65' }
@@ -188,7 +241,19 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
           <h3 id={cardTitleId} className="text-lg font-semibold truncate">{stockDisplayName(rec)}</h3>
           <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs ${stateBadge.cls}`}>{stateBadge.label}</span>
         </div>
-        {isHistoricalObservation(rec) ? (
+        {researchFailClosed ? (
+          <div className="shrink-0 text-right">
+            <p className="text-[11px] tracking-[0.18em] text-slate-500 dark:text-emerald-100/55">估值狀態</p>
+            <span className="text-sm font-bold text-amber-700 dark:text-amber-300">暫停估值</span>
+            <p className="mt-1 text-[11px] text-slate-500 dark:text-emerald-100/55">非今日買點</p>
+          </div>
+        ) : actionBlocked ? (
+          <div className="shrink-0 text-right">
+            <p className="text-[11px] tracking-[0.18em] text-slate-500 dark:text-emerald-100/55">動作狀態</p>
+            <span className="text-sm font-bold text-slate-600 dark:text-emerald-100/75">暫不進場</span>
+            <p className="mt-1 text-[11px] text-slate-500 dark:text-emerald-100/55">非買進建議</p>
+          </div>
+        ) : isHistoricalObservation(rec) ? (
           <div className="shrink-0 text-right">
             <p className="text-[11px] tracking-[0.18em] text-slate-500 dark:text-emerald-100/55">重估狀態</p>
             <span className="text-sm font-bold text-amber-700 dark:text-amber-300">等待重估</span>
@@ -215,7 +280,7 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
         )}
       </div>
 
-      {valuationLine(rec) && (
+      {!researchFailClosed && valuationLine(rec) && (
         <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/68">
           {valuationLine(rec)}
         </p>
@@ -227,14 +292,14 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
         </span>
         <span
           className={`rounded-full px-3 py-1 ${
-            rec.targetCoverageStatus === 'over_base_and_scenario' || rec.displayTargetMode === 'hidden_over_target'
+            researchFailClosed || rec.targetCoverageStatus === 'over_base_and_scenario' || rec.displayTargetMode === 'hidden_over_target'
               ? 'bg-slate-950/8 text-slate-600 dark:text-emerald-100/65'
               : rec.targetCoverageStatus === 'scenario_only'
                 ? 'bg-sky-600/12 text-sky-700 dark:text-sky-300'
                 : 'bg-emerald-600/12 text-emerald-700 dark:text-emerald-300'
           }`}
         >
-          {targetCoverageLine(rec)}
+          {researchFailClosed ? '研究證據待補，暫不判斷估值空間' : targetCoverageLine(rec)}
         </span>
         {rec.priceRefreshStatus && rec.priceRefreshStatus !== 'fresh' ? (
           <span className="rounded-full bg-amber-500/12 px-3 py-1 text-amber-700 dark:text-amber-300">股價待更新</span>
@@ -256,82 +321,100 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
         ) : null}
       </div>
 
-      {rec.researchDecision ? (
+      {availableResearchDecision ? (
         <section aria-label="研究與進場判斷" className="mt-3 rounded-xl border border-line bg-surface p-3 text-xs">
           <div className="flex flex-wrap gap-2">
-            <span className="rounded-full bg-slate-950/8 px-2.5 py-1 dark:bg-emerald-100/10">研究：{rec.researchDecision.researchMaturity}</span>
-            <span className="rounded-full bg-amber-500/12 px-2.5 py-1 text-amber-800 dark:text-amber-300">動作：{rec.researchDecision.newPositionAction}</span>
-            <span className="rounded-full bg-sky-500/12 px-2.5 py-1 text-sky-800 dark:text-sky-300">技術：{rec.researchDecision.technical.state || '資料不足'}</span>
-            {rec.researchDecision.technical.maDeviation != null ? (
-              <span className="rounded-full bg-violet-500/12 px-2.5 py-1 text-violet-800 dark:text-violet-300">MA20 乖離 {(rec.researchDecision.technical.maDeviation * 100).toFixed(1)}%</span>
+            <span className="rounded-full bg-slate-950/8 px-2.5 py-1 dark:bg-emerald-100/10">研究：{researchMaturityLabels[availableResearchDecision.researchMaturity]}</span>
+            <span className="rounded-full bg-amber-500/12 px-2.5 py-1 text-amber-800 dark:text-amber-300">動作：{newPositionActionLabels[availableResearchDecision.newPositionAction]}</span>
+            <span className="rounded-full bg-sky-500/12 px-2.5 py-1 text-sky-800 dark:text-sky-300">技術：{availableResearchDecision.technical.state ? technicalStateLabels[availableResearchDecision.technical.state] : '資料不足'}</span>
+            {availableResearchDecision.technical.maDeviation != null ? (
+              <span className="rounded-full bg-violet-500/12 px-2.5 py-1 text-violet-800 dark:text-violet-300">MA20 乖離 {(availableResearchDecision.technical.maDeviation * 100).toFixed(1)}%</span>
             ) : null}
-            <span className="rounded-full bg-slate-950/8 px-2.5 py-1 dark:bg-emerald-100/10">估值：{rec.researchDecision.valuation.status === 'normal' ? '可用' : '待覆核'}</span>
+            <span className="rounded-full bg-slate-950/8 px-2.5 py-1 dark:bg-emerald-100/10">估值：{availableResearchDecision.valuation.status === 'normal' ? '可用' : '待覆核'}</span>
           </div>
-          {rec.researchDecision.technical.state === 'reclaim_required' ? (
+          {availableResearchDecision.technical.state === 'reclaim_required' ? (
             <p className="mt-2 text-amber-800 dark:text-amber-300">已跌破支撐，原支撐現為收復觸發；未收復前不把它顯示成回測買點。</p>
           ) : null}
           <div aria-label="四軸研究評分" className="mt-3 grid min-w-0 grid-cols-2 gap-2 sm:grid-cols-4">
-            {rec.researchDecision.factorAxes?.availability === 'available'
-              ? Object.entries(rec.researchDecision.factorAxes.axes).map(([axis, score]) => (
+            {availableResearchDecision.factorAxes?.availability === 'available'
+              ? Object.entries(availableResearchDecision.factorAxes.axes).map(([axis, score]) => (
                 <div key={axis} className="min-w-0 break-words rounded-lg bg-slate-950/5 px-2 py-2 dark:bg-emerald-100/5">
                   <p className="text-slate-500 dark:text-emerald-100/60">{{ discovery: '發現', quality: '基本面品質', valuation: '估值', timingRisk: '時機風險' }[axis] || axis}</p>
                   <p className="mt-1 font-semibold tabular-nums">{Number(score).toFixed(0)} / 100</p>
                 </div>
               ))
-              : <p className="col-span-full break-words text-slate-500 dark:text-emerald-100/60">四軸評分：{rec.researchDecision.factorAxes?.reason || '資料不足'}</p>}
+              : <p className="col-span-full break-words text-slate-500 dark:text-emerald-100/60">四軸評分：{availableResearchDecision.factorAxes?.reason || '資料不足'}</p>}
           </div>
           <div aria-label="乖離率與本益比脈絡" className="mt-3 grid min-w-0 gap-2 sm:grid-cols-2">
             <div className="min-w-0 break-words rounded-lg bg-violet-500/8 px-3 py-2">
               <p className="font-medium">乖離率（BIAS）</p>
-              {rec.researchDecision.technical.bias?.availability === 'available' ? (
+              {availableResearchDecision.technical.bias?.availability === 'available' ? (
                 <p className="mt-1 text-slate-600 dark:text-emerald-100/70">
-                  MA20 {rec.researchDecision.technical.bias.bias20Pct.toFixed(1)}%
-                  {rec.researchDecision.technical.bias.bias60Pct != null ? ` · MA60 ${rec.researchDecision.technical.bias.bias60Pct.toFixed(1)}%` : ''}
-                  {rec.researchDecision.technical.bias.ownHistory?.label ? ` · 個股歷史 ${rec.researchDecision.technical.bias.ownHistory.label}` : ''}
+                  MA20 {availableResearchDecision.technical.bias.bias20Pct.toFixed(1)}%
+                  {availableResearchDecision.technical.bias.bias60Pct != null ? ` · MA60 ${availableResearchDecision.technical.bias.bias60Pct.toFixed(1)}%` : ''}
+                  {availableResearchDecision.technical.bias.ownHistory?.label ? ` · 個股歷史 ${availableResearchDecision.technical.bias.ownHistory.label}` : ''}
                 </p>
-              ) : <p className="mt-1 text-slate-500 dark:text-emerald-100/60">{rec.researchDecision.technical.bias?.reason || '乖離率歷史不足'}</p>}
+              ) : <p className="mt-1 text-slate-500 dark:text-emerald-100/60">{availableResearchDecision.technical.bias?.reason || '乖離率歷史不足'}</p>}
             </div>
             <div className="min-w-0 break-words rounded-lg bg-sky-500/8 px-3 py-2">
               <p className="font-medium">本益比比較（官方／模型分列）</p>
               <p className="mt-1 text-slate-600 dark:text-emerald-100/70">
-                {rec.researchDecision.valuation.exchangeReportedPe?.availability === 'available'
-                  ? `交易所 ${rec.researchDecision.valuation.exchangeReportedPe.current ?? rec.researchDecision.valuation.exchangeReportedPe.value ?? '—'}`
-                  : `交易所：${rec.researchDecision.valuation.exchangeReportedPe?.reason || '資料不足'}`}
+                {availableResearchDecision.valuation.exchangeReportedPe?.availability === 'available'
+                  ? `交易所 ${availableResearchDecision.valuation.exchangeReportedPe.current ?? availableResearchDecision.valuation.exchangeReportedPe.value ?? '—'}`
+                  : `交易所：${availableResearchDecision.valuation.exchangeReportedPe?.reason || '資料不足'}`}
                 {' · '}
-                {rec.researchDecision.valuation.modelComparablePe && rec.researchDecision.valuation.modelComparablePe.value != null
-                  ? `模型 ${rec.researchDecision.valuation.modelComparablePe.value}`
-                  : `模型：${rec.researchDecision.valuation.modelComparablePe?.reason || '不適用'}`}
+                {availableResearchDecision.valuation.modelComparablePe && availableResearchDecision.valuation.modelComparablePe.value != null
+                  ? `模型 ${availableResearchDecision.valuation.modelComparablePe.value}`
+                  : `模型：${availableResearchDecision.valuation.modelComparablePe?.reason || '不適用'}`}
               </p>
             </div>
           </div>
-          {rec.researchDecision.materialChangedBecause.length === 0 && rec.researchDecision.lastEvaluatedAt ? (
-            <p className="mt-2 text-slate-500 dark:text-emerald-100/60">已於 {formatTaipeiDateTime(rec.researchDecision.lastEvaluatedAt, 'compact')} 檢查，沒有重大變化。</p>
+          {availableResearchDecision.materialChangedBecause.length === 0 && availableResearchDecision.lastEvaluatedAt ? (
+            <p className="mt-2 text-slate-500 dark:text-emerald-100/60">已於 {formatTaipeiDateTime(availableResearchDecision.lastEvaluatedAt, 'compact')} 檢查，沒有重大變化。</p>
           ) : null}
+        </section>
+      ) : researchDecision?.availability === 'unavailable' ? (
+        <section aria-label="研究與進場判斷" className="mt-3 rounded-xl border border-amber-500/25 bg-amber-500/8 p-3 text-xs">
+          <div className="flex flex-wrap gap-2">
+            <span className="rounded-full bg-slate-950/8 px-2.5 py-1 dark:bg-emerald-100/10">研究：{researchMaturityLabels[researchDecision.researchMaturity]}</span>
+            <span className="rounded-full bg-amber-500/12 px-2.5 py-1 text-amber-800 dark:text-amber-300">動作：{newPositionActionLabels[researchDecision.newPositionAction]}</span>
+          </div>
+          <p className="mt-2 break-words text-amber-800 dark:text-amber-300">研究資料待補：{unavailableResearchDecisionLabels[researchDecision.reason]}</p>
         </section>
       ) : null}
 
 		      <div className="mt-3 grid gap-2 sm:grid-cols-3">
 	        <div className="rounded-xl border border-line bg-surface px-3 py-2">
 	          <p className="text-[10px] tracking-[0.14em] text-slate-500 dark:text-emerald-100/50">推薦指數</p>
-	          <p className="mt-1 text-sm font-semibold">{confidenceLabel(rec.recommendationIndex)} {rec.recommendationIndex != null ? `${rec.recommendationIndex}` : ''}</p>
+		          <p className="mt-1 text-sm font-semibold">{researchFailClosed ? '暫不評分' : `${confidenceLabel(rec.recommendationIndex)} ${rec.recommendationIndex ?? ''}`}</p>
 	        </div>
 	        <div className="rounded-xl border border-line bg-surface px-3 py-2">
 	          <p className="text-[10px] tracking-[0.14em] text-slate-500 dark:text-emerald-100/50">情境達成率</p>
-	          <p className="mt-1 text-sm font-semibold">{rec.scenarioChecklistProgress != null ? `${rec.scenarioChecklistProgress}%` : '待補'}</p>
-	          <p className="mt-1 text-[11px] leading-4 text-slate-500 dark:text-emerald-100/60">{scenarioBreakdownLine(rec)}</p>
+		          <p className="mt-1 text-sm font-semibold">{researchFailClosed ? '暫不評分' : rec.scenarioChecklistProgress != null ? `${rec.scenarioChecklistProgress}%` : '待補'}</p>
+		          <p className="mt-1 text-[11px] leading-4 text-slate-500 dark:text-emerald-100/60">{researchFailClosed ? '待研究證據補齊後再評估' : scenarioBreakdownLine(rec)}</p>
 	        </div>
 		        <div className="rounded-xl border border-line bg-surface px-3 py-2">
 		          <p className="text-[10px] tracking-[0.14em] text-slate-500 dark:text-emerald-100/50">進場狀態</p>
-		          <p className="mt-1 text-sm font-semibold">{rec.tradeDecision?.action || rec.entryActionLabel || rec.entryReadinessLabel || '等待量價確認'}</p>
+		          <p className="mt-1 text-sm font-semibold">
+                {researchFailClosed || actionBlocked
+                  ? '暫不提供進場建議'
+                  : rec.tradeDecision?.action || rec.entryActionLabel || rec.entryReadinessLabel || '等待量價確認'}
+              </p>
               <p className="mt-1 text-[11px] leading-4 text-slate-500 dark:text-emerald-100/60">
-                {rec.tradeDecision?.positionSize || rec.marketIndexSignal?.riskBudget || '依大盤與個股 Gate 決定'}
+                {researchFailClosed || actionBlocked
+                  ? researchFailClosed ? '待研究證據補齊後再評估' : '研究決策已完成，目前動作為避開'
+                  : rec.tradeDecision?.positionSize || rec.marketIndexSignal?.riskBudget || '依大盤與個股 Gate 決定'}
               </p>
 		        </div>
 		      </div>
 
 	      <div className="mt-3 flex items-center justify-between gap-2">
 	        <p className="text-xs text-slate-500 dark:text-emerald-100/60">
-	          {rec.displayTargetMode === 'early_potential'
+		          {researchFailClosed
+		            ? '研究證據待補 · 非正式'
+		            : actionBlocked
+		              ? '研究完成 · 暫不進場'
+		            : rec.displayTargetMode === 'early_potential'
 	            ? '未正式 · 待 gate 補齊'
 	            : rec.displayBucket === 'hot_tracking'
 	              ? `熱股追蹤 · ${rec.nextRevaluationAt ? `下次重估 ${formatTaipeiDateTime(rec.nextRevaluationAt, 'compact')}` : '等重估'}`
@@ -354,12 +437,29 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
 	}
 
 function StocksTab({ radar }: { radar: RadarDailyPayload }) {
-  const formalOpportunities = (radar.opportunities || []).filter((r) => Boolean(r.chineseName));
-  const scenarioUpsideCandidates = (radar.scenarioUpsideCandidates || []).filter((r) => Boolean(r.chineseName));
-  const hotTracking = (radar.hotTracking || []).filter((r) => Boolean(r.chineseName));
+  const namedFormal = (radar.opportunities || []).filter((r) => Boolean(r.chineseName));
+  const namedScenario = (radar.scenarioUpsideCandidates || []).filter((r) => Boolean(r.chineseName));
+  const namedEarly = (radar.earlyWatchlist ?? []).filter((r) => Boolean(r.chineseName));
+  const namedHot = (radar.hotTracking || []).filter((r) => Boolean(r.chineseName));
+  const researchPendingBySymbol = new Map<string, RecommendationCard>();
+  const actionBlockedBySymbol = new Map<string, RecommendationCard>();
+  for (const card of [...namedFormal, ...namedScenario, ...namedEarly, ...namedHot]) {
+    if (!researchDecisionComplete(card)) {
+      if (!researchPendingBySymbol.has(card.symbol)) researchPendingBySymbol.set(card.symbol, card);
+      continue;
+    }
+    if (card.researchDecision?.newPositionAction === 'avoid' && !actionBlockedBySymbol.has(card.symbol)) {
+      actionBlockedBySymbol.set(card.symbol, card);
+    }
+  }
+  const researchPending = [...researchPendingBySymbol.values()];
+  const actionBlockedCards = [...actionBlockedBySymbol.values()];
+  const formalOpportunities = namedFormal.filter(formalResearchPresentationReady);
+  const scenarioUpsideCandidates = namedScenario.filter(formalResearchPresentationReady);
+  const hotTracking = namedHot.filter(formalResearchPresentationReady);
   const highConviction = formalOpportunities.filter((r) => r.recommendationBucket === 'high_conviction');
   const earlyFormal = formalOpportunities.filter((r) => r.recommendationBucket === 'early_formal');
-  const earlyWatchlist = (radar.earlyWatchlist ?? []).filter((r) => Boolean(r.chineseName));
+  const earlyWatchlist = namedEarly.filter(formalResearchPresentationReady);
   const historicalSummary = radar.historicalObservationSummary;
   const historicalObservationCount = historicalSummary?.total || 0;
   const needsRevaluationCount = (historicalSummary?.revaluationQueue || 0) + earlyWatchlist.filter(
@@ -396,7 +496,7 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
   return (
     <div className="space-y-0">
       <p className="mb-8 text-sm text-slate-500 dark:text-emerald-100/50">
-        首頁先顯示正式推薦 {formalOpportunities.length} 支，並依「推薦指數」排序；情境上行候選 {scenarioUpsideCandidates.length} 支只代表 upside case 有追蹤價值，不等於正式買點。
+        首頁先顯示正式推薦 {formalOpportunities.length} 支，並依「推薦指數」排序；研究證據待補 {researchPending.length} 支不列入正式推薦；情境上行候選 {scenarioUpsideCandidates.length} 支只代表 upside case 有追蹤價值，不等於正式買點。
         早期可關注 {earlyWatchlist.length} 支會優先於歷史觀察顯示；熱股追蹤 {hotTracking.length} 支只保留市場討論與重估線索；歷史觀察 {historicalObservationCount} 支已收斂為重估/歸檔摘要。
       </p>
 
@@ -420,6 +520,42 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
             </div>
           </section>
         ),
+      )}
+
+      {researchPending.length > 0 && (
+        <section className="mt-10 border-t border-line pt-8">
+          <div className="mb-6 flex flex-wrap items-center gap-4">
+            <span className="text-2xl">🧪</span>
+            <div className="min-w-0 flex-1">
+              <h3 className="text-lg font-semibold">研究證據待補（非建議）</h3>
+              <p className="text-xs text-slate-500 dark:text-emerald-100/45">保留來源線索供後續研究；財務、估值或投影資料補齊前，不列入正式推薦、上行情境或買點判斷。</p>
+            </div>
+            <span className="rounded-full bg-slate-950/8 px-3 py-1 text-xs text-slate-600 dark:text-emerald-100/60">
+              {researchPending.length} 支
+            </span>
+          </div>
+          <div className="grid gap-4 lg:grid-cols-2">
+            {researchPending.map((rec) => (
+              <StockCard key={`research-pending-${rec.recommendationId}`} rec={rec} isPrimary={false} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {actionBlockedCards.length > 0 && (
+        <section className="mt-10 border-t border-line pt-8">
+          <div className="mb-6 flex flex-wrap items-center gap-4">
+            <span className="text-2xl">🛑</span>
+            <div className="min-w-0 flex-1">
+              <h3 className="text-lg font-semibold">研究完成／暫不進場（非買進建議）</h3>
+              <p className="text-xs text-slate-500 dark:text-emerald-100/45">研究與估值已完成，但技術、風險或品質條件要求避開；保留研究脈絡，不列入正式推薦。</p>
+            </div>
+            <span className="rounded-full bg-slate-950/8 px-3 py-1 text-xs text-slate-600 dark:text-emerald-100/60">{actionBlockedCards.length} 支</span>
+          </div>
+          <div className="grid gap-4 lg:grid-cols-2">
+            {actionBlockedCards.map((rec) => <StockCard key={`action-blocked-${rec.recommendationId}`} rec={rec} isPrimary={false} />)}
+          </div>
+        </section>
       )}
 
       {formalOpportunities.length === 0 && earlyWatchlist.length === 0 && scenarioUpsideCandidates.length === 0 && (
@@ -836,7 +972,7 @@ export function RadarTabs({ radar }: Props) {
   const tabs: { key: TabKey; label: string; count: number }[] = [
     {
       key: 'stocks',
-      label: '推薦股票',
+      label: '股票研究',
       count:
         radar.opportunities.filter((item) => Boolean(item.chineseName)).length +
         (radar.scenarioUpsideCandidates || []).filter((item) => Boolean(item.chineseName)).length +
@@ -860,12 +996,12 @@ export function RadarTabs({ radar }: Props) {
   return (
     <div>
       {/* Tab bar — full-width underline style */}
-      <div className="mb-8 flex items-center border-b border-line">
+      <div className="mb-8 flex flex-wrap items-center border-b border-line">
         {tabs.map((tab) => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={`flex items-center gap-2 border-b-2 px-6 py-3 text-base font-medium transition -mb-px ${
+            className={`-mb-px flex min-w-0 items-center gap-2 border-b-2 px-3 py-3 text-base font-medium transition sm:px-6 ${
               activeTab === tab.key
                 ? 'border-accent text-accent'
                 : 'border-transparent text-slate-500 dark:text-emerald-100/55 hover:text-slate-800 dark:hover:text-emerald-100/80'
