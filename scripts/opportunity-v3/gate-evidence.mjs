@@ -23,6 +23,14 @@ const checkNames = new Set([
   'promotion-gate-aggregate',
 ]);
 const requiredCodeInputs = ['requirements', 'architecture', 'product-runtime-code-gate', 'model-runner-code-gate', 'exact-review'];
+const shadowCommandCatalogSha256 = '9224cc76f0aada2a2c678d27f71ed92a93c5c2cc37a9b4b4a90a831afe40a5c4';
+const shadowCommands = Object.freeze([
+  ['shadow-migration-rehearsal', '/usr/local/bin/node scripts/opportunity-v3/shadow-activation-gate.mjs migration-rehearsal'],
+  ['shadow-runtime-installation-rehearsal', '/usr/local/bin/node scripts/opportunity-v3/shadow-activation-gate.mjs runtime-installation-rehearsal'],
+  ['shadow-runtime-doctor', '/usr/local/bin/node scripts/opportunity-v3/shadow-activation-gate.mjs runtime-doctor'],
+  ['shadow-disabled-web-smoke', '/usr/local/bin/node scripts/opportunity-v3/shadow-activation-gate.mjs disabled-web-smoke'],
+  ['shadow-rollback-lock-verification', '/usr/local/bin/node scripts/opportunity-v3/shadow-activation-gate.mjs rollback-lock-verification'],
+]);
 const commonEvidencePaths = new Set([
   `${changeRelative}/status.json`,
   `${changeRelative}/tasks.md`,
@@ -48,7 +56,7 @@ const gatePolicies = Object.freeze({
   },
   'exact-review': { commands: [], count: 0, partition: null },
   'code-gate-aggregate': { commands: [], count: 0, partition: null },
-  'shadow-activation-gate': { commands: [], count: 0, partition: null },
+  'shadow-activation-gate': { commands: shadowCommands, count: 0, partition: null },
   'promotion-gate-aggregate': { commands: [], count: 0, partition: null },
 });
 
@@ -304,11 +312,28 @@ function validateResult(result, expected, nested = new Map()) {
     'shadow_activation_not_executed', 'external_harness_attestation_unavailable',
   ].includes(result.blockedReason), 'closed blocker');
   assert.equal(result.partition, policy.partition, 'check partition');
+  assert.equal(
+    result.commandCatalogSha256,
+    result.check === 'shadow-activation-gate' ? shadowCommandCatalogSha256 : null,
+    'check command catalog binding',
+  );
+  assert.equal(
+    result.cwdMode,
+    result.check === 'shadow-activation-gate' ? 'verified-subject-checkout-root' : null,
+    'check cwd mode binding',
+  );
   assert.ok(Number.isSafeInteger(result.registeredCount) && result.registeredCount >= 0, 'registered count');
   assert.ok(Number.isSafeInteger(result.executedCount) && result.executedCount >= 0, 'executed count');
   assert.ok(Array.isArray(result.commands) && Array.isArray(result.inputs), 'commands and inputs');
   assert.match(result.completedAt, /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$/u, 'whole-second completion time');
   for (const [index, command] of result.commands.entries()) validateCommand(command, `command ${index}`);
+  if (result.check === 'shadow-activation-gate') {
+    assert.equal(result.commands.length, policy.commands.length, 'shadow exact command count');
+    for (const [index, [name, command]] of policy.commands.entries()) {
+      assert.equal(result.commands[index].name, name, `shadow command ${index} name`);
+      assert.equal(result.commands[index].command, command, `shadow command ${index} command`);
+    }
+  }
   const withoutEvidence = { ...result };
   delete withoutEvidence.evidenceSha256;
   assert.equal(result.evidenceSha256, sha256(canonicalJson(withoutEvidence)), 'result canonical evidence digest');
@@ -375,6 +400,13 @@ function validateEnvelope(envelope, expected) {
 // external authority or manufacturing an attestation.
 export function validateOpportunityGateEvidence(envelope, expected) {
   return validateEnvelope(envelope, expected);
+}
+
+// Result validation is deliberately separate from envelope authentication:
+// aggregate/shadow results bind upstream evidence and therefore require the
+// caller to provide the already-authenticated result graph.
+export function validateOpportunityGateResult(result, expected, nested = new Map()) {
+  return validateResult(result, expected, nested);
 }
 
 function parseArguments(argv) {
