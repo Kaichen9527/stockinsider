@@ -412,6 +412,16 @@ async function probePermissions({
   transport,
   verifyHostFn = verifyCurrentNode,
   spawnFn = spawn,
+  startProbeServersFn = async ({ tcpServer, httpsServer, unixServer, unixSocket }) => {
+    await Promise.all([
+      listenProbeServer(tcpServer, 0, '0.0.0.0'),
+      listenProbeServer(httpsServer, 0, '127.0.0.1'),
+      listenProbeServer(unixServer, unixSocket),
+    ]);
+    return { tcpAddress: tcpServer.address(), httpsAddress: httpsServer.address() };
+  },
+  reachabilityProbeFn = assertReachableProbe,
+  privateAddressFn = privateIpv4Address,
 }) {
   const codex = pins.executables.find((entry) => entry.name === 'codex');
   const node = pins.executables.find((entry) => entry.name === 'node');
@@ -446,18 +456,14 @@ async function probePermissions({
     socket.on('error', () => {});
     socket.end('ok');
   });
-  await Promise.all([
-    listenProbeServer(tcpServer, 0, '0.0.0.0'),
-    listenProbeServer(httpsServer, 0, '127.0.0.1'),
-    listenProbeServer(unixServer, unixSocket),
-  ]);
-  const tcpAddress = tcpServer.address();
-  const httpsAddress = httpsServer.address();
+  const { tcpAddress, httpsAddress } = await startProbeServersFn({
+    tcpServer, httpsServer, unixServer, unixSocket,
+  });
   assert(tcpAddress && typeof tcpAddress === 'object', 5);
   assert(httpsAddress && typeof httpsAddress === 'object', 5);
-  const privateHost = privateIpv4Address();
-  await assertReachableProbe('127.0.0.1', tcpAddress.port);
-  await assertReachableProbe(privateHost, tcpAddress.port);
+  const privateHost = privateAddressFn();
+  await reachabilityProbeFn('127.0.0.1', tcpAddress.port);
+  await reachabilityProbeFn(privateHost, tcpAddress.port);
   const script = [
     'set -eu',
     'ls "$1" >/dev/null',
@@ -555,7 +561,10 @@ async function probePermissions({
     });
   }).finally(async () => {
     await Promise.all([tcpServer, httpsServer, unixServer].map((server) =>
-      new Promise((resolve) => server.close(resolve))));
+      new Promise((resolve) => {
+        if (!server.listening) resolve();
+        else server.close(resolve);
+      })));
     for (const filename of [
       networkScript, descendantScript, directResult, ordinaryResult,
       processGroupResult, forkResult, setsidResult, doubleForkResult,

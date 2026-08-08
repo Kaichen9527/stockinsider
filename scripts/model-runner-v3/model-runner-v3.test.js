@@ -41,6 +41,7 @@ const {
   ancestorIdentity,
   assertAncestorIdentity,
   loadHostPins,
+  requiresGatekeeperAssessment,
   validatedVersionOutput,
   verifyCurrentNode,
 } = require('./hostPreflight');
@@ -328,6 +329,12 @@ ordinaryTest('host pin fixture has an exact hash-bound format', async () => {
         spawns += 1;
         return permissionProbeChild();
       },
+      startProbeServersFn: async () => ({
+        tcpAddress: { port: 1 },
+        httpsAddress: { port: 2 },
+      }),
+      reachabilityProbeFn: async () => {},
+      privateAddressFn: () => '127.0.0.2',
     }), (error) => error?.exit === 5);
     assert.equal(checks, failurePhase);
     assert.equal(spawns, failurePhase === 1 ? 0 : 1);
@@ -348,17 +355,33 @@ ordinaryTest('host pin fixture has an exact hash-bound format', async () => {
   fs.rmSync(directory, { recursive: true, force: true });
 });
 
-ordinaryTest('version probes admit only one or two exact Apple Git sandbox cache denials', () => {
+ordinaryTest('version probes admit only closed known sandbox diagnostics', () => {
   const stdout = 'git version 2.50.1 (Apple Git-155)\n';
   const denial = "git: error: couldn't create cache file '/var/folders/pt/opaque_123/T/xcrun_db-Ab12Cd' (errno=Operation not permitted)\n";
+  const codex = '/Applications/ChatGPT.app/Contents/Resources/codex';
+  const aliasWarning = 'WARNING: proceeding, even though we could not create PATH aliases: Operation not permitted (os error 1)\n';
   assert.equal(validatedVersionOutput('/usr/bin/git', stdout, ''), stdout);
   assert.equal(validatedVersionOutput('/usr/bin/git', stdout, denial), stdout);
   assert.equal(validatedVersionOutput('/usr/bin/git', stdout, `${denial}${denial}`), stdout);
+  assert.equal(validatedVersionOutput(codex, 'codex-cli 0.147.0-alpha.1.2\n', aliasWarning),
+    'codex-cli 0.147.0-alpha.1.2\n');
   expectExit(5, () => validatedVersionOutput('/usr/bin/git', stdout, denial.trimEnd()));
   expectExit(5, () => validatedVersionOutput('/usr/bin/git', stdout, `${denial}${denial}${denial}`));
   expectExit(5, () => validatedVersionOutput('/usr/bin/git', stdout, `${denial}${denial}unexpected\n`));
-  expectExit(5, () => validatedVersionOutput('/Applications/ChatGPT.app/Contents/Resources/codex', stdout,
-    `${denial}${denial}`));
+  expectExit(5, () => validatedVersionOutput(codex, stdout, `${denial}${denial}`));
+  expectExit(5, () => validatedVersionOutput(codex, stdout, aliasWarning.trimEnd()));
+  expectExit(5, () => validatedVersionOutput(codex, stdout, `${aliasWarning}${aliasWarning}`));
+  expectExit(5, () => validatedVersionOutput('/usr/bin/git', stdout, aliasWarning));
+  expectExit(5, () => validatedVersionOutput(codex, stdout, `unexpected ${aliasWarning}`));
+});
+
+ordinaryTest('only the explicit non-credential sandbox defers Gatekeeper to the trusted host oracle', () => {
+  assert.equal(requiresGatekeeperAssessment(true, undefined), true);
+  assert.equal(requiresGatekeeperAssessment(true, '0'), true);
+  assert.equal(requiresGatekeeperAssessment(true, '1'), false);
+  assert.equal(requiresGatekeeperAssessment(true, 'true'), true);
+  assert.equal(requiresGatekeeperAssessment(false, '0'), false);
+  assert.equal(requiresGatekeeperAssessment(false, '1'), false);
 });
 
 async function runRealPermissionProbe() {

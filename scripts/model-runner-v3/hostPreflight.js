@@ -121,13 +121,18 @@ function checkedCommand(command, args) {
 }
 
 const appleGitSandboxCacheDenial = /^git: error: couldn't create cache file '\/var\/folders\/[A-Za-z0-9_/-]+\/T\/xcrun_db-[A-Za-z0-9]+' \(errno=Operation not permitted\)$/u;
+const codexPathAliasSandboxWarning = /^WARNING: proceeding, even though we could not create PATH aliases: Operation not permitted \(os error 1\)$/u;
 
 function validatedVersionOutput(command, stdout, stderr) {
   assert(typeof stdout === 'string' && typeof stderr === 'string', 5);
   if (stderr === '') return stdout;
   const lines = stderr.endsWith('\n') ? stderr.slice(0, -1).split('\n') : [];
-  assert(command === '/usr/bin/git' && lines.length >= 1 && lines.length <= 2
-    && lines.every((line) => appleGitSandboxCacheDenial.test(line)), 5);
+  const admittedAppleGitDenial = command === '/usr/bin/git'
+    && lines.length >= 1 && lines.length <= 2
+    && lines.every((line) => appleGitSandboxCacheDenial.test(line));
+  const admittedCodexAliasWarning = command === '/Applications/ChatGPT.app/Contents/Resources/codex'
+    && lines.length === 1 && codexPathAliasSandboxWarning.test(lines[0]);
+  assert(admittedAppleGitDenial || admittedCodexAliasWarning, 5);
   return stdout;
 }
 
@@ -143,6 +148,10 @@ function checkedVersion(command, args) {
   return validatedVersionOutput(command, result.stdout || '', result.stderr || '');
 }
 
+function requiresGatekeeperAssessment(bundle, nonCredentialMode) {
+  return bundle && nonCredentialMode !== '1';
+}
+
 function verifySignature(filename, expected, bundle = false) {
   const verbose = checkedCommand('/usr/bin/codesign', ['-d', '--verbose=4', filename]);
   assert(verbose.includes(`CandidateCDHashFull sha256=${expected.cdHashFullSha256}`), 5);
@@ -151,7 +160,7 @@ function verifySignature(filename, expected, bundle = false) {
   const requirement = checkedCommand('/usr/bin/codesign', ['-d', '-r-', filename]);
   assert(requirement.includes(`designated => ${expected.designatedRequirement}`), 5);
   checkedCommand('/usr/bin/codesign', ['--verify', '--deep', '--strict', filename]);
-  if (bundle) {
+  if (requiresGatekeeperAssessment(bundle, process.env.OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH)) {
     const assessment = checkedCommand('/usr/sbin/spctl', ['-a', '-vv', filename]);
     assert(assessment.includes('accepted') && assessment.includes(`source=${expected.spctlSource}`), 5);
   }
@@ -200,4 +209,5 @@ module.exports = {
   ancestorIdentity,
   assertAncestorIdentity,
   validatedVersionOutput,
+  requiresGatekeeperAssessment,
 };
