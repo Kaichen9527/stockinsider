@@ -62,7 +62,7 @@ const lifecycleNewerSourceParseOutput = executeWorkerPayload('source_parse_batch
   ]],
   [],
 ]);
-const appendBoundarySourceFields = ['2330 測試', '', ''];
+const appendBoundarySourceFields = ['2330 測試, 保留逗號空格', '', ''];
 const appendBoundaryRawHash = sha256Canonical({
   version: 'raw-field-payload-v3.0',
   adapterVersion: 'source-adapter-v3.3',

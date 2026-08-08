@@ -12445,6 +12445,9 @@ DECLARE
   v_field_text text; v_field_key text; v_normalized text; v_segments jsonb;
   v_canonical_fields jsonb := '[]'::jsonb; v_measured_count integer := 0;
   v_expected_raw_hash text; v_expected_canonical_hash text;
+  v_json_text text; v_compact_json text; v_character text;
+  v_json_index integer; v_json_ordinal integer := 0;
+  v_inside_string boolean; v_escaped boolean;
 BEGIN
   SELECT * INTO v_authority FROM public.source_identity_authorities_v3 a
   WHERE a.authority_id=($1).source_identity_authority_id
@@ -12536,14 +12539,40 @@ BEGIN
           jsonb_build_array(jsonb_build_array(v_field_key,v_normalized));
       END IF;
     END LOOP;
-    v_expected_raw_hash:=encode(extensions.digest(convert_to(
+    FOREACH v_json_text IN ARRAY ARRAY[
       '{"adapterVersion":'||to_jsonb(($1).adapter_version)::text||
-      ',"fields":'||regexp_replace(($1).raw_field_payload::text,', ', ',', 'g')||
-      ',"version":"raw-field-payload-v3.0"}','utf8'
-    ),'sha256'),'hex');
-    v_expected_canonical_hash:=encode(extensions.digest(convert_to(
-      regexp_replace(v_canonical_fields::text,', ', ',', 'g'),'utf8'
-    ),'sha256'),'hex');
+        ',"fields":'||($1).raw_field_payload::text||
+        ',"version":"raw-field-payload-v3.0"}',
+      v_canonical_fields::text
+    ] LOOP
+      v_json_ordinal:=v_json_ordinal+1;
+      v_compact_json:=''; v_json_index:=1; v_inside_string:=false; v_escaped:=false;
+      WHILE v_json_index<=char_length(v_json_text) LOOP
+        v_character:=substr(v_json_text,v_json_index,1);
+        IF v_inside_string THEN
+          v_compact_json:=v_compact_json||v_character;
+          IF v_escaped THEN v_escaped:=false;
+          ELSIF v_character=chr(92) THEN v_escaped:=true;
+          ELSIF v_character='"' THEN v_inside_string:=false;
+          END IF;
+        ELSIF v_character='"' THEN
+          v_inside_string:=true; v_compact_json:=v_compact_json||v_character;
+        ELSIF v_character=',' AND substr(v_json_text,v_json_index+1,1)=' ' THEN
+          v_compact_json:=v_compact_json||','; v_json_index:=v_json_index+1;
+        ELSE
+          v_compact_json:=v_compact_json||v_character;
+        END IF;
+        v_json_index:=v_json_index+1;
+      END LOOP;
+      IF v_inside_string OR v_escaped THEN
+        RAISE EXCEPTION USING ERRCODE='PT422',MESSAGE='invalid_authority_request';
+      END IF;
+      IF v_json_ordinal=1 THEN
+        v_expected_raw_hash:=encode(extensions.digest(convert_to(v_compact_json,'utf8'),'sha256'),'hex');
+      ELSE
+        v_expected_canonical_hash:=encode(extensions.digest(convert_to(v_compact_json,'utf8'),'sha256'),'hex');
+      END IF;
+    END LOOP;
     IF v_measured_count<>($1).raw_code_point_count
       OR v_expected_raw_hash<>($1).ingestion_content_revision_sha256
       OR v_expected_canonical_hash<>($1).ingestion_canonical_content_hash_v3
