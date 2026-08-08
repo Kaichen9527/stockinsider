@@ -685,6 +685,98 @@ test('legacy producer resolves one scheduled occurrence and resumes the same det
   assert.ok(Number(result.weekday) >= 1 && Number(result.weekday) <= 5);
 });
 
+test('legacy analysis completion persists a typed material-revision evaluation', () => {
+  const result = JSON.parse(psql(`
+    BEGIN;
+    INSERT INTO public.legacy_producer_runs_v3_11(
+      run_id,owner_label,owner_token_hash,producer_commit_sha,worker_sha256,
+      scheduler_config_canonical,scheduler_config_sha256,legacy_seed_symbols,
+      legacy_seed_set_hash,scheduled_occurrence_id,source_cutoff,trading_date,
+      trading_session_authority_hash,authority_canonical,authority_json,authority_hash,
+      status,started_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,
+      logical_run_key,attempt
+    ) VALUES(
+      '51000000-0000-4000-8000-000000000001','com.stockinsider.auth-source-worker',
+      encode(extensions.digest(convert_to('51000000-0000-4000-8000-000000000010','utf8'),'sha256'),'hex'),
+      repeat('a',40),repeat('b',64),decode('${legacyRuntimeConfigHex}','hex'),
+      '1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2',
+      (SELECT array_agg(value ORDER BY ordinal) FROM jsonb_array_elements_text(
+        convert_from(decode('${legacyRuntimeConfigHex}','hex'),'utf8')::jsonb->'legacySeedSymbols'
+      ) WITH ORDINALITY seed(value,ordinal)),
+      'e6d9c09b8b552f5d9eaf389b76d2d90daa2d89578433d2a1ad63286888b3b743',
+      'analysis-enum-fixture','2026-08-08T12:00:00Z',NULL,NULL,
+      convert_to('{}','utf8'),'{}'::jsonb,
+      encode(extensions.digest(convert_to('{}','utf8'),'sha256'),'hex'),
+      'running','2026-08-08T12:00:00Z',clock_timestamp(),clock_timestamp()+interval '120 seconds',
+      NULL,NULL,repeat('9',64),1
+    );
+    INSERT INTO public.legacy_producer_jobs_v3_11(
+      job_id,run_id,stage,job_kind,stage_ordinal,shard_ordinal,execution_ordinal,
+      revision_id,predecessor_job_id,input_hash,payload_hash,status,attempt,max_attempts,
+      owner_token_hash,leased_at,heartbeat_at,lease_expires_at,terminal_at,failure_code
+    ) VALUES
+      ('51000000-0000-4000-8000-000000000011','51000000-0000-4000-8000-000000000001',
+       'facts_refresh','stage_barrier',3,NULL,0,NULL,NULL,repeat('1',64),repeat('1',64),
+       'succeeded',1,5,NULL,NULL,NULL,NULL,clock_timestamp(),NULL),
+      ('51000000-0000-4000-8000-000000000012','51000000-0000-4000-8000-000000000001',
+       'analysis_revision','stage_barrier',4,NULL,1,NULL,
+       '51000000-0000-4000-8000-000000000011',repeat('2',64),repeat('2',64),
+       'leased',1,5,
+       encode(extensions.digest(convert_to('51000000-0000-4000-8000-000000000010','utf8'),'sha256'),'hex'),
+       clock_timestamp(),clock_timestamp(),clock_timestamp()+interval '120 seconds',NULL,NULL);
+    WITH facts(value) AS (VALUES(jsonb_build_object(
+      'schema','legacy-facts-refresh-result-v3.11','decisions',jsonb_build_array(
+        jsonb_build_object('symbol','2330','materialChangeHash',repeat('a',64))
+      ),'sourceCandidates','[]'::jsonb,'discoveryDelta',jsonb_build_object(
+        'added','[]'::jsonb,'exited','[]'::jsonb,'continued','[]'::jsonb,
+        'unchangedReasons','[]'::jsonb
+      )
+    )))
+    INSERT INTO public.legacy_producer_job_results_v3_11(
+      job_id,result_canonical,result_json,result_hash
+    ) SELECT '51000000-0000-4000-8000-000000000011',convert_to(value::text,'utf8'),value,
+      encode(extensions.digest(convert_to(value::text,'utf8'),'sha256'),'hex') FROM facts;
+    CREATE TEMP TABLE legacy_analysis_complete_capture AS
+      WITH output(value) AS (VALUES(jsonb_build_object(
+        'schema','legacy-analysis-revision-result-v3.11','decisions',jsonb_build_array(
+          jsonb_build_object(
+            'symbol','2330','materialChangeHash',repeat('a',64),
+            'researchMaturity','source_signal','valuation',jsonb_build_object('status','valuation_review'),
+            'action','valuation_review','fundamental','{}'::jsonb,'technical',NULL,
+            'claimId','51000000-0000-4000-8000-000000000099',
+            'analysisGeneratedAt','2026-08-08T12:00:00Z'
+          )
+        ),'sourceCandidates','[]'::jsonb,'discoveryDelta',jsonb_build_object(
+          'added','[]'::jsonb,'exited','[]'::jsonb,'continued','[]'::jsonb,
+          'unchangedReasons','[]'::jsonb
+        )
+      )))
+      SELECT completion.* FROM output CROSS JOIN LATERAL public.complete_legacy_producer_job_v3_11(
+        '51000000-0000-4000-8000-000000000001','51000000-0000-4000-8000-000000000012',
+        '51000000-0000-4000-8000-000000000010',convert_to(output.value::text,'utf8'),output.value,
+        encode(extensions.digest(convert_to(output.value::text,'utf8'),'sha256'),'hex')
+      ) completion;
+    SELECT jsonb_build_object(
+      'completion',(SELECT status FROM legacy_analysis_complete_capture),
+      'jobStatus',(SELECT status::text FROM public.legacy_producer_jobs_v3_11
+        WHERE job_id='51000000-0000-4000-8000-000000000012'),
+      'nextStage',(SELECT next_job->>'stage' FROM legacy_analysis_complete_capture),
+      'revisionCount',(SELECT count(*) FROM public.legacy_analysis_revisions_v3_11
+        WHERE symbol='2330' AND material_change_hash=repeat('a',64)),
+      'evaluationDisposition',(SELECT disposition::text FROM public.legacy_analysis_evaluations_v3_11
+        WHERE producer_run_id='51000000-0000-4000-8000-000000000001' AND symbol='2330')
+    )::text;
+    ROLLBACK;
+  `, ['-At']).split('\n').find((line) => line.startsWith('{')));
+  assert.deepEqual(result, {
+    completion: 'running',
+    evaluationDisposition: 'material_revision_created',
+    jobStatus: 'succeeded',
+    nextStage: 'compact_radar_projection',
+    revisionCount: 1,
+  });
+});
+
 test('legacy producer advances exactly once for newly recorded material authority outside the scheduled cutoff', () => {
   const result = JSON.parse(psql(`
     BEGIN;
@@ -756,7 +848,8 @@ test('legacy producer claim plane carries prior discovery and analysis lineage a
   assert.match(claimBody, /current_setting\('stockinsider[.]legacy_authority_hash',true\) IS DISTINCT FROM v_run[.]authority_hash/u);
   assert.match(claimBody, /ORDER BY prior_run[.]source_cutoff DESC,prior_run[.]terminal_at DESC,prior_run[.]run_id LIMIT 1/u);
   assert.match(claimBody, /'priorRevisions'[\s\S]*legacy_analysis_revisions_v3_11[\s\S]*revision[.]source_cutoff<v_run[.]source_cutoff/u);
-  assert.match(completionBody, /CASE WHEN v_revision_created THEN 'material_revision_created' ELSE 'no_material_change' END/u);
+  assert.match(completionBody,
+    /WHEN v_revision_created THEN 'material_revision_created'::public[.]opportunity_analysis_evaluation_disposition_v3_11[\s\S]*?ELSE 'no_material_change'::public[.]opportunity_analysis_evaluation_disposition_v3_11/u);
   assert.match(completionBody, /ORDER BY source_cutoff DESC,recorded_at DESC,revision_id LIMIT 1/u);
   assert.doesNotMatch(completionBody, /'material_revision_created',v_run[.]source_cutoff/u);
   assert.match(heartbeatBody, /UPDATE public[.]legacy_producer_runs_v3_11 SET heartbeat_at=/u);

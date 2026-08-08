@@ -17836,7 +17836,10 @@ BEGIN
       END IF;
       INSERT INTO public.legacy_analysis_evaluations_v3_11 VALUES(
         extensions.gen_random_uuid(),v_item->>'symbol',v_revision_id,v_item->>'materialChangeHash',
-        CASE WHEN v_revision_created THEN 'material_revision_created' ELSE 'no_material_change' END,
+        CASE
+          WHEN v_revision_created THEN 'material_revision_created'::public.opportunity_analysis_evaluation_disposition_v3_11
+          ELSE 'no_material_change'::public.opportunity_analysis_evaluation_disposition_v3_11
+        END,
         v_run.source_cutoff,v_run.source_cutoff,NULL,NULL,'scheduled_material_check',p_run,v_now)
       ON CONFLICT(producer_run_id,symbol) DO NOTHING;
     END LOOP;
