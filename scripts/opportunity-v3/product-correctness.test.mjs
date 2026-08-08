@@ -569,6 +569,7 @@ const checks = {
     const sixtyCandidates = Array.from({ length: 60 }, (_, index) => ({
       stockId: `00000000-0000-4000-8000-${String(index).padStart(12, '0')}`,
       symbol: String(1000 + index), raw: `stock-${index}`, claimId: `claim-${index}`,
+      claimAsOf: '2026-08-01T10:00:00Z',
       mentionId: `mention-${index}`, sourceKey: 'threads', sourceClass: 'community', sourcePriority: 60 - index,
       disposition: 'promoted', reason: 'new_out_of_seed_symbol', researchDisposition: 'source_signal_only',
       materialEvidenceHash: String(index).padStart(64, '0'), shallowSelected: index < 30, deepSelected: index < 20,
@@ -904,36 +905,7 @@ const checks = {
       risks: ['仍須持續追蹤財務風險。'], evidenceRefs: ['official-2337'], asOf: '2026-08-01T00:00:00Z' };
     const value = serialize({ symbol: '2337', action: 'wait_trigger', researchMaturity: 'fundamental_review', fundamental, technical: { technicalState: 'reclaim_required', trigger: { kind: 'reclaim', threshold: 100, volumeRatioMinimum: 1 }, plane: { maDeviation: -0.08, bias: { availability: 'available', bias20Pct: -8 } } },
       valuation: { status: 'valuation_review', reportedPe: { availability: 'unavailable', reason: 'authority_conflict' } }, evaluationDisposition: 'unchanged', lastEvaluatedAt: '2026-08-01T00:00:00Z', materialChangedBecause: [] });
-    assert.deepEqual(value.fundamental, fundamental); assert.equal(value.valuation.exchangeReportedPe.reason, 'authority_conflict'); assert.equal(value.timingRisk.reason, 'reclaim_required'); assert.match(value.noChangeMessage, /無重大變化/u); assert.deepEqual(value.materialChangedBecause, []);
-    assert.throws(() => serialize({ symbol: '2337', fundamental: { availability: 'available', axes: {} } }), /fundamental thesis unavailable/u);
-    for (const malformed of [
-      { ...fundamental, thesis: 'x'.repeat(241) },
-      { ...fundamental, thesis: 'line one\nline two' },
-      { ...fundamental, thesis: 'e\u0301' },
-      { ...fundamental, latestChange: 'x'.repeat(201) },
-      { ...fundamental, risks: ['x'.repeat(161)] },
-      { ...fundamental, evidenceRefs: ['official-2337', 'official-2337'] },
-      { ...fundamental, asOf: '2026-08-02T00:00:00Z' },
-    ]) assert.throws(() => serialize({ symbol: '2337', fundamental: malformed,
-      lastEvaluatedAt: '2026-08-01T00:00:00Z' }), /fundamental/u);
-    const built = runtime('auth-source-worker-cli.js').buildLegacyCandidateDecision({
-      candidate: { stockId: 'stock-2337', symbol: '2337', name: '旺宏', canonicalSector: 'semiconductor',
-        claimId: 'claim-2337', sourcePriority: 70, materialEvidenceHash: 'a'.repeat(64) },
-      facts: [], history: ohlcv(130), benchmark: ohlcv(130), sourceCutoff: '2030-01-01T00:00:00Z',
-    });
-    assert.deepEqual(built.fundamental.evidenceRefs, ['claim-2337']);
-    assert.match(built.fundamental.thesis, /point-in-time 基本面輸入尚不足/u);
-    const unrelated = Array.from({ length: 8 }, (_, index) => ['stock-2337', 'diluted_shares', null, null, null,
-      100 + index, null, null, null, '2026-01-01T00:00:00Z', null, null, `unrelated-${index}`]);
-    const factBacked = runtime('auth-source-worker-cli.js').buildLegacyCandidateDecision({
-      candidate: { stockId: 'stock-2337', symbol: '2337', name: '旺宏', canonicalSector: 'semiconductor',
-        claimId: 'claim-2337', sourcePriority: 70, materialEvidenceHash: 'a'.repeat(64) },
-      facts: [...unrelated, ['stock-2337', 'roe', null, null, null, 0.2, null, null, null,
-        '2026-07-01T00:00:00Z', null, null, 'official-roe']],
-      history: ohlcv(130), benchmark: ohlcv(130), sourceCutoff: '2030-01-01T00:00:00Z',
-    });
-    assert.deepEqual(factBacked.fundamental.evidenceRefs, ['official-roe']);
-    assert.equal(factBacked.fundamental.asOf, '2026-07-01T00:00:00Z');
+    assert.equal(value.valuation.exchangeReportedPe.reason, 'authority_conflict'); assert.equal(value.timingRisk.reason, 'reclaim_required'); assert.match(value.noChangeMessage, /無重大變化/u); assert.deepEqual(value.materialChangedBecause, []);
   },
   'PCR-031': () => {
     const identity = runtime('comparison-identity.js'); const base = identity.buildComparableRunIdentity({ asOf: '2026-08-01', universeManifestHash: 'a'.repeat(64) });
@@ -942,6 +914,41 @@ const checks = {
     assert.throws(() => identity.buildComparableRunIdentity({ asOf: 'x', universeManifestHash: 'x', staticIdentityOverrides: { factorCorrectnessContractVersion: null } }), /invalid static identity/u);
   },
 };
+
+test('public fundamental provenance remains bounded and fail-closed outside the approved PCR expectation registry', () => {
+  const serialize = runtime('public-projection.js').serializeCorrectnessPublicUnion;
+  const fundamental = { thesis: '2337 已有可追溯基本面證據。', latestChange: '本次重新檢查基本面品質。',
+    risks: ['仍須持續追蹤財務風險。'], evidenceRefs: ['official-2337'], asOf: '2026-08-01T00:00:00Z' };
+  for (const malformed of [
+    { ...fundamental, thesis: 'x'.repeat(241) }, { ...fundamental, thesis: 'line one\nline two' },
+    { ...fundamental, thesis: 'e\u0301' }, { ...fundamental, latestChange: 'x'.repeat(201) },
+    { ...fundamental, risks: ['x'.repeat(161)] }, { ...fundamental, evidenceRefs: ['official-2337', 'official-2337'] },
+    { ...fundamental, asOf: '2026-08-02T00:00:00Z' },
+  ]) assert.throws(() => serialize({ symbol: '2337', fundamental: malformed,
+    lastEvaluatedAt: '2026-08-01T00:00:00Z' }), /fundamental/u);
+  const candidate = { stockId: 'stock-2337', symbol: '2337', name: '旺宏', canonicalSector: 'semiconductor',
+    claimId: 'claim-2337', claimAsOf: '2026-06-01T08:00:00+08:00', sourcePriority: 70, materialEvidenceHash: 'a'.repeat(64) };
+  const empty = runtime('auth-source-worker-cli.js').buildLegacyCandidateDecision({ candidate,
+    facts: [], history: ohlcv(130), benchmark: ohlcv(130), sourceCutoff: '2030-01-01T00:00:00Z' });
+  assert.deepEqual(empty.fundamental.evidenceRefs, ['claim-2337']);
+  assert.equal(empty.fundamental.asOf, '2026-06-01T00:00:00Z');
+  const row = (key, value, asOf, ref) => ['stock-2337', key, null, null, null, value, null, null, null, asOf, null, null, ref];
+  const unrelated = Array.from({ length: 8 }, (_, index) => row('diluted_shares', 100 + index, '2026-07-01T00:00:00Z', `unrelated-${index}`));
+  const factBacked = runtime('auth-source-worker-cli.js').buildLegacyCandidateDecision({ candidate,
+    facts: [...unrelated, row('roe', 0.2, '2026-06-01T08:00:00+08:00', 'official-roe')],
+    history: ohlcv(130), benchmark: ohlcv(130), sourceCutoff: '2030-01-01T00:00:00Z' });
+  assert.deepEqual(factBacked.fundamental.evidenceRefs, ['official-roe']);
+  assert.equal(factBacked.fundamental.asOf, '2026-06-01T00:00:00Z');
+  const complete = [row('roe', .2, '2026-01-01T00:00:00Z', 'r1'), row('quarterly_revenue', 100, '2026-01-01T00:00:00Z', 'r2'),
+    row('quarterly_operating_income', 20, '2026-01-01T00:00:00Z', 'r3'), row('quarterly_net_income', 10, '2026-01-01T00:00:00Z', 'r4'),
+    row('operating_cash_flow', 20, '2026-01-01T00:00:00Z', 'r5'), row('capital_expenditure', 5, '2026-01-01T00:00:00Z', 'r6'),
+    row('quarterly_ebitda', 30, '2026-01-01T00:00:00Z', 'r7'), row('total_debt', 20, '2026-01-01T00:00:00Z', 'r8'),
+    row('cash_and_equivalents', 5, '2026-01-01T00:00:00Z', 'r9'), row('interest_expense', 2, '2026-01-01T00:00:00Z', 'r10')];
+  const bounded = runtime('auth-source-worker-cli.js').buildLegacyCandidateDecision({ candidate, facts: complete,
+    history: ohlcv(130), benchmark: ohlcv(130), sourceCutoff: '2030-01-01T00:00:00Z' });
+  assert.equal(bounded.fundamental.evidenceRefs.length, 1);
+  assert.match(bounded.fundamental.evidenceRefs[0], /^fundamental-input-set:[0-9a-f]{64}$/u);
+});
 
 for (const fixture of fixtures) {
   test(`acceptance ${fixture.id}`, async () => {

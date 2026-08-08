@@ -23,6 +23,7 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
       stockId: outcome.link.stockId,
       symbol: outcome.link.symbol,
       claimId: outcome.claimId,
+      claimAsOf: outcome.claimAsOf ?? null,
       mentionId: outcome.mentionId,
       sourceKey: outcome.sourceKey ?? null,
       revisionId: outcome.revisionId ?? null,

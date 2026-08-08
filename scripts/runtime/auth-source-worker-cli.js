@@ -125,6 +125,11 @@ function uuidFromHash(value) {
   return `${digest.slice(0, 8)}-${digest.slice(8, 12)}-${digest.slice(12, 16)}-${digest.slice(16, 20)}-${digest.slice(20, 32)}`;
 }
 
+function canonicalUtc(value, label) {
+  invariant(typeof value === 'string' && Number.isFinite(Date.parse(value)), `${label} unavailable`);
+  return new Date(value).toISOString().replace('.000Z', 'Z');
+}
+
 function extractRevisionCandidates(bundle) {
   const frozen = bundle.frozenRevision;
   invariant(frozen && typeof frozen.revisionId === 'string', 'frozen revision unavailable');
@@ -151,6 +156,7 @@ function extractRevisionCandidates(bundle) {
     const claimId = uuidFromHash(`claim:${frozen.revisionId}:${stockId}:${raw}`);
     return [{ sourceKey: frozen.sourceKey, revisionId: frozen.revisionId, stockId, symbol, exchange,
       canonicalSector: sectorByStock.get(stockId) ?? 'unknown', raw, claimId,
+      claimAsOf: typeof frozen.sourceCollectedAt === 'string' ? canonicalUtc(frozen.sourceCollectedAt, 'frozen source collected-at') : null,
       mentionId: uuidFromHash(`mention:${frozen.revisionId}:${stockId}:${raw}`), claimEligible: true,
       link: { disposition: 'linked', stockId, symbol },
       sourceClass: SOURCE_CLASS_BY_KEY[frozen.sourceKey] ?? 'community' }];
@@ -202,15 +208,19 @@ function legacyQualityInput(facts) {
   return legacyQualityMaterial(facts).input;
 }
 
-function legacyFundamentalNarrative(candidate, facts, usedRows, quality, sourceCutoff) {
+function legacyFundamentalNarrative(candidate, usedRows, quality, sourceCutoff) {
   const score = Number.isFinite(quality.score) ? Math.round(quality.score) : null;
-  const evidenceRefs = [...new Set((score === null ? [candidate.claimId] : usedRows.map((row) => row[12]))
+  invariant(usedRows.every((row) => typeof row[12] === 'string' && row[12].length > 0), 'quality fact evidence unavailable');
+  const directRefs = [...new Set(usedRows.map((row) => row[12])
     .filter((value) => typeof value === 'string' && value.length > 0))];
+  const qualityEvidence = usedRows.map((row) => [row[1], row[5], canonicalUtc(row[9], 'quality fact as-of'), row[12]]);
+  const evidenceRefs = score === null ? [candidate.claimId].filter((value) => typeof value === 'string' && value.length > 0)
+    : directRefs.length <= 8 ? directRefs : [`fundamental-input-set:${sha256(canonicalJson(qualityEvidence))}`];
   invariant(evidenceRefs.length > 0, 'legacy fundamental evidence unavailable');
-  invariant(evidenceRefs.length <= 8, 'legacy fundamental evidence exceeds public bound');
-  const factAsOf = facts.filter((row) => Array.isArray(row) && typeof row[9] === 'string'
-      && Number.isFinite(Date.parse(row[9])) && Date.parse(row[9]) <= Date.parse(sourceCutoff))
-    .map((row) => row[9]).sort((left, right) => Date.parse(left) - Date.parse(right)).at(-1);
+  const factAsOf = usedRows.map((row) => canonicalUtc(row[9], 'quality fact as-of'))
+    .sort((left, right) => Date.parse(left) - Date.parse(right)).at(-1);
+  const narrativeAsOf = score === null ? canonicalUtc(candidate.claimAsOf, 'candidate claim as-of') : factAsOf;
+  invariant(typeof narrativeAsOf === 'string' && Date.parse(narrativeAsOf) <= Date.parse(sourceCutoff), 'fundamental evidence after cutoff');
   const thesis = score === null
     ? `${candidate.symbol} 已有可追溯來源訊號，但 point-in-time 基本面輸入尚不足。`
     : `${candidate.symbol} 的 point-in-time 基本面品質分數為 ${score}，仍須結合估值與技術狀態判斷。`;
@@ -224,14 +234,14 @@ function legacyFundamentalNarrative(candidate, facts, usedRows, quality, sourceC
     latestChange: '本次依最新可用的 point-in-time 財務與來源證據重新檢查基本面品質。',
     risks,
     evidenceRefs,
-    asOf: factAsOf ?? sourceCutoff,
+    asOf: narrativeAsOf,
   });
 }
 
 function buildLegacyCandidateDecision({ candidate, facts, history, benchmark, sourceCutoff, valuationInput = {} }) {
   const qualityMaterial = legacyQualityMaterial(facts);
   const quality = calculateFundamentalQualityAxes(qualityMaterial.input);
-  const fundamental = legacyFundamentalNarrative(candidate, facts, qualityMaterial.usedRows, quality, sourceCutoff);
+  const fundamental = legacyFundamentalNarrative(candidate, qualityMaterial.usedRows, quality, sourceCutoff);
   const plane = calculateAdjustedTechnicalPlane({ rows: history, asOf: sourceCutoff, benchmark });
   const biasHistory = selectBiasTechnicalHistory({ rows: history, asOf: sourceCutoff });
   const valuation = evaluateCandidateValuation({ stockId: candidate.stockId, subjectStockId: candidate.stockId,
