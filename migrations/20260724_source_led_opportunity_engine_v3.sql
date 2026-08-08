@@ -17430,7 +17430,7 @@ BEGIN
     ) adjusted ON true
   ), benchmark_ranked AS MATERIALIZED (
     SELECT observation.session_id,observation.value,observation.source_ref,
-      row_number() OVER (PARTITION BY observation.session_id ORDER BY observation.source_timestamp DESC,
+      row_number() OVER (PARTITION BY observation.session_id ORDER BY observation.observed_at DESC,
         observation.collected_at DESC,observation.recorded_at DESC,observation.source_ref,observation.observation_id) AS precedence
     FROM public.opportunity_market_observations_v3 observation
     WHERE observation.fact_key='taiex_close' AND observation.scope_key='TAIEX'

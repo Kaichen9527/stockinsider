@@ -641,6 +641,24 @@ test('legacy producer resolves one scheduled occurrence and resumes the same det
   assert.ok(Number(result.weekday) >= 1 && Number(result.weekday) <= 5);
 });
 
+test('legacy fact-plane benchmark reads the market observation timestamp contract', () => {
+  const benchmarkRows = psql(`
+    SELECT (public.read_legacy_candidate_fact_plane_v3_11(
+      '2026-07-24T08:00:00Z','{"candidates":[]}'::jsonb
+    )->'benchmarkRows')::text;
+  `, ['-At']).trim();
+  assert.equal(benchmarkRows, '[]');
+  const body = sql.match(
+    /CREATE OR REPLACE FUNCTION read_legacy_candidate_fact_plane_v3_11[\s\S]*?\nEND \$\$;/u,
+  )?.[0] ?? '';
+  assert.match(body,
+    /row_number\(\) OVER \(PARTITION BY observation[.]session_id ORDER BY observation[.]observed_at DESC,[\s\S]*?FROM public[.]opportunity_market_observations_v3 observation/u,
+  );
+  assert.doesNotMatch(body,
+    /row_number\(\) OVER \(PARTITION BY observation[.]session_id ORDER BY observation[.]source_timestamp DESC,[\s\S]*?FROM public[.]opportunity_market_observations_v3 observation/u,
+  );
+});
+
 test('legacy producer claim plane carries prior discovery and analysis lineage across successful runs', () => {
   const claimBody = sql.match(/CREATE OR REPLACE FUNCTION claim_legacy_producer_job_v3_11[\s\S]*?\nEND \$\$;/u)?.[0] ?? '';
   const completionBody = sql.match(/CREATE OR REPLACE FUNCTION complete_legacy_producer_job_v3_11[\s\S]*?\nEND \$\$;/u)?.[0] ?? '';
