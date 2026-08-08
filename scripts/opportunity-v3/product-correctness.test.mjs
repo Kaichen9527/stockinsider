@@ -493,6 +493,13 @@ const checks = {
     const explicitStock = parse('台積電 2330 股價轉強，列入觀察。');
     assert.equal(explicitStock.candidates.length, 1);
     assert.match(explicitStock.candidates[0].claimId, /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/u);
+    const effectiveSource = parser.extractRevisionCandidates({ frozenRevision: {
+      revisionId: '00000000-0000-4000-8000-000000000007', sourceKey: 'threads',
+      sourcePublishedAt: '2026-07-31T20:00:00Z', sourceCollectedAt: '2026-08-01T10:00:00Z',
+      rawFieldPayload: { text: '台積電 2330 股價轉強。' },
+    }, authorityPages });
+    assert.equal(effectiveSource.candidates[0].claimAsOf, '2026-07-31T20:00:00Z',
+      'published time is the source effective time when collection is delayed');
     const aliasPages = [...authorityPages, ['alias', null, null, [[
       '00000000-0000-4000-8000-000000002330', '世界',
     ]]]];
@@ -948,6 +955,12 @@ test('public fundamental provenance remains bounded and fail-closed outside the 
     history: ohlcv(130), benchmark: ohlcv(130), sourceCutoff: '2030-01-01T00:00:00Z' });
   assert.equal(bounded.fundamental.evidenceRefs.length, 1);
   assert.match(bounded.fundamental.evidenceRefs[0], /^fundamental-input-set:[0-9a-f]{64}$/u);
+  const priorAlgorithmMaterialHash = runtime('codec.js').sha256(runtime('codec.js').canonicalJson([
+    candidate.materialEvidenceHash, [], ohlcv(130).at(-1), ohlcv(130).at(-1), empty.valuation,
+    empty.technical, empty.factorAxes,
+  ]));
+  assert.notEqual(empty.materialChangeHash, priorAlgorithmMaterialHash,
+    'the provenance algorithm transition must force a new immutable analysis revision');
 });
 
 for (const fixture of fixtures) {

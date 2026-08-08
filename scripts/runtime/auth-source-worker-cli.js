@@ -156,7 +156,9 @@ function extractRevisionCandidates(bundle) {
     const claimId = uuidFromHash(`claim:${frozen.revisionId}:${stockId}:${raw}`);
     return [{ sourceKey: frozen.sourceKey, revisionId: frozen.revisionId, stockId, symbol, exchange,
       canonicalSector: sectorByStock.get(stockId) ?? 'unknown', raw, claimId,
-      claimAsOf: typeof frozen.sourceCollectedAt === 'string' ? canonicalUtc(frozen.sourceCollectedAt, 'frozen source collected-at') : null,
+      claimAsOf: typeof frozen.sourcePublishedAt === 'string'
+        ? canonicalUtc(frozen.sourcePublishedAt, 'frozen source published-at')
+        : typeof frozen.sourceCollectedAt === 'string' ? canonicalUtc(frozen.sourceCollectedAt, 'frozen source collected-at') : null,
       mentionId: uuidFromHash(`mention:${frozen.revisionId}:${stockId}:${raw}`), claimEligible: true,
       link: { disposition: 'linked', stockId, symbol },
       sourceClass: SOURCE_CLASS_BY_KEY[frozen.sourceKey] ?? 'community' }];
@@ -266,8 +268,9 @@ function buildLegacyCandidateDecision({ candidate, facts, history, benchmark, so
     : { ...actionDecision.technical, plane: { ...plane, bias: plane.availability === 'available'
       ? { ...plane.bias, ownHistory: biasHistory.availability === 'available' ? { ...biasHistory.quantiles, label: biasHistory.current.label } : null }
       : null } };
+  const fundamentalSnapshot = ['legacy-fundamental-provenance-v2', fundamental];
   const materialChangeHash = sha256(canonicalJson([candidate.materialEvidenceHash, facts, history.at(-1) ?? null,
-    benchmark.at(-1) ?? null, valuation, technical, factorAxes]));
+    benchmark.at(-1) ?? null, valuation, technical, factorAxes, fundamentalSnapshot]));
   return { ...candidate, researchMaturity: valuation.status === 'normal' && quality.qualityActionEligible ? 'decision_ready'
     : quality.availability === 'available' ? 'fundamental_review' : 'source_signal',
     action: actionDecision.action, fundamental, technical, geometry: actionDecision.geometry,
