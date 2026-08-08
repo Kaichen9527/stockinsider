@@ -54,7 +54,6 @@ const THEME_FIELDS = [
 ];
 
 const RADAR_PRODUCER_MAX_BYTES = 150_000;
-const RADAR_PRODUCER_FETCH_TIMEOUT_MS = 30_000;
 
 function compactText(value, max = 96) {
   if (typeof value !== 'string') return value;
@@ -140,6 +139,5 @@ function producerRadarPayloadBytes(payload) {
 module.exports = {
   compactProducerRadarPayload,
   producerRadarPayloadBytes,
-  RADAR_PRODUCER_FETCH_TIMEOUT_MS,
   RADAR_PRODUCER_MAX_BYTES,
 };
