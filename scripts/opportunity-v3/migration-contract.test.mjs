@@ -588,12 +588,39 @@ test('legacy producer resolves one scheduled occurrence and resumes the same det
         decode('${legacyRuntimeConfigHex}','hex'),'1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2',
         '50000000-0000-4000-8000-000000000003',120
       );
+    CREATE TEMP TABLE legacy_claim_capture AS
+      SELECT * FROM public.claim_legacy_producer_job_v3_11(
+        (SELECT run_id FROM legacy_resume_capture),(SELECT job_id FROM legacy_resume_capture),
+        '50000000-0000-4000-8000-000000000003',120
+      );
+    CREATE TEMP TABLE legacy_source_result AS
+      SELECT jsonb_build_object('schema','legacy-source-sync-result-v3.11') payload;
+    CREATE TEMP TABLE legacy_complete_capture AS
+      SELECT completion.*
+      FROM legacy_source_result source
+      CROSS JOIN LATERAL public.complete_legacy_producer_job_v3_11(
+        (SELECT run_id FROM legacy_resume_capture),(SELECT job_id FROM legacy_resume_capture),
+        '50000000-0000-4000-8000-000000000003',convert_to(source.payload::text,'utf8'),source.payload,
+        encode(extensions.digest(convert_to(source.payload::text,'utf8'),'sha256'),'hex')
+      ) completion;
+    CREATE TEMP TABLE legacy_next_claim_capture AS
+      SELECT * FROM public.claim_legacy_producer_job_v3_11(
+        (SELECT run_id FROM legacy_resume_capture),(SELECT (next_job->>'jobId')::uuid FROM legacy_complete_capture),
+        '50000000-0000-4000-8000-000000000003',120
+      );
+    CREATE TEMP TABLE legacy_fail_capture AS
+      SELECT * FROM public.fail_legacy_producer_job_v3_11(
+        (SELECT run_id FROM legacy_resume_capture),(SELECT job_id FROM legacy_next_claim_capture),
+        '50000000-0000-4000-8000-000000000003','provider_unavailable'
+      );
     SELECT jsonb_build_object(
       'created',(SELECT disposition FROM legacy_lease_capture),
       'busy',(SELECT disposition FROM legacy_busy_capture),
       'resumed',(SELECT disposition FROM legacy_resume_capture),
       'sameRun',(SELECT run_id FROM legacy_lease_capture)=(SELECT run_id FROM legacy_resume_capture),
       'sameJob',(SELECT job_id FROM legacy_lease_capture)=(SELECT job_id FROM legacy_resume_capture),
+      'completed',(SELECT status FROM legacy_complete_capture),
+      'failed',(SELECT status FROM legacy_fail_capture),
       'jobDeterministic',(SELECT job_id FROM legacy_lease_capture)=(SELECT (
         substr(h,1,8)||'-'||substr(h,9,4)||'-'||substr(h,13,4)||'-'||substr(h,17,4)||'-'||substr(h,21,12)
       )::uuid FROM (SELECT encode(extensions.digest(convert_to(
@@ -605,8 +632,10 @@ test('legacy producer resolves one scheduled occurrence and resumes the same det
     ROLLBACK;
   `, ['-At']).split('\n').find((line) => line.startsWith('{')));
   assert.deepEqual({ created: result.created, busy: result.busy, resumed: result.resumed,
-    sameRun: result.sameRun, sameJob: result.sameJob, jobDeterministic: result.jobDeterministic }, {
-    created: 'created', busy: 'owner_already_leased', resumed: 'resumed', sameRun: true, sameJob: true, jobDeterministic: true,
+    sameRun: result.sameRun, sameJob: result.sameJob, completed: result.completed, failed: result.failed,
+    jobDeterministic: result.jobDeterministic }, {
+    created: 'created', busy: 'owner_already_leased', resumed: 'resumed', sameRun: true, sameJob: true,
+    completed: 'running', failed: 'running', jobDeterministic: true,
   });
   assert.equal(Number(result.scheduledHour), 18); assert.equal(Number(result.scheduledMinute), 20);
   assert.ok(Number(result.weekday) >= 1 && Number(result.weekday) <= 5);
