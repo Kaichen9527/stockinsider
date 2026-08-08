@@ -1,6 +1,6 @@
 # Fresh Requirements Gate Review — Round 100 Final Revalidation
 
-Date: 2026-08-04
+Date: 2026-08-08
 Reviewer: Codex independent gate review
 Review mode: read-only review of the final immutable implementation and repair closure
 Result: `PASS`
@@ -8,24 +8,37 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected base: `f32a2e7a8029c5e8348712d475d60b3a4729ebca`
-- Final repair-closure commit/tree: `c01104ce7d0f83ccc893b5aed4030fcba564440a` / `f44c1250824afac4e78807be1fd2bf4c8b1bfea6`
-- Full reviewed range: `f32a2e7a8029c5e8348712d475d60b3a4729ebca..c01104ce7d0f83ccc893b5aed4030fcba564440a`
-- Active graph: `f03607130c64872d30e24cf42a70ce2336ecd8a1b6c16275917dfdcbd07d0d7e`
+- Protected base: `bef6ae972fe0901696960ee59a3bf54840f1eef6`
+- Final repair-closure commit/tree: `16b62921cbaebc34e0f9554a9fb2e5b7c4e1fceb` / `1d2730f8d04ce9773093fae3023021b0bb6a24bc`
+- Full reviewed range: `bef6ae972fe0901696960ee59a3bf54840f1eef6..16b62921cbaebc34e0f9554a9fb2e5b7c4e1fceb`
+- Active graph: `bd557c0f27263dbca17610ec07469ac73835838e5cc3d6d5fe921891c82de435`
 - Acceptance inventory: `1.44.6`, 297 cases, 31 immutable PCR boundaries
 
-This is a fresh review of the current post-rebase implementation. It does not reuse the
-obsolete `edbe685` evidence. The subject was resolved from its immutable Git tree; the
+This is a fresh review of the current post-PR-19 rebase implementation. It does not reuse
+the obsolete `103c464`, `51c8330` or pre-PR-19 evidence. The subject was resolved from its immutable Git tree; the
 working tree was clean, `git diff --check` passed, and dependency/build products were
 not included in the reviewed tree.
 
-The protected model-oracle bootstrap and pinned Node toolchain sandbox amendment are
-now part of the reviewed base. Every protected model-runner and external-worker byte in
+The protected model-oracle bootstrap, pinned Node toolchain sandbox amendment, track
+prerequisites, host-pin v3.6, shared Web preparation, Apple Git sandbox repair and
+protected PostgreSQL toolchain binding are now part of the reviewed base. Every protected model-runner and external-worker byte in
 the subject is identical to that base. The read-only sandbox grant is derived from the
 real setup-node executable, rejects npm outside that exact toolchain root, and admits
 only the public macOS OpenSSL configuration in addition to the existing minimal paths.
 The post-rebase host-compatibility repair also proves that a host without the contract-pinned
 `/usr/bin/shlock` fails closed before activation instead of producing a false CI failure.
+Only one or two complete, exact Apple Git xcrun cache-denial lines are tolerated; zero,
+three, unterminated, altered or non-Git forms fail closed. The Codex version probe may
+add only its one byte-exact, LF-terminated PATH-alias warning. The non-credential sandbox
+continues to verify codesign but delegates `spctl` and real network-denial infrastructure
+to the protected live oracle; unknown modes require Gatekeeper and the ordering matrix
+uses only injected fake endpoints. Only a real,
+package-owned `/usr/lib/postgresql/<major>/bin` containing executable `initdb`, `pg_ctl`
+and `psql` may enter the protected product track. The model track receives neither grant.
+The product trace runner now revalidates that same closed directory, realpaths,
+non-world-writable ownership boundary and three executables before preserving the
+package bin in its child `PATH`; this closes the run-17 PCR-022 harness failure without
+weakening the model or evaluation environments.
 
 ## Requirement closure
 
@@ -87,7 +100,14 @@ The post-rebase host-compatibility repair also proves that a host without the co
 | Legacy V1/V2 regression | PASS `2/2` |
 | Playwright correctness/accessibility | PASS `2/2` |
 | Controlled projection performance | PASS `4/4` |
-| Model-runner and disabled doctor | PASS `15/15`; host-pin v3.5; disabled |
+| Protected worker compatibility contract | PASS `8/8` |
+| Model-runner non-credential sandbox | PASS `15/15`; host-pin v3.6; trusted live oracle remains a protected-gate obligation |
+| Evaluation semantic tests | PASS `12/12` |
+
+The protected product `249/249` and model `28/28` partitions are intentionally not
+pre-claimed by this evidence carrier. The downstream base-owned five-envelope Code Gate
+must reproduce them independently on the final subject; this Requirements PASS cannot
+mint or substitute those envelopes.
 
 Evaluation governance is separately
 `blocked/non_fabricated_elapsed_cohorts_unavailable`: the required 120 point-in-time
