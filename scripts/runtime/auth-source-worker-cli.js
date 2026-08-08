@@ -226,6 +226,7 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
   internalApiKey = process.env.INTERNAL_API_KEY,
 } = {}) {
   let legacyPayloadsPromise;
+  const authorityPagesByHash = new Map();
   return {
     source_sync: async (claim) => {
       legacyPayloadsPromise ??= loadLegacyRadarPayloads(legacyRadarBaseUrl, fetchImpl, internalApiKey);
@@ -238,8 +239,17 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
       });
     },
     mention_claim_extraction: async (claim) => {
-      if (claim.jobKind === 'revision_shard') return immutableBundle('legacy_mention_claim_result_v3_11',
-        extractRevisionCandidates(readBundle(claim, 'frozen_revision_authority')));
+      if (claim.jobKind === 'revision_shard') {
+        const bundle = readBundle(claim, 'frozen_revision_authority');
+        const pages = Array.isArray(bundle.authorityPages) ? bundle.authorityPages : [];
+        invariant(typeof bundle.authorityHash === 'string' && /^[0-9a-f]{64}$/u.test(bundle.authorityHash),
+          'frozen authority hash unavailable');
+        if (pages.length > 0) authorityPagesByHash.set(bundle.authorityHash, pages);
+        const authorityPages = pages.length > 0 ? pages : authorityPagesByHash.get(bundle.authorityHash);
+        invariant(Array.isArray(authorityPages) && authorityPages.length > 0, 'frozen authority cache unavailable');
+        return immutableBundle('legacy_mention_claim_result_v3_11',
+          extractRevisionCandidates({ ...bundle, authorityPages }));
+      }
       const bundle = readBundle(claim, 'mention_shard_results');
       const candidates = (bundle.results ?? []).flatMap((result) => Array.isArray(result?.candidates) ? result.candidates : []);
       return immutableBundle('legacy_mention_barrier_result_v3_11', { schema: 'legacy-mention-barrier-result-v3.11', candidates });

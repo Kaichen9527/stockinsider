@@ -58,6 +58,7 @@ async function stopProcess(child) {
 
 async function waitForProductionServer(url, child, logs) {
   const deadline = Date.now() + 30000;
+  let lastReadiness = 'no response received';
   while (Date.now() < deadline) {
     if (child.exitCode !== null || child.signalCode !== null) {
       assert.fail(`production Next server exited before readiness\n${logs.join('')}`);
@@ -65,10 +66,11 @@ async function waitForProductionServer(url, child, logs) {
     try {
       const response = await fetch(url);
       if (response.ok) return;
-    } catch { /* bounded readiness polling */ }
+      lastReadiness = `status ${response.status}: ${(await response.text()).slice(0, 500)}`;
+    } catch (error) { lastReadiness = error instanceof Error ? error.message : String(error); }
     await new Promise((resolve) => setTimeout(resolve, 100));
   }
-  assert.fail(`production Next server readiness timeout\n${logs.join('')}`);
+  assert.fail(`production Next server readiness timeout (${lastReadiness})\n${logs.join('')}`);
 }
 
 export async function runControlledProjectionPerformanceOracle({ root }) {

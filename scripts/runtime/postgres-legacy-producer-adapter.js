@@ -4,6 +4,7 @@ const { Pool } = require('pg');
 
 function createPostgresLegacyProducerAdapter({ connectionString }) {
   const pool = new Pool({ connectionString, max: 1, application_name: 'stockinsider-auth-source-worker-v3-11' });
+  let cachedAuthorityHash = '';
   const one = async (text, values) => (await pool.query(text, values)).rows[0] ?? null;
   const lease = (row) => row && Object.freeze({
     runId: row.run_id,
@@ -38,7 +39,19 @@ function createPostgresLegacyProducerAdapter({ connectionString }) {
   return Object.freeze({
     acquireLegacyProducerLease: async (input) => lease(await one('select * from public.acquire_legacy_producer_lease_v3_11($1,$2,$3,$4,$5,$6,$7)',
       [input.ownerLabel, input.sourceCommitSha, input.workerSha256, input.configBytes, input.configSha256, input.ownerToken, input.leaseSeconds])),
-    claimLegacyProducerJob: async (input) => claim(await one('select * from public.claim_legacy_producer_job_v3_11($1,$2,$3,$4)', [input.runId, input.jobId, input.ownerToken, input.leaseSeconds])),
+    claimLegacyProducerJob: async (input) => {
+      const row = await one(`select claimed.* from
+        (select set_config('stockinsider.legacy_authority_hash',$5,true) marker) configured
+        cross join lateral public.claim_legacy_producer_job_v3_11(
+          $1,$2,$3,$4+(length(configured.marker)*0)
+        ) claimed`, [input.runId, input.jobId, input.ownerToken, input.leaseSeconds, cachedAuthorityHash]);
+      const value = claim(row);
+      if (Array.isArray(value?.readJson?.authorityPages) && value.readJson.authorityPages.length > 0 &&
+        typeof value.readJson.authorityHash === 'string' && /^[0-9a-f]{64}$/u.test(value.readJson.authorityHash)) {
+        cachedAuthorityHash = value.readJson.authorityHash;
+      }
+      return value;
+    },
     heartbeatLegacyProducerJob: async (input) => Boolean((await one(
       'select public.heartbeat_legacy_producer_job_v3_11($1,$2,$3,$4) as alive',
       [input.runId, input.jobId, input.ownerToken, input.leaseSeconds],
