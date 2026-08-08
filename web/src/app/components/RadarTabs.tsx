@@ -158,7 +158,7 @@ type TabKey = 'stocks' | 'themes' | 'discovery';
 
 const researchMaturityLabels = {
   source_signal: '來源訊號',
-  fundamental_review: '基本面研究中',
+  fundamental_review: '基本面待覆核',
   decision_ready: '決策資料完整',
 } as const;
 
@@ -176,6 +176,16 @@ const unavailableResearchDecisionLabels = {
   source_unavailable: '研究來源暫時無法取得，等待來源恢復',
   insufficient_adjusted_history: '還原權息歷史不足，暫不產生進場判斷',
   financial_inputs_missing: '財務資料尚未完整，暫不產生估值或買進建議',
+} as const;
+
+const technicalStateLabels = {
+  below_support: '股價低於支撐',
+  reclaim_required: '需先收復支撐',
+  at_support: '位於支撐區',
+  breakout_pending: '等待突破確認',
+  breakout_confirmed: '突破已確認',
+  extended: '漲幅已延伸',
+  invalidated: '技術條件失效',
 } as const;
 
 export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrimary: boolean }) {
@@ -283,9 +293,9 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
       {availableResearchDecision ? (
         <section aria-label="研究與進場判斷" className="mt-3 rounded-xl border border-line bg-surface p-3 text-xs">
           <div className="flex flex-wrap gap-2">
-            <span className="rounded-full bg-slate-950/8 px-2.5 py-1 dark:bg-emerald-100/10">研究：{availableResearchDecision.researchMaturity}</span>
-            <span className="rounded-full bg-amber-500/12 px-2.5 py-1 text-amber-800 dark:text-amber-300">動作：{availableResearchDecision.newPositionAction}</span>
-            <span className="rounded-full bg-sky-500/12 px-2.5 py-1 text-sky-800 dark:text-sky-300">技術：{availableResearchDecision.technical.state || '資料不足'}</span>
+            <span className="rounded-full bg-slate-950/8 px-2.5 py-1 dark:bg-emerald-100/10">研究：{researchMaturityLabels[availableResearchDecision.researchMaturity]}</span>
+            <span className="rounded-full bg-amber-500/12 px-2.5 py-1 text-amber-800 dark:text-amber-300">動作：{newPositionActionLabels[availableResearchDecision.newPositionAction]}</span>
+            <span className="rounded-full bg-sky-500/12 px-2.5 py-1 text-sky-800 dark:text-sky-300">技術：{availableResearchDecision.technical.state ? technicalStateLabels[availableResearchDecision.technical.state] : '資料不足'}</span>
             {availableResearchDecision.technical.maDeviation != null ? (
               <span className="rounded-full bg-violet-500/12 px-2.5 py-1 text-violet-800 dark:text-violet-300">MA20 乖離 {(availableResearchDecision.technical.maDeviation * 100).toFixed(1)}%</span>
             ) : null}

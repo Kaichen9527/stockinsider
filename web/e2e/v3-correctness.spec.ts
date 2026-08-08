@@ -33,9 +33,14 @@ test('PCR-024 exercises the decision matrix at 320px, 200% zoom, keyboard, reduc
   await expect(page.getByText(/MA20 -4\.2%/u).first()).toBeVisible();
   await expect(page.getByText(/交易所 12\.8 · 模型 13\.4/u).first()).toBeVisible();
   await expect(page.getByText(/沒有重大變化/u).first()).toBeVisible();
-  await expect(page.getByText('研究：來源訊號')).toBeVisible();
-  await expect(page.getByText('動作：估值待覆核')).toBeVisible();
-  await expect(page.getByText('研究資料待補：財務資料尚未完整，暫不產生估值或買進建議')).toBeVisible();
+  const availableCard = page.getByRole('article', { name: /9003/u });
+  await expect(availableCard.getByText('研究：決策資料完整')).toBeVisible();
+  await expect(availableCard.getByText('動作：等待技術觸發')).toBeVisible();
+  await expect(availableCard.getByText('技術：需先收復支撐')).toBeVisible();
+  const unavailableCard = page.getByRole('article', { name: /9006/u });
+  await expect(unavailableCard.getByText('研究：來源訊號')).toBeVisible();
+  await expect(unavailableCard.getByText('動作：估值待覆核')).toBeVisible();
+  await expect(unavailableCard.getByText('研究資料待補：財務資料尚未完整，暫不產生估值或買進建議')).toBeVisible();
   expect(pageErrors).toEqual([]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
 
