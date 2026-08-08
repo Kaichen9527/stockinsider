@@ -142,6 +142,7 @@ function runNode(args, subject) {
         HOME: temporaryHome,
         NODE_ENV: 'test',
         PATH: controlledPath,
+        PLAYWRIGHT_BROWSERS_PATH: '0',
         SOURCE_LED_OPPORTUNITY_V3: 'disabled',
         TMPDIR: temporaryHome,
         TZ: 'UTC',
