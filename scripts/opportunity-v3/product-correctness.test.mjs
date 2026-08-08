@@ -608,6 +608,10 @@ const checks = {
     assert.equal(document.sourceKey, 'ptt'); assert.equal(document.acquisitionStatus, 'complete');
     assert.match(document.ingestionContentRevisionSha256, /^[0-9a-f]{64}$/u);
     assert.match(document.ingestionCanonicalContentHashV3, /^[0-9a-f]{64}$/u);
+    assert.throws(() => bootstrap.prepareLegacyDocument({ platform: 'youtube', id: 'future-publication',
+      title: '2330', summary: '', content_text: '', document_url: null,
+      published_at: '2026-08-08T02:00:00Z', collected_at: '2026-08-08T01:00:00Z' },
+    '00000000-0000-4000-8000-000000000001'), /publication timestamp after collection/u);
     const sourceCommit = 'a'.repeat(40); const attestationCommit = 'b'.repeat(40);
     const unsignedAuthority = { approvedAt: '2026-08-08T01:00:00Z', approvedBy: 'repository-owner',
       attestationCommit, commitSha: sourceCommit, expiresAt: '2026-08-08T01:15:00Z',

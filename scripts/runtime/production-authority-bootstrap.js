@@ -149,6 +149,8 @@ function normalizeField(value) {
 function prepareLegacyDocument(row, identityAuthorityId) {
   const mapping = SOURCE_MAP[row.platform];
   invariant(mapping, 'unsupported legacy source platform');
+  invariant(!row.published_at || Date.parse(row.published_at) <= Date.parse(row.collected_at),
+    'legacy publication timestamp after collection');
   const title = normalizeField(row.title); const summary = normalizeField(row.summary); const content = normalizeField(row.content_text);
   const measured = [...title].length + [...summary].length + [...content].length;
   const stable = String(row.external_id || `legacy:${row.id}`).slice(0, 512);
@@ -259,11 +261,15 @@ async function selectLegacyDocuments(client) {
 }
 
 async function appendLegacyDocuments(client, authorityByIdentity, { transactionPerBatch = false, limit = Number.POSITIVE_INFINITY } = {}) {
-  const selected = await selectLegacyDocuments(client); const prepared = []; let rejectedMissingAuthority = 0;
+  const selected = await selectLegacyDocuments(client); const prepared = [];
+  let rejectedMissingAuthority = 0; let rejectedInvalidTimestamp = 0;
   for (const row of selected.slice(0, limit)) {
     const sourceKey = SOURCE_MAP[row.platform].sourceKey;
     const authority = authorityByIdentity.get(`${row.source_entity_id}:${sourceKey}`);
     if (!authority) { rejectedMissingAuthority += 1; continue; }
+    if (row.published_at && Date.parse(row.published_at) > Date.parse(row.collected_at)) {
+      rejectedInvalidTimestamp += 1; continue;
+    }
     prepared.push(prepareLegacyDocument(row, authority));
   }
   for (let offset = 0; offset < prepared.length; offset += 100) {
@@ -289,7 +295,7 @@ async function appendLegacyDocuments(client, authorityByIdentity, { transactionP
       throw error;
     }
   }
-  return { selected: selected.length, attempted: prepared.length, rejectedMissingAuthority };
+  return { selected: selected.length, attempted: prepared.length, rejectedInvalidTimestamp, rejectedMissingAuthority };
 }
 
 async function applyProductionAuthorityBootstrap({ client, roster, commit = true }) {
