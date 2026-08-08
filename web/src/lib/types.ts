@@ -917,7 +917,7 @@ export interface AvailableResearchDecisionV311 {
     risks: string[];
     evidenceRefs: string[];
     asOf: string;
-  } | { availability: 'unavailable'; reason: string };
+  };
   technical: {
     availability: 'available' | 'unavailable';
     state: 'below_support' | 'reclaim_required' | 'at_support' | 'breakout_pending' | 'breakout_confirmed' | 'extended' | 'invalidated' | null;

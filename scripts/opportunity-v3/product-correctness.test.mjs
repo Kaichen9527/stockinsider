@@ -798,7 +798,9 @@ const checks = {
   'PCR-021': () => {
     const serialize = runtime('public-projection.js').serializeOpportunityPublicProjection;
     assert.equal(serialize({ mode: 'disabled' }), null); assert.equal(serialize({ mode: 'drain' }), null);
-    const shadow = serialize({ mode: 'shadow', legacy: { legacyField: 7 }, cards: [{ symbol: '9999', action: 'valuation_review' }] });
+    const fundamental = { thesis: '9999 已有可追溯基本面證據。', latestChange: '本次重新檢查基本面品質。',
+      risks: ['仍須持續追蹤財務風險。'], evidenceRefs: ['official-9999'], asOf: '2026-08-01T00:00:00Z' };
+    const shadow = serialize({ mode: 'shadow', legacy: { legacyField: 7 }, cards: [{ symbol: '9999', action: 'valuation_review', fundamental }] });
     assert.equal(shadow.legacyField, 7); assert.equal(shadow.cards[0].symbol, '9999');
   },
   'PCR-022': async () => {
@@ -898,9 +900,19 @@ const checks = {
   },
   'PCR-030': () => {
     const serialize = runtime('public-projection.js').serializeCorrectnessPublicUnion;
-    const value = serialize({ symbol: '2337', action: 'wait_trigger', researchMaturity: 'fundamental_review', technical: { technicalState: 'reclaim_required', trigger: { kind: 'reclaim', threshold: 100, volumeRatioMinimum: 1 }, plane: { maDeviation: -0.08, bias: { availability: 'available', bias20Pct: -8 } } },
+    const fundamental = { thesis: '2337 已有可追溯基本面證據。', latestChange: '本次重新檢查基本面品質。',
+      risks: ['仍須持續追蹤財務風險。'], evidenceRefs: ['official-2337'], asOf: '2026-08-01T00:00:00Z' };
+    const value = serialize({ symbol: '2337', action: 'wait_trigger', researchMaturity: 'fundamental_review', fundamental, technical: { technicalState: 'reclaim_required', trigger: { kind: 'reclaim', threshold: 100, volumeRatioMinimum: 1 }, plane: { maDeviation: -0.08, bias: { availability: 'available', bias20Pct: -8 } } },
       valuation: { status: 'valuation_review', reportedPe: { availability: 'unavailable', reason: 'authority_conflict' } }, evaluationDisposition: 'unchanged', lastEvaluatedAt: '2026-08-01T00:00:00Z', materialChangedBecause: [] });
-    assert.equal(value.valuation.exchangeReportedPe.reason, 'authority_conflict'); assert.equal(value.timingRisk.reason, 'reclaim_required'); assert.match(value.noChangeMessage, /無重大變化/u); assert.deepEqual(value.materialChangedBecause, []);
+    assert.deepEqual(value.fundamental, fundamental); assert.equal(value.valuation.exchangeReportedPe.reason, 'authority_conflict'); assert.equal(value.timingRisk.reason, 'reclaim_required'); assert.match(value.noChangeMessage, /無重大變化/u); assert.deepEqual(value.materialChangedBecause, []);
+    assert.throws(() => serialize({ symbol: '2337', fundamental: { availability: 'available', axes: {} } }), /fundamental thesis unavailable/u);
+    const built = runtime('auth-source-worker-cli.js').buildLegacyCandidateDecision({
+      candidate: { stockId: 'stock-2337', symbol: '2337', name: '旺宏', canonicalSector: 'semiconductor',
+        claimId: 'claim-2337', sourcePriority: 70, materialEvidenceHash: 'a'.repeat(64) },
+      facts: [], history: ohlcv(130), benchmark: ohlcv(130), sourceCutoff: '2030-01-01T00:00:00Z',
+    });
+    assert.deepEqual(built.fundamental.evidenceRefs, ['claim-2337']);
+    assert.match(built.fundamental.thesis, /point-in-time 基本面輸入尚不足/u);
   },
   'PCR-031': () => {
     const identity = runtime('comparison-identity.js'); const base = identity.buildComparableRunIdentity({ asOf: '2026-08-01', universeManifestHash: 'a'.repeat(64) });

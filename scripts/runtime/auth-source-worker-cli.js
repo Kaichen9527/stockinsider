@@ -185,8 +185,33 @@ function legacyQualityInput(facts) {
     interestCoverage: Number.isFinite(interest) && interest > 0 && Number.isFinite(operating) ? operating / interest : null };
 }
 
+function legacyFundamentalNarrative(candidate, facts, quality, sourceCutoff) {
+  const evidenceRefs = [...new Set([
+    ...facts.map((row) => Array.isArray(row) ? row[12] : null),
+    candidate.claimId,
+  ].filter((value) => typeof value === 'string' && value.length > 0))].slice(0, 8);
+  invariant(evidenceRefs.length > 0, 'legacy fundamental evidence unavailable');
+  const score = Number.isFinite(quality.score) ? Math.round(quality.score) : null;
+  const thesis = score === null
+    ? `${candidate.symbol} 已有可追溯來源訊號，但 point-in-time 基本面輸入尚不足。`
+    : `${candidate.symbol} 的 point-in-time 基本面品質分數為 ${score}，仍須結合估值與技術狀態判斷。`;
+  const risks = [
+    quality.availableWeight < 0.65 ? '基本面品質輸入覆蓋不足，不能形成買進型建議。' : null,
+    quality.qualityActionEligible !== true ? '基本面品質尚未達到新倉動作門檻。' : null,
+    '財務與來源證據仍須依最新公告持續更新。',
+  ].filter((value) => value !== null).slice(0, 4);
+  return Object.freeze({
+    thesis,
+    latestChange: '本次依最新可用的 point-in-time 財務與來源證據重新檢查基本面品質。',
+    risks,
+    evidenceRefs,
+    asOf: sourceCutoff,
+  });
+}
+
 function buildLegacyCandidateDecision({ candidate, facts, history, benchmark, sourceCutoff, valuationInput = {} }) {
   const quality = calculateFundamentalQualityAxes(legacyQualityInput(facts));
+  const fundamental = legacyFundamentalNarrative(candidate, facts, quality, sourceCutoff);
   const plane = calculateAdjustedTechnicalPlane({ rows: history, asOf: sourceCutoff, benchmark });
   const biasHistory = selectBiasTechnicalHistory({ rows: history, asOf: sourceCutoff });
   const valuation = evaluateCandidateValuation({ stockId: candidate.stockId, subjectStockId: candidate.stockId,
@@ -215,7 +240,7 @@ function buildLegacyCandidateDecision({ candidate, facts, history, benchmark, so
     benchmark.at(-1) ?? null, valuation, technical, factorAxes]));
   return { ...candidate, researchMaturity: valuation.status === 'normal' && quality.qualityActionEligible ? 'decision_ready'
     : quality.availability === 'available' ? 'fundamental_review' : 'source_signal',
-    action: actionDecision.action, fundamental: quality, technical, geometry: actionDecision.geometry,
+    action: actionDecision.action, fundamental, technical, geometry: actionDecision.geometry,
     valuation, factorAxes, reason: actionDecision.reason, lastEvaluatedAt: sourceCutoff,
     materialChangeHash, materialChangedBecause: ['factor_correctness_changed'] };
 }

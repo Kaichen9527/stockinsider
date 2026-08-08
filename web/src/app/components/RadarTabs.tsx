@@ -364,9 +364,15 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
 	        </div>
 		        <div className="rounded-xl border border-line bg-surface px-3 py-2">
 		          <p className="text-[10px] tracking-[0.14em] text-slate-500 dark:text-emerald-100/50">進場狀態</p>
-		          <p className="mt-1 text-sm font-semibold">{rec.tradeDecision?.action || rec.entryActionLabel || rec.entryReadinessLabel || '等待量價確認'}</p>
+		          <p className="mt-1 text-sm font-semibold">
+                {researchDecision?.availability === 'unavailable'
+                  ? '暫不提供進場建議'
+                  : rec.tradeDecision?.action || rec.entryActionLabel || rec.entryReadinessLabel || '等待量價確認'}
+              </p>
               <p className="mt-1 text-[11px] leading-4 text-slate-500 dark:text-emerald-100/60">
-                {rec.tradeDecision?.positionSize || rec.marketIndexSignal?.riskBudget || '依大盤與個股 Gate 決定'}
+                {researchDecision?.availability === 'unavailable'
+                  ? '待研究證據補齊後再評估'
+                  : rec.tradeDecision?.positionSize || rec.marketIndexSignal?.riskBudget || '依大盤與個股 Gate 決定'}
               </p>
 		        </div>
 		      </div>

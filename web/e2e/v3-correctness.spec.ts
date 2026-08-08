@@ -41,6 +41,9 @@ test('PCR-024 exercises the decision matrix at 320px, 200% zoom, keyboard, reduc
   await expect(unavailableCard.getByText('研究：來源訊號')).toBeVisible();
   await expect(unavailableCard.getByText('動作：估值待覆核')).toBeVisible();
   await expect(unavailableCard.getByText('研究資料待補：財務資料尚未完整，暫不產生估值或買進建議')).toBeVisible();
+  await expect(unavailableCard.getByText('暫不提供進場建議')).toBeVisible();
+  await expect(unavailableCard.getByText('待研究證據補齊後再評估')).toBeVisible();
+  await expect(unavailableCard.getByText('等待量價確認')).toHaveCount(0);
   expect(pageErrors).toEqual([]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
 

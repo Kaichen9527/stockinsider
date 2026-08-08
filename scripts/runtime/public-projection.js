@@ -11,6 +11,19 @@ function closedUnavailable(value, fallbackReason) {
   return { availability: 'unavailable', reason: value?.reason || fallbackReason };
 }
 
+function serializeFundamental(value) {
+  invariant(value && typeof value === 'object' && !Array.isArray(value), 'fundamental narrative unavailable');
+  invariant(typeof value.thesis === 'string' && value.thesis.length > 0, 'fundamental thesis unavailable');
+  invariant(typeof value.latestChange === 'string' && value.latestChange.length > 0, 'fundamental latest change unavailable');
+  invariant(Array.isArray(value.risks) && value.risks.length >= 1 && value.risks.length <= 4
+    && value.risks.every((risk) => typeof risk === 'string' && risk.length > 0), 'fundamental risks unavailable');
+  invariant(Array.isArray(value.evidenceRefs) && value.evidenceRefs.length >= 1 && value.evidenceRefs.length <= 8
+    && value.evidenceRefs.every((ref) => typeof ref === 'string' && ref.length > 0), 'fundamental evidence unavailable');
+  invariant(typeof value.asOf === 'string' && Number.isFinite(Date.parse(value.asOf)), 'fundamental as-of unavailable');
+  return { thesis: value.thesis, latestChange: value.latestChange, risks: [...value.risks],
+    evidenceRefs: [...value.evidenceRefs], asOf: value.asOf };
+}
+
 function serializeFactorAxes(value) {
   if (value?.availability !== 'available') return closedUnavailable(value, 'factor_unavailable');
   const axes = Object.fromEntries(Object.entries(value.axes || {}).map(([key, axis]) => [key,
@@ -34,7 +47,7 @@ function serializeCorrectnessPublicUnion(decision) {
     ...(decision?.name ? { name: decision.name } : {}),
     researchMaturity: MATURITY.has(decision?.researchMaturity) ? decision.researchMaturity : 'source_signal',
     newPositionAction: action,
-    fundamental: closedUnavailable(decision?.fundamental, 'fundamental_unavailable'),
+    fundamental: serializeFundamental(decision?.fundamental),
     technical: {
       availability: state ? 'available' : 'unavailable',
       state,
