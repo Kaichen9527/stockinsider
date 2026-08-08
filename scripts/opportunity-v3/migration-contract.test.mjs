@@ -613,6 +613,14 @@ test('legacy producer resolves one scheduled occurrence and resumes the same det
         (SELECT run_id FROM legacy_resume_capture),(SELECT job_id FROM legacy_next_claim_capture),
         '50000000-0000-4000-8000-000000000003','provider_unavailable'
       );
+    UPDATE public.legacy_producer_runs_v3_11 SET lease_expires_at=clock_timestamp()-interval '1 second'
+      WHERE run_id=(SELECT run_id FROM legacy_resume_capture);
+    CREATE TEMP TABLE legacy_supersede_capture AS
+      SELECT * FROM public.acquire_legacy_producer_lease_v3_11(
+        'com.stockinsider.auth-source-worker',repeat('c',40),repeat('d',64),
+        decode('${legacyRuntimeConfigHex}','hex'),'1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2',
+        '50000000-0000-4000-8000-000000000004',120
+      );
     SELECT jsonb_build_object(
       'created',(SELECT disposition FROM legacy_lease_capture),
       'busy',(SELECT disposition FROM legacy_busy_capture),
@@ -621,6 +629,9 @@ test('legacy producer resolves one scheduled occurrence and resumes the same det
       'sameJob',(SELECT job_id FROM legacy_lease_capture)=(SELECT job_id FROM legacy_resume_capture),
       'completed',(SELECT status FROM legacy_complete_capture),
       'failed',(SELECT status FROM legacy_fail_capture),
+      'superseded',(SELECT disposition FROM legacy_supersede_capture),
+      'oldRunTerminal',(SELECT status FROM public.legacy_producer_runs_v3_11 WHERE run_id=(SELECT run_id FROM legacy_resume_capture)),
+      'newRun',(SELECT run_id FROM legacy_supersede_capture)<>(SELECT run_id FROM legacy_resume_capture),
       'jobDeterministic',(SELECT job_id FROM legacy_lease_capture)=(SELECT (
         substr(h,1,8)||'-'||substr(h,9,4)||'-'||substr(h,13,4)||'-'||substr(h,17,4)||'-'||substr(h,21,12)
       )::uuid FROM (SELECT encode(extensions.digest(convert_to(
@@ -633,9 +644,11 @@ test('legacy producer resolves one scheduled occurrence and resumes the same det
   `, ['-At']).split('\n').find((line) => line.startsWith('{')));
   assert.deepEqual({ created: result.created, busy: result.busy, resumed: result.resumed,
     sameRun: result.sameRun, sameJob: result.sameJob, completed: result.completed, failed: result.failed,
+    superseded: result.superseded, oldRunTerminal: result.oldRunTerminal, newRun: result.newRun,
     jobDeterministic: result.jobDeterministic }, {
     created: 'created', busy: 'owner_already_leased', resumed: 'resumed', sameRun: true, sameJob: true,
-    completed: 'running', failed: 'running', jobDeterministic: true,
+    completed: 'running', failed: 'running', superseded: 'created', oldRunTerminal: 'cancelled',
+    newRun: true, jobDeterministic: true,
   });
   assert.equal(Number(result.scheduledHour), 18); assert.equal(Number(result.scheduledMinute), 20);
   assert.ok(Number(result.weekday) >= 1 && Number(result.weekday) <= 5);
@@ -700,12 +713,16 @@ test('legacy fact-plane benchmark reads the market observation timestamp contrac
 });
 
 test('legacy producer claim plane carries prior discovery and analysis lineage across successful runs', () => {
+  const acquireBody = sql.match(/CREATE OR REPLACE FUNCTION acquire_legacy_producer_lease_v3_11[\s\S]*?\nEND \$\$;/u)?.[0] ?? '';
   const claimBody = sql.match(/CREATE OR REPLACE FUNCTION claim_legacy_producer_job_v3_11[\s\S]*?\nEND \$\$;/u)?.[0] ?? '';
   const completionBody = sql.match(/CREATE OR REPLACE FUNCTION complete_legacy_producer_job_v3_11[\s\S]*?\nEND \$\$;/u)?.[0] ?? '';
   const heartbeatBody = sql.match(/CREATE OR REPLACE FUNCTION heartbeat_legacy_producer_job_v3_11[\s\S]*?\nEND \$\$;/u)?.[0] ?? '';
   const failBody = sql.match(/CREATE OR REPLACE FUNCTION fail_legacy_producer_job_v3_11[\s\S]*?\nEND \$\$;/u)?.[0] ?? '';
   const primaryFailBody = sql.match(/CREATE OR REPLACE FUNCTION fail_opportunity_job_v3[\s\S]*?\n\$fn\$;/u)?.[0] ?? '';
   assert.match(claimBody, /'priorLedger'[\s\S]*prior_run[.]status='success'[\s\S]*legacy_candidate_discovery_ledger_v3_11/u);
+  assert.match(acquireBody, /producer_commit_sha<>p_commit OR worker_sha256<>p_worker OR scheduler_config_sha256<>p_config_hash[\s\S]*status='cancelled'/u);
+  assert.match(claimBody, /UPDATE public[.]legacy_producer_runs_v3_11 SET heartbeat_at=v_now,lease_expires_at=v_now\+interval '120 seconds'/u);
+  assert.match(claimBody, /current_setting\('stockinsider[.]legacy_authority_hash',true\) IS DISTINCT FROM v_run[.]authority_hash/u);
   assert.match(claimBody, /ORDER BY prior_run[.]source_cutoff DESC,prior_run[.]terminal_at DESC,prior_run[.]run_id LIMIT 1/u);
   assert.match(claimBody, /'priorRevisions'[\s\S]*legacy_analysis_revisions_v3_11[\s\S]*revision[.]source_cutoff<v_run[.]source_cutoff/u);
   assert.match(completionBody, /CASE WHEN v_revision_created THEN 'material_revision_created' ELSE 'no_material_change' END/u);

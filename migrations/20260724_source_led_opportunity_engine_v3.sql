@@ -17540,13 +17540,23 @@ BEGIN
     IF (SELECT lease_expires_at>=v_now FROM public.legacy_producer_runs_v3_11 WHERE run_id=v_run) THEN
       RETURN ROW(NULL,NULL,'owner_already_leased',NULL,NULL)::public.legacy_producer_lease_v3_11;
     END IF;
-    UPDATE public.legacy_producer_jobs_v3_11 SET status='retryable',owner_token_hash=NULL,leased_at=NULL,heartbeat_at=NULL,lease_expires_at=NULL
-      WHERE run_id=v_run AND status='leased' AND lease_expires_at<v_now;
-    UPDATE public.legacy_producer_runs_v3_11 SET owner_token_hash=v_token_hash,heartbeat_at=v_now,lease_expires_at=v_now+interval '120 seconds' WHERE run_id=v_run;
-    SELECT job_id INTO v_job FROM public.legacy_producer_jobs_v3_11 WHERE run_id=v_run AND status IN ('queued','retryable') ORDER BY execution_ordinal LIMIT 1;
-    RETURN ROW(v_run,v_job,'resumed',
-      (SELECT source_cutoff FROM public.legacy_producer_runs_v3_11 WHERE run_id=v_run),
-      (SELECT authority_hash FROM public.legacy_producer_runs_v3_11 WHERE run_id=v_run))::public.legacy_producer_lease_v3_11;
+    IF EXISTS(SELECT 1 FROM public.legacy_producer_runs_v3_11 WHERE run_id=v_run
+      AND (producer_commit_sha<>p_commit OR worker_sha256<>p_worker OR scheduler_config_sha256<>p_config_hash)) THEN
+      UPDATE public.legacy_producer_jobs_v3_11 SET status='cancelled',terminal_at=v_now,failure_code='cancelled',
+        owner_token_hash=NULL,leased_at=NULL,heartbeat_at=NULL,lease_expires_at=NULL
+        WHERE run_id=v_run AND status IN ('queued','leased','retryable');
+      UPDATE public.legacy_producer_runs_v3_11 SET status='cancelled',terminal_at=v_now,failure_code='cancelled',
+        heartbeat_at=v_now,lease_expires_at=v_now WHERE run_id=v_run;
+      v_run:=NULL;
+    ELSE
+      UPDATE public.legacy_producer_jobs_v3_11 SET status='retryable',owner_token_hash=NULL,leased_at=NULL,heartbeat_at=NULL,lease_expires_at=NULL
+        WHERE run_id=v_run AND status='leased' AND lease_expires_at<v_now;
+      UPDATE public.legacy_producer_runs_v3_11 SET owner_token_hash=v_token_hash,heartbeat_at=v_now,lease_expires_at=v_now+interval '120 seconds' WHERE run_id=v_run;
+      SELECT job_id INTO v_job FROM public.legacy_producer_jobs_v3_11 WHERE run_id=v_run AND status IN ('queued','retryable') ORDER BY execution_ordinal LIMIT 1;
+      RETURN ROW(v_run,v_job,'resumed',
+        (SELECT source_cutoff FROM public.legacy_producer_runs_v3_11 WHERE run_id=v_run),
+        (SELECT authority_hash FROM public.legacy_producer_runs_v3_11 WHERE run_id=v_run))::public.legacy_producer_lease_v3_11;
+    END IF;
   END IF;
   v_occ:=public.resolve_legacy_scheduled_occurrence_v3_11(p_owner,p_config_hash);
   v_logical_key:=encode(extensions.digest(convert_to(regexp_replace(jsonb_build_array(
@@ -17593,7 +17603,7 @@ END $$;
 
 CREATE OR REPLACE FUNCTION claim_legacy_producer_job_v3_11(p_run uuid,p_job uuid,p_token uuid,p_lease integer)
 RETURNS legacy_producer_claim_v3_11 LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $$
-DECLARE v_job public.legacy_producer_jobs_v3_11%ROWTYPE;v_run public.legacy_producer_runs_v3_11%ROWTYPE;v_payload public.legacy_producer_job_payloads_v3_11%ROWTYPE;v_prior public.legacy_producer_job_results_v3_11%ROWTYPE;v_source_result public.legacy_producer_job_results_v3_11%ROWTYPE;v_frozen public.legacy_frozen_revision_read_v3_11;v_frozen_json jsonb;v_frozen_bytes bytea;v_frozen_hash text;v_now timestamptz:=date_trunc('second',clock_timestamp());v_hash text;v_selected_hash text;v_read_kind text;v_read_json jsonb;v_read_bytes bytea;v_read_hash text;v_read_count integer;
+DECLARE v_job public.legacy_producer_jobs_v3_11%ROWTYPE;v_run public.legacy_producer_runs_v3_11%ROWTYPE;v_payload public.legacy_producer_job_payloads_v3_11%ROWTYPE;v_prior public.legacy_producer_job_results_v3_11%ROWTYPE;v_source_result public.legacy_producer_job_results_v3_11%ROWTYPE;v_frozen public.legacy_frozen_revision_read_v3_11;v_frozen_json jsonb;v_frozen_bytes bytea;v_frozen_hash text;v_now timestamptz:=date_trunc('second',clock_timestamp());v_hash text;v_selected_hash text;v_read_kind text;v_read_json jsonb;v_read_bytes bytea;v_read_hash text;v_read_count integer;v_include_authority boolean:=false;
 BEGIN
   IF p_lease<>120 THEN RETURN NULL; END IF;v_hash:=encode(extensions.digest(convert_to(p_token::text,'utf8'),'sha256'),'hex');
   SELECT * INTO v_run FROM public.legacy_producer_runs_v3_11 WHERE run_id=p_run AND status='running' AND owner_token_hash=v_hash AND lease_expires_at>=v_now FOR UPDATE;
@@ -17601,6 +17611,7 @@ BEGIN
   SELECT * INTO v_job FROM public.legacy_producer_jobs_v3_11 WHERE job_id=p_job AND run_id=p_run AND status IN ('queued','retryable') FOR UPDATE;
   IF NOT FOUND THEN RETURN NULL; END IF;
   UPDATE public.legacy_producer_jobs_v3_11 SET status='leased',attempt=attempt+1,owner_token_hash=v_hash,leased_at=v_now,heartbeat_at=v_now,lease_expires_at=v_now+interval '120 seconds' WHERE job_id=p_job RETURNING * INTO v_job;
+  UPDATE public.legacy_producer_runs_v3_11 SET heartbeat_at=v_now,lease_expires_at=v_now+interval '120 seconds' WHERE run_id=p_run;
   SELECT * INTO v_payload FROM public.legacy_producer_job_payloads_v3_11 WHERE job_id=p_job;
   IF v_job.predecessor_job_id IS NOT NULL THEN SELECT * INTO v_prior FROM public.legacy_producer_job_results_v3_11 WHERE job_id=v_job.predecessor_job_id; END IF;
   IF v_job.job_kind='revision_shard' THEN
@@ -17613,14 +17624,21 @@ BEGIN
   IF v_job.stage<>'source_sync' THEN
     IF v_job.job_kind='revision_shard' THEN
       v_read_kind:='frozen_revision_authority';
-      SELECT jsonb_build_object(
-        'authorityHash',v_run.authority_hash,
-        'authorityPages',coalesce(jsonb_agg(jsonb_build_array(page_kind,page_ordinal,page_hash,page_json)
-          ORDER BY page_kind,page_ordinal),'[]'::jsonb),
-        'frozenRevision',v_frozen_json
-      ),coalesce(sum(row_count),0)::integer
-      INTO v_read_json,v_read_count
-      FROM public.legacy_producer_authority_pages_v3_11 WHERE run_id=p_run;
+      v_include_authority:=current_setting('stockinsider.legacy_authority_hash',true) IS DISTINCT FROM v_run.authority_hash;
+      IF v_include_authority THEN
+        SELECT jsonb_build_object(
+          'authorityHash',v_run.authority_hash,
+          'authorityPages',coalesce(jsonb_agg(jsonb_build_array(page_kind,page_ordinal,page_hash,page_json)
+            ORDER BY page_kind,page_ordinal),'[]'::jsonb),
+          'frozenRevision',v_frozen_json
+        ),coalesce(sum(row_count),0)::integer
+        INTO v_read_json,v_read_count
+        FROM public.legacy_producer_authority_pages_v3_11 WHERE run_id=p_run;
+      ELSE
+        v_read_json:=jsonb_build_object('authorityHash',v_run.authority_hash,'authorityPages','[]'::jsonb,
+          'frozenRevision',v_frozen_json);
+        v_read_count:=1;
+      END IF;
     ELSIF v_job.stage='mention_claim_extraction' THEN
       v_read_kind:='mention_shard_results';
       SELECT jsonb_build_object('results',coalesce(jsonb_agg(result.result_json ORDER BY job.shard_ordinal),'[]'::jsonb)),count(*)::integer

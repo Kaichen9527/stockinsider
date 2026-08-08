@@ -479,6 +479,9 @@ const checks = {
     assert.equal(fetchCount, 3); assert.deepEqual(Object.keys(captured.json.legacyPayloads).sort(), ['daily','home','hot','weekly']);
     assert.equal(captured.json.legacyPayloadHashes.home, captured.json.legacyPayloadHashes.daily);
     const parser = runtime('auth-source-worker-cli.js');
+    const adapterSource = readFileSync(path.join(root, 'scripts/runtime/postgres-legacy-producer-adapter.js'), 'utf8');
+    assert.match(adapterSource, /set_config\('stockinsider[.]legacy_authority_hash',\$5,true\)[\s\S]*length\(configured[.]marker\)\*0/u,
+      'transaction-pooler-safe claims explicitly carry the worker authority cache state');
     assert.equal(parser.LEGACY_RADAR_FETCH_TIMEOUT_MS, 60000, 'bootstrap producer reads admit the measured Vercel cold legacy path');
     const authorityPages = [['roster', null, null, [[
       '00000000-0000-4000-8000-000000002330', '2330', 'TWSE', 'common_stock', 'active', '台灣積體電路製造', '台積電',
@@ -502,6 +505,35 @@ const checks = {
       rawFieldPayload: { text: '台積電財報與股價展望更新。' },
     }, authorityPages });
     assert.equal(official.candidates[0].sourceClass, 'official');
+    const authorityHash = 'e'.repeat(64);
+    const firstFrozenRead = runtime('codec.js').immutableBundle('frozen_revision_authority', {
+      authorityHash, authorityPages, frozenRevision: {
+        revisionId: '00000000-0000-4000-8000-000000000004', sourceKey: 'threads',
+        rawFieldPayload: { text: '台積電 2330 股價轉強。' },
+      },
+    });
+    const firstFrozen = await handlers.mention_claim_extraction({ jobKind: 'revision_shard',
+      readKind: 'frozen_revision_authority', readCanonical: firstFrozenRead.canonical,
+      readJson: firstFrozenRead.json, readHash: firstFrozenRead.hash });
+    assert.equal(firstFrozen.json.candidates.length, 1);
+    const cachedFrozenRead = runtime('codec.js').immutableBundle('frozen_revision_authority', {
+      authorityHash, authorityPages: [], frozenRevision: {
+        revisionId: '00000000-0000-4000-8000-000000000005', sourceKey: 'threads',
+        rawFieldPayload: { text: '台積電財報與股價更新。' },
+      },
+    });
+    const cachedFrozen = await handlers.mention_claim_extraction({ jobKind: 'revision_shard',
+      readKind: 'frozen_revision_authority', readCanonical: cachedFrozenRead.canonical,
+      readJson: cachedFrozenRead.json, readHash: cachedFrozenRead.hash });
+    assert.equal(cachedFrozen.json.candidates.length, 1, 'same-session shards reuse the hash-bound authority plane');
+    const uncachedRead = runtime('codec.js').immutableBundle('frozen_revision_authority', {
+      authorityHash: 'f'.repeat(64), authorityPages: [], frozenRevision: {
+        revisionId: '00000000-0000-4000-8000-000000000006', sourceKey: 'threads', rawFieldPayload: { text: '2330 股票' },
+      },
+    });
+    await assert.rejects(() => handlers.mention_claim_extraction({ jobKind: 'revision_shard',
+      readKind: 'frozen_revision_authority', readCanonical: uncachedRead.canonical,
+      readJson: uncachedRead.json, readHash: uncachedRead.hash }), /frozen authority cache unavailable/u);
     const retryRead = runtime('codec.js').immutableBundle('compact_projection_input', { analysisResult: { decisions: [] },
       sourceCutoff: '2026-08-01T10:20:00Z', legacyPayloads: captured.json.legacyPayloads,
       legacyPayloadHashes: captured.json.legacyPayloadHashes, legacySourceResultHash: captured.hash });
