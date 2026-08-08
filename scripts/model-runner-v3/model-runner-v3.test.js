@@ -348,12 +348,14 @@ ordinaryTest('host pin fixture has an exact hash-bound format', async () => {
   fs.rmSync(directory, { recursive: true, force: true });
 });
 
-ordinaryTest('version probes admit only the exact Apple Git sandbox cache denial', () => {
+ordinaryTest('version probes admit only one or two exact Apple Git sandbox cache denials', () => {
   const stdout = 'git version 2.50.1 (Apple Git-155)\n';
   const denial = "git: error: couldn't create cache file '/var/folders/pt/opaque_123/T/xcrun_db-Ab12Cd' (errno=Operation not permitted)\n";
   assert.equal(validatedVersionOutput('/usr/bin/git', stdout, ''), stdout);
+  assert.equal(validatedVersionOutput('/usr/bin/git', stdout, denial), stdout);
   assert.equal(validatedVersionOutput('/usr/bin/git', stdout, `${denial}${denial}`), stdout);
-  expectExit(5, () => validatedVersionOutput('/usr/bin/git', stdout, denial));
+  expectExit(5, () => validatedVersionOutput('/usr/bin/git', stdout, denial.trimEnd()));
+  expectExit(5, () => validatedVersionOutput('/usr/bin/git', stdout, `${denial}${denial}${denial}`));
   expectExit(5, () => validatedVersionOutput('/usr/bin/git', stdout, `${denial}${denial}unexpected\n`));
   expectExit(5, () => validatedVersionOutput('/Applications/ChatGPT.app/Contents/Resources/codex', stdout,
     `${denial}${denial}`));

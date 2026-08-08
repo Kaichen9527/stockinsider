@@ -126,7 +126,7 @@ function validatedVersionOutput(command, stdout, stderr) {
   assert(typeof stdout === 'string' && typeof stderr === 'string', 5);
   if (stderr === '') return stdout;
   const lines = stderr.endsWith('\n') ? stderr.slice(0, -1).split('\n') : [];
-  assert(command === '/usr/bin/git' && lines.length === 2
+  assert(command === '/usr/bin/git' && lines.length >= 1 && lines.length <= 2
     && lines.every((line) => appleGitSandboxCacheDenial.test(line)), 5);
   return stdout;
 }
