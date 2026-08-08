@@ -260,6 +260,31 @@ const checks = {
       launchctl: (args) => ({ status: 0, stdout: args[0] === 'start' ? '' : '"LastExitStatus" = 78;' }),
       waitOneSecond: async () => {},
     }), { code: 'scheduler_activation_failed' });
+    const ownerReplacementCalls = [];
+    await localPlatform.replaceOwnerAndWait('com.stockinsider.test-owner', '/tmp/test-owner.plist',
+      Buffer.from('new-owner'), { enabled: true }, {
+        launchctl: (args) => ownerReplacementCalls.push(['launchctl', ...args]),
+        atomicOwnedFile: (target, bytes) => ownerReplacementCalls.push(['install', target, bytes.toString('utf8')]),
+        startOwnerAndWait: async (label) => ownerReplacementCalls.push(['wait', label]),
+      });
+    assert.deepEqual(ownerReplacementCalls, [
+      ['launchctl', 'unload', '/tmp/test-owner.plist'],
+      ['install', '/tmp/test-owner.plist', 'new-owner'],
+      ['launchctl', 'load', '/tmp/test-owner.plist'],
+      ['wait', 'com.stockinsider.test-owner'],
+    ]);
+    ownerReplacementCalls.length = 0;
+    await localPlatform.replaceOwnerAndWait('com.stockinsider.test-owner', '/tmp/test-owner.plist',
+      Buffer.from('new-owner'), { enabled: false }, {
+        launchctl: (args) => ownerReplacementCalls.push(['launchctl', ...args]),
+        atomicOwnedFile: (target, bytes) => ownerReplacementCalls.push(['install', target, bytes.toString('utf8')]),
+        startOwnerAndWait: async (label) => ownerReplacementCalls.push(['wait', label]),
+      });
+    assert.deepEqual(ownerReplacementCalls, [
+      ['install', '/tmp/test-owner.plist', 'new-owner'],
+      ['launchctl', 'load', '/tmp/test-owner.plist'],
+      ['wait', 'com.stockinsider.test-owner'],
+    ]);
     const schedulerCaptureRoot = mkdtempSync(path.join(os.tmpdir(), 'scheduler-capture-nofollow-'));
     try {
       const plistPath = path.join(schedulerCaptureRoot, 'legacy.plist');
