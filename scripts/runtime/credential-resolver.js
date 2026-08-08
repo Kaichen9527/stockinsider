@@ -12,10 +12,23 @@ const RUNTIME_ENVIRONMENT_KEYS = Object.freeze([
   'HOME', 'INTERNAL_API_KEY_REF', 'NODE_ENV', 'PATH', 'STOCKINSIDER_DATABASE_URL_REF',
   'STOCKINSIDER_REVIEWED_COMMIT_SHA', 'TZ',
 ]);
+const DARWIN_TEXT_ENCODING_KEY = '__CF_USER_TEXT_ENCODING';
 
-function assertExactRuntimeEnvironment(environment = process.env) {
-  invariant(environment && typeof environment === 'object' &&
-    JSON.stringify(Object.keys(environment).sort()) === JSON.stringify([...RUNTIME_ENVIRONMENT_KEYS].sort()),
+function isOwnedDarwinTextEncoding(value) {
+  const match = /^0x([0-9a-f]+):0x([0-9a-f]+):0x([0-9a-f]+)$/iu.exec(value ?? '');
+  return Boolean(match) && Number.parseInt(match[1], 16) === process.getuid();
+}
+
+function assertExactRuntimeEnvironment(environment = process.env, platform = process.platform) {
+  const environmentIsObject = environment && typeof environment === 'object';
+  const keys = environmentIsObject ? Object.keys(environment) : [];
+  const hasOwnedDarwinTextEncoding = environmentIsObject && platform === 'darwin' &&
+    isOwnedDarwinTextEncoding(environment[DARWIN_TEXT_ENCODING_KEY]);
+  const reviewedKeys = hasOwnedDarwinTextEncoding
+    ? keys.filter((key) => key !== DARWIN_TEXT_ENCODING_KEY)
+    : keys;
+  invariant(environmentIsObject &&
+    JSON.stringify(reviewedKeys.sort()) === JSON.stringify([...RUNTIME_ENVIRONMENT_KEYS].sort()),
   'runtime environment not isolated');
   invariant(typeof environment.HOME === 'string' && environment.HOME.startsWith('/') &&
     environment.PATH === '/usr/bin:/bin' && environment.NODE_ENV === 'production' && environment.TZ === 'Asia/Taipei' &&
