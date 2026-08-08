@@ -218,6 +218,13 @@ const checks = {
       STOCKINSIDER_DATABASE_URL_REF: 'keychain:stockinsider-runtime:database-url',
       INTERNAL_API_KEY_REF: 'keychain:stockinsider-runtime:internal-api-key' };
     assert.doesNotThrow(() => runtime('credential-resolver.js').assertExactRuntimeEnvironment(isolatedEnvironment));
+    const darwinEnvironment = { ...isolatedEnvironment,
+      __CF_USER_TEXT_ENCODING: `0x${process.getuid().toString(16)}:0x0:0x0` };
+    assert.doesNotThrow(() => runtime('credential-resolver.js').assertExactRuntimeEnvironment(darwinEnvironment, 'darwin'));
+    assert.throws(() => runtime('credential-resolver.js').assertExactRuntimeEnvironment(darwinEnvironment, 'linux'),
+      /runtime environment not isolated/u);
+    assert.throws(() => runtime('credential-resolver.js').assertExactRuntimeEnvironment({ ...isolatedEnvironment,
+      __CF_USER_TEXT_ENCODING: '0x0:0x0:0x0' }, 'darwin'), /runtime environment not isolated/u);
     for (const injected of ['NODE_OPTIONS','DYLD_INSERT_LIBRARIES','HTTPS_PROXY','GIT_CONFIG_GLOBAL','npm_config_userconfig']) {
       assert.throws(() => runtime('credential-resolver.js').assertExactRuntimeEnvironment({ ...isolatedEnvironment,
         [injected]: '/tmp/unreviewed' }), /runtime environment not isolated/u);
