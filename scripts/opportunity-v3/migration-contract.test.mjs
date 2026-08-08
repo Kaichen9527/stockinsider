@@ -250,26 +250,6 @@ after(() => {
   fs.rmSync(cluster.directory, { recursive: true, force: true });
 });
 
-test('managed non-superuser migration retains only NOLOGIN owner memberships', () => {
-  assert.match(sql, /GRANT opportunity_v3_rpc_owner TO CURRENT_USER;/u);
-  assert.match(sql, /GRANT legacy_correctness_rpc_owner TO CURRENT_USER;/u);
-  assert.match(sql, /GRANT USAGE, CREATE ON SCHEMA public TO opportunity_v3_rpc_owner;/u);
-  assert.match(sql, /GRANT CREATE ON SCHEMA public TO legacy_correctness_rpc_owner;/u);
-  assert.match(sql, /REVOKE CREATE ON SCHEMA public FROM legacy_correctness_rpc_owner,opportunity_v3_rpc_owner;/u);
-  assert.doesNotMatch(sql, /REVOKE (?:legacy_correctness_rpc_owner|opportunity_v3_rpc_owner) FROM CURRENT_USER/u);
-  const rows = JSON.parse(psql(`
-    SELECT json_agg(json_build_object(
-      'role', requested.role_name,
-      'member', pg_has_role('stockinsider_managed_migrator', requested.role_name, 'MEMBER')
-    ) ORDER BY requested.role_name)
-    FROM (VALUES ('legacy_correctness_rpc_owner'),('opportunity_v3_rpc_owner')) requested(role_name);
-  `, ['-t', '-A']));
-  assert.deepEqual(rows, [
-    { role: 'legacy_correctness_rpc_owner', member: true },
-    { role: 'opportunity_v3_rpc_owner', member: true },
-  ]);
-});
-
 const functions = [
   'consume_internal_nonce_v3', 'purge_internal_nonces_v3', 'append_source_document_revision_v3',
   'append_instrument_roster_authority_v3', 'append_stock_sector_assignment_v3', 'append_trading_session_v3',
@@ -431,6 +411,23 @@ test('allocation and projection persist only hash-valid authoritative decision g
 });
 
 test('migration applies twice and exposes the exact granted/private function boundary', () => {
+  assert.match(sql, /GRANT opportunity_v3_rpc_owner TO CURRENT_USER;/u);
+  assert.match(sql, /GRANT legacy_correctness_rpc_owner TO CURRENT_USER;/u);
+  assert.match(sql, /GRANT USAGE, CREATE ON SCHEMA public TO opportunity_v3_rpc_owner;/u);
+  assert.match(sql, /GRANT CREATE ON SCHEMA public TO legacy_correctness_rpc_owner;/u);
+  assert.match(sql, /REVOKE CREATE ON SCHEMA public FROM legacy_correctness_rpc_owner,opportunity_v3_rpc_owner;/u);
+  assert.doesNotMatch(sql, /REVOKE (?:legacy_correctness_rpc_owner|opportunity_v3_rpc_owner) FROM CURRENT_USER/u);
+  const retainedOwnerMemberships = JSON.parse(psql(`
+    SELECT json_agg(json_build_object(
+      'role', requested.role_name,
+      'member', pg_has_role('stockinsider_managed_migrator', requested.role_name, 'MEMBER')
+    ) ORDER BY requested.role_name)
+    FROM (VALUES ('legacy_correctness_rpc_owner'),('opportunity_v3_rpc_owner')) requested(role_name);
+  `, ['-t', '-A']));
+  assert.deepEqual(retainedOwnerMemberships, [
+    { role: 'legacy_correctness_rpc_owner', member: true },
+    { role: 'opportunity_v3_rpc_owner', member: true },
+  ]);
   const applied = psql(`
     WITH expected(name) AS (
       SELECT unnest(ARRAY[${functions.map((name) => `'${name}'`).join(',')}])
