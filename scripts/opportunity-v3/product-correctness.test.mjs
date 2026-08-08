@@ -703,6 +703,11 @@ const checks = {
     assert.match(gateRunner, /const traceHome = track === 'model_runner' \? process\.env\.HOME \?\? '' : '\/tmp';/u);
     assert.match(gateRunner, /const traceTemp = track === 'model_runner' \? process\.env\.TMPDIR \?\? '' : '\/tmp';/u);
     assert.match(gateRunner, /model trace must retain one staged HOME\/TMPDIR/u);
+    assert.ok(gateRunner.includes('/^\\/usr\\/lib\\/postgresql\\/[0-9]+\\/bin$/u'));
+    assert.match(gateRunner, /product trace PostgreSQL bin is non-world-writable/u);
+    assert.match(gateRunner, /for \(const name of \['initdb', 'pg_ctl', 'psql'\]\)/u);
+    assert.match(gateRunner, /OPPORTUNITY_V3_POSTGRES_BIN: directory/u);
+    assert.match(gateRunner, /PATH: `\$\{directory\}\$\{path[.]delimiter\}\/usr\/local\/bin:\/usr\/bin:\/bin`/u);
     assert.match(gateRunner, /HOME: traceHome/u);
     assert.match(gateRunner, /TMPDIR: traceTemp/u);
     assert.match(workflow, /PLAYWRIGHT_BROWSERS_PATH: "0"/u);

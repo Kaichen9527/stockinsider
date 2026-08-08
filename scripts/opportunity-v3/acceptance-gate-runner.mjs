@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
+import { lstatSync, readFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 
@@ -52,13 +52,46 @@ if (track === 'model_runner') {
   );
 }
 
+function protectedPostgresEnvironment() {
+  if (track !== 'product_runtime') return {};
+  const directory = process.env.OPPORTUNITY_V3_POSTGRES_BIN ?? '';
+  assert.match(directory, /^\/usr\/lib\/postgresql\/[0-9]+\/bin$/u,
+    'product trace requires the protected PostgreSQL package bin');
+  assert.equal(realpathSync(directory), directory, 'product trace PostgreSQL bin realpath');
+  const directoryStat = lstatSync(directory);
+  assert.equal(
+    directoryStat.isDirectory() && !directoryStat.isSymbolicLink() && (directoryStat.mode & 0o002) === 0,
+    true,
+    'product trace PostgreSQL bin is non-world-writable',
+  );
+  for (const name of ['initdb', 'pg_ctl', 'psql']) {
+    const executable = path.join(directory, name);
+    const executableStat = lstatSync(executable);
+    assert.equal(realpathSync(executable), executable, `product trace PostgreSQL ${name} realpath`);
+    assert.equal(
+      executableStat.isFile() && !executableStat.isSymbolicLink() && (executableStat.mode & 0o111) !== 0,
+      true,
+      `product trace PostgreSQL ${name} executable`,
+    );
+  }
+  return {
+    OPPORTUNITY_V3_POSTGRES_BIN: directory,
+    PATH: `${directory}${path.delimiter}/usr/local/bin:/usr/bin:/bin`,
+  };
+}
+
+const postgresEnvironment = protectedPostgresEnvironment();
+
 const traceEnvironment = {
-  PATH: track === 'model_runner' ? '/usr/bin:/bin' : '/usr/local/bin:/usr/bin:/bin',
+  PATH: track === 'model_runner'
+    ? '/usr/bin:/bin'
+    : postgresEnvironment.PATH ?? '/usr/local/bin:/usr/bin:/bin',
   HOME: traceHome,
   TMPDIR: traceTemp,
   LC_ALL: 'C',
   LANG: 'C',
   TZ: 'Asia/Taipei',
+  ...postgresEnvironment,
   ...(track === 'model_runner' ? { OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH: '1' } : {}),
 };
 
