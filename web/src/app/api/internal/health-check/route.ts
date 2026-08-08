@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getSupabaseServerClient } from '@/lib/supabase-server';
 import { resolveDataMode } from '@/lib/data-mode';
 import { summarizeMetaEnvConfig } from '@/lib/source-auth';
-import { assessTrackedRuntimeHealth } from '@/lib/opportunity-v3/runtime-health';
+import { assessTrackedRuntimeHealth, runtimeObservationMatchesProducer } from '@/lib/opportunity-v3/runtime-health';
 import type { RuntimeHealthObservation } from '@/lib/opportunity-v3/runtime-health';
 import { sha256Canonical } from '@/lib/opportunity-v3/canonical';
 import { requireInternalAuth } from '@/lib/internal-auth';
@@ -106,7 +106,10 @@ export async function GET(request: Request) {
       ? runtimeRun?.status as 'success' | 'failed' | 'cancelled' : null;
     const directCompatibility = directProducerCommit && process.env.VERCEL_GIT_COMMIT_SHA === directProducerCommit
       ? 'compatible' as const : 'unknown' as const;
-    if (recordedObservation && typeof recordedObservation === 'object') {
+    const observationMatchesProducer = runtimeObservationMatchesProducer(recordedObservation, {
+      commitSha: directProducerCommit, workerSha256: directWorkerSha, schedulerConfigSha256: directConfigSha,
+    });
+    if (recordedObservation && observationMatchesProducer) {
       sourceLedRuntime = assessTrackedRuntimeHealth({
         manifestPresent: recordedObservation.manifestPresent === true,
         manifestCanonical: recordedObservation.manifestCanonical === true,
