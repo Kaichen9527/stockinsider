@@ -3,6 +3,7 @@ import { getHotRadarData } from '@/lib/domain';
 import { compactRadarEtag, legacyCorrectnessProjectionEnabled, loadPublishedRadarProjection,
   RadarProjectionUnavailableError } from '@/lib/radar-projection-read';
 import { requireExactInternalBearer } from '@/lib/internal-auth';
+import { compactProducerRadarPayload } from '@/lib/radar-producer-payload';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -21,7 +22,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(compact, { headers });
     }
     const data = await getHotRadarData();
-    return NextResponse.json(data);
+    return NextResponse.json(producerRead
+      ? compactProducerRadarPayload(data as unknown as Record<string, unknown>)
+      : data);
   } catch (error) {
     if (legacyCorrectnessProjectionEnabled() && error instanceof RadarProjectionUnavailableError) {
       return NextResponse.json({ error: 'radar_projection_unavailable', retryable: true }, { status: 503 });

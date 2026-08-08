@@ -9,6 +9,7 @@ import { runControlledProjectionPerformanceOracle } from './performance-harness.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const require = createRequire(import.meta.url);
 const { publishCompactRadarProjection } = require(path.join(root, 'scripts/runtime/compact-radar-projection.js'));
+const { compactProducerRadarPayload, producerRadarPayloadBytes } = require(path.join(root, 'web/src/lib/radar-producer-payload.js'));
 
 test('compact radar projection is bounded and has deterministic cache identity', () => {
   const decisions = Array.from({ length: 60 }, (_, index) => ({
@@ -25,6 +26,43 @@ test('compact radar projection is bounded and has deterministic cache identity',
   assert.equal(first.payload.sourceSignals.length, 30);
   assert.equal(first.storageWindow, 'daily');
   assert.equal(first.projectionKey, `legacy-radar-v3.11:daily:2026-08-01T00:00:00Z:${first.payloadChecksum}`);
+
+  const oversized = 'x'.repeat(4000);
+  const card = (index) => ({
+    recommendationId: `recommendation-${index}`, symbol: String(8000 + index), name: `stock-${index}`,
+    currentPrice: 100 + index, score: 80, confidence: 'medium', action: 'watch',
+    rationale: oversized, thesisSummary: oversized, catalystSummary: oversized,
+    entryReadinessReasons: [oversized, oversized, oversized, oversized],
+    entryDecision: { action: 'wait_trigger', buyZone: oversized, stopLoss: oversized, invalidation: oversized,
+      buyNowAllowed: false, indicatorStack: { oversized } },
+    tradeDecision: { action: 'wait_trigger', entryZone: oversized, stopLoss: oversized, takeProfit: oversized,
+      confidence: 'medium', entryTriggers: [{ condition: oversized }] },
+    marketValuationAdjustment: { summary: oversized, requiredEvidence: [oversized] },
+    revaluationJobSummary: { lastResult: oversized, missingEvidence: [oversized] },
+    sourceSignalSummary: oversized, ignoredNestedPayload: { oversized },
+  });
+  const producerInput = compactProducerRadarPayload({
+    generatedAt: '2026-08-01T00:00:00Z', opportunities: [card(0)],
+    earlyWatchlist: Array.from({ length: 12 }, (_, index) => card(index + 1)),
+    hotTracking: Array.from({ length: 4 }, (_, index) => card(index + 20)),
+    partiallyVerified: [card(30)],
+    sourceHealthSummary: { successfulSources: 10, degradedSources: 2, connectorDetails: oversized },
+    connectorStatus: Array.from({ length: 13 }, (_, index) => ({ connector: `source-${index}`,
+      lastRunStatus: 'success', lastErrorSummary: oversized, metadata: oversized })),
+    hotThemes: Array.from({ length: 12 }, (_, index) => ({ themeKey: `theme-${index}`,
+      themeName: oversized, relatedSymbols: ['2330', '2454'], sourceCoverage: [oversized], ignored: oversized })),
+  });
+  assert.ok(producerRadarPayloadBytes(producerInput) < 110000);
+  assert.equal(producerInput.sourceHealthSummary.connectorDetails, undefined);
+  assert.equal(producerInput.earlyWatchlist[0].ignoredNestedPayload, undefined);
+  assert.equal(producerInput.earlyWatchlist[0].entryDecision.action, 'wait_trigger');
+  const producerProjection = publishCompactRadarProjection({ decisions: [], legacyPayload: producerInput,
+    window: 'daily', asOf: '2026-08-01T00:00:00Z', producerIdentity: { runId: 'bootstrap' } });
+  assert.ok(Buffer.byteLength(JSON.stringify(producerProjection.payload)) <= 150000);
+  for (const route of ['daily', 'hot', 'weekly']) {
+    const routeSource = readFileSync(path.join(root, `web/src/app/api/radar/${route}/route.ts`), 'utf8');
+    assert.match(routeSource, /producerRead[\s\S]*compactProducerRadarPayload/u);
+  }
 });
 
 test('compact radar reader remains a projection-only indexed LIMIT 2 read', () => {
