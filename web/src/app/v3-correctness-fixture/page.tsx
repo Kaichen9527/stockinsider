@@ -5,8 +5,17 @@ import type { RecommendationCard, ResearchDecisionV311 } from '@/lib/types';
 export const dynamic = 'force-dynamic';
 
 const baseDecision: ResearchDecisionV311 = {
+  version: 'legacy-research-decision-v3.11.0',
+  availability: 'available',
   researchMaturity: 'decision_ready',
   newPositionAction: 'wait_trigger',
+  fundamental: {
+    thesis: '測試用基本面研究主張',
+    latestChange: '測試用最近變化',
+    risks: ['測試用風險'],
+    evidenceRefs: ['fixture-official'],
+    asOf: '2026-08-01T00:00:00Z',
+  },
   technical: {
     availability: 'available',
     state: 'at_support',
@@ -22,10 +31,12 @@ const baseDecision: ResearchDecisionV311 = {
     modelComparablePe: { availability: 'available', value: 13.4, method: 'normalized_pe', asOf: '2026-08-01T00:00:00Z', sourceRefs: ['fixture-official'] },
   },
   factorAxes: { availability: 'available', axes: { discovery: 77, quality: 72, valuation: 81, timingRisk: 55 } },
+  timingRisk: { status: 'eligible', reason: null },
   lastEvaluatedAt: '2026-08-01T00:00:00Z',
   analysisGeneratedAt: '2026-07-31T00:00:00Z',
   materialChangeHash: 'a'.repeat(64),
   materialChangedBecause: [],
+  noChangeMessage: null,
 };
 
 function card(id: string, symbol: string, decision: ResearchDecisionV311): RecommendationCard {

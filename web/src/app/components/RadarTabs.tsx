@@ -156,6 +156,28 @@ function formatTaipeiDateTime(value: string | null | undefined, mode: 'full' | '
 
 type TabKey = 'stocks' | 'themes' | 'discovery';
 
+const researchMaturityLabels = {
+  source_signal: '來源訊號',
+  fundamental_review: '基本面研究中',
+  decision_ready: '決策資料完整',
+} as const;
+
+const newPositionActionLabels = {
+  avoid: '暫時避開',
+  valuation_review: '估值待覆核',
+  wait_trigger: '等待技術觸發',
+  event_starter: '事件型試單',
+  starter_now: '可評估試單',
+} as const;
+
+const unavailableResearchDecisionLabels = {
+  projection_missing: '研究投影尚未建立，系統會在下一輪補齊',
+  projection_stale: '研究資料已過期，等待重新整理',
+  source_unavailable: '研究來源暫時無法取得，等待來源恢復',
+  insufficient_adjusted_history: '還原權息歷史不足，暫不產生進場判斷',
+  financial_inputs_missing: '財務資料尚未完整，暫不產生估值或買進建議',
+} as const;
+
 export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrimary: boolean }) {
   const cardTitleId = `stock-card-${rec.recommendationId.replace(/[^A-Za-z0-9_-]/gu, '-')}`;
   const researchDecision = rec.researchDecision;
@@ -313,10 +335,10 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
       ) : researchDecision?.availability === 'unavailable' ? (
         <section aria-label="研究與進場判斷" className="mt-3 rounded-xl border border-amber-500/25 bg-amber-500/8 p-3 text-xs">
           <div className="flex flex-wrap gap-2">
-            <span className="rounded-full bg-slate-950/8 px-2.5 py-1 dark:bg-emerald-100/10">研究：{researchDecision.researchMaturity}</span>
-            <span className="rounded-full bg-amber-500/12 px-2.5 py-1 text-amber-800 dark:text-amber-300">動作：{researchDecision.newPositionAction}</span>
+            <span className="rounded-full bg-slate-950/8 px-2.5 py-1 dark:bg-emerald-100/10">研究：{researchMaturityLabels[researchDecision.researchMaturity]}</span>
+            <span className="rounded-full bg-amber-500/12 px-2.5 py-1 text-amber-800 dark:text-amber-300">動作：{newPositionActionLabels[researchDecision.newPositionAction]}</span>
           </div>
-          <p className="mt-2 break-words text-amber-800 dark:text-amber-300">研究資料待補：{researchDecision.reason}</p>
+          <p className="mt-2 break-words text-amber-800 dark:text-amber-300">研究資料待補：{unavailableResearchDecisionLabels[researchDecision.reason]}</p>
         </section>
       ) : null}
 
