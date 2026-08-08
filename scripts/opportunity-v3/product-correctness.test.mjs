@@ -720,6 +720,21 @@ const checks = {
     }], seedSymbols: seeds(), priorLedger: [] });
     assert.deepEqual([funnel.candidateLedger[0].name, funnel.candidateLedger[0].sourceSummary],
       ['新公司', '新公司 9999 財報轉強。'], 'official identity and source context survive funnel ranking');
+    const worstCaseSignals = Array.from({ length: 30 }, (_, index) => ({
+      symbol: String(1000 + index), name: '名'.repeat(40), disposition: 'promoted', reason: 'new_source_evidence',
+      sourceClass: 'official', sourceSummary: '摘'.repeat(180), raw: String(1000 + index), claimId: `claim-${index}`,
+      lastEvaluatedAt: '2026-08-01T10:20:00Z',
+    }));
+    const compact = runtime('compact-radar-projection.js').publishCompactRadarProjection({
+      decisions: [], sourceCandidates: worstCaseSignals,
+      discoveryDelta: { added: [], exited: [], continued: [], unchangedReasons: [] },
+      window: 'daily', asOf: '2026-08-01T10:20:00Z', producerIdentity: { commitSha: 'a'.repeat(40) },
+      legacyPayload: { opportunities: [], boundedLegacyPadding: 'x'.repeat(110_000) },
+    });
+    assert.equal(compact.payload.sourceSignals.length, 30, 'all bounded top-30 source signals remain visible');
+    assert.ok(runtime('codec.js').byteLength(compact.payload) <= 150_000, 'worst-case named source signals fit the compact payload');
+    assert.ok(compact.payload.sourceSignals.every((signal) => !Object.hasOwn(signal, 'researchDecision')),
+      'source-signal cards omit duplicated optional recommendation metadata that the UI never consumes');
   },
   'PCR-010': () => {
     const select = runtime('candidate-funnel.js').selectLiveDiscoveryCards;
