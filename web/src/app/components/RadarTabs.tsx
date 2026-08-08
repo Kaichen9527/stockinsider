@@ -188,24 +188,30 @@ const technicalStateLabels = {
   invalidated: '技術條件失效',
 } as const;
 
-function formalResearchPresentationReady(rec: RecommendationCard) {
+function researchDecisionComplete(rec: RecommendationCard) {
   const decision = rec.researchDecision;
   if (!decision) return true;
   return decision.availability === 'available'
     && decision.researchMaturity === 'decision_ready'
     && decision.valuation.status === 'normal'
-    && !['avoid', 'valuation_review'].includes(decision.newPositionAction);
+    && decision.newPositionAction !== 'valuation_review';
+}
+
+function formalResearchPresentationReady(rec: RecommendationCard) {
+  return researchDecisionComplete(rec) && rec.researchDecision?.newPositionAction !== 'avoid';
 }
 
 export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrimary: boolean }) {
   const cardTitleId = `stock-card-${rec.recommendationId.replace(/[^A-Za-z0-9_-]/gu, '-')}`;
   const researchDecision = rec.researchDecision;
-  const unavailableResearchDecision = researchDecision?.availability === 'unavailable' ? researchDecision : null;
   const availableResearchDecision = researchDecision?.availability === 'available' ? researchDecision : null;
-  const researchFailClosed = Boolean(researchDecision) && !formalResearchPresentationReady(rec);
+  const researchFailClosed = Boolean(researchDecision) && !researchDecisionComplete(rec);
+  const actionBlocked = researchDecisionComplete(rec) && researchDecision?.newPositionAction === 'avoid';
   const stateBadge =
     researchFailClosed
       ? { label: '研究待補', cls: 'bg-amber-500/12 text-amber-700 dark:text-amber-300' }
+      : actionBlocked
+        ? { label: '暫不進場', cls: 'bg-slate-950/8 text-slate-600 dark:text-emerald-100/65' }
       : rec.displayBucket === 'hot_tracking'
       ? { label: '熱股追蹤', cls: 'bg-orange-500/12 text-orange-700 dark:text-orange-300' }
       : rec.displayBucket === 'archived_over_target' || rec.displayBucket === 'valuation_reflected_archive' || rec.displayTargetMode === 'hidden_over_target'
@@ -240,6 +246,12 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
             <p className="text-[11px] tracking-[0.18em] text-slate-500 dark:text-emerald-100/55">估值狀態</p>
             <span className="text-sm font-bold text-amber-700 dark:text-amber-300">暫停估值</span>
             <p className="mt-1 text-[11px] text-slate-500 dark:text-emerald-100/55">非今日買點</p>
+          </div>
+        ) : actionBlocked ? (
+          <div className="shrink-0 text-right">
+            <p className="text-[11px] tracking-[0.18em] text-slate-500 dark:text-emerald-100/55">動作狀態</p>
+            <span className="text-sm font-bold text-slate-600 dark:text-emerald-100/75">暫不進場</span>
+            <p className="mt-1 text-[11px] text-slate-500 dark:text-emerald-100/55">非買進建議</p>
           </div>
         ) : isHistoricalObservation(rec) ? (
           <div className="shrink-0 text-right">
@@ -384,13 +396,13 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
 		        <div className="rounded-xl border border-line bg-surface px-3 py-2">
 		          <p className="text-[10px] tracking-[0.14em] text-slate-500 dark:text-emerald-100/50">進場狀態</p>
 		          <p className="mt-1 text-sm font-semibold">
-                {researchFailClosed
+                {researchFailClosed || actionBlocked
                   ? '暫不提供進場建議'
                   : rec.tradeDecision?.action || rec.entryActionLabel || rec.entryReadinessLabel || '等待量價確認'}
               </p>
               <p className="mt-1 text-[11px] leading-4 text-slate-500 dark:text-emerald-100/60">
-                {researchFailClosed
-                  ? '待研究證據補齊後再評估'
+                {researchFailClosed || actionBlocked
+                  ? researchFailClosed ? '待研究證據補齊後再評估' : '研究決策已完成，目前動作為避開'
                   : rec.tradeDecision?.positionSize || rec.marketIndexSignal?.riskBudget || '依大盤與個股 Gate 決定'}
               </p>
 		        </div>
@@ -400,6 +412,8 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
 	        <p className="text-xs text-slate-500 dark:text-emerald-100/60">
 		          {researchFailClosed
 		            ? '研究證據待補 · 非正式'
+		            : actionBlocked
+		              ? '研究完成 · 暫不進場'
 		            : rec.displayTargetMode === 'early_potential'
 	            ? '未正式 · 待 gate 補齊'
 	            : rec.displayBucket === 'hot_tracking'
@@ -427,18 +441,20 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
   const namedScenario = (radar.scenarioUpsideCandidates || []).filter((r) => Boolean(r.chineseName));
   const namedEarly = (radar.earlyWatchlist ?? []).filter((r) => Boolean(r.chineseName));
   const namedHot = (radar.hotTracking || []).filter((r) => Boolean(r.chineseName));
-  const decisionAvailable = (card: RecommendationCard) => formalResearchPresentationReady(card);
   const researchPendingBySymbol = new Map<string, RecommendationCard>();
+  const actionBlockedBySymbol = new Map<string, RecommendationCard>();
   for (const card of [...namedFormal, ...namedScenario, ...namedEarly, ...namedHot]) {
-    if (!decisionAvailable(card) && !researchPendingBySymbol.has(card.symbol)) researchPendingBySymbol.set(card.symbol, card);
+    if (!researchDecisionComplete(card) && !researchPendingBySymbol.has(card.symbol)) researchPendingBySymbol.set(card.symbol, card);
+    else if (card.researchDecision?.newPositionAction === 'avoid' && !actionBlockedBySymbol.has(card.symbol)) actionBlockedBySymbol.set(card.symbol, card);
   }
   const researchPending = [...researchPendingBySymbol.values()];
-  const formalOpportunities = namedFormal.filter(decisionAvailable);
-  const scenarioUpsideCandidates = namedScenario.filter(decisionAvailable);
-  const hotTracking = namedHot.filter(decisionAvailable);
+  const actionBlockedCards = [...actionBlockedBySymbol.values()];
+  const formalOpportunities = namedFormal.filter(formalResearchPresentationReady);
+  const scenarioUpsideCandidates = namedScenario.filter(formalResearchPresentationReady);
+  const hotTracking = namedHot.filter(formalResearchPresentationReady);
   const highConviction = formalOpportunities.filter((r) => r.recommendationBucket === 'high_conviction');
   const earlyFormal = formalOpportunities.filter((r) => r.recommendationBucket === 'early_formal');
-  const earlyWatchlist = namedEarly.filter(decisionAvailable);
+  const earlyWatchlist = namedEarly.filter(formalResearchPresentationReady);
   const historicalSummary = radar.historicalObservationSummary;
   const historicalObservationCount = historicalSummary?.total || 0;
   const needsRevaluationCount = (historicalSummary?.revaluationQueue || 0) + earlyWatchlist.filter(
@@ -517,6 +533,22 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
             {researchPending.map((rec) => (
               <StockCard key={`research-pending-${rec.recommendationId}`} rec={rec} isPrimary={false} />
             ))}
+          </div>
+        </section>
+      )}
+
+      {actionBlockedCards.length > 0 && (
+        <section className="mt-10 border-t border-line pt-8">
+          <div className="mb-6 flex flex-wrap items-center gap-4">
+            <span className="text-2xl">🛑</span>
+            <div className="min-w-0 flex-1">
+              <h3 className="text-lg font-semibold">研究完成／暫不進場（非買進建議）</h3>
+              <p className="text-xs text-slate-500 dark:text-emerald-100/45">研究與估值已完成，但技術、風險或品質條件要求避開；保留研究脈絡，不列入正式推薦。</p>
+            </div>
+            <span className="rounded-full bg-slate-950/8 px-3 py-1 text-xs text-slate-600 dark:text-emerald-100/60">{actionBlockedCards.length} 支</span>
+          </div>
+          <div className="grid gap-4 lg:grid-cols-2">
+            {actionBlockedCards.map((rec) => <StockCard key={`action-blocked-${rec.recommendationId}`} rec={rec} isPrimary={false} />)}
           </div>
         </section>
       )}

@@ -73,6 +73,23 @@ const unavailableCard = card('fixture-decision-unavailable', '9006', {
   recommendationIndex: 90, scenarioChecklistProgress: 80,
 });
 
+const avoidCard = card('fixture-decision-avoid', '9007', {
+  ...baseDecision,
+  newPositionAction: 'avoid',
+  technical: {
+    ...baseDecision.technical,
+    state: 'invalidated',
+    trigger: null,
+    entryZone: null,
+  },
+  timingRisk: { status: 'blocked', reason: 'technical_setup_invalidated' },
+}, {
+  recommendationBucket: 'high_conviction', displayBucket: 'formal', displayTargetMode: 'actionable',
+  targetPrice: 150, baseTarget: 150, expectedUpsidePct: 20, displayBaseUpsidePct: 20,
+  cardPrimaryUpsidePct: 20, cardPrimaryUpsideLabel: 'Base 空間', targetCoverageStatus: 'base_upside',
+  recommendationIndex: 88, scenarioChecklistProgress: 100,
+});
+
 const cards = [
   card('fixture-discovery', '9001', { ...baseDecision, researchMaturity: 'source_signal', newPositionAction: 'valuation_review', valuation: { status: 'valuation_review', exchangeReportedPe: { availability: 'unavailable', reason: 'official_pe_unavailable' }, modelComparablePe: { value: null, reason: 'valuation_review' } } },
     { recommendationBucket: 'high_conviction', displayBucket: 'formal', targetPrice: 180, expectedUpsidePct: 50, cardPrimaryUpsidePct: 50, recommendationIndex: 92 }),
@@ -83,7 +100,7 @@ const cards = [
 ];
 
 const groupingRadar = {
-  opportunities: [unavailableCard, cards[0]], scenarioUpsideCandidates: [], earlyWatchlist: [],
+  opportunities: [unavailableCard, cards[0], avoidCard], scenarioUpsideCandidates: [], earlyWatchlist: [],
   hotTracking: [{ ...unavailableCard, recommendationId: 'hot-fixture-decision-unavailable', displayBucket: 'hot_tracking' }],
   hotThemes: [], discoveredStocks: [], sourceSignals: [],
 } as unknown as RadarDailyPayload;
