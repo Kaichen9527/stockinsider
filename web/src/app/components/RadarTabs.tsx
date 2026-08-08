@@ -444,8 +444,13 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
   const researchPendingBySymbol = new Map<string, RecommendationCard>();
   const actionBlockedBySymbol = new Map<string, RecommendationCard>();
   for (const card of [...namedFormal, ...namedScenario, ...namedEarly, ...namedHot]) {
-    if (!researchDecisionComplete(card) && !researchPendingBySymbol.has(card.symbol)) researchPendingBySymbol.set(card.symbol, card);
-    else if (card.researchDecision?.newPositionAction === 'avoid' && !actionBlockedBySymbol.has(card.symbol)) actionBlockedBySymbol.set(card.symbol, card);
+    if (!researchDecisionComplete(card)) {
+      if (!researchPendingBySymbol.has(card.symbol)) researchPendingBySymbol.set(card.symbol, card);
+      continue;
+    }
+    if (card.researchDecision?.newPositionAction === 'avoid' && !actionBlockedBySymbol.has(card.symbol)) {
+      actionBlockedBySymbol.set(card.symbol, card);
+    }
   }
   const researchPending = [...researchPendingBySymbol.values()];
   const actionBlockedCards = [...actionBlockedBySymbol.values()];

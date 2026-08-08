@@ -26,7 +26,7 @@ test('PCR-024 exercises the decision matrix at 320px, 200% zoom, keyboard, reduc
   await page.evaluate(() => { document.documentElement.style.zoom = '2'; });
 
   const articles = page.getByRole('article');
-  await expect(articles).toHaveCount(8);
+  await expect(articles).toHaveCount(9);
   await expect(page.getByRole('region', { name: '研究與進場判斷' }).first()).toBeVisible();
   await expect(page.getByText('已跌破支撐，原支撐現為收復觸發；未收復前不把它顯示成回測買點。')).toBeVisible();
   await expect(page.getByLabel('四軸研究評分').first()).toBeAttached();
@@ -68,6 +68,10 @@ test('PCR-024 exercises the decision matrix at 320px, 200% zoom, keyboard, reduc
   await expect(avoidCard.getByText('研究完成 · 暫不進場')).toBeVisible();
   await expect(avoidCard.getByText('研究資料待補', { exact: false })).toHaveCount(0);
   await expect(avoidCard.getByText('暫停估值')).toHaveCount(0);
+  const incompleteAvoidCard = page.getByRole('article', { name: /9008/u });
+  await expect(incompleteAvoidCard).toHaveCount(1);
+  await expect(incompleteAvoidCard.getByText('研究待補', { exact: true })).toBeVisible();
+  await expect(incompleteAvoidCard.getByText('研究完成 · 暫不進場')).toHaveCount(0);
   expect(pageErrors).toEqual([]);
   const horizontalOverflow = await page.evaluate(() => ({
     document: { clientWidth: document.documentElement.clientWidth, scrollWidth: document.documentElement.scrollWidth },
