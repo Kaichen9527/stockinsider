@@ -30,6 +30,7 @@ function runNode(args) {
     cwd: root,
     encoding: 'utf8',
     env: {
+      ...process.env,
       NODE_ENV: 'test',
       SOURCE_LED_OPPORTUNITY_V3: 'disabled',
       TZ: 'UTC',
