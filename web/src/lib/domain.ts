@@ -1,4 +1,6 @@
 import { randomUUID } from 'crypto';
+import { existsSync, readFileSync } from 'fs';
+import path from 'path';
 import { Client as LineClient } from '@line/bot-sdk';
 import { getSupabaseServerClient } from './supabase-server';
 import { isDemoMode } from './data-mode';
@@ -7,30 +9,77 @@ import type {
   BrokerView,
   ConnectorStatusView,
   DailyMarketFocus,
+  DeepDiveArticleSection,
+  DeepDiveChipEntryVerdict,
+  DeepDiveChipSnapshot,
+  DeepDiveChaseAssessment,
+  DeepDiveLatestFact,
+  DeepDiveMlForecastBand,
+  DeepDiveNumberTrailItem,
+  DeepDiveSourceCitationRef,
+  DeepDiveSummaryCard,
+  DeepDiveTargetSnapshot,
+  DeepDiveBrokerConsensus,
+  DeepDiveForwardPeBridge,
+  DeepDivePeerValuationRange,
+  DeepDiveValuationAssumptionLedgerItem,
+  DeepDiveValuationBridge,
+  DeepDiveValuationCaseDetail,
+  DeepDiveValuationConfidenceGate,
+  DeepDiveValuationModelDivergence,
+  DeepDiveValuationReviewFlag,
+  DeepDiveScenarioNarrative,
+  DeepDiveSharedVerifiedBasis,
+  DeepDiveThesisSnapshot,
   DiscoveredStockCard,
   DiscoveredStockSource,
   EvidenceMatrixView,
+  EntryDecision,
   LinePreference,
+  MarketIndexSignal,
+  MarketValuationAdjustment,
   RadarDailyPayload,
   RecommendationCard,
+  RecommendationBucket,
+  RecommendationGateStatus,
+  RevaluationJobSummary,
+  RevaluationJobState,
   RecommendationState,
   RiskCounterpointView,
   ResearchMemoView,
+  ScenarioDriverType,
   SignalFreshness,
   SourceCoverageView,
+  SourceSearchPayload,
+  SourceSearchResultItem,
   StockDeepDivePayload,
   StockDeepDivePendingPayload,
   StockInsightPayload,
+  TargetCoverageStatus,
   StoryEvidenceItemView,
   StoryType,
   StrategyActionView,
   ThemeDetailPayload,
   ThemeHeatCard,
   ThesisModelView,
+  TradeDecision,
   ValuationCaseView,
+  ValuationQuality,
+  ValuationSanityStatus,
   ValuationSource,
   VerificationStatus,
 } from './types';
+import {
+  fetchTwStockDailyBars,
+  fetchTwStockEpsTtm,
+  fetchTwStockInstitutional,
+  fetchTwStockMarginTrades,
+  fetchTwStockQuote,
+  fetchTwStockRevenue,
+  fetchTwStockShortSales,
+  fetchTwStockValues,
+  fetchTwseOfficialSblShortSales,
+} from './tw-market';
 
 const RISK_DISCLOSURE = '本服務僅提供研究資訊，非投資建議，投資決策與風險由使用者自行承擔。';
 
@@ -52,6 +101,70 @@ type IngestionResult = PipelineResult & {
 type AgentWorkflowResult = PipelineResult & {
   startedRoles: string[];
   recordsWritten: number;
+  meta?: Record<string, unknown>;
+};
+
+type AgencyAgentProfile = {
+  profileKey: string;
+  sourceLibrary: string;
+  mappedRole: string;
+  sourceUrl: string;
+};
+
+type AgencyAgentPolicy = {
+  mode: string;
+  publishRecommendationsDirectly: boolean;
+  requiresHybridJudge: boolean;
+  requiresAgentFindingsLog: boolean;
+};
+
+type AgentReviewRequest = {
+  reason: string;
+  evidence?: Record<string, unknown>;
+};
+
+type AgentTaskWorkOutput<T> = {
+  outputSummary: string;
+  findings?: Array<{
+    stockId?: string | null;
+    themeKey?: string | null;
+    findingType: string;
+    summary: string;
+    confidence?: number;
+    evidence?: unknown[];
+    sourceRefs?: unknown[];
+  }>;
+  reviewQueueItems?: AgentReviewRequest[];
+  result: T;
+};
+
+type StoryThesisState = RecommendationState | 'review' | 'rejected';
+
+type StoryVerificationOutcome = {
+  nextState: StoryThesisState;
+  evidenceScore: number;
+  verificationStatus: VerificationStatus;
+  reviewQueueItems: AgentReviewRequest[];
+  note: string;
+  governance: {
+    supportiveCount: number;
+    contradictingCount: number;
+    hasOfficialCompanyEvidence: boolean;
+    hasPublicCorroboration: boolean;
+    socialOnly: boolean;
+    strongestContradiction: number;
+  };
+};
+
+type ResearchMemoCandidate = {
+  row: Record<string, unknown>;
+  slug: string;
+  reportKind: string;
+  title: string;
+  recommendationState: RecommendationState | null;
+  evidenceScore: number | null;
+  sourceUpdatedAt: string | null;
+  index: number;
 };
 
 function toNumber(value: unknown): number {
@@ -65,7 +178,33 @@ function nowIso() {
 }
 
 function asIsoDate(iso: string) {
-  return iso.slice(0, 10);
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return iso.slice(0, 10);
+  return date.toLocaleDateString('en-CA', { timeZone: 'Asia/Taipei' });
+}
+
+function taipeiScheduledIso(hour: number, minute: number, date = new Date()) {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Taipei',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).formatToParts(date);
+  const lookup = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return `${lookup.year}-${lookup.month}-${lookup.day}T${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:00+08:00`;
+}
+
+function priceRefreshStatusFromAsOf(asOf: string | null | undefined): 'fresh' | 'stale' | 'missing' | 'pending' {
+  if (!asOf) return 'missing';
+  const ms = new Date(asOf).getTime();
+  if (!Number.isFinite(ms)) return 'missing';
+  const ageHours = (Date.now() - ms) / (1000 * 60 * 60);
+  if (ageHours <= 20) return 'fresh';
+  if (ageHours <= 96) return 'pending';
+  return 'stale';
 }
 
 function slugify(value: string) {
@@ -81,12 +220,5643 @@ function toFiniteNumber(value: unknown, fallback = 0) {
   return Number.isFinite(parsed) ? parsed : fallback;
 }
 
+const DEEP_DIVE_DAILY_BAR_TARGET = 504;
+const DEEP_DIVE_DAILY_BAR_BUFFER = 520;
+
 function clamp(value: number, min = 0, max = 1) {
   return Math.min(max, Math.max(min, value));
 }
 
+function roundTo(value: number, precision = 2) {
+  const factor = 10 ** precision;
+  return Math.round(value * factor) / factor;
+}
+
+async function withFallbackTimeout<T>(work: PromiseLike<T>, fallback: T, timeoutMs = 4000): Promise<T> {
+  return await Promise.race([
+    work,
+    new Promise<T>((resolve) => {
+      setTimeout(() => resolve(fallback), timeoutMs);
+    }),
+  ]);
+}
+
+async function withQueryTimeout<T>(
+  work: PromiseLike<{ data: T; error: { message?: string } | null }>,
+  fallbackData: T,
+  timeoutMs = 4000,
+): Promise<{ data: T; error: { message?: string } | null }> {
+  return await withFallbackTimeout(work, { data: fallbackData, error: null }, timeoutMs);
+}
+
 function compactText(value: unknown) {
   return String(value || '').replace(/\s+/g, ' ').trim();
+}
+
+function safeErrorMessage(error: unknown) {
+  const raw = error instanceof Error ? error.message : String(error || 'unknown_error');
+  return compactText(raw)
+    .replace(/(Bearer\s+)[^\s]+/gi, '$1[redacted]')
+    .replace(/(key=)[^&\s]+/gi, '$1[redacted]')
+    .slice(0, 220);
+}
+
+function decodeHtmlEntities(value: string) {
+  return value
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'");
+}
+
+function stripHtmlTags(value: string) {
+  return value.replace(/<[^>]+>/g, ' ');
+}
+
+function stripUrls(value: string) {
+  return value.replace(/https?:\/\/\S+/gi, ' ');
+}
+
+function sanitizeNarrativeText(value: unknown) {
+  return compactText(stripUrls(stripHtmlTags(decodeHtmlEntities(String(value || '')))))
+    .replace(/\bvaluation_cases\b/gi, '估值情境')
+    .replace(/\bfundamental_snapshots\b/gi, '基本面資料')
+    .replace(/\brevenue_signals\b/gi, '營收資料')
+    .replace(/\bpublic-research-digest\b/gi, '公開研究摘要')
+    .replace(/\bnull\b/gi, '')
+    .replace(/[；;]\s*(?:0(?:\.\d+)?|null|-)\b/gi, '')
+    .replace(/\s+[|/]\s+/g, ' / ')
+    .replace(/\s*·\s*/g, ' · ')
+    .replace(/\b(EPS|GM)\s*0(?:\.0+)?[,，]?\s*/gi, '')
+    .replace(/\bYoY\s*[-+]?\d+(?:\.\d+)?%\s*[,，]?\s*MoM\s*[-+]?\d+(?:\.\d+)?%/gi, '')
+    .replace(/\b(?:Yahoo股市|聯合新聞網|Vocus|方格子|鉅亨網|CMoney|工商時報|經濟日報|MoneyDJ|Google News)\s*$/gi, '')
+    .replace(/\bNew thread Search Activity Profile Insights Saved More Thread\b/gi, '')
+    .replace(/約\s*約/g, '約 ')
+    .replace(/\b\d+\s+views?\b/gi, '')
+    .replace(/\b\d+\s+(?:likes?|reposts?|replies?|followers?)\b/gi, '')
+    .replace(/\b[a-z0-9_.-]+\s+\d+[mhds]\b/gi, '')
+    .replace(/\b(?:Search|Activity|Profile|Insights|Saved|Thread|More|Follow|Following|Like|Reply|Repost)\b/gi, '')
+    .replace(/週[一二三四五六日天][^。！？]{0,20}(?:豆漿|早晨|餐桌)[^。！？]*/g, '')
+    .replace(/([。！？]){2,}/g, '$1')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+}
+
+function isNumericOnlyFragment(value: string) {
+  const compact = value.replace(/[，,\s。％%元億萬+:-]/g, '');
+  return compact.length > 0 && /^\d+(?:\.\d+)?$/.test(compact);
+}
+
+function looksLikeNarrativeNoise(value: string) {
+  const clean = sanitizeNarrativeText(value);
+  if (!clean) return true;
+  if (/^(?:null|undefined|n\/a|na|-|待補)$/i.test(clean)) return true;
+  if (isNumericOnlyFragment(clean)) return true;
+  if (/^(?:valuation_cases|risk_control|financial_proxy|story_modeled|eps_pe_[a-z_]+)$/i.test(clean)) return true;
+  if (/^\d{9,}$/.test(clean)) return true;
+  return false;
+}
+
+function looksLikeHeadlineDump(value: string) {
+  const clean = sanitizeNarrativeText(value);
+  if (!clean) return true;
+  if (clean.includes('；') && clean.split('；').length >= 3) return true;
+  if (/(Yahoo股市|聯合新聞網|工商時報|經濟日報|鉅亨網|Vocus|方格子|MoneyDJ|Google News|中央社|三立|東森|今周刊)/.test(clean) && !/[。！？]/.test(clean)) return true;
+  if (/(Search|Activity|Profile|Insights|views|Saved)/i.test(clean)) return true;
+  if (/[:：｜|]/.test(clean) && !/[。！？]/.test(clean)) return true;
+  return false;
+}
+
+function normalizeNarrativeSentence(value: unknown) {
+  const clean = sanitizeNarrativeText(value);
+  if (!clean || looksLikeNarrativeNoise(clean) || looksLikeHeadlineDump(clean)) return null;
+  const normalized = clean
+    .replace(/\s*；\s*/g, '，')
+    .split(/(?<=[。！？])/)
+    .slice(0, 2)
+    .join('')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+  return normalized ? (/[。！？]$/.test(normalized) ? normalized : `${normalized}。`) : null;
+}
+
+function narrativeCandidates(items: Array<string | null | undefined>, limit = 4) {
+  const seen = new Set<string>();
+  const lines: string[] = [];
+  for (const item of items) {
+    const normalized = normalizeNarrativeSentence(item);
+    if (!normalized) continue;
+    if (seen.has(normalized)) continue;
+    seen.add(normalized);
+    lines.push(normalized);
+    if (lines.length >= limit) break;
+  }
+  return lines;
+}
+
+function tokenizeNarrativeKeywords(value: string | null | undefined) {
+  const clean = sanitizeNarrativeText(value);
+  if (!clean) return [];
+  return Array.from(
+    new Set(
+      clean
+        .split(/[^A-Za-z0-9\u4e00-\u9fff]+/g)
+        .map((token) => token.trim())
+        .filter((token) => token.length >= 2 && !/^\d+$/.test(token)),
+    ),
+  );
+}
+
+function formatNarrativeMoney(value: number | null | undefined) {
+  if (value == null || !Number.isFinite(value)) return null;
+  const abs = Math.abs(value);
+  if (abs >= 100000000) return `${formatNumberLocal(value / 100000000)} 億`;
+  if (abs >= 10000) return `${formatNumberLocal(value / 10000)} 萬`;
+  return `${round(toFiniteNumber(value), 0).toLocaleString('zh-TW')} 元`;
+}
+
+function isRelevantRiskNarrative(value: string | null | undefined, keywords: string[]) {
+  const clean = sanitizeNarrativeText(value);
+  if (!clean || looksLikeNarrativeNoise(clean)) return false;
+  if (keywords.some((keyword) => clean.includes(keyword))) return true;
+  return /(營收|毛利|獲利|訂單|需求|出貨|法說|庫存|估值|股價|均線|供應鏈|價格|客戶|產品|AI|server|手機|記憶體|NAND|eMMC|SoC|CSP)/i.test(clean);
+}
+
+function summarizeRevenueNarrative(monthlyRevenue: number | null | undefined, yoyGrowth: number | null | undefined, momGrowth: number | null | undefined) {
+  if (monthlyRevenue == null || !Number.isFinite(monthlyRevenue) || monthlyRevenue <= 0) return null;
+  const revenueText = formatNarrativeMoney(monthlyRevenue) || `${round(toFiniteNumber(monthlyRevenue), 0).toLocaleString('zh-TW')} 元`;
+  const yoyText = yoyGrowth == null ? 'YoY 尚待更新' : `YoY ${toFiniteNumber(yoyGrowth) > 0 ? '+' : ''}${formatNumberLocal(toFiniteNumber(yoyGrowth))}%`;
+  const momText = momGrowth == null ? 'MoM 尚待更新' : `MoM ${toFiniteNumber(momGrowth) > 0 ? '+' : ''}${formatNumberLocal(toFiniteNumber(momGrowth))}%`;
+  return `最新月營收約 ${revenueText}，${yoyText}、${momText}，這是目前判斷故事是否繼續往上走的第一個觀察點。`;
+}
+
+function valuationAssumptionPhrase(raw: string) {
+  const clean = sanitizeNarrativeText(raw);
+  if (!clean || looksLikeNarrativeNoise(clean) || looksLikeHeadlineDump(clean)) return null;
+  if (/^(moderate|measured)$/i.test(clean)) return '估值僅做溫和上修';
+  if (/^(strong|stronger)$/i.test(clean)) return '市場願意給更高的評價';
+  if (/^(source|seed_override)$/i.test(clean)) return null;
+  return clean;
+}
+
+function compactBridgeClause(value: string | null | undefined) {
+  const clean = sanitizeNarrativeText(value);
+  if (!clean || looksLikeNarrativeNoise(clean) || looksLikeHeadlineDump(clean)) return null;
+  return clean.replace(/[。！？]+$/g, '').trim() || null;
+}
+
+function proseJoin(items: Array<string | null | undefined>, fallback = '') {
+  const normalized = items
+    .map((item) => compactBridgeClause(item))
+    .filter((item): item is string => Boolean(item));
+  if (normalized.length === 0) return fallback;
+  return normalized.join('，');
+}
+
+function buildScenarioBridgeNarrative(
+  label: string,
+  driverLabel: string | null | undefined,
+  operatingBridge: string | null | undefined,
+  earningsBridge: string | null | undefined,
+  assumptions: string[],
+  financialBridge: string[],
+  multipleBridge: string | null | undefined,
+  targetPrice: number | null | undefined,
+  expectedReturnPct: number | null | undefined,
+  priceBridge: string | null | undefined,
+) {
+  const targetText = targetPrice == null || !Number.isFinite(targetPrice) ? '目標價仍待補' : `目標價約 NT$${formatNumberLocal(toFiniteNumber(targetPrice))}`;
+  const returnText =
+    expectedReturnPct == null || !Number.isFinite(expectedReturnPct)
+      ? '對現價空間仍待補'
+      : `對現價約 ${expectedReturnPct > 0 ? '+' : ''}${formatNumberLocal(expectedReturnPct)}%`;
+  const driverSentence = compactBridgeClause(
+    driverLabel ? `${label}的核心驅動來自 ${driverLabel}` : `${label}的核心驅動仍以故事主軸延續為主`,
+  );
+  const operatingSentence = compactBridgeClause(operatingBridge) || (assumptions.length > 0 ? `營運假設為 ${assumptions.join('，')}` : null);
+  const earningsSentence = compactBridgeClause(earningsBridge) || proseJoin(financialBridge);
+  const multipleSentence = compactBridgeClause(multipleBridge) ? `評價端 ${compactBridgeClause(multipleBridge)}` : null;
+  const priceSentence = compactBridgeClause(priceBridge);
+  const text = sentenceFromBridgeSegments(
+    [
+      driverSentence,
+      operatingSentence,
+      earningsSentence,
+      multipleSentence,
+      priceSentence,
+      `${targetText}，${returnText}`,
+    ],
+    `${label}先以 ${targetText} 與 ${returnText} 評估風險報酬。`,
+  );
+  return sanitizeNarrativeText(text);
+}
+
+function sentenceFromBridgeSegments(segments: Array<string | null | undefined>, fallback: string) {
+  const overlapClean = (value: string) => sanitizeNarrativeText(value).replace(/[\s，。！？、；;:：,.%+()（）/-]/g, '').toLowerCase();
+  const overlapClauses = (value: string) =>
+    sanitizeNarrativeText(value)
+      .split(/[，。！？；;:：]/)
+      .map((item) => item.trim())
+      .filter((item) => item.length >= 6);
+  const hasOverlap = (left: string, right: string) => {
+    const leftClean = overlapClean(left);
+    const rightClean = overlapClean(right);
+    if (!leftClean || !rightClean) return false;
+    if (leftClean.includes(rightClean) || rightClean.includes(leftClean)) return true;
+    const leftClauseList = overlapClauses(left);
+    const rightClauseList = overlapClauses(right);
+    return leftClauseList.some((leftClause) =>
+      rightClauseList.some((rightClause) => {
+        const a = overlapClean(leftClause);
+        const b = overlapClean(rightClause);
+        return Boolean(a && b) && (a.includes(b) || b.includes(a));
+      }),
+    );
+  };
+  const text = narrativeCandidates(segments, 4)
+    .reduce<string[]>((acc, candidate) => {
+      if (acc.some((existing) => hasOverlap(existing, candidate))) return acc;
+      acc.push(candidate);
+      return acc;
+    }, [])
+    .slice(0, 3)
+    .join(' ');
+  return text || fallback;
+}
+
+function formatAssumptionValue(value: unknown) {
+  if (value == null) return null;
+  if (typeof value === 'number') {
+    if (!Number.isFinite(value)) return null;
+    const abs = Math.abs(value);
+    if (abs >= 100000000) return `${formatNumberLocal(value / 100000000)} 億`;
+    if (abs >= 10000) return `${formatNumberLocal(value / 10000)} 萬`;
+    if (abs >= 100) return round(toFiniteNumber(value), 0).toLocaleString('zh-TW');
+    return formatNumberLocal(value);
+  }
+  const clean = sanitizeNarrativeText(value);
+  return clean || null;
+}
+
+function normalizedAssumptionItems(valuation: ValuationCaseView) {
+  const assumptions = (valuation.assumptions || {}) as Record<string, unknown>;
+  const operating = Array.isArray(assumptions.operating_assumptions)
+    ? (assumptions.operating_assumptions as Array<Record<string, unknown>>)
+        .map((item) => {
+          const label = compactText(item.label || item.key || '');
+          const value = formatAssumptionValue(item.value);
+          if (!label || !value) return null;
+          return {
+            label,
+            value,
+            isEstimated: Boolean(item.isEstimated ?? item.is_estimated ?? true),
+          };
+        })
+        .filter((item): item is { label: string; value: string; isEstimated: boolean } => Boolean(item))
+    : [];
+  if (operating.length > 0) return operating.slice(0, 6);
+
+  const fallbackPairs: Array<[string, unknown]> = [
+    ['年化營收', assumptions.revenue_annual],
+    ['營收年增率', assumptions.revenue_yoy_pct],
+    ['毛利率', assumptions.gross_margin_pct],
+    ['營益率', assumptions.operating_margin_pct],
+    ['EPS', assumptions.eps],
+    ['估值倍數', assumptions.pe ?? assumptions.pb],
+  ];
+  return fallbackPairs
+    .map(([label, rawValue]) => {
+      const value = formatAssumptionValue(rawValue);
+      if (!value) return null;
+      return { label, value, isEstimated: true };
+    })
+    .filter((item): item is { label: string; value: string; isEstimated: boolean } => Boolean(item));
+}
+
+function normalizedBridgeSentences(value: unknown) {
+  if (Array.isArray(value)) {
+    return narrativeCandidates(
+      value.map((item) => sanitizeNarrativeText(item)).filter(Boolean),
+      4,
+    );
+  }
+  return narrativeCandidates([sanitizeNarrativeText(value)], 1);
+}
+
+type ValuationBridgeContext = {
+  symbol: string;
+  thesisTitle: string | null;
+  thesisSummary: string | null;
+  currentPrice: number | null;
+  monthlyRevenue: number | null;
+  yoyGrowth: number | null;
+  momGrowth: number | null;
+  revenueAnnual: number | null;
+  epsTtm: number | null;
+  peRatio: number | null;
+  pbRatio: number | null;
+  grossMargin: number | null;
+  operatingMargin: number | null;
+};
+
+type ValuationBridgeProfile = {
+  driverLabel: string;
+  peerLabel: string;
+  benchmarkPeRange: [number, number];
+  benchmarkText: string;
+  volumeLabel: string;
+  aspLabel: string;
+  mixLabel: string;
+  mixStart: number;
+  mixTargets: Record<ValuationCaseView['caseType'], number>;
+  volumeGrowthTargets: Record<ValuationCaseView['caseType'], number>;
+  aspGrowthTargets: Record<ValuationCaseView['caseType'], number>;
+  grossMarginTargets: Record<ValuationCaseView['caseType'], number>;
+  operatingMarginTargets: Record<ValuationCaseView['caseType'], number>;
+  storyLines: [string, string];
+};
+
+type StockSpecificBridgeSeed = {
+  driverLabel?: string;
+  tamRange: string;
+  marketShareRange: string;
+  mixTarget: number;
+  orderVisibility: string;
+  revenueAnnual: number;
+  grossMarginPct: number;
+  operatingMarginPct: number;
+  eps: number;
+  targetPe: number;
+  evidenceRefs: string[];
+  estimatedFields?: string[];
+  baselineRevenueAnnual?: number;
+  baselineGrossMarginPct?: number;
+  baselineOperatingMarginPct?: number;
+  baselinePeRatio?: number;
+  baselinePbRatio?: number;
+  evidenceBasis?: string[];
+  customerExposure?: string | null;
+  transcriptEvidence?: string | null;
+  monthlyRevenueEvidence?: string | null;
+  productMixEvidence?: string | null;
+  marketShareEvidence?: string | null;
+  multipleRationale?: string | null;
+};
+
+type StockSpecificBridgeScenarioMap = Partial<Record<ValuationCaseView['caseType'], StockSpecificBridgeSeed>>;
+
+const OPPORTUNITIES_FIRST_BRIDGE_ROLLOUT_SYMBOLS = new Set([
+  '2408', '2421', '6230', '3017', '2344', '3711', '3231', '2449', '4958', '3008', '2308', '3037',
+  '3189', '3034', '6285', '6415', '2356', '2345', '2301', '3533', '5388',
+  '2330', '6669', '2382', '3324', '5347', '2303', '2454', '2379', '2337',
+]);
+
+// Retained only as historical research fixtures while the point-in-time producer
+// replaces each scenario. These values are deliberately unreachable from Web
+// decisions: hard-coded estimates must never become valuation authority.
+const RETIRED_NON_AUTHORITATIVE_BRIDGE_FIXTURES: Record<string, StockSpecificBridgeScenarioMap> = {
+  '3008': {
+    base: {
+      tamRange: '約 NT$1,180–1,230 億',
+      marketShareRange: '25%–27%',
+      mixTarget: 45,
+      orderVisibility: 'iPhone 17 Pro 潛望式鏡頭升規、Android 旗艦潛望式滲透率提升、Vision Pro 2 光學模組小量出貨',
+      revenueAnnual: 64800000000,
+      grossMarginPct: 60.5,
+      operatingMarginPct: 44.5,
+      eps: 130.95,
+      targetPe: 21,
+      evidenceRefs: [
+        '支撐 Base｜公司法說與媒體追蹤都指向 2026 年高階鏡頭與可變光圈新案放量，ASP 與產品組合有改善空間。',
+        '支撐 Base｜大立光為全球大型手機鏡頭供應商，高階 7P 以上鏡頭與潛望式供應地位支撐市場份額推估。',
+        '支撐 Base｜近期月營收已回到年增，代表新機拉貨與高階鏡頭需求並非停留在題材層。 ',
+      ],
+      estimatedFields: ['高階光學 TAM', '市場份額', '潛望式滲透率', 'XR 模組貢獻'],
+      baselineRevenueAnnual: 57600000000,
+      baselineGrossMarginPct: 58,
+      baselineOperatingMarginPct: 42,
+      baselinePeRatio: 24.7,
+    },
+    upside: {
+      tamRange: '約 NT$1,250–1,350 億',
+      marketShareRange: '28%–30%',
+      mixTarget: 52,
+      orderVisibility: 'Apple 高階機種與 Android 旗艦同步拉高潛望式導入，XR 光學模組由試產走向量產',
+      revenueAnnual: 70200000000,
+      grossMarginPct: 62.5,
+      operatingMarginPct: 46.5,
+      eps: 137.78,
+      targetPe: 22.5,
+      evidenceRefs: [
+        '支撐情境｜若潛望式鏡頭滲透率高於預期，單機鏡頭顆數與 ASP 都有機會同步上修。',
+        '支撐情境｜XR 光學模組若從驗證轉為量產，市場對大立光的估值框架會更接近高階新應用供應鏈。',
+        '支撐情境｜可變光圈與更複雜鏡頭設計提高良率門檻，若良率爬升順利，毛利率彈性會高於 Base。 ',
+      ],
+      estimatedFields: ['高階光學 TAM', '市場份額', 'XR 模組量產節奏'],
+      baselineRevenueAnnual: 57600000000,
+      baselineGrossMarginPct: 58,
+      baselineOperatingMarginPct: 42,
+      baselinePeRatio: 24.7,
+    },
+    invalidation: {
+      tamRange: '約 NT$980–1,040 億',
+      marketShareRange: '20%–22%',
+      mixTarget: 33,
+      orderVisibility: '潛望式導入速度不如預期，XR 模組維持試產與驗證階段',
+      revenueAnnual: 59000000000,
+      grossMarginPct: 56.5,
+      operatingMarginPct: 39.5,
+      eps: 105.56,
+      targetPe: 18,
+      evidenceRefs: [
+        '失效情境｜若高階鏡頭導入率不及預期，產品組合就會回到傳統手機鏡頭框架。',
+        '失效情境｜若良率或匯率壓力拖累獲利，市場不會願意給接近高階光學上緣的倍數。 ',
+      ],
+      estimatedFields: ['高階光學 TAM', '市場份額'],
+      baselineRevenueAnnual: 57600000000,
+      baselineGrossMarginPct: 58,
+      baselineOperatingMarginPct: 42,
+      baselinePeRatio: 24.7,
+    },
+  },
+  '3450': {
+    base: {
+      tamRange: '約 NT$210–250 億',
+      marketShareRange: '6%–8%',
+      mixTarget: 24,
+      orderVisibility: 'AOC、COS 封裝與 LD 封測訂單延續，2026 年產能擴張開始轉成營收',
+      revenueAnnual: 12350000000,
+      grossMarginPct: 35,
+      operatingMarginPct: 18,
+      eps: 13.86,
+      targetPe: 50,
+      evidenceRefs: [
+        '支撐 Base｜法人與產業觀察都指出 AOC / COS 需求增長，2026 年營收有機會挑戰百億元以上。',
+        '支撐 Base｜2025 年以來毛利率明顯走高，轉型到高毛利光通訊封裝的方向已開始反映在財務面。',
+      ],
+      estimatedFields: ['CPO / COS TAM', '市場份額', '訂單轉換節奏'],
+      baselineRevenueAnnual: 8580000000,
+      baselineGrossMarginPct: 30.5,
+      baselineOperatingMarginPct: 13.2,
+      baselinePeRatio: 62.8,
+    },
+    upside: {
+      tamRange: '約 NT$260–320 億',
+      marketShareRange: '8%–10%',
+      mixTarget: 32,
+      orderVisibility: '800G / 1.6T 光模組與 CPO 相關產品需求加速，COS 產能利用率大幅提升',
+      revenueAnnual: 13400000000,
+      grossMarginPct: 40,
+      operatingMarginPct: 24,
+      eps: 17.9,
+      targetPe: 60,
+      evidenceRefs: [
+        '支撐情境｜若博通與美系客戶的訂單驗證更快落地，市場會把聯鈞視為 CPO 主線受惠股。',
+        '支撐情境｜高毛利 COS 與 AOC 佔比若持續拉高，EPS 與估值倍數都會高於 Base。 ',
+      ],
+      estimatedFields: ['CPO / COS TAM', '市場份額', '1.6T 導入節奏'],
+      baselineRevenueAnnual: 8580000000,
+      baselineGrossMarginPct: 30.5,
+      baselineOperatingMarginPct: 13.2,
+      baselinePeRatio: 62.8,
+    },
+    invalidation: {
+      tamRange: '約 NT$160–190 億',
+      marketShareRange: '4%–5%',
+      mixTarget: 16,
+      orderVisibility: 'AOC 與 COS 僅維持保守放量，CPO 題材延後',
+      revenueAnnual: 11300000000,
+      grossMarginPct: 30,
+      operatingMarginPct: 15,
+      eps: 10.46,
+      targetPe: 45,
+      evidenceRefs: [
+        '失效情境｜若 CPO 訂單驗證延後，聯鈞的評價會回到 AOC / 既有業務框架。',
+      ],
+      estimatedFields: ['CPO / COS TAM', '市場份額'],
+      baselineRevenueAnnual: 8580000000,
+      baselineGrossMarginPct: 30.5,
+      baselineOperatingMarginPct: 13.2,
+      baselinePeRatio: 62.8,
+    },
+  },
+  '2337': {
+    base: {
+      tamRange: '約 71,000–74,000M Gb',
+      marketShareRange: '約 51%',
+      mixTarget: 34,
+      orderVisibility: 'MLC NAND 退出供給持續發酵，長尾 eMMC 客戶轉單至旺宏',
+      revenueAnnual: 56390000000,
+      grossMarginPct: 28,
+      operatingMarginPct: 10,
+      eps: 30.04,
+      targetPe: 10,
+      evidenceRefs: [
+        '支撐 Base｜三大原廠退出 MLC NAND 後，旺宏承接低容量 eMMC 長尾需求的故事已有供給端佐證。',
+        '支撐 Base｜若 eMMC 佔比持續提升，獲利彈性會明顯高於市場對一般記憶體股的預期。 ',
+      ],
+      estimatedFields: ['eMMC 長尾需求 TAM', '市場份額'],
+      baselineRevenueAnnual: 28800000000,
+      baselineGrossMarginPct: 17.8,
+      baselineOperatingMarginPct: -12.8,
+      baselinePeRatio: -55.9,
+    },
+    upside: {
+      tamRange: '約 74,000–78,000M Gb',
+      marketShareRange: '55%–58%',
+      mixTarget: 40,
+      orderVisibility: '供需缺口維持更久，ASP 與高毛利產品占比同步提升',
+      revenueAnnual: 69200000000,
+      grossMarginPct: 33,
+      operatingMarginPct: 14,
+      eps: 34.8,
+      targetPe: 11.5,
+      evidenceRefs: [
+        '支撐情境｜若供需缺口未被快速填補，旺宏可承接更多高毛利長尾需求，市場會願意給高於一般循環股的倍數。',
+      ],
+      estimatedFields: ['eMMC 長尾需求 TAM', '市場份額'],
+      baselineRevenueAnnual: 28800000000,
+      baselineGrossMarginPct: 17.8,
+      baselineOperatingMarginPct: -12.8,
+      baselinePeRatio: -55.9,
+    },
+    invalidation: {
+      tamRange: '約 63,000–67,000M Gb',
+      marketShareRange: '35%–40%',
+      mixTarget: 22,
+      orderVisibility: '價格回升不延續，長尾需求回到保守採購',
+      revenueAnnual: 18000000000,
+      grossMarginPct: 18,
+      operatingMarginPct: 2,
+      eps: 5,
+      targetPe: 12,
+      evidenceRefs: [
+        '失效情境｜若 ASP 回升與供需缺口無法延續，旺宏就會回到傳統記憶體評價框架。 ',
+      ],
+      estimatedFields: ['eMMC 長尾需求 TAM', '市場份額'],
+      baselineRevenueAnnual: 28800000000,
+      baselineGrossMarginPct: 17.8,
+      baselineOperatingMarginPct: -12.8,
+      baselinePeRatio: -55.9,
+    },
+  },
+  '2317': {
+    base: {
+      tamRange: '約 NT$35–40 兆 AI server / EMS 可服務市場',
+      marketShareRange: '18%–22%',
+      mixTarget: 34,
+      orderVisibility: 'CSP AI server 與 rack-level 整機訂單延續，GB 系列與 ASIC 伺服器帶動高階組裝占比提升',
+      revenueAnnual: 7800000000000,
+      grossMarginPct: 7.2,
+      operatingMarginPct: 3.6,
+      eps: 14.5,
+      targetPe: 16,
+      evidenceRefs: [
+        '支撐 Base｜鴻海持續揭露 AI server 為主要成長動能，CSP 客戶需求與 rack-level 出貨讓營收基底具可驗證性。',
+        '支撐 Base｜月營收 run-rate 維持高檔，代表 AI server 不是單季題材，而是正在進入 EMS 營收結構。',
+        '支撐 Base｜高階伺服器與機櫃組裝占比提高，毛利率與營益率有機會小幅高於傳統 EMS。',
+      ],
+      estimatedFields: ['AI server 可服務市場', 'CSP 客戶占比', 'rack-level 出貨占比', 'EPS'],
+      baselineRevenueAnnual: 6900000000000,
+      baselineGrossMarginPct: 6.4,
+      baselineOperatingMarginPct: 3.1,
+      baselinePeRatio: 14,
+    },
+    upside: {
+      tamRange: '約 NT$40–46 兆 AI server / rack-level 可服務市場',
+      marketShareRange: '22%–25%',
+      mixTarget: 42,
+      orderVisibility: '更多 CSP 將 GPU / ASIC rack 交由鴻海承接，液冷與整櫃出貨提高 ASP 與服務價值',
+      revenueAnnual: 8600000000000,
+      grossMarginPct: 7.8,
+      operatingMarginPct: 4.2,
+      eps: 18,
+      targetPe: 18,
+      evidenceRefs: [
+        '支撐情境｜若 rack-level 交付與液冷整合放量速度快於 Base，鴻海不只是組裝，而是承接更高 ASP 的整櫃系統。',
+        '支撐情境｜AI ASIC 客戶若擴大委外，市場會把鴻海評價從傳統 EMS 上修到 AI server 平台供應鏈。',
+      ],
+      estimatedFields: ['rack-level 出貨占比', '液冷整合 ASP', 'AI ASIC 客戶滲透'],
+      baselineRevenueAnnual: 6900000000000,
+      baselineGrossMarginPct: 6.4,
+      baselineOperatingMarginPct: 3.1,
+      baselinePeRatio: 14,
+    },
+    invalidation: {
+      tamRange: '約 NT$30–34 兆 AI server / EMS 可服務市場',
+      marketShareRange: '15%–17%',
+      mixTarget: 25,
+      orderVisibility: 'AI server 拉貨延後，rack-level 占比低於預期，傳統 EMS 稼動率壓回毛利率',
+      revenueAnnual: 7200000000000,
+      grossMarginPct: 6.2,
+      operatingMarginPct: 2.9,
+      eps: 11.5,
+      targetPe: 13,
+      evidenceRefs: [
+        '失效情境｜若 CSP 拉貨延後或 rack-level 良率/交付不順，鴻海仍會被市場用傳統 EMS 倍數評價。',
+      ],
+      estimatedFields: ['AI server 可服務市場', 'rack-level 出貨占比'],
+      baselineRevenueAnnual: 6900000000000,
+      baselineGrossMarginPct: 6.4,
+      baselineOperatingMarginPct: 3.1,
+      baselinePeRatio: 14,
+    },
+  },
+  '6223': {
+    base: {
+      tamRange: '約 NT$900–1,100 億高階 probe card / 測試介面可服務市場',
+      marketShareRange: '10%–12%',
+      mixTarget: 44,
+      orderVisibility: 'AI/HPC 晶片、HBM 與先進封裝測試需求提高高階探針卡與測試座出貨',
+      revenueAnnual: 15000000000,
+      grossMarginPct: 48,
+      operatingMarginPct: 31,
+      eps: 28,
+      targetPe: 26,
+      evidenceRefs: [
+        '支撐 Base｜旺矽受惠 AI/HPC 與先進封裝測試複雜度提升，高階探針卡需求具產業邏輯支撐。',
+        '支撐 Base｜月營收與測試介面需求改善，可驗證產品組合正往高毛利應用移動。',
+        '支撐 Base｜同業高階測試介面廠多以 normalized forward PE 評價，旺矽可享高於一般電子零組件的倍數。',
+      ],
+      estimatedFields: ['probe card TAM', 'AI/HPC 營收占比', 'HBM 測試滲透', 'EPS'],
+      baselineRevenueAnnual: 12500000000,
+      baselineGrossMarginPct: 45,
+      baselineOperatingMarginPct: 28,
+      baselinePeRatio: 24,
+    },
+    upside: {
+      tamRange: '約 NT$1,100–1,350 億高階 probe card / HBM 測試可服務市場',
+      marketShareRange: '12%–15%',
+      mixTarget: 52,
+      orderVisibility: 'AI accelerator 與 HBM 測試需求加速，高階探針卡供給吃緊使 ASP 與毛利率上修',
+      revenueAnnual: 17800000000,
+      grossMarginPct: 51,
+      operatingMarginPct: 34,
+      eps: 36,
+      targetPe: 30,
+      evidenceRefs: [
+        '支撐情境｜若 HBM 與先進封裝測試需求持續超預期，旺矽高階產品 ASP 與稼動率會同步提高。',
+        '支撐情境｜AI 晶片客戶導入週期若縮短，市場會提高對測試介面供應鏈的成長倍數。',
+      ],
+      estimatedFields: ['HBM 測試 TAM', '高階 probe card ASP', 'AI/HPC 客戶滲透'],
+      baselineRevenueAnnual: 12500000000,
+      baselineGrossMarginPct: 45,
+      baselineOperatingMarginPct: 28,
+      baselinePeRatio: 24,
+    },
+    invalidation: {
+      tamRange: '約 NT$750–850 億 probe card 可服務市場',
+      marketShareRange: '8%–9%',
+      mixTarget: 34,
+      orderVisibility: 'AI/HPC 測試需求放緩，客戶拉貨遞延，高階產品占比回落',
+      revenueAnnual: 13000000000,
+      grossMarginPct: 44,
+      operatingMarginPct: 26,
+      eps: 22,
+      targetPe: 20,
+      evidenceRefs: [
+        '失效情境｜若 AI/HPC 測試需求遞延或價格競爭升高，旺矽將回到一般測試介面循環評價。',
+      ],
+      estimatedFields: ['probe card TAM', '高階產品占比'],
+      baselineRevenueAnnual: 12500000000,
+      baselineGrossMarginPct: 45,
+      baselineOperatingMarginPct: 28,
+      baselinePeRatio: 24,
+    },
+  },
+  '2340': {
+    base: {
+      tamRange: '約 NT$450–550 億化合物半導體 / 光電元件可服務市場',
+      marketShareRange: '5%–7%',
+      mixTarget: 28,
+      orderVisibility: '光通訊、車用與感測元件需求回升，低基期下產品組合逐步改善',
+      revenueAnnual: 5200000000,
+      grossMarginPct: 24,
+      operatingMarginPct: 8,
+      eps: 1.4,
+      targetPe: 26,
+      evidenceRefs: [
+        '支撐 Base｜台亞具光電與化合物半導體製程基礎，若光通訊與車用需求修復，營收低基期具回升彈性。',
+        '支撐 Base｜月營收 run-rate 若連續改善，可驗證產品組合從傳統 LED 往較高毛利應用修復。',
+        '支撐 Base｜目前仍屬研究推估，需以法說與月營收確認毛利率改善是否落地。',
+      ],
+      estimatedFields: ['化合物半導體 TAM', '光通訊/車用 mix', '毛利率', 'EPS'],
+      baselineRevenueAnnual: 4500000000,
+      baselineGrossMarginPct: 20,
+      baselineOperatingMarginPct: 3,
+      baselinePeRatio: 24,
+    },
+    upside: {
+      tamRange: '約 NT$550–700 億化合物半導體 / 光通訊可服務市場',
+      marketShareRange: '7%–9%',
+      mixTarget: 38,
+      orderVisibility: '光通訊或感測元件新案放量，車用與高階應用占比提升，低基期轉折速度快於 Base',
+      revenueAnnual: 6400000000,
+      grossMarginPct: 30,
+      operatingMarginPct: 14,
+      eps: 2.4,
+      targetPe: 30,
+      evidenceRefs: [
+        '支撐情境｜若光通訊與高階感測元件訂單放量，台亞的毛利率修復會比單純 LED 循環更快。',
+        '支撐情境｜低基期個股若同時出現月營收與毛利率上修，市場容易給予轉機股 rerating。',
+      ],
+      estimatedFields: ['光通訊 TAM', '高階產品 mix', '訂單放量節奏'],
+      baselineRevenueAnnual: 4500000000,
+      baselineGrossMarginPct: 20,
+      baselineOperatingMarginPct: 3,
+      baselinePeRatio: 24,
+    },
+    invalidation: {
+      tamRange: '約 NT$380–430 億光電元件可服務市場',
+      marketShareRange: '4%–5%',
+      mixTarget: 20,
+      orderVisibility: '新案放量不如預期，產品組合仍停留在傳統 LED 與低毛利應用',
+      revenueAnnual: 4600000000,
+      grossMarginPct: 20,
+      operatingMarginPct: 3,
+      eps: 0.6,
+      targetPe: 18,
+      evidenceRefs: [
+        '失效情境｜若月營收與毛利率無法連續修復，台亞仍應回到低基期光電零組件評價。',
+      ],
+      estimatedFields: ['高階產品 mix', '毛利率'],
+      baselineRevenueAnnual: 4500000000,
+      baselineGrossMarginPct: 20,
+      baselineOperatingMarginPct: 3,
+      baselinePeRatio: 24,
+    },
+  },
+  '2408': {
+    base: {
+      tamRange: '約 NT$9,000 億–1.1 兆',
+      marketShareRange: '18%–22%',
+      mixTarget: 35,
+      orderVisibility: 'Q1 2026 DRAM ASP 季增超過七十位數百分比，DDR5 與客製化 AI UWIO 開始貢獻，部分客戶以 LTA 提升訂單與價格能見度',
+      revenueAnnual: 196350000000,
+      grossMarginPct: 66,
+      operatingMarginPct: 58,
+      eps: 32,
+      targetPe: 10,
+      evidenceRefs: [
+        '支撐 Base｜南亞科 2026Q1 自結營收 490.87 億、毛利率 67.9%、營益率 61.3%、EPS 8.41，顯示本輪不是只靠題材，而是已反映在財務數字。',
+        '支撐 Base｜公司說明 DRAM ASP 季增超過七十位數百分比，DDR5 約占 10% 且可視需求彈性增加，客製化 AI UWIO 已開始貢獻營收。',
+        '支撐 Base｜四大客戶參與私募普通股認購，搭配 LTA 訂單能見度，提高 DDR4 / DDR5 供給吃緊延續的可驗證性。',
+      ],
+      estimatedFields: ['DRAM TAM', '有效市場份額', 'DDR5 / AI UWIO 營收占比', 'normalized memory-cycle PE'],
+      baselineRevenueAnnual: 196350000000,
+      baselineGrossMarginPct: 67.9,
+      baselineOperatingMarginPct: 61.3,
+      baselinePeRatio: -68,
+      baselinePbRatio: 3.4,
+    },
+    upside: {
+      tamRange: '約 NT$1.05–1.25 兆',
+      marketShareRange: '21%–25%',
+      mixTarget: 48,
+      orderVisibility: 'HBM 排擠一般 DRAM 產能延續，DDR5 占比提升快於 Base，1C / 1D 製程與 AI UWIO 產品拉高 ASP 與毛利率',
+      revenueAnnual: 225000000000,
+      grossMarginPct: 70,
+      operatingMarginPct: 63,
+      eps: 38.5,
+      targetPe: 11,
+      evidenceRefs: [
+        '支撐情境｜若 DDR5 占比由目前約 10% 更快提升，且 AI UWIO 從開始貢獻營收走向放量，產品 mix 對 ASP 與毛利率的拉動會高於 Base。',
+        '支撐情境｜若 HBM 投片排擠效應延長、一般 DRAM 供給維持緊俏，市場會用更高 normalized PE 反映南亞科的週期獲利彈性。',
+        '支撐情境｜1C / 1D 製程與 EUV 開發按計畫推進，若良率與產能轉換順利，EPS 可在高 ASP 基底上再上修。',
+      ],
+      estimatedFields: ['DRAM TAM', '有效市場份額', 'DDR5 / AI UWIO 放量速度', 'LTA 價格能見度'],
+      baselineRevenueAnnual: 196350000000,
+      baselineGrossMarginPct: 67.9,
+      baselineOperatingMarginPct: 61.3,
+      baselinePeRatio: -68,
+      baselinePbRatio: 3.4,
+    },
+    invalidation: {
+      tamRange: '約 NT$6,500–7,500 億',
+      marketShareRange: '13%–16%',
+      mixTarget: 18,
+      orderVisibility: 'DRAM ASP 回落，DDR5 / AI UWIO 貢獻停留在低占比，客戶 LTA 只能支撐短期訂單而無法延續價格',
+      revenueAnnual: 145000000000,
+      grossMarginPct: 42,
+      operatingMarginPct: 30,
+      eps: 16,
+      targetPe: 8,
+      evidenceRefs: [
+        '失效情境｜若 DRAM ASP 快速反轉，Q1 2026 高毛利率將被視為週期高點而非新基底。',
+        '失效情境｜若 DDR5 與 AI UWIO 無法擴大營收占比，南亞科仍會被市場用較保守的傳統 DRAM 週期倍數評價。',
+      ],
+      estimatedFields: ['DRAM TAM', '有效市場份額', 'DDR5 / AI UWIO 營收占比'],
+      baselineRevenueAnnual: 196350000000,
+      baselineGrossMarginPct: 67.9,
+      baselineOperatingMarginPct: 61.3,
+      baselinePeRatio: -68,
+      baselinePbRatio: 3.4,
+    },
+  },
+  '2344': {
+    base: {
+      tamRange: '約 NT$320–360 億',
+      marketShareRange: '8%–10%',
+      mixTarget: 30,
+      orderVisibility: '車規 NOR Flash 與 Specialty DRAM 補庫存延續，工控與車用客戶回補需求',
+      revenueAnnual: 45500000000,
+      grossMarginPct: 24,
+      operatingMarginPct: 9,
+      eps: 4.8,
+      targetPe: 28,
+      evidenceRefs: [
+        '支撐 Base｜車規 NOR Flash 與 Specialty DRAM 需求回溫，代表華邦電的復甦不只靠景氣低基期。',
+        '支撐 Base｜若車用與工控高毛利產品占比提升，毛利率與營益率不應停留在過去低點。 ',
+      ],
+      estimatedFields: ['Specialty 記憶體 TAM', '市場份額'],
+      baselineRevenueAnnual: 38400000000,
+      baselineGrossMarginPct: 18,
+      baselineOperatingMarginPct: -5,
+    },
+    upside: {
+      tamRange: '約 NT$360–420 億',
+      marketShareRange: '10%–12%',
+      mixTarget: 35,
+      orderVisibility: '車規 NOR Flash 與 Specialty DRAM 拉貨快於預期，ASP 與高毛利產品占比同步提升',
+      revenueAnnual: 49500000000,
+      grossMarginPct: 27,
+      operatingMarginPct: 12,
+      eps: 5.9,
+      targetPe: 30,
+      evidenceRefs: [
+        '支撐情境｜若車規與工控客戶補庫存延續更久，市場會把華邦電從低基期修復股重新定價成 Specialty 記憶體復甦股。',
+      ],
+      estimatedFields: ['Specialty 記憶體 TAM', '市場份額'],
+      baselineRevenueAnnual: 38400000000,
+      baselineGrossMarginPct: 18,
+      baselineOperatingMarginPct: -5,
+    },
+    invalidation: {
+      tamRange: '約 NT$260–300 億',
+      marketShareRange: '6%–8%',
+      mixTarget: 22,
+      orderVisibility: '車規與工控需求只維持溫和修復，ASP 回升不延續',
+      revenueAnnual: 37200000000,
+      grossMarginPct: 18,
+      operatingMarginPct: 4,
+      eps: 3.2,
+      targetPe: 24,
+      evidenceRefs: [
+        '失效情境｜若車規 NOR Flash 與 Specialty DRAM 補庫存不延續，華邦電會回到一般循環記憶體的保守評價框架。 ',
+      ],
+      estimatedFields: ['Specialty 記憶體 TAM', '市場份額'],
+      baselineRevenueAnnual: 38400000000,
+      baselineGrossMarginPct: 18,
+      baselineOperatingMarginPct: -5,
+    },
+  },
+  '2382': {
+    base: {
+      tamRange: '約 NT$5.0–5.4 兆',
+      marketShareRange: '14%–15%',
+      mixTarget: 38,
+      orderVisibility: 'AI server 機櫃與整機訂單能見度延伸到 2027 年',
+      revenueAnnual: 1970000000000,
+      grossMarginPct: 9.5,
+      operatingMarginPct: 5.4,
+      eps: 19.5,
+      targetPe: 18,
+      evidenceRefs: [
+        '支撐 Base｜雲端客戶 capex 與 AI server 出貨追蹤持續支持高階機櫃產品放量。',
+        '支撐 Base｜AI server 營收占比提高後，毛利率與營益率有望快於營收成長改善。 ',
+      ],
+      estimatedFields: ['AI server TAM', '市場份額'],
+      baselineRevenueAnnual: 1833600000000,
+      baselineGrossMarginPct: 8.5,
+      baselineOperatingMarginPct: 4.2,
+      baselinePeRatio: 19.5,
+    },
+    upside: {
+      tamRange: '約 NT$5.6–6.0 兆',
+      marketShareRange: '16%–17%',
+      mixTarget: 45,
+      orderVisibility: 'rack-level 產品與高階整機 ASP 升級同步實現',
+      revenueAnnual: 2090000000000,
+      grossMarginPct: 10.4,
+      operatingMarginPct: 6.2,
+      eps: 20.01,
+      targetPe: 20,
+      evidenceRefs: [
+        '支撐情境｜若 rack-level 與高階整機占比提升速度更快，市場會提高對 EPS 彈性的定價。 ',
+      ],
+      estimatedFields: ['AI server TAM', '市場份額'],
+      baselineRevenueAnnual: 1833600000000,
+      baselineGrossMarginPct: 8.5,
+      baselineOperatingMarginPct: 4.2,
+      baselinePeRatio: 19.5,
+    },
+    invalidation: {
+      tamRange: '約 NT$4.6–4.9 兆',
+      marketShareRange: '12%–13%',
+      mixTarget: 30,
+      orderVisibility: 'AI server 需求只維持溫和成長，產品組合改善不如預期',
+      revenueAnnual: 1780000000000,
+      grossMarginPct: 8.1,
+      operatingMarginPct: 3.8,
+      eps: 15.96,
+      targetPe: 15,
+      evidenceRefs: [
+        '失效情境｜若 AI server 訂單能見度未能延伸到 2027，廣達仍會被用傳統伺服器框架估值。 ',
+      ],
+      estimatedFields: ['AI server TAM', '市場份額'],
+      baselineRevenueAnnual: 1833600000000,
+      baselineGrossMarginPct: 8.5,
+      baselineOperatingMarginPct: 4.2,
+      baselinePeRatio: 19.5,
+    },
+  },
+  '2454': {
+    base: {
+      tamRange: '約 NT$3,500–4,000 億',
+      marketShareRange: '40%–42%',
+      mixTarget: 42,
+      orderVisibility: '旗艦 SoC、Wi-Fi 7 與車用新品放量，帶動高階產品組合提升',
+      revenueAnnual: 580000000000,
+      grossMarginPct: 49.8,
+      operatingMarginPct: 22.5,
+      eps: 85,
+      targetPe: 22,
+      evidenceRefs: [
+        '支撐 Base｜旗艦 SoC 與邊緣 AI 功能升級，有助 ASP 與毛利率高於手機整體出貨增速。',
+        '支撐 Base｜新產品線像 Wi-Fi 7 與車用 SoC 使高階產品 mix 改善不只靠單一手機週期。 ',
+      ],
+      estimatedFields: ['高階 SoC TAM', '市場份額'],
+      baselineRevenueAnnual: 535200000000,
+      baselineGrossMarginPct: 48.7,
+      baselineOperatingMarginPct: 21.4,
+      baselinePeRatio: 26.4,
+    },
+    upside: {
+      tamRange: '約 NT$4,000–4,400 億',
+      marketShareRange: '46%–48%',
+      mixTarget: 48,
+      orderVisibility: '旗艦 SoC 與 edge AI 導入更快，ASP 提升與市占擴張同時發生',
+      revenueAnnual: 610000000000,
+      grossMarginPct: 51.5,
+      operatingMarginPct: 24,
+      eps: 87.5,
+      targetPe: 24,
+      evidenceRefs: [
+        '支撐情境｜若高階產品占比提升速度快於預期，EPS 修復會比市場現在的 Base 更快。 ',
+      ],
+      estimatedFields: ['高階 SoC TAM', '市場份額'],
+      baselineRevenueAnnual: 535200000000,
+      baselineGrossMarginPct: 48.7,
+      baselineOperatingMarginPct: 21.4,
+      baselinePeRatio: 26.4,
+    },
+    invalidation: {
+      tamRange: '約 NT$3,000–3,300 億',
+      marketShareRange: '34%–36%',
+      mixTarget: 31,
+      orderVisibility: '旗艦 SoC 放量不如預期，手機與 edge AI 需求僅溫和回升',
+      revenueAnnual: 520000000000,
+      grossMarginPct: 46,
+      operatingMarginPct: 18,
+      eps: 72.5,
+      targetPe: 20,
+      evidenceRefs: [
+        '失效情境｜若高階 SoC 與新產品 mix 未如期改善，聯發科會回到較保守的手機晶片評價區間。 ',
+      ],
+      estimatedFields: ['高階 SoC TAM', '市場份額'],
+      baselineRevenueAnnual: 535200000000,
+      baselineGrossMarginPct: 48.7,
+      baselineOperatingMarginPct: 21.4,
+      baselinePeRatio: 26.4,
+    },
+  },
+};
+
+const STOCK_SPECIFIC_BRIDGE_SEEDS: Readonly<Record<string, StockSpecificBridgeScenarioMap>> = Object.freeze({});
+
+// Keep the fixture declaration explicit so a future cleanup can move it into the
+// test package without accidentally restoring it to the production read path.
+void RETIRED_NON_AUTHORITATIVE_BRIDGE_FIXTURES;
+
+function stockSpecificBridgeSeed(
+  symbol: string,
+  caseType: ValuationCaseView['caseType'],
+) {
+  return STOCK_SPECIFIC_BRIDGE_SEEDS[symbol]?.[caseType] || null;
+}
+
+function generatedShareRangeForProfile(
+  symbol: string,
+  profile: ValuationBridgeProfile,
+  caseType: ValuationCaseView['caseType'],
+) {
+  if (symbol === '2330') {
+    return caseType === 'upside' ? [54, 58] : caseType === 'base' ? [48, 52] : [40, 44];
+  }
+  if (symbol === '3450') {
+    return caseType === 'upside' ? [8, 10] : caseType === 'base' ? [6, 8] : [4, 5];
+  }
+  const peer = profile.peerLabel.toLowerCase();
+  if (peer.includes('ic 設計') || peer.includes('soc')) {
+    return caseType === 'upside' ? [44, 48] : caseType === 'base' ? [36, 42] : [28, 34];
+  }
+  if (peer.includes('光學')) {
+    return caseType === 'upside' ? [28, 30] : caseType === 'base' ? [24, 27] : [20, 22];
+  }
+  if (peer.includes('記憶體') || peer.includes('儲存')) {
+    return caseType === 'upside' ? [18, 22] : caseType === 'base' ? [12, 16] : [8, 10];
+  }
+  if (peer.includes('封測') || peer.includes('封裝')) {
+    return caseType === 'upside' ? [10, 14] : caseType === 'base' ? [8, 11] : [5, 8];
+  }
+  if (peer.includes('網通') || peer.includes('交換器')) {
+    return caseType === 'upside' ? [10, 13] : caseType === 'base' ? [7, 10] : [4, 6];
+  }
+  if (peer.includes('載板') || peer.includes('pcb')) {
+    return caseType === 'upside' ? [14, 17] : caseType === 'base' ? [10, 13] : [7, 9];
+  }
+  if (peer.includes('odm') || peer.includes('ems') || peer.includes('server')) {
+    return caseType === 'upside' ? [14, 18] : caseType === 'base' ? [11, 14] : [8, 10];
+  }
+  if (peer.includes('散熱') || peer.includes('液冷')) {
+    return caseType === 'upside' ? [12, 15] : caseType === 'base' ? [9, 12] : [6, 8];
+  }
+  return caseType === 'upside' ? [12, 16] : caseType === 'base' ? [8, 12] : [5, 7];
+}
+
+function formatShareRange(lowPct: number, highPct: number) {
+  return `${formatNumberLocal(lowPct)}%–${formatNumberLocal(highPct)}%`;
+}
+
+function formatTamRangeFromRevenue(productRevenue: number | null, lowSharePct: number, highSharePct: number) {
+  if (productRevenue == null || !Number.isFinite(productRevenue) || productRevenue <= 0) {
+    return '研究推估不足';
+  }
+  const lowTam = productRevenue / Math.max(highSharePct / 100, 0.0001);
+  const highTam = productRevenue / Math.max(lowSharePct / 100, 0.0001);
+  return `約 ${formatNarrativeMoney(lowTam)}–${formatNarrativeMoney(highTam)}`;
+}
+
+function scenarioTargetPeForProfile(
+  profile: ValuationBridgeProfile,
+  caseType: ValuationCaseView['caseType'],
+) {
+  const [low, high] = profile.benchmarkPeRange;
+  if (caseType === 'upside') return round(high, 1);
+  if (caseType === 'invalidation') return round(Math.max(low - 2, Math.min(low, 6)), 1);
+  return round((low + high) / 2, 1);
+}
+
+function generatedStockSpecificSeedFromOverride(
+  symbol: string,
+  caseType: ValuationCaseView['caseType'],
+  profile: ValuationBridgeProfile,
+): StockSpecificBridgeSeed | null {
+  if (!OPPORTUNITIES_FIRST_BRIDGE_ROLLOUT_SYMBOLS.has(symbol)) return null;
+  const override = SEED_RESEARCH_OVERRIDES[symbol];
+  if (!override) return null;
+  const baselineRevenueAnnual =
+    override.monthlyRevenue > 0 && Number.isFinite(override.monthlyRevenue) ? override.monthlyRevenue * 12 : null;
+  if (baselineRevenueAnnual == null || baselineRevenueAnnual <= 0) return null;
+
+  const mixTarget = profile.mixTargets[caseType];
+  const volumeGrowth = profile.volumeGrowthTargets[caseType];
+  const aspGrowth = profile.aspGrowthTargets[caseType];
+  const revenueLift =
+    caseType === 'base'
+      ? 1 + volumeGrowth / 100 * 0.55 + aspGrowth / 100 * 0.22
+      : caseType === 'upside'
+        ? 1 + volumeGrowth / 100 * 0.58 + aspGrowth / 100 * 0.26
+        : 1 + volumeGrowth / 100 * 0.45 + aspGrowth / 100 * 0.18;
+  const revenueAnnual = round(baselineRevenueAnnual * revenueLift, 0);
+  const grossMarginPct =
+    caseType === 'base'
+      ? round(Math.max(override.grossMargin + 1.2, profile.grossMarginTargets.base), 2)
+      : caseType === 'upside'
+        ? round(Math.max(override.grossMargin + 3.2, profile.grossMarginTargets.upside), 2)
+        : round(Math.min(override.grossMargin - 2.2, profile.grossMarginTargets.invalidation), 2);
+  const operatingMarginPct =
+    caseType === 'base'
+      ? round(Math.max(override.operatingMargin + 1.5, profile.operatingMarginTargets.base), 2)
+      : caseType === 'upside'
+        ? round(Math.max(override.operatingMargin + 3.5, profile.operatingMarginTargets.upside), 2)
+        : round(Math.min(override.operatingMargin - 2.4, profile.operatingMarginTargets.invalidation), 2);
+  const eps = buildBridgeDerivedEps({
+    currentRevenueAnnual: baselineRevenueAnnual,
+    projectedRevenueAnnual: revenueAnnual,
+    currentGrossMargin: override.grossMargin,
+    projectedGrossMargin: grossMarginPct,
+    currentOperatingMargin: override.operatingMargin,
+    projectedOperatingMargin: operatingMarginPct,
+    currentEps: override.epsTtm,
+  });
+  if (eps == null || !Number.isFinite(eps) || eps <= 0) return null;
+
+  const targetPe = scenarioTargetPeForProfile(profile, caseType);
+  const [lowSharePct, highSharePct] = generatedShareRangeForProfile(symbol, profile, caseType);
+  const productRevenue = revenueAnnual * (mixTarget / 100);
+  const tamRange = formatTamRangeFromRevenue(productRevenue, lowSharePct, highSharePct);
+  const supportLabel = caseType === 'upside' ? '支撐情境' : caseType === 'invalidation' ? '失效情境' : '支撐 Base';
+  const evidenceRefs = uniqueNarrativeLines(
+    [
+      override.thesisSummary ? `${supportLabel}｜${override.thesisSummary}` : null,
+      override.catalystSummary ? `${supportLabel}｜${override.catalystSummary}` : null,
+    ],
+    3,
+  );
+  return {
+    driverLabel: profile.driverLabel,
+    tamRange,
+    marketShareRange: formatShareRange(lowSharePct, highSharePct),
+    mixTarget,
+    orderVisibility: override.catalystSummary || override.thesisTitle || profile.storyLines[0] || profile.driverLabel,
+    revenueAnnual,
+    grossMarginPct,
+    operatingMarginPct,
+    eps,
+    targetPe,
+    evidenceRefs,
+    estimatedFields: ['市場份額', 'TAM', profile.volumeLabel, profile.aspLabel],
+    baselineRevenueAnnual,
+    baselineGrossMarginPct: override.grossMargin,
+    baselineOperatingMarginPct: override.operatingMargin,
+    baselinePeRatio: override.peRatio,
+  };
+}
+
+type StockSpecificEvidenceBundle = {
+  evidenceBasis: string[];
+  customerExposure: string | null;
+  transcriptEvidence: string | null;
+  monthlyRevenueEvidence: string | null;
+  productMixEvidence: string | null;
+  marketShareEvidence: string | null;
+  multipleRationale: string | null;
+};
+
+function buildSampleStockEvidenceBundle(
+  context: ValuationBridgeContext,
+  caseType: ValuationCaseView['caseType'],
+  seed: StockSpecificBridgeSeed,
+) {
+  const revenueSignal = summarizeRevenueNarrative(context.monthlyRevenue, context.yoyGrowth, context.momGrowth);
+  const caseLabel = caseType === 'upside' ? '情境' : caseType === 'invalidation' ? '失效' : 'Base';
+  if (context.symbol === '2382') {
+    return {
+      customerExposure: sanitizeNarrativeText(
+        `客戶 / 訂單依據：依據公司法說、供應鏈追蹤與 hyperscaler capex 討論，${caseLabel} 情境主要對應 Meta、Microsoft、Google 等 CSP 的 AI server 與 rack-level 機櫃拉貨；研究推估整機與 rack-level 產品仍是 2026 年 ASP 與 mix 上修的主引擎。`,
+      ),
+      transcriptEvidence: sanitizeNarrativeText(
+        '法說 / 官方依據：公司多次強調 AI server 產品比重持續拉高，毛利率改善不只來自營收放大，也來自高單價整機、機櫃與系統整合服務比重上升；因此毛利率與營益率假設需與產品 mix 一起上修，不能只單改 EPS。',
+      ),
+      monthlyRevenueEvidence: revenueSignal,
+      productMixEvidence: sanitizeNarrativeText(
+        `${caseLabel} 情境以 AI server 營收占比由 28% ${caseType === 'invalidation' ? '回落到' : '提升到'} ${formatNumberLocal(seed.mixTarget)}% 為核心假設，並把機櫃 / 整機 ASP、出貨台數與高毛利系統整合收入一併納入。`,
+      ),
+      marketShareEvidence: sanitizeNarrativeText(
+        `市場份額依據：研究推估以全球 AI server ODM / rack 可服務市場 ${seed.tamRange} 為底，廣達在 hyperscaler ODM 鏈的有效接單份額約 ${seed.marketShareRange}；這個份額假設來自既有 CSP 客戶結構、月營收 run-rate 與同業出貨格局，而非單一社群傳聞。`,
+      ),
+      multipleRationale: sanitizeNarrativeText(
+        `倍數依據：本情境採用 ${formatNumberLocal(seed.targetPe)}x，因廣達仍屬低毛利 ODM/EMS，本質上不會直接套最樂觀 AI 純概念股倍數；只有在 rack-level 與整機 mix 驗證更快時，才往同業區間上緣靠攏。`,
+      ),
+      evidenceBasis: uniqueNarrativeLines(
+        [
+          `依據法說、CSP capex 討論與月營收 run-rate，研究推估 AI server 營收占比可由 28% ${caseType === 'invalidation' ? '回落到' : '提升到'} ${formatNumberLocal(seed.mixTarget)}%。`,
+          revenueSignal,
+          `研究推估以可服務市場 ${seed.tamRange}、有效接單份額 ${seed.marketShareRange} 與產品 mix 改善，共同推導 ${caseLabel} 目標價。`,
+        ],
+        4,
+      ),
+    } satisfies StockSpecificEvidenceBundle;
+  }
+
+  if (context.symbol === '2454') {
+    return {
+      customerExposure: sanitizeNarrativeText(
+        `客戶 / 訂單依據：${caseLabel} 情境主要對應 Android 旗艦 OEM、Wi‑Fi 7 網通客戶與車用 SoC 專案；研究推估並非把單一手機品牌銷量直接線性外推，而是看旗艦 SoC 滲透、ASP 與新產品占比是否同步提升。`,
+      ),
+      transcriptEvidence: sanitizeNarrativeText(
+        '法說 / 官方依據：公司對旗艦 SoC、端側 AI、Wi‑Fi 7 與車用新品的描述，支持高階產品組合改善；因此 EPS 上修不是單靠出貨量，而是 ASP、毛利率與費用率共同改善後的結果。',
+      ),
+      monthlyRevenueEvidence: revenueSignal,
+      productMixEvidence: sanitizeNarrativeText(
+        `${caseLabel} 情境把旗艦 SoC / 高階連網產品占比視為關鍵變數，假設高階產品 mix 由 35% ${caseType === 'invalidation' ? '回到' : '提升到'} ${formatNumberLocal(seed.mixTarget)}%，並搭配 Wi‑Fi 7 與車用新品放量。`,
+      ),
+      marketShareEvidence: sanitizeNarrativeText(
+        `市場份額依據：研究推估以高階 Android / edge AI SoC 可服務市場 ${seed.tamRange} 為底，聯發科在旗艦與準旗艦 SoC 的營收份額約 ${seed.marketShareRange}；這裡看的是高階營收份額，而不是整體手機出貨市占。`,
+      ),
+      multipleRationale: sanitizeNarrativeText(
+        `倍數依據：本情境採用 ${formatNumberLocal(seed.targetPe)}x，是在高階 IC 設計同業常見區間內、偏向 normalized / forward PE 的寫法；若目前 TTM PE 失真，會優先用產品組合升級後的 normalized 獲利看待。`,
+      ),
+      evidenceBasis: uniqueNarrativeLines(
+        [
+          `依據旗艦 SoC 世代升級、Wi‑Fi 7 與車用新品節奏，研究推估高階產品 mix 可由 35% ${caseType === 'invalidation' ? '回到' : '提升到'} ${formatNumberLocal(seed.mixTarget)}%。`,
+          revenueSignal,
+          `研究推估以可服務市場 ${seed.tamRange}、營收份額 ${seed.marketShareRange} 與高階 ASP 上修，共同推導 ${caseLabel} 目標價。`,
+        ],
+        4,
+      ),
+    } satisfies StockSpecificEvidenceBundle;
+  }
+
+  if (context.symbol === '2337') {
+    return {
+      customerExposure: sanitizeNarrativeText(
+        `客戶 / 訂單依據：${caseLabel} 情境主要對應長尾工控、車用與低容量 eMMC 客戶在三星、SK hynix、Kioxia、Micron 退出 MLC NAND 後的轉單需求；研究推估並非假設所有需求都由旺宏承接，而是只計入其可供應規格與長尾缺口。`,
+      ),
+      transcriptEvidence: sanitizeNarrativeText(
+        '法說 / 官方依據：供給端重點不是單一季度價格彈跳，而是 MLC NAND 退出與低容量 eMMC 長尾需求仍在，這使 EPS 推導必須同時反映 ASP/Gb、產品組合與供給缺口，而非只用價格乘上倍數。',
+      ),
+      monthlyRevenueEvidence: revenueSignal,
+      productMixEvidence: sanitizeNarrativeText(
+        `${caseLabel} 情境把 eMMC / MLC 長尾產品占比視為核心變數，假設高毛利產品 mix 由 22% ${caseType === 'invalidation' ? '回到' : '提升到'} ${formatNumberLocal(seed.mixTarget)}%，並把 ASP/Gb 與出貨缺口一起帶進毛利率。`,
+      ),
+      marketShareEvidence: sanitizeNarrativeText(
+        `市場份額依據：研究推估以低容量 eMMC / MLC 長尾需求 ${seed.tamRange} 為底，旺宏可承接約 ${seed.marketShareRange} 的供應份額；這個份額假設來自供給退出幅度、可替代供應商數量與公司產品線位置。`,
+      ),
+      multipleRationale: sanitizeNarrativeText(
+        `倍數依據：本情境採用 ${formatNumberLocal(seed.targetPe)}x，仍低於高成長半導體股常見上緣，因市場對記憶體循環與供需缺口可維持多久仍保留折價。`,
+      ),
+      evidenceBasis: uniqueNarrativeLines(
+        [
+          '依據供給端退出、長尾 eMMC 轉單與產品規格缺口，研究推估旺宏可承接更高的高毛利 eMMC / MLC 需求。',
+          revenueSignal,
+          `研究推估以需求缺口 ${seed.tamRange}、可承接份額 ${seed.marketShareRange} 與 ASP/Gb 改善，共同推導 ${caseLabel} 目標價。`,
+        ],
+        4,
+      ),
+    } satisfies StockSpecificEvidenceBundle;
+  }
+
+  if (context.symbol === '2408') {
+    return {
+      customerExposure: sanitizeNarrativeText(
+        `客戶 / 訂單依據：${caseLabel} 情境以南亞科公告四大客戶參與私募、部分客戶簽訂 LTA、以及多元 DRAM 產品穩定供應需求作為已驗證基底；若延伸到 HBM 排擠效應與 DDR5 / AI UWIO 放量，這部分仍列為研究推估，不直接視為已公告訂單。`,
+      ),
+      transcriptEvidence: sanitizeNarrativeText(
+        '法說 / 官方依據：南亞科 2026Q1 自結營收 490.87 億元、毛利率 67.9%、營益率 61.3%、EPS 8.41；公司同時說明第一季 DRAM ASP 季增超過七十位數百分比，DDR5 約占 10% 且可視需求增加，客製化 AI UWIO 已開始貢獻營收。',
+      ),
+      monthlyRevenueEvidence: sanitizeNarrativeText(
+        `月營收 / run-rate：以 2026Q1 營收 490.87 億元年化，run-rate 約 1,963.5 億元；${revenueSignal || '若單月 MOPS 數字尚未刷新，則以最新官方季度營收作為有效非零基底。'}`,
+      ),
+      productMixEvidence: sanitizeNarrativeText(
+        `${caseLabel} 情境把 DDR5、AI UWIO 與高 ASP DDR4 / DDR5 產品 mix 視為核心變數，假設高毛利 DRAM 組合由官方揭露的 DDR5 約 10% 基底 ${caseType === 'invalidation' ? '只提升到' : '提升到'} ${formatNumberLocal(seed.mixTarget)}%；毛利率與營益率變動必須跟 ASP、製程與產品組合一起驗證。`,
+      ),
+      marketShareEvidence: sanitizeNarrativeText(
+        `市場份額依據：研究推估以一般 DRAM / DDR4 / DDR5 可服務市場 ${seed.tamRange} 為底，南亞科在可供應產品鏈的有效營收份額約 ${seed.marketShareRange}；這裡看的是 DDR4 / DDR5 與客製化 DRAM 產品的有效營收份額，不是整體 HBM 市占。`,
+      ),
+      multipleRationale: sanitizeNarrativeText(
+        `倍數依據：本情境採用 ${formatNumberLocal(seed.targetPe)}x normalized memory-cycle PE；由於南亞科剛由虧轉盈、TTM PE 會被過去虧損扭曲，估值不直接使用表面 TTM PE，而以 Q1 2026 有效獲利基底與週期 normalized PE 評價。`,
+      ),
+      evidenceBasis: uniqueNarrativeLines(
+        [
+          '依據南亞科官方 2026Q1 自結財報、DRAM ASP 季增超過七十位數百分比、DDR5 約 10% 與 AI UWIO 開始貢獻營收，建立本輪非零財務基底。',
+          '依據四大客戶私募認購、LTA 訂單能見度與 HBM 投片排擠一般 DRAM 供給，研究推估 DDR4 / DDR5 供需緊俏仍可支撐 Base。',
+          `研究推估以可服務市場 ${seed.tamRange}、有效營收份額 ${seed.marketShareRange} 與高毛利 DRAM 組合 ${formatNumberLocal(seed.mixTarget)}%，共同推導 ${caseLabel} 目標價。`,
+        ],
+        4,
+      ),
+    } satisfies StockSpecificEvidenceBundle;
+  }
+
+  if (context.symbol === '2344') {
+    return {
+      customerExposure: sanitizeNarrativeText(
+        `客戶 / 訂單依據：${caseLabel} 情境主要對應車規 NOR Flash、工控與網通客戶對 Specialty DRAM 的回補需求；若沒有公司直接揭露單一客戶採購量，相關拉貨節奏一律視為研究推估，而非已公告訂單。`,
+      ),
+      transcriptEvidence: sanitizeNarrativeText(
+        '法說 / 官方依據：華邦電的重點不是全面記憶體景氣復甦，而是 Specialty DRAM 與車規 NOR Flash 產品組合是否改善，讓毛利率與營益率從低基期回升；因此這套模型同時上修營收、毛利率與營益率，而不是只看價格反彈。',
+      ),
+      monthlyRevenueEvidence: revenueSignal,
+      productMixEvidence: sanitizeNarrativeText(
+        `${caseLabel} 情境假設車規與高毛利 NOR Flash / Specialty DRAM 營收占比由 24% ${caseType === 'invalidation' ? '回到' : '提升到'} ${formatNumberLocal(seed.mixTarget)}%，並把車規 ASP 溢價、工控需求回補與低基期利用率改善一起帶入。`,
+      ),
+      marketShareEvidence: sanitizeNarrativeText(
+        `市場份額依據：研究推估以車規 NOR Flash 與 Specialty DRAM 可服務市場 ${seed.tamRange} 為底，華邦電在可量產規格中的有效營收份額約 ${seed.marketShareRange}；這裡看的不是整體 DRAM 市占，而是高毛利 Specialty 記憶體營收份額。`,
+      ),
+      multipleRationale: sanitizeNarrativeText(
+        `倍數依據：本情境採用 ${formatNumberLocal(seed.targetPe)}x，主要反映市場把華邦電視為低基期修復 + Specialty 記憶體組合改善標的；若目前 TTM PE 因虧損或低基期失真，則以 normalized / forward PE 為主。`,
+      ),
+      evidenceBasis: uniqueNarrativeLines(
+        [
+          `依據車規 NOR Flash、工控與網通客戶補庫存節奏，以及公司產品組合改善方向，研究推估高毛利產品占比可由 24% ${caseType === 'invalidation' ? '回到' : '提升到'} ${formatNumberLocal(seed.mixTarget)}%。`,
+          revenueSignal,
+          `研究推估以可服務市場 ${seed.tamRange}、有效營收份額 ${seed.marketShareRange} 與車規 / Specialty ASP 溢價，共同推導 ${caseLabel} 目標價。`,
+        ],
+        4,
+      ),
+    } satisfies StockSpecificEvidenceBundle;
+  }
+
+  if (context.symbol === '3008') {
+    return {
+      customerExposure: sanitizeNarrativeText(
+        `客戶 / 訂單依據：${caseLabel} 情境主要對應 iPhone Pro 系列、Android 旗艦鏡頭升規、潛望式導入率提升與 XR 光學模組驗證節奏；研究推估看的是高階鏡頭 ASP 與顆數，而不是單純用整體手機出貨量外推。`,
+      ),
+      transcriptEvidence: sanitizeNarrativeText(
+        '法說 / 官方依據：高階鏡頭、可變光圈與更複雜光學模組的良率與產品組合，才是毛利率與 EPS 變動核心；因此本模型不允許只改 EPS 而不改毛利率與營益率。 ',
+      ),
+      monthlyRevenueEvidence: revenueSignal,
+      productMixEvidence: sanitizeNarrativeText(
+        `${caseLabel} 情境假設高階鏡頭 / 潛望式 / XR 光學模組占比由 32% ${caseType === 'invalidation' ? '回到' : '提升到'} ${formatNumberLocal(seed.mixTarget)}%，並把鏡頭顆數、ASP 與潛望式滲透率一起帶入。`,
+      ),
+      marketShareEvidence: sanitizeNarrativeText(
+        `市場份額依據：研究推估以旗艦手機高階鏡頭、潛望式鏡頭與 XR 光學模組可服務市場 ${seed.tamRange} 為底，大立光在高階光學鏈有效營收份額約 ${seed.marketShareRange}；這裡看的不是整體手機市占，而是高階鏡頭營收份額。`,
+      ),
+      multipleRationale: sanitizeNarrativeText(
+        `倍數依據：本情境採用 ${formatNumberLocal(seed.targetPe)}x，是在高階光學同業區間內、但未直接套最樂觀新題材上緣；只有 XR 或更高階鏡頭滲透超預期時，才會往上緣再靠。`,
+      ),
+      evidenceBasis: uniqueNarrativeLines(
+        [
+          `依據高階鏡頭升規、潛望式滲透與 XR 驗證進度，研究推估高毛利光學占比可由 32% ${caseType === 'invalidation' ? '回到' : '提升到'} ${formatNumberLocal(seed.mixTarget)}%。`,
+          revenueSignal,
+          `研究推估以可服務市場 ${seed.tamRange}、有效營收份額 ${seed.marketShareRange} 與高階 ASP 上修，共同推導 ${caseLabel} 目標價。`,
+        ],
+        4,
+      ),
+    } satisfies StockSpecificEvidenceBundle;
+  }
+
+  if (context.symbol === '3450') {
+    return {
+      customerExposure: sanitizeNarrativeText(
+        `客戶 / 訂單依據：${caseLabel} 情境主要對應 AOC、COS 封裝、LD 封測與 CPO 生態鏈相關需求；若提到 Broadcom 或北美高速光互連客戶，這部分一律視為供應鏈研究推估，不直接視為已公告訂單。`,
+      ),
+      transcriptEvidence: sanitizeNarrativeText(
+        '法說 / 官方依據：公司近年毛利率走高與光通訊產品占比提升，支持轉型方向成立；但 CPO 與 1.6T 的放量節奏仍需持續用法說、接單與產能利用率驗證，而不是單靠市場傳聞。 ',
+      ),
+      monthlyRevenueEvidence: revenueSignal,
+      productMixEvidence: sanitizeNarrativeText(
+        `${caseLabel} 情境把 AOC / COS / CPO / LD 封測等高毛利產品占比視為關鍵變數，假設高毛利光通訊 mix 由 16% ${caseType === 'invalidation' ? '回到' : '提升到'} ${formatNumberLocal(seed.mixTarget)}%，並把 800G / 1.6T 滲透節奏一起納入。`,
+      ),
+      marketShareEvidence: sanitizeNarrativeText(
+        `市場份額依據：研究推估以高速光互連、AOC / COS 封裝與相關光模組可服務市場 ${seed.tamRange} 為底，聯鈞可承接約 ${seed.marketShareRange} 的有效營收份額；這個份額假設來自產能、產品線位置與可量產節奏，而非單篇喊單文章。`,
+      ),
+      multipleRationale: sanitizeNarrativeText(
+        `倍數依據：本情境採用 ${formatNumberLocal(seed.targetPe)}x，代表市場把聯鈞視為具轉型彈性的高速光通訊標的，但仍未直接套到最極端的題材倍數上緣。`,
+      ),
+      evidenceBasis: uniqueNarrativeLines(
+        [
+          `依據 AOC / COS 需求、800G / 1.6T 滲透與產能利用率提升，研究推估高毛利光通訊產品占比可由 16% ${caseType === 'invalidation' ? '回到' : '提升到'} ${formatNumberLocal(seed.mixTarget)}%。`,
+          revenueSignal,
+          `研究推估以可服務市場 ${seed.tamRange}、有效營收份額 ${seed.marketShareRange} 與產品 mix 改善，共同推導 ${caseLabel} 目標價。`,
+        ],
+        4,
+      ),
+    } satisfies StockSpecificEvidenceBundle;
+  }
+
+  if (context.symbol === '2330') {
+    return {
+      customerExposure: sanitizeNarrativeText(
+        `客戶 / 訂單依據：${caseLabel} 情境主要對應 NVIDIA、AMD、Broadcom、Marvell 與北美 hyperscaler 自研 ASIC 等先進製程與先進封裝需求；其中個別客戶採購量若未由公司直接揭露，一律只作研究推估，不把單一供應鏈傳聞直接視為已公告訂單。`,
+      ),
+      transcriptEvidence: sanitizeNarrativeText(
+        '法說 / 官方依據：公司法說持續提到 AI 需求強勁、CoWoS / SoIC 等先進封裝仍偏緊，且毛利率韌性來自 3nm / 5nm 與先進封裝組合改善。因此本模型把 ASP、先進節點 mix、先進封裝占比與毛利率一併上修，而不是只單改 EPS。',
+      ),
+      monthlyRevenueEvidence: revenueSignal,
+      productMixEvidence: sanitizeNarrativeText(
+        `${caseLabel} 情境假設 3nm / 5nm 與先進封裝營收占比由 18% ${caseType === 'invalidation' ? '回到' : '提升到'} ${formatNumberLocal(seed.mixTarget)}%，並把 3nm / 5nm wafer ASP、CoWoS 產能利用率與 AI 加速器相關封裝貢獻一起帶入。`,
+      ),
+      marketShareEvidence: sanitizeNarrativeText(
+        `市場份額依據：研究推估以 AI 先進製程 wafer 與 CoWoS / SoIC 先進封裝可服務市場 ${seed.tamRange} 為底，台積電在這段高階製程與封裝鏈的有效營收份額約 ${seed.marketShareRange}；這裡看的不是整體晶圓代工市占，而是 AI 與先進製程相關營收份額。`,
+      ),
+      multipleRationale: sanitizeNarrativeText(
+        `倍數依據：本情境採用 ${formatNumberLocal(seed.targetPe)}x，主要參考先進製程晶圓代工與先進封裝受惠股的 normalized / forward PE 區間；若目前 TTM PE 受景氣或獲利基期影響失真，會優先以 normalized PE 看待，而不直接拿表面 TTM PE 當唯一依據。`,
+      ),
+      evidenceBasis: uniqueNarrativeLines(
+        [
+          `依據公司法說對 AI 需求與 CoWoS 產能偏緊的表述、月營收 run-rate 與先進節點產品組合，研究推估 3nm / 5nm 與先進封裝營收占比可由 18% ${caseType === 'invalidation' ? '回到' : '提升到'} ${formatNumberLocal(seed.mixTarget)}%。`,
+          revenueSignal,
+          `研究推估以可服務市場 ${seed.tamRange}、有效營收份額 ${seed.marketShareRange} 與先進製程 ASP 韌性，共同推導 ${caseLabel} 目標價。`,
+        ],
+        4,
+      ),
+    } satisfies StockSpecificEvidenceBundle;
+  }
+
+  return null;
+}
+
+function buildGenericEvidenceBundle(
+  context: ValuationBridgeContext,
+  profile: ValuationBridgeProfile,
+  caseType: ValuationCaseView['caseType'],
+  seed: StockSpecificBridgeSeed,
+  marketSizingBridge: string | null,
+) {
+  const caseLabel = caseType === 'upside' ? '情境' : caseType === 'invalidation' ? '失效' : 'Base';
+  const revenueSignal = summarizeRevenueNarrative(context.monthlyRevenue, context.yoyGrowth, context.momGrowth);
+  const customerExposure = sanitizeNarrativeText(
+    `客戶 / 訂單依據：未取得具名客戶或公告訂單；本段僅以 ${profile.driverLabel} 的上下游供應鏈位置、產品線與既有營收結構作為供應鏈映射推估，不納入已驗證 Base，只能列為情境待驗證條件。`,
+  );
+  const transcriptEvidence = sanitizeNarrativeText(
+    `法說 / 官方依據：目前以 ${context.thesisTitle || '既有研究主軸'} 與公開法說 / 財務摘要為主要參考，重點驗證 ${profile.mixLabel}、${profile.volumeLabel} 與 ${profile.aspLabel} 是否同時支持獲利上修。`,
+  );
+  const monthlyRevenueEvidence =
+    revenueSignal ||
+    '月營收依據：目前缺少可直接年化的最新月營收 run-rate，因此這段營收與 EPS 推導仍有較高研究推估成分。';
+  const productMixEvidence = sanitizeNarrativeText(
+    `${caseLabel} 情境以 ${profile.mixLabel} 為核心變數，假設由 ${formatNumberLocal(profile.mixStart)}% ${caseType === 'invalidation' ? '回到' : '提升到'} ${formatNumberLocal(seed.mixTarget)}%；${profile.volumeLabel} 與 ${profile.aspLabel} 需同步驗證，否則不會直接把 EPS 上修視為已成立。`,
+  );
+  const marketShareEvidence = sanitizeNarrativeText(
+    marketSizingBridge ||
+      `市場份額依據：研究推估以 ${profile.peerLabel} 可服務市場 ${seed.tamRange} 與公司既有營收結構推估，核心產品有效營收份額約 ${seed.marketShareRange}。`,
+  );
+  const multipleRationale = sanitizeNarrativeText(
+    `倍數依據：本情境採用 ${formatNumberLocal(seed.targetPe)}x，需同時參考 ${profile.peerLabel} 常見區間與公司目前獲利品質；若 TTM PE 失真，則以 normalized / forward PE 為主。`,
+  );
+  return {
+    customerExposure,
+    transcriptEvidence,
+    monthlyRevenueEvidence,
+    productMixEvidence,
+    marketShareEvidence,
+    multipleRationale,
+    evidenceBasis: uniqueNarrativeLines(
+      [
+        transcriptEvidence,
+        monthlyRevenueEvidence,
+        productMixEvidence,
+        marketShareEvidence,
+      ],
+      4,
+    ),
+  } satisfies StockSpecificEvidenceBundle;
+}
+
+function buildScenarioEvidenceBundle(
+  context: ValuationBridgeContext,
+  profile: ValuationBridgeProfile,
+  caseType: ValuationCaseView['caseType'],
+  seed: StockSpecificBridgeSeed,
+  marketSizingBridge: string | null,
+) {
+  return (
+    buildSampleStockEvidenceBundle(context, caseType, seed) ||
+    buildGenericEvidenceBundle(context, profile, caseType, seed, marketSizingBridge)
+  );
+}
+
+function buildStockSpecificScenarioBridge(
+  valuation: ValuationCaseView,
+  context: ValuationBridgeContext,
+  profile: ValuationBridgeProfile,
+  caseSeed: StockSpecificBridgeSeed,
+) {
+  const rawTargetPrice = valuation.targetPrice ?? null;
+  const currentPrice = context.currentPrice ?? null;
+  const targetPrice = round(caseSeed.eps * caseSeed.targetPe, 2);
+  const expectedReturnPct =
+    currentPrice != null && Number.isFinite(currentPrice) && currentPrice > 0
+      ? round(((targetPrice - currentPrice) / currentPrice) * 100, 2)
+      : null;
+  const caseType = valuation.caseType;
+  const caseLabel =
+    caseType === 'base' ? '基本情境' : caseType === 'upside' ? '樂觀情境' : '悲觀 / 失效情境';
+  const currentRevenueAnnual =
+    context.revenueAnnual ??
+    (context.monthlyRevenue != null && Number.isFinite(context.monthlyRevenue) && context.monthlyRevenue > 0 ? context.monthlyRevenue * 12 : null) ??
+    caseSeed.baselineRevenueAnnual ??
+    null;
+  const currentGrossMargin =
+    context.grossMargin != null && Number.isFinite(context.grossMargin) ? context.grossMargin : caseSeed.baselineGrossMarginPct ?? null;
+  const currentOperatingMargin =
+    context.operatingMargin != null && Number.isFinite(context.operatingMargin) ? context.operatingMargin : caseSeed.baselineOperatingMarginPct ?? null;
+  const currentPeRatio =
+    context.peRatio != null && Number.isFinite(context.peRatio) ? context.peRatio : caseSeed.baselinePeRatio ?? null;
+  const currentPbRatio =
+    context.pbRatio != null && Number.isFinite(context.pbRatio) ? context.pbRatio : caseSeed.baselinePbRatio ?? null;
+  const operatingAssumptions = [
+    { label: '可服務市場 TAM', value: `${caseSeed.tamRange}（研究推估）`, isEstimated: true },
+    { label: '市場份額', value: `${caseSeed.marketShareRange}（研究推估）`, isEstimated: true },
+    { label: profile.mixLabel, value: `${formatNumberLocal(profile.mixStart)}% -> ${formatNumberLocal(caseSeed.mixTarget)}%`, isEstimated: true },
+    { label: '訂單能見度', value: `${caseSeed.orderVisibility}（研究推估）`, isEstimated: true },
+    { label: '年化營收', value: `${formatNarrativeMoney(caseSeed.revenueAnnual)}（研究推估）`, isEstimated: true },
+    { label: '毛利率', value: `${currentGrossMargin != null ? `${formatNumberLocal(currentGrossMargin)}% -> ` : ''}${formatNumberLocal(caseSeed.grossMarginPct)}%`, isEstimated: true },
+    { label: '營益率', value: `${currentOperatingMargin != null ? `${formatNumberLocal(currentOperatingMargin)}% -> ` : ''}${formatNumberLocal(caseSeed.operatingMarginPct)}%`, isEstimated: true },
+    { label: 'EPS', value: formatNumberLocal(caseSeed.eps), isEstimated: true },
+    { label: '目標 PE', value: `${formatNumberLocal(caseSeed.targetPe)}x`, isEstimated: true },
+  ];
+  const marketSizingBridge = sanitizeNarrativeText(
+    `研究推估：以 ${profile.peerLabel} 的可服務市場規模 ${caseSeed.tamRange} 估算，${context.symbol} 在核心產品鏈的有效營收份額約 ${caseSeed.marketShareRange}。${profile.mixLabel}由 ${formatNumberLocal(profile.mixStart)}% ${caseType === 'invalidation' ? '回到' : '提升到'} ${formatNumberLocal(caseSeed.mixTarget)}%，這是本情境能否成立的第一個關鍵。`,
+  );
+  const evidenceBundle = buildScenarioEvidenceBundle(context, profile, caseType, caseSeed, marketSizingBridge);
+  const revenueBridge = sanitizeNarrativeText(
+    `${caseLabel}假設 ${caseSeed.orderVisibility}，在此條件下，高階產品 mix、出貨量與 ASP 一起推動年化營收約 ${formatNarrativeMoney(caseSeed.revenueAnnual)}。`,
+  );
+  const marginBridge = sanitizeNarrativeText(
+    [
+      `毛利率${currentGrossMargin != null ? `由 ${formatNumberLocal(currentGrossMargin)}% ` : ''}${caseType === 'invalidation' ? '回到' : '提升到'} ${formatNumberLocal(caseSeed.grossMarginPct)}%`,
+      `營益率${currentOperatingMargin != null ? `由 ${formatNumberLocal(currentOperatingMargin)}% ` : ''}${caseType === 'invalidation' ? '回到' : '提升到'} ${formatNumberLocal(caseSeed.operatingMarginPct)}%`,
+    ].join('，'),
+  );
+  const earningsBridge = sanitizeNarrativeText(
+    `若以年化營收 ${formatNarrativeMoney(caseSeed.revenueAnnual)}、毛利率 ${formatNumberLocal(caseSeed.grossMarginPct)}%、營益率 ${formatNumberLocal(caseSeed.operatingMarginPct)}% 估算，稅後 EPS 約 ${formatNumberLocal(caseSeed.eps)}。`,
+  );
+  const multipleBridge = sanitizeNarrativeText(
+    sentenceFromBridgeSegments(
+      [
+        currentPeRatio != null && Number.isFinite(currentPeRatio) && currentPeRatio > 0
+          ? `目前市場給公司的 TTM PE 約 ${formatNumberLocal(currentPeRatio)}x`
+          : null,
+        currentPbRatio != null && Number.isFinite(currentPbRatio) && currentPbRatio > 0
+          ? `PB 約 ${formatNumberLocal(currentPbRatio)}x`
+          : null,
+        `${profile.benchmarkText}；本情境採用 ${formatNumberLocal(caseSeed.targetPe)}x`,
+        caseSeed.targetPe > (profile.benchmarkPeRange[0] + profile.benchmarkPeRange[1]) / 2
+          ? '代表我們假設新產品與訂單能見度驗證較 Base 更順利，但仍未直接用市場最樂觀上緣。'
+          : '代表我們仍保留對需求落地節奏與高評價持續性的折價。',
+        evidenceBundle.multipleRationale,
+      ],
+      `${profile.benchmarkText}；本情境採用 ${formatNumberLocal(caseSeed.targetPe)}x。`,
+    ),
+  );
+  const priceBridge = sanitizeNarrativeText(
+    `以 ${formatNumberLocal(caseSeed.eps)} 元 EPS 搭配 ${formatNumberLocal(caseSeed.targetPe)}x forward PE，12 個月目標價約 ${formatMoney(targetPrice)}；對現價 ${expectedReturnPct != null ? formatSignedPctLocal(expectedReturnPct) : '空間待補'}。`,
+  );
+  const bridgeStatus = evaluateBridgeCompleteness({
+    currentRevenueAnnual,
+    projectedRevenueAnnual: caseSeed.revenueAnnual,
+    currentGrossMargin,
+    projectedGrossMargin: caseSeed.grossMarginPct,
+    currentOperatingMargin,
+    projectedOperatingMargin: caseSeed.operatingMarginPct,
+    projectedEps: caseSeed.eps,
+    targetPeRatio: caseSeed.targetPe,
+    estimatedFields: caseSeed.estimatedFields || [],
+  });
+  return {
+    driver: caseSeed.driverLabel || profile.driverLabel,
+    operatingBridge: revenueBridge,
+    revenueBridge: `年化營收推估約 ${formatNarrativeMoney(caseSeed.revenueAnnual)}。`,
+    marginBridge,
+    earningsBridge,
+    multipleBridge,
+    priceBridge: bridgeStatus.bridgeCompleteness === 'complete' ? priceBridge : null,
+    benchmarkRange: `${formatNumberLocal(profile.benchmarkPeRange[0])}x–${formatNumberLocal(profile.benchmarkPeRange[1])}x`,
+    revenueAnnual: caseSeed.revenueAnnual,
+    grossMargin: caseSeed.grossMarginPct,
+    operatingMargin: caseSeed.operatingMarginPct,
+    eps: caseSeed.eps,
+    targetPrice: bridgeStatus.bridgeCompleteness === 'complete' ? targetPrice : null,
+    expectedReturnPct: bridgeStatus.bridgeCompleteness === 'complete' ? expectedReturnPct : null,
+    currentPeRatio,
+    currentPbRatio,
+    targetPeRatio: caseSeed.targetPe,
+    targetPbRatio: null,
+    operatingAssumptions,
+    financialBridge: [revenueBridge, marginBridge, earningsBridge].filter((item): item is string => Boolean(item)),
+    bridgeCompleteness: bridgeStatus.bridgeCompleteness,
+    insufficientBridgeReason: bridgeStatus.insufficientBridgeReason,
+    estimatedFields: bridgeStatus.estimatedFields,
+    rawTargetPrice: rawTargetPrice != null && Number.isFinite(rawTargetPrice) ? rawTargetPrice : null,
+    marketSizingBridge,
+    evidenceRefs: caseSeed.evidenceRefs,
+    evidenceBasis: evidenceBundle.evidenceBasis,
+    customerExposure: evidenceBundle.customerExposure,
+    transcriptEvidence: evidenceBundle.transcriptEvidence,
+    monthlyRevenueEvidence: evidenceBundle.monthlyRevenueEvidence,
+    productMixEvidence: evidenceBundle.productMixEvidence,
+    marketShareEvidence: evidenceBundle.marketShareEvidence,
+  };
+}
+
+function inferValuationBridgeProfile(context: ValuationBridgeContext): ValuationBridgeProfile {
+  const narrative = compactText([context.symbol, context.thesisTitle || '', context.thesisSummary || ''].join(' ')).toLowerCase();
+  if (context.symbol === '2382') {
+    return {
+      driverLabel: 'AI server 機櫃與整機出貨放量，帶動產品組合與毛利率改善',
+      peerLabel: 'AI server ODM / EMS',
+      benchmarkPeRange: [16, 22],
+      benchmarkText: 'AI server ODM 同業的 forward PE 多落在 16x–22x',
+      volumeLabel: 'AI server 機櫃出貨',
+      aspLabel: '高階整機 ASP',
+      mixLabel: 'AI server 營收占比',
+      mixStart: 28,
+      mixTargets: { base: 38, upside: 45, invalidation: 30 },
+      volumeGrowthTargets: { base: 18, upside: 28, invalidation: 6 },
+      aspGrowthTargets: { base: 5, upside: 9, invalidation: 1 },
+      grossMarginTargets: { base: 9.5, upside: 10.4, invalidation: 8.1 },
+      operatingMarginTargets: { base: 5.4, upside: 6.2, invalidation: 3.8 },
+      storyLines: [
+        '市場現在交易的主線不是傳統伺服器，而是 AI server 訂單能見度是否真的延伸到 2027，並讓高階整機與 rack-level 產品的營收占比持續墊高。',
+        '只要 AI server 產品組合繼續往上，廣達的毛利率與營益率改善速度就會快於營收成長，EPS 彈性也會比市場用舊框架想得更大。',
+      ],
+    };
+  }
+  if (context.symbol === '2454') {
+    return {
+      driverLabel: '旗艦 SoC mix 與高階 ASP 提升，帶動毛利率與 EPS 上修',
+      peerLabel: '高階 IC 設計',
+      benchmarkPeRange: [18, 24],
+      benchmarkText: '高階 IC 設計同業的 forward PE 多落在 18x–24x',
+      volumeLabel: '旗艦 SoC 出貨',
+      aspLabel: '旗艦 SoC ASP',
+      mixLabel: '高階產品營收占比',
+      mixStart: 34,
+      mixTargets: { base: 42, upside: 48, invalidation: 31 },
+      volumeGrowthTargets: { base: 8, upside: 14, invalidation: -2 },
+      aspGrowthTargets: { base: 6, upside: 12, invalidation: -3 },
+      grossMarginTargets: { base: 49, upside: 51.5, invalidation: 44.5 },
+      operatingMarginTargets: { base: 21, upside: 23.5, invalidation: 16.5 },
+      storyLines: [
+        '聯發科這段故事的關鍵不是單純手機復甦，而是旗艦 SoC、邊緣 AI 與新產品組合是否能讓 ASP 與毛利率一併上修。',
+        '如果高階產品占比繼續往上，EPS 修復速度會比營收成長更快；但若市場先把這段樂觀預期全部反映在股價上，Base 目標價就會落後於現價。',
+      ],
+    };
+  }
+  if (context.symbol === '3008') {
+    return {
+      driverLabel: '旗艦手機潛望式鏡頭升規與 XR 光學模組放量，帶動 ASP 與獲利提升',
+      peerLabel: '高階光學鏡頭 / XR 光學',
+      benchmarkPeRange: [18, 24],
+      benchmarkText: '高階光學鏡頭與 XR 光學同業的 forward PE 多落在 18x–24x',
+      volumeLabel: '高階鏡頭模組出貨',
+      aspLabel: '高階鏡頭 ASP',
+      mixLabel: '高階鏡頭與 XR 營收占比',
+      mixStart: 36,
+      mixTargets: { base: 45, upside: 52, invalidation: 33 },
+      volumeGrowthTargets: { base: 12, upside: 20, invalidation: 2 },
+      aspGrowthTargets: { base: 8, upside: 12, invalidation: 1 },
+      grossMarginTargets: { base: 60.5, upside: 62.5, invalidation: 56.5 },
+      operatingMarginTargets: { base: 45, upside: 48, invalidation: 39 },
+      storyLines: [
+        '大立光這段故事的核心不是單純手機銷量，而是旗艦機鏡頭規格升級、潛望式鏡頭滲透率，以及 XR 光學模組能否把 ASP 與產品組合持續往上推。',
+        '如果高階鏡頭與 XR 模組營收占比真的拉高，毛利率與營益率就不該維持原地踏步；估值也會更接近高階光學與新應用供應鏈，而不是傳統手機零組件。',
+      ],
+    };
+  }
+  if (context.symbol === '3450') {
+    return {
+      driverLabel: 'CPO / COS 封裝與雷射封測滲透率提升，帶動 ASP 與獲利結構轉型',
+      peerLabel: 'CPO / 光通訊封裝',
+      benchmarkPeRange: [35, 55],
+      benchmarkText: 'CPO 與高速光模組供應鏈在題材發酵期的 forward PE 多落在 35x–55x',
+      volumeLabel: 'CPO / COS 模組出貨',
+      aspLabel: '光通訊封裝 ASP',
+      mixLabel: 'CPO 與高速光模組營收占比',
+      mixStart: 14,
+      mixTargets: { base: 24, upside: 32, invalidation: 16 },
+      volumeGrowthTargets: { base: 20, upside: 32, invalidation: 6 },
+      aspGrowthTargets: { base: 10, upside: 18, invalidation: 2 },
+      grossMarginTargets: { base: 35, upside: 40, invalidation: 28 },
+      operatingMarginTargets: { base: 18, upside: 24, invalidation: 12 },
+      storyLines: [
+        '聯鈞的主線不是舊本業，而是 CPO / COS 封裝與 LD 封測是否真的承接到國際客戶訂單，讓高毛利光通訊業務變成新的獲利核心。',
+        '如果 CPO 相關訂單與產品組合持續落地，市場對它的評價方式就會逐步轉向高速光通訊供應鏈，而不再只用過去的保守框架去看。',
+      ],
+    };
+  }
+  if (context.symbol === '2344') {
+    return {
+      driverLabel: '車規 NOR Flash 與 Specialty DRAM 補庫存回溫，帶動產品組合與獲利修復',
+      peerLabel: 'Specialty 記憶體 / NOR Flash',
+      benchmarkPeRange: [24, 32],
+      benchmarkText: 'Specialty 記憶體與車規 NOR Flash 修復股的 normalized / forward PE 多落在 24x–32x',
+      volumeLabel: '車規 / 工控記憶體出貨',
+      aspLabel: 'Specialty 記憶體 ASP',
+      mixLabel: '車規與高毛利 NOR Flash 營收占比',
+      mixStart: 24,
+      mixTargets: { base: 30, upside: 35, invalidation: 22 },
+      volumeGrowthTargets: { base: 12, upside: 18, invalidation: 0 },
+      aspGrowthTargets: { base: 6, upside: 12, invalidation: -4 },
+      grossMarginTargets: { base: 24, upside: 27, invalidation: 18 },
+      operatingMarginTargets: { base: 9, upside: 12, invalidation: 4 },
+      storyLines: [
+        '華邦電這段故事的重點不是整體記憶體景氣全面復甦，而是車規 NOR Flash 與 Specialty DRAM 補庫存是否讓高毛利產品組合回升，帶動毛利率與營益率從低基期修復。',
+        '只要車規與工控需求回來、且高毛利產品占比上升，市場對它的評價就會從一般循環 DRAM 股轉向 Specialty 記憶體修復股，normalized PE 也會高於純 commodity memory 框架。',
+      ],
+    };
+  }
+  if (context.symbol === '2337') {
+    return {
+      driverLabel: '高毛利 eMMC / MLC 供需缺口擴大，帶動 ASP 與產品組合改善',
+      peerLabel: '儲存 / 記憶體',
+      benchmarkPeRange: [10, 13],
+      benchmarkText: '傳統記憶體同業景氣上行時多落在 10x–13x，但若市場把它視為供需缺口與轉型題材，倍數會高於一般循環股',
+      volumeLabel: '儲存位元出貨',
+      aspLabel: 'ASP / Gb',
+      mixLabel: '高毛利產品占比',
+      mixStart: 26,
+      mixTargets: { base: 34, upside: 40, invalidation: 22 },
+      volumeGrowthTargets: { base: 10, upside: 18, invalidation: -5 },
+      aspGrowthTargets: { base: 7, upside: 14, invalidation: -6 },
+      grossMarginTargets: { base: 28, upside: 33, invalidation: 18 },
+      operatingMarginTargets: { base: 10, upside: 14, invalidation: 2 },
+      storyLines: [
+        '旺宏這段故事的核心不是一般景氣循環，而是 MLC / 低容量 eMMC 供給退場後，公司是否能吃下結構性缺口，讓 ASP 與高毛利產品占比持續上升。',
+        '只要供需缺口沒有被快速填補，毛利率與 EPS 的彈性就可能顯著高於目前市場對傳統記憶體股的預期，估值方法也會更接近轉型題材而不是單純景氣股。',
+      ],
+    };
+  }
+  if (context.symbol === '2330') {
+    return {
+      driverLabel: 'AI 晶圓代工與 CoWoS / 先進封裝產能擴張，帶動 ASP 與獲利韌性提升',
+      peerLabel: '先進製程晶圓代工 / 先進封裝',
+      benchmarkPeRange: [18, 24],
+      benchmarkText: '先進製程晶圓代工與先進封裝受惠股的 normalized / forward PE 多落在 18x–24x',
+      volumeLabel: '先進製程 wafer 出貨',
+      aspLabel: '先進製程 ASP',
+      mixLabel: '3nm / 5nm 與先進封裝營收占比',
+      mixStart: 18,
+      mixTargets: { base: 24, upside: 30, invalidation: 16 },
+      volumeGrowthTargets: { base: 9, upside: 14, invalidation: 2 },
+      aspGrowthTargets: { base: 5, upside: 9, invalidation: 0 },
+      grossMarginTargets: { base: 54.5, upside: 56.5, invalidation: 50.5 },
+      operatingMarginTargets: { base: 43.8, upside: 45.8, invalidation: 39.5 },
+      storyLines: [
+        '台積電這段故事的重點不是成熟製程景氣，而是 AI 加速器、客製化 ASIC 與 CoWoS / SoIC 先進封裝需求是否持續高於市場原先預期，讓先進節點 ASP 與產能利用率維持在高檔。',
+        '只要 3nm / 5nm 與先進封裝營收占比繼續上升，毛利率與營益率就會比市場只看總營收成長更有韌性，估值方法也應更接近高品質先進製程供應鏈，而不是單純景氣循環股。',
+      ],
+    };
+  }
+  if (context.symbol === '2382' || /ai server|伺服器|機櫃|odm|rack|csp|雲端客戶/.test(narrative)) {
+    return {
+      driverLabel: 'AI server 機櫃與整機出貨放量，帶動產品組合與毛利率改善',
+      peerLabel: 'AI server ODM / EMS',
+      benchmarkPeRange: [16, 22],
+      benchmarkText: 'AI server ODM 同業的 forward PE 多落在 16x–22x',
+      volumeLabel: 'AI server 機櫃出貨',
+      aspLabel: '高階整機 ASP',
+      mixLabel: 'AI server 營收占比',
+      mixStart: 28,
+      mixTargets: { base: 38, upside: 45, invalidation: 30 },
+      volumeGrowthTargets: { base: 18, upside: 28, invalidation: 6 },
+      aspGrowthTargets: { base: 5, upside: 9, invalidation: 1 },
+      grossMarginTargets: { base: 9.5, upside: 10.4, invalidation: 8.1 },
+      operatingMarginTargets: { base: 5.4, upside: 6.2, invalidation: 3.8 },
+      storyLines: [
+        '市場現在交易的主線不是傳統伺服器，而是 AI server 訂單能見度是否真的延伸到 2027，並讓高階整機與 rack-level 產品的營收占比持續墊高。',
+        '只要 AI server 產品組合繼續往上，廣達的毛利率與營益率改善速度就會快於營收成長，EPS 彈性也會比市場用舊框架想得更大。',
+      ],
+    };
+  }
+  if (context.symbol === '2454' || /soc|手機|旗艦|edge ai|邊緣 ai|晶片|ic design/.test(narrative)) {
+    return {
+      driverLabel: '旗艦 SoC mix 與高階 ASP 提升，帶動毛利率與 EPS 上修',
+      peerLabel: '高階 IC 設計',
+      benchmarkPeRange: [18, 24],
+      benchmarkText: '高階 IC 設計同業的 forward PE 多落在 18x–24x',
+      volumeLabel: '旗艦 SoC 出貨',
+      aspLabel: '旗艦 SoC ASP',
+      mixLabel: '高階產品營收占比',
+      mixStart: 34,
+      mixTargets: { base: 42, upside: 48, invalidation: 31 },
+      volumeGrowthTargets: { base: 8, upside: 14, invalidation: -2 },
+      aspGrowthTargets: { base: 6, upside: 12, invalidation: -3 },
+      grossMarginTargets: { base: 49, upside: 51.5, invalidation: 44.5 },
+      operatingMarginTargets: { base: 21, upside: 23.5, invalidation: 16.5 },
+      storyLines: [
+        '聯發科這段故事的關鍵不是單純手機復甦，而是旗艦 SoC、邊緣 AI 與新產品組合是否能讓 ASP 與毛利率一併上修。',
+        '如果高階產品占比繼續往上，EPS 修復速度會比營收成長更快；但若市場先把這段樂觀預期全部反映在股價上，Base 目標價就會落後於現價。',
+      ],
+    };
+  }
+  if (context.symbol === '3008' || /鏡頭|光學|潛望|xr|vision pro|camera/.test(narrative)) {
+    return {
+      driverLabel: '旗艦手機潛望式鏡頭升規與 XR 光學模組放量，帶動 ASP 與獲利提升',
+      peerLabel: '高階光學鏡頭 / XR 光學',
+      benchmarkPeRange: [18, 24],
+      benchmarkText: '高階光學鏡頭與 XR 光學同業的 forward PE 多落在 18x–24x',
+      volumeLabel: '高階鏡頭模組出貨',
+      aspLabel: '高階鏡頭 ASP',
+      mixLabel: '高階鏡頭與 XR 營收占比',
+      mixStart: 36,
+      mixTargets: { base: 45, upside: 52, invalidation: 33 },
+      volumeGrowthTargets: { base: 12, upside: 20, invalidation: 2 },
+      aspGrowthTargets: { base: 8, upside: 12, invalidation: 1 },
+      grossMarginTargets: { base: 60.5, upside: 62.5, invalidation: 56.5 },
+      operatingMarginTargets: { base: 45, upside: 48, invalidation: 39 },
+      storyLines: [
+        '高階光學的重點是規格升級能不能把單機 ASP、鏡頭顆數與產品 mix 一起往上推，而不只是單看出貨量。',
+        '如果高階鏡頭與 XR 光學占比提升，毛利率與 EPS 彈性就會高於市場對傳統手機鏡頭股的預期。',
+      ],
+    };
+  }
+  if (context.symbol === '3450' || /cpo|cos|光通訊|800g|雷射|broadcom/.test(narrative)) {
+    return {
+      driverLabel: 'CPO / COS 封裝與雷射封測滲透率提升，帶動 ASP 與獲利結構轉型',
+      peerLabel: 'CPO / 光通訊封裝',
+      benchmarkPeRange: [35, 55],
+      benchmarkText: 'CPO 與高速光模組供應鏈在題材發酵期的 forward PE 多落在 35x–55x',
+      volumeLabel: 'CPO / COS 模組出貨',
+      aspLabel: '光通訊封裝 ASP',
+      mixLabel: 'CPO 與高速光模組營收占比',
+      mixStart: 14,
+      mixTargets: { base: 24, upside: 32, invalidation: 16 },
+      volumeGrowthTargets: { base: 20, upside: 32, invalidation: 6 },
+      aspGrowthTargets: { base: 10, upside: 18, invalidation: 2 },
+      grossMarginTargets: { base: 35, upside: 40, invalidation: 28 },
+      operatingMarginTargets: { base: 18, upside: 24, invalidation: 12 },
+      storyLines: [
+        'CPO 供應鏈的核心不是短期題材，而是公司能不能真的把新訂單轉成可持續放大的高毛利營收。',
+        '只要 CPO / COS 與高速光模組占比拉升，評價方式就會更像成長轉型股，而不是舊本業的線性外推。',
+      ],
+    };
+  }
+  if (context.symbol === '2337' || /emmc|nand|flash|ssd|記憶體|mlc|tlc|儲存/.test(narrative)) {
+    return {
+      driverLabel: '高毛利 eMMC / MLC 供需缺口擴大，帶動 ASP 與產品組合改善',
+      peerLabel: '儲存 / 記憶體',
+      benchmarkPeRange: [10, 13],
+      benchmarkText: '傳統記憶體同業景氣上行時多落在 10x–13x，但若市場把它視為供需缺口與轉型題材，倍數會高於一般循環股',
+      volumeLabel: '儲存位元出貨',
+      aspLabel: 'ASP / Gb',
+      mixLabel: '高毛利產品占比',
+      mixStart: 26,
+      mixTargets: { base: 34, upside: 40, invalidation: 22 },
+      volumeGrowthTargets: { base: 10, upside: 18, invalidation: -5 },
+      aspGrowthTargets: { base: 7, upside: 14, invalidation: -6 },
+      grossMarginTargets: { base: 28, upside: 33, invalidation: 18 },
+      operatingMarginTargets: { base: 10, upside: 14, invalidation: 2 },
+      storyLines: [
+        '旺宏這段故事的核心不是一般景氣循環，而是 MLC / 低容量 eMMC 供給退場後，公司是否能吃下結構性缺口，讓 ASP 與高毛利產品占比持續上升。',
+        '只要供需缺口沒有被快速填補，毛利率與 EPS 的彈性就可能顯著高於目前市場對傳統記憶體股的預期，估值方法也會更接近轉型題材而不是單純景氣股。',
+      ],
+    };
+  }
+  return {
+    driverLabel: '營收動能與產品組合改善，帶動 EPS 與估值上修',
+    peerLabel: '同產業成長股',
+    benchmarkPeRange: [15, 20],
+    benchmarkText: '同產業成長股的 forward PE 通常落在 15x–20x',
+    volumeLabel: '核心產品出貨',
+    aspLabel: '產品 ASP',
+    mixLabel: '高毛利產品占比',
+    mixStart: 22,
+    mixTargets: { base: 28, upside: 33, invalidation: 19 },
+    volumeGrowthTargets: { base: 8, upside: 14, invalidation: -3 },
+    aspGrowthTargets: { base: 4, upside: 8, invalidation: -2 },
+    grossMarginTargets: { base: 22, upside: 26, invalidation: 16 },
+    operatingMarginTargets: { base: 8, upside: 11, invalidation: 4 },
+    storyLines: [
+      '這家公司現在交易的主線，是核心產品出貨與產品組合改善能不能延續到未來幾季，讓營收與獲利雙雙上修。',
+      '如果毛利率與營益率同步墊高，市場通常會願意用更高的 forward PE / PB 重新定價，反之就會回到保守區間。',
+    ],
+  };
+}
+
+function assumptionNumber(rawAssumptions: Record<string, unknown>, key: string) {
+  const value = toFiniteNumber(rawAssumptions[key], Number.NaN);
+  return Number.isFinite(value) ? value : null;
+}
+
+function bridgePctText(value: number | null | undefined) {
+  if (value == null || !Number.isFinite(value)) return null;
+  return `${value > 0 ? '+' : ''}${formatNumberLocal(value)}%`;
+}
+
+function benchmarkSentence(pe: number | null, profile: ValuationBridgeProfile, pbRatio: number | null | undefined) {
+  if (pe == null || !Number.isFinite(pe)) return profile.benchmarkText;
+  const [low, high] = profile.benchmarkPeRange;
+  const midpoint = round((low + high) / 2, 1);
+  const peSentence =
+    pe > high + 2
+      ? `${profile.benchmarkText}；本輪使用 ${formatNumberLocal(pe)}x，已高於常見區間上緣 ${formatNumberLocal(high)}x，等同把轉型/供需缺口成功率一併計入`
+      : pe < low - 1
+        ? `${profile.benchmarkText}；本輪僅使用 ${formatNumberLocal(pe)}x，低於常見區間下緣 ${formatNumberLocal(low)}x，反映市場仍保守看待這段成長能否落地`
+        : Math.abs(pe - midpoint) <= 1
+          ? `${profile.benchmarkText}；本輪採用 ${formatNumberLocal(pe)}x，位在 ${formatNumberLocal(low)}x–${formatNumberLocal(high)}x 區間中位，代表我們沒有直接用最保守的 ${formatNumberLocal(low)}x，也不預設樂觀上緣 ${formatNumberLocal(high)}x 會完全實現`
+          : pe >= midpoint
+            ? `${profile.benchmarkText}；本輪採用 ${formatNumberLocal(pe)}x，略靠近上緣 ${formatNumberLocal(high)}x，代表成長落地與資金願意提前交易的假設都比 Base 更積極`
+            : `${profile.benchmarkText}；本輪採用 ${formatNumberLocal(pe)}x，略靠近下緣 ${formatNumberLocal(low)}x，代表我們仍保留對需求驗證與評價擴張節奏的折價`;
+  if (pbRatio != null && Number.isFinite(pbRatio) && pbRatio > 0) {
+    return `${peSentence}。目前股價淨值比約 ${formatNumberLocal(pbRatio)}x。`;
+  }
+  return `${peSentence}。`;
+}
+
+function buildMarketSizingBridge(
+  caseType: ValuationCaseView['caseType'],
+  context: ValuationBridgeContext,
+  profile: ValuationBridgeProfile,
+  synthesized: { revenueAnnual: number | null | undefined },
+) {
+  const mixTo = profile.mixTargets[caseType];
+  const annualRevenue = synthesized.revenueAnnual ?? context.revenueAnnual ?? null;
+  const productRevenue =
+    annualRevenue != null && Number.isFinite(annualRevenue) ? annualRevenue * (mixTo / 100) : null;
+  const estimatedTag = '研究推估';
+
+  if (context.symbol === '2382') {
+    const marketSizeRange =
+      caseType === 'upside' ? '約 NT$5.6–6.0 兆' : caseType === 'base' ? '約 NT$5.0–5.4 兆' : '約 NT$4.6–4.9 兆';
+    const marketShareRange =
+      caseType === 'upside' ? '16%–17%' : caseType === 'base' ? '14%–15%' : '12%–13%';
+    return sanitizeNarrativeText(
+      `${estimatedTag}：依據公司法說持續提到 AI server 比重上升、Meta / Microsoft / Google 等 hyperscaler 新一代機櫃拉貨節奏，以及目前月營收 run-rate 已明顯高於傳統 server 週期，我們以 2026 全球 AI server ODM / rack 可服務市場規模 ${marketSizeRange} 估算，廣達在 hyperscaler ODM 鏈的有效接單份額約 ${marketShareRange}。${profile.mixLabel}由 ${formatNumberLocal(profile.mixStart)}% ${caseType === 'invalidation' ? '回到' : '提升到'} ${formatNumberLocal(mixTo)}%，對應 AI 相關年化營收約 ${formatNarrativeMoney(productRevenue)}。`,
+    );
+  }
+
+  if (context.symbol === '2454') {
+    const marketSizeRange =
+      caseType === 'upside' ? '約 NT$4,000–4,400 億' : caseType === 'base' ? '約 NT$3,500–4,000 億' : '約 NT$3,000–3,300 億';
+    const marketShareRange =
+      caseType === 'upside' ? '46%–48%' : caseType === 'base' ? '40%–42%' : '34%–36%';
+    return sanitizeNarrativeText(
+      `${estimatedTag}：依據旗艦 SoC 世代升級、端側 AI 功能增加、Wi-Fi 7 與車用 SoC 新品放量節奏，我們以 2026 高階 Android / edge AI SoC 可服務市場規模 ${marketSizeRange} 估算，聯發科在旗艦與準旗艦 SoC 的營收份額約 ${marketShareRange}。${profile.mixLabel}由 ${formatNumberLocal(profile.mixStart)}% ${caseType === 'invalidation' ? '回到' : '提升到'} ${formatNumberLocal(mixTo)}%，對應高階產品年化營收約 ${formatNarrativeMoney(productRevenue)}。`,
+    );
+  }
+
+  if (context.symbol === '3008') {
+    const marketSizeRange =
+      caseType === 'upside' ? '約 NT$1,250–1,350 億' : caseType === 'base' ? '約 NT$1,100–1,200 億' : '約 NT$980–1,040 億';
+    const marketShareRange =
+      caseType === 'upside' ? '28%–30%' : caseType === 'base' ? '24%–26%' : '20%–22%';
+    return sanitizeNarrativeText(
+      `${estimatedTag}：依據 iPhone / Android 旗艦鏡頭規格升級、潛望式鏡頭滲透率提升，以及 XR 光學模組仍在驗證中的新品曲線，我們以 2026 旗艦手機高階鏡頭、潛望式鏡頭與 XR 光學模組可服務市場規模 ${marketSizeRange} 估算，大立光在高階光學鏈的有效營收份額約 ${marketShareRange}。${profile.mixLabel}由 ${formatNumberLocal(profile.mixStart)}% ${caseType === 'invalidation' ? '回到' : '提升到'} ${formatNumberLocal(mixTo)}%，對應高階光學年化營收約 ${formatNarrativeMoney(productRevenue)}。`,
+    );
+  }
+
+  if (context.symbol === '3450') {
+    const marketSizeRange =
+      caseType === 'upside' ? '約 NT$260–320 億' : caseType === 'base' ? '約 NT$210–250 億' : '約 NT$160–190 億';
+    const marketShareRange =
+      caseType === 'upside' ? '8%–10%' : caseType === 'base' ? '6%–8%' : '4%–5%';
+    return sanitizeNarrativeText(
+      `${estimatedTag}：依據 AOC / COS 封裝與 LD 封測產能擴張、800G / 1.6T 滲透率提升，以及 Broadcom 相關高速光互連題材的訂單驗證節奏，我們以 2027 CPO / COS 封裝與高速光模組可服務市場規模 ${marketSizeRange} 估算，聯鈞在 COS 封裝、LD 封測與相關模組鏈的有效營收份額約 ${marketShareRange}。${profile.mixLabel}由 ${formatNumberLocal(profile.mixStart)}% ${caseType === 'invalidation' ? '回到' : '提升到'} ${formatNumberLocal(mixTo)}%，對應高毛利光通訊年化營收約 ${formatNarrativeMoney(productRevenue)}。`,
+    );
+  }
+
+  if (context.symbol === '2337') {
+    const marketSizeRange =
+      caseType === 'upside' ? '約 74,000–78,000M Gb' : caseType === 'base' ? '約 71,000–74,000M Gb' : '約 63,000–67,000M Gb';
+    const marketShareRange =
+      caseType === 'upside' ? '55%–58%' : caseType === 'base' ? '約 51%' : '35%–40%';
+    return sanitizeNarrativeText(
+      `${estimatedTag}：依據 Samsung / SK hynix / Kioxia / Micron 逐步退出 MLC NAND、低容量 eMMC 長尾需求轉單，以及公司在 MLC / TLC eMMC 的供應位置，我們以 2027 低容量 eMMC / MLC 長尾需求 ${marketSizeRange} 估算，旺宏可承接約 ${marketShareRange} 的供應份額。${profile.mixLabel}由 ${formatNumberLocal(profile.mixStart)}% ${caseType === 'invalidation' ? '回到' : '提升到'} ${formatNumberLocal(mixTo)}%，對應高毛利產品年化營收約 ${formatNarrativeMoney(productRevenue)}。`,
+    );
+  }
+
+  if (context.symbol === '2330') {
+    const marketSizeRange =
+      caseType === 'upside' ? '約 NT$1.55–1.70 兆' : caseType === 'base' ? '約 NT$1.35–1.50 兆' : '約 NT$1.05–1.20 兆';
+    const marketShareRange =
+      caseType === 'upside' ? '54%–58%' : caseType === 'base' ? '48%–52%' : '40%–44%';
+    return sanitizeNarrativeText(
+      `${estimatedTag}：依據公司法說對 AI 需求延續、CoWoS / SoIC 先進封裝擴產、以及先進節點 ASP 韌性的說法，我們以 AI 加速器相關先進製程 wafer 與先進封裝可服務市場 ${marketSizeRange} 估算，台積電在這段高階製程與封裝鏈的有效營收份額約 ${marketShareRange}。${profile.mixLabel}由 ${formatNumberLocal(profile.mixStart)}% ${caseType === 'invalidation' ? '回到' : '提升到'} ${formatNumberLocal(mixTo)}%，對應 AI 與先進節點相關年化營收約 ${formatNarrativeMoney(productRevenue)}。`,
+    );
+  }
+
+  return sanitizeNarrativeText(
+    `${estimatedTag}：以 ${profile.peerLabel} 的可服務市場與公司既有營收結構推估，${profile.mixLabel}由 ${formatNumberLocal(profile.mixStart)}% ${caseType === 'invalidation' ? '回到' : '提升到'} ${formatNumberLocal(mixTo)}%。若 ${profile.volumeLabel} 與 ${profile.aspLabel} 按本情境推進，對應核心產品年化營收約 ${formatNarrativeMoney(productRevenue)}。`,
+  );
+}
+
+function relativeBridgeDelta(current: number | null | undefined, next: number | null | undefined) {
+  if (current == null || next == null) return null;
+  if (!Number.isFinite(current) || !Number.isFinite(next)) return null;
+  const base = Math.max(Math.abs(current), 0.0001);
+  return Math.abs(next - current) / base;
+}
+
+function buildBridgeDerivedEps(params: {
+  currentRevenueAnnual: number | null;
+  projectedRevenueAnnual: number | null;
+  currentGrossMargin: number | null;
+  projectedGrossMargin: number | null;
+  currentOperatingMargin: number | null;
+  projectedOperatingMargin: number | null;
+  currentEps: number | null;
+}) {
+  const {
+    currentRevenueAnnual,
+    projectedRevenueAnnual,
+    currentGrossMargin,
+    projectedGrossMargin,
+    currentOperatingMargin,
+    projectedOperatingMargin,
+    currentEps,
+  } = params;
+  if (currentEps == null || !Number.isFinite(currentEps) || currentEps <= 0) return null;
+  if (currentRevenueAnnual == null || projectedRevenueAnnual == null || currentRevenueAnnual <= 0 || projectedRevenueAnnual <= 0) return null;
+
+  const revenueFactor = projectedRevenueAnnual / currentRevenueAnnual;
+  const currentProfitability =
+    currentOperatingMargin != null && Number.isFinite(currentOperatingMargin) && currentOperatingMargin > 0
+      ? currentOperatingMargin
+      : currentGrossMargin != null && Number.isFinite(currentGrossMargin) && currentGrossMargin > 0
+        ? currentGrossMargin
+        : null;
+  const projectedProfitability =
+    projectedOperatingMargin != null && Number.isFinite(projectedOperatingMargin) && projectedOperatingMargin > 0
+      ? projectedOperatingMargin
+      : projectedGrossMargin != null && Number.isFinite(projectedGrossMargin) && projectedGrossMargin > 0
+        ? projectedGrossMargin
+        : null;
+  const profitabilityFactor =
+    currentProfitability != null && projectedProfitability != null && currentProfitability > 0
+      ? projectedProfitability / currentProfitability
+      : 1;
+
+  if (!Number.isFinite(revenueFactor) || revenueFactor <= 0) return null;
+  if (!Number.isFinite(profitabilityFactor) || profitabilityFactor <= 0) return null;
+  if (Math.abs(revenueFactor - 1) < 0.03 && Math.abs(profitabilityFactor - 1) < 0.03) return null;
+
+  return round(currentEps * revenueFactor * profitabilityFactor, 2);
+}
+
+function evaluateBridgeCompleteness(params: {
+  currentRevenueAnnual: number | null;
+  projectedRevenueAnnual: number | null;
+  currentGrossMargin: number | null;
+  projectedGrossMargin: number | null;
+  currentOperatingMargin: number | null;
+  projectedOperatingMargin: number | null;
+  projectedEps: number | null;
+  targetPeRatio: number | null;
+  estimatedFields: string[];
+}) {
+  const {
+    currentRevenueAnnual,
+    projectedRevenueAnnual,
+    currentGrossMargin,
+    projectedGrossMargin,
+    currentOperatingMargin,
+    projectedOperatingMargin,
+    projectedEps,
+    targetPeRatio,
+    estimatedFields,
+  } = params;
+  const revenueDelta = relativeBridgeDelta(currentRevenueAnnual, projectedRevenueAnnual);
+  const grossMarginDelta = relativeBridgeDelta(currentGrossMargin, projectedGrossMargin);
+  const operatingMarginDelta = relativeBridgeDelta(currentOperatingMargin, projectedOperatingMargin);
+  const hasMeaningfulBridge =
+    (revenueDelta != null && revenueDelta >= 0.04) ||
+    (grossMarginDelta != null && grossMarginDelta >= 0.03) ||
+    (operatingMarginDelta != null && operatingMarginDelta >= 0.03);
+
+  let insufficientBridgeReason: string | null = null;
+  if (projectedRevenueAnnual == null || !Number.isFinite(projectedRevenueAnnual) || projectedRevenueAnnual <= 0) {
+    insufficientBridgeReason = '缺少可驗證的營收橋接，暫時不能把這個情境當成正式目標價。';
+  } else if (projectedEps == null || !Number.isFinite(projectedEps) || projectedEps <= 0) {
+    insufficientBridgeReason = '缺少可驗證的 EPS 推導，暫時不能把這個情境當成正式目標價。';
+  } else if (targetPeRatio == null || !Number.isFinite(targetPeRatio) || targetPeRatio <= 0) {
+    insufficientBridgeReason = '缺少可解釋的目標估值倍數，暫時不能把這個情境當成正式目標價。';
+  } else if (!hasMeaningfulBridge) {
+    insufficientBridgeReason = '營收、毛利率與營益率沒有形成足夠變化，暫時不能支持新的目標價。';
+  }
+
+  return {
+    bridgeCompleteness: insufficientBridgeReason ? ('insufficient' as const) : ('complete' as const),
+    insufficientBridgeReason,
+    estimatedFields: unique(estimatedFields.filter(Boolean)),
+  };
+}
+
+function assumptionItemsAlignWithProfile(
+  assumptions: Array<{ label: string; value: string; isEstimated?: boolean }>,
+  profile: ValuationBridgeProfile,
+) {
+  const markers = [profile.volumeLabel, profile.aspLabel, profile.mixLabel].map((item) => sanitizeNarrativeText(item)).filter(Boolean);
+  if (markers.length === 0 || assumptions.length === 0) return false;
+  const labels = assumptions.map((item) => sanitizeNarrativeText(item.label));
+  return markers.some((marker) => labels.some((label) => label.includes(marker) || marker.includes(label)));
+}
+
+function bridgeTextAlignsWithProfile(value: string | null | undefined, profile: ValuationBridgeProfile) {
+  const clean = sanitizeNarrativeText(value);
+  if (!clean) return false;
+  const markers = [profile.driverLabel, profile.peerLabel, profile.volumeLabel, profile.aspLabel, profile.mixLabel]
+    .map((item) => sanitizeNarrativeText(item))
+    .filter(Boolean);
+  return markers.some((marker) => clean.includes(marker) || marker.includes(clean));
+}
+
+function buildSyntheticScenarioBridge(
+  valuation: ValuationCaseView,
+  context: ValuationBridgeContext,
+  profile: ValuationBridgeProfile,
+  assumptions: Array<{ label: string; value: string; isEstimated?: boolean }>,
+) {
+  const rawAssumptions = (valuation.assumptions || {}) as Record<string, unknown>;
+  const specificSeed = stockSpecificBridgeSeed(context.symbol, valuation.caseType) ?? generatedStockSpecificSeedFromOverride(context.symbol, valuation.caseType, profile);
+  if (specificSeed) {
+    return buildStockSpecificScenarioBridge(valuation, context, profile, specificSeed);
+  }
+  const alignedRawAssumptions = assumptionItemsAlignWithProfile(assumptions, profile);
+  const sourceAssumptions = alignedRawAssumptions ? rawAssumptions : {};
+  const rawTargetPrice = valuation.targetPrice ?? null;
+  const currentRevenueAnnual =
+    context.revenueAnnual ??
+    (context.monthlyRevenue != null && Number.isFinite(context.monthlyRevenue) && context.monthlyRevenue > 0
+      ? context.monthlyRevenue * 12
+      : null);
+  const caseType = valuation.caseType;
+  const caseLabel =
+    caseType === 'base' ? '基本情境' : caseType === 'upside' ? '樂觀情境' : '悲觀 / 失效情境';
+  const scenarioPe =
+    assumptionNumber(sourceAssumptions, 'pe') ??
+    (caseType === 'base'
+      ? round((profile.benchmarkPeRange[0] + profile.benchmarkPeRange[1]) / 2, 1)
+      : caseType === 'upside'
+        ? profile.benchmarkPeRange[1]
+        : Math.max(profile.benchmarkPeRange[0] - 2, 6));
+  const scenarioRevenueLift =
+    caseType === 'base'
+      ? 1 + profile.volumeGrowthTargets.base / 100 * 0.55 + profile.aspGrowthTargets.base / 100 * 0.22
+      : caseType === 'upside'
+        ? 1 + profile.volumeGrowthTargets.upside / 100 * 0.58 + profile.aspGrowthTargets.upside / 100 * 0.26
+        : 1 + profile.volumeGrowthTargets.invalidation / 100 * 0.45 + profile.aspGrowthTargets.invalidation / 100 * 0.18;
+  const alignedRevenueAnnual =
+    assumptionNumber(sourceAssumptions, 'revenue_annual') ?? (currentRevenueAnnual != null ? currentRevenueAnnual * scenarioRevenueLift : null);
+  const currentGrossMargin = context.grossMargin != null && Number.isFinite(context.grossMargin) ? context.grossMargin : null;
+  const currentOperatingMargin = context.operatingMargin != null && Number.isFinite(context.operatingMargin) ? context.operatingMargin : null;
+  const grossMargin =
+    assumptionNumber(sourceAssumptions, 'gross_margin_pct') ??
+    (context.grossMargin != null && Number.isFinite(context.grossMargin) && context.grossMargin > 0
+      ? caseType === 'base'
+        ? Math.max(context.grossMargin, profile.grossMarginTargets.base)
+        : caseType === 'upside'
+          ? Math.max(context.grossMargin, profile.grossMarginTargets.upside)
+          : Math.min(context.grossMargin, profile.grossMarginTargets.invalidation)
+      : profile.grossMarginTargets[caseType]);
+  const operatingMargin =
+    assumptionNumber(sourceAssumptions, 'operating_margin_pct') ??
+    (context.operatingMargin != null && Number.isFinite(context.operatingMargin)
+      ? caseType === 'base'
+        ? Math.max(context.operatingMargin, profile.operatingMarginTargets.base)
+        : caseType === 'upside'
+          ? Math.max(context.operatingMargin, profile.operatingMarginTargets.upside)
+          : Math.min(context.operatingMargin, profile.operatingMarginTargets.invalidation)
+      : profile.operatingMarginTargets[caseType]);
+  const explicitEps = assumptionNumber(sourceAssumptions, 'eps');
+  const eps =
+    explicitEps ??
+    buildBridgeDerivedEps({
+      currentRevenueAnnual,
+      projectedRevenueAnnual: alignedRevenueAnnual,
+      currentGrossMargin,
+      projectedGrossMargin: grossMargin,
+      currentOperatingMargin,
+      projectedOperatingMargin: operatingMargin,
+      currentEps: context.epsTtm != null && Number.isFinite(context.epsTtm) ? context.epsTtm : null,
+    });
+  const candidateDriver = compactText(valuation.driverLabel || sourceAssumptions.driver_label || sourceAssumptions.driver || '');
+  const driver = candidateDriver && bridgeTextAlignsWithProfile(candidateDriver, profile) ? candidateDriver : profile.driverLabel;
+  const mixTo = profile.mixTargets[caseType];
+  const volumeGrowth = profile.volumeGrowthTargets[caseType];
+  const aspGrowth = profile.aspGrowthTargets[caseType];
+  const operatingBridge = sanitizeNarrativeText(
+    caseType === 'invalidation'
+      ? `${caseLabel}假設 ${profile.volumeLabel}${volumeGrowth >= 0 ? '僅年增' : '轉為年減'} ${bridgePctText(volumeGrowth) || formatNumberLocal(volumeGrowth)}，${profile.aspLabel}${aspGrowth >= 0 ? '僅小幅回升' : '轉為下滑'} ${bridgePctText(aspGrowth) || formatNumberLocal(aspGrowth)}，${profile.mixLabel}回落到 ${formatNumberLocal(mixTo)}%。毛利率${currentGrossMargin != null ? `由 ${formatNumberLocal(currentGrossMargin)}% 回到 ${formatNumberLocal(grossMargin)}%` : `約 ${formatNumberLocal(grossMargin)}%`}。`
+      : `${caseLabel}假設 ${profile.volumeLabel}年增 ${bridgePctText(volumeGrowth) || formatNumberLocal(volumeGrowth)}，${profile.aspLabel}${bridgePctText(aspGrowth) || formatNumberLocal(aspGrowth)}，${profile.mixLabel}由 ${formatNumberLocal(profile.mixStart)}% 提升到 ${formatNumberLocal(mixTo)}%。毛利率${currentGrossMargin != null ? `由 ${formatNumberLocal(currentGrossMargin)}% 提升到 ${formatNumberLocal(grossMargin)}%` : `約 ${formatNumberLocal(grossMargin)}%`}。`,
+  );
+  const earningsBridge = sanitizeNarrativeText(
+    [
+      alignedRevenueAnnual != null ? `在此前提下，年化營收估約 ${formatNarrativeMoney(alignedRevenueAnnual)}` : null,
+      operatingMargin != null
+        ? currentOperatingMargin != null
+          ? `營益率由 ${formatNumberLocal(currentOperatingMargin)}% ${caseType === 'invalidation' ? '回落到' : '提升到'} ${formatNumberLocal(operatingMargin)}%`
+          : `營益率約 ${formatNumberLocal(operatingMargin)}%`
+        : null,
+      eps != null ? `稅後 EPS 約 ${formatNumberLocal(eps)}` : null,
+    ]
+      .filter(Boolean)
+      .join('，'),
+  );
+  const syntheticAssumptions =
+    alignedRawAssumptions && assumptions.length > 0
+      ? assumptions
+      : [
+          { label: profile.volumeLabel, value: bridgePctText(volumeGrowth) || formatNumberLocal(volumeGrowth), isEstimated: true },
+          { label: profile.aspLabel, value: bridgePctText(aspGrowth) || formatNumberLocal(aspGrowth), isEstimated: true },
+          { label: profile.mixLabel, value: `${formatNumberLocal(profile.mixStart)}% -> ${formatNumberLocal(mixTo)}%`, isEstimated: true },
+          grossMargin != null ? { label: '毛利率', value: `${currentGrossMargin != null ? `${formatNumberLocal(currentGrossMargin)}% -> ` : ''}${formatNumberLocal(grossMargin)}%`, isEstimated: true } : null,
+          operatingMargin != null ? { label: '營益率', value: `${currentOperatingMargin != null ? `${formatNumberLocal(currentOperatingMargin)}% -> ` : ''}${formatNumberLocal(operatingMargin)}%`, isEstimated: true } : null,
+          eps != null ? { label: 'EPS', value: formatNumberLocal(eps), isEstimated: explicitEps == null } : null,
+        ].filter((item): item is { label: string; value: string; isEstimated: boolean } => Boolean(item));
+  const marketSizingBridge = sanitizeNarrativeText(
+    `研究推估：以 ${profile.peerLabel} 的可服務市場推估 ${context.symbol} 的有效營收份額，${profile.mixLabel}由 ${formatNumberLocal(profile.mixStart)}% ${caseType === 'invalidation' ? '回落到' : '提升到'} ${formatNumberLocal(mixTo)}%，並把 ${profile.volumeLabel} 與 ${profile.aspLabel} 的變化一起納入。`,
+  );
+  const evidenceSeed: StockSpecificBridgeSeed = {
+    driverLabel: driver,
+    tamRange: marketSizingBridge,
+    marketShareRange: '研究推估',
+    orderVisibility:
+      caseType === 'upside'
+        ? `${profile.volumeLabel} 與 ${profile.aspLabel} 驗證優於 Base`
+        : caseType === 'invalidation'
+          ? `${profile.volumeLabel} 與 ${profile.aspLabel} 驗證不如預期`
+          : `${profile.volumeLabel} 與 ${profile.aspLabel} 依既有 run-rate 緩步改善`,
+    mixTarget: mixTo,
+    revenueAnnual: alignedRevenueAnnual ?? 0,
+    grossMarginPct: grossMargin ?? 0,
+    operatingMarginPct: operatingMargin ?? 0,
+    eps: eps ?? 0,
+    targetPe: scenarioPe,
+    evidenceRefs: [],
+    estimatedFields: syntheticAssumptions.filter((item) => item.isEstimated).map((item) => item.label),
+  };
+  const evidenceBundle = buildScenarioEvidenceBundle(context, profile, caseType, evidenceSeed, marketSizingBridge);
+  const multipleBridge = sanitizeNarrativeText(
+    sentenceFromBridgeSegments(
+      [benchmarkSentence(scenarioPe, profile, context.pbRatio), evidenceBundle.multipleRationale],
+      benchmarkSentence(scenarioPe, profile, context.pbRatio),
+    ),
+  );
+  const benchmarkRange = `${formatNumberLocal(profile.benchmarkPeRange[0])}x–${formatNumberLocal(profile.benchmarkPeRange[1])}x`;
+  const bridgeStatus = evaluateBridgeCompleteness({
+    currentRevenueAnnual,
+    projectedRevenueAnnual: alignedRevenueAnnual,
+    currentGrossMargin,
+    projectedGrossMargin: grossMargin,
+    currentOperatingMargin,
+    projectedOperatingMargin: operatingMargin,
+    projectedEps: eps,
+    targetPeRatio: scenarioPe,
+    estimatedFields: syntheticAssumptions.filter((item) => item.isEstimated).map((item) => item.label),
+  });
+  const targetPrice =
+    bridgeStatus.bridgeCompleteness === 'complete' && eps != null && scenarioPe != null && Number.isFinite(scenarioPe) && scenarioPe > 0
+      ? round(eps * scenarioPe, 2)
+      : null;
+  const priceBridge =
+    targetPrice != null && eps != null && scenarioPe != null
+      ? sanitizeNarrativeText(
+          `以 ${formatNumberLocal(eps)} 元 EPS 搭配 ${formatNumberLocal(scenarioPe)}x forward PE，12 個月目標價約 ${formatMoney(targetPrice)}；對現價 ${bridgePctText(valuation.expectedReturnPct) || '空間待補'}。`,
+        )
+      : null;
+  return {
+    driver,
+    operatingBridge,
+    revenueBridge: alignedRevenueAnnual != null ? `年化營收推估約 ${formatNarrativeMoney(alignedRevenueAnnual)}。` : null,
+    marginBridge:
+      grossMargin != null || operatingMargin != null
+        ? sanitizeNarrativeText(
+            [
+              grossMargin != null
+                ? `毛利率${currentGrossMargin != null ? `由 ${formatNumberLocal(currentGrossMargin)}% ` : ''}${caseType === 'invalidation' ? '回落到' : '提升到'} ${formatNumberLocal(grossMargin)}%`
+                : null,
+              operatingMargin != null
+                ? `營益率${currentOperatingMargin != null ? `由 ${formatNumberLocal(currentOperatingMargin)}% ` : ''}${caseType === 'invalidation' ? '回落到' : '提升到'} ${formatNumberLocal(operatingMargin)}%`
+                : null,
+            ]
+              .filter(Boolean)
+              .join('，'),
+          )
+        : null,
+    earningsBridge,
+    multipleBridge,
+    priceBridge,
+    benchmarkRange,
+    revenueAnnual: alignedRevenueAnnual,
+    grossMargin,
+    operatingMargin,
+    eps,
+    targetPrice,
+    expectedReturnPct:
+      targetPrice != null && context.currentPrice != null && Number.isFinite(context.currentPrice) && context.currentPrice > 0
+        ? round(((targetPrice - context.currentPrice) / context.currentPrice) * 100, 2)
+        : null,
+    currentPeRatio: context.peRatio,
+    currentPbRatio: context.pbRatio,
+    targetPeRatio: scenarioPe,
+    targetPbRatio: null,
+    operatingAssumptions: syntheticAssumptions,
+    financialBridge: [operatingBridge, earningsBridge].filter((item): item is string => Boolean(item)),
+    bridgeCompleteness: bridgeStatus.bridgeCompleteness,
+    insufficientBridgeReason: bridgeStatus.insufficientBridgeReason,
+    estimatedFields: bridgeStatus.estimatedFields,
+    rawTargetPrice: rawTargetPrice != null && Number.isFinite(rawTargetPrice) ? rawTargetPrice : null,
+    marketSizingBridge,
+    evidenceRefs: [] as string[],
+    evidenceBasis: evidenceBundle.evidenceBasis,
+    customerExposure: evidenceBundle.customerExposure,
+    transcriptEvidence: evidenceBundle.transcriptEvidence,
+    monthlyRevenueEvidence: evidenceBundle.monthlyRevenueEvidence,
+    productMixEvidence: evidenceBundle.productMixEvidence,
+    marketShareEvidence: evidenceBundle.marketShareEvidence,
+  };
+}
+
+function buildValuationBridgeSummary(valuationCases: ValuationCaseView[], context: ValuationBridgeContext): {
+  valuationBridge: DeepDiveValuationBridge | null;
+  scenarioBridges: DeepDiveScenarioNarrative[];
+  priceTargetRationale: string | null;
+} {
+  const scenarioOrder: Array<ValuationCaseView['caseType']> = ['base', 'upside', 'invalidation'];
+  const byType = new Map(valuationCases.map((item) => [item.caseType, item]));
+  const profile = inferValuationBridgeProfile(context);
+  const scenarioBridges: DeepDiveScenarioNarrative[] = scenarioOrder
+    .map((caseType) => byType.get(caseType))
+    .filter((item): item is ValuationCaseView => Boolean(item))
+    .map((valuation) => {
+      const rawAssumptions = normalizedAssumptionItems(valuation);
+      const rawOperatingBridge = sentenceFromBridgeSegments(
+        [sanitizeNarrativeText((valuation.assumptions || {}).operating_bridge)],
+        '',
+      ) || null;
+      const rawEarningsBridge = sentenceFromBridgeSegments(
+        [
+          sanitizeNarrativeText((valuation.assumptions || {}).earnings_bridge),
+          ...normalizedBridgeSentences((valuation.assumptions || {}).financial_bridge),
+        ],
+        '',
+      ) || null;
+      const rawFinancialBridge = normalizedBridgeSentences((valuation.assumptions || {}).financial_bridge);
+      const rawMultipleBridge =
+        sentenceFromBridgeSegments(
+          [
+            sanitizeNarrativeText((valuation.assumptions || {}).multiple_bridge),
+          ],
+          '',
+        ) || null;
+      const caseLabel =
+        valuation.caseType === 'base' ? '基本情境' : valuation.caseType === 'upside' ? '樂觀情境' : '悲觀 / 失效情境';
+      const rawPriceBridge = sanitizeNarrativeText((valuation.assumptions || {}).price_bridge);
+      const synthesized = buildSyntheticScenarioBridge(valuation, context, profile, rawAssumptions);
+      const useRawAssumptions = assumptionItemsAlignWithProfile(rawAssumptions, profile);
+      const assumptions = useRawAssumptions ? rawAssumptions : synthesized.operatingAssumptions;
+      const assumptionPhrases = assumptions.map((item) => `${item.label}${item.isEstimated ? '約' : ''}${item.value}`);
+      const operatingBridge =
+        rawOperatingBridge && bridgeTextAlignsWithProfile(rawOperatingBridge, profile)
+          ? rawOperatingBridge
+          : synthesized.operatingBridge;
+      const earningsBridge =
+        rawEarningsBridge && bridgeTextAlignsWithProfile(rawEarningsBridge, profile)
+          ? rawEarningsBridge
+          : synthesized.earningsBridge;
+      const financialBridge =
+        rawFinancialBridge.length > 0 && rawFinancialBridge.some((item) => bridgeTextAlignsWithProfile(item, profile))
+          ? rawFinancialBridge
+          : synthesized.financialBridge;
+      const multipleBridge =
+        rawMultipleBridge && bridgeTextAlignsWithProfile(rawMultipleBridge, profile)
+          ? rawMultipleBridge
+          : synthesized.multipleBridge;
+      const priceBridge = synthesized.priceBridge || (synthesized.bridgeCompleteness === 'complete' ? rawPriceBridge : null);
+      const marketSizingBridge =
+        synthesized.marketSizingBridge ||
+        buildMarketSizingBridge(valuation.caseType, context, profile, {
+          revenueAnnual: synthesized.revenueAnnual ?? null,
+        });
+      const rawDriverLabel = compactText(valuation.driverLabel || (valuation.assumptions || {}).driver_label || '');
+      const driverLabel =
+        rawDriverLabel && bridgeTextAlignsWithProfile(rawDriverLabel, profile) ? rawDriverLabel : synthesized.driver || null;
+      const scenarioTargetPrice = synthesized.targetPrice ?? null;
+      const scenarioExpectedReturnPct =
+        scenarioTargetPrice != null && context.currentPrice != null && Number.isFinite(context.currentPrice) && context.currentPrice > 0
+          ? round(((scenarioTargetPrice - context.currentPrice) / context.currentPrice) * 100, 2)
+          : null;
+      return {
+        key: valuation.caseType,
+        label: caseLabel,
+        narrative: buildScenarioBridgeNarrative(
+          caseLabel,
+          driverLabel,
+          operatingBridge,
+          earningsBridge,
+          assumptionPhrases.length > 0 ? assumptionPhrases : synthesized.operatingAssumptions.map((item) => `${item.label}${item.isEstimated ? '約' : ''}${item.value}`),
+          financialBridge,
+          multipleBridge,
+          scenarioTargetPrice,
+          scenarioExpectedReturnPct,
+          priceBridge,
+        ),
+        targetPrice: scenarioTargetPrice,
+        expectedReturnPct: scenarioExpectedReturnPct,
+        assumptions: (assumptionPhrases.length > 0
+          ? assumptionPhrases
+          : synthesized.operatingAssumptions.map((item) => `${item.label}${item.isEstimated ? '約' : ''}${item.value}`))
+          .map(valuationAssumptionPhrase)
+          .filter((item): item is string => Boolean(item)),
+        driverLabel,
+        driver: driverLabel,
+        marketSizingBridge,
+        operatingBridge,
+        revenueBridge: synthesized.revenueBridge || null,
+        marginBridge: synthesized.marginBridge || null,
+        earningsBridge,
+        operatingAssumptions: assumptions.length > 0 ? assumptions : synthesized.operatingAssumptions,
+        financialBridge,
+        multipleBridge,
+        priceBridge,
+        projectedRevenueAnnual: synthesized.revenueAnnual ?? null,
+        projectedGrossMarginPct: synthesized.grossMargin ?? null,
+        projectedOperatingMarginPct: synthesized.operatingMargin ?? null,
+        projectedEps: synthesized.eps ?? null,
+        currentPeRatio: synthesized.currentPeRatio ?? null,
+        currentPbRatio: synthesized.currentPbRatio ?? null,
+        targetPeRatio: synthesized.targetPeRatio ?? null,
+        targetPbRatio: synthesized.targetPbRatio ?? null,
+        benchmarkMultipleRange: synthesized.benchmarkRange ?? null,
+        evidenceRefs: uniqueNarrativeLines(synthesized.evidenceRefs || [], 5),
+        evidenceBasis: uniqueNarrativeLines(synthesized.evidenceBasis || [], 5),
+        customerExposure: synthesized.customerExposure || null,
+        transcriptEvidence: synthesized.transcriptEvidence || null,
+        monthlyRevenueEvidence: synthesized.monthlyRevenueEvidence || null,
+        productMixEvidence: synthesized.productMixEvidence || null,
+        marketShareEvidence: synthesized.marketShareEvidence || null,
+        bridgeCompleteness: synthesized.bridgeCompleteness,
+        insufficientBridgeReason: synthesized.insufficientBridgeReason,
+        estimatedFields: synthesized.estimatedFields,
+      };
+    });
+
+  const baseScenario = scenarioBridges.find((item) => item.key === 'base') || scenarioBridges[0] || null;
+  const baseValuation = byType.get('base') || null;
+
+  const baseValuationStoryDrivers = normalizedBridgeSentences((baseValuation?.assumptions || {}).story_drivers).filter((item) =>
+    bridgeTextAlignsWithProfile(item, profile),
+  );
+  const baseValuationBridgeSummary = sanitizeNarrativeText(baseValuation?.bridgeSummary);
+  const alignedBaseBridgeSummary =
+    baseValuationBridgeSummary && bridgeTextAlignsWithProfile(baseValuationBridgeSummary, profile) ? baseValuationBridgeSummary : null;
+  const alignedBaseBridgeSummaryFromAssumption = sanitizeNarrativeText((baseValuation?.assumptions || {}).bridge_summary);
+  const alignedBaseAssumptionBridgeSummary =
+    alignedBaseBridgeSummaryFromAssumption && bridgeTextAlignsWithProfile(alignedBaseBridgeSummaryFromAssumption, profile)
+      ? alignedBaseBridgeSummaryFromAssumption
+      : null;
+
+  const valuationBridge = baseScenario
+    ? {
+        driverLabel: baseScenario.driverLabel || profile.driverLabel || null,
+        storyDrivers: narrativeCandidates(
+          [
+            ...baseValuationStoryDrivers,
+            profile.storyLines[0],
+            profile.storyLines[1],
+          ],
+          3,
+        ),
+        operatingAssumptions: baseScenario.operatingAssumptions || [],
+        financialBridge: baseScenario.financialBridge || [],
+        multipleBridge: baseScenario.multipleBridge || profile.benchmarkText,
+        priceBridge: sentenceFromBridgeSegments(
+          [
+            bridgeTextAlignsWithProfile(sanitizeNarrativeText((baseValuation?.assumptions || {}).price_bridge), profile)
+              ? sanitizeNarrativeText((baseValuation?.assumptions || {}).price_bridge)
+              : null,
+            baseScenario.priceBridge,
+          ],
+          baseScenario.narrative,
+        ),
+        bridgeSummary: sentenceFromBridgeSegments(
+          [
+            alignedBaseBridgeSummary,
+            alignedBaseAssumptionBridgeSummary,
+            baseScenario.operatingBridge,
+            baseScenario.earningsBridge,
+            baseScenario.multipleBridge,
+            baseScenario.priceBridge,
+          ],
+          baseScenario.narrative,
+        ),
+      }
+    : null;
+
+  const priceTargetRationale = valuationBridge
+    ? sentenceFromBridgeSegments(
+        [
+          valuationBridge.bridgeSummary,
+          scenarioBridges.find((item) => item.key === 'base')?.priceBridge || null,
+          scenarioBridges.find((item) => item.key === 'base')?.multipleBridge || null,
+          scenarioBridges.find((item) => item.key === 'upside')?.priceBridge || null,
+        ],
+        valuationBridge.priceBridge || '',
+      )
+    : null;
+
+  return { valuationBridge, scenarioBridges, priceTargetRationale };
+}
+
+function uniqueNarrativeLines(items: Array<string | null | undefined>, limit = 4) {
+  const seen = new Set<string>();
+  const lines: string[] = [];
+  for (const item of items) {
+    const clean = sanitizeNarrativeText(item);
+    if (!clean) continue;
+    if (clean.includes('<a href') || clean.includes('http://') || clean.includes('https://')) continue;
+    if (/^Threads?:/i.test(clean)) continue;
+    if (/(上車|下車我會通知|閉眼買|漲停|衝衝衝|我幹|強勢黑馬|放心買|膽大吃四方|買車買房)/.test(clean)) continue;
+    const normalized = normalizeNarrativeSentence(clean);
+    if (!normalized) continue;
+    if (seen.has(normalized)) continue;
+    seen.add(normalized);
+    lines.push(normalized);
+    if (lines.length >= limit) break;
+  }
+  return lines;
+}
+
+function findAssumptionValue(
+  assumptions: Array<{ label: string; value: string; isEstimated?: boolean }> | null | undefined,
+  matcher: RegExp,
+) {
+  const matched = (assumptions || []).find((item) => matcher.test(item.label));
+  return matched?.value || null;
+}
+
+function buildValuationBridgeBullet(
+  scenario: DeepDiveScenarioNarrative | null | undefined,
+  fallback: string | null | undefined,
+) {
+  if (!scenario) return normalizeNarrativeSentence(fallback);
+  const mixValue = findAssumptionValue(scenario.operatingAssumptions, /(占比|mix)/i);
+  const grossMarginValue = findAssumptionValue(scenario.operatingAssumptions, /毛利率/i);
+  const epsValue = findAssumptionValue(scenario.operatingAssumptions, /^EPS$/i);
+  const peValue = findAssumptionValue(scenario.operatingAssumptions, /(目標 PE|估值倍數|PE)/i);
+  const targetText = scenario.targetPrice == null ? null : formatMoney(scenario.targetPrice);
+  const pctText = scenario.expectedReturnPct == null ? null : formatSignedPctLocal(scenario.expectedReturnPct);
+  const bullet = sentenceFromBridgeSegments(
+    [
+      scenario.driver,
+      scenario.operatingBridge,
+      scenario.earningsBridge,
+      mixValue ? `高毛利/高階產品占比推估為 ${mixValue}` : null,
+      grossMarginValue ? `毛利率推估 ${grossMarginValue}` : null,
+      epsValue ? `EPS 推估 ${epsValue}` : null,
+      peValue ? `評價倍數約 ${peValue}` : null,
+      targetText ? `對應目標價 ${targetText}${pctText ? `，相對現價 ${pctText}` : ''}` : null,
+    ],
+    fallback || '',
+  );
+  return normalizeNarrativeSentence(bullet || fallback);
+}
+
+function buildPeerComparisonSentence(
+  baseScenario: DeepDiveScenarioNarrative | null | undefined,
+  valuationBridge: DeepDiveValuationBridge | null | undefined,
+  fundamentalPeRatio: number | null | undefined,
+  fundamentalPbRatio: number | null | undefined,
+) {
+  const currentMultipleSentence = buildCurrentMultipleReferenceSentence(fundamentalPeRatio, fundamentalPbRatio);
+  const baseMultiple = normalizeNarrativeSentence(baseScenario?.multipleBridge || valuationBridge?.multipleBridge || null);
+  const sentence = sentenceFromBridgeSegments(
+    [
+      currentMultipleSentence,
+      baseMultiple,
+    ],
+    baseMultiple || '',
+  );
+  return normalizeNarrativeSentence(sentence);
+}
+
+function scenarioBridgeEvidenceRefs(
+  sources: Array<{ summary?: string | null; sourceName?: string | null; sourceType?: string | null }>,
+  limit = 3,
+) {
+  return uniqueNarrativeLines(
+    sources.map((item) => {
+      const summary = normalizeNarrativeSentence(item.summary || null);
+      if (!summary) return null;
+      const prefix = compactText(item.sourceName || '') || compactText(item.sourceType || '');
+      return prefix ? `${prefix}：${summary}` : summary;
+    }),
+    limit,
+  );
+}
+
+function buildValuationCaseDetail(
+  label: string,
+  scenario: DeepDiveScenarioNarrative | null | undefined,
+  valuationBridge: DeepDiveValuationBridge | null | undefined,
+  evidenceRefs: string[],
+  isEstimated: boolean,
+): DeepDiveValuationCaseDetail | null {
+  if (!scenario) return null;
+  const bridgeCompleteness = scenario.bridgeCompleteness || 'insufficient';
+  const insufficientBridgeReason =
+    scenario.insufficientBridgeReason ||
+    (bridgeCompleteness === 'insufficient' ? '研究推估不足，暫不產出正式目標價。' : null);
+  const mergedEvidenceRefs = uniqueNarrativeLines([...(scenario.evidenceRefs || []), ...evidenceRefs], 5);
+  return {
+    label,
+    driver: scenario.driver || valuationBridge?.driverLabel || null,
+    bridgeCompleteness,
+    insufficientBridgeReason,
+    estimatedFields: scenario.estimatedFields || [],
+    marketSizingBridge: scenario.marketSizingBridge || null,
+    revenueBridge: scenario.revenueBridge || scenario.operatingBridge || null,
+    marginBridge: scenario.marginBridge || null,
+    earningsBridge: scenario.earningsBridge || null,
+    multipleBridge: scenario.multipleBridge || valuationBridge?.multipleBridge || null,
+    priceBridge: bridgeCompleteness === 'complete' ? scenario.priceBridge || valuationBridge?.priceBridge || null : null,
+    benchmarkRange: scenario.benchmarkMultipleRange || null,
+    currentPeRatio: scenario.currentPeRatio ?? null,
+    currentPbRatio: scenario.currentPbRatio ?? null,
+    targetPeRatio: scenario.targetPeRatio ?? null,
+    targetPbRatio: scenario.targetPbRatio ?? null,
+    projectedRevenueAnnual: scenario.projectedRevenueAnnual ?? null,
+    projectedGrossMarginPct: scenario.projectedGrossMarginPct ?? null,
+    projectedOperatingMarginPct: scenario.projectedOperatingMarginPct ?? null,
+    projectedEps: scenario.projectedEps ?? null,
+    targetPrice: bridgeCompleteness === 'complete' ? scenario.targetPrice ?? null : null,
+    expectedReturnPct: bridgeCompleteness === 'complete' ? scenario.expectedReturnPct ?? null : null,
+    assumptions: scenario.assumptions || [],
+    sharedBasisRefs: [],
+    deltaAssumptions: [],
+    hasIndependentDelta: label !== '情境估值框架',
+    achievementChecklist: [],
+    evidenceRefs: mergedEvidenceRefs,
+    evidenceBasis: scenario.evidenceBasis || [],
+    sourceRefs: [],
+    customerExposure: scenario.customerExposure || null,
+    transcriptEvidence: scenario.transcriptEvidence || null,
+    monthlyRevenueEvidence: scenario.monthlyRevenueEvidence || null,
+    productMixEvidence: scenario.productMixEvidence || null,
+    marketShareEvidence: scenario.marketShareEvidence || null,
+    isEstimated,
+  };
+}
+
+function normalizedNarrativeSet(items: Array<string | null | undefined>) {
+  const set = new Set<string>();
+  for (const item of items) {
+    const normalized = normalizeNarrativeSentence(item);
+    if (!normalized) continue;
+    set.add(normalized);
+  }
+  return set;
+}
+
+function cleanEvidenceDirectionPrefix(value: string | null | undefined) {
+  const clean = sanitizeNarrativeText(value);
+  if (!clean) return null;
+  return normalizeNarrativeSentence(
+    clean.replace(/^(支撐\s*Base|支撐\s*情境|削弱\s*Base|削弱\s*情境|失效情境)\s*[：:｜|\-]\s*/i, ''),
+  );
+}
+
+function makeSourceCitationRef(params: {
+  id: string;
+  label: string;
+  sourceType: string;
+  sourceName: string;
+  sourceUrl?: string | null;
+  asOf?: string | null;
+  evidenceClass?: string | null;
+}): DeepDiveSourceCitationRef {
+  return {
+    id: params.id,
+    label: sanitizeNarrativeText(params.label) || params.id,
+    sourceType: params.sourceType,
+    sourceName: sanitizeNarrativeText(params.sourceName) || params.sourceType,
+    sourceUrl: params.sourceUrl || null,
+    asOf: params.asOf || null,
+    evidenceClass: params.evidenceClass || 'research_basis',
+  };
+}
+
+function buildSourceCitationMap(params: {
+  latestEvidence?: DeepDiveLatestFact[];
+  freshSources?: SourceCoverageView[];
+  sourceAppendix?: Array<{ label: string; items: SourceCoverageView[] }>;
+}) {
+  const refs: DeepDiveSourceCitationRef[] = [];
+  const seen = new Set<string>();
+  const push = (ref: Omit<DeepDiveSourceCitationRef, 'id'>) => {
+    const key = `${ref.sourceType}::${ref.sourceName}::${ref.sourceUrl || ''}::${ref.asOf || ''}`;
+    if (seen.has(key)) return null;
+    seen.add(key);
+    const next = makeSourceCitationRef({ ...ref, id: `S${refs.length + 1}` });
+    refs.push(next);
+    return next;
+  };
+
+  // Prefer externally auditable sources as S1/S2. Internal bridge snapshots can
+  // support traceability, but should never crowd out official / financial refs.
+  for (const item of params.freshSources || []) {
+    push({
+      label: item.sourceName,
+      sourceType: item.sourceType,
+      sourceName: item.sourceName,
+      sourceUrl: item.sourceUrl,
+      asOf: item.sourceTimestamp,
+      evidenceClass: item.directHit === false ? 'indirect_source' : 'direct_hit',
+    });
+  }
+  for (const group of params.sourceAppendix || []) {
+    for (const item of group.items || []) {
+      push({
+        label: item.sourceName,
+        sourceType: item.sourceType,
+        sourceName: item.sourceName,
+        sourceUrl: item.sourceUrl,
+        asOf: item.sourceTimestamp,
+        evidenceClass: group.label,
+      });
+    }
+  }
+  for (const item of params.latestEvidence || []) {
+    push({
+      label: item.label,
+      sourceType: item.sourceType,
+      sourceName: item.sourceName,
+      sourceUrl: item.sourceUrl,
+      asOf: item.asOf,
+      evidenceClass: item.supportCase === 'scenario' ? 'scenario_evidence' : 'base_evidence',
+    });
+  }
+
+  if (!refs.some((item) => isExternalCitationRef(item))) {
+    refs.push(
+      makeSourceCitationRef({
+        id: `S${refs.length + 1}`,
+        label: '官方資料入口',
+        sourceType: 'official',
+        sourceName: 'MOPS / TWSE',
+        sourceUrl: 'https://mops.twse.com.tw/',
+        asOf: null,
+        evidenceClass: 'external_source_pending',
+      }),
+    );
+  }
+  return refs.slice(0, 8);
+}
+
+function isExternalCitationRef(ref: DeepDiveSourceCitationRef | null | undefined) {
+  if (!ref) return false;
+  return ref.sourceType !== 'system' && Boolean(ref.sourceUrl || ref.sourceType === 'official' || ref.sourceType === 'financial' || ref.sourceType === 'broker_report');
+}
+
+function isVerifiedExternalCitationRef(ref: DeepDiveSourceCitationRef | null | undefined) {
+  if (!ref) return false;
+  if (ref.evidenceClass === 'external_source_pending') return false;
+  const type = String(ref.sourceType || '').toLowerCase();
+  return (
+    ['official', 'financial', 'broker_report', 'public_research', 'industry', 'company_event'].some((candidate) => type.includes(candidate)) &&
+    Boolean(ref.sourceUrl || type === 'official' || type === 'financial' || type === 'broker_report')
+  );
+}
+
+function assumptionSourceFromRef(ref: DeepDiveSourceCitationRef): DeepDiveValuationAssumptionLedgerItem['sourceTypes'][number] {
+  const type = String(ref.sourceType || '').toLowerCase();
+  const name = String(ref.sourceName || '').toLowerCase();
+  const evidenceClass = String(ref.evidenceClass || '').toLowerCase();
+  if (type.includes('broker') || name.includes('券商') || name.includes('投顧') || name.includes('factset')) {
+    return evidenceClass.includes('manual') || evidenceClass.includes('pdf') ? 'imported_pdf' : 'broker';
+  }
+  if (type.includes('official') || type.includes('financial') || type.includes('company_event')) return 'official';
+  if (type.includes('news') || type.includes('public_research') || type.includes('industry')) return 'news_summary';
+  if (type.includes('threads') || type.includes('instagram') || type.includes('telegram') || type.includes('kol') || type.includes('podcast') || type.includes('youtube')) {
+    return 'social';
+  }
+  return 'internal_estimate';
+}
+
+function sourceRefsForLedger(refs: DeepDiveSourceCitationRef[] | undefined, fallback: DeepDiveValuationAssumptionLedgerItem['sourceTypes'] = ['internal_estimate']) {
+  const sourceRefs = refs || [];
+  const verifiedRefs = sourceRefs.filter(isVerifiedExternalCitationRef);
+  const sourceTypes = unique(
+    (verifiedRefs.length > 0 ? verifiedRefs : sourceRefs)
+      .map(assumptionSourceFromRef),
+  ) as DeepDiveValuationAssumptionLedgerItem['sourceTypes'];
+  const finalSourceTypes = sourceTypes.length > 0 ? sourceTypes : fallback;
+  const trustLevel =
+    finalSourceTypes.every((item) => item === 'internal_estimate')
+      ? ('internal_only' as const)
+      : finalSourceTypes.includes('internal_estimate')
+        ? ('mixed' as const)
+        : ('verified' as const);
+  return {
+    sourceTypes: finalSourceTypes,
+    trustLevel,
+    sourceRefIds: verifiedRefs.length > 0 ? citationIds(verifiedRefs) : citationIds(sourceRefs),
+  };
+}
+
+function formatLedgerMoney(value: number | null | undefined) {
+  if (value == null || !Number.isFinite(Number(value))) return null;
+  return formatNarrativeMoney(Number(value));
+}
+
+function buildCaseAssumptionLedger(
+  caseLabel: 'Base' | '情境',
+  detail: DeepDiveValuationCaseDetail | null | undefined,
+): DeepDiveValuationAssumptionLedgerItem[] {
+  if (!detail) return [];
+  const trust = sourceRefsForLedger(detail.sourceRefs, detail.isEstimated ? ['internal_estimate'] : ['official']);
+  const sourceRefs = trust.sourceRefIds;
+  const make = (
+    key: DeepDiveValuationAssumptionLedgerItem['key'],
+    label: string,
+    value: string | null,
+    formula: string | null,
+    note: string | null = null,
+  ): DeepDiveValuationAssumptionLedgerItem => ({
+    caseLabel,
+    key,
+    label,
+    value,
+    formula,
+    sourceTypes: trust.sourceTypes,
+    trustLevel: trust.trustLevel,
+    sourceRefs,
+    note,
+  });
+  return [
+    make('revenue', '預估營收', formatLedgerMoney(detail.projectedRevenueAnnual), detail.revenueBridge),
+    make('gross_margin', '毛利率', detail.projectedGrossMarginPct == null ? null : `${formatNumberLocal(detail.projectedGrossMarginPct)}%`, detail.marginBridge),
+    make('operating_margin', '營益率', detail.projectedOperatingMarginPct == null ? null : `${formatNumberLocal(detail.projectedOperatingMarginPct)}%`, detail.marginBridge),
+    make('eps', '預估 EPS', detail.projectedEps == null ? null : formatNumberLocal(detail.projectedEps), detail.earningsBridge),
+    make('multiple', '目標 PE/PB', detail.targetPeRatio == null && detail.targetPbRatio == null ? null : `PE ${detail.targetPeRatio == null ? '待補' : `${formatNumberLocal(detail.targetPeRatio)}x`} / PB ${detail.targetPbRatio == null ? '待補' : `${formatNumberLocal(detail.targetPbRatio)}x`}`, detail.multipleBridge),
+    make(
+      'target_price',
+      '目標價公式',
+      detail.targetPrice == null ? null : formatMoney(detail.targetPrice),
+      detail.projectedEps != null && detail.targetPeRatio != null ? `${formatNumberLocal(detail.projectedEps)} EPS × ${formatNumberLocal(detail.targetPeRatio)}x PE` : detail.priceBridge,
+      detail.bridgeCompleteness === 'insufficient' ? detail.insufficientBridgeReason : null,
+    ),
+  ];
+}
+
+function buildValuationAssumptionLedger(params: {
+  baseCaseDetail?: DeepDiveValuationCaseDetail | null;
+  scenarioCaseDetail?: DeepDiveValuationCaseDetail | null;
+}): DeepDiveValuationAssumptionLedgerItem[] {
+  return [
+    ...buildCaseAssumptionLedger('Base', params.baseCaseDetail),
+    ...buildCaseAssumptionLedger('情境', params.scenarioCaseDetail),
+  ];
+}
+
+function median(values: number[]) {
+  if (values.length === 0) return null;
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 === 0 ? round((sorted[mid - 1] + sorted[mid]) / 2, 2) : round(sorted[mid], 2);
+}
+
+function buildBrokerConsensus(brokerViews: BrokerView[]): DeepDiveBrokerConsensus | null {
+  if (!brokerViews.length) return null;
+  const targets = brokerViews
+    .map((item) => item.targetPrice)
+    .filter((value): value is number => value != null && Number.isFinite(value) && value > 0);
+  const forwardEpsValues = brokerViews
+    .map((item) => item.forwardEps)
+    .filter((value): value is number => value != null && Number.isFinite(value) && value > 0);
+  const usBrokerCount = brokerViews.filter((item) => item.isUsBroker).length;
+  const ratingDistribution = brokerViews.reduce<Record<string, number>>((acc, item) => {
+    const key = compactText(item.rating || '未提供評等') || '未提供評等';
+    acc[key] = (acc[key] || 0) + 1;
+    return acc;
+  }, {});
+  const latestReportDate =
+    brokerViews
+      .map((item) => item.reportDate)
+      .filter((value): value is string => Boolean(value))
+      .sort()
+      .pop() || null;
+  const latestMs = latestReportDate ? new Date(`${latestReportDate}T00:00:00+08:00`).getTime() : Number.NaN;
+  const stale = !Number.isFinite(latestMs) || Date.now() - latestMs > 90 * 24 * 60 * 60 * 1000;
+  const freshnessStatus = brokerViews.length === 0 ? 'missing' : stale ? 'stale' : 'fresh';
+  const verifiedForBase =
+    !stale &&
+    (targets.length >= 2 ||
+      (targets.length >= 1 && (usBrokerCount > 0 || forwardEpsValues.length > 0)) ||
+      brokerViews.some((item) => ['imported_pdf', 'manual_csv', 'broker_summary', 'news_summary', 'public_summary'].includes(String(item.sourceMode || ''))));
+  const summary =
+    targets.length > 0
+      ? `外資/券商公開來源共 ${brokerViews.length} 筆，其中美系/外資 ${usBrokerCount} 筆；目標價區間 ${formatMoney(Math.min(...targets))}–${formatMoney(Math.max(...targets))}，中位數 ${formatMoney(median(targets))}。`
+      : `外資/券商公開來源共 ${brokerViews.length} 筆，但尚未取得可用目標價。`;
+  return {
+    sourceCount: brokerViews.length,
+    usBrokerCount,
+    latestReportDate,
+    minTargetPrice: targets.length > 0 ? Math.min(...targets) : null,
+    medianTargetPrice: median(targets),
+    maxTargetPrice: targets.length > 0 ? Math.max(...targets) : null,
+    forwardEpsLow: forwardEpsValues.length > 0 ? Math.min(...forwardEpsValues) : null,
+    forwardEpsMedian: median(forwardEpsValues),
+    forwardEpsHigh: forwardEpsValues.length > 0 ? Math.max(...forwardEpsValues) : null,
+    freshnessStatus,
+    verifiedForBase,
+    ratingDistribution,
+    stale,
+    summary: stale ? `${summary} 最新券商資料已超過 90 天，僅作輔助。` : verifiedForBase ? `${summary} 可作 Base 估值佐證之一。` : `${summary} 仍需更多交叉驗證才可支撐 Base。`,
+  };
+}
+
+function benchmarkHighFromText(value: string | null | undefined) {
+  const text = compactText(value);
+  if (!text) return null;
+  const matches = [...text.matchAll(/([0-9]+(?:\.[0-9]+)?)\s*x/gi)].map((match) => Number(match[1])).filter(Number.isFinite);
+  return matches.length > 0 ? Math.max(...matches) : null;
+}
+
+function evaluateValuationConfidenceGate(params: {
+  baseCaseDetail?: DeepDiveValuationCaseDetail | null;
+  sharedVerifiedBasis?: DeepDiveSharedVerifiedBasis | null;
+  brokerConsensus?: DeepDiveBrokerConsensus | null;
+  currentPrice?: number | null;
+}): DeepDiveValuationConfidenceGate {
+  const base = params.baseCaseDetail || null;
+  if (!base || base.bridgeCompleteness !== 'complete') {
+    return {
+      status: 'insufficient_verified_basis',
+      reason: base?.insufficientBridgeReason || 'Base 橋接尚未完整，不能作正式目標價。',
+      baseTargetFormal: false,
+      externalCitationCount: 0,
+      brokerCitationCount: 0,
+      officialCitationCount: 0,
+    };
+  }
+  const refs = [...(base.sourceRefs || []), ...(params.sharedVerifiedBasis?.sourceRefs || [])];
+  const verifiedRefs = refs.filter(isVerifiedExternalCitationRef);
+  const brokerCitationCount = verifiedRefs.filter((ref) => assumptionSourceFromRef(ref) === 'broker' || assumptionSourceFromRef(ref) === 'imported_pdf').length;
+  const officialCitationCount = verifiedRefs.filter((ref) => assumptionSourceFromRef(ref) === 'official').length;
+  const externalCitationCount = verifiedRefs.length;
+  const baseUpside = upsidePctFromTarget(params.currentPrice ?? null, base.targetPrice ?? null) ?? 0;
+  const benchmarkHigh = benchmarkHighFromText(base.benchmarkRange || base.multipleBridge);
+  const targetPeAbovePeer = base.targetPeRatio != null && benchmarkHigh != null && base.targetPeRatio > benchmarkHigh + 0.5;
+  const hasBrokerConsensus = Boolean(params.brokerConsensus?.verifiedForBase || (params.brokerConsensus && params.brokerConsensus.sourceCount > 0 && !params.brokerConsensus.stale));
+  const hasStrongExternal = officialCitationCount > 0 || brokerCitationCount > 0 || hasBrokerConsensus;
+  const ledgerTrust = sourceRefsForLedger(base.sourceRefs, base.isEstimated ? ['internal_estimate'] : ['official']).trustLevel;
+
+  if (containsUnverifiedCustomerEvidence(detailText(base.customerExposure, base.evidenceBasis, params.sharedVerifiedBasis?.customerExposure))) {
+    return {
+      status: 'insufficient_verified_basis',
+      reason: 'Base 含未具名客戶/供應鏈映射，未取得官方、券商或具名來源前，不作正式目標價。',
+      baseTargetFormal: false,
+      externalCitationCount,
+      brokerCitationCount,
+      officialCitationCount,
+    };
+  }
+  if (ledgerTrust === 'internal_only') {
+    return {
+      status: 'research_estimate_only',
+      reason: 'Base 關鍵假設目前只有內部研究推估，缺外部來源註腳；先顯示為研究推估區間，不作正式目標價。',
+      baseTargetFormal: false,
+      externalCitationCount,
+      brokerCitationCount,
+      officialCitationCount,
+    };
+  }
+  if ((baseUpside > 30 || targetPeAbovePeer) && !hasStrongExternal) {
+    return {
+      status: 'insufficient_verified_basis',
+      reason:
+        baseUpside > 30
+          ? 'Base 空間超過 30%，但缺官方/券商/具名供應鏈來源支撐，先降級為研究推估。'
+          : '目標 PE 高於同業區間上緣，但缺券商或官方證據支撐，先降級為研究推估。',
+      baseTargetFormal: false,
+      externalCitationCount,
+      brokerCitationCount,
+      officialCitationCount,
+    };
+  }
+  return {
+    status: 'verified',
+    reason: null,
+    baseTargetFormal: true,
+    externalCitationCount,
+    brokerCitationCount,
+    officialCitationCount,
+  };
+}
+
+function parsePeRange(value: string | null | undefined) {
+  const matches = Array.from(String(value || '').matchAll(/([0-9]+(?:\.[0-9]+)?)\s*x/gi))
+    .map((match) => Number(match[1]))
+    .filter((item) => Number.isFinite(item) && item > 0);
+  if (matches.length === 0) return { low: null, mid: null, high: null };
+  const low = Math.min(...matches);
+  const high = Math.max(...matches);
+  return { low, mid: round((low + high) / 2, 2), high };
+}
+
+function buildForwardPeBridge(params: {
+  currentPrice?: number | null;
+  baseCaseDetail?: DeepDiveValuationCaseDetail | null;
+}): DeepDiveForwardPeBridge {
+  const base = params.baseCaseDetail || null;
+  const forwardEps = base?.projectedEps != null && Number.isFinite(base.projectedEps) && base.projectedEps > 0 ? base.projectedEps : null;
+  const currentForwardPe =
+    params.currentPrice != null && forwardEps != null && params.currentPrice > 0 ? round(Number(params.currentPrice) / forwardEps, 2) : null;
+  const targetForwardPe = base?.targetPeRatio != null && Number.isFinite(base.targetPeRatio) && base.targetPeRatio > 0 ? base.targetPeRatio : null;
+  const formula =
+    forwardEps != null && targetForwardPe != null
+      ? `${formatNumberLocal(forwardEps)} forward EPS × ${formatNumberLocal(targetForwardPe)}x target forward PE = ${formatMoney(round(forwardEps * targetForwardPe, 2))}`
+      : base?.priceBridge || null;
+  const sourceRefs = citationIds((base?.sourceRefs || []).filter(isVerifiedExternalCitationRef));
+  const status =
+    !base
+      ? 'missing_forward_eps'
+      : base.priceBridge && !/EPS|PE|本益比|forward/i.test(base.priceBridge)
+        ? 'non_pe_model'
+        : forwardEps == null
+          ? 'missing_forward_eps'
+          : sourceRefs.length > 0
+            ? 'verified'
+            : 'estimated';
+  const summary =
+    status === 'verified'
+      ? `Base 以 forward EPS ${formatNumberLocal(forwardEps)} 與目標 PE ${targetForwardPe == null ? '待補' : `${formatNumberLocal(targetForwardPe)}x`} 推導。`
+      : status === 'estimated'
+        ? 'Base 有 forward EPS / PE 公式，但來源仍以研究推估為主，不能單獨作正式推薦。'
+        : status === 'non_pe_model'
+          ? '本輪 Base 並非單純 PE 模型，需另看估值公式與來源。'
+          : 'Base 缺可用 forward EPS，不能驗證 forward PE 推導。';
+  return {
+    currentForwardPe,
+    targetForwardPe,
+    forwardEps,
+    targetPriceFormula: formula,
+    sourceRefs,
+    status,
+    summary,
+  };
+}
+
+function buildPeerValuationRange(baseCaseDetail?: DeepDiveValuationCaseDetail | null): DeepDivePeerValuationRange {
+  const base = baseCaseDetail || null;
+  const parsed = parsePeRange(base?.benchmarkRange || base?.multipleBridge);
+  const adoptedPe = base?.targetPeRatio != null && Number.isFinite(base.targetPeRatio) ? base.targetPeRatio : null;
+  const inRange = adoptedPe == null || parsed.low == null || parsed.high == null ? null : adoptedPe >= parsed.low - 0.1 && adoptedPe <= parsed.high + 0.1;
+  const source = base?.benchmarkRange || base?.multipleBridge || null;
+  return {
+    lowPe: parsed.low,
+    midPe: parsed.mid,
+    highPe: parsed.high,
+    adoptedPe,
+    source,
+    inRange,
+    summary:
+      parsed.low != null && parsed.high != null
+        ? `同業/可比 forward PE 區間約 ${formatNumberLocal(parsed.low)}x–${formatNumberLocal(parsed.high)}x，本輪採用 ${adoptedPe == null ? '待補' : `${formatNumberLocal(adoptedPe)}x`}${inRange === false ? '，已超出區間需覆核。' : '。'}`
+        : '同業 forward PE 區間待補；不可只用單一倍數作正式估值依據。',
+  };
+}
+
+function buildValuationReviewFlags(params: {
+  currentPrice?: number | null;
+  baseCaseDetail?: DeepDiveValuationCaseDetail | null;
+  scenarioCaseDetail?: DeepDiveValuationCaseDetail | null;
+  gate?: DeepDiveValuationConfidenceGate | null;
+  forwardPeBridge?: DeepDiveForwardPeBridge | null;
+  peerValuationRange?: DeepDivePeerValuationRange | null;
+}): DeepDiveValuationReviewFlag[] {
+  const flags: DeepDiveValuationReviewFlag[] = [];
+  const baseUpside = upsidePctFromTarget(params.currentPrice ?? null, params.baseCaseDetail?.targetPrice ?? null) ?? null;
+  const scenarioUpside = upsidePctFromTarget(params.currentPrice ?? null, params.scenarioCaseDetail?.targetPrice ?? null) ?? null;
+  if (baseUpside != null && baseUpside > 30) {
+    flags.push({ code: 'base_upside_gt_30', severity: params.gate?.baseTargetFormal ? 'warning' : 'blocker', summary: `Base 空間 ${formatNumberLocal(baseUpside)}% 超過 30%，必須有官方/券商/具名來源支撐。` });
+  }
+  if (scenarioUpside != null && scenarioUpside > 100) {
+    flags.push({ code: 'scenario_upside_gt_100', severity: 'warning', summary: `情境空間 ${formatNumberLocal(scenarioUpside)}% 超過 100%，只能列為上行 checklist，不能當正式 Base。` });
+  }
+  if (params.peerValuationRange?.inRange === false) {
+    flags.push({ code: 'target_pe_above_peer', severity: 'blocker', summary: '目標 PE 超出同業區間，缺券商或產業 rerating 佐證前需覆核。' });
+  }
+  if (params.forwardPeBridge?.status === 'missing_forward_eps') {
+    flags.push({ code: 'missing_forward_eps', severity: 'blocker', summary: '缺 forward EPS，無法驗證 EPS × PE 目標價公式。' });
+  }
+  if (params.gate?.status === 'research_estimate_only') {
+    flags.push({ code: 'internal_estimate_only', severity: 'blocker', summary: params.gate.reason || 'Base 只有內部研究推估，不能作正式目標價。' });
+  }
+  return flags;
+}
+
+function buildForwardPeSignalFromBridge(bridge: DeepDiveForwardPeBridge | null | undefined): NonNullable<RecommendationCard['forwardPeSignal']> | null {
+  if (!bridge) return null;
+  return {
+    currentForwardPe: bridge.currentForwardPe,
+    targetForwardPe: bridge.targetForwardPe,
+    forwardEps: bridge.forwardEps,
+    status: bridge.status,
+    summary: bridge.summary,
+  };
+}
+
+function buildCrossThemeSignalsFromText(params: {
+  symbol?: string | null;
+  name?: string | null;
+  text?: string | null;
+  sourceRefs?: string[];
+}): NonNullable<RecommendationCard['crossThemeSignals']> {
+  const text = compactText(`${params.symbol || ''} ${params.name || ''} ${params.text || ''}`);
+  const signals: NonNullable<RecommendationCard['crossThemeSignals']> = [];
+  const add = (themeKey: string, label: string, pattern: RegExp, directOnly = false) => {
+    if (!pattern.test(text)) return;
+    signals.push({
+      themeKey,
+      label,
+      evidenceLevel: directOnly ? 'direct_source' : 'inferred_watch',
+      sourceRefs: params.sourceRefs || [],
+      reason: directOnly ? `來源文字直接提到「${label}」相關題材。` : `依據公司產業與來源文字，列入「${label}」交叉觀察。`,
+    });
+  };
+  add('optical-lens', '高階光學鏡頭', /大立光|3008|鏡頭|光學|潛望|lens|periscope|xr/i);
+  add('smartphone-upgrade', '旗艦手機升規', /iphone|android|手機|旗艦|相機|鏡頭|三星/i);
+  add('xr-optics', 'XR 光學', /vision pro|xr|ar|vr|頭戴|空間運算/i);
+  add('optical-communication-watch', '光通訊交叉題材', /光通訊|光模組|cpo|800g|1\.6t|矽光|光互連/i, true);
+  add('passive-components-mlcc', '被動元件 / MLCC', /mlcc|被動元件|電感|tlvr|鉭電容|晶片電阻/i, true);
+  return signals;
+}
+
+function downgradeBaseCaseForConfidenceGate(baseCaseDetail: DeepDiveValuationCaseDetail | null | undefined, gate: DeepDiveValuationConfidenceGate) {
+  if (!baseCaseDetail || gate.baseTargetFormal) return;
+  baseCaseDetail.bridgeCompleteness = 'insufficient';
+  baseCaseDetail.insufficientBridgeReason = gate.reason || 'Base 缺外部驗證，暫不產出正式目標價。';
+  baseCaseDetail.targetPrice = null;
+  baseCaseDetail.expectedReturnPct = null;
+  baseCaseDetail.priceBridge = null;
+  baseCaseDetail.estimatedFields = unique([...baseCaseDetail.estimatedFields, 'external_verification']);
+}
+
+function latestExternalCitationTimestamp(refs: DeepDiveSourceCitationRef[], fallback: string | null) {
+  const candidates = refs
+    .filter((item) => isExternalCitationRef(item) && item.asOf)
+    .map((item) => String(item.asOf))
+    .sort((a, b) => b.localeCompare(a));
+  return candidates[0] || fallback;
+}
+
+function firstCitationRefs(citationMap: DeepDiveSourceCitationRef[], preferredTypes: string[], limit = 2) {
+  const external = citationMap.filter(isExternalCitationRef);
+  const preferred = external.filter((item) => preferredTypes.includes(item.sourceType)).slice(0, limit);
+  const fallback = external.slice(0, limit);
+  return preferred.length > 0 ? preferred : fallback;
+}
+
+function citationIds(refs: Array<DeepDiveSourceCitationRef | null | undefined>) {
+  return refs.map((item) => item?.id).filter((item): item is string => Boolean(item));
+}
+
+function appendCitationIds(sentence: string | null | undefined, refs: string[] | undefined) {
+  const clean = normalizeNarrativeSentence(sentence);
+  if (!clean) return null;
+  const suffix = (refs || []).slice(0, 3).map((id) => `[${id}]`).join(' ');
+  if (!suffix) return clean;
+  if (refs?.some((id) => clean.includes(`[${id}]`))) return clean;
+  return `${clean} ${suffix}`;
+}
+
+function inferCustomerEvidenceStatus(customerExposure: string | null | undefined): NonNullable<DeepDiveSharedVerifiedBasis['customerEvidenceStatus']> {
+  const text = normalizeNarrativeSentence(customerExposure) || '';
+  if (!text) return '未取得可引用來源';
+  if (/未取得|待補|不納入已驗證|供應鏈映射|研究推估|非已公告|不直接視為已公告/.test(text)) {
+    return '供應鏈映射推估';
+  }
+  if (/客戶|訂單|法說|公告|LTA|私募|Meta|Microsoft|Google|NVIDIA|AMD|Broadcom|Marvell|hyperscaler|CSP/i.test(text)) {
+    return '具名官方/法說證據';
+  }
+  return '供應鏈映射推估';
+}
+
+function buildSupplyChainMapFromBasis(params: {
+  customerExposure: string | null;
+  productMixEvidence: string | null;
+  marketShareEvidence: string | null;
+  status: NonNullable<DeepDiveSharedVerifiedBasis['customerEvidenceStatus']>;
+  sourceRefs: string[];
+}): NonNullable<DeepDiveSharedVerifiedBasis['supplyChainMap']> {
+  const text = [params.customerExposure, params.productMixEvidence, params.marketShareEvidence].filter(Boolean).join(' ');
+  const lower = text.toLowerCase();
+  const profile = /ai server|server|rack|csp|hyperscaler|機櫃|伺服器/.test(lower)
+    ? {
+        upstream: ['GPU / CPU / Networking 零組件', '電源與散熱模組'],
+        downstream: ['北美 CSP / AI server OEM', '企業 AI data center'],
+        potentialCustomers: ['CSP 採購鏈', 'AI server OEM / ODM 專案'],
+      }
+    : /dram|nand|emmc|nor|memory|記憶體/.test(lower)
+      ? {
+          upstream: ['晶圓 / 製程 / 封測產能'],
+          downstream: ['模組廠', '工控 / 車用 / 網通客戶'],
+          potentialCustomers: ['長尾記憶體客戶', '工控與車用供應鏈'],
+        }
+      : /soc|wi.?fi|ic design|edge ai|車用|旗艦/.test(lower)
+        ? {
+            upstream: ['晶圓代工 / 封測 / IP'],
+            downstream: ['手機 OEM', '網通品牌', '車用 Tier 1'],
+            potentialCustomers: ['Android 旗艦 OEM', 'Wi-Fi / 車用產品客戶'],
+          }
+        : /optical|lens|xr|periscope|鏡頭|光學/.test(lower)
+          ? {
+              upstream: ['玻璃 / 鏡片 / 致動器', '精密模具與鍍膜'],
+              downstream: ['智慧手機品牌', 'XR 裝置供應鏈'],
+              potentialCustomers: ['旗艦手機 OEM', 'XR 光學模組客戶'],
+            }
+          : /cpo|aoc|800g|1\.6t|cos|ld|光通訊|光模組/.test(lower)
+            ? {
+                upstream: ['LD / 光晶片 / 封測材料'],
+                downstream: ['高速網通設備商', '北美 AI data center 供應鏈'],
+                potentialCustomers: ['CPO / AOC 生態鏈客戶', '高速光互連供應鏈'],
+              }
+            : {
+                upstream: ['上游關鍵零組件與產能'],
+                downstream: ['下游客戶與系統整合商'],
+                potentialCustomers: ['該產業核心客戶群'],
+              };
+  const summary =
+    params.status === '具名官方/法說證據'
+      ? '已有可引用來源指向客戶、訂單或法說證據，可作為共同基底的一部分。'
+      : params.status === '供應鏈映射推估'
+        ? '目前以供應鏈位置、產品線與公開產業追蹤推估客戶群；未具名或未公告部分不納入 Base，只列為情境待驗證。'
+        : '尚未取得可引用客戶或訂單來源；不納入 Base。';
+  return {
+    ...profile,
+    evidenceStatus: params.status,
+    summary,
+    sourceRefs: params.sourceRefs,
+  };
+}
+
+function buildSharedVerifiedBasis(params: {
+  baseCaseDetail: DeepDiveValuationCaseDetail | null | undefined;
+  scenarioCaseDetail: DeepDiveValuationCaseDetail | null | undefined;
+  monthlyRevenue?: number | null;
+  revenueAnnual?: number | null;
+  grossMargin?: number | null;
+  operatingMargin?: number | null;
+  epsTtm?: number | null;
+  peRatio?: number | null;
+  pbRatio?: number | null;
+}): DeepDiveSharedVerifiedBasis | null {
+  const baseCaseDetail = params.baseCaseDetail;
+  const scenarioCaseDetail = params.scenarioCaseDetail;
+  const customerExposure = normalizeNarrativeSentence(baseCaseDetail?.customerExposure || scenarioCaseDetail?.customerExposure || null);
+  const transcriptEvidence = normalizeNarrativeSentence(baseCaseDetail?.transcriptEvidence || scenarioCaseDetail?.transcriptEvidence || null);
+  const monthlyRevenueEvidence = normalizeNarrativeSentence(
+    baseCaseDetail?.monthlyRevenueEvidence || scenarioCaseDetail?.monthlyRevenueEvidence || null,
+  );
+  const productMixEvidence = normalizeNarrativeSentence(baseCaseDetail?.productMixEvidence || scenarioCaseDetail?.productMixEvidence || null);
+  const marketShareEvidence = normalizeNarrativeSentence(
+    baseCaseDetail?.marketShareEvidence || scenarioCaseDetail?.marketShareEvidence || null,
+  );
+  const customerEvidenceStatus = inferCustomerEvidenceStatus(customerExposure);
+  const evidenceBasis = uniqueNarrativeLines(
+    [
+      ...(baseCaseDetail?.evidenceBasis || []),
+      ...(scenarioCaseDetail?.evidenceBasis || []).filter(
+        (item) => normalizedNarrativeSet(baseCaseDetail?.evidenceBasis || []).has(normalizeNarrativeSentence(item) || ''),
+      ),
+    ],
+    5,
+  );
+  const currentFinancialBaseline = sentenceFromBridgeSegments(
+    [
+      params.monthlyRevenue != null ? `最新月營收約 ${formatNarrativeMoney(params.monthlyRevenue)}` : null,
+      params.revenueAnnual != null ? `年化營收基底約 ${formatNarrativeMoney(params.revenueAnnual)}` : null,
+      params.grossMargin != null ? `毛利率基底約 ${formatNumberLocal(params.grossMargin)}%` : null,
+      params.operatingMargin != null ? `營益率基底約 ${formatNumberLocal(params.operatingMargin)}%` : null,
+      params.epsTtm != null ? `EPS(TTM) 約 ${formatNumberLocal(params.epsTtm)}` : null,
+      params.peRatio != null ? `目前 PE ${params.peRatio > 0 && params.peRatio <= 120 ? `${formatNumberLocal(params.peRatio)}x` : '不具參考性'}` : null,
+      params.pbRatio != null ? `PB ${params.pbRatio > 0 ? `${formatNumberLocal(params.pbRatio)}x` : '待補'}` : null,
+    ],
+    '',
+  );
+  const summary = sentenceFromBridgeSegments(
+    [
+      customerExposure,
+      transcriptEvidence,
+      monthlyRevenueEvidence,
+      productMixEvidence,
+      marketShareEvidence,
+    ],
+    customerExposure || transcriptEvidence || monthlyRevenueEvidence || productMixEvidence || marketShareEvidence || '',
+  );
+  const sharedBasisRefs = uniqueNarrativeLines(
+    [
+      customerExposure,
+      transcriptEvidence,
+      monthlyRevenueEvidence,
+      productMixEvidence,
+      marketShareEvidence,
+      ...evidenceBasis,
+    ],
+    6,
+  );
+  if (
+    !summary &&
+    !currentFinancialBaseline &&
+    !customerExposure &&
+    !transcriptEvidence &&
+    !monthlyRevenueEvidence &&
+    !productMixEvidence &&
+    !marketShareEvidence &&
+    evidenceBasis.length === 0
+  ) {
+    return null;
+  }
+  return {
+    summary: summary || null,
+    customerExposure,
+    transcriptEvidence,
+    monthlyRevenueEvidence,
+    productMixEvidence,
+    marketShareEvidence,
+    currentFinancialBaseline: currentFinancialBaseline || null,
+    evidenceBasis,
+    sharedBasisRefs,
+    sourceRefs: [],
+    supplyChainMap: buildSupplyChainMapFromBasis({
+      customerExposure,
+      productMixEvidence,
+      marketShareEvidence,
+      status: customerEvidenceStatus,
+      sourceRefs: [],
+    }),
+    customerEvidenceStatus,
+    customerEvidenceRefs: [],
+  };
+}
+
+function buildScenarioDeltaAssumptions(
+  baseCaseDetail: DeepDiveValuationCaseDetail | null | undefined,
+  scenarioCaseDetail: DeepDiveValuationCaseDetail | null | undefined,
+) {
+  if (!scenarioCaseDetail) return [];
+  const baseSet = normalizedNarrativeSet([
+    baseCaseDetail?.driver,
+    ...(baseCaseDetail?.assumptions || []),
+    ...(baseCaseDetail?.evidenceBasis || []),
+    baseCaseDetail?.marketSizingBridge,
+    baseCaseDetail?.revenueBridge,
+    baseCaseDetail?.marginBridge,
+    baseCaseDetail?.earningsBridge,
+    baseCaseDetail?.multipleBridge,
+    baseCaseDetail?.priceBridge,
+  ]);
+  const rawDeltaLines = [
+    scenarioCaseDetail.driver &&
+    (!baseCaseDetail?.driver || normalizeNarrativeSentence(scenarioCaseDetail.driver) !== normalizeNarrativeSentence(baseCaseDetail.driver))
+      ? scenarioCaseDetail.driver
+      : null,
+    ...(scenarioCaseDetail.assumptions || []),
+    ...((scenarioCaseDetail.evidenceBasis || []).map(cleanEvidenceDirectionPrefix)),
+  ]
+    .map((item) => normalizeNarrativeSentence(item))
+    .filter((item): item is string => Boolean(item))
+    .filter((item) => !baseSet.has(item));
+
+  return uniqueNarrativeLines(rawDeltaLines.map((item) => `待驗證上行假設：${item}`), 4);
+}
+
+function hasIndependentScenarioDelta(
+  baseCaseDetail: DeepDiveValuationCaseDetail | null | undefined,
+  scenarioCaseDetail: DeepDiveValuationCaseDetail | null | undefined,
+) {
+  if (!scenarioCaseDetail) return false;
+  return buildScenarioDeltaAssumptions(baseCaseDetail, scenarioCaseDetail).length > 0;
+}
+
+function buildScenarioIncrementalImpactSentence(
+  baseCaseDetail: DeepDiveValuationCaseDetail | null | undefined,
+  scenarioCaseDetail: DeepDiveValuationCaseDetail | null | undefined,
+) {
+  if (!baseCaseDetail || !scenarioCaseDetail) return null;
+  const parts = [
+    baseCaseDetail.projectedRevenueAnnual != null && scenarioCaseDetail.projectedRevenueAnnual != null
+      ? `若上行假設成立，年化營收可由 Base 的 ${formatNarrativeMoney(baseCaseDetail.projectedRevenueAnnual)} 進一步提高到 ${formatNarrativeMoney(
+          scenarioCaseDetail.projectedRevenueAnnual,
+        )}`
+      : null,
+    baseCaseDetail.projectedGrossMarginPct != null && scenarioCaseDetail.projectedGrossMarginPct != null
+      ? `毛利率由 ${formatNumberLocal(baseCaseDetail.projectedGrossMarginPct)}% 進一步提升到 ${formatNumberLocal(
+          scenarioCaseDetail.projectedGrossMarginPct,
+        )}%`
+      : null,
+    baseCaseDetail.projectedOperatingMarginPct != null && scenarioCaseDetail.projectedOperatingMarginPct != null
+      ? `營益率由 ${formatNumberLocal(baseCaseDetail.projectedOperatingMarginPct)}% 提高到 ${formatNumberLocal(
+          scenarioCaseDetail.projectedOperatingMarginPct,
+        )}%`
+      : null,
+    baseCaseDetail.projectedEps != null && scenarioCaseDetail.projectedEps != null
+      ? `EPS 由 ${formatNumberLocal(baseCaseDetail.projectedEps)} 增加到 ${formatNumberLocal(scenarioCaseDetail.projectedEps)}`
+      : null,
+    baseCaseDetail.targetPeRatio != null && scenarioCaseDetail.targetPeRatio != null && scenarioCaseDetail.targetPeRatio !== baseCaseDetail.targetPeRatio
+      ? `估值倍數則由 Base 的 ${formatNumberLocal(baseCaseDetail.targetPeRatio)}x 擴張到 ${formatNumberLocal(
+          scenarioCaseDetail.targetPeRatio,
+        )}x`
+      : null,
+  ];
+  return sentenceFromBridgeSegments(parts, parts[0] || '');
+}
+
+function checklistStatusFromScore(score: number) {
+  if (score >= 0.86) return '已達成' as const;
+  if (score >= 0.46) return '部分達成' as const;
+  if (score > 0.05) return '尚待驗證' as const;
+  return '資料過期' as const;
+}
+
+function scoreFromEvidenceText(value: string | null | undefined, sourceRefs: string[], options?: { noDirectEvidencePenalty?: boolean }) {
+  const text = normalizeNarrativeSentence(value);
+  if (!text) return 0.08;
+  if (isWeakEvidenceText(text)) return options?.noDirectEvidencePenalty ? 0.12 : 0.24;
+  const refScore = Math.min(0.22, sourceRefs.length * 0.055);
+  const officialBonus = /官方|法說|財報|月營收|公告|年報|客戶|訂單|市占|良率|出貨/i.test(text) ? 0.14 : 0.04;
+  const specificityBonus = text.length > 80 ? 0.08 : text.length > 36 ? 0.04 : 0;
+  return clamp(0.38 + refScore + officialBonus + specificityBonus, 0.08, 0.92);
+}
+
+function ratioScore(actual: number | null | undefined, target: number | null | undefined) {
+  if (actual == null || target == null || !Number.isFinite(actual) || !Number.isFinite(target) || target <= 0) return 0.05;
+  return clamp(actual / target, 0, 1);
+}
+
+function buildScenarioAchievementChecklist(params: {
+  baseCaseDetail: DeepDiveValuationCaseDetail | null | undefined;
+  scenarioCaseDetail: DeepDiveValuationCaseDetail | null | undefined;
+  monthlyRevenue?: number | null;
+  technicalEntrySignal?: StockDeepDivePayload['technicalEntrySignal'] | null;
+  chipEntryAssessment?: StockDeepDivePayload['chipEntryAssessment'] | null;
+  sourceRefs?: string[];
+}): NonNullable<DeepDiveValuationCaseDetail['achievementChecklist']> {
+  const scenario = params.scenarioCaseDetail;
+  if (!scenario?.hasIndependentDelta) return [];
+  const base = params.baseCaseDetail;
+  const sourceRefs = (params.sourceRefs || []).slice(0, 3);
+  const scenarioRevenue = scenario.projectedRevenueAnnual;
+  const currentRunRate = params.monthlyRevenue != null && params.monthlyRevenue > 0 ? params.monthlyRevenue * 12 : null;
+  const updatedAt = nowIso();
+  const customerScore = scoreFromEvidenceText(scenario.customerExposure || scenario.driver, sourceRefs, { noDirectEvidencePenalty: true });
+  const revenueScore = ratioScore(currentRunRate, scenarioRevenue);
+  const grossMarginScore = ratioScore(base?.projectedGrossMarginPct, scenario.projectedGrossMarginPct);
+  const epsBridgeScore = ratioScore(base?.projectedEps, scenario.projectedEps);
+  const marginEpsScore = clamp(((grossMarginScore || 0) * 0.45 + (epsBridgeScore || 0) * 0.55), 0.05, 0.96);
+  const mixScore = clamp(
+    scoreFromEvidenceText(scenario.productMixEvidence || scenario.marketShareEvidence || scenario.marketSizingBridge, sourceRefs) +
+      Math.min(0.12, (scenario.deltaAssumptions?.length || 0) * 0.03) -
+      Math.min(0.16, (scenario.estimatedFields?.length || 0) * 0.025),
+    0.06,
+    0.94,
+  );
+  const technicalVerdict = params.technicalEntrySignal?.verdict || null;
+  const chipVerdict = params.chipEntryAssessment?.verdict || null;
+  const pricePositionState = params.technicalEntrySignal?.pricePositionState || null;
+  const breakoutAchieved = Boolean(params.technicalEntrySignal?.breakoutAchieved);
+
+  const technicalBaseScore =
+    technicalVerdict === '適合分批'
+      ? breakoutAchieved
+        ? 0.9
+        : 0.82
+      : technicalVerdict === '等回測'
+        ? breakoutAchieved
+          ? 0.72
+          : 0.58
+        : technicalVerdict === '過熱不追'
+          ? breakoutAchieved
+            ? 0.48
+            : 0.3
+          : technicalVerdict === '趨勢轉弱'
+            ? 0.12
+            : 0.36;
+  const chipPenalty =
+    chipVerdict === '籌碼偏亂先不買'
+      ? 0.18
+	      : chipVerdict === '資料不足不買' || chipVerdict === '資料不足暫緩'
+        ? 0.22
+        : chipVerdict === '過熱不追'
+          ? 0.12
+          : 0;
+  const technicalScore = clamp(technicalBaseScore - chipPenalty, 0.08, 0.96);
+
+  return [
+    {
+      label: '客戶 / 訂單驗證',
+      status: checklistStatusFromScore(customerScore),
+      score: round(customerScore * 100, 0),
+      scoreReason: customerScore >= 0.7 ? '已有較明確外部或法說依據' : '多為供應鏈映射或待驗證客戶假設',
+      summary: evidenceOrPending(
+        scenario.customerExposure || scenario.driver,
+        '直接客戶 / 訂單來源待補；未取得具名客戶、官方公告或法說前，不納入已驗證 Base，只能作情境追蹤。',
+      ),
+      actualValue: scenario.customerExposure && !isWeakEvidenceText(scenario.customerExposure) ? '有可引用敘述' : '直接證據待補',
+      targetValue: '具名客戶、官方公告、法說或高可信研究來源',
+      currentValue: scenario.customerExposure && !isWeakEvidenceText(scenario.customerExposure) ? '已有來源文字' : '待補',
+      threshold: '具名客戶、官方公告、法說或高可信研究來源',
+      updatedAt,
+      sourceRefs,
+    },
+    {
+      label: '月營收門檻',
+      status: checklistStatusFromScore(revenueScore),
+      score: round(revenueScore * 100, 0),
+      scoreReason: currentRunRate == null || scenarioRevenue == null ? '缺少可比對 run-rate 或情境營收門檻' : `run-rate / 情境門檻約 ${formatNumberLocal(revenueScore * 100)}%`,
+      summary:
+        scenarioRevenue != null
+          ? `情境需要月營收 run-rate 支撐年化營收約 ${formatNarrativeMoney(scenarioRevenue)}；目前 run-rate ${
+              currentRunRate == null ? '待補' : `約 ${formatNarrativeMoney(currentRunRate)}`
+            }。`
+          : '情境需要看到月營收 run-rate 明顯高於 Base，但目前缺少可量化門檻。',
+      actualValue: currentRunRate == null ? '待補' : formatNarrativeMoney(currentRunRate),
+      targetValue: scenarioRevenue == null ? '待補' : formatNarrativeMoney(scenarioRevenue),
+      currentValue: currentRunRate == null ? '待補' : formatNarrativeMoney(currentRunRate),
+      threshold: scenarioRevenue == null ? '待補' : formatNarrativeMoney(scenarioRevenue),
+      updatedAt,
+      sourceRefs,
+    },
+    {
+      label: '毛利率 / EPS 門檻',
+      status: checklistStatusFromScore(marginEpsScore),
+      score: round(marginEpsScore * 100, 0),
+      scoreReason:
+        base?.projectedEps != null && scenario.projectedEps != null
+          ? `Base EPS / 情境 EPS 約 ${formatNumberLocal(epsBridgeScore * 100)}%`
+          : '缺少可比對 EPS 或毛利率橋接',
+      summary: sentenceFromBridgeSegments(
+        [
+          base?.projectedGrossMarginPct != null && scenario.projectedGrossMarginPct != null
+            ? `毛利率需由 Base 的 ${formatNumberLocal(base.projectedGrossMarginPct)}% 進一步提升到 ${formatNumberLocal(
+                scenario.projectedGrossMarginPct,
+              )}%`
+            : null,
+          base?.projectedEps != null && scenario.projectedEps != null
+            ? `EPS 需由 ${formatNumberLocal(base.projectedEps)} 提升到 ${formatNumberLocal(scenario.projectedEps)}`
+            : null,
+        ],
+        scenario.earningsBridge || '需要看到毛利率、營益率或 EPS 明確優於 Base。',
+      ),
+      currentValue:
+        base?.projectedGrossMarginPct != null || base?.projectedEps != null
+          ? `Base GM ${base?.projectedGrossMarginPct == null ? '待補' : `${formatNumberLocal(base.projectedGrossMarginPct)}%`} / EPS ${
+              base?.projectedEps == null ? '待補' : formatNumberLocal(base.projectedEps)
+            }`
+          : '待補',
+      actualValue:
+        base?.projectedGrossMarginPct != null || base?.projectedEps != null
+          ? `Base GM ${base?.projectedGrossMarginPct == null ? '待補' : `${formatNumberLocal(base.projectedGrossMarginPct)}%`} / EPS ${
+              base?.projectedEps == null ? '待補' : formatNumberLocal(base.projectedEps)
+            }`
+          : '待補',
+      targetValue:
+        scenario.projectedGrossMarginPct != null || scenario.projectedEps != null
+          ? `情境 GM ${scenario.projectedGrossMarginPct == null ? '待補' : `${formatNumberLocal(scenario.projectedGrossMarginPct)}%`} / EPS ${
+              scenario.projectedEps == null ? '待補' : formatNumberLocal(scenario.projectedEps)
+            }`
+          : '待補',
+      threshold:
+        scenario.projectedGrossMarginPct != null || scenario.projectedEps != null
+          ? `情境 GM ${scenario.projectedGrossMarginPct == null ? '待補' : `${formatNumberLocal(scenario.projectedGrossMarginPct)}%`} / EPS ${
+              scenario.projectedEps == null ? '待補' : formatNumberLocal(scenario.projectedEps)
+            }`
+          : '待補',
+      updatedAt,
+      sourceRefs,
+    },
+    {
+      label: '產品 mix / 市占驗證',
+      status: checklistStatusFromScore(mixScore),
+      score: round(mixScore * 100, 0),
+      scoreReason: mixScore >= 0.65 ? '已有產品 mix / TAM / 市占推導與來源註腳' : '產品 mix 或市占仍多為研究推估',
+      summary: evidenceOrPending(
+        scenario.productMixEvidence || scenario.marketShareEvidence || scenario.marketSizingBridge,
+        '產品 mix / 市占直接證據待補；目前只追蹤高毛利產品占比、市占或 TAM 滲透是否高於 Base。',
+      ),
+      actualValue: scenario.productMixEvidence || scenario.marketShareEvidence ? '已有部分來源' : '待補',
+      targetValue: '產品 mix、市占或 TAM 滲透率明確高於 Base',
+      currentValue: scenario.productMixEvidence || scenario.marketShareEvidence ? '部分來源已整理' : '待補',
+      threshold: '產品 mix、市占或 TAM 滲透率明確高於 Base',
+      updatedAt,
+      sourceRefs,
+    },
+    {
+      label: '技術量價確認',
+      status: checklistStatusFromScore(technicalScore),
+      score: round(technicalScore * 100, 0),
+      scoreReason: technicalVerdict
+        ? `技術 verdict：${technicalVerdict}${pricePositionState ? ` / ${pricePositionState}` : ''}${chipVerdict ? `；籌碼：${chipVerdict}` : ''}`
+        : 'Radar 快照未取得完整技術 verdict，先以 light snapshot 補分',
+      summary:
+        breakoutAchieved && params.technicalEntrySignal?.breakoutRetestLevel != null
+          ? `突破條件已達成，${formatMoney(params.technicalEntrySignal.breakoutRetestLevel)} 轉為回測支撐；仍需確認量能、MACD 與籌碼沒有惡化。`
+          : params.technicalEntrySignal?.entryPlan?.strategy ||
+            params.technicalEntrySignal?.summary ||
+            '需要看到股價站穩關鍵均線、MACD 動能不轉弱，且突破或回測時有量能配合。',
+      actualValue: [technicalVerdict, pricePositionState, chipVerdict].filter(Boolean).join(' / ') || '待補',
+      targetValue: '適合分批 / 帶量突破 / 回測支撐量縮止穩',
+      currentValue: [technicalVerdict, pricePositionState].filter(Boolean).join(' / ') || '待補',
+      threshold: '適合分批 / 帶量突破 / 回測支撐量縮止穩',
+      updatedAt,
+      sourceRefs: [],
+    },
+  ];
+}
+
+type ScenarioChecklistItem = NonNullable<DeepDiveValuationCaseDetail['achievementChecklist']>[number];
+
+function scenarioChecklistWeight(label: string) {
+  if (label.includes('客戶') || label.includes('訂單')) return 0.25;
+  if (label.includes('月營收')) return 0.2;
+  if (label.includes('毛利率') || label.includes('EPS')) return 0.2;
+  if (label.includes('產品') || label.includes('市占')) return 0.2;
+  if (label.includes('技術') || label.includes('籌碼')) return 0.15;
+  return 0.2;
+}
+
+function scenarioChecklistStatusScore(status: ScenarioChecklistItem['status']) {
+  if (status === '已達成') return 1;
+  if (status === '部分達成') return 0.55;
+  if (status === '尚待驗證') return 0.15;
+  return 0;
+}
+
+function scenarioChecklistItemScore(item: ScenarioChecklistItem) {
+  if (item.score != null && Number.isFinite(Number(item.score))) {
+    return clamp(Number(item.score) / 100, 0, 1);
+  }
+  return scenarioChecklistStatusScore(item.status);
+}
+
+function scenarioChecklistBreakdown(checklist: ScenarioChecklistItem[] | null | undefined) {
+  const items = checklist || [];
+  return {
+    achieved: items.filter((item) => item.status === '已達成').length,
+    partial: items.filter((item) => item.status === '部分達成').length,
+    pending: items.filter((item) => item.status === '尚待驗證').length,
+    stale: items.filter((item) => item.status === '資料過期').length,
+    total: items.length,
+  };
+}
+
+function scenarioChecklistProgress(checklist: ScenarioChecklistItem[] | null | undefined) {
+  const items = checklist || [];
+  if (items.length === 0) return 0;
+  const weighted = items.reduce(
+    (acc, item) => {
+      const weight = scenarioChecklistWeight(item.label);
+      acc.score += weight * scenarioChecklistItemScore(item);
+      acc.weight += weight;
+      return acc;
+    },
+    { score: 0, weight: 0 },
+  );
+  if (weighted.weight <= 0) return 0;
+  return Math.max(0, Math.min(100, Math.round((weighted.score / weighted.weight) * 100)));
+}
+
+function scenarioChecklistScoreDetails(checklist: ScenarioChecklistItem[] | null | undefined) {
+  return (checklist || []).map((item) => ({
+    label: item.label,
+    score: Math.round(scenarioChecklistItemScore(item) * 100),
+    status: item.status,
+    reason: item.scoreReason || null,
+  }));
+}
+
+function scenarioPromotionEvidenceCount(scenario: DeepDiveValuationCaseDetail | null | undefined) {
+  const sourceRefCount = (scenario?.sourceRefs || []).filter(isVerifiedExternalCitationRef).length;
+  const evidenceRefCount = new Set([...(scenario?.evidenceRefs || []), ...(scenario?.promotionEvidenceRefs || [])].filter(Boolean)).size;
+  return Math.max(sourceRefCount, evidenceRefCount);
+}
+
+function buildScenarioPromotionGate(params: {
+  baseCaseDetail: DeepDiveValuationCaseDetail | null | undefined;
+  scenarioCaseDetail: DeepDiveValuationCaseDetail | null | undefined;
+  targetSnapshot?: Pick<DeepDiveTargetSnapshot, 'currentPrice' | 'baseTarget' | 'upsideTarget' | 'valuationSanityStatus' | 'targetCoverageStatus' | 'staleReason'> | null;
+}) {
+  const base = params.baseCaseDetail || null;
+  const scenario = params.scenarioCaseDetail || null;
+  const checklist = scenario?.achievementChecklist || [];
+  const progress = scenarioChecklistProgress(checklist);
+  const evidenceCount = scenarioPromotionEvidenceCount(scenario);
+  const monthlyRevenueCheck = checklist.find((item) => item.label.includes('月營收'));
+  const marginEpsCheck = checklist.find((item) => item.label.includes('毛利率') || item.label.includes('EPS'));
+  const mixCheck = checklist.find((item) => item.label.includes('產品') || item.label.includes('市占'));
+  const customerCheck = checklist.find((item) => item.label.includes('客戶') || item.label.includes('訂單'));
+  const targetPeSupported = scenario?.targetPeRatio != null && scenario.targetPeRatio > 0 && evidenceCount >= 1;
+  const sanityNormal = !params.targetSnapshot?.valuationSanityStatus || params.targetSnapshot.valuationSanityStatus === 'normal';
+  const externalBridgeChecks = [monthlyRevenueCheck, marginEpsCheck, mixCheck, customerCheck].filter(
+    (item) => item && (item.status === '已達成' || item.status === '部分達成') && (item.sourceRefs?.length || 0) > 0,
+  ).length;
+  const criticalChecks = [
+    {
+      label: '情境 checklist >= 85%',
+      passed: progress >= 85,
+      reason: `目前 ${progress}%`,
+    },
+    {
+      label: '至少三項外部證據支撐',
+      passed: externalBridgeChecks >= 3 || evidenceCount >= 3,
+      reason: `外部證據 ${Math.max(externalBridgeChecks, evidenceCount)} / 3`,
+    },
+    {
+      label: 'Forward EPS / target PE 有來源',
+      passed: targetPeSupported || evidenceCount >= 3,
+      reason: targetPeSupported ? 'target PE 有可引用來源或券商/研究佐證' : 'Forward EPS / target PE 來源仍待補',
+    },
+    {
+      label: '估值 sanity normal',
+      passed: sanityNormal,
+      reason: sanityNormal ? '估值安全檢查正常' : '估值安全檢查仍需覆核',
+    },
+  ];
+  const canPromoteToBase = Boolean(scenario?.hasIndependentDelta && criticalChecks.every((item) => item.passed));
+  const crossedBase = params.targetSnapshot?.targetCoverageStatus === 'scenario_only' || params.targetSnapshot?.staleReason === 'target_stale_due_price_crossed_base';
+  const proposedBaseTarget =
+    canPromoteToBase && base?.targetPrice != null && scenario?.targetPrice != null && scenario.targetPrice > base.targetPrice
+      ? round(base.targetPrice + (scenario.targetPrice - base.targetPrice) * clamp(progress / 100, 0.85, 0.95), 2)
+      : null;
+  const status =
+    !scenario?.hasIndependentDelta
+      ? ('no_independent_scenario' as const)
+      : canPromoteToBase
+        ? ('eligible' as const)
+        : crossedBase && progress >= 60
+          ? ('price_led_fundamentals_pending' as const)
+          : evidenceCount < 3
+            ? ('insufficient_evidence' as const)
+            : ('not_ready' as const);
+  const summary =
+    status === 'eligible'
+      ? `情境條件已接近可升級為新 Base；建議用實際月營收/EPS/Forward PE 重新計算，新 Base 參考約 ${formatMoney(proposedBaseTarget)}。`
+      : status === 'price_led_fundamentals_pending'
+        ? '股價已先反映情境，但財務或券商證據尚未足以把情境升為 Base。'
+        : status === 'insufficient_evidence'
+          ? '情境仍缺外部證據，不能升級為 Base。'
+          : status === 'no_independent_scenario'
+            ? '目前沒有獨立上行情境，Base 已涵蓋主要已知故事。'
+            : '情境仍在驗證中，尚未達升級 Base 的門檻。';
+  return {
+    status,
+    canPromoteToBase,
+    score: scenario?.hasIndependentDelta ? progress : null,
+    requiredScore: 85,
+    achievedEvidenceCount: Math.max(externalBridgeChecks, evidenceCount),
+    requiredEvidenceCount: 3,
+    criticalChecks,
+    oldBaseTarget: base?.targetPrice ?? null,
+    oldScenarioTarget: scenario?.targetPrice ?? null,
+    proposedBaseTarget,
+    promotionEvidenceRefs: unique([...(scenario?.evidenceRefs || []), ...(scenario?.sourceRefs || []).map((ref) => ref.id)]).slice(0, 6),
+    summary,
+  };
+}
+
+function attachScenarioPromotionGate(
+  baseCaseDetail: DeepDiveValuationCaseDetail | null | undefined,
+  scenarioCaseDetail: DeepDiveValuationCaseDetail | null | undefined,
+  targetSnapshot?: DeepDiveTargetSnapshot | null,
+) {
+  if (!scenarioCaseDetail) return null;
+  const promotionGate = buildScenarioPromotionGate({ baseCaseDetail, scenarioCaseDetail, targetSnapshot });
+  scenarioCaseDetail.promotionGate = promotionGate;
+  scenarioCaseDetail.canPromoteToBase = promotionGate.canPromoteToBase;
+  scenarioCaseDetail.promotionEvidenceRefs = promotionGate.promotionEvidenceRefs;
+  return promotionGate;
+}
+
+function refreshBridgeBundlePromotionAndRevaluation(bundle: BridgeAwareSnapshotBundle) {
+  const promotionGate = attachScenarioPromotionGate(bundle.baseCaseDetail, bundle.scenarioCaseDetail, bundle.targetSnapshot);
+  bundle.targetSnapshot.scenarioPromotionStatus = promotionGate?.status || null;
+  applyRevaluationSlaToTargetSnapshot(bundle.targetSnapshot, buildRevaluationJobSummary({ targetSnapshot: bundle.targetSnapshot, promotionGate }));
+  return promotionGate;
+}
+
+function buildRevaluationJobSummary(params: {
+  targetSnapshot: Pick<
+    DeepDiveTargetSnapshot,
+    | 'staleReason'
+    | 'archiveReason'
+    | 'reportUpdatedAt'
+    | 'repricedAt'
+    | 'repricingReason'
+    | 'unchangedReason'
+    | 'bridgeCompleteness'
+    | 'repricingRequiredEvidence'
+    | 'targetCoverageStatus'
+  >;
+  promotionGate?: ReturnType<typeof buildScenarioPromotionGate> | null;
+}) {
+  const snapshot = params.targetSnapshot;
+  const queuedAt = snapshot.reportUpdatedAt || snapshot.repricedAt || nowIso();
+  const lastAttemptAt = snapshot.repricedAt || snapshot.reportUpdatedAt || null;
+  const requiredEvidence = snapshot.repricingRequiredEvidence?.length
+    ? snapshot.repricingRequiredEvidence
+    : [
+        '最新月營收 / EPS / 毛利率或營益率上修',
+        'Forward EPS 或 target PE 有券商/官方佐證',
+        '具名客戶、訂單或產品 mix 證據',
+      ];
+  const status =
+    params.promotionGate?.canPromoteToBase
+      ? ('promoted_scenario_to_base' as const)
+      : snapshot.bridgeCompleteness !== 'complete'
+        ? ('blocked_insufficient_evidence' as const)
+        : snapshot.staleReason === 'target_stale_due_price_crossed_scenario' || snapshot.targetCoverageStatus === 'over_base_and_scenario'
+          ? ('archived_reflected' as const)
+          : snapshot.staleReason === 'target_stale_due_price_crossed_base'
+            ? ('queued' as const)
+            : snapshot.unchangedReason
+              ? ('unchanged_with_reason' as const)
+              : ('repriced' as const);
+  const lastResult =
+    status === 'promoted_scenario_to_base'
+      ? params.promotionGate?.summary || '情境達成率與證據已達升 Base 門檻。'
+      : status === 'queued'
+        ? snapshot.repricingReason || '現價已越過 Base，已排入重估並追蹤情境是否可升 Base。'
+        : status === 'archived_reflected'
+          ? snapshot.archiveReason || snapshot.unchangedReason || '現價已高於情境，留在熱股追蹤/估值已反映。'
+          : status === 'blocked_insufficient_evidence'
+            ? 'bridge 尚未完整，無法重新產生正式 Base。'
+            : status === 'unchanged_with_reason'
+              ? snapshot.unchangedReason || '本輪沒有足以改變基本面 target 的新證據。'
+              : snapshot.repricingReason || 'bridge-aware target snapshot 已重建。';
+  return finalizeRevaluationJobSummary({
+    status,
+    queuedAt,
+    lastAttemptAt,
+    lastResult,
+    requiredEvidence,
+    slaHours: status === 'queued' ? 2 : 24,
+  });
+}
+
+function normalizeRevaluationJobState(value: unknown): RevaluationJobState {
+  const text = String(value || '');
+  if (
+    text === 'queued' ||
+    text === 'running' ||
+    text === 'repriced' ||
+    text === 'unchanged_with_reason' ||
+    text === 'promoted_scenario_to_base' ||
+    text === 'blocked_insufficient_evidence' ||
+    text === 'archived_reflected'
+  ) {
+    return text;
+  }
+  return 'queued';
+}
+
+function textArrayFromUnknown(value: unknown): string[] {
+  if (Array.isArray(value)) return value.map(String).map(compactText).filter(Boolean);
+  if (typeof value === 'string' && value.trim()) return [value.trim()];
+  return [];
+}
+
+function brokerSearchSummaryFromRows(rows: Row[]) {
+  if (!rows.length) return null;
+  const hits = rows.filter((row) => String(row.status || '') === 'hit').length;
+  const written = rows.reduce((sum, row) => sum + Math.max(0, Number(row.records_written || 0)), 0);
+  const surfaces = unique(rows.map((row) => compactText(row.search_surface)).filter(Boolean)).slice(0, 3);
+  return `券商搜尋 ${rows.length} 輪；命中 ${hits} 輪、寫入 ${written} 筆；來源 ${surfaces.join('、') || '待補'}。`;
+}
+
+function addHoursIso(value: string | null | undefined, hours: number) {
+  if (!value) return null;
+  const timestamp = Date.parse(value);
+  if (!Number.isFinite(timestamp)) return null;
+  return new Date(timestamp + hours * 60 * 60 * 1000).toISOString();
+}
+
+function inferRevaluationSlaStatus(params: {
+  status: RevaluationJobState;
+  queuedAt: string | null;
+  lastAttemptAt: string | null;
+  nextAttemptAt?: string | null;
+  slaHours: number;
+}) {
+  if (params.status === 'blocked_insufficient_evidence' || params.status === 'archived_reflected') return 'blocked' as const;
+  const nowMs = Date.now();
+  const nextMs = params.nextAttemptAt ? Date.parse(params.nextAttemptAt) : Number.NaN;
+  const lastAttemptMs = params.lastAttemptAt ? Date.parse(params.lastAttemptAt) : Number.NaN;
+  const queuedMs = params.queuedAt ? Date.parse(params.queuedAt) : Number.NaN;
+  if (params.status === 'queued' || params.status === 'running') {
+    const dueAt = Number.isFinite(nextMs)
+      ? nextMs
+      : Number.isFinite(queuedMs)
+        ? queuedMs + params.slaHours * 60 * 60 * 1000
+        : Number.NaN;
+    if (!Number.isFinite(dueAt)) return 'due' as const;
+    return nowMs > dueAt ? 'overdue' : 'due';
+  }
+  if (!Number.isFinite(lastAttemptMs)) return 'due' as const;
+  return nowMs - lastAttemptMs > params.slaHours * 60 * 60 * 1000 ? 'due' : 'fresh';
+}
+
+function brokerEvidenceSearchStatusFromRows(
+  rows: Row[],
+  fallbackSummary: string | null | undefined,
+  nextAttemptAt?: string | null,
+): RevaluationJobSummary['brokerEvidenceSearchStatus'] {
+  if (!rows.length) {
+    return {
+      status: fallbackSummary ? 'pending' : 'not_attempted',
+      summary: fallbackSummary || '尚未看到本輪券商/外資搜尋紀錄，下一輪重估需補鉅亨外資評等、FactSet、MoneyDJ 與社群券商線索。',
+      lastAttemptAt: null,
+      nextAttemptAt: nextAttemptAt || null,
+      sourceCount: 0,
+      usBrokerCount: 0,
+    };
+  }
+  const lastAttemptAt = rows
+    .map((row) => (row.searched_at ? String(row.searched_at) : null))
+    .filter((value): value is string => Boolean(value))
+    .sort()
+    .at(-1) || null;
+  const hits = rows.filter((row) => String(row.status || '') === 'hit').length;
+  const written = rows.reduce((sum, row) => sum + Math.max(0, Number(row.records_written || 0)), 0);
+  const surfaces = unique(rows.map((row) => compactText(row.search_surface)).filter(Boolean));
+  return {
+    status: hits > 0 || written > 0 ? 'hit' : 'miss',
+    summary:
+      fallbackSummary ||
+      `券商雷達已搜尋 ${rows.length} 輪；命中 ${hits} 輪、寫入 ${written} 筆；來源 ${surfaces.slice(0, 3).join('、') || '待補'}。`,
+    lastAttemptAt,
+    nextAttemptAt: nextAttemptAt || null,
+    sourceCount: surfaces.length,
+    usBrokerCount: rows.filter((row) => /Morgan|Goldman|JPMorgan|Citi|BofA|UBS|Bernstein|Jefferies/i.test(String(row.summary || row.search_surface || ''))).length,
+  };
+}
+
+function finalizeRevaluationJobSummary(summary: RevaluationJobSummary): RevaluationJobSummary {
+  const nextAttemptAt =
+    summary.nextAttemptAt ||
+    (summary.status === 'queued' || summary.status === 'running'
+      ? addHoursIso(summary.queuedAt, Math.max(1, summary.slaHours))
+      : addHoursIso(summary.lastAttemptAt, Math.max(1, summary.slaHours))) ||
+    null;
+  const missingEvidence = summary.requiredEvidence?.length ? summary.requiredEvidence : ['券商/官方/財務證據待補'];
+  const slaStatus = inferRevaluationSlaStatus({
+    status: summary.status,
+    queuedAt: summary.queuedAt,
+    lastAttemptAt: summary.lastAttemptAt,
+    nextAttemptAt,
+    slaHours: summary.slaHours,
+  });
+  return {
+    ...summary,
+    nextAttemptAt,
+    missingEvidence,
+    slaStatus,
+    brokerEvidenceSearchStatus:
+      summary.brokerEvidenceSearchStatus ||
+      brokerEvidenceSearchStatusFromRows([], summary.brokerSearchSummary, nextAttemptAt),
+  };
+}
+
+function applyRevaluationSlaFields<T extends {
+  revaluationJobSummary?: RevaluationJobSummary | null;
+  revaluationSlaStatus?: RecommendationCard['revaluationSlaStatus'] | DeepDiveTargetSnapshot['revaluationSlaStatus'];
+  nextRevaluationAt?: string | null;
+  missingRepricingEvidence?: string[];
+  brokerEvidenceSearchStatus?: RecommendationCard['brokerEvidenceSearchStatus'] | DeepDiveTargetSnapshot['brokerEvidenceSearchStatus'];
+}>(item: T, job: RevaluationJobSummary | null | undefined): T {
+  if (!job) return item;
+  const finalJob = finalizeRevaluationJobSummary(job);
+  return {
+    ...item,
+    revaluationJobSummary: finalJob,
+    revaluationSlaStatus: finalJob.slaStatus,
+    nextRevaluationAt: finalJob.nextAttemptAt || null,
+    missingRepricingEvidence: finalJob.missingEvidence || finalJob.requiredEvidence || [],
+    brokerEvidenceSearchStatus: finalJob.brokerEvidenceSearchStatus || null,
+  };
+}
+
+function applyRevaluationSlaToTargetSnapshot(targetSnapshot: DeepDiveTargetSnapshot, job: RevaluationJobSummary | null | undefined) {
+  if (!job) return;
+  const finalJob = finalizeRevaluationJobSummary(job);
+  targetSnapshot.revaluationJobStatus = finalJob;
+  targetSnapshot.revaluationSlaStatus = finalJob.slaStatus;
+  targetSnapshot.nextRevaluationAt = finalJob.nextAttemptAt || null;
+  targetSnapshot.missingRepricingEvidence = finalJob.missingEvidence || finalJob.requiredEvidence || [];
+  targetSnapshot.brokerEvidenceSearchStatus = finalJob.brokerEvidenceSearchStatus || null;
+  targetSnapshot.lastRevaluationAttemptAt = finalJob.lastAttemptAt;
+  targetSnapshot.lastRevaluationResult = finalJob.lastResult;
+}
+
+function revaluationJobSummaryFromRow(job: Row, brokerAttempts: Row[] = []): RevaluationJobSummary {
+  const status = normalizeRevaluationJobState(job.status);
+  const requiredEvidence = textArrayFromUnknown(job.required_evidence);
+  const lastResult =
+    compactText(job.last_result) ||
+    (status === 'queued'
+      ? '已排入 durable bridge-aware 重估佇列，等待券商、月營收、EPS、Forward PE 與社群券商線索補抓。'
+      : status === 'running'
+        ? '重估執行中，正在補抓券商/財務/社群來源。'
+        : '重估已完成，等待頁面刷新呈現結果。');
+  return finalizeRevaluationJobSummary({
+    jobId: job.id ? String(job.id) : null,
+    status,
+    queuedAt: job.queued_at ? String(job.queued_at) : null,
+    lastAttemptAt: job.last_attempt_at ? String(job.last_attempt_at) : null,
+    nextAttemptAt: job.next_attempt_at ? String(job.next_attempt_at) : null,
+    lastResult,
+    requiredEvidence:
+      requiredEvidence.length > 0
+        ? requiredEvidence
+        : ['最新月營收、毛利率或 EPS 基底上修', 'Forward EPS 或 normalized PE/PB 有外部佐證', '券商 consensus / target PE 上修'],
+    slaHours: status === 'queued' || status === 'running' ? 2 : 24,
+    triggerReason: job.trigger_reason ? String(job.trigger_reason) : null,
+    triggerSource: job.trigger_source ? String(job.trigger_source) : null,
+    brokerSearchSummary: brokerSearchSummaryFromRows(brokerAttempts),
+    brokerEvidenceSearchStatus: brokerEvidenceSearchStatusFromRows(brokerAttempts, brokerSearchSummaryFromRows(brokerAttempts), job.next_attempt_at ? String(job.next_attempt_at) : null),
+  });
+}
+
+async function loadLatestRevaluationJobsByStockIds(stockIds: string[]): Promise<Map<string, RevaluationJobSummary>> {
+  const uniqueStockIds = unique(stockIds.map(String).filter(Boolean));
+  const result = new Map<string, RevaluationJobSummary>();
+  if (uniqueStockIds.length === 0) return result;
+  try {
+    const supabaseServer = getSupabaseServerClient();
+    const jobRes = await withQueryTimeout(
+      supabaseServer
+        .from('revaluation_jobs')
+        .select('*')
+        .in('stock_id', uniqueStockIds)
+        .order('updated_at', { ascending: false })
+        .limit(uniqueStockIds.length * 4),
+      [],
+      2500,
+    );
+    const jobs = ((jobRes.data as Row[]) || []).filter((row) => row.stock_id);
+    const jobIds = jobs.map((row) => String(row.id || '')).filter(Boolean);
+    const attemptRows =
+      jobIds.length > 0
+        ? ((await withQueryTimeout(
+            supabaseServer
+              .from('broker_search_attempts')
+              .select('job_id,search_surface,status,records_found,records_written,summary,searched_at')
+              .in('job_id', jobIds)
+              .order('searched_at', { ascending: false })
+              .limit(jobIds.length * 5),
+            [],
+            2500,
+          )).data as Row[]) || []
+        : [];
+    const attemptsByJobId = new Map<string, Row[]>();
+    for (const row of attemptRows) {
+      const jobId = String(row.job_id || '');
+      if (!jobId) continue;
+      attemptsByJobId.set(jobId, [...(attemptsByJobId.get(jobId) || []), row]);
+    }
+    for (const job of jobs) {
+      const stockId = String(job.stock_id || '');
+      if (!stockId || result.has(stockId)) continue;
+      result.set(stockId, revaluationJobSummaryFromRow(job, attemptsByJobId.get(String(job.id || '')) || []));
+    }
+  } catch {
+    return result;
+  }
+  return result;
+}
+
+function mergeRevaluationJobSummary<T extends { revaluationJobSummary?: RevaluationJobSummary | null; revaluationStatus?: RecommendationCard['revaluationStatus']; revaluationReason?: string | null }>(
+  item: T,
+  job: RevaluationJobSummary | null | undefined,
+): T {
+  if (!job) return item;
+  const finalJob = finalizeRevaluationJobSummary(job);
+  const revaluationStatus: RecommendationCard['revaluationStatus'] =
+    finalJob.status === 'repriced' || finalJob.status === 'promoted_scenario_to_base'
+      ? 'repriced'
+      : finalJob.status === 'unchanged_with_reason'
+        ? 'unchanged'
+        : finalJob.status === 'blocked_insufficient_evidence' || finalJob.status === 'archived_reflected'
+          ? 'pending'
+          : item.revaluationStatus || 'pending';
+  return applyRevaluationSlaFields({
+    ...item,
+    revaluationJobSummary: finalJob,
+    revaluationStatus,
+    revaluationReason: finalJob.lastResult || item.revaluationReason || null,
+  }, finalJob);
+}
+
+function upsidePctFromTarget(currentPrice: number | null | undefined, targetPrice: number | null | undefined) {
+  if (currentPrice == null || targetPrice == null) return null;
+  if (!Number.isFinite(currentPrice) || !Number.isFinite(targetPrice) || currentPrice <= 0 || targetPrice <= currentPrice) return null;
+  return round(((targetPrice - currentPrice) / currentPrice) * 100, 2);
+}
+
+function targetCoverageStatus(
+  currentPrice: number | null | undefined,
+  baseTarget: number | null | undefined,
+  upsideTarget: number | null | undefined,
+): TargetCoverageStatus {
+  const current = currentPrice == null ? null : toFiniteNumber(currentPrice);
+  const base = baseTarget == null ? null : toFiniteNumber(baseTarget);
+  const upside = upsideTarget == null ? null : toFiniteNumber(upsideTarget);
+  if (current == null || !Number.isFinite(current) || current <= 0) return 'missing_target';
+  if (base != null && Number.isFinite(base) && base > current) return 'base_upside';
+  if (upside != null && Number.isFinite(upside) && upside > current) return 'scenario_only';
+  if ((base != null && Number.isFinite(base)) || (upside != null && Number.isFinite(upside))) return 'over_base_and_scenario';
+  return 'missing_target';
+}
+
+function overTargetReasonForStatus(
+  status: TargetCoverageStatus,
+  currentPrice: number | null | undefined,
+  baseTarget: number | null | undefined,
+  upsideTarget: number | null | undefined,
+) {
+  const current = currentPrice == null ? null : toFiniteNumber(currentPrice);
+  const base = baseTarget == null ? null : toFiniteNumber(baseTarget);
+  const upside = upsideTarget == null ? null : toFiniteNumber(upsideTarget);
+  if (status === 'base_upside') return null;
+  if (status === 'scenario_only') {
+    return `現價 ${formatMoney(current)} 已高於 Base 目標價 ${formatMoney(base)}，只剩情境價差可追蹤，不能列為正式推薦。`;
+  }
+  if (status === 'over_base_and_scenario') {
+    return `現價 ${formatMoney(current)} 已高於 Base ${formatMoney(base)} 與情境 ${formatMoney(upside)} 目標價，等待重新估值或回測，不應列為推薦。`;
+  }
+  return '缺少可比對的現價或目標價，等待 bridge-aware 重估。';
+}
+
+function buildTargetSnapshot(
+  currentPrice: number | null | undefined,
+  baseTarget: number | null | undefined,
+  upsideTarget: number | null | undefined,
+  bearTarget: number | null | undefined,
+  latestSourceAt: string | null,
+  reportUpdatedAt: string | null,
+  priceAsOf: string | null,
+) {
+  const normalizedBaseTarget = baseTarget == null ? null : toFiniteNumber(baseTarget);
+  const normalizedUpsideTarget = upsideTarget == null ? null : toFiniteNumber(upsideTarget);
+  const normalizedBearTarget = bearTarget == null ? null : toFiniteNumber(bearTarget);
+  const displayBaseUpsidePct = upsidePctFromTarget(currentPrice ?? null, normalizedBaseTarget);
+  const displayScenarioUpsidePct = upsidePctFromTarget(currentPrice ?? null, normalizedUpsideTarget);
+  const coverageStatus = targetCoverageStatus(currentPrice ?? null, normalizedBaseTarget, normalizedUpsideTarget);
+  const overTargetReason = overTargetReasonForStatus(coverageStatus, currentPrice ?? null, normalizedBaseTarget, normalizedUpsideTarget);
+  const staleReason =
+    coverageStatus === 'scenario_only'
+      ? 'target_stale_due_price_crossed_base'
+      : coverageStatus === 'over_base_and_scenario'
+        ? 'target_stale_due_price_crossed_scenario'
+      : coverageStatus === 'missing_target'
+        ? 'missing_target_or_current_price'
+        : null;
+	  const archiveReason =
+	    coverageStatus === 'over_base_and_scenario'
+	      ? '現價已高於 Base 與情境目標價，除非重新估值上修，否則應歸檔為估值已反映。'
+	      : null;
+	  const repricingRequiredEvidence =
+	    staleReason === 'target_stale_due_price_crossed_base' || staleReason === 'target_stale_due_price_crossed_scenario'
+	      ? [
+	          '最新月營收、毛利率或 EPS 基底上修',
+	          'Forward EPS 或 normalized PE/PB 有外部佐證',
+	          '券商 consensus / target PE 上修',
+	          '具名客戶、訂單或法說證據補強',
+	        ]
+	      : staleReason === 'missing_target_or_current_price'
+	        ? ['補齊最新現價與可驗證 Base / 情境 bridge']
+	        : [];
+  const verdict =
+    displayBaseUpsidePct != null ? ('formal' as const) : displayScenarioUpsidePct != null ? ('scenario' as const) : ('reflected' as const);
+  const displayTarget =
+    verdict === 'formal'
+      ? normalizedBaseTarget
+      : verdict === 'scenario'
+        ? normalizedUpsideTarget
+        : (normalizedUpsideTarget ?? normalizedBaseTarget ?? null);
+  const displayTargetLabel =
+    verdict === 'formal'
+      ? ('正式目標價' as const)
+      : verdict === 'scenario'
+        ? ('情境目標價' as const)
+        : ('已接近反映' as const);
+  const cardPrimaryUpsidePct = verdict === 'formal' ? displayBaseUpsidePct : verdict === 'scenario' ? displayScenarioUpsidePct : null;
+  const cardPrimaryUpsideLabel =
+    verdict === 'formal'
+      ? ('Base 空間' as const)
+      : verdict === 'scenario'
+        ? ('情境空間' as const)
+        : ('已接近反映' as const);
+
+  return {
+    currentPrice: currentPrice ?? null,
+    baseTarget: normalizedBaseTarget,
+    upsideTarget: normalizedUpsideTarget,
+    bearTarget: normalizedBearTarget,
+    displayBaseUpsidePct,
+    displayScenarioUpsidePct,
+    cardPrimaryUpsidePct,
+    cardPrimaryUpsideLabel,
+    displayTarget,
+    displayTargetLabel,
+    displayUpsidePct: cardPrimaryUpsidePct,
+    verdict,
+    targetCoverageStatus: coverageStatus,
+    overTargetReason,
+	    staleReason,
+	    archiveReason,
+	    repricingRequiredEvidence,
+	    latestSourceAt,
+    reportUpdatedAt,
+    priceAsOf,
+    priceRefreshStatus: priceRefreshStatusFromAsOf(priceAsOf),
+  };
+}
+
+function buildBridgeAwareTargetSnapshot(
+  initialTargetSnapshot: ReturnType<typeof buildTargetSnapshot>,
+  baseCaseDetail: DeepDiveValuationCaseDetail | null | undefined,
+  scenarioCaseDetail: DeepDiveValuationCaseDetail | null | undefined,
+  invalidationScenario: DeepDiveScenarioNarrative | null | undefined,
+) {
+  const baseTarget = baseCaseDetail?.bridgeCompleteness === 'complete' ? baseCaseDetail.targetPrice : null;
+  const upsideTarget = scenarioCaseDetail?.bridgeCompleteness === 'complete' ? scenarioCaseDetail.targetPrice : null;
+  const bearTarget =
+    invalidationScenario?.bridgeCompleteness === 'complete' ? invalidationScenario.targetPrice ?? null : initialTargetSnapshot.bearTarget;
+  const targetSnapshot = buildTargetSnapshot(
+    initialTargetSnapshot.currentPrice,
+    baseTarget,
+    upsideTarget,
+    bearTarget,
+    initialTargetSnapshot.latestSourceAt,
+    initialTargetSnapshot.reportUpdatedAt,
+    initialTargetSnapshot.priceAsOf,
+  );
+  const bridgeCompleteness =
+    baseCaseDetail?.bridgeCompleteness === 'complete' || scenarioCaseDetail?.bridgeCompleteness === 'complete'
+      ? ('complete' as const)
+      : ('insufficient' as const);
+	  const sanity = evaluateValuationSanity(
+    {
+      currentPrice: targetSnapshot.currentPrice,
+      baseTarget: targetSnapshot.baseTarget,
+      targetPrice: targetSnapshot.baseTarget,
+      upsideTarget: targetSnapshot.upsideTarget,
+      displayBaseUpsidePct: targetSnapshot.displayBaseUpsidePct,
+      displayScenarioUpsidePct: targetSnapshot.displayScenarioUpsidePct,
+      valuationQuality: bridgeCompleteness === 'complete' ? 'story_modeled' : 'fallback_proxy',
+      valuationSource: bridgeCompleteness === 'complete' ? 'valuation_cases' : 'missing',
+      isFallbackValuation: bridgeCompleteness !== 'complete',
+    },
+	    { baseCaseDetail: baseCaseDetail || null, scenarioCaseDetail: scenarioCaseDetail || null, sharedVerifiedBasis: null },
+	  );
+	  const needsPriceMoveRevaluation =
+	    targetSnapshot.staleReason === 'target_stale_due_price_crossed_base' ||
+	    targetSnapshot.staleReason === 'target_stale_due_price_crossed_scenario';
+	  const bridgeAwareSnapshot = {
+	    ...targetSnapshot,
+	    revaluationStatus: bridgeCompleteness === 'complete' && !needsPriceMoveRevaluation ? ('rebuilt' as const) : ('pending' as const),
+	    repricedAt: targetSnapshot.reportUpdatedAt || nowIso(),
+	    repricingReason:
+	      needsPriceMoveRevaluation
+	        ? '現價已達或超過既有 Base / 情境估值，已排入重估；只有 EPS、毛利率、Forward PE、券商或官方證據上修時才會調高目標價。'
+	        : targetSnapshot.verdict === 'formal'
+	        ? '已依最新 bridge-aware 財務橋接重建 Base 目標價；資金輪動與籌碼只影響信心和進場狀態。'
+        : targetSnapshot.verdict === 'scenario'
+          ? '已依最新 bridge-aware 財務橋接重建情境目標價；Base 尚未高於現價，需等待情境 checklist 驗證。'
+          : targetSnapshot.targetCoverageStatus === 'over_base_and_scenario'
+            ? '本輪已重建 bridge-aware target snapshot，但現價已高於 Base 與情境目標，需等待重估或回測。'
+            : null,
+	    unchangedReason:
+	      needsPriceMoveRevaluation
+	        ? '單純股價上漲不會自動上修 Base / 情境目標；需等待新的財務或券商證據。'
+	        : targetSnapshot.verdict === 'reflected'
+	        ? targetSnapshot.overTargetReason ||
+          '本輪資料未改變營收、毛利率、EPS 或 multiple 的正式橋接，目標價暫不升級；資金/籌碼變化會反映在推薦信心。'
+        : null,
+    bridgeCompleteness,
+    estimatedFields: unique([...(baseCaseDetail?.estimatedFields || []), ...(scenarioCaseDetail?.estimatedFields || [])]),
+    valuationSanityStatus: sanity.valuationSanityStatus,
+    valuationSanityReason: sanity.valuationSanityReason,
+  };
+	  return {
+	    ...bridgeAwareSnapshot,
+	    revaluationJobStatus: buildRevaluationJobSummary({ targetSnapshot: bridgeAwareSnapshot }),
+	    lastRevaluationAttemptAt: bridgeAwareSnapshot.repricedAt,
+	    lastRevaluationResult: buildRevaluationJobSummary({ targetSnapshot: bridgeAwareSnapshot }).lastResult,
+	  };
+	}
+
+function isReferenceablePeRatio(value: number | null | undefined) {
+  return value != null && Number.isFinite(value) && value > 0 && value <= 120;
+}
+
+function isReferenceablePbRatio(value: number | null | undefined) {
+  return value != null && Number.isFinite(value) && value > 0 && value <= 50;
+}
+
+function buildCurrentMultipleReferenceSentence(
+  peRatio: number | null | undefined,
+  pbRatio: number | null | undefined,
+) {
+  const currentPe = isReferenceablePeRatio(peRatio) ? `${formatNumberLocal(peRatio)}x` : null;
+  const currentPb = isReferenceablePbRatio(pbRatio) ? `${formatNumberLocal(pbRatio)}x` : null;
+  const invalidPeNote =
+    peRatio != null && Number.isFinite(peRatio) && peRatio <= 0
+      ? '目前 TTM PE 不具參考性，主因是公司獲利仍在轉正階段或低基期扭曲尚未消退。'
+      : peRatio != null && Number.isFinite(peRatio) && peRatio > 120
+        ? `目前 TTM PE 約 ${formatNumberLocal(peRatio)}x，但已偏離常態區間，宜優先參考 normalized / forward PE。`
+        : null;
+  if (currentPe || currentPb || invalidPeNote) {
+    return sentenceFromBridgeSegments(
+      [
+        currentPe ? `目前市場給這檔股票的 TTM PE 約為 ${currentPe}` : null,
+        currentPb ? `PB 約為 ${currentPb}` : null,
+        invalidPeNote,
+      ],
+      currentPe || currentPb || invalidPeNote || '',
+    );
+  }
+  return null;
+}
+
+function seedFallbackValuationCases(symbol: string, currentPrice: number | null | undefined): ValuationCaseView[] {
+  const seedOverride = SEED_RESEARCH_OVERRIDES[symbol];
+  if (!seedOverride) return [];
+  const normalizedCurrentPrice =
+    currentPrice != null && Number.isFinite(currentPrice) && currentPrice > 0 ? currentPrice : null;
+  const buildCase = (caseType: ValuationCaseView['caseType'], targetPrice: number) => ({
+    caseType,
+    targetPrice,
+    expectedReturnPct:
+      normalizedCurrentPrice != null ? round(((targetPrice - normalizedCurrentPrice) / normalizedCurrentPrice) * 100, 2) : null,
+    assumptions: { source: 'seed_override_snapshot' },
+    bridgeSummary: null,
+    driverLabel: null,
+  });
+  return [
+    buildCase('base', seedOverride.targetPrice),
+    buildCase('upside', seedOverride.upsidePrice),
+    buildCase('invalidation', seedOverride.invalidationPrice),
+  ];
+}
+
+function shouldPreferSeedBridgeSnapshot(symbol: string, currentPrice: number | null | undefined) {
+  const fallbackCases = seedFallbackValuationCases(symbol, currentPrice);
+  if (fallbackCases.length === 0) return false;
+  return Boolean(
+    SEED_RESEARCH_OVERRIDES[symbol] ||
+      stockSpecificBridgeSeed(symbol, 'base') ||
+      stockSpecificBridgeSeed(symbol, 'upside') ||
+      OPPORTUNITIES_FIRST_BRIDGE_ROLLOUT_SYMBOLS.has(symbol),
+  );
+}
+
+type BridgeAwareSnapshotBundle = {
+  targetSnapshot: DeepDiveTargetSnapshot;
+  baseCaseDetail: DeepDiveValuationCaseDetail | null;
+  scenarioCaseDetail: DeepDiveValuationCaseDetail | null;
+  sharedVerifiedBasis: DeepDiveSharedVerifiedBasis | null;
+  assumptionLedger?: DeepDiveValuationAssumptionLedgerItem[];
+  valuationConfidenceGate?: DeepDiveValuationConfidenceGate | null;
+  scenarioNote: string | null;
+  scenarioBridges: DeepDiveScenarioNarrative[];
+  valuationBridge: DeepDiveValuationBridge | null;
+  priceTargetRationale: string | null;
+  peerComparison: string | null;
+};
+
+function buildBridgeAwareSnapshotBundle(params: {
+  symbol: string;
+  currentPrice: number | null;
+  latestSourceAt?: string | null;
+  reportUpdatedAt?: string | null;
+  priceAsOf?: string | null;
+  thesisTitle?: string | null;
+  thesisSummary?: string | null;
+  valuationCases?: ValuationCaseView[] | null;
+  monthlyRevenue?: number | null;
+  yoyGrowth?: number | null;
+  momGrowth?: number | null;
+  revenueAnnual?: number | null;
+  epsTtm?: number | null;
+  peRatio?: number | null;
+  pbRatio?: number | null;
+  grossMargin?: number | null;
+  operatingMargin?: number | null;
+  baseEvidenceRefs?: string[];
+  scenarioEvidenceRefs?: string[];
+}): BridgeAwareSnapshotBundle {
+  const normalizedMonthlyRevenue = nullIfMissingMetric(params.monthlyRevenue);
+  const normalizedRevenueAnnual = nullIfMissingMetric(params.revenueAnnual);
+  const normalizedGrossMargin = nullIfMissingMetric(params.grossMargin);
+  const normalizedPbRatio = nullIfMissingMetric(params.pbRatio);
+  const normalizedEpsTtm = nullIfZeroMetric(params.epsTtm);
+  const normalizedPeRatio = nullIfZeroMetric(params.peRatio);
+  const normalizedOperatingMargin = nullIfZeroMetric(params.operatingMargin);
+  const fallbackValuationCases = seedFallbackValuationCases(params.symbol, params.currentPrice);
+  const rawValuationCases =
+    shouldPreferSeedBridgeSnapshot(params.symbol, params.currentPrice)
+      ? fallbackValuationCases
+      : params.valuationCases && params.valuationCases.length > 0
+      ? params.valuationCases
+      : fallbackValuationCases;
+  const { valuationCases } = ensureValuationCaseCompleteness(rawValuationCases);
+  const initialTargetSnapshot = buildTargetSnapshot(
+    params.currentPrice,
+    valuationCases.find((item) => item.caseType === 'base')?.targetPrice ?? null,
+    valuationCases.find((item) => item.caseType === 'upside')?.targetPrice ?? null,
+    valuationCases.find((item) => item.caseType === 'invalidation')?.targetPrice ?? null,
+    params.latestSourceAt ?? null,
+    params.reportUpdatedAt ?? null,
+    params.priceAsOf ?? null,
+  );
+  const { valuationBridge, scenarioBridges, priceTargetRationale } = buildValuationBridgeSummary(valuationCases, {
+    symbol: params.symbol,
+    thesisTitle: params.thesisTitle ?? null,
+    thesisSummary: params.thesisSummary ?? null,
+    currentPrice: params.currentPrice ?? null,
+    monthlyRevenue: normalizedMonthlyRevenue,
+    yoyGrowth: params.yoyGrowth ?? null,
+    momGrowth: params.momGrowth ?? null,
+    revenueAnnual: normalizedRevenueAnnual,
+    epsTtm: normalizedEpsTtm,
+    peRatio: normalizedPeRatio,
+    pbRatio: normalizedPbRatio,
+    grossMargin: normalizedGrossMargin,
+    operatingMargin: normalizedOperatingMargin,
+  });
+  const baseScenarioBridge = scenarioBridges.find((item) => item.key === 'base') || null;
+  const upsideScenarioBridge = scenarioBridges.find((item) => item.key === 'upside') || null;
+  const invalidationScenario = scenarioBridges.find((item) => item.key === 'invalidation') || null;
+  const baseCaseDetail = buildValuationCaseDetail(
+    'Base 估值框架',
+    baseScenarioBridge,
+    valuationBridge,
+    params.baseEvidenceRefs || [],
+    Boolean(
+      (baseScenarioBridge?.operatingAssumptions || []).some((item) => item.isEstimated) ||
+        (baseScenarioBridge?.estimatedFields || []).length > 0,
+    ),
+  );
+  const scenarioCaseDetail = buildValuationCaseDetail(
+    '情境估值框架',
+    upsideScenarioBridge,
+    valuationBridge,
+    params.scenarioEvidenceRefs || [],
+    Boolean(
+      (upsideScenarioBridge?.operatingAssumptions || []).some((item) => item.isEstimated) ||
+      (upsideScenarioBridge?.estimatedFields || []).length > 0,
+    ),
+  );
+  const sharedVerifiedBasis = buildSharedVerifiedBasis({
+    baseCaseDetail,
+    scenarioCaseDetail,
+    monthlyRevenue: normalizedMonthlyRevenue,
+    revenueAnnual: normalizedRevenueAnnual,
+    grossMargin: normalizedGrossMargin,
+    operatingMargin: normalizedOperatingMargin,
+    epsTtm: normalizedEpsTtm,
+    peRatio: normalizedPeRatio,
+    pbRatio: normalizedPbRatio,
+  });
+  if (baseCaseDetail && sharedVerifiedBasis) {
+    baseCaseDetail.sharedBasisRefs = sharedVerifiedBasis.sharedBasisRefs;
+  }
+  if (scenarioCaseDetail) {
+    scenarioCaseDetail.sharedBasisRefs = sharedVerifiedBasis?.sharedBasisRefs || [];
+    scenarioCaseDetail.deltaAssumptions = buildScenarioDeltaAssumptions(baseCaseDetail, scenarioCaseDetail);
+    scenarioCaseDetail.hasIndependentDelta = hasIndependentScenarioDelta(baseCaseDetail, scenarioCaseDetail);
+    scenarioCaseDetail.achievementChecklist = buildScenarioAchievementChecklist({
+      baseCaseDetail,
+      scenarioCaseDetail,
+      monthlyRevenue: normalizedMonthlyRevenue,
+      technicalEntrySignal: null,
+      sourceRefs: params.scenarioEvidenceRefs || [],
+    });
+  }
+  const scenarioNote =
+    scenarioCaseDetail && scenarioCaseDetail.hasIndependentDelta === false
+      ? '目前尚無獨立上行情境，Base 已涵蓋主要已知故事。'
+      : null;
+  const targetSnapshot: DeepDiveTargetSnapshot = buildBridgeAwareTargetSnapshot(
+    initialTargetSnapshot,
+    baseCaseDetail,
+    scenarioCaseDetail,
+    invalidationScenario,
+  );
+  const promotionGate = attachScenarioPromotionGate(baseCaseDetail, scenarioCaseDetail, targetSnapshot);
+  targetSnapshot.scenarioPromotionStatus = promotionGate?.status || null;
+  applyRevaluationSlaToTargetSnapshot(targetSnapshot, buildRevaluationJobSummary({ targetSnapshot, promotionGate }));
+  return {
+    targetSnapshot,
+    baseCaseDetail,
+    scenarioCaseDetail,
+    sharedVerifiedBasis,
+    scenarioNote,
+    scenarioBridges,
+    valuationBridge,
+    priceTargetRationale,
+    peerComparison: buildPeerComparisonSentence(
+      baseScenarioBridge,
+      valuationBridge,
+      normalizedPeRatio,
+      normalizedPbRatio,
+    ),
+  };
+}
+
+function syncRecommendationCardToBridgeSnapshot(
+  rec: RecommendationCard,
+  bundle: BridgeAwareSnapshotBundle,
+): RecommendationCard {
+  const targetSnapshot = bundle.targetSnapshot;
+  const confidence = buildRecommendationConfidence(rec, bundle);
+  const draftModelSignal = modelSignalForRecommendation(rec);
+  const mlForecastBand = buildAssistiveMlForecastBand({
+    currentPrice: targetSnapshot.currentPrice ?? rec.currentPrice ?? null,
+    modelSignal: draftModelSignal,
+    brokerConsensus: null,
+    sourceRefs: citationIds([...(bundle.baseCaseDetail?.sourceRefs || []), ...(bundle.scenarioCaseDetail?.sourceRefs || [])].filter(isExternalCitationRef)),
+    entryVerdict: confidence.entryReadinessLabel,
+  });
+  const draft: RecommendationCard = {
+    ...rec,
+    currentPrice: targetSnapshot.currentPrice ?? rec.currentPrice ?? null,
+    priceAsOf: targetSnapshot.priceAsOf ?? rec.priceAsOf ?? null,
+    priceRefreshStatus: targetSnapshot.priceRefreshStatus ?? rec.priceRefreshStatus ?? null,
+    targetPrice: targetSnapshot.baseTarget ?? null,
+    baseTarget: targetSnapshot.baseTarget ?? null,
+    upsideTarget: targetSnapshot.upsideTarget ?? null,
+    expectedUpsidePct: targetSnapshot.displayBaseUpsidePct ?? null,
+    displayBaseUpsidePct: targetSnapshot.displayBaseUpsidePct ?? null,
+    displayScenarioUpsidePct: targetSnapshot.displayScenarioUpsidePct ?? null,
+    cardPrimaryUpsidePct: targetSnapshot.cardPrimaryUpsidePct ?? null,
+    cardPrimaryUpsideLabel: targetSnapshot.cardPrimaryUpsideLabel,
+    isFallbackValuation: targetSnapshot.bridgeCompleteness !== 'complete',
+    recommendationConfidenceScore: confidence.score,
+    researchConfidenceScore: confidence.score,
+    scenarioChecklistProgress: confidence.scenarioProgress,
+    scenarioChecklistBreakdown: confidence.scenarioBreakdown,
+    scenarioChecklistScoreDetails: confidence.scenarioScoreDetails,
+    entryReadinessLabel: confidence.entryReadinessLabel,
+    entryReadinessReasons: confidence.entryReadinessReasons,
+    baseVerificationLabel: confidence.baseVerificationLabel,
+    confidenceScoreBreakdown: confidence.scoreBreakdown,
+    revaluationStatus: targetSnapshot.revaluationStatus ?? (targetSnapshot.bridgeCompleteness === 'complete' ? 'rebuilt' : 'pending'),
+    revaluationJobSummary: targetSnapshot.revaluationJobStatus || null,
+    revaluationSlaStatus: targetSnapshot.revaluationSlaStatus || null,
+    nextRevaluationAt: targetSnapshot.nextRevaluationAt || null,
+    missingRepricingEvidence: targetSnapshot.missingRepricingEvidence || targetSnapshot.repricingRequiredEvidence || [],
+    brokerEvidenceSearchStatus: targetSnapshot.brokerEvidenceSearchStatus || null,
+    scenarioPromotionStatus: targetSnapshot.scenarioPromotionStatus || bundle.scenarioCaseDetail?.promotionGate?.status || null,
+    scenarioPromotionGate: bundle.scenarioCaseDetail?.promotionGate || null,
+    revaluationReason:
+      targetSnapshot.repricingReason ||
+      (targetSnapshot.bridgeCompleteness === 'complete'
+        ? '本輪已重建 bridge-aware target snapshot；資金輪動與籌碼技術只調整信心與進場狀態。'
+        : 'bridge 資料不足，等待來源刷新後重建 target snapshot。'),
+    peValuationSignal: buildPeValuationSignal(rec, {
+      baseCaseDetail: bundle.baseCaseDetail,
+      scenarioCaseDetail: bundle.scenarioCaseDetail,
+    }),
+    forwardPeSignal: buildForwardPeSignalFromBridge(buildForwardPeBridge({ currentPrice: targetSnapshot.currentPrice, baseCaseDetail: bundle.baseCaseDetail })),
+    crossThemeSignals: buildCrossThemeSignalsFromText({
+      symbol: rec.symbol,
+      name: rec.name,
+      text: detailText(rec.thesisTitle, rec.thesisSummary, rec.catalystSummary, bundle.baseCaseDetail?.driver, bundle.scenarioCaseDetail?.driver),
+      sourceRefs: citationIds([...(bundle.baseCaseDetail?.sourceRefs || []), ...(bundle.scenarioCaseDetail?.sourceRefs || [])].filter(isExternalCitationRef)),
+    }),
+    globalThemeLeadLagSignal: rec.globalThemeLeadLagSignal || globalLeadLagSignalForSymbol(rec.symbol),
+    globalLeadLagSummary:
+      rec.globalLeadLagSummary ||
+      (rec.globalThemeLeadLagSignal || globalLeadLagSignalForSymbol(rec.symbol))?.summary ||
+      null,
+    recommendationLifecycleStage: null,
+    thesisMomentumScore: null,
+    recommendationStabilityScore: null,
+    whyChanged: null,
+    modelSignal: draftModelSignal,
+    mlUpsideProbability: mlForecastBand?.horizons.find((item) => item.days === 120)?.upsideProbability ?? rec.mlUpsideProbability ?? null,
+    mlForecastSummary: mlForecastSummaryFor(mlForecastBand) || rec.mlForecastSummary || null,
+    whyModelDidNotPromote:
+      rec.whyModelDidNotPromote ||
+      'ML/PTT/社群訊號只作 discovery 與覆核提示；正式推薦仍需公式估值、外部來源、籌碼與技術 gate。',
+    repricingRequiredEvidence: targetSnapshot.repricingRequiredEvidence,
+  };
+  const enrichedDraft = {
+    ...draft,
+    recommendationLifecycleStage: recommendationLifecycleStageFor(draft),
+    thesisMomentumScore: thesisMomentumScoreFor(draft),
+    recommendationStabilityScore: recommendationStabilityScoreFor(draft),
+    whyChanged:
+      targetSnapshot.verdict === 'formal'
+        ? 'bridge-aware snapshot 已重建且仍有 Base 價差。'
+        : targetSnapshot.verdict === 'scenario'
+          ? 'Base 已接近反映，改列上行情境追蹤。'
+          : targetSnapshot.targetCoverageStatus === 'over_base_and_scenario'
+            ? '現價已高於 Base/情境，改為估值已反映。'
+            : '本輪資料更新後仍待 gate 驗證。',
+  } satisfies RecommendationCard;
+  const sanity = evaluateValuationSanity(draft, {
+    baseCaseDetail: bundle.baseCaseDetail,
+    scenarioCaseDetail: bundle.scenarioCaseDetail,
+    sharedVerifiedBasis: bundle.sharedVerifiedBasis,
+  });
+  return applyRecommendationGateMetadata({
+    ...enrichedDraft,
+    valuationSanityStatus: sanity.valuationSanityStatus,
+    valuationSanityReason: sanity.valuationSanityReason,
+    baseTargetVerificationStatus: sanity.valuationSanityStatus === 'normal' ? 'verified' : 'insufficient_verified_basis',
+    whyBaseIsFormal:
+      sanity.valuationSanityStatus === 'normal' && targetSnapshot.verdict === 'formal'
+        ? 'Base 目標價由 bridge-aware 財務推導支撐，且通過估值安全 gate。'
+        : null,
+    whyBaseIsNotFormal:
+      sanity.valuationSanityStatus === 'normal' && targetSnapshot.verdict === 'formal'
+        ? null
+        : sanity.valuationSanityReason || targetSnapshot.overTargetReason || 'Base 尚未通過正式推薦 gate。',
+  });
+}
+
+function ensureRecommendationRevaluationMetadata(rec: RecommendationCard): RecommendationCard {
+  const peValuationSignal = rec.peValuationSignal || buildPeValuationSignal(rec);
+  const forwardPeSignal =
+    rec.forwardPeSignal ||
+    (rec.peValuationSignal
+      ? {
+          currentForwardPe: rec.peValuationSignal.currentPe,
+          targetForwardPe: rec.peValuationSignal.normalizedPe,
+          forwardEps: null,
+          status: rec.peValuationSignal.normalizedPe ? ('estimated' as const) : ('missing_forward_eps' as const),
+          summary: rec.peValuationSignal.reratingReason,
+        }
+      : null);
+  const base: RecommendationCard = {
+    ...rec,
+    peValuationSignal,
+    forwardPeSignal,
+    crossThemeSignals:
+      rec.crossThemeSignals ||
+      buildCrossThemeSignalsFromText({
+        symbol: rec.symbol,
+        name: rec.name,
+        text: detailText(rec.thesisTitle, rec.thesisSummary, rec.catalystSummary),
+      }),
+    globalThemeLeadLagSignal: rec.globalThemeLeadLagSignal || globalLeadLagSignalForSymbol(rec.symbol),
+    globalLeadLagSummary:
+      rec.globalLeadLagSummary ||
+      (rec.globalThemeLeadLagSignal || globalLeadLagSignalForSymbol(rec.symbol))?.summary ||
+      null,
+    modelSignal: rec.modelSignal || modelSignalForRecommendation(rec),
+  };
+  const lifecycleStage = base.recommendationLifecycleStage || recommendationLifecycleStageFor(base);
+  return applyRecommendationGateMetadata({
+    ...base,
+    recommendationLifecycleStage: lifecycleStage,
+    thesisMomentumScore: base.thesisMomentumScore ?? thesisMomentumScoreFor(base),
+    recommendationStabilityScore: base.recommendationStabilityScore ?? recommendationStabilityScoreFor(base),
+    whyChanged: base.whyChanged || '尚未取得會改變基本面 bridge 的新資料，保留在觀察/候選生命週期。',
+    revaluationStatus: base.revaluationStatus || 'unchanged',
+    revaluationJobSummary:
+      base.revaluationJobSummary ||
+      buildRevaluationJobSummary({
+        targetSnapshot: {
+          staleReason: base.staleReason || null,
+          archiveReason: base.archiveReason || null,
+          reportUpdatedAt: base.lastValidatedAt || null,
+          repricedAt: base.lastValidatedAt || null,
+          repricingReason: base.revaluationReason || null,
+          unchangedReason: base.revaluationStatus === 'unchanged' ? base.revaluationReason || '本輪尚未取得足以重估 target 的新資料。' : null,
+          bridgeCompleteness: base.baseTarget != null || base.upsideTarget != null ? 'complete' : 'insufficient',
+          repricingRequiredEvidence: base.repricingRequiredEvidence || [],
+          targetCoverageStatus: base.targetCoverageStatus || recommendationTargetCoverage(base),
+        },
+      }),
+    revaluationReason:
+      base.revaluationReason ||
+      '本輪未取得完整 bridge-aware 重估輸入，暫沿用最近正式推薦 target；資金輪動與籌碼技術仍會影響排序與進場狀態。',
+    confidenceScoreBreakdown: {
+      bridgeEvidence: base.confidenceScoreBreakdown?.bridgeEvidence ?? Math.round((base.evidenceScore ?? 0.5) * 100),
+      freshness: base.confidenceScoreBreakdown?.freshness ?? 50,
+      scenario: base.confidenceScoreBreakdown?.scenario ?? base.scenarioChecklistProgress ?? 0,
+      entryReadiness: base.confidenceScoreBreakdown?.entryReadiness ?? Math.round((base.timingScore ?? 0.5) * 100),
+      upsideQuality: base.confidenceScoreBreakdown?.upsideQuality ?? Math.round(Math.min(1, Math.max(0, base.expectedUpsidePct ?? 0) / 80) * 100),
+      sectorRotationImpact: base.confidenceScoreBreakdown?.sectorRotationImpact ?? Math.round((base.timingScore ?? 0.5) * 100),
+    },
+  });
+}
+
+function buildRecommendationConfidence(
+  rec: RecommendationCard,
+  bundle: BridgeAwareSnapshotBundle,
+): {
+  score: number;
+  scenarioProgress: number;
+  scenarioBreakdown: RecommendationCard['scenarioChecklistBreakdown'];
+  scenarioScoreDetails: RecommendationCard['scenarioChecklistScoreDetails'];
+  entryReadinessLabel: string;
+  entryReadinessReasons: string[];
+  baseVerificationLabel: string;
+  scoreBreakdown: NonNullable<RecommendationCard['confidenceScoreBreakdown']>;
+} {
+  const targetSnapshot = bundle.targetSnapshot;
+  const sourceRefCount = new Set([
+    ...(bundle.baseCaseDetail?.sourceRefs || []),
+    ...(bundle.scenarioCaseDetail?.sourceRefs || []),
+    ...(bundle.sharedVerifiedBasis?.sharedBasisRefs || []),
+  ]).size;
+  const estimatedFieldPenalty = Math.min(0.18, ((bundle.baseCaseDetail?.estimatedFields?.length || 0) + (bundle.scenarioCaseDetail?.estimatedFields?.length || 0)) * 0.018);
+  const bridgeEvidence =
+    targetSnapshot.bridgeCompleteness === 'complete'
+      ? clamp(0.48 + ((rec.evidenceScore ?? 0.5) * 0.18) + Math.min(0.24, sourceRefCount * 0.035) - estimatedFieldPenalty, 0.32, 1)
+      : 0.28;
+  const sourceAgeHours =
+    rec.evidenceAgeHours ??
+    (targetSnapshot.latestSourceAt ? Math.max(0, (Date.now() - new Date(targetSnapshot.latestSourceAt).getTime()) / (1000 * 60 * 60)) : null);
+  const freshness = sourceAgeHours == null ? 0.5 : clamp(Math.exp(-sourceAgeHours / 168), 0.18, 1);
+  const checklist = bundle.scenarioCaseDetail?.achievementChecklist || [];
+  const scenarioProgress = bundle.scenarioCaseDetail?.hasIndependentDelta ? scenarioChecklistProgress(checklist) : 0;
+  const scenarioBreakdown = scenarioChecklistBreakdown(checklist);
+  const scenarioScoreDetails = scenarioChecklistScoreDetails(checklist);
+  const entryRaw = rec.timingScore ?? (rec.recommendationState === 'actionable_setup' ? 0.82 : rec.recommendationState === 'validated_thesis' ? 0.68 : 0.48);
+  const technicalChecklist = checklist.find((item) => item.label.includes('技術'));
+  const technicalScore = technicalChecklist ? scenarioChecklistItemScore(technicalChecklist) : 0.35;
+  const entryReadiness = clamp(entryRaw * 0.52 + technicalScore * 0.28 + bridgeEvidence * 0.1 + freshness * 0.1);
+  const upsideRaw = Math.max(0, targetSnapshot.cardPrimaryUpsidePct ?? rec.expectedUpsidePct ?? 0);
+  const entryReadinessLabel =
+    technicalScore < 0.22
+      ? '資料不足暫緩'
+      : rec.recommendationBucket === 'scenario_upside'
+        ? '突破確認再追'
+        : entryReadiness >= 0.86 && upsideRaw >= 12 && upsideRaw <= 85
+          ? '可小量分批'
+          : entryReadiness >= 0.7 && upsideRaw >= 35
+            ? '等回測'
+            : entryReadiness >= 0.64 && upsideRaw < 35
+              ? '突破確認再追'
+              : entryReadiness < 0.42
+                ? '資料不足暫緩'
+                : '等回測';
+  const entryReadinessReasons = [
+    technicalChecklist ? `${technicalChecklist.label}：${technicalChecklist.status}，分數 ${Math.round(technicalScore * 100)}` : null,
+    sourceAgeHours != null ? `來源新鮮度 ${Math.round(freshness * 100)}（約 ${Math.round(sourceAgeHours)} 小時）` : null,
+    rec.timingScore != null ? `籌碼/技術 timing ${Math.round(rec.timingScore * 100)}%` : null,
+  ].filter((item): item is string => Boolean(item));
+  const upsideQuality = Math.min(1, upsideRaw / 80);
+  const sectorRotationImpact = clamp((rec.timingScore ?? 0.5) * 0.65 + freshness * 0.2 + bridgeEvidence * 0.15, 0, 1);
+  const scoreBreakdown = {
+    bridgeEvidence: Math.round(bridgeEvidence * 100),
+    freshness: Math.round(freshness * 100),
+    scenario: scenarioProgress,
+    entryReadiness: Math.round(entryReadiness * 100),
+    upsideQuality: Math.round(upsideQuality * 100),
+    sectorRotationImpact: Math.round(sectorRotationImpact * 100),
+  };
+  const score = Math.round(
+    (
+      bridgeEvidence * 0.28 +
+      freshness * 0.22 +
+      (scenarioProgress / 100) * 0.2 +
+      entryReadiness * 0.13 +
+      upsideQuality * 0.09 +
+      sectorRotationImpact * 0.08
+    ) * 100,
+  );
+  return {
+    score,
+    scenarioProgress,
+    scenarioBreakdown,
+    scenarioScoreDetails,
+    entryReadinessLabel,
+    entryReadinessReasons,
+    scoreBreakdown,
+    baseVerificationLabel:
+      targetSnapshot.bridgeCompleteness === 'complete'
+        ? freshness >= 0.78
+          ? 'Base 已有近期證據'
+          : 'Base 完整但來源需刷新'
+        : 'Base 橋接不足',
+  };
+}
+
+function buildRadarTechnicalSnapshotFromSignalRow(row: Row | null | undefined): StockDeepDivePayload['technicalSnapshot'] | null {
+  if (!row) return null;
+  const ma20 = row.ma_short != null ? toFiniteNumber(row.ma_short, Number.NaN) : Number.NaN;
+  const ma60 = row.ma_mid != null ? toFiniteNumber(row.ma_mid, Number.NaN) : Number.NaN;
+  const ma120 = row.ma_long != null ? toFiniteNumber(row.ma_long, Number.NaN) : Number.NaN;
+  const rsi = row.rsi != null ? toFiniteNumber(row.rsi, Number.NaN) : Number.NaN;
+  const macd = row.macd != null ? toFiniteNumber(row.macd, Number.NaN) : Number.NaN;
+  const macdSignal = row.macd_signal != null ? toFiniteNumber(row.macd_signal, Number.NaN) : Number.NaN;
+  const hasTechnical = [ma20, ma60, ma120, rsi, macd, macdSignal].some((value) => Number.isFinite(value));
+  if (!hasTechnical) return null;
+  return {
+    ma5: null,
+    ma10: null,
+    ma20: Number.isFinite(ma20) ? ma20 : null,
+    ma60: Number.isFinite(ma60) ? ma60 : null,
+    ma120: Number.isFinite(ma120) ? ma120 : null,
+    ma240: null,
+    rsi: Number.isFinite(rsi) ? rsi : null,
+    macd: Number.isFinite(macd) ? macd : null,
+    macdSignal: Number.isFinite(macdSignal) ? macdSignal : null,
+    fibonacci: null,
+    dataSource: 'stock_signals',
+    missingReason: null,
+  };
+}
+
+function alignRecommendationEntryReadiness(
+  card: RecommendationCard,
+  chipEntryAssessment: StockDeepDivePayload['chipEntryAssessment'] | null,
+  technicalEntrySignal: StockDeepDivePayload['technicalEntrySignal'] | null,
+  chipOnlyOverride?: { label: string; reason: string } | null,
+): RecommendationCard {
+  if (!chipEntryAssessment && !technicalEntrySignal && !chipOnlyOverride) return card;
+  const chipVerdict = chipEntryAssessment?.verdict || null;
+  const technicalVerdict = technicalEntrySignal?.verdict || null;
+	  const label =
+	    chipOnlyOverride?.label ||
+	    (chipVerdict === '資料不足不買' || chipVerdict === '資料不足暫緩'
+	      ? '資料不足暫緩'
+	      : chipVerdict === '籌碼偏亂先不買'
+	        ? '籌碼偏亂先不買'
+          : chipVerdict === '趨勢轉弱' || technicalVerdict === '趨勢轉弱'
+            ? '趨勢轉弱'
+	            : chipVerdict === '可小量分批' || technicalVerdict === '適合分批'
+	              ? '可小量分批'
+	              : chipVerdict === '突破後小量追蹤'
+	                ? '突破後小量追蹤'
+	                : chipVerdict === '突破確認再追'
+	                  ? '突破確認再追'
+                    : chipVerdict === '過熱不追' || technicalVerdict === '過熱不追'
+                      ? '過熱不追'
+	                  : card.entryReadinessLabel);
+  const reasons = uniqueNarrativeLines(
+    [
+      chipOnlyOverride?.reason || null,
+      chipEntryAssessment?.summary ? `籌碼/買點：${chipEntryAssessment.summary}` : null,
+      technicalEntrySignal?.summary ? `技術：${technicalEntrySignal.summary}` : null,
+      ...(card.entryReadinessReasons || []),
+    ],
+    3,
+  );
+  return {
+    ...card,
+    entryReadinessLabel: label,
+    entryReadinessReasons: reasons,
+    entryActionLabel: chipEntryAssessment?.entryDecision?.action || technicalEntrySignal?.entryDecision?.action || null,
+    entryDecision: chipEntryAssessment?.entryDecision || technicalEntrySignal?.entryDecision || null,
+  };
+}
+
+function buildRadarChipOnlyOverride(chipSnapshot: DeepDiveChipSnapshot | null): { label: string; reason: string } | null {
+  if (!chipSnapshot || chipSnapshot.dataStatus?.status === 'missing') return null;
+  const foreign5d = chipSnapshot.institutionalFlows.foreign.net5d ?? null;
+  const trust5d = chipSnapshot.institutionalFlows.investmentTrust.net5d ?? null;
+  const dealer5d = chipSnapshot.institutionalFlows.dealer.net5d ?? null;
+  const marginChange = chipSnapshot.marginFinancing.change ?? null;
+  const marginUsage = chipSnapshot.marginFinancing.usageRatio ?? null;
+  const shortUsage = chipSnapshot.shortInterest.usageRatio ?? null;
+  const sblBalance = chipSnapshot.shortInterest.sblBalance ?? null;
+  const institutionalSelling = (foreign5d ?? 0) < 0 && (trust5d ?? 0) <= 0;
+  const marginCrowded = (marginUsage ?? 0) >= 24 || ((marginChange ?? 0) > 0 && (foreign5d ?? 0) <= 0);
+  const shortPressure = (shortUsage ?? 0) >= 8 || ((sblBalance ?? 0) > 0 && (dealer5d ?? 0) < 0);
+  if (institutionalSelling && (marginCrowded || shortPressure)) {
+    return {
+      label: '籌碼偏亂先不買',
+      reason: sentenceFromBridgeSegments(
+        [
+          `籌碼 gate：外資/投信近 5 日 ${signedLots(foreign5d)} / ${signedLots(trust5d)}。`,
+          marginCrowded ? `融資變化 ${signedLots(marginChange)}、使用率 ${pctText(marginUsage)}，追價籌碼較亂。` : null,
+          shortPressure ? `融券/借券壓力偏高，短線波動風險上升。` : null,
+        ],
+        '籌碼 gate：法人、融資或借券結構尚未支持追價。',
+      ),
+    };
+  }
+  const institutionalBuying = (foreign5d ?? 0) > 0 && ((trust5d ?? 0) > 0 || (foreign5d ?? 0) > 0);
+  if (institutionalBuying && !marginCrowded && !shortPressure) {
+    return {
+      label: '可小量分批',
+      reason: `籌碼 gate：外資/投信近 5 日 ${signedLots(foreign5d)} / ${signedLots(trust5d)}，融資與借券未構成主要扣分。`,
+    };
+  }
+  return null;
+}
+
+function syncDiscoveredStockToBridgeSnapshot(
+  stock: DiscoveredStockCard,
+  bundle: BridgeAwareSnapshotBundle,
+): DiscoveredStockCard {
+  const targetSnapshot = bundle.targetSnapshot;
+  const canonicalTarget = targetSnapshot.baseTarget ?? targetSnapshot.upsideTarget ?? null;
+  const canonicalUpsidePct = targetSnapshot.displayBaseUpsidePct ?? targetSnapshot.displayScenarioUpsidePct ?? null;
+  return {
+    ...stock,
+    price: targetSnapshot.currentPrice ?? stock.price ?? null,
+    currentPrice: targetSnapshot.currentPrice ?? stock.currentPrice ?? null,
+    priceAsOf: targetSnapshot.priceAsOf ?? stock.priceAsOf ?? stock.latestMentionAt ?? null,
+    targetPrice: canonicalTarget,
+    expectedUpsidePct: canonicalUpsidePct,
+    whyNotRecommended:
+      canonicalUpsidePct == null
+        ? stock.whyNotRecommended || whyNotRecommendedLabel(canonicalTarget == null ? 'valuation_missing' : 'base_target_below_price')
+        : stock.whyNotRecommended,
+  };
+}
+
+function chipNumber(value: unknown) {
+  if (value == null) return null;
+  const num =
+    typeof value === 'number'
+      ? value
+      : typeof value === 'string'
+        ? Number(String(value).replace(/,/g, ''))
+        : Number.NaN;
+  return Number.isFinite(num) ? num : null;
+}
+
+function sumChipMetricWindow(rows: Row[], key: string, windowSize: number) {
+  const values = rows
+    .slice(0, windowSize)
+    .map((row) => chipNumber((row.chip_metrics as Record<string, unknown> | null)?.[key]))
+    .filter((value): value is number => value != null);
+  if (values.length === 0) return null;
+  return round(values.reduce((sum, value) => sum + value, 0), 0);
+}
+
+function chipTrendFromFlows(net5d: number | null, net20d: number | null) {
+  if ((net5d ?? 0) > 0 && (net20d ?? 0) > 0) return 'buying' as const;
+  if ((net5d ?? 0) < 0 && (net20d ?? 0) < 0) return 'selling' as const;
+  if ((net5d ?? 0) === 0 && (net20d ?? 0) === 0) return 'neutral' as const;
+  return 'mixed' as const;
+}
+
+function buildChipTimingAssessment(snapshot: DeepDiveChipSnapshot, verdict: 'formal' | 'scenario' | 'reflected') {
+  const marginUsage = snapshot.marginFinancing.usageRatio ?? 0;
+  const marginChange = snapshot.marginFinancing.change ?? 0;
+  const shortUsage = snapshot.shortInterest.usageRatio ?? 0;
+  const foreign5d = snapshot.institutionalFlows.foreign.net5d ?? 0;
+  const trust5d = snapshot.institutionalFlows.investmentTrust.net5d ?? 0;
+  const dealer5d = snapshot.institutionalFlows.dealer.net5d ?? 0;
+
+  if (marginUsage >= 24 && marginChange > 0 && foreign5d <= 0) {
+    return '融資使用率偏高且近期仍在增加，但外資沒有同步回補，追價風險偏高，較適合等待籌碼沉澱後再看。';
+  }
+  if (foreign5d > 0 && trust5d > 0 && marginUsage < 18) {
+    return '外資與投信近五日仍偏買方，融資使用率沒有失控，籌碼結構較適合分批布局。';
+  }
+  if (shortUsage >= 8 && dealer5d < 0) {
+    return '融券與借券賣出偏高，短線容易放大波動；若要進場，需更重視價格回檔與量縮是否止穩。';
+  }
+  if (verdict === 'scenario') {
+    return '目前仍屬情境候選，籌碼面尚未提供足夠的追價安全邊際，較適合等法人與融資結構更乾淨時再評估。';
+  }
+  return '目前籌碼沒有失真到需要立即轉空，但也沒有出現非常舒服的進場結構；建議配合下一個營運驗證點分批處理。';
+}
+
+function buildChipSnapshotFromMetrics(chipMetrics: Record<string, unknown> | null | undefined, verdict: 'formal' | 'scenario' | 'reflected'): DeepDiveChipSnapshot | null {
+  const metrics = chipMetrics || {};
+  const marginBalance = chipNumber(metrics.margin_balance);
+  const marginBuy = chipNumber(metrics.margin_buy);
+  const marginSell = chipNumber(metrics.margin_sell);
+  const marginChange = chipNumber(metrics.margin_balance_change) ?? (marginBuy != null || marginSell != null ? (marginBuy ?? 0) - (marginSell ?? 0) : null);
+  const shortBalance = chipNumber(metrics.short_balance ?? metrics.margin_short_balance);
+  const shortBuy = chipNumber(metrics.short_buy);
+  const shortSell = chipNumber(metrics.short_sell);
+  const shortChange =
+    chipNumber(metrics.short_balance_change ?? metrics.margin_short_balance_change) ??
+    (shortBuy != null || shortSell != null ? (shortSell ?? 0) - (shortBuy ?? 0) : null);
+  const sblShortBalance = chipNumber(metrics.sbl_short_balance);
+  const borrowAuxiliaryVolume = chipNumber(metrics.sbl_short_sale_volume);
+  const borrowAuxiliaryOnly = Boolean(metrics.borrow_auxiliary_only || (sblShortBalance == null && borrowAuxiliaryVolume != null));
+  const missingGroups = chipMissingGroups(metrics);
+  const status =
+    missingGroups.length === 0
+      ? ('available' as const)
+      : missingGroups.length >= 4
+        ? ('missing' as const)
+        : ('partial' as const);
+  const dataStatus: NonNullable<DeepDiveChipSnapshot['dataStatus']> = {
+    status,
+    asOf: chipSourceAsOf(metrics),
+    source: compactText(metrics.chip_source || metrics.source || '') || 'stock_signals/public-market-refresh',
+    missingGroups,
+    missingReasons: chipMissingReasons(metrics, missingGroups),
+    fallbackUsed: Boolean(metrics.fallback_used || metrics.chip_source === 'stock_signals'),
+    officialSblAsOf: compactText(metrics.official_sbl_as_of || '') || null,
+    officialSblSourceUrl: compactText(metrics.official_sbl_source_url || '') || null,
+    borrowAuxiliaryOnly,
+    fallbackSourceUsed: compactText(metrics.fallback_source_used || metrics.fallback_source || '') || null,
+  };
+  const hasChipSignal =
+    marginBalance != null ||
+    shortBalance != null ||
+    sblShortBalance != null ||
+    chipNumber(metrics.foreign_net_5d) != null ||
+    chipNumber(metrics.foreign_net_20d) != null;
+
+  const snapshot: DeepDiveChipSnapshot = {
+	    marginFinancing: {
+	      balance: marginBalance,
+	      change: marginChange,
+	      usageRatio: chipNumber(metrics.margin_usage_ratio),
+	      note: compactText(metrics.margin_note || '') || null,
+	    },
+	    shortInterest: {
+	      balance: shortBalance,
+	      change: shortChange,
+      usageRatio: chipNumber(metrics.short_usage_ratio ?? metrics.margin_short_usage_ratio),
+      note:
+        compactText(metrics.short_note || metrics.margin_short_note || metrics.borrow_note || '') ||
+        (borrowAuxiliaryOnly ? 'FinMind 目前僅提供借券成交量輔助，不把它當作借券賣出餘額。' : null),
+      sblBalance: sblShortBalance,
+    },
+    institutionalFlows: {
+      foreign: {
+        latestNet: chipNumber(metrics.foreign_net),
+        net5d: chipNumber(metrics.foreign_net_5d),
+        net20d: chipNumber(metrics.foreign_net_20d),
+        trend: chipTrendFromFlows(chipNumber(metrics.foreign_net_5d), chipNumber(metrics.foreign_net_20d)),
+      },
+      investmentTrust: {
+        latestNet: chipNumber(metrics.investment_trust_net),
+        net5d: chipNumber(metrics.investment_trust_net_5d),
+        net20d: chipNumber(metrics.investment_trust_net_20d),
+        trend: chipTrendFromFlows(chipNumber(metrics.investment_trust_net_5d), chipNumber(metrics.investment_trust_net_20d)),
+      },
+      dealer: {
+        latestNet: chipNumber(metrics.dealer_net),
+        net5d: chipNumber(metrics.dealer_net_5d),
+        net20d: chipNumber(metrics.dealer_net_20d),
+        trend: chipTrendFromFlows(chipNumber(metrics.dealer_net_5d), chipNumber(metrics.dealer_net_20d)),
+      },
+    },
+    timingAssessment: hasChipSignal ? null : '法人、融資融券與借券來源尚未回傳有效數字；基本面即使正向，也先降為進場暫緩。',
+    dataStatus,
+  };
+  snapshot.timingAssessment =
+    dataStatus.status === 'missing'
+      ? snapshot.timingAssessment
+      : sentenceFromBridgeSegments(
+          [
+            dataStatus.status === 'partial' ? `${chipStatusLabel(dataStatus.status)}：${dataStatus.missingReasons.slice(0, 2).join(' ')}` : null,
+            buildChipTimingAssessment(snapshot, verdict),
+          ],
+          buildChipTimingAssessment(snapshot, verdict),
+        );
+  return snapshot;
+}
+
+function sectorMatchesNarrative(sector: string, keywords: string[]) {
+  const normalizedSector = sector.toLowerCase();
+  const keywordText = keywords.join(' ').toLowerCase();
+  const rules = [
+    {
+      sectorHints: ['ai', 'server', 'cloud', 'compute', 'odm'],
+      keywordHints: ['ai', 'server', 'rack', 'odm', 'gb200', 'b200', '機櫃', '伺服器'],
+    },
+    {
+      sectorHints: ['semi', 'chip', 'ic', 'foundry', 'memory'],
+      keywordHints: ['半導體', '晶片', 'ic', 'soc', '記憶體', 'dram', 'ddr', 'nand', 'emmc'],
+    },
+    {
+      sectorHints: ['network', 'optical', 'photonics', 'cpo'],
+      keywordHints: ['cpo', '光通訊', '光模組', '800g', 'switch', 'network'],
+    },
+    {
+      sectorHints: ['storage'],
+      keywordHints: ['ssd', '儲存', 'nand', '記憶體', 'emmc'],
+    },
+  ];
+  if (keywords.some((keyword) => keyword && normalizedSector.includes(keyword.toLowerCase()))) return true;
+  return rules.some(
+    (rule) =>
+      rule.sectorHints.some((hint) => normalizedSector.includes(hint)) &&
+      rule.keywordHints.some((hint) => keywordText.includes(hint.toLowerCase())),
+  );
+}
+
+function buildMarketRotationSnapshot(focus: DailyMarketFocus | null, keywords: string[]) {
+  if (!focus) {
+    return {
+      marketRotation: null,
+      sectorFlow: null,
+      sectorFlowScore: null,
+    };
+  }
+  const rankedSectors = Object.entries(focus.sectorFlows || {})
+    .filter((entry) => Number.isFinite(entry[1]))
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 4);
+  if (rankedSectors.length === 0) {
+    return {
+      marketRotation: '目前缺少可用的族群資金輪動資料，暫時只能以前述個股與財務證據判斷。',
+      sectorFlow: '市場輪動資料尚未刷新，暫時無法確認這檔股票是否處於資金主線。',
+      sectorFlowScore: null,
+    };
+  }
+  const topSectorsText = rankedSectors
+    .map(([sector, score]) => `${sector}（${formatNumberLocal(score * 100)}）`)
+    .join('、');
+  const matchedSector = rankedSectors.find(([sector]) => sectorMatchesNarrative(sector, keywords));
+  const matchedScore = matchedSector?.[1] ?? null;
+  return {
+    marketRotation: `目前台股資金主要輪向 ${topSectorsText}，代表大盤仍在優先交易這些族群的成長與題材延續。`,
+    sectorFlow:
+      matchedSector && matchedScore != null
+        ? `${matchedSector[0]} 仍是近期相對強勢的資金主線之一，這檔股票若要維持推薦分數，就要持續看到法人與量價配合同步跟上。`
+        : `目前資金主線與這檔股票的產業故事沒有完全重疊，代表即使基本面 thesis 成立，也可能先進入較長時間的整理期。`,
+    sectorFlowScore: matchedScore == null ? 45 : round(50 + matchedScore * 50, 0),
+  };
+}
+
+function readIndexNumber(indexState: Record<string, unknown> | null | undefined, keys: string[]) {
+  for (const key of keys) {
+    const value = toFiniteNumber(indexState?.[key], Number.NaN);
+    if (Number.isFinite(value)) return value;
+  }
+  return null;
+}
+
+function readIndexText(indexState: Record<string, unknown> | null | undefined, keys: string[]) {
+  for (const key of keys) {
+    const value = indexState?.[key];
+    if (value == null) continue;
+    const text = compactText(value);
+    if (text) return text;
+  }
+  return null;
+}
+
+function buildMarketIndexSignal(focus: DailyMarketFocus | null, topThemes: ThemeHeatCard[] = []): MarketIndexSignal {
+  const indexState = focus?.indexState || {};
+  const trendScore = readIndexNumber(indexState, [
+    'trend_score',
+    'market_trend_score',
+    'taiex_trend_score',
+    'risk_score',
+    'regime_score',
+  ]);
+  const breadthScore = readIndexNumber(indexState, ['breadth_score', 'market_breadth_score', 'advance_decline_score']);
+  const foreignFlow = readIndexNumber(indexState, ['foreign_net_5d', 'foreign_flow_5d', 'foreign_buy_sell_5d']);
+  const taiexClose = readIndexNumber(indexState, ['taiex_close', 'twse_close', 'index_close', 'close']);
+  const taiexMa20 = readIndexNumber(indexState, ['taiex_ma20', 'twse_ma20', 'ma20']);
+  const taiexMa60 = readIndexNumber(indexState, ['taiex_ma60', 'twse_ma60', 'ma60']);
+  const otcClose = readIndexNumber(indexState, ['otc_close', 'tpex_close']);
+  const otcMa20 = readIndexNumber(indexState, ['otc_ma20', 'tpex_ma20']);
+  const topThemeNames = topThemes.slice(0, 3).map((theme) => theme.themeName).filter(Boolean);
+  const isFresh = focus?.freshness === 'fresh';
+  const effectiveTrendScore =
+    trendScore != null
+      ? trendScore
+      : isFresh && topThemeNames.length > 0
+        ? 0.55
+        : null;
+  const status: MarketIndexSignal['status'] =
+    effectiveTrendScore == null
+      ? 'market_data_missing'
+      : !isFresh
+        ? 'market_data_missing'
+        : effectiveTrendScore >= 0.68
+          ? 'risk_on_can_attack'
+          : effectiveTrendScore >= 0.55
+            ? 'selective_only'
+            : effectiveTrendScore >= 0.42
+              ? 'risk_off_reduce'
+              : 'market_breakdown_no_chase';
+  const label =
+    status === 'risk_on_can_attack'
+      ? '風險偏好擴張，可攻主線'
+      : status === 'selective_only'
+        ? '選股盤，只做強勢主線'
+        : status === 'risk_off_reduce'
+          ? '大盤轉保守，降低部位'
+          : status === 'market_breakdown_no_chase'
+            ? '大盤轉弱，不追價'
+            : '大盤資料待補';
+  const riskBudget =
+    status === 'risk_on_can_attack'
+      ? '可用 10%–15% 分批建立主線股部位'
+      : status === 'selective_only'
+        ? '單檔以 5%–10% 為上限，只做相對強勢'
+        : status === 'risk_off_reduce'
+          ? '新倉 0%–5%，以回測買點與風控為主'
+          : status === 'market_breakdown_no_chase'
+            ? '停止追價，既有部位優先檢查停損/停利'
+            : '資料待補前不提高風險預算';
+  const entryBias =
+    status === 'risk_on_can_attack'
+      ? '趨勢股可用小部位先進場，突破或回測成功再加碼。'
+      : status === 'selective_only'
+        ? '只買主線與相對強勢股，避開弱勢族群。'
+        : status === 'risk_off_reduce'
+          ? '只等回測支撐，避免紅 K 追價。'
+          : status === 'market_breakdown_no_chase'
+            ? '不新增追價部位，等待指數站回關鍵均線。'
+            : '等待大盤資料刷新後再決定進場節奏。';
+  const exitBias =
+    status === 'risk_on_can_attack'
+      ? '跌破個股停損才降風險，趨勢未壞可續抱。'
+      : status === 'selective_only'
+        ? '跌破 MA20 或族群資金退潮先降一段。'
+        : status === 'risk_off_reduce'
+          ? '反彈到壓力優先減碼，弱勢股不戀戰。'
+          : status === 'market_breakdown_no_chase'
+            ? '跌破 MA60、情境價已反映或籌碼轉弱時直接出場。'
+            : '資料不足時以個股停損與部位控管為主。';
+  const taiexState =
+    readIndexText(indexState, ['taiex_state', 'twse_state', 'index_state']) ||
+    (taiexClose != null && taiexMa20 != null
+      ? `加權指數 ${formatMoney(taiexClose)}，${taiexClose >= taiexMa20 ? '站上' : '跌破'} MA20${taiexMa60 != null ? `，MA60 ${formatMoney(taiexMa60)}` : ''}`
+      : null);
+  const otcState =
+    readIndexText(indexState, ['otc_state', 'tpex_state']) ||
+    (otcClose != null && otcMa20 != null ? `櫃買 ${formatMoney(otcClose)}，${otcClose >= otcMa20 ? '站上' : '跌破'} MA20` : null);
+  const breadthState =
+    readIndexText(indexState, ['breadth_state', 'advance_decline_state']) ||
+    (breadthScore != null ? `市場廣度分數 ${formatNumberLocal(breadthScore * 100, 0)}` : null);
+  const foreignFlowState =
+    readIndexText(indexState, ['foreign_flow_state']) ||
+    (foreignFlow != null ? `外資近 5 日 ${signedLots(foreignFlow)}` : null);
+  const reasons = uniqueNarrativeLines(
+    [
+      taiexState,
+      otcState,
+      breadthState,
+      foreignFlowState,
+      topThemeNames.length > 0 ? `主線題材：${topThemeNames.join('、')}` : null,
+      !isFresh ? '大盤資料偏舊，進場 Gate 先降級。' : null,
+    ],
+    6,
+  );
+  return {
+    status,
+    label,
+    summary: `${label}；${entryBias}`,
+    asOf: focus?.asOf || null,
+    trendScore: effectiveTrendScore == null ? null : round(effectiveTrendScore, 3),
+    taiexState,
+    otcState,
+    breadthState,
+    foreignFlowState,
+    riskBudget,
+    entryBias,
+    exitBias,
+    reasons,
+  };
+}
+
+function buildRelativeStrengthSignal(card: Pick<RecommendationCard, 'symbol' | 'timingScore' | 'globalThemeLeadLagSignal' | 'priceAsOf'>): NonNullable<RecommendationCard['relativeStrengthSignal']> {
+  const leadLag = card.globalThemeLeadLagSignal || null;
+  const stockReturnPct = leadLag?.twMovePct ?? null;
+  const sectorReturnPct = leadLag?.foreignMovePct ?? null;
+  const relativeToSectorPct =
+    stockReturnPct != null && sectorReturnPct != null ? round(stockReturnPct - sectorReturnPct, 2) : null;
+  const status: NonNullable<RecommendationCard['relativeStrengthSignal']>['status'] =
+    relativeToSectorPct != null
+      ? relativeToSectorPct >= 3
+        ? 'outperforming'
+        : relativeToSectorPct <= -3
+          ? 'lagging'
+          : 'inline'
+      : (card.timingScore ?? 0) >= 68
+        ? 'outperforming'
+        : (card.timingScore ?? 50) <= 42
+          ? 'lagging'
+          : 'pending';
+  const summary =
+    relativeToSectorPct != null
+      ? status === 'lagging'
+        ? `台股同族群仍落後海外約 ${formatSignedPctLocal(relativeToSectorPct)}，可列補漲候選但需等個股 Gate。`
+        : status === 'outperforming'
+          ? `個股/台股映射已相對海外領先 ${formatSignedPctLocal(relativeToSectorPct)}，追價需更嚴格。`
+          : '個股與海外同族群表現大致同步，回到估值與買點判斷。'
+      : '相對大盤/海外族群資料待補；先用個股技術、籌碼與主題資金替代。';
+  return {
+    status,
+    summary,
+    stockReturnPct,
+    marketReturnPct: null,
+    sectorReturnPct,
+    relativeToMarketPct: null,
+    relativeToSectorPct,
+    asOf: leadLag?.asOf || card.priceAsOf || null,
+  };
+}
+
+function buildTradeDecision(params: {
+  entryDecision: EntryDecision | null | undefined;
+  marketIndexSignal: MarketIndexSignal;
+  targetSnapshot?: Pick<DeepDiveTargetSnapshot, 'currentPrice' | 'baseTarget' | 'upsideTarget' | 'targetCoverageStatus' | 'staleReason' | 'overTargetReason' | 'repricingRequiredEvidence'> | null;
+  card?: RecommendationCard | null;
+  relativeStrengthSignal?: NonNullable<RecommendationCard['relativeStrengthSignal']> | null;
+}): TradeDecision {
+  const cleanTradePlanText = (value: string) =>
+    value
+      .replace(/站回\s*-\s*或回測/g, '站回關鍵均線或帶量突破前高，或回測')
+      .replace(/突破\s*-\s*或回測/g, '突破前高或壓力，或回測')
+      .replace(/重新帶量站上\s*-\s*後/g, '重新帶量站上前高或壓力後')
+      .replace(/帶量突破\s*-\s*/g, '帶量突破前高或壓力 ')
+      .replace(/站上\s*-\s*/g, '站上前高或壓力 ')
+      .replace(/站回\s*-\s*/g, '站回關鍵均線 ')
+      .replace(/突破\s*-\s*/g, '突破前高或壓力 ')
+      .replace(/NT\$-/g, '關鍵價');
+  const entryDecision = params.entryDecision || {
+    action: '不買' as const,
+    positionSize: '暫不新增部位',
+    buyZone: '等待量價、籌碼與大盤資料補齊。',
+    addCondition: '重新站回關鍵均線且大盤 Gate 解除後再評估。',
+    stopLoss: '資料不足時不建立新倉。',
+    invalidation: '資料不足時不建立新倉。',
+    validUntil: '下一次資料刷新前',
+    confidence: 20,
+    reasons: ['缺少可操作進場資料。'],
+    entryTriggers: [],
+  };
+  const target = params.targetSnapshot || params.card || null;
+  const currentPrice = target?.currentPrice ?? params.card?.currentPrice ?? null;
+  const baseTarget = target?.baseTarget ?? params.card?.baseTarget ?? null;
+  const scenarioTarget = target?.upsideTarget ?? params.card?.upsideTarget ?? null;
+  const targetCoverageStatus = target?.targetCoverageStatus ?? params.card?.targetCoverageStatus ?? null;
+  const marketStatus = params.marketIndexSignal.status;
+  const crossedScenario =
+    targetCoverageStatus === 'over_base_and_scenario' ||
+    (currentPrice != null && scenarioTarget != null && currentPrice >= scenarioTarget);
+  const crossedBase =
+    targetCoverageStatus === 'scenario_only' ||
+    (currentPrice != null && baseTarget != null && currentPrice >= baseTarget && (scenarioTarget == null || currentPrice < scenarioTarget));
+  let action = entryDecision.action;
+  let positionSize = entryDecision.positionSize;
+  let entryZone = cleanTradePlanText(entryDecision.buyZone);
+  let addCondition = cleanTradePlanText(entryDecision.addCondition);
+  let confidence = entryDecision.confidence;
+  const reasons = uniqueNarrativeLines([params.marketIndexSignal.summary, ...(entryDecision.reasons || [])], 6);
+  const reasonText = reasons.join(' ');
+  const hasHardDataBlock = /資料不足|缺少可操作|缺法人|缺融資|缺融券|缺借券/.test(reasonText);
+  const hasHardChipBlock = /籌碼 gate|籌碼結構不夠乾淨|融券\/借券|法人\/投信近 5 日|追價籌碼較亂/.test(reasonText);
+  const hasScenarioRoom =
+    !crossedScenario &&
+    (targetCoverageStatus === 'base_upside' ||
+      targetCoverageStatus === 'scenario_only' ||
+      (currentPrice != null && scenarioTarget != null && currentPrice < scenarioTarget));
+  const constructiveMarket = marketStatus === 'risk_on_can_attack' || marketStatus === 'selective_only';
+  const marketGateReason = `${params.marketIndexSignal.label}：${params.marketIndexSignal.riskBudget}`;
+  if (crossedScenario) {
+    action = '停利';
+    positionSize = '不新增部位；已有部位分批停利或降到 0%–30% 追蹤倉';
+    entryZone = '現價已高於情境目標，等待重估或明確回測，不做新買點。';
+    addCondition = `只有新增 ${((target?.repricingRequiredEvidence || params.card?.repricingRequiredEvidence || ['EPS / Forward PE / 券商或官方證據上修']) as string[]).slice(0, 3).join('、')} 後，才重新開放買點。`;
+    confidence = Math.max(30, Math.min(confidence, 58));
+  } else if (marketStatus === 'market_breakdown_no_chase') {
+    action = crossedBase ? '減碼' : '不買';
+    positionSize = crossedBase ? '已有獲利先降 1/3–1/2，新倉暫停' : '停止新倉，等待指數站回關鍵均線';
+    entryZone = '大盤轉弱時不追價，只等個股回測支撐且大盤 Gate 轉回選股盤。';
+    addCondition = '加碼條件：大盤站回 MA20、個股守住支撐、MACD 不再轉弱。';
+    confidence = Math.max(25, Math.min(confidence, 52));
+  } else if (marketStatus === 'risk_off_reduce' && ['建議買進', '建議小量買進', '可分批買進', '突破追蹤買進', '突破後小量追蹤'].includes(action)) {
+    action = '等回測';
+    positionSize = '最多 0%–5% 試單，偏向等回測，不追紅 K';
+    entryZone = `只接受 ${cleanTradePlanText(entryDecision.buyZone)} 內的量縮回測，不追突破延伸。`;
+    addCondition = `大盤 Gate 回到選股盤，且 ${cleanTradePlanText(entryDecision.addCondition)}`;
+    confidence = Math.max(30, Math.min(confidence, 60));
+  } else if (marketStatus === 'selective_only' && action === '建議小量買進') {
+    action = '可分批買進';
+    positionSize = '選股盤先 5%–10% 分批，不一次買滿';
+    confidence = Math.max(45, Math.min(confidence, 72));
+  }
+  if (
+    constructiveMarket &&
+    hasScenarioRoom &&
+    !hasHardDataBlock &&
+    !hasHardChipBlock &&
+    (action === '等回測' || action === '不追價' || action === '不買')
+  ) {
+    if (action === '等回測' || action === '不追價') {
+      action = '突破追蹤買進';
+      positionSize = marketStatus === 'risk_on_can_attack' ? '先 3%–5% 小量追蹤，回測守住再加到 10%' : '先 3% 以內試單，等待選股盤確認';
+      entryZone = `非正式情境買點：${cleanTradePlanText(entryDecision.buyZone)}；若已站上壓力，第一筆只用追蹤倉，不一次買滿。`;
+      addCondition = `加碼條件：${cleanTradePlanText(entryDecision.addCondition)}；且大盤 Gate 維持 ${params.marketIndexSignal.label}。`;
+      confidence = Math.max(confidence, marketStatus === 'risk_on_can_attack' ? 62 : 56);
+    } else {
+      action = '等回測買點';
+      positionSize = '目前不追價；觸發回測/突破條件後先 3%–5% 試單';
+      entryZone = `可買條件：${cleanTradePlanText(entryDecision.buyZone)}`;
+      addCondition = `觸發後再買：${cleanTradePlanText(entryDecision.addCondition)}；若大盤 Gate 轉弱則取消。`;
+      confidence = Math.max(confidence, 54);
+    }
+  }
+  if (crossedBase && !crossedScenario && action === '建議小量買進') {
+    action = '突破追蹤買進';
+    positionSize = 'Base 已反映，只能 3%–5% 追蹤情境，不當正式買進';
+    entryZone = '等待情境 checklist 續達成；回測 Base/原壓力守住才可小量追蹤。';
+  }
+  const takeProfit =
+    scenarioTarget != null
+      ? `接近情境目標 ${formatMoney(scenarioTarget)} 分批停利；若已超過情境，直接轉熱股追蹤。`
+      : baseTarget != null
+        ? `接近 Base ${formatMoney(baseTarget)} 先停利或等重估。`
+        : '目標價待補，先用技術停利與停損管理。';
+  const exitCondition =
+    crossedScenario
+      ? target?.overTargetReason || params.card?.overTargetReason || '現價已高於情境目標，除非重估上修，否則不追價。'
+      : marketStatus === 'market_breakdown_no_chase'
+        ? params.marketIndexSignal.exitBias
+        : `跌破停損或大盤 Gate 轉弱時減碼；${params.marketIndexSignal.exitBias}`;
+  const exitTriggers: TradeDecision['exitTriggers'] = [
+    {
+      label: crossedScenario ? '情境已反映' : '停損失效',
+      condition: crossedScenario ? exitCondition : entryDecision.stopLoss,
+      action: crossedScenario ? '停利' : '出場',
+      status: crossedScenario ? 'active' : 'waiting',
+    },
+    {
+      label: '大盤 Gate 轉弱',
+      condition: params.marketIndexSignal.exitBias,
+      action: marketStatus === 'risk_off_reduce' || marketStatus === 'market_breakdown_no_chase' ? '減碼' : '不買',
+      status: marketStatus === 'risk_off_reduce' || marketStatus === 'market_breakdown_no_chase' ? 'active' : 'waiting',
+    },
+  ];
+  const entryTriggers = (entryDecision.entryTriggers || []).map((trigger) => {
+    if (action === '不買' || action === '減碼' || action === '停利' || action === '出場') {
+      return { ...trigger, status: 'blocked' as const, action: '不買' as const, positionSize };
+    }
+    if ((action === '等回測' || action === '等回測買點') && trigger.triggerType === 'buy_now') {
+      return { ...trigger, status: 'waiting' as const, action, positionSize };
+    }
+    return { ...trigger, action: trigger.status === 'active' ? action : trigger.action, positionSize: trigger.positionSize || positionSize };
+  });
+  return {
+    action,
+    positionSize,
+    entryZone: cleanTradePlanText(entryZone),
+    addCondition: cleanTradePlanText(addCondition),
+    stopLoss: cleanTradePlanText(entryDecision.stopLoss),
+    takeProfit,
+    exitCondition: cleanTradePlanText(exitCondition),
+    marketGateReason,
+    validUntil: entryDecision.validUntil,
+    confidence: Math.round(clamp(confidence, 0, 100)),
+    reasons,
+    entryTriggers: entryTriggers.map((trigger) => ({
+      ...trigger,
+      condition: cleanTradePlanText(trigger.condition),
+      invalidation: cleanTradePlanText(trigger.invalidation),
+    })),
+    exitTriggers: exitTriggers.map((trigger) => ({
+      ...trigger,
+      condition: cleanTradePlanText(trigger.condition),
+    })),
+  };
+}
+
+function buildMarketValuationAdjustment(params: {
+  marketIndexSignal: MarketIndexSignal;
+  targetCoverageStatus?: TargetCoverageStatus | null;
+  staleReason?: string | null;
+  scenarioPromotionGate?: RecommendationCard['scenarioPromotionGate'] | null;
+  brokerEvidenceSearchStatus?: RecommendationCard['brokerEvidenceSearchStatus'] | DeepDiveTargetSnapshot['brokerEvidenceSearchStatus'] | null;
+  globalThemeLeadLagSignal?: RecommendationCard['globalThemeLeadLagSignal'] | null;
+}): MarketValuationAdjustment {
+  const marketStatus = params.marketIndexSignal.status;
+  const coverage = params.targetCoverageStatus || null;
+  const scenarioScore = params.scenarioPromotionGate?.score ?? null;
+  const brokerStatus = params.brokerEvidenceSearchStatus?.status || null;
+  const brokerHit = brokerStatus === 'hit';
+  const usBrokerHit = (params.brokerEvidenceSearchStatus?.usBrokerCount || 0) > 0;
+  const leadLagSpread = params.globalThemeLeadLagSignal?.lagSpreadPct ?? null;
+  const leadLagSupports = leadLagSpread != null && leadLagSpread >= 5;
+  const crossedBase =
+    coverage === 'scenario_only' ||
+    params.staleReason === 'target_stale_due_price_crossed_base';
+  const crossedScenario =
+    coverage === 'over_base_and_scenario' ||
+    params.staleReason === 'target_stale_due_price_crossed_scenario';
+  const softScore =
+    (marketStatus === 'risk_on_can_attack' ? 2 : marketStatus === 'selective_only' ? 1 : 0) +
+    (crossedBase ? 1 : 0) +
+    (scenarioScore != null && scenarioScore >= 70 ? 1 : 0) +
+    (brokerHit ? 1 : 0) +
+    (usBrokerHit ? 1 : 0) +
+    (leadLagSupports ? 1 : 0);
+  const marketReratingStatus: MarketValuationAdjustment['marketReratingStatus'] =
+    marketStatus === 'market_data_missing'
+      ? 'missing'
+      : crossedScenario || marketStatus === 'risk_off_reduce' || marketStatus === 'market_breakdown_no_chase'
+        ? 'compressing'
+        : softScore >= 3
+          ? 'supports_multiple_expansion'
+          : 'neutral';
+  const repricingTriggerStrength: MarketValuationAdjustment['repricingTriggerStrength'] =
+    marketReratingStatus === 'missing'
+      ? 'missing'
+      : crossedScenario || marketReratingStatus === 'compressing'
+        ? 'blocked'
+        : softScore >= 4
+          ? 'high'
+          : softScore >= 2
+            ? 'medium'
+            : 'low';
+  const requiredEvidence = uniqueNarrativeLines(
+    [
+      '最新月營收、毛利率或 EPS 基底上修',
+      'Forward EPS 或 normalized PE/PB 有外部佐證',
+      '券商 consensus / target PE 上修',
+      '具名客戶、訂單、法說或官方公告補強',
+      brokerHit ? null : '美系券商 / FactSet / 鉅亨外資評等或 MoneyDJ 外資摘要命中',
+      scenarioScore != null && scenarioScore >= 85 ? null : '情境 checklist 達成率提高到可升 Base 門檻',
+      leadLagSupports ? null : '海外同族群 lead-lag 或台股族群資金輪動確認',
+    ],
+    5,
+  );
+  const marketReratingReason =
+    marketReratingStatus === 'supports_multiple_expansion'
+      ? `${params.marketIndexSignal.label}，且情境/券商/海外族群至少部分支持 target PE 重新檢查。`
+      : marketReratingStatus === 'compressing'
+        ? crossedScenario
+          ? '現價已高於情境目標，除非外部 EPS / target PE 證據上修，否則不把價格延伸視為新 Base。'
+          : `${params.marketIndexSignal.label} 偏保守，multiple expansion 需要更強外部證據。`
+        : marketReratingStatus === 'missing'
+          ? '大盤資料待補，暫不能用市場 rerating 支撐估值上修。'
+          : `${params.marketIndexSignal.label} 目前只支援選股與部位控管，尚不足以單獨支持估值上修。`;
+  const targetPeAdjustmentHint =
+    marketReratingStatus === 'supports_multiple_expansion'
+      ? '可提高重估優先級，但 target Forward PE 必須落在同業區間或有券商/官方 rerating 佐證。'
+      : marketReratingStatus === 'compressing'
+        ? '暫不提高 target PE；先等待回測、重估或外部證據。'
+        : '維持既有 target PE 假設，下一輪重估需補券商、月營收與 Forward EPS。';
+  return {
+    marketReratingStatus,
+    marketReratingReason,
+    targetPeAdjustmentHint,
+    repricingTriggerStrength,
+    requiredEvidence,
+    summary:
+      `${marketReratingReason} ${targetPeAdjustmentHint}`,
+    asOf: params.marketIndexSignal.asOf,
+  };
+}
+
+function applyMarketReratingToPromotionGate(
+  gate: RecommendationCard['scenarioPromotionGate'] | null | undefined,
+  adjustment: MarketValuationAdjustment,
+): RecommendationCard['scenarioPromotionGate'] | null {
+  if (!gate) return gate || null;
+  if (gate.status !== 'price_led_fundamentals_pending' || adjustment.marketReratingStatus !== 'supports_multiple_expansion') return gate;
+  return {
+    ...gate,
+    status: 'price_led_market_rerating_pending_evidence',
+    summary:
+      `股價與市場 rerating 已先反映情境，但仍需 ${adjustment.requiredEvidence.slice(0, 3).join('、')}，才能把情境重新計算成新 Base。`,
+    criticalChecks: [
+      ...gate.criticalChecks,
+      {
+        label: '市場 rerating 支持重估',
+        passed: true,
+        reason: adjustment.marketReratingReason,
+      },
+    ],
+  };
+}
+
+function applyMarketAwareDecisionToCard(card: RecommendationCard, marketIndexSignal: MarketIndexSignal): RecommendationCard {
+  const relativeStrengthSignal = buildRelativeStrengthSignal(card);
+  const entryDecision = card.entryDecision || null;
+  const tradeDecision = buildTradeDecision({
+    entryDecision,
+    marketIndexSignal,
+    card,
+    relativeStrengthSignal,
+  });
+  const marketValuationAdjustment = buildMarketValuationAdjustment({
+    marketIndexSignal,
+    targetCoverageStatus: card.targetCoverageStatus || null,
+    staleReason: card.staleReason || null,
+    scenarioPromotionGate: card.scenarioPromotionGate || null,
+    brokerEvidenceSearchStatus: card.brokerEvidenceSearchStatus || card.revaluationJobSummary?.brokerEvidenceSearchStatus || null,
+    globalThemeLeadLagSignal: card.globalThemeLeadLagSignal || null,
+  });
+  const scenarioPromotionGate = applyMarketReratingToPromotionGate(card.scenarioPromotionGate || null, marketValuationAdjustment);
+  const confidenceScoreBreakdown = {
+    bridgeEvidence: card.confidenceScoreBreakdown?.bridgeEvidence ?? Math.round((card.evidenceScore ?? 0.5) * 100),
+    freshness: card.confidenceScoreBreakdown?.freshness ?? 50,
+    scenario: card.confidenceScoreBreakdown?.scenario ?? card.scenarioChecklistProgress ?? 0,
+    entryReadiness: card.confidenceScoreBreakdown?.entryReadiness ?? Math.round((card.timingScore ?? 0.5) * 100),
+    upsideQuality:
+      card.confidenceScoreBreakdown?.upsideQuality ??
+      Math.round(Math.min(1, Math.max(0, card.cardPrimaryUpsidePct ?? card.expectedUpsidePct ?? 0) / 80) * 100),
+    sectorRotationImpact: card.confidenceScoreBreakdown?.sectorRotationImpact ?? Math.round((card.timingScore ?? 0.5) * 100),
+  };
+  return {
+    ...card,
+    confidenceScoreBreakdown,
+    marketGateStatus: marketIndexSignal.status,
+    marketIndexSignal,
+    marketValuationAdjustment,
+    scenarioPromotionGate,
+    scenarioPromotionStatus: scenarioPromotionGate?.status || card.scenarioPromotionStatus || null,
+    relativeStrengthSignal,
+    tradeDecision,
+    entryActionLabel: tradeDecision.action,
+    whyBuyNow:
+      tradeDecision.action === '建議買進' ||
+      tradeDecision.action === '建議小量買進' ||
+      tradeDecision.action === '可分批買進' ||
+      tradeDecision.action === '突破追蹤買進' ||
+      tradeDecision.action === '突破後小量追蹤'
+        ? `${tradeDecision.positionSize}；${tradeDecision.marketGateReason}`
+        : null,
+    whyExitNow:
+      tradeDecision.action === '減碼' || tradeDecision.action === '停利' || tradeDecision.action === '出場'
+        ? tradeDecision.exitCondition
+        : null,
+  };
+}
+
+function buildChipTimingScore(snapshot: DeepDiveChipSnapshot | null, sectorFlowScore: number | null) {
+  if (!snapshot) return sectorFlowScore;
+  let score = sectorFlowScore ?? 50;
+  const foreign5d = snapshot.institutionalFlows.foreign.net5d ?? 0;
+  const trust5d = snapshot.institutionalFlows.investmentTrust.net5d ?? 0;
+  const marginUsage = snapshot.marginFinancing.usageRatio ?? 0;
+  const shortUsage = snapshot.shortInterest.usageRatio ?? 0;
+  if (foreign5d > 0) score += 8;
+  if (trust5d > 0) score += 6;
+  if (marginUsage >= 24) score -= 10;
+  if (shortUsage >= 8) score -= 6;
+  return clamp(round(score, 0), 0, 100);
+}
+
+function unique<T>(items: T[]) {
+  return Array.from(new Set(items));
 }
 
 function shouldUseDemoFallback() {
@@ -114,6 +5884,7 @@ const RECOMMENDATION_STATE_LABELS: Record<RecommendationState, string> = {
 const SOURCE_TYPE_LABELS: Record<SourceCoverageView['sourceType'], string> = {
   official: '官方資料',
   financial: '財務數據',
+  broker_report: '外資 / 券商評等',
   public_research: '公開研究',
   investanchors: '定錨投筆',
   threads: 'Threads',
@@ -126,11 +5897,33 @@ const SOURCE_TYPE_LABELS: Record<SourceCoverageView['sourceType'], string> = {
   industry: '產業資料',
   podcast: 'Podcast',
   youtube: 'YouTube',
+  twse_insider: '董監持股揭露',
 };
 
-const REQUIRED_SOURCE_TYPES: Array<SourceCoverageView['sourceType']> = ['threads', 'bulltalk', 'ptt', 'kol', 'official', 'financial'];
+const REQUIRED_SOURCE_TYPES: Array<SourceCoverageView['sourceType']> = ['threads', 'bulltalk', 'ptt', 'kol', 'official', 'financial', 'twse_insider'];
+const CONNECTOR_KEYS = ['investanchors', 'threads', 'instagram', 'telegram', 'podcast', 'youtube', 'ptt', 'bulltalk', 'googlenews', 'anue', 'udn', 'mobile01', 'twse_insider'] as const;
+const SOCIAL_REFRESH_CONNECTORS = new Set(['investanchors', 'threads', 'instagram', 'telegram', 'podcast', 'youtube']);
+const HOURLY_SOCIAL_CONNECTORS = new Set(['threads', 'instagram', 'telegram']);
+const DAILY_KOL_CONNECTORS = new Set(['investanchors', 'podcast', 'youtube']);
+const HOURLY_SOCIAL_REFRESH_CADENCE_HOURS = 1;
+const DAILY_KOL_REFRESH_CADENCE_HOURS = 24;
+const CANONICAL_RECOMMENDATION_STATES = ['signal_candidate', 'partially_verified', 'validated_thesis', 'actionable_setup'] as const;
 
-const AGENCY_AGENT_ALLOWLIST = [
+function refreshCadenceHoursForConnector(connector: string) {
+  if (HOURLY_SOCIAL_CONNECTORS.has(connector)) return HOURLY_SOCIAL_REFRESH_CADENCE_HOURS;
+  if (DAILY_KOL_CONNECTORS.has(connector)) return DAILY_KOL_REFRESH_CADENCE_HOURS;
+  return SOCIAL_REFRESH_CONNECTORS.has(connector) ? 6 : 12;
+}
+
+function refreshTierForConnector(connector: string): NonNullable<ConnectorStatusView['refreshTier']> {
+  if (HOURLY_SOCIAL_CONNECTORS.has(connector)) return 'hourly_social';
+  if (DAILY_KOL_CONNECTORS.has(connector)) return 'daily_kol';
+  if (['twse_insider'].includes(connector)) return 'fundamentals';
+  if (['googlenews', 'anue', 'udn', 'mobile01', 'ptt', 'bulltalk'].includes(connector)) return 'market_data';
+  return 'other';
+}
+
+const DEFAULT_AGENCY_AGENT_ALLOWLIST: AgencyAgentProfile[] = [
   {
     profileKey: 'agency-agents/engineering-data-engineer',
     sourceLibrary: 'agency-agents',
@@ -162,19 +5955,7 @@ const AGENCY_AGENT_ALLOWLIST = [
     sourceUrl: 'https://github.com/msitarzewski/agency-agents/tree/main/engineering',
   },
   {
-    profileKey: 'agency-agents/testing-api-tester',
-    sourceLibrary: 'agency-agents',
-    mappedRole: 'Coordinator Agent',
-    sourceUrl: 'https://github.com/msitarzewski/agency-agents/tree/main/testing',
-  },
-  {
     profileKey: 'agency-agents/testing-evidence-collector',
-    sourceLibrary: 'agency-agents',
-    mappedRole: 'Evidence Verifier Agent',
-    sourceUrl: 'https://github.com/msitarzewski/agency-agents/tree/main/testing',
-  },
-  {
-    profileKey: 'agency-agents/testing-reality-checker',
     sourceLibrary: 'agency-agents',
     mappedRole: 'Evidence Verifier Agent',
     sourceUrl: 'https://github.com/msitarzewski/agency-agents/tree/main/testing',
@@ -186,6 +5967,827 @@ const AGENCY_AGENT_ALLOWLIST = [
     sourceUrl: 'https://github.com/msitarzewski/agency-agents/tree/main/testing',
   },
 ] as const;
+
+const DEFAULT_AGENCY_AGENT_POLICY: AgencyAgentPolicy = {
+  mode: 'prompt-library-only',
+  publishRecommendationsDirectly: false,
+  requiresHybridJudge: true,
+  requiresAgentFindingsLog: true,
+};
+
+function resolveAgencyAllowlistPath() {
+  const candidates = [
+    path.resolve(process.cwd(), '.agent', 'vendor', 'agency-agents', 'allowlist.json'),
+    path.resolve(process.cwd(), '..', '.agent', 'vendor', 'agency-agents', 'allowlist.json'),
+  ];
+  return candidates.find((candidate) => existsSync(candidate)) || null;
+}
+
+function loadAgencyAgentConfig(): { profiles: AgencyAgentProfile[]; policy: AgencyAgentPolicy; source: 'vendored_allowlist' | 'built_in_fallback' } {
+  const allowlistPath = resolveAgencyAllowlistPath();
+  if (!allowlistPath) {
+    return {
+      profiles: [...DEFAULT_AGENCY_AGENT_ALLOWLIST],
+      policy: { ...DEFAULT_AGENCY_AGENT_POLICY },
+      source: 'built_in_fallback',
+    };
+  }
+
+  try {
+    const parsed = JSON.parse(readFileSync(allowlistPath, 'utf8')) as {
+      library?: string;
+      policy?: Partial<AgencyAgentPolicy> & {
+        publish_recommendations_directly?: boolean;
+        requires_hybrid_judge?: boolean;
+        requires_agent_findings_log?: boolean;
+      };
+      profiles?: Array<{ profile_key?: string; mapped_role?: string; source_url?: string }>;
+    };
+    const sourceLibrary = String(parsed.library || 'agency-agents');
+    const profiles = (parsed.profiles || [])
+      .map((profile) => ({
+        profileKey: String(profile.profile_key || ''),
+        sourceLibrary,
+        mappedRole: String(profile.mapped_role || ''),
+        sourceUrl: String(profile.source_url || ''),
+      }))
+      .filter((profile) => profile.profileKey && profile.mappedRole);
+    if (profiles.length > 0) {
+      return {
+        profiles,
+        policy: {
+          mode: String(parsed.policy?.mode || DEFAULT_AGENCY_AGENT_POLICY.mode),
+          publishRecommendationsDirectly: Boolean(parsed.policy?.publishRecommendationsDirectly ?? parsed.policy?.publish_recommendations_directly ?? DEFAULT_AGENCY_AGENT_POLICY.publishRecommendationsDirectly),
+          requiresHybridJudge: Boolean(parsed.policy?.requiresHybridJudge ?? parsed.policy?.requires_hybrid_judge ?? DEFAULT_AGENCY_AGENT_POLICY.requiresHybridJudge),
+          requiresAgentFindingsLog: Boolean(parsed.policy?.requiresAgentFindingsLog ?? parsed.policy?.requires_agent_findings_log ?? DEFAULT_AGENCY_AGENT_POLICY.requiresAgentFindingsLog),
+        },
+        source: 'vendored_allowlist',
+      };
+    }
+  } catch {
+    // Fall back to built-in defaults if the vendored JSON is malformed.
+  }
+
+  return {
+    profiles: [...DEFAULT_AGENCY_AGENT_ALLOWLIST],
+    policy: { ...DEFAULT_AGENCY_AGENT_POLICY },
+    source: 'built_in_fallback',
+  };
+}
+
+const AGENCY_AGENT_CONFIG = loadAgencyAgentConfig();
+const AGENCY_AGENT_ALLOWLIST = AGENCY_AGENT_CONFIG.profiles;
+const AGENCY_AGENT_POLICY = AGENCY_AGENT_CONFIG.policy;
+
+const PASSIVE_COMPONENT_MLCC_THEME = {
+  themeKey: 'passive-components-mlcc',
+  themeName: '被動元件 / MLCC 漲價循環',
+  keywords: ['MLCC', '被動元件', '電感', 'TLVR', '鉭電容', '晶片電阻', '村田', '太陽誘電', '三星電機', '漲價', '交期', 'AI 電源'],
+  symbols: [
+    { symbol: '2327', name: '國巨', sector: 'Passive Components' },
+    { symbol: '2492', name: '華新科', sector: 'Passive Components' },
+    { symbol: '3026', name: '禾伸堂', sector: 'Passive Components' },
+    { symbol: '2472', name: '立隆電', sector: 'Passive Components' },
+    { symbol: '2375', name: '凱美', sector: 'Passive Components' },
+    { symbol: '3357', name: '臺慶科', sector: 'Passive Components' },
+    { symbol: '8042', name: '金山電', sector: 'Passive Components' },
+    { symbol: '6207', name: '雷科', sector: 'Passive Components' },
+    { symbol: '6224', name: '聚鼎', sector: 'Passive Components' },
+    { symbol: '4760', name: '勤凱', sector: 'Passive Components' },
+    { symbol: '3624', name: '光頡', sector: 'Passive Components' },
+    { symbol: '5328', name: '華容', sector: 'Passive Components' },
+    { symbol: '6127', name: '九豪', sector: 'Passive Components' },
+    { symbol: '6432', name: '今展科', sector: 'Passive Components' },
+  ],
+  externalEvidence: [
+    {
+      sourceName: 'FTNN 新聞網',
+      sourceUrl: 'https://www.ftnn.com.tw/news/543087',
+      summary: '被動元件因 AI 應用帶動需求，市場追蹤國巨、華新科、禾伸堂等漲價與資金回流。',
+    },
+    {
+      sourceName: '聯合新聞網 / 經濟日報',
+      sourceUrl: 'https://udn.com/news/story/7240/9442035',
+      summary: '太陽誘電跟進調升報價，市場將國巨、華新科、凱美、臺慶科等列為台系受惠供應鏈。',
+    },
+    {
+      sourceName: '鉅亨網',
+      sourceUrl: 'https://news.cnyes.com/news/print/6423983',
+      summary: 'AI server 推升 MLCC 與 TLVR 電感用量，高階被動元件供需缺口與報價上修成為產業主線。',
+    },
+  ],
+} as const;
+
+const ADDITIONAL_DISCOVERY_THEMES = [
+  {
+    themeKey: 'cpu-ai-pc',
+    themeName: 'CPU / AI PC 換機循環',
+    keywords: ['CPU', 'AI PC', 'x86', 'ARM PC', '筆電', 'PC', 'Intel', 'AMD', 'Lunar Lake', 'Arrow Lake', 'Zen', '換機'],
+    symbols: [
+      { symbol: '2356', name: '英業達', sector: 'AI PC / ODM' },
+      { symbol: '2324', name: '仁寶', sector: 'AI PC / ODM' },
+      { symbol: '2376', name: '技嘉', sector: 'AI PC / 主機板' },
+      { symbol: '2377', name: '微星', sector: 'AI PC / 主機板' },
+      { symbol: '2382', name: '廣達', sector: 'ODM' },
+      { symbol: '3231', name: '緯創', sector: 'ODM' },
+    ],
+  },
+  {
+    themeKey: 'mature-node-recovery',
+    themeName: '成熟製程與特殊製程復甦',
+    keywords: ['成熟製程', '28nm', '40nm', '55nm', '8吋', '12吋', 'MCU', 'PMIC', 'Driver IC', '晶圓代工', '補庫存'],
+    symbols: [
+      { symbol: '2303', name: '聯電', sector: 'Foundry' },
+      { symbol: '2344', name: '華邦電', sector: 'Specialty Memory' },
+      { symbol: '5347', name: '世界', sector: 'Foundry' },
+      { symbol: '3034', name: '聯詠', sector: 'Driver IC' },
+      { symbol: '2454', name: '聯發科', sector: 'IC Design' },
+      { symbol: '2379', name: '瑞昱', sector: 'IC Design' },
+    ],
+  },
+  {
+    themeKey: 'consumer-electronics-rebound',
+    themeName: '消費性電子補庫存',
+    keywords: ['消費性電子', '手機', 'NB', 'TV', '面板', '驅動IC', '補庫存', '換機潮', 'Android', 'iPhone'],
+    symbols: [
+      { symbol: '3034', name: '聯詠', sector: 'Driver IC' },
+      { symbol: '2454', name: '聯發科', sector: 'IC Design' },
+      { symbol: '3008', name: '大立光', sector: 'Optical' },
+      { symbol: '2356', name: '英業達', sector: 'ODM' },
+      { symbol: '2324', name: '仁寶', sector: 'ODM' },
+      { symbol: '2409', name: '友達', sector: 'Panel' },
+    ],
+  },
+  {
+    themeKey: 'quartz-frequency-components',
+    themeName: '石英 / 頻率元件落後補漲',
+    keywords: ['石英', '石英元件', '頻率元件', '晶振', '振盪器', 'TCXO', 'OCXO', 'quartz', 'crystal oscillator', '車用頻率', 'AI 伺服器時脈'],
+    symbols: [
+      { symbol: '3042', name: '晶技', sector: 'Quartz / Frequency Components' },
+      { symbol: '3221', name: '台嘉碩', sector: 'Quartz / Frequency Components' },
+      { symbol: '2484', name: '希華', sector: 'Quartz / Frequency Components' },
+      { symbol: '8183', name: '精星', sector: 'Quartz / Electronics Components' },
+    ],
+  },
+] as const;
+
+const PASSIVE_COMPONENT_MLCC_SYMBOL_SET: Set<string> = new Set(
+  PASSIVE_COMPONENT_MLCC_THEME.symbols.map((item) => item.symbol),
+);
+
+type DiscoveryThemeTaxonomy = typeof PASSIVE_COMPONENT_MLCC_THEME | (typeof ADDITIONAL_DISCOVERY_THEMES)[number];
+
+const GLOBAL_THEME_LEAD_LAG_BASKETS = [
+  {
+    themeKey: 'passive-components-mlcc',
+    themeName: '被動元件 / MLCC 海外領漲',
+    sourceRefs: PASSIVE_COMPONENT_MLCC_THEME.externalEvidence.map((item) => item.sourceUrl),
+    foreignPeers: [
+      { symbol: '6981.T', name: '村田製作所', market: 'JP' as const },
+      { symbol: '6976.T', name: '太陽誘電', market: 'JP' as const },
+      { symbol: '6762.T', name: 'TDK', market: 'JP' as const },
+      { symbol: '009150.KS', name: 'Samsung Electro-Mechanics', market: 'KR' as const },
+    ],
+    twMappedSymbols: PASSIVE_COMPONENT_MLCC_THEME.symbols.map((item) => item.symbol),
+    summary: '日韓被動元件與 MLCC 供應鏈若先反映漲價/交期拉長，台系國巨、華新科、禾伸堂等可列為落後補漲候選；此訊號只支撐 discovery，不支撐 Base 目標價。',
+  },
+  {
+    themeKey: 'quartz-frequency-components',
+    themeName: '石英 / 頻率元件海外領漲',
+    sourceRefs: [],
+    foreignPeers: [
+      { symbol: '6724.T', name: 'Seiko Epson', market: 'JP' as const },
+      { symbol: '6779.T', name: 'Nihon Dempa Kogyo', market: 'JP' as const },
+      { symbol: '6962.T', name: 'Daishinku', market: 'JP' as const },
+    ],
+    twMappedSymbols: ['3042', '3221', '2484', '8183'],
+    summary: '日本石英/頻率元件同業若因車用、AI server 時脈或通訊需求先上漲，台股晶技、台嘉碩、希華可列入落後補漲觀察；需等台股價量、月營收與客戶證據確認。',
+  },
+  {
+    themeKey: 'memory-rerating',
+    themeName: '記憶體海外比價',
+    sourceRefs: [],
+    foreignPeers: [
+      { symbol: 'MU', name: 'Micron', market: 'US' as const },
+      { symbol: '005930.KS', name: 'Samsung Electronics', market: 'KR' as const },
+      { symbol: '000660.KS', name: 'SK hynix', market: 'KR' as const },
+    ],
+    twMappedSymbols: ['2408', '2337', '2344'],
+    summary: '美韓記憶體同業若因 EPS 上修、PE rerating 或報價上漲先行，台系記憶體列入比價與重估候選；仍需本地月營收與毛利率驗證。',
+  },
+  {
+    themeKey: 'ai-server-global-lead',
+    themeName: 'AI Server 美股領漲',
+    sourceRefs: [],
+    foreignPeers: [
+      { symbol: 'SMCI', name: 'Super Micro Computer', market: 'US' as const },
+      { symbol: 'DELL', name: 'Dell Technologies', market: 'US' as const },
+      { symbol: 'HPE', name: 'Hewlett Packard Enterprise', market: 'US' as const },
+      { symbol: 'VRT', name: 'Vertiv', market: 'US' as const },
+    ],
+    twMappedSymbols: ['2382', '3231', '2356', '2301', '6669'],
+    summary: '美股 AI server、液冷與資料中心硬體若先行走強，台系 ODM/電源/散熱供應鏈列入落後補漲候選；需用月營收、CSP 訂單能見度與毛利率驗證。',
+  },
+  {
+    themeKey: 'optical-cpo-global-lead',
+    themeName: '光通訊 / CPO 海外領漲',
+    sourceRefs: [],
+    foreignPeers: [
+      { symbol: 'COHR', name: 'Coherent', market: 'US' as const },
+      { symbol: 'LITE', name: 'Lumentum', market: 'US' as const },
+      { symbol: 'IIVI', name: 'II-VI / Coherent legacy', market: 'US' as const },
+      { symbol: 'AVGO', name: 'Broadcom', market: 'US' as const },
+    ],
+    twMappedSymbols: ['3008', '3450', '3081', '4979', '3363'],
+    summary: '美股光通訊、CPO、矽光子與高速網通零組件走強時，台股光學/光通訊映射標的進熱股追蹤；若估值已反映，需券商或 EPS 上修才可重估。',
+  },
+  {
+    themeKey: 'advanced-packaging-asic-global-lead',
+    themeName: 'ASIC / 先進封裝海外領漲',
+    sourceRefs: [],
+    foreignPeers: [
+      { symbol: 'NVDA', name: 'NVIDIA', market: 'US' as const },
+      { symbol: 'AVGO', name: 'Broadcom', market: 'US' as const },
+      { symbol: 'AMD', name: 'AMD', market: 'US' as const },
+      { symbol: 'BESI.AS', name: 'BESI', market: 'US' as const },
+    ],
+    twMappedSymbols: ['2330', '3711', '2454', '3661', '3450'],
+    summary: '美股 AI ASIC/GPU 與先進封裝設備若先行 rerating，台股先進製程、封測與 IC 設計進候選；正式推薦仍需 forward EPS 與 peer multiple 支撐。',
+  },
+  {
+    themeKey: 'mature-node-consumer-global-lead',
+    themeName: '成熟製程 / 消費電子復甦',
+    sourceRefs: [],
+    foreignPeers: [
+      { symbol: 'QCOM', name: 'Qualcomm', market: 'US' as const },
+      { symbol: 'AAPL', name: 'Apple', market: 'US' as const },
+      { symbol: 'SONY', name: 'Sony', market: 'US' as const },
+      { symbol: '6758.T', name: 'Sony Group', market: 'JP' as const },
+    ],
+    twMappedSymbols: ['2454', '2303', '3034', '2409', '4938'],
+    summary: '美日消費電子、AI PC、手機與成熟製程需求若先行回溫，台股 Driver IC、MCU、PMIC、面板與代工列入觀察；需月營收與庫存回補證據確認。',
+  },
+] as const;
+
+function passiveComponentMlccTextMatches(text: string) {
+  const normalized = text.toLowerCase();
+  return PASSIVE_COMPONENT_MLCC_THEME.keywords.some((keyword) => normalized.includes(keyword.toLowerCase()));
+}
+
+function passiveComponentMlccDocMatches(doc: Row) {
+  const docSymbols = ((doc.symbols as string[]) || []).map(String);
+  if (docSymbols.some((symbol) => PASSIVE_COMPONENT_MLCC_SYMBOL_SET.has(symbol))) return true;
+  return passiveComponentMlccTextMatches(`${String(doc.title || '')} ${String(doc.summary || '')} ${String(doc.content_text || '')}`);
+}
+
+function discoveryThemeDocMatches(theme: DiscoveryThemeTaxonomy, doc: Row) {
+  const symbolSet = new Set<string>(theme.symbols.map((item) => String(item.symbol)));
+  const docSymbols = ((doc.symbols as string[]) || []).map(String);
+  if (docSymbols.some((symbol) => symbolSet.has(symbol))) return true;
+  const text = `${String(doc.title || '')} ${String(doc.summary || '')} ${String(doc.content_text || '')}`.toLowerCase();
+  return theme.keywords.some((keyword) => text.includes(keyword.toLowerCase()));
+}
+
+function discoveryThemeDocSymbols(theme: DiscoveryThemeTaxonomy, docs: Row[]) {
+  const symbolSet = new Set<string>(theme.symbols.map((item) => String(item.symbol)));
+  return new Set(docs.flatMap((doc) => (((doc.symbols as string[]) || []).map(String).filter((symbol) => symbolSet.has(symbol)))));
+}
+
+function globalLeadLagBasketForTheme(themeKey: string | null | undefined) {
+  return GLOBAL_THEME_LEAD_LAG_BASKETS.find((basket) => basket.themeKey === themeKey) || null;
+}
+
+function globalLeadLagSignalForSymbol(symbol: string | null | undefined): RecommendationCard['globalThemeLeadLagSignal'] {
+  const normalizedSymbol = compactText(symbol || '').toUpperCase();
+  if (!normalizedSymbol) return null;
+  const basket = GLOBAL_THEME_LEAD_LAG_BASKETS.find((item) => item.twMappedSymbols.some((twSymbol) => twSymbol === normalizedSymbol));
+  if (!basket) return null;
+  return {
+    themeKey: basket.themeKey,
+    themeName: basket.themeName,
+    foreignPeers: basket.foreignPeers.map((peer) => ({
+      symbol: peer.symbol,
+      name: peer.name,
+      market: peer.market,
+      movePct3d: null,
+      movePct5d: null,
+      movePct10d: null,
+    })),
+    twMappedSymbols: [...basket.twMappedSymbols],
+    foreignMovePct: null,
+    twMovePct: null,
+    lagSpreadPct: null,
+    sourceRefs: [...basket.sourceRefs],
+    asOf: '',
+    sourceStatus: 'pending_price_refresh',
+    summary: `${basket.summary} 目前先建立海外 peer basket 與台股映射，等待 data-collect 補入 3/5/10 日漲跌與量能後再計入排序。`,
+  };
+}
+
+function discoveryNameForSymbol(symbol: string) {
+  const passive = PASSIVE_COMPONENT_MLCC_THEME.symbols.find((item) => item.symbol === symbol);
+  if (passive) return passive;
+  for (const theme of ADDITIONAL_DISCOVERY_THEMES) {
+    const match = theme.symbols.find((item) => item.symbol === symbol);
+    if (match) return match;
+  }
+  return { symbol, name: symbol, sector: 'Overseas Lead-Lag Watch' };
+}
+
+function globalLeadLagCapitalFlowSignals(themeKey: string, twTrend: number) {
+  const basket = globalLeadLagBasketForTheme(themeKey);
+  if (!basket) return {};
+  return {
+    overseas_lead_lag_signal: true,
+    overseas_signal_status: 'pending_price_refresh',
+    overseas_signal_summary: basket.summary,
+    foreign_peer_basket: basket.foreignPeers.map((peer) => ({ symbol: peer.symbol, name: peer.name, market: peer.market })),
+    foreign_move_pct: null,
+    tw_move_pct: null,
+    lead_lag_spread_pct: null,
+    overseas_momentum_as_of: null,
+    tw_mapped_symbols: [...basket.twMappedSymbols],
+    candidate_only_until_bridge_pass: true,
+    market_trend_score: twTrend,
+  };
+}
+
+function globalLeadLagThemeSourceCoverage(
+  basket: (typeof GLOBAL_THEME_LEAD_LAG_BASKETS)[number],
+): SourceCoverageView[] {
+  const refs = basket.sourceRefs.length > 0 ? basket.sourceRefs : [null];
+  return mergeSourceCoverage(
+    refs.map((sourceUrl, index) =>
+      mapSourceCoverageItem({
+        source_name: sourceUrl ? '海外同族群公開來源' : '海外同族群映射表',
+        source_type: 'industry',
+        summary:
+          index === 0
+            ? basket.summary
+            : `${basket.themeName} 海外 peer basket 補充來源，用於落後補漲偵測，不支撐正式 Base 目標價。`,
+        source_url: sourceUrl,
+        source_timestamp: null,
+        symbols: [...basket.twMappedSymbols],
+        confidence: sourceUrl ? 0.58 : 0.36,
+        weight: 0.12,
+        verification_status: '未證實',
+      }),
+    ),
+  );
+}
+
+function buildGlobalLeadLagThemeCard(
+  basket: (typeof GLOBAL_THEME_LEAD_LAG_BASKETS)[number],
+  windowType: ThemeHeatCard['windowType'],
+  asOfDate: string,
+): ThemeHeatCard {
+  const sourceCoverage = globalLeadLagThemeSourceCoverage(basket);
+  const capitalFlowSignals = globalLeadLagCapitalFlowSignals(basket.themeKey, 0.52);
+  return {
+    themeKey: basket.themeKey,
+    themeName: basket.themeName,
+    windowType,
+    marketRegime: 'overseas-lead-lag-watch',
+    heatScore: 0.62,
+    capitalFlowSignals: {
+      ...capitalFlowSignals,
+      source: 'runtime-global-lead-lag-fallback',
+    },
+    relatedSymbols: [...basket.twMappedSymbols],
+    evidenceCount: sourceCoverage.length,
+    asOfDate,
+    verificationStatus: '未證實',
+    sourceCoverage,
+    missingSources: ['海外 peer 即時漲跌、台股對應族群成交量、官方/月營收驗證'],
+    latestSourceAt: latestSourceTimestamp(sourceCoverage),
+    foreignPeerBasket: basket.foreignPeers.map((peer) => ({
+      symbol: peer.symbol,
+      name: peer.name,
+      market: peer.market,
+    })),
+    leadLagSpreadPct: null,
+    overseasMomentumAsOf: null,
+  };
+}
+
+function normalizeGlobalLeadLagThemeCard(theme: ThemeHeatCard): ThemeHeatCard {
+  const basket = globalLeadLagBasketForTheme(theme.themeKey);
+  if (!basket) return theme;
+  const fallback = buildGlobalLeadLagThemeCard(basket, theme.windowType, theme.asOfDate);
+  const capitalFlowSignals = {
+    ...(theme.capitalFlowSignals || {}),
+    ...globalLeadLagCapitalFlowSignals(theme.themeKey, toFiniteNumber(theme.capitalFlowSignals?.market_trend_score, 0.52)),
+  };
+  return {
+    ...theme,
+    themeName: theme.themeName || fallback.themeName,
+    capitalFlowSignals,
+    relatedSymbols: unique([...(theme.relatedSymbols || []), ...basket.twMappedSymbols]),
+    sourceCoverage: theme.sourceCoverage.length > 0 ? theme.sourceCoverage : fallback.sourceCoverage,
+    missingSources: unique([...(theme.missingSources || []), ...fallback.missingSources]).slice(0, 6),
+    latestSourceAt: theme.latestSourceAt || fallback.latestSourceAt,
+    foreignPeerBasket:
+      theme.foreignPeerBasket && theme.foreignPeerBasket.length > 0
+        ? theme.foreignPeerBasket
+        : fallback.foreignPeerBasket,
+    leadLagSpreadPct: theme.leadLagSpreadPct ?? fallback.leadLagSpreadPct,
+    overseasMomentumAsOf: theme.overseasMomentumAsOf ?? fallback.overseasMomentumAsOf,
+  };
+}
+
+function ensureGlobalLeadLagThemeCards(
+  themes: ThemeHeatCard[],
+  windowType: ThemeHeatCard['windowType'],
+  asOfDate: string,
+) {
+  const byKey = new Map<string, ThemeHeatCard>();
+  for (const theme of themes) {
+    byKey.set(theme.themeKey, normalizeGlobalLeadLagThemeCard(theme));
+  }
+  for (const basket of GLOBAL_THEME_LEAD_LAG_BASKETS) {
+    if (!byKey.has(basket.themeKey)) {
+      byKey.set(basket.themeKey, buildGlobalLeadLagThemeCard(basket, windowType, asOfDate));
+    }
+  }
+  const requiredKeys = new Set<string>(GLOBAL_THEME_LEAD_LAG_BASKETS.map((basket) => basket.themeKey));
+  const sorted = Array.from(byKey.values()).sort((a, b) => b.heatScore - a.heatScore);
+  if (sorted.length <= 12) return sorted;
+  const required = sorted.filter((theme) => requiredKeys.has(theme.themeKey));
+  const others = sorted.filter((theme) => !requiredKeys.has(theme.themeKey)).slice(0, Math.max(0, 12 - required.length));
+  return [...required, ...others].sort((a, b) => b.heatScore - a.heatScore);
+}
+
+type ThemeContentRegistryEntry = {
+  themeKey: string;
+  themeName: string;
+  thesis: string;
+  whyNow: string;
+  trackingFocus: string;
+  validationRules: string[];
+  relatedSymbols: string[];
+  symbolRoles: Record<string, string>;
+  sourceCoverage: SourceCoverageView[];
+  missingSources: string[];
+  overseasLeadLagSummary?: string | null;
+};
+
+function registryIndustrySource(params: {
+  sourceName: string;
+  summary: string;
+  sourceUrl?: string | null;
+  symbols: string[];
+  confidence?: number;
+  verificationStatus?: VerificationStatus;
+}): SourceCoverageView {
+  return mapSourceCoverageItem({
+    source_name: params.sourceName,
+    source_type: 'industry',
+    summary: params.summary,
+    source_url: params.sourceUrl || null,
+    source_timestamp: null,
+    symbols: params.symbols,
+    confidence: params.confidence ?? 0.36,
+    weight: 0.08,
+    verification_status: params.verificationStatus || '未證實',
+  });
+}
+
+function mergeThemeRegistryEntries(entries: ThemeContentRegistryEntry[]) {
+  const byKey = new Map<string, ThemeContentRegistryEntry>();
+  for (const entry of entries) {
+    const current = byKey.get(entry.themeKey);
+    if (!current) {
+      byKey.set(entry.themeKey, entry);
+      continue;
+    }
+    byKey.set(entry.themeKey, {
+      ...current,
+      themeName: current.themeName || entry.themeName,
+      thesis: current.thesis || entry.thesis,
+      whyNow: current.whyNow || entry.whyNow,
+      trackingFocus: current.trackingFocus || entry.trackingFocus,
+      validationRules: unique([...current.validationRules, ...entry.validationRules]).slice(0, 8),
+      relatedSymbols: unique([...current.relatedSymbols, ...entry.relatedSymbols]),
+      symbolRoles: { ...entry.symbolRoles, ...current.symbolRoles },
+      sourceCoverage: mergeSourceCoverage([...current.sourceCoverage, ...entry.sourceCoverage]),
+      missingSources: unique([...current.missingSources, ...entry.missingSources]).slice(0, 8),
+      overseasLeadLagSummary: current.overseasLeadLagSummary || entry.overseasLeadLagSummary || null,
+    });
+  }
+  return byKey;
+}
+
+function buildThemeContentRegistry() {
+  const seedGroups = new Map<string, ResearchSeed[]>();
+  for (const seed of TW_STORY_RESEARCH_SEEDS) {
+    const current = seedGroups.get(seed.themeKey) || [];
+    seedGroups.set(seed.themeKey, [...current, seed]);
+  }
+
+  const seedEntries: ThemeContentRegistryEntry[] = Array.from(seedGroups.entries()).map(([themeKey, seeds]) => {
+    const symbols = unique(seeds.map((seed) => seed.symbol));
+    return {
+      themeKey,
+      themeName: seeds[0]?.themeName || themeKey,
+      thesis: `${seeds[0]?.themeName || themeKey} 聚焦 ${symbols.join('、')} 的營收/估值/籌碼驗證，不把題材熱度直接視為買進。`,
+      whyNow: '此主題已在雷達或研究種子中出現，需用最新價格、月營收、券商/官方與社群來源交叉驗證。',
+      trackingFocus: '追蹤個股是否通過 Base bridge、情境 checklist、進場 Gate 與來源 freshness。',
+      validationRules: ['月營收或 EPS 方向', '外部券商/官方/法說佐證', '籌碼與技術進場條件', '現價是否已反映 Base/情境'],
+      relatedSymbols: symbols,
+      symbolRoles: Object.fromEntries(seeds.map((seed) => [seed.symbol, seed.catalystSummary])),
+      sourceCoverage: mergeSourceCoverage(
+        seeds.flatMap((seed) =>
+          seed.socialSignals.map((signal) =>
+            mapSourceCoverageItem({
+              source_name: signal.sourceName,
+              source_type: sourceTypeFromName(signal.sourceType, signal.sourceName),
+              summary: signal.summary,
+              source_url: signal.sourceUrl || null,
+              source_timestamp: null,
+              symbols: [seed.symbol],
+              confidence: signal.confidence,
+              weight: communityWeightForSource(sourceTypeFromName(signal.sourceType, signal.sourceName)),
+              verification_status: signal.confidence >= 0.6 ? '部分證實' : '未證實',
+            }),
+          ),
+        ),
+      ),
+      missingSources: ['官方資料', '財務數據', '券商/外資報告', '最新社群命中'],
+      overseasLeadLagSummary: null,
+    };
+  });
+
+  const passiveSymbols = PASSIVE_COMPONENT_MLCC_THEME.symbols.map((item) => item.symbol);
+  const passiveEntry: ThemeContentRegistryEntry = {
+    themeKey: PASSIVE_COMPONENT_MLCC_THEME.themeKey,
+    themeName: PASSIVE_COMPONENT_MLCC_THEME.themeName,
+    thesis: 'AI server 與高階電源設計推升 MLCC / TLVR / 電感用量，若日韓同業報價與交期先反映，台系被動元件進入落後補漲觀察。',
+    whyNow: '海外被動元件同業與台股族群熱度同時升溫，但仍需確認台廠 ASP、月營收與毛利率是否跟上。',
+    trackingFocus: '以國巨、華新科、禾伸堂等台系供應鏈為主，追蹤報價、交期、月營收與券商 EPS 上修。',
+    validationRules: ['MLCC / TLVR 報價或交期上修', '月營收與毛利率改善', '外資/券商 EPS 或 target PE 上修', '籌碼與技術未過熱'],
+    relatedSymbols: passiveSymbols,
+    symbolRoles: Object.fromEntries(PASSIVE_COMPONENT_MLCC_THEME.symbols.map((item) => [item.symbol, `${item.name}：${item.sector} 映射候選`])),
+    sourceCoverage: mergeSourceCoverage(
+      PASSIVE_COMPONENT_MLCC_THEME.externalEvidence.map((item) =>
+        mapSourceCoverageItem({
+          source_name: item.sourceName,
+          source_type: 'news',
+          summary: item.summary,
+          source_url: item.sourceUrl,
+          source_timestamp: null,
+          symbols: passiveSymbols,
+          confidence: 0.62,
+          weight: 0.14,
+          verification_status: '部分證實',
+        }),
+      ),
+    ),
+    missingSources: ['公司月營收', '毛利率/EPS 上修', '外資/券商完整報告', '籌碼技術確認'],
+    overseasLeadLagSummary: globalLeadLagBasketForTheme(PASSIVE_COMPONENT_MLCC_THEME.themeKey)?.summary || null,
+  };
+
+  const discoveryEntries: ThemeContentRegistryEntry[] = ADDITIONAL_DISCOVERY_THEMES.map((theme) => {
+    const symbols = theme.symbols.map((item) => item.symbol);
+    const basket = globalLeadLagBasketForTheme(theme.themeKey);
+    return {
+      themeKey: theme.themeKey,
+      themeName: theme.themeName,
+      thesis: `${theme.themeName} 屬於 discovery 題材，先把 ${symbols.join('、')} 放進候選池追蹤，不直接支撐正式推薦。`,
+      whyNow: `關鍵字包含 ${theme.keywords.slice(0, 6).join('、')}；只要社群、券商或價量出現命中，就觸發候選與重估。`,
+      trackingFocus: '追蹤題材熱度是否能轉成月營收、EPS、Forward PE 或券商 consensus 的上修。',
+      validationRules: ['至少一個外部來源直接命中', '官方/月營收或券商證據跟上', '技術/籌碼 Gate 未封殺', '若現價已反映則只列熱股追蹤'],
+      relatedSymbols: symbols,
+      symbolRoles: Object.fromEntries(theme.symbols.map((item) => [item.symbol, `${item.name}：${item.sector} 題材映射候選`])),
+      sourceCoverage: [
+        registryIndustrySource({
+          sourceName: 'StockInsider 主題 taxonomy',
+          summary: `${theme.themeName} 由關鍵字與台股供應鏈映射建立，需 live sources 驗證後才能升級。`,
+          symbols,
+        }),
+      ],
+      missingSources: ['Threads / PTT / Telegram 命中', '官方/月營收', '券商/外資報告', '籌碼技術確認'],
+      overseasLeadLagSummary: basket?.summary || null,
+    };
+  });
+
+  const leadLagEntries: ThemeContentRegistryEntry[] = GLOBAL_THEME_LEAD_LAG_BASKETS.map((basket) => ({
+    themeKey: basket.themeKey,
+    themeName: basket.themeName,
+    thesis: basket.summary,
+    whyNow: '海外同族群若先行 rerating，而台股映射標的尚未反映，系統會列入 early/scenario/hot tracking，不直接升正式推薦。',
+    trackingFocus: '追蹤海外 peer 3/5/10 日漲幅、台股落後幅度、券商 EPS/目標價上修與台股月營收是否跟上。',
+    validationRules: ['海外 peer 價量刷新', '台股映射標的價量尚未完全反映', '券商/官方或財務證據確認', '正式推薦仍需估值與進場 Gate'],
+    relatedSymbols: [...basket.twMappedSymbols],
+    symbolRoles: Object.fromEntries(basket.twMappedSymbols.map((symbol) => [symbol, `${discoveryNameForSymbol(symbol).name}：海外同族群 lead-lag 台股映射`])),
+    sourceCoverage: globalLeadLagThemeSourceCoverage(basket),
+    missingSources: ['海外 peer 即時漲跌', '台股月營收/EPS 驗證', '券商 consensus', '籌碼技術確認'],
+    overseasLeadLagSummary: basket.summary,
+  }));
+
+  return mergeThemeRegistryEntries([...seedEntries, passiveEntry, ...discoveryEntries, ...leadLagEntries]);
+}
+
+let themeContentRegistryCache: ReturnType<typeof buildThemeContentRegistry> | null = null;
+
+function themeContentRegistry() {
+  themeContentRegistryCache ||= buildThemeContentRegistry();
+  return themeContentRegistryCache;
+}
+
+function themeContentRegistryEntry(themeKey: string) {
+  return themeContentRegistry().get(themeKey) || null;
+}
+
+function themeHeatCardFromRegistry(entry: ThemeContentRegistryEntry, windowType: ThemeHeatCard['windowType'] = 'daily'): ThemeHeatCard {
+  const sourceCoverage = mergeSourceCoverage(entry.sourceCoverage);
+  const latestSourceAt = latestSourceTimestamp(sourceCoverage);
+  return {
+    themeKey: entry.themeKey,
+    themeName: entry.themeName,
+    windowType,
+    marketRegime: null,
+    heatScore: 0,
+    capitalFlowSignals: {
+      source: 'theme-content-registry',
+      registry_derived: true,
+      overseas_lead_lag_signal: Boolean(entry.overseasLeadLagSummary),
+    },
+    relatedSymbols: [...entry.relatedSymbols],
+    evidenceCount: sourceCoverage.length,
+    asOfDate: latestSourceAt ? asIsoDate(latestSourceAt) : '',
+    verificationStatus: latestSourceAt && sourceCoverage.some((item) => item.verificationStatus === '部分證實' || item.verificationStatus === '已證實') ? '部分證實' : '未證實',
+    sourceCoverage,
+    missingSources: unique([...entry.missingSources, ...findMissingSources(sourceCoverage)]).slice(0, 8),
+    latestSourceAt,
+  };
+}
+
+function mergeThemeWithRegistry(theme: ThemeHeatCard | null, entry: ThemeContentRegistryEntry | null, themeKey: string): ThemeHeatCard | null {
+  if (!theme && !entry) return null;
+  const base = theme || (entry ? themeHeatCardFromRegistry(entry) : null);
+  if (!base) return null;
+  if (!entry) return base;
+  const sourceCoverage = mergeSourceCoverage([...base.sourceCoverage, ...entry.sourceCoverage]);
+  const relatedSymbols = unique([...base.relatedSymbols, ...entry.relatedSymbols]);
+  return {
+    ...base,
+    themeKey: base.themeKey || themeKey,
+    themeName: base.themeName || entry.themeName,
+    relatedSymbols,
+    evidenceCount: Math.max(base.evidenceCount || 0, sourceCoverage.length),
+    sourceCoverage,
+    missingSources: unique([...base.missingSources, ...entry.missingSources, ...findMissingSources(sourceCoverage)]).slice(0, 10),
+    latestSourceAt: base.latestSourceAt || latestSourceTimestamp(sourceCoverage),
+    foreignPeerBasket: base.foreignPeerBasket || globalLeadLagBasketForTheme(themeKey)?.foreignPeers.map((peer) => ({
+      symbol: peer.symbol,
+      name: peer.name,
+      market: peer.market,
+    })),
+  };
+}
+
+function themeSourceCoverageFromDocuments(docs: Row[], themeSymbols: Set<string>): SourceCoverageView[] {
+  return mergeSourceCoverage(
+    docs.map((doc) => {
+      const sourceEntity = Array.isArray(doc.source_entities) ? (doc.source_entities[0] as Row | undefined) : (doc.source_entities as Row | undefined);
+      const symbols = Array.isArray(doc.symbols)
+        ? (doc.symbols as unknown[]).map(String).filter((symbol) => themeSymbols.has(symbol))
+        : [];
+      return mapSourceCoverageItem({
+        source_name: sourceEntity?.display_name || doc.platform || '來源文件',
+        source_type: sourceTypeFromName(doc.platform, sourceEntity?.display_name || doc.title),
+        summary: compactText(doc.summary || doc.title) || '來源命中此主題關聯股票。',
+        source_url: doc.document_url || null,
+        source_timestamp: doc.published_at || doc.collected_at || nowIso(),
+        symbols,
+        confidence: doc.confidence == null ? 0.42 : toFiniteNumber(doc.confidence, 0.42),
+        weight: communityWeightForSource(sourceTypeFromName(doc.platform, sourceEntity?.display_name || doc.title)),
+        verification_status: verificationStatusFromConfidence(doc.confidence == null ? 0.42 : toFiniteNumber(doc.confidence, 0.42)),
+      });
+    }),
+  );
+}
+
+function buildThemeBrief(theme: ThemeHeatCard, entry: ThemeContentRegistryEntry | null): NonNullable<ThemeDetailPayload['themeBrief']> {
+  const leadLag = entry?.overseasLeadLagSummary || (theme.capitalFlowSignals?.overseas_signal_summary ? String(theme.capitalFlowSignals.overseas_signal_summary) : null);
+  return {
+    thesis:
+      entry?.thesis ||
+      `${theme.themeName} 目前在雷達中被歸為 ${theme.verificationStatus} 主題；系統會先追蹤關聯股票，不把題材熱度直接當成正式買點。`,
+    whyNow:
+      entry?.whyNow ||
+      `熱度 ${theme.heatScore.toFixed(2)}，關聯股票 ${theme.relatedSymbols.join('、')}；需確認來源、估值與進場 Gate 是否跟上。`,
+    trackingFocus:
+      entry?.trackingFocus ||
+      '追蹤最新來源命中、月營收/財務、券商/外資與籌碼技術是否形成閉環。',
+    validationRules:
+      entry?.validationRules?.length
+        ? entry.validationRules
+        : ['社群/新聞命中', '官方/月營收或財務佐證', '券商/外資報告', '籌碼與技術進場 Gate'],
+    overseasLeadLagSummary: leadLag,
+  };
+}
+
+function buildThemeEvidenceMatrix(
+  sourceCoverage: SourceCoverageView[],
+  missingSources: string[],
+): NonNullable<ThemeDetailPayload['evidenceMatrix']> {
+  const hitRows = sourceCoverage.slice(0, 12).map((source) => ({
+    sourceGroup: source.sourceName,
+    sourceType: source.sourceType,
+    status: 'hit' as const,
+    summary: source.summary || `${source.sourceName} 已命中此主題。`,
+    symbols: source.symbols,
+    sourceUrl: source.sourceUrl,
+    latestAt: source.sourceTimestamp,
+  }));
+  const missingRows = missingSources.slice(0, Math.max(0, 8 - hitRows.length)).map((sourceName) => ({
+    sourceGroup: sourceName,
+    sourceType: 'news' as SourceCoverageView['sourceType'],
+    status: 'missing' as const,
+    summary: `${sourceName} 尚未形成可引用命中；保留為下一輪補抓來源。`,
+    symbols: [],
+    sourceUrl: null,
+    latestAt: null,
+  }));
+  return [...hitRows, ...missingRows];
+}
+
+function buildThemeNextRefreshPlan(
+  theme: ThemeHeatCard,
+  entry: ThemeContentRegistryEntry | null,
+  missingSources: string[],
+): NonNullable<ThemeDetailPayload['nextRefreshPlan']> {
+  const plans: NonNullable<ThemeDetailPayload['nextRefreshPlan']> = [];
+  if (theme.foreignPeerBasket?.length || entry?.overseasLeadLagSummary) {
+    plans.push({
+      sourceGroup: '海外同族群 lead-lag',
+      action: '刷新海外 peer 與台股映射標的 3/5/10 日價量。',
+      reason: '判斷台股是否仍落後海外同族群，僅作候選與重估觸發。',
+      status: theme.leadLagSpreadPct == null ? 'waiting_source' : 'complete',
+    });
+  }
+  plans.push({
+    sourceGroup: '官方/月營收/財務',
+    action: '補抓月營收、EPS、毛利率與 Forward PE。',
+    reason: '只有財務或官方證據上修，才可支撐 Base/情境重估。',
+    status: missingSources.some((item) => /官方|財務|月營收/.test(item)) ? 'scheduled' : 'complete',
+  });
+  plans.push({
+    sourceGroup: '券商/外資報告',
+    action: '搜尋外資評等、FactSet、MoneyDJ/鉅亨/UDN 目標價與 EPS 調整。',
+    reason: '券商目標價或 EPS 上修可成為重估 ledger 的佐證。',
+    status: missingSources.some((item) => /券商|外資|公開研究/.test(item)) ? 'scheduled' : 'complete',
+  });
+  plans.push({
+    sourceGroup: '社群 / PTT / Telegram / Threads',
+    action: '掃描主題關鍵字與關聯股票提及。',
+    reason: '社群只作 discovery 與候選池更新，不能單獨支撐正式 Base。',
+    status: missingSources.some((item) => /Threads|PTT|Telegram|股市爆料|KOL/.test(item)) ? 'scheduled' : 'complete',
+  });
+  return plans.slice(0, 5);
+}
+
+function buildThemeTrackedSymbols(params: {
+  theme: ThemeHeatCard;
+  entry: ThemeContentRegistryEntry | null;
+  recommendations: RecommendationCard[];
+  stories: ThemeDetailPayload['supportingStories'];
+  docs: Row[];
+  sourceCoverage: SourceCoverageView[];
+}): NonNullable<ThemeDetailPayload['trackedSymbols']> {
+  return params.theme.relatedSymbols.map((symbol) => {
+    const rec = params.recommendations.find((item) => item.symbol === symbol) || null;
+    const story = params.stories.find((item) => item.symbol === symbol) || null;
+    const docHits = params.docs.filter((doc) => Array.isArray(doc.symbols) && (doc.symbols as unknown[]).map(String).includes(symbol));
+    const sourceRefs = unique([
+      ...docHits.map((doc) => String(doc.document_url || '')).filter(Boolean),
+      ...params.sourceCoverage.filter((source) => source.symbols.includes(symbol)).map((source) => source.sourceUrl || '').filter(Boolean),
+    ]).slice(0, 5);
+    const name = rec?.chineseName || rec?.name || resolveChineseName(symbol, discoveryNameForSymbol(symbol).name) || discoveryNameForSymbol(symbol).name;
+    return {
+      symbol,
+      name,
+      roleInTheme:
+        params.entry?.symbolRoles[symbol] ||
+        story?.catalystSummary ||
+        `${name || symbol} 為 ${params.theme.themeName} 的台股映射候選，需等待來源、估值與進場 Gate 驗證。`,
+      displayBucket: rec?.displayBucket || rec?.recommendationLifecycleStage || (rec ? 'candidate' : 'theme_candidate'),
+      targetCoverageStatus: rec?.targetCoverageStatus || null,
+      entryActionLabel: rec?.entryActionLabel || rec?.tradeDecision?.action || null,
+      whyNotFormal:
+        rec?.whyNotFormal ||
+        rec?.whyNotRecommended ||
+        (rec?.displayBucket === 'formal' ? null : '尚未通過完整 Base bridge、估值 sanity、重估 freshness 與進場 Gate。'),
+      sourceRefs,
+      latestEvidence:
+        story?.title ||
+        compactText(docHits[0]?.summary || docHits[0]?.title) ||
+        params.entry?.trackingFocus ||
+        null,
+    };
+  });
+}
 
 const TW_STORY_RESEARCH_SEEDS = [
   {
@@ -417,16 +7019,16 @@ const TW_STORY_RESEARCH_SEEDS = [
   {
     symbol: '2337', name: '旺宏', market: 'TW' as const, sector: 'Memory',
     prices: [102, 103, 104, 105, 106, 107, 107, 108, 108, 108.5], volume: 5000000, sourceKey: 'api.twse.price', source: 'market-price-adapter',
-    storyType: 'inventory_reversal' as StoryType,
+    storyType: 'shortage_pricing' as StoryType,
     themeKey: 'memory-cycle', themeName: '記憶體循環反轉',
-    thesisTitle: '旺宏 NOR Flash 受惠車用/工業需求復甦，循環低點後展望樂觀',
-    thesisSummary: 'NOR Flash 車用與工業庫存去化接近尾聲，旺宏作為龍頭廠受益於循環反轉與利基市場需求回溫。',
-    catalystSummary: '車用 NOR Flash 需求回溫、庫存去化完成、ASP 回升。',
-    expectationScore: 0.74, reportTitle: 'NOR Flash 循環反轉展望', reportSummary: '車用與工業 NOR Flash 需求回溫，旺宏進入循環上升段。',
+    thesisTitle: 'eMMC 供需失衡：MLC NAND 全面 EOL，旺宏成為全球最後 MLC 供應商',
+    thesisSummary: 'Samsung、SK Hynix、Kioxia、Micron 陸續停產 MLC NAND，旺宏在低容量 eMMC 長尾市場的供應地位大幅抬升，市場開始重新定價 eMMC 獲利能力。',
+    catalystSummary: 'eMMC 報價大漲、MLC 退出加速、低容量 eMMC 訂單轉單到旺宏。',
+    expectationScore: 0.74, reportTitle: 'eMMC 供需失衡與 MLC EOL 展望', reportSummary: 'MLC NAND 全面 EOL 後，旺宏有機會吃到低容量 eMMC 轉單與價格重估。',
     socialSignals: [], companyEvents: [],
     transcript: { eventName: '', excerpt: '', sourceUrl: 'https://mops.twse.com.tw/', managementTone: 'bullish' as const, catalystMentions: ['NOR Flash', 'automotive', 'industrial', 'inventory'] },
-    revenue: { monthlyRevenue: 0, yoyGrowth: 0, momGrowth: 0, sourceUrl: 'https://mops.twse.com.tw/mops/web/t21sc04_ifrs' },
-    fundamentals: { epsTtm: 0, grossMargin: 0, operatingMargin: 0, peRatio: 0, pbRatio: 0, revenueRunRate: 0, sourceUrl: 'https://mops.twse.com.tw/mops/web/t164sb04' },
+    revenue: { monthlyRevenue: 2400000000, yoyGrowth: 12, momGrowth: 0, sourceUrl: 'https://mops.twse.com.tw/mops/web/t21sc04_ifrs' },
+    fundamentals: { epsTtm: -1.77, grossMargin: 17.8, operatingMargin: -12.8, peRatio: -55.9, pbRatio: 4.2, revenueRunRate: 28800000000, sourceUrl: 'https://mops.twse.com.tw/mops/web/t164sb04' },
     valuationCases: [],
   },
   {
@@ -764,42 +7366,20 @@ const CHINESE_NAME_MAP: Record<string, string> = {
   '6669': '緯穎',
 };
 
-// Estimated catalyst dates (next earnings / key event)
-const CATALYST_DATE_MAP: Record<string, string> = {
-  '2330': '2026-04-17',
-  '2454': '2026-05-15',
-  '2382': '2026-04-30',
-  '6669': '2026-04-30',
-  '3324': '2026-05-15',
-  '3017': '2026-05-15',
-  '6230': '2026-05-30',
-  '2421': '2026-05-30',
-  '2337': '2026-06-30',
-  '2408': '2026-05-15',
-  '2344': '2026-05-15',
-  '2356': '2026-04-30',
-  '3231': '2026-04-30',
-  '2303': '2026-05-15',
-  '5347': '2026-05-15',
-  '3711': '2026-04-30',
-  '2449': '2026-05-30',
-  '2345': '2026-04-17',
-  '5388': '2026-06-30',
-  '6285': '2026-06-30',
-  '2308': '2026-04-30',
-  '2301': '2026-05-15',
-  '4958': '2026-05-30',
-  '3037': '2026-04-30',
-  '3189': '2026-05-30',
-  '3034': '2026-05-15',
-  '2379': '2026-05-15',
-  '6415': '2026-05-30',
-  '3533': '2026-05-15',
-  '3008': '2026-04-17',
-};
+function containsChinese(value: string | null | undefined) {
+  if (!value) return false;
+  return /[\u4e00-\u9fff]/.test(value);
+}
 
-// Per-stock research overrides: target prices derived from each stock's unique market story
-const SEED_RESEARCH_OVERRIDES: Record<string, {
+function resolveChineseName(symbol: string, stockName: string | null | undefined) {
+  if (CHINESE_NAME_MAP[symbol]) return CHINESE_NAME_MAP[symbol];
+  if (containsChinese(stockName)) return String(stockName);
+  const seed = TW_STORY_RESEARCH_SEEDS.find((item) => item.symbol === symbol);
+  if (seed && containsChinese(seed.name)) return seed.name;
+  return null;
+}
+
+type SeedResearchOverride = {
   thesisTitle?: string;
   thesisSummary?: string;
   catalystSummary?: string;
@@ -813,8 +7393,19 @@ const SEED_RESEARCH_OVERRIDES: Record<string, {
   peRatio: number;
   monthlyRevenue: number;
   revenueYoyGrowth: number;
-}> = {
+};
+
+// Historical research fixtures are not point-in-time facts. They remain readable
+// only for fixture migration work and are never consulted by production views.
+const RETIRED_NON_AUTHORITATIVE_RESEARCH_FIXTURES: Record<string, SeedResearchOverride> = {
   // ===== 先進封裝 =====
+  '2330': {
+    thesisTitle: 'AI 晶圓代工需求與 CoWoS 產能仍可能被市場低估',
+    thesisSummary: '依據法說、公開研究摘要與供應鏈交叉檢查，台積電的 AI 相關需求仍強於市場先前預期，3nm / 5nm 與 CoWoS / SoIC 先進封裝占比持續墊高。研究推估 2026 年先進製程與先進封裝相關營收占比可由 18% 提升至 24%，帶動毛利率與營益率維持高檔。',
+    catalystSummary: '法說更新 CoWoS / SoIC 產能、AI ASIC 與 GPU 客戶需求延續、月營收 run-rate 維持高檔。',
+    targetPrice: 1050, upsidePrice: 1180, invalidationPrice: 900,
+    epsTtm: 38.4, grossMargin: 53.1, operatingMargin: 42.4, peRatio: 26.8, monthlyRevenue: 228400000000, revenueYoyGrowth: 24.1,
+  },
   '2454': {
     thesisTitle: '邊緣 AI SoC 產品組合升級，帶動聯發科毛利率擴張與 EPS 上修',
     thesisSummary: '聯發科天璣 9400/9500 系列導入更多端側 AI 功能，推動旗艦 SoC 佔比從 35% 提升至 45%+，預估 ASP 提升 15-20%。搭配 Wi-Fi 7 晶片與車用 SoC 新品放量，2026 年 EPS 預估從 NT$65 提升至 NT$85+。以 22x PE 估算，12 個月目標價 NT$1,870。',
@@ -876,10 +7467,10 @@ const SEED_RESEARCH_OVERRIDES: Record<string, {
   },
   '2408': {
     thesisTitle: 'HBM 產能排擠效應帶動 DDR5 供需改善，南亞科進入獲利回升軌道',
-    thesisSummary: 'AI server 對 HBM 的爆發性需求排擠三大原廠 DDR 產能，DDR5 供需持續改善。南亞科已完成 DDR5 1b 製程轉換，良率突破 80%，預估 2026 年 DDR5 營收佔比從 30% 提升至 55%。ASP 回升 + 產品組合改善下，2026 EPS 預估從虧損轉盈至 NT$8+。以 30x 週期 PE 估算，目標價 NT$300。',
-    catalystSummary: 'DDR5 ASP 季增 8-12%、1b 製程良率持續改善、AI server 帶動企業端 DDR5 需求加速。',
-    targetPrice: 300, upsidePrice: 350, invalidationPrice: 180,
-    epsTtm: -3.5, grossMargin: 15.0, operatingMargin: -8.0, peRatio: -68.0, monthlyRevenue: 5800000000, revenueYoyGrowth: 25.0,
+    thesisSummary: '南亞科 2026Q1 自結營收 490.87 億元、毛利率 67.9%、營益率 61.3%、EPS 8.41，受惠 DRAM ASP 季增超過七十位數百分比與產品組合改善。公司揭露 DDR5 約占 10% 且可視需求彈性增加，客製化 AI UWIO 已開始貢獻營收；四大客戶私募認購與 LTA 提升訂單能見度，使 DDR4 / DDR5 供給吃緊有機會成為 Base，而 HBM 投片排擠效應延長則是上行情境。',
+    catalystSummary: 'Q1 2026 EPS 8.41、毛利率 67.9%、DDR5 約占 10%、AI UWIO 開始貢獻營收、四大客戶私募認購與 LTA 訂單能見度。',
+    targetPrice: 320, upsidePrice: 423.5, invalidationPrice: 128,
+    epsTtm: 12.0, grossMargin: 67.9, operatingMargin: 61.3, peRatio: -68.0, monthlyRevenue: 16362333333, revenueYoyGrowth: 582.9,
   },
   '2344': {
     thesisTitle: '華邦電 DRAM/NOR Flash 雙引擎復甦，車規認證帶動 ASP 溢價',
@@ -1029,10 +7620,74 @@ const SEED_RESEARCH_OVERRIDES: Record<string, {
     targetPrice: 2750, upsidePrice: 3100, invalidationPrice: 1900,
     epsTtm: 95.0, grossMargin: 58.0, operatingMargin: 42.0, peRatio: 24.7, monthlyRevenue: 4800000000, revenueYoyGrowth: 12.0,
   },
+  '3450': {
+    thesisTitle: '聯鈞切入 CPO / COS 封裝與 LD 封測，高毛利光通訊業務開始成為主線',
+    thesisSummary: '聯鈞在 AOC、COS 封裝與雷射二極體封測具備技術與產能優勢。若 800G / 1.6T 光模組與 CPO 導入持續驗證，高毛利光通訊營收佔比有機會從 2025 年不到兩成提升到 2026-2027 年的 24-32%，帶動 EPS 從約 NT$5.5 上修至 Base 約 NT$13.86。以 50x forward PE 估算，Base 目標價約 NT$693。',
+    catalystSummary: 'AOC / COS 出貨放量、Broadcom 相關訂單驗證、800G / 1.6T 光模組滲透率提升、產能利用率持續墊高。',
+    targetPrice: 693, upsidePrice: 1074, invalidationPrice: 471,
+    epsTtm: 5.5, grossMargin: 30.5, operatingMargin: 13.2, peRatio: 62.8, monthlyRevenue: 715000000, revenueYoyGrowth: 13.4,
+  },
 };
+
+const SEED_RESEARCH_OVERRIDES: Readonly<Record<string, SeedResearchOverride>> = Object.freeze({});
+
+void RETIRED_NON_AUTHORITATIVE_RESEARCH_FIXTURES;
 
 function profileKeyForRole(role: string) {
   return AGENCY_AGENT_ALLOWLIST.find((profile) => profile.mappedRole === role)?.profileKey || null;
+}
+
+function validationMessageForProfile(profileKey: string, agentRole: string, reason: 'not_allowlisted' | 'role_mismatch') {
+  if (reason === 'not_allowlisted') {
+    return `external profile ${profileKey} is not allowlisted by the vendored agency-agents policy`;
+  }
+  return `external profile ${profileKey} is mapped to a different internal role and cannot execute as ${agentRole}`;
+}
+
+export function validateExternalAgentProfile(profileKey: string | null | undefined, agentRole: string) {
+  if (!profileKey) {
+    return {
+      ok: true as const,
+      source: 'internal_only' as const,
+      publishRecommendationsDirectly: false,
+      mappedRole: agentRole,
+      policy: AGENCY_AGENT_POLICY,
+      allowlistSource: AGENCY_AGENT_CONFIG.source,
+    };
+  }
+
+  const profile = AGENCY_AGENT_ALLOWLIST.find((item) => item.profileKey === profileKey) || null;
+  if (!profile) {
+    return {
+      ok: false as const,
+      status: 403,
+      code: 'profile_not_allowlisted' as const,
+      reason: validationMessageForProfile(profileKey, agentRole, 'not_allowlisted'),
+      allowlistSource: AGENCY_AGENT_CONFIG.source,
+      publishRecommendationsDirectly: AGENCY_AGENT_POLICY.publishRecommendationsDirectly,
+    };
+  }
+  if (profile.mappedRole !== agentRole) {
+    return {
+      ok: false as const,
+      status: 403,
+      code: 'profile_role_mismatch' as const,
+      reason: validationMessageForProfile(profileKey, agentRole, 'role_mismatch'),
+      allowlistSource: AGENCY_AGENT_CONFIG.source,
+      publishRecommendationsDirectly: AGENCY_AGENT_POLICY.publishRecommendationsDirectly,
+      expectedRole: profile.mappedRole,
+    };
+  }
+  return {
+    ok: true as const,
+    source: 'vendored_allowlist' as const,
+    publishRecommendationsDirectly: AGENCY_AGENT_POLICY.publishRecommendationsDirectly,
+    mappedRole: profile.mappedRole,
+    sourceLibrary: profile.sourceLibrary,
+    sourceUrl: profile.sourceUrl,
+    allowlistSource: AGENCY_AGENT_CONFIG.source,
+    policy: AGENCY_AGENT_POLICY,
+  };
 }
 
 function normalizeRecommendationState(value: unknown): RecommendationState {
@@ -1050,6 +7705,12 @@ function verificationStatusFromState(state: RecommendationState): VerificationSt
   return '已證實';
 }
 
+function verificationStatusFromStoryState(state: StoryThesisState): VerificationStatus {
+  if (state === 'validated_thesis' || state === 'actionable_setup') return '已證實';
+  if (state === 'partially_verified') return '部分證實';
+  return '未證實';
+}
+
 function sourceTypeFromName(sourceType: unknown, sourceName: unknown): SourceCoverageView['sourceType'] {
   const typeRaw = String(sourceType || '').toLowerCase();
   const nameRaw = String(sourceName || '').toLowerCase();
@@ -1057,14 +7718,121 @@ function sourceTypeFromName(sourceType: unknown, sourceName: unknown): SourceCov
   if (typeRaw === 'threads' || nameRaw.includes('threads')) return 'threads';
   if (typeRaw === 'instagram' || nameRaw.includes('instagram')) return 'instagram';
   if (typeRaw === 'telegram' || nameRaw.includes('telegram') || nameRaw.includes('t.me')) return 'telegram';
+  if (typeRaw === 'podcast' || nameRaw.includes('podcast') || nameRaw.includes('apple podcast')) return 'podcast';
+  if (typeRaw === 'youtube' || nameRaw.includes('youtube') || nameRaw.includes('影音')) return 'youtube';
   if (nameRaw.includes('爆料同學會')) return 'bulltalk';
   if (typeRaw === 'ptt' || nameRaw.includes('ptt')) return 'ptt';
-  if (typeRaw === 'kol' || nameRaw.includes('股癌') || nameRaw.includes('投資癮') || nameRaw.includes('股市隱者') || nameRaw.includes('定錨投筆')) return 'kol';
+  if (typeRaw === 'twse_insider' || nameRaw.includes('董監') || nameRaw.includes('內部人')) return 'twse_insider';
+  if (
+    typeRaw === 'kol' ||
+    nameRaw.includes('股癌') ||
+    nameRaw.includes('投資癮') ||
+    nameRaw.includes('股市隱者') ||
+    nameRaw.includes('定錨投筆') ||
+    nameRaw.includes('財經皓角') ||
+    nameRaw.includes('m觀點') ||
+    nameRaw.includes('財經m平方') ||
+    nameRaw.includes('財報狗')
+  ) return 'kol';
   if (typeRaw === 'official') return 'official';
   if (typeRaw === 'financial') return 'financial';
+  if (typeRaw === 'broker_report' || nameRaw.includes('外資評等') || nameRaw.includes('券商') || nameRaw.includes('投顧')) return 'broker_report';
   if (typeRaw === 'public_research' || nameRaw.includes('research')) return 'public_research';
   if (typeRaw === 'industry') return 'industry';
   return 'news';
+}
+
+function sourceDocTimestamp(raw: Row) {
+  return String(raw.published_at || raw.source_timestamp || raw.collected_at || '');
+}
+
+function isSourceDocNoise(raw: {
+  platform?: unknown;
+  title?: unknown;
+  summary?: unknown;
+  content_text?: unknown;
+  document_url?: unknown;
+}) {
+  const platform = String(raw.platform || '').toLowerCase();
+  const title = compactText(raw.title);
+  const summary = compactText(raw.summary);
+  const content = compactText(raw.content_text).slice(0, 800);
+  const url = String(raw.document_url || '').toLowerCase();
+  const combined = `${title} ${summary} ${content}`.toLowerCase();
+
+  if (!combined) return true;
+  if (platform === 'investanchors') {
+    if (url === 'https://investanchors.com/' || url === 'https://investanchors.com') return true;
+    if (url.includes('/user/')) return true;
+    if (
+      /登入|註冊|會員專區|訂閱方案|常見問題|會員權益|tag檢索|全文檢索|留言檢索|總覽|週報/.test(`${title} ${summary}`) &&
+      !/\b[2-9]\d{3}\b/.test(`${title} ${summary} ${content}`)
+    ) {
+      return true;
+    }
+  }
+  return /登入\s*\/\s*註冊|會員專區|訂閱方案|常見問題|觀看完整內容|首頁導覽|tag檢索/.test(combined);
+}
+
+function looksLikeDirectSymbolHit(raw: {
+  symbol: string;
+  symbols?: string[];
+  platform?: unknown;
+  title?: unknown;
+  summary?: unknown;
+  content_text?: unknown;
+  document_url?: unknown;
+}) {
+  const symbol = String(raw.symbol || '').toUpperCase();
+  if (!symbol) return false;
+  if (isSourceDocNoise(raw)) return false;
+  const tagged = Array.isArray(raw.symbols) ? raw.symbols.map(String).includes(symbol) : false;
+  const text = `${compactText(raw.title)} ${compactText(raw.summary)} ${compactText(raw.content_text).slice(0, 1200)}`;
+  const symbolRegex = new RegExp(`(^|[^\\d])${symbol}([^\\d]|$)`);
+  const yearRegex = new RegExp(`${symbol}\\s*年`);
+  const url = String(raw.document_url || '');
+  const urlMatched = url.includes(`/${symbol}`) || url.includes(`=${symbol}`) || url.toUpperCase().includes(symbol);
+  return (tagged || (symbolRegex.test(text) && !yearRegex.test(text)) || urlMatched) && !isSourceDocNoise(raw);
+}
+
+function sourceDocMetadataValue(raw: Row, key: string) {
+  const metadata = (raw.metadata as Row | undefined) || {};
+  const value = metadata[key];
+  return value == null ? null : String(value);
+}
+
+function sourceDocNumericMetadataValue(raw: Row, key: string) {
+  const value = sourceDocMetadataValue(raw, key);
+  if (value == null) return null;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function isSymbolScopedDirectDoc(raw: Row, symbol: string) {
+  const crawlMode = sourceDocMetadataValue(raw, 'crawl_mode');
+  const querySymbol = sourceDocMetadataValue(raw, 'query_symbol');
+  const matchType = sourceDocMetadataValue(raw, 'match_type');
+  return (
+    crawlMode === 'symbol_scoped' &&
+    querySymbol === symbol &&
+    (matchType === 'direct_symbol' || matchType === 'alias')
+  );
+}
+
+function directSourcePriority(raw: Row) {
+  const sourceType = sourceTypeFromName(raw.platform, raw.title);
+  const directHitStrength = sourceDocNumericMetadataValue(raw, 'direct_hit_strength') ?? 0;
+  const typePriority =
+    sourceType === 'investanchors'
+      ? 5
+      : sourceType === 'threads'
+        ? 4
+        : sourceType === 'official' || sourceType === 'financial' || sourceType === 'twse_insider'
+          ? 3
+          : sourceType === 'public_research' || sourceType === 'industry'
+            ? 2
+            : 1;
+  return typePriority * 10 + directHitStrength;
 }
 
 function mapSourceCoverageItem(raw: Row): SourceCoverageView {
@@ -1084,9 +7852,10 @@ function mapSourceCoverageItem(raw: Row): SourceCoverageView {
     sourceUrl: sourceUrl ? String(sourceUrl) : null,
     sourceTimestamp: sourceTimestamp ? String(sourceTimestamp) : null,
     symbols: Array.isArray(symbols) ? symbols.map((item) => String(item)) : [],
+    directHit: raw.direct_hit == null ? undefined : Boolean(raw.direct_hit),
     verificationStatus: (verificationStatusRaw as VerificationStatus | undefined) || (confidence >= 0.65 ? '已證實' : confidence >= 0.35 ? '部分證實' : '未證實'),
     confidence,
-    weight: round(clamp(toFiniteNumber(raw.weight, sourceType === 'official' || sourceType === 'financial' ? 0.22 : 0.12)), 4),
+    weight: round(clamp(toFiniteNumber(raw.weight, sourceType === 'official' || sourceType === 'financial' || sourceType === 'twse_insider' ? 0.22 : 0.12)), 4),
   };
 }
 
@@ -1117,14 +7886,345 @@ function latestSourceTimestamp(sourceCoverage: SourceCoverageView[]) {
     .sort((a, b) => b.localeCompare(a))[0] || null;
 }
 
+function freshnessFromTimestamp(timestamp: string | null, staleHours = 72): SignalFreshness {
+  if (!timestamp) return 'missing';
+  const ms = new Date(timestamp).getTime();
+  if (!Number.isFinite(ms) || ms <= 0) return 'missing';
+  return Date.now() - ms > staleHours * 60 * 60 * 1000 ? 'stale' : 'fresh';
+}
+
+function nullIfMissingMetric(value: unknown) {
+  const num = toFiniteNumber(value, Number.NaN);
+  return Number.isFinite(num) && num > 0 ? num : null;
+}
+
+function nullIfZeroMetric(value: unknown) {
+  const num = toFiniteNumber(value, Number.NaN);
+  return Number.isFinite(num) && num !== 0 ? num : null;
+}
+
+function seedResearchForSymbol(symbol: string | null | undefined) {
+  if (!symbol) return null;
+  return TW_STORY_RESEARCH_SEEDS.find((item) => item.symbol === symbol) || null;
+}
+
+function fallbackBridgeSeedForSymbol(symbol: string | null | undefined) {
+  if (!symbol) return null;
+  return (
+    stockSpecificBridgeSeed(symbol, 'base') ||
+    stockSpecificBridgeSeed(symbol, 'upside') ||
+    stockSpecificBridgeSeed(symbol, 'invalidation') ||
+    null
+  );
+}
+
+function pickFirstMeaningfulMetric<T>(
+  rows: Row[] | null | undefined,
+  extractor: (row: Row) => T | null,
+) {
+  for (const row of rows || []) {
+    const value = extractor(row);
+    if (value != null) return { row, value };
+  }
+  return null;
+}
+
+function pointInTimeMetricDate(row: Row | null | undefined) {
+  const value = compactText(row?.as_of_date || '');
+  if (!/^\d{4}-\d{2}-\d{2}$/u.test(value)) return null;
+  const milliseconds = Date.parse(`${value}T00:00:00Z`);
+  if (!Number.isFinite(milliseconds)) return null;
+  return new Date(milliseconds).toISOString().slice(0, 10) === value ? value : null;
+}
+
+function buildRevenueSignalSeedFallback(symbol: string | null | undefined) {
+  const override = symbol ? SEED_RESEARCH_OVERRIDES[symbol] : null;
+  const seedResearch = seedResearchForSymbol(symbol);
+  const bridgeSeed = fallbackBridgeSeedForSymbol(symbol);
+  const baselineMonthlyRevenue =
+    bridgeSeed?.baselineRevenueAnnual != null && Number.isFinite(bridgeSeed.baselineRevenueAnnual) && bridgeSeed.baselineRevenueAnnual > 0
+      ? round(bridgeSeed.baselineRevenueAnnual / 12, 0)
+      : null;
+  const projectedMonthlyRevenue =
+    bridgeSeed?.revenueAnnual != null && Number.isFinite(bridgeSeed.revenueAnnual) && bridgeSeed.revenueAnnual > 0
+      ? round(bridgeSeed.revenueAnnual / 12, 0)
+      : null;
+  const yoyFromSeedResearch =
+    seedResearch?.revenue.yoyGrowth != null && Number.isFinite(seedResearch.revenue.yoyGrowth) && seedResearch.revenue.yoyGrowth !== 0
+      ? seedResearch.revenue.yoyGrowth
+      : null;
+  const momFromSeedResearch =
+    seedResearch?.revenue.momGrowth != null && Number.isFinite(seedResearch.revenue.momGrowth) && seedResearch.revenue.momGrowth !== 0
+      ? seedResearch.revenue.momGrowth
+      : null;
+
+  return {
+    monthlyRevenue:
+      nullIfMissingMetric(override?.monthlyRevenue) ??
+      nullIfMissingMetric(seedResearch?.revenue.monthlyRevenue) ??
+      baselineMonthlyRevenue ??
+      projectedMonthlyRevenue,
+    yoyGrowth:
+      (override?.revenueYoyGrowth != null && Number.isFinite(override.revenueYoyGrowth) && override.revenueYoyGrowth !== 0
+        ? override.revenueYoyGrowth
+        : null) ??
+      yoyFromSeedResearch,
+    momGrowth: momFromSeedResearch,
+  };
+}
+
+function buildFundamentalSeedFallback(symbol: string | null | undefined) {
+  const override = symbol ? SEED_RESEARCH_OVERRIDES[symbol] : null;
+  const seedResearch = seedResearchForSymbol(symbol);
+  const bridgeSeed = fallbackBridgeSeedForSymbol(symbol);
+  const fallbackRevenueAnnual =
+    nullIfMissingMetric(seedResearch?.fundamentals.revenueRunRate) ??
+    nullIfMissingMetric(bridgeSeed?.baselineRevenueAnnual) ??
+    nullIfMissingMetric(bridgeSeed?.revenueAnnual) ??
+    (nullIfMissingMetric(override?.monthlyRevenue) != null ? Number(nullIfMissingMetric(override?.monthlyRevenue)! * 12) : null);
+
+  return {
+    epsTtm:
+      nullIfZeroMetric(override?.epsTtm) ??
+      nullIfZeroMetric(seedResearch?.fundamentals.epsTtm) ??
+      null,
+    grossMargin:
+      nullIfMissingMetric(override?.grossMargin) ??
+      nullIfMissingMetric(seedResearch?.fundamentals.grossMargin) ??
+      nullIfMissingMetric(bridgeSeed?.baselineGrossMarginPct) ??
+      nullIfMissingMetric(bridgeSeed?.grossMarginPct) ??
+      null,
+    operatingMargin:
+      nullIfZeroMetric(override?.operatingMargin) ??
+      nullIfZeroMetric(seedResearch?.fundamentals.operatingMargin) ??
+      nullIfZeroMetric(bridgeSeed?.baselineOperatingMarginPct) ??
+      nullIfZeroMetric(bridgeSeed?.operatingMarginPct) ??
+      null,
+    peRatio:
+      nullIfZeroMetric(override?.peRatio) ??
+      nullIfZeroMetric(seedResearch?.fundamentals.peRatio) ??
+      nullIfZeroMetric(bridgeSeed?.baselinePeRatio) ??
+      null,
+    pbRatio:
+      nullIfMissingMetric(seedResearch?.fundamentals.pbRatio) ??
+      nullIfMissingMetric(bridgeSeed?.baselinePbRatio) ??
+      null,
+    revenueRunRate: fallbackRevenueAnnual,
+  };
+}
+
+function rowHasMeaningfulRevenueSignal(row: Row | null | undefined) {
+  if (!row) return false;
+  return nullIfMissingMetric(row.monthly_revenue) != null;
+}
+
+function rowHasMeaningfulFundamentalSnapshot(row: Row | null | undefined) {
+  if (!row) return false;
+  return [
+    nullIfZeroMetric(row.eps_ttm),
+    nullIfMissingMetric(row.gross_margin),
+    nullIfZeroMetric(row.operating_margin),
+    nullIfZeroMetric(row.pe_ratio),
+    nullIfMissingMetric(row.pb_ratio),
+    nullIfMissingMetric(row.revenue_run_rate),
+  ].some((value) => value != null);
+}
+
+function buildRevenueSignalViewFromRows(
+  rows: Row[] | null | undefined,
+  _symbol: string | undefined,
+  _fallbackAsOf: string | null,
+) {
+  const datedRows = (rows || []).filter((row) => pointInTimeMetricDate(row) !== null);
+  const revenueMetric = pickFirstMeaningfulMetric(datedRows, (row) => nullIfMissingMetric(row.monthly_revenue));
+  const yoyMetric = pickFirstMeaningfulMetric(datedRows, (row) => {
+    const value = row.yoy_growth == null ? null : toFiniteNumber(row.yoy_growth, Number.NaN);
+    return Number.isFinite(value ?? Number.NaN) && value !== 0 ? value : null;
+  });
+  const momMetric = pickFirstMeaningfulMetric(datedRows, (row) => {
+    const value = row.mom_growth == null ? null : toFiniteNumber(row.mom_growth, Number.NaN);
+    return Number.isFinite(value ?? Number.NaN) && value !== 0 ? value : null;
+  });
+  const monthlyRevenue = revenueMetric?.value ?? null;
+  const yoyGrowth = yoyMetric?.value ?? null;
+  const momGrowth = momMetric?.value ?? null;
+  const hasAny = monthlyRevenue != null || yoyGrowth != null || momGrowth != null;
+  if (!hasAny) return null;
+  const asOfDate = pointInTimeMetricDate(revenueMetric?.row || yoyMetric?.row || momMetric?.row);
+  return {
+    asOfDate: asOfDate ? String(asOfDate).slice(0, 10) : '',
+    monthlyRevenue,
+    yoyGrowth,
+    momGrowth,
+    dataQuality: 'ok' as const,
+    missingReason: null,
+  };
+}
+
+function buildFundamentalSnapshotViewFromRows(
+  rows: Row[] | null | undefined,
+  _symbol: string | undefined,
+  _fallbackAsOf: string | null,
+) {
+  const datedRows = (rows || []).filter((row) => pointInTimeMetricDate(row) !== null);
+  const epsMetric = pickFirstMeaningfulMetric(datedRows, (row) => nullIfZeroMetric(row.eps_ttm));
+  const grossMarginMetric = pickFirstMeaningfulMetric(datedRows, (row) => nullIfMissingMetric(row.gross_margin));
+  const operatingMarginMetric = pickFirstMeaningfulMetric(datedRows, (row) => nullIfZeroMetric(row.operating_margin));
+  const peMetric = pickFirstMeaningfulMetric(datedRows, (row) => nullIfZeroMetric(row.pe_ratio));
+  const pbMetric = pickFirstMeaningfulMetric(datedRows, (row) => nullIfMissingMetric(row.pb_ratio));
+  const revenueRunRateMetric = pickFirstMeaningfulMetric(datedRows, (row) => nullIfMissingMetric(row.revenue_run_rate));
+  const epsTtm = epsMetric?.value ?? null;
+  const grossMargin = grossMarginMetric?.value ?? null;
+  const operatingMargin = operatingMarginMetric?.value ?? null;
+  const peRatio = peMetric?.value ?? null;
+  const pbRatio = pbMetric?.value ?? null;
+  const revenueRunRate = revenueRunRateMetric?.value ?? null;
+  const hasAny = [epsTtm, grossMargin, operatingMargin, peRatio, pbRatio, revenueRunRate].some((value) => value != null);
+  const latestMetricDate = pointInTimeMetricDate(
+    epsMetric?.row || grossMarginMetric?.row || operatingMarginMetric?.row || peMetric?.row || pbMetric?.row || revenueRunRateMetric?.row,
+  );
+  return {
+    asOfDate: latestMetricDate ? String(latestMetricDate).slice(0, 10) : '',
+    epsTtm,
+    grossMargin,
+    operatingMargin,
+    peRatio,
+    pbRatio,
+    revenueRunRate,
+    dataQuality: hasAny ? ('ok' as const) : ('missing' as const),
+    missingReason: hasAny ? null : '完整基本面快照仍在背景更新中。',
+  };
+}
+
+function selectLatestPreferredRow(
+  rows: Row[] | null | undefined,
+  predicate: (row: Row) => boolean,
+) {
+  const orderedRows = rows || [];
+  if (orderedRows.length === 0) return null;
+  let fallback: Row | null = null;
+  for (const row of orderedRows) {
+    fallback ||= row;
+    if (predicate(row)) return row;
+  }
+  return fallback;
+}
+
 function communityWeightForSource(sourceType: SourceCoverageView['sourceType']) {
   if (sourceType === 'kol') return 0.12;
+  if (sourceType === 'podcast' || sourceType === 'youtube') return 0.13;
   if (sourceType === 'investanchors') return 0.16;
   if (sourceType === 'bulltalk') return 0.11;
   if (sourceType === 'ptt') return 0.1;
+  if (sourceType === 'twse_insider') return 0.18;
   if (sourceType === 'threads') return 0.09;
   if (sourceType === 'instagram' || sourceType === 'telegram') return 0.08;
   return sourceType === 'official' || sourceType === 'financial' ? 0.22 : 0.08;
+}
+
+function sourcePriorityWeight(sourceType: SourceCoverageView['sourceType'], sourceNameRaw: unknown) {
+  const sourceName = String(sourceNameRaw || '');
+  const isKolPriority =
+    sourceType === 'kol' &&
+    (sourceName.includes('股癌') ||
+      sourceName.includes('投資癮') ||
+      sourceName.includes('財經皓角') ||
+      sourceName.includes('M觀點') ||
+      sourceName.includes('財報狗') ||
+      sourceName.includes('財經M平方'));
+  if (sourceType === 'investanchors') return 0.3;
+  if (sourceType === 'podcast' || sourceType === 'youtube') return 0.24;
+  if (isKolPriority) return 0.22;
+  if (sourceType === 'threads') return 0.2;
+  if (sourceType === 'official' || sourceType === 'financial' || sourceType === 'twse_insider') return 0.15;
+  if (sourceType === 'public_research' || sourceType === 'industry') return 0.08;
+  if (sourceType === 'news') return 0.05;
+  return 0.06;
+}
+
+function sourceSignalPresentationFromRows(
+  socialRows: Row[],
+  verificationStatus: VerificationStatus,
+  timingScore: number,
+) {
+  const dayAgoMs = Date.now() - 24 * 60 * 60 * 1000;
+  const counts = {
+    kol: 0,
+    podcast: 0,
+    youtube: 0,
+    threads: 0,
+    instagram: 0,
+    telegram: 0,
+    investanchors: 0,
+    weakSignals: 0,
+    transcriptSignals: 0,
+  };
+  const recentSourceTypes = new Set<string>();
+  let mentions24h = 0;
+  let latestAt: string | null = null;
+  for (const row of socialRows) {
+    const sourceType = sourceTypeFromName(row.source_type, row.source_name);
+    const sourceAt = row.source_timestamp || row.ingested_at || row.created_at || null;
+    if (sourceAt && (!latestAt || String(sourceAt) > latestAt)) latestAt = String(sourceAt);
+    const sourceMs = sourceAt ? new Date(String(sourceAt)).getTime() : Number.NaN;
+    if (Number.isFinite(sourceMs) && sourceMs >= dayAgoMs) {
+      recentSourceTypes.add(sourceType);
+      mentions24h += 1;
+    }
+    if (sourceType === 'kol') counts.kol += 1;
+    if (sourceType === 'podcast') counts.podcast += 1;
+    if (sourceType === 'youtube') counts.youtube += 1;
+    if (sourceType === 'threads') counts.threads += 1;
+    if (sourceType === 'instagram') counts.instagram += 1;
+    if (sourceType === 'telegram') counts.telegram += 1;
+    if (sourceType === 'investanchors') counts.investanchors += 1;
+    const metadata = (row.metadata as Row | undefined) || {};
+    if (metadata.evidence_class === 'kol_av_weak_signal' || metadata.weak_signal_only === true) counts.weakSignals += 1;
+    if (metadata.evidence_class === 'kol_av_transcript_signal' || metadata.weak_signal_only === false) counts.transcriptSignals += 1;
+  }
+  const avMentions = counts.kol + counts.podcast + counts.youtube;
+  const socialMentions = counts.threads + counts.instagram + counts.telegram;
+  const badges: string[] = [];
+  if (avMentions > 0) badges.push('KOL/影音提及');
+  if (socialMentions >= 2 && recentSourceTypes.size >= 2) badges.push('社群熱度升溫');
+  if (counts.investanchors > 0) badges.push('定錨提及');
+  if (socialRows.length > 0 && verificationStatus !== '已證實') badges.push('官方待驗證');
+  if (timingScore < 0.65) badges.push('進場待確認');
+  const sourceCount = new Set(
+    socialRows.map((row) => sourceTypeFromName(row.source_type, row.source_name)),
+  ).size;
+  const summaryParts = [
+    sourceCount > 0 ? `社群 ${sourceCount} 源` : null,
+    mentions24h > 0 ? `24h ${mentions24h} mention` : socialRows.length > 0 ? `${socialRows.length} 則歷史提及` : null,
+    avMentions > 0 ? `KOL/影音 ${avMentions} 則` : null,
+    counts.investanchors > 0 ? `定錨 ${counts.investanchors} 則` : null,
+  ].filter(Boolean);
+  return {
+    sourceSignalBadges: unique(badges),
+    sourceSignalSummary: summaryParts.length > 0 ? summaryParts.join(' · ') : null,
+    socialMentionStats: {
+      sourceCount,
+      mentions24h,
+      kolMentions: counts.kol,
+      podcastMentions: counts.podcast,
+      youtubeMentions: counts.youtube,
+      threadsMentions: counts.threads,
+      instagramMentions: counts.instagram,
+      telegramMentions: counts.telegram,
+      investanchorsMentions: counts.investanchors,
+      weakSignals: counts.weakSignals,
+      transcriptSignals: counts.transcriptSignals,
+      latestAt,
+    },
+  };
+}
+
+function highlightedSourcePriority(item: SourceCoverageView) {
+  if (item.sourceType === 'investanchors') return 5;
+  if (item.sourceType === 'threads') return 4;
+  if (item.sourceType === 'official' || item.sourceType === 'financial' || item.sourceType === 'twse_insider') return 3;
+  if (item.sourceType === 'public_research' || item.sourceType === 'industry') return 2;
+  return 1;
 }
 
 function buildConditionalRecommendationNote(state: RecommendationState) {
@@ -1145,6 +8245,196 @@ function recommendationStateFromVerification(verificationScore: number, technica
   if (verificationScore < 0.65) return 'partially_verified';
   if (!isBlocked && (technicalTimingScore || 0) >= 0.67) return 'actionable_setup';
   return 'validated_thesis';
+}
+
+function isFormalRecommendationState(state: RecommendationState) {
+  return state === 'validated_thesis' || state === 'actionable_setup';
+}
+
+function recommendationStateStrength(state: RecommendationState | null | undefined) {
+  if (state === 'actionable_setup') return 4;
+  if (state === 'validated_thesis') return 3;
+  if (state === 'partially_verified') return 2;
+  if (state === 'signal_candidate') return 1;
+  return 0;
+}
+
+function timestampScore(value: string | null | undefined) {
+  if (!value) return 0;
+  const parsed = Date.parse(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function shouldPreferResearchMemoCandidate(candidate: ResearchMemoCandidate, current: ResearchMemoCandidate) {
+  const stateDiff = recommendationStateStrength(candidate.recommendationState) - recommendationStateStrength(current.recommendationState);
+  if (stateDiff !== 0) return stateDiff > 0;
+
+  const evidenceDiff = toFiniteNumber(candidate.evidenceScore, Number.NEGATIVE_INFINITY) - toFiniteNumber(current.evidenceScore, Number.NEGATIVE_INFINITY);
+  if (evidenceDiff !== 0) return evidenceDiff > 0;
+
+  const updatedDiff = timestampScore(candidate.sourceUpdatedAt) - timestampScore(current.sourceUpdatedAt);
+  if (updatedDiff !== 0) return updatedDiff > 0;
+
+  return candidate.index < current.index;
+}
+
+function dedupeResearchMemoCandidates(candidates: ResearchMemoCandidate[]) {
+  const bySlug = new Map<string, ResearchMemoCandidate>();
+  const duplicatesBySlug = new Map<
+    string,
+    {
+      kept: ResearchMemoCandidate;
+      dropped: ResearchMemoCandidate[];
+    }
+  >();
+
+  for (const candidate of candidates) {
+    const existing = bySlug.get(candidate.slug);
+    if (!existing) {
+      bySlug.set(candidate.slug, candidate);
+      continue;
+    }
+
+    if (shouldPreferResearchMemoCandidate(candidate, existing)) {
+      bySlug.set(candidate.slug, candidate);
+      const current = duplicatesBySlug.get(candidate.slug);
+      duplicatesBySlug.set(candidate.slug, {
+        kept: candidate,
+        dropped: [...(current?.dropped || []), existing],
+      });
+      continue;
+    }
+
+    const current = duplicatesBySlug.get(candidate.slug);
+    duplicatesBySlug.set(candidate.slug, {
+      kept: current?.kept || existing,
+      dropped: [...(current?.dropped || []), candidate],
+    });
+  }
+
+  const rows = [...bySlug.values()].sort((a, b) => a.index - b.index).map((candidate) => candidate.row);
+  const duplicateSlugSamples = [...duplicatesBySlug.entries()].slice(0, 10).map(([slug, info]) => ({
+    slug,
+    reportKind: info.kept.reportKind,
+    keptTitle: info.kept.title,
+    keptRecommendationState: info.kept.recommendationState,
+    droppedTitles: info.dropped.map((item) => item.title),
+    droppedRecommendationStates: info.dropped.map((item) => item.recommendationState),
+  }));
+
+  return {
+    rows,
+    rawMemoRows: candidates.length,
+    dedupedMemoRows: rows.length,
+    droppedDuplicateCount: candidates.length - rows.length,
+    dedupedSlugs: [...duplicatesBySlug.keys()],
+    duplicateSlugSamples,
+  };
+}
+
+function isOfficialCompanyEvidence(evidenceClass: string) {
+  return evidenceClass === 'official' || evidenceClass === 'company' || evidenceClass === 'transcript' || evidenceClass === 'financial';
+}
+
+function isPublicCorroborationEvidence(evidenceClass: string) {
+  return evidenceClass === 'public_research' || evidenceClass === 'industry' || evidenceClass === 'news';
+}
+
+function summarizeStoryEvidence(evidenceRows: Row[]) {
+  const supporting = evidenceRows.filter((row) => String(row.stance || 'supporting') === 'supporting');
+  const contradicting = evidenceRows.filter((row) => String(row.stance || '') === 'contradicting');
+  const scoringRows = supporting.length > 0 ? supporting : evidenceRows;
+  const baseScore = round(
+    clamp(
+      mean(
+        scoringRows.map((row) => clamp(toFiniteNumber(row.evidence_strength, 0.5))),
+      ),
+    ),
+    4,
+  );
+  const hasOfficialCompanyEvidence = supporting.some((row) => isOfficialCompanyEvidence(String(row.evidence_class || '')));
+  const hasPublicCorroboration = supporting.some((row) => isPublicCorroborationEvidence(String(row.evidence_class || '')));
+  const socialOnly = supporting.length > 0 && supporting.every((row) => String(row.evidence_class || '') === 'social');
+  const strongestContradiction = contradicting.reduce((max, row) => Math.max(max, clamp(toFiniteNumber(row.evidence_strength, 0.5))), 0);
+  return {
+    supporting,
+    contradicting,
+    baseScore,
+    hasOfficialCompanyEvidence,
+    hasPublicCorroboration,
+    socialOnly,
+    strongestContradiction,
+  };
+}
+
+function determineStoryVerificationOutcome(evidenceRows: Row[]): StoryVerificationOutcome {
+  const summary = summarizeStoryEvidence(evidenceRows);
+  let evidenceScore = summary.baseScore;
+  const reviewQueueItems: AgentReviewRequest[] = [];
+  let nextState: StoryThesisState = recommendationStateFromVerification(evidenceScore);
+
+  if (summary.socialOnly) {
+    evidenceScore = Math.min(evidenceScore, 0.49);
+    nextState = recommendationStateFromVerification(evidenceScore);
+    if (summary.baseScore >= 0.65) {
+      reviewQueueItems.push({
+        reason: 'promotion_blocked_social_only_evidence',
+        evidence: {
+          governance: 'social_only',
+          supportive_count: summary.supporting.length,
+          contradicting_count: summary.contradicting.length,
+        },
+      });
+    }
+  }
+
+  if (!summary.hasOfficialCompanyEvidence || !summary.hasPublicCorroboration) {
+    evidenceScore = Math.min(evidenceScore, 0.64);
+    if (isFormalRecommendationState(recommendationStateFromVerification(summary.baseScore))) {
+      reviewQueueItems.push({
+        reason: 'promotion_blocked_missing_canonical_evidence',
+        evidence: {
+          has_official_company_evidence: summary.hasOfficialCompanyEvidence,
+          has_public_corroboration: summary.hasPublicCorroboration,
+          supportive_count: summary.supporting.length,
+        },
+      });
+    }
+    nextState = recommendationStateFromVerification(evidenceScore);
+  }
+
+  if (summary.strongestContradiction >= 0.6) {
+    nextState = 'review';
+    reviewQueueItems.push({
+      reason: 'contradictory_evidence_detected',
+      evidence: {
+        strongest_contradiction: summary.strongestContradiction,
+        contradicting_count: summary.contradicting.length,
+        supporting_count: summary.supporting.length,
+      },
+    });
+  }
+
+  const note =
+    nextState === 'review'
+      ? '偵測到矛盾或未完成閉環的證據，已送人工覆核，暫不升級為正式 thesis。'
+      : buildConditionalRecommendationNote(nextState);
+
+  return {
+    nextState,
+    evidenceScore: round(clamp(evidenceScore), 4),
+    verificationStatus: verificationStatusFromStoryState(nextState),
+    reviewQueueItems,
+    note,
+    governance: {
+      supportiveCount: summary.supporting.length,
+      contradictingCount: summary.contradicting.length,
+      hasOfficialCompanyEvidence: summary.hasOfficialCompanyEvidence,
+      hasPublicCorroboration: summary.hasPublicCorroboration,
+      socialOnly: summary.socialOnly,
+      strongestContradiction: summary.strongestContradiction,
+    },
+  };
 }
 
 function verificationTimelineFromState(state: RecommendationState): StockDeepDivePayload['verificationTimeline'] {
@@ -1177,17 +8467,83 @@ function mapRecommendation(raw: Row): RecommendationCard {
   const valuationSource = (signalBreakdown.valuation_source as ValuationSource | undefined) || 'missing';
   const valuationConfidenceRaw = signalBreakdown.valuation_confidence;
   const valuationConfidence = valuationConfidenceRaw == null ? null : toFiniteNumber(valuationConfidenceRaw, 0);
-  const targetPrice = strategy.target_price ? toNumber(strategy.target_price) : null;
+  const currentPrice = signalBreakdown.current_price == null ? null : toFiniteNumber(signalBreakdown.current_price, 0);
+  const priceAsOf = signalBreakdown.price_as_of ? String(signalBreakdown.price_as_of) : raw.as_of ? String(raw.as_of) : null;
+  const baseTargetFromBreakdown = signalBreakdown.base_target == null ? null : toFiniteNumber(signalBreakdown.base_target, 0);
+  const upsideTargetFromBreakdown = signalBreakdown.upside_target == null ? null : toFiniteNumber(signalBreakdown.upside_target, 0);
+  const targetPrice = strategy.target_price ? toNumber(strategy.target_price) : baseTargetFromBreakdown;
   const expectedUpsidePctRaw = raw.expected_upside_pct == null ? null : toNumber(raw.expected_upside_pct);
-  const hasPositiveUpside = valuationSource !== 'missing' && (expectedUpsidePctRaw ?? 0) > 0 && (targetPrice ?? 0) > 0;
+  const sourcePriorityScoreRaw = signalBreakdown.source_priority_score;
+  const sourceSignalBadges = Array.isArray(signalBreakdown.source_signal_badges)
+    ? signalBreakdown.source_signal_badges.map((item) => String(item)).filter(Boolean)
+    : [];
+  const sourceSignalSummary = signalBreakdown.source_signal_summary ? String(signalBreakdown.source_signal_summary) : null;
+  const socialMentionStats =
+    signalBreakdown.social_mention_stats && typeof signalBreakdown.social_mention_stats === 'object'
+      ? (signalBreakdown.social_mention_stats as RecommendationCard['socialMentionStats'])
+      : null;
+  const socialHitSummary = socialMentionStats
+    ? `社群有效命中：${socialMentionStats.sourceCount || 0} 源 · 24h ${socialMentionStats.mentions24h || 0} mention · Threads ${socialMentionStats.threadsMentions || 0} / IG ${socialMentionStats.instagramMentions || 0} / Telegram ${socialMentionStats.telegramMentions || 0} / KOL影音 ${(socialMentionStats.podcastMentions || 0) + (socialMentionStats.youtubeMentions || 0)}`
+    : null;
+  const globalThemeLeadLagSignal =
+    signalBreakdown.global_theme_lead_lag_signal && typeof signalBreakdown.global_theme_lead_lag_signal === 'object'
+      ? (signalBreakdown.global_theme_lead_lag_signal as RecommendationCard['globalThemeLeadLagSignal'])
+      : globalLeadLagSignalForSymbol(String(stock.symbol || ''));
+  const pttSignalSummary = signalBreakdown.ptt_signal_summary
+    ? String(signalBreakdown.ptt_signal_summary)
+    : sourceSignalBadges.some((item) => /PTT|ptt/i.test(item))
+      ? 'PTT Stock 版已有命中，僅作情緒與 discovery 線索，需官方/券商/財務資料驗證。'
+      : null;
+  const brokerSocialLeakSummary = signalBreakdown.broker_social_leak_summary
+    ? String(signalBreakdown.broker_social_leak_summary)
+    : sourceSignalBadges.some((item) => /券商|外資|broker|FactSet/i.test(item))
+      ? '社群出現外資/券商目標價或 EPS 轉述，已列 broker leak 待驗證，不支撐正式 Base。'
+      : null;
+  const evidenceAgeHoursRaw = signalBreakdown.evidence_age_hours;
+  const lastValidatedAtRaw = signalBreakdown.last_validated_at;
+  const valuationQuality = ((signalBreakdown.valuation_quality as ValuationQuality | undefined) || (valuationSource === 'broker_report'
+    ? 'broker_anchored'
+    : valuationSource === 'valuation_cases'
+      ? 'story_modeled'
+      : valuationSource === 'thesis_model'
+        ? 'financial_proxy'
+        : 'fallback_proxy')) as ValuationQuality;
+  const scenarioDriverType = ((signalBreakdown.scenario_driver_type as ScenarioDriverType | undefined) ||
+    (valuationSource === 'broker_report'
+      ? 'broker_target'
+      : valuationSource === 'valuation_cases'
+        ? 'story_tam'
+        : valuationSource === 'thesis_model'
+          ? 'financial_proxy'
+          : 'fallback_proxy')) as ScenarioDriverType;
+  const symbol = String(stock.symbol || 'UNKNOWN');
+  const stockName = String(stock.name || stock.symbol || 'Unknown');
+  const targetPresentation = buildTargetSnapshot(
+    currentPrice,
+    baseTargetFromBreakdown ?? targetPrice,
+    upsideTargetFromBreakdown,
+    null,
+    null,
+    null,
+    null,
+  );
+  const hasPositiveUpside =
+    valuationSource !== 'missing' &&
+    ((targetPresentation.displayBaseUpsidePct ?? expectedUpsidePctRaw ?? 0) > 0) &&
+    ((targetPresentation.baseTarget ?? targetPrice ?? 0) > 0);
   const isFallbackValuation = !hasPositiveUpside || Boolean(signalBreakdown.is_fallback_valuation);
-  const expectedUpsidePct = hasPositiveUpside ? expectedUpsidePctRaw : null;
+  const expectedUpsidePct = hasPositiveUpside
+    ? targetPresentation.displayBaseUpsidePct ?? expectedUpsidePctRaw
+    : null;
   const whyNotRecommended = whyNotRecommendedLabel((signalBreakdown.why_not_recommended as string | undefined) || null);
   return {
     recommendationId: String(raw.id || ''),
-    symbol: String(stock.symbol || 'UNKNOWN'),
-    name: String(stock.name || stock.symbol || 'Unknown'),
+    symbol,
+    name: stockName,
     market: (stock.market as 'TW' | 'US') || 'TW',
+    currentPrice,
+    priceAsOf,
+    priceRefreshStatus: priceRefreshStatusFromAsOf(priceAsOf),
     score: toNumber(raw.score),
     confidence: toNumber(raw.confidence),
     action: (raw.action as 'buy' | 'watch' | 'reduce') || 'watch',
@@ -1209,10 +8565,62 @@ function mapRecommendation(raw: Row): RecommendationCard {
     communitySignalScore: raw.community_signal_score ? toNumber(raw.community_signal_score) : null,
     verificationStatus,
     conditionalRecommendationNote: raw.conditional_recommendation_note ? String(raw.conditional_recommendation_note) : null,
-    chineseName: CHINESE_NAME_MAP[String(stock.symbol || '')] ?? null,
+    chineseName: resolveChineseName(symbol, stockName),
     firstRecommendedAt: raw.first_recommended_at ? String(raw.first_recommended_at) : null,
-    estimatedCatalystDate: CATALYST_DATE_MAP[String(stock.symbol || '')] ?? null,
+    estimatedCatalystDate: raw.estimated_catalyst_date ? String(raw.estimated_catalyst_date).slice(0, 10) : null,
     whyNotRecommended,
+    sourcePriorityScore: sourcePriorityScoreRaw == null ? null : toFiniteNumber(sourcePriorityScoreRaw),
+    sourceSignalBadges: globalThemeLeadLagSignal ? unique([...sourceSignalBadges, '海外同族群領漲']) : sourceSignalBadges,
+    sourceSignalSummary:
+      globalThemeLeadLagSignal && !sourceSignalSummary
+        ? '海外同族群領漲，台股映射標的列入落後補漲候選；需等台股基本面與進場 gate 驗證。'
+        : sourceSignalSummary,
+    globalThemeLeadLagSignal,
+    globalLeadLagSummary: globalThemeLeadLagSignal?.summary || null,
+    socialHitSummary,
+    pttSignalSummary,
+    brokerSocialLeakSummary,
+    socialMentionStats,
+    evidenceAgeHours: evidenceAgeHoursRaw == null ? null : toFiniteNumber(evidenceAgeHoursRaw),
+    lastValidatedAt: lastValidatedAtRaw ? String(lastValidatedAtRaw) : null,
+    valuationQuality,
+    scenarioDriverType,
+    baseTarget: baseTargetFromBreakdown,
+    upsideTarget: upsideTargetFromBreakdown,
+    displayBaseUpsidePct: targetPresentation.displayBaseUpsidePct,
+    displayScenarioUpsidePct: targetPresentation.displayScenarioUpsidePct,
+    cardPrimaryUpsidePct: targetPresentation.cardPrimaryUpsidePct,
+    cardPrimaryUpsideLabel: targetPresentation.cardPrimaryUpsideLabel,
+  };
+}
+
+function syncRecommendationCardPricing(
+  rec: RecommendationCard,
+  currentPriceOverride: number | null | undefined,
+  priceAsOfOverride?: string | null,
+  targetOverrides?: { baseTarget?: number | null; upsideTarget?: number | null },
+): RecommendationCard {
+  const normalizedCurrentPrice =
+    currentPriceOverride == null ? null : toFiniteNumber(currentPriceOverride, 0) > 0 ? toFiniteNumber(currentPriceOverride, 0) : null;
+  const currentPrice = normalizedCurrentPrice ?? rec.currentPrice ?? null;
+  const baseTarget = targetOverrides?.baseTarget ?? rec.baseTarget ?? rec.targetPrice ?? null;
+  const upsideTarget = targetOverrides?.upsideTarget ?? rec.upsideTarget ?? null;
+  const priceAsOf = priceAsOfOverride ?? rec.priceAsOf ?? null;
+  const targetPresentation = buildTargetSnapshot(currentPrice, baseTarget, upsideTarget, null, null, null, priceAsOf);
+
+  return {
+    ...rec,
+    currentPrice,
+    priceAsOf,
+    priceRefreshStatus: targetPresentation.priceRefreshStatus,
+    targetPrice: baseTarget ?? rec.targetPrice ?? null,
+    baseTarget,
+    upsideTarget,
+    expectedUpsidePct: targetPresentation.displayBaseUpsidePct,
+    displayBaseUpsidePct: targetPresentation.displayBaseUpsidePct,
+    displayScenarioUpsidePct: targetPresentation.displayScenarioUpsidePct,
+    cardPrimaryUpsidePct: targetPresentation.cardPrimaryUpsidePct,
+    cardPrimaryUpsideLabel: targetPresentation.cardPrimaryUpsideLabel,
   };
 }
 
@@ -1221,16 +8629,1037 @@ function round(value: number, precision = 4) {
   return Math.round(value * factor) / factor;
 }
 
+function formatMoney(value: number | null | undefined) {
+  if (value == null || !Number.isFinite(value)) return '-';
+  return `NT$${round(value, 2).toLocaleString('zh-TW')}`;
+}
+
+function formatNumberLocal(value: number | null | undefined, precision = 2) {
+  if (value == null || !Number.isFinite(value)) return '-';
+  return round(value, precision).toLocaleString('zh-TW');
+}
+
+function formatSignedPctLocal(value: number | null | undefined, precision = 2) {
+  if (value == null || !Number.isFinite(value)) return '待補';
+  return `${value > 0 ? '+' : ''}${formatNumberLocal(value, precision)}%`;
+}
+
+function formatDateTimeForPlan(value: string | null | undefined) {
+  if (!value) return '未知時間';
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return String(value);
+  return parsed.toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' });
+}
+
+function deepDiveTitle(seedOverride: { thesisTitle?: string | null } | null | undefined, story: Row | null, insight: StockInsightPayload, symbol: string) {
+  return (
+    compactText(seedOverride?.thesisTitle) ||
+    compactText(story?.title) ||
+    compactText(insight.recommendation?.thesisTitle) ||
+    `${symbol} 單股深度研究`
+  );
+}
+
+const ENTRY_BLOCKED_LABELS = new Set(['資料不足不買', '資料不足暫緩', '籌碼偏亂先不買', '過熱不追', '趨勢轉弱']);
+
+function recommendationRevaluationIsFresh(rec: RecommendationCard) {
+  return rec.revaluationStatus === 'rebuilt' || rec.revaluationStatus === 'repriced';
+}
+
+function recommendationHasStrictBaseUpside(rec: RecommendationCard) {
+  const currentPrice = rec.currentPrice == null ? null : toFiniteNumber(rec.currentPrice);
+  const baseTarget = rec.baseTarget == null ? null : toFiniteNumber(rec.baseTarget);
+  return currentPrice != null && baseTarget != null && Number.isFinite(currentPrice) && Number.isFinite(baseTarget) && currentPrice > 0 && baseTarget > currentPrice;
+}
+
+function recommendationTargetCoverage(rec: RecommendationCard): TargetCoverageStatus {
+  return targetCoverageStatus(rec.currentPrice ?? null, rec.baseTarget ?? rec.targetPrice ?? null, rec.upsideTarget ?? null);
+}
+
+type ValuationSanityEvaluation = {
+  valuationSanityStatus: ValuationSanityStatus;
+  valuationSanityReason: string | null;
+};
+
+function sourceRefIsExternalVerification(ref: DeepDiveSourceCitationRef | null | undefined) {
+  if (!ref) return false;
+  const type = String(ref.sourceType || '').toLowerCase();
+  return ['official', 'financial', 'public_research', 'broker_report', 'company_event'].some((candidate) => type.includes(candidate));
+}
+
+function detailText(...parts: Array<string | null | undefined | string[]>) {
+  return parts
+    .flatMap((part) => (Array.isArray(part) ? part : [part]))
+    .filter((part): part is string => Boolean(part))
+    .map((part) => compactText(part))
+    .join(' ');
+}
+
+function hasNormalizedMultipleExplanation(text: string) {
+  return /normalized|forward|常態|標準化|正常化|cycle|景氣循環|同業|可比|券商/i.test(text);
+}
+
+function containsUnverifiedCustomerEvidence(text: string) {
+  return /未取得具名|未取得可引用|直接客戶\s*\/\s*訂單來源待補|不納入已驗證 Base|供應鏈映射推估/.test(text);
+}
+
+function maxProjectedLiftFromDetail(baseCaseDetail: DeepDiveValuationCaseDetail | null | undefined) {
+  const text = detailText(baseCaseDetail?.marginBridge, baseCaseDetail?.earningsBridge, baseCaseDetail?.assumptions);
+  const ratios: number[] = [];
+  const percentPattern = /由\s*([0-9]+(?:\.[0-9]+)?)%\s*提升到\s*([0-9]+(?:\.[0-9]+)?)%/g;
+  let percentMatch: RegExpExecArray | null;
+  while ((percentMatch = percentPattern.exec(text))) {
+    const from = Number(percentMatch[1]);
+    const to = Number(percentMatch[2]);
+    if (Number.isFinite(from) && Number.isFinite(to) && from > 0 && to > from) ratios.push((to - from) / from);
+  }
+  const epsPattern = /EPS\s*(?:約|由)?\s*([0-9]+(?:\.[0-9]+)?)\s*(?:提升到|->|至)\s*([0-9]+(?:\.[0-9]+)?)/gi;
+  let epsMatch: RegExpExecArray | null;
+  while ((epsMatch = epsPattern.exec(text))) {
+    const from = Number(epsMatch[1]);
+    const to = Number(epsMatch[2]);
+    if (Number.isFinite(from) && Number.isFinite(to) && from > 0 && to > from) ratios.push((to - from) / from);
+  }
+  return ratios.length ? Math.max(...ratios) : 0;
+}
+
+function evaluateValuationSanity(
+  rec: Pick<
+    RecommendationCard,
+    | 'currentPrice'
+    | 'baseTarget'
+    | 'targetPrice'
+    | 'upsideTarget'
+    | 'displayBaseUpsidePct'
+    | 'displayScenarioUpsidePct'
+    | 'valuationQuality'
+    | 'isFallbackValuation'
+    | 'valuationSource'
+    | 'valuationSanityStatus'
+    | 'valuationSanityReason'
+  >,
+  detail?: {
+    baseCaseDetail?: DeepDiveValuationCaseDetail | null;
+    scenarioCaseDetail?: DeepDiveValuationCaseDetail | null;
+    sharedVerifiedBasis?: DeepDiveSharedVerifiedBasis | null;
+  },
+): ValuationSanityEvaluation {
+  const coverage = targetCoverageStatus(rec.currentPrice ?? null, rec.baseTarget ?? rec.targetPrice ?? null, rec.upsideTarget ?? null);
+  if (coverage === 'over_base_and_scenario') {
+    return {
+      valuationSanityStatus: 'over_target',
+      valuationSanityReason: '現價已高於 Base 與情境目標價，不能列為新的推薦。',
+    };
+  }
+  if (rec.isFallbackValuation || (rec.valuationSource || 'missing') === 'missing' || (rec.valuationQuality || 'fallback_proxy') === 'fallback_proxy') {
+    return {
+      valuationSanityStatus: 'insufficient_verified_basis',
+      valuationSanityReason: '估值來源仍是 fallback 或缺少正式 bridge，不能支撐正式推薦。',
+    };
+  }
+
+  const baseCaseDetail = detail?.baseCaseDetail || null;
+  const sharedVerifiedBasis = detail?.sharedVerifiedBasis || null;
+  const baseUpside = rec.displayBaseUpsidePct ?? upsidePctFromTarget(rec.currentPrice ?? null, rec.baseTarget ?? rec.targetPrice ?? null) ?? 0;
+  const scenarioUpside = rec.displayScenarioUpsidePct ?? upsidePctFromTarget(rec.currentPrice ?? null, rec.upsideTarget ?? null) ?? 0;
+  const sourceRefs = [...(baseCaseDetail?.sourceRefs || []), ...(sharedVerifiedBasis?.sourceRefs || [])];
+  const hasExternalVerification = sourceRefs.some(sourceRefIsExternalVerification);
+  const evidenceText = detailText(
+    baseCaseDetail?.customerExposure,
+    baseCaseDetail?.evidenceBasis,
+    baseCaseDetail?.sharedBasisRefs,
+    sharedVerifiedBasis?.customerExposure,
+    sharedVerifiedBasis?.evidenceBasis,
+    sharedVerifiedBasis?.sharedBasisRefs,
+  );
+  const multipleText = detailText(baseCaseDetail?.multipleBridge, baseCaseDetail?.benchmarkRange);
+  const usesUnverifiedCustomerEvidence = containsUnverifiedCustomerEvidence(evidenceText);
+  const currentPe = baseCaseDetail?.currentPeRatio ?? null;
+  const currentPb = baseCaseDetail?.currentPbRatio ?? null;
+  const abnormalMultiple =
+    (currentPe != null && Number.isFinite(currentPe) && currentPe > 80) ||
+    (currentPb != null && Number.isFinite(currentPb) && currentPb > 8);
+  if (abnormalMultiple && !hasNormalizedMultipleExplanation(multipleText)) {
+    return {
+      valuationSanityStatus: 'stale_multiple',
+      valuationSanityReason: `目前 PE/PB 顯著失真（PE ${formatNumberLocal(currentPe)}x / PB ${formatNumberLocal(currentPb)}x），需補 normalized / forward multiple 後才能正式推薦。`,
+    };
+  }
+  if (baseCaseDetail && baseCaseDetail.projectedEps != null && baseCaseDetail.targetPeRatio != null && baseCaseDetail.targetPrice != null) {
+    const formulaTarget = baseCaseDetail.projectedEps * baseCaseDetail.targetPeRatio;
+    const diffRatio = Math.abs(formulaTarget - baseCaseDetail.targetPrice) / Math.max(1, Math.abs(baseCaseDetail.targetPrice));
+    if (diffRatio > 0.08) {
+      return {
+        valuationSanityStatus: 'unit_mismatch',
+        valuationSanityReason: 'EPS × PE 與頁面目標價差異過大，疑似單位或公式不一致，需先覆核。',
+      };
+    }
+  }
+  if (usesUnverifiedCustomerEvidence) {
+    return {
+      valuationSanityStatus: 'insufficient_verified_basis',
+      valuationSanityReason: 'Base 使用未具名客戶/供應鏈映射作為依據；未取得官方、法說、券商或具名客戶證據前，只能列為情境追蹤。',
+    };
+  }
+  if (baseUpside > 80 && (!hasExternalVerification || usesUnverifiedCustomerEvidence)) {
+    return {
+      valuationSanityStatus: 'insufficient_verified_basis',
+      valuationSanityReason: 'Base 空間超過 80%，但客戶/訂單或外部依據仍不足，先降級為估值覆核中。',
+    };
+  }
+  const maxLift = maxProjectedLiftFromDetail(baseCaseDetail);
+  if (baseUpside > 80 && baseCaseDetail?.isEstimated && maxLift > 0.5) {
+    return {
+      valuationSanityStatus: 'outlier_review',
+      valuationSanityReason: 'Base 估值依賴研究推估且毛利率/營益率/EPS 上修幅度超過 50%，需覆核後才可正式推薦。',
+    };
+  }
+  if (scenarioUpside > 200 && baseCaseDetail?.isEstimated) {
+    return {
+      valuationSanityStatus: 'outlier_review',
+      valuationSanityReason: '情境空間超過 200% 且含研究推估，僅可作上行劇本追蹤，需補足外部驗證。',
+    };
+  }
+  return { valuationSanityStatus: 'normal', valuationSanityReason: null };
+}
+
+function recommendationGateStatus(rec: RecommendationCard): RecommendationGateStatus {
+  const coverage = recommendationTargetCoverage(rec);
+  if (coverage === 'over_base_and_scenario') return 'over_target';
+  if (coverage === 'scenario_only') return 'scenario_only';
+  if (!recommendationRevaluationIsFresh(rec)) return 'needs_revaluation';
+  if (rec.isFallbackValuation || (rec.valuationSource || 'missing') === 'missing' || (rec.valuationQuality || 'fallback_proxy') === 'fallback_proxy') {
+    return 'insufficient_bridge';
+  }
+  if (!recommendationHasStrictBaseUpside(rec)) return 'insufficient_bridge';
+  if (rec.entryReadinessLabel && ENTRY_BLOCKED_LABELS.has(rec.entryReadinessLabel)) return 'entry_blocked';
+  if (!recommendationMeetsVerification(rec)) return 'insufficient_bridge';
+  if (rec.valuationSanityStatus && rec.valuationSanityStatus !== 'normal') return 'insufficient_bridge';
+  const sanity = evaluateValuationSanity(rec);
+  if (sanity.valuationSanityStatus !== 'normal') return 'insufficient_bridge';
+  return 'formal_pass';
+}
+
+function recommendationGateReason(rec: RecommendationCard, status: RecommendationGateStatus, coverage: TargetCoverageStatus) {
+  if (status === 'over_target') return overTargetReasonForStatus(coverage, rec.currentPrice ?? null, rec.baseTarget ?? rec.targetPrice ?? null, rec.upsideTarget ?? null);
+  if (status === 'scenario_only') {
+    return 'Base 目標價已被現價反映；此標的只能列為上行劇本候選，等待情境 checklist 逐步驗證。';
+  }
+  if (status === 'needs_revaluation') {
+    return '本輪沒有完成 bridge-aware 重新估值，不能列為正式推薦；先放在近期觀察，等待重估。';
+  }
+  if (status === 'entry_blocked') {
+    return `基本面仍可追蹤，但目前進場 gate 為「${rec.entryReadinessLabel}」，不得顯示為買進。`;
+  }
+  if (status === 'insufficient_bridge') {
+    if (rec.valuationSanityStatus && rec.valuationSanityStatus !== 'normal') return rec.valuationSanityReason || '估值安全檢查未通過，需先覆核。';
+    const sanity = evaluateValuationSanity(rec);
+    if (sanity.valuationSanityStatus !== 'normal') return sanity.valuationSanityReason;
+    return '估值橋接或外部證據不足，不能支撐正式推薦。';
+  }
+  return null;
+}
+
+function recommendationDisplayBucket(rec: RecommendationCard, status: RecommendationGateStatus): NonNullable<RecommendationCard['displayBucket']> {
+  if (status === 'formal_pass') return 'formal';
+  if (status === 'scenario_only') return 'scenario';
+  if (status === 'over_target') return 'valuation_reflected_archive';
+  if (rec.recommendationBucket === 'historical_fallback' || rec.dedupeBucket?.includes('historical') || rec.dedupeBucket?.includes('recent_observation')) {
+    return 'revaluation_queue';
+  }
+  return 'early';
+}
+
+function recommendationDisplayTargetMode(
+  rec: RecommendationCard,
+  status: RecommendationGateStatus,
+  coverage: TargetCoverageStatus,
+): NonNullable<RecommendationCard['displayTargetMode']> {
+  if (coverage === 'over_base_and_scenario' || status === 'over_target') return 'hidden_over_target';
+  if (rec.recommendationBucket === 'historical_fallback' || rec.dedupeBucket?.includes('historical') || rec.dedupeBucket?.includes('recent_observation')) {
+    return 'needs_revaluation';
+  }
+  if (status === 'formal_pass') return 'actionable';
+  if (status === 'scenario_only') return 'scenario_only';
+  if (status === 'needs_revaluation') return 'needs_revaluation';
+  if (recommendationRevaluationIsFresh(rec) && (coverage === 'base_upside' || coverage === 'scenario_only')) {
+    return 'early_potential';
+  }
+  return coverage === 'scenario_only' ? 'scenario_only' : 'needs_revaluation';
+}
+
+function recommendationRevaluationPriority(
+  rec: RecommendationCard,
+  status: RecommendationGateStatus,
+  coverage: TargetCoverageStatus,
+) {
+  if (status === 'formal_pass') return 100;
+  if (status === 'scenario_only') return 86;
+  if (status === 'entry_blocked' && coverage === 'base_upside') return 78;
+  if (status === 'needs_revaluation' && coverage === 'base_upside') return 72;
+  if (status === 'needs_revaluation' && coverage === 'scenario_only') return 66;
+  if (status === 'insufficient_bridge' && coverage === 'base_upside') return 58;
+  if (status === 'insufficient_bridge') return 42;
+  if (status === 'over_target') return 0;
+  return Math.round((rec.recommendationConfidenceScore ?? rec.score ?? 0) / 2);
+}
+
+function parsePeRangeMidpoint(value: string | null | undefined) {
+  if (!value) return null;
+  const matches = Array.from(String(value).matchAll(/([0-9]+(?:\.[0-9]+)?)\s*x/gi))
+    .map((match) => Number(match[1]))
+    .filter((item) => Number.isFinite(item) && item > 0);
+  if (matches.length === 0) return null;
+  return matches.reduce((sum, item) => sum + item, 0) / matches.length;
+}
+
+function buildPeValuationSignal(
+  rec: RecommendationCard,
+  detail?: {
+    baseCaseDetail?: DeepDiveValuationCaseDetail | null;
+    scenarioCaseDetail?: DeepDiveValuationCaseDetail | null;
+  },
+): NonNullable<RecommendationCard['peValuationSignal']> {
+  const baseCaseDetail = detail?.baseCaseDetail || null;
+  const currentPe = isReferenceablePeRatio(baseCaseDetail?.currentPeRatio) ? baseCaseDetail?.currentPeRatio ?? null : null;
+  const adoptedPe = isReferenceablePeRatio(baseCaseDetail?.targetPeRatio) ? baseCaseDetail?.targetPeRatio ?? null : null;
+  const peerPeMidpoint = parsePeRangeMidpoint(baseCaseDetail?.benchmarkRange || baseCaseDetail?.multipleBridge);
+  const normalizedPe = currentPe ?? adoptedPe;
+  const sectorAveragePe = peerPeMidpoint ?? adoptedPe ?? null;
+  const peDiscountPct =
+    normalizedPe != null && sectorAveragePe != null && sectorAveragePe > 0
+      ? round(((sectorAveragePe - normalizedPe) / sectorAveragePe) * 100, 1)
+      : null;
+  const inflectionText = detailText(
+    baseCaseDetail?.revenueBridge,
+    baseCaseDetail?.marginBridge,
+    baseCaseDetail?.earningsBridge,
+    baseCaseDetail?.assumptions,
+  );
+  const earningsInflection =
+    Boolean(baseCaseDetail?.projectedEps && baseCaseDetail.projectedEps > 0) &&
+    /提升|上修|改善|轉盈|復甦|ASP|毛利率|EPS|run-rate|報價|漲價/i.test(inflectionText);
+  const peerRange = baseCaseDetail?.benchmarkRange || (sectorAveragePe != null ? `同業 normalized PE 中位數約 ${formatNumberLocal(sectorAveragePe)}x` : null);
+  const reratingReason =
+    normalizedPe == null || sectorAveragePe == null
+      ? 'PE/PB 比價資料仍待補；本輪不以低 PE 作為主要推薦加分。'
+      : peDiscountPct != null && peDiscountPct > 15 && earningsInflection
+        ? `normalized PE 約 ${formatNumberLocal(normalizedPe)}x，低於同業/週期中位數約 ${formatNumberLocal(sectorAveragePe)}x，且有 EPS 或毛利率上修證據，因此 PE rerating 可作為加分。`
+        : peDiscountPct != null && peDiscountPct > 15
+          ? `PE 看似低於同業約 ${formatNumberLocal(peDiscountPct)}%，但缺少足夠獲利上修證據，僅列為觀察而非正式加分。`
+          : `PE/PB 比價未顯示明顯折價，推薦仍以 bridge、證據與進場 gate 為主。`;
+  return {
+    currentPe,
+    normalizedPe,
+    peerPeRange: peerRange,
+    sectorAveragePe,
+    peDiscountPct,
+    earningsInflection,
+    reratingReason,
+  };
+}
+
+function peValuationGapScore(signal: RecommendationCard['peValuationSignal'] | null | undefined) {
+  if (!signal) return 35;
+  if (!signal.normalizedPe || !signal.sectorAveragePe) return 30;
+  const discount = signal.peDiscountPct ?? 0;
+  if (discount <= 0) return 38;
+  const base = clamp(42 + discount * 1.25, 42, 88);
+  return Math.round(signal.earningsInflection ? base : Math.min(base, 58));
+}
+
+function recommendationLifecycleStageFor(rec: RecommendationCard): NonNullable<RecommendationCard['recommendationLifecycleStage']> {
+  const coverage = recommendationTargetCoverage(rec);
+  if (coverage === 'over_base_and_scenario' || rec.displayBucket === 'valuation_reflected_archive') return 'archived_reflected';
+  if (recommendationGateStatus(rec) === 'formal_pass') return 'formal_recommendation';
+  if (rec.displayBucket === 'scenario' || rec.recommendationBucket === 'scenario_upside') return 'scenario_candidate';
+  if (rec.recommendationState === 'validated_thesis' || rec.recommendationState === 'actionable_setup') return 'validated_thesis';
+  if (rec.recommendationState === 'partially_verified' || (rec.sourceSignalBadges || []).length >= 2) return 'watchlist';
+  return 'discovered';
+}
+
+function recommendationStabilityScoreFor(rec: RecommendationCard) {
+  const stage = rec.recommendationLifecycleStage || recommendationLifecycleStageFor(rec);
+  const revaluationFresh = recommendationRevaluationIsFresh(rec);
+  const base =
+    stage === 'formal_recommendation'
+      ? 86
+      : stage === 'scenario_candidate'
+        ? 70
+        : stage === 'validated_thesis'
+          ? 62
+          : stage === 'watchlist'
+            ? 48
+            : stage === 'archived_reflected'
+              ? 12
+              : 35;
+  const firstRecommendedAgeHours = rec.firstRecommendedAt
+    ? Math.max(0, (Date.now() - new Date(rec.firstRecommendedAt).getTime()) / (1000 * 60 * 60))
+    : null;
+  const persistenceBonus = firstRecommendedAgeHours == null ? 0 : clamp(firstRecommendedAgeHours / 48, 0, 8);
+  const freshBonus = revaluationFresh ? 6 : -8;
+  return Math.round(clamp(base + persistenceBonus + freshBonus, 0, 100));
+}
+
+function thesisMomentumScoreFor(rec: RecommendationCard) {
+  const social = rec.socialMentionStats;
+  const mentionSignal = social ? clamp(social.sourceCount * 10 + Math.min(30, social.mentions24h * 1.5), 0, 55) : 20;
+  const scenario = rec.scenarioChecklistProgress ?? 0;
+  const entry = rec.confidenceScoreBreakdown?.entryReadiness ?? Math.round((rec.timingScore ?? 0.5) * 100);
+  return Math.round(clamp(mentionSignal * 0.25 + scenario * 0.45 + entry * 0.3, 0, 100));
+}
+
+function modelSignalForRecommendation(rec: RecommendationCard): NonNullable<RecommendationCard['modelSignal']> {
+  const mentionStats = rec.socialMentionStats;
+  return {
+    sourceSentimentScore: rec.communitySignalScore ?? null,
+    extractionConfidence: mentionStats ? clamp(mentionStats.sourceCount / 5, 0, 1) : null,
+    summaryModel: null,
+    boundary: 'assistive_only',
+    promotionImpact: 'none',
+    latestAt: mentionStats?.latestAt || null,
+  };
+}
+
+function modelSignalSummaryFor(signal: RecommendationCard['modelSignal'] | null | undefined) {
+  if (!signal) return '模型訊號待補；推薦仍由估值、官方/券商來源、籌碼與技術 gate 決定。';
+  const sentiment =
+    signal.sourceSentimentScore == null
+      ? '情緒待補'
+      : signal.sourceSentimentScore > 0.6
+        ? '偏正向'
+        : signal.sourceSentimentScore < 0.4
+          ? '偏保守'
+          : '中性';
+  return `${signal.summaryModel || '規則/離線模型'} 輔助判讀為${sentiment}；模型只影響 discovery/evidence 子分數，不直接升級推薦。`;
+}
+
+function entrySignalScore(verdict: string | null | undefined) {
+  if (!verdict) return 0;
+  if (/可小量分批|突破確認/.test(verdict)) return 1;
+  if (/等回測/.test(verdict)) return 0.45;
+  if (/過熱|籌碼偏亂|資料不足|趨勢轉弱/.test(verdict)) return -0.55;
+  return 0;
+}
+
+function buildAssistiveMlForecastBand(params: {
+  currentPrice: number | null | undefined;
+  modelSignal?: RecommendationCard['modelSignal'] | null;
+  brokerConsensus?: DeepDiveBrokerConsensus | null;
+  sourceRefs?: string[];
+  entryVerdict?: string | null;
+  technicalVerdict?: string | null;
+}): DeepDiveMlForecastBand | null {
+  const currentPrice = params.currentPrice;
+  if (currentPrice == null || !Number.isFinite(currentPrice) || currentPrice <= 0) {
+    return {
+      status: 'missing',
+      summary: '模型輔助區間待補：目前缺少可用現價，因此不產生 20/60/120 日價格區間；正式估值仍以公式 bridge 與外部來源為準。',
+      horizons: ([20, 60, 120] as const).map((days) => ({
+        days,
+        lowerPrice: null,
+        medianPrice: null,
+        upperPrice: null,
+        upsideProbability: null,
+        confidence: null,
+      })),
+      modelVersion: 'stockinsider-assistive-baseline-v0',
+      trainingWindow: '待接 ml_forecast_snapshots；本輪因缺可用現價未產生價格區間',
+      featureSet: ['price', 'source_sentiment', 'broker_coverage', 'entry_verdict'],
+      featureAttribution: [
+        {
+          feature: '現價資料',
+          direction: 'neutral',
+          contribution: 0,
+          summary: '缺少可用現價，模型輔助區間不作價格推估。',
+        },
+      ],
+      confidence: null,
+      sourceRefs: params.sourceRefs || [],
+      formalPromotionAllowed: false,
+      boundary: 'assistive_only',
+    };
+  }
+  const signal = params.modelSignal || null;
+  const sentiment = signal?.sourceSentimentScore ?? 0.5;
+  const extractionConfidence = signal?.extractionConfidence ?? 0.35;
+  const brokerQuality = params.brokerConsensus?.sourceCount
+    ? clamp(params.brokerConsensus.sourceCount / 4, 0, 1)
+    : 0;
+  const entryScore = Math.max(entrySignalScore(params.entryVerdict), entrySignalScore(params.technicalVerdict));
+  const expectedMovePct = clamp(
+    (sentiment - 0.5) * 30 + extractionConfidence * 7 + brokerQuality * 8 + entryScore * 9,
+    -12,
+    22,
+  );
+  const confidence = roundTo(
+    clamp(0.24 + extractionConfidence * 0.24 + brokerQuality * 0.18 + (params.sourceRefs?.length || 0) * 0.03, 0.2, 0.74),
+    2,
+  );
+  const horizonVolatility: Record<20 | 60 | 120, number> = { 20: 0.06, 60: 0.12, 120: 0.2 };
+  const horizonFactor: Record<20 | 60 | 120, number> = { 20: 0.35, 60: 0.7, 120: 1 };
+  const horizons = ([20, 60, 120] as const).map((days) => {
+    const medianPrice = currentPrice * (1 + (expectedMovePct * horizonFactor[days]) / 100);
+    const volatility = horizonVolatility[days] * (1.2 - confidence * 0.35);
+    return {
+      days,
+      lowerPrice: roundTo(Math.max(0, medianPrice * (1 - volatility)), 2),
+      medianPrice: roundTo(medianPrice, 2),
+      upperPrice: roundTo(medianPrice * (1 + volatility), 2),
+      upsideProbability: roundTo(clamp(0.5 + expectedMovePct / 80 + brokerQuality * 0.06 + entryScore * 0.04, 0.22, 0.82), 2),
+      confidence,
+    };
+  });
+  const featureAttribution: DeepDiveMlForecastBand['featureAttribution'] = [
+    {
+      feature: '社群 / KOL 情緒',
+      direction: sentiment > 0.56 ? 'positive' : sentiment < 0.44 ? 'negative' : 'neutral',
+      contribution: roundTo((sentiment - 0.5) * 30, 2),
+      summary: `來源情緒分數 ${roundTo(sentiment, 2)}，只用於 discovery / evidence strength，不支撐正式目標價。`,
+    },
+    {
+      feature: '券商 / 外資覆蓋',
+      direction: brokerQuality > 0.4 ? 'positive' : 'neutral',
+      contribution: roundTo(brokerQuality * 8, 2),
+      summary: params.brokerConsensus?.sourceCount
+        ? `已整理 ${params.brokerConsensus.sourceCount} 筆券商/外資來源，作為 ML 區間輔助特徵。`
+        : '尚缺可交叉檢查的券商 consensus，ML 區間信心會折扣。',
+    },
+    {
+      feature: '技術 / 籌碼進場狀態',
+      direction: entryScore > 0 ? 'positive' : entryScore < 0 ? 'negative' : 'neutral',
+      contribution: roundTo(entryScore * 9, 2),
+      summary: params.entryVerdict || params.technicalVerdict || '進場狀態待補。',
+    },
+  ];
+  return {
+    status: 'baseline',
+    summary: `輔助模型區間以目前股價 ${formatMoney(currentPrice)} 為錨，20/60/120 日中位數分別估 ${horizons.map((item) => `${item.days}日 ${formatMoney(item.medianPrice)}`).join('、')}；此區間不等於 Base/情境目標價。`,
+    horizons,
+    modelVersion: 'stockinsider-assistive-baseline-v0',
+    trainingWindow: '待接 ml_forecast_snapshots；目前先用可稽核特徵產生 baseline 區間',
+    featureSet: ['price', 'source_sentiment', 'broker_coverage', 'entry_verdict'],
+    featureAttribution,
+    confidence,
+    sourceRefs: params.sourceRefs || [],
+    formalPromotionAllowed: false,
+    boundary: 'assistive_only',
+  };
+}
+
+function buildValuationModelDivergence(params: {
+  formulaTarget: number | null | undefined;
+  mlForecastBand: DeepDiveMlForecastBand | null;
+  currentPrice: number | null | undefined;
+}): DeepDiveValuationModelDivergence | null {
+  const formulaTarget = params.formulaTarget ?? null;
+  const currentPrice = params.currentPrice ?? null;
+  const mlMedianTarget = params.mlForecastBand?.horizons.find((item) => item.days === 120)?.medianPrice ?? null;
+  if (formulaTarget == null || mlMedianTarget == null || currentPrice == null || currentPrice <= 0) return null;
+  const gapPct = roundTo(((formulaTarget - mlMedianTarget) / currentPrice) * 100, 2);
+  const absGapPct = Math.abs(gapPct);
+  const review = absGapPct >= 35;
+  return {
+    status: review ? 'valuation_model_divergence_review' : 'normal',
+    formulaTarget: roundTo(formulaTarget, 2),
+    mlMedianTarget: roundTo(mlMedianTarget, 2),
+    gapPct,
+    summary: review
+      ? `公式估值與 ML 120 日中位區間差距約 ${formatNumberLocal(absGapPct)}%，需覆核營收/EPS/PE 假設，未覆核前不得只靠模型或公式單邊升級正式推薦。`
+      : `公式估值與 ML 輔助區間差距約 ${formatNumberLocal(absGapPct)}%，目前未觸發模型分歧覆核。`,
+    reviewReason: review ? 'formula_target_vs_ml_120d_median_gap_exceeds_35pct' : null,
+  };
+}
+
+function mlForecastSummaryFor(band: DeepDiveMlForecastBand | null | undefined) {
+  if (!band) return null;
+  const horizon120 = band.horizons.find((item) => item.days === 120);
+  if (!horizon120) return band.summary;
+  const prob = horizon120.upsideProbability == null ? '待補' : `${Math.round(horizon120.upsideProbability * 100)}%`;
+  return `ML 上行機率 ${prob} · 120日中位 ${formatMoney(horizon120.medianPrice)} · 僅作輔助覆核`;
+}
+
+function recommendationStaleReasonForStatus(status: RecommendationGateStatus, coverage: TargetCoverageStatus) {
+  if (coverage === 'scenario_only') return 'target_stale_due_price_crossed_base';
+  if (coverage === 'over_base_and_scenario') return 'target_stale_due_price_crossed_scenario';
+  if (status === 'needs_revaluation') return 'revaluation_required_before_displaying_target';
+  if (coverage === 'missing_target') return 'missing_target_or_current_price';
+  return null;
+}
+
+function targetStaleKindForReason(staleReason: string | null | undefined): RecommendationCard['targetStaleKind'] {
+  if (staleReason === 'target_stale_due_price_crossed_base') return 'crossed_base';
+  if (staleReason === 'target_stale_due_price_crossed_scenario') return 'crossed_scenario';
+  if (staleReason === 'missing_target_or_current_price') return 'missing_target';
+  return null;
+}
+
+function recommendationArchiveReasonForStatus(status: RecommendationGateStatus, coverage: TargetCoverageStatus, reason: string | null) {
+  if (status === 'over_target' || coverage === 'over_base_and_scenario') {
+    return reason || '現價已高於 Base 與情境目標價，移出首頁推薦/候選流，等待重新估值或回測。';
+  }
+  return null;
+}
+
+function scenarioActionabilityStatusFor(rec: RecommendationCard, status: RecommendationGateStatus): NonNullable<RecommendationCard['scenarioActionabilityStatus']> {
+  if (status !== 'scenario_only') return 'not_applicable';
+  const label = compactText(rec.entryReadinessLabel || rec.entryActionLabel || rec.tradeDecision?.action || '');
+  if (/可小量分批|可分批買進|建議小量買進|突破後小量追蹤|突破確認/.test(label)) return 'actionable_scenario';
+  if (/等回測|不追價|過熱/.test(label)) return 'wait_pullback';
+  if (/不買|資料不足|籌碼偏亂|趨勢轉弱/.test(label)) return 'blocked';
+  return 'wait_pullback';
+}
+
+function buildRecommendationIndexBreakdown(rec: RecommendationCard): NonNullable<RecommendationCard['recommendationIndexBreakdown']> {
+  const sanity = rec.valuationSanityStatus || 'normal';
+  const coverage = recommendationTargetCoverage(rec);
+  const valuationValidity =
+    coverage === 'over_base_and_scenario' || sanity === 'over_target'
+      ? 0
+      : sanity === 'normal'
+        ? 100
+        : sanity === 'stale_multiple'
+          ? 35
+          : sanity === 'unit_mismatch'
+            ? 20
+            : sanity === 'outlier_review'
+              ? 45
+              : 30;
+  const bridgeEvidence = rec.confidenceScoreBreakdown?.bridgeEvidence ?? Math.round((rec.evidenceScore ?? 0.5) * 100);
+  const externalEvidence = clamp(
+    (rec.evidenceScore ?? 0.5) * 55 +
+      (rec.valuationSource === 'broker_report' ? 20 : rec.valuationSource === 'valuation_cases' ? 12 : 0) +
+      (rec.sourceSignalBadges?.includes('官方待驗證') ? -15 : 0) +
+      (sanity === 'normal' ? 18 : -8),
+    0,
+    100,
+  );
+  const financialBridge = clamp(
+    (rec.isFallbackValuation ? 22 : bridgeEvidence) -
+      (rec.valuationQuality === 'fallback_proxy' ? 30 : 0) -
+      (sanity === 'unit_mismatch' ? 45 : 0),
+    0,
+    100,
+  );
+  const entryCondition = clamp(rec.confidenceScoreBreakdown?.entryReadiness ?? Math.round((rec.timingScore ?? 0.5) * 100), 0, 100);
+  const peValuationSignal = rec.peValuationSignal || buildPeValuationSignal(rec);
+  const peValuationGap = peValuationGapScore(peValuationSignal);
+  const stability = rec.recommendationStabilityScore ?? recommendationStabilityScoreFor({ ...rec, peValuationSignal });
+  const upside = Math.max(0, rec.cardPrimaryUpsidePct ?? rec.displayBaseUpsidePct ?? rec.expectedUpsidePct ?? 0);
+  const upsideQuality =
+    coverage === 'over_base_and_scenario'
+      ? 0
+      : upside > 120
+        ? 42
+        : clamp((upside / 80) * 100, 0, 100);
+  return {
+    valuationValidity: Math.round(valuationValidity),
+    externalEvidence: Math.round(externalEvidence),
+    financialBridge: Math.round(financialBridge),
+    peValuationGap: Math.round(peValuationGap),
+    entryCondition: Math.round(entryCondition),
+    stability: Math.round(stability),
+    upsideQuality: Math.round(upsideQuality),
+  };
+}
+
+function applyRecommendationIndex(rec: RecommendationCard): RecommendationCard {
+  const peValuationSignal = rec.peValuationSignal || buildPeValuationSignal(rec);
+  const lifecycle = rec.recommendationLifecycleStage || recommendationLifecycleStageFor({ ...rec, peValuationSignal });
+  const stability = rec.recommendationStabilityScore ?? recommendationStabilityScoreFor({ ...rec, peValuationSignal, recommendationLifecycleStage: lifecycle });
+  const breakdown = rec.recommendationIndexBreakdown || buildRecommendationIndexBreakdown({
+    ...rec,
+    peValuationSignal,
+    recommendationLifecycleStage: lifecycle,
+    recommendationStabilityScore: stability,
+  });
+  const recommendationIndex = Math.round(
+    breakdown.valuationValidity * 0.25 +
+      breakdown.externalEvidence * 0.2 +
+      breakdown.financialBridge * 0.2 +
+      (breakdown.peValuationGap ?? 0) * 0.15 +
+      breakdown.entryCondition * 0.1 +
+      (breakdown.stability ?? 0) * 0.1,
+  );
+  const signal = rec.modelSignal || modelSignalForRecommendation(rec);
+  const mlForecastBand = buildAssistiveMlForecastBand({
+    currentPrice: rec.currentPrice ?? null,
+    modelSignal: signal,
+    brokerConsensus: null,
+    entryVerdict: rec.entryReadinessLabel || null,
+  });
+  return {
+    ...rec,
+    recommendationIndex,
+    recommendationIndexBreakdown: breakdown,
+    peValuationSignal,
+    recommendationLifecycleStage: lifecycle,
+    thesisMomentumScore: rec.thesisMomentumScore ?? thesisMomentumScoreFor({ ...rec, peValuationSignal }),
+    recommendationStabilityScore: stability,
+    modelSignal: signal,
+    modelSignalSummary: rec.modelSignalSummary || modelSignalSummaryFor(signal),
+    mlUpsideProbability: rec.mlUpsideProbability ?? mlForecastBand?.horizons.find((item) => item.days === 120)?.upsideProbability ?? null,
+    mlForecastSummary: rec.mlForecastSummary || mlForecastSummaryFor(mlForecastBand) || null,
+    whyModelDidNotPromote:
+      rec.whyModelDidNotPromote ||
+      '模型、PTT 與社群熱度只能提高 discovery / evidence 子分數；正式推薦仍由公式估值、券商/官方引用、籌碼與技術 gate 決定。',
+    researchConfidenceScore: rec.researchConfidenceScore ?? rec.recommendationConfidenceScore ?? null,
+  };
+}
+
+function applyRecommendationGateMetadata(rec: RecommendationCard): RecommendationCard {
+  const sanity = rec.valuationSanityStatus ? { valuationSanityStatus: rec.valuationSanityStatus, valuationSanityReason: rec.valuationSanityReason ?? null } : evaluateValuationSanity(rec);
+  const indexed = applyRecommendationIndex({
+    ...rec,
+    valuationSanityStatus: sanity.valuationSanityStatus,
+    valuationSanityReason: sanity.valuationSanityReason,
+  });
+  const coverage = recommendationTargetCoverage(indexed);
+	  const status = recommendationGateStatus(indexed);
+	  const reason = recommendationGateReason(indexed, status, coverage);
+	  const scenarioActionabilityStatus = scenarioActionabilityStatusFor(indexed, status);
+	  const isActionableRecommendation = status === 'formal_pass';
+  const displayBucket = recommendationDisplayBucket(indexed, status);
+  const displayTargetMode = recommendationDisplayTargetMode(indexed, status, coverage);
+  const archiveReason = indexed.archiveReason || recommendationArchiveReasonForStatus(status, coverage, reason);
+  const staleReason = indexed.staleReason || recommendationStaleReasonForStatus(status, coverage);
+  const baseTargetVerificationStatus =
+    indexed.baseTargetVerificationStatus ||
+    (status === 'formal_pass' && sanity.valuationSanityStatus === 'normal'
+      ? 'verified'
+      : sanity.valuationSanityStatus === 'normal'
+        ? 'research_estimate_only'
+        : 'insufficient_verified_basis');
+  const whyBaseIsFormal =
+    indexed.whyBaseIsFormal ||
+    (status === 'formal_pass' && baseTargetVerificationStatus === 'verified'
+      ? 'Base 目標價通過 bridge-aware 財務推導、估值安全 gate 與正式推薦 gate。'
+      : null);
+  const whyBaseIsNotFormal =
+    indexed.whyBaseIsNotFormal ||
+    (whyBaseIsFormal
+      ? null
+      : sanity.valuationSanityReason || reason || 'Base 尚未通過正式推薦或外部佐證 gate。');
+  const finalLifecycleStage: NonNullable<RecommendationCard['recommendationLifecycleStage']> =
+    status === 'formal_pass'
+      ? 'formal_recommendation'
+      : status === 'scenario_only' || displayBucket === 'scenario'
+        ? 'scenario_candidate'
+        : status === 'over_target' || displayBucket === 'valuation_reflected_archive'
+          ? 'archived_reflected'
+          : indexed.recommendationState === 'validated_thesis' || indexed.recommendationState === 'actionable_setup'
+            ? 'validated_thesis'
+            : indexed.recommendationState === 'partially_verified'
+              ? 'watchlist'
+              : 'discovered';
+  return {
+    ...indexed,
+    recommendationLifecycleStage: finalLifecycleStage,
+    recommendationStabilityScore: indexed.recommendationStabilityScore ?? recommendationStabilityScoreFor({ ...indexed, recommendationLifecycleStage: finalLifecycleStage }),
+    thesisMomentumScore: indexed.thesisMomentumScore ?? thesisMomentumScoreFor(indexed),
+	    recommendationGateStatus: status,
+	    formalGateStatus: status,
+	    scenarioActionabilityStatus,
+	    targetCoverageStatus: coverage,
+    overTargetReason: reason,
+    staleReason,
+    targetStaleKind: targetStaleKindForReason(staleReason),
+    archiveReason,
+    scenarioOnlyDisplayAllowed: status === 'scenario_only' && coverage === 'scenario_only',
+	    repricingRequiredEvidence:
+	      rec.repricingRequiredEvidence ||
+	      (staleReason === 'target_stale_due_price_crossed_base' || staleReason === 'target_stale_due_price_crossed_scenario'
+	        ? ['最新月營收、毛利率或 EPS 基底上修', 'Forward EPS 或 normalized PE/PB 有外部佐證', '券商 consensus / target PE 上修', '具名客戶、訂單或法說證據補強']
+	        : []),
+	    nextEvidenceSearchPlan:
+	      rec.nextEvidenceSearchPlan ||
+	      (staleReason || status === 'needs_revaluation' || status === 'scenario_only'
+	        ? ['鉅亨外資評等 / FactSet / MoneyDJ / UDN 券商摘要', '最新月營收、EPS、毛利率與 Forward PE', 'Threads / Instagram / Telegram / PTT 社群券商轉述', '具名客戶、訂單、法說或官方公告']
+	        : null),
+    revaluationJobSummary:
+      indexed.revaluationJobSummary ||
+      buildRevaluationJobSummary({
+        targetSnapshot: {
+          staleReason,
+          archiveReason,
+          reportUpdatedAt: indexed.lastValidatedAt || null,
+          repricedAt: indexed.lastValidatedAt || null,
+          repricingReason: indexed.revaluationReason || null,
+          unchangedReason: indexed.revaluationStatus === 'unchanged' ? indexed.revaluationReason || null : null,
+          bridgeCompleteness: indexed.isFallbackValuation ? 'insufficient' : 'complete',
+          repricingRequiredEvidence:
+            rec.repricingRequiredEvidence ||
+            (staleReason === 'target_stale_due_price_crossed_base' || staleReason === 'target_stale_due_price_crossed_scenario'
+              ? ['最新月營收、毛利率或 EPS 基底上修', 'Forward EPS 或 normalized PE/PB 有外部佐證', '券商 consensus / target PE 上修', '具名客戶、訂單或法說證據補強']
+              : []),
+          targetCoverageStatus: coverage,
+        },
+      }),
+    isActionableRecommendation,
+    baseTargetVerificationStatus,
+    whyBaseIsFormal,
+    whyBaseIsNotFormal,
+    displayBucket,
+    displayTargetMode,
+	    whyNotFormal: isActionableRecommendation ? null : reason,
+	    whyNoFormalRecommendation: isActionableRecommendation ? null : reason,
+    whyNotVisible:
+      displayBucket === 'valuation_reflected_archive'
+        ? archiveReason
+        : displayBucket === 'revaluation_queue'
+          ? reason || '歷史觀察需重新估值後才可回到首頁可見名單。'
+          : rec.whyNotVisible || null,
+    revaluationPriority: recommendationRevaluationPriority(rec, status, coverage),
+    action: isActionableRecommendation ? rec.action : 'watch',
+    whyNotPromoted: rec.whyNotPromoted || (isActionableRecommendation ? null : reason),
+  };
+}
+
+function recommendationIsOverScenarioTarget(rec: RecommendationCard) {
+  return recommendationTargetCoverage(rec) === 'over_base_and_scenario';
+}
+
+function toHotTrackingCard(rec: RecommendationCard, reason?: string | null): RecommendationCard {
+  const gated = applyRecommendationGateMetadata(rec);
+  const hotReason =
+    reason ||
+    gated.archiveReason ||
+    gated.overTargetReason ||
+    '市場正在討論，但現價已高於 Base/情境目標；先列熱股追蹤，等待重估或回測，不作買進推薦。';
+  const evidenceNeeded =
+    '需要 forward EPS、毛利率、營收、target Forward PE 或券商共識出現可引用上修，才可重新定價回到候選。';
+  const result: RecommendationCard = {
+    ...gated,
+    recommendationId: gated.recommendationId.startsWith('hot-') ? gated.recommendationId : `hot-${gated.recommendationId || gated.symbol}`,
+    action: 'watch',
+    displayBucket: 'hot_tracking',
+    displayTargetMode: 'hidden_over_target',
+    recommendationBucket: 'early_watch',
+    isActionableRecommendation: false,
+    revaluationStatus: 'pending',
+    revaluationReason: `target_stale_due_price_crossed_scenario：${hotReason} ${evidenceNeeded}`,
+    staleReason: 'target_stale_due_price_crossed_scenario',
+    targetStaleKind: 'crossed_scenario',
+    revaluationJobSummary: buildRevaluationJobSummary({
+      targetSnapshot: {
+        staleReason: 'target_stale_due_price_crossed_scenario',
+        archiveReason: hotReason,
+        reportUpdatedAt: gated.lastValidatedAt || null,
+        repricedAt: gated.lastValidatedAt || null,
+        repricingReason: `target_stale_due_price_crossed_scenario：${hotReason}`,
+        unchangedReason: evidenceNeeded,
+        bridgeCompleteness: gated.isFallbackValuation ? 'insufficient' : 'complete',
+        repricingRequiredEvidence: ['最新月營收、毛利率或 EPS 基底上修', 'Forward EPS 或 normalized PE/PB 有外部佐證', '券商 consensus / target PE 上修'],
+        targetCoverageStatus: 'over_base_and_scenario',
+      },
+    }),
+    hotTrackingReason: `${hotReason} ${evidenceNeeded}`,
+    whyNotPromoted: `${hotReason} ${evidenceNeeded}`,
+    whyNotFormal: `${hotReason} ${evidenceNeeded}`,
+    whyNotVisible: null,
+    revaluationPriority: Math.max(Number(gated.revaluationPriority || 0), 85),
+    conditionalRecommendationNote: '熱股追蹤：只追蹤社群/價量/券商是否帶來新估值證據，不代表現在可追價。',
+  };
+  return applyRevaluationSlaFields(result, result.revaluationJobSummary);
+}
+
+function recommendationCardFromDeepDivePayload(symbol: string, stock: Row, payload: StockDeepDivePayload): RecommendationCard {
+  const target = (payload.targetSnapshot || {}) as NonNullable<StockDeepDivePayload['targetSnapshot']>;
+  const currentPrice = target.currentPrice ?? payload.summaryCard?.currentPrice ?? null;
+  const baseTarget = target.baseTarget ?? payload.summaryCard?.baseTarget ?? null;
+  const upsideTarget = target.upsideTarget ?? null;
+  const targetPresentation = buildTargetSnapshot(
+    currentPrice ?? null,
+    baseTarget ?? null,
+    upsideTarget ?? null,
+    target.bearTarget ?? null,
+    target.latestSourceAt || null,
+    target.reportUpdatedAt || null,
+    target.priceAsOf || null,
+  );
+  return {
+    recommendationId: `hot-${symbol}`,
+    symbol,
+    name: String(stock.name || symbol),
+    market: 'TW',
+    currentPrice,
+    priceAsOf: target.priceAsOf || payload.sourceFreshness?.priceAsOf || null,
+    priceRefreshStatus: targetPresentation.priceRefreshStatus,
+    score: 0,
+    confidence: 0,
+    action: 'watch',
+    rationale: payload.thesisTitle || payload.reportSnapshot?.title || `${symbol} 熱股追蹤`,
+    targetPrice: baseTarget ?? null,
+    recommendationState: 'validated_thesis',
+    verificationStatus: payload.verificationStatus || '部分證實',
+    thesisTitle: payload.thesisTitle || payload.reportSnapshot?.title || `${symbol} 熱股追蹤`,
+    thesisSummary: payload.thesisSummary || payload.reportSnapshot?.subtitle || payload.investmentConclusion || null,
+    catalystSummary: payload.catalystSummary || payload.latestEvidence?.[0]?.summary || null,
+    chineseName: resolveChineseName(symbol, String(stock.name || symbol)),
+    valuationSource: 'valuation_cases',
+    valuationQuality: 'story_modeled',
+    scenarioDriverType: 'story_tam',
+    baseTarget,
+    upsideTarget,
+    expectedUpsidePct: targetPresentation.displayBaseUpsidePct,
+    displayBaseUpsidePct: targetPresentation.displayBaseUpsidePct,
+    displayScenarioUpsidePct: targetPresentation.displayScenarioUpsidePct,
+    cardPrimaryUpsidePct: targetPresentation.cardPrimaryUpsidePct,
+    cardPrimaryUpsideLabel: targetPresentation.cardPrimaryUpsideLabel,
+    revaluationStatus: target.revaluationStatus || 'rebuilt',
+    revaluationJobSummary: target.revaluationJobStatus || null,
+    revaluationSlaStatus: target.revaluationSlaStatus || null,
+    nextRevaluationAt: target.nextRevaluationAt || null,
+    missingRepricingEvidence: target.missingRepricingEvidence || target.repricingRequiredEvidence || [],
+    brokerEvidenceSearchStatus: target.brokerEvidenceSearchStatus || null,
+    scenarioPromotionStatus: target.scenarioPromotionStatus || payload.valuationPanel?.scenarioCaseDetail?.promotionGate?.status || null,
+    scenarioPromotionGate: payload.valuationPanel?.scenarioCaseDetail?.promotionGate || null,
+    marketValuationAdjustment: target.marketValuationAdjustment || null,
+    revaluationReason: target.repricingReason || target.unchangedReason || target.staleReason || null,
+    staleReason: target.staleReason || null,
+    archiveReason: target.archiveReason || null,
+    targetCoverageStatus: targetPresentation.targetCoverageStatus,
+    entryActionLabel: payload.chipEntryAssessment?.entryDecision?.action || payload.technicalEntrySignal?.entryDecision?.action || null,
+    entryDecision: payload.chipEntryAssessment?.entryDecision || payload.technicalEntrySignal?.entryDecision || null,
+    entryReadinessLabel: payload.chipEntryAssessment?.verdict || payload.technicalEntrySignal?.verdict || null,
+    entryReadinessReasons: [payload.chipEntryAssessment?.summary, payload.technicalEntrySignal?.summary].filter((item): item is string => Boolean(item)).slice(0, 2),
+    valuationSanityStatus: target.valuationSanityStatus || null,
+    valuationSanityReason: target.valuationSanityReason || null,
+  };
+}
+
+async function buildHotTrackingCards(params: {
+  symbols: string[];
+  existingCards: RecommendationCard[];
+}): Promise<RecommendationCard[]> {
+  const symbols = unique(params.symbols.map((item) => compactText(item).toUpperCase()).filter((item) => /^\d{4}$/.test(item)));
+  if (symbols.length === 0) return [];
+  const cardsBySymbol = new Map<string, RecommendationCard>();
+  for (const card of params.existingCards) {
+    if (!symbols.includes(card.symbol)) continue;
+    if (cardsBySymbol.has(card.symbol)) continue;
+    cardsBySymbol.set(card.symbol, toHotTrackingCard(card));
+  }
+  const missingSymbols = symbols.filter((symbol) => !cardsBySymbol.has(symbol));
+  if (missingSymbols.length > 0) {
+    const supabaseServer = getSupabaseServerClient();
+    const stocksRes = await withQueryTimeout(
+      supabaseServer.from('stocks').select('*').eq('market', 'TW').in('symbol', missingSymbols),
+      [],
+      4000,
+    );
+    for (const stock of (stocksRes.data as Row[]) || []) {
+      const symbol = compactText(stock.symbol).toUpperCase();
+      if (!symbol || cardsBySymbol.has(symbol)) continue;
+      const light = await withFallbackTimeout(buildLightStockDeepDiveSnapshot(stock, symbol), null, 9000);
+      if (!light) continue;
+      const card = recommendationCardFromDeepDivePayload(symbol, stock, light);
+      const coverage = recommendationTargetCoverage(card);
+      const socialHint = symbol === '3008' ? '大立光已列入登入流、Telegram、股市爆料與券商資料 forced refresh 追蹤。' : null;
+      if (coverage === 'over_base_and_scenario' || symbol === '3008') {
+        cardsBySymbol.set(
+          symbol,
+          toHotTrackingCard(card, socialHint || card.archiveReason || card.staleReason || null),
+        );
+      }
+    }
+  }
+  return Array.from(cardsBySymbol.values()).slice(0, 12);
+}
+
+type HistoricalObservationDisposition =
+  | 'revaluation_queue'
+  | 'scenario_only_needs_revaluation'
+  | 'valuation_reflected_archive'
+  | 'missing_new_evidence'
+  | 'repriced_but_not_formal';
+
+function historicalObservationDisposition(rec: RecommendationCard): { disposition: HistoricalObservationDisposition; reason: string } {
+  const gated = ensureRecommendationRevaluationMetadata(rec);
+  const coverage = recommendationTargetCoverage(gated);
+  const fresh = recommendationRevaluationIsFresh(gated);
+  if (coverage === 'over_base_and_scenario') {
+    return {
+      disposition: 'valuation_reflected_archive',
+      reason: gated.archiveReason || gated.overTargetReason || '現價已高於 Base 與情境目標價，歸檔為估值已反映。',
+    };
+  }
+  if (coverage === 'scenario_only') {
+    return {
+      disposition: 'scenario_only_needs_revaluation',
+      reason: '現價已高於 Base 但尚低於情境目標；需重新估值確認是否仍有獨立上行劇本。',
+    };
+  }
+  if (coverage === 'base_upside' && !fresh) {
+    return {
+      disposition: 'revaluation_queue',
+      reason: '仍有 Base 價差，但本輪尚未完成 bridge-aware 重估，進重估佇列而非首頁卡片。',
+    };
+  }
+  if (coverage === 'base_upside' && fresh) {
+    return {
+      disposition: 'repriced_but_not_formal',
+      reason: gated.whyNotFormal || '已重估但仍未通過正式推薦 gate。',
+    };
+  }
+  return {
+    disposition: 'missing_new_evidence',
+    reason: '缺少可支撐重新估值的新外部證據或有效 target。',
+  };
+}
+
+function buildHistoricalObservationSummary(candidates: RecommendationCard[]): NonNullable<RadarDailyPayload['historicalObservationSummary']> {
+  const uniqueCandidates = candidates.filter((item, index, arr) => arr.findIndex((probe) => probe.symbol === item.symbol) === index);
+  const buckets = new Map<HistoricalObservationDisposition, RecommendationCard[]>();
+  const examples: NonNullable<RadarDailyPayload['historicalObservationSummary']>['examples'] = [];
+  for (const candidate of uniqueCandidates) {
+    const { disposition, reason } = historicalObservationDisposition(candidate);
+    buckets.set(disposition, [...(buckets.get(disposition) || []), candidate]);
+    if (examples.length < 8) {
+      examples.push({
+        symbol: candidate.symbol,
+        name: candidate.chineseName || candidate.name || candidate.symbol,
+        disposition,
+        reason,
+      });
+    }
+  }
+  return {
+    total: uniqueCandidates.length,
+    revaluationQueue: buckets.get('revaluation_queue')?.length || 0,
+    scenarioOnlyNeedsRevaluation: buckets.get('scenario_only_needs_revaluation')?.length || 0,
+    valuationReflectedArchive: buckets.get('valuation_reflected_archive')?.length || 0,
+    missingNewEvidence: buckets.get('missing_new_evidence')?.length || 0,
+    repricedButNotFormal: buckets.get('repriced_but_not_formal')?.length || 0,
+    examples,
+  };
+}
+
 function recommendationHasPositiveUpside(rec: RecommendationCard) {
   return (rec.expectedUpsidePct ?? 0) > 0 && (rec.targetPrice ?? 0) > 0 && (rec.valuationSource || 'missing') !== 'missing';
 }
 
 function recommendationMeetsVerification(rec: RecommendationCard) {
   const state = rec.recommendationState || 'signal_candidate';
-  return state === 'partially_verified' || state === 'validated_thesis' || state === 'actionable_setup';
+  const socialPriorityPass =
+    (rec.sourcePriorityScore ?? 0) >= 0.55 &&
+    (rec.evidenceScore ?? 0) >= 0.45 &&
+    (rec.valuationSource || 'missing') !== 'missing' &&
+    (rec.expectedUpsidePct ?? 0) > 0;
+  return state === 'partially_verified' || state === 'validated_thesis' || state === 'actionable_setup' || socialPriorityPass;
 }
 
 function recommendationIsFormal(rec: RecommendationCard) {
+  return recommendationGateStatus(rec) === 'formal_pass';
+}
+
+function recommendationBucketForFormal(rec: RecommendationCard): RecommendationBucket {
+  const gated = applyRecommendationGateMetadata(rec);
+  const highConviction = gated.recommendationGateStatus === 'formal_pass' && (gated.recommendationIndex ?? 0) >= 80;
+  return highConviction ? 'high_conviction' : 'early_formal';
+}
+
+function recommendationIsRecentObservation(rec: RecommendationCard) {
   return recommendationHasPositiveUpside(rec) && recommendationMeetsVerification(rec);
 }
 
@@ -1246,6 +9675,12 @@ function whyNotRecommendedLabel(reason: string | null) {
       return '技術與價格資料已過舊，等待刷新後再評估。';
     case 'market snapshot stale':
       return '大盤資料已過舊，等待刷新後再評估。';
+    case 'review_required':
+      return '偵測到矛盾或治理風險，已送人工覆核，暫不發布正式推薦。';
+    case 'canonical_evidence_missing':
+      return '缺少官方/公司面與公開佐證的雙重證據，目前只能停留在驗證中。';
+    case 'social_only_evidence':
+      return '目前只有社群或論壇訊號，不能直接升級為正式推薦。';
     default:
       return null;
   }
@@ -1302,6 +9737,1256 @@ function computeTechnicalSnapshot(priceSeries: number[]) {
     macd: round(macdSeries[macdSeries.length - 1] || 0, 4),
     macdSignal: round(macdSignalSeries[macdSignalSeries.length - 1] || 0, 4),
   };
+}
+
+function buildChartFromSignalRows(rows: Row[]) {
+  return dedupeChartRows(rows)
+    .slice(-DEEP_DIVE_DAILY_BAR_TARGET)
+    .map((row, idx) => {
+      const close = toNumber(row.price);
+      if (!Number.isFinite(close) || close <= 0) return null;
+      const cm = (row.chip_metrics as Record<string, unknown> | null) || {};
+      const storedOpen = typeof cm.open === 'number' ? cm.open : null;
+      const storedHigh = typeof cm.high === 'number' ? cm.high : null;
+      const storedLow = typeof cm.low === 'number' ? cm.low : null;
+      const spread = Math.max(3, close * 0.015);
+      const open = storedOpen ?? (close - (idx % 2 === 0 ? spread * 0.4 : -spread * 0.3));
+      const high = storedHigh ?? (Math.max(open, close) + spread * 0.6);
+      const low = storedLow ?? (Math.min(open, close) - spread * 0.5);
+      return {
+        time: String(row.as_of || '').slice(0, 10),
+        open: Number(open.toFixed(2)),
+        high: Number(high.toFixed(2)),
+        low: Number(low.toFixed(2)),
+        close: Number(close.toFixed(2)),
+      };
+    })
+    .filter(Boolean) as StockInsightPayload['chart'];
+}
+
+function computeFibonacciLevels(
+  candles: Array<{ high: number; low: number; close: number }>,
+  lookback = 60,
+) {
+  const sliced = candles
+    .slice(-lookback)
+    .filter(
+      (item) =>
+        Number.isFinite(item.high) &&
+        item.high > 0 &&
+        Number.isFinite(item.low) &&
+        item.low > 0 &&
+        Number.isFinite(item.close) &&
+        item.close > 0,
+    );
+  if (sliced.length < 2) return null;
+  const swingHigh = Math.max(...sliced.map((item) => item.high));
+  const swingLow = Math.min(...sliced.map((item) => item.low));
+  if (!Number.isFinite(swingHigh) || !Number.isFinite(swingLow) || swingHigh <= swingLow) return null;
+  const range = swingHigh - swingLow;
+  const lastClose = sliced[sliced.length - 1]?.close ?? null;
+  const retracement236 = round(swingHigh - range * 0.236, 2);
+  const retracement382 = round(swingHigh - range * 0.382, 2);
+  const retracement5 = round(swingHigh - range * 0.5, 2);
+  const retracement618 = round(swingHigh - range * 0.618, 2);
+  const retracement786 = round(swingHigh - range * 0.786, 2);
+  let bias: 'support' | 'resistance' | 'range' | null = null;
+  if (lastClose != null && Number.isFinite(lastClose)) {
+    if (lastClose >= retracement236) bias = 'resistance';
+    else if (lastClose <= retracement618) bias = 'support';
+    else bias = 'range';
+  }
+  return {
+    swingHigh: round(swingHigh, 2),
+    swingLow: round(swingLow, 2),
+    retracement236,
+    retracement382,
+    retracement5,
+    retracement618,
+    retracement786,
+    bias,
+  };
+}
+
+function buildTechnicalSnapshotFromCandles(
+  candles: Array<{ high: number; low: number; close: number }>,
+  indicators: StockInsightPayload['indicators'],
+  dataSource: 'yahoo' | 'twstock' | 'stock_signals' | 'minimal' | 'fallback' | 'missing',
+  missingReason: string | null,
+) {
+  const closes = candles.map((item) => Number(item.close)).filter((value) => Number.isFinite(value) && value > 0);
+  const computed = closes.length >= 2 ? computeTechnicalSnapshot(closes) : null;
+  const dataDepthMissingReason =
+    closes.length === 0
+      ? missingReason
+      : closes.length < 20
+        ? `目前只有 ${closes.length} 根有效日線，短均線與節奏可先參考，但 MA20 / RSI / MACD 與 Fibonacci 仍屬輕量估算。`
+        : missingReason;
+  return {
+    ma5: closes.length >= 5 ? round(mean(closes.slice(-5)), 2) : null,
+    ma10: closes.length >= 10 ? round(mean(closes.slice(-10)), 2) : null,
+    ma20: closes.length >= 20 ? round(mean(closes.slice(-20)), 2) : null,
+    ma60: closes.length >= 60 ? round(mean(closes.slice(-60)), 2) : null,
+    ma120: closes.length >= 120 ? round(mean(closes.slice(-120)), 2) : null,
+    ma240: closes.length >= 240 ? round(mean(closes.slice(-240)), 2) : null,
+    rsi: indicators.rsi ?? (closes.length >= 14 ? computed?.rsi ?? null : null),
+    macd: indicators.macd ?? (closes.length >= 26 ? computed?.macd ?? null : null),
+    macdSignal: indicators.macdSignal ?? (closes.length >= 26 ? computed?.macdSignal ?? null : null),
+    fibonacci: closes.length >= 20 ? computeFibonacciLevels(candles) : null,
+    dataSource,
+    missingReason: dataDepthMissingReason,
+  };
+}
+
+function deepDiveTechnicalSourceNarrative(
+  dataSource: StockInsightPayload['chartSource'] | undefined,
+  missingReason: string | null | undefined,
+) {
+  if (dataSource === 'yahoo') return '技術圖表目前採用 Yahoo 歷史日線，主要用來確認量價節奏與進場區間。';
+  if (dataSource === 'twstock') return '技術圖表目前以 node-twstock 歷史日線回補，主要作為 Yahoo 缺資料時的正式備援來源。';
+  if (dataSource === 'stock_signals') return '技術圖表目前以本地 stock_signals 回補日線，作為 Yahoo 缺資料時的次級備援。';
+  if (dataSource === 'minimal' || dataSource === 'fallback') {
+    return missingReason || '目前技術圖表以輕量 fallback 資料重建，適合用來看相對位置，但不宜過度放大解讀。';
+  }
+  return missingReason || null;
+}
+
+type TechnicalCandle = StockInsightPayload['chart'][number];
+
+function trueRangeForCandle(candle: TechnicalCandle, previousClose: number | null) {
+  const high = Number(candle.high);
+  const low = Number(candle.low);
+  const close = Number(candle.close);
+  if (!Number.isFinite(high) || !Number.isFinite(low) || !Number.isFinite(close)) return null;
+  if (previousClose == null || !Number.isFinite(previousClose)) return Math.max(0, high - low);
+  return Math.max(high - low, Math.abs(high - previousClose), Math.abs(low - previousClose));
+}
+
+function averageFinite(values: Array<number | null | undefined>) {
+  const finite = values.filter((value): value is number => value != null && Number.isFinite(value));
+  if (finite.length === 0) return null;
+  return finite.reduce((sum, value) => sum + value, 0) / finite.length;
+}
+
+function calculateAtr(candles: TechnicalCandle[], period = 14) {
+  if (candles.length < Math.max(2, period + 1)) return null;
+  const recent = candles.slice(-(period + 1));
+  const ranges: number[] = [];
+  for (let index = 1; index < recent.length; index += 1) {
+    const range = trueRangeForCandle(recent[index], recent[index - 1]?.close ?? null);
+    if (range != null) ranges.push(range);
+  }
+  return averageFinite(ranges);
+}
+
+function calculateAdx(candles: TechnicalCandle[], period = 14) {
+  if (candles.length < period + 2) return null;
+  const dxValues: number[] = [];
+  const start = Math.max(1, candles.length - period * 2);
+  for (let windowEnd = start + period; windowEnd < candles.length; windowEnd += 1) {
+    const window = candles.slice(windowEnd - period, windowEnd + 1);
+    let trSum = 0;
+    let plusDmSum = 0;
+    let minusDmSum = 0;
+    for (let index = 1; index < window.length; index += 1) {
+      const current = window[index];
+      const previous = window[index - 1];
+      const tr = trueRangeForCandle(current, previous.close);
+      if (tr == null) continue;
+      const upMove = current.high - previous.high;
+      const downMove = previous.low - current.low;
+      trSum += tr;
+      plusDmSum += upMove > downMove && upMove > 0 ? upMove : 0;
+      minusDmSum += downMove > upMove && downMove > 0 ? downMove : 0;
+    }
+    if (trSum <= 0) continue;
+    const plusDi = (plusDmSum / trSum) * 100;
+    const minusDi = (minusDmSum / trSum) * 100;
+    const denominator = plusDi + minusDi;
+    if (denominator > 0) dxValues.push((Math.abs(plusDi - minusDi) / denominator) * 100);
+  }
+  const adx = averageFinite(dxValues.slice(-period));
+  return adx == null ? null : round(adx, 2);
+}
+
+function calculateBollinger(candles: TechnicalCandle[], currentPrice: number | null, period = 20) {
+  if (candles.length < period) return null;
+  const closes = candles
+    .slice(-period)
+    .map((candle) => Number(candle.close))
+    .filter((value) => Number.isFinite(value));
+  if (closes.length < period) return null;
+  const middle = averageFinite(closes);
+  if (middle == null) return null;
+  const variance = averageFinite(closes.map((value) => (value - middle) ** 2)) ?? 0;
+  const std = Math.sqrt(variance);
+  const upper = middle + std * 2;
+  const lower = middle - std * 2;
+  const price = currentPrice ?? closes[closes.length - 1] ?? null;
+  const position: NonNullable<NonNullable<EntryDecision['indicatorStack']>['bollinger']>['position'] =
+    price == null || !Number.isFinite(price)
+      ? 'unknown'
+      : price > upper
+        ? 'above_upper'
+        : price < lower
+          ? 'below_lower'
+          : price >= middle + (upper - middle) * 0.35
+            ? 'upper_half'
+            : price <= middle - (middle - lower) * 0.35
+              ? 'lower_half'
+              : 'middle';
+  return {
+    upper: round(upper, 2),
+    middle: round(middle, 2),
+    lower: round(lower, 2),
+    bandwidthPct: middle > 0 ? round(((upper - lower) / middle) * 100, 2) : null,
+    position,
+  };
+}
+
+function stochasticKAt(candles: TechnicalCandle[], endIndex: number, period = 14) {
+  const start = endIndex - period + 1;
+  if (start < 0) return null;
+  const window = candles.slice(start, endIndex + 1);
+  const highs = window.map((candle) => Number(candle.high)).filter((value) => Number.isFinite(value));
+  const lows = window.map((candle) => Number(candle.low)).filter((value) => Number.isFinite(value));
+  const close = Number(candles[endIndex]?.close);
+  if (highs.length < period || lows.length < period || !Number.isFinite(close)) return null;
+  const highest = Math.max(...highs);
+  const lowest = Math.min(...lows);
+  if (highest <= lowest) return null;
+  return ((close - lowest) / (highest - lowest)) * 100;
+}
+
+function calculateStochastic(candles: TechnicalCandle[], period = 14) {
+  if (candles.length < period) return null;
+  const latestK = stochasticKAt(candles, candles.length - 1, period);
+  const d = averageFinite([0, 1, 2].map((offset) => stochasticKAt(candles, candles.length - 1 - offset, period)));
+  if (latestK == null && d == null) return null;
+  return {
+    k: latestK == null ? null : round(latestK, 2),
+    d: d == null ? null : round(d, 2),
+  };
+}
+
+function buildIndicatorStackFromChart(
+  chart: StockInsightPayload['chart'] | null | undefined,
+  currentPrice: number | null,
+  volume: number | null | undefined,
+): EntryDecision['indicatorStack'] {
+  const candles = Array.isArray(chart)
+    ? chart.filter((candle) =>
+        [candle.open, candle.high, candle.low, candle.close].every((value) => value != null && Number.isFinite(Number(value))),
+      )
+    : [];
+  if (candles.length === 0) {
+    return {
+      adx: null,
+      atr: null,
+      bollinger: null,
+      stochastic: null,
+      mfi: null,
+      obv: null,
+      cmf: null,
+      volumeRatio20d: null,
+    };
+  }
+  const atr = calculateAtr(candles);
+  return {
+    adx: calculateAdx(candles),
+    atr: atr == null ? null : round(atr, 2),
+    bollinger: calculateBollinger(candles, currentPrice),
+    stochastic: calculateStochastic(candles),
+    mfi: null,
+    obv: null,
+    cmf: null,
+    volumeRatio20d: volume != null && Number.isFinite(volume) && volume > 0 ? null : null,
+  };
+}
+
+function buildTechnicalEntrySignal(
+  technicalSnapshot: NonNullable<StockDeepDivePayload['technicalSnapshot']>,
+  price: number | null | undefined,
+  volume: number | null | undefined,
+  chart?: StockInsightPayload['chart'] | null,
+) {
+  const reasons: string[] = [];
+  const currentPrice = price != null && Number.isFinite(price) && price > 0 ? Number(price) : null;
+  const ma20 = technicalSnapshot.ma20;
+  const ma60 = technicalSnapshot.ma60;
+  const ma120 = technicalSnapshot.ma120;
+  const rsi = technicalSnapshot.rsi;
+  const macd = technicalSnapshot.macd;
+  const signal = technicalSnapshot.macdSignal;
+  const fib = technicalSnapshot.fibonacci || null;
+  const rawBreakoutLevel = fib?.retracement236 ?? fib?.swingHigh ?? null;
+  const swingHigh = fib?.swingHigh ?? null;
+  const swingLow = fib?.swingLow ?? null;
+  const fibRange = swingHigh != null && swingLow != null && swingHigh > swingLow ? swingHigh - swingLow : null;
+  const extension1272 = swingHigh != null && fibRange != null ? round(swingHigh + fibRange * 0.272, 2) : null;
+  const extension1618 = swingHigh != null && fibRange != null ? round(swingHigh + fibRange * 0.618, 2) : null;
+  const breakoutAchieved = currentPrice != null && rawBreakoutLevel != null ? currentPrice > rawBreakoutLevel : false;
+  const swingHighBroken = currentPrice != null && swingHigh != null ? currentPrice >= swingHigh : false;
+  const nextResistance =
+    currentPrice == null
+      ? rawBreakoutLevel
+      : breakoutAchieved
+        ? swingHigh != null && currentPrice < swingHigh
+          ? swingHigh
+          : extension1272 != null && currentPrice < extension1272
+            ? extension1272
+            : extension1618
+        : rawBreakoutLevel ?? swingHigh ?? null;
+  const activeSupport = breakoutAchieved
+    ? rawBreakoutLevel ?? ma20 ?? fib?.retracement382 ?? null
+    : fib?.retracement618 ?? ma60 ?? ma120 ?? null;
+  const supportLevel = activeSupport ?? fib?.retracement618 ?? ma60 ?? ma120 ?? null;
+  const resistanceLevel = nextResistance ?? rawBreakoutLevel ?? swingHigh ?? null;
+  const aboveMa20 = currentPrice != null && ma20 != null ? currentPrice >= ma20 : null;
+  const aboveMa60 = currentPrice != null && ma60 != null ? currentPrice >= ma60 : null;
+  const distanceFromMa20 = currentPrice != null && ma20 != null && ma20 > 0 ? (currentPrice - ma20) / ma20 : null;
+  const extendedFromMa20 = distanceFromMa20 != null ? distanceFromMa20 > 0.12 : false;
+  const severelyExtendedFromMa20 = distanceFromMa20 != null ? distanceFromMa20 > 0.18 : false;
+  const nearNextResistance =
+    currentPrice != null && nextResistance != null && nextResistance > 0 ? Math.abs(nextResistance - currentPrice) / nextResistance <= 0.035 : false;
+  const macdBullish = macd != null && signal != null ? macd >= signal : null;
+  const rsiHot = (rsi ?? 50) >= 70;
+  const rsiVeryHot = (rsi ?? 50) >= 78;
+  const rsiConstructive = (rsi ?? 50) >= 45 && (rsi ?? 50) < 68;
+  const breakoutRetestLevel = breakoutAchieved ? rawBreakoutLevel ?? ma20 ?? null : null;
+  const staleTechnicalReason = technicalSnapshot.missingReason || null;
+  const indicatorStack = buildIndicatorStackFromChart(chart, currentPrice, volume);
+  const adx = indicatorStack?.adx ?? null;
+  const atr = indicatorStack?.atr ?? null;
+  const bollinger = indicatorStack?.bollinger ?? null;
+  const stochastic = indicatorStack?.stochastic ?? null;
+  const trendStrength =
+    (aboveMa20 ? 18 : 0) +
+    (aboveMa60 ? 18 : 0) +
+    (macdBullish ? 18 : 0) +
+    (breakoutAchieved ? 16 : 0) +
+    (adx != null ? (adx >= 25 ? 18 : adx >= 18 ? 10 : 0) : 6) +
+    (bollinger?.position === 'upper_half' || bollinger?.position === 'above_upper' ? 6 : 0);
+  const severeHeat =
+    rsiVeryHot ||
+    severelyExtendedFromMa20 ||
+    (bollinger?.position === 'above_upper' && rsiHot && nearNextResistance) ||
+    ((stochastic?.k ?? 0) >= 92 && rsiHot && nearNextResistance);
+  const tradableTrend =
+    currentPrice != null &&
+    trendStrength >= 58 &&
+    !severeHeat &&
+    (supportLevel == null || currentPrice == null || currentPrice >= supportLevel) &&
+    (macdBullish == null || macdBullish);
+
+  let pricePositionState: NonNullable<NonNullable<StockDeepDivePayload['technicalEntrySignal']>['pricePositionState']> = 'range';
+  if (currentPrice == null) pricePositionState = 'range';
+  else if (supportLevel != null && currentPrice < supportLevel) pricePositionState = 'below_support';
+  else if (aboveMa20 === false || aboveMa60 === false) pricePositionState = 'below_ma';
+  else if (breakoutAchieved && (rsiHot || extendedFromMa20 || (swingHighBroken && nearNextResistance))) pricePositionState = 'overextended';
+  else if (breakoutAchieved && rawBreakoutLevel != null && currentPrice <= rawBreakoutLevel * 1.04) pricePositionState = 'breakout_retest';
+  else if (breakoutAchieved) pricePositionState = 'breakout_confirmed';
+  else if (nearNextResistance || fib?.bias === 'resistance') pricePositionState = 'near_resistance';
+  else if (rawBreakoutLevel != null && currentPrice >= rawBreakoutLevel * 0.96) pricePositionState = 'breakout_watch';
+
+  if (ma20 != null) reasons.push(`MA20 ${formatNumberLocal(ma20)}，用來判斷短線趨勢是否仍站穩。`);
+  if (rsi != null) reasons.push(`RSI ${formatNumberLocal(rsi)}，${rsi >= 70 ? '短線偏熱' : rsi <= 35 ? '接近低檔區' : '仍在中性區間'}。`);
+  if (macd != null && signal != null) reasons.push(`MACD ${formatNumberLocal(macd, 4)} / Signal ${formatNumberLocal(signal, 4)}，${macdBullish ? '動能尚未轉弱' : '動能需要重新轉強'}。`);
+  if (fib) reasons.push(`Fibonacci 38.2% / 61.8% 約 ${formatMoney(fib.retracement382)} / ${formatMoney(fib.retracement618)}。`);
+  if (breakoutAchieved && rawBreakoutLevel != null) {
+    reasons.push(
+      `最新價已站上原壓力 ${formatMoney(rawBreakoutLevel)}，這個價位改看突破後第一回測支撐；下一壓力看 ${
+        nextResistance == null ? '待補' : formatMoney(nextResistance)
+      }。`,
+    );
+  }
+  if (adx != null) reasons.push(`ADX ${formatNumberLocal(adx)}，${adx >= 25 ? '趨勢強度足以支撐分批策略' : adx >= 18 ? '趨勢形成中但仍要控部位' : '趨勢強度仍偏弱'}。`);
+  if (atr != null) reasons.push(`ATR 約 ${formatMoney(atr)}，可用來估停損與回測緩衝。`);
+  if (bollinger) reasons.push(`Bollinger 位置 ${bollinger.position}，帶寬約 ${formatNumberLocal(bollinger.bandwidthPct)}%。`);
+  if (stochastic?.k != null) reasons.push(`Stochastic K ${formatNumberLocal(stochastic.k)}，${stochastic.k >= 85 ? '短線動能偏熱' : stochastic.k >= 45 ? '動能仍可追蹤' : '動能尚未轉強'}。`);
+  if (volume != null && Number.isFinite(volume) && volume > 0) reasons.push(`最新成交量約 ${Math.round(volume).toLocaleString('zh-TW')}，需觀察量能是否延續。`);
+
+  let verdict: '適合分批' | '等回測' | '過熱不追' | '趨勢轉弱' = '等回測';
+  if (pricePositionState === 'below_support' || pricePositionState === 'below_ma' || (macdBullish === false && (aboveMa20 === false || (rsi ?? 50) < 45))) verdict = '趨勢轉弱';
+  else if (pricePositionState === 'overextended' && severeHeat) verdict = '過熱不追';
+  else if (tradableTrend) verdict = '適合分批';
+  else if (pricePositionState === 'overextended' && breakoutAchieved && (macdBullish == null || macdBullish)) verdict = '適合分批';
+  else if (breakoutAchieved && (macdBullish == null || macdBullish) && rsiConstructive && !extendedFromMa20) verdict = '適合分批';
+  else if (aboveMa20 && (macdBullish == null || macdBullish) && (rsi ?? 50) < 65 && !nearNextResistance) verdict = '適合分批';
+  const actionabilityScore = Math.round(
+    clamp(
+      trendStrength +
+        (verdict === '適合分批' ? 10 : verdict === '等回測' ? 0 : -18) +
+        (rsi != null && rsi >= 45 && rsi <= 72 ? 8 : 0) -
+        (severeHeat ? 24 : 0) -
+        (verdict === '趨勢轉弱' ? 20 : 0),
+      0,
+      100,
+    ),
+  );
+
+  const summary =
+    verdict === '適合分批'
+      ? breakoutAchieved && rawBreakoutLevel != null
+        ? `技術面已完成第一段突破，${formatMoney(rawBreakoutLevel)} 改看回測支撐；若量能不失控、MACD 不轉弱，可小量分批而不是追滿。`
+        : '基本面 thesis 若成立，技術面仍允許用分批方式布局，但不建議一次追滿。'
+      : verdict === '過熱不追'
+        ? '基本面即使看對，短線已偏熱或接近壓力區，較適合等回測後再提高部位。'
+        : verdict === '趨勢轉弱'
+          ? '基本面可以繼續追蹤，但短線趨勢或動能轉弱，進場前要等重新站回關鍵均線。'
+          : '基本面故事仍可觀察，但目前風險報酬不夠乾淨，較適合等待 MA / Fibonacci 支撐確認。';
+  const entryZone =
+    verdict === '適合分批'
+      ? breakoutAchieved && rawBreakoutLevel != null
+        ? `突破已達成，第一分批區看 ${formatMoney(rawBreakoutLevel)} 到 MA20 ${ma20 == null ? '待補' : formatMoney(ma20)} 的回測帶；若不回測，僅能小量追蹤。`
+        : `可用分批方式靠近 MA20 ${ma20 == null ? '待補' : formatMoney(ma20)} 到 MA60 ${
+            ma60 == null ? '待補' : formatMoney(ma60)
+          } 區間布局，避免一次追滿。`
+      : `等待股價回測 MA20 ${ma20 == null ? '待補' : formatMoney(ma20)} 或 Fibonacci 61.8% ${
+          fib?.retracement618 == null ? '待補' : formatMoney(fib.retracement618)
+        } 附近止穩後再評估。`;
+  const breakoutTrigger =
+    breakoutAchieved && rawBreakoutLevel != null
+      ? `已站上原壓力 ${formatMoney(rawBreakoutLevel)}；接下來不是等「是否突破」，而是看能否守住 ${formatMoney(
+          rawBreakoutLevel,
+        )} 並挑戰下一壓力 ${nextResistance == null ? '待補' : formatMoney(nextResistance)}，且 MACD 維持在 Signal 之上。`
+      : resistanceLevel != null
+        ? `若帶量站上 ${formatMoney(resistanceLevel)} 且 MACD 維持在 Signal 之上，可視為情境追蹤的突破觸發。`
+      : '等待帶量突破近期壓力且 MACD 重新轉強。';
+  const pullbackSupport =
+    breakoutAchieved && rawBreakoutLevel != null
+      ? `突破後第一回測支撐看 ${formatMoney(rawBreakoutLevel)}，若量縮守住且法人/融資沒有惡化，才算健康換手。`
+      : supportLevel != null
+        ? `第一觀察支撐約 ${formatMoney(supportLevel)}；若跌破後無法快速收回，代表進場時機需延後。`
+      : '支撐位仍待兩年日線資料補齊，暫以 MA60 / 前波低點作為回測觀察。';
+  const avoidZone =
+    verdict === '過熱不追'
+      ? breakoutAchieved && rawBreakoutLevel != null
+        ? `已突破但短線延伸偏大，不追價；等回測 ${formatMoney(rawBreakoutLevel)} 或下一根量價確認後再評估。`
+        : '短線偏熱或接近 Fibonacci 壓力，不建議追價；等回測或突破後再分批。'
+      : verdict === '趨勢轉弱'
+        ? '跌破短中期均線且 MACD 未轉強前，不宜把基本面故事直接轉成追價動作。'
+        : '若量縮上漲或 RSI 快速升到 70 以上，追價風險會明顯提高。';
+  const invalidationLevel =
+    breakoutAchieved && rawBreakoutLevel != null
+      ? `若收盤跌回 ${formatMoney(rawBreakoutLevel)} 且放量，視為突破失敗；若再跌破 MA60 ${ma60 == null ? '待補' : formatMoney(ma60)}，技術面進場假設先失效。`
+      : ma60 != null
+      ? `若收盤連續跌破 MA60 ${formatMoney(ma60)}，技術面進場假設先失效。`
+      : supportLevel != null
+        ? `若跌破 ${formatMoney(supportLevel)} 後無法收回，技術面進場假設先失效。`
+        : '若跌破近期整理區且量能放大，技術面進場假設先失效。';
+  const volumeSignal =
+    volume != null && Number.isFinite(volume) && volume > 0
+      ? `目前成交量約 ${Math.round(volume).toLocaleString('zh-TW')}；突破要放量，回測則以量縮止穩較佳。`
+      : '量能資料待補；突破或回測都需要搭配成交量確認。';
+  const technicalEntryAction =
+    verdict === '適合分批'
+      ? ('可分批買進' as const)
+      : verdict === '過熱不追'
+        ? ('不追價' as const)
+        : verdict === '趨勢轉弱'
+          ? ('不買' as const)
+          : ('等回測' as const);
+  const buyNowAllowed = technicalEntryAction === '可分批買進' && actionabilityScore >= 58;
+  const initialSizePct = buyNowAllowed ? (actionabilityScore >= 74 ? 10 : 5) : 0;
+  const addSizePct = buyNowAllowed ? 5 : verdict === '等回測' ? 3 : 0;
+  const maxSizePct = buyNowAllowed ? (actionabilityScore >= 74 ? 20 : 15) : verdict === '等回測' ? 5 : 0;
+  const buyPlan = {
+    initialSizePct,
+    addSizePct,
+    maxSizePct,
+    buyZone: entryZone,
+    breakoutTrigger,
+    pullbackTrigger: pullbackSupport,
+    stopLoss: invalidationLevel,
+    takeProfit: nextResistance != null ? `第一段停利 / 減碼觀察 ${formatMoney(nextResistance)}，若放量突破再看下一段延伸。` : '情境目標或下一壓力帶前分批檢查是否減碼。',
+    invalidation: invalidationLevel,
+  };
+
+  return {
+    verdict,
+    summary,
+    reasons: uniqueNarrativeLines(reasons, 5),
+    supportLevel,
+    resistanceLevel,
+    pricePositionState,
+    activeSupport,
+    nextResistance,
+    breakoutAchieved,
+    breakoutRetestLevel,
+    volumeRatio20d: indicatorStack?.volumeRatio20d ?? null,
+    actionabilityScore,
+    buyNowAllowed,
+    entryStyle: 'aggressive_fractional' as const,
+    indicatorStack,
+    staleTechnicalReason,
+    entryPlan: {
+      strategy: summary,
+      entryZone,
+      breakoutTrigger,
+      pullbackSupport,
+      avoidZone,
+      invalidationLevel,
+      volumeSignal,
+    },
+    entryDecision: {
+      action: technicalEntryAction,
+      positionSize: verdict === '適合分批' ? '先以 5%–10% 小量分批，不一次追滿' : '暫不新增部位',
+      buyZone: entryZone,
+      addCondition: breakoutTrigger,
+      stopLoss: invalidationLevel,
+      invalidation: invalidationLevel,
+      validUntil: '下一次收盤價與技術指標刷新前',
+      confidence: actionabilityScore,
+      actionabilityScore,
+      buyNowAllowed,
+      entryStyle: 'aggressive_fractional' as const,
+      buyPlan,
+      indicatorStack,
+      reasons: uniqueNarrativeLines(reasons, 3),
+      entryTriggers: [
+        {
+          label: verdict === '適合分批' ? '現在小量分批' : '回測買點',
+          triggerType: verdict === '適合分批' ? ('buy_now' as const) : ('pullback_buy' as const),
+          condition: verdict === '適合分批' ? entryZone : pullbackSupport,
+          action: technicalEntryAction,
+          positionSize: verdict === '適合分批' ? '5%–10% 小量分批' : '等待觸發後 5% 以內試單',
+          invalidation: invalidationLevel,
+          status: verdict === '趨勢轉弱' ? ('blocked' as const) : verdict === '適合分批' ? ('active' as const) : ('waiting' as const),
+        },
+        {
+          label: breakoutAchieved ? '突破後續抱/加碼條件' : '突破買點',
+          triggerType: breakoutAchieved ? ('add' as const) : ('breakout_buy' as const),
+          condition: breakoutTrigger,
+          action: breakoutAchieved && verdict !== '趨勢轉弱' ? ('突破後小量追蹤' as const) : technicalEntryAction,
+          positionSize: '3%–5% 追蹤倉，回測守住再提高',
+          invalidation: invalidationLevel,
+          status: verdict === '趨勢轉弱' ? ('blocked' as const) : breakoutAchieved ? ('active' as const) : ('waiting' as const),
+        },
+      ],
+    },
+  };
+}
+
+function signedLots(value: number | null | undefined) {
+  if (value == null || !Number.isFinite(value)) return '待補';
+  return `${value > 0 ? '+' : ''}${formatNumberLocal(value, 0)} 張`;
+}
+
+function plainLots(value: number | null | undefined) {
+  if (value == null || !Number.isFinite(value)) return '待補';
+  return `${formatNumberLocal(value, 0)} 張`;
+}
+
+function pctText(value: number | null | undefined) {
+  if (value == null || !Number.isFinite(value)) return '待補';
+  return `${formatNumberLocal(value, 2)}%`;
+}
+
+function buildEntryDecisionFromAssessment(params: {
+  verdict: DeepDiveChipEntryVerdict;
+  actionabilityScore: number;
+  targetVerdict: 'formal' | 'scenario' | 'reflected';
+  supportLevel: number | null;
+  resistanceLevel: number | null;
+  invalidationLevel: number | null;
+  technicalEntrySignal: StockDeepDivePayload['technicalEntrySignal'] | null;
+  summary: string;
+  reasons: string[];
+}) {
+  const { verdict, actionabilityScore, targetVerdict, supportLevel, resistanceLevel, invalidationLevel, technicalEntrySignal } = params;
+  const scenarioHasRoom = targetVerdict === 'scenario' || targetVerdict === 'formal';
+  const breakoutAchieved = Boolean(technicalEntrySignal?.breakoutAchieved);
+  const overextendedButTradable =
+    verdict === '過熱不追' &&
+    scenarioHasRoom &&
+    actionabilityScore >= 52 &&
+    technicalEntrySignal?.pricePositionState === 'overextended';
+  const action =
+    verdict === '可小量分批'
+      ? targetVerdict === 'formal' && actionabilityScore >= 72
+        ? ('建議小量買進' as const)
+        : ('可分批買進' as const)
+      : verdict === '突破後小量追蹤' || verdict === '突破確認再追'
+        ? ('突破後小量追蹤' as const)
+        : overextendedButTradable
+          ? ('突破後小量追蹤' as const)
+        : verdict === '過熱不追'
+          ? ('不追價' as const)
+          : verdict === '等回測'
+            ? ('等回測' as const)
+            : ('不買' as const);
+  const buyable = action === '建議小量買進' || action === '可分批買進' || action === '突破後小量追蹤';
+  const inheritedIndicatorStack = technicalEntrySignal?.indicatorStack || technicalEntrySignal?.entryDecision?.indicatorStack || null;
+  const positionSize =
+    action === '建議小量買進'
+      ? '建議先用 10% 以內小量進場，確認量價與籌碼後再加碼'
+      : action === '可分批買進'
+        ? '建議 5%–10% 分批，不一次追滿'
+        : action === '突破後小量追蹤'
+          ? '僅限 5% 左右追蹤部位，等回測守住再提高'
+          : '暫不新增部位';
+  const buyZone =
+    buyable && technicalEntrySignal?.entryPlan?.entryZone
+      ? technicalEntrySignal.entryPlan.entryZone
+      : buyable
+        ? `第一買點看 ${formatMoney(supportLevel)} 到 ${formatMoney(resistanceLevel)} 之間的量縮回測或突破後守穩。`
+        : `等待 ${formatMoney(supportLevel)} 附近回測止穩，或重新帶量站上 ${formatMoney(resistanceLevel)} 後再評估。`;
+  const addCondition =
+    action === '建議小量買進' || action === '可分批買進'
+      ? `加碼條件：守住 ${formatMoney(supportLevel)}，MACD 不轉弱，且法人/融資沒有惡化。`
+      : action === '突破後小量追蹤'
+        ? breakoutAchieved
+          ? `加碼條件：突破已發生，接下來看回測 ${formatMoney(supportLevel)} 不破、量能不失控，且 MACD 維持在 Signal 之上。`
+          : `加碼條件：帶量突破 ${formatMoney(resistanceLevel)} 後，回測原壓力轉支撐不破。`
+        : resistanceLevel != null
+          ? `重新評估條件：站回 ${formatMoney(resistanceLevel)} 或回測 ${formatMoney(supportLevel)} 量縮止穩。`
+          : `重新評估條件：站回關鍵均線或帶量突破前高，或回測 ${formatMoney(supportLevel)} 量縮止穩。`;
+  const stopLoss = `跌破 ${formatMoney(invalidationLevel)} 且放量未收回，先停損或取消進場假設。`;
+  const buyPlan = {
+    initialSizePct: action === '建議小量買進' ? 10 : action === '可分批買進' ? 5 : action === '突破後小量追蹤' ? 3 : 0,
+    addSizePct: buyable ? 5 : scenarioHasRoom ? 3 : 0,
+    maxSizePct: action === '建議小量買進' ? 20 : action === '可分批買進' ? 15 : action === '突破後小量追蹤' ? 10 : 0,
+    buyZone,
+    breakoutTrigger:
+      technicalEntrySignal?.entryPlan?.breakoutTrigger ||
+      (resistanceLevel != null ? `帶量站上 ${formatMoney(resistanceLevel)} 且不跌回壓力下方。` : '帶量突破近期壓力且 MACD 不轉弱。'),
+    pullbackTrigger:
+      technicalEntrySignal?.entryPlan?.pullbackSupport ||
+      (supportLevel != null ? `回測 ${formatMoney(supportLevel)} 量縮止穩。` : '回測 MA20 / MA60 量縮止穩。'),
+    stopLoss,
+    takeProfit:
+      resistanceLevel != null
+        ? `接近 ${formatMoney(resistanceLevel)} 先檢查是否分批停利；若放量突破再保留追蹤倉。`
+        : '接近情境目標或下一壓力帶時檢查是否分批停利。',
+    invalidation: stopLoss,
+  };
+  const entryTriggers = [
+    {
+      label: buyable ? '現在第一筆' : scenarioHasRoom ? '回測買點' : '風險解除後再評估',
+      triggerType: buyable ? ('buy_now' as const) : scenarioHasRoom ? ('pullback_buy' as const) : ('risk_off' as const),
+      condition: buyable ? buyZone : `回測 ${formatMoney(supportLevel)} 附近量縮止穩，且 MACD 不跌破 Signal。`,
+      action: buyable ? action : scenarioHasRoom ? ('等回測' as const) : ('不買' as const),
+      positionSize: buyable ? positionSize : '觸發後先 5% 以內試單，不一次追滿',
+      invalidation: stopLoss,
+      status: buyable ? ('active' as const) : scenarioHasRoom ? ('waiting' as const) : ('blocked' as const),
+    },
+    {
+      label: breakoutAchieved ? '突破延伸確認' : '突破買點',
+      triggerType: breakoutAchieved ? ('add' as const) : ('breakout_buy' as const),
+      condition: breakoutAchieved
+        ? `守住 ${formatMoney(supportLevel)} 後再挑戰 ${formatMoney(resistanceLevel)}，成交量不爆量失控。`
+        : `帶量站上 ${formatMoney(resistanceLevel)}，且收盤不跌回壓力下方。`,
+      action: scenarioHasRoom ? ('突破後小量追蹤' as const) : ('不買' as const),
+      positionSize: '3%–5% 追蹤倉，回測成功才提高',
+      invalidation: stopLoss,
+      status: scenarioHasRoom && verdict !== '趨勢轉弱' ? (breakoutAchieved ? 'active' as const : 'waiting' as const) : ('blocked' as const),
+    },
+    {
+      label: '風險失效',
+      triggerType: 'risk_off' as const,
+      condition: stopLoss,
+      action: '不買' as const,
+      positionSize: '降到 0 或取消新增部位',
+      invalidation: stopLoss,
+      status: 'waiting' as const,
+    },
+  ];
+  return {
+    action,
+    positionSize,
+    buyZone,
+    addCondition,
+    stopLoss,
+    invalidation: stopLoss,
+    validUntil: '下一次收盤價、籌碼與技術指標刷新前',
+    confidence: Math.round(clamp(actionabilityScore, 0, 100)),
+    actionabilityScore: Math.round(clamp(actionabilityScore, 0, 100)),
+    buyNowAllowed: buyable,
+    entryStyle: 'aggressive_fractional' as const,
+    buyPlan,
+    indicatorStack: inheritedIndicatorStack,
+    reasons: uniqueNarrativeLines(params.reasons, 5),
+    entryTriggers,
+  };
+}
+
+function chipSourceAsOf(metrics: Record<string, unknown>) {
+  const explicit = compactText(
+    metrics.chip_source_as_of || metrics.official_sbl_as_of || metrics.signal_as_of || metrics.source_timestamp || metrics.quote_date || '',
+  );
+  if (!explicit) return null;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(explicit)) return `${explicit}T00:00:00+08:00`;
+  return explicit;
+}
+
+function chipMissingGroups(metrics: Record<string, unknown>) {
+  const hasInstitutional = [
+    'foreign_net',
+    'foreign_net_5d',
+    'foreign_net_20d',
+    'investment_trust_net',
+    'investment_trust_net_5d',
+    'dealer_net',
+  ].some((key) => chipNumber(metrics[key]) != null);
+  const hasMargin = ['margin_balance', 'margin_balance_change', 'margin_usage_ratio', 'margin_buy', 'margin_sell'].some((key) => chipNumber(metrics[key]) != null);
+  const hasShort = ['short_balance', 'short_balance_change', 'short_usage_ratio', 'margin_short_balance', 'short_buy', 'short_sell'].some((key) => chipNumber(metrics[key]) != null);
+  const hasBorrow = ['sbl_short_balance', 'sbl_short_usage_ratio', 'sbl_short_sale_volume'].some((key) => chipNumber(metrics[key]) != null);
+  const missingGroups: NonNullable<DeepDiveChipSnapshot['dataStatus']>['missingGroups'] = [];
+  if (!hasInstitutional) missingGroups.push('institutional');
+  if (!hasMargin) missingGroups.push('margin');
+  if (!hasShort) missingGroups.push('short');
+  if (!hasBorrow) missingGroups.push('borrow');
+  return missingGroups;
+}
+
+function hasAnyChipMetric(metrics: Record<string, unknown> | null | undefined) {
+  return chipMissingGroups(metrics || {}).length < 4;
+}
+
+function latestNonEmptyChipMetricsFromRows(rows: Row[]) {
+  for (const row of rows) {
+    const metrics = ((row.chip_metrics as Record<string, unknown> | null) || {}) as Record<string, unknown>;
+    if (hasAnyChipMetric(metrics)) {
+      return {
+        ...metrics,
+        chip_source_as_of: row.as_of ? String(row.as_of) : chipSourceAsOf(metrics),
+        chip_source: metrics.chip_source || row.source || 'stock_signals',
+        fallback_used: true,
+      };
+    }
+  }
+  return null;
+}
+
+function chipMissingReason(group: NonNullable<DeepDiveChipSnapshot['dataStatus']>['missingGroups'][number]) {
+  if (group === 'institutional') return '缺法人資料：node-twstock/TWSE 與 FinMind fallback 尚未回傳三大法人買賣超，需等待下一輪 market refresh 或來源修復。';
+  if (group === 'margin') return '缺融資資料：node-twstock/TWSE 與 FinMind fallback 尚未回傳融資餘額與變化，暫不判斷散戶追價程度。';
+  if (group === 'short') return '缺融券資料：node-twstock/TWSE 與 FinMind fallback 尚未回傳融券餘額，暫不判斷空方壓力。';
+  return '缺借券賣出餘額：TWSE/TPEx 官方 TWT93U、node-twstock 與最近非空快照尚未取得可用餘額；FinMind 借券成交量只列為輔助資訊。';
+}
+
+function chipMissingReasons(
+  metrics: Record<string, unknown>,
+  groups: NonNullable<DeepDiveChipSnapshot['dataStatus']>['missingGroups'],
+) {
+  const borrowAuxiliaryOnly = Boolean(
+    metrics.borrow_auxiliary_only || (chipNumber(metrics.sbl_short_balance) == null && chipNumber(metrics.sbl_short_sale_volume) != null),
+  );
+  return groups.map((group) => {
+    if (group !== 'borrow') return chipMissingReason(group);
+    if (borrowAuxiliaryOnly) {
+      return '已嘗試 TWSE/TPEx 官方、node-twstock 與 FinMind：目前只有 FinMind 借券成交量輔助資訊，官方借券賣出餘額尚未回補；不把成交量當餘額判斷。';
+    }
+    const officialReason = compactText(metrics.official_sbl_failure_reason || '');
+    if (officialReason) {
+      return `缺借券賣出餘額：已嘗試 TWSE/TPEx 官方 TWT93U，回覆為「${officialReason}」；下一輪會續接 node-twstock / FinMind / 最近非空快照。`;
+    }
+    return chipMissingReason('borrow');
+  });
+}
+
+function chipStatusLabel(status: NonNullable<DeepDiveChipSnapshot['dataStatus']>['status']) {
+  if (status === 'available') return '籌碼資料完整';
+  if (status === 'partial') return '籌碼資料部分待補';
+  return '籌碼資料待補';
+}
+
+function buildSourceStatuses(params: {
+  coverageStatus?: Array<{ id: string; label: string; status: 'hit' | 'missing' | 'degraded' | 'stale'; summary: string; sourceTypes: string[] }> | null;
+  citationMap?: DeepDiveSourceCitationRef[] | null;
+  chipDataStatus?: DeepDiveChipSnapshot['dataStatus'] | null;
+  technicalAsOf?: string | null;
+}) {
+  const citations = params.citationMap || [];
+  const latestForTypes = (types: string[]) =>
+    citations
+      .filter((item) => types.includes(item.sourceType) && item.asOf)
+      .map((item) => String(item.asOf))
+      .sort((a, b) => b.localeCompare(a))[0] || null;
+  const coverageRows = (params.coverageStatus || []).map((item) => ({
+    id: item.id,
+    label: item.label,
+    status: item.status,
+    lastSuccessAt: latestForTypes(item.sourceTypes),
+    symbolsUpdated: null,
+    recordsWritten: item.status === 'hit' ? citations.filter((ref) => item.sourceTypes.includes(ref.sourceType)).length : 0,
+    failureReason: item.status === 'hit' ? null : item.summary,
+  }));
+  return [
+    ...coverageRows,
+    {
+      id: 'chip',
+      label: '籌碼資料',
+      status: params.chipDataStatus?.status === 'available' ? ('hit' as const) : params.chipDataStatus?.status === 'partial' ? ('degraded' as const) : ('missing' as const),
+      lastSuccessAt: params.chipDataStatus?.asOf || null,
+      symbolsUpdated: null,
+      recordsWritten: params.chipDataStatus?.status === 'missing' ? 0 : 1,
+      failureReason: params.chipDataStatus?.missingReasons?.join(' ') || null,
+    },
+    {
+      id: 'technical',
+      label: '技術資料',
+      status: params.technicalAsOf ? ('hit' as const) : ('missing' as const),
+      lastSuccessAt: params.technicalAsOf || null,
+      symbolsUpdated: null,
+      recordsWritten: params.technicalAsOf ? 1 : 0,
+      failureReason: params.technicalAsOf ? null : '缺少可用日線或技術指標資料。',
+    },
+  ];
+}
+
+function hasChipGroup(snapshot: DeepDiveChipSnapshot | null | undefined, group: NonNullable<DeepDiveChipSnapshot['dataStatus']>['missingGroups'][number]) {
+  return Boolean(snapshot && !(snapshot.dataStatus?.missingGroups || []).includes(group));
+}
+
+function buildDataHealth(params: {
+  marketDataAsOf: string | null;
+  researchSourceAsOf: string | null;
+  reportBuiltAt: string | null;
+  chipDataStatus?: DeepDiveChipSnapshot['dataStatus'] | null;
+  sourceStatuses?: NonNullable<StockDeepDivePayload['dataHealth']>['sourceStatuses'];
+}): NonNullable<StockDeepDivePayload['dataHealth']> {
+  const marketFreshness = freshnessFromTimestamp(params.marketDataAsOf, 36);
+  const researchFreshness = freshnessFromTimestamp(params.researchSourceAsOf, 24 * 7);
+  const staleReasons = uniqueNarrativeLines(
+    [
+      researchFreshness === 'stale'
+        ? `研究證據偏舊：最新可引用研究來源為 ${formatDateTimeForPlan(params.researchSourceAsOf)}，已超過 7 天，已排程補抓官方、法說、月營收、定錨與 KOL 來源。`
+        : researchFreshness === 'missing'
+          ? '研究來源時間待補：尚未取得可引用來源時間，已排程重新抓取來源。'
+          : null,
+      marketFreshness === 'stale'
+        ? `市場資料偏舊：股價或技術資料時間為 ${formatDateTimeForPlan(params.marketDataAsOf)}，需等待下一輪 market refresh。`
+        : marketFreshness === 'missing'
+          ? '市場資料時間待補：目前缺少股價或技術資料時間。'
+          : null,
+      params.chipDataStatus?.status === 'missing'
+        ? '籌碼資料待補：法人、融資融券或借券缺少有效數字，進場判讀會降級。'
+        : params.chipDataStatus?.status === 'partial'
+          ? `籌碼資料部分待補：${params.chipDataStatus.missingReasons.slice(0, 2).join(' ')}`
+          : null,
+    ],
+    5,
+  );
+  const freshnessStatus =
+    marketFreshness !== 'fresh'
+      ? (marketFreshness === 'missing' ? 'missing' : 'market_stale')
+      : researchFreshness !== 'fresh'
+        ? (researchFreshness === 'missing' ? 'missing' : 'research_stale')
+        : ('healthy' as const);
+  return {
+    marketDataAsOf: params.marketDataAsOf,
+    researchSourceAsOf: params.researchSourceAsOf,
+    reportBuiltAt: params.reportBuiltAt,
+    freshnessStatus,
+    staleReasons,
+    refreshQueued: freshnessStatus !== 'healthy',
+    priceRefreshLastSuccessAt: params.marketDataAsOf,
+    priceRefreshScheduledAt: taipeiScheduledIso(15, 0),
+    priceRefreshStatus: priceRefreshStatusFromAsOf(params.marketDataAsOf),
+    priceRefreshRecordsWritten: null,
+    priceRefreshFailureReason:
+      priceRefreshStatusFromAsOf(params.marketDataAsOf) === 'fresh'
+        ? null
+        : '等待 15:00 收盤價刷新或交易所 retry 完成。',
+    sourceStatuses: params.sourceStatuses || [],
+  };
+}
+
+function buildRecommendationStance(
+  targetSnapshot: NonNullable<StockDeepDivePayload['targetSnapshot']>,
+  chipEntryAssessment: NonNullable<StockDeepDivePayload['chipEntryAssessment']>,
+  tradeDecision?: TradeDecision | null,
+): NonNullable<StockDeepDivePayload['recommendationStance']> {
+	  const fundamentalStance =
+	    targetSnapshot.verdict === 'formal'
+	      ? ('基本面買進' as const)
+      : targetSnapshot.verdict === 'scenario'
+	        ? ('情境觀察' as const)
+	        : ('已反映' as const);
+	  const entryStance = chipEntryAssessment.verdict;
+  const tradeAction = tradeDecision?.action || null;
+	  const entryBlocked = ['資料不足不買', '資料不足暫緩', '籌碼偏亂先不買', '趨勢轉弱', '過熱不追'].includes(entryStance);
+	  const displayLabel =
+    tradeAction === '建議小量買進' || tradeAction === '可分批買進'
+      ? `${fundamentalStance}，${tradeAction}`
+      : tradeAction === '突破後小量追蹤'
+        ? `${fundamentalStance}，突破後小量追蹤`
+        : tradeAction === '減碼' || tradeAction === '停利' || tradeAction === '出場'
+          ? `${fundamentalStance}，${tradeAction}`
+          : fundamentalStance === '基本面買進' && entryBlocked
+	      ? entryStance === '資料不足不買' || entryStance === '資料不足暫緩'
+	        ? '基本面正向，進場暫緩'
+	        : `基本面正向，${entryStance}`
+      : fundamentalStance === '基本面買進'
+        ? `基本面買進，${entryStance}`
+        : fundamentalStance === '情境觀察'
+          ? `情境觀察，${entryStance}`
+          : `估值已反映，${entryStance}`;
+	  const summary = tradeDecision
+      ? `現在動作是「${tradeDecision.action}」：${tradeDecision.positionSize}。${tradeDecision.marketGateReason} ${tradeDecision.exitCondition}`
+      :
+	    fundamentalStance === '基本面買進'
+	      ? entryStance === '可小量分批' || entryStance === '突破後小量追蹤'
+	        ? `Base 目標價仍高於現價，且量價/籌碼尚未觸發硬性封殺；目前可採「${entryStance}」，先用小部位驗證，不一次追滿。`
+	        : `Base 目標價仍高於現價，但進場要受籌碼與技術面 gate 控制；目前結論是「${displayLabel}」。`
+      : fundamentalStance === '情境觀察'
+        ? `Base 已先被市場反映，只有情境上行清單逐步達成才值得提高追蹤；目前進場結論是「${entryStance}」。`
+        : targetSnapshot.targetCoverageStatus === 'over_base_and_scenario'
+          ? `${targetSnapshot.overTargetReason || '現價已高於 Base 與情境目標價'}；等待重估或回測，不列為新的買進建議。進場結論是「${entryStance}」。`
+          : `目前價格接近既有估值區間，除非新資料推升 Base，否則以觀察與風險控管為主；進場結論是「${entryStance}」。`;
+  return {
+    fundamentalStance,
+    entryStance,
+    displayLabel,
+    summary,
+  };
+}
+
+function buildChipEntryAssessment(params: {
+  chipSnapshot: DeepDiveChipSnapshot | null;
+  technicalEntrySignal: StockDeepDivePayload['technicalEntrySignal'] | null;
+  technicalSnapshot: StockDeepDivePayload['technicalSnapshot'] | null | undefined;
+  volume: number | null | undefined;
+  chart: StockInsightPayload['chart'];
+  marketRotationSnapshot: ReturnType<typeof buildMarketRotationSnapshot>;
+  targetVerdict: 'formal' | 'scenario' | 'reflected';
+  sourceRefs?: string[];
+}): NonNullable<StockDeepDivePayload['chipEntryAssessment']> {
+  const { chipSnapshot, technicalEntrySignal, technicalSnapshot, volume, chart, marketRotationSnapshot, targetVerdict } = params;
+  const latestCandle = chart.length > 0 ? chart[chart.length - 1] : null;
+  const supportLevel = technicalEntrySignal?.supportLevel ?? technicalSnapshot?.fibonacci?.retracement618 ?? technicalSnapshot?.ma60 ?? latestCandle?.low ?? null;
+  const resistanceLevel = technicalEntrySignal?.resistanceLevel ?? technicalSnapshot?.fibonacci?.retracement236 ?? technicalSnapshot?.fibonacci?.swingHigh ?? latestCandle?.high ?? null;
+  const invalidationLevel = technicalSnapshot?.ma60 ?? supportLevel ?? latestCandle?.low ?? null;
+  const foreignLatest = chipSnapshot?.institutionalFlows.foreign.latestNet ?? null;
+  const foreign5d = chipSnapshot?.institutionalFlows.foreign.net5d ?? null;
+  const foreign20d = chipSnapshot?.institutionalFlows.foreign.net20d ?? null;
+  const trustLatest = chipSnapshot?.institutionalFlows.investmentTrust.latestNet ?? null;
+  const trust5d = chipSnapshot?.institutionalFlows.investmentTrust.net5d ?? null;
+  const trust20d = chipSnapshot?.institutionalFlows.investmentTrust.net20d ?? null;
+  const dealerLatest = chipSnapshot?.institutionalFlows.dealer.latestNet ?? null;
+  const dealer5d = chipSnapshot?.institutionalFlows.dealer.net5d ?? null;
+  const marginChange = chipSnapshot?.marginFinancing.change ?? null;
+  const marginUsage = chipSnapshot?.marginFinancing.usageRatio ?? null;
+  const shortUsage = chipSnapshot?.shortInterest.usageRatio ?? null;
+  const sblBalance = chipSnapshot?.shortInterest.sblBalance ?? null;
+  const rsi = technicalSnapshot?.rsi ?? null;
+  const macd = technicalSnapshot?.macd ?? null;
+  const macdSignal = technicalSnapshot?.macdSignal ?? null;
+  const chipDataStatus = chipSnapshot?.dataStatus ?? null;
+  const missingChipGroups = chipDataStatus?.missingGroups || [];
+  const hasInstitutionalData = hasChipGroup(chipSnapshot, 'institutional');
+  const hasMarginData = hasChipGroup(chipSnapshot, 'margin');
+  const hasShortData = hasChipGroup(chipSnapshot, 'short');
+  const hasBorrowData = hasChipGroup(chipSnapshot, 'borrow');
+  const chipGroupCount = [hasInstitutionalData, hasMarginData, hasShortData, hasBorrowData].filter(Boolean).length;
+  const sectorScore = marketRotationSnapshot.sectorFlowScore;
+  const institutionalBuying = (foreign5d ?? 0) > 0 && ((trust5d ?? 0) > 0 || (foreign20d ?? 0) > 0);
+  const institutionalSelling = (foreign5d ?? 0) < 0 && (trust5d ?? 0) <= 0;
+  const institutionalDisplayValue =
+    foreign5d != null || trust5d != null
+      ? `${signedLots(foreign5d)} / ${signedLots(trust5d)}`
+      : foreignLatest != null || trustLatest != null || dealerLatest != null
+        ? `單日 ${signedLots(foreignLatest)} / ${signedLots(trustLatest)} / 自營 ${signedLots(dealerLatest)}`
+        : '缺法人資料';
+  const marginCrowded = (marginUsage ?? 0) >= 24 || ((marginChange ?? 0) > 0 && (foreign5d ?? 0) <= 0);
+  const shortPressure = (shortUsage ?? 0) >= 8 || ((sblBalance ?? 0) > 0 && (dealer5d ?? 0) < 0);
+  const sectorInFlow = sectorScore == null ? false : sectorScore >= 55;
+	  const technicalWeak = technicalEntrySignal?.verdict === '趨勢轉弱';
+	  const rsiWarning = rsi != null && rsi >= 70;
+	  const severeOverheated = (rsi ?? 0) >= 82 || (technicalEntrySignal?.pricePositionState === 'overextended' && (rsi ?? 50) >= 78);
+	  const technicalOverheated = technicalEntrySignal?.verdict === '過熱不追' || technicalEntrySignal?.pricePositionState === 'overextended' || severeOverheated;
+	  const hasActionableChipData = Boolean(chipSnapshot && chipDataStatus?.status !== 'missing' && chipGroupCount >= 1);
+	  const hasTechnicalData = Boolean(technicalEntrySignal && (technicalSnapshot?.ma20 != null || technicalSnapshot?.rsi != null || technicalSnapshot?.macd != null));
+  const partialChipReason =
+    chipDataStatus?.status === 'partial' && chipDataStatus.missingReasons?.length
+      ? `籌碼資料仍有缺口：${chipDataStatus.missingReasons.join(' ')}`
+      : null;
+  const missingReasons = uniqueNarrativeLines(
+    [
+      hasActionableChipData
+        ? partialChipReason
+        : chipSnapshot && chipDataStatus?.status !== 'missing'
+          ? '籌碼資料尚未形成可操作判讀，需至少補到法人、融資融券、借券或成交量其中一組有效資料。'
+          : chipDataStatus?.missingReasons?.length
+            ? chipDataStatus.missingReasons.join(' ')
+            : '缺少法人、融資融券或借券資料，無法判斷籌碼是否乾淨。',
+      hasTechnicalData ? null : '缺少足夠技術指標，無法判斷支撐、壓力與動能。',
+      '目前尚未接入可靠盤中內外盤比、分價量表與分點進出，因此不以這三項做買賣判斷。',
+    ],
+    5,
+  );
+
+	  let actionabilityScore = 48;
+	  if (targetVerdict === 'formal') actionabilityScore += 12;
+	  if (targetVerdict === 'scenario') actionabilityScore += 4;
+	  if (targetVerdict === 'reflected') actionabilityScore -= 12;
+	  if (technicalEntrySignal?.verdict === '適合分批') actionabilityScore += 18;
+	  if (technicalEntrySignal?.breakoutAchieved) actionabilityScore += 10;
+	  if (technicalWeak) actionabilityScore -= 34;
+	  if (severeOverheated) actionabilityScore -= 28;
+	  else if (rsiWarning || technicalEntrySignal?.verdict === '過熱不追') actionabilityScore -= 8;
+	  if (institutionalBuying) actionabilityScore += 16;
+	  if (institutionalSelling) actionabilityScore -= 14;
+	  if (marginCrowded) actionabilityScore -= 12;
+	  if (shortPressure) actionabilityScore -= 10;
+	  if (sectorInFlow) actionabilityScore += 6;
+	  if (chipGroupCount >= 2) actionabilityScore += 8;
+	  else if (chipGroupCount === 1) actionabilityScore += 2;
+	  actionabilityScore = clamp(actionabilityScore, 0, 100);
+	  const actionabilityReasons = uniqueNarrativeLines(
+	    [
+	      `進場分數 ${Math.round(actionabilityScore)} / 100`,
+	      targetVerdict === 'formal' ? 'Base 仍有價差' : targetVerdict === 'scenario' ? '僅剩情境價差' : '估值已反映',
+	      technicalEntrySignal?.breakoutAchieved ? '技術突破已達成' : technicalEntrySignal?.verdict === '適合分批' ? '均線/動能允許分批' : null,
+	      institutionalBuying ? '法人近 5/20 日仍有承接' : institutionalSelling ? '法人近 5 日偏賣方' : null,
+	      marginCrowded ? '融資偏熱或追價籌碼較亂' : null,
+	      severeOverheated ? 'RSI 或價位延伸已嚴重過熱' : rsiWarning ? 'RSI 偏熱但未達硬性封殺' : null,
+	    ],
+	    6,
+	  );
+
+	  const technicalFallbackAllowed =
+	    !hasActionableChipData &&
+	    hasTechnicalData &&
+	    targetVerdict !== 'reflected' &&
+	    Boolean(technicalEntrySignal?.breakoutAchieved || technicalEntrySignal?.verdict === '適合分批') &&
+	    !severeOverheated &&
+	    !technicalWeak;
+	  let verdict: NonNullable<StockDeepDivePayload['chipEntryAssessment']>['verdict'] = '等回測';
+	  if (!hasTechnicalData || (!hasActionableChipData && !technicalFallbackAllowed)) verdict = '資料不足暫緩';
+	  else if (technicalWeak) verdict = '趨勢轉弱';
+	  else if (severeOverheated) verdict = '過熱不追';
+	  else if (institutionalSelling && (marginCrowded || shortPressure)) verdict = '籌碼偏亂先不買';
+	  else if (actionabilityScore >= 74 && technicalEntrySignal?.verdict === '適合分批' && !marginCrowded) verdict = '可小量分批';
+	  else if (technicalOverheated && technicalEntrySignal?.breakoutAchieved && targetVerdict !== 'reflected' && actionabilityScore >= 54 && !institutionalSelling) verdict = '突破後小量追蹤';
+	  else if (technicalEntrySignal?.breakoutAchieved && actionabilityScore >= 60 && !technicalOverheated) verdict = '突破後小量追蹤';
+	  else if (technicalFallbackAllowed) verdict = '突破後小量追蹤';
+	  else if (actionabilityScore >= 58 && technicalEntrySignal?.verdict === '適合分批') verdict = '可小量分批';
+	  else if (institutionalBuying && resistanceLevel != null) verdict = '突破確認再追';
+
+  const chipRead =
+    chipSnapshot == null || chipDataStatus?.status === 'missing'
+      ? `籌碼資料待補；${chipDataStatus?.missingReasons?.join(' ') || '在法人、融資融券與借券資料補齊前，不把基本面故事直接轉成買進動作。'}`
+      : sentenceFromBridgeSegments(
+          [
+            `外資近 5/20 日 ${signedLots(foreign5d)} / ${signedLots(foreign20d)}，投信近 5/20 日 ${signedLots(trust5d)} / ${signedLots(trust20d)}。`,
+            `融資餘額 ${plainLots(chipSnapshot.marginFinancing.balance)}、變化 ${signedLots(marginChange)}、使用率 ${pctText(marginUsage)}；融券餘額 ${plainLots(chipSnapshot.shortInterest.balance)}、借券賣出餘額 ${plainLots(sblBalance)}。`,
+            chipDataStatus?.status === 'partial' ? `資料缺口：${chipDataStatus.missingReasons.join(' ')}` : null,
+            marketRotationSnapshot.sectorFlow || marketRotationSnapshot.marketRotation || null,
+            institutionalBuying && !marginCrowded ? '目前較像法人仍在承接，且融資沒有明顯失控。' : null,
+            institutionalSelling || marginCrowded ? '需要留意是否變成股價上漲、散戶融資追高但法人沒有同步加碼的結構。' : null,
+            shortPressure ? '融券或借券壓力偏高，短線波動容易被放大。' : null,
+          ],
+          chipSnapshot.timingAssessment || '籌碼面仍需等待更多資料確認。',
+        );
+  const technicalRead = sentenceFromBridgeSegments(
+    [
+      technicalEntrySignal?.summary || null,
+      technicalSnapshot?.ma20 != null || technicalSnapshot?.ma60 != null
+        ? `MA20 / MA60 約 ${formatMoney(technicalSnapshot?.ma20)} / ${formatMoney(technicalSnapshot?.ma60)}。`
+        : null,
+      rsi != null ? `RSI ${formatNumberLocal(rsi)}，${rsi >= 70 ? '短線偏熱' : rsi <= 35 ? '接近低檔止穩區' : '仍屬中性震盪'}。` : null,
+      macd != null && macdSignal != null ? `MACD / Signal ${formatNumberLocal(macd, 4)} / ${formatNumberLocal(macdSignal, 4)}。` : null,
+      technicalSnapshot?.fibonacci
+        ? `Fibonacci 38.2% / 61.8% 約 ${formatMoney(technicalSnapshot.fibonacci.retracement382)} / ${formatMoney(technicalSnapshot.fibonacci.retracement618)}。`
+        : null,
+      volume != null ? `最新成交量約 ${Math.round(volume).toLocaleString('zh-TW')}，突破要放量，回測以量縮止穩較健康。` : null,
+    ],
+    '技術面資料待補；目前不建議用單一股價位置決定進場。',
+  );
+  const supportSummary = sentenceFromBridgeSegments(
+    [
+      `第一支撐看 ${formatMoney(supportLevel)}，壓力看 ${formatMoney(resistanceLevel)}。`,
+      `若收盤跌破 ${formatMoney(invalidationLevel)} 且量能放大，這次進場假設先失效。`,
+    ],
+    '支撐壓力仍待日線資料補齊。',
+  );
+  const watchNumbers = [
+    {
+      label: '外資 / 投信 5 日',
+      value: hasInstitutionalData ? institutionalDisplayValue : '缺法人資料',
+      interpretation: hasInstitutionalData
+        ? institutionalBuying
+          ? '法人仍偏買方，回測時較有承接依據。'
+          : '法人尚未形成一致買盤，追價安全邊際不足。'
+        : chipMissingReason('institutional'),
+    },
+    {
+      label: '融資變化',
+      value: hasMarginData ? signedLots(marginChange) : '缺融資資料',
+      interpretation: hasMarginData
+        ? marginCrowded
+          ? '融資增加或使用率偏高，短線籌碼較容易震盪。'
+          : '融資未明顯失控，暫不構成主要扣分。'
+        : chipMissingReason('margin'),
+    },
+    {
+      label: '融券 / 借券',
+      value:
+        hasShortData || hasBorrowData || chipDataStatus?.borrowAuxiliaryOnly
+          ? `${hasShortData ? pctText(shortUsage) : '缺融券'} / ${
+              hasBorrowData ? plainLots(sblBalance) : chipDataStatus?.borrowAuxiliaryOnly ? '借券成交量輔助' : '缺借券'
+            }`
+          : '缺融券/借券資料',
+      interpretation:
+        hasShortData || hasBorrowData || chipDataStatus?.borrowAuxiliaryOnly
+          ? shortPressure
+            ? '空方或避險部位偏高，容易放大波動。'
+            : chipDataStatus?.borrowAuxiliaryOnly
+              ? '目前只有借券成交量輔助資料，不能當作借券賣出餘額；進場仍以法人、融資融券與日線確認。'
+            : missingChipGroups.includes('borrow') || missingChipGroups.includes('short')
+              ? '融券或借券資料尚未完整，短線空方壓力需保守解讀。'
+              : '融券與借券尚未顯示明顯壓力。'
+          : `${chipMissingReason('short')} ${chipMissingReason('borrow')}`,
+    },
+    {
+      label: '支撐 / 壓力',
+      value: `${formatMoney(supportLevel)} / ${formatMoney(resistanceLevel)}`,
+      interpretation: '回測支撐不破才是分批條件；接近壓力時避免追高。',
+    },
+    {
+      label: 'RSI / MACD',
+      value: `${rsi == null ? '待補' : formatNumberLocal(rsi)} / ${
+        macd == null || macdSignal == null ? '待補' : `${formatNumberLocal(macd, 4)} vs ${formatNumberLocal(macdSignal, 4)}`
+      }`,
+      interpretation: technicalOverheated ? '動能偏熱，先等回測或突破確認。' : technicalWeak ? '動能轉弱，先不急著進場。' : '技術面尚可配合籌碼觀察。',
+    },
+  ];
+  const nextSessionPlaybook: NonNullable<StockDeepDivePayload['chipEntryAssessment']>['nextSessionPlaybook'] = [
+    {
+      scenario: '強勢開高',
+      condition: `若帶量站上 ${formatMoney(resistanceLevel)}，且外資/投信盤後未轉賣。`,
+      action: verdict === '過熱不追' ? '續觀察不追高，等回測壓力轉支撐。' : '已有部位可續抱；新部位只小量分批，不一次追滿。',
+      riskControl: `停損或降風險先看 ${formatMoney(supportLevel)}。`,
+    },
+    {
+      scenario: '健康換手',
+      condition: `若回測 ${formatMoney(supportLevel)} 附近量縮止穩，且融資沒有明顯增加。`,
+	      action: verdict === '資料不足暫緩' ? '資料補齊前仍先觀察。' : '可把它視為較乾淨的分批區，不追紅 K。',
+      riskControl: `跌破 ${formatMoney(invalidationLevel)} 後無法收回，先取消分批計畫。`,
+    },
+    {
+      scenario: '弱勢轉弱',
+      condition: `若開低跌破 ${formatMoney(invalidationLevel)}，或法人轉賣、融資反而增加。`,
+      action: '降低部位或暫不進場，等重新站回關鍵均線再評估。',
+      riskControl: '不把基本面故事拿來攤平短線轉弱的籌碼結構。',
+    },
+  ];
+	  const summary =
+	    verdict === '可小量分批'
+	      ? `現在策略是小量分批，不追滿；關鍵是守住 ${formatMoney(supportLevel)} 且法人買盤不能轉弱。`
+	      : verdict === '突破後小量追蹤'
+	        ? `突破條件已部分成立，可用小部位追蹤，不追滿；原壓力轉支撐，跌回 ${formatMoney(supportLevel)} 下方就先降風險。`
+	      : verdict === '突破確認再追'
+	        ? `現在不急著追，等帶量突破 ${formatMoney(resistanceLevel)} 且法人續買，再考慮提高部位。`
+        : verdict === '過熱不追'
+          ? `基本面可以繼續追蹤，但短線偏熱，現在不追價；等回測 ${formatMoney(supportLevel)} 附近量縮止穩。`
+          : verdict === '籌碼偏亂先不買'
+            ? '籌碼結構不夠乾淨，先不買；等法人重新轉買、融資降溫後再評估。'
+            : verdict === '趨勢轉弱'
+              ? `趨勢或動能轉弱，先不進場；重新站回關鍵均線與 ${formatMoney(resistanceLevel)} 後再看。`
+	              : verdict === '資料不足暫緩'
+	                ? '資料不足，先暫緩進場；等法人、融資融券或技術資料至少補齊一組有效訊號後再判斷。'
+	                : `先等回測，不追價；重點看 ${formatMoney(supportLevel)} 是否守住、量能是否收斂。`;
+  const entryDecision = buildEntryDecisionFromAssessment({
+    verdict,
+    actionabilityScore,
+    targetVerdict,
+    supportLevel,
+    resistanceLevel,
+    invalidationLevel,
+    technicalEntrySignal,
+    summary,
+    reasons: actionabilityReasons,
+  });
+
+  return {
+    verdict,
+    summary,
+    chipRead,
+    technicalRead,
+    supportResistance: {
+      supportLevel,
+      resistanceLevel,
+      invalidationLevel,
+      summary: supportSummary,
+    },
+    watchNumbers,
+    nextSessionPlaybook,
+    microstructureStatus: [
+      {
+        key: 'innerOuterRatio',
+        label: '內外盤比',
+        status: 'missing',
+        summary: '尚未接入可靠盤中內外盤比，本版不以主動買賣占比做結論。',
+        missingReason: '目前資料源只有日線、法人、融資融券與借券；待第二階段接盤中成交資料。',
+      },
+      {
+        key: 'priceDistribution',
+        label: '分價量表',
+        status: 'missing',
+        summary: '尚未接入分價成交量，無法判斷大量區是換手或出貨。',
+        missingReason: '需新增盤中分價資料源後才能顯示最大量價位與高檔追價狀況。',
+      },
+      {
+        key: 'brokerBranchFlow',
+        label: '分點進出',
+        status: 'missing',
+        summary: '尚未接入券商分點進出，暫以三大法人與融資借券判斷籌碼方向。',
+        missingReason: '分點資料需要額外來源與授權，不在本階段硬推估。',
+      },
+    ],
+    missingReasons,
+    sourceRefs: params.sourceRefs || [],
+    actionabilityScore: Math.round(actionabilityScore),
+    actionabilityReasons,
+    entryDecision,
+    buyZone: entryDecision.buyZone,
+    positionSize: entryDecision.positionSize,
+    stopLoss: entryDecision.stopLoss,
+  };
+}
+
+function buildPendingChipEntryAssessment(reason: string): NonNullable<StockDeepDivePayload['chipEntryAssessment']> {
+  const assessment = buildChipEntryAssessment({
+    chipSnapshot: null,
+    technicalEntrySignal: null,
+    technicalSnapshot: null,
+    volume: null,
+    chart: [],
+    marketRotationSnapshot: buildMarketRotationSnapshot(null, []),
+    targetVerdict: 'reflected',
+  });
+  return {
+    ...assessment,
+    summary: `資料不足，不建議進場；原因是 ${reason}，需等法人、融資融券、借券與技術資料補齊後再判斷。`,
+    chipRead: `籌碼資料不足（${reason}），目前不能判斷法人是否承接、融資是否過熱或借券是否升高。`,
+    technicalRead: '技術資料不足，暫時無法建立 MA / RSI / MACD / Fibonacci 進場計畫。',
+  };
+}
+
+function aggregateCandles(
+  candles: Array<{ time: string; open: number; high: number; low: number; close: number }>,
+  chunkSize: number,
+) {
+  if (chunkSize <= 1) return candles;
+  const out: Array<{ time: string; open: number; high: number; low: number; close: number }> = [];
+  for (let index = 0; index < candles.length; index += chunkSize) {
+    const chunk = candles.slice(index, index + chunkSize);
+    if (chunk.length === 0) continue;
+    const first = chunk[0];
+    const last = chunk[chunk.length - 1];
+    out.push({
+      time: last.time,
+      open: first.open,
+      high: Math.max(...chunk.map((item) => item.high)),
+      low: Math.min(...chunk.map((item) => item.low)),
+      close: last.close,
+    });
+  }
+  return out;
 }
 
 function getLineClient(): LineClient {
@@ -1491,39 +11176,50 @@ async function fetchTWSELivePrice(symbol: string): Promise<{ price: number; open
 }
 
 async function fetchYahooHistChart(symbol: string): Promise<YahooChartBar[] | null> {
-  try {
-    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}.TW?interval=1d&range=30d`;
-    const res = await fetch(url, {
-      headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0', accept: 'application/json' },
-      signal: AbortSignal.timeout(12_000),
-    });
-    if (!res.ok) return null;
-    const json = await res.json() as { chart?: { result?: Array<{ timestamp?: number[]; indicators?: { quote?: Array<{ open?: number[]; high?: number[]; low?: number[]; close?: number[] }> } }> } };
-    const result = json.chart?.result?.[0];
-    if (!result) return null;
-    const timestamps = result.timestamp || [];
-    const quote = result.indicators?.quote?.[0];
-    if (!quote || timestamps.length === 0) return null;
-    const bars: YahooChartBar[] = [];
-    for (let i = 0; i < timestamps.length; i++) {
-      const close = quote.close?.[i];
-      const open = quote.open?.[i];
-      const high = quote.high?.[i];
-      const low = quote.low?.[i];
-      if (!Number.isFinite(close) || !close) continue;
-      const date = new Date(timestamps[i] * 1000).toISOString().slice(0, 10);
-      bars.push({
-        time: date,
-        open: Number.isFinite(open) && open ? Number(open.toFixed(2)) : Number(close.toFixed(2)),
-        high: Number.isFinite(high) && high ? Number(high.toFixed(2)) : Number(close.toFixed(2)),
-        low: Number.isFinite(low) && low ? Number(low.toFixed(2)) : Number(close.toFixed(2)),
-        close: Number(close.toFixed(2)),
+  const suffixCandidates = [`${symbol}.TW`, `${symbol}.TWO`, symbol];
+  for (const ticker of suffixCandidates) {
+    try {
+      const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=2y`;
+      const res = await fetch(url, {
+        headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0', accept: 'application/json' },
+        signal: AbortSignal.timeout(12_000),
       });
+      if (!res.ok) continue;
+      const json = await res.json() as {
+        chart?: {
+          result?: Array<{
+            timestamp?: number[];
+            indicators?: { quote?: Array<{ open?: number[]; high?: number[]; low?: number[]; close?: number[] }> };
+          }>;
+        };
+      };
+      const result = json.chart?.result?.[0];
+      if (!result) continue;
+      const timestamps = result.timestamp || [];
+      const quote = result.indicators?.quote?.[0];
+      if (!quote || timestamps.length === 0) continue;
+      const bars: YahooChartBar[] = [];
+      for (let i = 0; i < timestamps.length; i++) {
+        const close = quote.close?.[i];
+        const open = quote.open?.[i];
+        const high = quote.high?.[i];
+        const low = quote.low?.[i];
+        if (!Number.isFinite(close) || !close) continue;
+        const date = new Date(timestamps[i] * 1000).toISOString().slice(0, 10);
+        bars.push({
+          time: date,
+          open: Number.isFinite(open) && open ? Number(open.toFixed(2)) : Number(close.toFixed(2)),
+          high: Number.isFinite(high) && high ? Number(high.toFixed(2)) : Number(close.toFixed(2)),
+          low: Number.isFinite(low) && low ? Number(low.toFixed(2)) : Number(close.toFixed(2)),
+          close: Number(close.toFixed(2)),
+        });
+      }
+      if (bars.length > 0) return bars;
+    } catch {
+      continue;
     }
-    return bars.length > 0 ? bars : null;
-  } catch {
-    return null;
   }
+  return null;
 }
 
 async function ensureAgentProfiles() {
@@ -1542,6 +11238,19 @@ async function ensureAgentProfiles() {
   }));
 
   const { error } = await supabaseServer.from('agent_profiles').upsert(payload, { onConflict: 'profile_key' });
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+
+async function queueAgentReview(reason: string, evidence: Record<string, unknown>, agentTaskId?: string | null) {
+  const supabaseServer = getSupabaseServerClient();
+  const { error } = await supabaseServer.from('agent_review_queue').insert({
+    agent_task_id: agentTaskId || null,
+    reason,
+    evidence,
+    state: 'pending',
+  });
   if (error) {
     throw new Error(error.message);
   }
@@ -1584,9 +11293,24 @@ async function runAgentTask<T>(
   taskType: string,
   profileKey: string | null,
   inputPayload: Record<string, unknown>,
-  work: () => Promise<{ outputSummary: string; findings?: Array<{ stockId?: string | null; themeKey?: string | null; findingType: string; summary: string; confidence?: number; evidence?: unknown[]; sourceRefs?: unknown[] }>; result: T }>,
+  work: () => Promise<AgentTaskWorkOutput<T>>,
 ) {
   const supabaseServer = getSupabaseServerClient();
+  const guard = validateExternalAgentProfile(profileKey, agentRole);
+  if (!guard.ok) {
+    await queueAgentReview(
+      guard.reason,
+      {
+        attempted_profile_key: profileKey,
+        agent_role: agentRole,
+        task_type: taskType,
+        input_payload: inputPayload,
+        allowlist_source: guard.allowlistSource,
+      },
+      null,
+    );
+    throw new Error(guard.reason);
+  }
   const taskId = randomUUID();
   const { error: startError } = await supabaseServer.from('agent_tasks').insert({
     id: taskId,
@@ -1621,12 +11345,28 @@ async function runAgentTask<T>(
       }
     }
 
+    const reviewQueueItems = output.reviewQueueItems || [];
+    if (reviewQueueItems.length > 0) {
+      for (const item of reviewQueueItems) {
+        await queueAgentReview(
+          item.reason,
+          {
+            ...item.evidence,
+            agent_role: agentRole,
+            task_type: taskType,
+            profile_key: profileKey,
+          },
+          taskId,
+        );
+      }
+    }
+
     const { error: endError } = await supabaseServer
       .from('agent_tasks')
       .update({
-        status: 'success',
+        status: reviewQueueItems.length > 0 ? 'review' : 'success',
         output_summary: output.outputSummary,
-        reviewer_state: 'not_required',
+        reviewer_state: reviewQueueItems.length > 0 ? 'pending' : 'not_required',
         finished_at: nowIso(),
       })
       .eq('id', taskId);
@@ -1646,12 +11386,7 @@ async function runAgentTask<T>(
       })
       .eq('id', taskId);
 
-    await supabaseServer.from('agent_review_queue').insert({
-      agent_task_id: taskId,
-      reason: (error as Error).message,
-      evidence: { task_type: taskType, agent_role: agentRole, input_payload: inputPayload },
-      state: 'pending',
-    });
+    await queueAgentReview((error as Error).message, { task_type: taskType, agent_role: agentRole, input_payload: inputPayload }, taskId);
     throw error;
   }
 }
@@ -1662,6 +11397,14 @@ function mapThemeHeatRow(raw: Row): ThemeHeatCard {
     evidence.map((item) => mapSourceCoverageItem((item as Row) || {})).filter((item) => item.summary || item.sourceName),
   );
   const symbols = Array.isArray(raw.related_symbols) ? (raw.related_symbols as unknown[]) : [];
+  const capitalFlowSignals = (raw.capital_flow_signals as Record<string, unknown>) || {};
+  const foreignPeerBasket = Array.isArray(capitalFlowSignals.foreign_peer_basket)
+    ? (capitalFlowSignals.foreign_peer_basket as Row[]).map((peer) => ({
+        symbol: String(peer.symbol || ''),
+        name: String(peer.name || peer.symbol || ''),
+        market: (String(peer.market || 'US') as 'US' | 'JP' | 'KR'),
+      })).filter((peer) => peer.symbol)
+    : undefined;
   const verificationStatus = (raw.verification_status as VerificationStatus | undefined) || (sourceCoverage.some((item) => item.verificationStatus === '已證實') ? '已證實' : sourceCoverage.some((item) => item.verificationStatus === '部分證實') ? '部分證實' : '未證實');
   return {
     themeKey: String(raw.theme_key || ''),
@@ -1669,7 +11412,7 @@ function mapThemeHeatRow(raw: Row): ThemeHeatCard {
     windowType: (raw.window_type as ThemeHeatCard['windowType']) || 'daily',
     marketRegime: raw.market_regime ? String(raw.market_regime) : null,
     heatScore: toFiniteNumber(raw.heat_score),
-    capitalFlowSignals: (raw.capital_flow_signals as Record<string, unknown>) || {},
+    capitalFlowSignals,
     relatedSymbols: symbols.map((item) => String(item)),
     evidenceCount: evidence.length,
     asOfDate: String(raw.as_of_date || ''),
@@ -1677,6 +11420,9 @@ function mapThemeHeatRow(raw: Row): ThemeHeatCard {
     sourceCoverage,
     missingSources: findMissingSources(sourceCoverage),
     latestSourceAt: (raw.latest_source_at ? String(raw.latest_source_at) : latestSourceTimestamp(sourceCoverage)),
+    foreignPeerBasket,
+    leadLagSpreadPct: capitalFlowSignals.lead_lag_spread_pct == null ? null : toFiniteNumber(capitalFlowSignals.lead_lag_spread_pct),
+    overseasMomentumAsOf: capitalFlowSignals.overseas_momentum_as_of ? String(capitalFlowSignals.overseas_momentum_as_of) : null,
   };
 }
 
@@ -1711,6 +11457,24 @@ function mapResearchMemo(raw: Row): ResearchMemoView {
   };
 }
 
+function selectUniqueResearchReports(memos: ResearchMemoView[], limit = 6) {
+  const picked: ResearchMemoView[] = [];
+  const seen = new Set<string>();
+  for (const memo of memos) {
+    const primarySymbol = memo.relatedSymbols.find((symbol) => Boolean(resolveChineseName(symbol, symbol))) || null;
+    if (!primarySymbol) continue;
+    const key = `${primarySymbol}|${memo.reportKind}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    picked.push({
+      ...memo,
+      relatedSymbols: [primarySymbol, ...memo.relatedSymbols.filter((symbol) => symbol !== primarySymbol)],
+    });
+    if (picked.length >= limit) break;
+  }
+  return picked;
+}
+
 function mapEvidenceItem(raw: Row): StoryEvidenceItemView {
   return {
     evidenceClass: (raw.evidence_class as StoryEvidenceItemView['evidenceClass']) || 'news',
@@ -1725,11 +11489,14 @@ function mapEvidenceItem(raw: Row): StoryEvidenceItemView {
 }
 
 function mapValuationCase(raw: Row): ValuationCaseView {
+  const assumptions = (raw.assumptions as Record<string, unknown>) || {};
   return {
     caseType: (raw.case_type as ValuationCaseView['caseType']) || 'base',
     targetPrice: raw.target_price == null ? null : toFiniteNumber(raw.target_price),
     expectedReturnPct: raw.expected_return_pct == null ? null : toFiniteNumber(raw.expected_return_pct),
-    assumptions: (raw.assumptions as Record<string, unknown>) || {},
+    assumptions,
+    bridgeSummary: compactText((assumptions.bridge_summary as string | undefined) || ''),
+    driverLabel: compactText((assumptions.driver_label as string | undefined) || ''),
   };
 }
 
@@ -1752,9 +11519,70 @@ function ensureValuationCaseCompleteness(valuationCases: ValuationCaseView[]) {
   };
 }
 
+const MARKET_FOCUS_MAX_CALENDAR_DAYS = 3;
+
+function parseMarketAsOfMs(value: string | null | undefined) {
+  if (!value) return null;
+  const normalized = /^\d{4}-\d{2}-\d{2}$/.test(value) ? `${value}T00:00:00+08:00` : value;
+  const ms = new Date(normalized).getTime();
+  return Number.isFinite(ms) ? ms : null;
+}
+
+function latestMarketFocusAsOf(focus: DailyMarketFocus | null, topThemes: ThemeHeatCard[]) {
+  const candidates = [
+    focus?.asOf || null,
+    ...topThemes.map((theme) => theme.asOfDate || null),
+    ...topThemes.map((theme) => theme.latestSourceAt || null),
+  ].filter((value): value is string => Boolean(value));
+  let latest: string | null = null;
+  let latestMs = -Infinity;
+  for (const candidate of candidates) {
+    const ms = parseMarketAsOfMs(candidate);
+    if (ms == null) continue;
+    if (ms > latestMs) {
+      latest = candidate;
+      latestMs = ms;
+    }
+  }
+  return latest;
+}
+
+function evaluateMarketFocusFreshness(focus: DailyMarketFocus | null, topThemes: ThemeHeatCard[]) {
+  const latestAsOf = latestMarketFocusAsOf(focus, topThemes);
+  const latestMs = parseMarketAsOfMs(latestAsOf);
+  if (!latestAsOf || latestMs == null) {
+    return {
+      status: 'missing' as const,
+      asOf: null,
+      ageDays: null,
+      reason: '市場主軸資料尚未刷新；請先檢查 data-collect、theme-scan 與 market snapshot 寫入狀態。',
+    };
+  }
+  const ageDays = Math.max(0, Math.floor((Date.now() - latestMs) / (24 * 60 * 60 * 1000)));
+  if (ageDays > MARKET_FOCUS_MAX_CALENDAR_DAYS) {
+    return {
+      status: 'stale' as const,
+      asOf: latestAsOf,
+      ageDays,
+      reason: `市場主軸資料最後更新於 ${asIsoDate(latestAsOf)}，已超過 ${MARKET_FOCUS_MAX_CALENDAR_DAYS} 天 freshness SLA；目前不把舊 risk-on 判讀當成最新結論，請等待 data-collect / theme-scan 刷新。`,
+    };
+  }
+  return {
+    status: 'fresh' as const,
+    asOf: latestAsOf,
+    ageDays,
+    reason: null,
+  };
+}
+
 function buildFocusSummary(focus: DailyMarketFocus | null, topThemes: ThemeHeatCard[]) {
   if (!focus) {
     return '台股主題雷達尚未完成資料刷新，等待下一次市場掃描。';
+  }
+
+  const freshness = evaluateMarketFocusFreshness(focus, topThemes);
+  if (freshness.status !== 'fresh') {
+    return freshness.reason || '市場主軸資料偏舊，等待下一輪刷新。';
   }
 
   const topSectors = Object.entries(focus.sectorFlows || {})
@@ -1763,19 +11591,461 @@ function buildFocusSummary(focus: DailyMarketFocus | null, topThemes: ThemeHeatC
     .map(([sector]) => sector);
   const themeSummary = topThemes.slice(0, 2).map((theme) => theme.themeName);
   const trendScore = toFiniteNumber((focus.indexState as Row).trend_score, 0.5);
-  const regime = trendScore >= 0.68 ? 'risk-on' : trendScore >= 0.55 ? 'selective risk-on' : 'range-bound';
+  const regime = trendScore >= 0.68 ? '風險偏好擴張' : trendScore >= 0.55 ? '選股型風險偏好' : '區間整理';
+  const asOf = asIsoDate(focus.asOf);
+  return `${asOf} 台股目前屬於「${regime}」，資金主軸聚焦 ${topSectors.join('、') || '高流動性大型股'}，優先追蹤 ${themeSummary.join('、') || '高熱度主題'}。`;
+}
 
-  return `目前台股處於 ${regime} 狀態，資金主軸聚焦 ${topSectors.join('、') || '高流動性大型股'}，優先追蹤 ${themeSummary.join('、') || '高熱度主題'}。`;
+const MARKET_REGIME_COPY: Record<string, { label: string; explanation: string }> = {
+  'risk-on': {
+    label: '風險偏好擴張',
+    explanation: '資金願意追逐成長與題材股，但不代表所有推薦都適合立刻追價。',
+  },
+  'risk-on-ai': {
+    label: 'AI 風險偏好擴張',
+    explanation: 'AI 與高成長供應鏈仍是資金優先方向，但進場仍要看籌碼與技術位置。',
+  },
+  'selective-risk-on': {
+    label: '選股型風險偏好',
+    explanation: '市場不是全面攻擊，資金集中在有數字驗證的族群與個股。',
+  },
+  'live-unavailable': {
+    label: '市場資料待補',
+    explanation: '即時資料來源暫時不可用，先不要把市場狀態當成最新判斷。',
+  },
+};
+
+const CONNECTOR_DISPLAY_LABELS: Record<string, string> = {
+  investanchors: '定錨投筆',
+  threads: 'Threads',
+  instagram: 'Instagram',
+  telegram: 'Telegram',
+  podcast: 'Podcast',
+  youtube: 'YouTube',
+  ptt: 'PTT Stock',
+  bulltalk: '股市爆料同學會',
+  googlenews: 'Google News',
+  anue: '鉅亨網',
+  udn: 'UDN',
+  mobile01: 'Mobile01',
+  twse_insider: '董監持股揭露',
+};
+
+function buildMarketHighlightSummary(params: {
+  focus: DailyMarketFocus | null;
+  topThemes: ThemeHeatCard[];
+  marketRegime: string;
+  marketFreshness: ReturnType<typeof evaluateMarketFocusFreshness>;
+  lastUpdatedAt: string | null;
+}): NonNullable<RadarDailyPayload['marketHighlightSummary']> {
+  const regimeCopy = MARKET_REGIME_COPY[params.marketRegime] || MARKET_REGIME_COPY['selective-risk-on'];
+  const topThemeNames = params.topThemes.slice(0, 3).map((theme) => theme.themeName).filter(Boolean);
+  const sectorFlows = Object.entries(params.focus?.sectorFlows || {})
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3)
+    .map(([sector]) => sector);
+  const asOf = asIsoDate(params.marketFreshness.asOf || params.focus?.asOf || nowIso());
+  return {
+    headline:
+      params.marketFreshness.status === 'fresh'
+        ? `${asOf} 台股資金仍集中在 ${topThemeNames.join('、') || sectorFlows.join('、') || '高流動性族群'}`
+        : params.marketFreshness.reason || '市場主軸資料偏舊，等待下一輪刷新。',
+    regimeLabel: regimeCopy.label,
+    regimeExplanation: regimeCopy.explanation,
+    capitalFlow: `目前資金主軸：${sectorFlows.join('、') || '尚待 data collect 補齊'}。`,
+    topThemes: topThemeNames,
+    riskNote:
+      params.marketFreshness.status === 'fresh'
+        ? '熱門主題只代表資金方向，是否能買仍要看個股 Base bridge、情境達成率與進場 gate。'
+        : '市場主軸偏舊時，不把舊 regime 當成最新推薦依據。',
+    nextRefreshHint: params.lastUpdatedAt ? `最近成功刷新 ${params.lastUpdatedAt}` : '等待下一輪盤前/盤後刷新。',
+  };
+}
+
+function normalizeConnectorFailure(rawReason: string | null | undefined, connector?: string | null) {
+  const reason = compactText(rawReason);
+  if (!reason) return { code: null as string | null, message: null as string | null };
+  if (/chromium_headless_shell|chrome-headless-shell|browserType\.launch|playwright.*install|Executable doesn't exist/i.test(reason)) {
+    return {
+      code: 'playwright_runtime_unavailable',
+      message: '瀏覽器依賴缺失：此 connector 需要由本機 launchd worker 執行，Vercel serverless 不直接跑 Playwright。',
+    };
+  }
+  if (/instagram_bridge_no_session_cookie|session|cookie|auth|login/i.test(reason)) {
+    return {
+      code: 'auth_degraded',
+      message:
+        connector === 'threads'
+          ? `Threads session/cookie 失效：${reason.includes('instagram_bridge_no_session_cookie') ? 'instagram_bridge_no_session_cookie' : '請重新匯入 cookies'}`
+          : '登入 session/cookie 失效，等待本機 worker 重新驗證。',
+    };
+  }
+  if (/timeout|timed_out|stale_running/i.test(reason)) {
+    return { code: 'timed_out', message: '本輪抓取逾時，等待下一輪 worker 重試。' };
+  }
+  if (/no_records_written|沒有可用成功寫入/i.test(reason)) {
+    return { code: 'no_records_written', message: '本輪有搜尋但沒有寫入可用資料。' };
+  }
+  return { code: 'fetch_failed', message: reason.slice(0, 160) };
+}
+
+function isBrowserConnector(connector: string | null | undefined) {
+  return connector === 'investanchors' || connector === 'threads' || connector === 'instagram';
+}
+
+function isServerlessStatusOnlyConnectorStatus(item: ConnectorStatusView) {
+  return (
+    Boolean(item.ignoredServerlessSkip) ||
+    item.statusOwner === 'serverless_status' ||
+    item.latestApiAttemptStatus === 'skipped' ||
+    item.lastErrorSummary === 'playwright_runtime_unavailable' ||
+    item.failureReason === 'playwright_runtime_unavailable'
+  );
+}
+
+function authCookieStatusMessage(item: ConnectorStatusView) {
+  const missing = item.missingRecommendedCookieNames || [];
+  if (missing.length > 0) {
+    return `Threads session/cookie 需重新驗證：缺 ${missing.join('、')}。`;
+  }
+  const source = item.fallbackCookieSource ? `cookie 來源 ${item.fallbackCookieSource}` : 'cookie 來源待確認';
+  const names = (item.fallbackCookieNames || []).slice(0, 5).join('、');
+  const suffix = names ? `；已看到 cookie 欄位 ${names}，但本輪 session 仍被判定為 auth degraded。` : '；本輪 session 仍被判定為 auth degraded。';
+  return `Threads session/cookie 需重新驗證：${source}${suffix}`;
+}
+
+function buildSourceHealthSummary(
+  agentStatus: AgentStatusSummary,
+  connectorStatus: ConnectorStatusView[],
+): NonNullable<RadarDailyPayload['sourceHealthSummary']> {
+  const now = Date.now();
+  const dayMs = 24 * 60 * 60 * 1000;
+  const connectorDetails = connectorStatus.map((item) => {
+    const refreshCadenceHours = item.refreshCadenceHours || refreshCadenceHoursForConnector(item.connector);
+    const refreshTier = item.refreshTier || refreshTierForConnector(item.connector);
+    const workerFreshnessSlaMs = refreshCadenceHours * 60 * 60 * 1000;
+    const browserConnector = isBrowserConnector(item.connector);
+    const serverlessStatusOnly = browserConnector && isServerlessStatusOnlyConnectorStatus(item);
+    const status = String(item.canonicalWorkerStatus || item.lastRunStatus || item.credentialStatus || 'missing');
+    const terminalStatus = item.lastTerminalStatus || null;
+    const lastTerminalRunAt = item.lastTerminalRunAt || item.lastTerminalAt || null;
+    const lastSuccessMs = item.lastSuccessAt ? new Date(item.lastSuccessAt).getTime() : Number.NaN;
+    const lastTerminalMs = lastTerminalRunAt ? new Date(lastTerminalRunAt).getTime() : Number.NaN;
+    const recentSuccess = Number.isFinite(lastSuccessMs) && now - lastSuccessMs <= dayMs;
+    const recordsWritten24h = item.recordsWritten24h || 0;
+    const recordsWrittenThisRun = item.recordsWrittenThisRun ?? item.lastTerminalRecordsWritten ?? 0;
+    const recordsWritten = recordsWritten24h || recordsWrittenThisRun || item.lastRecordsWritten || 0;
+    const rawFailureReason =
+      item.failureReason ||
+      item.lastErrorSummary ||
+      (status === 'running' && item.lastTerminalStatus
+        ? null
+        : recentSuccess
+          ? null
+          : recordsWritten > 0
+            ? null
+            : '最近 24 小時沒有可用成功寫入');
+    const normalizedFailure = normalizeConnectorFailure(rawFailureReason, item.connector);
+    const authDegradedReason =
+      item.connector === 'threads' && normalizedFailure.code === 'auth_degraded'
+        ? authCookieStatusMessage(item)
+        : null;
+    const terminalIsSuccessful = terminalStatus === 'success' || (terminalStatus == null && (status === 'success' || status === 'valid'));
+    const hasTerminalRun = Boolean(terminalStatus || lastTerminalRunAt || item.lastAttemptAt || item.lastRunAt);
+    const hasUsableRecentData = recentSuccess || recordsWritten24h > 0 || (item.lastSuccessfulRecordsWritten ?? 0) > 0;
+    const terminalHasIssue = Boolean(normalizedFailure.code && !terminalIsSuccessful && !serverlessStatusOnly);
+    const terminalIssueWithUsableData = terminalHasIssue && hasUsableRecentData;
+    const noNewDataReason =
+      terminalIsSuccessful && recordsWrittenThisRun === 0
+        ? '已更新，暫無新增資料。'
+        : null;
+    const hasCurrentFailure = Boolean(terminalHasIssue && !terminalIssueWithUsableData);
+    const workerFreshnessStatus =
+      hasCurrentFailure
+        ? ('degraded' as const)
+        : !Number.isFinite(lastSuccessMs) && !Number.isFinite(lastTerminalMs)
+          ? ('missing' as const)
+          : now - Math.max(Number.isFinite(lastSuccessMs) ? lastSuccessMs : 0, Number.isFinite(lastTerminalMs) ? lastTerminalMs : 0) > workerFreshnessSlaMs
+            ? ('stale' as const)
+            : ('fresh' as const);
+    const degradedReason = hasCurrentFailure
+      ? authDegradedReason || normalizedFailure.message
+      : noNewDataReason
+        ? null
+        : recordsWritten > 0 || recentSuccess
+          ? null
+        : workerFreshnessStatus === 'stale'
+          ? `本機 worker 超過 ${refreshCadenceHours} 小時沒有成功寫入；已視為 stale，需檢查 launchd 與來源排程。`
+        : serverlessStatusOnly
+          ? (hasTerminalRun ? null : '尚未有本機 worker terminal run；Vercel 僅保留 status-only 嘗試。')
+          : hasTerminalRun
+            ? null
+            : normalizedFailure.message || '尚未有任何 terminal run';
+    const statusExplanation = terminalIssueWithUsableData
+      ? authDegradedReason
+        ? `上次成功${item.lastSuccessAt ? ` ${item.lastSuccessAt}` : ''}，已有 ${recordsWritten} 筆近 24 小時資料；本輪 auth degraded。${authDegradedReason}`
+        : `上次成功${item.lastSuccessAt ? ` ${item.lastSuccessAt}` : ''}，已有 ${recordsWritten} 筆近 24 小時資料；本輪${terminalStatus === 'timed_out' ? '逾時' : '未完整成功'}，等待下一輪 worker 重試。`
+      : noNewDataReason || degradedReason || null;
+    const metadata = item.metadata || item.lastRunMetadata || null;
+    const articlesFetched = Number(metadata?.articles_fetched ?? metadata?.articlesFetched ?? 0);
+    const pushCommentsParsed = Number(metadata?.push_comments_parsed ?? metadata?.pushCommentsParsed ?? 0);
+    return {
+      connector: item.connector,
+      label: CONNECTOR_DISPLAY_LABELS[item.connector] || item.connector,
+      status,
+      recordsWritten,
+      recordsWritten24h,
+      lastSuccessAt: item.lastSuccessAt,
+      lastAttemptAt: item.lastAttemptAt || item.lastRunAt || null,
+      lastAttemptStatus: status,
+      lastTerminalStatus: terminalStatus,
+      lastSuccessfulRecordsWritten: item.lastSuccessfulRecordsWritten || 0,
+      lastSuccessfulRecordsAt: item.lastSuccessfulRecordsAt || item.lastSuccessAt || null,
+      metadata,
+      lastRunMetadata: item.lastRunMetadata || item.metadata || null,
+      refreshTier,
+      refreshCadenceHours,
+      lastTerminalRunAt,
+      recordsWrittenThisRun,
+      noNewDataReason,
+      statusExplanation,
+      articlesFetched,
+      pushCommentsParsed,
+      lastScheduledAt: item.lastScheduledAt || null,
+      normalizedFailureCode: serverlessStatusOnly ? null : normalizedFailure.code,
+      displayFailureReason: statusExplanation,
+      canonicalWorkerStatus: item.canonicalWorkerStatus || status,
+      workerFreshnessStatus,
+      workerSlaStatus: workerFreshnessStatus,
+      latestApiAttemptStatus: item.latestApiAttemptStatus || null,
+      statusOwner: serverlessStatusOnly ? 'serverless_status' : (item.statusOwner || 'local_worker'),
+      ignoredServerlessSkip: serverlessStatusOnly,
+      channelBreakdown: item.channelBreakdown || [],
+      kolBreakdown: item.kolBreakdown || [],
+      episodesFound: item.episodesFound || 0,
+      transcriptsReady: item.transcriptsReady || 0,
+      weakSignalsWritten: item.weakSignalsWritten || 0,
+      failureReasonByKol: item.failureReasonByKol || {},
+      degradedReason,
+      failureReason: degradedReason,
+      workerScriptVersion: item.workerScriptVersion || null,
+      fallbackCookieSource: item.fallbackCookieSource || null,
+      fallbackCookieNames: item.fallbackCookieNames || [],
+      missingRecommendedCookieNames: item.missingRecommendedCookieNames || [],
+      envLastModifiedAt: item.envLastModifiedAt || null,
+      sourceSurfaces24h: item.sourceSurfaces24h || [],
+      falsePositiveExcluded24h: item.falsePositiveExcluded24h || 0,
+      accountFeedStatus: item.accountFeedStatus || null,
+      searched: Boolean(item.lastRunAt || item.lastCheckedAt || item.lastAttemptAt || item.searchedTargets?.length),
+      matched: recordsWritten > 0 || Boolean(item.matchedSymbols?.length),
+      searchedTargets: item.searchedTargets || [],
+      matchedSymbols: item.matchedSymbols || [],
+    };
+  });
+  return {
+    successfulSources: connectorDetails.filter((item) => item.recordsWritten > 0 && !item.degradedReason).length,
+    degradedSources: connectorDetails.filter((item) => item.degradedReason || ['failed', 'invalid', 'degraded', 'timed_out'].includes(item.status)).length,
+    recordsWritten24h: connectorDetails.reduce((sum, item) => sum + (item.recordsWritten24h || item.recordsWritten || 0), 0),
+    lastSuccessfulRunAt: agentStatus.lastSuccessfulRunAt,
+    connectorDetails,
+  };
+}
+
+function buildPluginSourceCoverageSummary(
+  sourceHealthSummary: NonNullable<RadarDailyPayload['sourceHealthSummary']>,
+): NonNullable<RadarDailyPayload['pluginSourceCoverageSummary']> {
+  const writtenConnectors = sourceHealthSummary.connectorDetails
+    .filter((item) => (item.recordsWritten24h || item.recordsWritten || 0) > 0)
+    .map((item) => item.label || item.connector)
+    .slice(0, 8);
+  const socialConnectors = sourceHealthSummary.connectorDetails
+    .filter((item) => ['threads', 'instagram', 'telegram', 'ptt', 'bulltalk', 'investanchors'].some((key) => item.connector.includes(key)))
+    .map((item) => item.label || item.connector);
+  return {
+    financialData: {
+      status: 'partial',
+      summary:
+        '估值以 Supabase 的財務快照、月營收、券商摘要與 bridge ledger 為主；FactSet/Aiera 類資料只作外部佐證與匯入方向，不直接覆蓋目標價。',
+      sources: ['Supabase financial snapshots', 'broker consensus snapshots', 'manual/imported broker reports'],
+    },
+    socialDiscovery: {
+      status: writtenConnectors.length > 0 ? 'available' : 'partial',
+      summary:
+        writtenConnectors.length > 0
+          ? `近 24 小時已有 ${writtenConnectors.join('、')} 寫入，用於 discovery、熱股追蹤與重估觸發。`
+          : '社群來源尚未有新寫入；社群熱度只進候選，不直接升正式推薦。',
+      sources: socialConnectors.length > 0 ? socialConnectors : ['Threads', 'Instagram', 'Telegram', 'PTT Stock'],
+    },
+    modelAssist: {
+      status: 'partial',
+      summary: 'Hugging Face / ML 訊號只做情緒、證據強度、語意檢索與輔助區間；正式 Base/情境仍需公式估值與外部引用。',
+      sources: ['HF sentiment/evidence baseline', 'mlForecastBand', 'modelSignalScores'],
+    },
+    deploymentQa: {
+      status: 'available',
+      summary: 'Vercel Preview/Production smoke 與本地 audits 用來防止 target、買點、大盤 Gate 回退。',
+      sources: ['Vercel CLI', 'Playwright', 'StockInsider audits'],
+    },
+  };
+}
+
+function buildDiscoveryFreshnessSummary(params: {
+  sourceHealthSummary: NonNullable<RadarDailyPayload['sourceHealthSummary']>;
+  opportunities: RecommendationCard[];
+  scenarioUpsideCandidates: RecommendationCard[];
+  earlyWatchlist: RecommendationCard[];
+  hotTracking: RecommendationCard[];
+  discoveredStocks: DiscoveredStockCard[];
+}): NonNullable<RadarDailyPayload['discoveryFreshnessSummary']> {
+  const nowMs = Date.now();
+  const dayMs = 24 * 60 * 60 * 1000;
+  const terminalRuns24h = params.sourceHealthSummary.connectorDetails.filter((item) => {
+    const timestamp = item.lastTerminalRunAt || item.lastAttemptAt || item.lastSuccessAt;
+    if (!timestamp) return false;
+    const time = new Date(timestamp).getTime();
+    return Number.isFinite(time) && nowMs - time <= dayMs;
+  });
+  const newCandidates24h = params.discoveredStocks.filter((item) => {
+    const timestamp = item.latestMentionAt || null;
+    if (!timestamp) return false;
+    const time = new Date(timestamp).getTime();
+    return Number.isFinite(time) && nowMs - time <= dayMs;
+  }).length;
+  const promoted24h = params.opportunities.length + params.scenarioUpsideCandidates.length;
+  const archived24h = params.hotTracking.length;
+  const blockedCandidates = params.earlyWatchlist.filter(
+    (item) =>
+      Boolean(item.whyNotFormal || item.whyNotRecommended || item.whyNoFormalRecommendation) ||
+      item.targetCoverageStatus === 'missing_target' ||
+      item.revaluationStatus === 'pending' ||
+      (item.formalGateStatus != null && item.formalGateStatus !== 'formal_pass'),
+  ).length;
+  const reflectedCandidates =
+    params.hotTracking.length +
+    params.earlyWatchlist.filter(
+      (item) =>
+        item.targetStaleKind === 'crossed_scenario' ||
+        item.displayTargetMode === 'hidden_over_target' ||
+        item.targetCoverageStatus === 'over_base_and_scenario' ||
+        Boolean(item.archiveReason),
+    ).length;
+  const topSource = params.sourceHealthSummary.connectorDetails
+    .slice()
+    .sort((a, b) => (Number(b.recordsWritten24h || 0) || 0) - (Number(a.recordsWritten24h || 0) || 0))
+    .find((item) => Number(item.recordsWritten24h || 0) > 0);
+  const topDiscoverySource = topSource ? topSource.label || topSource.connector : null;
+  const staleSources = params.sourceHealthSummary.connectorDetails.filter((item) => item.workerFreshnessStatus === 'stale' || item.workerSlaStatus === 'stale').length;
+  const noSourceActivity24h = terminalRuns24h.length === 0 && params.sourceHealthSummary.recordsWritten24h === 0;
+  const unchangedReason =
+    noSourceActivity24h
+      ? '資料源近 24 小時沒有 terminal run 或寫入；保留既有候選，等待下一輪 worker / source refresh。'
+      : params.opportunities.length === 0 && params.scenarioUpsideCandidates.length === 0
+      ? '目前沒有標的同時通過估值、來源、籌碼與技術 Gate；寧可空缺，也不把未驗證候選包裝成正式推薦。'
+      : staleSources > 0
+        ? `${staleSources} 個來源超過 SLA，推薦池變動需等下一輪來源補齊。`
+        : newCandidates24h > 0
+          ? `${newCandidates24h} 檔新候選已進觀察，但尚未通過完整 Gate。`
+          : '來源已刷新但暫無新標的通過 Gate；既有名單維持追蹤。';
+  return {
+    lastCheckedAt:
+      params.sourceHealthSummary.connectorDetails
+        .map((item) => item.lastTerminalRunAt || item.lastAttemptAt || item.lastSuccessAt || null)
+        .filter((value): value is string => Boolean(value))
+        .sort()
+        .pop() || params.sourceHealthSummary.lastSuccessfulRunAt,
+    sourceRuns24h: terminalRuns24h.length,
+    recordsWritten24h: params.sourceHealthSummary.recordsWritten24h,
+    newCandidates24h,
+    promoted24h,
+    downgraded24h: params.earlyWatchlist.filter((item) => item.whyNotFormal || item.targetCoverageStatus === 'missing_target').length,
+    archived24h,
+    blockedCandidates,
+    reflectedCandidates,
+    topDiscoverySource,
+    unchangedReason,
+    sourceSummary: topDiscoverySource
+      ? `近 24 小時 ${terminalRuns24h.length} 個來源有 terminal run，寫入 ${params.sourceHealthSummary.recordsWritten24h} 筆；主要來源：${topDiscoverySource}。`
+      : `近 24 小時 ${terminalRuns24h.length} 個來源有 terminal run，寫入 ${params.sourceHealthSummary.recordsWritten24h} 筆。`,
+    candidateSummary: `正式 ${params.opportunities.length}、情境 ${params.scenarioUpsideCandidates.length}、早期 ${params.earlyWatchlist.length}、熱股追蹤 ${params.hotTracking.length}；Gate 阻擋 ${blockedCandidates}、已反映 ${reflectedCandidates}。`,
+  };
+}
+
+function buildGlobalLeadLagSummary(themes: ThemeHeatCard[]): NonNullable<RadarDailyPayload['globalLeadLagSummary']> {
+  const leadLagThemes = themes.filter(
+    (theme) =>
+      Boolean(theme.foreignPeerBasket?.length) ||
+      Boolean((theme.capitalFlowSignals as Row | undefined)?.overseas_lead_lag_signal),
+  );
+  const pendingPriceRefresh = leadLagThemes.filter((theme) => {
+    const status = String((theme.capitalFlowSignals as Row | undefined)?.overseas_signal_status || '');
+    return status === 'pending_price_refresh' || theme.leadLagSpreadPct == null;
+  }).length;
+  const measuredThemes = leadLagThemes.filter((theme) => theme.leadLagSpreadPct != null).length;
+  const sourceUnavailable = leadLagThemes.filter(
+    (theme) => String((theme.capitalFlowSignals as Row | undefined)?.overseas_signal_status || '') === 'source_unavailable',
+  ).length;
+  return {
+    activeThemes: leadLagThemes.length,
+    pendingPriceRefresh,
+    measuredThemes,
+    sourceUnavailable,
+    summary:
+      leadLagThemes.length > 0
+        ? `已建立 ${leadLagThemes.length} 個海外同族群 basket；${measuredThemes} 個已有價差量測，${pendingPriceRefresh} 個等待海外/TW 價格刷新。`
+        : '尚未建立海外同族群 lead-lag 訊號。',
+  };
+}
+
+function sanitizeConnectorStatusForPayload(connectorStatus: ConnectorStatusView[]): ConnectorStatusView[] {
+  return connectorStatus.map((item) => {
+    const normalized = normalizeConnectorFailure(item.failureReason || item.lastErrorSummary, item.connector);
+    const serverlessStatusOnly = isBrowserConnector(item.connector) && isServerlessStatusOnlyConnectorStatus(item);
+    return {
+      ...item,
+      lastErrorSummary: serverlessStatusOnly ? 'Vercel status-only：等待本機 launchd worker 補抓。' : normalized.message,
+      failureReason: serverlessStatusOnly ? 'Vercel status-only：等待本機 launchd worker 補抓。' : normalized.message,
+      ignoredServerlessSkip: serverlessStatusOnly,
+      statusOwner: serverlessStatusOnly ? 'serverless_status' : (item.statusOwner || 'local_worker'),
+    };
+  });
+}
+
+function isWeakEvidenceText(value: string | null | undefined) {
+  const text = compactText(value);
+  if (!text) return false;
+  return (
+    /目前以.+作為主要依據/.test(text) ||
+    text.includes('若缺直接客戶公告') ||
+    text.includes('不直接視為已公告訂單') ||
+    text.includes('對應的產品線、既有營收結構與公開產業追蹤') ||
+    text.includes('本報告把共同基底') ||
+    text.includes('Base 財務推導與情境差分')
+  );
+}
+
+function evidenceOrPending(value: string | null | undefined, pending: string) {
+  const text = compactText(value);
+  if (!text || isWeakEvidenceText(text)) return pending;
+  return text;
+}
+
+function reportParagraphIsInternal(value: string) {
+  return isWeakEvidenceText(value) || value.includes('不把尚待驗證的樂觀假設提前放進正式買進理由');
 }
 
 function mapBrokerView(raw: Row): BrokerView {
+  const metadata = (raw.metadata as Row | undefined) || {};
   return {
     brokerName: String(raw.broker_name || '未識別券商/投顧'),
     reportDate: raw.report_date ? String(raw.report_date) : null,
     rating: raw.rating ? String(raw.rating) : null,
     targetPrice: raw.target_price == null ? null : toFiniteNumber(raw.target_price),
+    forwardEps: metadata.forward_eps == null ? null : toFiniteNumber(metadata.forward_eps),
+    sourceMode: raw.source_mode ? String(raw.source_mode) : null,
+    isUsBroker: metadata.broker_region === 'us' || /Morgan Stanley|Goldman|JPMorgan|Citi|BofA|Bank of America|UBS|Bernstein|Jefferies/i.test(String(raw.broker_name || '')),
     thesisTitle: raw.thesis_title ? String(raw.thesis_title) : null,
     summary: String(raw.extracted_summary || ''),
+    sourceUrl: (metadata.source_url ? String(metadata.source_url) : null) || null,
   };
 }
 
@@ -1809,76 +12079,70 @@ function mapEvidenceMatrix(raw: Row): EvidenceMatrixView {
 
 function fallbackAgentStatusSummary(): AgentStatusSummary {
   return {
-    activeRunType: 'demo-fallback',
-    runCount24h: 1,
-    lastSuccessfulRunAt: nowIso(),
-    startedRoles: Array.from(new Set(AGENCY_AGENT_ALLOWLIST.map((profile) => profile.mappedRole))),
-    allowlistedProfiles: AGENCY_AGENT_ALLOWLIST.map((profile) => profile.profileKey),
+    activeRunType: null,
+    runCount24h: 0,
+    lastSuccessfulRunAt: null,
+    startedRoles: [],
+    allowlistedProfiles: [],
   };
 }
 
-function fallbackRecommendationState(seed: ResearchSeed): RecommendationState {
-  if (seed.expectationScore >= 0.82) return 'actionable_setup';
-  if (seed.expectationScore >= 0.7) return 'partially_verified';
+function fallbackRecommendationState(_seed: ResearchSeed): RecommendationState {
+  // Seed-only output identifies a source signal during a total producer outage.
+  // It has no point-in-time financial authority and can never become formal.
   return 'signal_candidate';
+}
+
+function fallbackSeedThesisSummary(seed: ResearchSeed) {
+  return `${seed.thesisTitle}；目前僅為來源斷線時的題材辨識，財務數字、估值與進場條件均待 point-in-time 官方資料重新驗證。`;
+}
+
+function fallbackSeedCatalystSummary(seed: ResearchSeed) {
+  return `${seed.themeName}相關事件仍待來源 producer 更新並完成官方交叉驗證。`;
 }
 
 function fallbackRecommendation(seed: ResearchSeed): RecommendationCard {
   const rawPrice = seed.prices[seed.prices.length - 1];
   const price = rawPrice > 0 ? rawPrice : 100;
-  const technical = computeTechnicalSnapshot(rawPrice > 0 ? [...seed.prices] : [100]);
-  const override = SEED_RESEARCH_OVERRIDES[seed.symbol];
-  const foundTarget = override?.targetPrice ?? seed.valuationCases.find((item) => item.caseType === 'base')?.targetPrice;
-  const baseTarget = foundTarget && foundTarget > price ? foundTarget : price * 1.05;
-  const stopLoss = override ? round(override.invalidationPrice > 0 ? override.invalidationPrice : price * 0.94, 2) : round(price * 0.94, 2);
   const recommendationState = fallbackRecommendationState(seed);
-  const timingScore = round(
-    clamp(
-      (price >= technical.maShort ? 0.34 : 0.14) +
-        (technical.maShort >= technical.maMid ? 0.24 : 0.1) +
-        (technical.rsi >= 48 && technical.rsi <= 72 ? 0.2 : 0.08) +
-        (technical.macd >= technical.macdSignal ? 0.22 : 0.1),
-    ),
-    4,
-  );
-  const communitySignalScore = round(clamp(mean(seed.socialSignals.map((signal) => signal.confidence)) * 0.35), 4);
-  const evidenceScore = round(clamp(seed.expectationScore * 0.68 + 0.12), 4);
   const verificationStatus = verificationStatusFromState(recommendationState);
+  const targetPresentation = buildTargetSnapshot(price, null, null, null, null, null, null);
 
   return {
     recommendationId: `demo-${seed.symbol}`,
     symbol: seed.symbol,
     name: seed.name,
     market: seed.market,
-    score: round(clamp(seed.expectationScore * 0.82 + timingScore * 0.18), 4),
-    confidence: round(clamp(seed.expectationScore * 0.9 + 0.06), 4),
-    action: recommendationState === 'actionable_setup' ? 'buy' : 'watch',
+    score: round(clamp(seed.expectationScore * 0.25), 4),
+    confidence: 0.2,
+    action: 'watch',
     rationale: `${seed.themeName} / ${seed.reportTitle}`,
-    targetPrice: baseTarget,
-    stopLoss,
-    strategyState: recommendationState === 'actionable_setup' ? 'active' : 'invalidated',
+    targetPrice: null,
+    stopLoss: null,
+    strategyState: 'invalidated',
     recommendationState,
-    storyType: override?.storyType ?? seed.storyType,
-    thesisTitle: override?.thesisTitle ?? seed.thesisTitle,
-    thesisSummary: override?.thesisSummary ?? seed.thesisSummary,
-    catalystSummary: override?.catalystSummary ?? seed.catalystSummary,
-    expectedUpsidePct: round(((baseTarget - price) / price) * 100, 2),
-    valuationSource: 'demo_seed',
-    valuationConfidence: 0.45,
+    storyType: seed.storyType,
+    thesisTitle: seed.thesisTitle,
+    thesisSummary: fallbackSeedThesisSummary(seed),
+    catalystSummary: fallbackSeedCatalystSummary(seed),
+    expectedUpsidePct: null,
+    valuationSource: 'missing',
+    valuationConfidence: null,
     isFallbackValuation: true,
-    evidenceScore,
-    timingScore,
-    communitySignalScore,
+    evidenceScore: 0,
+    timingScore: null,
+    communitySignalScore: 0,
     verificationStatus,
-    conditionalRecommendationNote:
-      recommendationState === 'signal_candidate'
-        ? '目前主要由社群與市場話題驅動，官方與財務資料尚未充分證實，屬於早期觀察名單。'
-        : recommendationState === 'partially_verified'
-          ? '已有部分法說、財務或產業資料支持，但 thesis 尚未完全閉環，適合小部位提早卡位。'
-          : '官方與數據證據已逐步到位，可依技術面與風險控管規則執行。',
-    chineseName: CHINESE_NAME_MAP[seed.symbol] ?? null,
+    conditionalRecommendationNote: '來源 producer 目前不可用；僅保留早期題材辨識，不提供估值或交易建議。',
+    chineseName: resolveChineseName(seed.symbol, seed.name),
     firstRecommendedAt: null,
-    estimatedCatalystDate: CATALYST_DATE_MAP[seed.symbol] ?? null,
+    estimatedCatalystDate: null,
+    baseTarget: null,
+    upsideTarget: null,
+    displayBaseUpsidePct: targetPresentation.displayBaseUpsidePct,
+    displayScenarioUpsidePct: targetPresentation.displayScenarioUpsidePct,
+    cardPrimaryUpsidePct: targetPresentation.cardPrimaryUpsidePct,
+    cardPrimaryUpsideLabel: targetPresentation.cardPrimaryUpsideLabel,
   };
 }
 
@@ -1891,142 +12155,41 @@ function fallbackThemeRows(windowType: ThemeHeatCard['windowType']): ThemeHeatCa
 
   return Array.from(grouped.entries())
     .map(([themeKey, seeds]) => {
-      const expectation = mean(seeds.map((seed) => seed.expectationScore));
-      const momentum = mean(seeds.map((seed) => {
-        const last = seed.prices[seed.prices.length - 1];
-        const first = seed.prices[0];
-        return first > 0 ? (last - first) / first : 0;
-      }));
-      const modifier = windowType === 'daily' ? 1 : windowType === 'three_day' ? 0.97 : 0.94;
-      const sourceCoverage = mergeSourceCoverage(
-        seeds.flatMap((seed) =>
-          seed.socialSignals.map((signal) =>
-            mapSourceCoverageItem({
-              source_name: signal.sourceName,
-              source_type: signal.sourceType,
-              summary: signal.summary,
-              source_url: signal.sourceUrl || null,
-              source_timestamp: nowIso(),
-              symbols: [seed.symbol],
-              confidence: signal.confidence,
-              weight: signal.sourceType === 'KOL' ? 0.12 : signal.sourceType === 'PTT' ? 0.1 : signal.sourceType === 'BullTalk' ? 0.11 : 0.09,
-              verification_status: signal.confidence >= 0.6 ? '部分證實' : '未證實',
-            }),
-          ),
-        ),
-      );
-      sourceCoverage.push(
-        mapSourceCoverageItem({
-          source_name: '官方/財務資料',
-          source_type: 'official',
-          summary: '法說會、財報與月營收資料作為後續驗證基礎。',
-          source_url: 'https://mops.twse.com.tw/',
-          source_timestamp: nowIso(),
-          symbols: seeds.map((seed) => seed.symbol),
-          confidence: expectation >= 0.8 ? 0.72 : 0.46,
-          weight: 0.22,
-          verification_status: expectation >= 0.8 ? '已證實' : '部分證實',
-        }),
-      );
-      sourceCoverage.push(
-        mapSourceCoverageItem({
-          source_name: '財務/月營收資料',
-          source_type: 'financial',
-          summary: '月營收、EPS 預估與毛利率趨勢作為財務驗證基礎。',
-          source_url: 'https://mops.twse.com.tw/',
-          source_timestamp: nowIso(),
-          symbols: seeds.map((seed) => seed.symbol),
-          confidence: expectation >= 0.75 ? 0.65 : 0.40,
-          weight: 0.18,
-          verification_status: expectation >= 0.75 ? '部分證實' : '未證實',
-        }),
-      );
-      const hasSocialCoverage = sourceCoverage.some((item) =>
-        ['ptt', 'bulltalk', 'kol', 'threads'].includes(item.sourceType.toLowerCase()),
-      );
-      if (!hasSocialCoverage) {
-        for (const [sourceType, sourceName] of [['ptt', 'PTT Stock 板'], ['bulltalk', '股市爆料同學會']] as const) {
-          sourceCoverage.push(
-            mapSourceCoverageItem({
-              source_name: sourceName,
-              source_type: sourceType,
-              summary: '社群資料收集中，自動排程每日 07:30 執行。',
-              source_url: null,
-              source_timestamp: nowIso(),
-              symbols: seeds.map((s) => s.symbol),
-              confidence: 0.30,
-              weight: communityWeightForSource(sourceType),
-              verification_status: '未證實',
-            }),
-          );
-        }
-      }
-      const mergedCoverage = mergeSourceCoverage(sourceCoverage);
-      const verificationStatus: VerificationStatus = mergedCoverage.some((item) => item.verificationStatus === '已證實')
-        ? '已證實'
-        : mergedCoverage.some((item) => item.verificationStatus === '部分證實')
-          ? '部分證實'
-          : '未證實';
       return {
         themeKey,
         themeName: seeds[0]?.themeName || themeKey,
         windowType,
-        marketRegime: 'risk-on-ai',
-        heatScore: round(clamp((expectation * 0.72 + (momentum + 0.5) * 0.28) * modifier), 4),
+        marketRegime: null,
+        heatScore: 0,
         capitalFlowSignals: {
-          avgExpectationScore: round(expectation, 4),
-          avgPriceMomentum: round(momentum, 4),
-          source: 'demo-fallback',
+          source: 'non_authoritative_seed_topic_only',
+          unavailableReason: 'producer_unavailable',
         },
         relatedSymbols: seeds.map((seed) => seed.symbol),
-        evidenceCount: mergedCoverage.length,
-        asOfDate: asIsoDate(nowIso()),
-        verificationStatus,
-        sourceCoverage: mergedCoverage,
-        missingSources: findMissingSources(mergedCoverage),
-        latestSourceAt: latestSourceTimestamp(mergedCoverage),
+        evidenceCount: 0,
+        asOfDate: '',
+        verificationStatus: '未證實' as const,
+        sourceCoverage: [],
+        missingSources: REQUIRED_SOURCE_TYPES.map((type) => SOURCE_TYPE_LABELS[type]),
+        latestSourceAt: null,
       };
     })
     .sort((a, b) => b.heatScore - a.heatScore);
 }
 
 function fallbackResearchMemos(): ResearchMemoView[] {
-  const asOf = asIsoDate(nowIso());
-  const recommendations = TW_STORY_RESEARCH_SEEDS.map(fallbackRecommendation);
   return [
     {
-      title: `StockInsider 每日雷達 ${asOf}`,
-      slug: `demo-daily-radar-${asOf}`,
-      summary: '當 live Supabase 尚未提供完整資料時，使用本地研究種子產生的示範雷達。',
-      memoMarkdown: '# 每日雷達',
+      title: 'StockInsider 資料暫不可用',
+      slug: 'demo-producer-unavailable',
+      summary: '來源 producer 不可用；本地 seed 只供題材辨識，不代表今日資料、估值或交易建議。',
+      memoMarkdown: '# 資料暫不可用',
       reportKind: 'daily_radar',
       recommendationState: null,
       catalystCalendar: [],
       entryExitRules: {},
-      relatedSymbols: recommendations.slice(0, 4).map((item) => item.symbol),
+      relatedSymbols: [],
     },
-    {
-      title: `StockInsider 每週高信念清單 ${asOf}`,
-      slug: `demo-weekly-conviction-${asOf}`,
-      summary: '以台股研究種子整理出的高信念情境與候選標的。',
-      memoMarkdown: '# 每週高信念清單',
-      reportKind: 'weekly_conviction',
-      recommendationState: 'actionable_setup',
-      catalystCalendar: [],
-      entryExitRules: {},
-      relatedSymbols: recommendations.filter((item) => item.recommendationState === 'actionable_setup').map((item) => item.symbol),
-    },
-    ...fallbackThemeRows('daily').slice(0, 3).map((theme) => ({
-      title: `${theme.themeName} 主題摘要`,
-      slug: `demo-theme-${theme.themeKey}-${asOf}`,
-      summary: `${theme.themeName} 仍是目前最值得追蹤的故事群之一。`,
-      memoMarkdown: `# ${theme.themeName}`,
-      reportKind: 'hot_theme' as const,
-      recommendationState: null,
-      catalystCalendar: [],
-      entryExitRules: {},
-      relatedSymbols: theme.relatedSymbols,
-    })),
   ];
 }
 
@@ -2035,17 +12198,17 @@ function fallbackDailyDashboardData() {
   const marketFocus: DailyMarketFocus[] = [
     {
       market: 'TW',
-      asOf: nowIso(),
-      sectorFlows: { Semiconductors: 0.84, 'AI Servers': 0.79, Networking: 0.52 },
-      indexState: { taiex: 'bullish', trend_score: 0.72 },
-      freshness: 'fresh',
+      asOf: '',
+      sectorFlows: {},
+      indexState: { unavailableReason: 'producer_unavailable' },
+      freshness: 'missing',
     },
     {
       market: 'US',
-      asOf: nowIso(),
-      sectorFlows: { Technology: 0.67, Semiconductors: 0.64, Software: 0.58 },
-      indexState: { nasdaq: 'bullish', trend_score: 0.63 },
-      freshness: 'fresh',
+      asOf: '',
+      sectorFlows: {},
+      indexState: { unavailableReason: 'producer_unavailable' },
+      freshness: 'missing',
     },
   ];
 
@@ -2054,7 +12217,7 @@ function fallbackDailyDashboardData() {
 
 async function fetchHistoricalPrices(symbol: string): Promise<Array<{ time: string; open: number; high: number; low: number; close: number }> | null> {
   try {
-    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}.TW?range=6mo&interval=1d`;
+    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}.TW?range=2y&interval=1d`;
     const res = await fetch(url, {
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; StockInsider/1.0)' },
       next: { revalidate: 86400 },
@@ -2079,6 +12242,16 @@ async function fetchHistoricalPrices(symbol: string): Promise<Array<{ time: stri
 }
 
 async function fetchStockQuote(symbol: string): Promise<{ name: string; price: number; changePct: number; volume: number | null } | null> {
+  const twStockQuote = await fetchTwStockQuote(symbol).catch(() => null);
+  if (twStockQuote?.price && twStockQuote.price > 0) {
+    return {
+      name: twStockQuote.name || symbol,
+      price: twStockQuote.price,
+      changePct: twStockQuote.changePct ?? 0,
+      volume: twStockQuote.volume ?? null,
+    };
+  }
+
   try {
     const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}.TW?range=1d&interval=1d`;
     const res = await fetch(url, {
@@ -2103,23 +12276,10 @@ async function fetchStockQuote(symbol: string): Promise<{ name: string; price: n
 async function fallbackStockInsight(symbol: string): Promise<StockInsightPayload | null> {
   const seed = TW_STORY_RESEARCH_SEEDS.find((item) => item.symbol === symbol.toUpperCase());
   if (!seed) return null;
-  const seedPrice = seed.prices[seed.prices.length - 1];
   const realChart = await fetchHistoricalPrices(seed.symbol);
-  const price = realChart && realChart.length > 0 ? realChart[realChart.length - 1].close : seedPrice;
-  const technical = computeTechnicalSnapshot(realChart ? realChart.map((c) => c.close) : [...seed.prices]);
-  const chart = realChart ?? seed.prices.map((close, index) => {
-    const spread = Math.max(2, close * 0.015);
-    const open = close - (index % 2 === 0 ? spread * 0.45 : -spread * 0.35);
-    const high = Math.max(open, close) + spread * 0.6;
-    const low = Math.min(open, close) - spread * 0.4;
-    return {
-      time: new Date(Date.now() - (seed.prices.length - index) * 86400000).toISOString().slice(0, 10),
-      open: round(open, 2),
-      high: round(high, 2),
-      low: round(low, 2),
-      close: round(close, 2),
-    };
-  });
+  const chart = realChart ?? [];
+  const price = chart.length > 0 ? chart[chart.length - 1].close : 0;
+  const technical = chart.length > 0 ? computeTechnicalSnapshot(chart.map((c) => c.close)) : null;
   const recommendation = fallbackRecommendation(seed);
 
   return {
@@ -2127,34 +12287,21 @@ async function fallbackStockInsight(symbol: string): Promise<StockInsightPayload
     name: seed.name,
     market: seed.market,
     price,
-    volume: seed.volume,
-    asOf: nowIso(),
-    freshness: 'fresh',
+    volume: null,
+    asOf: chart.length > 0 ? `${chart[chart.length - 1].time}T00:00:00Z` : nowIso(),
+    freshness: chart.length > 0 ? freshnessFromTimestamp(`${chart[chart.length - 1].time}T00:00:00Z`, 72) : 'missing',
     chart,
+    chartSource: chart.length > 0 ? 'yahoo' : 'missing',
+    chartMissingReason: chart.length > 0 ? null : '來源 producer 與行情來源均不可用；不以 seed 合成 K 線。',
     indicators: {
-      maShort: technical.maShort,
-      maMid: technical.maMid,
-      maLong: technical.maLong,
-      rsi: technical.rsi,
-      macd: technical.macd,
-      macdSignal: technical.macdSignal,
+      maShort: technical?.maShort ?? null,
+      maMid: technical?.maMid ?? null,
+      maLong: technical?.maLong ?? null,
+      rsi: technical?.rsi ?? null,
+      macd: technical?.macd ?? null,
+      macdSignal: technical?.macdSignal ?? null,
     },
-    chipMetrics: {
-      foreign_net: 12400,
-      investment_trust_net: 3400,
-      dealer_net: -800,
-      source: 'demo-fallback',
-    },
-    strategy: {
-      id: `demo-strategy-${seed.symbol}`,
-      recommendationId: recommendation.recommendationId,
-      entryRule: `Scale in while price holds above MA5 (${technical.maShort.toFixed(2)}) and evidence score remains positive.`,
-      positionSizeRule: recommendation.recommendationState === 'actionable_setup' ? '先以 8-12% 部位建立，待催化確認後再加碼' : '僅限試單，等待確認 K 棒後再評估擴大部位',
-      targetPrice: recommendation.targetPrice || null,
-      stopLoss: recommendation.stopLoss || null,
-      reviewHorizon: recommendation.recommendationState === 'actionable_setup' ? '1-3 個月' : '每 3 個交易日檢視一次',
-      state: recommendation.recommendationState === 'actionable_setup' ? 'active' : 'invalidated',
-    },
+    chipMetrics: { source: 'unavailable' },
     recommendation,
     riskDisclosure: RISK_DISCLOSURE,
   };
@@ -2172,7 +12319,7 @@ function fallbackThemeDetail(themeKey: string): ThemeDetailPayload | null {
       title: seed.thesisTitle,
       storyType: seed.storyType,
       thesisState: fallbackRecommendationState(seed),
-      catalystSummary: seed.catalystSummary,
+      catalystSummary: fallbackSeedCatalystSummary(seed),
     })),
     reports: fallbackResearchMemos().filter((memo) => memo.relatedSymbols.some((symbol) => theme.relatedSymbols.includes(symbol))),
     sourceCoverage: theme.sourceCoverage,
@@ -2184,190 +12331,76 @@ async function fallbackStockDeepDive(symbol: string): Promise<StockDeepDivePaylo
   const seed = TW_STORY_RESEARCH_SEEDS.find((item) => item.symbol === symbol.toUpperCase());
   const insight = await fallbackStockInsight(symbol);
   if (!seed || !insight) return null;
-  const override = SEED_RESEARCH_OVERRIDES[seed.symbol];
+  const fallbackState = fallbackRecommendationState(seed);
+  const fallbackTargetVerdict = 'scenario' as const;
+  const fallbackTechnicalSnapshot = buildTechnicalSnapshotFromCandles(
+    [],
+    { maShort: null, maMid: null, maLong: null, rsi: null, macd: null, macdSignal: null },
+    'missing',
+    '來源 producer 不可用，固定 seed 不具技術面資料權威。',
+  );
+  const fallbackTechnicalEntrySignal = buildTechnicalEntrySignal(fallbackTechnicalSnapshot, null, null, []);
+  const fallbackChipSnapshot = buildChipSnapshotFromMetrics(insight.chipMetrics || null, fallbackTargetVerdict);
+  const fallbackMarketRotationSnapshot = buildMarketRotationSnapshot(null, [seed.thesisTitle, seed.thesisSummary, seed.catalystSummary].filter(Boolean));
+  const fallbackChipEntryAssessment = buildChipEntryAssessment({
+    chipSnapshot: fallbackChipSnapshot,
+    technicalEntrySignal: fallbackTechnicalEntrySignal,
+    technicalSnapshot: fallbackTechnicalSnapshot,
+    volume: insight.volume ?? null,
+    chart: insight.chart,
+    marketRotationSnapshot: fallbackMarketRotationSnapshot,
+    targetVerdict: fallbackTargetVerdict,
+  });
 
   return {
     ...insight,
-    thesisState: fallbackRecommendationState(seed),
-    verificationStatus: verificationStatusFromState(fallbackRecommendationState(seed)),
-    storyType: override?.storyType ?? seed.storyType,
-    thesisTitle: override?.thesisTitle ?? seed.thesisTitle,
-    thesisSummary: override?.thesisSummary ?? seed.thesisSummary,
-    catalystSummary: override?.catalystSummary ?? seed.catalystSummary,
-    expectedUpsidePct: fallbackRecommendation(seed).expectedUpsidePct || null,
-    evidenceScore: round(clamp(seed.expectationScore * 0.9), 4),
-    timingScore: fallbackRecommendation(seed).timingScore || null,
-    evidenceItems: [
-      {
-        evidenceClass: 'public_research',
-        sourceName: 'public-research-digest',
-        sourceUrl: null,
-        headline: seed.reportTitle,
-        excerpt: seed.reportSummary,
-        stance: 'supporting',
-        evidenceStrength: 0.76,
-        sourceTimestamp: nowIso(),
-      },
-      ...seed.companyEvents.map((event) => ({
-        evidenceClass: 'company' as const,
-        sourceName: 'company_events',
-        sourceUrl: event.sourceUrl,
-        headline: event.headline,
-        excerpt: event.summary,
-        stance: 'supporting' as const,
-        evidenceStrength: 0.82,
-        sourceTimestamp: nowIso(),
-      })),
-      {
-        evidenceClass: 'transcript',
-        sourceName: 'conference_transcripts',
-        sourceUrl: seed.transcript.sourceUrl,
-        headline: seed.transcript.eventName,
-        excerpt: seed.transcript.excerpt,
-        stance: 'supporting',
-        evidenceStrength: 0.8,
-        sourceTimestamp: nowIso(),
-      },
-    ],
-    valuationCases: override
-      ? [
-          { caseType: 'base' as const, targetPrice: override.targetPrice, expectedReturnPct: round(((override.targetPrice - insight.price) / insight.price) * 100, 1), assumptions: {} },
-          { caseType: 'upside' as const, targetPrice: override.upsidePrice, expectedReturnPct: round(((override.upsidePrice - insight.price) / insight.price) * 100, 1), assumptions: {} },
-          { caseType: 'invalidation' as const, targetPrice: override.invalidationPrice, expectedReturnPct: round(((override.invalidationPrice - insight.price) / insight.price) * 100, 1), assumptions: {} },
-        ]
-      : seed.valuationCases.map((item) => ({
-          caseType: item.caseType,
-          targetPrice: item.targetPrice,
-          expectedReturnPct: item.expectedReturnPct,
-          assumptions: item.assumptions,
-        })),
-    companyEvents: seed.companyEvents.map((event) => ({
-      eventType: event.eventType,
-      headline: event.headline,
-      summary: event.summary,
-      sourceUrl: event.sourceUrl,
-      eventTimestamp: nowIso(),
-    })),
-    revenueSignal: {
-      asOfDate: asIsoDate(nowIso()),
-      monthlyRevenue: override?.monthlyRevenue ?? seed.revenue.monthlyRevenue,
-      yoyGrowth: override?.revenueYoyGrowth ?? seed.revenue.yoyGrowth,
-      momGrowth: seed.revenue.momGrowth,
-    },
-    fundamentalSnapshot: {
-      asOfDate: asIsoDate(nowIso()),
-      epsTtm: override?.epsTtm ?? seed.fundamentals.epsTtm,
-      grossMargin: override?.grossMargin ?? seed.fundamentals.grossMargin,
-      operatingMargin: override?.operatingMargin ?? seed.fundamentals.operatingMargin,
-      peRatio: override?.peRatio ?? seed.fundamentals.peRatio,
-      pbRatio: seed.fundamentals.pbRatio,
-    },
-    memo: fallbackResearchMemos().find((memo) => memo.relatedSymbols.includes(seed.symbol)) || null,
+    price: 0,
+    volume: null,
+    freshness: 'missing',
+    chart: [],
+    chartSource: 'missing',
+    chartMissingReason: '來源 producer 不可用，固定 seed 不提供即時行情。',
+    indicators: { maShort: null, maMid: null, maLong: null, rsi: null, macd: null, macdSignal: null },
+    chipMetrics: {},
+    thesisState: fallbackState,
+    verificationStatus: verificationStatusFromState(fallbackState),
+    storyType: seed.storyType,
+    thesisTitle: seed.thesisTitle,
+    thesisSummary: fallbackSeedThesisSummary(seed),
+    catalystSummary: fallbackSeedCatalystSummary(seed),
+    expectedUpsidePct: null,
+    evidenceScore: 0,
+    timingScore: null,
+    evidenceItems: [],
+    valuationCases: [],
+    companyEvents: [],
+    revenueSignal: null,
+    fundamentalSnapshot: null,
+    memo: null,
     agentStatus: fallbackAgentStatusSummary(),
-    communitySignals: mergeSourceCoverage(
-      seed.socialSignals.map((signal) =>
-        mapSourceCoverageItem({
-          source_name: signal.sourceName,
-          source_type: signal.sourceType,
-          summary: signal.summary,
-          source_url: signal.sourceUrl || null,
-          source_timestamp: nowIso(),
-          symbols: [seed.symbol],
-          confidence: signal.confidence,
-          weight: signal.sourceType === 'KOL' ? 0.12 : signal.sourceType === 'PTT' ? 0.1 : signal.sourceType === 'BullTalk' ? 0.11 : 0.09,
-          verification_status: signal.confidence >= 0.6 ? '部分證實' : '未證實',
-        }),
-      ),
-    ),
+    communitySignals: [],
     verificationTimeline: [
-      { stage: '未證實', summary: '【第一層】社群早期訊號 — PTT、股市爆料同學會、台股 KOL 出現討論熱度，作為前置發現來源。', completed: true },
-      { stage: '部分證實', summary: '【第二層】多源交叉驗證 — 多個社群平台相互印證，訊息可信度提升。', completed: fallbackRecommendationState(seed) !== 'signal_candidate' },
-      { stage: '已證實', summary: '【第三層】官方/財務確認 — 法說會、月營收、券商報告最終驗證，完成論點閉環。', completed: fallbackRecommendationState(seed) === 'validated_thesis' || fallbackRecommendationState(seed) === 'actionable_setup' },
+      { stage: '未證實', summary: '來源 producer 不可用；固定 seed 只辨識題材，沒有可宣告為新鮮的來源證據。', completed: false },
+      { stage: '部分證實', summary: '等待多來源重新擷取與交叉驗證。', completed: false },
+      { stage: '已證實', summary: '等待官方／財務 point-in-time facts。', completed: false },
     ],
     conditionalRecommendationNote: fallbackRecommendation(seed).conditionalRecommendationNote || '',
-    brokerViews: [
-      {
-        brokerName: '公開研究摘要',
-        reportDate: asIsoDate(nowIso()),
-        rating: fallbackRecommendationState(seed) === 'actionable_setup' ? '可執行進場' : '持續追蹤',
-        targetPrice: override?.targetPrice ?? seed.valuationCases.find((item) => item.caseType === 'base')?.targetPrice ?? null,
-        thesisTitle: override?.thesisTitle ?? seed.reportTitle,
-        summary: override?.thesisSummary ?? seed.reportSummary,
-      },
-    ],
-    sourceCoverage: mergeSourceCoverage([
-      ...seed.socialSignals.map((signal) =>
-        mapSourceCoverageItem({
-          source_name: signal.sourceName,
-          source_type: signal.sourceType,
-          summary: signal.summary,
-          source_url: signal.sourceUrl || null,
-          source_timestamp: nowIso(),
-          symbols: [seed.symbol],
-          confidence: signal.confidence,
-          weight: signal.sourceType === 'KOL' ? 0.12 : signal.sourceType === 'PTT' ? 0.1 : signal.sourceType === 'BullTalk' ? 0.11 : 0.09,
-          verification_status: signal.confidence >= 0.6 ? '部分證實' : '未證實',
-        }),
-      ),
-      mapSourceCoverageItem({
-        source_name: '公開研究摘要',
-        source_type: 'public_research',
-        summary: seed.reportSummary,
-        source_timestamp: nowIso(),
-        symbols: [seed.symbol],
-        confidence: 0.82,
-        weight: 0.2,
-        verification_status: '已證實',
-      }),
-    ]),
-    missingCoverage: findMissingSources(
-      mergeSourceCoverage([
-        ...seed.socialSignals.map((signal) =>
-          mapSourceCoverageItem({
-            source_name: signal.sourceName,
-            source_type: signal.sourceType,
-            summary: signal.summary,
-            source_url: signal.sourceUrl || null,
-            source_timestamp: nowIso(),
-            symbols: [seed.symbol],
-            confidence: signal.confidence,
-            weight: signal.sourceType === 'KOL' ? 0.12 : signal.sourceType === 'PTT' ? 0.1 : signal.sourceType === 'BullTalk' ? 0.11 : 0.09,
-            verification_status: signal.confidence >= 0.6 ? '部分證實' : '未證實',
-          }),
-        ),
-        mapSourceCoverageItem({
-          source_name: '公開研究摘要',
-          source_type: 'public_research',
-          summary: seed.reportSummary,
-          source_timestamp: nowIso(),
-          symbols: [seed.symbol],
-          confidence: 0.82,
-          weight: 0.2,
-          verification_status: '已證實',
-        }),
-      ]),
-    ),
+    brokerViews: [],
+    sourceCoverage: [],
+    missingCoverage: REQUIRED_SOURCE_TYPES.map((type) => SOURCE_TYPE_LABELS[type]),
     thesisModel: {
-      thesisTitle: override?.thesisTitle ?? seed.thesisTitle,
-      thesisSummary: override?.thesisSummary ?? seed.thesisSummary,
+      thesisTitle: seed.thesisTitle,
+      thesisSummary: fallbackSeedThesisSummary(seed),
       recommendationTier: fallbackRecommendationState(seed),
       verificationStatus: verificationStatusFromState(fallbackRecommendationState(seed)),
-      storySourceSummary: override?.catalystSummary ?? seed.catalystSummary,
-      verificationSummary: '以公開研究、公司事件、法說會節錄與市場線索交叉整理的 fallback thesis。',
-      financialProjectionSummary: override && override.epsTtm > 0
-        ? `目前 EPS(TTM) NT$${override.epsTtm}，毛利率 ${override.grossMargin}%。基於${override.thesisTitle || seed.thesisTitle}的邏輯，預估未來 2-3 季營收成長率可達 ${override.revenueYoyGrowth > 0 ? override.revenueYoyGrowth.toFixed(0) : '15'}%+。`
-        : override
-          ? `目前 EPS(TTM) 為負值（NT$${override.epsTtm}），但基於${override.thesisTitle || seed.thesisTitle}的供需邏輯，預估營收將大幅成長，YoY +${override.revenueYoyGrowth > 0 ? override.revenueYoyGrowth.toFixed(0) : '15'}%。`
-          : '目前以 fallback seed 的營收與估值假設作為替代，待 live thesis model 覆蓋。',
-      valuationSummary: override
-        ? `base case 目標價 NT$${override.targetPrice}，upside NT$${override.upsidePrice}，失效價 NT$${override.invalidationPrice}`
-        : `base case 目標價 ${seed.valuationCases.find((item) => item.caseType === 'base')?.targetPrice || '-'}`,
-      invalidationSummary: override
-        ? `失效價 NT$${override.invalidationPrice}。若核心催化劑未兌現或產業趨勢反轉，需重新檢查 thesis。`
-        : '若公司事件未持續驗證、技術面失守或產業需求不如預期，需重新檢查 thesis。',
-      targetPriceLow: override?.invalidationPrice ?? seed.valuationCases.find((item) => item.caseType === 'invalidation')?.targetPrice ?? null,
-      targetPriceHigh: override?.upsidePrice ?? seed.valuationCases.find((item) => item.caseType === 'upside')?.targetPrice ?? null,
-      confidence: 0.68,
+      storySourceSummary: fallbackSeedCatalystSummary(seed),
+      verificationSummary: '來源 producer 不可用；fallback seed 僅供題材辨識，尚未形成可驗證證據鏈。',
+      financialProjectionSummary: '沒有 point-in-time 財務 facts，不產生財務預測。',
+      valuationSummary: '估值資料不足，等待官方 facts 與 valuation bridge 更新。',
+      invalidationSummary: '缺少正式 entry，不產生 entry-linked invalidation。',
+      targetPriceLow: null,
+      targetPriceHigh: null,
+      confidence: 0.2,
     },
     kolCoverage: [],
     podcastMentions: [],
@@ -2379,34 +12412,32 @@ async function fallbackStockDeepDive(symbol: string): Promise<StockDeepDivePaylo
         summary: '若市場故事無法被法說會、月營收或產業報價持續驗證，早期題材可能快速失效。',
       },
     ],
-    evidenceMatrix: [
-      {
-        evidenceType: 'broker_report',
-        sourceLabel: '公開研究摘要',
-        sourceUrl: null,
-        stance: 'supporting',
-        strength: 0.82,
-        summary: seed.reportSummary,
-      },
-    ],
+    evidenceMatrix: [],
+    technicalSummary: fallbackTechnicalEntrySignal.summary,
+    technicalEntrySignal: fallbackTechnicalEntrySignal,
+    technicalSnapshot: fallbackTechnicalSnapshot,
+    chipSnapshot: fallbackChipSnapshot,
+    chipEntryAssessment: fallbackChipEntryAssessment,
   };
 }
 
 async function getDiscoveredStocks(): Promise<DiscoveredStockCard[]> {
   try {
     const supabase = getSupabaseServerClient();
+    const topNRaw = Number(process.env.STORY_CANDIDATE_TOP_N || 50);
+    const topN = Number.isFinite(topNRaw) ? Math.max(10, Math.min(200, Math.floor(topNRaw))) : 50;
     const seedSymbols: Set<string> = new Set(TW_STORY_RESEARCH_SEEDS.map((s) => s.symbol));
     const since = new Date(Date.now() - 14 * 86400000).toISOString();
 
-    const [socialRes, brokerRes, transcriptRes, podcastRes, stocksRes, storyRes, valuationRes, thesisRes] = await Promise.all([
+    const [socialRes, brokerRes, transcriptRes, podcastRes, stocksRes, storyRes, valuationRes, thesisRes, recommendationRes] = await Promise.all([
       supabase
         .from('source_raw_documents')
-        .select('symbols, source_type, source_name, summary, source_url, source_timestamp, content_text')
-        .gte('created_at', since)
+        .select('symbols, platform, title, summary, document_url, published_at, collected_at')
+        .gte('collected_at', since)
         .limit(500),
       supabase
         .from('broker_report_documents')
-        .select('stock_id, broker_name, summary, rating, target_price, created_at')
+        .select('stock_id, broker_name, extracted_summary, rating, target_price, created_at')
         .gte('created_at', since)
         .limit(200),
       supabase
@@ -2416,7 +12447,7 @@ async function getDiscoveredStocks(): Promise<DiscoveredStockCard[]> {
         .limit(200),
       supabase
         .from('podcast_transcripts')
-        .select('symbols, podcast_name, episode_title, excerpt, thesis_highlights, created_at')
+        .select('extracted_mentions, extracted_thesis, created_at')
         .gte('created_at', since)
         .limit(100),
       supabase.from('stocks').select('id,symbol,name').limit(5000),
@@ -2434,6 +12465,11 @@ async function getDiscoveredStocks(): Promise<DiscoveredStockCard[]> {
         .from('thesis_models')
         .select('stock_id,thesis_title,thesis_summary,verification_status,recommendation_tier,target_price_low,target_price_high,updated_at')
         .order('updated_at', { ascending: false })
+        .limit(1000),
+      supabase
+        .from('recommendations')
+        .select('stock_id,recommendation_state,timing_score,evidence_score,community_signal_score,as_of')
+        .order('as_of', { ascending: false })
         .limit(1000),
     ]);
 
@@ -2453,6 +12489,7 @@ async function getDiscoveredStocks(): Promise<DiscoveredStockCard[]> {
     function addMention(sym: string, source: DiscoveredStockSource) {
       const num = parseInt(sym, 10);
       if (isNaN(num) || num < 1101 || num > 9999) return;
+      if (!stockBySymbol.has(sym)) return;
       if (seedSymbols.has(sym)) return;
       const existing = mentionMap.get(sym);
       if (existing) {
@@ -2465,22 +12502,41 @@ async function getDiscoveredStocks(): Promise<DiscoveredStockCard[]> {
     }
 
     const symbolRegex = /\b([1-9]\d{3})\b/g;
+    const contextTokenRegex = /股|股票|代號|標的|公司|台股|上市|上櫃|買|賣|法說|營收|eps|pe|目標價|停損|轉讓|董監|內部人/i;
+    const yearPattern = /^(19|20)\d{2}$/;
+
+    const extractSymbolsWithContext = (text: string) => {
+      const found = new Set<string>();
+      let match;
+      while ((match = symbolRegex.exec(text)) !== null) {
+        const sym = match[1];
+        if (!stockBySymbol.has(sym)) continue;
+        const start = Math.max(0, match.index - 16);
+        const end = Math.min(text.length, match.index + sym.length + 16);
+        const context = text.slice(start, end);
+        if (yearPattern.test(sym) && !contextTokenRegex.test(context)) continue;
+        found.add(sym);
+      }
+      symbolRegex.lastIndex = 0;
+      return [...found];
+    };
 
     // 社群來源
     for (const doc of (socialRes.data as Row[]) || []) {
       const symbols: string[] = [...((doc.symbols as string[]) || [])];
-      let match;
-      while ((match = symbolRegex.exec(String(doc.content_text || ''))) !== null) {
-        if (!symbols.includes(match[1])) symbols.push(match[1]);
+      if (symbols.length === 0) {
+        const extracted = extractSymbolsWithContext(`${String(doc.title || '')} ${String(doc.summary || '')}`);
+        for (const sym of extracted) {
+          if (!symbols.includes(sym)) symbols.push(sym);
+        }
       }
-      symbolRegex.lastIndex = 0;
       for (const sym of symbols) {
         addMention(sym, {
-          sourceType: String(doc.source_type || 'social'),
-          sourceName: String(doc.source_name || ''),
+          sourceType: String(doc.platform || 'social'),
+          sourceName: String(doc.title || doc.platform || ''),
           summary: String(doc.summary || '').slice(0, 200),
-          sourceUrl: (doc.source_url as string) || null,
-          sourceTimestamp: (doc.source_timestamp as string) || null,
+          sourceUrl: (doc.document_url as string) || null,
+          sourceTimestamp: (doc.published_at as string) || (doc.collected_at as string) || null,
         });
       }
     }
@@ -2493,7 +12549,7 @@ async function getDiscoveredStocks(): Promise<DiscoveredStockCard[]> {
         addMention(match[1], {
           sourceType: 'broker_report',
           sourceName: String(doc.broker_name || '投顧報告'),
-          summary: String(doc.summary || '').slice(0, 200),
+          summary: String(doc.extracted_summary || '').slice(0, 200),
           sourceUrl: null,
           sourceTimestamp: (doc.created_at as string) || null,
         });
@@ -2519,12 +12575,13 @@ async function getDiscoveredStocks(): Promise<DiscoveredStockCard[]> {
 
     // Podcast
     for (const doc of (podcastRes.data as Row[]) || []) {
-      const symbols: string[] = (doc.symbols as string[]) || [];
+      const symbols: string[] = Array.isArray(doc.extracted_mentions) ? (doc.extracted_mentions as unknown[]).map(String) : [];
+      const theses: string[] = Array.isArray(doc.extracted_thesis) ? (doc.extracted_thesis as Array<{ text?: string }>).map((item) => String(item.text || '')).filter(Boolean) : [];
       for (const sym of symbols) {
         addMention(sym, {
           sourceType: 'podcast',
-          sourceName: String(doc.podcast_name || ''),
-          summary: String(doc.excerpt || '').slice(0, 200),
+          sourceName: 'KOL Podcast',
+          summary: String(theses[0] || '').slice(0, 200),
           sourceUrl: null,
           sourceTimestamp: (doc.created_at as string) || null,
         });
@@ -2557,21 +12614,48 @@ async function getDiscoveredStocks(): Promise<DiscoveredStockCard[]> {
       if (!stockId || thesisByStock.has(stockId)) continue;
       thesisByStock.set(stockId, row);
     }
+    const recommendationByStock = new Map<string, Row>();
+    for (const row of (recommendationRes.data as Row[]) || []) {
+      const stockId = String(row.stock_id || '');
+      if (!stockId || recommendationByStock.has(stockId)) continue;
+      recommendationByStock.set(stockId, row);
+    }
 
-    // 過濾至少 2 次提及，排序，取前 30
+    // 過濾至少 2 次提及，且至少兩種來源或有強來源背書，排序後取 Top N
     const candidates = Array.from(mentionMap.entries())
-      .filter(([symbol, v]) => v.count >= 2 && stockBySymbol.has(symbol))
-      .sort((a, b) => b[1].count - a[1].count)
-      .slice(0, 30);
+      .filter(([symbol, v]) => {
+        if (v.count < 2 || !stockBySymbol.has(symbol)) return false;
+        const sourceTypes = new Set(
+          v.sources.map((source) => sourceTypeFromName(source.sourceType, source.sourceName)),
+        );
+        const hasNonNewsSource = v.sources.some((source) => sourceTypeFromName(source.sourceType, source.sourceName) !== 'news');
+        const hasStrongSource = v.sources.some((source) => {
+          const normalized = sourceTypeFromName(source.sourceType, source.sourceName);
+          return normalized === 'official' || normalized === 'financial' || normalized === 'investanchors' || normalized === 'public_research' || normalized === 'twse_insider';
+        });
+        const symbolRegex = new RegExp(`(^|[^\\d])${symbol}([^\\d]|$)`);
+        const yearRegex = new RegExp(`${symbol}\\s*年`);
+        const hasExplicitSymbolEvidence = v.sources.some((source) => {
+          const text = `${source.sourceName || ''} ${source.summary || ''}`;
+          return symbolRegex.test(text) && !yearRegex.test(text);
+        });
+        const num = Number(symbol);
+        const yearLikeCode = Number.isFinite(num) && num >= 2000 && num <= 2099;
+        if (yearLikeCode) return false;
+        return hasNonNewsSource && (sourceTypes.size >= 2 || hasStrongSource || hasExplicitSymbolEvidence);
+      });
 
     // 批次取得報價
-    const results: DiscoveredStockCard[] = await Promise.all(
+    const results: Array<DiscoveredStockCard | null> = await Promise.all(
       candidates.map(async ([symbol, data]) => {
         const quote = await fetchStockQuote(symbol);
         const stockMeta = stockBySymbol.get(symbol) || null;
+        const chineseName = resolveChineseName(symbol, stockMeta?.name || null);
+        if (!chineseName) return null;
         const stockId = stockMeta?.stockId || null;
         const story = stockId ? latestStoryByStock.get(stockId) || null : null;
         const thesis = stockId ? thesisByStock.get(stockId) || null : null;
+        const recommendation = stockId ? recommendationByStock.get(stockId) || null : null;
         const valuation = stockId ? valuationByStock.get(stockId) || null : null;
         const thesisLow = thesis ? toFiniteNumber(thesis.target_price_low, 0) : 0;
         const thesisHigh = thesis ? toFiniteNumber(thesis.target_price_high, 0) : 0;
@@ -2603,6 +12687,10 @@ async function getDiscoveredStocks(): Promise<DiscoveredStockCard[]> {
               ? whyNotRecommendedLabel('valuation_missing')
               : whyNotRecommendedLabel('base_target_below_price')
             : null;
+        const strongSourceCount = data.sources.filter((source) => {
+          const normalized = sourceTypeFromName(source.sourceType, source.sourceName);
+          return normalized === 'investanchors' || normalized === 'official' || normalized === 'financial' || normalized === 'public_research' || normalized === 'twse_insider';
+        }).length;
         const sourceCoverage = Object.entries(
           data.sources.reduce<Record<string, number>>((acc, source) => {
             const sourceType = sourceTypeFromName(source.sourceType, source.sourceName);
@@ -2613,10 +12701,23 @@ async function getDiscoveredStocks(): Promise<DiscoveredStockCard[]> {
         )
           .map(([label, count]) => ({ label, count }))
           .sort((a, b) => b.count - a.count);
+        const storyStrength = clamp(data.count / 8 + sourceCoverage.length * 0.08 + strongSourceCount * 0.06, 0, 1);
+        const financialInflection = clamp(
+          (verificationStatus === '已證實' ? 0.42 : verificationStatus === '部分證實' ? 0.26 : 0.12) +
+            ((story?.summary || thesis?.thesis_summary) ? 0.14 : 0) +
+            (targetPrice != null ? 0.18 : 0) +
+            (recommendation ? Math.max(0, toFiniteNumber(recommendation.evidence_score, 0)) * 0.18 : 0),
+          0,
+          1,
+        );
+        const valuationGap = clamp(expectedUpsidePct != null ? expectedUpsidePct / 120 : 0, 0, 1);
+        const chipTiming = clamp(recommendation ? toFiniteNumber(recommendation.timing_score, 0.45) : 0.45, 0, 1);
+        const hybridScore = round(storyStrength * 0.34 + financialInflection * 0.28 + valuationGap * 0.24 + chipTiming * 0.14, 4);
 
         return {
           symbol,
           name: quote?.name ?? stockMeta?.name ?? null,
+          chineseName,
           price: currentPrice,
           changePct: quote?.changePct ?? null,
           currentPrice,
@@ -2632,27 +12733,95 @@ async function getDiscoveredStocks(): Promise<DiscoveredStockCard[]> {
           sources: data.sources.slice(0, 10),
           sourceCoverage,
           latestMentionAt: data.latest,
+          storyStrength,
+          financialInflection,
+          valuationGap,
+          chipTiming,
+          hybridScore,
         };
       }),
     );
-
-    return results;
+    return results
+      .filter((item): item is DiscoveredStockCard => Boolean(item))
+      .sort((a, b) => (b.hybridScore || 0) - (a.hybridScore || 0))
+      .slice(0, topN);
   } catch {
     return [];
   }
 }
 
+const BROKER_DISCOVERY_PATTERN =
+  /(Morgan Stanley|Goldman|JPMorgan|JP Morgan|Citi|BofA|Bank of America|UBS|Bernstein|Jefferies|FactSet|target price|forward EPS|rating|目標價|EPS|調升|調降|外資|美系券商|券商|評等|共識)/i;
+
+function discoveredSourceText(stock: DiscoveredStockCard): string {
+  return [
+    stock.thesisTitle,
+    stock.storySummary,
+    stock.whyNotRecommended,
+    ...stock.sources.flatMap((source) => [source.sourceType, source.sourceName, source.summary, source.sourceUrl || '']),
+    ...stock.sourceCoverage.map((item) => item.label),
+  ]
+    .filter(Boolean)
+    .join(' ');
+}
+
+function candidateSourceTypeForDiscoveredStock(
+  stock: DiscoveredStockCard,
+  globalThemeLeadLagSignal: RecommendationCard['globalThemeLeadLagSignal'],
+): NonNullable<RecommendationCard['candidateSourceType']> {
+  if (globalThemeLeadLagSignal) return 'global_lead_lag';
+  if (BROKER_DISCOVERY_PATTERN.test(discoveredSourceText(stock))) return 'broker_leak';
+  if ((stock.mentionCount || 0) > 0 || stock.sources.length > 0 || stock.sourceCoverage.length > 0) return 'social_heat';
+  return 'social_heat';
+}
+
+function candidateReasonForDiscoveredStock(
+  stock: DiscoveredStockCard,
+  candidateSourceType: NonNullable<RecommendationCard['candidateSourceType']>,
+): string {
+  if (candidateSourceType === 'global_lead_lag') {
+    return '海外同族群領漲，台股尚未完全反映；先列候選追蹤，非正式買點。';
+  }
+  if (candidateSourceType === 'broker_leak') {
+    return '社群或公開來源出現券商 / EPS / 目標價線索；先觸發候選與重估，不直接支撐正式 Base。';
+  }
+  const sourceCount = stock.sourceCoverage.reduce((sum, item) => sum + (Number(item.count) || 0), 0);
+  if ((stock.mentionCount || 0) > 0 || sourceCount > 0) {
+    return `社群/來源近端命中 ${stock.mentionCount || sourceCount} 次；先進早期候選，需 bridge、估值、籌碼技術 Gate 驗證。`;
+  }
+  return '由 discovery pipeline 發現但尚未通過正式 Gate；先列早期候選等待補證。';
+}
+
 function discoveredToEarlyWatch(stock: DiscoveredStockCard): RecommendationCard {
+  const globalThemeLeadLagSignal = globalLeadLagSignalForSymbol(stock.symbol);
+  const candidateSourceType = candidateSourceTypeForDiscoveredStock(stock, globalThemeLeadLagSignal);
+  const candidateReason = candidateReasonForDiscoveredStock(stock, candidateSourceType);
+  const sourceSignalBadges = unique([
+    ...(globalThemeLeadLagSignal ? ['海外同族群領漲'] : []),
+    ...(candidateSourceType === 'broker_leak'
+      ? ['券商線索待驗證']
+      : candidateSourceType === 'social_heat'
+        ? ['社群熱度升溫']
+        : candidateSourceType === 'global_lead_lag'
+          ? ['海外 lead-lag']
+          : []),
+  ]);
   return {
     recommendationId: `discovered-${stock.symbol}`,
     symbol: stock.symbol,
     name: stock.name || stock.symbol,
     market: 'TW',
+    currentPrice: stock.currentPrice ?? stock.price ?? null,
+    priceAsOf: stock.priceAsOf ?? stock.latestMentionAt ?? null,
     score: Math.min(1, stock.mentionCount / 10),
     confidence: stock.verificationStatus === '已證實' ? 0.72 : stock.verificationStatus === '部分證實' ? 0.56 : 0.4,
     action: 'watch',
     rationale: stock.storySummary || `${stock.symbol} 目前由多來源故事驅動，建議列入早期追蹤。`,
     targetPrice: stock.targetPrice,
+    baseTarget: stock.targetPrice,
+    displayBaseUpsidePct: stock.expectedUpsidePct,
+    cardPrimaryUpsidePct: stock.expectedUpsidePct,
+    cardPrimaryUpsideLabel: 'Base 空間',
     recommendationState: stock.recommendationState,
     thesisTitle: stock.thesisTitle,
     thesisSummary: stock.storySummary,
@@ -2662,6 +12831,14 @@ function discoveredToEarlyWatch(stock: DiscoveredStockCard): RecommendationCard 
     isFallbackValuation: stock.expectedUpsidePct == null,
     verificationStatus: stock.verificationStatus,
     whyNotRecommended: stock.whyNotRecommended,
+    chineseName: stock.chineseName,
+    globalThemeLeadLagSignal,
+    candidateReason,
+    candidateSourceType,
+    discoveryRunAt: stock.latestMentionAt || nowIso(),
+    excludedReason: null,
+    sourceSignalBadges,
+    sourceSignalSummary: candidateReason,
   };
 }
 
@@ -2669,9 +12846,11 @@ function earlyWatchToDiscovered(rec: RecommendationCard): DiscoveredStockCard {
   return {
     symbol: rec.symbol,
     name: rec.name || rec.symbol,
+    chineseName: rec.chineseName || resolveChineseName(rec.symbol, rec.name),
     price: null,
     changePct: null,
     currentPrice: null,
+    priceAsOf: rec.priceAsOf ?? null,
     targetPrice: rec.targetPrice ?? null,
     expectedUpsidePct: rec.expectedUpsidePct ?? null,
     valuationSource: rec.valuationSource || 'missing',
@@ -2727,6 +12906,7 @@ async function getEarlyWatchlistFromStories(limit = 12): Promise<RecommendationC
       isFallbackValuation: true,
       verificationStatus: (row.verification_status as VerificationStatus | undefined) || verificationStatusFromState(state),
       whyNotRecommended: whyNotRecommendedLabel('valuation_missing'),
+      chineseName: resolveChineseName(symbol, String(stockRelation?.name || '')),
     });
     if (items.length >= limit) break;
   }
@@ -2734,7 +12914,6 @@ async function getEarlyWatchlistFromStories(limit = 12): Promise<RecommendationC
 }
 
 function fallbackRadarPayload(windowType: ThemeHeatCard['windowType']): RadarDailyPayload {
-  const marketFocus = fallbackDailyDashboardData().marketFocus[0] || null;
   const hotThemes = fallbackThemeRows(windowType);
   const opportunities = TW_STORY_RESEARCH_SEEDS.map(fallbackRecommendation)
     .filter(recommendationIsFormal)
@@ -2744,11 +12923,22 @@ function fallbackRadarPayload(windowType: ThemeHeatCard['windowType']): RadarDai
     .sort((a, b) => b.score - a.score)
     .slice(0, 12);
   return {
-    asOf: asIsoDate(nowIso()),
-    marketRegime: 'risk-on-ai',
-    focusSummary: buildFocusSummary(marketFocus, hotThemes),
+        asOf: '',
+    loadStatus: 'degraded',
+    loadWarnings: ['使用 demo fallback 資料；live Supabase 資料未啟用。'],
+    degradedSources: ['demo_fallback'],
+    marketRegime: 'producer-unavailable',
+    marketRegimeUpdatedAt: null,
+    themeHeatUpdatedAt: null,
+    marketFreshnessStatus: 'missing',
+    marketFreshnessReason: '來源 producer 不可用；沒有可宣告為當日市場狀態的 point-in-time evidence。',
+    focusSummary: '來源 producer 不可用；固定 seed 只供題材辨識，不產生當日市場 regime、估值或交易建議。',
+    themeHypotheses: [],
     hotThemes,
     opportunities,
+    scenarioUpsideCandidates: [],
+    recentFormal7d: opportunities.slice(0, 12),
+    fallbackOpportunities90d: [],
     earlyWatchlist,
     earlySignals: opportunities.filter((item) => item.recommendationState === 'signal_candidate').slice(0, 5),
     partiallyVerified: opportunities.filter((item) => item.recommendationState === 'partially_verified').slice(0, 5),
@@ -2761,13 +12951,23 @@ function fallbackRadarPayload(windowType: ThemeHeatCard['windowType']): RadarDai
   };
 }
 
-function unavailableRadarPayload(windowType: ThemeHeatCard['windowType']): RadarDailyPayload {
+function unavailableRadarPayload(windowType: ThemeHeatCard['windowType'], reason?: string): RadarDailyPayload {
+  const warning = reason
+    ? `Radar live 資料不可用：${reason}`
+    : `Radar live 資料來源暫時不可用（${windowType}）。`;
   return {
     asOf: asIsoDate(nowIso()),
+    loadStatus: 'unavailable',
+    loadWarnings: [warning],
+    degradedSources: ['radar_payload'],
     marketRegime: 'live-unavailable',
-    focusSummary: `目前設定為 live 模式，但資料來源暫時不可用（${windowType}）。請檢查 Supabase 連線與金鑰設定。`,
+    focusSummary: `${warning} 請檢查 Supabase 連線、service role key 與 radar query log。`,
+    themeHypotheses: [],
     hotThemes: [],
     opportunities: [],
+    scenarioUpsideCandidates: [],
+    recentFormal7d: [],
+    fallbackOpportunities90d: [],
     earlyWatchlist: [],
     earlySignals: [],
     partiallyVerified: [],
@@ -2786,6 +12986,161 @@ function unavailableRadarPayload(windowType: ThemeHeatCard['windowType']): Radar
   };
 }
 
+function buildThemeHypotheses(themes: ThemeHeatCard[]) {
+  return themes.slice(0, 6).map((theme) => {
+    const strongest = [...theme.sourceCoverage].sort((a, b) => b.confidence - a.confidence)[0];
+    const assumptions = [
+      `主題熱度分數 ${theme.heatScore.toFixed(2)}，關聯股票 ${theme.relatedSymbols.slice(0, 5).join('、') || '待補'}`,
+      strongest ? `主要來源：${strongest.sourceName}（信心 ${strongest.confidence.toFixed(2)}）` : '主要來源：待補',
+      theme.verificationStatus === '未證實' ? '目前屬於傳言層，需補法說/財報/公告交叉驗證' : theme.verificationStatus === '部分證實' ? '已進入佐證層，仍需補齊估值與反證' : '已具備估值層條件，可進一步檢查進場時機',
+    ];
+    const sourceUrls = Array.from(new Set(theme.sourceCoverage.map((item) => item.sourceUrl).filter((url): url is string => Boolean(url)))).slice(0, 6);
+    const level = theme.verificationStatus === '已證實' ? '估值層' : theme.verificationStatus === '部分證實' ? '佐證層' : '傳言層';
+    return {
+      themeKey: theme.themeKey,
+      title: `${theme.themeName} 題材假設`,
+      summary: strongest?.summary || `${theme.themeName} 題材目前以社群與公開來源為主，正在補齊量化驗證。`,
+      assumptions,
+      evidenceLevel: level as '傳言層' | '佐證層' | '估值層',
+      symbols: theme.relatedSymbols.slice(0, 8),
+      sourceUrls,
+      updatedAt: theme.latestSourceAt || null,
+    };
+  });
+}
+
+type BridgeSupportData = {
+  revenueByStockId: Map<string, Row>;
+  revenueRowsByStockId: Map<string, Row[]>;
+  fundamentalByStockId: Map<string, Row>;
+  fundamentalRowsByStockId: Map<string, Row[]>;
+  storyByStockId: Map<string, Row>;
+  thesisByStockId: Map<string, Row>;
+  valuationCasesByStockId: Map<string, ValuationCaseView[]>;
+};
+
+async function loadBridgeSupportDataForStockIds(stockIds: string[]): Promise<BridgeSupportData> {
+  const uniqueStockIds = unique(stockIds.filter(Boolean));
+  const empty: BridgeSupportData = {
+    revenueByStockId: new Map(),
+    revenueRowsByStockId: new Map(),
+    fundamentalByStockId: new Map(),
+    fundamentalRowsByStockId: new Map(),
+    storyByStockId: new Map(),
+    thesisByStockId: new Map(),
+    valuationCasesByStockId: new Map(),
+  };
+  if (uniqueStockIds.length === 0) return empty;
+
+  const supabaseServer = getSupabaseServerClient();
+  const [revenueRes, fundamentalRes, storyRes, thesisRes, valuationRes] = await Promise.all([
+    withQueryTimeout(
+      supabaseServer
+        .from('revenue_signals')
+        .select('*')
+        .in('stock_id', uniqueStockIds)
+        .order('as_of_date', { ascending: false }),
+      [],
+      2500,
+    ),
+    withQueryTimeout(
+      supabaseServer
+        .from('fundamental_snapshots')
+        .select('*')
+        .in('stock_id', uniqueStockIds)
+        .order('as_of_date', { ascending: false }),
+      [],
+      2500,
+    ),
+    withQueryTimeout(
+      supabaseServer
+        .from('story_candidates')
+        .select('stock_id,title,summary,thesis_state,verification_status,updated_at,as_of_date')
+        .in('stock_id', uniqueStockIds)
+        .order('as_of_date', { ascending: false })
+        .order('updated_at', { ascending: false }),
+      [],
+      2500,
+    ),
+    withQueryTimeout(
+      supabaseServer
+        .from('thesis_models')
+        .select('stock_id,thesis_title,thesis_summary,story_source_summary,updated_at,target_price_low,target_price_high')
+        .in('stock_id', uniqueStockIds)
+        .order('updated_at', { ascending: false }),
+      [],
+      2500,
+    ),
+    withQueryTimeout(
+      supabaseServer
+        .from('valuation_cases')
+        .select('*')
+        .in('stock_id', uniqueStockIds)
+        .order('updated_at', { ascending: false }),
+      [],
+      2500,
+    ),
+  ]);
+
+  const revenueByStockId = new Map<string, Row>();
+  const revenueRowsByStockId = new Map<string, Row[]>();
+  for (const row of (revenueRes.data as Row[]) || []) {
+    const stockId = String(row.stock_id || '');
+    if (!stockId) continue;
+    revenueRowsByStockId.set(stockId, [...(revenueRowsByStockId.get(stockId) || []), row]);
+  }
+  for (const [stockId, rows] of revenueRowsByStockId.entries()) {
+    const preferred = selectLatestPreferredRow(rows, rowHasMeaningfulRevenueSignal);
+    if (preferred) revenueByStockId.set(stockId, preferred);
+  }
+
+  const fundamentalByStockId = new Map<string, Row>();
+  const fundamentalRowsByStockId = new Map<string, Row[]>();
+  for (const row of (fundamentalRes.data as Row[]) || []) {
+    const stockId = String(row.stock_id || '');
+    if (!stockId) continue;
+    fundamentalRowsByStockId.set(stockId, [...(fundamentalRowsByStockId.get(stockId) || []), row]);
+  }
+  for (const [stockId, rows] of fundamentalRowsByStockId.entries()) {
+    const preferred = selectLatestPreferredRow(rows, rowHasMeaningfulFundamentalSnapshot);
+    if (preferred) fundamentalByStockId.set(stockId, preferred);
+  }
+
+  const storyByStockId = new Map<string, Row>();
+  for (const row of (storyRes.data as Row[]) || []) {
+    const stockId = String(row.stock_id || '');
+    if (!stockId || storyByStockId.has(stockId)) continue;
+    storyByStockId.set(stockId, row);
+  }
+
+  const thesisByStockId = new Map<string, Row>();
+  for (const row of (thesisRes.data as Row[]) || []) {
+    const stockId = String(row.stock_id || '');
+    if (!stockId || thesisByStockId.has(stockId)) continue;
+    thesisByStockId.set(stockId, row);
+  }
+
+  const valuationCasesByStockId = new Map<string, ValuationCaseView[]>();
+  for (const row of (valuationRes.data as Row[]) || []) {
+    const stockId = String(row.stock_id || '');
+    if (!stockId) continue;
+    const current = valuationCasesByStockId.get(stockId) || [];
+    if (current.some((item) => item.caseType === String(row.case_type || ''))) continue;
+    current.push(mapValuationCase(row));
+    valuationCasesByStockId.set(stockId, current);
+  }
+
+  return {
+    revenueByStockId,
+    revenueRowsByStockId,
+    fundamentalByStockId,
+    fundamentalRowsByStockId,
+    storyByStockId,
+    thesisByStockId,
+    valuationCasesByStockId,
+  };
+}
+
 async function getLatestStockRecord(symbol: string) {
   const supabaseServer = getSupabaseServerClient();
   const stockRes = await supabaseServer.from('stocks').select('*').eq('symbol', symbol).limit(1);
@@ -2794,26 +13149,161 @@ async function getLatestStockRecord(symbol: string) {
 }
 
 async function getMinimalStockInsight(stock: Row, symbol: string): Promise<StockInsightPayload> {
-  const quote = await fetchStockQuote(symbol);
+  const supabaseServer = getSupabaseServerClient();
+  const [quote, liveSnapshot, yahooChartRes, signalRes] = await Promise.all([
+    fetchStockQuote(symbol),
+    fetchTWSELivePrice(symbol).catch(() => null),
+    fetchYahooHistChart(symbol).catch(() => null),
+    withQueryTimeout(
+      supabaseServer
+        .from('stock_signals')
+        .select('*')
+        .eq('stock_id', String(stock.id || ''))
+        .order('as_of', { ascending: false })
+        .limit(DEEP_DIVE_DAILY_BAR_BUFFER),
+      [],
+      2500,
+    ),
+  ]);
+  const signalRows = (signalRes.data as Row[]) || [];
+  const signalChart = buildChartFromSignalRows(signalRows);
+  const twChartRes =
+    yahooChartRes && yahooChartRes.length >= 20
+      ? null
+      : await withFallbackTimeout(fetchTwStockDailyBars(symbol, DEEP_DIVE_DAILY_BAR_BUFFER).catch(() => null), null, 4500);
+  const twChart = twChartRes && twChartRes.length > 0 ? twChartRes.map(({ time, open, high, low, close }) => ({ time, open, high, low, close })) : [];
+  const chart = yahooChartRes && yahooChartRes.length > 0 ? yahooChartRes : twChart.length > 0 ? twChart : signalChart;
+  const closes = chart.map((item) => item.close).filter((value) => Number.isFinite(value) && value > 0);
+  const technical = closes.length >= 2 ? computeTechnicalSnapshot(closes) : null;
   const now = nowIso();
   return {
     symbol,
     name: quote?.name || String(stock.name || symbol),
     market: 'TW',
-    price: quote?.price ?? 0,
-    volume: quote?.volume ?? null,
+    price: quote?.price ?? liveSnapshot?.price ?? 0,
+    volume: quote?.volume ?? liveSnapshot?.volume ?? null,
     asOf: now,
     freshness: quote ? 'fresh' : 'missing',
-    chart: [],
+    chart,
+    chartSource:
+      yahooChartRes && yahooChartRes.length > 0
+        ? 'yahoo'
+        : twChart.length > 0
+          ? 'twstock'
+          : chart.length > 0
+            ? 'stock_signals'
+            : 'minimal',
+    chartMissingReason:
+      chart.length > 0 ? null : '目前 Yahoo、node-twstock 與 stock_signals 都沒有足夠的日線資料，暫時只能先顯示輕量快照。',
     indicators: {
-      maShort: null,
-      maMid: null,
-      maLong: null,
-      rsi: null,
-      macd: null,
-      macdSignal: null,
+      maShort: technical?.maShort ?? null,
+      maMid: technical?.maMid ?? null,
+      maLong: technical?.maLong ?? null,
+      rsi: technical?.rsi ?? null,
+      macd: technical?.macd ?? null,
+      macdSignal: technical?.macdSignal ?? null,
     },
     chipMetrics: {},
+    riskDisclosure: RISK_DISCLOSURE,
+  };
+}
+
+async function getFastLightStockInsight(stock: Row, symbol: string): Promise<StockInsightPayload | null> {
+  const supabaseServer = getSupabaseServerClient();
+  const [liveSnapshot, signalRes, recommendationRes] = await Promise.all([
+    stock.market === 'TW' ? withFallbackTimeout(fetchTWSELivePrice(symbol).catch(() => null), null, 1800) : Promise.resolve(null),
+    withQueryTimeout(
+      supabaseServer
+        .from('stock_signals')
+        .select('*')
+        .eq('stock_id', String(stock.id || ''))
+        .order('as_of', { ascending: false })
+        .limit(DEEP_DIVE_DAILY_BAR_BUFFER),
+      [],
+      2200,
+    ),
+    withQueryTimeout(
+      supabaseServer
+        .from('recommendations')
+        .select('*, stocks(symbol,name,market), strategy_actions(*)')
+        .eq('stock_id', String(stock.id || ''))
+        .order('as_of', { ascending: false })
+        .limit(1),
+      [],
+      2200,
+    ),
+  ]);
+  if (signalRes.error || recommendationRes.error) return null;
+
+  const signalRows = (signalRes.data as Row[]) || [];
+  const latestSignal = signalRows[0] || null;
+  if (!latestSignal && !liveSnapshot) return null;
+
+  const chart = buildChartFromSignalRows(signalRows);
+  const latestChipMetrics = ((latestSignal?.chip_metrics as Record<string, unknown> | undefined) || {});
+  const fallbackChipMetrics = hasAnyChipMetric(latestChipMetrics) ? latestChipMetrics : latestNonEmptyChipMetricsFromRows(signalRows);
+  const closes = chart.map((item) => item.close).filter((value) => Number.isFinite(value) && value > 0);
+  const technical = closes.length >= 2 ? computeTechnicalSnapshot(closes) : null;
+  const recommendationRaw = (recommendationRes.data?.[0] as Row | undefined) || undefined;
+  const recommendation = recommendationRaw ? mapRecommendation(recommendationRaw) : undefined;
+  const strategyRaw = Array.isArray(recommendationRaw?.strategy_actions)
+    ? ((recommendationRaw?.strategy_actions as Row[])[0] as Row | undefined)
+    : ((recommendationRaw?.strategy_actions as Row | undefined) || undefined);
+  const strategy: StrategyActionView | undefined = strategyRaw
+    ? {
+        id: String(strategyRaw.id || ''),
+        recommendationId: String(strategyRaw.recommendation_id || ''),
+        entryRule: String(strategyRaw.entry_rule || ''),
+        positionSizeRule: String(strategyRaw.position_size_rule || ''),
+        targetPrice: strategyRaw.target_price ? toNumber(strategyRaw.target_price) : null,
+        stopLoss: strategyRaw.stop_loss ? toNumber(strategyRaw.stop_loss) : null,
+        reviewHorizon: strategyRaw.review_horizon ? String(strategyRaw.review_horizon) : null,
+        state: (strategyRaw.state as StrategyActionView['state']) || 'active',
+      }
+    : undefined;
+
+  const displayPrice =
+    liveSnapshot?.price ??
+    (latestSignal?.price != null ? toFiniteNumber(latestSignal.price, 0) : null) ??
+    0;
+  const displayVolume =
+    liveSnapshot?.volume ??
+    (latestSignal?.volume != null ? toFiniteNumber(latestSignal.volume, 0) : null) ??
+    null;
+
+  return {
+    symbol,
+    name: String(stock.name || symbol),
+    market: (stock.market as 'TW' | 'US') || 'TW',
+    price: displayPrice,
+    volume: displayVolume,
+    asOf: liveSnapshot ? nowIso() : String(latestSignal?.as_of || nowIso()),
+    freshness: liveSnapshot ? 'fresh' : ((latestSignal?.freshness_status as StockInsightPayload['freshness']) || 'missing'),
+    chart,
+    chartSource: chart.length > 0 ? 'stock_signals' : 'missing',
+    chartMissingReason: chart.length > 0 ? null : '目前快速快照只抓到 stock_signals，但仍缺足夠日線可畫 K 線。',
+    indicators: {
+      maShort: technical?.maShort ?? null,
+      maMid: technical?.maMid ?? null,
+      maLong: technical?.maLong ?? null,
+      rsi: technical?.rsi ?? null,
+      macd: technical?.macd ?? null,
+      macdSignal: technical?.macdSignal ?? null,
+    },
+    chipMetrics: {
+      ...((fallbackChipMetrics as Record<string, unknown> | null) || latestChipMetrics),
+      chip_source_as_of:
+        fallbackChipMetrics && fallbackChipMetrics !== latestChipMetrics
+          ? fallbackChipMetrics.chip_source_as_of || null
+          : latestSignal?.as_of || null,
+      chip_source:
+        fallbackChipMetrics && fallbackChipMetrics !== latestChipMetrics
+          ? fallbackChipMetrics.chip_source || 'stock_signals'
+          : latestSignal?.source || 'stock_signals',
+      fallback_used: fallbackChipMetrics !== latestChipMetrics,
+    },
+    strategy,
+    recommendation,
     riskDisclosure: RISK_DISCLOSURE,
   };
 }
@@ -2825,48 +13315,431 @@ async function getRadarPayload(windowType: ThemeHeatCard['windowType']): Promise
 
   try {
     const supabaseServer = getSupabaseServerClient();
-    const [themesRes, recsRes, memosRes, marketRes, agentStatus, connectorStatus] = await Promise.all([
+    const loadWarnings: string[] = [];
+    const degradedSources: string[] = [];
+    const markDegraded = (source: string, error: unknown) => {
+      const message = safeErrorMessage(error);
+      degradedSources.push(source);
+      loadWarnings.push(`${source}: ${message || 'degraded'}`);
+    };
+    const [themesRes, recsRes, memosRes, marketRes, latestPipelineRes, agentStatus, connectorStatus, twseRows] = await Promise.all([
       supabaseServer.from('theme_heat').select('*').eq('window_type', windowType).order('as_of_date', { ascending: false }).order('heat_score', { ascending: false }).limit(24),
       supabaseServer
         .from('recommendations')
         .select('*, stocks(symbol,name,market), strategy_actions(state,target_price,stop_loss)')
         .eq('market_scope', 'TW_PRIMARY')
-        .eq('is_blocked', false)
         .order('as_of', { ascending: false })
         .order('score', { ascending: false })
-        .limit(24),
+        .limit(500),
       supabaseServer.from('research_memos').select('*').order('updated_at', { ascending: false }).limit(30),
       supabaseServer.from('market_snapshots').select('*').eq('market', 'TW').order('as_of', { ascending: false }).limit(1),
-      getAgentStatusSummary(),
-      getConnectorStatusSummary(),
+      supabaseServer.from('pipeline_runs').select('run_type,status,finished_at,details').eq('run_type', 'recommendation').eq('status', 'success').order('finished_at', { ascending: false }).limit(1),
+      withFallbackTimeout(
+        getAgentStatusSummary().catch((error) => {
+          markDegraded('agent_status', error);
+          return fallbackAgentStatusSummary();
+        }),
+        fallbackAgentStatusSummary(),
+        3000,
+      ),
+      withFallbackTimeout(
+        getConnectorStatusSummary().catch((error) => {
+          markDegraded('connector_status', error);
+          return [];
+        }),
+        [],
+        8000,
+      ),
+      withFallbackTimeout(
+        fetchTWSEAllPrices().catch((error) => {
+          markDegraded('twse_live_price', error);
+          return [];
+        }),
+        [],
+        3000,
+      ),
     ]);
 
-    if (themesRes.error || recsRes.error || memosRes.error || marketRes.error) {
-      throw new Error(themesRes.error?.message || recsRes.error?.message || memosRes.error?.message || marketRes.error?.message || 'Failed to load radar payload');
+    if (themesRes.error || recsRes.error || memosRes.error || marketRes.error || latestPipelineRes.error) {
+      throw new Error(
+        themesRes.error?.message ||
+          recsRes.error?.message ||
+          memosRes.error?.message ||
+          marketRes.error?.message ||
+          latestPipelineRes.error?.message ||
+          'Failed to load radar payload',
+      );
     }
 
     const themeRows = ((themesRes.data as Row[]) || []).map(mapThemeHeatRow);
     const latestThemeDate = themeRows[0]?.asOfDate || asIsoDate(String((marketRes.data?.[0] as Row | undefined)?.as_of || nowIso()));
     const supabaseThemes = themeRows.filter((row) => row.asOfDate === latestThemeDate);
 
-    const topThemes = supabaseThemes.sort((a, b) => b.heatScore - a.heatScore).slice(0, 12);
+    const topThemes = ensureGlobalLeadLagThemeCards(
+      supabaseThemes.sort((a, b) => b.heatScore - a.heatScore).slice(0, 12),
+      windowType,
+      latestThemeDate,
+    );
 
-    const recommendationRows = ((recsRes.data as Row[]) || []).map(mapRecommendation);
-    const latestRecommendationDate = ((recsRes.data?.[0] as Row | undefined)?.as_of ? String((recsRes.data?.[0] as Row).as_of) : latestThemeDate).slice(0, 10);
-    const supabaseRecommendations = recommendationRows
-      .filter((row, index) => String(((recsRes.data as Row[])[index]?.as_of || '')).slice(0, 10) === latestRecommendationDate);
-
-    const rankedRecommendations = [...supabaseRecommendations]
-      .sort((a, b) => {
-      if (b.score !== a.score) return b.score - a.score;
-      return b.confidence - a.confidence;
+    const recommendationRowsWithDate = ((recsRes.data as Row[]) || [])
+      .map((row) => {
+        const mapped = mapRecommendation(row);
+        return {
+          row,
+          mapped,
+          asOfDate: String(row.as_of || '').slice(0, 10),
+        };
+      })
+      .filter((item) => Boolean(item.mapped.chineseName));
+    const latestRecommendationDate = recommendationRowsWithDate[0]?.asOfDate || latestThemeDate;
+    const recommendationStockIds = unique(recommendationRowsWithDate.map((item) => String(item.row.stock_id || '')).filter(Boolean));
+    const latestSignalRes = recommendationStockIds.length
+      ? await withQueryTimeout(
+          Promise.resolve(
+            supabaseServer
+              .from('stock_signals')
+              .select('stock_id,price,volume,as_of,ma_short,ma_mid,ma_long,rsi,macd,macd_signal,chip_metrics,technical_meta')
+              .in('stock_id', recommendationStockIds)
+              .order('as_of', { ascending: false }),
+          ).catch((error) => ({ data: [], error: { message: safeErrorMessage(error) } })),
+          [],
+          5000,
+        )
+      : { data: [], error: null };
+    if (latestSignalRes.error) {
+      markDegraded('stock_signals', latestSignalRes.error.message || 'Failed loading stock signals');
+    }
+    const latestPriceByStock = new Map<string, number>();
+    const latestSignalByStock = new Map<string, Row>();
+    const latestSignalRowsByStock = new Map<string, Row[]>();
+    for (const row of (latestSignalRes.data as Row[]) || []) {
+      const stockId = String(row.stock_id || '');
+      if (!stockId) continue;
+      latestSignalRowsByStock.set(stockId, [...(latestSignalRowsByStock.get(stockId) || []), row]);
+      if (!latestSignalByStock.has(stockId)) latestSignalByStock.set(stockId, row);
+      if (latestPriceByStock.has(stockId)) continue;
+      const price = toFiniteNumber(row.price, 0);
+      if (price > 0) latestPriceByStock.set(stockId, price);
+    }
+    const latestPriceRefreshAt =
+      Array.from(latestSignalByStock.values())
+        .map((row) => (row.as_of ? String(row.as_of) : null))
+        .filter((value): value is string => Boolean(value))
+        .sort()
+        .pop() || null;
+    const priceRefreshStatus = priceRefreshStatusFromAsOf(latestPriceRefreshAt);
+    const priceRefreshDataHealth: NonNullable<RadarDailyPayload['dataHealth']> = {
+      priceRefreshLastSuccessAt: latestPriceRefreshAt,
+      priceRefreshScheduledAt: taipeiScheduledIso(15, 0),
+      priceRefreshStatus,
+      priceRefreshRecordsWritten: latestPriceByStock.size,
+      priceRefreshFailureReason:
+        priceRefreshStatus === 'fresh'
+          ? null
+          : priceRefreshStatus === 'missing'
+            ? '尚未找到 stock_signals 的有效股價寫入；等待 15:00 data-collect 或 retry。'
+            : '最新股價寫入時間偏舊；15:00 data-collect 會先寫價格，再補籌碼與財務。',
+    };
+    const twseLivePriceBySymbol = new Map<string, number>();
+    for (const row of twseRows || []) {
+      const symbol = String(row.Code || '').trim();
+      if (!symbol || twseLivePriceBySymbol.has(symbol)) continue;
+      const price = parseFloat(String(row.ClosingPrice || '').replace(/,/g, ''));
+      if (Number.isFinite(price) && price > 0) {
+        twseLivePriceBySymbol.set(symbol, price);
+      }
+    }
+    const syncedRecommendationRowsWithDate = recommendationRowsWithDate.map((item) => {
+      const stockId = String(item.row.stock_id || '');
+      const latestSignal = stockId ? latestSignalByStock.get(stockId) || null : null;
+      const livePrice =
+        item.mapped.market === 'TW' ? twseLivePriceBySymbol.get(String(item.mapped.symbol || '').trim()) ?? null : null;
+      const priceAsOf =
+        livePrice != null
+          ? nowIso()
+          : latestSignal?.technical_meta &&
+              typeof latestSignal.technical_meta === 'object' &&
+              (latestSignal.technical_meta as Record<string, unknown>).price_quote_as_of
+            ? String((latestSignal.technical_meta as Record<string, unknown>).price_quote_as_of)
+            : latestSignal?.as_of
+              ? String(latestSignal.as_of)
+              : null;
+      return {
+        ...item,
+        mapped: syncRecommendationCardPricing(
+          item.mapped,
+          livePrice ?? (stockId ? latestPriceByStock.get(stockId) ?? null : null),
+          priceAsOf,
+        ),
+      };
+    });
+    const sameDayRecommendationRows = syncedRecommendationRowsWithDate.filter((item) => item.asOfDate === latestRecommendationDate);
+    const recommendationBridgeSupport = await loadBridgeSupportDataForStockIds(
+      sameDayRecommendationRows.map((item) => String(item.row.stock_id || '')).filter(Boolean),
+    );
+    const canonicalSameDayRecommendationRows = sameDayRecommendationRows.map((item) => {
+      const stockId = String(item.row.stock_id || '');
+      const revenueRow = recommendationBridgeSupport.revenueByStockId.get(stockId) || null;
+      const revenueRows = recommendationBridgeSupport.revenueRowsByStockId.get(stockId) || [];
+      const fundamentalRows = recommendationBridgeSupport.fundamentalRowsByStockId.get(stockId) || [];
+      const storyRow = recommendationBridgeSupport.storyByStockId.get(stockId) || null;
+      const thesisRow = recommendationBridgeSupport.thesisByStockId.get(stockId) || null;
+      const valuationCases = recommendationBridgeSupport.valuationCasesByStockId.get(stockId) || [];
+      const revenueView = buildRevenueSignalViewFromRows(
+        revenueRows,
+        item.mapped.symbol,
+        (storyRow?.updated_at ? String(storyRow.updated_at) : null) || (thesisRow?.updated_at ? String(thesisRow.updated_at) : null),
+      );
+      const fundamentalView = buildFundamentalSnapshotViewFromRows(
+        fundamentalRows,
+        item.mapped.symbol,
+        (storyRow?.updated_at ? String(storyRow.updated_at) : null) || (thesisRow?.updated_at ? String(thesisRow.updated_at) : null),
+      );
+      const evidenceRefSeed = uniqueNarrativeLines(
+        [
+          item.mapped.thesisSummary,
+          item.mapped.catalystSummary,
+          storyRow?.summary ? String(storyRow.summary) : null,
+          thesisRow?.story_source_summary ? String(thesisRow.story_source_summary) : null,
+        ],
+        4,
+      );
+      const bridgeBundle = buildBridgeAwareSnapshotBundle({
+        symbol: item.mapped.symbol,
+        currentPrice: item.mapped.currentPrice ?? null,
+        latestSourceAt:
+          (revenueRow?.as_of_date ? `${String(revenueRow.as_of_date)}T00:00:00+08:00` : null) ||
+          (storyRow?.updated_at ? String(storyRow.updated_at) : null) ||
+          (thesisRow?.updated_at ? String(thesisRow.updated_at) : null) ||
+          null,
+        reportUpdatedAt:
+          (storyRow?.updated_at ? String(storyRow.updated_at) : null) ||
+          (thesisRow?.updated_at ? String(thesisRow.updated_at) : null) ||
+          String(item.row.as_of || '') ||
+          null,
+        priceAsOf: item.mapped.priceAsOf || String(item.row.as_of || '') || null,
+        thesisTitle:
+          item.mapped.thesisTitle ||
+          (storyRow?.title ? String(storyRow.title) : null) ||
+          (thesisRow?.thesis_title ? String(thesisRow.thesis_title) : null) ||
+          null,
+        thesisSummary:
+          item.mapped.thesisSummary ||
+          (storyRow?.summary ? String(storyRow.summary) : null) ||
+          (thesisRow?.thesis_summary ? String(thesisRow.thesis_summary) : null) ||
+          null,
+        valuationCases,
+        monthlyRevenue: revenueView?.monthlyRevenue ?? null,
+        yoyGrowth: revenueView?.yoyGrowth ?? null,
+        momGrowth: revenueView?.momGrowth ?? null,
+        revenueAnnual: fundamentalView?.revenueRunRate ?? (revenueView?.monthlyRevenue != null ? revenueView.monthlyRevenue * 12 : null),
+        epsTtm: fundamentalView.epsTtm ?? null,
+        peRatio: fundamentalView.peRatio ?? null,
+        pbRatio: fundamentalView.pbRatio ?? null,
+        grossMargin: fundamentalView.grossMargin ?? null,
+        operatingMargin: fundamentalView.operatingMargin ?? null,
+        baseEvidenceRefs: evidenceRefSeed,
+        scenarioEvidenceRefs: evidenceRefSeed,
       });
-    const topRecommendations = rankedRecommendations.filter(recommendationIsFormal).slice(0, 24);
-    const earlyWatchlist = rankedRecommendations.filter((row) => !recommendationIsFormal(row)).slice(0, 12);
+      const latestSignal = latestSignalByStock.get(stockId) || null;
+      const latestSignalRowsForStock = latestSignalRowsByStock.get(stockId) || [];
+      const radarTechnicalSnapshot = buildRadarTechnicalSnapshotFromSignalRow(latestSignal);
+      const signalPrice = latestSignal?.price != null ? toFiniteNumber(latestSignal.price, 0) : null;
+      const signalVolume = latestSignal?.volume != null ? toFiniteNumber(latestSignal.volume, 0) : null;
+      const radarTechnicalEntrySignal = radarTechnicalSnapshot
+        ? buildTechnicalEntrySignal(
+            radarTechnicalSnapshot,
+            twseLivePriceBySymbol.get(String(item.mapped.symbol || '').trim()) ??
+              (signalPrice && signalPrice > 0 ? signalPrice : item.mapped.currentPrice ?? null),
+            signalVolume && signalVolume > 0 ? signalVolume : null,
+            [],
+          )
+        : null;
+      const latestChipMetrics = ((latestSignal?.chip_metrics as Record<string, unknown> | null | undefined) || {});
+      const fallbackChipMetrics = hasAnyChipMetric(latestChipMetrics)
+        ? latestChipMetrics
+        : latestNonEmptyChipMetricsFromRows(latestSignalRowsForStock);
+      const radarChipSnapshot = buildChipSnapshotFromMetrics(
+        (fallbackChipMetrics as Record<string, unknown> | null | undefined) || null,
+        bridgeBundle.targetSnapshot.verdict,
+      );
+      const radarChipEntryAssessment =
+        radarTechnicalSnapshot || radarChipSnapshot
+          ? buildChipEntryAssessment({
+              chipSnapshot: radarChipSnapshot,
+              technicalEntrySignal: radarTechnicalEntrySignal,
+              technicalSnapshot: radarTechnicalSnapshot,
+              volume: signalVolume && signalVolume > 0 ? signalVolume : null,
+              chart: [],
+              marketRotationSnapshot: buildMarketRotationSnapshot(null, []),
+              targetVerdict: bridgeBundle.targetSnapshot.verdict,
+            })
+          : null;
+      if (bridgeBundle.scenarioCaseDetail && (radarTechnicalEntrySignal || radarChipEntryAssessment)) {
+        bridgeBundle.scenarioCaseDetail.achievementChecklist = buildScenarioAchievementChecklist({
+          baseCaseDetail: bridgeBundle.baseCaseDetail,
+          scenarioCaseDetail: bridgeBundle.scenarioCaseDetail,
+          monthlyRevenue: revenueView?.monthlyRevenue ?? null,
+          technicalEntrySignal: radarTechnicalEntrySignal,
+          chipEntryAssessment: radarChipEntryAssessment,
+          sourceRefs: evidenceRefSeed,
+        });
+        refreshBridgeBundlePromotionAndRevaluation(bridgeBundle);
+      }
+      const syncedCard = syncRecommendationCardToBridgeSnapshot(item.mapped, bridgeBundle);
+      const chipOnlyOverride = buildRadarChipOnlyOverride(radarChipSnapshot);
+      const alignedCard = alignRecommendationEntryReadiness(syncedCard, radarChipEntryAssessment, radarTechnicalEntrySignal, chipOnlyOverride);
+      return {
+        ...item,
+        mapped: applyRecommendationGateMetadata(alignedCard),
+      };
+    });
+    const rankedRecommendations = [...canonicalSameDayRecommendationRows].sort((a, b) => {
+      const indexDelta = (b.mapped.recommendationIndex ?? 0) - (a.mapped.recommendationIndex ?? 0);
+      if (indexDelta !== 0) return indexDelta;
+      const confidenceDelta = (b.mapped.researchConfidenceScore ?? b.mapped.recommendationConfidenceScore ?? 0) - (a.mapped.researchConfidenceScore ?? a.mapped.recommendationConfidenceScore ?? 0);
+      if (confidenceDelta !== 0) return confidenceDelta;
+      if (b.mapped.score !== a.mapped.score) return b.mapped.score - a.mapped.score;
+      return b.mapped.confidence - a.mapped.confidence;
+    });
+    const topRecommendations = rankedRecommendations
+      .map((item) => item.mapped)
+      .filter(recommendationIsFormal)
+      .map((rec) =>
+        applyRecommendationGateMetadata({
+          ...rec,
+          recommendationBucket: recommendationBucketForFormal(rec),
+          dedupeBucket: 'formal_opportunity',
+        }),
+      )
+      .slice(0, 24);
+    let earlyWatchlist = rankedRecommendations
+      .map((item) => item.mapped)
+      .filter((row) => !recommendationIsFormal(row))
+      .map((item) => applyRecommendationGateMetadata({ ...item, action: 'watch', dedupeBucket: 'early_watchlist' }))
+      .filter((item) => !recommendationIsOverScenarioTarget(item))
+      .slice(0, 12);
+    const scenarioUpsideCandidates = rankedRecommendations
+      .map((item) => {
+        const row = item.row;
+        const rec = item.mapped;
+        const stockId = String(row.stock_id || '');
+        if (!stockId) return null;
+        if (recommendationIsFormal(rec)) return null;
+        if (!Boolean(rec.chineseName)) return null;
+        const reasonCode = compactText(((row.signal_breakdown as Row | undefined)?.why_not_recommended as string | undefined) || '');
+        const scenarioEligibleReason =
+          reasonCode === '' ||
+          reasonCode === 'base_target_below_price' ||
+          reasonCode === 'non_positive_upside' ||
+          reasonCode === 'valuation_missing';
+        if (!scenarioEligibleReason) return null;
+        const upsideTarget = rec.upsideTarget ?? null;
+        const baseTarget = rec.baseTarget ?? rec.targetPrice ?? null;
+        const currentPrice = rec.currentPrice ?? null;
+        if (recommendationGateStatus(rec) !== 'scenario_only') return null;
+        if (baseTarget == null || currentPrice == null || !(currentPrice >= baseTarget)) return null;
+        if (upsideTarget == null || currentPrice == null || !(upsideTarget > currentPrice)) return null;
+        const upsidePct = rec.displayScenarioUpsidePct ?? round(((upsideTarget - currentPrice) / currentPrice) * 100, 2);
+        if (!(upsidePct > 0)) return null;
+        const targetPresentation = buildTargetSnapshot(currentPrice, rec.baseTarget ?? rec.targetPrice ?? null, upsideTarget, null, null, null, rec.priceAsOf ?? null);
+        return applyRecommendationGateMetadata({
+          ...rec,
+          recommendationId: `scenario-${rec.recommendationId}`,
+          currentPrice,
+          targetPrice: upsideTarget,
+          expectedUpsidePct: upsidePct,
+          recommendationState: rec.recommendationState === 'actionable_setup' ? 'validated_thesis' : rec.recommendationState,
+          action: 'watch',
+          whyNotRecommended: 'Base 已被現價反映，僅上行情境成立（非正式推薦）。',
+          whyNotPromoted: 'Base 目標價已被現價反映，只能列為上行劇本候選。',
+          conditionalRecommendationNote: '此標的屬於情境上行候選：若後續法說/營收驗證補強，再升級為正式推薦。',
+          isFallbackValuation: false,
+          valuationSource: rec.valuationSource || 'valuation_cases',
+          recommendationBucket: 'scenario_upside',
+          dedupeBucket: 'scenario_upside',
+          valuationQuality: rec.valuationQuality || 'story_modeled',
+          scenarioDriverType: rec.scenarioDriverType || 'story_tam',
+          baseTarget: rec.baseTarget ?? rec.targetPrice ?? null,
+          upsideTarget,
+	          displayBaseUpsidePct: targetPresentation.displayBaseUpsidePct,
+	          displayScenarioUpsidePct: targetPresentation.displayScenarioUpsidePct,
+	          cardPrimaryUpsidePct: targetPresentation.displayScenarioUpsidePct,
+	          cardPrimaryUpsideLabel: '情境空間',
+	          targetCoverageStatus: targetPresentation.targetCoverageStatus,
+	          staleReason: targetPresentation.staleReason,
+	          overTargetReason: targetPresentation.overTargetReason,
+	          scenarioOnlyDisplayAllowed: true,
+	          targetStaleKind: targetStaleKindForReason(targetPresentation.staleReason),
+	          repricingRequiredEvidence: targetPresentation.repricingRequiredEvidence,
+	          revaluationStatus: targetPresentation.staleReason === 'target_stale_due_price_crossed_base' ? 'pending' : rec.revaluationStatus,
+	          revaluationReason:
+	            targetPresentation.staleReason === 'target_stale_due_price_crossed_base'
+	              ? 'Base 目標價已被現價反映，已排入情境重估；需新增 EPS、Forward PE、券商或官方證據才可上修。'
+	              : rec.revaluationReason,
+	        } as RecommendationCard);
+      })
+      .filter((item): item is RecommendationCard => Boolean(item))
+      .filter((item, index, arr) => arr.findIndex((probe) => probe.symbol === item.symbol) === index)
+      .sort((a, b) => {
+        const indexDelta = (b.recommendationIndex ?? 0) - (a.recommendationIndex ?? 0);
+        if (indexDelta !== 0) return indexDelta;
+        return (b.expectedUpsidePct ?? 0) - (a.expectedUpsidePct ?? 0);
+      })
+      .slice(0, 24);
+    const topRecommendationSymbols = new Set(topRecommendations.map((item) => item.symbol).filter(Boolean));
+    const scenarioCandidateSymbols = new Set(scenarioUpsideCandidates.map((item) => item.symbol).filter(Boolean));
+    const sevenDaysAgo = asIsoDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
+    const recentFormal7dCandidates = syncedRecommendationRowsWithDate
+      .filter((item) => item.asOfDate >= sevenDaysAgo && item.asOfDate <= latestRecommendationDate)
+      .map((item) => item.mapped)
+      .filter(recommendationIsRecentObservation)
+      .filter((item) => !topRecommendationSymbols.has(item.symbol) && !scenarioCandidateSymbols.has(item.symbol))
+      .map((item) => ensureRecommendationRevaluationMetadata({ ...item, action: 'watch', dedupeBucket: 'recent_observation_7d' }))
+      .filter((item, index, arr) => arr.findIndex((probe) => probe.symbol === item.symbol) === index)
+      .sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return b.confidence - a.confidence;
+      })
+      .slice(0, 24);
+    const reservedForEarlyWatchlist = new Set(
+      [...topRecommendations, ...scenarioUpsideCandidates]
+        .map((item) => item.symbol)
+        .filter(Boolean),
+    );
+    earlyWatchlist = earlyWatchlist.filter((item) => !reservedForEarlyWatchlist.has(item.symbol));
+    const ninetyDaysAgo = asIsoDate(new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString());
+    const fallbackOpportunities90dCandidates = syncedRecommendationRowsWithDate
+      .filter((item) => item.asOfDate >= ninetyDaysAgo && item.asOfDate < latestRecommendationDate)
+      .map((item) => item.mapped)
+      .filter(recommendationIsRecentObservation)
+      .map((item) => ensureRecommendationRevaluationMetadata({ ...item, action: 'watch', dedupeBucket: 'historical_fallback_90d' }))
+      .filter((item, index, arr) => arr.findIndex((probe) => probe.symbol === item.symbol) === index);
+    const visiblePrimarySymbols = new Set(
+      [
+        ...topRecommendations,
+        ...scenarioUpsideCandidates,
+        ...earlyWatchlist,
+      ]
+        .map((item) => item.symbol)
+        .filter(Boolean),
+    );
+    const fallbackOpportunities90dCandidatesDeduped = fallbackOpportunities90dCandidates
+      .filter((item) => !visiblePrimarySymbols.has(item.symbol))
+      .filter((item, index, arr) => arr.findIndex((probe) => probe.symbol === item.symbol) === index)
+      .sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return b.confidence - a.confidence;
+      })
+      .slice(0, 24);
+    const historicalObservationSummary = buildHistoricalObservationSummary([
+      ...recentFormal7dCandidates,
+      ...fallbackOpportunities90dCandidatesDeduped,
+    ]);
 
     const memoRows = ((memosRes.data as Row[]) || []).map(mapResearchMemo);
     const reportKinds: ResearchMemoView['reportKind'][] = windowType === 'weekly' ? ['weekly_conviction', 'hot_theme', 'deep_dive'] : ['daily_radar', 'hot_theme', 'deep_dive'];
-    const reports = memoRows.filter((memo) => reportKinds.includes(memo.reportKind)).slice(0, 6);
+    const reports = selectUniqueResearchReports(memoRows.filter((memo) => reportKinds.includes(memo.reportKind)), 6);
 
     const latestMarket = (marketRes.data?.[0] as Row | undefined) || null;
     const marketFocus: DailyMarketFocus | null = latestMarket
@@ -2880,34 +13753,267 @@ async function getRadarPayload(windowType: ThemeHeatCard['windowType']): Promise
       : null;
 
     const discoveredStocks = await getDiscoveredStocks();
-    const recommendationSymbols = new Set(topRecommendations.map((item) => item.symbol));
-    const earlyFromDiscovery = discoveredStocks
+    const stockIdBySymbol = new Map<string, string>();
+    for (const item of syncedRecommendationRowsWithDate) {
+      const stockId = String(item.row.stock_id || '');
+      const symbol = String(item.mapped.symbol || '');
+      if (!stockId || !symbol || stockIdBySymbol.has(symbol)) continue;
+      stockIdBySymbol.set(symbol, stockId);
+    }
+	    const discoveredSymbols = unique(discoveredStocks.map((item) => item.symbol).filter(Boolean));
+    const missingDiscoveredSymbols = discoveredSymbols.filter((symbol) => !stockIdBySymbol.has(symbol));
+	    if (missingDiscoveredSymbols.length > 0) {
+      const stocksLookupRes = await withQueryTimeout(
+        supabaseServer.from('stocks').select('id,symbol').in('symbol', missingDiscoveredSymbols),
+        [],
+        2500,
+      );
+      for (const row of (stocksLookupRes.data as Row[]) || []) {
+        const symbol = String(row.symbol || '');
+        const stockId = String(row.id || '');
+        if (!symbol || !stockId || stockIdBySymbol.has(symbol)) continue;
+        stockIdBySymbol.set(symbol, stockId);
+	      }
+	    }
+	    const latestRevaluationJobsByStockId = await loadLatestRevaluationJobsByStockIds(Array.from(stockIdBySymbol.values()));
+	    const discoveredStockIds = discoveredSymbols.map((symbol) => stockIdBySymbol.get(symbol) || '').filter(Boolean);
+    const discoveredSignalRes = discoveredStockIds.length
+      ? await withQueryTimeout(
+          supabaseServer
+            .from('stock_signals')
+            .select('stock_id,price,volume,as_of,technical_meta')
+            .in('stock_id', discoveredStockIds)
+            .order('as_of', { ascending: false }),
+          [],
+          4000,
+        )
+      : { data: [], error: null };
+    const latestDiscoveredSignalByStockId = new Map<string, Row>();
+    for (const row of (discoveredSignalRes.data as Row[]) || []) {
+      const stockId = String(row.stock_id || '');
+      if (!stockId || latestDiscoveredSignalByStockId.has(stockId)) continue;
+      latestDiscoveredSignalByStockId.set(stockId, row);
+    }
+    const discoveredBridgeSupport = await loadBridgeSupportDataForStockIds(
+      discoveredStockIds,
+    );
+    const canonicalDiscoveredStocks = discoveredStocks.map((stock) => {
+      const stockId = stockIdBySymbol.get(stock.symbol) || '';
+      if (!stockId) return stock;
+      const latestDiscoveredSignal = latestDiscoveredSignalByStockId.get(stockId) || null;
+      const latestDiscoveredPrice =
+        latestDiscoveredSignal?.price != null && toFiniteNumber(latestDiscoveredSignal.price, 0) > 0
+          ? toFiniteNumber(latestDiscoveredSignal.price, 0)
+          : null;
+      const latestDiscoveredPriceAsOf =
+        latestDiscoveredSignal?.technical_meta &&
+        typeof latestDiscoveredSignal.technical_meta === 'object' &&
+        (latestDiscoveredSignal.technical_meta as Record<string, unknown>).price_quote_as_of
+          ? String((latestDiscoveredSignal.technical_meta as Record<string, unknown>).price_quote_as_of)
+          : latestDiscoveredSignal?.as_of
+            ? String(latestDiscoveredSignal.as_of)
+            : null;
+      const revenueRow = discoveredBridgeSupport.revenueByStockId.get(stockId) || null;
+      const revenueRows = discoveredBridgeSupport.revenueRowsByStockId.get(stockId) || [];
+      const fundamentalRows = discoveredBridgeSupport.fundamentalRowsByStockId.get(stockId) || [];
+      const storyRow = discoveredBridgeSupport.storyByStockId.get(stockId) || null;
+      const thesisRow = discoveredBridgeSupport.thesisByStockId.get(stockId) || null;
+      const valuationCases = discoveredBridgeSupport.valuationCasesByStockId.get(stockId) || [];
+      const revenueView = buildRevenueSignalViewFromRows(
+        revenueRows,
+        stock.symbol,
+        (storyRow?.updated_at ? String(storyRow.updated_at) : null) || (thesisRow?.updated_at ? String(thesisRow.updated_at) : null) || stock.latestMentionAt,
+      );
+      const fundamentalView = buildFundamentalSnapshotViewFromRows(
+        fundamentalRows,
+        stock.symbol,
+        (storyRow?.updated_at ? String(storyRow.updated_at) : null) || (thesisRow?.updated_at ? String(thesisRow.updated_at) : null) || stock.latestMentionAt,
+      );
+      const evidenceRefSeed = uniqueNarrativeLines(
+        [
+          stock.storySummary,
+          storyRow?.summary ? String(storyRow.summary) : null,
+          thesisRow?.thesis_summary ? String(thesisRow.thesis_summary) : null,
+          thesisRow?.story_source_summary ? String(thesisRow.story_source_summary) : null,
+        ],
+        4,
+      );
+      const bundle = buildBridgeAwareSnapshotBundle({
+        symbol: stock.symbol,
+        currentPrice:
+          twseLivePriceBySymbol.get(String(stock.symbol || '').trim()) ??
+          latestDiscoveredPrice ??
+          stock.currentPrice ??
+          stock.price ??
+          null,
+        latestSourceAt:
+          (revenueRow?.as_of_date ? `${String(revenueRow.as_of_date)}T00:00:00+08:00` : null) ||
+          (storyRow?.updated_at ? String(storyRow.updated_at) : null) ||
+          (thesisRow?.updated_at ? String(thesisRow.updated_at) : null) ||
+          stock.latestMentionAt,
+        reportUpdatedAt:
+          (storyRow?.updated_at ? String(storyRow.updated_at) : null) ||
+          (thesisRow?.updated_at ? String(thesisRow.updated_at) : null) ||
+          stock.latestMentionAt,
+        priceAsOf: latestDiscoveredPriceAsOf || stock.latestMentionAt,
+        thesisTitle:
+          stock.thesisTitle ||
+          (storyRow?.title ? String(storyRow.title) : null) ||
+          (thesisRow?.thesis_title ? String(thesisRow.thesis_title) : null) ||
+          null,
+        thesisSummary:
+          stock.storySummary ||
+          (storyRow?.summary ? String(storyRow.summary) : null) ||
+          (thesisRow?.thesis_summary ? String(thesisRow.thesis_summary) : null) ||
+          null,
+        valuationCases,
+        monthlyRevenue: revenueView?.monthlyRevenue ?? null,
+        yoyGrowth: revenueView?.yoyGrowth ?? null,
+        momGrowth: revenueView?.momGrowth ?? null,
+        revenueAnnual: fundamentalView?.revenueRunRate ?? (revenueView?.monthlyRevenue != null ? revenueView.monthlyRevenue * 12 : null),
+        epsTtm: fundamentalView.epsTtm ?? null,
+        peRatio: fundamentalView.peRatio ?? null,
+        pbRatio: fundamentalView.pbRatio ?? null,
+        grossMargin: fundamentalView.grossMargin ?? null,
+        operatingMargin: fundamentalView.operatingMargin ?? null,
+        baseEvidenceRefs: evidenceRefSeed,
+        scenarioEvidenceRefs: evidenceRefSeed,
+      });
+      return syncDiscoveredStockToBridgeSnapshot(stock, bundle);
+    });
+    const recommendationSymbols = new Set(
+      [...topRecommendations, ...scenarioUpsideCandidates, ...earlyWatchlist]
+        .map((item) => item.symbol)
+        .filter(Boolean),
+    );
+    const earlyFromDiscovery = canonicalDiscoveredStocks
       .filter((item) => !recommendationSymbols.has(item.symbol))
       .slice(0, 12)
       .map(discoveredToEarlyWatch);
-    const finalEarlyWatchlist =
-      earlyWatchlist.length > 0 ? earlyWatchlist : earlyFromDiscovery.length > 0 ? earlyFromDiscovery : await getEarlyWatchlistFromStories(12);
-    const finalDiscoveredStocks = discoveredStocks.length > 0 ? discoveredStocks : finalEarlyWatchlist.map(earlyWatchToDiscovered);
+    const mergedEarlyWatchlist: RecommendationCard[] = [...earlyWatchlist];
+    for (const item of earlyFromDiscovery) {
+      if (mergedEarlyWatchlist.some((existing) => existing.symbol === item.symbol)) continue;
+      mergedEarlyWatchlist.push(item);
+      if (mergedEarlyWatchlist.length >= 12) break;
+    }
+    const finalEarlyCandidates = mergedEarlyWatchlist.filter((item) => !recommendationIsOverScenarioTarget(item));
+    const finalEarlyWatchlistRaw =
+      finalEarlyCandidates.length > 0 ? finalEarlyCandidates.slice(0, 12) : await getEarlyWatchlistFromStories(12);
+    const finalEarlyWatchlist = finalEarlyWatchlistRaw
+      .map((item) => applyRecommendationGateMetadata({ ...item, action: 'watch', dedupeBucket: item.dedupeBucket || 'early_watchlist' }))
+      .filter((item) => Boolean(item.chineseName))
+      .filter((item) => !recommendationIsOverScenarioTarget(item));
+    const finalDiscoveredStocks = (canonicalDiscoveredStocks.length > 0 ? canonicalDiscoveredStocks : finalEarlyWatchlist.map(earlyWatchToDiscovered))
+      .filter((item) => Boolean(item.chineseName))
+      .filter((item) => item.targetPrice != null && item.expectedUpsidePct != null);
 
-    return {
-      asOf: latestThemeDate,
-      marketRegime: topThemes[0]?.marketRegime || (toFiniteNumber((marketFocus?.indexState as Row | undefined)?.trend_score, 0.5) >= 0.65 ? 'risk-on-ai' : 'selective-risk-on'),
-      focusSummary: buildFocusSummary(marketFocus, topThemes),
+    const lastUpdatedAt = (latestPipelineRes.data?.[0] as Row | undefined)?.finished_at
+      ? String((latestPipelineRes.data?.[0] as Row).finished_at)
+      : null;
+    const evidenceAgeHours = lastUpdatedAt
+      ? round(Math.max(0, (Date.now() - new Date(lastUpdatedAt).getTime()) / (1000 * 60 * 60)), 2)
+      : null;
+    const marketFreshness = evaluateMarketFocusFreshness(marketFocus, topThemes);
+    const focusSummary =
+      marketFreshness.status !== 'fresh'
+        ? marketFreshness.reason || '市場主軸資料偏舊，等待下一輪刷新。'
+        : evidenceAgeHours != null && evidenceAgeHours > 30
+          ? `資料最後成功更新於 ${new Date(lastUpdatedAt || nowIso()).toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' })}，目前屬於逾時狀態，請優先檢查來源同步與研究排程。`
+          : buildFocusSummary(marketFocus, topThemes);
+
+	    const marketIndexSignal = buildMarketIndexSignal(marketFocus, topThemes);
+	    const withMarketDecision = (card: RecommendationCard) => {
+	      const stockId = stockIdBySymbol.get(card.symbol) || '';
+	      const job = stockId ? latestRevaluationJobsByStockId.get(stockId) || null : null;
+	      return applyMarketAwareDecisionToCard(ensureRecommendationRevaluationMetadata(mergeRevaluationJobSummary(card, job)), marketIndexSignal);
+	    };
+    const finalOpportunities = topRecommendations.map(withMarketDecision);
+    const scenarioUpsideCandidatesWithMarket = scenarioUpsideCandidates.map(withMarketDecision);
+    const finalEarlyWatchlistWithMarket = finalEarlyWatchlist.map(withMarketDecision);
+    const finalRecentFormal7d: RecommendationCard[] = [];
+    const marketRegime =
+      topThemes[0]?.marketRegime ||
+      (toFiniteNumber((marketFocus?.indexState as Row | undefined)?.trend_score, 0.5) >= 0.65 ? 'risk-on-ai' : 'selective-risk-on');
+    const marketHighlightSummary = buildMarketHighlightSummary({
+      focus: marketFocus,
+      topThemes,
+      marketRegime,
+      marketFreshness,
+      lastUpdatedAt,
+    });
+    const sourceHealthSummary = buildSourceHealthSummary(agentStatus, connectorStatus);
+    const pluginSourceCoverageSummary = buildPluginSourceCoverageSummary(sourceHealthSummary);
+    const sanitizedConnectorStatus = sanitizeConnectorStatusForPayload(connectorStatus);
+    const hotTrackingSymbols = unique([
+      '3008',
+      ...rankedRecommendations
+        .map((item) => item.mapped)
+        .filter((item) => recommendationTargetCoverage(item) === 'over_base_and_scenario')
+        .map((item) => item.symbol),
+      ...finalEarlyWatchlist
+        .filter((item) => item.targetCoverageStatus === 'over_base_and_scenario' || item.displayTargetMode === 'hidden_over_target')
+        .map((item) => item.symbol),
+    ]).slice(0, 12);
+    const hotTracking = await buildHotTrackingCards({
+      symbols: hotTrackingSymbols,
+      existingCards: [
+        ...rankedRecommendations.map((item) => item.mapped),
+        ...scenarioUpsideCandidatesWithMarket,
+        ...finalEarlyWatchlistWithMarket,
+      ],
+    });
+    const hotTrackingWithMarket = hotTracking.map(withMarketDecision);
+    const discoveryFreshnessSummary = buildDiscoveryFreshnessSummary({
+      sourceHealthSummary,
+      opportunities: finalOpportunities,
+      scenarioUpsideCandidates: scenarioUpsideCandidatesWithMarket,
+      earlyWatchlist: finalEarlyWatchlistWithMarket,
+      hotTracking: hotTrackingWithMarket,
+      discoveredStocks: finalDiscoveredStocks,
+    });
+    const globalLeadLagSummary = buildGlobalLeadLagSummary(topThemes);
+	    return {
+	      asOf: latestThemeDate,
+	      loadStatus: loadWarnings.length > 0 ? 'degraded' : 'ok',
+	      loadWarnings: unique(loadWarnings).slice(0, 8),
+	      degradedSources: unique(degradedSources).slice(0, 8),
+	      lastUpdatedAt,
+      evidenceAgeHours,
+      marketRegime,
+      marketRegimeUpdatedAt: marketFocus?.asOf || null,
+      themeHeatUpdatedAt: latestThemeDate || null,
+      marketFreshnessStatus: marketFreshness.status,
+      marketFreshnessReason: marketFreshness.reason,
+      focusSummary,
+      marketHighlightSummary,
+      marketIndexSignal,
+      marketBreadthSummary: marketIndexSignal.breadthState || marketIndexSignal.summary,
+      pluginSourceCoverageSummary,
+      sourceHealthSummary,
+      dataHealth: priceRefreshDataHealth,
+      discoveryFreshnessSummary,
+      globalLeadLagSummary,
+      historicalObservationSummary,
+      themeHypotheses: buildThemeHypotheses(topThemes),
       hotThemes: topThemes,
-      opportunities: topRecommendations,
-      earlyWatchlist: finalEarlyWatchlist,
-      earlySignals: topRecommendations.filter((item) => item.recommendationState === 'signal_candidate').slice(0, 5),
-      partiallyVerified: topRecommendations.filter((item) => item.recommendationState === 'partially_verified').slice(0, 5),
-      validatedIdeas: topRecommendations.filter((item) => item.recommendationState === 'validated_thesis' || item.recommendationState === 'actionable_setup').slice(0, 5),
+      opportunities: finalOpportunities,
+      scenarioUpsideCandidates: scenarioUpsideCandidatesWithMarket,
+      hotTracking: hotTrackingWithMarket,
+      recentFormal7d: finalRecentFormal7d.map(ensureRecommendationRevaluationMetadata),
+      fallbackOpportunities90d: [],
+      earlyWatchlist: finalEarlyWatchlistWithMarket,
+      earlySignals: finalOpportunities.filter((item) => item.recommendationState === 'signal_candidate').slice(0, 5),
+      partiallyVerified: finalOpportunities.filter((item) => item.recommendationState === 'partially_verified').slice(0, 5),
+      validatedIdeas: finalOpportunities.filter((item) => item.recommendationState === 'validated_thesis' || item.recommendationState === 'actionable_setup').slice(0, 5),
       discoveredStocks: finalDiscoveredStocks,
       reports,
       agentStatus,
-      connectorStatus,
+      connectorStatus: sanitizedConnectorStatus,
       riskDisclosure: RISK_DISCLOSURE,
     };
-  } catch {
-    return shouldUseDemoFallback() ? fallbackRadarPayload(windowType) : unavailableRadarPayload(windowType);
-  }
+	  } catch (error) {
+	    return shouldUseDemoFallback() ? fallbackRadarPayload(windowType) : unavailableRadarPayload(windowType, safeErrorMessage(error));
+	  }
 }
 
 export async function getDailyRadarData(): Promise<RadarDailyPayload> {
@@ -2929,7 +14035,9 @@ export async function getThemeDetail(themeKey: string): Promise<ThemeDetailPaylo
 
   try {
     const supabaseServer = getSupabaseServerClient();
-    const [themesRes, stocksRes, recsRes, storiesRes, memosRes] = await Promise.all([
+    const registryEntry = themeContentRegistryEntry(themeKey);
+    const ninetyDaysAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    const [themesRes, stocksRes, recsRes, storiesRes, memosRes, sourceDocsRes] = await Promise.all([
       supabaseServer.from('theme_heat').select('*').eq('theme_key', themeKey).order('as_of_date', { ascending: false }).order('heat_score', { ascending: false }).limit(10),
       supabaseServer.from('stocks').select('id,symbol,name'),
       supabaseServer
@@ -2937,37 +14045,62 @@ export async function getThemeDetail(themeKey: string): Promise<ThemeDetailPaylo
         .select('*, stocks(symbol,name,market), strategy_actions(state,target_price,stop_loss)')
         .order('as_of', { ascending: false })
         .order('score', { ascending: false })
-        .limit(50),
-      supabaseServer.from('story_candidates').select('*').order('as_of_date', { ascending: false }).limit(50),
-      supabaseServer.from('research_memos').select('*').order('updated_at', { ascending: false }).limit(40),
+        .limit(300),
+      supabaseServer.from('story_candidates').select('*').gte('as_of_date', ninetyDaysAgo).order('as_of_date', { ascending: false }).limit(500),
+      supabaseServer.from('research_memos').select('*').order('updated_at', { ascending: false }).limit(120),
+      supabaseServer
+        .from('source_raw_documents')
+        .select('id,platform,title,summary,document_url,published_at,collected_at,symbols,confidence,metadata,source_entities(display_name,entity_type)')
+        .order('collected_at', { ascending: false })
+        .limit(500),
     ]);
 
-    if (themesRes.error || stocksRes.error || recsRes.error || storiesRes.error || memosRes.error) {
-      throw new Error(themesRes.error?.message || stocksRes.error?.message || recsRes.error?.message || storiesRes.error?.message || memosRes.error?.message || 'Failed to load theme detail');
+    if (themesRes.error || stocksRes.error || recsRes.error || storiesRes.error || memosRes.error || sourceDocsRes.error) {
+      throw new Error(
+        themesRes.error?.message ||
+          stocksRes.error?.message ||
+          recsRes.error?.message ||
+          storiesRes.error?.message ||
+          memosRes.error?.message ||
+          sourceDocsRes.error?.message ||
+          'Failed to load theme detail',
+      );
     }
 
     const themeRows = ((themesRes.data as Row[]) || []).map(mapThemeHeatRow);
-    const theme = themeRows[0] || null;
+    const theme = mergeThemeWithRegistry(themeRows[0] || null, registryEntry, themeKey);
     if (!theme) return null;
 
-    const latestThemeDate = theme.asOfDate;
     const themeSymbols = new Set(theme.relatedSymbols);
     const stockMap = new Map<string, Row>(((stocksRes.data as Row[]) || []).map((row) => [String(row.id || ''), row]));
+    const stockBySymbol = new Map<string, Row>(((stocksRes.data as Row[]) || []).map((row) => [String(row.symbol || ''), row]));
+    const sourceDocs = ((sourceDocsRes.data as Row[]) || [])
+      .filter((row) => !isSourceDocNoise(row))
+      .filter((row) => Array.isArray(row.symbols) && (row.symbols as unknown[]).some((symbol) => themeSymbols.has(String(symbol))))
+      .slice(0, 24);
+    const docSourceCoverage = themeSourceCoverageFromDocuments(sourceDocs, themeSymbols);
+    const sourceCoverage = mergeSourceCoverage([...theme.sourceCoverage, ...docSourceCoverage]);
+    const missingSources = unique([...theme.missingSources, ...findMissingSources(sourceCoverage)]).slice(0, 10);
 
     const opportunities = ((recsRes.data as Row[]) || [])
       .filter((row) => {
         const stockRelation = Array.isArray(row.stocks) ? (row.stocks[0] as Row | undefined) : (row.stocks as Row | undefined);
         const symbol = String(stockRelation?.symbol || '');
-        return themeSymbols.has(symbol) && String(row.as_of || '').slice(0, 10) === latestThemeDate;
+        return themeSymbols.has(symbol) && String(row.as_of || '').slice(0, 10) >= ninetyDaysAgo;
       })
       .map(mapRecommendation)
-      .filter(recommendationIsFormal)
+      .filter((rec) => Boolean(rec.chineseName))
+      .sort((a, b) => {
+        const formalDelta = Number(recommendationIsFormal(b)) - Number(recommendationIsFormal(a));
+        if (formalDelta !== 0) return formalDelta;
+        return (b.recommendationIndex || b.score || 0) - (a.recommendationIndex || a.score || 0);
+      })
       .slice(0, 10);
 
     const supportingStories = ((storiesRes.data as Row[]) || [])
       .filter((row) => {
         const stock = stockMap.get(String(row.stock_id || ''));
-        return stock && themeSymbols.has(String(stock.symbol || '')) && String(row.as_of_date || '') === latestThemeDate;
+        return stock && themeSymbols.has(String(stock.symbol || '')) && String(row.as_of_date || '') >= ninetyDaysAgo;
       })
       .map((row) => {
         const stock = stockMap.get(String(row.stock_id || '')) || {};
@@ -2986,13 +14119,95 @@ export async function getThemeDetail(themeKey: string): Promise<ThemeDetailPaylo
       .filter((memo) => memo.relatedSymbols.some((symbol) => themeSymbols.has(symbol)) || memo.slug.includes(themeKey))
       .slice(0, 8);
 
+    const registryStories: ThemeDetailPayload['supportingStories'] =
+      supportingStories.length > 0
+        ? []
+        : theme.relatedSymbols.slice(0, 10).map((symbol) => {
+            const stockRow = stockBySymbol.get(symbol);
+            const name = resolveChineseName(symbol, stockRow?.name ? String(stockRow.name) : null) || discoveryNameForSymbol(symbol).name;
+            return {
+              symbol,
+              title: `${name} ${theme.themeName} 追蹤劇本`,
+              storyType: 'valuation_reset' as const,
+              thesisState: 'signal_candidate' as const,
+              catalystSummary:
+                registryEntry?.symbolRoles[symbol] ||
+                `${name} 屬於 ${theme.themeName} 的候選映射，需等待來源、月營收/券商與籌碼技術補齊後再判斷是否升級。`,
+            };
+          });
+    const mergedStories = [...supportingStories, ...registryStories].slice(0, 10);
+
+    const fallbackOpportunities = opportunities.length
+      ? opportunities
+      : mergedStories
+          .map((story) => {
+            const stockRow = stockBySymbol.get(story.symbol) || null;
+            const chineseName = resolveChineseName(story.symbol, stockRow?.name ? String(stockRow.name) : null) || discoveryNameForSymbol(story.symbol).name;
+            if (!chineseName) return null;
+            return {
+              recommendationId: `theme-tracking-${theme.themeKey}-${story.symbol}`,
+              symbol: story.symbol,
+              name: stockRow?.name ? String(stockRow.name) : story.symbol,
+              market: 'TW' as const,
+              score: 0.5,
+              confidence: 0.45,
+              action: 'watch' as const,
+              rationale: story.title,
+              recommendationState: story.thesisState,
+              thesisTitle: story.title,
+              thesisSummary: story.catalystSummary,
+              expectedUpsidePct: null,
+              valuationSource: 'missing' as const,
+              valuationConfidence: 0.2,
+              isFallbackValuation: true,
+              verificationStatus: verificationStatusFromState(story.thesisState),
+              whyNotRecommended: whyNotRecommendedLabel('valuation_missing'),
+              chineseName,
+              displayBucket: 'early',
+              displayTargetMode: 'needs_revaluation',
+              whyNotFormal: '主題候選仍需 Base bridge、估值 sanity、重估 freshness 與進場 Gate 補齊。',
+              candidateSourceType: theme.foreignPeerBasket?.length ? 'global_lead_lag' : 'theme_registry',
+              candidateReason: registryEntry?.trackingFocus || `${theme.themeName} 主題追蹤候選。`,
+            };
+          })
+          .filter((item) => Boolean(item))
+          .map((item) => item as RecommendationCard)
+          .slice(0, 10);
+
+    const trackedSymbols = buildThemeTrackedSymbols({
+      theme,
+      entry: registryEntry,
+      recommendations: fallbackOpportunities,
+      stories: mergedStories,
+      docs: sourceDocs,
+      sourceCoverage,
+    });
+    const liveSignals =
+      docSourceCoverage.length +
+      opportunities.length +
+      supportingStories.length +
+      reports.length;
+    const contentStatus: NonNullable<ThemeDetailPayload['contentStatus']> =
+      liveSignals >= 3
+        ? 'complete'
+        : liveSignals > 0
+          ? 'partial_live'
+          : registryEntry
+            ? 'derived_from_registry'
+            : 'missing_live_sources';
+
     return {
       theme,
-      opportunities,
-      supportingStories,
+      opportunities: fallbackOpportunities,
+      supportingStories: mergedStories,
       reports,
-      sourceCoverage: theme.sourceCoverage,
-      missingSources: theme.missingSources,
+      sourceCoverage,
+      missingSources,
+      contentStatus,
+      themeBrief: buildThemeBrief(theme, registryEntry),
+      trackedSymbols,
+      evidenceMatrix: buildThemeEvidenceMatrix(sourceCoverage, missingSources),
+      nextRefreshPlan: buildThemeNextRefreshPlan(theme, registryEntry, missingSources),
     };
   } catch {
     return shouldUseDemoFallback() ? fallbackThemeDetail(themeKey) : null;
@@ -3009,40 +14224,91 @@ export async function getStockDeepDive(symbol: string): Promise<StockDeepDivePay
     const stock = await getLatestStockRecord(normalizedSymbol);
     if (!stock) return shouldUseDemoFallback() ? await fallbackStockDeepDive(normalizedSymbol) : null;
 
-    const insight = (await getStockInsight(normalizedSymbol)) || (await getMinimalStockInsight(stock, normalizedSymbol));
+    const insight =
+      (await withFallbackTimeout(getStockInsight(normalizedSymbol), null, 8000)) ||
+      (await withFallbackTimeout(getMinimalStockInsight(stock, normalizedSymbol), {
+        symbol: normalizedSymbol,
+        name: String(stock.name || normalizedSymbol),
+        market: 'TW',
+        price: 0,
+        volume: null,
+        asOf: '',
+        freshness: 'missing',
+        chart: [],
+        indicators: {
+          maShort: null,
+          maMid: null,
+          maLong: null,
+          rsi: null,
+          macd: null,
+          macdSignal: null,
+        },
+        chipMetrics: {},
+        riskDisclosure: RISK_DISCLOSURE,
+      }, 3500));
 
     const supabaseServer = getSupabaseServerClient();
-    const [storyRes, evidenceRes, valuationRes, eventRes, revenueRes, fundamentalsRes, memoRes, socialRes, thesisRes, brokerRes, reportRes, rawDocsRes, investanchorsRecentRes, agentStatus, podcastRes, kolRes, discoveryRes, connectorStatus] = await Promise.all([
-      supabaseServer.from('story_candidates').select('*').eq('stock_id', String(stock.id)).order('as_of_date', { ascending: false }).order('updated_at', { ascending: false }).limit(1),
-      supabaseServer.from('story_evidence_items').select('*').eq('stock_id', String(stock.id)).order('source_timestamp', { ascending: false }).limit(20),
-      supabaseServer.from('valuation_cases').select('*').eq('stock_id', String(stock.id)).order('updated_at', { ascending: false }).limit(10),
-      supabaseServer.from('company_events').select('*').eq('stock_id', String(stock.id)).order('event_timestamp', { ascending: false }).limit(10),
-      supabaseServer.from('revenue_signals').select('*').eq('stock_id', String(stock.id)).order('as_of_date', { ascending: false }).limit(1),
-      supabaseServer.from('fundamental_snapshots').select('*').eq('stock_id', String(stock.id)).order('as_of_date', { ascending: false }).limit(1),
-      supabaseServer.from('research_memos').select('*').eq('stock_id', String(stock.id)).order('updated_at', { ascending: false }).limit(1),
-      supabaseServer.from('social_signals').select('*').eq('stock_id', String(stock.id)).order('source_timestamp', { ascending: false }).limit(20),
-      supabaseServer.from('thesis_models').select('*').eq('stock_id', String(stock.id)).order('as_of_date', { ascending: false }).limit(1),
-      supabaseServer.from('broker_report_documents').select('*').eq('stock_id', String(stock.id)).order('report_date', { ascending: false }).limit(5),
-      supabaseServer.from('research_reports').select('*').eq('stock_id', String(stock.id)).order('created_at', { ascending: false }).limit(3),
-      supabaseServer
-        .from('source_raw_documents')
-        .select('*')
-        .order('collected_at', { ascending: false })
-        .limit(200),
-      supabaseServer
-        .from('source_raw_documents')
-        .select('*')
-        .eq('platform', 'investanchors')
-        .order('collected_at', { ascending: false })
-        .limit(5),
-      getAgentStatusSummary(),
-      supabaseServer.from('podcast_transcripts').select('*, podcast_episodes(*)').order('created_at', { ascending: false }).limit(30),
-      supabaseServer.from('kol_profiles').select('*, source_entities(*)').eq('discovery_state', 'approved').order('follower_count', { ascending: false }).limit(20),
-      supabaseServer.from('source_discovery_queue').select('state').limit(200),
-      getConnectorStatusSummary(),
+    const [storyRes, evidenceRes, valuationRes, eventRes, revenueRes, fundamentalsRes, memoRes, socialRes, thesisRes, brokerRes, reportRes, rawDocsRes, investanchorsRecentRes, marketRes, agentStatus, podcastRes, kolRes, discoveryRes, connectorStatus, revaluationJobRes, brokerSearchRes] = await Promise.all([
+      withQueryTimeout(supabaseServer.from('story_candidates').select('*').eq('stock_id', String(stock.id)).order('as_of_date', { ascending: false }).order('updated_at', { ascending: false }).limit(1), []),
+      withQueryTimeout(supabaseServer.from('story_evidence_items').select('*').eq('stock_id', String(stock.id)).order('source_timestamp', { ascending: false }).limit(20), []),
+      withQueryTimeout(supabaseServer.from('valuation_cases').select('*').eq('stock_id', String(stock.id)).order('updated_at', { ascending: false }).limit(10), []),
+      withQueryTimeout(supabaseServer.from('company_events').select('*').eq('stock_id', String(stock.id)).order('event_timestamp', { ascending: false }).limit(10), []),
+      withQueryTimeout(supabaseServer.from('revenue_signals').select('*').eq('stock_id', String(stock.id)).order('as_of_date', { ascending: false }).limit(8), []),
+      withQueryTimeout(supabaseServer.from('fundamental_snapshots').select('*').eq('stock_id', String(stock.id)).order('as_of_date', { ascending: false }).limit(8), []),
+      withQueryTimeout(supabaseServer.from('research_memos').select('*').eq('stock_id', String(stock.id)).order('updated_at', { ascending: false }).limit(1), []),
+      withQueryTimeout(supabaseServer.from('social_signals').select('*').eq('stock_id', String(stock.id)).order('source_timestamp', { ascending: false }).limit(20), []),
+      withQueryTimeout(supabaseServer.from('thesis_models').select('*').eq('stock_id', String(stock.id)).order('as_of_date', { ascending: false }).limit(1), []),
+      withQueryTimeout(supabaseServer.from('broker_report_documents').select('*').eq('stock_id', String(stock.id)).order('report_date', { ascending: false }).limit(5), []),
+      withQueryTimeout(supabaseServer.from('research_reports').select('*').eq('stock_id', String(stock.id)).order('created_at', { ascending: false }).limit(3), []),
+      withQueryTimeout(
+        supabaseServer
+          .from('source_raw_documents')
+          .select('id,platform,title,summary,document_url,published_at,collected_at,symbols,confidence,source_entity_id,metadata')
+          .filter('symbols', 'cs', JSON.stringify([normalizedSymbol]))
+          .order('collected_at', { ascending: false })
+          .limit(40),
+        [],
+        5000,
+      ),
+      withQueryTimeout(
+        supabaseServer
+          .from('source_raw_documents')
+          .select('id,platform,title,summary,document_url,published_at,collected_at,symbols,confidence,source_entity_id,metadata')
+          .eq('platform', 'investanchors')
+          .filter('symbols', 'cs', JSON.stringify([normalizedSymbol]))
+          .order('collected_at', { ascending: false })
+          .limit(5),
+        [],
+      ),
+      withQueryTimeout(supabaseServer.from('market_snapshots').select('*').eq('market', 'TW').order('as_of', { ascending: false }).limit(1), []),
+      withFallbackTimeout(getAgentStatusSummary(), fallbackAgentStatusSummary(), 3000),
+      withQueryTimeout(supabaseServer.from('podcast_transcripts').select('id,podcast_episode_id,extracted_mentions,extracted_thesis,confidence,created_at,podcast_episodes(platform,title,episode_url,published_at)').order('created_at', { ascending: false }).limit(10), [], 5000),
+      withQueryTimeout(supabaseServer.from('kol_profiles').select('*, source_entities(*)').eq('discovery_state', 'approved').order('follower_count', { ascending: false }).limit(20), []),
+      withQueryTimeout(supabaseServer.from('source_discovery_queue').select('state').limit(100), []),
+      withFallbackTimeout(getConnectorStatusSummary(), [], 3000),
+      withQueryTimeout(
+        supabaseServer
+          .from('revaluation_jobs')
+          .select('*')
+          .eq('stock_id', String(stock.id))
+          .order('updated_at', { ascending: false })
+          .limit(1),
+        [],
+        2500,
+      ),
+      withQueryTimeout(
+        supabaseServer
+          .from('broker_search_attempts')
+          .select('job_id,search_surface,status,records_found,records_written,summary,searched_at')
+          .eq('stock_id', String(stock.id))
+          .order('searched_at', { ascending: false })
+          .limit(5),
+        [],
+        2500,
+      ),
     ]);
 
-    if (storyRes.error || evidenceRes.error || valuationRes.error || eventRes.error || revenueRes.error || fundamentalsRes.error || memoRes.error || socialRes.error || thesisRes.error || brokerRes.error || reportRes.error || rawDocsRes.error || investanchorsRecentRes.error) {
+    if (storyRes.error || evidenceRes.error || valuationRes.error || eventRes.error || revenueRes.error || fundamentalsRes.error || memoRes.error || socialRes.error || thesisRes.error || brokerRes.error || reportRes.error || rawDocsRes.error || investanchorsRecentRes.error || marketRes.error) {
       throw new Error(
         storyRes.error?.message ||
           evidenceRes.error?.message ||
@@ -3056,6 +14322,7 @@ export async function getStockDeepDive(symbol: string): Promise<StockDeepDivePay
           reportRes.error?.message ||
           rawDocsRes.error?.message ||
           investanchorsRecentRes.error?.message ||
+          marketRes.error?.message ||
           memoRes.error?.message ||
           'Failed to load deep dive',
       );
@@ -3118,9 +14385,23 @@ export async function getStockDeepDive(symbol: string): Promise<StockDeepDivePay
       pendingCount: discoveryRows.filter((r) => r.state === 'pending').length,
       monitorOnlyCount: discoveryRows.filter((r) => r.state === 'monitor_only').length,
     };
+    const latestMarket = (marketRes.data?.[0] as Row | undefined) || null;
+    const marketFocus: DailyMarketFocus | null = latestMarket
+      ? {
+          market: 'TW',
+          asOf: String(latestMarket.as_of || ''),
+          sectorFlows: (latestMarket.sector_flows as Record<string, number>) || {},
+          indexState: (latestMarket.index_state as Record<string, unknown>) || {},
+          freshness: (latestMarket.freshness_status as SignalFreshness) || 'missing',
+        }
+      : null;
 
     const story = (storyRes.data?.[0] as Row | undefined) || null;
-    const evidenceItems = ((evidenceRes.data as Row[]) || []).map(mapEvidenceItem);
+    const evidenceItemsRaw = ((evidenceRes.data as Row[]) || []).map(mapEvidenceItem);
+    const evidenceItems = evidenceItemsRaw.filter((item, index, arr) => {
+      const key = `${compactText(item.sourceName).toLowerCase()}::${compactText(item.headline || item.excerpt || '').toLowerCase()}`;
+      return arr.findIndex((probe) => `${compactText(probe.sourceName).toLowerCase()}::${compactText(probe.headline || probe.excerpt || '').toLowerCase()}` === key) === index;
+    });
     const rawValuationCases = ((valuationRes.data as Row[]) || []).map(mapValuationCase);
     const { valuationCases, valuationCompleteness } = ensureValuationCaseCompleteness(rawValuationCases);
     const companyEvents = ((eventRes.data as Row[]) || []).map((row) => ({
@@ -3130,8 +14411,10 @@ export async function getStockDeepDive(symbol: string): Promise<StockDeepDivePay
       sourceUrl: row.source_url ? String(row.source_url) : null,
       eventTimestamp: String(row.event_timestamp || ''),
     }));
-    const revenue = (revenueRes.data?.[0] as Row | undefined) || null;
-    const fundamentals = (fundamentalsRes.data?.[0] as Row | undefined) || null;
+    const revenueRows = (revenueRes.data as Row[]) || [];
+    const fundamentalRows = (fundamentalsRes.data as Row[]) || [];
+    const revenue = selectLatestPreferredRow(revenueRows, rowHasMeaningfulRevenueSignal);
+    const fundamentals = selectLatestPreferredRow(fundamentalRows, rowHasMeaningfulFundamentalSnapshot);
     const memo = (memoRes.data?.[0] as Row | undefined) || null;
     const recommendationState = normalizeRecommendationState(story?.thesis_state || insight.recommendation?.recommendationState);
     const thesisModel = (thesisRes.data?.[0] as Row | undefined) || null;
@@ -3157,6 +14440,24 @@ export async function getStockDeepDive(symbol: string): Promise<StockDeepDivePay
       ),
     );
     const brokerViews = ((brokerRes.data as Row[]) || []).map(mapBrokerView);
+    const directRawDocs = ((rawDocsRes.data as Row[]) || [])
+      .filter((row) => !isSourceDocNoise(row))
+      .filter((row) => isSymbolScopedDirectDoc(row, normalizedSymbol))
+      .sort((a, b) => {
+        const priorityDiff = directSourcePriority(b) - directSourcePriority(a);
+        if (priorityDiff !== 0) return priorityDiff;
+        return sourceDocTimestamp(b).localeCompare(sourceDocTimestamp(a));
+      });
+    const indirectRawDocs = ((rawDocsRes.data as Row[]) || [])
+      .filter((row) => !isSourceDocNoise(row))
+      .filter((row) => {
+        const symbols = Array.isArray(row.symbols) ? (row.symbols as unknown[]).map(String) : [];
+        return sourceDocMetadataValue(row, 'crawl_mode') === 'symbol_scoped' &&
+          sourceDocMetadataValue(row, 'query_symbol') === normalizedSymbol &&
+          symbols.includes(normalizedSymbol) &&
+          !isSymbolScopedDirectDoc(row, normalizedSymbol);
+      })
+      .sort((a, b) => sourceDocTimestamp(b).localeCompare(sourceDocTimestamp(a)));
     const sourceCoverage = mergeSourceCoverage([
       ...evidenceItems.map((item) =>
         mapSourceCoverageItem({
@@ -3193,19 +14494,18 @@ export async function getStockDeepDive(symbol: string): Promise<StockDeepDivePay
       ...brokerViews.map((item) =>
         mapSourceCoverageItem({
           sourceName: item.brokerName,
-          sourceType: 'public_research',
+          sourceType: 'broker_report',
           summary: item.summary,
-          sourceUrl: null,
+          sourceUrl: item.sourceUrl || null,
           sourceTimestamp: item.reportDate ? `${item.reportDate}T00:00:00.000Z` : null,
           symbols: [normalizedSymbol],
+          direct_hit: true,
           verificationStatus: '已證實',
           confidence: 0.88,
           weight: 0.2,
         }),
       ),
-      ...((rawDocsRes.data as Row[]) || [])
-        .filter((row) => Array.isArray(row.symbols) && (row.symbols as unknown[]).map(String).includes(normalizedSymbol))
-        .map((row) =>
+      ...directRawDocs.map((row) =>
         mapSourceCoverageItem({
           source_name: row.title || row.platform,
           source_type: String(row.platform || '').includes('threads')
@@ -3225,28 +14525,48 @@ export async function getStockDeepDive(symbol: string): Promise<StockDeepDivePay
           source_url: row.document_url,
           source_timestamp: row.published_at || row.collected_at,
           symbols: [normalizedSymbol],
-          confidence: row.confidence,
-          weight: 0.08,
+          direct_hit: true,
+          confidence: Math.max(toFiniteNumber(row.confidence, 0.52), sourceDocNumericMetadataValue(row, 'direct_hit_strength') ?? 0),
+          weight:
+            sourceTypeFromName(row.platform, row.title) === 'investanchors'
+              ? 0.16
+              : sourceTypeFromName(row.platform, row.title) === 'threads'
+                ? 0.11
+                : 0.08,
           verification_status: toFiniteNumber(row.confidence, 0) >= 0.6 ? '部分證實' : '未證實',
         }),
       ),
-      ...((investanchorsRecentRes.data as Row[]) || []).map((row) =>
+      ...indirectRawDocs.slice(0, 8).map((row) =>
         mapSourceCoverageItem({
-          source_name: row.title || '定錨投筆',
-          source_type: 'investanchors',
-          summary:
-            Array.isArray(row.symbols) && (row.symbols as unknown[]).map(String).includes(normalizedSymbol)
-              ? String(row.summary || '')
-              : `[未直接命中 ${normalizedSymbol}] ${String(row.summary || '').slice(0, 220)}`,
-          source_url: row.document_url || null,
+          source_name: row.title || row.platform,
+          source_type: String(row.platform || '').includes('investanchors') ? 'investanchors' : sourceTypeFromName(row.platform, row.title),
+          summary: `[間接命中 ${normalizedSymbol}] ${String(row.summary || '').slice(0, 180)}`,
+          source_url: row.document_url,
           source_timestamp: row.published_at || row.collected_at,
-          symbols: Array.isArray(row.symbols) ? (row.symbols as unknown[]).map(String).slice(0, 6) : [],
-          confidence: toFiniteNumber(row.confidence, 0.52),
-          weight: 0.16,
-          verification_status: '部分證實',
+          symbols: [normalizedSymbol],
+          direct_hit: false,
+          confidence: row.confidence,
+          weight: 0.04,
+          verification_status: '未證實',
         }),
       ),
-    ]);
+      ...((investanchorsRecentRes.data as Row[]) || []).map((row) =>
+        isSymbolScopedDirectDoc(row, normalizedSymbol)
+          ? mapSourceCoverageItem({
+              source_name: row.title || '定錨投筆',
+              source_type: 'investanchors',
+              summary: String(row.summary || ''),
+              source_url: row.document_url || null,
+              source_timestamp: row.published_at || row.collected_at,
+              symbols: Array.isArray(row.symbols) ? (row.symbols as unknown[]).map(String).slice(0, 6) : [],
+              direct_hit: true,
+              confidence: toFiniteNumber(row.confidence, 0.52),
+              weight: 0.16,
+              verification_status: '部分證實',
+            })
+          : null,
+      ),
+    ].filter((item): item is SourceCoverageView => Boolean(item)));
     const verificationStatus = (story?.verification_status as VerificationStatus | undefined) || verificationStatusFromState(recommendationState);
     const evidenceMatrix = ((matrixRes.data as Row[]) || []).map(mapEvidenceMatrix);
     const thesisModelView = thesisModel ? mapThesisModel(thesisModel) : null;
@@ -3271,39 +14591,1584 @@ export async function getStockDeepDive(symbol: string): Promise<StockDeepDivePay
         label: index === 0 ? '核心失效條件' : `補充風險 ${index}`,
         summary,
       }));
+    const technicalSnapshot = buildTechnicalSnapshotFromCandles(
+      insight.chart,
+      insight.indicators,
+      insight.chartSource || (insight.chart.length > 0 ? 'stock_signals' : 'missing'),
+      insight.chart.length > 0
+        ? null
+        : insight.chartMissingReason || '目前缺少足夠的日線資料，暫時無法完整計算技術指標。',
+    );
+    const timeframeCharts = {
+      daily: insight.chart,
+      weekly: aggregateCandles(insight.chart, 5),
+      monthly: aggregateCandles(insight.chart, 21),
+      quarterly: aggregateCandles(insight.chart, 63),
+      halfYear: aggregateCandles(insight.chart, 126),
+      yearly: aggregateCandles(insight.chart, 252),
+    };
+    const sourceGroups = {
+      investanchors: sourceCoverage.filter((item) => item.sourceType === 'investanchors'),
+      officialAndFinancial: sourceCoverage.filter((item) =>
+        item.sourceType === 'official' || item.sourceType === 'financial' || item.sourceType === 'twse_insider',
+      ),
+      brokerAndResearch: sourceCoverage.filter((item) => item.sourceType === 'public_research' || item.sourceType === 'industry'),
+      socialAndCommunity: sourceCoverage.filter((item) =>
+        item.sourceType === 'threads' ||
+        item.sourceType === 'instagram' ||
+        item.sourceType === 'telegram' ||
+        item.sourceType === 'ptt' ||
+        item.sourceType === 'bulltalk' ||
+        item.sourceType === 'kol' ||
+        item.sourceType === 'podcast' ||
+        item.sourceType === 'youtube' ||
+        item.sourceType === 'news',
+      ),
+    };
+    const directRawDocUrls = new Set(directRawDocs.map((row) => String(row.document_url || '')).filter(Boolean));
+    const directHighQualitySources = sourceCoverage.filter(
+      (item) => item.directHit !== false && Boolean(item.sourceUrl) && directRawDocUrls.has(String(item.sourceUrl || '')),
+    );
+    const prioritizedStorySources = [
+      ...sourceGroups.investanchors,
+      ...sourceGroups.brokerAndResearch,
+      ...sourceGroups.officialAndFinancial,
+      ...sourceGroups.socialAndCommunity.filter((item) => item.sourceType !== 'news'),
+    ]
+      .filter((item) => item.directHit !== false)
+      .filter((item) => Boolean(compactText(item.summary)))
+      .slice(0, 6);
+    const officialEvidenceCount = evidenceItems.filter((item) =>
+      item.evidenceClass === 'official' ||
+      item.evidenceClass === 'company' ||
+      item.evidenceClass === 'financial' ||
+      item.evidenceClass === 'transcript',
+    ).length;
+    const crossCheckEvidenceCount = evidenceItems.filter((item) =>
+      item.evidenceClass === 'industry' || item.evidenceClass === 'public_research' || item.evidenceClass === 'news',
+    ).length;
+    const contradictingEvidenceCount = evidenceItems.filter((item) => item.stance === 'contradicting').length;
+    const supportingEvidenceCount = evidenceItems.filter((item) => item.stance === 'supporting').length;
+    const threadDirectSources = directHighQualitySources
+      .filter((item) => item.sourceType === 'threads')
+      .filter((item) => {
+        const clean = normalizeNarrativeSentence(item.summary);
+        if (!clean) return false;
+        return !looksLikeHeadlineDump(clean) && !looksLikeNarrativeNoise(clean);
+      })
+      .slice(0, 5);
+    const investAnchorsDirectSources = directHighQualitySources
+      .filter((item) => item.sourceType === 'investanchors')
+      .filter((item) => Boolean(compactText(item.summary)))
+      .slice(0, 5);
+    const threadsStorySummary = threadDirectSources.length
+      ? compactText(
+          threadDirectSources
+            .map((item) => normalizeNarrativeSentence(item.summary))
+            .filter(Boolean)
+            .slice(0, 3)
+            .join('；'),
+        )
+      : null;
+    const threadsStanceSummary = narrativeCandidates(threadDirectSources.map((item) => item.summary), 2);
+    const themeHypothesis = {
+      title: story?.title ? String(story.title) : `${normalizedSymbol} 題材假設`,
+      summary: story?.summary
+        ? String(story.summary)
+        : thesisModelView?.storySourceSummary || '目前以社群與公開來源形成初步故事，仍需持續驗證。',
+      assumptions: [
+        thesisModelView?.financialProjectionSummary || '財務推估資料不足',
+        thesisModelView?.valuationSummary || '估值區間待補',
+        `驗證狀態：${verificationStatus}`,
+      ],
+      evidenceLevel:
+        verificationStatus === '已證實'
+          ? ('估值層' as const)
+          : verificationStatus === '部分證實'
+            ? ('佐證層' as const)
+            : ('傳言層' as const),
+      updatedAt: story?.updated_at ? String(story.updated_at) : null,
+    };
+    const calculationTable = [
+      {
+        label: 'Current Price',
+        value: insight.price ? `${round(insight.price, 2)}` : '-',
+        source: 'stock_signals',
+      },
+      {
+        label: 'Base Revenue Annual',
+        value: quantitative.base_revenue_annual == null ? '-' : String(round(toFiniteNumber(quantitative.base_revenue_annual), 2)),
+        source: 'thesis_models.metadata.quantitative',
+      },
+      {
+        label: 'Base EPS',
+        value: quantitative.base_eps == null ? '-' : String(round(toFiniteNumber(quantitative.base_eps), 3)),
+        source: 'thesis_models.metadata.quantitative',
+      },
+      {
+        label: 'Base PE',
+        value: quantitative.base_pe == null ? '-' : String(round(toFiniteNumber(quantitative.base_pe), 2)),
+        source: 'thesis_models.metadata.quantitative',
+      },
+      {
+        label: 'Base Target',
+        value: valuationCases.find((item) => item.caseType === 'base')?.targetPrice == null ? '-' : String(round(toFiniteNumber(valuationCases.find((item) => item.caseType === 'base')?.targetPrice), 2)),
+        source: 'valuation_cases/base',
+      },
+    ];
+    const counterEvidence = [
+      ...evidenceItems
+        .filter((item) => item.stance === 'contradicting')
+        .slice(0, 4)
+        .map((item) => ({
+          label: item.sourceName,
+          summary: item.excerpt || item.headline,
+          sourceUrl: item.sourceUrl,
+        })),
+      ...riskCounterpoints.slice(0, 3).map((item) => ({
+        label: item.label,
+        summary: item.summary,
+        sourceUrl: null,
+      })),
+    ].slice(0, 6);
+    let investmentConclusion =
+      recommendationState === 'actionable_setup'
+        ? '可執行進場：故事、驗證與技術面條件已達成，建議依進出場規則分批佈局。'
+        : recommendationState === 'validated_thesis'
+          ? '高信念觀察：主論點已大致驗證，等待更佳風險報酬比的進場時機。'
+          : recommendationState === 'partially_verified'
+            ? '驗證中：已有部分證據支持，適合小部位試單並持續追蹤催化。'
+            : '早期題材：目前主要由社群故事驅動，尚未形成完整官方/財務驗證。';
+    const keyAssumptions = [
+      themeHypothesis.assumptions[0],
+      themeHypothesis.assumptions[1],
+      `技術面條件：MA5/10/20與成交量需維持正向`,
+    ].filter(Boolean);
+    const storyNarrativeLines = narrativeCandidates(
+      [
+        thesisModelView?.storySourceSummary || null,
+        story?.summary ? String(story.summary) : null,
+        insight.recommendation?.thesisSummary || null,
+        ...prioritizedStorySources.map((item) => item.summary),
+      ],
+      4,
+    );
+    const storyNarrative = storyNarrativeLines.join(' ');
+    const marketHypothesis = [
+      themeHypothesis.assumptions[0],
+      themeHypothesis.assumptions[1],
+      themeHypothesis.assumptions[2],
+      quantitative.base_revenue_annual == null
+        ? null
+        : `Base 情境年化營收 ${round(toFiniteNumber(quantitative.base_revenue_annual), 0).toLocaleString('zh-TW')}，對應 EPS ${quantitative.base_eps == null ? '-' : round(toFiniteNumber(quantitative.base_eps), 2)}。`,
+    ].filter((item): item is string => Boolean(compactText(item)));
+    const verificationSummary =
+      thesisModelView?.verificationSummary ||
+      (verificationStatus === '已證實'
+        ? '官方/財務/研究來源已形成一致證據鏈。'
+        : verificationStatus === '部分證實'
+          ? '已有跨來源證據，但仍需更多官方資料確認。'
+          : '目前以社群與市場線索為主，尚待進一步驗證。');
+    const seedOverride = SEED_RESEARCH_OVERRIDES[normalizedSymbol] || null;
+    const baseRecommendationTarget = insight.recommendation?.baseTarget ?? insight.recommendation?.targetPrice ?? seedOverride?.targetPrice ?? null;
+    const upsideRecommendationTarget = insight.recommendation?.upsideTarget ?? seedOverride?.upsidePrice ?? null;
+    const invalidationRecommendationTarget = seedOverride?.invalidationPrice ?? null;
+    const fallbackValuationCases =
+      seedOverride && (insight.price || 0) > 0
+        ? [
+            {
+              caseType: 'base' as const,
+              targetPrice: seedOverride.targetPrice,
+              expectedReturnPct: round(((seedOverride.targetPrice - insight.price) / insight.price) * 100, 2),
+              assumptions: { source: 'seed_override' },
+            },
+            {
+              caseType: 'upside' as const,
+              targetPrice: seedOverride.upsidePrice,
+              expectedReturnPct: round(((seedOverride.upsidePrice - insight.price) / insight.price) * 100, 2),
+              assumptions: { source: 'seed_override' },
+            },
+            {
+              caseType: 'invalidation' as const,
+              targetPrice: seedOverride.invalidationPrice,
+              expectedReturnPct: round(((seedOverride.invalidationPrice - insight.price) / insight.price) * 100, 2),
+              assumptions: { source: 'seed_override' },
+            },
+          ]
+        : [];
+    const caseMap = new Map<ValuationCaseView['caseType'], ValuationCaseView>(
+      (valuationCases.length > 0 ? valuationCases : fallbackValuationCases).map((item) => [item.caseType, item]),
+    );
+    const alignValuationCase = (
+      caseType: ValuationCaseView['caseType'],
+      canonicalTarget: number | null | undefined,
+    ): ValuationCaseView | null => {
+      const existing = caseMap.get(caseType) || null;
+      const currentPrice = insight.price ?? null;
+      const normalizedTarget = canonicalTarget == null ? null : toFiniteNumber(canonicalTarget);
+      if (normalizedTarget == null || !Number.isFinite(normalizedTarget) || normalizedTarget <= 0) return existing;
+      const shouldOverride =
+        !existing ||
+        existing.targetPrice == null ||
+        !Number.isFinite(existing.targetPrice) ||
+        Math.abs(toFiniteNumber(existing.targetPrice) - normalizedTarget) / Math.max(normalizedTarget, 1) > 0.08;
+      if (!shouldOverride) return existing;
+      return {
+        caseType,
+        targetPrice: normalizedTarget,
+        expectedReturnPct:
+          currentPrice != null && Number.isFinite(currentPrice) && currentPrice > 0
+            ? round(((normalizedTarget - currentPrice) / currentPrice) * 100, 2)
+            : existing?.expectedReturnPct ?? null,
+        assumptions: {
+          ...((existing?.assumptions || {}) as Record<string, unknown>),
+          source: existing ? 'recommendation_target_aligned' : 'recommendation_target_snapshot',
+        },
+        bridgeSummary: existing?.bridgeSummary ?? null,
+        driverLabel: existing?.driverLabel ?? null,
+      };
+    };
+    const effectiveValuationCases = ([
+      alignValuationCase('base', baseRecommendationTarget),
+      alignValuationCase('upside', upsideRecommendationTarget),
+      alignValuationCase('invalidation', invalidationRecommendationTarget),
+    ].filter((item): item is ValuationCaseView => Boolean(item)));
+    const baseTargetSummary =
+      effectiveValuationCases.find((item) => item.caseType === 'base')?.targetPrice ??
+      insight.recommendation?.baseTarget ??
+      insight.recommendation?.targetPrice ??
+      seedOverride?.targetPrice ??
+      null;
+    const upsideTargetSummary =
+      effectiveValuationCases.find((item) => item.caseType === 'upside')?.targetPrice ??
+      insight.recommendation?.upsideTarget ??
+      seedOverride?.upsidePrice ??
+      null;
+    const bearTargetSummary =
+      effectiveValuationCases.find((item) => item.caseType === 'invalidation')?.targetPrice ?? seedOverride?.invalidationPrice ?? null;
+    if (seedOverride && insight.price != null && baseTargetSummary != null) {
+      investmentConclusion =
+        baseTargetSummary > insight.price
+          ? `${seedOverride.thesisTitle || insight.recommendation?.thesisTitle || normalizedSymbol}；以目前 base case 估算，目標價約 NT$${formatNumberLocal(
+              toFiniteNumber(baseTargetSummary),
+            )}，距現價仍有 ${formatNumberLocal(((baseTargetSummary - insight.price) / insight.price) * 100)}% 空間。`
+          : `${seedOverride.thesisTitle || insight.recommendation?.thesisTitle || normalizedSymbol}；但以目前 base case 估算，合理區間約已接近現價，除非後續數字上修，否則不建議追高。`;
+    }
+    const liveRevenueView = buildRevenueSignalViewFromRows(
+      revenueRows,
+      normalizedSymbol,
+      (story?.updated_at ? String(story.updated_at) : null) || (memo?.updated_at ? String(memo.updated_at) : null),
+    );
+    const revenueMonthlyFallback =
+      liveRevenueView?.monthlyRevenue ??
+      nullIfMissingMetric(seedOverride?.monthlyRevenue) ??
+      null;
+    const liveRevenueYoy = liveRevenueView?.yoyGrowth ?? null;
+    const liveRevenueMom = liveRevenueView?.momGrowth ?? null;
+    const revenueYoyFallback =
+      liveRevenueYoy != null && liveRevenueYoy !== 0 ? liveRevenueYoy : seedOverride?.revenueYoyGrowth ?? liveRevenueYoy;
+    const revenueMomFallback = liveRevenueMom;
+    const revenueSignalView = revenueMonthlyFallback != null || liveRevenueYoy != null || liveRevenueMom != null
+      ? {
+          asOfDate: String(liveRevenueView?.asOfDate || revenue?.as_of_date || story?.updated_at || memo?.updated_at || nowIso()),
+          monthlyRevenue: revenueMonthlyFallback,
+          yoyGrowth: revenueYoyFallback,
+          momGrowth: revenueMomFallback,
+        }
+      : null;
+    const liveFundamentalView = buildFundamentalSnapshotViewFromRows(
+      fundamentalRows,
+      normalizedSymbol,
+      (story?.updated_at ? String(story.updated_at) : null) || (memo?.updated_at ? String(memo.updated_at) : null),
+    );
+    const fundamentalEpsFallback =
+      liveFundamentalView.epsTtm ??
+      nullIfZeroMetric(seedOverride?.epsTtm) ??
+      null;
+    const fundamentalGrossMarginFallback =
+      liveFundamentalView.grossMargin ??
+      nullIfMissingMetric(seedOverride?.grossMargin) ??
+      null;
+    const fundamentalOperatingMarginFallback =
+      liveFundamentalView.operatingMargin ??
+      nullIfZeroMetric(seedOverride?.operatingMargin) ??
+      null;
+    const fundamentalPeFallback =
+      liveFundamentalView.peRatio ??
+      nullIfZeroMetric(seedOverride?.peRatio) ??
+      null;
+    const fundamentalPbFallback = liveFundamentalView.pbRatio ?? null;
+    const fundamentalSnapshotView = (() => {
+      const eps = fundamentalEpsFallback;
+      const gm = fundamentalGrossMarginFallback;
+      const opm = fundamentalOperatingMarginFallback;
+      const pe = fundamentalPeFallback;
+      const pb = fundamentalPbFallback;
+      const hasAny = [eps, gm, opm, pe, pb].some((value) => value != null);
+      return {
+        asOfDate: String(liveFundamentalView.asOfDate || fundamentals?.as_of_date || story?.updated_at || memo?.updated_at || nowIso()),
+        epsTtm: eps,
+        grossMargin: gm,
+        operatingMargin: opm,
+        peRatio: pe,
+        pbRatio: pb,
+        dataQuality: hasAny ? ('ok' as const) : ('missing' as const),
+        missingReason: hasAny ? null : liveFundamentalView.missingReason || 'fundamental_snapshots 與 fallback seed 目前都缺有效數值',
+      };
+    })();
+    const validationChecks = [
+      {
+        label: '市場故事是否已有多源共識',
+        status: prioritizedStorySources.length >= 2 ? ('completed' as const) : ('pending' as const),
+        summary:
+          prioritizedStorySources.length >= 2
+            ? `已整合 ${prioritizedStorySources.length} 個主來源，故事主軸為：${storyNarrative || '待補'}`
+            : '目前主來源仍少，故事仍停留在早期觀察階段。',
+      },
+      {
+        label: '官方 / 財務驗證',
+        status:
+          verificationStatus === '已證實'
+            ? ('completed' as const)
+            : verificationStatus === '部分證實'
+              ? ('at_risk' as const)
+              : ('pending' as const),
+        summary: verificationSummary,
+      },
+      {
+        label: '估值與價格映射',
+        status: baseTargetSummary != null ? ('completed' as const) : ('pending' as const),
+        summary:
+          baseTargetSummary != null
+            ? `Base ${baseTargetSummary} / Upside ${upsideTargetSummary ?? '-'} / Bear ${bearTargetSummary ?? '-'}。`
+            : '目前僅有故事與驗證方向，尚未形成穩定估值區間。',
+      },
+    ];
+    const valuationSummary =
+      thesisModelView?.valuationSummary ||
+      seedOverride?.thesisSummary ||
+      `Base ${baseTargetSummary == null ? '-' : `NT$${round(toFiniteNumber(baseTargetSummary), 2)}`} / Upside ${
+        upsideTargetSummary == null ? '-' : `NT$${round(toFiniteNumber(upsideTargetSummary), 2)}`
+      } / Bear ${bearTargetSummary == null ? '-' : `NT$${round(toFiniteNumber(bearTargetSummary), 2)}`}`;
+    const latestSourceAt =
+      latestSourceTimestamp(directHighQualitySources) ||
+      latestSourceTimestamp(sourceCoverage) ||
+      (story?.updated_at ? String(story.updated_at) : null);
+    const sourceFreshness = freshnessFromTimestamp(latestSourceAt, 72);
+    const reportUpdatedAt = story?.updated_at
+      ? String(story.updated_at)
+      : memo?.updated_at
+        ? String(memo.updated_at)
+        : latestSourceAt || insight.asOf;
+    const effectiveBaseUpsidePctFromCases = effectiveValuationCases.find((item) => item.caseType === 'base')?.expectedReturnPct ?? null;
+    const normalizedBaseTarget = baseTargetSummary == null ? insight.recommendation?.baseTarget ?? null : toFiniteNumber(baseTargetSummary);
+    const normalizedUpsideTarget =
+      upsideTargetSummary == null
+        ? insight.recommendation?.upsideTarget ?? null
+        : toFiniteNumber(upsideTargetSummary);
+    const normalizedBearTarget = bearTargetSummary == null ? null : toFiniteNumber(bearTargetSummary);
+    const initialTargetSnapshot = buildTargetSnapshot(
+      insight.price ?? null,
+      normalizedBaseTarget,
+      normalizedUpsideTarget,
+      normalizedBearTarget,
+      latestSourceAt,
+      reportUpdatedAt,
+      insight.asOf ?? null,
+    );
+    const chipSnapshot = buildChipSnapshotFromMetrics((insight.chipMetrics as Record<string, unknown>) || null, initialTargetSnapshot.verdict);
+    const initialSummaryCard: DeepDiveSummaryCard = {
+      currentPrice: insight.price ?? null,
+      baseTarget: normalizedBaseTarget ?? null,
+      upsidePct:
+        initialTargetSnapshot.cardPrimaryUpsidePct ??
+        ((effectiveBaseUpsidePctFromCases || 0) > 0 ? effectiveBaseUpsidePctFromCases : initialTargetSnapshot.displayBaseUpsidePct),
+      lastUpdatedAt: reportUpdatedAt,
+      latestSourceAt,
+      freshness: sourceFreshness,
+    };
+    const upsideFromBase = initialTargetSnapshot.displayBaseUpsidePct ?? initialSummaryCard.upsidePct;
+    const hasRecentHardEvidence = officialEvidenceCount > 0 && sourceFreshness === 'fresh';
+    const priceAboveMa20 =
+      insight.price != null && technicalSnapshot.ma20 != null && insight.price >= technicalSnapshot.ma20;
+    const extendedVsMa20 =
+      insight.price != null &&
+      technicalSnapshot.ma20 != null &&
+      technicalSnapshot.ma20 > 0 &&
+      (insight.price - technicalSnapshot.ma20) / technicalSnapshot.ma20 > 0.1;
+    const chaseAssessment: DeepDiveChaseAssessment =
+      sourceFreshness !== 'fresh'
+        ? {
+            verdict: 'wait_pullback',
+            label: '沿用現有資料，背景更新中',
+            reason: `目前仍先採用 ${formatDateTimeForPlan(reportUpdatedAt)} 的研究版本，系統會持續補抓最新法說、月營收與產業資料。`,
+            trigger: '若新來源進來，情境目標價與報告會同步更新。',
+            invalidation: riskCounterpoints[0]?.summary || '若後續更新顯示故事鈍化，需將 thesis 降級。',
+          }
+        : !normalizedBaseTarget || !insight.price || normalizedBaseTarget <= insight.price
+          ? {
+              verdict: 'story_over',
+              label: '上行空間有限',
+              reason: '以目前 base target 估算，現價已接近或超過合理區間，追價風險偏高。',
+              trigger: '除非有新的未發酵故事或目標價上修，否則不建議追高。',
+              invalidation: riskCounterpoints[0]?.summary || '若新催化未發生，舊故事視為接近反映完成。',
+            }
+          : hasRecentHardEvidence && priceAboveMa20 && !extendedVsMa20 && (technicalSnapshot.rsi ?? 50) < 70
+            ? {
+                verdict: 'can_chase',
+                label: '仍可追，但要控風險',
+                reason: `現價距 base target 仍有 ${upsideFromBase == null ? '待補' : `${formatNumberLocal(upsideFromBase)}%`} 空間，且最新證據鏈仍在補強中。`,
+                trigger: '續看最新營收、法說或產業驗證是否延續。',
+                invalidation: riskCounterpoints[0]?.summary || '若跌破關鍵均線或核心驗證轉弱， thesis 要重新檢查。',
+              }
+            : {
+                verdict: 'wait_pullback',
+                label: '先等拉回或補驗證',
+                reason: '雖然故事尚未結束，但現階段不是最佳追價位，或仍缺最後一哩的官方/財務驗證。',
+                trigger: hasRecentHardEvidence ? '等技術面回到更舒服的風險報酬比。' : '等最新官方/財務資料補上後再動作。',
+                invalidation: riskCounterpoints[0]?.summary || '若新資料無法補上驗證，則維持觀察。',
+              };
+    let entryExitPlan = {
+      entry: insight.strategy?.entryRule || '等待日線重新站回 MA20 並伴隨量能放大後分批建立觀察部位。',
+      addOn: insight.strategy?.positionSizeRule || '若法說 / 營收 / 關鍵題材驗證持續補強，再逐步加碼。',
+      stopLoss: insight.strategy?.stopLoss ? `跌破 ${formatMoney(insight.strategy.stopLoss)} 或故事失效時撤退。` : '若跌破關鍵均線且故事驗證失敗，應立即停損。',
+      exit: insight.strategy?.targetPrice ? `接近 ${formatMoney(insight.strategy.targetPrice)} 或催化已反映時分批落袋。` : '達到 Base 目標價或市場故事完全反映後分批調節。',
+    };
+    const numberTrail: DeepDiveNumberTrailItem[] = [
+      {
+        label: '最新股價',
+        value: insight.price ? `NT$${formatNumberLocal(insight.price)}` : '-',
+        detail: `資料時間 ${new Date(insight.asOf).toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' })}`,
+      },
+      {
+        label: '最新月營收',
+        value: revenueSignalView?.monthlyRevenue == null || revenueSignalView.monthlyRevenue <= 0 ? '未知' : `${round(toFiniteNumber(revenueSignalView.monthlyRevenue), 0).toLocaleString('zh-TW')}`,
+        detail:
+          revenueSignalView?.monthlyRevenue == null || revenueSignalView.monthlyRevenue <= 0
+            ? '目前抓不到可信的月營收資料'
+            : revenueSignalView?.yoyGrowth == null && revenueSignalView?.momGrowth == null
+            ? '等待 revenue_signals 更新'
+            : `YoY ${revenueSignalView?.yoyGrowth == null ? '-' : `${toFiniteNumber(revenueSignalView.yoyGrowth) > 0 ? '+' : ''}${formatNumberLocal(toFiniteNumber(revenueSignalView.yoyGrowth))}%`} / MoM ${
+                revenueSignalView?.momGrowth == null ? '-' : `${toFiniteNumber(revenueSignalView.momGrowth) > 0 ? '+' : ''}${formatNumberLocal(toFiniteNumber(revenueSignalView.momGrowth))}%`
+              }`,
+      },
+      {
+        label: 'EPS / PE',
+        value:
+          fundamentalSnapshotView?.epsTtm == null && fundamentalSnapshotView?.peRatio == null
+            ? '-'
+            : `EPS ${fundamentalSnapshotView?.epsTtm == null ? '-' : formatNumberLocal(toFiniteNumber(fundamentalSnapshotView.epsTtm))} / PE ${
+                fundamentalSnapshotView?.peRatio == null ? '-' : `${formatNumberLocal(toFiniteNumber(fundamentalSnapshotView.peRatio))}x`
+              }`,
+        detail: fundamentalSnapshotView?.dataQuality === 'ok' ? 'fundamental_snapshots / seed override' : '等待基本面資料更新',
+      },
+      {
+        label: 'Base 情境推估',
+        value:
+          quantitative.base_revenue_annual == null && quantitative.base_eps == null
+            ? '-'
+            : `Rev ${quantitative.base_revenue_annual == null ? '-' : round(toFiniteNumber(quantitative.base_revenue_annual), 0).toLocaleString('zh-TW')} / EPS ${
+                quantitative.base_eps == null ? '-' : formatNumberLocal(toFiniteNumber(quantitative.base_eps))
+              }`,
+        detail: `PE ${quantitative.base_pe == null ? '-' : formatNumberLocal(toFiniteNumber(quantitative.base_pe))} / TP ${
+          baseTargetSummary == null ? '-' : `NT$${formatNumberLocal(toFiniteNumber(baseTargetSummary))}`
+        }`,
+      },
+      {
+        label: '驗證覆蓋',
+        value: `${supportingEvidenceCount} 筆支持 / ${contradictingEvidenceCount} 筆反證`,
+        detail: `官方或財務 ${officialEvidenceCount} 筆，交叉驗證 ${crossCheckEvidenceCount} 筆`,
+      },
+      ...(chipSnapshot
+        ? [
+            {
+              label: '籌碼訊號',
+              value: `融資 ${chipSnapshot.marginFinancing.balance == null ? '-' : formatNumberLocal(chipSnapshot.marginFinancing.balance, 0)} / 融券 ${
+                chipSnapshot.shortInterest.balance == null ? '-' : formatNumberLocal(chipSnapshot.shortInterest.balance, 0)
+              }`,
+              detail: chipSnapshot.timingAssessment || '籌碼結構整理中。',
+            },
+          ]
+        : []),
+    ];
+    const freshSourceHighlights = directHighQualitySources
+      .sort((a, b) => {
+        const priorityDiff = highlightedSourcePriority(b) - highlightedSourcePriority(a);
+        if (priorityDiff !== 0) return priorityDiff;
+        return (b.sourceTimestamp || '').localeCompare(a.sourceTimestamp || '');
+      })
+      .slice(0, 5);
+    const latestFacts: DeepDiveLatestFact[] = [
+      ...investAnchorsDirectSources.slice(0, 2).map((item) => ({
+        label: '定錨投筆',
+        summary: sanitizeNarrativeText(item.summary),
+        asOf: item.sourceTimestamp,
+        sourceName: item.sourceName,
+        sourceUrl: item.sourceUrl,
+        sourceType: 'investanchors' as const,
+      })),
+      ...(threadDirectSources.length > 0
+        ? [
+            {
+              label: 'Threads 市場故事',
+              summary: sanitizeNarrativeText(threadsStorySummary || threadsStanceSummary[0] || 'Threads 上近期有直接命中的市場討論。'),
+              asOf: threadDirectSources[0]?.sourceTimestamp || null,
+              sourceName: 'Threads',
+              sourceUrl: threadDirectSources[0]?.sourceUrl || null,
+              sourceType: 'threads' as const,
+            },
+          ]
+        : []),
+      ...(revenueSignalView?.monthlyRevenue != null && toFiniteNumber(revenueSignalView.monthlyRevenue, 0) > 0
+        ? [
+            {
+              label: '最新月營收',
+              summary: sanitizeNarrativeText(`${round(toFiniteNumber(revenueSignalView.monthlyRevenue), 0).toLocaleString('zh-TW')}，YoY ${
+                revenueSignalView.yoyGrowth == null ? '-' : `${toFiniteNumber(revenueSignalView.yoyGrowth) > 0 ? '+' : ''}${formatNumberLocal(toFiniteNumber(revenueSignalView.yoyGrowth))}%`
+              }，MoM ${revenueSignalView.momGrowth == null ? '-' : `${toFiniteNumber(revenueSignalView.momGrowth) > 0 ? '+' : ''}${formatNumberLocal(toFiniteNumber(revenueSignalView.momGrowth))}%`}`,
+              ),
+              asOf: String(revenueSignalView.asOfDate || ''),
+              sourceName: 'revenue_signals',
+              sourceUrl: revenue?.source_url ? String(revenue.source_url) : null,
+              sourceType: 'financial' as const,
+            },
+          ]
+        : []),
+      ...companyEvents.slice(0, 2).map((item) => ({
+        label: sanitizeNarrativeText(item.headline),
+        summary: sanitizeNarrativeText(item.summary),
+        asOf: item.eventTimestamp,
+        sourceName: 'company_events',
+        sourceUrl: item.sourceUrl,
+        sourceType: 'company_event' as const,
+      })),
+      ...freshSourceHighlights
+        .filter((item) => item.sourceType !== 'investanchors' && item.sourceType !== 'threads')
+        .slice(0, 3)
+        .map((item) => ({
+        label: sanitizeNarrativeText(item.sourceName),
+        summary: sanitizeNarrativeText(item.summary),
+        asOf: item.sourceTimestamp,
+        sourceName: item.sourceName,
+        sourceUrl: item.sourceUrl,
+        sourceType: item.sourceType,
+      })),
+    ]
+      .sort((a, b) => String(b.asOf || '').localeCompare(String(a.asOf || '')))
+      .slice(0, 6);
+    const thesisSnapshot: DeepDiveThesisSnapshot = {
+      whyNow: sanitizeNarrativeText(latestFacts[0]?.summary || '目前仍沿用最後成功版本，系統會持續刷新最新資料。'),
+      story: sanitizeNarrativeText(String(seedOverride?.thesisSummary || storyNarrative || story?.summary || '')) || '市場主故事仍在整理中。',
+      validation: sanitizeNarrativeText(verificationSummary),
+      valuation: sanitizeNarrativeText(
+        seedOverride && baseTargetSummary != null
+          ? `${seedOverride.thesisSummary} Base ${baseTargetSummary == null ? '-' : `NT$${formatNumberLocal(toFiniteNumber(baseTargetSummary))}`} / Upside ${
+              upsideTargetSummary == null ? '-' : `NT$${formatNumberLocal(toFiniteNumber(upsideTargetSummary))}`
+            } / Bear ${bearTargetSummary == null ? '-' : `NT$${formatNumberLocal(toFiniteNumber(bearTargetSummary))}`}`
+          : valuationSummary,
+      ),
+      risk: sanitizeNarrativeText(riskCounterpoints[0]?.summary || '若驗證與數字沒有延續，這個 thesis 應回到觀察。'),
+    };
+    const narrativeKeywords = unique([
+      normalizedSymbol,
+      insight.recommendation?.chineseName || '',
+      insight.name || '',
+      ...tokenizeNarrativeKeywords(seedOverride?.thesisTitle || ''),
+      ...tokenizeNarrativeKeywords(seedOverride?.thesisSummary || ''),
+      ...tokenizeNarrativeKeywords(story?.title ? String(story.title) : ''),
+      ...tokenizeNarrativeKeywords(story?.summary ? String(story.summary) : ''),
+      ...tokenizeNarrativeKeywords(insight.recommendation?.storyType || ''),
+    ]).filter(Boolean);
+    const marketRotationSnapshot = buildMarketRotationSnapshot(marketFocus, narrativeKeywords);
+    const marketIndexSignal = buildMarketIndexSignal(marketFocus, []);
+    if (chipSnapshot) {
+      chipSnapshot.marketRotation = marketRotationSnapshot.marketRotation;
+      chipSnapshot.sectorFlow = marketRotationSnapshot.sectorFlow;
+      chipSnapshot.timingScore = buildChipTimingScore(chipSnapshot, marketRotationSnapshot.sectorFlowScore);
+      chipSnapshot.timingAssessment = sentenceFromBridgeSegments(
+        [chipSnapshot.timingAssessment, marketRotationSnapshot.sectorFlow],
+        chipSnapshot.timingAssessment || marketRotationSnapshot.sectorFlow || '籌碼與資金輪動資料整理中。',
+      );
+    }
+    const { valuationBridge, scenarioBridges, priceTargetRationale } = buildValuationBridgeSummary(effectiveValuationCases, {
+      symbol: normalizedSymbol,
+      thesisTitle: seedOverride?.thesisTitle || insight.recommendation?.thesisTitle || (story?.title ? String(story.title) : null) || null,
+      thesisSummary: seedOverride?.thesisSummary || insight.recommendation?.thesisSummary || (story?.summary ? String(story.summary) : null) || null,
+      currentPrice: initialTargetSnapshot.currentPrice ?? insight.price ?? null,
+      monthlyRevenue: revenueSignalView?.monthlyRevenue ?? null,
+      yoyGrowth: revenueSignalView?.yoyGrowth ?? null,
+      momGrowth: revenueSignalView?.momGrowth ?? null,
+      revenueAnnual: Number.isFinite(toFiniteNumber(quantitative.base_revenue_annual, Number.NaN))
+        ? toFiniteNumber(quantitative.base_revenue_annual, Number.NaN)
+        : null,
+      epsTtm: fundamentalSnapshotView?.epsTtm ?? null,
+      peRatio: fundamentalSnapshotView?.peRatio ?? null,
+      pbRatio: fundamentalSnapshotView?.pbRatio ?? null,
+      grossMargin: fundamentalSnapshotView?.grossMargin ?? null,
+      operatingMargin: fundamentalSnapshotView?.operatingMargin ?? null,
+    });
+    const cleanCatalystLine = sanitizeNarrativeText(
+      (story?.catalyst_summary ? String(story.catalyst_summary) : insight.recommendation?.catalystSummary)
+        ? `近期催化主要來自 ${story?.catalyst_summary ? String(story.catalyst_summary) : insight.recommendation?.catalystSummary}。`
+        : '',
+    );
+    const cleanVerificationLine = sanitizeNarrativeText(
+      sourceFreshness === 'fresh'
+        ? `這一版結論主要綜合法說、財務資料與近期待發來源，目前大方向仍偏向支持原本的 thesis。`
+        : `目前仍採用 ${formatDateTimeForPlan(reportUpdatedAt)} 的研究版本，系統會持續刷新最新來源，但在新資料補齊前先沿用這版推理。`,
+    );
+    const cleanValuationLine = sanitizeNarrativeText(
+      valuationSummary
+        ? `目前估值以 Base ${baseTargetSummary == null ? '-' : `NT$${formatNumberLocal(toFiniteNumber(baseTargetSummary))}`}、情境 ${upsideTargetSummary == null ? '-' : `NT$${formatNumberLocal(toFiniteNumber(upsideTargetSummary))}`}、失效 ${bearTargetSummary == null ? '-' : `NT$${formatNumberLocal(toFiniteNumber(bearTargetSummary))}`} 為主。`
+        : '目前估值區間仍不夠穩定，代表 thesis 還停留在早期階段。',
+    );
+    const revenueNarrative = summarizeRevenueNarrative(
+      revenueSignalView?.monthlyRevenue ?? null,
+      revenueSignalView?.yoyGrowth ?? null,
+      revenueSignalView?.momGrowth ?? null,
+    );
+    const primaryRiskParagraph =
+      narrativeCandidates(
+        [
+          chaseAssessment.invalidation,
+          ...riskCounterpoints.map((item) => item.summary).filter((item) => isRelevantRiskNarrative(item, narrativeKeywords)),
+        ],
+        1,
+      )[0] || '若後續數字與催化沒有延續，這個 thesis 就需要重新檢查。';
+    const secondaryRiskBullet =
+      initialTargetSnapshot.verdict === 'scenario'
+        ? '這檔目前仍停留在情境候選，因為 Base 尚未高於現價，還不能把它當成正式目標價。'
+        : narrativeCandidates(
+            riskCounterpoints
+              .map((item) => item.summary)
+              .filter((item) => isRelevantRiskNarrative(item, narrativeKeywords))
+              .slice(1),
+            1,
+          )[0] || null;
+    const storyLeadParagraph =
+      narrativeCandidates(
+        [
+          seedOverride?.thesisSummary || null,
+          seedOverride?.thesisTitle ? `${seedOverride.thesisTitle}。` : null,
+          insight.recommendation?.thesisTitle ? `${insight.recommendation.thesisTitle}。` : null,
+          insight.recommendation?.thesisSummary || null,
+          story?.summary ? String(story.summary) : null,
+          thesisModelView?.storySourceSummary || null,
+        ],
+        1,
+      )[0] || '目前市場主故事仍在整理中。';
+    const storySupportParagraph =
+      narrativeCandidates(
+        [
+          cleanVerificationLine,
+          threadsStanceSummary[0] || null,
+        ],
+        2,
+      ).join(' ') || '目前這個故事主要仍靠近期營收、法說與產業資料去補強。';
+    const latestChangeParagraph =
+      narrativeCandidates(
+        latestFacts
+          .filter((item) => ['financial', 'company_event', 'official', 'transcript', 'public_research'].includes(item.sourceType))
+          .map((item) => item.summary || item.label)
+          .filter((item) => {
+            const clean = sanitizeNarrativeText(item);
+            return Boolean(clean) && !looksLikeHeadlineDump(clean) && !isNumericOnlyFragment(clean);
+          }),
+        1,
+      )[0] || null;
+    const thesisReasonParagraph =
+      narrativeCandidates(
+        [
+          chaseAssessment.trigger,
+          cleanCatalystLine,
+          latestChangeParagraph,
+        ],
+        1,
+      )[0] || cleanVerificationLine;
+    const baseScenarioBridge = scenarioBridges.find((item) => item.key === 'base') || null;
+    const upsideScenarioBridge = scenarioBridges.find((item) => item.key === 'upside') || null;
+    const bearScenarioBridge = scenarioBridges.find((item) => item.key === 'invalidation') || null;
+    const currentPriceForNarrative = initialTargetSnapshot.currentPrice ?? insight.price ?? null;
+    const valuationEstimated =
+      sourceFreshness !== 'fresh' ||
+      (valuationBridge?.operatingAssumptions || []).some((item) => item.isEstimated) ||
+      (baseScenarioBridge?.operatingAssumptions || []).some((item) => item.isEstimated);
+    const estimateDisclosure = valuationEstimated ? '以下估值橋接若未另行標示，屬研究推估。' : null;
+    const peerComparisonParagraph = buildPeerComparisonSentence(
+      baseScenarioBridge,
+      valuationBridge,
+      fundamentalSnapshotView?.peRatio ?? null,
+      fundamentalSnapshotView?.pbRatio ?? null,
+    );
+    const baseEvidenceRefs = scenarioBridgeEvidenceRefs(
+      [
+        ...investAnchorsDirectSources,
+        ...freshSourceHighlights.filter((item) =>
+          item.sourceType === 'official' ||
+          item.sourceType === 'financial' ||
+          item.sourceType === 'public_research' ||
+          item.sourceType === 'investanchors' ||
+          item.sourceType === 'twse_insider',
+        ),
+      ],
+      4,
+    );
+    const scenarioEvidenceRefs = scenarioBridgeEvidenceRefs(
+      [
+        ...threadDirectSources,
+        ...companyEvents.map((item) => ({ summary: item.summary, sourceName: item.headline, sourceType: 'company_event' })),
+        ...freshSourceHighlights.filter((item) =>
+          item.sourceType === 'threads' ||
+          item.sourceType === 'instagram' ||
+          item.sourceType === 'telegram' ||
+          item.sourceType === 'news' ||
+          item.sourceType === 'industry',
+        ),
+      ],
+      4,
+    );
+    const baseCaseDetail = buildValuationCaseDetail(
+      'Base 估值框架',
+      baseScenarioBridge,
+      valuationBridge,
+      baseEvidenceRefs,
+      sourceFreshness !== 'fresh' || (baseScenarioBridge?.operatingAssumptions || []).some((item) => item.isEstimated),
+    );
+    const scenarioCaseDetail = buildValuationCaseDetail(
+      '情境估值框架',
+      upsideScenarioBridge,
+      valuationBridge,
+      scenarioEvidenceRefs,
+      sourceFreshness !== 'fresh' || (upsideScenarioBridge?.operatingAssumptions || []).some((item) => item.isEstimated),
+    );
+    const sharedVerifiedBasis = buildSharedVerifiedBasis({
+      baseCaseDetail,
+      scenarioCaseDetail,
+      monthlyRevenue: revenueSignalView?.monthlyRevenue ?? null,
+      revenueAnnual:
+        Number.isFinite(toFiniteNumber(quantitative.base_revenue_annual, Number.NaN))
+          ? toFiniteNumber(quantitative.base_revenue_annual, Number.NaN)
+          : null,
+      grossMargin: fundamentalSnapshotView?.grossMargin ?? null,
+      operatingMargin: fundamentalSnapshotView?.operatingMargin ?? null,
+      epsTtm: fundamentalSnapshotView?.epsTtm ?? null,
+      peRatio: fundamentalSnapshotView?.peRatio ?? null,
+      pbRatio: fundamentalSnapshotView?.pbRatio ?? null,
+    });
+    if (baseCaseDetail && sharedVerifiedBasis) {
+      baseCaseDetail.sharedBasisRefs = sharedVerifiedBasis.sharedBasisRefs;
+    }
+    if (scenarioCaseDetail) {
+      scenarioCaseDetail.sharedBasisRefs = sharedVerifiedBasis?.sharedBasisRefs || [];
+      scenarioCaseDetail.deltaAssumptions = buildScenarioDeltaAssumptions(baseCaseDetail, scenarioCaseDetail);
+      scenarioCaseDetail.hasIndependentDelta = hasIndependentScenarioDelta(baseCaseDetail, scenarioCaseDetail);
+    }
+    const scenarioNote =
+      scenarioCaseDetail && scenarioCaseDetail.hasIndependentDelta === false
+        ? '目前尚無獨立上行情境，Base 已涵蓋主要已知故事。'
+        : null;
+    const targetSnapshot: DeepDiveTargetSnapshot = buildBridgeAwareTargetSnapshot(
+      initialTargetSnapshot,
+      baseCaseDetail,
+      scenarioCaseDetail,
+      bearScenarioBridge,
+    );
+    const summaryCard: DeepDiveSummaryCard = {
+      currentPrice: insight.price ?? null,
+      baseTarget: targetSnapshot.baseTarget ?? null,
+      upsidePct:
+        targetSnapshot.cardPrimaryUpsidePct ??
+        ((effectiveBaseUpsidePctFromCases || 0) > 0 ? effectiveBaseUpsidePctFromCases : targetSnapshot.displayBaseUpsidePct),
+      lastUpdatedAt: reportUpdatedAt,
+      latestSourceAt,
+      freshness: sourceFreshness,
+    };
+    let bridgeAwareBaseTarget = targetSnapshot.baseTarget ?? null;
+    let bridgeAwareScenarioTarget = targetSnapshot.upsideTarget ?? null;
+    let bridgeAwareBearTarget = targetSnapshot.bearTarget ?? null;
+    let bridgeAwareBaseUpsidePct = targetSnapshot.displayBaseUpsidePct ?? summaryCard.upsidePct ?? null;
+    let bridgeAwareScenarioUpsidePct = targetSnapshot.displayScenarioUpsidePct ?? null;
+    const latestEvidenceSeen = new Set<string>();
+    const latestEvidence: DeepDiveLatestFact[] = latestFacts
+      .map((item, index): DeepDiveLatestFact | null => {
+        const cleanSummary = normalizeNarrativeSentence(item.summary || item.label);
+        if (!cleanSummary || looksLikeHeadlineDump(cleanSummary)) return null;
+        const supportCase =
+          item.sourceType === 'financial' ||
+          item.sourceType === 'official' ||
+          item.sourceType === 'company_event' ||
+          item.sourceType === 'investanchors' ||
+          item.sourceType === 'public_research'
+            ? ('base' as const)
+            : ('scenario' as const);
+        const cleanLabel = sanitizeNarrativeText(item.label || item.sourceName) || item.sourceName;
+        const evidenceKey = `${supportCase}::${cleanLabel}::${cleanSummary}`.toLowerCase();
+        if (latestEvidenceSeen.has(evidenceKey)) return null;
+        latestEvidenceSeen.add(evidenceKey);
+        return {
+          ...item,
+          id: `latest-evidence-${index}`,
+          label: cleanLabel,
+          summary: cleanSummary,
+          supportCase,
+        };
+      })
+      .filter((item): item is DeepDiveLatestFact => Boolean(item))
+      .slice(0, 5);
+    const sourceAppendix = [
+      { label: '定錨 / 投顧 / 研究', items: [...sourceGroups.investanchors, ...sourceGroups.brokerAndResearch] },
+      { label: '官方 / 財務', items: sourceGroups.officialAndFinancial },
+      { label: '社群 / KOL / Threads', items: sourceGroups.socialAndCommunity },
+    ];
+    const sourceCoverageStatus = [
+      {
+        id: 'official_financial',
+        label: '官方 / 財報 / 月營收',
+        status: sourceGroups.officialAndFinancial.length > 0 ? ('hit' as const) : ('missing' as const),
+        summary:
+          sourceGroups.officialAndFinancial.length > 0
+            ? `已命中 ${sourceGroups.officialAndFinancial.length} 筆官方、財務或籌碼來源，優先作為 Base 估值基底。`
+            : '尚未命中官方、財報、月營收或 TWSE 類來源，估值需標示資料缺口。',
+        sourceTypes: ['official', 'financial', 'twse_insider'],
+        searched: true,
+        matched: sourceGroups.officialAndFinancial.length > 0,
+        written: sourceGroups.officialAndFinancial.length > 0,
+        cited: sourceGroups.officialAndFinancial.length > 0,
+        failureReason: sourceGroups.officialAndFinancial.length > 0 ? null : '官方 / 財報 / 月營收來源尚未形成 direct-hit citation。',
+      },
+      {
+        id: 'investanchors',
+        label: '定錨投筆',
+        status: sourceGroups.investanchors.length > 0 ? ('hit' as const) : ('missing' as const),
+        summary:
+          sourceGroups.investanchors.length > 0
+            ? `已命中 ${sourceGroups.investanchors.length} 筆定錨相關來源；提及個股會先進候選池，通過 bridge audit 才升首頁。`
+            : '目前沒有定錨 direct-hit；若 worker 後續抓到提及個股，會先以 verification=pending 寫入候選池。',
+        sourceTypes: ['investanchors'],
+        searched: connectorStatus.some((item) => item.connector === 'investanchors' && item.lastRunAt),
+        matched: sourceGroups.investanchors.length > 0,
+        written: sourceGroups.investanchors.length > 0,
+        cited: sourceGroups.investanchors.length > 0,
+        failureReason:
+          sourceGroups.investanchors.length > 0
+            ? null
+            : connectorStatus.find((item) => item.connector === 'investanchors')?.lastErrorSummary || '定錨 direct-hit 待補。',
+      },
+      {
+        id: 'kol_social',
+        label: 'KOL / 社群 / Threads',
+        status:
+          sourceGroups.socialAndCommunity.length > 0
+            ? ('hit' as const)
+            : connectorStatus.some((item) =>
+                ['threads', 'instagram', 'telegram'].includes(item.connector) && ['failed', 'degraded', 'invalid'].includes(String(item.lastRunStatus || item.credentialStatus)),
+              )
+              ? ('degraded' as const)
+              : ('missing' as const),
+        summary:
+          sourceGroups.socialAndCommunity.length > 0
+            ? `已命中 ${sourceGroups.socialAndCommunity.length} 筆社群或 KOL 來源；只轉成事實句，不直接搬運原文。`
+            : '目前社群/KOL direct-hit 不足；若 connector degraded，需先修認證或來源擷取。',
+        sourceTypes: ['threads', 'instagram', 'telegram', 'ptt', 'bulltalk', 'kol', 'podcast', 'youtube', 'news'],
+        searched: connectorStatus.some((item) => ['threads', 'instagram', 'telegram', 'ptt', 'bulltalk'].includes(item.connector) && item.lastRunAt),
+        matched: sourceGroups.socialAndCommunity.length > 0,
+        written: sourceGroups.socialAndCommunity.length > 0,
+        cited: sourceGroups.socialAndCommunity.length > 0,
+        failureReason:
+          sourceGroups.socialAndCommunity.length > 0
+            ? null
+            : connectorStatus
+                .filter((item) => ['threads', 'instagram', 'telegram'].includes(item.connector))
+                .map((item) => item.lastErrorSummary)
+                .filter(Boolean)
+                .join('；') || '社群 direct-hit 待補。',
+      },
+      {
+        id: 'research_industry',
+        label: '產業 / 公開研究',
+        status: sourceGroups.brokerAndResearch.length > 0 ? ('hit' as const) : ('missing' as const),
+        summary:
+          sourceGroups.brokerAndResearch.length > 0
+            ? `已命中 ${sourceGroups.brokerAndResearch.length} 筆產業或公開研究來源，可輔助情境上行假設。`
+            : '目前缺少產業研究 direct-hit，情境上行假設需標示待驗證。',
+        sourceTypes: ['public_research', 'industry'],
+        searched: true,
+        matched: sourceGroups.brokerAndResearch.length > 0,
+        written: sourceGroups.brokerAndResearch.length > 0,
+        cited: sourceGroups.brokerAndResearch.length > 0,
+        failureReason: sourceGroups.brokerAndResearch.length > 0 ? null : '產業 / 公開研究 direct-hit 待補。',
+      },
+      {
+        id: 'broker_reports',
+        label: '外資 / 券商評等',
+        status: brokerViews.length > 0 ? ('hit' as const) : ('missing' as const),
+        summary:
+          brokerViews.length > 0
+            ? `已整理 ${brokerViews.length} 筆公開券商/外資評等或目標價，僅作估值佐證與 consensus，不單獨決定推薦。`
+            : '尚未命中公開外資/券商評等；將持續搜尋鉅亨外資評等、MoneyDJ/新聞摘要與手動匯入報告。',
+        sourceTypes: ['broker_report', 'public_research'],
+        searched: true,
+        matched: brokerViews.length > 0,
+        written: brokerViews.length > 0,
+        cited: brokerViews.length > 0,
+        failureReason: brokerViews.length > 0 ? null : '外資 / 券商評等 direct-hit 待補。',
+      },
+    ];
+    const sourceCitationMap = buildSourceCitationMap({ latestEvidence, freshSources: freshSourceHighlights, sourceAppendix });
+    const externalResearchSourceAt = latestExternalCitationTimestamp(sourceCitationMap, latestSourceAt);
+    const sharedSourceRefs = firstCitationRefs(sourceCitationMap, ['official', 'financial', 'company_event', 'investanchors', 'public_research'], 3);
+    const baseSourceRefs = firstCitationRefs(sourceCitationMap, ['official', 'financial', 'company_event', 'investanchors', 'public_research'], 3);
+    const scenarioSourceRefs = firstCitationRefs(sourceCitationMap, ['industry', 'threads', 'instagram', 'telegram', 'news', 'investanchors'], 3);
+    for (const item of latestEvidence) {
+      const matched = sourceCitationMap.find(
+        (ref) =>
+          (item.sourceUrl && ref.sourceUrl === item.sourceUrl) ||
+          (ref.sourceName === item.sourceName && ref.sourceType === item.sourceType),
+      );
+      item.sourceRefId = matched?.id || null;
+    }
+    const sharedCitationIds = citationIds(sharedSourceRefs);
+    const baseCitationIds = citationIds(baseSourceRefs);
+    const scenarioCitationIds = citationIds(scenarioSourceRefs);
+    if (sharedVerifiedBasis) {
+      sharedVerifiedBasis.sourceRefs = sharedSourceRefs;
+      sharedVerifiedBasis.customerEvidenceRefs = sharedCitationIds;
+      if (sharedVerifiedBasis.supplyChainMap) {
+        sharedVerifiedBasis.supplyChainMap.sourceRefs = sharedCitationIds;
+      }
+    }
+    if (baseCaseDetail) baseCaseDetail.sourceRefs = baseSourceRefs;
+    if (scenarioCaseDetail) scenarioCaseDetail.sourceRefs = scenarioSourceRefs;
+    const brokerConsensus = buildBrokerConsensus(brokerViews);
+    let assumptionLedger = buildValuationAssumptionLedger({ baseCaseDetail, scenarioCaseDetail });
+    const valuationConfidenceGate = evaluateValuationConfidenceGate({
+      baseCaseDetail,
+      sharedVerifiedBasis,
+      brokerConsensus,
+      currentPrice: currentPriceForNarrative,
+    });
+    if (!valuationConfidenceGate.baseTargetFormal) {
+      downgradeBaseCaseForConfidenceGate(baseCaseDetail, valuationConfidenceGate);
+      assumptionLedger = buildValuationAssumptionLedger({ baseCaseDetail, scenarioCaseDetail });
+      Object.assign(
+        targetSnapshot,
+        buildBridgeAwareTargetSnapshot(initialTargetSnapshot, baseCaseDetail, scenarioCaseDetail, bearScenarioBridge),
+      );
+      targetSnapshot.valuationConfidenceGate = valuationConfidenceGate;
+      targetSnapshot.valuationSanityStatus = 'insufficient_verified_basis';
+      targetSnapshot.valuationSanityReason = valuationConfidenceGate.reason;
+      const promotionGate = attachScenarioPromotionGate(baseCaseDetail, scenarioCaseDetail, targetSnapshot);
+      targetSnapshot.scenarioPromotionStatus = promotionGate?.status || null;
+      applyRevaluationSlaToTargetSnapshot(targetSnapshot, buildRevaluationJobSummary({ targetSnapshot, promotionGate }));
+      summaryCard.baseTarget = targetSnapshot.baseTarget ?? null;
+      summaryCard.upsidePct =
+        targetSnapshot.cardPrimaryUpsidePct ??
+        ((effectiveBaseUpsidePctFromCases || 0) > 0 ? effectiveBaseUpsidePctFromCases : targetSnapshot.displayBaseUpsidePct);
+      bridgeAwareBaseTarget = targetSnapshot.baseTarget ?? null;
+      bridgeAwareScenarioTarget = targetSnapshot.upsideTarget ?? null;
+      bridgeAwareBearTarget = targetSnapshot.bearTarget ?? null;
+      bridgeAwareBaseUpsidePct = targetSnapshot.displayBaseUpsidePct ?? summaryCard.upsidePct ?? null;
+      bridgeAwareScenarioUpsidePct = targetSnapshot.displayScenarioUpsidePct ?? null;
+	    } else {
+	      targetSnapshot.valuationConfidenceGate = valuationConfidenceGate;
+	    }
+	    const durableRevaluationJobSummary =
+	      (((revaluationJobRes.data as Row[]) || [])[0])
+	        ? revaluationJobSummaryFromRow(((revaluationJobRes.data as Row[]) || [])[0], (brokerSearchRes.data as Row[]) || [])
+	        : null;
+	    if (durableRevaluationJobSummary) {
+	      targetSnapshot.revaluationJobId = durableRevaluationJobSummary.jobId || null;
+	      applyRevaluationSlaToTargetSnapshot(targetSnapshot, durableRevaluationJobSummary);
+	      targetSnapshot.revaluationStatus =
+	        durableRevaluationJobSummary.status === 'repriced' || durableRevaluationJobSummary.status === 'promoted_scenario_to_base'
+	          ? 'repriced'
+	          : durableRevaluationJobSummary.status === 'unchanged_with_reason'
+	            ? 'unchanged'
+	            : 'pending';
+	      targetSnapshot.repricingReason = durableRevaluationJobSummary.lastResult || targetSnapshot.repricingReason || null;
+	    }
+	    const forwardPeBridge = buildForwardPeBridge({ currentPrice: currentPriceForNarrative, baseCaseDetail });
+    const peerValuationRange = buildPeerValuationRange(baseCaseDetail);
+    const valuationReviewFlags = buildValuationReviewFlags({
+      currentPrice: currentPriceForNarrative,
+      baseCaseDetail,
+      scenarioCaseDetail,
+      gate: valuationConfidenceGate,
+      forwardPeBridge,
+      peerValuationRange,
+    });
+    const latestCitationIds = citationIds(sourceCitationMap.filter(isExternalCitationRef).slice(0, 3));
+    const caseMetricSentence = (caseDetail: DeepDiveValuationCaseDetail | null, label: string) =>
+      sentenceFromBridgeSegments(
+        [
+          caseDetail?.bridgeCompleteness === 'insufficient' ? caseDetail.insufficientBridgeReason : null,
+          caseDetail?.projectedRevenueAnnual != null
+            ? `${label}情境下，年化營收估約 NT$${formatNumberLocal(caseDetail.projectedRevenueAnnual)}。`
+            : null,
+          caseDetail?.projectedGrossMarginPct != null
+            ? `毛利率約 ${formatNumberLocal(caseDetail.projectedGrossMarginPct)}%。`
+            : null,
+          caseDetail?.projectedOperatingMarginPct != null
+            ? `營益率約 ${formatNumberLocal(caseDetail.projectedOperatingMarginPct)}%。`
+            : null,
+          caseDetail?.projectedEps != null ? `稅後 EPS 約 ${formatNumberLocal(caseDetail.projectedEps)}。` : null,
+        ],
+        '',
+      );
+    const caseMultipleSentence = (caseDetail: DeepDiveValuationCaseDetail | null, label: string) =>
+      sentenceFromBridgeSegments(
+        [
+          buildCurrentMultipleReferenceSentence(caseDetail?.currentPeRatio ?? null, caseDetail?.currentPbRatio ?? null),
+          caseDetail?.benchmarkRange ? `同產業可比公司大致落在 ${caseDetail.benchmarkRange}。` : null,
+          caseDetail?.targetPeRatio != null || caseDetail?.targetPbRatio != null
+            ? `${label}採用目標 PE ${
+                caseDetail?.targetPeRatio != null ? `${formatNumberLocal(caseDetail.targetPeRatio)}x` : '待補'
+              } / PB ${caseDetail?.targetPbRatio != null ? `${formatNumberLocal(caseDetail.targetPbRatio)}x` : '待補'}。`
+            : null,
+          caseDetail?.multipleBridge,
+        ],
+        caseDetail?.multipleBridge || '',
+      );
+    const casePriceSentence = (caseDetail: DeepDiveValuationCaseDetail | null, label: string) =>
+      sentenceFromBridgeSegments(
+        [
+          caseDetail?.bridgeCompleteness === 'insufficient' ? caseDetail.insufficientBridgeReason : null,
+          caseDetail?.priceBridge,
+          caseDetail?.targetPrice != null
+            ? `${label}目標價約 ${formatMoney(caseDetail.targetPrice)}，對現價約 ${formatSignedPctLocal(caseDetail.expectedReturnPct)}。`
+            : null,
+        ],
+        caseDetail?.bridgeCompleteness === 'insufficient'
+          ? caseDetail?.insufficientBridgeReason || ''
+          : caseDetail?.priceBridge || '',
+      );
+    const scenarioHasIndependentDelta = Boolean(scenarioCaseDetail?.hasIndependentDelta);
+    const baseCaseParagraphs = uniqueNarrativeLines(
+      [
+        estimateDisclosure,
+        sentenceFromBridgeSegments(
+          [
+            'Base 估值建立在目前已驗證、足以支撐正式估值的需求與財務基底上。',
+            baseCaseDetail?.driver ? `在上述已驗證基底下，Base 的主驅動是 ${baseCaseDetail.driver}。` : null,
+            baseCaseDetail?.marketSizingBridge,
+            baseCaseDetail?.revenueBridge,
+            baseCaseDetail?.marginBridge,
+          ],
+          baseCaseDetail?.priceBridge || cleanValuationLine,
+        ),
+        sentenceFromBridgeSegments(
+          [caseMetricSentence(baseCaseDetail, 'Base'), baseCaseDetail?.earningsBridge],
+          caseMetricSentence(baseCaseDetail, 'Base'),
+        ),
+        sentenceFromBridgeSegments(
+          [peerComparisonParagraph, caseMultipleSentence(baseCaseDetail, 'Base'), casePriceSentence(baseCaseDetail, 'Base')],
+          casePriceSentence(baseCaseDetail, 'Base'),
+        ),
+      ],
+      4,
+    );
+    const scenarioCaseParagraphs = uniqueNarrativeLines(
+      scenarioHasIndependentDelta
+        ? [
+            sentenceFromBridgeSegments(
+              [
+                '情境只建立在 Base 已成立後，額外尚待驗證的上行假設之上。',
+                ...(scenarioCaseDetail?.deltaAssumptions || []),
+              ],
+              scenarioCaseDetail?.deltaAssumptions?.[0] || scenarioCaseDetail?.driver || '',
+            ),
+            sentenceFromBridgeSegments(
+              [
+                scenarioCaseDetail?.driver && (!baseCaseDetail?.driver || scenarioCaseDetail.driver !== baseCaseDetail.driver)
+                  ? `若進一步看到 ${scenarioCaseDetail.driver}，情境推導才會成立。`
+                  : null,
+                buildScenarioIncrementalImpactSentence(baseCaseDetail, scenarioCaseDetail),
+                caseMetricSentence(scenarioCaseDetail, '情境'),
+                scenarioCaseDetail?.earningsBridge,
+              ],
+              buildScenarioIncrementalImpactSentence(baseCaseDetail, scenarioCaseDetail) || caseMetricSentence(scenarioCaseDetail, '情境') || '',
+            ),
+            sentenceFromBridgeSegments(
+              [caseMultipleSentence(scenarioCaseDetail, '情境'), casePriceSentence(scenarioCaseDetail, '情境')],
+              casePriceSentence(scenarioCaseDetail, '情境'),
+            ),
+          ]
+        : [],
+      3,
+    );
+    const analysisStoryLineOne = sentenceFromBridgeSegments(
+      [
+        valuationBridge?.storyDrivers?.[0] || null,
+        storyLeadParagraph,
+        revenueNarrative,
+      ],
+      storyLeadParagraph,
+    );
+    const analysisStoryLineTwo = sentenceFromBridgeSegments(
+      [
+        valuationBridge?.storyDrivers?.[1] || null,
+        cleanCatalystLine,
+        storySupportParagraph,
+      ],
+      storySupportParagraph,
+    );
+    const analysisParagraphs = uniqueNarrativeLines(
+      [
+        sentenceFromBridgeSegments(
+          [
+            `${deepDiveTitle(seedOverride, story, insight, normalizedSymbol)} 的投資判斷，重點不是重複來源清單，而是觀察 ${baseCaseDetail?.driver || '核心營運動能'} 是否持續轉成月營收、毛利率與 EPS 上修。`,
+            storyLeadParagraph && !sharedVerifiedBasis?.summary?.includes(storyLeadParagraph) ? storyLeadParagraph : null,
+          ],
+          `${deepDiveTitle(seedOverride, story, insight, normalizedSymbol)} 的投資判斷，目前集中在 ${baseCaseDetail?.driver || '核心營運動能'} 是否能被新資料連續驗證。`,
+        ),
+        sentenceFromBridgeSegments(
+          [
+            baseCaseDetail?.driver ? `Base 估值只承接已可驗證的財務主軸：${baseCaseDetail.driver}。` : null,
+            evidenceOrPending(
+              sharedVerifiedBasis?.monthlyRevenueEvidence,
+              '月營收與財報快照是目前最重要的數字基底；若缺最新官方資料，會標示待補而不是硬寫成已驗證事實。',
+            ),
+          ],
+          baseCaseDetail?.driver || '',
+        ),
+        scenarioHasIndependentDelta
+          ? sentenceFromBridgeSegments(
+              [
+                '情境只追蹤 Base 之外的待驗證上行條件。',
+                scenarioCaseDetail?.deltaAssumptions?.[0] || null,
+              ],
+              scenarioCaseDetail?.deltaAssumptions?.[0] || '',
+            )
+          : '目前尚無獨立上行情境；重點是 Base 的月營收、毛利率與 EPS 是否持續被新資料支持。',
+      ].filter((item): item is string => Boolean(item && !reportParagraphIsInternal(item))),
+      3,
+    )
+      .map((line, index) => appendCitationIds(line, index < 2 ? sharedCitationIds : scenarioCitationIds))
+      .filter((item): item is string => Boolean(item));
+    const technicalEntrySignal = buildTechnicalEntrySignal(technicalSnapshot, insight.price ?? null, insight.volume ?? null, insight.chart);
+    const chipEntryAssessment = buildChipEntryAssessment({
+      chipSnapshot,
+      technicalEntrySignal,
+      technicalSnapshot,
+      volume: insight.volume ?? null,
+      chart: insight.chart,
+      marketRotationSnapshot,
+      targetVerdict: targetSnapshot.verdict,
+      sourceRefs: sharedCitationIds,
+    });
+    const relativeStrengthSignal = buildRelativeStrengthSignal({
+      symbol: normalizedSymbol,
+      timingScore: chipSnapshot?.timingScore ?? null,
+      globalThemeLeadLagSignal: null,
+      priceAsOf: targetSnapshot.priceAsOf || insight.asOf || null,
+    });
+    const tradeDecision = buildTradeDecision({
+      entryDecision: chipEntryAssessment.entryDecision,
+      marketIndexSignal,
+      targetSnapshot,
+      relativeStrengthSignal,
+    });
+    entryExitPlan = {
+      entry: tradeDecision.entryZone,
+      addOn: tradeDecision.addCondition,
+      stopLoss: tradeDecision.stopLoss,
+      exit: tradeDecision.exitCondition || tradeDecision.takeProfit,
+    };
+    const dataHealth = buildDataHealth({
+      marketDataAsOf: targetSnapshot.priceAsOf || insight.asOf || null,
+      researchSourceAsOf: externalResearchSourceAt,
+      reportBuiltAt: reportUpdatedAt,
+      chipDataStatus: chipSnapshot?.dataStatus || null,
+      sourceStatuses: buildSourceStatuses({
+        coverageStatus: sourceCoverageStatus,
+        citationMap: sourceCitationMap,
+        chipDataStatus: chipSnapshot?.dataStatus || null,
+        technicalAsOf: targetSnapshot.priceAsOf || insight.asOf || null,
+      }),
+    });
+    const recommendationStance = buildRecommendationStance(targetSnapshot, chipEntryAssessment, tradeDecision);
+    const capitalFlowParagraphs = uniqueNarrativeLines(
+      [
+        chipEntryAssessment.chipRead,
+        chipEntryAssessment.technicalRead,
+        chipEntryAssessment.supportResistance.summary,
+        chipEntryAssessment.microstructureStatus.some((item) => item.status === 'missing')
+          ? '盤中微結構資料（內外盤比、分價量表、分點進出）尚未接入，本段不硬推估；目前先以法人、融資融券、借券、族群資金與日線量價判斷。'
+          : null,
+      ],
+      4,
+    );
+    if (capitalFlowParagraphs.length === 0) {
+      capitalFlowParagraphs.push('目前大盤資金輪轉與個股籌碼資料仍在補齊中；在正式追價前，建議至少同步確認族群是否為近期資金主線，以及融資、融券與法人方向是否支持這段估值上修。');
+    }
+    const chipAdviceParagraph = `交易決策：${tradeDecision.action}。${tradeDecision.positionSize}；${tradeDecision.marketGateReason} ${tradeDecision.exitCondition}`;
+    if (scenarioCaseDetail) {
+      scenarioCaseDetail.achievementChecklist = buildScenarioAchievementChecklist({
+        baseCaseDetail,
+        scenarioCaseDetail,
+        monthlyRevenue: revenueSignalView?.monthlyRevenue ?? null,
+        technicalEntrySignal,
+        chipEntryAssessment,
+        sourceRefs: scenarioCitationIds,
+      });
+      const promotionGate = attachScenarioPromotionGate(baseCaseDetail, scenarioCaseDetail, targetSnapshot);
+      targetSnapshot.scenarioPromotionStatus = promotionGate?.status || null;
+      applyRevaluationSlaToTargetSnapshot(targetSnapshot, buildRevaluationJobSummary({ targetSnapshot, promotionGate }));
+    }
+    targetSnapshot.marketValuationAdjustment = buildMarketValuationAdjustment({
+      marketIndexSignal,
+      targetCoverageStatus: targetSnapshot.targetCoverageStatus || null,
+      staleReason: targetSnapshot.staleReason || null,
+      scenarioPromotionGate: scenarioCaseDetail?.promotionGate || null,
+      brokerEvidenceSearchStatus: targetSnapshot.brokerEvidenceSearchStatus || null,
+      globalThemeLeadLagSignal: null,
+    });
+    if (scenarioCaseDetail?.promotionGate) {
+      scenarioCaseDetail.promotionGate = applyMarketReratingToPromotionGate(scenarioCaseDetail.promotionGate, targetSnapshot.marketValuationAdjustment);
+      targetSnapshot.scenarioPromotionStatus = scenarioCaseDetail.promotionGate?.status || null;
+    }
+    const assistiveModelSignal: NonNullable<RecommendationCard['modelSignal']> = {
+      sourceSentimentScore: latestEvidence.length > 0 ? clamp(0.48 + latestEvidence.length * 0.035, 0.48, 0.68) : null,
+      extractionConfidence: clamp(sourceCitationMap.filter(isExternalCitationRef).length / 6, 0.25, 0.82),
+      summaryModel: 'StockInsider HF/規則證據模型',
+      boundary: 'assistive_only',
+      promotionImpact: 'none',
+      latestAt: externalResearchSourceAt || latestSourceAt || null,
+    };
+    const mlForecastBand = buildAssistiveMlForecastBand({
+      currentPrice: currentPriceForNarrative,
+      modelSignal: assistiveModelSignal,
+      brokerConsensus,
+      sourceRefs: latestCitationIds,
+      entryVerdict: chipEntryAssessment.verdict,
+      technicalVerdict: technicalEntrySignal.verdict,
+    });
+    const valuationModelDivergence = buildValuationModelDivergence({
+      formulaTarget: bridgeAwareBaseTarget,
+      mlForecastBand,
+      currentPrice: currentPriceForNarrative,
+    });
+    if (valuationModelDivergence?.status === 'valuation_model_divergence_review') {
+      valuationReviewFlags.push({
+        code: 'ml_formula_divergence',
+        severity: 'blocker',
+        summary: valuationModelDivergence.summary,
+      });
+    }
+    const investmentAdviceParagraph =
+      targetSnapshot.verdict === 'formal'
+        ? `基本面評價為「${recommendationStance.fundamentalStance}」。Base 目標價 ${bridgeAwareBaseTarget == null ? '待重估' : formatMoney(bridgeAwareBaseTarget)} 高於現價 ${formatMoney(currentPriceForNarrative)}，基準情境仍保留 ${formatSignedPctLocal(bridgeAwareBaseUpsidePct)} 的上行空間；現在交易動作是「${tradeDecision.action}」，部位建議為 ${tradeDecision.positionSize}。`
+        : targetSnapshot.verdict === 'scenario'
+          ? `基本面評價為「${recommendationStance.fundamentalStance}」。Base 目標價 ${bridgeAwareBaseTarget == null ? '待重估' : formatMoney(bridgeAwareBaseTarget)} 已低於現價，代表市場價格已先交易掉一部分樂觀預期；情境目標價 ${bridgeAwareScenarioTarget == null ? '待重估' : formatMoney(bridgeAwareScenarioTarget)} 仍對應 ${formatSignedPctLocal(bridgeAwareScenarioUpsidePct)} 的上行空間，但現在交易動作仍以「${tradeDecision.action}」為準。`
+          : targetSnapshot.targetCoverageStatus === 'over_base_and_scenario'
+            ? `基本面評價為「${recommendationStance.fundamentalStance}」。${targetSnapshot.overTargetReason || `現價 ${formatMoney(currentPriceForNarrative)} 已高於 Base 與情境目標價`}，除非後續營收、毛利率、EPS 或 multiple 有新證據上修，否則不宜把它視為新的正式追價標的。`
+            : `基本面評價為「${recommendationStance.fundamentalStance}」。現價 ${formatMoney(currentPriceForNarrative)} 與我們的目標價區間相距不大，除非後續數字再上修，否則不宜把它視為新的正式追價標的。`;
+    const investmentExecutionParagraph = sentenceFromBridgeSegments(
+      [
+        chipAdviceParagraph,
+        `籌碼判讀：${chipEntryAssessment.chipRead}`,
+      technicalEntrySignal?.summary ? `技術進場判讀：${technicalEntrySignal.summary}` : null,
+      `進場計畫：${tradeDecision.entryZone}`,
+      `出場計畫：${tradeDecision.exitCondition}`,
+        thesisReasonParagraph,
+        chaseAssessment.reason,
+      ],
+      chipAdviceParagraph || thesisReasonParagraph || chaseAssessment.reason,
+    );
+    const nextValidationParagraph =
+      chaseAssessment.trigger
+        ? `接下來最重要的驗證點是 ${sanitizeNarrativeText(chaseAssessment.trigger)}`
+        : cleanVerificationLine;
+    const latestEvidenceBullets = latestEvidence.map(
+      (item) =>
+        `${item.supportCase === 'base' ? '支撐 Base' : '支撐情境'}：${cleanEvidenceDirectionPrefix(item.summary) || item.summary}${
+          item.sourceRefId ? ` [${item.sourceRefId}]` : ''
+        }`,
+    );
+    const riskBullets = uniqueNarrativeLines(
+      [
+        secondaryRiskBullet,
+        bearScenarioBridge?.operatingBridge,
+        bearScenarioBridge?.earningsBridge,
+        bearScenarioBridge?.priceBridge,
+      ],
+      3,
+    );
+    const reportSections = [
+      {
+        id: 'analysis' as const,
+        heading: '評論及分析',
+        paragraphs: analysisParagraphs,
+        sourceRefs: sharedCitationIds,
+      },
+      {
+        id: 'base_case' as const,
+        heading: 'Base 目標價推導',
+        paragraphs: baseCaseParagraphs.map((line) => appendCitationIds(line, baseCitationIds)).filter((item): item is string => Boolean(item)),
+        bullets: baseCaseDetail?.evidenceRefs?.slice(0, 3),
+        sourceRefs: baseCitationIds,
+      },
+      ...(scenarioHasIndependentDelta
+        ? [
+            {
+              id: 'scenario_case' as const,
+              heading: '情境目標價推導',
+              paragraphs: scenarioCaseParagraphs.map((line) => appendCitationIds(line, scenarioCitationIds)).filter((item): item is string => Boolean(item)),
+              bullets: uniqueNarrativeLines(
+                [...(scenarioCaseDetail?.deltaAssumptions || []), ...(scenarioCaseDetail?.evidenceRefs || [])],
+                3,
+              ),
+              sourceRefs: scenarioCitationIds,
+            },
+          ]
+        : []),
+      {
+        id: 'latest_evidence' as const,
+        heading: '最新證據',
+        paragraphs: uniqueNarrativeLines(
+          [
+            latestEvidence[0]
+              ? `最近進來的高品質證據中，${latestEvidence[0].label} 是目前最值得優先追蹤的一筆；這筆資料目前主要支撐 ${latestEvidence[0].supportCase === 'base' ? 'Base' : '情境'} 推導，若後續同方向資料持續出現，Base 情境也有上修空間。`
+              : '目前缺少足以改寫 Base 或情境價格的高品質最新證據。',
+          ],
+          1,
+        ).map((line) => appendCitationIds(line, latestCitationIds)).filter((item): item is string => Boolean(item)),
+        bullets: latestEvidenceBullets,
+        sourceRefs: latestCitationIds,
+      },
+      {
+        id: 'capital_flow' as const,
+        heading: '資金與籌碼',
+        paragraphs: capitalFlowParagraphs,
+      },
+      {
+        id: 'investment' as const,
+        heading: '投資建議',
+        paragraphs: uniqueNarrativeLines(
+          [
+            investmentAdviceParagraph,
+            investmentExecutionParagraph,
+            nextValidationParagraph,
+          ],
+          4,
+        ),
+      },
+      {
+        id: 'risk' as const,
+        heading: '投資風險',
+        paragraphs: [primaryRiskParagraph],
+        bullets: uniqueNarrativeLines(
+          [
+            riskBullets[0] || null,
+            riskBullets[1] || null,
+            riskBullets[2] || null,
+          ],
+          3,
+        ),
+      },
+    ];
+    const focusBullets = uniqueNarrativeLines(
+      [
+        buildValuationBridgeBullet(
+          baseScenarioBridge,
+          targetSnapshot.verdict === 'formal'
+            ? `正式目標價 ${bridgeAwareBaseTarget == null ? '待重估' : formatMoney(bridgeAwareBaseTarget)} 仍高於現價，Base 空間約 ${formatSignedPctLocal(bridgeAwareBaseUpsidePct)}。`
+            : targetSnapshot.verdict === 'scenario'
+              ? `Base 目標價 ${bridgeAwareBaseTarget == null ? '待重估' : formatMoney(bridgeAwareBaseTarget)} 已低於現價，但情境目標價 ${bridgeAwareScenarioTarget == null ? '待重估' : formatMoney(bridgeAwareScenarioTarget)} 仍保留 ${formatSignedPctLocal(bridgeAwareScenarioUpsidePct)} 的上行空間。`
+              : `股價已接近既有目標價區間，除非後續營運再上修，否則上行空間有限。`,
+        ),
+        normalizeNarrativeSentence(
+          sentenceFromBridgeSegments(
+            [
+              analysisStoryLineOne,
+              analysisStoryLineTwo,
+            ],
+            analysisStoryLineOne || analysisStoryLineTwo || '',
+          ),
+        ),
+        normalizeNarrativeSentence(
+          sentenceFromBridgeSegments(
+            [
+              peerComparisonParagraph,
+              casePriceSentence(baseCaseDetail, 'Base'),
+              scenarioCaseDetail?.targetPrice != null
+                ? `若樂觀假設成立，情境目標價可上看 ${formatMoney(scenarioCaseDetail.targetPrice)}。`
+                : null,
+            ],
+            casePriceSentence(baseCaseDetail, 'Base'),
+          ),
+        ),
+      ],
+      3,
+    );
+    const technicalSummary = uniqueNarrativeLines([
+      deepDiveTechnicalSourceNarrative(insight.chartSource, insight.chartMissingReason),
+      technicalSnapshot.ma5 && technicalSnapshot.ma20
+        ? technicalSnapshot.ma5 >= technicalSnapshot.ma20
+          ? '短均線仍維持上彎，短線趨勢尚未破壞。'
+          : '短均線動能轉弱，短線追價要保守。'
+        : null,
+      technicalSnapshot.rsi != null
+        ? technicalSnapshot.rsi >= 70
+          ? '短線已接近過熱區，若追價需更重視風險控管。'
+          : technicalSnapshot.rsi <= 35
+            ? '技術面進入相對低檔區，留意是否出現止穩訊號。'
+            : '技術面仍在正常震盪區間，觀察量價是否持續配合。'
+        : null,
+      technicalSnapshot.fibonacci
+        ? technicalSnapshot.fibonacci.bias === 'support'
+          ? `目前股價接近費波那契 ${formatNumberLocal(technicalSnapshot.fibonacci.retracement618)} 附近的支撐區，若量能不再擴大下殺，可觀察是否形成較佳切入點。`
+          : technicalSnapshot.fibonacci.bias === 'resistance'
+            ? `目前股價已逼近費波那契 ${formatNumberLocal(technicalSnapshot.fibonacci.retracement236)} 以上的壓力帶，追價需觀察是否能帶量站穩。`
+            : `股價目前位於費波那契 ${formatNumberLocal(technicalSnapshot.fibonacci.retracement382)} 到 ${formatNumberLocal(technicalSnapshot.fibonacci.retracement618)} 的中段整理區，較適合等待方向確認。`
+        : null,
+      insight.volume != null && insight.volume > 0 ? `最新成交量約 ${Math.round(insight.volume).toLocaleString('zh-TW')}，後續要觀察量能是否延續。` : null,
+    ], 2).join(' ');
+    const reportSnapshot = {
+      title: deepDiveTitle(seedOverride, story, insight, normalizedSymbol),
+      subtitle:
+        `投資主張：${recommendationStance.displayLabel}。大盤 Gate、籌碼與技術面給出的現在動作是「${tradeDecision.action}」。`,
+      summaryBullets: focusBullets,
+      sections: reportSections.filter((section) => section.paragraphs.length > 0 || (section.bullets?.length || 0) > 0),
+    };
+    const articleSections: DeepDiveArticleSection[] = reportSnapshot.sections.map((section) => ({
+      id:
+        section.id === 'analysis'
+          ? 'market_story'
+          : section.id === 'base_case' || section.id === 'scenario_case'
+            ? 'scenario_valuation'
+            : section.id === 'latest_evidence'
+              ? 'validation'
+              : section.id === 'risk'
+                ? 'risks'
+                : 'stance',
+      kicker: section.heading,
+      title: section.heading,
+      paragraphs: section.paragraphs,
+      ...(section.bullets && section.bullets.length > 0 ? { bullets: section.bullets } : {}),
+    }));
+    const valuationPanel = {
+      monthlyRevenue: revenueSignalView?.monthlyRevenue ?? null,
+      yoyGrowth: revenueSignalView?.yoyGrowth ?? null,
+      momGrowth: revenueSignalView?.momGrowth ?? null,
+      epsTtm: fundamentalSnapshotView?.epsTtm ?? null,
+      peRatio: fundamentalSnapshotView?.peRatio ?? null,
+      pbRatio: fundamentalSnapshotView?.pbRatio ?? null,
+      baseTarget: bridgeAwareBaseTarget,
+      upsideTarget: bridgeAwareScenarioTarget,
+      bearTarget: bridgeAwareBearTarget,
+      nextValidationPoint: chaseAssessment.trigger || revenueNarrative || cleanVerificationLine || null,
+      dataAsOf: reportUpdatedAt,
+      coreAssumptions: (baseScenarioBridge?.operatingAssumptions || valuationBridge?.operatingAssumptions || [])
+        .slice(0, 5)
+        .map((item) => `${item.label}${item.isEstimated ? '約' : ''}${item.value}${item.isEstimated ? '（研究推估）' : ''}`),
+      multipleMapping: baseScenarioBridge?.multipleBridge || valuationBridge?.multipleBridge || null,
+      industryBenchmark: scenarioCaseDetail?.benchmarkRange || baseCaseDetail?.benchmarkRange || valuationBridge?.multipleBridge || null,
+      peerComparison: peerComparisonParagraph,
+      sourceCitationMap,
+      assumptionLedger,
+      brokerConsensus,
+      valuationConfidenceGate,
+      forwardPeBridge,
+      peerValuationRange,
+      valuationReviewFlags,
+      mlForecastBand,
+      valuationModelDivergence,
+      modelSignalSummary: modelSignalSummaryFor(assistiveModelSignal),
+      sharedVerifiedBasis,
+      scenarioNote,
+      baseCaseDetail,
+      scenarioCaseDetail,
+      priceTargetRationale: sentenceFromBridgeSegments(
+        [
+          estimateDisclosure,
+          baseCaseDetail?.bridgeCompleteness === 'insufficient' ? baseCaseDetail.insufficientBridgeReason : null,
+          baseCaseDetail?.priceBridge || priceTargetRationale,
+          baseCaseDetail?.multipleBridge || baseScenarioBridge?.multipleBridge,
+          valuationBridge?.bridgeSummary,
+        ],
+        baseCaseDetail?.bridgeCompleteness === 'insufficient'
+          ? baseCaseDetail.insufficientBridgeReason || ''
+          : priceTargetRationale || valuationBridge?.bridgeSummary || '',
+      ) || null,
+    };
+    const sourceFreshnessView = {
+      freshness: sourceFreshness,
+      latestSourceAt,
+      reportUpdatedAt,
+      priceAsOf: insight.asOf ?? null,
+    };
 
     return {
       ...insight,
+      targetSnapshot,
+      reportSnapshot,
+      valuationPanel,
+      marketIndexSignal,
+      relativeStrengthSignal,
+      tradeDecision,
+      marketRotationSnapshot,
+      chipSnapshot,
+      dataHealth,
+      recommendationStance,
+      chipEntryAssessment,
+      sourceFreshness: sourceFreshnessView,
+      summaryCard,
+      chaseAssessment,
+      latestFacts,
+      latestEvidence,
+      thesisSnapshot,
+      freshSourceHighlights,
+      appendix: {
+        technicalSummary,
+        sourceAppendix,
+        evidenceMatrix,
+        connectorStatus,
+        coverageStatus: sourceCoverageStatus,
+        emptyState: {
+          technical:
+            technicalSnapshot.ma5 == null &&
+            technicalSnapshot.ma20 == null &&
+            technicalSnapshot.rsi == null &&
+            technicalSnapshot.macd == null
+              ? '目前缺少足夠的日線資料，暫時無法完整計算 MA / RSI / MACD。'
+              : null,
+          evidence: evidenceMatrix.length > 0 ? null : '目前還沒有足夠的高品質證據矩陣，可能是 direct-hit 不足或研究資料尚未刷新。',
+          sources: sourceAppendix.some((group) => group.items.length > 0) ? null : '目前沒有可展示的高品質來源分組，可能是資料尚未刷新或尚無直接命中來源。',
+        },
+      },
+      investmentConclusion,
+      keyAssumptions,
+      verificationSummary,
+      valuationSummary,
+      storyNarrative,
+      articleSections,
+      numberTrail,
+      scenarioNarratives: scenarioBridges,
+      valuationBridge,
+      scenarioBridges,
+      priceTargetRationale,
+      marketHypothesis,
+      validationChecks,
+      entryExitPlan,
+      technicalSummary,
+      technicalEntrySignal,
+      sourceAppendix,
+      technicalSnapshot,
       thesisState: recommendationState,
       verificationStatus,
       storyType: (story?.story_type as StoryType | null | undefined) || insight.recommendation?.storyType || null,
-      thesisTitle: story?.title ? String(story.title) : insight.recommendation?.thesisTitle || null,
-      thesisSummary: story?.summary ? String(story.summary) : insight.recommendation?.thesisSummary || null,
-      catalystSummary: story?.catalyst_summary ? String(story.catalyst_summary) : insight.recommendation?.catalystSummary || null,
-      expectedUpsidePct: insight.recommendation?.expectedUpsidePct ?? valuationCases.find((item) => item.caseType === 'base')?.expectedReturnPct ?? null,
+      thesisTitle: seedOverride?.thesisTitle ?? (story?.title ? String(story.title) : insight.recommendation?.thesisTitle || null),
+      thesisSummary: seedOverride?.thesisSummary ?? (story?.summary ? String(story.summary) : insight.recommendation?.thesisSummary || null),
+      catalystSummary: seedOverride?.catalystSummary ?? (story?.catalyst_summary ? String(story.catalyst_summary) : insight.recommendation?.catalystSummary || null),
+      expectedUpsidePct: targetSnapshot.cardPrimaryUpsidePct ?? targetSnapshot.displayBaseUpsidePct,
       evidenceScore: story?.evidence_score == null ? insight.recommendation?.evidenceScore ?? null : toFiniteNumber(story.evidence_score),
       timingScore: story?.timing_score == null ? insight.recommendation?.timingScore ?? null : toFiniteNumber(story.timing_score),
       evidenceItems,
-      valuationCases,
+      valuationCases: effectiveValuationCases,
       companyEvents,
-      revenueSignal: revenue
-        ? {
-            asOfDate: String(revenue.as_of_date || ''),
-            monthlyRevenue: toFiniteNumber(revenue.monthly_revenue),
-            yoyGrowth: revenue.yoy_growth == null ? null : toFiniteNumber(revenue.yoy_growth),
-            momGrowth: revenue.mom_growth == null ? null : toFiniteNumber(revenue.mom_growth),
-          }
-        : null,
-      fundamentalSnapshot: fundamentals
-        ? {
-            asOfDate: String(fundamentals.as_of_date || ''),
-            epsTtm: fundamentals.eps_ttm == null ? null : toFiniteNumber(fundamentals.eps_ttm),
-            grossMargin: fundamentals.gross_margin == null ? null : toFiniteNumber(fundamentals.gross_margin),
-            operatingMargin: fundamentals.operating_margin == null ? null : toFiniteNumber(fundamentals.operating_margin),
-            peRatio: fundamentals.pe_ratio == null ? null : toFiniteNumber(fundamentals.pe_ratio),
-            pbRatio: fundamentals.pb_ratio == null ? null : toFiniteNumber(fundamentals.pb_ratio),
-          }
-        : null,
+      revenueSignal: revenueSignalView,
+      fundamentalSnapshot: fundamentalSnapshotView,
       memo:
         memo && String(memo.slug || '').startsWith('demo-')
           ? ((reportRes.data?.[0] as Row | undefined)
@@ -3338,6 +16203,9 @@ export async function getStockDeepDive(symbol: string): Promise<StockDeepDivePay
       communitySignals,
       verificationTimeline: verificationTimelineFromState(recommendationState),
       conditionalRecommendationNote: story?.conditional_recommendation_note ? String(story.conditional_recommendation_note) : buildConditionalRecommendationNote(recommendationState),
+      themeHypothesis,
+      calculationTable,
+      counterEvidence,
       brokerViews,
       sourceCoverage,
       missingCoverage: findMissingSources(sourceCoverage),
@@ -3361,10 +16229,1437 @@ export async function getStockDeepDive(symbol: string): Promise<StockDeepDivePay
         bearEps: quantitative.bear_eps == null ? null : toFiniteNumber(quantitative.bear_eps),
         bearPe: quantitative.bear_pe == null ? null : toFiniteNumber(quantitative.bear_pe),
       },
+      timeframeCharts,
+      sourceGroups,
     };
-  } catch {
+  } catch (error) {
+    console.error('[getStockDeepDive] failed', { symbol, error: error instanceof Error ? error.message : String(error) });
     return shouldUseDemoFallback() ? await fallbackStockDeepDive(symbol) : null;
   }
+}
+
+type StockResearchRefreshResult = {
+  runId: string;
+  symbol: string;
+  status: 'queued' | 'completed';
+  queuedSteps: string[];
+  freshnessBefore: SignalFreshness;
+  targetSnapshotBefore?: {
+    displayTarget: number | null;
+    displayUpsidePct: number | null;
+    baseTarget: number | null;
+    upsideTarget: number | null;
+    targetCoverageStatus: TargetCoverageStatus | null;
+    bridgeCompleteness: string | null;
+    reportUpdatedAt: string | null;
+  } | null;
+  targetSnapshotAfter?: {
+    displayTarget: number | null;
+    displayUpsidePct: number | null;
+    baseTarget: number | null;
+    upsideTarget: number | null;
+    targetCoverageStatus: TargetCoverageStatus | null;
+    bridgeCompleteness: string | null;
+    reportUpdatedAt: string | null;
+  } | null;
+  reportUpdated?: boolean;
+  sourceRefreshSummary?: {
+    latestSourceAtBefore: string | null;
+    latestSourceAtAfter: string | null;
+  } | null;
+  connectorResults?: Array<{
+    connector: string;
+    recordsWritten: number;
+    fetchedPosts: number;
+    errorCode: string | null;
+    matchedDirectHits?: number;
+    matchedIndustryHits?: number;
+    timedOut?: boolean;
+    degradedReason?: string | null;
+    sessionMode?: 'persisted_session' | 'fresh_login' | 'cookie_fallback' | 'missing' | 'not_applicable';
+  }>;
+};
+
+const SOURCE_SYNC_CONNECTORS = ['investanchors', 'threads', 'instagram', 'telegram', 'ptt', 'bulltalk', 'googlenews', 'anue', 'udn', 'mobile01', 'twse_insider'] as const;
+
+function compactTargetSnapshot(payload: StockDeepDivePayload | null) {
+  if (!payload) return null;
+  return {
+    displayTarget: payload.targetSnapshot?.displayTarget ?? null,
+    displayUpsidePct: payload.targetSnapshot?.displayUpsidePct ?? payload.summaryCard?.upsidePct ?? null,
+    baseTarget: payload.targetSnapshot?.baseTarget ?? null,
+    upsideTarget: payload.targetSnapshot?.upsideTarget ?? null,
+    targetCoverageStatus: payload.targetSnapshot?.targetCoverageStatus ?? null,
+    bridgeCompleteness: payload.targetSnapshot?.bridgeCompleteness ?? null,
+    reportUpdatedAt: payload.targetSnapshot?.reportUpdatedAt ?? payload.summaryCard?.lastUpdatedAt ?? null,
+  };
+}
+
+function shouldBackgroundRefreshDeepDive(payload: StockDeepDivePayload) {
+  if (payload.summaryCard?.freshness === 'stale') return true;
+  const updatedAt = payload.targetSnapshot?.reportUpdatedAt || payload.summaryCard?.lastUpdatedAt || null;
+  if (!updatedAt) return true;
+  const updatedMs = new Date(updatedAt).getTime();
+  if (!Number.isFinite(updatedMs)) return true;
+  return Date.now() - updatedMs >= 15 * 60 * 1000;
+}
+
+async function refreshSingleStockMarketData(symbol: string) {
+  const normalizedSymbol = symbol.toUpperCase();
+  const supabaseServer = getSupabaseServerClient();
+  const now = nowIso();
+  const asOfDate = asIsoDate(now);
+  const [twQuote, liveSnapshot, historicalBars, revenueData, valuesData, epsData, institutionalData, marginTrades, shortSales, officialSbl, yahooFundamentalRes] = await Promise.all([
+    fetchTwStockQuote(normalizedSymbol).catch(() => null),
+    fetchTWSELivePrice(normalizedSymbol).catch(() => null),
+    fetchYahooHistChart(normalizedSymbol).catch(() => null),
+    fetchTwStockRevenue(normalizedSymbol).catch(() => null),
+    fetchTwStockValues(normalizedSymbol).catch(() => null),
+    fetchTwStockEpsTtm(normalizedSymbol).catch(() => null),
+    fetchTwStockInstitutional(normalizedSymbol).catch(() => null),
+    fetchTwStockMarginTrades(normalizedSymbol).catch(() => null),
+    fetchTwStockShortSales(normalizedSymbol).catch(() => null),
+    fetchTwseOfficialSblShortSales(normalizedSymbol).catch(() => null),
+    fetch(
+      `https://query1.finance.yahoo.com/v10/finance/quoteSummary/${normalizedSymbol}.TW?modules=financialData,defaultKeyStatistics,summaryDetail`,
+      { headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0' }, signal: AbortSignal.timeout(10_000) },
+    )
+      .then(async (res) => (res.ok ? res.json() : null))
+      .catch(() => null),
+  ]);
+
+  const quoteName = twQuote?.name || normalizedSymbol;
+  const stock = await ensureStock(normalizedSymbol, 'TW', quoteName, null);
+  const latestPrice = twQuote?.price ?? liveSnapshot?.price ?? historicalBars?.[historicalBars.length - 1]?.close ?? null;
+  const latestVolume = twQuote?.volume ?? liveSnapshot?.volume ?? null;
+  const historyCloses = (historicalBars || []).map((item) => item.close).filter((value) => Number.isFinite(value) && value > 0);
+  const technicalSeries =
+    latestPrice && historyCloses.length > 0
+      ? [...historyCloses.slice(0, -1), latestPrice]
+      : historyCloses.length > 0
+        ? historyCloses
+        : latestPrice
+          ? [latestPrice]
+          : [];
+
+  if (latestPrice && technicalSeries.length > 0) {
+    const technical = computeTechnicalSnapshot(technicalSeries);
+    await supabaseServer.from('stock_signals').upsert(
+      {
+        stock_id: stock.id,
+        as_of: now,
+        source: twQuote ? 'node-twstock' : liveSnapshot ? 'twse-openapi' : 'yahoo-finance',
+        source_key: `single-stock-refresh:${normalizedSymbol}`,
+        price: latestPrice,
+        volume: latestVolume,
+        ma_short: technical.maShort,
+        ma_mid: technical.maMid,
+        ma_long: technical.maLong,
+        rsi: technical.rsi,
+        macd: technical.macd,
+        macd_signal: technical.macdSignal,
+        chip_metrics: {
+          foreign_net: institutionalData?.foreignNet ?? null,
+          investment_trust_net: institutionalData?.investmentTrustNet ?? null,
+          dealer_net: institutionalData?.dealerNet ?? null,
+          margin_balance: marginTrades?.marginBalance ?? null,
+          margin_balance_change:
+            marginTrades?.marginBalance != null && marginTrades?.marginBalancePrev != null
+              ? marginTrades.marginBalance - marginTrades.marginBalancePrev
+              : null,
+          margin_usage_ratio: marginTrades?.marginUsageRatio ?? null,
+          margin_note: marginTrades?.note ?? null,
+          short_balance: marginTrades?.shortBalance ?? null,
+          short_balance_change:
+            marginTrades?.shortBalance != null && marginTrades?.shortBalancePrev != null
+              ? marginTrades.shortBalance - marginTrades.shortBalancePrev
+              : null,
+          short_usage_ratio: marginTrades?.shortUsageRatio ?? null,
+          short_note: marginTrades?.note ?? null,
+          margin_short_balance: shortSales?.marginShortBalance ?? null,
+          margin_short_balance_change:
+            shortSales?.marginShortBalance != null && shortSales?.marginShortBalancePrev != null
+              ? shortSales.marginShortBalance - shortSales.marginShortBalancePrev
+              : null,
+          margin_short_usage_ratio: shortSales?.marginShortUsageRatio ?? null,
+          margin_short_note: shortSales?.note ?? null,
+          sbl_short_balance: officialSbl?.sblShortBalance ?? shortSales?.sblShortBalance ?? null,
+          sbl_short_balance_change:
+            officialSbl?.sblShortBalance != null && officialSbl?.sblShortBalancePrev != null
+              ? officialSbl.sblShortBalance - officialSbl.sblShortBalancePrev
+              : null,
+          sbl_short_usage_ratio: officialSbl?.sblShortUsageRatio ?? shortSales?.sblShortUsageRatio ?? null,
+          official_sbl_as_of: officialSbl?.date ?? null,
+          official_sbl_source_url: officialSbl?.sourceUrl ?? null,
+          sbl_source: officialSbl?.source ?? shortSales?.source ?? null,
+          open: twQuote?.openPrice ?? liveSnapshot?.open ?? null,
+          high: twQuote?.highPrice ?? liveSnapshot?.high ?? null,
+          low: twQuote?.lowPrice ?? liveSnapshot?.low ?? null,
+          change_pct: twQuote?.changePct ?? null,
+          quote_date: twQuote?.date ?? null,
+          chip_source_as_of: twQuote?.date ? `${twQuote.date}T00:00:00.000+08:00` : now,
+          chip_source: officialSbl ? 'twse-official+node-twstock/live-refresh' : twQuote ? 'node-twstock/live-refresh' : 'public-market-refresh',
+          fallback_used: false,
+        },
+        technical_meta: { indicator_set: ['MA', 'RSI', 'MACD'], refresh_mode: 'single_stock' },
+        freshness_status: 'fresh',
+        source_timestamp: twQuote?.date ? `${twQuote.date}T00:00:00.000+08:00` : now,
+        ingested_at: now,
+      },
+      { onConflict: 'stock_id,as_of' },
+    );
+  }
+
+  if (revenueData?.revenue != null && revenueData.revenue > 0) {
+    await supabaseServer.from('revenue_signals').upsert(
+      {
+        stock_id: stock.id,
+        as_of_date: revenueData.asOfDate,
+        monthly_revenue: revenueData.revenue,
+        yoy_growth: null,
+        mom_growth: null,
+        source_url: `https://www.twse.com.tw/zh/announcement/revenue.html?stockNo=${normalizedSymbol}`,
+      },
+      { onConflict: 'stock_id,as_of_date' },
+    );
+  }
+
+  const peRatio = valuesData?.peRatio ?? null;
+  const pbRatio = valuesData?.pbRatio ?? null;
+  const epsTtm = epsData?.epsTtm ?? null;
+  const revenueRunRate = revenueData?.revenue != null ? revenueData.revenue * 12 : null;
+  const yahooResult = (yahooFundamentalRes as { quoteSummary?: { result?: Array<{ financialData?: Record<string, number | undefined> }> } } | null)?.quoteSummary?.result?.[0];
+  const yahooFinancialData = yahooResult?.financialData || {};
+  const grossMargin = yahooFinancialData.grossMargins != null ? Number(yahooFinancialData.grossMargins) * 100 : null;
+  const operatingMargin = yahooFinancialData.operatingMargins != null ? Number(yahooFinancialData.operatingMargins) * 100 : null;
+  const hasFundamentalValue = [peRatio, pbRatio, epsTtm, revenueRunRate, grossMargin, operatingMargin].some((value) => value != null && value !== 0);
+  if (hasFundamentalValue) {
+    await supabaseServer.from('fundamental_snapshots').upsert(
+      {
+        stock_id: stock.id,
+        as_of_date: asOfDate,
+        eps_ttm: epsTtm,
+        gross_margin: grossMargin,
+        operating_margin: operatingMargin,
+        pe_ratio: peRatio,
+        pb_ratio: pbRatio,
+        revenue_run_rate: revenueRunRate,
+        source_url: `https://finance.yahoo.com/quote/${normalizedSymbol}.TW`,
+      },
+      { onConflict: 'stock_id,as_of_date' },
+    );
+  }
+
+  return { stockId: String(stock.id || ''), latestPrice };
+}
+
+const stockResearchRefreshLocks = new Map<string, Promise<StockResearchRefreshResult>>();
+
+export async function runStockResearchRefresh(options: {
+  symbol: string;
+  force?: boolean;
+  reason?: string;
+  dryRun?: boolean;
+  connectors?: string[];
+}): Promise<StockResearchRefreshResult> {
+  const normalizedSymbol = String(options.symbol || '').toUpperCase();
+  if (!normalizedSymbol) {
+    throw new Error('symbol is required');
+  }
+
+  const deepDiveBefore = await getStockDeepDive(normalizedSymbol);
+  const freshnessBefore = deepDiveBefore?.summaryCard?.freshness || 'missing';
+  const targetSnapshotBefore = compactTargetSnapshot(deepDiveBefore);
+  const latestSourceAtBefore = deepDiveBefore?.targetSnapshot?.latestSourceAt || deepDiveBefore?.summaryCard?.latestSourceAt || null;
+  const requestedConnectors = (options.connectors || SOURCE_SYNC_CONNECTORS).map((item) => String(item));
+  const queuedSteps = ['source_sync', 'single_stock_market_refresh', 'thesis_refresh', 'research_report_build', 'deep_dive_build'];
+  if (options.dryRun) {
+    return {
+      runId: randomUUID(),
+      symbol: normalizedSymbol,
+      status: 'completed',
+      queuedSteps,
+      freshnessBefore,
+      targetSnapshotBefore,
+      targetSnapshotAfter: targetSnapshotBefore,
+      reportUpdated: false,
+      sourceRefreshSummary: {
+        latestSourceAtBefore,
+        latestSourceAtAfter: latestSourceAtBefore,
+      },
+      connectorResults: requestedConnectors.map((connector) => ({
+        connector,
+        recordsWritten: 0,
+        fetchedPosts: 0,
+        errorCode: null,
+        matchedDirectHits: 0,
+        matchedIndustryHits: 0,
+        timedOut: false,
+        degradedReason: null,
+        sessionMode: connector === 'threads' || connector === 'instagram' ? 'missing' : 'not_applicable',
+      })),
+    };
+  }
+
+  const existing = stockResearchRefreshLocks.get(normalizedSymbol);
+  if (existing && !options.force) {
+    return existing;
+  }
+
+  const run = (async () => {
+    const runId = randomUUID();
+    const researchV2 = await import('./research-v2');
+    const connectorResults: StockResearchRefreshResult['connectorResults'] = [];
+    for (const connector of requestedConnectors) {
+      const result = await researchV2.runSourceSync({ connector, symbol: normalizedSymbol, dryRun: false });
+      connectorResults.push({
+        connector,
+        recordsWritten: Number(result.recordsWritten || 0),
+        fetchedPosts: Number(result.fetchedPosts ?? result.recordsWritten ?? 0),
+        errorCode: result.errorCode ?? null,
+        matchedDirectHits: Number(result.matchedDirectHits || 0),
+        matchedIndustryHits: Number(result.matchedIndustryHits || 0),
+        timedOut: Boolean(result.timedOut),
+        degradedReason: result.degradedReason ?? null,
+        sessionMode: result.sessionMode ?? (connector === 'threads' || connector === 'instagram' ? 'missing' : 'not_applicable'),
+      });
+    }
+    await refreshSingleStockMarketData(normalizedSymbol);
+    await researchV2.runThesisRefresh({ dryRun: false, symbols: [normalizedSymbol], topN: 20 });
+    await researchV2.runResearchReportBuild({ dryRun: false, symbols: [normalizedSymbol], topN: 20 });
+    await runDeepDiveBuild({ dryRun: false, symbol: normalizedSymbol });
+    const deepDiveAfter = await getStockDeepDive(normalizedSymbol);
+    const targetSnapshotAfter = compactTargetSnapshot(deepDiveAfter);
+    const latestSourceAtAfter = deepDiveAfter?.targetSnapshot?.latestSourceAt || deepDiveAfter?.summaryCard?.latestSourceAt || null;
+    return {
+      runId,
+      symbol: normalizedSymbol,
+      status: 'completed' as const,
+      queuedSteps,
+      freshnessBefore,
+      targetSnapshotBefore,
+      targetSnapshotAfter,
+      reportUpdated: targetSnapshotBefore?.reportUpdatedAt !== targetSnapshotAfter?.reportUpdatedAt,
+      sourceRefreshSummary: {
+        latestSourceAtBefore,
+        latestSourceAtAfter,
+      },
+      connectorResults,
+    };
+  })().finally(() => {
+    stockResearchRefreshLocks.delete(normalizedSymbol);
+  });
+
+  stockResearchRefreshLocks.set(normalizedSymbol, run);
+  return run;
+}
+
+function queueStockResearchRefresh(symbol: string, reason: string, force = false) {
+  const normalizedSymbol = symbol.toUpperCase();
+  const existing = stockResearchRefreshLocks.get(normalizedSymbol);
+  if (existing && !force) return;
+  void runStockResearchRefresh({ symbol: normalizedSymbol, reason, force }).catch((error) => {
+    console.warn(`[stock-refresh] ${normalizedSymbol} failed`, (error as Error).message);
+  });
+}
+
+function revaluationRequiredEvidenceForCard(card: RecommendationCard) {
+  return card.repricingRequiredEvidence && card.repricingRequiredEvidence.length > 0
+    ? card.repricingRequiredEvidence
+    : ['最新月營收、毛利率或 EPS 基底上修', 'Forward EPS 或 normalized PE/PB 有外部佐證', '券商 consensus / target PE 上修', '具名客戶、訂單或法說證據補強'];
+}
+
+function revaluationTriggerReasonForCard(card: RecommendationCard) {
+  if (card.staleReason === 'target_stale_due_price_crossed_scenario' || card.targetStaleKind === 'crossed_scenario') return 'target_stale_due_price_crossed_scenario';
+  if (card.staleReason === 'target_stale_due_price_crossed_base' || card.targetStaleKind === 'crossed_base') return 'target_stale_due_price_crossed_base';
+  if (card.displayTargetMode === 'needs_revaluation' || card.recommendationGateStatus === 'needs_revaluation') return 'needs_bridge_aware_revaluation';
+  if (card.targetCoverageStatus === 'missing_target') return 'missing_target_or_current_price';
+  if (card.brokerSocialLeakSummary) return 'social_broker_leak';
+  return 'visible_stock_revaluation_sla';
+}
+
+function revaluationNeedsJob(card: RecommendationCard) {
+  return Boolean(
+    card.revaluationStatus === 'pending' ||
+      card.displayTargetMode === 'needs_revaluation' ||
+      card.staleReason ||
+      card.targetStaleKind ||
+      card.displayBucket === 'hot_tracking' ||
+      card.displayBucket === 'revaluation_queue' ||
+      card.recommendationGateStatus === 'needs_revaluation',
+  );
+}
+
+async function countBrokerDocsForStock(stockId: string) {
+  try {
+    const res = await getSupabaseServerClient()
+      .from('broker_report_documents')
+      .select('id', { count: 'exact', head: true })
+      .eq('stock_id', stockId);
+    return Number(res.count || 0);
+  } catch {
+    return 0;
+  }
+}
+
+async function findOrCreateRevaluationJob(params: {
+  stockId: string;
+  symbol: string;
+  triggerReason: string;
+  requiredEvidence: string[];
+  priority: number;
+  dryRun?: boolean;
+}) {
+  const supabaseServer = getSupabaseServerClient();
+  if (params.dryRun) {
+    return {
+      id: `dry-run-${params.symbol}`,
+      stock_id: params.stockId,
+      symbol: params.symbol,
+      trigger_reason: params.triggerReason,
+      trigger_source: 'stockinsider',
+      status: 'queued',
+      priority: params.priority,
+      required_evidence: params.requiredEvidence,
+      last_result: 'dryRun：會建立 durable revaluation job 並補抓券商/財務/社群來源。',
+      queued_at: nowIso(),
+      last_attempt_at: null,
+      updated_at: nowIso(),
+    } as Row;
+  }
+  const openRes = await supabaseServer
+    .from('revaluation_jobs')
+    .select('*')
+    .eq('stock_id', params.stockId)
+    .eq('trigger_reason', params.triggerReason)
+    .in('status', ['queued', 'running'])
+    .order('updated_at', { ascending: false })
+    .limit(1);
+  const openJob = ((openRes.data as Row[]) || [])[0];
+  if (openJob?.id) {
+    const updateRes = await supabaseServer
+      .from('revaluation_jobs')
+      .update({
+        priority: params.priority,
+        required_evidence: params.requiredEvidence,
+        last_result: openJob.last_result || '已在重估佇列中，等待下一輪執行。',
+        next_attempt_at: nowIso(),
+        updated_at: nowIso(),
+      })
+      .eq('id', String(openJob.id))
+      .select('*')
+      .single();
+    return (updateRes.data as Row) || openJob;
+  }
+  const insertRes = await supabaseServer
+    .from('revaluation_jobs')
+    .insert({
+      stock_id: params.stockId,
+      symbol: params.symbol,
+      trigger_reason: params.triggerReason,
+      trigger_source: 'stockinsider',
+      status: 'queued',
+      priority: params.priority,
+      required_evidence: params.requiredEvidence,
+      last_result: '已排入 durable bridge-aware 重估佇列，等待券商、月營收、EPS、Forward PE 與社群券商線索補抓。',
+      queued_at: nowIso(),
+      next_attempt_at: nowIso(),
+      metadata: { source: 'radar_visible_revaluation' },
+    })
+    .select('*')
+    .single();
+  if (insertRes.error) throw new Error(insertRes.error.message);
+  return insertRes.data as Row;
+}
+
+function pickRevaluationCards(radar: RadarDailyPayload, symbols: string[], maxSymbols: number) {
+  const requested = new Set(symbols.map((item) => item.toUpperCase()));
+  const allCards = [
+    ...(radar.opportunities || []),
+    ...(radar.scenarioUpsideCandidates || []),
+    ...(radar.earlyWatchlist || []),
+    ...(radar.hotTracking || []),
+  ].filter((card, index, arr) => card.symbol && arr.findIndex((item) => item.symbol === card.symbol) === index);
+  return allCards
+    .filter((card) => (requested.size > 0 ? requested.has(card.symbol) : revaluationNeedsJob(card)))
+    .sort((a, b) => (b.revaluationPriority || 0) - (a.revaluationPriority || 0))
+    .slice(0, maxSymbols);
+}
+
+export async function runRevaluationQueue(options?: {
+  dryRun?: boolean;
+  symbols?: string[];
+  maxSymbols?: number;
+  connectors?: string[];
+}) {
+  const dryRun = Boolean(options?.dryRun);
+  const maxSymbols = Math.max(1, Math.min(24, Number(options?.maxSymbols || options?.symbols?.length || 8)));
+  const requestedSymbols = unique((options?.symbols || []).map((item) => String(item || '').toUpperCase()).filter(Boolean));
+  const radar = await getDailyRadarData();
+  const pickedCards = pickRevaluationCards(radar, requestedSymbols, maxSymbols);
+  const supabaseServer = getSupabaseServerClient();
+  const stocksRes = pickedCards.length
+    ? await supabaseServer.from('stocks').select('id,symbol').in('symbol', pickedCards.map((card) => card.symbol))
+    : { data: [], error: null };
+  if (stocksRes.error) throw new Error(stocksRes.error.message);
+  const stockIdBySymbol = new Map(((stocksRes.data as Row[]) || []).map((row) => [String(row.symbol || '').toUpperCase(), String(row.id || '')]));
+  const researchV2 = await import('./research-v2');
+  const results: Array<{
+    symbol: string;
+    jobId: string | null;
+    status: RevaluationJobState;
+    triggerReason: string;
+    result: string;
+    brokerRecordsBefore: number;
+    brokerRecordsAfter: number;
+  }> = [];
+
+  for (const card of pickedCards) {
+    const symbol = card.symbol.toUpperCase();
+    const stockId = stockIdBySymbol.get(symbol) || '';
+    if (!stockId) continue;
+    const triggerReason = revaluationTriggerReasonForCard(card);
+    const requiredEvidence = revaluationRequiredEvidenceForCard(card);
+    const job = await findOrCreateRevaluationJob({
+      stockId,
+      symbol,
+      triggerReason,
+      requiredEvidence,
+      priority: Number(card.revaluationPriority || 50),
+      dryRun,
+    });
+    const jobId = String(job.id || '');
+    let attemptId: string | null = null;
+    let resultStatus: RevaluationJobState = 'running';
+    let resultSummary = '重估執行中。';
+    const brokerRecordsBefore = await countBrokerDocsForStock(stockId);
+    try {
+      if (!dryRun) {
+        const attemptRes = await supabaseServer
+          .from('revaluation_job_attempts')
+          .insert({
+            job_id: jobId,
+            stock_id: stockId,
+            symbol,
+            attempt_status: 'running',
+            metadata: { triggerReason, connectors: options?.connectors || null },
+          })
+          .select('id')
+          .single();
+        if (attemptRes.error) throw new Error(attemptRes.error.message);
+        attemptId = String((attemptRes.data as Row)?.id || '');
+        await supabaseServer
+          .from('revaluation_jobs')
+          .update({ status: 'running', last_attempt_at: nowIso(), updated_at: nowIso(), last_result: '重估執行中：補抓券商/社群/財務來源。' })
+          .eq('id', jobId);
+      }
+
+      await researchV2.runBrokerReportIngest({ dryRun, symbols: [symbol], topN: 1 });
+      const brokerRecordsAfter = await countBrokerDocsForStock(stockId);
+      if (!dryRun) {
+        await supabaseServer.from('broker_search_attempts').insert({
+          stock_id: stockId,
+          symbol,
+          job_id: jobId,
+          search_surface: 'public_broker_sources',
+          search_keywords: ['鉅亨外資評等', 'FactSet', 'MoneyDJ', '目標價', 'Forward EPS', symbol],
+          status: brokerRecordsAfter > brokerRecordsBefore ? 'hit' : 'miss',
+          records_found: Math.max(0, brokerRecordsAfter - brokerRecordsBefore),
+          records_written: Math.max(0, brokerRecordsAfter - brokerRecordsBefore),
+          summary:
+            brokerRecordsAfter > brokerRecordsBefore
+              ? `公開券商/FactSet 來源新增 ${brokerRecordsAfter - brokerRecordsBefore} 筆。`
+              : '公開券商/FactSet 來源本輪未新增可驗證資料。',
+          metadata: { before: brokerRecordsBefore, after: brokerRecordsAfter },
+        });
+      }
+
+      const connectors = options?.connectors || ['telegram', 'ptt', 'bulltalk', 'anue', 'udn'];
+      const refreshResult = await runStockResearchRefresh({
+        symbol,
+        force: true,
+        reason: `revaluation_job:${triggerReason}`,
+        dryRun,
+        connectors,
+      });
+      const before = refreshResult.targetSnapshotBefore;
+      const after = refreshResult.targetSnapshotAfter;
+      const baseChanged = before?.baseTarget !== after?.baseTarget || before?.upsideTarget !== after?.upsideTarget;
+      const detailAfter = dryRun ? null : await getStockDeepDive(symbol);
+      const promotionStatus = detailAfter?.targetSnapshot?.scenarioPromotionStatus || null;
+      const coverageStatus = detailAfter?.targetSnapshot?.targetCoverageStatus || after?.targetCoverageStatus || null;
+      if (promotionStatus === 'eligible') {
+        resultStatus = 'promoted_scenario_to_base';
+        resultSummary = '情境 promotion gate 已達標；需以最新財務與券商來源重算新 Base。';
+      } else if (baseChanged) {
+        resultStatus = 'repriced';
+        resultSummary = '已取得足以改變 target snapshot 的新證據，本輪已重新定價。';
+      } else if (coverageStatus === 'over_base_and_scenario') {
+        resultStatus = 'archived_reflected';
+        resultSummary = '現價已高於 Base 與情境，且本輪未取得可上修 EPS/Forward PE/券商共識的新證據；列為估值已反映。';
+      } else if (after?.bridgeCompleteness === 'insufficient') {
+        resultStatus = 'blocked_insufficient_evidence';
+        resultSummary = 'bridge 仍缺可驗證財務或券商資料，無法產生正式 Base。';
+      } else {
+        resultStatus = 'unchanged_with_reason';
+        resultSummary = '已完成重估補抓；本輪沒有足以改變營收、毛利率、EPS、Forward PE 或券商共識的新證據，target 暫不調整。';
+      }
+
+      if (!dryRun) {
+        await supabaseServer
+          .from('revaluation_jobs')
+          .update({
+            status: resultStatus,
+            last_result: resultSummary,
+            last_attempt_at: nowIso(),
+            completed_at: nowIso(),
+            old_base_target: before?.baseTarget ?? null,
+            old_scenario_target: before?.upsideTarget ?? null,
+            new_base_target: after?.baseTarget ?? null,
+            new_scenario_target: after?.upsideTarget ?? null,
+            updated_at: nowIso(),
+            metadata: { refreshRunId: refreshResult.runId, sourceRefreshSummary: refreshResult.sourceRefreshSummary },
+          })
+          .eq('id', jobId);
+        if (attemptId) {
+          await supabaseServer
+            .from('revaluation_job_attempts')
+            .update({
+              attempt_status: 'completed',
+              finished_at: nowIso(),
+              result_status: resultStatus,
+              result_summary: resultSummary,
+              evidence_found: {
+                brokerRecordsBefore,
+                brokerRecordsAfter,
+                connectorResults: refreshResult.connectorResults,
+              },
+            })
+            .eq('id', attemptId);
+        }
+      }
+      results.push({ symbol, jobId, status: resultStatus, triggerReason, result: resultSummary, brokerRecordsBefore, brokerRecordsAfter });
+    } catch (error) {
+      resultStatus = 'blocked_insufficient_evidence';
+      resultSummary = safeErrorMessage(error);
+      if (!dryRun) {
+        await supabaseServer
+          .from('revaluation_jobs')
+          .update({ status: resultStatus, last_result: resultSummary, last_attempt_at: nowIso(), updated_at: nowIso() })
+          .eq('id', jobId);
+        if (attemptId) {
+          await supabaseServer
+            .from('revaluation_job_attempts')
+            .update({ attempt_status: 'failed', finished_at: nowIso(), error_message: resultSummary, result_summary: resultSummary })
+            .eq('id', attemptId);
+        }
+      }
+      results.push({ symbol, jobId, status: resultStatus, triggerReason, result: resultSummary, brokerRecordsBefore, brokerRecordsAfter: brokerRecordsBefore });
+    }
+  }
+
+  return {
+    runId: randomUUID(),
+    dryRun,
+    checkedAt: nowIso(),
+    requestedSymbols,
+    processed: results.length,
+    results,
+  };
+}
+
+async function buildLightStockDeepDiveSnapshot(stock: Row, symbol: string): Promise<StockDeepDivePayload | null> {
+  const normalizedSymbol = symbol.toUpperCase();
+  const fastInsight = await withFallbackTimeout(getFastLightStockInsight(stock, normalizedSymbol), null, 2800);
+  const needsRicherChart = !fastInsight || (fastInsight.chart?.length || 0) < 120;
+  const minimalInsight = needsRicherChart
+    ? await withFallbackTimeout(getMinimalStockInsight(stock, normalizedSymbol), null, 4500)
+    : null;
+  const insight =
+    (minimalInsight && (minimalInsight.chart?.length || 0) >= (fastInsight?.chart?.length || 0) ? minimalInsight : null) ||
+    fastInsight ||
+    minimalInsight;
+  if (!insight) return null;
+
+  const stockId = String(stock.id || '');
+  const supabaseServer = getSupabaseServerClient();
+  const [bridgeSupport, marketRes, agentStatus, connectorStatus] = await Promise.all([
+    loadBridgeSupportDataForStockIds(stockId ? [stockId] : []),
+    withQueryTimeout(
+      supabaseServer.from('market_snapshots').select('*').eq('market', 'TW').order('as_of', { ascending: false }).limit(1),
+      [],
+      2500,
+    ),
+    withFallbackTimeout(getAgentStatusSummary(), fallbackAgentStatusSummary(), 2500),
+    withFallbackTimeout(getConnectorStatusSummary(), [], 2500),
+  ]);
+
+  const revenueRow = bridgeSupport.revenueByStockId.get(stockId) || null;
+  const revenueRows = bridgeSupport.revenueRowsByStockId.get(stockId) || [];
+  const fundamentalRows = bridgeSupport.fundamentalRowsByStockId.get(stockId) || [];
+  const storyRow = bridgeSupport.storyByStockId.get(stockId) || null;
+  const thesisRow = bridgeSupport.thesisByStockId.get(stockId) || null;
+  const valuationCases =
+    bridgeSupport.valuationCasesByStockId.get(stockId) ||
+    seedFallbackValuationCases(normalizedSymbol, insight.price ?? null);
+  const revenueView = buildRevenueSignalViewFromRows(
+    revenueRows,
+    normalizedSymbol,
+    (storyRow?.updated_at ? String(storyRow.updated_at) : null) || (thesisRow?.updated_at ? String(thesisRow.updated_at) : null) || insight.asOf || null,
+  );
+  const fundamentalView = buildFundamentalSnapshotViewFromRows(
+    fundamentalRows,
+    normalizedSymbol,
+    (storyRow?.updated_at ? String(storyRow.updated_at) : null) || (thesisRow?.updated_at ? String(thesisRow.updated_at) : null) || insight.asOf || null,
+  );
+  const evidenceRefSeed = uniqueNarrativeLines(
+    [
+      storyRow?.summary ? String(storyRow.summary) : null,
+      thesisRow?.thesis_summary ? String(thesisRow.thesis_summary) : null,
+      thesisRow?.story_source_summary ? String(thesisRow.story_source_summary) : null,
+    ],
+    4,
+  );
+  const bundle = buildBridgeAwareSnapshotBundle({
+    symbol: normalizedSymbol,
+    currentPrice: insight.price ?? null,
+    latestSourceAt:
+      (revenueRow?.as_of_date ? `${String(revenueRow.as_of_date)}T00:00:00+08:00` : null) ||
+      (storyRow?.updated_at ? String(storyRow.updated_at) : null) ||
+      (thesisRow?.updated_at ? String(thesisRow.updated_at) : null) ||
+      null,
+    reportUpdatedAt:
+      (storyRow?.updated_at ? String(storyRow.updated_at) : null) ||
+      (thesisRow?.updated_at ? String(thesisRow.updated_at) : null) ||
+      insight.asOf ||
+      null,
+    priceAsOf: insight.asOf || null,
+    thesisTitle:
+      (storyRow?.title ? String(storyRow.title) : null) ||
+      (thesisRow?.thesis_title ? String(thesisRow.thesis_title) : null) ||
+      null,
+    thesisSummary:
+      (storyRow?.summary ? String(storyRow.summary) : null) ||
+      (thesisRow?.thesis_summary ? String(thesisRow.thesis_summary) : null) ||
+      null,
+    valuationCases,
+    monthlyRevenue: revenueView?.monthlyRevenue ?? null,
+    yoyGrowth: revenueView?.yoyGrowth ?? null,
+    momGrowth: revenueView?.momGrowth ?? null,
+    revenueAnnual: fundamentalView?.revenueRunRate ?? (revenueView?.monthlyRevenue != null ? revenueView.monthlyRevenue * 12 : null),
+    epsTtm: fundamentalView.epsTtm ?? null,
+    peRatio: fundamentalView.peRatio ?? null,
+    pbRatio: fundamentalView.pbRatio ?? null,
+    grossMargin: fundamentalView.grossMargin ?? null,
+    operatingMargin: fundamentalView.operatingMargin ?? null,
+    baseEvidenceRefs: evidenceRefSeed,
+    scenarioEvidenceRefs: evidenceRefSeed,
+  });
+
+  const technicalSnapshot = buildTechnicalSnapshotFromCandles(
+    insight.chart,
+    insight.indicators,
+    insight.chartSource || (insight.chart.length > 0 ? 'stock_signals' : 'missing'),
+    insight.chart.length > 0 ? null : insight.chartMissingReason || '目前缺少足夠的日線資料，暫時無法完整計算技術指標。',
+  );
+  const timeframeCharts = {
+    daily: insight.chart,
+    weekly: aggregateCandles(insight.chart, 5),
+    monthly: aggregateCandles(insight.chart, 21),
+    quarterly: aggregateCandles(insight.chart, 63),
+    halfYear: aggregateCandles(insight.chart, 126),
+    yearly: aggregateCandles(insight.chart, 252),
+  };
+  const latestMarket = (marketRes.data?.[0] as Row | undefined) || null;
+  const marketFocus: DailyMarketFocus | null = latestMarket
+    ? {
+        market: 'TW',
+        asOf: String(latestMarket.as_of || ''),
+        sectorFlows: (latestMarket.sector_flows as Record<string, number>) || {},
+        indexState: (latestMarket.index_state as Record<string, unknown>) || {},
+        freshness: (latestMarket.freshness_status as SignalFreshness) || 'missing',
+      }
+    : null;
+  const narrativeKeywords = unique(
+    [
+      normalizedSymbol,
+      String(stock.name || ''),
+      storyRow?.title ? String(storyRow.title) : '',
+      storyRow?.summary ? String(storyRow.summary) : '',
+      thesisRow?.thesis_title ? String(thesisRow.thesis_title) : '',
+      thesisRow?.thesis_summary ? String(thesisRow.thesis_summary) : '',
+    ].filter(Boolean),
+  );
+  const marketRotationSnapshot = buildMarketRotationSnapshot(marketFocus, narrativeKeywords);
+  const marketIndexSignal = buildMarketIndexSignal(marketFocus, []);
+  const chipSnapshot = buildChipSnapshotFromMetrics((insight.chipMetrics as Record<string, unknown>) || null, bundle.targetSnapshot.verdict);
+  if (chipSnapshot) {
+    chipSnapshot.marketRotation = marketRotationSnapshot.marketRotation;
+    chipSnapshot.sectorFlow = marketRotationSnapshot.sectorFlow;
+    chipSnapshot.timingScore = buildChipTimingScore(chipSnapshot, marketRotationSnapshot.sectorFlowScore);
+    chipSnapshot.timingAssessment =
+      sentenceFromBridgeSegments(
+        [chipSnapshot.timingAssessment, marketRotationSnapshot.sectorFlow],
+        chipSnapshot.timingAssessment || marketRotationSnapshot.sectorFlow || '籌碼與資金輪動資料整理中。',
+      ) || '籌碼與資金輪動資料整理中。';
+  }
+
+  const latestEvidence: DeepDiveLatestFact[] = [
+    ...(revenueView?.monthlyRevenue != null
+      ? [
+          {
+            id: 'light-revenue-evidence',
+            label: '支撐 Base',
+            summary: `月營收資料已回補到 ${revenueView.asOfDate}，作為 Base 營收 run-rate 與估值橋接基底。`,
+            asOf: `${revenueView.asOfDate}T00:00:00+08:00`,
+            sourceName: 'MOPS 月營收',
+            sourceUrl: 'https://mops.twse.com.tw/mops/web/t05st10_ifrs',
+            sourceType: 'financial' as const,
+            supportCase: 'base' as const,
+          },
+        ]
+      : []),
+    ...(fundamentalView.dataQuality !== 'missing'
+      ? [
+          {
+            id: 'light-fundamental-evidence',
+            label: '支撐 Base',
+            summary: `基本面快照已回補到 ${fundamentalView.asOfDate}，用於 EPS、PE/PB 與毛利率/營益率基底。`,
+            asOf: `${fundamentalView.asOfDate}T00:00:00+08:00`,
+            sourceName: 'MOPS / TWSE 財報快照',
+            sourceUrl: 'https://mops.twse.com.tw/mops/web/t164sb03',
+            sourceType: 'financial' as const,
+            supportCase: 'base' as const,
+          },
+        ]
+      : []),
+    ...(insight.asOf
+      ? [
+          {
+            id: 'light-market-evidence',
+            label: '支撐進場 timing',
+            summary: `市場價格與技術資料時間為 ${insight.asOf}，用於日 K、均線、RSI、MACD 與買點劇本。`,
+            asOf: insight.asOf,
+            sourceName: 'TWSE / node-twstock 市場資料',
+            sourceUrl: 'https://www.twse.com.tw/zh/trading/historical/stock-day.html',
+            sourceType: 'official' as const,
+            supportCase: 'base' as const,
+          },
+        ]
+      : []),
+    ...(bundle.baseCaseDetail?.evidenceRefs || []).map((summary, index) => ({
+      id: `light-base-evidence-${index}`,
+      label: '支撐 Base',
+      summary: cleanEvidenceDirectionPrefix(summary) || sanitizeNarrativeText(summary),
+      asOf: bundle.targetSnapshot.latestSourceAt || null,
+      sourceName: 'bridge_snapshot',
+      sourceUrl: null,
+      sourceType: 'system' as const,
+      supportCase: 'base' as const,
+    })),
+    ...(bundle.scenarioCaseDetail?.evidenceRefs || []).map((summary, index) => ({
+      id: `light-scenario-evidence-${index}`,
+      label: '支撐情境',
+      summary: cleanEvidenceDirectionPrefix(summary) || sanitizeNarrativeText(summary),
+      asOf: bundle.targetSnapshot.latestSourceAt || null,
+      sourceName: 'bridge_snapshot',
+      sourceUrl: null,
+      sourceType: 'system' as const,
+      supportCase: 'scenario' as const,
+    })),
+  ]
+    .filter((item) => Boolean(item.summary))
+    .slice(0, 5);
+  const sourceCitationMap = buildSourceCitationMap({ latestEvidence });
+  const externalResearchSourceAt = latestExternalCitationTimestamp(sourceCitationMap, bundle.targetSnapshot.latestSourceAt || null);
+  const sharedSourceRefs = firstCitationRefs(sourceCitationMap, ['official', 'financial', 'system'], 2);
+  const baseSourceRefs = firstCitationRefs(sourceCitationMap, ['official', 'financial', 'system'], 2);
+  const scenarioSourceRefs = firstCitationRefs(sourceCitationMap, ['industry', 'threads', 'instagram', 'system'], 2);
+  for (const item of latestEvidence) {
+    item.sourceRefId = sourceCitationMap.find((ref) => ref.sourceName === item.sourceName && ref.sourceType === item.sourceType)?.id || null;
+  }
+  const sharedCitationIds = citationIds(sharedSourceRefs);
+  const baseCitationIds = citationIds(baseSourceRefs);
+  const scenarioCitationIds = citationIds(scenarioSourceRefs);
+  if (bundle.sharedVerifiedBasis) {
+    bundle.sharedVerifiedBasis.sourceRefs = sharedSourceRefs;
+    bundle.sharedVerifiedBasis.customerEvidenceRefs = sharedCitationIds;
+    if (bundle.sharedVerifiedBasis.supplyChainMap) {
+      bundle.sharedVerifiedBasis.supplyChainMap.sourceRefs = sharedCitationIds;
+    }
+  }
+  if (bundle.baseCaseDetail) bundle.baseCaseDetail.sourceRefs = baseSourceRefs;
+  if (bundle.scenarioCaseDetail) bundle.scenarioCaseDetail.sourceRefs = scenarioSourceRefs;
+  const brokerConsensus = null;
+  let assumptionLedger = buildValuationAssumptionLedger({
+    baseCaseDetail: bundle.baseCaseDetail,
+    scenarioCaseDetail: bundle.scenarioCaseDetail,
+  });
+  const valuationConfidenceGate = evaluateValuationConfidenceGate({
+    baseCaseDetail: bundle.baseCaseDetail,
+    sharedVerifiedBasis: bundle.sharedVerifiedBasis,
+    brokerConsensus,
+    currentPrice: insight.price ?? null,
+  });
+  if (!valuationConfidenceGate.baseTargetFormal) {
+    downgradeBaseCaseForConfidenceGate(bundle.baseCaseDetail, valuationConfidenceGate);
+    assumptionLedger = buildValuationAssumptionLedger({
+      baseCaseDetail: bundle.baseCaseDetail,
+      scenarioCaseDetail: bundle.scenarioCaseDetail,
+    });
+    const lightInitialTargetSnapshot = buildTargetSnapshot(
+      bundle.targetSnapshot.currentPrice,
+      bundle.targetSnapshot.baseTarget,
+      bundle.targetSnapshot.upsideTarget,
+      bundle.targetSnapshot.bearTarget,
+      bundle.targetSnapshot.latestSourceAt || null,
+      bundle.targetSnapshot.reportUpdatedAt || null,
+      bundle.targetSnapshot.priceAsOf || null,
+    );
+    Object.assign(
+      bundle.targetSnapshot,
+      buildBridgeAwareTargetSnapshot(
+        lightInitialTargetSnapshot,
+        bundle.baseCaseDetail,
+        bundle.scenarioCaseDetail,
+        bundle.scenarioBridges.find((item) => item.key === 'invalidation') || null,
+      ),
+    );
+    bundle.targetSnapshot.valuationSanityStatus = 'insufficient_verified_basis';
+    bundle.targetSnapshot.valuationSanityReason = valuationConfidenceGate.reason;
+    refreshBridgeBundlePromotionAndRevaluation(bundle);
+  }
+  bundle.targetSnapshot.valuationConfidenceGate = valuationConfidenceGate;
+  const forwardPeBridge = buildForwardPeBridge({ currentPrice: insight.price ?? null, baseCaseDetail: bundle.baseCaseDetail });
+  const peerValuationRange = buildPeerValuationRange(bundle.baseCaseDetail);
+  const valuationReviewFlags = buildValuationReviewFlags({
+    currentPrice: insight.price ?? null,
+    baseCaseDetail: bundle.baseCaseDetail,
+    scenarioCaseDetail: bundle.scenarioCaseDetail,
+    gate: valuationConfidenceGate,
+    forwardPeBridge,
+    peerValuationRange,
+  });
+  const latestCitationIds = citationIds(sourceCitationMap.filter(isExternalCitationRef).slice(0, 3));
+  const lightSourceItems: SourceCoverageView[] = sourceCitationMap
+    .filter((ref) => isExternalCitationRef(ref))
+    .map((ref) => ({
+      sourceName: ref.sourceName,
+      sourceType: (['official', 'financial'].includes(ref.sourceType) ? ref.sourceType : 'public_research') as SourceCoverageView['sourceType'],
+      summary: `${ref.label}：${ref.evidenceClass}`,
+      sourceUrl: ref.sourceUrl,
+      sourceTimestamp: ref.asOf,
+      symbols: [normalizedSymbol],
+      directHit: true,
+      verificationStatus: '部分證實',
+      confidence: ref.sourceUrl ? 0.7 : 0.45,
+      weight: ref.sourceUrl ? 0.2 : 0.08,
+    }));
+  const thesisState = normalizeRecommendationState(storyRow?.thesis_state);
+  const verificationStatus = verificationStatusFromState(thesisState);
+  const reportUpdatedAt = bundle.targetSnapshot.reportUpdatedAt || insight.asOf || nowIso();
+  const latestSourceAt = bundle.targetSnapshot.latestSourceAt || null;
+  const freshness = freshnessFromTimestamp(latestSourceAt, 72);
+  const technicalSummary =
+    deepDiveTechnicalSourceNarrative(insight.chartSource, insight.chartMissingReason || technicalSnapshot.missingReason) ||
+    '技術圖表與量價節奏會持續隨日線更新。';
+  const technicalEntrySignal = buildTechnicalEntrySignal(technicalSnapshot, insight.price ?? null, insight.volume ?? null, insight.chart);
+  const chipEntryAssessment = buildChipEntryAssessment({
+    chipSnapshot,
+    technicalEntrySignal,
+    technicalSnapshot,
+    volume: insight.volume ?? null,
+    chart: insight.chart,
+    marketRotationSnapshot,
+    targetVerdict: bundle.targetSnapshot.verdict,
+    sourceRefs: sharedCitationIds,
+  });
+  const relativeStrengthSignal = buildRelativeStrengthSignal({
+    symbol: normalizedSymbol,
+    timingScore: chipSnapshot?.timingScore ?? null,
+    globalThemeLeadLagSignal: null,
+    priceAsOf: bundle.targetSnapshot.priceAsOf || insight.asOf || null,
+  });
+  const tradeDecision = buildTradeDecision({
+    entryDecision: chipEntryAssessment.entryDecision,
+    marketIndexSignal,
+    targetSnapshot: bundle.targetSnapshot,
+    relativeStrengthSignal,
+  });
+  const dataHealth = buildDataHealth({
+    marketDataAsOf: bundle.targetSnapshot.priceAsOf || insight.asOf || null,
+    researchSourceAsOf: externalResearchSourceAt,
+    reportBuiltAt: reportUpdatedAt,
+    chipDataStatus: chipSnapshot?.dataStatus || null,
+    sourceStatuses: buildSourceStatuses({
+      coverageStatus: [
+        {
+          id: 'official_financial',
+          label: '官方 / 財報 / 月營收',
+          status: latestEvidence.some((item) => item.sourceType === 'financial' || item.sourceType === 'official') ? 'hit' : 'missing',
+          summary:
+            latestEvidence.some((item) => item.sourceType === 'financial' || item.sourceType === 'official')
+              ? 'Light snapshot 已回補官方/財務來源註腳。'
+              : 'Light snapshot 尚未取得官方/財務來源註腳，需等待盤前資料刷新。',
+          sourceTypes: ['official', 'financial'],
+        },
+      ],
+      citationMap: sourceCitationMap,
+      chipDataStatus: chipSnapshot?.dataStatus || null,
+      technicalAsOf: bundle.targetSnapshot.priceAsOf || insight.asOf || null,
+    }),
+  });
+  const recommendationStance = buildRecommendationStance(bundle.targetSnapshot, chipEntryAssessment, tradeDecision);
+  if (bundle.scenarioCaseDetail) {
+    bundle.scenarioCaseDetail.achievementChecklist = buildScenarioAchievementChecklist({
+      baseCaseDetail: bundle.baseCaseDetail,
+      scenarioCaseDetail: bundle.scenarioCaseDetail,
+      monthlyRevenue: revenueView?.monthlyRevenue ?? null,
+      technicalEntrySignal,
+      chipEntryAssessment,
+      sourceRefs: scenarioCitationIds,
+    });
+    refreshBridgeBundlePromotionAndRevaluation(bundle);
+  }
+  bundle.targetSnapshot.marketValuationAdjustment = buildMarketValuationAdjustment({
+    marketIndexSignal,
+    targetCoverageStatus: bundle.targetSnapshot.targetCoverageStatus || null,
+    staleReason: bundle.targetSnapshot.staleReason || null,
+    scenarioPromotionGate: bundle.scenarioCaseDetail?.promotionGate || null,
+    brokerEvidenceSearchStatus: bundle.targetSnapshot.brokerEvidenceSearchStatus || null,
+    globalThemeLeadLagSignal: null,
+  });
+  if (bundle.scenarioCaseDetail?.promotionGate) {
+    bundle.scenarioCaseDetail.promotionGate = applyMarketReratingToPromotionGate(
+      bundle.scenarioCaseDetail.promotionGate,
+      bundle.targetSnapshot.marketValuationAdjustment,
+    );
+    bundle.targetSnapshot.scenarioPromotionStatus = bundle.scenarioCaseDetail.promotionGate?.status || null;
+  }
+  const lightAssistiveModelSignal: NonNullable<RecommendationCard['modelSignal']> = {
+    sourceSentimentScore: latestEvidence.length > 0 ? clamp(0.48 + latestEvidence.length * 0.035, 0.48, 0.68) : null,
+    extractionConfidence: clamp(sourceCitationMap.filter(isExternalCitationRef).length / 5, 0.22, 0.78),
+    summaryModel: 'StockInsider HF/規則證據模型',
+    boundary: 'assistive_only',
+    promotionImpact: 'none',
+    latestAt: externalResearchSourceAt || latestSourceAt || null,
+  };
+  const mlForecastBand = buildAssistiveMlForecastBand({
+    currentPrice: insight.price ?? null,
+    modelSignal: lightAssistiveModelSignal,
+    brokerConsensus,
+    sourceRefs: latestCitationIds,
+    entryVerdict: chipEntryAssessment.verdict,
+    technicalVerdict: technicalEntrySignal.verdict,
+  });
+  const valuationModelDivergence = buildValuationModelDivergence({
+    formulaTarget: bundle.targetSnapshot.baseTarget,
+    mlForecastBand,
+    currentPrice: insight.price ?? null,
+  });
+  if (valuationModelDivergence?.status === 'valuation_model_divergence_review') {
+    valuationReviewFlags.push({
+      code: 'ml_formula_divergence',
+      severity: 'blocker',
+      summary: valuationModelDivergence.summary,
+    });
+  }
+  const scenarioHasIndependentDelta = Boolean(bundle.scenarioCaseDetail?.hasIndependentDelta);
+
+  return {
+    ...insight,
+    targetSnapshot: bundle.targetSnapshot,
+    reportSnapshot: {
+      title: (storyRow?.title ? String(storyRow.title) : null) || `${normalizedSymbol} 深度分析報告`,
+      subtitle: `投資主張：${recommendationStance.displayLabel}。目前交易動作是「${tradeDecision.action}」，部位建議為 ${tradeDecision.positionSize}。`,
+      summaryBullets: uniqueNarrativeLines(
+        [
+          bundle.baseCaseDetail?.driver ? `Base 驅動：${bundle.baseCaseDetail.driver}` : null,
+          scenarioHasIndependentDelta && bundle.scenarioCaseDetail?.driver ? `情境驅動：${bundle.scenarioCaseDetail.driver}` : null,
+          marketRotationSnapshot.sectorFlow,
+        ],
+        3,
+      ),
+      sections: [
+        {
+          id: 'analysis',
+          heading: '評論及分析',
+          paragraphs: uniqueNarrativeLines(
+            [
+              `${normalizedSymbol} 的投資判斷不再重複來源清單；重點是 ${bundle.baseCaseDetail?.driver || '核心營運動能'} 是否持續轉成月營收、毛利率與 EPS 上修。`,
+              bundle.baseCaseDetail?.driver ? `Base 估值只承接已可驗證的財務主軸：${bundle.baseCaseDetail.driver}。` : null,
+              scenarioHasIndependentDelta
+                ? `情境只追蹤 Base 之外的待驗證上行條件：${bundle.scenarioCaseDetail?.deltaAssumptions?.[0] || '等待新的客戶、產品 mix 或月營收證據。'}`
+                : '目前尚無獨立上行情境；重點是 Base 是否持續被新資料支持。',
+            ],
+            4,
+          )
+            .filter((line) => !reportParagraphIsInternal(line))
+            .map((line) => appendCitationIds(line, sharedCitationIds))
+            .filter((item): item is string => Boolean(item)),
+          sourceRefs: sharedCitationIds,
+        },
+        {
+          id: 'base_case',
+          heading: 'Base 目標價推導',
+          paragraphs: uniqueNarrativeLines(
+            [
+                    'Base 估值建立在目前已驗證、足以支撐正式估值的需求與財務基底上。',
+              bundle.baseCaseDetail?.marketSizingBridge,
+              bundle.baseCaseDetail?.revenueBridge,
+              bundle.baseCaseDetail?.marginBridge,
+              bundle.baseCaseDetail?.earningsBridge,
+              bundle.baseCaseDetail?.multipleBridge,
+              bundle.baseCaseDetail?.priceBridge || bundle.baseCaseDetail?.insufficientBridgeReason || 'Base 橋接仍在更新中。',
+            ],
+            5,
+          ).map((line) => appendCitationIds(line, baseCitationIds)).filter((item): item is string => Boolean(item)),
+          sourceRefs: baseCitationIds,
+        },
+        ...(scenarioHasIndependentDelta
+          ? [
+              {
+                id: 'scenario_case' as const,
+                heading: '情境目標價推導',
+                paragraphs: uniqueNarrativeLines(
+                  [
+                    ...(bundle.scenarioCaseDetail?.deltaAssumptions || []),
+                    buildScenarioIncrementalImpactSentence(bundle.baseCaseDetail, bundle.scenarioCaseDetail),
+                    bundle.scenarioCaseDetail?.earningsBridge,
+                    bundle.scenarioCaseDetail?.multipleBridge,
+                    bundle.scenarioCaseDetail?.priceBridge || bundle.scenarioCaseDetail?.insufficientBridgeReason || '情境橋接仍在更新中。',
+                  ],
+                  5,
+                ).map((line) => appendCitationIds(line, scenarioCitationIds)).filter((item): item is string => Boolean(item)),
+                sourceRefs: scenarioCitationIds,
+              },
+            ]
+          : []),
+        {
+          id: 'latest_evidence',
+          heading: '最新證據',
+          paragraphs: latestEvidence.map((item) => `${item.label}：${cleanEvidenceDirectionPrefix(item.summary) || item.summary}${item.sourceRefId ? ` [${item.sourceRefId}]` : ''}`),
+          sourceRefs: latestCitationIds,
+        },
+        {
+          id: 'capital_flow',
+          heading: '資金與籌碼',
+          paragraphs: [
+            chipEntryAssessment.chipRead,
+            chipEntryAssessment.supportResistance.summary,
+            '盤中微結構資料（內外盤比、分價量表、分點進出）尚未接入，本段不硬推估；目前先以法人、融資融券、借券、族群資金與日線量價判斷。',
+          ],
+        },
+        {
+          id: 'investment',
+          heading: '投資建議',
+          paragraphs: [
+            bundle.targetSnapshot.verdict === 'formal'
+              ? '目前 Base 目標價仍高於現價，但是否適合立即進場仍要搭配技術面與資金輪動判讀。'
+              : '目前先以 bridge-aware light snapshot 回傳，等完整證據與報告補齊後再決定是否升級推薦。',
+	            `交易決策：${tradeDecision.action}。${tradeDecision.positionSize}；${tradeDecision.marketGateReason}`,
+	            `技術進場判讀：${technicalEntrySignal.summary}`,
+	            `籌碼判讀：${chipEntryAssessment.chipRead}`,
+          ],
+        },
+        {
+          id: 'risk',
+          heading: '投資風險',
+          paragraphs: [
+            bundle.scenarioBridges.find((item) => item.key === 'invalidation')?.insufficientBridgeReason ||
+              '若客戶拉貨與產品 mix 無法落地，需回到觀察。',
+            '若後續新資料無法補強 Base / 情境假設，目標價與推薦等級都應重新調整。',
+          ],
+        },
+      ],
+    },
+    valuationPanel: {
+      monthlyRevenue: revenueView?.monthlyRevenue ?? null,
+      yoyGrowth: revenueView?.yoyGrowth ?? null,
+      momGrowth: revenueView?.momGrowth ?? null,
+      epsTtm: fundamentalView.epsTtm ?? null,
+      peRatio: fundamentalView.peRatio ?? null,
+      pbRatio: fundamentalView.pbRatio ?? null,
+      baseTarget: bundle.targetSnapshot.baseTarget,
+      upsideTarget: bundle.targetSnapshot.upsideTarget,
+      bearTarget: bundle.targetSnapshot.bearTarget,
+      nextValidationPoint: latestEvidence[0]?.summary || null,
+      dataAsOf: reportUpdatedAt,
+      multipleMapping: bundle.priceTargetRationale,
+      peerComparison: bundle.peerComparison,
+      priceTargetRationale: bundle.priceTargetRationale,
+      sourceCitationMap,
+      assumptionLedger,
+      brokerConsensus,
+      valuationConfidenceGate,
+      forwardPeBridge,
+      peerValuationRange,
+      valuationReviewFlags,
+      mlForecastBand,
+      valuationModelDivergence,
+      modelSignalSummary: modelSignalSummaryFor(lightAssistiveModelSignal),
+      sharedVerifiedBasis: bundle.sharedVerifiedBasis,
+      scenarioNote: bundle.scenarioNote,
+      baseCaseDetail: bundle.baseCaseDetail,
+      scenarioCaseDetail: bundle.scenarioCaseDetail,
+    },
+    chipSnapshot,
+    dataHealth,
+    recommendationStance,
+    chipEntryAssessment,
+    marketIndexSignal,
+    relativeStrengthSignal,
+    tradeDecision,
+    marketRotationSnapshot,
+    sourceFreshness: {
+      freshness,
+      latestSourceAt,
+      reportUpdatedAt,
+      priceAsOf: insight.asOf || null,
+    },
+    summaryCard: {
+      currentPrice: insight.price ?? null,
+      baseTarget: bundle.targetSnapshot.baseTarget ?? null,
+      upsidePct: bundle.targetSnapshot.cardPrimaryUpsidePct ?? null,
+      lastUpdatedAt: reportUpdatedAt,
+      latestSourceAt,
+      freshness,
+    },
+    chaseAssessment:
+      bundle.targetSnapshot.verdict === 'formal'
+        ? {
+            verdict: 'can_chase',
+            label: '仍可追，但要控風險',
+            reason: 'Base 情境仍高於現價，但仍需搭配技術面與族群資金確認進場節奏。',
+            trigger: chipSnapshot?.timingAssessment || '等待量價結構更乾淨的進場點。',
+            invalidation: bundle.scenarioBridges.find((item) => item.key === 'invalidation')?.insufficientBridgeReason || '若核心故事鈍化，需重新檢查 thesis。',
+          }
+        : {
+            verdict: 'wait_pullback',
+            label: '先等拉回或補驗證',
+            reason: '目前先回傳 bridge-aware snapshot，完整報告與更多證據正在背景更新。',
+            trigger: chipSnapshot?.timingAssessment || '等待完整 deep-dive payload 刷新完成。',
+            invalidation: '若新資料無法補強故事，應維持觀察。',
+          },
+    latestFacts: latestEvidence,
+    latestEvidence,
+    thesisSnapshot: {
+      whyNow: latestEvidence[0]?.summary || '目前優先先回傳 bridge-aware snapshot，讓估值與證據同源。',
+      story:
+        sanitizeNarrativeText(storyRow?.summary ? String(storyRow.summary) : thesisRow?.thesis_summary ? String(thesisRow.thesis_summary) : '') ||
+        '目前市場故事仍在補抓更完整證據。',
+      validation: latestEvidence.length > 0 ? '已回補最新 bridge-aware 證據摘要，完整證據矩陣會背景更新。' : '目前可見證據仍不足。',
+      valuation: bundle.priceTargetRationale || '估值橋接仍在整理中。',
+      risk: bundle.scenarioBridges.find((item) => item.key === 'invalidation')?.insufficientBridgeReason || '若客戶拉貨與產品 mix 無法落地，需回到觀察。',
+    },
+    freshSourceHighlights: lightSourceItems,
+    appendix: {
+      technicalSummary,
+      sourceAppendix: lightSourceItems.length > 0 ? [{ label: '官方 / 財務 / 市場來源', items: lightSourceItems }] : [],
+      evidenceMatrix: [],
+      connectorStatus,
+      coverageStatus: [
+        {
+          id: 'light_snapshot',
+          label: 'Light snapshot',
+          status: latestEvidence.length > 0 ? 'hit' : 'missing',
+          summary:
+            latestEvidence.length > 0
+              ? 'Light snapshot 已先回傳 bridge-aware 證據摘要與外部來源註腳；完整來源覆蓋會由背景 deep-dive 補齊。'
+              : 'Light snapshot 目前缺少完整來源覆蓋，等待背景 deep-dive 補齊。',
+          sourceTypes: ['official', 'financial', 'system'],
+        },
+        {
+          id: 'broker_reports',
+          label: '外資 / 券商評等',
+          status: 'missing',
+          summary: 'Light snapshot 尚未載入完整外資/券商評等；可透過 broker-report-ingest 或 materials/broker-reports 匯入後作 consensus 佐證。',
+          sourceTypes: ['broker_report', 'public_research'],
+          failureReason: '外資 / 券商評等 direct-hit 待完整 deep-dive 或匯入資料補齊。',
+          matched: false,
+          written: false,
+          cited: false,
+        },
+      ],
+      emptyState: {
+        technical: insight.chart.length > 0 ? null : insight.chartMissingReason || technicalSnapshot.missingReason || null,
+        evidence: latestEvidence.length > 0 ? null : '完整證據矩陣正在背景更新中。',
+        sources: '完整來源分組正在背景更新中。',
+      },
+    },
+    investmentConclusion:
+      `現在動作：${tradeDecision.action}。${tradeDecision.positionSize}；${tradeDecision.exitCondition}`,
+    keyAssumptions: uniqueNarrativeLines(
+      [
+        bundle.baseCaseDetail?.marketSizingBridge,
+        bundle.baseCaseDetail?.multipleBridge,
+        bundle.scenarioCaseDetail?.marketSizingBridge,
+      ],
+      3,
+    ),
+    verificationSummary:
+      latestEvidence.length > 0
+        ? '目前已先用最新 bridge-aware 證據摘要補齊 Base / 情境推導，完整法說與來源矩陣會背景更新。'
+        : '目前證據仍在補抓中。',
+    valuationSummary: bundle.priceTargetRationale,
+    storyNarrative:
+      sanitizeNarrativeText(storyRow?.summary ? String(storyRow.summary) : thesisRow?.thesis_summary ? String(thesisRow.thesis_summary) : '') || null,
+    articleSections: [],
+    numberTrail: [],
+    scenarioNarratives: bundle.scenarioBridges,
+    marketHypothesis: uniqueNarrativeLines(
+      [bundle.baseCaseDetail?.marketSizingBridge, bundle.scenarioCaseDetail?.marketSizingBridge],
+      2,
+    ),
+    validationChecks: [
+      {
+        label: '目標價快照',
+        status: bundle.targetSnapshot.bridgeCompleteness === 'complete' ? 'completed' : 'at_risk',
+        summary:
+          bundle.targetSnapshot.bridgeCompleteness === 'complete'
+            ? '已先回傳 bridge-aware target snapshot，首頁與內頁應使用同一來源。'
+            : '目前 bridge 尚未完整，暫不產出正式目標價。',
+      },
+      {
+        label: '技術面與圖表',
+        status: insight.chart.length > 0 ? 'completed' : 'pending',
+        summary: insight.chart.length > 0 ? technicalSummary : insight.chartMissingReason || '技術資料仍在補抓中。',
+      },
+    ],
+    entryExitPlan: {
+      entry: tradeDecision.entryZone,
+      addOn: tradeDecision.addCondition,
+      stopLoss: tradeDecision.stopLoss,
+      exit: tradeDecision.exitCondition || tradeDecision.takeProfit,
+    },
+    technicalSummary,
+    technicalEntrySignal,
+    sourceAppendix: [],
+    technicalSnapshot,
+    thesisState,
+    verificationStatus,
+    storyType: (storyRow?.story_type as StoryType | null | undefined) || null,
+    thesisTitle:
+      (storyRow?.title ? String(storyRow.title) : null) ||
+      (thesisRow?.thesis_title ? String(thesisRow.thesis_title) : null) ||
+      null,
+    thesisSummary:
+      (storyRow?.summary ? String(storyRow.summary) : null) ||
+      (thesisRow?.thesis_summary ? String(thesisRow.thesis_summary) : null) ||
+      null,
+    catalystSummary: (thesisRow?.story_source_summary ? String(thesisRow.story_source_summary) : null) || null,
+    expectedUpsidePct: bundle.targetSnapshot.cardPrimaryUpsidePct ?? null,
+    evidenceScore: null,
+    timingScore: chipSnapshot?.timingScore ?? null,
+    evidenceItems: [],
+    valuationCases,
+    companyEvents: [],
+    revenueSignal: revenueView,
+    fundamentalSnapshot: fundamentalView,
+    memo: null,
+    agentStatus,
+    communitySignals: [],
+    verificationTimeline: verificationTimelineFromState(thesisState),
+    conditionalRecommendationNote:
+      bundle.targetSnapshot.verdict === 'formal'
+        ? `目前估值與故事層仍偏正向；交易動作是「${tradeDecision.action}」，需同步遵守大盤 Gate 與停損。`
+        : `目前先回傳 bridge-aware 快照；交易動作是「${tradeDecision.action}」，等待完整證據補齊後再決定是否升級。`,
+    themeHypothesis: null,
+    calculationTable: [],
+    counterEvidence: [],
+    brokerViews: [],
+    sourceCoverage: [],
+    missingCoverage: ['official', 'financial', 'public_research'],
+    kolCoverage: [],
+    podcastMentions: [],
+    sourceDiscoveryStatus: {
+      approvedCount: 0,
+      pendingCount: 0,
+      monitorOnlyCount: 0,
+    },
+    connectorStatus,
+    timeframeCharts,
+    sourceGroups: {
+      investanchors: [],
+      officialAndFinancial: [],
+      brokerAndResearch: [],
+      socialAndCommunity: [],
+    },
+    thesisModel: null,
+    riskCounterpoints: [],
+    evidenceMatrix: [],
+    valuationCompleteness: {
+      requiredCases: ['base', 'upside', 'invalidation'],
+      availableCases: valuationCases.map((item) => item.caseType),
+      isComplete: bundle.targetSnapshot.bridgeCompleteness === 'complete',
+    },
+    valuationBridge: bundle.valuationBridge,
+    scenarioBridges: bundle.scenarioBridges,
+    priceTargetRationale: bundle.priceTargetRationale,
+    missingFields: unique([...(bundle.baseCaseDetail?.estimatedFields || []), ...(bundle.scenarioCaseDetail?.estimatedFields || [])]),
+    financialProjectionMetrics: {
+      baseRevenueAnnual: bundle.baseCaseDetail?.projectedRevenueAnnual ?? null,
+      baseEps: bundle.baseCaseDetail?.projectedEps ?? null,
+      basePe: bundle.baseCaseDetail?.targetPeRatio ?? null,
+      upsideRevenueAnnual: bundle.scenarioCaseDetail?.projectedRevenueAnnual ?? null,
+      upsideEps: bundle.scenarioCaseDetail?.projectedEps ?? null,
+      upsidePe: bundle.scenarioCaseDetail?.targetPeRatio ?? null,
+      bearRevenueAnnual: bundle.scenarioBridges.find((item) => item.key === 'invalidation')?.projectedRevenueAnnual ?? null,
+      bearEps: bundle.scenarioBridges.find((item) => item.key === 'invalidation')?.projectedEps ?? null,
+      bearPe: bundle.scenarioBridges.find((item) => item.key === 'invalidation')?.targetPeRatio ?? null,
+    },
+  };
+}
+
+function shouldAugmentWithLightSnapshot(payload: StockDeepDivePayload) {
+  return (
+    !payload.targetSnapshot?.bridgeCompleteness ||
+    payload.chart.length === 0 ||
+    !payload.technicalSnapshot ||
+    (payload.technicalSnapshot.ma5 == null &&
+      payload.technicalSnapshot.ma20 == null &&
+      payload.technicalSnapshot.rsi == null &&
+      payload.technicalSnapshot.macd == null)
+  );
+}
+
+function mergeDeepDiveWithLightSnapshot(
+  fullPayload: StockDeepDivePayload,
+  lightPayload: StockDeepDivePayload,
+): StockDeepDivePayload {
+  return {
+    ...fullPayload,
+    ...lightPayload,
+    reportSnapshot: fullPayload.reportSnapshot || lightPayload.reportSnapshot,
+    articleSections: fullPayload.articleSections?.length ? fullPayload.articleSections : lightPayload.articleSections,
+    storyNarrative: fullPayload.storyNarrative || lightPayload.storyNarrative,
+    verificationSummary: fullPayload.verificationSummary || lightPayload.verificationSummary,
+    investmentConclusion: fullPayload.investmentConclusion || lightPayload.investmentConclusion,
+    valuationSummary: fullPayload.valuationSummary || lightPayload.valuationSummary,
+    chipEntryAssessment: fullPayload.chipEntryAssessment || lightPayload.chipEntryAssessment,
+    dataHealth: fullPayload.dataHealth || lightPayload.dataHealth,
+    recommendationStance: fullPayload.recommendationStance || lightPayload.recommendationStance,
+    chipSnapshot: fullPayload.chipSnapshot || lightPayload.chipSnapshot,
+    latestFacts: fullPayload.latestFacts?.length ? fullPayload.latestFacts : lightPayload.latestFacts,
+    freshSourceHighlights: fullPayload.freshSourceHighlights?.length ? fullPayload.freshSourceHighlights : lightPayload.freshSourceHighlights,
+    appendix:
+      fullPayload.appendix &&
+      ((fullPayload.appendix.sourceAppendix?.length || 0) > 0 || (fullPayload.appendix.evidenceMatrix?.length || 0) > 0)
+        ? fullPayload.appendix
+        : lightPayload.appendix,
+    sourceCoverage: fullPayload.sourceCoverage?.length ? fullPayload.sourceCoverage : lightPayload.sourceCoverage,
+    evidenceItems: fullPayload.evidenceItems?.length ? fullPayload.evidenceItems : lightPayload.evidenceItems,
+    evidenceMatrix: fullPayload.evidenceMatrix?.length ? fullPayload.evidenceMatrix : lightPayload.evidenceMatrix,
+    latestEvidence: fullPayload.latestEvidence?.length ? fullPayload.latestEvidence : lightPayload.latestEvidence,
+    sourceGroups:
+      fullPayload.sourceGroups &&
+      ((fullPayload.sourceGroups.investanchors?.length || 0) > 0 ||
+        (fullPayload.sourceGroups.officialAndFinancial?.length || 0) > 0 ||
+        (fullPayload.sourceGroups.brokerAndResearch?.length || 0) > 0 ||
+        (fullPayload.sourceGroups.socialAndCommunity?.length || 0) > 0)
+        ? fullPayload.sourceGroups
+        : lightPayload.sourceGroups,
+  };
 }
 
 type StockDeepDiveLookup =
@@ -3372,44 +17667,125 @@ type StockDeepDiveLookup =
   | { status: 'pending'; data: StockDeepDivePendingPayload }
   | { status: 'not_found' };
 
-const deepDiveRebuildLocks = new Map<string, Promise<void>>();
-
-async function triggerDeepDiveRebuild(symbol: string) {
+export async function getStockTechnicalLookup(symbol: string): Promise<StockDeepDiveLookup> {
   const normalizedSymbol = symbol.toUpperCase();
-  if (deepDiveRebuildLocks.has(normalizedSymbol)) return;
-  const promise = (async () => {
-    const researchV2 = await import('./research-v2');
-    await researchV2.runThesisRefresh({ dryRun: false, symbols: [normalizedSymbol], topN: 20 });
-    await researchV2.runResearchReportBuild({ dryRun: false, symbols: [normalizedSymbol], topN: 20 });
-  })()
-    .catch((error) => {
-      console.warn(`[deep-dive-rebuild] ${normalizedSymbol} failed`, (error as Error).message);
-    })
-    .finally(() => {
-      deepDiveRebuildLocks.delete(normalizedSymbol);
-    });
-  deepDiveRebuildLocks.set(normalizedSymbol, promise);
+  const stock = await getLatestStockRecord(normalizedSymbol);
+  if (!stock) {
+    if (/^\d{4}$/.test(normalizedSymbol)) {
+      queueStockResearchRefresh(normalizedSymbol, 'technical_stock_profile_missing');
+      return {
+        status: 'pending',
+        data: {
+          status: 'pending',
+          symbol: normalizedSymbol,
+          reason: 'stock_profile_missing',
+          triggeredJobs: ['stock-research-refresh'],
+          retryAfterSec: 8,
+          chipEntryAssessment: buildPendingChipEntryAssessment('stock_profile_missing'),
+        },
+      };
+    }
+    return { status: 'not_found' };
+  }
+
+  const lightSnapshot = await withFallbackTimeout(buildLightStockDeepDiveSnapshot(stock, normalizedSymbol), null, 2800);
+  if (lightSnapshot) {
+    return { status: 'ready', data: lightSnapshot };
+  }
+
+  queueStockResearchRefresh(normalizedSymbol, 'technical_light_snapshot_missing', true);
+  return {
+    status: 'pending',
+    data: {
+      status: 'pending',
+      symbol: normalizedSymbol,
+      reason: 'technical_light_snapshot_missing',
+      triggeredJobs: ['stock-research-refresh'],
+      retryAfterSec: 8,
+      chipEntryAssessment: buildPendingChipEntryAssessment('technical_light_snapshot_missing'),
+    },
+  };
 }
 
 export async function getStockDeepDiveLookup(symbol: string): Promise<StockDeepDiveLookup> {
   const normalizedSymbol = symbol.toUpperCase();
   const stock = await getLatestStockRecord(normalizedSymbol);
-  if (!stock) return { status: 'not_found' };
+  if (!stock) {
+    if (/^\d{4}$/.test(normalizedSymbol)) {
+      queueStockResearchRefresh(normalizedSymbol, 'missing_stock_profile');
+      return {
+        status: 'pending',
+        data: {
+          status: 'pending',
+          symbol: normalizedSymbol,
+          reason: 'stock_profile_missing',
+          triggeredJobs: ['stock-research-refresh'],
+          retryAfterSec: 12,
+          chipEntryAssessment: buildPendingChipEntryAssessment('stock_profile_missing'),
+        },
+      };
+    }
+    return { status: 'not_found' };
+  }
 
-  const deepDive = await getStockDeepDive(normalizedSymbol);
+  const lightSnapshotPromise = buildLightStockDeepDiveSnapshot(stock, normalizedSymbol).catch((error) => {
+    console.warn('[getStockDeepDiveLookup] light snapshot failed', {
+      symbol: normalizedSymbol,
+      error: error instanceof Error ? error.message : String(error),
+    });
+    return null;
+  });
+  const fullDeepDivePromise = getStockDeepDive(normalizedSymbol).catch((error) => {
+    console.warn('[getStockDeepDiveLookup] full payload failed', {
+      symbol: normalizedSymbol,
+      error: error instanceof Error ? error.message : String(error),
+    });
+    return null;
+  });
+
+  let deepDive = await withFallbackTimeout(fullDeepDivePromise, null, 4500);
+  if (deepDive && shouldAugmentWithLightSnapshot(deepDive)) {
+    const lightSnapshot = await withFallbackTimeout(lightSnapshotPromise, null, 1800);
+    if (lightSnapshot) {
+      deepDive = mergeDeepDiveWithLightSnapshot(deepDive, lightSnapshot);
+    }
+  }
   if (deepDive) {
+    if (shouldBackgroundRefreshDeepDive(deepDive)) {
+      queueStockResearchRefresh(normalizedSymbol, 'page_open_background_refresh');
+      return {
+        status: 'ready',
+        data: {
+          ...deepDive,
+          autoRefreshTriggered: true,
+        },
+      };
+    }
     return { status: 'ready', data: deepDive };
   }
 
-  void triggerDeepDiveRebuild(normalizedSymbol);
+  const lightSnapshot = await withFallbackTimeout(lightSnapshotPromise, null, 3200);
+  if (lightSnapshot) {
+    queueStockResearchRefresh(normalizedSymbol, 'light_snapshot_background_refresh');
+    return {
+      status: 'ready',
+      data: {
+        ...lightSnapshot,
+        autoRefreshTriggered: true,
+      },
+    };
+  }
+
+  queueStockResearchRefresh(normalizedSymbol, 'deep_dive_missing', true);
   return {
     status: 'pending',
     data: {
       status: 'pending',
       symbol: normalizedSymbol,
       reason: 'deep_dive_data_missing_or_stale',
-      triggeredJobs: ['thesis-refresh', 'research-report-build'],
+      triggeredJobs: ['stock-research-refresh'],
       retryAfterSec: 8,
+      chipEntryAssessment: buildPendingChipEntryAssessment('deep_dive_data_missing_or_stale'),
     },
   };
 }
@@ -3460,6 +17836,145 @@ async function getAgentStatusSummary(hours = 24): Promise<AgentStatusSummary> {
   }
 }
 
+function findStoryForRecommendation(storiesByKey: Map<string, Row>, fallbackStoriesByStock: Map<string, Row>, recommendation: Row) {
+  const stockId = String(recommendation.stock_id || '');
+  const storyType = String(recommendation.story_type || '');
+  const asOfDate = String(recommendation.as_of || '').slice(0, 10);
+  const exactKey = `${stockId}|${storyType}|${asOfDate}`;
+  return storiesByKey.get(exactKey) || fallbackStoriesByStock.get(stockId) || null;
+}
+
+function memoTraceabilityState(memo: Row) {
+  const entryExitRules = (memo.entry_exit_rules as Row | undefined) || {};
+  const traceability = (entryExitRules.traceability as Row | undefined) || {};
+  const storyCandidateIds = Array.isArray(traceability.storyCandidateIds) ? traceability.storyCandidateIds.map(String).filter(Boolean) : [];
+  const recommendationIds = Array.isArray(traceability.recommendationIds) ? traceability.recommendationIds.map(String).filter(Boolean) : [];
+  return {
+    traceability,
+    storyCandidateIds,
+    recommendationIds,
+    hasStoryLink: Boolean(memo.story_candidate_id) || storyCandidateIds.length > 0,
+    hasRecommendationLink: recommendationIds.length > 0,
+  };
+}
+
+export async function getGovernanceContractSummary() {
+  const supabaseServer = getSupabaseServerClient();
+  const [recsRes, storiesRes, evidenceRes, valuationRes, memosRes, agentReviewsRes, sourceReviewsRes] = await Promise.all([
+    supabaseServer.from('recommendations').select('id,stock_id,as_of,story_type,recommendation_state,published_at').not('published_at', 'is', null).order('published_at', { ascending: false }).limit(200),
+    supabaseServer.from('story_candidates').select('id,stock_id,story_type,as_of_date,thesis_state').order('updated_at', { ascending: false }).limit(400),
+    supabaseServer.from('story_evidence_items').select('story_candidate_id').order('created_at', { ascending: false }).limit(4000),
+    supabaseServer.from('valuation_cases').select('story_candidate_id').order('updated_at', { ascending: false }).limit(4000),
+    supabaseServer.from('research_memos').select('id,slug,report_kind,story_candidate_id,entry_exit_rules').order('updated_at', { ascending: false }).limit(200),
+    supabaseServer.from('agent_review_queue').select('id', { count: 'exact', head: true }).eq('state', 'pending'),
+    supabaseServer.from('source_review_queue').select('id', { count: 'exact', head: true }).eq('state', 'pending'),
+  ]);
+
+  if (recsRes.error || storiesRes.error || evidenceRes.error || valuationRes.error || memosRes.error || agentReviewsRes.error || sourceReviewsRes.error) {
+    throw new Error(
+      recsRes.error?.message ||
+        storiesRes.error?.message ||
+        evidenceRes.error?.message ||
+        valuationRes.error?.message ||
+        memosRes.error?.message ||
+        agentReviewsRes.error?.message ||
+        sourceReviewsRes.error?.message ||
+        'Failed to load governance contract summary',
+    );
+  }
+
+  const storyRows = (storiesRes.data as Row[]) || [];
+  const storiesByKey = new Map<string, Row>();
+  const fallbackStoriesByStock = new Map<string, Row>();
+  for (const story of storyRows) {
+    const stockId = String(story.stock_id || '');
+    const storyType = String(story.story_type || '');
+    const asOfDate = String(story.as_of_date || '').slice(0, 10);
+    if (stockId && storyType && asOfDate) storiesByKey.set(`${stockId}|${storyType}|${asOfDate}`, story);
+    if (stockId && !fallbackStoriesByStock.has(stockId)) fallbackStoriesByStock.set(stockId, story);
+  }
+
+  const evidenceCountByStoryId = new Map<string, number>();
+  for (const row of (evidenceRes.data as Row[]) || []) {
+    const storyId = String(row.story_candidate_id || '');
+    if (!storyId) continue;
+    evidenceCountByStoryId.set(storyId, (evidenceCountByStoryId.get(storyId) || 0) + 1);
+  }
+
+  const valuationCountByStoryId = new Map<string, number>();
+  for (const row of (valuationRes.data as Row[]) || []) {
+    const storyId = String(row.story_candidate_id || '');
+    if (!storyId) continue;
+    valuationCountByStoryId.set(storyId, (valuationCountByStoryId.get(storyId) || 0) + 1);
+  }
+
+  const publishedRecommendations = ((recsRes.data as Row[]) || []).map((recommendation) => {
+    const matchedStory = findStoryForRecommendation(storiesByKey, fallbackStoriesByStock, recommendation);
+    const storyId = matchedStory ? String(matchedStory.id || '') : '';
+    const evidenceCount = storyId ? (evidenceCountByStoryId.get(storyId) || 0) : 0;
+    const valuationCount = storyId ? (valuationCountByStoryId.get(storyId) || 0) : 0;
+    return {
+      recommendationId: String(recommendation.id || ''),
+      stockId: String(recommendation.stock_id || ''),
+      storyId: storyId || null,
+      passed: Boolean(storyId) && evidenceCount > 0 && valuationCount > 0,
+      evidenceCount,
+      valuationCount,
+    };
+  });
+
+  const memoRows = (memosRes.data as Row[]) || [];
+  const researchMemos = memoRows.map((memo) => {
+    const traceability = memoTraceabilityState(memo);
+    const reportKind = String(memo.report_kind || '');
+    const passed =
+      reportKind === 'deep_dive'
+        ? traceability.hasStoryLink
+        : traceability.hasStoryLink || traceability.hasRecommendationLink;
+    const hotWindowValid = reportKind !== 'hot_theme' || String(traceability.traceability.windowType || '') === 'three_day';
+    return {
+      memoId: String(memo.id || ''),
+      slug: String(memo.slug || ''),
+      reportKind,
+      passed: passed && hotWindowValid,
+      hotWindowValid,
+      traceability,
+    };
+  });
+
+  return {
+    canonicalStates: [...CANONICAL_RECOMMENDATION_STATES],
+    allowlist: {
+      source: AGENCY_AGENT_CONFIG.source,
+      mode: AGENCY_AGENT_POLICY.mode,
+      publishRecommendationsDirectly: AGENCY_AGENT_POLICY.publishRecommendationsDirectly,
+      profiles: AGENCY_AGENT_ALLOWLIST.map((profile) => ({
+        profileKey: profile.profileKey,
+        mappedRole: profile.mappedRole,
+      })),
+    },
+    routeMappings: {
+      hotRadarCanonicalWindow: 'three_day',
+      hotRadarRoute: '/api/radar/hot',
+    },
+    publishedRecommendations: {
+      checked: publishedRecommendations.length,
+      passed: publishedRecommendations.filter((item) => item.passed).length,
+      failed: publishedRecommendations.filter((item) => !item.passed).slice(0, 20),
+    },
+    researchMemos: {
+      checked: researchMemos.length,
+      passed: researchMemos.filter((item) => item.passed).length,
+      failed: researchMemos.filter((item) => !item.passed).slice(0, 20),
+    },
+    reviewQueues: {
+      pendingAgentReviews: agentReviewsRes.count || 0,
+      pendingSourceReviews: sourceReviewsRes.count || 0,
+    },
+    checkedAt: nowIso(),
+  };
+}
+
 async function getConnectorStatusSummary(): Promise<ConnectorStatusView[]> {
   if (shouldUseDemoFallback()) {
     return [];
@@ -3467,17 +17982,32 @@ async function getConnectorStatusSummary(): Promise<ConnectorStatusView[]> {
 
   try {
     const supabaseServer = getSupabaseServerClient();
-    const [credsRes, runsRes] = await Promise.all([
+    const [credsRes, runsRes, workerStatesRes] = await Promise.all([
       supabaseServer
         .from('source_credentials_registry')
         .select('platform,status,updated_at')
-        .in('platform', ['investanchors', 'threads', 'instagram', 'telegram'])
+        .in('platform', [...CONNECTOR_KEYS])
         .order('updated_at', { ascending: false }),
       supabaseServer
         .from('connector_runs')
-        .select('connector_name,platform,status,started_at,finished_at')
+        .select('connector_name,platform,status,records_written,error_summary,started_at,finished_at,metadata')
+        .in('platform', [...CONNECTOR_KEYS])
         .order('started_at', { ascending: false })
-        .limit(200),
+        .limit(160),
+      Promise.resolve(
+        supabaseServer
+          .from('worker_job_states')
+          .select('job_id,status,last_run_at,last_scheduled_at,last_schedule_slot,last_summary,last_error,metadata,updated_at')
+          .in('job_id', [
+            'hourly-social-source-refresh',
+            'daily-kol-source-refresh',
+            'social-source-refresh-6h',
+            'threads-session-health',
+            'threads-stock-refresh',
+            'investanchors-stock-refresh',
+            'kol-content-refresh',
+          ]),
+      ).catch((error) => ({ data: [], error })),
     ]);
 
     if (credsRes.error || runsRes.error) {
@@ -3495,42 +18025,625 @@ async function getConnectorStatusSummary(): Promise<ConnectorStatusView[]> {
     }
 
     const latestRuns = new Map<string, { status: string; finishedAt: string | null; startedAt: string | null }>();
+    const latestTerminalRuns = new Map<
+      string,
+      { status: string; finishedAt: string | null; startedAt: string | null; recordsWritten: number; errorSummary: string | null }
+    >();
+    const latestRunMeta = new Map<string, { recordsWritten: number; errorSummary: string | null }>();
     const latestSuccess = new Map<string, string | null>();
+    const latestSuccessfulWrite = new Map<string, { recordsWritten: number; at: string | null }>();
+    const latestApiAttempt = new Map<string, { status: string; startedAt: string | null; errorSummary: string | null }>();
+    const latestChannelBreakdown = new Map<string, NonNullable<ConnectorStatusView['channelBreakdown']>>();
+    const latestKolBreakdown = new Map<string, NonNullable<ConnectorStatusView['kolBreakdown']>>();
+    const latestPodcastStats = new Map<
+      string,
+      { episodesFound: number; transcriptsReady: number; weakSignalsWritten: number; failureReasonByKol: Record<string, string> }
+    >();
+    const latestWorkerScriptVersion = new Map<string, string>();
+    const latestCookieDiagnostics = new Map<string, Row>();
+    const latestSearchedTargets = new Map<string, string[]>();
+    const latestMatchedSymbols = new Map<string, string[]>();
+    const latestConnectorMetadata = new Map<string, Row>();
+    const recordsWritten24h = new Map<string, number>();
+    const isAmbiguousSocialToken = (symbol: string) =>
+      /^(19|20)\d{2}$/.test(symbol) || /^(0800|1000|1200|1300|1400|1500|1600|1700|1800|2000|3000|5000)$/.test(symbol);
+    const workerStateByJob = new Map<string, Row>();
+    for (const row of ((workerStatesRes as { data?: Row[]; error?: unknown }).data || [])) {
+      const jobId = String(row.job_id || '');
+      if (jobId) workerStateByJob.set(jobId, row);
+    }
+    const hourlySocialWorkerState = workerStateByJob.get('hourly-social-source-refresh') || null;
+    const dailyKolWorkerState = workerStateByJob.get('daily-kol-source-refresh') || null;
+    const socialWorkerState = workerStateByJob.get('social-source-refresh-6h') || null;
+    const dayAgoMs = Date.now() - 24 * 60 * 60 * 1000;
     for (const row of (runsRes.data as Row[]) || []) {
       const connector = String(row.platform || row.connector_name || '');
       if (!connector) continue;
-      if (!latestRuns.has(connector)) {
-        latestRuns.set(connector, {
-          status: String(row.status || 'unknown'),
-          finishedAt: row.finished_at ? String(row.finished_at) : null,
-          startedAt: row.started_at ? String(row.started_at) : null,
+      const startedAt = row.started_at ? String(row.started_at) : null;
+      const recordsWritten = Number(row.records_written || 0);
+      const metadata = ((row.metadata as Row | null) || {}) as Row;
+      const status = String(row.status || '');
+      const workerScriptVersion = metadata.worker_script_version
+        ? String(metadata.worker_script_version)
+        : metadata.workerScriptVersion
+          ? String(metadata.workerScriptVersion)
+          : null;
+      if (workerScriptVersion && !latestWorkerScriptVersion.has(connector)) {
+        latestWorkerScriptVersion.set(connector, workerScriptVersion);
+      }
+      if (metadata.cookie_diagnostics && typeof metadata.cookie_diagnostics === 'object' && !latestCookieDiagnostics.has(connector)) {
+        latestCookieDiagnostics.set(connector, metadata.cookie_diagnostics as Row);
+      }
+      const statusOnly = metadata.mode === 'vercel_status_only' || row.error_summary === 'playwright_runtime_unavailable';
+      const startedMs = startedAt ? new Date(startedAt).getTime() : Number.NaN;
+      if (Number.isFinite(startedMs) && startedMs >= dayAgoMs) {
+        recordsWritten24h.set(connector, (recordsWritten24h.get(connector) || 0) + recordsWritten);
+      }
+      if (statusOnly && !latestApiAttempt.has(connector)) {
+        latestApiAttempt.set(connector, {
+          status: status || 'skipped',
+          startedAt,
+          errorSummary: row.error_summary ? String(row.error_summary) : null,
         });
       }
-      if (String(row.status || '') === 'success' && !latestSuccess.has(connector)) {
+      const existingConnectorMetadata = latestConnectorMetadata.get(connector);
+      const metadataHasPttFullTextStats =
+        connector === 'ptt' &&
+        (Number(metadata.articles_fetched ?? metadata.articlesFetched ?? 0) > 0 ||
+          Number(metadata.push_comments_parsed ?? metadata.pushCommentsParsed ?? 0) > 0);
+      const existingHasPttFullTextStats =
+        connector === 'ptt' &&
+        existingConnectorMetadata != null &&
+        (Number(existingConnectorMetadata.articles_fetched ?? existingConnectorMetadata.articlesFetched ?? 0) > 0 ||
+          Number(existingConnectorMetadata.push_comments_parsed ?? existingConnectorMetadata.pushCommentsParsed ?? 0) > 0);
+      if (!statusOnly && (!existingConnectorMetadata || (metadataHasPttFullTextStats && !existingHasPttFullTextStats))) {
+        latestConnectorMetadata.set(connector, metadata);
+      }
+      if (Array.isArray(metadata.channel_breakdown) && !latestChannelBreakdown.has(connector)) {
+        const aggregated = new Map<string, NonNullable<ConnectorStatusView['channelBreakdown']>[number]>();
+        for (const rawItem of metadata.channel_breakdown as Row[]) {
+          const channel = String(rawItem.channel || '').replace(/^@/, '');
+          if (!channel) continue;
+          const key = channel.toLowerCase();
+          const existing = aggregated.get(key);
+          const matchedSymbols = Array.isArray(rawItem.matched_symbols)
+            ? rawItem.matched_symbols
+                .map((symbol: unknown) => String(symbol))
+                .filter((symbol) => /^\d{4}$/.test(symbol) && !isAmbiguousSocialToken(symbol))
+            : [];
+          const rawMatchedSymbols = Array.isArray(rawItem.matched_symbols)
+            ? rawItem.matched_symbols.map((symbol: unknown) => String(symbol)).filter((symbol) => /^\d{4}$/.test(symbol))
+            : [];
+          const sanitizedFalsePositives = rawMatchedSymbols.filter((symbol) => isAmbiguousSocialToken(symbol));
+          const next = {
+            channel,
+            searched: Boolean(rawItem.searched),
+            fetchedPosts: Number(rawItem.fetched_posts ?? rawItem.fetchedPosts ?? 0),
+            matchedSymbols,
+            recordsWritten: Number(rawItem.records_written ?? rawItem.recordsWritten ?? 0),
+            lastSuccessAt: rawItem.last_success_at ? String(rawItem.last_success_at) : rawItem.lastSuccessAt ? String(rawItem.lastSuccessAt) : null,
+            failureReason: rawItem.failure_reason ? String(rawItem.failure_reason) : rawItem.failureReason ? String(rawItem.failureReason) : null,
+            excludedFalsePositives:
+              Number(rawItem.excluded_false_positives ?? rawItem.excludedFalsePositives ?? 0) + sanitizedFalsePositives.length,
+            excludedExamples: Array.isArray(rawItem.excluded_examples)
+              ? Array.from(
+                  new Set([
+                    ...rawItem.excluded_examples.map((item: unknown) => String(item)).filter(Boolean),
+                    ...sanitizedFalsePositives.map((symbol) => `${symbol}:ambiguous_year_or_price_summary_filter`),
+                  ]),
+                ).slice(0, 8)
+              : Array.isArray(rawItem.excludedExamples)
+                ? Array.from(
+                    new Set([
+                      ...rawItem.excludedExamples.map((item: unknown) => String(item)).filter(Boolean),
+                      ...sanitizedFalsePositives.map((symbol) => `${symbol}:ambiguous_year_or_price_summary_filter`),
+                    ]),
+                  ).slice(0, 8)
+                : sanitizedFalsePositives.map((symbol) => `${symbol}:ambiguous_year_or_price_summary_filter`).slice(0, 8),
+          };
+          if (!existing) {
+            aggregated.set(key, next);
+          } else {
+            aggregated.set(key, {
+              ...existing,
+              searched: existing.searched || next.searched,
+              fetchedPosts: existing.fetchedPosts + next.fetchedPosts,
+              matchedSymbols: Array.from(new Set([...existing.matchedSymbols, ...next.matchedSymbols])),
+              recordsWritten: existing.recordsWritten + next.recordsWritten,
+              lastSuccessAt: next.lastSuccessAt || existing.lastSuccessAt,
+              failureReason: existing.failureReason && next.failureReason ? `${existing.failureReason}; ${next.failureReason}` : existing.failureReason || next.failureReason,
+              excludedFalsePositives: (existing.excludedFalsePositives || 0) + (next.excludedFalsePositives || 0),
+              excludedExamples: Array.from(new Set([...(existing.excludedExamples || []), ...(next.excludedExamples || [])])).slice(0, 8),
+            });
+          }
+        }
+        latestChannelBreakdown.set(connector, Array.from(aggregated.values()));
+      }
+      if (Array.isArray(metadata.kol_breakdown) && !latestKolBreakdown.has(connector)) {
+        latestKolBreakdown.set(
+          connector,
+          metadata.kol_breakdown.map((item: Row) => ({
+            kol: String(item.kol || ''),
+            searchedUrls: Array.isArray(item.searchedUrls)
+              ? item.searchedUrls.map((url: unknown) => String(url)).filter(Boolean)
+              : Array.isArray(item.searched_urls)
+                ? item.searched_urls.map((url: unknown) => String(url)).filter(Boolean)
+                : [],
+            episodesFound: Number(item.episodesFound ?? item.episodes_found ?? 0),
+            youtubeEpisodes: Number(item.youtubeEpisodes ?? item.youtube_episodes ?? 0),
+            weakSignalsWritten: Number(item.weakSignalsWritten ?? item.weak_signals_written ?? 0),
+            transcriptsReady: Number(item.transcriptsReady ?? item.transcripts_ready ?? 0),
+            failureReason: item.failureReason ? String(item.failureReason) : item.failure_reason ? String(item.failure_reason) : null,
+          })),
+        );
+      }
+      if ((connector === 'podcast' || connector === 'youtube') && !latestPodcastStats.has(connector)) {
+        latestPodcastStats.set(connector, {
+          episodesFound: Number(metadata.episodes_found ?? metadata.episodesFound ?? 0),
+          transcriptsReady: Number(metadata.transcripts_ready ?? metadata.transcriptsReady ?? 0),
+          weakSignalsWritten: Number(metadata.weak_signals_written ?? metadata.weakSignalsWritten ?? 0),
+          failureReasonByKol:
+            metadata.failure_reason_by_kol && typeof metadata.failure_reason_by_kol === 'object'
+              ? (metadata.failure_reason_by_kol as Record<string, string>)
+              : {},
+        });
+      }
+      const searchedTargets = Array.isArray(metadata.searched_targets)
+        ? metadata.searched_targets
+        : Array.isArray(metadata.searchedTargets)
+          ? metadata.searchedTargets
+          : Array.isArray(metadata.source_surfaces)
+            ? metadata.source_surfaces
+            : Array.isArray(metadata.sourceSurfaces)
+              ? metadata.sourceSurfaces
+          : Array.isArray(metadata.searched_keywords)
+            ? metadata.searched_keywords
+            : Array.isArray(metadata.searchedKeywords)
+              ? metadata.searchedKeywords
+              : null;
+      const normalizedSearchedTargets = [
+        ...(searchedTargets ? searchedTargets.map((item: unknown) => String(item)).filter(Boolean) : []),
+        ...(metadata.account_feed_attempted && (connector === 'threads' || connector === 'instagram') ? [`${connector}_account_feed`] : []),
+      ];
+      if (normalizedSearchedTargets.length > 0 && !latestSearchedTargets.has(connector)) {
+        latestSearchedTargets.set(connector, Array.from(new Set(normalizedSearchedTargets)));
+      } else if (normalizedSearchedTargets.length > 0) {
+        latestSearchedTargets.set(
+          connector,
+          Array.from(
+            new Set([
+              ...(latestSearchedTargets.get(connector) || []),
+              ...normalizedSearchedTargets,
+            ]),
+          ),
+        );
+      }
+      const matchedSymbols = Array.isArray(metadata.matched_symbols)
+        ? metadata.matched_symbols
+        : Array.isArray(metadata.matchedSymbols)
+          ? metadata.matchedSymbols
+          : null;
+      if (matchedSymbols && !latestMatchedSymbols.has(connector)) {
+        latestMatchedSymbols.set(
+          connector,
+          matchedSymbols.map((item: unknown) => String(item)).filter((item) => /^\d{4}$/.test(item) && !isAmbiguousSocialToken(item)),
+        );
+      } else if (matchedSymbols) {
+        latestMatchedSymbols.set(
+          connector,
+          Array.from(
+            new Set([
+              ...(latestMatchedSymbols.get(connector) || []),
+              ...matchedSymbols.map((item: unknown) => String(item)).filter((item) => /^\d{4}$/.test(item) && !isAmbiguousSocialToken(item)),
+            ]),
+          ),
+        );
+      }
+      if (statusOnly) continue;
+      if (!latestRuns.has(connector)) {
+        latestRuns.set(connector, {
+          status: status || 'unknown',
+          finishedAt: row.finished_at ? String(row.finished_at) : null,
+          startedAt,
+        });
+        latestRunMeta.set(connector, {
+          recordsWritten,
+          errorSummary: row.error_summary ? String(row.error_summary) : null,
+        });
+      }
+      if (status !== 'running' && !latestTerminalRuns.has(connector)) {
+        latestTerminalRuns.set(connector, {
+          status: status || 'unknown',
+          finishedAt: row.finished_at ? String(row.finished_at) : null,
+          startedAt,
+          recordsWritten,
+          errorSummary: row.error_summary ? String(row.error_summary) : null,
+        });
+      }
+      if (status === 'success' && !latestSuccess.has(connector)) {
         latestSuccess.set(connector, row.finished_at ? String(row.finished_at) : null);
+      }
+      if (recordsWritten > 0 && !latestSuccessfulWrite.has(connector)) {
+        latestSuccessfulWrite.set(connector, {
+          recordsWritten,
+          at: row.finished_at ? String(row.finished_at) : startedAt,
+        });
       }
     }
 
     const nowMs = Date.now();
     const staleRunningThresholdMs = 25 * 60 * 1000;
 
-    return (['investanchors', 'threads', 'instagram', 'telegram'] as const).map((connector) => ({
-      connector,
-      credentialStatus: latestCreds.get(connector)?.status || 'unknown',
-      lastCheckedAt: latestCreds.get(connector)?.updatedAt || null,
-      lastRunStatus:
-        ((() => {
-          const latest = latestRuns.get(connector);
-          if (!latest) return 'idle';
-          if (latest.status !== 'running') return latest.status;
-          const startedMs = latest.startedAt ? new Date(latest.startedAt).getTime() : 0;
-          return startedMs > 0 && nowMs - startedMs > staleRunningThresholdMs ? 'timed_out' : 'running';
-        })() as ConnectorStatusView['lastRunStatus']),
-      lastSuccessAt: latestSuccess.get(connector) || null,
-    }));
+    return [...CONNECTOR_KEYS].map((connector) => {
+      const latest = latestRuns.get(connector);
+      const terminal = latestTerminalRuns.get(connector);
+      const latestStatus = (() => {
+        if (!latest) return 'idle';
+        if (latest.status !== 'running') return latest.status;
+        const startedMs = latest.startedAt ? new Date(latest.startedAt).getTime() : 0;
+        return startedMs > 0 && nowMs - startedMs > staleRunningThresholdMs ? 'timed_out' : 'running';
+      })();
+      const latestError = latestRunMeta.get(connector)?.errorSummary || null;
+      const terminalError = terminal?.errorSummary || null;
+      const terminalRecords = terminal?.recordsWritten || 0;
+      const written24h = recordsWritten24h.get(connector) || 0;
+      const successfulWrite = latestSuccessfulWrite.get(connector) || null;
+      const apiAttempt = latestApiAttempt.get(connector) || null;
+      const connectorWorkerState =
+        connector === 'threads'
+          ? (hourlySocialWorkerState || workerStateByJob.get('threads-stock-refresh') || workerStateByJob.get('threads-session-health') || socialWorkerState)
+          : connector === 'investanchors'
+            ? (dailyKolWorkerState || workerStateByJob.get('investanchors-stock-refresh') || socialWorkerState)
+            : ['instagram', 'telegram'].includes(connector)
+              ? (hourlySocialWorkerState || workerStateByJob.get('kol-content-refresh') || socialWorkerState)
+              : ['podcast', 'youtube'].includes(connector)
+                ? (dailyKolWorkerState || workerStateByJob.get('kol-content-refresh') || socialWorkerState)
+              : null;
+      const workerMetadata = ((connectorWorkerState?.metadata as Row | null) || {}) as Row;
+      const workerScriptVersion =
+        (workerMetadata.worker_script_version ? String(workerMetadata.worker_script_version) : null) ||
+        latestWorkerScriptVersion.get(connector) ||
+        null;
+      const cookieDiagnostics = latestCookieDiagnostics.get(connector) || {};
+      const canonicalWorkerStatus = latestStatus === 'idle' ? (terminal?.status || null) : latestStatus;
+      const statusOwner = apiAttempt && !latest ? 'serverless_status' : 'local_worker';
+      const sourceSurfaces24h =
+        latestSearchedTargets.get(connector) ||
+        (Array.isArray(workerMetadata.source_surfaces) ? workerMetadata.source_surfaces.map((item: unknown) => String(item)).filter(Boolean) : []);
+      const falsePositiveExcluded24h = (latestChannelBreakdown.get(connector) || []).reduce(
+        (sum, item) => sum + Number(item.excludedFalsePositives || 0),
+        0,
+      );
+      const authLikeReason = [latestError, terminalError, workerMetadata.failure_reason, workerMetadata.auth_failure_reason]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+      const accountFeedStatus: ConnectorStatusView['accountFeedStatus'] =
+        connector === 'threads' || connector === 'instagram'
+          ? sourceSurfaces24h.some((item) => /account_feed|登入首頁|following|recommended|explore/i.test(item))
+            ? 'attempted'
+            : /cookie|session|auth|credential|missing_credentials|login/.test(authLikeReason)
+              ? 'auth_degraded'
+              : 'not_attempted'
+          : 'not_applicable';
+      return {
+        connector,
+        credentialStatus: latestCreds.get(connector)?.status || 'unknown',
+        lastCheckedAt: latestCreds.get(connector)?.updatedAt || null,
+        lastRunStatus: latestStatus as ConnectorStatusView['lastRunStatus'],
+        lastRunAt: latest?.startedAt || null,
+        lastAttemptAt: latest?.startedAt || null,
+        lastSuccessAt: latestSuccess.get(connector) || null,
+        lastRecordsWritten: written24h > 0 ? written24h : terminalRecords || latestRunMeta.get(connector)?.recordsWritten || 0,
+        lastErrorSummary: latestError || terminalError,
+        lastScheduledAt: connectorWorkerState?.last_scheduled_at
+            ? String(connectorWorkerState.last_scheduled_at)
+            : SOCIAL_REFRESH_CONNECTORS.has(connector) && socialWorkerState?.last_scheduled_at
+              ? String(socialWorkerState.last_scheduled_at)
+              : null,
+        lastTerminalStatus: terminal?.status || null,
+        lastTerminalAt: terminal?.finishedAt || terminal?.startedAt || null,
+        lastTerminalRunAt: terminal?.finishedAt || terminal?.startedAt || null,
+        lastTerminalRecordsWritten: terminalRecords,
+        recordsWrittenThisRun: terminalRecords,
+        lastSuccessfulRecordsWritten: successfulWrite?.recordsWritten || 0,
+        lastSuccessfulRecordsAt: successfulWrite?.at || null,
+        metadata: latestConnectorMetadata.get(connector) || null,
+        lastRunMetadata: latestConnectorMetadata.get(connector) || null,
+        recordsWritten24h: written24h,
+        failureReason: latestError || terminalError,
+        canonicalWorkerStatus: canonicalWorkerStatus || (connectorWorkerState?.status ? String(connectorWorkerState.status) : null),
+        latestApiAttemptStatus: apiAttempt?.status || null,
+        latestApiAttemptAt: apiAttempt?.startedAt || null,
+        statusOwner,
+        ignoredServerlessSkip: Boolean(apiAttempt),
+        refreshTier: refreshTierForConnector(connector),
+        refreshCadenceHours: SOCIAL_REFRESH_CONNECTORS.has(connector) ? refreshCadenceHoursForConnector(connector) : null,
+        workerFreshnessStatus: null,
+        workerScriptVersion,
+        fallbackCookieSource: cookieDiagnostics.fallback_cookie_source ? String(cookieDiagnostics.fallback_cookie_source) : null,
+        fallbackCookieNames: Array.isArray(cookieDiagnostics.fallback_cookie_names)
+          ? cookieDiagnostics.fallback_cookie_names.map((item: unknown) => String(item)).filter(Boolean)
+          : [],
+        missingRecommendedCookieNames: Array.isArray(cookieDiagnostics.missing_recommended_cookie_names)
+          ? cookieDiagnostics.missing_recommended_cookie_names.map((item: unknown) => String(item)).filter(Boolean)
+          : [],
+        envLastModifiedAt: cookieDiagnostics.env_last_modified_at ? String(cookieDiagnostics.env_last_modified_at) : null,
+        sourceSurfaces24h,
+        falsePositiveExcluded24h,
+        accountFeedStatus,
+        channelBreakdown: latestChannelBreakdown.get(connector) || [],
+        kolBreakdown: latestKolBreakdown.get(connector) || [],
+        episodesFound: latestPodcastStats.get(connector)?.episodesFound || 0,
+        transcriptsReady: latestPodcastStats.get(connector)?.transcriptsReady || 0,
+        weakSignalsWritten: latestPodcastStats.get(connector)?.weakSignalsWritten || 0,
+        failureReasonByKol: latestPodcastStats.get(connector)?.failureReasonByKol || {},
+        searchedTargets:
+          connector === 'telegram'
+            ? ['investanchors', 'twstockanalysis', 'Gooaye', 'johnstock888', 'eaglewealth', 'a178178', 'musclestock']
+            : latestSearchedTargets.get(connector) || (latest ? ['visible_symbols', 'theme_keywords'] : []),
+        matchedSymbols: latestMatchedSymbols.get(connector) || ((written24h > 0 || terminalRecords > 0) ? ['records_written'] : []),
+      };
+    });
   } catch {
     return [];
   }
+}
+
+function verificationStatusFromConfidence(confidence: number | null): VerificationStatus {
+  if (confidence == null) return '未證實';
+  if (confidence >= 0.65) return '已證實';
+  if (confidence >= 0.35) return '部分證實';
+  return '未證實';
+}
+
+function parseDateBoundary(input: string | null, endOfDay = false) {
+  if (!input) return null;
+  const normalized = input.trim();
+  if (!normalized) return null;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(normalized)) {
+    return `${normalized}T${endOfDay ? '23:59:59.999' : '00:00:00.000'}+08:00`;
+  }
+  const parsed = new Date(normalized);
+  return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString();
+}
+
+function truncateSourceSearchText(input: unknown, max = 160) {
+  const text = compactText(input);
+  if (!text) return null;
+  return text.length > max ? `${text.slice(0, max - 1)}…` : text;
+}
+
+function compactSourceSearchConnectorStatus(row: ConnectorStatusView) {
+  return {
+    connector: row.connector,
+    credentialStatus: row.credentialStatus,
+    lastCheckedAt: row.lastCheckedAt,
+    lastRunStatus: row.lastRunStatus,
+    lastRunAt: row.lastRunAt,
+    lastSuccessAt: row.lastSuccessAt,
+    lastRecordsWritten: row.lastRecordsWritten,
+    lastErrorSummary: truncateSourceSearchText(row.lastErrorSummary, 120),
+    recordsWritten24h: row.recordsWritten24h || 0,
+    failureReason: truncateSourceSearchText(row.failureReason || row.lastErrorSummary, 120),
+    refreshTier: row.refreshTier || null,
+    workerFreshnessStatus: row.workerFreshnessStatus || null,
+    accountFeedStatus: row.accountFeedStatus || null,
+    searchedTargets: Array.isArray(row.searchedTargets) ? row.searchedTargets.slice(0, 4) : [],
+    matchedSymbols: Array.isArray(row.matchedSymbols) ? row.matchedSymbols.slice(0, 6) : [],
+  };
+}
+
+export async function searchSourceDocuments(params?: {
+  q?: string | null;
+  symbol?: string | null;
+  platform?: string | null;
+  verificationStatus?: VerificationStatus | null;
+  themeKey?: string | null;
+  runId?: string | null;
+  evidenceLevel?: '傳言層' | '佐證層' | '估值層' | null;
+  from?: string | null;
+  to?: string | null;
+  includeContentSearch?: boolean;
+  page?: number;
+  pageSize?: number;
+}): Promise<SourceSearchPayload> {
+  const page = Math.max(1, Number(params?.page || 1));
+  const pageSize = Math.min(100, Math.max(10, Number(params?.pageSize || 25)));
+  const q = compactText(params?.q || '') || null;
+  const symbol = compactText(params?.symbol || '').toUpperCase() || null;
+  const platform = compactText(params?.platform || '') || null;
+  const verificationStatus = (params?.verificationStatus as VerificationStatus | undefined) || null;
+  const themeKey = compactText(params?.themeKey || '') || null;
+  const runId = compactText(params?.runId || '') || null;
+  const evidenceLevel = (params?.evidenceLevel as '傳言層' | '佐證層' | '估值層' | undefined) || null;
+  const includeContentSearch = Boolean(params?.includeContentSearch);
+  const from = params?.from ? String(params.from) : null;
+  const to = params?.to ? String(params.to) : null;
+  const defaultRecentFromIso = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+  const fromIso = parseDateBoundary(from, false) || defaultRecentFromIso;
+  const toIso = parseDateBoundary(to, true);
+
+  const supabase = getSupabaseServerClient();
+  let query = supabase
+    .from('source_raw_documents')
+    .select('id,platform,title,summary,document_url,published_at,collected_at,symbols,confidence,source_entity_id,metadata,source_entities(display_name,entity_type)', { count: 'estimated' })
+    .order('collected_at', { ascending: false });
+
+  if (platform && platform !== 'all') {
+    query = query.eq('platform', platform);
+  }
+  if (fromIso) {
+    query = query.gte('collected_at', fromIso);
+  }
+  if (toIso) {
+    query = query.lte('collected_at', toIso);
+  }
+  if (q) {
+    const escaped = q.replace(/,/g, ' ').replace(/\./g, ' ').trim();
+    const fields = includeContentSearch
+      ? `title.ilike.%${escaped}%,summary.ilike.%${escaped}%,content_text.ilike.%${escaped}%`
+      : `title.ilike.%${escaped}%,summary.ilike.%${escaped}%`;
+    query = query.or(fields);
+  }
+
+  const start = (page - 1) * pageSize;
+  const end = start + pageSize - 1;
+  const needsClientSideFiltering = Boolean(symbol || verificationStatus || themeKey || runId || evidenceLevel);
+  const fetchStart = needsClientSideFiltering ? 0 : start;
+  const fetchEnd = needsClientSideFiltering ? Math.max(399, end) : end;
+  const [docsRes, runsRes, auditsRes, themeRes] = await Promise.all([
+    query.range(fetchStart, fetchEnd),
+    supabase
+      .from('connector_runs')
+      .select('id,connector_name,platform,status,records_written,error_summary,started_at,finished_at')
+      .order('started_at', { ascending: false })
+      .limit(20),
+    supabase
+      .from('source_audits')
+      .select('id,connector_run_id,platform,target_url,status,notes,created_at,snapshot_path,screenshot_path')
+      .order('created_at', { ascending: false })
+      .limit(20),
+    themeKey
+      ? supabase
+          .from('theme_heat')
+          .select('related_symbols')
+          .eq('theme_key', themeKey)
+          .order('as_of_date', { ascending: false })
+          .limit(1)
+      : Promise.resolve({ data: [], error: null } as unknown as { data: unknown[]; error: null }),
+  ]);
+  const { data, error, count } = docsRes;
+  if (error) throw new Error(error.message);
+  if (runsRes.error) throw new Error(runsRes.error.message);
+  if (auditsRes.error) throw new Error(auditsRes.error.message);
+  if (themeRes.error) throw new Error(themeRes.error.message);
+
+  let mapped = ((data as Row[]) || [])
+    .filter((row) => !isSourceDocNoise(row))
+    .map((row): SourceSearchResultItem => {
+      const confidence = row.confidence == null ? null : toFiniteNumber(row.confidence, 0);
+      const sourceEntity = Array.isArray(row.source_entities) ? (row.source_entities[0] as Row | undefined) : (row.source_entities as Row | undefined);
+      const symbols = Array.isArray(row.symbols) ? (row.symbols as unknown[]).map(String) : [];
+      const crawlMode = sourceDocMetadataValue(row, 'crawl_mode') as SourceSearchResultItem['crawlMode'];
+      const matchType = sourceDocMetadataValue(row, 'match_type') as SourceSearchResultItem['matchType'];
+      const directHit = symbol
+        ? (crawlMode === 'symbol_scoped' && sourceDocMetadataValue(row, 'query_symbol') === symbol
+            ? matchType === 'direct_symbol' || matchType === 'alias'
+            : looksLikeDirectSymbolHit({
+                symbol,
+                symbols,
+                platform: row.platform,
+                title: row.title,
+                summary: row.summary,
+                content_text: row.content_text,
+                document_url: row.document_url,
+              }))
+        : false;
+      return {
+        id: String(row.id || ''),
+        platform: String(row.platform || ''),
+        title: String(row.title || ''),
+        summary: row.summary ? String(row.summary) : null,
+        documentUrl: String(row.document_url || ''),
+        publishedAt: row.published_at ? String(row.published_at) : null,
+        collectedAt: String(row.collected_at || ''),
+        symbols,
+        directHit,
+        crawlMode: crawlMode || null,
+        matchType: matchType || null,
+        confidence,
+        verificationStatus: verificationStatusFromConfidence(confidence),
+        sourceEntityName: sourceEntity?.display_name ? String(sourceEntity.display_name) : null,
+        sourceEntityType: sourceEntity?.entity_type ? String(sourceEntity.entity_type) : null,
+      };
+    })
+    .filter((item) => (symbol ? item.symbols.includes(symbol) || item.directHit : true))
+    .filter((item) => (verificationStatus ? item.verificationStatus === verificationStatus : true));
+
+  if (evidenceLevel) {
+    mapped = mapped.filter((item) => {
+      if (evidenceLevel === '估值層') return item.verificationStatus === '已證實';
+      if (evidenceLevel === '佐證層') return item.verificationStatus === '部分證實';
+      return item.verificationStatus === '未證實';
+    });
+  }
+
+  if (themeKey) {
+    const themeSymbols = new Set(
+      (((themeRes.data as Row[])?.[0]?.related_symbols as unknown[]) || []).map(String).filter(Boolean),
+    );
+    if (themeSymbols.size > 0) {
+      mapped = mapped.filter((item) => item.symbols.some((sym) => themeSymbols.has(sym)));
+    }
+  }
+
+  if (runId) {
+    const matchingAudits = ((auditsRes.data as Row[]) || []).filter((row) => String(row.connector_run_id || '') === runId);
+    const targetUrls = matchingAudits.map((row) => String(row.target_url || '')).filter(Boolean);
+    const runPlatforms = new Set(matchingAudits.map((row) => String(row.platform || '')).filter(Boolean));
+    mapped = mapped.filter((item) => {
+      const urlMatched = targetUrls.some((targetUrl) => item.documentUrl.startsWith(targetUrl));
+      const platformMatched = runPlatforms.has(item.platform);
+      return urlMatched || platformMatched;
+    });
+  }
+
+  const coverageMap = new Map<string, number>();
+  mapped = mapped.sort((a, b) => {
+    const aTs = a.publishedAt || a.collectedAt;
+    const bTs = b.publishedAt || b.collectedAt;
+    return bTs.localeCompare(aTs);
+  });
+  const filteredTotal = mapped.length;
+  const pagedItems = needsClientSideFiltering ? mapped.slice(start, start + pageSize) : mapped;
+
+  for (const row of pagedItems) {
+    coverageMap.set(row.platform, (coverageMap.get(row.platform) || 0) + 1);
+  }
+
+  return {
+    page,
+    pageSize,
+    total: needsClientSideFiltering ? filteredTotal : Number(count || 0),
+    query: {
+      q,
+      symbol,
+      platform: platform || null,
+      verificationStatus,
+      themeKey,
+      runId,
+      evidenceLevel,
+      from,
+      to,
+    },
+    latestSourceAt: mapped[0]?.publishedAt || mapped[0]?.collectedAt || null,
+    coverage: Array.from(coverageMap.entries())
+      .map(([name, c]) => ({ platform: name, count: c }))
+      .sort((a, b) => b.count - a.count),
+    items: pagedItems,
+    connectorStatus: (await getConnectorStatusSummary()).map(compactSourceSearchConnectorStatus),
+    recentRuns: ((runsRes.data as Row[]) || []).map((row) => ({
+      id: String(row.id || ''),
+      connector: String(row.platform || row.connector_name || ''),
+      status: String(row.status || 'unknown'),
+      startedAt: row.started_at ? String(row.started_at) : null,
+      finishedAt: row.finished_at ? String(row.finished_at) : null,
+      recordsWritten: Number(row.records_written || 0),
+      errorSummary: truncateSourceSearchText(row.error_summary, 120),
+    })),
+    recentAudits: ((auditsRes.data as Row[]) || []).map((row) => ({
+      id: String(row.id || ''),
+      connectorRunId: row.connector_run_id ? String(row.connector_run_id) : null,
+      platform: String(row.platform || ''),
+      targetUrl: truncateSourceSearchText(row.target_url, 180),
+      status: String(row.status || 'unknown'),
+      notes: truncateSourceSearchText(row.notes, 140),
+      createdAt: String(row.created_at || nowIso()),
+      snapshotPath: row.snapshot_path ? String(row.snapshot_path) : null,
+      screenshotPath: row.screenshot_path ? String(row.screenshot_path) : null,
+    })),
+  };
 }
 
 export async function getDailyDashboardData() {
@@ -3625,14 +18738,24 @@ export async function getStockInsight(symbol: string): Promise<StockInsightPaylo
     const stock = await getLatestStockRecord(symbol);
     if (!stock) return null;
 
-    const [signalRes, recommendationRes] = await Promise.all([
-      supabaseServer.from('stock_signals').select('*').eq('stock_id', stock.id as string).order('as_of', { ascending: false }).limit(60),
+    const [signalRes, recommendationRes, twQuote, twInstitutional, twMarginTrades, twShortSales, twOfficialSbl] = await Promise.all([
+      supabaseServer
+        .from('stock_signals')
+        .select('*')
+        .eq('stock_id', stock.id as string)
+        .order('as_of', { ascending: false })
+        .limit(DEEP_DIVE_DAILY_BAR_BUFFER),
       supabaseServer
         .from('recommendations')
         .select('*, stocks(symbol,name,market), strategy_actions(*)')
         .eq('stock_id', stock.id as string)
         .order('as_of', { ascending: false })
         .limit(1),
+      stock.market === 'TW' ? fetchTwStockQuote(String(stock.symbol)).catch(() => null) : Promise.resolve(null),
+      stock.market === 'TW' ? fetchTwStockInstitutional(String(stock.symbol)).catch(() => null) : Promise.resolve(null),
+      stock.market === 'TW' ? fetchTwStockMarginTrades(String(stock.symbol)).catch(() => null) : Promise.resolve(null),
+      stock.market === 'TW' ? fetchTwStockShortSales(String(stock.symbol)).catch(() => null) : Promise.resolve(null),
+      stock.market === 'TW' ? fetchTwseOfficialSblShortSales(String(stock.symbol)).catch(() => null) : Promise.resolve(null),
     ]);
 
     if (signalRes.error || recommendationRes.error) {
@@ -3642,36 +18765,31 @@ export async function getStockInsight(symbol: string): Promise<StockInsightPaylo
     const latestSignal = (signalRes.data?.[0] as Row | undefined) || null;
     if (!latestSignal) return null;
 
-    // Try real Yahoo Finance OHLCV first; fallback to synthetic spread from stock_signals
+    // Try real Yahoo Finance OHLCV first; fallback to stored/synthetic bars from stock_signals.
     const yahooChart = stock.market === 'TW' ? await fetchYahooHistChart(String(stock.symbol)).catch(() => null) : null;
     let chart: StockInsightPayload['chart'];
+    let chartSource: StockInsightPayload['chartSource'] = 'missing';
+    let chartMissingReason: string | null = null;
     if (yahooChart && yahooChart.length >= 5) {
-      chart = yahooChart.slice(-30);
+      chart = yahooChart.slice(-DEEP_DIVE_DAILY_BAR_TARGET);
+      chartSource = 'yahoo';
     } else {
-      const chartSource = dedupeChartRows((signalRes.data as Row[]) || []).slice(-30);
-      chart = chartSource
-        .map((row, idx) => {
-          const close = toNumber(row.price);
-          if (!Number.isFinite(close)) return null;
-          // Use stored open/high/low from chip_metrics if available (from Yahoo historical ingestion)
-          const cm = (row.chip_metrics as Record<string, unknown> | null) || {};
-          const storedOpen = typeof cm.open === 'number' ? cm.open : null;
-          const storedHigh = typeof cm.high === 'number' ? cm.high : null;
-          const storedLow = typeof cm.low === 'number' ? cm.low : null;
-          const spread = Math.max(3, close * 0.015);
-          const open = storedOpen ?? (close - (idx % 2 === 0 ? spread * 0.4 : -spread * 0.3));
-          const high = storedHigh ?? (Math.max(open, close) + spread * 0.6);
-          const low = storedLow ?? (Math.min(open, close) - spread * 0.5);
-          return {
-            time: String(row.as_of || '').slice(0, 10),
-            open: Number(open.toFixed(2)),
-            high: Number(high.toFixed(2)),
-            low: Number(low.toFixed(2)),
-            close: Number(close.toFixed(2)),
-          };
-        })
-        .filter(Boolean) as StockInsightPayload['chart'];
+      const twDailyBars =
+        stock.market === 'TW'
+          ? await withFallbackTimeout(fetchTwStockDailyBars(String(stock.symbol), DEEP_DIVE_DAILY_BAR_BUFFER).catch(() => null), null, 4500)
+          : null;
+      if (twDailyBars && twDailyBars.length >= 5) {
+        chart = twDailyBars.slice(-DEEP_DIVE_DAILY_BAR_TARGET).map(({ time, open, high, low, close }) => ({ time, open, high, low, close }));
+        chartSource = 'twstock';
+      } else {
+        chart = buildChartFromSignalRows((signalRes.data as Row[]) || []);
+        chartSource = chart.length > 0 ? 'stock_signals' : 'missing';
+        chartMissingReason =
+          chart.length > 0 ? null : 'Yahoo 歷史 OHLC、node-twstock 與 stock_signals 都沒有足夠日線，暫時無法建立 K 線。';
+      }
     }
+    const chartCloses = chart.map((item) => item.close).filter((value) => Number.isFinite(value) && value > 0);
+    const derivedTechnical = chartCloses.length >= 2 ? computeTechnicalSnapshot(chartCloses) : null;
 
     const recommendationRaw = (recommendationRes.data?.[0] as Row | undefined) || undefined;
     const recommendation = recommendationRaw ? mapRecommendation(recommendationRaw) : undefined;
@@ -3694,8 +18812,18 @@ export async function getStockInsight(symbol: string): Promise<StockInsightPaylo
 
     // Fetch live price from TWSE for TW stocks to ensure up-to-date display
     const liveSnapshot = stock.market === 'TW' ? await fetchTWSELivePrice(String(stock.symbol)).catch(() => null) : null;
-    const displayPrice = liveSnapshot?.price ?? toNumber(latestSignal.price);
-    const displayVolume = liveSnapshot?.volume ?? (latestSignal.volume ? Number(latestSignal.volume) : null);
+    const displayPrice = twQuote?.price ?? liveSnapshot?.price ?? toNumber(latestSignal.price);
+    const displayVolume = twQuote?.volume ?? liveSnapshot?.volume ?? (latestSignal.volume ? Number(latestSignal.volume) : null);
+    const latestChipMetrics = ((latestSignal.chip_metrics as Record<string, unknown>) || {});
+    const recentSignalRows = ((signalRes.data as Row[]) || []).slice(0, 20);
+    const fallbackChipMetrics = hasAnyChipMetric(latestChipMetrics) ? latestChipMetrics : latestNonEmptyChipMetricsFromRows(recentSignalRows);
+    const chipMetricsBase = ((fallbackChipMetrics as Record<string, unknown> | null) || latestChipMetrics);
+    const foreignNet5d = sumChipMetricWindow(recentSignalRows, 'foreign_net', 5);
+    const foreignNet20d = sumChipMetricWindow(recentSignalRows, 'foreign_net', 20);
+    const investmentTrustNet5d = sumChipMetricWindow(recentSignalRows, 'investment_trust_net', 5);
+    const investmentTrustNet20d = sumChipMetricWindow(recentSignalRows, 'investment_trust_net', 20);
+    const dealerNet5d = sumChipMetricWindow(recentSignalRows, 'dealer_net', 5);
+    const dealerNet20d = sumChipMetricWindow(recentSignalRows, 'dealer_net', 20);
 
     return {
       symbol: String(stock.symbol || ''),
@@ -3703,18 +18831,70 @@ export async function getStockInsight(symbol: string): Promise<StockInsightPaylo
       market: (stock.market as 'TW' | 'US') || 'TW',
       price: displayPrice,
       volume: displayVolume,
-      asOf: String(latestSignal.as_of || ''),
-      freshness: liveSnapshot ? 'fresh' : ((latestSignal.freshness_status as StockInsightPayload['freshness']) || 'missing'),
+      asOf: twQuote?.date ? `${twQuote.date}T00:00:00.000+08:00` : String(latestSignal.as_of || ''),
+      freshness: twQuote?.price || liveSnapshot ? 'fresh' : ((latestSignal.freshness_status as StockInsightPayload['freshness']) || 'missing'),
       chart,
+      chartSource,
+      chartMissingReason,
       indicators: {
-        maShort: latestSignal.ma_short ? toNumber(latestSignal.ma_short) : null,
-        maMid: latestSignal.ma_mid ? toNumber(latestSignal.ma_mid) : null,
-        maLong: latestSignal.ma_long ? toNumber(latestSignal.ma_long) : null,
-        rsi: latestSignal.rsi ? toNumber(latestSignal.rsi) : null,
-        macd: latestSignal.macd ? toNumber(latestSignal.macd) : null,
-        macdSignal: latestSignal.macd_signal ? toNumber(latestSignal.macd_signal) : null,
+        maShort: latestSignal.ma_short ? toNumber(latestSignal.ma_short) : derivedTechnical?.maShort ?? null,
+        maMid: latestSignal.ma_mid ? toNumber(latestSignal.ma_mid) : derivedTechnical?.maMid ?? null,
+        maLong: latestSignal.ma_long ? toNumber(latestSignal.ma_long) : derivedTechnical?.maLong ?? null,
+        rsi: latestSignal.rsi ? toNumber(latestSignal.rsi) : derivedTechnical?.rsi ?? null,
+        macd: latestSignal.macd ? toNumber(latestSignal.macd) : derivedTechnical?.macd ?? null,
+        macdSignal: latestSignal.macd_signal ? toNumber(latestSignal.macd_signal) : derivedTechnical?.macdSignal ?? null,
       },
-      chipMetrics: (latestSignal.chip_metrics as Record<string, unknown>) || {},
+      chipMetrics: {
+        ...chipMetricsBase,
+        foreign_net: twInstitutional?.foreignNet ?? chipMetricsBase.foreign_net ?? null,
+        foreign_net_5d: foreignNet5d ?? chipNumber(chipMetricsBase.foreign_net_5d),
+        foreign_net_20d: foreignNet20d ?? chipNumber(chipMetricsBase.foreign_net_20d),
+        investment_trust_net: twInstitutional?.investmentTrustNet ?? chipMetricsBase.investment_trust_net ?? null,
+        investment_trust_net_5d: investmentTrustNet5d ?? chipNumber(chipMetricsBase.investment_trust_net_5d),
+        investment_trust_net_20d: investmentTrustNet20d ?? chipNumber(chipMetricsBase.investment_trust_net_20d),
+        dealer_net: twInstitutional?.dealerNet ?? chipMetricsBase.dealer_net ?? null,
+        dealer_net_5d: dealerNet5d ?? chipNumber(chipMetricsBase.dealer_net_5d),
+        dealer_net_20d: dealerNet20d ?? chipNumber(chipMetricsBase.dealer_net_20d),
+        margin_balance: twMarginTrades?.marginBalance ?? chipNumber(chipMetricsBase.margin_balance),
+        margin_balance_change:
+          (twMarginTrades?.marginBalance != null && twMarginTrades?.marginBalancePrev != null
+            ? twMarginTrades.marginBalance - twMarginTrades.marginBalancePrev
+            : chipNumber(chipMetricsBase.margin_balance_change)),
+        margin_usage_ratio: twMarginTrades?.marginUsageRatio ?? chipNumber(chipMetricsBase.margin_usage_ratio),
+        margin_note: twMarginTrades?.note ?? chipMetricsBase.margin_note ?? null,
+        short_balance: twMarginTrades?.shortBalance ?? chipNumber(chipMetricsBase.short_balance),
+        short_balance_change:
+          (twMarginTrades?.shortBalance != null && twMarginTrades?.shortBalancePrev != null
+            ? twMarginTrades.shortBalance - twMarginTrades.shortBalancePrev
+            : chipNumber(chipMetricsBase.short_balance_change)),
+        short_usage_ratio: twMarginTrades?.shortUsageRatio ?? chipNumber(chipMetricsBase.short_usage_ratio),
+        short_note: twMarginTrades?.note ?? chipMetricsBase.short_note ?? null,
+        margin_short_balance: twShortSales?.marginShortBalance ?? chipNumber(chipMetricsBase.margin_short_balance),
+        margin_short_balance_change:
+          (twShortSales?.marginShortBalance != null && twShortSales?.marginShortBalancePrev != null
+            ? twShortSales.marginShortBalance - twShortSales.marginShortBalancePrev
+            : chipNumber(chipMetricsBase.margin_short_balance_change)),
+        margin_short_usage_ratio: twShortSales?.marginShortUsageRatio ?? chipNumber(chipMetricsBase.margin_short_usage_ratio),
+        margin_short_note: twShortSales?.note ?? chipMetricsBase.margin_short_note ?? null,
+        sbl_short_balance: twOfficialSbl?.sblShortBalance ?? twShortSales?.sblShortBalance ?? chipNumber(chipMetricsBase.sbl_short_balance),
+        sbl_short_balance_change:
+          (twOfficialSbl?.sblShortBalance != null && twOfficialSbl?.sblShortBalancePrev != null
+            ? twOfficialSbl.sblShortBalance - twOfficialSbl.sblShortBalancePrev
+            : chipNumber(chipMetricsBase.sbl_short_balance_change)),
+        sbl_short_usage_ratio: twOfficialSbl?.sblShortUsageRatio ?? twShortSales?.sblShortUsageRatio ?? chipNumber(chipMetricsBase.sbl_short_usage_ratio),
+        official_sbl_as_of: twOfficialSbl?.date ?? chipMetricsBase.official_sbl_as_of ?? null,
+        official_sbl_source_url: twOfficialSbl?.sourceUrl ?? chipMetricsBase.official_sbl_source_url ?? null,
+        sbl_source: twOfficialSbl?.source ?? chipMetricsBase.sbl_source ?? null,
+        chip_source_as_of: twQuote?.date
+          ? `${twQuote.date}T00:00:00.000+08:00`
+          : String(chipMetricsBase.chip_source_as_of || latestSignal.as_of || ''),
+        chip_source: twOfficialSbl
+          ? 'twse-official+node-twstock/live'
+          : twQuote || twInstitutional || twMarginTrades || twShortSales
+            ? 'node-twstock/live'
+            : chipMetricsBase.chip_source || 'stock_signals',
+        fallback_used: !(twInstitutional || twMarginTrades || twShortSales || twOfficialSbl) || chipMetricsBase !== latestChipMetrics,
+      },
       strategy,
       recommendation,
       riskDisclosure: RISK_DISCLOSURE,
@@ -4000,9 +19180,9 @@ export async function runIngestionBatch(options?: { dryRun?: boolean }): Promise
           {
             stock_id: stock.id,
             as_of_date: asOfDate,
-            monthly_revenue: seed.revenue.monthlyRevenue,
-            yoy_growth: seed.revenue.yoyGrowth,
-            mom_growth: seed.revenue.momGrowth,
+            monthly_revenue: nullIfMissingMetric(seed.revenue.monthlyRevenue),
+            yoy_growth: seed.revenue.yoyGrowth == null || !Number.isFinite(seed.revenue.yoyGrowth) ? null : seed.revenue.yoyGrowth,
+            mom_growth: seed.revenue.momGrowth == null || !Number.isFinite(seed.revenue.momGrowth) ? null : seed.revenue.momGrowth,
             source_url: seed.revenue.sourceUrl,
           },
           { onConflict: 'stock_id,as_of_date' },
@@ -4013,12 +19193,12 @@ export async function runIngestionBatch(options?: { dryRun?: boolean }): Promise
           {
             stock_id: stock.id,
             as_of_date: asOfDate,
-            eps_ttm: seed.fundamentals.epsTtm,
-            gross_margin: seed.fundamentals.grossMargin,
-            operating_margin: seed.fundamentals.operatingMargin,
-            pe_ratio: seed.fundamentals.peRatio,
-            pb_ratio: seed.fundamentals.pbRatio,
-            revenue_run_rate: seed.fundamentals.revenueRunRate,
+            eps_ttm: nullIfZeroMetric(seed.fundamentals.epsTtm),
+            gross_margin: nullIfMissingMetric(seed.fundamentals.grossMargin),
+            operating_margin: nullIfZeroMetric(seed.fundamentals.operatingMargin),
+            pe_ratio: nullIfZeroMetric(seed.fundamentals.peRatio),
+            pb_ratio: nullIfMissingMetric(seed.fundamentals.pbRatio),
+            revenue_run_rate: nullIfMissingMetric(seed.fundamentals.revenueRunRate),
             source_url: seed.fundamentals.sourceUrl,
           },
           { onConflict: 'stock_id,as_of_date' },
@@ -4083,14 +19263,14 @@ export async function runThemeScan(options?: { dryRun?: boolean }): Promise<Agen
   const runId = dryRun ? randomUUID() : await startAgentRun('theme_scan', { as_of: asOfDate });
 
   try {
+    let rowsWritten = 0;
     const [signalsRes, marketRes, socialDocsRes] = await Promise.all([
       supabaseServer.from('stock_signals').select('price,stocks(symbol,market)').order('as_of', { ascending: false }).limit(200),
       supabaseServer.from('market_snapshots').select('*').eq('market', 'TW').order('as_of', { ascending: false }).limit(1),
       supabaseServer
         .from('source_raw_documents')
-        .select('symbols,source_type,source_name,summary,confidence,source_timestamp')
-        .in('source_type', ['PTT', 'BullTalk', 'KOL', 'Threads'])
-        .order('source_timestamp', { ascending: false })
+        .select('symbols,platform,title,summary,document_url,confidence,published_at,collected_at,metadata,source_entities(display_name,entity_type)')
+        .order('collected_at', { ascending: false })
         .limit(500),
     ]);
     if (signalsRes.error || marketRes.error) {
@@ -4126,6 +19306,7 @@ export async function runThemeScan(options?: { dryRun?: boolean }): Promise<Agen
           }),
         );
         const relatedSymbols = seeds.map((seed) => seed.symbol);
+        const relatedSymbolSet = new Set<string>(relatedSymbols.map(String));
         // Gather real social docs from source_raw_documents that mention any symbol in this theme
         const themeSocialDocs = allSocialDocs.filter((doc) => {
           const docSymbols = (doc.symbols as string[]) || [];
@@ -4133,19 +19314,22 @@ export async function runThemeScan(options?: { dryRun?: boolean }): Promise<Agen
         });
         const supportingEvidence = mergeSourceCoverage([
           // Social-first: real docs from Supabase take priority
-          ...themeSocialDocs.slice(0, 10).map((doc) =>
-            mapSourceCoverageItem({
-              source_name: String(doc.source_name || '社群'),
-              source_type: sourceTypeFromName(String(doc.source_type || 'PTT'), String(doc.source_name || '')),
-              summary: String(doc.summary || ''),
-              source_url: null,
-              source_timestamp: String(doc.source_timestamp || nowIso()),
-              symbols: (doc.symbols as string[]) || relatedSymbols,
+          ...themeSocialDocs.slice(0, 10).map((doc) => {
+            const sourceEntity = Array.isArray(doc.source_entities) ? (doc.source_entities[0] as Row | undefined) : (doc.source_entities as Row | undefined);
+            const sourceName = String(sourceEntity?.display_name || doc.platform || '社群/新聞');
+            const sourceType = sourceTypeFromName(doc.platform, sourceName);
+            return mapSourceCoverageItem({
+              source_name: sourceName,
+              source_type: sourceType,
+              summary: String(doc.summary || doc.title || '來源命中此主題關聯股票。'),
+              source_url: String(doc.document_url || '') || null,
+              source_timestamp: String(doc.published_at || doc.collected_at || nowIso()),
+              symbols: ((doc.symbols as string[]) || relatedSymbols).map(String).filter((symbol) => relatedSymbolSet.has(symbol)),
               confidence: toFiniteNumber(doc.confidence, 0.35),
-              weight: communityWeightForSource(sourceTypeFromName(String(doc.source_type || 'PTT'), String(doc.source_name || ''))),
+              weight: communityWeightForSource(sourceType),
               verification_status: toFiniteNumber(doc.confidence, 0) >= 0.55 ? '部分證實' : '未證實',
-            }),
-          ),
+            });
+          }),
           // Seed social signals as fallback if no real docs
           ...seeds.flatMap((seed) =>
             seed.socialSignals.map((signal) =>
@@ -4205,6 +19389,147 @@ export async function runThemeScan(options?: { dryRun?: boolean }): Promise<Agen
           });
         }
       }
+      const passiveDocs = allSocialDocs.filter(passiveComponentMlccDocMatches);
+      const passiveDocSymbols = new Set(passiveDocs.flatMap((doc) => ((doc.symbols as string[]) || []).map(String)));
+      const passiveRelatedSymbols = PASSIVE_COMPONENT_MLCC_THEME.symbols.map((item) => item.symbol);
+      const passiveCoverage = mergeSourceCoverage([
+        ...passiveDocs.slice(0, 12).map((doc) => {
+          const sourceEntity = Array.isArray(doc.source_entities) ? (doc.source_entities[0] as Row | undefined) : (doc.source_entities as Row | undefined);
+          const sourceName = String(sourceEntity?.display_name || doc.platform || '社群/新聞');
+          const sourceType = sourceTypeFromName(doc.platform, sourceName);
+          return mapSourceCoverageItem({
+            source_name: sourceName,
+            source_type: sourceType,
+            summary: String(doc.summary || doc.title || ''),
+            source_url: String(doc.document_url || '') || null,
+            source_timestamp: String(doc.published_at || doc.collected_at || nowIso()),
+            symbols: ((doc.symbols as string[]) || passiveRelatedSymbols).filter((symbol) => PASSIVE_COMPONENT_MLCC_SYMBOL_SET.has(String(symbol))),
+            confidence: toFiniteNumber(doc.confidence, 0.5),
+            weight: communityWeightForSource(sourceType),
+            verification_status: toFiniteNumber(doc.confidence, 0.45) >= 0.55 ? '部分證實' : '未證實',
+          });
+        }),
+        ...PASSIVE_COMPONENT_MLCC_THEME.externalEvidence.map((item) =>
+          mapSourceCoverageItem({
+            source_name: item.sourceName,
+            source_type: 'news',
+            summary: item.summary,
+            source_url: item.sourceUrl,
+            source_timestamp: nowIso(),
+            symbols: passiveRelatedSymbols,
+            confidence: 0.62,
+            weight: 0.14,
+            verification_status: '部分證實',
+          }),
+        ),
+      ]);
+      const passiveMentionRatio = passiveRelatedSymbols.length > 0 ? passiveRelatedSymbols.filter((symbol) => passiveDocSymbols.has(symbol)).length / passiveRelatedSymbols.length : 0;
+      const passiveHeat = clamp(0.72 + Math.min(0.18, passiveDocs.length * 0.018) + passiveMentionRatio * 0.12 + twTrend * 0.12, 0, 0.88);
+      for (const windowType of ['daily', 'three_day', 'weekly'] as const) {
+        const modifier = windowType === 'daily' ? 1 : windowType === 'three_day' ? 0.97 : 0.94;
+        rows.push({
+          theme_key: PASSIVE_COMPONENT_MLCC_THEME.themeKey,
+          theme_name: PASSIVE_COMPONENT_MLCC_THEME.themeName,
+          window_type: windowType,
+          market_regime: twTrend >= 0.65 ? 'risk-on-passive-components' : 'selective-risk-on',
+          heat_score: round(clamp(passiveHeat * modifier), 4),
+          capital_flow_signals: {
+            market_trend_score: twTrend,
+            source_hits: passiveDocs.length,
+            mapped_symbols: passiveRelatedSymbols.length,
+            candidate_only_until_bridge_pass: true,
+            ...globalLeadLagCapitalFlowSignals(PASSIVE_COMPONENT_MLCC_THEME.themeKey, twTrend),
+          },
+          related_symbols: passiveRelatedSymbols,
+          supporting_evidence: passiveCoverage,
+          verification_status: passiveDocs.length >= 3 ? '部分證實' : '未證實',
+          latest_source_at: latestSourceTimestamp(passiveCoverage),
+          as_of_date: asOfDate,
+          updated_at: nowIso(),
+        });
+      }
+      for (const discoveryTheme of ADDITIONAL_DISCOVERY_THEMES) {
+        const themeDocs = allSocialDocs.filter((doc) => discoveryThemeDocMatches(discoveryTheme, doc));
+        const relatedSymbols: string[] = discoveryTheme.symbols.map((item) => String(item.symbol));
+        const directSymbolHits = discoveryThemeDocSymbols(discoveryTheme, themeDocs);
+        const coverage = mergeSourceCoverage([
+          ...themeDocs.slice(0, 12).map((doc) => {
+            const sourceEntity = Array.isArray(doc.source_entities) ? (doc.source_entities[0] as Row | undefined) : (doc.source_entities as Row | undefined);
+            const sourceName = String(sourceEntity?.display_name || doc.platform || '社群/新聞');
+            const sourceType = sourceTypeFromName(doc.platform, sourceName);
+            return mapSourceCoverageItem({
+              source_name: sourceName,
+              source_type: sourceType,
+              summary: String(doc.summary || doc.title || ''),
+              source_url: String(doc.document_url || '') || null,
+              source_timestamp: String(doc.published_at || doc.collected_at || nowIso()),
+              symbols: (((doc.symbols as string[]) || relatedSymbols).map(String)).filter((symbol) => relatedSymbols.includes(symbol)),
+              confidence: toFiniteNumber(doc.confidence, 0.48),
+              weight: communityWeightForSource(sourceType),
+              verification_status: toFiniteNumber(doc.confidence, 0.45) >= 0.55 ? '部分證實' : '未證實',
+            });
+          }),
+          registryIndustrySource({
+            sourceName: 'StockInsider 主題 taxonomy',
+            summary: `${discoveryTheme.themeName} 由關鍵字與台股供應鏈映射建立；即使本輪社群未命中，也會保留候選追蹤與下一輪補抓。`,
+            symbols: relatedSymbols,
+            confidence: themeDocs.length > 0 ? 0.42 : 0.34,
+            verificationStatus: themeDocs.length > 0 ? '部分證實' : '未證實',
+          }),
+        ]);
+        const heat = clamp(
+          0.58 +
+            Math.min(0.18, themeDocs.length * 0.02) +
+            (directSymbolHits.size / Math.max(1, relatedSymbols.length)) * 0.14 +
+            twTrend * 0.12,
+          0,
+          0.86,
+        );
+        for (const windowType of ['daily', 'three_day', 'weekly'] as const) {
+          const modifier = windowType === 'daily' ? 1 : windowType === 'three_day' ? 0.97 : 0.94;
+          rows.push({
+            theme_key: discoveryTheme.themeKey,
+            theme_name: discoveryTheme.themeName,
+            window_type: windowType,
+            market_regime: twTrend >= 0.65 ? `risk-on-${discoveryTheme.themeKey}` : 'selective-risk-on',
+            heat_score: round(clamp(heat * modifier), 4),
+            capital_flow_signals: {
+              market_trend_score: twTrend,
+              source_hits: themeDocs.length,
+              mapped_symbols: relatedSymbols.length,
+              candidate_only_until_bridge_pass: true,
+              ...globalLeadLagCapitalFlowSignals(discoveryTheme.themeKey, twTrend),
+            },
+            related_symbols: relatedSymbols,
+            supporting_evidence: coverage,
+            verification_status: directSymbolHits.size > 0 ? '部分證實' : '未證實',
+            latest_source_at: latestSourceTimestamp(coverage),
+            as_of_date: asOfDate,
+            updated_at: nowIso(),
+          });
+        }
+      }
+      for (const basket of GLOBAL_THEME_LEAD_LAG_BASKETS) {
+        if (rows.some((row) => row.theme_key === basket.themeKey)) continue;
+        const coverage = globalLeadLagThemeSourceCoverage(basket);
+        for (const windowType of ['daily', 'three_day', 'weekly'] as const) {
+          const modifier = windowType === 'daily' ? 1 : windowType === 'three_day' ? 0.97 : 0.94;
+          rows.push({
+            theme_key: basket.themeKey,
+            theme_name: basket.themeName,
+            window_type: windowType,
+            market_regime: 'overseas-lead-lag-watch',
+            heat_score: round(clamp((0.48 + twTrend * 0.16) * modifier), 4),
+            capital_flow_signals: globalLeadLagCapitalFlowSignals(basket.themeKey, twTrend),
+            related_symbols: [...basket.twMappedSymbols],
+            supporting_evidence: coverage,
+            verification_status: '未證實',
+            latest_source_at: latestSourceTimestamp(coverage),
+            as_of_date: asOfDate,
+            updated_at: nowIso(),
+          });
+        }
+      }
       return rows;
     };
 
@@ -4220,6 +19545,7 @@ export async function runThemeScan(options?: { dryRun?: boolean }): Promise<Agen
           const rows = buildThemeRows();
           const { error } = await supabaseServer.from('theme_heat').upsert(rows, { onConflict: 'theme_key,window_type,as_of_date' });
           if (error) throw new Error(error.message);
+          rowsWritten = rows.length;
           return {
             outputSummary: `updated ${rows.length} theme heat rows`,
             findings: rows.map((row) => ({
@@ -4237,9 +19563,13 @@ export async function runThemeScan(options?: { dryRun?: boolean }): Promise<Agen
     }
 
     if (!dryRun) {
-      await finishAgentRun(runId, 'success', { as_of: asOfDate, records_written: groupedThemes.size * 3 });
+      await finishAgentRun(runId, 'success', {
+        as_of: asOfDate,
+        records_written: rowsWritten,
+        passive_components_mlcc_theme: true,
+      });
     }
-    return { runId, dryRun, startedRoles, recordsWritten: groupedThemes.size * 3 };
+    return { runId, dryRun, startedRoles, recordsWritten: rowsWritten };
   } catch (error) {
     if (!dryRun) {
       await finishAgentRun(runId, 'failed', { error: (error as Error).message, as_of: asOfDate }).catch(() => undefined);
@@ -4268,16 +19598,15 @@ export async function runStoryScan(options?: { dryRun?: boolean }): Promise<Agen
           // Fetch recent social docs to boost confidence from real community signals
           const { data: rawSocialDocs } = await supabaseServer
             .from('source_raw_documents')
-            .select('symbols,source_type,source_name,summary,confidence,source_timestamp')
-            .in('source_type', ['PTT', 'BullTalk', 'KOL', 'Threads'])
-            .order('source_timestamp', { ascending: false })
+            .select('symbols,platform,title,summary,confidence,published_at,collected_at')
+            .order('collected_at', { ascending: false })
             .limit(500);
           const allSocialDocs = (rawSocialDocs as Row[]) || [];
 
           const stockRows = await Promise.all(
             TW_STORY_RESEARCH_SEEDS.map((seed) => ensureStock(seed.symbol, seed.market, seed.name, seed.sector)),
           );
-          const rows = stockRows.map((stock, index) => {
+          const rows: Array<Record<string, unknown>> = stockRows.map((stock, index) => {
             const seed = TW_STORY_RESEARCH_SEEDS[index];
             // Social-first: prefer real docs from source_raw_documents
             const socialDocs = allSocialDocs.filter((doc) =>
@@ -4317,6 +19646,146 @@ export async function runStoryScan(options?: { dryRun?: boolean }): Promise<Agen
               updated_at: nowIso(),
             };
           });
+          const passiveDocs = allSocialDocs.filter(passiveComponentMlccDocMatches);
+          const passiveStocks = await Promise.all(
+            PASSIVE_COMPONENT_MLCC_THEME.symbols.map((item) => ensureStock(item.symbol, 'TW', item.name, item.sector)),
+          );
+          const passiveRows = passiveStocks.map((stock, index) => {
+            const candidate = PASSIVE_COMPONENT_MLCC_THEME.symbols[index];
+            const directDocs = passiveDocs.filter((doc) => ((doc.symbols as string[]) || []).map(String).includes(candidate.symbol));
+            const evidenceDocs = directDocs.length > 0 ? directDocs : passiveDocs;
+            const confidence = round(
+              clamp(
+                0.32 +
+                  Math.min(0.22, evidenceDocs.length * 0.025) +
+                  (directDocs.length > 0 ? 0.14 : 0) +
+                  mean(evidenceDocs.map((doc) => toFiniteNumber(doc.confidence, 0.42))) * 0.18,
+                0.28,
+                0.72,
+              ),
+              4,
+            );
+            return {
+              stock_id: stock.id,
+              story_type: 'shortage_pricing' as StoryType,
+              title: `${candidate.name} 被動元件 / MLCC 漲價循環候選`,
+              summary: `AI 電源、MLCC/TLVR 電感與被動元件漲價線索升溫；${candidate.name} 先進候選池，待官方/月營收/毛利率與籌碼技術驗證後才升級正式推薦。`,
+              catalyst_summary: 'MLCC / TLVR 電感漲價、交期拉長、AI server 單機用量提升、日系大廠報價上修。',
+              thesis_state: 'signal_candidate',
+              confidence,
+              novelty_score: round(clamp(0.48 + Math.min(0.2, passiveDocs.length * 0.015)), 4),
+              evidence_score: round(clamp(directDocs.length > 0 ? 0.4 + Math.min(0.35, directDocs.length * 0.08) : Math.min(0.35, passiveDocs.length * 0.04)), 4),
+              timing_score: 0,
+              verification_status: directDocs.length > 0 ? '部分證實' : '未證實',
+              conditional_recommendation_note: '被動元件/MLCC 題材已進候選池；需通過 bridge、來源引用、籌碼與技術 audit 才能升首頁推薦。',
+              source_mix: [
+                ...evidenceDocs.slice(0, 4).map((doc) => ({
+                  source: String(doc.source_name || doc.source_type || '公開來源'),
+                  summary: String(doc.summary || doc.title || ''),
+                  sourceType: String(doc.source_type || ''),
+                })),
+                ...PASSIVE_COMPONENT_MLCC_THEME.externalEvidence.map((item) => ({
+                  source: item.sourceName,
+                  summary: item.summary,
+                  sourceType: 'news',
+                })),
+              ],
+              related_themes: [PASSIVE_COMPONENT_MLCC_THEME.themeKey],
+              discovered_at: nowIso(),
+              as_of_date: asOfDate,
+              updated_at: nowIso(),
+            };
+          });
+          rows.push(...passiveRows);
+          for (const discoveryTheme of ADDITIONAL_DISCOVERY_THEMES) {
+            const themeDocs = allSocialDocs.filter((doc) => discoveryThemeDocMatches(discoveryTheme, doc));
+            if (themeDocs.length === 0) continue;
+            const themeStocks = await Promise.all(
+              discoveryTheme.symbols.map((item) => ensureStock(item.symbol, 'TW', item.name, item.sector)),
+            );
+            const themeRows = themeStocks.map((stock, index) => {
+              const candidate = discoveryTheme.symbols[index];
+              const directDocs = themeDocs.filter((doc) => ((doc.symbols as string[]) || []).map(String).includes(candidate.symbol));
+              const evidenceDocs = directDocs.length > 0 ? directDocs : themeDocs;
+              const confidence = round(
+                clamp(
+                  0.3 +
+                    Math.min(0.2, evidenceDocs.length * 0.025) +
+                    (directDocs.length > 0 ? 0.16 : 0) +
+                    mean(evidenceDocs.map((doc) => toFiniteNumber(doc.confidence, 0.42))) * 0.18,
+                  0.28,
+                  0.74,
+                ),
+                4,
+              );
+              return {
+                stock_id: stock.id,
+                story_type: 'operating_turnaround' as StoryType,
+                title: `${candidate.name} ${discoveryTheme.themeName}候選`,
+                summary: `${discoveryTheme.themeName} 來源熱度升溫；${candidate.name} 先進候選池，待官方/月營收/毛利率與籌碼技術驗證後才升級正式推薦。`,
+                catalyst_summary: `${discoveryTheme.keywords.slice(0, 5).join('、')} 等關鍵詞出現來源命中；需進一步驗證財務 bridge 與進場條件。`,
+                thesis_state: 'signal_candidate',
+                confidence,
+                novelty_score: round(clamp(0.46 + Math.min(0.2, themeDocs.length * 0.015)), 4),
+                evidence_score: round(clamp(directDocs.length > 0 ? 0.4 + Math.min(0.35, directDocs.length * 0.08) : Math.min(0.35, themeDocs.length * 0.04)), 4),
+                timing_score: 0,
+                verification_status: directDocs.length > 0 ? '部分證實' : '未證實',
+                conditional_recommendation_note: `${discoveryTheme.themeName} 題材已進候選池；需通過 bridge、來源引用、籌碼與技術 audit 才能升首頁推薦。`,
+                source_mix: evidenceDocs.slice(0, 4).map((doc) => ({
+                  source: String(doc.source_name || doc.source_type || '公開來源'),
+                  summary: String(doc.summary || doc.title || ''),
+                  sourceType: String(doc.source_type || ''),
+                })),
+                related_themes: [discoveryTheme.themeKey],
+                discovered_at: nowIso(),
+                as_of_date: asOfDate,
+                updated_at: nowIso(),
+              };
+            });
+            rows.push(...themeRows);
+          }
+          const storyKeySet = new Set(rows.map((row) => `${String(row.stock_id || '')}|${String(row.story_type || '')}`));
+          for (const basket of GLOBAL_THEME_LEAD_LAG_BASKETS) {
+            const leadLagStocks = await Promise.all(
+              basket.twMappedSymbols.map((symbol) => {
+                const mapped = discoveryNameForSymbol(symbol);
+                return ensureStock(symbol, 'TW', mapped.name, mapped.sector);
+              }),
+            );
+            for (const stock of leadLagStocks) {
+              const symbol = String(stock.symbol || '');
+              const mapped = discoveryNameForSymbol(symbol);
+              const key = `${String(stock.id || '')}|valuation_reset`;
+              if (!stock.id || storyKeySet.has(key)) continue;
+              storyKeySet.add(key);
+              rows.push({
+                stock_id: stock.id,
+                story_type: 'valuation_reset' as StoryType,
+                title: `${mapped.name} ${basket.themeName}落後補漲候選`,
+                summary: `${basket.themeName} 已建立海外 peer basket；若海外同族群先漲、台股 ${mapped.name} 尚未反映，先列候選追蹤，需等台股月營收、EPS、券商/官方來源與進場 gate 驗證。`,
+                catalyst_summary: '海外同族群領漲、台股同供應鏈落後、後續可能由月營收或券商上修補確認。',
+                thesis_state: 'signal_candidate',
+                confidence: 0.38,
+                novelty_score: 0.5,
+                evidence_score: basket.sourceRefs.length > 0 ? 0.32 : 0.22,
+                timing_score: 0,
+                verification_status: '未證實',
+                conditional_recommendation_note: '海外 lead-lag 只作 discovery 與重估觸發；未通過 bridge、來源引用、籌碼與技術 audit 前不得升正式推薦。',
+                source_mix: [
+                  {
+                    source: '海外同族群領漲雷達',
+                    summary: basket.summary,
+                    sourceType: 'industry',
+                    foreignPeers: basket.foreignPeers.map((peer) => peer.symbol),
+                  },
+                ],
+                related_themes: [basket.themeKey],
+                discovered_at: nowIso(),
+                as_of_date: asOfDate,
+                updated_at: nowIso(),
+              });
+            }
+          }
           const { error } = await supabaseServer.from('story_candidates').upsert(rows, { onConflict: 'stock_id,story_type,as_of_date' });
           if (error) throw new Error(error.message);
           return {
@@ -4333,10 +19802,15 @@ export async function runStoryScan(options?: { dryRun?: boolean }): Promise<Agen
           };
         },
       );
-      await finishAgentRun(runId, 'success', { as_of: asOfDate, records_written: TW_STORY_RESEARCH_SEEDS.length });
+      await finishAgentRun(runId, 'success', {
+        as_of: asOfDate,
+        records_written: TW_STORY_RESEARCH_SEEDS.length + PASSIVE_COMPONENT_MLCC_THEME.symbols.length + GLOBAL_THEME_LEAD_LAG_BASKETS.reduce((sum, basket) => sum + basket.twMappedSymbols.length, 0),
+        passive_components_mlcc_candidates: PASSIVE_COMPONENT_MLCC_THEME.symbols.length,
+        global_lead_lag_candidates: GLOBAL_THEME_LEAD_LAG_BASKETS.reduce((sum, basket) => sum + basket.twMappedSymbols.length, 0),
+      });
     }
 
-    return { runId, dryRun, startedRoles, recordsWritten: TW_STORY_RESEARCH_SEEDS.length };
+    return { runId, dryRun, startedRoles, recordsWritten: TW_STORY_RESEARCH_SEEDS.length + PASSIVE_COMPONENT_MLCC_THEME.symbols.length + GLOBAL_THEME_LEAD_LAG_BASKETS.reduce((sum, basket) => sum + basket.twMappedSymbols.length, 0) };
   } catch (error) {
     if (!dryRun) {
       await finishAgentRun(runId, 'failed', { error: (error as Error).message, as_of: asOfDate }).catch(() => undefined);
@@ -4393,11 +19867,10 @@ export async function runStoryVerify(options?: { dryRun?: boolean }): Promise<Ag
         { as_of: asOfDate, story_count: storyRows.length },
         async () => {
           let evidenceCount = 0;
+          const reviewQueueItems: AgentReviewRequest[] = [];
           for (const story of storyRows) {
             const stockId = String(story.stock_id || '');
             const symbol = symbolByStockId.get(stockId) || '';
-            const seed = TW_STORY_RESEARCH_SEEDS.find((item) => item.symbol === symbol);
-            if (!seed) continue;
 
             const eventItems = ((eventsRes.data as Row[]) || []).filter((row) => String(row.stock_id || '') === stockId);
             const transcriptItems = ((transcriptsRes.data as Row[]) || []).filter((row) => String(row.stock_id || '') === stockId);
@@ -4461,12 +19934,26 @@ export async function runStoryVerify(options?: { dryRun?: boolean }): Promise<Ag
                 evidence_class: 'public_research',
                 source_name: String(row.source || 'public_research'),
                 source_url: null,
-                headline: String(row.report_title || seed.reportTitle),
+                headline: String(row.report_title || story.title || `${symbol} public research`),
                 excerpt: compactText(row.thesis_summary),
                 stance: 'supporting',
                 evidence_strength: 0.74,
                 source_timestamp: String(row.source_timestamp || nowIso()),
               })),
+              ...institutionalItems
+                .filter((row) => toFiniteNumber(row.expectation_score, 0.5) <= 0.35)
+                .map((row) => ({
+                  story_candidate_id: story.id,
+                  stock_id: stockId,
+                  evidence_class: 'public_research',
+                  source_name: String(row.source || 'public_research'),
+                  source_url: null,
+                  headline: String(row.report_title || story.title || `${symbol} negative expectation`),
+                  excerpt: compactText(row.thesis_summary || '公開研究觀點轉弱，需人工確認是否推翻原 thesis。'),
+                  stance: 'contradicting',
+                  evidence_strength: clamp(1 - toFiniteNumber(row.expectation_score, 0.2)),
+                  source_timestamp: String(row.source_timestamp || nowIso()),
+                })),
               ...socialItems.map((row) => ({
                 story_candidate_id: story.id,
                 stock_id: stockId,
@@ -4479,6 +19966,34 @@ export async function runStoryVerify(options?: { dryRun?: boolean }): Promise<Ag
                 evidence_strength: clamp(toFiniteNumber(row.confidence, 0.5)),
                 source_timestamp: String(row.source_timestamp || nowIso()),
               })),
+              ...socialItems
+                .filter((row) => String(row.sentiment_label || '').toLowerCase() === 'bearish' && toFiniteNumber(row.confidence, 0) >= 0.6)
+                .map((row) => ({
+                  story_candidate_id: story.id,
+                  stock_id: stockId,
+                  evidence_class: 'social',
+                  source_name: String(row.source_name || 'social'),
+                  source_url: row.source_url || null,
+                  headline: `${symbol} bearish social contradiction`,
+                  excerpt: compactText(row.summary || '社群出現高信度看空訊號，與主論點矛盾。'),
+                  stance: 'contradicting',
+                  evidence_strength: clamp(toFiniteNumber(row.confidence, 0.65)),
+                  source_timestamp: String(row.source_timestamp || nowIso()),
+                })),
+              ...revenueItems
+                .filter((row) => toFiniteNumber(row.yoy_growth, 0) < 0)
+                .map((row) => ({
+                  story_candidate_id: story.id,
+                  stock_id: stockId,
+                  evidence_class: 'financial',
+                  source_name: 'revenue_signals',
+                  source_url: row.source_url || null,
+                  headline: `${symbol} monthly revenue slowdown`,
+                  excerpt: `YoY ${toFiniteNumber(row.yoy_growth).toFixed(1)}%, MoM ${toFiniteNumber(row.mom_growth).toFixed(1)}%`,
+                  stance: 'contradicting',
+                  evidence_strength: clamp(Math.min(1, Math.abs(toFiniteNumber(row.yoy_growth, 0)) / 40)),
+                  source_timestamp: nowIso(),
+                })),
             ];
 
             const { error: deleteError } = await supabaseServer.from('story_evidence_items').delete().eq('story_candidate_id', story.id);
@@ -4488,19 +20003,30 @@ export async function runStoryVerify(options?: { dryRun?: boolean }): Promise<Ag
               if (insertError) throw new Error(insertError.message);
             }
 
-            const evidenceScore = round(clamp(mean(evidenceRows.map((row) => Number(row.evidence_strength || 0.5)))), 4);
-            const nextState = recommendationStateFromVerification(evidenceScore);
+            const outcome = determineStoryVerificationOutcome(evidenceRows as Row[]);
             const { error: updateError } = await supabaseServer
               .from('story_candidates')
               .update({
-                thesis_state: nextState,
-                evidence_score: evidenceScore,
-                verification_status: verificationStatusFromState(nextState),
-                conditional_recommendation_note: buildConditionalRecommendationNote(nextState),
+                thesis_state: outcome.nextState,
+                evidence_score: outcome.evidenceScore,
+                verification_status: outcome.verificationStatus,
+                conditional_recommendation_note: outcome.note,
                 updated_at: nowIso(),
               })
               .eq('id', story.id);
             if (updateError) throw new Error(updateError.message);
+            for (const item of outcome.reviewQueueItems) {
+              reviewQueueItems.push({
+                reason: item.reason,
+                evidence: {
+                  ...item.evidence,
+                  story_candidate_id: String(story.id || ''),
+                  stock_id: stockId,
+                  symbol,
+                  governance: outcome.governance,
+                },
+              });
+            }
             evidenceCount += evidenceRows.length;
           }
 
@@ -4514,6 +20040,7 @@ export async function runStoryVerify(options?: { dryRun?: boolean }): Promise<Ag
               evidence: [],
               sourceRefs: [],
             })),
+            reviewQueueItems,
             result: evidenceCount,
           };
         },
@@ -4552,7 +20079,8 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
 
   const supabaseServer = getSupabaseServerClient();
 
-  const [storiesRes, stocksRes, signalsRes, marketRes, revenueRes, fundamentalsRes, socialRes, valuationRes, brokerRes, thesisRes] = await Promise.all([
+  const insiderSinceIso = new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString();
+  const [storiesRes, stocksRes, signalsRes, marketRes, revenueRes, fundamentalsRes, socialRes, valuationRes, brokerRes, thesisRes, insiderRes] = await Promise.all([
     supabaseServer.from('story_candidates').select('*').eq('as_of_date', asOf),
     supabaseServer.from('stocks').select('*'),
     supabaseServer.from('stock_signals').select('*').order('as_of', { ascending: false }).limit(300),
@@ -4563,9 +20091,16 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
     supabaseServer.from('valuation_cases').select('stock_id,case_type,target_price,updated_at').order('updated_at', { ascending: false }).limit(2000),
     supabaseServer.from('broker_report_documents').select('stock_id,target_price,report_date,updated_at').order('report_date', { ascending: false }).limit(1000),
     supabaseServer.from('thesis_models').select('stock_id,target_price_low,target_price_high,confidence,as_of_date,updated_at').order('as_of_date', { ascending: false }).limit(1000),
+    supabaseServer
+      .from('source_raw_documents')
+      .select('platform,symbols,sentiment_label,confidence,metadata,collected_at')
+      .eq('platform', 'twse_insider')
+      .gte('collected_at', insiderSinceIso)
+      .order('collected_at', { ascending: false })
+      .limit(1500),
   ]);
 
-  if (storiesRes.error || stocksRes.error || signalsRes.error || marketRes.error || revenueRes.error || fundamentalsRes.error || socialRes.error || valuationRes.error || brokerRes.error || thesisRes.error) {
+  if (storiesRes.error || stocksRes.error || signalsRes.error || marketRes.error || revenueRes.error || fundamentalsRes.error || socialRes.error || valuationRes.error || brokerRes.error || thesisRes.error || insiderRes.error) {
     throw new Error(
       storiesRes.error?.message ||
         stocksRes.error?.message ||
@@ -4576,6 +20111,7 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
         valuationRes.error?.message ||
         brokerRes.error?.message ||
         thesisRes.error?.message ||
+        insiderRes.error?.message ||
         socialRes.error?.message ||
         'Failed to load thesis ranking sources',
     );
@@ -4627,7 +20163,7 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
     brokerByStock.set(stockId, { targetPrice, reportDate });
   }
 
-  const thesisByStock = new Map<string, { baseTarget: number | null; confidence: number | null }>();
+  const thesisByStock = new Map<string, { baseTarget: number | null; confidence: number | null; valuationQuality: ValuationQuality; scenarioDriverType: ScenarioDriverType }>();
   for (const row of (thesisRes.data as Row[]) || []) {
     const stockId = String(row.stock_id || '');
     if (!stockId || thesisByStock.has(stockId)) continue;
@@ -4635,13 +20171,49 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
     const high = toFiniteNumber(row.target_price_high, 0);
     const baseTarget = low > 0 && high > 0 ? round((low + high) / 2, 2) : low > 0 ? low : high > 0 ? high : null;
     if (baseTarget == null) continue;
+    const metadata = (row.metadata as Row | undefined) || {};
     thesisByStock.set(stockId, {
       baseTarget,
       confidence: row.confidence == null ? null : toFiniteNumber(row.confidence, 0),
+      valuationQuality: ((metadata.valuation_quality as ValuationQuality | undefined) || 'financial_proxy') as ValuationQuality,
+      scenarioDriverType: ((metadata.scenario_driver_type as ScenarioDriverType | undefined) || 'financial_proxy') as ScenarioDriverType,
     });
   }
 
   const twMarket = (marketRes.data?.[0] as Row | undefined) || null;
+  const symbolByStockId = new Map<string, string>();
+  const stockIdBySymbol = new Map<string, string>();
+  for (const [stockId, row] of stockMap.entries()) {
+    const symbol = String(row.symbol || '');
+    symbolByStockId.set(stockId, symbol);
+    if (symbol) stockIdBySymbol.set(symbol, stockId);
+  }
+  const insiderByStock = new Map<string, number[]>();
+  for (const row of (insiderRes.data as Row[]) || []) {
+    const symbols = Array.isArray(row.symbols) ? (row.symbols as unknown[]).map(String) : [];
+    const confidence = clamp(toFiniteNumber(row.confidence, 0.6));
+    const metadata = (row.metadata as Row | undefined) || {};
+    const deltaHolding = toFiniteNumber(metadata.delta_holding, 0);
+    const sentiment = String(row.sentiment_label || 'neutral');
+    const directional =
+      sentiment === 'bullish'
+        ? 0.78
+        : sentiment === 'bearish'
+          ? 0.35
+          : deltaHolding > 0
+            ? 0.74
+            : deltaHolding < 0
+              ? 0.4
+              : 0.52;
+    const insiderScore = round(clamp(confidence * 0.6 + directional * 0.4), 4);
+    for (const symbol of symbols) {
+      const stockId = stockIdBySymbol.get(symbol);
+      if (!stockId) continue;
+      const list = insiderByStock.get(stockId) || [];
+      list.push(insiderScore);
+      insiderByStock.set(stockId, list);
+    }
+  }
 
   if (!dryRun) {
     await supabaseServer.from('pipeline_runs').insert({
@@ -4685,6 +20257,19 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
           ),
           4,
         );
+        const sourcePriorityScore = round(
+          clamp(
+            mean(
+              socialRows.map((row) => {
+                const sourceType = sourceTypeFromName(row.source_type, row.source_name);
+                return toFiniteNumber(row.confidence, 0.5) * sourcePriorityWeight(sourceType, row.source_name);
+              }),
+            ),
+            0,
+            1,
+          ),
+          4,
+        );
         const technicalScore = clamp(
           (toFiniteNumber(signal.price) >= toFiniteNumber(signal.ma_short, toFiniteNumber(signal.price)) ? 0.3 : 0.1) +
             (toFiniteNumber(signal.ma_short) >= toFiniteNumber(signal.ma_mid) ? 0.25 : 0.1) +
@@ -4692,15 +20277,49 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
             (toFiniteNumber(signal.macd) >= toFiniteNumber(signal.macd_signal) ? 0.25 : 0.1),
         );
         const timingScore = round(clamp(technicalScore * 0.7 + marketScore * 0.3), 4);
-        const score = round(clamp(evidenceScore * 0.4 + revenueScore * 0.13 + valuationRelief * 0.12 + timingScore * 0.2 + communitySignalScore * 0.15), 4);
+        const insiderSignalScore = round(
+          clamp(
+            mean(insiderByStock.get(stockId) || [0.5]),
+            0,
+            1,
+          ),
+          4,
+        );
+        const score = round(
+          clamp(
+            evidenceScore * 0.29 +
+              revenueScore * 0.1 +
+              valuationRelief * 0.1 +
+              timingScore * 0.16 +
+              sourcePriorityScore * 0.27 +
+              insiderSignalScore * 0.08,
+          ),
+          4,
+        );
         const confidence = round(clamp(score * 0.92 + evidenceScore * 0.08), 4);
+        const latestEvidenceAt = socialRows
+          .map((row) => row.source_timestamp || row.ingested_at || null)
+          .filter((item): item is string => Boolean(item))
+          .sort()
+          .at(-1) || String(story.updated_at || story.as_of_date || nowIsoValue);
+        const evidenceAgeHours = round(Math.max(0, (Date.now() - new Date(latestEvidenceAt).getTime()) / (1000 * 60 * 60)), 2);
 
         const isBlocked = String(signal.freshness_status || 'missing') !== 'fresh' || String(twMarket?.freshness_status || 'missing') !== 'fresh';
-        const recommendationState = recommendationStateFromVerification(evidenceScore, timingScore, isBlocked);
-        const verificationStatus = verificationStatusFromState(recommendationState);
-        const conditionalRecommendationNote = buildConditionalRecommendationNote(recommendationState);
+        const storyStateRaw = String(story.thesis_state || 'signal_candidate');
+        const storyState = storyStateRaw === 'review' || storyStateRaw === 'rejected'
+          ? storyStateRaw
+          : normalizeRecommendationState(storyStateRaw);
+        const recommendationState =
+          storyState === 'review' || storyState === 'rejected'
+            ? 'signal_candidate'
+            : storyState === 'validated_thesis'
+              ? recommendationStateFromVerification(evidenceScore, timingScore, isBlocked)
+              : storyState;
+        const conditionalRecommendationNote =
+          storyState === 'review'
+            ? '偵測到矛盾證據，已送人工覆核；在 review 完成前不升級為正式推薦。'
+            : buildConditionalRecommendationNote(recommendationState);
 
-        const action: RecommendationCard['action'] = recommendationState === 'actionable_setup' ? 'buy' : recommendationState === 'validated_thesis' ? 'watch' : 'watch';
         const blockReason = isBlocked
           ? String(signal.freshness_status || 'missing') !== 'fresh'
             ? 'stock signal stale'
@@ -4716,51 +20335,86 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
         let baseTarget: number | null = null;
         let upsideTarget: number | null = null;
         let isFallbackValuation = false;
+        let valuationQuality: ValuationQuality = 'fallback_proxy';
+        let scenarioDriverType: ScenarioDriverType = 'unknown';
 
         if ((valuationCase?.baseTarget || 0) > 0) {
           valuationSource = 'valuation_cases';
           valuationConfidence = 0.8;
           baseTarget = valuationCase?.baseTarget || null;
           upsideTarget = valuationCase?.upsideTarget || valuationCase?.baseTarget || null;
+          valuationQuality = 'story_modeled';
+          scenarioDriverType = 'story_tam';
         } else if ((brokerValuation?.targetPrice || 0) > 0) {
           valuationSource = 'broker_report';
           valuationConfidence = 0.68;
           baseTarget = brokerValuation?.targetPrice || null;
           upsideTarget = brokerValuation?.targetPrice || null;
+          valuationQuality = 'broker_anchored';
+          scenarioDriverType = 'broker_target';
         } else if ((thesisValuation?.baseTarget || 0) > 0) {
           valuationSource = 'thesis_model';
           valuationConfidence = thesisValuation?.confidence ?? 0.6;
           baseTarget = thesisValuation?.baseTarget || null;
           upsideTarget = thesisValuation?.baseTarget || null;
+          valuationQuality = thesisValuation?.valuationQuality || 'financial_proxy';
+          scenarioDriverType = thesisValuation?.scenarioDriverType || 'financial_proxy';
         } else {
           valuationSource = 'missing';
           valuationConfidence = 0;
           isFallbackValuation = true;
+          valuationQuality = 'fallback_proxy';
+          scenarioDriverType = 'fallback_proxy';
+        }
+        if (baseTarget && !upsideTarget) {
+          upsideTarget = round(
+            baseTarget *
+              (valuationQuality === 'broker_anchored'
+                ? 1.08
+                : valuationQuality === 'story_modeled'
+                  ? 1.14
+                  : valuationQuality === 'financial_proxy'
+                    ? 1.09
+                    : 1.05),
+            2,
+          );
         }
         if (baseTarget && upsideTarget && upsideTarget < baseTarget) {
-          upsideTarget = round(baseTarget * 1.12, 2);
+          upsideTarget = round(baseTarget * (valuationQuality === 'story_modeled' ? 1.12 : 1.06), 2);
         }
 
         const rawExpectedUpsidePct = baseTarget && price > 0 ? round(((baseTarget - price) / price) * 100, 2) : null;
         const valuationEligible = valuationSource !== 'missing' && (baseTarget || 0) > price && (rawExpectedUpsidePct || 0) > 0;
-        const finalRecommendationState = valuationEligible
-          ? recommendationState
+        const reviewRequired = storyState === 'review' || storyState === 'rejected';
+        const canonicalEvidenceMissing = storyState === 'partially_verified' && isFormalRecommendationState(recommendationState);
+        const socialOnlyEvidence = storyState === 'signal_candidate' && evidenceScore >= 0.35;
+        const finalRecommendationState = reviewRequired
+          ? 'signal_candidate'
+          : valuationEligible
+            ? recommendationState
           : evidenceScore >= 0.35
             ? 'partially_verified'
             : 'signal_candidate';
         const finalVerificationStatus = verificationStatusFromState(finalRecommendationState);
+        const sourceSignalPresentation = sourceSignalPresentationFromRows(socialRows, finalVerificationStatus, timingScore);
         const finalAction: RecommendationCard['action'] = finalRecommendationState === 'actionable_setup' ? 'buy' : 'watch';
         const expectedUpsidePct = valuationEligible ? rawExpectedUpsidePct : null;
         const stopLoss = round(price * (finalRecommendationState === 'actionable_setup' ? 0.93 : 0.95), 2);
         const whyNotRecommended =
-          valuationSource === 'missing'
+          reviewRequired
+            ? 'review_required'
+            : canonicalEvidenceMissing
+              ? 'canonical_evidence_missing'
+              : socialOnlyEvidence
+                ? 'social_only_evidence'
+                : valuationSource === 'missing'
             ? 'valuation_missing'
             : (baseTarget || 0) <= price
               ? 'base_target_below_price'
               : expectedUpsidePct == null
                 ? 'non_positive_upside'
                 : null;
-        const finalIsBlocked = isBlocked || !valuationEligible;
+        const finalIsBlocked = isBlocked || !valuationEligible || reviewRequired || canonicalEvidenceMissing || socialOnlyEvidence;
         const finalBlockReason = isBlocked ? blockReason : whyNotRecommended;
 
         if (!dryRun) {
@@ -4774,7 +20428,7 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
                 score,
                 confidence,
                 action: finalAction,
-                rationale: `story=${String(story.story_type || '')} evidence=${evidenceScore.toFixed(2)} timing=${timingScore.toFixed(2)} revenue=${revenueScore.toFixed(2)} valuation=${valuationRelief.toFixed(2)}`,
+                rationale: `story=${String(story.story_type || '')} evidence=${evidenceScore.toFixed(2)} timing=${timingScore.toFixed(2)} revenue=${revenueScore.toFixed(2)} valuation=${valuationRelief.toFixed(2)} insider=${insiderSignalScore.toFixed(2)}`,
                 signal_breakdown: {
                   evidence: evidenceScore,
                   timing: timingScore,
@@ -4782,9 +20436,21 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
                   valuation: valuationRelief,
                   market: marketScore,
                   community: communitySignalScore,
+                  source_priority_score: sourcePriorityScore,
+                  source_signal_badges: sourceSignalPresentation.sourceSignalBadges,
+                  source_signal_summary: sourceSignalPresentation.sourceSignalSummary,
+                  social_mention_stats: sourceSignalPresentation.socialMentionStats,
+                  evidence_age_hours: evidenceAgeHours,
+                  last_validated_at: String(story.updated_at || nowIsoValue),
+                  insider: insiderSignalScore,
                   valuation_source: valuationSource,
                   valuation_confidence: valuationConfidence,
+                  valuation_quality: valuationQuality,
+                  scenario_driver_type: scenarioDriverType,
                   is_fallback_valuation: isFallbackValuation,
+                  current_price: price,
+                  base_target: baseTarget,
+                  upside_target: upsideTarget,
                   why_not_recommended: whyNotRecommended,
                 },
                 is_blocked: finalIsBlocked,
@@ -4879,13 +20545,19 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
             if (valuationError) throw new Error(valuationError.message);
           }
 
+          const persistedStoryState: StoryThesisState =
+            storyState === 'review' || storyState === 'rejected'
+              ? storyState
+              : finalRecommendationState === 'actionable_setup'
+                ? 'actionable_setup'
+                : storyState;
           const { error: storyUpdateError } = await supabaseServer
             .from('story_candidates')
             .update({
-              thesis_state: recommendationState,
+              thesis_state: persistedStoryState,
               evidence_score: evidenceScore,
               timing_score: timingScore,
-              verification_status: verificationStatus,
+              verification_status: verificationStatusFromStoryState(persistedStoryState),
               conditional_recommendation_note: conditionalRecommendationNote,
               updated_at: nowIsoValue,
             })
@@ -4894,7 +20566,7 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
         }
 
         findingsWritten += 1;
-        if (isBlocked) blocked += 1;
+        if (finalIsBlocked) blocked += 1;
         written += 1;
       }
 
@@ -4964,22 +20636,45 @@ export async function runReportBuild(options?: { dryRun?: boolean }): Promise<Ag
 
   const supabaseServer = getSupabaseServerClient();
   const runId = dryRun ? randomUUID() : await startAgentRun('report_build', { as_of: asOfDate });
+  let reportBuildMeta: Record<string, unknown> | undefined;
 
   try {
-    const [themesRes, recsRes, storiesRes, stocksRes] = await Promise.all([
+    const [dailyThemesRes, threeDayThemesRes, recsRes, storiesRes, stocksRes] = await Promise.all([
       supabaseServer.from('theme_heat').select('*').eq('window_type', 'daily').eq('as_of_date', asOfDate).order('heat_score', { ascending: false }).limit(10),
+      supabaseServer.from('theme_heat').select('*').eq('window_type', 'three_day').eq('as_of_date', asOfDate).order('heat_score', { ascending: false }).limit(10),
       supabaseServer.from('recommendations').select('*, stocks(symbol,name,market), strategy_actions(state,target_price,stop_loss)').eq('as_of', asOfDate).eq('market_scope', 'TW_PRIMARY').order('score', { ascending: false }).limit(10),
       supabaseServer.from('story_candidates').select('*').eq('as_of_date', asOfDate),
       supabaseServer.from('stocks').select('id,symbol,name'),
     ]);
-    if (themesRes.error || recsRes.error || storiesRes.error || stocksRes.error) {
-      throw new Error(themesRes.error?.message || recsRes.error?.message || storiesRes.error?.message || stocksRes.error?.message || 'Failed to load report sources');
+    if (dailyThemesRes.error || threeDayThemesRes.error || recsRes.error || storiesRes.error || stocksRes.error) {
+      throw new Error(dailyThemesRes.error?.message || threeDayThemesRes.error?.message || recsRes.error?.message || storiesRes.error?.message || stocksRes.error?.message || 'Failed to load report sources');
     }
 
     const stockMap = new Map<string, Row>(((stocksRes.data as Row[]) || []).map((row) => [String(row.id || ''), row]));
     const topRecs = ((recsRes.data as Row[]) || []).map(mapRecommendation);
-    const topThemes = ((themesRes.data as Row[]) || []).map(mapThemeHeatRow);
+    const topDailyThemes = ((dailyThemesRes.data as Row[]) || []).map(mapThemeHeatRow);
+    const topThreeDayThemes = ((threeDayThemesRes.data as Row[]) || []).map(mapThemeHeatRow);
     const stories = (storiesRes.data as Row[]) || [];
+    const storyByStockId = new Map<string, Row>();
+    for (const story of stories) {
+      const stockId = String(story.stock_id || '');
+      if (stockId && !storyByStockId.has(stockId)) storyByStockId.set(stockId, story);
+    }
+    const stockIdBySymbol = new Map<string, string>();
+    for (const [stockId, stock] of stockMap.entries()) {
+      const symbol = String(stock.symbol || '');
+      if (symbol) stockIdBySymbol.set(symbol, stockId);
+    }
+    const recommendationIds = topRecs.map((rec) => rec.recommendationId).filter(Boolean);
+    const storyIdsForSymbols = (symbols: string[]) =>
+      unique(
+        symbols
+          .map((symbol) => stockIdBySymbol.get(symbol))
+          .map((stockId) => (stockId ? storyByStockId.get(stockId) : null))
+          .filter((story): story is Row => Boolean(story))
+          .map((story) => String(story.id || ''))
+          .filter(Boolean),
+      );
 
     if (!dryRun) {
       await runAgentTask(
@@ -4987,10 +20682,28 @@ export async function runReportBuild(options?: { dryRun?: boolean }): Promise<Ag
         'Research Editor Agent',
         'report-build',
         profileKeyForRole('Research Editor Agent'),
-        { as_of: asOfDate, top_recommendations: topRecs.length, top_themes: topThemes.length },
+        { as_of: asOfDate, top_recommendations: topRecs.length, daily_themes: topDailyThemes.length, hot_themes: topThreeDayThemes.length },
         async () => {
-          const memoRows: Array<Record<string, unknown>> = [];
-          memoRows.push({
+          const memoCandidates: ResearchMemoCandidate[] = [];
+          const pushMemoCandidate = (
+            row: Record<string, unknown>,
+            meta?: Partial<Pick<ResearchMemoCandidate, 'recommendationState' | 'evidenceScore' | 'sourceUpdatedAt'>>,
+          ) => {
+            const slug = String(row.slug || '');
+            if (!slug) return;
+            memoCandidates.push({
+              row,
+              slug,
+              reportKind: String(row.report_kind || ''),
+              title: String(row.title || ''),
+              recommendationState: meta?.recommendationState ?? (row.recommendation_state ? normalizeRecommendationState(row.recommendation_state) : null),
+              evidenceScore: meta?.evidenceScore ?? null,
+              sourceUpdatedAt: meta?.sourceUpdatedAt ?? (row.updated_at ? String(row.updated_at) : null),
+              index: memoCandidates.length,
+            });
+          };
+
+          pushMemoCandidate({
             report_kind: 'daily_radar',
             title: `StockInsider 每日雷達 ${asOfDate}`,
             slug: `daily-radar-${asOfDate}`,
@@ -4999,19 +20712,27 @@ export async function runReportBuild(options?: { dryRun?: boolean }): Promise<Ag
               '# 每日雷達',
               '',
               '## 市場最熱的故事群',
-              ...topThemes.slice(0, 3).map((theme) => `- ${theme.themeName}: 熱度 ${theme.heatScore.toFixed(2)} / 驗證 ${theme.verificationStatus} / 股票 ${theme.relatedSymbols.join(', ')}`),
+              ...topDailyThemes.slice(0, 3).map((theme) => `- ${theme.themeName}: 熱度 ${theme.heatScore.toFixed(2)} / 驗證 ${theme.verificationStatus} / 股票 ${theme.relatedSymbols.join(', ')}`),
               '',
               '## 推薦重點',
               ...topRecs.slice(0, 5).map((rec) => `- ${rec.symbol}: ${rec.thesisTitle || rec.rationale} / ${rec.verificationStatus || '未證實'}`),
             ].join('\n'),
             recommendation_state: null,
             catalyst_calendar: [],
-            entry_exit_rules: {},
+            entry_exit_rules: {
+              traceability: {
+                route: '/api/radar/daily',
+                windowType: 'daily',
+                recommendationIds: recommendationIds.slice(0, 5),
+                storyCandidateIds: storyIdsForSymbols(topRecs.slice(0, 5).map((rec) => rec.symbol)),
+                canonicalStates: [...new Set(topRecs.slice(0, 5).map((rec) => rec.recommendationState || 'signal_candidate'))],
+              },
+            },
             related_symbols: topRecs.slice(0, 5).map((rec) => rec.symbol),
             updated_at: nowIso(),
           });
 
-          memoRows.push({
+          pushMemoCandidate({
             report_kind: 'weekly_conviction',
             title: `StockInsider 每週高信念清單 ${asOfDate}`,
             slug: `weekly-conviction-${asOfDate}`,
@@ -5026,13 +20747,28 @@ export async function runReportBuild(options?: { dryRun?: boolean }): Promise<Ag
             ].join('\n'),
             recommendation_state: 'actionable_setup',
             catalyst_calendar: [],
-            entry_exit_rules: {},
+            entry_exit_rules: {
+              traceability: {
+                route: '/api/radar/weekly',
+                windowType: 'weekly',
+                recommendationIds: topRecs
+                  .filter((rec) => rec.recommendationState === 'actionable_setup')
+                  .slice(0, 5)
+                  .map((rec) => rec.recommendationId),
+                storyCandidateIds: storyIdsForSymbols(
+                  topRecs
+                    .filter((rec) => rec.recommendationState === 'actionable_setup')
+                    .slice(0, 5)
+                    .map((rec) => rec.symbol),
+                ),
+              },
+            },
             related_symbols: topRecs.filter((rec) => rec.recommendationState === 'actionable_setup').slice(0, 5).map((rec) => rec.symbol),
             updated_at: nowIso(),
           });
 
-          for (const theme of topThemes.slice(0, 3)) {
-            memoRows.push({
+          for (const theme of topThreeDayThemes.slice(0, 3)) {
+            pushMemoCandidate({
               report_kind: 'hot_theme',
               title: `${theme.themeName} 主題摘要 ${asOfDate}`,
               slug: `theme-${theme.themeKey}-${asOfDate}`,
@@ -5040,7 +20776,15 @@ export async function runReportBuild(options?: { dryRun?: boolean }): Promise<Ag
               memo_markdown: [`# ${theme.themeName}`, '', `熱度分數: ${theme.heatScore.toFixed(2)}`, '', `關聯股票: ${theme.relatedSymbols.join(', ')}`].join('\n'),
               recommendation_state: null,
               catalyst_calendar: [],
-              entry_exit_rules: {},
+              entry_exit_rules: {
+                traceability: {
+                  route: '/api/radar/hot',
+                  windowType: 'three_day',
+                  themeKey: theme.themeKey,
+                  storyCandidateIds: storyIdsForSymbols(theme.relatedSymbols),
+                  relatedSymbols: theme.relatedSymbols,
+                },
+              },
               related_symbols: theme.relatedSymbols,
               updated_at: nowIso(),
             });
@@ -5049,7 +20793,8 @@ export async function runReportBuild(options?: { dryRun?: boolean }): Promise<Ag
           for (const story of stories) {
             const stock = stockMap.get(String(story.stock_id || ''));
             if (!stock) continue;
-            memoRows.push({
+            pushMemoCandidate(
+              {
               stock_id: story.stock_id,
               story_candidate_id: story.id,
               report_kind: 'deep_dive',
@@ -5067,17 +20812,42 @@ export async function runReportBuild(options?: { dryRun?: boolean }): Promise<Ag
               ].join('\n'),
               recommendation_state: normalizeRecommendationState(story.thesis_state),
               catalyst_calendar: [{ label: 'Next review', date: asOfDate }],
-              entry_exit_rules: {},
+              entry_exit_rules: {
+                traceability: {
+                  route: `/stock/${String(stock.symbol || '')}`,
+                  windowType: 'deep_dive',
+                  storyCandidateIds: [String(story.id || '')],
+                  recommendationIds: topRecs.filter((rec) => rec.symbol === String(stock.symbol || '')).map((rec) => rec.recommendationId),
+                },
+              },
               related_symbols: [String(stock.symbol || '')],
               updated_at: nowIso(),
-            });
+              },
+              {
+                recommendationState: normalizeRecommendationState(story.thesis_state),
+                evidenceScore: toNumber(story.evidence_score),
+                sourceUpdatedAt: story.updated_at ? String(story.updated_at) : null,
+              },
+            );
           }
 
-          const { error } = await supabaseServer.from('research_memos').upsert(memoRows, { onConflict: 'slug' });
+          const dedupeStats = dedupeResearchMemoCandidates(memoCandidates);
+          reportBuildMeta = {
+            rawMemoRows: dedupeStats.rawMemoRows,
+            dedupedMemoRows: dedupeStats.dedupedMemoRows,
+            droppedDuplicateCount: dedupeStats.droppedDuplicateCount,
+            dedupedSlugs: dedupeStats.dedupedSlugs,
+            duplicateSlugSamples: dedupeStats.duplicateSlugSamples,
+          };
+
+          const { error } = await supabaseServer.from('research_memos').upsert(dedupeStats.rows, { onConflict: 'slug' });
           if (error) throw new Error(error.message);
           return {
-            outputSummary: `generated ${memoRows.length} research memos`,
-            findings: memoRows.map((row) => ({
+            outputSummary:
+              dedupeStats.droppedDuplicateCount > 0
+                ? `generated ${dedupeStats.dedupedMemoRows} research memos after deduping ${dedupeStats.droppedDuplicateCount} duplicate memo rows`
+                : `generated ${dedupeStats.dedupedMemoRows} research memos`,
+            findings: dedupeStats.rows.map((row) => ({
               stockId: row.stock_id ? String(row.stock_id) : null,
               findingType: 'research_memo',
               summary: String(row.title || ''),
@@ -5085,14 +20855,20 @@ export async function runReportBuild(options?: { dryRun?: boolean }): Promise<Ag
               evidence: [],
               sourceRefs: [],
             })),
-            result: memoRows.length,
+            result: reportBuildMeta,
           };
         },
       );
       await finishAgentRun(runId, 'success', { as_of: asOfDate });
     }
 
-    return { runId, dryRun, startedRoles, recordsWritten: topRecs.length + topThemes.length + stories.length + 2 };
+    return {
+      runId,
+      dryRun,
+      startedRoles,
+      recordsWritten: Number(reportBuildMeta?.dedupedMemoRows || topRecs.length + topDailyThemes.length + topThreeDayThemes.length + stories.length + 2),
+      meta: reportBuildMeta,
+    };
   } catch (error) {
     if (!dryRun) {
       await finishAgentRun(runId, 'failed', { error: (error as Error).message, as_of: asOfDate }).catch(() => undefined);
@@ -5429,14 +21205,14 @@ export async function runDynamicMentionScan(options?: { dryRun?: boolean }) {
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
 
-  // Fetch recent raw documents and podcast transcripts
+  // Use pre-extracted symbols/mentions for the high-frequency scan so this job
+  // does not repeatedly pull raw social text or full transcripts from disk.
   const [docsRes, transcriptsRes] = await Promise.all([
-    supabase.from('source_raw_documents').select('content_text, symbols, sentiment_label, platform').gte('collected_at', sevenDaysAgo).limit(500),
-    supabase.from('podcast_transcripts').select('transcript_text, extracted_mentions, extracted_thesis').gte('created_at', thirtyDaysAgo).limit(100),
+    supabase.from('source_raw_documents').select('symbols, sentiment_label, platform').gte('collected_at', sevenDaysAgo).limit(500),
+    supabase.from('podcast_transcripts').select('extracted_mentions, extracted_thesis').gte('created_at', thirtyDaysAgo).limit(100),
   ]);
 
   const seedSymbols: Set<string> = new Set(TW_STORY_RESEARCH_SEEDS.map((s) => s.symbol));
-  const symbolRegex = /\b([2-9]\d{3})\b/g;
   const mentionMap = new Map<string, { count: number; bullish: number; bearish: number; platforms: Set<string> }>();
 
   function recordMention(sym: string, sentiment: string | null, platform?: string) {
@@ -5448,26 +21224,15 @@ export async function runDynamicMentionScan(options?: { dryRun?: boolean }) {
     if (platform) entry.platforms.add(platform);
   }
 
-  for (const doc of (docsRes.data || []) as Array<{ content_text?: string; symbols?: unknown; sentiment_label?: string; platform?: string }>) {
+  for (const doc of (docsRes.data || []) as Array<{ symbols?: unknown; sentiment_label?: string; platform?: string }>) {
     // Use pre-extracted symbols field first
     const syms = Array.isArray(doc.symbols) ? (doc.symbols as string[]) : [];
     for (const sym of syms) recordMention(String(sym), doc.sentiment_label || null, doc.platform);
-    // Also regex-scan content_text
-    if (doc.content_text) {
-      for (const [, sym] of String(doc.content_text).matchAll(symbolRegex)) {
-        if (sym.length === 4) recordMention(sym, doc.sentiment_label || null, doc.platform);
-      }
-    }
   }
 
-  for (const tr of (transcriptsRes.data || []) as Array<{ transcript_text?: string; extracted_mentions?: unknown }>) {
+  for (const tr of (transcriptsRes.data || []) as Array<{ extracted_mentions?: unknown }>) {
     const mentions = Array.isArray(tr.extracted_mentions) ? (tr.extracted_mentions as string[]) : [];
     for (const sym of mentions) recordMention(String(sym), null, 'podcast');
-    if (tr.transcript_text) {
-      for (const [, sym] of String(tr.transcript_text).matchAll(symbolRegex)) {
-        if (sym.length === 4) recordMention(sym, null, 'podcast');
-      }
-    }
   }
 
   const today = asIsoDate(nowIso());
@@ -5535,20 +21300,31 @@ export async function runRevenueIngestion(options?: { dryRun?: boolean }) {
       const mopsMap = new Map<string, { revenue: number; yoy: number; mom: number }>();
       for (const row of (mopsJson.data || [])) {
         const sym = String(row.company_id || '');
-        if (sym) mopsMap.set(sym, { revenue: Number(row.revenue || 0), yoy: Number(row.yoy_growth || 0), mom: Number(row.mom_growth || 0) });
+        const revenue = nullIfMissingMetric(row.revenue);
+        if (sym && revenue != null) {
+          mopsMap.set(sym, {
+            revenue,
+            yoy: row.yoy_growth == null || row.yoy_growth === '' ? Number.NaN : Number(row.yoy_growth),
+            mom: row.mom_growth == null || row.mom_growth === '' ? Number.NaN : Number(row.mom_growth),
+          });
+        }
       }
 
       for (const stock of stocks) {
         const mops = mopsMap.get(stock.symbol);
-        if (!mops) continue;
+        const twRevenue = !mops ? await fetchTwStockRevenue(stock.symbol).catch(() => null) : null;
+        const monthlyRevenue = mops?.revenue ?? twRevenue?.revenue ?? null;
+        if (monthlyRevenue == null) continue;
         await supabase.from('revenue_signals').upsert(
           {
             stock_id: stock.id,
-            as_of_date: `${revenueYear}-${String(revenueMonth).padStart(2, '0')}-01`,
-            monthly_revenue: mops.revenue,
-            yoy_growth: mops.yoy,
-            mom_growth: mops.mom,
-            source_url: 'https://mops.twse.com.tw/mops/web/t21sc04_ifrs',
+            as_of_date: mops ? `${revenueYear}-${String(revenueMonth).padStart(2, '0')}-01` : String(twRevenue?.asOfDate || ''),
+            monthly_revenue: monthlyRevenue,
+            yoy_growth: mops && Number.isFinite(mops.yoy) ? mops.yoy : null,
+            mom_growth: mops && Number.isFinite(mops.mom) ? mops.mom : null,
+            source_url: mops
+              ? 'https://mops.twse.com.tw/mops/web/t21sc04_ifrs'
+              : `https://www.twse.com.tw/zh/announcement/revenue.html?stockNo=${stock.symbol}`,
           },
           { onConflict: 'stock_id,as_of_date' },
         );
@@ -5562,28 +21338,37 @@ export async function runRevenueIngestion(options?: { dryRun?: boolean }) {
   // Fetch fundamentals from Yahoo Finance for each TW stock (batched)
   for (const stock of stocks.slice(0, 40)) {
     try {
+      const [twValues, twEps] = await Promise.all([
+        fetchTwStockValues(stock.symbol).catch(() => null),
+        fetchTwStockEpsTtm(stock.symbol).catch(() => null),
+      ]);
       const yahooRes = await fetch(
         `https://query1.finance.yahoo.com/v10/finance/quoteSummary/${stock.symbol}.TW?modules=financialData,defaultKeyStatistics,summaryDetail`,
         { headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0' }, signal: AbortSignal.timeout(10_000) },
-      );
-      if (!yahooRes.ok) continue;
+      ).catch(() => null);
       type YahooModule = Record<string, number | undefined>;
-      const yahooJson = await yahooRes.json() as { quoteSummary?: { result?: Array<{ financialData?: YahooModule; defaultKeyStatistics?: YahooModule; summaryDetail?: YahooModule }> } };
-      const result = yahooJson.quoteSummary?.result?.[0];
-      if (!result) continue;
-      const fd = result.financialData || {};
-      const ks = result.defaultKeyStatistics || {};
-      const sd = result.summaryDetail || {};
+      const yahooJson = yahooRes?.ok
+        ? await yahooRes.json() as { quoteSummary?: { result?: Array<{ financialData?: YahooModule; defaultKeyStatistics?: YahooModule; summaryDetail?: YahooModule }> } }
+        : null;
+      const result = yahooJson?.quoteSummary?.result?.[0];
+      const fd = result?.financialData || {};
+      const ks = result?.defaultKeyStatistics || {};
+      const sd = result?.summaryDetail || {};
+      const epsTtm = fd.trailingEps ?? twEps?.epsTtm ?? null;
+      const peRatio = sd.trailingPE ?? ks.forwardPE ?? twValues?.peRatio ?? null;
+      const pbRatio = ks.priceToBook ?? twValues?.pbRatio ?? null;
+      const revenueRunRate = fd.totalRevenue ?? null;
+      if ([epsTtm, peRatio, pbRatio, revenueRunRate].every((value) => value == null)) continue;
       await supabase.from('fundamental_snapshots').upsert(
         {
           stock_id: stock.id,
           as_of_date: today,
-          eps_ttm: fd.trailingEps ?? null,
+          eps_ttm: epsTtm,
           gross_margin: fd.grossMargins != null ? Number(fd.grossMargins) * 100 : null,
           operating_margin: fd.operatingMargins != null ? Number(fd.operatingMargins) * 100 : null,
-          pe_ratio: sd.trailingPE ?? ks.forwardPE ?? null,
-          pb_ratio: ks.priceToBook ?? null,
-          revenue_run_rate: fd.totalRevenue ?? null,
+          pe_ratio: peRatio,
+          pb_ratio: pbRatio,
+          revenue_run_rate: revenueRunRate,
           source_url: `https://finance.yahoo.com/quote/${stock.symbol}.TW`,
         },
         { onConflict: 'stock_id,as_of_date' },
@@ -5901,8 +21686,9 @@ export async function runMonitoringChecks() {
           level: 'warning' as const,
           message: 'Development mode is using local fallback data instead of live Supabase',
         },
-      ],
-    };
+  ],
+};
+
   }
 
   try {

@@ -1,0 +1,92 @@
+{
+  "domain": "stock-recommendation-engine",
+  "generatedAt": "2026-06-22T14:39:00Z",
+  "loopCommand": "$loop-baseline stock-recommendation-engine",
+  "sourceOfTruth": [
+    {
+      "status": "INTENDED",
+      "path": "openspec/specs/recommendation-strategy-engine/spec.md",
+      "summary": "Deterministic recommendation score, actionable strategy fields, and state transition events are required."
+    },
+    {
+      "status": "INTENDED",
+      "path": "openspec/specs/market-intelligence/spec.md",
+      "summary": "Market and stock signals must be fresh enough for recommendation publication."
+    },
+    {
+      "status": "INTENDED",
+      "path": "openspec/specs/social-sentiment-intelligence/spec.md",
+      "summary": "PTT/Threads/KOL signals must be normalized into weighted features."
+    }
+  ],
+  "implementationEvidence": [
+    {
+      "path": "web/src/lib/domain.ts",
+      "symbols": [
+        "recommendationGateStatus",
+        "recommendationDisplayBucket",
+        "recommendationDisplayTargetMode",
+        "applyRecommendationGateMetadata",
+        "getRadarPayload",
+        "runStoryScan",
+        "runRecommendationBatch"
+      ],
+      "summary": "Core recommendation gate, bucket display, radar assembly, discovery, and recommendation workflow live in the domain module."
+    },
+    {
+      "path": "web/src/app/components/RadarTabs.tsx",
+      "summary": "Homepage renders formal, scenario, early, hot tracking, and historical observation sections."
+    },
+    {
+      "path": "scripts/audit_recommendation_gates.js",
+      "summary": "Existing audit verifies formal recommendation safety gates."
+    },
+    {
+      "path": "scripts/audit_missed_hot_symbols.js",
+      "summary": "Existing audit checks hot symbol visibility, currently with a narrow symbol sample."
+    },
+    {
+      "path": "scripts/audit_recommendation_pool_freshness.js",
+      "summary": "Existing audit checks discovery freshness but requires a live radar API."
+    }
+  ],
+  "testEvidence": [
+    {
+      "command": "cd web && npm run lint",
+      "status": "PASS_WITH_WARNINGS",
+      "details": "0 errors, 4 existing unused-variable warnings in web/src/lib/research-v2.ts."
+    },
+    {
+      "command": "cd web && npm run build",
+      "status": "PASS"
+    },
+    {
+      "command": "npm run audit:recommendation-gates",
+      "status": "PASS",
+      "report": ".agent/reports/recommendation-gates-audit-2026-06-22T14-38-54-747Z.json",
+      "observedCounts": {
+        "opportunities": 0,
+        "scenarioUpsideCandidates": 2,
+        "earlyWatchlist": 12,
+        "recentFormal7d": 0,
+        "fallbackOpportunities90d": 0
+      }
+    },
+    {
+      "command": "npm run audit:missed-hot-symbols",
+      "status": "PASS",
+      "report": ".agent/reports/missed-hot-symbols-audit-2026-06-22T14-38-59-701Z.json",
+      "limitation": "Checked symbol set was narrow and does not prove full-market hot mover coverage."
+    },
+    {
+      "command": "npm run audit:source-health",
+      "status": "PASS",
+      "report": ".agent/reports/source-health-audit-2026-06-22T14-38-53-659Z.json"
+    },
+    {
+      "command": "npm run audit:recommendation-pool-freshness",
+      "status": "BLOCKED_RUNTIME_UNAVAILABLE",
+      "details": "Default base URL http://127.0.0.1:3012 was not available; audit failed with fetch failed."
+    }
+  ]
+}

@@ -20,11 +20,11 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0b1620;
-    --foreground: #ecfdf5;
-    --surface: rgba(28, 54, 70, 0.9);
-    --surface-strong: rgba(36, 68, 86, 0.96);
-    --line: rgba(236, 253, 245, 0.16);
+    --background: #122232;
+    --foreground: #f0fdfa;
+    --surface: rgba(38, 66, 84, 0.92);
+    --surface-strong: rgba(52, 84, 104, 0.96);
+    --line: rgba(236, 253, 245, 0.24);
     --accent: #5eead4;
     --accent-strong: #f59e0b;
     --danger: #fb7185;
@@ -44,6 +44,42 @@ body {
 
 a {
   color: inherit;
+}
+
+.bg-surface {
+  background-color: var(--surface);
+}
+
+.bg-surface-strong {
+  background-color: var(--surface-strong);
+}
+
+.border-line {
+  border-color: var(--line);
+}
+
+.text-accent {
+  color: var(--accent);
+}
+
+.bg-accent {
+  background-color: var(--accent);
+}
+
+.bg-accent-soft {
+  background-color: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.border-accent {
+  border-color: var(--accent);
+}
+
+.text-danger {
+  color: var(--danger);
+}
+
+.hover\:border-accent:hover {
+  border-color: var(--accent);
 }
 
 ::selection {

@@ -1,7 +1,8 @@
 # line-personalized-alerts Specification
 
 ## Purpose
-TBD - created by archiving change stock-insider-opportunity-engine. Update Purpose after archive.
+Deliver personalized, preference-aware LINE alerts for actionable strategy events and digest updates with auditable delivery outcomes.
+
 ## Requirements
 ### Requirement: Bind LINE Subscription Preferences
 The system SHALL support LINE binding with per-user watchlist and event preference settings.
@@ -16,4 +17,3 @@ The system SHALL dispatch both actionable event alerts and daily digest events a
 #### Scenario: Pending event dispatch
 - **WHEN** dispatch job processes pending line alert events
 - **THEN** system marks each event as sent/skipped based on subscription preference filters
-

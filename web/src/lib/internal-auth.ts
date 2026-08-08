@@ -12,3 +12,11 @@ export function requireInternalAuth(req: Request): { ok: true } | { ok: false; s
 
   return { ok: true };
 }
+
+export function requireExactInternalBearer(request: Request): boolean {
+  const expected = process.env.INTERNAL_API_KEY;
+  const authorization = request.headers.get('authorization');
+  return Boolean(expected && authorization?.startsWith('Bearer ')
+    && authorization.slice(7) === expected && !request.headers.has('x-internal-key')
+    && requireInternalAuth(request).ok);
+}

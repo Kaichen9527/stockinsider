@@ -1,7 +1,8 @@
 # market-intelligence Specification
 
 ## Purpose
-TBD - created by archiving change stock-insider-opportunity-engine. Update Purpose after archive.
+Provide a reliable and normalized daily market + stock signal baseline for TW/US so downstream recommendation logic can make freshness-aware decisions.
+
 ## Requirements
 ### Requirement: Ingest Latest TW/US Market and Stock Signals
 The system SHALL ingest latest TW/US market and stock signals including price, volume, chip metrics, MA, RSI, and MACD.
@@ -16,4 +17,3 @@ The system SHALL block recommendation publication when critical market/stock sig
 #### Scenario: Critical signal is stale
 - **WHEN** any critical signal exceeds 1 hour freshness threshold
 - **THEN** the system marks recommendation rows as blocked with block reason and prevents publish timestamp
-

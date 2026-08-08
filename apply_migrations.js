@@ -9,6 +9,9 @@ const dbUser = process.env.SUPABASE_DB_USER || `postgres.${projectRef || ''}`;
 const dbPort = process.env.SUPABASE_DB_PORT || '6543';
 const dbName = process.env.SUPABASE_DB_NAME || process.env.SUPABASE_DB_DATABASE || 'postgres';
 const migrationDir = process.env.MIGRATIONS_DIR || path.join(__dirname, 'migrations');
+const BLOCKED_MIGRATIONS = new Set([
+  '20260724_source_led_opportunity_engine_v3.sql',
+]);
 
 if (!dbPassword || (!projectRef && !dbHost)) {
   console.error('Missing required env vars: SUPABASE_DB_PASSWORD and one of SUPABASE_PROJECT_REF/SUPABASE_DB_HOST');
@@ -27,7 +30,7 @@ const regions = [
 function listMigrationFiles() {
   return fs
     .readdirSync(migrationDir)
-    .filter((name) => name.endsWith('.sql'))
+    .filter((name) => name.endsWith('.sql') && !BLOCKED_MIGRATIONS.has(name))
     .sort()
     .map((name) => path.join(migrationDir, name));
 }

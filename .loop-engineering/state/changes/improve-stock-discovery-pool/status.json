@@ -1,0 +1,13 @@
+{
+  "featureId": "improve-stock-discovery-pool",
+  "createdAt": "2026-06-22T14:39:00Z",
+  "loopStage": "ready_for_release",
+  "requirementsStatus": "approved",
+  "designStatus": "approved",
+  "implementationStatus": "ready_for_full_verification",
+  "verificationStatus": "pass",
+  "releaseStatus": "not_started",
+  "baselineDomain": "stock-recommendation-engine",
+  "blockedReason": null,
+  "nextHumanResponse": null
+}

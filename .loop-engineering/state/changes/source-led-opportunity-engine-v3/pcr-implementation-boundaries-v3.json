@@ -1,0 +1,440 @@
+{
+  "boundaries": [
+    {
+      "caller": {
+        "function": "runRuntimeInstallation",
+        "path": "scripts/runtime/runtime-installation-gate.mjs"
+      },
+      "effect": "resolves the exact source and direct-child evidence commits from Git, derives the tracked worker/config hashes, and writes the release only after the reviewed-release checks pass",
+      "id": "PCR-001",
+      "implementationState": "implemented",
+      "operation": "installTrackedAuthSourceWorker",
+      "owner": {
+        "export": "installTrackedAuthSourceWorker",
+        "path": "scripts/runtime/auth-source-worker-installer.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "installTrackedAuthSourceWorker",
+        "path": "scripts/runtime/auth-source-worker-installer.js"
+      },
+      "effect": "accepts only canonical manifest, attestation, worker/config and rollback hashes in the documented precedence",
+      "id": "PCR-002",
+      "implementationState": "implemented",
+      "operation": "validateRuntimeInstallationManifest",
+      "owner": {
+        "export": "validateRuntimeInstallationManifest",
+        "path": "scripts/runtime/auth-source-worker-installation.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "installTrackedAuthSourceWorker",
+        "path": "scripts/runtime/auth-source-worker-installer.js"
+      },
+      "effect": "activates one scheduler owner or restores the byte-exact previous release without a partial scheduler state",
+      "id": "PCR-003",
+      "implementationState": "implemented",
+      "operation": "activateTrackedRuntimeRelease",
+      "owner": {
+        "export": "activateTrackedRuntimeRelease",
+        "path": "scripts/runtime/auth-source-worker-installation.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "GET",
+        "path": "web/src/app/api/internal/health-check/route.ts"
+      },
+      "effect": "reports the closed runtime-health reason set from manifest, scheduler, terminal run, projection and compatibility observations",
+      "id": "PCR-004",
+      "implementationState": "implemented",
+      "operation": "assessTrackedRuntimeHealth",
+      "owner": {
+        "export": "assessTrackedRuntimeHealth",
+        "path": "scripts/runtime/runtime-health.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "main",
+        "path": "scripts/runtime/auth-source-worker-cli.js"
+      },
+      "effect": "validates the exact occurrence-bound legacy-correctness configuration and passes its canonical bytes to the database-owned acquire path without V3 writes",
+      "id": "PCR-005",
+      "implementationState": "implemented",
+      "operation": "validateAuthSourceDagConfig",
+      "owner": {
+        "export": "validateAuthSourceDagConfig",
+        "path": "scripts/runtime/source-run-config.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "main",
+        "path": "scripts/runtime/auth-source-worker-cli.js"
+      },
+      "effect": "commits the occurrence-to-terminal-run transaction with atomic frozen pages, claims, revisions and terminal recovery",
+      "id": "PCR-006",
+      "implementationState": "implemented",
+      "operation": "runDurableAuthSourceWorker",
+      "owner": {
+        "export": "runDurableAuthSourceWorker",
+        "path": "scripts/runtime/auth-source-worker.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "runDurableAuthSourceWorker",
+        "path": "scripts/runtime/auth-source-worker.js"
+      },
+      "effect": "claims each database-derived successor with its bounded token-bound read bundle so retries cannot skip, enumerate or reorder a revision shard",
+      "id": "PCR-007",
+      "implementationState": "implemented",
+      "operation": "claimLegacyProducerJob",
+      "owner": {
+        "export": "claimLegacyProducerJob",
+        "path": "scripts/runtime/postgres-legacy-producer-adapter.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "extractRevisionMentions",
+        "path": "scripts/runtime/source-claim-extraction.js"
+      },
+      "effect": "returns one typed instrument-authority join result and never derives a symbol from a UUID substring",
+      "id": "PCR-008",
+      "implementationState": "implemented",
+      "operation": "resolveInstrumentAuthorityJoin",
+      "owner": {
+        "export": "resolveInstrumentAuthorityJoin",
+        "path": "scripts/runtime/instrument-authority-join.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "buildCandidateFunnel",
+        "path": "scripts/runtime/candidate-funnel.js"
+      },
+      "effect": "persists source-signal discovery membership independently of valuation and records the typed entrant reason",
+      "id": "PCR-009",
+      "implementationState": "implemented",
+      "operation": "deriveDiscoveryDisposition",
+      "owner": {
+        "export": "deriveDiscoveryDisposition",
+        "path": "scripts/runtime/discovery-disposition.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "publishCompactRadarProjection",
+        "path": "scripts/runtime/compact-radar-projection.js"
+      },
+      "effect": "excludes seed-only live cards and publishes only typed health on an authorised total-outage fallback",
+      "id": "PCR-010",
+      "implementationState": "implemented",
+      "operation": "selectLiveDiscoveryCards",
+      "owner": {
+        "export": "selectLiveDiscoveryCards",
+        "path": "scripts/runtime/candidate-funnel.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "completeLegacyProducerJob",
+        "path": "scripts/runtime/postgres-legacy-producer-adapter.js"
+      },
+      "effect": "persists one bounded typed document, claim, mention and evidence-disposition outcome per frozen revision",
+      "id": "PCR-011",
+      "implementationState": "implemented",
+      "operation": "complete_legacy_producer_job_v3_11",
+      "owner": {
+        "export": "complete_legacy_producer_job_v3_11",
+        "path": "migrations/20260724_source_led_opportunity_engine_v3.sql"
+      }
+    },
+    {
+      "caller": {
+        "function": "evaluateCandidateValuation",
+        "path": "scripts/runtime/candidate-valuation.js"
+      },
+      "effect": "derives a complete revenue-to-diluted-EPS bridge or returns valuation_review with null public targets",
+      "id": "PCR-012",
+      "implementationState": "implemented",
+      "operation": "buildPointInTimeOperatingBridge",
+      "owner": {
+        "export": "buildPointInTimeOperatingBridge",
+        "path": "scripts/runtime/valuation-operating-bridge.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "evaluateCandidateValuation",
+        "path": "scripts/runtime/candidate-valuation.js"
+      },
+      "effect": "selects roster-first comparable inputs and terminalises incomplete, conflicting or divergent valuation evidence without hard-coded symbols",
+      "id": "PCR-013",
+      "implementationState": "implemented",
+      "operation": "selectComparableValuationInputs",
+      "owner": {
+        "export": "selectComparableValuationInputs",
+        "path": "scripts/runtime/valuation-comparables.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "evaluateCandidateValuation",
+        "path": "scripts/runtime/candidate-valuation.js"
+      },
+      "effect": "chooses the closed sector method and cross-check outcome, suppressing PE for loss-making companies",
+      "id": "PCR-014",
+      "implementationState": "implemented",
+      "operation": "selectSectorValuationMethod",
+      "owner": {
+        "export": "selectSectorValuationMethod",
+        "path": "scripts/runtime/valuation-method.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "evaluateCandidateValuation",
+        "path": "scripts/runtime/candidate-valuation.js"
+      },
+      "effect": "validates company-specific, cutoff-valid evidence before it can verify an assumption or confidence",
+      "id": "PCR-015",
+      "implementationState": "implemented",
+      "operation": "verifyCompanyValuationEvidence",
+      "owner": {
+        "export": "verifyCompanyValuationEvidence",
+        "path": "scripts/runtime/valuation-evidence.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "deriveActionDecision",
+        "path": "scripts/runtime/action-decision.js"
+      },
+      "effect": "turns a broken support into reclaim_required with former support as a trigger/resistance rather than a pullback entry",
+      "id": "PCR-016",
+      "implementationState": "implemented",
+      "operation": "deriveTechnicalEntryState",
+      "owner": {
+        "export": "deriveTechnicalEntryState",
+        "path": "scripts/runtime/technical-state.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "deriveActionDecision",
+        "path": "scripts/runtime/action-decision.js"
+      },
+      "effect": "returns typed unavailable geometry unless entry and invalidation satisfy the state-owned long-entry constraints",
+      "id": "PCR-017",
+      "implementationState": "implemented",
+      "operation": "validateLongEntryGeometry",
+      "owner": {
+        "export": "validateLongEntryGeometry",
+        "path": "scripts/runtime/technical-entry-geometry.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "deriveTechnicalEntryState",
+        "path": "scripts/runtime/technical-state.js"
+      },
+      "effect": "derives indicators only from sufficient adjusted OHLCV and emits one closed unavailable reason otherwise",
+      "id": "PCR-018",
+      "implementationState": "implemented",
+      "operation": "calculateAdjustedTechnicalPlane",
+      "owner": {
+        "export": "calculateAdjustedTechnicalPlane",
+        "path": "scripts/runtime/technical-plane.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "appendAnalysisRevision",
+        "path": "scripts/runtime/analysis-revision.js"
+      },
+      "effect": "creates the canonical material-change hash from only the closed material identity members",
+      "id": "PCR-019",
+      "implementationState": "implemented",
+      "operation": "hashMaterialAnalysisChange",
+      "owner": {
+        "export": "hashMaterialAnalysisChange",
+        "path": "scripts/runtime/analysis-material-change.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "buildStageHandlers",
+        "path": "scripts/runtime/auth-source-worker-cli.js"
+      },
+      "effect": "reuses a no-change revision or atomically appends one fact/evidence-bound analysis revision with locked narrative claims",
+      "id": "PCR-020",
+      "implementationState": "implemented",
+      "operation": "appendAnalysisRevision",
+      "owner": {
+        "export": "appendAnalysisRevision",
+        "path": "scripts/runtime/analysis-revision.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "availableResearchDecision",
+        "path": "scripts/runtime/compact-radar-projection.js"
+      },
+      "effect": "serializes only declared additive V3 fields and preserves disabled/drain legacy byte identity with zero V3 query",
+      "id": "PCR-021",
+      "implementationState": "implemented",
+      "operation": "serializeOpportunityPublicProjection",
+      "owner": {
+        "export": "serializeOpportunityPublicProjection",
+        "path": "scripts/runtime/public-projection.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "GET",
+        "path": "web/src/app/api/radar/daily/route.ts"
+      },
+      "effect": "serves a precomputed compact projection through the exact indexed read, cache and size boundaries without producer work",
+      "id": "PCR-022",
+      "implementationState": "implemented",
+      "operation": "loadCompactRadarProjection",
+      "owner": {
+        "export": "loadCompactRadarProjection",
+        "path": "web/src/lib/opportunity-v3/compact-radar-read.ts"
+      }
+    },
+    {
+      "caller": {
+        "function": "executeCodeGate",
+        "path": "protected://stockinsider-v3-gate-root/execute-code-gate.mjs"
+      },
+      "effect": "validates canonical leaf and aggregate evidence against one externally checked clean subject, preserving Code, Shadow and Promotion gate separation",
+      "id": "PCR-023",
+      "implementationState": "implemented",
+      "operation": "validateOpportunityGateEvidence",
+      "owner": {
+        "export": "validateOpportunityGateEvidence",
+        "path": "scripts/opportunity-v3/gate-evidence.mjs"
+      }
+    },
+    {
+      "caller": {
+        "function": "Home",
+        "path": "web/src/app/page.tsx"
+      },
+      "effect": "renders the disabled-V3 legacy card with four axes, BIAS context, separate official/model PE and typed unavailable reasons at accessible responsive widths",
+      "id": "PCR-024",
+      "implementationState": "implemented",
+      "operation": "renderLegacyResearchDecision",
+      "owner": {
+        "export": "StockCard",
+        "path": "web/src/app/components/RadarTabs.tsx"
+      }
+    },
+    {
+      "caller": {
+        "function": "buildFactorSnapshot",
+        "path": "scripts/runtime/factor-snapshot.js"
+      },
+      "effect": "selects only bounded pre-cutoff adjusted history and returns typed unavailable without a live-read backfill",
+      "id": "PCR-025",
+      "implementationState": "implemented",
+      "operation": "selectBiasTechnicalHistory",
+      "owner": {
+        "export": "selectBiasTechnicalHistory",
+        "path": "scripts/runtime/bias-technical-history.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "buildFactorSnapshot",
+        "path": "scripts/runtime/factor-snapshot.js"
+      },
+      "effect": "constructs one capped roster/history manifest and bounded sector percentile selector without seed-only or fixed-page truncation",
+      "id": "PCR-026",
+      "implementationState": "implemented",
+      "operation": "buildBiasUniverseManifest",
+      "owner": {
+        "export": "buildBiasUniverseManifest",
+        "path": "scripts/runtime/bias-universe-manifest.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "deriveActionDecision",
+        "path": "scripts/runtime/action-decision.js"
+      },
+      "effect": "applies the shadow-only BIAS adjustment and mandatory deep-negative action cap without promoted-score influence",
+      "id": "PCR-027",
+      "implementationState": "implemented",
+      "operation": "applyBiasActionCap",
+      "owner": {
+        "export": "applyBiasActionCap",
+        "path": "scripts/runtime/bias-action-cap.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "evaluateCandidateValuation",
+        "path": "scripts/runtime/candidate-valuation.js"
+      },
+      "effect": "selects only official reported-PE history and sector references, keeping model-comparable multiples separate",
+      "id": "PCR-028",
+      "implementationState": "implemented",
+      "operation": "selectOfficialReportedPe",
+      "owner": {
+        "export": "selectOfficialReportedPe",
+        "path": "scripts/runtime/reported-pe-authority.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "calculateFactorScore",
+        "path": "scripts/runtime/factor-score.js"
+      },
+      "effect": "computes each fundamental quality axis from named point-in-time facts with no imputation",
+      "id": "PCR-029",
+      "implementationState": "implemented",
+      "operation": "calculateFundamentalQualityAxes",
+      "owner": {
+        "export": "calculateFundamentalQualityAxes",
+        "path": "scripts/runtime/fundamental-quality.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "loadOpportunityEngineV3",
+        "path": "web/src/lib/opportunity-v3/projection.ts"
+      },
+      "effect": "serializes the closed reported-PE, valuation-review and timing-risk unions for the web projection response without inventing a material change",
+      "id": "PCR-030",
+      "implementationState": "implemented",
+      "operation": "serializeCorrectnessPublicUnion",
+      "owner": {
+        "export": "serializeCorrectnessPublicUnion",
+        "path": "scripts/runtime/public-projection.js"
+      }
+    },
+    {
+      "caller": {
+        "function": "evaluateComparableRun",
+        "path": "scripts/runtime/comparable-evaluation.js"
+      },
+      "effect": "builds the exact closed comparison identity so factor-contract changes cannot reuse an earlier comparable run",
+      "id": "PCR-031",
+      "implementationState": "implemented",
+      "operation": "buildComparableRunIdentity",
+      "owner": {
+        "export": "buildComparableRunIdentity",
+        "path": "scripts/runtime/comparison-identity.js"
+      }
+    }
+  ],
+  "schema": "source-led-opportunity-pcr-implementation-boundaries-v1",
+  "version": "source-led-opportunity-pcr-boundaries-v3.11.4"
+}

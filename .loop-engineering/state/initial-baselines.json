@@ -1,0 +1,38 @@
+{
+  "generatedAt": "2026-06-22",
+  "profile": "codex-only",
+  "domains": [
+    {
+      "id": "stock-recommendation-engine",
+      "purpose": "Homepage recommendation buckets, formal/scenario/early/hot tracking gates, recommendation index, and user-facing reason codes.",
+      "status": "baseline_created",
+      "baselinePath": ".loop-engineering/state/stock-recommendation-engine/baseline.md",
+      "evidencePath": ".loop-engineering/state/stock-recommendation-engine/evidence.json"
+    },
+    {
+      "id": "valuation-and-revaluation",
+      "purpose": "Base/scenario target formulas, broker/official evidence, revaluation jobs, scenario promotion, and target stale handling.",
+      "status": "recommended_next_baseline"
+    },
+    {
+      "id": "social-source-ingestion",
+      "purpose": "Threads, Instagram, Telegram, PTT, BullTalk, KOL audio/video, broker leaks, source health, and candidate discovery.",
+      "status": "recommended_next_baseline"
+    },
+    {
+      "id": "supabase-io-runtime-health",
+      "purpose": "Supabase payload size, egress, high disk I/O mitigation, retention, indexes, runtime workers, and launchd health.",
+      "status": "recommended_next_baseline"
+    },
+    {
+      "id": "deep-dive-entry-decision-ui",
+      "purpose": "Individual stock report layout, technical/chip entry decisions, buy/sell/hold actionability, and source appendix behavior.",
+      "status": "recommended_next_baseline"
+    }
+  ],
+  "notes": [
+    "Do not migrate existing .agent/skills into .agents/skills.",
+    "Do not deploy from Loop release without explicit user approval.",
+    "Use OpenSpec as current durable specification source until Spec Kit is installed."
+  ]
+}

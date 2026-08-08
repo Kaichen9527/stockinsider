@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.stockinsider.auth-source-worker</string>
+
+    <key>ProgramArguments</key>
+    <array>
+      <string>/usr/bin/env</string>
+      <string>-i</string>
+      <string>HOME=__RUNTIME_HOME__</string>
+      <string>PATH=/usr/bin:/bin</string>
+      <string>NODE_ENV=production</string>
+      <string>TZ=Asia/Taipei</string>
+      <string>STOCKINSIDER_REVIEWED_COMMIT_SHA=__REVIEWED_COMMIT_SHA__</string>
+      <string>STOCKINSIDER_DATABASE_URL_REF=keychain:stockinsider-runtime:database-url</string>
+      <string>INTERNAL_API_KEY_REF=keychain:stockinsider-runtime:internal-api-key</string>
+      <string>__PINNED_NODE22__</string>
+      <string>__RUNTIME_CURRENT__/scripts/runtime/auth-source-worker-cli.js</string>
+      <string>--config</string>
+      <string>__RUNTIME_CURRENT__/config/runtime/auth-source-dag.json</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>__RUNTIME_CURRENT__</string>
+
+    <key>RunAtLoad</key>
+    <false/>
+    <key>KeepAlive</key>
+    <false/>
+
+    <key>StartCalendarInterval</key>
+    <array>
+      <dict><key>Weekday</key><integer>1</integer><key>Hour</key><integer>18</integer><key>Minute</key><integer>20</integer></dict>
+      <dict><key>Weekday</key><integer>2</integer><key>Hour</key><integer>18</integer><key>Minute</key><integer>20</integer></dict>
+      <dict><key>Weekday</key><integer>3</integer><key>Hour</key><integer>18</integer><key>Minute</key><integer>20</integer></dict>
+      <dict><key>Weekday</key><integer>4</integer><key>Hour</key><integer>18</integer><key>Minute</key><integer>20</integer></dict>
+      <dict><key>Weekday</key><integer>5</integer><key>Hour</key><integer>18</integer><key>Minute</key><integer>20</integer></dict>
+    </array>
+    <key>ProcessType</key>
+    <string>Background</string>
+    <key>ThrottleInterval</key>
+    <integer>60</integer>
+
+    <key>StandardOutPath</key>
+    <string>__RUNTIME_ROOT__/logs/auth-source-worker.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>__RUNTIME_ROOT__/logs/auth-source-worker.err.log</string>
+  </dict>
+</plist>

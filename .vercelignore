@@ -1,0 +1,13 @@
+.agent/
+.git/
+.next/
+node_modules/
+web/.next/
+web/node_modules/
+web/test-results/
+test-results/
+scraper/venv/
+materials/
+.env
+.env.*
+*.log

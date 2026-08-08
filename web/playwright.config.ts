@@ -1,12 +1,13 @@
 import { defineConfig } from '@playwright/test';
 
-const baseURL = process.env.E2E_BASE_URL || 'http://127.0.0.1:3000';
+const baseURL = process.env.E2E_BASE_URL || 'http://127.0.0.1:3100';
 const skipWebServer = process.env.PLAYWRIGHT_SKIP_WEBSERVER === '1';
 const port = new URL(baseURL).port || '3000';
 
 export default defineConfig({
   testDir: './e2e',
   timeout: 90_000,
+  workers: 1,
   expect: {
     timeout: 10_000,
   },
@@ -20,13 +21,13 @@ export default defineConfig({
   webServer: skipWebServer
     ? undefined
     : {
-        command: `npm run dev -- --port ${port}`,
+        command: `bash -lc 'set -a; source ../.env; set +a; npm run dev -- --port ${port}'`,
         env: {
           ...process.env,
           DATA_MODE: process.env.DATA_MODE || 'demo',
         },
         url: baseURL,
-        reuseExistingServer: true,
+        reuseExistingServer: false,
         timeout: 120_000,
       },
 });

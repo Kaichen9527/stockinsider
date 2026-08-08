@@ -1,0 +1,17 @@
+version: 5
+runner_default: all
+max_task_iterations: 5
+same_failure_limit: 2
+continue_after_task_pass: true
+blocker_findings_allowed: 0
+high_findings_allowed: 0
+auto_merge: false
+auto_deploy: false
+maker_may_modify_approved_acceptance_expectations: false
+stop_on:
+  - spec_conflict
+  - scope_expansion_required
+  - destructive_migration_required
+  - security_high_or_critical
+  - same_failure_repeated
+  - human_product_decision_required

@@ -1,7 +1,8 @@
 # institutional-expectation-analysis Specification
 
 ## Purpose
-TBD - created by archiving change stock-insider-opportunity-engine. Update Purpose after archive.
+Continuously convert institutional/public research narratives into structured expectation signals that can be ranked and consumed by the strategy engine.
+
 ## Requirements
 ### Requirement: Parse Public Institutional Sources
 The system SHALL parse public institutional-research-like sources and map expectation signals to symbols.
@@ -16,4 +17,3 @@ The system SHALL rank high-expectation symbols based on recency and expectation 
 #### Scenario: Daily expectation ranking runs
 - **WHEN** institutional aggregation finishes
 - **THEN** the system outputs ranked candidate signals for downstream strategy scoring
-

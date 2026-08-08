@@ -1,7 +1,13 @@
 import { expect, test } from '@playwright/test';
 
 test('health-check returns env configuration status', async ({ request }) => {
-  const res = await request.get('/api/internal/health-check');
+  const unauthorized = await request.get('/api/internal/health-check');
+  expect([401, 500]).toContain(unauthorized.status());
+  const internalKey = process.env.E2E_INTERNAL_API_KEY || process.env.INTERNAL_API_KEY;
+  test.skip(!internalKey, 'authenticated health smoke requires an internal key');
+  const res = await request.get('/api/internal/health-check', {
+    headers: { authorization: `Bearer ${internalKey}` },
+  });
   expect(res.status()).toBe(200);
 
   const json = await res.json();

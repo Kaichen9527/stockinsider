@@ -1,20 +1,64 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { randomUUID } from 'crypto';
+import { createHash, randomUUID } from 'crypto';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
 import { getSupabaseServerClient } from './supabase-server';
+import {
+  createMetaSessionStore,
+  resolveInvestAnchorsCredential,
+  resolveMetaAuthConfig,
+  THREADS_CANONICAL_DOMAIN,
+  THREADS_CANONICAL_ORIGIN,
+  THREADS_LEGACY_DOMAIN,
+  THREADS_LEGACY_ORIGIN,
+  type MetaAuthConfig,
+  type MetaPlatform,
+  type PersistedMetaSessionState,
+} from './source-auth';
 
 type Row = Record<string, unknown>;
 
 const ROOT_DIR = path.resolve(process.cwd(), '..');
 const MATERIALS_DIR = path.join(ROOT_DIR, 'materials');
-const ARTIFACTS_DIR = path.join(ROOT_DIR, '.agent', 'artifacts', 'source-audits');
+const BROKER_REPORT_IMPORT_DIR = path.join(MATERIALS_DIR, 'broker-reports');
+const ARTIFACTS_DIR = process.env.VERCEL
+  ? path.join('/tmp', 'stockinsider', 'source-audits')
+  : path.join(ROOT_DIR, '.agent', 'artifacts', 'source-audits');
 const execFileAsync = promisify(execFile);
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || process.env.BOT_TOKEN || '';
+const SOURCE_RAW_CONTENT_MAX_CHARS = Math.max(500, Number(process.env.SOURCE_RAW_CONTENT_MAX_CHARS || 4000));
+const DEFAULT_TELEGRAM_CHANNEL_NAMES = ['investanchors', 'twstockanalysis', 'Gooaye', 'johnstock888', 'eaglewealth', 'a178178', 'musclestock'];
 const DEFAULT_STORY_CANDIDATE_TOP_N = 50;
 const DEFAULT_SOURCE_SYNC_LOOKBACK_HOURS = 24;
+const US_BROKER_KEYWORDS = [
+  'Morgan Stanley',
+  'Goldman',
+  'Goldman Sachs',
+  'JPMorgan',
+  'JP Morgan',
+  'Citi',
+  'Citigroup',
+  'BofA',
+  'Bank of America',
+  'UBS',
+  'Bernstein',
+  'Jefferies',
+  'FactSet',
+  '美系外資',
+  '外資報告',
+  '券商報告',
+];
+const BROKER_VALUATION_KEYWORDS = ['target price', '目標價', 'EPS', 'Forward EPS', '本益比', 'PE', '評等', '調升', '調降', '上修', '下修'];
+const BROKER_DISCOVERY_SEARCH_TERMS = [
+  '台股 美系外資 目標價',
+  '台股 FactSet EPS 目標價',
+  'Morgan Stanley 台股 目標價',
+  'Goldman Sachs 台股 EPS',
+  'JPMorgan 台股 評等',
+  '外資報告 台股 調升',
+];
 
 const KOL_SEEDS = [
   {
@@ -135,7 +179,7 @@ const KOL_SEEDS = [
     primaryPlatform: 'threads',
     followerCount: 25000,
     contentFocus: 'tw_stocks',
-    profileUrl: 'https://www.threads.net/@ikala_stevecc',
+    profileUrl: `${THREADS_CANONICAL_ORIGIN}/@ikala_stevecc`,
     metadata: {
       threadsUsername: 'ikala_stevecc',
       instagramUrl: 'https://www.instagram.com/ikala_stevecc/',
@@ -151,6 +195,67 @@ const KOL_SEEDS = [
       investanchorsUrl: 'https://investanchors.com/',
       podcastName: '定錨投筆',
       telegramUrl: 'https://t.me/s/investanchors',
+    },
+  },
+  {
+    displayName: '游庭皓的財經皓角',
+    primaryPlatform: 'youtube',
+    followerCount: 600000,
+    contentFocus: 'tw_macro_tw_stocks',
+    profileUrl: 'https://www.youtube.com/@yutinghaofinance',
+    metadata: {
+      youtubeUrl: 'https://www.youtube.com/@yutinghaofinance',
+      youtubeChannelId: 'UC0lbAQVpenvfA2QqzsRtL_g',
+      podcastName: '游庭皓的財經皓角',
+      appleUrl: 'https://podcasts.apple.com/tw/podcast/id1488295306',
+      keywords: ['台股', '產業趨勢', '資金流向', '總經', '財經皓角'],
+      sourcePriority: 0.74,
+    },
+  },
+  {
+    displayName: 'M觀點',
+    primaryPlatform: 'youtube',
+    followerCount: 180000,
+    contentFocus: 'technology_investing',
+    profileUrl: 'https://www.youtube.com/channel/UCT3uWFvKLVpRnEealmRwvrw',
+    metadata: {
+      youtubeUrl: 'https://www.youtube.com/channel/UCT3uWFvKLVpRnEealmRwvrw',
+      youtubeChannelId: 'UCT3uWFvKLVpRnEealmRwvrw',
+      podcastName: 'M觀點 | 科技X商業X投資',
+      websiteUrl: 'https://miula.tw/miula_perspective/',
+      keywords: ['科技趨勢', 'AI', '半導體', '商業模式', '投資觀點'],
+      sourcePriority: 0.68,
+    },
+  },
+  {
+    displayName: '財經M平方',
+    primaryPlatform: 'youtube',
+    followerCount: 120000,
+    contentFocus: 'macro_market',
+    profileUrl: 'https://www.youtube.com/channel/UC6LU7FUBvbFCh_cQasrHZ_Q',
+    metadata: {
+      youtubeUrl: 'https://www.youtube.com/channel/UC6LU7FUBvbFCh_cQasrHZ_Q',
+      youtubeChannelId: 'UC6LU7FUBvbFCh_cQasrHZ_Q',
+      podcastName: 'MacroMicro 財經M平方',
+      appleUrl: 'https://podcasts.apple.com/tw/podcast/id1522682178',
+      websiteUrl: 'https://www.macromicro.me/video',
+      keywords: ['總經', '台股', '半導體', '景氣循環', '資金流向'],
+      sourcePriority: 0.66,
+    },
+  },
+  {
+    displayName: '財報狗',
+    primaryPlatform: 'podcast',
+    followerCount: 90000,
+    contentFocus: 'tw_us_fundamentals',
+    profileUrl: 'https://podcasts.apple.com/tw/podcast/id1513810531',
+    metadata: {
+      podcastName: '財報狗 - 掌握台股美股時事議題',
+      appleUrl: 'https://podcasts.apple.com/tw/podcast/id1513810531',
+      youtubeUrl: 'https://www.youtube.com/@StatementdogAcademy',
+      websiteUrl: 'https://statementdog.com/',
+      keywords: ['財報', '產業循環', '台股', '美股', '基本面'],
+      sourcePriority: 0.7,
     },
   },
   {
@@ -202,6 +307,12 @@ const DEFAULT_WATCHLISTS = [
   { platform: 'threads', watch_type: 'keyword', watch_value: '先進封裝' },
   { platform: 'threads', watch_type: 'keyword', watch_value: 'AI 伺服器' },
   { platform: 'threads', watch_type: 'keyword', watch_value: '半導體' },
+  { platform: 'threads', watch_type: 'keyword', watch_value: '800G 光模組' },
+  { platform: 'threads', watch_type: 'keyword', watch_value: 'AOI 檢測' },
+  { platform: 'threads', watch_type: 'hashtag', watch_value: '台股' },
+  { platform: 'threads', watch_type: 'hashtag', watch_value: 'AI伺服器' },
+  { platform: 'threads', watch_type: 'hashtag', watch_value: '先進封裝' },
+  { platform: 'threads', watch_type: 'hashtag', watch_value: 'CPO' },
   // Threads authors - known TW stock KOLs
   { platform: 'threads', watch_type: 'author', watch_value: 'stockcancer' },       // 股癌
   { platform: 'threads', watch_type: 'author', watch_value: 'chenweytai' },        // 陳唯泰
@@ -211,6 +322,11 @@ const DEFAULT_WATCHLISTS = [
   { platform: 'threads', watch_type: 'author', watch_value: 'investaddict_tw' },   // 投資癮
   { platform: 'threads', watch_type: 'author', watch_value: 'zhangzhenqing' },    // 張真卿（補漏）
   { platform: 'threads', watch_type: 'author', watch_value: 's178178' },          // 郭哲榮分析師
+  { platform: 'threads', watch_type: 'author', watch_value: 'yutinghaofinance' }, // 游庭皓的財經皓角
+  { platform: 'threads', watch_type: 'keyword', watch_value: '財經皓角' },
+  { platform: 'threads', watch_type: 'keyword', watch_value: '財報狗' },
+  { platform: 'threads', watch_type: 'keyword', watch_value: '財經M平方' },
+  { platform: 'threads', watch_type: 'keyword', watch_value: 'M觀點' },
   // Instagram authors
   { platform: 'instagram', watch_type: 'author', watch_value: 'stockcancer' },
   { platform: 'instagram', watch_type: 'author', watch_value: 'investanchors' },
@@ -243,6 +359,10 @@ const DEFAULT_WATCHLISTS = [
   { platform: 'kol', watch_type: 'author', watch_value: '張真卿' },
   { platform: 'kol', watch_type: 'author', watch_value: '程世嘉' },
   { platform: 'kol', watch_type: 'author', watch_value: '定錨投筆' },
+  { platform: 'kol', watch_type: 'author', watch_value: '游庭皓的財經皓角' },
+  { platform: 'kol', watch_type: 'author', watch_value: 'M觀點' },
+  { platform: 'kol', watch_type: 'author', watch_value: '財經M平方' },
+  { platform: 'kol', watch_type: 'author', watch_value: '財報狗' },
   { platform: 'kol', watch_type: 'author', watch_value: 'John 林睿閔' },
   { platform: 'kol', watch_type: 'author', watch_value: '郭哲榮分析師' },
   { platform: 'kol', watch_type: 'author', watch_value: '股海筋肉人' },
@@ -256,19 +376,69 @@ const DEFAULT_WATCHLISTS = [
   { platform: 'podcast', watch_type: 'url', watch_value: 'https://www.youtube.com/@StockHideaway' },            // 股市隱者
   { platform: 'podcast', watch_type: 'url', watch_value: 'https://www.youtube.com/@ChangChenkuei' },            // 張真卿
   { platform: 'podcast', watch_type: 'url', watch_value: 'https://www.youtube.com/@investanchors' },            // 定錨投筆（補漏）
+  { platform: 'podcast', watch_type: 'url', watch_value: 'https://www.youtube.com/@yutinghaofinance' },          // 游庭皓的財經皓角
+  { platform: 'podcast', watch_type: 'url', watch_value: 'https://www.youtube.com/channel/UCT3uWFvKLVpRnEealmRwvrw' }, // M觀點
+  { platform: 'podcast', watch_type: 'url', watch_value: 'https://www.youtube.com/channel/UC6LU7FUBvbFCh_cQasrHZ_Q' }, // 財經M平方
+  { platform: 'podcast', watch_type: 'url', watch_value: 'https://www.youtube.com/@StatementdogAcademy' },       // 財報狗
 ];
 
 function nowIso() {
   return new Date().toISOString();
 }
 
+function resolveTimeoutMs(envKey: string, fallbackMs: number) {
+  const raw = process.env[envKey];
+  if (!raw) return fallbackMs;
+  const parsed = Number(raw);
+  if (!Number.isFinite(parsed) || parsed <= 0) return fallbackMs;
+  return Math.floor(parsed);
+}
+
 function asDate(iso = nowIso()) {
-  return iso.slice(0, 10);
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return nowIso().slice(0, 10);
+  return date.toLocaleDateString('en-CA', { timeZone: 'Asia/Taipei' });
 }
 
 function toFiniteNumber(value: unknown, fallback = 0) {
   const num = typeof value === 'number' ? value : typeof value === 'string' ? Number(value) : Number.NaN;
   return Number.isFinite(num) ? num : fallback;
+}
+
+function positiveNumberOrNull(value: unknown) {
+  const num = toFiniteNumber(value, Number.NaN);
+  return Number.isFinite(num) && num > 0 ? num : null;
+}
+
+function nonZeroNumberOrNull(value: unknown) {
+  const num = toFiniteNumber(value, Number.NaN);
+  return Number.isFinite(num) && num !== 0 ? num : null;
+}
+
+function hasMeaningfulRevenueRow(row: Row | null | undefined) {
+  if (!row) return false;
+  return positiveNumberOrNull(row.monthly_revenue) != null;
+}
+
+function hasMeaningfulFundamentalRow(row: Row | null | undefined) {
+  if (!row) return false;
+  return [
+    nonZeroNumberOrNull(row.eps_ttm),
+    positiveNumberOrNull(row.gross_margin),
+    nonZeroNumberOrNull(row.operating_margin),
+    nonZeroNumberOrNull(row.pe_ratio),
+    positiveNumberOrNull(row.pb_ratio),
+    positiveNumberOrNull(row.revenue_run_rate),
+  ].some((value) => value != null);
+}
+
+function selectLatestPreferredRow(rows: Row[], predicate: (row: Row) => boolean) {
+  let fallback: Row | null = null;
+  for (const row of rows) {
+    fallback ||= row;
+    if (predicate(row)) return row;
+  }
+  return fallback;
 }
 
 function clamp(value: number, min = 0, max = 1) {
@@ -283,6 +453,15 @@ function slugify(value: string) {
     .slice(0, 120);
 }
 
+function sourceKeySegment(value: string) {
+  const ascii = slugify(value);
+  if (ascii) return ascii;
+  return encodeURIComponent(value)
+    .replace(/%/g, '')
+    .toLowerCase()
+    .slice(0, 100);
+}
+
 function compactText(value: unknown) {
   return String(value || '').replace(/\s+/g, ' ').trim();
 }
@@ -291,9 +470,127 @@ function unique<T>(values: T[]) {
   return Array.from(new Set(values));
 }
 
+function looksLikeThreadsLoginWall(text: string) {
+  const normalized = compactText(text).toLowerCase();
+  if (!normalized) return false;
+  const patterns = [
+    'scan to get the app',
+    'log in with your instagram account',
+    'use the app',
+    'threads.net/login',
+    'threads.com/login',
+    'log in or sign up for threads',
+    'sign up for threads',
+  ];
+  return patterns.some((pattern) => normalized.includes(pattern));
+}
+
+function normalizeThreadsUrl(url: string) {
+  return compactText(url).replace(THREADS_LEGACY_ORIGIN, THREADS_CANONICAL_ORIGIN);
+}
+
+function isThreadsLoginUrl(url: string) {
+  const normalized = normalizeThreadsUrl(url).toLowerCase();
+  return normalized.includes('/login');
+}
+
+function detectLegacyThreadsSession(session: PersistedMetaSessionState | null) {
+  if (!session?.cookies?.length) return false;
+  const domains = new Set(
+    session.cookies
+      .map((cookie) => compactText(cookie.domain).toLowerCase())
+      .filter(Boolean),
+  );
+  return domains.has(THREADS_LEGACY_DOMAIN) && !domains.has(THREADS_CANONICAL_DOMAIN);
+}
+
+function extractTwSymbolsWithContext(text: string, validSymbols?: Set<string>) {
+  const symbols = new Set<string>();
+  const symbolRegex = /\b([1-9]\d{3})\b/g;
+  const yearPattern = /^(19|20)\d{2}$/;
+  const stockContextToken = /股|股票|代號|標的|公司|台股|上市|上櫃|買|賣|法說|營收|eps|pe|目標價|停損|轉讓|董監|內部人|外資|投信|自營/i;
+
+  let match: RegExpExecArray | null;
+  while ((match = symbolRegex.exec(text)) !== null) {
+    const symbol = match[1];
+    if (validSymbols && !validSymbols.has(symbol)) continue;
+    const contextStart = Math.max(0, match.index - 16);
+    const contextEnd = Math.min(text.length, match.index + symbol.length + 16);
+    const context = text.slice(contextStart, contextEnd);
+    if (yearPattern.test(symbol) && !stockContextToken.test(context)) continue;
+    symbols.add(symbol);
+  }
+  return [...symbols];
+}
+
+type ExtractedTwSymbols = {
+  symbols: string[];
+  excludedFalsePositives: Array<{ token: string; reason: string }>;
+};
+
+function extractTwSymbolsWithEvidence(
+  text: string,
+  options?: {
+    validSymbols?: Set<string>;
+    stockNamesBySymbol?: Map<string, string>;
+    aliasesBySymbol?: Map<string, string[]>;
+  },
+): ExtractedTwSymbols {
+  const symbols = new Set<string>();
+  const excludedFalsePositives: Array<{ token: string; reason: string }> = [];
+  const symbolRegex = /\b([1-9]\d{3})\b/g;
+  const stockContextToken = /股|股票|代號|股號|標的|公司|台股|上市|上櫃|買|賣|法說|營收|eps|pe|目標價|停損|外資|投信|自營|漲停|跌停|轉強|轉弱|突破|回測/i;
+  const explicitTickerMarker = /[$#]$/;
+  const explicitTickerSuffix = /^(\.TW|\.TWO)\b/i;
+  const ambiguousNumber = /^(19|20)\d{2}$|^(1000|1200|1500|1600|1700|1800|2000|3000|5000)$/;
+  let match: RegExpExecArray | null;
+
+  while ((match = symbolRegex.exec(text)) !== null) {
+    const symbol = match[1];
+    const contextStart = Math.max(0, match.index - 28);
+    const contextEnd = Math.min(text.length, match.index + symbol.length + 28);
+    const context = text.slice(contextStart, contextEnd);
+    const rawName = compactText(options?.stockNamesBySymbol?.get(symbol) || '');
+    const name = rawName && rawName !== symbol && !/^\d+$/.test(rawName) ? rawName : '';
+    const aliases = (options?.aliasesBySymbol?.get(symbol) || [])
+      .map(compactText)
+      .filter((alias) => alias && alias !== symbol && !/^\d+$/.test(alias));
+    const hasNameNearby = Boolean(name && context.includes(name)) || aliases.some((alias) => context.includes(alias));
+    const before = text.slice(Math.max(0, match.index - 3), match.index);
+    const after = text.slice(match.index + symbol.length, Math.min(text.length, match.index + symbol.length + 6));
+    const hasTickerFormat =
+      explicitTickerMarker.test(before.trimEnd()) ||
+      explicitTickerSuffix.test(after);
+    const hasStockContext = stockContextToken.test(context);
+
+    if (options?.validSymbols && !options.validSymbols.has(symbol)) {
+      excludedFalsePositives.push({ token: symbol, reason: 'not_twse_tpex_symbol' });
+      continue;
+    }
+    if (ambiguousNumber.test(symbol) && !hasNameNearby && !hasTickerFormat && !/代號|股號|股票代碼/i.test(context)) {
+      excludedFalsePositives.push({ token: symbol, reason: 'ambiguous_year_or_price_without_stock_name' });
+      continue;
+    }
+    if (!hasNameNearby && !hasTickerFormat && !hasStockContext) {
+      excludedFalsePositives.push({ token: symbol, reason: 'no_stock_context_nearby' });
+      continue;
+    }
+    symbols.add(symbol);
+  }
+
+  return { symbols: [...symbols], excludedFalsePositives };
+}
+
 function roundTo(value: number, precision = 2) {
   const factor = 10 ** precision;
   return Math.round(value * factor) / factor;
+}
+
+function medianNumber(values: number[]) {
+  if (values.length === 0) return null;
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 === 0 ? roundTo((sorted[mid - 1] + sorted[mid]) / 2, 2) : roundTo(sorted[mid], 2);
 }
 
 function resolveStoryCandidateTopN() {
@@ -327,6 +624,15 @@ function scoreStoryDrivenCandidates(params: {
   );
 
   const scoreByStock = new Map<string, { score: number; reasons: string[] }>();
+  const componentByStock = new Map<
+    string,
+    {
+      storyStrength: number;
+      industryStrength: number;
+      sourceStrength: number;
+      hybridBonus: number;
+    }
+  >();
   const fromStory = new Set<string>();
   const fromTheme = new Set<string>();
   const fromSource = new Set<string>();
@@ -336,15 +642,29 @@ function scoreStoryDrivenCandidates(params: {
     scoreByStock.set(stockId, current);
     return current;
   };
+  const ensureComponents = (stockId: string) => {
+    const current =
+      componentByStock.get(stockId) || {
+        storyStrength: 0,
+        industryStrength: 0,
+        sourceStrength: 0,
+        hybridBonus: 0,
+      };
+    componentByStock.set(stockId, current);
+    return current;
+  };
 
   for (const story of stories) {
     const stockId = String(story.stock_id || '');
     if (!stockId) continue;
     fromStory.add(stockId);
     const current = ensure(stockId);
+    const component = ensureComponents(stockId);
     const evidence = clamp(toFiniteNumber(story.evidence_score, 0.45));
     const timing = clamp(toFiniteNumber(story.timing_score, 0.45));
-    current.score += 5 + evidence * 2.2 + timing * 1.4;
+    const storyScore = 5 + evidence * 2.2 + timing * 1.4;
+    current.score += storyScore;
+    component.storyStrength += storyScore;
     current.reasons.push(`story:${String(story.story_type || 'unknown')}`);
   }
 
@@ -358,7 +678,10 @@ function scoreStoryDrivenCandidates(params: {
         if (!stockId) continue;
         fromTheme.add(stockId);
         const current = ensure(stockId);
-        current.score += 0.8 + heat * 0.65;
+        const component = ensureComponents(stockId);
+        const themeScore = 0.8 + heat * 0.65;
+        current.score += themeScore;
+        component.industryStrength += themeScore;
         current.reasons.push(`theme:${String(theme.theme_key || 'unknown')}`);
       }
     }
@@ -375,13 +698,49 @@ function scoreStoryDrivenCandidates(params: {
       if (!stockId) continue;
       fromSource.add(stockId);
       const current = ensure(stockId);
-      current.score += 0.45 + confidence * 0.9;
+      const component = ensureComponents(stockId);
+      const sourceScore = 0.45 + confidence * 0.9;
+      current.score += sourceScore;
+      component.sourceStrength += sourceScore;
       current.reasons.push(`source:${String(doc.platform || 'raw')}`);
     }
   }
 
+  for (const [stockId, current] of scoreByStock.entries()) {
+    const component = ensureComponents(stockId);
+    const hasStory = fromStory.has(stockId);
+    const hasTheme = fromTheme.has(stockId);
+    const hasSource = fromSource.has(stockId);
+    let hybridBonus = 0;
+    if (hasStory && hasTheme) hybridBonus += 1.4;
+    if (hasStory && hasSource) hybridBonus += 1.1;
+    if (hasTheme && hasSource) hybridBonus += 0.8;
+    if (hasStory && hasTheme && hasSource) hybridBonus += 1.6;
+    if (hybridBonus > 0) {
+      current.score += hybridBonus;
+      component.hybridBonus += hybridBonus;
+      const axes = [
+        hasStory ? 'stock' : null,
+        hasTheme ? 'industry' : null,
+        hasSource ? 'source' : null,
+      ].filter((item): item is string => Boolean(item));
+      current.reasons.push(`hybrid:${axes.join('+')}`);
+    }
+  }
+
   const ranked = Array.from(scoreByStock.entries())
-    .map(([stockId, value]) => ({ stockId, score: roundTo(value.score, 4), reasons: unique(value.reasons) }))
+    .map(([stockId, value]) => {
+      const component = ensureComponents(stockId);
+      return {
+        stockId,
+        score: roundTo(value.score, 4),
+        reasons: unique(value.reasons),
+        storyStrength: roundTo(component.storyStrength, 4),
+        industryStrength: roundTo(component.industryStrength, 4),
+        sourceStrength: roundTo(component.sourceStrength, 4),
+        hybridBonus: roundTo(component.hybridBonus, 4),
+      };
+    })
     .sort((a, b) => b.score - a.score);
 
   const storyFirst = ranked.filter((item) => fromStory.has(item.stockId));
@@ -395,60 +754,485 @@ function scoreStoryDrivenCandidates(params: {
       fromStory: fromStory.size,
       fromTheme: fromTheme.size,
       fromSource: fromSource.size,
+      hybridConfirmed: selected.filter((item) => item.hybridBonus > 0).length,
       topN,
-      preview: selected.slice(0, 10).map((item) => ({ stockId: item.stockId, score: item.score, reasons: item.reasons.slice(0, 3) })),
+      preview: selected.slice(0, 10).map((item) => ({
+        stockId: item.stockId,
+        score: item.score,
+        reasons: item.reasons.slice(0, 4),
+        components: {
+          story: item.storyStrength,
+          industry: item.industryStrength,
+          source: item.sourceStrength,
+          hybrid: item.hybridBonus,
+        },
+      })),
     },
   };
 }
 
 function buildPeScenario(params: {
+  symbol?: string | null;
+  thesisTitle?: string | null;
+  thesisSummary?: string | null;
   currentPrice: number | null;
   epsTtm: number | null;
   peRatio: number | null;
+  pbRatio?: number | null;
   monthlyRevenue: number | null;
   yoyGrowth: number | null;
   momGrowth: number | null;
   revenueRunRate: number | null;
+  grossMarginPct?: number | null;
+  operatingMarginPct?: number | null;
   brokerTargetPrice: number | null;
+  evidenceCount?: number | null;
+  sourceDocumentCount?: number | null;
+  brokerReportCount?: number | null;
 }) {
+  type ScenarioProfileKey = 'odm_ai_server' | 'ic_design' | 'memory_storage' | 'optical_cpo' | 'generic_growth';
+  type ScenarioProfile = {
+    key: ScenarioProfileKey;
+    driverLabel: string;
+    peerLabel: string;
+    benchmarkLabel: string;
+    volumeLabel: string;
+    aspLabel: string;
+    mixLabel: string;
+    mixStart: number;
+    mixBase: number;
+    mixUpside: number;
+    mixBear: number;
+    volumeGrowthBase: number;
+    volumeGrowthUpside: number;
+    volumeGrowthBear: number;
+    aspGrowthBase: number;
+    aspGrowthUpside: number;
+    aspGrowthBear: number;
+    grossMarginStart: number;
+    grossMarginBase: number;
+    grossMarginUpside: number;
+    grossMarginBear: number;
+    operatingMarginStart: number;
+    operatingMarginBase: number;
+    operatingMarginUpside: number;
+    operatingMarginBear: number;
+    benchmarkPeBase: number;
+    benchmarkPeUpside: number;
+    benchmarkPeBear: number;
+    defaultDrivers: string[];
+  };
+  const formatScenarioMoney = (value: number | null) => {
+    if (value == null || !Number.isFinite(value)) return null;
+    const abs = Math.abs(value);
+    if (abs >= 100000000) return `${roundTo(value / 100000000, 1).toLocaleString('en-US')} 億`;
+    if (abs >= 10000) return `${roundTo(value / 10000, 1).toLocaleString('en-US')} 萬`;
+    return roundTo(value, 2).toLocaleString('en-US');
+  };
+  const percentText = (value: number | null | undefined) =>
+    value == null || !Number.isFinite(value) ? null : `${value > 0 ? '+' : ''}${roundTo(value, 2)}%`;
+  const safeRatioText = (value: number | null | undefined, suffix = 'x') =>
+    value == null || !Number.isFinite(value) ? null : `${roundTo(value, 2)}${suffix}`;
+  const formatPctPointRange = (fromValue: number | null | undefined, toValue: number | null | undefined) => {
+    if (fromValue == null || toValue == null || !Number.isFinite(fromValue) || !Number.isFinite(toValue)) return null;
+    return `${roundTo(fromValue, 2)}% -> ${roundTo(toValue, 2)}%`;
+  };
+  const inferScenarioProfile = (symbol: string, contextText: string): ScenarioProfile => {
+    const text = contextText.toLowerCase();
+    if (
+      symbol === '2382' ||
+      /ai server|伺服器|機櫃|odm|rack|server|cloud capex|雲端客戶/.test(text)
+    ) {
+      return {
+        key: 'odm_ai_server',
+        driverLabel: 'AI server 機櫃與整機出貨放量',
+        peerLabel: 'AI server ODM / EMS',
+        benchmarkLabel: '同業 forward PE 多落在 16x–22x',
+        volumeLabel: 'AI server 機櫃出貨',
+        aspLabel: '高階整機 ASP',
+        mixLabel: 'AI server 營收占比',
+        mixStart: 28,
+        mixBase: 38,
+        mixUpside: 45,
+        mixBear: 30,
+        volumeGrowthBase: 18,
+        volumeGrowthUpside: 28,
+        volumeGrowthBear: 6,
+        aspGrowthBase: 5,
+        aspGrowthUpside: 9,
+        aspGrowthBear: 1,
+        grossMarginStart: 8.5,
+        grossMarginBase: 9.5,
+        grossMarginUpside: 10.4,
+        grossMarginBear: 8.1,
+        operatingMarginStart: 4.2,
+        operatingMarginBase: 5.4,
+        operatingMarginUpside: 6.2,
+        operatingMarginBear: 3.8,
+        benchmarkPeBase: 18,
+        benchmarkPeUpside: 22,
+        benchmarkPeBear: 15,
+        defaultDrivers: [
+          '國際 CSP 資本支出延伸到 2027，AI server 訂單能見度仍在拉長',
+          '高階機櫃與 rack-level 產品滲透，讓 ASP 與毛利率都比傳統伺服器更好',
+          '若出貨節奏沒有掉速，市場願意用 forward PE 重新定價這段轉型獲利',
+        ],
+      };
+    }
+    if (symbol === '2454' || /soc|手機|旗艦|edge ai|邊緣 ai|ic design|晶片/.test(text)) {
+      return {
+        key: 'ic_design',
+        driverLabel: '旗艦 SoC mix 與高階 ASP 提升',
+        peerLabel: '高階 IC 設計',
+        benchmarkLabel: '同業 forward PE 多落在 18x–24x',
+        volumeLabel: '旗艦 SoC 出貨',
+        aspLabel: '旗艦 SoC ASP',
+        mixLabel: '高階產品營收占比',
+        mixStart: 34,
+        mixBase: 42,
+        mixUpside: 48,
+        mixBear: 31,
+        volumeGrowthBase: 8,
+        volumeGrowthUpside: 14,
+        volumeGrowthBear: -2,
+        aspGrowthBase: 6,
+        aspGrowthUpside: 12,
+        aspGrowthBear: -3,
+        grossMarginStart: 46,
+        grossMarginBase: 49,
+        grossMarginUpside: 51.5,
+        grossMarginBear: 44.5,
+        operatingMarginStart: 18,
+        operatingMarginBase: 21,
+        operatingMarginUpside: 23.5,
+        operatingMarginBear: 16.5,
+        benchmarkPeBase: 20,
+        benchmarkPeUpside: 24,
+        benchmarkPeBear: 17,
+        defaultDrivers: [
+          '旗艦 SoC 與 AI 邊緣運算產品組合改善，是下一段獲利彈性的主因',
+          '高階 ASP 與毛利率只要再往上墊高，EPS 會比營收成長更快',
+          '市場通常以同業成長股的 forward PE 來反映高階產品 mix 上升',
+        ],
+      };
+    }
+    if (symbol === '2337' || /emmc|nand|flash|ssd|儲存|記憶體|mlc|tlc/.test(text)) {
+      return {
+        key: 'memory_storage',
+        driverLabel: '高毛利 eMMC / MLC 供需缺口帶動 ASP 與 product mix 改善',
+        peerLabel: '儲存 / 記憶體',
+        benchmarkLabel: '同業景氣上行時 forward PE 多落在 10x–13x',
+        volumeLabel: '儲存位元出貨',
+        aspLabel: 'ASP/Gb',
+        mixLabel: '高毛利產品占比',
+        mixStart: 26,
+        mixBase: 34,
+        mixUpside: 40,
+        mixBear: 22,
+        volumeGrowthBase: 10,
+        volumeGrowthUpside: 18,
+        volumeGrowthBear: -5,
+        aspGrowthBase: 7,
+        aspGrowthUpside: 14,
+        aspGrowthBear: -6,
+        grossMarginStart: 20,
+        grossMarginBase: 28,
+        grossMarginUpside: 33,
+        grossMarginBear: 18,
+        operatingMarginStart: 4,
+        operatingMarginBase: 10,
+        operatingMarginUpside: 14,
+        operatingMarginBear: 2,
+        benchmarkPeBase: 10,
+        benchmarkPeUpside: 13,
+        benchmarkPeBear: 8,
+        defaultDrivers: [
+          '高毛利 eMMC / MLC 產品供給吃緊，ASP/Gb 與產品組合都有改善空間',
+          '記憶體週期只要從供需失衡走向缺貨，毛利率彈性通常大於營收彈性',
+          '這類股票往往先由 EPS 修復，再用景氣上行區間的 PE 重新定價',
+        ],
+      };
+    }
+    if (/cpo|800g|光模組|optical|ld|cos/.test(text)) {
+      return {
+        key: 'optical_cpo',
+        driverLabel: '高速光模組 / CPO 滲透率提升',
+        peerLabel: '光通訊 / CPO',
+        benchmarkLabel: '同業 forward PE 多落在 20x–30x',
+        volumeLabel: '高速光模組出貨',
+        aspLabel: '高階光通訊 ASP',
+        mixLabel: '高階產品營收占比',
+        mixStart: 18,
+        mixBase: 30,
+        mixUpside: 38,
+        mixBear: 15,
+        volumeGrowthBase: 20,
+        volumeGrowthUpside: 32,
+        volumeGrowthBear: 4,
+        aspGrowthBase: 8,
+        aspGrowthUpside: 15,
+        aspGrowthBear: -2,
+        grossMarginStart: 24,
+        grossMarginBase: 31,
+        grossMarginUpside: 36,
+        grossMarginBear: 22,
+        operatingMarginStart: 8,
+        operatingMarginBase: 13,
+        operatingMarginUpside: 17,
+        operatingMarginBear: 6,
+        benchmarkPeBase: 24,
+        benchmarkPeUpside: 30,
+        benchmarkPeBear: 18,
+        defaultDrivers: [
+          'CPO / 800G 滲透率上升，讓高毛利產品占比比一般光模組更快擴大',
+          '國際大客戶訂單可見度是估值提升的關鍵驗證點',
+          '市場通常用同業的高成長倍數去定價落後補漲股',
+        ],
+      };
+    }
+    return {
+      key: 'generic_growth',
+      driverLabel: '營收動能與產品組合改善',
+      peerLabel: '可比成長股',
+      benchmarkLabel: '以同產業 forward PE / PB 區間作為估值錨點',
+      volumeLabel: '核心產品出貨',
+      aspLabel: '產品 ASP',
+      mixLabel: '高毛利產品占比',
+      mixStart: 22,
+      mixBase: 28,
+      mixUpside: 33,
+      mixBear: 19,
+      volumeGrowthBase: 8,
+      volumeGrowthUpside: 14,
+      volumeGrowthBear: -3,
+      aspGrowthBase: 4,
+      aspGrowthUpside: 8,
+      aspGrowthBear: -2,
+      grossMarginStart: 18,
+      grossMarginBase: 22,
+      grossMarginUpside: 26,
+      grossMarginBear: 16,
+      operatingMarginStart: 5,
+      operatingMarginBase: 8,
+      operatingMarginUpside: 11,
+      operatingMarginBear: 4,
+      benchmarkPeBase: 15,
+      benchmarkPeUpside: 19,
+      benchmarkPeBear: 11,
+      defaultDrivers: [
+        '市場正在交易營收成長與產品組合改善能否延續',
+        '若毛利率與營益率同步墊高，EPS 修復速度會比營收更快',
+        '最後仍要看同產業估值倍數是否願意往上給',
+      ],
+    };
+  };
+  const driverLabelFromType = (driverType: 'story_tam' | 'broker_target' | 'financial_proxy' | 'fallback_proxy' | 'unknown') => {
+    if (driverType === 'broker_target') return '券商目標價與市場預期';
+    if (driverType === 'story_tam') return '故事驅動的營收與產品組合推估';
+    if (driverType === 'financial_proxy') return '財務代理變數推估';
+    return '保守代理估值';
+  };
+  const symbol = compactText(params.symbol || '').toUpperCase();
+  const contextText = compactText([symbol, params.thesisTitle || '', params.thesisSummary || ''].filter(Boolean).join(' '));
+  const profile = inferScenarioProfile(symbol, contextText);
   const currentPrice = params.currentPrice && params.currentPrice > 0 ? params.currentPrice : null;
-  const basePe = clamp(params.peRatio && params.peRatio > 0 ? params.peRatio : 14, 8, 35);
+  const brokerTargetPrice = params.brokerTargetPrice && params.brokerTargetPrice > 0 ? params.brokerTargetPrice : null;
+  const hasRevenueSignal = Boolean((params.revenueRunRate && params.revenueRunRate > 0) || (params.monthlyRevenue && params.monthlyRevenue > 0));
+  const hasFinancialSignal = Boolean((params.epsTtm && params.epsTtm > 0) || (params.peRatio && params.peRatio > 0));
+  const valuationQuality =
+    brokerTargetPrice != null ? 'broker_anchored' : hasRevenueSignal && hasFinancialSignal ? 'story_modeled' : hasFinancialSignal ? 'financial_proxy' : 'fallback_proxy';
+  const scenarioDriverType =
+    brokerTargetPrice != null
+      ? 'broker_target'
+      : hasRevenueSignal
+        ? 'story_tam'
+        : hasFinancialSignal
+          ? 'financial_proxy'
+          : 'fallback_proxy';
+  const currentPeObserved = params.peRatio && params.peRatio > 0 ? clamp(params.peRatio, 6, 140) : brokerTargetPrice && currentPrice ? clamp(brokerTargetPrice / currentPrice, 6, 140) : null;
+  const currentPbObserved = params.pbRatio && params.pbRatio > 0 ? clamp(params.pbRatio, 0.4, 20) : null;
+  const basePe = clamp(currentPeObserved ?? profile.benchmarkPeBase, 8, 60);
   const growthYoy = clamp((params.yoyGrowth || 0) / 100, -0.45, 1.5);
   const growthMom = clamp((params.momGrowth || 0) / 100, -0.2, 0.35);
   const growthBlend = clamp(growthYoy * 0.7 + growthMom * 0.3, -0.4, 0.85);
+  const brokerPremium = brokerTargetPrice && currentPrice ? clamp((brokerTargetPrice - currentPrice) / currentPrice, -0.2, 0.8) : 0;
+  const evidenceLift = clamp(((params.evidenceCount || 0) - 1) * 0.012, 0, 0.08);
+  const sourceLift = clamp(((params.sourceDocumentCount || 0) - 1) * 0.008, 0, 0.05);
+  const brokerLift = clamp((params.brokerReportCount || 0) * 0.018, 0, 0.08);
+  const scenarioIntensity = clamp(
+    0.05 +
+      Math.max(growthBlend, 0) * 0.22 +
+      Math.max(brokerPremium, 0) * 0.35 +
+      (hasRevenueSignal ? 0.05 : 0) +
+      (hasFinancialSignal ? 0.03 : 0) +
+      evidenceLift +
+      sourceLift +
+      brokerLift,
+    0.05,
+    0.42,
+  );
 
-  const baseRevenueAnnual = params.revenueRunRate && params.revenueRunRate > 0
-    ? params.revenueRunRate * (1 + growthBlend * 0.25)
-    : params.monthlyRevenue && params.monthlyRevenue > 0
-      ? params.monthlyRevenue * 12 * (1 + growthBlend * 0.35)
-      : null;
-  const upsideRevenueAnnual = baseRevenueAnnual ? baseRevenueAnnual * 1.12 : null;
-  const bearRevenueAnnual = baseRevenueAnnual ? baseRevenueAnnual * 0.9 : null;
+  const baseRevenueRunRate =
+    params.revenueRunRate && params.revenueRunRate > 0
+      ? params.revenueRunRate
+      : params.monthlyRevenue && params.monthlyRevenue > 0
+        ? params.monthlyRevenue * 12
+        : null;
+  const revenueLiftFrom = (volumeGrowthPct: number, aspGrowthPct: number, mixFrom: number, mixTo: number) =>
+    clamp(
+      volumeGrowthPct / 100 * 0.58 +
+        aspGrowthPct / 100 * 0.24 +
+        Math.max(mixTo - mixFrom, 0) / 100 * 0.72 +
+        Math.max(growthBlend, -0.1) * 0.12 +
+        evidenceLift +
+        sourceLift +
+        brokerLift,
+      -0.18,
+      0.62,
+    );
+  const baseRevenueLift = revenueLiftFrom(profile.volumeGrowthBase, profile.aspGrowthBase, profile.mixStart, profile.mixBase);
+  const upsideRevenueLift = revenueLiftFrom(profile.volumeGrowthUpside, profile.aspGrowthUpside, profile.mixStart, profile.mixUpside);
+  const bearRevenueLift = clamp(
+    revenueLiftFrom(profile.volumeGrowthBear, profile.aspGrowthBear, profile.mixStart, profile.mixBear) - scenarioIntensity * 0.18,
+    -0.28,
+    0.18,
+  );
+  const baseRevenueAnnual = baseRevenueRunRate ? baseRevenueRunRate * (1 + baseRevenueLift) : null;
+  const upsideRevenueAnnual = baseRevenueRunRate ? baseRevenueRunRate * (1 + upsideRevenueLift) : null;
+  const bearRevenueAnnual = baseRevenueRunRate ? baseRevenueRunRate * (1 + bearRevenueLift) : null;
 
   const impliedCurrentEps = currentPrice && basePe > 0 ? currentPrice / basePe : null;
   const epsAnchor = params.epsTtm && params.epsTtm > 0 ? params.epsTtm : impliedCurrentEps;
-  const baseEps = epsAnchor ? epsAnchor * (1 + growthBlend * 0.55) : null;
-  const upsideEps = baseEps ? baseEps * 1.16 : null;
-  const bearEps = baseEps ? baseEps * 0.82 : null;
+  const currentGrossMargin = params.grossMarginPct && params.grossMarginPct > 0 ? params.grossMarginPct : profile.grossMarginStart;
+  const currentOperatingMargin = params.operatingMarginPct && params.operatingMarginPct > 0 ? params.operatingMarginPct : profile.operatingMarginStart;
+  const baseGrossMargin = clamp(Math.max(currentGrossMargin, profile.grossMarginBase), 6, 65);
+  const upsideGrossMargin = clamp(Math.max(baseGrossMargin, profile.grossMarginUpside), 6, 70);
+  const bearGrossMargin = clamp(Math.min(Math.max(currentGrossMargin - 2, profile.grossMarginBear), baseGrossMargin - 0.5), 4, 60);
+  const baseOperatingMargin = clamp(Math.max(currentOperatingMargin, profile.operatingMarginBase), 1, 35);
+  const upsideOperatingMargin = clamp(Math.max(baseOperatingMargin, profile.operatingMarginUpside), 2, 40);
+  const bearOperatingMargin = clamp(Math.min(Math.max(currentOperatingMargin - 1.5, profile.operatingMarginBear), baseOperatingMargin - 0.4), 0.5, 30);
+  const epsGrowthFrom = (revenueLift: number, grossMarginTo: number, operatingMarginTo: number) => {
+    const grossDelta = grossMarginTo - currentGrossMargin;
+    const operatingDelta = operatingMarginTo - currentOperatingMargin;
+    return clamp(1 + revenueLift * 0.52 + grossDelta * 0.11 + operatingDelta * 0.12, 0.45, 3.4);
+  };
+  const baseEps = epsAnchor ? epsAnchor * epsGrowthFrom(baseRevenueLift, baseGrossMargin, baseOperatingMargin) : null;
+  const upsideEps = epsAnchor ? epsAnchor * epsGrowthFrom(upsideRevenueLift, upsideGrossMargin, upsideOperatingMargin) : null;
+  const bearEps = epsAnchor ? epsAnchor * epsGrowthFrom(bearRevenueLift, bearGrossMargin, bearOperatingMargin) : null;
 
-  const basePeScenario = basePe;
-  const upsidePeScenario = clamp(basePe * 1.08, 9, 40);
-  const bearPeScenario = clamp(basePe * 0.88, 6, 30);
+  const basePeScenario = clamp(
+    brokerTargetPrice && currentPrice ? ((brokerTargetPrice / currentPrice) * 0.35 + profile.benchmarkPeBase * 0.65) : profile.benchmarkPeBase,
+    8,
+    60,
+  );
+  const upsidePeScenario = clamp(profile.benchmarkPeUpside + Math.max(scenarioIntensity * 8, 0), 9, 70);
+  const bearPeScenario = clamp(Math.min(profile.benchmarkPeBear, basePeScenario - 2), 6, 40);
 
   const peBaseTarget = baseEps ? baseEps * basePeScenario : null;
-  const baseTarget = params.brokerTargetPrice && params.brokerTargetPrice > 0
-    ? (peBaseTarget ? params.brokerTargetPrice * 0.65 + peBaseTarget * 0.35 : params.brokerTargetPrice)
+  const baseTarget = brokerTargetPrice
+    ? (peBaseTarget ? brokerTargetPrice * 0.72 + peBaseTarget * 0.28 : brokerTargetPrice)
     : peBaseTarget;
-  let upsideTarget = upsideEps ? upsideEps * upsidePeScenario : (baseTarget ? baseTarget * 1.15 : null);
-  let bearTarget = bearEps ? bearEps * bearPeScenario : (baseTarget ? baseTarget * 0.82 : null);
+  let upsideTarget = upsideEps ? upsideEps * upsidePeScenario : (baseTarget ? baseTarget * (1 + scenarioIntensity) : null);
+  let bearTarget = bearEps ? bearEps * bearPeScenario : (baseTarget ? baseTarget * (1 - clamp(scenarioIntensity * 0.85, 0.12, 0.32)) : null);
   if (baseTarget && upsideTarget && upsideTarget < baseTarget) {
-    upsideTarget = baseTarget * 1.12;
+    upsideTarget = baseTarget * (1 + clamp(scenarioIntensity, 0.08, 0.2));
   }
   if (baseTarget && bearTarget && bearTarget > baseTarget) {
-    bearTarget = baseTarget * 0.88;
+    bearTarget = baseTarget * (1 - clamp(scenarioIntensity * 0.8, 0.1, 0.25));
   }
 
   const expectedReturn = (target: number | null) => (target && currentPrice ? roundTo(((target - currentPrice) / currentPrice) * 100, 2) : null);
+  const driverLabel = profile.driverLabel || driverLabelFromType(scenarioDriverType);
+  const buildOperatingAssumptions = (
+    scenarioLabel: 'base' | 'upside' | 'bear',
+    revenueAnnual: number | null,
+    eps: number | null,
+    pe: number | null,
+    grossMargin: number | null,
+    operatingMargin: number | null,
+  ) => {
+    const mixTo = scenarioLabel === 'upside' ? profile.mixUpside : scenarioLabel === 'bear' ? profile.mixBear : profile.mixBase;
+    const volumeGrowth = scenarioLabel === 'upside' ? profile.volumeGrowthUpside : scenarioLabel === 'bear' ? profile.volumeGrowthBear : profile.volumeGrowthBase;
+    const aspGrowth = scenarioLabel === 'upside' ? profile.aspGrowthUpside : scenarioLabel === 'bear' ? profile.aspGrowthBear : profile.aspGrowthBase;
+    return [
+      { label: '年化營收', value: formatScenarioMoney(revenueAnnual), isEstimated: true },
+      { label: profile.volumeLabel, value: `+${roundTo(volumeGrowth, 1)}%`, isEstimated: true },
+      { label: profile.aspLabel, value: `${aspGrowth >= 0 ? '+' : ''}${roundTo(aspGrowth, 1)}%`, isEstimated: true },
+      { label: profile.mixLabel, value: `${roundTo(profile.mixStart, 1)}% -> ${roundTo(mixTo, 1)}%`, isEstimated: true },
+      { label: '毛利率', value: formatPctPointRange(currentGrossMargin, grossMargin), isEstimated: true },
+      { label: '營益率', value: formatPctPointRange(currentOperatingMargin, operatingMargin), isEstimated: true },
+      { label: 'EPS', value: eps == null ? null : `${roundTo(eps, 2)}`, isEstimated: true },
+      { label: '目標 PE', value: safeRatioText(pe), isEstimated: true },
+    ].filter((item): item is { label: string; value: string; isEstimated: boolean } => Boolean(item.value));
+  };
+  const buildScenarioDetails = (
+    scenarioLabel: 'base' | 'upside' | 'bear',
+    revenueAnnual: number | null,
+    eps: number | null,
+    pe: number | null,
+    targetPrice: number | null,
+    grossMargin: number | null,
+    operatingMargin: number | null,
+  ) => {
+    const priorRevenueAnnual = baseRevenueRunRate;
+    const mixTo = scenarioLabel === 'upside' ? profile.mixUpside : scenarioLabel === 'bear' ? profile.mixBear : profile.mixBase;
+    const volumeGrowth = scenarioLabel === 'upside' ? profile.volumeGrowthUpside : scenarioLabel === 'bear' ? profile.volumeGrowthBear : profile.volumeGrowthBase;
+    const aspGrowth = scenarioLabel === 'upside' ? profile.aspGrowthUpside : scenarioLabel === 'bear' ? profile.aspGrowthBear : profile.aspGrowthBase;
+    const caseLabel =
+      scenarioLabel === 'base' ? '基本情境' : scenarioLabel === 'upside' ? '樂觀情境' : '悲觀 / 失效情境';
+    const storyDrivers = unique([
+      ...profile.defaultDrivers,
+      brokerTargetPrice != null ? '市場已有外部目標價可供比對，因此估值不只看單一內部模型。' : null,
+      hasRevenueSignal ? '最新營收訊號仍提供第一層驗證。' : null,
+      hasFinancialSignal ? '獲利結構與估值倍數會一起決定最終股價彈性。' : null,
+    ].filter((item): item is string => Boolean(item)));
+    const operatingBridge = compactText(
+      `${profile.volumeLabel}假設約 ${volumeGrowth >= 0 ? '+' : ''}${roundTo(volumeGrowth, 1)}%，${profile.aspLabel}${aspGrowth >= 0 ? '+' : ''}${roundTo(aspGrowth, 1)}%，${profile.mixLabel}由 ${roundTo(profile.mixStart, 1)}% 提升至 ${roundTo(mixTo, 1)}%。`,
+    );
+    const earningsBridge = compactText(
+      [
+        priorRevenueAnnual && revenueAnnual
+          ? `對應年化營收由 ${formatScenarioMoney(priorRevenueAnnual)} 推到 ${formatScenarioMoney(revenueAnnual)}`
+          : revenueAnnual
+            ? `年化營收約 ${formatScenarioMoney(revenueAnnual)}`
+            : null,
+        grossMargin != null ? `毛利率由 ${roundTo(currentGrossMargin, 2)}% 提升至 ${roundTo(grossMargin, 2)}%` : null,
+        operatingMargin != null ? `營益率由 ${roundTo(currentOperatingMargin, 2)}% 推到 ${roundTo(operatingMargin, 2)}%` : null,
+        eps != null ? `推估 EPS 約 ${roundTo(eps, 2)}` : null,
+      ]
+        .filter(Boolean)
+        .join('，'),
+    );
+    const multipleBridge = compactText(
+      [
+        `${caseLabel}對照 ${profile.peerLabel}，${profile.benchmarkLabel}`,
+        currentPeObserved != null ? `目前市場 TTM PE 約 ${roundTo(currentPeObserved, 2)}x` : null,
+        currentPbObserved != null ? `PB 約 ${roundTo(currentPbObserved, 2)}x` : null,
+        pe != null ? `本輪以 ${roundTo(pe, 2)}x 作為目標估值倍數` : null,
+      ]
+        .filter(Boolean)
+        .join('，'),
+    ) || null;
+    const financialBridge = [operatingBridge, earningsBridge].filter((item): item is string => Boolean(item));
+    const priceBridge =
+      targetPrice != null && eps != null && pe != null
+        ? `${caseLabel}以 EPS ${roundTo(eps, 2)} × ${roundTo(pe, 2)}x，推得目標價約 NT$${roundTo(targetPrice, 2)}；${currentPrice ? `相對現價 ${percentText(expectedReturn(targetPrice))}` : '相對現價空間待補'}。`
+        : null;
+    const bridgeSummary = [operatingBridge, earningsBridge, multipleBridge, priceBridge].filter(Boolean).join(' ');
+    return {
+      driver: driverLabel,
+      storyDrivers,
+      operatingBridge,
+      earningsBridge,
+      operatingAssumptions: buildOperatingAssumptions(scenarioLabel, revenueAnnual, eps, pe, grossMargin, operatingMargin),
+      financialBridge,
+      multipleBridge,
+      priceBridge,
+      bridgeSummary,
+      grossMarginPct: grossMargin == null ? null : roundTo(grossMargin, 2),
+      operatingMarginPct: operatingMargin == null ? null : roundTo(operatingMargin, 2),
+    };
+  };
 
   return {
     base: {
@@ -457,6 +1241,7 @@ function buildPeScenario(params: {
       pe: roundTo(basePeScenario, 2),
       targetPrice: baseTarget ? roundTo(baseTarget, 2) : null,
       expectedReturnPct: expectedReturn(baseTarget),
+      ...buildScenarioDetails('base', baseRevenueAnnual, baseEps, basePeScenario, baseTarget, baseGrossMargin, baseOperatingMargin),
     },
     upside: {
       revenueAnnual: upsideRevenueAnnual ? roundTo(upsideRevenueAnnual, 0) : null,
@@ -464,6 +1249,7 @@ function buildPeScenario(params: {
       pe: roundTo(upsidePeScenario, 2),
       targetPrice: upsideTarget ? roundTo(upsideTarget, 2) : null,
       expectedReturnPct: expectedReturn(upsideTarget),
+      ...buildScenarioDetails('upside', upsideRevenueAnnual, upsideEps, upsidePeScenario, upsideTarget, upsideGrossMargin, upsideOperatingMargin),
     },
     bear: {
       revenueAnnual: bearRevenueAnnual ? roundTo(bearRevenueAnnual, 0) : null,
@@ -471,7 +1257,11 @@ function buildPeScenario(params: {
       pe: roundTo(bearPeScenario, 2),
       targetPrice: bearTarget ? roundTo(bearTarget, 2) : null,
       expectedReturnPct: expectedReturn(bearTarget),
+      ...buildScenarioDetails('bear', bearRevenueAnnual, bearEps, bearPeScenario, bearTarget, bearGrossMargin, bearOperatingMargin),
     },
+    valuationQuality,
+    scenarioDriverType,
+    driverLabel,
     missingFields: [
       ...(baseEps ? [] : ['eps']),
       ...(baseRevenueAnnual ? [] : ['revenue']),
@@ -522,25 +1312,1266 @@ function parseFollowerCount(text: string) {
   return Math.round(raw);
 }
 
-function normalizeMetaCookieSeed() {
-  const shared = [
-    { name: 'sessionid', value: process.env.sessionid || '' },
-    { name: 'csrftoken', value: process.env.csrftoken || '' },
-    { name: 'ds_user_id', value: process.env.ds_user_id || '' },
-    { name: 'ig_did', value: process.env.ig_did || '' },
-    { name: 'mid', value: process.env.mid || '' },
-    { name: 'datr', value: process.env.datr || '' },
-    { name: 'ps_l', value: process.env.ps_l || '' },
-    { name: 'ps_n', value: process.env.ps_n || '' },
-  ].filter((item) => item.value);
+type SourceSyncRunShape = {
+  connector: string;
+  recordsWritten: number;
+  fetchedPosts?: number;
+  entityId: string | null;
+  watermarkBefore?: string | null;
+  watermarkAfter?: string | null;
+  duplicatesSkipped?: number;
+  sessionRefreshed?: boolean;
+  errorCode?: string | null;
+  matchedDirectHits?: number;
+  matchedIndustryHits?: number;
+  searchedKeywords?: string[];
+  matchedSymbols?: string[];
+  authFailureReason?: string | null;
+  degradedReason?: string | null;
+  timedOut?: boolean;
+  sessionMode?: 'persisted_session' | 'fresh_login' | 'cookie_fallback' | 'missing' | 'not_applicable';
+  loginStage?: string | null;
+  failureReason?: string | null;
+  configWarning?: string | null;
+  legacyDomainDetected?: boolean;
+  legacyDomainMigrated?: boolean;
+  validatedUrlFinal?: string | null;
+  cookieDiagnostics?: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
+};
+
+type SourceSyncOptions = {
+  connector?: string;
+  dryRun?: boolean;
+  symbol?: string;
+};
+
+type SourceDocMatchType = 'direct_symbol' | 'alias' | 'indirect' | 'none';
+type SourceDocCrawlMode = 'symbol_scoped' | 'market_scan' | 'account_feed' | 'public_search' | 'author_watch' | 'channel_scan';
+type SourceStoryAxis = 'stock' | 'industry' | 'kol';
+
+type MetaSessionMode = NonNullable<SourceSyncRunShape['sessionMode']>;
+
+type MetaSessionValidationResult = {
+  validatedSearch: boolean;
+  validatedAuthorPage: boolean;
+  validatedUrl: string | null;
+  validatedUrlFinal: string | null;
+  failureReason: string | null;
+};
+
+type MetaBrowserCookie = {
+  name?: string;
+  value?: string;
+  domain?: string;
+  path?: string;
+  httpOnly?: boolean;
+  secure?: boolean;
+  sameSite?: 'Strict' | 'Lax' | 'None';
+  expires?: number;
+};
+
+type MetaInputCookie = MetaBrowserCookie & {
+  name: string;
+  value: string;
+};
+
+type MetaLocatorHandle = {
+  count: () => Promise<number>;
+  fill: (value: string) => Promise<unknown>;
+  click: () => Promise<unknown>;
+  innerText: () => Promise<string>;
+  getAttribute: (name: string) => Promise<string | null>;
+};
+
+type MetaLocatorFactory = {
+  first: () => MetaLocatorHandle;
+  innerText: () => Promise<string>;
+};
+
+type MetaRoleHandle = {
+  count: () => Promise<number>;
+  click: () => Promise<unknown>;
+};
+
+type MetaContextLike = {
+  cookies: (urls?: string[]) => Promise<MetaBrowserCookie[]>;
+  addCookies?: (cookies: MetaInputCookie[]) => Promise<unknown>;
+  clearCookies?: () => Promise<unknown>;
+};
+
+type MetaPageLike = {
+  goto: (url: string, options?: { waitUntil?: 'domcontentloaded' | 'load'; timeout?: number }) => Promise<unknown>;
+  waitForTimeout: (ms: number) => Promise<unknown>;
+  locator: (selector: string) => MetaLocatorFactory;
+  getByRole: (role: 'button', options: { name: RegExp }) => MetaRoleHandle;
+  evaluate: <T>(pageFunction: () => T | Promise<T>) => Promise<T>;
+  context: () => MetaContextLike;
+  url: () => string;
+  content: () => Promise<string>;
+  screenshot: (options: { type: 'png'; fullPage: boolean }) => Promise<Buffer>;
+  close: () => Promise<unknown>;
+};
+
+type MetaSessionRefreshResult = {
+  ok: boolean;
+  sessionMode: MetaSessionMode;
+  loginStage: string | null;
+  cookieCount: number;
+  hasSessionId: boolean;
+  validatedUrl: string | null;
+  validatedUrlFinal: string | null;
+  validatedSearch: boolean;
+  validatedAuthorPage: boolean;
+  failureReason: string | null;
+};
+
+type ThreadsSessionPreflightResult = {
+  hasCookies: boolean;
+  sessionMode: MetaSessionMode;
+  sessionRefreshed: boolean;
+  validatedSearch: boolean;
+  validatedAuthorPage: boolean;
+  validatedUrl: string | null;
+  validatedUrlFinal: string | null;
+  failureReason: string | null;
+  legacyDomainDetected: boolean;
+  legacyDomainMigrated: boolean;
+};
+
+export type ThreadsAuthDebugResult = {
+  sessionModeBefore: MetaSessionMode;
+  sessionModeAfter: MetaSessionMode;
+  loginStage: string | null;
+  hasSessionFile: boolean;
+  sessionFilePath: string;
+  cookieCount: number;
+  validatedSearch: boolean;
+  validatedAuthorPage: boolean;
+  failureReason: string | null;
+  configWarning: string | null;
+  legacyDomainDetected?: boolean;
+  legacyDomainMigrated?: boolean;
+  validatedUrlFinal?: string | null;
+  fallbackCookieSource?: MetaAuthConfig['fallbackCookieSource'];
+  fallbackCookieNames?: string[];
+  missingRecommendedCookieNames?: string[];
+  envLastModifiedAt?: string | null;
+  preferredCookieSource?: 'persisted_session' | 'env_fallback' | 'fresh_login' | 'none';
+};
+
+type SymbolScopedStockContext = {
+  symbol: string;
+  market: 'TW';
+  name: string;
+  aliases: string[];
+  sector: string | null;
+  themeName: string | null;
+  stockQueryTerms: string[];
+  industryQueryTerms: string[];
+  queryTerms: string[];
+};
+
+type SourceRawDocInput = {
+  sourceEntityId: string | null;
+  platform: string;
+  documentUrl: string;
+  title: string;
+  summary: string;
+  contentText: string;
+  publishedAt?: string | null;
+  symbols?: string[];
+  sentimentLabel?: string | null;
+  confidence?: number | null;
+  metadata?: Record<string, unknown>;
+};
+
+async function getSourceWatermark(platform: string) {
+  const supabase = getSupabaseServerClient();
+  const { data, error } = await supabase
+    .from('source_raw_documents')
+    .select('collected_at')
+    .eq('platform', platform)
+    .order('collected_at', { ascending: false })
+    .limit(1);
+  if (error) return null;
+  const row = (data?.[0] as Row | undefined) || null;
+  return row?.collected_at ? String(row.collected_at) : null;
+}
+
+function sha256Hex(value: string) {
+  return createHash('sha256').update(value).digest('hex');
+}
+
+function truncateSourceContent(value: string) {
+  const text = String(value || '');
+  if (text.length <= SOURCE_RAW_CONTENT_MAX_CHARS) {
+    return { contentText: text, originalChars: text.length, truncated: false };
+  }
   return {
-    instagram: shared.map((item) => ({ ...item, domain: '.instagram.com', path: '/', httpOnly: false, secure: true })),
-    threads: shared.map((item) => ({ ...item, domain: '.threads.net', path: '/', httpOnly: false, secure: true })),
+    contentText: text.slice(0, SOURCE_RAW_CONTENT_MAX_CHARS),
+    originalChars: text.length,
+    truncated: true,
   };
+}
+
+function sourceRawKey(item: Pick<SourceRawDocInput, 'platform' | 'documentUrl'>) {
+  return `${item.platform}::${item.documentUrl}`;
+}
+
+function chunkArray<T>(items: T[], size: number) {
+  const chunks: T[][] = [];
+  for (let index = 0; index < items.length; index += size) {
+    chunks.push(items.slice(index, index + size));
+  }
+  return chunks;
+}
+
+function getSymbolAliases(symbol: string, stockName?: string | null) {
+  const aliases = new Set<string>();
+  for (const [alias, company] of Object.entries(COMPANY_ALIAS_MAP)) {
+    if (company.market === 'TW' && company.symbol === symbol) {
+      aliases.add(alias);
+      if (company.name) aliases.add(company.name);
+    }
+  }
+  if (stockName) aliases.add(stockName);
+  aliases.delete(symbol);
+  return Array.from(aliases)
+    .map((item) => compactText(item))
+    .filter(Boolean)
+    .sort((a, b) => b.length - a.length);
+}
+
+async function resolveSymbolScopedStockContext(symbol: string): Promise<SymbolScopedStockContext> {
+  const normalizedSymbol = compactText(symbol).toUpperCase();
+  if (!/^\d{4}$/.test(normalizedSymbol)) {
+    throw new Error('symbol must be a 4-digit TW stock code');
+  }
+  const supabase = getSupabaseServerClient();
+  const [{ data, error }, latestThemeRes] = await Promise.all([
+    supabase
+      .from('stocks')
+      .select('symbol,name,market,sector')
+      .eq('symbol', normalizedSymbol)
+      .eq('market', 'TW')
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from('theme_heat')
+      .select('theme_name,related_symbols,as_of_date')
+      .order('as_of_date', { ascending: false })
+      .limit(200),
+  ]);
+  if (error || latestThemeRes.error) throw new Error(error?.message || latestThemeRes.error?.message || 'failed resolving symbol context');
+  const stockName = compactText((data as Row | null)?.name || '') || getSymbolAliases(normalizedSymbol)[0] || normalizedSymbol;
+  const sector = compactText((data as Row | null)?.sector || '') || null;
+  const latestThemeMatch = ((latestThemeRes.data as Row[] | undefined) || []).find((row) => {
+    const related = row?.related_symbols;
+    if (Array.isArray(related)) {
+      return related.map((item) => compactText(item).toUpperCase()).includes(normalizedSymbol);
+    }
+    const text = compactText(related);
+    return text.includes(normalizedSymbol);
+  }) || null;
+  const themeName = compactText(latestThemeMatch?.theme_name || '') || null;
+  const aliases = getSymbolAliases(normalizedSymbol, stockName);
+  const stockQueryTerms = unique(
+    [
+      normalizedSymbol,
+      `${normalizedSymbol} ${stockName}`,
+      `${stockName} 台股`,
+      stockName,
+      ...aliases,
+    ].map((item) => compactText(item)).filter(Boolean),
+  );
+  const industryQueryTerms = unique(
+    [
+      sector ? `${sector} 台股` : null,
+      sector ? `${sector} 產業` : null,
+      themeName,
+      themeName ? `${themeName} 台股` : null,
+      themeName ? `${themeName} 供應鏈` : null,
+    ].map((item) => compactText(item)).filter(Boolean),
+  );
+  const queryTerms = unique([...stockQueryTerms, ...industryQueryTerms]);
+  return {
+    symbol: normalizedSymbol,
+    market: 'TW',
+    name: stockName,
+    aliases,
+    sector,
+    themeName,
+    stockQueryTerms,
+    industryQueryTerms,
+    queryTerms,
+  };
+}
+
+function classifySymbolScopedMatch(params: {
+  context: SymbolScopedStockContext;
+  title?: unknown;
+  summary?: unknown;
+  contentText?: unknown;
+  documentUrl?: unknown;
+  symbols?: string[];
+}) {
+  const { context } = params;
+  const title = compactText(params.title);
+  const summary = compactText(params.summary);
+  const contentText = compactText(params.contentText).slice(0, 4000);
+  const text = `${title}\n${summary}\n${contentText}`;
+  const lowerText = text.toLowerCase();
+  const url = String(params.documentUrl || '');
+  const upperUrl = url.toUpperCase();
+  const taggedSymbols = (params.symbols || []).map((item) => String(item).toUpperCase());
+  const symbolRegex = new RegExp(`(^|[^\\d])${context.symbol}([^\\d]|$)`);
+  const yearRegex = new RegExp(`${context.symbol}\\s*年`);
+  const hasDirectSymbol =
+    taggedSymbols.includes(context.symbol) ||
+    (symbolRegex.test(text) && !yearRegex.test(text)) ||
+    upperUrl.includes(`/${context.symbol}`) ||
+    upperUrl.includes(`=${context.symbol}`) ||
+    upperUrl.includes(context.symbol);
+  if (hasDirectSymbol) return 'direct_symbol' as const;
+  const aliasMatched = [context.name, ...context.aliases]
+    .map((item) => compactText(item))
+    .filter(Boolean)
+    .some((alias) => lowerText.includes(alias.toLowerCase()) || url.toLowerCase().includes(encodeURIComponent(alias.toLowerCase())));
+  if (aliasMatched) return 'alias' as const;
+  const queryMentioned = context.queryTerms.some((term) => lowerText.includes(term.toLowerCase()));
+  return queryMentioned ? ('indirect' as const) : ('none' as const);
+}
+
+function buildSourceDocMetadata(params: {
+  connector: string;
+  context?: SymbolScopedStockContext | null;
+  title?: unknown;
+  summary?: unknown;
+  contentText?: unknown;
+  documentUrl?: unknown;
+  symbols?: string[];
+  metadata?: Record<string, unknown>;
+}) {
+  const baseMetadata = (params.metadata || {}) as Record<string, unknown>;
+  const requestedCrawlMode = compactText(baseMetadata.crawl_mode) as SourceDocCrawlMode | '';
+  if (!params.context) {
+    return {
+      ...baseMetadata,
+      connector_name: params.connector,
+      crawl_mode: requestedCrawlMode || ('market_scan' as SourceDocCrawlMode),
+      query_symbol: null,
+      query_terms: [],
+      match_type: 'none' as SourceDocMatchType,
+      story_axis: String(baseMetadata.story_axis || 'kol') as SourceStoryAxis,
+    };
+  }
+  const matchType = classifySymbolScopedMatch({
+    context: params.context,
+    title: params.title,
+    summary: params.summary,
+    contentText: params.contentText,
+    documentUrl: params.documentUrl,
+    symbols: params.symbols,
+  });
+  return {
+    ...baseMetadata,
+    connector_name: params.connector,
+    crawl_mode: requestedCrawlMode || ('symbol_scoped' as SourceDocCrawlMode),
+    query_symbol: params.context.symbol,
+    query_terms: params.context.queryTerms,
+    match_type: matchType,
+    story_axis: String(baseMetadata.story_axis || 'stock') as SourceStoryAxis,
+  };
+}
+
+function extractMatchedTerms(text: string, terms: string[]) {
+  const lower = text.toLowerCase();
+  return terms.filter((term) => compactText(term) && lower.includes(compactText(term).toLowerCase()));
+}
+
+function resolveContextSymbols(params: {
+  text: string;
+  validSymbols?: Set<string>;
+  stockNamesBySymbol?: Map<string, string>;
+  aliasesBySymbol?: Map<string, string[]>;
+  context?: SymbolScopedStockContext | null;
+  matchedStockTerms?: string[];
+  matchedIndustryTerms?: string[];
+}) {
+  const evidence = extractTwSymbolsWithEvidence(params.text, {
+    validSymbols: params.validSymbols,
+    stockNamesBySymbol: params.stockNamesBySymbol,
+    aliasesBySymbol: params.aliasesBySymbol,
+  });
+  const extracted = new Set(evidence.symbols);
+  if (!params.context) {
+    const text = params.text || '';
+    for (const [symbol, name] of params.stockNamesBySymbol || new Map<string, string>()) {
+      const normalizedSymbol = compactText(symbol).toUpperCase();
+      if (!normalizedSymbol || (params.validSymbols && !params.validSymbols.has(normalizedSymbol))) continue;
+      const candidates = [name, ...((params.aliasesBySymbol?.get(normalizedSymbol) || []))]
+        .map(compactText)
+        .filter((item) => item.length >= 2 && !/^\d+$/.test(item));
+      if (candidates.some((candidate) => text.includes(candidate))) extracted.add(normalizedSymbol);
+    }
+    return unique([...extracted]);
+  }
+  const extractedList = [...extracted];
+  if (extracted.has(params.context.symbol)) return unique(extractedList);
+  if ((params.matchedStockTerms || []).length > 0 || (params.matchedIndustryTerms || []).length > 0) {
+    return unique([params.context.symbol, ...extractedList]);
+  }
+  return unique(extractedList);
+}
+
+function computeDirectHitStrength(params: {
+  context?: SymbolScopedStockContext | null;
+  title?: unknown;
+  summary?: unknown;
+  contentText?: unknown;
+  documentUrl?: unknown;
+  symbols?: string[];
+  storyAxis?: SourceStoryAxis;
+  matchedStockTerms?: string[];
+  matchedIndustryTerms?: string[];
+}) {
+  if (!params.context) return 0.5;
+  const matchType = classifySymbolScopedMatch({
+    context: params.context,
+    title: params.title,
+    summary: params.summary,
+    contentText: params.contentText,
+    documentUrl: params.documentUrl,
+    symbols: params.symbols,
+  });
+  if (matchType === 'direct_symbol') return 1;
+  if (matchType === 'alias') return 0.84;
+  if (params.storyAxis === 'industry' && (params.matchedIndustryTerms || []).length > 0) return 0.56;
+  if ((params.matchedStockTerms || []).length > 0) return 0.66;
+  return 0.28;
+}
+
+function shouldRetainSymbolScopedDoc(metadata: Record<string, unknown>, context?: SymbolScopedStockContext | null) {
+  if (!context) return true;
+  const matchType = String(metadata.match_type || 'none') as SourceDocMatchType;
+  const storyAxis = String(metadata.story_axis || 'stock') as SourceStoryAxis;
+  const queryMode = String(metadata.query_mode || '');
+  if (matchType === 'direct_symbol' || matchType === 'alias') return true;
+  if (storyAxis === 'industry' && matchType === 'indirect' && (queryMode === 'industry_search' || queryMode === 'industry_card')) return true;
+  return false;
+}
+
+function decodeHtmlEntities(value: string) {
+  return value
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
+}
+
+function stripHtmlToText(html: string) {
+  return compactText(
+    decodeHtmlEntities(
+      html
+        .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+        .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<\/p>/gi, '\n')
+        .replace(/<[^>]+>/g, ' '),
+    ),
+  );
+}
+
+function normalizeInvestAnchorsUrl(href: string) {
+  const trimmed = compactText(href);
+  if (!trimmed) return null;
+  if (trimmed.startsWith('http')) return trimmed;
+  if (trimmed.startsWith('/')) return `https://investanchors.com${trimmed}`;
+  return `https://investanchors.com/${trimmed.replace(/^\.?\//, '')}`;
+}
+
+function classifyInvestAnchorsCategory(text: string) {
+  const lower = text.toLowerCase();
+  if (lower.includes('法說')) return 'earnings_call';
+  if (lower.includes('營運簡評')) return 'operations_brief';
+  if (lower.includes('週報')) return 'industry_weekly';
+  if (lower.includes('電子報')) return 'newsletter';
+  return 'generic';
+}
+
+function investAnchorsCategoryPriority(category: string) {
+  if (category === 'operations_brief') return 1;
+  if (category === 'earnings_call') return 2;
+  if (category === 'newsletter') return 3;
+  if (category === 'industry_weekly') return 4;
+  return 5;
+}
+
+function extractInvestAnchorsCardsFromHtml(html: string, sourcePage: string) {
+  const cards: Array<{
+    href: string;
+    title: string;
+    snippet: string;
+    category: string;
+    sourcePage: string;
+  }> = [];
+  const anchorPattern = /<a[^>]+href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi;
+  for (const match of html.matchAll(anchorPattern)) {
+    const href = normalizeInvestAnchorsUrl(match[1] || '');
+    if (!href || !href.startsWith('https://investanchors.com/')) continue;
+    if (href.includes('/user/register') || href.includes('/login')) continue;
+    const rawInner = String(match[2] || '');
+    const title = stripHtmlToText(rawInner).slice(0, 180);
+    if (!title || title.length < 6) continue;
+    const category = classifyInvestAnchorsCategory(title);
+    cards.push({
+      href,
+      title,
+      snippet: title,
+      category,
+      sourcePage,
+    });
+  }
+  return cards;
+}
+
+function buildCookieHeader(cookies: Array<{ name?: string; value?: string }>) {
+  return cookies
+    .filter((cookie) => cookie.name && cookie.value)
+    .map((cookie) => `${cookie.name}=${cookie.value}`)
+    .join('; ');
+}
+
+function scoreInvestAnchorsCard(card: {
+  title: string;
+  snippet: string;
+  category: string;
+  href: string;
+}, context?: SymbolScopedStockContext | null) {
+  const haystack = `${card.title}\n${card.snippet}\n${card.href}`;
+  const matchedStockTerms = context ? extractMatchedTerms(haystack, context.stockQueryTerms) : [];
+  const matchedIndustryTerms = context ? extractMatchedTerms(haystack, context.industryQueryTerms) : [];
+  return {
+    matchedStockTerms,
+    matchedIndustryTerms,
+    score: matchedStockTerms.length * 10 + matchedIndustryTerms.length * 4 - investAnchorsCategoryPriority(card.category),
+  };
+}
+
+async function fetchInvestAnchorsArticleHtml(url: string, cookieHeader: string) {
+  const response = await fetch(url, {
+    headers: {
+      'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0',
+      cookie: cookieHeader,
+      accept: 'text/html,application/xhtml+xml',
+    },
+    signal: AbortSignal.timeout(8_000),
+  });
+  if (!response.ok) throw new Error(`investanchors_article_fetch_${response.status}`);
+  return await response.text();
+}
+
+function filterSymbolScopedDocs(
+  docs: SourceRawDocInput[],
+  connector: string,
+  context?: SymbolScopedStockContext | null,
+) {
+  return docs
+    .map((doc) => {
+      const metadata = buildSourceDocMetadata({
+        connector,
+        context,
+        title: doc.title,
+        summary: doc.summary,
+        contentText: doc.contentText,
+        documentUrl: doc.documentUrl,
+        symbols: doc.symbols,
+        metadata: doc.metadata,
+      });
+      if (!shouldRetainSymbolScopedDoc(metadata, context)) return null;
+      return {
+        ...doc,
+        symbols: context ? unique([context.symbol, ...((doc.symbols || []).map((item) => String(item).toUpperCase()))]) : doc.symbols,
+        metadata,
+      };
+    })
+    .filter(Boolean) as SourceRawDocInput[];
+}
+
+function buildMetaSessionState(params: {
+  platform: MetaPlatform;
+  cookies: MetaBrowserCookie[];
+  userAgent?: string | null;
+  lastSuccessfulUrl?: string | null;
+  lastDegradedReason?: string | null;
+  existing?: PersistedMetaSessionState | null;
+}) {
+  const now = nowIso();
+  return {
+    platform: params.platform,
+    cookies: params.cookies
+      .filter((cookie) => cookie.name && cookie.value)
+      .map((cookie) => ({
+        name: String(cookie.name || ''),
+        value: String(cookie.value || ''),
+        domain: String(cookie.domain || (params.platform === 'threads' ? THREADS_CANONICAL_DOMAIN : '.instagram.com')),
+        path: String(cookie.path || '/'),
+        httpOnly: Boolean(cookie.httpOnly),
+        secure: Boolean(cookie.secure ?? true),
+        sameSite: cookie.sameSite,
+        expires: typeof cookie.expires === 'number' ? cookie.expires : undefined,
+      })),
+    userAgent: params.userAgent ?? params.existing?.userAgent ?? null,
+    createdAt: params.existing?.createdAt || now,
+    validatedAt: now,
+    expiredAt: null,
+    lastSuccessfulUrl: params.lastSuccessfulUrl ?? params.existing?.lastSuccessfulUrl ?? null,
+    lastDegradedReason: params.lastDegradedReason ?? params.existing?.lastDegradedReason ?? null,
+  } satisfies PersistedMetaSessionState;
+}
+
+function cookieDiagnostics(auth: MetaAuthConfig) {
+  return {
+    fallback_cookie_source: auth.fallbackCookieSource,
+    fallback_cookie_names: auth.fallbackCookieNames,
+    missing_recommended_cookie_names: auth.missingRecommendedCookieNames,
+    fallback_cookie_count: auth.fallbackCookies.length,
+    env_last_modified_at: auth.envLastModifiedAt,
+    duplicate_legacy_keys: auth.duplicateLegacyKeys,
+    config_warning: auth.configWarning,
+  };
+}
+
+function sessionTimestampMs(session: PersistedMetaSessionState | null) {
+  if (!session) return 0;
+  const candidates = [session.validatedAt, session.createdAt].map((value) => (value ? new Date(value).getTime() : 0));
+  return Math.max(...candidates.filter((value) => Number.isFinite(value)), 0);
+}
+
+function shouldPreferEnvFallbackCookies(auth: MetaAuthConfig, session: PersistedMetaSessionState | null) {
+  if (!session || auth.fallbackCookies.length === 0 || !auth.envLastModifiedAt) return false;
+  const envMs = new Date(auth.envLastModifiedAt).getTime();
+  return Number.isFinite(envMs) && envMs > sessionTimestampMs(session);
+}
+
+async function getPageBodyText(page: MetaPageLike) {
+  try {
+    return compactText(await page.locator('body').innerText());
+  } catch {
+    return '';
+  }
+}
+
+async function validateThreadsSession(page: MetaPageLike, symbol = '2454'): Promise<MetaSessionValidationResult> {
+  const homeUrl = `${THREADS_CANONICAL_ORIGIN}/`;
+  await page.goto(homeUrl, { waitUntil: 'domcontentloaded', timeout: 30_000 });
+  await page.waitForTimeout(2000);
+  const homeFinalUrl = normalizeThreadsUrl(typeof page.url === 'function' ? page.url() : homeUrl);
+  const homeText = await getPageBodyText(page);
+  if (!homeText || isThreadsLoginUrl(homeFinalUrl) || looksLikeThreadsLoginWall(homeText)) {
+    return {
+      validatedSearch: false,
+      validatedAuthorPage: false,
+      validatedUrl: homeUrl,
+      validatedUrlFinal: homeFinalUrl,
+      failureReason: 'home_page_still_login_wall',
+    };
+  }
+
+  const searchUrl = `${THREADS_CANONICAL_ORIGIN}/search?q=${encodeURIComponent(symbol)}`;
+  await page.goto(searchUrl, { waitUntil: 'domcontentloaded', timeout: 30_000 });
+  await page.waitForTimeout(2000);
+  const searchFinalUrl = normalizeThreadsUrl(typeof page.url === 'function' ? page.url() : searchUrl);
+  const searchText = await getPageBodyText(page);
+  if (!searchText || isThreadsLoginUrl(searchFinalUrl) || looksLikeThreadsLoginWall(searchText)) {
+    return {
+      validatedSearch: false,
+      validatedAuthorPage: false,
+      validatedUrl: searchUrl,
+      validatedUrlFinal: searchFinalUrl,
+      failureReason: 'search_page_still_login_wall',
+    };
+  }
+
+  const authorUrl = `${THREADS_CANONICAL_ORIGIN}/@stockcancer`;
+  await page.goto(authorUrl, { waitUntil: 'domcontentloaded', timeout: 30_000 });
+  await page.waitForTimeout(1500);
+  const authorFinalUrl = normalizeThreadsUrl(typeof page.url === 'function' ? page.url() : authorUrl);
+  const authorText = await getPageBodyText(page);
+  if (!authorText || isThreadsLoginUrl(authorFinalUrl) || looksLikeThreadsLoginWall(authorText)) {
+    return {
+      validatedSearch: true,
+      validatedAuthorPage: false,
+      validatedUrl: authorUrl,
+      validatedUrlFinal: authorFinalUrl,
+      failureReason: 'author_page_still_login_wall',
+    };
+  }
+
+  return {
+    validatedSearch: true,
+    validatedAuthorPage: true,
+    validatedUrl: authorUrl,
+    validatedUrlFinal: authorFinalUrl,
+    failureReason: null,
+  };
+}
+
+async function validateThreadsFallbackCookies(options: {
+  context: MetaContextLike;
+  page: MetaPageLike;
+  fallbackCookies: MetaInputCookie[];
+  sessionStore: ReturnType<typeof createMetaSessionStore>;
+  userAgent: string;
+  existingSession?: PersistedMetaSessionState | null;
+}): Promise<ThreadsSessionPreflightResult | null> {
+  const { context, page, fallbackCookies, sessionStore, userAgent, existingSession } = options;
+  if (fallbackCookies.length === 0) return null;
+  if (typeof context.clearCookies === 'function') await context.clearCookies().catch(() => undefined);
+  if (typeof context.addCookies === 'function') await context.addCookies(fallbackCookies);
+  const validation = await validateThreadsSession(page, '2454');
+  if (!validation.validatedSearch || !validation.validatedAuthorPage) {
+    if (typeof context.clearCookies === 'function') await context.clearCookies().catch(() => undefined);
+    return {
+      hasCookies: false,
+      sessionMode: 'missing',
+      sessionRefreshed: false,
+      validatedSearch: validation.validatedSearch,
+      validatedAuthorPage: validation.validatedAuthorPage,
+      validatedUrl: validation.validatedUrl,
+      validatedUrlFinal: validation.validatedUrlFinal,
+      failureReason: validation.failureReason || 'fallback_cookie_invalid',
+      legacyDomainDetected: false,
+      legacyDomainMigrated: false,
+    };
+  }
+  const cookies = await context.cookies([THREADS_CANONICAL_ORIGIN, THREADS_LEGACY_ORIGIN, 'https://www.instagram.com']);
+  await sessionStore.persistPreferred(
+    buildMetaSessionState({
+      platform: 'threads',
+      cookies,
+      userAgent,
+      existing: existingSession || null,
+      lastSuccessfulUrl: validation.validatedUrlFinal ?? validation.validatedUrl,
+    }),
+  );
+  return {
+    hasCookies: true,
+    sessionMode: 'cookie_fallback',
+    sessionRefreshed: true,
+    validatedSearch: true,
+    validatedAuthorPage: true,
+    validatedUrl: validation.validatedUrl,
+    validatedUrlFinal: validation.validatedUrlFinal,
+    failureReason: null,
+    legacyDomainDetected: false,
+    legacyDomainMigrated: false,
+  };
+}
+
+async function preflightThreadsSession(options: {
+  context: MetaContextLike;
+  page: MetaPageLike;
+  persistedSession: PersistedMetaSessionState | null;
+  fallbackCookies: MetaInputCookie[];
+  sessionStore: ReturnType<typeof createMetaSessionStore>;
+  username: string;
+  password: string;
+  userAgent: string;
+}): Promise<ThreadsSessionPreflightResult> {
+  const { context, page, persistedSession, fallbackCookies, sessionStore, username, password, userAgent } = options;
+  const legacyDomainDetected = detectLegacyThreadsSession(persistedSession);
+  const fallbackValidation = async (existingSession?: PersistedMetaSessionState | null) =>
+    await validateThreadsFallbackCookies({
+      context,
+      page,
+      fallbackCookies,
+      sessionStore,
+      userAgent,
+      existingSession,
+    });
+
+  if (persistedSession?.cookies?.length) {
+    const validation = await validateThreadsSession(page, '2454');
+    if (validation.validatedSearch && validation.validatedAuthorPage) {
+      return {
+        hasCookies: true,
+        sessionMode: 'persisted_session',
+        sessionRefreshed: false,
+        validatedSearch: true,
+        validatedAuthorPage: true,
+        validatedUrl: validation.validatedUrl,
+        validatedUrlFinal: validation.validatedUrlFinal,
+        failureReason: null,
+        legacyDomainDetected,
+        legacyDomainMigrated: false,
+      };
+    }
+
+    await sessionStore.clearPreferred('persisted_session_invalid');
+    if (typeof context.clearCookies === 'function') {
+      await context.clearCookies().catch(() => undefined);
+    }
+
+    const fallback = await fallbackValidation(persistedSession);
+    if (fallback?.hasCookies) {
+      return {
+        ...fallback,
+        legacyDomainDetected,
+        legacyDomainMigrated: legacyDomainDetected,
+      };
+    }
+
+    const refreshResult = await tryRefreshMetaSession(page, {
+      platform: 'threads',
+      username,
+      password,
+      sessionStore,
+      userAgent,
+    });
+
+    if (refreshResult.ok) {
+      return {
+        hasCookies: true,
+        sessionMode: refreshResult.sessionMode,
+        sessionRefreshed: true,
+        validatedSearch: refreshResult.validatedSearch,
+        validatedAuthorPage: refreshResult.validatedAuthorPage,
+        validatedUrl: refreshResult.validatedUrl,
+        validatedUrlFinal: refreshResult.validatedUrlFinal,
+        failureReason: null,
+        legacyDomainDetected,
+        legacyDomainMigrated: legacyDomainDetected,
+      };
+    }
+
+    return {
+      hasCookies: false,
+      sessionMode: 'missing',
+      sessionRefreshed: false,
+      validatedSearch: false,
+      validatedAuthorPage: false,
+      validatedUrl: validation.validatedUrl,
+      validatedUrlFinal: validation.validatedUrlFinal,
+      failureReason: fallback?.failureReason || 'persisted_session_invalid',
+      legacyDomainDetected,
+      legacyDomainMigrated: false,
+    };
+  }
+
+  if (fallbackCookies.length > 0) {
+    const fallback = await fallbackValidation(null);
+    if (fallback) return fallback;
+  }
+
+  const refreshResult = await tryRefreshMetaSession(page, {
+    platform: 'threads',
+    username,
+    password,
+    sessionStore,
+    userAgent,
+  });
+
+  return {
+    hasCookies: refreshResult.ok,
+    sessionMode: refreshResult.sessionMode,
+    sessionRefreshed: refreshResult.ok,
+    validatedSearch: refreshResult.validatedSearch,
+    validatedAuthorPage: refreshResult.validatedAuthorPage,
+    validatedUrl: refreshResult.validatedUrl,
+    validatedUrlFinal: refreshResult.validatedUrlFinal,
+    failureReason: refreshResult.ok ? null : refreshResult.failureReason || 'fresh_login_failed',
+    legacyDomainDetected: false,
+    legacyDomainMigrated: false,
+  };
+}
+
+async function tryInstagramBridgeSession(page: MetaPageLike, username: string, password: string) {
+  await page.goto('https://www.instagram.com/accounts/login/', { waitUntil: 'domcontentloaded', timeout: 60_000 });
+  await page.waitForTimeout(2500);
+
+  const userSelectors = [
+    'input[name="username"]',
+    'input[name="email"]',
+    'input[autocomplete="username"]',
+    'input[name="text"]',
+    'input[type="email"]',
+  ];
+  const passSelectors = [
+    'input[name="password"]',
+    'input[name="pass"]',
+    'input[type="password"]',
+    'input[autocomplete="current-password"]',
+  ];
+
+  let userFilled = false;
+  for (const selector of userSelectors) {
+    const field = page.locator(selector).first();
+    if ((await field.count()) > 0) {
+      await field.fill(username);
+      userFilled = true;
+      break;
+    }
+  }
+  if (!userFilled) {
+    return { ok: false, cookieCount: 0, failureReason: 'instagram_login_form_not_found' };
+  }
+
+  let passFilled = false;
+  for (const selector of passSelectors) {
+    const field = page.locator(selector).first();
+    if ((await field.count()) > 0) {
+      await field.fill(password);
+      passFilled = true;
+      break;
+    }
+  }
+  if (!passFilled) {
+    return { ok: false, cookieCount: 0, failureReason: 'instagram_login_form_not_found' };
+  }
+
+  let clicked = false;
+  const submit = page.locator('button[type="submit"]').first();
+  if ((await submit.count()) > 0) {
+    await submit.click();
+    clicked = true;
+  }
+  if (!clicked) {
+    clicked = await page.evaluate(() => {
+      const candidates = Array.from(document.querySelectorAll('button, div[role="button"]')) as HTMLElement[];
+      const target = candidates.find((element) => /^(log in|登入|sign in)$/i.test((element.textContent || '').replace(/\s+/g, ' ').trim()));
+      if (!target) return false;
+      target.click();
+      return true;
+    });
+  }
+  if (!clicked) {
+    return { ok: false, cookieCount: 0, failureReason: 'instagram_login_submit_not_found' };
+  }
+
+  let cookies: MetaBrowserCookie[] = [];
+  let hasSession = false;
+  for (let attempt = 0; attempt < 15; attempt += 1) {
+    await page.waitForTimeout(1000);
+    cookies = await page.context().cookies([THREADS_CANONICAL_ORIGIN, THREADS_LEGACY_ORIGIN, 'https://www.instagram.com']);
+    hasSession = cookies.some((cookie) => cookie.name === 'sessionid' && Boolean(cookie.value));
+    if (hasSession) break;
+  }
+
+  const bodyText = await getPageBodyText(page);
+  const normalizedBodyText = bodyText.toLowerCase();
+  const failureReason =
+    normalizedBodyText.includes('incorrect password') || normalizedBodyText.includes('wrong password')
+      ? 'invalid_credentials'
+      : normalizedBodyText.includes('suspend') || normalizedBodyText.includes('checkpoint') || normalizedBodyText.includes('confirm it was you')
+        ? 'checkpoint_required'
+        : normalizedBodyText.includes('try again later') || normalizedBodyText.includes('wait a few minutes')
+          ? 'rate_limited'
+          : 'instagram_bridge_no_session_cookie';
+
+  return {
+    ok: hasSession,
+    cookieCount: cookies.length,
+    failureReason: hasSession ? null : failureReason,
+  };
+}
+
+async function tryRefreshMetaSession(page: MetaPageLike, options: {
+  platform: MetaPlatform;
+  username: string;
+  password: string;
+  sessionStore?: ReturnType<typeof createMetaSessionStore>;
+  userAgent?: string | null;
+  persistOnSuccess?: boolean;
+}): Promise<MetaSessionRefreshResult> {
+  if (!options.username || !options.password) {
+    return {
+      ok: false,
+      sessionMode: 'missing',
+      loginStage: null,
+      cookieCount: 0,
+      hasSessionId: false,
+      validatedUrl: null,
+      validatedUrlFinal: null,
+      validatedSearch: false,
+      validatedAuthorPage: false,
+      failureReason: 'missing_credentials',
+    };
+  }
+
+  try {
+    let loginStage: MetaSessionRefreshResult['loginStage'] = 'open_login_page';
+    await page.goto(`${THREADS_CANONICAL_ORIGIN}/login`, { waitUntil: 'domcontentloaded', timeout: 60_000 });
+    await page.waitForTimeout(1500);
+
+    const userSelectors = [
+      'input[name="text"]',
+      'input[name="username"]',
+      'input[name="email"]',
+      'input[autocomplete="username"]',
+      'input[type="email"]',
+    ];
+    const passSelectors = [
+      'input[name="password"]',
+      'input[name="pass"]',
+      'input[type="password"]',
+      'input[autocomplete="current-password"]',
+    ];
+
+    let userFilled = false;
+    for (const selector of userSelectors) {
+      const field = page.locator(selector).first();
+      if ((await field.count()) > 0) {
+        loginStage = 'locate_username_field';
+        await field.fill(options.username);
+        userFilled = true;
+        break;
+      }
+    }
+    if (!userFilled) {
+      return {
+        ok: false,
+        sessionMode: 'missing',
+        loginStage: 'locate_username_field',
+        cookieCount: 0,
+        hasSessionId: false,
+        validatedUrl: null,
+        validatedUrlFinal: null,
+        validatedSearch: false,
+        validatedAuthorPage: false,
+        failureReason: 'login_form_not_found',
+      };
+    }
+
+    let passFilled = false;
+    for (const selector of passSelectors) {
+      const field = page.locator(selector).first();
+      if ((await field.count()) > 0) {
+        loginStage = 'locate_password_field';
+        await field.fill(options.password);
+        passFilled = true;
+        break;
+      }
+    }
+    if (!passFilled) {
+      return {
+        ok: false,
+        sessionMode: 'missing',
+        loginStage: 'locate_password_field',
+        cookieCount: 0,
+        hasSessionId: false,
+        validatedUrl: null,
+        validatedUrlFinal: null,
+        validatedSearch: false,
+        validatedAuthorPage: false,
+        failureReason: 'login_form_not_found',
+      };
+    }
+
+    let clicked = false;
+    const submit = page.locator('button[type="submit"]').first();
+    if ((await submit.count()) > 0) {
+      loginStage = 'submit_login';
+      await submit.click();
+      clicked = true;
+    }
+    if (!clicked) {
+      clicked = await page.evaluate(() => {
+        const candidates = Array.from(document.querySelectorAll('button, div[role="button"]')) as HTMLElement[];
+        const target = candidates.find((element) => /^(log in|登入|sign in)$/i.test((element.textContent || '').replace(/\s+/g, ' ').trim()));
+        if (!target) return false;
+        target.click();
+        return true;
+      });
+      if (clicked) loginStage = 'submit_login';
+    }
+    if (!clicked) {
+      const continueButton = page.locator('div[role="button"]').first();
+      if ((await continueButton.count()) > 0) {
+        const label = compactText(await continueButton.innerText().catch(() => ''));
+        if (/continue|繼續|log in|登入|sign in/i.test(label)) {
+          loginStage = 'submit_login';
+          await continueButton.click();
+          clicked = true;
+        }
+      }
+    }
+    if (!clicked) {
+      return {
+        ok: false,
+        sessionMode: 'missing',
+        loginStage: 'submit_login',
+        cookieCount: 0,
+        hasSessionId: false,
+        validatedUrl: null,
+        validatedUrlFinal: null,
+        validatedSearch: false,
+        validatedAuthorPage: false,
+        failureReason: 'login_submit_not_found',
+      };
+    }
+
+    loginStage = 'post_login_wait';
+    let cookies: MetaBrowserCookie[] = [];
+    let hasSession = false;
+    for (let attempt = 0; attempt < 12; attempt += 1) {
+      await page.waitForTimeout(1000);
+      loginStage = 'read_cookies';
+      cookies = await page.context().cookies([THREADS_CANONICAL_ORIGIN, THREADS_LEGACY_ORIGIN, 'https://www.instagram.com']);
+      hasSession = cookies.some((cookie) => cookie.name === 'sessionid' && Boolean(cookie.value));
+      if (hasSession) break;
+    }
+    if (!hasSession) {
+      loginStage = 'open_instagram_login_page';
+      const instagramBridge = await tryInstagramBridgeSession(page, options.username, options.password);
+      if (!instagramBridge.ok) {
+        const postSubmitText = await getPageBodyText(page);
+        const normalizedPostSubmitText = compactText(postSubmitText).toLowerCase();
+        const failureReason =
+          instagramBridge.failureReason ||
+          (normalizedPostSubmitText.includes('incorrect password') || normalizedPostSubmitText.includes('wrong password')
+            ? 'invalid_credentials'
+            : normalizedPostSubmitText.includes('try again later') || normalizedPostSubmitText.includes('wait a few minutes')
+              ? 'rate_limited'
+              : 'login_submitted_but_no_session_cookie');
+        return {
+          ok: false,
+          sessionMode: 'missing',
+          loginStage,
+          cookieCount: Math.max(cookies.length, instagramBridge.cookieCount),
+          hasSessionId: false,
+          validatedUrl: null,
+          validatedUrlFinal: null,
+          validatedSearch: false,
+          validatedAuthorPage: false,
+          failureReason,
+        };
+      }
+      cookies = await page.context().cookies([THREADS_CANONICAL_ORIGIN, THREADS_LEGACY_ORIGIN, 'https://www.instagram.com']);
+      hasSession = cookies.some((cookie) => cookie.name === 'sessionid' && Boolean(cookie.value));
+    }
+
+    loginStage = 'validate_search_page';
+    const validation =
+      options.platform === 'threads'
+        ? await validateThreadsSession(page, '2454')
+        : { validatedSearch: true, validatedAuthorPage: true, validatedUrl: null, validatedUrlFinal: null, failureReason: null };
+    if (!validation.validatedSearch || !validation.validatedAuthorPage) {
+      return {
+        ok: false,
+        sessionMode: 'missing',
+        loginStage,
+        cookieCount: cookies.length,
+        hasSessionId: true,
+        validatedUrl: validation.validatedUrl,
+        validatedUrlFinal: validation.validatedUrlFinal,
+        validatedSearch: validation.validatedSearch,
+        validatedAuthorPage: validation.validatedAuthorPage,
+        failureReason: validation.failureReason || 'search_page_still_login_wall',
+      };
+    }
+
+    loginStage = 'persist_session';
+    if (options.persistOnSuccess !== false && hasSession && options.sessionStore) {
+      const existing = await options.sessionStore.loadPreferred();
+      try {
+        await options.sessionStore.persistPreferred(
+          buildMetaSessionState({
+            platform: options.platform,
+            cookies,
+            userAgent: options.userAgent ?? null,
+            existing,
+            lastSuccessfulUrl: validation.validatedUrlFinal ?? validation.validatedUrl ?? `${THREADS_CANONICAL_ORIGIN}/search`,
+          }),
+        );
+      } catch {
+        return {
+          ok: false,
+          sessionMode: 'missing',
+          loginStage,
+          cookieCount: cookies.length,
+          hasSessionId: true,
+          validatedUrl: validation.validatedUrl,
+          validatedUrlFinal: validation.validatedUrlFinal,
+          validatedSearch: validation.validatedSearch,
+          validatedAuthorPage: validation.validatedAuthorPage,
+          failureReason: 'session_persist_failed',
+        };
+      }
+    }
+    return {
+      ok: true,
+      sessionMode: 'fresh_login',
+      loginStage,
+      cookieCount: cookies.length,
+      hasSessionId: true,
+      validatedUrl: validation.validatedUrl,
+      validatedUrlFinal: validation.validatedUrlFinal,
+      validatedSearch: validation.validatedSearch,
+      validatedAuthorPage: validation.validatedAuthorPage,
+      failureReason: null,
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      sessionMode: 'missing',
+      loginStage: 'open_login_page',
+      cookieCount: 0,
+      hasSessionId: false,
+      validatedUrl: null,
+      validatedUrlFinal: null,
+      validatedSearch: false,
+      validatedAuthorPage: false,
+      failureReason: compactText((error as Error)?.message) || 'meta_login_failed',
+    };
+  }
+}
+
+async function persistMetaSessionFromContext(options: {
+  platform: MetaPlatform;
+  context: MetaContextLike;
+  sessionStore: ReturnType<typeof createMetaSessionStore>;
+  userAgent?: string | null;
+  lastSuccessfulUrl?: string | null;
+  lastDegradedReason?: string | null;
+  validatedSearch?: boolean;
+  validatedAuthorPage?: boolean;
+}) {
+  const cookies = await options.context.cookies([THREADS_CANONICAL_ORIGIN, THREADS_LEGACY_ORIGIN, 'https://www.instagram.com']);
+  if (!cookies.some((cookie) => cookie.name === 'sessionid' && Boolean(cookie.value))) return false;
+  if (options.platform === 'threads' && (!options.validatedSearch || !options.validatedAuthorPage)) return false;
+  const existing = await options.sessionStore.loadPreferred();
+  await options.sessionStore.persistPreferred(
+    buildMetaSessionState({
+      platform: options.platform,
+      cookies,
+      userAgent: options.userAgent ?? null,
+      existing,
+      lastSuccessfulUrl: options.lastSuccessfulUrl ?? existing?.lastSuccessfulUrl ?? null,
+      lastDegradedReason: options.lastDegradedReason ?? null,
+    }),
+  );
+  return true;
 }
 
 async function startConnectorRun(connectorName: string, platform: string, metadata?: Record<string, unknown>) {
   const supabase = getSupabaseServerClient();
+  // Auto-close stale running rows so a previous interrupted local run does not pollute status.
+  const staleThresholdIso = new Date(Date.now() - 30 * 60 * 1000).toISOString();
+  await supabase
+    .from('connector_runs')
+    .update({
+      status: 'failed',
+      error_summary: 'stale_running_auto_closed',
+      finished_at: nowIso(),
+      metadata: { auto_closed: true, reason: 'stale_running' },
+    })
+    .eq('platform', platform)
+    .eq('status', 'running')
+    .lt('started_at', staleThresholdIso);
   const { data, error } = await supabase
     .from('connector_runs')
     .insert({ connector_name: connectorName, platform, status: 'running', metadata: metadata || {} })
@@ -592,6 +2623,32 @@ async function createSourceAudit(params: {
     metadata: params.metadata || {},
   });
   if (error) throw new Error(error.message);
+}
+
+async function markLatestRunningConnectorFailed(platform: string, errorMessage: string) {
+  await finishLatestRunningConnector(platform, 'failed', 0, errorMessage);
+}
+
+async function finishLatestRunningConnector(
+  platform: string,
+  status: 'success' | 'failed' | 'partial' | 'skipped',
+  recordsWritten: number,
+  errorMessage?: string,
+) {
+  const supabase = getSupabaseServerClient();
+  const { data, error } = await supabase
+    .from('connector_runs')
+    .select('id')
+    .eq('platform', platform)
+    .eq('status', 'running')
+    .order('started_at', { ascending: false })
+    .limit(1);
+  if (error) return;
+  const runId = String((data?.[0] as Row | undefined)?.id || '');
+  if (!runId) return;
+  await finishConnectorRun(runId, status, recordsWritten, {
+    error_summary: errorMessage ? errorMessage.slice(0, 500) : null,
+  });
 }
 
 async function startAgentRun(runType: string, context: Record<string, unknown>) {
@@ -756,16 +2813,22 @@ async function upsertCredentialRegistry(platform: string, status: 'missing' | 'c
 
 async function ensureDefaultWatchlists() {
   const supabase = getSupabaseServerClient();
-  const rows = DEFAULT_WATCHLISTS.map((item) => ({
-    platform: item.platform,
-    watch_type: item.watch_type,
-    watch_value: item.watch_value,
-    enabled: true,
-    priority: 50,
-    metadata: { seeded_by: 'research-v2' },
-    updated_at: nowIso(),
-  }));
-  const { error } = await supabase.from('source_watchlists').upsert(rows, { onConflict: 'platform,watch_type,watch_value' });
+  // DB has unique constraint on (platform, watch_value), so dedupe defaults first.
+  const deduped = new Map<string, Row>();
+  for (const item of DEFAULT_WATCHLISTS) {
+    const key = `${item.platform}::${item.watch_value}`;
+    deduped.set(key, {
+      platform: item.platform,
+      watch_type: item.watch_type,
+      watch_value: item.watch_value,
+      enabled: true,
+      priority: 50,
+      metadata: { seeded_by: 'research-v2' },
+      updated_at: nowIso(),
+    });
+  }
+  const rows = Array.from(deduped.values());
+  const { error } = await supabase.from('source_watchlists').upsert(rows, { onConflict: 'platform,watch_value' });
   if (error) throw new Error(error.message);
 }
 
@@ -775,7 +2838,7 @@ async function ensureDefaultKolProfiles() {
       platform: seed.primaryPlatform,
       entityType: 'kol',
       displayName: seed.displayName,
-      sourceKey: `kol.${slugify(seed.displayName)}.${seed.primaryPlatform}`,
+      sourceKey: `kol.${sourceKeySegment(seed.displayName)}.${seed.primaryPlatform}`,
       profileUrl: seed.profileUrl,
       metadata: seed.metadata,
     });
@@ -923,19 +2986,7 @@ async function readPdfReport(filePath: string, fileName: string) {
   return parseBrokerReportText(merged, fileName);
 }
 
-async function upsertSourceRawDocuments(items: Array<{
-  sourceEntityId: string | null;
-  platform: string;
-  documentUrl: string;
-  title: string;
-  summary: string;
-  contentText: string;
-  publishedAt?: string | null;
-  symbols?: string[];
-  sentimentLabel?: string | null;
-  confidence?: number | null;
-  metadata?: Record<string, unknown>;
-}>) {
+async function upsertSourceRawDocuments(items: SourceRawDocInput[]) {
   if (items.length === 0) return 0;
   const lookbackHours = resolveSourceSyncLookbackHours();
   const cutoffMs = Date.now() - lookbackHours * 60 * 60 * 1000;
@@ -948,28 +2999,67 @@ async function upsertSourceRawDocuments(items: Array<{
   if (filteredItems.length === 0) return 0;
   const dedupedItems = Array.from(
     new Map(
-      filteredItems.map((item) => [`${item.platform}::${item.documentUrl}`, item] as const),
+      filteredItems.map((item) => [sourceRawKey(item), item] as const),
     ).values(),
   );
   const supabase = getSupabaseServerClient();
+
+  const existingKeys = new Set<string>();
+  const urlsByPlatform = new Map<string, string[]>();
+  for (const item of dedupedItems) {
+    if (!item.documentUrl) continue;
+    urlsByPlatform.set(item.platform, [...(urlsByPlatform.get(item.platform) || []), item.documentUrl]);
+  }
+  for (const [platform, urls] of urlsByPlatform) {
+    for (const urlChunk of chunkArray(Array.from(new Set(urls)), 80)) {
+      const { data, error } = await supabase
+        .from('source_raw_documents')
+        .select('platform,document_url')
+        .eq('platform', platform)
+        .in('document_url', urlChunk);
+      if (error) throw new Error(error.message);
+      for (const row of (data as Row[]) || []) {
+        existingKeys.add(`${String(row.platform || platform)}::${String(row.document_url || '')}`);
+      }
+    }
+  }
+
+  const newItems = dedupedItems.filter((item) => !existingKeys.has(sourceRawKey(item)));
+  if (newItems.length === 0) return 0;
+
   const { error } = await supabase.from('source_raw_documents').upsert(
-    dedupedItems.map((item) => ({
+    newItems.map((item) => {
+      const compacted = truncateSourceContent(item.contentText);
+      const contentHash = sha256Hex(item.contentText || `${item.title}\n${item.summary}\n${item.documentUrl}`);
+      return {
       source_entity_id: item.sourceEntityId,
       platform: item.platform,
       document_url: item.documentUrl,
       title: item.title,
       summary: item.summary,
-      content_text: item.contentText,
+      content_text: compacted.contentText,
       published_at: item.publishedAt || null,
       symbols: item.symbols || [],
       sentiment_label: item.sentimentLabel || null,
       confidence: item.confidence ?? null,
-      metadata: { ...(item.metadata || {}), lookback_hours: lookbackHours },
-    })),
-    { onConflict: 'platform,document_url' },
+      metadata: {
+        crawl_mode: 'market_scan',
+        query_symbol: null,
+        query_terms: [],
+        match_type: 'none',
+        ...(item.metadata || {}),
+        lookback_hours: lookbackHours,
+        content_hash: contentHash,
+        content_chars: compacted.originalChars,
+        content_truncated: compacted.truncated,
+        content_max_chars: SOURCE_RAW_CONTENT_MAX_CHARS,
+      },
+    };
+    }),
+    { onConflict: 'platform,document_url', ignoreDuplicates: true },
   );
   if (error) throw new Error(error.message);
-  return dedupedItems.length;
+  return newItems.length;
 }
 
 function buildBrokerSourceCoverage(parsed: ReturnType<typeof parseBrokerReportText>) {
@@ -988,92 +3078,660 @@ function buildBrokerSourceCoverage(parsed: ReturnType<typeof parseBrokerReportTe
   ];
 }
 
-async function scrapeInvestAnchors() {
+async function storeParsedBrokerReportDocument(
+  supabase: ReturnType<typeof getSupabaseServerClient>,
+  parsed: ReturnType<typeof parseBrokerReportText>,
+  fileName: string,
+  filePath: string,
+  sourceMode: 'manual_pdf' | 'imported_pdf' = 'manual_pdf',
+) {
+  const stock = parsed.stock ? await ensureStock(parsed.stock.symbol, parsed.stock.market, parsed.stock.name) : null;
+  const brokerEntity = await upsertSourceEntity({
+    platform: 'broker_report',
+    entityType: 'broker',
+    displayName: parsed.brokerName,
+    sourceKey: `broker.${slugify(parsed.brokerName)}`,
+    metadata: { source_mode: sourceMode },
+  });
+  const { data, error } = await supabase
+    .from('broker_report_documents')
+    .upsert(
+      {
+        stock_id: stock?.id || null,
+        broker_name: parsed.brokerName,
+        report_date: parsed.reportDate,
+        file_name: fileName,
+        file_path: filePath,
+        source_mode: sourceMode,
+        rating: parsed.rating,
+        target_price: parsed.targetPrice,
+        thesis_title: parsed.thesisTitle,
+        extracted_summary: parsed.extractedSummary,
+        raw_text: parsed.rawText,
+        metadata: {
+          assumptions: parsed.assumptions,
+          risks: parsed.risks,
+          focus_bullets: parsed.focusBullets,
+          source_entity_id: brokerEntity.id,
+          source_coverage: buildBrokerSourceCoverage(parsed),
+        },
+        updated_at: nowIso(),
+      },
+      { onConflict: 'file_path' },
+    )
+    .select('*')
+    .single();
+  if (error || !data) throw new Error(error?.message || `failed storing broker report ${fileName}`);
+  await supabase.from('broker_report_sections').delete().eq('broker_report_document_id', data.id);
+  let sectionsWritten = 0;
+  if (parsed.sections.length > 0) {
+    const { error: sectionError } = await supabase.from('broker_report_sections').insert(
+      parsed.sections.map((section, index) => ({
+        broker_report_document_id: data.id,
+        section_kind: section.sectionKind,
+        section_title: section.sectionTitle,
+        section_content: section.sectionContent,
+        sort_order: index + 1,
+      })),
+    );
+    if (sectionError) throw new Error(sectionError.message);
+    sectionsWritten = parsed.sections.length;
+  }
+  return { docId: String(data.id), sectionsWritten };
+}
+
+async function listBrokerReportImportFiles() {
+  const dirs = [BROKER_REPORT_IMPORT_DIR];
+  const files: Array<{ fileName: string; filePath: string }> = [];
+  for (const dir of dirs) {
+    try {
+      const entries = await fs.readdir(dir);
+      for (const fileName of entries) {
+        if (!/\.(pdf|csv)$/i.test(fileName)) continue;
+        files.push({ fileName, filePath: path.join(dir, fileName) });
+      }
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
+    }
+  }
+  return files;
+}
+
+function parseCsvLine(line: string) {
+  const cells: string[] = [];
+  let current = '';
+  let quoted = false;
+  for (let i = 0; i < line.length; i += 1) {
+    const ch = line[i];
+    if (ch === '"' && line[i + 1] === '"') {
+      current += '"';
+      i += 1;
+      continue;
+    }
+    if (ch === '"') {
+      quoted = !quoted;
+      continue;
+    }
+    if (ch === ',' && !quoted) {
+      cells.push(current.trim());
+      current = '';
+      continue;
+    }
+    current += ch;
+  }
+  cells.push(current.trim());
+  return cells;
+}
+
+function normalizeCsvHeader(value: string) {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, '_');
+}
+
+function rowsFromBrokerCsv(content: string) {
+  const lines = content.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+  if (lines.length < 2) return [];
+  const headers = parseCsvLine(lines[0]).map(normalizeCsvHeader);
+  return lines.slice(1).map((line) => {
+    const cells = parseCsvLine(line);
+    return headers.reduce<Record<string, string>>((acc, header, index) => {
+      acc[header] = cells[index] || '';
+      return acc;
+    }, {});
+  });
+}
+
+async function ingestManualBrokerImports(supabase: ReturnType<typeof getSupabaseServerClient>) {
+  const files = await listBrokerReportImportFiles();
+  let reportsIngested = 0;
+  let sectionsWritten = 0;
+  for (const file of files) {
+    if (file.fileName.toLowerCase().endsWith('.pdf')) {
+      const parsed = await readPdfReport(file.filePath, file.fileName);
+      const stored = await storeParsedBrokerReportDocument(supabase, parsed, file.fileName, file.filePath, 'imported_pdf');
+      reportsIngested += 1;
+      sectionsWritten += stored.sectionsWritten;
+      continue;
+    }
+    const content = await fs.readFile(file.filePath, 'utf8');
+    const rows = rowsFromBrokerCsv(content);
+    for (const row of rows) {
+      const symbol = compactText(row.symbol || row.code || row.stock || row['股票代號']);
+      if (!/^\d{4}$/.test(symbol)) continue;
+      const stock = await ensureStock(symbol, 'TW', compactText(row.name || row.stock_name || row['股票名稱']) || symbol);
+      const brokerName = compactText(row.broker_name || row.broker || row.source || row['券商'] || '手動匯入券商');
+      const reportDate = compactText(row.report_date || row.date || row.as_of || row['日期']) || asDate();
+      const rating = compactText(row.rating || row.recommendation || row['評等']) || null;
+      const targetPrice = positiveNumberOrNull(row.target_price || row.target || row['目標價']);
+      const sourceUrl = compactText(row.source_url || row.url || row['來源連結']) || null;
+      const summary = compactText(row.summary || row.thesis || row.note || row['摘要']) || `${brokerName} 對 ${symbol} 的手動匯入券商觀點。`;
+      const filePath = `manual_csv/${file.fileName}/${symbol}/${slugify(brokerName)}/${reportDate}`;
+      const { data, error } = await supabase
+        .from('broker_report_documents')
+        .upsert(
+          {
+            stock_id: stock.id,
+            broker_name: brokerName,
+            report_date: reportDate,
+            file_name: file.fileName,
+            file_path: filePath,
+            source_mode: 'manual_csv',
+            rating,
+            target_price: targetPrice,
+            thesis_title: compactText(row.thesis_title || row.title || row['標題']) || `${brokerName} 評等${rating ? `：${rating}` : ''}${targetPrice ? `，目標價 ${targetPrice}` : ''}`,
+            extracted_summary: summary.slice(0, 2000),
+            raw_text: JSON.stringify(row),
+            metadata: { source: 'manual_csv', source_url: sourceUrl, imported_from: file.filePath },
+            updated_at: nowIso(),
+          },
+          { onConflict: 'file_path' },
+        )
+        .select('id')
+        .single();
+      if (error || !data) throw new Error(error?.message || `failed storing broker CSV row ${file.fileName}`);
+      await supabase.from('broker_report_sections').upsert(
+        {
+          broker_report_document_id: data.id,
+          section_kind: 'investment_view',
+          section_title: '手動匯入摘要',
+          section_content: summary,
+          sort_order: 1,
+        },
+        { onConflict: 'broker_report_document_id,sort_order' },
+      );
+      reportsIngested += 1;
+      sectionsWritten += 1;
+    }
+  }
+  return { reportsIngested, sectionsWritten };
+}
+
+async function rebuildBrokerConsensusSnapshots(supabase: ReturnType<typeof getSupabaseServerClient>, asOfDate: string) {
+  const { data } = await supabase.from('broker_report_documents').select('*').order('report_date', { ascending: false }).limit(2000);
+  const rows = ((data as Row[]) || []).filter((row) => row.stock_id);
+  const byStock = new Map<string, Row[]>();
+  for (const row of rows) {
+    const stockId = String(row.stock_id || '');
+    if (!stockId) continue;
+    const reportDate = row.report_date ? new Date(`${String(row.report_date)}T00:00:00+08:00`).getTime() : Date.now();
+    if (Number.isFinite(reportDate) && Date.now() - reportDate > 180 * 24 * 60 * 60 * 1000) continue;
+    byStock.set(stockId, [...(byStock.get(stockId) || []), row]);
+  }
+  let snapshotsWritten = 0;
+  for (const [stockId, docs] of byStock.entries()) {
+    const targets = docs.map((row) => positiveNumberOrNull(row.target_price)).filter((value): value is number => value != null);
+    const forwardEpsValues = docs
+      .map((row) => positiveNumberOrNull((row.metadata as Row | undefined)?.forward_eps))
+      .filter((value): value is number => value != null);
+    const ratingDistribution = docs.reduce<Record<string, number>>((acc, row) => {
+      const key = compactText(row.rating || '未提供評等') || '未提供評等';
+      acc[key] = (acc[key] || 0) + 1;
+      return acc;
+    }, {});
+    const usBrokerCount = docs.filter((row) => String((row.metadata as Row | undefined)?.broker_region || '').toLowerCase() === 'us' || /美系|高盛|摩根|美林|花旗|Goldman|Morgan|JPMorgan|Citi|Jefferies/i.test(String(row.broker_name || ''))).length;
+    const factsetCount = docs.filter((row) => /factset/i.test(String((row.metadata as Row | undefined)?.consensus_provider || row.broker_name || ''))).length;
+    const summary =
+      targets.length > 0
+        ? `近 180 日公開券商/外資來源 ${docs.length} 筆，目標價中位數 ${medianNumber(targets)}，美系券商 ${usBrokerCount} 筆，FactSet/共識 ${factsetCount} 筆。`
+        : `近 180 日公開券商/外資來源 ${docs.length} 筆，但未取得可用目標價。`;
+    const { error } = await supabase.from('broker_consensus_snapshots').upsert(
+      {
+        stock_id: stockId,
+        as_of_date: asOfDate,
+        source_count: docs.length,
+        us_broker_count: usBrokerCount,
+        factset_count: factsetCount,
+        min_target_price: targets.length ? Math.min(...targets) : null,
+        median_target_price: medianNumber(targets),
+        max_target_price: targets.length ? Math.max(...targets) : null,
+        forward_eps: medianNumber(forwardEpsValues),
+        forward_year: docs.map((row) => compactText((row.metadata as Row | undefined)?.forward_year)).find(Boolean) || null,
+        rating_distribution: ratingDistribution,
+        source_document_ids: docs.map((row) => row.id).filter(Boolean),
+        freshness_status: docs.length > 0 ? 'fresh' : 'missing',
+        summary,
+        metadata: { rebuilt_at: nowIso() },
+        updated_at: nowIso(),
+      },
+      { onConflict: 'stock_id,as_of_date' },
+    );
+    if (!error) snapshotsWritten += 1;
+  }
+  return snapshotsWritten;
+}
+
+function stripHtmlForBrokerText(html: string) {
+  return compactText(
+    html
+      .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+      .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&amp;/g, '&')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/<[^>]+>/g, ' '),
+  );
+}
+
+function parseCnyesForeignRatingRows(html: string, symbol: string, today: string) {
+  const text = stripHtmlForBrokerText(html);
+  const rows: Array<{
+    brokerName: string;
+    rating: string | null;
+    targetPrice: number | null;
+    summary: string;
+    reportDate: string;
+    forwardEps?: number | null;
+    forwardYear?: string | null;
+    isUsBroker?: boolean;
+    isConsensus?: boolean;
+  }> = [];
+  const brokerPattern =
+    /(Factset|美系券商|外資|高盛|摩根士丹利|摩根大通|美林|瑞銀|花旗|里昂|麥格理|野村|大和|匯豐|巴克萊|德意志|Jefferies|Goldman|Morgan Stanley|JPMorgan|UBS|Citi|CLSA|Macquarie)[\s\S]{0,160}?(買進|加碼|增持|優於大盤|超越市場表現|中立|持有|劣於大盤|減碼|賣出|Buy|Overweight|Outperform|Neutral|Hold|Underweight|Sell)?[\s\S]{0,160}?(?:目標價|target price|TP)?\s*(\d{2,5}(?:\.\d{1,2})?)/gi;
+  for (const match of text.matchAll(brokerPattern)) {
+    const brokerName = compactText(match[1]);
+    const ratingRaw = compactText(match[2] || '');
+    const targetPrice = positiveNumberOrNull(match[3]);
+    if (!brokerName || !targetPrice) continue;
+    const rating =
+      /買進|加碼|增持|優於|buy|overweight/i.test(ratingRaw)
+        ? '買進'
+        : /賣出|減碼|劣於|sell|underweight/i.test(ratingRaw)
+          ? '賣出'
+          : ratingRaw
+            ? '持有'
+            : null;
+    const summary = `${brokerName} 於鉅亨外資評等公開頁提及 ${symbol}${rating ? ` ${rating}` : ''}，目標價 ${targetPrice} 元。`;
+    rows.push({
+      brokerName,
+      rating,
+      targetPrice,
+      summary,
+      reportDate: today,
+      isUsBroker: /美系|高盛|摩根|美林|花旗|Goldman|Morgan|JPMorgan|Citi|Jefferies/i.test(brokerName),
+      isConsensus: /factset/i.test(brokerName),
+    });
+  }
+
+  const compact = text.replace(/\s+/g, ' ');
+  const rowPattern =
+    /(\d{8})\s+(Factset|美系券商|歐系券商|亞系券商|澳系券商|高盛|摩根士丹利|摩根大通|美林|瑞銀|花旗|里昂|麥格理|野村|大和|匯豐|巴克萊|德意志)[^\d]{0,80}?(?:(買進|加碼|增持|優於大盤|超越市場表現|中立|持有|劣於大盤|減碼|賣出|Buy|Overweight|Outperform|Neutral|Hold|Underweight|Sell)[^\d]{0,80})?(?:(\d+(?:\.\d+)?)\s*\((20\d{2})\))?[^\d]{0,60}?(\d{2,5}(?:\.\d{1,2})?)\s+\d{2,5}(?:,\d{3})?(?:\.\d+)?/gi;
+  for (const match of compact.matchAll(rowPattern)) {
+    const reportDateRaw = compactText(match[1]);
+    const brokerName = compactText(match[2]);
+    const ratingRaw = compactText(match[3] || '');
+    const forwardEps = positiveNumberOrNull(match[4]);
+    const forwardYear = compactText(match[5] || '');
+    const targetPrice = positiveNumberOrNull(match[6]);
+    if (!brokerName || !targetPrice) continue;
+    const rating =
+      /買進|加碼|增持|優於|超越|buy|overweight|outperform/i.test(ratingRaw)
+        ? '買進'
+        : /賣出|減碼|劣於|sell|underweight/i.test(ratingRaw)
+          ? '賣出'
+          : ratingRaw
+            ? '持有'
+            : null;
+    const reportDate = reportDateRaw.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+    const summary = `${brokerName} 於鉅亨外資評等公開頁 ${reportDate} 提及 ${symbol}${rating ? ` ${rating}` : ''}，${
+      forwardEps ? `${forwardYear || 'forward'} EPS ${forwardEps}，` : ''
+    }目標價 ${targetPrice} 元。`;
+    rows.push({
+      brokerName,
+      rating,
+      targetPrice,
+      summary,
+      reportDate,
+      forwardEps,
+      forwardYear: forwardYear || null,
+      isUsBroker: /美系|高盛|摩根|美林|花旗|Goldman|Morgan|JPMorgan|Citi|Jefferies/i.test(brokerName),
+      isConsensus: /factset/i.test(brokerName),
+    });
+  }
+  return Array.from(new Map(rows.map((row) => [`${row.brokerName}-${row.targetPrice}-${row.reportDate}`, row] as const)).values()).slice(0, 12);
+}
+
+function parseFactsetConsensusFromText(text: string) {
+  const compact = compactText(text);
+  const epsMatch = compact.match(/EPS預估(?:上修|下修)?至\s*([0-9]+(?:\.[0-9]+)?)\s*元/i);
+  const targetMatch = compact.match(/預估目標價為\s*([0-9]+(?:\.[0-9]+)?)\s*元/i) || compact.match(/目標價\s*([0-9]+(?:\.[0-9]+)?)\s*元/i);
+  const analystMatch = compact.match(/共\s*(\d+)\s*位分析師/);
+  const yearMatch = compact.match(/做出\s*(20\d{2})\s*年EPS預估/);
+  return {
+    forwardEps: positiveNumberOrNull(epsMatch?.[1]),
+    targetPrice: positiveNumberOrNull(targetMatch?.[1]),
+    analystCount: analystMatch ? Number(analystMatch[1]) : null,
+    forwardYear: yearMatch?.[1] || null,
+  };
+}
+
+function detectCrossThemeKeys(text: string) {
+  const normalized = compactText(text);
+  const themes: Array<{ key: string; label: string; evidenceLevel: 'direct_source' | 'inferred_watch'; reason: string }> = [];
+  const add = (key: string, label: string, pattern: RegExp, evidenceLevel: 'direct_source' | 'inferred_watch' = 'direct_source') => {
+    if (!pattern.test(normalized)) return;
+    themes.push({ key, label, evidenceLevel, reason: `來源文字命中 ${label} 題材關鍵字。` });
+  };
+  add('optical-communication-watch', '光通訊 / CPO', /光通訊|光模組|cpo|800g|1\.6t|矽光|光互連/i);
+  add('optical-lens', '高階光學鏡頭', /大立光|鏡頭|光學|潛望|lens|periscope|xr/i, 'inferred_watch');
+  add('passive-components-mlcc', '被動元件 / MLCC', /mlcc|被動元件|電感|tlvr|鉭電容|晶片電阻|漲價/i);
+  add('cpu-ai-pc', 'CPU / AI PC', /cpu|ai pc|nb|筆電|pc/i);
+  add('mature-node-recovery', '成熟製程復甦', /成熟製程|28nm|40nm|driver ic|mcu|pmic/i);
+  add('consumer-electronics-rebound', '消費性電子復甦', /消費性電子|手機|nb|電視|穿戴/i);
+  return themes;
+}
+
+async function scrapeInvestAnchors(symbolContext?: SymbolScopedStockContext | null) {
+  try {
+    return await _scrapeInvestAnchorsInner(symbolContext);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    if (/investanchors_timeout/i.test(msg)) {
+      if (symbolContext) {
+        await upsertCredentialRegistry('investanchors', 'invalid', {
+          credential_ref: process.env.Account || process.env.INVESTANCHORS_ACCOUNT ? 'Account/Password' : null,
+          error_message: msg.slice(0, 500),
+          metadata: { mode: 'symbol_scoped_timeout', symbol: symbolContext.symbol },
+        });
+        return {
+          connector: 'investanchors',
+          recordsWritten: 0,
+          fetchedPosts: 0,
+          entityId: null,
+          errorCode: 'investanchors_timeout',
+          matchedDirectHits: 0,
+          matchedIndustryHits: 0,
+          degradedReason: 'article_fetch_timeout',
+          timedOut: true,
+        };
+      }
+      const fallback = await syncGenericWatchlistConnector('investanchors');
+      await finishLatestRunningConnector('investanchors', fallback.recordsWritten > 0 ? 'partial' : 'failed', fallback.recordsWritten, msg);
+      await upsertCredentialRegistry('investanchors', fallback.recordsWritten > 0 ? 'configured' : 'invalid', {
+        credential_ref: process.env.Account || process.env.INVESTANCHORS_ACCOUNT ? 'Account/Password' : null,
+        error_message: msg.slice(0, 500),
+        metadata: { mode: 'timeout_fallback_watchlist', records_written: fallback.recordsWritten },
+      });
+      return {
+        ...fallback,
+        errorCode: 'investanchors_timeout_fallback',
+      };
+    }
+    if (/executable|chromium|browser|playwright/i.test(msg)) {
+      console.warn('[source-sync] investanchors: Playwright not available in serverless, falling back to watchlist');
+      if (symbolContext) {
+        const investAnchorsCredential = resolveInvestAnchorsCredential();
+        await upsertCredentialRegistry('investanchors', 'invalid', {
+          credential_ref: investAnchorsCredential.hasCredential ? 'INVESTANCHORS_ACCOUNT/INVESTANCHORS_PASSWORD' : null,
+          error_message: 'playwright_unavailable',
+          metadata: { mode: 'symbol_scoped', symbol: symbolContext.symbol },
+        });
+        return {
+          connector: 'investanchors',
+          recordsWritten: 0,
+          fetchedPosts: 0,
+          entityId: null,
+          errorCode: 'playwright_unavailable',
+          matchedDirectHits: 0,
+          matchedIndustryHits: 0,
+          degradedReason: 'playwright_unavailable',
+          timedOut: false,
+          sessionMode: 'not_applicable' as const,
+        };
+      }
+      const fallback = await syncGenericWatchlistConnector('investanchors');
+      await finishLatestRunningConnector('investanchors', fallback.recordsWritten > 0 ? 'partial' : 'failed', fallback.recordsWritten, msg);
+      const investAnchorsCredential = resolveInvestAnchorsCredential();
+      await upsertCredentialRegistry('investanchors', 'invalid', {
+        credential_ref: investAnchorsCredential.hasCredential ? 'INVESTANCHORS_ACCOUNT/INVESTANCHORS_PASSWORD' : null,
+        error_message: 'playwright_unavailable',
+        metadata: { mode: 'fallback_watchlist', records_written: fallback.recordsWritten },
+      });
+      return fallback;
+    }
+    await markLatestRunningConnectorFailed('investanchors', msg);
+    throw err;
+  }
+}
+
+async function _scrapeInvestAnchorsInner(symbolContext?: SymbolScopedStockContext | null) {
   const { chromium } = await import('playwright');
   await ensureDefaultWatchlists();
   await ensureDefaultKolProfiles();
-  const connectorRunId = await startConnectorRun('source-sync', 'investanchors', { mode: 'playwright_login' });
-  const agentRunId = await startAgentRun('source_sync', { connector: 'investanchors' });
+  const connectorRunId = await startConnectorRun('source-sync', 'investanchors', {
+    mode: symbolContext ? 'playwright_symbol_search' : 'playwright_login',
+    crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
+    query_symbol: symbolContext?.symbol || null,
+    query_terms: symbolContext?.queryTerms || [],
+  });
+  const agentRunId = await startAgentRun('source_sync', { connector: 'investanchors', symbol: symbolContext?.symbol || null });
+  const connectorBudgetMs = resolveTimeoutMs('INVESTANCHORS_TIMEOUT_MS', 60_000);
+  const connectorStartedAt = Date.now();
+  const ensureWithinBudget = (stage: string) => {
+    if (Date.now() - connectorStartedAt > connectorBudgetMs) {
+      throw new Error(`investanchors_timeout:${stage}`);
+    }
+  };
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
-  const account = process.env.Account || process.env.INVESTANCHORS_ACCOUNT || '';
-  const password = process.env.Password || process.env.INVESTANCHORS_PASSWORD || '';
-  const records: Array<{ title: string; summary: string; contentText: string; publishedAt: string | null; documentUrl: string; symbols: string[] }> = [];
+  page.setDefaultNavigationTimeout(12_000);
+  page.setDefaultTimeout(12_000);
+  const { account, password, hasCredential } = resolveInvestAnchorsCredential();
+  const records: Array<{ title: string; summary: string; contentText: string; publishedAt: string | null; documentUrl: string; symbols: string[]; metadata?: Record<string, unknown> }> = [];
   let entityId = '';
+  let matchedDirectHits = 0;
+  let matchedIndustryHits = 0;
+  let timedOut = false;
 
   try {
-    await page.goto('https://investanchors.com/', { waitUntil: 'domcontentloaded', timeout: 60_000 });
-    if (account && password) {
+    let loginSucceeded = false;
+    if (hasCredential) {
       try {
-        await page.goto('https://investanchors.com/user/register/new', { waitUntil: 'domcontentloaded', timeout: 60_000 });
+        ensureWithinBudget('open_login');
+        await page.goto('https://investanchors.com/user/register/new', { waitUntil: 'domcontentloaded', timeout: 12_000 });
         await page.locator('input[placeholder*="Email"], input[type="email"]').first().fill(account);
         await page.locator('input[placeholder*="密碼"], input[type="password"]').first().fill(password);
         await page.getByRole('button', { name: '登入' }).first().click();
-        await page.waitForTimeout(2000);
-        await upsertCredentialRegistry('investanchors', 'valid', { credential_ref: 'Account/Password', metadata: { mode: 'playwright_login' } });
+        await page.waitForTimeout(2200);
+        loginSucceeded = true;
+        await upsertCredentialRegistry('investanchors', 'configured', { credential_ref: 'INVESTANCHORS_ACCOUNT/INVESTANCHORS_PASSWORD', metadata: { mode: 'playwright_login' } });
       } catch (error) {
         await upsertCredentialRegistry('investanchors', 'invalid', {
-          credential_ref: 'Account/Password',
+          credential_ref: 'INVESTANCHORS_ACCOUNT/INVESTANCHORS_PASSWORD',
           error_message: (error as Error).message,
           metadata: { mode: 'playwright_login' },
         });
-        await page.goto('https://investanchors.com/', { waitUntil: 'domcontentloaded', timeout: 60_000 });
+        ensureWithinBudget('login_fallback_home');
+        await page.goto('https://investanchors.com/', { waitUntil: 'domcontentloaded', timeout: 12_000 });
       }
     } else {
-      await upsertCredentialRegistry('investanchors', 'missing', { credential_ref: 'Account/Password' });
+      await upsertCredentialRegistry('investanchors', 'missing', { credential_ref: 'INVESTANCHORS_ACCOUNT/INVESTANCHORS_PASSWORD' });
     }
 
-    const bodyText = compactText(await page.locator('body').innerText());
-    const links = await page.$$eval('a', (els) => els.map((el) => ({ text: (el.textContent || '').trim(), href: (el as HTMLAnchorElement).href })));
-    const articleLinks = unique(
-      links
-        .map((item) => item.href)
-        .filter((href) => href && href.startsWith('https://investanchors.com/') && !href.includes('/user/') && href.split('/').length > 4),
-    ).slice(0, 12);
+    const [{ data: stocksData }] = await Promise.all([
+      getSupabaseServerClient().from('stocks').select('symbol').eq('market', 'TW'),
+    ]);
+    const validSymbols = new Set(((stocksData as Row[]) || []).map((row) => String(row.symbol || '')).filter(Boolean));
+    const pageTargets = symbolContext
+      ? [
+          'https://investanchors.com/user/vip_contents/investanchors_index',
+          'https://investanchors.com/user/vip_contents',
+        ]
+      : ['https://investanchors.com/'];
+    const candidateCards: Array<{ href: string; title: string; snippet: string; category: string; sourcePage: string }> = [];
+    let bodyText = '';
+    for (const targetUrl of pageTargets) {
+      ensureWithinBudget(`open_${slugify(targetUrl)}`);
+      await page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 12_000 });
+      await page.waitForTimeout(900);
+      const html = await page.content();
+      bodyText = `${bodyText}\n${stripHtmlToText(html)}`.trim();
+      for (const card of extractInvestAnchorsCardsFromHtml(html, targetUrl)) {
+        candidateCards.push(card);
+      }
+    }
+    const cookieHeader = buildCookieHeader(await page.context().cookies(['https://investanchors.com']));
     const dedup = new Set<string>();
+    const shortlistedCards = symbolContext
+      ? unique(
+          candidateCards
+            .map((card) => {
+              const scoring = scoreInvestAnchorsCard(card, symbolContext);
+              return {
+                ...card,
+                matchedStockTerms: scoring.matchedStockTerms,
+                matchedIndustryTerms: scoring.matchedIndustryTerms,
+                score: scoring.score,
+              };
+            })
+            .filter((card) => card.score > 0)
+            .sort((a, b) => {
+              if (b.score !== a.score) return b.score - a.score;
+              return investAnchorsCategoryPriority(a.category) - investAnchorsCategoryPriority(b.category);
+            })
+            .slice(0, 6)
+            .map((card) => JSON.stringify(card)),
+        ).map((item) => JSON.parse(item) as {
+          href: string;
+          title: string;
+          snippet: string;
+          category: string;
+          sourcePage: string;
+          matchedStockTerms: string[];
+          matchedIndustryTerms: string[];
+          score: number;
+        })
+      : candidateCards.slice(0, 6).map((card) => ({
+          ...card,
+          matchedStockTerms: [] as string[],
+          matchedIndustryTerms: [] as string[],
+          score: 0,
+        }));
 
-    for (const link of articleLinks) {
+    for (const card of shortlistedCards) {
+      ensureWithinBudget('article_loop');
       try {
-        await page.goto(link, { waitUntil: 'domcontentloaded', timeout: 60_000 });
-        await page.waitForTimeout(1200);
+        const html = await fetchInvestAnchorsArticleHtml(card.href, cookieHeader);
+        const text = stripHtmlToText(html);
+        if (!text) continue;
         const title = firstNonEmpty(
-          await page.locator('h1').first().textContent().catch(() => ''),
-          await page.title(),
-          link.split('/').filter(Boolean).pop(),
+          html.match(/<meta[^>]+property="og:title"[^>]+content="([^"]+)"/i)?.[1],
+          html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1],
+          card.title,
+          card.href.split('/').filter(Boolean).pop(),
         );
         if (!title || dedup.has(title)) continue;
         dedup.add(title);
-        const text = compactText(await page.locator('body').innerText());
+        const textBundle = `${title}\n${text}`;
+        const matchedStockTerms = symbolContext ? unique([...card.matchedStockTerms, ...extractMatchedTerms(textBundle, symbolContext.stockQueryTerms)]) : [];
+        const matchedIndustryTerms = symbolContext ? unique([...card.matchedIndustryTerms, ...extractMatchedTerms(textBundle, symbolContext.industryQueryTerms)]) : [];
+        const storyAxis: SourceStoryAxis = matchedStockTerms.length > 0 ? 'stock' : matchedIndustryTerms.length > 0 ? 'industry' : 'kol';
+        if (symbolContext && matchedStockTerms.length === 0 && matchedIndustryTerms.length === 0) continue;
         const publishedAt = safeDateString(
-          await page.locator('time').first().getAttribute('datetime').catch(() => '') ||
+          html.match(/<time[^>]+datetime="([^"]+)"/i)?.[1] ||
             text.match(/(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{2},\s+\d{4}\s+\d{2}:\d{2}/)?.[0],
         );
         const summary = text.slice(0, 900);
-        const symbols = unique((text.match(/\b\d{4}\b/g) || []).filter((code) => code.length === 4)).slice(0, 8);
-        records.push({ title, summary, contentText: text.slice(0, 8000), publishedAt, documentUrl: link, symbols });
-        const screenshot = await page.screenshot({ type: 'png', fullPage: true });
+        const symbols = resolveContextSymbols({
+          text: textBundle,
+          validSymbols,
+          context: symbolContext,
+          matchedStockTerms,
+          matchedIndustryTerms,
+        }).slice(0, 8);
+        const directHitStrength = computeDirectHitStrength({
+          context: symbolContext,
+          title,
+          summary,
+          contentText: text,
+          documentUrl: card.href,
+          symbols,
+          storyAxis,
+          matchedStockTerms,
+          matchedIndustryTerms,
+        });
+        const matchType = symbolContext
+          ? classifySymbolScopedMatch({
+              context: symbolContext,
+              title,
+              summary,
+              contentText: text,
+              documentUrl: card.href,
+              symbols,
+            })
+          : 'none';
+        if (symbolContext && storyAxis === 'stock' && (matchType === 'direct_symbol' || matchType === 'alias')) matchedDirectHits += 1;
+        if (symbolContext && storyAxis === 'industry' && matchedIndustryTerms.length > 0) matchedIndustryHits += 1;
+        records.push({
+          title,
+          summary,
+          contentText: text.slice(0, 8000),
+          publishedAt,
+          documentUrl: card.href,
+          symbols,
+          metadata: {
+            connector: 'html_fetch',
+            origin: 'investanchors',
+            story_axis: storyAxis,
+            query_mode: storyAxis === 'industry' ? 'industry_card' : 'stock_card',
+            matched_stock_terms: matchedStockTerms,
+            matched_industry_terms: matchedIndustryTerms,
+            matched_terms: unique([...matchedStockTerms, ...matchedIndustryTerms]),
+            direct_hit_strength: directHitStrength,
+            category: card.category,
+          },
+        });
         await createSourceAudit({
           connectorRunId,
           platform: 'investanchors',
-          targetUrl: link,
+          targetUrl: card.href,
           status: 'success',
-          htmlContent: await page.content(),
-          screenshotBase64: screenshot.toString('base64'),
+          htmlContent: html.slice(0, 200000),
           notes: title,
+          metadata: {
+            category: card.category,
+            story_axis: storyAxis,
+            query_mode: storyAxis === 'industry' ? 'industry_card' : 'stock_card',
+          },
         });
       } catch (error) {
+        const message = (error as Error).message;
+        if (/timeout/i.test(message)) timedOut = true;
         await createSourceAudit({
           connectorRunId,
           platform: 'investanchors',
-          targetUrl: link,
+          targetUrl: card.href,
           status: 'failed',
-          notes: (error as Error).message,
+          notes: message,
         });
       }
-      if (records.length >= 10) break;
+      ensureWithinBudget('article_after_each');
+      if (records.length >= (symbolContext ? 6 : 10)) break;
     }
 
-    if (records.length === 0) {
+    if (!symbolContext && records.length === 0) {
       records.push({
         title: '定錨首頁產業摘要',
         summary: bodyText.slice(0, 1200),
@@ -1081,6 +3739,14 @@ async function scrapeInvestAnchors() {
         publishedAt: null,
         documentUrl: 'https://investanchors.com/',
         symbols: unique((bodyText.match(/\b\d{4}\b/g) || []).slice(0, 5)),
+        metadata: { connector: 'playwright', origin: 'investanchors', story_axis: 'industry' },
+      });
+    }
+    if (hasCredential && !loginSucceeded) {
+      await upsertCredentialRegistry('investanchors', 'invalid', {
+        credential_ref: 'INVESTANCHORS_ACCOUNT/INVESTANCHORS_PASSWORD',
+        error_message: 'login_failed',
+        metadata: { mode: 'playwright_login' },
       });
     }
   } finally {
@@ -1099,7 +3765,7 @@ async function scrapeInvestAnchors() {
   entityId = String(entity.id);
 
   const count = await upsertSourceRawDocuments(
-    records.map((item) => ({
+    filterSymbolScopedDocs(records.map((item) => ({
       sourceEntityId: String(entity.id),
       platform: 'investanchors',
       documentUrl: item.documentUrl,
@@ -1110,9 +3776,20 @@ async function scrapeInvestAnchors() {
       symbols: item.symbols,
       sentimentLabel: 'bullish',
       confidence: 0.72,
-      metadata: { connector: 'playwright', origin: 'investanchors' },
-    })),
+      metadata: { connector: 'playwright', origin: 'investanchors', ...(item.metadata || {}) },
+    })), 'investanchors', symbolContext),
   );
+  await upsertCredentialRegistry('investanchors', count > 0 ? 'valid' : 'invalid', {
+    credential_ref: hasCredential ? 'INVESTANCHORS_ACCOUNT/INVESTANCHORS_PASSWORD' : null,
+    error_message: count > 0 ? null : timedOut ? 'timeout_partial' : 'no_records_written',
+    metadata: {
+      mode: symbolContext ? 'symbol_scoped_index_html_fetch' : 'playwright_login',
+      records_written: count,
+      matched_direct_hits: matchedDirectHits,
+      matched_industry_hits: matchedIndustryHits,
+      timed_out: timedOut,
+    },
+  });
   const taskId = await writeAgentTask({
     agentRunId,
     agentRole: 'Source Connector Agent',
@@ -1122,31 +3799,85 @@ async function scrapeInvestAnchors() {
     outputSummary: `synced ${count} investanchors records`,
   });
   await writeAgentFinding(taskId, `定錨投筆同步 ${count} 筆內容`, { source_refs: records.map((item) => item.documentUrl), confidence: 0.77 });
-  await finishAgentRun(agentRunId, 'success', { connector: 'investanchors', records_written: count });
-  await finishConnectorRun(connectorRunId, 'success', count, { metadata: { entity_id: entity.id } });
-  return { connector: 'investanchors', recordsWritten: count, entityId };
+  await finishAgentRun(agentRunId, 'success', { connector: 'investanchors', records_written: count, symbol: symbolContext?.symbol || null });
+  await finishConnectorRun(connectorRunId, count > 0 ? 'success' : 'partial', count, {
+    metadata: {
+      entity_id: entity.id,
+      crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
+      query_symbol: symbolContext?.symbol || null,
+      query_terms: symbolContext?.queryTerms || [],
+      matched_direct_hits: matchedDirectHits,
+      matched_industry_hits: matchedIndustryHits,
+      timed_out: timedOut,
+    },
+  });
+  return {
+    connector: 'investanchors',
+    recordsWritten: count,
+    fetchedPosts: records.length,
+    entityId,
+    errorCode: count > 0 ? null : timedOut ? 'timeout_partial' : symbolContext ? 'symbol_search_no_hit' : null,
+    matchedDirectHits,
+    matchedIndustryHits,
+    degradedReason: count > 0 ? null : timedOut ? 'article_fetch_timeout' : 'no_symbol_hits',
+    timedOut,
+    sessionMode: 'not_applicable' as const,
+  };
 }
 
-async function scrapePttStock() {
+async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
+  const supabase = getSupabaseServerClient();
   const baseUrl = 'https://www.ptt.cc/bbs/Stock/index.html';
   const headers = { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0', cookie: 'over18=1' };
 
-  // Fetch index page to find prev-page links, then scrape up to 4 pages total (~80 articles)
   const allMatches: Array<{ href: string; title: string }> = [];
-  let currentUrl = baseUrl;
-  for (let page = 0; page < 4; page++) {
-    try {
-      const html = await fetch(currentUrl, { headers, signal: AbortSignal.timeout(8_000) }).then((res) => res.text());
-      const titleMatches = Array.from(html.matchAll(/class="title">\s*<a href="([^"]+)">([^<]+)<\/a>/g));
-      for (const m of titleMatches) {
-        allMatches.push({ href: m[1], title: m[2] });
+  const [{ data: stocksData, error: stocksError }] = await Promise.all([
+    supabase.from('stocks').select('id,symbol,name').eq('market', 'TW'),
+  ]);
+  if (stocksError) throw new Error(stocksError.message);
+  const stocksRows = ((stocksData as Row[]) || []).filter((row) => /^\d{4}$/.test(compactText(row.symbol)));
+  const validSymbols = new Set(stocksRows.map((row) => compactText(row.symbol).toUpperCase()));
+  const stockBySymbol = new Map(stocksRows.map((row) => [compactText(row.symbol).toUpperCase(), row] as const));
+  const stockNamesBySymbol = new Map(stocksRows.map((row) => [compactText(row.symbol).toUpperCase(), compactText(row.name)] as const));
+  const aliasesBySymbol = new Map(stocksRows.map((row) => {
+    const symbol = compactText(row.symbol).toUpperCase();
+    return [symbol, getSymbolAliases(symbol, compactText(row.name))] as const;
+  }));
+
+  const searchTerms = symbolContext
+    ? symbolContext.queryTerms.slice(0, 8)
+    : [
+        '標的',
+        '情報',
+        '請益',
+        '心得',
+        '美系外資',
+        '目標價',
+        'EPS',
+        '被動元件',
+        'MLCC',
+        '大立光',
+        '記憶體',
+      ];
+  const targetPages = [
+    baseUrl,
+    ...searchTerms.map((term) => `https://www.ptt.cc/bbs/Stock/search?page=1&q=${encodeURIComponent(term)}`),
+  ];
+  for (const targetPage of targetPages) {
+    let currentUrl = targetPage;
+    for (let page = 0; page < (symbolContext ? 1 : targetPage === baseUrl ? 4 : 2); page++) {
+      try {
+        const html = await fetch(currentUrl, { headers, signal: AbortSignal.timeout(8_000) }).then((res) => res.text());
+        const titleMatches = Array.from(html.matchAll(/class="title">\s*<a href="([^"]+)">([^<]+)<\/a>/g));
+        for (const m of titleMatches) {
+          allMatches.push({ href: m[1], title: m[2] });
+        }
+        const prevMatch = html.match(/href="([^"]+)"[^>]*>‹ 上頁/);
+        if (!prevMatch || symbolContext) break;
+        currentUrl = `https://www.ptt.cc${prevMatch[1]}`;
+      } catch {
+        break;
       }
-      // Find "上頁" (prev page) link
-      const prevMatch = html.match(/href="([^"]+)"[^>]*>‹ 上頁/);
-      if (!prevMatch) break;
-      currentUrl = `https://www.ptt.cc${prevMatch[1]}`;
-    } catch {
-      break;
     }
   }
 
@@ -1159,35 +3890,78 @@ async function scrapePttStock() {
   });
 
   // For articles with stock-like patterns in title, fetch article body for richer content
-  const docs: Array<{
-    sourceEntityId: string; platform: string; documentUrl: string;
-    title: string; summary: string; contentText: string;
-    symbols: string[]; sentimentLabel: string; confidence: number; metadata: Record<string, unknown>;
-  }> = [];
+  const docs: SourceRawDocInput[] = [];
+  const pttSignalRows: Array<Record<string, unknown>> = [];
+  let articlesFetched = 0;
+  let pushCommentsParsed = 0;
+  const matchedSymbols = new Set<string>();
 
-  for (const match of allMatches.slice(0, 80)) {
+  const postTypeFromTitle = (title: string) => {
+    const tag = title.match(/\[(標的|情報|請益|心得|新聞|閒聊|其他|公告)\]/);
+    return tag?.[1] || (/標的/.test(title) ? '標的' : /情報/.test(title) ? '情報' : /請益/.test(title) ? '請益' : /心得/.test(title) ? '心得' : /新聞/.test(title) ? '新聞' : '討論');
+  };
+  const stripHtml = (html: string) => compactText(html.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, ' '));
+  const parsePushComments = (html: string) => {
+    const comments: Array<{ tag: string; text: string }> = [];
+    for (const match of html.matchAll(/<div class="push">([\s\S]*?)<\/div>/g)) {
+      const block = match[1] || '';
+      const tag = compactText(block.match(/<span[^>]*class="[^"]*\bpush-tag\b[^"]*"[^>]*>([\s\S]*?)<\/span>/)?.[1] || '');
+      const text = compactText(block.match(/<span[^>]*class="[^"]*\bpush-content\b[^"]*"[^>]*>([\s\S]*?)<\/span>/)?.[1] || '').replace(/^:\s*/, '');
+      if (tag || text) comments.push({ tag, text });
+    }
+    return comments;
+  };
+  const commentSentimentFrom = (comments: Array<{ tag: string; text: string }>) => {
+    const text = comments.map((item) => item.text).join(' ');
+    const bullish = (text.match(/噴|漲|利多|看好|突破|買|上修|目標價|轉強/g) || []).length;
+    const bearish = (text.match(/跌|崩|利空|看壞|出貨|套|停損|轉弱|下修/g) || []).length;
+    if (bullish > bearish + 1) return 'bullish';
+    if (bearish > bullish + 1) return 'bearish';
+    return 'neutral';
+  };
+
+  const seenArticles = new Set<string>();
+  for (const match of allMatches.slice(0, symbolContext ? 60 : 140)) {
     const title = compactText(match.title);
+    if (!match.href || seenArticles.has(match.href)) continue;
+    seenArticles.add(match.href);
     const articleUrl = `https://www.ptt.cc${match.href}`;
     let contentText = title;
-    let symbols = unique((String(match.title).match(/\b\d{4}\b/g) || []));
+    let comments: Array<{ tag: string; text: string }> = [];
 
-    // Fetch article body for posts that look stock-related (have 4-digit numbers or common tags)
-    if (/\b\d{4}\b|標的|請益|心得|閒聊|情報/.test(match.title)) {
-      try {
-        const bodyHtml = await fetch(articleUrl, { headers, signal: AbortSignal.timeout(6_000) }).then((r) => r.text());
-        const bodyText = compactText(bodyHtml.replace(/<[^>]+>/g, ' ')).slice(0, 2000);
-        contentText = bodyText || title;
-        // Extract symbols from body as well
-        const bodySymbols = unique((bodyText.match(/\b\d{4}\b/g) || []));
-        symbols = unique([...symbols, ...bodySymbols]);
-      } catch {
-        // Use title only on fetch failure
-      }
+    try {
+      const bodyHtml = await fetch(articleUrl, { headers, signal: AbortSignal.timeout(7_000) }).then((r) => r.text());
+      articlesFetched += 1;
+      comments = parsePushComments(bodyHtml);
+      pushCommentsParsed += comments.length;
+      const mainBlock = bodyHtml.match(/<div id="main-content">([\s\S]*?)<\/div>\s*<div id="article-polling"/)?.[1] ||
+        bodyHtml.match(/<div id="main-content">([\s\S]*?)<\/div>/)?.[1] ||
+        bodyHtml;
+      const bodyWithoutPushes = mainBlock.replace(/<div class="push">[\s\S]*?<\/div>/g, ' ');
+      const bodyText = stripHtml(bodyWithoutPushes).slice(0, 5000);
+      const commentText = comments.map((item) => `${item.tag} ${item.text}`).join('\n').slice(0, 3000);
+      contentText = compactText([bodyText, commentText].filter(Boolean).join('\n\n推噓留言：\n')) || title;
+    } catch {
+      // Use title only on fetch failure.
     }
 
-    // Detect sentiment from title keywords
-    const sentimentLabel = /多|漲|噴|飆|利多|看好/.test(match.title) ? 'bullish'
-      : /空|跌|崩|利空|看壞/.test(match.title) ? 'bearish' : 'neutral';
+    const extracted = extractTwSymbolsWithEvidence(`${title}\n${contentText}`, { validSymbols, stockNamesBySymbol, aliasesBySymbol });
+    const symbols = extracted.symbols;
+    for (const symbol of symbols) matchedSymbols.add(symbol);
+    const pushCount = comments.filter((item) => item.tag.includes('推')).length;
+    const booCount = comments.filter((item) => item.tag.includes('噓')).length;
+    const neutralCount = comments.filter((item) => item.tag.includes('→')).length;
+    const pushScore = pushCount - booCount;
+    const ratioDenominator = pushCount + booCount;
+    const pushBullBearRatio = ratioDenominator > 0 ? roundTo(pushCount / ratioDenominator, 4) : null;
+    const commentSentiment = commentSentimentFrom(comments);
+    const titleSentiment = /多|漲|噴|飆|利多|看好|上修|調升/.test(title)
+      ? 'bullish'
+      : /空|跌|崩|利空|看壞|下修|調降/.test(title)
+        ? 'bearish'
+        : 'neutral';
+    const sentimentLabel = commentSentiment !== 'neutral' ? commentSentiment : titleSentiment;
+    const postType = postTypeFromTitle(title);
 
     docs.push({
       sourceEntityId: String(entity.id),
@@ -1198,16 +3972,75 @@ async function scrapePttStock() {
       contentText,
       symbols,
       sentimentLabel,
-      confidence: symbols.length > 0 ? 0.62 : 0.45,
-      metadata: { connector: 'http', page_depth: Math.floor(allMatches.indexOf(match) / 20) },
+      confidence: symbols.length > 0 ? Math.min(0.82, 0.58 + Math.min(0.18, Math.abs(pushScore) / 80)) : 0.42,
+      metadata: {
+        connector: 'http',
+        source_surface: 'ptt_stock_board',
+        crawl_mode: symbolContext ? 'symbol_scoped' : 'board_scan',
+        post_type: postType,
+        push_score: pushScore,
+        push_count: pushCount,
+        boo_count: booCount,
+        neutral_count: neutralCount,
+        push_bull_bear_ratio: pushBullBearRatio,
+        comment_sentiment: commentSentiment,
+        matched_symbol_reason: symbols.length > 0 ? 'tw_symbol_or_name_proximity' : null,
+        excluded_false_positives: extracted.excludedFalsePositives,
+        page_depth: Math.floor(allMatches.indexOf(match) / 20),
+        query_mode: symbolContext ? 'search' : 'board_scan',
+      },
     });
+    for (const symbol of symbols) {
+      pttSignalRows.push({
+        stock_id: stockBySymbol.get(symbol)?.id || null,
+        symbol,
+        document_url: articleUrl,
+        title,
+        post_type: postType,
+        push_score: pushScore,
+        push_count: pushCount,
+        boo_count: booCount,
+        neutral_count: neutralCount,
+        push_bull_bear_ratio: pushBullBearRatio,
+        comment_sentiment: commentSentiment,
+        matched_symbol_reason: 'tw_symbol_or_name_proximity',
+        metadata: {
+          source_surface: 'ptt_stock_board',
+          crawl_mode: symbolContext ? 'symbol_scoped' : 'board_scan',
+          excluded_false_positives: extracted.excludedFalsePositives,
+        },
+        collected_at: nowIso(),
+      });
+    }
   }
 
-  const count = await upsertSourceRawDocuments(docs);
-  return { connector: 'ptt', recordsWritten: count, entityId: String(entity.id) };
+  const count = await upsertSourceRawDocuments(filterSymbolScopedDocs(docs, 'ptt', symbolContext));
+  if (pttSignalRows.length > 0) {
+    const { error: pttSignalError } = await supabase
+      .from('ptt_post_signals')
+      .upsert(pttSignalRows, { onConflict: 'document_url,symbol' });
+    if (pttSignalError && !/does not exist|schema cache|Could not find/i.test(pttSignalError.message)) {
+      throw new Error(pttSignalError.message);
+    }
+  }
+  return {
+    connector: 'ptt',
+    recordsWritten: count,
+    entityId: String(entity.id),
+    articlesFetched,
+    pushCommentsParsed,
+    matchedSymbols: [...matchedSymbols],
+    metadata: {
+      source_surface: 'ptt_stock_board',
+      pages_scanned: targetPages.length,
+      articles_fetched: articlesFetched,
+      push_comments_parsed: pushCommentsParsed,
+      matched_symbols: [...matchedSymbols],
+    },
+  };
 }
 
-async function scrapeBullTalk() {
+async function scrapeBullTalk(symbolContext?: SymbolScopedStockContext | null) {
   const baseUrl = 'https://www.cmoney.tw/forum/';
   const headers = { 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' };
 
@@ -1219,18 +4052,14 @@ async function scrapeBullTalk() {
     profileUrl: baseUrl,
   });
 
-  const docs: Array<{
-    sourceEntityId: string; platform: string; documentUrl: string;
-    title: string; summary: string; contentText: string;
-    symbols: string[]; sentimentLabel: string; confidence: number; metadata: Record<string, unknown>;
-  }> = [];
-
-  // Scrape multiple CMoney forum sections for stock discussions
-  const sections = [
-    { url: 'https://www.cmoney.tw/forum/', label: '首頁' },
-    { url: 'https://www.cmoney.tw/forum/article-list?topicId=1', label: '台股' },
-    { url: 'https://www.cmoney.tw/forum/article-list?topicId=5', label: '熱門' },
-  ];
+  const docs: SourceRawDocInput[] = [];
+  const sections = symbolContext
+    ? [{ url: `https://www.cmoney.tw/forum/stock/${symbolContext.symbol}`, label: `${symbolContext.name}(${symbolContext.symbol})` }]
+    : [
+        { url: 'https://www.cmoney.tw/forum/', label: '首頁' },
+        { url: 'https://www.cmoney.tw/forum/article-list?topicId=1', label: '台股' },
+        { url: 'https://www.cmoney.tw/forum/article-list?topicId=5', label: '熱門' },
+      ];
 
   for (const section of sections) {
     try {
@@ -1275,7 +4104,7 @@ async function scrapeBullTalk() {
       }
 
       // Fallback: if no article links found, extract text content with stock symbols
-      if (docs.length === 0) {
+      if (docs.length === 0 && !symbolContext) {
         const plainText = compactText(html.replace(/<[^>]+>/g, ' ')).slice(0, 6000);
         const symbols = unique((plainText.match(/\b\d{4}\b/g) || []));
         docs.push({
@@ -1290,23 +4119,45 @@ async function scrapeBullTalk() {
           confidence: 0.40,
           metadata: { connector: 'http', section: section.label, fallback: true },
         });
+      } else if (symbolContext && docs.length === 0) {
+        const plainText = compactText(html.replace(/<[^>]+>/g, ' ')).slice(0, 3000);
+        const title = compactText((html.match(/<title>(.*?)<\/title>/i) || [])[1] || `${symbolContext.name}(${symbolContext.symbol}) 今日股價與討論`);
+        docs.push({
+          sourceEntityId: String(entity.id),
+          platform: 'bulltalk',
+          documentUrl: section.url,
+          title,
+          summary: title,
+          contentText: plainText,
+          symbols: [symbolContext.symbol],
+          sentimentLabel: 'neutral',
+          confidence: 0.46,
+          metadata: { connector: 'http', section: section.label, symbol_page: true },
+        });
       }
     } catch {
       // Non-fatal per section
     }
   }
 
-  const count = await upsertSourceRawDocuments(docs);
+  const count = await upsertSourceRawDocuments(filterSymbolScopedDocs(docs, 'bulltalk', symbolContext));
   return { connector: 'bulltalk', recordsWritten: count, entityId: String(entity.id) };
 }
 
-async function scrapeGoogleNewsTW() {
-  const queries = [
-    '台股+分析', '台股+投資報告', '半導體+台股', 'AI+伺服器+台股', '台股+法人買賣',
-    '外資+買超+台股', '投信+買超+台股', '台股+法說會', '台股+財報+超預期',
-    '台股+漲停+主力', '台股+突破+季線', '台股+轉機股', '電動車+台股概念股',
-    '台積電+分析', '聯發科+展望', '台股+小型股+飆漲',
-  ];
+async function scrapeGoogleNewsTW(symbolContext?: SymbolScopedStockContext | null) {
+  const queries = symbolContext
+    ? unique([
+        `${symbolContext.symbol} ${symbolContext.name} 台股`,
+        `${symbolContext.name} 法說`,
+        `${symbolContext.name} 營收`,
+        ...symbolContext.aliases.slice(0, 2).map((alias) => `${alias} 台股`),
+      ])
+    : [
+        '台股+分析', '台股+投資報告', '半導體+台股', 'AI+伺服器+台股', '台股+法人買賣',
+        '外資+買超+台股', '投信+買超+台股', '台股+法說會', '台股+財報+超預期',
+        '台股+漲停+主力', '台股+突破+季線', '台股+轉機股', '電動車+台股概念股',
+        '台積電+分析', '聯發科+展望', '台股+小型股+飆漲',
+      ];
   const headers = { 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' };
 
   const entity = await upsertSourceEntity({
@@ -1317,11 +4168,7 @@ async function scrapeGoogleNewsTW() {
     profileUrl: 'https://news.google.com',
   });
 
-  const docs: Array<{
-    sourceEntityId: string; platform: string; documentUrl: string;
-    title: string; summary: string; contentText: string;
-    symbols: string[]; sentimentLabel: string; confidence: number; metadata: Record<string, unknown>;
-  }> = [];
+  const docs: SourceRawDocInput[] = [];
   const seen = new Set<string>();
 
   for (const query of queries) {
@@ -1363,7 +4210,7 @@ async function scrapeGoogleNewsTW() {
           symbols,
           sentimentLabel,
           confidence: 0.60,
-          metadata: { connector: 'http', query, publishedAt: pubDate },
+          metadata: { connector: 'http', query, publishedAt: pubDate, query_mode: symbolContext ? 'symbol_search' : 'market_search' },
         });
       }
     } catch {
@@ -1371,11 +4218,11 @@ async function scrapeGoogleNewsTW() {
     }
   }
 
-  const count = await upsertSourceRawDocuments(docs);
+  const count = await upsertSourceRawDocuments(filterSymbolScopedDocs(docs, 'googlenews', symbolContext));
   return { connector: 'googlenews', recordsWritten: count, entityId: String(entity.id) };
 }
 
-async function scrapeAnueNews() {
+async function scrapeAnueNews(symbolContext?: SymbolScopedStockContext | null) {
   const entity = await upsertSourceEntity({
     platform: 'anue',
     entityType: 'site',
@@ -1384,63 +4231,96 @@ async function scrapeAnueNews() {
     profileUrl: 'https://news.cnyes.com/news/cat/tw_stock',
   });
 
-  const docs: Array<{
-    sourceEntityId: string; platform: string; documentUrl: string;
-    title: string; summary: string; contentText: string;
-    symbols: string[]; sentimentLabel: string; confidence: number; metadata: Record<string, unknown>;
-    publishedAt?: string;
-  }> = [];
+  const docs: SourceRawDocInput[] = [];
 
-  // Anue REST API — tw_stock category + analyst picks
-  const categories = ['tw_stock', 'tw_stock_news', 'tw_report'];
-  for (const cat of categories) {
-    try {
-      const url = `https://news.cnyes.com/api/v3/news/category/${cat}?limit=30`;
-      const res = await fetch(url, {
-        headers: { 'User-Agent': 'Mozilla/5.0 StockInsiderBot/1.0', 'Accept': 'application/json' },
-        signal: AbortSignal.timeout(10_000),
-      });
-      if (!res.ok) continue;
-      const data = await res.json();
-      const items: Array<Record<string, unknown>> = data?.items?.data || [];
-      for (const item of items) {
-        const title = compactText(String(item.title || ''));
-        if (!title) continue;
-        const docUrl = String(item.url || `https://news.cnyes.com/news/id/${item.newsId}`);
-        const summary = compactText(String(item.summary || item.intro || ''));
-        const symbols = unique((Array.isArray(item.stocks) ? item.stocks : []).map((s: Record<string, unknown>) => String(s.code || '')).filter(Boolean));
-        const allText = `${title} ${summary}`;
-        const sentimentLabel = /利多|漲|看好|買進|強勢|突破|創高/.test(allText) ? 'bullish'
-          : /利空|跌|看壞|賣出|破底|警示|下修/.test(allText) ? 'bearish' : 'neutral';
-        const pubAt = item.publishAt ? new Date(Number(item.publishAt) * 1000).toISOString() : undefined;
-        docs.push({
-          sourceEntityId: String(entity.id),
-          platform: 'anue',
-          documentUrl: docUrl,
-          title,
-          summary: summary || title,
-          contentText: allText.slice(0, 3000),
-          symbols,
-          sentimentLabel,
-          confidence: symbols.length > 0 ? 0.65 : 0.50,
-          metadata: { connector: 'http', category: cat },
-          ...(pubAt ? { publishedAt: pubAt } : {}),
-        });
+  if (symbolContext) {
+    for (const term of symbolContext.queryTerms.slice(0, 4)) {
+      try {
+        const url = `https://news.cnyes.com/search?q=${encodeURIComponent(term)}`;
+        const html = await fetch(url, {
+          headers: { 'User-Agent': 'Mozilla/5.0 StockInsiderBot/1.0', 'Accept': 'text/html' },
+          signal: AbortSignal.timeout(10_000),
+        }).then((res) => res.text());
+        const items = Array.from(html.matchAll(/<a href="(\/news\/id\/\d+)"><p title="([^"]+)"[^>]*>(.*?)<\/p><\/a>[\s\S]{0,500}?<p class="s5flkzr">(.*?)<\/p>/g));
+        for (const item of items.slice(0, 20)) {
+          const title = compactText(item[2] || item[3] || '');
+          if (!title) continue;
+          const summary = compactText((item[4] || '').replace(/<[^>]+>/g, ' '));
+          const allText = `${title} ${summary}`;
+          const symbols = unique((allText.match(/\b[1-9]\d{3}\b/g) || []).filter((s) => Number(s) >= 1101 && Number(s) <= 9999));
+          docs.push({
+            sourceEntityId: String(entity.id),
+            platform: 'anue',
+            documentUrl: `https://news.cnyes.com${item[1]}`,
+            title,
+            summary: summary || title,
+            contentText: allText.slice(0, 3000),
+            symbols,
+            sentimentLabel: /利多|漲|看好|買進|強勢|突破|創高/.test(allText) ? 'bullish' : /利空|跌|看壞|賣出|破底|警示|下修/.test(allText) ? 'bearish' : 'neutral',
+            confidence: 0.64,
+            metadata: { connector: 'http', search_term: term, query_mode: 'symbol_search' },
+          });
+        }
+      } catch {
+        // Non-fatal per term
       }
-    } catch {
-      // Non-fatal per category
+    }
+  } else {
+    const categories = ['tw_stock', 'tw_stock_news', 'tw_report'];
+    for (const cat of categories) {
+      try {
+        const url = `https://news.cnyes.com/api/v3/news/category/${cat}?limit=30`;
+        const res = await fetch(url, {
+          headers: { 'User-Agent': 'Mozilla/5.0 StockInsiderBot/1.0', 'Accept': 'application/json' },
+          signal: AbortSignal.timeout(10_000),
+        });
+        if (!res.ok) continue;
+        const data = await res.json();
+        const items: Array<Record<string, unknown>> = data?.items?.data || [];
+        for (const item of items) {
+          const title = compactText(String(item.title || ''));
+          if (!title) continue;
+          const docUrl = String(item.url || `https://news.cnyes.com/news/id/${item.newsId}`);
+          const summary = compactText(String(item.summary || item.intro || ''));
+          const symbols = unique((Array.isArray(item.stocks) ? item.stocks : []).map((s: Record<string, unknown>) => String(s.code || '')).filter(Boolean));
+          const allText = `${title} ${summary}`;
+          const sentimentLabel = /利多|漲|看好|買進|強勢|突破|創高/.test(allText) ? 'bullish'
+            : /利空|跌|看壞|賣出|破底|警示|下修/.test(allText) ? 'bearish' : 'neutral';
+          const pubAt = item.publishAt ? new Date(Number(item.publishAt) * 1000).toISOString() : undefined;
+          docs.push({
+            sourceEntityId: String(entity.id),
+            platform: 'anue',
+            documentUrl: docUrl,
+            title,
+            summary: summary || title,
+            contentText: allText.slice(0, 3000),
+            symbols,
+            sentimentLabel,
+            confidence: symbols.length > 0 ? 0.65 : 0.50,
+            metadata: { connector: 'http', category: cat },
+            ...(pubAt ? { publishedAt: pubAt } : {}),
+          });
+        }
+      } catch {
+        // Non-fatal per category
+      }
     }
   }
 
-  const count = await upsertSourceRawDocuments(docs);
+  const count = await upsertSourceRawDocuments(filterSymbolScopedDocs(docs, 'anue', symbolContext));
   return { connector: 'anue', recordsWritten: count, entityId: String(entity.id) };
 }
 
-async function scrapeUdnFinance() {
-  const pages = [
-    { url: 'https://money.udn.com/money/cate/5591', label: '台股新聞' },
-    { url: 'https://money.udn.com/money/cate/12017', label: '台股焦點' },
-  ];
+async function scrapeUdnFinance(symbolContext?: SymbolScopedStockContext | null) {
+  const pages = symbolContext
+    ? unique([
+        `https://money.udn.com/search/result/1001/${encodeURIComponent(symbolContext.name)}`,
+        `https://money.udn.com/search/result/1001/${encodeURIComponent(symbolContext.symbol)}`,
+      ]).map((url) => ({ url, label: 'symbol_search' }))
+    : [
+        { url: 'https://money.udn.com/money/cate/5591', label: '台股新聞' },
+        { url: 'https://money.udn.com/money/cate/12017', label: '台股焦點' },
+      ];
   const headers = { 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' };
 
   const entity = await upsertSourceEntity({
@@ -1451,30 +4331,31 @@ async function scrapeUdnFinance() {
     profileUrl: 'https://money.udn.com',
   });
 
-  const docs: Array<{
-    sourceEntityId: string; platform: string; documentUrl: string;
-    title: string; summary: string; contentText: string;
-    symbols: string[]; sentimentLabel: string; confidence: number; metadata: Record<string, unknown>;
-  }> = [];
+  const docs: SourceRawDocInput[] = [];
   const seen = new Set<string>();
 
   for (const page of pages) {
     try {
       const html = await fetch(page.url, { headers, signal: AbortSignal.timeout(10_000) }).then((r) => r.text());
 
-      // UDN uses <a href="/money/story/xxxx/yyyy">title</a> pattern
-      const articlePattern = /href="(\/money\/story\/[^"]+)"[^>]*>([^<]{4,})<\/a>/g;
-      const matches = Array.from(html.matchAll(articlePattern));
+      const structuredItems = Array.from(
+        html.matchAll(
+          /"@type":"NewsArticle","@id":"([^"]+)","url":"([^"]+)","name":"([^"]+)","headline":"([^"]+)","description":"([^"]+)","datePublished":"([^"]+)"/g,
+        ),
+      );
+      const matches = structuredItems.length > 0
+        ? structuredItems.map((item) => ({ href: item[2], title: compactText(item[4] || item[3] || ''), summary: compactText(item[5] || ''), publishedAt: safeDateString(item[6]) }))
+        : Array.from(html.matchAll(/href="(\/money\/story\/[^"]+)"[^>]*>([^<]{4,})<\/a>/g)).map((item) => ({ href: `https://money.udn.com${item[1]}`, title: compactText(item[2]), summary: '', publishedAt: null }));
 
       for (const m of matches.slice(0, 30)) {
-        const href = m[1];
-        const title = compactText(m[2]);
+        const href = m.href;
+        const title = compactText(m.title);
         if (!title || title.length < 6) continue;
-        const docUrl = `https://money.udn.com${href}`;
+        const docUrl = href.startsWith('http') ? href : `https://money.udn.com${href}`;
         if (seen.has(docUrl)) continue;
         seen.add(docUrl);
 
-        const symbols = unique((title.match(/\b[1-9]\d{3}\b/g) || []).filter((s) => Number(s) >= 1101 && Number(s) <= 9999));
+        const symbols = unique((`${title} ${m.summary}`.match(/\b[1-9]\d{3}\b/g) || []).filter((s) => Number(s) >= 1101 && Number(s) <= 9999));
 
         const sentimentLabel = /利多|漲|看好|買進|強勢|突破|創高/.test(title) ? 'bullish'
           : /利空|跌|看壞|賣出|破底|警示|下修/.test(title) ? 'bearish' : 'neutral';
@@ -1484,12 +4365,13 @@ async function scrapeUdnFinance() {
           platform: 'udn',
           documentUrl: docUrl,
           title,
-          summary: title,
-          contentText: title,
+          summary: m.summary || title,
+          contentText: `${title} ${m.summary || ''}`.trim(),
           symbols,
           sentimentLabel,
           confidence: symbols.length > 0 ? 0.58 : 0.40,
-          metadata: { connector: 'http', section: page.label },
+          publishedAt: m.publishedAt,
+          metadata: { connector: 'http', section: page.label, query_mode: symbolContext ? 'symbol_search' : 'category_feed' },
         });
       }
     } catch {
@@ -1497,11 +4379,11 @@ async function scrapeUdnFinance() {
     }
   }
 
-  const count = await upsertSourceRawDocuments(docs);
+  const count = await upsertSourceRawDocuments(filterSymbolScopedDocs(docs, 'udn', symbolContext));
   return { connector: 'udn', recordsWritten: count, entityId: String(entity.id) };
 }
 
-async function scrapeMobile01Finance() {
+async function scrapeMobile01Finance(symbolContext?: SymbolScopedStockContext | null) {
   const url = 'https://www.mobile01.com/topiclist.php?f=291';
   const headers = { 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' };
 
@@ -1513,11 +4395,16 @@ async function scrapeMobile01Finance() {
     profileUrl: url,
   });
 
-  const docs: Array<{
-    sourceEntityId: string; platform: string; documentUrl: string;
-    title: string; summary: string; contentText: string;
-    symbols: string[]; sentimentLabel: string; confidence: number; metadata: Record<string, unknown>;
-  }> = [];
+  const docs: SourceRawDocInput[] = [];
+
+  if (symbolContext) {
+    return {
+      connector: 'mobile01',
+      recordsWritten: 0,
+      entityId: String(entity.id),
+      errorCode: 'symbol_search_unavailable',
+    };
+  }
 
   try {
     const html = await fetch(url, { headers, signal: AbortSignal.timeout(10_000) }).then((r) => r.text());
@@ -1557,11 +4444,11 @@ async function scrapeMobile01Finance() {
     // Non-fatal
   }
 
-  const count = await upsertSourceRawDocuments(docs);
+  const count = await upsertSourceRawDocuments(filterSymbolScopedDocs(docs, 'mobile01', symbolContext));
   return { connector: 'mobile01', recordsWritten: count, entityId: String(entity.id) };
 }
 
-async function syncGenericWatchlistConnector(platform: 'threads' | 'instagram' | 'telegram') {
+async function syncGenericWatchlistConnector(platform: 'threads' | 'instagram' | 'telegram' | 'investanchors') {
   const supabase = getSupabaseServerClient();
   const { data, error } = await supabase.from('source_watchlists').select('*').eq('platform', platform).eq('enabled', true).order('priority', { ascending: false });
   if (error) throw new Error(error.message);
@@ -1592,47 +4479,284 @@ async function syncGenericWatchlistConnector(platform: 'threads' | 'instagram' |
     })),
   );
   await upsertCredentialRegistry(platform, 'missing', { metadata: { reason: 'watchlist_only_seed' } });
-  return { connector: platform, recordsWritten: count, entityId: String(entity.id) };
+  return {
+    connector: platform,
+    recordsWritten: count,
+    fetchedPosts: 0,
+    entityId: String(entity.id),
+    errorCode: 'watchlist_only_seed',
+  };
 }
 
-async function scrapeThreads() {
+function buildThreadsSearchTargets(symbolContext: SymbolScopedStockContext, watchlists: Row[]) {
+  const stockQueries = unique([
+    symbolContext.symbol,
+    `${symbolContext.symbol} ${symbolContext.name}`,
+    `${symbolContext.name} 台股`,
+    `${symbolContext.name} 法說`,
+    `${symbolContext.name} 目標價`,
+    `${symbolContext.name} 美系外資 目標價`,
+    `${symbolContext.name} FactSet EPS`,
+    `${symbolContext.name} Morgan Stanley`,
+    ...symbolContext.aliases.slice(0, 2).map((alias) => `${alias} 台股`),
+  ]).slice(0, 9);
+  const industryQueries = unique([
+    ...symbolContext.industryQueryTerms,
+    symbolContext.sector ? `${symbolContext.sector} 龍頭` : null,
+    symbolContext.themeName ? `${symbolContext.themeName} 受惠股` : null,
+  ].filter(Boolean) as string[]).slice(0, 4);
+  const authorTargets = watchlists
+    .filter((item) => String(item.watch_type || '') === 'author')
+    .slice(0, 6)
+    .map((item) => ({
+      watch_type: 'author',
+      watch_value: String(item.watch_value || ''),
+      target_url: '',
+      story_axis: 'kol' as SourceStoryAxis,
+      query_mode: 'author_scan',
+    }));
+  return [
+    ...stockQueries.map((term) => ({
+      watch_type: 'symbol_search',
+      watch_value: term,
+      target_url: `${THREADS_CANONICAL_ORIGIN}/search?q=${encodeURIComponent(term)}`,
+      story_axis: 'stock' as SourceStoryAxis,
+      query_mode: 'stock_search',
+    })),
+    ...industryQueries.map((term) => ({
+      watch_type: 'industry_search',
+      watch_value: term,
+      target_url: `${THREADS_CANONICAL_ORIGIN}/search?q=${encodeURIComponent(term)}`,
+      story_axis: 'industry' as SourceStoryAxis,
+      query_mode: 'industry_search',
+    })),
+    ...authorTargets,
+  ];
+}
+
+function buildThreadsMarketDiscoveryTargets(stocksRows: Row[]) {
+  const limit = Math.max(8, Math.min(80, Number(process.env.THREADS_MARKET_STOCK_SEARCH_LIMIT || 36)));
+  const stocks = stocksRows
+    .map((row) => ({
+      symbol: compactText(row.symbol).toUpperCase(),
+      name: compactText(row.name),
+      sector: compactText(row.sector),
+    }))
+    .filter((row) => /^\d{4}$/.test(row.symbol) && row.name && row.name !== row.symbol);
+  const prioritySymbols = ['3008', '2337', '2408', '2327', '2492', '3026', '3711', '3231', '2356', '3034'];
+  const priority = prioritySymbols
+    .map((symbol) => stocks.find((row) => row.symbol === symbol))
+    .filter((row): row is { symbol: string; name: string; sector: string } => Boolean(row));
+  const rotationPool = stocks.filter((row) => !prioritySymbols.includes(row.symbol));
+  const rotationOffset = rotationPool.length > 0 ? Math.floor(Date.now() / (60 * 60 * 1000)) % rotationPool.length : 0;
+  const rotated = [...rotationPool.slice(rotationOffset), ...rotationPool.slice(0, rotationOffset)].slice(0, Math.max(0, limit - priority.length));
+  const stockTargets = unique([...priority, ...rotated].flatMap((stock) => [
+    `${stock.symbol} ${stock.name}`,
+    `${stock.name} 台股`,
+    `${stock.name} 美系外資 目標價`,
+  ])).slice(0, limit * 2);
+  const themeTargets = [
+    '台股 推薦',
+    '台股 潛力股',
+    '台股 法說 目標價',
+    '台股 美系外資 EPS',
+    '台股 資金輪動',
+    '大立光 光通訊 目標價',
+    'MLCC 被動元件 台股',
+    '成熟製程 台股',
+    'AI PC 台股',
+    'CPU 概念股 台股',
+  ];
+  return [...themeTargets, ...stockTargets].map((term) => ({
+    watch_type: 'keyword',
+    watch_value: term,
+    target_url: `${THREADS_CANONICAL_ORIGIN}/search?q=${encodeURIComponent(term)}`,
+    story_axis: 'stock' as SourceStoryAxis,
+    query_mode: 'all_tw_stock_search',
+    crawl_mode: 'public_search' as SourceDocCrawlMode,
+    source_surface: 'threads_public_search',
+  }));
+}
+
+async function scrapeThreads(symbolContext?: SymbolScopedStockContext | null) {
   try {
-    return await _scrapeThreadsInner();
+    return await _scrapeThreadsInner(symbolContext);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
+    if (/^threads_timeout:/i.test(msg)) {
+      await finishLatestRunningConnector('threads', 'partial', 0, msg);
+      await upsertCredentialRegistry('threads', 'invalid', {
+        credential_ref: 'THREADS_SESSION_STATE/THREADS_USERNAME/THREADS_PASSWORD',
+        error_message: msg,
+        metadata: { mode: symbolContext ? 'playwright_symbol_search' : 'playwright_cookie', timed_out: true, symbol: symbolContext?.symbol || null },
+      });
+      return {
+        connector: 'threads',
+        recordsWritten: 0,
+        fetchedPosts: 0,
+        entityId: null,
+        errorCode: 'timeout_partial',
+        matchedDirectHits: 0,
+        matchedIndustryHits: 0,
+        degradedReason: 'timeout_partial',
+        timedOut: true,
+        sessionMode: 'missing' as const,
+      };
+    }
     if (/executable|chromium|browser|playwright/i.test(msg)) {
       console.warn('[source-sync] threads: Playwright not available in serverless, falling back to watchlist');
-      return syncGenericWatchlistConnector('threads');
+      if (symbolContext) {
+        return {
+          connector: 'threads',
+          recordsWritten: 0,
+          fetchedPosts: 0,
+          entityId: null,
+          errorCode: 'symbol_search_partial',
+          matchedDirectHits: 0,
+          matchedIndustryHits: 0,
+          degradedReason: 'playwright_unavailable',
+          timedOut: false,
+          sessionMode: 'missing' as const,
+        };
+      }
+      const fallback = await syncGenericWatchlistConnector('threads');
+      await finishLatestRunningConnector('threads', fallback.recordsWritten > 0 ? 'partial' : 'failed', fallback.recordsWritten, msg);
+      await upsertCredentialRegistry('threads', 'invalid', {
+        credential_ref: 'THREADS_SESSION_STATE/THREADS_USERNAME/THREADS_PASSWORD',
+        error_message: 'playwright_unavailable',
+        metadata: { mode: 'fallback_watchlist', records_written: fallback.recordsWritten },
+      });
+      return fallback;
     }
+    await markLatestRunningConnectorFailed('threads', msg);
     throw err;
   }
 }
 
-async function _scrapeThreadsInner() {
+async function _scrapeThreadsInner(symbolContext?: SymbolScopedStockContext | null) {
   const supabase = getSupabaseServerClient();
-  const connectorRunId = await startConnectorRun('source-sync', 'threads', { mode: 'playwright_cookie' });
-  const agentRunId = await startAgentRun('source_sync', { connector: 'threads' });
+  const threadsAuth = resolveMetaAuthConfig('threads');
+  const threadsSessionStore = createMetaSessionStore('threads', threadsAuth.sessionStatePath);
+  const persistedThreadsSessionRaw = await threadsSessionStore.loadPreferred();
+  const envFallbackIsNewer = shouldPreferEnvFallbackCookies(threadsAuth, persistedThreadsSessionRaw);
+  const persistedThreadsSession = envFallbackIsNewer ? null : persistedThreadsSessionRaw;
+  const connectorRunId = await startConnectorRun('source-sync', 'threads', {
+    mode: symbolContext ? 'playwright_symbol_search' : 'playwright_cookie',
+    crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
+    query_symbol: symbolContext?.symbol || null,
+    query_terms: symbolContext?.queryTerms || [],
+    session_mode: persistedThreadsSession ? 'persisted_session' : threadsAuth.fallbackCookies.length > 0 ? 'cookie_fallback' : 'missing',
+    env_fallback_preferred: envFallbackIsNewer,
+    cookie_diagnostics: cookieDiagnostics(threadsAuth),
+    config_error: threadsAuth.configError,
+  });
+  const agentRunId = await startAgentRun('source_sync', { connector: 'threads', symbol: symbolContext?.symbol || null });
+  const watermarkBefore = await getSourceWatermark('threads');
+  const connectorBudgetMs = resolveTimeoutMs('THREADS_TIMEOUT_MS', 75_000);
+  const connectorStartedAt = Date.now();
+  const ensureWithinBudget = (stage: string) => {
+    if (Date.now() - connectorStartedAt > connectorBudgetMs) {
+      throw new Error(`threads_timeout:${stage}`);
+    }
+  };
 
-  const metaCookies = normalizeMetaCookieSeed();
-  const hasCookies = metaCookies.threads.length > 0;
-
-  if (!hasCookies) {
-    console.warn('[source-sync] threads connector skipped: Meta session cookies not configured. Set sessionid, csrftoken, ds_user_id, ig_did, mid, datr, ps_l, ps_n in Vercel env.');
-    await upsertCredentialRegistry('threads', 'missing', { metadata: { reason: 'no_meta_cookies' } });
-    await finishConnectorRun(connectorRunId, 'skipped', 0, { metadata: { reason: 'missing_credentials' } });
-    await finishAgentRun(agentRunId, 'failed', { reason: 'missing_credentials' });
-    return await syncGenericWatchlistConnector('threads');
-  }
+  const browserUserAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+  const initialCookies = persistedThreadsSession?.cookies?.length ? persistedThreadsSession.cookies : threadsAuth.fallbackCookies;
+  let sessionMode: SourceSyncRunShape['sessionMode'] =
+    persistedThreadsSession?.cookies?.length ? 'persisted_session' : initialCookies.length > 0 ? 'cookie_fallback' : 'missing';
+  let hasCookies = initialCookies.length > 0;
+  let sessionRefreshed = false;
+  let authFailureReason: string | null = null;
+  let legacyDomainDetected = false;
+  let legacyDomainMigrated = false;
+  let validatedUrlFinal: string | null = null;
 
   const { data, error } = await supabase.from('source_watchlists').select('*').eq('platform', 'threads').eq('enabled', true).order('priority', { ascending: false });
   if (error) throw new Error(error.message);
   const watchlists = (data as Row[]) || [];
+  const [{ data: latestSuccess }, { data: stocksData }] = await Promise.all([
+    supabase.from('connector_runs').select('finished_at').eq('platform', 'threads').eq('status', 'success').order('finished_at', { ascending: false }).limit(1),
+    supabase.from('stocks').select('symbol,name,sector').eq('market', 'TW'),
+  ]);
+  const lastSuccessAt = latestSuccess?.[0]?.finished_at ? String(latestSuccess[0].finished_at) : null;
+  const stocksRows = (stocksData as Row[]) || [];
+  const validSymbols = new Set(stocksRows.map((row) => String(row.symbol || '')).filter(Boolean));
+  const stockNamesBySymbol = new Map(stocksRows.map((row) => [compactText(row.symbol).toUpperCase(), compactText(row.name)] as const));
+  const aliasesBySymbol = new Map(stocksRows.map((row) => {
+    const symbol = compactText(row.symbol).toUpperCase();
+    return [symbol, getSymbolAliases(symbol, compactText(row.name))] as const;
+  }));
 
   const { chromium } = await import('playwright');
   const browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext({ userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' });
-  await context.addCookies(metaCookies.threads);
+  const context = await browser.newContext({ userAgent: browserUserAgent });
+  if (hasCookies) {
+    await context.addCookies(initialCookies);
+  }
   const page = await context.newPage();
+  const preflight = await preflightThreadsSession({
+    context,
+    page,
+    persistedSession: persistedThreadsSession,
+    fallbackCookies: threadsAuth.fallbackCookies,
+    sessionStore: threadsSessionStore,
+    username: threadsAuth.username,
+    password: threadsAuth.password,
+    userAgent: browserUserAgent,
+  });
+  sessionMode = preflight.sessionMode;
+  hasCookies = preflight.hasCookies;
+  sessionRefreshed = preflight.sessionRefreshed;
+  authFailureReason = preflight.failureReason;
+  legacyDomainDetected = preflight.legacyDomainDetected;
+  legacyDomainMigrated = preflight.legacyDomainMigrated;
+  validatedUrlFinal = preflight.validatedUrlFinal;
+
+  if (!hasCookies) {
+    console.warn('[source-sync] threads connector skipped: Meta session cookies not configured and login refresh failed.');
+    await upsertCredentialRegistry('threads', 'missing', {
+      credential_ref: 'THREADS_SESSION_STATE/THREADS_USERNAME/THREADS_PASSWORD',
+      metadata: {
+        reason: authFailureReason || 'no_meta_cookies_or_login_failed',
+        config_error: threadsAuth.configError,
+        cookie_diagnostics: cookieDiagnostics(threadsAuth),
+        duplicate_legacy_keys: threadsAuth.duplicateLegacyKeys,
+      },
+    });
+    await finishConnectorRun(connectorRunId, 'skipped', 0, {
+      metadata: {
+        reason: 'missing_credentials',
+        config_error: threadsAuth.configError,
+        cookie_diagnostics: cookieDiagnostics(threadsAuth),
+        duplicate_legacy_keys: threadsAuth.duplicateLegacyKeys,
+      },
+    });
+    await finishAgentRun(agentRunId, 'failed', {
+      reason: 'missing_credentials',
+      config_error: threadsAuth.configError,
+    });
+    await page.close().catch(() => undefined);
+    await context.close().catch(() => undefined);
+    await browser.close().catch(() => undefined);
+    return symbolContext
+      ? {
+          connector: 'threads',
+          recordsWritten: 0,
+          fetchedPosts: 0,
+          entityId: null,
+          errorCode: authFailureReason || 'missing_credentials',
+          matchedDirectHits: 0,
+          matchedIndustryHits: 0,
+          degradedReason: authFailureReason || 'missing_credentials',
+          timedOut: false,
+          sessionMode,
+          failureReason: authFailureReason,
+          legacyDomainDetected,
+          legacyDomainMigrated,
+          validatedUrlFinal,
+        }
+      : await syncGenericWatchlistConnector('threads');
+  }
 
   const entity = await upsertSourceEntity({
     platform: 'threads',
@@ -1641,36 +4765,308 @@ async function _scrapeThreadsInner() {
     sourceKey: 'site.threads.kol',
   });
 
-  const records: Array<{ title: string; summary: string; contentText: string; publishedAt: string | null; documentUrl: string; symbols: string[] }> = [];
+  const records: Array<{ title: string; summary: string; contentText: string; publishedAt: string | null; documentUrl: string; symbols: string[]; metadata?: Record<string, unknown> }> = [];
+  const searchedKeywords = new Set<string>();
   let failedFetches = 0;
+  let duplicateInRun = 0;
+  let fetchedPosts = 0;
+  let matchedDirectHits = 0;
+  let matchedIndustryHits = 0;
+  let authBlockedFetches = 0;
+  const seenDocUrls = new Set<string>();
+  const accountFeedTargets: Array<Record<string, unknown>> = hasCookies
+    ? [
+        {
+          watch_type: 'account_feed',
+          watch_value: 'Threads 登入首頁推薦流',
+          target_url: `${THREADS_CANONICAL_ORIGIN}/`,
+          story_axis: 'stock' as SourceStoryAxis,
+          query_mode: 'account_feed',
+          crawl_mode: 'account_feed' as SourceDocCrawlMode,
+          source_surface: 'threads_account_feed',
+        },
+        {
+          watch_type: 'account_feed',
+          watch_value: 'Threads following / recommended feed',
+          target_url: `${THREADS_CANONICAL_ORIGIN}/following`,
+          story_axis: 'stock' as SourceStoryAxis,
+          query_mode: 'account_feed',
+          crawl_mode: 'account_feed' as SourceDocCrawlMode,
+          source_surface: 'threads_account_feed',
+        },
+      ]
+    : [];
 
   try {
-    for (const watchItem of watchlists.slice(0, 6)) {
+    const scopedSearchTargets: Array<Record<string, unknown>> = symbolContext ? buildThreadsSearchTargets(symbolContext, watchlists) : [];
+    const marketDiscoveryTargets: Array<Record<string, unknown>> = symbolContext ? [] : buildThreadsMarketDiscoveryTargets(stocksRows);
+    const targetItems: Array<Record<string, unknown>> = symbolContext
+      ? scopedSearchTargets
+      : [
+          ...accountFeedTargets,
+          ...marketDiscoveryTargets,
+          ...BROKER_DISCOVERY_SEARCH_TERMS.map((term) => ({
+            watch_type: 'keyword',
+            watch_value: term,
+            target_url: `${THREADS_CANONICAL_ORIGIN}/search?q=${encodeURIComponent(term)}`,
+            story_axis: 'stock' as SourceStoryAxis,
+            query_mode: 'broker_search',
+            crawl_mode: 'public_search' as SourceDocCrawlMode,
+            source_surface: 'threads_public_search',
+          })),
+          ...watchlists.slice(0, 8).map((item) => ({ ...item, target_url: '' })),
+        ];
+    for (const watchItem of targetItems) {
       const watchType = String(watchItem.watch_type || '');
       const watchValue = String(watchItem.watch_value || '');
+      if (watchValue) searchedKeywords.add(watchValue);
+      const storyAxis = String(watchItem.story_axis || 'kol') as SourceStoryAxis;
+      const queryMode = String(watchItem.query_mode || (watchType === 'author' ? 'author_scan' : watchType === 'industry_search' ? 'industry_search' : 'stock_search'));
+      const crawlMode = String(watchItem.crawl_mode || (queryMode === 'account_feed' ? 'account_feed' : watchType === 'author' ? 'author_watch' : 'public_search')) as SourceDocCrawlMode;
+      const sourceSurface = String(watchItem.source_surface || (queryMode === 'account_feed' ? 'threads_account_feed' : watchType === 'author' ? 'threads_author_watch' : 'threads_public_search'));
       let targetUrl = '';
-      if (watchType === 'author') targetUrl = `https://www.threads.net/@${watchValue}`;
-      else if (watchType === 'keyword' || watchType === 'hashtag') targetUrl = `https://www.threads.net/search?q=${encodeURIComponent(watchValue)}`;
+      if (watchItem.target_url) targetUrl = String(watchItem.target_url);
+      else if (watchType === 'author') targetUrl = `${THREADS_CANONICAL_ORIGIN}/@${watchValue}`;
+      else if (watchType === 'keyword' || watchType === 'hashtag') targetUrl = `${THREADS_CANONICAL_ORIGIN}/search?q=${encodeURIComponent(watchValue)}`;
       else if (watchType === 'url') targetUrl = watchValue;
+      targetUrl = normalizeThreadsUrl(targetUrl);
       if (!targetUrl) continue;
 
       try {
-        await page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 45_000 });
+        ensureWithinBudget(`open_${slugify(targetUrl)}`);
+        await page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 20_000 });
         await page.waitForTimeout(3000);
-        const bodyText = compactText(await page.locator('body').innerText());
-        if (bodyText.length < 100) {
+        let bodyText = compactText(await page.locator('body').innerText());
+        let loginWall = bodyText.length < 100 || looksLikeThreadsLoginWall(bodyText);
+        if (loginWall && !sessionRefreshed) {
+          const refreshResult = await tryRefreshMetaSession(page, {
+            platform: 'threads',
+            username: threadsAuth.username,
+            password: threadsAuth.password,
+            sessionStore: threadsSessionStore,
+            userAgent: browserUserAgent,
+          });
+          if (refreshResult.ok) {
+            sessionRefreshed = true;
+            sessionMode = refreshResult.sessionMode;
+            authFailureReason = null;
+            ensureWithinBudget(`retry_${slugify(targetUrl)}`);
+            await page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 20_000 });
+            await page.waitForTimeout(3000);
+            bodyText = compactText(await page.locator('body').innerText());
+            loginWall = bodyText.length < 100 || looksLikeThreadsLoginWall(bodyText);
+          } else {
+            authFailureReason = refreshResult.failureReason || 'fresh_login_failed';
+          }
+        }
+        if (loginWall) {
           failedFetches += 1;
-          await createSourceAudit({ connectorRunId, platform: 'threads', targetUrl, status: 'failed', notes: 'body too short, likely blocked' });
+          authBlockedFetches += 1;
+          await createSourceAudit({
+            connectorRunId,
+            platform: 'threads',
+            targetUrl,
+            status: 'failed',
+            notes: authFailureReason || (looksLikeThreadsLoginWall(bodyText) ? 'login wall detected' : 'body too short, likely blocked'),
+          });
           continue;
         }
-        const paragraphs = bodyText.split('\n').map(compactText).filter((t) => t.length > 20).slice(0, 20);
-        for (const para of paragraphs) {
-          const symbols = unique((para.match(/\b\d{4}\b/g) || []));
-          const docUrl = `${targetUrl}#${slugify(para.slice(0, 40))}`;
-          records.push({ title: `Threads: ${watchValue} - ${para.slice(0, 60)}`, summary: para.slice(0, 300), contentText: para, publishedAt: null, documentUrl: docUrl, symbols });
+        await persistMetaSessionFromContext({
+          platform: 'threads',
+          context,
+          sessionStore: threadsSessionStore,
+          userAgent: browserUserAgent,
+          lastSuccessfulUrl: targetUrl,
+          validatedSearch: true,
+          validatedAuthorPage: true,
+        });
+          const postUrls = await page
+          .evaluate(() => {
+            const anchors = Array.from(document.querySelectorAll('a[href*="/post/"]')) as HTMLAnchorElement[];
+            const urls = anchors
+              .map((anchor) => anchor.getAttribute('href') || '')
+              .map((href) => {
+                if (!href) return null;
+                if (href.startsWith('http')) return href;
+                if (href.startsWith('/')) return `https://www.threads.com${href}`;
+                return null;
+              })
+              .filter((item): item is string => Boolean(item));
+            return Array.from(new Set(urls)).slice(0, 8);
+          })
+          .catch(() => [] as string[]);
+
+        for (const postUrl of postUrls) {
+          ensureWithinBudget('post_loop');
+          const normalizedPostUrl = normalizeThreadsUrl(postUrl);
+          if (!normalizedPostUrl) continue;
+          if (seenDocUrls.has(normalizedPostUrl)) {
+            duplicateInRun += 1;
+            continue;
+          }
+          seenDocUrls.add(normalizedPostUrl);
+          fetchedPosts += 1;
+
+          try {
+            await page.goto(normalizedPostUrl, { waitUntil: 'domcontentloaded', timeout: 20_000 });
+            await page.waitForTimeout(1200);
+            const postBody = compactText(await page.locator('body').innerText());
+            if (postBody.length < 40) {
+              duplicateInRun += 1;
+              continue;
+            }
+            const postLines = postBody.split('\n').map(compactText).filter((line) => line.length > 10);
+            const contentText = postLines.slice(0, 10).join('\n').slice(0, 4000) || postBody.slice(0, 4000);
+            const summary = postLines.find((line) => line.length >= 24) || postBody.slice(0, 300);
+            const textBundle = `${summary}\n${contentText}`;
+            const matchedStockTerms = symbolContext ? extractMatchedTerms(textBundle, symbolContext.stockQueryTerms) : [];
+            const matchedIndustryTerms = symbolContext ? extractMatchedTerms(textBundle, symbolContext.industryQueryTerms) : [];
+            const symbols = resolveContextSymbols({
+              text: textBundle,
+              validSymbols,
+              stockNamesBySymbol,
+              aliasesBySymbol,
+              context: symbolContext,
+              matchedStockTerms,
+              matchedIndustryTerms,
+            });
+            if (symbols.length === 0) continue;
+            const directHitStrength = computeDirectHitStrength({
+              context: symbolContext,
+              title: summary,
+              summary,
+              contentText,
+              documentUrl: normalizedPostUrl,
+              symbols,
+              storyAxis,
+              matchedStockTerms,
+              matchedIndustryTerms,
+            });
+            const matchType = symbolContext
+              ? classifySymbolScopedMatch({
+                  context: symbolContext,
+                  title: summary,
+                  summary,
+                  contentText,
+                  documentUrl: normalizedPostUrl,
+                  symbols,
+                })
+              : 'none';
+            if (symbolContext && storyAxis === 'stock' && (matchType === 'direct_symbol' || matchType === 'alias')) matchedDirectHits += 1;
+            if (symbolContext && storyAxis === 'industry' && matchedIndustryTerms.length > 0) matchedIndustryHits += 1;
+            const publishedAt = await page.locator('time').first().getAttribute('datetime').then((value) => safeDateString(value)).catch(() => null);
+            records.push({
+              title: `Threads: ${watchValue} - ${summary.slice(0, 60)}`,
+              summary: summary.slice(0, 300),
+              contentText,
+              publishedAt,
+              documentUrl: normalizedPostUrl,
+              symbols,
+              metadata: {
+                watch_type: watchType,
+                watch_value: watchValue,
+                target_url: targetUrl,
+                story_axis: storyAxis,
+                query_mode: queryMode,
+                crawl_mode: crawlMode,
+                source_surface: sourceSurface,
+                query_keyword: watchValue,
+                matched_symbol_reason: symbols.length > 0 ? 'symbol_or_alias_in_threads_text' : null,
+                source_account: watchType === 'author' ? watchValue : null,
+                session_mode: sessionMode,
+                matched_terms: unique([...matchedStockTerms, ...matchedIndustryTerms]),
+                matched_stock_terms: matchedStockTerms,
+                matched_industry_terms: matchedIndustryTerms,
+                direct_hit_strength: directHitStrength,
+              },
+            });
+          } catch {
+            failedFetches += 1;
+          }
+        }
+
+        if (postUrls.length === 0) {
+          const paragraphs = bodyText.split('\n').map(compactText).filter((t) => t.length > 20).slice(0, 20);
+          for (const para of paragraphs) {
+            const matchedStockTerms = symbolContext ? extractMatchedTerms(para, symbolContext.stockQueryTerms) : [];
+            const matchedIndustryTerms = symbolContext ? extractMatchedTerms(para, symbolContext.industryQueryTerms) : [];
+            const symbols = resolveContextSymbols({
+              text: para,
+              validSymbols,
+              stockNamesBySymbol,
+              aliasesBySymbol,
+              context: symbolContext,
+              matchedStockTerms,
+              matchedIndustryTerms,
+            });
+            if (symbols.length === 0) continue;
+            const docUrl = `${targetUrl}#${slugify(para.slice(0, 40))}`;
+            if (seenDocUrls.has(docUrl)) {
+              duplicateInRun += 1;
+              continue;
+            }
+            seenDocUrls.add(docUrl);
+            const matchType = symbolContext
+              ? classifySymbolScopedMatch({
+                  context: symbolContext,
+                  title: para,
+                  summary: para,
+                  contentText: para,
+                  documentUrl: docUrl,
+                  symbols,
+                })
+              : 'none';
+            if (symbolContext && storyAxis === 'stock' && (matchType === 'direct_symbol' || matchType === 'alias')) matchedDirectHits += 1;
+            if (symbolContext && storyAxis === 'industry' && matchedIndustryTerms.length > 0) matchedIndustryHits += 1;
+            records.push({
+              title: `Threads: ${watchValue} - ${para.slice(0, 60)}`,
+              summary: para.slice(0, 300),
+              contentText: para,
+              publishedAt: null,
+              documentUrl: docUrl,
+              symbols,
+              metadata: {
+                watch_type: watchType,
+                watch_value: watchValue,
+                target_url: targetUrl,
+                fallback_paragraph: true,
+                story_axis: storyAxis,
+                query_mode: queryMode,
+                crawl_mode: crawlMode,
+                source_surface: sourceSurface,
+                query_keyword: watchValue,
+                matched_symbol_reason: symbols.length > 0 ? 'symbol_or_alias_in_threads_text' : null,
+                source_account: watchType === 'author' ? watchValue : null,
+                session_mode: sessionMode,
+                matched_terms: unique([...matchedStockTerms, ...matchedIndustryTerms]),
+                matched_stock_terms: matchedStockTerms,
+                matched_industry_terms: matchedIndustryTerms,
+                direct_hit_strength: computeDirectHitStrength({
+                  context: symbolContext,
+                  title: para,
+                  summary: para,
+                  contentText: para,
+                  documentUrl: docUrl,
+                  symbols,
+                  storyAxis,
+                  matchedStockTerms,
+                  matchedIndustryTerms,
+                }),
+              },
+            });
+          }
         }
         const screenshot = await page.screenshot({ type: 'png', fullPage: false });
-        await createSourceAudit({ connectorRunId, platform: 'threads', sourceEntityId: String(entity.id), targetUrl, status: 'success', htmlContent: await page.content(), screenshotBase64: screenshot.toString('base64'), notes: watchValue });
+        await createSourceAudit({
+          connectorRunId,
+          platform: 'threads',
+          sourceEntityId: String(entity.id),
+          targetUrl,
+          status: 'success',
+          htmlContent: await page.content(),
+          screenshotBase64: screenshot.toString('base64'),
+          notes: `${watchValue} posts=${postUrls.length}`,
+        });
       } catch (err) {
         failedFetches += 1;
         await createSourceAudit({ connectorRunId, platform: 'threads', targetUrl, status: 'failed', notes: (err as Error).message });
@@ -1683,7 +5079,7 @@ async function _scrapeThreadsInner() {
   }
 
   const count = await upsertSourceRawDocuments(
-    records.map((item) => ({
+    filterSymbolScopedDocs(records.map((item) => ({
       sourceEntityId: String(entity.id),
       platform: 'threads',
       documentUrl: item.documentUrl,
@@ -1694,61 +5090,461 @@ async function _scrapeThreadsInner() {
       symbols: item.symbols,
       sentimentLabel: 'neutral',
       confidence: 0.55,
-      metadata: { connector: 'playwright_cookie' },
-    })),
+      metadata: { connector: 'playwright_cookie', last_success_at: lastSuccessAt, ...(item.metadata || {}) },
+    })), 'threads', symbolContext),
   );
+  const watermarkAfter = await getSourceWatermark('threads');
+  const matchedSymbols = unique(records.flatMap((item) => item.symbols || []).filter(Boolean));
 
   const credStatus: 'valid' | 'invalid' = count > 0 && failedFetches < watchlists.length ? 'valid' : 'invalid';
   await upsertCredentialRegistry('threads', credStatus, {
-    credential_ref: 'sessionid/csrftoken',
-    metadata: { mode: 'playwright_cookie', records_written: count, failed_fetches: failedFetches, watchlist_count: watchlists.length },
+    credential_ref: 'THREADS_SESSION_STATE/THREADS_USERNAME/THREADS_PASSWORD',
+      metadata: {
+        mode: 'playwright_cookie',
+        session_mode: sessionMode,
+        legacy_domain_detected: legacyDomainDetected,
+        legacy_domain_migrated: legacyDomainMigrated,
+        records_written: count,
+      failed_fetches: failedFetches,
+      watchlist_count: watchlists.length,
+      last_success_at: lastSuccessAt,
+      session_refreshed: sessionRefreshed,
+      config_error: threadsAuth.configError,
+      cookie_diagnostics: cookieDiagnostics(threadsAuth),
+      duplicate_legacy_keys: threadsAuth.duplicateLegacyKeys,
+      fallback_cookie_source: threadsAuth.fallbackCookieSource,
+      duplicates_skipped: duplicateInRun,
+      fetched_posts: fetchedPosts,
+      matched_direct_hits: matchedDirectHits,
+      matched_industry_hits: matchedIndustryHits,
+      watermark_before: watermarkBefore,
+      watermark_after: watermarkAfter,
+      auth_failure_reason: authFailureReason,
+      auth_blocked_fetches: authBlockedFetches,
+      searched_keywords: [...searchedKeywords],
+      matched_symbols: matchedSymbols,
+    },
   });
 
   const taskId = await writeAgentTask({ agentRunId, agentRole: 'Source Connector Agent', taskType: 'source-sync', status: 'success', inputPayload: { connector: 'threads' }, outputSummary: `synced ${count} threads records` });
   await writeAgentFinding(taskId, `Threads 同步 ${count} 筆內容`, { confidence: 0.6 });
-  await finishAgentRun(agentRunId, 'success', { connector: 'threads', records_written: count });
-  await finishConnectorRun(connectorRunId, count > 0 ? 'success' : 'partial', count, { metadata: { entity_id: entity.id } });
-  return { connector: 'threads', recordsWritten: count, entityId: String(entity.id) };
+  await finishAgentRun(agentRunId, 'success', { connector: 'threads', records_written: count, symbol: symbolContext?.symbol || null });
+  const threadsDegradedReason =
+    count === 0
+      ? authFailureReason
+        ? authFailureReason
+        : authBlockedFetches > 0
+          ? 'fresh_login_failed'
+          : 'valid_session_but_no_direct_hits'
+      : null;
+  const threadsSourceSurfaces = unique([
+    ...records.map((item) => compactText(item.metadata?.source_surface)).filter(Boolean),
+    ...(!symbolContext && accountFeedTargets.length > 0 ? ['threads_account_feed'] : []),
+    ...(!symbolContext ? ['threads_public_search', 'threads_author_watch'] : ['threads_symbol_scoped']),
+  ]);
+  await finishConnectorRun(connectorRunId, count > 0 ? 'success' : 'partial', count, {
+    error_summary: threadsDegradedReason,
+    metadata: {
+      entity_id: entity.id,
+      crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
+      query_symbol: symbolContext?.symbol || null,
+      query_terms: symbolContext?.queryTerms || [],
+      source_surfaces: threadsSourceSurfaces,
+      account_feed_attempted: !symbolContext && accountFeedTargets.length > 0,
+      session_refreshed: sessionRefreshed,
+      session_mode: sessionMode,
+      legacy_domain_detected: legacyDomainDetected,
+      legacy_domain_migrated: legacyDomainMigrated,
+      validated_url_final: validatedUrlFinal,
+      duplicates_skipped: duplicateInRun,
+      fetched_posts: fetchedPosts,
+      watermark_before: watermarkBefore,
+      watermark_after: watermarkAfter,
+      last_success_at: lastSuccessAt,
+      matched_direct_hits: matchedDirectHits,
+      matched_industry_hits: matchedIndustryHits,
+      degraded_reason: threadsDegradedReason,
+      config_error: threadsAuth.configError,
+      cookie_diagnostics: cookieDiagnostics(threadsAuth),
+    },
+  });
+  return {
+    connector: 'threads',
+    recordsWritten: count,
+    fetchedPosts,
+    entityId: String(entity.id),
+    sessionRefreshed,
+    duplicatesSkipped: duplicateInRun,
+    watermarkBefore,
+    watermarkAfter,
+    errorCode: hasCookies ? null : 'missing_credentials',
+    matchedDirectHits,
+    matchedIndustryHits,
+    searchedKeywords: [...searchedKeywords],
+    matchedSymbols,
+    authFailureReason,
+    degradedReason: threadsDegradedReason,
+    sessionMode,
+    failureReason: authFailureReason,
+    legacyDomainDetected,
+    legacyDomainMigrated,
+    validatedUrlFinal,
+    cookieDiagnostics: cookieDiagnostics(threadsAuth),
+  } as SourceSyncRunShape;
 }
 
-async function scrapeInstagram() {
+export async function runThreadsAuthDebug(options?: {
+  forceLogin?: boolean;
+  ignoreFallbackCookies?: boolean;
+  persistOnSuccess?: boolean;
+}): Promise<ThreadsAuthDebugResult> {
+  const forceLogin = Boolean(options?.forceLogin);
+  const ignoreFallbackCookies = Boolean(options?.ignoreFallbackCookies);
+  const persistOnSuccess = options?.persistOnSuccess !== false;
+  const threadsAuth = resolveMetaAuthConfig('threads', {
+    allowLegacyFallback: true,
+    ignoreFallbackCookies,
+  });
+  const sessionStore = createMetaSessionStore('threads', threadsAuth.sessionStatePath);
+  const persistedBeforeRaw = await sessionStore.loadPreferred();
+  const envFallbackIsNewer = shouldPreferEnvFallbackCookies(threadsAuth, persistedBeforeRaw);
+  const persistedBefore = envFallbackIsNewer ? null : persistedBeforeRaw;
+  const sessionModeBefore: MetaSessionMode = persistedBefore?.cookies?.length
+    ? 'persisted_session'
+    : threadsAuth.fallbackCookies.length > 0
+      ? 'cookie_fallback'
+      : 'missing';
+
+  if (forceLogin) await sessionStore.clearPreferred('force_login');
+
+  const connectorRunId = await startConnectorRun('threads-auth-debug', 'threads', {
+    mode: 'threads_auth_debug',
+    force_login: forceLogin,
+    ignore_fallback_cookies: ignoreFallbackCookies,
+    persist_on_success: persistOnSuccess,
+    session_mode_before: sessionModeBefore,
+    config_warning: threadsAuth.configWarning,
+  });
+
+  const { chromium } = await import('playwright');
+  const browser = await chromium.launch({ headless: true });
+  const browserUserAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+  const context = await browser.newContext({ userAgent: browserUserAgent });
+  const page = await context.newPage();
+
+  let sessionModeAfter: MetaSessionMode = forceLogin ? 'missing' : sessionModeBefore;
+  let loginStage: string | null = null;
+  let failureReason: string | null = null;
+  let validatedSearch = false;
+  let validatedAuthorPage = false;
+  let cookieCount = 0;
+  let validatedUrl: string | null = null;
+  let validatedUrlFinal: string | null = null;
+  const legacyDomainDetected = detectLegacyThreadsSession(persistedBefore);
+  let legacyDomainMigrated = false;
+  let preferredCookieSource: ThreadsAuthDebugResult['preferredCookieSource'] =
+    persistedBefore?.cookies?.length ? 'persisted_session' : threadsAuth.fallbackCookies.length > 0 ? 'env_fallback' : 'none';
+
   try {
-    return await _scrapeInstagramInner();
+    if (!forceLogin && persistedBefore?.cookies?.length) {
+      await context.addCookies(persistedBefore.cookies);
+      const validation = await validateThreadsSession(page, '2454');
+      validatedSearch = validation.validatedSearch;
+      validatedAuthorPage = validation.validatedAuthorPage;
+      validatedUrl = validation.validatedUrl;
+      validatedUrlFinal = validation.validatedUrlFinal;
+      failureReason = validation.failureReason;
+      if (validation.validatedSearch && validation.validatedAuthorPage) {
+        const cookies = await context.cookies([THREADS_CANONICAL_ORIGIN, THREADS_LEGACY_ORIGIN, 'https://www.instagram.com']);
+        cookieCount = cookies.length;
+        sessionModeAfter = 'persisted_session';
+        loginStage = 'validate_search_page';
+        if (persistOnSuccess) {
+          await sessionStore.persistPreferred(
+            buildMetaSessionState({
+              platform: 'threads',
+              cookies,
+              userAgent: browserUserAgent,
+              existing: persistedBefore,
+              lastSuccessfulUrl: validatedUrlFinal ?? validatedUrl,
+            }),
+          );
+        }
+      } else {
+        await sessionStore.clearPreferred('persisted_session_invalid');
+        sessionModeAfter = 'missing';
+        failureReason = 'persisted_session_invalid';
+        legacyDomainMigrated = legacyDomainDetected;
+      }
+    }
+
+    if (sessionModeAfter !== 'persisted_session' && !forceLogin && threadsAuth.fallbackCookies.length > 0) {
+      const fallback = await validateThreadsFallbackCookies({
+        context,
+        page,
+        fallbackCookies: threadsAuth.fallbackCookies,
+        sessionStore,
+        userAgent: browserUserAgent,
+        existingSession: persistedBeforeRaw,
+      });
+      if (fallback?.hasCookies) {
+        sessionModeAfter = 'cookie_fallback';
+        loginStage = 'validate_env_fallback_cookie';
+        failureReason = null;
+        validatedSearch = fallback.validatedSearch;
+        validatedAuthorPage = fallback.validatedAuthorPage;
+        validatedUrl = fallback.validatedUrl;
+        validatedUrlFinal = fallback.validatedUrlFinal;
+        cookieCount = (await context.cookies([THREADS_CANONICAL_ORIGIN, THREADS_LEGACY_ORIGIN, 'https://www.instagram.com'])).length;
+        preferredCookieSource = 'env_fallback';
+      } else if (fallback) {
+        failureReason = `${fallback.failureReason || 'fallback_cookie_invalid'}; missing recommended cookies: ${threadsAuth.missingRecommendedCookieNames.join(', ') || 'none'}`;
+      }
+    }
+
+    if (sessionModeAfter !== 'persisted_session' && sessionModeAfter !== 'cookie_fallback') {
+      const refresh = await tryRefreshMetaSession(page, {
+        platform: 'threads',
+        username: threadsAuth.username,
+        password: threadsAuth.password,
+        sessionStore,
+        userAgent: browserUserAgent,
+        persistOnSuccess,
+      });
+      sessionModeAfter = refresh.sessionMode;
+      loginStage = refresh.loginStage;
+      failureReason = refresh.failureReason || failureReason;
+      validatedSearch = refresh.validatedSearch;
+      validatedAuthorPage = refresh.validatedAuthorPage;
+      cookieCount = refresh.cookieCount;
+      validatedUrl = refresh.validatedUrl;
+      validatedUrlFinal = refresh.validatedUrlFinal;
+      if (legacyDomainDetected && refresh.ok) legacyDomainMigrated = true;
+      if (refresh.ok) preferredCookieSource = 'fresh_login';
+    }
+
+    const hasSessionFile = await fs.access(threadsAuth.sessionStatePath).then(() => true).catch(() => false);
+    await createSourceAudit({
+      connectorRunId,
+      platform: 'threads',
+      targetUrl: validatedUrlFinal || validatedUrl || `${THREADS_CANONICAL_ORIGIN}/login`,
+      status: sessionModeAfter === 'fresh_login' || sessionModeAfter === 'persisted_session' || sessionModeAfter === 'cookie_fallback' ? 'success' : 'failed',
+      htmlContent: await page.content().catch(() => null),
+      screenshotBase64: await page.screenshot({ type: 'png', fullPage: false }).then((buffer) => buffer.toString('base64')).catch(() => null),
+      notes: failureReason || `${sessionModeAfter} auth debug`,
+      metadata: {
+        login_stage: loginStage,
+        session_mode_before: sessionModeBefore,
+        session_mode_after: sessionModeAfter,
+        validated_search: validatedSearch,
+        validated_author_page: validatedAuthorPage,
+        cookie_count: cookieCount,
+        validated_url_final: validatedUrlFinal,
+        legacy_domain_detected: legacyDomainDetected,
+        legacy_domain_migrated: legacyDomainMigrated,
+        config_warning: threadsAuth.configWarning,
+        cookie_diagnostics: cookieDiagnostics(threadsAuth),
+        preferred_cookie_source: preferredCookieSource,
+      },
+    });
+    await finishConnectorRun(
+      connectorRunId,
+      sessionModeAfter === 'fresh_login' || sessionModeAfter === 'persisted_session' || sessionModeAfter === 'cookie_fallback' ? 'success' : 'failed',
+      0,
+      {
+        error_summary: failureReason,
+        metadata: {
+          mode: 'threads_auth_debug',
+          force_login: forceLogin,
+          ignore_fallback_cookies: ignoreFallbackCookies,
+          persist_on_success: persistOnSuccess,
+          session_mode_before: sessionModeBefore,
+          session_mode_after: sessionModeAfter,
+          login_stage: loginStage,
+          validated_search: validatedSearch,
+          validated_author_page: validatedAuthorPage,
+          cookie_count: cookieCount,
+          validated_url: validatedUrl,
+          validated_url_final: validatedUrlFinal,
+          legacy_domain_detected: legacyDomainDetected,
+          legacy_domain_migrated: legacyDomainMigrated,
+          config_warning: threadsAuth.configWarning,
+          cookie_diagnostics: cookieDiagnostics(threadsAuth),
+          preferred_cookie_source: preferredCookieSource,
+        },
+      },
+    );
+    return {
+      sessionModeBefore,
+      sessionModeAfter,
+      loginStage,
+      hasSessionFile,
+      sessionFilePath: threadsAuth.sessionStatePath,
+      cookieCount,
+      validatedSearch,
+      validatedAuthorPage,
+      failureReason,
+      configWarning: threadsAuth.configWarning,
+      legacyDomainDetected,
+      legacyDomainMigrated,
+      validatedUrlFinal,
+      fallbackCookieSource: threadsAuth.fallbackCookieSource,
+      fallbackCookieNames: threadsAuth.fallbackCookieNames,
+      missingRecommendedCookieNames: threadsAuth.missingRecommendedCookieNames,
+      envLastModifiedAt: threadsAuth.envLastModifiedAt,
+      preferredCookieSource,
+    };
+  } catch (error) {
+    failureReason = compactText((error as Error)?.message) || 'threads_auth_debug_failed';
+    await finishConnectorRun(connectorRunId, 'failed', 0, {
+      error_summary: failureReason,
+      metadata: {
+        mode: 'threads_auth_debug',
+        session_mode_before: sessionModeBefore,
+        session_mode_after: sessionModeAfter,
+        login_stage: loginStage,
+        validated_search: validatedSearch,
+        validated_author_page: validatedAuthorPage,
+        cookie_count: cookieCount,
+        validated_url_final: validatedUrlFinal,
+        legacy_domain_detected: legacyDomainDetected,
+        legacy_domain_migrated: legacyDomainMigrated,
+        config_warning: threadsAuth.configWarning,
+        cookie_diagnostics: cookieDiagnostics(threadsAuth),
+        preferred_cookie_source: preferredCookieSource,
+      },
+    }).catch(() => undefined);
+    return {
+      sessionModeBefore,
+      sessionModeAfter,
+      loginStage,
+      hasSessionFile: false,
+      sessionFilePath: threadsAuth.sessionStatePath,
+      cookieCount,
+      validatedSearch,
+      validatedAuthorPage,
+      failureReason,
+      configWarning: threadsAuth.configWarning,
+      legacyDomainDetected,
+      legacyDomainMigrated,
+      validatedUrlFinal,
+      fallbackCookieSource: threadsAuth.fallbackCookieSource,
+      fallbackCookieNames: threadsAuth.fallbackCookieNames,
+      missingRecommendedCookieNames: threadsAuth.missingRecommendedCookieNames,
+      envLastModifiedAt: threadsAuth.envLastModifiedAt,
+      preferredCookieSource,
+    };
+  } finally {
+    await page.close().catch(() => undefined);
+    await context.close().catch(() => undefined);
+    await browser.close().catch(() => undefined);
+  }
+}
+
+async function scrapeInstagram(symbolContext?: SymbolScopedStockContext | null) {
+  try {
+    return await _scrapeInstagramInner(symbolContext);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     if (/executable|chromium|browser|playwright/i.test(msg)) {
       console.warn('[source-sync] instagram: Playwright not available in serverless, falling back to watchlist');
-      return syncGenericWatchlistConnector('instagram');
+      if (symbolContext) {
+        return { connector: 'instagram', recordsWritten: 0, fetchedPosts: 0, entityId: null, errorCode: 'symbol_search_partial', sessionMode: 'missing' as const };
+      }
+      const fallback = await syncGenericWatchlistConnector('instagram');
+      await finishLatestRunningConnector('instagram', fallback.recordsWritten > 0 ? 'partial' : 'failed', fallback.recordsWritten, msg);
+      await upsertCredentialRegistry('instagram', 'invalid', {
+        credential_ref: 'INSTAGRAM_SESSION_STATE/INSTAGRAM_USERNAME/INSTAGRAM_PASSWORD',
+        error_message: 'playwright_unavailable',
+        metadata: { mode: 'fallback_watchlist', records_written: fallback.recordsWritten },
+      });
+      return fallback;
     }
+    await markLatestRunningConnectorFailed('instagram', msg);
     throw err;
   }
 }
 
-async function _scrapeInstagramInner() {
+async function _scrapeInstagramInner(symbolContext?: SymbolScopedStockContext | null) {
   const supabase = getSupabaseServerClient();
-  const connectorRunId = await startConnectorRun('source-sync', 'instagram', { mode: 'playwright_cookie' });
-  const agentRunId = await startAgentRun('source_sync', { connector: 'instagram' });
+  const instagramAuth = resolveMetaAuthConfig('instagram');
+  const instagramSessionStore = createMetaSessionStore('instagram', instagramAuth.sessionStatePath);
+  const persistedInstagramSession = await instagramSessionStore.loadPreferred();
+  const connectorRunId = await startConnectorRun('source-sync', 'instagram', {
+    mode: symbolContext ? 'playwright_author_symbol_filter' : 'playwright_cookie',
+    crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
+    query_symbol: symbolContext?.symbol || null,
+    query_terms: symbolContext?.queryTerms || [],
+    session_mode: persistedInstagramSession ? 'persisted_session' : instagramAuth.fallbackCookies.length > 0 ? 'cookie_fallback' : 'missing',
+    config_error: instagramAuth.configError,
+  });
+  const agentRunId = await startAgentRun('source_sync', { connector: 'instagram', symbol: symbolContext?.symbol || null });
+  const watermarkBefore = await getSourceWatermark('instagram');
 
-  const metaCookies = normalizeMetaCookieSeed();
-  const hasCookies = metaCookies.instagram.length > 0;
+  const browserUserAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+  const initialCookies = persistedInstagramSession?.cookies?.length ? persistedInstagramSession.cookies : instagramAuth.fallbackCookies;
+  let hasCookies = initialCookies.length > 0;
+  let sessionRefreshed = false;
+  let sessionMode: SourceSyncRunShape['sessionMode'] =
+    persistedInstagramSession?.cookies?.length ? 'persisted_session' : initialCookies.length > 0 ? 'cookie_fallback' : 'missing';
 
-  if (!hasCookies) {
-    console.warn('[source-sync] instagram connector skipped: Meta session cookies not configured. Set sessionid, csrftoken, ds_user_id, ig_did, mid, datr, ps_l, ps_n in Vercel env.');
-    await upsertCredentialRegistry('instagram', 'missing', { metadata: { reason: 'no_meta_cookies' } });
-    await finishConnectorRun(connectorRunId, 'skipped', 0, { metadata: { reason: 'missing_credentials' } });
-    await finishAgentRun(agentRunId, 'failed', { reason: 'missing_credentials' });
-    return await syncGenericWatchlistConnector('instagram');
-  }
-
-  const { data, error } = await supabase.from('source_watchlists').select('*').eq('platform', 'instagram').eq('watch_type', 'author').eq('enabled', true).order('priority', { ascending: false });
-  if (error) throw new Error(error.message);
+  const [{ data, error }, stocksRes] = await Promise.all([
+    supabase.from('source_watchlists').select('*').eq('platform', 'instagram').eq('watch_type', 'author').eq('enabled', true).order('priority', { ascending: false }),
+    supabase.from('stocks').select('symbol,name').eq('market', 'TW'),
+  ]);
+  if (error || stocksRes.error) throw new Error(error?.message || stocksRes.error?.message || 'failed loading instagram context');
   const watchlists = (data as Row[]) || [];
+  const stocksRows = (stocksRes.data as Row[]) || [];
+  const validSymbols = new Set(stocksRows.map((row) => compactText(row.symbol).toUpperCase()).filter((item) => /^\d{4}$/.test(item)));
+  const stockNamesBySymbol = new Map(stocksRows.map((row) => [compactText(row.symbol).toUpperCase(), compactText(row.name)] as const));
+  const aliasesBySymbol = new Map(stocksRows.map((row) => {
+    const symbol = compactText(row.symbol).toUpperCase();
+    return [symbol, getSymbolAliases(symbol, compactText(row.name))] as const;
+  }));
 
   const { chromium } = await import('playwright');
   const browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext({ userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' });
-  await context.addCookies(metaCookies.instagram);
+  const context = await browser.newContext({ userAgent: browserUserAgent });
+  if (hasCookies) {
+    await context.addCookies(initialCookies);
+  }
   const page = await context.newPage();
+  if (!hasCookies) {
+    const refreshResult = await tryRefreshMetaSession(page, {
+      platform: 'instagram',
+      username: instagramAuth.username,
+      password: instagramAuth.password,
+      sessionStore: instagramSessionStore,
+      userAgent: browserUserAgent,
+    });
+    sessionRefreshed = refreshResult.ok;
+    hasCookies = refreshResult.ok;
+    if (refreshResult.ok) sessionMode = refreshResult.sessionMode;
+  }
+  if (!hasCookies) {
+    console.warn('[source-sync] instagram connector skipped: Meta session cookies not configured and login refresh failed.');
+    await upsertCredentialRegistry('instagram', 'missing', {
+      credential_ref: 'INSTAGRAM_SESSION_STATE/INSTAGRAM_USERNAME/INSTAGRAM_PASSWORD',
+      metadata: {
+        reason: 'no_meta_cookies_or_login_failed',
+        config_error: instagramAuth.configError,
+        duplicate_legacy_keys: instagramAuth.duplicateLegacyKeys,
+      },
+    });
+    await finishConnectorRun(connectorRunId, 'skipped', 0, {
+      metadata: {
+        reason: 'missing_credentials',
+        config_error: instagramAuth.configError,
+      },
+    });
+    await finishAgentRun(agentRunId, 'failed', { reason: 'missing_credentials', config_error: instagramAuth.configError });
+    await page.close().catch(() => undefined);
+    await context.close().catch(() => undefined);
+    await browser.close().catch(() => undefined);
+    return symbolContext
+      ? { connector: 'instagram', recordsWritten: 0, fetchedPosts: 0, entityId: null, errorCode: 'missing_credentials', sessionMode }
+      : await syncGenericWatchlistConnector('instagram');
+  }
 
   const entity = await upsertSourceEntity({
     platform: 'instagram',
@@ -1757,13 +5553,30 @@ async function _scrapeInstagramInner() {
     sourceKey: 'site.instagram.kol',
   });
 
-  const records: Array<{ title: string; summary: string; contentText: string; publishedAt: string | null; documentUrl: string; symbols: string[] }> = [];
+  const records: Array<{ title: string; summary: string; contentText: string; publishedAt: string | null; documentUrl: string; symbols: string[]; metadata?: Record<string, unknown> }> = [];
   let failedFetches = 0;
+  let duplicateInRun = 0;
+  let fetchedPosts = 0;
 
   try {
-    for (const watchItem of watchlists.slice(0, 5)) {
-      const author = String(watchItem.watch_value || '');
-      const targetUrl = `https://www.instagram.com/${author}/`;
+    const scanTargets = [
+      { author: null as string | null, targetUrl: 'https://www.instagram.com/', sourceSurface: 'instagram_account_feed', crawlMode: 'account_feed' as SourceDocCrawlMode, queryKeyword: 'Instagram 登入首頁推薦流' },
+      { author: null as string | null, targetUrl: 'https://www.instagram.com/explore/', sourceSurface: 'instagram_account_feed', crawlMode: 'account_feed' as SourceDocCrawlMode, queryKeyword: 'Instagram explore feed' },
+      ...BROKER_DISCOVERY_SEARCH_TERMS.slice(0, 4).map((term) => ({
+        author: null as string | null,
+        targetUrl: `https://www.instagram.com/explore/search/keyword/?q=${encodeURIComponent(term)}`,
+        sourceSurface: 'instagram_public_search',
+        crawlMode: 'public_search' as SourceDocCrawlMode,
+        queryKeyword: term,
+      })),
+      ...watchlists.slice(0, 5).map((watchItem) => {
+        const author = String(watchItem.watch_value || '');
+        return { author, targetUrl: `https://www.instagram.com/${author}/`, sourceSurface: 'instagram_author_watch', crawlMode: 'author_watch' as SourceDocCrawlMode, queryKeyword: author };
+      }),
+    ];
+    for (const scanTarget of scanTargets) {
+      const author = scanTarget.author || 'account_feed';
+      const targetUrl = scanTarget.targetUrl;
       try {
         await page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 45_000 });
         await page.waitForTimeout(3000);
@@ -1773,14 +5586,47 @@ async function _scrapeInstagramInner() {
           await createSourceAudit({ connectorRunId, platform: 'instagram', targetUrl, status: 'failed', notes: 'body too short, likely blocked' });
           continue;
         }
-        const captions = bodyText.split('\n').map(compactText).filter((t) => t.length > 30 && !t.startsWith('http')).slice(0, 15);
+        await persistMetaSessionFromContext({
+          platform: 'instagram',
+          context,
+          sessionStore: instagramSessionStore,
+          userAgent: browserUserAgent,
+          lastSuccessfulUrl: targetUrl,
+        });
+        const captions = bodyText.split('\n').map(compactText).filter((t) => t.length > 30 && !t.startsWith('http')).slice(0, 24);
+        const seenInPage = new Set<string>();
         for (const caption of captions) {
-          const symbols = unique((caption.match(/\b\d{4}\b/g) || []));
+          const extracted = extractTwSymbolsWithEvidence(caption, { validSymbols, stockNamesBySymbol, aliasesBySymbol });
+          const symbols = extracted.symbols;
+          if (symbols.length === 0) continue;
           const docUrl = `${targetUrl}#${slugify(caption.slice(0, 40))}`;
-          records.push({ title: `IG @${author}: ${caption.slice(0, 60)}`, summary: caption.slice(0, 300), contentText: caption, publishedAt: null, documentUrl: docUrl, symbols });
+          if (seenInPage.has(docUrl)) {
+            duplicateInRun += 1;
+            continue;
+          }
+          seenInPage.add(docUrl);
+          fetchedPosts += 1;
+          records.push({
+            title: `IG @${author}: ${caption.slice(0, 60)}`,
+            summary: caption.slice(0, 300),
+            contentText: caption,
+            publishedAt: null,
+            documentUrl: docUrl,
+            symbols,
+            metadata: {
+              author: scanTarget.author,
+              target_url: targetUrl,
+              source_surface: scanTarget.sourceSurface,
+              crawl_mode: scanTarget.crawlMode,
+              query_keyword: scanTarget.queryKeyword,
+              matched_symbol_reason: 'tw_symbol_with_name_or_stock_context',
+              session_mode: sessionMode,
+              excluded_false_positives: extracted.excludedFalsePositives,
+            },
+          });
         }
         const screenshot = await page.screenshot({ type: 'png', fullPage: false });
-        await createSourceAudit({ connectorRunId, platform: 'instagram', sourceEntityId: String(entity.id), targetUrl, status: 'success', htmlContent: await page.content(), screenshotBase64: screenshot.toString('base64'), notes: author });
+        await createSourceAudit({ connectorRunId, platform: 'instagram', sourceEntityId: String(entity.id), targetUrl, status: 'success', htmlContent: await page.content(), screenshotBase64: screenshot.toString('base64'), notes: `${scanTarget.sourceSurface}:${author}` });
       } catch (err) {
         failedFetches += 1;
         await createSourceAudit({ connectorRunId, platform: 'instagram', targetUrl, status: 'failed', notes: (err as Error).message });
@@ -1793,7 +5639,7 @@ async function _scrapeInstagramInner() {
   }
 
   const count = await upsertSourceRawDocuments(
-    records.map((item) => ({
+    filterSymbolScopedDocs(records.map((item) => ({
       sourceEntityId: String(entity.id),
       platform: 'instagram',
       documentUrl: item.documentUrl,
@@ -1804,31 +5650,115 @@ async function _scrapeInstagramInner() {
       symbols: item.symbols,
       sentimentLabel: 'neutral',
       confidence: 0.52,
-      metadata: { connector: 'playwright_cookie' },
-    })),
+      metadata: { connector: 'playwright_cookie', ...(item.metadata || {}) },
+    })), 'instagram', symbolContext),
   );
+  const watermarkAfter = await getSourceWatermark('instagram');
 
   const credStatus: 'valid' | 'invalid' = count > 0 && failedFetches < watchlists.length ? 'valid' : 'invalid';
   await upsertCredentialRegistry('instagram', credStatus, {
-    credential_ref: 'sessionid/csrftoken',
-    metadata: { mode: 'playwright_cookie', records_written: count, failed_fetches: failedFetches, watchlist_count: watchlists.length },
+    credential_ref: 'INSTAGRAM_SESSION_STATE/INSTAGRAM_USERNAME/INSTAGRAM_PASSWORD',
+    metadata: {
+      mode: 'playwright_cookie',
+      session_mode: sessionMode,
+      records_written: count,
+      failed_fetches: failedFetches,
+      watchlist_count: watchlists.length,
+      session_refreshed: sessionRefreshed,
+      config_error: instagramAuth.configError,
+      duplicate_legacy_keys: instagramAuth.duplicateLegacyKeys,
+      fallback_cookie_source: instagramAuth.fallbackCookieSource,
+      duplicates_skipped: duplicateInRun,
+      fetched_posts: fetchedPosts,
+      watermark_before: watermarkBefore,
+      watermark_after: watermarkAfter,
+    },
   });
 
   const taskId = await writeAgentTask({ agentRunId, agentRole: 'Source Connector Agent', taskType: 'source-sync', status: 'success', inputPayload: { connector: 'instagram' }, outputSummary: `synced ${count} instagram records` });
   await writeAgentFinding(taskId, `Instagram 同步 ${count} 筆內容`, { confidence: 0.57 });
-  await finishAgentRun(agentRunId, 'success', { connector: 'instagram', records_written: count });
-  await finishConnectorRun(connectorRunId, count > 0 ? 'success' : 'partial', count, { metadata: { entity_id: entity.id } });
-  return { connector: 'instagram', recordsWritten: count, entityId: String(entity.id) };
+  await finishAgentRun(agentRunId, 'success', { connector: 'instagram', records_written: count, symbol: symbolContext?.symbol || null });
+  await finishConnectorRun(connectorRunId, count > 0 ? 'success' : 'partial', count, {
+    metadata: {
+      entity_id: entity.id,
+      crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
+      query_symbol: symbolContext?.symbol || null,
+      query_terms: symbolContext?.queryTerms || [],
+      source_surfaces: unique([
+        ...records.map((item) => compactText(item.metadata?.source_surface)).filter(Boolean),
+        ...(!symbolContext ? ['instagram_account_feed', 'instagram_public_search'] : []),
+        ...(!symbolContext && watchlists.length > 0 ? ['instagram_author_watch'] : []),
+      ]),
+      account_feed_attempted: !symbolContext,
+      session_refreshed: sessionRefreshed,
+      session_mode: sessionMode,
+      duplicates_skipped: duplicateInRun,
+      fetched_posts: fetchedPosts,
+      watermark_before: watermarkBefore,
+      watermark_after: watermarkAfter,
+    },
+  });
+  return {
+    connector: 'instagram',
+    recordsWritten: count,
+    fetchedPosts,
+    entityId: String(entity.id),
+    sessionRefreshed,
+    duplicatesSkipped: duplicateInRun,
+    watermarkBefore,
+    watermarkAfter,
+    errorCode: null,
+    sessionMode,
+  } as SourceSyncRunShape;
 }
 
-async function scrapeTelegram() {
-  const supabase = getSupabaseServerClient();
-  const connectorRunId = await startConnectorRun('source-sync', 'telegram', { mode: 'public_channel_html' });
-  const agentRunId = await startAgentRun('source_sync', { connector: 'telegram' });
+async function scrapeTelegram(symbolContext?: SymbolScopedStockContext | null) {
+  try {
+    return await _scrapeTelegramInner(symbolContext);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    if (symbolContext) {
+      await upsertCredentialRegistry('telegram', TELEGRAM_BOT_TOKEN ? 'invalid' : 'missing', {
+        credential_ref: TELEGRAM_BOT_TOKEN ? 'TELEGRAM_BOT_TOKEN' : null,
+        error_message: msg.slice(0, 500),
+        metadata: { mode: 'symbol_scoped_partial', records_written: 0 },
+      });
+      return { connector: 'telegram', recordsWritten: 0, fetchedPosts: 0, entityId: null, errorCode: 'symbol_search_partial', sessionMode: 'not_applicable' as const };
+    }
+    const fallback = await syncGenericWatchlistConnector('telegram');
+    await finishLatestRunningConnector('telegram', fallback.recordsWritten > 0 ? 'partial' : 'failed', fallback.recordsWritten, msg);
+    await upsertCredentialRegistry('telegram', TELEGRAM_BOT_TOKEN ? 'invalid' : 'missing', {
+      credential_ref: TELEGRAM_BOT_TOKEN ? 'TELEGRAM_BOT_TOKEN' : null,
+      error_message: msg.slice(0, 500),
+      metadata: { mode: 'fallback_watchlist', records_written: fallback.recordsWritten },
+    });
+    return fallback;
+  }
+}
 
-  const { data, error } = await supabase.from('source_watchlists').select('*').eq('platform', 'telegram').eq('enabled', true).order('priority', { ascending: false });
-  if (error) throw new Error(error.message);
+async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | null) {
+  const supabase = getSupabaseServerClient();
+  const connectorRunId = await startConnectorRun('source-sync', 'telegram', {
+    mode: symbolContext ? 'channel_symbol_filter' : 'public_channel_html',
+    crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
+    query_symbol: symbolContext?.symbol || null,
+    query_terms: symbolContext?.queryTerms || [],
+  });
+  const agentRunId = await startAgentRun('source_sync', { connector: 'telegram', symbol: symbolContext?.symbol || null });
+
+  const [{ data, error }, stocksRes] = await Promise.all([
+    supabase.from('source_watchlists').select('*').eq('platform', 'telegram').eq('enabled', true).order('priority', { ascending: false }),
+    supabase.from('stocks').select('symbol,name').eq('market', 'TW'),
+  ]);
+  if (error || stocksRes.error) throw new Error(error?.message || stocksRes.error?.message || 'failed loading telegram context');
   const watchlists = (data as Row[]) || [];
+  const stocksRows = (stocksRes.data as Row[]) || [];
+  const validSymbols = new Set(stocksRows.map((row) => compactText(row.symbol).toUpperCase()).filter((item) => /^\d{4}$/.test(item)));
+  const stockNamesBySymbol = new Map(stocksRows.map((row) => [compactText(row.symbol).toUpperCase(), compactText(row.name)] as const));
+  const aliasesBySymbol = new Map(stocksRows.map((row) => {
+    const symbol = compactText(row.symbol).toUpperCase();
+    return [symbol, getSymbolAliases(symbol, compactText(row.name))] as const;
+  }));
 
   if (watchlists.length === 0) {
     await upsertCredentialRegistry('telegram', 'missing', { metadata: { reason: 'no watchlist' } });
@@ -1844,14 +5774,41 @@ async function scrapeTelegram() {
     sourceKey: 'site.telegram.channels',
   });
 
-  const records: Array<{ title: string; summary: string; contentText: string; publishedAt: string | null; documentUrl: string; symbols: string[] }> = [];
+  const records: Array<{ title: string; summary: string; contentText: string; publishedAt: string | null; documentUrl: string; symbols: string[]; metadata?: Record<string, unknown> }> = [];
+  const channelBreakdown: Array<{
+    channel: string;
+    searched: boolean;
+    fetched_posts: number;
+    matched_symbols: string[];
+    records_written: number;
+    last_success_at: string | null;
+    failure_reason: string | null;
+    excluded_false_positives: number;
+    excluded_examples: string[];
+  }> = [];
+  let fetchedPosts = 0;
 
-  for (const watchItem of watchlists.slice(0, 8)) {
+  const watchByChannel = new Map<string, Row>();
+  for (const watchItem of watchlists) {
     const rawUrl = String(watchItem.watch_value || '');
     const channelMatch = rawUrl.match(/t\.me\/(?:s\/)?([^/?]+)/);
     if (!channelMatch) continue;
-    const channelName = channelMatch[1];
+    const key = channelMatch[1].toLowerCase();
+    if (!watchByChannel.has(key)) watchByChannel.set(key, watchItem);
+  }
+  const channelNames = unique([
+    ...DEFAULT_TELEGRAM_CHANNEL_NAMES,
+    ...Array.from(watchByChannel.keys()),
+  ]).slice(0, 12);
+
+  for (const channelNameRaw of channelNames) {
+    const channelName = channelNameRaw.replace(/^@/, '');
     const previewUrl = `https://t.me/s/${channelName}`;
+    const channelRecordsBefore = records.length;
+    const channelSymbols = new Set<string>();
+    const channelExclusions: Array<{ token: string; reason: string }> = [];
+    let channelFetchedPosts = 0;
+    let channelFailure: string | null = null;
 
     try {
       const html = await fetch(previewUrl, { headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0' }, signal: AbortSignal.timeout(15_000) }).then((res) => res.text());
@@ -1863,15 +5820,55 @@ async function scrapeTelegram() {
         const msgText = compactText(rawMsg);
         if (msgText.length < 15) continue;
         const publishedAt = safeDateString(dateMatches[i]?.[1] || null);
-        const symbols = unique((msgText.match(/\b\d{4}\b/g) || []));
+        const extracted = extractTwSymbolsWithEvidence(msgText, { validSymbols, stockNamesBySymbol, aliasesBySymbol });
+        const symbols = extracted.symbols;
+        channelExclusions.push(...extracted.excludedFalsePositives);
+        for (const symbol of symbols) channelSymbols.add(symbol);
         const docUrl = `${previewUrl}#msg-${i}`;
-        records.push({ title: `Telegram @${channelName}: ${msgText.slice(0, 60)}`, summary: msgText.slice(0, 300), contentText: msgText, publishedAt, documentUrl: docUrl, symbols });
+        fetchedPosts += 1;
+        channelFetchedPosts += 1;
+        if (symbols.length === 0) continue;
+        records.push({
+          title: `Telegram @${channelName}: ${msgText.slice(0, 60)}`,
+          summary: msgText.slice(0, 300),
+          contentText: msgText,
+          publishedAt,
+          documentUrl: docUrl,
+          symbols,
+          metadata: {
+            channel_name: channelName,
+            source_mode: 'public_channel_html',
+            source_surface: 'telegram_public_channel',
+            crawl_mode: 'channel_scan',
+            match_reason: 'tw_symbol_with_name_or_stock_context',
+            excluded_false_positives: extracted.excludedFalsePositives,
+          },
+        });
       }
 
-      await createSourceAudit({ connectorRunId, platform: 'telegram', sourceEntityId: String(entity.id), targetUrl: previewUrl, status: records.length > 0 ? 'success' : 'partial', notes: channelName });
+      await createSourceAudit({
+        connectorRunId,
+        platform: 'telegram',
+        sourceEntityId: String(entity.id),
+        targetUrl: previewUrl,
+        status: records.length > channelRecordsBefore ? 'success' : 'partial',
+        notes: `${channelName}; fetched=${channelFetchedPosts}; matched=${channelSymbols.size}`,
+      });
     } catch (err) {
-      await createSourceAudit({ connectorRunId, platform: 'telegram', targetUrl: previewUrl, status: 'failed', notes: (err as Error).message });
+      channelFailure = (err as Error).message;
+      await createSourceAudit({ connectorRunId, platform: 'telegram', targetUrl: previewUrl, status: 'failed', notes: channelFailure });
     }
+    channelBreakdown.push({
+      channel: channelName,
+      searched: true,
+      fetched_posts: channelFetchedPosts,
+      matched_symbols: [...channelSymbols],
+      records_written: Math.max(0, records.length - channelRecordsBefore),
+      last_success_at: channelFetchedPosts > 0 ? new Date().toISOString() : null,
+      failure_reason: channelFailure,
+      excluded_false_positives: channelExclusions.length,
+      excluded_examples: channelExclusions.slice(0, 8).map((item) => `${item.token}:${item.reason}`),
+    });
   }
 
   // Bot token mode: always collect from all groups the bot is a member of (public + private)
@@ -1896,8 +5893,26 @@ async function scrapeTelegram() {
           const chatTitle = msg.chat?.title || msg.chat?.username || String(msg.chat?.id || 'unknown');
           const chatHandle = msg.chat?.username ? `https://t.me/${msg.chat.username}` : `tg://chat?id=${msg.chat?.id}`;
           const publishedAt = msg.date ? new Date(msg.date * 1000).toISOString() : null;
-          const symbols = unique((msgText.match(/\b\d{4}\b/g) || []));
-          records.push({ title: `Telegram @${chatTitle}: ${msgText.slice(0, 60)}`, summary: msgText.slice(0, 300), contentText: msgText, publishedAt, documentUrl: chatHandle, symbols });
+          const extracted = extractTwSymbolsWithEvidence(msgText, { validSymbols, stockNamesBySymbol, aliasesBySymbol });
+          const symbols = extracted.symbols;
+          if (symbols.length === 0) continue;
+          fetchedPosts += 1;
+          records.push({
+            title: `Telegram @${chatTitle}: ${msgText.slice(0, 60)}`,
+            summary: msgText.slice(0, 300),
+            contentText: msgText,
+            publishedAt,
+            documentUrl: chatHandle,
+            symbols,
+            metadata: {
+              chat_title: chatTitle,
+              source_mode: 'bot_getUpdates',
+              source_surface: 'telegram_bot_channel_or_group',
+              crawl_mode: 'channel_scan',
+              match_reason: 'tw_symbol_with_name_or_stock_context',
+              excluded_false_positives: extracted.excludedFalsePositives,
+            },
+          });
           // Auto-register newly seen private groups (chat_id based)
           const chatId = msg.chat?.id;
           if (chatId && !seenChatIds.has(chatId)) {
@@ -1925,11 +5940,12 @@ async function scrapeTelegram() {
       mode: TELEGRAM_BOT_TOKEN ? 'html_plus_bot_getUpdates' : 'public_channel_html',
       bot_token_valid: botTokenValid,
       records_written: records.length,
+      channel_breakdown: channelBreakdown,
     },
   });
 
   const count = await upsertSourceRawDocuments(
-    records.map((item) => ({
+    filterSymbolScopedDocs(records.map((item) => ({
       sourceEntityId: String(entity.id),
       platform: 'telegram',
       documentUrl: item.documentUrl,
@@ -1940,15 +5956,216 @@ async function scrapeTelegram() {
       symbols: item.symbols,
       sentimentLabel: 'neutral',
       confidence: 0.5,
-      metadata: { connector: 'public_channel_html' },
-    })),
+      metadata: { connector: 'public_channel_html', ...(item.metadata || {}) },
+    })), 'telegram', symbolContext),
   );
 
   const taskId = await writeAgentTask({ agentRunId, agentRole: 'Source Connector Agent', taskType: 'source-sync', status: 'success', inputPayload: { connector: 'telegram' }, outputSummary: `synced ${count} telegram records` });
   await writeAgentFinding(taskId, `Telegram 同步 ${count} 筆訊息`, { confidence: 0.55 });
-  await finishAgentRun(agentRunId, 'success', { connector: 'telegram', records_written: count });
-  await finishConnectorRun(connectorRunId, count > 0 ? 'success' : 'partial', count, { metadata: { entity_id: entity.id } });
-  return { connector: 'telegram', recordsWritten: count, entityId: String(entity.id) };
+  await finishAgentRun(agentRunId, 'success', { connector: 'telegram', records_written: count, symbol: symbolContext?.symbol || null });
+  await finishConnectorRun(connectorRunId, count > 0 ? 'success' : 'partial', count, {
+    metadata: {
+      entity_id: entity.id,
+      fetched_posts: fetchedPosts,
+      channel_breakdown: channelBreakdown,
+      crawl_mode: symbolContext ? 'symbol_scoped' : 'channel_scan',
+      source_surface: 'telegram_public_channels',
+      query_symbol: symbolContext?.symbol || null,
+      query_terms: symbolContext?.queryTerms || [],
+    },
+  });
+  return { connector: 'telegram', recordsWritten: count, fetchedPosts, entityId: String(entity.id), errorCode: null };
+}
+
+function parseTwNumber(value: unknown) {
+  const text = compactText(value).replace(/[,\s]/g, '');
+  if (!text) return null;
+  const parsed = Number(text);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function parseRocDateToIso(input: unknown) {
+  const digits = compactText(input).replace(/\D/g, '');
+  if (digits.length < 6) return null;
+  if (digits.length === 7) {
+    const rocYear = Number(digits.slice(0, 3));
+    const month = Number(digits.slice(3, 5));
+    const day = Number(digits.slice(5, 7));
+    if (!Number.isFinite(rocYear) || month < 1 || month > 12 || day < 1 || day > 31) return null;
+    const year = rocYear + 1911;
+    return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}T00:00:00+08:00`;
+  }
+  if (digits.length === 8) {
+    const year = Number(digits.slice(0, 4));
+    const month = Number(digits.slice(4, 6));
+    const day = Number(digits.slice(6, 8));
+    if (!Number.isFinite(year) || month < 1 || month > 12 || day < 1 || day > 31) return null;
+    return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}T00:00:00+08:00`;
+  }
+  return null;
+}
+
+async function scrapeTwseInsider(symbolContext?: SymbolScopedStockContext | null) {
+  const connectorRunId = await startConnectorRun('source-sync', 'twse_insider', {
+    mode: symbolContext ? 'openapi_twse_symbol' : 'openapi_twse',
+    crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
+    query_symbol: symbolContext?.symbol || null,
+    query_terms: symbolContext?.queryTerms || [],
+  });
+  const agentRunId = await startAgentRun('source_sync', { connector: 'twse_insider', symbol: symbolContext?.symbol || null });
+  const entity = await upsertSourceEntity({
+    platform: 'twse_insider',
+    entityType: 'site',
+    displayName: 'TWSE 內部人持股揭露',
+    sourceKey: 'site.twse.insider',
+    profileUrl: 'https://openapi.twse.com.tw/',
+  });
+
+  const datasets = [
+    {
+      url: 'https://openapi.twse.com.tw/v1/opendata/t187ap11_L',
+      kind: 'holding',
+      label: '上市公司董監事持股餘額',
+    },
+    {
+      url: 'https://openapi.twse.com.tw/v1/opendata/t187ap11_P',
+      kind: 'holding',
+      label: '公發公司董監事持股餘額',
+    },
+    {
+      url: 'https://openapi.twse.com.tw/v1/opendata/t187ap12_L',
+      kind: 'transfer',
+      label: '內部人持股轉讓申報',
+    },
+  ] as const;
+
+  const records: Array<{
+    sourceEntityId: string;
+    platform: string;
+    documentUrl: string;
+    title: string;
+    summary: string;
+    contentText: string;
+    publishedAt: string | null;
+    symbols: string[];
+    sentimentLabel: 'bullish' | 'neutral' | 'bearish';
+    confidence: number;
+    metadata: Record<string, unknown>;
+  }> = [];
+
+  for (const dataset of datasets) {
+    try {
+      const rows = await fetch(dataset.url, {
+        headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0', accept: 'application/json' },
+        signal: AbortSignal.timeout(20_000),
+      }).then((res) => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`)))) as Row[];
+      const selected = Array.isArray(rows)
+        ? rows
+            .filter((row) => {
+              if (!symbolContext) return true;
+              return compactText(row['公司代號']) === symbolContext.symbol;
+            })
+            .slice(0, symbolContext ? 60 : 500)
+        : [];
+      for (const row of selected) {
+        const symbol = compactText(row['公司代號']);
+        if (!/^[1-9]\d{3}$/.test(symbol)) continue;
+        const companyName = compactText(row['公司名稱']) || symbol;
+        const role = compactText(row['職稱'] || row['申報人身分']) || '內部人';
+        const person = compactText(row['姓名']) || '未揭露';
+        const issueDate = compactText(row['出表日期']) || compactText(row['申報日期']) || '';
+        const publishedAt = parseRocDateToIso(issueDate);
+        const currentHolding = parseTwNumber(row['目前持股']);
+        const electedHolding = parseTwNumber(row['選任時持股'] || row['選任時持股 ']);
+        const transferMethod = compactText(row['預定轉讓方式及股數-轉讓方式']);
+        const transferShares = parseTwNumber(row['預定轉讓方式及股數-擬轉讓股數']);
+        const deltaHolding =
+          currentHolding != null && electedHolding != null
+            ? currentHolding - electedHolding
+            : null;
+        const sentimentLabel: 'bullish' | 'neutral' | 'bearish' =
+          dataset.kind === 'transfer'
+            ? 'bearish'
+            : deltaHolding != null && deltaHolding > 0
+              ? 'bullish'
+              : 'neutral';
+        const deltaText =
+          deltaHolding == null
+            ? '持股變化資料不足'
+            : `選任時 ${electedHolding?.toLocaleString() || '-'} 股，現在 ${currentHolding?.toLocaleString() || '-'} 股，變化 ${deltaHolding > 0 ? '+' : ''}${deltaHolding.toLocaleString()} 股`;
+        const summary =
+          dataset.kind === 'transfer'
+            ? `${companyName}(${symbol}) ${role} ${person} 申報轉讓 ${transferShares?.toLocaleString() || '-'} 股（${transferMethod || '方式未標記'}）。`
+            : `${companyName}(${symbol}) ${role} ${person} 董監持股揭露：${deltaText}。`;
+        records.push({
+          sourceEntityId: String(entity.id),
+          platform: 'twse_insider',
+          documentUrl: dataset.url,
+          title: `${dataset.label}｜${companyName}(${symbol})`,
+          summary: summary.slice(0, 500),
+          contentText: JSON.stringify(row).slice(0, 4000),
+          publishedAt,
+          symbols: [symbol],
+          sentimentLabel,
+          confidence: dataset.kind === 'transfer' ? 0.58 : 0.66,
+          metadata: {
+            connector: 'openapi_twse',
+            dataset: dataset.url,
+            issue_date: issueDate || null,
+            role,
+            person,
+            delta_holding: deltaHolding,
+            transfer_shares: transferShares,
+          },
+        });
+      }
+      await createSourceAudit({
+        connectorRunId,
+        platform: 'twse_insider',
+        sourceEntityId: String(entity.id),
+        targetUrl: dataset.url,
+        status: selected.length > 0 ? 'success' : 'partial',
+        notes: `${dataset.label} rows=${selected.length}`,
+      });
+    } catch (error) {
+      await createSourceAudit({
+        connectorRunId,
+        platform: 'twse_insider',
+        sourceEntityId: String(entity.id),
+        targetUrl: dataset.url,
+        status: 'failed',
+        notes: (error as Error).message.slice(0, 500),
+      });
+    }
+  }
+
+  const count = await upsertSourceRawDocuments(filterSymbolScopedDocs(records, 'twse_insider', symbolContext));
+  await upsertCredentialRegistry('twse_insider', count > 0 ? 'valid' : 'invalid', {
+    credential_ref: 'public_openapi',
+    metadata: { mode: 'openapi_twse', records_written: count },
+  });
+  const taskId = await writeAgentTask({
+    agentRunId,
+    agentRole: 'Source Connector Agent',
+    taskType: 'source-sync',
+    status: 'success',
+    inputPayload: { connector: 'twse_insider' },
+    outputSummary: `synced ${count} twse insider records`,
+  });
+  await writeAgentFinding(taskId, `TWSE 內部人揭露同步 ${count} 筆`, {
+    finding_type: 'source_signal',
+    confidence: 0.63,
+  });
+  await finishAgentRun(agentRunId, 'success', { connector: 'twse_insider', records_written: count, symbol: symbolContext?.symbol || null });
+  await finishConnectorRun(connectorRunId, count > 0 ? 'success' : 'partial', count, {
+    metadata: {
+      entity_id: entity.id,
+      crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
+      query_symbol: symbolContext?.symbol || null,
+      query_terms: symbolContext?.queryTerms || [],
+    },
+  });
+  return { connector: 'twse_insider', recordsWritten: count, entityId: String(entity.id) };
 }
 
 export async function runReportIngest(options?: { dryRun?: boolean }) {
@@ -2025,12 +6242,33 @@ export async function runReportIngest(options?: { dryRun?: boolean }) {
   return { runId: randomUUID(), dryRun, filesFound: files.length, recordsWritten };
 }
 
-export async function runSourceSync(options?: { connector?: string; dryRun?: boolean }) {
+export async function runSourceSync(options?: SourceSyncOptions): Promise<SourceSyncRunShape & { runId: string; dryRun: boolean }> {
   const connector = options?.connector || 'investanchors';
   const dryRun = Boolean(options?.dryRun);
-  if (dryRun) return { runId: randomUUID(), dryRun, connector, recordsWritten: 0 };
+  const symbolContext = options?.symbol ? await resolveSymbolScopedStockContext(options.symbol) : null;
+  const defaultSessionMode: SourceSyncRunShape['sessionMode'] = connector === 'threads' || connector === 'instagram' ? 'missing' : 'not_applicable';
+  if (dryRun) {
+    return {
+      runId: randomUUID(),
+      dryRun,
+      connector,
+      recordsWritten: 0,
+      fetchedPosts: 0,
+      entityId: null,
+      watermarkBefore: null,
+      watermarkAfter: null,
+      duplicatesSkipped: 0,
+      sessionRefreshed: false,
+      errorCode: null,
+      matchedDirectHits: 0,
+      matchedIndustryHits: 0,
+      degradedReason: null,
+      timedOut: false,
+      sessionMode: defaultSessionMode,
+    };
+  }
 
-  const mapping: Record<string, () => Promise<{ connector: string; recordsWritten: number; entityId: string | null }>> = {
+  const mapping: Record<string, (context?: SymbolScopedStockContext | null) => Promise<SourceSyncRunShape>> = {
     investanchors: scrapeInvestAnchors,
     ptt: scrapePttStock,
     bulltalk: scrapeBullTalk,
@@ -2041,31 +6279,211 @@ export async function runSourceSync(options?: { connector?: string; dryRun?: boo
     threads: scrapeThreads,
     instagram: scrapeInstagram,
     telegram: scrapeTelegram,
+    twse_insider: scrapeTwseInsider,
   };
   const runner = mapping[connector];
   if (!runner) throw new Error(`unsupported connector: ${connector}`);
-  const result = await runner();
-  return { runId: randomUUID(), dryRun, ...result };
+  const watermarkBefore = await getSourceWatermark(connector);
+  const browserConnector = new Set(['investanchors', 'threads', 'instagram']).has(connector);
+  if (process.env.VERCEL && browserConnector) {
+    const connectorRunId = await startConnectorRun('source-sync', connector, {
+      mode: 'vercel_status_only',
+      reason: 'playwright_runtime_unavailable',
+      searched_targets: symbolContext ? ['symbol_scoped'] : ['visible_symbols', 'theme_keywords'],
+      query_symbol: symbolContext?.symbol || null,
+    });
+    await finishConnectorRun(connectorRunId, 'skipped', 0, {
+      error_summary: 'playwright_runtime_unavailable',
+      metadata: {
+        mode: 'vercel_status_only',
+        status_owner: 'serverless_status',
+        reason: 'browser connector is owned by local launchd worker',
+        query_symbol: symbolContext?.symbol || null,
+        searched_targets: symbolContext ? ['symbol_scoped'] : ['visible_symbols', 'theme_keywords'],
+      },
+    });
+    return {
+      runId: connectorRunId,
+      dryRun,
+      connector,
+      recordsWritten: 0,
+      fetchedPosts: 0,
+      entityId: null,
+      watermarkBefore,
+      watermarkAfter: watermarkBefore,
+      duplicatesSkipped: 0,
+      sessionRefreshed: false,
+      errorCode: 'playwright_runtime_unavailable',
+      matchedDirectHits: 0,
+      matchedIndustryHits: 0,
+      degradedReason: 'playwright_runtime_unavailable',
+      timedOut: false,
+      sessionMode: defaultSessionMode,
+    };
+  }
+  const selfManagedConnector = new Set(['investanchors', 'threads', 'instagram', 'telegram', 'twse_insider']).has(connector);
+  if (selfManagedConnector) {
+    const result = await runner(symbolContext);
+    return {
+      runId: randomUUID(),
+      dryRun,
+      ...result,
+      fetchedPosts: result.fetchedPosts ?? result.recordsWritten,
+      watermarkBefore: result.watermarkBefore ?? watermarkBefore,
+      watermarkAfter: result.watermarkAfter ?? (await getSourceWatermark(connector)),
+      duplicatesSkipped: result.duplicatesSkipped ?? 0,
+      sessionRefreshed: result.sessionRefreshed ?? false,
+      errorCode: result.errorCode ?? null,
+      matchedDirectHits: result.matchedDirectHits ?? 0,
+      matchedIndustryHits: result.matchedIndustryHits ?? 0,
+      degradedReason: result.degradedReason ?? null,
+      timedOut: result.timedOut ?? false,
+      sessionMode: result.sessionMode ?? defaultSessionMode,
+    };
+  }
+
+  const connectorRunId = await startConnectorRun('source-sync', connector, { mode: 'public_http' });
+  const startedAtMs = Date.now();
+  let result: SourceSyncRunShape | null = null;
+  try {
+    result = await runner(symbolContext);
+    const durationMs = Date.now() - startedAtMs;
+    await finishConnectorRun(
+      connectorRunId,
+      result.recordsWritten > 0 ? 'success' : 'partial',
+      result.recordsWritten,
+      {
+        metadata: {
+          mode: symbolContext ? 'symbol_scoped_http' : 'public_http',
+          duration_ms: durationMs,
+          entity_id: result.entityId,
+          crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
+          query_symbol: symbolContext?.symbol || null,
+          query_terms: symbolContext?.queryTerms || [],
+          matched_direct_hits: result.matchedDirectHits ?? 0,
+          matched_industry_hits: result.matchedIndustryHits ?? 0,
+          degraded_reason: result.degradedReason ?? null,
+          ...(result.metadata || {}),
+        },
+      },
+    );
+    await upsertCredentialRegistry(connector, result.recordsWritten > 0 ? 'valid' : 'invalid', {
+      credential_ref: 'public_http',
+      error_message: result.recordsWritten > 0 ? null : 'no_records_written',
+      metadata: {
+        mode: symbolContext ? 'symbol_scoped_http' : 'public_http',
+        duration_ms: durationMs,
+        records_written: result.recordsWritten,
+        crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
+        query_symbol: symbolContext?.symbol || null,
+        matched_direct_hits: result.matchedDirectHits ?? 0,
+        matched_industry_hits: result.matchedIndustryHits ?? 0,
+        degraded_reason: result.degradedReason ?? null,
+        ...(result.metadata || {}),
+      },
+    });
+  } catch (error) {
+    const durationMs = Date.now() - startedAtMs;
+    const message = (error as Error).message || String(error);
+    await finishConnectorRun(connectorRunId, 'failed', 0, {
+      error_summary: message.slice(0, 500),
+      metadata: {
+        mode: symbolContext ? 'symbol_scoped_http' : 'public_http',
+        duration_ms: durationMs,
+        crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
+        query_symbol: symbolContext?.symbol || null,
+      },
+    });
+    await upsertCredentialRegistry(connector, 'invalid', {
+      credential_ref: 'public_http',
+      error_message: message.slice(0, 500),
+      metadata: {
+        mode: symbolContext ? 'symbol_scoped_http' : 'public_http',
+        duration_ms: durationMs,
+        records_written: 0,
+        crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
+        query_symbol: symbolContext?.symbol || null,
+      },
+    });
+    throw error;
+  }
+  if (!result) throw new Error(`connector result missing: ${connector}`);
+  return {
+    runId: randomUUID(),
+    dryRun,
+    ...result,
+    fetchedPosts: result.fetchedPosts ?? result.recordsWritten,
+    watermarkBefore,
+    watermarkAfter: await getSourceWatermark(connector),
+    duplicatesSkipped: 0,
+    sessionRefreshed: false,
+    errorCode: result.errorCode ?? null,
+    matchedDirectHits: result.matchedDirectHits ?? 0,
+    matchedIndustryHits: result.matchedIndustryHits ?? 0,
+    degradedReason: result.degradedReason ?? null,
+    timedOut: result.timedOut ?? false,
+    sessionMode: result.sessionMode ?? 'not_applicable',
+  };
+}
+
+function detectSocialBrokerSignal(text: string) {
+  const normalized = compactText(text);
+  if (!normalized) return null;
+  const brokerName =
+    US_BROKER_KEYWORDS.find((keyword) => new RegExp(keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(normalized)) || null;
+  const hasValuationKeyword = BROKER_VALUATION_KEYWORDS.some((keyword) =>
+    new RegExp(keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(normalized),
+  );
+  if (!brokerName || !hasValuationKeyword) return null;
+  const targetMatch =
+    normalized.match(/(?:目標價|target price|TP|上看|調升至)\s*(?:NT\$|新台幣|台幣|TWD|\$|：|:)?\s*(\d{2,5}(?:\.\d{1,2})?)/i) ||
+    normalized.match(/(?:目標價|target price|TP)[^\d]{0,20}(\d{2,5}(?:\.\d{1,2})?)/i);
+  const epsMatch =
+    normalized.match(/(?:Forward\s*)?EPS(?:\s*\(?\d{4}\)?)?[^\d]{0,20}(\d{1,4}(?:\.\d{1,2})?)/i) ||
+    normalized.match(/(?:每股盈餘|EPS預估|EPS估)[^\d]{0,20}(\d{1,4}(?:\.\d{1,2})?)/i);
+  return {
+    brokerName,
+    targetPrice: targetMatch ? Number(targetMatch[1]) : null,
+    forwardEps: epsMatch ? Number(epsMatch[1]) : null,
+    summary: normalized.slice(0, 700),
+  };
 }
 
 export async function runSourceDiscovery(options?: { dryRun?: boolean }) {
   const dryRun = Boolean(options?.dryRun);
   const supabase = getSupabaseServerClient();
-  const { data, error } = await supabase
-    .from('source_raw_documents')
-    .select('*')
-    .order('collected_at', { ascending: false })
-    .limit(80);
-  if (error) throw new Error(error.message);
-  const documents = (data as Row[]) || [];
+  const [docsRes, investanchorsDocsRes, stocksRes] = await Promise.all([
+    supabase
+      .from('source_raw_documents')
+      .select('id,platform,title,summary,document_url,symbols,collected_at,published_at,metadata,source_entity_id,confidence')
+      .order('collected_at', { ascending: false })
+      .limit(80),
+    supabase
+      .from('source_raw_documents')
+      .select('id,platform,title,summary,document_url,symbols,collected_at,published_at,metadata,source_entity_id,confidence')
+      .eq('platform', 'investanchors')
+      .order('collected_at', { ascending: false })
+      .limit(160),
+    supabase.from('stocks').select('id,symbol,name,market').eq('market', 'TW').limit(3000),
+  ]);
+  if (docsRes.error || investanchorsDocsRes.error || stocksRes.error) {
+    throw new Error(docsRes.error?.message || investanchorsDocsRes.error?.message || stocksRes.error?.message || 'Failed to load source discovery inputs');
+  }
+  const documents = (docsRes.data as Row[]) || [];
+  const investanchorsDocuments = (investanchorsDocsRes.data as Row[]) || [];
+  const stockBySymbol = new Map<string, Row>();
+  for (const stock of (stocksRes.data as Row[]) || []) {
+    const symbol = String(stock.symbol || '');
+    if (symbol) stockBySymbol.set(symbol, stock);
+  }
   const candidates: Array<{ platform: string; candidate_name: string; candidate_url: string | null; reason: string; evidence: Record<string, unknown> }> = [];
 
   for (const doc of documents) {
-    const content = `${doc.title || ''}\n${doc.summary || ''}\n${doc.content_text || ''}`;
+    const content = `${doc.title || ''}\n${doc.summary || ''}\n${doc.document_url || ''}`;
     const urls = Array.from(String(content).matchAll(/https?:\/\/[^\s)]+/g)).map((match) => match[0]);
     for (const url of urls) {
       let platform = 'unknown';
-      if (url.includes('threads.net')) platform = 'threads';
+      if (url.includes('threads.net') || url.includes('threads.com')) platform = 'threads';
       else if (url.includes('instagram.com')) platform = 'instagram';
       else if (url.includes('t.me')) platform = 'telegram';
       else if (url.includes('youtube.com') || url.includes('youtu.be')) platform = 'kol';
@@ -2084,33 +6502,312 @@ export async function runSourceDiscovery(options?: { dryRun?: boolean }) {
     .map((key) => candidates.find((item) => `${item.platform}|${item.candidate_url}` === key))
     .filter(Boolean) as typeof candidates;
 
+  const asOfDate = asDate();
+  const extractedInvestanchorsSymbols = new Set<string>();
+  const investanchorsRows: Array<Record<string, unknown>> = [];
+  const extractMentionedSymbols = (doc: Row) => {
+    const explicit = Array.isArray(doc.symbols) ? (doc.symbols as unknown[]).map(String) : [];
+    const text = `${doc.title || ''}\n${doc.summary || ''}`;
+    const textSymbols = Array.from(text.matchAll(/[【\[(（]\s*(\d{4})\s*[】\])）]/g)).map((match) => match[1]);
+    return unique([...explicit, ...textSymbols])
+      .map((symbol) => symbol.trim())
+      .filter((symbol) => {
+        if (!/^\d{4}$/.test(symbol)) return false;
+        const stock = stockBySymbol.get(symbol);
+        if (!stock) return false;
+        const stockName = compactText(stock.name || '');
+        return textSymbols.includes(symbol) || (stockName.length >= 2 && stockName !== symbol && !/^\d+$/.test(stockName) && text.includes(stockName));
+      });
+  };
+
+  for (const doc of investanchorsDocuments) {
+    const symbols = extractMentionedSymbols(doc);
+    if (symbols.length === 0) continue;
+    const sourceTitle = compactText(doc.title || '定錨投筆提及個股').slice(0, 120);
+    const sourceSummary = compactText(doc.summary || '').slice(0, 500);
+    for (const symbol of symbols) {
+      const stock = stockBySymbol.get(symbol);
+      if (!stock) continue;
+      const stockId = String(stock.id || '');
+      const key = `${stockId}|investanchors_candidate|${asOfDate}`;
+      if (!stockId || extractedInvestanchorsSymbols.has(key)) continue;
+      extractedInvestanchorsSymbols.add(key);
+      investanchorsRows.push({
+        stock_id: stockId,
+        story_type: 'operating_turnaround',
+        title: `定錨提及 ${symbol}：${sourceTitle || String(stock.name || symbol)}`,
+        summary:
+          sourceSummary ||
+          `定錨投筆近期提及 ${symbol}，已先納入候選池；升級首頁前仍需補官方、財務與估值 bridge 驗證。`,
+        catalyst_summary: `定錨提及 ${symbol}，來源已進候選池；目前 verification=pending，需確認官方資料、月營收與估值橋接後才能升級推薦。`,
+        thesis_state: 'signal_candidate',
+        confidence: 0.42,
+        novelty_score: 0.58,
+        evidence_score: 0.25,
+        timing_score: 0,
+        verification_status: '未證實',
+        conditional_recommendation_note: '定錨提及已進候選池；待官方資料、財務快照、估值 bridge 與技術時機通過 audit 後才可升級首頁推薦。',
+        source_mix: [
+          {
+            source: '定錨投筆',
+            sourceType: 'investanchors',
+            title: sourceTitle,
+            summary: sourceSummary,
+            sourceUrl: doc.document_url || null,
+            verification: 'pending',
+          },
+        ],
+        related_themes: ['investanchors'],
+        discovered_at: nowIso(),
+        as_of_date: asOfDate,
+        updated_at: nowIso(),
+      });
+    }
+  }
+
+  const socialBrokerDocs: Array<Record<string, unknown>> = [];
+  const socialBrokerMentionRows: Array<Record<string, unknown>> = [];
+  const socialBrokerCandidateRows: Array<Record<string, unknown>> = [];
+  const socialBrokerSeen = new Set<string>();
+  for (const doc of documents) {
+    const platform = compactText(doc.platform || '').toLowerCase();
+    if (!['threads', 'instagram', 'telegram', 'bulltalk', 'ptt', 'kol', 'youtube', 'podcast'].includes(platform)) continue;
+    const text = `${doc.title || ''}\n${doc.summary || ''}\n${doc.content_text || ''}`;
+    const brokerSignal = detectSocialBrokerSignal(text);
+    if (!brokerSignal) continue;
+    const symbols = extractMentionedSymbols(doc);
+    if (symbols.length === 0) continue;
+    for (const symbol of symbols) {
+      const stock = stockBySymbol.get(symbol);
+      if (!stock) continue;
+      const stockId = String(stock.id || '');
+      const reportDate = doc.published_at
+        ? String(doc.published_at).slice(0, 10)
+        : doc.collected_at
+          ? String(doc.collected_at).slice(0, 10)
+          : asOfDate;
+      const sourceUrl = String(doc.document_url || '');
+      const key = `${stockId}|${sourceUrl}|${brokerSignal.brokerName}`;
+      if (!stockId || socialBrokerSeen.has(key)) continue;
+      socialBrokerSeen.add(key);
+      const filePath = `social_broker_leak/${symbol}/${slugify(platform)}/${slugify(sourceUrl || String(doc.id || randomUUID())).slice(0, 100)}`;
+      socialBrokerDocs.push({
+        stock_id: stockId,
+        broker_name: brokerSignal.brokerName,
+        report_date: reportDate || asOfDate,
+        file_name: `social_broker_leak_${symbol}_${slugify(brokerSignal.brokerName)}_${reportDate || asOfDate}`,
+        file_path: filePath,
+        source_mode: 'social_broker_leak',
+        rating: null,
+        target_price: brokerSignal.targetPrice,
+        thesis_title: `社群轉述 ${brokerSignal.brokerName}：${symbol} 券商目標價 / EPS 線索`,
+        extracted_summary: brokerSignal.summary,
+        raw_text: String(text || '').slice(0, 8000),
+        metadata: {
+          source: 'social_broker_leak',
+          platform,
+          source_document_id: doc.id || null,
+          source_document_url: sourceUrl || null,
+          crawl_mode: (doc.metadata as Row | null)?.crawl_mode || null,
+          source_surface: (doc.metadata as Row | null)?.source_surface || null,
+          query_keyword: (doc.metadata as Row | null)?.query_keyword || null,
+          target_price_extracted: brokerSignal.targetPrice,
+          forward_eps_extracted: brokerSignal.forwardEps,
+          formal_base_eligible: false,
+          source_quality: 'social_broker_leak_requires_confirmation',
+          extracted_by: 'deterministic_broker_keyword_parser',
+        },
+        updated_at: nowIso(),
+      });
+      socialBrokerMentionRows.push({
+        stock_id: stockId,
+        symbol,
+        source_document_id: doc.id || null,
+        platform,
+        broker_name: brokerSignal.brokerName,
+        target_price: brokerSignal.targetPrice,
+        forward_eps: brokerSignal.forwardEps,
+        source_url: sourceUrl || null,
+        summary: brokerSignal.summary,
+        source_mode: 'social_broker_leak',
+        verification_status: 'pending',
+        metadata: {
+          source_document_url: sourceUrl || null,
+          crawl_mode: (doc.metadata as Row | null)?.crawl_mode || null,
+          source_surface: (doc.metadata as Row | null)?.source_surface || null,
+          query_keyword: (doc.metadata as Row | null)?.query_keyword || null,
+          formal_base_eligible: false,
+          boundary: 'social_broker_leak_requires_public_or_imported_confirmation',
+        },
+        collected_at: nowIso(),
+      });
+      socialBrokerCandidateRows.push({
+        stock_id: stockId,
+        story_type: 'valuation_reset',
+        title: `社群轉述外資估值線索：${symbol} ${brokerSignal.brokerName}`,
+        summary: `社群來源轉述 ${brokerSignal.brokerName} 對 ${symbol} 的 EPS / 目標價線索；目前只作券商雷達候選，需原始報告、新聞或官方財務資料確認後才可納入 Base。`,
+        catalyst_summary: `疑似外資/FactSet 估值訊號：${brokerSignal.summary.slice(0, 220)}`,
+        thesis_state: 'signal_candidate',
+        confidence: 0.38,
+        novelty_score: 0.62,
+        evidence_score: 0.3,
+        timing_score: 0,
+        verification_status: '未證實',
+        conditional_recommendation_note: '社群轉述券商線索只能進候選池；未取得原始券商/新聞佐證前，不支撐正式 Base 目標價。',
+        source_mix: [
+          {
+            source: platform,
+            sourceType: 'social_broker_leak',
+            title: compactText(doc.title || `${platform} broker leak`).slice(0, 160),
+            summary: brokerSignal.summary,
+            sourceUrl: sourceUrl || null,
+            verification: 'pending',
+          },
+        ],
+        related_themes: ['broker_rerating_watch', 'social_broker_leak'],
+        discovered_at: nowIso(),
+        as_of_date: asOfDate,
+        updated_at: nowIso(),
+      });
+    }
+  }
+
   if (!dryRun && deduped.length > 0) {
     const { error: insertError } = await supabase.from('source_discovery_queue').insert(deduped);
     if (insertError) throw new Error(insertError.message);
   }
+  if (!dryRun && socialBrokerDocs.length > 0) {
+    const { error: brokerLeakError } = await supabase
+      .from('broker_report_documents')
+      .upsert(socialBrokerDocs, { onConflict: 'file_path' });
+    if (brokerLeakError) throw new Error(brokerLeakError.message);
+  }
+  if (!dryRun && socialBrokerMentionRows.length > 0) {
+    const { error: brokerMentionError } = await supabase
+      .from('social_broker_mentions')
+      .upsert(socialBrokerMentionRows, { onConflict: 'stock_id,source_url,broker_name' });
+    if (brokerMentionError && !/does not exist|schema cache|Could not find/i.test(brokerMentionError.message)) {
+      throw new Error(brokerMentionError.message);
+    }
+  }
+  if (!dryRun && investanchorsRows.length > 0) {
+    const { error: candidateError } = await supabase.from('story_candidates').upsert(investanchorsRows, { onConflict: 'stock_id,story_type,as_of_date' });
+    if (candidateError) throw new Error(candidateError.message);
+  }
+  if (!dryRun && socialBrokerCandidateRows.length > 0) {
+    const { error: brokerCandidateError } = await supabase
+      .from('story_candidates')
+      .upsert(socialBrokerCandidateRows, { onConflict: 'stock_id,story_type,as_of_date' });
+    if (brokerCandidateError) throw new Error(brokerCandidateError.message);
+  }
 
-  return { runId: randomUUID(), dryRun, recordsWritten: deduped.length };
+  return {
+    runId: randomUUID(),
+    dryRun,
+    recordsWritten: deduped.length + investanchorsRows.length + socialBrokerDocs.length + socialBrokerCandidateRows.length,
+    discoveryQueueRecordsWritten: deduped.length,
+    investanchorsCandidateRecordsWritten: investanchorsRows.length,
+    socialBrokerLeakDocumentsWritten: socialBrokerDocs.length,
+    socialBrokerMentionsWritten: socialBrokerMentionRows.length,
+    socialBrokerCandidateRecordsWritten: socialBrokerCandidateRows.length,
+    socialBrokerLeakSymbols: unique(
+      socialBrokerCandidateRows
+        .map((row) => [...stockBySymbol.values()].find((item) => String(item.id || '') === String(row.stock_id || ''))?.symbol)
+        .filter((item): item is string => Boolean(item)),
+    ),
+    investanchorsCandidateSymbols: investanchorsRows.map((row) => {
+      const stock = [...stockBySymbol.values()].find((item) => String(item.id || '') === String(row.stock_id || ''));
+      return String(stock?.symbol || row.stock_id || '');
+    }),
+  };
 }
 
-export async function runBrokerReportIngest(options?: { dryRun?: boolean }) {
+export async function runBrokerReportIngest(options?: { dryRun?: boolean; symbols?: string[]; topN?: number }) {
   const dryRun = Boolean(options?.dryRun);
   if (dryRun) return { runId: randomUUID(), dryRun, reportsIngested: 0, sectionsWritten: 0 };
 
   const supabase = getSupabaseServerClient();
   // Get all tracked TW stocks
-  const topN = resolveStoryCandidateTopN();
+  const requestedSymbols = unique((options?.symbols || []).map((item) => String(item || '').toUpperCase()).filter(Boolean));
+  const topN = Number.isFinite(Number(options?.topN)) && Number(options?.topN) > 0
+    ? Number(options?.topN)
+    : requestedSymbols.length > 0
+      ? requestedSymbols.length
+      : resolveStoryCandidateTopN();
   const queryLimit = Math.max(topN, 60);
-  const { data: stocksData } = await supabase.from('stocks').select('id,symbol,name,market').eq('market', 'TW').limit(queryLimit);
+  const stockQuery = supabase.from('stocks').select('id,symbol,name,market').eq('market', 'TW');
+  const { data: stocksData } = requestedSymbols.length > 0
+    ? await stockQuery.in('symbol', requestedSymbols).limit(Math.max(requestedSymbols.length, 1))
+    : await stockQuery.limit(queryLimit);
   const stocks = (stocksData as Row[]) || [];
   const today = asDate();
 
   let reportsIngested = 0;
   let sectionsWritten = 0;
+  const manualImports = await ingestManualBrokerImports(supabase).catch(() => ({ reportsIngested: 0, sectionsWritten: 0 }));
+  reportsIngested += manualImports.reportsIngested;
+  sectionsWritten += manualImports.sectionsWritten;
 
   for (const stock of stocks.slice(0, topN)) {
     const symbol = String(stock.symbol || '');
     const stockId = String(stock.id || '');
     try {
+      try {
+        const sourceUrl = `https://www.cnyes.com/twstock/foreignrating.aspx?code=${symbol}`;
+        const cnyesRatingRes = await fetch(sourceUrl, {
+          headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0', accept: 'text/html' },
+          signal: AbortSignal.timeout(10_000),
+        });
+        if (cnyesRatingRes.ok) {
+          const html = await cnyesRatingRes.text();
+          const ratingRows = parseCnyesForeignRatingRows(html, symbol, today);
+          for (const row of ratingRows) {
+            const { data: cnyesDoc } = await supabase.from('broker_report_documents').upsert(
+              {
+                stock_id: stockId,
+                broker_name: row.brokerName,
+                report_date: row.reportDate || today,
+                file_name: `cnyes_foreignrating_${symbol}_${slugify(row.brokerName)}_${row.reportDate || today}`,
+                file_path: `public_summary/cnyes_foreignrating/${symbol}/${slugify(row.brokerName)}/${row.reportDate || today}`,
+                source_mode: 'public_summary',
+                rating: row.rating,
+                target_price: row.targetPrice,
+                thesis_title: `${row.brokerName} 外資評等${row.rating ? `：${row.rating}` : ''}，目標價 ${row.targetPrice}`,
+                extracted_summary: row.summary,
+                raw_text: row.summary,
+                metadata: {
+                  source: 'cnyes_foreignrating',
+                  source_url: sourceUrl,
+                  scraped_at: today,
+                  forward_eps: row.forwardEps ?? null,
+                  forward_year: row.forwardYear ?? null,
+                  broker_region: row.isUsBroker ? 'us' : 'unknown',
+                  consensus_provider: row.isConsensus ? 'factset' : null,
+                  source_quality: row.isConsensus ? 'consensus' : row.isUsBroker ? 'us_broker_public_summary' : 'broker_public_summary',
+                },
+                updated_at: nowIso(),
+              },
+              { onConflict: 'file_path' },
+            ).select('id').single();
+            if (cnyesDoc?.id) {
+              await supabase.from('broker_report_sections').upsert(
+                {
+                  broker_report_document_id: cnyesDoc.id,
+                  section_kind: 'valuation',
+                  section_title: '鉅亨外資評等',
+                  section_content: row.summary,
+                  sort_order: 1,
+                },
+                { onConflict: 'broker_report_document_id,sort_order' },
+              );
+              sectionsWritten += 1;
+            }
+            reportsIngested += 1;
+          }
+        }
+      } catch {
+        // Cnyes foreign rating scrape failure is non-fatal.
+      }
       // Fetch Anue news for this stock (public, no auth)
       const anueRes = await fetch(
         `https://news.cnyes.com/api/v3/news/category/tw_stock?limit=5&stock_code=${symbol}`,
@@ -2131,13 +6828,14 @@ export async function runBrokerReportIngest(options?: { dryRun?: boolean }) {
 
       // Detect rating keywords in title/summary
       const allText = articles.map((a) => `${a.title || ''} ${a.summary || ''}`).join(' ');
+      const factsetConsensus = parseFactsetConsensusFromText(allText);
       const rating = /買進|增持|強烈推薦|buy|strong buy/i.test(allText) ? '買進'
         : /持有|neutral|維持/i.test(allText) ? '持有'
         : /賣出|減碼|sell|underperform/i.test(allText) ? '賣出' : null;
 
       // Extract target price from text (e.g. "目標價 XXX 元")
       const targetPriceMatch = allText.match(/目標價\s*[：:＄$]?\s*(\d{2,5}(?:\.\d{1,2})?)/);
-      const targetPrice = targetPriceMatch ? Number(targetPriceMatch[1]) : null;
+      const targetPrice = factsetConsensus.targetPrice || (targetPriceMatch ? Number(targetPriceMatch[1]) : null);
 
       const reportDate = latestArticle.publishAt
         ? new Date(Number(latestArticle.publishAt) * 1000).toISOString().slice(0, 10)
@@ -2156,7 +6854,15 @@ export async function runBrokerReportIngest(options?: { dryRun?: boolean }) {
           thesis_title: String(latestArticle.title || `${symbol} 近期市場觀點`).slice(0, 200),
           extracted_summary: extractedSummary.slice(0, 2000),
           raw_text: allText.slice(0, 8000),
-          metadata: { source: 'anue', article_count: articles.length },
+          metadata: {
+            source: /FactSet/i.test(allText) ? 'anue_factset_news' : 'anue',
+            article_count: articles.length,
+            forward_eps: factsetConsensus.forwardEps,
+            forward_year: factsetConsensus.forwardYear,
+            analyst_count: factsetConsensus.analystCount,
+            consensus_provider: factsetConsensus.forwardEps || factsetConsensus.analystCount ? 'factset' : null,
+            source_quality: factsetConsensus.forwardEps || factsetConsensus.targetPrice ? 'consensus_news_summary' : 'news_summary',
+          },
           updated_at: nowIso(),
         },
         { onConflict: 'file_path' },
@@ -2292,6 +6998,44 @@ export async function runBrokerReportIngest(options?: { dryRun?: boolean }) {
             confidence: 0.65,
             metadata: { connector: 'http', source: 'anue_general_news', publishedAt: publishDate },
           });
+          const crossThemes = detectCrossThemeKeys(allText);
+          if (crossThemes.length > 0) {
+            for (const symbol of symbols) {
+              const stock = await ensureStock(symbol, 'TW', symbol);
+              for (const theme of crossThemes) {
+                await supabase.from('cross_theme_discovery_events').upsert(
+                  {
+                    stock_id: stock.id,
+                    symbol,
+                    primary_theme: null,
+                    cross_theme: theme.key,
+                    evidence_level: theme.evidenceLevel,
+                    source_refs: [docUrl],
+                    reason: `${theme.reason} 來源：${title}`,
+                    event_date: asDate(publishDate),
+                    metadata: { label: theme.label, source_url: docUrl, title },
+                    updated_at: nowIso(),
+                  },
+                  { onConflict: 'symbol,cross_theme,event_date' },
+                );
+              }
+              if (/噴出|創高|漲停|大漲|突破|爆量|外資調升|目標價上修/i.test(allText)) {
+                await supabase.from('missed_hot_symbol_reports').upsert(
+                  {
+                    symbol,
+                    name: stock.name || symbol,
+                    reason: `新聞/公開來源顯示 ${symbol} 出現價量或券商上修熱度：${title}`,
+                    social_mentions: 0,
+                    broker_target_revisions: /目標價|外資|券商|FactSet/i.test(allText) ? 1 : 0,
+                    visible_state: 'needs_visibility_check',
+                    report_date: asDate(publishDate),
+                    metadata: { source_url: docUrl, title, cross_themes: crossThemes.map((theme) => theme.key) },
+                  },
+                  { onConflict: 'symbol,report_date' },
+                );
+              }
+            }
+          }
         }
 
         if (generalDocs.length > 0) {
@@ -2306,7 +7050,8 @@ export async function runBrokerReportIngest(options?: { dryRun?: boolean }) {
     // General news scan failure is non-fatal
   }
 
-  return { runId: randomUUID(), dryRun, reportsIngested, sectionsWritten };
+  const consensusSnapshotsWritten = await rebuildBrokerConsensusSnapshots(supabase, today).catch(() => 0);
+  return { runId: randomUUID(), dryRun, reportsIngested, sectionsWritten, consensusSnapshotsWritten };
 }
 
 function ratingToTier(hasBrokerReport: boolean, evidenceScore: number, timingScore: number) {
@@ -2337,7 +7082,7 @@ export async function runThesisRefresh(options?: { dryRun?: boolean; symbols?: s
     supabase.from('broker_report_documents').select('*').order('report_date', { ascending: false }),
     supabase.from('recommendations').select('*').eq('as_of', today).order('score', { ascending: false }),
     supabase.from('story_evidence_items').select('*').order('source_timestamp', { ascending: false }),
-    supabase.from('source_raw_documents').select('*').order('collected_at', { ascending: false }).limit(300),
+    supabase.from('source_raw_documents').select('platform,title,summary,symbols,confidence,collected_at,published_at,metadata,source_entity_id').order('collected_at', { ascending: false }).limit(300),
     supabase.from('valuation_cases').select('*'),
     supabase.from('revenue_signals').select('*').order('as_of_date', { ascending: false }).limit(200),
     supabase.from('fundamental_snapshots').select('*').order('as_of_date', { ascending: false }).limit(200),
@@ -2406,14 +7151,26 @@ export async function runThesisRefresh(options?: { dryRun?: boolean; symbols?: s
   }
   // Revenue and fundamental lookup by stock_id (latest entry first)
   const revenueByStock = new Map<string, Row>();
+  const revenueRowsByStock = new Map<string, Row[]>();
   for (const row of revenueSignals) {
     const key = String(row.stock_id || '');
-    if (key && !revenueByStock.has(key)) revenueByStock.set(key, row);
+    if (!key) continue;
+    revenueRowsByStock.set(key, [...(revenueRowsByStock.get(key) || []), row]);
+  }
+  for (const [key, rows] of revenueRowsByStock.entries()) {
+    const preferred = selectLatestPreferredRow(rows, hasMeaningfulRevenueRow);
+    if (preferred) revenueByStock.set(key, preferred);
   }
   const fundamentalByStock = new Map<string, Row>();
+  const fundamentalRowsByStock = new Map<string, Row[]>();
   for (const row of fundamentalSnapshots) {
     const key = String(row.stock_id || '');
-    if (key && !fundamentalByStock.has(key)) fundamentalByStock.set(key, row);
+    if (!key) continue;
+    fundamentalRowsByStock.set(key, [...(fundamentalRowsByStock.get(key) || []), row]);
+  }
+  for (const [key, rows] of fundamentalRowsByStock.entries()) {
+    const preferred = selectLatestPreferredRow(rows, hasMeaningfulFundamentalRow);
+    if (preferred) fundamentalByStock.set(key, preferred);
   }
   // Podcast thesis extraction by symbol (cross-ref via extracted_mentions)
   const podcastThesisBySymbol = new Map<string, string[]>();
@@ -2466,14 +7223,23 @@ export async function runThesisRefresh(options?: { dryRun?: boolean; symbols?: s
     const thesisTitle = compactText(latestBroker?.thesis_title || rec?.thesis_title || sourceDocs[0]?.title || `${symbol} 研究主論點`);
     const thesisSummary = compactText(latestBroker?.extracted_summary || rec?.thesis_summary || sourceDocs[0]?.summary || '等待更多來源驗證與財務推估。').slice(0, 4000);
     const scenario = buildPeScenario({
+      symbol,
+      thesisTitle,
+      thesisSummary,
       currentPrice,
-      epsTtm: fundamentalByStock.get(stockId) ? toFiniteNumber(fundamentalByStock.get(stockId)?.eps_ttm, 0) : null,
-      peRatio: fundamentalByStock.get(stockId) ? toFiniteNumber(fundamentalByStock.get(stockId)?.pe_ratio, 0) : null,
-      monthlyRevenue: revenueByStock.get(stockId) ? toFiniteNumber(revenueByStock.get(stockId)?.monthly_revenue, 0) : null,
-      yoyGrowth: revenueByStock.get(stockId) ? toFiniteNumber(revenueByStock.get(stockId)?.yoy_growth, 0) : null,
-      momGrowth: revenueByStock.get(stockId) ? toFiniteNumber(revenueByStock.get(stockId)?.mom_growth, 0) : null,
-      revenueRunRate: fundamentalByStock.get(stockId) ? toFiniteNumber(fundamentalByStock.get(stockId)?.revenue_run_rate, 0) : null,
+      epsTtm: fundamentalByStock.get(stockId) ? nonZeroNumberOrNull(fundamentalByStock.get(stockId)?.eps_ttm) : null,
+      peRatio: fundamentalByStock.get(stockId) ? nonZeroNumberOrNull(fundamentalByStock.get(stockId)?.pe_ratio) : null,
+      pbRatio: fundamentalByStock.get(stockId) ? positiveNumberOrNull(fundamentalByStock.get(stockId)?.pb_ratio) : null,
+      monthlyRevenue: revenueByStock.get(stockId) ? positiveNumberOrNull(revenueByStock.get(stockId)?.monthly_revenue) : null,
+      yoyGrowth: revenueByStock.get(stockId) ? nonZeroNumberOrNull(revenueByStock.get(stockId)?.yoy_growth) : null,
+      momGrowth: revenueByStock.get(stockId) ? nonZeroNumberOrNull(revenueByStock.get(stockId)?.mom_growth) : null,
+      revenueRunRate: fundamentalByStock.get(stockId) ? positiveNumberOrNull(fundamentalByStock.get(stockId)?.revenue_run_rate) : null,
+      grossMarginPct: fundamentalByStock.get(stockId) ? positiveNumberOrNull(fundamentalByStock.get(stockId)?.gross_margin) : null,
+      operatingMarginPct: fundamentalByStock.get(stockId) ? nonZeroNumberOrNull(fundamentalByStock.get(stockId)?.operating_margin) : null,
       brokerTargetPrice: latestBroker ? toFiniteNumber(latestBroker.target_price, 0) : toFiniteNumber(baseValuation?.target_price, 0),
+      evidenceCount: stockEvidence.length,
+      sourceDocumentCount: sourceDocs.length,
+      brokerReportCount: brokerViews.length,
     });
     const targetPrice = scenario.base.targetPrice || null;
     const targetLow = scenario.bear.targetPrice || null;
@@ -2493,18 +7259,26 @@ export async function runThesisRefresh(options?: { dryRun?: boolean; symbols?: s
     const financialProjectionSummary = (() => {
       const parts: string[] = [];
       if (revenue) {
-        const rev = toFiniteNumber(revenue.monthly_revenue, 0);
-        const yoy = toFiniteNumber(revenue.yoy_growth, 0);
-        const mom = toFiniteNumber(revenue.mom_growth, 0);
-        if (rev > 0) parts.push(`月營收 ${(rev / 1e8).toFixed(1)} 億（YoY ${yoy >= 0 ? '+' : ''}${yoy.toFixed(1)}%，MoM ${mom >= 0 ? '+' : ''}${mom.toFixed(1)}%）`);
+        const rev = positiveNumberOrNull(revenue.monthly_revenue);
+        const yoy = revenue.yoy_growth == null ? null : toFiniteNumber(revenue.yoy_growth, Number.NaN);
+        const mom = revenue.mom_growth == null ? null : toFiniteNumber(revenue.mom_growth, Number.NaN);
+        if (rev != null && rev > 0) {
+          const yoyText = yoy != null && Number.isFinite(yoy)
+            ? `${yoy >= 0 ? '+' : ''}${yoy.toFixed(1)}%`
+            : '待補';
+          const momText = mom != null && Number.isFinite(mom)
+            ? `${mom >= 0 ? '+' : ''}${mom.toFixed(1)}%`
+            : '待補';
+          parts.push(`月營收 ${(rev / 1e8).toFixed(1)} 億（YoY ${yoyText}，MoM ${momText}）`);
+        }
       }
       if (fundamental) {
-        const pe = toFiniteNumber(fundamental.pe_ratio, 0);
-        const gm = toFiniteNumber(fundamental.gross_margin, 0);
-        const eps = toFiniteNumber(fundamental.eps_ttm, 0);
-        if (eps !== 0) parts.push(`EPS TTM ${eps.toFixed(2)} 元`);
-        if (gm > 0) parts.push(`毛利率 ${gm.toFixed(1)}%`);
-        if (pe > 0) parts.push(`本益比 ${pe.toFixed(1)}x`);
+        const pe = nonZeroNumberOrNull(fundamental.pe_ratio);
+        const gm = positiveNumberOrNull(fundamental.gross_margin);
+        const eps = nonZeroNumberOrNull(fundamental.eps_ttm);
+        if (eps != null) parts.push(`EPS TTM ${eps.toFixed(2)} 元`);
+        if (gm != null && gm > 0) parts.push(`毛利率 ${gm.toFixed(1)}%`);
+        if (pe != null && pe > 0) parts.push(`本益比 ${pe.toFixed(1)}x`);
       }
       if (latestBroker) {
         const match = compactText(String(latestBroker.raw_text || '')).match(/每股盈餘[\s\S]{0,100}/);
@@ -2556,6 +7330,8 @@ export async function runThesisRefresh(options?: { dryRun?: boolean; symbols?: s
                 bear_eps: scenario.bear.eps,
                 bear_pe: scenario.bear.pe,
               },
+              valuation_quality: scenario.valuationQuality,
+              scenario_driver_type: scenario.scenarioDriverType,
             },
             updated_at: nowIso(),
           },
@@ -2625,6 +7401,25 @@ export async function runThesisRefresh(options?: { dryRun?: boolean; symbols?: s
             valuation_method: 'eps_pe_base',
             target_price: scenario.base.targetPrice,
             expected_return_pct: scenario.base.expectedReturnPct,
+            assumptions: {
+              ...(((baseValuation?.assumptions as Record<string, unknown> | null) || {})),
+              valuation_quality: scenario.valuationQuality,
+              scenario_driver_type: scenario.scenarioDriverType,
+              driver_label: scenario.driverLabel,
+              story_drivers: scenario.base.storyDrivers,
+              operating_bridge: scenario.base.operatingBridge,
+              earnings_bridge: scenario.base.earningsBridge,
+              operating_assumptions: scenario.base.operatingAssumptions,
+              financial_bridge: scenario.base.financialBridge,
+              multiple_bridge: scenario.base.multipleBridge,
+              price_bridge: scenario.base.priceBridge,
+              bridge_summary: scenario.base.bridgeSummary,
+              revenue_annual: scenario.base.revenueAnnual,
+              gross_margin_pct: scenario.base.grossMarginPct,
+              operating_margin_pct: scenario.base.operatingMarginPct,
+              eps: scenario.base.eps,
+              pe: scenario.base.pe,
+            },
             updated_at: nowIso(),
           },
           {
@@ -2635,6 +7430,24 @@ export async function runThesisRefresh(options?: { dryRun?: boolean; symbols?: s
             valuation_method: 'eps_pe_upside',
             target_price: scenario.upside.targetPrice,
             expected_return_pct: scenario.upside.expectedReturnPct,
+            assumptions: {
+              valuation_quality: scenario.valuationQuality,
+              scenario_driver_type: scenario.scenarioDriverType,
+              driver_label: scenario.driverLabel,
+              story_drivers: scenario.upside.storyDrivers,
+              operating_bridge: scenario.upside.operatingBridge,
+              earnings_bridge: scenario.upside.earningsBridge,
+              operating_assumptions: scenario.upside.operatingAssumptions,
+              financial_bridge: scenario.upside.financialBridge,
+              multiple_bridge: scenario.upside.multipleBridge,
+              price_bridge: scenario.upside.priceBridge,
+              bridge_summary: scenario.upside.bridgeSummary,
+              revenue_annual: scenario.upside.revenueAnnual,
+              gross_margin_pct: scenario.upside.grossMarginPct,
+              operating_margin_pct: scenario.upside.operatingMarginPct,
+              eps: scenario.upside.eps,
+              pe: scenario.upside.pe,
+            },
             updated_at: nowIso(),
           },
           {
@@ -2645,6 +7458,24 @@ export async function runThesisRefresh(options?: { dryRun?: boolean; symbols?: s
             valuation_method: 'eps_pe_bear',
             target_price: scenario.bear.targetPrice,
             expected_return_pct: scenario.bear.expectedReturnPct,
+            assumptions: {
+              valuation_quality: scenario.valuationQuality,
+              scenario_driver_type: scenario.scenarioDriverType,
+              driver_label: scenario.driverLabel,
+              story_drivers: scenario.bear.storyDrivers,
+              operating_bridge: scenario.bear.operatingBridge,
+              earnings_bridge: scenario.bear.earningsBridge,
+              operating_assumptions: scenario.bear.operatingAssumptions,
+              financial_bridge: scenario.bear.financialBridge,
+              multiple_bridge: scenario.bear.multipleBridge,
+              price_bridge: scenario.bear.priceBridge,
+              bridge_summary: scenario.bear.bridgeSummary,
+              revenue_annual: scenario.bear.revenueAnnual,
+              gross_margin_pct: scenario.bear.grossMarginPct,
+              operating_margin_pct: scenario.bear.operatingMarginPct,
+              eps: scenario.bear.eps,
+              pe: scenario.bear.pe,
+            },
             updated_at: nowIso(),
           },
         ],
@@ -2661,7 +7492,23 @@ export async function runThesisRefresh(options?: { dryRun?: boolean; symbols?: s
               case_type: 'base',
               target_price: scenario.base.targetPrice,
               expected_return_pct: scenario.base.expectedReturnPct,
-              assumptions: { revenue_annual: scenario.base.revenueAnnual, eps: scenario.base.eps, pe: scenario.base.pe, method: 'eps_pe_base' },
+              assumptions: {
+                revenue_annual: scenario.base.revenueAnnual,
+                eps: scenario.base.eps,
+                pe: scenario.base.pe,
+                method: 'eps_pe_base',
+                driver_label: scenario.driverLabel,
+                story_drivers: scenario.base.storyDrivers,
+                operating_bridge: scenario.base.operatingBridge,
+                earnings_bridge: scenario.base.earningsBridge,
+                operating_assumptions: scenario.base.operatingAssumptions,
+                financial_bridge: scenario.base.financialBridge,
+                multiple_bridge: scenario.base.multipleBridge,
+                price_bridge: scenario.base.priceBridge,
+                bridge_summary: scenario.base.bridgeSummary,
+                gross_margin_pct: scenario.base.grossMarginPct,
+                operating_margin_pct: scenario.base.operatingMarginPct,
+              },
               updated_at: nowIso(),
             },
             {
@@ -2670,7 +7517,23 @@ export async function runThesisRefresh(options?: { dryRun?: boolean; symbols?: s
               case_type: 'upside',
               target_price: scenario.upside.targetPrice,
               expected_return_pct: scenario.upside.expectedReturnPct,
-              assumptions: { revenue_annual: scenario.upside.revenueAnnual, eps: scenario.upside.eps, pe: scenario.upside.pe, method: 'eps_pe_upside' },
+              assumptions: {
+                revenue_annual: scenario.upside.revenueAnnual,
+                eps: scenario.upside.eps,
+                pe: scenario.upside.pe,
+                method: 'eps_pe_upside',
+                driver_label: scenario.driverLabel,
+                story_drivers: scenario.upside.storyDrivers,
+                operating_bridge: scenario.upside.operatingBridge,
+                earnings_bridge: scenario.upside.earningsBridge,
+                operating_assumptions: scenario.upside.operatingAssumptions,
+                financial_bridge: scenario.upside.financialBridge,
+                multiple_bridge: scenario.upside.multipleBridge,
+                price_bridge: scenario.upside.priceBridge,
+                bridge_summary: scenario.upside.bridgeSummary,
+                gross_margin_pct: scenario.upside.grossMarginPct,
+                operating_margin_pct: scenario.upside.operatingMarginPct,
+              },
               updated_at: nowIso(),
             },
             {
@@ -2679,7 +7542,23 @@ export async function runThesisRefresh(options?: { dryRun?: boolean; symbols?: s
               case_type: 'invalidation',
               target_price: scenario.bear.targetPrice,
               expected_return_pct: scenario.bear.expectedReturnPct,
-              assumptions: { revenue_annual: scenario.bear.revenueAnnual, eps: scenario.bear.eps, pe: scenario.bear.pe, method: 'eps_pe_bear' },
+              assumptions: {
+                revenue_annual: scenario.bear.revenueAnnual,
+                eps: scenario.bear.eps,
+                pe: scenario.bear.pe,
+                method: 'eps_pe_bear',
+                driver_label: scenario.driverLabel,
+                story_drivers: scenario.bear.storyDrivers,
+                operating_bridge: scenario.bear.operatingBridge,
+                earnings_bridge: scenario.bear.earningsBridge,
+                operating_assumptions: scenario.bear.operatingAssumptions,
+                financial_bridge: scenario.bear.financialBridge,
+                multiple_bridge: scenario.bear.multipleBridge,
+                price_bridge: scenario.bear.priceBridge,
+                bridge_summary: scenario.bear.bridgeSummary,
+                gross_margin_pct: scenario.bear.grossMarginPct,
+                operating_margin_pct: scenario.bear.operatingMarginPct,
+              },
               updated_at: nowIso(),
             },
           ],
@@ -2825,7 +7704,7 @@ export async function getSourceEntityDetail(entityId: string) {
   const supabase = getSupabaseServerClient();
   const [entityRes, docsRes, watchlistsRes, discoveryRes] = await Promise.all([
     supabase.from('source_entities').select('*').eq('id', entityId).single(),
-    supabase.from('source_raw_documents').select('*').eq('source_entity_id', entityId).order('collected_at', { ascending: false }).limit(30),
+    supabase.from('source_raw_documents').select('id,platform,title,summary,document_url,symbols,collected_at,published_at,metadata,confidence,source_entity_id').eq('source_entity_id', entityId).order('collected_at', { ascending: false }).limit(30),
     supabase.from('source_watchlists').select('*').eq('source_entity_id', entityId).order('priority', { ascending: false }),
     supabase.from('source_discovery_queue').select('*').order('created_at', { ascending: false }).limit(20),
   ]);
@@ -2843,28 +7722,202 @@ function extractYoutubeVideoId(url: string) {
   return match ? match[1] : null;
 }
 
+type PodcastEpisodeCandidate = {
+  title: string;
+  link: string;
+  pubDate: string | null;
+  audioUrl: string | null;
+  description?: string | null;
+  platform: 'youtube' | 'rss' | 'apple_podcast' | 'spotify' | 'other';
+  sourceMode?: string;
+};
+
+function decodeXmlText(value: unknown) {
+  return compactText(value)
+    .replace(/<!\[CDATA\[|\]\]>/g, '')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+}
+
+function firstXmlValue(body: string, tags: string[]) {
+  for (const tag of tags) {
+    const escaped = tag.replace(':', '\\:');
+    const match = body.match(new RegExp(`<${escaped}(?:\\s[^>]*)?>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${escaped}>`, 'i'));
+    if (match?.[1]) return decodeXmlText(match[1]);
+  }
+  return '';
+}
+
 function parseRssItems(xmlText: string) {
-  const items: Array<{ title: string; link: string; pubDate: string | null; audioUrl: string | null }> = [];
-  const itemMatches = Array.from(xmlText.matchAll(/<item[\s>]([\s\S]*?)<\/item>/g));
+  const items: PodcastEpisodeCandidate[] = [];
+  const itemMatches = [
+    ...Array.from(xmlText.matchAll(/<item[\s>]([\s\S]*?)<\/item>/g)).map((match) => ({ body: match[1], kind: 'rss' as const })),
+    ...Array.from(xmlText.matchAll(/<entry[\s>]([\s\S]*?)<\/entry>/g)).map((match) => ({ body: match[1], kind: 'youtube_feed' as const })),
+  ];
   for (const match of itemMatches.slice(0, 10)) {
-    const body = match[1];
-    const title = compactText((body.match(/<title>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/title>/) || [])[1] || '');
-    const link = compactText((body.match(/<link>([\s\S]*?)<\/link>/) || [])[1] || (body.match(/<enclosure[^>]+url="([^"]+)"/) || [])[1] || '');
-    const pubDate = safeDateString((body.match(/<pubDate>([\s\S]*?)<\/pubDate>/) || [])[1] || '');
-    const audioUrl = compactText((body.match(/<enclosure[^>]+url="([^"]+)"/) || [])[1] || '');
-    if (title && link) items.push({ title, link, pubDate, audioUrl: audioUrl || null });
+    const body = match.body;
+    const title = firstXmlValue(body, ['title', 'media:title']);
+    const hrefLink = (body.match(/<link[^>]+href="([^"]+)"/i) || [])[1] || '';
+    const link = decodeXmlText(firstXmlValue(body, ['link']) || hrefLink || (body.match(/<enclosure[^>]+url="([^"]+)"/i) || [])[1] || '');
+    const pubDate = safeDateString(firstXmlValue(body, ['pubDate', 'published', 'updated']));
+    const audioUrl = decodeXmlText((body.match(/<enclosure[^>]+url="([^"]+)"/i) || [])[1] || '');
+    const description = firstXmlValue(body, ['description', 'summary', 'media:description', 'itunes:summary']);
+    if (title && link) {
+      items.push({
+        title,
+        link,
+        pubDate,
+        audioUrl: audioUrl || null,
+        description: description || null,
+        platform: match.kind === 'youtube_feed' || link.includes('youtube.com') || link.includes('youtu.be') ? 'youtube' : 'rss',
+        sourceMode: match.kind,
+      });
+    }
   }
   return items;
 }
 
-async function fetchYoutubePlaylist(channelUrl: string) {
+function arrayFromMetadata(value: unknown) {
+  if (Array.isArray(value)) return value.map((item) => compactText(item)).filter(Boolean);
+  const text = compactText(value);
+  return text ? [text] : [];
+}
+
+function youtubeHandleFromUrl(url: string) {
+  const match = url.match(/youtube\.com\/@([^/?#]+)/i);
+  return match ? `@${match[1]}` : null;
+}
+
+function youtubeChannelIdFromUrl(url: string, meta?: Record<string, unknown>) {
+  const metaId = compactText(meta?.youtubeChannelId);
+  if (/^UC[A-Za-z0-9_-]{20,}$/.test(metaId)) return metaId;
+  const match = url.match(/youtube\.com\/channel\/(UC[A-Za-z0-9_-]+)/i);
+  return match ? match[1] : null;
+}
+
+async function fetchYoutubeViaApi(channelUrl: string, meta?: Record<string, unknown>) {
+  const apiKey = process.env.YOUTUBE_API_KEY || '';
+  if (!apiKey) return [] as PodcastEpisodeCandidate[];
+  try {
+    let channelId = youtubeChannelIdFromUrl(channelUrl, meta);
+    const handle = youtubeHandleFromUrl(channelUrl);
+    if (!channelId && handle) {
+      const channelRes = await fetch(
+        `https://www.googleapis.com/youtube/v3/channels?part=contentDetails,snippet&forHandle=${encodeURIComponent(handle)}&key=${apiKey}`,
+        { signal: AbortSignal.timeout(15_000) },
+      );
+      if (channelRes.ok) {
+        const channelJson = await channelRes.json() as { items?: Array<{ id?: string }> };
+        channelId = channelJson.items?.[0]?.id || null;
+      }
+    }
+    if (!channelId) return [];
+    const searchRes = await fetch(
+      `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${encodeURIComponent(channelId)}&order=date&type=video&maxResults=10&key=${apiKey}`,
+      { signal: AbortSignal.timeout(15_000) },
+    );
+    if (!searchRes.ok) return [];
+    const searchJson = await searchRes.json() as {
+      items?: Array<{ id?: { videoId?: string }; snippet?: { title?: string; description?: string; publishedAt?: string } }>;
+    };
+    return (searchJson.items || [])
+      .map((item): PodcastEpisodeCandidate | null => {
+        const videoId = item.id?.videoId || '';
+        const title = decodeXmlText(item.snippet?.title || '');
+        if (!videoId || !title) return null;
+        return {
+          title,
+          link: `https://www.youtube.com/watch?v=${videoId}`,
+          pubDate: safeDateString(item.snippet?.publishedAt || ''),
+          audioUrl: null,
+          description: decodeXmlText(item.snippet?.description || ''),
+          platform: 'youtube',
+          sourceMode: 'youtube_data_api',
+        };
+      })
+      .filter((item): item is PodcastEpisodeCandidate => Boolean(item));
+  } catch {
+    return [];
+  }
+}
+
+async function fetchYoutubeViaRss(channelUrl: string, meta?: Record<string, unknown>) {
+  const channelId = youtubeChannelIdFromUrl(channelUrl, meta);
+  if (!channelId) return [] as PodcastEpisodeCandidate[];
+  try {
+    const xml = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${encodeURIComponent(channelId)}`, {
+      headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0' },
+      signal: AbortSignal.timeout(15_000),
+    }).then((res) => (res.ok ? res.text() : ''));
+    if (!xml) return [];
+    return parseRssItems(xml).map((item) => ({ ...item, platform: 'youtube' as const, sourceMode: item.sourceMode || 'youtube_rss' }));
+  } catch {
+    return [];
+  }
+}
+
+async function fetchYoutubePlaylist(channelUrl: string, meta?: Record<string, unknown>) {
+  const apiItems = await fetchYoutubeViaApi(channelUrl, meta);
+  if (apiItems.length > 0) return apiItems;
+  const rssItems = await fetchYoutubeViaRss(channelUrl, meta);
+  if (rssItems.length > 0) return rssItems;
   try {
     const html = await fetch(channelUrl, { headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0' }, signal: AbortSignal.timeout(15_000) }).then((res) => res.text());
     const videoIds = unique(Array.from(html.matchAll(/"videoId":"([A-Za-z0-9_-]{11})"/g)).map((m) => m[1])).slice(0, 10);
     const titles = Array.from(html.matchAll(/"title":\{"runs":\[\{"text":"([^"]+)"/g)).map((m) => compactText(m[1])).slice(0, 10);
-    return videoIds.map((id, i) => ({ title: titles[i] || `Episode ${i + 1}`, link: `https://www.youtube.com/watch?v=${id}`, pubDate: null, audioUrl: null }));
+    return videoIds.map((id, i) => ({
+      title: decodeXmlText(titles[i] || `Episode ${i + 1}`),
+      link: `https://www.youtube.com/watch?v=${id}`,
+      pubDate: null,
+      audioUrl: null,
+      description: null,
+      platform: 'youtube' as const,
+      sourceMode: 'youtube_html',
+    }));
   } catch {
     return [];
+  }
+}
+
+function applePodcastIdFromUrl(url: string) {
+  const match = url.match(/\/id(\d+)/);
+  return match ? match[1] : null;
+}
+
+async function fetchApplePodcastRssItems(appleUrl: string) {
+  const podcastId = applePodcastIdFromUrl(appleUrl);
+  if (!podcastId) return [] as PodcastEpisodeCandidate[];
+  try {
+    const lookupRes = await fetch(`https://itunes.apple.com/lookup?id=${encodeURIComponent(podcastId)}`, {
+      headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0' },
+      signal: AbortSignal.timeout(12_000),
+    });
+    if (!lookupRes.ok) return [];
+    const lookupJson = await lookupRes.json() as { results?: Array<{ feedUrl?: string }> };
+    const feedUrl = lookupJson.results?.[0]?.feedUrl || '';
+    if (!feedUrl) return [];
+    const xml = await fetch(feedUrl, {
+      headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0' },
+      signal: AbortSignal.timeout(12_000),
+    }).then((res) => (res.ok ? res.text() : ''));
+    return parseRssItems(xml).map((item) => ({ ...item, platform: 'apple_podcast' as const, sourceMode: 'apple_lookup_feed' }));
+  } catch {
+    return [];
+  }
+}
+
+async function fetchExplicitRssItems(rssUrl: string) {
+  try {
+    const xml = await fetch(rssUrl, {
+      headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0' },
+      signal: AbortSignal.timeout(12_000),
+    }).then((res) => (res.ok ? res.text() : ''));
+    return parseRssItems(xml).map((item) => ({ ...item, platform: 'rss' as const, sourceMode: 'explicit_rss' }));
+  } catch {
+    return [] as PodcastEpisodeCandidate[];
   }
 }
 
@@ -2950,71 +8003,211 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
   if (dryRun) return { runId: randomUUID(), dryRun, recordsWritten: 0, episodesFound: 0, platforms: [] as string[] };
 
   const supabase = getSupabaseServerClient();
-  const { data: kolData, error: kolError } = await supabase.from('kol_profiles').select('*').eq('discovery_state', 'approved');
-  if (kolError) throw new Error(kolError.message);
-  const kols = (kolData as Row[]) || [];
+  await ensureDefaultKolProfiles();
+  await ensureDefaultWatchlists();
+  const podcastRunId = await startConnectorRun('podcast-sync', 'podcast', { source: 'kol_profiles' });
+  const youtubeRunId = await startConnectorRun('podcast-sync', 'youtube', { source: 'kol_profiles', mode: 'youtube_playlist' });
+  try {
+    const { data: kolData, error: kolError } = await supabase.from('kol_profiles').select('*').eq('discovery_state', 'approved');
+    if (kolError) throw new Error(kolError.message);
+    const kols = (kolData as Row[]) || [];
 
-  let totalEpisodes = 0;
-  const platformsUsed = new Set<string>();
+    let totalEpisodes = 0;
+    let youtubeEpisodes = 0;
+    let weakSignalsWritten = 0;
+    const platformsUsed = new Set<string>();
+    const searchedKeywords = unique([
+      ...KOL_SEEDS.map((seed) => seed.displayName),
+      '台股 KOL',
+      'Podcast',
+      'YouTube',
+      'CPU',
+      'MLCC',
+      '成熟製程',
+      '消費性電子',
+    ]);
+    const kolBreakdown: Array<{
+      kol: string;
+      searchedUrls: string[];
+      episodesFound: number;
+      youtubeEpisodes: number;
+      weakSignalsWritten: number;
+      transcriptsReady: number;
+      failureReason: string | null;
+    }> = [];
+    const failureReasonByKol: Record<string, string> = {};
+    const matchedSymbols = new Set<string>();
 
-  for (const kol of kols) {
-    const meta = (kol.metadata || {}) as Record<string, unknown>;
-    const kolId = String(kol.id);
-    const sourceEntityId = kol.source_entity_id ? String(kol.source_entity_id) : null;
+    for (const kol of kols) {
+      const meta = (kol.metadata || {}) as Record<string, unknown>;
+      const kolId = String(kol.id);
+      const sourceEntityId = kol.source_entity_id ? String(kol.source_entity_id) : null;
+      const kolName = String(kol.display_name || meta.podcastName || 'KOL');
+      const searchedUrls: string[] = [];
 
-    const episodeItems: Array<{ title: string; link: string; pubDate: string | null; audioUrl: string | null; platform: string }> = [];
+      const episodeItems: PodcastEpisodeCandidate[] = [];
 
-    const youtubeUrl = String(meta.youtubeUrl || '');
-    if (youtubeUrl) {
-      platformsUsed.add('youtube');
-      const ytItems = await fetchYoutubePlaylist(youtubeUrl);
-      episodeItems.push(...ytItems.map((item) => ({ ...item, platform: 'youtube' })));
-    }
+      const youtubeUrls = unique([...arrayFromMetadata(meta.youtubeUrl), ...arrayFromMetadata(meta.youtubeUrls)]);
+      for (const youtubeUrl of youtubeUrls) {
+        platformsUsed.add('youtube');
+        searchedUrls.push(youtubeUrl);
+        const ytItems = await fetchYoutubePlaylist(youtubeUrl, meta);
+        episodeItems.push(...ytItems.map((item) => ({ ...item, platform: 'youtube' as const })));
+      }
 
-    const podcastName = String(meta.podcastName || String(kol.display_name || ''));
-    if (episodeItems.length === 0 && podcastName) {
-      const rssGuesses = [
-        `https://feeds.soundon.fm/podcasts/${slugify(podcastName)}.xml`,
-      ];
-      for (const rssUrl of rssGuesses) {
-        try {
-          const xml = await fetch(rssUrl, { headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0' }, signal: AbortSignal.timeout(10_000) }).then((res) => res.text());
-          if (xml.includes('<rss') || xml.includes('<feed')) {
-            const items = parseRssItems(xml);
-            episodeItems.push(...items.map((item) => ({ ...item, platform: 'rss' })));
-            platformsUsed.add('rss');
-            break;
-          }
-        } catch {
-          continue;
+      const podcastName = String(meta.podcastName || String(kol.display_name || ''));
+      const explicitRssUrls = arrayFromMetadata(meta.rssUrl).concat(arrayFromMetadata(meta.rssUrls));
+      for (const rssUrl of unique(explicitRssUrls)) {
+        searchedUrls.push(rssUrl);
+        const rssItems = await fetchExplicitRssItems(rssUrl);
+        if (rssItems.length > 0) {
+          platformsUsed.add('rss');
+          episodeItems.push(...rssItems);
         }
       }
+
+      const appleUrls = arrayFromMetadata(meta.appleUrl).concat(arrayFromMetadata(meta.appleUrls));
+      for (const appleUrl of unique(appleUrls)) {
+        searchedUrls.push(appleUrl);
+        const appleItems = await fetchApplePodcastRssItems(appleUrl);
+        if (appleItems.length > 0) {
+          platformsUsed.add('apple_podcast');
+          episodeItems.push(...appleItems);
+        }
+      }
+
+      if (episodeItems.length === 0 && podcastName) {
+        const rssGuess = `https://feeds.soundon.fm/podcasts/${slugify(podcastName)}.xml`;
+        searchedUrls.push(rssGuess);
+        const rssItems = await fetchExplicitRssItems(rssGuess);
+        if (rssItems.length > 0) {
+          platformsUsed.add('rss');
+          episodeItems.push(...rssItems);
+        }
+      }
+
+      const uniqueEpisodes = Array.from(new Map(episodeItems.map((item) => [`${item.platform}::${item.link}`, item] as const)).values()).slice(0, 10);
+      let kolWeakSignals = 0;
+      for (const ep of uniqueEpisodes) {
+        const { error } = await supabase.from('podcast_episodes').upsert(
+          {
+            source_entity_id: sourceEntityId,
+            kol_profile_id: kolId,
+            platform: ep.platform,
+            podcast_name: podcastName,
+            episode_title: ep.title,
+            episode_url: ep.link,
+            audio_url: ep.audioUrl || null,
+            external_id: extractYoutubeVideoId(ep.link) || null,
+            published_at: ep.pubDate,
+            transcript_status: 'pending',
+            metadata: {
+              synced_by: 'runPodcastSync',
+              kol_name: kolName,
+              source_mode: ep.sourceMode || null,
+              description: ep.description || null,
+            },
+            updated_at: nowIso(),
+          },
+          { onConflict: 'platform,episode_url' },
+        );
+        if (error && !String(error.message).includes('duplicate')) throw new Error(error.message);
+        totalEpisodes += 1;
+        if (ep.platform === 'youtube') youtubeEpisodes += 1;
+
+        const weakText = compactText(`${ep.title}。${ep.description || ''}`);
+        const weakInsights = extractPodcastInsights(weakText);
+        for (const symbol of weakInsights.symbols) matchedSymbols.add(symbol);
+        if (weakInsights.symbols.length > 0) {
+          const docsWritten = await upsertSourceRawDocuments([{
+            sourceEntityId,
+            platform: ep.platform === 'youtube' ? 'youtube' : 'podcast',
+            documentUrl: ep.link,
+            title: `[KOL影音弱訊號] ${kolName}: ${ep.title}`,
+            summary: weakText.slice(0, 600),
+            contentText: weakText.slice(0, 3000),
+            publishedAt: ep.pubDate,
+            symbols: weakInsights.symbols,
+            sentimentLabel: weakInsights.thesis.length > 0 ? 'bullish' : weakInsights.risks.length > 0 ? 'bearish' : 'neutral',
+            confidence: 0.34,
+            metadata: {
+              connector: 'podcast_sync',
+              evidence_class: 'kol_av_weak_signal',
+              kol_name: kolName,
+              weak_signal_only: true,
+              source_mode: ep.sourceMode || null,
+            },
+          }]);
+          weakSignalsWritten += docsWritten;
+          kolWeakSignals += docsWritten;
+        }
+      }
+
+      const failureReason =
+        uniqueEpisodes.length > 0
+          ? null
+          : searchedUrls.length === 0
+            ? 'missing_youtube_or_podcast_endpoint'
+            : process.env.YOUTUBE_API_KEY
+              ? 'no_recent_episode_found'
+              : 'no_recent_episode_found_youtube_api_key_missing';
+      if (failureReason) failureReasonByKol[kolName] = failureReason;
+      kolBreakdown.push({
+        kol: kolName,
+        searchedUrls,
+        episodesFound: uniqueEpisodes.length,
+        youtubeEpisodes: uniqueEpisodes.filter((item) => item.platform === 'youtube').length,
+        weakSignalsWritten: kolWeakSignals,
+        transcriptsReady: 0,
+        failureReason,
+      });
     }
 
-    for (const ep of episodeItems.slice(0, 8)) {
-      const { error } = await supabase.from('podcast_episodes').upsert(
-        {
-          source_entity_id: sourceEntityId,
-          kol_profile_id: kolId,
-          platform: ep.platform,
-          podcast_name: podcastName,
-          episode_title: ep.title,
-          episode_url: ep.link,
-          audio_url: ep.audioUrl || null,
-          external_id: extractYoutubeVideoId(ep.link) || null,
-          published_at: ep.pubDate,
-          transcript_status: 'pending',
-          metadata: { synced_by: 'runPodcastSync' },
-          updated_at: nowIso(),
-        },
-        { onConflict: 'platform,episode_url' },
-      );
-      if (error && !String(error.message).includes('duplicate')) throw new Error(error.message);
-      totalEpisodes += 1;
-    }
+    const recordsWritten = totalEpisodes + weakSignalsWritten;
+    await finishConnectorRun(podcastRunId, recordsWritten > 0 ? 'success' : 'partial', recordsWritten, {
+      error_summary: recordsWritten > 0 ? null : 'no_podcast_or_youtube_episodes_found',
+      metadata: {
+        searched_keywords: searchedKeywords,
+        searched_targets: searchedKeywords,
+        platforms: Array.from(platformsUsed),
+        episodes_found: totalEpisodes,
+        youtube_episodes: youtubeEpisodes,
+        weak_signals_written: weakSignalsWritten,
+        matched_symbols: Array.from(matchedSymbols),
+        kol_breakdown: kolBreakdown,
+        failure_reason_by_kol: failureReasonByKol,
+        youtube_api_key_present: Boolean(process.env.YOUTUBE_API_KEY),
+      },
+    });
+    await finishConnectorRun(youtubeRunId, youtubeEpisodes + weakSignalsWritten > 0 ? 'success' : 'partial', youtubeEpisodes + weakSignalsWritten, {
+      error_summary: youtubeEpisodes + weakSignalsWritten > 0 ? null : 'no_youtube_episodes_found',
+      metadata: {
+        searched_keywords: searchedKeywords,
+        searched_targets: searchedKeywords,
+        episodes_found: youtubeEpisodes,
+        weak_signals_written: weakSignalsWritten,
+        matched_symbols: Array.from(matchedSymbols),
+        kol_breakdown: kolBreakdown,
+        failure_reason_by_kol: failureReasonByKol,
+        youtube_api_key_present: Boolean(process.env.YOUTUBE_API_KEY),
+      },
+    });
+
+    return {
+      runId: podcastRunId,
+      dryRun,
+      recordsWritten,
+      episodesFound: totalEpisodes,
+      weakSignalsWritten,
+      platforms: Array.from(platformsUsed),
+      kolBreakdown,
+    };
+  } catch (error) {
+    const message = (error as Error).message;
+    await finishConnectorRun(podcastRunId, 'failed', 0, { error_summary: message });
+    await finishConnectorRun(youtubeRunId, 'failed', 0, { error_summary: message });
+    throw error;
   }
-
-  return { runId: randomUUID(), dryRun, recordsWritten: totalEpisodes, episodesFound: totalEpisodes, platforms: Array.from(platformsUsed) };
 }
 
 export async function runPodcastTranscribe(options?: { dryRun?: boolean }) {
@@ -3082,7 +8275,7 @@ export async function runPodcastTranscribe(options?: { dryRun?: boolean }) {
 
       await upsertSourceRawDocuments([{
         sourceEntityId: ep.source_entity_id ? String(ep.source_entity_id) : null,
-        platform: 'podcast',
+        platform: platform === 'youtube' ? 'youtube' : 'podcast',
         documentUrl: epUrl,
         title: `[Podcast] ${podcastName}: ${episodeTitle}`,
         summary: transcriptResult.text.slice(0, 600),
@@ -3091,7 +8284,15 @@ export async function runPodcastTranscribe(options?: { dryRun?: boolean }) {
         symbols: insights.symbols,
         sentimentLabel: insights.thesis.length > 0 ? 'bullish' : 'neutral',
         confidence: 0.6,
-        metadata: { connector: 'podcast_transcript', video_id: videoId, lang: transcriptResult.lang, source: transcriptSource },
+        metadata: {
+          connector: 'podcast_transcript',
+          evidence_class: 'kol_av_transcript_signal',
+          weak_signal_only: false,
+          video_id: videoId,
+          lang: transcriptResult.lang,
+          source: transcriptSource,
+          kol_name: podcastName,
+        },
       }]);
 
       transcribed += 1;

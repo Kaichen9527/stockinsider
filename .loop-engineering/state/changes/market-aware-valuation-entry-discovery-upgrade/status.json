@@ -1,0 +1,40 @@
+{
+  "changeId": "market-aware-valuation-entry-discovery-upgrade",
+  "loopStage": "release_recommended",
+  "requirementsStatus": "approved",
+  "designStatus": "approved",
+  "implementationStatus": "ready_for_full_verification",
+  "verificationStatus": "pass",
+  "releaseStatus": "release_recommended",
+  "createdAt": "2026-06-28T00:00:00+08:00",
+  "updatedAt": "2026-06-28T15:40:59+08:00",
+  "baselineDomain": "stock-recommendation-engine",
+  "scope": [
+    "market-aware valuation and target stale explanation",
+    "TAIEX/OTC market analysis for stock entry timing",
+    "entry/exit decision v3 actionability",
+    "broker and discovery evidence visibility for repricing"
+  ],
+  "nonGoals": [
+    "automatic target raise from price action only",
+    "formal recommendation gate relaxation",
+    "new Supabase migration unless separately approved",
+    "deployment",
+    "secrets or environment changes"
+  ],
+  "blockedReason": null,
+  "nextHumanResponse": null,
+  "approvalNotes": [
+    "User responded APPROVE REQUIREMENTS and explicitly asked Codex to continue without waiting for more commands.",
+    "Design is approved under autonomous-continuation instruction; release/deploy remains out of scope unless separately requested."
+  ],
+  "implementationNotes": [
+    "Local lint/build pass.",
+    "Local market-index, market-aware-entry-v3, entry-buy-actionability-v2, scenario-actionability, revaluation-sla-v2, broker-evidence, pool-freshness, recommendation-gates, valuation-sanity, revaluation-loop, radar-live, and source-health audits pass against http://127.0.0.1:3012.",
+    "Full Playwright smoke passed against http://127.0.0.1:3012.",
+    "All tasks in tasks.md are complete.",
+    "Full local Loop verification passed.",
+    "Loop release evaluation is RELEASE_RECOMMENDED; deploy/merge/push not performed.",
+    "Final copy guard fix removed missing-price placeholders such as '站回 -'; refreshed audits and Playwright smoke passed."
+  ]
+}

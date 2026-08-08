@@ -1,0 +1,11 @@
+{
+  "bootstrap": "npm install && cd web && npm install",
+  "run": "cd web && npm run dev",
+  "verify_fast": "cd web && npm run lint && npm run build",
+  "verify_full": "cd web && npm run lint && npm run build && PLAYWRIGHT_SKIP_WEBSERVER=1 E2E_BASE_URL=${E2E_BASE_URL:-http://127.0.0.1:3012} npm exec playwright test e2e/investor.spec.ts e2e/deep-dive-story.spec.ts e2e/radar-layering.spec.ts --reporter=line",
+  "e2e": "cd web && PLAYWRIGHT_SKIP_WEBSERVER=1 E2E_BASE_URL=${E2E_BASE_URL:-http://127.0.0.1:3012} npm exec playwright test e2e/investor.spec.ts e2e/deep-dive-story.spec.ts e2e/radar-layering.spec.ts --reporter=line",
+  "migration": "Manual only: apply a single reviewed migration to Supabase; never run npm run db:migrate without explicit approval.",
+  "release_check": "npm run audit:recommendation-gates && npm run audit:valuation-sanity && npm run audit:revaluation-loop && npm run audit:radar-live-availability && npm run audit:source-health && npm run audit:api-payload-size && npm run audit:supabase-egress-risk",
+  "deploy": "Manual only: Vercel preview/production deploy requires explicit user approval after loop-release.",
+  "note": "StockInsider Loop commands use real project checks. Loop release evaluates readiness only; it must not auto-merge, auto-deploy, or modify secrets."
+}
