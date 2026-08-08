@@ -66,6 +66,14 @@ BEGIN
 END
 $rpc_owner$;
 
+-- Managed PostgreSQL administrators commonly have CREATEROLE without SUPERUSER.
+-- PostgreSQL requires SET membership in a target role before transferring object
+-- ownership to it. Keep the managed migration administrator as a member of this
+-- NOLOGIN owner role so idempotent reapplication and administrator-owned helper
+-- functions retain the same closed table authority; no application role is added.
+GRANT opportunity_v3_rpc_owner TO CURRENT_USER;
+
+GRANT USAGE, CREATE ON SCHEMA public TO opportunity_v3_rpc_owner;
 GRANT USAGE ON SCHEMA extensions TO opportunity_v3_rpc_owner;
 GRANT EXECUTE ON FUNCTION extensions.digest(bytea,text) TO opportunity_v3_rpc_owner;
 GRANT EXECUTE ON FUNCTION extensions.gen_random_uuid() TO opportunity_v3_rpc_owner;
@@ -17101,7 +17109,9 @@ BEGIN
   END IF;
 END
 $legacy_correctness_owner$;
+GRANT legacy_correctness_rpc_owner TO CURRENT_USER;
 GRANT USAGE ON SCHEMA public,extensions TO legacy_correctness_rpc_owner;
+GRANT CREATE ON SCHEMA public TO legacy_correctness_rpc_owner;
 GRANT EXECUTE ON FUNCTION extensions.digest(bytea,text),extensions.gen_random_uuid() TO legacy_correctness_rpc_owner;
 
 DO $legacy_correctness_types$
@@ -17897,5 +17907,7 @@ ALTER FUNCTION public.read_legacy_frozen_revision_v3_11(uuid,uuid,text,uuid,text
 ALTER FUNCTION public.read_legacy_candidate_fact_plane_v3_11(timestamptz,jsonb) OWNER TO opportunity_v3_rpc_owner;
 REVOKE ALL ON FUNCTION public.resolve_legacy_scheduled_occurrence_v3_11(text,text),public.read_legacy_discovery_authority_v3_11(uuid,text,text),public.read_legacy_frozen_revision_v3_11(uuid,uuid,text,uuid,text),public.read_legacy_candidate_fact_plane_v3_11(timestamptz,jsonb) FROM PUBLIC,anon,authenticated,service_role;
 GRANT EXECUTE ON FUNCTION public.resolve_legacy_scheduled_occurrence_v3_11(text,text),public.read_legacy_discovery_authority_v3_11(uuid,text,text),public.read_legacy_frozen_revision_v3_11(uuid,uuid,text,uuid,text),public.read_legacy_candidate_fact_plane_v3_11(timestamptz,jsonb) TO legacy_correctness_rpc_owner;
+
+REVOKE CREATE ON SCHEMA public FROM legacy_correctness_rpc_owner,opportunity_v3_rpc_owner;
 
 COMMIT;

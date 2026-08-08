@@ -201,6 +201,7 @@ before(() => {
     CREATE ROLE anon NOLOGIN;
     CREATE ROLE authenticated NOLOGIN;
     CREATE ROLE service_role NOLOGIN BYPASSRLS;
+    CREATE ROLE stockinsider_managed_migrator LOGIN NOSUPERUSER CREATEROLE BYPASSRLS;
     CREATE SCHEMA extensions;
     CREATE EXTENSION pgcrypto WITH SCHEMA extensions;
     CREATE TABLE public.source_entities(id uuid PRIMARY KEY);
@@ -224,11 +225,17 @@ before(() => {
       source_timestamp timestamptz NOT NULL,
       ingested_at timestamptz NOT NULL DEFAULT clock_timestamp()
     );
+    ALTER DATABASE postgres OWNER TO stockinsider_managed_migrator;
+    ALTER SCHEMA public OWNER TO stockinsider_managed_migrator;
+    GRANT USAGE ON SCHEMA extensions TO stockinsider_managed_migrator WITH GRANT OPTION;
+    GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA extensions TO stockinsider_managed_migrator WITH GRANT OPTION;
+    GRANT ALL PRIVILEGES ON TABLE public.source_entities,public.stocks,public.stock_signals
+      TO stockinsider_managed_migrator WITH GRANT OPTION;
   `);
   for (let application = 0; application < 2; application += 1) {
     command(pg.psql, [
       '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
-      '-U', user, '-d', 'postgres', '-f', migrationPath,
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', migrationPath,
     ]);
   }
 });
@@ -241,6 +248,26 @@ after(() => {
     env: { ...process.env, LC_ALL: 'C' },
   });
   fs.rmSync(cluster.directory, { recursive: true, force: true });
+});
+
+test('managed non-superuser migration retains only NOLOGIN owner memberships', () => {
+  assert.match(sql, /GRANT opportunity_v3_rpc_owner TO CURRENT_USER;/u);
+  assert.match(sql, /GRANT legacy_correctness_rpc_owner TO CURRENT_USER;/u);
+  assert.match(sql, /GRANT USAGE, CREATE ON SCHEMA public TO opportunity_v3_rpc_owner;/u);
+  assert.match(sql, /GRANT CREATE ON SCHEMA public TO legacy_correctness_rpc_owner;/u);
+  assert.match(sql, /REVOKE CREATE ON SCHEMA public FROM legacy_correctness_rpc_owner,opportunity_v3_rpc_owner;/u);
+  assert.doesNotMatch(sql, /REVOKE (?:legacy_correctness_rpc_owner|opportunity_v3_rpc_owner) FROM CURRENT_USER/u);
+  const rows = JSON.parse(psql(`
+    SELECT json_agg(json_build_object(
+      'role', requested.role_name,
+      'member', pg_has_role('stockinsider_managed_migrator', requested.role_name, 'MEMBER')
+    ) ORDER BY requested.role_name)
+    FROM (VALUES ('legacy_correctness_rpc_owner'),('opportunity_v3_rpc_owner')) requested(role_name);
+  `, ['-t', '-A']));
+  assert.deepEqual(rows, [
+    { role: 'legacy_correctness_rpc_owner', member: true },
+    { role: 'opportunity_v3_rpc_owner', member: true },
+  ]);
 });
 
 const functions = [
