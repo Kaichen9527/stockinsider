@@ -5977,10 +5977,10 @@ const DEFAULT_AGENCY_AGENT_POLICY: AgencyAgentPolicy = {
 
 function resolveAgencyAllowlistPath() {
   const candidates = [
-    path.resolve(process.cwd(), '.agent', 'vendor', 'agency-agents', 'allowlist.json'),
-    path.resolve(process.cwd(), '..', '.agent', 'vendor', 'agency-agents', 'allowlist.json'),
+    path.resolve(/*turbopackIgnore: true*/ process.cwd(), '.agent', 'vendor', 'agency-agents', 'allowlist.json'),
+    path.resolve(/*turbopackIgnore: true*/ process.cwd(), '..', '.agent', 'vendor', 'agency-agents', 'allowlist.json'),
   ];
-  return candidates.find((candidate) => existsSync(candidate)) || null;
+  return candidates.find((candidate) => existsSync(/*turbopackIgnore: true*/ candidate)) || null;
 }
 
 function loadAgencyAgentConfig(): { profiles: AgencyAgentProfile[]; policy: AgencyAgentPolicy; source: 'vendored_allowlist' | 'built_in_fallback' } {
@@ -5994,7 +5994,7 @@ function loadAgencyAgentConfig(): { profiles: AgencyAgentProfile[]; policy: Agen
   }
 
   try {
-    const parsed = JSON.parse(readFileSync(allowlistPath, 'utf8')) as {
+    const parsed = JSON.parse(readFileSync(/*turbopackIgnore: true*/ allowlistPath, 'utf8')) as {
       library?: string;
       policy?: Partial<AgencyAgentPolicy> & {
         publish_recommendations_directly?: boolean;
