@@ -1363,6 +1363,7 @@ describe('closed HTTP body value schemas', () => {
       pageSource,
       /const publishedRadar = await loadPublishedRadarProjection\('home'\);[\s\S]*const legacyRadar = \(publishedRadar \?\? await getDailyRadarData\(\)\)[\s\S]*layerHomepageOpportunityV3\(\{[\s\S]*legacyRadar,[\s\S]*loadShadowEngine:[\s\S]*shadowEnabled: v3PublicEnabled\(\),/u,
     );
+    assert.match(pageSource, /\(radar\.reports \|\| \[\]\)\.filter/u);
     assert.ok(
       pageSource.indexOf('<ShadowOpportunityV3') <
         pageSource.indexOf('<RadarTabs radar={radar}'),

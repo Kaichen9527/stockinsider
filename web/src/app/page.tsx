@@ -138,7 +138,7 @@ export default async function Home() {
     const zh = item.chineseName || item.name || item.symbol;
     symbolNameMap.set(item.symbol, zh);
   }
-  const visibleReports = radar.reports.filter((memo) => {
+  const visibleReports = (radar.reports || []).filter((memo) => {
     const relatedSymbol = memo.relatedSymbols[0] || null;
     if (!relatedSymbol) return false;
     return Boolean(symbolNameMap.get(relatedSymbol));
