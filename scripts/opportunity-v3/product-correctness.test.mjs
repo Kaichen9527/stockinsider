@@ -906,6 +906,16 @@ const checks = {
       valuation: { status: 'valuation_review', reportedPe: { availability: 'unavailable', reason: 'authority_conflict' } }, evaluationDisposition: 'unchanged', lastEvaluatedAt: '2026-08-01T00:00:00Z', materialChangedBecause: [] });
     assert.deepEqual(value.fundamental, fundamental); assert.equal(value.valuation.exchangeReportedPe.reason, 'authority_conflict'); assert.equal(value.timingRisk.reason, 'reclaim_required'); assert.match(value.noChangeMessage, /無重大變化/u); assert.deepEqual(value.materialChangedBecause, []);
     assert.throws(() => serialize({ symbol: '2337', fundamental: { availability: 'available', axes: {} } }), /fundamental thesis unavailable/u);
+    for (const malformed of [
+      { ...fundamental, thesis: 'x'.repeat(241) },
+      { ...fundamental, thesis: 'line one\nline two' },
+      { ...fundamental, thesis: 'e\u0301' },
+      { ...fundamental, latestChange: 'x'.repeat(201) },
+      { ...fundamental, risks: ['x'.repeat(161)] },
+      { ...fundamental, evidenceRefs: ['official-2337', 'official-2337'] },
+      { ...fundamental, asOf: '2026-08-02T00:00:00Z' },
+    ]) assert.throws(() => serialize({ symbol: '2337', fundamental: malformed,
+      lastEvaluatedAt: '2026-08-01T00:00:00Z' }), /fundamental/u);
     const built = runtime('auth-source-worker-cli.js').buildLegacyCandidateDecision({
       candidate: { stockId: 'stock-2337', symbol: '2337', name: '旺宏', canonicalSector: 'semiconductor',
         claimId: 'claim-2337', sourcePriority: 70, materialEvidenceHash: 'a'.repeat(64) },
@@ -913,6 +923,17 @@ const checks = {
     });
     assert.deepEqual(built.fundamental.evidenceRefs, ['claim-2337']);
     assert.match(built.fundamental.thesis, /point-in-time 基本面輸入尚不足/u);
+    const unrelated = Array.from({ length: 8 }, (_, index) => ['stock-2337', 'diluted_shares', null, null, null,
+      100 + index, null, null, null, '2026-01-01T00:00:00Z', null, null, `unrelated-${index}`]);
+    const factBacked = runtime('auth-source-worker-cli.js').buildLegacyCandidateDecision({
+      candidate: { stockId: 'stock-2337', symbol: '2337', name: '旺宏', canonicalSector: 'semiconductor',
+        claimId: 'claim-2337', sourcePriority: 70, materialEvidenceHash: 'a'.repeat(64) },
+      facts: [...unrelated, ['stock-2337', 'roe', null, null, null, 0.2, null, null, null,
+        '2026-07-01T00:00:00Z', null, null, 'official-roe']],
+      history: ohlcv(130), benchmark: ohlcv(130), sourceCutoff: '2030-01-01T00:00:00Z',
+    });
+    assert.deepEqual(factBacked.fundamental.evidenceRefs, ['official-roe']);
+    assert.equal(factBacked.fundamental.asOf, '2026-07-01T00:00:00Z');
   },
   'PCR-031': () => {
     const identity = runtime('comparison-identity.js'); const base = identity.buildComparableRunIdentity({ asOf: '2026-08-01', universeManifestHash: 'a'.repeat(64) });

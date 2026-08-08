@@ -11,15 +11,25 @@ function closedUnavailable(value, fallbackReason) {
   return { availability: 'unavailable', reason: value?.reason || fallbackReason };
 }
 
-function serializeFundamental(value) {
+function canonicalSingleLine(value, maximum) {
+  return typeof value === 'string' && [...value].length >= 1 && [...value].length <= maximum
+    && value === value.normalize('NFC') && value === value.trim()
+    && !/[\r\n\u0000-\u001f\u007f]/u.test(value);
+}
+
+function serializeFundamental(value, lastEvaluatedAt) {
   invariant(value && typeof value === 'object' && !Array.isArray(value), 'fundamental narrative unavailable');
-  invariant(typeof value.thesis === 'string' && value.thesis.length > 0, 'fundamental thesis unavailable');
-  invariant(typeof value.latestChange === 'string' && value.latestChange.length > 0, 'fundamental latest change unavailable');
+  invariant(canonicalSingleLine(value.thesis, 240), 'fundamental thesis unavailable');
+  invariant(canonicalSingleLine(value.latestChange, 200), 'fundamental latest change unavailable');
   invariant(Array.isArray(value.risks) && value.risks.length >= 1 && value.risks.length <= 4
-    && value.risks.every((risk) => typeof risk === 'string' && risk.length > 0), 'fundamental risks unavailable');
+    && value.risks.every((risk) => canonicalSingleLine(risk, 160)), 'fundamental risks unavailable');
   invariant(Array.isArray(value.evidenceRefs) && value.evidenceRefs.length >= 1 && value.evidenceRefs.length <= 8
-    && value.evidenceRefs.every((ref) => typeof ref === 'string' && ref.length > 0), 'fundamental evidence unavailable');
-  invariant(typeof value.asOf === 'string' && Number.isFinite(Date.parse(value.asOf)), 'fundamental as-of unavailable');
+    && value.evidenceRefs.every((ref) => canonicalSingleLine(ref, Number.MAX_SAFE_INTEGER))
+    && new Set(value.evidenceRefs).size === value.evidenceRefs.length, 'fundamental evidence unavailable');
+  invariant(typeof value.asOf === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:[.]\d{3})?Z$/u.test(value.asOf)
+    && Number.isFinite(Date.parse(value.asOf))
+    && (lastEvaluatedAt == null || (Number.isFinite(Date.parse(lastEvaluatedAt))
+      && Date.parse(value.asOf) <= Date.parse(lastEvaluatedAt))), 'fundamental as-of unavailable');
   return { thesis: value.thesis, latestChange: value.latestChange, risks: [...value.risks],
     evidenceRefs: [...value.evidenceRefs], asOf: value.asOf };
 }
@@ -47,7 +57,7 @@ function serializeCorrectnessPublicUnion(decision) {
     ...(decision?.name ? { name: decision.name } : {}),
     researchMaturity: MATURITY.has(decision?.researchMaturity) ? decision.researchMaturity : 'source_signal',
     newPositionAction: action,
-    fundamental: serializeFundamental(decision?.fundamental),
+    fundamental: serializeFundamental(decision?.fundamental, decision?.lastEvaluatedAt),
     technical: {
       availability: state ? 'available' : 'unavailable',
       state,
