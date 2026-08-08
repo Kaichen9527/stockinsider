@@ -86,7 +86,7 @@ function assertPinnedNode() {
 
 function assertTrackedScript(commitSha) {
   const row = git(['ls-tree', '-z', commitSha, '--', scriptRelative]);
-  const match = row.match(/^(100644) blob ([0-9a-f]{40})\t(.+)\u0000?$/u);
+  const match = row.match(/^(100644) blob ([0-9a-f]{40})\t([^\u0000]+)\u0000?$/u);
   assert.ok(match, 'shadow gate script must be one tracked regular blob');
   assert.equal(match[3], scriptRelative);
   const absolute = path.join(root, scriptRelative);
