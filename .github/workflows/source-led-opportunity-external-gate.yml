@@ -135,6 +135,7 @@ jobs:
           test -x "$postgres_bin/initdb"
           test -x "$postgres_bin/pg_ctl"
           echo "$postgres_bin" >> "$GITHUB_PATH"
+          echo "OPPORTUNITY_V3_POSTGRES_BIN=$postgres_bin" >> "$GITHUB_ENV"
       - name: Retrieve bootstrap and prepare detached subject
         uses: ./.github/actions/prepare-source-led-external-subject
         with:
