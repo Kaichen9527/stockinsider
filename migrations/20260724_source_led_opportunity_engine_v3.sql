@@ -17890,7 +17890,10 @@ BEGIN
     AND job.owner_token_hash=v_token_hash AND job.lease_expires_at>=v_now FOR UPDATE;
   IF NOT FOUND THEN RETURN; END IF;
   IF p_failure='provider_unavailable' AND v_job.attempt<5 THEN UPDATE public.legacy_producer_jobs_v3_11 SET status='retryable',owner_token_hash=NULL,leased_at=NULL,heartbeat_at=NULL,lease_expires_at=NULL WHERE job_id=p_job;status:='running';
-  ELSE UPDATE public.legacy_producer_jobs_v3_11 SET status=CASE WHEN p_failure='cancelled' THEN 'cancelled' ELSE 'failed' END,terminal_at=v_now,failure_code=p_failure,owner_token_hash=NULL,leased_at=NULL,heartbeat_at=NULL,lease_expires_at=NULL WHERE job_id=p_job;
+  ELSE UPDATE public.legacy_producer_jobs_v3_11 SET status=CASE
+      WHEN p_failure='cancelled' THEN 'cancelled'::public.opportunity_legacy_producer_job_status_v3_11
+      ELSE 'failed'::public.opportunity_legacy_producer_job_status_v3_11
+    END,terminal_at=v_now,failure_code=p_failure,owner_token_hash=NULL,leased_at=NULL,heartbeat_at=NULL,lease_expires_at=NULL WHERE job_id=p_job;
     UPDATE public.legacy_producer_runs_v3_11 SET status=CASE WHEN p_failure='cancelled' THEN 'cancelled' ELSE 'failed' END,terminal_at=v_now,failure_code=p_failure,heartbeat_at=v_now,lease_expires_at=v_now WHERE run_id=p_run;status:=CASE WHEN p_failure='cancelled' THEN 'cancelled' ELSE 'failed' END;END IF;RETURN NEXT;
 END $$;
 CREATE OR REPLACE FUNCTION reap_legacy_producer_jobs_v3_11(p_limit integer)
@@ -17902,7 +17905,10 @@ BEGIN
     PERFORM 1 FROM public.legacy_producer_runs_v3_11 WHERE run_id=v_row.run_id FOR UPDATE;
     SELECT attempt INTO v_attempt FROM public.legacy_producer_jobs_v3_11 WHERE run_id=v_row.run_id AND job_id=v_row.job_id AND status='leased' AND lease_expires_at<clock_timestamp() FOR UPDATE SKIP LOCKED;
     IF NOT FOUND THEN CONTINUE;END IF;
-    UPDATE public.legacy_producer_jobs_v3_11 SET status=CASE WHEN v_attempt<5 THEN 'retryable' ELSE 'failed' END,failure_code=CASE WHEN v_attempt<5 THEN NULL ELSE 'job_attempts_exhausted'::public.opportunity_legacy_producer_failure_code_v3_11 END,
+    UPDATE public.legacy_producer_jobs_v3_11 SET status=CASE
+        WHEN v_attempt<5 THEN 'retryable'::public.opportunity_legacy_producer_job_status_v3_11
+        ELSE 'failed'::public.opportunity_legacy_producer_job_status_v3_11
+      END,failure_code=CASE WHEN v_attempt<5 THEN NULL ELSE 'job_attempts_exhausted'::public.opportunity_legacy_producer_failure_code_v3_11 END,
       terminal_at=CASE WHEN v_attempt<5 THEN NULL ELSE date_trunc('second',clock_timestamp()) END,owner_token_hash=NULL,leased_at=NULL,heartbeat_at=NULL,lease_expires_at=NULL WHERE job_id=v_row.job_id;
     IF v_attempt>=5 THEN UPDATE public.legacy_producer_runs_v3_11 SET status='failed',failure_code='job_attempts_exhausted',terminal_at=date_trunc('second',clock_timestamp()) WHERE run_id=v_row.run_id;END IF;v_count:=v_count+1;
   END LOOP;RETURN v_count;

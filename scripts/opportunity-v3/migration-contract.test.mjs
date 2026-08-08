@@ -621,6 +621,30 @@ test('legacy producer resolves one scheduled occurrence and resumes the same det
         decode('${legacyRuntimeConfigHex}','hex'),'1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2',
         '50000000-0000-4000-8000-000000000004',120
       );
+    CREATE TEMP TABLE legacy_terminal_claim_capture AS
+      SELECT * FROM public.claim_legacy_producer_job_v3_11(
+        (SELECT run_id FROM legacy_supersede_capture),(SELECT job_id FROM legacy_supersede_capture),
+        '50000000-0000-4000-8000-000000000004',120
+      );
+    CREATE TEMP TABLE legacy_terminal_fail_capture AS
+      SELECT * FROM public.fail_legacy_producer_job_v3_11(
+        (SELECT run_id FROM legacy_supersede_capture),(SELECT job_id FROM legacy_terminal_claim_capture),
+        '50000000-0000-4000-8000-000000000004','cancelled'
+      );
+    CREATE TEMP TABLE legacy_reap_lease_capture AS
+      SELECT * FROM public.acquire_legacy_producer_lease_v3_11(
+        'com.stockinsider.auth-source-worker',repeat('e',40),repeat('f',64),
+        decode('${legacyRuntimeConfigHex}','hex'),'1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2',
+        '50000000-0000-4000-8000-000000000005',120
+      );
+    CREATE TEMP TABLE legacy_reap_claim_capture AS
+      SELECT * FROM public.claim_legacy_producer_job_v3_11(
+        (SELECT run_id FROM legacy_reap_lease_capture),(SELECT job_id FROM legacy_reap_lease_capture),
+        '50000000-0000-4000-8000-000000000005',120
+      );
+    UPDATE public.legacy_producer_jobs_v3_11 SET lease_expires_at=clock_timestamp()-interval '1 second'
+      WHERE job_id=(SELECT job_id FROM legacy_reap_claim_capture);
+    CREATE TEMP TABLE legacy_reap_capture AS SELECT public.reap_legacy_producer_jobs_v3_11(1) reaped;
     SELECT jsonb_build_object(
       'created',(SELECT disposition FROM legacy_lease_capture),
       'busy',(SELECT disposition FROM legacy_busy_capture),
@@ -632,6 +656,10 @@ test('legacy producer resolves one scheduled occurrence and resumes the same det
       'superseded',(SELECT disposition FROM legacy_supersede_capture),
       'oldRunTerminal',(SELECT status FROM public.legacy_producer_runs_v3_11 WHERE run_id=(SELECT run_id FROM legacy_resume_capture)),
       'newRun',(SELECT run_id FROM legacy_supersede_capture)<>(SELECT run_id FROM legacy_resume_capture),
+      'terminalFail',(SELECT status FROM legacy_terminal_fail_capture),
+      'terminalJob',(SELECT status::text FROM public.legacy_producer_jobs_v3_11 WHERE job_id=(SELECT job_id FROM legacy_terminal_claim_capture)),
+      'reaped',(SELECT reaped FROM legacy_reap_capture),
+      'reapedJob',(SELECT status::text FROM public.legacy_producer_jobs_v3_11 WHERE job_id=(SELECT job_id FROM legacy_reap_claim_capture)),
       'jobDeterministic',(SELECT job_id FROM legacy_lease_capture)=(SELECT (
         substr(h,1,8)||'-'||substr(h,9,4)||'-'||substr(h,13,4)||'-'||substr(h,17,4)||'-'||substr(h,21,12)
       )::uuid FROM (SELECT encode(extensions.digest(convert_to(
@@ -645,10 +673,13 @@ test('legacy producer resolves one scheduled occurrence and resumes the same det
   assert.deepEqual({ created: result.created, busy: result.busy, resumed: result.resumed,
     sameRun: result.sameRun, sameJob: result.sameJob, completed: result.completed, failed: result.failed,
     superseded: result.superseded, oldRunTerminal: result.oldRunTerminal, newRun: result.newRun,
+    terminalFail: result.terminalFail, terminalJob: result.terminalJob,
+    reaped: result.reaped, reapedJob: result.reapedJob,
     jobDeterministic: result.jobDeterministic }, {
     created: 'created', busy: 'owner_already_leased', resumed: 'resumed', sameRun: true, sameJob: true,
     completed: 'running', failed: 'running', superseded: 'created', oldRunTerminal: 'cancelled',
-    newRun: true, jobDeterministic: true,
+    newRun: true, terminalFail: 'cancelled', terminalJob: 'cancelled', reaped: 1,
+    reapedJob: 'retryable', jobDeterministic: true,
   });
   assert.equal(Number(result.scheduledHour), 18); assert.equal(Number(result.scheduledMinute), 20);
   assert.ok(Number(result.weekday) >= 1 && Number(result.weekday) <= 5);
