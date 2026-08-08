@@ -14,6 +14,8 @@ const { compactProducerRadarPayload, producerRadarPayloadBytes } = require(path.
 test('compact radar projection is bounded and has deterministic cache identity', () => {
   const decisions = Array.from({ length: 60 }, (_, index) => ({
     symbol: String(7000 + index), claimId: `claim-${index}`, action: 'valuation_review', researchMaturity: 'source_signal',
+    fundamental: { thesis: `${String(7000 + index)} 已有可追溯來源訊號。`, latestChange: '本次重新檢查基本面品質。',
+      risks: ['基本面輸入尚待補齊。'], evidenceRefs: [`claim-${index}`], asOf: '2026-08-01T00:00:00Z' },
     technical: { technicalState: 'unavailable' }, valuation: { status: 'valuation_review' },
     changedBecause: [`source-${index}`], lastEvaluatedAt: '2026-08-01T00:00:00Z', analysisGeneratedAt: '2026-08-01T00:00:00Z',
   }));
