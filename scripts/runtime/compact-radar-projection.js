@@ -65,7 +65,7 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
     .slice(0, 30).map((decision) => ({
       symbol: decision.symbol, chineseName: decision.name ?? null, researchMaturity: 'source_signal',
       newPositionAction: 'valuation_review', discoveredAt: decision.lastEvaluatedAt ?? asOf,
-      sourceClass: decision.sourceClass ?? 'community', sourceSummary: String(decision.raw ?? '來源訊號待研究').normalize('NFC').replace(/[\r\n]+/gu, ' ').slice(0, 180),
+      sourceClass: decision.sourceClass ?? 'community', sourceSummary: [...String(decision.sourceSummary ?? decision.raw ?? '來源訊號待研究').normalize('NFC').replace(/[\r\n]+/gu, ' ')].slice(0, 180).join(''),
       evidenceRefs: [decision.claimId].filter((value) => typeof value === 'string').slice(0, 5),
       valuationStatus: 'pending', technicalState: decision.technical?.technicalState ?? 'unavailable',
       changedBecause: signalReasons.has(decision.reason) ? decision.reason : 'new_source_evidence',

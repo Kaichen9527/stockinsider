@@ -146,6 +146,7 @@ function extractRevisionCandidates(bundle) {
   }
   const sectorByStock = new Map(rowsByKind('taxonomy').filter(Array.isArray).map((row) => [row[0], row[3]]));
   const text = sourceText(frozen.rawFieldPayload);
+  const sourceSummary = [...text.normalize('NFC').replace(/[\r\n]+/gu, ' ').trim()].slice(0, 180).join('');
   const collectedAt = typeof frozen.sourceCollectedAt === 'string'
     ? canonicalUtc(frozen.sourceCollectedAt, 'frozen source collected-at') : null;
   const publishedAt = typeof frozen.sourcePublishedAt === 'string'
@@ -161,6 +162,9 @@ function extractRevisionCandidates(bundle) {
     const raw = tickerMatch ? String(symbol) : String([shortName, ...aliases, legalName].find((name) => typeof name === 'string' && text.includes(name)));
     const claimId = uuidFromHash(`claim:${frozen.revisionId}:${stockId}:${raw}`);
     return [{ sourceKey: frozen.sourceKey, revisionId: frozen.revisionId, stockId, symbol, exchange,
+      name: typeof shortName === 'string' && [...shortName].length <= 40 ? shortName
+        : typeof legalName === 'string' && [...legalName].length <= 40 ? legalName : null,
+      sourceSummary,
       canonicalSector: sectorByStock.get(stockId) ?? 'unknown', raw, claimId,
       claimAsOf: sourceEffectiveAt,
       mentionId: uuidFromHash(`mention:${frozen.revisionId}:${stockId}:${raw}`), claimEligible: true,

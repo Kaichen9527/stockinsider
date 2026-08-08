@@ -27,6 +27,7 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
     candidates.push({
       stockId: outcome.link.stockId,
       symbol: outcome.link.symbol,
+      name: outcome.name ?? null,
       claimId: outcome.claimId,
       claimAsOf: outcome.claimAsOf ?? null,
       mentionId: outcome.mentionId,
@@ -36,6 +37,7 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
       sourceClass: outcome.sourceClass ?? 'community',
       sourcePriority: discoveryPriority(outcome, disposition),
       raw: outcome.raw,
+      sourceSummary: outcome.sourceSummary ?? null,
       materialEvidenceHash,
       ...disposition,
     });

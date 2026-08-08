@@ -926,7 +926,7 @@ function DiscoveryTab({ radar }: { radar: RadarDailyPayload }) {
       </p>
       {delta ? (
         <section aria-label="每日股票發現變化" className="grid grid-cols-2 gap-2 rounded-[1.25rem] border border-line bg-surface p-3 text-xs sm:grid-cols-4">
-          <div><span className="text-slate-500 dark:text-emerald-100/55">今日新增</span><strong className="mt-1 block text-slate-900 dark:text-emerald-50">{delta.added.length}</strong></div>
+          <div><span className="text-slate-500 dark:text-emerald-100/55">候選池新增</span><strong className="mt-1 block text-slate-900 dark:text-emerald-50">{delta.added.length}</strong></div>
           <div><span className="text-slate-500 dark:text-emerald-100/55">今日退出</span><strong className="mt-1 block text-slate-900 dark:text-emerald-50">{delta.exited.length}</strong></div>
           <div><span className="text-slate-500 dark:text-emerald-100/55">持續追蹤</span><strong className="mt-1 block text-slate-900 dark:text-emerald-50">{delta.continued.length}</strong></div>
           <div><span className="text-slate-500 dark:text-emerald-100/55">無重大變化</span><strong className="mt-1 block text-slate-900 dark:text-emerald-50">{delta.unchangedReasons.length}</strong></div>
@@ -949,7 +949,7 @@ function DiscoveryTab({ radar }: { radar: RadarDailyPayload }) {
         <section aria-labelledby="source-signals-title" className="space-y-3">
           <div>
             <h3 id="source-signals-title" className="text-base font-semibold text-slate-900 dark:text-emerald-50">新來源訊號</h3>
-            <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/65">尚未完成估值的股票也會先列出；在資料補齊前不形成買進建議。</p>
+            <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/65">尚未完成估值的股票也會先列出；目前顯示候選池排序前 30 檔，在資料補齊前不形成買進建議。</p>
           </div>
           <div className="grid gap-3 lg:grid-cols-2">
             {sourceSignals.map((signal) => <SourceSignalCardView key={`${signal.symbol}-${signal.discoveredAt}`} signal={signal} />)}
