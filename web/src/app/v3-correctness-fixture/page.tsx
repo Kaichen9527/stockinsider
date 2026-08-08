@@ -39,7 +39,7 @@ const baseDecision: ResearchDecisionV311 = {
   noChangeMessage: null,
 };
 
-function card(id: string, symbol: string, decision: ResearchDecisionV311): RecommendationCard {
+function card(id: string, symbol: string, decision: ResearchDecisionV311, overrides: Partial<RecommendationCard> = {}): RecommendationCard {
   return {
     recommendationId: id,
     symbol,
@@ -51,6 +51,7 @@ function card(id: string, symbol: string, decision: ResearchDecisionV311): Recom
     action: 'watch',
     rationale: '只供受控 UI 正確性測試，不是投資建議。',
     researchDecision: decision,
+    ...overrides,
   };
 }
 
@@ -71,6 +72,10 @@ const cards = [
     materialChangeHash: null,
     materialChangedBecause: [],
     noChangeMessage: null,
+  }, {
+    recommendationBucket: 'high_conviction', displayBucket: 'formal', displayTargetMode: 'actionable',
+    targetPrice: 200, baseTarget: 200, expectedUpsidePct: 42, displayBaseUpsidePct: 42,
+    cardPrimaryUpsidePct: 42, cardPrimaryUpsideLabel: 'Base 空間', targetCoverageStatus: 'base_upside',
   }),
 ];
 

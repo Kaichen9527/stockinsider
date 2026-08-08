@@ -191,9 +191,12 @@ const technicalStateLabels = {
 export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrimary: boolean }) {
   const cardTitleId = `stock-card-${rec.recommendationId.replace(/[^A-Za-z0-9_-]/gu, '-')}`;
   const researchDecision = rec.researchDecision;
-  const availableResearchDecision = researchDecision?.availability === 'unavailable' ? null : researchDecision;
+  const unavailableResearchDecision = researchDecision?.availability === 'unavailable' ? researchDecision : null;
+  const availableResearchDecision = researchDecision?.availability === 'available' ? researchDecision : null;
   const stateBadge =
-    rec.displayBucket === 'hot_tracking'
+    unavailableResearchDecision
+      ? { label: '研究待補', cls: 'bg-amber-500/12 text-amber-700 dark:text-amber-300' }
+      : rec.displayBucket === 'hot_tracking'
       ? { label: '熱股追蹤', cls: 'bg-orange-500/12 text-orange-700 dark:text-orange-300' }
       : rec.displayBucket === 'archived_over_target' || rec.displayBucket === 'valuation_reflected_archive' || rec.displayTargetMode === 'hidden_over_target'
       ? { label: '估值已反映', cls: 'bg-slate-950/8 text-slate-600 dark:text-emerald-100/65' }
@@ -222,7 +225,13 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
           <h3 id={cardTitleId} className="text-lg font-semibold truncate">{stockDisplayName(rec)}</h3>
           <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs ${stateBadge.cls}`}>{stateBadge.label}</span>
         </div>
-        {isHistoricalObservation(rec) ? (
+        {unavailableResearchDecision ? (
+          <div className="shrink-0 text-right">
+            <p className="text-[11px] tracking-[0.18em] text-slate-500 dark:text-emerald-100/55">估值狀態</p>
+            <span className="text-sm font-bold text-amber-700 dark:text-amber-300">暫停估值</span>
+            <p className="mt-1 text-[11px] text-slate-500 dark:text-emerald-100/55">非今日買點</p>
+          </div>
+        ) : isHistoricalObservation(rec) ? (
           <div className="shrink-0 text-right">
             <p className="text-[11px] tracking-[0.18em] text-slate-500 dark:text-emerald-100/55">重估狀態</p>
             <span className="text-sm font-bold text-amber-700 dark:text-amber-300">等待重估</span>
@@ -249,7 +258,7 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
         )}
       </div>
 
-      {valuationLine(rec) && (
+      {!unavailableResearchDecision && valuationLine(rec) && (
         <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/68">
           {valuationLine(rec)}
         </p>
@@ -261,14 +270,14 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
         </span>
         <span
           className={`rounded-full px-3 py-1 ${
-            rec.targetCoverageStatus === 'over_base_and_scenario' || rec.displayTargetMode === 'hidden_over_target'
+            unavailableResearchDecision || rec.targetCoverageStatus === 'over_base_and_scenario' || rec.displayTargetMode === 'hidden_over_target'
               ? 'bg-slate-950/8 text-slate-600 dark:text-emerald-100/65'
               : rec.targetCoverageStatus === 'scenario_only'
                 ? 'bg-sky-600/12 text-sky-700 dark:text-sky-300'
                 : 'bg-emerald-600/12 text-emerald-700 dark:text-emerald-300'
           }`}
         >
-          {targetCoverageLine(rec)}
+          {unavailableResearchDecision ? '研究證據待補，暫不判斷估值空間' : targetCoverageLine(rec)}
         </span>
         {rec.priceRefreshStatus && rec.priceRefreshStatus !== 'fresh' ? (
           <span className="rounded-full bg-amber-500/12 px-3 py-1 text-amber-700 dark:text-amber-300">股價待更新</span>

@@ -941,6 +941,10 @@ test('public fundamental provenance remains bounded and fail-closed outside the 
     { ...fundamental, asOf: '2026-08-02T00:00:00Z' },
   ]) assert.throws(() => serialize({ symbol: '2337', fundamental: malformed,
     lastEvaluatedAt: '2026-08-01T00:00:00Z' }), /fundamental/u);
+  const opaqueEvidenceRef = 'official-e\u0301vidence\nrevision';
+  assert.deepEqual(serialize({ symbol: '2337', fundamental: { ...fundamental, evidenceRefs: [opaqueEvidenceRef] },
+    lastEvaluatedAt: '2026-08-01T00:00:00Z' }).fundamental.evidenceRefs, [opaqueEvidenceRef],
+  'accepted opaque evidence identifiers remain byte-preserving at the public projection boundary');
   const candidate = { stockId: 'stock-2337', symbol: '2337', name: '旺宏', canonicalSector: 'semiconductor',
     claimId: 'claim-2337', claimAsOf: '2026-06-01T08:00:00+08:00', sourcePriority: 70, materialEvidenceHash: 'a'.repeat(64) };
   const empty = runtime('auth-source-worker-cli.js').buildLegacyCandidateDecision({ candidate,

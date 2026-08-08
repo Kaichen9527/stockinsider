@@ -17,6 +17,11 @@ function canonicalSingleLine(value, maximum) {
     && !/[\r\n\u0000-\u001f\u007f]/u.test(value);
 }
 
+function opaqueEvidenceReference(value) {
+  return typeof value === 'string' && [...value].length >= 1 && [...value].length <= 120
+    && value === value.trim();
+}
+
 function serializeFundamental(value, lastEvaluatedAt) {
   invariant(value && typeof value === 'object' && !Array.isArray(value), 'fundamental narrative unavailable');
   invariant(canonicalSingleLine(value.thesis, 240), 'fundamental thesis unavailable');
@@ -24,7 +29,7 @@ function serializeFundamental(value, lastEvaluatedAt) {
   invariant(Array.isArray(value.risks) && value.risks.length >= 1 && value.risks.length <= 4
     && value.risks.every((risk) => canonicalSingleLine(risk, 160)), 'fundamental risks unavailable');
   invariant(Array.isArray(value.evidenceRefs) && value.evidenceRefs.length >= 1 && value.evidenceRefs.length <= 8
-    && value.evidenceRefs.every((ref) => canonicalSingleLine(ref, Number.MAX_SAFE_INTEGER))
+    && value.evidenceRefs.every(opaqueEvidenceReference)
     && new Set(value.evidenceRefs).size === value.evidenceRefs.length, 'fundamental evidence unavailable');
   invariant(typeof value.asOf === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:[.]\d{3})?Z$/u.test(value.asOf)
     && Number.isFinite(Date.parse(value.asOf))
