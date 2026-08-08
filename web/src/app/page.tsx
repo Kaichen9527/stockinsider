@@ -147,7 +147,7 @@ export default async function Home() {
   const sourceHealth = radar.sourceHealthSummary;
   const priceHealth = radar.dataHealth;
   const socialSourceDetails =
-    sourceHealth?.connectorDetails.filter((item) => ['threads', 'investanchors', 'instagram', 'telegram', 'podcast', 'youtube', 'ptt', 'bulltalk'].includes(item.connector)) || [];
+    (sourceHealth?.connectorDetails || []).filter((item) => ['threads', 'investanchors', 'instagram', 'telegram', 'podcast', 'youtube', 'ptt', 'bulltalk'].includes(item.connector));
 
   return (
     <main className="min-h-screen px-5 py-6 text-slate-950 dark:text-emerald-50 md:px-10 lg:px-14">
