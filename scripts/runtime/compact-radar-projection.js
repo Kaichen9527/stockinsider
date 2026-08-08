@@ -69,8 +69,6 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
       evidenceRefs: [decision.claimId].filter((value) => typeof value === 'string').slice(0, 5),
       valuationStatus: 'pending', technicalState: decision.technical?.technicalState ?? 'unavailable',
       changedBecause: signalReasons.has(decision.reason) ? decision.reason : 'new_source_evidence',
-      researchDecision: bySymbol.has(decision.symbol)
-        ? availableResearchDecision(decision) : unavailableResearchDecision(asOf),
     }));
   return { legacy: clean, sourceSignals };
 }
