@@ -4,6 +4,10 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { spawnSync } = require('child_process');
+const { canonicalJson, sha256 } = require('./runtime/codec');
+const { assessTrackedRuntimeHealth } = require('./runtime/runtime-health');
+const { resolveCredentialReference } = require('./runtime/credential-resolver');
+const { runtimeBundleSha256 } = require('./runtime/tracked-runtime-bundle');
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 const HOME_DIR = process.env.HOME || '/Users/kaerchen';
@@ -17,6 +21,10 @@ const RUNTIME_DIR = path.join(AGENT_DIR, 'runtime');
 const LOCAL_REPORTS_DIR = path.join(ROOT_DIR, '.agent', 'reports');
 const uid = process.getuid ? process.getuid() : Number(process.env.UID || 501);
 const strictData = process.argv.includes('--strict-data');
+const TRACKED_RUNTIME_ROOT =
+  process.env.STOCKINSIDER_RUNTIME_ROOT ||
+  path.join(HOME_DIR, 'Library', 'Application Support', 'StockInsiderRuntime');
+const TRACKED_CURRENT = path.join(TRACKED_RUNTIME_ROOT, 'current');
 
 const services = [
   {
@@ -70,6 +78,145 @@ function parseLaunchctlPrint(label) {
     lastExitCode: lastExit,
     raw: output,
   };
+}
+
+function readCanonical(file) {
+  const text = fs.readFileSync(file, 'utf8');
+  const value = JSON.parse(text);
+  if (`${canonicalJson(value)}\n` !== text) throw new Error(`noncanonical runtime file: ${path.basename(file)}`);
+  return value;
+}
+
+function trackedRuntimeAvailable() {
+  try {
+    return fs.lstatSync(TRACKED_CURRENT).isSymbolicLink() &&
+      fs.statSync(path.join(TRACKED_CURRENT, 'installation-manifest.json')).isFile();
+  } catch {
+    return false;
+  }
+}
+
+function oneShotSchedulerHealthy(scheduler) {
+  return scheduler.loaded === true && (Boolean(scheduler.pid) || scheduler.lastExitCode === '0');
+}
+
+function trackedIdentityCompatible(publicHealth, commitSha) {
+  return publicHealth.producerCommitSha === commitSha &&
+    publicHealth.consumerCommitSha === commitSha &&
+    publicHealth.compatibility === 'compatible';
+}
+
+async function fetchTrackedHealth(config) {
+  const key = resolveCredentialReference('keychain:stockinsider-runtime:internal-api-key');
+  const response = await fetch(`${config.legacyRadarBaseUrl}/api/internal/health-check`, {
+    headers: { Accept: 'application/json', Authorization: `Bearer ${key}` },
+    signal: AbortSignal.timeout(10000),
+  });
+  if (!response.ok) throw new Error(`tracked health endpoint HTTP ${response.status}`);
+  const payload = await response.json();
+  const runtime = payload?.sourceLedRuntime;
+  if (!runtime || typeof runtime !== 'object') throw new Error('tracked health payload missing');
+  return {
+    status: runtime.status ?? null,
+    reasons: Array.isArray(runtime.reasons) ? runtime.reasons : null,
+    producerCommitSha: runtime.producer?.commitSha ?? null,
+    consumerCommitSha: runtime.consumer?.commitSha ?? null,
+    compatibility: runtime.consumer?.compatibility ?? null,
+    schedulerOwner: runtime.scheduler?.owner ?? null,
+    lastTerminalStatus: runtime.runtime?.lastTerminalStatus ?? null,
+    projectionFreshness: runtime.projection?.freshness ?? null,
+  };
+}
+
+async function trackedMain() {
+  const failures = [];
+  let report;
+  try {
+    const pointer = fs.readlinkSync(TRACKED_CURRENT);
+    const match = pointer.match(/^releases\/([0-9a-f]{40})$/u);
+    if (!match) throw new Error('tracked current pointer invalid');
+    const commitSha = match[1];
+    const releaseRoot = fs.realpathSync(TRACKED_CURRENT);
+    if (releaseRoot !== fs.realpathSync(path.join(TRACKED_RUNTIME_ROOT, pointer))) {
+      throw new Error('tracked current pointer escapes releases');
+    }
+    const manifest = readCanonical(path.join(releaseRoot, 'installation-manifest.json'));
+    const observation = readCanonical(path.join(releaseRoot, 'runtime-health-observation.json'));
+    const journal = readCanonical(path.join(TRACKED_RUNTIME_ROOT, 'activation-journal.json'));
+    const configPath = path.join(releaseRoot, 'config/runtime/auth-source-dag.json');
+    const rollbackPath = path.join(releaseRoot, 'scheduler-rollback-package.json');
+    const plistPath = path.join(HOME_DIR, 'Library', 'LaunchAgents', 'com.stockinsider.auth-source-worker.plist');
+    const scheduler = parseLaunchctlPrint('com.stockinsider.auth-source-worker');
+    const competingSchedulers = [
+      'com.stockinsider.data-collect',
+      'com.stockinsider.night-shift',
+      'com.stockinsider.research-daemon',
+    ].filter((label) => parseLaunchctlPrint(label).loaded);
+    const localHealth = assessTrackedRuntimeHealth(observation);
+    const publicHealth = await fetchTrackedHealth(readCanonical(configPath));
+
+    if (manifest.commitSha !== commitSha) failures.push('manifest commit does not match active pointer');
+    if (runtimeBundleSha256(releaseRoot) !== manifest.worker?.sha256) failures.push('tracked worker hash mismatch');
+    if (sha256(fs.readFileSync(configPath)) !== manifest.config?.sha256) failures.push('tracked config hash mismatch');
+    if (sha256(fs.readFileSync(rollbackPath)) !== manifest.schedulerRollback?.sha256) failures.push('scheduler rollback hash mismatch');
+    if (journal.commitSha !== commitSha || journal.phase !== 'complete') failures.push('activation journal incomplete');
+    if (!scheduler.loaded) failures.push('tracked scheduler owner not loaded');
+    else if (!oneShotSchedulerHealthy(scheduler)) failures.push('tracked one-shot scheduler has not exited successfully');
+    if (sha256(fs.readFileSync(plistPath)) !== observation.ownerPlistSha256) failures.push('scheduler plist hash mismatch');
+    if (competingSchedulers.length > 0) failures.push(`competing schedulers loaded: ${competingSchedulers.join(',')}`);
+    if (localHealth.status !== 'pass') failures.push(...localHealth.reasons.map((reason) => `local health: ${reason}`));
+    if (publicHealth.status !== 'pass') failures.push(`public health: ${(publicHealth.reasons || []).join(',') || 'failed'}`);
+    if (!trackedIdentityCompatible(publicHealth, commitSha)) failures.push('consumer/producer commit incompatibility');
+    if (publicHealth.schedulerOwner !== 'com.stockinsider.auth-source-worker') failures.push('public scheduler owner mismatch');
+    if (publicHealth.lastTerminalStatus !== 'success') failures.push('last producer run is not successful');
+    if (publicHealth.projectionFreshness !== 'fresh') failures.push('compact projection is not fresh');
+
+    report = {
+      checkedAt: new Date().toISOString(),
+      mode: 'tracked-reviewed-runtime',
+      ok: failures.length === 0,
+      failures,
+      active: {
+        commitSha,
+        reviewedTreeSha: manifest.reviewedTreeSha,
+        workerSha256: manifest.worker?.sha256 ?? null,
+        configSha256: manifest.config?.sha256 ?? null,
+        manifestSha256: observation.manifestSha256 ?? null,
+        pointer,
+      },
+      scheduler: {
+        loaded: scheduler.loaded,
+        state: scheduler.state,
+        pid: scheduler.pid,
+        lastExitCode: scheduler.lastExitCode,
+        competingSchedulers,
+      },
+      runtime: {
+        stateSchema: localHealth.runtime.stateSchema,
+        lastTerminalRunAt: localHealth.runtime.lastTerminalRunAt,
+        lastTerminalStatus: publicHealth.lastTerminalStatus,
+        stuckRunCount: localHealth.runtime.stuckRunCount,
+      },
+      projection: {
+        asOf: localHealth.projection.asOf,
+        freshness: publicHealth.projectionFreshness,
+      },
+      consumer: {
+        commitSha: publicHealth.consumerCommitSha,
+        compatibility: publicHealth.compatibility,
+      },
+    };
+  } catch (error) {
+    failures.push(error instanceof Error ? error.message : String(error));
+    report = {
+      checkedAt: new Date().toISOString(),
+      mode: 'tracked-reviewed-runtime',
+      ok: false,
+      failures,
+    };
+  }
+  console.log(JSON.stringify(report, null, 2));
+  if (!report.ok) process.exitCode = 1;
 }
 
 function statFile(file) {
@@ -265,7 +412,20 @@ async function main() {
   }
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+const entrypoint = process.argv.includes('--legacy') || !trackedRuntimeAvailable() ? main : trackedMain;
+
+if (require.main === module) {
+  entrypoint().catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+}
+
+module.exports = {
+  fetchTrackedHealth,
+  oneShotSchedulerHealthy,
+  readCanonical,
+  trackedIdentityCompatible,
+  trackedMain,
+  trackedRuntimeAvailable,
+};

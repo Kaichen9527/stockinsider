@@ -407,6 +407,21 @@ const checks = {
     assert.equal(firstAttempt.disposition, 'rolled_back'); assert.equal(secondAttempt.disposition, 'activated');
   },
   'PCR-004': async () => {
+    const runtimeDoctor = require(path.join(root, 'scripts/runtime_doctor.js'));
+    assert.equal(runtimeDoctor.oneShotSchedulerHealthy({ loaded: true, pid: null, lastExitCode: '0' }), true,
+      'a loaded one-shot scheduler with a successful terminal exit is healthy');
+    assert.equal(runtimeDoctor.oneShotSchedulerHealthy({ loaded: true, pid: 1234, lastExitCode: null }), true,
+      'an actively running one-shot scheduler is healthy');
+    assert.equal(runtimeDoctor.oneShotSchedulerHealthy({ loaded: true, pid: null, lastExitCode: '1' }), false,
+      'a loaded one-shot scheduler with a failed terminal exit is unhealthy');
+    assert.equal(runtimeDoctor.oneShotSchedulerHealthy({ loaded: false, pid: null, lastExitCode: '0' }), false,
+      'an unloaded scheduler cannot borrow a prior successful exit');
+    const trackedCommit = 'a'.repeat(40);
+    assert.equal(runtimeDoctor.trackedIdentityCompatible({ producerCommitSha: trackedCommit,
+      consumerCommitSha: trackedCommit, compatibility: 'compatible' }, trackedCommit), true);
+    assert.equal(runtimeDoctor.trackedIdentityCompatible({ producerCommitSha: trackedCommit,
+      consumerCommitSha: 'b'.repeat(40), compatibility: 'compatible' }, trackedCommit), false,
+    'the doctor rejects a consumer from a different reviewed commit');
     const health = runtime('runtime-health.js').assessTrackedRuntimeHealth({ manifestPresent: false, manifestCanonical: false, reviewBindingValid: false,
       workerHashMatches: false, configHashMatches: false, schedulerRollbackPackagePresent: false, schedulerRollbackHashMatches: false,
       activationJournalComplete: false, activePointerValid: false, schedulerPlistMatches: false, schedulerOwner: null, competingOwners: [],
