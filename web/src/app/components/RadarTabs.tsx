@@ -416,8 +416,11 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
   const namedEarly = (radar.earlyWatchlist ?? []).filter((r) => Boolean(r.chineseName));
   const namedHot = (radar.hotTracking || []).filter((r) => Boolean(r.chineseName));
   const decisionAvailable = (card: RecommendationCard) => card.researchDecision?.availability !== 'unavailable';
-  const researchPending = [...new Map([...namedFormal, ...namedScenario, ...namedEarly, ...namedHot]
-    .filter((card) => !decisionAvailable(card)).map((card) => [card.recommendationId, card])).values()];
+  const researchPendingBySymbol = new Map<string, RecommendationCard>();
+  for (const card of [...namedFormal, ...namedScenario, ...namedEarly, ...namedHot]) {
+    if (!decisionAvailable(card) && !researchPendingBySymbol.has(card.symbol)) researchPendingBySymbol.set(card.symbol, card);
+  }
+  const researchPending = [...researchPendingBySymbol.values()];
   const formalOpportunities = namedFormal.filter(decisionAvailable);
   const scenarioUpsideCandidates = namedScenario.filter(decisionAvailable);
   const hotTracking = namedHot.filter(decisionAvailable);

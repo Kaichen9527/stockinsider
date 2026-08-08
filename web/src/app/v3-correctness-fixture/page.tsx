@@ -81,7 +81,8 @@ const cards = [
 ];
 
 const groupingRadar = {
-  opportunities: [unavailableCard], scenarioUpsideCandidates: [], earlyWatchlist: [], hotTracking: [],
+  opportunities: [unavailableCard], scenarioUpsideCandidates: [], earlyWatchlist: [],
+  hotTracking: [{ ...unavailableCard, recommendationId: 'hot-fixture-decision-unavailable', displayBucket: 'hot_tracking' }],
   hotThemes: [], discoveredStocks: [], sourceSignals: [],
 } as unknown as RadarDailyPayload;
 
