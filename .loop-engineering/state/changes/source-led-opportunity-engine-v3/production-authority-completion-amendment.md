@@ -1,12 +1,13 @@
-# Production Authority Completion Amendment: source-led-opportunity-engine-v3
-
-Version: `production-authority-completion-v3.11.1`
+# Production Authority Completion Record: source-led-opportunity-engine-v3
 
 Date: 2026-08-08
 
-This amendment owns the final authority-bootstrap, public health and material-refresh
-gap discovered after the previously reviewed V3.11 Web/runtime deployment. It does
-not weaken the Promotion Gate or authorize fabricated evaluation evidence.
+This non-normative operational record describes the final authority-bootstrap, public
+health and material-refresh gap discovered after the previously reviewed V3.11
+Web/runtime deployment. The closed active contract/version graph remains unchanged;
+the existing runtime, storage, point-in-time, rollout and product-correctness owners
+remain authoritative. This record does not weaken the Promotion Gate or authorize
+fabricated evaluation evidence.
 
 ## Reproducible RED baseline
 
