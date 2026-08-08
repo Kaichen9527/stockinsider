@@ -411,12 +411,19 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
 	}
 
 function StocksTab({ radar }: { radar: RadarDailyPayload }) {
-  const formalOpportunities = (radar.opportunities || []).filter((r) => Boolean(r.chineseName));
-  const scenarioUpsideCandidates = (radar.scenarioUpsideCandidates || []).filter((r) => Boolean(r.chineseName));
-  const hotTracking = (radar.hotTracking || []).filter((r) => Boolean(r.chineseName));
+  const namedFormal = (radar.opportunities || []).filter((r) => Boolean(r.chineseName));
+  const namedScenario = (radar.scenarioUpsideCandidates || []).filter((r) => Boolean(r.chineseName));
+  const namedEarly = (radar.earlyWatchlist ?? []).filter((r) => Boolean(r.chineseName));
+  const namedHot = (radar.hotTracking || []).filter((r) => Boolean(r.chineseName));
+  const decisionAvailable = (card: RecommendationCard) => card.researchDecision?.availability !== 'unavailable';
+  const researchPending = [...new Map([...namedFormal, ...namedScenario, ...namedEarly, ...namedHot]
+    .filter((card) => !decisionAvailable(card)).map((card) => [card.recommendationId, card])).values()];
+  const formalOpportunities = namedFormal.filter(decisionAvailable);
+  const scenarioUpsideCandidates = namedScenario.filter(decisionAvailable);
+  const hotTracking = namedHot.filter(decisionAvailable);
   const highConviction = formalOpportunities.filter((r) => r.recommendationBucket === 'high_conviction');
   const earlyFormal = formalOpportunities.filter((r) => r.recommendationBucket === 'early_formal');
-  const earlyWatchlist = (radar.earlyWatchlist ?? []).filter((r) => Boolean(r.chineseName));
+  const earlyWatchlist = namedEarly.filter(decisionAvailable);
   const historicalSummary = radar.historicalObservationSummary;
   const historicalObservationCount = historicalSummary?.total || 0;
   const needsRevaluationCount = (historicalSummary?.revaluationQueue || 0) + earlyWatchlist.filter(
@@ -453,7 +460,7 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
   return (
     <div className="space-y-0">
       <p className="mb-8 text-sm text-slate-500 dark:text-emerald-100/50">
-        首頁先顯示正式推薦 {formalOpportunities.length} 支，並依「推薦指數」排序；情境上行候選 {scenarioUpsideCandidates.length} 支只代表 upside case 有追蹤價值，不等於正式買點。
+        首頁先顯示正式推薦 {formalOpportunities.length} 支，並依「推薦指數」排序；研究證據待補 {researchPending.length} 支不列入正式推薦；情境上行候選 {scenarioUpsideCandidates.length} 支只代表 upside case 有追蹤價值，不等於正式買點。
         早期可關注 {earlyWatchlist.length} 支會優先於歷史觀察顯示；熱股追蹤 {hotTracking.length} 支只保留市場討論與重估線索；歷史觀察 {historicalObservationCount} 支已收斂為重估/歸檔摘要。
       </p>
 
@@ -477,6 +484,26 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
             </div>
           </section>
         ),
+      )}
+
+      {researchPending.length > 0 && (
+        <section className="mt-10 border-t border-line pt-8">
+          <div className="mb-6 flex flex-wrap items-center gap-4">
+            <span className="text-2xl">🧪</span>
+            <div className="min-w-0 flex-1">
+              <h3 className="text-lg font-semibold">研究證據待補（非建議）</h3>
+              <p className="text-xs text-slate-500 dark:text-emerald-100/45">保留來源線索供後續研究；財務、估值或投影資料補齊前，不列入正式推薦、上行情境或買點判斷。</p>
+            </div>
+            <span className="rounded-full bg-slate-950/8 px-3 py-1 text-xs text-slate-600 dark:text-emerald-100/60">
+              {researchPending.length} 支
+            </span>
+          </div>
+          <div className="grid gap-4 lg:grid-cols-2">
+            {researchPending.map((rec) => (
+              <StockCard key={`research-pending-${rec.recommendationId}`} rec={rec} isPrimary={false} />
+            ))}
+          </div>
+        </section>
       )}
 
       {formalOpportunities.length === 0 && earlyWatchlist.length === 0 && scenarioUpsideCandidates.length === 0 && (
@@ -893,7 +920,7 @@ export function RadarTabs({ radar }: Props) {
   const tabs: { key: TabKey; label: string; count: number }[] = [
     {
       key: 'stocks',
-      label: '推薦股票',
+      label: '股票研究',
       count:
         radar.opportunities.filter((item) => Boolean(item.chineseName)).length +
         (radar.scenarioUpsideCandidates || []).filter((item) => Boolean(item.chineseName)).length +
@@ -917,12 +944,12 @@ export function RadarTabs({ radar }: Props) {
   return (
     <div>
       {/* Tab bar — full-width underline style */}
-      <div className="mb-8 flex items-center border-b border-line">
+      <div className="mb-8 flex flex-wrap items-center border-b border-line">
         {tabs.map((tab) => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={`flex items-center gap-2 border-b-2 px-6 py-3 text-base font-medium transition -mb-px ${
+            className={`-mb-px flex min-w-0 items-center gap-2 border-b-2 px-3 py-3 text-base font-medium transition sm:px-6 ${
               activeTab === tab.key
                 ? 'border-accent text-accent'
                 : 'border-transparent text-slate-500 dark:text-emerald-100/55 hover:text-slate-800 dark:hover:text-emerald-100/80'

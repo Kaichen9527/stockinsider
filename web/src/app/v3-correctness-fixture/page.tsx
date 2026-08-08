@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
-import { StockCard } from '@/app/components/RadarTabs';
-import type { RecommendationCard, ResearchDecisionV311 } from '@/lib/types';
+import { RadarTabs, StockCard } from '@/app/components/RadarTabs';
+import type { RadarDailyPayload, RecommendationCard, ResearchDecisionV311 } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -55,29 +55,35 @@ function card(id: string, symbol: string, decision: ResearchDecisionV311, overri
   };
 }
 
+const unavailableCard = card('fixture-decision-unavailable', '9006', {
+  version: 'legacy-research-decision-v3.11.0',
+  availability: 'unavailable',
+  reason: 'financial_inputs_missing',
+  researchMaturity: 'source_signal',
+  newPositionAction: 'valuation_review',
+  lastEvaluatedAt: '2026-08-01T00:00:00Z',
+  analysisGeneratedAt: null,
+  materialChangeHash: null,
+  materialChangedBecause: [],
+  noChangeMessage: null,
+}, {
+  recommendationBucket: 'high_conviction', displayBucket: 'formal', displayTargetMode: 'actionable',
+  targetPrice: 200, baseTarget: 200, expectedUpsidePct: 42, displayBaseUpsidePct: 42,
+  cardPrimaryUpsidePct: 42, cardPrimaryUpsideLabel: 'Base 空間', targetCoverageStatus: 'base_upside',
+});
+
 const cards = [
   card('fixture-discovery', '9001', { ...baseDecision, researchMaturity: 'source_signal', newPositionAction: 'valuation_review', valuation: { status: 'valuation_review', exchangeReportedPe: { availability: 'unavailable', reason: 'official_pe_unavailable' }, modelComparablePe: { value: null, reason: 'valuation_review' } } }),
   card('fixture-valuation', '9002', { ...baseDecision, newPositionAction: 'valuation_review', valuation: { status: 'valuation_review', exchangeReportedPe: { availability: 'unavailable', reason: 'authority_conflict' }, modelComparablePe: { value: null, reason: 'method_divergence' } } }),
   card('fixture-reclaim', '9003', { ...baseDecision, technical: { ...baseDecision.technical, state: 'reclaim_required', trigger: { kind: 'reclaim', threshold: 102, volumeRatioMinimum: 1.3 }, entryZone: { kind: 'trigger_zone', lower: 102, upper: 104 }, invalidation: { stop: 96, thesisLevel: 97 } } }),
   card('fixture-unavailable', '9004', { ...baseDecision, newPositionAction: 'wait_trigger', technical: { availability: 'unavailable', state: null, bias: { availability: 'unavailable', reason: 'insufficient_adjusted_history' } }, factorAxes: { availability: 'unavailable', reason: 'factor_inputs_unavailable' } }),
   card('fixture-no-change', '9005', baseDecision),
-  card('fixture-decision-unavailable', '9006', {
-    version: 'legacy-research-decision-v3.11.0',
-    availability: 'unavailable',
-    reason: 'financial_inputs_missing',
-    researchMaturity: 'source_signal',
-    newPositionAction: 'valuation_review',
-    lastEvaluatedAt: '2026-08-01T00:00:00Z',
-    analysisGeneratedAt: null,
-    materialChangeHash: null,
-    materialChangedBecause: [],
-    noChangeMessage: null,
-  }, {
-    recommendationBucket: 'high_conviction', displayBucket: 'formal', displayTargetMode: 'actionable',
-    targetPrice: 200, baseTarget: 200, expectedUpsidePct: 42, displayBaseUpsidePct: 42,
-    cardPrimaryUpsidePct: 42, cardPrimaryUpsideLabel: 'Base 空間', targetCoverageStatus: 'base_upside',
-  }),
 ];
+
+const groupingRadar = {
+  opportunities: [unavailableCard], scenarioUpsideCandidates: [], earlyWatchlist: [], hotTracking: [],
+  hotThemes: [], discoveredStocks: [], sourceSignals: [],
+} as unknown as RadarDailyPayload;
 
 export default function V3CorrectnessFixturePage() {
   if (process.env.OPPORTUNITY_V3_UI_FIXTURE !== 'enabled') notFound();
@@ -87,6 +93,7 @@ export default function V3CorrectnessFixturePage() {
       <p className="mt-2 text-sm">受環境變數封閉的非正式資料測試面。</p>
       <section aria-label="研究決策狀態矩陣" className="mt-5 grid min-w-0 gap-4">
         {cards.map((item, index) => <StockCard key={item.recommendationId} rec={item} isPrimary={index === 0} />)}
+        <RadarTabs radar={groupingRadar} />
       </section>
     </main>
   );
