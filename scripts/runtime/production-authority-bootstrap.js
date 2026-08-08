@@ -293,15 +293,17 @@ async function appendLegacyDocuments(client, authorityByIdentity, { transactionP
 }
 
 async function applyProductionAuthorityBootstrap({ client, roster, commit = true }) {
-  await client.query('BEGIN');
+  let sessionLocked = false; let inTransaction = false;
   try {
-    await client.query(`SELECT pg_advisory_xact_lock(hashtextextended('stockinsider-production-authority-bootstrap-v1',0))`);
+    await client.query(`SELECT pg_advisory_lock(hashtextextended('stockinsider-production-authority-bootstrap-v1',0))`);
+    sessionLocked = true;
+    await client.query('BEGIN'); inTransaction = true;
     await seedPrincipalBindings(client);
     const official = await appendOfficialRoster(client, roster);
     const authorityByIdentity = await appendSourceIdentities(client);
     let documents;
     if (commit) {
-      await client.query('COMMIT');
+      await client.query('COMMIT'); inTransaction = false;
       documents = await appendLegacyDocuments(client, authorityByIdentity, { transactionPerBatch: true });
     } else {
       documents = await appendLegacyDocuments(client, authorityByIdentity, { limit: 20 });
@@ -315,12 +317,17 @@ async function applyProductionAuthorityBootstrap({ client, roster, commit = true
     invariant(counts.instruments >= 1700 && counts.aliases >= 1700 && counts.sectors >= 1700 &&
       counts.source_identities > 0 && (commit ? counts.source_revisions > 500 : documents.attempted > 0),
     'production authority bootstrap underfilled');
-    if (!commit) await client.query('ROLLBACK');
+    if (!commit) { await client.query('ROLLBACK'); inTransaction = false; }
     return Object.freeze({ schema: 'stockinsider-production-authority-bootstrap-result-v1',
       disposition: commit ? 'applied' : 'rehearsed_rolled_back', officialRosterRows: official.length, documents, counts });
   } catch (error) {
-    try { if (!commit) await client.query('ROLLBACK'); } catch { /* original error is authoritative */ }
+    try { if (inTransaction) await client.query('ROLLBACK'); } catch { /* original error is authoritative */ }
     throw error;
+  } finally {
+    if (sessionLocked) {
+      try { await client.query(`SELECT pg_advisory_unlock(hashtextextended('stockinsider-production-authority-bootstrap-v1',0))`); }
+      catch { /* a disconnected session releases its advisory lock */ }
+    }
   }
 }
 

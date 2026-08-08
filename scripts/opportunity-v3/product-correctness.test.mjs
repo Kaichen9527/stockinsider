@@ -627,6 +627,9 @@ const checks = {
       assert.throws(() => bootstrap.consumeBootstrapNonce(bootstrapRuntime, authority),
         /production_authority_bootstrap_required/u);
     } finally { rmSync(bootstrapRuntime, { recursive: true, force: true }); }
+    const bootstrapSource = readFileSync(path.join(root, 'scripts/runtime/production-authority-bootstrap.js'), 'utf8');
+    assert.match(bootstrapSource, /pg_advisory_lock/u); assert.match(bootstrapSource, /pg_advisory_unlock/u);
+    assert.match(bootstrapSource, /if \(inTransaction\) await client[.]query\('ROLLBACK'\)/u);
   },
   'PCR-008': () => {
     const join = runtime('instrument-authority-join.js').resolveInstrumentAuthorityJoin; const roster = [{ stockId: '00000000-0000-4000-8000-000000002337', symbol: '2337', officialName: '旺宏', status: 'active' }];
