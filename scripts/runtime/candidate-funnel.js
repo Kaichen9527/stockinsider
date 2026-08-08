@@ -13,6 +13,11 @@ function discoveryPriority(outcome, disposition) {
   return source + evidence;
 }
 
+function effectiveTimestamp(value) {
+  const parsed = typeof value === 'string' ? Date.parse(value) : Number.NaN;
+  return Number.isFinite(parsed) ? parsed : Number.NEGATIVE_INFINITY;
+}
+
 function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvailable = true }) {
   const candidates = [];
   for (const outcome of outcomes) {
@@ -36,6 +41,7 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
     });
   }
   const deduped = candidates.sort((left, right) => right.sourcePriority - left.sourcePriority
+      || effectiveTimestamp(right.claimAsOf) - effectiveTimestamp(left.claimAsOf)
       || String(right.revisionId ?? '').localeCompare(String(left.revisionId ?? ''))
       || String(left.claimId).localeCompare(String(right.claimId))
       || left.symbol.localeCompare(right.symbol))

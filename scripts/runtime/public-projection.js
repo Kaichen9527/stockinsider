@@ -31,10 +31,12 @@ function serializeFundamental(value, lastEvaluatedAt) {
   invariant(Array.isArray(value.evidenceRefs) && value.evidenceRefs.length >= 1 && value.evidenceRefs.length <= 8
     && value.evidenceRefs.every(opaqueEvidenceReference)
     && new Set(value.evidenceRefs).size === value.evidenceRefs.length, 'fundamental evidence unavailable');
+  invariant(typeof lastEvaluatedAt === 'string'
+    && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:[.]\d{3})?Z$/u.test(lastEvaluatedAt)
+    && Number.isFinite(Date.parse(lastEvaluatedAt)), 'fundamental evaluation cutoff unavailable');
   invariant(typeof value.asOf === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:[.]\d{3})?Z$/u.test(value.asOf)
     && Number.isFinite(Date.parse(value.asOf))
-    && (lastEvaluatedAt == null || (Number.isFinite(Date.parse(lastEvaluatedAt))
-      && Date.parse(value.asOf) <= Date.parse(lastEvaluatedAt))), 'fundamental as-of unavailable');
+    && Date.parse(value.asOf) <= Date.parse(lastEvaluatedAt), 'fundamental as-of unavailable');
   return { thesis: value.thesis, latestChange: value.latestChange, risks: [...value.risks],
     evidenceRefs: [...value.evidenceRefs], asOf: value.asOf };
 }

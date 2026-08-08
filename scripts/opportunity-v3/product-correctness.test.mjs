@@ -572,6 +572,8 @@ const checks = {
     const provenanceInput = runtime('codec.js').immutableBundle('candidate_funnel_input', { mentionResult: { candidates: [
       { stockId: '00000000-0000-4000-8000-000000008888', symbol: '8888', raw: 'older', claimId: 'claim-first', mentionId: 'mention-first', sourceKey: 'threads', revisionId: 'rev-first', sourceClass: 'community', sourcePriority: 40 },
       { stockId: '00000000-0000-4000-8000-000000008888', symbol: '8888', raw: 'newer', claimId: 'claim-last', mentionId: 'mention-last', sourceKey: 'mops', revisionId: 'rev-last', sourceClass: 'official', sourcePriority: 95 },
+      { stockId: '00000000-0000-4000-8000-000000007777', symbol: '7777', raw: 'older equal priority', claimId: 'claim-older-equal', claimAsOf: '2026-07-31T10:00:00Z', mentionId: 'mention-older-equal', sourceKey: 'threads', revisionId: 'zzzz-older', sourceClass: 'community', sourcePriority: 50 },
+      { stockId: '00000000-0000-4000-8000-000000007777', symbol: '7777', raw: 'newer equal priority', claimId: 'claim-newer-equal', claimAsOf: '2026-08-01T10:00:00Z', mentionId: 'mention-newer-equal', sourceKey: 'threads', revisionId: 'aaaa-newer', sourceClass: 'community', sourcePriority: 50 },
       { stockId: '00000000-0000-4000-8000-000000001111', symbol: '1111', raw: 'low', claimId: 'claim-low', mentionId: 'mention-low', sourceKey: 'threads', revisionId: 'rev-low', sourceClass: 'community', sourcePriority: 10 },
     ] }, seedSymbols: seeds() });
     const provenance = await handlers.candidate_funnel({ readKind: 'candidate_funnel_input', readCanonical: provenanceInput.canonical,
@@ -580,7 +582,11 @@ const checks = {
       provenance.json.candidates[0].revisionId], ['8888', 'claim-last', 'rev-last']);
     assert.ok(provenance.json.candidates[0].sourcePriority > provenance.json.candidates.at(-1).sourcePriority,
       'official evidence outranks community evidence');
-    assert.deepEqual(provenance.json.discoveryDelta.added.sort(), ['1111','8888']);
+    const equalPriority = provenance.json.candidates.find((candidate) => candidate.symbol === '7777');
+    assert.deepEqual([equalPriority.claimId, equalPriority.claimAsOf, equalPriority.revisionId],
+      ['claim-newer-equal', '2026-08-01T10:00:00Z', 'aaaa-newer'],
+      'newest effective claim wins before an arbitrary revision identifier');
+    assert.deepEqual(provenance.json.discoveryDelta.added.sort(), ['1111','7777','8888']);
     const sixtyCandidates = Array.from({ length: 60 }, (_, index) => ({
       stockId: `00000000-0000-4000-8000-${String(index).padStart(12, '0')}`,
       symbol: String(1000 + index), raw: `stock-${index}`, claimId: `claim-${index}`,
@@ -816,7 +822,8 @@ const checks = {
     assert.equal(serialize({ mode: 'disabled' }), null); assert.equal(serialize({ mode: 'drain' }), null);
     const fundamental = { thesis: '9999 已有可追溯基本面證據。', latestChange: '本次重新檢查基本面品質。',
       risks: ['仍須持續追蹤財務風險。'], evidenceRefs: ['official-9999'], asOf: '2026-08-01T00:00:00Z' };
-    const shadow = serialize({ mode: 'shadow', legacy: { legacyField: 7 }, cards: [{ symbol: '9999', action: 'valuation_review', fundamental }] });
+    const shadow = serialize({ mode: 'shadow', legacy: { legacyField: 7 }, cards: [{ symbol: '9999', action: 'valuation_review',
+      fundamental, lastEvaluatedAt: '2026-08-01T00:00:00Z' }] });
     assert.equal(shadow.legacyField, 7); assert.equal(shadow.cards[0].symbol, '9999');
   },
   'PCR-022': async () => {
@@ -941,6 +948,12 @@ test('public fundamental provenance remains bounded and fail-closed outside the 
     { ...fundamental, asOf: '2026-08-02T00:00:00Z' },
   ]) assert.throws(() => serialize({ symbol: '2337', fundamental: malformed,
     lastEvaluatedAt: '2026-08-01T00:00:00Z' }), /fundamental/u);
+  for (const lastEvaluatedAt of [undefined, null, 'not-a-timestamp', '2026-08-01T08:00:00+08:00']) {
+    assert.throws(() => serialize({ symbol: '2337', fundamental, lastEvaluatedAt }),
+      /fundamental evaluation cutoff unavailable/u);
+  }
+  assert.throws(() => serialize({ symbol: '2337', fundamental: { ...fundamental, asOf: '2099-01-01T00:00:00Z' } }),
+    /fundamental evaluation cutoff unavailable/u);
   const opaqueEvidenceRef = 'official-e\u0301vidence\nrevision';
   assert.deepEqual(serialize({ symbol: '2337', fundamental: { ...fundamental, evidenceRefs: [opaqueEvidenceRef] },
     lastEvaluatedAt: '2026-08-01T00:00:00Z' }).fundamental.evidenceRefs, [opaqueEvidenceRef],
