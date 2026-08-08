@@ -410,6 +410,7 @@ const checks = {
     assert.equal(fetchCount, 3); assert.deepEqual(Object.keys(captured.json.legacyPayloads).sort(), ['daily','home','hot','weekly']);
     assert.equal(captured.json.legacyPayloadHashes.home, captured.json.legacyPayloadHashes.daily);
     const parser = runtime('auth-source-worker-cli.js');
+    assert.equal(parser.LEGACY_RADAR_FETCH_TIMEOUT_MS, 30000, 'bootstrap producer reads admit the measured cold legacy path');
     const authorityPages = [['roster', null, null, [[
       '00000000-0000-4000-8000-000000002330', '2330', 'TWSE', 'common_stock', 'active', '台灣積體電路製造', '台積電',
     ]]]];

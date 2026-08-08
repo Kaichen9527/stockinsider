@@ -19,6 +19,7 @@ const { runtimeBundleBytes } = require('./tracked-runtime-bundle');
 const { assertExactRuntimeEnvironment, hydrateRuntimeCredentials } = require('./credential-resolver');
 
 const LEGACY_RADAR_PATHS = Object.freeze({ daily: '/api/radar/daily', hot: '/api/radar/hot', weekly: '/api/radar/weekly' });
+const LEGACY_RADAR_FETCH_TIMEOUT_MS = 30000;
 const SOURCE_CLASS_BY_KEY = Object.freeze({
   bulltalk: 'community', earnings_call: 'official', instagram: 'community',
   investanchors: 'curated_thesis', mops_material_event: 'official', podcast: 'curated_thesis',
@@ -32,7 +33,7 @@ async function loadLegacyRadarPayloads(baseUrl, fetchImpl = globalThis.fetch, in
   invariant(typeof internalApiKey === 'string' && internalApiKey.length >= 16, 'legacy radar internal credential unavailable');
   const entries = await Promise.all(Object.entries(LEGACY_RADAR_PATHS).map(async ([window, pathname]) => {
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 10000);
+    const timer = setTimeout(() => controller.abort(), LEGACY_RADAR_FETCH_TIMEOUT_MS);
     try {
       const response = await fetchImpl(`${baseUrl}${pathname}`, {
         headers: { Accept: 'application/json', Authorization: `Bearer ${internalApiKey}`,
@@ -348,5 +349,5 @@ if (require.main === module) main().catch((error) => {
 });
 
 module.exports = { args, buildLegacyCandidateDecision, buildStageHandlers, extractRevisionCandidates,
-  legacyFactInput, legacyQualityInput, loadLegacyRadarPayloads, main, readBundle, readRuntimeHealthObservation,
+  LEGACY_RADAR_FETCH_TIMEOUT_MS, legacyFactInput, legacyQualityInput, loadLegacyRadarPayloads, main, readBundle, readRuntimeHealthObservation,
   tickerHasStockContext, uuidFromHash };
