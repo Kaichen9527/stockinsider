@@ -137,14 +137,23 @@
 
 ## Production completion checkpoint — explicitly authorized 2026-08-08
 
-- [ ] Apply reviewed production migration.
-- [ ] Bootstrap the official TWSE/TPEx roster and tracked legacy source authority from the exact reviewed commit.
-- [ ] Publish durable runtime health and verify exact Vercel consumer/local producer compatibility.
-- [ ] Verify a material-authority refresh produces bounded dynamic discovery and truthful `source_signal` output.
-- [ ] Deploy and activate the same reviewed implementation commit; complete public read-only smoke and rollback rehearsal evidence.
-- [ ] Enable shadow scheduler only after its separate Shadow Activation Gate passes.
-- [ ] Promote V3 homepage ordering only after the 120-date backtest and 20 matured live 20-session cohorts pass every conjunctive rule.
-- [ ] Approve a specific model artifact for any non-shadow influence.
+- [x] Confirm the reviewed additive legacy bridge is already applied and healthy; do
+  not apply the separate V3 migration while the V3 deployment state remains disabled.
+- [x] Confirm the retained official TWSE/TPEx roster and tracked legacy source
+  authority, then run the exact reviewed producer against that authority.
+- [x] Publish durable runtime health and verify exact Vercel consumer/local producer
+  compatibility at `184390953048209730c22828548858c28fa3b6b7`.
+- [x] Verify the terminal authority refresh produces bounded dynamic discovery and
+  truthful source-signal dispositions without fabricating formal targets.
+- [x] Deploy and activate the same reviewed implementation commit; complete public
+  read-only smoke and retain the installer-owned rollback package.
+
+The following are promotion boundaries, not unfinished Code/Release tasks: enable the
+shadow scheduler only after its separate Shadow Activation Gate passes; promote V3
+homepage ordering only after 120 point-in-time backtest dates and 20 matured live
+trading dates satisfy every conjunctive rule; approve a specific model artifact before
+any non-shadow influence. They remain blocked on real elapsed evidence and V3 remains
+disabled.
 
 ## /autoplan Review — 2026-07-24
 
@@ -1249,15 +1258,17 @@ This approval authorizes implementation only. It does not authorize production m
 
 ### Review and Verification — Sol
 
-- [ ] Run all PCR, V1/V2, V3, migration, runner, lint, typecheck, build, Playwright,
+- [x] Run all PCR, V1/V2, V3, migration, runner, lint, typecheck, build, Playwright,
   accessibility and controlled performance checks.
-- [ ] Create exact implementation commit and review `parent..exact_commit`.
-- [ ] Repair every P0/P1 finding, review the repair range and review the full final
+- [x] Create exact implementation commit `184390953048209730c22828548858c28fa3b6b7`
+  and review `parent..exact_commit`.
+- [x] Repair every P0/P1 finding, review the repair range and review the full final
   range.
-- [ ] Record Code Gate PASS, honest evaluation blocker and a reviewed shadow
+- [x] Record Code Gate PASS, honest evaluation blocker and a reviewed shadow
   activation package.
-- [ ] Update and push Draft PR #1; do not merge, deploy, install runtime, mutate
-  production DB/cron/flag or activate V3.
+- [x] Supersede the historical PR #1 hold with user-authorized PR #46; merge only
+  after the authoritative root PASS, deploy the exact reviewed Web commit, activate
+  only the tracked legacy producer, and keep V3 migration/cron/flag/promotion disabled.
 
 ### V3.12 Product Value Recovery — user-authorized completion
 
@@ -1279,8 +1290,12 @@ This approval authorizes implementation only. It does not authorize production m
 - [x] Execute evaluation governance honestly; retain
   `blocked/non_fabricated_elapsed_cohorts_unavailable` for 120/20/252 elapsed
   cohorts and do not synthesize evidence.
-- [ ] Freeze the exact V3.12 implementation commit; run fresh Requirements,
+- [x] Freeze exact implementation commit
+  `184390953048209730c22828548858c28fa3b6b7`; carry fresh Requirements and
   Architecture, exact-commit diff review and repair/full-range closure.
-- [ ] Pass authoritative Code Gate, merge the reviewed PR, apply only the reviewed
-  additive bridge migration, install the reviewed tracked producer, deploy the same
-  commit to Vercel and complete read-only production smoke/product-value checks.
+- [x] Pass authoritative Code Gate run `31298639896`, merge PR #46 as
+  `3f685bf57a16eab502a2f8291cf15c6c2bc69e38`, confirm the already-applied additive
+  legacy bridge without applying V3 migration, install the reviewed tracked producer,
+  deploy the same exact commit to Vercel and pass read-only production smoke/product-
+  value checks. Runtime terminalized 3,140/3,140 jobs with producer/consumer SHA
+  compatibility and zero stuck runs; V3 remains disabled.
