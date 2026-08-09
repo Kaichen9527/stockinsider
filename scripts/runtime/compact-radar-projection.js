@@ -17,7 +17,8 @@ function compactPositiveReason(row) {
     'priceDislocation:moderate_dislocation':'p:moderate','priceDislocation:extended':'p:extended',
     'valuation:pe_compared_with_sector_and_own_history':'v:sector_history','valuation:pe_compared_with_own_history':'v:history',
     'valuation:pe_compared_with_sector_reference':'v:sector','timing:below_ma20_reclaim_required':'t:reclaim',
-    'timing:breakout_pending':'t:breakout_pending','timing:extended':'t:extended',
+    'timing:breakout_pending':'t:breakout_pending','timing:breakout_confirmed':'t:breakout_confirmed',
+    'timing:at_support':'t:at_support','timing:extended':'t:extended',
   })[key] ?? `${String(row?.axis ?? 'e').slice(0,1)}:${String(row?.reason ?? 'available').slice(0,40)}`;
 }
 
@@ -25,6 +26,106 @@ function compactRisk(reason) {
   if (String(reason).startsWith('missing:')) return reason;
   return ({ price_must_reclaim_support_before_entry:'reclaim_first',research_coverage_below_70_percent:'coverage_lt_70',
     formal_valuation_target_unavailable:'valuation_target_missing' })[reason] ?? String(reason).slice(0,48);
+}
+
+function finiteAxisScore(score, axis) {
+  const value = score?.axes?.[axis];
+  return value?.trustworthy === true && Number.isFinite(value.score) ? value.score : null;
+}
+
+function derivePublicOpportunityView(decision, marketAnalysis = null) {
+  const score = decision?.researchScore;
+  const rawTechnicalState = score?.priceContext?.technicalState ?? score?.axes?.timing?.technicalState ?? 'unavailable';
+  const bias20Pct = score?.priceContext?.bias20Pct;
+  const technicalState = rawTechnicalState === 'breakout_pending' && Number.isFinite(bias20Pct)
+    && bias20Pct > -3 && bias20Pct <= 1.5 ? 'at_support' : rawTechnicalState;
+  const axisScores = {
+    fundamental: finiteAxisScore(score, 'fundamental'),
+    dislocation: finiteAxisScore(score, 'priceDislocation'),
+    valuation: finiteAxisScore(score, 'valuation'),
+    timing: finiteAxisScore(score, 'timing'),
+  };
+  const compactAxes = Object.fromEntries(Object.entries(axisScores).filter(([, value]) => Number.isFinite(value)));
+  const completeRelativeCase = Number.isFinite(score?.underreactionScore) && score.underreactionScore >= 72
+    && (score.coverage ?? 0) >= 0.85 && (score.confidence ?? 0) >= 0.75
+    && axisScores.fundamental >= 64 && axisScores.valuation >= 58 && axisScores.dislocation >= 52;
+  const selectiveHighConviction = completeRelativeCase && score.underreactionScore >= 76
+    && axisScores.fundamental >= 70 && axisScores.valuation >= 68;
+  const marketAllowsSetup = marketAnalysis?.status === 'risk_on'
+    ? completeRelativeCase : marketAnalysis?.status === 'selective_or_defensive' && selectiveHighConviction;
+
+  let opportunityAction = 'evidence_watch'; let actionReason = 'relative_evidence_incomplete';
+  if (Number.isFinite(score?.underreactionScore) && score.underreactionScore < 35) {
+    opportunityAction = 'avoid'; actionReason = 'underreaction_score_below_floor';
+  } else if (technicalState === 'extended') {
+    opportunityAction = 'avoid_chase'; actionReason = 'price_extended_wait_for_reset';
+  } else if (!completeRelativeCase) {
+    opportunityAction = 'evidence_watch'; actionReason = 'relative_evidence_incomplete';
+  } else if (marketAnalysis?.status === 'data_incomplete' || !marketAnalysis) {
+    opportunityAction = 'evidence_watch'; actionReason = 'market_evidence_incomplete';
+  } else if (technicalState === 'reclaim_required' || technicalState === 'below_support') {
+    opportunityAction = 'wait_reclaim'; actionReason = 'support_must_be_reclaimed';
+  } else if (technicalState === 'breakout_pending') {
+    opportunityAction = 'wait_breakout'; actionReason = 'breakout_not_confirmed';
+  } else if (marketAllowsSetup && (technicalState === 'at_support' || technicalState === 'breakout_confirmed')) {
+    opportunityAction = 'setup_ready';
+    actionReason = marketAnalysis.status === 'risk_on'
+      ? `risk_on_${technicalState}` : `selective_high_conviction_${technicalState}`;
+  } else {
+    opportunityAction = 'evidence_watch'; actionReason = 'market_or_timing_gate_not_met';
+  }
+  return Object.freeze({ opportunityAction, actionReason, technicalState, axisScores: compactAxes });
+}
+
+function normalizedMarketAnalysis(marketAnalysis) {
+  if (!marketAnalysis) return null;
+  const components = marketAnalysis.components ?? {};
+  const indexSummary = (label, row) => row ? `${label}${row.state === 'uptrend' ? '多頭' : row.state === 'drawdown' ? '跌深' : '拉回'}${Number.isFinite(row.drawdownPct) ? `、距區間高點 ${row.drawdownPct.toFixed(1)}%` : ''}` : `${label}資料待補`;
+  const breadthSummary = components.breadth && Number.isFinite(components.breadth.aboveMa20Pct)
+    ? `市場廣度 ${components.breadth.aboveMa20Pct.toFixed(1)}% 站上 MA20` : '市場廣度待補';
+  const foreignNet = components.foreignFlow?.net5d ?? components.foreignFlow?.net1d;
+  const foreignSummary = Number.isFinite(foreignNet)
+    ? `外資${Number.isFinite(components.foreignFlow?.net5d) ? '五日' : '單日'}淨${foreignNet >= 0 ? '買' : '賣'}超 ${Math.abs(foreignNet / 1e8).toFixed(1)} 億元`
+    : '外資動向待補';
+  const summary = [indexSummary('加權', components.taiex), indexSummary('櫃買', components.otc), breadthSummary, foreignSummary].join('；');
+  const riskBudget = marketAnalysis.status === 'risk_on'
+    ? '大盤允許積極選股；仍需個股相對估值與技術條件同時通過。'
+    : marketAnalysis.status === 'selective_or_defensive'
+      ? '只保留高信念選股候選；不追高，跌破支撐先等收復。'
+      : '市場證據未完整，不形成進場候選。';
+  return Object.freeze({ ...marketAnalysis, summary, riskBudget });
+}
+
+function alignLegacyMarketView(legacy, marketAnalysis) {
+  if (!marketAnalysis) return legacy;
+  const status = marketAnalysis.status === 'risk_on' ? 'risk_on_can_attack'
+    : marketAnalysis.status === 'selective_or_defensive' ? 'selective_only' : 'market_data_missing';
+  const label = marketAnalysis.status === 'risk_on' ? '趨勢與廣度支持'
+    : marketAnalysis.status === 'selective_or_defensive' ? '選股／防守優先' : '大盤證據未完整';
+  const existingIndex = legacy.marketIndexSignal && typeof legacy.marketIndexSignal === 'object'
+    ? legacy.marketIndexSignal : {};
+  const existingHighlight = legacy.marketHighlightSummary && typeof legacy.marketHighlightSummary === 'object'
+    ? legacy.marketHighlightSummary : {};
+  return {
+    ...legacy,
+    marketRegime: marketAnalysis.status === 'risk_on' ? 'risk-on' : marketAnalysis.status === 'selective_or_defensive'
+      ? 'selective-risk-on' : 'live-unavailable',
+    marketBreadthSummary: marketAnalysis.summary,
+    marketIndexSignal: { ...existingIndex, status, label, summary: marketAnalysis.summary,
+      asOf: marketAnalysis.asOf, trendScore: status === 'risk_on_can_attack' ? 80 : status === 'selective_only' ? 50 : null,
+      taiexState: marketAnalysis.components?.taiex?.state ?? null,
+      otcState: marketAnalysis.components?.otc?.state ?? null,
+      breadthState: Number.isFinite(marketAnalysis.components?.breadth?.aboveMa20Pct)
+        ? marketAnalysis.components.breadth.aboveMa20Pct >= 50 ? 'healthy' : 'weak' : null,
+      foreignFlowState: Number.isFinite(marketAnalysis.components?.foreignFlow?.net5d ?? marketAnalysis.components?.foreignFlow?.net1d)
+        ? (marketAnalysis.components.foreignFlow.net5d ?? marketAnalysis.components.foreignFlow.net1d) >= 0 ? 'net_buy' : 'net_sell' : null,
+      riskBudget: marketAnalysis.riskBudget,
+      entryBias: status === 'risk_on_can_attack' ? '優先等待個股確認' : '只做高信念確認型候選',
+      exitBias: status === 'risk_on_can_attack' ? '個股失效即退出' : '支撐失效優先防守',
+      reasons: marketAnalysis.missingComponents?.length ? ['market_evidence_incomplete'] : [marketAnalysis.status] },
+    marketHighlightSummary: { ...existingHighlight, regimeLabel: label,
+      regimeExplanation: marketAnalysis.summary, riskNote: marketAnalysis.riskBudget },
+  };
 }
 
 function stripCorrectnessAdditions(payload) {
@@ -60,7 +161,7 @@ function availableResearchDecision(decision) {
   });
 }
 
-function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates = []) {
+function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates = [], marketAnalysis = null) {
   const clean = stripCorrectnessAdditions(legacyPayload);
   invariant(Array.isArray(clean.opportunities), 'legacy opportunities required');
   const bySymbol = new Map(decisions.filter((decision) => typeof decision?.symbol === 'string')
@@ -92,6 +193,7 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
       valuationStatus: 'pending', technicalState: decision.technical?.technicalState
         ?? decision.researchScore?.priceContext?.technicalState ?? 'unavailable',
       changedBecause: signalReasons.has(decision.reason) ? decision.reason : 'new_source_evidence',
+      ...(marketAnalysis ? derivePublicOpportunityView(decision, marketAnalysis) : {}),
       ...(Number.isFinite(decision.researchScore?.underreactionScore) ? {
         underreactionScore: decision.researchScore.underreactionScore,
         scoreCoverage: decision.researchScore.coverage,
@@ -117,9 +219,15 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
         valuationExchange: String(decision.researchScore.axes?.valuation?.sourceRef ?? '').startsWith('twse-')
           ? 'TWSE' : String(decision.researchScore.axes?.valuation?.sourceRef ?? '').startsWith('tpex-') ? 'TPEx' : null,
         historyPeSessions: (decision.researchScore.axes?.valuation?.historyAsOf ?? []).slice(0,4),
+        ...(Number.isFinite(decision.researchScore.axes?.valuation?.historyRelativePe) ? {
+          ownPeDiscountPct: Math.round((decision.researchScore.axes.valuation.historyRelativePe - 1) * 1000) / 10,
+        } : {}),
+        ...(Number.isFinite(decision.researchScore.axes?.valuation?.relativePe) ? {
+          sectorPeDiscountPct: Math.round((decision.researchScore.axes.valuation.relativePe - 1) * 1000) / 10,
+        } : {}),
       } : {}),
     }));
-  return { legacy: clean, sourceSignals };
+  return { legacy: alignLegacyMarketView(clean, marketAnalysis), sourceSignals };
 }
 
 function publishCompactRadarProjection({ decisions, sourceCandidates = [], discoveryDelta, marketAnalysis = null, window, asOf, producerIdentity, legacyPayload }) {
@@ -127,12 +235,13 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
   invariant(decisions.length <= 60, 'radar card bound');
   invariant(legacyPayload && typeof legacyPayload === 'object' && !Array.isArray(legacyPayload), 'legacy radar payload required');
   invariant(decisions.length + sourceCandidates.length <= 60, 'radar discovery bound');
-  const layered = addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates);
+  const publicMarketAnalysis = normalizedMarketAnalysis(marketAnalysis);
+  const layered = addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates, publicMarketAnalysis);
   const payload = {
     ...layered.legacy,
     sourceSignals: layered.sourceSignals,
     discoveryDelta,
-    underreactionMarket: marketAnalysis,
+    underreactionMarket: publicMarketAnalysis,
     sourceLedCorrectness: { schema: 'legacy-radar-v3.12.0', window, asOf, producerIdentity },
   };
   bounded(payload, 150000, 'radar payload');
@@ -150,4 +259,4 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
   });
 }
 
-module.exports = { CARD_BUCKETS, addResearchDecisions, publishCompactRadarProjection, stripCorrectnessAdditions };
+module.exports = { CARD_BUCKETS, addResearchDecisions, derivePublicOpportunityView, publishCompactRadarProjection, stripCorrectnessAdditions };

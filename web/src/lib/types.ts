@@ -1448,6 +1448,14 @@ export interface SourceSignalCard {
   valuationStatus: 'pending';
   technicalState: string;
   changedBecause: string;
+  opportunityAction?: 'setup_ready' | 'wait_breakout' | 'wait_reclaim' | 'avoid_chase' | 'evidence_watch' | 'avoid';
+  actionReason?: string;
+  axisScores?: {
+    fundamental?: number;
+    dislocation?: number;
+    valuation?: number;
+    timing?: number;
+  };
   underreactionScore?: number;
   scoreCoverage?: number;
   scoreConfidence?: number;
@@ -1471,6 +1479,8 @@ export interface SourceSignalCard {
   historyPeMin?: number | null;
   historyPeMax?: number | null;
   historyPeSampleCount?: number;
+  ownPeDiscountPct?: number | null;
+  sectorPeDiscountPct?: number | null;
   valuationAsOf?: string | null;
   valuationAuthority?: 'exchange_reported' | null;
   valuationExchange?: 'TWSE' | 'TPEx' | null;

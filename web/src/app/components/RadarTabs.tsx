@@ -437,8 +437,14 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
 	}
 
 function StocksTab({ radar }: { radar: RadarDailyPayload }) {
-  const rankedResearch = (radar.sourceSignals ?? []).filter((signal) => Number.isFinite(signal.underreactionScore)
-    && signal.researchDisposition !== 'avoid').slice(0, 12);
+  const opportunityActionOrder = { setup_ready: 0, wait_breakout: 1, wait_reclaim: 2,
+    avoid_chase: 3, evidence_watch: 4, avoid: 5 } as const;
+  const rankedResearch = [...(radar.sourceSignals ?? [])].filter((signal) => Number.isFinite(signal.underreactionScore)
+    && signal.researchDisposition !== 'avoid').sort((left, right) =>
+      (opportunityActionOrder[left.opportunityAction ?? 'evidence_watch']
+        - opportunityActionOrder[right.opportunityAction ?? 'evidence_watch'])
+      || (right.underreactionScore ?? 0) - (left.underreactionScore ?? 0)).slice(0, 12);
+  const setupReadyCount = rankedResearch.filter((signal) => signal.opportunityAction === 'setup_ready').length;
   const namedFormal = (radar.opportunities || []).filter((r) => Boolean(r.chineseName));
   const namedScenario = (radar.scenarioUpsideCandidates || []).filter((r) => Boolean(r.chineseName));
   const namedEarly = (radar.earlyWatchlist ?? []).filter((r) => Boolean(r.chineseName));
@@ -502,10 +508,10 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
           <div className="mb-5 flex items-end justify-between gap-4">
             <div>
               <p className="text-xs tracking-[0.2em] text-amber-700 dark:text-amber-300">PRICE HAS NOT FULLY REFLECTED THE EVIDENCE</p>
-              <h3 className="mt-1 text-xl font-semibold">目前最值得研究</h3>
-              <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/55">這是可比較的研究優先級；正式目標價與買進動作仍需通過估值、技術與風險 Gate。</p>
+              <h3 className="mt-1 text-xl font-semibold">目前可留意的未反映機會</h3>
+              <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/55">相對估值、基本面、跌深程度與技術時機分開評分；卡片會明確標示可評估、等突破、等收復或不追價。正式目標價仍需完整財務 bridge，兩者不混用。</p>
             </div>
-            <span className="rounded-full bg-amber-300 px-3 py-1 text-xs font-semibold text-slate-950">{rankedResearch.length} 檔</span>
+            <span className="rounded-full bg-amber-300 px-3 py-1 text-xs font-semibold text-slate-950">{setupReadyCount} 條件成熟 · {rankedResearch.length} 顯示</span>
           </div>
           <div className="grid gap-3 lg:grid-cols-2">
             {rankedResearch.map((signal) => <SourceSignalCardView key={`ranked-${signal.symbol}`} signal={signal} />)}
@@ -905,23 +911,44 @@ function DiscoveredCard({ stock }: { stock: DiscoveredStockCard }) {
 }
 
 function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
-  const dispositionLabel = signal.researchDisposition === 'research_now' ? '優先研究'
-    : signal.researchDisposition === 'watch_reclaim' ? '等收復再評估'
-      : signal.researchDisposition === 'avoid' ? '暫時避開' : '補證據觀察';
+  const actionLabels = {
+    setup_ready: '條件成熟候選', wait_breakout: '等待突破', wait_reclaim: '等待收復',
+    avoid_chase: '乖離過高／不追價', evidence_watch: '補證據觀察', avoid: '暫時避開',
+  } as const;
+  const actionDescriptions = {
+    selective_high_conviction_at_support: '選股／防守盤中，僅保留完整度高且位於支撐區的候選。',
+    selective_high_conviction_breakout_confirmed: '選股／防守盤中，個股已用量價與相對強度確認突破。',
+    risk_on_at_support: '大盤條件支持，個股位於合理乖離與支撐區。',
+    risk_on_breakout_confirmed: '大盤條件支持，個股突破已由量價與相對強度確認。',
+    support_must_be_reclaimed: '股價仍在支撐下方，先收復再重新評估。',
+    breakout_not_confirmed: '研究條件足夠，但量價突破尚未確認。',
+    price_extended_wait_for_reset: '乖離已過高，等待回到合理區間。',
+    relative_evidence_incomplete: '相對估值、基本面或價格證據尚未完整。',
+    market_evidence_incomplete: '大盤證據不完整，暫不形成進場候選。',
+    market_or_timing_gate_not_met: '大盤或個股時機尚未同時通過。',
+    underreaction_score_below_floor: '未反映分數低於研究門檻。',
+  } as const;
+  const action = signal.opportunityAction ?? 'evidence_watch';
+  const dispositionLabel = actionLabels[action];
   const technicalTrigger = signal.technicalState === 'reclaim_required' || signal.technicalState === 'below_support'
     ? '先收復 MA20／原支撐並站穩，才重新評估進場。'
     : signal.technicalState === 'extended' ? '乖離偏高，不追價；等待回到合理乖離區。'
-      : signal.technicalState === 'breakout_pending' ? '等待帶量突破或回測確認。' : '技術資料不足，不形成進場訊號。';
+      : signal.technicalState === 'breakout_pending' ? '等待帶量突破或回測確認。'
+        : signal.technicalState === 'breakout_confirmed' ? '突破已由成交量與相對強度確認；仍需遵守失效條件。'
+          : signal.technicalState === 'at_support' ? '目前接近 MA20 支撐與合理乖離區，可配合基本面評估。'
+            : '技術資料不足，不形成進場訊號。';
   const explainReason = (reason: string) => ({
     'f:revenue_ok': '官方月營收尚未惡化','f:revenue_down':'官方月營收正在減弱',
     'v:sector_history': 'PE 已與自身歷史及同產業比較','v:history':'PE 已與自身歷史比較',
     'v:sector':'PE 已與同產業比較','p:drawdown':'股價相對 60／120 日高點明顯回落',
     'p:moderate':'股價出現中度回落','p:extended':'股價乖離偏高','d:dislocation':'全市場跌深掃描納入',
-    't:reclaim':'技術面必須先收復','t:breakout_pending':'等待突破確認','t:extended':'技術面過度延伸',
+    't:reclaim':'技術面必須先收復','t:breakout_pending':'等待突破確認',
+    't:breakout_confirmed':'量價與相對強度已確認突破','t:at_support':'接近 MA20 支撐與合理乖離',
+    't:extended':'技術面過度延伸',
   }[reason] ?? reason.replaceAll('_', ' '));
   const explainRisk = (reason: string) => reason.startsWith('missing:')
     ? `待補證據：${reason.slice(8).replaceAll(',', '、')}`
-    : ({ valuation_target_missing:'正式估值未完成，不提供目標價或買進動作',
+    : ({ valuation_target_missing:'正式估值未完成，因此不顯示目標價；相對估值與條件式行動另行呈現',
       reclaim_first:'必須先收復支撐再考慮進場',coverage_lt_70:'研究覆蓋率低於 70%' }[reason]
       ?? reason.replaceAll('_', ' '));
   return (
@@ -938,6 +965,9 @@ function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
         </span>
       </div>
       <p className="mt-3 break-words text-sm leading-6 text-slate-600 dark:text-emerald-100/72">{signal.sourceSummary}</p>
+      <p className="mt-2 rounded-xl border border-amber-500/20 bg-amber-500/8 px-3 py-2 text-xs leading-5 text-amber-800 dark:text-amber-300">
+        {actionDescriptions[signal.actionReason as keyof typeof actionDescriptions] ?? '依基本面、相對估值、價格未反映程度與技術時機持續評估。'}
+      </p>
       {Number.isFinite(signal.underreactionScore) ? (
         <div className="mt-3 grid grid-cols-3 gap-2 text-xs">
           <div className="rounded-xl bg-slate-950/5 p-2 dark:bg-emerald-100/8"><span className="text-slate-500">研究分數</span><strong className="mt-1 block text-base">{signal.underreactionScore}</strong></div>
@@ -945,9 +975,18 @@ function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
           <div className="rounded-xl bg-slate-950/5 p-2 dark:bg-emerald-100/8"><span className="text-slate-500">信心</span><strong className="mt-1 block text-base">{Math.round((signal.scoreConfidence ?? 0) * 100)}%</strong></div>
         </div>
       ) : null}
+      {signal.axisScores ? (
+        <div aria-label="未反映機會四軸評分" className="mt-3 grid grid-cols-4 gap-2 text-xs">
+          {([['fundamental','基本面'],['dislocation','未反映'],['valuation','相對估值'],['timing','時機']] as const).map(([key,label]) => (
+            <div key={key} className="min-w-0 rounded-xl bg-slate-950/5 p-2 text-center dark:bg-emerald-100/8">
+              <span className="text-slate-500">{label}</span><strong className="mt-1 block text-sm">{signal.axisScores?.[key] ?? '—'}</strong>
+            </div>
+          ))}
+        </div>
+      ) : null}
       <dl className="mt-3 grid grid-cols-2 gap-2 text-xs">
-        <div><dt className="text-slate-500 dark:text-emerald-100/50">來源類型</dt><dd className="mt-1 text-slate-800 dark:text-emerald-50">{signal.sourceClass}</dd></div>
-        <div><dt className="text-slate-500 dark:text-emerald-100/50">技術狀態</dt><dd className="mt-1 text-slate-800 dark:text-emerald-50">{signal.technicalState}</dd></div>
+        <div><dt className="text-slate-500 dark:text-emerald-100/50">來源類型</dt><dd className="mt-1 text-slate-800 dark:text-emerald-50">{sourceTypeLabel[signal.sourceClass] ?? signal.sourceClass}</dd></div>
+        <div><dt className="text-slate-500 dark:text-emerald-100/50">技術狀態</dt><dd className="mt-1 text-slate-800 dark:text-emerald-50">{technicalStateLabels[signal.technicalState as keyof typeof technicalStateLabels] ?? '資料不足'}</dd></div>
         <div><dt className="text-slate-500 dark:text-emerald-100/50">目前股價</dt><dd className="mt-1 text-slate-800 dark:text-emerald-50">{signal.currentPrice != null ? signal.currentPrice.toFixed(2) : '待補'}</dd></div>
         <div><dt className="text-slate-500 dark:text-emerald-100/50">60 日回落</dt><dd className="mt-1 text-slate-800 dark:text-emerald-50">{signal.drawdown60Pct != null ? `${signal.drawdown60Pct.toFixed(1)}%` : '待補'}</dd></div>
         <div><dt className="text-slate-500 dark:text-emerald-100/50">BIAS 20 / 60 / 120</dt><dd className="mt-1 text-slate-800 dark:text-emerald-50">{[signal.bias20Pct,signal.bias60Pct,signal.bias120Pct].map((value)=>value != null ? `${value.toFixed(1)}%` : '—').join(' / ')}</dd></div>
@@ -955,6 +994,7 @@ function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
         <div><dt className="text-slate-500 dark:text-emerald-100/50">相對加權 20 日</dt><dd className="mt-1 text-slate-800 dark:text-emerald-50">{signal.relativeStrength20Pct != null ? `${signal.relativeStrength20Pct.toFixed(1)}%` : '待補'}</dd></div>
         <div><dt className="text-slate-500 dark:text-emerald-100/50">營收年增</dt><dd className="mt-1 text-slate-800 dark:text-emerald-50">{signal.revenueYoy != null ? `${signal.revenueYoy.toFixed(1)}%` : '待補'}</dd></div>
         <div><dt className="text-slate-500 dark:text-emerald-100/50">PE / 歷史中位 / 同產業</dt><dd className="mt-1 text-slate-800 dark:text-emerald-50">{signal.currentPe != null ? signal.currentPe.toFixed(1) : '待補'} / {signal.historyPeMedian != null ? signal.historyPeMedian.toFixed(1) : '待累積'} / {signal.sectorPe != null ? signal.sectorPe.toFixed(1) : '待補'}</dd></div>
+        <div><dt className="text-slate-500 dark:text-emerald-100/50">PE 相對折溢價</dt><dd className="mt-1 text-slate-800 dark:text-emerald-50">自身 {signal.ownPeDiscountPct != null ? `${signal.ownPeDiscountPct > 0 ? '+' : ''}${signal.ownPeDiscountPct.toFixed(1)}%` : '待補'} / 產業 {signal.sectorPeDiscountPct != null ? `${signal.sectorPeDiscountPct > 0 ? '+' : ''}${signal.sectorPeDiscountPct.toFixed(1)}%` : '待補'}</dd></div>
       </dl>
       {signal.valuationAuthority === 'exchange_reported' ? <p className="mt-2 text-xs leading-5 text-slate-500 dark:text-emerald-100/55">估值來源：{signal.valuationExchange ?? '交易所'} · 當期 {signal.valuationAsOf ?? '日期待補'}{(signal.historyPeSessions?.length ?? 0) > 0 ? ` · 歷史樣本 ${signal.historyPeSessions?.join('、')}` : ''}</p> : null}
       <p className="mt-3 text-xs leading-5 text-sky-700 dark:text-sky-300">技術觸發：{technicalTrigger}</p>
