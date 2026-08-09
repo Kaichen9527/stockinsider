@@ -28,7 +28,7 @@ const REASON_ORDER = [
   'manifest_missing','manifest_noncanonical','review_binding_invalid','worker_hash_mismatch','config_hash_mismatch',
   'scheduler_rollback_package_missing','scheduler_rollback_hash_mismatch','activation_journal_incomplete','active_pointer_invalid',
   'scheduler_plist_mismatch','scheduler_owner_mismatch','competing_scheduler','lease_invalid','state_schema_mismatch',
-  'last_run_nonterminal','negative_run_duration','stuck_runs_present','projection_missing','projection_hash_mismatch',
+  'last_run_nonterminal','last_run_failed','negative_run_duration','stuck_runs_present','projection_missing','projection_hash_mismatch',
   'projection_stale','consumer_producer_incompatible',
 ] as const;
 
@@ -42,6 +42,7 @@ export function assessTrackedRuntimeHealth(observation: RuntimeHealthObservation
   add(observation.schedulerOwner !== 'com.stockinsider.auth-source-worker', 'scheduler_owner_mismatch'); add((observation.competingOwners?.length ?? 0) > 0, 'competing_scheduler');
   add(observation.leaseStatus === 'invalid', 'lease_invalid'); add(observation.stateSchema !== 'stockinsider-producer-state-v1', 'state_schema_mismatch');
   add(Boolean(observation.lastRunNonterminal), 'last_run_nonterminal'); add(Boolean(observation.negativeRunDuration), 'negative_run_duration'); add((observation.stuckRunCount ?? 0) > 0, 'stuck_runs_present');
+  add(['failed', 'cancelled'].includes(observation.lastTerminalStatus ?? ''), 'last_run_failed');
   add(observation.projectionFreshness === 'missing', 'projection_missing'); add(observation.projectionFreshness === 'invalid', 'projection_hash_mismatch'); add(observation.projectionFreshness === 'stale', 'projection_stale');
   add(observation.consumerCompatibility !== 'compatible', 'consumer_producer_incompatible');
   const checkedAt = new Date(observation.checkedAt ?? Date.now()).toISOString().replace(/\.\d{3}Z$/u, 'Z');

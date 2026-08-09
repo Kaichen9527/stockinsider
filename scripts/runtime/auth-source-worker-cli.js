@@ -89,7 +89,7 @@ function readRuntimeHealthObservation(sourceCommitSha, workerSha256, configSha25
 function sourceText(raw) {
   const values = [];
   const walk = (value) => {
-    if (typeof value === 'string') values.push(value.normalize('NFKC'));
+    if (typeof value === 'string') values.push(value.toWellFormed().normalize('NFKC'));
     else if (Array.isArray(value)) value.forEach(walk);
     else if (value && typeof value === 'object') Object.values(value).forEach(walk);
   };
@@ -125,7 +125,7 @@ function nameHasStockContext(text, name, symbol) {
 
 function extractMatchedEvidenceSnippet(text, { symbol, names = [] }) {
   invariant(typeof text === 'string' && typeof symbol === 'string', 'matched evidence input');
-  const normalized = text.normalize('NFC').replace(/[\r\n]+/gu, '。');
+  const normalized = text.toWellFormed().normalize('NFC').replace(/[\r\n]+/gu, '。');
   const terms = [symbol, ...names.filter((name) => typeof name === 'string' && name.length >= 2)];
   const occurrences = terms.flatMap((term) => {
     const rows = [];
@@ -149,13 +149,13 @@ function extractMatchedEvidenceSnippet(text, { symbol, names = [] }) {
     const nextBoundary = following.length ? Math.min(...following) + 1 : normalized.length;
     const start = Math.max(priorBoundary + 1, occurrence.index - 70);
     const end = Math.min(nextBoundary, occurrence.index + occurrence.term.length + 105);
-    const candidate = normalized.slice(start, end).trim();
+    const candidate = normalized.slice(start, end).toWellFormed().trim();
     const hasSymbol = candidate.includes(symbol);
     const hasName = names.some((name) => typeof name === 'string' && name.length >= 2 && candidate.includes(name));
     const score = (hasSymbol ? 2 : 0) + (hasName ? 2 : 0) + Math.min(candidate.length, 180) / 1000;
     if (!best || score > best.score) best = { candidate, score, hasSymbol, hasName };
   }
-  const textOut = [...best.candidate].slice(0, 180).join('').trim();
+  const textOut = [...best.candidate].slice(0, 180).join('').toWellFormed().trim();
   return Object.freeze({ text: textOut, matchBasis: best.hasSymbol && best.hasName ? 'symbol_and_name'
     : best.hasSymbol ? 'symbol' : 'name' });
 }
