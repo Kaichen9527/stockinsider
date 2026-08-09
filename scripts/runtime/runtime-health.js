@@ -9,7 +9,7 @@ const REASON_ORDER = Object.freeze([
   'activation_journal_incomplete', 'active_pointer_invalid',
   'scheduler_plist_mismatch', 'scheduler_owner_mismatch',
   'competing_scheduler', 'lease_invalid', 'state_schema_mismatch',
-  'last_run_nonterminal', 'negative_run_duration', 'stuck_runs_present',
+  'last_run_nonterminal', 'last_run_failed', 'negative_run_duration', 'stuck_runs_present',
   'projection_missing', 'projection_hash_mismatch', 'projection_stale',
   'consumer_producer_incompatible',
 ]);
@@ -38,6 +38,7 @@ function assessTrackedRuntimeHealth(observation) {
   add(observation.leaseStatus === 'invalid', 'lease_invalid');
   add(observation.stateSchema !== 'stockinsider-producer-state-v1', 'state_schema_mismatch');
   add(Boolean(observation.lastRunNonterminal), 'last_run_nonterminal');
+  add(['failed', 'cancelled'].includes(observation.lastTerminalStatus), 'last_run_failed');
   add(Boolean(observation.negativeRunDuration), 'negative_run_duration');
   add((observation.stuckRunCount ?? 0) > 0, 'stuck_runs_present');
   add(observation.projectionFreshness === 'missing', 'projection_missing');

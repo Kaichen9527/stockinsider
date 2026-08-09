@@ -416,6 +416,21 @@ const checks = {
     const secondAttempt = await runtime('auth-source-worker-installation.js').activateTrackedRuntimeRelease({ manifest,
       reviewedRelease, ...testActivationProof, filesystem: retryFilesystem, scheduler: retryScheduler, journal: retryJournal });
     assert.equal(firstAttempt.disposition, 'rolled_back'); assert.equal(secondAttempt.disposition, 'activated');
+    const failedTerminalCalls = [];
+    const failedTerminalDoctor = passingRuntimeDoctor(manifest, reviewedRelease);
+    failedTerminalDoctor.observation.lastTerminalStatus = 'failed';
+    const failedTerminal = await runtime('auth-source-worker-installation.js').activateTrackedRuntimeRelease({ manifest,
+      reviewedRelease, ...testActivationProof,
+      filesystem: { captureActivePointer: async () => 'old', stage: async () => {}, verifyStaged: async () => {},
+        publishRelease: async () => {}, writeHealthObservation: async () => failedTerminalCalls.push('health-observation'),
+        restoreActivePointer: async () => failedTerminalCalls.push('restore-pointer'), cleanupIncomplete: async () => {} },
+      scheduler: { capture: async () => 'owners', disablePriorOwners: async () => {}, loadNewOwner: async () => {},
+        doctor: async () => failedTerminalDoctor, restore: async () => failedTerminalCalls.push('restore-scheduler') },
+      journal: { recover: async () => {}, begin: async () => {}, write: async () => {}, rollback: async () => {} },
+    });
+    assert.equal(failedTerminal.disposition, 'rolled_back');
+    assert.deepEqual(failedTerminalCalls, ['restore-scheduler', 'restore-pointer'],
+      'a terminal failed producer run must rollback before publishing health');
   },
   'PCR-004': async () => {
     const runtimeDoctor = require(path.join(root, 'scripts/runtime_doctor.js'));
@@ -522,6 +537,14 @@ const checks = {
     assert.equal(explicitStock.candidates[0].name, '台積電',
       'official roster name remains attached through the source-led candidate funnel');
     assert.equal(explicitStock.candidates[0].sourceSummary, '台積電 2330 股價轉強,列入觀察。');
+    const productionSurrogateBoundary = parse(`${'段'.repeat(92)}台積電 2330 股票轉強${'文'.repeat(100)}😀後續。`);
+    assert.equal(productionSurrogateBoundary.candidates.length, 1);
+    assert.equal(productionSurrogateBoundary.candidates[0].sourceSummary.isWellFormed(), true,
+      'UTF-16 snippet windows must remain PostgreSQL jsonb-compatible Unicode scalar text');
+    assert.doesNotThrow(() => JSON.parse(canonicalJson(productionSurrogateBoundary)));
+    const productionLoneSurrogate = parse('台積電 2330 股票轉強 \ud83d');
+    assert.equal(productionLoneSurrogate.candidates[0].sourceSummary.isWellFormed(), true,
+      'malformed upstream UTF-16 must be replaced before immutable JSON persistence');
     const longNamePages = [['roster', null, null, [[
       '00000000-0000-4000-8000-000000002330', '2330', 'TWSE', 'common_stock', 'active', '超過四十字的官方公司完整名稱不應被送進公開短名稱欄位以免破壞公開契約而造成整批投影無法發布', null,
     ]]]];
