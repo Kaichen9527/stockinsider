@@ -11,6 +11,7 @@ const dbName = process.env.SUPABASE_DB_NAME || process.env.SUPABASE_DB_DATABASE 
 const migrationDir = process.env.MIGRATIONS_DIR || path.join(__dirname, 'migrations');
 const BLOCKED_MIGRATIONS = new Set([
   '20260724_source_led_opportunity_engine_v3.sql',
+  '20260809_product_value_recovery_v3_12.sql',
 ]);
 
 if (!dbPassword || (!projectRef && !dbHost)) {

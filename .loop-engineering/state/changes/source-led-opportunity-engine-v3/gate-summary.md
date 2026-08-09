@@ -1826,6 +1826,27 @@ that repair. Exact implementation commit, review and Verification remain next. N
 production, PR, runtime, scheduler, flag, database or deployment state changed.
 Evidence: `architecture-review-round-11.md`.
 
+## V3.12 Product Value Recovery — precommit evidence
+
+The 2026-08-09 production audit is RED for product value even though the prior code
+gates passed: 30 source cards have no finite research recommendation, the three V3
+fact planes are empty, legacy observations are not bridged, 2330 legacy PE/PB is
+swapped or stale relative to TWSE, market risk-on is emitted without its components,
+and evidence snippets can name a different stock.
+
+The V3.12 amendment implements a separate fail-closed research-priority plane over
+official TWSE/TPEx current and historical evidence plus the bounded legacy price
+universe. It does not turn an incomplete valuation into a target price or buy action.
+Fresh precommit verification passes typecheck, lint, production build, semantic
+`61/61`, product correctness `37/37`, migration `28/28`, legacy `2/2`, Playwright
+`2/2`, performance `4/4`, model-runner `17/17`, and disabled host-pin v3.6 doctor.
+The official network smoke returned 1,970 current valuations, 7,826 historical
+valuations, 27 TAIEX and 27 TPEx sessions with 21 exact response hashes.
+
+This is precommit evidence, not an exact-review or release PASS. Evaluation promotion
+remains `blocked/non_fabricated_elapsed_cohorts_unavailable` for the required
+120 backtest dates, 20 live dates and 252-date attempt roster.
+
 ## Gate Rules
 
 - `PASS` requires zero P1/P0 findings and no material unspecified interface, precedence, failure or migration decision.

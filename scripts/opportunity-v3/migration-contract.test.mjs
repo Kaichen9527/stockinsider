@@ -12,6 +12,8 @@ import { executeWorkerPayload } from '../../web/src/lib/opportunity-v3/worker-ex
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const migrationPath = path.join(root, 'migrations/20260724_source_led_opportunity_engine_v3.sql');
 const sql = fs.readFileSync(migrationPath, 'utf8');
+const productValueMigrationPath = path.join(root, 'migrations/20260809_product_value_recovery_v3_12.sql');
+const productValueSql = fs.readFileSync(productValueMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -225,17 +227,46 @@ before(() => {
       source_timestamp timestamptz NOT NULL,
       ingested_at timestamptz NOT NULL DEFAULT clock_timestamp()
     );
+    CREATE TABLE public.revenue_signals(
+      id uuid PRIMARY KEY DEFAULT extensions.gen_random_uuid(),
+      stock_id uuid NOT NULL REFERENCES public.stocks(id),
+      as_of_date date NOT NULL,
+      monthly_revenue numeric NOT NULL,
+      yoy_growth numeric,
+      mom_growth numeric,
+      source_url text,
+      created_at timestamptz NOT NULL DEFAULT clock_timestamp()
+    );
+    CREATE TABLE public.market_snapshots(
+      id uuid PRIMARY KEY DEFAULT extensions.gen_random_uuid(),
+      market text NOT NULL,
+      as_of timestamptz NOT NULL,
+      source text NOT NULL,
+      source_key text,
+      sector_flows jsonb NOT NULL DEFAULT '{}'::jsonb,
+      index_state jsonb NOT NULL DEFAULT '{}'::jsonb,
+      freshness_status text NOT NULL,
+      source_timestamp timestamptz NOT NULL,
+      ingested_at timestamptz NOT NULL DEFAULT clock_timestamp()
+    );
     ALTER DATABASE postgres OWNER TO stockinsider_managed_migrator;
     ALTER SCHEMA public OWNER TO stockinsider_managed_migrator;
     GRANT USAGE ON SCHEMA extensions TO stockinsider_managed_migrator WITH GRANT OPTION;
     GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA extensions TO stockinsider_managed_migrator WITH GRANT OPTION;
-    GRANT ALL PRIVILEGES ON TABLE public.source_entities,public.stocks,public.stock_signals
+    GRANT ALL PRIVILEGES ON TABLE public.source_entities,public.stocks,public.stock_signals,
+      public.revenue_signals,public.market_snapshots
       TO stockinsider_managed_migrator WITH GRANT OPTION;
   `);
   for (let application = 0; application < 2; application += 1) {
     command(pg.psql, [
       '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', migrationPath,
+    ]);
+  }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', productValueMigrationPath,
     ]);
   }
 });
@@ -411,6 +442,8 @@ test('allocation and projection persist only hash-valid authoritative decision g
 });
 
 test('migration applies twice and exposes the exact granted/private function boundary', () => {
+  assert.match(productValueSql,/row_number\(\) OVER \(PARTITION BY instrument[.]stock_id ORDER BY[\s\S]*?instrument[.]source_timestamp DESC,instrument[.]recorded_at DESC/u);
+  assert.match(productValueSql,/'sectorValuationUniverse',v_sector_universe/u);
   assert.match(sql, /GRANT opportunity_v3_rpc_owner TO CURRENT_USER;/u);
   assert.match(sql, /GRANT legacy_correctness_rpc_owner TO CURRENT_USER;/u);
   assert.match(sql, /GRANT USAGE, CREATE ON SCHEMA public TO opportunity_v3_rpc_owner;/u);
@@ -428,6 +461,19 @@ test('migration applies twice and exposes the exact granted/private function bou
     { role: 'legacy_correctness_rpc_owner', member: true },
     { role: 'opportunity_v3_rpc_owner', member: true },
   ]);
+  const bridgeShape=JSON.parse(psql(`
+    SET ROLE legacy_correctness_rpc_owner;
+    SELECT jsonb_build_object(
+      'bridgeSchema',result->>'bridgeSchema',
+      'sectorUniverseType',jsonb_typeof(result->'sectorValuationUniverse'),
+      'dislocationType',jsonb_typeof(result->'dislocationCandidates')
+    )::text
+    FROM public.read_legacy_candidate_fact_plane_v3_11(
+      '2026-08-01T00:00:00Z'::timestamptz,'{"candidates":[]}'::jsonb
+    ) result;
+    RESET ROLE;
+  `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual(bridgeShape,{ bridgeSchema:'legacy-product-value-bridge-v3.12',sectorUniverseType:'array',dislocationType:'array' });
   const applied = psql(`
     WITH expected(name) AS (
       SELECT unnest(ARRAY[${functions.map((name) => `'${name}'`).join(',')}])

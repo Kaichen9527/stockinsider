@@ -15,6 +15,9 @@ const { deriveActionDecision } = require('./action-decision');
 const { selectBiasTechnicalHistory } = require('./bias-technical-history');
 const { appendAnalysisRevision } = require('./analysis-revision');
 const { publishCompactRadarProjection } = require('./compact-radar-projection');
+const { computeUnderreactionResearchScore } = require('./underreaction-score');
+const { loadOfficialTwMarketSnapshot, validateReportedValuation } = require('./official-twse-valuation');
+const { buildMarketAnalysis } = require('./market-analysis');
 const { runtimeBundleBytes } = require('./tracked-runtime-bundle');
 const { assertExactRuntimeEnvironment, hydrateRuntimeCredentials } = require('./credential-resolver');
 
@@ -120,6 +123,43 @@ function nameHasStockContext(text, name, symbol) {
   return false;
 }
 
+function extractMatchedEvidenceSnippet(text, { symbol, names = [] }) {
+  invariant(typeof text === 'string' && typeof symbol === 'string', 'matched evidence input');
+  const normalized = text.normalize('NFC').replace(/[\r\n]+/gu, '。');
+  const terms = [symbol, ...names.filter((name) => typeof name === 'string' && name.length >= 2)];
+  const occurrences = terms.flatMap((term) => {
+    const rows = [];
+    let index = normalized.indexOf(term);
+    while (index >= 0) {
+      rows.push({ term, index });
+      index = normalized.indexOf(term, index + term.length);
+    }
+    return rows;
+  }).sort((left, right) => left.index - right.index || right.term.length - left.term.length);
+  invariant(occurrences.length > 0, 'matched evidence unavailable');
+  let best = null;
+  for (const occurrence of occurrences) {
+    const priorBoundary = Math.max(
+      normalized.lastIndexOf('。', occurrence.index - 1), normalized.lastIndexOf('！', occurrence.index - 1),
+      normalized.lastIndexOf('？', occurrence.index - 1), normalized.lastIndexOf(';', occurrence.index - 1),
+      normalized.lastIndexOf('；', occurrence.index - 1),
+    );
+    const following = ['。', '！', '？', ';', '；'].map((token) => normalized.indexOf(token, occurrence.index + occurrence.term.length))
+      .filter((index) => index >= 0);
+    const nextBoundary = following.length ? Math.min(...following) + 1 : normalized.length;
+    const start = Math.max(priorBoundary + 1, occurrence.index - 70);
+    const end = Math.min(nextBoundary, occurrence.index + occurrence.term.length + 105);
+    const candidate = normalized.slice(start, end).trim();
+    const hasSymbol = candidate.includes(symbol);
+    const hasName = names.some((name) => typeof name === 'string' && name.length >= 2 && candidate.includes(name));
+    const score = (hasSymbol ? 2 : 0) + (hasName ? 2 : 0) + Math.min(candidate.length, 180) / 1000;
+    if (!best || score > best.score) best = { candidate, score, hasSymbol, hasName };
+  }
+  const textOut = [...best.candidate].slice(0, 180).join('').trim();
+  return Object.freeze({ text: textOut, matchBasis: best.hasSymbol && best.hasName ? 'symbol_and_name'
+    : best.hasSymbol ? 'symbol' : 'name' });
+}
+
 function uuidFromHash(value) {
   const digest = sha256(value);
   return `${digest.slice(0, 8)}-${digest.slice(8, 12)}-${digest.slice(12, 16)}-${digest.slice(16, 20)}-${digest.slice(20, 32)}`;
@@ -146,7 +186,6 @@ function extractRevisionCandidates(bundle) {
   }
   const sectorByStock = new Map(rowsByKind('taxonomy').filter(Array.isArray).map((row) => [row[0], row[3]]));
   const text = sourceText(frozen.rawFieldPayload);
-  const sourceSummary = [...text.normalize('NFC').replace(/[\r\n]+/gu, ' ').trim()].slice(0, 180).join('');
   const collectedAt = typeof frozen.sourceCollectedAt === 'string'
     ? canonicalUtc(frozen.sourceCollectedAt, 'frozen source collected-at') : null;
   const publishedAt = typeof frozen.sourcePublishedAt === 'string'
@@ -159,12 +198,13 @@ function extractRevisionCandidates(bundle) {
     const nameMatch = [shortName, legalName, ...aliases].some((name) => nameHasStockContext(text, name, symbol));
     const tickerMatch = typeof symbol === 'string' && (nameMatch || tickerHasStockContext(text, symbol));
     if (!tickerMatch && !nameMatch) return [];
+    const matched = extractMatchedEvidenceSnippet(text, { symbol: String(symbol), names: [shortName, legalName, ...aliases] });
     const raw = tickerMatch ? String(symbol) : String([shortName, ...aliases, legalName].find((name) => typeof name === 'string' && text.includes(name)));
     const claimId = uuidFromHash(`claim:${frozen.revisionId}:${stockId}:${raw}`);
     return [{ sourceKey: frozen.sourceKey, revisionId: frozen.revisionId, stockId, symbol, exchange,
       name: typeof shortName === 'string' && [...shortName].length <= 40 ? shortName
         : typeof legalName === 'string' && [...legalName].length <= 40 ? legalName : null,
-      sourceSummary,
+      sourceSummary: matched.text, matchBasis: matched.matchBasis,
       canonicalSector: sectorByStock.get(stockId) ?? 'unknown', raw, claimId,
       claimAsOf: sourceEffectiveAt,
       mentionId: uuidFromHash(`mention:${frozen.revisionId}:${stockId}:${raw}`), claimEligible: true,
@@ -186,6 +226,150 @@ function legacyFactInput(rows) {
     bookValue: latest.book_value_per_share, nav: latest.net_asset_value,
     cash: latest.cash_and_equivalents, totalDebt: latest.total_debt, netDebt: latest.net_debt,
   };
+}
+
+function researchHistory(rows, symbol) {
+  return (rows ?? []).filter((row) => Array.isArray(row) && row[0] === symbol && Number.isFinite(Number(row[5])))
+    .map((row) => ({ session: String(row[1]),open:Number(row[2]),high:Number(row[3]),low:Number(row[4]),
+      close:Number(row[5]),volume:Number(row[6]) }))
+    .filter((row) => Number.isFinite(Date.parse(row.session)) && row.close > 0)
+    .sort((left, right) => left.session.localeCompare(right.session))
+    .filter((row, index, all) => index === 0 || row.session !== all[index - 1].session)
+    .slice(-130);
+}
+
+function average(values) { return values.length ? values.reduce((sum,value)=>sum+value,0)/values.length : null; }
+function ema(values,period) {
+  if (values.length<period) return null; const multiplier=2/(period+1); let value=average(values.slice(0,period));
+  for (const next of values.slice(period)) value=(next-value)*multiplier+value; return value;
+}
+function rsi14(closes) {
+  if (closes.length<15) return null; const changes=closes.slice(-15).slice(1).map((value,index)=>value-closes.slice(-15)[index]);
+  const gain=average(changes.map((value)=>Math.max(value,0))); const loss=average(changes.map((value)=>Math.max(-value,0)));
+  if (loss===0) return gain===0?50:100; return 100-100/(1+gain/loss);
+}
+
+function priceResearchAxes(history, stats = null, benchmarkRows = []) {
+  const closes = history.map((row) => row.close);
+  const current = Number(stats?.currentPrice ?? closes.at(-1));
+  const high20 = Number(stats?.high20 ?? (closes.length ? Math.max(...closes.slice(-20)) : Number.NaN));
+  const high60 = Number(stats?.high60 ?? (closes.length ? Math.max(...closes.slice(-60)) : Number.NaN));
+  const high120 = Number(stats?.high120 ?? (closes.length>=120 ? Math.max(...closes.slice(-120)) : Number.NaN));
+  const ma20 = Number(stats?.ma20 ?? (closes.length >= 20 ? closes.slice(-20).reduce((sum, value) => sum + value, 0) / 20 : Number.NaN));
+  const ma60 = Number(stats?.ma60 ?? (closes.length >= 60 ? closes.slice(-60).reduce((sum, value) => sum + value, 0) / 60 : Number.NaN));
+  const ma120 = Number(stats?.ma120 ?? (closes.length >= 120 ? closes.slice(-120).reduce((sum, value) => sum + value, 0) / 120 : Number.NaN));
+  if (![current, high60, ma20].every(Number.isFinite) || current <= 0 || high60 <= 0 || ma20 <= 0) {
+    return { priceDislocation: { score: null, trustworthy: false, reason: 'price_history_unavailable' },
+      timing: { score: null, trustworthy: false, reason: 'price_history_unavailable' }, context: null };
+  }
+  const drawdown20Pct = 100*(current/high20-1); const drawdown60Pct = 100 * (current / high60 - 1);
+  const drawdown120Pct = Number.isFinite(high120)&&high120>0?100*(current/high120-1):null;
+  const bias20Pct = 100 * (current / ma20 - 1);
+  const bias60Pct = Number.isFinite(ma60) && ma60 > 0 ? 100 * (current / ma60 - 1) : null;
+  const bias120Pct = Number.isFinite(ma120)&&ma120>0?100*(current/ma120-1):null;
+  const rsi = rsi14(closes); const ema12=ema(closes,12); const ema26=ema(closes,26); const macd=Number.isFinite(ema12)&&Number.isFinite(ema26)?ema12-ema26:null;
+  const trueRanges=history.slice(-15).map((row,index,selected)=>Math.max(Number(row.high)-Number(row.low),
+    index?Math.abs(Number(row.high)-selected[index-1].close):0,index?Math.abs(Number(row.low)-selected[index-1].close):0)).filter(Number.isFinite);
+  const atr14=trueRanges.length>=14?average(trueRanges.slice(-14)):null;
+  const volumes=history.slice(-20).map((row)=>row.volume).filter((value)=>Number.isFinite(value)&&value>=0);
+  const volumeRatio20=volumes.length>=20&&average(volumes.slice(0,-1))>0?volumes.at(-1)/average(volumes.slice(0,-1)):null;
+  const benchmarkCloses=(benchmarkRows??[]).slice(-20).map((row)=>Number(row.close)).filter((value)=>Number.isFinite(value)&&value>0);
+  const relativeStrength20Pct=closes.length>=20&&benchmarkCloses.length>=20
+    ? 100*((current/closes.at(-20))/(benchmarkCloses.at(-1)/benchmarkCloses.at(-20))-1):null;
+  const governingDrawdown=Math.min(drawdown60Pct,Number.isFinite(drawdown120Pct)?drawdown120Pct:drawdown60Pct);
+  const dislocationScore = governingDrawdown <= -20 ? 92 : governingDrawdown <= -12 ? 80
+    : governingDrawdown <= -7 ? 68 : governingDrawdown <= -3 ? 52 : bias20Pct >= 8 ? 20 : 38;
+  const technicalState = bias20Pct <= -3 ? 'reclaim_required' : bias20Pct >= 8 || rsi>=70 ? 'extended' : 'breakout_pending';
+  const timingScore = technicalState === 'reclaim_required' ? 38 : technicalState === 'extended' ? 18 : 58;
+  return { priceDislocation: { score: dislocationScore, trustworthy: true, drawdown60Pct, drawdown120Pct,bias20Pct,
+    reason: governingDrawdown <= -12 ? 'large_drawdown' : bias20Pct >= 8 ? 'extended' : 'moderate_dislocation' },
+  timing: { score: timingScore, trustworthy: true, technicalState,
+    reason: technicalState === 'reclaim_required' ? 'below_ma20_reclaim_required' : technicalState },
+  context: { currentPrice:current,high20,high60,high120:Number.isFinite(high120)?high120:null,ma20,
+    ma60:Number.isFinite(ma60)?ma60:null,ma120:Number.isFinite(ma120)?ma120:null,drawdown20Pct,drawdown60Pct,drawdown120Pct,
+    bias20Pct,bias60Pct,bias120Pct,rsi14:rsi,macd,atr14,volumeRatio20,relativeStrength20Pct,technicalState } };
+}
+
+function revenueResearchAxis(row, sourceCutoff) {
+  if (!row || row.authority !== 'exchange_reported' || !/^https:\/\/(?:openapi[.]twse[.]com[.]tw|www[.]tpex[.]org[.]tw)\//u.test(row.sourceUrl ?? '')
+      || !Number.isFinite(Number(row.yoyGrowth)) || !Number.isFinite(Date.parse(`${row.asOf}T00:00:00Z`))) {
+    return { score: null, trustworthy: false, reason: 'official_revenue_unavailable' };
+  }
+  const ageDays = (Date.parse(sourceCutoff) - Date.parse(`${row.asOf}T00:00:00Z`)) / 86400000;
+  if (ageDays < 0 || ageDays > 120) return { score: null, trustworthy: false, reason: 'official_revenue_stale' };
+  const yoy = Number(row.yoyGrowth);
+  return { score: yoy >= 20 ? 88 : yoy >= 8 ? 76 : yoy >= 0 ? 64 : yoy >= -8 ? 48 : 25,
+    trustworthy: true, trend: yoy >= 0 ? 'stable_or_growing' : yoy >= -8 ? 'softening' : 'deteriorating',
+    reason: yoy >= 0 ? 'official_revenue_not_deteriorating' : 'official_revenue_deteriorating', yoyGrowth: yoy,
+    momGrowth: Number.isFinite(Number(row.momGrowth)) ? Number(row.momGrowth) : null, asOf: row.asOf, sourceRef: row.sourceRef };
+}
+
+function relativePeScore(ratio) {
+  return ratio <= 0.7 ? 92 : ratio <= 0.9 ? 78 : ratio <= 1.1 ? 58 : ratio <= 1.35 ? 38 : 20;
+}
+
+function valuationResearchAxis(row, sectorReference, historyRows = []) {
+  const verified = validateReportedValuation(row);
+  if (verified.availability !== 'available') return { score: null, trustworthy: false, reason: verified.reason };
+  if (!Number.isFinite(row.peRatio)) {
+    return { score: null, trustworthy: false, reason: 'sector_pe_reference_unavailable', currentPe: row.peRatio,
+      currentPb: row.pbRatio, sourceRef: row.sourceRef, asOf: row.session };
+  }
+  const officialHistory = historyRows.filter((item) => item?.symbol === row.symbol && item.authority === 'exchange_reported_history'
+      && item.session < row.session && Number.isFinite(item.peRatio) && item.peRatio > 0 && item.peRatio <= 200
+      && (/^twse-rwd:BWIBBU_d:\d{4}-\d{2}-\d{2}:\d{4}$/u.test(item.sourceRef ?? '')
+        || /^tpex-rwd:peratio:\d{4}-\d{2}-\d{2}:\d{4}$/u.test(item.sourceRef ?? '')))
+    .sort((left,right)=>left.session.localeCompare(right.session));
+  const historyPes = officialHistory.map((item)=>item.peRatio); const historyPeMedian = median(historyPes);
+  const hasHistoryReference = historyPes.length >= 2 && Number.isFinite(historyPeMedian);
+  const hasSectorReference = sectorReference?.count >= 3 && Number.isFinite(sectorReference.medianPe);
+  if (!hasSectorReference && !hasHistoryReference) return { score: null, trustworthy: false,
+    reason: 'pe_reference_unavailable', currentPe: row.peRatio,currentPb:row.pbRatio,historySampleCount:historyPes.length,
+    sourceRef:row.sourceRef,asOf:row.session };
+  const sectorRelativePe = hasSectorReference ? row.peRatio / sectorReference.medianPe : null;
+  const historyRelativePe = hasHistoryReference ? row.peRatio / historyPeMedian : null;
+  const referenceScores = [sectorRelativePe,historyRelativePe].filter(Number.isFinite).map(relativePeScore);
+  const score = referenceScores.reduce((sum,value)=>sum+value,0)/referenceScores.length;
+  const reason = hasSectorReference && hasHistoryReference ? 'pe_compared_with_sector_and_own_history'
+    : hasHistoryReference ? 'pe_compared_with_own_history' : 'pe_compared_with_sector_reference';
+  return { score,trustworthy:true,reason,currentPe:row.peRatio,currentPb:row.pbRatio,
+    sectorPe:hasSectorReference?sectorReference.medianPe:null,sectorCount:hasSectorReference?sectorReference.count:0,
+    relativePe:sectorRelativePe,historyPeMedian,historyPeMin:historyPes.length?Math.min(...historyPes):null,
+    historyPeMax:historyPes.length?Math.max(...historyPes):null,historySampleCount:historyPes.length,
+    historyRelativePe,historyAsOf:officialHistory.map((item)=>item.session),
+    sourceRefs:[row.sourceRef,...officialHistory.map((item)=>item.sourceRef)],sourceRef:row.sourceRef,asOf:row.session };
+}
+
+function median(values) {
+  const selected = values.filter(Number.isFinite).sort((left, right) => left - right);
+  if (!selected.length) return null;
+  const middle = Math.floor(selected.length / 2);
+  return selected.length % 2 ? selected[middle] : (selected[middle - 1] + selected[middle]) / 2;
+}
+
+function buildResearchScore(candidate, { priceRows = [], officialSnapshot = null, sectorReferences = new Map(), stats = null, sourceCutoff }) {
+  const price = priceResearchAxes(researchHistory(priceRows, candidate.symbol), stats, officialSnapshot?.twseIndex ?? []);
+  const revenue = officialSnapshot?.revenues?.find((row) => row.symbol === candidate.symbol) ?? null;
+  const valuation = officialSnapshot?.valuations?.find((row) => row.symbol === candidate.symbol) ?? null;
+  const fundamental = revenueResearchAxis(revenue, sourceCutoff);
+  const valuationAxis = valuationResearchAxis(valuation, sectorReferences.get(candidate.canonicalSector),
+    officialSnapshot?.valuationHistory ?? []);
+  const score = computeUnderreactionResearchScore({ symbol: candidate.symbol,
+    discovery: { score: Number.isFinite(candidate.sourcePriority) ? candidate.sourcePriority : stats ? 62 : 50,
+      trustworthy: true, reason: stats ? 'price_dislocation_scan' : `${candidate.sourceClass ?? 'community'}_source_signal` },
+    fundamental, priceDislocation: price.priceDislocation, valuation: valuationAxis, timing: price.timing });
+  return Object.freeze({ ...score, axes: { fundamental, priceDislocation: price.priceDislocation,
+    valuation: valuationAxis, timing: price.timing }, priceContext: price.context });
+}
+
+function indexComponent(rows) {
+  if (!Array.isArray(rows) || rows.length < 20) return null;
+  const closes = rows.slice(-60).map((row) => Number(row.close)).filter((value) => Number.isFinite(value) && value > 0);
+  if (closes.length < 20) return null;
+  const current = closes.at(-1); const ma20 = closes.slice(-20).reduce((sum, value) => sum + value, 0) / 20;
+  const high = Math.max(...closes); const drawdownPct = 100 * (current / high - 1);
+  return { state: current >= ma20 ? 'uptrend' : drawdownPct <= -12 ? 'drawdown' : 'pullback',
+    current, ma20, drawdownPct, session: rows.at(-1).session };
 }
 
 function legacyQualityMaterial(facts) {
@@ -292,6 +476,7 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
   internalApiKey = process.env.INTERNAL_API_KEY,
 } = {}) {
   let legacyPayloadsPromise;
+  const officialSnapshotsByCutoff = new Map();
   const authorityPagesByHash = new Map();
   return {
     source_sync: async (claim) => {
@@ -334,6 +519,26 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
     facts_refresh: async (claim) => {
       const bundle = readBundle(claim, 'candidate_fact_plane');
       const candidates = bundle.candidateResult?.candidates ?? [];
+      const bridgeAvailable = bundle.bridgeSchema === 'legacy-product-value-bridge-v3.12';
+      if (bridgeAvailable && !officialSnapshotsByCutoff.has(bundle.sourceCutoff)) {
+        officialSnapshotsByCutoff.set(bundle.sourceCutoff,loadOfficialTwMarketSnapshot({ cutoff:bundle.sourceCutoff,fetchImpl })
+          .catch((error)=>({ availability:'unavailable',reason:'official_market_snapshot_unavailable',
+            detail:error instanceof Error?error.message:String(error),valuations:[],valuationHistory:[],revenues:[],twseIndex:[],
+            tpexIndex:[],foreignFlow:null,sourceFailures:[] })));
+      }
+      const officialSnapshot = bridgeAvailable ? await officialSnapshotsByCutoff.get(bundle.sourceCutoff) : null;
+      const dislocationInputs = Array.isArray(bundle.dislocationCandidates) ? bundle.dislocationCandidates : [];
+      const officialValuationBySymbol = new Map((officialSnapshot?.valuations ?? []).map((row) => [row.symbol, row]));
+      const sectorMembers = (bundle.sectorValuationUniverse ?? []).reduce((map, row) => {
+        if (!Array.isArray(row) || !/^\d{4}$/u.test(String(row[0])) || typeof row[1] !== 'string') return map;
+        const pe = Number(officialValuationBySymbol.get(String(row[0]))?.peRatio);
+        if (!Number.isFinite(pe) || pe <= 0) return map;
+        const selected = map.get(row[1]) ?? [];
+        selected.push(pe); map.set(row[1],selected); return map;
+      }, new Map());
+      const sectorReferences = new Map([...sectorMembers].map(([sector, values]) => [sector,
+        { medianPe: median(values), count: values.length }]));
+      const researchPriceRows = [...(bundle.priceRows ?? []), ...(bundle.legacyPriceRows ?? [])];
       const decisions = candidates.filter((candidate) => candidate.deepSelected === true).map((candidate) => {
         const facts = (bundle.financialRows ?? []).filter((row) => Array.isArray(row) && row[0] === candidate.symbol);
         const history = (bundle.priceRows ?? []).filter((row) => Array.isArray(row) && row[0] === candidate.symbol)
@@ -342,19 +547,53 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         const benchmark = (bundle.benchmarkRows ?? []).filter(Array.isArray)
           .map((row) => ({ session: row[0], close: row[1] }))
           .sort((left, right) => String(left.session).localeCompare(String(right.session)));
-        return buildLegacyCandidateDecision({ candidate, facts, history, benchmark, sourceCutoff: bundle.sourceCutoff,
+        const decision = buildLegacyCandidateDecision({ candidate, facts, history, benchmark, sourceCutoff: bundle.sourceCutoff,
           valuationInput: bundle.valuationInputs?.[candidate.symbol] ?? {} });
+        return { ...decision, researchScore: buildResearchScore(candidate, { priceRows: researchPriceRows,
+          officialSnapshot, sectorReferences, sourceCutoff: bundle.sourceCutoff }) };
       });
       const shallowObservations = candidates.filter((candidate) => candidate.shallowSelected === true && candidate.deepSelected !== true)
         .map((candidate) => {
-          const latest = (bundle.priceRows ?? []).filter((row) => Array.isArray(row) && row[0] === candidate.symbol)
+          const latest = researchPriceRows.filter((row) => Array.isArray(row) && row[0] === candidate.symbol)
             .sort((left, right) => String(right[1]).localeCompare(String(left[1])))[0];
           return { ...candidate, researchMaturity: 'source_signal', newPositionAction: 'valuation_review',
-            shallowStatus: 'enriched_observation', currentPrice: Array.isArray(latest) && Number.isFinite(latest[5]) ? latest[5] : null };
+            shallowStatus: 'enriched_observation', currentPrice: Array.isArray(latest) && Number.isFinite(latest[5]) ? latest[5] : null,
+            lastEvaluatedAt: bundle.sourceCutoff, researchScore: buildResearchScore(candidate, { priceRows: researchPriceRows,
+              officialSnapshot, sectorReferences, sourceCutoff: bundle.sourceCutoff }) };
         });
-      const deferredSignals = candidates.filter((candidate) => candidate.shallowSelected !== true);
+      const deferredSignals = candidates.filter((candidate) => candidate.shallowSelected !== true).map((candidate) => ({
+        ...candidate, lastEvaluatedAt: bundle.sourceCutoff, researchScore: buildResearchScore(candidate, { priceRows: researchPriceRows,
+          officialSnapshot, sectorReferences, sourceCutoff: bundle.sourceCutoff }),
+      }));
+      const dislocationCandidates = dislocationInputs.map((row) => {
+        const candidate = { stockId: row.stockId, symbol: row.symbol, name: row.name ?? null,
+          canonicalSector: row.canonicalSector ?? 'unknown', sourceClass: 'price_dislocation', sourcePriority: 62,
+          claimId: row.sourceRef, disposition: 'promoted', reason: 'price_dislocation',
+          sourceSummary: `${row.symbol} 近 60 個交易日自高點回落 ${Math.abs(Number(row.drawdown60Pct)).toFixed(1)}%，納入基本面未惡化檢查。`,
+          lastEvaluatedAt: bundle.sourceCutoff };
+        return { ...candidate, researchMaturity: 'fundamental_review', newPositionAction: 'valuation_review',
+          researchScore: buildResearchScore(candidate, { priceRows: researchPriceRows, officialSnapshot, sectorReferences,
+            stats: row, sourceCutoff: bundle.sourceCutoff }) };
+      });
+      const decisionSymbols = new Set(decisions.map((row) => row.symbol));
+      const sourceCandidates = [...shallowObservations, ...deferredSignals, ...dislocationCandidates]
+        .filter((row) => !decisionSymbols.has(row.symbol))
+        .sort((left, right) => (right.researchScore?.underreactionScore ?? -1) - (left.researchScore?.underreactionScore ?? -1)
+          || (right.sourcePriority ?? 0) - (left.sourcePriority ?? 0) || left.symbol.localeCompare(right.symbol))
+        .filter((row, index, all) => all.findIndex((candidate) => candidate.symbol === row.symbol) === index)
+        .slice(0, Math.max(0, 60 - decisions.length));
+      const marketAnalysis = buildMarketAnalysis({ asOf: bundle.sourceCutoff,
+        taiex: indexComponent(officialSnapshot?.twseIndex), otc: indexComponent(officialSnapshot?.tpexIndex),
+        breadth: bundle.marketBreadth && Number(bundle.marketBreadth.trackedCount) >= 20
+          ? { aboveMa20Pct: Number(bundle.marketBreadth.aboveMa20Pct), trackedCount: Number(bundle.marketBreadth.trackedCount),
+            scope: bundle.marketBreadth.scope,asOf:bundle.marketBreadth.asOf } : null,
+        foreignFlow: officialSnapshot?.foreignFlow ?? null });
       return immutableBundle('legacy_facts_refresh_result_v3_11', { schema: 'legacy-facts-refresh-result-v3.11', decisions,
-        shallowObservations, sourceCandidates: [...shallowObservations, ...deferredSignals],
+        shallowObservations, sourceCandidates, marketAnalysis,
+        officialSnapshotStatus: officialSnapshot?.availability === 'unavailable'
+          ? { availability:'unavailable',reason:officialSnapshot.reason }
+          : { availability:bridgeAvailable ? officialSnapshot?.sourceFailures?.length ? 'partial' : 'available' : 'not_requested',
+            sourceFailures:officialSnapshot?.sourceFailures ?? [] },
         discoveryDelta: bundle.candidateResult?.discoveryDelta ?? { added: [], exited: [], continued: [], unchangedReasons: [] } });
     },
     analysis_revision: async (claim) => {
@@ -370,6 +609,7 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
       });
       return immutableBundle('legacy_analysis_revision_result_v3_11', { schema: 'legacy-analysis-revision-result-v3.11', decisions,
         sourceCandidates: bundle.factsResult?.sourceCandidates ?? [],
+        marketAnalysis: bundle.factsResult?.marketAnalysis ?? null,
         discoveryDelta: bundle.factsResult?.discoveryDelta ?? { added: [], exited: [], continued: [], unchangedReasons: [] } });
     },
     compact_radar_projection: async (claim) => {
@@ -383,6 +623,7 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         legacyPayloads[window] && typeof legacyPayloads[window] === 'object'), 'legacy radar capture unavailable');
       const projections = ['daily', 'hot', 'weekly', 'home'].map((window) => publishCompactRadarProjection({ decisions,
         sourceCandidates: bundle.analysisResult?.sourceCandidates ?? [],
+        marketAnalysis: bundle.analysisResult?.marketAnalysis ?? null,
         discoveryDelta: bundle.analysisResult?.discoveryDelta ?? { added: [], exited: [], continued: [], unchangedReasons: [] },
         window, asOf: bundle.sourceCutoff, producerIdentity, legacyPayload: legacyPayloads[window] }));
       return immutableBundle('legacy_compact_projection_result_v3_11', { schema: 'legacy-compact-projection-result-v3.11', projections });
@@ -425,5 +666,5 @@ if (require.main === module) main().catch((error) => {
 });
 
 module.exports = { args, buildLegacyCandidateDecision, buildStageHandlers, extractRevisionCandidates,
-  LEGACY_RADAR_FETCH_TIMEOUT_MS, legacyFactInput, legacyQualityInput, loadLegacyRadarPayloads, main, readBundle, readRuntimeHealthObservation,
-  tickerHasStockContext, uuidFromHash };
+  extractMatchedEvidenceSnippet, LEGACY_RADAR_FETCH_TIMEOUT_MS, legacyFactInput, legacyQualityInput, loadLegacyRadarPayloads, main, readBundle, readRuntimeHealthObservation,
+  tickerHasStockContext, uuidFromHash, valuationResearchAxis };

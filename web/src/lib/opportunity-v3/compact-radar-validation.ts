@@ -2,7 +2,7 @@ import { sha256Canonical } from './canonical.ts';
 
 export type CompactRadarProjection = {
   sourceLedCorrectness: {
-    schema: 'legacy-radar-v3.11.3';
+    schema: 'legacy-radar-v3.11.3' | 'legacy-radar-v3.12.0';
     window: 'daily' | 'hot' | 'weekly' | 'home';
     asOf: string;
   };
@@ -25,7 +25,7 @@ export function validateCompactRadarProjectionRow(
   const payload = row?.payload_json;
   if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return null;
   const value = payload as CompactRadarProjection;
-  if (value.sourceLedCorrectness?.schema !== 'legacy-radar-v3.11.3'
+  if (!['legacy-radar-v3.11.3', 'legacy-radar-v3.12.0'].includes(value.sourceLedCorrectness?.schema)
     || value.sourceLedCorrectness?.window !== window || !Array.isArray(value.opportunities)
     || value.opportunities.length > 60 || typeof row?.payload_sha256 !== 'string'
     || sha256Canonical(value) !== row.payload_sha256 || new TextEncoder().encode(JSON.stringify(value)).byteLength > 150000) return null;
