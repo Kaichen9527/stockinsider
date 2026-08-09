@@ -1,6 +1,6 @@
 {
   "changeId": "source-led-opportunity-engine-v3",
-  "loopStage": "v3_12_product_value_recovery_precommit_verification_complete_exact_review_pending",
+  "loopStage": "v3_13_actionable_opportunity_release_complete_promotion_evaluation_blocked",
   "requirementsStatus": "round_101_pass_p0_0_p1_0_p2_0",
   "designStatus": "round_12_pass_p0_0_p1_0_p2_0",
   "requirementsGateStatus": "pass_round_101_p0_0_p1_0_p2_0",
@@ -54,28 +54,28 @@
   "round100RequirementsVerdict": "PASS P0=0 P1=0 P2=0",
   "requirementsPendingTree": null,
   "requirementsPendingEvidence": null,
-  "implementationStatus": "v3_12_product_value_recovery_implemented_precommit_product_runtime_pass",
+  "implementationStatus": "v3_13_actionable_opportunity_exact_implementation_merged_and_live",
   "priorV310ExactImplementationCommit": "e16f9f819e0a2f7fdc8382dad343ebb6e2050b72",
   "priorV310ExactImplementationParent": "1fe429d3a91359cd2d6d07c89441ebb66d9ccc5d",
-  "v311ExactImplementationCommit": null,
-  "v311ExactImplementationParent": null,
-  "exactCommitReviewStatus": "pending_v3_12_tree_freeze",
+  "v311ExactImplementationCommit": "184390953048209730c22828548858c28fa3b6b7",
+  "v311ExactImplementationParent": "93c61021ee9c2b9c43ea86f1a66e480fef6b7d27",
+  "exactCommitReviewStatus": "pass_p0_0_p1_0_p2_0_evidence_422f785931661c5658004ad1714496285fee697d",
   "priorV310ExactCommitReviewEvidence": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review.md",
   "priorV310ExactCommitReviewFindings": {
     "P0": 0,
     "P1": 0,
     "P2": 0
   },
-  "verificationStatus": "v3_12_precommit_product_runtime_pass_exact_review_and_authoritative_code_gate_pending",
-  "verificationGateConclusion": "v3_12_precommit_product_runtime_pass; formal_targets_remain_fail_closed; exact_review_and_release_pending; promotion_evaluation_governance_remains_blocked_non_fabricated_elapsed_cohorts_unavailable",
+  "verificationStatus": "authoritative_code_gate_pass_release_and_production_smoke_pass",
+  "verificationGateConclusion": "requirements_architecture_exact_review_product_runtime_model_runner_and_root_pass; production_consumer_producer_compatible; formal_targets_remain_fail_closed; promotion_evaluation_governance_remains_blocked_non_fabricated_elapsed_cohorts_unavailable",
   "verificationTracks": {
-    "product_runtime": "precommit_pass_build_61_semantic_37_correctness_28_migration_2_legacy_2_playwright_4_performance",
+    "product_runtime": "authoritative_pass_build_61_semantic_38_correctness_28_migration_2_legacy_2_playwright_4_performance",
     "evaluation_governance": "blocked/non_fabricated_elapsed_cohorts_unavailable",
-    "model_runner": "precommit_pass_17_of_17_and_disabled_host_pin_v3_6_doctor_pass"
+    "model_runner": "authoritative_pass_17_of_17_and_disabled_host_pin_v3_6_doctor_pass"
   },
-  "releaseStatus": "prior_production_live_v3_12_recovery_not_yet_reviewed_or_deployed",
+  "releaseStatus": "pr_46_merged_vercel_and_tracked_producer_live_v3_disabled",
   "createdAt": "2026-07-18T21:22:18+08:00",
-  "updatedAt": "2026-08-09T09:42:36+08:00",
+  "updatedAt": "2026-08-09T14:30:00+08:00",
   "baselineDomain": "stock-recommendation-engine",
   "amendmentClass": "v3_11_defect_repair_and_specified_flow_forward",
   "supersedesForFutureWork": [
@@ -100,8 +100,23 @@
     "homepage ranking promotion before real evaluation cohorts",
     "absolute prevention of all code execution or Codex-private scratch writes"
   ],
-  "blockedReason": "v3_12_exact_review_and_authoritative_code_gate_pending; promotion_gate_waits_for_non_fabricated_elapsed_cohorts",
-  "nextHumanResponse": "none_user_authorized_completion_agent_continues_through_review_deploy_bootstrap_runtime_and_smoke",
+  "blockedReason": "promotion_gate_waits_for_non_fabricated_elapsed_cohorts; code_release_and_disabled_web_product_runtime_are_complete",
+  "nextHumanResponse": "none_release_complete; wait_for_real_elapsed_cohorts_before_v3_promotion",
+  "releaseEvidence": {
+    "exactImplementationCommit": "184390953048209730c22828548858c28fa3b6b7",
+    "exactImplementationTree": "3bf8ec477e20b7fd32f72f5b1170742fdb860964",
+    "exactReviewEvidenceCommit": "422f785931661c5658004ad1714496285fee697d",
+    "protectedGateRun": 31298639896,
+    "pullRequest": 46,
+    "mergeCommit": "3f685bf57a16eab502a2f8291cf15c6c2bc69e38",
+    "vercelDeploymentId": "dpl_HSmfSAFk79bmtN7ckSnN7jLJjR8J",
+    "vercelProductionAlias": "https://stockinsider-three.vercel.app",
+    "runtimeManifestSha256": "cd23a465b12eccb7da590c0540723cf9f2935403a690e848d8379909200c0d77",
+    "runtimeTerminalJobs": "3140/3140",
+    "runtimeCompatibility": "pass",
+    "productionSmoke": "pass",
+    "v3DeploymentState": "disabled"
+  },
   "productionAuthorityCompletionAmendment": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/production-authority-completion-amendment.md",
   "authority": {
     "architectureAmendmentRequestedByUser": true,
