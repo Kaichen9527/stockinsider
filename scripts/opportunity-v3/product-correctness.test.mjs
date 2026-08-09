@@ -478,9 +478,19 @@ const checks = {
     assert.equal(database.stateSchema, 'stockinsider-producer-state-v1');
     assert.equal(database.lastTerminalStatus, 'success'); assert.equal(database.projectionFreshness, 'fresh');
     assert.equal(await observer.observeConsumer({ legacyRadarBaseUrl: 'https://example.test' },
-      () => 'test-internal-key-000000', async () => ({ ok: true, json: async () => ({
-        sourceLedRuntime: { consumer: { commitSha: 'd'.repeat(40) } },
-      }) })), 'd'.repeat(40));
+      () => 'test-internal-key-000000', async (url, options) => {
+        assert.equal(url, 'https://example.test/api/internal/health-check');
+        assert.equal(options.headers.Authorization, 'Bearer test-internal-key-000000');
+        assert.equal(options.headers['X-StockInsider-Runtime-Consumer-Check'], 'v1',
+          'activation uses the authenticated constant-time consumer identity check');
+        return { ok: true, json: async () => ({
+          sourceLedRuntime: { consumer: { commitSha: 'd'.repeat(40) } },
+        }) };
+      }), 'd'.repeat(40));
+    const healthRoute = readFileSync(path.join(root, 'web/src/app/api/internal/health-check/route.ts'), 'utf8');
+    assert.match(healthRoute, /consumerCheck !== 'v1'/u);
+    assert.match(healthRoute, /producerIdentity[?][.]configSha256/u,
+      'full health falls back to the hash-bound projection config when the run table is not readable by Web');
     const publicationQueries = [];
     class HealthPublicationClient {
       async connect() { publicationQueries.push('connect'); }

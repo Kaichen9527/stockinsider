@@ -63,7 +63,8 @@ async function observeDatabase(releaseRoot, config, resolver, clientFactory) {
 async function observeConsumer(config, resolver, fetchImpl = globalThis.fetch) {
   const key = resolver('keychain:stockinsider-runtime:internal-api-key');
   const response = await fetchImpl(`${config.legacyRadarBaseUrl}/api/internal/health-check`, {
-    headers: { Accept: 'application/json', Authorization: `Bearer ${key}` }, signal: AbortSignal.timeout(10000),
+    headers: { Accept: 'application/json', Authorization: `Bearer ${key}`,
+      'X-StockInsider-Runtime-Consumer-Check': 'v1' }, signal: AbortSignal.timeout(10000),
   });
   if (!response.ok) throw new Error('consumer_health_unavailable');
   const payload = await response.json();

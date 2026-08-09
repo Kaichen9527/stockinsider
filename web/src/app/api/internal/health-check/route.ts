@@ -17,6 +17,19 @@ export async function GET(request: Request) {
       headers: { 'Cache-Control': 'private, no-store' },
     });
   }
+  const consumerCheck = request.headers.get('x-stockinsider-runtime-consumer-check');
+  if (consumerCheck !== null) {
+    if (consumerCheck !== 'v1') {
+      return NextResponse.json({ ok: false, error: 'invalid_runtime_consumer_check' }, {
+        status: 400,
+        headers: { 'Cache-Control': 'private, no-store' },
+      });
+    }
+    return NextResponse.json({
+      ok: true,
+      sourceLedRuntime: { consumer: { commitSha: process.env.VERCEL_GIT_COMMIT_SHA ?? null } },
+    }, { headers: { 'Cache-Control': 'private, no-store' } });
+  }
   const dataMode = resolveDataMode();
   const fallbackUsed = dataMode === 'demo';
   const metaEnvConfig = summarizeMetaEnvConfig();
@@ -101,7 +114,8 @@ export async function GET(request: Request) {
       ? runtimeRun.worker_sha256
       : typeof runtimeProjection?.worker_sha256 === 'string' ? runtimeProjection.worker_sha256 : null;
     const directConfigSha = typeof runtimeRun?.scheduler_config_sha256 === 'string'
-      ? runtimeRun.scheduler_config_sha256 : null;
+      ? runtimeRun.scheduler_config_sha256
+      : typeof producerIdentity?.configSha256 === 'string' ? producerIdentity.configSha256 : null;
     const directStatus = ['success', 'failed', 'cancelled'].includes(String(runtimeRun?.status))
       ? runtimeRun?.status as 'success' | 'failed' | 'cancelled' : null;
     const directCompatibility = directProducerCommit && process.env.VERCEL_GIT_COMMIT_SHA === directProducerCommit
