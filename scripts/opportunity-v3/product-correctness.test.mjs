@@ -660,23 +660,49 @@ const checks = {
       disposition: 'promoted', reason: 'new_out_of_seed_symbol', researchDisposition: 'source_signal_only',
       materialEvidenceHash: String(index).padStart(64, '0'), shallowSelected: index < 30, deepSelected: index < 20,
     }));
+    const dislocationCandidates = Array.from({ length: 30 }, (_, index) => ({
+      stockId: `00000000-0000-4000-8001-${String(index).padStart(12, '0')}`,
+      symbol: String(2000 + index), name: `dislocation-${index}`, sourceRef: `price-${index}`,
+      drawdown60Pct: -30 + index / 10,
+    }));
     const factRead = runtime('codec.js').immutableBundle('candidate_fact_plane', { candidateResult: {
       candidates: sixtyCandidates, discoveryDelta: { added: [], exited: [], continued: [], unchangedReasons: [] },
-    }, financialRows: [], priceRows: [], benchmarkRows: [], sourceCutoff: '2026-08-01T10:20:00Z' });
+    }, financialRows: [], priceRows: [], benchmarkRows: [], dislocationCandidates,
+    sourceCutoff: '2026-08-01T10:20:00Z' });
     const capped = await handlers.facts_refresh({ readKind: 'candidate_fact_plane', readCanonical: factRead.canonical,
       readJson: factRead.json, readHash: factRead.hash });
     assert.equal(capped.json.decisions.length, 20); assert.equal(capped.json.shallowObservations.length, 10);
     assert.equal(capped.json.sourceCandidates.length, 40);
+    assert.deepEqual(capped.json.sourceCandidates.map((candidate) => candidate.symbol).sort(),
+      sixtyCandidates.filter((candidate) => !candidate.deepSelected).map((candidate) => candidate.symbol).sort(),
+      'the persisted source-candidate plane remains the exact non-deep candidate partition');
+    assert.equal(capped.json.dislocationCandidates.length, 30,
+      'market dislocations remain separately bounded instead of replacing source-led candidates');
     assert.ok(capped.json.shallowObservations.every((candidate) => candidate.shallowStatus === 'enriched_observation'));
     const materialChangeHash = 'd'.repeat(64); const originalGeneratedAt = '2026-07-31T10:20:00Z';
     const analysisRead = runtime('codec.js').immutableBundle('analysis_revision_input', { factsResult: { decisions: [{ symbol: '9999',
-      claimId: 'claim-9999', materialChangeHash, materialChangedBecause: [], researchMaturity: 'source_signal' }] },
+      claimId: 'claim-9999', materialChangeHash, materialChangedBecause: [], researchMaturity: 'source_signal' }],
+      sourceCandidates: capped.json.sourceCandidates, dislocationCandidates: capped.json.dislocationCandidates },
       sourceCutoff: '2026-08-01T10:20:00Z', priorRevisions: [{ symbol: '9999', revisionId: 'revision-9999',
         materialChangeHash, analysisGeneratedAt: originalGeneratedAt }] });
     const analysis = await handlers.analysis_revision({ readKind: 'analysis_revision_input', readCanonical: analysisRead.canonical,
       readJson: analysisRead.json, readHash: analysisRead.hash });
     assert.equal(analysis.json.decisions[0].evaluationDisposition, 'unchanged');
     assert.equal(analysis.json.decisions[0].analysisGeneratedAt, originalGeneratedAt);
+    assert.equal(analysis.json.sourceCandidates.length, 40);
+    assert.equal(analysis.json.dislocationCandidates.length, 30);
+    const mixedProjectionRead = runtime('codec.js').immutableBundle('compact_projection_input', {
+      analysisResult: analysis.json, sourceCutoff: '2026-08-01T10:20:00Z',
+      legacyPayloads: captured.json.legacyPayloads, legacyPayloadHashes: captured.json.legacyPayloadHashes,
+      legacySourceResultHash: captured.hash,
+    });
+    const mixedProjection = await handlers.compact_radar_projection({ readKind: 'compact_projection_input',
+      readCanonical: mixedProjectionRead.canonical, readJson: mixedProjectionRead.json, readHash: mixedProjectionRead.hash });
+    assert.equal(mixedProjection.json.projections.length, 4);
+    assert.ok(mixedProjection.json.projections.every((projection) => projection.payload.sourceSignals.length <= 30));
+    assert.ok(mixedProjection.json.projections[0].payload.sourceSignals.some((signal) =>
+      dislocationCandidates.some((candidate) => candidate.symbol === signal.symbol)),
+    'ranked market dislocations can enter the compact signal projection without corrupting the durable source partition');
   },
   'PCR-006': async () => {
     const stages = runtime('source-run-config.js').LEGACY_STAGES; const completed = []; let nextIndex = 0; let interrupted = false;

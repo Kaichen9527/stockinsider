@@ -576,12 +576,19 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
             stats: row, sourceCutoff: bundle.sourceCutoff }) };
       });
       const decisionSymbols = new Set(decisions.map((row) => row.symbol));
-      const sourceCandidates = [...shallowObservations, ...deferredSignals, ...dislocationCandidates]
+      const sourceCandidates = [...shallowObservations, ...deferredSignals]
         .filter((row) => !decisionSymbols.has(row.symbol))
         .sort((left, right) => (right.researchScore?.underreactionScore ?? -1) - (left.researchScore?.underreactionScore ?? -1)
           || (right.sourcePriority ?? 0) - (left.sourcePriority ?? 0) || left.symbol.localeCompare(right.symbol))
         .filter((row, index, all) => all.findIndex((candidate) => candidate.symbol === row.symbol) === index)
         .slice(0, Math.max(0, 60 - decisions.length));
+      const candidateSymbols = new Set([...decisionSymbols, ...sourceCandidates.map((row) => row.symbol)]);
+      const boundedDislocationCandidates = dislocationCandidates
+        .filter((row) => !candidateSymbols.has(row.symbol))
+        .sort((left, right) => (right.researchScore?.underreactionScore ?? -1) - (left.researchScore?.underreactionScore ?? -1)
+          || (right.sourcePriority ?? 0) - (left.sourcePriority ?? 0) || left.symbol.localeCompare(right.symbol))
+        .filter((row, index, all) => all.findIndex((candidate) => candidate.symbol === row.symbol) === index)
+        .slice(0, 30);
       const marketAnalysis = buildMarketAnalysis({ asOf: bundle.sourceCutoff,
         taiex: indexComponent(officialSnapshot?.twseIndex), otc: indexComponent(officialSnapshot?.tpexIndex),
         breadth: bundle.marketBreadth && Number(bundle.marketBreadth.trackedCount) >= 20
@@ -589,7 +596,7 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
             scope: bundle.marketBreadth.scope,asOf:bundle.marketBreadth.asOf } : null,
         foreignFlow: officialSnapshot?.foreignFlow ?? null });
       return immutableBundle('legacy_facts_refresh_result_v3_11', { schema: 'legacy-facts-refresh-result-v3.11', decisions,
-        shallowObservations, sourceCandidates, marketAnalysis,
+        shallowObservations, sourceCandidates, dislocationCandidates: boundedDislocationCandidates, marketAnalysis,
         officialSnapshotStatus: officialSnapshot?.availability === 'unavailable'
           ? { availability:'unavailable',reason:officialSnapshot.reason }
           : { availability:bridgeAvailable ? officialSnapshot?.sourceFailures?.length ? 'partial' : 'available' : 'not_requested',
@@ -609,12 +616,21 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
       });
       return immutableBundle('legacy_analysis_revision_result_v3_11', { schema: 'legacy-analysis-revision-result-v3.11', decisions,
         sourceCandidates: bundle.factsResult?.sourceCandidates ?? [],
+        dislocationCandidates: bundle.factsResult?.dislocationCandidates ?? [],
         marketAnalysis: bundle.factsResult?.marketAnalysis ?? null,
         discoveryDelta: bundle.factsResult?.discoveryDelta ?? { added: [], exited: [], continued: [], unchangedReasons: [] } });
     },
     compact_radar_projection: async (claim) => {
       const bundle = readBundle(claim, 'compact_projection_input');
       const decisions = bundle.analysisResult?.decisions ?? [];
+      const sourceCandidates = bundle.analysisResult?.sourceCandidates ?? [];
+      const dislocationCandidates = bundle.analysisResult?.dislocationCandidates ?? [];
+      const projectionSignals = [...sourceCandidates, ...dislocationCandidates]
+        .sort((left, right) => (right.researchScore?.underreactionScore ?? -1) - (left.researchScore?.underreactionScore ?? -1)
+          || (right.sourcePriority ?? 0) - (left.sourcePriority ?? 0) || String(left.symbol ?? '').localeCompare(String(right.symbol ?? '')))
+        .filter((row, index, all) => typeof row?.symbol === 'string'
+          && all.findIndex((candidate) => candidate?.symbol === row.symbol) === index)
+        .slice(0, Math.max(0, 60 - decisions.length));
       const runtimeHealthObservation = readRuntimeHealthObservation(sourceCommitSha, workerSha256, validated.sha256);
       const producerIdentity = { commitSha: sourceCommitSha, workerSha256, configSha256: validated.sha256,
         ...(runtimeHealthObservation ? { runtimeHealthObservation } : {}) };
@@ -622,7 +638,7 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
       invariant(legacyPayloads && ['daily', 'hot', 'weekly', 'home'].every((window) =>
         legacyPayloads[window] && typeof legacyPayloads[window] === 'object'), 'legacy radar capture unavailable');
       const projections = ['daily', 'hot', 'weekly', 'home'].map((window) => publishCompactRadarProjection({ decisions,
-        sourceCandidates: bundle.analysisResult?.sourceCandidates ?? [],
+        sourceCandidates: projectionSignals,
         marketAnalysis: bundle.analysisResult?.marketAnalysis ?? null,
         discoveryDelta: bundle.analysisResult?.discoveryDelta ?? { added: [], exited: [], continued: [], unchangedReasons: [] },
         window, asOf: bundle.sourceCutoff, producerIdentity, legacyPayload: legacyPayloads[window] }));
