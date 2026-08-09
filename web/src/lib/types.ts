@@ -1471,6 +1471,10 @@ export interface SourceSignalCard {
   historyPeMin?: number | null;
   historyPeMax?: number | null;
   historyPeSampleCount?: number;
+  valuationAsOf?: string | null;
+  valuationAuthority?: 'exchange_reported' | null;
+  valuationExchange?: 'TWSE' | 'TPEx' | null;
+  historyPeSessions?: string[];
   researchDecision?: RecommendationCard['researchDecision'];
 }
 

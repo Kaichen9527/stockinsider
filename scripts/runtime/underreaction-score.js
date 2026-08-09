@@ -37,8 +37,8 @@ function computeUnderreactionResearchScore(input) {
   const confidence = enoughEvidence ? round(Math.min(1, coverage * (0.72 + 0.07 * available.length)), 2) : round(coverage * 0.5, 2);
   const technicalState = trustworthyAxis(input.timing) ? input.timing.technicalState ?? null : null;
   let researchDisposition = 'watch_evidence';
-  if (enoughEvidence && RECLAIM_STATES.has(technicalState)) researchDisposition = 'watch_reclaim';
-  else if (enoughEvidence && underreactionScore < 35) researchDisposition = 'avoid';
+  if (enoughEvidence && underreactionScore < 35) researchDisposition = 'avoid';
+  else if (enoughEvidence && RECLAIM_STATES.has(technicalState)) researchDisposition = 'watch_reclaim';
   else if (enoughEvidence && underreactionScore >= 65 && trustworthyAxis(input.fundamental)
       && trustworthyAxis(input.priceDislocation)) researchDisposition = 'research_now';
 

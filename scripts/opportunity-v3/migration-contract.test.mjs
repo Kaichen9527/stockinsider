@@ -442,6 +442,8 @@ test('allocation and projection persist only hash-valid authoritative decision g
 });
 
 test('migration applies twice and exposes the exact granted/private function boundary', () => {
+  assert.match(productValueSql,/row_number\(\) OVER \(PARTITION BY instrument[.]stock_id ORDER BY[\s\S]*?instrument[.]source_timestamp DESC,instrument[.]recorded_at DESC/u);
+  assert.match(productValueSql,/'sectorValuationUniverse',v_sector_universe/u);
   assert.match(sql, /GRANT opportunity_v3_rpc_owner TO CURRENT_USER;/u);
   assert.match(sql, /GRANT legacy_correctness_rpc_owner TO CURRENT_USER;/u);
   assert.match(sql, /GRANT USAGE, CREATE ON SCHEMA public TO opportunity_v3_rpc_owner;/u);
@@ -459,6 +461,19 @@ test('migration applies twice and exposes the exact granted/private function bou
     { role: 'legacy_correctness_rpc_owner', member: true },
     { role: 'opportunity_v3_rpc_owner', member: true },
   ]);
+  const bridgeShape=JSON.parse(psql(`
+    SET ROLE legacy_correctness_rpc_owner;
+    SELECT jsonb_build_object(
+      'bridgeSchema',result->>'bridgeSchema',
+      'sectorUniverseType',jsonb_typeof(result->'sectorValuationUniverse'),
+      'dislocationType',jsonb_typeof(result->'dislocationCandidates')
+    )::text
+    FROM public.read_legacy_candidate_fact_plane_v3_11(
+      '2026-08-01T00:00:00Z'::timestamptz,'{"candidates":[]}'::jsonb
+    ) result;
+    RESET ROLE;
+  `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual(bridgeShape,{ bridgeSchema:'legacy-product-value-bridge-v3.12',sectorUniverseType:'array',dislocationType:'array' });
   const applied = psql(`
     WITH expected(name) AS (
       SELECT unnest(ARRAY[${functions.map((name) => `'${name}'`).join(',')}])

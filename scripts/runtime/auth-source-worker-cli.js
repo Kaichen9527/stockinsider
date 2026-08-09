@@ -476,7 +476,7 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
   internalApiKey = process.env.INTERNAL_API_KEY,
 } = {}) {
   let legacyPayloadsPromise;
-  let officialSnapshotPromise;
+  const officialSnapshotsByCutoff = new Map();
   const authorityPagesByHash = new Map();
   return {
     source_sync: async (claim) => {
@@ -520,17 +520,21 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
       const bundle = readBundle(claim, 'candidate_fact_plane');
       const candidates = bundle.candidateResult?.candidates ?? [];
       const bridgeAvailable = bundle.bridgeSchema === 'legacy-product-value-bridge-v3.12';
-      if (bridgeAvailable) officialSnapshotPromise ??= loadOfficialTwMarketSnapshot({ cutoff: bundle.sourceCutoff, fetchImpl })
-        .catch((error) => ({ availability: 'unavailable', reason: 'official_market_snapshot_unavailable',
-          detail: error instanceof Error ? error.message : String(error), valuations: [], revenues: [], twseIndex: [], tpexIndex: [], foreignFlow: null }));
-      const officialSnapshot = bridgeAvailable ? await officialSnapshotPromise : null;
+      if (bridgeAvailable && !officialSnapshotsByCutoff.has(bundle.sourceCutoff)) {
+        officialSnapshotsByCutoff.set(bundle.sourceCutoff,loadOfficialTwMarketSnapshot({ cutoff:bundle.sourceCutoff,fetchImpl })
+          .catch((error)=>({ availability:'unavailable',reason:'official_market_snapshot_unavailable',
+            detail:error instanceof Error?error.message:String(error),valuations:[],valuationHistory:[],revenues:[],twseIndex:[],
+            tpexIndex:[],foreignFlow:null,sourceFailures:[] })));
+      }
+      const officialSnapshot = bridgeAvailable ? await officialSnapshotsByCutoff.get(bundle.sourceCutoff) : null;
       const dislocationInputs = Array.isArray(bundle.dislocationCandidates) ? bundle.dislocationCandidates : [];
       const officialValuationBySymbol = new Map((officialSnapshot?.valuations ?? []).map((row) => [row.symbol, row]));
-      const sectorMembers = [...candidates, ...dislocationInputs].reduce((map, candidate) => {
-        const pe = Number(officialValuationBySymbol.get(candidate.symbol)?.peRatio);
-        if (!Number.isFinite(pe) || pe <= 0 || typeof candidate.canonicalSector !== 'string') return map;
-        const selected = map.get(candidate.canonicalSector) ?? [];
-        selected.push(pe); map.set(candidate.canonicalSector, selected); return map;
+      const sectorMembers = (bundle.sectorValuationUniverse ?? []).reduce((map, row) => {
+        if (!Array.isArray(row) || !/^\d{4}$/u.test(String(row[0])) || typeof row[1] !== 'string') return map;
+        const pe = Number(officialValuationBySymbol.get(String(row[0]))?.peRatio);
+        if (!Number.isFinite(pe) || pe <= 0) return map;
+        const selected = map.get(row[1]) ?? [];
+        selected.push(pe); map.set(row[1],selected); return map;
       }, new Map());
       const sectorReferences = new Map([...sectorMembers].map(([sector, values]) => [sector,
         { medianPe: median(values), count: values.length }]));
@@ -587,7 +591,9 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
       return immutableBundle('legacy_facts_refresh_result_v3_11', { schema: 'legacy-facts-refresh-result-v3.11', decisions,
         shallowObservations, sourceCandidates, marketAnalysis,
         officialSnapshotStatus: officialSnapshot?.availability === 'unavailable'
-          ? { availability: 'unavailable', reason: officialSnapshot.reason } : { availability: bridgeAvailable ? 'available' : 'not_requested' },
+          ? { availability:'unavailable',reason:officialSnapshot.reason }
+          : { availability:bridgeAvailable ? officialSnapshot?.sourceFailures?.length ? 'partial' : 'available' : 'not_requested',
+            sourceFailures:officialSnapshot?.sourceFailures ?? [] },
         discoveryDelta: bundle.candidateResult?.discoveryDelta ?? { added: [], exited: [], continued: [], unchangedReasons: [] } });
     },
     analysis_revision: async (claim) => {

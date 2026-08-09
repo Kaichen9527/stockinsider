@@ -745,7 +745,9 @@ const checks = {
         risks:['formal_valuation_target_unavailable'],missingAxes:[],priceContext:{ currentPrice:100+index,drawdown60Pct:-18,
           drawdown120Pct:-24,bias20Pct:-8,bias60Pct:-12,bias120Pct:-18,rsi14:31,volumeRatio20:1.4,
           relativeStrength20Pct:-6,technicalState:'reclaim_required' },axes:{ fundamental:{ yoyGrowth:12.3 },
-          valuation:{ currentPe:12.4,sectorPe:18.6,historyPeMedian:16.8,historyPeMin:11.2,historyPeMax:23.1,historySampleCount:4 } } },
+          valuation:{ currentPe:12.4,sectorPe:18.6,historyPeMedian:16.8,historyPeMin:11.2,historyPeMax:23.1,
+            historySampleCount:4,asOf:'2026-08-01',sourceRef:`twse-openapi:BWIBBU_ALL:2026-08-01:${1000+index}`,
+            historyAsOf:['2026-07-01','2026-05-01','2026-02-01','2025-08-01'] } } },
     }));
     const compact = runtime('compact-radar-projection.js').publishCompactRadarProjection({
       decisions: [], sourceCandidates: worstCaseSignals,
@@ -924,7 +926,8 @@ const checks = {
     const gateRunner = readFileSync(path.join(root, 'scripts/opportunity-v3/acceptance-gate-runner.mjs'), 'utf8');
     const workflow = readFileSync(path.join(root, '.github/workflows/source-led-opportunity-v3.yml'), 'utf8');
     for (const token of ['研究與進場判斷','四軸研究評分','乖離率與本益比脈絡','基本面品質','時機風險',
-      '乖離率（BIAS）','交易所','模型','min-w-0','break-words','sourceSignals','新來源訊號','估值待補']) assert.ok(component.includes(token), token);
+      '乖離率（BIAS）','交易所','模型','min-w-0','break-words','sourceSignals','新來源訊號','估值待補',
+      "signal.researchDisposition !== 'avoid'",'.slice(0, 12)','估值來源：{signal.valuationExchange']) assert.ok(component.includes(token), token);
     for (const token of ['exchangeReportedPe','modelComparablePe','bias20Pct','timingRisk']) assert.ok(types.includes(token), token);
     assert.match(gateRunner, /PLAYWRIGHT_BROWSERS_PATH: '0'/u);
     assert.match(gateRunner, /const traceHome = track === 'model_runner' \? process\.env\.HOME \?\? '' : '\/tmp';/u);
@@ -1098,6 +1101,10 @@ test('V3.12 product-value recovery ranks partial evidence without fabricating a 
   assert.equal(thin.researchDisposition, 'watch_evidence');
   assert.equal(thin.underreactionScore, null);
   assert.equal(thin.tradeAction, 'valuation_review');
+  const weakBelowSupport = score.computeUnderreactionResearchScore({ symbol:'8888',
+    discovery:{ score:20,trustworthy:true },fundamental:{ score:20,trustworthy:true },
+    priceDislocation:{ score:20,trustworthy:true },timing:{ score:20,trustworthy:true,technicalState:'reclaim_required' } });
+  assert.equal(weakBelowSupport.researchDisposition,'avoid');
 });
 
 test('V3.12 official valuation parser rejects swapped or non-authoritative values', () => {
@@ -1134,6 +1141,20 @@ test('V3.12 official index history supplies at least 20 sessions without inventi
   assert.deepEqual(twse,[{ session:'2026-07-01',close:47018.99 }]);
   assert.deepEqual(tpex,[{ session:'2026-07-01',close:431.23 }]);
   assert.deepEqual(official.parseTwseIndexHistory({ stat:'OK',data:[['115/02/30','1','2','1','2']] }),[]);
+});
+
+test('V3.12 official source failure degrades independently instead of erasing valid valuation data', async () => {
+  const official=runtime('official-twse-valuation.js');
+  const response=(payload)=>new Response(JSON.stringify(payload),{ status:200,headers:{ 'content-type':'application/json' } });
+  const fetchImpl=async (url)=>{
+    if (url===official.SOURCE_URL) return response([{ Date:'1150807',Code:'2330',Name:'台積電',PEratio:'31.86',PBratio:'10.43',DividendYield:'0.93' }]);
+    if (url===official.TPEX_SOURCE_URL) throw new Error('fixture_tpex_down');
+    return response([]);
+  };
+  const snapshot=await official.loadOfficialTwMarketSnapshot({ cutoff:'2026-08-09T00:00:00Z',fetchImpl });
+  assert.equal(snapshot.schema,'official-tw-market-snapshot-v1.2');
+  assert.equal(snapshot.valuations.length,1); assert.equal(snapshot.valuations[0].symbol,'2330');
+  assert.deepEqual(snapshot.sourceFailures,[{ url:official.TPEX_SOURCE_URL,reason:'official_source_unavailable' }]);
 });
 
 test('V3.12 evidence snippets are local to the matched stock', () => {

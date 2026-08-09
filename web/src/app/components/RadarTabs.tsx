@@ -437,7 +437,8 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
 	}
 
 function StocksTab({ radar }: { radar: RadarDailyPayload }) {
-  const rankedResearch = (radar.sourceSignals ?? []).filter((signal) => Number.isFinite(signal.underreactionScore));
+  const rankedResearch = (radar.sourceSignals ?? []).filter((signal) => Number.isFinite(signal.underreactionScore)
+    && signal.researchDisposition !== 'avoid').slice(0, 12);
   const namedFormal = (radar.opportunities || []).filter((r) => Boolean(r.chineseName));
   const namedScenario = (radar.scenarioUpsideCandidates || []).filter((r) => Boolean(r.chineseName));
   const namedEarly = (radar.earlyWatchlist ?? []).filter((r) => Boolean(r.chineseName));
@@ -912,18 +913,17 @@ function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
     : signal.technicalState === 'extended' ? '乖離偏高，不追價；等待回到合理乖離區。'
       : signal.technicalState === 'breakout_pending' ? '等待帶量突破或回測確認。' : '技術資料不足，不形成進場訊號。';
   const explainReason = (reason: string) => ({
-    'fundamental:official_revenue_not_deteriorating': '官方月營收尚未惡化',
-    'valuation:pe_compared_with_sector_and_own_history': 'PE 已與自身歷史及同產業比較',
-    'valuation:pe_compared_with_own_history': 'PE 低於或接近自身歷史區間',
-    'valuation:pe_compared_with_sector_reference': 'PE 已與同產業比較',
-    'priceDislocation:large_drawdown': '股價相對 60／120 日高點明顯回落',
-    'discovery:price_dislocation_scan': '全市場跌深掃描納入',
+    'f:revenue_ok': '官方月營收尚未惡化','f:revenue_down':'官方月營收正在減弱',
+    'v:sector_history': 'PE 已與自身歷史及同產業比較','v:history':'PE 已與自身歷史比較',
+    'v:sector':'PE 已與同產業比較','p:drawdown':'股價相對 60／120 日高點明顯回落',
+    'p:moderate':'股價出現中度回落','p:extended':'股價乖離偏高','d:dislocation':'全市場跌深掃描納入',
+    't:reclaim':'技術面必須先收復','t:breakout_pending':'等待突破確認','t:extended':'技術面過度延伸',
   }[reason] ?? reason.replaceAll('_', ' '));
   const explainRisk = (reason: string) => reason.startsWith('missing:')
     ? `待補證據：${reason.slice(8).replaceAll(',', '、')}`
-    : ({ formal_valuation_target_unavailable: '正式估值未完成，不提供目標價或買進動作',
-      price_must_reclaim_support_before_entry: '必須先收復支撐再考慮進場',
-      research_coverage_below_70_percent: '研究覆蓋率低於 70%' }[reason] ?? reason.replaceAll('_', ' '));
+    : ({ valuation_target_missing:'正式估值未完成，不提供目標價或買進動作',
+      reclaim_first:'必須先收復支撐再考慮進場',coverage_lt_70:'研究覆蓋率低於 70%' }[reason]
+      ?? reason.replaceAll('_', ' '));
   return (
     <article className="rounded-[1.25rem] border border-line bg-surface p-4">
       <div className="flex items-start justify-between gap-3">
@@ -956,6 +956,7 @@ function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
         <div><dt className="text-slate-500 dark:text-emerald-100/50">營收年增</dt><dd className="mt-1 text-slate-800 dark:text-emerald-50">{signal.revenueYoy != null ? `${signal.revenueYoy.toFixed(1)}%` : '待補'}</dd></div>
         <div><dt className="text-slate-500 dark:text-emerald-100/50">PE / 歷史中位 / 同產業</dt><dd className="mt-1 text-slate-800 dark:text-emerald-50">{signal.currentPe != null ? signal.currentPe.toFixed(1) : '待補'} / {signal.historyPeMedian != null ? signal.historyPeMedian.toFixed(1) : '待累積'} / {signal.sectorPe != null ? signal.sectorPe.toFixed(1) : '待補'}</dd></div>
       </dl>
+      {signal.valuationAuthority === 'exchange_reported' ? <p className="mt-2 text-xs leading-5 text-slate-500 dark:text-emerald-100/55">估值來源：{signal.valuationExchange ?? '交易所'} · 當期 {signal.valuationAsOf ?? '日期待補'}{(signal.historyPeSessions?.length ?? 0) > 0 ? ` · 歷史樣本 ${signal.historyPeSessions?.join('、')}` : ''}</p> : null}
       <p className="mt-3 text-xs leading-5 text-sky-700 dark:text-sky-300">技術觸發：{technicalTrigger}</p>
       {(signal.positiveReasons?.length ?? 0) > 0 ? <p className="mt-1 text-xs leading-5 text-emerald-700 dark:text-emerald-300">加分：{signal.positiveReasons?.map(explainReason).join('、')}</p> : null}
       {(signal.riskReasons?.length ?? 0) > 0 ? <p className="mt-1 text-xs leading-5 text-amber-700 dark:text-amber-300">風險：{signal.riskReasons?.map(explainRisk).join('、')}</p> : null}

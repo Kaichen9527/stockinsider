@@ -9,6 +9,24 @@ const CARD_BUCKETS = Object.freeze([
   'recentFormal7d', 'fallbackOpportunities90d', 'hotTracking',
 ]);
 
+function compactPositiveReason(row) {
+  const key=`${row?.axis}:${row?.reason}`;
+  return ({
+    'discovery:price_dislocation_scan':'d:dislocation','fundamental:official_revenue_not_deteriorating':'f:revenue_ok',
+    'fundamental:official_revenue_deteriorating':'f:revenue_down','priceDislocation:large_drawdown':'p:drawdown',
+    'priceDislocation:moderate_dislocation':'p:moderate','priceDislocation:extended':'p:extended',
+    'valuation:pe_compared_with_sector_and_own_history':'v:sector_history','valuation:pe_compared_with_own_history':'v:history',
+    'valuation:pe_compared_with_sector_reference':'v:sector','timing:below_ma20_reclaim_required':'t:reclaim',
+    'timing:breakout_pending':'t:breakout_pending','timing:extended':'t:extended',
+  })[key] ?? `${String(row?.axis ?? 'e').slice(0,1)}:${String(row?.reason ?? 'available').slice(0,40)}`;
+}
+
+function compactRisk(reason) {
+  if (String(reason).startsWith('missing:')) return reason;
+  return ({ price_must_reclaim_support_before_entry:'reclaim_first',research_coverage_below_70_percent:'coverage_lt_70',
+    formal_valuation_target_unavailable:'valuation_target_missing' })[reason] ?? String(reason).slice(0,48);
+}
+
 function stripCorrectnessAdditions(payload) {
   invariant(payload && typeof payload === 'object' && !Array.isArray(payload), 'legacy radar payload required');
   const clean = Object.fromEntries(Object.entries(payload).filter(([key]) => ![
@@ -67,10 +85,10 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
       && liveSymbols.has(decision.symbol) && !visible.has(decision.symbol))
     .slice(0, 30).map((decision) => ({
       symbol: decision.symbol, chineseName: typeof decision.name === 'string'
-        ? [...decision.name.normalize('NFC')].slice(0,24).join('') : null, researchMaturity: 'source_signal',
+        ? [...decision.name.normalize('NFC')].slice(0,20).join('') : null, researchMaturity: 'source_signal',
       newPositionAction: 'valuation_review', discoveredAt: decision.lastEvaluatedAt ?? asOf,
-      sourceClass: decision.sourceClass ?? 'community', sourceSummary: [...String(decision.sourceSummary ?? decision.raw ?? '來源訊號待研究').normalize('NFC').replace(/[\r\n]+/gu, ' ')].slice(0, 120).join(''),
-      evidenceRefs: [decision.claimId].filter((value) => typeof value === 'string').slice(0, 5),
+      sourceClass: decision.sourceClass ?? 'community', sourceSummary: [...String(decision.sourceSummary ?? decision.raw ?? '來源訊號待研究').normalize('NFC').replace(/[\r\n]+/gu, ' ')].slice(0, 100).join(''),
+      evidenceRefs: [decision.claimId].filter((value) => typeof value === 'string').slice(0, 1),
       valuationStatus: 'pending', technicalState: decision.technical?.technicalState
         ?? decision.researchScore?.priceContext?.technicalState ?? 'unavailable',
       changedBecause: signalReasons.has(decision.reason) ? decision.reason : 'new_source_evidence',
@@ -79,8 +97,8 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
         scoreCoverage: decision.researchScore.coverage,
         scoreConfidence: decision.researchScore.confidence,
         researchDisposition: decision.researchScore.researchDisposition,
-        positiveReasons: (decision.researchScore.reasons ?? []).slice(0, 2).map((row) => `${row.axis}:${row.reason}`),
-        riskReasons: (decision.researchScore.risks ?? []).slice(0, 2),
+        positiveReasons: (decision.researchScore.reasons ?? []).slice(0, 2).map(compactPositiveReason),
+        riskReasons: (decision.researchScore.risks ?? []).slice(0, 2).map(compactRisk),
         currentPrice: decision.researchScore.priceContext?.currentPrice ?? decision.currentPrice ?? null,
         drawdown60Pct: decision.researchScore.priceContext?.drawdown60Pct ?? null,
         drawdown120Pct: decision.researchScore.priceContext?.drawdown120Pct ?? null,
@@ -94,6 +112,11 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
         currentPe: decision.researchScore.axes?.valuation?.currentPe ?? null,
         sectorPe: decision.researchScore.axes?.valuation?.sectorPe ?? null,
         historyPeMedian: decision.researchScore.axes?.valuation?.historyPeMedian ?? null,
+        valuationAsOf: decision.researchScore.axes?.valuation?.asOf ?? null,
+        valuationAuthority: decision.researchScore.axes?.valuation?.sourceRef ? 'exchange_reported' : null,
+        valuationExchange: String(decision.researchScore.axes?.valuation?.sourceRef ?? '').startsWith('twse-')
+          ? 'TWSE' : String(decision.researchScore.axes?.valuation?.sourceRef ?? '').startsWith('tpex-') ? 'TPEx' : null,
+        historyPeSessions: (decision.researchScore.axes?.valuation?.historyAsOf ?? []).slice(0,4),
       } : {}),
     }));
   return { legacy: clean, sourceSignals };

@@ -196,13 +196,14 @@ async function loadOfficialTwMarketSnapshot({ cutoff, fetchImpl = globalThis.fet
   if (typeof cutoff !== 'string' || !Number.isFinite(Date.parse(cutoff))) throw new Error('official_snapshot_cutoff');
   const collectedAt = new Date().toISOString().replace('.000Z','Z');
   const sources = [SOURCE_URL,TPEX_SOURCE_URL,TWSE_REVENUE_URL,TPEX_REVENUE_URL,TWSE_INDEX_URL,TPEX_INDEX_URL];
-  const values = await Promise.all(sources.map((url)=>fetchJsonBounded(url,fetchImpl)));
-  const byUrl = new Map(sources.map((url,index)=>[url,values[index]]));
+  const values = await Promise.allSettled(sources.map((url)=>fetchJsonBounded(url,fetchImpl)));
+  const byUrl = new Map(sources.flatMap((url,index)=>values[index].status==='fulfilled' ? [[url,values[index].value]] : []));
+  const sourceFailures = sources.filter((url)=>!byUrl.has(url)).map((url)=>({ url,reason:'official_source_unavailable' }));
   const cutoffSession = new Date(cutoff).toISOString().slice(0,10);
-  const valuations = [...parseTwseValuationRows(byUrl.get(SOURCE_URL).payload,{collectedAt}),
-    ...parseTpexValuationRows(byUrl.get(TPEX_SOURCE_URL).payload,{collectedAt})].filter((row)=>row.session<=cutoffSession);
-  const revenues = [...parseRevenueRows(byUrl.get(TWSE_REVENUE_URL).payload,{exchange:'TWSE',collectedAt}),
-    ...parseRevenueRows(byUrl.get(TPEX_REVENUE_URL).payload,{exchange:'TPEX',collectedAt})].filter((row)=>row.asOf<=cutoffSession);
+  const valuations = [...parseTwseValuationRows(byUrl.get(SOURCE_URL)?.payload,{collectedAt}),
+    ...parseTpexValuationRows(byUrl.get(TPEX_SOURCE_URL)?.payload,{collectedAt})].filter((row)=>row.session<=cutoffSession);
+  const revenues = [...parseRevenueRows(byUrl.get(TWSE_REVENUE_URL)?.payload,{exchange:'TWSE',collectedAt}),
+    ...parseRevenueRows(byUrl.get(TPEX_REVENUE_URL)?.payload,{exchange:'TPEX',collectedAt})].filter((row)=>row.asOf<=cutoffSession);
   const historyMonths = [1,3,6,12].map((monthsAgo)=>({ monthsAgo,...monthCoordinates(cutoffSession,monthsAgo) }));
   const twseIndexHistoryUrls = historyMonths.map((month)=>`${TWSE_INDEX_HISTORY_URL}?date=${month.twseDate}&response=json`);
   const priorMonth = historyMonths[0];
@@ -216,11 +217,11 @@ async function loadOfficialTwMarketSnapshot({ cutoff, fetchImpl = globalThis.fet
   }));
   const tpexHistoryResult = optionalIndexResults.at(-1);
   const twseIndex = dedupeSessions([
-    ...twseHistories[0].rows,...parseIndexRows(byUrl.get(TWSE_INDEX_URL).payload,{exchange:'TWSE'}),
+    ...twseHistories[0].rows,...parseIndexRows(byUrl.get(TWSE_INDEX_URL)?.payload,{exchange:'TWSE'}),
   ].filter((row)=>row.session<=cutoffSession));
   const tpexIndex = dedupeSessions([
     ...(tpexHistoryResult.status==='fulfilled' ? parseTpexIndexHistory(tpexHistoryResult.value.payload) : []),
-    ...parseIndexRows(byUrl.get(TPEX_INDEX_URL).payload,{exchange:'TPEX'}),
+    ...parseIndexRows(byUrl.get(TPEX_INDEX_URL)?.payload,{exchange:'TPEX'}),
   ].filter((row)=>row.session<=cutoffSession));
   const historicalSessions = twseHistories.map(({ month,rows })=>({ month,session:rows.at(-1)?.session ?? null }))
     .filter((row)=>typeof row.session==='string');
@@ -239,9 +240,9 @@ async function loadOfficialTwMarketSnapshot({ cutoff, fetchImpl = globalThis.fet
   const flowSession = twseIndex.at(-1)?.session ?? cutoffSession;
   const twseFlowUrl = `https://www.twse.com.tw/rwd/zh/fund/BFI82U?response=json&date=${flowSession.replaceAll('-','')}`;
   const tpexFlowUrl = 'https://www.tpex.org.tw/openapi/v1/tpex_3insti_summary';
-  const [twseFlowResult,tpexFlowResult] = await Promise.all([fetchJsonBounded(twseFlowUrl,fetchImpl),fetchJsonBounded(tpexFlowUrl,fetchImpl)]);
-  const twseFlow = parseTwseForeignFlow(twseFlowResult.payload);
-  const tpexFlow = parseTpexForeignFlow(tpexFlowResult.payload);
+  const [twseFlowResult,tpexFlowResult] = await Promise.allSettled([fetchJsonBounded(twseFlowUrl,fetchImpl),fetchJsonBounded(tpexFlowUrl,fetchImpl)]);
+  const twseFlow = twseFlowResult.status==='fulfilled' ? parseTwseForeignFlow(twseFlowResult.value.payload) : null;
+  const tpexFlow = tpexFlowResult.status==='fulfilled' ? parseTpexForeignFlow(tpexFlowResult.value.payload) : null;
   const flowSessionMatch = twseFlow?.session===flowSession && tpexFlow?.session===flowSession;
   const foreignFlow = flowSessionMatch ? { session:flowSession,net1d:twseFlow.net+tpexFlow.net,twseNet1d:twseFlow.net,
     tpexNet1d:tpexFlow.net,sourceRefs:[twseFlowUrl,tpexFlowUrl] } : null;
@@ -251,11 +252,14 @@ async function loadOfficialTwMarketSnapshot({ cutoff, fetchImpl = globalThis.fet
   historicalValuationRequests.forEach((request,index)=>{
     if (historicalValuationResults[index].status==='fulfilled') optionalHashes[request.url]=historicalValuationResults[index].value.hash;
   });
-  return Object.freeze({ schema:'official-tw-market-snapshot-v1.1',collectedAt,cutoff,
+  const sourceHashes={...Object.fromEntries([...byUrl].map(([url,result])=>[url,result.hash])),...optionalHashes};
+  if (twseFlowResult.status==='fulfilled') sourceHashes[twseFlowUrl]=twseFlowResult.value.hash;
+  else sourceFailures.push({ url:twseFlowUrl,reason:'official_source_unavailable' });
+  if (tpexFlowResult.status==='fulfilled') sourceHashes[tpexFlowUrl]=tpexFlowResult.value.hash;
+  else sourceFailures.push({ url:tpexFlowUrl,reason:'official_source_unavailable' });
+  return Object.freeze({ schema:'official-tw-market-snapshot-v1.2',collectedAt,cutoff,
     valuations,valuationHistory,revenues,twseIndex,
-    tpexIndex,foreignFlow,
-    sourceHashes:{...Object.fromEntries(sources.map((url)=>[url,byUrl.get(url).hash])),
-      [twseFlowUrl]:twseFlowResult.hash,[tpexFlowUrl]:tpexFlowResult.hash,...optionalHashes} });
+    tpexIndex,foreignFlow,sourceFailures,sourceHashes });
 }
 
 function validateReportedValuation(row) {

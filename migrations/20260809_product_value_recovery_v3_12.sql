@@ -20,6 +20,7 @@ DECLARE
   v_legacy_prices jsonb;
   v_revenue jsonb;
   v_dislocations jsonb;
+  v_sector_universe jsonb;
   v_breadth jsonb;
   v_market jsonb;
   v_result jsonb;
@@ -95,6 +96,13 @@ BEGIN
       (array_agg(source_timestamp ORDER BY session_id DESC))[1] AS latest_source_timestamp,
       (array_agg(ingested_at ORDER BY session_id DESC))[1] AS latest_ingested_at
     FROM recent WHERE session_rank<=120 GROUP BY stock_id
+  ), instrument_ranked AS MATERIALIZED (
+    SELECT instrument.*,row_number() OVER (PARTITION BY instrument.stock_id ORDER BY
+      instrument.source_timestamp DESC,instrument.recorded_at DESC,instrument.instrument_authority_id) AS precedence
+    FROM public.stock_instruments_v3 instrument
+    WHERE instrument.instrument_type='common_stock' AND instrument.listing_status='active'
+      AND instrument.source_timestamp<=p_source_cutoff AND instrument.recorded_at<=p_source_cutoff
+      AND instrument.valid_from<=p_source_cutoff AND (instrument.valid_to IS NULL OR instrument.valid_to>p_source_cutoff)
   ), eligible AS MATERIALIZED (
     SELECT instrument.stock_id,instrument.symbol,instrument.official_name,
       coalesce(sector.canonical_sector_key::text,'unknown') AS sector,
@@ -109,10 +117,7 @@ BEGIN
       CASE WHEN stats.ma60>0 THEN 100*(stats.current_price/stats.ma60-1) END AS bias60_pct,
       CASE WHEN stats.ma120>0 THEN 100*(stats.current_price/stats.ma120-1) END AS bias120_pct,
       CASE WHEN stats.avg_prior_volume20>0 THEN stats.current_volume/stats.avg_prior_volume20 END AS volume_ratio20
-    FROM stats JOIN public.stock_instruments_v3 instrument ON instrument.stock_id=stats.stock_id
-      AND instrument.instrument_type='common_stock' AND instrument.listing_status='active'
-      AND instrument.recorded_at<=p_source_cutoff AND instrument.valid_from<=p_source_cutoff
-      AND (instrument.valid_to IS NULL OR instrument.valid_to>p_source_cutoff)
+    FROM stats JOIN instrument_ranked instrument ON instrument.stock_id=stats.stock_id AND instrument.precedence=1
     LEFT JOIN LATERAL (
       SELECT assignment.canonical_sector_key FROM public.stock_sector_assignments_v3 assignment
       WHERE assignment.stock_id=stats.stock_id AND assignment.status='active'
@@ -141,6 +146,29 @@ BEGIN
     'sourceTimestamp',latest_source_timestamp,'ingestedAt',latest_ingested_at,
     'revenueAsOf',revenue_as_of,'revenueYoy',yoy_growth,'revenueMom',mom_growth,'revenueSource',revenue_source
   ) ORDER BY drawdown60_pct,bias20_pct,symbol),'[]'::jsonb) INTO v_dislocations FROM bounded;
+
+  WITH instrument_ranked AS MATERIALIZED (
+    SELECT instrument.*,row_number() OVER (PARTITION BY instrument.stock_id ORDER BY
+      instrument.source_timestamp DESC,instrument.recorded_at DESC,instrument.instrument_authority_id) AS precedence
+    FROM public.stock_instruments_v3 instrument
+    WHERE instrument.instrument_type='common_stock' AND instrument.listing_status='active'
+      AND instrument.source_timestamp<=p_source_cutoff AND instrument.recorded_at<=p_source_cutoff
+      AND instrument.valid_from<=p_source_cutoff AND (instrument.valid_to IS NULL OR instrument.valid_to>p_source_cutoff)
+  ), sector_ranked AS MATERIALIZED (
+    SELECT assignment.*,row_number() OVER (PARTITION BY assignment.stock_id ORDER BY
+      assignment.source_timestamp DESC,assignment.recorded_at DESC,assignment.assignment_authority_id) AS precedence
+    FROM public.stock_sector_assignments_v3 assignment
+    WHERE assignment.status='active' AND assignment.source_timestamp<=p_source_cutoff
+      AND assignment.recorded_at<=p_source_cutoff AND assignment.valid_from<=p_source_cutoff
+      AND (assignment.valid_to IS NULL OR assignment.valid_to>p_source_cutoff)
+  ), bounded AS MATERIALIZED (
+    SELECT instrument.symbol,sector.canonical_sector_key::text AS sector
+    FROM instrument_ranked instrument JOIN sector_ranked sector ON sector.stock_id=instrument.stock_id AND sector.precedence=1
+    WHERE instrument.precedence=1 ORDER BY instrument.symbol LIMIT 3001
+  )
+  SELECT coalesce(jsonb_agg(jsonb_build_array(symbol,sector) ORDER BY symbol),'[]'::jsonb)
+    INTO v_sector_universe FROM bounded;
+  IF jsonb_array_length(v_sector_universe)>3000 THEN RAISE EXCEPTION 'bound_violation';END IF;
 
   WITH daily_ranked AS MATERIALIZED (
     SELECT signal.stock_id,signal.as_of::date AS session_id,signal.price::double precision AS close,
@@ -177,6 +205,7 @@ BEGIN
     'legacyPriceRows',v_legacy_prices,
     'legacyRevenueRows',v_revenue,
     'dislocationCandidates',v_dislocations,
+    'sectorValuationUniverse',v_sector_universe,
     'marketBreadth',v_breadth,
     'legacyMarketRows',v_market,
     'bridgeSchema','legacy-product-value-bridge-v3.12'

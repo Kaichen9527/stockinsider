@@ -75,7 +75,7 @@
   },
   "releaseStatus": "prior_production_live_v3_12_recovery_not_yet_reviewed_or_deployed",
   "createdAt": "2026-07-18T21:22:18+08:00",
-  "updatedAt": "2026-08-09T12:00:00+08:00",
+  "updatedAt": "2026-08-09T09:42:36+08:00",
   "baselineDomain": "stock-recommendation-engine",
   "amendmentClass": "v3_11_defect_repair_and_specified_flow_forward",
   "supersedesForFutureWork": [
