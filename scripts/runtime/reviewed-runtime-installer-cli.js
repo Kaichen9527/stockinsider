@@ -8,7 +8,8 @@ const os = require('os');
 const path = require('path');
 const { canonicalJson, sha256 } = require('./codec');
 const { resolveReviewedRuntimeRelease } = require('./reviewed-runtime-release');
-const { TRACKED_RUNTIME_PATHS, runtimeBundleSha256 } = require('./tracked-runtime-bundle');
+const { TRACKED_RUNTIME_PATHS, runtimeBundleSha256,
+  runtimeBundleSha256ForPresentMembers } = require('./tracked-runtime-bundle');
 const { activateTrackedRuntimeRelease } = require('./auth-source-worker-installation');
 const { acquireActivationLock, captureSchedulerRollback, createLocalRuntimePlatform,
   recoverInterruptedActivation } = require('./local-runtime-platform');
@@ -278,7 +279,8 @@ function priorRelease(runtimeRoot) {
   const configBytes = fs.readFileSync(configDescriptor); fs.closeSync(configDescriptor);
   if (!configStat.isFile() || configStat.uid !== process.getuid() || (configStat.mode & 0o077) !== 0 ||
     `${canonicalJson(prior)}\n` !== bytes.toString('utf8') || !SHA40.test(prior.commitSha) ||
-    path.basename(resolved) !== prior.commitSha || runtimeBundleSha256(resolved) !== prior.worker.sha256 ||
+    path.basename(resolved) !== prior.commitSha ||
+    runtimeBundleSha256ForPresentMembers(resolved) !== prior.worker.sha256 ||
     sha256(configBytes) !== prior.config.sha256) {
     fail('active_pointer_invalid');
   }

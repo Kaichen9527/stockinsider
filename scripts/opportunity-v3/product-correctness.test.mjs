@@ -168,7 +168,18 @@ const checks = {
         mkdirSync(path.dirname(filename), { recursive: true, mode: 0o700 });
         writeFileSync(filename, `${repositoryPath}\n`, { mode: 0o600 });
       }
-      assert.match(bundle.runtimeBundleSha256(bundleRoot), /^[0-9a-f]{64}$/u);
+      const completeBundleSha = bundle.runtimeBundleSha256(bundleRoot);
+      assert.match(completeBundleSha, /^[0-9a-f]{64}$/u);
+      assert.equal(bundle.runtimeBundleSha256ForPresentMembers(bundleRoot), completeBundleSha);
+      for (const additiveMember of [
+        'scripts/runtime/market-analysis.js',
+        'scripts/runtime/official-twse-valuation.js',
+        'scripts/runtime/underreaction-score.js',
+      ]) unlinkSync(path.join(bundleRoot, additiveMember));
+      assert.throws(() => bundle.runtimeBundleSha256(bundleRoot), { code: 'ENOENT' });
+      const predecessorBundleSha = bundle.runtimeBundleSha256ForPresentMembers(bundleRoot);
+      assert.match(predecessorBundleSha, /^[0-9a-f]{64}$/u);
+      assert.notEqual(predecessorBundleSha, completeBundleSha);
       const linkedPath = path.join(bundleRoot, bundle.TRACKED_RUNTIME_PATHS[0]);
       unlinkSync(linkedPath);
       symlinkSync(path.join(bundleRoot, bundle.TRACKED_RUNTIME_PATHS[1]), linkedPath);

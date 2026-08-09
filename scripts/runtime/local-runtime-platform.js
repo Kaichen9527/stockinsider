@@ -6,7 +6,7 @@ const os = require('os');
 const path = require('path');
 const crypto = require('crypto');
 const { canonicalJson, sha256 } = require('./codec');
-const { runtimeBundleSha256 } = require('./tracked-runtime-bundle');
+const { runtimeBundleSha256, runtimeBundleSha256ForPresentMembers } = require('./tracked-runtime-bundle');
 const { observeRuntimeHealth, publishRuntimeHealthObservation } = require('./runtime-health-observer');
 
 const PRIOR_LABELS = Object.freeze([
@@ -254,7 +254,8 @@ function verifyJournalPriorRelease(runtimeRoot, pointer, manifestSha256) {
   validatePriorInstallationManifest(manifest, path.basename(root));
   const configBytes = ownedRegularBytes(path.join(root, 'config/runtime/auth-source-dag.json'));
   if (`${canonicalJson(manifest)}\n` !== bytes.toString('utf8') || sha256(bytes) !== manifestSha256 ||
-    runtimeBundleSha256(root) !== manifest.worker.sha256 || sha256(configBytes) !== manifest.config.sha256) {
+    runtimeBundleSha256ForPresentMembers(root) !== manifest.worker.sha256 ||
+    sha256(configBytes) !== manifest.config.sha256) {
     fail('scheduler_rollback_failed');
   }
 }
@@ -313,7 +314,7 @@ function createLocalRuntimePlatform({ runtimeRoot, preparedRoot, manifest, revie
     if (`${canonicalJson(priorManifest)}\n` !== manifestBytes.toString('utf8') ||
       sha256(manifestBytes) !== manifest.rollback.manifestSha256 ||
       priorManifest.commitSha !== manifest.rollback.commitSha ||
-      runtimeBundleSha256(priorRoot) !== priorManifest.worker.sha256 ||
+      runtimeBundleSha256ForPresentMembers(priorRoot) !== priorManifest.worker.sha256 ||
       sha256(configBytes) !== priorManifest.config.sha256) {
       fail('active_pointer_invalid');
     }

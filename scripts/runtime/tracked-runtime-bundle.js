@@ -42,10 +42,14 @@ const TRACKED_RUNTIME_PATHS = Object.freeze([
   'scripts/runtime/valuation-operating-bridge.js',
 ]);
 
-function runtimeBundleBytes(repositoryRoot) {
+function runtimeBundleBytesForPaths(repositoryRoot, repositoryPaths) {
   invariant(typeof repositoryRoot === 'string' && path.isAbsolute(repositoryRoot), 'absolute repository root required');
+  invariant(Array.isArray(repositoryPaths) && repositoryPaths.length > 0 &&
+    repositoryPaths.every((repositoryPath, index) => typeof repositoryPath === 'string' &&
+      TRACKED_RUNTIME_PATHS.includes(repositoryPath) && (index === 0 || repositoryPaths[index - 1] < repositoryPath)),
+  'runtime bundle paths must be a sorted nonempty tracked subset');
   const canonicalRoot = fs.realpathSync(repositoryRoot);
-  const members = TRACKED_RUNTIME_PATHS.map((repositoryPath) => {
+  const members = repositoryPaths.map((repositoryPath) => {
     const absolutePath = path.resolve(canonicalRoot, repositoryPath);
     invariant(absolutePath.startsWith(`${canonicalRoot}${path.sep}`) && fs.realpathSync(absolutePath) === absolutePath,
       'runtime bundle path escapes root');
@@ -62,6 +66,31 @@ function runtimeBundleBytes(repositoryRoot) {
   return Buffer.from(canonicalJson({ schema: 'stockinsider-tracked-runtime-bundle-v1', members }));
 }
 
+function runtimeBundleBytes(repositoryRoot) {
+  return runtimeBundleBytesForPaths(repositoryRoot, TRACKED_RUNTIME_PATHS);
+}
+
 function runtimeBundleSha256(repositoryRoot) { return sha256(runtimeBundleBytes(repositoryRoot)); }
 
-module.exports = { TRACKED_RUNTIME_PATHS, runtimeBundleBytes, runtimeBundleSha256 };
+// Rollback releases were sealed with the tracked member set owned by their
+// reviewed commit. The current list only grows additively, so an older release
+// can omit newer members. Its original canonical bundle hash remains the
+// authority: omitting any member that belonged to that release changes the hash
+// and fails the manifest comparison at the caller.
+function runtimeBundleSha256ForPresentMembers(repositoryRoot) {
+  const canonicalRoot = fs.realpathSync(repositoryRoot);
+  const present = TRACKED_RUNTIME_PATHS.filter((repositoryPath) => {
+    const absolutePath = path.resolve(canonicalRoot, repositoryPath);
+    try {
+      fs.lstatSync(absolutePath);
+      return true;
+    } catch (error) {
+      if (error?.code === 'ENOENT') return false;
+      throw error;
+    }
+  });
+  return sha256(runtimeBundleBytesForPaths(canonicalRoot, present));
+}
+
+module.exports = { TRACKED_RUNTIME_PATHS, runtimeBundleBytes, runtimeBundleSha256,
+  runtimeBundleSha256ForPresentMembers };
