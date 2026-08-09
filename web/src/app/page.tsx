@@ -146,6 +146,7 @@ export default async function Home() {
   const marketHighlight = radar.marketHighlightSummary;
   const sourceHealth = radar.sourceHealthSummary;
   const priceHealth = radar.dataHealth;
+  const underreactionMarket = radar.underreactionMarket;
   const socialSourceDetails =
     (sourceHealth?.connectorDetails || []).filter((item) => ['threads', 'investanchors', 'instagram', 'telegram', 'podcast', 'youtube', 'ptt', 'bulltalk'].includes(item.connector));
 
@@ -194,11 +195,17 @@ export default async function Home() {
                   </p>
                 </div>
                 <div className="rounded-2xl border border-line bg-surface-strong p-4">
-                  <p className="text-xs tracking-[0.24em] text-slate-500 dark:text-emerald-100/50">大盤進場 Gate</p>
-                  <p className="mt-2 text-xl font-semibold">{radar.marketIndexSignal?.label || '大盤資料待補'}</p>
-                  <p className="mt-2 text-xs leading-5 text-slate-600 dark:text-emerald-100/62">
-                    {radar.marketIndexSignal?.riskBudget || '個股買點會在大盤資料補齊後再放大部位。'}
+                  <p className="text-xs tracking-[0.24em] text-slate-500 dark:text-emerald-100/50">台股大盤分析</p>
+                  <p className="mt-2 text-xl font-semibold">
+                    {underreactionMarket?.status === 'risk_on' ? '趨勢與廣度支持'
+                      : underreactionMarket?.status === 'selective_or_defensive' ? '選股／防守優先'
+                        : '大盤證據未完整'}
                   </p>
+                  <p className="mt-2 text-xs leading-5 text-slate-600 dark:text-emerald-100/62">
+                    {underreactionMarket?.summary || '等待加權、櫃買、市場廣度與外資資料。'}
+                    {underreactionMarket ? ` · 完整度 ${Math.round(underreactionMarket.completeness * 100)}%` : ''}
+                  </p>
+                  <p className="mt-2 text-xs font-medium text-amber-700 dark:text-amber-300">{underreactionMarket?.riskBudget || '資料未完整，不提供部位預算。'}</p>
                 </div>
                 <div className="rounded-2xl border border-line bg-surface-strong p-4">
                   <p className="text-xs tracking-[0.24em] text-slate-500 dark:text-emerald-100/50">資料刷新健康度</p>

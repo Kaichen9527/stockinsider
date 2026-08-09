@@ -157,7 +157,7 @@ const checks = {
     assert.ok(!readFileSync(path.join(root, 'scripts/runtime/auth-source-worker-cli.js'), 'utf8').includes('.agent/'));
     const bundle = runtime('tracked-runtime-bundle.js');
     assert.deepEqual([...bundle.TRACKED_RUNTIME_PATHS].sort(), bundle.TRACKED_RUNTIME_PATHS);
-    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 29);
+    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 32);
     assert.equal(bundle.runtimeBundleSha256(root), sha256(bundle.runtimeBundleBytes(root)));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/auth-source-worker-cli.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/tracked-runtime-bundle.js'));
@@ -739,6 +739,13 @@ const checks = {
       symbol: String(1000 + index), name: '名'.repeat(40), disposition: 'promoted', reason: 'new_source_evidence',
       sourceClass: 'official', sourceSummary: '摘'.repeat(180), raw: String(1000 + index), claimId: `claim-${index}`,
       lastEvaluatedAt: '2026-08-01T10:20:00Z',
+      researchScore: { underreactionScore:80-index/10,coverage:0.85,confidence:0.82,researchDisposition:'research_now',
+        reasons:[{ axis:'fundamental',reason:'official_revenue_not_deteriorating' },
+          { axis:'valuation',reason:'pe_compared_with_sector_and_own_history' },{ axis:'priceDislocation',reason:'drawdown_without_revenue_deterioration' }],
+        risks:['formal_valuation_target_unavailable'],missingAxes:[],priceContext:{ currentPrice:100+index,drawdown60Pct:-18,
+          drawdown120Pct:-24,bias20Pct:-8,bias60Pct:-12,bias120Pct:-18,rsi14:31,volumeRatio20:1.4,
+          relativeStrength20Pct:-6,technicalState:'reclaim_required' },axes:{ fundamental:{ yoyGrowth:12.3 },
+          valuation:{ currentPe:12.4,sectorPe:18.6,historyPeMedian:16.8,historyPeMin:11.2,historyPeMax:23.1,historySampleCount:4 } } },
     }));
     const compact = runtime('compact-radar-projection.js').publishCompactRadarProjection({
       decisions: [], sourceCandidates: worstCaseSignals,
@@ -1055,3 +1062,101 @@ for (const fixture of fixtures) {
     await checks[fixture.id]();
   });
 }
+
+test('V3.12 product-value recovery ranks partial evidence without fabricating a trade target', () => {
+  const score = runtime('underreaction-score.js');
+  const dislocated = score.computeUnderreactionResearchScore({
+    symbol: '2337',
+    discovery: { score: 82, trustworthy: true, reason: 'official_material_event' },
+    fundamental: { score: 72, trustworthy: true, trend: 'stable', reason: 'revenue_and_margin_not_deteriorating' },
+    priceDislocation: { score: 90, trustworthy: true, drawdown60Pct: -24, bias20Pct: -9, reason: 'large_drawdown' },
+    valuation: { score: null, trustworthy: false, reason: 'official_history_unavailable' },
+    timing: { score: 38, trustworthy: true, technicalState: 'reclaim_required', reason: 'below_support' },
+  });
+  assert.ok(Number.isFinite(dislocated.underreactionScore));
+  assert.ok(dislocated.coverage >= 0.7);
+  assert.equal(dislocated.researchDisposition, 'watch_reclaim');
+  assert.equal(dislocated.formalTargetPrice, null);
+  assert.equal(dislocated.tradeAction, 'valuation_review');
+  assert.deepEqual(dislocated.missingAxes, ['valuation']);
+
+  const extended = score.computeUnderreactionResearchScore({
+    symbol: '2454',
+    discovery: { score: 82, trustworthy: true, reason: 'official_material_event' },
+    fundamental: { score: 72, trustworthy: true, trend: 'stable', reason: 'revenue_and_margin_not_deteriorating' },
+    priceDislocation: { score: 25, trustworthy: true, drawdown60Pct: -2, bias20Pct: 12, reason: 'extended' },
+    valuation: { score: null, trustworthy: false, reason: 'official_history_unavailable' },
+    timing: { score: 15, trustworthy: true, technicalState: 'extended', reason: 'extended' },
+  });
+  assert.ok(dislocated.underreactionScore > extended.underreactionScore);
+  assert.deepEqual(score.rankUnderreactionCandidates([extended, dislocated]).map((row) => row.symbol), ['2337', '2454']);
+
+  const thin = score.computeUnderreactionResearchScore({
+    symbol: '9999',
+    discovery: { score: 80, trustworthy: true, reason: 'community_claim' },
+  });
+  assert.equal(thin.researchDisposition, 'watch_evidence');
+  assert.equal(thin.underreactionScore, null);
+  assert.equal(thin.tradeAction, 'valuation_review');
+});
+
+test('V3.12 official valuation parser rejects swapped or non-authoritative values', () => {
+  const official = runtime('official-twse-valuation.js');
+  const rows = official.parseTwseValuationRows([
+    { Date: '1150807', Code: '2330', Name: '台積電', PEratio: '31.86', DividendYield: '0.93', PBratio: '10.43' },
+  ], { collectedAt: '2026-08-08T10:20:00Z' });
+  assert.deepEqual(rows[0], {
+    symbol: '2330', name: '台積電', session: '2026-08-07', peRatio: 31.86, pbRatio: 10.43,
+    dividendYield: 0.93, sourceRef: 'twse-openapi:BWIBBU_ALL:2026-08-07:2330',
+    sourceUrl: 'https://openapi.twse.com.tw/v1/exchangeReport/BWIBBU_ALL',
+    collectedAt: '2026-08-08T10:20:00Z', authority: 'exchange_reported',
+  });
+  assert.equal(official.validateReportedValuation({ peRatio: 114, pbRatio: 30.32, sourceRef: 'legacy:yahoo' }).availability, 'unavailable');
+  assert.equal(official.validateReportedValuation(rows[0]).availability, 'available');
+  const historyUrl = 'https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?date=20260731&response=json';
+  const history = official.parseTwseHistoricalValuationRows({ stat: 'OK',date: '20260731',
+    data: [['2330','台積電','1,785.00','0.90',114,'32.80','10.74','115/1']] },
+  { collectedAt:'2026-08-08T10:20:00Z',sourceUrl:historyUrl });
+  assert.deepEqual([history[0].session,history[0].peRatio,history[0].pbRatio,history[0].authority],
+    ['2026-07-31',32.8,10.74,'exchange_reported_history']);
+  const older = [{ ...history[0],session:'2026-05-29',peRatio:27,
+    sourceRef:'twse-rwd:BWIBBU_d:2026-05-29:2330' },{ ...history[0],session:'2026-02-27',peRatio:25,
+    sourceRef:'twse-rwd:BWIBBU_d:2026-02-27:2330' }];
+  const axis = runtime('auth-source-worker-cli.js').valuationResearchAxis(rows[0], { count:8,medianPe:35 }, [...history,...older]);
+  assert.equal(axis.trustworthy,true); assert.equal(axis.historySampleCount,3); assert.equal(axis.historyPeMedian,27);
+  assert.equal(axis.sectorPe,35); assert.match(axis.reason,/sector_and_own_history/u);
+});
+
+test('V3.12 official index history supplies at least 20 sessions without inventing dates', () => {
+  const official = runtime('official-twse-valuation.js');
+  const twse = official.parseTwseIndexHistory({ stat:'OK',data:[['115/07/01','46,234.70','47,293.10','46,234.70','47,018.99']] });
+  const tpex = official.parseTpexIndexHistory({ tables:[{ data:[['2026/07/01','430.29','437.56','430.29','431.23','4.26']] }] });
+  assert.deepEqual(twse,[{ session:'2026-07-01',close:47018.99 }]);
+  assert.deepEqual(tpex,[{ session:'2026-07-01',close:431.23 }]);
+  assert.deepEqual(official.parseTwseIndexHistory({ stat:'OK',data:[['115/02/30','1','2','1','2']] }),[]);
+});
+
+test('V3.12 evidence snippets are local to the matched stock', () => {
+  const worker = runtime('auth-source-worker-cli.js');
+  const text = '景碩 3189 財報轉強，市場開始討論。\n其他新聞。\n欣興（3037）法說指出 ABF 載板稼動率回升。';
+  const snippet = worker.extractMatchedEvidenceSnippet(text, { symbol: '3037', names: ['欣興'] });
+  assert.match(snippet.text, /欣興|3037/u);
+  assert.match(snippet.text, /ABF/u);
+  assert.doesNotMatch(snippet.text, /^景碩/u);
+  assert.equal(snippet.matchBasis, 'symbol_and_name');
+});
+
+test('V3.12 market analysis suppresses risk budget when components are missing', () => {
+  const market = runtime('market-analysis.js');
+  const incomplete = market.buildMarketAnalysis({ asOf: '2026-08-08T07:00:00Z', taiex: { state: 'uptrend',session:'2026-08-07' } });
+  assert.equal(incomplete.completeness, 0.25);
+  assert.equal(incomplete.riskBudget, null);
+  assert.equal(incomplete.status, 'data_incomplete');
+  const complete = market.buildMarketAnalysis({
+    asOf: '2026-08-08T07:00:00Z', taiex: { state: 'pullback', drawdownPct: -8,session:'2026-08-07' },
+    otc: { state: 'pullback', drawdownPct: -10,session:'2026-08-07' }, breadth: { aboveMa20Pct: 34,asOf:'2026-08-07' },
+    foreignFlow: { net5d: -12000000000,session:'2026-08-07' },
+  });
+  assert.equal(complete.completeness, 1);
+  assert.match(complete.summary, /加權|櫃買|廣度|外資/u);
+});

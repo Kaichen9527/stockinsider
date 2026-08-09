@@ -1258,3 +1258,29 @@ This approval authorizes implementation only. It does not authorize production m
   activation package.
 - [ ] Update and push Draft PR #1; do not merge, deploy, install runtime, mutate
   production DB/cron/flag or activate V3.
+
+### V3.12 Product Value Recovery — user-authorized completion
+
+- [x] Capture the 2026-08-09 production RED baseline and prove that the empty V3
+  authority planes forced every card into `valuation_review` while legacy producer
+  observations remained unused.
+- [x] Add the reviewed legacy read bridge and a bounded 60-card dynamic universe,
+  including a top-30 whole-universe 20/60/120-session price-dislocation lane.
+- [x] Use official TWSE/TPEx current PE/PB, monthly revenue, TAIEX/OTC history and
+  institutional flow; add exact-source 1/3/6/12-month own-PE history and sector PE.
+- [x] Add the fail-closed underreaction research score, BIAS20/60/120, RSI14, MACD,
+  ATR, volume ratio and relative-TAIEX evidence without fabricating target prices.
+- [x] Replace unrelated document prefixes with local matched evidence snippets and
+  add the ranked research lane, market completeness and evidence/technical UI.
+- [x] Pass precommit typecheck, lint, production build, 61 semantic tests, 37 product
+  correctness tests, 28 applied migration tests, 2 legacy regressions, 2 Playwright
+  cases, 4 controlled performance tests, 17 model-runner tests and disabled v3.6
+  host-pin doctor.
+- [x] Execute evaluation governance honestly; retain
+  `blocked/non_fabricated_elapsed_cohorts_unavailable` for 120/20/252 elapsed
+  cohorts and do not synthesize evidence.
+- [ ] Freeze the exact V3.12 implementation commit; run fresh Requirements,
+  Architecture, exact-commit diff review and repair/full-range closure.
+- [ ] Pass authoritative Code Gate, merge the reviewed PR, apply only the reviewed
+  additive bridge migration, install the reviewed tracked producer, deploy the same
+  commit to Vercel and complete read-only production smoke/product-value checks.

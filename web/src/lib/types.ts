@@ -1448,6 +1448,29 @@ export interface SourceSignalCard {
   valuationStatus: 'pending';
   technicalState: string;
   changedBecause: string;
+  underreactionScore?: number;
+  scoreCoverage?: number;
+  scoreConfidence?: number;
+  researchDisposition?: 'research_now' | 'watch_reclaim' | 'watch_evidence' | 'avoid';
+  positiveReasons?: string[];
+  riskReasons?: string[];
+  missingAxes?: string[];
+  currentPrice?: number | null;
+  drawdown60Pct?: number | null;
+  drawdown120Pct?: number | null;
+  bias20Pct?: number | null;
+  bias60Pct?: number | null;
+  bias120Pct?: number | null;
+  rsi14?: number | null;
+  volumeRatio20?: number | null;
+  relativeStrength20Pct?: number | null;
+  revenueYoy?: number | null;
+  currentPe?: number | null;
+  sectorPe?: number | null;
+  historyPeMedian?: number | null;
+  historyPeMin?: number | null;
+  historyPeMax?: number | null;
+  historyPeSampleCount?: number;
   researchDecision?: RecommendationCard['researchDecision'];
 }
 
@@ -1466,6 +1489,15 @@ export interface RadarDailyPayload {
   lastUpdatedAt?: string | null;
   evidenceAgeHours?: number | null;
   marketRegime: string;
+  underreactionMarket?: {
+    asOf: string;
+    status: 'data_incomplete' | 'risk_on' | 'selective_or_defensive';
+    completeness: number;
+    riskBudget: string | null;
+    summary: string;
+    components: Record<string, unknown>;
+    missingComponents: string[];
+  } | null;
   marketRegimeUpdatedAt?: string | null;
   themeHeatUpdatedAt?: string | null;
   marketFreshnessStatus?: 'fresh' | 'stale' | 'missing';

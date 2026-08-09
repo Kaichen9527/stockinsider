@@ -437,6 +437,7 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
 	}
 
 function StocksTab({ radar }: { radar: RadarDailyPayload }) {
+  const rankedResearch = (radar.sourceSignals ?? []).filter((signal) => Number.isFinite(signal.underreactionScore));
   const namedFormal = (radar.opportunities || []).filter((r) => Boolean(r.chineseName));
   const namedScenario = (radar.scenarioUpsideCandidates || []).filter((r) => Boolean(r.chineseName));
   const namedEarly = (radar.earlyWatchlist ?? []).filter((r) => Boolean(r.chineseName));
@@ -495,6 +496,21 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
 
   return (
     <div className="space-y-0">
+      {rankedResearch.length > 0 ? (
+        <section className="mb-10 rounded-[1.5rem] border border-amber-500/25 bg-amber-500/5 p-5">
+          <div className="mb-5 flex items-end justify-between gap-4">
+            <div>
+              <p className="text-xs tracking-[0.2em] text-amber-700 dark:text-amber-300">PRICE HAS NOT FULLY REFLECTED THE EVIDENCE</p>
+              <h3 className="mt-1 text-xl font-semibold">目前最值得研究</h3>
+              <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/55">這是可比較的研究優先級；正式目標價與買進動作仍需通過估值、技術與風險 Gate。</p>
+            </div>
+            <span className="rounded-full bg-amber-300 px-3 py-1 text-xs font-semibold text-slate-950">{rankedResearch.length} 檔</span>
+          </div>
+          <div className="grid gap-3 lg:grid-cols-2">
+            {rankedResearch.map((signal) => <SourceSignalCardView key={`ranked-${signal.symbol}`} signal={signal} />)}
+          </div>
+        </section>
+      ) : null}
       <p className="mb-8 text-sm text-slate-500 dark:text-emerald-100/50">
         首頁先顯示正式推薦 {formalOpportunities.length} 支，並依「推薦指數」排序；研究證據待補 {researchPending.length} 支不列入正式推薦；情境上行候選 {scenarioUpsideCandidates.length} 支只代表 upside case 有追蹤價值，不等於正式買點。
         早期可關注 {earlyWatchlist.length} 支會優先於歷史觀察顯示；熱股追蹤 {hotTracking.length} 支只保留市場討論與重估線索；歷史觀察 {historicalObservationCount} 支已收斂為重估/歸檔摘要。
@@ -888,24 +904,61 @@ function DiscoveredCard({ stock }: { stock: DiscoveredStockCard }) {
 }
 
 function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
+  const dispositionLabel = signal.researchDisposition === 'research_now' ? '優先研究'
+    : signal.researchDisposition === 'watch_reclaim' ? '等收復再評估'
+      : signal.researchDisposition === 'avoid' ? '暫時避開' : '補證據觀察';
+  const technicalTrigger = signal.technicalState === 'reclaim_required' || signal.technicalState === 'below_support'
+    ? '先收復 MA20／原支撐並站穩，才重新評估進場。'
+    : signal.technicalState === 'extended' ? '乖離偏高，不追價；等待回到合理乖離區。'
+      : signal.technicalState === 'breakout_pending' ? '等待帶量突破或回測確認。' : '技術資料不足，不形成進場訊號。';
+  const explainReason = (reason: string) => ({
+    'fundamental:official_revenue_not_deteriorating': '官方月營收尚未惡化',
+    'valuation:pe_compared_with_sector_and_own_history': 'PE 已與自身歷史及同產業比較',
+    'valuation:pe_compared_with_own_history': 'PE 低於或接近自身歷史區間',
+    'valuation:pe_compared_with_sector_reference': 'PE 已與同產業比較',
+    'priceDislocation:large_drawdown': '股價相對 60／120 日高點明顯回落',
+    'discovery:price_dislocation_scan': '全市場跌深掃描納入',
+  }[reason] ?? reason.replaceAll('_', ' '));
+  const explainRisk = (reason: string) => reason.startsWith('missing:')
+    ? `待補證據：${reason.slice(8).replaceAll(',', '、')}`
+    : ({ formal_valuation_target_unavailable: '正式估值未完成，不提供目標價或買進動作',
+      price_must_reclaim_support_before_entry: '必須先收復支撐再考慮進場',
+      research_coverage_below_70_percent: '研究覆蓋率低於 70%' }[reason] ?? reason.replaceAll('_', ' '));
   return (
     <article className="rounded-[1.25rem] border border-line bg-surface p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-xs tracking-[0.16em] text-amber-700 dark:text-amber-300">SOURCE SIGNAL · 估值待補</p>
+          <p className="text-xs tracking-[0.16em] text-amber-700 dark:text-amber-300">未反映研究 · {dispositionLabel}</p>
           <h4 className="mt-1 break-words text-lg font-semibold text-slate-900 dark:text-emerald-50">
             {signal.chineseName ? `${signal.chineseName} ` : ''}{signal.symbol}
           </h4>
         </div>
         <span className="shrink-0 rounded-full border border-amber-500/25 bg-amber-500/10 px-2.5 py-1 text-xs text-amber-700 dark:text-amber-300">
-          僅供研究
+          {Number.isFinite(signal.underreactionScore) ? `${signal.underreactionScore} 分` : '資料不足'}
         </span>
       </div>
       <p className="mt-3 break-words text-sm leading-6 text-slate-600 dark:text-emerald-100/72">{signal.sourceSummary}</p>
+      {Number.isFinite(signal.underreactionScore) ? (
+        <div className="mt-3 grid grid-cols-3 gap-2 text-xs">
+          <div className="rounded-xl bg-slate-950/5 p-2 dark:bg-emerald-100/8"><span className="text-slate-500">研究分數</span><strong className="mt-1 block text-base">{signal.underreactionScore}</strong></div>
+          <div className="rounded-xl bg-slate-950/5 p-2 dark:bg-emerald-100/8"><span className="text-slate-500">覆蓋率</span><strong className="mt-1 block text-base">{Math.round((signal.scoreCoverage ?? 0) * 100)}%</strong></div>
+          <div className="rounded-xl bg-slate-950/5 p-2 dark:bg-emerald-100/8"><span className="text-slate-500">信心</span><strong className="mt-1 block text-base">{Math.round((signal.scoreConfidence ?? 0) * 100)}%</strong></div>
+        </div>
+      ) : null}
       <dl className="mt-3 grid grid-cols-2 gap-2 text-xs">
         <div><dt className="text-slate-500 dark:text-emerald-100/50">來源類型</dt><dd className="mt-1 text-slate-800 dark:text-emerald-50">{signal.sourceClass}</dd></div>
         <div><dt className="text-slate-500 dark:text-emerald-100/50">技術狀態</dt><dd className="mt-1 text-slate-800 dark:text-emerald-50">{signal.technicalState}</dd></div>
+        <div><dt className="text-slate-500 dark:text-emerald-100/50">目前股價</dt><dd className="mt-1 text-slate-800 dark:text-emerald-50">{signal.currentPrice != null ? signal.currentPrice.toFixed(2) : '待補'}</dd></div>
+        <div><dt className="text-slate-500 dark:text-emerald-100/50">60 日回落</dt><dd className="mt-1 text-slate-800 dark:text-emerald-50">{signal.drawdown60Pct != null ? `${signal.drawdown60Pct.toFixed(1)}%` : '待補'}</dd></div>
+        <div><dt className="text-slate-500 dark:text-emerald-100/50">BIAS 20 / 60 / 120</dt><dd className="mt-1 text-slate-800 dark:text-emerald-50">{[signal.bias20Pct,signal.bias60Pct,signal.bias120Pct].map((value)=>value != null ? `${value.toFixed(1)}%` : '—').join(' / ')}</dd></div>
+        <div><dt className="text-slate-500 dark:text-emerald-100/50">RSI14 / 量比</dt><dd className="mt-1 text-slate-800 dark:text-emerald-50">{signal.rsi14 != null ? signal.rsi14.toFixed(1) : '—'} / {signal.volumeRatio20 != null ? signal.volumeRatio20.toFixed(2) : '—'}</dd></div>
+        <div><dt className="text-slate-500 dark:text-emerald-100/50">相對加權 20 日</dt><dd className="mt-1 text-slate-800 dark:text-emerald-50">{signal.relativeStrength20Pct != null ? `${signal.relativeStrength20Pct.toFixed(1)}%` : '待補'}</dd></div>
+        <div><dt className="text-slate-500 dark:text-emerald-100/50">營收年增</dt><dd className="mt-1 text-slate-800 dark:text-emerald-50">{signal.revenueYoy != null ? `${signal.revenueYoy.toFixed(1)}%` : '待補'}</dd></div>
+        <div><dt className="text-slate-500 dark:text-emerald-100/50">PE / 歷史中位 / 同產業</dt><dd className="mt-1 text-slate-800 dark:text-emerald-50">{signal.currentPe != null ? signal.currentPe.toFixed(1) : '待補'} / {signal.historyPeMedian != null ? signal.historyPeMedian.toFixed(1) : '待累積'} / {signal.sectorPe != null ? signal.sectorPe.toFixed(1) : '待補'}</dd></div>
       </dl>
+      <p className="mt-3 text-xs leading-5 text-sky-700 dark:text-sky-300">技術觸發：{technicalTrigger}</p>
+      {(signal.positiveReasons?.length ?? 0) > 0 ? <p className="mt-1 text-xs leading-5 text-emerald-700 dark:text-emerald-300">加分：{signal.positiveReasons?.map(explainReason).join('、')}</p> : null}
+      {(signal.riskReasons?.length ?? 0) > 0 ? <p className="mt-1 text-xs leading-5 text-amber-700 dark:text-amber-300">風險：{signal.riskReasons?.map(explainRisk).join('、')}</p> : null}
       <div className="mt-4 flex items-center justify-between gap-3">
         <time className="text-xs text-slate-500 dark:text-emerald-100/55" dateTime={signal.discoveredAt}>{signal.discoveredAt}</time>
         <Link href={`/stock/${signal.symbol}`} className="rounded-full bg-amber-300 px-3 py-1.5 text-sm font-semibold text-slate-950 transition hover:bg-amber-200">查看研究 →</Link>
