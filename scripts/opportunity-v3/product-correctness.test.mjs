@@ -829,6 +829,57 @@ const checks = {
     assert.ok(runtime('codec.js').byteLength(compact.payload) <= 150_000, 'worst-case named source signals fit the compact payload');
     assert.ok(compact.payload.sourceSignals.every((signal) => !Object.hasOwn(signal, 'researchDecision')),
       'source-signal cards omit duplicated optional recommendation metadata that the UI never consumes');
+    const projection = runtime('compact-radar-projection.js');
+    const selectiveMarket = { status: 'selective_or_defensive', completeness: 1 };
+    const setupReady = projection.derivePublicOpportunityView({ researchScore: {
+      underreactionScore: 78, coverage: 1, confidence: 0.9, missingAxes: [],
+      axes: {
+        fundamental: { score: 88, trustworthy: true },
+        priceDislocation: { score: 92, trustworthy: true },
+        valuation: { score: 68, trustworthy: true },
+        timing: { score: 76, trustworthy: true, technicalState: 'at_support' },
+      }, priceContext: { technicalState: 'at_support' },
+    } }, selectiveMarket);
+    assert.deepEqual(setupReady, {
+      opportunityAction: 'setup_ready', actionReason: 'selective_high_conviction_at_support',
+      technicalState: 'at_support',
+      axisScores: { fundamental: 88, dislocation: 92, valuation: 68, timing: 76 },
+    }, 'a complete relative-value case can become a setup-ready research candidate without fabricating a formal target');
+    assert.equal(projection.derivePublicOpportunityView({ researchScore: {
+      underreactionScore: 82, coverage: 1, confidence: 0.9, missingAxes: [],
+      axes: { fundamental: { score: 90, trustworthy: true }, priceDislocation: { score: 90, trustworthy: true },
+        valuation: { score: 80, trustworthy: true }, timing: { score: 18, trustworthy: true, technicalState: 'extended' } },
+      priceContext: { technicalState: 'extended' },
+    } }, selectiveMarket).opportunityAction, 'avoid_chase');
+    assert.equal(projection.derivePublicOpportunityView({ researchScore: {
+      underreactionScore: 82, coverage: 0.85, confidence: 0.8, missingAxes: ['valuation'],
+      axes: { fundamental: { score: 90, trustworthy: true }, priceDislocation: { score: 90, trustworthy: true },
+        valuation: { score: null, trustworthy: false }, timing: { score: 76, trustworthy: true, technicalState: 'at_support' } },
+      priceContext: { technicalState: 'at_support' },
+    } }, selectiveMarket).opportunityAction, 'evidence_watch', 'missing relative valuation cannot become a setup-ready candidate');
+    const worker = runtime('auth-source-worker-cli.js');
+    const priceHistory = Array.from({ length: 20 }, (_, index) => ({ session: `2026-07-${String(index + 1).padStart(2, '0')}`,
+      open: 99, high: 101, low: 98, close: 100, volume: 1000 }));
+    assert.equal(worker.priceResearchAxes(priceHistory, { currentPrice: 100, high20: 110, high60: 120, ma20: 100 }, []).timing.technicalState,
+      'at_support', 'reasonable MA20 deviation is not mislabeled as an unconfirmed breakout');
+    const aligned = projection.publishCompactRadarProjection({ decisions: [], sourceCandidates: [{
+      symbol: '6285', name: '啟碁', disposition: 'promoted', reason: 'price_dislocation', sourceSummary: '官方證據',
+      researchScore: { underreactionScore: 78, coverage: 1, confidence: 0.9, missingAxes: [],
+        axes: { fundamental: { score: 88, trustworthy: true }, priceDislocation: { score: 92, trustworthy: true },
+          valuation: { score: 68, trustworthy: true }, timing: { score: 76, trustworthy: true, technicalState: 'at_support' } },
+        priceContext: { technicalState: 'at_support', bias20Pct: 0.2 } },
+    }], discoveryDelta: { added: [], exited: [], continued: [], unchangedReasons: [] }, window: 'daily',
+      asOf: '2026-08-01T10:20:00Z', producerIdentity: { commitSha: 'a'.repeat(40) },
+      legacyPayload: { opportunities: [], marketRegime: 'risk-on', marketIndexSignal: { status: 'risk_on_can_attack' },
+        marketHighlightSummary: { regimeLabel: '風險偏好擴張' } },
+      marketAnalysis: { asOf: '2026-08-01T10:20:00Z', status: 'selective_or_defensive', completeness: 1,
+        components: { taiex: { state: 'uptrend', drawdownPct: -5.94 }, otc: { state: 'uptrend', drawdownPct: -13.74 },
+          breadth: { aboveMa20Pct: 49.12 }, foreignFlow: { net1d: -51870490959 } }, missingComponents: [] },
+    });
+    assert.deepEqual([aligned.payload.marketRegime, aligned.payload.marketIndexSignal.status,
+      aligned.payload.sourceSignals[0].opportunityAction], ['selective-risk-on','selective_only','setup_ready'],
+    'legacy risk-on wording cannot contradict the authoritative selective market gate');
+    assert.match(aligned.payload.underreactionMarket.summary, /外資單日淨賣超 518[.]7 億元/u);
   },
   'PCR-010': () => {
     const select = runtime('candidate-funnel.js').selectLiveDiscoveryCards;

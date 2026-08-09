@@ -279,8 +279,15 @@ function priceResearchAxes(history, stats = null, benchmarkRows = []) {
   const governingDrawdown=Math.min(drawdown60Pct,Number.isFinite(drawdown120Pct)?drawdown120Pct:drawdown60Pct);
   const dislocationScore = governingDrawdown <= -20 ? 92 : governingDrawdown <= -12 ? 80
     : governingDrawdown <= -7 ? 68 : governingDrawdown <= -3 ? 52 : bias20Pct >= 8 ? 20 : 38;
-  const technicalState = bias20Pct <= -3 ? 'reclaim_required' : bias20Pct >= 8 || rsi>=70 ? 'extended' : 'breakout_pending';
-  const timingScore = technicalState === 'reclaim_required' ? 38 : technicalState === 'extended' ? 18 : 58;
+  const breakoutConfirmed = Number.isFinite(high20) && high20 > 0 && current >= high20 * 0.995
+    && Number.isFinite(volumeRatio20) && volumeRatio20 >= 1.2
+    && Number.isFinite(relativeStrength20Pct) && relativeStrength20Pct > 0;
+  const technicalState = bias20Pct <= -3 ? 'reclaim_required'
+    : bias20Pct >= 8 || rsi >= 70 ? 'extended'
+      : breakoutConfirmed ? 'breakout_confirmed'
+        : bias20Pct <= 1.5 ? 'at_support' : 'breakout_pending';
+  const timingScore = technicalState === 'reclaim_required' ? 38 : technicalState === 'extended' ? 18
+    : technicalState === 'breakout_confirmed' ? 84 : technicalState === 'at_support' ? 76 : 58;
   return { priceDislocation: { score: dislocationScore, trustworthy: true, drawdown60Pct, drawdown120Pct,bias20Pct,
     reason: governingDrawdown <= -12 ? 'large_drawdown' : bias20Pct >= 8 ? 'extended' : 'moderate_dislocation' },
   timing: { score: timingScore, trustworthy: true, technicalState,
@@ -541,12 +548,12 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
       const researchPriceRows = [...(bundle.priceRows ?? []), ...(bundle.legacyPriceRows ?? [])];
       const decisions = candidates.filter((candidate) => candidate.deepSelected === true).map((candidate) => {
         const facts = (bundle.financialRows ?? []).filter((row) => Array.isArray(row) && row[0] === candidate.symbol);
-        const history = (bundle.priceRows ?? []).filter((row) => Array.isArray(row) && row[0] === candidate.symbol)
-          .map((row) => ({ session: row[1], open: row[2], high: row[3], low: row[4], close: row[5], volume: row[6] }))
-          .sort((left, right) => String(left.session).localeCompare(String(right.session)));
-        const benchmark = (bundle.benchmarkRows ?? []).filter(Array.isArray)
+        const history = researchHistory(researchPriceRows, candidate.symbol);
+        const legacyBenchmark = (bundle.benchmarkRows ?? []).filter(Array.isArray)
           .map((row) => ({ session: row[0], close: row[1] }))
           .sort((left, right) => String(left.session).localeCompare(String(right.session)));
+        const benchmark = (officialSnapshot?.twseIndex?.length ? officialSnapshot.twseIndex : legacyBenchmark)
+          .map((row) => ({ session: row.session, close: row.close }));
         const decision = buildLegacyCandidateDecision({ candidate, facts, history, benchmark, sourceCutoff: bundle.sourceCutoff,
           valuationInput: bundle.valuationInputs?.[candidate.symbol] ?? {} });
         return { ...decision, researchScore: buildResearchScore(candidate, { priceRows: researchPriceRows,
@@ -683,4 +690,4 @@ if (require.main === module) main().catch((error) => {
 
 module.exports = { args, buildLegacyCandidateDecision, buildStageHandlers, extractRevisionCandidates,
   extractMatchedEvidenceSnippet, LEGACY_RADAR_FETCH_TIMEOUT_MS, legacyFactInput, legacyQualityInput, loadLegacyRadarPayloads, main, readBundle, readRuntimeHealthObservation,
-  tickerHasStockContext, uuidFromHash, valuationResearchAxis };
+  priceResearchAxes, tickerHasStockContext, uuidFromHash, valuationResearchAxis };
