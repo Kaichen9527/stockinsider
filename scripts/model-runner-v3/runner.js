@@ -10,17 +10,17 @@ const { loadHostPins, verifyCurrentNode } = require('./hostPreflight');
 const { executeOperation, readState, statePath, repositoryRoot } = require('./execution');
 
 const MODEL_RUNNER_IDENTITY = [
-  ['approvalPolicy', 'never'], ['codexVersion', '0.147.0-alpha.1.2'], ['contractVersion', 'model-runner-v3.6'],
+  ['approvalPolicy', 'never'], ['codexVersion', '0.147.0-alpha.6.5'], ['contractVersion', 'model-runner-v3.6'],
   ['gitVersion', '2.50.1 (Apple Git-155)'], ['hardIsolationClaims', ['external_user_read', 'authoritative_write', 'command_network']],
-  ['hostPinFixtureSha256', '3827556c3dbef5fdd342d1272845810ec0c9f57f7940200a1beff2bb22301049'],
-  ['hostPinVersion', 'model-runner-host-pins-v3.6'], ['journalVersion', 'model-runner-journal-v3.5'],
+  ['hostPinFixtureSha256', '504b71611ffea3f99fea5e65cdb00a0612de0d1bb3f4efdf295a1d479b9d6bcf'],
+  ['hostPinVersion', 'model-runner-host-pins-v3.7'], ['journalVersion', 'model-runner-journal-v3.5'],
   ['manifestVersion', 'loop-model-manifest-v3.5'], ['nodeVersion', 'v22.14.0'],
   ['permissionProfileVersion', 'model-runner-permissions-v3.5'], ['promptPolicyVersion', 'model-runner-prompt-v3.5'],
   ['requestProtocol', 'loop-model-v3.5'], ['resultProtocol', 'loop-model-result-v3.5'],
   ['routingVersion', 'model-runner-routing-v3.5'], ['sourceViewVersion', 'model-runner-source-view-v3.5'],
   ['stateNamespace', 'model-runner-v3'], ['trustedApplyVersion', 'model-runner-trusted-apply-v3.5'],
 ];
-const MODEL_RUNNER_IDENTITY_SHA256 = '2e49bba8f65750e1acce787116107cdba2cd5bf4b3feaa3abb1b0454bc8e4fa9';
+const MODEL_RUNNER_IDENTITY_SHA256 = '66a3b174236d908b902a5802ec9889669a3d8723ca29b53c14c89095c05d6778';
 
 assert(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)) === 884 && sha256(canonicalJson(MODEL_RUNNER_IDENTITY)) === MODEL_RUNNER_IDENTITY_SHA256, 12);
 

@@ -50,7 +50,7 @@ const gatePolicies = Object.freeze({
   architecture: { commands: [], count: 0, partition: null, review: true },
   'product-runtime-code-gate': {
     commands: [['product-runtime-track', 'protected://stockinsider-v3-gate-root/execute-track --track product_runtime']],
-    count: 249,
+    count: 260,
     partition: 'product_runtime',
     review: false,
   },
@@ -547,7 +547,7 @@ function run(subjectRoot, executable, args, environment, label) {
 
 function executeTrack(subjectRoot, track, identity, attestation) {
   const descriptor = track === 'product_runtime'
-    ? { check: 'product-runtime-code-gate', registeredCount: 249, name: 'product-runtime-track' }
+    ? { check: 'product-runtime-code-gate', registeredCount: 260, name: 'product-runtime-track' }
     : track === 'model_runner'
       ? { check: 'model-runner-code-gate', registeredCount: 28, name: 'model-runner-track' }
       : null;
@@ -613,7 +613,7 @@ function executeTrack(subjectRoot, track, identity, attestation) {
         'scripts/model-runner-v3/model-runner-v3.test.js'], 'test:model-runner-v3');
       verify(executeClosedCandidate, modelNodeExecutable, ['scripts/run-node22.js', '--experimental-strip-types',
         'scripts/opportunity-v3/doctor.mjs', '--expect-mode', 'disabled', '--require-host-pin',
-        'model-runner-host-pins-v3.6'], 'disabled model runner doctor');
+        'model-runner-host-pins-v3.7'], 'disabled model runner doctor');
       const oracle = trustedHostModelOracle(subjectRoot, attestation, modelNodeExecutable);
       outputs.push(oracle);
       measured.push({ ...measuredResult(oracle, 'trusted protected-base exact-subject model oracle'), ownsPartitionCount: false });

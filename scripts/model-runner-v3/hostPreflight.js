@@ -7,7 +7,7 @@ const { spawnSync } = require('node:child_process');
 const { assert, RunnerError } = require('./artifacts');
 const { canonicalJson, parseJsonWithNoDuplicateKeys, sha256 } = require('./canonicalJson');
 
-const PIN_FIXTURE_SHA256 = '3827556c3dbef5fdd342d1272845810ec0c9f57f7940200a1beff2bb22301049';
+const PIN_FIXTURE_SHA256 = '504b71611ffea3f99fea5e65cdb00a0612de0d1bb3f4efdf295a1d479b9d6bcf';
 const PIN_FIXTURE_BYTES = 2138;
 let stableAncestorIdentity = null;
 
@@ -27,7 +27,7 @@ function loadHostPins(filename) {
   } catch {
     throw new RunnerError(5);
   }
-  assert(canonicalJson(fixture) === raw && fixture.fixtureVersion === 'model-runner-host-pins-v3.6', 5);
+  assert(canonicalJson(fixture) === raw && fixture.fixtureVersion === 'model-runner-host-pins-v3.7', 5);
   assert(fixture.platform === 'darwin' && fixture.architecture === 'arm64' && Array.isArray(fixture.executables), 5);
   const node = fixture.executables.find((entry) => entry.name === 'node');
   assert(node && typeof node.path === 'string' && typeof node.realpath === 'string' && node.version === 'v22.14.0', 5);
