@@ -13,8 +13,8 @@ runs:
         # This action executes from the protected base before the detached subject is
         # prepared, so its runtime pin must not depend on a candidate-owned file.
         node-version: '22.14.0'
-        cache: npm
-        cache-dependency-path: package-lock.json
+        # The protected runner's finite shared volume must never turn a successful
+        # gate into a failed post-job cache upload. Each trace already runs npm ci.
     - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
       with:
         name: ${{ inputs.bootstrap-artifact-name }}
