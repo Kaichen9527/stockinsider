@@ -1,9 +1,9 @@
 # Fresh Requirements Gate Review — Round 105
 
-Subject commit: `9ec6c19e22ff09e9f43fbfec5ad04f3a14c4639f`  
-Subject tree: `6eaee4e1caba5056884281ffa1cc644c010c3de0`  
-Baseline: `1b714a4303c2a97ebb913dced8d9d607a4ac8951`  
-Reviewer: independent read-only `gpt-5.6-sol` / xhigh process  
+Subject commit: `9ec6c19e22ff09e9f43fbfec5ad04f3a14c4639f`
+Subject tree: `6eaee4e1caba5056884281ffa1cc644c010c3de0`
+Baseline: `1b714a4303c2a97ebb913dced8d9d607a4ac8951`
+Reviewer: independent read-only `gpt-5.6-sol` / xhigh process
 Verdict: `CHANGES_REQUIRED` (`P0=0`, `P1=8`, `P2=0`)
 
 Canonical inventory literals and the DI-008 parser → completion → persistence →

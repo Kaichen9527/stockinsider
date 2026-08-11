@@ -1,10 +1,10 @@
 # Fresh Requirements Gate Review — Round 119
 
-Subject commit: `f29b9d70d7d6230e09a8612ff50b6b743ee92995`  
-Subject tree: `d13edef2c4bdcba18e73cb951959e5cb78967506`  
-Baseline commit: `2314ee9f579645f1d579d8738e0115e6864a7afb`  
-Baseline tree: `aaee71c8aeef1a713b4f4e0f86055b41cc11af06`  
-Reviewer: independent read-only `gpt-5.6-sol` / xhigh process  
+Subject commit: `f29b9d70d7d6230e09a8612ff50b6b743ee92995`
+Subject tree: `d13edef2c4bdcba18e73cb951959e5cb78967506`
+Baseline commit: `2314ee9f579645f1d579d8738e0115e6864a7afb`
+Baseline tree: `aaee71c8aeef1a713b4f4e0f86055b41cc11af06`
+Reviewer: independent read-only `gpt-5.6-sol` / xhigh process
 Verdict: `CHANGES_REQUIRED` (`P0=0`, `P1=5`, `P2=0`)
 
 ## P1 findings
