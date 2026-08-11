@@ -9,10 +9,10 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `0b2090854246518903f4475076eb4719488857d3`
-- Requirements implementation commit: `9c10a9f445d5f39ee687c03376c7f08695560b6d`
-- Requirements evidence carrier: `88c302f3d7f1b60346bcfa5e8f9f553664235663`
-- Final repair-closure commit/tree: `88c302f3d7f1b60346bcfa5e8f9f553664235663` / `70293b69c09918c3e67004b03de93588198a2f3e`
-- Full reviewed implementation range: `0b2090854246518903f4475076eb4719488857d3..88c302f3d7f1b60346bcfa5e8f9f553664235663`
+- Requirements implementation commit: `6b97317c6ff76f3130e353015a29fd5ce4fb7091`
+- Requirements evidence carrier: `25f09a9dcd20b63bf0b46016589ad70f613f8244`
+- Final repair-closure commit/tree: `25f09a9dcd20b63bf0b46016589ad70f613f8244` / `e6e6ade6ca481e8943692957769760bc02015676`
+- Full reviewed implementation range: `0b2090854246518903f4475076eb4719488857d3..25f09a9dcd20b63bf0b46016589ad70f613f8244`
 - Active graph: `685211645ee93d2f792254036c5c39271791c7c8f7ac3beec7d3b85e85430393`
 - Canonical evidence: `architecture-review-round-18.md`
 
@@ -20,7 +20,10 @@ Findings: `P0=0 P1=0 P2=0`
 
 Round 18 independently returned PASS on the same active architecture graph. The
 new protected-base parent changes only the byte-identical closed host oracle and
-does not modify the reviewed architecture. The final implementation keeps one
+does not modify the reviewed architecture. The final test-process repair preserves
+the same executable migration owners while preventing repeated nested full-suite
+restarts, and therefore does not change a runtime, SQL, Web or data-flow boundary.
+The final implementation keeps one
 bounded acquisition-to-projection DAG, separates
 research ranking from the sole action envelope, and preserves checksum-valid
 last-good research whenever freshness or release compatibility disables action.
