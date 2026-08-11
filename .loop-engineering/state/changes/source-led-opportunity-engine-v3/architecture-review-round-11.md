@@ -9,10 +9,10 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `0b2090854246518903f4475076eb4719488857d3`
-- Requirements implementation commit: `dca0eda3ad4657808ce58bc9167e3e3ab6e929b2`
-- Requirements evidence carrier: `ecf35e31afbfc3a61ddec0171a7d06b9f5c6c693`
-- Final repair-closure commit/tree: `ecf35e31afbfc3a61ddec0171a7d06b9f5c6c693` / `4abdcaa6ec5d2e078b240293115c4bb54cdfbe74`
-- Full reviewed implementation range: `0b2090854246518903f4475076eb4719488857d3..ecf35e31afbfc3a61ddec0171a7d06b9f5c6c693`
+- Requirements implementation commit: `9c10a9f445d5f39ee687c03376c7f08695560b6d`
+- Requirements evidence carrier: `88c302f3d7f1b60346bcfa5e8f9f553664235663`
+- Final repair-closure commit/tree: `88c302f3d7f1b60346bcfa5e8f9f553664235663` / `70293b69c09918c3e67004b03de93588198a2f3e`
+- Full reviewed implementation range: `0b2090854246518903f4475076eb4719488857d3..88c302f3d7f1b60346bcfa5e8f9f553664235663`
 - Active graph: `685211645ee93d2f792254036c5c39271791c7c8f7ac3beec7d3b85e85430393`
 - Canonical evidence: `architecture-review-round-18.md`
 
