@@ -9,8 +9,8 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `0b2090854246518903f4475076eb4719488857d3`
-- Final repair-closure commit/tree: `9c10a9f445d5f39ee687c03376c7f08695560b6d` / `d80809c8c82e55e8718fa3b68151cc0876d4d978`
-- Full reviewed range: `0b2090854246518903f4475076eb4719488857d3..9c10a9f445d5f39ee687c03376c7f08695560b6d`
+- Final repair-closure commit/tree: `6b97317c6ff76f3130e353015a29fd5ce4fb7091` / `46216105bda02ca96783aa29cf9822f337bd1ae3`
+- Full reviewed range: `0b2090854246518903f4475076eb4719488857d3..6b97317c6ff76f3130e353015a29fd5ce4fb7091`
 - Active graph: `685211645ee93d2f792254036c5c39271791c7c8f7ac3beec7d3b85e85430393`
 - Canonical evidence: `requirements-review-round-137.md`
 - Acceptance inventory: `1.46.0`, 320 cases, partitioned as 272 product/runtime,
@@ -20,9 +20,12 @@ Findings: `P0=0 P1=0 P2=0`
 
 Round 137 independently returned PASS on this exact active requirements graph. The
 protected-base bootstrap changes only the closed host oracle and is byte-identical
-to the nine model-runner paths already reviewed in the implementation tree; the
-squashed implementation and the bounded completed-declaration meta-test repair
-therefore do not alter or relax the reviewed product contract. It closes
+to the nine model-runner paths already reviewed in the implementation tree. The
+bounded completed-declaration meta-test repair and the final migration-evidence
+process repair alter only test orchestration: the latter memoizes one complete
+51-case migration execution and scopes the V3.14 consumer to three independently
+executable migration owners. Neither change alters or relaxes the reviewed product
+contract. It closes
 official-data persistence, publication isolation, read-only
 compatibility, exact decision uniqueness and honest connector outcomes.
 
