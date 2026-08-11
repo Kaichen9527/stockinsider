@@ -1262,8 +1262,8 @@ const structuralExecutors = {
         '- [ ] Run fresh Requirements Round 137 over commit',
       ), status],
       ['pending-round declaration removed', tasks.replace(
-        '- [ ] Obtain independent fresh Architecture Round 18 PASS',
         '- [x] Obtain independent fresh Architecture Round 18 PASS',
+        '- [ ] Obtain independent fresh Architecture Round 18 PASS',
       ), status],
     ]) {
       assert.throws(
