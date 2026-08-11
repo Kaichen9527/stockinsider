@@ -8,9 +8,9 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `75e329471da257c2855d4de04d71e05a589e6c72`
-- Final repair-closure commit/tree: `c87ebc8faef2a15844cc15dc786005f4617e729c` / `0de7a9d4c51c4f9ba675e34edd43d9dbe403fbf7`
-- Full reviewed range: `75e329471da257c2855d4de04d71e05a589e6c72..c87ebc8faef2a15844cc15dc786005f4617e729c`
+- Protected implementation parent: `0b2090854246518903f4475076eb4719488857d3`
+- Final repair-closure commit/tree: `dca0eda3ad4657808ce58bc9167e3e3ab6e929b2` / `f041e27d56f3c8bdbca6d656e301ff38c8e34e1e`
+- Full reviewed range: `0b2090854246518903f4475076eb4719488857d3..dca0eda3ad4657808ce58bc9167e3e3ab6e929b2`
 - Active graph: `685211645ee93d2f792254036c5c39271791c7c8f7ac3beec7d3b85e85430393`
 - Canonical evidence: `requirements-review-round-137.md`
 - Acceptance inventory: `1.46.0`, 320 cases, partitioned as 272 product/runtime,
@@ -18,10 +18,12 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Closure
 
-Round 137 independently returned PASS on the same active requirements graph. The
-subsequent implementation and exact-review repairs do not alter that graph or relax
-its product contract. They close official-data persistence, publication isolation,
-read-only compatibility, exact decision uniqueness and honest connector outcomes.
+Round 137 independently returned PASS on this exact active requirements graph. The
+protected-base bootstrap changes only the closed host oracle and is byte-identical
+to the nine model-runner paths already reviewed in the implementation tree; the
+squashed implementation therefore does not alter or relax the reviewed product
+contract. It closes official-data persistence, publication isolation, read-only
+compatibility, exact decision uniqueness and honest connector outcomes.
 
 The final code subject passes typecheck, lint, production build, base 61/61,
 product/runtime 82/82, migration 51/51, legacy 2/2, Playwright 8/8, performance
