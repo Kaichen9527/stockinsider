@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {execFileSync} from 'node:child_process';
+import {execFileSync,spawnSync} from 'node:child_process';
 import { createRequire } from 'node:module';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -11,12 +11,22 @@ const require = createRequire(import.meta.url);
 const runtime = (name) => require(path.join(root, 'scripts/runtime', name));
 function independentEnvironment(){const environment={...process.env,OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD:'false'};
   delete environment.NODE_TEST_CONTEXT;return environment;}
-let migrationEvidenceOutput=null;
+let migrationEvidenceResult=null;
+const MIGRATION_EVIDENCE_PATTERN=[
+  'migration applies twice and exposes the exact granted/private function boundary',
+  'V3[.]14 official chunks persist under the exact lease, replay idempotently, and complete before DB reread',
+  'V3[.]13 database derives successful-empty, missing, auth and provider terminals from 51 connector attempts',
+].join('|');
 function appliedV314MigrationEvidence(){
-  migrationEvidenceOutput??=execFileSync(process.execPath,[path.join(root,'scripts/run-node22.js'),
-    '--experimental-strip-types','--test',path.join(root,'scripts/opportunity-v3/migration-contract.test.mjs')],{
+  migrationEvidenceResult??=spawnSync(process.execPath,[path.join(root,'scripts/run-node22.js'),
+    '--experimental-strip-types','--test',`--test-name-pattern=${MIGRATION_EVIDENCE_PATTERN}`,
+    path.join(root,'scripts/opportunity-v3/migration-contract.test.mjs')],{
     cwd:root,encoding:'utf8',env:independentEnvironment(),timeout:240000,maxBuffer:32*1024*1024});
-  return migrationEvidenceOutput;
+  const diagnostic=`${migrationEvidenceResult.stdout??''}\n${migrationEvidenceResult.stderr??''}`.slice(-12000);
+  assert.equal(migrationEvidenceResult.error,undefined,`migration evidence process error\n${diagnostic}`);
+  assert.equal(migrationEvidenceResult.signal,null,`migration evidence process signal\n${diagnostic}`);
+  assert.equal(migrationEvidenceResult.status,0,`migration evidence process exit\n${diagnostic}`);
+  return migrationEvidenceResult.stdout;
 }
 let browserEvidenceOutput=null;
 function v314BrowserEvidence(){
@@ -360,6 +370,7 @@ test('V314-009 official calendar and backfill coverage remain typed and non-synt
     evaluatedAt:'2026-08-11T00:00:00Z'}),/official calendar/u);
   const applied=appliedV314MigrationEvidence();
   assert.match(applied,/V3\.14 official chunks persist under the exact lease, replay idempotently, and complete before DB reread/u);
+  assert.match(applied,/# pass 3/u);
   assert.match(applied,/# fail 0/u);
 });
 
@@ -498,6 +509,7 @@ test('V314-011 every approved profile/provider has one honest terminal outcome',
   assert.ok(acquired.itemOutcomes.some((row)=>row.acquisitionDisposition==='metadata_only'));
   const applied=appliedV314MigrationEvidence();
   assert.match(applied,/V3\.13 database derives successful-empty, missing, auth and provider terminals from 51 connector attempts/u);
+  assert.match(applied,/# pass 3/u);
   assert.match(applied,/# fail 0/u);
 });
 
@@ -511,6 +523,7 @@ test('V314-012 migration persists redacted diagnostics append-only with recorded
   const applied=appliedV314MigrationEvidence();
   assert.match(applied,/migration applies twice and exposes the exact granted\/private function boundary/u);
   assert.match(applied,/V3\.14 official chunks persist under the exact lease, replay idempotently, and complete before DB reread/u);
+  assert.match(applied,/# pass 3/u);
   assert.match(applied,/# fail 0/u);
   assert.match(applied,/# skipped 0/u);
 });

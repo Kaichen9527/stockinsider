@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
+import { execFileSync,spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import fs, { readFileSync } from 'node:fs';
 import os from 'node:os';
@@ -18,13 +18,17 @@ function independentTestEnvironment(){
   delete environment.NODE_TEST_CONTEXT;
   return environment;
 }
-let migrationContractOutput;
+let migrationContractResult;
 function appliedMigrationContract(){
-  migrationContractOutput??=execFileSync(process.execPath,[path.join(root,'scripts/run-node22.js'),
+  migrationContractResult??=spawnSync(process.execPath,[path.join(root,'scripts/run-node22.js'),
     '--experimental-strip-types','--test',path.join(root,'scripts/opportunity-v3/migration-contract.test.mjs')],{
-    cwd:root,encoding:'utf8',env:independentTestEnvironment(),timeout:180000,
+    cwd:root,encoding:'utf8',env:independentTestEnvironment(),timeout:420000,maxBuffer:32*1024*1024,
   });
-  return migrationContractOutput;
+  const diagnostic=`${migrationContractResult.stdout??''}\n${migrationContractResult.stderr??''}`.slice(-12000);
+  assert.equal(migrationContractResult.error,undefined,`migration evidence process error\n${diagnostic}`);
+  assert.equal(migrationContractResult.signal,null,`migration evidence process signal\n${diagnostic}`);
+  assert.equal(migrationContractResult.status,0,`migration evidence process exit\n${diagnostic}`);
+  return migrationContractResult.stdout;
 }
 
 const FLOW_FACTS=new Set(['quarterly_revenue','quarterly_gross_profit','quarterly_operating_expense',
