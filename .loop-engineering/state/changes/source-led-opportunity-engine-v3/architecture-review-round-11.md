@@ -8,18 +8,20 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `75e329471da257c2855d4de04d71e05a589e6c72`
-- Requirements implementation commit: `c87ebc8faef2a15844cc15dc786005f4617e729c`
-- Requirements evidence carrier: `b2564611ec58de9c345a4980b673a315a74d1a6f`
-- Final repair-closure commit/tree: `b2564611ec58de9c345a4980b673a315a74d1a6f` / `dde36dcc07fe7c9aa125aecc95f1bed822ecf291`
-- Full reviewed implementation range: `75e329471da257c2855d4de04d71e05a589e6c72..b2564611ec58de9c345a4980b673a315a74d1a6f`
+- Protected implementation parent: `0b2090854246518903f4475076eb4719488857d3`
+- Requirements implementation commit: `dca0eda3ad4657808ce58bc9167e3e3ab6e929b2`
+- Requirements evidence carrier: `ecf35e31afbfc3a61ddec0171a7d06b9f5c6c693`
+- Final repair-closure commit/tree: `ecf35e31afbfc3a61ddec0171a7d06b9f5c6c693` / `4abdcaa6ec5d2e078b240293115c4bb54cdfbe74`
+- Full reviewed implementation range: `0b2090854246518903f4475076eb4719488857d3..ecf35e31afbfc3a61ddec0171a7d06b9f5c6c693`
 - Active graph: `685211645ee93d2f792254036c5c39271791c7c8f7ac3beec7d3b85e85430393`
 - Canonical evidence: `architecture-review-round-18.md`
 
 ## Architecture closure
 
 Round 18 independently returned PASS on the same active architecture graph. The
-final implementation keeps one bounded acquisition-to-projection DAG, separates
+new protected-base parent changes only the byte-identical closed host oracle and
+does not modify the reviewed architecture. The final implementation keeps one
+bounded acquisition-to-projection DAG, separates
 research ranking from the sole action envelope, and preserves checksum-valid
 last-good research whenever freshness or release compatibility disables action.
 
