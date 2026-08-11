@@ -6244,8 +6244,9 @@ test('V3.13 projection guard serializes every writer, rejects non-monotonic time
           AND trigger.tgname IN('legacy_radar_projection_insert_guard_v3_13','legacy_radar_projection_retention_v3_13')))::text;
     ROLLBACK;
   `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
-  assert.deepEqual(result,{rows:1500,oldest:'2026-01-01T08:00:02+08:00',
-    newest:'2026-01-01T08:25:01+08:00',guards:2});
+  assert.deepEqual({rows:result.rows,guards:result.guards},{rows:1500,guards:2});
+  assert.equal(new Date(result.oldest).toISOString(),'2026-01-01T00:00:02.000Z');
+  assert.equal(new Date(result.newest).toISOString(),'2026-01-01T00:25:01.000Z');
 });
 
 test('V3.13 financial fact append authority rejects future reported periods and the 129th distinct series row',()=>{
