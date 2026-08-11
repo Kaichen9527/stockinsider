@@ -9,8 +9,8 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `0b2090854246518903f4475076eb4719488857d3`
-- Final repair-closure commit/tree: `dca0eda3ad4657808ce58bc9167e3e3ab6e929b2` / `f041e27d56f3c8bdbca6d656e301ff38c8e34e1e`
-- Full reviewed range: `0b2090854246518903f4475076eb4719488857d3..dca0eda3ad4657808ce58bc9167e3e3ab6e929b2`
+- Final repair-closure commit/tree: `9c10a9f445d5f39ee687c03376c7f08695560b6d` / `d80809c8c82e55e8718fa3b68151cc0876d4d978`
+- Full reviewed range: `0b2090854246518903f4475076eb4719488857d3..9c10a9f445d5f39ee687c03376c7f08695560b6d`
 - Active graph: `685211645ee93d2f792254036c5c39271791c7c8f7ac3beec7d3b85e85430393`
 - Canonical evidence: `requirements-review-round-137.md`
 - Acceptance inventory: `1.46.0`, 320 cases, partitioned as 272 product/runtime,
@@ -21,8 +21,9 @@ Findings: `P0=0 P1=0 P2=0`
 Round 137 independently returned PASS on this exact active requirements graph. The
 protected-base bootstrap changes only the closed host oracle and is byte-identical
 to the nine model-runner paths already reviewed in the implementation tree; the
-squashed implementation therefore does not alter or relax the reviewed product
-contract. It closes official-data persistence, publication isolation, read-only
+squashed implementation and the bounded completed-declaration meta-test repair
+therefore do not alter or relax the reviewed product contract. It closes
+official-data persistence, publication isolation, read-only
 compatibility, exact decision uniqueness and honest connector outcomes.
 
 The final code subject passes typecheck, lint, production build, base 61/61,
