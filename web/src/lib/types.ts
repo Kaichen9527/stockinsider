@@ -904,6 +904,62 @@ type ResearchDecisionChangeReasonV311 =
   | 'risk_changed'
   | 'factor_correctness_changed';
 
+export interface DecisionEnvelopeV313 {
+  version: 'decision-envelope-v3.13.0' | 'decision-envelope-v3.14.0';
+  decisionRevisionId: string;
+  recommendationAuthority: 'formal' | 'conditional_research' | 'none';
+  valuationReadiness: 'complete' | 'relative_only' | 'missing' | 'stale' | 'conflict';
+  userAction: 'buy' | 'accumulate' | 'research_starter' | 'wait_value' | 'wait_market' | 'wait_breakout' | 'wait_reclaim' | 'avoid_chase' | 'avoid' | 'unavailable';
+  reason: string | null;
+  whyNow: string;
+  valuationSummary: {
+    kind: 'formal_range' | 'relative_reference_band' | 'unavailable';
+    currentPrice: number | null;
+    formalRange: { bear: number; base: number; bull: number } | null;
+    relativeBand: { low: number; base: number; high: number } | null;
+    baseUpsidePct: number | null;
+    relativeDiscountPct: number | null;
+    method: string | null;
+    asOf: string | null;
+    sourceRefs: string[];
+    thresholdAuthority: { kind:'formal';baseTargetRaw:number }
+      | { kind:'relative';currentMultiple:number;referenceMultiple:number;historySessions:252;sectorPeers:number;
+          algorithm:'official-relative-pe-evidence-v1';evidenceRoot:string;currentObservationRoot:string;
+          historyMembershipRoot:string;sectorMembershipRoot:string }
+      | null;
+    blockers: string[];
+  };
+  entryPlan:
+    | { technicalState:'at_support'|'breakout_confirmed';trigger:null;entryZone:[number,number];invalidation:number;rewardRisk:number|null }
+    | { technicalState:'breakout_pending';trigger:{kind:'breakout';threshold:number;volumeRatioMinimum?:number|null};entryZone:[number,number];invalidation:number;rewardRisk:number|null }
+    | { technicalState:'below_support'|'reclaim_required';trigger:{kind:'reclaim';threshold:number;volumeRatioMinimum?:number|null};entryZone:null;invalidation:null;rewardRisk:null }
+    | { technicalState:'extended';trigger:{kind:'pullback';threshold:number;volumeRatioMinimum?:number|null};entryZone:null;invalidation:null;rewardRisk:null }
+    | { technicalState:'invalidated';trigger:null;entryZone:null;invalidation:null;rewardRisk:null }
+    | null;
+  blockers: string[];
+  nextUnlock?: { kind:'max_entry';price:number;requiredMarginPct:number;requiredRewardRisk:number } | null;
+  thresholdAuthority?: {marketRegime:'risk_on'|'selective_or_defensive';requiredMarginPct:15|20;
+    requiredRewardRisk:2|2.5;actualMarginPct:number;actualRewardRisk:number;evidenceRoot:string} | null;
+  evaluatedAt: string | null;
+}
+
+type ReportedPeUnavailableReasonV313 = 'authority_conflict' | 'non_positive_reported_pe'
+  | 'insufficient_own_history' | 'sector_reference_insufficient' | 'missing_official_pe'
+  | 'missing_shares_outstanding' | 'calendar_authority_mismatch' | 'manifest_missing'
+  | 'manifest_hash_mismatch';
+type ReportedPeCurrentV313 =
+  | { status:'available';reason:null;value:number;asOf:string;sourceRef:string;manifestRef:string }
+  | { status:'unavailable';reason:ReportedPeUnavailableReasonV313;value:null;asOf:null;sourceRef:null;manifestRef:string|null };
+type ReportedPeOwnHistoryV313 =
+  | { status:'available';reason:null;count:number;p10:number;p25:number;p50:number;p75:number;p90:number;currentPercentile:number;asOf:string;manifestRef:string }
+  | { status:'unavailable';reason:ReportedPeUnavailableReasonV313;count:number;p10:null;p25:null;p50:null;p75:null;p90:null;currentPercentile:null;asOf:null;manifestRef:string|null };
+type ReportedPeSectorV313 =
+  | { status:'available';reason:null;count:number;p25:number;p50:number;p75:number;capWeightedAggregate:number;asOf:string;manifestRef:string }
+  | { status:'unavailable';reason:ReportedPeUnavailableReasonV313;count:number;p25:null;p50:null;p75:null;capWeightedAggregate:null;asOf:null;manifestRef:string|null };
+type RelativeMultipleV313 = { exchangeReportedPe:ReportedPeCurrentV313;ownHistory:ReportedPeOwnHistoryV313;
+  sector:ReportedPeSectorV313;modelComparablePe:null|{ value:number;method:'pe'|'normalized_pe';asOf:string;sourceRefs:string[];reason:null }
+    | { value:null;method:null;asOf:null;sourceRefs:[];reason:'negative_eps'|'method_not_pe'|'valuation_review' } };
+
 export interface AvailableResearchDecisionV311 {
   version: 'legacy-research-decision-v3.11.0';
   availability: 'available';
@@ -911,6 +967,8 @@ export interface AvailableResearchDecisionV311 {
   name?: string;
   researchMaturity: 'source_signal' | 'fundamental_review' | 'decision_ready';
   newPositionAction: 'avoid' | 'valuation_review' | 'wait_trigger' | 'event_starter' | 'starter_now';
+  decisionEnvelope: DecisionEnvelopeV313;
+  decisionRevisionId: string;
   fundamental: {
     thesis: string;
     latestChange: string;
@@ -939,9 +997,8 @@ export interface AvailableResearchDecisionV311 {
     status: 'normal' | 'valuation_review';
     targetPrice?: number | null;
     valuationRange?: { bear: number; base: number; bull: number } | null;
-    relativeMultiple?: { current: number; reference: number; ratio: number } | { availability: 'unavailable'; reason: string } | null;
-    exchangeReportedPe?: { availability: 'available'; current?: number; value?: number; ownReference?: { p50?: number; percentile?: number }; sectorReference?: { capWeighted?: number; count?: number } }
-      | { availability: 'unavailable'; reason: string } | null;
+    relativeMultiple?: RelativeMultipleV313 | null;
+    exchangeReportedPe?: ReportedPeCurrentV313 | null;
     modelComparablePe?: { availability?: 'available'; value: number; method: 'pe' | 'normalized_pe'; asOf?: string; sourceRefs?: string[] }
       | { value: null; reason: string } | null;
   };
@@ -986,6 +1043,7 @@ export interface RecommendationCard {
   recommendationId: string;
   symbol: string;
   name: string;
+  projectionReadOnly?: boolean;
   market: 'TW' | 'US';
   currentPrice?: number | null;
   priceAsOf?: string | null;
@@ -1440,12 +1498,24 @@ export interface SourceSignalCard {
   symbol: string;
   chineseName: string | null;
   researchMaturity: 'source_signal';
-  newPositionAction: 'valuation_review';
+  newPositionAction: 'avoid' | 'valuation_review' | 'wait_trigger' | 'event_starter' | 'starter_now';
+  decisionEnvelope: DecisionEnvelopeV313;
+  decisionRevisionId: string;
+  researchRanking?: { version:'research-ranking-envelope-v3.14.0';rankingScore:number;coverage:number;
+    missingAxes:string[];axes:Record<string,number|null> } | null;
+  proximityToAction?: boolean;
+  nextUnlock?: { kind:'max_entry';price:number;requiredMarginPct:number;requiredRewardRisk:number } | null;
+  decisionBrief?: { thesis: [string,string,string] | string[]; risks: [string,string,string] | string[];
+    evidence: Array<{ point: 'thesis:0'|'thesis:1'|'thesis:2'|'risk:0'|'risk:1'|'risk:2'; refs: string[] }> }
+    | { availability:'unavailable'; reason:'insufficient_cited_decision_brief' } | null;
+  projectionReadOnly?: true;
+  lastKnownAction?: DecisionEnvelopeV313['userAction'];
+  detailHref?: string;
   discoveredAt: string;
   sourceClass: string;
   sourceSummary: string;
   evidenceRefs: string[];
-  valuationStatus: 'pending';
+  valuationStatus: 'complete' | 'relative_only' | 'missing' | 'stale' | 'conflict' | 'pending';
   technicalState: string;
   changedBecause: string;
   opportunityAction?: 'setup_ready' | 'wait_breakout' | 'wait_reclaim' | 'avoid_chase' | 'evidence_watch' | 'avoid';
@@ -1479,6 +1549,10 @@ export interface SourceSignalCard {
   historyPeMin?: number | null;
   historyPeMax?: number | null;
   historyPeSampleCount?: number;
+  provisionalRelativeValue?: {
+    kind:'provisional_relative_value';sampleCount:number;asOf:string;
+    referenceBand:{low:number;base:number;high:number};evidenceRoot:string;sourceRefs:string[];
+  } | null;
   ownPeDiscountPct?: number | null;
   sectorPeDiscountPct?: number | null;
   valuationAsOf?: string | null;
@@ -1486,6 +1560,23 @@ export interface SourceSignalCard {
   valuationExchange?: 'TWSE' | 'TPEx' | null;
   historyPeSessions?: string[];
   researchDecision?: RecommendationCard['researchDecision'];
+  sourceProvenance: {
+    sourceKey: string | null;
+    sourceName: string | null;
+    sourceUrl: string | null;
+    kolIdentity: string | null;
+    publishedAt: string | null;
+    collectedAt: string | null;
+    evaluatedAt: string | null;
+  };
+  sourceProvenances?: Array<{
+    ref: string; sourceKey: string | null; sourceName: string | null; sourceUrl: string;
+    kolIdentity: string | null; publishedAt: string | null; collectedAt: string | null; evaluatedAt: string | null;
+  }>;
+  citations?: Array<{
+    ref: string; sourceKey: string | null; sourceName: string | null; sourceUrl: string;
+    kolIdentity: string | null; publishedAt: string | null; collectedAt: string | null; evaluatedAt: string | null;
+  }>;
 }
 
 export interface DiscoveryDeltaV311 {
@@ -1497,8 +1588,30 @@ export interface DiscoveryDeltaV311 {
 
 export interface RadarDailyPayload {
   asOf: string;
+  sourceLedCorrectness?: {
+    schema: 'legacy-radar-v3.11.3'|'legacy-radar-v3.12.0'|'legacy-radar-v3.13.0'|'legacy-radar-v3.14.0';
+    window: 'daily'|'hot'|'weekly'|'home';
+    asOf: string;
+  };
   loadStatus?: 'ok' | 'degraded' | 'unavailable';
   loadWarnings?: string[];
+  projectionHealth?: {
+    status: 'fresh' | 'stale_readonly' | 'unavailable';
+    integrityStatus?: 'valid' | 'conflict' | 'missing';
+    freshnessStatus?: 'fresh' | 'stale_readonly' | 'unavailable';
+    researchVisibility?: 'live' | 'last_good_readonly' | 'none';
+    actionAuthority?: 'enabled' | 'disabled';
+    reason: string;
+    missedExpectedRuns: number;
+    contentAsOf: string | null;
+    evaluatedAt: string | null;
+    publishedAt: string | null;
+    nextExpectedAt: string | null;
+    calendarAuthority: 'tw_trading_sessions_v3';
+    actionsEnabled: boolean;
+  };
+  sourceAcquisitionHealth?: unknown;
+  releaseIdentity?: { schema:string;producerCommitSha:string|null };
   degradedSources?: string[];
   lastUpdatedAt?: string | null;
   evidenceAgeHours?: number | null;

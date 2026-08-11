@@ -1554,7 +1554,7 @@ function projectionBundle(tuple: unknown[], context?: WorkerExecutionContextV3) 
     }));
     const detail = {
       contractVersion: 'opportunity-detail-v3.3',
-      acceptanceVersion: '1.44.6',
+      acceptanceVersion: '1.46.0',
       mode: 'shadow',
       decisionAuthority: 'research_only',
       runId: context.runId,
@@ -1820,7 +1820,7 @@ function projectionBundle(tuple: unknown[], context?: WorkerExecutionContextV3) 
     engineHealth: {
       status: warnings.length > 1 ? 'degraded' : 'ok',
       sourceCutoff: market.asOf,
-      acceptanceVersion: '1.44.6',
+      acceptanceVersion: '1.46.0',
       modelInfluence: 'none',
       assistiveArtifacts: [],
       warnings,

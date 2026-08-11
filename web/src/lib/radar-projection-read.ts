@@ -2,6 +2,7 @@ import {
   compactRadarEtag,
   legacyCorrectnessProjectionEnabled,
   loadCompactRadarProjection,
+  loadCompactRadarDecisionRevision,
   RadarProjectionUnavailableError,
   type CompactRadarProjection,
 } from './opportunity-v3/compact-radar-read';
@@ -16,6 +17,10 @@ export function loadPublishedRadarProjection(
   window: CompactRadarProjection['sourceLedCorrectness']['window'],
 ): Promise<CompactRadarProjection | null> {
   return loadCompactRadarProjection(window);
+}
+
+export function loadPublishedDecisionRevision(symbol: string, decisionRevisionId: string): Promise<CompactRadarProjection | null> {
+  return loadCompactRadarDecisionRevision(symbol, decisionRevisionId);
 }
 
 export { compactRadarEtag, legacyCorrectnessProjectionEnabled, RadarProjectionUnavailableError };

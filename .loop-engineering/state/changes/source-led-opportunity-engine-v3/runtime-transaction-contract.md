@@ -122,7 +122,7 @@ This section is the sole byte authority for `comparisonContractKey`, `preparatio
 
 ```text
 [
- ["acceptanceVersion","1.44.6"],
+ ["acceptanceVersion","1.46.0"],
  ["analysisRevisionContractVersion","stock-analysis-revision-v3.11.2"],
  ["authoritySupersessionContractVersion","authority-supersession-v3.2"],
  ["controlPlaneContractVersion","opportunity-control-v3.3"],
@@ -144,7 +144,7 @@ This section is the sole byte authority for `comparisonContractKey`, `preparatio
  ["marketContextContractVersion","market-context-v3.6"],
  ["moverAuditPriceContractVersion","mover-audit-price-v3.3"],
  ["portfolioContextContractVersion","research-basket-v3.0"],
- ["postgresTypeContractVersion","opportunity-postgres-types-v3.21"],
+ ["postgresTypeContractVersion","opportunity-postgres-types-v3.22"],
  ["priceProviderAllowlistHash",priceProviderAllowlistHash],
  ["providerFieldAllowlistHash",providerFieldAllowlistHash],
  ["publisherVerificationPolicyHash",publisherVerificationPolicyHash],
@@ -158,7 +158,7 @@ This section is the sole byte authority for `comparisonContractKey`, `preparatio
  ["sourceDatasetContractVersion","source-dataset-v3.3"],
  ["sourceFunnelContractVersion","source-funnel-v3.0"],
  ["sourceFunnelPolicyHash",sourceFunnelPolicyHash],
- ["storageContractVersion","opportunity-storage-v3.24"],
+ ["storageContractVersion","opportunity-storage-v3.25"],
  ["taxonomyMapHash",taxonomyMapHash],
  ["technicalDecisionContractVersion","opportunity-technical-decision-v3.11.1"],
  ["tradingCalendarContractVersion","tw-trading-calendar-v3.4"],
@@ -166,7 +166,7 @@ This section is the sole byte authority for `comparisonContractKey`, `preparatio
 ]
 ```
 
-The resolved 41-member comparison preimage is exactly 2,729 UTF-8 bytes and has SHA-256 `ebaa6dbdaa7dd55bb261187008f51e930919e7c0cfe07732d531e01267e67c41`. Its active RFC 8785 owner values are `priceProviderAllowlistHash=48fa54ee9f0e3a0b888ac0dc17eda8ad5bb746106a6fe4395eb50a5865e4e44e`, `providerFieldAllowlistHash=fe78e0f8c5b0846f822f72c6b2356cac35ed5c00dd0bcd06f9a75b7c5b21d3f7`, `publisherVerificationPolicyHash=2c4746cb02d98d402ecd1d0d980c91632b8105ab9fd2aec198e7789da603abba`, `sourceAdapterRegistryHash=a14d4753f221a43fb0422710e705ee00f529d9f31653a142211fe94596da80fe`, `sourceFunnelPolicyHash=6893fb5f265edc10eea8222a560f9afdcc4342f72b1d7d39d5723ec0056bc105` and `taxonomyMapHash=6b28d85903d7a410eef29386de011c71aa789dc0ce3231df38cb4e085181060c`. This is the static identity before purpose-owned input-manifest and calendar bindings; any member omission, reordering, null or factor-correctness version mutation is rejected or produces a different identity.
+The resolved 41-member comparison preimage is exactly 2,729 UTF-8 bytes and has SHA-256 `c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729`. Its active RFC 8785 owner values are `priceProviderAllowlistHash=48fa54ee9f0e3a0b888ac0dc17eda8ad5bb746106a6fe4395eb50a5865e4e44e`, `providerFieldAllowlistHash=fe78e0f8c5b0846f822f72c6b2356cac35ed5c00dd0bcd06f9a75b7c5b21d3f7`, `publisherVerificationPolicyHash=2c4746cb02d98d402ecd1d0d980c91632b8105ab9fd2aec198e7789da603abba`, `sourceAdapterRegistryHash=a14d4753f221a43fb0422710e705ee00f529d9f31653a142211fe94596da80fe`, `sourceFunnelPolicyHash=6893fb5f265edc10eea8222a560f9afdcc4342f72b1d7d39d5723ec0056bc105` and `taxonomyMapHash=6b28d85903d7a410eef29386de011c71aa789dc0ce3231df38cb4e085181060c`. This is the static identity before purpose-owned input-manifest and calendar bindings; any member omission, reordering, null or factor-correctness version mutation is rejected or produces a different identity.
 
 The comparison preimage is exactly:
 

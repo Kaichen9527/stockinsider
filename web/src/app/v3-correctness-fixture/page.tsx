@@ -1,14 +1,32 @@
 import { notFound } from 'next/navigation';
 import { RadarTabs, StockCard } from '@/app/components/RadarTabs';
-import type { RadarDailyPayload, RecommendationCard, ResearchDecisionV311 } from '@/lib/types';
+import type { AvailableResearchDecisionV311, DecisionEnvelopeV313, RadarDailyPayload, RecommendationCard, ResearchDecisionV311 } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
-const baseDecision: ResearchDecisionV311 = {
+const fixtureEnvelope: DecisionEnvelopeV313 = {
+  version:'decision-envelope-v3.13.0',decisionRevisionId:`decision-v3.13:${'a'.repeat(64)}`,
+  recommendationAuthority:'formal',valuationReadiness:'complete',userAction:'wait_breakout',reason:'fixture_wait',
+  whyNow:'受控 UI fixture 等待突破。',valuationSummary:{kind:'formal_range',currentPrice:100,
+    formalRange:{bear:90,base:120,bull:140},relativeBand:null,baseUpsidePct:20,relativeDiscountPct:null,
+    method:'fixture',asOf:'2026-08-01T00:00:00Z',sourceRefs:['fixture-official'],
+    thresholdAuthority:{kind:'formal',baseTargetRaw:120},blockers:[]},
+  entryPlan:{technicalState:'breakout_pending',trigger:{kind:'breakout',threshold:102},entryZone:[102,104],
+    invalidation:92,rewardRisk:1.55},blockers:[],evaluatedAt:'2026-08-01T00:00:00Z',
+};
+
+const availableReportedPe = { status:'available' as const,reason:null,value:12.8,
+  asOf:'2026-08-01T00:00:00Z',sourceRef:'fixture-official',manifestRef:'reported-pe-reference:fixture' };
+const unavailableReportedPe = (reason:'authority_conflict'|'missing_official_pe') => ({ status:'unavailable' as const,
+  reason,value:null,asOf:null,sourceRef:null,manifestRef:null });
+
+const baseDecision: AvailableResearchDecisionV311 = {
   version: 'legacy-research-decision-v3.11.0',
   availability: 'available',
   researchMaturity: 'decision_ready',
   newPositionAction: 'wait_trigger',
+  decisionEnvelope: fixtureEnvelope,
+  decisionRevisionId: fixtureEnvelope.decisionRevisionId,
   fundamental: {
     thesis: '測試用基本面研究主張',
     latestChange: '測試用最近變化',
@@ -27,7 +45,7 @@ const baseDecision: ResearchDecisionV311 = {
   },
   valuation: {
     status: 'normal',
-    exchangeReportedPe: { availability: 'available', current: 12.8, ownReference: { p50: 16.2, percentile: 23 }, sectorReference: { capWeighted: 18.4, count: 14 } },
+    exchangeReportedPe: availableReportedPe,
     modelComparablePe: { availability: 'available', value: 13.4, method: 'normalized_pe', asOf: '2026-08-01T00:00:00Z', sourceRefs: ['fixture-official'] },
   },
   factorAxes: { availability: 'available', axes: { discovery: 77, quality: 72, valuation: 81, timingRisk: 55 } },
@@ -101,9 +119,9 @@ const incompleteAvoidCard = card('fixture-incomplete-avoid', '9008', {
 });
 
 const cards = [
-  card('fixture-discovery', '9001', { ...baseDecision, researchMaturity: 'source_signal', newPositionAction: 'valuation_review', valuation: { status: 'valuation_review', exchangeReportedPe: { availability: 'unavailable', reason: 'official_pe_unavailable' }, modelComparablePe: { value: null, reason: 'valuation_review' } } },
+  card('fixture-discovery', '9001', { ...baseDecision, researchMaturity: 'source_signal', newPositionAction: 'valuation_review', valuation: { status: 'valuation_review', exchangeReportedPe: unavailableReportedPe('missing_official_pe'), modelComparablePe: { value: null, reason: 'valuation_review' } } },
     { recommendationBucket: 'high_conviction', displayBucket: 'formal', targetPrice: 180, expectedUpsidePct: 50, cardPrimaryUpsidePct: 50, recommendationIndex: 92 }),
-  card('fixture-valuation', '9002', { ...baseDecision, newPositionAction: 'valuation_review', valuation: { status: 'valuation_review', exchangeReportedPe: { availability: 'unavailable', reason: 'authority_conflict' }, modelComparablePe: { value: null, reason: 'method_divergence' } } }),
+  card('fixture-valuation', '9002', { ...baseDecision, newPositionAction: 'valuation_review', valuation: { status: 'valuation_review', exchangeReportedPe: unavailableReportedPe('authority_conflict'), modelComparablePe: { value: null, reason: 'method_divergence' } } }),
   card('fixture-reclaim', '9003', { ...baseDecision, technical: { ...baseDecision.technical, state: 'reclaim_required', trigger: { kind: 'reclaim', threshold: 102, volumeRatioMinimum: 1.3 }, entryZone: { kind: 'trigger_zone', lower: 102, upper: 104 }, invalidation: { stop: 96, thesisLevel: 97 } } }),
   card('fixture-unavailable', '9004', { ...baseDecision, newPositionAction: 'wait_trigger', technical: { availability: 'unavailable', state: null, bias: { availability: 'unavailable', reason: 'insufficient_adjusted_history' } }, factorAxes: { availability: 'unavailable', reason: 'factor_inputs_unavailable' } }),
   card('fixture-no-change', '9005', baseDecision),

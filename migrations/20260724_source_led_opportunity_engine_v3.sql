@@ -450,6 +450,11 @@ CREATE TABLE IF NOT EXISTS opportunity_financial_facts_v3 (
     AND collected_at <= recorded_at
   ),
   CHECK (
+    estimate_kind<>'reported'
+    OR (period_end <= (filing_published_at AT TIME ZONE 'Asia/Taipei')::date
+      AND period_end <= (source_timestamp AT TIME ZONE 'Asia/Taipei')::date)
+  ),
+  CHECK (
     (estimate_kind='reported' AND estimate_horizon='reported_period'
       AND fact_key<>'broker_target_price')
     OR
@@ -1624,7 +1629,7 @@ CREATE TABLE IF NOT EXISTS opportunity_link_audit_labels (
 CREATE TABLE IF NOT EXISTS opportunity_public_projections_v3 (
   run_id uuid PRIMARY KEY REFERENCES opportunity_runs(run_id) ON DELETE RESTRICT,
   contract_version text NOT NULL CHECK (contract_version = 'source-led-opportunity-v3.6'),
-  acceptance_version text NOT NULL CHECK (acceptance_version = '1.44.6'),
+  acceptance_version text NOT NULL CHECK (acceptance_version = '1.46.0'),
   payload_canonical bytea NOT NULL CHECK (octet_length(payload_canonical) <= 3145728),
   payload_json jsonb NOT NULL,
   payload_hash text NOT NULL CHECK (payload_hash ~ '^[0-9a-f]{64}$'),
@@ -1670,7 +1675,7 @@ matching AS MATERIALIZED (
   SELECT *
   FROM created
   WHERE run_purpose='production_shadow_daily'
-    AND comparison_contract_key='ebaa6dbdaa7dd55bb261187008f51e930919e7c0cfe07732d531e01267e67c41'
+    AND comparison_contract_key='c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729'
 ),
 successes AS MATERIALIZED (
   SELECT matching.*
@@ -12440,6 +12445,9 @@ LANGUAGE plpgsql SECURITY DEFINER SET search_path = ''
 AS $fn$
 DECLARE
   v_now timestamptz := clock_timestamp(); v_authority public.source_identity_authorities_v3%ROWTYPE;
+  v_authority_cutoff timestamptz := v_now;
+  v_supplied_authority public.source_identity_authorities_v3%ROWTYPE;
+  v_latest_recorded_at timestamptz; v_semantic_count integer;
   v_family text; v_revision uuid := extensions.gen_random_uuid(); v_registered_count bigint;
   v_existing uuid; v_existing_recorded timestamptz; v_field jsonb; v_segment jsonb;
   v_field_text text; v_field_key text; v_normalized text; v_segments jsonb;
@@ -12449,12 +12457,56 @@ DECLARE
   v_json_index integer; v_json_ordinal integer := 0;
   v_inside_string boolean; v_escaped boolean;
 BEGIN
-  SELECT * INTO v_authority FROM public.source_identity_authorities_v3 a
-  WHERE a.authority_id=($1).source_identity_authority_id
-    AND a.status='active' AND a.recorded_at<=v_now AND a.valid_from<=v_now
-    AND (a.valid_to IS NULL OR v_now<a.valid_to)
-  FOR SHARE;
+  IF to_regclass('public.legacy_source_append_context_v3_13') IS NOT NULL THEN
+    EXECUTE $context$
+      SELECT context.authority_cutoff
+      FROM public.legacy_source_append_context_v3_13 context
+      WHERE context.source_identity_authority_id=$1
+        AND context.stable_connector_document_id=$2
+        AND context.backend_pid=pg_backend_pid()
+        AND context.transaction_id=txid_current()
+        AND NOT EXISTS (
+          SELECT 1 FROM public.legacy_source_document_persistence_v3_13 persisted
+          WHERE persisted.source_run_id=context.source_run_id
+            AND persisted.profile_id=context.profile_id
+            AND persisted.source_key=context.source_key
+            AND persisted.stable_connector_document_id=context.stable_connector_document_id
+        )
+      ORDER BY context.recorded_at DESC LIMIT 1
+    $context$ INTO v_authority_cutoff
+    USING ($1).source_identity_authority_id,($1).stable_connector_document_id;
+    v_authority_cutoff:=coalesce(v_authority_cutoff,v_now);
+  END IF;
+  SELECT * INTO v_supplied_authority FROM public.source_identity_authorities_v3 a
+  WHERE a.authority_id=($1).source_identity_authority_id;
   IF NOT FOUND THEN RAISE EXCEPTION USING ERRCODE='PT404',MESSAGE='authority_reference_unavailable'; END IF;
+  -- Append and every cutoff reader share the contractual discovery-identity stream.
+  -- The registry-first guard proves the family/stream bounds and equal-time conflict
+  -- sentinel before status or expiry can revive an older event.
+  PERFORM pg_advisory_xact_lock(hashtextextended(
+    'discovery_identity:'||v_supplied_authority.source_identity_id::text,0));
+  PERFORM public.opportunity_authority_selected_stream_count_v3_internal('discovery_identity',v_authority_cutoff);
+  SELECT max(a.recorded_at) INTO v_latest_recorded_at
+  FROM public.source_identity_authorities_v3 a
+  WHERE a.source_identity_id=v_supplied_authority.source_identity_id
+    AND a.recorded_at<=v_authority_cutoff AND a.approved_at<=v_authority_cutoff AND a.valid_from<=v_authority_cutoff;
+  SELECT count(DISTINCT jsonb_build_array(a.source_identity_id,a.source_key,a.source_class,
+      a.distribution_identity,a.valid_from,a.valid_to,a.status,a.approved_at,a.approving_principal_id))
+    INTO v_semantic_count
+  FROM public.source_identity_authorities_v3 a
+  WHERE a.source_identity_id=v_supplied_authority.source_identity_id
+    AND a.recorded_at=v_latest_recorded_at AND a.approved_at<=v_authority_cutoff AND a.valid_from<=v_authority_cutoff;
+  IF v_semantic_count>1 THEN
+    RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='authority_revision_conflict';
+  END IF;
+  SELECT * INTO v_authority FROM public.source_identity_authorities_v3 a
+  WHERE a.source_identity_id=v_supplied_authority.source_identity_id
+    AND a.recorded_at=v_latest_recorded_at AND a.approved_at<=v_authority_cutoff AND a.valid_from<=v_authority_cutoff
+  ORDER BY a.authority_id LIMIT 1 FOR SHARE;
+  IF v_authority.authority_id IS DISTINCT FROM ($1).source_identity_authority_id
+    OR v_authority.status<>'active' OR v_authority.valid_from>v_authority_cutoff
+    OR (v_authority.valid_to IS NOT NULL AND v_authority_cutoff>=v_authority.valid_to)
+  THEN RAISE EXCEPTION USING ERRCODE='PT404',MESSAGE='authority_reference_unavailable'; END IF;
   IF NOT public.internal_principal_role_is_exact_v3_internal($2,'opportunity_runner',v_now)
   THEN RAISE EXCEPTION USING ERRCODE='PT403',MESSAGE='principal_role_unavailable'; END IF;
   IF ($1).adapter_version<>'source-adapter-v3.3'
@@ -13423,6 +13475,9 @@ BEGIN
   IF ($1).filing_published_at>($1).source_timestamp
     OR ($1).source_timestamp>($1).collected_at
     OR ($1).collected_at>v_now
+    OR (($1).estimate_kind='reported' AND (
+      ($1).period_end>(($1).filing_published_at AT TIME ZONE 'Asia/Taipei')::date
+      OR ($1).period_end>(($1).source_timestamp AT TIME ZONE 'Asia/Taipei')::date))
     OR char_length(btrim(($1).source_ref)) NOT BETWEEN 1 AND 120
     OR ($1).source_ref<>btrim(($1).source_ref)
     OR (
@@ -13433,12 +13488,15 @@ BEGIN
     OR (
       ($1).fact_key IN (
         'monthly_revenue','quarterly_revenue','quarterly_gross_profit',
-        'quarterly_operating_income','quarterly_net_income','quarterly_ebitda',
-        'depreciation_amortization','net_debt'
+        'quarterly_operating_expense','quarterly_operating_income','quarterly_non_operating_income',
+        'quarterly_pretax_income','quarterly_income_tax_expense','quarterly_noncontrolling_interest',
+        'quarterly_net_income','quarterly_net_income_attributable_to_common','quarterly_ebitda',
+        'depreciation_amortization','net_debt','cash_and_equivalents','total_debt','total_equity',
+        'total_assets','invested_capital','net_asset_value','operating_cash_flow','capital_expenditure','interest_expense'
       ) AND ($1).unit NOT IN ('TWD','TWD_thousand','TWD_million')
     )
     OR (
-      ($1).fact_key='diluted_shares'
+      ($1).fact_key IN ('diluted_shares','diluted_weighted_average_shares','shares_outstanding')
       AND ($1).unit NOT IN ('share','thousand_shares')
     )
     OR (
@@ -14576,7 +14634,7 @@ DECLARE
   v_evaluation_lock text;
   v_input_run_ids jsonb := '[]'::jsonb;
   v_static_identity_members jsonb := $identity$[
-    ["acceptanceVersion","1.44.6"],
+    ["acceptanceVersion","1.46.0"],
     ["analysisRevisionContractVersion","stock-analysis-revision-v3.11.2"],
     ["authoritySupersessionContractVersion","authority-supersession-v3.2"],
     ["controlPlaneContractVersion","opportunity-control-v3.3"],
@@ -14598,7 +14656,7 @@ DECLARE
     ["marketContextContractVersion","market-context-v3.6"],
     ["moverAuditPriceContractVersion","mover-audit-price-v3.3"],
     ["portfolioContextContractVersion","research-basket-v3.0"],
-    ["postgresTypeContractVersion","opportunity-postgres-types-v3.21"],
+    ["postgresTypeContractVersion","opportunity-postgres-types-v3.22"],
     ["priceProviderAllowlistHash","48fa54ee9f0e3a0b888ac0dc17eda8ad5bb746106a6fe4395eb50a5865e4e44e"],
     ["providerFieldAllowlistHash","fe78e0f8c5b0846f822f72c6b2356cac35ed5c00dd0bcd06f9a75b7c5b21d3f7"],
     ["publisherVerificationPolicyHash","2c4746cb02d98d402ecd1d0d980c91632b8105ab9fd2aec198e7789da603abba"],
@@ -14612,7 +14670,7 @@ DECLARE
     ["sourceDatasetContractVersion","source-dataset-v3.3"],
     ["sourceFunnelContractVersion","source-funnel-v3.0"],
     ["sourceFunnelPolicyHash","6893fb5f265edc10eea8222a560f9afdcc4342f72b1d7d39d5723ec0056bc105"],
-    ["storageContractVersion","opportunity-storage-v3.24"],
+    ["storageContractVersion","opportunity-storage-v3.25"],
     ["taxonomyMapHash","6b28d85903d7a410eef29386de011c71aa789dc0ce3231df38cb4e085181060c"],
     ["technicalDecisionContractVersion","opportunity-technical-decision-v3.11.1"],
     ["tradingCalendarContractVersion","tw-trading-calendar-v3.4"],
@@ -14756,7 +14814,7 @@ BEGIN
       jsonb_build_array('staticIdentityMembers',v_static_identity_members)
     )::text, ', ', ',', 'g'
   ),'utf8'),'sha256'),'hex');
-  IF v_comparison<>'ebaa6dbdaa7dd55bb261187008f51e930919e7c0cfe07732d531e01267e67c41'
+  IF v_comparison<>'c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729'
     OR jsonb_array_length(v_static_identity_members)<>41
   THEN
     RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='data_integrity_failure';
@@ -16437,7 +16495,7 @@ BEGIN
     INSERT INTO public.opportunity_public_projections_v3(
       run_id,contract_version,acceptance_version,payload_canonical,payload_json,payload_hash
     ) VALUES(
-      v_job.run_id,'source-led-opportunity-v3.6','1.44.6',
+      v_job.run_id,'source-led-opportunity-v3.6','1.46.0',
       convert_to(v_row_text,'utf8'),v_row,v_row_hash
     );
     FOR v_detail IN SELECT value FROM jsonb_array_elements(v_stage.output_json->5->2) LOOP
@@ -16550,7 +16608,7 @@ DECLARE
   v_manifest_bindings jsonb;
   v_calendar_bindings jsonb;
   v_static_identity_members jsonb := $identity$[
-    ["acceptanceVersion","1.44.6"],
+    ["acceptanceVersion","1.46.0"],
     ["analysisRevisionContractVersion","stock-analysis-revision-v3.11.2"],
     ["authoritySupersessionContractVersion","authority-supersession-v3.2"],
     ["controlPlaneContractVersion","opportunity-control-v3.3"],
@@ -16572,7 +16630,7 @@ DECLARE
     ["marketContextContractVersion","market-context-v3.6"],
     ["moverAuditPriceContractVersion","mover-audit-price-v3.3"],
     ["portfolioContextContractVersion","research-basket-v3.0"],
-    ["postgresTypeContractVersion","opportunity-postgres-types-v3.21"],
+    ["postgresTypeContractVersion","opportunity-postgres-types-v3.22"],
     ["priceProviderAllowlistHash","48fa54ee9f0e3a0b888ac0dc17eda8ad5bb746106a6fe4395eb50a5865e4e44e"],
     ["providerFieldAllowlistHash","fe78e0f8c5b0846f822f72c6b2356cac35ed5c00dd0bcd06f9a75b7c5b21d3f7"],
     ["publisherVerificationPolicyHash","2c4746cb02d98d402ecd1d0d980c91632b8105ab9fd2aec198e7789da603abba"],
@@ -16586,7 +16644,7 @@ DECLARE
     ["sourceDatasetContractVersion","source-dataset-v3.3"],
     ["sourceFunnelContractVersion","source-funnel-v3.0"],
     ["sourceFunnelPolicyHash","6893fb5f265edc10eea8222a560f9afdcc4342f72b1d7d39d5723ec0056bc105"],
-    ["storageContractVersion","opportunity-storage-v3.24"],
+    ["storageContractVersion","opportunity-storage-v3.25"],
     ["taxonomyMapHash","6b28d85903d7a410eef29386de011c71aa789dc0ce3231df38cb4e085181060c"],
     ["technicalDecisionContractVersion","opportunity-technical-decision-v3.11.1"],
     ["tradingCalendarContractVersion","tw-trading-calendar-v3.4"],
@@ -17380,57 +17438,84 @@ DECLARE
 BEGIN
   SELECT * INTO v_run FROM public.legacy_producer_runs_v3_11 r WHERE r.run_id=$1 AND r.producer_commit_sha=$2 AND r.scheduler_config_sha256=$3 AND r.status='running';
   IF NOT FOUND THEN RETURN;END IF;
+  PERFORM public.opportunity_authority_selected_stream_count_v3_internal('instrument_roster',v_run.source_cutoff);
+  PERFORM public.opportunity_authority_selected_stream_count_v3_internal('stock_alias',v_run.source_cutoff);
+  PERFORM public.opportunity_authority_selected_stream_count_v3_internal('sector_assignment',v_run.source_cutoff);
+  PERFORM public.opportunity_authority_selected_stream_count_v3_internal('discovery_identity',v_run.source_cutoff);
   v_header:=jsonb_build_object('schema','legacy-discovery-authority-v1','runId',v_run.run_id,'scheduledOccurrenceId',v_run.scheduled_occurrence_id,'sourceCutoff',to_char(v_run.source_cutoff AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS"Z"'));
   v_header_bytes:=convert_to(v_header::text,'utf8');
   FOREACH v_kind IN ARRAY ARRAY['roster','alias','taxonomy','selected_revision']::public.opportunity_legacy_authority_page_kind_v3_11[] LOOP
     v_size:=CASE WHEN v_kind='selected_revision' THEN 200 ELSE 500 END;
     IF v_kind='roster' THEN
+      WITH heads AS MATERIALIZED (
+        SELECT DISTINCT ON(stock_id) instrument.* FROM public.stock_instruments_v3 instrument
+        WHERE instrument.source_timestamp<=v_run.source_cutoff AND instrument.recorded_at<=v_run.source_cutoff
+          AND instrument.valid_from<=v_run.source_cutoff
+        ORDER BY stock_id,recorded_at DESC,instrument_authority_id
+      )
       SELECT coalesce(jsonb_agg(jsonb_build_array(stock_id,symbol,exchange,instrument_type,listing_status,official_legal_name,official_short_name) ORDER BY symbol,stock_id),'[]'::jsonb)
-      INTO v_all FROM public.stock_instruments_v3 WHERE instrument_type='common_stock' AND listing_status='active'
-        AND source_timestamp<=v_run.source_cutoff AND recorded_at<=v_run.source_cutoff
-        AND valid_from<=v_run.source_cutoff AND (valid_to IS NULL OR valid_to>v_run.source_cutoff);
+      INTO v_all FROM heads WHERE instrument_type='common_stock' AND listing_status='active'
+        AND (valid_to IS NULL OR valid_to>v_run.source_cutoff);
     ELSIF v_kind='alias' THEN
+      WITH heads AS MATERIALIZED (
+        SELECT DISTINCT ON(stock_id,normalized_alias,source) alias.* FROM public.stock_aliases_v3 alias
+        WHERE alias.source_timestamp<=v_run.source_cutoff AND alias.approved_at<=v_run.source_cutoff
+          AND alias.recorded_at<=v_run.source_cutoff AND alias.valid_from<=v_run.source_cutoff
+        ORDER BY stock_id,normalized_alias,source,recorded_at DESC,alias_authority_id
+      )
       SELECT coalesce(jsonb_agg(jsonb_build_array(stock_id,normalized_alias,source) ORDER BY normalized_alias,stock_id),'[]'::jsonb)
-      INTO v_all FROM public.stock_aliases_v3 WHERE status='active'
-        AND source_timestamp<=v_run.source_cutoff AND approved_at<=v_run.source_cutoff AND recorded_at<=v_run.source_cutoff
-        AND valid_from<=v_run.source_cutoff AND (valid_to IS NULL OR valid_to>v_run.source_cutoff);
+      INTO v_all FROM heads WHERE status='active' AND (valid_to IS NULL OR valid_to>v_run.source_cutoff);
     ELSIF v_kind='taxonomy' THEN
+      WITH heads AS MATERIALIZED (
+        SELECT DISTINCT ON(stock_id,market) assignment.* FROM public.stock_sector_assignments_v3 assignment
+        WHERE assignment.source_timestamp<=v_run.source_cutoff AND assignment.recorded_at<=v_run.source_cutoff
+          AND assignment.valid_from<=v_run.source_cutoff
+        ORDER BY stock_id,market,recorded_at DESC,assignment_authority_id
+      )
       SELECT coalesce(jsonb_agg(jsonb_build_array(stock_id,market,official_industry_code,canonical_sector_key) ORDER BY stock_id,canonical_sector_key),'[]'::jsonb)
-      INTO v_all FROM public.stock_sector_assignments_v3 WHERE status='active'
-        AND source_timestamp<=v_run.source_cutoff AND recorded_at<=v_run.source_cutoff
-        AND valid_from<=v_run.source_cutoff AND (valid_to IS NULL OR valid_to>v_run.source_cutoff);
+      INTO v_all FROM heads WHERE status='active' AND (valid_to IS NULL OR valid_to>v_run.source_cutoff);
     ELSE
-      WITH family_heads AS (
-        SELECT d.*,row_number() OVER(PARTITION BY d.source_key,d.revision_family_key ORDER BY d.collected_at DESC,d.recorded_at DESC,d.revision_id) AS family_rank
+      WITH authority_heads AS MATERIALIZED (
+        SELECT DISTINCT ON(authority.source_identity_id) authority.*
+        FROM public.source_identity_authorities_v3 authority
+        WHERE authority.approved_at<=v_run.source_cutoff AND authority.recorded_at<=v_run.source_cutoff
+          AND authority.valid_from<=v_run.source_cutoff
+        ORDER BY authority.source_identity_id,authority.recorded_at DESC,authority.authority_id
+      ), family_heads AS (
+        SELECT d.*,row_number() OVER(PARTITION BY d.source_key,d.revision_family_key ORDER BY d.recorded_at DESC,d.revision_id) AS family_rank
         FROM public.source_document_revisions_v3 d
         JOIN public.source_revision_family_registry_v3 registry ON registry.source_key=d.source_key AND registry.revision_family_key=d.revision_family_key
           AND registry.approved_source_identity_id=d.approved_source_identity_id AND registry.stable_connector_document_id=d.stable_connector_document_id
-        JOIN public.source_identity_authorities_v3 authority ON authority.authority_id=d.source_identity_authority_id
+        JOIN authority_heads authority ON authority.authority_id=d.source_identity_authority_id
           AND authority.source_identity_id=d.approved_source_identity_id AND authority.source_key=d.source_key
-        WHERE d.acquisition_status='complete' AND (d.published_at IS NULL OR d.published_at<=d.collected_at)
-          AND d.collected_at<=v_run.source_cutoff AND d.recorded_at<=v_run.source_cutoff
-          AND authority.status='active' AND authority.approved_at<=v_run.source_cutoff AND authority.recorded_at<=v_run.source_cutoff
-          AND authority.valid_from<=v_run.source_cutoff AND (authority.valid_to IS NULL OR authority.valid_to>v_run.source_cutoff)
+        WHERE d.collected_at<=v_run.source_cutoff AND d.recorded_at<=v_run.source_cutoff
+          AND authority.status='active' AND (authority.valid_to IS NULL OR authority.valid_to>v_run.source_cutoff)
       ), connector_bound AS (
         SELECT f.*,row_number() OVER(PARTITION BY f.source_key ORDER BY f.collected_at DESC,f.revision_family_key,f.revision_id) AS connector_rank
-        FROM family_heads f WHERE f.family_rank=1
+        FROM family_heads f WHERE f.family_rank=1 AND f.acquisition_status='complete'
+          AND (f.published_at IS NULL OR f.published_at<=f.collected_at)
       )
       SELECT coalesce(jsonb_agg(jsonb_build_array(source_key,revision_id,revision_family_key,approved_source_identity_id,stable_connector_document_id,published_at,collected_at,
         raw_field_payload_algorithm_version,ingestion_content_revision_sha256,canonical_content_algorithm_version,ingestion_canonical_content_hash_v3)
       ORDER BY source_key,collected_at DESC,revision_family_key,revision_id),'[]'::jsonb) INTO v_all FROM connector_bound WHERE connector_rank<=1000;
       IF EXISTS(
-        WITH family_heads AS (
-          SELECT d.source_key,d.revision_family_key,d.collected_at,d.recorded_at,d.revision_id,
-            row_number() OVER(PARTITION BY d.source_key,d.revision_family_key ORDER BY d.collected_at DESC,d.recorded_at DESC,d.revision_id) family_rank
+        WITH authority_heads AS MATERIALIZED (
+          SELECT DISTINCT ON(authority.source_identity_id) authority.*
+          FROM public.source_identity_authorities_v3 authority
+          WHERE authority.approved_at<=v_run.source_cutoff AND authority.recorded_at<=v_run.source_cutoff
+            AND authority.valid_from<=v_run.source_cutoff
+          ORDER BY authority.source_identity_id,authority.recorded_at DESC,authority.authority_id
+        ), family_heads AS (
+          SELECT d.source_key,d.revision_family_key,d.collected_at,d.recorded_at,d.revision_id,d.acquisition_status,d.published_at,
+            row_number() OVER(PARTITION BY d.source_key,d.revision_family_key ORDER BY d.recorded_at DESC,d.revision_id) family_rank
           FROM public.source_document_revisions_v3 d
-          JOIN public.source_identity_authorities_v3 authority ON authority.authority_id=d.source_identity_authority_id
-          WHERE d.acquisition_status='complete' AND (d.published_at IS NULL OR d.published_at<=d.collected_at)
-            AND d.collected_at<=v_run.source_cutoff AND d.recorded_at<=v_run.source_cutoff
-            AND authority.status='active' AND authority.approved_at<=v_run.source_cutoff AND authority.recorded_at<=v_run.source_cutoff
-            AND authority.valid_from<=v_run.source_cutoff AND (authority.valid_to IS NULL OR authority.valid_to>v_run.source_cutoff)
+          JOIN authority_heads authority ON authority.authority_id=d.source_identity_authority_id
+          WHERE d.collected_at<=v_run.source_cutoff AND d.recorded_at<=v_run.source_cutoff
+            AND authority.status='active' AND (authority.valid_to IS NULL OR authority.valid_to>v_run.source_cutoff)
         ), connector_bound AS (
           SELECT row_number() OVER(PARTITION BY source_key ORDER BY collected_at DESC,revision_family_key,revision_id) connector_rank
-          FROM family_heads WHERE family_rank=1
+          FROM family_heads WHERE family_rank=1 AND acquisition_status='complete'
+            AND (published_at IS NULL OR published_at<=collected_at)
         ) SELECT 1 FROM connector_bound WHERE connector_rank>1000
       ) THEN RAISE EXCEPTION 'bound_violation';END IF;
     END IF;
@@ -17473,15 +17558,31 @@ BEGIN
   ), facts AS MATERIALIZED (
     SELECT candidate.ordinal,candidate.symbol,fact.fact_key,fact.period_start,fact.period_end,fact.duration_kind,
       fact.value,fact.unit,fact.authority_tier,fact.filing_published_at,fact.source_timestamp,
-      fact.collected_at,fact.recorded_at,fact.source_ref,fact.estimate_kind,fact.estimate_horizon
+      fact.collected_at,fact.recorded_at,fact.source_ref,fact.filing_restatement_id,
+      fact.estimate_kind,fact.estimate_horizon
     FROM candidates candidate JOIN LATERAL (
-      SELECT selected.* FROM public.opportunity_financial_facts_v3 selected
-      WHERE selected.stock_id=candidate.stock_id::uuid AND selected.recorded_at<=p_source_cutoff
-        AND selected.filing_published_at<=p_source_cutoff AND selected.source_timestamp<=p_source_cutoff
-        AND selected.collected_at<=p_source_cutoff
-      ORDER BY selected.fact_key,selected.period_end DESC,selected.filing_published_at DESC,
-        selected.source_timestamp DESC,selected.collected_at DESC,selected.recorded_at DESC,
-        selected.source_ref,selected.fact_id LIMIT 256
+      SELECT bounded.* FROM (
+        SELECT selected.*,dense_rank() OVER(PARTITION BY selected.fact_key
+          ORDER BY selected.period_end DESC,selected.period_start DESC NULLS LAST,selected.duration_kind) identity_rank
+        FROM public.opportunity_financial_facts_v3 selected
+        WHERE selected.stock_id=candidate.stock_id::uuid AND selected.recorded_at<=p_source_cutoff
+          AND selected.filing_published_at<=p_source_cutoff AND selected.source_timestamp<=p_source_cutoff
+          AND selected.collected_at<=p_source_cutoff AND selected.period_end<=p_source_cutoff::date
+      ) bounded
+      WHERE bounded.identity_rank<=CASE
+        WHEN bounded.fact_key='monthly_revenue' THEN 18
+        WHEN bounded.fact_key IN('pe_multiple','pb_multiple','ev_ebitda_multiple','ev_sales_multiple') THEN 20
+        WHEN bounded.fact_key='book_value_per_share' THEN 9
+        WHEN bounded.fact_key IN('invested_capital','total_assets') THEN 2
+        WHEN bounded.fact_key IN('quarterly_revenue','quarterly_gross_profit','quarterly_operating_expense',
+          'quarterly_operating_income','quarterly_non_operating_income','quarterly_pretax_income',
+          'quarterly_income_tax_expense','quarterly_noncontrolling_interest','quarterly_net_income',
+          'quarterly_net_income_attributable_to_common','quarterly_diluted_eps','quarterly_ebitda',
+          'depreciation_amortization','operating_cash_flow','capital_expenditure','interest_expense') THEN 12
+        ELSE 1 END
+      ORDER BY bounded.fact_key,bounded.period_end DESC,bounded.filing_published_at DESC,
+        bounded.source_timestamp DESC,bounded.collected_at DESC,bounded.recorded_at DESC,
+        bounded.filing_restatement_id DESC NULLS LAST,bounded.source_ref,bounded.fact_id
     ) fact ON candidate.deep_selected
   ), selected_prices AS MATERIALIZED (
     SELECT candidate.ordinal,candidate.symbol,selected.observation_id,selected.session_id,selected.volume,
@@ -17517,7 +17618,7 @@ BEGIN
     'candidateResult',p_candidate_result,
     'financialRows',coalesce((SELECT jsonb_agg(jsonb_build_array(symbol,fact_key,period_start,period_end,
       duration_kind,value,unit,authority_tier,filing_published_at,source_timestamp,collected_at,recorded_at,
-      source_ref,estimate_kind,estimate_horizon) ORDER BY ordinal,fact_key,period_end DESC,source_timestamp DESC,source_ref) FROM facts),'[]'::jsonb),
+      source_ref,filing_restatement_id,estimate_kind,estimate_horizon) ORDER BY ordinal,fact_key,period_end DESC,source_timestamp DESC,source_ref) FROM facts),'[]'::jsonb),
     'priceRows',coalesce((SELECT jsonb_agg(jsonb_build_array(symbol,session_id,
       (payload#>>'{evidence,11}')::double precision,(payload#>>'{evidence,12}')::double precision,
       (payload#>>'{evidence,13}')::double precision,(payload#>>'{evidence,14}')::double precision,
@@ -17713,7 +17814,26 @@ BEGIN
       IF jsonb_typeof(v_source_result.result_json->'legacyPayloads')<>'object'
         OR jsonb_typeof(v_source_result.result_json->'legacyPayloadHashes')<>'object'
       THEN RAISE EXCEPTION 'data_integrity_failure';END IF;
-      v_read_kind:='compact_projection_input';v_read_json:=jsonb_build_object('analysisResult',v_prior.result_json,'sourceCutoff',to_char(v_run.source_cutoff AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS"Z"'),'producerCommitSha',v_run.producer_commit_sha,'workerSha256',v_run.worker_sha256,'legacyPayloads',v_source_result.result_json->'legacyPayloads','legacyPayloadHashes',v_source_result.result_json->'legacyPayloadHashes','legacySourceResultHash',v_source_result.result_hash);v_read_count:=coalesce(jsonb_array_length(v_prior.result_json->'decisions'),0);
+      v_read_kind:='compact_projection_input';
+      v_read_json:=jsonb_build_object(
+        'analysisResult',v_prior.result_json,
+        'sourceCutoff',to_char(v_run.source_cutoff AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS"Z"'),
+        'producerCommitSha',v_run.producer_commit_sha,
+        'workerSha256',v_run.worker_sha256,
+        'legacyPayloads',v_source_result.result_json->'legacyPayloads',
+        'legacyPayloadHashes',v_source_result.result_json->'legacyPayloadHashes',
+        'legacySourceResultHash',v_source_result.result_hash,
+        'priorProjections',coalesce((
+          SELECT jsonb_object_agg(previous."window",previous.payload_json ORDER BY previous."window")
+          FROM (
+            SELECT DISTINCT ON(projection."window") projection."window",projection.payload_json
+            FROM public.legacy_radar_projections_v3_11 projection
+            WHERE projection.as_of<v_run.source_cutoff
+            ORDER BY projection."window",projection.as_of DESC,projection.projection_key
+          ) previous
+        ),'{}'::jsonb)
+      );
+      v_read_count:=coalesce(jsonb_array_length(v_prior.result_json->'decisions'),0);
     END IF;
     v_read_bytes:=convert_to(v_read_json::text,'utf8');v_read_hash:=encode(extensions.digest(v_read_bytes,'sha256'),'hex');
     IF octet_length(v_read_bytes)>3145728 OR v_read_count>20000 THEN RAISE EXCEPTION 'bound_violation';END IF;
@@ -17743,7 +17863,7 @@ BEGIN
 END $$;
 CREATE OR REPLACE FUNCTION complete_legacy_producer_job_v3_11(p_run uuid,p_job uuid,p_token uuid,p_result bytea,p_json jsonb,p_hash text)
 RETURNS TABLE(status text,next_job jsonb) LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $$
-DECLARE v_job public.legacy_producer_jobs_v3_11%ROWTYPE;v_run public.legacy_producer_runs_v3_11%ROWTYPE;v_frozen public.legacy_frozen_source_revisions_v3_11%ROWTYPE;v_now timestamptz:=date_trunc('second',clock_timestamp());v_next uuid;v_stage public.opportunity_legacy_producer_stage_v3_11;v_kind public.opportunity_legacy_producer_job_kind_v3_11:='stage_barrier';v_payload bytea;v_payload_json jsonb;v_payload_hash text;v_shard integer;v_revision uuid;v_item jsonb;v_revision_id uuid;v_prior_revision_id uuid;v_revision_created boolean;v_projection jsonb;v_projection_bytes bytea;v_uuid_hash text;v_prior_json jsonb;v_expected_symbols text[];v_actual_symbols text[];v_expected_deep text[];v_actual_deep text[];v_expected_shallow text[];v_actual_shallow text[];v_expected_source text[];v_actual_source text[];
+DECLARE v_job public.legacy_producer_jobs_v3_11%ROWTYPE;v_run public.legacy_producer_runs_v3_11%ROWTYPE;v_frozen public.legacy_frozen_source_revisions_v3_11%ROWTYPE;v_now timestamptz:=date_trunc('second',clock_timestamp());v_next uuid;v_stage public.opportunity_legacy_producer_stage_v3_11;v_kind public.opportunity_legacy_producer_job_kind_v3_11:='stage_barrier';v_payload bytea;v_payload_json jsonb;v_payload_hash text;v_shard integer;v_revision uuid;v_item jsonb;v_revision_id uuid;v_prior_revision_id uuid;v_revision_created boolean;v_projection jsonb;v_projection_bytes bytea;v_projection_material_root text;v_expected_projection_key text;v_inserted_projection_id uuid;v_existing_projection public.legacy_radar_projections_v3_11%ROWTYPE;v_uuid_hash text;v_prior_json jsonb;v_expected_symbols text[];v_actual_symbols text[];v_expected_deep text[];v_actual_deep text[];v_expected_shallow text[];v_actual_shallow text[];v_expected_source text[];v_actual_source text[];
 BEGIN
   IF octet_length(p_result)>3145728 OR convert_from(p_result,'utf8')::jsonb<>p_json OR encode(extensions.digest(p_result,'sha256'),'hex')<>p_hash THEN RAISE EXCEPTION 'data_integrity_failure'; END IF;
   SELECT run.* INTO v_run FROM public.legacy_producer_runs_v3_11 run WHERE run.run_id=p_run AND run.status='running'
@@ -17855,19 +17975,40 @@ BEGIN
           FROM jsonb_array_elements(p_json->'projections') item(value))
         <>ARRAY['daily','home','three_day','weekly']::text[]
     THEN RAISE EXCEPTION 'data_integrity_failure';END IF;
+    v_projection_material_root:=encode(extensions.digest(
+      convert_to(coalesce((p_json->'projections')::text,'[]'),'utf8'),'sha256'),'hex');
     FOR v_projection IN SELECT value FROM jsonb_array_elements(p_json->'projections') item(value) LOOP
       v_projection_bytes:=convert_to(v_projection#>>'{bundle,canonical}','utf8');
+      v_expected_projection_key:='legacy-radar-v3.11:'||(v_projection->>'storageWindow')||':'||
+        to_char(v_run.source_cutoff AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS"Z"')||':'||
+        (v_projection->>'payloadChecksum');
       IF convert_from(v_projection_bytes,'utf8')::jsonb<>v_projection->'payload'
         OR encode(extensions.digest(v_projection_bytes,'sha256'),'hex')<>v_projection->>'payloadChecksum'
+        OR v_projection->>'projectionKey'<>v_expected_projection_key
       THEN RAISE EXCEPTION 'data_integrity_failure';END IF;
+      v_inserted_projection_id:=NULL;
       INSERT INTO public.legacy_radar_projections_v3_11(
         projection_key,"window",as_of,producer_commit_sha,worker_sha256,material_change_root,
         payload_canonical,payload_json,payload_sha256
       ) VALUES(v_projection->>'projectionKey',v_projection->>'storageWindow',v_run.source_cutoff,
         v_run.producer_commit_sha,v_run.worker_sha256,
-        encode(extensions.digest(convert_to(coalesce((p_json->'projections')::text,'[]'),'utf8'),'sha256'),'hex'),
+        v_projection_material_root,
         v_projection_bytes,v_projection->'payload',v_projection->>'payloadChecksum')
-      ON CONFLICT(projection_key) DO NOTHING;
+      ON CONFLICT(projection_key) DO NOTHING RETURNING projection_id INTO v_inserted_projection_id;
+      IF v_inserted_projection_id IS NULL THEN
+        SELECT * INTO STRICT v_existing_projection
+        FROM public.legacy_radar_projections_v3_11 projection
+        WHERE projection.projection_key=v_expected_projection_key FOR UPDATE;
+        IF v_existing_projection."window"::text<>v_projection->>'storageWindow'
+          OR v_existing_projection.as_of<>v_run.source_cutoff
+          OR v_existing_projection.producer_commit_sha<>v_run.producer_commit_sha
+          OR v_existing_projection.worker_sha256<>v_run.worker_sha256
+          OR v_existing_projection.material_change_root<>v_projection_material_root
+          OR v_existing_projection.payload_canonical<>v_projection_bytes
+          OR v_existing_projection.payload_json<>v_projection->'payload'
+          OR v_existing_projection.payload_sha256<>v_projection->>'payloadChecksum'
+        THEN RAISE EXCEPTION 'projection_key_collision';END IF;
+      END IF;
     END LOOP;
   END IF;
   INSERT INTO public.legacy_producer_job_results_v3_11 VALUES(p_job,p_result,p_json,p_hash,v_now) ON CONFLICT(job_id) DO NOTHING;

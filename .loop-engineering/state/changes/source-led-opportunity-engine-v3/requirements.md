@@ -163,6 +163,12 @@ Sector cycle SHALL be one of `early_recovery`, `expansion`, `late_expansion`, `c
 
 ## R9 — Research and Action Are Separate
 
+R9 is normative for the V3 shadow/Promotion engine through V3.12. For the V3.13
+disabled legacy-product projection and its Landing/detail consumers, the exhaustive
+supersession table in the active V3.13 decision-integrity amendment replaces the
+five-action, sizing, capacity and allocation clauses below. They cannot be used as a
+second V3.13 decision path.
+
 `formalResearchStatus` and `actionDecision` SHALL be independent fields.
 
 `formalResearchStatus` is one of:
@@ -234,7 +240,7 @@ Metric formulas, relevance labels, cohorts, maturity gates and the fail-closed l
   or invoke the 33 V3 functions and has no public mutating route. `service_role`
   receives no direct DML. Exact additive
   DDL/constraints/indexes/FK targets/deletion actions/triggers/owners/policies/grants
-  are normative in `storage-schema-contract.md` v3.24.
+  are normative in `storage-schema-contract.md` v3.25.
 - Long-running work uses the durable run/job protocol and per-request resource envelopes in `runtime-transaction-contract.md` v3.17. `job-graph-contract.md` v3.15 is the sole authority for deterministic job creation, one-revision parse sharding, immutable one-to-one payload/result rows, manifest cursors, exact staging bodies, token-bound database-computed connector/outcome/evaluation projections returned atomically by claim, every per-payload database-call ordinal, private successor helpers and worker HTTP responses. Begin creates the first job/payload atomically; every successful predecessor creates exactly one successor/payload in its terminal transaction; finalize is a leased job. One Vercel request cannot own an entire run, a worker cannot select/skip/create work, enumerate a read view or receive a full connector/benchmark population, and crash/retry cannot publish a partial success or orphan a successful predecessor.
 - Production rollout and rollback SHALL follow `legacy-compatibility-contract.md` v3.2. V3 starts disabled, schema application is transactional and additive, shadow schedules enable last, rollback stops producers before bounded drain, keeps committed V3 objects/evidence, verifies the frozen legacy lock and re-enables in the exact fail-closed order. No down migration or request-selected deployment state is permitted.
 - Every dataset/authority manifest uses the single kind/header/section/page/root/lifecycle authority in `manifest-storage-contract.md`; domain-named manifest hashes are its universal root hashes and cannot be reconstructed as monolithic arrays or stored in dedicated sector tables. Page descriptors are database-owned; append rechecks the exact bounded selector and greedy boundary, and page/root success plus successor creation is atomic.
@@ -313,8 +319,8 @@ there is no prior tracked release. Shadow Activation SHALL have its own canonica
 evidence boundary, remain outside required PR Code checks and Promotion inputs, and
 remain blocked until separately authorized.
 
-The canonical V3 acceptance inventory advances to `1.44.6` with the PCR cases owned by
-this amendment. Requirements/Architecture evidence binds the exact active-graph blob
+The canonical V3 acceptance inventory advances to `1.46.0` with the PCR, V3.13 decision-integrity and V3.14 actionability-recovery cases owned by
+their active amendments. Requirements/Architecture evidence binds the exact active-graph blob
 identity; exact review binds the final subject commit/code tree, so an older PASS
 cannot be replayed. Existing 1.42.0 evidence remains historical and cannot satisfy
 R13.
@@ -348,3 +354,54 @@ for non-positive EPS. Method-specific valuation selection, operating bridge and
 `valuation_review` fail closure remain mandatory. Factor/prose changes must follow the
 immutable material-revision contract; a re-check with no material input change must
 not rewrite the analysis.
+
+## R15 — V3.13 decision integrity and product truth
+
+`source-led-opportunity-engine-v3.13-decision-integrity-amendment.md` is the sole
+owner of the disabled-legacy-product repair for projection availability, official
+valuation authority, one decision envelope, source-acquisition truth and the compact
+Landing/detail information architecture. Earlier V3.11/V3.12 gate evidence remains
+historical and cannot satisfy this amendment.
+
+The implementation SHALL distinguish immutable content time from evaluation and
+publication heartbeats, apply one exchange-calendar freshness policy in Web, doctor
+and internal health, and degrade to last-good read-only or typed unavailable data
+without crashing the public page. Checksum conflicts remain fail-closed.
+
+Every buy-like recommendation SHALL derive from one `DecisionEnvelopeV313`. Formal
+recommendations require method-appropriate official point-in-time facts, a complete
+Bear/Base/Bull bridge and valid technical geometry. Conditional research may use only
+complete official 252-session own-history authority plus at least eight same-session
+sector peers. Missing data is `unavailable`, not `avoid`; no action quota may force a
+recommendation.
+
+Acquisition SHALL be official or explicitly authorized, terminally conserved and
+separate from analysis. Metadata-only podcast/video rows cannot claim transcript
+understanding. FULL detail is authoritative and LIGHT may fill only missing leaves.
+Landing and detail SHALL bind the same immutable decision revision.
+
+Fresh Requirements and a distinct evidence-carrying Architecture review SHALL bind a
+new immutable V3.13 subject tree. The 297 predecessor cases and 11 executable V3.13
+decision-integrity cases form one canonical 308-case protected inventory. Exact review and the authoritative Code Gate
+must bind the final release-candidate range before any coordinated publication.
+
+## R16 — V3.14 actionability recovery
+
+`source-led-opportunity-engine-v3.14-actionability-recovery-amendment.md` supersedes
+V3.13 only for projection visibility, research ranking, the public decision enum,
+producer unchanged-disposition integrity and the coordinated production activation
+described there. Research visibility is independent of action authority: calendar,
+freshness or compatibility failure may disable actions but cannot erase a checksum-
+valid last-good research projection. Research ranking never authorizes an action and
+missing factors cannot be renormalized upward.
+
+The sole V3.14 action envelope adds `wait_value` and `wait_market`, preserves strict
+formal/conditional authority and requires affirmative evidence for `avoid`. The
+official data plane, typed failure diagnostics, exact release identity, three-section
+Landing and two-stage rollout are mandatory. Fresh Requirements, Architecture,
+exact-commit review and authoritative Code/Shadow Activation gates must bind a new
+immutable tree; V3.13 evidence is historical.
+
+The canonical protected inventory advances to `1.46.0`: 320 unique IDs partitioned
+as 272 product/runtime, 28 model-runner and 20 evaluation-governance cases. The
+twelve `REC-*` owners are mandatory, non-skipped V3.14 product/runtime evidence.

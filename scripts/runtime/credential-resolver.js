@@ -7,6 +7,9 @@ const KEYCHAIN_REFERENCES = Object.freeze({
   'keychain:stockinsider-runtime:database-url': Object.freeze({ service: 'stockinsider-runtime', account: 'database-url' }),
   'keychain:stockinsider-runtime:internal-api-key': Object.freeze({ service: 'stockinsider-runtime', account: 'internal-api-key' }),
   'keychain:stockinsider-runtime:activation-authority-hmac': Object.freeze({ service: 'stockinsider-runtime', account: 'activation-authority-hmac' }),
+  'keychain:stockinsider-runtime:threads-access-token': Object.freeze({ service: 'stockinsider-runtime', account: 'threads-access-token' }),
+  'keychain:stockinsider-runtime:youtube-api-key': Object.freeze({ service: 'stockinsider-runtime', account: 'youtube-api-key' }),
+  'keychain:stockinsider-runtime:youtube-oauth-token': Object.freeze({ service: 'stockinsider-runtime', account: 'youtube-oauth-token' }),
 });
 const RUNTIME_ENVIRONMENT_KEYS = Object.freeze([
   'HOME', 'INTERNAL_API_KEY_REF', 'NODE_ENV', 'PATH', 'STOCKINSIDER_DATABASE_URL_REF',

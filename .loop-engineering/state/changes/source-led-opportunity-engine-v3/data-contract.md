@@ -361,7 +361,7 @@ type OpportunityEngineAvailableV3 = {
   verifiedChangeWorkspace: VerifiedChangeWorkspaceV3;
   homepageSummary: OpportunityHomepageSummaryV3;
   missedSourceAudit: {auditedSessionDate:string; auditedCloseAt:string; auditWindowClosesAt:string; sourceCollectionCutoff:string; maturity:'pending'|'matured'; moverCount:number; laterMentionedCount:number; sourceRecallPct:number|null; symbols:string[]}; // max 20 canonical symbols, never actionable
-  engineHealth: {status:'ok'|'degraded'; sourceCutoff:string; acceptanceVersion:'1.44.6'; modelInfluence:'none'; assistiveArtifacts:AssistiveArtifactSummaryV3[]; warnings:EngineWarningV3[]}; // max 3 artifacts and 7 unique warnings
+  engineHealth: {status:'ok'|'degraded'; sourceCutoff:string; acceptanceVersion:'1.46.0'; modelInfluence:'none'; assistiveArtifacts:AssistiveArtifactSummaryV3[]; warnings:EngineWarningV3[]}; // max 3 artifacts and 7 unique warnings
 };
 
 type OpportunityEngineUnavailableV3 = {
@@ -372,8 +372,8 @@ type OpportunityEngineUnavailableV3 = {
   runId: null;
   sourceRunId: null;
   engineHealth:
-    | {status:'pending'; sourceCutoff:string; acceptanceVersion:'1.44.6'; modelInfluence:'none'; reason:'cold_start'|'no_matching_success'|'matching_run_in_progress'; assistiveArtifacts:[]; warnings:EngineWarningV3[]}
-    | {status:'failed'; sourceCutoff:string; acceptanceVersion:'1.44.6'; modelInfluence:'none'; reason:'latest_matching_failed'; assistiveArtifacts:[]; warnings:EngineWarningV3[]};
+    | {status:'pending'; sourceCutoff:string; acceptanceVersion:'1.46.0'; modelInfluence:'none'; reason:'cold_start'|'no_matching_success'|'matching_run_in_progress'; assistiveArtifacts:[]; warnings:EngineWarningV3[]}
+    | {status:'failed'; sourceCutoff:string; acceptanceVersion:'1.46.0'; modelInfluence:'none'; reason:'latest_matching_failed'; assistiveArtifacts:[]; warnings:EngineWarningV3[]};
 };
 
 type OpportunityEngineV3 = OpportunityEngineAvailableV3 | OpportunityEngineUnavailableV3;
@@ -413,7 +413,7 @@ Internal candidate/allocation rows retain the complete `InternalActionDecisionV3
 
 `verifiedChangeWorkspace` has exactly three lanes in the order and with the derivation, uniqueness, sorting, per-lane eight-item cap and combined eighteen-item round-robin cap in `hybrid-product-amendment.md`. Brief strings follow the exact NFC/whitespace and `96/280/280` limits there; evidence refs are 1..3 and contradictions 0..3. `homepageSummary` is derived only from that stored workspace, contains at most three round-robin items, and exposes no score, action, sizing or raw evidence. An available run with zero eligible briefs uses workspace/summary status `empty`; unavailable engine payloads contain neither member.
 
-Public projection time is server-owned. Normalize C to UTC RFC-3339 with whole seconds and literal `Z`; fractional seconds are rejected rather than rounded. An available object is read byte-for-byte from `opportunity_public_projections_v3`: its stored `asOf` and `engineHealth.sourceCutoff` both equal the selected run's immutable normalized `sourceCutoff`. C is only the selection boundary and is not serialized or substituted into an available payload. An unavailable object has no selected run, is serialized for C, and sets both `asOf` and `engineHealth.sourceCutoff` to C; it never copies a failed/active attempt's cutoff. The endpoint cannot add a request envelope, mutate/re-canonicalize a stored success or mix fields from different runs. The four unavailable reason/status pairs and their precedence are the exhaustive rules above. Every available or unavailable object sets `engineHealth.acceptanceVersion` to the exact canonical inventory literal `1.44.6`; a different/unknown version fails serialization and cannot claim V3 acceptance traceability. `legacy-compatibility-contract.md` v3.2 executes before this serializer and omits the entire V3 member in `disabled|drain`, with zero V3 query.
+Public projection time is server-owned. Normalize C to UTC RFC-3339 with whole seconds and literal `Z`; fractional seconds are rejected rather than rounded. An available object is read byte-for-byte from `opportunity_public_projections_v3`: its stored `asOf` and `engineHealth.sourceCutoff` both equal the selected run's immutable normalized `sourceCutoff`. C is only the selection boundary and is not serialized or substituted into an available payload. An unavailable object has no selected run, is serialized for C, and sets both `asOf` and `engineHealth.sourceCutoff` to C; it never copies a failed/active attempt's cutoff. The endpoint cannot add a request envelope, mutate/re-canonicalize a stored success or mix fields from different runs. The four unavailable reason/status pairs and their precedence are the exhaustive rules above. Every available or unavailable object sets `engineHealth.acceptanceVersion` to the exact canonical inventory literal `1.46.0`; a different/unknown version fails serialization and cannot claim V3 acceptance traceability. `legacy-compatibility-contract.md` v3.2 executes before this serializer and omits the entire V3 member in `disabled|drain`, with zero V3 query.
 
 Available `engineHealth.warnings` is the unique canonical enum-order set derived from facts: connector failure/degradation -> `connector_degraded`; incomplete market -> `market_incomplete`; any emitted unknown sector cycle from missing inputs -> `sector_cycle_unknown`; pending selected mover audit -> `source_audit_pending`; absent comparison lineage -> `prior_lineage_missing`; any deep-success valuation not normal -> `valuation_missing`; and `shadow_only` is always present. `source_audit_pending` and `shadow_only` are expected informational states; status is `degraded` iff any other warning is present, otherwise `ok`.
 

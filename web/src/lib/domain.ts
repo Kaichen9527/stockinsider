@@ -4,6 +4,7 @@ import path from 'path';
 import { Client as LineClient } from '@line/bot-sdk';
 import { getSupabaseServerClient } from './supabase-server';
 import { isDemoMode } from './data-mode';
+import { mergeAuthoritativeDeepDiveLeaves } from './deep-dive-merge';
 import type {
   AgentStatusSummary,
   BrokerView,
@@ -17623,43 +17624,11 @@ function shouldAugmentWithLightSnapshot(payload: StockDeepDivePayload) {
   );
 }
 
-function mergeDeepDiveWithLightSnapshot(
+export function mergeDeepDiveWithLightSnapshot(
   fullPayload: StockDeepDivePayload,
   lightPayload: StockDeepDivePayload,
 ): StockDeepDivePayload {
-  return {
-    ...fullPayload,
-    ...lightPayload,
-    reportSnapshot: fullPayload.reportSnapshot || lightPayload.reportSnapshot,
-    articleSections: fullPayload.articleSections?.length ? fullPayload.articleSections : lightPayload.articleSections,
-    storyNarrative: fullPayload.storyNarrative || lightPayload.storyNarrative,
-    verificationSummary: fullPayload.verificationSummary || lightPayload.verificationSummary,
-    investmentConclusion: fullPayload.investmentConclusion || lightPayload.investmentConclusion,
-    valuationSummary: fullPayload.valuationSummary || lightPayload.valuationSummary,
-    chipEntryAssessment: fullPayload.chipEntryAssessment || lightPayload.chipEntryAssessment,
-    dataHealth: fullPayload.dataHealth || lightPayload.dataHealth,
-    recommendationStance: fullPayload.recommendationStance || lightPayload.recommendationStance,
-    chipSnapshot: fullPayload.chipSnapshot || lightPayload.chipSnapshot,
-    latestFacts: fullPayload.latestFacts?.length ? fullPayload.latestFacts : lightPayload.latestFacts,
-    freshSourceHighlights: fullPayload.freshSourceHighlights?.length ? fullPayload.freshSourceHighlights : lightPayload.freshSourceHighlights,
-    appendix:
-      fullPayload.appendix &&
-      ((fullPayload.appendix.sourceAppendix?.length || 0) > 0 || (fullPayload.appendix.evidenceMatrix?.length || 0) > 0)
-        ? fullPayload.appendix
-        : lightPayload.appendix,
-    sourceCoverage: fullPayload.sourceCoverage?.length ? fullPayload.sourceCoverage : lightPayload.sourceCoverage,
-    evidenceItems: fullPayload.evidenceItems?.length ? fullPayload.evidenceItems : lightPayload.evidenceItems,
-    evidenceMatrix: fullPayload.evidenceMatrix?.length ? fullPayload.evidenceMatrix : lightPayload.evidenceMatrix,
-    latestEvidence: fullPayload.latestEvidence?.length ? fullPayload.latestEvidence : lightPayload.latestEvidence,
-    sourceGroups:
-      fullPayload.sourceGroups &&
-      ((fullPayload.sourceGroups.investanchors?.length || 0) > 0 ||
-        (fullPayload.sourceGroups.officialAndFinancial?.length || 0) > 0 ||
-        (fullPayload.sourceGroups.brokerAndResearch?.length || 0) > 0 ||
-        (fullPayload.sourceGroups.socialAndCommunity?.length || 0) > 0)
-        ? fullPayload.sourceGroups
-        : lightPayload.sourceGroups,
-  };
+  return mergeAuthoritativeDeepDiveLeaves(fullPayload, lightPayload);
 }
 
 type StockDeepDiveLookup =

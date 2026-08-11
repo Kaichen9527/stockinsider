@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import type { DiscoveredStockCard, RadarDailyPayload, RecommendationCard, SourceSignalCard, ThemeHeatCard } from '@/lib/types';
+import { validatePublishedDecisionCard } from '@/lib/opportunity-v3/decision-publication';
 
 type Props = {
   radar: RadarDailyPayload;
@@ -359,8 +360,8 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
             <div className="min-w-0 break-words rounded-lg bg-sky-500/8 px-3 py-2">
               <p className="font-medium">本益比比較（官方／模型分列）</p>
               <p className="mt-1 text-slate-600 dark:text-emerald-100/70">
-                {availableResearchDecision.valuation.exchangeReportedPe?.availability === 'available'
-                  ? `交易所 ${availableResearchDecision.valuation.exchangeReportedPe.current ?? availableResearchDecision.valuation.exchangeReportedPe.value ?? '—'}`
+                {availableResearchDecision.valuation.exchangeReportedPe?.status === 'available'
+                  ? `交易所 ${availableResearchDecision.valuation.exchangeReportedPe.value}`
                   : `交易所：${availableResearchDecision.valuation.exchangeReportedPe?.reason || '資料不足'}`}
                 {' · '}
                 {availableResearchDecision.valuation.modelComparablePe && availableResearchDecision.valuation.modelComparablePe.value != null
@@ -408,7 +409,7 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
 		        </div>
 		      </div>
 
-	      <div className="mt-3 flex items-center justify-between gap-2">
+	      <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
 	        <p className="text-xs text-slate-500 dark:text-emerald-100/60">
 		          {researchFailClosed
 		            ? '研究證據待補 · 非正式'
@@ -424,27 +425,71 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
 	                ? '待估值補齊'
 	                : '點進查看估值與來源'}
 	        </p>
-	        <Link
-	          href={`/stock/${rec.symbol}`}
+	        {rec.projectionReadOnly || !availableResearchDecision?.decisionRevisionId ? <span data-testid="readonly-detail-unavailable" className="inline-flex min-h-11 max-w-full items-center rounded-full border border-line px-3.5 py-1.5 text-center text-sm font-semibold text-slate-500 dark:text-emerald-100/55">
+	          {rec.projectionReadOnly?'舊快照無決策詳情':'決策版本待補'}
+	        </span> : <Link
+	          href={`/stock/${rec.symbol}?decisionRevisionId=${encodeURIComponent(availableResearchDecision.decisionRevisionId)}`}
           data-testid={isPrimary ? 'view-insight-link' : undefined}
           className="inline-flex min-h-11 shrink-0 items-center rounded-full bg-amber-300 px-3.5 py-1.5 text-sm font-semibold text-slate-900 transition hover:bg-amber-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 dark:bg-amber-300 dark:text-slate-950"
 	        >
 	          深度分析 →
-	        </Link>
+	        </Link>}
 	      </div>
 	    </article>
 	  );
 	}
 
 function StocksTab({ radar }: { radar: RadarDailyPayload }) {
-  const opportunityActionOrder = { setup_ready: 0, wait_breakout: 1, wait_reclaim: 2,
-    avoid_chase: 3, evidence_watch: 4, avoid: 5 } as const;
-  const rankedResearch = [...(radar.sourceSignals ?? [])].filter((signal) => Number.isFinite(signal.underreactionScore)
-    && signal.researchDisposition !== 'avoid').sort((left, right) =>
-      (opportunityActionOrder[left.opportunityAction ?? 'evidence_watch']
-        - opportunityActionOrder[right.opportunityAction ?? 'evidence_watch'])
-      || (right.underreactionScore ?? 0) - (left.underreactionScore ?? 0)).slice(0, 12);
-  const setupReadyCount = rankedResearch.filter((signal) => signal.opportunityAction === 'setup_ready').length;
+  const decisionActionOrder = { buy: 0, accumulate: 1, research_starter: 2, wait_value:3,wait_market:4,wait_breakout: 5,
+    wait_reclaim: 6, avoid_chase: 7, unavailable: 8, avoid: 9 } as const;
+  const effectiveAction=(signal:SourceSignalCard)=>signal.projectionReadOnly
+    ?'unavailable':signal.decisionEnvelope?.userAction??'unavailable';
+  const rankedResearch = [...(radar.sourceSignals ?? [])]
+    .filter((signal)=>signal.projectionReadOnly===true
+      ||validatePublishedDecisionCard(signal as unknown as Record<string,unknown>)!==null)
+    .sort((left, right) => (decisionActionOrder[effectiveAction(left)]
+      - decisionActionOrder[effectiveAction(right)])
+      || (right.underreactionScore ?? 0) - (left.underreactionScore ?? 0)).slice(0, 30);
+  const signalSections = [
+    { key: 'action', eyebrow: 'ACTIONABLE NOW', title: '現在可行動', description: '完整正式決策，或明確標示為研究型小量分批；相對估值不冒充正式目標價。',
+      items: rankedResearch.filter((signal) => ['buy', 'accumulate', 'research_starter'].includes(effectiveAction(signal))) },
+    { key: 'wait', eyebrow: 'CONDITION WATCH', title: '等待條件', description: '估值或題材仍值得追蹤，但突破、收復支撐、合理乖離或風險條件尚未達成。',
+      items: rankedResearch.filter((signal) => ['wait_value','wait_market','wait_breakout', 'wait_reclaim', 'avoid_chase', 'avoid'].includes(effectiveAction(signal))) },
+    { key: 'research', eyebrow: 'SOURCE SIGNALS', title: '新來源待研究', description: '來源已出現，但估值、技術或基本面資料尚缺；資料缺失不會被翻譯成「不買」。',
+      items: rankedResearch.filter((signal) => effectiveAction(signal) === 'unavailable') },
+  ];
+  if (['legacy-radar-v3.13.0','legacy-radar-v3.14.0'].includes(radar.sourceLedCorrectness?.schema??'') || rankedResearch.length > 0) return (
+    <div className="space-y-0">
+      {radar.projectionHealth?.status !== 'fresh' ? (
+        <section role="status" className="mb-6 rounded-2xl border border-amber-500/30 bg-amber-500/8 px-5 py-4 text-sm text-amber-850 dark:text-amber-200">
+          {radar.projectionHealth?.researchVisibility === 'last_good_readonly'
+            ? `研究投影已漏 ${radar.projectionHealth?.missedExpectedRuns ?? 0} 次預定更新；目前只讀顯示 last-good，所有買進型動作已停用。`
+            : '研究投影目前不可用；首頁以降級空狀態顯示，不提供買進型動作。'}
+        </section>
+      ) : null}
+      {signalSections.map((section) => (
+        <section key={section.key} aria-labelledby={`signal-section-${section.key}`} className="mb-8 border-b border-line pb-8 last:border-b-0">
+          <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+            <div className="max-w-3xl">
+              <p className="text-[11px] font-medium tracking-[0.2em] text-amber-700 dark:text-amber-300">{section.eyebrow}</p>
+              <h3 id={`signal-section-${section.key}`} className="mt-1 text-2xl font-semibold tracking-[-0.025em]">{section.title}</h3>
+              <p className="mt-1 text-sm leading-6 text-slate-500 dark:text-emerald-100/60">{section.description}</p>
+            </div>
+            <span className="rounded-full border border-line px-3 py-1 text-xs text-slate-600 dark:text-emerald-100/65">{section.items.length} 檔</span>
+          </div>
+          {section.items.length > 0 ? (
+            <div className="grid gap-4 xl:grid-cols-2">
+              {section.items.map((signal) => <SourceSignalCardView key={`${section.key}-${signal.symbol}`} signal={signal} />)}
+            </div>
+          ) : (
+            <p className="rounded-2xl border border-dashed border-line px-5 py-6 text-sm text-slate-500 dark:text-emerald-100/55">
+              {section.key === 'action' ? '目前沒有通過完整決策條件的可行動標的；系統不會用配額製造買進名單。' : '目前沒有標的落在此區。'}
+            </p>
+          )}
+        </section>
+      ))}
+    </div>
+  );
   const namedFormal = (radar.opportunities || []).filter((r) => Boolean(r.chineseName));
   const namedScenario = (radar.scenarioUpsideCandidates || []).filter((r) => Boolean(r.chineseName));
   const namedEarly = (radar.earlyWatchlist ?? []).filter((r) => Boolean(r.chineseName));
@@ -503,21 +548,28 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
 
   return (
     <div className="space-y-0">
-      {rankedResearch.length > 0 ? (
-        <section className="mb-10 rounded-[1.5rem] border border-amber-500/25 bg-amber-500/5 p-5">
-          <div className="mb-5 flex items-end justify-between gap-4">
-            <div>
-              <p className="text-xs tracking-[0.2em] text-amber-700 dark:text-amber-300">PRICE HAS NOT FULLY REFLECTED THE EVIDENCE</p>
-              <h3 className="mt-1 text-xl font-semibold">目前可留意的未反映機會</h3>
-              <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/55">相對估值、基本面、跌深程度與技術時機分開評分；卡片會明確標示可評估、等突破、等收復或不追價。正式目標價仍需完整財務 bridge，兩者不混用。</p>
-            </div>
-            <span className="rounded-full bg-amber-300 px-3 py-1 text-xs font-semibold text-slate-950">{setupReadyCount} 條件成熟 · {rankedResearch.length} 顯示</span>
-          </div>
-          <div className="grid gap-3 lg:grid-cols-2">
-            {rankedResearch.map((signal) => <SourceSignalCardView key={`ranked-${signal.symbol}`} signal={signal} />)}
-          </div>
+      {radar.projectionHealth?.status !== 'fresh' ? (
+        <section role="status" className="mb-6 rounded-2xl border border-amber-500/30 bg-amber-500/8 px-5 py-4 text-sm text-amber-850 dark:text-amber-200">
+          {radar.projectionHealth?.researchVisibility === 'last_good_readonly'
+            ? `研究投影已漏 ${radar.projectionHealth?.missedExpectedRuns ?? 0} 次預定更新；目前只讀顯示 last-good，所有買進型動作已停用。`
+            : '研究投影目前不可用；首頁以降級空狀態顯示，不提供買進型動作。'}
         </section>
       ) : null}
+      {signalSections.map((section) => section.items.length > 0 ? (
+        <section key={section.key} aria-labelledby={`signal-section-${section.key}`} className="mb-8 border-b border-line pb-8 last:border-b-0">
+          <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+            <div className="max-w-3xl">
+              <p className="text-[11px] font-medium tracking-[0.2em] text-amber-700 dark:text-amber-300">{section.eyebrow}</p>
+              <h3 id={`signal-section-${section.key}`} className="mt-1 text-2xl font-semibold tracking-[-0.025em]">{section.title}</h3>
+              <p className="mt-1 text-sm leading-6 text-slate-500 dark:text-emerald-100/60">{section.description}</p>
+            </div>
+            <span className="rounded-full border border-line px-3 py-1 text-xs text-slate-600 dark:text-emerald-100/65">{section.items.length} 檔</span>
+          </div>
+          <div className="grid gap-4 xl:grid-cols-2">
+            {section.items.map((signal) => <SourceSignalCardView key={`${section.key}-${signal.symbol}`} signal={signal} />)}
+          </div>
+        </section>
+      ) : null)}
       <p className="mb-8 text-sm text-slate-500 dark:text-emerald-100/50">
         首頁先顯示正式推薦 {formalOpportunities.length} 支，並依「推薦指數」排序；研究證據待補 {researchPending.length} 支不列入正式推薦；情境上行候選 {scenarioUpsideCandidates.length} 支只代表 upside case 有追蹤價值，不等於正式買點。
         早期可關注 {earlyWatchlist.length} 支會優先於歷史觀察顯示；熱股追蹤 {hotTracking.length} 支只保留市場討論與重估線索；歷史觀察 {historicalObservationCount} 支已收斂為重估/歸檔摘要。
@@ -706,7 +758,7 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
           </div>
           <div className="mt-4 grid gap-2 md:grid-cols-2">
             {(historicalSummary?.examples || []).map((item) => (
-              <div key={`${item.symbol}-${item.disposition}`} className="rounded-2xl border border-line bg-surface px-3 py-2 text-xs leading-5">
+              <Link href={`/stock/${item.symbol}`} key={`${item.symbol}-${item.disposition}`} className="block rounded-2xl border border-line bg-surface px-3 py-2 text-xs leading-5 transition hover:border-accent/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600">
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-semibold">{item.symbol} {item.name}</span>
                   <span className="text-slate-500 dark:text-emerald-100/55">
@@ -722,7 +774,7 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
                   </span>
                 </div>
                 <p className="mt-1 text-slate-500 dark:text-emerald-100/58">{item.reason}</p>
-              </div>
+              </Link>
             ))}
           </div>
         </details>
@@ -910,7 +962,7 @@ function DiscoveredCard({ stock }: { stock: DiscoveredStockCard }) {
   );
 }
 
-function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
+function SourceSignalDiagnostics({ signal }: { signal: SourceSignalCard }) {
   const actionLabels = {
     setup_ready: '條件成熟候選', wait_breakout: '等待突破', wait_reclaim: '等待收復',
     avoid_chase: '乖離過高／不追價', evidence_watch: '補證據觀察', avoid: '暫時避開',
@@ -1008,10 +1060,113 @@ function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
   );
 }
 
+function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
+  const envelope = signal.decisionEnvelope;
+  const action = signal.projectionReadOnly ? 'unavailable' : envelope?.userAction ?? 'unavailable';
+  const actionLabels = {
+    buy: '可買進', accumulate: '可分批', research_starter: '研究型小量分批',
+        wait_value:'等待價格',wait_market:'等待大盤',wait_breakout: '等待突破', wait_reclaim: '等待收復支撐', avoid_chase: '不追價',
+    avoid: '暫時避開', unavailable: '資料待補',
+  } as const;
+  const actionTone = ['buy', 'accumulate', 'research_starter'].includes(action)
+    ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
+        : ['wait_value','wait_market','wait_breakout', 'wait_reclaim', 'avoid_chase'].includes(action)
+      ? 'border-sky-500/25 bg-sky-500/10 text-sky-700 dark:text-sky-300'
+      : 'border-amber-500/25 bg-amber-500/8 text-amber-800 dark:text-amber-300';
+  const valuation = envelope?.valuationSummary;
+  const provisional=signal.provisionalRelativeValue;
+  const band = valuation?.formalRange
+    ? { low: valuation.formalRange.bear, base: valuation.formalRange.base, high: valuation.formalRange.bull }
+    : valuation?.relativeBand ?? provisional?.referenceBand ?? null;
+  const triggerValue = envelope?.entryPlan?.trigger && typeof envelope.entryPlan.trigger === 'object'
+    ? envelope.entryPlan.trigger.threshold ?? null
+    : null;
+  const invalidation = envelope?.entryPlan?.invalidation ?? null;
+  const missingCount = new Set([
+    ...(envelope?.blockers ?? []),
+    ...(signal.missingAxes ?? []),
+    ...(!Number.isFinite(signal.currentPrice) ? ['current_price'] : []),
+  ]).size;
+  const revision = signal.decisionRevisionId ?? envelope?.decisionRevisionId ?? null;
+  const href = revision
+    ? signal.detailHref ?? `/stock/${signal.symbol}?decisionRevisionId=${encodeURIComponent(revision)}`
+    : null;
+  const provenance = signal.sourceProvenance;
+
+  return (
+    <article data-testid="decision-card" data-numeric-budget="six financial or trigger values; stock identity excluded" aria-label={`${signal.chineseName || signal.symbol} ${signal.symbol} ${actionLabels[action]}`} className="overflow-hidden rounded-[1.35rem] border border-line bg-surface shadow-[0_10px_34px_rgba(8,18,26,0.06)]">
+      <div className="p-4 sm:p-5">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-[11px] font-medium tracking-[0.18em] text-slate-500 dark:text-emerald-100/55">
+              {envelope?.recommendationAuthority === 'formal' ? '正式決策'
+                : envelope?.recommendationAuthority === 'conditional_research' ? '條件式研究' : '來源待研究'}
+            </p>
+            <h4 className="mt-1 text-xl font-semibold tracking-[-0.02em] text-slate-950 dark:text-emerald-50">
+              {signal.chineseName ? `${signal.chineseName} ` : ''}<span className="font-mono text-base text-slate-500">{signal.symbol}</span>
+            </h4>
+          </div>
+          <span className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold ${actionTone}`}>
+            {actionLabels[action]}
+          </span>
+        </div>
+
+        <p className="mt-3 line-clamp-2 text-sm leading-6 text-slate-650 dark:text-emerald-100/72">
+          {signal.projectionReadOnly ? '研究投影已過期；保留 last-good 估值供唯讀參考，但停止所有買進型動作。' : envelope?.whyNow || signal.sourceSummary}
+        </p>
+
+        <dl data-testid="collapsed-decision-metrics" className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-4">
+          <div className="bg-surface-strong p-3">
+            <dt className="text-[11px] tracking-[0.12em] text-slate-500">現價</dt>
+            <dd className="mt-1 text-base font-semibold">{signal.currentPrice != null ? <span data-decision-numeric-value>{`NT$${signal.currentPrice.toFixed(2)}`}</span> : '待補'}</dd>
+          </div>
+          <div className="bg-surface-strong p-3 sm:col-span-2">
+            <dt className="text-[11px] tracking-[0.12em] text-slate-500">
+              {valuation?.kind === 'formal_range' ? 'Bear / Base / Bull'
+                : valuation?.kind === 'relative_reference_band' ? '相對估值參考帶'
+                  : provisional ? `暫定相對估值帶（${provisional.sampleCount} 日）` : '估值'}
+            </dt>
+            <dd className="mt-1 text-base font-semibold">
+              {band ? <><span data-decision-numeric-value>{band.low.toFixed(1)}</span> / <span data-decision-numeric-value>{band.base.toFixed(1)}</span> / <span data-decision-numeric-value>{band.high.toFixed(1)}</span></>
+                : `尚缺 ${Math.max(1, missingCount)} 項`}
+            </dd>
+          </div>
+          <div className="bg-surface-strong p-3">
+            <dt className="text-[11px] tracking-[0.12em] text-slate-500">觸發 / 失效</dt>
+            <dd className="mt-1 text-sm font-semibold">
+              {triggerValue != null ? <span data-decision-numeric-value>{triggerValue.toFixed(1)}</span> : '待條件'} / {invalidation != null ? <span data-decision-numeric-value>{invalidation.toFixed(1)}</span> : '待補'}
+            </dd>
+          </div>
+        </dl>
+
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-3">
+          <div className="min-w-0 text-xs leading-5 text-slate-500 dark:text-emerald-100/55">
+            {provenance?.sourceUrl ? <a href={provenance.sourceUrl} target="_blank" rel="noreferrer" className="underline decoration-slate-300 underline-offset-2 hover:text-slate-800 dark:hover:text-emerald-50">{provenance.sourceName || sourceTypeLabel[signal.sourceClass] || signal.sourceClass}</a>
+              : <span>{provenance?.sourceName || sourceTypeLabel[signal.sourceClass] || signal.sourceClass}</span>}
+            <span className="sr-only">；發布、收集與評估日期請展開研究依據。</span>
+          </div>
+          {href ? <Link href={href} className="inline-flex min-h-11 items-center rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 dark:bg-amber-300 dark:text-slate-950 dark:hover:bg-amber-200">
+            查看決策摘要 →
+          </Link> : <span data-testid="readonly-detail-unavailable" className="inline-flex min-h-11 items-center rounded-full border border-line px-4 py-2 text-sm font-semibold text-slate-500 dark:text-emerald-100/55">
+            舊快照無決策詳情
+          </span>}
+        </div>
+      </div>
+
+      <details className="group border-t border-line bg-slate-950/[0.02] dark:bg-white/[0.02]">
+        <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between px-5 py-3 text-sm font-medium text-slate-600 marker:hidden dark:text-emerald-100/70">
+          研究依據與診斷
+          <span aria-hidden="true" className="transition group-open:rotate-45">＋</span>
+        </summary>
+        <div className="border-t border-line p-3"><SourceSignalDiagnostics signal={signal} /></div>
+      </details>
+    </article>
+  );
+}
+
 function DiscoveryTab({ radar }: { radar: RadarDailyPayload }) {
   const stocks = (radar.discoveredStocks ?? []).filter((stock) => Boolean(stock.chineseName));
-  const discoveredSymbols = new Set(stocks.map((stock) => stock.symbol));
-  const sourceSignals = (radar.sourceSignals ?? []).filter((signal) => !discoveredSymbols.has(signal.symbol));
+  const sourceSignals: SourceSignalCard[] = radar.sourceSignals ?? [];
   const delta = radar.discoveryDelta;
   return (
     <div className="space-y-4">
@@ -1063,14 +1218,15 @@ export function RadarTabs({ radar }: Props) {
     return () => window.clearTimeout(timer);
   }, []);
 
+  const visibleStockCount = new Set([
+    ...(radar.opportunities || []), ...(radar.scenarioUpsideCandidates || []),
+    ...(radar.earlyWatchlist || []), ...(radar.hotTracking || []), ...(radar.sourceSignals || []),
+  ].filter((item) => Boolean(item.symbol)).map((item) => item.symbol)).size;
   const tabs: { key: TabKey; label: string; count: number }[] = [
     {
       key: 'stocks',
       label: '股票研究',
-      count:
-        radar.opportunities.filter((item) => Boolean(item.chineseName)).length +
-        (radar.scenarioUpsideCandidates || []).filter((item) => Boolean(item.chineseName)).length +
-        (radar.earlyWatchlist || []).filter((item) => Boolean(item.chineseName)).length,
+          count: visibleStockCount,
     },
     { key: 'themes', label: '主題分析', count: radar.hotThemes.length },
     { key: 'discovery', label: '社群發現', count: new Set([

@@ -1,6 +1,6 @@
 # Additive Storage Schema Contract: source-led-opportunity-engine-v3
 
-Version: `opportunity-storage-v3.24`
+Version: `opportunity-storage-v3.25`
 
 This file fixes the additive PostgreSQL shape that Terra must implement. SQL identifier casing is snake_case, timestamps are `timestamptz`, IDs are `uuid`, hashes are `text CHECK (value ~ '^[0-9a-f]{64}$')`, finite numeric facts are `double precision` with `CHECK (isfinite(value))`, and every RPC-visible enum/composite is the exact named type in `postgres-type-contract.md`; substituting anonymous/generic enums, JSON objects or implementation-selected `CHECK` labels is forbidden. No existing table or constraint is dropped or repurposed.
 
@@ -134,16 +134,20 @@ client has direct registry DML or SELECT.
 
 `opportunity_exchange_reported_pe_v3` columns are `(reported_pe_id uuid PK,stock_id
 uuid REFERENCES stocks(id) ON DELETE RESTRICT,exchange stock_exchange_v3,session_date
-date,close double precision,reported_pe double precision,published_at timestamptz,
+date,close double precision,reported_pe double precision NULL,reported_pb double precision NULL,published_at timestamptz,
 source_timestamp timestamptz,collected_at timestamptz,source_ref text,recorded_at
 timestamptz)`. It permits only exchange-owner `twse|tpex` append RPC authority,
-requires finite positive close, finite PE and
+requires finite positive close and at least one finite PE or positive finite PB and
 `published_at <= source_timestamp <= collected_at <= recorded_at`, and has no update
 or delete privilege/trigger exception. `append_price_authority_v3` owns this table's
 `kind='exchange_reported_pe'` branch: the branch accepts only the exact
 `exchange_reported_pe_input_v3` composite, inserts one row plus one RPC audit in one
 transaction and returns `reported_pe_id`; raw-price and corporate-action branches
-must leave this table unchanged. Its immutable unique source tuple covers every
+must leave this table unchanged. For the V3.13 legacy-correctness producer,
+`append_exchange_reported_valuation_v3_13(exchange_reported_valuation_input_v3_13,uuid)`
+is the sole additive PE/PB writer; it uses the same exact runner role and atomically
+records an `append_price_authority_v3` audit. Direct producer DML is forbidden. Its
+immutable expression-unique source tuple covers every
 column through `source_ref`. The selector index is `(stock_id,exchange,session_date
 DESC,published_at DESC,source_timestamp DESC,collected_at DESC,recorded_at DESC,
 source_ref)` and the full-roster current-session index is `(session_date,stock_id,
@@ -514,11 +518,14 @@ forced, and grants `service_role` only `SELECT`; `PUBLIC|anon|authenticated` rec
 nothing. Direct `service_role` insert/update/delete/truncate is denied by ACL. A
 trigger rejects every UPDATE and rejects DELETE unless both
 `current_user='legacy_correctness_rpc_owner'` and the transaction-local internal
-retention marker was set by
-`append_legacy_radar_projection_v3_11`. The NOLOGIN owner is not granted to any login
+retention marker was set by the shared V3.13 retention trigger. A BEFORE INSERT
+trigger takes the per-window transaction advisory lock and rejects non-monotonic time
+or an equal-`as_of` checksum conflict; an AFTER INSERT trigger performs retention.
+Consequently the atomic completion insert and the helper append RPC cross the same
+guard and neither can bypass serialization or retention. The NOLOGIN owner is not granted to any login
 role, so only an owner-rights function can have that effective owner identity.
 
-Projection append takes one transaction advisory lock for the window, requires
+Every projection insert takes one transaction advisory lock for the window, requires
 `as_of` not earlier than the greatest retained `as_of`, inserts or byte-identically
 reuses the projection, then sets the internal marker and retains exactly the newest
 1,500 rows in `(as_of DESC,created_at DESC,projection_id ASC)` order for that window.
@@ -528,6 +535,139 @@ insert or retention step rolls back both. Projections are a rebuildable compact 
 model; immutable analysis revisions/evaluations remain the long-lived evidence
 authority. The legacy `runtime_artifacts` table, its policies/indexes and its generic
 retention job are untouched, so old projections cannot abort unrelated cleanup.
+
+V3.13 adds `legacy_decision_revisions_v3_13` as immutable long-lived disclosure
+authority with exact columns `(decision_revision_id text primary key,symbol text,
+decision_payload_canonical bytea,decision_payload_json jsonb,decision_payload_sha256
+text,recorded_at timestamptz)`. It deliberately stores neither correctness heartbeat nor
+a foreign key to the rebuildable projection relation. `legacy_decision_revision_evaluations_v3_13`
+stores `(evaluation_id uuid primary key,decision_revision_id text references the decision
+revision on delete restrict,projection_id uuid,source_led_correctness jsonb,evaluated_at
+timestamptz,recorded_at timestamptz)`; projection ID is audit provenance without a foreign
+key, so the 1,500-row projection retention remains executable. Unique
+`(decision_revision_id,evaluated_at)` and a locked existing-payload comparison make an
+equal-instant correctness disagreement fail closed. Index
+`(decision_revision_id,evaluated_at DESC,recorded_at DESC,evaluation_id)` supplies the
+two-row exact-read sentinel. The exact Decision Brief renders its immutable evaluation
+date from decision source provenance, while freshness is derived only from the newest
+separate evaluation row.
+
+V3.13 also adds `legacy_analysis_revision_payloads_v3_13` with exact columns
+`(revision_id uuid primary key,symbol text,material_change_hash text,payload_canonical
+bytea,payload_json jsonb,payload_sha256 text,recorded_at timestamptz)`. It is immutable,
+RLS-enabled, bounded to 256 KiB per payload and has unique
+`(symbol,material_change_hash)`. Analysis completion persists the worker's exact
+`legacy_analysis_fact_payload_v3_13` bundle after authoritative lease completion. The
+claim wrapper returns a prior analysis revision only when this exact payload exists and
+its revision/symbol/material hash agree; it never reconstructs immutable facts from
+current mutable inputs. Pre-V3.13 rows without a payload are omitted once, causing the
+current exact payload to be captured without fabricating a prior Decision Brief.
+
+### V3.13 frozen source-acquisition plane
+
+The following eight relations are the complete persistent source-acquisition plane.
+They are not implementation-private scratch tables. Every listed column, bound, key,
+foreign key, lifecycle rule and privilege is normative; an additional column, relaxed
+bound, alternate owner, policy or application grant is forbidden.
+
+`legacy_approved_source_profiles_v3_13` is the migration-owned exact 17-row roster:
+`(profile_id text primary key CHECK ^[a-z0-9_]{2,40}$, profile_name text NOT NULL
+CHECK length 1..120)`. Its rows byte-match `approved-source-roster-v3.13`; reapply with
+an extra, missing, renamed or conflicting row aborts as `approved_source_roster_conflict`.
+
+`legacy_frozen_source_authorities_v3_13` is
+`(source_run_id uuid FK legacy_producer_runs_v3_11(run_id) RESTRICT, profile_id text FK
+legacy_approved_source_profiles_v3_13(profile_id) RESTRICT, source_key source_key_v3
+CHECK threads|podcast|youtube, distribution_identity text, source_identity_id uuid FK
+source_entities(id) RESTRICT, source_identity_authority_id uuid FK
+source_identity_authorities_v3(authority_id) RESTRICT, authority_cutoff timestamptz,
+recorded_at timestamptz default database clock)`, with primary key
+`(source_run_id,profile_id,source_key)`, unique
+`(source_run_id,source_identity_authority_id)` and exact distribution identity
+`source_key || ':' || profile_id`. The AFTER-INSERT run trigger first invokes the
+bounded registry-first latest-event conflict sentinel, then freezes only the active
+cutoff-visible head. Post-cutoff grants, revocations and renames cannot affect it.
+
+`legacy_source_append_context_v3_13` is
+`(source_run_id uuid FK run RESTRICT, profile_id text FK approved profile RESTRICT,
+source_key source_key_v3, stable_connector_document_id text length 1..512,
+source_identity_authority_id uuid FK source authority RESTRICT, authority_cutoff
+timestamptz, backend_pid integer, transaction_id bigint, recorded_at timestamptz default
+database clock)`. Its primary key is
+`(source_run_id,source_key,profile_id,stable_connector_document_id)` and composite FK
+`(source_run_id,profile_id,source_key)` targets the frozen authority with RESTRICT.
+Completion creates it immediately before the existing append RPC in the same database
+transaction. Append may consume it only for that exact backend/transaction and only
+before the matching persistence terminal exists; completed context cannot be replayed.
+
+`legacy_source_document_persistence_v3_13` is
+`(source_run_id uuid FK run RESTRICT, profile_id text CHECK ^[a-z0-9_]{2,40}$,
+source_key source_key_v3, stable_connector_document_id text length 1..512,
+ingestion_canonical_content_hash_v3 text nullable lower-hex-64,
+document_terminal_identity_sha256 text lower-hex-64, disposition text
+new_revision|unchanged|deferred|rejected, revision_id uuid NULL FK
+source_document_revisions_v3(revision_id) RESTRICT, reason text length 1..500,
+recorded_at timestamptz default database clock)`. Its primary key is
+`(source_run_id,document_terminal_identity_sha256)` and `revision_id` is non-null
+exactly for `new_revision|unchanged`. The terminal identity is SHA-256 over canonical
+`[sourceKey,profileId,stableConnectorDocumentId,collectedAt,acquisitionStatus,
+ingestionCanonicalContentHashV3OrNull]`. The canonical content hash is null exactly
+when the appended revision has a non-complete typed acquisition status such as
+`content_overflow`; the separate terminal identity conserves that document without
+inventing a content hash.
+
+`legacy_source_connector_attempts_v3_13` is one row per frozen
+`(source_run_id,profile_id,source_key)` and stores `status`, `reason_code`,
+`response_kind`, nullable `response_status_code`, `response_bytes`, `item_count`,
+`document_count`, and database `recorded_at`. Status is exactly
+`items_found|successful_empty|metadata_only|missing_endpoint|auth_failed|provider_failed`;
+reason is lower snake-case length 2..80; kind is
+`http_response|configuration|transport_error`; HTTP status is 100..599 iff kind is
+HTTP; bytes are 0..8,000,000, items 0..20 and documents 0..10. The status/kind/status-
+code/count/reason matrix is exact: a successful empty is observed 2xx with zero/zero,
+items-found is observed 2xx with a nonzero item or document, metadata-only is observed
+2xx with items and zero documents, auth is configuration-missing or 401/403, missing
+endpoint is configuration-missing or 404, and provider failure is transport or another
+non-2xx. Completion requires exactly 51 distinct rows and exact attempt/item/document
+count conservation.
+
+`legacy_source_item_outcomes_v3_13` is
+`(source_run_id uuid FK run RESTRICT, profile_id text CHECK ^[a-z0-9_]{2,40}$,
+source_key source_key_v3, stable_item_id text length 1..512, source_url text HTTPS,
+published_at timestamptz NULL, acquisition_disposition text, analysis_disposition text,
+recorded_at timestamptz default database clock)` with primary key
+`(source_run_id,source_key,profile_id,stable_item_id)`. Its only allowed disposition
+pairs are `(transcript_ready,eligible_for_claim_extraction)`,
+`(metadata_only,no_claim)`, `(rejected,rejected)` and `(deferred,deferred)`.
+
+`legacy_source_acquisition_outcomes_v3_13` is one SQL-derived row per
+`(source_run_id,profile_id)`, with exact roster name, status
+`fresh|unchanged|no_new_items|missing_endpoint|auth_failed|provider_failed`, reason
+length 1..1000, acquired/new/unchanged/deferred/rejected integer counts each bounded
+0..30 and exact count conservation, plus database `recorded_at`. Caller-supplied status
+or reason is forbidden. The closed precedence is provider failure, authentication
+failure, fresh, any remaining positive-document batch containing deferred work as
+failure, an all-rejected batch as failure, unchanged, missing endpoint, successful empty. `no_new_items` requires
+exactly zero documents; no evidence class may be re-labeled by the caller.
+
+`legacy_source_processing_outcomes_v3_13` is
+`(source_run_id uuid FK run RESTRICT, revision_id uuid FK source revision RESTRICT,
+scope text document|claim|entity, outcome_id uuid, parent_outcome_id uuid NULL, symbol
+text NULL CHECK ^[0-9A-Za-z]{2,12}$, stock_id uuid NULL FK stocks(id) RESTRICT, outcome
+text processed_with_claims|processed_no_claim|linked|rejected|deferred, reason text
+length 1..500, recorded_at timestamptz default database clock)` with primary key
+`(source_run_id,revision_id,scope,outcome_id)`. Documents alone have null parents;
+claims/entities require a parent; `linked` has a stock exactly when linked. Every
+persisted revision receives one document terminal and conserved claim/entity terminals.
+
+All eight relations have RLS enabled and not forced, no policies, and owner
+`opportunity_v3_rpc_owner` (`NOLOGIN NOBYPASSRLS`). `PUBLIC`, `anon`, `authenticated`
+and `service_role` receive no table privilege. Seven run-owned/event relations (all
+except the static approved roster) use the exact
+`legacy_correctness_immutable_v3_11` BEFORE UPDATE OR DELETE trigger; direct truncate is
+denied by the closed ACL. Writes occur only inside the reviewed security-definer run
+creation/completion wrappers. Catalog acceptance independently mutates every column,
+bound, PK/FK, trigger, RLS flag, owner and ACL and must fail on each mutation.
 
 The separate ten-function catalog, with no overload/default argument, is:
 
@@ -552,7 +692,8 @@ closed seed authority, derives the scheduled occurrence/cutoff/trading
 authority exactly under `runtime-installation-contract.md` v1.12, atomically freezes
 the run-owned paged authority manifest/root, creates the payload/input/job identities in that
 order, returns
-the run and execution-ordinal-zero job, and accepts no caller time. Claim returns one closed
+the run and execution-ordinal-zero job, and accepts no caller time. Claim preserves the
+legacy lease state machine, then returns one closed
 payload/predecessor-result row with exactly `(run_id,job_id,stage,job_kind,
 stage_ordinal,shard_ordinal,execution_ordinal,revision_id,attempt,
 payload_canonical,payload_json,payload_hash,
@@ -566,6 +707,15 @@ revision members are non-null only for a leased `mention_claim_extraction`
 revision shard and return exactly one raw revision after its frozen-row and token
 checks.
 
+For `analysis_revision`, the V3.13 claim wrapper joins only exact immutable fact
+payloads. For `compact_radar_projection`, it selects prior projections in literal
+`as_of DESC,created_at DESC,projection_id ASC` order and checks a two-row equal-instant
+checksum sentinel before returning `priorProjections`; conflict fails closed.
+Analysis completion additionally requires the ordered `(symbol,materialChangeHash)`
+multiset in `decisionPayloads` to equal the ordered multiset in this exact completed
+result's `decisions`; a valid payload for an unrelated retained revision cannot be
+substituted merely because its own hash is sound.
+
 The four private non-overloaded legacy bridge helpers are:
 
 ```text
@@ -577,6 +727,15 @@ read_legacy_frozen_revision_v3_11(uuid,uuid,text,uuid,text)
 read_legacy_candidate_fact_plane_v3_11(timestamptz,jsonb)
   RETURNS jsonb
 ```
+
+The V3.13 migration preserves the public ten-function catalog by renaming the prior
+claim, completion and fact-plane implementations to the private
+`*_authoritative_v3_13` names and placing the reviewed V3.13 wrappers at the original
+signatures. Those three authoritative implementations grant EXECUTE only to the
+NOLOGIN owner of their wrapper, revoke every client role, and are not an additional
+application RPC surface. The wrappers and authoritative implementations execute in
+one SQL transaction, so any V3.13 validation or persistence failure rolls back the
+underlying lease/completion mutation as well.
 
 `resolve_legacy_scheduled_occurrence_v3_11` is owned by
 `opportunity_v3_rpc_owner`, security-definer with empty search path, and grants
@@ -643,8 +802,10 @@ staged attempt and all owner/lease fields; the enclosing claim transaction then
 terminalizes the prior queued/retryable job and run as `failed` with that failure code,
 unchanged attempt, null owner token/lease timestamps, zero claim rows and zero raw
 bytes. The integrity branch is not retryable and cannot consume an attempt.
-Heartbeat returns Boolean. Complete
-validates canonical result bytes/JSON/hash,
+Heartbeat returns Boolean. Complete validates canonical result bytes/JSON/hash. The
+V3.13 wrapper returns immediately when authoritative completion produces no row,
+before any V3.13 source, fact, price, analysis-payload, decision or evaluation write.
+On a valid completion it validates
 stage-owned appended IDs and exact counts, then atomically succeeds the job and
 creates the database-derived next revision shard/barrier or succeeds the run.
 Revision-shard completion atomically persists one document plus bounded claims/
@@ -653,8 +814,9 @@ barrier, never a monolithic outcome array. Fail/reap apply the attempt-five rule
 and cannot create a successor. Append functions return retained/created UUIDs and are
 authorized only by a matching leased stage; candidate append derives seed membership
 and hash from the run rather than caller input; projection append additionally verifies
-the compact payload, immutable key and checksum before its sole
-`legacy_radar_projections_v3_11` insert/retention transaction. An expired/wrong owner
+the compact payload, immutable key and checksum before its guarded
+`legacy_radar_projections_v3_11` insert/retention transaction. The compact completion
+path uses the same table-level guard. An expired/wrong owner
 or stage performs zero domain or projection write.
 Catalog/RLS/zero-direct-DML/interruption acceptance is mandatory before any later
 production migration authority. Applied-PostgreSQL acceptance runs as

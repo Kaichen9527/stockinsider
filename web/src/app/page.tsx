@@ -128,10 +128,11 @@ export default async function Home() {
     ...(radar.hotTracking || []),
     ...(radar.fallbackOpportunities90d || []),
     ...(radar.earlyWatchlist || []),
+    ...(radar.sourceSignals || []),
   ];
   for (const item of allCards) {
     if (!item.symbol) continue;
-    const zh = item.chineseName || item.name || item.symbol;
+    const zh = item.chineseName || ('name' in item ? item.name : null) || item.symbol;
     symbolNameMap.set(item.symbol, zh);
   }
   for (const item of radar.discoveredStocks || []) {

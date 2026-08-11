@@ -108,3 +108,86 @@ test('PCR-024 exercises the decision matrix at 320px, 200% zoom, keyboard, reduc
   expect(darkBackground).not.toBe(lightBackground);
   await expect(page.getByRole('article', { name: /9005/u })).toBeVisible();
 });
+
+test('V3.13 Landing has three exclusive action sections and at most six collapsed numbers per card', async ({ page }) => {
+  const pageErrors: Error[] = [];
+  page.on('pageerror', (error) => pageErrors.push(error));
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.emulateMedia({ reducedMotion: 'reduce', colorScheme: 'light' });
+  await page.goto('/v313-decision-fixture');
+  await page.evaluate(() => { document.documentElement.style.zoom = '2'; });
+
+  for (const heading of ['現在可行動', '等待條件', '新來源待研究']) {
+    await expect(page.getByRole('heading', { name: heading })).toHaveCount(1);
+  }
+  await expect(page.getByRole('article')).toHaveCount(3);
+  await expect(page.getByText('研究型小量分批', { exact: true })).toBeVisible();
+  await expect(page.getByText('等待收復支撐', { exact: true })).toBeVisible();
+  await expect(page.getByText('資料待補', { exact: true })).toBeVisible();
+
+  const cards=page.getByTestId('decision-card');
+  await expect(cards).toHaveCount(3);
+  for(let index=0;index<await cards.count();index+=1){
+    expect(await cards.nth(index).locator('[data-decision-numeric-value]').count()).toBeLessThanOrEqual(6);
+  }
+  const links = page.getByRole('link', { name: /查看決策摘要/u });
+  await expect(links).toHaveCount(3);
+  await links.first().focus();
+  await expect(links.first()).toBeFocused();
+  await expect(links.first()).toHaveAttribute('href', /\/stock\/9101[?]decisionRevisionId=decision-v3[.]13%3A/u);
+
+  const horizontalOverflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  expect(horizontalOverflow).toBeLessThanOrEqual(0);
+  await page.emulateMedia({ reducedMotion: 'reduce', colorScheme: 'dark' });
+  await page.evaluate(() => document.documentElement.classList.add('dark'));
+  await expect(page.getByRole('article', { name: /9103/u })).toBeVisible();
+  await links.first().click();
+  await expect(page.getByTestId('detail-revision')).toHaveText(`decision-v3.13:${'a'.repeat(64)}`);
+  await expect(page.getByTestId('detail-action')).toHaveText('research_starter');
+  await expect(page.getByTestId('detail-authority')).toHaveText('conditional_research');
+  await expect(page.getByTestId('detail-valuation')).toHaveText('90 / 117.65 / 135');
+  await expect(page.getByTestId('detail-entry')).toHaveText('101–103');
+  await expect(page.getByTestId('detail-invalidation')).toHaveText('92');
+  await expect(page.getByTestId('detail-thesis').getByRole('listitem')).toHaveCount(3);
+  await expect(page.getByTestId('detail-risks').getByRole('listitem')).toHaveCount(3);
+  await expect(page.getByTestId('detail-source-dates')).toContainText('發布：');
+  await expect(page.getByTestId('detail-source-dates')).toContainText('收集：');
+  await expect(page.getByTestId('detail-source-dates')).toContainText('評估：');
+  await expect(page.getByTestId('detail-citations').getByRole('link', { name: '授權來源 fixture' }))
+    .toHaveAttribute('href', 'https://example.com/fixture');
+  await page.goto(`/stock/9103?decisionRevisionId=${encodeURIComponent(`decision-v3.13:${'c'.repeat(64)}`)}`);
+  await expect(page.getByTestId('detail-valuation')).toHaveText('尚缺：diluted_shares、cash_debt');
+  await expect(page.getByText('已反映')).toHaveCount(0);
+  await page.goto('/stock/9101');
+  await expect(page.getByTestId('detail-action')).toHaveText('research_starter');
+  await page.goto('/stock/9199');
+  await expect(page.getByTestId('detail-unavailable')).toContainText('authoritative_decision_envelope_missing');
+  await expect(page.getByText(/可買進|可分批|研究型小量分批/u)).toHaveCount(0);
+  await page.goto(`/stock/9105?decisionRevisionId=${encodeURIComponent(`decision-v3.13:${'e'.repeat(64)}`)}`);
+  await expect(page.getByTestId('detail-unavailable')).toContainText('projection_stale_readonly');
+  await expect(page.getByText(/可買進|可分批|研究型小量分批/u)).toHaveCount(0);
+  await page.goto(`/stock/9104?decisionRevisionId=${encodeURIComponent(`decision-v3.13:${'d'.repeat(64)}`)}`);
+  await expect(page.getByTestId('detail-unavailable')).toContainText('revision_envelope_brief_or_provenance_invalid');
+  for (const suffix of [
+    'bad&refresh=1',
+    `decision-v3.13:${'A'.repeat(64)}&refresh=1`,
+    `decision-v3.13:${'a'.repeat(63)}&refresh=1`,
+    `decision-v3.13:${'a'.repeat(64)}&decisionRevisionId=decision-v3.13:${'b'.repeat(64)}&refresh=1`,
+  ]) {
+    await page.goto(`/stock/9101?decisionRevisionId=${suffix}`);
+    await expect(page.getByTestId('detail-unavailable')).toContainText('decision_revision_parameter_invalid_or_ambiguous');
+    await expect(page.getByText('深度分析準備中')).toHaveCount(0);
+    await expect(page.getByTestId('detail-revision')).toHaveCount(0);
+  }
+  const duplicateQuery=`decisionRevisionId=decision-v3.13:${'a'.repeat(64)}`+
+    `&decisionRevisionId=decision-v3.13:${'b'.repeat(64)}`;
+  await page.goto(`/stock/9101/technical?${duplicateQuery}`);
+  await expect(page.getByTestId('detail-unavailable'))
+    .toContainText('decision_revision_parameter_invalid_or_ambiguous');
+  for(const apiPath of ['deep-dive','insight']){
+    const response=await page.request.get(`/api/stocks/9101/${apiPath}?${duplicateQuery}`);
+    expect(response.status()).toBe(409);
+    expect(await response.json()).toMatchObject({status:'unavailable',reason:'decision_revision_ambiguous'});
+  }
+  expect(pageErrors).toEqual([]);
+});

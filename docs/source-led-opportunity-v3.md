@@ -155,10 +155,19 @@ curl --fail-with-body -X POST \
 Vercel Web deployment 仍不授權 merge、套 migration、寫 principal bindings、
 啟用排程或變更 `SOURCE_LED_OPPORTUNITY_V3`。
 
-目前沒有提供會直接套用 V3 production migration 的 npm 指令；這是刻意的權限邊界。
-通用的 `npm run db:migrate` 也會明確略過
-`20260724_source_led_opportunity_engine_v3.sql`；未來若取得 production mutation 與
-target pin 的獨立授權，必須另建專用 apply 路徑，不能解除這個通用指令的排除規則。
+通用的 `npm run db:migrate` 使用封閉 allowlist，只會選取已審查的 legacy migrations；
+所有 V3-family migration 都不會被自動發現。`npm run db:v3:plan` 會輸出 base、
+V3.12、V3.13、V3.14 完整有序 chain 的逐檔 hash、chain hash 與 durable authority
+artifact hash。未取得 production mutation authority 時，plan 維持
+`applyAuthorized:false`；V3.14 已記錄 authority 後，只能使用
+`npm run db:v3:apply-reviewed -- --source-commit <reviewed> --attestation-commit <attestation>`。
+該命令要求乾淨 exact HEAD、direct-child review attestation、Keychain credential、
+additive-only chain 與單一 advisory lock；不把 V3 migration 加入通用 allowlist。
+
+V3.14 action authority 另要求 Web Production 環境的
+`STOCKINSIDER_REVIEWED_RELEASE_SHA` 與 `STOCKINSIDER_RUNTIME_MANIFEST_SHA256` 精確等於
+projection 的 producer/runtime identity。缺少或不相等時保留 last-good research，
+但只允許 read-only；rollback 同時恢復 prior Vercel alias、runtime pointer/plist 並停止 scheduler。
 
 ## 三條 Verification track
 

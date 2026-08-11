@@ -155,6 +155,21 @@ trading dates satisfy every conjunctive rule; approve a specific model artifact 
 any non-shadow influence. They remain blocked on real elapsed evidence and V3 remains
 disabled.
 
+## V3.13 decision-integrity checkpoint — 2026-08-10
+
+- [x] Record independent fresh Requirements Round 104 as `CHANGES_REQUIRED P0=0 P1=6 P2=0` over tree `d9d49aca1c975636792f6b74818d34aaaf1d5b8d`.
+- [x] Synchronize every active current-inventory declaration to `1.45.1` / 308 total / 260 product-runtime and add an active-corpus regression oracle.
+- [x] Separate material decision identity from evaluation heartbeat; preserve `contentAsOf` and immutable revision identity on no-change publication.
+- [x] Make PB/ROE, NAV, EV/Sales and EV/EBITDA constructible through the production official-fact and 8-peer authority path.
+- [x] Route DI-008 parser output through job completion, immutable price/action persistence and the later 122-session adjusted read.
+- [x] Persist and conserve `new_revision | unchanged | deferred | rejected`, with/without-claim document outcomes and linked/rejected entities.
+- [x] Load the requested decision revision before legacy detail lookup; make FULL authoritative and remove fabricated Decision Brief filler.
+- [x] Pass diagnostic migration 30/30, product correctness 49/49, Playwright 3/3, typecheck, lint and production build.
+- [x] Supersede the Round 104 gate checkpoint with the operative current section below; no PASS is claimed here.
+- [x] Supersede the Round 104 Architecture instruction with the operative post-Requirements task below.
+- [x] Supersede the Round 104 exact-review instruction with the operative current task below.
+- [x] Confirm V3.13 production Web, DB, runtime, connector, source-write, activation, LINE and ranking authorities remain disabled and separately gated.
+
 ## /autoplan Review — 2026-07-24
 
 ### Intake
@@ -1299,3 +1314,353 @@ This approval authorizes implementation only. It does not authorize production m
   deploy the same exact commit to Vercel and pass read-only production smoke/product-
   value checks. Runtime terminalized 3,140/3,140 jobs with producer/consumer SHA
   compatibility and zero stuck runs; V3 remains disabled.
+
+### V3.13 Decision Integrity — current implementation
+
+- [x] Freeze the eight-finding repair tree and complete independent repair-range and
+  full-range closure review with `PASS P0=0 P1=0 P2=0` for both. The authoritative
+  Code Gate remains the sole pending implementation evidence.
+
+- [x] Capture the production 500/503, missing valuation bridge, split-brain action,
+  FULL/LIGHT overwrite and connector-truth RED baseline.
+
+### V3.14 Actionability Recovery — user-authorized implementation
+
+- [x] Advance the canonical inventory to `1.46.0` / 320 total / 272 product-runtime
+  and bind REC-001..REC-012 to exact V3.14 owner tests.
+
+- [x] Record the 2026-08-11 zero-card production RED baseline and exposed-credential
+  containment requirement.
+- [x] Run fresh Requirements Round 131 over commit
+  `2aefcf2fdb81f8a751f90bd3626192c6fd6cc113` / tree
+  `29532559faafd3154af743c592a6c68e943e03eb`, record
+  `CHANGES_REQUIRED P0=0 P1=4 P2=0`, and repair the four roots together:
+  V3.13 completion preservation, terminal-atomic official staging, consolidated
+  MOPS context authority and effective acquisition bounds.
+- [x] Run fresh Requirements Round 132 over commit
+  `f259bade55361fb507da977fdddd4d366df677e2` / tree
+  `077e2992fa5c7406cffb6a268bd832837b8ac1ef`, record
+  `CHANGES_REQUIRED P0=0 P1=7 P2=0`, and replace all seven false-green owners with
+  executed ranking, browser, release-matrix, PostgreSQL lifecycle, official-data-to-
+  Web, mixed-source and apply-twice evidence. Fresh Round 133 remains pending over a
+  new immutable repair tree.
+- [x] Run fresh Requirements Round 133 over commit
+  `bbddc4a9eea407ba223c7e1365036e321c6fd592` / tree
+  `901eb5940508c6afbc225292234e30b924e0c255`, record
+  `CHANGES_REQUIRED P0=0 P1=1 P2=0`, and align the protected traceability executor
+  with the canonical 140 non-PCR mappings. Fresh Round 134 remains pending over a
+  new immutable repair tree.
+- [x] Run fresh Requirements Round 134 over commit
+  `a16eae610cc73aba13ca5355b024acac60f0f06b` / tree
+  `d3a37c687c5e84bb094507515d7f6d15a8254d0c`, record
+  `CHANGES_REQUIRED P0=0 P1=1 P2=0`, and align traceability, gate envelopes and the
+  protected worker to 320 total / 272 product-runtime / 171 suite-backed. Fresh
+  Round 135 remains pending over a new immutable repair tree.
+- [x] Run fresh Requirements Round 135 over commit
+  `0ae3fbc3ed3ddcbe6a142cd082fabf386c47c326` / tree
+  `e47ee26d6fc6683edec44b100c87dceafd26a77f`, record
+  `CHANGES_REQUIRED P0=0 P1=1 P2=0`, and register `REC` as an executable V3.14
+  product-runtime suite prefix. Fresh Round 136 remains pending over a new immutable
+  repair tree.
+- [x] Run fresh Requirements Round 136 over commit
+  `50dac5c3619704b7b7256043d7e86b5ac8e745c4` / tree
+  `13740c8595afebce7dc00da53ebc928fc8b3d86e`, record
+  `CHANGES_REQUIRED P0=0 P1=2 P2=0`, and seal the 50-file/40-owner active graph plus
+  the deterministic product-correctness script row. Fresh Round 137 remains pending
+  over a new immutable repair tree.
+- [x] Run fresh Requirements Round 137 over commit
+  `14b32b18a68368a19730fd2b450bd15a8be56504` / tree
+  `0e79f47c8081f68b7e33c0b35e068beecf43d98d`; record
+  `PASS P0=0 P1=0 P2=0` after 272/272 exact-tree product/runtime cases and freeze
+  the Requirements evidence for Architecture Round 17.
+- [x] Run independent fresh Architecture Round 17 on commit
+  `d1ea2701ad46d21711da7fd4441c03be57ac25ad` / tree
+  `71700c03641ab3ddcc80ec17aaca17aaa40e24b6`; record
+  `CHANGES_REQUIRED P0=0 P1=2 P2=0` for the missing reviewed migration apply seam
+  and undocumented Web/runtime release identity.
+- [x] Repair both Architecture Round 17 P1 roots together with an attested,
+  Keychain-only migration CLI plus exact release/rollback runbook ownership.
+- [x] Obtain independent fresh Architecture Round 18 PASS on commit
+  `a08cbb6ec96f2e1ea396a96445b98b9a9dc9f22a` / tree
+  `4f7c4cded600f6a1791451ba71519e0630656b83`; record
+  `PASS P0=0 P1=0 P2=0`.
+- [x] Run the full local product/runtime and model-runner diagnostic matrix, then
+  freeze exact V3.14 implementation commit
+  `db55309e17887d59d2f6001f5577114ab6cc343b` for diff review.
+- [x] Independently review
+  `75e329471da257c2855d4de04d71e05a589e6c72..db55309e17887d59d2f6001f5577114ab6cc343b`,
+  record `CHANGES_REQUIRED P0=0 P1=4 P2=3`, and repair all seven findings in one
+  bounded tree: V3.14 persistence, defensive market gate, read-only compatibility
+  rendering, early-year calendar history, exact detail IDs, doctor freshness and
+  valuation-audit compatibility.
+- [x] Review the first repair range
+  `db55309e17887d59d2f6001f5577114ab6cc343b..1fd694954a4805ec11cbe6b99c13f98fa45a93db`,
+  record `CHANGES_REQUIRED P0=0 P1=2 P2=1`, and repair the three shared boundaries:
+  bounded calendar ingestion, SQL-persistable unavailable threshold diagnostics,
+  and revision-less read-only detail navigation.
+- [x] Review the second repair range
+  `1fd694954a4805ec11cbe6b99c13f98fa45a93db..1136125ce1814d199856c0c81bf685b396917199`,
+  record `CHANGES_REQUIRED P0=0 P1=1 P2=1`, and close both over-broad exemptions:
+  actionable threshold authority remains mandatory, while only a revision-less
+  legacy card loses detail navigation.
+- [x] Review the third repair range
+  `1136125ce1814d199856c0c81bf685b396917199..603f6da509c9976f1f8c2ead1a056c76b3bf68b7`,
+  record `CHANGES_REQUIRED P0=0 P1=0 P2=2`, and close both executable consistency
+  gaps: identical regime-specific threshold validation in SQL/runtime/Web and a
+  positive browser traversal for stale V3.14 exact-revision detail.
+- [x] Review the fourth repair range
+  `603f6da509c9976f1f8c2ead1a056c76b3bf68b7..d1d62b787baf505ac2fa036e25fc385079103e8d`,
+  record `CHANGES_REQUIRED P0=0 P1=0 P2=1`, and replace nullable SQL comparisons
+  with one exact six-key threshold authority schema shared by SQL, runtime and Web.
+- [ ] Freeze the repair commit, pass repair-range and full-range closure review,
+  then refresh the authoritative Verification Code Gate.
+- [x] Restore checksum-valid V3.12/V3.13 last-good cards as read-only while keeping
+  action authority disabled; align all counts, tabs, reports and links.
+- [x] Repair unchanged `seedMembership` and add typed redacted failure diagnostics.
+- [ ] Replay the failed 2026-08-10 candidate funnel in the production successor run
+  and prove terminal success after credential rotation and activation authority.
+- [x] Implement `ResearchRankingEnvelopeV314`, monotonic missing-axis scoring and
+  `DecisionEnvelopeV314` with `wait_value`/`wait_market`.
+- [x] Add official calendar/bootstrap/backfill authority, V3.14 additive migration
+  and truthful 51-attempt terminal conservation in code and executable fixtures.
+- [ ] Apply the reviewed additive migration and run official production bootstrap/
+  backfill after the remaining gates and credential rotation.
+- [x] Implement the bounded three-section Landing, same-revision detail and
+  `legacy-radar-v3.14.0` additive API.
+- [ ] Pass fresh Requirements and Architecture, full product/runtime/model/migration/
+  browser/performance tests, exact diff review and repair/full-range closure.
+- [ ] Rotate the exposed DB credential, merge the reviewed PRs, apply migration and
+  bootstrap, run the producer twice, deploy the exact release and pass canary/rollback.
+- [x] Implement the shared trading-session freshness policy, evaluation heartbeat,
+  last-good read-only and typed degraded projection behavior.
+- [x] Implement official point-in-time facts, 252-session/8-peer relative authority,
+  method-specific valuation and adjusted raw-price/corporate-action backfill.
+- [x] Implement the closed eight-action `DecisionEnvelopeV313` and derive all legacy
+  compatibility fields from it without a daily recommendation quota.
+- [x] Implement official/authorized source acquisition, 17-identity conservation,
+  metadata-only truth, contextual entity validation and evidence provenance.
+- [x] Implement the three-section Landing, six-number collapsed-card budget,
+  authoritative FULL merge and same-revision detail Decision Brief.
+- [x] Run fresh Requirements Round 105 over implementation tree
+  `6eaee4e1caba5056884281ffa1cc644c010c3de0`, record `CHANGES_REQUIRED P0=0
+  P1=8 P2=0`, and repair the eight shared roots in one batch: exact material identity,
+  typed PE/PB authority, point-in-time NAV/EV sessions, production-reachable source
+  conservation, immutable decision revision lookup, cited brief/no-change reuse,
+  diluted-EPS authority and stale-readonly action suppression.
+- [x] Run independent fresh Requirements Round 106 over commit
+  `aa80352a5ccdcb65e0c6f5ead222e5713b3fd7dd` / tree
+  `03505c453c8e736f442eb929710b60e66089e462`, record `CHANGES_REQUIRED P0=0
+  P1=5 P2=0`, and repair all five roots together: heartbeat-free immutable decision
+  payloads, exact historical revision reads without newest-projection scans,
+  1,261-revision/252-distinct-session valuation history, complete V3.13 RLS, and the
+  audited 128-row financial-fact series append authority.
+- [x] Run independent fresh Requirements Round 107 over commit
+  `8ede8ba49aaed6cce92e1f4be11e7343ac12ab90` / tree
+  `ecc6f017db6668fb86531d77c8a0a306da33df72`, record `CHANGES_REQUIRED P0=0
+  P1=3 P2=0`, and repair all three roots together: restore the authenticated worker's
+  completion RPC privilege, retain immutable publication/collection/analysis dates,
+  and split append-only evaluation heartbeats from immutable decision material.
+- [x] Run independent fresh Requirements Round 108 over commit
+  `490645ebcf264b1ddc672d2b4cc691a48d05cf5f` / tree
+  `d4ed5254271e54f660531609bff21e664936925e`, record `CHANGES_REQUIRED P0=0
+  P1=8 P2=0`, and repair all eight roots together: executable service-role compact
+  completion, heartbeat-free immutable rows, projection-retention-safe audit identity,
+  provenance-bound evaluation dates, exact disclosure-card revision identity,
+  latest-event peer authority, all-rejected acquisition truth, and equal-time heartbeat
+  conflict closure.
+- [x] Run independent fresh Requirements Round 109 over commit
+  `3e7cd3130e275d4bf0584ea184876c7ff4a2506c` / tree
+  `f841b40ddeae24899e1f33e27d8c84947150d416`, record `CHANGES_REQUIRED P0=0
+  P1=6 P2=0`, and repair all six roots as one authority batch: invalid-owner
+  zero-write ordering, shared projection serialization/retention, exact immutable
+  no-change payload replay plus decision-ID preimage verification, latest-event source
+  and calendar supersession, all-deferred acquisition truth, and authoritative prior-
+  projection precedence/conflict detection.
+- [x] Run independent fresh Requirements Round 110 over commit
+  `b0f7aecbb2e0f090757c48966247104aee078ce2` / tree
+  `09ad284a99996eebbced12e4fb29b15e62d9cf31`, record `CHANGES_REQUIRED P0=0
+  P1=4 P2=0`, and repair the common authority-binding root in one batch: registry-first
+  latest-event source authority, truthful successful-empty/source multiset
+  conservation, exact projection-key collision handling, and one-to-one canonical
+  home-card/decision-revision identity.
+- [x] Run independent fresh Requirements Round 111 over commit
+  `179a430586a4dc181c3c2eba1ee35d045d5ddb9d` / tree
+  `e8cc41744dc43bc0d2ad88b0d3027ded11a647f4`, record `CHANGES_REQUIRED P0=0
+  P1=2 P2=0`, and repair both remaining source-acquisition authority roots together:
+  run-frozen cutoff-visible source identity plus DB-owned append context, and exactly
+  51 typed connector attempts whose aggregate terminal is derived by SQL rather than
+  asserted by the caller.
+- [x] Run independent fresh Requirements Round 112 over commit
+  `914d07957581369def5c46909d806f2139f9b521` / tree
+  `f530cedb78e03efad845c90bbb41b62f83d73172`, record `CHANGES_REQUIRED P0=0
+  P1=2 P2=0`, and repair both roots together: promote all eight V3.13 source-plane
+  relations into exact normative storage/type plus canonical DI-006/MIG-004 catalog
+  ownership, and fail closed on every present malformed/uppercase/truncated/duplicate
+  decision revision before fixture, refresh, legacy or current-projection reads.
+- [x] Run independent fresh Requirements Round 113 over commit
+  `166615e849767ad3943e88cb20ae90fdff358c17` / tree
+  `92ea0a0192193f3eb79473c24f95d355e80605b0`, record `CHANGES_REQUIRED P0=0
+  P1=3 P2=0`, correct the one-nibble baseline transcription for the next review, and
+  repair both implementation roots: provider/auth terminal precedence over fresh or
+  unchanged, plus a hash-pinned exact columns/constraint/trigger/RLS/owner/ACL oracle
+  for all eight persistent source-plane relations.
+- [x] Run independent fresh Requirements Round 114 over commit
+  `d756ff2b9a2866adfc0eccb8d66787350292823b` / tree
+  `3bfbbbf16d0ab1dc7c5c5a218a987bac43d00ba7`, record `CHANGES_REQUIRED P0=0
+  P1=7 P2=0`, and repair the four shared roots as one immutable batch: terminal/2xx
+  empty truth, latest-recorded roster/taxonomy/calendar authority, unknown/missing-
+  shares peer exclusion, and exact defaults/full-trigger catalog identity.
+- [x] Run independent fresh Requirements Round 115 over commit
+  `a358126211ba24ee57b451a87bd386a32047bce8` / tree
+  `4d5c991c9a61cd66ecae240797009b2958631841`, record `CHANGES_REQUIRED P0=0
+  P1=5 P2=0`, and repair the three remaining root families together: complete
+  positive-document source terminals, bounded/effective-time authority selection,
+  and authoritative taxonomy plus normalized official-share valuation inputs.
+- [x] Run independent fresh Requirements Round 116 over commit
+  `773bc1155902ba5f2af0bbec5b392b97d20131c8` / tree
+  `7d63c15e18f129dce69d2b905e40e50e3d75f0e2`, record `CHANGES_REQUIRED P0=0
+  P1=4 P2=0`, and repair the final authority-integrity family together: one bounded
+  registry/calendar enumeration, completed-session valuation append, exclusive
+  candidate/peer authority and typed observation/share conflict propagation.
+- [x] Run independent fresh Requirements Round 117 over commit
+  `93db3334e23b5a00dbd163b6adc977d7ec4e36be` / tree
+  `6010aa36e8a66ba40e8ba26a63a1205edc9fc6a6`, record
+  `CHANGES_REQUIRED P0=0 P1=3 P2=0`, and repair the remaining shared roots together:
+  session-identity-first history/calendar bounds, winner-free closed conflict unions,
+  and order-independent SQL/runtime conflict precedence.
+- [x] Run independent fresh Requirements Round 118 over commit
+  `2314ee9f579645f1d579d8738e0115e6864a7afb` / tree
+  `aaee71c8aeef1a713b4f4e0f86055b41cc11af06`, record
+  `CHANGES_REQUIRED P0=0 P1=3 P2=0`, and repair the remaining bypasses together:
+  a complete explicit calendar interval before the 513/512 sentinel, same-exchange
+  runtime peers, and permutation-independent normalized-share conflict precedence.
+- [x] Run independent fresh Requirements Round 119 over commit
+  `f29b9d70d7d6230e09a8612ff50b6b743ee92995` / tree
+  `d13edef2c4bdcba18e73cb951959e5cb78967506`, record
+  `CHANGES_REQUIRED P0=0 P1=5 P2=0`, and repair the complete remaining families in one
+  tree: winner-free financial facts, bounded acquisition/fact planes, closed canonical
+  method dispatch, total-NAV semantics and typed source-content overflow.
+- [x] Run independent fresh Requirements Round 120 over commit
+  `32dded855831fc498ed0706ac0748bface89db2f` / tree
+  `6c2d9a738cf8e84a1b8936562a17d6a853c3bd88`, record
+  `CHANGES_REQUIRED P0=0 P1=4 P2=0`, and repair all four roots in one batch:
+  instant-fact parser/runtime/SQL compatibility, exact seven-method distributions and
+  full mandatory cross-checks, end-to-end overflow terminality, and authority-first
+  decision precedence. Diagnostics pass V3.13 `11/11` and applied migration `46/46`.
+- [x] Repair independent fresh Requirements Round 121 (`P0=0 P1=4 P2=0`) as one
+  authority batch: common-quarter fully reconciled operating bridge and day-weighted
+  shares; complete seven-method scenario/freshness/divergence authority; one exact
+  252-session/eight-peer relative-valuation plane; and identity-bound SQL overflow
+  conservation. Freeze the repair as a new immutable Round 122 subject.
+- [x] Run independent fresh Requirements Round 122 over commit
+  `c92792e48dcf63907508853a865ad869e1de6451` / tree
+  `93294d9f5612221c7974211e0a927cf2e2c39e11`, record
+  `CHANGES_REQUIRED P0=0 P1=6 P2=0`, and repair the six roots as one batch:
+  scheduled-session freshness, sole detail action authority, cited Decision Brief,
+  same-stock evidence merge, tracked Threads constructibility and exact DI-007 owner
+  execution.
+- [x] Run independent fresh Requirements Round 123 over commit
+  `aa6579499e748457b10d7b53552beb9065983a06` / tree
+  `a284dab3aff9bb1dd2769b50ea3392aae5d71e99`, record
+  `CHANGES_REQUIRED P0=0 P1=2 P2=0`, and repair both final publication-authority
+  roots together: eliminate every reachable generic-detail legacy action surface and
+  enforce the exact cited 3+3 brief independently in runtime, SQL and revision UI.
+- [x] Run independent fresh Requirements Round 124 over commit
+  `13ebbd0395932f8ce44d5b2ac01081b2976086cb` / tree
+  `69d72deee8d4786ba54af6a14471a07319fc8067`, record
+  `CHANGES_REQUIRED P0=0 P1=3 P2=0`, and repair the common publication boundary:
+  close technical/API legacy bypasses, require one exhaustive envelope identity per
+  symbol, and make strict cited authority mandatory across runtime, Web and SQL.
+- [x] Run independent fresh Requirements Round 125 over commit
+  `6b5b75fb9eff7533791a9493cedfdcefb9465e3a` / tree
+  `7abac8d161b8084a8ab86efdde991edef3359901`, record
+  `CHANGES_REQUIRED P0=0 P1=4 P2=0`, and repair the four shared roots together:
+  duplicate revision query cardinality, the complete runtime/Web/SQL envelope
+  matrix and Landing boundary, SQL/Web publication grammar parity, and
+  credential-free/timezone-authoritative source acquisition plus persistence.
+- [x] Run independent fresh Requirements Round 126 over commit
+  `994f29af53eefd854d395b5fd346dcf02b0c5ddd` / tree
+  `d189afe83012f85b5f147258f203bc5a14c8cf05`, record
+  `CHANGES_REQUIRED P0=0 P1=4 P2=0`, and repair both common authority roots:
+  unrounded decision thresholds with persisted 252-session/eight-peer proof, plus a
+  state-specific production geometry union and SQL-persistable typed unavailable
+  quality/market authority.
+- [x] Run independent fresh Requirements Round 127 over commit
+  `5829f2e3d6413230b00fc9988f929d2254d577c1` / tree
+  `025e15c4c2dc5dda9ed1aa2910a42c7479133f43`, record
+  `CHANGES_REQUIRED P0=0 P1=2 P2=0`, and repair both remaining authority roots:
+  enforce the exact state/trigger/geometry discriminated union across Runtime, Web
+  and SQL, and bind relative multiples/counts to exact cutoff-resolved official
+  observation/history/peer evidence roots at SQL completion.
+- [x] Run independent fresh Requirements Round 128 over commit
+  `834c140e82b9c8acd022f1ed71cadf0a016d3c21` / tree
+  `cca6e72aa7fb97b9e3baaf02b02dfab74e968d7f`, record
+  `CHANGES_REQUIRED P0=0 P1=2 P2=0`, and repair both remaining roots: align the exact
+  official-row predicate and remove scalar epsilon authority, then synchronize DI-004
+  acceptance and execute its complete exact-owner query/selection matrix.
+- [x] Run independent fresh Requirements Round 129 over commit
+  `d910bdc6722c373530ee613df9be42e443eeab8b` / tree
+  `54b3aeb335f1e4c3e37a0634db450536a49471c7`, record
+  `CHANGES_REQUIRED P0=0 P1=1 P2=0`, and repair the sole remaining Loop-integrity
+  root: synchronize current task/status next-work state and add executable positive
+  and negative meta-owner coverage. Repair commits are
+  `2ff9e483bb90bdc8629cfe0fbd3c25e4a2fdb826` and
+  `bd8bfd3e78274fa45024eca82e740ea1eb0cb8f1`; focused meta-owner, full
+  product/runtime diagnostic, model-runner 17/17 and disabled host-pin doctor pass.
+- [x] Obtain fresh V3.13 Requirements PASS in Round 130 over commit
+  `793701b9d26239530450ab8a4ae4650a3d61fdc7` / tree
+  `e6b9a733e9033a7f5aeb4a08f713ee06875055e2`; verdict `PASS P0=0 P1=0 P2=0`.
+- [x] Carry Requirements evidence into immutable commit
+  `790f2d63cee6d85a6a4823f0bdf6203d8c930f02` / tree
+  `4fefb62e09aa17e368c5dcae6c545a8096529519` and run independent Architecture
+  Round 13. Record `CHANGES_REQUIRED P0=0 P1=5 P2=0`.
+- [x] Repair all five Architecture Round 13 P1 roots together: source-only Decision
+  Brief construction, analysis/disclosure lineage, future reported-period authority,
+  decision-gate precedence and cross-layer negative half-tie rounding.
+- [x] Run independent fresh Architecture Round 14 over commit
+  `df2e210a3f883070ee42f947c78388164f024e4c` / tree
+  `659e3543c9e8abb452a05c31de054fb0d5964837`; record
+  `CHANGES_REQUIRED P0=0 P1=1 P2=0`.
+- [x] Repair the sole Architecture Round 14 P1 root across Runtime, SQL, TypeScript,
+  Web validation, React and JSON detail publication: closed blocker vocabulary,
+  stale-readonly precedence, no actionable stale envelope, no-store non-ready
+  responses and source-only/stale-buy/invalid-blocker regression coverage.
+- [x] Run independent fresh Architecture Round 15 over commit
+  `1e6f8c421cc1141a3fa2376dbae8aea4af7db262` / tree
+  `be578da611fa0cfb224e6781067e4b0f1b7984ec`; record
+  `CHANGES_REQUIRED P0=0 P1=2 P2=0`.
+- [x] Repair both Architecture Round 15 P1 roots together: make every
+  revision-bound detail response `no-store` across the fresh-to-stale clock boundary,
+  and replace generic migration denylisting with a closed legacy allowlist plus a
+  complete hash/authority-bound V3 migration plan.
+- [x] Obtain independent fresh Architecture Round 16 PASS over commit
+  `200b89a699faca98040111fc76c8135d10eb58bd` / tree
+  `4005c99f530219588e6120d93e427b7807134cee`; result
+  `PASS P0=0 P1=0 P2=0`. Evidence: `architecture-review-round-16.md`.
+- [x] Run the complete pre-review product/runtime, migration, model-runner, build,
+  browser, accessibility and performance matrix after the Round 15 repairs:
+  typecheck/lint/build PASS; base `61/61`; product/V3.13 `50/50`; migration
+  `48/48`; legacy `2/2`; Playwright `3/3`; performance `4/4`; model-runner
+  `17/17`; disabled host-pin v3.7 doctor PASS; root/Web production dependency
+  audits zero vulnerabilities. The authoritative Code Gate still reruns this matrix
+  on the final reviewed commit.
+- [x] Create exact implementation commit `3f3fb99412ceee7c3c21dda11199a30be1594242`
+  (parent `75e329471da257c2855d4de04d71e05a589e6c72`, tree
+  `4eacc4dad679bc85c7f46453c5e01e0ea18de9dd`) and complete its independent
+  read-only diff review. Record `CHANGES_REQUIRED P0=0 P1=5 P2=3` in
+  `exact-commit-review-v3.13.md`.
+- [x] Freeze the eight-finding repair head `9a4bce1d1daf587c9d9ce2d186b77abb2beca0f1`
+  / tree `4c41d715890c41d99b015b84883507fd7a593195`, then complete independent
+  repair-range and full-range closure review with `PASS P0=0 P1=0 P2=0` for both.
+  Evidence: `repair-closure-review-v3.13.md`.
+- [x] Rerun the complete local Code Gate diagnostic on reviewed evidence head
+  `1ac740f33c7e3bf8ab682e044417617bfc306fde`: product/runtime PASS with base
+  `61/61`, product/V3.13 `51/51`, migration `48/48`, legacy `2/2`, Playwright
+  `6/6`, performance `4/4`, typecheck/lint/build PASS; model-runner `17/17` and
+  disabled host-pin v3.7 doctor PASS; evaluation contract `12/12` PASS and formal
+  governance honestly `blocked/non_fabricated_elapsed_cohorts_unavailable`.
+- [ ] Obtain the protected `stockinsider-v3-gate-root` aggregate artifact for the
+  final evidence tree. Local diagnostics cannot self-attest this external gate.
+- [ ] Form one authoritative release candidate. Do not apply production migration,
+  install/activate the source-writing runtime or coordinate Web publication without
+  explicit V3.13 production-write authority.

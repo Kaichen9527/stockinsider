@@ -1,9 +1,92 @@
 # StockInsider Operations Runbook
 
+> Sections 1–5 document the legacy V1/V2 runtime only. They are not an
+> activation procedure for V3.14. In particular, cookie, login-wall,
+> watchlist-seed and public mutating-endpoint workflows below must not be used
+> to claim V3.14 source acquisition success.
+
+## V3.14 reviewed release and activation
+
+V3.14 is installed only from one clean exact-reviewed commit plus its direct-child
+attestation commit. Repository-owner authority for Web deployment, additive
+migration, tracked runtime, credentials and source writes is recorded in the Loop
+status. V3 activation, LINE/dispatch, automatic trading and ranking promotion remain
+unauthorized.
+
+Before any database write, rotate the database password that appeared in internal
+tool logs. Update the Keychain reference `stockinsider-runtime:database-url` and any
+CI/Vercel secret that actually consumes that credential, then prove the old password
+is rejected without printing either URI or password. Record the current Vercel alias,
+runtime active pointer, scheduler plist hash and database migration plan as rollback
+targets.
+
+The pre-activation sequence is:
+
+```bash
+npm ci
+npm --prefix web ci
+npm run diagnostic:source-led-opportunity-v3:product-runtime
+npm run verify:source-led-opportunity-v3:model-runner
+npm run db:v3:plan
+npm run agent:runtime:prepare -- --source-commit <reviewed-40-hex-commit>
+```
+
+`db:v3:plan` and `agent:runtime:prepare` are read-only. The plan must list base,
+V3.12, V3.13 and V3.14 in that order and report `applyAuthorized:true`. After the
+exact review attestation exists, apply only through:
+
+```bash
+npm run db:v3:apply-reviewed -- \
+  --source-commit <reviewed-commit> \
+  --attestation-commit <direct-child-attestation-commit>
+```
+
+The command requires a clean exact HEAD, a valid review attestation, the recorded
+V3.14 migration authority and the Keychain database reference. It acquires one
+database advisory lock, accepts additive migrations only, applies the reviewed
+four-file chain and verifies the V3.14 catalog without logging connection details.
+Additive objects are retained on rollback.
+
+The tracked worker accepts only these credential references; raw credential
+environment variables are not the V3.14 contract:
+
+- `STOCKINSIDER_DATABASE_URL_REF=keychain:stockinsider-runtime:database-url`
+- `INTERNAL_API_KEY_REF=keychain:stockinsider-runtime:internal-api-key`
+- optional Keychain references for `threads-access-token`, `youtube-api-key`
+  and `youtube-oauth-token`, resolved by the tracked credential resolver.
+
+Every one of the 17 approved profiles must terminate all three connector
+attempts (`threads`, `podcast`, `youtube`), producing exactly 51 attempt rows.
+Allowed terminal statuses are `items_found`, `successful_empty`,
+`metadata_only`, `missing_endpoint`, `auth_failed`, and `provider_failed`.
+Threads uses the Meta OAuth keyword-search endpoint; Podcast uses an approved
+RSS origin and creator-provided `podcast:transcript`; YouTube uses the official
+Data/Captions APIs. Metadata alone is never transcript evidence.
+
+Prepare and install the tracked runtime from the same reviewed commit. Before the
+production Web build, set these existing-project Production values to the exact
+release tuple (never to a branch name or `VERCEL_GIT_COMMIT_SHA`):
+
+- `STOCKINSIDER_REVIEWED_RELEASE_SHA=<reviewed-commit>`
+- `STOCKINSIDER_RUNTIME_MANIFEST_SHA256=<prepared-runtime-manifest-sha256>`
+
+Deploy the same reviewed commit, activate the tracked scheduler, then run the
+producer twice. Both runs must terminate successfully; the second must prove
+no-change idempotency. Action authority remains disabled until the projection is
+`legacy-radar-v3.14.0`, producer commit and runtime manifest exactly match the two
+Web values, migration level is `decision-integrity-v3.14`, and freshness is `fresh`.
+Inspect the 17×3 terminal matrix and official coverage waterfall. Missing OAuth is
+an honest `auth_failed`, never a synthesized success.
+
+On any smoke failure, stop the scheduler, restore the prior runtime pointer/plist and
+Vercel alias, and keep additive database objects. Do not trigger LINE, dispatch,
+ingestion, pipeline or ranking promotion during smoke.
+
 ## 1. Daily Job Sequence
 
-1. Apply migrations when schema changes:
-   - `npm run db:migrate`
+1. Apply reviewed legacy migrations when schema changes:
+   - `npm run db:migrate` (closed legacy allowlist; never applies V3-family migrations)
+   - V3 changes require `npm run db:v3:plan`, an exact reviewed chain and separate production authority.
 2. Verify target DB schema/indexes (staging/prod):
    - `npm run db:verify`
 3. Trigger ingestion:
@@ -50,8 +133,9 @@
 - Verify `line_subscriptions` preferences and watchlist filters.
 - Check alert webhook status (`ALERT_WEBHOOK_URL`) if monitoring alerts are expected.
 
-## 3. Night-Shift Research Runtime (ai-night-shift)
+## 3. Legacy Night-Shift Research Runtime (ai-night-shift; not V3.13)
 
+以下是舊系統排程，只供 V1/V2 維護；不得用於 V3.13 acquisition、shadow 或 promotion 證據。
 夜間研究排程由 `ai-night-shift` 依以下順序呼叫（需帶 `Authorization: Bearer $INTERNAL_API_KEY`）：
 
 ```bash

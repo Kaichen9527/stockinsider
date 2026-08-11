@@ -5,6 +5,8 @@ const path = require('node:path');
 const { canonicalJson, sha256 } = require('./codec');
 const { resolveCredentialReference } = require('./credential-resolver');
 const { runtimeBundleSha256 } = require('./tracked-runtime-bundle');
+const { assessProjectionFreshness } = require('./projection-freshness');
+const { assessReleaseCompatibility } = require('../../web/src/lib/opportunity-v3/release-compatibility-runtime');
 
 function canonicalFile(filename) {
   const text = fs.readFileSync(filename, 'utf8'); const value = JSON.parse(text);
@@ -28,7 +30,7 @@ async function observeDatabase(releaseRoot, config, resolver, clientFactory) {
       WHERE status='running' AND lease_expires_at<clock_timestamp()`);
     const leaseResult = await client.query(`SELECT status,lease_expires_at FROM public.legacy_producer_jobs_v3_11
       WHERE status='leased' ORDER BY leased_at DESC,job_id LIMIT 2`);
-    const projectionResult = await client.query(`SELECT as_of,payload_canonical,payload_sha256,producer_commit_sha,worker_sha256
+    const projectionResult = await client.query(`SELECT as_of,payload_canonical,payload_json,payload_sha256,producer_commit_sha,worker_sha256
       FROM public.legacy_radar_projections_v3_11 WHERE "window"='daily' ORDER BY as_of DESC,created_at DESC,projection_id LIMIT 1`);
     await client.query('COMMIT');
     const run = runResult.rows[0] ?? null; const projection = projectionResult.rows[0] ?? null;
@@ -37,7 +39,16 @@ async function observeDatabase(releaseRoot, config, resolver, clientFactory) {
       : Date.parse(leases[0].lease_expires_at) >= Date.now() ? 'active' : 'expired';
     const checksumMatches = projection && Buffer.isBuffer(projection.payload_canonical) &&
       sha256(projection.payload_canonical) === projection.payload_sha256;
-    const projectionAge = projection ? Date.now() - Date.parse(projection.as_of) : Number.POSITIVE_INFINITY;
+    const correctness = projection?.payload_json?.sourceLedCorrectness ?? {};
+    const projectionHealth = ['legacy-radar-v3.13.0','legacy-radar-v3.14.0']
+      .includes(projection?.payload_json?.sourceLedCorrectness?.schema)
+      ? assessProjectionFreshness({
+      contentAsOf: correctness.contentAsOf ?? projection.as_of,
+      evaluatedAt: correctness.evaluatedAt ?? projection.as_of,
+      publishedAt: correctness.publishedAt ?? projection.as_of,
+      tradingSessions: Array.isArray(correctness.freshnessSchedule) ? correctness.freshnessSchedule : [],
+    }) : projection ? { status:'fresh',reason:'legacy_pre_v313_projection',missedExpectedRuns:0,
+      actionsEnabled:true,nextExpectedAt:null } : { status: 'unavailable', missedExpectedRuns: 3 };
     return {
       config,
       lastRunNonterminal: run?.status === 'running',
@@ -48,11 +59,15 @@ async function observeDatabase(releaseRoot, config, resolver, clientFactory) {
       producerCommitSha: run?.producer_commit_sha ?? null,
       projectionAsOf: projection ? new Date(projection.as_of).toISOString() : null,
       projectionChecksum: projection?.payload_sha256 ?? null,
-      projectionFreshness: !projection ? 'missing' : !checksumMatches ? 'invalid' : projectionAge <= 36 * 60 * 60 * 1000 ? 'fresh' : 'stale',
+      projectionFreshness: !projection ? 'missing' : !checksumMatches ? 'invalid'
+        : projectionHealth.status === 'fresh' ? 'fresh' : 'stale',
+      projectionHealth,
       stateSchema: 'stockinsider-producer-state-v1',
       stuckRunCount: Number(stuckResult.rows[0]?.count ?? 0),
       workerSha256: run?.worker_sha256 ?? projection?.worker_sha256 ?? null,
       schedulerConfigSha256: run?.scheduler_config_sha256 ?? null,
+      releaseIdentity: projection?.payload_json?.releaseIdentity ?? null,
+      projectionSchema: correctness.schema ?? null,
     };
   } catch (error) {
     try { await client.query('ROLLBACK'); } catch { /* read-only connection cleanup */ }
@@ -107,6 +122,10 @@ async function observeRuntimeHealth({ releaseRoot, runtimeRoot, manifest, review
   const owner = schedulerRows.find((row) => row.label === 'com.stockinsider.auth-source-worker');
   const competingOwners = schedulerRows.filter((row) => row.label !== 'com.stockinsider.auth-source-worker' && row.enabled)
     .map((row) => row.label);
+  const runtimeManifestSha256=sha256(Buffer.from(canonicalJson(installation)));
+  const releaseCompatibility=assessReleaseCompatibility({schema:database.projectionSchema,
+    releaseIdentity:database.releaseIdentity,expectedConsumerSha:reviewedRelease.commitSha,
+    expectedRuntimeManifestSha:runtimeManifestSha256});
   return {
     status: 'pass',
     observation: {
@@ -115,15 +134,16 @@ async function observeRuntimeHealth({ releaseRoot, runtimeRoot, manifest, review
       competingOwners,
       configSha256: sha256(fs.readFileSync(path.join(releaseRoot, 'config/runtime/auth-source-dag.json'))),
       consumerCommitSha,
-      consumerCompatibility: consumerCommitSha === reviewedRelease.commitSha && database.producerCommitSha === reviewedRelease.commitSha
-        ? 'compatible' : database.producerCommitSha === reviewedRelease.commitSha ? 'producer_newer'
-          : consumerCommitSha === reviewedRelease.commitSha ? 'consumer_newer' : 'unknown',
+      consumerCompatibility: consumerCommitSha === reviewedRelease.commitSha&&releaseCompatibility.compatible
+        ? 'compatible':releaseCompatibility.reason,
+      releaseCompatibility,
       lastRunNonterminal: database.lastRunNonterminal,
       lastTerminalRunAt: database.lastTerminalRunAt,
       lastTerminalStatus: database.lastTerminalStatus,
       leaseStatus: database.leaseStatus,
       manifestCanonical: canonicalJson(installation) === canonicalJson(manifest),
       manifestPresent: true,
+      runtimeManifestSha256,
       negativeRunDuration: database.negativeRunDuration,
       ownerPlistSha256: owner?.plistSha256 ?? null,
       projectionAsOf: database.projectionAsOf,

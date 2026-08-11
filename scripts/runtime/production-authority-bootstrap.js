@@ -5,6 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { canonicalJson, sha256, invariant } = require('./codec');
 const { resolveCredentialReference } = require('./credential-resolver');
+const approvedSourceRoster = require('../../config/runtime/approved-source-roster-v3.13.json');
 
 const RUNNER_PRINCIPAL_ID = 'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001';
 const SOURCE_REVIEWER_PRINCIPAL_ID = 'a11d4e67-7d0a-4c44-8a9d-1d5c3b875002';
@@ -247,6 +248,43 @@ async function appendSourceIdentities(client) {
   return new Map(authorities.map((row) => [`${row.source_identity_id}:${row.source_key}`, row.authority_id]));
 }
 
+async function appendApprovedProfileIdentities(client) {
+  invariant(approvedSourceRoster.schema === 'approved-source-roster-v3.13' &&
+    approvedSourceRoster.profiles.length === 17, 'approved profile roster unavailable');
+  const requested = approvedSourceRoster.profiles.flatMap((profile) => [
+    profile.threads ? { sourceKey:'threads',sourceClass:'community',profileUrl:`https://www.threads.net/@${profile.threads}` } : null,
+    profile.podcastFeed ? { sourceKey:'podcast',sourceClass:'curated_thesis',profileUrl:profile.podcastFeed } : null,
+    profile.youtubeChannelId || profile.youtubeHandle ? { sourceKey:'youtube',sourceClass:'curated_thesis',
+      profileUrl:profile.youtubeChannelId ? `https://www.youtube.com/channel/${profile.youtubeChannelId}` :
+        `https://www.youtube.com/@${profile.youtubeHandle}` } : null,
+  ].filter(Boolean).map((source) => ({
+    id:uuidFromIdentity(`stockinsider:v313-source:${source.sourceKey}:${profile.id}`),
+    platform:source.sourceKey,entityType:source.sourceKey === 'threads' ? 'kol' : 'channel',displayName:profile.name,
+    sourceIdentityKey:`v313:${source.sourceKey}:${profile.id}`,distributionIdentity:`${source.sourceKey}:${profile.id}`,
+    ...source,
+  })));
+  await client.query(`WITH requested AS (SELECT * FROM jsonb_to_recordset($1::jsonb) AS x(
+      id uuid,platform text,"entityType" text,"displayName" text,"sourceIdentityKey" text,"profileUrl" text))
+    INSERT INTO public.source_entities(id,platform,entity_type,display_name,source_key,profile_url,status,metadata,created_at,updated_at)
+    SELECT id,platform,"entityType","displayName","sourceIdentityKey","profileUrl",'active',
+      jsonb_build_object('authority','approved-source-roster-v3.13'),clock_timestamp(),clock_timestamp()
+    FROM requested ON CONFLICT(source_key) DO NOTHING`, [JSON.stringify(requested)]);
+  const authorityRows = requested.map((row) => ({ sourceIdentityId:row.id,sourceKey:row.sourceKey,
+    sourceClass:row.sourceClass,distributionIdentity:row.distributionIdentity,validFrom:new Date(0).toISOString() }));
+  await client.query(`WITH requested AS (SELECT * FROM jsonb_to_recordset($1::jsonb) AS x(
+      "sourceIdentityId" uuid,"sourceKey" text,"sourceClass" text,"distributionIdentity" text,"validFrom" timestamptz)),
+    missing AS (SELECT requested.* FROM requested WHERE NOT EXISTS(
+      SELECT 1 FROM public.source_identity_authorities_v3 retained
+      WHERE retained.source_identity_id=requested."sourceIdentityId" AND retained.source_key::text=requested."sourceKey"
+        AND retained.distribution_identity=requested."distributionIdentity" AND retained.status='active'))
+    SELECT appended.authority_id FROM missing
+    CROSS JOIN LATERAL public.append_source_identity_authority_v3(ROW("sourceIdentityId",
+      "sourceKey"::public.source_key_v3,"sourceClass"::public.source_class_v3,"distributionIdentity",
+      "validFrom",NULL,'active'::public.authority_status_v3)::public.source_identity_authority_input_v3,$2::uuid) appended`,
+  [JSON.stringify(authorityRows), SOURCE_REVIEWER_PRINCIPAL_ID]);
+  return requested.length;
+}
+
 async function selectLegacyDocuments(client) {
   const values = Object.entries(SOURCE_MAP);
   const params = []; const tuples = values.map(([platform, value]) => {
@@ -306,6 +344,7 @@ async function applyProductionAuthorityBootstrap({ client, roster, commit = true
     await client.query('BEGIN'); inTransaction = true;
     await seedPrincipalBindings(client);
     const official = await appendOfficialRoster(client, roster);
+    const approvedProfileIdentityCount = await appendApprovedProfileIdentities(client);
     const authorityByIdentity = await appendSourceIdentities(client);
     let documents;
     if (commit) {
@@ -325,7 +364,8 @@ async function applyProductionAuthorityBootstrap({ client, roster, commit = true
     'production authority bootstrap underfilled');
     if (!commit) { await client.query('ROLLBACK'); inTransaction = false; }
     return Object.freeze({ schema: 'stockinsider-production-authority-bootstrap-result-v1',
-      disposition: commit ? 'applied' : 'rehearsed_rolled_back', officialRosterRows: official.length, documents, counts });
+      disposition: commit ? 'applied' : 'rehearsed_rolled_back', officialRosterRows: official.length,
+      approvedProfileIdentityCount,documents,counts });
   } catch (error) {
     try { if (inTransaction) await client.query('ROLLBACK'); } catch { /* original error is authoritative */ }
     throw error;
@@ -338,5 +378,5 @@ async function applyProductionAuthorityBootstrap({ client, roster, commit = true
 }
 
 module.exports = { RUNNER_PRINCIPAL_ID, SOURCE_MAP, SOURCE_REVIEWER_PRINCIPAL_ID, TPEX_ROSTER_URL, TWSE_ROSTER_URL,
-  applyProductionAuthorityBootstrap, consumeBootstrapNonce, fetchOfficialRoster, normalizeOfficialRoster,
+  appendApprovedProfileIdentities,applyProductionAuthorityBootstrap, consumeBootstrapNonce, fetchOfficialRoster, normalizeOfficialRoster,
   prepareLegacyDocument, rocDateToIso, uuidFromIdentity, validateBootstrapAuthority, ymdToIso };

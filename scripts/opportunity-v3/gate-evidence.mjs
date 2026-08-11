@@ -41,7 +41,7 @@ const gatePolicies = Object.freeze({
   architecture: { commands: [], count: 0, partition: null },
   'product-runtime-code-gate': {
     commands: [['product-runtime-track', 'protected://stockinsider-v3-gate-root/execute-track --track product_runtime']],
-    count: 249,
+    count: 272,
     partition: 'product_runtime',
   },
   'model-runner-code-gate': {

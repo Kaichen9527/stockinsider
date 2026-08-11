@@ -4,22 +4,33 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const { canonicalJson, immutableBundle, sha256, invariant } = require('./codec');
+const { canonicalJson, immutableBundle, sha256, invariant, percentile } = require('./codec');
 const { runDurableAuthSourceWorker } = require('./auth-source-worker');
 const { validateAuthSourceDagConfig } = require('./source-run-config');
 const { buildCandidateFunnel } = require('./candidate-funnel');
 const { calculateAdjustedTechnicalPlane } = require('./technical-plane');
 const { calculateFundamentalQualityAxes } = require('./fundamental-quality');
 const { evaluateCandidateValuation } = require('./candidate-valuation');
+const { selectSectorValuationMethod } = require('./valuation-method');
 const { deriveActionDecision } = require('./action-decision');
 const { selectBiasTechnicalHistory } = require('./bias-technical-history');
 const { appendAnalysisRevision } = require('./analysis-revision');
-const { publishCompactRadarProjection } = require('./compact-radar-projection');
+const { hashMaterialAnalysisChange, materialChangedReasons } = require('./analysis-material-change');
+const { decisionRevisionIdentityBundle, immutableDecisionRevisionCard,
+  publishCompactRadarProjection } = require('./compact-radar-projection');
 const { computeUnderreactionResearchScore } = require('./underreaction-score');
-const { loadOfficialTwMarketSnapshot, validateReportedValuation } = require('./official-twse-valuation');
+const { computeResearchRankingV314 } = require('./research-ranking-v314');
+const { safeFailureDiagnostic } = require('./safe-diagnostics');
+const { buildOfficialTradingScheduleV314, coverageReportV314 } = require('./official-market-authority-v314');
+const { loadOfficialTwMarketSnapshot, SOURCE_URL, TPEX_SOURCE_URL, TWSE_REVENUE_URL, TPEX_REVENUE_URL,
+  TWSE_PRICE_HISTORY_URL, TPEX_PRICE_HISTORY_URL, validateReportedValuation,
+  validOfficialReportedValuationSourceRef } = require('./official-twse-valuation');
+const { MOPS_INLINE_URL } = require('./official-mops-v314');
 const { buildMarketAnalysis } = require('./market-analysis');
 const { runtimeBundleBytes } = require('./tracked-runtime-bundle');
-const { assertExactRuntimeEnvironment, hydrateRuntimeCredentials } = require('./credential-resolver');
+const { acquireApprovedSources } = require('./official-source-acquisition');
+const approvedSourceRoster = require('../../config/runtime/approved-source-roster-v3.13.json');
+const { assertExactRuntimeEnvironment, hydrateRuntimeCredentials, resolveCredentialReference } = require('./credential-resolver');
 
 const LEGACY_RADAR_PATHS = Object.freeze({ daily: '/api/radar/daily', hot: '/api/radar/hot', weekly: '/api/radar/weekly' });
 const LEGACY_RADAR_FETCH_TIMEOUT_MS = 60000;
@@ -192,7 +203,7 @@ function extractRevisionCandidates(bundle) {
     ? canonicalUtc(frozen.sourcePublishedAt, 'frozen source published-at') : null;
   const sourceEffectiveAt = publishedAt && collectedAt && Date.parse(publishedAt) <= Date.parse(collectedAt)
     ? publishedAt : collectedAt;
-  const matches = roster.flatMap((row) => {
+  const allMatches = roster.flatMap((row) => {
     const [stockId, symbol, exchange, , , legalName, shortName] = row;
     const aliases = aliasByStock.get(stockId) ?? [];
     const nameMatch = [shortName, legalName, ...aliases].some((name) => nameHasStockContext(text, name, symbol));
@@ -210,32 +221,596 @@ function extractRevisionCandidates(bundle) {
       mentionId: uuidFromHash(`mention:${frozen.revisionId}:${stockId}:${raw}`), claimEligible: true,
       link: { disposition: 'linked', stockId, symbol },
       sourceClass: SOURCE_CLASS_BY_KEY[frozen.sourceKey] ?? 'community' }];
-  }).slice(0, 200);
+  });
+  const matches=allMatches.slice(0,200);
+  const linkedSymbols=new Set(matches.map((candidate)=>candidate.symbol));
+  const allRejectedTokens=[...new Set([...text.matchAll(/(^|[^0-9])([0-9]{4})(?=[^0-9]|$)/gu)].map((match)=>match[2]))]
+    .filter((symbol)=>!linkedSymbols.has(symbol));
+  const rejectedTokens=allRejectedTokens.slice(0,200);
+  const rejected=rejectedTokens.map((symbol)=>({
+    claimId:uuidFromHash(`claim:${frozen.revisionId}:rejected:${symbol}`),
+    mentionId:uuidFromHash(`mention:${frozen.revisionId}:rejected:${symbol}`),symbol,
+    outcome:'rejected',reason:'stock_context_or_master_authority_unavailable',stockId:null,
+  }));
+  const overflowCount=Math.max(0,allMatches.length-matches.length)+Math.max(0,allRejectedTokens.length-rejectedTokens.length);
+  const overflow=overflowCount?[{claimId:uuidFromHash(`claim:${frozen.revisionId}:bounded-overflow`),
+    mentionId:uuidFromHash(`mention:${frozen.revisionId}:bounded-overflow`),symbol:null,stockId:null,
+    outcome:'deferred',reason:`entity_bound_deferred:${overflowCount}`}]:[];
+  const claimOutcomes=[...matches.map((candidate)=>({claimId:candidate.claimId,mentionId:candidate.mentionId,
+    symbol:candidate.symbol,stockId:candidate.stockId,outcome:'linked',reason:'canonical_master_context_verified'})),...rejected];
+  claimOutcomes.push(...overflow);
+  const entityOutcomes=claimOutcomes.map((outcome)=>({entityOutcomeId:uuidFromHash(`entity:${outcome.claimId}`),
+    claimId:outcome.claimId,symbol:outcome.symbol,stockId:outcome.stockId,outcome:outcome.outcome,
+    reason:outcome.reason}));
+  const parseOutcome=matches.length?'processed_with_claims':'processed_no_claim';
   return { schema: 'legacy-mention-claim-result-v3.11', revisionId: frozen.revisionId,
-    candidates: matches, parseOutcome: matches.length ? 'processed_with_claims' : 'processed_no_claim' };
+    candidates: matches, parseOutcome,documentOutcome:{outcome:parseOutcome,reason:matches.length
+      ?'one_or_more_verified_entities':'no_verified_stock_claim'},claimOutcomes,entityOutcomes,
+    conservation:{documentCount:1,claimCount:claimOutcomes.length,entityCount:entityOutcomes.length,
+      linkedEntityCount:entityOutcomes.filter((row)=>row.outcome==='linked').length,
+      rejectedEntityCount:entityOutcomes.filter((row)=>row.outcome==='rejected').length} };
+}
+
+function factRestatement(row) { return row.length>=16 ? String(row[13]??'') : ''; }
+
+function selectOfficialFactHeads(rows,sourceCutoff=null) {
+  const accepted=rows.filter((row)=>validOfficialFactRow(row,sourceCutoff)).map(normalizeOfficialFactRow);
+  const groups=Map.groupBy(accepted,(row)=>canonicalJson([row[1],row[2]??null,row[3],row[4]]));
+  const selected=[];const conflicts=[];
+  for(const members of groups.values()) {
+    const ordered=[...members].sort((left,right)=>String(right[8]).localeCompare(String(left[8]))
+      ||String(right[9]).localeCompare(String(left[9]))||String(right[10]).localeCompare(String(left[10]))
+      ||String(right[11]).localeCompare(String(left[11]))||factRestatement(right).localeCompare(factRestatement(left))
+      ||String(left[12]).localeCompare(String(right[12])));
+    const winner=ordered[0];
+    const tied=ordered.filter((row)=>String(row[8])===String(winner[8])&&String(row[9])===String(winner[9])
+      &&String(row[10])===String(winner[10])&&String(row[11])===String(winner[11])
+      &&factRestatement(row)===factRestatement(winner));
+    if(new Set(tied.map((row)=>Number(row[5]))).size>1)conflicts.push([winner[1],winner[2]??null,winner[3],winner[4]]);
+    else selected.push(winner);
+  }
+  return {rows:selected,conflicts};
 }
 
 function legacyFactInput(rows) {
-  const latest = Object.fromEntries(rows.filter((row) => Array.isArray(row) && typeof row[1] === 'string' && Number.isFinite(row[5]))
-    .map((row) => [row[1], Number(row[5])]));
+  const latest = {};
+  for (const row of rows) {
+    if (Array.isArray(row) && typeof row[1] === 'string' && Number.isFinite(row[5]) && latest[row[1]] === undefined) {
+      latest[row[1]] = Number(row[5]);
+    }
+  }
   return {
     revenue: latest.quarterly_revenue, grossProfit: latest.quarterly_gross_profit,
     operatingIncome: latest.quarterly_operating_income, pretaxIncome: latest.quarterly_pretax_income,
     netIncome: latest.quarterly_net_income_attributable_to_common ?? latest.quarterly_net_income,
-    dilutedShares: latest.diluted_shares, ebitda: latest.quarterly_ebitda,
+    dilutedShares: latest.diluted_weighted_average_shares ?? latest.diluted_shares,
+    ebitda: latest.quarterly_ebitda,
     bookValue: latest.book_value_per_share, nav: latest.net_asset_value,
     cash: latest.cash_and_equivalents, totalDebt: latest.total_debt, netDebt: latest.net_debt,
+    roe: latest.roe,
+  };
+}
+
+const VALUATION_FLOW_KEYS = Object.freeze(['quarterly_revenue','quarterly_gross_profit','quarterly_operating_expense',
+  'quarterly_operating_income','quarterly_non_operating_income','quarterly_pretax_income','quarterly_income_tax_expense',
+  'quarterly_noncontrolling_interest','quarterly_net_income','quarterly_net_income_attributable_to_common',
+  'quarterly_diluted_eps','diluted_weighted_average_shares']);
+const VALUATION_BRIDGE_KEYS = Object.freeze(VALUATION_FLOW_KEYS.filter((key)=>key!=='quarterly_diluted_eps'));
+const OPTIONAL_VALUATION_FLOW_KEYS = Object.freeze(['quarterly_ebitda','depreciation_amortization']);
+const VALUATION_BALANCE_KEYS = Object.freeze(['cash_and_equivalents','total_debt','total_assets','total_equity','book_value_per_share']);
+const FACT_UNIT_KIND = Object.freeze({
+  monthly_revenue:'money',
+  quarterly_revenue:'money',quarterly_gross_profit:'money',quarterly_operating_expense:'money',quarterly_operating_income:'money',
+  quarterly_non_operating_income:'money',quarterly_pretax_income:'money',quarterly_income_tax_expense:'money',
+  quarterly_noncontrolling_interest:'money',quarterly_net_income:'money',quarterly_net_income_attributable_to_common:'money',quarterly_ebitda:'money',
+  depreciation_amortization:'money',cash_and_equivalents:'money',total_debt:'money',net_debt:'money',total_assets:'money',
+  total_equity:'money',net_asset_value:'money',quarterly_diluted_eps:'per_share',book_value_per_share:'per_share',
+  diluted_weighted_average_shares:'shares',diluted_shares:'shares',roe:'percentage',
+});
+
+function factUnitAllowed(kind,unit) {
+  return kind==='money'?['TWD','TWD_thousand','TWD_million'].includes(unit)
+    :kind==='shares'?['share','thousand_shares'].includes(unit)
+      :kind==='per_share'?unit==='TWD_per_share':kind==='percentage'&&unit==='percentage_points';
+}
+
+function normalizeOfficialFactRow(row) {
+  const kind=FACT_UNIT_KIND[row[1]];const normalized=[...row];
+  if(kind==='money') {
+    normalized[5]=Number(row[5])*({TWD:1,TWD_thousand:1000,TWD_million:1000000})[row[6]];
+    normalized[6]='TWD';
+  } else if(kind==='shares') {
+    normalized[5]=Number(row[5])*(row[6]==='thousand_shares'?1000:1);normalized[6]='share';
+  } else normalized[5]=Number(row[5]);
+  return normalized;
+}
+
+function consecutiveQuarterIndex(periodEnd) {
+  const match=/^(\d{4})-(03-31|06-30|09-30|12-31)$/u.exec(String(periodEnd));
+  if(!match)return null;
+  return Number(match[1])*4+({ '03-31':0,'06-30':1,'09-30':2,'12-31':3 })[match[2]];
+}
+
+function quarterDayCounts(quarter) {
+  const year=Math.floor(quarter/4);const ordinal=quarter%4;
+  const start=Date.UTC(year,ordinal*3,1);const end=Date.UTC(year,ordinal*3+3,1);
+  return {quarterDays:(end-start)/86400000,yearToDateDays:(end-Date.UTC(year,0,1))/86400000};
+}
+
+function discreteQuarterRows(rows,key,{weightedAverage=false}={}) {
+  const byPeriod=new Map();
+  for(const row of rows) {
+    if(!Array.isArray(row)||row[1]!==key||!Number.isFinite(row[5])||consecutiveQuarterIndex(row[3])===null)continue;
+    if(!byPeriod.has(row[3]))byPeriod.set(row[3],row);
+  }
+  const ordered=[...byPeriod.values()].sort((left,right)=>String(left[3]).localeCompare(String(right[3])));
+  const discrete=[];
+  for(const row of ordered) {
+    const quarter=consecutiveQuarterIndex(row[3]); const withinYear=quarter%4;
+    if(withinYear===0) discrete.push({quarter,value:Number(row[5]),row,days:quarterDayCounts(quarter).quarterDays});
+    else {
+      const prior=ordered.find((candidate)=>consecutiveQuarterIndex(candidate[3])===quarter-1);
+      if(prior) {
+        const days=quarterDayCounts(quarter);const priorDays=quarterDayCounts(quarter-1).yearToDateDays;
+        const value=weightedAverage
+          ?(Number(row[5])*days.yearToDateDays-Number(prior[5])*priorDays)/days.quarterDays
+          :Number(row[5])-Number(prior[5]);
+        if(Number.isFinite(value))discrete.push({quarter,value,row,days:days.quarterDays});
+      }
+    }
+  }
+  return discrete;
+}
+
+function fourQuarterFlow(rows,key) {
+  const discrete=discreteQuarterRows(rows,key,{weightedAverage:key==='diluted_weighted_average_shares'});
+  const latest=discrete.slice(-4);
+  if(latest.length!==4||latest.some((row,index)=>index>0&&row.quarter!==latest[index-1].quarter+1))return null;
+  const value=key==='diluted_weighted_average_shares'
+    ?latest.reduce((sum,row)=>sum+row.value*row.days,0)/latest.reduce((sum,row)=>sum+row.days,0)
+    :latest.reduce((sum,row)=>sum+row.value,0);
+  return { value,rows:latest.map((row)=>row.row),quarters:latest.map((row)=>row.quarter),discrete:latest };
+}
+
+function discreteQuarterSeries(rows,key,limit) {
+  const output=discreteQuarterRows(rows,key,{weightedAverage:key==='diluted_weighted_average_shares'});
+  const latest=output.slice(-limit);
+  return latest.length===limit&&latest.every((row,index)=>index===0||row.quarter===latest[index-1].quarter+1)?latest:[];
+}
+
+function alignedQuarterSeries(rows,keys,limit) {
+  const series=new Map(keys.map((key)=>[key,discreteQuarterRows(rows,key,
+    {weightedAverage:key==='diluted_weighted_average_shares'})]));
+  const maps=new Map([...series].map(([key,values])=>[key,new Map(values.map((row)=>[row.quarter,row]))]));
+  const common=[...new Set(series.get(keys[0])?.map((row)=>row.quarter)??[])].filter((quarter)=>
+    keys.every((key)=>maps.get(key)?.has(quarter))).sort((left,right)=>left-right);
+  let selected=[];
+  for(let end=common.length-1;end>=limit-1;end-=1) {
+    const candidate=common.slice(end-limit+1,end+1);
+    if(candidate.every((quarter,index)=>index===0||quarter===candidate[index-1]+1)){selected=candidate;break;}
+  }
+  if(selected.length!==limit)return null;
+  return Object.freeze({quarters:selected,byKey:Object.freeze(Object.fromEntries(keys.map((key)=>[key,
+    selected.map((quarter)=>maps.get(key).get(quarter))])))});
+}
+
+function validOfficialFactRow(row, cutoff) {
+  const quarterly=[...VALUATION_FLOW_KEYS,...OPTIONAL_VALUATION_FLOW_KEYS].includes(row?.[1]);
+  const monthly=row?.[1]==='monthly_revenue';
+  const periodStartValid=quarterly||monthly
+    ? /^\d{4}-\d{2}-\d{2}$/u.test(String(row?.[2]))&&Date.parse(row[2])<=Date.parse(row[3])
+    : row?.[2]===null;
+  if(!Array.isArray(row)||!FACT_UNIT_KIND[row[1]]||!Number.isFinite(row[5])||!factUnitAllowed(FACT_UNIT_KIND[row[1]],row[6])
+    ||row[7]!=='official_filing'||!periodStartValid
+    ||!/^\d{4}-\d{2}-\d{2}$/u.test(String(row[3]))
+    ||(quarterly?row[4]!=='quarterly':monthly?row[4]!=='monthly':row[4]!=='instant'))return false;
+  const published=Date.parse(row[8]);const source=Date.parse(row[9]);const collected=Date.parse(row[10]);
+  const taipeiDate=(instant)=>new Date(instant+8*60*60*1000).toISOString().slice(0,10);
+  const periodEnd=String(row[3]);
+  return Number.isFinite(published)&&Number.isFinite(source)&&Number.isFinite(collected)
+    &&periodEnd<=taipeiDate(published)&&periodEnd<=taipeiDate(source)
+    &&(!cutoff||periodEnd<=taipeiDate(Date.parse(cutoff)))
+    &&published<=source&&source<=collected&&(!cutoff||collected<=Date.parse(cutoff))
+    &&typeof row[12]==='string'&&row[12].length>0;
+}
+
+function valuationFactInput(rows, sourceCutoff = null) {
+  const resolved=selectOfficialFactHeads(rows,sourceCutoff);
+  if(resolved.conflicts.length)return {authorityConflict:'authority_conflict',conflictingFacts:resolved.conflicts,
+    missingFacts:[],periodReadiness:'conflicting_point_in_time_fact',sourceRefs:[]};
+  const accepted=resolved.rows;
+  const commonBridge=alignedQuarterSeries(accepted,VALUATION_BRIDGE_KEYS,4);
+  const ttm=commonBridge?Object.fromEntries(VALUATION_BRIDGE_KEYS.map((key)=>{
+    const selected=commonBridge.byKey[key];
+    const value=key==='diluted_weighted_average_shares'
+      ?selected.reduce((sum,row)=>sum+row.value*row.days,0)/selected.reduce((sum,row)=>sum+row.days,0)
+      :selected.reduce((sum,row)=>sum+row.value,0);
+    return [key,{value,rows:selected.map((row)=>row.row),quarters:commonBridge.quarters,discrete:selected}];
+  })):Object.fromEntries(VALUATION_BRIDGE_KEYS.map((key)=>[key,null]));
+  const reportedEpsByPeriod=new Map(accepted.filter((row)=>row[1]==='quarterly_diluted_eps')
+    .map((row)=>[row[3],row]));
+  const epsBridge=commonBridge?commonBridge.quarters.map((period,index)=>{
+    const reported=reportedEpsByPeriod.get(commonBridge.byKey.quarterly_revenue[index].row[3]);
+    const attributable=commonBridge.byKey.quarterly_net_income_attributable_to_common[index];
+    const shares=commonBridge.byKey.diluted_weighted_average_shares[index];
+    return reported&&shares.row[5]>0?{reported,reportedExpected:Number(attributable.row[5])/Number(shares.row[5]),
+      derived:Number(attributable.value)/Number(shares.value),period}:null;
+  }):[];
+  ttm.quarterly_diluted_eps=epsBridge.length===4&&epsBridge.every(Boolean)
+    ?{value:ttm.quarterly_net_income_attributable_to_common.value/ttm.diluted_weighted_average_shares.value,
+      rows:epsBridge.map((row)=>row.reported),quarters:commonBridge.quarters,discrete:epsBridge}:null;
+  const attributable=ttm.quarterly_net_income_attributable_to_common;
+  const dilutedSharesAuthority=ttm.diluted_weighted_average_shares;
+  const latest=legacyFactInput([...accepted].sort((left,right)=>String(right[3]).localeCompare(String(left[3]))
+    ||String(right[9]).localeCompare(String(left[9]))||String(left[12]).localeCompare(String(right[12]))));
+  const ebitda=fourQuarterFlow(accepted,'quarterly_ebitda');
+  const depreciationAmortization=fourQuarterFlow(accepted,'depreciation_amortization');
+  const cycleRows=discreteQuarterSeries(accepted,'quarterly_net_income_attributable_to_common',12);
+  const roeHistory=accepted.filter((row)=>row[1]==='roe'&&Number.isFinite(row[5]))
+    .sort((left,right)=>String(left[3]).localeCompare(String(right[3]))).slice(-8).map((row)=>Number(row[5]));
+  const monthlyRevenueHistory=accepted.filter((row)=>row[1]==='monthly_revenue'&&Number.isFinite(row[5]))
+    .sort((left,right)=>String(left[3]).localeCompare(String(right[3]))).slice(-18).map((row)=>Number(row[5]));
+  const netHistory=alignedQuarterSeries(accepted,['quarterly_revenue','quarterly_net_income_attributable_to_common'],8);
+  const ebitdaHistory=alignedQuarterSeries(accepted,['quarterly_revenue','quarterly_ebitda'],8);
+  const quarterlyRevenueHistory=(netHistory?.byKey.quarterly_revenue??[]).map((row)=>row.value);
+  const quarterlyNetIncomeRevenueHistory=(netHistory?.byKey.quarterly_revenue??[]).map((row)=>row.value);
+  const quarterlyNetIncomeHistory=(netHistory?.byKey.quarterly_net_income_attributable_to_common??[]).map((row)=>row.value);
+  const quarterlyEbitdaRevenueHistory=(ebitdaHistory?.byKey.quarterly_revenue??[]).map((row)=>row.value);
+  const quarterlyEbitdaHistory=(ebitdaHistory?.byKey.quarterly_ebitda??[]).map((row)=>row.value);
+  const bookValueHistory=accepted.filter((row)=>row[1]==='book_value_per_share'&&Number.isFinite(row[5]))
+    .sort((left,right)=>String(left[3]).localeCompare(String(right[3]))).slice(-9).map((row)=>Number(row[5]));
+  const currentAnchorSourceTimestamps=Object.fromEntries([...Map.groupBy(accepted,(row)=>row[1])]
+    .map(([key,members])=>[key,[...members].sort((left,right)=>String(right[3]).localeCompare(String(left[3]))
+      ||String(right[9]).localeCompare(String(left[9])))[0]?.[9]??null]));
+  if(!currentAnchorSourceTimestamps.roe) {
+    const derived=[currentAnchorSourceTimestamps.quarterly_net_income_attributable_to_common,
+      currentAnchorSourceTimestamps.total_equity].filter((value)=>Number.isFinite(Date.parse(value)));
+    if(derived.length===2)currentAnchorSourceTimestamps.roe=derived.sort()[0];
+  }
+  const balances=Object.fromEntries(VALUATION_BALANCE_KEYS.map((key)=>[key,accepted.filter((row)=>row[1]===key)
+    .sort((left,right)=>String(left[3]).localeCompare(String(right[3]))).at(-1)]));
+  const missingFlows=VALUATION_FLOW_KEYS.filter((key)=>!ttm[key]);
+  const missingBalances=VALUATION_BALANCE_KEYS.filter((key)=>!balances[key]);
+  if(missingFlows.length||missingBalances.length||!commonBridge||!dilutedSharesAuthority
+    ||!Number.isFinite(dilutedSharesAuthority.value)||dilutedSharesAuthority.value<=0) {
+    const dilutedShares=Number.isFinite(dilutedSharesAuthority?.value)?dilutedSharesAuthority.value:null;
+    const equity=balances.total_equity?.[5];
+    return { bookValue:latest.bookValue,nav:latest.nav,ebitda:ebitda?.value,depreciationAmortization:depreciationAmortization?.value,
+      cash:latest.cash,totalDebt:latest.totalDebt,netDebt:latest.netDebt,roe:latest.roe,
+      revenue:ttm.quarterly_revenue?.value,grossProfit:ttm.quarterly_gross_profit?.value,
+      netIncome:attributable?.value,dilutedShares,
+      roe:Number.isFinite(latest.roe)?latest.roe:Number.isFinite(attributable?.value)&&equity>0?attributable.value/equity*100:null,
+      roeHistory,monthlyRevenueHistory,quarterlyRevenueHistory,quarterlyNetIncomeRevenueHistory,
+      quarterlyNetIncomeHistory,quarterlyEbitdaRevenueHistory,quarterlyEbitdaHistory,
+      bookValueHistory,currentAnchorSourceTimestamps,
+      cycleHistory:cycleRows.map((row)=>Number.isFinite(dilutedShares)&&dilutedShares>0?row.value/dilutedShares*4:null),
+      missingFacts:[...missingFlows,...missingBalances],periodReadiness:'missing_complete_official_bridge',sourceRows:accepted };
+  }
+  const dilutedShares=dilutedSharesAuthority.value;
+  const balancePeriod=new Set(Object.values(balances).map((row)=>row[3]));
+  const perQuarterConflict=commonBridge.quarters.some((_,index)=>{
+    const at=(key)=>commonBridge.byKey[key][index].value;
+    const tolerance=Math.max(1,Math.abs(at('quarterly_revenue'))*1e-8);
+    const eps=epsBridge[index];
+    const epsTolerance=Math.max(.01,Math.abs(eps?.reported?.[5]??0)*1e-4);
+    return Math.abs(at('quarterly_gross_profit')-at('quarterly_operating_expense')-at('quarterly_operating_income'))>tolerance
+      ||Math.abs(at('quarterly_operating_income')+at('quarterly_non_operating_income')-at('quarterly_pretax_income'))>tolerance
+      ||Math.abs(at('quarterly_pretax_income')-at('quarterly_income_tax_expense')-at('quarterly_net_income'))>tolerance
+      ||Math.abs(at('quarterly_net_income')-at('quarterly_noncontrolling_interest')
+        -at('quarterly_net_income_attributable_to_common'))>tolerance
+      ||!(at('diluted_weighted_average_shares')>0)
+      ||!eps||Math.abs(eps.reportedExpected-Number(eps.reported[5]))>epsTolerance
+      ||Math.abs(eps.derived-at('quarterly_net_income_attributable_to_common')
+        /at('diluted_weighted_average_shares'))>Number.EPSILON;
+  });
+  const latestBridgePeriod=commonBridge.byKey.quarterly_revenue.at(-1).row[3];
+  const balanceTolerance=Math.max(1,Math.abs(ttm.quarterly_revenue.value)*1e-8);
+  if(!Number.isFinite(dilutedShares)||dilutedShares<=0||balancePeriod.size!==1
+    ||[...balancePeriod][0]!==latestBridgePeriod||perQuarterConflict
+    ||balances.total_assets[5]+balanceTolerance<balances.total_equity[5]
+    ||balances.total_assets[5]+balanceTolerance<balances.cash_and_equivalents[5]) {
+    return { missingFacts:[],periodReadiness:'official_bridge_reconciliation_conflict' };
+  }
+  const resolvedDepreciation=depreciationAmortization?.value??(Number.isFinite(ebitda?.value)
+    ?ebitda.value-ttm.quarterly_operating_income.value:null);
+  return { revenue:ttm.quarterly_revenue.value,grossProfit:ttm.quarterly_gross_profit.value,
+    operatingIncome:ttm.quarterly_operating_income.value,pretaxIncome:ttm.quarterly_pretax_income.value,
+    nonOperatingIncome:ttm.quarterly_non_operating_income.value,incomeTaxExpense:ttm.quarterly_income_tax_expense.value,
+    totalNetIncome:ttm.quarterly_net_income.value,netIncome:attributable.value,dilutedShares,
+    bookValue:balances.book_value_per_share[5],nav:latest.nav,ebitda:ebitda?.value,
+    depreciationAmortization:resolvedDepreciation,cash:balances.cash_and_equivalents[5],
+    totalAssets:balances.total_assets[5],totalEquity:balances.total_equity[5],
+    totalDebt:balances.total_debt[5],netDebt:balances.total_debt[5]-balances.cash_and_equivalents[5],
+    roe:attributable.value/balances.total_equity[5]*100,roeHistory,monthlyRevenueHistory,
+    quarterlyRevenueHistory,quarterlyNetIncomeRevenueHistory,quarterlyNetIncomeHistory,
+    quarterlyEbitdaRevenueHistory,quarterlyEbitdaHistory,bookValueHistory,
+    currentAnchorSourceTimestamps,
+    bridgeQuarterPeriods:commonBridge.byKey.quarterly_revenue.map((row)=>row.row[3]),
+    cycleHistory:cycleRows.map((row)=>row.value/dilutedShares*4),periodReadiness:'ttm_from_four_official_quarters',sourceRows:accepted,
+    sourceRefs:[...new Set(accepted.map((row)=>row[12]).filter(Boolean))],
+  };
+}
+
+function persistedOfficialSnapshot(bundle, acquisition) {
+  const hasFinite=(value)=>value!==null&&value!==''&&Number.isFinite(Number(value));
+  const reportedRows = (bundle.reportedPeRows ?? []).filter((row)=>Array.isArray(row) && row.length>=12
+    && /^\d{4}$/u.test(String(row[0])) && (hasFinite(row[5])
+      || row.length>=13&&hasFinite(row[6]) || row[18]==='authority_conflict'));
+  const normalized = reportedRows.map((row)=>{const v313=row.length>=13;const conflict=v313&&row[18]==='authority_conflict';
+    const nullable=(value)=>value===null||value===''?null:Number.isFinite(Number(value))?Number(value):null;
+    const nullableText=(value)=>value===null||value===undefined||value===''?null:String(value);
+    return { symbol:String(row[0]),sector:String(row[1] ?? 'unknown'),
+    exchange:String(row[2]),canonicalSector:String(row[1]??'unknown'),session:String(row[3]),close:Number(row[4]),peRatio:nullable(row[5]),pbRatio:v313?nullable(row[6]):null,
+    publishedAt:conflict?null:nullableText(row[v313?7:6]),sourceTimestamp:conflict?null:nullableText(row[v313?8:7]),
+    collectedAt:conflict?null:nullableText(row[v313?9:8]),sourceRef:conflict?null:nullableText(row[v313?10:9]),
+    stockId:String(row[v313?11:10] ?? ''),
+    tradingSessionAuthorityHash:String(row[v313?12:11] ?? ''),
+    evSalesRatio:v313?nullable(row[13]):null,evEbitdaRatio:v313?nullable(row[14]):null,
+    navMultiple:v313?nullable(row[15]):null,sharesOutstanding:v313?nullable(row[17]):null,
+    authorityConflict:conflict?'authority_conflict':null,
+    metricSources:v313&&Array.isArray(row[16])?Object.fromEntries(row[16]
+      .filter((entry)=>Array.isArray(entry)&&typeof entry[0]==='string'&&typeof entry[1]==='string')
+      .map((entry)=>[String(entry[0]),{sourceRef:String(entry[1]),asOf:entry[2]?String(entry[2]):null}])):{},
+    metricSourceRefs:v313&&Array.isArray(row[16])?row[16]
+      .filter((entry)=>Array.isArray(entry)&&typeof entry[1]==='string').map((entry)=>String(entry[1])):[],
+    sourceUrl:String(row[2])==='TWSE'?SOURCE_URL:TPEX_SOURCE_URL,
+    authority:'exchange_reported_history' };});
+  const latestSessionByExchange=new Map();
+  for(const row of normalized) if(!latestSessionByExchange.has(row.exchange)
+    ||row.session>latestSessionByExchange.get(row.exchange))latestSessionByExchange.set(row.exchange,row.session);
+  const valuations = normalized.filter((row)=>row.session===latestSessionByExchange.get(row.exchange))
+    .map((row)=>({ ...row,authority:'exchange_reported' }));
+  const valuationHistory = normalized.filter((row)=>row.session!==latestSessionByExchange.get(row.exchange));
+  const revenues = (bundle.legacyRevenueRows ?? []).filter((row)=>Array.isArray(row) && row.length>=8)
+    .map((row)=>({ symbol:String(row[0]),asOf:String(row[1]),monthlyRevenue:Number(row[2]),
+      yoyGrowth:Number(row[3]),momGrowth:Number(row[4]),sourceUrl:String(row[5]),collectedAt:String(row[6]),
+      sourceRef:String(row[7]),authority:'exchange_reported' }))
+    .filter((row)=>Number.isFinite(row.monthlyRevenue) && Date.parse(row.collectedAt)<=Date.parse(bundle.sourceCutoff));
+  const persistedTwseIndex = (bundle.benchmarkRows ?? []).filter(Array.isArray)
+    .map((row)=>({ session:String(row[0]),close:Number(row[1]) })).filter((row)=>Number.isFinite(row.close));
+  const twseIndex=(acquisition?.twseIndex?.length??0)>=122?acquisition.twseIndex:persistedTwseIndex;
+  const financialFacts=(bundle.financialRows??[]).filter((row)=>Array.isArray(row)&&row.length>=13)
+    .map((row)=>({symbol:String(row[0]),factKey:String(row[1]),periodStart:row[2]===null?null:String(row[2]),
+      periodEnd:String(row[3]),durationKind:String(row[4]),value:Number(row[5]),unit:String(row[6]),
+      authorityTier:String(row[7]),filingPublishedAt:String(row[8]),sourceTimestamp:String(row[9]),
+      collectedAt:String(row[10]),sourceRef:String(row[12])})).filter((row)=>Number.isFinite(row.value));
+  const priceObservations=(bundle.priceRows??[]).filter((row)=>Array.isArray(row)&&row.length>=9&&Array.isArray(row[8]))
+    .map((row)=>({symbol:String(row[0]),session:String(row[1]),open:Number(row[2]),high:Number(row[3]),
+      low:Number(row[4]),close:Number(row[5]),volume:Number(row[6]),adjustmentEvidenceRef:String(row[7]),
+      adjustmentEvidence:row[8],exchange:String(row[8]?.[3]??'').startsWith('twse-')?'TWSE'
+        :String(row[8]?.[3]??'').startsWith('tpex-')?'TPEX':'',rawSourceRef:String(row[8]?.[3]??''),
+      rawSourceUrl:String(row[8]?.[3]??'').startsWith('twse-')?TWSE_PRICE_HISTORY_URL:TPEX_PRICE_HISTORY_URL}))
+    .filter((row)=>['TWSE','TPEX'].includes(row.exchange)&&Number.isFinite(row.close));
+  return { schema:'official-tw-market-decision-snapshot-v1',cutoff:bundle.sourceCutoff,
+    valuations,valuationHistory,reportedRows:normalized,revenues,financialFacts,priceObservations,
+    twseIndex,tpexIndex:acquisition?.tpexIndex??[],foreignFlow:acquisition?.foreignFlow??null,
+    sourceFailures:acquisition?.sourceFailures ?? [] };
+}
+
+function valuationAuthorityInput(candidate, factRows, officialSnapshot, sourceCutoff) {
+  if(!candidate?.canonicalSector||candidate.canonicalSector==='unknown')return {};
+  const cutoffMs=Date.parse(sourceCutoff);
+  const authoritativeRows=(officialSnapshot?.reportedRows??[]).filter((row)=>row.stockId
+    &&/^\d{4}-\d{2}-\d{2}$/u.test(String(row.session))&&Date.parse(row.session)<=cutoffMs
+    &&/^[0-9a-f]{64}$/u.test(row.tradingSessionAuthorityHash??'')
+    &&(row.authorityConflict==='authority_conflict'||(
+      Number.isFinite(Date.parse(row.publishedAt))&&Date.parse(row.publishedAt)<=cutoffMs
+      &&Number.isFinite(Date.parse(row.sourceTimestamp))&&Date.parse(row.sourceTimestamp)<=cutoffMs
+      &&Number.isFinite(Date.parse(row.collectedAt))&&Date.parse(row.collectedAt)<=cutoffMs
+      &&typeof row.sourceRef==='string'&&row.sourceRef.length>0)));
+  const collapseRows=(rows,keyOf)=>[...Map.groupBy(rows,keyOf)].map(([,members])=>{
+    const ordered=[...members].sort((left,right)=>String(right.sourceTimestamp??'').localeCompare(String(left.sourceTimestamp??''))
+      ||String(left.sourceRef??'').localeCompare(String(right.sourceRef??'')));
+    const valueFields=['close','peRatio','pbRatio','evSalesRatio','evEbitdaRatio','navMultiple','sharesOutstanding'];
+    const conflicting=members.some((row)=>row.authorityConflict==='authority_conflict')||valueFields.some((field)=>
+      new Set(members.map((row)=>row[field]).filter((value)=>value!==null&&value!==undefined&&Number.isFinite(Number(value)))
+        .map(Number)).size>1);
+    if(conflicting)return { ...ordered[0],close:null,peRatio:null,pbRatio:null,evSalesRatio:null,
+      evEbitdaRatio:null,navMultiple:null,sharesOutstanding:null,publishedAt:null,sourceTimestamp:null,
+      collectedAt:null,sourceRef:null,metricSourceRefs:[],authorityConflict:'authority_conflict' };
+    const merged={ ...ordered[0] };
+    for(const field of valueFields) {
+      const present=members.map((row)=>row[field]).find((value)=>value!==null&&value!==undefined);
+      if(present!==undefined)merged[field]=present;
+    }
+    merged.metricSourceRefs=[...new Set(members.flatMap((row)=>row.metricSourceRefs??[]))].sort();
+    return merged;
+  });
+  const own=collapseRows(authoritativeRows.filter((row)=>row.stockId===candidate.stockId),
+    (row)=>`${row.exchange}|${row.session}`)
+    .sort((left,right)=>left.session.localeCompare(right.session));
+  if(own.some((row)=>row.authorityConflict==='authority_conflict'))return {
+    authorityConflict:'authority_conflict',requireCompleteOfficialBridge:true,
+  };
+  const current=own.at(-1);
+  const authoritySector=current?.sector;
+  const ownExchanges=new Set(own.map((row)=>row.exchange));
+  if(!current||ownExchanges.size!==1||!authoritySector||authoritySector==='unknown'
+    ||authoritySector!==candidate.canonicalSector)return {};
+  const peers=collapseRows(authoritativeRows.filter((row)=>row.stockId!==candidate.stockId
+    &&row.exchange===current.exchange&&row.sector===authoritySector&&row.session===current.session),
+  (row)=>`${row.exchange}|${row.stockId}`);
+  if(peers.some((row)=>row.authorityConflict==='authority_conflict'))return {
+    authorityConflict:'authority_conflict',requireCompleteOfficialBridge:true,
+  };
+  const facts=valuationFactInput(factRows,sourceCutoff);
+  if(facts.authorityConflict==='authority_conflict')return {authorityConflict:'authority_conflict',requireCompleteOfficialBridge:true};
+  const selectedMethod=selectSectorValuationMethod({...facts,sector:authoritySector});
+  const method=selectedMethod.availability==='available'?selectedMethod.method:null;
+  const metric=(row,selectedMethod=method)=>['pb_roe','residual_income'].includes(selectedMethod)?row.pbRatio:selectedMethod==='nav'?row.navMultiple:
+    selectedMethod==='ev_sales'?row.evSalesRatio:selectedMethod==='ev_ebitda'?row.evEbitdaRatio:row.peRatio;
+  const metricFactKey=(selectedMethod)=>({ev_sales:'ev_sales_multiple',ev_ebitda:'ev_ebitda_multiple',nav:'net_asset_value'}[selectedMethod]??null);
+  const metricSource=(row,selectedMethod=method)=>{
+    const factKey=metricFactKey(selectedMethod);
+    return factKey?row.metricSources?.[factKey]?.sourceRef??null:row.sourceRef;
+  };
+  const currentMethodRows=own.filter((row)=>Number.isFinite(metric(row))&&metric(row)>0&&metricSource(row));
+  const peerMethodRows=peers.filter((row)=>Number.isFinite(metric(row))&&metric(row)>0&&metricSource(row));
+  const rows=[...currentMethodRows,...peerMethodRows]
+    .map((row)=>({ stockId:row.stockId,sector:row.sector,authority:'official',
+      value:metric(row),method,asOf:row.session,close:row.close,sharesOutstanding:row.sharesOutstanding,
+      exchange:row.exchange,publishedAt:row.publishedAt,sourceTimestamp:row.sourceTimestamp,collectedAt:row.collectedAt,
+      tradingSessionAuthorityHash:row.tradingSessionAuthorityHash,
+      sourceRef:metricSource(row) }));
+  const roster=[...new Map([current,...peers].map((row)=>[row.stockId,
+    { stockId:row.stockId,sector:row.sector,active:true }])).values()];
+  const multiples=peerMethodRows
+    .map((row)=>({ stockId:row.stockId,sector:row.sector,method,value:metric(row),
+    asOf:row.session,sourceRef:metricSource(row) }));
+  // Do not pass `metric` directly to Array#map: the callback index would be
+  // interpreted as the optional method override and silently select PE.
+  const orderedOwn=currentMethodRows.map((row)=>metric(row)).sort((a,b)=>a-b);
+  const orderedPeers=peerMethodRows.map((row)=>metric(row)).sort((a,b)=>a-b);
+  const scenarioSource=`${metricSource(current)??current.sourceRef}#history:${candidate.symbol}:${orderedOwn.length}`;
+  const formulaOnly=['nav','residual_income'].includes(method);
+  const blendedScenarios=(history,population,sourceRef)=>{
+    if(history.length<252||population.length<8)return null;
+    const winsor=(values)=>{const ordered=[...values].sort((a,b)=>a-b);const low=percentile(ordered,.1),high=percentile(ordered,.9);
+      return ordered.map((value)=>Math.max(low,Math.min(high,value)));};
+    const historyValues=winsor(history);const peerValues=winsor(population);
+    return Object.freeze(Object.fromEntries([['bear',.1],['base',.5],['bull',.9]].map(([name,quantile])=>{
+      const ownValue=historyValues?percentile(historyValues,quantile):null;
+      const peerValue=peerValues?percentile(peerValues,quantile):null;
+      const multiple=0.6*ownValue+0.4*peerValue;
+      return [name,{multiple,asOf:current.session,sourceRef}];
+    })));
+  };
+  const scenarios=formulaOnly?null:blendedScenarios(orderedOwn,orderedPeers,scenarioSource);
+  const mandatoryCrossMethod=method==='normalized_pe'?'ev_ebitda':method==='residual_income'?'pb_roe':null;
+  const crossMetric=(row)=>metric(row,mandatoryCrossMethod);
+  const crossOwn=mandatoryCrossMethod?own.filter((row)=>Number.isFinite(crossMetric(row))&&crossMetric(row)>0
+    &&metricSource(row,mandatoryCrossMethod)).map(crossMetric).sort((a,b)=>a-b):[];
+  const crossPeers=mandatoryCrossMethod?peers.filter((row)=>Number.isFinite(crossMetric(row))&&crossMetric(row)>0
+    &&metricSource(row,mandatoryCrossMethod)).map(crossMetric).sort((a,b)=>a-b):[];
+  const crossScenarios=mandatoryCrossMethod?blendedScenarios(crossOwn,crossPeers,
+    `${metricSource(current,mandatoryCrossMethod)??current.sourceRef}#cross-check:${mandatoryCrossMethod}:${candidate.symbol}`):null;
+  const crossCheck=mandatoryCrossMethod&&crossScenarios?Object.freeze({method:mandatoryCrossMethod,scenarios:crossScenarios}):null;
+  const primaryFactKey={nav:'net_asset_value',residual_income:'book_value_per_share',pb_roe:'book_value_per_share',
+    normalized_pe:'quarterly_net_income_attributable_to_common',pe:'quarterly_diluted_eps',
+    ev_ebitda:'quarterly_ebitda',ev_sales:'quarterly_revenue'}[method];
+  const evidence=(facts.sourceRows??[]).filter((row)=>Array.isArray(row)&&typeof row[12]==='string'&&row[12].length>0
+    && Number.isFinite(Date.parse(row[8]))&&Date.parse(row[8])<=Date.parse(sourceCutoff))
+    .map((row)=>({ stockId:candidate.stockId,companySpecific:true,publishedAt:String(row[8]),sourceRef:String(row[12]),
+      factKey:String(row[1]),periodEnd:String(row[3]) }))
+    .sort((left,right)=>Number(right.factKey===primaryFactKey)-Number(left.factKey===primaryFactKey)
+      ||right.periodEnd.localeCompare(left.periodEnd)||left.sourceRef.localeCompare(right.sourceRef));
+  const sectorMedian=orderedPeers.length>=8?median(orderedPeers):null;
+  const subjectReference=Number.isFinite(metric(current))?metric(current):orderedOwn.length?median(orderedOwn):null;
+  const crossCheckScore=Number.isFinite(sectorMedian)&&Number.isFinite(subjectReference)
+    ?Math.max(0,100-100*Math.abs(sectorMedian-subjectReference)/Math.max(Math.abs(sectorMedian),Math.abs(subjectReference),1)):null;
+  const primaryAuthorityReady=orderedOwn.length>=252&&orderedPeers.length>=8&&currentMethodRows.at(-1)?.session===current.session;
+  const crossAuthorityReady=!mandatoryCrossMethod||(crossOwn.length>=252&&crossPeers.length>=8);
+  return { rows,roster,multiples,scenarios,evidence,minimumPeers:8,requireCompleteOfficialBridge:true,
+    cycleHistory:facts.cycleHistory??[],crossCheck,
+    methodAuthority:Object.freeze({availability:primaryAuthorityReady&&crossAuthorityReady?'available':'missing',method,
+      ownSessionCount:orderedOwn.length,peerCount:orderedPeers.length,crossOwnSessionCount:crossOwn.length,
+      crossPeerCount:crossPeers.length,asOf:current.session,exchange:current.exchange,sector:authoritySector,
+      primarySourceRef:metricSource(current),crossSourceRef:mandatoryCrossMethod?metricSource(current,mandatoryCrossMethod):null}),
+    tradingSessionAuthorityHash:current.tradingSessionAuthorityHash,
+    valuationScores:{ scenarioBridgeScore:method&&facts.periodReadiness==='ttm_from_four_official_quarters'?100:null,
+      capitalStructureScore:method==='nav'?Number.isFinite(facts.nav)&&facts.dilutedShares>0?100:null
+        :method==='residual_income'?facts.bookValue>0&&facts.roeHistory?.length>=8?100:null
+          :Number.isFinite(facts.cash)&&Number.isFinite(facts.totalDebt)?100:null,crossCheckScore },
   };
 }
 
 function researchHistory(rows, symbol) {
   return (rows ?? []).filter((row) => Array.isArray(row) && row[0] === symbol && Number.isFinite(Number(row[5])))
     .map((row) => ({ session: String(row[1]),open:Number(row[2]),high:Number(row[3]),low:Number(row[4]),
-      close:Number(row[5]),volume:Number(row[6]) }))
+      close:Number(row[5]),volume:Number(row[6]),sourceRef:typeof row[7]==='string'?row[7]:null }))
     .filter((row) => Number.isFinite(Date.parse(row.session)) && row.close > 0)
     .sort((left, right) => left.session.localeCompare(right.session))
     .filter((row, index, all) => index === 0 || row.session !== all[index - 1].session)
     .slice(-130);
+}
+
+const HEARTBEAT_ONLY_KEYS = new Set([
+  'asOf','cutoff','sourceCutoff','evaluatedAt','lastEvaluatedAt','publishedAt','nextExpectedAt',
+  'contentAsOf','noChangeMessage','analysisGeneratedAt',
+]);
+
+function materialDecisionValue(value) {
+  if (Array.isArray(value)) return value.map(materialDecisionValue);
+  if (!value || typeof value !== 'object') return value;
+  return Object.fromEntries(Object.entries(value)
+    .filter(([key])=>!HEARTBEAT_ONLY_KEYS.has(key)&&key!=='decisionRevisionId')
+    .map(([key,nested])=>[key,materialDecisionValue(nested)]));
+}
+
+function clampDecile(value) {
+  return Number.isFinite(value) ? Math.max(0, Math.min(9, Math.floor(value))) : null;
+}
+
+function materialFactRows(facts) {
+  return (facts ?? []).filter((row) => Array.isArray(row) && typeof row[1] === 'string'
+      && Number.isFinite(row[5]) && typeof row[6] === 'string' && typeof row[9] === 'string')
+    .map((row) => [typeof row[12] === 'string' ? row[12] : sha256(canonicalJson(row)), row[1], row[5], row[6],
+      canonicalUtc(row[9], 'material fact timestamp')])
+    .sort((left, right) => left[1].localeCompare(right[1]) || right[4].localeCompare(left[4])
+      || String(left[0]).localeCompare(String(right[0])))
+    .filter((row, index, all) => index === 0 || canonicalJson(row) !== canonicalJson(all[index - 1]))
+    .slice(0, 128);
+}
+
+function materialSourceEvidence(candidate, fundamental, facts) {
+  const timestampByRef = new Map((facts ?? []).filter((row) => Array.isArray(row) && typeof row[12] === 'string')
+    .map((row) => [row[12], typeof row[9] === 'string' ? row[9] : '']));
+  if (typeof candidate?.materialEvidenceHash === 'string') timestampByRef.set(candidate.materialEvidenceHash,
+    typeof candidate.claimAsOf === 'string' ? candidate.claimAsOf : '');
+  return [...new Set([candidate?.materialEvidenceHash, ...(fundamental?.evidenceRefs ?? [])].filter((value) =>
+    typeof value === 'string' && value.length > 0))]
+    .sort((left, right) => String(timestampByRef.get(right) ?? '').localeCompare(String(timestampByRef.get(left) ?? ''))
+      || left.localeCompare(right)).slice(0, 40);
+}
+
+function materialRiskState(candidate, valuation, technical) {
+  const reason = String(valuation?.reason ?? '');
+  if (candidate?.sourceContradiction === true) return ['risk', 'source_contradiction'];
+  if (/bridge_reconciliation_conflict|financial_conflict/u.test(reason)) return ['risk', 'financial_conflict'];
+  if (technical?.technicalState === 'invalidated') return ['risk', 'technical_invalidated'];
+  if (/conflict|divergence|scenario_order/u.test(reason)) return ['risk', 'valuation_conflict'];
+  return ['risk', 'none'];
+}
+
+function reportedPeSectorBand(reportedPe) {
+  if (reportedPe?.availability !== 'available' || reportedPe.sectorReference?.availability !== 'available'
+      || !Number.isFinite(reportedPe.currentValue)) return null;
+  if (reportedPe.currentValue <= reportedPe.sectorReference.p25) return 'low';
+  if (reportedPe.currentValue >= reportedPe.sectorReference.p75) return 'high';
+  return 'normal';
+}
+
+function timingRiskStatus(technical, reason) {
+  if (!technical?.technicalState) return 'unavailable';
+  if (['below_support', 'reclaim_required', 'invalidated'].includes(technical.technicalState)) return 'blocked';
+  if (reason === 'bias_observe_only') return 'observe_only';
+  return 'eligible';
+}
+
+function buildDecisionMaterial({ candidate, facts, fundamental, quality, biasHistory, valuation, valuationInput,
+  technical, actionDecision }) {
+  const valuationInputHash = sha256(canonicalJson(materialDecisionValue({
+    sector: candidate.canonicalSector, facts: valuationFactInput(facts), authority: valuationInput,
+    method: valuation?.method ?? null, bridge: valuation?.bridge ?? null, comparable: valuation?.comparable ?? null,
+    reportedPe: valuation?.reportedPe ?? null, scenarios: valuation?.scenarios ?? null,
+  })));
+  const state = technical?.technicalState ?? null;
+  const availability = technical?.availability === 'unavailable' || !state ? 'unavailable' : 'available';
+  const reportedPercentile = valuation?.reportedPe?.ownReference?.percentile;
+  return hashMaterialAnalysisChange({ symbol: candidate.symbol,
+    sourceEvidence: materialSourceEvidence(candidate, fundamental, facts),
+    facts: materialFactRows(facts),
+    priceTrigger: ['price_trigger', availability, state, technical?.trigger?.kind ?? null],
+    technical: ['technical', state ?? 'unavailable', Number.isFinite(technical?.plane?.support) ? technical.plane.support : null,
+      Number.isFinite(technical?.plane?.resistance) ? technical.plane.resistance : null],
+    valuation: ['valuation', valuationInputHash],
+    risk: materialRiskState(candidate, valuation, technical),
+    factor: ['factor', quality.availability, quality.availableWeight,
+      Number.isFinite(quality.score) ? clampDecile(quality.score / 10) : null,
+      biasHistory.availability, biasHistory.availability === 'available' ? biasHistory.current.label : null, null,
+      timingRiskStatus(technical, actionDecision.reason), clampDecile(reportedPercentile * 10),
+      reportedPeSectorBand(valuation?.reportedPe)],
+  });
 }
 
 function average(values) { return values.length ? values.reduce((sum,value)=>sum+value,0)/values.length : null; }
@@ -315,21 +890,42 @@ function relativePeScore(ratio) {
   return ratio <= 0.7 ? 92 : ratio <= 0.9 ? 78 : ratio <= 1.1 ? 58 : ratio <= 1.35 ? 38 : 20;
 }
 
+function orderedPercentile(values, fraction) {
+  const selected = values.filter(Number.isFinite).sort((left, right) => left - right);
+  if (!selected.length) return null;
+  const rank = (selected.length - 1) * fraction;
+  const lower = Math.floor(rank); const upper = Math.ceil(rank);
+  return lower === upper ? selected[lower] : selected[lower] + (selected[upper] - selected[lower]) * (rank - lower);
+}
+
+function validEmbeddedOfficialValuationRef(sourceRef,session,maximumSession){
+  const embedded=String(sourceRef??'').match(/:(\d{4}-\d{2}-\d{2}):\d{4}$/u)?.[1];
+  if(!embedded||embedded!==session||embedded>maximumSession)return false;
+  const parsed=new Date(`${embedded}T00:00:00Z`);
+  return Number.isFinite(parsed.getTime())&&parsed.toISOString().slice(0,10)===embedded;
+}
+
 function valuationResearchAxis(row, sectorReference, historyRows = []) {
   const verified = validateReportedValuation(row);
   if (verified.availability !== 'available') return { score: null, trustworthy: false, reason: verified.reason };
+  if(!validEmbeddedOfficialValuationRef(row.sourceRef,row.session,row.session))
+    return {score:null,trustworthy:false,reason:'official_valuation_source_ref_date_invalid'};
   if (!Number.isFinite(row.peRatio)) {
     return { score: null, trustworthy: false, reason: 'sector_pe_reference_unavailable', currentPe: row.peRatio,
       currentPb: row.pbRatio, sourceRef: row.sourceRef, asOf: row.session };
   }
-  const officialHistory = historyRows.filter((item) => item?.symbol === row.symbol && item.authority === 'exchange_reported_history'
-      && item.session < row.session && Number.isFinite(item.peRatio) && item.peRatio > 0 && item.peRatio <= 200
-      && (/^twse-rwd:BWIBBU_d:\d{4}-\d{2}-\d{2}:\d{4}$/u.test(item.sourceRef ?? '')
-        || /^tpex-rwd:peratio:\d{4}-\d{2}-\d{2}:\d{4}$/u.test(item.sourceRef ?? '')))
-    .sort((left,right)=>left.session.localeCompare(right.session));
+  const officialHistory = [...historyRows,row].filter((item) => item?.stockId === row.stockId&&item.exchange===row.exchange
+      &&['exchange_reported_history','exchange_reported'].includes(item.authority)
+      && item.session <= row.session && Number.isFinite(item.peRatio) && item.peRatio > 0 && item.peRatio <= 200
+      && /^[0-9a-f]{64}$/u.test(item.tradingSessionAuthorityHash??'')
+      && validOfficialReportedValuationSourceRef(item.exchange,item.sourceRef)
+      && validEmbeddedOfficialValuationRef(item.sourceRef,item.session,row.session))
+    .sort((left,right)=>left.session.localeCompare(right.session))
+    .filter((item,index,all)=>index===0||item.session!==all[index-1].session)
+    .slice(-252);
   const historyPes = officialHistory.map((item)=>item.peRatio); const historyPeMedian = median(historyPes);
-  const hasHistoryReference = historyPes.length >= 2 && Number.isFinite(historyPeMedian);
-  const hasSectorReference = sectorReference?.count >= 3 && Number.isFinite(sectorReference.medianPe);
+  const hasHistoryReference = historyPes.length >= 252 && Number.isFinite(historyPeMedian);
+  const hasSectorReference = sectorReference?.count >= 8 && Number.isFinite(sectorReference.medianPe);
   if (!hasSectorReference && !hasHistoryReference) return { score: null, trustworthy: false,
     reason: 'pe_reference_unavailable', currentPe: row.peRatio,currentPb:row.pbRatio,historySampleCount:historyPes.length,
     sourceRef:row.sourceRef,asOf:row.session };
@@ -339,12 +935,51 @@ function valuationResearchAxis(row, sectorReference, historyRows = []) {
   const score = referenceScores.reduce((sum,value)=>sum+value,0)/referenceScores.length;
   const reason = hasSectorReference && hasHistoryReference ? 'pe_compared_with_sector_and_own_history'
     : hasHistoryReference ? 'pe_compared_with_own_history' : 'pe_compared_with_sector_reference';
+  const memberIdentity=(item)=>[item.stockId,item.exchange,item.session,item.peRatio,
+    item.tradingSessionAuthorityHash,item.sourceRef];
+  const historyMembers=officialHistory.map(memberIdentity);
+  const sectorMembers=hasSectorReference&&Array.isArray(sectorReference.members)
+    ?sectorReference.members.map(memberIdentity):[];
+  const currentMember=memberIdentity(row);
+  const valuationEvidence=hasHistoryReference&&hasSectorReference
+    &&sectorMembers.length===sectorReference.count?Object.freeze({
+    algorithm:'official-relative-pe-evidence-v1',
+    currentObservationRoot:sha256(canonicalJson(currentMember)),
+    historyMembershipRoot:sha256(canonicalJson(historyMembers)),
+    sectorMembershipRoot:sha256(canonicalJson(sectorMembers)),
+    evidenceRoot:sha256(canonicalJson(['official-relative-pe-evidence-v1',currentMember,
+      historyMembers,sectorMembers])),
+    historySessions:historyMembers.length,sectorPeers:sectorMembers.length,
+  }):null;
+  const provisionalRelativeValue=historyPes.length>=60&&historyPes.length<252?Object.freeze({
+    kind:'provisional_relative_value',sampleCount:historyPes.length,asOf:row.session,
+    referenceBand:Object.freeze({low:orderedPercentile(historyPes,.25),base:historyPeMedian,
+      high:orderedPercentile(historyPes,.75)}),
+    evidenceRoot:sha256(canonicalJson(['provisional-relative-value-v3.14',officialHistory.map((item)=>item.sourceRef)])),
+    sourceRefs:Object.freeze(officialHistory.map((item)=>item.sourceRef).slice(-8)),
+  }):null;
   return { score,trustworthy:true,reason,currentPe:row.peRatio,currentPb:row.pbRatio,
     sectorPe:hasSectorReference?sectorReference.medianPe:null,sectorCount:hasSectorReference?sectorReference.count:0,
     relativePe:sectorRelativePe,historyPeMedian,historyPeMin:historyPes.length?Math.min(...historyPes):null,
-    historyPeMax:historyPes.length?Math.max(...historyPes):null,historySampleCount:historyPes.length,
+    historyPeMax:historyPes.length?Math.max(...historyPes):null,
+    historyPeP25:orderedPercentile(historyPes,0.25),historyPeP75:orderedPercentile(historyPes,0.75),
+    historySampleCount:historyPes.length,valuationEvidence,provisionalRelativeValue,
     historyRelativePe,historyAsOf:officialHistory.map((item)=>item.session),
     sourceRefs:[row.sourceRef,...officialHistory.map((item)=>item.sourceRef)],sourceRef:row.sourceRef,asOf:row.session };
+}
+
+function exactSectorPeReference(row,valuationRows=[]) {
+  if(!row?.stockId||!row.exchange||!row.session||!row.sector||row.sector==='unknown')return null;
+  const peers=valuationRows.filter((peer)=>peer.stockId&&peer.stockId!==row.stockId
+    &&peer.exchange===row.exchange&&peer.session===row.session&&peer.sector===row.sector
+    &&peer.authority==='exchange_reported'&&Number.isFinite(peer.peRatio)&&peer.peRatio>0&&peer.peRatio<=200
+    &&/^[0-9a-f]{64}$/u.test(peer.tradingSessionAuthorityHash??'')
+    &&validOfficialReportedValuationSourceRef(peer.exchange,peer.sourceRef,{current:true}));
+  const orderedPeers=peers.sort((left,right)=>left.stockId.localeCompare(right.stockId)
+    ||left.sourceRef.localeCompare(right.sourceRef));
+  return orderedPeers.length>=8?Object.freeze({count:orderedPeers.length,
+    medianPe:median(orderedPeers.map((peer)=>peer.peRatio)),members:Object.freeze(orderedPeers),
+    exchange:row.exchange,session:row.session,sector:row.sector}):null;
 }
 
 function median(values) {
@@ -354,18 +989,21 @@ function median(values) {
   return selected.length % 2 ? selected[middle] : (selected[middle - 1] + selected[middle]) / 2;
 }
 
-function buildResearchScore(candidate, { priceRows = [], officialSnapshot = null, sectorReferences = new Map(), stats = null, sourceCutoff }) {
+function buildResearchScore(candidate, { priceRows = [], officialSnapshot = null, stats = null, sourceCutoff }) {
   const price = priceResearchAxes(researchHistory(priceRows, candidate.symbol), stats, officialSnapshot?.twseIndex ?? []);
   const revenue = officialSnapshot?.revenues?.find((row) => row.symbol === candidate.symbol) ?? null;
   const valuation = officialSnapshot?.valuations?.find((row) => row.symbol === candidate.symbol) ?? null;
   const fundamental = revenueResearchAxis(revenue, sourceCutoff);
-  const valuationAxis = valuationResearchAxis(valuation, sectorReferences.get(candidate.canonicalSector),
+  const sectorReference=exactSectorPeReference(valuation,officialSnapshot?.valuations??[]);
+  const valuationAxis = valuationResearchAxis(valuation, sectorReference,
     officialSnapshot?.valuationHistory ?? []);
   const score = computeUnderreactionResearchScore({ symbol: candidate.symbol,
     discovery: { score: Number.isFinite(candidate.sourcePriority) ? candidate.sourcePriority : stats ? 62 : 50,
       trustworthy: true, reason: stats ? 'price_dislocation_scan' : `${candidate.sourceClass ?? 'community'}_source_signal` },
     fundamental, priceDislocation: price.priceDislocation, valuation: valuationAxis, timing: price.timing });
-  return Object.freeze({ ...score, axes: { fundamental, priceDislocation: price.priceDislocation,
+  return Object.freeze({ ...score, axes: { discovery:score.reasons.find((row)=>row.axis==='discovery')
+      ?{score:score.reasons.find((row)=>row.axis==='discovery').score,trustworthy:true,reason:'source_signal'}:null,
+    fundamental, priceDislocation: price.priceDislocation,
     valuation: valuationAxis, timing: price.timing }, priceContext: price.context });
 }
 
@@ -379,7 +1017,7 @@ function indexComponent(rows) {
     current, ma20, drawdownPct, session: rows.at(-1).session };
 }
 
-function legacyQualityMaterial(facts) {
+function legacyQualityMaterial(facts,researchScore=null) {
   const row = (key) => facts.find((item) => Array.isArray(item) && item[1] === key && Number.isFinite(item[5]));
   const value = (item) => item?.[5];
   const roeRow = row('roe'); const revenueRow = row('quarterly_revenue');
@@ -393,12 +1031,20 @@ function legacyQualityMaterial(facts) {
   const netIncome = value(netIncomeRow); const ocf = value(ocfRow); const capex = value(capexRow);
   const ebitda = value(ebitdaRow); const debt = value(debtRow); const cash = value(cashRow);
   const interest = value(interestRow);
-  const usedRows = [roeRow];
+  const dilutedRow=row('diluted_weighted_average_shares')??row('diluted_shares');const bookRow=row('book_value_per_share');
+  const periodMonth=Number(String(netIncomeRow?.[3]??'').slice(5,7));
+  const derivedRoe=Number.isFinite(netIncome)&&Number.isFinite(value(dilutedRow))&&Number.isFinite(value(bookRow))&&
+    value(dilutedRow)>0&&value(bookRow)>0&&[3,6,9,12].includes(periodMonth)
+    ? netIncome/(value(dilutedRow)*value(bookRow))*(12/periodMonth):null;
+  const officialRevenueGrowth=Number(researchScore?.axes?.fundamental?.yoyGrowth);
+  const usedRows = [roeRow,...(Number.isFinite(derivedRoe)?[netIncomeRow,dilutedRow,bookRow]:[])];
   if (Number.isFinite(revenue) && revenue !== 0 && Number.isFinite(operating)) usedRows.push(revenueRow, operatingRow);
   if (Number.isFinite(netIncome) && netIncome !== 0 && Number.isFinite(ocf) && Number.isFinite(capex)) usedRows.push(netIncomeRow, ocfRow, capexRow);
   if (Number.isFinite(ebitda) && ebitda > 0 && Number.isFinite(debt)) usedRows.push(ebitdaRow, debtRow, ...(Number.isFinite(cash) ? [cashRow] : []));
   if (Number.isFinite(interest) && interest > 0 && Number.isFinite(operating)) usedRows.push(interestRow, operatingRow);
-  return { input: { roe: value(roeRow), operatingMargin: Number.isFinite(revenue) && revenue !== 0 && Number.isFinite(operating) ? operating / revenue : null,
+  return { input: { roe:Number.isFinite(value(roeRow))?value(roeRow):derivedRoe,
+    revenueGrowth:Number.isFinite(officialRevenueGrowth)?officialRevenueGrowth/100:null,
+    operatingMargin: Number.isFinite(revenue) && revenue !== 0 && Number.isFinite(operating) ? operating / revenue : null,
     freeCashFlowConversion: Number.isFinite(netIncome) && netIncome !== 0 && Number.isFinite(ocf) && Number.isFinite(capex) ? (ocf - Math.abs(capex)) / Math.abs(netIncome) : null,
     netDebtToEbitda: Number.isFinite(ebitda) && ebitda > 0 && Number.isFinite(debt) ? (debt - (Number.isFinite(cash) ? cash : 0)) / ebitda : null,
     interestCoverage: Number.isFinite(interest) && interest > 0 && Number.isFinite(operating) ? operating / interest : null },
@@ -409,10 +1055,10 @@ function legacyQualityInput(facts) {
   return legacyQualityMaterial(facts).input;
 }
 
-function legacyFundamentalNarrative(candidate, usedRows, quality, sourceCutoff) {
+function legacyFundamentalNarrative(candidate, usedRows, quality, sourceCutoff, additionalEvidenceRefs=[]) {
   const score = Number.isFinite(quality.score) ? Math.round(quality.score) : null;
   invariant(usedRows.every((row) => typeof row[12] === 'string' && row[12].length > 0), 'quality fact evidence unavailable');
-  const directRefs = [...new Set(usedRows.map((row) => row[12])
+  const directRefs = [...new Set([...usedRows.map((row) => row[12]),...additionalEvidenceRefs]
     .filter((value) => typeof value === 'string' && value.length > 0))];
   const qualityEvidence = usedRows.map((row) => [row[1], row[5], canonicalUtc(row[9], 'quality fact as-of'), row[12]]);
   const evidenceRefs = score === null ? [candidate.claimId].filter((value) => typeof value === 'string' && value.length > 0)
@@ -439,16 +1085,45 @@ function legacyFundamentalNarrative(candidate, usedRows, quality, sourceCutoff) 
   });
 }
 
-function buildLegacyCandidateDecision({ candidate, facts, history, benchmark, sourceCutoff, valuationInput = {} }) {
-  const qualityMaterial = legacyQualityMaterial(facts);
+function officialCitation(ref, evaluatedAt, {publishedAt=null,collectedAt=null}={}) {
+  if (typeof ref !== 'string' || ref.length === 0) return null;
+  const twse=ref.startsWith('twse-')||ref.startsWith('twse:');const tpex=ref.startsWith('tpex-')||ref.startsWith('tpex:');
+  const mops=ref.match(/^(?:twse|tpex)-mops-inline:(\d{4})-(\d{2})-\d{2}:(\d{4}):/u);
+  const sourceUrl=mops?`${MOPS_INLINE_URL}?step=1&CO_ID=${mops[3]}&SYEAR=${mops[1]}&SSEASON=${Math.ceil(Number(mops[2])/3)}&REPORT_ID=C`
+    :ref.includes('financial-statement')?(twse?'https://openapi.twse.com.tw/':tpex?'https://www.tpex.org.tw/openapi/':null)
+    :ref.includes('monthly-revenue')?(twse?TWSE_REVENUE_URL:tpex?TPEX_REVENUE_URL:null)
+      :ref.includes('STOCK_DAY')||ref.includes('tradingStock')?(twse?TWSE_PRICE_HISTORY_URL:tpex?TPEX_PRICE_HISTORY_URL:null)
+        :twse?SOURCE_URL:tpex?TPEX_SOURCE_URL:null;
+  const utc=(value)=>typeof value==='string'&&Number.isFinite(Date.parse(value))?new Date(value).toISOString():null;
+  return sourceUrl ? { ref, sourceKey: ref.startsWith('twse') ? 'twse' : 'tpex',
+    sourceName: ref.startsWith('twse') ? '臺灣證券交易所' : '證券櫃檯買賣中心', sourceUrl,
+    kolIdentity: null, publishedAt:utc(publishedAt), collectedAt:utc(collectedAt), evaluatedAt:utc(evaluatedAt) } : null;
+}
+
+function marketAllowsNewPosition(marketAnalysis) {
+  return marketAnalysis?.status === 'risk_on';
+}
+
+function buildLegacyCandidateDecision({ candidate, facts, history, benchmark, sourceCutoff, valuationInput = {},
+  researchScore = null, marketAnalysis = null }) {
+  const qualityMaterial = legacyQualityMaterial(facts,researchScore);
   const quality = calculateFundamentalQualityAxes(qualityMaterial.input);
-  const fundamental = legacyFundamentalNarrative(candidate, qualityMaterial.usedRows, quality, sourceCutoff);
+  const fundamental = legacyFundamentalNarrative(candidate, qualityMaterial.usedRows, quality, sourceCutoff,
+    [researchScore?.axes?.fundamental?.sourceRef].filter(Boolean));
   const plane = calculateAdjustedTechnicalPlane({ rows: history, asOf: sourceCutoff, benchmark });
   const biasHistory = selectBiasTechnicalHistory({ rows: history, asOf: sourceCutoff });
   const valuation = evaluateCandidateValuation({ stockId: candidate.stockId, subjectStockId: candidate.stockId,
-    cutoff: sourceCutoff, asOf: sourceCutoff, sector: candidate.canonicalSector, facts: legacyFactInput(facts), ...valuationInput });
+    cutoff: sourceCutoff, asOf: sourceCutoff, sector: candidate.canonicalSector, facts: valuationFactInput(facts), ...valuationInput });
+  // A defensive/selective regime is deliberately research-visible but not action-authoritative.
+  // V3.14 converts an otherwise eligible stock to wait_market instead of silently treating a
+  // missing actionAuthority property as permission to buy.
+  const marketAllowsAction = marketAllowsNewPosition(marketAnalysis);
+  const qualityReadiness=quality.availableWeight>=0.65?'available':'missing';
+  const marketReadiness=['risk_on','selective_or_defensive'].includes(marketAnalysis?.status)?'available':'missing';
   const actionDecision = deriveActionDecision({ plane, support: plane.support, resistance: plane.resistance,
-    valuationStatus: valuation.status, qualityActionEligible: quality.qualityActionEligible,
+    valuationStatus: valuation.status, valuation, researchScore, marketAllowsAction,
+    qualityActionEligible: quality.qualityActionEligible,qualityReadiness,marketReadiness,
+    marketRegime:marketAnalysis?.status,contractVersion:'v3.14',lastEvaluatedAt: sourceCutoff,
     bias20Atr: plane.bias?.bias20Atr, atrDistance: plane.bias?.bias20Atr });
   const timingScore = actionDecision.technical?.technicalState === 'breakout_confirmed' ? 85
     : actionDecision.technical?.technicalState === 'at_support' ? 70
@@ -462,25 +1137,139 @@ function buildLegacyCandidateDecision({ candidate, facts, history, benchmark, so
   const factorAxes = Object.values(factorScores).every(Number.isFinite)
     ? { availability: 'available', axes: factorScores }
     : { availability: 'unavailable', reason: 'factor_axis_unavailable', axes: factorScores };
+  const axisValue=(axis)=>researchScore?.axes?.[axis]?.trustworthy===true
+    &&Number.isFinite(researchScore.axes[axis].score)?researchScore.axes[axis].score:null;
+  const timingParts=[axisValue('priceDislocation'),axisValue('timing')].filter(Number.isFinite);
+  const researchRanking=computeResearchRankingV314({valuation:axisValue('valuation'),
+    fundamentalQuality:axisValue('fundamental'),momentumTechnical:timingParts.length
+      ?timingParts.reduce((sum,value)=>sum+value,0)/timingParts.length:null,
+    sourceCatalyst:axisValue('discovery'),marketLiquidity:Number.isFinite(candidate.liquidityScore)
+      ?candidate.liquidityScore:null,softBlockers:actionDecision.decisionEnvelope.blockers,
+    conflict:actionDecision.decisionEnvelope.valuationReadiness==='conflict'});
   const technical = actionDecision.technical?.availability === 'unavailable'
     ? { technicalState: null, plane, availability: 'unavailable', reason: actionDecision.technical.reason }
     : { ...actionDecision.technical, plane: { ...plane, bias: plane.availability === 'available'
       ? { ...plane.bias, ownHistory: biasHistory.availability === 'available' ? { ...biasHistory.quantiles, label: biasHistory.current.label } : null }
       : null } };
-  const fundamentalSnapshot = ['legacy-fundamental-provenance-v2', fundamental.evidenceRefs, fundamental.asOf];
-  const materialChangeHash = sha256(canonicalJson([candidate.materialEvidenceHash, facts, history.at(-1) ?? null,
-    benchmark.at(-1) ?? null, valuation, technical, factorAxes, fundamentalSnapshot]));
+  const material = buildDecisionMaterial({ candidate, facts, fundamental, quality, biasHistory, valuation,
+    valuationInput, technical, actionDecision });
+  const valuationRefs=Array.isArray(valuation?.evidence?.sourceRefs)?valuation.evidence.sourceRefs:[];
+  const technicalRef=history.at(-1)?.sourceRef;
+  const fundamentalRefs=qualityMaterial.usedRows.map((row)=>row[12]).filter((ref)=>typeof ref==='string');
+  const citations=[...(candidate.sourceEvidence??[candidate]).map((row)=>({ref:row.claimId,sourceKey:row.sourceKey,
+    sourceName:row.sourceName??row.sourceKey??null,sourceUrl:row.sourceUrl??null,kolIdentity:row.kolIdentity??null,
+    publishedAt:row.sourcePublishedAt??row.claimAsOf??null,collectedAt:row.sourceCollectedAt??null,evaluatedAt:sourceCutoff})),
+  ...qualityMaterial.usedRows.map((row)=>officialCitation(row[12],sourceCutoff,{publishedAt:row[8],collectedAt:row[10]})).filter(Boolean),
+  ...valuationRefs.map((ref)=>officialCitation(ref,sourceCutoff,{publishedAt:valuation.asOf??sourceCutoff,collectedAt:sourceCutoff})).filter(Boolean),
+  officialCitation(technicalRef,sourceCutoff,{publishedAt:history.at(-1)?.session??sourceCutoff,collectedAt:sourceCutoff})].filter(Boolean)
+    .filter((row)=>typeof row.ref==='string'&&typeof row.sourceUrl==='string'&&/^https:\/\//u.test(row.sourceUrl))
+    .filter((row,index,all)=>all.findIndex((candidateCitation)=>candidateCitation.ref===row.ref)===index);
+  const citationRefs=new Set(citations.map((row)=>row.ref));
+  const thesis=[];const risks=[];const briefEvidence=[];
+  const citedFundamentalRefs=fundamentalRefs.filter((ref)=>citationRefs.has(ref));
+  const citedValuationRefs=valuationRefs.filter((ref)=>citationRefs.has(ref));
+  if(citedFundamentalRefs.length){thesis.push(fundamental.thesis);briefEvidence.push({point:'thesis:0',refs:citedFundamentalRefs});}
+  if(citedValuationRefs.length){thesis.push(valuation.status==='normal'
+    ?`估值方法 ${valuation.method?.method??'unknown'} 已形成可追溯情境區間。`
+    :`估值尚未完成：${valuation.reason??'valuation_unavailable'}。`);briefEvidence.push({point:`thesis:${thesis.length-1}`,refs:citedValuationRefs});}
+  if(technicalRef&&citationRefs.has(technicalRef)){thesis.push(`還原權息技術狀態為 ${technical.technicalState??'unavailable'}。`);
+    briefEvidence.push({point:`thesis:${thesis.length-1}`,refs:[technicalRef]});}
+  for(const risk of fundamental.risks){if(risks.length>=3||!citedFundamentalRefs.length)break;risks.push(risk);
+    briefEvidence.push({point:`risk:${risks.length-1}`,refs:citedFundamentalRefs});}
+  if(risks.length<3&&citedValuationRefs.length&&actionDecision.decisionEnvelope.blockers.length){
+    risks.push(`決策阻擋條件：${actionDecision.decisionEnvelope.blockers.join('、')}。`);
+    briefEvidence.push({point:`risk:${risks.length-1}`,refs:citedValuationRefs});
+  }
+  if(risks.length<3&&citedValuationRefs.length&&valuation.status==='normal'){
+    risks.push(`估值區間會隨 ${valuation.method?.method??'selected'} 方法的基本面與倍數敏感度改變。`);
+    briefEvidence.push({point:`risk:${risks.length-1}`,refs:citedValuationRefs});
+  }
+  if(risks.length<3&&technicalRef&&citationRefs.has(technicalRef)&&Number.isFinite(actionDecision.geometry?.invalidation)){
+    risks.push(`多頭失效價為 ${actionDecision.geometry.invalidation}。`);
+    briefEvidence.push({point:`risk:${risks.length-1}`,refs:[technicalRef]});
+  }
+  const decisionBrief=thesis.length===3&&risks.length===3
+    ?{thesis,risks,evidence:briefEvidence}:null;
   return { ...candidate, researchMaturity: valuation.status === 'normal' && quality.qualityActionEligible ? 'decision_ready'
     : quality.availability === 'available' ? 'fundamental_review' : 'source_signal',
     action: actionDecision.action, fundamental, technical, geometry: actionDecision.geometry,
-    valuation, factorAxes, reason: actionDecision.reason, lastEvaluatedAt: sourceCutoff,
-    materialChangeHash, materialChangedBecause: ['factor_correctness_changed'] };
+    decisionEnvelope: actionDecision.decisionEnvelope,
+    valuation, factorAxes, researchScore,researchRanking,decisionBrief,citations, reason: actionDecision.reason, lastEvaluatedAt: sourceCutoff,
+    materialChangeHash: material.materialChangeHash, materialIdentity: material.materialIdentity,
+    materialChangedBecause: [] };
+}
+
+function financialSemanticIdentity(row){
+  const normalized=Array.isArray(row)?{
+    symbol:row[0],factKey:row[1],periodStart:row[2],periodEnd:row[3],durationKind:row[4],value:row[5],unit:row[6],
+    authorityTier:row[7],filingPublishedAt:row[8],sourceTimestamp:row[9],sourceRef:row[12],
+    filingRestatementId:row[13],estimateKind:row[14],estimateHorizon:row[15],
+  }:row;
+  return canonicalJson([normalized?.symbol,normalized?.factKey,normalized?.periodStart??null,normalized?.periodEnd,
+    normalized?.durationKind,normalized?.value,normalized?.unit,normalized?.authorityTier,
+    normalized?.filingPublishedAt,normalized?.sourceTimestamp,normalized?.sourceRef,
+    normalized?.filingRestatementId??null,normalized?.estimateKind,normalized?.estimateHorizon]);
+}
+
+function newFinancialFactsV314(facts,priorRows=[]){
+  const seen=new Set((Array.isArray(priorRows)?priorRows:[]).filter((row)=>Array.isArray(row)&&row.length>=16)
+    .map(financialSemanticIdentity));
+  return (Array.isArray(facts)?facts:[]).filter((row)=>{
+    const identity=financialSemanticIdentity(row);if(seen.has(identity))return false;seen.add(identity);return true;
+  });
+}
+
+function resolveOfficialAuthorityCandidatesV314(candidates,candidateAuthorityRows=[],peerUniverseRows=[]){
+  const normalize=(rows,limit)=>(Array.isArray(rows)?rows:[]).flatMap((row)=>{
+    const value=Array.isArray(row)?{symbol:row[0],stockId:row[1],exchange:row[2],canonicalSector:row[3]}:row;
+    return /^\d{4}$/u.test(String(value?.symbol??''))&&['TWSE','TPEX'].includes(String(value?.exchange??''))
+      ?[{symbol:String(value.symbol),stockId:value.stockId?String(value.stockId):null,exchange:String(value.exchange),
+        canonicalSector:String(value.canonicalSector??'unknown')}]:[];
+  }).slice(0,limit);
+  const candidateAuthority=normalize(candidateAuthorityRows,30);
+  const peerUniverse=normalize(peerUniverseRows,240);
+  const instrumentBySymbol=new Map([...peerUniverse,...candidateAuthority].map((row)=>[row.symbol,row]));
+  const authorityCandidates=(Array.isArray(candidates)?candidates:[]).filter((candidate)=>candidate?.deepSelected===true)
+    .slice(0,30).map((candidate)=>({...candidate,
+      exchange:candidate.exchange??instrumentBySymbol.get(candidate.symbol)?.exchange??null,
+      canonicalSector:candidate.canonicalSector&&candidate.canonicalSector!=='unknown'?candidate.canonicalSector
+        :instrumentBySymbol.get(candidate.symbol)?.canonicalSector??'unknown'}));
+  return Object.freeze({authorityCandidates:Object.freeze(authorityCandidates),peerUniverse:Object.freeze(peerUniverse)});
+}
+
+async function streamOfficialIngestionV314({claim,snapshot,sourceCutoff,producerSha,persistChunk,priorFinancialRows=[]}){
+  const financialFacts=newFinancialFactsV314(snapshot?.financialFacts??[],priorFinancialRows);
+  const datasets=[
+    ['trading_sessions',snapshot?.calendarSessions??[],200],
+    ['financial_facts',financialFacts,200],
+    ['price_observations',snapshot?.priceObservations??[],200],
+    ['corporate_action_snapshots',snapshot?.corporateActionSnapshots??[],20],
+    ['reported_valuations',[...(snapshot?.valuations??[]),...(snapshot?.valuationHistory??[])],200],
+  ];
+  const chunks=[];const counts={};
+  for(const [kind,items,chunkSize] of datasets){
+    counts[kind]=items.length;
+    for(let offset=0,ordinal=0;offset<items.length;offset+=chunkSize,ordinal+=1){
+      const members=items.slice(offset,offset+chunkSize);
+      const chunkHash=sha256(canonicalJson(['official-ingestion-chunk-v3.14',kind,ordinal,members]));
+      if(persistChunk)await persistChunk({runId:claim.runId,jobId:claim.jobId,ownerToken:claim.ownerToken,kind,ordinal,items:members,
+        chunkHash,producerSha,sourceCutoff});
+      chunks.push({kind,ordinal,itemCount:members.length,chunkHash});
+    }
+  }
+  const terminalRoot=sha256(canonicalJson(['official-ingestion-terminal-v3.14',sourceCutoff,counts,chunks]));
+  if(persistChunk)await persistChunk({runId:claim.runId,jobId:claim.jobId,ownerToken:claim.ownerToken,kind:'terminal',ordinal:0,
+    items:[{sourceCutoff,counts,chunks,terminalRoot}],chunkHash:terminalRoot,producerSha,sourceCutoff});
+  return Object.freeze({schema:'legacy-official-ingestion-v3.14',sourceCutoff,counts:Object.freeze(counts),
+    chunks:Object.freeze(chunks),terminalRoot});
 }
 
 function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
   legacyRadarBaseUrl = validated.config.legacyRadarBaseUrl,
   fetchImpl = globalThis.fetch,
   internalApiKey = process.env.INTERNAL_API_KEY,
+  sourceCredentials = {},
+  persistOfficialIngestionChunk = null,
 } = {}) {
   let legacyPayloadsPromise;
   const officialSnapshotsByCutoff = new Map();
@@ -488,10 +1277,13 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
   return {
     source_sync: async (claim) => {
       legacyPayloadsPromise ??= loadLegacyRadarPayloads(legacyRadarBaseUrl, fetchImpl, internalApiKey);
-      const legacyPayloads = await legacyPayloadsPromise;
+      const [legacyPayloads,sourceAcquisition] = await Promise.all([
+        legacyPayloadsPromise,
+        acquireApprovedSources({ roster:approvedSourceRoster,credentials:sourceCredentials,fetchImpl,now:new Date() }),
+      ]);
       return immutableBundle('legacy_source_sync_result_v3_11', {
         schema: 'legacy-source-sync-result-v3.11', authorityHash: claim.authorityHash,
-        sourceCutoff: claim.payloadJson?.[3] ?? null, legacyPayloads,
+        sourceCutoff: claim.payloadJson?.[3] ?? null, legacyPayloads,sourceAcquisition,
         legacyPayloadHashes: Object.fromEntries(Object.entries(legacyPayloads)
           .map(([window, payload]) => [window, sha256(canonicalJson(payload))])),
       });
@@ -525,27 +1317,58 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
     },
     facts_refresh: async (claim) => {
       const bundle = readBundle(claim, 'candidate_fact_plane');
-      const candidates = bundle.candidateResult?.candidates ?? [];
-      const bridgeAvailable = bundle.bridgeSchema === 'legacy-product-value-bridge-v3.12';
+      const sourceProvenanceByRevision=new Map((bundle.sourceProvenanceRows??[]).filter((row)=>Array.isArray(row)&&row.length>=7)
+        .map((row)=>[String(row[0]),{sourceKey:String(row[1]),sourceUrl:row[2]?String(row[2]):null,
+          sourcePublishedAt:row[3]?String(row[3]):null,sourceCollectedAt:String(row[4]),sourceName:String(row[5]),
+          kolIdentity:String(row[6])}]));
+      const candidates = (bundle.candidateResult?.candidates ?? []).map((candidate)=>{
+        const sourceEvidence=(Array.isArray(candidate.evidence)&&candidate.evidence.length?candidate.evidence:[candidate])
+          .map((evidence)=>({ ...evidence,
+            ...(sourceProvenanceByRevision.get(String(evidence.revisionId))??{}) }));
+        return { ...candidate, ...(sourceProvenanceByRevision.get(String(candidate.revisionId))??{}), sourceEvidence };
+      });
+      const {authorityCandidates,peerUniverse}=resolveOfficialAuthorityCandidatesV314(candidates,
+        bundle.candidateAuthorityRows,bundle.peerUniverseRows);
+      const authoritySymbols=new Set(authorityCandidates.map((row)=>row.symbol));
+      const authorityPeers=peerUniverse.filter((row)=>!authoritySymbols.has(row.symbol)).slice(0,240);
+      const bridgeAvailable = ['legacy-product-value-bridge-v3.12','legacy-product-value-bridge-v3.13',
+        'legacy-product-value-bridge-v3.14'].includes(bundle.bridgeSchema);
       if (bridgeAvailable && !officialSnapshotsByCutoff.has(bundle.sourceCutoff)) {
-        officialSnapshotsByCutoff.set(bundle.sourceCutoff,loadOfficialTwMarketSnapshot({ cutoff:bundle.sourceCutoff,fetchImpl })
+        officialSnapshotsByCutoff.set(bundle.sourceCutoff,loadOfficialTwMarketSnapshot({ cutoff:bundle.sourceCutoff,
+          candidates:authorityCandidates,peerCandidates:authorityPeers,
+          valuationBackfillSessions:bundle.reportedPeBackfillSessions??[],
+          priceBackfillSymbols:[...(bundle.officialPriceBackfillSymbols??[]),...authorityCandidates.map((row)=>[row.symbol,row.exchange])]
+            .filter((row)=>Array.isArray(row)&&['TWSE','TPEX'].includes(String(row[1])))
+            .filter((row,index,all)=>all.findIndex((item)=>item[0]===row[0]&&item[1]===row[1])===index).slice(0,20),
+          corporateActionBackfillSessions:bundle.corporateActionBackfillSessions??[],fetchImpl })
           .catch((error)=>({ availability:'unavailable',reason:'official_market_snapshot_unavailable',
-            detail:error instanceof Error?error.message:String(error),valuations:[],valuationHistory:[],revenues:[],twseIndex:[],
-            tpexIndex:[],foreignFlow:null,sourceFailures:[] })));
+            detail:safeFailureDiagnostic(error,{stage:'facts_refresh',origin:'provider'}).invariantCode,
+            valuations:[],valuationHistory:[],revenues:[],twseIndex:[],
+          financialFacts:[],priceObservations:[],corporateActionSnapshots:[],tpexIndex:[],foreignFlow:null,sourceFailures:[] })));
       }
-      const officialSnapshot = bridgeAvailable ? await officialSnapshotsByCutoff.get(bundle.sourceCutoff) : null;
+      const acquisitionSnapshot = bridgeAvailable ? await officialSnapshotsByCutoff.get(bundle.sourceCutoff) : null;
+      const officialSnapshot = bridgeAvailable ? persistedOfficialSnapshot(bundle,acquisitionSnapshot) : null;
+      const officialCalendar=bridgeAvailable&&(acquisitionSnapshot?.calendarSessions?.length??0)>0
+        ?buildOfficialTradingScheduleV314({calendarSessions:acquisitionSnapshot.calendarSessions,
+          evaluatedAt:bundle.sourceCutoff}):null;
+      const officialCoverage=officialCalendar?coverageReportV314({calendar:officialCalendar,candidates:authorityCandidates,
+        officialSnapshot:{financialFacts:officialSnapshot?.financialFacts??[],
+          priceObservations:officialSnapshot?.priceObservations??[],valuations:officialSnapshot?.valuations??[],
+          valuationHistory:officialSnapshot?.valuationHistory??[]}}):null;
+      const projectionFreshnessSchedule=officialCalendar?officialCalendar.sessions
+        .filter((row)=>row.session>=new Date(Date.parse(bundle.sourceCutoff)-35*86_400_000).toISOString().slice(0,10)
+          &&row.session<=new Date(Date.parse(bundle.sourceCutoff)+14*86_400_000).toISOString().slice(0,10))
+        .map((row)=>({session_id:row.session,close_at:row.closeAt,status:row.status})):[];
       const dislocationInputs = Array.isArray(bundle.dislocationCandidates) ? bundle.dislocationCandidates : [];
-      const officialValuationBySymbol = new Map((officialSnapshot?.valuations ?? []).map((row) => [row.symbol, row]));
-      const sectorMembers = (bundle.sectorValuationUniverse ?? []).reduce((map, row) => {
-        if (!Array.isArray(row) || !/^\d{4}$/u.test(String(row[0])) || typeof row[1] !== 'string') return map;
-        const pe = Number(officialValuationBySymbol.get(String(row[0]))?.peRatio);
-        if (!Number.isFinite(pe) || pe <= 0) return map;
-        const selected = map.get(row[1]) ?? [];
-        selected.push(pe); map.set(row[1],selected); return map;
-      }, new Map());
-      const sectorReferences = new Map([...sectorMembers].map(([sector, values]) => [sector,
-        { medianPe: median(values), count: values.length }]));
       const researchPriceRows = [...(bundle.priceRows ?? []), ...(bundle.legacyPriceRows ?? [])];
+      const marketAnalysis = buildMarketAnalysis({ asOf: bundle.sourceCutoff,
+        taiex: indexComponent(officialSnapshot?.twseIndex), otc: indexComponent(officialSnapshot?.tpexIndex),
+        breadth: bundle.marketBreadth && Number(bundle.marketBreadth.trackedCount) >= 20
+          ? { aboveMa20Pct: Number(bundle.marketBreadth.aboveMa20Pct), trackedCount: Number(bundle.marketBreadth.trackedCount),
+            scope: bundle.marketBreadth.scope,asOf:bundle.marketBreadth.asOf } : null,
+        foreignFlow: officialSnapshot?.foreignFlow ?? null });
+      invariant(bundle.valuationInputs===undefined || bundle.valuationInputs===null
+        || Object.keys(bundle.valuationInputs).length===0,'compatibility valuationInputs forbidden');
       const decisions = candidates.filter((candidate) => candidate.deepSelected === true).map((candidate) => {
         const facts = (bundle.financialRows ?? []).filter((row) => Array.isArray(row) && row[0] === candidate.symbol);
         const history = researchHistory(researchPriceRows, candidate.symbol);
@@ -554,10 +1377,11 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
           .sort((left, right) => String(left.session).localeCompare(String(right.session)));
         const benchmark = (officialSnapshot?.twseIndex?.length ? officialSnapshot.twseIndex : legacyBenchmark)
           .map((row) => ({ session: row.session, close: row.close }));
-        const decision = buildLegacyCandidateDecision({ candidate, facts, history, benchmark, sourceCutoff: bundle.sourceCutoff,
-          valuationInput: bundle.valuationInputs?.[candidate.symbol] ?? {} });
-        return { ...decision, researchScore: buildResearchScore(candidate, { priceRows: researchPriceRows,
-          officialSnapshot, sectorReferences, sourceCutoff: bundle.sourceCutoff }) };
+        const researchScore = buildResearchScore(candidate, { priceRows: researchPriceRows,
+          officialSnapshot, sourceCutoff: bundle.sourceCutoff });
+        const persistedValuationInput=valuationAuthorityInput(candidate,facts,officialSnapshot,bundle.sourceCutoff);
+        return buildLegacyCandidateDecision({ candidate, facts, history, benchmark, sourceCutoff: bundle.sourceCutoff,
+          valuationInput:persistedValuationInput,researchScore,marketAnalysis });
       });
       const shallowObservations = candidates.filter((candidate) => candidate.shallowSelected === true && candidate.deepSelected !== true)
         .map((candidate) => {
@@ -566,20 +1390,23 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
           return { ...candidate, researchMaturity: 'source_signal', newPositionAction: 'valuation_review',
             shallowStatus: 'enriched_observation', currentPrice: Array.isArray(latest) && Number.isFinite(latest[5]) ? latest[5] : null,
             lastEvaluatedAt: bundle.sourceCutoff, researchScore: buildResearchScore(candidate, { priceRows: researchPriceRows,
-              officialSnapshot, sectorReferences, sourceCutoff: bundle.sourceCutoff }) };
+              officialSnapshot, sourceCutoff: bundle.sourceCutoff }) };
         });
       const deferredSignals = candidates.filter((candidate) => candidate.shallowSelected !== true).map((candidate) => ({
         ...candidate, lastEvaluatedAt: bundle.sourceCutoff, researchScore: buildResearchScore(candidate, { priceRows: researchPriceRows,
-          officialSnapshot, sectorReferences, sourceCutoff: bundle.sourceCutoff }),
+          officialSnapshot, sourceCutoff: bundle.sourceCutoff }),
       }));
       const dislocationCandidates = dislocationInputs.map((row) => {
         const candidate = { stockId: row.stockId, symbol: row.symbol, name: row.name ?? null,
           canonicalSector: row.canonicalSector ?? 'unknown', sourceClass: 'price_dislocation', sourcePriority: 62,
-          claimId: row.sourceRef, disposition: 'promoted', reason: 'price_dislocation',
+          claimId: row.sourceRef, sourceKey:'official',sourceName:'TWSE／TPEx 官方行情',
+          sourceUrl:'https://openapi.twse.com.tw/',claimAsOf:bundle.sourceCutoff,
+          sourcePublishedAt:bundle.sourceCutoff,sourceCollectedAt:bundle.sourceCutoff,
+          disposition: 'promoted', reason: 'price_dislocation',
           sourceSummary: `${row.symbol} 近 60 個交易日自高點回落 ${Math.abs(Number(row.drawdown60Pct)).toFixed(1)}%，納入基本面未惡化檢查。`,
           lastEvaluatedAt: bundle.sourceCutoff };
         return { ...candidate, researchMaturity: 'fundamental_review', newPositionAction: 'valuation_review',
-          researchScore: buildResearchScore(candidate, { priceRows: researchPriceRows, officialSnapshot, sectorReferences,
+          researchScore: buildResearchScore(candidate, { priceRows: researchPriceRows, officialSnapshot,
             stats: row, sourceCutoff: bundle.sourceCutoff }) };
       });
       const decisionSymbols = new Set(decisions.map((row) => row.symbol));
@@ -596,35 +1423,62 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
           || (right.sourcePriority ?? 0) - (left.sourcePriority ?? 0) || left.symbol.localeCompare(right.symbol))
         .filter((row, index, all) => all.findIndex((candidate) => candidate.symbol === row.symbol) === index)
         .slice(0, 30);
-      const marketAnalysis = buildMarketAnalysis({ asOf: bundle.sourceCutoff,
-        taiex: indexComponent(officialSnapshot?.twseIndex), otc: indexComponent(officialSnapshot?.tpexIndex),
-        breadth: bundle.marketBreadth && Number(bundle.marketBreadth.trackedCount) >= 20
-          ? { aboveMa20Pct: Number(bundle.marketBreadth.aboveMa20Pct), trackedCount: Number(bundle.marketBreadth.trackedCount),
-            scope: bundle.marketBreadth.scope,asOf:bundle.marketBreadth.asOf } : null,
-        foreignFlow: officialSnapshot?.foreignFlow ?? null });
+      const officialIngestion=bridgeAvailable?await streamOfficialIngestionV314({claim,snapshot:acquisitionSnapshot,
+        sourceCutoff:bundle.sourceCutoff,producerSha:sourceCommitSha,persistChunk:persistOfficialIngestionChunk,
+        priorFinancialRows:bundle.financialRows??[]}):null;
       return immutableBundle('legacy_facts_refresh_result_v3_11', { schema: 'legacy-facts-refresh-result-v3.11', decisions,
         shallowObservations, sourceCandidates, dislocationCandidates: boundedDislocationCandidates, marketAnalysis,
-        officialSnapshotStatus: officialSnapshot?.availability === 'unavailable'
-          ? { availability:'unavailable',reason:officialSnapshot.reason }
-          : { availability:bridgeAvailable ? officialSnapshot?.sourceFailures?.length ? 'partial' : 'available' : 'not_requested',
-            sourceFailures:officialSnapshot?.sourceFailures ?? [] },
+        officialAuthority:officialCalendar?{calendar:officialCalendar,coverage:officialCoverage}:null,
+        projectionFreshnessSchedule:projectionFreshnessSchedule.length?projectionFreshnessSchedule
+          :(bundle.projectionFreshnessSchedule??[]).slice(0,80),
+        officialIngestion,
+        officialSnapshotStatus: acquisitionSnapshot?.availability === 'unavailable'
+          ? { availability:'unavailable',reason:acquisitionSnapshot.reason }
+          : { availability:bridgeAvailable ? acquisitionSnapshot?.sourceFailures?.length ? 'partial' : 'available' : 'not_requested',
+            sourceFailures:acquisitionSnapshot?.sourceFailures ?? [] },
         discoveryDelta: bundle.candidateResult?.discoveryDelta ?? { added: [], exited: [], continued: [], unchangedReasons: [] } });
     },
     analysis_revision: async (claim) => {
       const bundle = readBundle(claim, 'analysis_revision_input');
       const priorBySymbol = new Map((bundle.priorRevisions ?? []).map((revision) => [revision.symbol, revision]));
       const decisions = (bundle.factsResult?.decisions ?? []).map((decision) => {
-        const revision = appendAnalysisRevision({ priorRevision: priorBySymbol.get(decision.symbol) ?? null,
+        const priorRevision=priorBySymbol.get(decision.symbol) ?? null;
+        const reasons = priorRevision?.facts?.materialIdentity
+          ? materialChangedReasons(priorRevision.facts.materialIdentity, decision.materialIdentity)
+          : ['source_evidence_changed','financial_fact_changed','price_trigger_changed','technical_state_changed',
+            'valuation_changed','risk_changed','factor_correctness_changed'];
+        const revision = appendAnalysisRevision({ priorRevision,
           input: { materialChangeHash: decision.materialChangeHash, facts: decision, lockedNarrativeClaims: [decision.claimId] },
-          changedBecause: decision.materialChangedBecause, now: bundle.sourceCutoff });
-        return { ...decision, analysisRevision: revision, evaluationDisposition: revision.disposition === 'unchanged' ? 'unchanged' : 'appended',
+          changedBecause: reasons, now: bundle.sourceCutoff });
+        const priorFacts=revision.revision?.facts;
+        const revisionDecision=revision.disposition==='unchanged'&&priorFacts
+          ?{...priorFacts,...decision,
+            decisionBrief:priorFacts.decisionBrief??decision.decisionBrief,
+            citations:priorFacts.citations??decision.citations,
+            sourceProvenance:priorFacts.sourceProvenance??decision.sourceProvenance}
+          :decision;
+        return { ...revisionDecision, analysisRevision: revision.revision,
+          materialChangedBecause: revision.disposition === 'unchanged' ? [] : reasons,
+          evaluationDisposition: revision.disposition === 'unchanged' ? 'unchanged' : 'appended',
+          lastEvaluatedAt:bundle.sourceCutoff,
           analysisGeneratedAt: revision.revision.analysisGeneratedAt,
           noChangeMessage: revision.disposition === 'unchanged' ? `已於 ${bundle.sourceCutoff} 檢查，無重大變化` : null };
       });
+      const decisionPayloads=decisions.map((decision)=>{
+        const immutableFacts=decision.analysisRevision?.facts;
+        invariant(immutableFacts && immutableFacts.symbol===decision.symbol
+          && immutableFacts.materialChangeHash===decision.materialChangeHash,
+        'immutable analysis fact payload required');
+        return { symbol:decision.symbol,materialChangeHash:decision.materialChangeHash,
+          bundle:immutableBundle('legacy_analysis_fact_payload_v3_13',immutableFacts) };
+      });
       return immutableBundle('legacy_analysis_revision_result_v3_11', { schema: 'legacy-analysis-revision-result-v3.11', decisions,
+        decisionPayloads,
         sourceCandidates: bundle.factsResult?.sourceCandidates ?? [],
         dislocationCandidates: bundle.factsResult?.dislocationCandidates ?? [],
         marketAnalysis: bundle.factsResult?.marketAnalysis ?? null,
+        officialAuthority:bundle.factsResult?.officialAuthority??null,
+        projectionFreshnessSchedule:bundle.factsResult?.projectionFreshnessSchedule??[],
         discoveryDelta: bundle.factsResult?.discoveryDelta ?? { added: [], exited: [], continued: [], unchangedReasons: [] } });
     },
     compact_radar_projection: async (claim) => {
@@ -633,23 +1487,47 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
       const sourceCandidates = bundle.analysisResult?.sourceCandidates ?? [];
       const dislocationCandidates = bundle.analysisResult?.dislocationCandidates ?? [];
       const projectionSignals = [...sourceCandidates, ...dislocationCandidates]
-        .sort((left, right) => (right.researchScore?.underreactionScore ?? -1) - (left.researchScore?.underreactionScore ?? -1)
+        .sort((left, right) => (right.researchRanking?.rankingScore??right.researchScore?.underreactionScore??-1)
+          -(left.researchRanking?.rankingScore??left.researchScore?.underreactionScore??-1)
           || (right.sourcePriority ?? 0) - (left.sourcePriority ?? 0) || String(left.symbol ?? '').localeCompare(String(right.symbol ?? '')))
         .filter((row, index, all) => typeof row?.symbol === 'string'
           && all.findIndex((candidate) => candidate?.symbol === row.symbol) === index)
         .slice(0, Math.max(0, 60 - decisions.length));
       const runtimeHealthObservation = readRuntimeHealthObservation(sourceCommitSha, workerSha256, validated.sha256);
       const producerIdentity = { commitSha: sourceCommitSha, workerSha256, configSha256: validated.sha256,
+        runtimeManifestSha256:runtimeHealthObservation?.runtimeManifestSha256??null,
         ...(runtimeHealthObservation ? { runtimeHealthObservation } : {}) };
       const legacyPayloads = bundle.legacyPayloads;
       invariant(legacyPayloads && ['daily', 'hot', 'weekly', 'home'].every((window) =>
         legacyPayloads[window] && typeof legacyPayloads[window] === 'object'), 'legacy radar capture unavailable');
+      const priorProjections=bundle.priorProjections&&typeof bundle.priorProjections==='object'
+        ?bundle.priorProjections:{};
       const projections = ['daily', 'hot', 'weekly', 'home'].map((window) => publishCompactRadarProjection({ decisions,
         sourceCandidates: projectionSignals,
         marketAnalysis: bundle.analysisResult?.marketAnalysis ?? null,
+        sourceAcquisitionHealth:bundle.analysisResult?.officialAuthority?{
+          schema:'source-acquisition-health-v3.14',
+          calendarAuthorityHash:bundle.analysisResult.officialAuthority.calendar?.authorityHash??null,
+          completedSessions:bundle.analysisResult.officialAuthority.coverage?.completedSessions??0,
+          officialCoverageReady:bundle.analysisResult.officialAuthority.coverage?.ready===true,
+          blockers:(bundle.analysisResult.officialAuthority.coverage?.blockers??[]).slice(0,12),
+        }:null,
         discoveryDelta: bundle.analysisResult?.discoveryDelta ?? { added: [], exited: [], continued: [], unchangedReasons: [] },
-        window, asOf: bundle.sourceCutoff, producerIdentity, legacyPayload: legacyPayloads[window] }));
-      return immutableBundle('legacy_compact_projection_result_v3_11', { schema: 'legacy-compact-projection-result-v3.11', projections });
+        freshnessSchedule:bundle.analysisResult?.projectionFreshnessSchedule??[],
+        schemaVersion:'legacy-radar-v3.14.0',
+        window, asOf: bundle.sourceCutoff, evaluatedAt:bundle.sourceCutoff,publishedAt:bundle.sourceCutoff,
+        priorProjection:priorProjections[window==='hot'?'three_day':window]??null,
+        producerIdentity, legacyPayload: legacyPayloads[window] }));
+      const home=projections.find((projection)=>projection.storageWindow==='home');
+      const decisionRevisions=(home?.payload?.sourceSignals??[]).map((card)=>({
+        symbol:card.symbol,decisionRevisionId:card.decisionRevisionId,
+        bundle:immutableBundle('legacy_decision_revision_v3_14',immutableDecisionRevisionCard(card)),
+        identityBundle:decisionRevisionIdentityBundle(card),
+        sourceLedCorrectness:home.payload.sourceLedCorrectness,
+      }));
+      return immutableBundle('legacy_compact_projection_result_v3_11', {
+        schema: 'legacy-compact-projection-result-v3.11', projections,decisionRevisions,
+      });
     },
   };
 }
@@ -671,8 +1549,17 @@ async function main() {
   const { createPostgresLegacyProducerAdapter } = require('./postgres-legacy-producer-adapter');
   const adapter = createPostgresLegacyProducerAdapter({ connectionString: runtimeEnvironment.STOCKINSIDER_DATABASE_URL });
   const workerBytes = runtimeBundleBytes(path.resolve(__dirname, '..', '..'));
+  const optionalCredential = (reference) => {
+    try { return resolveCredentialReference(reference); } catch { return null; }
+  };
   const stageHandlers = buildStageHandlers(validated, runtimeEnvironment.STOCKINSIDER_REVIEWED_COMMIT_SHA, sha256(workerBytes), {
     internalApiKey: runtimeEnvironment.INTERNAL_API_KEY,
+    persistOfficialIngestionChunk:adapter.appendLegacyOfficialIngestionChunk,
+    sourceCredentials: {
+      threadsAccessToken:optionalCredential('keychain:stockinsider-runtime:threads-access-token'),
+      youtubeApiKey:optionalCredential('keychain:stockinsider-runtime:youtube-api-key'),
+      youtubeOauthToken:optionalCredential('keychain:stockinsider-runtime:youtube-oauth-token'),
+    },
   });
   try {
     const result = await runDurableAuthSourceWorker({ configBytes: bytes, adapter, sourceCommitSha: runtimeEnvironment.STOCKINSIDER_REVIEWED_COMMIT_SHA,
@@ -684,10 +1571,14 @@ async function main() {
 }
 
 if (require.main === module) main().catch((error) => {
-  process.stderr.write(`tracked auth-source worker failed: ${error instanceof Error ? error.message : String(error)}\n`);
+  process.stderr.write(`${canonicalJson(safeFailureDiagnostic(error,{stage:'worker_terminal',origin:'auth_source_worker'}))}\n`);
   process.exitCode = 1;
 });
 
 module.exports = { args, buildLegacyCandidateDecision, buildStageHandlers, extractRevisionCandidates,
-  extractMatchedEvidenceSnippet, LEGACY_RADAR_FETCH_TIMEOUT_MS, legacyFactInput, legacyQualityInput, loadLegacyRadarPayloads, main, readBundle, readRuntimeHealthObservation,
-  priceResearchAxes, tickerHasStockContext, uuidFromHash, valuationResearchAxis };
+  valuationAuthorityInput,materialDecisionValue,exactSectorPeReference,financialSemanticIdentity,newFinancialFactsV314,
+  resolveOfficialAuthorityCandidatesV314,streamOfficialIngestionV314,
+  validEmbeddedOfficialValuationRef,marketAllowsNewPosition,
+  extractMatchedEvidenceSnippet, LEGACY_RADAR_FETCH_TIMEOUT_MS, legacyFactInput, legacyQualityInput, loadLegacyRadarPayloads,
+  main,officialCitation,readBundle,readRuntimeHealthObservation,
+  priceResearchAxes, tickerHasStockContext, uuidFromHash, valuationFactInput,valuationResearchAxis };

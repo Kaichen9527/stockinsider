@@ -1,0 +1,8 @@
+{
+  "calendarTable": "tw_trading_sessions_v3",
+  "graceHours": 2,
+  "runHourAsiaTaipei": 18,
+  "runMinuteAsiaTaipei": 20,
+  "staleReadonlyMaximumMissedRuns": 2,
+  "version": "projection-freshness-v3.13.0"
+}

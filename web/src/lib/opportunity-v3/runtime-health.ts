@@ -32,7 +32,21 @@ const REASON_ORDER = [
   'projection_stale','consumer_producer_incompatible',
 ] as const;
 
+const terminalStatuses = ['success', 'failed', 'cancelled'] as const;
+const leaseStatuses = ['absent', 'active', 'expired', 'invalid'] as const;
+const projectionFreshnessValues = ['fresh', 'stale', 'missing', 'invalid'] as const;
+const compatibilityValues = ['compatible', 'producer_newer', 'consumer_newer', 'unknown'] as const;
+
+function exactEnum<const T extends readonly string[]>(value: unknown, values: T, fallback: T[number]): T[number] {
+  return typeof value === 'string' && (values as readonly string[]).includes(value) ? value as T[number] : fallback;
+}
+
 export function assessTrackedRuntimeHealth(observation: RuntimeHealthObservation) {
+  const terminalStatus = observation.lastTerminalStatus == null ? null
+    : exactEnum(observation.lastTerminalStatus, terminalStatuses, null as never);
+  const leaseStatus = exactEnum(observation.leaseStatus, leaseStatuses, 'invalid');
+  const projectionFreshness = exactEnum(observation.projectionFreshness, projectionFreshnessValues, 'invalid');
+  const consumerCompatibility = exactEnum(observation.consumerCompatibility, compatibilityValues, 'unknown');
   const present = new Set<string>();
   const add = (condition: boolean, reason: string) => { if (condition) present.add(reason); };
   add(!observation.manifestPresent, 'manifest_missing'); add(observation.manifestPresent && !observation.manifestCanonical, 'manifest_noncanonical');
@@ -40,11 +54,12 @@ export function assessTrackedRuntimeHealth(observation: RuntimeHealthObservation
   add(!observation.schedulerRollbackPackagePresent, 'scheduler_rollback_package_missing'); add(observation.schedulerRollbackPackagePresent && !observation.schedulerRollbackHashMatches, 'scheduler_rollback_hash_mismatch');
   add(!observation.activationJournalComplete, 'activation_journal_incomplete'); add(!observation.activePointerValid, 'active_pointer_invalid'); add(!observation.schedulerPlistMatches, 'scheduler_plist_mismatch');
   add(observation.schedulerOwner !== 'com.stockinsider.auth-source-worker', 'scheduler_owner_mismatch'); add((observation.competingOwners?.length ?? 0) > 0, 'competing_scheduler');
-  add(observation.leaseStatus === 'invalid', 'lease_invalid'); add(observation.stateSchema !== 'stockinsider-producer-state-v1', 'state_schema_mismatch');
+  add(leaseStatus === 'invalid', 'lease_invalid'); add(observation.stateSchema !== 'stockinsider-producer-state-v1'
+    || (observation.lastTerminalStatus != null && terminalStatus === null), 'state_schema_mismatch');
   add(Boolean(observation.lastRunNonterminal), 'last_run_nonterminal'); add(Boolean(observation.negativeRunDuration), 'negative_run_duration'); add((observation.stuckRunCount ?? 0) > 0, 'stuck_runs_present');
-  add(['failed', 'cancelled'].includes(observation.lastTerminalStatus ?? ''), 'last_run_failed');
-  add(observation.projectionFreshness === 'missing', 'projection_missing'); add(observation.projectionFreshness === 'invalid', 'projection_hash_mismatch'); add(observation.projectionFreshness === 'stale', 'projection_stale');
-  add(observation.consumerCompatibility !== 'compatible', 'consumer_producer_incompatible');
+  add(terminalStatus === 'failed' || terminalStatus === 'cancelled', 'last_run_failed');
+  add(projectionFreshness === 'missing', 'projection_missing'); add(projectionFreshness === 'invalid', 'projection_hash_mismatch'); add(projectionFreshness === 'stale', 'projection_stale');
+  add(consumerCompatibility !== 'compatible', 'consumer_producer_incompatible');
   const checkedAt = new Date(observation.checkedAt ?? Date.now()).toISOString().replace(/\.\d{3}Z$/u, 'Z');
   return {
     schema: 'stockinsider-runtime-health-v1.1', status: present.size === 0 ? 'pass' : 'fail', checkedAt,
@@ -52,11 +67,11 @@ export function assessTrackedRuntimeHealth(observation: RuntimeHealthObservation
       workerSha256: observation.workerSha256 ?? null, schedulerConfigSha256: observation.schedulerConfigSha256 ?? null,
       schedulerRollbackPackageSha256: observation.schedulerRollbackPackageSha256 ?? null, manifestSha256: observation.manifestSha256 ?? null },
     scheduler: { owner: observation.schedulerOwner, ownerPlistSha256: observation.ownerPlistSha256 ?? null,
-      competingOwners: [...new Set(observation.competingOwners ?? [])].sort().slice(0, 8), leaseStatus: observation.leaseStatus },
+      competingOwners: [...new Set(observation.competingOwners ?? [])].sort().slice(0, 8), leaseStatus },
     runtime: { stateSchema: observation.stateSchema, lastTerminalRunAt: observation.lastTerminalRunAt ?? null,
-      lastTerminalStatus: observation.lastTerminalStatus ?? null, stuckRunCount: Math.max(0, Math.trunc(observation.stuckRunCount ?? 0)) },
-    projection: { asOf: observation.projectionAsOf ?? null, checksum: observation.projectionChecksum ?? null, freshness: observation.projectionFreshness },
-    consumer: { commitSha: observation.consumerCommitSha ?? null, acceptedProducerSchema: 'stockinsider-producer-state-v1', compatibility: observation.consumerCompatibility },
+      lastTerminalStatus: terminalStatus, stuckRunCount: Math.max(0, Math.trunc(observation.stuckRunCount ?? 0)) },
+    projection: { asOf: observation.projectionAsOf ?? null, checksum: observation.projectionChecksum ?? null, freshness: projectionFreshness },
+    consumer: { commitSha: observation.consumerCommitSha ?? null, acceptedProducerSchema: 'stockinsider-producer-state-v1', compatibility: consumerCompatibility },
     reasons: REASON_ORDER.filter((reason) => present.has(reason)),
   } as const;
 }

@@ -6,6 +6,7 @@ import { assessTrackedRuntimeHealth, runtimeObservationMatchesProducer } from '@
 import type { RuntimeHealthObservation } from '@/lib/opportunity-v3/runtime-health';
 import { sha256Canonical } from '@/lib/opportunity-v3/canonical';
 import { requireInternalAuth } from '@/lib/internal-auth';
+import { assessProjectionFreshness, type ProjectionHealth } from '@/lib/opportunity-v3/projection-freshness';
 
 type Row = Record<string, unknown>;
 
@@ -71,6 +72,7 @@ export async function GET(request: Request) {
     stuckRunCount: 0, projectionFreshness: 'missing', consumerCompatibility: 'unknown',
     consumerCommitSha: process.env.VERCEL_GIT_COMMIT_SHA ?? null,
   });
+  let projectionHealth: ProjectionHealth | null = null;
 
   try {
     const supabase = getSupabaseServerClient();
@@ -106,7 +108,15 @@ export async function GET(request: Request) {
     const projectionAsOf = typeof runtimeProjection?.as_of === 'string' ? runtimeProjection.as_of : null;
     const projectionChecksum = typeof runtimeProjection?.payload_sha256 === 'string' ? runtimeProjection.payload_sha256 : null;
     const checksumMatches = Boolean(runtimePayload && projectionChecksum && sha256Canonical(runtimePayload) === projectionChecksum);
-    const projectionAgeMs = projectionAsOf ? Date.now() - new Date(projectionAsOf).getTime() : Number.POSITIVE_INFINITY;
+    projectionHealth = assessProjectionFreshness({
+      contentAsOf: typeof sourceCorrectness?.contentAsOf === 'string' ? sourceCorrectness.contentAsOf : projectionAsOf,
+      evaluatedAt: typeof sourceCorrectness?.evaluatedAt === 'string' ? sourceCorrectness.evaluatedAt : projectionAsOf,
+      publishedAt: typeof sourceCorrectness?.publishedAt === 'string' ? sourceCorrectness.publishedAt : projectionAsOf,
+      tradingSessions: Array.isArray(sourceCorrectness?.freshnessSchedule)
+        ? sourceCorrectness.freshnessSchedule as Array<{ session_id?: string; close_at?: string; status?: string }>
+        : [],
+    });
+    const sharedProjectionFreshness = projectionHealth.status === 'fresh' ? 'fresh' : 'stale';
     const directProducerCommit = typeof runtimeRun?.producer_commit_sha === 'string'
       ? runtimeRun.producer_commit_sha
       : typeof runtimeProjection?.producer_commit_sha === 'string' ? runtimeProjection.producer_commit_sha : null;
@@ -116,8 +126,10 @@ export async function GET(request: Request) {
     const directConfigSha = typeof runtimeRun?.scheduler_config_sha256 === 'string'
       ? runtimeRun.scheduler_config_sha256
       : typeof producerIdentity?.configSha256 === 'string' ? producerIdentity.configSha256 : null;
-    const directStatus = ['success', 'failed', 'cancelled'].includes(String(runtimeRun?.status))
-      ? runtimeRun?.status as 'success' | 'failed' | 'cancelled' : null;
+    const rawDirectStatus = runtimeRun?.status;
+    const directStatus = typeof rawDirectStatus === 'string'
+      && (rawDirectStatus === 'success' || rawDirectStatus === 'failed' || rawDirectStatus === 'cancelled')
+      ? rawDirectStatus : null;
     const directCompatibility = directProducerCommit && process.env.VERCEL_GIT_COMMIT_SHA === directProducerCommit
       ? 'compatible' as const : 'unknown' as const;
     const observationMatchesProducer = runtimeObservationMatchesProducer(recordedObservation, {
@@ -142,12 +154,16 @@ export async function GET(request: Request) {
         stateSchema: recordedObservation.stateSchema === 'stockinsider-producer-state-v1' ? recordedObservation.stateSchema : null,
         lastTerminalRunAt: directStatus ? String(runtimeRun?.terminal_at ?? recordedObservation.lastTerminalRunAt ?? '') || null
           : recordedObservation.lastTerminalRunAt ?? null,
-        lastTerminalStatus: directStatus ?? recordedObservation.lastTerminalStatus ?? null,
+        lastTerminalStatus: directStatus ?? (typeof recordedObservation.lastTerminalStatus === 'string'
+          && (recordedObservation.lastTerminalStatus === 'success'
+            || recordedObservation.lastTerminalStatus === 'failed'
+            || recordedObservation.lastTerminalStatus === 'cancelled')
+          ? recordedObservation.lastTerminalStatus : null),
         lastRunNonterminal: runtimeRun?.status === 'running' || recordedObservation.lastRunNonterminal,
         negativeRunDuration: recordedObservation.negativeRunDuration,
         stuckRunCount: stuckRunCount ?? recordedObservation.stuckRunCount,
         projectionAsOf, projectionChecksum,
-        projectionFreshness: !checksumMatches ? 'invalid' : projectionAgeMs <= 36 * 60 * 60 * 1000 ? 'fresh' : 'stale',
+        projectionFreshness: !checksumMatches ? 'invalid' : sharedProjectionFreshness,
         consumerCommitSha: process.env.VERCEL_GIT_COMMIT_SHA ?? null,
         consumerCompatibility: directCompatibility,
         producerCommitSha: directProducerCommit ?? recordedObservation.producerCommitSha ?? null,
@@ -173,7 +189,7 @@ export async function GET(request: Request) {
         lastRunNonterminal: runtimeRun?.status === 'running', negativeRunDuration: false,
         stuckRunCount: stuckRunCount ?? 0,
         projectionAsOf, projectionChecksum,
-        projectionFreshness: !checksumMatches ? 'invalid' : projectionAgeMs <= 36 * 60 * 60 * 1000 ? 'fresh' : 'stale',
+        projectionFreshness: !checksumMatches ? 'invalid' : sharedProjectionFreshness,
         consumerCommitSha: process.env.VERCEL_GIT_COMMIT_SHA ?? null,
         consumerCompatibility: directCompatibility,
         producerCommitSha: directProducerCommit, reviewedTreeSha: null,
@@ -327,6 +343,7 @@ export async function GET(request: Request) {
     dataCollectLastSuccessAt,
     researchPipelineLastSuccessAt,
     sourceLedRuntime,
+    projectionHealth,
     checkedAt: new Date().toISOString(),
   }, { headers: { 'Cache-Control': 'private, no-store' } });
 }

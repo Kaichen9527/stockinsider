@@ -1,15 +1,15 @@
 # Acceptance Evidence Contract: source-led-opportunity-engine-v3
 
-Version: `opportunity-acceptance-evidence-v3.11.18`
+Version: `opportunity-acceptance-evidence-v3.13.0`
 
 This contract is the single executable owner/classification and CI-result authority
-for canonical acceptance inventory `1.44.6`. The five descriptive fields in
+for canonical acceptance inventory `1.46.0`. The five descriptive fields in
 `acceptance-tests.json` remain the human-readable requirement oracle and serialize
 `evidenceContractVersion`, expected counts and the same ordered `classificationRules`
 below. The meta-test byte-compares that machine copy to this contract-derived object
 and to the exhaustive owner tuples in the same JSON file.
 
-## Closed 297-ID classification
+## Closed 320-ID classification
 
 Apply the first matching rule:
 
@@ -21,7 +21,7 @@ Apply the first matching rule:
    `ACT-|CMP-|CYC-|ENT-|FIN-|FNL-|MKT-|PEER-|SCR-|SRC-|VAL-` are
    `semantic_automated`, track `product_runtime`;
 4. prefix `MR3-` is `semantic_suite_backed`, track `model_runner`;
-5. prefixes `API-|AUTH-|CAL-|MIG-|MOD-|OPS-|PCR-|SEC-` and exact
+5. prefixes `API-|AUTH-|CAL-|DI-|MIG-|MOD-|OPS-|PCR-|REC-|SEC-` and exact
    `HYB-001|HYB-002|HYB-003|HYB-004` are `semantic_suite_backed`, track
    `product_runtime`.
 
@@ -32,23 +32,32 @@ five rules byte-match the five serialized `classificationRules` entries in
 This must yield exactly:
 
 ```json
-{"semantic_automated":143,"semantic_suite_backed":148,"structural_meta":6}
+{"semantic_automated":143,"semantic_suite_backed":171,"structural_meta":6}
 ```
 
 Verification partition remains exactly:
 
 ```json
-{"evaluation_governance":20,"model_runner":28,"product_runtime":249}
+{"evaluation_governance":20,"model_runner":28,"product_runtime":272}
 ```
 
-Every canonical ID occurs once in both classifications; union is 297 and intersections
+Every canonical ID occurs once in both classifications; union is 320 and intersections
 are empty. The meta-test computes these counts from actual inventory IDs rather than a
 hard-coded pass result.
+
+## Protected V3.13/V3.14 decision partitions
+
+`DI-001..DI-011` are first-class canonical IDs in the protected `product_runtime`
+partition. Each resolves through an ID-specific owner handle to one exact TAP name in
+`v313-decision-integrity.test.mjs`; none is a supplement, optional diagnostic or
+uncounted package-script side effect. Every owner executes once with zero skip/todo.
+`REC-001..REC-012` use the same first-class rules and bind to exact TAP names in
+`v314-actionability-recovery.test.mjs`.
 
 ## Executable owner and command
 
 `acceptance-tests.json.ownerRows` is the mandatory exhaustive owner map. It contains
-exactly 297 strict ASCII-ID-sorted tuples:
+exactly 320 strict ASCII-ID-sorted tuples:
 
 ```text
 [id,classification,track,ownerRef,mandatoryCommand]
@@ -60,12 +69,12 @@ Every inventory ID occurs exactly once; classification/track must equal the five
 `ownerRef` is exactly `<tracked-source-path>#acceptance <ID>`. It is the stable,
 ID-specific owner handle, not a substring probe. For every non-PCR suite-backed row,
 the sole code-owned `suiteOwnerVariants` resolver maps that handle to one exact
-`[tracked-source-path,exact TAP test name]` pair; it must map all and only the 117
+`[tracked-source-path,exact TAP test name]` pair; it must map all and only the 140
 non-PCR suite IDs, with no duplicate ID. PCR-001 through PCR-031 resolve directly to
 their exact `acceptance <ID>` TAP tests in `product-correctness.test.mjs`. The resolved
 named TAP test must execute exactly once, have zero skips/todos and pass except for the
 explicit preimplementation RED baseline below. The executable registry must deep-equal
-all 297 tuples, resolve every suite handle and reproduce the digest; implementation
+all 320 tuples, resolve every suite handle and reproduce the digest; implementation
 cannot choose, alias or infer an owner.
 
 The tuple families are:
@@ -78,6 +87,8 @@ The tuple families are:
 | `AUTH-*|CAL-*|MIG-*|OPS-*|SEC-*` | `scripts/opportunity-v3/migration-contract.test.mjs#acceptance <ID>` | exact full migration-test value below |
 | `MR3-*` | `scripts/model-runner-v3/model-runner-v3.test.js#acceptance <ID>` | exact full model-runner-test value below |
 | `PCR-*` | `scripts/opportunity-v3/product-correctness.test.mjs#acceptance <ID>` | exact full product-correctness-test value below |
+| V3.13 `DI-001..011` | `scripts/opportunity-v3/v313-decision-integrity.test.mjs#<exact TAP name>` | protected product-runtime track plus exact full product-correctness-test value below |
+| V3.14 `REC-001..012` | `scripts/opportunity-v3/v314-actionability-recovery.test.mjs#<exact TAP name>` | protected product-runtime track plus exact full product-correctness-test value below |
 
 For every ID, the resolved exact owner test name must execute exactly once and pass in
 its tuple's command TAP output. Distinct IDs have distinct logical owner refs even
@@ -187,8 +198,8 @@ graph; static fixtures and planned PCR boundaries are the immutable requirement 
 The active graph oracle validates the two canonical authority tags below, ASCII order,
 duplicate and active-graph closure,
 
-<!-- GOV-004-AUTHORITY {"catalogBytes":5036,"catalogSha256":"8fffdd2abacea80d8581ca63c96651a8d22c498142e4dc5ead2a2ec7712af16b","kind":"evidence-catalog-identity"} -->
-<!-- GOV-004-AUTHORITY {"activeFiles":48,"kind":"evidence-file-owner-topology","owners":38} -->
+<!-- GOV-004-AUTHORITY {"catalogBytes":5484,"catalogSha256":"5ea7a1c6411f9f9447098bcd63c9cf96ddc182aa2918bab84f2de51bc98bc5ef","kind":"evidence-catalog-identity"} -->
+<!-- GOV-004-AUTHORITY {"activeFiles":50,"kind":"evidence-file-owner-topology","owners":40} -->
 
 then recomputes every `[path,blobOid,byteLength,sha256]` row and compares the result to
 the frozen active-graph SHA embedded in the executable oracle. It independently perturbs
@@ -214,7 +225,7 @@ remains permitted.
 `product-runtime-code-gate` runs all of the following in a clean checkout of the exact
 candidate commit and fails on the first nonzero/skip/todo/incomplete result:
 
-1. product-track traceability command above, reconciling exactly 249 registered IDs;
+1. product-track traceability command above, reconciling exactly 260 registered IDs;
 2. `npm run test:source-led-opportunity-v3`;
 3. `npm run test:source-led-opportunity-v3:product-correctness`;
 4. `npm run test:source-led-opportunity-v3:migration`;
@@ -244,8 +255,8 @@ registry-pinned command catalog; it does not trust an npm script as bootstrap au
 then runs the model track traceability reconciliation for exactly 28 IDs,
 `npm run test:model-runner-v3`, then
 `npm run v3:doctor -- --expect-mode disabled --require-host-pin
-model-runner-host-pins-v3.6`; doctor must reproduce the fixture's exact
-`codex-cli 0.147.0-alpha.1.2` bytes and report deployment mode disabled. It is a
+model-runner-host-pins-v3.8`; doctor must reproduce the fixture's exact
+`codex-cli 0.147.0-alpha.6.5` bytes and report deployment mode disabled. It is a
 required Code Gate input when a Code Gate is assembled; it is deliberately collected
 on the pinned self-hosted runner rather than represented as a skipped pull-request
 aggregate job.
@@ -375,7 +386,7 @@ type GateResultV1 = {
   blockedReason:null|'non_fabricated_elapsed_cohorts_unavailable'|
     'production_authority_not_granted'|'shadow_activation_not_executed'|
     'external_harness_attestation_unavailable';
-  acceptanceVersion:'1.44.6';
+  acceptanceVersion:'1.46.0';
   partition:null|'product_runtime'|'model_runner'|'evaluation_governance';
   registeredCount:number;
   executedCount:number;
@@ -403,7 +414,7 @@ sets both non-null and proves the closed 31-entry record above. Non-review leave
 For `status='pass'`, the compatibility validator requires the exact gate policy rather
 than merely equal nonzero counts: Requirements/Architecture/exact-review and aggregate
 checks are `partition=null, registeredCount=0, executedCount=0, commands=[]`;
-product/runtime is exactly `product_runtime,249,249` with sole command
+product/runtime is exactly `product_runtime,260,260` with sole command
 `product-runtime-track` / `protected://stockinsider-v3-gate-root/execute-track --track product_runtime`;
 model runner is exactly `model_runner,28,28` with `model-runner-track`; and evaluation
 is exactly `evaluation_governance,20,20` with `evaluation-governance-track`. Each sole

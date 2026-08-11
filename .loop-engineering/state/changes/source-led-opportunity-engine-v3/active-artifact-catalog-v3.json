@@ -42,6 +42,8 @@
     "sector-taxonomy-map-v3.json",
     "shadow-evaluation-contract.md",
     "source-adapter-contract.md",
+    "source-led-opportunity-engine-v3.13-decision-integrity-amendment.md",
+    "source-led-opportunity-engine-v3.14-actionability-recovery-amendment.md",
     "source-matrix.md",
     "storage-schema-contract.md",
     "technical-decision-contract.md",
@@ -52,7 +54,7 @@
   "owners": [
     [
       "acceptance-evidence-contract.md",
-      "opportunity-acceptance-evidence-v3.11.18"
+      "opportunity-acceptance-evidence-v3.13.0"
     ],
     [
       "analysis-revision-contract.md",
@@ -100,7 +102,7 @@
     ],
     [
       "host-pin-compatibility-amendment.md",
-      "model-runner-host-pin-amendment-v3.6"
+      "model-runner-host-pin-amendment-v3.8"
     ],
     [
       "hybrid-product-amendment.md",
@@ -140,7 +142,7 @@
     ],
     [
       "postgres-type-contract.md",
-      "opportunity-postgres-types-v3.21"
+      "opportunity-postgres-types-v3.22"
     ],
     [
       "product-correctness-runtime-amendment.md",
@@ -183,8 +185,16 @@
       "source-adapter-v3.3"
     ],
     [
+      "source-led-opportunity-engine-v3.13-decision-integrity-amendment.md",
+      "source-led-opportunity-decision-integrity-v3.13.0"
+    ],
+    [
+      "source-led-opportunity-engine-v3.14-actionability-recovery-amendment.md",
+      "source-led-opportunity-actionability-v3.14.0"
+    ],
+    [
       "storage-schema-contract.md",
-      "opportunity-storage-v3.24"
+      "opportunity-storage-v3.25"
     ],
     [
       "technical-decision-contract.md",

@@ -77,7 +77,7 @@ fallback publishes zero cards; there is no production `fixture_fallback` card or
 ## Point-in-time financial and valuation integrity
 
 `financial-data-contract.md` v3.3, `valuation-contract.md` v3.4,
-`postgres-type-contract.md` v3.21 and `storage-schema-contract.md` v3.24 jointly and
+`postgres-type-contract.md` v3.22 and `storage-schema-contract.md` v3.25 jointly and
 exhaustively own the new official fact keys, operating bridge, tolerance/failure
 precedence, tax/ROIC/cash/debt/share invariants, method enum/formulas, industry
 precedence, cycle windows, mandatory cross-checks and Bear/Base/Bull scenario inputs.
@@ -118,8 +118,8 @@ unknown fields.
 
 ## Health, CI and release partitions
 
-`acceptance-evidence-contract.md` v3.11.18 is the sole owner of the exact 297-ID
-`143/148/6` classification, `20/28/249` track partition, executable owner/command,
+`acceptance-evidence-contract.md` v3.13.0 is the sole owner of the exact 308-ID
+`143/159/6` classification, `20/28/260` track partition, executable owner/command,
 no-skip binding, active-graph/code/evidence identity, canonical CI evidence and
 Code-vs-Promotion aggregate semantics.
 Runtime health is the exact payload in `runtime-installation-contract.md`.
