@@ -227,7 +227,7 @@ ordinaryTest('operation and resource identities are deterministic and bound', ()
   assert.equal(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)), 884);
   assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'codexVersion'), ['codexVersion', '0.147.0-alpha.6.5']);
   assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'contractVersion'), ['contractVersion', 'model-runner-v3.6']);
-  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'hostPinVersion'), ['hostPinVersion', 'model-runner-host-pins-v3.7']);
+  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'hostPinVersion'), ['hostPinVersion', 'model-runner-host-pins-v3.8']);
 });
 
 ordinaryTest('task locks, contiguous reservations and resource hash chains fail closed', () => {
@@ -295,7 +295,7 @@ ordinaryTest('host pin fixture has an exact hash-bound format', async () => {
   const fixture = path.resolve(__dirname, '../../.loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json');
   assert.equal(fs.statSync(fixture).size, PIN_FIXTURE_BYTES);
   const pins = loadHostPins(fixture);
-  assert.equal(pins.fixtureVersion, 'model-runner-host-pins-v3.7');
+  assert.equal(pins.fixtureVersion, 'model-runner-host-pins-v3.8');
   assert.equal(pins.executables.find((entry) => entry.name === 'codex').version, 'codex-cli 0.147.0-alpha.6.5');
   assert.equal(verifyCurrentNode(pins), true);
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-pins-'));
