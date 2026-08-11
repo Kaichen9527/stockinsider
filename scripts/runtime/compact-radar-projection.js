@@ -2,12 +2,51 @@
 
 const { bounded, canonicalJson, immutableBundle, invariant, sha256 } = require('./codec');
 const { serializeCorrectnessPublicUnion } = require('./public-projection');
-const { selectLiveDiscoveryCards } = require('./candidate-funnel');
+const { compatibilityAction, unavailableDecisionEnvelope, validateDecisionEnvelopeV313,
+  overrideDecisionEnvelopeAction } = require('./decision-envelope');
+const { validateDecisionEnvelopeV314 } = require('./decision-envelope-v314');
+const { assessProjectionFreshness } = require('./projection-freshness');
 
 const CARD_BUCKETS = Object.freeze([
   'opportunities', 'scenarioUpsideCandidates', 'earlyWatchlist',
   'recentFormal7d', 'fallbackOpportunities90d', 'hotTracking',
 ]);
+const DECISION_BRIEF_UNAVAILABLE_REASON = 'insufficient_cited_decision_brief';
+
+function omitProjectionHeartbeat(value) {
+  if (Array.isArray(value)) return value.map(omitProjectionHeartbeat);
+  if (!value || typeof value !== 'object') return value;
+  return Object.fromEntries(Object.entries(value)
+    .filter(([key]) => !['evaluatedAt', 'lastEvaluatedAt', 'noChangeMessage'].includes(key))
+    .map(([key, nested]) => [key, omitProjectionHeartbeat(nested)]));
+}
+
+function immutableDecisionRevisionCard(card) {
+  invariant(card && typeof card === 'object' && !Array.isArray(card), 'decision revision card required');
+  const material = { ...card };
+  delete material.lastEvaluatedAt;
+  delete material.noChangeMessage;
+  if (material.decisionEnvelope && typeof material.decisionEnvelope === 'object'
+      && !Array.isArray(material.decisionEnvelope)) {
+    const envelope = { ...material.decisionEnvelope };
+    delete envelope.evaluatedAt;
+    material.decisionEnvelope = envelope;
+  }
+  return material;
+}
+
+function decisionRevisionIdentityBundle(card) {
+  const identityMaterial = immutableDecisionRevisionCard(card);
+  delete identityMaterial.decisionRevisionId;
+  if (identityMaterial.decisionEnvelope && typeof identityMaterial.decisionEnvelope === 'object'
+      && !Array.isArray(identityMaterial.decisionEnvelope)) {
+    const envelope = { ...identityMaterial.decisionEnvelope };
+    delete envelope.decisionRevisionId;
+    identityMaterial.decisionEnvelope = envelope;
+  }
+  return immutableBundle('legacy_decision_revision_identity_v3_13',
+    ['decision-revision-v3.13.2', identityMaterial]);
+}
 
 function compactPositiveReason(row) {
   const key=`${row?.axis}:${row?.reason}`;
@@ -46,35 +85,34 @@ function derivePublicOpportunityView(decision, marketAnalysis = null) {
     timing: finiteAxisScore(score, 'timing'),
   };
   const compactAxes = Object.fromEntries(Object.entries(axisScores).filter(([, value]) => Number.isFinite(value)));
-  const completeRelativeCase = Number.isFinite(score?.underreactionScore) && score.underreactionScore >= 72
-    && (score.coverage ?? 0) >= 0.85 && (score.confidence ?? 0) >= 0.75
-    && axisScores.fundamental >= 64 && axisScores.valuation >= 58 && axisScores.dislocation >= 52;
-  const selectiveHighConviction = completeRelativeCase && score.underreactionScore >= 76
-    && axisScores.fundamental >= 70 && axisScores.valuation >= 68;
-  const marketAllowsSetup = marketAnalysis?.status === 'risk_on'
-    ? completeRelativeCase : marketAnalysis?.status === 'selective_or_defensive' && selectiveHighConviction;
-
-  let opportunityAction = 'evidence_watch'; let actionReason = 'relative_evidence_incomplete';
-  if (Number.isFinite(score?.underreactionScore) && score.underreactionScore < 35) {
-    opportunityAction = 'avoid'; actionReason = 'underreaction_score_below_floor';
-  } else if (technicalState === 'extended') {
-    opportunityAction = 'avoid_chase'; actionReason = 'price_extended_wait_for_reset';
-  } else if (!completeRelativeCase) {
-    opportunityAction = 'evidence_watch'; actionReason = 'relative_evidence_incomplete';
-  } else if (marketAnalysis?.status === 'data_incomplete' || !marketAnalysis) {
-    opportunityAction = 'evidence_watch'; actionReason = 'market_evidence_incomplete';
-  } else if (technicalState === 'reclaim_required' || technicalState === 'below_support') {
-    opportunityAction = 'wait_reclaim'; actionReason = 'support_must_be_reclaimed';
-  } else if (technicalState === 'breakout_pending') {
-    opportunityAction = 'wait_breakout'; actionReason = 'breakout_not_confirmed';
-  } else if (marketAllowsSetup && (technicalState === 'at_support' || technicalState === 'breakout_confirmed')) {
-    opportunityAction = 'setup_ready';
-    actionReason = marketAnalysis.status === 'risk_on'
-      ? `risk_on_${technicalState}` : `selective_high_conviction_${technicalState}`;
+  let envelope;
+  if (decision?.decisionEnvelope === undefined || decision?.decisionEnvelope === null) {
+    envelope = unavailableDecisionEnvelope({ reason: 'authoritative_decision_envelope_missing',
+      evaluatedAt: decision?.lastEvaluatedAt ?? null, symbol: decision?.symbol ?? null });
   } else {
-    opportunityAction = 'evidence_watch'; actionReason = 'market_or_timing_gate_not_met';
+    invariant(validateDecisionEnvelopeV313(decision.decisionEnvelope)
+      ||validateDecisionEnvelopeV314(decision.decisionEnvelope), 'present decision envelope invalid');
+    envelope = decision.decisionEnvelope;
   }
-  return Object.freeze({ opportunityAction, actionReason, technicalState, axisScores: compactAxes });
+  const opportunityAction = ['buy', 'accumulate', 'research_starter'].includes(envelope.userAction) ? 'setup_ready'
+    : envelope.userAction === 'wait_reclaim' ? 'wait_reclaim'
+      : envelope.userAction === 'wait_breakout' ? 'wait_breakout'
+        : envelope.userAction === 'avoid_chase' ? 'avoid_chase'
+          : envelope.userAction === 'avoid' ? 'avoid' : 'evidence_watch';
+  return Object.freeze({ opportunityAction, actionReason: envelope.reason ?? 'relative_evidence_incomplete',
+    technicalState, axisScores: compactAxes, decisionEnvelope: envelope,
+    decisionRevisionId: envelope.decisionRevisionId });
+}
+
+function bindDecisionRevisionCard(card) {
+  const identity = decisionRevisionIdentityBundle(card);
+  const v314=card.decisionEnvelope?.version==='decision-envelope-v3.14.0';
+  const decisionRevisionId=`decision-v3.${v314?'14':'13'}:${identity.hash}`;
+  invariant(card.decisionEnvelope && typeof card.decisionEnvelope === 'object', 'decision envelope required');
+  const boundEnvelope=Object.freeze({ ...card.decisionEnvelope, decisionRevisionId });
+  invariant(v314?validateDecisionEnvelopeV314(boundEnvelope):validateDecisionEnvelopeV313(boundEnvelope,decisionRevisionId),
+    'decision envelope invalid');
+  return Object.freeze({ ...card, decisionRevisionId,decisionEnvelope:boundEnvelope });
 }
 
 function normalizedMarketAnalysis(marketAnalysis) {
@@ -131,7 +169,7 @@ function alignLegacyMarketView(legacy, marketAnalysis) {
 function stripCorrectnessAdditions(payload) {
   invariant(payload && typeof payload === 'object' && !Array.isArray(payload), 'legacy radar payload required');
   const clean = Object.fromEntries(Object.entries(payload).filter(([key]) => ![
-    'sourceLedCorrectness', 'sourceSignals', 'discoveryDelta', 'underreactionMarket',
+    'sourceLedCorrectness', 'sourceSignals', 'discoveryDelta', 'underreactionMarket', 'boundedLegacyPadding',
   ].includes(key)));
   for (const bucket of CARD_BUCKETS) {
     if (!Array.isArray(clean[bucket])) continue;
@@ -161,6 +199,122 @@ function availableResearchDecision(decision) {
   });
 }
 
+function mergedSourceSignals(rows) {
+  const bySymbol = new Map();
+  for (const row of rows) {
+    if (typeof row?.symbol !== 'string') continue;
+    const selected = bySymbol.get(row.symbol) ?? [];
+    selected.push(row);
+    bySymbol.set(row.symbol, selected);
+  }
+  return [...bySymbol.values()].map((selected) => {
+    const representative = selected[0];
+    const evidence = selected.flatMap((row) => Array.isArray(row.sourceEvidence) && row.sourceEvidence.length
+      ? row.sourceEvidence : [row]).filter((row, index, all) => {
+        const identity = `${row.claimId ?? ''}:${row.revisionId ?? ''}:${row.sourceUrl ?? ''}`;
+        return all.findIndex((candidate) => `${candidate.claimId ?? ''}:${candidate.revisionId ?? ''}:${candidate.sourceUrl ?? ''}`
+          === identity) === index;
+      });
+    return { ...representative, sourceEvidence: evidence, evidenceCount: evidence.length };
+  });
+}
+
+function validHttpsUrl(value) {
+  if (typeof value !== 'string' || value.length === 0 || value !== value.trim()) return false;
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === 'https:' && parsed.hostname.length > 0
+      && parsed.username === '' && parsed.password === '';
+  } catch {
+    return false;
+  }
+}
+
+function validInstant(value) {
+  if(typeof value!=='string')return false;
+  const match=/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:[.](\d{1,9}))?(Z|([+-])(\d{2}):(\d{2}))$/u.exec(value);
+  if(!match)return false;
+  const year=Number(match[1]);const month=Number(match[2]);const day=Number(match[3]);
+  const hour=Number(match[4]);const minute=Number(match[5]);const second=Number(match[6]);
+  const maximumDay=new Date(Date.UTC(year,month,0)).getUTCDate();
+  if(month<1||month>12||day<1||day>maximumDay||hour>23||minute>59||second>59)return false;
+  if(match[8]!=='Z'){
+    const offsetHour=Number(match[10]);const offsetMinute=Number(match[11]);
+    if(offsetHour>14||offsetMinute>59||(offsetHour===14&&offsetMinute!==0))return false;
+  }
+  return Number.isFinite(Date.parse(value));
+}
+
+function validCitation(row) {
+  return row && typeof row === 'object' && typeof row.ref === 'string' && row.ref.length > 0 && row.ref === row.ref.trim()
+    && typeof row.sourceKey === 'string' && row.sourceKey.length > 0 && row.sourceKey === row.sourceKey.trim()
+    && typeof row.sourceName === 'string' && row.sourceName.length > 0 && row.sourceName === row.sourceName.trim()
+    && validHttpsUrl(row.sourceUrl)
+    && [row.publishedAt, row.collectedAt, row.evaluatedAt].every(validInstant)
+    && Date.parse(row.publishedAt) <= Date.parse(row.collectedAt)
+    && Date.parse(row.collectedAt) <= Date.parse(row.evaluatedAt);
+}
+
+function validPrimaryProvenance(provenance, citations) {
+  if (!provenance || typeof provenance !== 'object'
+      || typeof provenance.sourceKey !== 'string' || provenance.sourceKey.length === 0
+      || provenance.sourceKey !== provenance.sourceKey.trim()
+      || typeof provenance.sourceName !== 'string' || provenance.sourceName.length === 0
+      || provenance.sourceName !== provenance.sourceName.trim()
+      || !validHttpsUrl(provenance.sourceUrl)
+      || ![provenance.publishedAt, provenance.collectedAt, provenance.evaluatedAt].every(validInstant)
+      || Date.parse(provenance.publishedAt) > Date.parse(provenance.collectedAt)
+      || Date.parse(provenance.collectedAt) > Date.parse(provenance.evaluatedAt)) return false;
+  return citations.some((citation) => ['sourceKey', 'sourceName', 'sourceUrl',
+    'publishedAt', 'collectedAt', 'evaluatedAt'].every((key) => citation[key] === provenance[key]));
+}
+
+function navigableCitations(decision) {
+  const rows = [
+    decision,
+    ...(Array.isArray(decision.citations) ? decision.citations : []),
+    ...(Array.isArray(decision.sourceEvidence) ? decision.sourceEvidence : [decision]),
+  ];
+  const normalized=rows.map((row) => ({
+    ref: row.ref ?? row.claimId ?? null,
+    sourceKey: row.sourceKey ?? null,
+    sourceName: row.sourceName ?? row.sourceKey ?? null,
+    sourceUrl: row.sourceUrl ?? null,
+    kolIdentity: row.kolIdentity ?? null,
+    publishedAt: row.publishedAt ?? row.sourcePublishedAt ?? row.claimAsOf ?? null,
+    collectedAt: row.collectedAt ?? row.sourceCollectedAt ?? null,
+    evaluatedAt: row.evaluatedAt ?? decision.analysisGeneratedAt ?? decision.analysisRevision?.analysisGeneratedAt
+      ?? decision.sourceCollectedAt ?? decision.claimAsOf ?? null,
+  })).filter(validCitation);
+  const byRef=new Map();
+  for(const citation of normalized){
+    const prior=byRef.get(citation.ref);
+    if(prior&&canonicalJson(prior)!==canonicalJson(citation))return [];
+    byRef.set(citation.ref,citation);
+  }
+  return [...byRef.values()];
+}
+
+function citedDecisionBrief(brief, citations, provenance) {
+  if (!brief || !Array.isArray(brief.thesis) || brief.thesis.length !== 3
+      || !brief.thesis.every((value) => typeof value === 'string' && value.length > 0
+        && value.length <= 240 && value === value.trim())
+      || !Array.isArray(brief.risks) || brief.risks.length !== 3
+      || !brief.risks.every((value) => typeof value === 'string' && value.length > 0
+        && value.length <= 240 && value === value.trim())
+      || !Array.isArray(brief.evidence) || !validPrimaryProvenance(provenance, citations)) return null;
+  const citationRefs = new Set(citations.map((row) => row.ref));
+  const expected = ['thesis:0', 'thesis:1', 'thesis:2', 'risk:0', 'risk:1', 'risk:2'];
+  const points = brief.evidence.map((row) => row?.point);
+  if (brief.evidence.length !== expected.length || new Set(points).size !== expected.length
+      || !expected.every((point) => points.includes(point))
+      || brief.evidence.some((row) => !Array.isArray(row?.refs) || row.refs.length === 0
+        || new Set(row.refs).size !== row.refs.length
+        || row.refs.some((ref) => typeof ref !== 'string' || ref.length === 0
+          || ref !== ref.trim() || !citationRefs.has(ref)))) return null;
+  return brief;
+}
+
 function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates = [], marketAnalysis = null) {
   const clean = stripCorrectnessAdditions(legacyPayload);
   invariant(Array.isArray(clean.opportunities), 'legacy opportunities required');
@@ -174,26 +328,50 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
       return { ...card, researchDecision: decision ? availableResearchDecision(decision) : unavailableResearchDecision(asOf) };
     });
   }
-  const visible = new Set(CARD_BUCKETS.flatMap((bucket) => Array.isArray(clean[bucket])
-    ? clean[bucket].map((card) => card?.symbol).filter((symbol) => typeof symbol === 'string') : []));
   const signalReasons = new Set(['new_in_seed_symbol', 'new_out_of_seed_symbol', 'new_source_evidence', 'material_source_change', 'price_dislocation']);
-  const signalPool = [...decisions, ...sourceCandidates];
-  const liveSymbols = new Set(selectLiveDiscoveryCards({ candidateLedger: signalPool }).cards.map((card) => card.symbol));
-  const sourceSignals = signalPool.sort((left, right) => (right.researchScore?.underreactionScore ?? -1)
-      - (left.researchScore?.underreactionScore ?? -1) || (right.sourcePriority ?? 0) - (left.sourcePriority ?? 0)
+  const signalPool = mergedSourceSignals([...decisions, ...sourceCandidates]);
+  const sourceSignals = signalPool.sort((left, right) => (right.researchRanking?.rankingScore
+      ??right.researchScore?.underreactionScore??-1)-(left.researchRanking?.rankingScore
+        ??left.researchScore?.underreactionScore??-1) || (right.sourcePriority ?? 0) - (left.sourcePriority ?? 0)
       || String(left.symbol ?? '').localeCompare(String(right.symbol ?? '')))
-    .filter((decision) => typeof decision?.symbol === 'string'
-      && liveSymbols.has(decision.symbol) && !visible.has(decision.symbol))
-    .slice(0, 30).map((decision) => ({
+    .filter((decision) => typeof decision?.symbol === 'string')
+    .slice(0, 30).map((decision) => {
+      const citations = navigableCitations(decision);
+      const sourceProvenance = citations[0] ?? { sourceKey: decision.sourceKey ?? null,
+        sourceName: decision.sourceName ?? decision.sourceKey ?? null, sourceUrl: decision.sourceUrl ?? null,
+        kolIdentity: decision.kolIdentity ?? null, publishedAt: decision.claimAsOf ?? decision.sourcePublishedAt ?? null,
+        collectedAt: decision.sourceCollectedAt ?? null, evaluatedAt: decision.analysisGeneratedAt
+          ?? decision.analysisRevision?.analysisGeneratedAt ?? decision.sourceCollectedAt ?? decision.claimAsOf ?? null };
+      const availableBrief=citedDecisionBrief(decision.decisionBrief,citations,sourceProvenance);
+      const authorityDecision=decision.decisionEnvelope===undefined
+        ?{...decision,decisionEnvelope:unavailableDecisionEnvelope({evaluatedAt:decision.lastEvaluatedAt??asOf,
+          symbol:decision.symbol})}:decision;
+      const effectiveDecision=!availableBrief&&authorityDecision.decisionEnvelope?.userAction!=='unavailable'
+        ?{...authorityDecision,decisionEnvelope:overrideDecisionEnvelopeAction(authorityDecision.decisionEnvelope,'unavailable',
+          DECISION_BRIEF_UNAVAILABLE_REASON)}:authorityDecision;
+      const unboundView=derivePublicOpportunityView(effectiveDecision,marketAnalysis);
+      const publicView={...unboundView,
+        opportunityAction:['buy','accumulate','research_starter'].includes(unboundView.decisionEnvelope.userAction)?'setup_ready'
+          :unboundView.opportunityAction};
+      const decisionBrief=availableBrief??Object.freeze({availability:'unavailable',
+        reason:DECISION_BRIEF_UNAVAILABLE_REASON});
+      const card = {
       symbol: decision.symbol, chineseName: typeof decision.name === 'string'
         ? [...decision.name.normalize('NFC')].slice(0,20).join('') : null, researchMaturity: 'source_signal',
-      newPositionAction: 'valuation_review', discoveredAt: decision.lastEvaluatedAt ?? asOf,
-      sourceClass: decision.sourceClass ?? 'community', sourceSummary: [...String(decision.sourceSummary ?? decision.raw ?? '來源訊號待研究').normalize('NFC').replace(/[\r\n]+/gu, ' ')].slice(0, 100).join(''),
-      evidenceRefs: [decision.claimId].filter((value) => typeof value === 'string').slice(0, 1),
-      valuationStatus: 'pending', technicalState: decision.technical?.technicalState
+      newPositionAction: compatibilityAction(publicView.decisionEnvelope),
+      decisionEnvelope:publicView.decisionEnvelope,decisionRevisionId:publicView.decisionRevisionId,
+      discoveredAt: decision.claimAsOf ?? decision.sourceEffectiveAt ?? null,
+      sourceClass: decision.sourceClass ?? 'community', sourceSummary: [...String(decision.sourceSummary ?? decision.raw ?? '來源訊號待研究').normalize('NFC').replace(/[\r\n]+/gu, ' ')].slice(0, 40).join(''),
+      evidenceRefs: citations.map((row) => row.ref),
+      valuationStatus: publicView.decisionEnvelope.valuationReadiness, technicalState: decision.technical?.technicalState
         ?? decision.researchScore?.priceContext?.technicalState ?? 'unavailable',
       changedBecause: signalReasons.has(decision.reason) ? decision.reason : 'new_source_evidence',
-      ...(marketAnalysis ? derivePublicOpportunityView(decision, marketAnalysis) : {}),
+      sourceProvenance, sourceProvenances: citations, citations,
+      decisionBrief,
+      researchRanking:decision.researchRanking??null,
+      proximityToAction:decision.researchRanking?.lane==='near_buy',
+      nextUnlock:publicView.decisionEnvelope.nextUnlock??null,
+      ...publicView,
       ...(Number.isFinite(decision.researchScore?.underreactionScore) ? {
         underreactionScore: decision.researchScore.underreactionScore,
         scoreCoverage: decision.researchScore.coverage,
@@ -214,6 +392,7 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
         currentPe: decision.researchScore.axes?.valuation?.currentPe ?? null,
         sectorPe: decision.researchScore.axes?.valuation?.sectorPe ?? null,
         historyPeMedian: decision.researchScore.axes?.valuation?.historyPeMedian ?? null,
+        provisionalRelativeValue:decision.researchScore.axes?.valuation?.provisionalRelativeValue??null,
         valuationAsOf: decision.researchScore.axes?.valuation?.asOf ?? null,
         valuationAuthority: decision.researchScore.axes?.valuation?.sourceRef ? 'exchange_reported' : null,
         valuationExchange: String(decision.researchScore.axes?.valuation?.sourceRef ?? '').startsWith('twse-')
@@ -226,23 +405,60 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
           sectorPeDiscountPct: Math.round((decision.researchScore.axes.valuation.relativePe - 1) * 1000) / 10,
         } : {}),
       } : {}),
-    }));
+    };
+      return bindDecisionRevisionCard(card);
+    });
   return { legacy: alignLegacyMarketView(clean, marketAnalysis), sourceSignals };
 }
 
-function publishCompactRadarProjection({ decisions, sourceCandidates = [], discoveryDelta, marketAnalysis = null, window, asOf, producerIdentity, legacyPayload }) {
+function publishCompactRadarProjection({ decisions, sourceCandidates = [], discoveryDelta, marketAnalysis = null,
+  sourceAcquisitionHealth = null,
+  freshnessSchedule = [],window, asOf, evaluatedAt = asOf, publishedAt = asOf, contentAsOf = asOf,
+  materialChanged = null, priorProjection = null, producerIdentity, legacyPayload,
+  schemaVersion = 'legacy-radar-v3.13.0' }) {
   invariant(['daily', 'hot', 'weekly', 'home'].includes(window), 'radar window');
   invariant(decisions.length <= 60, 'radar card bound');
   invariant(legacyPayload && typeof legacyPayload === 'object' && !Array.isArray(legacyPayload), 'legacy radar payload required');
   invariant(decisions.length + sourceCandidates.length <= 60, 'radar discovery bound');
   const publicMarketAnalysis = normalizedMarketAnalysis(marketAnalysis);
   const layered = addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates, publicMarketAnalysis);
+  const publishableSourceSignals=layered.sourceSignals.filter((card)=>{
+    const validBrief=card.decisionBrief&&card.citations?.length>0
+      &&((card.decisionBrief.availability==='unavailable'
+          &&card.decisionBrief.reason===DECISION_BRIEF_UNAVAILABLE_REASON
+          &&card.decisionEnvelope.userAction==='unavailable')
+        ||citedDecisionBrief(card.decisionBrief,card.citations,card.sourceProvenance));
+    const validProvenance=validPrimaryProvenance(card.sourceProvenance,card.citations??[]);
+    return Boolean(validBrief&&validProvenance);
+  });
+  const publishableLayered={...layered,sourceSignals:publishableSourceSignals};
+  const publishableSymbols=new Set(publishableSourceSignals.map((card)=>card.symbol));
+  const publicDiscoveryDelta={...discoveryDelta,
+    added:(discoveryDelta?.added??[]).filter((symbol)=>publishableSymbols.has(symbol)),
+    continued:(discoveryDelta?.continued??[]).filter((symbol)=>publishableSymbols.has(symbol)),
+    unchangedReasons:(discoveryDelta?.unchangedReasons??[]).filter((row)=>publishableSymbols.has(row?.symbol))};
+  invariant(new Set(publishableLayered.sourceSignals.map((card)=>card.symbol)).size===publishableLayered.sourceSignals.length,
+    'one current decision card per symbol required');
+  const priorCorrectness = priorProjection?.sourceLedCorrectness;
+  const materialContentHash = sha256(canonicalJson(omitProjectionHeartbeat({ legacy:publishableLayered.legacy,sourceSignals:publishableLayered.sourceSignals,
+    discoveryDelta:publicDiscoveryDelta,underreactionMarket:publicMarketAnalysis })));
+  const resolvedMaterialChanged = materialChanged ?? priorCorrectness?.contentHash !== materialContentHash;
+  const resolvedContentAsOf = resolvedMaterialChanged ? contentAsOf
+    : priorCorrectness?.contentAsOf ?? priorCorrectness?.asOf ?? contentAsOf;
+  const freshness = assessProjectionFreshness({ contentAsOf:resolvedContentAsOf,evaluatedAt,publishedAt,
+    now:new Date(publishedAt),tradingSessions:freshnessSchedule });
   const payload = {
-    ...layered.legacy,
-    sourceSignals: layered.sourceSignals,
-    discoveryDelta,
+    ...publishableLayered.legacy,
+    sourceSignals: publishableLayered.sourceSignals,
+    discoveryDelta: publicDiscoveryDelta,
     underreactionMarket: publicMarketAnalysis,
-    sourceLedCorrectness: { schema: 'legacy-radar-v3.12.0', window, asOf, producerIdentity },
+    sourceAcquisitionHealth:sourceAcquisitionHealth??legacyPayload.sourceAcquisitionHealth??null,
+    releaseIdentity:{schema:schemaVersion,producerCommitSha:producerIdentity?.commitSha??null,
+      runtimeManifestSha256:producerIdentity?.runtimeManifestSha256??null,migrationLevel:'decision-integrity-v3.14'},
+    sourceLedCorrectness: { schema: schemaVersion, window, asOf,
+      contentAsOf: resolvedContentAsOf, evaluatedAt, publishedAt,
+      nextExpectedAt:freshness.nextExpectedAt,
+      freshnessSchedule:freshnessSchedule.slice(0,80),contentHash:materialContentHash,producerIdentity },
   };
   bounded(payload, 150000, 'radar payload');
   const canonical = canonicalJson(payload);
@@ -259,4 +475,7 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
   });
 }
 
-module.exports = { CARD_BUCKETS, addResearchDecisions, derivePublicOpportunityView, publishCompactRadarProjection, stripCorrectnessAdditions };
+module.exports = { CARD_BUCKETS, DECISION_BRIEF_UNAVAILABLE_REASON, addResearchDecisions, decisionRevisionIdentityBundle,
+  citedDecisionBrief, derivePublicOpportunityView, immutableDecisionRevisionCard, navigableCitations,
+  publishCompactRadarProjection, stripCorrectnessAdditions, validCitation, validHttpsUrl, validInstant,
+  validPrimaryProvenance };

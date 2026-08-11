@@ -1,4 +1,4 @@
-export const ACCEPTANCE_VERSION_V3 = '1.44.6' as const;
+export const ACCEPTANCE_VERSION_V3 = '1.46.0' as const;
 export const ENGINE_CONTRACT_V3 = 'source-led-opportunity-v3.6' as const;
 export const DETAIL_CONTRACT_V3 = 'opportunity-detail-v3.3' as const;
 

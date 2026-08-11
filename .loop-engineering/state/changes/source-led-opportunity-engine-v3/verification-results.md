@@ -91,3 +91,55 @@ No synthetic elapsed cohort evidence was generated. The aggregate evaluation-gov
 - Evaluation-governance: `BLOCKED/non_fabricated_elapsed_cohorts_unavailable`.
 
 The disabled Vercel Web deployment may proceed under the user's explicit production-Web-only authority because the deploy does not run V3 migration, does not enable `SOURCE_LED_OPPORTUNITY_V3=shadow|drain`, does not enable V3 cron/shadow runtime and does not call mutating production endpoints. A full aggregate Verification PASS is not claimed.
+
+## V3.13 pre-repair-freeze diagnostics — 2026-08-10
+
+The independent exact-commit review of `3f3fb99412ceee7c3c21dda11199a30be1594242`
+returned `CHANGES_REQUIRED P0=0 P1=5 P2=3`. The repair worktree then passed:
+
+- product/runtime diagnostic: typecheck PASS, lint PASS, production build PASS (63 pages), base tests `61/61`, product correctness including V3.13 `51/51`, migration `48/48`, legacy `2/2`, performance `4/4`;
+- authoritative V3.13 Playwright fixture after adding the revision-bound consumers: `6/6` passed; the legacy chart-room case remains in the regular E2E project;
+- model-runner `17/17` and doctor PASS with deployment `disabled` and host pin `model-runner-host-pins-v3.7`;
+- root and Web production dependency audits: zero vulnerabilities;
+- focused adversarial repair tests: generic migration authority, mandatory source/facts completion, point-in-time history and Podcast SSRF PASS.
+
+These are diagnostics on a mutable repair worktree, not the authoritative Code Gate. No production migration, runtime activation, credential installation, source write, Web deployment, LINE dispatch or ranking promotion was performed.
+
+## V3.13 reviewed-head local Code Gate diagnostic — 2026-08-10
+
+The repair-range and full-range closure reviews both returned `PASS P0=0 P1=0 P2=0`.
+The resulting reviewed evidence head was `1ac740f33c7e3bf8ab682e044417617bfc306fde`
+with tree `690579f93ca9fcf2fa15ec42b3d9b5ae3a9604cb`. A clean-worktree rerun then
+produced:
+
+- product/runtime diagnostic: typecheck PASS, lint PASS, production build PASS (63
+  pages), base tests `61/61`, product/V3.13 `51/51`, migration `48/48`, legacy
+  `2/2`, Playwright `6/6`, performance `4/4`;
+- model-runner `17/17` and doctor PASS with deployment `disabled`, host pin
+  `model-runner-host-pins-v3.7`, `localVerificationReady=true` and no configured
+  runtime credential environment;
+- evaluation/product-value contract subtrack `12/12` PASS;
+- formal evaluation-governance gate exit `2`, status `blocked`, blocker
+  `non_fabricated_elapsed_cohorts_unavailable`, requiring 120 backtest dates, 20
+  live dates and a 252-date attempt roster.
+
+This is final local diagnostic evidence for the reviewed implementation. It does not
+mint or replace the protected `stockinsider-v3-gate-root` artifact. The authoritative
+Code Gate remains pending the protected GitHub workflow over the final evidence tree.
+The Promotion Gate remains honestly blocked; no synthetic cohort was created.
+
+## V3.14 Requirements Round 132 repair diagnostics — 2026-08-11
+
+Round 132 returned `CHANGES_REQUIRED P0=0 P1=7 P2=0` because seven canonical REC
+owners could pass without executing the behavior they claimed. The repair now runs
+the real browser cardinality case, applied PostgreSQL lifecycle and upgrade suite,
+release compatibility/doctor matrix, mixed 51-connector outcomes, every missing
+ranking axis, and an official facts-to-Web `buy` publication fixture.
+
+- V3.14 owner suite: `23/23` PASS.
+- Combined product correctness: `75/75` PASS using deterministic test concurrency 1.
+- The invoked applied migration evidence reports zero failures and zero skips.
+
+This remains mutable repair-worktree evidence. It neither constitutes fresh
+Requirements PASS nor authorizes a production migration, credential use, runtime
+activation or deployment.

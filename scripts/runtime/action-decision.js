@@ -3,17 +3,26 @@
 const { deriveTechnicalEntryState } = require('./technical-state');
 const { validateLongEntryGeometry } = require('./technical-entry-geometry');
 const { applyBiasActionCap } = require('./bias-action-cap');
+const { compatibilityAction, deriveDecisionEnvelope, overrideDecisionEnvelopeAction } = require('./decision-envelope');
+const { deriveDecisionEnvelopeV314 } = require('./decision-envelope-v314');
 
 function deriveActionDecision(input) {
   const technical = deriveTechnicalEntryState(input);
-  if (input.valuationStatus !== 'normal') return Object.freeze({ action: 'valuation_review', technical, geometry: null, publicStop: null, reason: 'valuation_review' });
-  if (technical.availability === 'unavailable' || technical.technicalState === null) return Object.freeze({ action: 'avoid', technical, geometry: null, publicStop: null, reason: 'entry_data_unavailable' });
-  if (technical.technicalState === 'invalidated') return Object.freeze({ action: 'avoid', technical, geometry: null, publicStop: null, reason: 'entry_invalidated' });
-  const geometry = validateLongEntryGeometry({ ...technical, currentPrice: technical.plane.current });
-  let action = geometry.availability === 'available' && input.qualityActionEligible === true ? 'starter_now' : 'wait_trigger';
-  const capped = applyBiasActionCap({ action, bias: input.bias, bias20Atr: technical.plane.bias?.bias20Atr, atrDistance: input.atrDistance, technicalState: technical.technicalState });
-  action = capped.action;
-  return Object.freeze({ action, technical, geometry, publicStop: action === 'starter_now' ? geometry.invalidation : null, reason: capped.reason || (geometry.reason ?? null), biasAdjustment: capped.biasAdjustment });
+  const geometry = technical.availability === 'available'
+    ? validateLongEntryGeometry({ ...technical, currentPrice: technical.plane.current }) : null;
+  const baseEnvelope = input.contractVersion === 'v3.14'
+    ? deriveDecisionEnvelopeV314({ ...input, technical, geometry })
+    : deriveDecisionEnvelope({ ...input, technical, geometry });
+  const baseAction = compatibilityAction(baseEnvelope);
+  const capped = applyBiasActionCap({ action: baseAction, bias: input.bias, bias20Atr: technical.plane?.bias?.bias20Atr,
+    atrDistance: input.atrDistance, technicalState: technical.technicalState });
+  const envelope = capped.action === baseAction ? baseEnvelope
+    : overrideDecisionEnvelopeAction(baseEnvelope, capped.action === 'avoid' ? 'avoid' : 'unavailable', capped.reason);
+  const action = compatibilityAction(envelope);
+  const buyLike = action === 'starter_now' || action === 'event_starter';
+  return Object.freeze({ action, technical, geometry, decisionEnvelope: envelope,
+    publicStop: buyLike && geometry?.availability === 'available' ? geometry.invalidation : null,
+    reason: capped.reason || envelope.reason || geometry?.reason || null, biasAdjustment: capped.biasAdjustment });
 }
 
 module.exports = { deriveActionDecision };

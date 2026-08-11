@@ -4,16 +4,23 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawn, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
+import { createRequire } from 'node:module';
 import test, { after, before } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { canonicalJson, sha256Canonical } from '../../web/src/lib/opportunity-v3/canonical.ts';
 import { executeWorkerPayload } from '../../web/src/lib/opportunity-v3/worker-executors.ts';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const require = createRequire(import.meta.url);
+const runtime = (name) => require(path.join(root, 'scripts/runtime', name));
 const migrationPath = path.join(root, 'migrations/20260724_source_led_opportunity_engine_v3.sql');
 const sql = fs.readFileSync(migrationPath, 'utf8');
 const productValueMigrationPath = path.join(root, 'migrations/20260809_product_value_recovery_v3_12.sql');
 const productValueSql = fs.readFileSync(productValueMigrationPath, 'utf8');
+const decisionIntegrityMigrationPath = path.join(root, 'migrations/20260809_decision_integrity_v3_13.sql');
+const decisionIntegritySql = fs.readFileSync(decisionIntegrityMigrationPath, 'utf8');
+const actionabilityRecoveryMigrationPath = path.join(root, 'migrations/20260811_actionability_recovery_v3_14.sql');
+const actionabilityRecoverySql = fs.readFileSync(actionabilityRecoveryMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -24,6 +31,10 @@ const staticIdentityMemberDeclarations = [...sql.matchAll(
 )].map((match) => JSON.parse(match[1]));
 const digest = (value) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const sqlLiteral = (value) => `'${String(value).replaceAll("'", "''")}'`;
+const v313CorporateActionSourceRef = sha256Canonical([
+  'corporate-action-source-row-v3.1','TWSE','2026-07-24','2330','ex_right_dividend',100,95,
+  'twse:twt49u:v1',
+]);
 const lifecycleSourceFields = ['2330 營收維持成長', '', ''];
 const lifecycleSourceContentHash = sha256Canonical([
   ['title', lifecycleSourceFields[0]],
@@ -206,7 +217,7 @@ before(() => {
     CREATE ROLE stockinsider_managed_migrator LOGIN NOSUPERUSER CREATEROLE BYPASSRLS;
     CREATE SCHEMA extensions;
     CREATE EXTENSION pgcrypto WITH SCHEMA extensions;
-    CREATE TABLE public.source_entities(id uuid PRIMARY KEY);
+    CREATE TABLE public.source_entities(id uuid PRIMARY KEY,source_key text,display_name text);
     CREATE TABLE public.stocks(id uuid PRIMARY KEY, symbol text);
     CREATE TABLE public.stock_signals(
       id uuid PRIMARY KEY DEFAULT extensions.gen_random_uuid(),
@@ -267,6 +278,18 @@ before(() => {
     command(pg.psql, [
       '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', productValueMigrationPath,
+    ]);
+  }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', decisionIntegrityMigrationPath,
+    ]);
+  }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', actionabilityRecoveryMigrationPath,
     ]);
   }
 });
@@ -442,6 +465,18 @@ test('allocation and projection persist only hash-valid authoritative decision g
 });
 
 test('migration applies twice and exposes the exact granted/private function boundary', () => {
+  assert.match(actionabilityRecoverySql,/legacy-product-value-bridge-v3[.]14/u);
+  const v314Completion=actionabilityRecoverySql.match(
+    /CREATE OR REPLACE FUNCTION public[.]complete_legacy_producer_job_v3_14[\s\S]*?END \$complete\$;/u,
+  )?.[0]??'';
+  assert.equal((v314Completion.match(/RETURN NEXT/gu)??[]).length,1,
+    'V3.14 completion returns exactly one RPC row');
+  assert.match(decisionIntegritySql,/'reportedPeRows',v_reported_pe/u);
+  assert.match(decisionIntegritySql,/'projectionFreshnessSchedule',v_freshness_schedule/u);
+  assert.match(decisionIntegritySql,/legacy_source_document_persistence_v3_13/u);
+  assert.match(decisionIntegritySql,/analysis_disposition[\s\S]*?eligible_for_claim_extraction[\s\S]*?no_claim/u);
+  assert.doesNotMatch(decisionIntegritySql,/'pending'/u,
+    'V3.13 acquisition accounting must not persist a permanently pending claim or entity outcome');
   assert.match(productValueSql,/row_number\(\) OVER \(PARTITION BY instrument[.]stock_id ORDER BY[\s\S]*?instrument[.]source_timestamp DESC,instrument[.]recorded_at DESC/u);
   assert.match(productValueSql,/'sectorValuationUniverse',v_sector_universe/u);
   assert.match(sql, /GRANT opportunity_v3_rpc_owner TO CURRENT_USER;/u);
@@ -465,6 +500,7 @@ test('migration applies twice and exposes the exact granted/private function bou
     SET ROLE legacy_correctness_rpc_owner;
     SELECT jsonb_build_object(
       'bridgeSchema',result->>'bridgeSchema',
+      'candidateAuthorityType',jsonb_typeof(result->'candidateAuthorityRows'),
       'sectorUniverseType',jsonb_typeof(result->'sectorValuationUniverse'),
       'dislocationType',jsonb_typeof(result->'dislocationCandidates')
     )::text
@@ -473,7 +509,22 @@ test('migration applies twice and exposes the exact granted/private function bou
     ) result;
     RESET ROLE;
   `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
-  assert.deepEqual(bridgeShape,{ bridgeSchema:'legacy-product-value-bridge-v3.12',sectorUniverseType:'array',dislocationType:'array' });
+  assert.deepEqual(bridgeShape,{ bridgeSchema:'legacy-product-value-bridge-v3.14',candidateAuthorityType:'array',
+    sectorUniverseType:'array',dislocationType:'array' });
+  const appliedV314ReadPlane=psql(`
+    SELECT pg_get_functiondef('public.read_legacy_candidate_fact_plane_v3_11(timestamptz,jsonb)'::regprocedure);
+  `,['-At']);
+  assert.match(appliedV314ReadPlane,
+    /candidate_instrument AS MATERIALIZED[\s\S]*resolve_legacy_instrument_authority_v3_13_internal/u);
+  assert.match(appliedV314ReadPlane,
+    /candidate_sector AS MATERIALIZED[\s\S]*resolve_legacy_sector_authority_v3_13_internal/u);
+  const sourceItemColumns=JSON.parse(psql(`
+    SELECT jsonb_agg(column_name ORDER BY ordinal_position)::text
+    FROM information_schema.columns
+    WHERE table_schema='public' AND table_name='legacy_source_item_outcomes_v3_13';
+  `,['-At']).trim());
+  assert.deepEqual(sourceItemColumns,['source_run_id','profile_id','source_key','stable_item_id','source_url',
+    'published_at','acquisition_disposition','analysis_disposition','recorded_at']);
   const applied = psql(`
     WITH expected(name) AS (
       SELECT unnest(ARRAY[${functions.map((name) => `'${name}'`).join(',')}])
@@ -576,6 +627,691 @@ test('migration applies twice and exposes the exact granted/private function bou
   });
 });
 
+test('V3.14 official chunks persist under the exact lease, replay idempotently, and complete before DB reread', () => {
+  const runId='71400000-0000-4000-8000-000000000001';
+  const jobId='71400000-0000-4000-8000-000000000002';
+  const ownerToken='71400000-0000-4000-8000-000000000003';
+  const producerSha='a'.repeat(40);
+  const sourceCutoff='2026-08-11T00:00:00Z';
+  const session={market:'TWSE',session:'2026-08-07',status:'completed',
+    openAt:'2026-08-07T01:00:00.000Z',scheduledCloseAt:'2026-08-07T05:30:00.000Z',provider:'twse',
+    sourceTimestamp:'2026-08-07T05:30:00.000Z',collectedAt:'2026-08-07T06:00:00.000Z',
+    sourceRef:'twse-annual-calendar:2026:2026-08-07'};
+  const sessionItems=[session];
+  const chunkHash=sha256Canonical(['official-ingestion-chunk-v3.14','trading_sessions',0,sessionItems]);
+  const counts={trading_sessions:1,financial_facts:0,price_observations:0,
+    corporate_action_snapshots:0,reported_valuations:0};
+  const chunks=[{kind:'trading_sessions',ordinal:0,itemCount:1,chunkHash}];
+  const terminalRoot=sha256Canonical(['official-ingestion-terminal-v3.14',sourceCutoff,counts,chunks]);
+  const terminalItems=[{sourceCutoff,counts,chunks,terminalRoot}];
+  const officialIngestion={schema:'legacy-official-ingestion-v3.14',sourceCutoff,counts,chunks,terminalRoot};
+  const completionPayload={schema:'legacy-facts-refresh-result-v3.11',decisions:[],shallowObservations:[],
+    sourceCandidates:[],dislocationCandidates:[],officialIngestion};
+  const result=JSON.parse(psql(`
+    BEGIN;
+    INSERT INTO public.internal_principal_role_bindings_v3(principal_id,role,valid_from,valid_to,status,configuration_hash,recorded_at)
+    VALUES('a11d4e67-7d0a-4c44-8a9d-1d5c3b875001','opportunity_runner','2026-01-01',NULL,'active',repeat('7',64),clock_timestamp())
+    ON CONFLICT DO NOTHING;
+    INSERT INTO public.legacy_producer_runs_v3_11(run_id,owner_label,owner_token_hash,producer_commit_sha,worker_sha256,
+      scheduler_config_canonical,scheduler_config_sha256,legacy_seed_symbols,legacy_seed_set_hash,scheduled_occurrence_id,
+      source_cutoff,trading_date,trading_session_authority_hash,authority_canonical,authority_json,authority_hash,status,
+      started_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,logical_run_key,attempt)
+    VALUES('${runId}','com.stockinsider.auth-source-worker',
+      encode(extensions.digest(convert_to('${ownerToken}','utf8'),'sha256'),'hex'),'${producerSha}',repeat('9',64),
+      decode('${legacyRuntimeConfigHex}','hex'),'1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2',
+      (SELECT array_agg(value ORDER BY ordinal) FROM jsonb_array_elements_text(
+        convert_from(decode('${legacyRuntimeConfigHex}','hex'),'utf8')::jsonb->'legacySeedSymbols')
+        WITH ORDINALITY seed(value,ordinal)),
+      'e6d9c09b8b552f5d9eaf389b76d2d90daa2d89578433d2a1ad63286888b3b743','v314-official-chunk-owner',
+      '${sourceCutoff}','2026-08-11',NULL,convert_to('{}','utf8'),'{}'::jsonb,
+      encode(extensions.digest(convert_to('{}','utf8'),'sha256'),'hex'),'running',clock_timestamp(),clock_timestamp(),
+      clock_timestamp()+interval '120 seconds',NULL,NULL,repeat('a',64),1);
+    INSERT INTO public.legacy_producer_jobs_v3_11(job_id,run_id,stage,job_kind,stage_ordinal,shard_ordinal,
+      execution_ordinal,revision_id,predecessor_job_id,input_hash,payload_hash,status,attempt,max_attempts,
+      owner_token_hash,leased_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,recorded_at)
+    VALUES('${jobId}','${runId}','facts_refresh','stage_barrier',3,NULL,0,NULL,NULL,repeat('1',64),repeat('1',64),
+      'leased',1,5,encode(extensions.digest(convert_to('${ownerToken}','utf8'),'sha256'),'hex'),clock_timestamp(),
+      clock_timestamp(),clock_timestamp()+interval '120 seconds',NULL,NULL,clock_timestamp());
+    SET ROLE service_role;
+    SELECT public.append_legacy_official_ingestion_chunk_v3_14('${runId}','${jobId}','${ownerToken}',
+      'trading_sessions',0,${sqlLiteral(JSON.stringify(sessionItems))}::jsonb,'${chunkHash}','${producerSha}','${sourceCutoff}');
+    SELECT public.append_legacy_official_ingestion_chunk_v3_14('${runId}','${jobId}','${ownerToken}',
+      'trading_sessions',0,${sqlLiteral(JSON.stringify(sessionItems))}::jsonb,'${chunkHash}','${producerSha}','${sourceCutoff}');
+    SELECT public.append_legacy_official_ingestion_chunk_v3_14('${runId}','${jobId}','${ownerToken}',
+      'terminal',0,${sqlLiteral(JSON.stringify(terminalItems))}::jsonb,'${terminalRoot}','${producerSha}','${sourceCutoff}');
+    RESET ROLE;
+    CREATE TEMP TABLE v314_pre_completion AS SELECT count(*)::integer session_rows
+      FROM public.tw_trading_sessions_v3 WHERE session_id='2026-08-07' AND market='TWSE';
+    WITH output(value) AS(VALUES(${sqlLiteral(JSON.stringify(completionPayload))}::jsonb))
+      SELECT completion.status FROM output CROSS JOIN LATERAL public.complete_legacy_producer_job_v3_14(
+        '${runId}','${jobId}','${ownerToken}',convert_to(output.value::text,'utf8'),output.value,
+        encode(extensions.digest(convert_to(output.value::text,'utf8'),'sha256'),'hex')) completion;
+    SELECT jsonb_build_object(
+      'chunkRows',(SELECT count(*) FROM public.legacy_official_ingestion_chunks_v3_14 WHERE job_id='${jobId}'),
+      'preCompletionRows',(SELECT session_rows FROM v314_pre_completion),
+      'sessionRows',(SELECT count(*) FROM public.tw_trading_sessions_v3 WHERE session_id='2026-08-07' AND market='TWSE'),
+      'nextCutoffRows',(SELECT count(*) FROM public.resolve_legacy_trading_session_authority_v3_13(
+        '2026-08-07','TWSE','2026-08-12T00:00:00Z')),
+      'jobStatus',(SELECT status FROM public.legacy_producer_jobs_v3_11 WHERE job_id='${jobId}'))::text;
+    ROLLBACK;
+  `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual(result,{chunkRows:2,preCompletionRows:0,sessionRows:1,nextCutoffRows:1,jobStatus:'succeeded'});
+});
+
+test('V3.14 completion persists a non-empty exact decision revision and heartbeat',()=>{
+  const codec=runtime('codec.js');
+  const projectionCodec=runtime('compact-radar-projection.js');
+  const {deriveDecisionEnvelopeV314}=runtime('decision-envelope-v314.js');
+  const ownerToken='71400000-0000-4000-8000-000000000113';
+  const runId='71400000-0000-4000-8000-000000000111';
+  const jobId='71400000-0000-4000-8000-000000000112';
+  const sourceCutoff='2026-08-11T06:30:00Z';
+  const citation={ref:'twse-openapi:statement:1101:2026-06-30',sourceKey:'twse',sourceName:'臺灣證券交易所',
+    sourceUrl:'https://openapi.twse.com.tw/',kolIdentity:null,publishedAt:'2026-08-10T05:00:00Z',
+    collectedAt:'2026-08-10T06:00:00Z',evaluatedAt:sourceCutoff};
+  const envelope=deriveDecisionEnvelopeV314({valuation:{status:'normal',valuationRange:{bear:90,base:132,bull:165},
+    method:{method:'pe'},asOf:'2026-08-10',evidence:{sourceRefs:[citation.ref]}},currentPrice:100,
+    qualityActionEligible:true,qualityReadiness:'available',marketReadiness:'available',marketRegime:'risk_on',
+    marketAllowsAction:true,technical:{technicalState:'breakout_confirmed',plane:{current:100}},
+    geometry:{availability:'available',entryZone:[99,101],invalidation:90,trigger:null},lastEvaluatedAt:sourceCutoff});
+  assert.equal(envelope.userAction,'buy');
+  const draft={symbol:'1101',decisionEnvelope:envelope,sourceProvenance:citation,citations:[citation],decisionBrief:{
+    thesis:['官方營運證據完整','估值安全邊際通過','技術突破確認'],risks:['需求反轉','利潤率下滑','突破失敗'],evidence:[
+      {point:'thesis:0',refs:[citation.ref]},{point:'thesis:1',refs:[citation.ref]},
+      {point:'thesis:2',refs:[citation.ref]},{point:'risk:0',refs:[citation.ref]},
+      {point:'risk:1',refs:[citation.ref]},{point:'risk:2',refs:[citation.ref]}]}};
+  const identityBundle=projectionCodec.decisionRevisionIdentityBundle(draft);
+  const revisionId=`decision-v3.14:${identityBundle.hash}`;
+  const card={...draft,decisionRevisionId:revisionId,decisionEnvelope:{...envelope,decisionRevisionId:revisionId}};
+  const revisionBundle=codec.immutableBundle('legacy_decision_revision_v3_14',
+    projectionCodec.immutableDecisionRevisionCard(card));
+  const correctness={schema:'legacy-radar-v3.14.0',window:'home',asOf:sourceCutoff,contentAsOf:sourceCutoff,
+    evaluatedAt:sourceCutoff,publishedAt:sourceCutoff,nextExpectedAt:'2026-08-12T06:30:00Z',freshnessSchedule:[],
+    contentHash:'d'.repeat(64),producerIdentity:{commitSha:'a'.repeat(40)}};
+  const projections=['daily','home','three_day','weekly'].map((storageWindow)=>{
+    const payload={sourceSignals:storageWindow==='home'?[card]:[],sourceLedCorrectness:{...correctness,
+      window:storageWindow==='three_day'?'hot':storageWindow}};
+    const canonical=codec.canonicalJson(payload);const payloadChecksum=codec.sha256(canonical);
+    return {projectionKey:`legacy-radar-v3.11:${storageWindow}:${sourceCutoff}:${payloadChecksum}`,
+      storageWindow,payload,payloadChecksum,bundle:{canonical}};
+  });
+  const completion={schema:'legacy-compact-projection-result-v3.11',projections,decisionRevisions:[{
+    symbol:'1101',decisionRevisionId:revisionId,bundle:revisionBundle,identityBundle,sourceLedCorrectness:correctness}]};
+  const canonical=codec.canonicalJson(completion);
+  const result=JSON.parse(psql(`
+    BEGIN;
+    INSERT INTO public.legacy_producer_runs_v3_11(run_id,owner_label,owner_token_hash,producer_commit_sha,worker_sha256,
+      scheduler_config_canonical,scheduler_config_sha256,legacy_seed_symbols,legacy_seed_set_hash,scheduled_occurrence_id,
+      source_cutoff,trading_date,trading_session_authority_hash,authority_canonical,authority_json,authority_hash,status,
+      started_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,logical_run_key,attempt)
+    VALUES('${runId}','com.stockinsider.auth-source-worker',
+      encode(extensions.digest(convert_to('${ownerToken}','utf8'),'sha256'),'hex'),repeat('a',40),repeat('b',64),
+      decode('${legacyRuntimeConfigHex}','hex'),'1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2',
+      (SELECT array_agg(value ORDER BY ordinal) FROM jsonb_array_elements_text(
+        convert_from(decode('${legacyRuntimeConfigHex}','hex'),'utf8')::jsonb->'legacySeedSymbols')
+        WITH ORDINALITY seed(value,ordinal)),
+      'e6d9c09b8b552f5d9eaf389b76d2d90daa2d89578433d2a1ad63286888b3b743','v314-decision-persistence',
+      '${sourceCutoff}',NULL,NULL,convert_to('{}','utf8'),'{}',
+      encode(extensions.digest(convert_to('{}','utf8'),'sha256'),'hex'),'running',
+      date_trunc('second',clock_timestamp())-interval '1 second',clock_timestamp(),clock_timestamp()+interval '120 seconds',
+      NULL,NULL,repeat('8',64),1);
+    INSERT INTO public.legacy_producer_jobs_v3_11(job_id,run_id,stage,job_kind,stage_ordinal,shard_ordinal,
+      execution_ordinal,revision_id,predecessor_job_id,input_hash,payload_hash,status,attempt,max_attempts,
+      owner_token_hash,leased_at,heartbeat_at,lease_expires_at,terminal_at,failure_code)
+    VALUES('${jobId}','${runId}','compact_radar_projection','stage_barrier',5,NULL,0,NULL,NULL,repeat('3',64),repeat('3',64),
+      'leased',1,5,encode(extensions.digest(convert_to('${ownerToken}','utf8'),'sha256'),'hex'),clock_timestamp(),
+      clock_timestamp(),clock_timestamp()+interval '120 seconds',NULL,NULL);
+    SET ROLE service_role;
+    SELECT status FROM public.complete_legacy_producer_job_v3_14('${runId}','${jobId}','${ownerToken}',
+      decode('${Buffer.from(canonical).toString('hex')}','hex'),${sqlLiteral(canonical)}::jsonb,'${codec.sha256(canonical)}');
+    RESET ROLE;
+    SELECT jsonb_build_object(
+      'revision',(SELECT count(*) FROM public.legacy_decision_revisions_v3_13 WHERE decision_revision_id='${revisionId}'),
+      'evaluation',(SELECT count(*) FROM public.legacy_decision_revision_evaluations_v3_13 WHERE decision_revision_id='${revisionId}'),
+      'schema',(SELECT source_led_correctness->>'schema' FROM public.legacy_decision_revision_evaluations_v3_13
+        WHERE decision_revision_id='${revisionId}' LIMIT 1),
+      'jobStatus',(SELECT status FROM public.legacy_producer_jobs_v3_11 WHERE job_id='${jobId}'))::text;
+    ROLLBACK;
+  `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual(result,{revision:1,evaluation:1,schema:'legacy-radar-v3.14.0',jobStatus:'succeeded'});
+});
+
+test('V3.14 SQL envelope validator preserves diagnostics for unavailable cards',()=>{
+  const {deriveDecisionEnvelopeV314}=runtime('decision-envelope-v314.js');
+  const envelope=deriveDecisionEnvelopeV314({valuation:{status:'normal',valuationRange:{bear:80,base:105,bull:125},
+    method:{method:'pe'},asOf:'2026-08-10',evidence:{sourceRefs:['official']}},currentPrice:100,
+    qualityActionEligible:true,qualityReadiness:'available',marketReadiness:'available',marketRegime:'risk_on',
+    marketAllowsAction:true,technical:{technicalState:'breakout_confirmed',plane:{current:100}},
+    geometry:{availability:'available',entryZone:[99,101],invalidation:90,trigger:null},
+    lastEvaluatedAt:'2026-08-11T06:30:00Z'});
+  assert.equal(envelope.userAction,'unavailable');
+  assert.ok(envelope.thresholdAuthority);
+  const malformed={...envelope,thresholdAuthority:{...envelope.thresholdAuthority,evidenceRoot:'not-a-hash'}};
+  const wrongRegimeThreshold={...envelope,thresholdAuthority:{...envelope.thresholdAuthority,
+    marketRegime:'selective_or_defensive'}};
+  const missingThreshold=structuredClone(envelope);delete missingThreshold.thresholdAuthority;
+  const missingThresholdSubfield=structuredClone(envelope);delete missingThresholdSubfield.thresholdAuthority.actualRewardRisk;
+  const extraThresholdSubfield={...envelope,thresholdAuthority:{...envelope.thresholdAuthority,unexpected:'not-closed'}};
+  const actionable={...envelope,userAction:'buy',reason:'v314_breakout_confirmed',blockers:[],
+    valuationSummary:{...envelope.valuationSummary,blockers:[]},thresholdAuthority:null};
+  const selectiveWait=deriveDecisionEnvelopeV314({valuation:{status:'normal',valuationRange:{bear:80,base:116,bull:140},
+    method:{method:'pe'},asOf:'2026-08-10',evidence:{sourceRefs:['official']}},currentPrice:100,
+    qualityActionEligible:true,qualityReadiness:'available',marketReadiness:'available',marketRegime:'selective_or_defensive',
+    marketAllowsAction:true,technical:{technicalState:'breakout_confirmed',plane:{current:100}},
+    geometry:{availability:'available',entryZone:[99,101],invalidation:95,trigger:null},
+    lastEvaluatedAt:'2026-08-11T06:30:00Z'});
+  assert.equal(selectiveWait.userAction,'wait_value');
+  const forgedSelectiveBuy={...selectiveWait,userAction:'buy',reason:'v314_breakout_confirmed',whyNow:'forged',
+    blockers:[],valuationSummary:{...selectiveWait.valuationSummary,blockers:[]},nextUnlock:null};
+  const exactMarginWait=deriveDecisionEnvelopeV314({valuation:{status:'normal',valuationRange:{bear:80,base:115,bull:140},
+    method:{method:'pe'},asOf:'2026-08-10',evidence:{sourceRefs:['official']}},currentPrice:100,
+    qualityActionEligible:true,qualityReadiness:'available',marketReadiness:'available',marketRegime:'risk_on',
+    marketAllowsAction:true,technical:{technicalState:'breakout_confirmed',plane:{current:100}},
+    geometry:{availability:'available',entryZone:[99,101],invalidation:90,trigger:null},
+    lastEvaluatedAt:'2026-08-11T06:30:00Z'});
+  assert.equal(exactMarginWait.userAction,'wait_value');
+  const result=JSON.parse(psql(`SELECT jsonb_build_object(
+    'valid',public.legacy_valid_decision_envelope_v3_14(${sqlLiteral(JSON.stringify(envelope))}::jsonb),
+    'malformed',public.legacy_valid_decision_envelope_v3_14(${sqlLiteral(JSON.stringify(malformed))}::jsonb),
+    'wrongRegimeThreshold',public.legacy_valid_decision_envelope_v3_14(
+      ${sqlLiteral(JSON.stringify(wrongRegimeThreshold))}::jsonb),
+    'missingThreshold',public.legacy_valid_decision_envelope_v3_14(
+      ${sqlLiteral(JSON.stringify(missingThreshold))}::jsonb),
+    'missingThresholdSubfield',public.legacy_valid_decision_envelope_v3_14(
+      ${sqlLiteral(JSON.stringify(missingThresholdSubfield))}::jsonb),
+    'extraThresholdSubfield',public.legacy_valid_decision_envelope_v3_14(
+      ${sqlLiteral(JSON.stringify(extraThresholdSubfield))}::jsonb),
+    'actionableWithoutThreshold',public.legacy_valid_decision_envelope_v3_14(
+      ${sqlLiteral(JSON.stringify(actionable))}::jsonb),
+    'forgedSelectiveBuy',public.legacy_valid_decision_envelope_v3_14(
+      ${sqlLiteral(JSON.stringify(forgedSelectiveBuy))}::jsonb),
+    'exactMarginWait',public.legacy_valid_decision_envelope_v3_14(
+      ${sqlLiteral(JSON.stringify(exactMarginWait))}::jsonb))::text;`,
+  ['-At']).trim());
+  assert.deepEqual(result,{valid:true,malformed:false,wrongRegimeThreshold:false,missingThreshold:false,
+    missingThresholdSubfield:false,extraThresholdSubfield:false,actionableWithoutThreshold:false,
+    forgedSelectiveBuy:false,exactMarginWait:true});
+});
+
+test('V3.13 source acquisition persists seventeen terminals, citation, and typed claim/entity conservation', async () => {
+  const roster=structuredClone(JSON.parse(fs.readFileSync(path.join(root,'config/runtime/approved-source-roster-v3.13.json'),'utf8')));
+  roster.profiles[0].podcastFeed='https://creator.example/feed.xml';
+  roster.profiles[1].podcastFeed='https://creator.example/feed.xml';
+  const rss='<rss><channel><item><guid>episode-applied</guid><title>產業更新</title><pubDate>Fri, 07 Aug 2026 08:00:00 GMT</pubDate><link>https://creator.example/e/applied</link><podcast:transcript url="https://creator.example/e/applied.txt" type="text/plain" /></item><item><guid>episode-no-claim</guid><title>總經回顧</title><pubDate>Fri, 07 Aug 2026 07:00:00 GMT</pubDate><link>https://creator.example/e/no-claim</link><podcast:transcript url="https://creator.example/e/no-claim.txt" type="text/plain" /></item><item><guid>episode-rejected</guid><title>無效逐字稿</title><pubDate>Fri, 07 Aug 2026 06:00:00 GMT</pubDate><link>https://creator.example/e/rejected</link><podcast:transcript url="https://creator.example/e/rejected.bin" type="application/octet-stream" /></item></channel></rss>';
+  const acquisition=await runtime('official-source-acquisition.js').acquireApprovedSources({roster,credentials:{},
+    fetchImpl:async(url)=>String(url).endsWith('feed.xml')?new Response(rss,{status:200,headers:{'content-type':'application/rss+xml'}})
+      :String(url).endsWith('applied.txt')?new Response('2026 年產業回顧：台積電 2330 股價與先進製程需求更新。',{status:200,headers:{'content-type':'text/plain'}})
+        :String(url).endsWith('no-claim.txt')?new Response('2019 年與 2026 年的總體經濟回顧。',{status:200,headers:{'content-type':'text/plain'}})
+        :String(url).endsWith('rejected.bin')?new Response('not-authorized-transcript',{status:200,headers:{'content-type':'application/octet-stream'}})
+        :new Response('{}',{status:404}),now:new Date('2026-08-09T10:20:00Z')});
+  const acquisitionProfiles=[...new Set(acquisition.documents.map((document)=>document.profileId))];
+  const secondaryProfile=acquisitionProfiles[1];
+  const mixedFailureProfile=acquisitionProfiles[0];
+  const mixedFailureAttempt=acquisition.connectorAttempts.find((attempt)=>
+    attempt.profileId===mixedFailureProfile && attempt.sourceKey!=='podcast');
+  assert.ok(mixedFailureAttempt);
+  Object.assign(mixedFailureAttempt,{status:'provider_failed',reasonCode:'provider_transport_failed',
+    responseEvidence:{kind:'transport_error',statusCode:null,responseBytes:0,itemCount:0,documentCount:0}});
+  assert.equal(acquisition.outcomes.length,17);assert.equal(acquisition.documents.length,6);
+  assert.equal(acquisition.documents.filter((document)=>document.terminalDisposition==='rejected').length,2);
+  const authorityPages=[
+    ['roster',0,'a'.repeat(64),[['123e4567-e89b-42d3-a456-426614173330','2330','TWSE','common_stock','active','台灣積體電路製造股份有限公司','台積電']]],
+    ['taxonomy',0,'b'.repeat(64),[['123e4567-e89b-42d3-a456-426614173330','2330','TWSE','semiconductor']]],
+  ];
+  const parsed=runtime('auth-source-worker-cli.js').extractRevisionCandidates({frozenRevision:{
+    revisionId:'71300000-0000-4000-8000-000000000010',sourceKey:'podcast',sourcePublishedAt:'2026-08-07T08:00:00Z',
+    sourceCollectedAt:'2026-08-09T10:20:00Z',rawFieldPayload:{text:'2026 年產業回顧：台積電 2330 股價與先進製程需求更新。'}},authorityPages});
+  assert.equal(parsed.parseOutcome,'processed_with_claims');assert.equal(parsed.candidates.length,1);
+  assert.deepEqual(parsed.entityOutcomes.map((row)=>row.outcome).sort(),['linked','rejected']);
+  const parsedNoClaim=runtime('auth-source-worker-cli.js').extractRevisionCandidates({frozenRevision:{
+    revisionId:'71300000-0000-4000-8000-000000000012',sourceKey:'podcast',sourcePublishedAt:'2026-08-07T07:00:00Z',
+    sourceCollectedAt:'2026-08-09T10:20:00Z',rawFieldPayload:{text:'2019 年與 2026 年的總體經濟回顧。'}},authorityPages});
+  assert.equal(parsedNoClaim.parseOutcome,'processed_no_claim');assert.equal(parsedNoClaim.candidates.length,0);
+  assert.deepEqual(parsedNoClaim.entityOutcomes.map((row)=>row.outcome),['rejected','rejected']);
+  const payload={schema:'legacy-source-sync-result-v3.11',sourceAcquisition:acquisition};
+  const repeatAcquisition=structuredClone(acquisition);
+  repeatAcquisition.connectorAttempts.filter((attempt)=>attempt.profileId===mixedFailureProfile
+    &&attempt.status!=='items_found').forEach((attempt)=>Object.assign(attempt,{status:'successful_empty',
+    reasonCode:`${attempt.sourceKey}_successful_empty`,responseEvidence:{kind:'http_response',statusCode:200,
+      responseBytes:2,itemCount:0,documentCount:0}}));
+  const deferredDocument=runtime('official-source-acquisition.js').documentRevision({sourceKey:'threads',
+    profile:roster.profiles.find((profile)=>profile.id===mixedFailureProfile),stableId:'mixed-unchanged-deferred',
+    title:'Threads authority unavailable',sourceUrl:'https://www.threads.net/@fixture/post/mixed-deferred',
+    publishedAt:'2026-08-07T09:00:00Z',transcript:'台積電 2330 來源權限待補。',collectedAt:'2026-08-09T10:20:00Z'});
+  repeatAcquisition.documents.push(deferredDocument);
+  repeatAcquisition.itemOutcomes.push({sourceKey:'threads',profileId:mixedFailureProfile,
+    stableId:deferredDocument.stableConnectorDocumentId,sourceUrl:deferredDocument.canonicalUrlCandidate,
+    publishedAt:deferredDocument.publishedAt,acquisitionDisposition:'transcript_ready',
+    analysisDisposition:'eligible_for_claim_extraction'});
+  Object.assign(repeatAcquisition.connectorAttempts.find((attempt)=>attempt.profileId===mixedFailureProfile
+    &&attempt.sourceKey==='threads'),{status:'items_found',reasonCode:'threads_items_observed',
+    responseEvidence:{kind:'http_response',statusCode:200,responseBytes:128,itemCount:1,documentCount:1}});
+  repeatAcquisition.outcomes.find((outcome)=>outcome.profileId===mixedFailureProfile).documentCount+=1;
+  const repeatPayload={schema:'legacy-source-sync-result-v3.11',sourceAcquisition:repeatAcquisition};
+  const applied=JSON.parse(psql(`
+    BEGIN;
+    INSERT INTO public.internal_principal_role_bindings_v3(principal_id,role,valid_from,valid_to,status,configuration_hash,recorded_at)
+    VALUES('a11d4e67-7d0a-4c44-8a9d-1d5c3b875001','opportunity_runner','2026-01-01',NULL,'active',repeat('7',64),clock_timestamp());
+    INSERT INTO public.source_entities(id) VALUES
+      ('71300000-0000-4000-8000-000000000002'),('71300000-0000-4000-8000-000000000008');
+    INSERT INTO public.stocks(id,symbol) VALUES('123e4567-e89b-42d3-a456-426614173330','2330');
+    INSERT INTO public.source_identity_authorities_v3(authority_id,source_identity_id,source_key,source_class,
+      distribution_identity,valid_from,valid_to,status,approved_at,approving_principal_id,recorded_at)
+    VALUES('71300000-0000-4000-8000-000000000003','71300000-0000-4000-8000-000000000002','podcast','community',
+      'podcast:${acquisition.documents[0].profileId}','2026-01-01',NULL,'active','2026-08-01',
+      'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001','2026-08-01T00:00:00Z');
+    WITH canonical(value) AS(SELECT convert_to(regexp_replace(jsonb_build_array(
+      'discovery_identity','71300000-0000-4000-8000-000000000002'::uuid)::text,', ', ',', 'g'),'utf8'))
+    INSERT INTO public.opportunity_authority_stream_registry_v3(family,stream_key_hash,stream_key_canonical)
+    SELECT 'discovery_identity',encode(extensions.digest(value,'sha256'),'hex'),value FROM canonical;
+    CREATE TEMP TABLE v313_run AS SELECT * FROM public.acquire_legacy_producer_lease_v3_11(
+      'com.stockinsider.auth-source-worker',repeat('7',40),repeat('8',64),decode('${legacyRuntimeConfigHex}','hex'),
+      '1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2',
+      '71300000-0000-4000-8000-000000000004',120);
+    CREATE TEMP TABLE v313_claim AS SELECT * FROM public.claim_legacy_producer_job_v3_11(
+      (SELECT run_id FROM v313_run),(SELECT job_id FROM v313_run),'71300000-0000-4000-8000-000000000004',120);
+    CREATE TEMP TABLE v313_payload AS SELECT ${sqlLiteral(JSON.stringify(payload))}::jsonb payload;
+    CREATE TEMP TABLE v313_complete AS SELECT completion.* FROM v313_payload source CROSS JOIN LATERAL
+      public.complete_legacy_producer_job_v3_11((SELECT run_id FROM v313_run),(SELECT job_id FROM v313_run),
+        '71300000-0000-4000-8000-000000000004',convert_to(source.payload::text,'utf8'),source.payload,
+        encode(extensions.digest(convert_to(source.payload::text,'utf8'),'sha256'),'hex')) completion;
+    WITH revisions AS(SELECT source.*,row_number() OVER(ORDER BY source.stable_connector_document_id)-1 selection_ordinal
+      FROM public.source_document_revisions_v3 source
+      JOIN public.legacy_source_document_persistence_v3_13 persisted ON persisted.revision_id=source.revision_id
+      WHERE persisted.source_run_id=(SELECT run_id FROM v313_run)),selected AS(
+      SELECT selection_ordinal,jsonb_build_array(source_key,revision_id,revision_family_key,approved_source_identity_id,
+        stable_connector_document_id,published_at,collected_at,raw_field_payload_algorithm_version,
+        ingestion_content_revision_sha256,canonical_content_algorithm_version,ingestion_canonical_content_hash_v3) value
+      FROM revisions)
+    INSERT INTO public.legacy_frozen_source_revisions_v3_11(run_id,selection_ordinal,source_key,revision_id,
+      selected_revision_row_canonical,selected_revision_row_json,selected_revision_row_hash,
+      raw_field_payload_algorithm_version,ingestion_content_revision_sha256,canonical_content_algorithm_version,
+      canonical_content_sha256,recorded_at)
+    SELECT (SELECT run_id FROM v313_run),selection_ordinal,(value->>0)::public.source_key_v3,(value->>1)::uuid,
+      convert_to(value::text,'utf8'),value,encode(extensions.digest(convert_to(value::text,'utf8'),'sha256'),'hex'),
+      value->>7,value->>8,value->>9,value->>10,clock_timestamp() FROM selected;
+    WITH selected AS(SELECT revision_id FROM public.legacy_frozen_source_revisions_v3_11
+      WHERE run_id=(SELECT run_id FROM v313_run) AND selected_revision_row_json->>4='episode-applied'),payload AS(
+      SELECT jsonb_build_array('v313-followup','mention_claim_extraction','revision_shard',0,revision_id) value FROM selected)
+    INSERT INTO public.legacy_producer_jobs_v3_11(job_id,run_id,stage,job_kind,stage_ordinal,shard_ordinal,
+      execution_ordinal,revision_id,predecessor_job_id,input_hash,payload_hash,status,attempt,max_attempts,
+      owner_token_hash,leased_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,recorded_at)
+    SELECT '71300000-0000-4000-8000-000000000011',(SELECT run_id FROM v313_run),'mention_claim_extraction',
+      'revision_shard',1,0,2,revision_id,(SELECT job_id FROM v313_run),
+      encode(extensions.digest(convert_to(value::text,'utf8'),'sha256'),'hex'),
+      encode(extensions.digest(convert_to(value::text,'utf8'),'sha256'),'hex'),'queued',0,5,NULL,NULL,NULL,NULL,NULL,NULL,
+      clock_timestamp() FROM selected,payload;
+    WITH payload(value) AS(SELECT jsonb_build_array('v313-followup','mention_claim_extraction','revision_shard',0,
+      (SELECT revision_id FROM public.legacy_frozen_source_revisions_v3_11 WHERE run_id=(SELECT run_id FROM v313_run)
+        AND selected_revision_row_json->>4='episode-applied')))
+    INSERT INTO public.legacy_producer_job_payloads_v3_11(job_id,payload_canonical,payload_json,payload_hash,recorded_at)
+    SELECT '71300000-0000-4000-8000-000000000011',convert_to(value::text,'utf8'),value,
+      encode(extensions.digest(convert_to(value::text,'utf8'),'sha256'),'hex'),clock_timestamp() FROM payload;
+    CREATE TEMP TABLE v313_mention_claim AS SELECT * FROM public.claim_legacy_producer_job_v3_11(
+      (SELECT run_id FROM v313_run),'71300000-0000-4000-8000-000000000011',
+      '71300000-0000-4000-8000-000000000004',120);
+    CREATE TEMP TABLE v313_analysis_payload AS SELECT jsonb_set(
+      ${sqlLiteral(JSON.stringify(parsed))}::jsonb,'{revisionId}',to_jsonb((SELECT revision_id::text
+        FROM public.legacy_source_document_persistence_v3_13 WHERE source_run_id=(SELECT run_id FROM v313_run)
+          AND stable_connector_document_id='episode-applied' AND revision_id IS NOT NULL))) payload;
+    CREATE TEMP TABLE v313_analysis_complete AS SELECT completion.* FROM v313_analysis_payload analysis CROSS JOIN LATERAL
+      public.complete_legacy_producer_job_v3_11((SELECT run_id FROM v313_run),(SELECT job_id FROM v313_mention_claim),
+        '71300000-0000-4000-8000-000000000004',convert_to(analysis.payload::text,'utf8'),analysis.payload,
+        encode(extensions.digest(convert_to(analysis.payload::text,'utf8'),'sha256'),'hex')) completion;
+    WITH selected AS(SELECT revision_id FROM public.legacy_frozen_source_revisions_v3_11
+      WHERE run_id=(SELECT run_id FROM v313_run) AND selected_revision_row_json->>4='episode-no-claim'),payload AS(
+      SELECT jsonb_build_array('v313-no-claim','mention_claim_extraction','revision_shard',1,revision_id) value FROM selected)
+    INSERT INTO public.legacy_producer_jobs_v3_11(job_id,run_id,stage,job_kind,stage_ordinal,shard_ordinal,
+      execution_ordinal,revision_id,predecessor_job_id,input_hash,payload_hash,status,attempt,max_attempts,
+      owner_token_hash,leased_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,recorded_at)
+    SELECT '71300000-0000-4000-8000-000000000013',(SELECT run_id FROM v313_run),'mention_claim_extraction',
+      'revision_shard',1,1,(SELECT max(execution_ordinal)+1 FROM public.legacy_producer_jobs_v3_11
+        WHERE run_id=(SELECT run_id FROM v313_run)),revision_id,(SELECT job_id FROM v313_run),
+      encode(extensions.digest(convert_to(value::text,'utf8'),'sha256'),'hex'),
+      encode(extensions.digest(convert_to(value::text,'utf8'),'sha256'),'hex'),'queued',0,5,NULL,NULL,NULL,NULL,NULL,NULL,
+      clock_timestamp() FROM selected,payload;
+    WITH payload(value) AS(SELECT jsonb_build_array('v313-no-claim','mention_claim_extraction','revision_shard',1,
+      (SELECT revision_id FROM public.legacy_frozen_source_revisions_v3_11 WHERE run_id=(SELECT run_id FROM v313_run)
+        AND selected_revision_row_json->>4='episode-no-claim')))
+    INSERT INTO public.legacy_producer_job_payloads_v3_11(job_id,payload_canonical,payload_json,payload_hash,recorded_at)
+    SELECT '71300000-0000-4000-8000-000000000013',convert_to(value::text,'utf8'),value,
+      encode(extensions.digest(convert_to(value::text,'utf8'),'sha256'),'hex'),clock_timestamp() FROM payload;
+    CREATE TEMP TABLE v313_no_claim_job AS SELECT * FROM public.claim_legacy_producer_job_v3_11(
+      (SELECT run_id FROM v313_run),'71300000-0000-4000-8000-000000000013',
+      '71300000-0000-4000-8000-000000000004',120);
+    CREATE TEMP TABLE v313_no_claim_payload AS SELECT jsonb_set(
+      ${sqlLiteral(JSON.stringify(parsedNoClaim))}::jsonb,'{revisionId}',to_jsonb((SELECT revision_id::text
+        FROM public.legacy_source_document_persistence_v3_13 WHERE source_run_id=(SELECT run_id FROM v313_run)
+          AND stable_connector_document_id='episode-no-claim' AND revision_id IS NOT NULL))) payload;
+    CREATE TEMP TABLE v313_no_claim_complete AS SELECT completion.* FROM v313_no_claim_payload analysis CROSS JOIN LATERAL
+      public.complete_legacy_producer_job_v3_11((SELECT run_id FROM v313_run),(SELECT job_id FROM v313_no_claim_job),
+        '71300000-0000-4000-8000-000000000004',convert_to(analysis.payload::text,'utf8'),analysis.payload,
+        encode(extensions.digest(convert_to(analysis.payload::text,'utf8'),'sha256'),'hex')) completion;
+    UPDATE public.legacy_producer_runs_v3_11 SET status='success',terminal_at=clock_timestamp()
+      WHERE run_id=(SELECT run_id FROM v313_run);
+    INSERT INTO public.source_identity_authorities_v3(authority_id,source_identity_id,source_key,source_class,
+      distribution_identity,valid_from,valid_to,status,approved_at,approving_principal_id,recorded_at)
+    VALUES('71300000-0000-4000-8000-000000000005','71300000-0000-4000-8000-000000000002','youtube','community',
+      'youtube:${acquisition.documents[0].profileId}','2026-01-01',NULL,'inactive','2026-08-09T10:21:00Z',
+      'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001','2026-08-09T10:21:00Z');
+    DO $stale_source_append$ DECLARE d public.source_document_revisions_v3%ROWTYPE;BEGIN
+      SELECT * INTO STRICT d FROM public.source_document_revisions_v3 ORDER BY recorded_at,revision_id LIMIT 1;
+      BEGIN
+        PERFORM * FROM public.append_source_document_revision_v3(ROW(
+          '71300000-0000-4000-8000-000000000003','stale-authority-probe',d.canonical_url_candidate,
+          d.published_at,d.collected_at,d.adapter_version,d.acquisition_status,d.raw_field_payload,d.raw_code_point_count,
+          d.raw_field_payload_algorithm_version,d.ingestion_content_revision_sha256,d.canonical_content_algorithm_version,
+          d.ingestion_canonical_content_hash_v3,NULL)::public.source_document_revision_input_v3,
+          'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+        RAISE EXCEPTION 'expected_stale_source_authority_failure';
+      EXCEPTION WHEN OTHERS THEN
+        IF SQLERRM<>'authority_reference_unavailable' THEN RAISE;END IF;
+      END;
+    END $stale_source_append$;
+    DO $consumed_source_context$ DECLARE d public.source_document_revisions_v3%ROWTYPE;BEGIN
+      SELECT * INTO STRICT d FROM public.source_document_revisions_v3
+        WHERE stable_connector_document_id='episode-applied' ORDER BY recorded_at,revision_id LIMIT 1;
+      BEGIN
+        PERFORM * FROM public.append_source_document_revision_v3(ROW(
+          '71300000-0000-4000-8000-000000000003','episode-applied',d.canonical_url_candidate,
+          d.published_at,d.collected_at,d.adapter_version,d.acquisition_status,d.raw_field_payload,d.raw_code_point_count,
+          d.raw_field_payload_algorithm_version,d.ingestion_content_revision_sha256,d.canonical_content_algorithm_version,
+          d.ingestion_canonical_content_hash_v3,NULL)::public.source_document_revision_input_v3,
+          'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+        RAISE EXCEPTION 'expected_consumed_source_context_failure';
+      EXCEPTION WHEN OTHERS THEN
+        IF SQLERRM<>'authority_reference_unavailable' THEN RAISE;END IF;
+      END;
+    END $consumed_source_context$;
+    INSERT INTO public.legacy_producer_runs_v3_11(run_id,owner_label,owner_token_hash,producer_commit_sha,worker_sha256,
+      scheduler_config_canonical,scheduler_config_sha256,legacy_seed_symbols,legacy_seed_set_hash,scheduled_occurrence_id,
+      source_cutoff,trading_date,trading_session_authority_hash,authority_canonical,authority_json,authority_hash,status,
+      started_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,logical_run_key,attempt)
+    VALUES('71300000-0000-4000-8000-000000000020','com.stockinsider.auth-source-worker',
+      encode(extensions.digest(convert_to('71300000-0000-4000-8000-000000000021','utf8'),'sha256'),'hex'),
+      repeat('7',40),repeat('8',64),decode('${legacyRuntimeConfigHex}','hex'),
+      '1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2',
+      (SELECT array_agg(value ORDER BY ordinal) FROM jsonb_array_elements_text(
+        convert_from(decode('${legacyRuntimeConfigHex}','hex'),'utf8')::jsonb->'legacySeedSymbols'
+      ) WITH ORDINALITY seed(value,ordinal)),
+      'e6d9c09b8b552f5d9eaf389b76d2d90daa2d89578433d2a1ad63286888b3b743','v313-source-repeat',
+      '2026-08-09T10:20:00Z',NULL,NULL,convert_to('{}','utf8'),'{}'::jsonb,
+      encode(extensions.digest(convert_to('{}','utf8'),'sha256'),'hex'),'running',clock_timestamp(),clock_timestamp(),
+      clock_timestamp()+interval '120 seconds',NULL,NULL,repeat('2',64),1);
+    INSERT INTO public.source_identity_authorities_v3(authority_id,source_identity_id,source_key,source_class,
+      distribution_identity,valid_from,valid_to,status,approved_at,approving_principal_id,recorded_at)
+    VALUES('71300000-0000-4000-8000-000000000009','71300000-0000-4000-8000-000000000008','podcast','community',
+      'podcast:${secondaryProfile}','2026-01-01',NULL,'active','2026-08-09T10:21:00Z',
+      'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001','2026-08-09T10:21:00Z');
+    INSERT INTO public.legacy_producer_jobs_v3_11(job_id,run_id,stage,job_kind,stage_ordinal,shard_ordinal,
+      execution_ordinal,revision_id,predecessor_job_id,input_hash,payload_hash,status,attempt,max_attempts,
+      owner_token_hash,leased_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,recorded_at)
+    VALUES('71300000-0000-4000-8000-000000000022','71300000-0000-4000-8000-000000000020','source_sync',
+      'stage_barrier',0,NULL,0,NULL,NULL,repeat('1',64),repeat('1',64),'leased',1,5,
+      encode(extensions.digest(convert_to('71300000-0000-4000-8000-000000000021','utf8'),'sha256'),'hex'),
+      clock_timestamp(),clock_timestamp(),clock_timestamp()+interval '120 seconds',NULL,NULL,clock_timestamp());
+    CREATE TEMP TABLE v313_repeat_payload AS SELECT ${sqlLiteral(JSON.stringify(repeatPayload))}::jsonb payload;
+    CREATE TEMP TABLE v313_repeat_complete AS SELECT completion.* FROM v313_repeat_payload source CROSS JOIN LATERAL
+      public.complete_legacy_producer_job_v3_11('71300000-0000-4000-8000-000000000020',
+        '71300000-0000-4000-8000-000000000022','71300000-0000-4000-8000-000000000021',
+        convert_to(source.payload::text,'utf8'),source.payload,
+        encode(extensions.digest(convert_to(source.payload::text,'utf8'),'sha256'),'hex')) completion;
+    INSERT INTO public.source_identity_authorities_v3(authority_id,source_identity_id,source_key,source_class,
+      distribution_identity,valid_from,valid_to,status,approved_at,approving_principal_id,recorded_at)
+    SELECT '71300000-0000-4000-8000-000000000006',source_identity_id,'threads',source_class,
+      'threads:${acquisition.documents[0].profileId}',valid_from,valid_to,'active',approved_at,
+      approving_principal_id,recorded_at FROM public.source_identity_authorities_v3
+      WHERE authority_id='71300000-0000-4000-8000-000000000005';
+    DO $source_tie_conflict$ BEGIN
+      BEGIN
+        PERFORM public.opportunity_authority_selected_stream_count_v3_internal('discovery_identity',clock_timestamp());
+        RAISE EXCEPTION 'expected_source_tie_conflict_missing';
+      EXCEPTION WHEN OTHERS THEN
+        IF SQLERRM<>'authority_revision_conflict' THEN RAISE;END IF;
+      END;
+    END $source_tie_conflict$;
+    SELECT jsonb_build_object(
+      'profileCount',(SELECT count(*) FROM public.legacy_source_acquisition_outcomes_v3_13 WHERE source_run_id=(SELECT run_id FROM v313_run)),
+      'terminalCount',(SELECT count(*) FROM public.legacy_source_acquisition_outcomes_v3_13 WHERE source_run_id=(SELECT run_id FROM v313_run)
+        AND status IN('fresh','unchanged','missing_endpoint','auth_failed','provider_failed')),
+      'newDocuments',(SELECT count(*) FROM public.legacy_source_document_persistence_v3_13
+        WHERE source_run_id=(SELECT run_id FROM v313_run) AND disposition='new_revision'),
+      'citation',(SELECT revision.canonical_url_candidate FROM public.legacy_source_document_persistence_v3_13 persisted
+        JOIN public.source_document_revisions_v3 revision ON revision.revision_id=persisted.revision_id
+        WHERE persisted.source_run_id=(SELECT run_id FROM v313_run) AND persisted.stable_connector_document_id='episode-applied'),
+      'transcriptReadyItems',(SELECT count(*) FROM public.legacy_source_item_outcomes_v3_13
+        WHERE source_run_id=(SELECT run_id FROM v313_run) AND acquisition_disposition='transcript_ready'
+          AND analysis_disposition='eligible_for_claim_extraction'),
+      'metadataClaims',(SELECT count(*) FROM public.legacy_source_item_outcomes_v3_13
+        WHERE source_run_id=(SELECT run_id FROM v313_run) AND acquisition_disposition='metadata_only'
+          AND analysis_disposition<>'no_claim'),
+      'processingDocuments',(SELECT count(*) FROM public.legacy_source_processing_outcomes_v3_13
+        WHERE source_run_id=(SELECT run_id FROM v313_run) AND scope='document'),
+      'processedNoClaim',(SELECT count(*) FROM public.legacy_source_processing_outcomes_v3_13
+        WHERE source_run_id=(SELECT run_id FROM v313_run) AND scope='document' AND outcome='processed_no_claim'),
+      'processingClaims',(SELECT count(*) FROM public.legacy_source_processing_outcomes_v3_13
+        WHERE source_run_id=(SELECT run_id FROM v313_run) AND scope='claim'),
+      'processingEntities',(SELECT count(*) FROM public.legacy_source_processing_outcomes_v3_13
+        WHERE source_run_id=(SELECT run_id FROM v313_run) AND scope='entity'),
+      'linkedEntities',(SELECT count(*) FROM public.legacy_source_processing_outcomes_v3_13
+        WHERE source_run_id=(SELECT run_id FROM v313_run) AND scope='entity' AND outcome='linked'),
+      'rejectedEntities',(SELECT count(*) FROM public.legacy_source_processing_outcomes_v3_13
+        WHERE source_run_id=(SELECT run_id FROM v313_run) AND scope='entity' AND outcome='rejected'),
+      'repeatUnchanged',(SELECT count(*) FROM public.legacy_source_document_persistence_v3_13
+        WHERE source_run_id='71300000-0000-4000-8000-000000000020' AND disposition='unchanged'),
+      'repeatDeferred',(SELECT count(*) FROM public.legacy_source_document_persistence_v3_13
+        WHERE source_run_id='71300000-0000-4000-8000-000000000020' AND disposition='deferred'),
+      'repeatRejected',(SELECT count(*) FROM public.legacy_source_document_persistence_v3_13
+        WHERE source_run_id='71300000-0000-4000-8000-000000000020' AND disposition='rejected'),
+      'repeatMixedTerminal',(SELECT status FROM public.legacy_source_acquisition_outcomes_v3_13
+        WHERE source_run_id='71300000-0000-4000-8000-000000000020' AND profile_id='${mixedFailureProfile}'),
+      'repeatFrozenAuthorities',(SELECT count(*) FROM public.legacy_frozen_source_authorities_v3_13
+        WHERE source_run_id='71300000-0000-4000-8000-000000000020'),
+      'postCutoffGrantDeferred',(SELECT count(*) FROM public.legacy_source_document_persistence_v3_13
+        WHERE source_run_id='71300000-0000-4000-8000-000000000020' AND profile_id='${secondaryProfile}'
+          AND disposition='deferred'),
+      'mixedFailureTerminal',(SELECT status FROM public.legacy_source_acquisition_outcomes_v3_13
+        WHERE source_run_id=(SELECT run_id FROM v313_run) AND profile_id='${mixedFailureProfile}'),
+      'runBoundAppendContexts',(SELECT count(*) FROM public.legacy_source_append_context_v3_13
+        WHERE source_run_id=(SELECT run_id FROM v313_run)),
+      'staleAppendRows',(SELECT count(*) FROM public.source_document_revisions_v3
+        WHERE stable_connector_document_id='stale-authority-probe'),
+      'staleAppendAudits',(SELECT count(*) FROM public.opportunity_rpc_audit_v3
+        WHERE function_name='append_source_document_revision_v3' AND subject_id IS NULL))::text;
+    ROLLBACK;
+  `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual(applied,{profileCount:17,terminalCount:17,newDocuments:2,
+    citation:'https://creator.example/e/applied',transcriptReadyItems:4,metadataClaims:0,
+    processingDocuments:2,processedNoClaim:1,processingClaims:4,processingEntities:4,linkedEntities:1,rejectedEntities:3,
+    repeatUnchanged:2,repeatDeferred:3,repeatRejected:2,repeatMixedTerminal:'provider_failed',repeatFrozenAuthorities:1,
+    postCutoffGrantDeferred:2,mixedFailureTerminal:'provider_failed',runBoundAppendContexts:2,
+    staleAppendRows:0,staleAppendAudits:0});
+  assert.equal(parsed.candidates[0].link.disposition,'linked');assert.equal(parsed.candidates[0].symbol,'2330');
+});
+
+test('V3.13 source completion rejects unsupported empty terminals and unconserved item multisets atomically',()=>{
+  const roster=JSON.parse(fs.readFileSync(path.join(root,'config/runtime/approved-source-roster-v3.13.json'),'utf8'));
+  const acquisition={schema:'official-source-acquisition-v3.13',collectedAt:'2026-08-09T10:20:00Z',documents:[],
+    itemOutcomes:[],connectorAttempts:roster.profiles.flatMap((profile)=>['threads','podcast','youtube'].map((sourceKey)=>({
+      profileId:profile.id,sourceKey,status:'successful_empty',reasonCode:`${sourceKey}_successful_empty`,
+      responseEvidence:{kind:'http_response',statusCode:200,responseBytes:2,itemCount:0,documentCount:0}}))),
+    outcomes:roster.profiles.map((profile)=>({profileId:profile.id,profileName:profile.name,documentCount:0}))};
+  const variants=[
+    ['missing-extension',undefined],
+    ['null-extension',null],
+    ['scalar-extension','not-an-object'],
+    ['empty-extension',{}],
+    ['wrong-schema-extension',{schema:'official-source-acquisition-v3.12'}],
+    ['caller-status',(()=>{const value=structuredClone(acquisition);value.outcomes[0].status='no_new_items';return value;})()],
+    ['caller-reason',(()=>{const value=structuredClone(acquisition);value.outcomes[0].reason='caller_selected';return value;})()],
+    ['missing-profile',(()=>{const value=structuredClone(acquisition);value.outcomes.pop();return value;})()],
+    ['missing-attempt',(()=>{const value=structuredClone(acquisition);value.connectorAttempts.pop();return value;})()],
+    ['tampered-attempt-reason',(()=>{const value=structuredClone(acquisition);
+      value.connectorAttempts[0].reasonCode='provider_transport_failed';return value;})()],
+    ['forged-empty-auth',(()=>{const value=structuredClone(acquisition);
+      value.connectorAttempts[0].status='auth_failed';value.connectorAttempts[0].reasonCode='provider_auth_rejected';return value;})()],
+    ['forged-metadata-configuration',(()=>{const value=structuredClone(acquisition);Object.assign(value.connectorAttempts[0],
+      {status:'metadata_only',reasonCode:'threads_metadata_only',responseEvidence:{kind:'configuration',statusCode:null,
+        responseBytes:0,itemCount:1,documentCount:0}});return value;})()],
+    ['forged-missing-http-success',(()=>{const value=structuredClone(acquisition);Object.assign(value.connectorAttempts[0],
+      {status:'missing_endpoint',reasonCode:'threads_endpoint_missing',responseEvidence:{kind:'http_response',statusCode:200,
+        responseBytes:2,itemCount:0,documentCount:0}});return value;})()],
+    ['forged-provider-http-success',(()=>{const value=structuredClone(acquisition);Object.assign(value.connectorAttempts[0],
+      {status:'provider_failed',reasonCode:'provider_transport_failed',responseEvidence:{kind:'http_response',statusCode:200,
+        responseBytes:2,itemCount:0,documentCount:0}});return value;})()],
+    ['out-of-bound-attempt-count',(()=>{const value=structuredClone(acquisition);
+      value.connectorAttempts[0].responseEvidence.itemCount=21;return value;})()],
+    ['unpaired-item',(()=>{const value=structuredClone(acquisition);value.itemOutcomes.push({sourceKey:'podcast',
+      profileId:value.outcomes[0].profileId,stableId:'orphan',sourceUrl:'https://creator.example/orphan',publishedAt:null,
+      acquisitionDisposition:'rejected',analysisDisposition:'rejected'});return value;})()],
+    ['credential-item-url',(()=>{const value=structuredClone(acquisition);value.itemOutcomes.push({sourceKey:'podcast',
+      profileId:value.outcomes[0].profileId,stableId:'credential',sourceUrl:'https://user:secret@creator.example/orphan',
+      publishedAt:null,acquisitionDisposition:'rejected',analysisDisposition:'rejected'});return value;})()],
+    ['timezone-free-item',(()=>{const value=structuredClone(acquisition);value.itemOutcomes.push({sourceKey:'podcast',
+      profileId:value.outcomes[0].profileId,stableId:'timezone-free',sourceUrl:'https://creator.example/orphan',
+      publishedAt:'2026-08-07T08:00:00',acquisitionDisposition:'rejected',analysisDisposition:'rejected'});return value;})()],
+  ];
+  const attempts=variants.map(([label,sourceAcquisition],index)=>{
+    const suffix=String(index+40).padStart(12,'0');
+    const runId=`71300000-0000-4000-8000-${suffix}`;
+    const jobId=`71400000-0000-4000-8000-${suffix}`;
+    const payload=JSON.stringify(sourceAcquisition===undefined?{schema:'legacy-source-sync-result-v3.11'}:
+      {schema:'legacy-source-sync-result-v3.11',sourceAcquisition});
+    return `
+      INSERT INTO public.legacy_producer_runs_v3_11(run_id,owner_label,owner_token_hash,producer_commit_sha,worker_sha256,
+        scheduler_config_canonical,scheduler_config_sha256,legacy_seed_symbols,legacy_seed_set_hash,scheduled_occurrence_id,
+        source_cutoff,trading_date,trading_session_authority_hash,authority_canonical,authority_json,authority_hash,status,
+        started_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,logical_run_key,attempt)
+      VALUES('${runId}','com.stockinsider.auth-source-worker',encode(extensions.digest(convert_to(
+        '71300000-0000-4000-8000-000000000099','utf8'),'sha256'),'hex'),repeat('a',40),repeat('b',64),
+        decode('${legacyRuntimeConfigHex}','hex'),'1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2',
+        (SELECT array_agg(value ORDER BY ordinal) FROM jsonb_array_elements_text(convert_from(
+          decode('${legacyRuntimeConfigHex}','hex'),'utf8')::jsonb->'legacySeedSymbols') WITH ORDINALITY seed(value,ordinal)),
+        'e6d9c09b8b552f5d9eaf389b76d2d90daa2d89578433d2a1ad63286888b3b743','${label}',
+        '2026-08-09T10:20:00Z',NULL,NULL,convert_to('{}','utf8'),'{}',
+        encode(extensions.digest(convert_to('{}','utf8'),'sha256'),'hex'),'running',clock_timestamp(),clock_timestamp(),
+        clock_timestamp()+interval '120 seconds',NULL,NULL,'${createHash('sha256').update(label).digest('hex')}',1);
+      INSERT INTO public.legacy_producer_jobs_v3_11(job_id,run_id,stage,job_kind,stage_ordinal,shard_ordinal,
+        execution_ordinal,revision_id,predecessor_job_id,input_hash,payload_hash,status,attempt,max_attempts,
+        owner_token_hash,leased_at,heartbeat_at,lease_expires_at,terminal_at,failure_code)
+      VALUES('${jobId}','${runId}','source_sync','stage_barrier',0,NULL,0,NULL,NULL,repeat('1',64),repeat('1',64),
+        'leased',1,5,encode(extensions.digest(convert_to('71300000-0000-4000-8000-000000000099','utf8'),'sha256'),'hex'),
+        clock_timestamp(),clock_timestamp(),clock_timestamp()+interval '120 seconds',NULL,NULL);
+      DO $negative_${index}$ DECLARE value jsonb:=${sqlLiteral(payload)}::jsonb;BEGIN
+        BEGIN
+          PERFORM * FROM public.complete_legacy_producer_job_v3_11('${runId}','${jobId}',
+            '71300000-0000-4000-8000-000000000099',convert_to(value::text,'utf8'),value,
+            encode(extensions.digest(convert_to(value::text,'utf8'),'sha256'),'hex'));
+          RAISE EXCEPTION 'expected_source_conservation_failure_missing';
+        EXCEPTION WHEN OTHERS THEN
+          IF SQLERRM NOT LIKE 'data_integrity_failure/%' AND SQLERRM<>'v313_source_acquisition_required' THEN RAISE;END IF;
+        END;
+      END $negative_${index}$;
+      UPDATE public.legacy_producer_jobs_v3_11 SET status='failed',terminal_at=clock_timestamp(),
+        owner_token_hash=NULL,leased_at=NULL,heartbeat_at=NULL,lease_expires_at=NULL WHERE job_id='${jobId}';
+      UPDATE public.legacy_producer_runs_v3_11 SET status='failed',terminal_at=clock_timestamp(),
+        heartbeat_at=clock_timestamp(),lease_expires_at=clock_timestamp() WHERE run_id='${runId}';`;
+  }).join('\n');
+  const factsAttempt=`
+    INSERT INTO public.legacy_producer_runs_v3_11(run_id,owner_label,owner_token_hash,producer_commit_sha,worker_sha256,
+      scheduler_config_canonical,scheduler_config_sha256,legacy_seed_symbols,legacy_seed_set_hash,scheduled_occurrence_id,
+      source_cutoff,trading_date,trading_session_authority_hash,authority_canonical,authority_json,authority_hash,status,
+      started_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,logical_run_key,attempt)
+    VALUES('71600000-0000-4000-8000-000000000001','com.stockinsider.auth-source-worker',
+      encode(extensions.digest(convert_to('71600000-0000-4000-8000-000000000003','utf8'),'sha256'),'hex'),repeat('a',40),repeat('b',64),
+      decode('${legacyRuntimeConfigHex}','hex'),'1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2',
+      (SELECT array_agg(value ORDER BY ordinal) FROM jsonb_array_elements_text(convert_from(
+        decode('${legacyRuntimeConfigHex}','hex'),'utf8')::jsonb->'legacySeedSymbols') WITH ORDINALITY seed(value,ordinal)),
+      'e6d9c09b8b552f5d9eaf389b76d2d90daa2d89578433d2a1ad63286888b3b743','missing-facts-extension',
+      '2026-08-09T10:20:00Z',NULL,NULL,convert_to('{}','utf8'),'{}',
+      encode(extensions.digest(convert_to('{}','utf8'),'sha256'),'hex'),'running',clock_timestamp(),clock_timestamp(),
+      clock_timestamp()+interval '120 seconds',NULL,NULL,repeat('f',64),1);
+    INSERT INTO public.legacy_producer_jobs_v3_11(job_id,run_id,stage,job_kind,stage_ordinal,shard_ordinal,
+      execution_ordinal,revision_id,predecessor_job_id,input_hash,payload_hash,status,attempt,max_attempts,
+      owner_token_hash,leased_at,heartbeat_at,lease_expires_at,terminal_at,failure_code)
+    VALUES('71600000-0000-4000-8000-000000000002','71600000-0000-4000-8000-000000000001','facts_refresh',
+      'stage_barrier',3,NULL,0,NULL,NULL,repeat('2',64),repeat('2',64),'leased',1,5,
+      encode(extensions.digest(convert_to('71600000-0000-4000-8000-000000000003','utf8'),'sha256'),'hex'),
+      clock_timestamp(),clock_timestamp(),clock_timestamp()+interval '120 seconds',NULL,NULL);
+    DO $missing_facts$ DECLARE value jsonb:='{"schema":"legacy-facts-refresh-result-v3.11"}'::jsonb;BEGIN
+      BEGIN
+        PERFORM * FROM public.complete_legacy_producer_job_v3_11('71600000-0000-4000-8000-000000000001',
+          '71600000-0000-4000-8000-000000000002','71600000-0000-4000-8000-000000000003',
+          convert_to(value::text,'utf8'),value,encode(extensions.digest(convert_to(value::text,'utf8'),'sha256'),'hex'));
+        RAISE EXCEPTION 'expected_v313_official_ingestion_required';
+      EXCEPTION WHEN OTHERS THEN IF SQLERRM<>'v313_official_ingestion_required' THEN RAISE;END IF;END;
+    END $missing_facts$;`;
+  const result=JSON.parse(psql(`BEGIN;${attempts}${factsAttempt}
+    SELECT jsonb_build_object('failed',(SELECT count(*) FROM public.legacy_producer_jobs_v3_11
+      WHERE job_id::text LIKE '71400000-%' AND status='failed'),'results',(SELECT count(*)
+      FROM public.legacy_producer_job_results_v3_11 result JOIN public.legacy_producer_jobs_v3_11 job USING(job_id)
+      WHERE job.run_id::text LIKE '71300000-%'),
+      'factsResult',(SELECT count(*) FROM public.legacy_producer_job_results_v3_11
+        WHERE job_id='71600000-0000-4000-8000-000000000002'),
+      'factsJobStatus',(SELECT status::text FROM public.legacy_producer_jobs_v3_11
+        WHERE job_id='71600000-0000-4000-8000-000000000002'),
+      'outcomes',(SELECT count(*)
+      FROM public.legacy_source_acquisition_outcomes_v3_13 WHERE source_run_id::text LIKE '71300000-%'))::text;
+    ROLLBACK;`,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual(result,{failed:18,results:0,factsResult:0,factsJobStatus:'leased',outcomes:0});
+});
+
+test('V3.13 database derives successful-empty, missing, auth and provider terminals from 51 connector attempts',()=>{
+  const roster=JSON.parse(fs.readFileSync(path.join(root,'config/runtime/approved-source-roster-v3.13.json'),'utf8'));
+  const base={schema:'official-source-acquisition-v3.13',collectedAt:'2026-08-09T10:20:00Z',documents:[],itemOutcomes:[],
+    connectorAttempts:roster.profiles.flatMap((profile)=>['threads','podcast','youtube'].map((sourceKey)=>({
+      profileId:profile.id,sourceKey,status:'successful_empty',reasonCode:`${sourceKey}_successful_empty`,
+      responseEvidence:{kind:'http_response',statusCode:200,responseBytes:2,itemCount:0,documentCount:0}}))),
+    outcomes:roster.profiles.map((profile)=>({profileId:profile.id,profileName:profile.name,documentCount:0}))};
+  const cases=['no_new_items','missing_endpoint','auth_failed','provider_failed'].map((expected,index)=>{
+    const acquisition=structuredClone(base);const profileId=roster.profiles[0].id;
+    const selected=acquisition.connectorAttempts.filter((attempt)=>attempt.profileId===profileId);
+    if(expected==='missing_endpoint')selected.forEach((attempt)=>Object.assign(attempt,{status:'missing_endpoint',
+      reasonCode:`${attempt.sourceKey}_endpoint_missing`,responseEvidence:{kind:'configuration',statusCode:null,responseBytes:0,itemCount:0,documentCount:0}}));
+    if(expected==='auth_failed')Object.assign(selected[0],{status:'auth_failed',reasonCode:'threads_oauth_missing',
+      responseEvidence:{kind:'configuration',statusCode:null,responseBytes:0,itemCount:0,documentCount:0}});
+    if(expected==='provider_failed')Object.assign(selected[0],{status:'provider_failed',reasonCode:'provider_transport_failed',
+      responseEvidence:{kind:'transport_error',statusCode:null,responseBytes:0,itemCount:0,documentCount:0}});
+    const suffix=String(index+70).padStart(12,'0');const runId=`71300000-0000-4000-8000-${suffix}`;
+    const jobId=`71400000-0000-4000-8000-${suffix}`;const token=`71500000-0000-4000-8000-${suffix}`;
+    const payload=JSON.stringify({schema:'legacy-source-sync-result-v3.11',sourceAcquisition:acquisition});
+    return `
+      INSERT INTO public.legacy_producer_runs_v3_11(run_id,owner_label,owner_token_hash,producer_commit_sha,worker_sha256,
+        scheduler_config_canonical,scheduler_config_sha256,legacy_seed_symbols,legacy_seed_set_hash,scheduled_occurrence_id,
+        source_cutoff,trading_date,trading_session_authority_hash,authority_canonical,authority_json,authority_hash,status,
+        started_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,logical_run_key,attempt)
+      VALUES('${runId}','com.stockinsider.auth-source-worker',encode(extensions.digest(convert_to('${token}','utf8'),'sha256'),'hex'),
+        repeat('a',40),repeat('b',64),decode('${legacyRuntimeConfigHex}','hex'),
+        '1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2',
+        (SELECT array_agg(value ORDER BY ordinal) FROM jsonb_array_elements_text(convert_from(
+          decode('${legacyRuntimeConfigHex}','hex'),'utf8')::jsonb->'legacySeedSymbols') WITH ORDINALITY seed(value,ordinal)),
+        'e6d9c09b8b552f5d9eaf389b76d2d90daa2d89578433d2a1ad63286888b3b743','terminal-${expected}',
+        '2026-08-09T10:20:00Z',NULL,NULL,convert_to('{}','utf8'),'{}',
+        encode(extensions.digest(convert_to('{}','utf8'),'sha256'),'hex'),'running',clock_timestamp(),clock_timestamp(),
+        clock_timestamp()+interval '120 seconds',NULL,NULL,repeat('${index+1}',64),1);
+      INSERT INTO public.legacy_producer_jobs_v3_11(job_id,run_id,stage,job_kind,stage_ordinal,shard_ordinal,
+        execution_ordinal,revision_id,predecessor_job_id,input_hash,payload_hash,status,attempt,max_attempts,
+        owner_token_hash,leased_at,heartbeat_at,lease_expires_at,terminal_at,failure_code)
+      VALUES('${jobId}','${runId}','source_sync','stage_barrier',0,NULL,0,NULL,NULL,repeat('1',64),repeat('1',64),
+        'leased',1,5,encode(extensions.digest(convert_to('${token}','utf8'),'sha256'),'hex'),clock_timestamp(),
+        clock_timestamp(),clock_timestamp()+interval '120 seconds',NULL,NULL);
+      DO $terminal_${index}$ DECLARE value jsonb:=${sqlLiteral(payload)}::jsonb;BEGIN
+        PERFORM * FROM public.complete_legacy_producer_job_v3_11('${runId}','${jobId}',
+          '${token}',convert_to(value::text,'utf8'),value,
+          encode(extensions.digest(convert_to(value::text,'utf8'),'sha256'),'hex'));
+      END $terminal_${index}$;
+      UPDATE public.legacy_producer_runs_v3_11 SET status='success',terminal_at=clock_timestamp()
+        WHERE run_id='${runId}';`;
+  }).join('\n');
+  const result=JSON.parse(psql(`BEGIN;${cases}
+    SELECT jsonb_object_agg(replace(run.scheduled_occurrence_id,'terminal-',''),outcome.status)::text
+    FROM public.legacy_producer_runs_v3_11 run JOIN public.legacy_source_acquisition_outcomes_v3_13 outcome
+      ON outcome.source_run_id=run.run_id AND outcome.profile_id=${sqlLiteral(roster.profiles[0].id)}
+    WHERE run.scheduled_occurrence_id LIKE 'terminal-%';ROLLBACK;`,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual(result,{auth_failed:'auth_failed',missing_endpoint:'missing_endpoint',
+    no_new_items:'no_new_items',provider_failed:'provider_failed'});
+});
+
 test('every principal-bound RPC rejects conflicting active role bindings', () => {
   const helperBody = sql.match(
     /CREATE OR REPLACE FUNCTION internal_principal_role_is_exact_v3_internal[\s\S]*?\n\$fn\$;/u,
@@ -613,6 +1349,13 @@ test('every principal-bound RPC rejects conflicting active role bindings', () =>
 });
 
 test('legacy producer resolves one scheduled occurrence and resumes the same deterministic SQL graph', () => {
+  const roster=JSON.parse(fs.readFileSync(path.join(root,'config/runtime/approved-source-roster-v3.13.json'),'utf8'));
+  const emptyAcquisition={schema:'official-source-acquisition-v3.13',collectedAt:'2026-08-09T10:20:00Z',documents:[],
+    itemOutcomes:[],connectorAttempts:roster.profiles.flatMap((profile)=>['threads','podcast','youtube'].map((sourceKey)=>({
+      profileId:profile.id,sourceKey,status:'successful_empty',reasonCode:`${sourceKey}_successful_empty`,
+      responseEvidence:{kind:'http_response',statusCode:200,responseBytes:2,itemCount:0,documentCount:0}}))),
+    outcomes:roster.profiles.map((profile)=>({profileId:profile.id,profileName:profile.name,documentCount:0}))};
+  const sourceResult={schema:'legacy-source-sync-result-v3.11',sourceAcquisition:emptyAcquisition};
   const result = JSON.parse(psql(`
     BEGIN;
     CREATE TEMP TABLE legacy_lease_capture AS
@@ -640,7 +1383,7 @@ test('legacy producer resolves one scheduled occurrence and resumes the same det
         '50000000-0000-4000-8000-000000000003',120
       );
     CREATE TEMP TABLE legacy_source_result AS
-      SELECT jsonb_build_object('schema','legacy-source-sync-result-v3.11') payload;
+      SELECT ${sqlLiteral(JSON.stringify(sourceResult))}::jsonb payload;
     CREATE TEMP TABLE legacy_complete_capture AS
       SELECT completion.*
       FROM legacy_source_result source
@@ -732,6 +1475,13 @@ test('legacy producer resolves one scheduled occurrence and resumes the same det
 });
 
 test('legacy analysis completion persists a typed material-revision evaluation', () => {
+  const decision={symbol:'2330',materialChangeHash:'a'.repeat(64),researchMaturity:'source_signal',
+    valuation:{status:'valuation_review'},action:'valuation_review',fundamental:{},technical:null,
+    claimId:'51000000-0000-4000-8000-000000000099',analysisGeneratedAt:'2026-08-08T12:00:00Z'};
+  const decisionBundle=runtime('codec.js').immutableBundle('legacy_analysis_fact_payload_v3_13',decision);
+  const analysisOutput={schema:'legacy-analysis-revision-result-v3.11',decisions:[decision],
+    decisionPayloads:[{symbol:'2330',materialChangeHash:'a'.repeat(64),bundle:decisionBundle}],
+    sourceCandidates:[],discoveryDelta:{added:[],exited:[],continued:[],unchangedReasons:[]}};
   const result = JSON.parse(psql(`
     BEGIN;
     INSERT INTO public.legacy_producer_runs_v3_11(
@@ -783,20 +1533,7 @@ test('legacy analysis completion persists a typed material-revision evaluation',
     ) SELECT '51000000-0000-4000-8000-000000000011',convert_to(value::text,'utf8'),value,
       encode(extensions.digest(convert_to(value::text,'utf8'),'sha256'),'hex') FROM facts;
     CREATE TEMP TABLE legacy_analysis_complete_capture AS
-      WITH output(value) AS (VALUES(jsonb_build_object(
-        'schema','legacy-analysis-revision-result-v3.11','decisions',jsonb_build_array(
-          jsonb_build_object(
-            'symbol','2330','materialChangeHash',repeat('a',64),
-            'researchMaturity','source_signal','valuation',jsonb_build_object('status','valuation_review'),
-            'action','valuation_review','fundamental','{}'::jsonb,'technical',NULL,
-            'claimId','51000000-0000-4000-8000-000000000099',
-            'analysisGeneratedAt','2026-08-08T12:00:00Z'
-          )
-        ),'sourceCandidates','[]'::jsonb,'discoveryDelta',jsonb_build_object(
-          'added','[]'::jsonb,'exited','[]'::jsonb,'continued','[]'::jsonb,
-          'unchangedReasons','[]'::jsonb
-        )
-      )))
+      WITH output(value) AS (VALUES(${sqlLiteral(JSON.stringify(analysisOutput))}::jsonb))
       SELECT completion.* FROM output CROSS JOIN LATERAL public.complete_legacy_producer_job_v3_11(
         '51000000-0000-4000-8000-000000000001','51000000-0000-4000-8000-000000000012',
         '51000000-0000-4000-8000-000000000010',convert_to(output.value::text,'utf8'),output.value,
@@ -821,6 +1558,81 @@ test('legacy analysis completion persists a typed material-revision evaluation',
     nextStage: 'compact_radar_projection',
     revisionCount: 1,
   });
+});
+
+test('V3.13 invalid completion is zero-write and analysis claims replay the exact immutable fact payload',()=>{
+  const codec=runtime('codec.js');
+  const priorFact={symbol:'9196',materialChangeHash:'e'.repeat(64),
+    decisionBrief:{action:'wait_reclaim',thesis:['a','b','c'],risks:['d','e','f']},
+    analysisGeneratedAt:'2026-08-07T10:20:00Z'};
+  const priorBundle=codec.immutableBundle('legacy_analysis_fact_payload_v3_13',priorFact);
+  const result=JSON.parse(psql(`
+    BEGIN;
+    INSERT INTO public.legacy_analysis_revisions_v3_11(revision_id,symbol,source_cutoff,material_change_hash,
+      prior_revision_id,research_maturity,formal_research_status,new_position_action,fundamental_snapshot_hash,
+      technical_decision_hash,valuation_input_hash,locked_claims,narrative_template_version,sentence_claim_refs,
+      narrative,narrative_hash,analysis_generated_at,producer_commit_sha,recorded_at)
+    VALUES('51960000-0000-4000-8000-000000000001','9196','2026-08-07T10:20:00Z',repeat('e',64),NULL,
+      'source_signal','valuation_review','valuation_review',repeat('1',64),NULL,NULL,'[]','fixture','[]','fixture',
+      repeat('2',64),'2026-08-07T10:20:00Z',repeat('a',40),'2026-08-07T10:20:00Z');
+    INSERT INTO public.legacy_analysis_revision_payloads_v3_13(revision_id,symbol,material_change_hash,
+      payload_canonical,payload_json,payload_sha256,recorded_at)
+    VALUES('51960000-0000-4000-8000-000000000001','9196',repeat('e',64),
+      decode('${Buffer.from(priorBundle.canonical).toString('hex')}','hex'),${sqlLiteral(priorBundle.canonical)}::jsonb,
+      '${priorBundle.hash}','2026-08-07T10:20:00Z');
+    INSERT INTO public.legacy_producer_runs_v3_11(run_id,owner_label,owner_token_hash,producer_commit_sha,
+      worker_sha256,scheduler_config_canonical,scheduler_config_sha256,legacy_seed_symbols,legacy_seed_set_hash,
+      scheduled_occurrence_id,source_cutoff,trading_date,trading_session_authority_hash,authority_canonical,
+      authority_json,authority_hash,status,started_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,
+      logical_run_key,attempt)
+    VALUES('51960000-0000-4000-8000-000000000010','com.stockinsider.auth-source-worker',
+      encode(extensions.digest(convert_to('51960000-0000-4000-8000-000000000099','utf8'),'sha256'),'hex'),
+      repeat('a',40),repeat('b',64),decode('${legacyRuntimeConfigHex}','hex'),
+      '1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2',
+      (SELECT array_agg(value ORDER BY ordinal) FROM jsonb_array_elements_text(
+        convert_from(decode('${legacyRuntimeConfigHex}','hex'),'utf8')::jsonb->'legacySeedSymbols')
+        WITH ORDINALITY seed(value,ordinal)),
+      'e6d9c09b8b552f5d9eaf389b76d2d90daa2d89578433d2a1ad63286888b3b743','v313-replay',
+      '2026-08-08T10:20:00Z',NULL,NULL,convert_to('{}','utf8'),'{}',
+      encode(extensions.digest(convert_to('{}','utf8'),'sha256'),'hex'),'running',clock_timestamp(),
+      clock_timestamp(),clock_timestamp()+interval '120 seconds',NULL,NULL,repeat('3',64),1);
+    INSERT INTO public.legacy_producer_jobs_v3_11(job_id,run_id,stage,job_kind,stage_ordinal,shard_ordinal,
+      execution_ordinal,revision_id,predecessor_job_id,input_hash,payload_hash,status,attempt,max_attempts,
+      owner_token_hash,leased_at,heartbeat_at,lease_expires_at,terminal_at,failure_code)
+    VALUES
+      ('51960000-0000-4000-8000-000000000011','51960000-0000-4000-8000-000000000010','facts_refresh',
+       'stage_barrier',3,NULL,0,NULL,NULL,repeat('4',64),repeat('4',64),'succeeded',1,5,
+       NULL,NULL,NULL,NULL,clock_timestamp(),NULL),
+      ('51960000-0000-4000-8000-000000000012','51960000-0000-4000-8000-000000000010','analysis_revision',
+       'stage_barrier',4,NULL,1,NULL,'51960000-0000-4000-8000-000000000011',repeat('5',64),repeat('5',64),
+       'queued',0,5,NULL,NULL,NULL,NULL,NULL,NULL);
+    WITH value AS(SELECT jsonb_build_object('schema','legacy-facts-refresh-result-v3.11','decisions',
+      jsonb_build_array(jsonb_build_object('symbol','9196','materialChangeHash',repeat('e',64)))) payload)
+    INSERT INTO public.legacy_producer_job_results_v3_11(job_id,result_canonical,result_json,result_hash)
+    SELECT '51960000-0000-4000-8000-000000000011',convert_to(payload::text,'utf8'),payload,
+      encode(extensions.digest(convert_to(payload::text,'utf8'),'sha256'),'hex') FROM value;
+    WITH value AS(SELECT '{}'::jsonb payload)
+    INSERT INTO public.legacy_producer_job_payloads_v3_11(job_id,payload_canonical,payload_json,payload_hash)
+    SELECT '51960000-0000-4000-8000-000000000012',convert_to(payload::text,'utf8'),payload,
+      encode(extensions.digest(convert_to(payload::text,'utf8'),'sha256'),'hex') FROM value;
+    CREATE TEMP TABLE exact_claim AS SELECT * FROM public.claim_legacy_producer_job_v3_11(
+      '51960000-0000-4000-8000-000000000010','51960000-0000-4000-8000-000000000012',
+      '51960000-0000-4000-8000-000000000099',120);
+    CREATE TEMP TABLE invalid_complete AS SELECT * FROM public.complete_legacy_producer_job_v3_11(
+      '51960000-0000-4000-8000-000000000010','51960000-0000-4000-8000-000000000012',
+      '51960000-0000-4000-8000-000000000098',convert_to('{}','utf8'),'{}'::jsonb,
+      encode(extensions.digest(convert_to('{}','utf8'),'sha256'),'hex'));
+    SELECT jsonb_build_object(
+      'brief',(SELECT read_json#>>'{priorRevisions,0,facts,decisionBrief,action}' FROM exact_claim),
+      'hashValid',(SELECT read_hash=encode(extensions.digest(read_canonical,'sha256'),'hex') FROM exact_claim),
+      'invalidRows',(SELECT count(*) FROM invalid_complete),
+      'jobStatus',(SELECT status::text FROM public.legacy_producer_jobs_v3_11
+        WHERE job_id='51960000-0000-4000-8000-000000000012'),
+      'newPayloadRows',(SELECT count(*) FROM public.legacy_analysis_revision_payloads_v3_13
+        WHERE revision_id<>'51960000-0000-4000-8000-000000000001'))::text;
+    ROLLBACK;
+  `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual(result,{brief:'wait_reclaim',hashValid:true,invalidRows:0,jobStatus:'leased',newPayloadRows:0});
 });
 
 test('legacy producer advances exactly once for newly recorded material authority outside the scheduled cutoff', () => {
@@ -1184,6 +1996,12 @@ test('applied catalog has the closed section enum, RLS and security-barrier view
 });
 
 test('applied catalog exposes exact composite arities, named indexes and primary-key coverage', () => {
+  const sourceCatalogFixtureBytes=fs.readFileSync(path.join(root,'scripts/opportunity-v3/fixtures/v313-source-plane-catalog-v1.json'));
+  assert.equal(createHash('sha256').update(sourceCatalogFixtureBytes).digest('hex'),
+    '43a951d6f087eebc8aed8a8a02bccbdef886577dd0c22c50bb4ca07fac221569');
+  const { schema:sourceCatalogSchema,...expectedSourceCatalog }=JSON.parse(sourceCatalogFixtureBytes);
+  assert.equal(sourceCatalogSchema,'v313-source-plane-catalog-oracle-v1');
+  const sourceTables=Object.keys(expectedSourceCatalog.columns);
   const expectedCompositeArities = Object.fromEntries([
     ['source_identity_authority_input_v3', 7],
     ['publisher_authority_input_v3', 8],
@@ -1335,6 +2153,83 @@ test('applied catalog exposes exact composite arities, named indexes and primary
   ]);
   assert.deepEqual(catalog.missingIndexes, []);
   assert.deepEqual(catalog.missingPrimaryKeys, []);
+    const sourceCatalog=JSON.parse(psql(`
+    WITH requested(table_name) AS (SELECT unnest(ARRAY[${sourceTables.map((name)=>`'${name}'`).join(',')}])::text),
+    source_shapes AS (
+      SELECT class.relname,
+        count(DISTINCT constraint_row.oid) FILTER(WHERE constraint_row.contype='p') primary_count,
+        count(DISTINCT constraint_row.oid) FILTER(WHERE constraint_row.contype='f') foreign_count,
+        count(DISTINCT constraint_row.oid) FILTER(WHERE constraint_row.contype='c') check_count,
+        count(DISTINCT trigger.oid) FILTER(WHERE trigger.tgname LIKE '%_immutable') immutable_count
+      FROM pg_class class JOIN pg_namespace namespace ON namespace.oid=class.relnamespace
+      JOIN requested ON requested.table_name=class.relname
+      LEFT JOIN pg_constraint constraint_row ON constraint_row.conrelid=class.oid
+      LEFT JOIN pg_trigger trigger ON trigger.tgrelid=class.oid AND NOT trigger.tgisinternal
+      WHERE namespace.nspname='public' GROUP BY class.relname
+    ), source_constraints AS (
+      SELECT class.relname,jsonb_agg(jsonb_build_array(constraint_row.contype,
+        pg_get_constraintdef(constraint_row.oid,true))
+        ORDER BY constraint_row.contype,pg_get_constraintdef(constraint_row.oid,true)) definitions
+      FROM pg_class class JOIN pg_namespace namespace ON namespace.oid=class.relnamespace
+      JOIN requested ON requested.table_name=class.relname
+      JOIN pg_constraint constraint_row ON constraint_row.conrelid=class.oid
+      WHERE namespace.nspname='public' GROUP BY class.relname
+    ), source_triggers AS (
+      SELECT class.relname,jsonb_agg(jsonb_build_array(trigger.tgname,trigger.tgtype,
+        function_namespace.nspname||'.'||function.proname,encode(trigger.tgargs,'hex'),trigger.tgenabled,
+        pg_get_triggerdef(trigger.oid,true),coalesce(pg_get_expr(trigger.tgqual,trigger.tgrelid),''))
+        ORDER BY trigger.tgname) definitions
+      FROM pg_class class JOIN pg_namespace namespace ON namespace.oid=class.relnamespace
+      JOIN requested ON requested.table_name=class.relname
+      JOIN pg_trigger trigger ON trigger.tgrelid=class.oid AND NOT trigger.tgisinternal
+      JOIN pg_proc function ON function.oid=trigger.tgfoid
+      JOIN pg_namespace function_namespace ON function_namespace.oid=function.pronamespace
+      WHERE namespace.nspname='public' GROUP BY class.relname
+    ), source_acl AS (
+      SELECT class.relname,coalesce(jsonb_agg(jsonb_build_array(coalesce(grantee.rolname,'PUBLIC'),
+        privilege.privilege_type,privilege.is_grantable)
+        ORDER BY coalesce(grantee.rolname,'PUBLIC'),privilege.privilege_type)
+        FILTER(WHERE privilege.grantee IS DISTINCT FROM class.relowner),'[]'::jsonb) grants
+      FROM pg_class class JOIN pg_namespace namespace ON namespace.oid=class.relnamespace
+      JOIN requested ON requested.table_name=class.relname
+      LEFT JOIN LATERAL aclexplode(class.relacl) privilege ON true
+      LEFT JOIN pg_roles grantee ON grantee.oid=privilege.grantee
+      WHERE namespace.nspname='public' GROUP BY class.relname
+    )
+    SELECT jsonb_build_object(
+      'columns',(SELECT jsonb_object_agg(table_name,columns ORDER BY table_name) FROM (
+        SELECT column_row.table_name,jsonb_agg(jsonb_build_array(column_row.column_name,column_row.udt_name,
+          column_row.is_nullable,column_row.column_default) ORDER BY column_row.ordinal_position) columns
+        FROM information_schema.columns column_row JOIN requested USING(table_name)
+        WHERE column_row.table_schema='public' GROUP BY column_row.table_name
+      ) shaped),
+      'security',(SELECT jsonb_object_agg(class.relname,jsonb_build_array(role.rolname,class.relrowsecurity,
+        class.relforcerowsecurity,(SELECT count(*) FROM pg_policy policy WHERE policy.polrelid=class.oid),
+        has_table_privilege('service_role',class.oid,'SELECT,INSERT,UPDATE,DELETE,TRUNCATE'),
+        has_table_privilege('anon',class.oid,'SELECT,INSERT,UPDATE,DELETE,TRUNCATE'),
+        has_table_privilege('authenticated',class.oid,'SELECT,INSERT,UPDATE,DELETE,TRUNCATE')) ORDER BY class.relname)
+        FROM pg_class class JOIN pg_namespace namespace ON namespace.oid=class.relnamespace
+        JOIN pg_roles role ON role.oid=class.relowner JOIN requested ON requested.table_name=class.relname
+        WHERE namespace.nspname='public'),
+      'shape',(SELECT jsonb_object_agg(relname,jsonb_build_array(primary_count,foreign_count,
+        check_count,immutable_count) ORDER BY relname) FROM source_shapes),
+      'constraints',(SELECT jsonb_object_agg(relname,definitions ORDER BY relname) FROM source_constraints),
+      'triggers',(SELECT coalesce(jsonb_object_agg(relname,definitions ORDER BY relname),'{}'::jsonb) FROM source_triggers),
+      'acl',(SELECT jsonb_object_agg(relname,grants ORDER BY relname) FROM source_acl)
+    )::text;
+  `,['-At']).trim());
+  assert.deepEqual(sourceCatalog,expectedSourceCatalog,
+    'all eight source relations byte-match the independent columns/constraints/triggers/RLS/owner/ACL oracle');
+  const sourceContractSql=decisionIntegritySql.replace(/\s+/gu,' ');
+  for(const required of [
+    "successful_empty' OR (response_kind='http_response' AND response_status_code BETWEEN 200 AND 299",
+    "metadata_only' OR (response_kind='http_response' AND response_status_code BETWEEN 200 AND 299",
+    "auth_failed' OR ((response_kind='configuration' AND response_status_code IS NULL)",
+    "missing_endpoint' OR ((response_kind='configuration' AND response_status_code IS NULL)",
+    "provider_failed' OR response_kind='transport_error'",
+    "new_revision_count+unchanged_count+deferred_count+rejected_count=acquired_document_count",
+    "distribution_identity=source_key::text||':'||profile_id",
+  ]) assert.ok(sourceContractSql.includes(required),`missing normative source constraint: ${required}`);
   const sessionPlan = psql(`
     SET enable_seqscan=off;
     EXPLAIN (FORMAT JSON)
@@ -1908,6 +2803,32 @@ test('authority append RPCs recompute source hashes and converge roster sector c
       )::public.trading_session_input_v3,
       '41000000-0000-4000-8000-000000000001'
     );
+    SELECT * FROM public.append_price_authority_v3(
+      ROW('raw_price',ROW(
+        '41000000-0000-4000-8000-000000000004','TWSE','2026-07-24',
+        (SELECT session_authority_id FROM public.tw_trading_sessions_v3
+          WHERE market='TWSE' AND session_id='2026-07-24' LIMIT 1),
+        99,101,98,100,1000000,100000000,'twse','2026-07-24T06:30:00Z','2026-07-24T06:31:00Z',
+        'twse-rwd:STOCK_DAY:2026-07-24:2330'
+      )::public.price_observation_input_v3,NULL,NULL)::public.price_authority_input_v3,
+      '41000000-0000-4000-8000-000000000001'
+    );
+    SELECT * FROM public.append_price_authority_v3(
+      ROW('corporate_action_snapshot',NULL,ROW(
+        'TWSE','2026-07-24',
+        (SELECT session_authority_id FROM public.tw_trading_sessions_v3
+          WHERE market='TWSE' AND session_id='2026-07-24' LIMIT 1),
+        'tw-corporate-action-v3.1','twse','2026-07-24T06:31:00Z',
+        ARRAY[
+          ROW('twse:twt49u:v1',100,repeat('a',64),1)::public.corporate_action_feed_evidence_input_v3,
+          ROW('twse:twtauu:v1',100,repeat('b',64),0)::public.corporate_action_feed_evidence_input_v3,
+          ROW('twse:twtb8u:v1',100,repeat('c',64),0)::public.corporate_action_feed_evidence_input_v3
+        ],1,ARRAY[
+          ROW('2330','ex_right_dividend',100,95,'twse:twt49u:v1',${sqlLiteral(v313CorporateActionSourceRef)})::public.corporate_action_event_input_v3
+        ]
+      )::public.corporate_action_snapshot_input_v3,NULL)::public.price_authority_input_v3,
+      '41000000-0000-4000-8000-000000000001'
+    );
     SELECT * FROM public.append_trading_session_v3(
       ROW(
         '2026-07-24','TPEX','2026-07-24T01:00:00Z','2026-07-24T05:30:00Z',
@@ -1952,6 +2873,12 @@ test('authority append RPCs recompute source hashes and converge roster sector c
         WHERE stock_id='41000000-0000-4000-8000-000000000004'),
       'sessionRows',(SELECT count(*) FROM public.tw_trading_sessions_v3
         WHERE market='TWSE' AND session_id='2026-07-24'),
+      'rawPriceRows',(SELECT count(*) FROM public.opportunity_price_observations_v3
+        WHERE stock_id='41000000-0000-4000-8000-000000000004' AND session_id='2026-07-24'),
+      'actionSnapshotRows',(SELECT count(*) FROM public.opportunity_corporate_action_snapshots_v3
+        WHERE exchange='TWSE' AND session_id='2026-07-24'),
+      'actionEventRows',(SELECT count(*) FROM public.opportunity_corporate_action_events_v3
+        WHERE symbol='2330'),
       'marketRows',(SELECT count(*) FROM public.opportunity_market_observations_v3
         WHERE fact_key='taiex_close' AND authority_date='2026-07-24')
     )::text;
@@ -1967,6 +2894,9 @@ test('authority append RPCs recompute source hashes and converge roster sector c
     },
     sectorRows: 1,
     sessionRows: 1,
+    rawPriceRows: 1,
+    actionSnapshotRows: 1,
+    actionEventRows: 1,
     marketRows: 1,
   });
   assert.match(rejectedSql(`
@@ -2051,7 +2981,14 @@ test('authority registries enforce exact 64/65 family bounds and serialized boun
 	      'append_trading_session_v3',
 	      'enqueue_next_opportunity_job_v3_internal',
 	      'opportunity_authority_selected_stream_count_v3_internal',
-	      'opportunity_peer_authority_header_counts_v3_internal'
+	      'opportunity_peer_authority_header_counts_v3_internal',
+        'resolve_legacy_instrument_authority_v3_13',
+        'resolve_legacy_instrument_authority_v3_13_internal',
+        'resolve_legacy_instrument_symbol_authority_v3_13_internal',
+        'resolve_legacy_sector_authority_v3_13',
+        'resolve_legacy_sector_authority_v3_13_internal',
+        'resolve_legacy_trading_session_authority_v3_13',
+        'resolve_legacy_trading_session_window_v3_13'
 	    );
 	  `, ['-At']).trim());
   const familyBounds = {
@@ -2101,6 +3038,19 @@ test('authority registries enforce exact 64/65 family bounds and serialized boun
   );
   assert.match(functionDefinitions.opportunity_authority_selected_stream_count_v3_internal, /LIMIT 65/u);
   assert.match(functionDefinitions.opportunity_authority_selected_stream_count_v3_internal, /authority_revision_conflict/u);
+  assert.match(functionDefinitions.resolve_legacy_instrument_authority_v3_13,
+    /opportunity_authority_selected_stream_count_v3_internal\('instrument_roster'/u);
+  assert.match(functionDefinitions.resolve_legacy_instrument_authority_v3_13_internal,/LIMIT 65/u);
+  assert.match(functionDefinitions.resolve_legacy_instrument_symbol_authority_v3_13_internal,/LIMIT 20001/u);
+  assert.doesNotMatch(functionDefinitions.resolve_legacy_instrument_symbol_authority_v3_13_internal,
+    /FROM public[.]stock_instruments_v3 candidate/u);
+  assert.match(functionDefinitions.resolve_legacy_sector_authority_v3_13,
+    /opportunity_authority_selected_stream_count_v3_internal\('sector_assignment'/u);
+  assert.match(functionDefinitions.resolve_legacy_sector_authority_v3_13_internal,/LIMIT 65/u);
+  assert.match(functionDefinitions.resolve_legacy_trading_session_authority_v3_13,/LIMIT 1025/u);
+  assert.match(functionDefinitions.resolve_legacy_trading_session_authority_v3_13,/v_retained>1024/u);
+  assert.match(functionDefinitions.resolve_legacy_trading_session_window_v3_13,/LIMIT 513/u);
+  assert.match(functionDefinitions.resolve_legacy_trading_session_window_v3_13,/v_stream_count>512/u);
   assert.match(functionDefinitions.enqueue_next_opportunity_job_v3_internal, /opportunity_authority_selected_stream_count_v3_internal/u);
   assert.match(functionDefinitions.enqueue_next_opportunity_job_v3_internal, /opportunity_peer_authority_header_counts_v3_internal/u);
   assert.doesNotMatch(functionDefinitions.enqueue_next_opportunity_job_v3_internal, /exclusionReasonCounts','\{\}'::jsonb/u);
@@ -3166,7 +4116,7 @@ test('applied begin creates one deterministic canonical v3.3 bootstrap job and p
     decoded.comparisonContractKey,
     digest(['opportunity-comparison-contract-v3.0', ['staticIdentityMembers', staticIdentityMembers]]),
   );
-  assert.equal(decoded.comparisonContractKey, 'ebaa6dbdaa7dd55bb261187008f51e930919e7c0cfe07732d531e01267e67c41');
+  assert.equal(decoded.comparisonContractKey, 'c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729');
   assert.equal(decoded.evaluationDatasetLockHash, null);
   assert.equal(decoded.preparationKey, digest([
     'opportunity-preparation-v3.0',
@@ -3803,7 +4753,7 @@ test('all four mode graphs use closed reads; enrich executes nonempty normalized
         '123e4567-e89b-42d3-a456-426614177901',repeat('7',64),repeat('7',64),1,
         'enrich_rank','backtest_daily_primary','2026-04-01',
         '2026-04-01T08:00:00Z',
-        'ebaa6dbdaa7dd55bb261187008f51e930919e7c0cfe07732d531e01267e67c41',
+        'c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729',
         encode(extensions.digest(convert_to('source-led-eval-v3.7','utf8'),'sha256'),'hex'),
         'success','2026-04-01T08:00:01Z','2026-04-01T08:00:02Z',
         '2026-04-01T08:00:03Z','2026-04-01T08:00:01Z'
@@ -3812,7 +4762,7 @@ test('all four mode graphs use closed reads; enrich executes nonempty normalized
         '123e4567-e89b-42d3-a456-426614177902',repeat('8',64),repeat('8',64),1,
         'label_outcomes','outcome_label_daily','2026-07-20',
         '2026-07-20T09:00:00Z',
-        'ebaa6dbdaa7dd55bb261187008f51e930919e7c0cfe07732d531e01267e67c41',
+        'c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729',
         encode(extensions.digest(convert_to('source-led-eval-v3.7','utf8'),'sha256'),'hex'),
         'success','2026-07-20T09:00:01Z','2026-07-20T09:00:02Z',
         '2026-07-20T09:00:03Z','2026-07-20T09:00:01Z'
@@ -4171,6 +5121,1306 @@ test('all four mode graphs use closed reads; enrich executes nonempty normalized
   }
 });
 
+test('V3.13 PB authority is typed and audited while NAV history is point-in-time per distinct session', () => {
+  assert.match(decisionIntegritySql,/LIMIT 1261/u);
+  assert.doesNotMatch(decisionIntegritySql,/candidate_history WHERE rank<=253/u);
+  assert.match(decisionIntegritySql,/PERFORM public[.]append_financial_fact_v3/u);
+  assert.doesNotMatch(decisionIntegritySql,/INSERT INTO public[.]opportunity_financial_facts_v3[(]stock_id/u);
+  assert.match(decisionIntegritySql,
+    /INSERT INTO public[.]legacy_decision_revision_evaluations_v3_13[(]decision_revision_id,projection_id,[\s\S]*?ON CONFLICT[(]decision_revision_id,evaluated_at[)] DO NOTHING/u);
+  assert.doesNotMatch(decisionIntegritySql,/first_projection_id uuid|source_led_correctness jsonb NOT NULL,[\s\S]{0,200}recorded_at timestamptz[\s\S]{0,200}UNIQUE[(]symbol,decision_payload_sha256[)]/u);
+  assert.match(decisionIntegritySql,/projection_id uuid NOT NULL,\s+source_led_correctness jsonb NOT NULL/u);
+  assert.doesNotMatch(decisionIntegritySql,/projection_id uuid NOT NULL REFERENCES public[.]legacy_radar_projections_v3_11/u);
+  assert.match(decisionIntegritySql,/GRANT SELECT ON TABLE public[.]legacy_radar_projections_v3_11 TO opportunity_v3_rpc_owner/u);
+  assert.match(decisionIntegritySql,/CREATE POLICY legacy_radar_projections_v3_11_v313_completion_read[\s\S]*FOR SELECT TO opportunity_v3_rpc_owner USING [(]true[)]/u);
+  assert.match(decisionIntegritySql,/v_existing_correctness<>v_item->'sourceLedCorrectness'[\s\S]*decision_evaluation_checksum_conflict/u);
+  assert.match(decisionIntegritySql,/resolve_legacy_instrument_authority_v3_13[\s\S]{0,240}selected[.]instrument_type='common_stock' AND selected[.]listing_status='active'/u);
+  assert.match(decisionIntegritySql,/resolve_legacy_sector_authority_v3_13[\s\S]{0,260}selected[.]status='active'/u);
+  assert.doesNotMatch(decisionIntegritySql,/CASE WHEN value->>'exchange'='TPEX'[\s\S]{0,120}ELSE 'TWSE'/u);
+  assert.match(decisionIntegritySql,/selected[.]exchange=observation[.]exchange AND selected[.]instrument_type='common_stock'/u);
+  const sharesResultDefinition=decisionIntegritySql.slice(
+    decisionIntegritySql.indexOf('CREATE OR REPLACE FUNCTION public.resolve_legacy_official_shares_result_v3_13'),
+    decisionIntegritySql.indexOf('CREATE OR REPLACE FUNCTION public.read_legacy_candidate_fact_plane_v3_11'));
+  assert.match(sharesResultDefinition,/authority_conflict/u);
+  const result=JSON.parse(psql(`
+    BEGIN;
+    INSERT INTO public.internal_principal_role_bindings_v3(principal_id,role,valid_from,valid_to,status,configuration_hash,recorded_at)
+    VALUES('a11d4e67-7d0a-4c44-8a9d-1d5c3b875001','opportunity_runner','2026-01-01',NULL,'active',repeat('7',64),clock_timestamp());
+    INSERT INTO public.stocks(id,symbol) VALUES('71300000-0000-4000-8000-000000000070','9170');
+    WITH keys(family,canonical) AS(VALUES
+      ('instrument_roster'::public.authority_stream_family_v3,convert_to('["instrument_roster","71300000-0000-4000-8000-000000000070"]','utf8')),
+      ('sector_assignment'::public.authority_stream_family_v3,convert_to('["sector_assignment","71300000-0000-4000-8000-000000000070","TWSE"]','utf8')))
+    INSERT INTO public.opportunity_authority_stream_registry_v3(family,stream_key_hash,stream_key_canonical,registered_at)
+    SELECT family,encode(extensions.digest(canonical,'sha256'),'hex'),canonical,'2026-01-01' FROM keys;
+    INSERT INTO public.stock_instruments_v3(instrument_authority_id,stock_id,symbol,exchange,instrument_type,
+      listing_status,official_legal_name,official_short_name,provider,source_timestamp,valid_from,valid_to,
+      roster_version,recorded_at)
+    VALUES('71300000-0000-4000-8000-000000000071','71300000-0000-4000-8000-000000000070','9170','TWSE',
+      'common_stock','active','V313 NAV Fixture','NAV9170','twse','2026-01-01','2026-01-01',NULL,
+      'tw-instrument-roster-v3.0','2026-01-01');
+    INSERT INTO public.stock_sector_assignments_v3(assignment_authority_id,stock_id,market,official_industry_code,
+      canonical_sector_key,provider,source_timestamp,valid_from,valid_to,taxonomy_version,status,recorded_at)
+    VALUES('71300000-0000-4000-8000-000000000077','71300000-0000-4000-8000-000000000070','TWSE','20',
+      'other','twse','2026-01-01','2026-01-01',NULL,'tw-sector-taxonomy-v3.0','active','2026-01-01');
+    INSERT INTO public.tw_trading_sessions_v3(session_authority_id,session_id,market,open_at,close_at,status,
+      provider,source_timestamp,collected_at,source_ref,recorded_at)
+    SELECT extensions.gen_random_uuid(),day,'TWSE',day::timestamp+time '01:00',day::timestamp+time '05:30',
+      'completed','twse',day::timestamp+time '05:30',day::timestamp+time '06:00','twse-calendar:di008:'||day,
+      day::timestamp+time '06:00'
+    FROM generate_series('2026-03-24'::date,'2026-07-22'::date,interval '1 day') series(day);
+    INSERT INTO public.tw_trading_sessions_v3(session_authority_id,session_id,market,open_at,close_at,status,
+      provider,source_timestamp,collected_at,source_ref,recorded_at)
+    VALUES
+      ('71300000-0000-4000-8000-000000000074','2026-05-12','TWSE','2026-05-12T01:00:00Z',
+       '2026-05-12T05:30:00Z','completed','twse','2026-05-12T05:30:00Z',clock_timestamp()-interval '3 seconds',
+       'twse-calendar:9170:completed',clock_timestamp()-interval '2 seconds'),
+      ('71300000-0000-4000-8000-000000000076','2026-05-13','TWSE','2026-05-13T01:00:00Z',
+       '2026-05-13T05:30:00Z','completed','twse','2026-05-13T05:30:00Z',clock_timestamp()-interval '3 seconds',
+       'twse-calendar:9170:completed-0513',clock_timestamp()-interval '2 seconds');
+    INSERT INTO public.opportunity_financial_facts_v3(fact_id,stock_id,fact_key,period_start,period_end,duration_kind,
+      value,unit,provider,authority_tier,estimate_kind,estimate_horizon,filing_published_at,source_timestamp,
+      collected_at,filing_restatement_id,source_ref,recorded_at)
+    VALUES
+      ('71300000-0000-4000-8000-000000000072','71300000-0000-4000-8000-000000000070','net_asset_value',NULL,
+       '2026-04-30','instant',5000000,'TWD_thousand','twse','official_filing','reported','reported_period',
+       '2026-05-01T00:00:00Z','2026-05-01T00:00:00Z','2026-05-01T01:00:00Z',NULL,'twse-openapi:nav:old','2026-05-01T01:00:00Z'),
+      ('71300000-0000-4000-8000-000000000073','71300000-0000-4000-8000-000000000070','net_asset_value',NULL,
+       '2026-05-13','instant',10000000,'TWD_thousand','twse','official_filing','reported','reported_period',
+       '2026-05-13T00:00:00Z','2026-05-13T00:00:00Z','2026-05-13T01:00:00Z',NULL,'twse-openapi:nav:new','2026-05-13T01:00:00Z'),
+      ('71300000-0000-4000-8000-000000000078','71300000-0000-4000-8000-000000000070','ev_sales_multiple',NULL,
+       '2026-05-10','quarter_end',3,'dimensionless','twse','official_filing','reported','reported_period',
+       '2026-05-12T05:30:00Z','2026-05-12T05:30:00Z','2026-05-12T05:30:00Z',NULL,
+       'twse-openapi:ev-sales:exact-close','2026-05-12T05:30:00Z'),
+      ('71300000-0000-4000-8000-000000000079','71300000-0000-4000-8000-000000000070','ev_sales_multiple',NULL,
+       '2026-05-10','quarter_end',9,'dimensionless','twse','official_filing','reported','reported_period',
+       '2026-05-12T05:30:01Z','2026-05-12T05:30:01Z','2026-05-12T05:31:00Z',NULL,
+       'twse-openapi:ev-sales:post-close','2026-05-12T05:31:00Z');
+    SELECT * FROM public.append_exchange_reported_valuation_v3_13(ROW(
+      '71300000-0000-4000-8000-000000000070','TWSE','2026-05-12',100,NULL,1.2,
+      '2026-05-12T06:30:00Z','2026-05-12T06:30:00Z',now(),'twse-openapi:BWIBBU_ALL:2026-05-12:9170'
+    )::public.exchange_reported_valuation_input_v3_13,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+    SELECT * FROM public.append_exchange_reported_valuation_v3_13(ROW(
+      '71300000-0000-4000-8000-000000000070','TWSE','2026-05-13',100,NULL,1.1,
+      '2026-05-13T06:30:00Z','2026-05-13T06:30:00Z',now(),'twse-openapi:BWIBBU_ALL:2026-05-13:9170'
+    )::public.exchange_reported_valuation_input_v3_13,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+    SELECT * FROM public.append_exchange_reported_valuation_v3_13(ROW(
+      '71300000-0000-4000-8000-000000000070','TWSE','2026-05-13',100,NULL,1.1,
+      '2026-05-13T06:30:00Z','2026-05-13T06:30:00Z',now(),'twse-openapi:BWIBBU_ALL:2026-05-13:9170'
+    )::public.exchange_reported_valuation_input_v3_13,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+    WITH plane AS(SELECT public.read_legacy_candidate_fact_plane_v3_11(clock_timestamp(),jsonb_build_object('candidates',
+      jsonb_build_array(jsonb_build_object('stockId','71300000-0000-4000-8000-000000000070','symbol','9170',
+        'deepSelected',true,'exchange','TWSE')))) value),rows AS(
+      SELECT item.value row_value FROM plane,jsonb_array_elements(plane.value->'reportedPeRows') item(value)
+      WHERE item.value->>0='9170')
+    SELECT jsonb_build_object(
+      'pbRows',(SELECT count(*) FROM public.opportunity_exchange_reported_pe_v3 WHERE stock_id='71300000-0000-4000-8000-000000000070'),
+      'appendAudits',(SELECT count(*) FROM public.opportunity_rpc_audit_v3 WHERE caller_principal_id='a11d4e67-7d0a-4c44-8a9d-1d5c3b875001'
+        AND function_name='append_price_authority_v3' AND subject_kind='exchange_reported_pe'),
+      'seriesRows',(SELECT count(*) FROM public.opportunity_financial_fact_series_registry_v3
+        WHERE stock_id='71300000-0000-4000-8000-000000000070'),
+      'seriesTriggers',(SELECT count(*) FROM pg_trigger trigger JOIN pg_class relation ON relation.oid=trigger.tgrelid
+        WHERE relation.relname IN('opportunity_financial_facts_v3','opportunity_financial_fact_series_registry_v3')
+          AND trigger.tgname LIKE '%series%'),
+      'v313Rls',(SELECT count(*) FROM pg_class relation WHERE relation.relname IN(
+        'legacy_source_document_persistence_v3_13','legacy_source_acquisition_outcomes_v3_13',
+        'legacy_source_item_outcomes_v3_13','legacy_source_processing_outcomes_v3_13',
+        'legacy_decision_revisions_v3_13','legacy_decision_revision_evaluations_v3_13',
+        'legacy_analysis_revision_payloads_v3_13',
+        'opportunity_financial_fact_series_registry_v3')
+        AND relation.relrowsecurity AND NOT relation.relforcerowsecurity),
+      'serviceRegistrySelect',has_table_privilege('service_role',
+        'public.opportunity_financial_fact_series_registry_v3','SELECT'),
+      'serviceCompletionExecute',has_function_privilege('service_role',
+        'public.complete_legacy_producer_job_v3_11(uuid,uuid,uuid,bytea,jsonb,text)','EXECUTE'),
+      'serviceHeartbeatSelect',has_table_privilege('service_role',
+        'public.legacy_decision_revision_evaluations_v3_13','SELECT'),
+      'sessionCount',(SELECT count(*) FROM rows),
+      'navBySession',(SELECT jsonb_object_agg(row_value->>3,(row_value->>15)::double precision ORDER BY row_value->>3) FROM rows),
+      'metricRefs',(SELECT jsonb_agg(row_value->16 ORDER BY row_value->>3) FROM rows))::text;
+    ROLLBACK;
+  `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.equal(result.pbRows,2);assert.equal(result.appendAudits,3);
+  assert.equal(result.seriesRows,2);assert.equal(result.seriesTriggers,4);
+  assert.equal(result.v313Rls,8);assert.equal(result.serviceRegistrySelect,false);
+  assert.equal(result.serviceCompletionExecute,true);assert.equal(result.serviceHeartbeatSelect,true);
+  assert.equal(result.sessionCount,2);
+  assert.deepEqual(result.navBySession,{'2026-05-12':null,'2026-05-13':null});
+  assert.equal(result.metricRefs[0].find((row)=>row[0]==='net_asset_value')[1],'twse-openapi:nav:old');
+  assert.equal(result.metricRefs[1].find((row)=>row[0]==='net_asset_value')[1],'twse-openapi:nav:new');
+  assert.equal(result.metricRefs[0].find((row)=>row[0]==='ev_sales_multiple')[1],'twse-openapi:ev-sales:exact-close');
+  assert.equal(result.metricRefs[1].find((row)=>row[0]==='ev_sales_multiple')[1],'twse-openapi:ev-sales:post-close');
+});
+
+test('V3.13 official valuation append requires elapsed same-exchange completed session authority',()=>{
+  const result=JSON.parse(psql(`
+    BEGIN;
+    INSERT INTO public.internal_principal_role_bindings_v3(principal_id,role,valid_from,valid_to,status,
+      configuration_hash,recorded_at)
+    VALUES('a11d4e67-7d0a-4c44-8a9d-1d5c3b875001','opportunity_runner','2026-01-01',NULL,
+      'active',repeat('7',64),clock_timestamp());
+    INSERT INTO public.stocks(id,symbol) VALUES('71300000-0000-4000-8000-0000000000c0','9195');
+    INSERT INTO public.tw_trading_sessions_v3(session_authority_id,session_id,market,open_at,close_at,status,
+      provider,source_timestamp,collected_at,source_ref,recorded_at)
+    VALUES('71300000-0000-4000-8000-0000000000c1','2026-05-20','TWSE','2026-05-20T01:00:00Z',
+      '2026-05-20T05:30:00Z','completed','twse','2026-05-20T05:00:00Z','2026-05-20T05:01:00Z',
+      'twse-calendar:9195','2026-05-20T05:01:00Z');
+    DO $probe$ BEGIN BEGIN
+      PERFORM public.append_exchange_reported_valuation_v3_13(ROW(
+        '71300000-0000-4000-8000-0000000000c0','TWSE','2026-05-20',40,10,1.1,
+        '2026-05-20T05:00:00Z','2026-05-20T05:00:00Z','2026-05-20T05:29:59Z',
+        'twse-openapi:BWIBBU_ALL:2026-05-20:9195')::public.exchange_reported_valuation_input_v3_13,
+        'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+      RAISE EXCEPTION 'expected_calendar_authority_mismatch';
+    EXCEPTION WHEN SQLSTATE 'PT409' THEN
+      IF SQLERRM<>'calendar_authority_mismatch' THEN RAISE;END IF;
+    END;END $probe$;
+    DO $probe$ BEGIN BEGIN
+      PERFORM public.append_exchange_reported_valuation_v3_13(ROW(
+        '71300000-0000-4000-8000-0000000000c0','TPEX','2026-05-20',40,10,1.1,
+        '2026-05-20T05:30:00Z','2026-05-20T05:30:00Z','2026-05-20T06:00:00Z',
+        'tpex-openapi:peratio:2026-05-20:9195')::public.exchange_reported_valuation_input_v3_13,
+        'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+      RAISE EXCEPTION 'expected_calendar_authority_mismatch';
+    EXCEPTION WHEN SQLSTATE 'PT409' THEN
+      IF SQLERRM<>'calendar_authority_mismatch' THEN RAISE;END IF;
+    END;END $probe$;
+    SELECT * FROM public.append_exchange_reported_valuation_v3_13(ROW(
+      '71300000-0000-4000-8000-0000000000c0','TWSE','2026-05-20',40,10,1.1,
+      '2026-05-20T05:30:00Z','2026-05-20T05:30:00Z','2026-05-20T06:00:00Z',
+      'twse-openapi:BWIBBU_ALL:2026-05-20:9195')::public.exchange_reported_valuation_input_v3_13,
+      'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+    SELECT jsonb_build_object(
+      'rows',(SELECT count(*) FROM public.opportunity_exchange_reported_pe_v3
+        WHERE stock_id='71300000-0000-4000-8000-0000000000c0'),
+      'audits',(SELECT count(*) FROM public.opportunity_rpc_audit_v3
+        WHERE subject_kind='exchange_reported_pe' AND caller_principal_id=
+          'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001' AND subject_id IN(
+            SELECT reported_pe_id FROM public.opportunity_exchange_reported_pe_v3
+            WHERE stock_id='71300000-0000-4000-8000-0000000000c0')))::text;
+    ROLLBACK;
+  `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual(result,{rows:1,audits:1});
+});
+
+test('V3.13 equal-head reported or EV authority remains a typed candidate conflict without winner lineage',()=>{
+  const result=JSON.parse(psql(`
+    BEGIN;
+    INSERT INTO public.stocks(id,symbol) VALUES('71300000-0000-4000-8000-0000000000d0','9196');
+    WITH keys(family,canonical) AS(VALUES
+      ('instrument_roster'::public.authority_stream_family_v3,
+        convert_to('["instrument_roster","71300000-0000-4000-8000-0000000000d0"]','utf8')),
+      ('sector_assignment'::public.authority_stream_family_v3,
+        convert_to('["sector_assignment","71300000-0000-4000-8000-0000000000d0","TWSE"]','utf8')))
+    INSERT INTO public.opportunity_authority_stream_registry_v3(family,stream_key_hash,stream_key_canonical,registered_at)
+    SELECT family,encode(extensions.digest(canonical,'sha256'),'hex'),canonical,'2026-01-01' FROM keys;
+    INSERT INTO public.stock_instruments_v3(instrument_authority_id,stock_id,symbol,exchange,instrument_type,
+      listing_status,official_legal_name,official_short_name,provider,source_timestamp,valid_from,valid_to,
+      roster_version,recorded_at)
+    VALUES('71300000-0000-4000-8000-0000000000d1','71300000-0000-4000-8000-0000000000d0',
+      '9196','TWSE','common_stock','active','Conflict Fixture','C9196','twse','2026-01-01','2026-01-01',
+      NULL,'tw-instrument-roster-v3.0','2026-01-01');
+    INSERT INTO public.stock_sector_assignments_v3(assignment_authority_id,stock_id,market,official_industry_code,
+      canonical_sector_key,provider,source_timestamp,valid_from,valid_to,taxonomy_version,status,recorded_at)
+    VALUES('71300000-0000-4000-8000-0000000000d2','71300000-0000-4000-8000-0000000000d0',
+      'TWSE','24','semiconductor','twse','2026-01-01','2026-01-01',NULL,
+      'tw-sector-taxonomy-v3.0','active','2026-01-01');
+    INSERT INTO public.tw_trading_sessions_v3(session_authority_id,session_id,market,open_at,close_at,status,
+      provider,source_timestamp,collected_at,source_ref,recorded_at)
+    VALUES('71300000-0000-4000-8000-0000000000d3','2026-05-21','TWSE','2026-05-21T01:00:00Z',
+      '2026-05-21T05:30:00Z','completed','twse','2026-05-21T05:00:00Z','2026-05-21T05:01:00Z',
+      'twse-calendar:9196','2026-05-21T05:01:00Z');
+    INSERT INTO public.opportunity_exchange_reported_pe_v3(reported_pe_id,stock_id,exchange,session_date,close,
+      reported_pe,reported_pb,published_at,source_timestamp,collected_at,source_ref,recorded_at) VALUES
+      ('71300000-0000-4000-8000-0000000000d4','71300000-0000-4000-8000-0000000000d0','TWSE',
+       '2026-05-21',50,10,1.1,'2026-05-21T06:00:00Z','2026-05-21T06:00:00Z',
+       '2026-05-21T06:30:00Z','twse-openapi:pe:9196:a','2026-05-21T06:31:00Z'),
+      ('71300000-0000-4000-8000-0000000000d5','71300000-0000-4000-8000-0000000000d0','TWSE',
+       '2026-05-21',50,10,1.1,'2026-05-21T06:00:00Z','2026-05-21T06:00:00Z',
+       '2026-05-21T06:30:00Z','twse-openapi:pe:9196:b','2026-05-21T06:31:00Z');
+    INSERT INTO public.opportunity_financial_facts_v3(fact_id,stock_id,fact_key,period_start,period_end,duration_kind,
+      value,unit,provider,authority_tier,estimate_kind,estimate_horizon,filing_published_at,source_timestamp,
+      collected_at,filing_restatement_id,source_ref,recorded_at) VALUES
+      ('71300000-0000-4000-8000-0000000000d6','71300000-0000-4000-8000-0000000000d0','ev_sales_multiple',NULL,
+       '2026-05-21','quarter_end',2,'dimensionless','twse','official_filing','reported','reported_period',
+       '2026-05-21T06:00:00Z','2026-05-21T06:00:00Z','2026-05-21T06:30:00Z',NULL,
+       'twse-openapi:ev-sales:9196:a','2026-05-21T06:31:00Z'),
+      ('71300000-0000-4000-8000-0000000000d7','71300000-0000-4000-8000-0000000000d0','ev_sales_multiple',NULL,
+       '2026-05-21','quarter_end',3,'dimensionless','twse','official_filing','reported','reported_period',
+       '2026-05-21T06:00:00Z','2026-05-21T06:00:00Z','2026-05-21T06:30:00Z',NULL,
+       'twse-openapi:ev-sales:9196:b','2026-05-21T06:31:00Z');
+    WITH plane AS(SELECT public.read_legacy_candidate_fact_plane_v3_11('2026-05-21T08:00:00Z',
+      jsonb_build_object('candidates',jsonb_build_array(jsonb_build_object(
+        'stockId','71300000-0000-4000-8000-0000000000d0','symbol','9196','deepSelected',true)))) value),
+    conflict AS(SELECT item.value FROM plane,jsonb_array_elements(plane.value->'reportedPeRows') item(value)
+      WHERE item.value->>0='9196')
+    SELECT jsonb_build_object('rowCount',(SELECT count(*) FROM conflict),
+      'close',(SELECT value->4 FROM conflict),'pe',(SELECT value->5 FROM conflict),
+      'pb',(SELECT value->6 FROM conflict),'publishedAt',(SELECT value->7 FROM conflict),
+      'sourceTimestamp',(SELECT value->8 FROM conflict),'collectedAt',(SELECT value->9 FROM conflict),
+      'sourceRef',(SELECT value->10 FROM conflict),'status',(SELECT value->>18 FROM conflict))::text;
+    ROLLBACK;
+  `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual(result,{rowCount:1,close:null,pe:null,pb:null,publishedAt:null,
+    sourceTimestamp:null,collectedAt:null,sourceRef:null,status:'authority_conflict'});
+});
+
+test('V3.13 candidate fact plane ranks complete identities before applying per-series bounds',()=>{
+  const definition=sql.slice(sql.indexOf('CREATE OR REPLACE FUNCTION read_legacy_candidate_fact_plane_v3_11'),
+    sql.indexOf('CREATE OR REPLACE FUNCTION acquire_legacy_producer_lease_v3_11'));
+  assert.doesNotMatch(definition,/LIMIT 256/u);
+  assert.match(definition,/dense_rank[(][)] OVER[(]PARTITION BY selected[.]fact_key/u);
+  assert.match(definition,/WHEN bounded[.]fact_key='monthly_revenue' THEN 18/u);
+  const result=JSON.parse(psql(`
+    BEGIN;
+    INSERT INTO public.stocks(id,symbol) VALUES('71300000-0000-4000-8000-0000000000c8','9194');
+    INSERT INTO public.opportunity_financial_facts_v3(fact_id,stock_id,fact_key,period_start,period_end,duration_kind,
+      value,unit,provider,authority_tier,estimate_kind,estimate_horizon,filing_published_at,source_timestamp,
+      collected_at,filing_restatement_id,source_ref,recorded_at)
+    SELECT extensions.gen_random_uuid(),'71300000-0000-4000-8000-0000000000c8','quarterly_revenue',
+      date_trunc('year',date '2022-03-31'+(ordinal-1)*interval '3 months')::date,
+      (date '2022-03-31'+(ordinal-1)*interval '3 months')::date,
+      'quarterly',ordinal*100,'TWD_thousand','twse','official_filing','reported','reported_period',
+      '2026-01-01','2026-01-01','2026-01-01T01:00:00Z',NULL,'twse-openapi:bounded:'||ordinal,'2026-01-01T01:00:00Z'
+    FROM generate_series(1,14) ordinal;
+    WITH latest AS(SELECT max(period_end) period_end FROM public.opportunity_financial_facts_v3
+      WHERE stock_id='71300000-0000-4000-8000-0000000000c8')
+    INSERT INTO public.opportunity_financial_facts_v3(fact_id,stock_id,fact_key,period_start,period_end,duration_kind,
+      value,unit,provider,authority_tier,estimate_kind,estimate_horizon,filing_published_at,source_timestamp,
+      collected_at,filing_restatement_id,source_ref,recorded_at)
+    SELECT extensions.gen_random_uuid(),'71300000-0000-4000-8000-0000000000c8','quarterly_revenue',
+      date_trunc('year',period_end)::date,period_end,'quarterly',9999,'TWD_thousand','twse','official_filing',
+      'reported','reported_period','2026-01-01','2026-01-01','2026-01-01T01:00:00Z',NULL,
+      'twse-openapi:bounded:conflict','2026-01-01T01:00:00Z' FROM latest;
+    WITH plane AS(SELECT public.read_legacy_candidate_fact_plane_v3_11('2026-02-01',jsonb_build_object('candidates',
+      jsonb_build_array(jsonb_build_object('stockId','71300000-0000-4000-8000-0000000000c8','symbol','9194',
+        'deepSelected',true,'shallowSelected',false)))) value),rows AS(
+      SELECT item.value FROM plane,jsonb_array_elements(plane.value->'financialRows') item(value))
+    SELECT jsonb_build_object('periods',(SELECT count(DISTINCT value->>3) FROM rows),
+      'latestRows',(SELECT count(*) FROM rows WHERE value->>3=(SELECT max(value->>3) FROM rows)),
+      'arity',(SELECT min(jsonb_array_length(value)) FROM rows))::text;
+    ROLLBACK;
+  `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual(result,{periods:12,latestRows:2,arity:16});
+});
+
+test('V3.13 requested calendar windows fail on the 513th distinct stream instead of truncating',()=>{
+  const output=psql(`
+    BEGIN;
+    INSERT INTO public.tw_trading_sessions_v3(session_authority_id,session_id,market,open_at,close_at,status,
+      provider,source_timestamp,collected_at,source_ref,recorded_at)
+    SELECT extensions.gen_random_uuid(),day,'TPEX',day::timestamp+time '01:00',day::timestamp+time '05:30',
+      'completed','tpex',CASE WHEN day='2024-07-01'::date+512 THEN '2030-01-01'::timestamptz ELSE day::timestamp+time '05:30' END,
+      CASE WHEN day='2024-07-01'::date+512 THEN '2030-01-01'::timestamptz ELSE day::timestamp+time '05:31' END,
+      'tpex-window:'||day::text,
+      CASE WHEN day='2024-07-01'::date+512 THEN '2030-01-01'::timestamptz ELSE day::timestamp+time '05:31' END
+    FROM generate_series('2024-07-01'::date,'2024-07-01'::date+512,interval '1 day') series(day);
+    DO $probe$ BEGIN BEGIN
+      PERFORM * FROM public.resolve_legacy_trading_session_window_v3_13('TPEX','2024-07-01',
+        '2024-07-01'::date+512,'2026-01-01');
+      RAISE EXCEPTION 'expected_bound_violation';
+    EXCEPTION WHEN SQLSTATE 'PT409' THEN
+      IF SQLERRM<>'bound_violation' THEN RAISE;END IF;
+    END;END $probe$;
+    INSERT INTO public.stocks(id,symbol) VALUES('71300000-0000-4000-8000-0000000000f0','9198');
+    WITH keys(family,canonical) AS(VALUES
+      ('instrument_roster'::public.authority_stream_family_v3,
+        convert_to('["instrument_roster","71300000-0000-4000-8000-0000000000f0"]','utf8')),
+      ('sector_assignment'::public.authority_stream_family_v3,
+        convert_to('["sector_assignment","71300000-0000-4000-8000-0000000000f0","TPEX"]','utf8')))
+    INSERT INTO public.opportunity_authority_stream_registry_v3(family,stream_key_hash,stream_key_canonical,registered_at)
+    SELECT family,encode(extensions.digest(canonical,'sha256'),'hex'),canonical,'2024-01-01' FROM keys;
+    INSERT INTO public.stock_instruments_v3(instrument_authority_id,stock_id,symbol,exchange,instrument_type,
+      listing_status,official_legal_name,official_short_name,provider,source_timestamp,valid_from,valid_to,
+      roster_version,recorded_at)
+    VALUES('71300000-0000-4000-8000-0000000000f1','71300000-0000-4000-8000-0000000000f0',
+      '9198','TPEX','common_stock','active','Calendar Bound Fixture','C9198','tpex','2024-01-01',
+      '2024-01-01',NULL,'tw-instrument-roster-v3.0','2024-01-01');
+    INSERT INTO public.stock_sector_assignments_v3(assignment_authority_id,stock_id,market,official_industry_code,
+      canonical_sector_key,provider,source_timestamp,valid_from,valid_to,taxonomy_version,status,recorded_at)
+    VALUES('71300000-0000-4000-8000-0000000000f2','71300000-0000-4000-8000-0000000000f0',
+      'TPEX','24','semiconductor','tpex','2024-01-01','2024-01-01',NULL,
+      'tw-sector-taxonomy-v3.0','active','2024-01-01');
+    DO $probe$ BEGIN BEGIN
+      PERFORM public.read_legacy_candidate_fact_plane_v3_11('2026-01-01',jsonb_build_object('candidates',
+        jsonb_build_array(jsonb_build_object('stockId','71300000-0000-4000-8000-0000000000f0',
+          'symbol','9198','deepSelected',true))));
+      RAISE EXCEPTION 'expected_fact_plane_bound_violation';
+    EXCEPTION WHEN SQLSTATE 'PT409' THEN
+      IF SQLERRM<>'bound_violation' THEN RAISE;END IF;
+    END;END $probe$;
+    ROLLBACK;
+  `,['-At']);
+  assert.match(output,/DO/u);
+});
+
+test('V3.13 valuation history binds distinct sessions before revision-heavy observation heads',()=>{
+  const planeDefinition=decisionIntegritySql.slice(
+    decisionIntegritySql.indexOf('CREATE OR REPLACE FUNCTION public.read_legacy_candidate_fact_plane_v3_11'),
+    decisionIntegritySql.indexOf('DO $rename_claim$'));
+  assert.match(planeDefinition,/SELECT DISTINCT raw[.]session_date[\s\S]*?LIMIT 1261/u);
+  assert.doesNotMatch(planeDefinition,/SELECT raw[.][*][\s\S]*?LIMIT 1261/u);
+  assert.doesNotMatch(planeDefinition,/SELECT max[(]session_date[)] AS session_date/u);
+  assert.match(planeDefinition,/requested_calendar_windows AS MATERIALIZED[\s\S]*?::date-730 oldest_session/u);
+  assert.doesNotMatch(planeDefinition,/tw_trading_sessions_v3 raw[\s\S]{0,300}LIMIT 512/u);
+  const result=JSON.parse(psql(`
+    BEGIN;
+    INSERT INTO public.stocks(id,symbol) VALUES('71300000-0000-4000-8000-0000000000e0','9197');
+    WITH keys(family,canonical) AS(VALUES
+      ('instrument_roster'::public.authority_stream_family_v3,
+        convert_to('["instrument_roster","71300000-0000-4000-8000-0000000000e0"]','utf8')),
+      ('sector_assignment'::public.authority_stream_family_v3,
+        convert_to('["sector_assignment","71300000-0000-4000-8000-0000000000e0","TWSE"]','utf8')))
+    INSERT INTO public.opportunity_authority_stream_registry_v3(family,stream_key_hash,stream_key_canonical,registered_at)
+    SELECT family,encode(extensions.digest(canonical,'sha256'),'hex'),canonical,'2024-01-01' FROM keys;
+    INSERT INTO public.stock_instruments_v3(instrument_authority_id,stock_id,symbol,exchange,instrument_type,
+      listing_status,official_legal_name,official_short_name,provider,source_timestamp,valid_from,valid_to,
+      roster_version,recorded_at)
+    VALUES('71300000-0000-4000-8000-0000000000e1','71300000-0000-4000-8000-0000000000e0',
+      '9197','TWSE','common_stock','active','Revision Heavy Fixture','R9197','twse','2024-01-01','2024-01-01',
+      NULL,'tw-instrument-roster-v3.0','2024-01-01');
+    INSERT INTO public.stock_sector_assignments_v3(assignment_authority_id,stock_id,market,official_industry_code,
+      canonical_sector_key,provider,source_timestamp,valid_from,valid_to,taxonomy_version,status,recorded_at)
+    VALUES('71300000-0000-4000-8000-0000000000e2','71300000-0000-4000-8000-0000000000e0',
+      'TWSE','24','semiconductor','twse','2024-01-01','2024-01-01',NULL,
+      'tw-sector-taxonomy-v3.0','active','2024-01-01');
+    INSERT INTO public.tw_trading_sessions_v3(session_authority_id,session_id,market,open_at,close_at,status,
+      provider,source_timestamp,collected_at,source_ref,recorded_at)
+    SELECT extensions.gen_random_uuid(),day,'TWSE',day::timestamp+time '01:00',day::timestamp+time '05:30',
+      'completed','twse',day::timestamp+time '05:30',day::timestamp+time '05:31',
+      'twse-history:'||day::text,day::timestamp+time '05:31'
+    FROM generate_series('2025-01-01'::date,'2025-01-01'::date+251,interval '1 day') series(day);
+    INSERT INTO public.opportunity_exchange_reported_pe_v3(reported_pe_id,stock_id,exchange,session_date,close,
+      reported_pe,reported_pb,published_at,source_timestamp,collected_at,source_ref,recorded_at)
+    SELECT extensions.gen_random_uuid(),'71300000-0000-4000-8000-0000000000e0','TWSE',day,50,10,1.1,
+      day::timestamp+time '06:00',day::timestamp+time '06:00',day::timestamp+time '06:30',
+      'twse-openapi:history:'||day::text,day::timestamp+time '06:31'
+    FROM generate_series('2025-01-01'::date,'2025-01-01'::date+251,interval '1 day') series(day);
+    INSERT INTO public.opportunity_exchange_reported_pe_v3(reported_pe_id,stock_id,exchange,session_date,close,
+      reported_pe,reported_pb,published_at,source_timestamp,collected_at,source_ref,recorded_at)
+    SELECT extensions.gen_random_uuid(),'71300000-0000-4000-8000-0000000000e0','TWSE','2025-09-09',50,10,1.1,
+      '2025-09-09T06:00:00Z','2025-09-09T06:00:00Z','2025-09-09T06:30:00Z',
+      'twse-openapi:history:2025-09-09:mirror:'||ordinal,'2025-09-09T06:31:00Z'
+    FROM generate_series(1,1260) ordinal;
+    WITH plane AS(SELECT public.read_legacy_candidate_fact_plane_v3_11('2026-01-01T00:00:00Z',
+      jsonb_build_object('candidates',jsonb_build_array(jsonb_build_object(
+        'stockId','71300000-0000-4000-8000-0000000000e0','symbol','9197','deepSelected',true)))) value)
+    SELECT jsonb_build_object('sessions',(SELECT count(DISTINCT item.value->>3)
+      FROM plane,jsonb_array_elements(plane.value->'reportedPeRows') item(value)
+      WHERE item.value->>0='9197'),'conflicts',(SELECT count(*)
+      FROM plane,jsonb_array_elements(plane.value->'reportedPeRows') item(value)
+      WHERE item.value->>0='9197' AND item.value->>18='authority_conflict'))::text;
+    ROLLBACK;
+  `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual(result,{sessions:252,conflicts:0});
+});
+
+test('V3.13 conditional valuation completion binds scalars and counts to the cutoff official evidence root',()=>{
+  const codec=runtime('codec.js');
+  const uuidFromMd5=(value)=>{const hex=createHash('md5').update(value).digest('hex');
+    return `${hex.slice(0,8)}-${hex.slice(8,12)}-${hex.slice(12,16)}-${hex.slice(16,20)}-${hex.slice(20)}`;};
+  const historyMembers=Array.from({length:252},(_,index)=>{const date=new Date(Date.UTC(2025,0,index+1))
+    .toISOString().slice(0,10);const sessionUuid=uuidFromMd5(`v313-relative:${date}`);
+    return ['71300000-0000-4000-8000-000000000f00','TWSE',date,index===251?12.75:15,
+      codec.sha256(sessionUuid),`twse-openapi:BWIBBU_ALL:${date}:9196`];});
+  const currentMember=historyMembers.at(-1);
+  const peerMembers=Array.from({length:8},(_,index)=>{const ordinal=index+1;
+    const stockId=`71300000-0000-4000-8000-${(0xf00+ordinal).toString(16).padStart(12,'0')}`;
+    return [stockId,'TWSE','2025-09-09',15,codec.sha256(uuidFromMd5('v313-relative:2025-09-09')),
+      `twse-openapi:BWIBBU_ALL:2025-09-09:${9200+ordinal}`];});
+  const expectedRoots={currentObservationRoot:codec.sha256(codec.canonicalJson(currentMember)),
+    historyMembershipRoot:codec.sha256(codec.canonicalJson(historyMembers)),
+    sectorMembershipRoot:codec.sha256(codec.canonicalJson(peerMembers)),
+    evidenceRoot:codec.sha256(codec.canonicalJson(['official-relative-pe-evidence-v1',currentMember,
+      historyMembers,peerMembers]))};
+  const completionDefinition=decisionIntegritySql.slice(
+    decisionIntegritySql.indexOf('CREATE OR REPLACE FUNCTION public.complete_legacy_producer_job_v3_11'),
+    decisionIntegritySql.indexOf('DO $v313_rls$'));
+  assert.match(completionDefinition,/legacy_valid_relative_valuation_authority_v3_13[(]/u);
+  const result=JSON.parse(psql(`
+    BEGIN;
+    INSERT INTO public.internal_principal_role_bindings_v3(principal_id,role,valid_from,valid_to,status,
+      configuration_hash,recorded_at)
+    VALUES('a11d4e67-7d0a-4c44-8a9d-1d5c3b875001','opportunity_runner','2026-01-01',NULL,
+      'active',repeat('7',64),clock_timestamp());
+    WITH entities AS(
+      SELECT ordinal,
+        ('71300000-0000-4000-8000-'||lpad(to_hex(3840+ordinal),12,'0'))::uuid stock_id,
+        CASE WHEN ordinal=0 THEN '9196' ELSE (9200+ordinal)::text END symbol
+      FROM generate_series(0,8) ordinal
+    ) INSERT INTO public.stocks(id,symbol) SELECT stock_id,symbol FROM entities;
+    WITH entities AS(
+      SELECT ordinal,('71300000-0000-4000-8000-'||lpad(to_hex(3840+ordinal),12,'0'))::uuid stock_id,
+        CASE WHEN ordinal=0 THEN '9196' ELSE (9200+ordinal)::text END symbol FROM generate_series(0,8) ordinal
+    ),keys AS(
+      SELECT 'instrument_roster'::public.authority_stream_family_v3 family,
+        convert_to(regexp_replace(jsonb_build_array('instrument_roster',stock_id::text)::text,', ', ',', 'g'),'utf8') canonical FROM entities
+      UNION ALL SELECT 'sector_assignment'::public.authority_stream_family_v3,
+        convert_to(regexp_replace(jsonb_build_array('sector_assignment',stock_id::text,'TWSE')::text,', ', ',', 'g'),'utf8') FROM entities
+    ) INSERT INTO public.opportunity_authority_stream_registry_v3(
+      family,stream_key_hash,stream_key_canonical,registered_at)
+    SELECT family,encode(extensions.digest(canonical,'sha256'),'hex'),canonical,'2024-01-01' FROM keys;
+    WITH entities AS(
+      SELECT ordinal,('71300000-0000-4000-8000-'||lpad(to_hex(3840+ordinal),12,'0'))::uuid stock_id,
+        CASE WHEN ordinal=0 THEN '9196' ELSE (9200+ordinal)::text END symbol FROM generate_series(0,8) ordinal
+    ) INSERT INTO public.stock_instruments_v3(instrument_authority_id,stock_id,symbol,exchange,instrument_type,
+      listing_status,official_legal_name,official_short_name,provider,source_timestamp,valid_from,valid_to,
+      roster_version,recorded_at)
+    SELECT ('71300000-0000-4000-8001-'||lpad(to_hex(3840+ordinal),12,'0'))::uuid,stock_id,symbol,'TWSE',
+      'common_stock','active','Relative Authority '||symbol,'R'||symbol,'twse','2024-01-01','2024-01-01',NULL,
+      'tw-instrument-roster-v3.0','2024-01-01' FROM entities;
+    WITH entities AS(
+      SELECT ordinal,('71300000-0000-4000-8000-'||lpad(to_hex(3840+ordinal),12,'0'))::uuid stock_id
+      FROM generate_series(0,8) ordinal
+    ) INSERT INTO public.stock_sector_assignments_v3(assignment_authority_id,stock_id,market,official_industry_code,
+      canonical_sector_key,provider,source_timestamp,valid_from,valid_to,taxonomy_version,status,recorded_at)
+    SELECT ('71300000-0000-4000-8002-'||lpad(to_hex(3840+ordinal),12,'0'))::uuid,stock_id,'TWSE','24',
+      'semiconductor','twse','2024-01-01','2024-01-01',NULL,'tw-sector-taxonomy-v3.0','active','2024-01-01'
+    FROM entities;
+    INSERT INTO public.tw_trading_sessions_v3(session_authority_id,session_id,market,open_at,close_at,status,
+      provider,source_timestamp,collected_at,source_ref,recorded_at)
+    SELECT md5('v313-relative:'||day::date::text)::uuid,day,'TWSE',day::timestamp+time '01:00',
+      day::timestamp+time '05:30','completed','twse',day::timestamp+time '05:30',
+      day::timestamp+time '05:31','twse-relative-calendar:'||day::date::text,day::timestamp+time '05:31'
+    FROM generate_series('2025-01-01'::date,'2025-09-09'::date,interval '1 day') series(day);
+    DO $probe$ BEGIN BEGIN
+      PERFORM public.append_exchange_reported_valuation_v3_13(ROW(
+        '71300000-0000-4000-8000-000000000f00','TWSE','2025-09-09',100,200.0000001,1.1,
+        '2025-09-09T06:00:00Z','2025-09-09T06:00:00Z','2025-09-09T06:01:00Z',
+        'twse-openapi:BWIBBU_ALL:2025-09-09:9196')::public.exchange_reported_valuation_input_v3_13,
+        'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+      RAISE EXCEPTION 'expected_reported_pe_out_of_range';
+    EXCEPTION WHEN SQLSTATE 'PT422' THEN
+      IF SQLERRM<>'invalid_exchange_reported_valuation' THEN RAISE;END IF;
+    END;END $probe$;
+    DO $probe$ BEGIN BEGIN
+      PERFORM public.append_exchange_reported_valuation_v3_13(ROW(
+        '71300000-0000-4000-8000-000000000f00','TWSE','2025-09-09',100,12.75,1.1,
+        '2025-09-09T06:00:00Z','2025-09-09T06:00:00Z','2025-09-09T06:01:00Z',
+        'twse-arbitrary:valuation:2025-09-09:9196')::public.exchange_reported_valuation_input_v3_13,
+        'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+      RAISE EXCEPTION 'expected_noncanonical_source_ref';
+    EXCEPTION WHEN SQLSTATE 'PT422' THEN
+      IF SQLERRM<>'invalid_exchange_reported_valuation' THEN RAISE;END IF;
+    END;END $probe$;
+    INSERT INTO public.opportunity_exchange_reported_pe_v3(reported_pe_id,stock_id,exchange,session_date,close,
+      reported_pe,reported_pb,published_at,source_timestamp,collected_at,source_ref,recorded_at)
+    SELECT md5('v313-relative-subject:'||day::text)::uuid,'71300000-0000-4000-8000-000000000f00','TWSE',day,100,
+      CASE WHEN day='2025-09-09'::date THEN 12.75 ELSE 15 END,1.1,
+      day::timestamp+time '06:00',day::timestamp+time '06:00',day::timestamp+time '06:01',
+      'twse-openapi:BWIBBU_ALL:'||day::date::text||':9196',day::timestamp+time '06:02'
+    FROM generate_series('2025-01-01'::date,'2025-09-09'::date,interval '1 day') series(day);
+    WITH peers AS(SELECT ordinal,('71300000-0000-4000-8000-'||lpad(to_hex(3840+ordinal),12,'0'))::uuid stock_id,
+      (9200+ordinal)::text symbol FROM generate_series(1,8) ordinal)
+    INSERT INTO public.opportunity_exchange_reported_pe_v3(reported_pe_id,stock_id,exchange,session_date,close,
+      reported_pe,reported_pb,published_at,source_timestamp,collected_at,source_ref,recorded_at)
+    SELECT ('71300000-0000-4000-8003-'||lpad(to_hex(3840+ordinal),12,'0'))::uuid,stock_id,'TWSE','2025-09-09',
+      100,15,1.2,'2025-09-09T06:00:00Z','2025-09-09T06:00:00Z','2025-09-09T06:01:00Z',
+      'twse-openapi:BWIBBU_ALL:2025-09-09:'||symbol,'2025-09-09T06:02:00Z' FROM peers;
+    WITH entities AS(SELECT ordinal,('71300000-0000-4000-8000-'||lpad(to_hex(3840+ordinal),12,'0'))::uuid stock_id
+      FROM generate_series(0,8) ordinal)
+    INSERT INTO public.opportunity_financial_facts_v3(fact_id,stock_id,fact_key,period_start,period_end,duration_kind,
+      value,unit,provider,authority_tier,estimate_kind,estimate_horizon,filing_published_at,source_timestamp,
+      collected_at,filing_restatement_id,source_ref,recorded_at)
+    SELECT ('71300000-0000-4000-8004-'||lpad(to_hex(3840+ordinal),12,'0'))::uuid,stock_id,
+      'shares_outstanding',NULL,'2025-06-30','instant',1000,'thousand_shares','twse',
+      'official_filing','reported','reported_period','2025-07-01','2025-07-01','2025-07-01T01:00:00Z',NULL,
+      'twse-openapi:shares:2025-06-30:'||ordinal,'2025-07-01T01:00:00Z' FROM entities;
+    WITH plane AS(
+      SELECT public.read_legacy_candidate_fact_plane_v3_11('2026-01-01T00:00:00Z',jsonb_build_object(
+        'candidates',jsonb_build_array(jsonb_build_object('stockId','71300000-0000-4000-8000-000000000f00',
+          'symbol','9196','deepSelected',true)))) value
+    ),authority AS(
+      SELECT public.legacy_relative_valuation_authority_v3_13('9196','2026-01-01T00:00:00Z') value
+    ),forged AS(
+      SELECT jsonb_set(jsonb_set(jsonb_set(jsonb_set(jsonb_set(jsonb_set(jsonb_set(value,
+        '{currentMultiple}','9'::jsonb),'{historySessions}','253'::jsonb),'{sectorPeers}','9'::jsonb),
+        '{currentObservationRoot}',to_jsonb(repeat('a',64))),'{historyMembershipRoot}',to_jsonb(repeat('b',64))),
+        '{sectorMembershipRoot}',to_jsonb(repeat('c',64))),'{evidenceRoot}',to_jsonb(repeat('d',64))) value FROM authority
+    ),scalar_drift AS(
+      SELECT jsonb_set(value,'{currentMultiple}','12.7500000000001'::jsonb) value FROM authority
+    ),reference_drift AS(
+      SELECT jsonb_set(value,'{referenceMultiple}','15.0000000000001'::jsonb) value FROM authority
+    ) SELECT jsonb_build_object('historySessions',(authority.value->>'historySessions')::integer,
+      'sectorPeers',(authority.value->>'sectorPeers')::integer,
+      'currentMultiple',(authority.value->>'currentMultiple')::numeric,
+      'referenceMultiple',(authority.value->>'referenceMultiple')::numeric,
+      'rootsValid',(authority.value->>'evidenceRoot')~'^[0-9a-f]{64}$'
+        AND (authority.value->>'historyMembershipRoot')~'^[0-9a-f]{64}$'
+        AND (authority.value->>'sectorMembershipRoot')~'^[0-9a-f]{64}$',
+      'currentObservationRoot',authority.value->>'currentObservationRoot',
+      'historyMembershipRoot',authority.value->>'historyMembershipRoot',
+      'sectorMembershipRoot',authority.value->>'sectorMembershipRoot',
+      'evidenceRoot',authority.value->>'evidenceRoot',
+      'currentMember',(SELECT jsonb_build_array(value->>11,value->>2,value->>3,(value->>5)::numeric,
+        value->>12,value->>10) FROM jsonb_array_elements(plane.value->'reportedPeRows') row(value)
+        WHERE value->>11='71300000-0000-4000-8000-000000000f00' ORDER BY value->>3 DESC LIMIT 1),
+      'firstPeer',(SELECT jsonb_build_array(value->>11,value->>2,value->>3,(value->>5)::numeric,
+        value->>12,value->>10) FROM jsonb_array_elements(plane.value->'reportedPeRows') row(value)
+        WHERE value->>11<>'71300000-0000-4000-8000-000000000f00' ORDER BY value->>11,value->>10 LIMIT 1),
+      'valid',public.legacy_valid_relative_valuation_authority_v3_13(
+        '9196','2026-01-01T00:00:00Z',authority.value),
+      'planeRows',jsonb_array_length(plane.value->'reportedPeRows'),
+      'subjectRows',(SELECT count(*) FROM jsonb_array_elements(plane.value->'reportedPeRows') row(value)
+        WHERE value->>11='71300000-0000-4000-8000-000000000f00'),
+      'peerRows',(SELECT count(*) FROM jsonb_array_elements(plane.value->'reportedPeRows') row(value)
+        WHERE value->>11<>'71300000-0000-4000-8000-000000000f00'),
+      'forged',public.legacy_valid_relative_valuation_authority_v3_13(
+        '9196','2026-01-01T00:00:00Z',forged.value),
+      'nearBoundaryScalarDrift',public.legacy_valid_relative_valuation_authority_v3_13(
+        '9196','2026-01-01T00:00:00Z',scalar_drift.value),
+      'referenceScalarDrift',public.legacy_valid_relative_valuation_authority_v3_13(
+        '9196','2026-01-01T00:00:00Z',reference_drift.value))::text
+    FROM plane,authority,forged,scalar_drift,reference_drift;
+    ROLLBACK;
+  `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual(result.currentMember,currentMember);
+  assert.deepEqual(result.firstPeer,peerMembers[0]);
+  delete result.currentMember;delete result.firstPeer;
+  assert.deepEqual(result,{historySessions:252,sectorPeers:8,currentMultiple:12.75,referenceMultiple:15,
+    rootsValid:true,...expectedRoots,valid:true,planeRows:260,subjectRows:252,peerRows:8,forged:false,
+    nearBoundaryScalarDrift:false,referenceScalarDrift:false});
+});
+
+test('V3.13 latest-recorded instrument, sector and calendar heads cannot be revived by newer business timestamps',()=>{
+  const result=JSON.parse(psql(`
+    BEGIN;
+    INSERT INTO public.stocks(id,symbol) VALUES('71300000-0000-4000-8000-000000000080','9180');
+    WITH keys(family,canonical) AS(VALUES
+      ('instrument_roster'::public.authority_stream_family_v3,convert_to('["instrument_roster","71300000-0000-4000-8000-000000000080"]','utf8')),
+      ('sector_assignment'::public.authority_stream_family_v3,convert_to('["sector_assignment","71300000-0000-4000-8000-000000000080","TWSE"]','utf8')))
+    INSERT INTO public.opportunity_authority_stream_registry_v3(family,stream_key_hash,stream_key_canonical,registered_at)
+    SELECT family,encode(extensions.digest(canonical,'sha256'),'hex'),canonical,'2026-01-01' FROM keys;
+    INSERT INTO public.stock_instruments_v3(instrument_authority_id,stock_id,symbol,exchange,instrument_type,
+      listing_status,official_legal_name,official_short_name,provider,source_timestamp,valid_from,valid_to,
+      roster_version,recorded_at) VALUES
+      ('71300000-0000-4000-8000-000000000081','71300000-0000-4000-8000-000000000080','9180','TWSE',
+       'common_stock','active','Authority Fixture','A9180','twse','2026-08-09T10:00:00Z','2026-01-01',NULL,
+       'tw-instrument-roster-v3.0','2026-08-09T10:00:00Z'),
+      ('71300000-0000-4000-8000-000000000082','71300000-0000-4000-8000-000000000080','9180','TWSE',
+       'common_stock','delisted','Authority Fixture','A9180','twse','2026-08-09T09:00:00Z','2026-01-01',NULL,
+       'tw-instrument-roster-v3.0','2026-08-09T11:00:00Z');
+    INSERT INTO public.stock_sector_assignments_v3(assignment_authority_id,stock_id,market,official_industry_code,
+      canonical_sector_key,provider,source_timestamp,valid_from,valid_to,taxonomy_version,status,recorded_at) VALUES
+      ('71300000-0000-4000-8000-000000000083','71300000-0000-4000-8000-000000000080','TWSE','24',
+       'semiconductor','twse','2026-08-09T10:00:00Z','2026-01-01',NULL,'tw-sector-taxonomy-v3.0','active','2026-08-09T10:00:00Z'),
+      ('71300000-0000-4000-8000-000000000084','71300000-0000-4000-8000-000000000080','TWSE','24',
+       'semiconductor','twse','2026-08-09T09:00:00Z','2026-01-01',NULL,'tw-sector-taxonomy-v3.0','inactive','2026-08-09T11:00:00Z');
+    INSERT INTO public.tw_trading_sessions_v3(session_authority_id,session_id,market,open_at,close_at,status,
+      provider,source_timestamp,collected_at,source_ref,recorded_at) VALUES
+      ('71300000-0000-4000-8000-000000000085','2026-08-07','TWSE','2026-08-07T01:00:00Z',
+       '2026-08-07T05:30:00Z','completed','twse','2026-08-09T10:00:00Z','2026-08-09T10:00:00Z',
+       'twse-calendar:9180:completed','2026-08-09T10:00:00Z'),
+      ('71300000-0000-4000-8000-000000000086','2026-08-07','TWSE','2026-08-07T01:00:00Z',
+       '2026-08-07T05:30:00Z','cancelled','twse','2026-08-09T09:00:00Z','2026-08-09T09:00:00Z',
+       'twse-calendar:9180:cancelled','2026-08-09T11:00:00Z'),
+      ('71300000-0000-4000-8000-000000000089','2026-08-11','TWSE','2026-08-11T01:00:00Z',
+       '2026-08-11T05:30:00Z','completed','twse','2026-08-09T09:00:00Z','2026-08-09T09:01:00Z',
+       'twse-calendar:future-completed','2026-08-09T09:02:00Z');
+    WITH plane AS(SELECT public.read_legacy_candidate_fact_plane_v3_11('2026-08-10T10:00:00Z','{"candidates":[]}'::jsonb) value)
+    SELECT jsonb_build_object(
+      'instrument',(SELECT listing_status FROM public.resolve_legacy_instrument_authority_v3_13(
+        '71300000-0000-4000-8000-000000000080','2026-08-10T10:00:00Z')),
+      'sector',(SELECT status FROM public.resolve_legacy_sector_authority_v3_13(
+        '71300000-0000-4000-8000-000000000080','TWSE','2026-08-10T10:00:00Z')),
+      'calendar',(SELECT status FROM public.resolve_legacy_trading_session_authority_v3_13(
+        '2026-08-07','TWSE','2026-08-10T10:00:00Z')),
+      'schedule',(SELECT item.value->>'status' FROM plane,jsonb_array_elements(plane.value->'projectionFreshnessSchedule') item(value)
+        WHERE item.value->>'session_id'='2026-08-07'),
+      'beforeClose',(SELECT count(*) FROM public.resolve_legacy_trading_session_authority_v3_13(
+        '2026-08-11','TWSE','2026-08-11T05:29:59Z') selected
+        WHERE selected.status='completed' AND selected.close_at<='2026-08-11T05:29:59Z'),
+      'atClose',(SELECT count(*) FROM public.resolve_legacy_trading_session_authority_v3_13(
+        '2026-08-11','TWSE','2026-08-11T05:30:00Z') selected
+        WHERE selected.status='completed' AND selected.close_at<='2026-08-11T05:30:00Z'),
+      'afterClose',(SELECT count(*) FROM public.resolve_legacy_trading_session_authority_v3_13(
+        '2026-08-11','TWSE','2026-08-11T05:30:01Z') selected
+        WHERE selected.status='completed' AND selected.close_at<='2026-08-11T05:30:01Z'),
+      'futureSchedule',(SELECT item.value->>'status' FROM plane,jsonb_array_elements(plane.value->'projectionFreshnessSchedule') item(value)
+        WHERE item.value->>'session_id'='2026-08-11'))::text;
+    ROLLBACK;
+  `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual(result,{instrument:'delisted',sector:'inactive',calendar:'cancelled',schedule:'cancelled',
+    beforeClose:0,atClose:1,afterClose:1,futureSchedule:'scheduled'});
+  const conflict=psql(`BEGIN;
+    INSERT INTO public.tw_trading_sessions_v3(session_authority_id,session_id,market,open_at,close_at,status,
+      provider,source_timestamp,collected_at,source_ref,recorded_at) VALUES
+      ('71300000-0000-4000-8000-000000000087','2026-08-06','TWSE','2026-08-06T01:00:00Z','2026-08-06T05:30:00Z',
+       'completed','twse','2026-08-06T06:00:00Z','2026-08-06T06:01:00Z','twse-calendar:tie:a','2026-08-06T06:02:00Z'),
+      ('71300000-0000-4000-8000-000000000088','2026-08-06','TWSE','2026-08-06T01:00:00Z','2026-08-06T05:30:00Z',
+       'cancelled','twse','2026-08-06T06:00:00Z','2026-08-06T06:01:00Z','twse-calendar:tie:b','2026-08-06T06:02:00Z');
+    DO $probe$ BEGIN BEGIN PERFORM * FROM public.resolve_legacy_trading_session_authority_v3_13(
+      '2026-08-06','TWSE','2026-08-10T10:00:00Z');RAISE EXCEPTION 'expected_conflict';
+      EXCEPTION WHEN SQLSTATE 'PT409' THEN RAISE NOTICE 'authority_conflict_closed';END;END $probe$;ROLLBACK;`,['-At']);
+  assert.match(conflict,/DO/u);
+});
+
+test('V3.13 official shares normalizes units and propagates differing equal-head authority',()=>{
+  const result=JSON.parse(psql(`
+    BEGIN;
+    INSERT INTO public.stocks(id,symbol) VALUES('71300000-0000-4000-8000-0000000000a0','9188');
+    INSERT INTO public.opportunity_financial_facts_v3(fact_id,stock_id,fact_key,period_start,period_end,duration_kind,
+      value,unit,provider,authority_tier,estimate_kind,estimate_horizon,filing_published_at,source_timestamp,
+      collected_at,filing_restatement_id,source_ref,recorded_at) VALUES
+      ('71300000-0000-4000-8000-0000000000a1','71300000-0000-4000-8000-0000000000a0','shares_outstanding',NULL,
+       '2026-06-30','instant',1000,'thousand_shares','twse','official_filing','reported','reported_period',
+       '2026-07-31T00:00:00Z','2026-07-31T00:00:00Z','2026-07-31T01:00:00Z',NULL,
+       'twse-openapi:shares:thousand','2026-07-31T01:01:00Z'),
+      ('71300000-0000-4000-8000-0000000000a2','71300000-0000-4000-8000-0000000000a0','shares_outstanding',NULL,
+       '2026-06-30','instant',1000000,'share','twse','official_filing','reported','reported_period',
+       '2026-07-31T00:00:00Z','2026-07-31T00:00:00Z','2026-07-31T01:00:00Z',NULL,
+       'twse-openapi:shares:individual','2026-07-31T01:01:00Z');
+    SELECT jsonb_build_object('normalized',public.resolve_legacy_official_shares_v3_13(
+      '71300000-0000-4000-8000-0000000000a0','2026-08-07','2026-08-07T10:20:00Z'))::text;
+    ROLLBACK;
+  `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual(result,{normalized:1000000});
+  const conflict=psql(`BEGIN;
+    INSERT INTO public.stocks(id,symbol) VALUES('71300000-0000-4000-8000-0000000000b0','9189');
+    INSERT INTO public.opportunity_financial_facts_v3(fact_id,stock_id,fact_key,period_start,period_end,duration_kind,
+      value,unit,provider,authority_tier,estimate_kind,estimate_horizon,filing_published_at,source_timestamp,
+      collected_at,filing_restatement_id,source_ref,recorded_at) VALUES
+      ('71300000-0000-4000-8000-0000000000b1','71300000-0000-4000-8000-0000000000b0','shares_outstanding',NULL,
+       '2026-06-30','instant',1000,'thousand_shares','twse','official_filing','reported','reported_period',
+       '2026-07-31','2026-07-31','2026-07-31T01:00:00Z',NULL,'twse-openapi:shares:a','2026-07-31T01:01:00Z'),
+      ('71300000-0000-4000-8000-0000000000b2','71300000-0000-4000-8000-0000000000b0','shares_outstanding',NULL,
+       '2026-06-30','instant',2000000,'share','twse','official_filing','reported','reported_period',
+       '2026-07-31','2026-07-31','2026-07-31T01:00:00Z',NULL,'twse-openapi:shares:b','2026-07-31T01:01:00Z');
+    SELECT public.resolve_legacy_official_shares_result_v3_13(
+      '71300000-0000-4000-8000-0000000000b0','2026-08-07','2026-08-07T10:20:00Z')->>'status';
+    DO $probe$ BEGIN BEGIN PERFORM public.resolve_legacy_official_shares_v3_13(
+      '71300000-0000-4000-8000-0000000000b0','2026-08-07','2026-08-07T10:20:00Z');
+      RAISE EXCEPTION 'expected_authority_conflict';
+      EXCEPTION WHEN SQLSTATE 'PT409' THEN
+        IF SQLERRM<>'authority_conflict' THEN RAISE;END IF;
+      END;END $probe$;ROLLBACK;`,['-At']);
+  assert.match(conflict,/authority_conflict/u);assert.match(conflict,/DO/u);
+});
+
+test('V3.13 completion binds exact decision payload set and classifies only after latest authority selection',()=>{
+  const completion=decisionIntegritySql.slice(
+    decisionIntegritySql.indexOf("ELSIF v_stage='analysis_revision'"),
+    decisionIntegritySql.indexOf("ELSIF v_stage='facts_refresh'"),
+  );
+  assert.match(completion,
+    /jsonb_array_elements\(coalesce\(p_json->'decisionPayloads','\[\]'::jsonb\)\)[\s\S]*?<>\(SELECT coalesce\(jsonb_agg[\s\S]*?jsonb_array_elements\(coalesce\(p_json->'decisions','\[\]'::jsonb\)\)/u,
+  );
+  const provenance=decisionIntegritySql.slice(
+    decisionIntegritySql.indexOf('JOIN public.source_document_revisions_v3 revision ON'),
+    decisionIntegritySql.indexOf('WITH candidates AS MATERIALIZED',
+      decisionIntegritySql.indexOf('JOIN public.source_document_revisions_v3 revision ON')),
+  );
+  assert.match(provenance,
+    /ORDER BY authority[.]recorded_at DESC,authority[.]authority_id LIMIT 1\s+\) latest WHERE latest[.]status='active'[\s\S]*?latest[.]valid_from<=revision[.]collected_at/u,
+  );
+  assert.doesNotMatch(provenance,
+    /WHERE authority[.]source_identity_id=[\s\S]*?AND authority[.]valid_from<=revision[.]collected_at[\s\S]*?ORDER BY authority[.]recorded_at/u,
+  );
+  const acquisition=decisionIntegritySql.slice(
+    decisionIntegritySql.indexOf("IF v_stage='source_sync'"),
+    decisionIntegritySql.indexOf("ELSIF v_stage='mention_claim_extraction'"),
+  );
+  assert.match(acquisition,
+    /FROM public[.]legacy_frozen_source_authorities_v3_13 frozen[\s\S]*?frozen[.]source_run_id=p_run[\s\S]*?frozen[.]authority_cutoff=v_cutoff/u,
+  );
+  assert.doesNotMatch(acquisition,
+    /v_authority_cutoff|opportunity_authority_selected_stream_count_v3_internal\(\s*'discovery_identity',clock_timestamp/u,
+  );
+  const freeze=decisionIntegritySql.slice(decisionIntegritySql.indexOf('CREATE OR REPLACE FUNCTION public.freeze_legacy_source_authorities_v3_13'),
+    decisionIntegritySql.indexOf('DROP TRIGGER IF EXISTS legacy_freeze_source_authorities_v3_13'));
+  assert.match(freeze,/opportunity_authority_selected_stream_count_v3_internal\('discovery_identity',NEW[.]source_cutoff\)/u);
+  assert.match(freeze,/ORDER BY authority[.]source_identity_id,authority[.]recorded_at DESC,authority[.]authority_id/u);
+  const compact=decisionIntegritySql.slice(
+    decisionIntegritySql.indexOf("ELSIF v_stage='compact_radar_projection'"),
+    decisionIntegritySql.indexOf('DO $v313_rls$'),
+  );
+  assert.match(compact,/v_home_revisions<>v_submitted_revisions[\s\S]*?decision_revision_projection_mismatch/u);
+  assert.match(compact,/legacy_canonical_json_v3_13\(v_identity_json\)[\s\S]*?convert_from\(v_identity_bytes,'utf8'\)<>v_expected_identity_canonical/u);
+  assert.match(sql,/v_expected_projection_key:='legacy-radar-v3[.]11:'[\s\S]*?projection_key_collision/u);
+});
+
+test('V3.13 service role completes compact persistence and equal-time heartbeat disagreement fails closed',()=>{
+  const codec=runtime('codec.js');
+  const projectionCodec=runtime('compact-radar-projection.js');
+  const envelopeCodec=runtime('decision-envelope.js');
+  const citation={ref:'claim-9197',sourceKey:'mops',sourceName:'公開資訊觀測站',
+    sourceUrl:'https://mops.twse.com.tw/mops/web/index',kolIdentity:null,publishedAt:'2026-08-07T08:00:00Z',
+    collectedAt:'2026-08-07T09:00:00Z',evaluatedAt:'2026-08-07T10:20:00Z'};
+  const draftEnvelope={...envelopeCodec.deriveDecisionEnvelope({valuation:{status:'normal',
+    valuationRange:{bear:90,base:132,bull:165},method:{method:'pe'},asOf:'2026-08-07',
+    evidence:{sourceRefs:['official-filing']}},currentPrice:100,qualityActionEligible:false,
+    qualityReadiness:'missing',marketAllowsAction:true,technical:{technicalState:'at_support',plane:{current:100}},
+    geometry:{availability:'available',entryZone:[99,101],invalidation:90,trigger:null},
+    lastEvaluatedAt:'2026-08-07T10:20:00Z'})};
+  assert.equal(draftEnvelope.recommendationAuthority,'formal');
+  assert.equal(draftEnvelope.userAction,'unavailable');
+  delete draftEnvelope.evaluatedAt;
+  const formalEnvelope={...envelopeCodec.deriveDecisionEnvelope({valuation:{status:'normal',
+    valuationRange:{bear:90,base:132,bull:165},method:{method:'pe'},asOf:'2026-08-07',
+    evidence:{sourceRefs:['official-filing']}},currentPrice:100,qualityActionEligible:true,marketAllowsAction:true,
+    technical:{technicalState:'breakout_confirmed',plane:{current:100}},geometry:{availability:'available',
+      entryZone:[99,101],invalidation:90,trigger:null}})};
+  delete formalEnvelope.evaluatedAt;
+  const draftCard={symbol:'9197',decisionEnvelope:draftEnvelope,
+    sourceProvenance:citation,citations:[citation],decisionBrief:{
+      thesis:['a','b','c'],risks:['d','e','f'],evidence:[
+        {point:'thesis:0',refs:['claim-9197']},{point:'thesis:1',refs:['claim-9197']},
+        {point:'thesis:2',refs:['claim-9197']},{point:'risk:0',refs:['claim-9197']},
+        {point:'risk:1',refs:['claim-9197']},{point:'risk:2',refs:['claim-9197']}]}};
+  const identityBundle=projectionCodec.decisionRevisionIdentityBundle(draftCard);
+  const revisionId=`decision-v3.13:${identityBundle.hash}`;
+  const card={...draftCard,decisionRevisionId:revisionId,
+    decisionEnvelope:{...draftCard.decisionEnvelope,decisionRevisionId:revisionId}};
+  const revisionBundle=codec.immutableBundle('legacy_decision_revision_v3_13',card);
+  const compactResult=(sourceCutoff,publishedAt,selectedCard=card,selectedIdentity=identityBundle,
+    selectedRevision=revisionBundle)=>{
+    const correctness={schema:'legacy-radar-v3.13.0',window:'home',asOf:sourceCutoff,
+      contentAsOf:'2026-08-07T10:20:00Z',evaluatedAt:'2026-08-08T10:20:00Z',publishedAt,
+      nextExpectedAt:'2026-08-10T10:20:00Z',freshnessSchedule:[],contentHash:'d'.repeat(64),
+      producerIdentity:{commitSha:'a'.repeat(40)}};
+    const projections=['daily','home','three_day','weekly'].map((storageWindow)=>{
+      const payload={sourceSignals:storageWindow==='home'?[selectedCard]:[],sourceLedCorrectness:{...correctness,
+        window:storageWindow==='three_day'?'hot':storageWindow}};
+      const canonical=codec.canonicalJson(payload);const payloadChecksum=codec.sha256(canonical);
+      return {projectionKey:`legacy-radar-v3.11:${storageWindow}:${sourceCutoff}:${payloadChecksum}`,
+        storageWindow,payload,payloadChecksum,bundle:{canonical}};
+    });
+    return {schema:'legacy-compact-projection-result-v3.11',projections,decisionRevisions:[{
+      symbol:'9197',decisionRevisionId:selectedCard.decisionRevisionId,bundle:selectedRevision,identityBundle:selectedIdentity,
+      sourceLedCorrectness:correctness}]};
+  };
+  const first=compactResult('2026-08-08T10:20:00Z','2026-08-08T10:21:00Z');
+  const uncitedDraft={...draftCard,decisionBrief:{thesis:['a','b','c'],risks:['d','e','f']},
+    citations:[{ref:'claim-9197',sourceUrl:'https://example.com/9197'}]};
+  const uncitedIdentity=projectionCodec.decisionRevisionIdentityBundle(uncitedDraft);
+  const uncitedId=`decision-v3.13:${uncitedIdentity.hash}`;
+  const uncitedCard={...uncitedDraft,decisionRevisionId:uncitedId,
+    decisionEnvelope:{...uncitedDraft.decisionEnvelope,decisionRevisionId:uncitedId}};
+  const uncitedRevision=codec.immutableBundle('legacy_decision_revision_v3_13',uncitedCard);
+  const uncited=compactResult('2026-08-08T10:20:00Z','2026-08-08T10:21:00Z',uncitedCard,uncitedIdentity,uncitedRevision);
+  const malformedDecisionResult=(mutate,afterBind=null)=>{
+    const malformedDraft=structuredClone(draftCard);mutate(malformedDraft);
+    const malformedIdentity=projectionCodec.decisionRevisionIdentityBundle(malformedDraft);
+    const malformedId=`decision-v3.13:${malformedIdentity.hash}`;
+    let malformedCard={...malformedDraft,decisionRevisionId:malformedId,
+      decisionEnvelope:{...malformedDraft.decisionEnvelope,decisionRevisionId:malformedId}};
+    if(afterBind)malformedCard=afterBind(malformedCard);
+    return compactResult('2026-08-08T10:20:00Z','2026-08-08T10:21:00Z',malformedCard,malformedIdentity,
+      codec.immutableBundle('legacy_decision_revision_v3_13',malformedCard));
+  };
+  const malformedBriefCanonicals=[
+    malformedDecisionResult((draft)=>{draft.decisionBrief={availability:'unavailable',reason:'arbitrary_blocker'};}),
+    malformedDecisionResult((draft)=>{draft.citations[0].sourceUrl='https://';draft.sourceProvenance.sourceUrl='https://';}),
+    malformedDecisionResult((draft)=>{draft.citations[0].evaluatedAt='2026-99-99T00:00:00Z';
+      draft.sourceProvenance.evaluatedAt='2026-99-99T00:00:00Z';}),
+    malformedDecisionResult((draft)=>{draft.decisionBrief.evidence.push({point:'thesis:0',refs:['claim-9197']});}),
+    malformedDecisionResult((draft)=>{draft.decisionBrief.evidence[1].point='thesis:0';}),
+    malformedDecisionResult((draft)=>{draft.sourceProvenance={};}),
+    malformedDecisionResult((draft)=>{draft.decisionBrief=null;}),
+    malformedDecisionResult((draft)=>{draft.citations[0].sourceUrl='https://example.com:99999/a';
+      draft.sourceProvenance.sourceUrl='https://example.com:99999/a';}),
+    malformedDecisionResult((draft)=>{draft.citations[0].evaluatedAt='2026-02-30T00:00:00Z';
+      draft.sourceProvenance.evaluatedAt='2026-02-30T00:00:00Z';}),
+    malformedDecisionResult((draft)=>{draft.citations[0].evaluatedAt='2026-08-07T10:20:00';
+      draft.sourceProvenance.evaluatedAt='2026-08-07T10:20:00';}),
+    malformedDecisionResult((draft)=>{draft.citations[0].evaluatedAt='2026-08-07T24:00:00Z';
+      draft.sourceProvenance.evaluatedAt='2026-08-07T24:00:00Z';}),
+    malformedDecisionResult((draft)=>{draft.decisionBrief.thesis[0]='   ';}),
+    malformedDecisionResult((draft)=>{draft.citations[0].sourceKey=9197;draft.sourceProvenance.sourceKey=9197;}),
+    malformedDecisionResult((draft)=>{draft.citations[0].sourceName=9197;draft.sourceProvenance.sourceName=9197;}),
+    malformedDecisionResult((draft)=>{draft.decisionBrief.evidence[0].refs=[9197];}),
+    malformedDecisionResult((draft)=>{draft.decisionEnvelope.recommendationAuthority='none';
+      draft.decisionEnvelope.valuationReadiness='missing';draft.decisionEnvelope.userAction='buy';}),
+    malformedDecisionResult((draft)=>{draft.decisionEnvelope.userAction='avoid';}),
+    malformedDecisionResult((draft)=>{draft.decisionEnvelope=structuredClone(formalEnvelope);
+      draft.decisionEnvelope.userAction='buy';draft.decisionEnvelope.valuationSummary.baseUpsidePct=14.9;}),
+    malformedDecisionResult((draft)=>{draft.decisionEnvelope=structuredClone(formalEnvelope);
+      draft.decisionEnvelope.userAction='buy';draft.decisionEnvelope.entryPlan.rewardRisk=1.99;}),
+    malformedDecisionResult((draft)=>{draft.decisionEnvelope=structuredClone(formalEnvelope);
+      draft.decisionEnvelope.valuationSummary.method=null;}),
+    malformedDecisionResult((draft)=>{draft.decisionEnvelope=structuredClone(formalEnvelope);
+      draft.decisionEnvelope.valuationSummary.sourceRefs=[];}),
+    malformedDecisionResult(()=>{},(card)=>({...card,decisionEnvelope:{...card.decisionEnvelope,
+      decisionRevisionId:`decision-v3.13:${'e'.repeat(64)}`}})),
+    malformedDecisionResult(()=>{},(card)=>({...card,researchDecision:{decisionEnvelope:{...card.decisionEnvelope,
+      reason:'contradictory_nested_envelope'}}})),
+  ].map((value)=>codec.canonicalJson(value));
+  const conflict=compactResult('2026-08-08T10:20:01Z','2026-08-08T10:22:00Z');
+  const staleCollision=structuredClone(first);
+  staleCollision.projections[0].payload.sourceLedCorrectness.contentHash='e'.repeat(64);
+  staleCollision.projections[0].bundle.canonical=codec.canonicalJson(staleCollision.projections[0].payload);
+  staleCollision.projections[0].payloadChecksum=codec.sha256(staleCollision.projections[0].bundle.canonical);
+  const tampered=structuredClone(first);const tamperedId=`decision-v3.13:${'f'.repeat(64)}`;
+  const tamperedCard={...card,decisionRevisionId:tamperedId,
+    decisionEnvelope:{...card.decisionEnvelope,decisionRevisionId:tamperedId}};
+  tampered.decisionRevisions[0].decisionRevisionId=tamperedId;
+  tampered.decisionRevisions[0].bundle=codec.immutableBundle('legacy_decision_revision_v3_13',tamperedCard);
+  const missing=structuredClone(first);missing.decisionRevisions=[];
+  const noncanonical=structuredClone(first);
+  noncanonical.decisionRevisions[0].identityBundle.canonical=
+    noncanonical.decisionRevisions[0].identityBundle.canonical.replace(',{',', {');
+  const firstCanonical=codec.canonicalJson(first);const conflictCanonical=codec.canonicalJson(conflict);
+  const uncitedCanonical=codec.canonicalJson(uncited);
+  const staleCollisionCanonical=codec.canonicalJson(staleCollision);
+  const tamperedCanonical=codec.canonicalJson(tampered);
+  const missingCanonical=codec.canonicalJson(missing);const noncanonicalCanonical=codec.canonicalJson(noncanonical);
+  const result=JSON.parse(psql(`
+    BEGIN;
+    INSERT INTO public.legacy_producer_runs_v3_11(run_id,owner_label,owner_token_hash,producer_commit_sha,worker_sha256,
+      scheduler_config_canonical,scheduler_config_sha256,legacy_seed_symbols,legacy_seed_set_hash,scheduled_occurrence_id,
+      source_cutoff,trading_date,trading_session_authority_hash,authority_canonical,authority_json,authority_hash,status,
+      started_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,logical_run_key,attempt)
+    VALUES
+      ('71300000-0000-4000-8000-000000000097','com.stockinsider.auth-source-worker',
+       encode(extensions.digest(convert_to('71300000-0000-4000-8000-000000000099','utf8'),'sha256'),'hex'),
+       repeat('a',40),repeat('b',64),decode('${legacyRuntimeConfigHex}','hex'),
+       '1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2',
+       (SELECT array_agg(value ORDER BY ordinal) FROM jsonb_array_elements_text(
+         convert_from(decode('${legacyRuntimeConfigHex}','hex'),'utf8')::jsonb->'legacySeedSymbols'
+       ) WITH ORDINALITY seed(value,ordinal)),
+       'e6d9c09b8b552f5d9eaf389b76d2d90daa2d89578433d2a1ad63286888b3b743',
+       'v313-service-completion-1','2026-08-08T10:20:00Z',NULL,NULL,convert_to('{}','utf8'),'{}',
+       encode(extensions.digest(convert_to('{}','utf8'),'sha256'),'hex'),'running',
+       date_trunc('second',clock_timestamp())-interval '1 second',clock_timestamp(),
+       clock_timestamp()+interval '120 seconds',NULL,NULL,repeat('1',64),1);
+    INSERT INTO public.legacy_producer_jobs_v3_11(job_id,run_id,stage,job_kind,stage_ordinal,shard_ordinal,
+      execution_ordinal,revision_id,predecessor_job_id,input_hash,payload_hash,status,attempt,max_attempts,
+      owner_token_hash,leased_at,heartbeat_at,lease_expires_at,terminal_at,failure_code)
+    VALUES
+      ('71300000-0000-4000-8000-000000000095','71300000-0000-4000-8000-000000000097','compact_radar_projection',
+       'stage_barrier',5,NULL,0,NULL,NULL,repeat('3',64),repeat('3',64),'leased',1,5,
+       encode(extensions.digest(convert_to('71300000-0000-4000-8000-000000000099','utf8'),'sha256'),'hex'),
+       clock_timestamp(),clock_timestamp(),clock_timestamp()+interval '120 seconds',NULL,NULL);
+    SET ROLE service_role;
+    DO $uncited_brief$ BEGIN
+      BEGIN
+        PERFORM * FROM public.complete_legacy_producer_job_v3_11(
+          '71300000-0000-4000-8000-000000000097','71300000-0000-4000-8000-000000000095',
+          '71300000-0000-4000-8000-000000000099',decode('${Buffer.from(uncitedCanonical).toString('hex')}','hex'),
+          ${sqlLiteral(uncitedCanonical)}::jsonb,'${codec.sha256(uncitedCanonical)}');
+        RAISE EXCEPTION 'expected_uncited_brief_failure';
+      EXCEPTION WHEN OTHERS THEN
+        IF SQLERRM<>'data_integrity_failure' THEN RAISE;END IF;
+      END;
+    END $uncited_brief$;
+    ${malformedBriefCanonicals.map((canonical,index)=>`DO $invalid_brief_${index}$ BEGIN
+      BEGIN
+        PERFORM * FROM public.complete_legacy_producer_job_v3_11(
+          '71300000-0000-4000-8000-000000000097','71300000-0000-4000-8000-000000000095',
+          '71300000-0000-4000-8000-000000000099',decode('${Buffer.from(canonical).toString('hex')}','hex'),
+          ${sqlLiteral(canonical)}::jsonb,'${codec.sha256(canonical)}');
+        RAISE EXCEPTION 'expected_invalid_brief_failure';
+      EXCEPTION WHEN OTHERS THEN
+        IF SQLERRM<>'data_integrity_failure' THEN RAISE;END IF;
+      END;
+    END $invalid_brief_${index}$;`).join('\n')}
+    DO $missing_revision$ BEGIN
+      BEGIN
+        PERFORM * FROM public.complete_legacy_producer_job_v3_11(
+          '71300000-0000-4000-8000-000000000097','71300000-0000-4000-8000-000000000095',
+          '71300000-0000-4000-8000-000000000099',decode('${Buffer.from(missingCanonical).toString('hex')}','hex'),
+          ${sqlLiteral(missingCanonical)}::jsonb,'${codec.sha256(missingCanonical)}');
+        RAISE EXCEPTION 'expected_missing_revision_failure';
+      EXCEPTION WHEN OTHERS THEN
+        IF SQLERRM<>'decision_revision_projection_mismatch' THEN RAISE;END IF;
+      END;
+    END $missing_revision$;
+    DO $noncanonical_identity$ BEGIN
+      BEGIN
+        PERFORM * FROM public.complete_legacy_producer_job_v3_11(
+          '71300000-0000-4000-8000-000000000097','71300000-0000-4000-8000-000000000095',
+          '71300000-0000-4000-8000-000000000099',decode('${Buffer.from(noncanonicalCanonical).toString('hex')}','hex'),
+          ${sqlLiteral(noncanonicalCanonical)}::jsonb,'${codec.sha256(noncanonicalCanonical)}');
+        RAISE EXCEPTION 'expected_noncanonical_identity_failure';
+      EXCEPTION WHEN OTHERS THEN
+        IF SQLERRM<>'decision_revision_identity_conflict' THEN RAISE;END IF;
+      END;
+    END $noncanonical_identity$;
+    DO $identity_conflict$ BEGIN
+      BEGIN
+        PERFORM * FROM public.complete_legacy_producer_job_v3_11(
+          '71300000-0000-4000-8000-000000000097','71300000-0000-4000-8000-000000000095',
+          '71300000-0000-4000-8000-000000000099',decode('${Buffer.from(tamperedCanonical).toString('hex')}','hex'),
+          ${sqlLiteral(tamperedCanonical)}::jsonb,'${codec.sha256(tamperedCanonical)}');
+        RAISE EXCEPTION 'expected_identity_conflict_missing';
+      EXCEPTION WHEN OTHERS THEN
+        IF SQLERRM<>'decision_revision_projection_mismatch' THEN RAISE;END IF;
+      END;
+    END $identity_conflict$;
+    SELECT status FROM public.complete_legacy_producer_job_v3_11(
+      '71300000-0000-4000-8000-000000000097','71300000-0000-4000-8000-000000000095',
+      '71300000-0000-4000-8000-000000000099',decode('${Buffer.from(firstCanonical).toString('hex')}','hex'),
+      ${sqlLiteral(firstCanonical)}::jsonb,'${codec.sha256(firstCanonical)}');
+    RESET ROLE;
+    INSERT INTO public.legacy_producer_runs_v3_11(run_id,owner_label,owner_token_hash,producer_commit_sha,worker_sha256,
+      scheduler_config_canonical,scheduler_config_sha256,legacy_seed_symbols,legacy_seed_set_hash,scheduled_occurrence_id,
+      source_cutoff,trading_date,trading_session_authority_hash,authority_canonical,authority_json,authority_hash,status,
+      started_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,logical_run_key,attempt)
+    VALUES('71300000-0000-4000-8000-000000000094','com.stockinsider.auth-source-worker',
+      encode(extensions.digest(convert_to('71300000-0000-4000-8000-000000000099','utf8'),'sha256'),'hex'),
+      repeat('a',40),repeat('b',64),decode('${legacyRuntimeConfigHex}','hex'),
+      '1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2',
+      (SELECT array_agg(value ORDER BY ordinal) FROM jsonb_array_elements_text(
+        convert_from(decode('${legacyRuntimeConfigHex}','hex'),'utf8')::jsonb->'legacySeedSymbols'
+      ) WITH ORDINALITY seed(value,ordinal)),
+      'e6d9c09b8b552f5d9eaf389b76d2d90daa2d89578433d2a1ad63286888b3b743',
+      'v313-service-completion-exact-retry','2026-08-08T10:20:00Z',NULL,NULL,convert_to('{}','utf8'),'{}',
+      encode(extensions.digest(convert_to('{}','utf8'),'sha256'),'hex'),'running',
+      date_trunc('second',clock_timestamp())-interval '1 second',clock_timestamp(),
+      clock_timestamp()+interval '120 seconds',NULL,NULL,repeat('5',64),1);
+    INSERT INTO public.legacy_producer_jobs_v3_11(job_id,run_id,stage,job_kind,stage_ordinal,shard_ordinal,
+      execution_ordinal,revision_id,predecessor_job_id,input_hash,payload_hash,status,attempt,max_attempts,
+      owner_token_hash,leased_at,heartbeat_at,lease_expires_at,terminal_at,failure_code)
+    VALUES('71300000-0000-4000-8000-000000000093','71300000-0000-4000-8000-000000000094',
+      'compact_radar_projection','stage_barrier',5,NULL,0,NULL,NULL,repeat('5',64),repeat('5',64),'leased',1,5,
+      encode(extensions.digest(convert_to('71300000-0000-4000-8000-000000000099','utf8'),'sha256'),'hex'),
+      clock_timestamp(),clock_timestamp(),clock_timestamp()+interval '120 seconds',NULL,NULL);
+    SET ROLE service_role;
+    DO $stale_key_collision$ BEGIN
+      BEGIN
+        PERFORM * FROM public.complete_legacy_producer_job_v3_11(
+          '71300000-0000-4000-8000-000000000094','71300000-0000-4000-8000-000000000093',
+          '71300000-0000-4000-8000-000000000099',decode('${Buffer.from(staleCollisionCanonical).toString('hex')}','hex'),
+          ${sqlLiteral(staleCollisionCanonical)}::jsonb,'${codec.sha256(staleCollisionCanonical)}');
+        RAISE EXCEPTION 'expected_stale_key_collision_missing';
+      EXCEPTION WHEN OTHERS THEN
+        IF SQLERRM<>'data_integrity_failure' THEN RAISE;END IF;
+      END;
+    END $stale_key_collision$;
+    SELECT status FROM public.complete_legacy_producer_job_v3_11(
+      '71300000-0000-4000-8000-000000000094','71300000-0000-4000-8000-000000000093',
+      '71300000-0000-4000-8000-000000000099',decode('${Buffer.from(firstCanonical).toString('hex')}','hex'),
+      ${sqlLiteral(firstCanonical)}::jsonb,'${codec.sha256(firstCanonical)}');
+    RESET ROLE;
+    INSERT INTO public.legacy_producer_runs_v3_11(run_id,owner_label,owner_token_hash,producer_commit_sha,worker_sha256,
+      scheduler_config_canonical,scheduler_config_sha256,legacy_seed_symbols,legacy_seed_set_hash,scheduled_occurrence_id,
+      source_cutoff,trading_date,trading_session_authority_hash,authority_canonical,authority_json,authority_hash,status,
+      started_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,logical_run_key,attempt)
+    VALUES('71300000-0000-4000-8000-000000000098','com.stockinsider.auth-source-worker',
+      encode(extensions.digest(convert_to('71300000-0000-4000-8000-000000000099','utf8'),'sha256'),'hex'),
+      repeat('a',40),repeat('b',64),decode('${legacyRuntimeConfigHex}','hex'),
+      '1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2',
+      (SELECT array_agg(value ORDER BY ordinal) FROM jsonb_array_elements_text(
+        convert_from(decode('${legacyRuntimeConfigHex}','hex'),'utf8')::jsonb->'legacySeedSymbols'
+      ) WITH ORDINALITY seed(value,ordinal)),
+      'e6d9c09b8b552f5d9eaf389b76d2d90daa2d89578433d2a1ad63286888b3b743',
+      'v313-service-completion-2','2026-08-08T10:20:01Z',NULL,NULL,convert_to('{}','utf8'),'{}',
+      encode(extensions.digest(convert_to('{}','utf8'),'sha256'),'hex'),'running',
+      date_trunc('second',clock_timestamp())-interval '1 second',clock_timestamp(),
+      clock_timestamp()+interval '120 seconds',NULL,NULL,repeat('2',64),1);
+    INSERT INTO public.legacy_producer_jobs_v3_11(job_id,run_id,stage,job_kind,stage_ordinal,shard_ordinal,
+      execution_ordinal,revision_id,predecessor_job_id,input_hash,payload_hash,status,attempt,max_attempts,
+      owner_token_hash,leased_at,heartbeat_at,lease_expires_at,terminal_at,failure_code)
+    VALUES('71300000-0000-4000-8000-000000000096','71300000-0000-4000-8000-000000000098',
+      'compact_radar_projection','stage_barrier',5,NULL,0,NULL,NULL,repeat('4',64),repeat('4',64),'leased',1,5,
+      encode(extensions.digest(convert_to('71300000-0000-4000-8000-000000000099','utf8'),'sha256'),'hex'),
+      clock_timestamp(),clock_timestamp(),clock_timestamp()+interval '120 seconds',NULL,NULL);
+    SET ROLE service_role;
+    DO $conflict$ BEGIN
+      BEGIN
+        PERFORM * FROM public.complete_legacy_producer_job_v3_11(
+          '71300000-0000-4000-8000-000000000098','71300000-0000-4000-8000-000000000096',
+          '71300000-0000-4000-8000-000000000099',decode('${Buffer.from(conflictCanonical).toString('hex')}','hex'),
+          ${sqlLiteral(conflictCanonical)}::jsonb,'${codec.sha256(conflictCanonical)}');
+        RAISE EXCEPTION 'expected_conflict_missing';
+      EXCEPTION WHEN OTHERS THEN
+        IF SQLERRM<>'decision_evaluation_checksum_conflict' THEN RAISE;END IF;
+      END;
+    END $conflict$;
+    RESET ROLE;
+    SELECT jsonb_build_object(
+      'firstStatus',(SELECT status::text FROM public.legacy_producer_runs_v3_11 WHERE run_id='71300000-0000-4000-8000-000000000097'),
+      'exactRetryStatus',(SELECT status::text FROM public.legacy_producer_runs_v3_11 WHERE run_id='71300000-0000-4000-8000-000000000094'),
+      'secondStatus',(SELECT status::text FROM public.legacy_producer_jobs_v3_11 WHERE job_id='71300000-0000-4000-8000-000000000096'),
+      'revisions',(SELECT count(*) FROM public.legacy_decision_revisions_v3_13 WHERE decision_revision_id='${revisionId}'),
+      'evaluations',(SELECT count(*) FROM public.legacy_decision_revision_evaluations_v3_13 WHERE decision_revision_id='${revisionId}'),
+      'projectionFks',(SELECT count(*) FROM pg_constraint con JOIN pg_class relation ON relation.oid=con.conrelid
+        WHERE relation.relname IN('legacy_decision_revisions_v3_13','legacy_decision_revision_evaluations_v3_13')
+          AND con.contype='f' AND pg_get_constraintdef(con.oid) LIKE '%legacy_radar_projections_v3_11%'))::text;
+    ROLLBACK;
+  `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual(result,{firstStatus:'success',exactRetryStatus:'success',secondStatus:'leased',revisions:1,evaluations:1,
+    projectionFks:0});
+});
+
+test('V3.13 SQL decision envelope enforces the exact 15 percent and 2.0 authority boundaries',()=>{
+  const envelopes=runtime('decision-envelope.js');
+  const relative=(currentPe)=>({valuation:{status:'valuation_review',reason:'formal_target_unavailable'},currentPrice:100,
+    researchScore:{axes:{valuation:{trustworthy:true,currentPe,historyPeP25:10,historyPeMedian:15,
+      historyPeP75:20,sectorPe:16,historySampleCount:252,sectorCount:8,asOf:'2026-08-07',
+      valuationEvidence:{algorithm:'official-relative-pe-evidence-v1',evidenceRoot:'a'.repeat(64),
+        currentObservationRoot:'b'.repeat(64),historyMembershipRoot:'c'.repeat(64),
+        sectorMembershipRoot:'d'.repeat(64),historySessions:252,sectorPeers:8},
+      sourceRefs:['twse-openapi:official']}}},qualityActionEligible:true,marketAllowsAction:true,
+    technical:{technicalState:'at_support',plane:{current:100}},geometry:{availability:'available',
+      entryZone:[99,101],invalidation:94,trigger:null}});
+  const formal=(base,invalidation)=>({valuation:{status:'normal',valuationRange:{bear:90,base,bull:140},
+    method:{method:'pe'},asOf:'2026-08-07',evidence:{sourceRefs:['official-filing']}},currentPrice:100,
+    qualityActionEligible:true,marketAllowsAction:true,technical:{technicalState:'breakout_confirmed',plane:{current:100}},
+    geometry:{availability:'available',entryZone:[99,101],invalidation,trigger:null}});
+  const exactFormal=envelopes.deriveDecisionEnvelope(formal(115,92.5));
+  const exactRelative=envelopes.deriveDecisionEnvelope(relative(12.75));
+  const validAvoid=envelopes.deriveDecisionEnvelope(relative(12.7515));
+  const negativeHalfTie=envelopes.deriveDecisionEnvelope(formal(98.75,92.5));
+  const lowUpside={...envelopes.deriveDecisionEnvelope(formal(114.99,92.5)),userAction:'buy'};
+  const lowRewardRisk={...envelopes.deriveDecisionEnvelope(formal(115,92.49625)),userAction:'buy'};
+  const lowRelative={...validAvoid,userAction:'research_starter'};
+  const forgedRelative={...validAvoid,userAction:'research_starter',valuationSummary:{...validAvoid.valuationSummary,
+    relativeDiscountPct:15}};
+  const insufficientHistory={...exactRelative,valuationSummary:{...exactRelative.valuationSummary,
+    thresholdAuthority:{...exactRelative.valuationSummary.thresholdAuthority,historySessions:251}}};
+  const excessiveHistory={...exactRelative,valuationSummary:{...exactRelative.valuationSummary,
+    thresholdAuthority:{...exactRelative.valuationSummary.thresholdAuthority,historySessions:253}}};
+  const insufficientPeers={...exactRelative,valuationSummary:{...exactRelative.valuationSummary,
+    thresholdAuthority:{...exactRelative.valuationSummary.thresholdAuthority,sectorPeers:7}}};
+  const missingQuality=envelopes.deriveDecisionEnvelope({...formal(120,90),qualityActionEligible:false,
+    qualityReadiness:'missing'});
+  const missingMarket=envelopes.deriveDecisionEnvelope({...relative(10),marketAllowsAction:false,
+    marketReadiness:'missing'});
+  const technicalEnvelope=(technicalState,availability,trigger,geometry={})=>envelopes.deriveDecisionEnvelope({
+    ...relative(10),technical:{technicalState,plane:{current:100}},geometry:{availability,trigger,
+      entryZone:null,invalidation:null,...geometry}});
+  const waitReclaim=technicalEnvelope('below_support','conditional',{kind:'reclaim',threshold:102});
+  const avoidChase=technicalEnvelope('extended','conditional',{kind:'pullback',threshold:98});
+  const invalidated=technicalEnvelope('invalidated','invalidated',null);
+  const waitBreakout=technicalEnvelope('breakout_pending','available',{kind:'breakout',threshold:102},
+    {entryZone:[101,103],invalidation:96});
+  const wrongTriggers=[
+    {...waitReclaim,entryPlan:{...waitReclaim.entryPlan,trigger:{kind:'breakout',threshold:102}}},
+    {...avoidChase,entryPlan:{...avoidChase.entryPlan,trigger:{kind:'reclaim',threshold:102}}},
+    {...invalidated,entryPlan:{...invalidated.entryPlan,trigger:{kind:'reclaim',threshold:102}}},
+    {...waitBreakout,entryPlan:{...waitBreakout.entryPlan,trigger:{kind:'pullback',threshold:98}}},
+    {...waitReclaim,entryPlan:{...waitReclaim.entryPlan,trigger:{threshold:102}}},
+    {...waitReclaim,entryPlan:{...waitReclaim.entryPlan,trigger:{kind:'reclaim',threshold:102,arbitrary:true}}},
+  ];
+  const unavailable=envelopes.unavailableDecisionEnvelope({reason:'valuation_missing'});
+  const missingAsAvoid={...unavailable,userAction:'avoid'};
+  const values=[exactFormal,exactRelative,validAvoid,negativeHalfTie,lowUpside,lowRewardRisk,lowRelative,forgedRelative,
+    insufficientHistory,excessiveHistory,insufficientPeers,missingQuality,missingMarket,waitReclaim,avoidChase,invalidated,
+    waitBreakout,...wrongTriggers,missingAsAvoid]
+    .map((value)=>`public.legacy_valid_decision_envelope_v3_13(${sqlLiteral(JSON.stringify(value))}::jsonb)`);
+  const actual=JSON.parse(psql(`SELECT jsonb_build_array(${values.join(',')})::text;`,['-At']).trim());
+  assert.deepEqual(actual,[true,true,true,true,false,false,false,false,false,false,false,true,true,true,true,true,true,
+    false,false,false,false,false,false,false]);
+});
+
+test('V3.13 SQL decision canonicalizer is byte-equal to the tracked worker for disclosure values',()=>{
+  const codec=runtime('codec.js');
+  const value={action:'accumulate',entry:236.5,invalidation:219.5,upsidePct:15,riskRatio:2.25,
+    unavailable:null,flags:[true,false],text:'comma, colon: and escaped "value"'};
+  const expected=codec.canonicalJson(value);
+  const actual=psql(`SELECT public.legacy_canonical_json_v3_13(${sqlLiteral(expected)}::jsonb);`,['-At']).trim();
+  assert.equal(actual,expected);
+});
+
+test('V3.13 projection guard serializes every writer, rejects non-monotonic time, and retains exactly 1500 rows',()=>{
+  const result=JSON.parse(psql(`
+    BEGIN;
+    INSERT INTO public.legacy_radar_projections_v3_11(projection_key,"window",as_of,producer_commit_sha,
+      worker_sha256,material_change_root,payload_canonical,payload_json,payload_sha256)
+    SELECT 'retention-fixture-'||ordinal,'daily','2026-01-01T00:00:00Z'::timestamptz+ordinal*interval '1 second',
+      repeat('a',40),repeat('b',64),repeat('c',64),convert_to(payload::text,'utf8'),payload,
+      encode(extensions.digest(convert_to(payload::text,'utf8'),'sha256'),'hex')
+    FROM(SELECT ordinal,jsonb_build_object('ordinal',ordinal) payload FROM generate_series(1,1501) ordinal) rows
+    ORDER BY ordinal;
+    DO $non_monotonic$ BEGIN
+      BEGIN
+        INSERT INTO public.legacy_radar_projections_v3_11(projection_key,"window",as_of,producer_commit_sha,
+          worker_sha256,material_change_root,payload_canonical,payload_json,payload_sha256)
+        SELECT 'retention-fixture-old','daily','2026-01-01T00:00:00Z',repeat('a',40),repeat('b',64),
+          repeat('c',64),convert_to(value::text,'utf8'),value,
+          encode(extensions.digest(convert_to(value::text,'utf8'),'sha256'),'hex')
+        FROM(SELECT jsonb_build_object('ordinal',0) value) payload;
+        RAISE EXCEPTION 'expected_non_monotonic_missing';
+      EXCEPTION WHEN OTHERS THEN
+        IF SQLERRM<>'non_monotonic_projection' THEN RAISE;END IF;
+      END;
+    END $non_monotonic$;
+    SELECT jsonb_build_object(
+      'rows',(SELECT count(*) FROM public.legacy_radar_projections_v3_11 WHERE "window"='daily'),
+      'oldest',(SELECT min(as_of) FROM public.legacy_radar_projections_v3_11 WHERE "window"='daily'),
+      'newest',(SELECT max(as_of) FROM public.legacy_radar_projections_v3_11 WHERE "window"='daily'),
+      'guards',(SELECT count(*) FROM pg_trigger trigger JOIN pg_class relation ON relation.oid=trigger.tgrelid
+        WHERE relation.relname='legacy_radar_projections_v3_11'
+          AND trigger.tgname IN('legacy_radar_projection_insert_guard_v3_13','legacy_radar_projection_retention_v3_13')))::text;
+    ROLLBACK;
+  `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual({rows:result.rows,guards:result.guards},{rows:1500,guards:2});
+  assert.equal(new Date(result.oldest).toISOString(),'2026-01-01T00:00:02.000Z');
+  assert.equal(new Date(result.newest).toISOString(),'2026-01-01T00:25:01.000Z');
+});
+
+test('V3.13 financial fact append authority rejects future reported periods and the 129th distinct series row',()=>{
+  const result=JSON.parse(psql(`
+    BEGIN;
+    INSERT INTO public.internal_principal_role_bindings_v3(principal_id,role,valid_from,valid_to,status,configuration_hash,recorded_at)
+    VALUES('a11d4e67-7d0a-4c44-8a9d-1d5c3b875001','opportunity_runner','2026-01-01',NULL,'active',repeat('8',64),clock_timestamp());
+    INSERT INTO public.stocks(id,symbol) VALUES('71300000-0000-4000-8000-000000000080','9180');
+    DO $series$
+    DECLARE i integer;v_rejected boolean:=false;v_future_rejected boolean:=false;v_day date;
+    BEGIN
+      FOR i IN 1..128 LOOP
+        v_day:=date '2025-01-01'+i;
+        PERFORM public.append_financial_fact_v3(ROW(
+          '71300000-0000-4000-8000-000000000080','net_asset_value',NULL,v_day,'instant',
+          i::double precision,'TWD','twse','official_filing','reported','reported_period',
+          v_day::timestamptz,v_day::timestamptz,v_day::timestamptz+interval '1 hour',NULL,
+          'twse-openapi:series-bound:'||i)::public.financial_fact_input_v3,
+          'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+      END LOOP;
+      BEGIN
+        v_day:=date '2025-06-01';
+        PERFORM public.append_financial_fact_v3(ROW(
+          '71300000-0000-4000-8000-000000000080','net_asset_value',NULL,v_day,'instant',129,
+          'TWD','twse','official_filing','reported','reported_period',v_day::timestamptz,
+          v_day::timestamptz,v_day::timestamptz+interval '1 hour',NULL,
+          'twse-openapi:series-bound:129')::public.financial_fact_input_v3,
+          'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+      EXCEPTION WHEN SQLSTATE 'PT409' THEN v_rejected:=true;
+      END;
+      IF NOT v_rejected THEN RAISE EXCEPTION '129th series row was accepted';END IF;
+      BEGIN
+        PERFORM public.append_financial_fact_v3(ROW(
+          '71300000-0000-4000-8000-000000000080','net_asset_value',NULL,date '2027-01-01','instant',130,
+          'TWD','twse','official_filing','reported','reported_period','2026-08-07T00:00:00Z'::timestamptz,
+          '2026-08-07T00:00:00Z'::timestamptz,'2026-08-07T01:00:00Z'::timestamptz,NULL,
+          'twse-openapi:future-reported-period')::public.financial_fact_input_v3,
+          'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+      EXCEPTION WHEN SQLSTATE 'PT422' THEN v_future_rejected:=true;
+      END;
+      IF NOT v_future_rejected THEN RAISE EXCEPTION 'future reported period was accepted';END IF;
+    END $series$;
+    SELECT jsonb_build_object(
+      'facts',(SELECT count(*) FROM public.opportunity_financial_facts_v3
+        WHERE stock_id='71300000-0000-4000-8000-000000000080'),
+      'series',(SELECT count(*) FROM public.opportunity_financial_fact_series_registry_v3
+        WHERE stock_id='71300000-0000-4000-8000-000000000080'),
+      'audits',(SELECT count(*) FROM public.opportunity_rpc_audit_v3
+        WHERE caller_principal_id='a11d4e67-7d0a-4c44-8a9d-1d5c3b875001'
+          AND function_name='append_financial_fact_v3'))::text;
+    ROLLBACK;
+  `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual(result,{facts:128,series:1,audits:128});
+});
+
+test('DI-008 parser output crosses job completion and persistence before an adjusted read', async () => {
+  const official=runtime('official-twse-valuation.js');
+  const parsedPrice=official.parseOfficialPriceHistory({stat:'OK',data:[
+    ['115/07/23','1,000','222,000','221.00','223.00','220.00','222.00'],
+  ]},{exchange:'TWSE',symbol:'9199',sourceUrl:`${official.TWSE_PRICE_HISTORY_URL}?date=20260701&stockNo=9199&response=json`,
+    collectedAt:'2026-07-23T10:00:00Z'});
+  assert.equal(parsedPrice.length,1);
+  const parsedSnapshots=await official.loadCorporateActionSnapshots({sessions:[['TWSE','2026-07-23']],
+    collectedAt:'2026-07-23T10:00:00Z',fetchImpl:async(url)=>{
+      const feed=official.CORPORATE_ACTION_FEEDS.TWSE.find((candidate)=>url.includes(candidate.path));
+      const data=feed===official.CORPORATE_ACTION_FEEDS.TWSE[0]
+        ?[['115年07月23日','9199','DI-008','100.00','50.00']]:[];
+      return new Response(JSON.stringify({stat:'OK',fields:feed.header,data}),{status:200,
+        headers:{'content-type':'application/json'}});
+    }});
+  assert.equal(parsedSnapshots.length,1);assert.equal(parsedSnapshots[0].declaredEventCount,1);
+  const completionPayload={schema:'legacy-facts-refresh-result-v3.11',decisions:[],shallowObservations:[],
+    sourceCandidates:[],dislocationCandidates:[],officialIngestion:{schema:'legacy-official-ingestion-v3.13',
+      financialFacts:[],priceObservations:parsedPrice,corporateActionSnapshots:parsedSnapshots,reportedValuations:[]}};
+  const result=JSON.parse(psql(`
+    BEGIN;
+    INSERT INTO public.internal_principal_role_bindings_v3(principal_id,role,valid_from,valid_to,status,configuration_hash,recorded_at)
+    VALUES('a11d4e67-7d0a-4c44-8a9d-1d5c3b875001','opportunity_runner','2026-01-01',NULL,'active',repeat('7',64),clock_timestamp());
+    INSERT INTO public.stocks(id,symbol) VALUES('71300000-0000-4000-8000-000000000090','9199');
+    WITH key(canonical) AS(VALUES(convert_to('["instrument_roster","71300000-0000-4000-8000-000000000090"]','utf8')))
+    INSERT INTO public.opportunity_authority_stream_registry_v3(family,stream_key_hash,stream_key_canonical,registered_at)
+    SELECT 'instrument_roster',encode(extensions.digest(canonical,'sha256'),'hex'),canonical,'2026-01-01' FROM key;
+    INSERT INTO public.stock_instruments_v3(instrument_authority_id,stock_id,symbol,exchange,instrument_type,
+      listing_status,official_legal_name,official_short_name,provider,source_timestamp,valid_from,valid_to,
+      roster_version,recorded_at)
+    VALUES('71300000-0000-4000-8000-000000000091','71300000-0000-4000-8000-000000000090','9199','TWSE',
+      'common_stock','active','DI-008 Parser Fixture','DI008','twse','2026-01-01','2026-01-01',NULL,
+      'tw-instrument-roster-v3.0','2026-01-01');
+    INSERT INTO public.tw_trading_sessions_v3(session_authority_id,session_id,market,open_at,close_at,status,
+      provider,source_timestamp,collected_at,source_ref,recorded_at)
+    VALUES('71300000-0000-4000-8000-000000000092','2026-07-23','TWSE','2026-07-23T01:00:00Z',
+      '2026-07-23T05:30:00Z','completed','twse','2026-07-23T05:30:00Z','2026-07-23T06:00:00Z',
+      'twse-calendar:di008','2026-07-23T06:00:00Z');
+    INSERT INTO public.legacy_producer_runs_v3_11(run_id,owner_label,owner_token_hash,producer_commit_sha,worker_sha256,
+      scheduler_config_canonical,scheduler_config_sha256,legacy_seed_symbols,legacy_seed_set_hash,scheduled_occurrence_id,
+      source_cutoff,trading_date,trading_session_authority_hash,authority_canonical,authority_json,authority_hash,status,
+      started_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,logical_run_key,attempt)
+    VALUES('71300000-0000-4000-8000-000000000080','com.stockinsider.auth-source-worker',
+      encode(extensions.digest(convert_to('71300000-0000-4000-8000-000000000081','utf8'),'sha256'),'hex'),
+      repeat('8',40),repeat('9',64),decode('${legacyRuntimeConfigHex}','hex'),
+      '1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2',
+      (SELECT array_agg(value ORDER BY ordinal) FROM jsonb_array_elements_text(
+        convert_from(decode('${legacyRuntimeConfigHex}','hex'),'utf8')::jsonb->'legacySeedSymbols'
+      ) WITH ORDINALITY seed(value,ordinal)),
+      'e6d9c09b8b552f5d9eaf389b76d2d90daa2d89578433d2a1ad63286888b3b743','v313-di008-parser-persistence',
+      date_trunc('second',clock_timestamp()),'2026-07-23',NULL,convert_to('{}','utf8'),'{}'::jsonb,
+      encode(extensions.digest(convert_to('{}','utf8'),'sha256'),'hex'),'running',clock_timestamp(),clock_timestamp(),
+      clock_timestamp()+interval '120 seconds',NULL,NULL,repeat('8',64),1);
+    INSERT INTO public.legacy_producer_jobs_v3_11(job_id,run_id,stage,job_kind,stage_ordinal,shard_ordinal,
+      execution_ordinal,revision_id,predecessor_job_id,input_hash,payload_hash,status,attempt,max_attempts,
+      owner_token_hash,leased_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,recorded_at)
+    VALUES('71300000-0000-4000-8000-000000000082','71300000-0000-4000-8000-000000000080','facts_refresh',
+      'stage_barrier',3,NULL,0,NULL,NULL,repeat('1',64),repeat('1',64),'leased',1,5,
+      encode(extensions.digest(convert_to('71300000-0000-4000-8000-000000000081','utf8'),'sha256'),'hex'),
+      clock_timestamp(),clock_timestamp(),clock_timestamp()+interval '120 seconds',NULL,NULL,clock_timestamp());
+    WITH output(value) AS(VALUES(${sqlLiteral(JSON.stringify(completionPayload))}::jsonb))
+    SELECT completion.status FROM output CROSS JOIN LATERAL public.complete_legacy_producer_job_v3_11(
+      '71300000-0000-4000-8000-000000000080','71300000-0000-4000-8000-000000000082',
+      '71300000-0000-4000-8000-000000000081',convert_to(output.value::text,'utf8'),output.value,
+      encode(extensions.digest(convert_to(output.value::text,'utf8'),'sha256'),'hex')) completion;
+    WITH selected AS (
+      SELECT session_id,session_authority_id,row_number() OVER(ORDER BY session_id) ordinal
+      FROM (SELECT session_id,session_authority_id FROM public.tw_trading_sessions_v3
+        WHERE market='TWSE' AND status='completed' AND session_id<='2026-07-23'
+        ORDER BY session_id DESC LIMIT 122) bounded
+    ), ordered AS (SELECT * FROM selected ORDER BY session_id)
+    INSERT INTO public.opportunity_corporate_action_snapshots_v3(
+      snapshot_id,exchange,session_id,session_authority_id,corporate_action_version,provider,collected_at,
+      declared_event_count,dataset_hash,recorded_at
+    ) SELECT extensions.gen_random_uuid(),'TWSE',session_id,session_authority_id,'tw-corporate-action-v3.1','twse',
+      session_id::timestamp AT TIME ZONE 'UTC'+interval '8 hours',0,
+      encode(extensions.digest(convert_to('v313-adjustment:'||session_id::text,'utf8'),'sha256'),'hex'),
+      session_id::timestamp AT TIME ZONE 'UTC'+interval '8 hours'
+    FROM ordered WHERE session_id<>'2026-07-23' ON CONFLICT DO NOTHING;
+
+    WITH selected AS (
+      SELECT session_id,session_authority_id,row_number() OVER(ORDER BY session_id) ordinal
+      FROM (SELECT session_id,session_authority_id FROM public.tw_trading_sessions_v3
+        WHERE market='TWSE' AND status='completed' AND session_id<='2026-07-23'
+        ORDER BY session_id DESC LIMIT 122) bounded ORDER BY session_id
+    ) INSERT INTO public.opportunity_price_observations_v3(stock_id,exchange,session_id,session_authority_id,
+      raw_open,raw_high,raw_low,raw_close,volume,turnover_twd,provider,source_timestamp,collected_at,source_ref,recorded_at)
+    SELECT (SELECT stock_id FROM public.opportunity_price_observations_v3
+        WHERE source_ref='twse-rwd:STOCK_DAY:2026-07-23:9199'),'TWSE',session_id,session_authority_id,
+      99+ordinal,101+ordinal,98+ordinal,100+ordinal,1000,100000,'twse',
+      session_id::timestamp AT TIME ZONE 'UTC'+interval '7 hours',
+      session_id::timestamp AT TIME ZONE 'UTC'+interval '8 hours','twse:v313-adjusted:'||session_id::text,
+      session_id::timestamp AT TIME ZONE 'UTC'+interval '8 hours'
+    FROM selected WHERE session_id<>'2026-07-23';
+
+    WITH plane AS (
+      SELECT public.read_legacy_candidate_fact_plane_v3_11(clock_timestamp(),jsonb_build_object('candidates',
+        jsonb_build_array(jsonb_build_object('stockId',(SELECT stock_id FROM public.opportunity_price_observations_v3
+          WHERE source_ref='twse-rwd:STOCK_DAY:2026-07-23:9199'),'symbol','9199','deepSelected',true,
+          'shallowSelected',true)))) value
+    ) SELECT jsonb_build_object('count',jsonb_array_length(value->'priceRows'),
+      'firstClose',(value#>>'{priceRows,0,5}')::double precision,
+      'lastClose',(value#>ARRAY['priceRows',(jsonb_array_length(value->'priceRows')-1)::text,'5'])::double precision,
+      'referenceCount',(SELECT count(*) FROM jsonb_array_elements(value->'priceRows') row(value)
+        WHERE (row.value->>7)~'^[0-9a-f]{64}$'),
+      'parsedSourcePersisted',(SELECT count(*) FROM public.opportunity_price_observations_v3
+        WHERE source_ref='twse-rwd:STOCK_DAY:2026-07-23:9199'),
+      'parsedActionPersisted',(SELECT count(*) FROM public.opportunity_corporate_action_events_v3
+        WHERE symbol='9199' AND source_row_ref='${parsedSnapshots[0].events[0].sourceRowRef}'),
+      'allPriceRows',(SELECT count(*) FROM public.opportunity_price_observations_v3 WHERE stock_id=(SELECT stock_id
+        FROM public.opportunity_price_observations_v3 WHERE source_ref='twse-rwd:STOCK_DAY:2026-07-23:9199')),
+      'jobStatus',(SELECT status FROM public.legacy_producer_jobs_v3_11 WHERE job_id='71300000-0000-4000-8000-000000000082'),
+      'resultRows',(SELECT count(*) FROM public.legacy_producer_job_results_v3_11 WHERE job_id='71300000-0000-4000-8000-000000000082'))::text FROM plane;
+    ROLLBACK;
+  `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual(result,{count:121,firstClose:50.5,lastClose:222,referenceCount:121,
+    parsedSourcePersisted:1,parsedActionPersisted:1,allPriceRows:121,jobStatus:'succeeded',resultRows:1});
+});
+
 test('real TypeScript evaluation executor output stages and commits through PostgreSQL', () => {
   const runId = '123e4567-e89b-42d3-a456-426614179101';
   const jobId = '123e4567-e89b-42d3-a456-426614179102';
@@ -4269,7 +6519,7 @@ test('real TypeScript evaluation executor output stages and commits through Post
     ) VALUES(
       '${runId}',repeat('d',64),repeat('e',64),1,'shadow_evaluate',
       'shadow_evaluation_daily','2026-07-23T06:58:00Z',
-      'ebaa6dbdaa7dd55bb261187008f51e930919e7c0cfe07732d531e01267e67c41',
+      'c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729',
       encode(extensions.digest(convert_to('source-led-eval-v3.7','utf8'),'sha256'),'hex'),
       'running','2026-07-23T06:58:01Z','2026-07-23T06:58:02Z','2026-07-23T06:58:01Z'
     );
@@ -4328,19 +6578,19 @@ test('public selector is one point-in-time statement across cold, active, failed
         'failed','2026-08-01T00:00:00Z','2026-08-01T01:00:00Z','2026-08-01T00:00:00Z'),
       ('123e4567-e89b-42d3-a456-426614178102',repeat('2',64),NULL,1,
         'enrich_rank','production_shadow_daily','2026-08-02T08:00:00Z',
-        'ebaa6dbdaa7dd55bb261187008f51e930919e7c0cfe07732d531e01267e67c41',
+        'c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729',
         'failed','2026-08-02T00:00:00Z','2026-08-03T00:00:00Z','2026-08-02T00:00:00Z'),
       ('123e4567-e89b-42d3-a456-426614178103',repeat('3',64),repeat('3',64),1,
         'enrich_rank','production_shadow_daily','2026-08-04T08:00:00Z',
-        'ebaa6dbdaa7dd55bb261187008f51e930919e7c0cfe07732d531e01267e67c41',
+        'c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729',
         'success','2026-08-04T00:00:00Z','2026-08-04T09:00:00Z','2026-08-04T00:00:00Z'),
       ('123e4567-e89b-42d3-a456-426614178104',repeat('4',64),repeat('4',64),1,
         'enrich_rank','production_shadow_daily','2026-08-05T08:00:00Z',
-        'ebaa6dbdaa7dd55bb261187008f51e930919e7c0cfe07732d531e01267e67c41',
+        'c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729',
         'success','2026-08-05T00:00:00Z','2026-08-05T09:00:00Z','2026-08-05T00:00:00Z'),
       ('123e4567-e89b-42d3-a456-426614178105',repeat('5',64),repeat('5',64),1,
         'enrich_rank','production_shadow_daily','2026-08-05T08:00:00Z',
-        'ebaa6dbdaa7dd55bb261187008f51e930919e7c0cfe07732d531e01267e67c41',
+        'c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729',
         'success','2026-08-05T00:00:00Z','2026-08-05T09:00:00Z','2026-08-05T00:00:00Z');
     INSERT INTO public.opportunity_run_jobs_v3(
       job_id,run_id,stage,shard_key,input_hash,status,attempt,output_kind,output_hash,
@@ -4362,15 +6612,15 @@ test('public selector is one point-in-time statement across cold, active, failed
     INSERT INTO public.opportunity_public_projections_v3(
       run_id,contract_version,acceptance_version,payload_canonical,payload_json,payload_hash,recorded_at
     ) VALUES
-      ('123e4567-e89b-42d3-a456-426614178103','source-led-opportunity-v3.6','1.44.6',
+      ('123e4567-e89b-42d3-a456-426614178103','source-led-opportunity-v3.6','1.46.0',
         convert_to('{"run":"one"}','utf8'),'{"run":"one"}',
         encode(extensions.digest(convert_to('{"run":"one"}','utf8'),'sha256'),'hex'),
         '2026-08-04T09:00:00Z'),
-      ('123e4567-e89b-42d3-a456-426614178104','source-led-opportunity-v3.6','1.44.6',
+      ('123e4567-e89b-42d3-a456-426614178104','source-led-opportunity-v3.6','1.46.0',
         convert_to('{"run":"tie-a"}','utf8'),'{"run":"tie-a"}',
         encode(extensions.digest(convert_to('{"run":"tie-a"}','utf8'),'sha256'),'hex'),
         '2026-08-05T09:00:00Z'),
-      ('123e4567-e89b-42d3-a456-426614178105','source-led-opportunity-v3.6','1.44.6',
+      ('123e4567-e89b-42d3-a456-426614178105','source-led-opportunity-v3.6','1.46.0',
         convert_to('{"run":"tie-b"}','utf8'),'{"run":"tie-b"}',
         encode(extensions.digest(convert_to('{"run":"tie-b"}','utf8'),'sha256'),'hex'),
         '2026-08-05T09:00:00Z');

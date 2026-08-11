@@ -1,6 +1,7 @@
 const { Client } = require('pg');
 const fs = require('fs');
 const path = require('path');
+const { loadGenericMigrationPlan } = require('./scripts/generic-migration-policy.js');
 
 const projectRef = process.env.SUPABASE_PROJECT_REF;
 const dbHost = process.env.SUPABASE_DB_HOST;
@@ -8,16 +9,8 @@ const dbPassword = process.env.SUPABASE_DB_PASSWORD;
 const dbUser = process.env.SUPABASE_DB_USER || `postgres.${projectRef || ''}`;
 const dbPort = process.env.SUPABASE_DB_PORT || '6543';
 const dbName = process.env.SUPABASE_DB_NAME || process.env.SUPABASE_DB_DATABASE || 'postgres';
-const migrationDir = process.env.MIGRATIONS_DIR || path.join(__dirname, 'migrations');
-const BLOCKED_MIGRATIONS = new Set([
-  '20260724_source_led_opportunity_engine_v3.sql',
-  '20260809_product_value_recovery_v3_12.sql',
-]);
-
-if (!dbPassword || (!projectRef && !dbHost)) {
-  console.error('Missing required env vars: SUPABASE_DB_PASSWORD and one of SUPABASE_PROJECT_REF/SUPABASE_DB_HOST');
-  process.exit(1);
-}
+const canonicalMigrationDir = path.join(__dirname, 'migrations');
+const migrationDir = process.env.MIGRATIONS_DIR || canonicalMigrationDir;
 
 const regions = [
   'ap-northeast-1',
@@ -28,12 +21,8 @@ const regions = [
   'ap-southeast-2',
 ];
 
-function listMigrationFiles() {
-  return fs
-    .readdirSync(migrationDir)
-    .filter((name) => name.endsWith('.sql') && !BLOCKED_MIGRATIONS.has(name))
-    .sort()
-    .map((name) => path.join(migrationDir, name));
+function loadMigrationPlan() {
+  return loadGenericMigrationPlan(fs, migrationDir, canonicalMigrationDir);
 }
 
 function connectionHosts() {
@@ -60,19 +49,24 @@ async function connectAnyRegion() {
 }
 
 (async () => {
-  const migrationFiles = listMigrationFiles();
-  if (migrationFiles.length === 0) {
+  // Validate the complete immutable plan before reading credentials or opening a
+  // database connection. SQL is retained in memory so path replacement cannot
+  // change the bytes between validation and execution.
+  const migrationPlan = loadMigrationPlan();
+  if (migrationPlan.length === 0) {
     console.log('No migration files found.');
     return;
+  }
+  if (!dbPassword || (!projectRef && !dbHost)) {
+    throw new Error('Missing required env vars: SUPABASE_DB_PASSWORD and one of SUPABASE_PROJECT_REF/SUPABASE_DB_HOST');
   }
 
   const client = await connectAnyRegion();
   try {
     await client.query('BEGIN');
-    for (const file of migrationFiles) {
-      console.log(`Applying ${path.basename(file)}...`);
-      const sql = fs.readFileSync(file, 'utf8');
-      await client.query(sql);
+    for (const migration of migrationPlan) {
+      console.log(`Applying ${migration.name} (${migration.digest})...`);
+      await client.query(migration.sql);
     }
     await client.query('COMMIT');
     console.log('All migrations applied successfully.');

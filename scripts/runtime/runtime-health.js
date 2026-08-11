@@ -14,6 +14,15 @@ const REASON_ORDER = Object.freeze([
   'consumer_producer_incompatible',
 ]);
 
+const TERMINAL_STATUSES = Object.freeze(['success', 'failed', 'cancelled']);
+const LEASE_STATUSES = Object.freeze(['absent', 'active', 'expired', 'invalid']);
+const PROJECTION_FRESHNESS = Object.freeze(['fresh', 'stale', 'missing', 'invalid']);
+const CONSUMER_COMPATIBILITY = Object.freeze(['compatible', 'producer_newer', 'consumer_newer', 'unknown']);
+
+function exactEnum(value, values, fallback) {
+  return typeof value === 'string' && values.includes(value) ? value : fallback;
+}
+
 function wholeSecond(value = new Date().toISOString()) {
   const parsed = new Date(value);
   invariant(!Number.isNaN(parsed.getTime()), 'runtime health checkedAt');
@@ -21,6 +30,11 @@ function wholeSecond(value = new Date().toISOString()) {
 }
 
 function assessTrackedRuntimeHealth(observation) {
+  const terminalStatus = observation.lastTerminalStatus === null || observation.lastTerminalStatus === undefined
+    ? null : exactEnum(observation.lastTerminalStatus, TERMINAL_STATUSES, null);
+  const leaseStatus = exactEnum(observation.leaseStatus, LEASE_STATUSES, 'invalid');
+  const projectionFreshness = exactEnum(observation.projectionFreshness, PROJECTION_FRESHNESS, 'invalid');
+  const consumerCompatibility = exactEnum(observation.consumerCompatibility, CONSUMER_COMPATIBILITY, 'unknown');
   const present = new Set();
   const add = (condition, reason) => { if (condition) present.add(reason); };
   add(!observation.manifestPresent, 'manifest_missing');
@@ -35,22 +49,21 @@ function assessTrackedRuntimeHealth(observation) {
   add(!observation.schedulerPlistMatches, 'scheduler_plist_mismatch');
   add(observation.schedulerOwner !== 'com.stockinsider.auth-source-worker', 'scheduler_owner_mismatch');
   add((observation.competingOwners?.length ?? 0) > 0, 'competing_scheduler');
-  add(observation.leaseStatus === 'invalid', 'lease_invalid');
-  add(observation.stateSchema !== 'stockinsider-producer-state-v1', 'state_schema_mismatch');
+  add(leaseStatus === 'invalid', 'lease_invalid');
+  add(observation.stateSchema !== 'stockinsider-producer-state-v1'
+    || (observation.lastTerminalStatus !== null && observation.lastTerminalStatus !== undefined && terminalStatus === null),
+  'state_schema_mismatch');
   add(Boolean(observation.lastRunNonterminal), 'last_run_nonterminal');
-  add(['failed', 'cancelled'].includes(observation.lastTerminalStatus), 'last_run_failed');
+  add(terminalStatus === 'failed' || terminalStatus === 'cancelled', 'last_run_failed');
   add(Boolean(observation.negativeRunDuration), 'negative_run_duration');
   add((observation.stuckRunCount ?? 0) > 0, 'stuck_runs_present');
-  add(observation.projectionFreshness === 'missing', 'projection_missing');
-  add(observation.projectionFreshness === 'invalid', 'projection_hash_mismatch');
-  add(observation.projectionFreshness === 'stale', 'projection_stale');
-  add(observation.consumerCompatibility !== 'compatible', 'consumer_producer_incompatible');
+  add(projectionFreshness === 'missing', 'projection_missing');
+  add(projectionFreshness === 'invalid', 'projection_hash_mismatch');
+  add(projectionFreshness === 'stale', 'projection_stale');
+  add(consumerCompatibility !== 'compatible', 'consumer_producer_incompatible');
   const reasons = REASON_ORDER.filter((reason) => present.has(reason));
   const competingOwners = [...new Set(observation.competingOwners ?? [])].sort().slice(0, 8);
   const stuckRunCount = Math.max(0, Math.trunc(observation.stuckRunCount ?? 0));
-  invariant(['absent', 'active', 'expired', 'invalid'].includes(observation.leaseStatus), 'runtime health lease');
-  invariant(['fresh', 'stale', 'missing', 'invalid'].includes(observation.projectionFreshness), 'runtime health projection');
-  invariant(['compatible', 'producer_newer', 'consumer_newer', 'unknown'].includes(observation.consumerCompatibility), 'runtime health compatibility');
   return Object.freeze({
     schema: 'stockinsider-runtime-health-v1.1', status: reasons.length === 0 ? 'pass' : 'fail',
     checkedAt: wholeSecond(observation.checkedAt),
@@ -66,23 +79,23 @@ function assessTrackedRuntimeHealth(observation) {
       owner: observation.schedulerOwner ?? null,
       ownerPlistSha256: observation.ownerPlistSha256 ?? null,
       competingOwners,
-      leaseStatus: observation.leaseStatus,
+      leaseStatus,
     },
     runtime: {
       stateSchema: observation.stateSchema ?? null,
       lastTerminalRunAt: observation.lastTerminalRunAt ?? null,
-      lastTerminalStatus: observation.lastTerminalStatus ?? null,
+      lastTerminalStatus: terminalStatus,
       stuckRunCount,
     },
     projection: {
       asOf: observation.projectionAsOf ?? null,
       checksum: observation.projectionChecksum ?? null,
-      freshness: observation.projectionFreshness,
+      freshness: projectionFreshness,
     },
     consumer: {
       commitSha: observation.consumerCommitSha ?? null,
       acceptedProducerSchema: 'stockinsider-producer-state-v1',
-      compatibility: observation.consumerCompatibility,
+      compatibility: consumerCompatibility,
     },
     reasons,
   });
@@ -97,11 +110,11 @@ function buildInstalledRuntimeHealthObservation({ manifest, reviewedRelease, doc
     competingOwners: Array.isArray(observed.competingOwners) ? observed.competingOwners : [],
     configHashMatches: observed.configSha256 === reviewedRelease.configSha256,
     consumerCommitSha: observed.consumerCommitSha ?? null,
-    consumerCompatibility: observed.consumerCompatibility ?? 'unknown',
+    consumerCompatibility: exactEnum(observed.consumerCompatibility, CONSUMER_COMPATIBILITY, 'unknown'),
     lastRunNonterminal: observed.lastRunNonterminal === true,
     lastTerminalRunAt: observed.lastTerminalRunAt ?? null,
-    lastTerminalStatus: observed.lastTerminalStatus ?? null,
-    leaseStatus: observed.leaseStatus ?? 'invalid',
+    lastTerminalStatus: exactEnum(observed.lastTerminalStatus, TERMINAL_STATUSES, null),
+    leaseStatus: exactEnum(observed.leaseStatus, LEASE_STATUSES, 'invalid'),
     manifestCanonical: observed.manifestCanonical === true,
     manifestPresent: observed.manifestPresent === true,
     manifestSha256: manifest.manifestSha256,
@@ -110,7 +123,7 @@ function buildInstalledRuntimeHealthObservation({ manifest, reviewedRelease, doc
     producerCommitSha: reviewedRelease.commitSha,
     projectionAsOf: observed.projectionAsOf ?? null,
     projectionChecksum: observed.projectionChecksum ?? null,
-    projectionFreshness: observed.projectionFreshness ?? 'missing',
+    projectionFreshness: exactEnum(observed.projectionFreshness, PROJECTION_FRESHNESS, 'missing'),
     reviewBindingValid: observed.reviewAttestationSha256 === reviewedRelease.reviewAttestationSha256,
     reviewedTreeSha: reviewedRelease.treeSha,
     schedulerConfigSha256: reviewedRelease.configSha256,

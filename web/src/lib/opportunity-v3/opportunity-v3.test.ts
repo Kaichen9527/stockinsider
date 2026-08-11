@@ -732,7 +732,7 @@ describe('hybrid verified-change product boundary', () => {
     const detailCard = card('2330');
     const detail: OpportunityDetailV3 = {
       contractVersion: 'opportunity-detail-v3.3',
-      acceptanceVersion: '1.44.6',
+      acceptanceVersion: '1.46.0',
       mode: 'shadow',
       decisionAuthority: 'research_only',
       runId,
@@ -2595,7 +2595,7 @@ describe('point-in-time projection selection', () => {
     assert.equal(COMPARISON_PREIMAGE_CANONICAL_V3.length, 2729);
     assert.equal(
       COMPARISON_CONTRACT_KEY_V3,
-      'ebaa6dbdaa7dd55bb261187008f51e930919e7c0cfe07732d531e01267e67c41',
+      'c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729',
     );
     assert.deepEqual(
       STATIC_IDENTITY_MEMBERS_V3.map(([name]) => name),

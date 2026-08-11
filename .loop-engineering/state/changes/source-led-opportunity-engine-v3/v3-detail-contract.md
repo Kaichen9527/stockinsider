@@ -9,7 +9,7 @@ Every V3 radar card has `detailPath = /opportunity-v3/{runId}/{symbol}`. `runId`
 ```ts
 type OpportunityDetailUnavailableV3 = {
   contractVersion: 'opportunity-detail-v3.3';
-  acceptanceVersion: '1.44.6';
+  acceptanceVersion: '1.46.0';
   availability: 'unavailable';
   status: 404;
   reason: 'detail_not_available';
@@ -28,7 +28,7 @@ Existing legacy cards and `/stock/{symbol}` remain unchanged. V3 cards link only
 ```ts
 type OpportunityDetailV3 = {
   contractVersion: 'opportunity-detail-v3.3';
-  acceptanceVersion: '1.44.6';
+  acceptanceVersion: '1.46.0';
   mode: 'shadow';
   decisionAuthority: 'research_only';
   runId: string;

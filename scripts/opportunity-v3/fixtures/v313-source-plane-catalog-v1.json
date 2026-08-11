@@ -1,0 +1,984 @@
+{
+  "schema": "v313-source-plane-catalog-oracle-v1",
+  "acl": {
+    "legacy_source_item_outcomes_v3_13": [],
+    "legacy_source_append_context_v3_13": [],
+    "legacy_approved_source_profiles_v3_13": [],
+    "legacy_frozen_source_authorities_v3_13": [],
+    "legacy_source_connector_attempts_v3_13": [],
+    "legacy_source_processing_outcomes_v3_13": [],
+    "legacy_source_acquisition_outcomes_v3_13": [],
+    "legacy_source_document_persistence_v3_13": []
+  },
+  "shape": {
+    "legacy_source_item_outcomes_v3_13": [
+      1,
+      1,
+      8,
+      1
+    ],
+    "legacy_source_append_context_v3_13": [
+      1,
+      4,
+      1,
+      1
+    ],
+    "legacy_approved_source_profiles_v3_13": [
+      1,
+      0,
+      2,
+      0
+    ],
+    "legacy_frozen_source_authorities_v3_13": [
+      1,
+      4,
+      2,
+      1
+    ],
+    "legacy_source_connector_attempts_v3_13": [
+      1,
+      2,
+      16,
+      1
+    ],
+    "legacy_source_processing_outcomes_v3_13": [
+      1,
+      3,
+      6,
+      1
+    ],
+    "legacy_source_acquisition_outcomes_v3_13": [
+      1,
+      1,
+      10,
+      1
+    ],
+    "legacy_source_document_persistence_v3_13": [
+      1,
+      2,
+      7,
+      1
+    ]
+  },
+  "columns": {
+    "legacy_source_item_outcomes_v3_13": [
+      [
+        "source_run_id",
+        "uuid",
+        "NO",
+        null
+      ],
+      [
+        "profile_id",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "source_key",
+        "source_key_v3",
+        "NO",
+        null
+      ],
+      [
+        "stable_item_id",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "source_url",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "published_at",
+        "timestamptz",
+        "YES",
+        null
+      ],
+      [
+        "acquisition_disposition",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "analysis_disposition",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "recorded_at",
+        "timestamptz",
+        "NO",
+        "clock_timestamp()"
+      ]
+    ],
+    "legacy_source_append_context_v3_13": [
+      [
+        "source_run_id",
+        "uuid",
+        "NO",
+        null
+      ],
+      [
+        "profile_id",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "source_key",
+        "source_key_v3",
+        "NO",
+        null
+      ],
+      [
+        "stable_connector_document_id",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "source_identity_authority_id",
+        "uuid",
+        "NO",
+        null
+      ],
+      [
+        "authority_cutoff",
+        "timestamptz",
+        "NO",
+        null
+      ],
+      [
+        "backend_pid",
+        "int4",
+        "NO",
+        null
+      ],
+      [
+        "transaction_id",
+        "int8",
+        "NO",
+        null
+      ],
+      [
+        "recorded_at",
+        "timestamptz",
+        "NO",
+        "clock_timestamp()"
+      ]
+    ],
+    "legacy_approved_source_profiles_v3_13": [
+      [
+        "profile_id",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "profile_name",
+        "text",
+        "NO",
+        null
+      ]
+    ],
+    "legacy_frozen_source_authorities_v3_13": [
+      [
+        "source_run_id",
+        "uuid",
+        "NO",
+        null
+      ],
+      [
+        "profile_id",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "source_key",
+        "source_key_v3",
+        "NO",
+        null
+      ],
+      [
+        "distribution_identity",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "source_identity_id",
+        "uuid",
+        "NO",
+        null
+      ],
+      [
+        "source_identity_authority_id",
+        "uuid",
+        "NO",
+        null
+      ],
+      [
+        "authority_cutoff",
+        "timestamptz",
+        "NO",
+        null
+      ],
+      [
+        "recorded_at",
+        "timestamptz",
+        "NO",
+        "clock_timestamp()"
+      ]
+    ],
+    "legacy_source_connector_attempts_v3_13": [
+      [
+        "source_run_id",
+        "uuid",
+        "NO",
+        null
+      ],
+      [
+        "profile_id",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "source_key",
+        "source_key_v3",
+        "NO",
+        null
+      ],
+      [
+        "status",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "reason_code",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "response_kind",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "response_status_code",
+        "int4",
+        "YES",
+        null
+      ],
+      [
+        "response_bytes",
+        "int4",
+        "NO",
+        null
+      ],
+      [
+        "item_count",
+        "int4",
+        "NO",
+        null
+      ],
+      [
+        "document_count",
+        "int4",
+        "NO",
+        null
+      ],
+      [
+        "recorded_at",
+        "timestamptz",
+        "NO",
+        "clock_timestamp()"
+      ]
+    ],
+    "legacy_source_processing_outcomes_v3_13": [
+      [
+        "source_run_id",
+        "uuid",
+        "NO",
+        null
+      ],
+      [
+        "revision_id",
+        "uuid",
+        "NO",
+        null
+      ],
+      [
+        "scope",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "outcome_id",
+        "uuid",
+        "NO",
+        null
+      ],
+      [
+        "parent_outcome_id",
+        "uuid",
+        "YES",
+        null
+      ],
+      [
+        "symbol",
+        "text",
+        "YES",
+        null
+      ],
+      [
+        "stock_id",
+        "uuid",
+        "YES",
+        null
+      ],
+      [
+        "outcome",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "reason",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "recorded_at",
+        "timestamptz",
+        "NO",
+        "clock_timestamp()"
+      ]
+    ],
+    "legacy_source_acquisition_outcomes_v3_13": [
+      [
+        "source_run_id",
+        "uuid",
+        "NO",
+        null
+      ],
+      [
+        "profile_id",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "profile_name",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "status",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "reason",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "acquired_document_count",
+        "int4",
+        "NO",
+        null
+      ],
+      [
+        "new_revision_count",
+        "int4",
+        "NO",
+        null
+      ],
+      [
+        "unchanged_count",
+        "int4",
+        "NO",
+        null
+      ],
+      [
+        "deferred_count",
+        "int4",
+        "NO",
+        null
+      ],
+      [
+        "rejected_count",
+        "int4",
+        "NO",
+        null
+      ],
+      [
+        "recorded_at",
+        "timestamptz",
+        "NO",
+        "clock_timestamp()"
+      ]
+    ],
+    "legacy_source_document_persistence_v3_13": [
+      [
+        "source_run_id",
+        "uuid",
+        "NO",
+        null
+      ],
+      [
+        "profile_id",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "source_key",
+        "source_key_v3",
+        "NO",
+        null
+      ],
+      [
+        "stable_connector_document_id",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "ingestion_canonical_content_hash_v3",
+        "text",
+        "YES",
+        null
+      ],
+      [
+        "document_terminal_identity_sha256",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "disposition",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "revision_id",
+        "uuid",
+        "YES",
+        null
+      ],
+      [
+        "reason",
+        "text",
+        "NO",
+        null
+      ],
+      [
+        "recorded_at",
+        "timestamptz",
+        "NO",
+        "clock_timestamp()"
+      ]
+    ]
+  },
+  "security": {
+    "legacy_source_item_outcomes_v3_13": [
+      "opportunity_v3_rpc_owner",
+      true,
+      false,
+      0,
+      false,
+      false,
+      false
+    ],
+    "legacy_source_append_context_v3_13": [
+      "opportunity_v3_rpc_owner",
+      true,
+      false,
+      0,
+      false,
+      false,
+      false
+    ],
+    "legacy_approved_source_profiles_v3_13": [
+      "opportunity_v3_rpc_owner",
+      true,
+      false,
+      0,
+      false,
+      false,
+      false
+    ],
+    "legacy_frozen_source_authorities_v3_13": [
+      "opportunity_v3_rpc_owner",
+      true,
+      false,
+      0,
+      false,
+      false,
+      false
+    ],
+    "legacy_source_connector_attempts_v3_13": [
+      "opportunity_v3_rpc_owner",
+      true,
+      false,
+      0,
+      false,
+      false,
+      false
+    ],
+    "legacy_source_processing_outcomes_v3_13": [
+      "opportunity_v3_rpc_owner",
+      true,
+      false,
+      0,
+      false,
+      false,
+      false
+    ],
+    "legacy_source_acquisition_outcomes_v3_13": [
+      "opportunity_v3_rpc_owner",
+      true,
+      false,
+      0,
+      false,
+      false,
+      false
+    ],
+    "legacy_source_document_persistence_v3_13": [
+      "opportunity_v3_rpc_owner",
+      true,
+      false,
+      0,
+      false,
+      false,
+      false
+    ]
+  },
+  "triggers": {
+    "legacy_source_item_outcomes_v3_13": [
+      [
+        "legacy_source_item_outcomes_v3_13_immutable",
+        27,
+        "public.legacy_correctness_immutable_v3_11",
+        "",
+        "O",
+        "CREATE TRIGGER legacy_source_item_outcomes_v3_13_immutable BEFORE DELETE OR UPDATE ON legacy_source_item_outcomes_v3_13 FOR EACH ROW EXECUTE FUNCTION legacy_correctness_immutable_v3_11()",
+        ""
+      ]
+    ],
+    "legacy_source_append_context_v3_13": [
+      [
+        "legacy_source_append_context_v3_13_immutable",
+        27,
+        "public.legacy_correctness_immutable_v3_11",
+        "",
+        "O",
+        "CREATE TRIGGER legacy_source_append_context_v3_13_immutable BEFORE DELETE OR UPDATE ON legacy_source_append_context_v3_13 FOR EACH ROW EXECUTE FUNCTION legacy_correctness_immutable_v3_11()",
+        ""
+      ]
+    ],
+    "legacy_frozen_source_authorities_v3_13": [
+      [
+        "legacy_frozen_source_authorities_v3_13_immutable",
+        27,
+        "public.legacy_correctness_immutable_v3_11",
+        "",
+        "O",
+        "CREATE TRIGGER legacy_frozen_source_authorities_v3_13_immutable BEFORE DELETE OR UPDATE ON legacy_frozen_source_authorities_v3_13 FOR EACH ROW EXECUTE FUNCTION legacy_correctness_immutable_v3_11()",
+        ""
+      ]
+    ],
+    "legacy_source_connector_attempts_v3_13": [
+      [
+        "legacy_source_connector_attempts_v3_13_immutable",
+        27,
+        "public.legacy_correctness_immutable_v3_11",
+        "",
+        "O",
+        "CREATE TRIGGER legacy_source_connector_attempts_v3_13_immutable BEFORE DELETE OR UPDATE ON legacy_source_connector_attempts_v3_13 FOR EACH ROW EXECUTE FUNCTION legacy_correctness_immutable_v3_11()",
+        ""
+      ]
+    ],
+    "legacy_source_processing_outcomes_v3_13": [
+      [
+        "legacy_source_processing_outcomes_v3_13_immutable",
+        27,
+        "public.legacy_correctness_immutable_v3_11",
+        "",
+        "O",
+        "CREATE TRIGGER legacy_source_processing_outcomes_v3_13_immutable BEFORE DELETE OR UPDATE ON legacy_source_processing_outcomes_v3_13 FOR EACH ROW EXECUTE FUNCTION legacy_correctness_immutable_v3_11()",
+        ""
+      ]
+    ],
+    "legacy_source_acquisition_outcomes_v3_13": [
+      [
+        "legacy_source_acquisition_outcomes_v3_13_immutable",
+        27,
+        "public.legacy_correctness_immutable_v3_11",
+        "",
+        "O",
+        "CREATE TRIGGER legacy_source_acquisition_outcomes_v3_13_immutable BEFORE DELETE OR UPDATE ON legacy_source_acquisition_outcomes_v3_13 FOR EACH ROW EXECUTE FUNCTION legacy_correctness_immutable_v3_11()",
+        ""
+      ]
+    ],
+    "legacy_source_document_persistence_v3_13": [
+      [
+        "legacy_source_document_persistence_v3_13_immutable",
+        27,
+        "public.legacy_correctness_immutable_v3_11",
+        "",
+        "O",
+        "CREATE TRIGGER legacy_source_document_persistence_v3_13_immutable BEFORE DELETE OR UPDATE ON legacy_source_document_persistence_v3_13 FOR EACH ROW EXECUTE FUNCTION legacy_correctness_immutable_v3_11()",
+        ""
+      ]
+    ]
+  },
+  "constraints": {
+    "legacy_source_item_outcomes_v3_13": [
+      [
+        "c",
+        "CHECK ((acquisition_disposition = 'metadata_only'::text) = (analysis_disposition = 'no_claim'::text))"
+      ],
+      [
+        "c",
+        "CHECK ((acquisition_disposition = 'transcript_ready'::text) = (analysis_disposition = 'eligible_for_claim_extraction'::text))"
+      ],
+      [
+        "c",
+        "CHECK (acquisition_disposition = 'transcript_ready'::text AND analysis_disposition = 'eligible_for_claim_extraction'::text OR acquisition_disposition = 'metadata_only'::text AND analysis_disposition = 'no_claim'::text OR acquisition_disposition = 'rejected'::text AND analysis_disposition = 'rejected'::text OR acquisition_disposition = 'deferred'::text AND analysis_disposition = 'deferred'::text)"
+      ],
+      [
+        "c",
+        "CHECK (acquisition_disposition = ANY (ARRAY['transcript_ready'::text, 'metadata_only'::text, 'rejected'::text, 'deferred'::text]))"
+      ],
+      [
+        "c",
+        "CHECK (analysis_disposition = ANY (ARRAY['eligible_for_claim_extraction'::text, 'no_claim'::text, 'rejected'::text, 'deferred'::text]))"
+      ],
+      [
+        "c",
+        "CHECK (char_length(stable_item_id) >= 1 AND char_length(stable_item_id) <= 512)"
+      ],
+      [
+        "c",
+        "CHECK (profile_id ~ '^[a-z0-9_]{2,40}$'::text)"
+      ],
+      [
+        "c",
+        "CHECK (source_url ~ '^https://'::text)"
+      ],
+      [
+        "f",
+        "FOREIGN KEY (source_run_id) REFERENCES legacy_producer_runs_v3_11(run_id) ON DELETE RESTRICT"
+      ],
+      [
+        "p",
+        "PRIMARY KEY (source_run_id, source_key, profile_id, stable_item_id)"
+      ]
+    ],
+    "legacy_source_append_context_v3_13": [
+      [
+        "c",
+        "CHECK (char_length(stable_connector_document_id) >= 1 AND char_length(stable_connector_document_id) <= 512)"
+      ],
+      [
+        "f",
+        "FOREIGN KEY (profile_id) REFERENCES legacy_approved_source_profiles_v3_13(profile_id) ON DELETE RESTRICT"
+      ],
+      [
+        "f",
+        "FOREIGN KEY (source_identity_authority_id) REFERENCES source_identity_authorities_v3(authority_id) ON DELETE RESTRICT"
+      ],
+      [
+        "f",
+        "FOREIGN KEY (source_run_id) REFERENCES legacy_producer_runs_v3_11(run_id) ON DELETE RESTRICT"
+      ],
+      [
+        "f",
+        "FOREIGN KEY (source_run_id, profile_id, source_key) REFERENCES legacy_frozen_source_authorities_v3_13(source_run_id, profile_id, source_key) ON DELETE RESTRICT"
+      ],
+      [
+        "p",
+        "PRIMARY KEY (source_run_id, source_key, profile_id, stable_connector_document_id)"
+      ]
+    ],
+    "legacy_approved_source_profiles_v3_13": [
+      [
+        "c",
+        "CHECK (char_length(profile_name) >= 1 AND char_length(profile_name) <= 120)"
+      ],
+      [
+        "c",
+        "CHECK (profile_id ~ '^[a-z0-9_]{2,40}$'::text)"
+      ],
+      [
+        "p",
+        "PRIMARY KEY (profile_id)"
+      ]
+    ],
+    "legacy_frozen_source_authorities_v3_13": [
+      [
+        "c",
+        "CHECK (distribution_identity = ((source_key::text || ':'::text) || profile_id))"
+      ],
+      [
+        "c",
+        "CHECK (source_key = ANY (ARRAY['threads'::source_key_v3, 'podcast'::source_key_v3, 'youtube'::source_key_v3]))"
+      ],
+      [
+        "f",
+        "FOREIGN KEY (profile_id) REFERENCES legacy_approved_source_profiles_v3_13(profile_id) ON DELETE RESTRICT"
+      ],
+      [
+        "f",
+        "FOREIGN KEY (source_identity_authority_id) REFERENCES source_identity_authorities_v3(authority_id) ON DELETE RESTRICT"
+      ],
+      [
+        "f",
+        "FOREIGN KEY (source_identity_id) REFERENCES source_entities(id) ON DELETE RESTRICT"
+      ],
+      [
+        "f",
+        "FOREIGN KEY (source_run_id) REFERENCES legacy_producer_runs_v3_11(run_id) ON DELETE RESTRICT"
+      ],
+      [
+        "p",
+        "PRIMARY KEY (source_run_id, profile_id, source_key)"
+      ],
+      [
+        "u",
+        "UNIQUE (source_run_id, source_identity_authority_id)"
+      ]
+    ],
+    "legacy_source_connector_attempts_v3_13": [
+      [
+        "c",
+        "CHECK (\nCASE status\n    WHEN 'items_found'::text THEN reason_code ~ '_items_observed$'::text\n    WHEN 'successful_empty'::text THEN reason_code ~ '_successful_empty$'::text\n    WHEN 'metadata_only'::text THEN reason_code ~ '(_metadata_only|_authority_missing)$'::text\n    WHEN 'missing_endpoint'::text THEN reason_code ~ '(_missing|_not_found)$'::text\n    WHEN 'auth_failed'::text THEN reason_code ~ '(_auth_missing|_oauth_missing|^provider_auth_rejected$)'::text\n    WHEN 'provider_failed'::text THEN reason_code = 'provider_transport_failed'::text\n    ELSE false\nEND)"
+      ],
+      [
+        "c",
+        "CHECK ((response_kind = 'http_response'::text) = (response_status_code IS NOT NULL))"
+      ],
+      [
+        "c",
+        "CHECK (document_count >= 0 AND document_count <= 10)"
+      ],
+      [
+        "c",
+        "CHECK (item_count >= 0 AND item_count <= 20)"
+      ],
+      [
+        "c",
+        "CHECK (reason_code ~ '^[a-z0-9_]{2,80}$'::text)"
+      ],
+      [
+        "c",
+        "CHECK (response_bytes >= 0 AND response_bytes <= 8000000)"
+      ],
+      [
+        "c",
+        "CHECK (response_kind = ANY (ARRAY['http_response'::text, 'configuration'::text, 'transport_error'::text]))"
+      ],
+      [
+        "c",
+        "CHECK (response_status_code >= 100 AND response_status_code <= 599)"
+      ],
+      [
+        "c",
+        "CHECK (source_key = ANY (ARRAY['threads'::source_key_v3, 'podcast'::source_key_v3, 'youtube'::source_key_v3]))"
+      ],
+      [
+        "c",
+        "CHECK (status <> 'auth_failed'::text OR response_kind = 'configuration'::text AND response_status_code IS NULL OR response_kind = 'http_response'::text AND (response_status_code = ANY (ARRAY[401, 403])))"
+      ],
+      [
+        "c",
+        "CHECK (status <> 'items_found'::text OR response_kind = 'http_response'::text AND response_status_code >= 200 AND response_status_code <= 299 AND (item_count > 0 OR document_count > 0))"
+      ],
+      [
+        "c",
+        "CHECK (status <> 'metadata_only'::text OR response_kind = 'http_response'::text AND response_status_code >= 200 AND response_status_code <= 299 AND item_count > 0 AND document_count = 0)"
+      ],
+      [
+        "c",
+        "CHECK (status <> 'missing_endpoint'::text OR response_kind = 'configuration'::text AND response_status_code IS NULL OR response_kind = 'http_response'::text AND response_status_code = 404)"
+      ],
+      [
+        "c",
+        "CHECK (status <> 'provider_failed'::text OR response_kind = 'transport_error'::text OR response_kind = 'http_response'::text AND (response_status_code < 200 OR response_status_code > 299) AND (response_status_code <> ALL (ARRAY[401, 403, 404])))"
+      ],
+      [
+        "c",
+        "CHECK (status <> 'successful_empty'::text OR response_kind = 'http_response'::text AND response_status_code >= 200 AND response_status_code <= 299 AND item_count = 0 AND document_count = 0)"
+      ],
+      [
+        "c",
+        "CHECK (status = ANY (ARRAY['items_found'::text, 'successful_empty'::text, 'metadata_only'::text, 'missing_endpoint'::text, 'auth_failed'::text, 'provider_failed'::text]))"
+      ],
+      [
+        "f",
+        "FOREIGN KEY (profile_id) REFERENCES legacy_approved_source_profiles_v3_13(profile_id) ON DELETE RESTRICT"
+      ],
+      [
+        "f",
+        "FOREIGN KEY (source_run_id) REFERENCES legacy_producer_runs_v3_11(run_id) ON DELETE RESTRICT"
+      ],
+      [
+        "p",
+        "PRIMARY KEY (source_run_id, profile_id, source_key)"
+      ]
+    ],
+    "legacy_source_processing_outcomes_v3_13": [
+      [
+        "c",
+        "CHECK ((outcome = 'linked'::text) = (stock_id IS NOT NULL))"
+      ],
+      [
+        "c",
+        "CHECK (char_length(reason) >= 1 AND char_length(reason) <= 500)"
+      ],
+      [
+        "c",
+        "CHECK (outcome = ANY (ARRAY['processed_with_claims'::text, 'processed_no_claim'::text, 'linked'::text, 'rejected'::text, 'deferred'::text]))"
+      ],
+      [
+        "c",
+        "CHECK (scope = 'document'::text AND parent_outcome_id IS NULL OR (scope = ANY (ARRAY['claim'::text, 'entity'::text])) AND parent_outcome_id IS NOT NULL)"
+      ],
+      [
+        "c",
+        "CHECK (scope = ANY (ARRAY['document'::text, 'claim'::text, 'entity'::text]))"
+      ],
+      [
+        "c",
+        "CHECK (symbol IS NULL OR symbol ~ '^[0-9A-Za-z]{2,12}$'::text)"
+      ],
+      [
+        "f",
+        "FOREIGN KEY (revision_id) REFERENCES source_document_revisions_v3(revision_id) ON DELETE RESTRICT"
+      ],
+      [
+        "f",
+        "FOREIGN KEY (source_run_id) REFERENCES legacy_producer_runs_v3_11(run_id) ON DELETE RESTRICT"
+      ],
+      [
+        "f",
+        "FOREIGN KEY (stock_id) REFERENCES stocks(id) ON DELETE RESTRICT"
+      ],
+      [
+        "p",
+        "PRIMARY KEY (source_run_id, revision_id, scope, outcome_id)"
+      ]
+    ],
+    "legacy_source_acquisition_outcomes_v3_13": [
+      [
+        "c",
+        "CHECK ((new_revision_count + unchanged_count + deferred_count + rejected_count) = acquired_document_count)"
+      ],
+      [
+        "c",
+        "CHECK (acquired_document_count >= 0 AND acquired_document_count <= 30)"
+      ],
+      [
+        "c",
+        "CHECK (char_length(profile_name) >= 1 AND char_length(profile_name) <= 120)"
+      ],
+      [
+        "c",
+        "CHECK (char_length(reason) >= 1 AND char_length(reason) <= 1000)"
+      ],
+      [
+        "c",
+        "CHECK (deferred_count >= 0 AND deferred_count <= acquired_document_count)"
+      ],
+      [
+        "c",
+        "CHECK (new_revision_count >= 0 AND new_revision_count <= acquired_document_count)"
+      ],
+      [
+        "c",
+        "CHECK (profile_id ~ '^[a-z0-9_]{2,40}$'::text)"
+      ],
+      [
+        "c",
+        "CHECK (rejected_count >= 0 AND rejected_count <= acquired_document_count)"
+      ],
+      [
+        "c",
+        "CHECK (status = ANY (ARRAY['fresh'::text, 'unchanged'::text, 'no_new_items'::text, 'missing_endpoint'::text, 'auth_failed'::text, 'provider_failed'::text]))"
+      ],
+      [
+        "c",
+        "CHECK (unchanged_count >= 0 AND unchanged_count <= acquired_document_count)"
+      ],
+      [
+        "f",
+        "FOREIGN KEY (source_run_id) REFERENCES legacy_producer_runs_v3_11(run_id) ON DELETE RESTRICT"
+      ],
+      [
+        "p",
+        "PRIMARY KEY (source_run_id, profile_id)"
+      ]
+    ],
+    "legacy_source_document_persistence_v3_13": [
+      [
+        "c",
+        "CHECK ((revision_id IS NOT NULL) = ((disposition = ANY (ARRAY['new_revision'::text, 'unchanged'::text])) OR disposition = 'rejected'::text AND reason = 'content_overflow_parse_failure'::text))"
+      ],
+      [
+        "c",
+        "CHECK (char_length(reason) >= 1 AND char_length(reason) <= 500)"
+      ],
+      [
+        "c",
+        "CHECK (char_length(stable_connector_document_id) >= 1 AND char_length(stable_connector_document_id) <= 512)"
+      ],
+      [
+        "c",
+        "CHECK (disposition = ANY (ARRAY['new_revision'::text, 'unchanged'::text, 'deferred'::text, 'rejected'::text]))"
+      ],
+      [
+        "c",
+        "CHECK (document_terminal_identity_sha256 ~ '^[0-9a-f]{64}$'::text)"
+      ],
+      [
+        "c",
+        "CHECK (ingestion_canonical_content_hash_v3 IS NULL OR ingestion_canonical_content_hash_v3 ~ '^[0-9a-f]{64}$'::text)"
+      ],
+      [
+        "c",
+        "CHECK (profile_id ~ '^[a-z0-9_]{2,40}$'::text)"
+      ],
+      [
+        "f",
+        "FOREIGN KEY (revision_id) REFERENCES source_document_revisions_v3(revision_id) ON DELETE RESTRICT"
+      ],
+      [
+        "f",
+        "FOREIGN KEY (source_run_id) REFERENCES legacy_producer_runs_v3_11(run_id) ON DELETE RESTRICT"
+      ],
+      [
+        "p",
+        "PRIMARY KEY (source_run_id, document_terminal_identity_sha256)"
+      ]
+    ]
+  }
+}

@@ -47,18 +47,18 @@ cp .env.example .env
 - `CRON_SECRET`
 - `SIGNAL_FRESHNESS_THRESHOLD_SECONDS`
 
-### Optional（non-blocking）
+### Legacy V1/V2 optional configuration（不適用 V3.14 tracked runtime）
 
 - `ALERT_WEBHOOK_URL`
 - `OPENROUTER_API_KEY`
 - `PREFECT_API_URL`
 - `OPSX_MUTATING_SMOKE`
-- `THREADS_USERNAME` / `THREADS_PASSWORD` / `THREADS_SESSION_STATE`
+- `THREADS_USERNAME` / `THREADS_PASSWORD` / `THREADS_SESSION_STATE`（legacy only）
 - `INVESTANCHORS_ACCOUNT` / `INVESTANCHORS_PASSWORD`
 - `TELEGRAM_BOT_TOKEN`
 - `YOUTUBE_API_KEY`
 
-### 變數用途
+### Legacy 變數用途
 
 - `INTERNAL_API_KEY` / `CRON_SECRET`：保護 `/api/internal/*` 端點
 - `OPSX_MUTATING_SMOKE=true`：讓 `opsx:test` 額外跑 non-dry-run smoke
@@ -67,11 +67,18 @@ cp .env.example .env
 - `THREADS_COOKIE_FALLBACK_*`：只作人工救援，不建議當主路徑
 - `INVESTANCHORS_ACCOUNT` / `INVESTANCHORS_PASSWORD`：定錨投筆登入帳密
 
-### Meta / Threads 注意事項
+### Meta / Threads 注意事項（legacy only）
 
 - 不要再把 Threads 與 Instagram 共用同名 `sessionid/csrftoken/...` 當主配置。
 - 若 `.env` 內重複宣告 legacy Meta cookie，health-check 會回報 `env.metaCookieConfig.*.configError`。
 - 目前 runtime 仍會盡量從 `.env` 的 `#Thread` / `#Instagram` 區塊救援，但正式配置應改成 namespaced `THREADS_*` / `INSTAGRAM_*`。
+
+V3.14 tracked runtime 不讀取上述 raw login/cookie 設定。它要求
+`STOCKINSIDER_DATABASE_URL_REF=keychain:stockinsider-runtime:database-url` 與
+`INTERNAL_API_KEY_REF=keychain:stockinsider-runtime:internal-api-key`；Threads
+OAuth、YouTube API/captions 也只由 `scripts/runtime/credential-resolver.js`
+的 allowlisted Keychain reference 取得。完整的非啟用驗證與 17×3 connector
+terminal-status 程序見 [operations runbook](docs/operations_runbook.md)。
 
 ## 3. 安裝依賴
 
@@ -210,8 +217,8 @@ npm run worker:auth-sources:dry
 
 ### 5.1.4 Linux Virtual Server Runbook
 
-- 若你要在 Linux Virtual Server 上做一次性全量回補，並用 `systemd` 常駐跑 authenticated source worker，直接看：
-  [docs/virtual-server-auth-source-worker.md](/Users/kaerchen/Desktop/20_stock/StockInsider/docs/virtual-server-auth-source-worker.md)
+- 舊版 Linux Virtual Server / `systemd` worker 僅供 V1/V2 維護，見
+  [legacy virtual-server auth-source worker](docs/virtual-server-auth-source-worker.md)；它不是 V3.13 activation runbook。
 
 ### 5.2 手動啟動（進階）
 

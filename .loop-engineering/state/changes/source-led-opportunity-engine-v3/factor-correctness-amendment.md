@@ -183,7 +183,7 @@ projections add only closed fields: `factorAxes`, `technicalDecision.maDeviation
 paginated. `disabled|drain` continues to make no V3 query and `/api/opportunity-v3`
 continues to return the exact disabled 404.
 
-Canonical acceptance inventory `1.44.6` now owns seven non-skipped R14 cases:
+Canonical acceptance inventory `1.46.0` retains seven non-skipped R14 cases and adds twelve V3.14 recovery cases. The former `1.45.1` inventory is historical and superseded:
 `PCR-025..PCR-031`. They cover BIAS formula/history, sector bounds, shadow/safety
 precedence, official/model PE and history, quality formulas, no-change schema and
 factor run identity. They were intentionally RED in the historical planning baseline;

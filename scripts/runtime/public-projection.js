@@ -1,6 +1,8 @@
 'use strict';
 
 const { bounded, canonicalJson, invariant } = require('./codec');
+const { compatibilityAction, unavailableDecisionEnvelope, validateDecisionEnvelopeV313 } = require('./decision-envelope');
+const { validateDecisionEnvelopeV314 } = require('./decision-envelope-v314');
 
 const TECHNICAL_STATES = new Set(['below_support', 'reclaim_required', 'at_support', 'breakout_pending', 'breakout_confirmed', 'extended', 'invalidated']);
 const ACTIONS = new Set(['avoid', 'valuation_review', 'wait_trigger', 'event_starter', 'starter_now']);
@@ -9,6 +11,34 @@ const MATURITY = new Set(['source_signal', 'fundamental_review', 'decision_ready
 function closedUnavailable(value, fallbackReason) {
   if (value?.availability === 'available') return value;
   return { availability: 'unavailable', reason: value?.reason || fallbackReason };
+}
+
+function unavailableReportedComparison(reason) {
+  const current={ status:'unavailable',reason,value:null,asOf:null,sourceRef:null,manifestRef:null };
+  const ownHistory={ status:'unavailable',reason,count:0,p10:null,p25:null,p50:null,p75:null,p90:null,
+    currentPercentile:null,asOf:null,manifestRef:null };
+  const sector={ status:'unavailable',reason,count:0,p25:null,p50:null,p75:null,
+    capWeightedAggregate:null,asOf:null,manifestRef:null };
+  return { current,ownHistory,sector };
+}
+
+function reportedComparison(valuation) {
+  const rawReason=valuation?.reportedPe?.reason||valuation?.reason||'missing_official_pe';
+  const reason=new Set(['authority_conflict','non_positive_reported_pe','insufficient_own_history',
+    'sector_reference_insufficient','missing_official_pe','missing_shares_outstanding',
+    'calendar_authority_mismatch','manifest_missing','manifest_hash_mismatch']).has(rawReason)
+    ?rawReason:'missing_official_pe';
+  const fallback=unavailableReportedComparison(reason);
+  const reported=valuation?.reportedPe;
+  const exchangeReportedPe=reported?.current?.status?reported.current:fallback.current;
+  const ownHistory=reported?.ownHistory?.status?reported.ownHistory:fallback.ownHistory;
+  const sector=reported?.sector?.status?reported.sector:fallback.sector;
+  const model=valuation?.relativeMultiple?.modelComparablePe??(valuation?.modelComparablePe?.value
+    ?{ value:valuation.modelComparablePe.value,method:valuation.modelComparablePe.method,
+      asOf:valuation.modelComparablePe.asOf??valuation.asOf??null,
+      sourceRefs:valuation.modelComparablePe.sourceRefs??[],reason:null }
+    :{ value:null,method:null,asOf:null,sourceRefs:[],reason:'valuation_review' });
+  return { exchangeReportedPe,ownHistory,sector,modelComparablePe:model };
 }
 
 function canonicalSingleLine(value, maximum) {
@@ -50,7 +80,12 @@ function serializeFactorAxes(value) {
 }
 
 function serializeCorrectnessPublicUnion(decision) {
-  const action = ACTIONS.has(decision?.action) ? decision.action : 'valuation_review';
+  const suppliedEnvelope=decision?.decisionEnvelope;
+  const validatedEnvelope=validateDecisionEnvelopeV313(suppliedEnvelope)??validateDecisionEnvelopeV314(suppliedEnvelope);
+  const envelope = validatedEnvelope ? suppliedEnvelope : unavailableDecisionEnvelope({ reason:'authoritative_decision_envelope_missing',
+      evaluatedAt:decision?.lastEvaluatedAt ?? null,symbol:decision?.symbol ?? null });
+  const mappedAction = compatibilityAction(envelope);
+  const action = ACTIONS.has(mappedAction) ? mappedAction : 'valuation_review';
   const state = TECHNICAL_STATES.has(decision?.technical?.technicalState) ? decision.technical.technicalState : null;
   const geometry = decision?.geometry?.availability === 'available' ? decision.geometry : null;
   const buyLike = action === 'starter_now' || action === 'event_starter';
@@ -59,11 +94,14 @@ function serializeCorrectnessPublicUnion(decision) {
   const invalidation = buyLike && Number.isFinite(geometry?.invalidation) ? { stop: geometry.invalidation, thesisLevel: geometry.invalidation } : null;
   const materialChangedBecause = Array.isArray(decision?.materialChangedBecause ?? decision?.changedBecause)
     ? [...new Set(decision.materialChangedBecause ?? decision.changedBecause)].sort() : [];
+  const comparison=reportedComparison(decision?.valuation);
   const payload = {
     ...(decision?.symbol ? { symbol: decision.symbol } : {}),
     ...(decision?.name ? { name: decision.name } : {}),
     researchMaturity: MATURITY.has(decision?.researchMaturity) ? decision.researchMaturity : 'source_signal',
     newPositionAction: action,
+    decisionEnvelope: envelope,
+    decisionRevisionId: envelope.decisionRevisionId,
     fundamental: serializeFundamental(decision?.fundamental, decision?.lastEvaluatedAt),
     technical: {
       availability: state ? 'available' : 'unavailable',
@@ -77,12 +115,12 @@ function serializeCorrectnessPublicUnion(decision) {
     },
     valuation: decision?.valuation?.status === 'normal' ? {
       status: 'normal', targetPrice: decision.valuation.targetPrice ?? null, valuationRange: decision.valuation.valuationRange ?? null,
-      relativeMultiple: decision.valuation.relativeMultiple ?? closedUnavailable(null, 'reported_pe_unavailable'),
-      exchangeReportedPe: decision.valuation.reportedPe ?? closedUnavailable(null, 'reported_pe_unavailable'),
+      relativeMultiple: comparison,
+      exchangeReportedPe: comparison.exchangeReportedPe,
       modelComparablePe: decision.valuation.modelComparablePe ?? null,
     } : { status: 'valuation_review', targetPrice: null, valuationRange: null,
-      relativeMultiple: closedUnavailable(decision?.valuation?.relativeMultiple, decision?.valuation?.reason || 'valuation_review'),
-      exchangeReportedPe: closedUnavailable(decision?.valuation?.reportedPe, 'reported_pe_unavailable'), modelComparablePe: null },
+      relativeMultiple: comparison,
+      exchangeReportedPe: comparison.exchangeReportedPe, modelComparablePe: null },
     factorAxes: serializeFactorAxes(decision?.factorAxes),
     timingRisk: ['below_support', 'reclaim_required', 'invalidated'].includes(state) ? { status: 'blocked', reason: state }
       : decision?.reason === 'bias_observe_only' ? { status: 'observe_only', reason: 'bias_observe_only' }

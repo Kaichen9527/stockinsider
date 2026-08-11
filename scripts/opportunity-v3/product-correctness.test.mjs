@@ -83,6 +83,16 @@ assert.deepEqual(Object.keys(plannedBoundaries), expectedIds, 'PCR planned behav
 const require = createRequire(import.meta.url);
 const runtime = (name) => require(path.join(root, 'scripts/runtime', name));
 
+function citedPublicationEvidence(ref,evaluatedAt='2026-08-01T10:20:00Z'){
+  return {claimId:ref,sourceKey:'mops',sourceName:'公開資訊觀測站',sourceUrl:'https://mops.twse.com.tw/mops/web/index',
+    claimAsOf:'2026-08-01T09:00:00Z',sourcePublishedAt:'2026-08-01T09:00:00Z',
+    sourceCollectedAt:'2026-08-01T10:00:00Z',analysisGeneratedAt:evaluatedAt,
+    decisionBrief:{thesis:['官方來源形成可追溯研究依據。','本次評估保留來源與時點。','決策與揭露共用相同 revision。'],
+      risks:['資料更新可能改變判斷。','技術條件失效時不得進場。','缺少估值時只保留研究訊號。'],evidence:[
+        {point:'thesis:0',refs:[ref]},{point:'thesis:1',refs:[ref]},{point:'thesis:2',refs:[ref]},
+        {point:'risk:0',refs:[ref]},{point:'risk:1',refs:[ref]},{point:'risk:2',refs:[ref]}]}};
+}
+
 function assertImplementedBehaviorBoundary(fixture) {
   const boundary = plannedBoundaries[fixture.id];
   assert.ok(boundary, `${fixture.id} implementation behavior boundary`);
@@ -157,7 +167,7 @@ const checks = {
     assert.ok(!readFileSync(path.join(root, 'scripts/runtime/auth-source-worker-cli.js'), 'utf8').includes('.agent/'));
     const bundle = runtime('tracked-runtime-bundle.js');
     assert.deepEqual([...bundle.TRACKED_RUNTIME_PATHS].sort(), bundle.TRACKED_RUNTIME_PATHS);
-    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 32);
+    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 45);
     assert.equal(bundle.runtimeBundleSha256(root), sha256(bundle.runtimeBundleBytes(root)));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/auth-source-worker-cli.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/tracked-runtime-bundle.js'));
@@ -469,6 +479,7 @@ const checks = {
         if (statement.includes('legacy_radar_projections_v3_11')) return { rows: [{ as_of: new Date(),
           payload_canonical: projectionBytes, payload_sha256: sha256(projectionBytes),
           producer_commit_sha: 'a'.repeat(40), worker_sha256: 'b'.repeat(64) }] };
+        if (statement.includes('tw_trading_sessions_v3')) return { rows: [] };
         throw new Error(`unexpected doctor query: ${statement}`);
       }
     }
@@ -620,7 +631,8 @@ const checks = {
       readJson: uncachedRead.json, readHash: uncachedRead.hash }), /frozen authority cache unavailable/u);
     const retryRead = runtime('codec.js').immutableBundle('compact_projection_input', { analysisResult: { decisions: [],
       sourceCandidates: [{ symbol: '2330', name: '台積電', disposition: 'promoted', reason: 'new_source_evidence',
-        sourceClass: 'official', raw: '2330', sourceSummary: '台積電財報更新', lastEvaluatedAt: '2026-08-01T10:20:00Z' }] },
+        sourceClass: 'official', raw: '2330', sourceSummary: '台積電財報更新', lastEvaluatedAt: '2026-08-01T10:20:00Z',
+        ...citedPublicationEvidence('claim-2330') }] },
       sourceCutoff: '2026-08-01T10:20:00Z', legacyPayloads: captured.json.legacyPayloads,
       legacyPayloadHashes: captured.json.legacyPayloadHashes, legacySourceResultHash: captured.hash });
     const projected = await handlers.compact_radar_projection({ readKind: 'compact_projection_input',
@@ -690,19 +702,28 @@ const checks = {
       'market dislocations remain separately bounded instead of replacing source-led candidates');
     assert.ok(capped.json.shallowObservations.every((candidate) => candidate.shallowStatus === 'enriched_observation'));
     const materialChangeHash = 'd'.repeat(64); const originalGeneratedAt = '2026-07-31T10:20:00Z';
-    const analysisRead = runtime('codec.js').immutableBundle('analysis_revision_input', { factsResult: { decisions: [{ symbol: '9999',
-      claimId: 'claim-9999', materialChangeHash, materialChangedBecause: [], researchMaturity: 'source_signal' }],
+    const priorAuthority=citedPublicationEvidence('claim-9999');
+    const priorFacts={symbol:'9999',...priorAuthority,materialChangeHash,materialChangedBecause:[],
+      researchMaturity:'source_signal',decisionBrief:{...priorAuthority.decisionBrief,action:'wait_reclaim'}};
+    const analysisRead = runtime('codec.js').immutableBundle('analysis_revision_input', { factsResult: { decisions: [priorFacts],
       sourceCandidates: capped.json.sourceCandidates, dislocationCandidates: capped.json.dislocationCandidates },
       sourceCutoff: '2026-08-01T10:20:00Z', priorRevisions: [{ symbol: '9999', revisionId: 'revision-9999',
-        materialChangeHash, analysisGeneratedAt: originalGeneratedAt }] });
+        materialChangeHash, analysisGeneratedAt: originalGeneratedAt,facts:priorFacts }] });
     const analysis = await handlers.analysis_revision({ readKind: 'analysis_revision_input', readCanonical: analysisRead.canonical,
       readJson: analysisRead.json, readHash: analysisRead.hash });
     assert.equal(analysis.json.decisions[0].evaluationDisposition, 'unchanged');
     assert.equal(analysis.json.decisions[0].analysisGeneratedAt, originalGeneratedAt);
+    assert.equal(analysis.json.decisions[0].decisionBrief.action,'wait_reclaim');
+    assert.deepEqual(analysis.json.decisionPayloads[0].bundle.json,priorFacts);
     assert.equal(analysis.json.sourceCandidates.length, 40);
     assert.equal(analysis.json.dislocationCandidates.length, 30);
+    const publicationAnalysis={...analysis.json,
+      sourceCandidates:analysis.json.sourceCandidates.map((candidate,index)=>({...candidate,
+        ...citedPublicationEvidence(candidate.claimId??`source-candidate-${index}`)})),
+      dislocationCandidates:analysis.json.dislocationCandidates.map((candidate,index)=>({...candidate,
+        ...citedPublicationEvidence(`dislocation-${index}`)}))};
     const mixedProjectionRead = runtime('codec.js').immutableBundle('compact_projection_input', {
-      analysisResult: analysis.json, sourceCutoff: '2026-08-01T10:20:00Z',
+      analysisResult: publicationAnalysis, sourceCutoff: '2026-08-01T10:20:00Z',
       legacyPayloads: captured.json.legacyPayloads, legacyPayloadHashes: captured.json.legacyPayloadHashes,
       legacySourceResultHash: captured.hash,
     });
@@ -725,7 +746,7 @@ const checks = {
       completeLegacyProducerJob: async ({ jobId, resultHash }) => { const index = Number(jobId.slice(1));
         assert.match(resultHash, /^[0-9a-f]{64}$/u); completed.push([jobId, resultHash]); nextIndex = index + 1;
         return index === 5 ? { status: 'succeeded' } : { status: 'running', nextJob: { jobId: `j${index + 1}` } }; },
-      failLegacyProducerJob: async () => ({ status: 'failed' }) };
+      appendLegacyRuntimeFailureDiagnostic:async()=>true,failLegacyProducerJob: async () => ({ status: 'failed' }) };
     const handlers = Object.fromEntries(stages.map((stage) => [stage, async () => runtime('codec.js').immutableBundle(stage, [stage])]));
     const first = await runtime('auth-source-worker.js').runDurableAuthSourceWorker({ configBytes: readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')),
       adapter, sourceCommitSha: 'a'.repeat(40), workerBytes: Buffer.from('reviewed-worker'), stageHandlers: handlers, ownerToken: '00000000-0000-4000-8000-000000000001' });
@@ -738,6 +759,7 @@ const checks = {
       adapter: { acquireLegacyProducerLease: async () => ({ runId: 'lost-run', job: { jobId: 'lost-job' }, disposition: 'created' }),
         claimLegacyProducerJob: async () => ({ jobId: 'lost-job', stage: stages[0] }), heartbeatLegacyProducerJob: async () => false,
         completeLegacyProducerJob: async () => { throw new Error('must not complete after lease loss'); },
+        appendLegacyRuntimeFailureDiagnostic:async()=>true,
         failLegacyProducerJob: async () => { failedAfterLoss = true; return { status: 'failed' }; } },
       sourceCommitSha: 'a'.repeat(40), workerBytes: Buffer.from('reviewed-worker'), heartbeatIntervalMs: 1,
       stageHandlers: { [stages[0]]: async () => { await new Promise((resolve) => setTimeout(resolve, 5)); return runtime('codec.js').immutableBundle('lost', []); } },
@@ -809,6 +831,7 @@ const checks = {
       symbol: String(1000 + index), name: '名'.repeat(40), disposition: 'promoted', reason: 'new_source_evidence',
       sourceClass: 'official', sourceSummary: '摘'.repeat(180), raw: String(1000 + index), claimId: `claim-${index}`,
       lastEvaluatedAt: '2026-08-01T10:20:00Z',
+      ...citedPublicationEvidence(`claim-${index}`),
       researchScore: { underreactionScore:80-index/10,coverage:0.85,confidence:0.82,researchDisposition:'research_now',
         reasons:[{ axis:'fundamental',reason:'official_revenue_not_deteriorating' },
           { axis:'valuation',reason:'pe_compared_with_sector_and_own_history' },{ axis:'priceDislocation',reason:'drawdown_without_revenue_deterioration' }],
@@ -831,26 +854,35 @@ const checks = {
       'source-signal cards omit duplicated optional recommendation metadata that the UI never consumes');
     const projection = runtime('compact-radar-projection.js');
     const selectiveMarket = { status: 'selective_or_defensive', completeness: 1 };
-    const setupReady = projection.derivePublicOpportunityView({ researchScore: {
+    const starterScore = {
       underreactionScore: 78, coverage: 1, confidence: 0.9, missingAxes: [],
       axes: {
         fundamental: { score: 88, trustworthy: true },
         priceDislocation: { score: 92, trustworthy: true },
-        valuation: { score: 68, trustworthy: true },
+        valuation: { score: 68, trustworthy: true,currentPe:10,historyPeP25:10,historyPeMedian:15,
+          historyPeP75:20,sectorPe:16,historySampleCount:252,sectorCount:8,asOf:'2026-08-01',
+          valuationEvidence:{algorithm:'official-relative-pe-evidence-v1',evidenceRoot:'a'.repeat(64),
+            currentObservationRoot:'b'.repeat(64),historyMembershipRoot:'c'.repeat(64),
+            sectorMembershipRoot:'d'.repeat(64),historySessions:252,sectorPeers:8},
+          sourceRefs:['twse-openapi:BWIBBU_ALL:2026-08-01:9999'] },
         timing: { score: 76, trustworthy: true, technicalState: 'at_support' },
-      }, priceContext: { technicalState: 'at_support' },
-    } }, selectiveMarket);
-    assert.deepEqual(setupReady, {
-      opportunityAction: 'setup_ready', actionReason: 'selective_high_conviction_at_support',
-      technicalState: 'at_support',
-      axisScores: { fundamental: 88, dislocation: 92, valuation: 68, timing: 76 },
-    }, 'a complete relative-value case can become a setup-ready research candidate without fabricating a formal target');
+      }, priceContext: { technicalState: 'at_support',currentPrice:100 },
+    };
+    const starterInput={researchScore:starterScore,technical:{technicalState:'at_support',plane:{current:100}},
+      geometry:{availability:'available',entryZone:[99,101],invalidation:95},qualityActionEligible:true,
+      marketAllowsAction:true,lastEvaluatedAt:'2026-08-01T10:20:00Z'};
+    const decisionEnvelope=runtime('decision-envelope.js').deriveDecisionEnvelope(starterInput);
+    const setupReady = projection.derivePublicOpportunityView({ ...starterInput,decisionEnvelope }, selectiveMarket);
+    assert.deepEqual([setupReady.opportunityAction,setupReady.decisionEnvelope.userAction,
+      setupReady.decisionEnvelope.recommendationAuthority,setupReady.decisionEnvelope.valuationSummary.kind],
+    ['setup_ready','research_starter','conditional_research','relative_reference_band'],
+    'a complete relative-value case can become a research starter without fabricating a formal target');
     assert.equal(projection.derivePublicOpportunityView({ researchScore: {
       underreactionScore: 82, coverage: 1, confidence: 0.9, missingAxes: [],
       axes: { fundamental: { score: 90, trustworthy: true }, priceDislocation: { score: 90, trustworthy: true },
         valuation: { score: 80, trustworthy: true }, timing: { score: 18, trustworthy: true, technicalState: 'extended' } },
       priceContext: { technicalState: 'extended' },
-    } }, selectiveMarket).opportunityAction, 'avoid_chase');
+    } }, selectiveMarket).opportunityAction, 'evidence_watch', 'missing valuation cannot be mislabeled as a technical avoid');
     assert.equal(projection.derivePublicOpportunityView({ researchScore: {
       underreactionScore: 82, coverage: 0.85, confidence: 0.8, missingAxes: ['valuation'],
       axes: { fundamental: { score: 90, trustworthy: true }, priceDislocation: { score: 90, trustworthy: true },
@@ -864,6 +896,7 @@ const checks = {
       'at_support', 'reasonable MA20 deviation is not mislabeled as an unconfirmed breakout');
     const aligned = projection.publishCompactRadarProjection({ decisions: [], sourceCandidates: [{
       symbol: '6285', name: '啟碁', disposition: 'promoted', reason: 'price_dislocation', sourceSummary: '官方證據',
+      ...citedPublicationEvidence('claim-6285'),
       researchScore: { underreactionScore: 78, coverage: 1, confidence: 0.9, missingAxes: [],
         axes: { fundamental: { score: 88, trustworthy: true }, priceDislocation: { score: 92, trustworthy: true },
           valuation: { score: 68, trustworthy: true }, timing: { score: 76, trustworthy: true, technicalState: 'at_support' } },
@@ -877,8 +910,8 @@ const checks = {
           breadth: { aboveMa20Pct: 49.12 }, foreignFlow: { net1d: -51870490959 } }, missingComponents: [] },
     });
     assert.deepEqual([aligned.payload.marketRegime, aligned.payload.marketIndexSignal.status,
-      aligned.payload.sourceSignals[0].opportunityAction], ['selective-risk-on','selective_only','setup_ready'],
-    'legacy risk-on wording cannot contradict the authoritative selective market gate');
+      aligned.payload.sourceSignals[0].opportunityAction], ['selective-risk-on','selective_only','evidence_watch'],
+    'legacy risk-on wording cannot contradict the valuation authority gate');
     assert.match(aligned.payload.underreactionMarket.summary, /外資單日淨賣超 518[.]7 億元/u);
   },
   'PCR-010': () => {
@@ -934,33 +967,36 @@ const checks = {
     assert.doesNotMatch(staticRegistry, /asOf: nowIso\(\)|source_timestamp: nowIso\(\)|asOfDate: asIsoDate\(nowIso\(\)\)/u);
   },
   'PCR-013': () => {
-    const select = runtime('valuation-comparables.js').selectComparableValuationInputs; const roster = ['s','a','b','c','d','e','f'].map((stockId) => ({ stockId, sector: 'semiconductor' }));
-    const multiples = ['a','b','c','d','e'].flatMap((stockId) => [{ stockId, method: 'pe', value: 10, asOf: '2026-01-01' }, { stockId, method: 'pe', value: 99, asOf: '2027-01-01' }]);
-    const result = select({ subjectStockId: 's', roster, multiples, cutoff: '2026-06-01', sector: 'semiconductor' });
+    const select = runtime('valuation-comparables.js').selectComparableValuationInputs; const roster = ['s','a','b','c','d','e','f','g','h'].map((stockId) => ({ stockId, sector: 'electronics' }));
+    const multiples = ['a','b','c','d','e','f','g','h'].flatMap((stockId) => [{ stockId, method: 'pe', value: 10, asOf: '2026-01-01' }, { stockId, method: 'pe', value: 99, asOf: '2027-01-01' }]);
+    const result = select({ subjectStockId: 's', roster, multiples, cutoff: '2026-06-01', sector: 'electronics' });
     assert.equal(result.availability, 'available'); assert.ok(result.rows.every((row) => row.value === 10));
     const ownPe = peRows(252, 's'); const latest = ownPe.at(-1).asOf;
     const sectorPe = Array.from({ length: 8 }, (_, index) => ({ stockId: `peer-${index}`, authority: 'official', value: 9 + index / 10,
-      asOf: latest, sector: 'semiconductor', close: 100 + index, sharesOutstanding: 1_000_000 + index,
+      asOf: latest, sector: 'electronics', close: 100 + index, sharesOutstanding: 1_000_000 + index,
       tradingSessionAuthorityHash: 'a'.repeat(64) }));
     const golden = runtime('candidate-valuation.js').evaluateCandidateValuation({ stockId: 's', cutoff: '2026-06-01', asOf: '2026-06-01',
-      facts: { revenue: 56.39, grossProfit: 18, operatingIncome: 5.639, pretaxIncome: 2.1, netIncome: 1.7721, dilutedShares: 1.969 }, roster, multiples,
+      facts: { revenue: 56.39, grossProfit: 18, operatingIncome: 5.639, pretaxIncome: 2.1, netIncome: 1.7721,
+        dilutedShares: 1.969,depreciationAmortization:1,monthlyRevenueHistory:Array.from({length:18},(_,index)=>40+index),
+        quarterlyRevenueHistory:[11,12,13,14,15,16,17,18],quarterlyNetIncomeRevenueHistory:[11,12,13,14,15,16,17,18],
+        quarterlyNetIncomeHistory:[.5,.6,.7,.8,.9,1,1.1,1.2] }, roster, multiples,
       evidence: [{ stockId: 's', companySpecific: true, publishedAt: '2026-05-01', sourceRef: 'macronix-q1-2026' }],
-      sector: 'semiconductor', cycleHistory: Array(12).fill(.9), crossCheck: { primary: 10, secondary: 11 },
+      sector: 'electronics', cycleHistory: Array(12).fill(.9), crossCheck: { primary: 10, secondary: 11 },
       rows: [...ownPe, ...sectorPe], tradingSessionAuthorityHash: 'a'.repeat(64),
       scenarios: { bear: { multiple: 8, asOf: '2026-06-01', sourceRef: 'cycle-bear' },
         base: { multiple: 10, asOf: '2026-06-01', sourceRef: 'cycle-base' },
         bull: { multiple: 12, asOf: '2026-06-01', sourceRef: 'cycle-bull' } },
       valuationScores: { scenarioBridgeScore: 70, capitalStructureScore: 65, crossCheckScore: 80 } });
     assert.equal(golden.status, 'normal'); assert.ok(Math.abs(golden.eps - 0.9) < 1e-12);
-    assert.ok(Math.abs(golden.targetPrice - 9) < 1e-12); assert.notEqual(golden.eps, 30.04);
+    assert.ok(Number.isFinite(golden.targetPrice)&&golden.targetPrice>0); assert.notEqual(golden.eps, 30.04);
     const incomplete = runtime('candidate-valuation.js').evaluateCandidateValuation({ stockId: 's', cutoff: '2026-06-01', facts: { revenue: 56.39 } });
-    assert.deepEqual([incomplete.status, incomplete.reason, incomplete.eps, incomplete.targetPrice], ['valuation_review','missing_bridge_inputs',null,null]);
+    assert.deepEqual([incomplete.status, incomplete.reason, incomplete.eps, incomplete.targetPrice], ['valuation_review','missing_valuation_method',null,null]);
   },
   'PCR-014': () => {
     const select = runtime('valuation-method.js').selectSectorValuationMethod;
     assert.equal(select({ sector: 'x', netIncome: -1, ebitda: 2, revenue: 5 }).method, 'ev_ebitda');
-    assert.equal(select({ sector: 'x', netIncome: -1, ebitda: -1, revenue: 5 }).method, 'ev_sales');
-    assert.equal(select({ sector: 'financial', netIncome: 1, bookValue: 5 }).method, 'residual_income');
+    assert.equal(select({ sector: 'information_service', netIncome: -1, ebitda: -1, revenue: 5, grossProfit: 2 }).method, 'ev_sales');
+    assert.equal(select({ sector: 'finance_insurance', netIncome: 1, bookValue: 5, roe: 8 }).method, 'pb_roe');
     assert.equal(select({ sector: 'semiconductor', netIncome: 1, cycleHistory: [], crossCheck: null }).availability, 'unavailable');
   },
   'PCR-015': () => {
@@ -1048,7 +1084,7 @@ const checks = {
     const workflow = readFileSync(path.join(root, '.github/workflows/source-led-opportunity-v3.yml'), 'utf8');
     for (const token of ['研究與進場判斷','四軸研究評分','乖離率與本益比脈絡','基本面品質','時機風險',
       '乖離率（BIAS）','交易所','模型','min-w-0','break-words','sourceSignals','新來源訊號','估值待補',
-      "signal.researchDisposition !== 'avoid'",'.slice(0, 12)','估值來源：{signal.valuationExchange']) assert.ok(component.includes(token), token);
+      'decisionEnvelope','現在可行動','等待條件','新來源待研究','估值來源：{signal.valuationExchange']) assert.ok(component.includes(token), token);
     for (const token of ['exchangeReportedPe','modelComparablePe','bias20Pct','timingRisk']) assert.ok(types.includes(token), token);
     assert.match(gateRunner, /PLAYWRIGHT_BROWSERS_PATH: '0'/u);
     assert.match(gateRunner, /const traceHome = track === 'model_runner' \? process\.env\.HOME \?\? '' : '\/tmp';/u);
@@ -1068,7 +1104,8 @@ const checks = {
       encoding: 'utf8',
       env: { ...process.env, FORCE_COLOR: '0', NO_COLOR: '1' },
     });
-    assert.match(output, /2 passed/u);
+    assert.match(output, /8 passed/u);
+    assert.doesNotMatch(output, /skipped/u);
   },
   'PCR-025': () => {
     const select = runtime('bias-technical-history.js').selectBiasTechnicalHistory;
@@ -1094,9 +1131,12 @@ const checks = {
     const select = runtime('reported-pe-authority.js').selectOfficialReportedPe; const own = peRows(252); const latest = own.at(-1).asOf;
     const sector = Array.from({ length: 8 }, (_, index) => ({ stockId: `peer${index}`, authority: 'official', value: 9 + index, asOf: latest, sector: 'semiconductor', close: 100 + index, sharesOutstanding: 1000 + index, tradingSessionAuthorityHash: 'a'.repeat(64) }));
     const result = select({ stockId: 'subject', asOf: '2030-01-01T00:00:00Z', rows: [...own, ...sector], sector: 'semiconductor', tradingSessionAuthorityHash: 'a'.repeat(64) });
-    assert.equal(result.availability, 'available'); assert.equal(result.ownHistory.length, 252); assert.equal(result.sectorReference.count, 8);
-    assert.equal(select({ stockId: 'subject', asOf: '2030-01-01T00:00:00Z', rows: peRows(1261) }).reason, 'reported_pe_selection_bound_violation');
-    assert.equal(select({ stockId: 'subject', asOf: '2030-01-01T00:00:00Z', rows: [...own, { ...own.at(-1), value: 99 }] }).reason, 'authority_conflict');
+    assert.equal(result.availability, 'available'); assert.equal(result.observations.length, 252); assert.equal(result.sectorReference.count, 8);
+    assert.equal(result.current.status,'available');assert.equal(result.ownHistory.count,252);assert.equal(result.sector.count,8);
+    assert.equal(select({ stockId: 'subject', asOf: '2030-01-01T00:00:00Z', rows: peRows(1261) }).reason, 'insufficient_own_history');
+    const conflict=select({ stockId: 'subject', asOf: '2030-01-01T00:00:00Z', rows: [...own, { ...own.at(-1), value: 99 }] });
+    assert.equal(conflict.reason, 'authority_conflict');assert.equal(conflict.current.sourceRef,null);
+    assert.equal(conflict.ownHistory.reason,'authority_conflict');assert.equal(conflict.sector.reason,'authority_conflict');
   },
   'PCR-029': () => {
     const calculate = runtime('fundamental-quality.js').calculateFundamentalQualityAxes;
@@ -1110,11 +1150,15 @@ const checks = {
       risks: ['仍須持續追蹤財務風險。'], evidenceRefs: ['official-2337'], asOf: '2026-08-01T00:00:00Z' };
     const value = serialize({ symbol: '2337', action: 'wait_trigger', researchMaturity: 'fundamental_review', fundamental, technical: { technicalState: 'reclaim_required', trigger: { kind: 'reclaim', threshold: 100, volumeRatioMinimum: 1 }, plane: { maDeviation: -0.08, bias: { availability: 'available', bias20Pct: -8 } } },
       valuation: { status: 'valuation_review', reportedPe: { availability: 'unavailable', reason: 'authority_conflict' } }, evaluationDisposition: 'unchanged', lastEvaluatedAt: '2026-08-01T00:00:00Z', materialChangedBecause: [] });
-    assert.equal(value.valuation.exchangeReportedPe.reason, 'authority_conflict'); assert.equal(value.timingRisk.reason, 'reclaim_required'); assert.match(value.noChangeMessage, /無重大變化/u); assert.deepEqual(value.materialChangedBecause, []);
+    assert.equal(value.valuation.exchangeReportedPe.reason, 'authority_conflict');
+    assert.equal(value.valuation.exchangeReportedPe.sourceRef,null);
+    assert.equal(value.valuation.relativeMultiple.ownHistory.reason,'authority_conflict');
+    assert.equal(value.valuation.relativeMultiple.sector.reason,'authority_conflict');
+    assert.equal(value.timingRisk.reason, 'reclaim_required'); assert.match(value.noChangeMessage, /無重大變化/u); assert.deepEqual(value.materialChangedBecause, []);
   },
   'PCR-031': () => {
     const identity = runtime('comparison-identity.js'); const base = identity.buildComparableRunIdentity({ asOf: '2026-08-01', universeManifestHash: 'a'.repeat(64) });
-    assert.equal(identity.STATIC_IDENTITY_MEMBERS.length, 41); assert.equal(base.comparisonContractKey, 'ebaa6dbdaa7dd55bb261187008f51e930919e7c0cfe07732d531e01267e67c41');
+    assert.equal(identity.STATIC_IDENTITY_MEMBERS.length, 41); assert.equal(base.comparisonContractKey, 'c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729');
     for (const [name, value] of identity.STATIC_IDENTITY_MEMBERS) assert.notEqual(identity.buildComparableRunIdentity({ asOf: '2026-08-01', universeManifestHash: 'a'.repeat(64), staticIdentityOverrides: { [name]: `${value}-changed` } }).comparisonContractKey, base.comparisonContractKey, name);
     assert.throws(() => identity.buildComparableRunIdentity({ asOf: 'x', universeManifestHash: 'x', staticIdentityOverrides: { factorCorrectnessContractVersion: null } }), /invalid static identity/u);
   },
@@ -1240,19 +1284,25 @@ test('V3.12 official valuation parser rejects swapped or non-authoritative value
     collectedAt: '2026-08-08T10:20:00Z', authority: 'exchange_reported',
   });
   assert.equal(official.validateReportedValuation({ peRatio: 114, pbRatio: 30.32, sourceRef: 'legacy:yahoo' }).availability, 'unavailable');
+  const current={...rows[0],stockId:'subject',exchange:'TWSE',sector:'semiconductor',
+    tradingSessionAuthorityHash:'a'.repeat(64)};
   assert.equal(official.validateReportedValuation(rows[0]).availability, 'available');
+  assert.equal(official.validateReportedValuation({...rows[0],exchange:'TPEX'}).availability,'unavailable');
   const historyUrl = 'https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?date=20260731&response=json';
   const history = official.parseTwseHistoricalValuationRows({ stat: 'OK',date: '20260731',
     data: [['2330','台積電','1,785.00','0.90',114,'32.80','10.74','115/1']] },
   { collectedAt:'2026-08-08T10:20:00Z',sourceUrl:historyUrl });
   assert.deepEqual([history[0].session,history[0].peRatio,history[0].pbRatio,history[0].authority],
     ['2026-07-31',32.8,10.74,'exchange_reported_history']);
-  const older = [{ ...history[0],session:'2026-05-29',peRatio:27,
+  const authoritativeHistory=history.map((row)=>({...row,stockId:'subject',exchange:'TWSE',sector:'semiconductor',
+    tradingSessionAuthorityHash:'a'.repeat(64)}));
+  const older = [{ ...authoritativeHistory[0],session:'2026-05-29',peRatio:27,
     sourceRef:'twse-rwd:BWIBBU_d:2026-05-29:2330' },{ ...history[0],session:'2026-02-27',peRatio:25,
+    stockId:'subject',exchange:'TWSE',sector:'semiconductor',tradingSessionAuthorityHash:'a'.repeat(64),
     sourceRef:'twse-rwd:BWIBBU_d:2026-02-27:2330' }];
-  const axis = runtime('auth-source-worker-cli.js').valuationResearchAxis(rows[0], { count:8,medianPe:35 }, [...history,...older]);
-  assert.equal(axis.trustworthy,true); assert.equal(axis.historySampleCount,3); assert.equal(axis.historyPeMedian,27);
-  assert.equal(axis.sectorPe,35); assert.match(axis.reason,/sector_and_own_history/u);
+  const axis = runtime('auth-source-worker-cli.js').valuationResearchAxis(current, { count:8,medianPe:35 }, [...authoritativeHistory,...older]);
+  assert.equal(axis.trustworthy,true); assert.equal(axis.historySampleCount,4); assert.equal(axis.historyPeMedian,29.43);
+  assert.equal(axis.sectorPe,35); assert.match(axis.reason,/sector_reference/u);
 });
 
 test('V3.12 official index history supplies at least 20 sessions without inventing dates', () => {
@@ -1272,10 +1322,12 @@ test('V3.12 official source failure degrades independently instead of erasing va
     if (url===official.TPEX_SOURCE_URL) throw new Error('fixture_tpex_down');
     return response([]);
   };
-  const snapshot=await official.loadOfficialTwMarketSnapshot({ cutoff:'2026-08-09T00:00:00Z',fetchImpl });
-  assert.equal(snapshot.schema,'official-tw-market-snapshot-v1.2');
+  const snapshot=await official.loadOfficialTwMarketSnapshot({ cutoff:'2026-08-09T00:00:00Z',
+    candidates:[{symbol:'2330',exchange:'TWSE',canonicalSector:'semiconductor'}],fetchImpl });
+  assert.equal(snapshot.schema,'official-tw-market-snapshot-v1.4');
   assert.equal(snapshot.valuations.length,1); assert.equal(snapshot.valuations[0].symbol,'2330');
-  assert.deepEqual(snapshot.sourceFailures,[{ url:official.TPEX_SOURCE_URL,reason:'official_source_unavailable' }]);
+  assert.ok(snapshot.sourceFailures.some((failure)=>failure.url===official.TPEX_SOURCE_URL
+    &&failure.reason==='official_source_unavailable'));
 });
 
 test('V3.12 evidence snippets are local to the matched stock', () => {

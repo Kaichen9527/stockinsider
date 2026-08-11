@@ -148,7 +148,7 @@ function fixture(): OpportunityEngineAvailableV3 {
     engineHealth: {
       status: 'degraded',
       sourceCutoff: '2026-07-23T08:00:00Z',
-      acceptanceVersion: '1.44.6',
+      acceptanceVersion: '1.46.0',
       modelInfluence: 'none',
       assistiveArtifacts: [],
       warnings: ['market_incomplete', 'shadow_only'],

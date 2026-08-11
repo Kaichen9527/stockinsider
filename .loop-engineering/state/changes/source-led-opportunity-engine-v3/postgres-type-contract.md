@@ -1,6 +1,6 @@
 # PostgreSQL Type and RPC Payload Contract: source-led-opportunity-engine-v3
 
-Version: `opportunity-postgres-types-v3.21`
+Version: `opportunity-postgres-types-v3.22`
 
 This file is the sole SQL type catalog for every V3 RPC-visible argument, return column, stored enum and staged completion count. Terra must create these exact snake-case named PostgreSQL enums/composites before the functions. A generic `enum`, an anonymous record with untyped columns, an open JSON object or an equivalent implementation-selected value set is forbidden. Built-ins retain their PostgreSQL names (`uuid`, `text`, `boolean`, `integer`, `bigint`, `date`, `timestamptz`, `double precision`, `bytea`, `jsonb`, and arrays thereof).
 
@@ -75,6 +75,18 @@ This file is the sole SQL type catalog for every V3 RPC-visible argument, return
 - `opportunity_legacy_authority_page_kind_v3_11`: `roster|alias|taxonomy|selected_revision`.
 - `opportunity_legacy_producer_job_status_v3_11`: `queued|leased|retryable|succeeded|failed|cancelled`.
 - `opportunity_legacy_producer_failure_code_v3_11`: `provider_unavailable|data_integrity_failure|job_attempts_exhausted|lease_expired|cancelled`.
+- V3.13 source persistence deliberately uses closed constrained `text` domains rather
+  than adding RPC-visible enums. Connector attempt status is exactly
+  `items_found|successful_empty|metadata_only|missing_endpoint|auth_failed|provider_failed`;
+  response kind is `http_response|configuration|transport_error`; profile aggregate is
+  `fresh|unchanged|no_new_items|missing_endpoint|auth_failed|provider_failed`; document
+  persistence is `new_revision|unchanged|deferred|rejected`; item disposition pairs are
+  exactly `transcript_ready/eligible_for_claim_extraction`, `metadata_only/no_claim`,
+  `rejected/rejected`, and `deferred/deferred`; processing scope is
+  `document|claim|entity` and outcome is
+  `processed_with_claims|processed_no_claim|linked|rejected|deferred`. These values and
+  their cross-column matrices are storage constraints owned by
+  `opportunity-storage-v3.25`; accepting another text is a catalog failure.
 
 ## V3.11 legacy producer return types
 
@@ -260,6 +272,12 @@ corporate_action_snapshot_input_v3 = (
 exchange_reported_pe_input_v3 = (
   stock_id uuid, exchange stock_exchange_v3, session_date date,
   close double precision, reported_pe double precision, published_at timestamptz,
+  source_timestamp timestamptz, collected_at timestamptz, source_ref text
+)
+exchange_reported_valuation_input_v3_13 = (
+  stock_id uuid, exchange stock_exchange_v3, session_date date,
+  close double precision, reported_pe double precision NULL,
+  reported_pb double precision NULL, published_at timestamptz,
   source_timestamp timestamptz, collected_at timestamptz, source_ref text
 )
 price_authority_input_v3 = (

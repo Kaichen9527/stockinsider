@@ -1847,6 +1847,60 @@ This is precommit evidence, not an exact-review or release PASS. Evaluation prom
 remains `blocked/non_fabricated_elapsed_cohorts_unavailable` for the required
 120 backtest dates, 20 live dates and 252-date attempt roster.
 
+## V3.13 Architecture Gate Round 16 — PASS
+
+Fresh independent Sol XHigh review examined commit
+`200b89a699faca98040111fc76c8135d10eb58bd`, tree
+`4005c99f530219588e6120d93e427b7807134cee`, in a clean detached read-only checkout
+and returned `PASS P0=0 P1=0 P2=0`. It closed the Round 15 revision-detail cache
+boundary and unauthorized generic-migration discovery findings, reproduced the
+three migration hashes and ordered-chain hash, and accepted the whole V3.13
+contracts, SQL/RPC/RLS, transaction/concurrency, runtime, Web/detail, compatibility
+and rollback architecture. Historical diagnostics were not treated as current
+execution evidence. Exact implementation commit, exact/full-range diff review and
+authoritative Code Gate remain pending. No production authority was granted.
+Evidence: `architecture-review-round-16.md`.
+
+## V3.13 reviewed-head local Code Gate diagnostic — external aggregate pending
+
+After exact-commit findings were repaired, both the repair-range review
+`3f3fb99412ceee7c3c21dda11199a30be1594242..9a4bce1d1daf587c9d9ce2d186b77abb2beca0f1`
+and full implementation review
+`75e329471da257c2855d4de04d71e05a589e6c72..9a4bce1d1daf587c9d9ce2d186b77abb2beca0f1`
+returned `PASS P0=0 P1=0 P2=0`. Closure evidence was committed at
+`1ac740f33c7e3bf8ab682e044417617bfc306fde`, tree
+`690579f93ca9fcf2fa15ec42b3d9b5ae3a9604cb`.
+
+The clean reviewed head then passed typecheck, lint, production build, base `61/61`,
+product/V3.13 `51/51`, migration `48/48`, legacy `2/2`, Playwright `6/6`,
+performance `4/4`, model-runner `17/17` and disabled host-pin v3.7 doctor. The
+evaluation contract subtrack passed `12/12`; the formal elapsed-evidence gate returned
+exit `2` with `blocked/non_fabricated_elapsed_cohorts_unavailable` for 120 backtest
+dates, 20 live dates and a 252-date attempt roster. No synthetic cohort was created.
+
+These results are local diagnostics, not a candidate-minted protected attestation.
+The authoritative Code Gate remains pending a `stockinsider-v3-gate-root` workflow
+run over the final evidence tree. No production or release authority is implied.
+
+## V3.14 Requirements Gate Round 131 — CHANGES_REQUIRED and repaired
+
+Fresh read-only Requirements review examined commit
+`2aefcf2fdb81f8a751f90bd3626192c6fd6cc113`, tree
+`29532559faafd3154af743c592a6c68e943e03eb`, and returned
+`CHANGES_REQUIRED P0=0 P1=4 P2=0`. It found that V3.14 facts completion bypassed
+the V3.13 successor contract, official chunks wrote before terminal conservation,
+MOPS accepted dimensional contexts, and effective calendar/valuation requests were
+not bounded after normalization and union.
+
+The unreviewed repair stages exact chunk payloads, validates a closed terminal
+manifest, preserves the V3.13 wrapper, and applies official rows transactionally
+after the predecessor completion accepts the lease. It rejects dimensional MOPS
+facts and closes the 252-per-exchange valuation plus 130-per-exchange action-session
+bounds. Targeted local evidence passes V3.14 `23/23`, combined product `75/75` and
+applied migration `49/49`. A new immutable tree and fresh Requirements Round 132
+remain mandatory; no production state changed. Evidence:
+`requirements-review-round-131.md` and `requirements-round-131-p1-repair.md`.
+
 ## Gate Rules
 
 - `PASS` requires zero P1/P0 findings and no material unspecified interface, precedence, failure or migration decision.

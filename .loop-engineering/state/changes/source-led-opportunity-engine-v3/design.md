@@ -67,7 +67,7 @@ manifest; `opportunity-job-graph-v3.15` is the sole null-predecessor bootstrap,
 successor, inline UUIDv5, immutable payload/result, mover-root audit, token-bound
 database-computed read and finite worker call-plan authority; domain files own only
 native rows/header semantics. `opportunity-runtime-v3.17`,
-`opportunity-storage-v3.24` and `opportunity-postgres-types-v3.21` own byte-exact run
+`opportunity-storage-v3.25` and `opportunity-postgres-types-v3.22` own byte-exact run
 identity, transaction, physical and type closure.
 
 `model-runner-v3.6` solely owns local Loop manifest/CLI/routing/status,
@@ -87,8 +87,8 @@ canonical authority tags immediately below are the only design-side declarations
 catalog identity, active-file topology and the shortened product-correctness owner.
 Their JSON payloads use RFC 8785 key order and are permitted exactly once only.
 
-<!-- GOV-004-AUTHORITY {"catalogBytes":5036,"catalogSha256":"8fffdd2abacea80d8581ca63c96651a8d22c498142e4dc5ead2a2ec7712af16b","kind":"design-catalog-identity"} -->
-<!-- GOV-004-AUTHORITY {"activeFiles":48,"kind":"design-active-file-topology"} -->
+<!-- GOV-004-AUTHORITY {"catalogBytes":5484,"catalogSha256":"5ea7a1c6411f9f9447098bcd63c9cf96ddc182aa2918bab84f2de51bc98bc5ef","kind":"design-catalog-identity"} -->
+<!-- GOV-004-AUTHORITY {"activeFiles":50,"kind":"design-active-file-topology"} -->
 <!-- GOV-004-AUTHORITY {"kind":"design-product-correctness-owner","owner":"product-correctness-runtime-v3.11.11"} -->
 
 `GOV-004` parses every tag across the active graph, rejects a missing, repeated,
@@ -109,7 +109,7 @@ request/status/reservation/operation-journal/resource-journal/attempt schemas an
 key preimages, every manifest kind/version row, every data/public acceptance literal
 and every active prose contract-version edge. Extracted owners must byte-equal the
 catalog and these current roots: `runtime-transaction-contract.md` v3.17,
-`storage-schema-contract.md` v3.24, `postgres-type-contract.md` v3.21,
+`storage-schema-contract.md` v3.25, `postgres-type-contract.md` v3.22,
 `manifest-storage-contract.md` v3.10, `job-graph-contract.md` v3.15,
 `shadow-evaluation-contract.md` v3.7, `market-contract.md` v3.6,
 `source-adapter-contract.md` v3.3, `financial-data-contract.md` v3.3,
@@ -120,13 +120,13 @@ catalog and these current roots: `runtime-transaction-contract.md` v3.17,
 `technical-decision-contract.md` v3.11.1, the tagged PCR owner,
 `analysis-revision-contract.md` v3.11.2,
 `legacy-radar-correctness-contract.md` v3.11.4,
-`acceptance-evidence-contract.md` v3.11.18,
+`acceptance-evidence-contract.md` v3.13.0,
 `factor-correctness-amendment.md` v3.11.6,
 `authority-supersession-contract.md` v3.2, `auth-principal-contract.md` v3.8,
 `trading-calendar-contract.md` v3.4, and `model-runner-contract.md` v3.6 with 884-byte identity SHA-256
-`2e49bba8f65750e1acce787116107cdba2cd5bf4b3feaa3abb1b0454bc8e4fa9`, host fixture
-SHA-256 `3827556c3dbef5fdd342d1272845810ec0c9f57f7940200a1beff2bb22301049`,
-and acceptance `1.44.6/297`. Hash-preimage schema tags inside fenced canonical
+`f3db935442cb0d837be9c6ddf566caefd752edb83817f8a47741282969cf9029`, host fixture
+SHA-256 `e7ce9c035f2af2de47e180bbaa50ff1a914c7098afc43112edf951a9162611d4`,
+and acceptance `1.46.0/320`. Hash-preimage schema tags inside fenced canonical
 preimages are data, not active contract references. Model-runner identity remains
 independent of the opportunity runtime tuple.
 
@@ -456,3 +456,57 @@ Implementation order is fixed: tracked runtime and hash oracle; pure discovery,
 valuation, technical and revision modules; producer DAG; compact projection adapter;
 public integration; performance and accessibility. Every behavior is introduced by a
 failing PCR acceptance owner before product code changes.
+
+## V3.13 decision-integrity architecture amendment
+
+The tracked producer remains the only mutation owner. Official financial, valuation,
+price and corporate-action observations append at a later database-owned cutoff and
+therefore cannot become visible inside the run that acquired them.
+
+```text
+official/authorized acquisition
+  -> append-only fact, price, action and source revisions
+  -> next-cutoff valuation + adjusted technical authority
+  -> DecisionEnvelopeV313 (single action authority)
+  -> immutable compact projection + evaluation heartbeat
+  -> Landing and same-revision detail
+```
+
+Web, runtime doctor and internal health compile the same exchange-session freshness
+policy. One or two missed scheduled runs expose last-good content as read-only and
+disable buy-like compatibility actions; three misses return a typed degraded empty
+projection. Neither path invokes production work from an HTTP request. Content hash
+conflicts remain hard failures.
+
+Official raw-price backfill is bounded to four incomplete deep symbols and seven
+monthly windows. Corporate-action backfill is bounded to twenty missing exchange
+sessions and three official feed classes. The exchange corporate-action endpoints are
+compiled as official JSON because a valid no-event TWSE CSV response has no schema;
+typed official no-data is accepted, while transport, HTML, status or schema failures
+remain unavailable and cannot manufacture an empty authoritative snapshot.
+
+Decision rendering is downstream-only. Legacy action fields are compatibility views
+of the envelope, FULL payload leaves outrank LIGHT leaves, and UI links carry the
+immutable `decisionRevisionId`. Source connectors conserve every configured identity
+to a typed terminal outcome; metadata-only inputs do not cross the claim boundary.
+
+## V3.14 actionability-recovery architecture amendment
+
+V3.14 separates evidence visibility from action authority:
+
+```text
+checksum-valid stored projection
+  -> ProjectionHealthV314
+  -> live or last-good read-only research
+  -> ResearchRankingEnvelopeV314 (ordering only)
+  -> DecisionEnvelopeV314 (sole action authority)
+  -> compact projection / same-revision detail
+```
+
+The Web never clears research merely because calendar authority is absent. A V3.12
+adapter can expose only read-only evidence; V3.13 remains read-only compatible; a
+fresh V3.14 producer and official authority plane are required for action enablement.
+The producer repairs unchanged-candidate seed identity before persistence and emits
+only allowlisted failure diagnostics. The release embeds one reviewed release identity
+in Web, projection and runtime manifest rather than relying on a platform-provided Git
+environment variable.

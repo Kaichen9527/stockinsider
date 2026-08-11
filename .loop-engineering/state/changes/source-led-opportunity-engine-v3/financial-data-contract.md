@@ -127,7 +127,11 @@ Only the official exchange owner (`twse` for TWSE, `tpex` for TPEX) may append
 sourceTimestamp,collectedAt,recordedAt,sourceRef]`. The append transaction resolves
 the date to a completed official session for the same exchange; consumers bind the
 cutoff-selected `sessionAuthorityId` from the immutable trading calendar rather than
-accepting it from the caller. `close` is
+accepting it from the caller. The append uses `collectedAt` as its authority cutoff and
+requires the selected event to be `completed` with `closeAt <= collectedAt` before
+either the valuation row or its audit is written; missing, cancelled, pre-close or
+conflicting authority is `calendar_authority_mismatch`/the underlying integrity error
+and leaves both tables unchanged. `close` is
 finite positive and `reportedPe` is finite. All timestamps are database-checked in the
 same order and at/before cutoff. The immutable identity includes every member through
 `sourceRef`; selection first collapses an exact `(stockId,exchange,sessionDate,
@@ -157,7 +161,10 @@ fact is carried only in the sector-current native row with its period end/source
 An observation-stream or shares selector `authority_conflict` propagates unchanged to
 the unavailable current/history/sector reported-PE branch and to valuation review;
 `data-contract.md` is the sole public closed-union owner. It may never be relabeled as
-missing data or silently substituted by an older fact.
+missing data, abort unrelated candidate rows or silently substitute an older fact.
+The compact fact plane therefore retains one typed conflict terminal for the affected
+stock/session with null valuation values; the runtime cannot select its source-ref/UUID
+as a winner.
 It computes market cap as `close*sharesOutstanding`, then Type-7 sector P25/P50/P75
 and `sum(reportedPe*marketCap)/sum(marketCap)` only when at least eight same-sector
 rows qualify. The three ordered sections, cursor and row bounds are owned by

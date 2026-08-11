@@ -11,7 +11,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const trustedExecFileSync = childProcess.execFileSync.bind(childProcess);
 const trustedSpawnSync = childProcess.spawnSync.bind(childProcess);
 const requestedTrack = process.env.OPPORTUNITY_V3_ACCEPTANCE_TRACK ?? 'product_runtime';
-const expectedActiveGraphSha256 = 'bd557c0f27263dbca17610ec07469ac73835838e5cc3d6d5fe921891c82de435';
+const expectedActiveGraphSha256 = '685211645ee93d2f792254036c5c39271791c7c8f7ac3beec7d3b85e85430393';
 assert.ok(
   ['product_runtime', 'evaluation_governance', 'model_runner'].includes(requestedTrack),
   'acceptance traceability executes only an explicit automated track',
@@ -106,6 +106,7 @@ let workerExecutors;
 let evaluation;
 let dataContract;
 let tasks;
+let status;
 let operatorDocs;
 let operatorSchemas;
 let runner;
@@ -193,6 +194,7 @@ workerExecutors = readFileSync(path.join(root, 'web/src/lib/opportunity-v3/worke
 evaluation = readFileSync(path.join(change, 'shadow-evaluation-contract.md'), 'utf8');
 dataContract = readFileSync(path.join(change, 'data-contract.md'), 'utf8');
 tasks = readFileSync(path.join(change, 'tasks.md'), 'utf8');
+status = JSON.parse(readFileSync(path.join(change, 'status.json'), 'utf8'));
 operatorDocs = readFileSync(path.join(root, 'docs/source-led-opportunity-v3.md'), 'utf8');
 operatorSchemas = JSON.parse(readFileSync(path.join(root, 'docs/source-led-opportunity-v3.schemas.json'), 'utf8'));
 runner = createRequire(import.meta.url)('../model-runner-v3/runner.js');
@@ -425,16 +427,219 @@ function mutateAuthorityRecords(records, repositoryPath, mutate) {
   record.text = mutate(record.text);
 }
 
+function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
+  assert.equal(statusRecord.changeId, 'source-led-opportunity-engine-v3');
+  const round = statusRecord.requirementsReviewRound;
+  assert.ok(Number.isInteger(round) && round >= 104, 'current Requirements round is explicit');
+  assert.match(statusRecord.requirementsReviewTree, /^[0-9a-f]{40}$/u);
+  assert.equal(
+    statusRecord.requirementsReviewEvidence,
+    `.loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-${round}.md`,
+  );
+
+  if (statusRecord.requirementsGateStatus === `pass_v3_14_round_${round}`) {
+    const currentMarkerV314 = '### V3.14 Actionability Recovery — user-authorized implementation';
+    const currentStartV314 = tasksText.lastIndexOf(currentMarkerV314);
+    assert.ok(currentStartV314 >= 0, 'one operative V3.14 task section exists');
+    const currentTasksV314 = tasksText.slice(currentStartV314);
+    assert.equal(statusRecord.requirementsStatus, `v3_14_round_${round}_pass`);
+    assert.equal(statusRecord.requirementsPendingTree, null);
+    assert.equal(statusRecord.requirementsPendingEvidence, null);
+    assert.match(currentTasksV314, new RegExp(`- \\[x\\] Run fresh Requirements Round ${round}`, 'u'));
+    if (statusRecord.architectureGateStatus === 'pending_v3_14_round_17') {
+      assert.equal(statusRecord.loopStage, `v3_14_round_${round}_requirements_pass_architecture_round_17_pending`);
+      assert.equal(statusRecord.designStatus, 'v3_14_architecture_round_17_pending');
+      assert.equal(statusRecord.architecturePendingRound, 17);
+      assert.equal(statusRecord.architecturePendingTree, 'round_17_subject_tree_with_round_137_requirements_evidence');
+      assert.equal(statusRecord.architecturePendingEvidence,
+        '.loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-17.md');
+      assert.equal(statusRecord.implementationStatus, 'v3_14_requirements_pass_architecture_round_17_pending');
+      assert.match(statusRecord.blockedReason, /Architecture Round 17 PASS is required/u);
+      assert.match(currentTasksV314, /- \[ \] Obtain independent fresh Architecture Round 17 PASS/u);
+    } else if (statusRecord.architectureGateStatus.startsWith('changes_required_v3_14_round_17_')) {
+      assert.match(statusRecord.architectureGateStatus,
+        /^changes_required_v3_14_round_17_p0_0_p1_[1-9][0-9]*_p2_[0-9]+_repaired_unreviewed$/u);
+      assert.equal(statusRecord.loopStage, 'v3_14_architecture_round_17_p1_repaired_round_18_pending');
+      assert.equal(statusRecord.designStatus, 'v3_14_architecture_round_17_changes_required_repaired_round_18_pending');
+      assert.equal(statusRecord.architectureReviewRound, 17);
+      assert.equal(statusRecord.architectureReviewTree, '71700c03641ab3ddcc80ec17aaca17aaa40e24b6');
+      assert.equal(statusRecord.architecturePendingRound, 18);
+      assert.equal(statusRecord.architecturePendingTree, 'round_18_subject_tree_after_round_17_repairs');
+      assert.equal(statusRecord.architecturePendingEvidence,
+        '.loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-18.md');
+      assert.equal(statusRecord.implementationStatus, 'v3_14_architecture_round_17_p1_repair_complete_unreviewed');
+      assert.match(statusRecord.blockedReason, /Architecture Round 18 PASS is required/u);
+      assert.match(currentTasksV314, /- \[x\] Run independent fresh Architecture Round 17/u);
+      assert.match(currentTasksV314, /- \[ \] Obtain independent fresh Architecture Round 18 PASS/u);
+    } else {
+      assert.equal(statusRecord.architectureGateStatus, 'pass_v3_14_round_18');
+      assert.equal(statusRecord.architectureReviewRound, 18);
+      assert.equal(statusRecord.architecturePendingRound, null);
+      assert.equal(statusRecord.architecturePendingTree, null);
+      assert.equal(statusRecord.architecturePendingEvidence, null);
+      assert.match(currentTasksV314, /- \[x\] Obtain independent fresh Architecture Round 18 PASS/u);
+    }
+    return;
+  }
+
+  if (statusRecord.requirementsGateStatus.startsWith('changes_required_v3_14_')) {
+    const currentMarkerV314 = '### V3.14 Actionability Recovery — user-authorized implementation';
+    const currentStartV314 = tasksText.lastIndexOf(currentMarkerV314);
+    assert.ok(currentStartV314 >= 0, 'one operative V3.14 task section exists');
+    const currentTasksV314 = tasksText.slice(currentStartV314);
+    const nextRound = round + 1;
+    assert.match(
+      statusRecord.requirementsGateStatus,
+      new RegExp(`^changes_required_v3_14_round_${round}_p0_0_p1_[1-9][0-9]*_p2_[0-9]+_repaired_unreviewed$`, 'u'),
+    );
+    assert.equal(statusRecord.loopStage, `v3_14_round_${round}_p1_repaired_round_${nextRound}_pending`);
+    assert.match(
+      statusRecord.requirementsStatus,
+      new RegExp(`^v3_14_round_${round}_changes_required_p1_[1-9][0-9]*_repaired_fresh_round_${nextRound}_pending$`, 'u'),
+    );
+    assert.equal(statusRecord.requirementsPendingTree, `round_${nextRound}_subject_tree_after_round_${round}_repairs`);
+    assert.equal(statusRecord.requirementsPendingEvidence,
+      `.loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-${nextRound}.md`);
+    assert.equal(statusRecord.implementationStatus, `v3_14_round_${round}_p1_repair_complete_unreviewed`);
+    assert.match(statusRecord.blockedReason, new RegExp(`Round ${nextRound} Requirements PASS is required`, 'u'));
+    assert.match(currentTasksV314, new RegExp(`- \\[x\\] Run fresh Requirements Round ${round}`, 'u'));
+    assert.match(currentTasksV314, new RegExp(`Fresh Round ${nextRound} remains pending`, 'u'));
+    return;
+  }
+
+  const currentMarker = '### V3.13 Decision Integrity — current implementation';
+  const currentStart = tasksText.lastIndexOf(currentMarker);
+  assert.ok(currentStart >= 0, 'one operative V3.13 task section exists');
+  const currentTasks = tasksText.slice(currentStart);
+  if (statusRecord.requirementsGateStatus === `pass_v3_13_round_${round}`) {
+    assert.equal(statusRecord.requirementsPendingTree, null);
+    assert.equal(statusRecord.requirementsPendingEvidence, null);
+    assert.equal(statusRecord.requirementsStatus, `v3_13_round_${round}_pass`);
+    assert.match(currentTasks, new RegExp(`- \\[x\\] Obtain fresh V3[.]13 Requirements PASS in Round ${round}`, 'u'));
+    if (statusRecord.architectureGateStatus === 'pending_v3_13_round_13') {
+      assert.equal(statusRecord.loopStage, `v3_13_round_${round}_requirements_pass_architecture_round_13_freeze`);
+      assert.equal(statusRecord.implementationStatus, 'v3_13_requirements_pass_architecture_round_13_pending');
+      assert.match(statusRecord.blockedReason, /Architecture Round 13 PASS is required/u);
+    } else if (statusRecord.architectureGateStatus === 'changes_required_v3_13_round_13') {
+      assert.equal(statusRecord.architectureGateStatus, 'changes_required_v3_13_round_13');
+      assert.equal(statusRecord.architectureReviewRound, 13);
+      assert.equal(statusRecord.architectureReviewTree, '4fefb62e09aa17e368c5dcae6c545a8096529519');
+      assert.equal(statusRecord.architectureReviewEvidence,
+        '.loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-13.md');
+      assert.equal(statusRecord.architecturePendingRound, 14);
+      assert.equal(statusRecord.architecturePendingTree, 'round_14_subject_tree_after_round_13_repairs');
+      assert.equal(statusRecord.architecturePendingEvidence, 'architecture-review-round-14.md');
+      assert.equal(statusRecord.loopStage, 'v3_13_architecture_round_13_five_p1_repair_round_14_freeze');
+      assert.equal(statusRecord.implementationStatus,
+        'v3_13_architecture_round_13_five_p1_repair_complete_round_14_pending');
+      assert.match(statusRecord.blockedReason, /Architecture Round 14 PASS is required/u);
+      assert.match(currentTasks, /- \[x\] Repair all five Architecture Round 13 P1 roots together/u);
+      assert.match(currentTasks, /- \[ \] Obtain independent fresh Architecture PASS in Round 14/u);
+    } else if (statusRecord.architectureGateStatus === 'changes_required_v3_13_round_14') {
+      assert.equal(statusRecord.architectureGateStatus, 'changes_required_v3_13_round_14');
+      assert.equal(statusRecord.architectureReviewRound, 14);
+      assert.equal(statusRecord.architectureReviewTree, '659e3543c9e8abb452a05c31de054fb0d5964837');
+      assert.equal(statusRecord.architectureReviewEvidence,
+        '.loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-14.md');
+      assert.equal(statusRecord.architecturePendingRound, 15);
+      assert.equal(statusRecord.architecturePendingTree, 'round_15_subject_tree_after_round_14_repairs');
+      assert.equal(statusRecord.architecturePendingEvidence, 'architecture-review-round-15.md');
+      assert.equal(statusRecord.loopStage, 'v3_13_architecture_round_14_one_p1_repair_round_15_freeze');
+      assert.equal(statusRecord.implementationStatus,
+        'v3_13_architecture_round_14_one_p1_repair_complete_round_15_pending');
+      assert.match(statusRecord.blockedReason, /Architecture Round 15 PASS is required/u);
+      assert.match(currentTasks, /- \[x\] Repair the sole Architecture Round 14 P1 root/u);
+      assert.match(currentTasks, /- \[ \] Obtain independent fresh Architecture PASS in Round 15/u);
+    } else if (statusRecord.architectureGateStatus === 'changes_required_v3_13_round_15') {
+      assert.equal(statusRecord.architectureGateStatus, 'changes_required_v3_13_round_15');
+      assert.equal(statusRecord.architectureReviewRound, 15);
+      assert.equal(statusRecord.architectureReviewTree, 'be578da611fa0cfb224e6781067e4b0f1b7984ec');
+      assert.equal(statusRecord.architectureReviewEvidence,
+        '.loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-15.md');
+      assert.equal(statusRecord.architecturePendingRound, 16);
+      assert.equal(statusRecord.architecturePendingTree, 'round_16_subject_tree_after_round_15_repairs');
+      assert.equal(statusRecord.architecturePendingEvidence, 'architecture-review-round-16.md');
+      assert.equal(statusRecord.loopStage, 'v3_13_architecture_round_15_two_p1_repair_round_16_freeze');
+      assert.equal(statusRecord.implementationStatus,
+        'v3_13_architecture_round_15_two_p1_repair_complete_round_16_pending');
+      assert.match(statusRecord.blockedReason, /Architecture Round 16 PASS is required/u);
+      assert.match(currentTasks, /- \[x\] Repair both Architecture Round 15 P1 roots together/u);
+      assert.match(currentTasks, /- \[ \] Obtain independent fresh Architecture PASS in Round 16/u);
+    } else {
+      assert.equal(statusRecord.architectureGateStatus, 'pass_v3_13_round_16');
+      assert.equal(statusRecord.architectureReviewRound, 16);
+      assert.equal(statusRecord.architectureReviewTree, '4005c99f530219588e6120d93e427b7807134cee');
+      assert.equal(statusRecord.architectureReviewEvidence,
+        '.loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-16.md');
+      assert.equal(statusRecord.architecturePendingRound, null);
+      assert.equal(statusRecord.architecturePendingTree, null);
+      assert.equal(statusRecord.architecturePendingEvidence, null);
+      assert.match(currentTasks, /- \[x\] Obtain independent fresh Architecture Round 16 PASS/u);
+      if (statusRecord.exactCommitReviewStatus === 'v3_13_changes_required_p0_0_p1_5_p2_3_repair_in_progress') {
+        assert.equal(statusRecord.loopStage, 'v3_13_exact_review_repair_in_progress');
+        assert.equal(statusRecord.implementationStatus, 'v3_13_exact_commit_reviewed_repair_pending');
+        assert.equal(statusRecord.v313ExactImplementationCommit,
+          '3f3fb99412ceee7c3c21dda11199a30be1594242');
+        assert.match(statusRecord.blockedReason, /repair-range\/full-range closure/u);
+        assert.match(currentTasks, /- \[x\] Create exact implementation commit/u);
+        assert.match(currentTasks, /- \[ \] Freeze the eight-finding repair tree/u);
+      } else if (statusRecord.exactCommitReviewStatus === 'v3_13_repair_and_full_range_pass_p0_0_p1_0') {
+        assert.equal(statusRecord.loopStage, 'v3_13_review_closure_pass_code_gate_pending');
+        assert.equal(statusRecord.implementationStatus, 'v3_13_exact_review_repair_closure_complete');
+        assert.match(statusRecord.blockedReason, /authoritative Code Gate remains/u);
+        assert.match(currentTasks, /- \[x\] Freeze the eight-finding repair tree/u);
+      } else {
+        assert.equal(statusRecord.loopStage, 'v3_13_architecture_round_16_pass_exact_commit_freeze');
+        assert.equal(statusRecord.implementationStatus, 'v3_13_architecture_pass_exact_commit_pending');
+        assert.match(statusRecord.blockedReason, /exact implementation commit/u);
+        assert.match(currentTasks, /- \[ \] Create the exact implementation commit/u);
+      }
+    }
+  } else {
+    const nextRound = round + 1;
+    assert.equal(statusRecord.requirementsGateStatus, `changes_required_v3_13_round_${round}`);
+    assert.match(
+      statusRecord.loopStage,
+      new RegExp(`^v3_13_round_${round}_.+repair.+round_${nextRound}_freeze$`, 'u'),
+    );
+    assert.match(
+      statusRecord.requirementsStatus,
+      new RegExp(`^v3_13_round_${round}_changes_required_.+repaired_round_${nextRound}_pending$`, 'u'),
+    );
+    assert.equal(statusRecord.requirementsPendingTree, `round_${nextRound}_subject_tree_after_round_${round}_repairs`);
+    assert.equal(statusRecord.requirementsPendingEvidence, `requirements-review-round-${nextRound}.md`);
+    assert.match(
+      statusRecord.implementationStatus,
+      new RegExp(`^v3_13_round_${round}_.+repair.+round_${nextRound}_pending$`, 'u'),
+    );
+    assert.match(statusRecord.blockedReason, new RegExp(`Round ${nextRound} Requirements PASS is required`, 'u'));
+    assert.match(currentTasks, new RegExp(`fresh Requirements Round ${round} over commit`, 'u'));
+    assert.match(currentTasks, new RegExp(`- \\[ \\] Obtain fresh V3[.]13 Requirements PASS in Round ${nextRound}`, 'u'));
+  }
+  assert.match(currentTasks, /independent Architecture/u);
+  assert.match(currentTasks, /- \[(?: |x)\] (?:Create exact implementation commit|Freeze the eight-finding repair tree)/u);
+  assert.match(currentTasks, /- \[ \] Form one authoritative release candidate[.]/u);
+
+  const historicalStart = tasksText.indexOf('## V3.13 decision-integrity checkpoint — 2026-08-10');
+  const historicalEnd = tasksText.indexOf('## /autoplan Review', historicalStart);
+  assert.ok(historicalStart >= 0 && historicalEnd > historicalStart, 'historical Round 104 checkpoint is bounded');
+  assert.doesNotMatch(
+    tasksText.slice(historicalStart, historicalEnd),
+    /^- \[ \]/mu,
+    'obsolete Round 104 checkpoint contains no open task',
+  );
+}
+
 function activeGraphOracle() {
   const subjectTree = reviewedSubjectTree();
   assert.equal(subjectTree, bootstrapSubjectTree, 'active graph must remain bound to the bootstrap reviewed tree');
   assertCleanReviewedExecutionRoot(subjectTree);
   const catalogBlob = subjectTreeBlob(subjectTree, activeCatalogRepositoryPath);
   assert.deepEqual(catalogBlob.bytes, activeCatalogBytes, 'catalog working bytes equal reviewed subject tree');
-  assert.equal(catalogBlob.bytes.length, 5036, 'catalog exact tracked byte length including LF');
+  assert.equal(catalogBlob.bytes.length, 5484, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    '8fffdd2abacea80d8581ca63c96651a8d22c498142e4dc5ead2a2ec7712af16b',
+    '5ea7a1c6411f9f9447098bcd63c9cf96ddc182aa2918bab84f2de51bc98bc5ef',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);
@@ -446,16 +651,16 @@ function activeGraphOracle() {
     .sort();
   assert.deepEqual(activeContractFiles, expectedContractFiles);
   const activeArtifactFiles = activeCatalog.activeFiles;
-  assert.equal(activeArtifactFiles.length, 48);
+  assert.equal(activeArtifactFiles.length, 50);
   assert.equal(new Set(activeArtifactFiles).size, activeArtifactFiles.length);
   assert.deepEqual(activeArtifactFiles, [...activeArtifactFiles].toSorted(), 'catalog active-file ASCII order');
-  assert.equal(activeCatalog.owners.length, 38, 'catalog owner row count');
+  assert.equal(activeCatalog.owners.length, 40, 'catalog owner row count');
   assert.deepEqual(
     activeCatalog.owners.map(([file]) => file),
     activeCatalog.owners.map(([file]) => file).toSorted(),
     'catalog owner ASCII order',
   );
-  assert.equal(new Set(activeCatalog.owners.map(([file]) => file)).size, 38, 'catalog owner uniqueness');
+  assert.equal(new Set(activeCatalog.owners.map(([file]) => file)).size, 40, 'catalog owner uniqueness');
   for (const [file] of activeCatalog.owners) assert.ok(activeArtifactFiles.includes(file), `${file} owner must be active`);
   const orderedBlobRows = activeArtifactFiles.map((file) => {
     const repositoryPath = `.loop-engineering/state/changes/source-led-opportunity-engine-v3/${file}`;
@@ -465,6 +670,23 @@ function activeGraphOracle() {
     assert.ok(indexed.bytes.length > 0, `${file} nonempty`);
     return [file, indexed.oid, indexed.bytes.length, sha256(indexed.bytes)];
   });
+  for (const file of ['data-contract.md','v3-detail-contract.md']) {
+    const text=subjectTreeBlob(subjectTree,
+      `.loop-engineering/state/changes/source-led-opportunity-engine-v3/${file}`).bytes.toString('utf8');
+    assert.match(text,/1[.]46[.]0/u,`${file} declares the canonical V3.14 inventory`);
+    assert.doesNotMatch(text,/1[.]45[.]1/u,`${file} cannot expose the superseded V3.13 inventory as active`);
+  }
+  for (const file of ['hybrid-product-amendment.md','factor-correctness-amendment.md']) {
+    const text=subjectTreeBlob(subjectTree,
+      `.loop-engineering/state/changes/source-led-opportunity-engine-v3/${file}`).bytes.toString('utf8');
+    for (const line of text.split('\n').filter((candidate)=>candidate.includes('1.44.6'))) {
+      assert.match(line,/historical|superseded/u,`${file} labels every 1.44.6 declaration historical`);
+    }
+  }
+  const recoveryText=subjectTreeBlob(subjectTree,
+    '.loop-engineering/state/changes/source-led-opportunity-engine-v3/source-led-opportunity-engine-v3.14-actionability-recovery-amendment.md').bytes.toString('utf8');
+  assert.match(recoveryText,/320 IDs, partitioned as\s*272 product\/runtime/u,
+    'active V3.14 contract declares the canonical total and product/runtime partition');
   const activeGraphSha256 = sha256(canonicalJson([
     'opportunity-active-graph-v1',
     sha256(catalogBlob.bytes),
@@ -513,8 +735,8 @@ function activeGraphOracle() {
   }
   const design = readFileSync(path.join(change, 'design.md'), 'utf8');
   const evidenceContract = readFileSync(path.join(change, 'acceptance-evidence-contract.md'), 'utf8');
-  assert.equal(inventory.evidenceContractVersion, 'opportunity-acceptance-evidence-v3.11.18');
-  assert.match(evidenceContract, /^Version: `opportunity-acceptance-evidence-v3\.11\.18`$/mu);
+  assert.equal(inventory.evidenceContractVersion, 'opportunity-acceptance-evidence-v3.13.0');
+  assert.match(evidenceContract, /^Version: `opportunity-acceptance-evidence-v3\.13\.0`$/mu);
   const productCorrectnessOwner = expectedVersions.get('product-correctness-runtime-amendment.md');
   assert.match(productCorrectnessOwner ?? '', /^product-correctness-runtime-v\d+[.]\d+[.]\d+$/u,
     'catalog product-correctness owner version');
@@ -762,25 +984,25 @@ function activeGraphOracle() {
     /Amendment version: `hybrid-product-v3[.]2`/u,
   );
   const hostAmendment = readFileSync(path.join(change, 'host-pin-compatibility-amendment.md'), 'utf8');
-  assert.match(hostAmendment, /Amendment version: `model-runner-host-pin-amendment-v3[.]6`/u);
-  assert.match(hostAmendment, /codex-cli 0[.]147[.]0-alpha[.]1[.]2/u);
+  assert.match(hostAmendment, /Amendment version: `model-runner-host-pin-amendment-v3[.]8`/u);
+  assert.match(hostAmendment, /codex-cli 0[.]147[.]0-alpha[.]6[.]5/u);
   assert.match(hostAmendment, /exact pin/u);
   const hostPinBytes = readFileSync(path.join(change, 'model-runner-host-pins-v3.json'), 'utf8');
   const hostPins = JSON.parse(hostPinBytes);
   const hostPinCanonical = canonicalJson(hostPins);
   assert.equal(Buffer.byteLength(hostPinBytes), 2138);
   assert.equal(Buffer.byteLength(hostPinCanonical), 2137);
-  assert.equal(sha256(hostPinCanonical), '3827556c3dbef5fdd342d1272845810ec0c9f57f7940200a1beff2bb22301049');
-  assert.equal(hostPins.fixtureVersion, 'model-runner-host-pins-v3.6');
-  assert.equal(hostPins.executables.find(({ name }) => name === 'codex')?.version, 'codex-cli 0.147.0-alpha.1.2');
-  assert.equal(runner.MODEL_RUNNER_IDENTITY_SHA256, '2e49bba8f65750e1acce787116107cdba2cd5bf4b3feaa3abb1b0454bc8e4fa9');
+  assert.equal(sha256(hostPinCanonical), 'e7ce9c035f2af2de47e180bbaa50ff1a914c7098afc43112edf951a9162611d4');
+  assert.equal(hostPins.fixtureVersion, 'model-runner-host-pins-v3.8');
+  assert.equal(hostPins.executables.find(({ name }) => name === 'codex')?.version, 'codex-cli 0.147.0-alpha.6.5');
+  assert.equal(runner.MODEL_RUNNER_IDENTITY_SHA256, 'f3db935442cb0d837be9c6ddf566caefd752edb83817f8a47741282969cf9029');
   assert.equal(Buffer.byteLength(canonicalJson(runner.MODEL_RUNNER_IDENTITY)), 884);
   const runtimeContract = readFileSync(path.join(change, 'runtime-transaction-contract.md'), 'utf8');
   assert.match(runtimeContract, /staticIdentityMembers` is the following exact 41-member/u);
-  assert.match(runtimeContract, /\["acceptanceVersion","1[.]44[.]6"\]/u);
+  assert.match(runtimeContract, /\["acceptanceVersion","1[.]46[.]0"\]/u);
   assert.match(runtimeContract, /\["factorCorrectnessContractVersion","opportunity-factor-correctness-v3[.]11[.]6"\]/u);
   assert.match(runtimeContract, /2,729 UTF-8 bytes/u);
-  assert.match(runtimeContract, /ebaa6dbdaa7dd55bb261187008f51e930919e7c0cfe07732d531e01267e67c41/u);
+  assert.match(runtimeContract, /c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729/u);
   assert.doesNotMatch(
     activeArtifactFiles.map((file) => readFileSync(path.join(change, file), 'utf8')).join('\n'),
     /acceptanceVersion:'1[.]41[.]0'|\["acceptanceVersion","1[.]41[.]0"\]|opportunity-runtime-v3[.]11/u,
@@ -889,8 +1111,8 @@ function activeGraphOracle() {
   ]) {
     assert.doesNotMatch(activeCorpus, new RegExp(stale.replaceAll('.', '[.]'), 'u'), stale);
   }
-  assert.equal(inventory.version, '1.44.6');
-  assert.equal(inventory.caseCount, 297);
+  assert.equal(inventory.version, '1.46.0');
+  assert.equal(inventory.caseCount, 320);
   assert.equal(inventory.verificationPartition.version, 'opportunity-verification-partition-v3.0');
   return { subjectTree, activeGraphSha256 };
 }
@@ -901,11 +1123,11 @@ const structuralExecutors = {
     assert.equal(inventory.cases.length, inventory.caseCount);
     assert.equal(new Set(inventory.cases.map(({ id }) => id)).size, inventory.caseCount);
     assert.deepEqual(inventory.cases.map(({ id }) => id), [...executionRegistry.keys()]);
-    assert.equal(inventory.version, '1.44.6');
-    assert.equal(inventory.caseCount, 297);
-    assert.equal(inventory.ownerRows.length, 297);
+    assert.equal(inventory.version, '1.46.0');
+    assert.equal(inventory.caseCount, 320);
+    assert.equal(inventory.ownerRows.length, 320);
     assert.equal(sha256(canonicalJson(inventory.ownerRows)), inventory.ownerRowsSha256);
-    assert.equal(inventory.ownerRowsSha256, '30ff920699bc5cea270a9077473fac4b184edfe0fb17fcf5da9e17458ada672b');
+    assert.equal(inventory.ownerRowsSha256, '48792bd40a862d577d0d4c5269f9399e647004892d116ec2a73d5648f59776d4');
     assert.deepEqual(
       inventory.ownerRows.map(([id]) => id),
       inventory.cases.map(({ id }) => id).toSorted(),
@@ -920,7 +1142,7 @@ const structuralExecutors = {
     }
     assert.equal(inventory.scriptValueRows.length, 14);
     assert.equal(sha256(canonicalJson(inventory.scriptValueRows)), inventory.scriptValueRowsSha256);
-    assert.equal(inventory.scriptValueRowsSha256, '275134ddafa47fe24ca1e12621f99f1ec15e799272603f8dfb553cfb6332b498');
+    assert.equal(inventory.scriptValueRowsSha256, 'b39a564c1897e091a6162891123bf389f8228d5973a6a032557229962c803d62');
     const rootPackageScripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts;
     const webPackageScripts = JSON.parse(readFileSync(path.join(root, 'web/package.json'), 'utf8')).scripts;
     assert.deepEqual(inventory.scriptValueRows.map(([scriptKey]) => scriptKey), [
@@ -972,7 +1194,8 @@ const structuralExecutors = {
     const prefixOwners = {
       ACT: 'decision-contract.md', API: 'data-contract.md', AUTH: 'auth-principal-contract.md',
       CAL: 'trading-calendar-contract.md', CMP: 'runtime-transaction-contract.md',
-      CYC: 'sector-cycle-contract.md', ENT: 'entity-link-contract.md',
+      CYC: 'sector-cycle-contract.md', DI: 'source-led-opportunity-engine-v3.13-decision-integrity-amendment.md',
+      ENT: 'entity-link-contract.md',
       EVAL: 'shadow-evaluation-contract.md',
       FIN: 'financial-data-contract.md', FNL: 'source-adapter-contract.md',
       GOV: '.specify/memory/constitution.md', HYB: 'hybrid-product-amendment.md',
@@ -982,7 +1205,7 @@ const structuralExecutors = {
       PEER: 'entity-link-contract.md',
       SCR: 'scoring-contract.md', SEC: 'auth-principal-contract.md',
       SRC: 'source-adapter-contract.md', VAL: 'valuation-contract.md',
-      PCR: 'factor-correctness-amendment.md',
+      PCR: 'factor-correctness-amendment.md', REC: 'source-led-opportunity-engine-v3.14-actionability-recovery-amendment.md',
     };
     const prefixes = new Set(inventory.cases.map(({ id }) => id.split('-')[0]));
     assert.deepEqual([...prefixes].sort(), Object.keys(prefixOwners).sort());
@@ -1010,7 +1233,7 @@ const structuralExecutors = {
       key === 'verify:source-led-opportunity-v3:model-runner')?.[1];
     assert.equal(
       modelAggregate,
-      'node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track model_runner && npm run test:model-runner-v3 && npm run v3:doctor -- --expect-mode disabled --require-host-pin model-runner-host-pins-v3.6',
+      'node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track model_runner && npm run test:model-runner-v3 && npm run v3:doctor -- --expect-mode disabled --require-host-pin model-runner-host-pins-v3.8',
       'model aggregate is the frozen fourteenth script authority',
     );
     const packageModelAggregate = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts[
@@ -1030,6 +1253,25 @@ const structuralExecutors = {
     assert.doesNotMatch(identityCode, /hybrid-product-v3[.]0/u);
     assert.match(tasks, /model-runner-v3[.]6/u);
     assert.ok(tasks.lastIndexOf('model-runner-v3.6') > tasks.lastIndexOf('model-runner-v3.5'));
+    assert.doesNotThrow(() => assertTaskStatusNextWorkConsistent(tasks, status));
+    for (const [label, mutatedTasks, mutatedStatus] of [
+      ['review round drift', tasks, { ...status, requirementsReviewRound: status.requirementsReviewRound - 1 }],
+      ['pending evidence drift', tasks, { ...status, requirementsPendingEvidence: 'requirements-review-round-131.md' }],
+      ['operative requirements disposition drift', tasks.replace(
+        '- [x] Run fresh Requirements Round 137 over commit',
+        '- [ ] Run fresh Requirements Round 137 over commit',
+      ), status],
+      ['pending-round declaration removed', tasks.replace(
+        '- [x] Obtain independent fresh Architecture Round 18 PASS',
+        '- [ ] Obtain independent fresh Architecture Round 18 PASS',
+      ), status],
+    ]) {
+      assert.throws(
+        () => assertTaskStatusNextWorkConsistent(mutatedTasks, mutatedStatus),
+        undefined,
+        `task/status meta-owner rejects ${label}`,
+      );
+    }
   },
 };
 
@@ -2693,6 +2935,18 @@ const directExecutorByPrefix = {
 };
 
 const suiteBackedByPrefix = {
+  DI: {
+    track: 'product_runtime',
+    evidenceKind: 'v313_decision_integrity_suite',
+    command: 'npm run test:source-led-opportunity-v3:product-correctness',
+    source: 'scripts/opportunity-v3/v313-decision-integrity.test.mjs',
+  },
+  REC: {
+    track: 'product_runtime',
+    evidenceKind: 'v314_actionability_recovery_suite',
+    command: 'npm run test:source-led-opportunity-v3:product-correctness',
+    source: 'scripts/opportunity-v3/v314-actionability-recovery.test.mjs',
+  },
   API: {
     track: 'product_runtime',
     evidenceKind: 'typescript_public_and_route_suite',
@@ -2771,7 +3025,7 @@ const suiteOwnerVariants = [
     [productOwner, 'derives a closed sizing-free public projection from normalized lineage rows'],
     [publicOwner, 'available public projection is recursively closed and conservation checked'],
     [productOwner, 'derives deterministic brief, lane bounds and sizing-free homepage summary'],
-    [productOwner, 'freezes the exact 37-member v3.12 comparison identity and mutates every member'],
+    [productOwner, 'freezes the exact 41-member v3.17 comparison identity and mutates every member'],
     [productOwner, 'rejects recursively malformed detail cards, horizons and factor tuples'],
     [publicOwner, 'available public projection is recursively closed and conservation checked'],
     [productOwner, 'derives a closed sizing-free public projection from normalized lineage rows'],
@@ -2781,8 +3035,8 @@ const suiteOwnerVariants = [
     [productOwner, 'derives a closed sizing-free public projection from normalized lineage rows'],
     [productOwner, 'derives a closed sizing-free public projection from normalized lineage rows'],
     [publicOwner, 'available public projection is recursively closed and conservation checked'],
-    [productOwner, 'freezes the exact 37-member v3.12 comparison identity and mutates every member'],
-    [productOwner, 'freezes the exact 37-member v3.12 comparison identity and mutates every member'],
+    [productOwner, 'freezes the exact 41-member v3.17 comparison identity and mutates every member'],
+    [productOwner, 'freezes the exact 41-member v3.17 comparison identity and mutates every member'],
     [publicOwner, 'available public projection is recursively closed and conservation checked'],
     [productOwner, 'treats post-cutoff terminalization as active and tied success as integrity failure'],
   ]),
@@ -2791,7 +3045,7 @@ const suiteOwnerVariants = [
     [productOwner, 'derives deterministic brief, lane bounds and sizing-free homepage summary'],
     [productOwner, 'validates database-computed outcomes and fixed empty strategy evidence'],
     [productOwner, 'hashes the complete pre-cap population and retains exactly the first 400 rows'],
-    [productOwner, 'freezes the exact 37-member v3.12 comparison identity and mutates every member'],
+    [productOwner, 'freezes the exact 41-member v3.17 comparison identity and mutates every member'],
     [migrationOwner, 'all four mode graphs use closed reads; enrich executes nonempty normalized stages and converges'],
   ]),
   ...ownerRows('HYB', [
@@ -2834,11 +3088,11 @@ const suiteOwnerVariants = [
     [migrationOwner, 'applied begin creates one deterministic canonical v3.3 bootstrap job and payload'],
     [migrationOwner, 'applied begin creates one deterministic canonical v3.3 bootstrap job and payload'],
     [migrationOwner, 'nonempty source-identity manifest executes header, bounded page, root and durable row'],
-    [productOwner, 'freezes the exact 37-member v3.12 comparison identity and mutates every member'],
+    [productOwner, 'freezes the exact 41-member v3.17 comparison identity and mutates every member'],
     [productOwner, 'uses the normative transcript key and rejects claim or mention overflow atomically'],
     [migrationOwner, 'all four mode graphs use closed reads; enrich executes nonempty normalized stages and converges'],
     [migrationOwner, 'nonempty source-identity manifest executes header, bounded page, root and durable row'],
-    [productOwner, 'freezes the exact 37-member v3.12 comparison identity and mutates every member'],
+    [productOwner, 'freezes the exact 41-member v3.17 comparison identity and mutates every member'],
     [productOwner, 'treats post-cutoff terminalization as active and tied success as integrity failure'],
     [migrationOwner, 'applied empty-run lifecycle commits each predecessor and deterministic successor atomically'],
     [productOwner, 'owns the eighth stock-flow route and nested price discriminator schemas'],
@@ -2861,7 +3115,7 @@ const suiteOwnerVariants = [
     [productOwner, 'authenticates before parsed object and cutoff validation'],
     [migrationOwner, 'real TypeScript evaluation executor output stages and commits through PostgreSQL'],
     [migrationOwner, 'all four mode graphs use closed reads; enrich executes nonempty normalized stages and converges'],
-    [productOwner, 'freezes the exact 37-member v3.12 comparison identity and mutates every member'],
+    [productOwner, 'freezes the exact 41-member v3.17 comparison identity and mutates every member'],
     [migrationOwner, 'all four mode graphs use closed reads; enrich executes nonempty normalized stages and converges'],
     [migrationOwner, 'source-identity manifest advances a hash-bound 2,001-row sentinel into two cursor pages'],
     [migrationOwner, 'all four mode graphs use closed reads; enrich executes nonempty normalized stages and converges'],
@@ -2874,6 +3128,37 @@ const suiteOwnerVariants = [
       variant: 'applied checks, privileges, RLS boundary and immutable relations reject negative writes',
     }],
   },
+  ...[
+    'V3.13 decision envelope closes all eight user actions without an action quota',
+    'V3.13 formal valuation requires four consecutive quarters and rejects the 2337 one-quarter shortcut',
+    'V3.13 official facts and 252-session peer authority reach a formal valuation without hidden inputs',
+    'V3.13 FULL detail remains authoritative while LIGHT fills only genuinely missing leaves',
+    'V3.13 projection freshness uses scheduled trading runs, not a 24-hour wall clock',
+    'V3.13 approved source acquisition conserves 17 terminal outcomes and only ingests creator transcripts',
+    'V3.13 official statement parser requires reported diluted shares and never derives the 30.04 shortcut',
+    'V3.13 official close and bounded raw OHLCV parsers retain exchange authority and reject bad geometry',
+    'V3.13 entity linking rejects naked calendar years even when they are listed symbols',
+    'V3.13 official corporate-action adapter distinguishes complete empty snapshots from transport failure',
+    'V3.13 stale-readonly projection disables compatibility actions without mutating immutable decision identity',
+  ].map((variant, index) => {
+    const caseId = `DI-${String(index + 1).padStart(3, '0')}`;
+    return { ids: [caseId], probes: [{ source: 'scripts/opportunity-v3/v313-decision-integrity.test.mjs', variant }] };
+  }),
+  ...[
+    'V314-001 calendar authority loss preserves checksum-valid last-good research as readonly',
+    'V314-002 unchanged discovery outcomes conserve seed membership',
+    'V314-003 research ranking never improves when an available axis is removed',
+    'V314-004 discovery and report visibility are backed by payload data',
+    'V314-005 one actionable card without a cited brief degrades only that card',
+    'V314-006 selective market raises thresholds and exposes wait_value or wait_market without score gate',
+    'V314-007 runtime diagnostics never serialize SQL text or connection credentials',
+    'V314-008 Web and runtime share exact release compatibility authority',
+    'V314-009 official calendar and backfill coverage remain typed and non-synthetic',
+    'V314-010 all ten decision actions are closed and operationally reachable',
+    'V314-011 every approved profile/provider has one honest terminal outcome',
+    'V314-012 migration persists redacted diagnostics append-only with recorded time',
+  ].map((variant,index)=>({ids:[`REC-${String(index+1).padStart(3,'0')}`],
+    probes:[{source:'scripts/opportunity-v3/v314-actionability-recovery.test.mjs',variant}]})),
   ...[
     'source-view identity binds sorted readable tracked entries',
     'manifest requires canonical LF-terminated JSON with unique keys',
@@ -2934,7 +3219,7 @@ for (const [caseId, classificationName, , ownerRef] of inventory.ownerRows) {
   const resolvedOwner = declaredSuiteOwnerVariants.get(caseId) ?? logicalOwner;
   suiteOwnerById.set(caseId, resolvedOwner);
 }
-assert.equal(declaredSuiteOwnerVariants.size, 117, 'all non-PCR suite mappings are explicit');
+assert.equal(declaredSuiteOwnerVariants.size, 140, 'all non-PCR suite mappings are explicit');
 for (const [caseId, probes] of declaredSuiteOwnerVariants) {
   assert.deepEqual(suiteOwnerById.get(caseId), probes, `${caseId} exact suite owner mapping`);
 }
@@ -2952,7 +3237,7 @@ function executeOwnerSuite(source, variant, caseId) {
     ? ['--experimental-strip-types', '--test', source]
     : pcrOwnerProbe
       ? ['--experimental-strip-types', '--test', `--test-name-pattern=^${escapeRegex(variant)}$`, source]
-    : source.endsWith('.ts')
+    : source.endsWith('.ts') || source.endsWith('.mjs')
       ? ['--experimental-strip-types', '--test', `--test-name-pattern=^${escapeRegex(variant)}$`, source]
       : ['--test', `--test-name-pattern=^${escapeRegex(variant)}$`, source];
   const childEnvironment = { ...process.env };
@@ -2983,7 +3268,10 @@ function executeOwnerSuite(source, variant, caseId) {
   if (migrationOwnerProbe) {
     assert.match(
       output,
-      new RegExp(`# Subtest: ${escapeRegex(variant)}\\r?\\nok \\d+ - ${escapeRegex(variant)}`, 'u'),
+      // Node's TAP printer indents a leaf `it` when it belongs to `describe`.
+      // Match the selected leaf rather than assuming a root-level test, while
+      // still requiring the exact named TAP owner to report `ok` immediately.
+      new RegExp(`(?:^|\\r?\\n)[\\t ]*# Subtest: ${escapeRegex(variant)}\\r?\\n[\\t ]*ok \\d+ - ${escapeRegex(variant)}`, 'u'),
       `${caseId} migration owner target did not pass`,
     );
     const lifecycleTests = output.match(/^# tests ([1-9][0-9]*)(?:\r?\n|$)/mu);
@@ -2994,7 +3282,14 @@ function executeOwnerSuite(source, variant, caseId) {
       `${caseId} migration lifecycle was incomplete`,
     );
   } else {
-    assert.match(output, /# pass 1(?:\r?\n|$)/u, `${caseId} owner variant did not execute exactly once`);
+    assert.match(
+      output,
+      new RegExp(`(?:^|\\r?\\n)[\\t ]*# Subtest: ${escapeRegex(variant)}\\r?\\n[\\t ]*ok \\d+ - ${escapeRegex(variant)}`, 'u'),
+      `${caseId} owner target did not pass`,
+    );
+    assert.doesNotMatch(output, /^1[.][.]0(?:\r?\n|$)/mu, `${caseId} owner selected zero semantic tests`);
+    assert.match(output, /# tests 1(?:\r?\n|$)/u, `${caseId} owner variant did not execute exactly once`);
+    assert.match(output, /# pass 1(?:\r?\n|$)/u, `${caseId} owner variant did not pass exactly once`);
   }
   assert.match(output, /# skipped 0(?:\r?\n|$)/u, `${caseId} owner variant was skipped`);
   return true;
@@ -3095,10 +3390,10 @@ const executionRegistry = new Map(inventory.cases.map((item) => {
 }));
 
 {
-  assert.equal(inventory.version, '1.44.6');
-  assert.equal(inventory.caseCount, 297);
-  assert.equal(inventory.cases.length, 297);
-  assert.equal(new Set(inventory.cases.map((item) => item.id)).size, 297);
+  assert.equal(inventory.version, '1.46.0');
+  assert.equal(inventory.caseCount, 320);
+  assert.equal(inventory.cases.length, 320);
+  assert.equal(new Set(inventory.cases.map((item) => item.id)).size, 320);
   const mirrorCases = mirror.split('\n').flatMap((line) => {
     const match = line.match(/^\| ([A-Z0-9-]+) \| ([^|]+) \| ([^|]+) \| (.*) \| (.*) \|$/u);
     if (!match || match[1] === 'ID') return [];
@@ -3127,16 +3422,16 @@ const executionRegistry = new Map(inventory.cases.map((item) => {
       partitions.product_runtime.push(item.id);
     }
   }
-  assert.equal(Object.values(partitions).flat().length, 297);
-  assert.equal(new Set(Object.values(partitions).flat()).size, 297);
+  assert.equal(Object.values(partitions).flat().length, 320);
+  assert.equal(new Set(Object.values(partitions).flat()).size, 320);
   assert.deepEqual(Object.fromEntries(Object.entries(partitions).map(([track, ids]) => [track, ids.length])), {
     evaluation_governance: 20,
     model_runner: 28,
-    product_runtime: 249,
+    product_runtime: 272,
   });
-  assert.equal(executionRegistry.size, 297);
+  assert.equal(executionRegistry.size, 320);
   assert.deepEqual([...executionRegistry.keys()], inventory.cases.map((item) => item.id));
-  assert.equal(new Set([...executionRegistry.values()].map(({ item }) => item.id)).size, 297);
+  assert.equal(new Set([...executionRegistry.values()].map(({ item }) => item.id)).size, 320);
   assert.equal(
     [...executionRegistry.values()].some((entry) => entry.classification === 'missing'),
     false,
@@ -3169,7 +3464,7 @@ const executionRegistry = new Map(inventory.cases.map((item) => {
     ),
     {
       semantic_automated: 143,
-      semantic_suite_backed: 148,
+      semantic_suite_backed: 171,
       structural_meta: 6,
     },
   );

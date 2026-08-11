@@ -14,6 +14,13 @@ const { compactProducerRadarPayload, producerRadarPayloadBytes } = require(path.
 test('compact radar projection is bounded and has deterministic cache identity', () => {
   const decisions = Array.from({ length: 60 }, (_, index) => ({
     symbol: String(7000 + index), claimId: `claim-${index}`, action: 'valuation_review', researchMaturity: 'source_signal',
+    sourceKey:'mops',sourceName:'公開資訊觀測站',sourceUrl:'https://mops.twse.com.tw/mops/web/index',
+    claimAsOf:'2026-08-01T00:00:00Z',sourceCollectedAt:'2026-08-01T00:00:00Z',
+    decisionBrief:{thesis:['來源訊號可追溯。','本次評估已記錄。','決策 revision 已固定。'],
+      risks:['估值資料待補。','技術資料待補。','過期時停用動作。'],evidence:[
+        {point:'thesis:0',refs:[`claim-${index}`]},{point:'thesis:1',refs:[`claim-${index}`]},
+        {point:'thesis:2',refs:[`claim-${index}`]},{point:'risk:0',refs:[`claim-${index}`]},
+        {point:'risk:1',refs:[`claim-${index}`]},{point:'risk:2',refs:[`claim-${index}`]}]},
     fundamental: { thesis: `${String(7000 + index)} 已有可追溯來源訊號。`, latestChange: '本次重新檢查基本面品質。',
       risks: ['基本面輸入尚待補齊。'], evidenceRefs: [`claim-${index}`], asOf: '2026-08-01T00:00:00Z' },
     technical: { technicalState: 'unavailable' }, valuation: { status: 'valuation_review' },

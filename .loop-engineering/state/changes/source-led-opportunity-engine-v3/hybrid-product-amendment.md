@@ -142,17 +142,17 @@ The root workspace contract is owned here. `GET /opportunity-v3` is a server-ren
 The V3.11 product-correctness milestone is governed by the catalog-bound PCR amendment.
 Its tracked producer, material-change revision, valuation-integrity and compact-projection
 rules are part of this hybrid milestone and advance the canonical acceptance inventory to
-`1.44.6`.
+historical `1.44.6` (superseded by the V3.14 canonical `1.46.0`).
 
 ## Independent verification tracks
 
 - `evaluation_governance` is exactly every `OUT-*`, every `EVAL-*`, and `HYB-005`.
 - `model_runner` is exactly every `MR3-*`.
-- `product_runtime` is the exact remainder of the 297 canonical IDs, including the partition/meta cases.
+- Historical `product_runtime` was the exact remainder of the 297 IDs at this amendment; V3.14 supersedes it with 320 total and 272 product/runtime cases.
 
 This is serialized as `opportunity-verification-partition-v3.0` in
 `acceptance-tests.json`; prefixes and exact exceptions are disjoint and exhaustive,
-and the meta-test expands them to exactly 297 unique IDs. Each track runs every
+and the historical meta-test expanded them to exactly 297 unique IDs; V3.14 now expands 320. Each track runs every
 currently executable registered case in its partition with no skip/todo. V3.11 has two
 non-interchangeable aggregates owned by `acceptance-evidence-contract.md`: Code Gate
 requires Requirements, Architecture, product/runtime, model-runner and exact-review

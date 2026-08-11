@@ -3,6 +3,7 @@
 const crypto = require('crypto');
 const { invariant, sha256 } = require('./codec');
 const { validateAuthSourceDagConfig } = require('./source-run-config');
+const { safeFailureDiagnostic } = require('./safe-diagnostics');
 
 const TERMINAL = new Set(['succeeded', 'failed', 'cancelled', 'non_trading_occurrence']);
 
@@ -31,7 +32,7 @@ async function runWithLeaseHeartbeat({ adapter, lease, claim, ownerToken, leaseS
     }
   })();
   try {
-    const output = await handler(Object.freeze(claim));
+    const output = await handler(Object.freeze({ ...claim, ownerToken }));
     if (leaseLost) {
       const error = new Error('producer_lease_lost');
       error.code = 'producer_lease_lost';
@@ -51,7 +52,9 @@ async function runDurableAuthSourceWorker({ configBytes, adapter, sourceCommitSh
   const validated = validateAuthSourceDagConfig(configBytes);
   invariant(/^[0-9a-f]{40}$/u.test(sourceCommitSha), 'source commit SHA');
   invariant(Buffer.isBuffer(workerBytes), 'reviewed worker bytes');
-  invariant(adapter && ['acquireLegacyProducerLease', 'claimLegacyProducerJob', 'heartbeatLegacyProducerJob', 'completeLegacyProducerJob', 'failLegacyProducerJob'].every((name) => typeof adapter[name] === 'function'), 'durable PostgreSQL adapter');
+  invariant(adapter && ['acquireLegacyProducerLease', 'claimLegacyProducerJob', 'heartbeatLegacyProducerJob',
+    'completeLegacyProducerJob','appendLegacyRuntimeFailureDiagnostic','failLegacyProducerJob']
+    .every((name) => typeof adapter[name] === 'function'), 'durable PostgreSQL adapter');
   const lease = await adapter.acquireLegacyProducerLease({ ownerLabel: validated.config.ownerLabel, sourceCommitSha,
     workerSha256: sha256(workerBytes), configBytes: validated.bytes, configSha256: validated.sha256, ownerToken, leaseSeconds: validated.config.leaseSeconds });
   if (!lease || lease.disposition === 'owner_already_leased' || TERMINAL.has(lease.status)) return Object.freeze(lease ?? { disposition: 'lease_unavailable' });
@@ -77,6 +80,10 @@ async function runDurableAuthSourceWorker({ configBytes, adapter, sourceCommitSh
         return Object.freeze({ disposition: 'lease_lost', runId: lease.runId, completedJobs });
       }
       const failure = error?.code === 'provider_unavailable' ? 'provider_unavailable' : 'data_integrity_failure';
+      const failureDiagnostic=safeFailureDiagnostic(error,{runId:lease.runId,jobId:claim.jobId,stage:claim.stage,
+        jobKind:claim.jobKind,origin:'handler',failureCode:failure,inputHash:claim.readHash,producerSha:sourceCommitSha,
+        recordedAt:new Date().toISOString()});
+      await adapter.appendLegacyRuntimeFailureDiagnostic({...failureDiagnostic,ownerToken});
       const terminal = await adapter.failLegacyProducerJob({ runId: lease.runId, jobId: claim.jobId, ownerToken, failure });
       if (!terminal) return Object.freeze({ disposition: 'lease_lost', runId: lease.runId, completedJobs });
       return Object.freeze({ ...terminal, disposition: 'failed', failure, completedJobs });
