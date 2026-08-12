@@ -7,6 +7,7 @@ import type { RuntimeHealthObservation } from '@/lib/opportunity-v3/runtime-heal
 import { sha256Canonical } from '@/lib/opportunity-v3/canonical';
 import { requireInternalAuth } from '@/lib/internal-auth';
 import { assessProjectionFreshness, type ProjectionHealth } from '@/lib/opportunity-v3/projection-freshness';
+import { resolveReviewedConsumerCommitSha } from '@/lib/opportunity-v3/reviewed-release-identity';
 
 type Row = Record<string, unknown>;
 
@@ -18,6 +19,7 @@ export async function GET(request: Request) {
       headers: { 'Cache-Control': 'private, no-store' },
     });
   }
+  const consumerCommitSha = resolveReviewedConsumerCommitSha();
   const consumerCheck = request.headers.get('x-stockinsider-runtime-consumer-check');
   if (consumerCheck !== null) {
     if (consumerCheck !== 'v1') {
@@ -28,7 +30,7 @@ export async function GET(request: Request) {
     }
     return NextResponse.json({
       ok: true,
-      sourceLedRuntime: { consumer: { commitSha: process.env.VERCEL_GIT_COMMIT_SHA ?? null } },
+      sourceLedRuntime: { consumer: { commitSha: consumerCommitSha } },
     }, { headers: { 'Cache-Control': 'private, no-store' } });
   }
   const dataMode = resolveDataMode();
@@ -70,7 +72,7 @@ export async function GET(request: Request) {
     activationJournalComplete: false, activePointerValid: false, schedulerPlistMatches: false,
     schedulerOwner: null, competingOwners: [], leaseStatus: 'absent', stateSchema: null,
     stuckRunCount: 0, projectionFreshness: 'missing', consumerCompatibility: 'unknown',
-    consumerCommitSha: process.env.VERCEL_GIT_COMMIT_SHA ?? null,
+    consumerCommitSha,
   });
   let projectionHealth: ProjectionHealth | null = null;
 
@@ -130,7 +132,7 @@ export async function GET(request: Request) {
     const directStatus = typeof rawDirectStatus === 'string'
       && (rawDirectStatus === 'success' || rawDirectStatus === 'failed' || rawDirectStatus === 'cancelled')
       ? rawDirectStatus : null;
-    const directCompatibility = directProducerCommit && process.env.VERCEL_GIT_COMMIT_SHA === directProducerCommit
+    const directCompatibility = directProducerCommit && consumerCommitSha === directProducerCommit
       ? 'compatible' as const : 'unknown' as const;
     const observationMatchesProducer = runtimeObservationMatchesProducer(recordedObservation, {
       commitSha: directProducerCommit, workerSha256: directWorkerSha, schedulerConfigSha256: directConfigSha,
@@ -164,7 +166,7 @@ export async function GET(request: Request) {
         stuckRunCount: stuckRunCount ?? recordedObservation.stuckRunCount,
         projectionAsOf, projectionChecksum,
         projectionFreshness: !checksumMatches ? 'invalid' : sharedProjectionFreshness,
-        consumerCommitSha: process.env.VERCEL_GIT_COMMIT_SHA ?? null,
+        consumerCommitSha,
         consumerCompatibility: directCompatibility,
         producerCommitSha: directProducerCommit ?? recordedObservation.producerCommitSha ?? null,
         reviewedTreeSha: recordedObservation.reviewedTreeSha ?? null,
@@ -190,7 +192,7 @@ export async function GET(request: Request) {
         stuckRunCount: stuckRunCount ?? 0,
         projectionAsOf, projectionChecksum,
         projectionFreshness: !checksumMatches ? 'invalid' : sharedProjectionFreshness,
-        consumerCommitSha: process.env.VERCEL_GIT_COMMIT_SHA ?? null,
+        consumerCommitSha,
         consumerCompatibility: directCompatibility,
         producerCommitSha: directProducerCommit, reviewedTreeSha: null,
         workerSha256: directWorkerSha, schedulerConfigSha256: directConfigSha,

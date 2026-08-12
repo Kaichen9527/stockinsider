@@ -154,6 +154,28 @@ test('V314-004 discovery and report visibility are backed by payload data', () =
   assert.match(executed,/2 passed/u);
 });
 
+test('V314-004a internal health uses the reviewed release SHA when Vercel git metadata is absent', async () => {
+  const { resolveReviewedConsumerCommitSha } = await import(
+    '../../web/src/lib/opportunity-v3/reviewed-release-identity.ts'
+  );
+  const reviewed = '1'.repeat(40);
+  const vercel = '2'.repeat(40);
+  assert.equal(resolveReviewedConsumerCommitSha({
+    STOCKINSIDER_REVIEWED_RELEASE_SHA: reviewed,
+    VERCEL_GIT_COMMIT_SHA: vercel,
+  }), reviewed);
+  assert.equal(resolveReviewedConsumerCommitSha({ VERCEL_GIT_COMMIT_SHA: vercel }), vercel);
+  assert.equal(resolveReviewedConsumerCommitSha({
+    STOCKINSIDER_REVIEWED_RELEASE_SHA: 'invalid',
+    VERCEL_GIT_COMMIT_SHA: vercel,
+  }), vercel);
+  assert.equal(resolveReviewedConsumerCommitSha({}), null);
+
+  const health = readFileSync(path.join(root, 'web/src/app/api/internal/health-check/route.ts'), 'utf8');
+  assert.match(health, /resolveReviewedConsumerCommitSha\(\)/u);
+  assert.doesNotMatch(health, /process\.env\.VERCEL_GIT_COMMIT_SHA/u);
+});
+
 test('V314-005 one actionable card without a cited brief degrades only that card', () => {
   const projection = runtime('compact-radar-projection.js');
   const decision = runtime('decision-envelope.js').deriveDecisionEnvelope({
