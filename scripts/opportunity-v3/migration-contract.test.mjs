@@ -691,7 +691,8 @@ test('V3.14 official chunks persist under the exact lease, replay idempotently, 
       'preCompletionRows',(SELECT session_rows FROM v314_pre_completion),
       'sessionRows',(SELECT count(*) FROM public.tw_trading_sessions_v3 WHERE session_id='2026-08-07' AND market='TWSE'),
       'nextCutoffRows',(SELECT count(*) FROM public.resolve_legacy_trading_session_authority_v3_13(
-        '2026-08-07','TWSE','2026-08-12T00:00:00Z')),
+        '2026-08-07','TWSE',(SELECT max(recorded_at)+interval '1 microsecond'
+          FROM public.tw_trading_sessions_v3 WHERE session_id='2026-08-07' AND market='TWSE'))),
       'jobStatus',(SELECT status FROM public.legacy_producer_jobs_v3_11 WHERE job_id='${jobId}'))::text;
     ROLLBACK;
   `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
