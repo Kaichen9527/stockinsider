@@ -1684,8 +1684,11 @@ This approval authorizes implementation only. It does not authorize production m
   `4e16faa465278eface62428fca172a0b506440d9` and fresh Architecture Round 19
   PASS over commit `70167d6a3d8015824fe1a695505d06ae6b03179f` / tree
   `25111b0c4f8204cc54316aabc647aa1522c945ee`, both P0=0 P1=0 P2=0.
-- [ ] Freeze the exact V3.15 implementation commit and complete exact diff review,
-  repair/full-range closure and authoritative Code Gate.
+- [x] Freeze exact implementation `97bc7de9027e8f334f9343aa1552d7b7bb33fce2`,
+  review `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..97bc7de9027e8f334f9343aa1552d7b7bb33fce2`,
+  repair both P1 roots in `5e9b56e4621d0a04e2e59f4b903e535ba3769ac6`,
+  and obtain repair/full-range closure `PASS P0=0 P1=0 P2=0`. Local Code Gate is
+  PASS; protected external artifact remains the landing check.
 - [ ] Apply the additive production migration, install the exact reviewed runtime,
   run two terminal producers and verify the official gate waterfall.
 - [ ] Deploy the same reviewed commit to `stockinsider-three`, complete visible-browser
