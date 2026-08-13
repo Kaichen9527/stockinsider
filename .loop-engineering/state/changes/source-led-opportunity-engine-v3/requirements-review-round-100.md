@@ -1,7 +1,7 @@
 # V3.15 protected Requirements compatibility evidence
 
-Date: 2026-08-13
-Review authority: fresh Requirements Round 146, carried at the protected worker's
+Date: 2026-08-14
+Review authority: fresh Requirements Round 147, carried at the protected worker's
 stable compatibility path without changing the reviewed active artifact graph.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
@@ -9,16 +9,16 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Final repair-closure commit/tree: `836a3a82c13c51a506d2113709f1e94a1f166a43` / `e813d2e034d28a46c6f3da86fdc8de9c34bbb8c4`
-- Full reviewed range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..836a3a82c13c51a506d2113709f1e94a1f166a43`
+- Final repair-closure commit/tree: `2463bb7332212846e3270c09a6fa41ba04f97a71` / `7b04e2110ff630c672a9eefbcf11e8db9a6edc8c`
+- Full reviewed range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..2463bb7332212846e3270c09a6fa41ba04f97a71`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
-- Canonical evidence: this protected Round 146 compatibility carrier.
+- Canonical evidence: this protected Round 147 compatibility carrier.
 - Acceptance inventory: `1.46.0`, 320 cases, partitioned as 272 product/runtime,
   28 model-runner and 20 evaluation-governance owners.
 
 ## Closure
 
-Round 146 returned PASS for the bounded official-market research entrance, retained
+Round 147 returned PASS for the bounded official-market research entrance, retained
 single decision authority, point-in-time revenue and adjusted-price requirements,
 narrow Supabase REST transport, additive migration and explicit no-buy-quota rule.
 The earlier exact review found future filing leakage and a doctor privilege mismatch;
@@ -51,6 +51,15 @@ existing 200-entity bound; it does not merge distinct identities, change stock
 authority, manufacture a claim or alter the 60→30→20 funnel. The production-shaped
 2472 regression proves one candidate, one linked claim and one linked entity outcome.
 Focused V3.15 tests pass 10/10 and the complete product-correctness suite passes 93/93.
+
+The next coordinated run completed all 3,385 revision shards but the mention barrier
+attempted to serialize 10.7 MB of full per-shard diagnostics across the REST boundary.
+The repair keeps those immutable diagnostics in durable storage and exposes only the
+ordered candidate projection required by the barrier (2,121 observed candidates,
+1.87 MB), through a private least-privilege helper capped at 4,000 rows and 3 MiB.
+The runtime accepts only the candidate-only contract and fails above that bound.
+Executable apply-twice migration, permission-boundary and production-shaped transport
+tests pass; focused V3.15 is 11/11 and complete product correctness is 94/94.
 
 Evaluation governance remains `blocked/non_fabricated_elapsed_cohorts_unavailable`;
 no synthetic cohort, LINE/dispatch, automatic trade or Promotion authority is claimed.
