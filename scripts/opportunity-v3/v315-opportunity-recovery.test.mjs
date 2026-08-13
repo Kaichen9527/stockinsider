@@ -111,6 +111,22 @@ test('V315 candidate funnel combines source-led and official full-market candida
   assert.ok(result.json.factorDiscovery.selected>=1);assert.ok(result.json.candidates.length<=60);
 });
 
+test('V315 duplicate authority roster heads emit one persistence identity per stock and revision',()=>{
+  const parser=runtime('auth-source-worker-cli.js');
+  const rosterRow=['25bfd69c-3df6-4e00-9779-865cc05b89f9','2472','TWSE','common_stock','active',
+    '立隆電子工業','立隆電'];
+  const parsed=parser.extractRevisionCandidates({frozenRevision:{
+    revisionId:'bace13e5-19fc-4954-991c-3d2273289c24',sourceKey:'bulltalk',
+    sourceCollectedAt:'2026-05-23T12:36:43.497Z',
+    rawFieldPayload:{text:'立隆電 2472 股價與財報更新。'},
+  },authorityPages:[['roster',0,'a'.repeat(64),[rosterRow]],['roster',1,'b'.repeat(64),[rosterRow]]]});
+  assert.equal(parsed.candidates.length,1);
+  assert.equal(parsed.claimOutcomes.filter((row)=>row.outcome==='linked').length,1);
+  assert.equal(parsed.entityOutcomes.filter((row)=>row.outcome==='linked').length,1);
+  assert.equal(new Set(parsed.claimOutcomes.map((row)=>row.claimId)).size,parsed.claimOutcomes.length);
+  assert.equal(new Set(parsed.entityOutcomes.map((row)=>row.entityOutcomeId)).size,parsed.entityOutcomes.length);
+});
+
 test('V315 REST producer adapter maps canonical bytea and never exposes its service credential in failures',async()=>{
   const {MAX_RPC_RESPONSE_BYTES,createSupabaseRestLegacyProducerAdapter}=runtime('supabase-rest-legacy-producer-adapter.js');
   const secret='service-role-secret-'.padEnd(40,'x');const calls=[];

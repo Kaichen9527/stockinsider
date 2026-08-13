@@ -223,7 +223,20 @@ function extractRevisionCandidates(bundle) {
       link: { disposition: 'linked', stockId, symbol },
       sourceClass: SOURCE_CLASS_BY_KEY[frozen.sourceKey] ?? 'community' }];
   });
-  const matches=allMatches.slice(0,200);
+  // Authority pages may legitimately repeat an identical active roster head
+  // (for example, when an upgrade-safe snapshot carries the same instrument
+  // through two bounded page sources).  The persistence contract keys claims
+  // and mentions by their deterministic identities, so collapse exact
+  // identity duplicates before applying the 200-entity conservation bound.
+  // The deterministic identity is the persistence authority here; conflicting
+  // roster heads for that identity are rejected by the frozen authority plane
+  // before this extraction step.
+  const uniqueMatches=[];const seenClaimIds=new Set();
+  for(const candidate of allMatches){
+    if(seenClaimIds.has(candidate.claimId))continue;
+    seenClaimIds.add(candidate.claimId);uniqueMatches.push(candidate);
+  }
+  const matches=uniqueMatches.slice(0,200);
   const linkedSymbols=new Set(matches.map((candidate)=>candidate.symbol));
   const allRejectedTokens=[...new Set([...text.matchAll(/(^|[^0-9])([0-9]{4})(?=[^0-9]|$)/gu)].map((match)=>match[2]))]
     .filter((symbol)=>!linkedSymbols.has(symbol));
@@ -233,7 +246,7 @@ function extractRevisionCandidates(bundle) {
     mentionId:uuidFromHash(`mention:${frozen.revisionId}:rejected:${symbol}`),symbol,
     outcome:'rejected',reason:'stock_context_or_master_authority_unavailable',stockId:null,
   }));
-  const overflowCount=Math.max(0,allMatches.length-matches.length)+Math.max(0,allRejectedTokens.length-rejectedTokens.length);
+  const overflowCount=Math.max(0,uniqueMatches.length-matches.length)+Math.max(0,allRejectedTokens.length-rejectedTokens.length);
   const overflow=overflowCount?[{claimId:uuidFromHash(`claim:${frozen.revisionId}:bounded-overflow`),
     mentionId:uuidFromHash(`mention:${frozen.revisionId}:bounded-overflow`),symbol:null,stockId:null,
     outcome:'deferred',reason:`entity_bound_deferred:${overflowCount}`}]:[];
