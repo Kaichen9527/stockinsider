@@ -1,7 +1,7 @@
 # V3.15 protected Requirements compatibility evidence
 
 Date: 2026-08-14
-Review authority: fresh Requirements Round 152, carried at the protected worker's
+Review authority: fresh Requirements Round 153, carried at the protected worker's
 stable compatibility path without changing the reviewed active artifact graph.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
@@ -9,8 +9,8 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Final repair-closure commit/tree: `d735fcbc8cd1a4b8ae92c62827e3b44846fe39bd` / `b999ad7b9fe5ceba2d20ff2310a11d9615266063`
-- Full reviewed range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..d735fcbc8cd1a4b8ae92c62827e3b44846fe39bd`
+- Final repair-closure commit/tree: `1719653be79729475a68b31c77a61d2773d58408` / `8fb198d4bec4b3c64479e7c52aacad5a113e6702`
+- Full reviewed range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..1719653be79729475a68b31c77a61d2773d58408`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
 - Canonical evidence: this protected Round 152 compatibility carrier.
 - Acceptance inventory: `1.46.0`, 320 cases, partitioned as 272 product/runtime,
@@ -112,3 +112,14 @@ and preserves the real diagnostic job kind. No action threshold, ranking weight,
 public mutation or source authority changes. Product correctness is 95/95 and the
 fresh/apply-twice migration suite is 53/53 PASS. Round 152 independently finds
 `P0=0 P1=0 P2=0` for this bounded production-activation repair.
+
+The next production run proved that the claim transaction restored the immutable
+registry hash, but the separate completion transaction did not. Financial-fact
+symbol resolution therefore lost its indexed authority context and exceeded the
+database statement timeout even though every staged chunk was valid. The V3.15 REST
+adapter now caches the run-bound hash from the authoritative claim and sends it to a
+private completion wrapper. The wrapper requires an exact match with the run's
+authority hash, restores only that transaction-local setting, and delegates the
+unchanged V3.14 completion. Missing or mismatched authority fails before persistence.
+Focused V3.15 is 11/11, product correctness is 95/95 and the apply-twice migration
+suite is 53/53 PASS. Fresh Requirements Round 153 finds `P0=0 P1=0 P2=0`.
