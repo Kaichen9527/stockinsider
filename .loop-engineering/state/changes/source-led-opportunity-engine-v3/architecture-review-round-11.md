@@ -1,7 +1,7 @@
 # V3.15 protected Architecture compatibility evidence
 
 Date: 2026-08-14
-Review authority: fresh Architecture Round 31, carried at the protected worker's
+Review authority: fresh Architecture Round 32, carried at the protected worker's
 stable compatibility path after the immutable Requirements carrier.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
@@ -9,16 +9,16 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Requirements implementation commit: `039ef058c77b6b26fcd6ccc674261124e5553294`
-- Requirements evidence carrier: `2421860b361bd797d292f53f56ce5589513aa085`
-- Final repair-closure commit/tree: `2421860b361bd797d292f53f56ce5589513aa085` / `d12d3338512b1f3755de88da1e85997325097972`
-- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..2421860b361bd797d292f53f56ce5589513aa085`
+- Requirements implementation commit: `e10f5f0685f2a053af6190725af9024c74cee112`
+- Requirements evidence carrier: `b69e37e76375a37892582c858376caa0d0dd8409`
+- Final repair-closure commit/tree: `b69e37e76375a37892582c858376caa0d0dd8409` / `68c2f1bfc01c0b7ea2042ad34a21af67b2e6f2df`
+- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..b69e37e76375a37892582c858376caa0d0dd8409`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
 - Canonical evidence: this protected Round 30 compatibility carrier.
 
 ## Architecture closure
 
-Round 31 returned PASS on the same active architecture graph. One producer DAG owns
+Round 32 returned PASS on the same active architecture graph. One producer DAG owns
 source acquisition, official full-market coarse ranking, the 60→30→20 deep funnel,
 point-in-time facts, the unique decision envelope and compact projection. Public
 requests remain projection-only, and official factors cannot mint a user action.
@@ -84,6 +84,15 @@ while all other REST calls keep the 120-second deadline. The server still verifi
 run, job, owner token and lease before persisting, and the 16 MiB response ceiling is
 unchanged. This closes the observed long-running candidate ledger transaction without
 adding a database role, endpoint, scheduler owner or decision authority.
+
+Official whole-market factors now cross the durable discovery ledger with one exact
+provenance vocabulary. `official_market_factor` is additive in PostgreSQL and both Web
+validators; it is not aliased to a social or broker source. Claim and mention UUIDs are
+deterministically derived from the factor evidence, stock identity and session, so an
+idempotent rerun converges without discarding the human-readable official references
+inside `factorEvidence`. The diagnostic plane accepts the real stage-barrier job kind
+under the same live run/job/token/lease checks. No public mutation, action authority,
+ranking weight or source trust tier is widened.
 
 Missing source OAuth remains typed and does not block official market/fundamental
 acquisition. Missing official authority disables actions rather than generating targets.
