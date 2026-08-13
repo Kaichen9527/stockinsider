@@ -1,7 +1,7 @@
 # V3.15 protected Architecture compatibility evidence
 
 Date: 2026-08-13
-Review authority: fresh Architecture Round 22, carried at the protected worker's
+Review authority: fresh Architecture Round 23, carried at the protected worker's
 stable compatibility path after the immutable Requirements carrier.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
@@ -9,16 +9,16 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Requirements implementation commit: `7a71025d68a724bcb89bff9a7629bb6387e10f3d`
-- Requirements evidence carrier: `0d1325583436945861f0f98da1575d052220786b`
-- Final repair-closure commit/tree: `0d1325583436945861f0f98da1575d052220786b` / `8e1fa60776d5ee3d2288d4fd86ca60db79687144`
-- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..0d1325583436945861f0f98da1575d052220786b`
-- Active graph: `b7cb7c7aef9a4ed283c066a9128605aa0348f3526aade2adb1b559893707ac7b`
-- Canonical evidence: this protected Round 22 compatibility carrier.
+- Requirements implementation commit: `a1478bcdc35ab6b7ca7c8b0f2275c1d29451f5ed`
+- Requirements evidence carrier: `0139798e760fff558591f698b7edab728fc80c12`
+- Final repair-closure commit/tree: `0139798e760fff558591f698b7edab728fc80c12` / `a12ba9d1d6931994efb9eb940d817536778834d4`
+- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..0139798e760fff558591f698b7edab728fc80c12`
+- Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
+- Canonical evidence: this protected Round 23 compatibility carrier.
 
 ## Architecture closure
 
-Round 22 returned PASS on the same active architecture graph. One producer DAG owns
+Round 23 returned PASS on the same active architecture graph. One producer DAG owns
 source acquisition, official full-market coarse ranking, the 60→30→20 deep funnel,
 point-in-time facts, the unique decision envelope and compact projection. Public
 requests remain projection-only, and official factors cannot mint a user action.
@@ -39,7 +39,7 @@ terminal bound. It accepts the observed 3,385-revision production corpus without
 changing the 60→30→20 research funnel or decision authority, while any connector
 above 2,000 still fails before a run becomes visible.
 
-Missing source OAuth remains typed and does not block official market/fundamental
+The protected acceptance registry is now architecturally bound to the complete V3.15 correctness suite and the operative V3.15 task/status state. This closes the protected-harness-only registry drift without changing the producer, decision or projection data flow.\n\nMissing source OAuth remains typed and does not block official market/fundamental
 acquisition. Missing official authority disables actions rather than generating targets.
 Web, producer manifest, projection schema and embedded release identity must share the
 reviewed source. LINE, dispatch, automatic trading and Promotion remain disabled.
