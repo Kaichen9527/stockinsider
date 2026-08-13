@@ -154,18 +154,24 @@ test('V315 REST producer adapter maps canonical bytea and never exposes its serv
     createSupabaseRestLegacyProducerAdapter,rpcTimeoutMs}=runtime('supabase-rest-legacy-producer-adapter.js');
   assert.equal(DEFAULT_RPC_TIMEOUT_MS,120_000);
   assert.equal(COMPLETION_RPC_TIMEOUT_MS,600_000);
-  assert.equal(rpcTimeoutMs('complete_legacy_producer_job_v3_14'),COMPLETION_RPC_TIMEOUT_MS);
+  assert.equal(rpcTimeoutMs('complete_legacy_producer_job_rest_v3_15'),COMPLETION_RPC_TIMEOUT_MS);
   assert.equal(rpcTimeoutMs('claim_legacy_producer_job_rest_v3_15'),DEFAULT_RPC_TIMEOUT_MS);
   const secret='service-role-secret-'.padEnd(40,'x');const calls=[];
   const adapter=createSupabaseRestLegacyProducerAdapter({supabaseUrl:'https://fixture.supabase.co',serviceRoleKey:secret,
     fetchImpl:async(url,init)=>{calls.push({url,body:JSON.parse(init.body)});
       if(String(url).endsWith('/claim_legacy_producer_job_rest_v3_15'))return new Response(JSON.stringify({
         run_id:'run',job_id:'job',stage:'candidate_funnel',job_kind:'candidate_batch',read_kind:'candidate_funnel_input',
-        read_canonical:'\\x7b7d',read_json:{},read_hash:'a'.repeat(64)}),{status:200});
+        read_canonical:'\\x7b7d',read_json:{},read_hash:'a'.repeat(64),authority_hash:'b'.repeat(64)}),{status:200});
+      if(String(url).endsWith('/complete_legacy_producer_job_rest_v3_15'))return new Response(JSON.stringify({
+        status:'running',next_job:{jobId:'next'}}),{status:200});
       return new Response(JSON.stringify({code:'42501',message:`do not echo ${secret}`}),{status:403});}});
   const claim=await adapter.claimLegacyProducerJob({runId:'run',jobId:'job',ownerToken:'token',leaseSeconds:120});
   assert.equal(claim.readCanonical.toString('utf8'),'{}');
   assert.equal(calls[0].body.p_authority_hash,'');
+  const completion=await adapter.completeLegacyProducerJob({runId:'run',jobId:'job',ownerToken:'token',
+    resultCanonical:Buffer.from('{}'),resultJson:{},resultHash:'c'.repeat(64)});
+  assert.equal(completion.status,'running');
+  assert.equal(calls[1].body.p_authority_hash,'b'.repeat(64));
   await assert.rejects(()=>adapter.heartbeatLegacyProducerJob({runId:'run',jobId:'job',ownerToken:'token',leaseSeconds:120}),
     (error)=>error.message==='supabase_rpc_rejected:heartbeat_legacy_producer_job_v3_11:42501'
       &&!error.message.includes(secret));
@@ -197,18 +203,21 @@ test('V315 REST doctor reads private producer state only through the bounded hea
   assert.equal(calls.some((url)=>url.includes('/legacy_producer_jobs_v3_11?')),false);
 });
 
-test('V315 migration is additive, bounded, upgrade-safe, and exposes only the authority-carrying REST claim',()=>{
+test('V315 migration is additive, bounded, upgrade-safe, and binds authority to REST claim and completion',()=>{
   const sql=readFileSync(path.join(root,'migrations/20260813_opportunity_recovery_v3_15.sql'),'utf8');
   const v314=readFileSync(path.join(root,'migrations/20260811_actionability_recovery_v3_14.sql'),'utf8');
   assert.doesNotMatch(sql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
   assert.match(sql,/LIMIT 3000/u);assert.match(sql,/octet_length\(v_claim\.read_canonical\)>3145728/u);
   assert.match(sql,/claim_legacy_producer_job_authoritative_v3_15/u);
   assert.match(sql,/claim_legacy_producer_job_rest_v3_15/u);
+  assert.match(sql,/complete_legacy_producer_job_rest_v3_15/u);
   assert.match(sql,/read_legacy_runtime_health_rest_v3_15/u);
   assert.match(sql,/p_authority_hash/u);
   assert.match(sql,/ALTER TYPE public[.]source_key_v3 ADD VALUE IF NOT EXISTS 'official_market_factor'/u);
   assert.match(v314,/legacy_runtime_failure_diagnostics_v3_14_job_kind_check[\s\S]*'stage_barrier'/u);
   assert.match(sql,/GRANT EXECUTE[\s\S]*claim_legacy_producer_job_rest_v3_15[\s\S]*TO service_role/u);
+  assert.match(sql,/complete_legacy_producer_job_rest_v3_15[\s\S]*set_config\('stockinsider\.legacy_authority_hash',p_authority_hash,true\)[\s\S]*complete_legacy_producer_job_v3_14/u);
+  assert.match(sql,/GRANT EXECUTE[\s\S]*complete_legacy_producer_job_rest_v3_15[\s\S]*TO service_role/u);
   assert.match(sql,/REVOKE CREATE ON SCHEMA public/u);
   assert.match(sql,/connector_rank<=1000/u);
   assert.match(sql,/connector_rank<=2000/u);

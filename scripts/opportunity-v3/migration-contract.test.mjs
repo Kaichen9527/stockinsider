@@ -751,9 +751,10 @@ test('V3.14 official chunks persist under the exact lease, replay idempotently, 
     CREATE TEMP TABLE v314_pre_completion AS SELECT count(*)::integer session_rows
       FROM public.tw_trading_sessions_v3 WHERE session_id='2026-08-07' AND market='TWSE';
     WITH output(value) AS(VALUES(${sqlLiteral(JSON.stringify(completionPayload))}::jsonb))
-      SELECT completion.status FROM output CROSS JOIN LATERAL public.complete_legacy_producer_job_v3_14(
+      SELECT completion.status FROM output CROSS JOIN LATERAL public.complete_legacy_producer_job_rest_v3_15(
         '${runId}','${jobId}','${ownerToken}',convert_to(output.value::text,'utf8'),output.value,
-        encode(extensions.digest(convert_to(output.value::text,'utf8'),'sha256'),'hex')) completion;
+        encode(extensions.digest(convert_to(output.value::text,'utf8'),'sha256'),'hex'),
+        encode(extensions.digest(convert_to('{}','utf8'),'sha256'),'hex')) completion;
     SELECT jsonb_build_object(
       'chunkRows',(SELECT count(*) FROM public.legacy_official_ingestion_chunks_v3_14 WHERE job_id='${jobId}'),
       'preCompletionRows',(SELECT session_rows FROM v314_pre_completion),
@@ -775,9 +776,12 @@ test('V3.15 production-sized authority lookup and staged resume are installed',(
     'boundedSymbolTable',position('FROM public.stock_instruments_v3 authority' in pg_get_functiondef(
       'public.resolve_legacy_instrument_symbol_authority_v3_13_internal(text,timestamptz)'::regprocedure))>0,
     'resumeTransport',position('legacy-official-ingestion-resume-v3.15' in pg_get_functiondef(
-      'public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)'::regprocedure))>0
+      'public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)'::regprocedure))>0,
+    'completionAuthority',position('run.authority_hash=p_authority_hash' in pg_get_functiondef(
+      'public.complete_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,bytea,jsonb,text,text)'::regprocedure))>0
   )::text;`,['-At']).trim());
-  assert.deepEqual(value,{symbolIndex:true,exactRegistryHash:true,boundedSymbolTable:true,resumeTransport:true});
+  assert.deepEqual(value,{symbolIndex:true,exactRegistryHash:true,boundedSymbolTable:true,resumeTransport:true,
+    completionAuthority:true});
 });
 
 test('V3.14 completion persists a non-empty exact decision revision and heartbeat',()=>{

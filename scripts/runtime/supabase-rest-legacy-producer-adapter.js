@@ -13,7 +13,7 @@ const DEFAULT_RPC_TIMEOUT_MS=120_000;
 const COMPLETION_RPC_TIMEOUT_MS=600_000;
 
 function rpcTimeoutMs(name){
-  return name==='complete_legacy_producer_job_v3_14'?COMPLETION_RPC_TIMEOUT_MS:DEFAULT_RPC_TIMEOUT_MS;
+  return name==='complete_legacy_producer_job_rest_v3_15'?COMPLETION_RPC_TIMEOUT_MS:DEFAULT_RPC_TIMEOUT_MS;
 }
 
 function createSupabaseRestLegacyProducerAdapter({supabaseUrl,serviceRoleKey,fetchImpl=globalThis.fetch}={}){
@@ -64,15 +64,16 @@ function createSupabaseRestLegacyProducerAdapter({supabaseUrl,serviceRoleKey,fet
       const row=await rpc('claim_legacy_producer_job_rest_v3_15',{p_run:input.runId,p_job:input.jobId,
         p_token:input.ownerToken,p_lease:input.leaseSeconds,p_authority_hash:cachedAuthorityHash});
       const value=claim(row);
+      if(/^[0-9a-f]{64}$/u.test(value?.authorityHash??''))cachedAuthorityHash=value.authorityHash;
       if(Array.isArray(value?.readJson?.authorityPages)&&value.readJson.authorityPages.length>0
           &&/^[0-9a-f]{64}$/u.test(value.readJson.authorityHash??''))cachedAuthorityHash=value.readJson.authorityHash;
       return value;
     },
     heartbeatLegacyProducerJob:async(input)=>Boolean(await rpc('heartbeat_legacy_producer_job_v3_11',{
       p_run:input.runId,p_job:input.jobId,p_token:input.ownerToken,p_lease:input.leaseSeconds})),
-    completeLegacyProducerJob:async(input)=>completion(await rpc('complete_legacy_producer_job_v3_14',{
+    completeLegacyProducerJob:async(input)=>completion(await rpc('complete_legacy_producer_job_rest_v3_15',{
       p_run_id:input.runId,p_job_id:input.jobId,p_owner_token:input.ownerToken,p_result:bytea(input.resultCanonical),
-      p_json:input.resultJson,p_hash:input.resultHash})),
+      p_json:input.resultJson,p_hash:input.resultHash,p_authority_hash:cachedAuthorityHash})),
     appendLegacyRuntimeFailureDiagnostic:async(input)=>Boolean(await rpc('append_legacy_runtime_failure_diagnostic_v3_14',{
       p_run_id:input.runId,p_job_id:input.jobId,p_owner_token:input.ownerToken,p_stage:input.stage,p_job_kind:input.jobKind,
       p_failure_code:input.failureCode,p_failure_origin:input.origin,p_invariant_code:input.invariantCode,

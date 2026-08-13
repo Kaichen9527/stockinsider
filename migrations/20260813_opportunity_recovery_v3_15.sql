@@ -255,6 +255,26 @@ BEGIN
   RETURN v_claim;
 END $rest_claim$;
 
+-- Completion persists official financial facts after the claim request has
+-- ended. Restore the same immutable registry authority hash inside this REST
+-- transaction so symbol resolution stays on the canonical indexed stream.
+CREATE OR REPLACE FUNCTION public.complete_legacy_producer_job_rest_v3_15(
+  p_run_id uuid,p_job_id uuid,p_owner_token uuid,p_result bytea,p_json jsonb,p_hash text,p_authority_hash text
+) RETURNS TABLE(status text,next_job jsonb)
+LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $rest_complete$
+BEGIN
+  IF coalesce(p_authority_hash,'')!~'^[0-9a-f]{64}$' OR NOT EXISTS(
+    SELECT 1 FROM public.legacy_producer_runs_v3_11 run
+    WHERE run.run_id=p_run_id AND run.authority_hash=p_authority_hash
+  ) THEN
+    RAISE EXCEPTION USING ERRCODE='PT403',MESSAGE='authentication_rejected';
+  END IF;
+  PERFORM pg_catalog.set_config('stockinsider.legacy_authority_hash',p_authority_hash,true);
+  RETURN QUERY SELECT completed.status,completed.next_job
+  FROM public.complete_legacy_producer_job_v3_14(
+    p_run_id,p_job_id,p_owner_token,p_result,p_json,p_hash) completed;
+END $rest_complete$;
+
 -- Production-sized official fact batches must not scan and decode the full
 -- authority registry once per fact. Resolve the exact registry stream through
 -- its canonical hash and discover symbol candidates through a bounded index.
@@ -362,6 +382,8 @@ ALTER FUNCTION public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)
   OWNER TO opportunity_v3_rpc_owner;
 ALTER FUNCTION public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)
   OWNER TO opportunity_v3_rpc_owner;
+ALTER FUNCTION public.complete_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,bytea,jsonb,text,text)
+  OWNER TO opportunity_v3_rpc_owner;
 ALTER FUNCTION public.append_legacy_runtime_health_rest_v3_15(text,text,text,bytea,jsonb,text,timestamptz)
   OWNER TO opportunity_v3_rpc_owner;
 ALTER FUNCTION public.read_legacy_runtime_health_rest_v3_15() OWNER TO opportunity_v3_rpc_owner;
@@ -370,6 +392,7 @@ REVOKE ALL ON FUNCTION public.claim_legacy_producer_job_authoritative_v3_15(uuid
   public.claim_legacy_mention_barrier_transport_v3_15(uuid,uuid,uuid,integer),
   public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer),
   public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text),
+  public.complete_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,bytea,jsonb,text,text),
   public.append_legacy_runtime_health_rest_v3_15(text,text,text,bytea,jsonb,text,timestamptz),
   public.read_legacy_runtime_health_rest_v3_15()
   FROM PUBLIC,anon,authenticated,service_role;
@@ -381,6 +404,8 @@ GRANT EXECUTE ON FUNCTION public.read_legacy_mention_barrier_transport_v3_15(uui
 GRANT EXECUTE ON FUNCTION public.claim_legacy_mention_barrier_transport_v3_15(uuid,uuid,uuid,integer)
   TO opportunity_v3_rpc_owner;
 GRANT EXECUTE ON FUNCTION public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)
+  TO service_role;
+GRANT EXECUTE ON FUNCTION public.complete_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,bytea,jsonb,text,text)
   TO service_role;
 GRANT EXECUTE ON FUNCTION public.append_legacy_runtime_health_rest_v3_15(text,text,text,bytea,jsonb,text,timestamptz)
   TO service_role;
