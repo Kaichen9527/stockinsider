@@ -1,7 +1,7 @@
 # V3.15 protected Architecture compatibility evidence
 
 Date: 2026-08-14
-Review authority: fresh Architecture Round 28, carried at the protected worker's
+Review authority: fresh Architecture Round 29, carried at the protected worker's
 stable compatibility path after the immutable Requirements carrier.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
@@ -9,16 +9,16 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Requirements implementation commit: `2463bb7332212846e3270c09a6fa41ba04f97a71`
-- Requirements evidence carrier: `dd0101b7f9ba7dc1136cf4a699e3628da762389f`
-- Final repair-closure commit/tree: `dd0101b7f9ba7dc1136cf4a699e3628da762389f` / `0eda7ff88fc250d82b6dbf8adcfb2f01aa7a6ee7`
-- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..dd0101b7f9ba7dc1136cf4a699e3628da762389f`
+- Requirements implementation commit: `01f3c6681d44c0f6f8b27bdebb866765aea03319`
+- Requirements evidence carrier: `771d06bb1008ec459870be71596c0ef0366c0d67`
+- Final repair-closure commit/tree: `771d06bb1008ec459870be71596c0ef0366c0d67` / `ee507075f7872b10ee3ba81a475d532f229e3de0`
+- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..771d06bb1008ec459870be71596c0ef0366c0d67`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
-- Canonical evidence: this protected Round 28 compatibility carrier.
+- Canonical evidence: this protected Round 29 compatibility carrier.
 
 ## Architecture closure
 
-Round 28 returned PASS on the same active architecture graph. One producer DAG owns
+Round 29 returned PASS on the same active architecture graph. One producer DAG owns
 source acquisition, official full-market coarse ranking, the 60→30→20 deep funnel,
 point-in-time facts, the unique decision envelope and compact projection. Public
 requests remain projection-only, and official factors cannot mint a user action.
@@ -60,6 +60,15 @@ grants execute—not table SELECT—to the opportunity RPC owner. Full per-shard
 entity and document outcomes remain queryable only in durable storage. The runtime's
 closed candidate-only input contract matches that projection and rejects overflow;
 no public endpoint, ranking weight or decision action changes.
+
+The final production transport closure moves only the mention stage-barrier claim
+into a second private security-definer helper because the predecessor applies its
+3 MiB bound before the outer wrapper can project candidates. The helper duplicates
+the predecessor's exact run, owner-token, lease, row-lock and attempt transition for
+that one job kind, then delegates candidate assembly to the already bounded reader.
+It is owned by the legacy correctness role; the REST claim owner receives EXECUTE
+only, and service_role retains access solely to the outer authority-carrying RPC.
+Every non-barrier claim still traverses the authoritative predecessor unchanged.
 
 Missing source OAuth remains typed and does not block official market/fundamental
 acquisition. Missing official authority disables actions rather than generating targets.
