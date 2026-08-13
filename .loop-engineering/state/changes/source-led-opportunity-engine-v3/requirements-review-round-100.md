@@ -1,7 +1,7 @@
 # V3.15 protected Requirements compatibility evidence
 
 Date: 2026-08-14
-Review authority: fresh Requirements Round 149, carried at the protected worker's
+Review authority: fresh Requirements Round 150, carried at the protected worker's
 stable compatibility path without changing the reviewed active artifact graph.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
@@ -9,10 +9,10 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Final repair-closure commit/tree: `224e248e498393478bdf445e2b97b9c960bdf836` / `5d79b917be0a1827782f20cac695db97a50764ba`
-- Full reviewed range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..224e248e498393478bdf445e2b97b9c960bdf836`
+- Final repair-closure commit/tree: `039ef058c77b6b26fcd6ccc674261124e5553294` / `4aeacb492feed5e1d67ddfefa6a28286b9bd5f62`
+- Full reviewed range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..039ef058c77b6b26fcd6ccc674261124e5553294`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
-- Canonical evidence: this protected Round 149 compatibility carrier.
+- Canonical evidence: this protected Round 150 compatibility carrier.
 - Acceptance inventory: `1.46.0`, 320 cases, partitioned as 272 product/runtime,
   28 model-runner and 20 evaluation-governance owners.
 
@@ -82,3 +82,12 @@ Evaluation governance remains `blocked/non_fabricated_elapsed_cohorts_unavailabl
 no synthetic cohort, LINE/dispatch, automatic trade or Promotion authority is claimed.
 This evidence grants only Requirements eligibility for Architecture, exact review and
 the protected Code Gate.
+
+The exact reviewed production replay completed all 3,387 mention jobs and produced a
+bounded 562 KB candidate result, but the candidate completion transaction exceeded the
+REST client's shared 120-second deadline. The lease and handler remained correct; the
+client cancelled the database completion before it could persist the result or emit a
+typed diagnostic. The repair gives only `complete_legacy_producer_job_v3_14` a closed
+600-second transport deadline while every claim, heartbeat, failure and ingestion RPC
+retains 120 seconds. Response-size ceilings, lease checks, result hashes, mutation
+authority and the 60→30→20 funnel are unchanged. Focused V3.15 remains 11/11 PASS.
