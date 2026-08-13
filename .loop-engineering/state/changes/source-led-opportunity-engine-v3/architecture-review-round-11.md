@@ -1,7 +1,7 @@
 # V3.15 protected Architecture compatibility evidence
 
 Date: 2026-08-13
-Review authority: fresh Architecture Round 24, carried at the protected worker's
+Review authority: fresh Architecture Round 25, carried at the protected worker's
 stable compatibility path after the immutable Requirements carrier.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
@@ -9,16 +9,16 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Requirements implementation commit: `54a9b907e4ce82ecb163325800468e0fb83704cf`
-- Requirements evidence carrier: `d8f45875ad17fda40e1ee3504402f55ebe7e9b66`
-- Final repair-closure commit/tree: `d8f45875ad17fda40e1ee3504402f55ebe7e9b66` / `290a643cf72a8417854448f998c613f069f1d22d`
-- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..d8f45875ad17fda40e1ee3504402f55ebe7e9b66`
+- Requirements implementation commit: `6e25bff3fdd53a1b2555b0d8b97aac542469d8f0`
+- Requirements evidence carrier: `d15a1f91077b4a838250047ef8c14620151ce789`
+- Final repair-closure commit/tree: `d15a1f91077b4a838250047ef8c14620151ce789` / `f1d20d6f0e8c4645468b7c9431a7f1f7ac979f4a`
+- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..d15a1f91077b4a838250047ef8c14620151ce789`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
-- Canonical evidence: this protected Round 24 compatibility carrier.
+- Canonical evidence: this protected Round 25 compatibility carrier.
 
 ## Architecture closure
 
-Round 24 returned PASS on the same active architecture graph. One producer DAG owns
+Round 25 returned PASS on the same active architecture graph. One producer DAG owns
 source acquisition, official full-market coarse ranking, the 60→30→20 deep funnel,
 point-in-time facts, the unique decision envelope and compact projection. Public
 requests remain projection-only, and official factors cannot mint a user action.
@@ -40,6 +40,8 @@ changing the 60→30→20 research funnel or decision authority, while any conne
 above 2,000 still fails before a run becomes visible.
 
 The protected acceptance registry is now architecturally bound to the complete V3.15 correctness suite and the operative V3.15 task/status state. This closes the protected-harness-only registry drift without changing the producer, decision or projection data flow.\n\nRuntime activation now permits one narrowly bounded `activated_readonly_bootstrap` state only when the exact reviewed Web consumer is already deployed, the last-good projection checksum is valid, freshness is fresh or stale-readonly, and the only health finding is consumer/producer compatibility (plus optional projection staleness). Actions remain disabled until that same reviewed producer publishes a compatible projection; every other finding rolls back the scheduler and manifest. The executable product-correctness owner closes both the permitted bootstrap and wrong-consumer rejection paths (92/92 PASS).
+
+Activation now derives the typed installed-runtime observation before deciding whether the doctor is admissible. A top-level failing doctor can cross only the closed readonly-bootstrap boundary (exact reviewed consumer, checksum-valid readable last-good projection, and only compatibility/staleness reasons); all malformed, integrity, scheduler, lease, state or broader health failures still restore the prior scheduler and manifest. This removes the bootstrap cycle without weakening fail-closed activation.
 
 Missing source OAuth remains typed and does not block official market/fundamental
 acquisition. Missing official authority disables actions rather than generating targets.
