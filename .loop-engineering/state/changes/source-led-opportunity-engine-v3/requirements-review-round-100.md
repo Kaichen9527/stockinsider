@@ -1,7 +1,7 @@
 # V3.15 protected Requirements compatibility evidence
 
 Date: 2026-08-14
-Review authority: fresh Requirements Round 151, carried at the protected worker's
+Review authority: fresh Requirements Round 152, carried at the protected worker's
 stable compatibility path without changing the reviewed active artifact graph.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
@@ -9,10 +9,10 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Final repair-closure commit/tree: `e10f5f0685f2a053af6190725af9024c74cee112` / `60fcaf0bc0c07b826512d9f6947f9c7cead9e224`
-- Full reviewed range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..e10f5f0685f2a053af6190725af9024c74cee112`
+- Final repair-closure commit/tree: `d735fcbc8cd1a4b8ae92c62827e3b44846fe39bd` / `b999ad7b9fe5ceba2d20ff2310a11d9615266063`
+- Full reviewed range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..d735fcbc8cd1a4b8ae92c62827e3b44846fe39bd`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
-- Canonical evidence: this protected Round 151 compatibility carrier.
+- Canonical evidence: this protected Round 152 compatibility carrier.
 - Acceptance inventory: `1.46.0`, 320 cases, partitioned as 272 product/runtime,
   28 model-runner and 20 evaluation-governance owners.
 
@@ -101,3 +101,14 @@ from the complete factor evidence. It also admits the actual `stage_barrier` job
 to the typed diagnostic table so future SQL failures cannot be hidden by diagnostic
 persistence. Web detail/public validators carry the same additive source key. Focused
 V3.15 is 11/11, migration is 52/52 and product correctness is 94/94 PASS.
+
+The coordinated activation then staged every official chunk but timed out while the
+completion transaction repeatedly decoded and scanned the full instrument registry
+for each financial fact. A retry correctly refused the now-different live provider
+snapshot, but the diagnostic allowlist mislabeled the actual `stage_barrier` as a
+terminal job. The repair resolves instrument streams by their exact canonical hash,
+uses a bounded symbol index, transports an already-staged immutable snapshot on retry,
+and preserves the real diagnostic job kind. No action threshold, ranking weight,
+public mutation or source authority changes. Product correctness is 95/95 and the
+fresh/apply-twice migration suite is 53/53 PASS. Round 152 independently finds
+`P0=0 P1=0 P2=0` for this bounded production-activation repair.
