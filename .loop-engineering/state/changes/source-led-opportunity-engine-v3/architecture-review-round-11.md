@@ -1,7 +1,7 @@
 # V3.15 protected Architecture compatibility evidence
 
-Date: 2026-08-13
-Review authority: fresh Architecture Round 27, carried at the protected worker's
+Date: 2026-08-14
+Review authority: fresh Architecture Round 28, carried at the protected worker's
 stable compatibility path after the immutable Requirements carrier.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
@@ -9,16 +9,16 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Requirements implementation commit: `836a3a82c13c51a506d2113709f1e94a1f166a43`
-- Requirements evidence carrier: `16e408444315deda1924cb784030c82ccbb8442f`
-- Final repair-closure commit/tree: `16e408444315deda1924cb784030c82ccbb8442f` / `50d379fff99efb1d799fd0e36b8c749d5828c2b5`
-- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..16e408444315deda1924cb784030c82ccbb8442f`
+- Requirements implementation commit: `2463bb7332212846e3270c09a6fa41ba04f97a71`
+- Requirements evidence carrier: `dd0101b7f9ba7dc1136cf4a699e3628da762389f`
+- Final repair-closure commit/tree: `dd0101b7f9ba7dc1136cf4a699e3628da762389f` / `0eda7ff88fc250d82b6dbf8adcfb2f01aa7a6ee7`
+- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..dd0101b7f9ba7dc1136cf4a699e3628da762389f`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
-- Canonical evidence: this protected Round 27 compatibility carrier.
+- Canonical evidence: this protected Round 28 compatibility carrier.
 
 ## Architecture closure
 
-Round 27 returned PASS on the same active architecture graph. One producer DAG owns
+Round 28 returned PASS on the same active architecture graph. One producer DAG owns
 source acquisition, official full-market coarse ranking, the 60→30→20 deep funnel,
 point-in-time facts, the unique decision envelope and compact projection. Public
 requests remain projection-only, and official factors cannot mint a user action.
@@ -51,6 +51,15 @@ the existing entity bound and before immutable persistence. Frozen authority rem
 the only source of instrument identity; distinct claim identities and every rejection
 outcome remain conserved. This prevents a duplicate authority representation from
 terminating the whole DAG without changing candidate ranking or action authority.
+
+The mention barrier transport repair preserves the same durable graph and authority.
+The predecessor claim still verifies the exact run, job, token, lease and immutable
+shard results. A private security-definer helper owned by the legacy correctness role
+then projects only ordered candidates, caps the result at 4,000 rows and 3 MiB, and
+grants execute—not table SELECT—to the opportunity RPC owner. Full per-shard claim,
+entity and document outcomes remain queryable only in durable storage. The runtime's
+closed candidate-only input contract matches that projection and rejects overflow;
+no public endpoint, ranking weight or decision action changes.
 
 Missing source OAuth remains typed and does not block official market/fundamental
 acquisition. Missing official authority disables actions rather than generating targets.
