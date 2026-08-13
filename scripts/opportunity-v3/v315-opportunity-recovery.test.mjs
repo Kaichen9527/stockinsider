@@ -127,6 +127,26 @@ test('V315 duplicate authority roster heads emit one persistence identity per st
   assert.equal(new Set(parsed.entityOutcomes.map((row)=>row.entityOutcomeId)).size,parsed.entityOutcomes.length);
 });
 
+test('V315 mention barrier consumes the compact candidate-only authoritative transport',async()=>{
+  const {canonicalJson,sha256}=runtime('codec.js');
+  const config=runtime('source-run-config.js').validateAuthSourceDagConfig(
+    readFileSync(path.join(root,'config/runtime/auth-source-dag.json')));
+  const handlers=runtime('auth-source-worker-cli.js').buildStageHandlers(config,'a'.repeat(40),'b'.repeat(64),{
+    fetchImpl:async()=>new Response('{}',{status:200}),internalApiKey:'fixture-internal-api-key-000000'});
+  const candidates=Array.from({length:2_121},(_,index)=>({claimId:`claim-${index}`,symbol:String(1000+index)}));
+  const readJson={candidates};const readCanonical=Buffer.from(canonicalJson(readJson));
+  const result=await handlers.mention_claim_extraction({jobKind:'stage_barrier',readKind:'mention_shard_results',
+    readJson,readCanonical,readHash:sha256(readCanonical)});
+  assert.equal(result.json.candidates.length,2_121);
+  assert.equal(result.json.candidates[0].claimId,'claim-0');
+  assert.equal('results' in readJson,false);
+  const oversized={candidates:Array.from({length:4_001},()=>({claimId:'overflow'}))};
+  const oversizedCanonical=Buffer.from(canonicalJson(oversized));
+  await assert.rejects(()=>handlers.mention_claim_extraction({jobKind:'stage_barrier',readKind:'mention_shard_results',
+    readJson:oversized,readCanonical:oversizedCanonical,readHash:sha256(oversizedCanonical)}),
+  {message:'mention barrier candidate transport unavailable'});
+});
+
 test('V315 REST producer adapter maps canonical bytea and never exposes its service credential in failures',async()=>{
   const {MAX_RPC_RESPONSE_BYTES,createSupabaseRestLegacyProducerAdapter}=runtime('supabase-rest-legacy-producer-adapter.js');
   const secret='service-role-secret-'.padEnd(40,'x');const calls=[];
@@ -185,4 +205,12 @@ test('V315 migration is additive, bounded, upgrade-safe, and exposes only the au
   assert.match(sql,/connector_rank>1000/u);
   assert.match(sql,/connector_rank>2000/u);
   assert.match(sql,/discovery_authority_bound_predecessor_conflict/u);
+  assert.match(sql,/read_legacy_mention_barrier_transport_v3_15/u);
+  assert.match(sql,/jsonb_build_object\('candidates'/u);
+  assert.match(sql,/ORDER BY job\.shard_ordinal,candidate\.ordinality/u);
+  assert.match(sql,/mention_barrier_transport_bound/u);
+  assert.match(sql,/LIMIT 4001/u);
+  assert.match(sql,/OWNER TO legacy_correctness_rpc_owner/u);
+  assert.match(sql,/GRANT EXECUTE ON FUNCTION public\.read_legacy_mention_barrier_transport_v3_15\(uuid\)[\s\S]*TO opportunity_v3_rpc_owner/u);
+  assert.doesNotMatch(sql,/v_claim\.read_json:=jsonb_build_object\('results'/u);
 });

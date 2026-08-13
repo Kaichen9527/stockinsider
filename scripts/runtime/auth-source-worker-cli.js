@@ -1316,7 +1316,9 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
           extractRevisionCandidates({ ...bundle, authorityPages }));
       }
       const bundle = readBundle(claim, 'mention_shard_results');
-      const candidates = (bundle.results ?? []).flatMap((result) => Array.isArray(result?.candidates) ? result.candidates : []);
+      invariant(Array.isArray(bundle.candidates) && bundle.candidates.length <= 4000,
+        'mention barrier candidate transport unavailable');
+      const candidates = bundle.candidates;
       return immutableBundle('legacy_mention_barrier_result_v3_11', { schema: 'legacy-mention-barrier-result-v3.11', candidates });
     },
     candidate_funnel: async (claim) => {

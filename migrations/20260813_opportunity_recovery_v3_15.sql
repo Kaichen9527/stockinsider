@@ -44,6 +44,32 @@ BEGIN
   END IF;
 END $upgrade_claim$;
 
+CREATE OR REPLACE FUNCTION public.read_legacy_mention_barrier_transport_v3_15(p_run uuid)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $mention_transport$
+DECLARE
+  v_transport jsonb;
+  v_count integer;
+BEGIN
+  WITH bounded AS MATERIALIZED (
+    SELECT candidate.value,job.shard_ordinal,candidate.ordinality
+    FROM public.legacy_producer_jobs_v3_11 job
+    JOIN public.legacy_producer_job_results_v3_11 result ON result.job_id=job.job_id
+    CROSS JOIN LATERAL jsonb_array_elements(coalesce(result.result_json->'candidates','[]'::jsonb))
+      WITH ORDINALITY candidate(value,ordinality)
+    WHERE job.run_id=p_run AND job.stage='mention_claim_extraction'
+      AND job.job_kind='revision_shard' AND job.status='succeeded'
+    ORDER BY job.shard_ordinal,candidate.ordinality
+    LIMIT 4001
+  )
+  SELECT jsonb_build_object('candidates',coalesce(jsonb_agg(value
+    ORDER BY shard_ordinal,ordinality),'[]'::jsonb)),count(*)::integer
+  INTO v_transport,v_count FROM bounded;
+  IF v_count>4000 OR octet_length(convert_to(v_transport::text,'utf8'))>3145728 THEN
+    RAISE EXCEPTION 'mention_barrier_transport_bound';
+  END IF;
+  RETURN v_transport;
+END $mention_transport$;
+
 CREATE OR REPLACE FUNCTION public.claim_legacy_producer_job_v3_11(
   p_run uuid,p_job uuid,p_token uuid,p_lease integer
 ) RETURNS public.legacy_producer_claim_v3_11
@@ -54,7 +80,23 @@ DECLARE
   v_universe jsonb;
 BEGIN
   v_claim:=public.claim_legacy_producer_job_authoritative_v3_15(p_run,p_job,p_token,p_lease);
-  IF v_claim.run_id IS NULL OR v_claim.read_kind IS DISTINCT FROM 'candidate_funnel_input' THEN
+  IF v_claim.run_id IS NULL THEN
+    RETURN v_claim;
+  END IF;
+  -- A production run can contain thousands of revision shards.  The
+  -- authoritative predecessor result also contains per-shard claim, entity and
+  -- document diagnostics, which are useful in durable storage but must not be
+  -- copied through the REST claim boundary.  The mention barrier consumes only
+  -- candidates, so project that closed input here in deterministic shard/order
+  -- order.  This keeps evidence in the database while bounding the transport.
+  IF v_claim.read_kind='mention_shard_results' THEN
+    v_claim.read_json:=public.read_legacy_mention_barrier_transport_v3_15(p_run);
+    v_claim.read_row_count:=jsonb_array_length(v_claim.read_json->'candidates');
+    v_claim.read_canonical:=convert_to(v_claim.read_json::text,'utf8');
+    v_claim.read_hash:=encode(extensions.digest(v_claim.read_canonical,'sha256'),'hex');
+    RETURN v_claim;
+  END IF;
+  IF v_claim.read_kind IS DISTINCT FROM 'candidate_funnel_input' THEN
     RETURN v_claim;
   END IF;
   SELECT run.source_cutoff INTO STRICT v_cutoff
@@ -168,6 +210,8 @@ END $health_read$;
 
 ALTER FUNCTION public.claim_legacy_producer_job_authoritative_v3_15(uuid,uuid,uuid,integer)
   OWNER TO opportunity_v3_rpc_owner;
+ALTER FUNCTION public.read_legacy_mention_barrier_transport_v3_15(uuid)
+  OWNER TO legacy_correctness_rpc_owner;
 ALTER FUNCTION public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)
   OWNER TO opportunity_v3_rpc_owner;
 ALTER FUNCTION public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)
@@ -176,6 +220,7 @@ ALTER FUNCTION public.append_legacy_runtime_health_rest_v3_15(text,text,text,byt
   OWNER TO opportunity_v3_rpc_owner;
 ALTER FUNCTION public.read_legacy_runtime_health_rest_v3_15() OWNER TO opportunity_v3_rpc_owner;
 REVOKE ALL ON FUNCTION public.claim_legacy_producer_job_authoritative_v3_15(uuid,uuid,uuid,integer),
+  public.read_legacy_mention_barrier_transport_v3_15(uuid),
   public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer),
   public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text),
   public.append_legacy_runtime_health_rest_v3_15(text,text,text,bytea,jsonb,text,timestamptz),
@@ -184,6 +229,8 @@ REVOKE ALL ON FUNCTION public.claim_legacy_producer_job_authoritative_v3_15(uuid
 GRANT EXECUTE ON FUNCTION public.claim_legacy_producer_job_authoritative_v3_15(uuid,uuid,uuid,integer),
   public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)
   TO legacy_correctness_rpc_owner;
+GRANT EXECUTE ON FUNCTION public.read_legacy_mention_barrier_transport_v3_15(uuid)
+  TO opportunity_v3_rpc_owner;
 GRANT EXECUTE ON FUNCTION public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)
   TO service_role;
 GRANT EXECUTE ON FUNCTION public.append_legacy_runtime_health_rest_v3_15(text,text,text,bytea,jsonb,text,timestamptz)
