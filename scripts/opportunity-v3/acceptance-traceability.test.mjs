@@ -437,6 +437,30 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
     `.loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-${round}.md`,
   );
 
+  if (statusRecord.requirementsGateStatus === `pass_v3_15_round_${round}`) {
+    const currentMarkerV315 = '## V3.15 opportunity recovery';
+    const currentStartV315 = tasksText.lastIndexOf(currentMarkerV315);
+    assert.ok(currentStartV315 >= 0, 'one operative V3.15 task section exists');
+    const currentTasksV315 = tasksText.slice(currentStartV315);
+    assert.equal(statusRecord.requirementsStatus, `v3_15_round_${round}_pass`);
+    assert.equal(statusRecord.requirementsPendingTree, null);
+    assert.equal(statusRecord.requirementsPendingEvidence, null);
+    assert.match(currentTasksV315, new RegExp(`- \\[x\\] Obtain fresh Requirements Round ${round} PASS`, 'u'));
+    assert.equal(statusRecord.architectureGateStatus, 'pass_v3_15_round_19');
+    assert.equal(statusRecord.architectureReviewRound, 19);
+    assert.equal(statusRecord.architecturePendingRound, null);
+    assert.equal(statusRecord.architecturePendingTree, null);
+    assert.equal(statusRecord.architecturePendingEvidence, null);
+    assert.equal(statusRecord.designStatus, 'v3_15_architecture_round_19_pass');
+    assert.equal(statusRecord.loopStage, 'v3_15_exact_review_repair_closure_pass_protected_gate_pending');
+    assert.equal(statusRecord.implementationStatus, 'v3_15_exact_review_repair_closure_pass');
+    assert.equal(statusRecord.exactCommitReviewStatus,
+      'v3_15_repair_and_full_range_pass_p0_0_p1_0_p2_0');
+    assert.match(statusRecord.blockedReason, /protected Code Gate/u);
+    assert.match(currentTasksV315, /protected external artifact remains the landing check/u);
+    return;
+  }
+
   if (statusRecord.requirementsGateStatus === `pass_v3_14_round_${round}`) {
     const currentMarkerV314 = '### V3.14 Actionability Recovery — user-authorized implementation';
     const currentStartV314 = tasksText.lastIndexOf(currentMarkerV314);
@@ -1258,12 +1282,12 @@ const structuralExecutors = {
       ['review round drift', tasks, { ...status, requirementsReviewRound: status.requirementsReviewRound - 1 }],
       ['pending evidence drift', tasks, { ...status, requirementsPendingEvidence: 'requirements-review-round-131.md' }],
       ['operative requirements disposition drift', tasks.replace(
-        '- [x] Run fresh Requirements Round 137 over commit',
-        '- [ ] Run fresh Requirements Round 137 over commit',
+        '- [x] Obtain fresh Requirements Round 138 PASS',
+        '- [ ] Obtain fresh Requirements Round 138 PASS',
       ), status],
-      ['pending-round declaration removed', tasks.replace(
-        '- [x] Obtain independent fresh Architecture Round 18 PASS',
-        '- [ ] Obtain independent fresh Architecture Round 18 PASS',
+      ['protected-gate declaration removed', tasks.replace(
+        'protected external artifact remains the landing check',
+        'protected external artifact is not the landing check',
       ), status],
     ]) {
       assert.throws(
