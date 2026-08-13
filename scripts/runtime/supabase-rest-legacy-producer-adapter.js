@@ -9,6 +9,12 @@ function decodeBytea(value){
 }
 
 const MAX_RPC_RESPONSE_BYTES=16_777_216;
+const DEFAULT_RPC_TIMEOUT_MS=120_000;
+const COMPLETION_RPC_TIMEOUT_MS=600_000;
+
+function rpcTimeoutMs(name){
+  return name==='complete_legacy_producer_job_v3_14'?COMPLETION_RPC_TIMEOUT_MS:DEFAULT_RPC_TIMEOUT_MS;
+}
 
 function createSupabaseRestLegacyProducerAdapter({supabaseUrl,serviceRoleKey,fetchImpl=globalThis.fetch}={}){
   invariant(typeof supabaseUrl==='string'&&/^https:\/\/[a-z0-9-]+\.supabase\.co$/u.test(supabaseUrl),
@@ -18,7 +24,7 @@ function createSupabaseRestLegacyProducerAdapter({supabaseUrl,serviceRoleKey,fet
   invariant(typeof fetchImpl==='function','supabase REST transport unavailable');
   let cachedAuthorityHash='';
   const rpc=async(name,body)=>{
-    const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),120000);
+    const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),rpcTimeoutMs(name));
     try{
       const response=await fetchImpl(`${supabaseUrl}/rest/v1/rpc/${name}`,{method:'POST',signal:controller.signal,
         headers:{apikey:serviceRoleKey,Authorization:`Bearer ${serviceRoleKey}`,'Content-Type':'application/json',
@@ -82,4 +88,5 @@ function createSupabaseRestLegacyProducerAdapter({supabaseUrl,serviceRoleKey,fet
   });
 }
 
-module.exports={MAX_RPC_RESPONSE_BYTES,createSupabaseRestLegacyProducerAdapter,decodeBytea};
+module.exports={COMPLETION_RPC_TIMEOUT_MS,DEFAULT_RPC_TIMEOUT_MS,MAX_RPC_RESPONSE_BYTES,
+  createSupabaseRestLegacyProducerAdapter,decodeBytea,rpcTimeoutMs};

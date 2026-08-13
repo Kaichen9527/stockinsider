@@ -148,7 +148,12 @@ test('V315 mention barrier consumes the compact candidate-only authoritative tra
 });
 
 test('V315 REST producer adapter maps canonical bytea and never exposes its service credential in failures',async()=>{
-  const {MAX_RPC_RESPONSE_BYTES,createSupabaseRestLegacyProducerAdapter}=runtime('supabase-rest-legacy-producer-adapter.js');
+  const {COMPLETION_RPC_TIMEOUT_MS,DEFAULT_RPC_TIMEOUT_MS,MAX_RPC_RESPONSE_BYTES,
+    createSupabaseRestLegacyProducerAdapter,rpcTimeoutMs}=runtime('supabase-rest-legacy-producer-adapter.js');
+  assert.equal(DEFAULT_RPC_TIMEOUT_MS,120_000);
+  assert.equal(COMPLETION_RPC_TIMEOUT_MS,600_000);
+  assert.equal(rpcTimeoutMs('complete_legacy_producer_job_v3_14'),COMPLETION_RPC_TIMEOUT_MS);
+  assert.equal(rpcTimeoutMs('claim_legacy_producer_job_rest_v3_15'),DEFAULT_RPC_TIMEOUT_MS);
   const secret='service-role-secret-'.padEnd(40,'x');const calls=[];
   const adapter=createSupabaseRestLegacyProducerAdapter({supabaseUrl:'https://fixture.supabase.co',serviceRoleKey:secret,
     fetchImpl:async(url,init)=>{calls.push({url,body:JSON.parse(init.body)});
