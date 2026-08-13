@@ -397,6 +397,7 @@ const checks = {
       } });
     assert.equal(activated.disposition, 'activated'); assert.deepEqual(activationCalls, ['stage','verify','publish','disable','load','health-observation']);
     const readonlyDoctor = passingRuntimeDoctor(manifest, reviewedRelease);
+    readonlyDoctor.status = 'fail';
     readonlyDoctor.observation.consumerCompatibility = 'consumer_newer';
     readonlyDoctor.observation.projectionFreshness = 'stale';
     const readonlyCalls = [];

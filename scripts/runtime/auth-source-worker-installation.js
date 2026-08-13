@@ -79,7 +79,11 @@ async function activateTrackedRuntimeRelease({ manifest, reviewedRelease, schedu
     await scheduler.loadNewOwner(validated);
     await phase('new_owner_loaded');
     const doctor = await scheduler.doctor(validated);
-    requireCondition(doctor?.status === 'pass', 'scheduler_activation_failed');
+    // A newly reviewed producer cannot be fully healthy until it has published
+    // its first same-release projection. Build the typed observation first so
+    // assessActivationHealth can admit only the closed read-only bootstrap
+    // reasons; malformed or broader failing doctor output still rolls back.
+    requireCondition(doctor?.observation && typeof doctor.observation === 'object', 'scheduler_activation_failed');
     requireCondition(typeof filesystem.writeHealthObservation === 'function', 'scheduler_activation_failed');
     const observation = buildInstalledRuntimeHealthObservation({ manifest: validated, reviewedRelease, doctor });
     const activationHealth = assessActivationHealth(observation, reviewedRelease);
