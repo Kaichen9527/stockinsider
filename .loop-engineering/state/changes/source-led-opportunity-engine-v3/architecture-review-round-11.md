@@ -1,7 +1,7 @@
 # V3.15 protected Architecture compatibility evidence
 
 Date: 2026-08-14
-Review authority: fresh Architecture Round 34, carried at the protected worker's
+Review authority: fresh Architecture Round 35, carried at the protected worker's
 stable compatibility path after the immutable Requirements carrier.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
@@ -9,12 +9,12 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Requirements implementation commit: `ba47a63d8b473f6f39a48f673eeccb977bb15560`
-- Requirements evidence carrier: `d023561700a32d8b1252ff0167213f6dae5b09a2`
-- Final repair-closure commit/tree: `d023561700a32d8b1252ff0167213f6dae5b09a2` / `9811364f37a983f0c65d8cabbb36936e92e30b21`
-- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..d023561700a32d8b1252ff0167213f6dae5b09a2`
+- Requirements implementation commit: `70db2f425c55581b21427fa58942625209a94dc3`
+- Requirements evidence carrier: `a6ac12401841cc32032dd7b8ab008971af5f5780`
+- Final repair-closure commit/tree: `a6ac12401841cc32032dd7b8ab008971af5f5780` / `ae1032d6d8e9529d38885bc4853b56fd8707d63b`
+- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..a6ac12401841cc32032dd7b8ab008971af5f5780`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
-- Canonical evidence: this protected Round 34 compatibility carrier.
+- Canonical evidence: this protected Round 35 compatibility carrier.
 
 ## Architecture closure
 
@@ -122,3 +122,12 @@ persistence and successor creation. A wrong or absent hash fails before delegati
 This removes the claim/completion context gap without adding a data source, action
 authority, public mutation, scheduler owner or promotion path. Architecture result:
 `PASS`, `P0=0 P1=0 P2=0`.
+
+Round 35 reviewed the authority-cache repair. Run identity and materialized authority
+pages are separate capabilities: completion may use the run-bound identity returned by
+an authenticated claim, but claim elision is permitted only after the worker received
+non-empty pages whose embedded hash matches that identity. The two caches are private
+to one adapter instance and cannot cross runs or survive process restart. Existing DB
+hash checks, page bounds, immutable reads and completion ownership remain unchanged.
+The production failure was terminal before projection publication. Architecture
+result: `PASS`, `P0=0 P1=0 P2=0`.
