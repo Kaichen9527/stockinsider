@@ -9,12 +9,12 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Requirements implementation commit: `1719653be79729475a68b31c77a61d2773d58408`
-- Requirements evidence carrier: `3a7b139c3302d6e232329fd367d49d9ac2619681`
-- Final repair-closure commit/tree: `3a7b139c3302d6e232329fd367d49d9ac2619681` / `8fe0ee1a33f6bb146b1dbf89459ef70680c19348`
-- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..3a7b139c3302d6e232329fd367d49d9ac2619681`
+- Requirements implementation commit: `ba47a63d8b473f6f39a48f673eeccb977bb15560`
+- Requirements evidence carrier: `d023561700a32d8b1252ff0167213f6dae5b09a2`
+- Final repair-closure commit/tree: `d023561700a32d8b1252ff0167213f6dae5b09a2` / `9811364f37a983f0c65d8cabbb36936e92e30b21`
+- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..d023561700a32d8b1252ff0167213f6dae5b09a2`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
-- Canonical evidence: this protected Round 33 compatibility carrier.
+- Canonical evidence: this protected Round 34 compatibility carrier.
 
 ## Architecture closure
 
