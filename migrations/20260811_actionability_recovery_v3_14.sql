@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS public.legacy_runtime_failure_diagnostics_v3_14 (
   run_id uuid NOT NULL REFERENCES public.legacy_producer_runs_v3_11(run_id) ON DELETE RESTRICT,
   job_id uuid NOT NULL REFERENCES public.legacy_producer_jobs_v3_11(job_id) ON DELETE RESTRICT,
   stage text NOT NULL CHECK (stage IN ('source_sync','mention_claim_extraction','candidate_funnel','facts_refresh','analysis_revision','compact_radar_projection','worker_terminal')),
-  job_kind text NOT NULL CHECK (job_kind IN ('source_root','revision_shard','candidate_batch','analysis_batch','projection_batch','terminal')),
+  job_kind text NOT NULL CHECK (job_kind IN ('source_root','revision_shard','stage_barrier','candidate_batch','analysis_batch','projection_batch','terminal')),
   failure_code text NOT NULL CHECK (failure_code IN ('provider_unavailable','data_integrity_failure','authentication_rejected')),
   failure_origin text NOT NULL CHECK (failure_origin IN ('handler','rpc_validation','persistence','provider','runtime')),
   invariant_code text NOT NULL CHECK (invariant_code IN ('candidate_seed_membership_missing','database_constraint_rejected','provider_timeout','authentication_rejected','data_integrity_failure')),
@@ -26,6 +26,11 @@ CREATE TABLE IF NOT EXISTS public.legacy_runtime_failure_diagnostics_v3_14 (
 );
 
 ALTER TABLE public.legacy_runtime_failure_diagnostics_v3_14 ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.legacy_runtime_failure_diagnostics_v3_14
+  DROP CONSTRAINT IF EXISTS legacy_runtime_failure_diagnostics_v3_14_job_kind_check;
+ALTER TABLE public.legacy_runtime_failure_diagnostics_v3_14
+  ADD CONSTRAINT legacy_runtime_failure_diagnostics_v3_14_job_kind_check
+  CHECK (job_kind IN ('source_root','revision_shard','stage_barrier','candidate_batch','analysis_batch','projection_batch','terminal'));
 REVOKE ALL ON public.legacy_runtime_failure_diagnostics_v3_14 FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON public.legacy_runtime_failure_diagnostics_v3_14 FROM service_role;
 

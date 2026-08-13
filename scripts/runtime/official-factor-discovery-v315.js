@@ -6,6 +6,7 @@ const clamp=(low,high,value)=>Math.min(high,Math.max(low,value));
 const smooth=(value,scale,amplitude)=>50+amplitude*Math.tanh(value/scale);
 const median=(values)=>{const ordered=values.filter(Number.isFinite).sort((a,b)=>a-b);if(!ordered.length)return null;
   const middle=Math.floor(ordered.length/2);return ordered.length%2?ordered[middle]:(ordered[middle-1]+ordered[middle])/2;};
+const uuidFromHash=(value)=>{const hash=sha256(value);return `${hash.slice(0,8)}-${hash.slice(8,12)}-${hash.slice(12,16)}-${hash.slice(16,20)}-${hash.slice(20,32)}`;};
 
 function buildOfficialFactorCandidatesV315({snapshot,cutoff,limit=40}={}){
   if(snapshot?.schema!=='official-coarse-market-snapshot-v3.15'||typeof cutoff!=='string'||!Number.isFinite(Date.parse(cutoff))
@@ -39,8 +40,9 @@ function buildOfficialFactorCandidatesV315({snapshot,cutoff,limit=40}={}){
       coverage:availableWeight,rankingScore,sourceRefs};
     return [{stockId:identity.stockId,symbol:identity.symbol,name:identity.name,exchange:identity.exchange,
       canonicalSector:identity.canonicalSector,sourceClass:'public_research',sourcePriority:clamp(55,95,rankingScore),
-      claimId:`official-factor:${valuation.session}:${valuation.symbol}:${sha256(canonicalJson(factorEvidence)).slice(0,16)}`,
-      mentionId:`official-factor:${valuation.symbol}`,claimAsOf:`${valuation.session}T06:30:00Z`,
+      claimId:uuidFromHash(canonicalJson(['official-factor-claim-v3.15',factorEvidence])),
+      mentionId:uuidFromHash(canonicalJson(['official-factor-mention-v3.15',identity.stockId,valuation.session])),
+      claimAsOf:`${valuation.session}T06:30:00Z`,
       sourceKey:'official_market_factor',sourceName:'TWSE／TPEx 官方市場資料',sourceUrl:valuation.sourceUrl,
       sourcePublishedAt:`${valuation.session}T06:30:00Z`,sourceCollectedAt:snapshot.collectedAt,
       raw:factorEvidence,sourceSummary:`${identity.name}（${identity.symbol}）官方估值與營收因子進入全市場研究排序；這不是買進建議。`,

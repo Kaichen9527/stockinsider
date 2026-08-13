@@ -1,5 +1,7 @@
 BEGIN;
 
+ALTER TYPE public.source_key_v3 ADD VALUE IF NOT EXISTS 'official_market_factor';
+
 -- V3.15 keeps the durable producer state machine unchanged.  It adds a bounded
 -- official whole-market research entrance and a service-role REST claim bridge
 -- so production does not depend on a locally cached database password.

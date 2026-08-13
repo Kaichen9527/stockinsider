@@ -78,6 +78,8 @@ test('V315 official factor discovery admits out-of-source undervaluation researc
     cutoff:'2026-08-13T10:20:00Z'});
   const phison=output.candidates.find((row)=>row.symbol==='8299');
   assert.ok(phison);assert.equal(phison.sourceKey,'official_market_factor');
+  assert.match(phison.claimId,/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/u);
+  assert.match(phison.mentionId,/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/u);
   assert.equal(phison.factorEvidence.coverage,.8);assert.ok(phison.factorEvidence.relativeDiscountPct>40);
   assert.equal('userAction' in phison,false);assert.equal('newPositionAction' in phison,false);
   const missingFundamental=buildOfficialFactorCandidatesV315({snapshot:{schema:'official-coarse-market-snapshot-v3.15',
@@ -197,12 +199,15 @@ test('V315 REST doctor reads private producer state only through the bounded hea
 
 test('V315 migration is additive, bounded, upgrade-safe, and exposes only the authority-carrying REST claim',()=>{
   const sql=readFileSync(path.join(root,'migrations/20260813_opportunity_recovery_v3_15.sql'),'utf8');
+  const v314=readFileSync(path.join(root,'migrations/20260811_actionability_recovery_v3_14.sql'),'utf8');
   assert.doesNotMatch(sql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
   assert.match(sql,/LIMIT 3000/u);assert.match(sql,/octet_length\(v_claim\.read_canonical\)>3145728/u);
   assert.match(sql,/claim_legacy_producer_job_authoritative_v3_15/u);
   assert.match(sql,/claim_legacy_producer_job_rest_v3_15/u);
   assert.match(sql,/read_legacy_runtime_health_rest_v3_15/u);
   assert.match(sql,/p_authority_hash/u);
+  assert.match(sql,/ALTER TYPE public[.]source_key_v3 ADD VALUE IF NOT EXISTS 'official_market_factor'/u);
+  assert.match(v314,/legacy_runtime_failure_diagnostics_v3_14_job_kind_check[\s\S]*'stage_barrier'/u);
   assert.match(sql,/GRANT EXECUTE[\s\S]*claim_legacy_producer_job_rest_v3_15[\s\S]*TO service_role/u);
   assert.match(sql,/REVOKE CREATE ON SCHEMA public/u);
   assert.match(sql,/connector_rank<=1000/u);
