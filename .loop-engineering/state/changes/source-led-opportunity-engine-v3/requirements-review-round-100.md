@@ -1,7 +1,7 @@
 # V3.15 protected Requirements compatibility evidence
 
 Date: 2026-08-13
-Review authority: fresh Requirements Round 144, carried at the protected worker's
+Review authority: fresh Requirements Round 145, carried at the protected worker's
 stable compatibility path without changing the reviewed active artifact graph.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
@@ -9,16 +9,16 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Final repair-closure commit/tree: `6e25bff3fdd53a1b2555b0d8b97aac542469d8f0` / `986d2c5c59afd3fecdd6300998e14f609ac403cf`
-- Full reviewed range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..6e25bff3fdd53a1b2555b0d8b97aac542469d8f0`
+- Final repair-closure commit/tree: `94ff4b42ae7ea34857f47e3fdffb647ba8c8e111` / `2878df894a1ededb6d369f2bb931fdfeb0a3643c`
+- Full reviewed range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..94ff4b42ae7ea34857f47e3fdffb647ba8c8e111`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
-- Canonical evidence: this protected Round 144 compatibility carrier.
+- Canonical evidence: this protected Round 145 compatibility carrier.
 - Acceptance inventory: `1.46.0`, 320 cases, partitioned as 272 product/runtime,
   28 model-runner and 20 evaluation-governance owners.
 
 ## Closure
 
-Round 144 returned PASS for the bounded official-market research entrance, retained
+Round 145 returned PASS for the bounded official-market research entrance, retained
 single decision authority, point-in-time revenue and adjusted-price requirements,
 narrow Supabase REST transport, additive migration and explicit no-buy-quota rule.
 The earlier exact review found future filing leakage and a doctor privilege mismatch;
