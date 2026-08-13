@@ -396,6 +396,26 @@ const checks = {
         recover: async () => {}, begin: async () => {}, write: async () => {}, rollback: async () => {},
       } });
     assert.equal(activated.disposition, 'activated'); assert.deepEqual(activationCalls, ['stage','verify','publish','disable','load','health-observation']);
+    const readonlyDoctor = passingRuntimeDoctor(manifest, reviewedRelease);
+    readonlyDoctor.observation.consumerCompatibility = 'consumer_newer';
+    readonlyDoctor.observation.projectionFreshness = 'stale';
+    const readonlyCalls = [];
+    const readonlyBootstrap = await runtime('auth-source-worker-installation.js').activateTrackedRuntimeRelease({
+      manifest, reviewedRelease, ...testActivationProof,
+      filesystem: { captureActivePointer: async () => 'old', stage: async () => {}, verifyStaged: async () => {},
+        publishRelease: async () => {}, writeHealthObservation: async () => readonlyCalls.push('health-observation'),
+        restoreActivePointer: async () => readonlyCalls.push('restore-pointer'), cleanupIncomplete: async () => {} },
+      scheduler: { capture: async () => 'owners', disablePriorOwners: async () => {}, loadNewOwner: async () => {},
+        doctor: async () => readonlyDoctor, restore: async () => readonlyCalls.push('restore-scheduler') },
+      journal: { recover: async () => {}, begin: async () => {}, write: async () => {}, rollback: async () => {} },
+    });
+    assert.equal(readonlyBootstrap.disposition, 'activated_readonly_bootstrap');
+    assert.deepEqual(readonlyCalls, ['health-observation']);
+    readonlyDoctor.observation.consumerCommitSha = '0'.repeat(40);
+    const mismatchedConsumer = runtime('auth-source-worker-installation.js').assessActivationHealth;
+    assert.throws(() => mismatchedConsumer(runtime('runtime-health.js').buildInstalledRuntimeHealthObservation({
+      manifest: { ...manifest, manifestSha256: '7'.repeat(64) }, reviewedRelease, doctor: readonlyDoctor,
+    }), reviewedRelease), { code: 'scheduler_activation_failed' });
   },
   'PCR-002': () => {
     const { manifest, reviewedRelease } = runtimeRelease(); const validate = runtime('auth-source-worker-installation.js').validateRuntimeInstallationManifest;

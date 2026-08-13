@@ -7,6 +7,11 @@ const INSTALLATION_SCHEMA = 'stockinsider-runtime-installation-v1.1';
 const SHA40 = /^[0-9a-f]{40}$/u;
 const SHA64 = /^[0-9a-f]{64}$/u;
 const RFC3339_SECONDS = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/u;
+const SHA256 = /^[0-9a-f]{64}$/u;
+const READONLY_BOOTSTRAP_REASONS = new Set([
+  'projection_stale',
+  'consumer_producer_incompatible',
+]);
 
 class RuntimeInstallationError extends Error {
   constructor(reason) { super(reason); this.code = reason; }
@@ -38,6 +43,19 @@ function validateRuntimeInstallationManifest(manifest, reviewedRelease) {
   return Object.freeze({ ...manifest, manifestSha256: sha256(canonicalJson(manifest)) });
 }
 
+function assessActivationHealth(observation, reviewedRelease) {
+  const health = assessTrackedRuntimeHealth(observation);
+  if (health.status === 'pass') return Object.freeze({ disposition: 'activated', health });
+  const reasons = health.reasons ?? [];
+  const readonlyBootstrap = observation.consumerCommitSha === reviewedRelease.commitSha
+    && SHA256.test(observation.projectionChecksum ?? '')
+    && ['fresh', 'stale'].includes(observation.projectionFreshness)
+    && reasons.includes('consumer_producer_incompatible')
+    && reasons.every((reason) => READONLY_BOOTSTRAP_REASONS.has(reason));
+  requireCondition(readonlyBootstrap, 'scheduler_activation_failed');
+  return Object.freeze({ disposition: 'activated_readonly_bootstrap', health });
+}
+
 async function activateTrackedRuntimeRelease({ manifest, reviewedRelease, scheduler, filesystem, journal,
   activationAuthority, verifyActivationAuthority }) {
   const validated = validateRuntimeInstallationManifest(manifest, reviewedRelease);
@@ -64,11 +82,11 @@ async function activateTrackedRuntimeRelease({ manifest, reviewedRelease, schedu
     requireCondition(doctor?.status === 'pass', 'scheduler_activation_failed');
     requireCondition(typeof filesystem.writeHealthObservation === 'function', 'scheduler_activation_failed');
     const observation = buildInstalledRuntimeHealthObservation({ manifest: validated, reviewedRelease, doctor });
-    requireCondition(assessTrackedRuntimeHealth(observation).status === 'pass', 'scheduler_activation_failed');
+    const activationHealth = assessActivationHealth(observation, reviewedRelease);
     await filesystem.writeHealthObservation(observation);
     await phase('doctor_passed');
     await phase('complete');
-    return Object.freeze({ disposition: 'activated', manifestSha256: validated.manifestSha256 });
+    return Object.freeze({ disposition: activationHealth.disposition, manifestSha256: validated.manifestSha256 });
   } catch (error) {
     try {
       await scheduler.restore(priorScheduler);
@@ -83,4 +101,5 @@ async function activateTrackedRuntimeRelease({ manifest, reviewedRelease, schedu
   }
 }
 
-module.exports = { INSTALLATION_SCHEMA, RuntimeInstallationError, activateTrackedRuntimeRelease, validateRuntimeInstallationManifest };
+module.exports = { INSTALLATION_SCHEMA, RuntimeInstallationError, activateTrackedRuntimeRelease,
+  assessActivationHealth, validateRuntimeInstallationManifest };
