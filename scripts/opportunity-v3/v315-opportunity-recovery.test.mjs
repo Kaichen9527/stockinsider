@@ -208,9 +208,17 @@ test('V315 migration is additive, bounded, upgrade-safe, and exposes only the au
   assert.match(sql,/read_legacy_mention_barrier_transport_v3_15/u);
   assert.match(sql,/jsonb_build_object\('candidates'/u);
   assert.match(sql,/ORDER BY job\.shard_ordinal,candidate\.ordinality/u);
+  assert.match(sql,/v_job\.stage<>'mention_claim_extraction' OR v_job\.job_kind<>'stage_barrier'/u);
+  assert.match(sql,/SELECT run\.\* INTO v_run[\s\S]*?FOR UPDATE[\s\S]*?SELECT job\.\* INTO v_job[\s\S]*?FOR UPDATE/u);
+  assert.match(sql,/v_barrier_json:=public\.read_legacy_mention_barrier_transport_v3_15\(p_run\)[\s\S]*?RETURN ROW/u);
+  assert.ok(sql.indexOf("v_barrier_json:=public.read_legacy_mention_barrier_transport_v3_15(p_run)")
+    <sql.indexOf('v_claim:=public.claim_legacy_producer_job_authoritative_v3_15'),
+  'compact barrier must bypass predecessor materialization before its 3 MiB bound');
   assert.match(sql,/mention_barrier_transport_bound/u);
   assert.match(sql,/LIMIT 4001/u);
   assert.match(sql,/OWNER TO legacy_correctness_rpc_owner/u);
   assert.match(sql,/GRANT EXECUTE ON FUNCTION public\.read_legacy_mention_barrier_transport_v3_15\(uuid\)[\s\S]*TO opportunity_v3_rpc_owner/u);
+  assert.match(sql,/ALTER FUNCTION public\.claim_legacy_mention_barrier_transport_v3_15\(uuid,uuid,uuid,integer\)[\s\S]*OWNER TO legacy_correctness_rpc_owner/u);
+  assert.match(sql,/GRANT EXECUTE ON FUNCTION public\.claim_legacy_mention_barrier_transport_v3_15\(uuid,uuid,uuid,integer\)[\s\S]*TO opportunity_v3_rpc_owner/u);
   assert.doesNotMatch(sql,/v_claim\.read_json:=jsonb_build_object\('results'/u);
 });

@@ -70,6 +70,52 @@ BEGIN
   RETURN v_transport;
 END $mention_transport$;
 
+CREATE OR REPLACE FUNCTION public.claim_legacy_mention_barrier_transport_v3_15(
+  p_run uuid,p_job uuid,p_token uuid,p_lease integer
+) RETURNS public.legacy_producer_claim_v3_11
+LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $mention_claim$
+DECLARE
+  v_job public.legacy_producer_jobs_v3_11%ROWTYPE;
+  v_run public.legacy_producer_runs_v3_11%ROWTYPE;
+  v_payload public.legacy_producer_job_payloads_v3_11%ROWTYPE;
+  v_now timestamptz:=date_trunc('second',clock_timestamp());
+  v_owner_hash text;
+  v_barrier_json jsonb;
+  v_barrier_bytes bytea;
+  v_barrier_hash text;
+  v_barrier_count integer;
+BEGIN
+  IF p_lease<>120 THEN RETURN NULL; END IF;
+  v_owner_hash:=encode(extensions.digest(convert_to(p_token::text,'utf8'),'sha256'),'hex');
+  SELECT run.* INTO v_run FROM public.legacy_producer_runs_v3_11 run
+  WHERE run.run_id=p_run AND run.status='running' AND run.owner_token_hash=v_owner_hash
+    AND run.lease_expires_at>=v_now FOR UPDATE;
+  IF NOT FOUND THEN RETURN NULL; END IF;
+  SELECT job.* INTO v_job FROM public.legacy_producer_jobs_v3_11 job
+  WHERE job.job_id=p_job AND job.run_id=p_run AND job.status IN ('queued','retryable') FOR UPDATE;
+  IF NOT FOUND OR v_job.stage<>'mention_claim_extraction' OR v_job.job_kind<>'stage_barrier' THEN
+    RETURN NULL;
+  END IF;
+  UPDATE public.legacy_producer_jobs_v3_11 SET status='leased',attempt=attempt+1,
+    owner_token_hash=v_owner_hash,leased_at=v_now,heartbeat_at=v_now,
+    lease_expires_at=v_now+interval '120 seconds'
+  WHERE job_id=p_job RETURNING * INTO v_job;
+  UPDATE public.legacy_producer_runs_v3_11 SET heartbeat_at=v_now,
+    lease_expires_at=v_now+interval '120 seconds' WHERE run_id=p_run;
+  SELECT payload.* INTO STRICT v_payload
+  FROM public.legacy_producer_job_payloads_v3_11 payload WHERE payload.job_id=p_job;
+  v_barrier_json:=public.read_legacy_mention_barrier_transport_v3_15(p_run);
+  v_barrier_count:=jsonb_array_length(v_barrier_json->'candidates');
+  v_barrier_bytes:=convert_to(v_barrier_json::text,'utf8');
+  v_barrier_hash:=encode(extensions.digest(v_barrier_bytes,'sha256'),'hex');
+  RETURN ROW(v_job.run_id,v_job.job_id,v_job.stage,v_job.job_kind,v_job.stage_ordinal,
+    v_job.shard_ordinal,v_job.execution_ordinal,v_job.revision_id,v_job.attempt,
+    v_payload.payload_canonical,v_payload.payload_json,v_payload.payload_hash,
+    NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,
+    'mention_shard_results',v_barrier_bytes,v_barrier_json,v_barrier_hash,
+    v_barrier_count,v_job.lease_expires_at)::public.legacy_producer_claim_v3_11;
+END $mention_claim$;
+
 CREATE OR REPLACE FUNCTION public.claim_legacy_producer_job_v3_11(
   p_run uuid,p_job uuid,p_token uuid,p_lease integer
 ) RETURNS public.legacy_producer_claim_v3_11
@@ -79,6 +125,13 @@ DECLARE
   v_cutoff timestamptz;
   v_universe jsonb;
 BEGIN
+  -- The V3.11 predecessor materializes the complete per-shard result array and
+  -- enforces its 3 MiB canonical bound before a wrapper can replace that value.
+  -- Claim the mention barrier directly with the same row locks, owner-token,
+  -- lease and attempt transitions, then return only the reviewed candidate
+  -- projection. All shard evidence remains immutable in the result table.
+  v_claim:=public.claim_legacy_mention_barrier_transport_v3_15(p_run,p_job,p_token,p_lease);
+  IF v_claim.run_id IS NOT NULL THEN RETURN v_claim; END IF;
   v_claim:=public.claim_legacy_producer_job_authoritative_v3_15(p_run,p_job,p_token,p_lease);
   IF v_claim.run_id IS NULL THEN
     RETURN v_claim;
@@ -212,6 +265,8 @@ ALTER FUNCTION public.claim_legacy_producer_job_authoritative_v3_15(uuid,uuid,uu
   OWNER TO opportunity_v3_rpc_owner;
 ALTER FUNCTION public.read_legacy_mention_barrier_transport_v3_15(uuid)
   OWNER TO legacy_correctness_rpc_owner;
+ALTER FUNCTION public.claim_legacy_mention_barrier_transport_v3_15(uuid,uuid,uuid,integer)
+  OWNER TO legacy_correctness_rpc_owner;
 ALTER FUNCTION public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)
   OWNER TO opportunity_v3_rpc_owner;
 ALTER FUNCTION public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)
@@ -221,6 +276,7 @@ ALTER FUNCTION public.append_legacy_runtime_health_rest_v3_15(text,text,text,byt
 ALTER FUNCTION public.read_legacy_runtime_health_rest_v3_15() OWNER TO opportunity_v3_rpc_owner;
 REVOKE ALL ON FUNCTION public.claim_legacy_producer_job_authoritative_v3_15(uuid,uuid,uuid,integer),
   public.read_legacy_mention_barrier_transport_v3_15(uuid),
+  public.claim_legacy_mention_barrier_transport_v3_15(uuid,uuid,uuid,integer),
   public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer),
   public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text),
   public.append_legacy_runtime_health_rest_v3_15(text,text,text,bytea,jsonb,text,timestamptz),
@@ -230,6 +286,8 @@ GRANT EXECUTE ON FUNCTION public.claim_legacy_producer_job_authoritative_v3_15(u
   public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)
   TO legacy_correctness_rpc_owner;
 GRANT EXECUTE ON FUNCTION public.read_legacy_mention_barrier_transport_v3_15(uuid)
+  TO opportunity_v3_rpc_owner;
+GRANT EXECUTE ON FUNCTION public.claim_legacy_mention_barrier_transport_v3_15(uuid,uuid,uuid,integer)
   TO opportunity_v3_rpc_owner;
 GRANT EXECUTE ON FUNCTION public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)
   TO service_role;
