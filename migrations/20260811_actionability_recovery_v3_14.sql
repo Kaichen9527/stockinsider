@@ -719,7 +719,7 @@ BEGIN
   END LOOP;
   ALTER TABLE public.opportunity_public_projections_v3
     ADD CONSTRAINT opportunity_projection_acceptance_v3_14_check
-    CHECK(acceptance_version IN('1.45.1','1.46.0')) NOT VALID;
+    CHECK(acceptance_version IN('1.44.6','1.45.1','1.46.0')) NOT VALID;
   ALTER TABLE public.opportunity_public_projections_v3
     VALIDATE CONSTRAINT opportunity_projection_acceptance_v3_14_check;
 
@@ -729,10 +729,12 @@ BEGIN
     'public.complete_opportunity_job_v3(uuid,text,text,opportunity_job_counts_v3)'::regprocedure
   ] LOOP
     SELECT pg_get_functiondef(v_regprocedure) INTO STRICT v_definition;
-    v_old_count := (length(v_definition)-length(replace(v_definition,'1.45.1','')))/length('1.45.1');
+    v_old_count :=
+      (length(v_definition)-length(replace(v_definition,'1.44.6','')))/length('1.44.6')
+      +(length(v_definition)-length(replace(v_definition,'1.45.1','')))/length('1.45.1');
     v_new_count := (length(v_definition)-length(replace(v_definition,'1.46.0','')))/length('1.46.0');
     IF v_old_count=1 AND v_new_count=0 THEN
-      EXECUTE replace(v_definition,'1.45.1','1.46.0');
+      EXECUTE replace(replace(v_definition,'1.44.6','1.46.0'),'1.45.1','1.46.0');
     ELSIF NOT(v_old_count=0 AND v_new_count=1) THEN
       RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='acceptance_identity_upgrade_shape';
     END IF;
@@ -743,12 +745,17 @@ BEGIN
     'public.select_opportunity_public_projection_v3(timestamp with time zone)'::regprocedure
   ] LOOP
     SELECT pg_get_functiondef(v_regprocedure) INTO STRICT v_definition;
-    v_old_count := (length(v_definition)-length(replace(v_definition,
-      '393a6080aad2278b5da08b2a34ae824cca0fa83f99221ebc07c077753adcf9c9','')))/64;
+    v_old_count :=
+      (length(v_definition)-length(replace(v_definition,
+        'ebaa6dbdaa7dd55bb261187008f51e930919e7c0cfe07732d531e01267e67c41','')))/64
+      +(length(v_definition)-length(replace(v_definition,
+        '393a6080aad2278b5da08b2a34ae824cca0fa83f99221ebc07c077753adcf9c9','')))/64;
     v_new_count := (length(v_definition)-length(replace(v_definition,
       'c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729','')))/64;
     IF v_old_count=1 AND v_new_count=0 THEN
-      EXECUTE replace(v_definition,
+      EXECUTE replace(replace(v_definition,
+        'ebaa6dbdaa7dd55bb261187008f51e930919e7c0cfe07732d531e01267e67c41',
+        'c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729'),
         '393a6080aad2278b5da08b2a34ae824cca0fa83f99221ebc07c077753adcf9c9',
         'c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729');
     ELSIF NOT(v_old_count=0 AND v_new_count=1) THEN

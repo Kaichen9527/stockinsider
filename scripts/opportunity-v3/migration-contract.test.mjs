@@ -312,6 +312,62 @@ after(() => {
   fs.rmSync(cluster.directory, { recursive: true, force: true });
 });
 
+test('V3.14 acceptance upgrade accepts the deployed V3.11 predecessor identity', () => {
+  const marker = 'DO $acceptance_upgrade$';
+  const start = actionabilityRecoverySql.indexOf(marker);
+  const endMarker = '$acceptance_upgrade$;';
+  const end = actionabilityRecoverySql.indexOf(endMarker, start) + endMarker.length;
+  assert.ok(start >= 0 && end > start, 'acceptance upgrade block is extractable');
+  const acceptanceUpgradeSql = actionabilityRecoverySql.slice(start, end);
+
+  psql(`DO $downgrade_production_predecessor$
+  DECLARE v_regprocedure regprocedure;v_definition text;
+  BEGIN
+    FOREACH v_regprocedure IN ARRAY ARRAY[
+      'public.begin_opportunity_run_v3(opportunity_mode_v3,opportunity_run_purpose_v3,timestamp with time zone,text,uuid)'::regprocedure,
+      'public.seal_opportunity_run_inputs_v3(uuid,text)'::regprocedure,
+      'public.complete_opportunity_job_v3(uuid,text,text,opportunity_job_counts_v3)'::regprocedure,
+      'public.select_opportunity_public_projection_v3(timestamp with time zone)'::regprocedure
+    ] LOOP
+      SELECT pg_get_functiondef(v_regprocedure) INTO STRICT v_definition;
+      v_definition := replace(v_definition,'1.46.0','1.44.6');
+      v_definition := replace(v_definition,
+        'c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729',
+        'ebaa6dbdaa7dd55bb261187008f51e930919e7c0cfe07732d531e01267e67c41');
+      EXECUTE v_definition;
+    END LOOP;
+  END $downgrade_production_predecessor$;`);
+
+  psql(acceptanceUpgradeSql);
+  psql(acceptanceUpgradeSql);
+  const result = JSON.parse(psql(`SELECT jsonb_build_object(
+    'versions',(
+      SELECT bool_and(position('1.46.0' in pg_get_functiondef(proc))>0)
+      FROM unnest(ARRAY[
+        'public.begin_opportunity_run_v3(opportunity_mode_v3,opportunity_run_purpose_v3,timestamp with time zone,text,uuid)'::regprocedure,
+        'public.seal_opportunity_run_inputs_v3(uuid,text)'::regprocedure,
+        'public.complete_opportunity_job_v3(uuid,text,text,opportunity_job_counts_v3)'::regprocedure
+      ]) proc
+    ),
+    'comparison',(
+      SELECT bool_and(position(
+        'c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729'
+        in pg_get_functiondef(proc))>0)
+      FROM unnest(ARRAY[
+        'public.begin_opportunity_run_v3(opportunity_mode_v3,opportunity_run_purpose_v3,timestamp with time zone,text,uuid)'::regprocedure,
+        'public.select_opportunity_public_projection_v3(timestamp with time zone)'::regprocedure
+      ]) proc
+    ),
+    'historicalRows',(
+      SELECT position('1.44.6' in pg_get_constraintdef(oid))>0
+      FROM pg_constraint
+      WHERE conrelid='public.opportunity_public_projections_v3'::regclass
+        AND conname='opportunity_projection_acceptance_v3_14_check'
+    )
+  )::text;`,['-Atq']));
+  assert.deepEqual(result,{versions:true,comparison:true,historicalRows:true});
+});
+
 const functions = [
   'consume_internal_nonce_v3', 'purge_internal_nonces_v3', 'append_source_document_revision_v3',
   'append_instrument_roster_authority_v3', 'append_stock_sector_assignment_v3', 'append_trading_session_v3',
