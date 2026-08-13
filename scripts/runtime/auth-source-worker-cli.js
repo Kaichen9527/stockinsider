@@ -1361,6 +1361,14 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
       const authorityPeers=peerUniverse.filter((row)=>!authoritySymbols.has(row.symbol)).slice(0,240);
       const bridgeAvailable = ['legacy-product-value-bridge-v3.12','legacy-product-value-bridge-v3.13',
         'legacy-product-value-bridge-v3.14'].includes(bundle.bridgeSchema);
+      const ingestionResume=bundle.officialIngestionResume;
+      if(bridgeAvailable&&ingestionResume?.schema==='legacy-official-ingestion-resume-v3.15'
+        &&ingestionResume.sourceCutoff===bundle.sourceCutoff&&!officialSnapshotsByCutoff.has(bundle.sourceCutoff)){
+        officialSnapshotsByCutoff.set(bundle.sourceCutoff,Promise.resolve({availability:'available',sourceFailures:[],
+          calendarSessions:ingestionResume.calendarSessions??[],financialFacts:ingestionResume.financialFacts??[],
+          priceObservations:ingestionResume.priceObservations??[],corporateActionSnapshots:ingestionResume.corporateActionSnapshots??[],
+          valuations:ingestionResume.reportedValuations??[],valuationHistory:[],twseIndex:[],tpexIndex:[],revenues:[],foreignFlow:null}));
+      }
       if (bridgeAvailable && !officialSnapshotsByCutoff.has(bundle.sourceCutoff)) {
         officialSnapshotsByCutoff.set(bundle.sourceCutoff,loadOfficialTwMarketSnapshot({ cutoff:bundle.sourceCutoff,
           candidates:authorityCandidates,peerCandidates:authorityPeers,

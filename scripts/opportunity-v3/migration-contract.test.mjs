@@ -767,6 +767,19 @@ test('V3.14 official chunks persist under the exact lease, replay idempotently, 
   assert.deepEqual(result,{chunkRows:2,preCompletionRows:0,sessionRows:1,nextCutoffRows:1,jobStatus:'succeeded'});
 });
 
+test('V3.15 production-sized authority lookup and staged resume are installed',()=>{
+  const value=JSON.parse(psql(`SELECT jsonb_build_object(
+    'symbolIndex',to_regclass('public.stock_instruments_v3_symbol_authority_v3_15') IS NOT NULL,
+    'exactRegistryHash',position('registry.stream_key_hash=encode' in pg_get_functiondef(
+      'public.resolve_legacy_instrument_authority_v3_13_internal(uuid,timestamptz)'::regprocedure))>0,
+    'boundedSymbolTable',position('FROM public.stock_instruments_v3 authority' in pg_get_functiondef(
+      'public.resolve_legacy_instrument_symbol_authority_v3_13_internal(text,timestamptz)'::regprocedure))>0,
+    'resumeTransport',position('legacy-official-ingestion-resume-v3.15' in pg_get_functiondef(
+      'public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)'::regprocedure))>0
+  )::text;`,['-At']).trim());
+  assert.deepEqual(value,{symbolIndex:true,exactRegistryHash:true,boundedSymbolTable:true,resumeTransport:true});
+});
+
 test('V3.14 completion persists a non-empty exact decision revision and heartbeat',()=>{
   const codec=runtime('codec.js');
   const projectionCodec=runtime('compact-radar-projection.js');
@@ -3110,9 +3123,12 @@ test('authority registries enforce exact 64/65 family bounds and serialized boun
   assert.match(functionDefinitions.resolve_legacy_instrument_authority_v3_13,
     /opportunity_authority_selected_stream_count_v3_internal\('instrument_roster'/u);
   assert.match(functionDefinitions.resolve_legacy_instrument_authority_v3_13_internal,/LIMIT 65/u);
-  assert.match(functionDefinitions.resolve_legacy_instrument_symbol_authority_v3_13_internal,/LIMIT 20001/u);
+  assert.match(functionDefinitions.resolve_legacy_instrument_symbol_authority_v3_13_internal,
+    /FROM public[.]stock_instruments_v3 authority[\s\S]*?LIMIT 3/u);
+  assert.match(functionDefinitions.resolve_legacy_instrument_symbol_authority_v3_13_internal,
+    /v_stream_count>2[\s\S]*?authority_revision_conflict/u);
   assert.doesNotMatch(functionDefinitions.resolve_legacy_instrument_symbol_authority_v3_13_internal,
-    /FROM public[.]stock_instruments_v3 candidate/u);
+    /convert_from\(registry[.]stream_key_canonical/u);
   assert.match(functionDefinitions.resolve_legacy_sector_authority_v3_13,
     /opportunity_authority_selected_stream_count_v3_internal\('sector_assignment'/u);
   assert.match(functionDefinitions.resolve_legacy_sector_authority_v3_13_internal,/LIMIT 65/u);

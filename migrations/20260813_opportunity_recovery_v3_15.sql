@@ -211,15 +211,98 @@ CREATE OR REPLACE FUNCTION public.claim_legacy_producer_job_rest_v3_15(
   p_run uuid,p_job uuid,p_token uuid,p_lease integer,p_authority_hash text
 ) RETURNS public.legacy_producer_claim_v3_11
 LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $rest_claim$
-DECLARE v_claim public.legacy_producer_claim_v3_11;
+DECLARE v_claim public.legacy_producer_claim_v3_11;v_resume jsonb;
 BEGIN
   IF coalesce(p_authority_hash,'')<>'' AND p_authority_hash!~'^[0-9a-f]{64}$' THEN
     RAISE EXCEPTION USING ERRCODE='PT403',MESSAGE='authentication_rejected';
   END IF;
   PERFORM pg_catalog.set_config('stockinsider.legacy_authority_hash',coalesce(p_authority_hash,''),true);
   v_claim:=public.claim_legacy_producer_job_v3_11(p_run,p_job,p_token,p_lease);
+  IF v_claim.stage='facts_refresh' AND EXISTS(SELECT 1
+    FROM public.legacy_official_ingestion_chunks_v3_14 chunk
+    WHERE chunk.run_id=p_run AND chunk.job_id=p_job AND chunk.chunk_kind='terminal') THEN
+    SELECT jsonb_build_object('schema','legacy-official-ingestion-resume-v3.15',
+      'sourceCutoff',terminal.items_json#>>'{0,sourceCutoff}',
+      'calendarSessions',(SELECT coalesce(jsonb_agg(item.value ORDER BY chunk.chunk_ordinal,item.ordinality),'[]'::jsonb)
+        FROM public.legacy_official_ingestion_chunks_v3_14 chunk
+        CROSS JOIN LATERAL jsonb_array_elements(chunk.items_json) WITH ORDINALITY item(value,ordinality)
+        WHERE chunk.run_id=p_run AND chunk.job_id=p_job AND chunk.chunk_kind='trading_sessions'),
+      'financialFacts',(SELECT coalesce(jsonb_agg(item.value ORDER BY chunk.chunk_ordinal,item.ordinality),'[]'::jsonb)
+        FROM public.legacy_official_ingestion_chunks_v3_14 chunk
+        CROSS JOIN LATERAL jsonb_array_elements(chunk.items_json) WITH ORDINALITY item(value,ordinality)
+        WHERE chunk.run_id=p_run AND chunk.job_id=p_job AND chunk.chunk_kind='financial_facts'),
+      'priceObservations',(SELECT coalesce(jsonb_agg(item.value ORDER BY chunk.chunk_ordinal,item.ordinality),'[]'::jsonb)
+        FROM public.legacy_official_ingestion_chunks_v3_14 chunk
+        CROSS JOIN LATERAL jsonb_array_elements(chunk.items_json) WITH ORDINALITY item(value,ordinality)
+        WHERE chunk.run_id=p_run AND chunk.job_id=p_job AND chunk.chunk_kind='price_observations'),
+      'corporateActionSnapshots',(SELECT coalesce(jsonb_agg(item.value ORDER BY chunk.chunk_ordinal,item.ordinality),'[]'::jsonb)
+        FROM public.legacy_official_ingestion_chunks_v3_14 chunk
+        CROSS JOIN LATERAL jsonb_array_elements(chunk.items_json) WITH ORDINALITY item(value,ordinality)
+        WHERE chunk.run_id=p_run AND chunk.job_id=p_job AND chunk.chunk_kind='corporate_action_snapshots'),
+      'reportedValuations',(SELECT coalesce(jsonb_agg(item.value ORDER BY chunk.chunk_ordinal,item.ordinality),'[]'::jsonb)
+        FROM public.legacy_official_ingestion_chunks_v3_14 chunk
+        CROSS JOIN LATERAL jsonb_array_elements(chunk.items_json) WITH ORDINALITY item(value,ordinality)
+        WHERE chunk.run_id=p_run AND chunk.job_id=p_job AND chunk.chunk_kind='reported_valuations'))
+    INTO v_resume FROM public.legacy_official_ingestion_chunks_v3_14 terminal
+    WHERE terminal.run_id=p_run AND terminal.job_id=p_job AND terminal.chunk_kind='terminal';
+    v_claim.read_json:=jsonb_set(v_claim.read_json,'{officialIngestionResume}',v_resume,true);
+    v_claim.read_canonical:=convert_to(public.legacy_canonical_json_v3_13(v_claim.read_json),'utf8');
+    IF octet_length(v_claim.read_canonical)>12582912 THEN
+      RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='official_ingestion_resume_bound';
+    END IF;
+    v_claim.read_hash:=encode(extensions.digest(v_claim.read_canonical,'sha256'),'hex');
+  END IF;
   RETURN v_claim;
 END $rest_claim$;
+
+-- Production-sized official fact batches must not scan and decode the full
+-- authority registry once per fact. Resolve the exact registry stream through
+-- its canonical hash and discover symbol candidates through a bounded index.
+CREATE INDEX IF NOT EXISTS stock_instruments_v3_symbol_authority_v3_15
+  ON public.stock_instruments_v3(symbol,recorded_at DESC,stock_id,instrument_authority_id);
+
+DO $accelerate_instrument_registry_lookup$
+DECLARE v_definition text;v_rewritten text;
+BEGIN
+  SELECT pg_get_functiondef('public.resolve_legacy_instrument_authority_v3_13_internal(uuid,timestamptz)'::regprocedure)
+    INTO v_definition;
+  IF position('registry.stream_key_hash=encode' IN v_definition)>0 THEN RETURN;END IF;
+  v_rewritten:=replace(v_definition,
+    $$WHERE registry.family='instrument_roster'
+      AND (convert_from(registry.stream_key_canonical,'utf8')::jsonb->>1)::uuid=p_stock_id$$,
+    $$WHERE registry.family='instrument_roster'
+      AND registry.stream_key_hash=encode(extensions.digest(convert_to(regexp_replace(
+        jsonb_build_array('instrument_roster',p_stock_id)::text,', ', ',', 'g'),'utf8'),'sha256'),'hex')
+      AND registry.stream_key_canonical=convert_to(regexp_replace(
+        jsonb_build_array('instrument_roster',p_stock_id)::text,', ', ',', 'g'),'utf8')$$);
+  IF v_rewritten=v_definition OR position('registry.stream_key_hash=encode' IN v_rewritten)=0 THEN
+    RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='instrument_registry_lookup_upgrade_shape';
+  END IF;
+  EXECUTE v_rewritten;
+END $accelerate_instrument_registry_lookup$;
+
+CREATE OR REPLACE FUNCTION public.resolve_legacy_instrument_symbol_authority_v3_13_internal(
+  p_symbol text,p_cutoff timestamptz
+) RETURNS SETOF public.stock_instruments_v3
+LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path='' AS $resolver$
+DECLARE v_matches integer;v_stream_count integer;v_streams uuid[];
+BEGIN
+  SELECT array_agg(stock_id ORDER BY stock_id),count(*) INTO v_streams,v_stream_count FROM(
+    SELECT DISTINCT authority.stock_id
+    FROM public.stock_instruments_v3 authority
+    WHERE authority.symbol=p_symbol AND authority.recorded_at<=p_cutoff
+      AND authority.source_timestamp<=p_cutoff AND authority.valid_from<=p_cutoff
+      AND(authority.valid_to IS NULL OR p_cutoff<authority.valid_to)
+    ORDER BY authority.stock_id LIMIT 3
+  ) bounded;
+  IF v_stream_count>2 THEN RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='authority_revision_conflict';END IF;
+  RETURN QUERY
+  SELECT authority.* FROM unnest(coalesce(v_streams,'{}'::uuid[])) stream(stock_id)
+  CROSS JOIN LATERAL public.resolve_legacy_instrument_authority_v3_13_internal(stream.stock_id,p_cutoff) authority
+  WHERE authority.symbol=p_symbol ORDER BY authority.stock_id LIMIT 2;
+  GET DIAGNOSTICS v_matches=ROW_COUNT;
+  IF v_matches>1 THEN RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='authority_revision_conflict';END IF;
+END $resolver$;
 
 CREATE OR REPLACE FUNCTION public.append_legacy_runtime_health_rest_v3_15(
   p_producer_commit_sha text,p_worker_sha256 text,p_scheduler_config_sha256 text,

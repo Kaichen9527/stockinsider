@@ -281,6 +281,9 @@ test('V314-007 runtime diagnostics never serialize SQL text or connection creden
   assert.equal(diagnostic.stage,'candidate_funnel');
   assert.equal(diagnostic.jobKind,'candidate_batch');
   assert.equal(diagnostic.origin,'persistence');
+  const barrier=safeFailureDiagnostic(new Error('completion failed'),{stage:'facts_refresh',jobKind:'stage_barrier',
+    origin:'handler',producerSha:'b'.repeat(40)});
+  assert.equal(barrier.jobKind,'stage_barrier');
 });
 
 test('V314-008 Web and runtime share exact release compatibility authority', () => {
@@ -708,6 +711,27 @@ test('V314-016 official ingestion streams bounded idempotency-addressed chunks a
   assert.ok(seen.filter((row)=>row.kind!=='terminal').every((row)=>row.items.length<=200));
   assert.equal(summary.counts.trading_sessions,401);assert.equal(summary.counts.reported_valuations,401);
   assert.match(summary.terminalRoot,/^[0-9a-f]{64}$/u);
+});
+
+test('V314-016b a staged ingestion resume is replayed without refetching mutable provider state', async () => {
+  const {buildStageHandlers}=runtime('auth-source-worker-cli.js');
+  const {canonicalJson,sha256}=runtime('codec.js');
+  const {validateAuthSourceDagConfig}=runtime('source-run-config.js');
+  const config=validateAuthSourceDagConfig(readFileSync(path.join(root,'config/runtime/auth-source-dag.json')));
+  const sourceCutoff='2026-08-11T00:00:00Z';const persisted=[];
+  const bundle={sourceCutoff,bridgeSchema:'legacy-product-value-bridge-v3.14',candidateResult:{candidates:[],discoveryDelta:{}},
+    candidateAuthorityRows:[],peerUniverseRows:[],sourceProvenanceRows:[],financialRows:[],priceRows:[],legacyPriceRows:[],
+    benchmarkRows:[],dislocationCandidates:[],projectionFreshnessSchedule:[],reportedPeBackfillSessions:[],
+    officialPriceBackfillSymbols:[],corporateActionBackfillSessions:[],officialIngestionResume:{
+      schema:'legacy-official-ingestion-resume-v3.15',sourceCutoff,calendarSessions:[],financialFacts:[],
+      priceObservations:[],corporateActionSnapshots:[],reportedValuations:[]}};
+  const canonical=canonicalJson(bundle);
+  const handlers=buildStageHandlers(config,'a'.repeat(40),'b'.repeat(64),{fetchImpl:async()=>{
+    throw new Error('provider fetch must not run during immutable resume');},persistOfficialIngestionChunk:async(row)=>persisted.push(row)});
+  const output=await handlers.facts_refresh({runId:'run',jobId:'job',ownerToken:'token',readKind:'candidate_fact_plane',
+    readCanonical:Buffer.from(canonical),readJson:bundle,readHash:sha256(canonical)});
+  assert.equal(output.json.officialIngestion.schema,'legacy-official-ingestion-v3.14');
+  assert.deepEqual(persisted.map((row)=>row.kind),['terminal']);
 });
 
 test('V314-016a unchanged financial semantics are not appended on every collection heartbeat', () => {
