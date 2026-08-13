@@ -214,6 +214,7 @@ test('V315 migration is additive, bounded, upgrade-safe, and exposes only the au
   assert.ok(sql.indexOf("v_barrier_json:=public.read_legacy_mention_barrier_transport_v3_15(p_run)")
     <sql.indexOf('v_claim:=public.claim_legacy_producer_job_authoritative_v3_15'),
   'compact barrier must bypass predecessor materialization before its 3 MiB bound');
+  assert.match(sql,/v_claim\.predecessor_result_canonical:=NULL;[\s\S]*?v_claim\.predecessor_result_json:=NULL;[\s\S]*?v_claim\.predecessor_result_hash:=NULL;/u);
   assert.match(sql,/mention_barrier_transport_bound/u);
   assert.match(sql,/LIMIT 4001/u);
   assert.match(sql,/OWNER TO legacy_correctness_rpc_owner/u);

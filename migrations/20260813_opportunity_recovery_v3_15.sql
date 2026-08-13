@@ -196,6 +196,12 @@ BEGIN
   IF octet_length(v_claim.read_canonical)>3145728 OR v_claim.read_row_count>20000 THEN
     RAISE EXCEPTION 'bound_violation';
   END IF;
+  -- The candidate read bundle already contains the immutable mention result.
+  -- Do not serialize the same 1.87 MiB predecessor bytes and parsed JSON a
+  -- second time through PostgREST; the durable predecessor row is unchanged.
+  v_claim.predecessor_result_canonical:=NULL;
+  v_claim.predecessor_result_json:=NULL;
+  v_claim.predecessor_result_hash:=NULL;
   RETURN v_claim;
 END $claim$;
 
