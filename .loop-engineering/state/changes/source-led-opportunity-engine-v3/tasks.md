@@ -1678,6 +1678,11 @@ This approval authorizes implementation only. It does not authorize production m
   coarse-universe and health RPCs; do not reset the database password.
 - [x] Prove the five-migration chain applies twice on a fresh database; migration
   contract is 51/51 and V3.15 focused product regression is 7/7.
+- [x] Obtain fresh Requirements Round 138 PASS over commit
+  `835f66ba8589f6fa6d58be71ad8880b070b2da11` / tree
+  `4e16faa465278eface62428fca172a0b506440d9` and fresh Architecture Round 19
+  PASS over commit `70167d6a3d8015824fe1a695505d06ae6b03179f` / tree
+  `25111b0c4f8204cc54316aabc647aa1522c945ee`, both P0=0 P1=0 P2=0.
 - [ ] Freeze the exact V3.15 implementation commit and complete exact diff review,
   repair/full-range closure and authoritative Code Gate.
 - [ ] Apply the additive production migration, install the exact reviewed runtime,
