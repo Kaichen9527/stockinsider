@@ -110,6 +110,31 @@ BEGIN
   RETURN true;
 END $health$;
 
+CREATE OR REPLACE FUNCTION public.read_legacy_runtime_health_rest_v3_15()
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $health_read$
+DECLARE
+  v_last_run jsonb:='null'::jsonb;
+  v_leases jsonb:='[]'::jsonb;
+  v_stuck_run_count integer;
+BEGIN
+  SELECT jsonb_build_object('status',run.status,'started_at',run.started_at,'terminal_at',run.terminal_at,
+    'heartbeat_at',run.heartbeat_at,'lease_expires_at',run.lease_expires_at,
+    'producer_commit_sha',run.producer_commit_sha,'worker_sha256',run.worker_sha256,
+    'scheduler_config_sha256',run.scheduler_config_sha256)
+  INTO v_last_run FROM public.legacy_producer_runs_v3_11 run
+  ORDER BY run.started_at DESC,run.run_id DESC LIMIT 1;
+  SELECT coalesce(jsonb_agg(jsonb_build_object('status',job.status,'lease_expires_at',job.lease_expires_at,
+    'leased_at',job.leased_at,'job_id',job.job_id) ORDER BY job.leased_at DESC,job.job_id),'[]'::jsonb)
+  INTO v_leases FROM (SELECT job.status,job.lease_expires_at,job.leased_at,job.job_id
+    FROM public.legacy_producer_jobs_v3_11 job WHERE job.status='leased'
+    ORDER BY job.leased_at DESC,job.job_id LIMIT 2) job;
+  SELECT count(*) INTO v_stuck_run_count FROM (SELECT 1 FROM public.legacy_producer_runs_v3_11 run
+    WHERE run.status='running' AND run.lease_expires_at<clock_timestamp() LIMIT 1001) stuck;
+  IF v_stuck_run_count>1000 THEN RAISE EXCEPTION 'runtime_running_run_bound';END IF;
+  RETURN jsonb_build_object('lastRun',coalesce(v_last_run,'null'::jsonb),'leases',v_leases,
+    'stuckRunCount',v_stuck_run_count);
+END $health_read$;
+
 ALTER FUNCTION public.claim_legacy_producer_job_authoritative_v3_15(uuid,uuid,uuid,integer)
   OWNER TO opportunity_v3_rpc_owner;
 ALTER FUNCTION public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)
@@ -118,10 +143,12 @@ ALTER FUNCTION public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,intege
   OWNER TO opportunity_v3_rpc_owner;
 ALTER FUNCTION public.append_legacy_runtime_health_rest_v3_15(text,text,text,bytea,jsonb,text,timestamptz)
   OWNER TO opportunity_v3_rpc_owner;
+ALTER FUNCTION public.read_legacy_runtime_health_rest_v3_15() OWNER TO opportunity_v3_rpc_owner;
 REVOKE ALL ON FUNCTION public.claim_legacy_producer_job_authoritative_v3_15(uuid,uuid,uuid,integer),
   public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer),
   public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text),
-  public.append_legacy_runtime_health_rest_v3_15(text,text,text,bytea,jsonb,text,timestamptz)
+  public.append_legacy_runtime_health_rest_v3_15(text,text,text,bytea,jsonb,text,timestamptz),
+  public.read_legacy_runtime_health_rest_v3_15()
   FROM PUBLIC,anon,authenticated,service_role;
 GRANT EXECUTE ON FUNCTION public.claim_legacy_producer_job_authoritative_v3_15(uuid,uuid,uuid,integer),
   public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)
@@ -130,6 +157,7 @@ GRANT EXECUTE ON FUNCTION public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,
   TO service_role;
 GRANT EXECUTE ON FUNCTION public.append_legacy_runtime_health_rest_v3_15(text,text,text,bytea,jsonb,text,timestamptz)
   TO service_role;
+GRANT EXECUTE ON FUNCTION public.read_legacy_runtime_health_rest_v3_15() TO service_role;
 
 REVOKE CREATE ON SCHEMA public FROM opportunity_v3_rpc_owner,legacy_correctness_rpc_owner;
 COMMIT;

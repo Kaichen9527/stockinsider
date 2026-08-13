@@ -475,6 +475,7 @@ test('allocation and projection persist only hash-valid authoritative decision g
 test('migration applies twice and exposes the exact granted/private function boundary', () => {
   assert.match(opportunityRecoverySql,/claim_legacy_producer_job_rest_v3_15/u);
   assert.match(opportunityRecoverySql,/append_legacy_runtime_health_rest_v3_15/u);
+  assert.match(opportunityRecoverySql,/read_legacy_runtime_health_rest_v3_15/u);
   assert.match(opportunityRecoverySql,/LIMIT 3000/u);
   assert.match(actionabilityRecoverySql,/legacy-product-value-bridge-v3[.]14/u);
   const v314Completion=actionabilityRecoverySql.match(

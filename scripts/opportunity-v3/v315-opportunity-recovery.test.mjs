@@ -48,6 +48,21 @@ test('V315 official monthly revenue carries filing time and a persistable monthl
   {periodStart:'2026-07-01',periodEnd:'2026-07-31',filingPublishedAt:'2026-08-13T00:00:00Z',monthlyRevenue:27161687});
 });
 
+test('V315 official coarse research rejects revenue filed after the point-in-time cutoff',async()=>{
+  const official=runtime('official-twse-valuation.js');
+  const universe=[{stockId:'00000000-0000-4000-8000-000000008299',symbol:'8299',exchange:'TPEX',
+    canonicalSector:'semiconductor',name:'群聯'}];
+  const fetchImpl=async(url)=>new Response(JSON.stringify(String(url).includes('peratio_analysis')
+    ?[{Date:'1150813',SecuritiesCompanyCode:'8299',CompanyName:'群聯',PriceEarningRatio:'12',PriceBookRatio:'3',YieldRatio:'1'}]
+    :String(url).includes('mopsfin_t187ap05_O')?[{'出表日期':'1150814','公司代號':'8299','公司名稱':'群聯',
+      '資料年月':'11507','營業收入-當月營收':'27161687','營業收入-去年同月增減(%)':'377.5',
+      '營業收入-上月比較增減(%)':'9.29'}]
+      :String(url).includes('tpex_mainboard_quotes')?[{Date:'1150813',SecuritiesCompanyCode:'8299',Close:'2280'}]:[]),
+  {status:200});
+  const snapshot=await official.loadOfficialCoarseMarketSnapshot({cutoff:'2026-08-13T10:20:00Z',universe,fetchImpl});
+  assert.equal(snapshot.valuations.length,1);assert.equal(snapshot.revenues.length,0);
+});
+
 test('V315 official factor discovery admits out-of-source undervaluation research without minting an action',()=>{
   const {buildOfficialFactorCandidatesV315}=runtime('official-factor-discovery-v315.js');
   const universe=Array.from({length:10},(_,index)=>({stockId:`00000000-0000-4000-8000-${String(index+1).padStart(12,'0')}`,
@@ -113,12 +128,29 @@ test('V315 REST producer adapter maps canonical bytea and never exposes its serv
       &&!error.message.includes(secret));
 });
 
+test('V315 REST doctor reads private producer state only through the bounded health RPC',async()=>{
+  const observer=runtime('runtime-health-observer.js');const calls=[];
+  const fetchImpl=async(url)=>{calls.push(String(url));
+    if(String(url).includes('/rpc/read_legacy_runtime_health_rest_v3_15'))return new Response(JSON.stringify({
+      lastRun:{status:'success',started_at:'2026-08-13T09:00:00Z',terminal_at:'2026-08-13T09:10:00Z',
+        producer_commit_sha:'a'.repeat(40),worker_sha256:'b'.repeat(64),scheduler_config_sha256:'c'.repeat(64)},
+      leases:[],stuckRunCount:0}),{status:200});
+    return new Response('[]',{status:200});};
+  const resolver=(reference)=>reference.endsWith('supabase-url')?'https://fixture.supabase.co':'s'.repeat(40);
+  const result=await observer.observeDatabase(root,{},resolver,undefined,fetchImpl);
+  assert.equal(result.lastTerminalStatus,'success');assert.equal(result.stuckRunCount,0);
+  assert.ok(calls.some((url)=>url.includes('/rpc/read_legacy_runtime_health_rest_v3_15')));
+  assert.equal(calls.some((url)=>url.includes('/legacy_producer_runs_v3_11?')),false);
+  assert.equal(calls.some((url)=>url.includes('/legacy_producer_jobs_v3_11?')),false);
+});
+
 test('V315 migration is additive, bounded, upgrade-safe, and exposes only the authority-carrying REST claim',()=>{
   const sql=readFileSync(path.join(root,'migrations/20260813_opportunity_recovery_v3_15.sql'),'utf8');
   assert.doesNotMatch(sql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
   assert.match(sql,/LIMIT 3000/u);assert.match(sql,/octet_length\(v_claim\.read_canonical\)>3145728/u);
   assert.match(sql,/claim_legacy_producer_job_authoritative_v3_15/u);
   assert.match(sql,/claim_legacy_producer_job_rest_v3_15/u);
+  assert.match(sql,/read_legacy_runtime_health_rest_v3_15/u);
   assert.match(sql,/p_authority_hash/u);
   assert.match(sql,/GRANT EXECUTE[\s\S]*claim_legacy_producer_job_rest_v3_15[\s\S]*TO service_role/u);
   assert.match(sql,/REVOKE CREATE ON SCHEMA public/u);

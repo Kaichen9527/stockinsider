@@ -35,15 +35,15 @@ async function restJson({resolver,fetchImpl=globalThis.fetch,path:pathname,metho
 }
 
 async function observeDatabaseRest(config,resolver,fetchImpl){
-  const [runs,runningRuns,jobs,projections]=await Promise.all([
-    restJson({resolver,fetchImpl,path:'legacy_producer_runs_v3_11?select=status,started_at,terminal_at,heartbeat_at,lease_expires_at,producer_commit_sha,worker_sha256,scheduler_config_sha256&order=started_at.desc,run_id.desc&limit=1'}),
-    restJson({resolver,fetchImpl,path:'legacy_producer_runs_v3_11?select=lease_expires_at&status=eq.running&limit=1001'}),
-    restJson({resolver,fetchImpl,path:'legacy_producer_jobs_v3_11?select=status,lease_expires_at,leased_at,job_id&status=eq.leased&order=leased_at.desc,job_id&limit=2'}),
+  const [health,projections]=await Promise.all([
+    restJson({resolver,fetchImpl,method:'POST',path:'rpc/read_legacy_runtime_health_rest_v3_15',body:{}}),
     restJson({resolver,fetchImpl,path:'legacy_radar_projections_v3_11?select=as_of,payload_canonical,payload_json,payload_sha256,producer_commit_sha,worker_sha256&window=eq.daily&order=as_of.desc,created_at.desc,projection_id&limit=1'}),
   ]);
-  const run=Array.isArray(runs)?runs[0]??null:null;const leases=Array.isArray(jobs)?jobs:[];
+  if(!health||typeof health!=='object'||Array.isArray(health)||!Array.isArray(health.leases)
+      ||!Number.isInteger(health.stuckRunCount)||health.stuckRunCount<0||health.stuckRunCount>1000)
+    throw new Error('runtime REST health contract');
+  const run=health.lastRun&&typeof health.lastRun==='object'?health.lastRun:null;const leases=health.leases;
   const projection=Array.isArray(projections)?projections[0]??null:null;
-  if(!Array.isArray(runningRuns)||runningRuns.length>1000)throw new Error('runtime running-run bound');
   const now=Date.now();const leaseStatus=leases.length===0?'absent':leases.length!==1?'invalid'
     :Date.parse(leases[0].lease_expires_at)>=now?'active':'expired';
   const canonical=typeof projection?.payload_canonical==='string'&&/^\\x[0-9a-f]+$/iu.test(projection.payload_canonical)
@@ -63,7 +63,7 @@ async function observeDatabaseRest(config,resolver,fetchImpl){
     producerCommitSha:run?.producer_commit_sha??null,projectionAsOf:projection?new Date(projection.as_of).toISOString():null,
     projectionChecksum:projection?.payload_sha256??null,projectionFreshness:!projection?'missing':!checksumMatches?'invalid'
       :projectionHealth.status==='fresh'?'fresh':'stale',projectionHealth,stateSchema:'stockinsider-producer-state-v1',
-    stuckRunCount:(Array.isArray(runningRuns)?runningRuns:[]).filter((row)=>Date.parse(row.lease_expires_at)<now).length,
+    stuckRunCount:health.stuckRunCount,
     workerSha256:run?.worker_sha256??projection?.worker_sha256??null,
     schedulerConfigSha256:run?.scheduler_config_sha256??null,releaseIdentity:projection?.payload_json?.releaseIdentity??null,
     projectionSchema:correctness.schema??null};

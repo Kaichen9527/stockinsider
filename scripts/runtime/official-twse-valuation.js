@@ -570,7 +570,8 @@ async function loadOfficialTwMarketSnapshot({ cutoff, candidates = [], peerCandi
       close:closeBySymbol.get(`${row.exchange}:${row.symbol}:${row.session}`)?.close??null,
       closeSourceRef:closeBySymbol.get(`${row.exchange}:${row.symbol}:${row.session}`)?.sourceRef??null }));
   const revenues = [...parseRevenueRows(byUrl.get(TWSE_REVENUE_URL)?.payload,{exchange:'TWSE',collectedAt,allowedSymbols:candidateSymbols}),
-    ...parseRevenueRows(byUrl.get(TPEX_REVENUE_URL)?.payload,{exchange:'TPEX',collectedAt,allowedSymbols:candidateSymbols})].filter((row)=>row.asOf<=cutoffSession);
+    ...parseRevenueRows(byUrl.get(TPEX_REVENUE_URL)?.payload,{exchange:'TPEX',collectedAt,allowedSymbols:candidateSymbols})]
+    .filter((row)=>row.asOf<=cutoffSession&&row.filingPublishedAt<=cutoff);
   const candidateSectors = new Set(normalizedCandidates.map((row)=>row.canonicalSector).filter(Boolean));
   const statementKinds = new Set(['ci','mim']);
   if (candidateSectors.has('finance_insurance')) ['basi','bd','fh','ins'].forEach((kind)=>statementKinds.add(kind));
@@ -745,7 +746,8 @@ async function loadOfficialCoarseMarketSnapshot({cutoff,universe=[],fetchImpl=gl
   const revenues=[
     ...parseRevenueRows(byUrl.get(TWSE_REVENUE_URL)?.payload,{exchange:'TWSE',collectedAt,allowedSymbols}),
     ...parseRevenueRows(byUrl.get(TPEX_REVENUE_URL)?.payload,{exchange:'TPEX',collectedAt,allowedSymbols}),
-  ].filter((row)=>row.asOf<=cutoffSession).map((row)=>({...row,stockId:identityBySymbol.get(row.symbol)?.stockId??null,
+  ].filter((row)=>row.asOf<=cutoffSession&&row.filingPublishedAt<=cutoff)
+    .map((row)=>({...row,stockId:identityBySymbol.get(row.symbol)?.stockId??null,
     canonicalSector:identityBySymbol.get(row.symbol)?.canonicalSector??'unknown'}));
   return Object.freeze({schema:'official-coarse-market-snapshot-v3.15',cutoff,collectedAt,
     universe:Object.freeze(normalized),valuations:Object.freeze(valuations),revenues:Object.freeze(revenues),

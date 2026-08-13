@@ -1677,7 +1677,8 @@ This approval authorizes implementation only. It does not authorize production m
 - [x] Add the Supabase REST durable-producer/doctor boundary and additive V3.15 claim,
   coarse-universe and health RPCs; do not reset the database password.
 - [x] Prove the five-migration chain applies twice on a fresh database; migration
-  contract is 51/51 and V3.15 focused product regression is 7/7.
+  contract is 51/51 and V3.15 focused product regression is 9/9 after exact-review
+  repairs.
 - [x] Obtain fresh Requirements Round 138 PASS over commit
   `835f66ba8589f6fa6d58be71ad8880b070b2da11` / tree
   `4e16faa465278eface62428fca172a0b506440d9` and fresh Architecture Round 19
