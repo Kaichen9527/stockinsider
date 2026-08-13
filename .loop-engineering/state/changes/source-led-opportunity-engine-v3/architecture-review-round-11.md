@@ -1,7 +1,7 @@
 # V3.15 protected Architecture compatibility evidence
 
 Date: 2026-08-14
-Review authority: fresh Architecture Round 30, carried at the protected worker's
+Review authority: fresh Architecture Round 31, carried at the protected worker's
 stable compatibility path after the immutable Requirements carrier.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
@@ -9,16 +9,16 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Requirements implementation commit: `224e248e498393478bdf445e2b97b9c960bdf836`
-- Requirements evidence carrier: `ad96be063c9d752499989f219fa1bb8a6a83c783`
-- Final repair-closure commit/tree: `ad96be063c9d752499989f219fa1bb8a6a83c783` / `bae6cea21ed851b352a3260e8bd73f3fb8912204`
-- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..ad96be063c9d752499989f219fa1bb8a6a83c783`
+- Requirements implementation commit: `039ef058c77b6b26fcd6ccc674261124e5553294`
+- Requirements evidence carrier: `2421860b361bd797d292f53f56ce5589513aa085`
+- Final repair-closure commit/tree: `2421860b361bd797d292f53f56ce5589513aa085` / `d12d3338512b1f3755de88da1e85997325097972`
+- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..2421860b361bd797d292f53f56ce5589513aa085`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
 - Canonical evidence: this protected Round 30 compatibility carrier.
 
 ## Architecture closure
 
-Round 30 returned PASS on the same active architecture graph. One producer DAG owns
+Round 31 returned PASS on the same active architecture graph. One producer DAG owns
 source acquisition, official full-market coarse ranking, the 60→30→20 deep funnel,
 point-in-time facts, the unique decision envelope and compact projection. Public
 requests remain projection-only, and official factors cannot mint a user action.
@@ -76,6 +76,14 @@ are nulled only on the transient claim after the read bundle has been constructe
 the immutable predecessor row and its result hash remain stored and independently
 auditable. This reduces the measured PostgREST row from 11.65 MB without changing
 the candidate set, 60→30→20 selection, provenance or action authority.
+
+The completion-timeout repair is transport-only and RPC-specific. Candidate result
+construction, canonical hashing and database completion semantics are unchanged;
+only the already-authorized completion call may remain connected for up to 600 seconds
+while all other REST calls keep the 120-second deadline. The server still verifies the
+run, job, owner token and lease before persisting, and the 16 MiB response ceiling is
+unchanged. This closes the observed long-running candidate ledger transaction without
+adding a database role, endpoint, scheduler owner or decision authority.
 
 Missing source OAuth remains typed and does not block official market/fundamental
 acquisition. Missing official authority disables actions rather than generating targets.
