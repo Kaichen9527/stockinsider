@@ -1,7 +1,7 @@
 # V3.15 protected Architecture compatibility evidence
 
 Date: 2026-08-14
-Review authority: fresh Architecture Round 32, carried at the protected worker's
+Review authority: fresh Architecture Round 33, carried at the protected worker's
 stable compatibility path after the immutable Requirements carrier.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
@@ -9,12 +9,12 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Requirements implementation commit: `e10f5f0685f2a053af6190725af9024c74cee112`
-- Requirements evidence carrier: `b69e37e76375a37892582c858376caa0d0dd8409`
-- Final repair-closure commit/tree: `b69e37e76375a37892582c858376caa0d0dd8409` / `68c2f1bfc01c0b7ea2042ad34a21af67b2e6f2df`
-- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..b69e37e76375a37892582c858376caa0d0dd8409`
+- Requirements implementation commit: `d735fcbc8cd1a4b8ae92c62827e3b44846fe39bd`
+- Requirements evidence carrier: `580ba1c6c44f1b10f9a29929b9c58f1506a4eb4e`
+- Final repair-closure commit/tree: `580ba1c6c44f1b10f9a29929b9c58f1506a4eb4e` / `81d357838dc66a4984816aff3d53fb394f855af8`
+- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..580ba1c6c44f1b10f9a29929b9c58f1506a4eb4e`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
-- Canonical evidence: this protected Round 30 compatibility carrier.
+- Canonical evidence: this protected Round 33 compatibility carrier.
 
 ## Architecture closure
 
@@ -101,3 +101,13 @@ reviewed source. LINE, dispatch, automatic trading and Promotion remain disabled
 
 This evidence grants Architecture eligibility for exact review and the protected Code
 Gate. It does not claim future investment performance.
+
+Round 33 also reviewed the production-activation repair. Registry authority remains
+hash-bound and append-only, but the hot path now resolves the exact canonical stream
+through the existing `(family, stream_key_hash, stream_key_canonical)` index and a
+bounded symbol index instead of decoding every registered stream for every fact.
+Interrupted facts jobs receive their already-staged immutable official snapshot in
+the private authority-carrying claim; they do not refetch mutable provider state or
+weaken chunk-conflict checks. The resume transport is capped at 12 MiB inside the
+existing 16 MiB REST ceiling, and diagnostic persistence retains the same live
+run/job/token/lease checks. Architecture result: `PASS`, `P0=0 P1=0 P2=0`.
