@@ -1,7 +1,7 @@
 # V3.15 protected Architecture compatibility evidence
 
 Date: 2026-08-13
-Review authority: fresh Architecture Round 20, carried at the protected worker's
+Review authority: fresh Architecture Round 21, carried at the protected worker's
 stable compatibility path after the immutable Requirements carrier.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
@@ -9,16 +9,16 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Requirements implementation commit: `f0ec19ad10b1edc38457c800f3ee1eb946b35c77`
-- Requirements evidence carrier: `3d0679fbeed01dad648b687fe2ff74163777ce40`
-- Final repair-closure commit/tree: `3d0679fbeed01dad648b687fe2ff74163777ce40` / `14632a63a172334ad82c4a8a6bffb65c22afd564`
-- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..3d0679fbeed01dad648b687fe2ff74163777ce40`
+- Requirements implementation commit: `7b1c40cd7817b5e974e4f06f1a958c874870a02f`
+- Requirements evidence carrier: `2dbca76331037d0cc7f944a6a4b4f6688650160b`
+- Final repair-closure commit/tree: `2dbca76331037d0cc7f944a6a4b4f6688650160b` / `27262ffe1f0f0ee7f0fc681f8f090a83ed29c601`
+- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..2dbca76331037d0cc7f944a6a4b4f6688650160b`
 - Active graph: `b7cb7c7aef9a4ed283c066a9128605aa0348f3526aade2adb1b559893707ac7b`
-- Canonical evidence: this protected Round 20 compatibility carrier.
+- Canonical evidence: this protected Round 21 compatibility carrier.
 
 ## Architecture closure
 
-Round 20 returned PASS on the same active architecture graph. One producer DAG owns
+Round 21 returned PASS on the same active architecture graph. One producer DAG owns
 source acquisition, official full-market coarse ranking, the 60→30→20 deep funnel,
 point-in-time facts, the unique decision envelope and compact projection. Public
 requests remain projection-only, and official factors cannot mint a user action.
