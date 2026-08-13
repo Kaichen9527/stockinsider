@@ -156,12 +156,16 @@ test('V315 REST producer adapter maps canonical bytea and never exposes its serv
   assert.equal(COMPLETION_RPC_TIMEOUT_MS,600_000);
   assert.equal(rpcTimeoutMs('complete_legacy_producer_job_rest_v3_15'),COMPLETION_RPC_TIMEOUT_MS);
   assert.equal(rpcTimeoutMs('claim_legacy_producer_job_rest_v3_15'),DEFAULT_RPC_TIMEOUT_MS);
-  const secret='service-role-secret-'.padEnd(40,'x');const calls=[];
+  const secret='service-role-secret-'.padEnd(40,'x');const calls=[];let claimCount=0;
   const adapter=createSupabaseRestLegacyProducerAdapter({supabaseUrl:'https://fixture.supabase.co',serviceRoleKey:secret,
     fetchImpl:async(url,init)=>{calls.push({url,body:JSON.parse(init.body)});
-      if(String(url).endsWith('/claim_legacy_producer_job_rest_v3_15'))return new Response(JSON.stringify({
-        run_id:'run',job_id:'job',stage:'candidate_funnel',job_kind:'candidate_batch',read_kind:'candidate_funnel_input',
-        read_canonical:'\\x7b7d',read_json:{},read_hash:'a'.repeat(64),authority_hash:'b'.repeat(64)}),{status:200});
+      if(String(url).endsWith('/claim_legacy_producer_job_rest_v3_15')){
+        claimCount+=1;const hasPages=claimCount===2;
+        return new Response(JSON.stringify({run_id:'run',job_id:'job',stage:'candidate_funnel',job_kind:'candidate_batch',
+          read_kind:'candidate_funnel_input',read_canonical:'\\x7b7d',read_json:hasPages
+            ?{authorityHash:'b'.repeat(64),authorityPages:[['instrument',0,'c'.repeat(64),[]]]}
+            :{authorityHash:'b'.repeat(64),authorityPages:[]},read_hash:'a'.repeat(64),authority_hash:'b'.repeat(64)}),
+        {status:200});}
       if(String(url).endsWith('/complete_legacy_producer_job_rest_v3_15'))return new Response(JSON.stringify({
         status:'running',next_job:{jobId:'next'}}),{status:200});
       return new Response(JSON.stringify({code:'42501',message:`do not echo ${secret}`}),{status:403});}});
@@ -172,6 +176,10 @@ test('V315 REST producer adapter maps canonical bytea and never exposes its serv
     resultCanonical:Buffer.from('{}'),resultJson:{},resultHash:'c'.repeat(64)});
   assert.equal(completion.status,'running');
   assert.equal(calls[1].body.p_authority_hash,'b'.repeat(64));
+  await adapter.claimLegacyProducerJob({runId:'run',jobId:'job-2',ownerToken:'token',leaseSeconds:120});
+  assert.equal(calls[2].body.p_authority_hash,'');
+  await adapter.claimLegacyProducerJob({runId:'run',jobId:'job-3',ownerToken:'token',leaseSeconds:120});
+  assert.equal(calls[3].body.p_authority_hash,'b'.repeat(64));
   await assert.rejects(()=>adapter.heartbeatLegacyProducerJob({runId:'run',jobId:'job',ownerToken:'token',leaseSeconds:120}),
     (error)=>error.message==='supabase_rpc_rejected:heartbeat_legacy_producer_job_v3_11:42501'
       &&!error.message.includes(secret));
