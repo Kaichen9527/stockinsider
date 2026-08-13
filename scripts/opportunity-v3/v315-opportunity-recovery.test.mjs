@@ -112,7 +112,7 @@ test('V315 candidate funnel combines source-led and official full-market candida
 });
 
 test('V315 REST producer adapter maps canonical bytea and never exposes its service credential in failures',async()=>{
-  const {createSupabaseRestLegacyProducerAdapter}=runtime('supabase-rest-legacy-producer-adapter.js');
+  const {MAX_RPC_RESPONSE_BYTES,createSupabaseRestLegacyProducerAdapter}=runtime('supabase-rest-legacy-producer-adapter.js');
   const secret='service-role-secret-'.padEnd(40,'x');const calls=[];
   const adapter=createSupabaseRestLegacyProducerAdapter({supabaseUrl:'https://fixture.supabase.co',serviceRoleKey:secret,
     fetchImpl:async(url,init)=>{calls.push({url,body:JSON.parse(init.body)});
@@ -126,6 +126,16 @@ test('V315 REST producer adapter maps canonical bytea and never exposes its serv
   await assert.rejects(()=>adapter.heartbeatLegacyProducerJob({runId:'run',jobId:'job',ownerToken:'token',leaseSeconds:120}),
     (error)=>error.message==='supabase_rpc_rejected:heartbeat_legacy_producer_job_v3_11:42501'
       &&!error.message.includes(secret));
+  const boundedClaim=JSON.stringify({run_id:'run',job_id:'job',stage:'candidate_funnel',job_kind:'candidate_batch',
+    read_kind:'candidate_funnel_input',read_canonical:'\\x7b7d',read_json:{padding:'x'.repeat(5_000_000)},
+    read_hash:'a'.repeat(64)});
+  const boundedAdapter=createSupabaseRestLegacyProducerAdapter({supabaseUrl:'https://fixture.supabase.co',serviceRoleKey:secret,
+    fetchImpl:async()=>new Response(boundedClaim,{status:200})});
+  assert.equal((await boundedAdapter.claimLegacyProducerJob({runId:'run',jobId:'job',ownerToken:'token',leaseSeconds:120})).jobId,'job');
+  const oversizedAdapter=createSupabaseRestLegacyProducerAdapter({supabaseUrl:'https://fixture.supabase.co',serviceRoleKey:secret,
+    fetchImpl:async()=>new Response('x'.repeat(MAX_RPC_RESPONSE_BYTES+1),{status:200})});
+  await assert.rejects(()=>oversizedAdapter.claimLegacyProducerJob({runId:'run',jobId:'job',ownerToken:'token',leaseSeconds:120}),
+    {message:'supabase_rpc_response_bound:claim_legacy_producer_job_rest_v3_15'});
 });
 
 test('V315 REST doctor reads private producer state only through the bounded health RPC',async()=>{

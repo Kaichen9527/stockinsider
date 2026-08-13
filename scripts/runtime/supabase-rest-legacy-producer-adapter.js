@@ -8,6 +8,8 @@ function decodeBytea(value){
   return value===null||value===undefined?null:Buffer.from(String(value),'utf8');
 }
 
+const MAX_RPC_RESPONSE_BYTES=16_777_216;
+
 function createSupabaseRestLegacyProducerAdapter({supabaseUrl,serviceRoleKey,fetchImpl=globalThis.fetch}={}){
   invariant(typeof supabaseUrl==='string'&&/^https:\/\/[a-z0-9-]+\.supabase\.co$/u.test(supabaseUrl),
     'supabase REST URL invalid');
@@ -22,7 +24,11 @@ function createSupabaseRestLegacyProducerAdapter({supabaseUrl,serviceRoleKey,fet
         headers:{apikey:serviceRoleKey,Authorization:`Bearer ${serviceRoleKey}`,'Content-Type':'application/json',
           Accept:'application/json','X-Client-Info':'stockinsider-reviewed-producer-v3.15'},body:JSON.stringify(body)});
       const bytes=Buffer.from(await response.arrayBuffer());
-      if(bytes.length>4_194_304)throw new Error(`supabase_rpc_response_bound:${name}`);
+      // The authoritative claim carries both a <=3 MiB canonical read bundle and
+      // its parsed JSON/authority pages. Keep a closed transport ceiling, but do
+      // not reject the reviewed 3,385-revision corpus merely because the two
+      // representations exceed the historical 4 MiB HTTP limit.
+      if(bytes.length>MAX_RPC_RESPONSE_BYTES)throw new Error(`supabase_rpc_response_bound:${name}`);
       let value=null;try{value=bytes.length?JSON.parse(bytes.toString('utf8')):null;}catch{throw new Error(`supabase_rpc_json:${name}`);}
       if(!response.ok){const code=typeof value?.code==='string'&&/^[A-Z0-9]{4,5}$/u.test(value.code)?value.code:'unknown';
         throw new Error(`supabase_rpc_rejected:${name}:${code}`);}
@@ -76,4 +82,4 @@ function createSupabaseRestLegacyProducerAdapter({supabaseUrl,serviceRoleKey,fet
   });
 }
 
-module.exports={createSupabaseRestLegacyProducerAdapter,decodeBytea};
+module.exports={MAX_RPC_RESPONSE_BYTES,createSupabaseRestLegacyProducerAdapter,decodeBytea};
