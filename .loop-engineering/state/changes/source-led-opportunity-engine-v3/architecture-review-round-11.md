@@ -1,7 +1,7 @@
 # V3.15 protected Architecture compatibility evidence
 
 Date: 2026-08-13
-Review authority: fresh Architecture Round 26, carried at the protected worker's
+Review authority: fresh Architecture Round 27, carried at the protected worker's
 stable compatibility path after the immutable Requirements carrier.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
@@ -9,16 +9,16 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Requirements implementation commit: `94ff4b42ae7ea34857f47e3fdffb647ba8c8e111`
-- Requirements evidence carrier: `23dd6206c221bfdf63f23b22671f22009001c24b`
-- Final repair-closure commit/tree: `23dd6206c221bfdf63f23b22671f22009001c24b` / `b065e634fd749594d43bacfe3ceb16aef6c836bc`
-- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..23dd6206c221bfdf63f23b22671f22009001c24b`
+- Requirements implementation commit: `836a3a82c13c51a506d2113709f1e94a1f166a43`
+- Requirements evidence carrier: `16e408444315deda1924cb784030c82ccbb8442f`
+- Final repair-closure commit/tree: `16e408444315deda1924cb784030c82ccbb8442f` / `50d379fff99efb1d799fd0e36b8c749d5828c2b5`
+- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..16e408444315deda1924cb784030c82ccbb8442f`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
-- Canonical evidence: this protected Round 26 compatibility carrier.
+- Canonical evidence: this protected Round 27 compatibility carrier.
 
 ## Architecture closure
 
-Round 26 returned PASS on the same active architecture graph. One producer DAG owns
+Round 27 returned PASS on the same active architecture graph. One producer DAG owns
 source acquisition, official full-market coarse ranking, the 60→30→20 deep funnel,
 point-in-time facts, the unique decision envelope and compact projection. Public
 requests remain projection-only, and official factors cannot mint a user action.
@@ -44,6 +44,13 @@ The protected acceptance registry is now architecturally bound to the complete V
 Activation now derives the typed installed-runtime observation before deciding whether the doctor is admissible. A top-level failing doctor can cross only the closed readonly-bootstrap boundary (exact reviewed consumer, checksum-valid readable last-good projection, and only compatibility/staleness reasons); all malformed, integrity, scheduler, lease, state or broader health failures still restore the prior scheduler and manifest. This removes the bootstrap cycle without weakening fail-closed activation.
 
 The Supabase REST transport keeps a closed 16 MiB response ceiling sized for the reviewed claim's bounded canonical bytes plus its parsed authority-page representation. The SQL read bundle remains capped at 3 MiB, authority pages remain 200 rows, connector ceilings remain 2,000, and the durable DAG remains capped at 12,000 jobs. This repairs transport compatibility without widening research or decision authority; an oversized response still fails before parsing or execution.
+
+The production 2472 repair is confined to the mention extraction boundary: identical
+deterministic claim identities from repeated frozen roster heads are collapsed before
+the existing entity bound and before immutable persistence. Frozen authority remains
+the only source of instrument identity; distinct claim identities and every rejection
+outcome remain conserved. This prevents a duplicate authority representation from
+terminating the whole DAG without changing candidate ranking or action authority.
 
 Missing source OAuth remains typed and does not block official market/fundamental
 acquisition. Missing official authority disables actions rather than generating targets.
