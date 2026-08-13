@@ -13,6 +13,7 @@ const migrationPaths = [
   'migrations/20260809_product_value_recovery_v3_12.sql',
   'migrations/20260809_decision_integrity_v3_13.sql',
   'migrations/20260811_actionability_recovery_v3_14.sql',
+  'migrations/20260813_opportunity_recovery_v3_15.sql',
 ];
 const migrations = migrationPaths.map((relativePath) => {
   const bytes = fs.readFileSync(path.join(root, relativePath));

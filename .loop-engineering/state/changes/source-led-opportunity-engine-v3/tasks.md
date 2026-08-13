@@ -1664,3 +1664,23 @@ This approval authorizes implementation only. It does not authorize production m
 - [ ] Form one authoritative release candidate. Do not apply production migration,
   install/activate the source-writing runtime or coordinate Web publication without
   explicit V3.13 production-write authority.
+
+## V3.15 opportunity recovery
+
+- [x] Record the production RED baseline and close the V3.14/V3.12 split-release,
+  empty official planes, source-only funnel and official TPEX parsing roots in
+  `opportunity-recovery-v3.15-amendment.md`.
+- [x] Add the bounded official whole-market research entrance without weakening or
+  bypassing the unique decision envelope.
+- [x] Repair TPEX Gregorian history, shares/TWD units, compact corporate-action dates,
+  bounded retries and monthly-revenue fact persistence.
+- [x] Add the Supabase REST durable-producer/doctor boundary and additive V3.15 claim,
+  coarse-universe and health RPCs; do not reset the database password.
+- [x] Prove the five-migration chain applies twice on a fresh database; migration
+  contract is 51/51 and V3.15 focused product regression is 7/7.
+- [ ] Freeze the exact V3.15 implementation commit and complete exact diff review,
+  repair/full-range closure and authoritative Code Gate.
+- [ ] Apply the additive production migration, install the exact reviewed runtime,
+  run two terminal producers and verify the official gate waterfall.
+- [ ] Deploy the same reviewed commit to `stockinsider-three`, complete visible-browser
+  and canary verification, then update this task/status evidence with exact identities.

@@ -22,11 +22,12 @@ const { computeUnderreactionResearchScore } = require('./underreaction-score');
 const { computeResearchRankingV314 } = require('./research-ranking-v314');
 const { safeFailureDiagnostic } = require('./safe-diagnostics');
 const { buildOfficialTradingScheduleV314, coverageReportV314 } = require('./official-market-authority-v314');
-const { loadOfficialTwMarketSnapshot, SOURCE_URL, TPEX_SOURCE_URL, TWSE_REVENUE_URL, TPEX_REVENUE_URL,
+const { loadOfficialTwMarketSnapshot,loadOfficialCoarseMarketSnapshot, SOURCE_URL, TPEX_SOURCE_URL, TWSE_REVENUE_URL, TPEX_REVENUE_URL,
   TWSE_PRICE_HISTORY_URL, TPEX_PRICE_HISTORY_URL, validateReportedValuation,
   validOfficialReportedValuationSourceRef } = require('./official-twse-valuation');
 const { MOPS_INLINE_URL } = require('./official-mops-v314');
 const { buildMarketAnalysis } = require('./market-analysis');
+const { buildOfficialFactorCandidatesV315 } = require('./official-factor-discovery-v315');
 const { runtimeBundleBytes } = require('./tracked-runtime-bundle');
 const { acquireApprovedSources } = require('./official-source-acquisition');
 const approvedSourceRoster = require('../../config/runtime/approved-source-roster-v3.13.json');
@@ -1273,6 +1274,7 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
 } = {}) {
   let legacyPayloadsPromise;
   const officialSnapshotsByCutoff = new Map();
+  const coarseSnapshotsByCutoff = new Map();
   const authorityPagesByHash = new Map();
   return {
     source_sync: async (claim) => {
@@ -1306,14 +1308,25 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
     },
     candidate_funnel: async (claim) => {
       const bundle = readBundle(claim, 'candidate_funnel_input');
-      const outcomes = (bundle.mentionResult?.candidates ?? []).map((candidate) => ({
+      const sourceOutcomes = (bundle.mentionResult?.candidates ?? []).map((candidate) => ({
         ...candidate, raw: candidate.raw, claimId: candidate.claimId, mentionId: candidate.mentionId,
         claimEligible: true, link: { disposition: 'linked', stockId: candidate.stockId, symbol: candidate.symbol },
       }));
+      const coarseUniverseRows=Array.isArray(bundle.coarseUniverseRows)?bundle.coarseUniverseRows.slice(0,3000):[];
+      if(coarseUniverseRows.length&&!coarseSnapshotsByCutoff.has(bundle.sourceCutoff)){
+        coarseSnapshotsByCutoff.set(bundle.sourceCutoff,loadOfficialCoarseMarketSnapshot({cutoff:bundle.sourceCutoff,
+          universe:coarseUniverseRows,fetchImpl}).catch((error)=>({schema:'official-coarse-market-snapshot-v3.15',
+          cutoff:bundle.sourceCutoff,collectedAt:bundle.sourceCutoff,universe:coarseUniverseRows,valuations:[],revenues:[],
+          sourceFailures:[{url:'official-coarse-market-snapshot',reason:safeFailureDiagnostic(error,
+            {stage:'candidate_funnel',origin:'provider'}).invariantCode}]})));
+      }
+      const coarseSnapshot=coarseUniverseRows.length?await coarseSnapshotsByCutoff.get(bundle.sourceCutoff):null;
+      const factorDiscovery=buildOfficialFactorCandidatesV315({snapshot:coarseSnapshot,cutoff:bundle.sourceCutoff,limit:40});
+      const outcomes=[...sourceOutcomes,...factorDiscovery.candidates];
       const funnel = buildCandidateFunnel({ outcomes, seedSymbols: bundle.seedSymbols ?? [], priorLedger: bundle.priorLedger ?? [] });
       return immutableBundle('legacy_candidate_funnel_result_v3_11', { schema: 'legacy-candidate-funnel-result-v3.11',
         candidates: funnel.candidateLedger, discoverySummary: funnel.discoverySummary,
-        discoveryDelta: funnel.discoveryDelta });
+        discoveryDelta: funnel.discoveryDelta,factorDiscovery:factorDiscovery.waterfall });
     },
     facts_refresh: async (claim) => {
       const bundle = readBundle(claim, 'candidate_fact_plane');
@@ -1544,10 +1557,9 @@ async function main() {
   assertExactRuntimeEnvironment(process.env);
   const runtimeEnvironment = hydrateRuntimeCredentials(process.env, undefined, { requireReferences: true });
   if (!runtimeEnvironment.STOCKINSIDER_REVIEWED_COMMIT_SHA) throw new Error('reviewed_runtime_environment_incomplete');
-  // Load the production-only database driver only after dry-run/config checks, so
-  // the reviewed CLI can be verified without installing runtime dependencies.
-  const { createPostgresLegacyProducerAdapter } = require('./postgres-legacy-producer-adapter');
-  const adapter = createPostgresLegacyProducerAdapter({ connectionString: runtimeEnvironment.STOCKINSIDER_DATABASE_URL });
+  const { createSupabaseRestLegacyProducerAdapter } = require('./supabase-rest-legacy-producer-adapter');
+  const adapter = createSupabaseRestLegacyProducerAdapter({supabaseUrl:runtimeEnvironment.STOCKINSIDER_SUPABASE_URL,
+    serviceRoleKey:runtimeEnvironment.STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY});
   const workerBytes = runtimeBundleBytes(path.resolve(__dirname, '..', '..'));
   const optionalCredential = (reference) => {
     try { return resolveCredentialReference(reference); } catch { return null; }

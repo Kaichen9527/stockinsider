@@ -13,12 +13,12 @@ migration, tracked runtime, credentials and source writes is recorded in the Loo
 status. V3 activation, LINE/dispatch, automatic trading and ranking promotion remain
 unauthorized.
 
-Before any database write, rotate the database password that appeared in internal
-tool logs. Update the Keychain reference `stockinsider-runtime:database-url` and any
-CI/Vercel secret that actually consumes that credential, then prove the old password
-is rejected without printing either URI or password. Record the current Vercel alias,
-runtime active pointer, scheduler plist hash and database migration plan as rollback
-targets.
+The previously exposed database password has already been rotated. Do not rotate it
+again for this release. The tracked producer and doctor use the Supabase HTTPS REST
+boundary, so store only `stockinsider-runtime:supabase-url` and
+`stockinsider-runtime:supabase-service-role-key` in Keychain. Never print either
+value. Record the current Vercel alias, runtime active pointer, scheduler plist hash
+and database migration plan as rollback targets.
 
 The pre-activation sequence is:
 
@@ -32,7 +32,7 @@ npm run agent:runtime:prepare -- --source-commit <reviewed-40-hex-commit>
 ```
 
 `db:v3:plan` and `agent:runtime:prepare` are read-only. The plan must list base,
-V3.12, V3.13 and V3.14 in that order and report `applyAuthorized:true`. After the
+V3.12, V3.13, V3.14 and V3.15 in that order and report `applyAuthorized:true`. After the
 exact review attestation exists, apply only through:
 
 ```bash
@@ -44,13 +44,14 @@ npm run db:v3:apply-reviewed -- \
 The command requires a clean exact HEAD, a valid review attestation, the recorded
 V3.14 migration authority and the Keychain database reference. It acquires one
 database advisory lock, accepts additive migrations only, applies the reviewed
-four-file chain and verifies the V3.14 catalog without logging connection details.
+five-file chain and verifies the V3.15 REST bridge without logging connection details.
 Additive objects are retained on rollback.
 
 The tracked worker accepts only these credential references; raw credential
 environment variables are not the V3.14 contract:
 
-- `STOCKINSIDER_DATABASE_URL_REF=keychain:stockinsider-runtime:database-url`
+- `STOCKINSIDER_SUPABASE_URL_REF=keychain:stockinsider-runtime:supabase-url`
+- `STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY_REF=keychain:stockinsider-runtime:supabase-service-role-key`
 - `INTERNAL_API_KEY_REF=keychain:stockinsider-runtime:internal-api-key`
 - optional Keychain references for `threads-access-token`, `youtube-api-key`
   and `youtube-oauth-token`, resolved by the tracked credential resolver.

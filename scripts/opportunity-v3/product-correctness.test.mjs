@@ -167,7 +167,7 @@ const checks = {
     assert.ok(!readFileSync(path.join(root, 'scripts/runtime/auth-source-worker-cli.js'), 'utf8').includes('.agent/'));
     const bundle = runtime('tracked-runtime-bundle.js');
     assert.deepEqual([...bundle.TRACKED_RUNTIME_PATHS].sort(), bundle.TRACKED_RUNTIME_PATHS);
-    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 45);
+    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 47);
     assert.equal(bundle.runtimeBundleSha256(root), sha256(bundle.runtimeBundleBytes(root)));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/auth-source-worker-cli.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/tracked-runtime-bundle.js'));
@@ -184,6 +184,7 @@ const checks = {
       for (const additiveMember of [
         'scripts/runtime/market-analysis.js',
         'scripts/runtime/official-twse-valuation.js',
+        'scripts/runtime/official-factor-discovery-v315.js',
         'scripts/runtime/underreaction-score.js',
       ]) unlinkSync(path.join(bundleRoot, additiveMember));
       assert.throws(() => bundle.runtimeBundleSha256(bundleRoot), { code: 'ENOENT' });
@@ -227,17 +228,21 @@ const checks = {
       assert.deepEqual((await Promise.all([runNonce(), runNonce()])).sort(), [0, 1]);
     } finally { rmSync(nonceRoot, { recursive: true, force: true }); }
     const credentials = runtime('credential-resolver.js').hydrateRuntimeCredentials({
-      STOCKINSIDER_DATABASE_URL_REF: 'keychain:stockinsider-runtime:database-url',
+      STOCKINSIDER_SUPABASE_URL_REF: 'keychain:stockinsider-runtime:supabase-url',
+      STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY_REF: 'keychain:stockinsider-runtime:supabase-service-role-key',
       INTERNAL_API_KEY_REF: 'keychain:stockinsider-runtime:internal-api-key',
-    }, (reference) => reference.endsWith('database-url') ? 'postgresql://test/stockinsider' : 'test-internal-api-key');
-    assert.equal(credentials.STOCKINSIDER_DATABASE_URL, 'postgresql://test/stockinsider');
+    }, (reference) => reference.endsWith('supabase-url') ? 'https://fixture.supabase.co'
+      :reference.endsWith('supabase-service-role-key')?'fixture-service-role-key'.padEnd(40,'x'):'test-internal-api-key');
+    assert.equal(credentials.STOCKINSIDER_SUPABASE_URL, 'https://fixture.supabase.co');
+    assert.equal(credentials.STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY,'fixture-service-role-key'.padEnd(40,'x'));
     assert.equal(credentials.INTERNAL_API_KEY, 'test-internal-api-key');
     assert.throws(() => runtime('credential-resolver.js').hydrateRuntimeCredentials({
       STOCKINSIDER_DATABASE_URL: 'postgresql://ambient/forbidden', INTERNAL_API_KEY: 'ambient-forbidden-key',
     }, () => 'unused', { requireReferences: true }), /runtime credential references required/u);
     const isolatedEnvironment = { HOME: '/Users/test', PATH: '/usr/bin:/bin', NODE_ENV: 'production', TZ: 'Asia/Taipei',
       STOCKINSIDER_REVIEWED_COMMIT_SHA: '1'.repeat(40),
-      STOCKINSIDER_DATABASE_URL_REF: 'keychain:stockinsider-runtime:database-url',
+      STOCKINSIDER_SUPABASE_URL_REF: 'keychain:stockinsider-runtime:supabase-url',
+      STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY_REF: 'keychain:stockinsider-runtime:supabase-service-role-key',
       INTERNAL_API_KEY_REF: 'keychain:stockinsider-runtime:internal-api-key' };
     assert.doesNotThrow(() => runtime('credential-resolver.js').assertExactRuntimeEnvironment(isolatedEnvironment));
     const darwinEnvironment = { ...isolatedEnvironment,

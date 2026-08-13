@@ -247,7 +247,8 @@ function rollbackLockVerification() {
   assert.equal((plist.match(/<key>Label<\/key>/gu) ?? []).length, 1);
   assert.match(plist, /<string>com\.stockinsider\.auth-source-worker<\/string>/u);
   assert.match(plist, /STOCKINSIDER_REVIEWED_COMMIT_SHA=__REVIEWED_COMMIT_SHA__/u);
-  assert.match(plist, /STOCKINSIDER_DATABASE_URL_REF=keychain:stockinsider-runtime:database-url/u);
+  assert.match(plist, /STOCKINSIDER_SUPABASE_URL_REF=keychain:stockinsider-runtime:supabase-url/u);
+  assert.match(plist, /STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY_REF=keychain:stockinsider-runtime:supabase-service-role-key/u);
   assert.equal(legacyLock.promotionAllowed, false);
   assert.equal(legacyLock.runDateCount, 0);
   assert.equal(legacyLock.liveMaturedCohortCount, 0);

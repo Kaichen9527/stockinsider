@@ -20,6 +20,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260809_product_value_recovery_v3_12.sql',
   'migrations/20260809_decision_integrity_v3_13.sql',
   'migrations/20260811_actionability_recovery_v3_14.sql',
+  'migrations/20260813_opportunity_recovery_v3_15.sql',
 ]);
 
 function parseArguments(argv) {
@@ -73,6 +74,7 @@ async function applyReviewedMigrations(options) {
       'decisionRevisions',to_regclass('public.legacy_decision_revisions_v3_13') IS NOT NULL,
       'candidateRead',to_regprocedure('public.read_legacy_candidate_fact_plane_v3_11(timestamptz,jsonb)') IS NOT NULL,
       'projectionSelect',to_regprocedure('public.select_opportunity_public_projection_v3(timestamptz)') IS NOT NULL
+      ,'restClaim',to_regprocedure('public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)') IS NOT NULL
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',

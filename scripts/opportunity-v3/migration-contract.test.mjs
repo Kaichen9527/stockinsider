@@ -21,6 +21,8 @@ const decisionIntegrityMigrationPath = path.join(root, 'migrations/20260809_deci
 const decisionIntegritySql = fs.readFileSync(decisionIntegrityMigrationPath, 'utf8');
 const actionabilityRecoveryMigrationPath = path.join(root, 'migrations/20260811_actionability_recovery_v3_14.sql');
 const actionabilityRecoverySql = fs.readFileSync(actionabilityRecoveryMigrationPath, 'utf8');
+const opportunityRecoveryMigrationPath = path.join(root, 'migrations/20260813_opportunity_recovery_v3_15.sql');
+const opportunityRecoverySql = fs.readFileSync(opportunityRecoveryMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -292,6 +294,12 @@ before(() => {
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', actionabilityRecoveryMigrationPath,
     ]);
   }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', opportunityRecoveryMigrationPath,
+    ]);
+  }
 });
 
 after(() => {
@@ -465,6 +473,9 @@ test('allocation and projection persist only hash-valid authoritative decision g
 });
 
 test('migration applies twice and exposes the exact granted/private function boundary', () => {
+  assert.match(opportunityRecoverySql,/claim_legacy_producer_job_rest_v3_15/u);
+  assert.match(opportunityRecoverySql,/append_legacy_runtime_health_rest_v3_15/u);
+  assert.match(opportunityRecoverySql,/LIMIT 3000/u);
   assert.match(actionabilityRecoverySql,/legacy-product-value-bridge-v3[.]14/u);
   const v314Completion=actionabilityRecoverySql.match(
     /CREATE OR REPLACE FUNCTION public[.]complete_legacy_producer_job_v3_14[\s\S]*?END \$complete\$;/u,
