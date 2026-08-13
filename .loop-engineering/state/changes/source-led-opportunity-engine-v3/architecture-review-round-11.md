@@ -1,7 +1,7 @@
 # V3.15 protected Architecture compatibility evidence
 
 Date: 2026-08-14
-Review authority: fresh Architecture Round 33, carried at the protected worker's
+Review authority: fresh Architecture Round 34, carried at the protected worker's
 stable compatibility path after the immutable Requirements carrier.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
@@ -9,10 +9,10 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Requirements implementation commit: `d735fcbc8cd1a4b8ae92c62827e3b44846fe39bd`
-- Requirements evidence carrier: `580ba1c6c44f1b10f9a29929b9c58f1506a4eb4e`
-- Final repair-closure commit/tree: `580ba1c6c44f1b10f9a29929b9c58f1506a4eb4e` / `81d357838dc66a4984816aff3d53fb394f855af8`
-- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..580ba1c6c44f1b10f9a29929b9c58f1506a4eb4e`
+- Requirements implementation commit: `1719653be79729475a68b31c77a61d2773d58408`
+- Requirements evidence carrier: `3a7b139c3302d6e232329fd367d49d9ac2619681`
+- Final repair-closure commit/tree: `3a7b139c3302d6e232329fd367d49d9ac2619681` / `8fe0ee1a33f6bb146b1dbf89459ef70680c19348`
+- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..3a7b139c3302d6e232329fd367d49d9ac2619681`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
 - Canonical evidence: this protected Round 33 compatibility carrier.
 
@@ -111,3 +111,14 @@ the private authority-carrying claim; they do not refetch mutable provider state
 weaken chunk-conflict checks. The resume transport is capped at 12 MiB inside the
 existing 16 MiB REST ceiling, and diagnostic persistence retains the same live
 run/job/token/lease checks. Architecture result: `PASS`, `P0=0 P1=0 P2=0`.
+
+Round 34 reviewed the completion authority repair as a closed transaction boundary.
+The adapter obtains the authority hash only from the already-authoritative claim and
+the completion wrapper independently binds it to the exact run before restoring the
+transaction-local registry context. `service_role` receives EXECUTE only on this
+narrow wrapper; it receives no registry or producer-table SELECT. The predecessor
+completion still owns leases, result hashes, staged-chunk conservation, append-only
+persistence and successor creation. A wrong or absent hash fails before delegation.
+This removes the claim/completion context gap without adding a data source, action
+authority, public mutation, scheduler owner or promotion path. Architecture result:
+`PASS`, `P0=0 P1=0 P2=0`.
