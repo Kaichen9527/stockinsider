@@ -1,7 +1,7 @@
 # V3.15 protected Requirements compatibility evidence
 
 Date: 2026-08-14
-Review authority: fresh Requirements Round 153, carried at the protected worker's
+Review authority: fresh Requirements Round 154, carried at the protected worker's
 stable compatibility path without changing the reviewed active artifact graph.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
@@ -9,10 +9,10 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Final repair-closure commit/tree: `ba47a63d8b473f6f39a48f673eeccb977bb15560` / `afb4311a4671f6b8f91a16a8df3d13f2d06c0251`
-- Full reviewed range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..ba47a63d8b473f6f39a48f673eeccb977bb15560`
+- Final repair-closure commit/tree: `70db2f425c55581b21427fa58942625209a94dc3` / `cdb3315cd55d2daece75154eb87f4225ab7ac3fd`
+- Full reviewed range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..70db2f425c55581b21427fa58942625209a94dc3`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
-- Canonical evidence: this protected Round 153 compatibility carrier.
+- Canonical evidence: this protected Round 154 compatibility carrier.
 - Acceptance inventory: `1.46.0`, 320 cases, partitioned as 272 product/runtime,
   28 model-runner and 20 evaluation-governance owners.
 
@@ -123,3 +123,14 @@ authority hash, restores only that transaction-local setting, and delegates the
 unchanged V3.14 completion. Missing or mismatched authority fails before persistence.
 Focused V3.15 is 11/11, product correctness is 95/95 and the apply-twice migration
 suite is 53/53 PASS. Fresh Requirements Round 153 finds `P0=0 P1=0 P2=0`.
+
+The first run of that reviewed completion wrapper exposed a cache-boundary regression
+before the mention stage could persist anything: a claim's run authority identity was
+mistaken for proof that the process already held the corresponding authority pages.
+The adapter now keeps two closed values. Completion receives the exact run identity
+from any authoritative claim, while later claims suppress pages only after a claim has
+actually delivered a non-empty page set with the matching hash. A production-shaped
+three-claim regression proves identity-only, page-delivery and cached-page states.
+The failed run is terminal and published no projection. Product correctness remains
+95/95 and migration remains 53/53. Fresh Requirements Round 154 finds
+`P0=0 P1=0 P2=0`.
