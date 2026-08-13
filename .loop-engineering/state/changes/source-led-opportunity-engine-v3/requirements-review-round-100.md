@@ -9,10 +9,10 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Final repair-closure commit/tree: `1719653be79729475a68b31c77a61d2773d58408` / `8fb198d4bec4b3c64479e7c52aacad5a113e6702`
-- Full reviewed range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..1719653be79729475a68b31c77a61d2773d58408`
+- Final repair-closure commit/tree: `ba47a63d8b473f6f39a48f673eeccb977bb15560` / `afb4311a4671f6b8f91a16a8df3d13f2d06c0251`
+- Full reviewed range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..ba47a63d8b473f6f39a48f673eeccb977bb15560`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
-- Canonical evidence: this protected Round 152 compatibility carrier.
+- Canonical evidence: this protected Round 153 compatibility carrier.
 - Acceptance inventory: `1.46.0`, 320 cases, partitioned as 272 product/runtime,
   28 model-runner and 20 evaluation-governance owners.
 
