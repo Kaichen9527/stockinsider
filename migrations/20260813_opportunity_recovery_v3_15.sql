@@ -5,6 +5,37 @@ BEGIN;
 -- so production does not depend on a locally cached database password.
 GRANT CREATE ON SCHEMA public TO opportunity_v3_rpc_owner,legacy_correctness_rpc_owner;
 
+-- The production authority bootstrap can legitimately contain more than the
+-- V3.11 per-connector ceiling of 1,000 immutable document families. Upgrade
+-- the existing reader in place so every selected revision remains conserved;
+-- retain a closed 2,000-row ceiling per connector so unexpected growth fails
+-- explicitly instead of being silently truncated.
+DO $upgrade_discovery_authority_bound$
+DECLARE
+  v_definition text;
+  v_old_count integer;
+  v_new_count integer;
+BEGIN
+  SELECT pg_get_functiondef(
+    'public.read_legacy_discovery_authority_v3_11(uuid,text,text)'::regprocedure
+  ) INTO STRICT v_definition;
+  v_old_count := (length(v_definition)-length(replace(v_definition,'connector_rank<=1000','')))
+    / length('connector_rank<=1000')
+    + (length(v_definition)-length(replace(v_definition,'connector_rank>1000','')))
+      / length('connector_rank>1000');
+  v_new_count := (length(v_definition)-length(replace(v_definition,'connector_rank<=2000','')))
+    / length('connector_rank<=2000')
+    + (length(v_definition)-length(replace(v_definition,'connector_rank>2000','')))
+      / length('connector_rank>2000');
+  IF v_old_count=2 AND v_new_count=0 THEN
+    v_definition:=replace(v_definition,'connector_rank<=1000','connector_rank<=2000');
+    v_definition:=replace(v_definition,'connector_rank>1000','connector_rank>2000');
+    EXECUTE v_definition;
+  ELSIF NOT (v_old_count=0 AND v_new_count=2) THEN
+    RAISE EXCEPTION 'discovery_authority_bound_predecessor_conflict';
+  END IF;
+END $upgrade_discovery_authority_bound$;
+
 DO $upgrade_claim$
 BEGIN
   IF to_regprocedure('public.claim_legacy_producer_job_authoritative_v3_15(uuid,uuid,uuid,integer)') IS NULL THEN

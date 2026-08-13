@@ -154,4 +154,9 @@ test('V315 migration is additive, bounded, upgrade-safe, and exposes only the au
   assert.match(sql,/p_authority_hash/u);
   assert.match(sql,/GRANT EXECUTE[\s\S]*claim_legacy_producer_job_rest_v3_15[\s\S]*TO service_role/u);
   assert.match(sql,/REVOKE CREATE ON SCHEMA public/u);
+  assert.match(sql,/connector_rank<=1000/u);
+  assert.match(sql,/connector_rank<=2000/u);
+  assert.match(sql,/connector_rank>1000/u);
+  assert.match(sql,/connector_rank>2000/u);
+  assert.match(sql,/discovery_authority_bound_predecessor_conflict/u);
 });
