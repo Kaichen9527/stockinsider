@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 const require = createRequire(import.meta.url);
 const { Client } = require('pg');
 const { canonicalJson } = require('../runtime/codec');
-const { resolveCredentialReference } = require('../runtime/credential-resolver');
+const { resolvePostgresConnectionReference } = require('../runtime/credential-resolver');
 const { resolveReviewedRuntimeRelease } = require('../runtime/reviewed-runtime-release');
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
@@ -61,7 +61,7 @@ function reviewedMigrationPlan(options) {
 
 async function applyReviewedMigrations(options) {
   const plan=reviewedMigrationPlan(options);
-  const client=new Client({connectionString:resolveCredentialReference('keychain:stockinsider-runtime:database-url'),
+  const client=new Client({connectionString:resolvePostgresConnectionReference('keychain:stockinsider-runtime:database-url'),
     application_name:'stockinsider-reviewed-v3-migration',statement_timeout:180000,query_timeout:180000});
   await client.connect();
   let locked=false;

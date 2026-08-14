@@ -3,7 +3,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { canonicalJson, sha256 } = require('./codec');
-const { resolveCredentialReference } = require('./credential-resolver');
+const { resolveCredentialReference, resolvePostgresConnectionReference } = require('./credential-resolver');
 const { runtimeBundleSha256 } = require('./tracked-runtime-bundle');
 const { assessProjectionFreshness } = require('./projection-freshness');
 const { assessReleaseCompatibility } = require('../../web/src/lib/opportunity-v3/release-compatibility-runtime');
@@ -71,7 +71,7 @@ async function observeDatabaseRest(config,resolver,fetchImpl){
 
 async function observeDatabase(releaseRoot, config, resolver, clientFactory,fetchImpl) {
   if(!clientFactory)return observeDatabaseRest(config,resolver,fetchImpl);
-  const connectionString = resolver('keychain:stockinsider-runtime:database-url');
+  const connectionString = resolvePostgresConnectionReference('keychain:stockinsider-runtime:database-url', resolver);
   const Client = clientFactory ?? require(path.join(releaseRoot, 'node_modules/pg')).Client;
   const client = new Client({ connectionString, application_name: 'stockinsider-runtime-doctor',
     statement_timeout: 10000, query_timeout: 10000 });

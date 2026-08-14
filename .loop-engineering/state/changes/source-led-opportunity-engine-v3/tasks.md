@@ -1742,3 +1742,7 @@ This approval authorizes implementation only. It does not authorize production m
   quarter, and serialize bounded provider requests. The live 8299 fixture reaches a
   four-quarter bridge with derived EPS near 211.45; this is evidence of bridge
   consistency, not a buy recommendation.
+- [x] Reproduce the production `pg` TLS compatibility failure without exposing the
+  credential; keep the existing Keychain value, add one strict Supabase/libpq
+  connection resolver shared by migration, bootstrap and direct doctor, and prove the
+  reviewed boundary connects while rejecting foreign hosts and disabled TLS.

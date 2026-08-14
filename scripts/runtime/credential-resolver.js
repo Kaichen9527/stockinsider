@@ -54,6 +54,27 @@ function resolveCredentialReference(reference, spawn = spawnSync) {
   return value;
 }
 
+function resolvePostgresConnectionReference(reference, resolver = resolveCredentialReference) {
+  invariant(reference === 'keychain:stockinsider-runtime:database-url',
+    'runtime database credential reference not allowed');
+  let parsed;
+  try { parsed = new URL(resolver(reference)); }
+  catch { invariant(false, 'runtime database credential invalid'); }
+  const parameterKeys = [...parsed.searchParams.keys()];
+  invariant(['postgres:','postgresql:'].includes(parsed.protocol) && parsed.username.length > 0 &&
+    parsed.password.length > 0 && /(?:^|\.)pooler\.supabase\.com$|(?:^|\.)supabase\.co$/u.test(parsed.hostname) &&
+    ['', '5432', '6543'].includes(parsed.port) && parsed.pathname === '/postgres' && parsed.hash === '' &&
+    parameterKeys.length === 1 && parameterKeys[0] === 'sslmode' &&
+    parsed.searchParams.getAll('sslmode').length === 1 && parsed.searchParams.get('sslmode') === 'require',
+  'runtime database credential invalid');
+  // pg-connection-string >=2.9 changed `sslmode=require` to certificate
+  // verification semantics. The stored Supabase pooler URL uses libpq's
+  // encrypted-transport `require` contract, so make that interpretation
+  // explicit instead of weakening or rewriting the credential itself.
+  parsed.searchParams.set('uselibpqcompat', 'true');
+  return parsed.toString();
+}
+
 function hydrateRuntimeCredentials(environment = process.env, resolver = resolveCredentialReference, { requireReferences = false } = {}) {
   if (requireReferences) {
     invariant(environment.STOCKINSIDER_SUPABASE_URL_REF === 'keychain:stockinsider-runtime:supabase-url' &&
@@ -83,4 +104,4 @@ function hydrateRuntimeCredentials(environment = process.env, resolver = resolve
 }
 
 module.exports = { KEYCHAIN_REFERENCES, RUNTIME_ENVIRONMENT_KEYS, assertExactRuntimeEnvironment,
-  hydrateRuntimeCredentials, resolveCredentialReference };
+  hydrateRuntimeCredentials, resolveCredentialReference, resolvePostgresConnectionReference };

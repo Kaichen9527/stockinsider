@@ -7,7 +7,7 @@ const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 const { Client } = require('pg');
 const { canonicalJson } = require('./codec');
-const { resolveCredentialReference } = require('./credential-resolver');
+const { resolvePostgresConnectionReference } = require('./credential-resolver');
 const { resolveReviewedRuntimeRelease } = require('./reviewed-runtime-release');
 const { applyProductionAuthorityBootstrap, consumeBootstrapNonce, fetchOfficialRoster,
   validateBootstrapAuthority } = require('./production-authority-bootstrap');
@@ -53,7 +53,7 @@ async function main() {
   const runtimeRoot = process.env.STOCKINSIDER_RUNTIME_ROOT ? path.resolve(process.env.STOCKINSIDER_RUNTIME_ROOT)
     : path.join(os.homedir(), 'Library', 'Application Support', 'StockInsiderRuntime');
   consumeBootstrapNonce(runtimeRoot, authority);
-  const client = new Client({ connectionString: resolveCredentialReference('keychain:stockinsider-runtime:database-url'),
+  const client = new Client({ connectionString: resolvePostgresConnectionReference('keychain:stockinsider-runtime:database-url'),
     application_name: 'stockinsider-production-authority-bootstrap', statement_timeout: 120000, query_timeout: 120000 });
   await client.connect();
   try {

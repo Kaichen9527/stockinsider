@@ -173,6 +173,12 @@ research threshold. This observation is research supply, not proof of future ret
 23. A shallow candidate with complete fixed-weight ranking may be visible as near-buy
     research with one explicit `deep_research_not_selected` blocker. Missing technical
     or valuation authority keeps it in data-pending rather than fabricating an action.
+24. The stored Supabase pooler credential is not rewritten or rotated. Every reviewed
+    direct-PostgreSQL client resolves it through one closed helper that accepts only the
+    Keychain database reference, a Supabase hostname, `/postgres`, and encrypted
+    `sslmode=require`; it explicitly opts into libpq compatibility for `pg` versions
+    whose default interpretation changed. Migration, authority bootstrap and the
+    direct doctor share this boundary, and failures remain credential-redacted.
 
 ## Acceptance
 
@@ -226,3 +232,6 @@ research threshold. This observation is research supply, not proof of future ret
 - the MOPS request graph skips the unclosed civil quarter and preserves the preceding
   cumulative anchor, so the 8299 official fixture reaches a four-quarter TTM bridge
   without exceeding the per-symbol 128-row authority bound.
+- the exact Keychain database credential connects through the reviewed libpq-compatible
+  encrypted transport without modification; a non-Supabase host or disabled TLS is
+  rejected before `pg` receives it.

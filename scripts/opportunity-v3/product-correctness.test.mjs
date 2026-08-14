@@ -236,6 +236,24 @@ const checks = {
     assert.equal(credentials.STOCKINSIDER_SUPABASE_URL, 'https://fixture.supabase.co');
     assert.equal(credentials.STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY,'fixture-service-role-key'.padEnd(40,'x'));
     assert.equal(credentials.INTERNAL_API_KEY, 'test-internal-api-key');
+    const postgresUrl=runtime('credential-resolver.js').resolvePostgresConnectionReference(
+      'keychain:stockinsider-runtime:database-url',()=>
+        'postgresql://postgres.fixture:secret@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres?sslmode=require');
+    const parsedPostgresUrl=new URL(postgresUrl);
+    assert.equal(parsedPostgresUrl.searchParams.get('sslmode'),'require');
+    assert.equal(parsedPostgresUrl.searchParams.get('uselibpqcompat'),'true');
+    assert.throws(()=>runtime('credential-resolver.js').resolvePostgresConnectionReference(
+      'keychain:stockinsider-runtime:database-url',()=>
+        'postgresql://postgres.fixture:secret@evil.example:6543/postgres?sslmode=require'),
+    /runtime database credential invalid/u);
+    assert.throws(()=>runtime('credential-resolver.js').resolvePostgresConnectionReference(
+      'keychain:stockinsider-runtime:database-url',()=>
+        'postgresql://postgres.fixture:secret@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres?sslmode=disable'),
+    /runtime database credential invalid/u);
+    assert.throws(()=>runtime('credential-resolver.js').resolvePostgresConnectionReference(
+      'keychain:stockinsider-runtime:database-url',()=>
+        'postgresql://postgres.fixture:secret@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres?sslmode=require&options=-csearch_path%3Devil'),
+    /runtime database credential invalid/u);
     assert.throws(() => runtime('credential-resolver.js').hydrateRuntimeCredentials({
       STOCKINSIDER_DATABASE_URL: 'postgresql://ambient/forbidden', INTERNAL_API_KEY: 'ambient-forbidden-key',
     }, () => 'unused', { requireReferences: true }), /runtime credential references required/u);
@@ -511,7 +529,7 @@ const checks = {
     }
     const observer = runtime('runtime-health-observer.js');
     const database = await observer.observeDatabase(root, { legacyRadarBaseUrl: 'https://example.test' },
-      () => 'postgresql://doctor-read-only', ReadOnlyDoctorClient);
+      () => 'postgresql://doctor:read-only@db.fixture.supabase.co/postgres?sslmode=require', ReadOnlyDoctorClient);
     assert.equal(database.stateSchema, 'stockinsider-producer-state-v1');
     assert.equal(database.lastTerminalStatus, 'success'); assert.equal(database.projectionFreshness, 'fresh');
     assert.equal(await observer.observeConsumer({ legacyRadarBaseUrl: 'https://example.test' },
