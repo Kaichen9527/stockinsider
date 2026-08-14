@@ -6,9 +6,11 @@ const ALLOWED_SQLSTATES=new Set(['22000','22023','23502','23503','23505','23514'
 const ALLOWED_CONSTRAINT=/^[a-z][a-z0-9_]{0,95}$/u;
 const STAGES=new Set(['source_sync','mention_claim_extraction','candidate_funnel','facts_refresh','analysis_revision','compact_radar_projection','worker_terminal']);
 const ORIGINS=new Set(['handler','rpc_validation','persistence','provider','runtime']);
-const JOB_KINDS=new Set(['source_root','revision_shard','candidate_batch','analysis_batch','projection_batch','terminal']);
+const JOB_KINDS=new Set(['source_root','revision_shard','stage_barrier','candidate_batch','analysis_batch','projection_batch','terminal']);
+const INVARIANT_CODES=new Set(['official_ingestion_transport_rejected','official_ingestion_chunk_rejected']);
 function text(value){return typeof value==='string'?value:String(value??'');}
 function invariantCode(error){
+  if(INVARIANT_CODES.has(text(error?.invariantCode)))return text(error.invariantCode);
   const raw=text(error?.code||error?.message||'data_integrity_failure').toLowerCase();
   if(raw.includes('seed')&&raw.includes('membership'))return 'candidate_seed_membership_missing';
   if(raw.includes('constraint'))return 'database_constraint_rejected';

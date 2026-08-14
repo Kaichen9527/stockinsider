@@ -660,7 +660,7 @@ acceptanceTest('DI-003','V3.13 official facts and 252-session peer authority rea
   assert.match(workerSource,/compatibility valuationInputs forbidden/u);
   assert.doesNotMatch(workerSource,/financialFacts:\s*[(]acquisitionSnapshot[?][.]financialFacts[^\n]+slice[(]0,600[)]/u);
   assert.match(workerSource,/const financialFacts=newFinancialFactsV314\(snapshot[?][.]financialFacts[?][?]\[\],priorFinancialRows\)/u);
-  assert.match(workerSource,/\['financial_facts',financialFacts,200\]/u);
+  assert.match(workerSource,/\['financial_facts',financialFacts,5\]/u);
   assert.match(workerSource,/priorFinancialRows:bundle[.]financialRows[?][?]\[\]/u);
   assert.match(workerSource,/items[.]slice\(offset,offset[+]chunkSize\)/u);
   const missingSharesInput=worker.valuationAuthorityInput(candidate,facts,
@@ -965,6 +965,8 @@ test('generic migration discovery is a closed legacy allowlist and the V3.13 pla
     'migrations/20260809_product_value_recovery_v3_12.sql',
     'migrations/20260809_decision_integrity_v3_13.sql',
     'migrations/20260811_actionability_recovery_v3_14.sql',
+    'migrations/20260813_opportunity_recovery_v3_15.sql',
+    'migrations/20260814_official_ingestion_chunk_apply_v3_15.sql',
   ]);
   assert.ok(plan.migrations.every((row)=>/^[0-9a-f]{64}$/u.test(row.sha256)&&row.additiveOnly));
   assert.match(plan.orderedChainSha256,/^[0-9a-f]{64}$/u);
@@ -981,7 +983,8 @@ test('V3.13 operator docs and positive consumers use tracked authority and exact
   assert.match(runbook,/V3[.]14 reviewed release and activation/u);
   assert.match(runbook,/17×3 terminal matrix/u);
   assert.match(runbook,/items_found.*successful_empty.*metadata_only.*missing_endpoint.*auth_failed.*provider_failed/su);
-  assert.match(runbook,/STOCKINSIDER_DATABASE_URL_REF=keychain:stockinsider-runtime:database-url/u);
+  assert.match(runbook,/STOCKINSIDER_SUPABASE_URL_REF=keychain:stockinsider-runtime:supabase-url/u);
+  assert.match(runbook,/STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY_REF=keychain:stockinsider-runtime:supabase-service-role-key/u);
   assert.match(runbook,/Legacy Night-Shift Research Runtime/u);
   assert.match(runbook,/cookie,[\s\S]*watchlist-seed[\s\S]*not be used[\s\S]*to claim V3[.]14/u);
   assert.match(readme,/V3[.]14 tracked runtime 不讀取上述 raw login\/cookie/u);
@@ -1284,11 +1287,12 @@ acceptanceTest('DI-008','V3.13 official close and bounded raw OHLCV parsers reta
   ]},{exchange:'TWSE',symbol:'4760',sourceUrl:twseUrl,collectedAt:'2026-08-09T10:20:00Z'});
   assert.equal(rows.length,1);assert.equal(rows[0].session,'2026-08-07');assert.equal(rows[0].volume,1000);
   assert.equal(rows[0].sourceRef,'twse-rwd:STOCK_DAY:2026-08-07:4760');
-  const tpexUrl=`${official.TPEX_PRICE_HISTORY_URL}?date=115%2F08%2F01&code=6285&response=json`;
+  const tpexUrl=`${official.TPEX_PRICE_HISTORY_URL}?date=2026%2F08%2F01&code=6285&response=json`;
   const tpex=official.parseOfficialPriceHistory({tables:[{data:[
     ['115/08/07','2,000','410,000','201.00','208.00','199.00','205.00'],
   ]}]},{exchange:'TPEX',symbol:'6285',sourceUrl:tpexUrl,collectedAt:'2026-08-09T10:20:00Z'});
   assert.equal(tpex.length,1);assert.equal(tpex[0].provider,'tpex');
+  assert.equal(tpex[0].volume,2000000);assert.equal(tpex[0].turnoverTwd,410000000);
   assert.equal(tpex[0].sourceRef,'tpex-rwd:tradingStock:2026-08-07:6285');
   const applied=appliedMigrationContract();
   assert.match(applied,/DI-008 parser output crosses job completion and persistence before an adjusted read/u);

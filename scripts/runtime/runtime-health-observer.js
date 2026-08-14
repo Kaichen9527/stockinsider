@@ -14,7 +14,63 @@ function canonicalFile(filename) {
   return value;
 }
 
-async function observeDatabase(releaseRoot, config, resolver, clientFactory) {
+function restCredentials(resolver){
+  const supabaseUrl=resolver('keychain:stockinsider-runtime:supabase-url');
+  const serviceRoleKey=resolver('keychain:stockinsider-runtime:supabase-service-role-key');
+  if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/u.test(supabaseUrl??'')||typeof serviceRoleKey!=='string'
+      ||serviceRoleKey.length<32)throw new Error('runtime REST credential unavailable');
+  return {supabaseUrl,serviceRoleKey};
+}
+
+async function restJson({resolver,fetchImpl=globalThis.fetch,path:pathname,method='GET',body}){
+  const {supabaseUrl,serviceRoleKey}=restCredentials(resolver);
+  const response=await fetchImpl(`${supabaseUrl}/rest/v1/${pathname}`,{method,
+    headers:{apikey:serviceRoleKey,Authorization:`Bearer ${serviceRoleKey}`,Accept:'application/json',
+      ...(body?{'Content-Type':'application/json'}:{})},body:body?JSON.stringify(body):undefined,
+    signal:AbortSignal.timeout(10000)});
+  const bytes=Buffer.from(await response.arrayBuffer());
+  if(bytes.length>1_000_000)throw new Error('runtime REST response bound');
+  let payload=null;try{payload=bytes.length?JSON.parse(bytes.toString('utf8')):null;}catch{throw new Error('runtime REST invalid response');}
+  if(!response.ok)throw new Error('runtime REST rejected');return payload;
+}
+
+async function observeDatabaseRest(config,resolver,fetchImpl){
+  const [health,projections]=await Promise.all([
+    restJson({resolver,fetchImpl,method:'POST',path:'rpc/read_legacy_runtime_health_rest_v3_15',body:{}}),
+    restJson({resolver,fetchImpl,path:'legacy_radar_projections_v3_11?select=as_of,payload_canonical,payload_json,payload_sha256,producer_commit_sha,worker_sha256&window=eq.daily&order=as_of.desc,created_at.desc,projection_id&limit=1'}),
+  ]);
+  if(!health||typeof health!=='object'||Array.isArray(health)||!Array.isArray(health.leases)
+      ||!Number.isInteger(health.stuckRunCount)||health.stuckRunCount<0||health.stuckRunCount>1000)
+    throw new Error('runtime REST health contract');
+  const run=health.lastRun&&typeof health.lastRun==='object'?health.lastRun:null;const leases=health.leases;
+  const projection=Array.isArray(projections)?projections[0]??null:null;
+  const now=Date.now();const leaseStatus=leases.length===0?'absent':leases.length!==1?'invalid'
+    :Date.parse(leases[0].lease_expires_at)>=now?'active':'expired';
+  const canonical=typeof projection?.payload_canonical==='string'&&/^\\x[0-9a-f]+$/iu.test(projection.payload_canonical)
+    ?Buffer.from(projection.payload_canonical.slice(2),'hex'):null;
+  const checksumMatches=canonical&&sha256(canonical)===projection.payload_sha256;
+  const correctness=projection?.payload_json?.sourceLedCorrectness??{};
+  const projectionHealth=['legacy-radar-v3.13.0','legacy-radar-v3.14.0'].includes(correctness.schema)
+    ?assessProjectionFreshness({contentAsOf:correctness.contentAsOf??projection.as_of,
+      evaluatedAt:correctness.evaluatedAt??projection.as_of,publishedAt:correctness.publishedAt??projection.as_of,
+      tradingSessions:Array.isArray(correctness.freshnessSchedule)?correctness.freshnessSchedule:[]})
+    :projection?{status:'fresh',reason:'legacy_pre_v313_projection',missedExpectedRuns:0,actionsEnabled:true,nextExpectedAt:null}
+      :{status:'unavailable',missedExpectedRuns:3};
+  return {config,lastRunNonterminal:run?.status==='running',
+    lastTerminalRunAt:run&&run.status!=='running'?new Date(run.terminal_at).toISOString():null,
+    lastTerminalStatus:run&&run.status!=='running'?run.status:null,leaseStatus,
+    negativeRunDuration:Boolean(run?.terminal_at&&Date.parse(run.terminal_at)<Date.parse(run.started_at)),
+    producerCommitSha:run?.producer_commit_sha??null,projectionAsOf:projection?new Date(projection.as_of).toISOString():null,
+    projectionChecksum:projection?.payload_sha256??null,projectionFreshness:!projection?'missing':!checksumMatches?'invalid'
+      :projectionHealth.status==='fresh'?'fresh':'stale',projectionHealth,stateSchema:'stockinsider-producer-state-v1',
+    stuckRunCount:health.stuckRunCount,
+    workerSha256:run?.worker_sha256??projection?.worker_sha256??null,
+    schedulerConfigSha256:run?.scheduler_config_sha256??null,releaseIdentity:projection?.payload_json?.releaseIdentity??null,
+    projectionSchema:correctness.schema??null};
+}
+
+async function observeDatabase(releaseRoot, config, resolver, clientFactory,fetchImpl) {
+  if(!clientFactory)return observeDatabaseRest(config,resolver,fetchImpl);
   const connectionString = resolver('keychain:stockinsider-runtime:database-url');
   const Client = clientFactory ?? require(path.join(releaseRoot, 'node_modules/pg')).Client;
   const client = new Client({ connectionString, application_name: 'stockinsider-runtime-doctor',
@@ -88,12 +144,20 @@ async function observeConsumer(config, resolver, fetchImpl = globalThis.fetch) {
 }
 
 async function publishRuntimeHealthObservation({ releaseRoot, observation, resolver = resolveCredentialReference,
-  clientFactory }) {
+  clientFactory,fetchImpl }) {
+  const canonical = canonicalJson(observation); const digest = sha256(canonical);
+  if(!clientFactory){
+    const accepted=await restJson({resolver,fetchImpl,method:'POST',path:'rpc/append_legacy_runtime_health_rest_v3_15',body:{
+      p_producer_commit_sha:observation.producerCommitSha,p_worker_sha256:observation.workerSha256,
+      p_scheduler_config_sha256:observation.schedulerConfigSha256,p_observation_canonical:`\\x${Buffer.from(canonical).toString('hex')}`,
+      p_observation_json:observation,p_observation_sha256:digest,p_observed_at:new Date().toISOString()}});
+    if(accepted!==true)throw new Error('runtime health publication rejected');
+    return Object.freeze({observationSha256:digest});
+  }
   const connectionString = resolver('keychain:stockinsider-runtime:database-url');
   const Client = clientFactory ?? require(path.join(releaseRoot, 'node_modules/pg')).Client;
   const client = new Client({ connectionString, application_name: 'stockinsider-runtime-health-publisher',
     statement_timeout: 10000, query_timeout: 10000 });
-  const canonical = canonicalJson(observation); const digest = sha256(canonical);
   await client.connect();
   try {
     await client.query('BEGIN');
@@ -117,7 +181,7 @@ async function observeRuntimeHealth({ releaseRoot, runtimeRoot, manifest, review
   const installation = canonicalFile(path.join(releaseRoot, 'installation-manifest.json'));
   const journal = canonicalFile(path.join(runtimeRoot, 'activation-journal.json'));
   const config = canonicalFile(path.join(releaseRoot, 'config/runtime/auth-source-dag.json'));
-  const database = await observeDatabase(releaseRoot, config, resolver, clientFactory);
+  const database = await observeDatabase(releaseRoot, config, resolver, clientFactory,fetchImpl);
   const consumerCommitSha = await observeConsumer(config, resolver, fetchImpl);
   const owner = schedulerRows.find((row) => row.label === 'com.stockinsider.auth-source-worker');
   const competingOwners = schedulerRows.filter((row) => row.label !== 'com.stockinsider.auth-source-worker' && row.enabled)
