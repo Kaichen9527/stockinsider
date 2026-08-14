@@ -46,6 +46,7 @@ const {
   verifyCurrentNode,
 } = require('./hostPreflight');
 const {
+  authenticationSourcePath,
   executeModel,
   executeOperation,
   prepareTransport,
@@ -54,6 +55,18 @@ const {
   statePath,
   terminalResultFromJsonl,
 } = require('./execution');
+
+ordinaryTest('authentication source is bound to the operating-system account, not mutable HOME', () => {
+  const inheritedHome = process.env.HOME;
+  try {
+    process.env.HOME = '/tmp';
+    assert.equal(authenticationSourcePath(), path.join(os.userInfo().homedir, '.codex', 'auth.json'));
+    assert.notEqual(authenticationSourcePath(), '/tmp/.codex/auth.json');
+  } finally {
+    if (inheritedHome === undefined) delete process.env.HOME;
+    else process.env.HOME = inheritedHome;
+  }
+});
 
 function manifestObject(strategy = 'hybrid') {
   return {

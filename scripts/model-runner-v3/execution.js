@@ -168,8 +168,23 @@ function terminalResultFromJsonl(stdout) {
   return terminal;
 }
 
+function authenticationSourcePath() {
+  let account;
+  try {
+    account = os.userInfo();
+  } catch {
+    throw new RunnerError(5);
+  }
+  if (account.uid !== process.getuid()
+    || typeof account.homedir !== 'string'
+    || !path.isAbsolute(account.homedir)) {
+    throw new RunnerError(5);
+  }
+  return path.join(account.homedir, '.codex', 'auth.json');
+}
+
 function copyAuthenticationMaterial(transport) {
-  const source = path.join(os.homedir(), '.codex', 'auth.json');
+  const source = authenticationSourcePath();
   let descriptor;
   try {
     const stat = fs.lstatSync(source);
@@ -499,7 +514,7 @@ async function probePermissions({
       '-C', source.view,
       '--',
       '/bin/sh', '-c', script, 'permission-probe', source.view, scratch, transport,
-      path.join(os.homedir(), '.codex', 'auth.json'),
+      authenticationSourcePath(),
       node.path, networkScript, directResult, String(tcpAddress.port), unixSocket,
       descendantScript, doubleForkResult, String(httpsAddress.port),
       forkResult, setsidResult, delayedResult, ordinaryResult, processGroupResult,
@@ -1625,6 +1640,7 @@ async function executeOperation({
 }
 
 module.exports = {
+  authenticationSourcePath,
   executeOperation,
   executeModel,
   prepareTransport,
