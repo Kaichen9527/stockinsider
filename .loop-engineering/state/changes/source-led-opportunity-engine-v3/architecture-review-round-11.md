@@ -1,20 +1,20 @@
 # V3.15 protected Architecture compatibility evidence
 
 Date: 2026-08-14
-Review authority: fresh Architecture Round 43, carried at the protected worker's
+Review authority: fresh Architecture Round 45, carried at the protected worker's
 stable compatibility path after the immutable Requirements carrier.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Requirements implementation commit: `1fd45c4bf1f6d83fdb81a81bae4b7d60cb51c9b0`
-- Requirements evidence carrier: `f47fb3c3270e9fd36dc092a103150dfc924b2733`
-- Final repair-closure commit/tree: `f47fb3c3270e9fd36dc092a103150dfc924b2733` / `80445ca4391826ae76fd60a023eb21f77c05496a`
-- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..f47fb3c3270e9fd36dc092a103150dfc924b2733`
+- Protected implementation parent: `8cccb21f0b6cced023543118a606e63adf225c9d`
+- Requirements implementation commit: `acadd4e5531cd390257403b7186d16af6f87420d`
+- Requirements evidence carrier: `9e3b541ce4ae3982dee1d64f17ee665686513a45`
+- Final repair-closure commit/tree: `9e3b541ce4ae3982dee1d64f17ee665686513a45` / `a8df6adabe0cf9f47fe67eb9d4dda59dcb85a44e`
+- Full reviewed implementation range: `8cccb21f0b6cced023543118a606e63adf225c9d..9e3b541ce4ae3982dee1d64f17ee665686513a45`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
-- Canonical evidence: this protected Round 43 compatibility carrier.
+- Canonical evidence: this protected Round 45 compatibility carrier.
 
 ## Architecture closure
 
@@ -205,3 +205,13 @@ citation or evidence is filtered, and the production-shaped result remains below
 existing 3 MiB envelope. Restoring the fixed exact-review stage labels changes no
 runtime, SQL, Web, authority, ranking, DecisionEnvelope, grant, scheduler, LINE,
 dispatch or Promotion boundary. Architecture result: `PASS`, `P0=0 P1=0 P2=0`.
+
+Round 45 reviews the post-bootstrap graph and the production-shaped per-revision
+closure. The protected base owns the identical model-runner HOME bytes, so the V3.15
+product range no longer crosses that separately protected boundary. The rebased
+implementation tree is byte-identical to the Round 44 subject. Lossless evidence
+deduplication remains confined to the durable analysis transport: sourceEvidence is
+authoritative only when it is an ordered canonical superset; divergence still retains
+both planes and fails the existing bound. This changes no provider authority, ranking,
+DecisionEnvelope, database grant, scheduler, public mutation, LINE, dispatch or
+Promotion boundary. Architecture result: `PASS`, `P0=0 P1=0 P2=0`.
