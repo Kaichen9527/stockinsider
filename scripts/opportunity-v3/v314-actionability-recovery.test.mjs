@@ -709,6 +709,8 @@ test('V314-016 official ingestion streams bounded idempotency-addressed chunks a
       corporateActionSnapshots:rows(41),valuations:rows(201),valuationHistory:rows(200)},persistChunk:async(row)=>seen.push(row)});
   assert.equal(seen.filter((row)=>row.kind==='terminal').length,1);
   assert.ok(seen.filter((row)=>row.kind!=='terminal').every((row)=>row.items.length<=200));
+  assert.ok(seen.filter((row)=>['financial_facts','price_observations','reported_valuations'].includes(row.kind))
+    .every((row)=>row.items.length<=20));
   assert.equal(summary.counts.trading_sessions,401);assert.equal(summary.counts.reported_valuations,401);
   assert.match(summary.terminalRoot,/^[0-9a-f]{64}$/u);
 });

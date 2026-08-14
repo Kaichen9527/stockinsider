@@ -84,7 +84,7 @@ function createSupabaseRestLegacyProducerAdapter({supabaseUrl,serviceRoleKey,fet
       p_sqlstate:input.sqlstate,p_constraint_name:input.constraint,p_item_ordinal:input.itemOrdinal,
       p_field_path:input.fieldPath,p_input_hash:input.inputHash,p_producer_sha:input.producerSha,
       p_diagnostic_hash:input.diagnosticHash,p_recorded_at:input.recordedAt})),
-    appendLegacyOfficialIngestionChunk:async(input)=>Boolean(await rpc('append_legacy_official_ingestion_chunk_v3_14',{
+    appendLegacyOfficialIngestionChunk:async(input)=>Boolean(await rpc('append_legacy_official_ingestion_chunk_rest_v3_15',{
       p_run_id:input.runId,p_job_id:input.jobId,p_owner_token:input.ownerToken,p_kind:input.kind,p_ordinal:input.ordinal,
       p_items:input.items,p_chunk_hash:input.chunkHash,p_producer_sha:input.producerSha,p_source_cutoff:input.sourceCutoff})),
     failLegacyProducerJob:async(input)=>completion(await rpc('fail_legacy_producer_job_v3_11',{

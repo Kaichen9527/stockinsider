@@ -250,3 +250,27 @@ test('V315 migration is additive, bounded, upgrade-safe, and binds authority to 
   assert.match(sql,/GRANT EXECUTE ON FUNCTION public\.claim_legacy_mention_barrier_transport_v3_15\(uuid,uuid,uuid,integer\)[\s\S]*TO opportunity_v3_rpc_owner/u);
   assert.doesNotMatch(sql,/v_claim\.read_json:=jsonb_build_object\('results'/u);
 });
+
+test('V315 production repair pre-applies bounded official chunks and makes terminal completion constant-work',async()=>{
+  const repairSql=readFileSync(path.join(root,'migrations/20260814_official_ingestion_chunk_apply_v3_15.sql'),'utf8');
+  assert.doesNotMatch(repairSql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(repairSql,/legacy_official_ingestion_applications_v3_15/u);
+  assert.match(repairSql,/apply_legacy_official_ingestion_chunk_base_v3_15/u);
+  assert.match(repairSql,/append_legacy_official_ingestion_chunk_rest_v3_15/u);
+  assert.match(repairSql,/official_ingestion_preapply_incomplete/u);
+  assert.match(repairSql,/chunk[.]chunk_kind<>'terminal'[\s\S]*legacy_official_ingestion_applications_v3_15/u);
+  assert.match(repairSql,/REVOKE ALL[\s\S]*FROM PUBLIC,anon,authenticated,service_role/u);
+  assert.match(repairSql,/GRANT EXECUTE[\s\S]*append_legacy_official_ingestion_chunk_rest_v3_15[\s\S]*TO service_role/u);
+  const adapterSource=readFileSync(path.join(root,'scripts/runtime/supabase-rest-legacy-producer-adapter.js'),'utf8');
+  const postgresSource=readFileSync(path.join(root,'scripts/runtime/postgres-legacy-producer-adapter.js'),'utf8');
+  assert.match(adapterSource,/rpc\('append_legacy_official_ingestion_chunk_rest_v3_15'/u);
+  assert.match(postgresSource,/append_legacy_official_ingestion_chunk_rest_v3_15/u);
+  const {streamOfficialIngestionV314}=runtime('auth-source-worker-cli.js');const seen=[];
+  const rows=(length)=>Array.from({length},(_,ordinal)=>({ordinal}));
+  await streamOfficialIngestionV314({claim:{runId:'run',jobId:'job'},sourceCutoff:'2026-08-14T00:00:00Z',
+    producerSha:'a'.repeat(40),snapshot:{calendarSessions:rows(300),financialFacts:rows(41),priceObservations:rows(41),
+      corporateActionSnapshots:[],valuations:rows(21),valuationHistory:rows(20)},persistChunk:async(row)=>seen.push(row)});
+  for(const kind of ['financial_facts','price_observations','reported_valuations'])
+    assert.ok(seen.filter((row)=>row.kind===kind).every((row)=>row.items.length<=20),`${kind} bounded apply`);
+  assert.ok(seen.filter((row)=>row.kind==='trading_sessions').every((row)=>row.items.length<=200));
+});

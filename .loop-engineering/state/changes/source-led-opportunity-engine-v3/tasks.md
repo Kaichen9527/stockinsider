@@ -1689,6 +1689,13 @@ This approval authorizes implementation only. It does not authorize production m
   repair both P1 roots in `5e9b56e4621d0a04e2e59f4b903e535ba3769ac6`,
   and obtain repair/full-range closure `PASS P0=0 P1=0 P2=0`. Local Code Gate is
   PASS; protected external artifact remains the landing check.
+- [x] Reproduce the production `facts_refresh` failure without mutation: a 200-row
+  official financial or price chunk exceeds the 120-second database statement bound,
+  while individual authority rows are valid. Add ≤20-row application chunks, an
+  immutable applied-chunk ledger, interruption-safe replay and constant-work terminal
+  completion; rehearse the successor migration twice with rollback.
+- [ ] Obtain superseding fresh Requirements, Architecture, exact-review and protected
+  Code Gate evidence for the bounded chunk-application repair.
 - [ ] Apply the additive production migration, install the exact reviewed runtime,
   run two terminal producers and verify the official gate waterfall.
 - [ ] Deploy the same reviewed commit to `stockinsider-three`, complete visible-browser

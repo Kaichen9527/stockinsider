@@ -18,6 +18,10 @@ Observed on production on 2026-08-13:
   an approved source before official financial and market authority can be loaded;
 - the installed legacy writer emits nearly identical technical histories across
   unrelated stocks. Those values are not eligible for V3 action authority.
+- the first reviewed production bootstrap staged 5,530 official rows, but the
+  terminal completion attempted to append every row inside one REST transaction.
+  A 200-row financial or price chunk exceeded the database's 120-second statement
+  bound, so the producer failed at `facts_refresh` and never published a projection.
 
 The production read-only official scan proves this is infrastructure failure rather
 than an empty market: 1,977 active common stocks resolve, 1,971 have current official
@@ -46,6 +50,11 @@ research threshold. This observation is research supply, not proof of future ret
 7. The additive V3.15 migration is apply-twice safe, keeps RLS/immutable state, adds a
    bounded coarse-universe read and narrowly grants only the REST claim/health RPCs to
    `service_role`.
+8. Official ingestion chunks that contain per-stock append work are capped at 20
+   rows and are applied transactionally before terminal completion. An immutable
+   application ledger binds run, job, ordinal, hash, producer and cutoff. Completion
+   remains conservation-gated but performs constant work for already-applied chunks;
+   retries cannot double-apply or silently skip a chunk.
 
 ## Acceptance
 
@@ -59,6 +68,8 @@ research threshold. This observation is research supply, not proof of future ret
   failures without exposing credentials;
 - two production producer runs terminate successfully; the second rereads persisted
   authority and proves idempotency;
+- a rollback-only production rehearsal applies the chunk-application migration twice,
+  and a terminal completion refuses any manifest with an unapplied non-terminal chunk;
 - production projection identity, runtime manifest and Web release are the same
   reviewed commit; public action authority is enabled only if compatibility and
   freshness pass;

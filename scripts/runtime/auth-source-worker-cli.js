@@ -1255,10 +1255,10 @@ async function streamOfficialIngestionV314({claim,snapshot,sourceCutoff,producer
   const financialFacts=newFinancialFactsV314(snapshot?.financialFacts??[],priorFinancialRows);
   const datasets=[
     ['trading_sessions',snapshot?.calendarSessions??[],200],
-    ['financial_facts',financialFacts,200],
-    ['price_observations',snapshot?.priceObservations??[],200],
+    ['financial_facts',financialFacts,20],
+    ['price_observations',snapshot?.priceObservations??[],20],
     ['corporate_action_snapshots',snapshot?.corporateActionSnapshots??[],20],
-    ['reported_valuations',[...(snapshot?.valuations??[]),...(snapshot?.valuationHistory??[])],200],
+    ['reported_valuations',[...(snapshot?.valuations??[]),...(snapshot?.valuationHistory??[])],20],
   ];
   const chunks=[];const counts={};
   for(const [kind,items,chunkSize] of datasets){
