@@ -1,7 +1,7 @@
 # V3.15 protected Architecture compatibility evidence
 
 Date: 2026-08-14
-Review authority: fresh Architecture Round 36, carried at the protected worker's
+Review authority: fresh Architecture Round 37, carried at the protected worker's
 stable compatibility path after the immutable Requirements carrier.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
@@ -9,10 +9,10 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Requirements implementation commit: `9afb12b85c8e0eb9a98090c6443c2be146b6d523`
-- Requirements evidence carrier: `b88effd37fcff02a49ffbc9445904f637849cb87`
-- Final repair-closure commit/tree: `b88effd37fcff02a49ffbc9445904f637849cb87` / `2e5b00fed00c291dad0bfb7ccc0f429feeb3b6dd`
-- Full reviewed implementation range: `2e2c835d4c678e48cddd0429abdc7358e2b0e2f2..b88effd37fcff02a49ffbc9445904f637849cb87`
+- Requirements implementation commit: `82577e63dfcdbbd1a9306b6e4484c01b2c103b33`
+- Requirements evidence carrier: `7b6eee8af578c4d7c800e65d4b2f946935e39c04`
+- Final repair-closure commit/tree: `7b6eee8af578c4d7c800e65d4b2f946935e39c04` / `3c65148e5506a438ce714b84c9df788742452264`
+- Full reviewed implementation range: `2e2c835d4c678e48cddd0429abdc7358e2b0e2f2..7b6eee8af578c4d7c800e65d4b2f946935e39c04`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
 - Canonical evidence: this protected Round 35 compatibility carrier.
 
@@ -145,3 +145,8 @@ applied rows. The migration is additive, apply-twice safe, grants service_role o
 the combined append/apply wrapper and completion wrapper, and leaves LINE, dispatch,
 automatic trading and Promotion disabled. Architecture result: `PASS`,
 `P0=0 P1=0 P2=0`.
+
+Round 37 confirms the final assertion-only closure does not alter the architecture:
+the acceptance oracle now binds the actual 20-row financial chunk contract, and the
+full 96-case product suite proves the same producer, decision and projection graph.
+Architecture result remains `PASS`, `P0=0 P1=0 P2=0`.
