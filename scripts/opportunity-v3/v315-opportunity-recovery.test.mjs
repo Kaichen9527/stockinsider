@@ -60,6 +60,12 @@ test('V315 official TPEX history uses Gregorian query authority and scales lots/
   const official=runtime('official-twse-valuation.js');const requested=[];
   const fetchImpl=async(url)=>{
     requested.push(String(url));
+    if(String(url).includes('/web/stock/aftertrading/peratio_analysis')&&String(url).includes('d=')){
+      return new Response(JSON.stringify({stat:'ok',tables:[{data:[
+        ['8299','群聯','12','1','1','1','3'],
+        ['8101','華冠','18','1','1','1','2'],
+      ]}]}),{status:200});
+    }
     if(String(url).includes('/afterTrading/tradingStock')&&String(url).includes('code=8299')){
       return new Response(JSON.stringify({stat:'ok',tables:[{data:[
         ['115/08/03','6,128','10,757,327','1,675.00','1,800.00','1,670.00','1,760.00'],
@@ -69,12 +75,16 @@ test('V315 official TPEX history uses Gregorian query authority and scales lots/
   };
   const snapshot=await official.loadOfficialTwMarketSnapshot({cutoff:'2026-08-13T10:20:00Z',
     candidates:[{symbol:'8299',exchange:'TPEX',canonicalSector:'semiconductor'}],
+    peerCandidates:[{symbol:'8101',exchange:'TPEX',canonicalSector:'semiconductor'}],
+    valuationBackfillSessions:[['TPEX','2026-08-03']],
     priceBackfillSymbols:[['8299','TPEX']],fetchImpl});
   assert.ok(requested.some((url)=>url.includes('date=2026%2F08%2F01')&&url.includes('code=8299')));
   assert.equal(requested.some((url)=>url.includes('date=115%2F08%2F01')),false);
   assert.equal(snapshot.priceObservations.length,1);
   assert.equal(snapshot.priceObservations[0].volume,6_128_000);
   assert.equal(snapshot.priceObservations[0].turnoverTwd,10_757_327_000);
+  assert.ok(snapshot.valuationHistory.some((row)=>row.symbol==='8101'&&row.session==='2026-08-03'),
+    `same-sector peer history must survive the authoritative loader filter: ${JSON.stringify(requested)}`);
 });
 
 test('V315 TPEX corporate-action range accepts the official compact ROC date form',()=>{
@@ -93,6 +103,48 @@ test('V315 official monthly revenue carries filing time and a persistable monthl
   assert.deepEqual({periodStart:rows[0].periodStart,periodEnd:rows[0].periodEnd,
     filingPublishedAt:rows[0].filingPublishedAt,monthlyRevenue:rows[0].monthlyRevenue},
   {periodStart:'2026-07-01',periodEnd:'2026-07-31',filingPublishedAt:'2026-08-13T00:00:00Z',monthlyRevenue:27161687});
+});
+
+test('V315 PE bridge derives a bounded diluted-share denominator from official cumulative EPS when MOPS omits the share concept',()=>{
+  const {valuationFactInput}=runtime('auth-source-worker-cli.js');
+  const periods=['2025-06-30','2025-09-30','2025-12-31','2026-03-31','2026-06-30'];
+  const series={
+    quarterly_revenue:[200,300,400,120,250],quarterly_gross_profit:[80,120,160,50,105],
+    quarterly_operating_expense:[30,45,60,20,42],quarterly_operating_income:[50,75,100,30,63],
+    quarterly_non_operating_income:[5,7,10,3,6],quarterly_pretax_income:[55,82,110,33,69],
+    quarterly_income_tax_expense:[10,15,20,6,13],quarterly_net_income:[45,67,90,27,56],
+    quarterly_noncontrolling_interest:[2,3,4,1,2],
+    quarterly_net_income_attributable_to_common:[43,64,86,26,54],
+    quarterly_diluted_eps:[4.3,6.4,8.6,2.6,5.4],
+  };
+  const rows=Object.entries(series).flatMap(([factKey,values])=>periods.map((period,index)=>[
+    '2330',factKey,`${period.slice(0,4)}-01-01`,period,'quarterly',values[index],
+    factKey==='quarterly_diluted_eps'?'TWD_per_share':'TWD','official_filing',
+    '2026-08-01T00:00:00Z','2026-08-01T00:00:00Z','2026-08-01T01:00:00Z','2026-08-01T01:00:00Z',
+    `twse-mops-inline:${period}:2330:${factKey}:${'a'.repeat(64)}`,null,'reported','reported_period',
+  ]));
+  const facts=valuationFactInput(rows,'2026-08-14T00:00:00Z');
+  assert.equal(facts.periodReadiness,'ttm_from_four_official_quarters',JSON.stringify({missingFacts:facts.missingFacts}));
+  assert.equal(facts.dilutedSharesAuthority,'implied_from_official_eps');
+  assert.ok(Math.abs(facts.dilutedShares-10)<1e-9);
+  assert.ok(Math.abs(facts.netIncome/facts.dilutedShares-9.7)<1e-9);
+  assert.deepEqual(facts.missingFacts.sort(),['book_value_per_share','cash_and_equivalents','total_assets','total_debt','total_equity']);
+  const bridge=runtime('valuation-operating-bridge.js').buildPointInTimeOperatingBridge(facts);
+  assert.equal(bridge.availability,'available');
+  assert.ok(Math.abs(bridge.eps-9.7)<1e-9);
+});
+
+test('V315 fundamental quality derives ROE directly from official attributable income and equity',()=>{
+  const row=(key,value,unit='TWD')=>['2330',key,key==='total_equity'?null:'2026-01-01','2026-06-30',
+    key==='total_equity'?'instant':'quarterly',value,unit,'official_filing','2026-08-01T00:00:00Z',
+    '2026-08-01T00:00:00Z','2026-08-01T01:00:00Z','2026-08-01T01:00:00Z',
+    `twse-mops-inline:2026-06-30:2330:${key}:${'b'.repeat(64)}`];
+  const input=runtime('auth-source-worker-cli.js').legacyQualityInput([
+    row('quarterly_revenue',1000),row('quarterly_operating_income',300),
+    row('quarterly_net_income_attributable_to_common',200),row('total_equity',2000),
+  ]);
+  assert.ok(Math.abs(input.roe-.2)<1e-12);
+  assert.ok(Math.abs(input.operatingMargin-.3)<1e-12);
 });
 
 test('V315 official coarse research rejects revenue filed after the point-in-time cutoff',async()=>{

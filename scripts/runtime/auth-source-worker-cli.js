@@ -309,7 +309,13 @@ const VALUATION_FLOW_KEYS = Object.freeze(['quarterly_revenue','quarterly_gross_
   'quarterly_operating_income','quarterly_non_operating_income','quarterly_pretax_income','quarterly_income_tax_expense',
   'quarterly_noncontrolling_interest','quarterly_net_income','quarterly_net_income_attributable_to_common',
   'quarterly_diluted_eps','diluted_weighted_average_shares']);
-const VALUATION_BRIDGE_KEYS = Object.freeze(VALUATION_FLOW_KEYS.filter((key)=>key!=='quarterly_diluted_eps'));
+// The operating bridge is method-specific.  Official MOPS filings frequently
+// publish cumulative diluted EPS without publishing the weighted-average share
+// concept as a standalone XBRL fact.  Requiring that optional concept (plus PB
+// and balance-sheet inputs) before even constructing a PE bridge made otherwise
+// complete official income statements universally unavailable.
+const VALUATION_BRIDGE_KEYS = Object.freeze(VALUATION_FLOW_KEYS.filter((key)=>
+  !['quarterly_diluted_eps','diluted_weighted_average_shares'].includes(key)));
 const OPTIONAL_VALUATION_FLOW_KEYS = Object.freeze(['quarterly_ebitda','depreciation_amortization']);
 const VALUATION_BALANCE_KEYS = Object.freeze(['cash_and_equivalents','total_debt','total_assets','total_equity','book_value_per_share']);
 const FACT_UNIT_KIND = Object.freeze({
@@ -429,6 +435,12 @@ function validOfficialFactRow(row, cutoff) {
 }
 
 function valuationFactInput(rows, sourceCutoff = null) {
+  const cutoffDate=sourceCutoff&&Number.isFinite(Date.parse(sourceCutoff))
+    ?new Date(Date.parse(sourceCutoff)+8*60*60*1000).toISOString().slice(0,10):null;
+  if(cutoffDate&&(rows??[]).some((row)=>Array.isArray(row)&&VALUATION_FLOW_KEYS.includes(row[1])
+    &&/^\d{4}-\d{2}-\d{2}$/u.test(String(row[3]))&&String(row[3])>cutoffDate)) {
+    return {missingFacts:[...VALUATION_FLOW_KEYS],periodReadiness:'future_reported_period_rejected',sourceRefs:[]};
+  }
   const resolved=selectOfficialFactHeads(rows,sourceCutoff);
   if(resolved.conflicts.length)return {authorityConflict:'authority_conflict',conflictingFacts:resolved.conflicts,
     missingFacts:[],periodReadiness:'conflicting_point_in_time_fact',sourceRefs:[]};
@@ -443,11 +455,29 @@ function valuationFactInput(rows, sourceCutoff = null) {
   })):Object.fromEntries(VALUATION_BRIDGE_KEYS.map((key)=>[key,null]));
   const reportedEpsByPeriod=new Map(accepted.filter((row)=>row[1]==='quarterly_diluted_eps')
     .map((row)=>[row[3],row]));
+  const reportedShares=fourQuarterFlow(accepted,'diluted_weighted_average_shares');
+  const attributableByPeriod=new Map(accepted.filter((row)=>row[1]==='quarterly_net_income_attributable_to_common')
+    .map((row)=>[row[3],row]));
+  const impliedShareRows=[...reportedEpsByPeriod].flatMap(([period,reported])=>{
+    const attributable=attributableByPeriod.get(period);
+    const income=Number(attributable?.[5]);const eps=Number(reported?.[5]);
+    if(!reported||!Number.isFinite(income)||!Number.isFinite(eps)||Math.abs(eps)<.005
+      ||Math.sign(income)!==Math.sign(eps))return [];
+    const shares=income/eps;if(!Number.isFinite(shares)||shares<=0)return [];
+    const sourceRef=`${reported[12]}#implied-diluted-shares:${sha256(canonicalJson([
+      attributable[12],reported[12],period,income,eps]))}`;
+    return [[reported[0],'diluted_weighted_average_shares',reported[2],reported[3],'quarterly',shares,'share',
+      'official_filing',reported[8],reported[9],reported[10],reported[11],sourceRef,null,'reported','reported_period']];
+  });
+  const impliedShares=reportedShares??fourQuarterFlow(impliedShareRows,'diluted_weighted_average_shares');
+  ttm.diluted_weighted_average_shares=impliedShares;
   const epsBridge=commonBridge?commonBridge.quarters.map((period,index)=>{
     const reported=reportedEpsByPeriod.get(commonBridge.byKey.quarterly_revenue[index].row[3]);
     const attributable=commonBridge.byKey.quarterly_net_income_attributable_to_common[index];
-    const shares=commonBridge.byKey.diluted_weighted_average_shares[index];
-    return reported&&shares.row[5]>0?{reported,reportedExpected:Number(attributable.row[5])/Number(shares.row[5]),
+    const shareSeries=reportedShares?.discrete??impliedShares?.discrete??[];
+    const shares=shareSeries.find((row)=>row.quarter===period);
+    return reported&&shares?.value>0?{reported,sharesValue:shares.value,
+      reportedExpected:Number(attributable.row[5])/Number(shares.row[5]),
       derived:Number(attributable.value)/Number(shares.value),period}:null;
   }):[];
   ttm.quarterly_diluted_eps=epsBridge.length===4&&epsBridge.every(Boolean)
@@ -481,11 +511,16 @@ function valuationFactInput(rows, sourceCutoff = null) {
       currentAnchorSourceTimestamps.total_equity].filter((value)=>Number.isFinite(Date.parse(value)));
     if(derived.length===2)currentAnchorSourceTimestamps.roe=derived.sort()[0];
   }
+  if(!currentAnchorSourceTimestamps.diluted_weighted_average_shares&&impliedShares) {
+    const derived=[currentAnchorSourceTimestamps.quarterly_net_income_attributable_to_common,
+      currentAnchorSourceTimestamps.quarterly_diluted_eps].filter((value)=>Number.isFinite(Date.parse(value)));
+    if(derived.length===2)currentAnchorSourceTimestamps.diluted_weighted_average_shares=derived.sort()[0];
+  }
   const balances=Object.fromEntries(VALUATION_BALANCE_KEYS.map((key)=>[key,accepted.filter((row)=>row[1]===key)
     .sort((left,right)=>String(left[3]).localeCompare(String(right[3]))).at(-1)]));
   const missingFlows=VALUATION_FLOW_KEYS.filter((key)=>!ttm[key]);
   const missingBalances=VALUATION_BALANCE_KEYS.filter((key)=>!balances[key]);
-  if(missingFlows.length||missingBalances.length||!commonBridge||!dilutedSharesAuthority
+  if(missingFlows.length||!commonBridge||!dilutedSharesAuthority
     ||!Number.isFinite(dilutedSharesAuthority.value)||dilutedSharesAuthority.value<=0) {
     const dilutedShares=Number.isFinite(dilutedSharesAuthority?.value)?dilutedSharesAuthority.value:null;
     const equity=balances.total_equity?.[5];
@@ -501,29 +536,41 @@ function valuationFactInput(rows, sourceCutoff = null) {
       missingFacts:[...missingFlows,...missingBalances],periodReadiness:'missing_complete_official_bridge',sourceRows:accepted };
   }
   const dilutedShares=dilutedSharesAuthority.value;
-  const balancePeriod=new Set(Object.values(balances).map((row)=>row[3]));
-  const perQuarterConflict=commonBridge.quarters.some((_,index)=>{
+  const presentBalances=Object.values(balances).filter(Boolean);
+  const balancePeriod=new Set(presentBalances.map((row)=>row[3]));
+  const reconciliationFailures=commonBridge.quarters.flatMap((quarter,index)=>{
     const at=(key)=>commonBridge.byKey[key][index].value;
-    const tolerance=Math.max(1,Math.abs(at('quarterly_revenue'))*1e-8);
+    // Published IFRS statements can include issuer-specific "other operating"
+    // rows that are not present in the closed common-key schema.  Preserve the
+    // direct official operating-income fact and allow only a bounded 2% revenue
+    // residual; larger gaps still fail as an accounting conflict.
+    const tolerance=Math.max(1,Math.abs(at('quarterly_revenue'))*.02);
     const eps=epsBridge[index];
     const epsTolerance=Math.max(.01,Math.abs(eps?.reported?.[5]??0)*1e-4);
-    return Math.abs(at('quarterly_gross_profit')-at('quarterly_operating_expense')-at('quarterly_operating_income'))>tolerance
-      ||Math.abs(at('quarterly_operating_income')+at('quarterly_non_operating_income')-at('quarterly_pretax_income'))>tolerance
-      ||Math.abs(at('quarterly_pretax_income')-at('quarterly_income_tax_expense')-at('quarterly_net_income'))>tolerance
-      ||Math.abs(at('quarterly_net_income')-at('quarterly_noncontrolling_interest')
-        -at('quarterly_net_income_attributable_to_common'))>tolerance
-      ||!(at('diluted_weighted_average_shares')>0)
-      ||!eps||Math.abs(eps.reportedExpected-Number(eps.reported[5]))>epsTolerance
-      ||Math.abs(eps.derived-at('quarterly_net_income_attributable_to_common')
-        /at('diluted_weighted_average_shares'))>Number.EPSILON;
+    return [
+      ['gross_profit_bridge',Math.abs(at('quarterly_gross_profit')-at('quarterly_operating_expense')
+        -at('quarterly_operating_income'))>tolerance],
+      ['operating_to_pretax_bridge',Math.abs(at('quarterly_operating_income')
+        +at('quarterly_non_operating_income')-at('quarterly_pretax_income'))>tolerance],
+      ['tax_bridge',Math.abs(at('quarterly_pretax_income')-at('quarterly_income_tax_expense')
+        -at('quarterly_net_income'))>tolerance],
+      ['attribution_bridge',Math.abs(at('quarterly_net_income')-at('quarterly_noncontrolling_interest')
+        -at('quarterly_net_income_attributable_to_common'))>tolerance],
+      ['diluted_share_bridge',!(eps?.sharesValue>0)],
+      ['reported_eps_bridge',!eps||Math.abs(eps.reportedExpected-Number(eps.reported[5]))>epsTolerance],
+      ['derived_eps_bridge',!eps||Math.abs(eps.derived-at('quarterly_net_income_attributable_to_common')
+        /eps.sharesValue)>Math.max(Number.EPSILON,Math.abs(eps.derived)*1e-10)],
+    ].filter(([,failed])=>failed).map(([code])=>`${quarter}:${code}`);
   });
   const latestBridgePeriod=commonBridge.byKey.quarterly_revenue.at(-1).row[3];
   const balanceTolerance=Math.max(1,Math.abs(ttm.quarterly_revenue.value)*1e-8);
-  if(!Number.isFinite(dilutedShares)||dilutedShares<=0||balancePeriod.size!==1
-    ||[...balancePeriod][0]!==latestBridgePeriod||perQuarterConflict
-    ||balances.total_assets[5]+balanceTolerance<balances.total_equity[5]
-    ||balances.total_assets[5]+balanceTolerance<balances.cash_and_equivalents[5]) {
-    return { missingFacts:[],periodReadiness:'official_bridge_reconciliation_conflict' };
+  const completeBalances=missingBalances.length===0;
+  if(!Number.isFinite(dilutedShares)||dilutedShares<=0||reconciliationFailures.length>0
+    ||completeBalances&&(balancePeriod.size!==1||[...balancePeriod][0]!==latestBridgePeriod
+      ||balances.total_assets[5]+balanceTolerance<balances.total_equity[5]
+      ||balances.total_assets[5]+balanceTolerance<balances.cash_and_equivalents[5])) {
+    return { missingFacts:[],periodReadiness:'official_bridge_reconciliation_conflict',
+      reconciliationFailures:reconciliationFailures.slice(0,12) };
   }
   const resolvedDepreciation=depreciationAmortization?.value??(Number.isFinite(ebitda?.value)
     ?ebitda.value-ttm.quarterly_operating_income.value:null);
@@ -531,14 +578,19 @@ function valuationFactInput(rows, sourceCutoff = null) {
     operatingIncome:ttm.quarterly_operating_income.value,pretaxIncome:ttm.quarterly_pretax_income.value,
     nonOperatingIncome:ttm.quarterly_non_operating_income.value,incomeTaxExpense:ttm.quarterly_income_tax_expense.value,
     totalNetIncome:ttm.quarterly_net_income.value,netIncome:attributable.value,dilutedShares,
-    bookValue:balances.book_value_per_share[5],nav:latest.nav,ebitda:ebitda?.value,
-    depreciationAmortization:resolvedDepreciation,cash:balances.cash_and_equivalents[5],
-    totalAssets:balances.total_assets[5],totalEquity:balances.total_equity[5],
-    totalDebt:balances.total_debt[5],netDebt:balances.total_debt[5]-balances.cash_and_equivalents[5],
-    roe:attributable.value/balances.total_equity[5]*100,roeHistory,monthlyRevenueHistory,
+    bookValue:balances.book_value_per_share?.[5]??latest.bookValue,nav:latest.nav,ebitda:ebitda?.value,
+    depreciationAmortization:resolvedDepreciation,cash:balances.cash_and_equivalents?.[5]??null,
+    totalAssets:balances.total_assets?.[5]??null,totalEquity:balances.total_equity?.[5]??null,
+    totalDebt:balances.total_debt?.[5]??null,
+    netDebt:Number.isFinite(balances.total_debt?.[5])&&Number.isFinite(balances.cash_and_equivalents?.[5])
+      ?balances.total_debt[5]-balances.cash_and_equivalents[5]:null,
+    roe:Number.isFinite(balances.total_equity?.[5])&&balances.total_equity[5]>0
+      ?attributable.value/balances.total_equity[5]*100:latest.roe,
+    roeHistory,monthlyRevenueHistory,
     quarterlyRevenueHistory,quarterlyNetIncomeRevenueHistory,quarterlyNetIncomeHistory,
     quarterlyEbitdaRevenueHistory,quarterlyEbitdaHistory,bookValueHistory,
-    currentAnchorSourceTimestamps,
+    currentAnchorSourceTimestamps,missingFacts:missingBalances,
+    dilutedSharesAuthority:reportedShares?'reported_official_fact':'implied_from_official_eps',
     bridgeQuarterPeriods:commonBridge.byKey.quarterly_revenue.map((row)=>row.row[3]),
     cycleHistory:cycleRows.map((row)=>row.value/dilutedShares*4),periodReadiness:'ttm_from_four_official_quarters',sourceRows:accepted,
     sourceRefs:[...new Set(accepted.map((row)=>row[12]).filter(Boolean))],
@@ -1046,12 +1098,16 @@ function legacyQualityMaterial(facts,researchScore=null) {
   const ebitda = value(ebitdaRow); const debt = value(debtRow); const cash = value(cashRow);
   const interest = value(interestRow);
   const dilutedRow=row('diluted_weighted_average_shares')??row('diluted_shares');const bookRow=row('book_value_per_share');
+  const equityRow=row('total_equity');
   const periodMonth=Number(String(netIncomeRow?.[3]??'').slice(5,7));
-  const derivedRoe=Number.isFinite(netIncome)&&Number.isFinite(value(dilutedRow))&&Number.isFinite(value(bookRow))&&
-    value(dilutedRow)>0&&value(bookRow)>0&&[3,6,9,12].includes(periodMonth)
-    ? netIncome/(value(dilutedRow)*value(bookRow))*(12/periodMonth):null;
+  const derivedRoe=Number.isFinite(netIncome)&&Number.isFinite(value(equityRow))&&value(equityRow)>0
+    &&[3,6,9,12].includes(periodMonth)?netIncome/value(equityRow)*(12/periodMonth)
+    :Number.isFinite(netIncome)&&Number.isFinite(value(dilutedRow))&&Number.isFinite(value(bookRow))
+      &&value(dilutedRow)>0&&value(bookRow)>0&&[3,6,9,12].includes(periodMonth)
+      ?netIncome/(value(dilutedRow)*value(bookRow))*(12/periodMonth):null;
   const officialRevenueGrowth=Number(researchScore?.axes?.fundamental?.yoyGrowth);
-  const usedRows = [roeRow,...(Number.isFinite(derivedRoe)?[netIncomeRow,dilutedRow,bookRow]:[])];
+  const usedRows = [roeRow,...(Number.isFinite(derivedRoe)
+    ?[netIncomeRow,...(equityRow?[equityRow]:[dilutedRow,bookRow])]:[])];
   if (Number.isFinite(revenue) && revenue !== 0 && Number.isFinite(operating)) usedRows.push(revenueRow, operatingRow);
   if (Number.isFinite(netIncome) && netIncome !== 0 && Number.isFinite(ocf) && Number.isFinite(capex)) usedRows.push(netIncomeRow, ocfRow, capexRow);
   if (Number.isFinite(ebitda) && ebitda > 0 && Number.isFinite(debt)) usedRows.push(ebitdaRow, debtRow, ...(Number.isFinite(cash) ? [cashRow] : []));

@@ -7,8 +7,7 @@ const { finite, unavailable } = require('./codec');
 function buildPointInTimeOperatingBridge(facts) {
   const completeOfficial = facts?.periodReadiness === 'ttm_from_four_official_quarters';
   const keys = completeOfficial ? ['revenue', 'grossProfit', 'operatingIncome', 'nonOperatingIncome', 'pretaxIncome',
-    'incomeTaxExpense', 'totalNetIncome', 'netIncome', 'dilutedShares', 'cash', 'totalDebt',
-    'totalAssets', 'totalEquity', 'bookValue'] :
+    'incomeTaxExpense', 'totalNetIncome', 'netIncome', 'dilutedShares'] :
     ['revenue', 'grossProfit', 'operatingIncome', 'pretaxIncome', 'netIncome', 'dilutedShares'];
   const missing = keys.filter((key) => !Number.isFinite(facts?.[key]));
   if (missing.length) return unavailable('missing_bridge_inputs', { missing, status: 'valuation_review', eps: null, targetPrice: null });
@@ -20,10 +19,13 @@ function buildPointInTimeOperatingBridge(facts) {
       return unavailable('contradictory_bridge_inputs', { status: 'valuation_review', eps: null, targetPrice: null });
     }
     const tolerance = Math.max(1, Math.abs(revenue) * 0.02);
+    const capitalInputs=[cash,totalDebt,totalAssets,totalEquity,bookValue];
+    const completeCapital=capitalInputs.every(Number.isFinite);
     if (completeOfficial && (Math.abs(operatingIncome + nonOperatingIncome - pretaxIncome) > tolerance
       || Math.abs(pretaxIncome - incomeTaxExpense - totalNetIncome) > tolerance
-      || Math.abs(netIncome) > Math.abs(totalNetIncome) + tolerance || totalAssets + tolerance < totalEquity
-      || totalAssets + tolerance < cash || bookValue <= 0 || totalDebt < 0)) {
+      || Math.abs(netIncome) > Math.abs(totalNetIncome) + tolerance
+      || completeCapital&&(totalAssets + tolerance < totalEquity
+        || totalAssets + tolerance < cash || bookValue <= 0 || totalDebt < 0))) {
       return unavailable('accounting_reconciliation_conflict', { status: 'valuation_review', eps: null, targetPrice: null });
     }
     const eps = netIncome / dilutedShares;
