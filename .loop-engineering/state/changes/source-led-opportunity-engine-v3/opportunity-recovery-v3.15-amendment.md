@@ -52,6 +52,13 @@ Observed on production on 2026-08-13:
   each complete immutable fact payload beneath both `decisions.analysisRevision` and
   `decisionPayloads`, and copied complete calendar/coverage rows even though the next
   stage consumes only their authority hash and bounded coverage summary.
+- a read-only replay of real official filings found that otherwise complete income
+  bridges were still rejected when MOPS published cumulative diluted EPS but omitted
+  a standalone diluted weighted-share concept. The universal bridge also required
+  PE-irrelevant PB/balance inputs, and historical valuation acquisition discarded
+  every rostered peer that was not itself a deep candidate. These two implementation
+  roots made formal and relative valuation operationally unreachable despite valid
+  point-in-time authority.
 
 The production read-only official scan proves this is infrastructure failure rather
 than an empty market: 1,977 active common stocks resolve, 1,971 have current official
@@ -108,6 +115,19 @@ research threshold. This observation is research supply, not proof of future ret
     completed-session count, readiness and at most twelve blockers; the complete rows
     remain immutable in the succeeded facts result. This compaction may not remove a
     decision, candidate, citation or source-evidence item.
+14. Method readiness is method-specific. A complete normalized-PE income bridge does
+    not require PB/NAV-only balance facts; present balance facts are still reconciled
+    and any conflict remains terminal for that method.
+15. When an official filing publishes cumulative attributable income and cumulative
+    diluted EPS for the same point-in-time periods but no standalone weighted-share
+    concept, the runtime may derive the implied year-to-date denominator and its
+    day-weighted four-quarter denominator. The derivation is in-memory, source-ref
+    bound to both official facts, never persisted as a reported fact, and any sign,
+    zero, future-period or reconciliation conflict fails closed.
+16. Historical PE/PB acquisition admits the exact bounded union of deep candidates
+    and their same-exchange peer roster. A peer need not be a deep candidate, cannot
+    become an action candidate through this path, and remains subject to the existing
+    252-session/eight-peer authority gates.
 
 ## Acceptance
 
@@ -115,6 +135,11 @@ research threshold. This observation is research supply, not proof of future ret
   append-only tests pass;
 - official 8299/TPEX history returns real sessions with base units, and compact ROC
   corporate-action dates are accepted;
+- historical valuation retains a same-sector peer outside the deep-candidate set;
+- an official four-quarter income bridge with cumulative EPS and no standalone share
+  concept derives the bounded denominator and rejects future or conflicting periods;
+- official attributable income plus total equity supplies fundamental ROE without
+  inventing book value per share;
 - a source-empty funnel admits at least one out-of-seed official factor candidate,
   preserves `seedMembership`, and creates no action field;
 - the REST adapter maps canonical bytea, carries authority cache, and redacts provider

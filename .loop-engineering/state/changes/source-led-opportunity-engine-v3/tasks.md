@@ -1711,3 +1711,13 @@ This approval authorizes implementation only. It does not authorize production m
 - [ ] Run two terminal reviewed producers, activate the matching reviewed runtime,
   merge PR #53, deploy the exact source to `stockinsider-three`, and complete API plus
   visible-browser production verification. Do not reset the database password.
+- [x] Reproduce and repair the post-analysis valuation-authority dead ends: derive a
+  point-in-time diluted denominator only from same-period official attributable
+  income plus diluted EPS when MOPS omits the standalone concept; make PE readiness
+  independent of PB/NAV-only fields; derive quality ROE from official equity; and
+  retain the bounded same-exchange peer roster in historical PE/PB acquisition.
+  Product correctness is 102/102, migration 53/53, core 61/61, legacy 2/2,
+  Playwright 8/8 and performance 4/4; typecheck, lint and production build pass.
+- [ ] Supersede the prior exact evidence with fresh Requirements, Architecture,
+  exact-range review and protected aggregate evidence for the method-specific
+  valuation repair before any final production activation.
