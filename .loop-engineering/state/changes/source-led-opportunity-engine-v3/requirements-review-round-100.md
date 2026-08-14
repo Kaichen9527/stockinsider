@@ -1,18 +1,18 @@
 # V3.15 protected Requirements compatibility evidence
 
 Date: 2026-08-14
-Review authority: fresh Requirements Round 162, carried at the protected worker's
+Review authority: fresh Requirements Round 164, carried at the protected worker's
 stable compatibility path without changing the reviewed active artifact graph.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Final repair-closure commit/tree: `1fd45c4bf1f6d83fdb81a81bae4b7d60cb51c9b0` / `af0b8adf7bdc995de1b3e0d8cbf7cde8611eb0e8`
-- Full reviewed range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..1fd45c4bf1f6d83fdb81a81bae4b7d60cb51c9b0`
+- Protected implementation parent: `8cccb21f0b6cced023543118a606e63adf225c9d`
+- Final repair-closure commit/tree: `acadd4e5531cd390257403b7186d16af6f87420d` / `304862ae0b7a005cdeafff3f56fb3c7d68523463`
+- Full reviewed range: `8cccb21f0b6cced023543118a606e63adf225c9d..acadd4e5531cd390257403b7186d16af6f87420d`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
-- Canonical evidence: this protected Round 162 compatibility carrier.
+- Canonical evidence: this protected Round 164 compatibility carrier.
 - Acceptance inventory: `1.46.0`, 320 cases, partitioned as 272 product/runtime,
   28 model-runner and 20 evaluation-governance owners.
 
@@ -218,5 +218,12 @@ once, 40 source candidates and all citations, and produces a 2,648,074-byte resu
 the captured production shape. The status-oracle closure restores the already-reviewed
 exact-review stage labels without changing runtime behavior. Focused V3.15 is 16/16
 and complete product correctness is 100/100; migration 53/53, model-runner 17/17,
-disabled host-pin v3.8 doctor, typecheck, lint and production build PASS. Fresh
-Requirements Round 162 result: `PASS`, `P0=0 P1=0 P2=0`.
+disabled host-pin v3.8 doctor, typecheck, lint and production build PASS.
+
+The protected base now carries the identical model-runner HOME compatibility bytes;
+the rebased implementation tree is byte-identical to the independently reviewed Round
+163 subject. Its only ancestry change replaces the prior base with the narrow bootstrap,
+and the product range contains no model-runner diff. The production-shaped per-revision
+payload remains 206,591 bytes, the full analysis result remains 1,546,468 bytes, and all
+authority, migration, source conservation and no-buy-quota requirements are unchanged.
+Fresh Requirements Round 164 result: `PASS`, `P0=0 P1=0 P2=0`.
