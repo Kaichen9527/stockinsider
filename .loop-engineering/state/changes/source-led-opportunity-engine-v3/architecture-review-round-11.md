@@ -1,7 +1,7 @@
 # V3.15 protected Architecture compatibility evidence
 
 Date: 2026-08-14
-Review authority: fresh Architecture Round 35, carried at the protected worker's
+Review authority: fresh Architecture Round 36, carried at the protected worker's
 stable compatibility path after the immutable Requirements carrier.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
@@ -9,10 +9,10 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Requirements implementation commit: `70db2f425c55581b21427fa58942625209a94dc3`
-- Requirements evidence carrier: `a6ac12401841cc32032dd7b8ab008971af5f5780`
-- Final repair-closure commit/tree: `a6ac12401841cc32032dd7b8ab008971af5f5780` / `ae1032d6d8e9529d38885bc4853b56fd8707d63b`
-- Full reviewed implementation range: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..a6ac12401841cc32032dd7b8ab008971af5f5780`
+- Requirements implementation commit: `9afb12b85c8e0eb9a98090c6443c2be146b6d523`
+- Requirements evidence carrier: `b88effd37fcff02a49ffbc9445904f637849cb87`
+- Final repair-closure commit/tree: `b88effd37fcff02a49ffbc9445904f637849cb87` / `2e5b00fed00c291dad0bfb7ccc0f429feeb3b6dd`
+- Full reviewed implementation range: `2e2c835d4c678e48cddd0429abdc7358e2b0e2f2..b88effd37fcff02a49ffbc9445904f637849cb87`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
 - Canonical evidence: this protected Round 35 compatibility carrier.
 
@@ -131,3 +131,17 @@ to one adapter instance and cannot cross runs or survive process restart. Existi
 hash checks, page bounds, immutable reads and completion ownership remain unchanged.
 The production failure was terminal before projection publication. Architecture
 result: `PASS`, `P0=0 P1=0 P2=0`.
+
+Round 36 reviews the official-ingestion transaction split. A chunk becomes visible
+only after the original V3.14 hash, provenance, point-in-time and append authority
+checks succeed; the new ledger binds that exact staged member and is private under
+RLS. A job may fail after valid official facts have appended, but neither a decision
+revision nor compact projection can publish until every manifest member is ledgered
+and the unchanged V3.14 completion accepts the full result. This is an intentional
+append-only data-plane boundary, not partial action authority. Twenty-row application
+transactions keep the REST and statement bounds finite, and the ledger makes retries
+idempotent; terminal completion performs indexed verification and skips already
+applied rows. The migration is additive, apply-twice safe, grants service_role only
+the combined append/apply wrapper and completion wrapper, and leaves LINE, dispatch,
+automatic trading and Promotion disabled. Architecture result: `PASS`,
+`P0=0 P1=0 P2=0`.
