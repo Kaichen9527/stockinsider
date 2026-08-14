@@ -1,7 +1,7 @@
 # V3.15 protected Requirements compatibility evidence
 
 Date: 2026-08-14
-Review authority: fresh Requirements Round 155, carried at the protected worker's
+Review authority: fresh Requirements Round 156, carried at the protected worker's
 stable compatibility path without changing the reviewed active artifact graph.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
@@ -9,8 +9,8 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd`
-- Final repair-closure commit/tree: `9afb12b85c8e0eb9a98090c6443c2be146b6d523` / `d70a3c3fe8fc58691537cc1c714d12989daa7e0f`
-- Full reviewed range: `2e2c835d4c678e48cddd0429abdc7358e2b0e2f2..9afb12b85c8e0eb9a98090c6443c2be146b6d523`
+- Final repair-closure commit/tree: `82577e63dfcdbbd1a9306b6e4484c01b2c103b33` / `31aef4aafaa1bc2f27719fbbc9f054263f598bba`
+- Full reviewed range: `2e2c835d4c678e48cddd0429abdc7358e2b0e2f2..82577e63dfcdbbd1a9306b6e4484c01b2c103b33`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
 - Canonical evidence: this protected Round 154 compatibility carrier.
 - Acceptance inventory: `1.46.0`, 320 cases, partitioned as 272 product/runtime,
@@ -147,3 +147,10 @@ append. Official authority can therefore survive a later job failure without ena
 an action or partial projection. The additive successor migration applies twice in a
 rollback-only production rehearsal, V3.15 focused tests pass 12/12, and the combined
 V3.14/migration suite passes 85/85. Requirements result: `PASS`, `P0=0 P1=0 P2=0`.
+
+The first full product-correctness rerun found one stale test oracle that still
+required 200-row financial chunks. The production contract and runtime already used
+the new 20-row bound; Round 156 updates only that assertion and reruns the entire
+closed product suite with a clean local dependency installation. Result: 96/96 PASS,
+with no skipped or todo cases. Requirements result remains `PASS`,
+`P0=0 P1=0 P2=0`.
