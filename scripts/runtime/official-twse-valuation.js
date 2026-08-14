@@ -21,6 +21,12 @@ const TWSE_CLOSE_URL = 'https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_
 const TPEX_CLOSE_URL = 'https://www.tpex.org.tw/openapi/v1/tpex_mainboard_quotes';
 const TWSE_PRICE_HISTORY_URL = 'https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY';
 const TPEX_PRICE_HISTORY_URL = 'https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock';
+// The canonical www.twse.com.tw host currently rejects historical range queries
+// for the corporate-action reports at the CDN/WAF layer. TWSE's wwwc alias
+// serves the same signed report payload and is the origin linked by the report
+// UI. Keep this narrowly scoped to those range reports so other authorities do
+// not change identity.
+const TWSE_CORPORATE_ACTION_ORIGIN = 'https://wwwc.twse.com.tw';
 const STATEMENT_KINDS = Object.freeze(['ci','mim','basi','bd','fh','ins']);
 const CORPORATE_ACTION_FEEDS = Object.freeze({
   TWSE:Object.freeze([
@@ -203,7 +209,7 @@ function corporateActionUrl(exchange,session,feed){
   if(!CORPORATE_ACTION_FEEDS[exchange]?.includes(feed)||!/^\d{4}-\d{2}-\d{2}$/u.test(String(session)))return null;
   const compact=session.replaceAll('-','');const slash=session.replaceAll('-','%2F');
   return exchange==='TWSE'
-    ?`https://www.twse.com.tw/rwd/zh/${feed.path}?startDate=${compact}&endDate=${compact}&response=json`
+    ?`${TWSE_CORPORATE_ACTION_ORIGIN}/rwd/zh/${feed.path}?startDate=${compact}&endDate=${compact}&response=json`
     :`https://www.tpex.org.tw/www/zh-tw/bulletin/${feed.path}?startDate=${slash}&endDate=${slash}&response=json`;
 }
 
@@ -449,12 +455,13 @@ async function loadCorporateActionSnapshots({sessions,fetchImpl,collectedAt}){
     const session=Array.isArray(row)?String(row[1]??''):String(row?.session??'');
     if(!CORPORATE_ACTION_FEEDS[exchange]||!/^\d{4}-\d{2}-\d{2}$/u.test(session))throw new Error('corporate_action_backfill_input');
     const feeds=CORPORATE_ACTION_FEEDS[exchange];
-    const acquired=await Promise.all(feeds.map(async(feed)=>{
+    const acquired=[];
+    for(const feed of feeds){
       const url=corporateActionUrl(exchange,session,feed);const bytes=await retryOfficial(()=>fetchBytesBounded(url,fetchImpl));
       const events=parseCorporateActionResponse(bytes,{exchange,session,feed});
-      return {feedEvidence:{feedIdentity:feed.identity,responseByteCount:bytes.length,
-        responseSha256:sha256(bytes),parsedRowCount:events.length},events};
-    }));
+      acquired.push({feedEvidence:{feedIdentity:feed.identity,responseByteCount:bytes.length,
+        responseSha256:sha256(bytes),parsedRowCount:events.length},events});
+    }
     const events=acquired.flatMap((row)=>row.events).sort((left,right)=>left.symbol.localeCompare(right.symbol));
     if(new Set(events.map((event)=>event.symbol)).size!==events.length)throw new Error('corporate_action_cross_feed_conflict');
     return {exchange,session,provider:exchange.toLowerCase(),corporateActionVersion:'tw-corporate-action-v3.1',
@@ -468,7 +475,7 @@ function corporateActionRangeUrl(exchange,startSession,endSession,feed){
   const startCompact=startSession.replaceAll('-','');const endCompact=endSession.replaceAll('-','');
   const startSlash=startSession.replaceAll('-','%2F');const endSlash=endSession.replaceAll('-','%2F');
   return exchange==='TWSE'
-    ?`https://www.twse.com.tw/rwd/zh/${feed.path}?startDate=${startCompact}&endDate=${endCompact}&response=json`
+    ?`${TWSE_CORPORATE_ACTION_ORIGIN}/rwd/zh/${feed.path}?startDate=${startCompact}&endDate=${endCompact}&response=json`
     :`https://www.tpex.org.tw/www/zh-tw/bulletin/${feed.path}?startDate=${startSlash}&endDate=${endSlash}&response=json`;
 }
 
@@ -508,12 +515,13 @@ async function loadCorporateActionSnapshotsRange({calendarSessions,fetchImpl,col
     const sessions=[...new Set(calendarSessions.filter((row)=>row.market===exchange&&row.status==='completed')
       .map((row)=>row.session))].sort().slice(-130);
     if(!sessions.length)continue;const startSession=sessions[0];const endSession=sessions.at(-1);
-    const acquired=await Promise.all(CORPORATE_ACTION_FEEDS[exchange].map(async(feed)=>{
+    const acquired=[];
+    for(const feed of CORPORATE_ACTION_FEEDS[exchange]){
       const url=corporateActionRangeUrl(exchange,startSession,endSession,feed);
-      const bytes=await retryOfficial(()=>fetchBytesBounded(url,fetchImpl));
+      const bytes=await retryOfficial(()=>fetchBytesBounded(url,fetchImpl),4);
       const events=parseCorporateActionRangeResponse(bytes,{exchange,startSession,endSession,feed});
-      return {feedEvidence:{feedIdentity:feed.identity,responseByteCount:bytes.length,responseSha256:sha256(bytes)},events};
-    }));
+      acquired.push({feedEvidence:{feedIdentity:feed.identity,responseByteCount:bytes.length,responseSha256:sha256(bytes)},events});
+    }
     for(const session of sessions){
       const events=acquired.flatMap((row)=>row.events.filter((event)=>event.session===session)
         .map(({session:ignored,...event})=>event)).sort((left,right)=>left.symbol.localeCompare(right.symbol));
@@ -633,8 +641,12 @@ async function loadOfficialTwMarketSnapshot({ cutoff, candidates = [], peerCandi
       :{exchange,session,url:`${TPEX_VALUATION_HISTORY_URL}?l=zh-tw&d=${encodeURIComponent(roc)}`};
   });
   const combinedValuationRequests=boundedValuationRequests([...historicalValuationRequests,...backfillRequests]);
-  const historicalValuationResults = await allSettledBounded(combinedValuationRequests,4,
-    (request)=>retryOfficial(()=>fetchJsonBounded(request.url,fetchImpl)));
+  // Both exchanges throttle historical report endpoints aggressively. A
+  // sequential provider boundary remains bounded while avoiding the burst pattern that
+  // previously left otherwise eligible symbols with only a fraction of their
+  // 252-session authority.
+  const historicalValuationResults = await allSettledBounded(combinedValuationRequests,1,
+    (request)=>retryOfficial(()=>fetchJsonBounded(request.url,fetchImpl),4));
   const valuationHistory = combinedValuationRequests.flatMap((request,index)=>{
     const result = historicalValuationResults[index]; if (result.status!=='fulfilled') return [];
     return request.exchange==='TWSE'
@@ -656,8 +668,8 @@ async function loadOfficialTwMarketSnapshot({ cutoff, candidates = [], peerCandi
       ?{...target,url:`${TWSE_PRICE_HISTORY_URL}?date=${month.twseDate}&stockNo=${target.symbol}&response=json`}
       :{...target,url:`${TPEX_PRICE_HISTORY_URL}?date=${encodeURIComponent(`${month.year}/${String(month.month).padStart(2,'0')}/01`)}&code=${target.symbol}&response=json`};
   }));
-  const priceHistoryResults=await allSettledBounded(priceHistoryRequests,6,
-    (request)=>retryOfficial(()=>fetchJsonBounded(request.url,fetchImpl)));
+  const priceHistoryResults=await allSettledBounded(priceHistoryRequests,1,
+    (request)=>retryOfficial(()=>fetchJsonBounded(request.url,fetchImpl),4));
   const allPriceObservations=dedupePriceObservations(priceHistoryRequests.flatMap((request,index)=>{
     const result=priceHistoryResults[index];
     return result.status==='fulfilled'?parseOfficialPriceHistory(result.value.payload,{...request,sourceUrl:request.url,collectedAt}):[];
@@ -778,7 +790,7 @@ function dedupePriceObservations(rows){
 
 module.exports = { SOURCE_URL,TPEX_SOURCE_URL,TWSE_REVENUE_URL,TPEX_REVENUE_URL,TWSE_INDEX_URL,TPEX_INDEX_URL,
   TWSE_CLOSE_URL,TPEX_CLOSE_URL,TWSE_PRICE_HISTORY_URL,TPEX_PRICE_HISTORY_URL,parseOfficialCloseRows,parseOfficialPriceHistory,
-  CORPORATE_ACTION_FEEDS,corporateActionUrl,corporateActionRangeUrl,loadCorporateActionSnapshots,loadCorporateActionSnapshotsRange,
+  CORPORATE_ACTION_FEEDS,TWSE_CORPORATE_ACTION_ORIGIN,corporateActionUrl,corporateActionRangeUrl,loadCorporateActionSnapshots,loadCorporateActionSnapshotsRange,
   parseCorporateActionResponse,
   loadOfficialTwMarketSnapshot,loadOfficialCoarseMarketSnapshot,parseIndexRows,parseRevenueRows,parseTpexForeignFlow,parseTpexHistoricalValuationRows,
   parseStatementFacts,statementUrl,

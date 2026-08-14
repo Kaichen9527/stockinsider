@@ -1,13 +1,13 @@
 {
   "changeId": "source-led-opportunity-engine-v3",
-  "loopStage": "v3_15_exact_review_repair_closure_pass_protected_gate_pending",
-  "requirementsStatus": "v3_15_round_138_pass",
-  "designStatus": "v3_15_architecture_round_19_pass",
-  "requirementsGateStatus": "pass_v3_15_round_138",
+  "loopStage": "v3_15_post_review_actionability_repair_fresh_gates_pending",
+  "requirementsStatus": "prior_v3_15_round_138_pass_superseded_by_actionability_repair",
+  "designStatus": "prior_v3_15_architecture_round_19_pass_superseded_by_actionability_repair",
+  "requirementsGateStatus": "pending_fresh_actionability_repair",
   "requirementsReviewRound": 138,
   "requirementsReviewTree": "4e16faa465278eface62428fca172a0b506440d9",
   "requirementsReviewEvidence": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-138.md",
-  "architectureGateStatus": "pass_v3_15_round_19",
+  "architectureGateStatus": "pending_after_fresh_requirements_pass",
   "architectureReviewRound": 19,
   "architectureReviewTree": "25111b0c4f8204cc54316aabc647aa1522c945ee",
   "architectureReviewEvidence": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-19.md",
@@ -292,16 +292,16 @@
     "P1": 0,
     "P2": 0
   },
-  "verificationStatus": "v3_15_analysis_transport_repair_local_tests_pass;superseding_protected_gate_and_shadow_activation_pending",
+  "verificationStatus": "v3_15_actionability_repair_local_tests_pass;fresh_requirements_architecture_exact_review_protected_gate_and_shadow_activation_pending",
   "verificationGateConclusion": "analysis_transport_repair_local_tests_pass;superseding_protected_external_gate_and_shadow_activation_pending;promotion_blocked_non_fabricated_elapsed_cohorts_unavailable",
   "verificationTracks": {
     "product_runtime": "reviewed_head_local_diagnostic_pass_typecheck_lint_build_base_61_product_92_migration_51_legacy_2_playwright_8_performance_4_dependency_audit_0;protected_external_attestation_pending",
     "evaluation_governance": "blocked/non_fabricated_elapsed_cohorts_unavailable",
     "model_runner": "reviewed_head_local_diagnostic_pass_17_of_17_and_disabled_host_pin_v3_8_doctor_pass;protected_external_attestation_pending"
   },
-  "releaseStatus": "v3_14_web_live;v3_15_first_formal_producer_failed_after_facts;analysis_transport_repair_ready_for_superseding_gate",
+  "releaseStatus": "v3_14_web_live;v3_15_reviewed_candidate_not_landed;official_actionability_repair_ready_for_fresh_gates",
   "createdAt": "2026-07-18T21:22:18+08:00",
-  "updatedAt": "2026-08-14T16:00:00+08:00",
+  "updatedAt": "2026-08-14T21:15:00+08:00",
   "baselineDomain": "stock-recommendation-engine",
   "amendmentClass": "v3_15_opportunity_recovery_product_truth",
   "supersedesForFutureWork": [
@@ -326,7 +326,7 @@
     "homepage ranking promotion before real evaluation cohorts",
     "absolute prevention of all code execution or Codex-private scratch writes"
   ],
-  "blockedReason": "Superseding exact-commit review, protected Code Gate and coordinated production activation remain; promotion_gate waits for non_fabricated_elapsed_cohorts",
+  "blockedReason": "Fresh Requirements, Architecture, exact-commit review, protected Code Gate and coordinated production activation remain; promotion_gate waits for non_fabricated_elapsed_cohorts",
   "nextHumanResponse": "none; user authorized completing V3.15 and production deployment without stepwise confirmation; do not reset the database password",
   "releaseEvidence": {
     "exactImplementationCommit": "184390953048209730c22828548858c28fa3b6b7",

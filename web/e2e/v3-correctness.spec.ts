@@ -120,18 +120,19 @@ test('V3.13 Landing has three exclusive action sections and at most six collapse
   for (const heading of ['現在可行動', '等待條件', '新來源待研究']) {
     await expect(page.getByRole('heading', { name: heading })).toHaveCount(1);
   }
-  await expect(page.getByRole('article')).toHaveCount(3);
+  await expect(page.getByRole('article')).toHaveCount(4);
   await expect(page.getByText('研究型小量分批', { exact: true })).toBeVisible();
   await expect(page.getByText('等待收復支撐', { exact: true })).toBeVisible();
   await expect(page.getByText('資料待補', { exact: true })).toBeVisible();
+  await expect(page.getByText('接近買點・待深度驗證', { exact: true })).toBeVisible();
 
   const cards=page.getByTestId('decision-card');
-  await expect(cards).toHaveCount(3);
+  await expect(cards).toHaveCount(4);
   for(let index=0;index<await cards.count();index+=1){
     expect(await cards.nth(index).locator('[data-decision-numeric-value]').count()).toBeLessThanOrEqual(6);
   }
   const links = page.getByRole('link', { name: /查看決策摘要/u });
-  await expect(links).toHaveCount(3);
+  await expect(links).toHaveCount(4);
   await links.first().focus();
   await expect(links.first()).toBeFocused();
   await expect(links.first()).toHaveAttribute('href', /\/stock\/9101[?]decisionRevisionId=decision-v3[.]13%3A/u);

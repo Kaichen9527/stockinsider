@@ -1113,7 +1113,8 @@ const checks = {
     const workflow = readFileSync(path.join(root, '.github/workflows/source-led-opportunity-v3.yml'), 'utf8');
     for (const token of ['研究與進場判斷','四軸研究評分','乖離率與本益比脈絡','基本面品質','時機風險',
       '乖離率（BIAS）','交易所','模型','min-w-0','break-words','sourceSignals','新來源訊號','估值待補',
-      'decisionEnvelope','現在可行動','等待條件','新來源待研究','估值來源：{signal.valuationExchange']) assert.ok(component.includes(token), token);
+      'decisionEnvelope','現在可行動','等待條件','新來源待研究','signal.proximityToAction===true',
+      '接近買點・待深度驗證','估值來源：{signal.valuationExchange']) assert.ok(component.includes(token), token);
     for (const token of ['exchangeReportedPe','modelComparablePe','bias20Pct','timingRisk']) assert.ok(types.includes(token), token);
     assert.match(gateRunner, /PLAYWRIGHT_BROWSERS_PATH: '0'/u);
     assert.match(gateRunner, /const traceHome = track === 'model_runner' \? process\.env\.HOME \?\? '' : '\/tmp';/u);

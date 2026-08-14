@@ -1721,3 +1721,24 @@ This approval authorizes implementation only. It does not authorize production m
 - [ ] Supersede the prior exact evidence with fresh Requirements, Architecture,
   exact-range review and protected aggregate evidence for the method-specific
   valuation repair before any final production activation.
+- [x] Reproduce the post-review actionability blocker against live official endpoints:
+  TWSE `www` rejects corporate-action range acquisition, burst history requests leave
+  symbol-dependent gaps, coarse PE discounts use an exaggerated reciprocal formula,
+  and shallow complete research cannot enter the near-buy Landing lane.
+- [x] Repair the bounded official acquisition and presentation roots together: use
+  TWSE's official `wwwc` report authority for range feeds, acquire the three action
+  reports and history deterministically, exclude the subject from conventional peer
+  discount, and publish shallow/deferred ResearchRanking envelopes without minting an
+  action. Focused V3.15/V3.16 regression is 20/20; complete product correctness is
+  104/104; migration remains 53/53; typecheck, lint and production build pass.
+- [ ] Obtain superseding fresh Requirements, Architecture, exact-review and protected
+  Code Gate evidence for this final actionability repair, then apply the reviewed
+  migration/runtime, run two terminal producers, merge and deploy the exact release.
+- [ ] Verify production DB coverage and waterfall for 8299/2408, public Landing action/
+  waiting/research cardinalities, detail revision consistency, health, performance and
+  visible browser rendering. Do not reset the database password.
+- [x] Close the same-run official-fact reachability root: use filing/source time as the
+  point-in-time boundary, retain the cumulative quarter anchor, skip the unclosed MOPS
+  quarter, and serialize bounded provider requests. The live 8299 fixture reaches a
+  four-quarter bridge with derived EPS near 211.45; this is evidence of bridge
+  consistency, not a buy recommendation.

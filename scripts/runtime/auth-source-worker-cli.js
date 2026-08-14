@@ -427,10 +427,15 @@ function validOfficialFactRow(row, cutoff) {
   const published=Date.parse(row[8]);const source=Date.parse(row[9]);const collected=Date.parse(row[10]);
   const taipeiDate=(instant)=>new Date(instant+8*60*60*1000).toISOString().slice(0,10);
   const periodEnd=String(row[3]);
+  const cutoffMs=cutoff?Date.parse(cutoff):null;
   return Number.isFinite(published)&&Number.isFinite(source)&&Number.isFinite(collected)
     &&periodEnd<=taipeiDate(published)&&periodEnd<=taipeiDate(source)
     &&(!cutoff||periodEnd<=taipeiDate(Date.parse(cutoff)))
-    &&published<=source&&source<=collected&&(!cutoff||collected<=Date.parse(cutoff))
+    // sourceCutoff is the point-in-time information boundary, not the wall-clock
+    // acquisition finish.  A live run necessarily collects the response after its
+    // scheduled cutoff.  Guard look-ahead with the filing/source timestamps while
+    // retaining source <= collected provenance ordering.
+    &&published<=source&&source<=collected&&(!cutoff||source<=cutoffMs)
     &&typeof row[12]==='string'&&row[12].length>0;
 }
 
@@ -631,7 +636,9 @@ function persistedOfficialSnapshot(bundle, acquisition) {
     .map((row)=>({ symbol:String(row[0]),asOf:String(row[1]),monthlyRevenue:Number(row[2]),
       yoyGrowth:Number(row[3]),momGrowth:Number(row[4]),sourceUrl:String(row[5]),collectedAt:String(row[6]),
       sourceRef:String(row[7]),authority:'exchange_reported' }))
-    .filter((row)=>Number.isFinite(row.monthlyRevenue) && Date.parse(row.collectedAt)<=Date.parse(bundle.sourceCutoff));
+    .filter((row)=>Number.isFinite(row.monthlyRevenue)
+      && Date.parse(row.filingPublishedAt??row.asOf)<=Date.parse(bundle.sourceCutoff)
+      && Date.parse(row.sourceTimestamp??row.asOf)<=Date.parse(bundle.sourceCutoff));
   const persistedTwseIndex = (bundle.benchmarkRows ?? []).filter(Array.isArray)
     .map((row)=>({ session:String(row[0]),close:Number(row[1]) })).filter((row)=>Number.isFinite(row.close));
   const twseIndex=(acquisition?.twseIndex?.length??0)>=122?acquisition.twseIndex:persistedTwseIndex;
@@ -662,7 +669,7 @@ function valuationAuthorityInput(candidate, factRows, officialSnapshot, sourceCu
     &&(row.authorityConflict==='authority_conflict'||(
       Number.isFinite(Date.parse(row.publishedAt))&&Date.parse(row.publishedAt)<=cutoffMs
       &&Number.isFinite(Date.parse(row.sourceTimestamp))&&Date.parse(row.sourceTimestamp)<=cutoffMs
-      &&Number.isFinite(Date.parse(row.collectedAt))&&Date.parse(row.collectedAt)<=cutoffMs
+      &&Number.isFinite(Date.parse(row.collectedAt))&&Date.parse(row.sourceTimestamp)<=Date.parse(row.collectedAt)
       &&typeof row.sourceRef==='string'&&row.sourceRef.length>0)));
   const collapseRows=(rows,keyOf)=>[...Map.groupBy(rows,keyOf)].map(([,members])=>{
     const ordered=[...members].sort((left,right)=>String(right.sourceTimestamp??'').localeCompare(String(left.sourceTimestamp??''))
@@ -1073,6 +1080,17 @@ function buildResearchScore(candidate, { priceRows = [], officialSnapshot = null
     valuation: valuationAxis, timing: price.timing }, priceContext: price.context });
 }
 
+function researchRankingFromScore(candidate,researchScore,{softBlockers=[],conflict=false}={}){
+  const axisValue=(axis)=>researchScore?.axes?.[axis]?.trustworthy===true
+    &&Number.isFinite(researchScore.axes[axis].score)?researchScore.axes[axis].score:null;
+  const timingParts=[axisValue('priceDislocation'),axisValue('timing')].filter(Number.isFinite);
+  return computeResearchRankingV314({valuation:axisValue('valuation'),
+    fundamentalQuality:axisValue('fundamental'),momentumTechnical:timingParts.length
+      ?timingParts.reduce((sum,value)=>sum+value,0)/timingParts.length:null,
+    sourceCatalyst:axisValue('discovery'),marketLiquidity:Number.isFinite(candidate.liquidityScore)
+      ?candidate.liquidityScore:null,softBlockers,conflict});
+}
+
 function indexComponent(rows) {
   if (!Array.isArray(rows) || rows.length < 20) return null;
   const closes = rows.slice(-60).map((row) => Number(row.close)).filter((value) => Number.isFinite(value) && value > 0);
@@ -1207,14 +1225,8 @@ function buildLegacyCandidateDecision({ candidate, facts, history, benchmark, so
   const factorAxes = Object.values(factorScores).every(Number.isFinite)
     ? { availability: 'available', axes: factorScores }
     : { availability: 'unavailable', reason: 'factor_axis_unavailable', axes: factorScores };
-  const axisValue=(axis)=>researchScore?.axes?.[axis]?.trustworthy===true
-    &&Number.isFinite(researchScore.axes[axis].score)?researchScore.axes[axis].score:null;
-  const timingParts=[axisValue('priceDislocation'),axisValue('timing')].filter(Number.isFinite);
-  const researchRanking=computeResearchRankingV314({valuation:axisValue('valuation'),
-    fundamentalQuality:axisValue('fundamental'),momentumTechnical:timingParts.length
-      ?timingParts.reduce((sum,value)=>sum+value,0)/timingParts.length:null,
-    sourceCatalyst:axisValue('discovery'),marketLiquidity:Number.isFinite(candidate.liquidityScore)
-      ?candidate.liquidityScore:null,softBlockers:actionDecision.decisionEnvelope.blockers,
+  const researchRanking=researchRankingFromScore(candidate,researchScore,{
+    softBlockers:actionDecision.decisionEnvelope.blockers,
     conflict:actionDecision.decisionEnvelope.valuationReadiness==='conflict'});
   const technical = actionDecision.technical?.availability === 'unavailable'
     ? { technicalState: null, plane, availability: 'unavailable', reason: actionDecision.technical.reason }
@@ -1521,15 +1533,20 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         .map((candidate) => {
           const latest = researchPriceRows.filter((row) => Array.isArray(row) && row[0] === candidate.symbol)
             .sort((left, right) => String(right[1]).localeCompare(String(left[1])))[0];
+          const researchScore=buildResearchScore(candidate,{priceRows:researchPriceRows,
+            officialSnapshot,sourceCutoff:bundle.sourceCutoff});
           return { ...candidate, researchMaturity: 'source_signal', newPositionAction: 'valuation_review',
             shallowStatus: 'enriched_observation', currentPrice: Array.isArray(latest) && Number.isFinite(latest[5]) ? latest[5] : null,
-            lastEvaluatedAt: bundle.sourceCutoff, researchScore: buildResearchScore(candidate, { priceRows: researchPriceRows,
-              officialSnapshot, sourceCutoff: bundle.sourceCutoff }) };
+            lastEvaluatedAt: bundle.sourceCutoff,researchScore,
+            researchRanking:researchRankingFromScore(candidate,researchScore,{softBlockers:['deep_research_not_selected']}) };
         });
-      const deferredSignals = candidates.filter((candidate) => candidate.shallowSelected !== true).map((candidate) => ({
-        ...candidate, lastEvaluatedAt: bundle.sourceCutoff, researchScore: buildResearchScore(candidate, { priceRows: researchPriceRows,
-          officialSnapshot, sourceCutoff: bundle.sourceCutoff }),
-      }));
+      const deferredSignals = candidates.filter((candidate) => candidate.shallowSelected !== true).map((candidate) => {
+        const researchScore=buildResearchScore(candidate,{priceRows:researchPriceRows,
+          officialSnapshot,sourceCutoff:bundle.sourceCutoff});
+        return {...candidate,lastEvaluatedAt:bundle.sourceCutoff,researchScore,
+          researchRanking:researchRankingFromScore(candidate,researchScore,
+            {softBlockers:['shallow_research_not_selected','deep_research_not_selected']})};
+      });
       const dislocationCandidates = dislocationInputs.map((row) => {
         const candidate = { stockId: row.stockId, symbol: row.symbol, name: row.name ?? null,
           canonicalSector: row.canonicalSector ?? 'unknown', sourceClass: 'price_dislocation', sourcePriority: 62,
@@ -1539,9 +1556,10 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
           disposition: 'promoted', reason: 'price_dislocation',
           sourceSummary: `${row.symbol} 近 60 個交易日自高點回落 ${Math.abs(Number(row.drawdown60Pct)).toFixed(1)}%，納入基本面未惡化檢查。`,
           lastEvaluatedAt: bundle.sourceCutoff };
-        return { ...candidate, researchMaturity: 'fundamental_review', newPositionAction: 'valuation_review',
-          researchScore: buildResearchScore(candidate, { priceRows: researchPriceRows, officialSnapshot,
-            stats: row, sourceCutoff: bundle.sourceCutoff }) };
+        const researchScore=buildResearchScore(candidate,{priceRows:researchPriceRows,officialSnapshot,
+          stats:row,sourceCutoff:bundle.sourceCutoff});
+        return { ...candidate, researchMaturity: 'fundamental_review', newPositionAction: 'valuation_review',researchScore,
+          researchRanking:researchRankingFromScore(candidate,researchScore,{softBlockers:['deep_research_not_selected']}) };
       });
       const decisionSymbols = new Set(decisions.map((row) => row.symbol));
       const sourceCandidates = [...shallowObservations, ...deferredSignals]
@@ -1719,6 +1737,7 @@ module.exports = { args, buildLegacyCandidateDecision, buildStageHandlers, extra
   compactAnalysisOfficialAuthority,immutableAnalysisFacts,projectionDecision,
   valuationAuthorityInput,materialDecisionValue,exactSectorPeReference,financialSemanticIdentity,newFinancialFactsV314,
   resolveOfficialAuthorityCandidatesV314,streamOfficialIngestionV314,
+  researchRankingFromScore,validOfficialFactRow,
   validEmbeddedOfficialValuationRef,marketAllowsNewPosition,
   extractMatchedEvidenceSnippet, LEGACY_RADAR_FETCH_TIMEOUT_MS, legacyFactInput, legacyQualityInput, loadLegacyRadarPayloads,
   main,officialCitation,readBundle,readRuntimeHealthObservation,

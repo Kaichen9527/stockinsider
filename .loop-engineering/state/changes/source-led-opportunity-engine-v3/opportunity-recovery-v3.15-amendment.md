@@ -59,6 +59,22 @@ Observed on production on 2026-08-13:
   every rostered peer that was not itself a deep candidate. These two implementation
   roots made formal and relative valuation operationally unreachable despite valid
   point-in-time authority.
+- a production-shaped live replay on 2026-08-14 found another shared infrastructure
+  blocker after the exact review: TWSE historical corporate-action range requests on
+  `www.twse.com.tw` were rejected by the exchange CDN/WAF, while the same official
+  report bytes were available from TWSE's report-serving `wwwc.twse.com.tw` alias.
+  Because the adjustment contract requires a complete daily no-action/action
+  snapshot, this one host failure reduced adjusted price coverage to zero for every
+  TWSE candidate and prevented any technical wait or action state.
+- the same replay found burst-throttled history acquisition leaving 2408 with only a
+  partial price series, and the coarse factor disclosure expressed PE discount with
+  the reciprocal formula `reference/current - 1`, overstating 10x versus 30x as 200%
+  rather than the conventional 66.7% below-reference discount.
+- shallow candidates with complete research axes were still published only as
+  generic `unavailable` cards. The validated ResearchRanking envelope existed only
+  for deep decisions, so a bounded 21st-ranked stock could never appear in the
+  truthful near-buy lane even though it had at most the single soft blocker
+  `deep_research_not_selected`.
 
 The production read-only official scan proves this is infrastructure failure rather
 than an empty market: 1,977 active common stocks resolve, 1,971 have current official
@@ -128,6 +144,35 @@ research threshold. This observation is research supply, not proof of future ret
     and their same-exchange peer roster. A peer need not be a deep candidate, cannot
     become an action candidate through this path, and remains subject to the existing
     252-session/eight-peer authority gates.
+17. TWSE corporate-action history uses the official report-serving `wwwc.twse.com.tw`
+    alias only for the three bounded range reports. The host is explicitly allowlisted
+    as TWSE authority; all other market and filing endpoints keep their prior identity.
+    The three feeds are acquired sequentially with bounded retries so one CDN burst
+    cannot erase the entire 130-session snapshot plane.
+18. Historical valuation and price requests are deterministic and sequential at the
+    provider boundary. This changes latency, not the 60/30/20 candidate bound, and
+    prevents provider throttling from silently creating symbol-dependent coverage.
+19. Coarse PE discount is `100 * (1 - current / peerMedian)` with the subject removed
+    from the same-exchange, same-sector peer set. The value is a research-ranking
+    feature only; it never creates a formal or conditional action authority.
+20. Deep, shallow and deferred candidates all receive the same fixed-weight
+    `ResearchRankingEnvelopeV314`. A shallow candidate may enter `near_buy` only when
+    score, coverage, all three core axes, no conflict and at most the single deep-
+    selection blocker pass. The UI may show it under “等待條件” as “接近買點・待深度
+    驗證”, but its DecisionEnvelope remains `unavailable` and no action is minted.
+21. `sourceCutoff` is the point-in-time information boundary. Official filing and
+    source timestamps must be at or before it, while a live response may be collected
+    after the scheduled cutoff as long as source ≤ collected. Treating collection
+    completion as the information cutoff makes every same-run acquisition unreachable;
+    future filing/source timestamps remain rejected.
+22. The MOPS history loader starts at the last completed quarter, retains at least the
+    prior cumulative anchor required to derive four consecutive discrete quarters, and
+    acquires deterministically with bounded retry/cooldown. A known-unfiled current
+    quarter cannot consume one request per candidate and trip the provider WAF before
+    completed filings are read.
+23. A shallow candidate with complete fixed-weight ranking may be visible as near-buy
+    research with one explicit `deep_research_not_selected` blocker. Missing technical
+    or valuation authority keeps it in data-pending rather than fabricating an action.
 
 ## Acceptance
 
@@ -166,3 +211,18 @@ research threshold. This observation is research supply, not proof of future ret
 - a production-shaped 20-decision/40-source analysis result is below 3,145,728 bytes;
   the equivalent duplicated representation is above that bound, all complete facts
   remain in `decisionPayloads`, and every decision, candidate and citation is conserved.
+- a real bounded corporate-action range returns 130 complete sessions for TWSE and
+  TPEx with exactly three feed evidences per session; an unavailable feed remains
+  fail-closed and never fabricates adjusted OHLCV;
+- the PE discount fixture excludes the subject peer and reports the conventional
+  below-reference percentage; removing an axis cannot increase the ranking;
+- a complete shallow research fixture reaches `near_buy` with exactly one selection
+  blocker but contains no `userAction` or `recommendationAuthority`; adding the second
+  selection blocker removes it from `near_buy`, and the Landing sections stay mutually
+  exclusive;
+- a filing whose official source timestamp precedes the scheduled cutoff but whose
+  collection finishes afterward remains usable; moving the source timestamp beyond
+  the cutoff is rejected;
+- the MOPS request graph skips the unclosed civil quarter and preserves the preceding
+  cumulative anchor, so the 8299 official fixture reaches a four-quarter TTM bridge
+  without exceeding the per-symbol 128-row authority bound.

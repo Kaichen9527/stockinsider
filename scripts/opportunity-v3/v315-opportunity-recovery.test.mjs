@@ -95,6 +95,26 @@ test('V315 TPEX corporate-action range accepts the official compact ROC date for
   assert.equal(parsed.length,1);assert.equal(parsed[0].symbol,'8299');
 });
 
+test('V316 TWSE corporate-action history uses the report-serving wwwc authority alias',async()=>{
+  const official=runtime('official-twse-valuation.js');
+  const feed=official.CORPORATE_ACTION_FEEDS.TWSE[0];
+  const url=official.corporateActionRangeUrl('TWSE','2026-02-03','2026-08-14',feed);
+  assert.equal(new URL(url).hostname,'wwwc.twse.com.tw');
+  assert.equal(new URL(url).searchParams.get('startDate'),'20260203');
+  assert.equal(new URL(url).searchParams.get('endDate'),'20260814');
+  const requested=[];
+  const snapshots=await official.loadCorporateActionSnapshotsRange({calendarSessions:[
+    {market:'TWSE',session:'2026-08-13',status:'completed'},
+  ],collectedAt:'2026-08-14T00:00:00Z',fetchImpl:async(requestUrl)=>{
+    requested.push(String(requestUrl));
+    const matching=official.CORPORATE_ACTION_FEEDS.TWSE.find((member)=>String(requestUrl).includes(member.path));
+    return new Response(JSON.stringify({stat:'OK',fields:matching.header,data:[]}),{status:200});
+  }});
+  assert.equal(snapshots.length,1);assert.equal(snapshots[0].declaredEventCount,0);
+  assert.equal(snapshots[0].feedEvidence.length,3);
+  assert.ok(requested.every((requestUrl)=>new URL(requestUrl).hostname==='wwwc.twse.com.tw'));
+});
+
 test('V315 official monthly revenue carries filing time and a persistable monthly fact period',()=>{
   const official=runtime('official-twse-valuation.js');
   const rows=official.parseRevenueRows([{'出表日期':'1150813','資料年月':'11507','公司代號':'8299',
@@ -132,6 +152,27 @@ test('V315 PE bridge derives a bounded diluted-share denominator from official c
   const bridge=runtime('valuation-operating-bridge.js').buildPointInTimeOperatingBridge(facts);
   assert.equal(bridge.availability,'available');
   assert.ok(Math.abs(bridge.eps-9.7)<1e-9);
+});
+
+test('V316 live acquisition collected after the scheduled cutoff keeps point-in-time facts but rejects future source timestamps',()=>{
+  const {validOfficialFactRow}=runtime('auth-source-worker-cli.js');
+  const row=['8299','quarterly_revenue','2026-01-01','2026-06-30','quarterly',100,'TWD','official_filing',
+    '2026-08-13T00:00:00Z','2026-08-13T00:00:00Z','2026-08-14T00:01:00Z','2026-08-14T00:01:00Z',
+    `tpex-mops-inline:2026-06-30:8299:${'c'.repeat(64)}`,null,'reported','reported_period'];
+  assert.equal(validOfficialFactRow(row,'2026-08-14T00:00:00Z'),true,
+    'the source boundary must not make every newly collected live fact unreachable');
+  const future=[...row];future[8]='2026-08-14T00:00:01Z';future[9]='2026-08-14T00:00:01Z';
+  assert.equal(validOfficialFactRow(future,'2026-08-14T00:00:00Z'),false);
+});
+
+test('V316 MOPS retention keeps the prior cumulative anchor needed to derive four consecutive quarters',()=>{
+  const {selectLatestMopsFacts}=runtime('official-mops-v314.js');
+  const periods=['2025-06-30','2025-09-30','2025-12-31','2026-03-31','2026-06-30'];
+  const rows=periods.map((period,index)=>({symbol:'8299',exchange:'TPEX',factKey:'quarterly_operating_income',
+    periodStart:`${period.slice(0,4)}-01-01`,periodEnd:period,durationKind:'quarterly',value:index+1,unit:'TWD',
+    authorityTier:'official_filing',filingPublishedAt:'2026-08-13T00:00:00Z',sourceTimestamp:'2026-08-13T00:00:00Z',
+    collectedAt:'2026-08-14T00:01:00Z',sourceRef:`tpex-mops-inline:${period}:8299:${'d'.repeat(64)}`}));
+  assert.deepEqual(selectLatestMopsFacts(rows).map((row)=>row.periodEnd),periods);
 });
 
 test('V315 fundamental quality derives ROE directly from official attributable income and equity',()=>{
@@ -180,6 +221,9 @@ test('V315 official factor discovery admits out-of-source undervaluation researc
   assert.match(phison.claimId,/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/u);
   assert.match(phison.mentionId,/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/u);
   assert.equal(phison.factorEvidence.coverage,.8);assert.ok(phison.factorEvidence.relativeDiscountPct>40);
+  const peerMedian=[...valuations.slice(1).map((row)=>row.peRatio)].sort((left,right)=>left-right)[4];
+  assert.ok(Math.abs(phison.factorEvidence.relativeDiscountPct-(1-12/peerMedian)*100)<1e-12,
+    'reported discount is the percentage below reference, not an exaggerated reciprocal premium');
   assert.equal('userAction' in phison,false);assert.equal('newPositionAction' in phison,false);
   const missingFundamental=buildOfficialFactorCandidatesV315({snapshot:{schema:'official-coarse-market-snapshot-v3.15',
     universe,valuations,revenues:[],collectedAt:'2026-08-13T10:00:00Z',sourceFailures:[]},
@@ -210,6 +254,23 @@ test('V315 candidate funnel combines source-led and official full-market candida
   const phison=result.json.candidates.find((row)=>row.symbol==='8299');
   assert.ok(phison);assert.equal(phison.deepSelected,true);assert.equal(phison.seedMembership,'out_of_seed');
   assert.ok(result.json.factorDiscovery.selected>=1);assert.ok(result.json.candidates.length<=60);
+});
+
+test('V316 shallow official research can reach the near-buy lane without minting a buy action',()=>{
+  const {researchRankingFromScore}=runtime('auth-source-worker-cli.js');
+  const candidate={symbol:'2408',sourcePriority:82};
+  const score={axes:{
+    discovery:{score:82,trustworthy:true},fundamental:{score:88,trustworthy:true},
+    valuation:{score:84,trustworthy:true},priceDislocation:{score:78,trustworthy:true},
+    timing:{score:74,trustworthy:true},
+  }};
+  const shallow=researchRankingFromScore(candidate,score,{softBlockers:['deep_research_not_selected']});
+  assert.equal(shallow.lane,'near_buy');assert.equal(shallow.coverage,.9);
+  assert.ok(shallow.rankingScore>=70);
+  const deferred=researchRankingFromScore(candidate,score,
+    {softBlockers:['shallow_research_not_selected','deep_research_not_selected']});
+  assert.equal(deferred.lane,'waiting');
+  assert.equal('userAction' in shallow,false);assert.equal('recommendationAuthority' in shallow,false);
 });
 
 test('V315 duplicate authority roster heads emit one persistence identity per stock and revision',()=>{

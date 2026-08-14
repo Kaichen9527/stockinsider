@@ -631,14 +631,19 @@ test('V314-014aa MOPS rejects dimensional segment and scenario contexts', () => 
 
 test('V314-014b MOPS loader binds the requested official URL into parsed provenance', async () => {
   const {loadMopsFinancialHistoryV314,MOPS_INLINE_URL}=runtime('official-mops-v314.js');
+  const requested=[];
   const html=`<html><xbrli:context id="duration"><xbrli:startDate>2026-01-01</xbrli:startDate><xbrli:endDate>2026-03-31</xbrli:endDate></xbrli:context>
     <ix:nonNumeric name="tifrs-ar:ReviewAuditDate" contextRef="duration">2026-05-12</ix:nonNumeric>
     <ix:nonFraction name="ifrs-full:Revenue" contextRef="duration" unitRef="TWD">1000</ix:nonFraction></html>`;
   const result=await loadMopsFinancialHistoryV314({cutoff:'2026-08-11T00:00:00Z',
-    candidates:[{symbol:'2330',exchange:'TWSE'}],fetchImpl:async(url)=>new Response(
-      url.includes('SSEASON=3')||url.includes('SSEASON=2')?'<h4>not found</h4>':html,
-      {status:200,headers:{'content-type':'text/html'}})});
+    candidates:[{symbol:'2330',exchange:'TWSE'}],fetchImpl:async(url)=>{
+      requested.push(String(url));
+      return new Response(url.includes('SSEASON=3')||url.includes('SSEASON=2')?'<h4>not found</h4>':html,
+        {status:200,headers:{'content-type':'text/html'}});
+    }});
   assert.ok(result.facts.length>0);assert.ok(result.facts.every((row)=>row.sourceUrl.startsWith(MOPS_INLINE_URL)));
+  assert.ok(requested.some((url)=>url.includes('SYEAR=2026')&&url.includes('SSEASON=2')));
+  assert.equal(requested.some((url)=>url.includes('SYEAR=2026')&&url.includes('SSEASON=3')),false);
 });
 
 test('V314-014c MOPS fact selection preserves cycle history without crossing the 128-row authority bound',()=>{
@@ -656,7 +661,7 @@ test('V314-014c MOPS fact selection preserves cycle history without crossing the
   const selected=selectLatestMopsFacts(facts);
   assert.ok(selected.length<=128);
   assert.equal(selected.filter((row)=>row.factKey==='quarterly_revenue').length,12);
-  assert.equal(selected.filter((row)=>row.factKey==='quarterly_operating_income').length,4);
+  assert.equal(selected.filter((row)=>row.factKey==='quarterly_operating_income').length,8);
   assert.equal(selected.filter((row)=>row.factKey==='total_assets').length,1);
 });
 

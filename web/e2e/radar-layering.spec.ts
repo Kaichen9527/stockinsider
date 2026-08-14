@@ -10,10 +10,11 @@ test('V3.13 landing separates actionable, conditional, and source-only decisions
   for (const heading of ['現在可行動', '等待條件', '新來源待研究']) {
     await expect(page.getByRole('heading', { name: heading })).toHaveCount(1);
   }
-  await expect(page.getByRole('article')).toHaveCount(3);
+  await expect(page.getByRole('article')).toHaveCount(4);
   await expect(page.getByText('研究型小量分批', { exact: true })).toBeVisible();
   await expect(page.getByText('等待收復支撐', { exact: true })).toBeVisible();
   await expect(page.getByText('資料待補', { exact: true })).toBeVisible();
+  await expect(page.getByText('接近買點・待深度驗證', { exact: true })).toBeVisible();
   await expect(page.getByText('高信念正式推薦', { exact: true })).toHaveCount(0);
   for (const card of await page.getByTestId('decision-card').all()) {
     expect(await card.locator('[data-decision-numeric-value]').count()).toBeLessThanOrEqual(6);

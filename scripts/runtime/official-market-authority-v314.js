@@ -2,7 +2,7 @@
 
 const { canonicalJson, invariant, sha256 } = require('./codec');
 
-const OFFICIAL_HOSTS = Object.freeze(['openapi.twse.com.tw', 'www.twse.com.tw', 'www.tpex.org.tw']);
+const OFFICIAL_HOSTS = Object.freeze(['openapi.twse.com.tw', 'www.twse.com.tw', 'wwwc.twse.com.tw', 'www.tpex.org.tw']);
 const MARKETS = Object.freeze(['TWSE', 'TPEX']);
 const FLOW_FACT_KEYS = Object.freeze([
   'quarterly_revenue', 'quarterly_gross_profit', 'quarterly_operating_expense',

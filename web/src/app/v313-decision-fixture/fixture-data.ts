@@ -46,10 +46,16 @@ function signal(symbol:string,name:string,decision:DecisionEnvelopeV313):SourceS
     detailHref:`/stock/${symbol}?decisionRevisionId=${encodeURIComponent(decision.decisionRevisionId)}`};
 }
 
+const nearBuy={...signal('9107','接近買點股票',envelope(`decision-v3.13:${'7'.repeat(64)}`,'unavailable','none')),
+  proximityToAction:true,researchRanking:{version:'research-ranking-envelope-v3.14.0' as const,
+    rankingScore:78,coverage:.9,missingAxes:['marketLiquidity'],axes:{valuation:84,fundamentalQuality:88,
+      momentumTechnical:76,sourceCatalyst:82,marketLiquidity:null}}};
+
 export const v313FixtureSignals=[
   signal('9101','行動股票',envelope(`decision-v3.13:${'a'.repeat(64)}`,'research_starter','conditional_research')),
   signal('9102','等待股票',envelope(`decision-v3.13:${'b'.repeat(64)}`,'wait_reclaim','formal')),
   signal('9103','待研究股票',envelope(`decision-v3.13:${'c'.repeat(64)}`,'unavailable','none')),
+  nearBuy,
 ];
 
 const malformed=signal('9104','錯誤來源股票',envelope(`decision-v3.13:${'d'.repeat(64)}`,
