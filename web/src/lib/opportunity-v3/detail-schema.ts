@@ -16,6 +16,7 @@ const SOURCE_KEYS = new Set([
   'earnings_call',
   'instagram',
   'investanchors',
+  'official_market_factor',
   'mops_material_event',
   'podcast',
   'ptt',

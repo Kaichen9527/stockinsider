@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS public.legacy_runtime_failure_diagnostics_v3_14 (
   run_id uuid NOT NULL REFERENCES public.legacy_producer_runs_v3_11(run_id) ON DELETE RESTRICT,
   job_id uuid NOT NULL REFERENCES public.legacy_producer_jobs_v3_11(job_id) ON DELETE RESTRICT,
   stage text NOT NULL CHECK (stage IN ('source_sync','mention_claim_extraction','candidate_funnel','facts_refresh','analysis_revision','compact_radar_projection','worker_terminal')),
-  job_kind text NOT NULL CHECK (job_kind IN ('source_root','revision_shard','candidate_batch','analysis_batch','projection_batch','terminal')),
+  job_kind text NOT NULL CHECK (job_kind IN ('source_root','revision_shard','stage_barrier','candidate_batch','analysis_batch','projection_batch','terminal')),
   failure_code text NOT NULL CHECK (failure_code IN ('provider_unavailable','data_integrity_failure','authentication_rejected')),
   failure_origin text NOT NULL CHECK (failure_origin IN ('handler','rpc_validation','persistence','provider','runtime')),
   invariant_code text NOT NULL CHECK (invariant_code IN ('candidate_seed_membership_missing','database_constraint_rejected','provider_timeout','authentication_rejected','data_integrity_failure')),
@@ -26,6 +26,11 @@ CREATE TABLE IF NOT EXISTS public.legacy_runtime_failure_diagnostics_v3_14 (
 );
 
 ALTER TABLE public.legacy_runtime_failure_diagnostics_v3_14 ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.legacy_runtime_failure_diagnostics_v3_14
+  DROP CONSTRAINT IF EXISTS legacy_runtime_failure_diagnostics_v3_14_job_kind_check;
+ALTER TABLE public.legacy_runtime_failure_diagnostics_v3_14
+  ADD CONSTRAINT legacy_runtime_failure_diagnostics_v3_14_job_kind_check
+  CHECK (job_kind IN ('source_root','revision_shard','stage_barrier','candidate_batch','analysis_batch','projection_batch','terminal'));
 REVOKE ALL ON public.legacy_runtime_failure_diagnostics_v3_14 FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON public.legacy_runtime_failure_diagnostics_v3_14 FROM service_role;
 
@@ -719,7 +724,7 @@ BEGIN
   END LOOP;
   ALTER TABLE public.opportunity_public_projections_v3
     ADD CONSTRAINT opportunity_projection_acceptance_v3_14_check
-    CHECK(acceptance_version IN('1.45.1','1.46.0')) NOT VALID;
+    CHECK(acceptance_version IN('1.44.6','1.45.1','1.46.0')) NOT VALID;
   ALTER TABLE public.opportunity_public_projections_v3
     VALIDATE CONSTRAINT opportunity_projection_acceptance_v3_14_check;
 
@@ -729,10 +734,12 @@ BEGIN
     'public.complete_opportunity_job_v3(uuid,text,text,opportunity_job_counts_v3)'::regprocedure
   ] LOOP
     SELECT pg_get_functiondef(v_regprocedure) INTO STRICT v_definition;
-    v_old_count := (length(v_definition)-length(replace(v_definition,'1.45.1','')))/length('1.45.1');
+    v_old_count :=
+      (length(v_definition)-length(replace(v_definition,'1.44.6','')))/length('1.44.6')
+      +(length(v_definition)-length(replace(v_definition,'1.45.1','')))/length('1.45.1');
     v_new_count := (length(v_definition)-length(replace(v_definition,'1.46.0','')))/length('1.46.0');
     IF v_old_count=1 AND v_new_count=0 THEN
-      EXECUTE replace(v_definition,'1.45.1','1.46.0');
+      EXECUTE replace(replace(v_definition,'1.44.6','1.46.0'),'1.45.1','1.46.0');
     ELSIF NOT(v_old_count=0 AND v_new_count=1) THEN
       RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='acceptance_identity_upgrade_shape';
     END IF;
@@ -743,12 +750,17 @@ BEGIN
     'public.select_opportunity_public_projection_v3(timestamp with time zone)'::regprocedure
   ] LOOP
     SELECT pg_get_functiondef(v_regprocedure) INTO STRICT v_definition;
-    v_old_count := (length(v_definition)-length(replace(v_definition,
-      '393a6080aad2278b5da08b2a34ae824cca0fa83f99221ebc07c077753adcf9c9','')))/64;
+    v_old_count :=
+      (length(v_definition)-length(replace(v_definition,
+        'ebaa6dbdaa7dd55bb261187008f51e930919e7c0cfe07732d531e01267e67c41','')))/64
+      +(length(v_definition)-length(replace(v_definition,
+        '393a6080aad2278b5da08b2a34ae824cca0fa83f99221ebc07c077753adcf9c9','')))/64;
     v_new_count := (length(v_definition)-length(replace(v_definition,
       'c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729','')))/64;
     IF v_old_count=1 AND v_new_count=0 THEN
-      EXECUTE replace(v_definition,
+      EXECUTE replace(replace(v_definition,
+        'ebaa6dbdaa7dd55bb261187008f51e930919e7c0cfe07732d531e01267e67c41',
+        'c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729'),
         '393a6080aad2278b5da08b2a34ae824cca0fa83f99221ebc07c077753adcf9c9',
         'c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729');
     ELSIF NOT(v_old_count=0 AND v_new_count=1) THEN

@@ -1664,3 +1664,50 @@ This approval authorizes implementation only. It does not authorize production m
 - [ ] Form one authoritative release candidate. Do not apply production migration,
   install/activate the source-writing runtime or coordinate Web publication without
   explicit V3.13 production-write authority.
+
+## V3.15 opportunity recovery
+
+- [x] Record the production RED baseline and close the V3.14/V3.12 split-release,
+  empty official planes, source-only funnel and official TPEX parsing roots in
+  `opportunity-recovery-v3.15-amendment.md`.
+- [x] Add the bounded official whole-market research entrance without weakening or
+  bypassing the unique decision envelope.
+- [x] Repair TPEX Gregorian history, shares/TWD units, compact corporate-action dates,
+  bounded retries and monthly-revenue fact persistence.
+- [x] Add the Supabase REST durable-producer/doctor boundary and additive V3.15 claim,
+  coarse-universe and health RPCs; do not reset the database password.
+- [x] Prove the five-migration chain applies twice on a fresh database; migration
+  contract is 51/51 and V3.15 focused product regression is 9/9 after exact-review
+  repairs.
+- [x] Obtain fresh Requirements Round 138 PASS over commit
+  `835f66ba8589f6fa6d58be71ad8880b070b2da11` / tree
+  `4e16faa465278eface62428fca172a0b506440d9` and fresh Architecture Round 19
+  PASS over commit `70167d6a3d8015824fe1a695505d06ae6b03179f` / tree
+  `25111b0c4f8204cc54316aabc647aa1522c945ee`, both P0=0 P1=0 P2=0.
+- [x] Freeze exact implementation `97bc7de9027e8f334f9343aa1552d7b7bb33fce2`,
+  review `e74b672cf397b7f8ba11f86ff49b2633afb5b7dd..97bc7de9027e8f334f9343aa1552d7b7bb33fce2`,
+  repair both P1 roots in `5e9b56e4621d0a04e2e59f4b903e535ba3769ac6`,
+  and obtain repair/full-range closure `PASS P0=0 P1=0 P2=0`. Local Code Gate is
+  PASS; protected external artifact remains the landing check.
+- [x] Reproduce the production `facts_refresh` failure without mutation: a 200-row
+  official financial or price chunk exceeds the 120-second database statement bound,
+  while individual authority rows are valid. Add ≤20-row application chunks, an
+  immutable applied-chunk ledger, interruption-safe replay and constant-work terminal
+  completion; rehearse the successor migration twice with rollback.
+- [ ] Obtain superseding fresh Requirements, Architecture, exact-review and protected
+  Code Gate evidence for the bounded chunk-application repair.
+- [ ] Apply the additive production migration, install the exact reviewed runtime,
+  run two terminal producers and verify the official gate waterfall.
+- [ ] Deploy the same reviewed commit to `stockinsider-three`, complete visible-browser
+  and canary verification, then update this task/status evidence with exact identities.
+- [x] Reproduce the first coordinated production run's post-facts failure without
+  mutation: official ingestion and facts completed, while the 3,893,236-byte analysis
+  result exceeded the closed 3,145,728-byte durable-result envelope. Remove only the
+  duplicate decision fact plane and unused full authority rows; conserve 20 decisions,
+  20 immutable decision payloads, 40 source candidates and every citation. Focused
+  V3.15 is 16/16 and complete product correctness is 100/100.
+- [ ] Obtain superseding Requirements Round 161, Architecture Round 42, exact-range
+  review and protected aggregate evidence for the analysis-transport repair.
+- [ ] Run two terminal reviewed producers, activate the matching reviewed runtime,
+  merge PR #53, deploy the exact source to `stockinsider-three`, and complete API plus
+  visible-browser production verification. Do not reset the database password.

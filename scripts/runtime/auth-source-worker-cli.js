@@ -22,11 +22,12 @@ const { computeUnderreactionResearchScore } = require('./underreaction-score');
 const { computeResearchRankingV314 } = require('./research-ranking-v314');
 const { safeFailureDiagnostic } = require('./safe-diagnostics');
 const { buildOfficialTradingScheduleV314, coverageReportV314 } = require('./official-market-authority-v314');
-const { loadOfficialTwMarketSnapshot, SOURCE_URL, TPEX_SOURCE_URL, TWSE_REVENUE_URL, TPEX_REVENUE_URL,
+const { loadOfficialTwMarketSnapshot,loadOfficialCoarseMarketSnapshot, SOURCE_URL, TPEX_SOURCE_URL, TWSE_REVENUE_URL, TPEX_REVENUE_URL,
   TWSE_PRICE_HISTORY_URL, TPEX_PRICE_HISTORY_URL, validateReportedValuation,
   validOfficialReportedValuationSourceRef } = require('./official-twse-valuation');
 const { MOPS_INLINE_URL } = require('./official-mops-v314');
 const { buildMarketAnalysis } = require('./market-analysis');
+const { buildOfficialFactorCandidatesV315 } = require('./official-factor-discovery-v315');
 const { runtimeBundleBytes } = require('./tracked-runtime-bundle');
 const { acquireApprovedSources } = require('./official-source-acquisition');
 const approvedSourceRoster = require('../../config/runtime/approved-source-roster-v3.13.json');
@@ -222,7 +223,20 @@ function extractRevisionCandidates(bundle) {
       link: { disposition: 'linked', stockId, symbol },
       sourceClass: SOURCE_CLASS_BY_KEY[frozen.sourceKey] ?? 'community' }];
   });
-  const matches=allMatches.slice(0,200);
+  // Authority pages may legitimately repeat an identical active roster head
+  // (for example, when an upgrade-safe snapshot carries the same instrument
+  // through two bounded page sources).  The persistence contract keys claims
+  // and mentions by their deterministic identities, so collapse exact
+  // identity duplicates before applying the 200-entity conservation bound.
+  // The deterministic identity is the persistence authority here; conflicting
+  // roster heads for that identity are rejected by the frozen authority plane
+  // before this extraction step.
+  const uniqueMatches=[];const seenClaimIds=new Set();
+  for(const candidate of allMatches){
+    if(seenClaimIds.has(candidate.claimId))continue;
+    seenClaimIds.add(candidate.claimId);uniqueMatches.push(candidate);
+  }
+  const matches=uniqueMatches.slice(0,200);
   const linkedSymbols=new Set(matches.map((candidate)=>candidate.symbol));
   const allRejectedTokens=[...new Set([...text.matchAll(/(^|[^0-9])([0-9]{4})(?=[^0-9]|$)/gu)].map((match)=>match[2]))]
     .filter((symbol)=>!linkedSymbols.has(symbol));
@@ -232,7 +246,7 @@ function extractRevisionCandidates(bundle) {
     mentionId:uuidFromHash(`mention:${frozen.revisionId}:rejected:${symbol}`),symbol,
     outcome:'rejected',reason:'stock_context_or_master_authority_unavailable',stockId:null,
   }));
-  const overflowCount=Math.max(0,allMatches.length-matches.length)+Math.max(0,allRejectedTokens.length-rejectedTokens.length);
+  const overflowCount=Math.max(0,uniqueMatches.length-matches.length)+Math.max(0,allRejectedTokens.length-rejectedTokens.length);
   const overflow=overflowCount?[{claimId:uuidFromHash(`claim:${frozen.revisionId}:bounded-overflow`),
     mentionId:uuidFromHash(`mention:${frozen.revisionId}:bounded-overflow`),symbol:null,stockId:null,
     outcome:'deferred',reason:`entity_bound_deferred:${overflowCount}`}]:[];
@@ -1237,14 +1251,56 @@ function resolveOfficialAuthorityCandidatesV314(candidates,candidateAuthorityRow
   return Object.freeze({authorityCandidates:Object.freeze(authorityCandidates),peerUniverse:Object.freeze(peerUniverse)});
 }
 
+function compactAnalysisOfficialAuthority(authority){
+  if(!authority||typeof authority!=='object')return null;
+  return Object.freeze({
+    calendar:Object.freeze({authorityHash:authority.calendar?.authorityHash??null}),
+    coverage:Object.freeze({completedSessions:Number(authority.coverage?.completedSessions??0),
+      ready:authority.coverage?.ready===true,
+      blockers:Object.freeze((authority.coverage?.blockers??[]).slice(0,12))}),
+  });
+}
+
+function projectionDecision(decision){
+  const {facts:_immutableFacts,...analysisRevision}=decision.analysisRevision??{};
+  return Object.freeze({...decision,analysisRevision:Object.freeze(analysisRevision)});
+}
+
+const ANALYSIS_PROVENANCE_KEYS=new Set(
+  ['sourceKey','sourceUrl','sourcePublishedAt','sourceCollectedAt','sourceName','kolIdentity']);
+
+function immutableAnalysisFacts(decision){
+  const evidence=Array.isArray(decision?.evidence)?decision.evidence:null;
+  const sourceEvidence=Array.isArray(decision?.sourceEvidence)?decision.sourceEvidence:null;
+  const sourceEvidenceIsLossless=Boolean(evidence&&sourceEvidence&&evidence.length===sourceEvidence.length
+    &&evidence.every((row,index)=>row&&typeof row==='object'&&!Array.isArray(row)
+      &&sourceEvidence[index]&&typeof sourceEvidence[index]==='object'&&!Array.isArray(sourceEvidence[index])
+      &&Object.entries(row).every(([key,value])=>Object.hasOwn(sourceEvidence[index],key)
+        &&(ANALYSIS_PROVENANCE_KEYS.has(key)||canonicalJson(sourceEvidence[index][key])===canonicalJson(value)))));
+  if(!sourceEvidenceIsLossless)return decision;
+  const {evidence:_duplicateEvidence,...completeFacts}=decision;
+  return Object.freeze(completeFacts);
+}
+
 async function streamOfficialIngestionV314({claim,snapshot,sourceCutoff,producerSha,persistChunk,priorFinancialRows=[]}){
   const financialFacts=newFinancialFactsV314(snapshot?.financialFacts??[],priorFinancialRows);
+  const reportedValuations=[...(snapshot?.valuations??[]),...(snapshot?.valuationHistory??[])].flatMap((row)=>{
+    if(!row||typeof row!=='object')return [];
+    // Older synthetic contract owners intentionally omit the metric fields. Keep
+    // those fixtures transport-compatible, while production observations are
+    // normalized to the same closed ranges enforced by the V3.13 append RPC.
+    if(!Object.hasOwn(row,'peRatio')&&!Object.hasOwn(row,'pbRatio'))return [row];
+    const pe=Number(row.peRatio);const pb=Number(row.pbRatio);
+    const peRatio=Number.isFinite(pe)&&pe>0&&pe<=200?pe:null;
+    const pbRatio=Number.isFinite(pb)&&pb>0&&pb<=100?pb:null;
+    return peRatio===null&&pbRatio===null?[]:[{...row,peRatio,pbRatio}];
+  });
   const datasets=[
     ['trading_sessions',snapshot?.calendarSessions??[],200],
-    ['financial_facts',financialFacts,200],
-    ['price_observations',snapshot?.priceObservations??[],200],
-    ['corporate_action_snapshots',snapshot?.corporateActionSnapshots??[],20],
-    ['reported_valuations',[...(snapshot?.valuations??[]),...(snapshot?.valuationHistory??[])],200],
+    ['financial_facts',financialFacts,5],
+    ['price_observations',snapshot?.priceObservations??[],5],
+    ['corporate_action_snapshots',snapshot?.corporateActionSnapshots??[],5],
+    ['reported_valuations',reportedValuations,5],
   ];
   const chunks=[];const counts={};
   for(const [kind,items,chunkSize] of datasets){
@@ -1273,6 +1329,7 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
 } = {}) {
   let legacyPayloadsPromise;
   const officialSnapshotsByCutoff = new Map();
+  const coarseSnapshotsByCutoff = new Map();
   const authorityPagesByHash = new Map();
   return {
     source_sync: async (claim) => {
@@ -1301,19 +1358,32 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
           extractRevisionCandidates({ ...bundle, authorityPages }));
       }
       const bundle = readBundle(claim, 'mention_shard_results');
-      const candidates = (bundle.results ?? []).flatMap((result) => Array.isArray(result?.candidates) ? result.candidates : []);
+      invariant(Array.isArray(bundle.candidates) && bundle.candidates.length <= 4000,
+        'mention barrier candidate transport unavailable');
+      const candidates = bundle.candidates;
       return immutableBundle('legacy_mention_barrier_result_v3_11', { schema: 'legacy-mention-barrier-result-v3.11', candidates });
     },
     candidate_funnel: async (claim) => {
       const bundle = readBundle(claim, 'candidate_funnel_input');
-      const outcomes = (bundle.mentionResult?.candidates ?? []).map((candidate) => ({
+      const sourceOutcomes = (bundle.mentionResult?.candidates ?? []).map((candidate) => ({
         ...candidate, raw: candidate.raw, claimId: candidate.claimId, mentionId: candidate.mentionId,
         claimEligible: true, link: { disposition: 'linked', stockId: candidate.stockId, symbol: candidate.symbol },
       }));
+      const coarseUniverseRows=Array.isArray(bundle.coarseUniverseRows)?bundle.coarseUniverseRows.slice(0,3000):[];
+      if(coarseUniverseRows.length&&!coarseSnapshotsByCutoff.has(bundle.sourceCutoff)){
+        coarseSnapshotsByCutoff.set(bundle.sourceCutoff,loadOfficialCoarseMarketSnapshot({cutoff:bundle.sourceCutoff,
+          universe:coarseUniverseRows,fetchImpl}).catch((error)=>({schema:'official-coarse-market-snapshot-v3.15',
+          cutoff:bundle.sourceCutoff,collectedAt:bundle.sourceCutoff,universe:coarseUniverseRows,valuations:[],revenues:[],
+          sourceFailures:[{url:'official-coarse-market-snapshot',reason:safeFailureDiagnostic(error,
+            {stage:'candidate_funnel',origin:'provider'}).invariantCode}]})));
+      }
+      const coarseSnapshot=coarseUniverseRows.length?await coarseSnapshotsByCutoff.get(bundle.sourceCutoff):null;
+      const factorDiscovery=buildOfficialFactorCandidatesV315({snapshot:coarseSnapshot,cutoff:bundle.sourceCutoff,limit:40});
+      const outcomes=[...sourceOutcomes,...factorDiscovery.candidates];
       const funnel = buildCandidateFunnel({ outcomes, seedSymbols: bundle.seedSymbols ?? [], priorLedger: bundle.priorLedger ?? [] });
       return immutableBundle('legacy_candidate_funnel_result_v3_11', { schema: 'legacy-candidate-funnel-result-v3.11',
         candidates: funnel.candidateLedger, discoverySummary: funnel.discoverySummary,
-        discoveryDelta: funnel.discoveryDelta });
+        discoveryDelta: funnel.discoveryDelta,factorDiscovery:factorDiscovery.waterfall });
     },
     facts_refresh: async (claim) => {
       const bundle = readBundle(claim, 'candidate_fact_plane');
@@ -1333,6 +1403,14 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
       const authorityPeers=peerUniverse.filter((row)=>!authoritySymbols.has(row.symbol)).slice(0,240);
       const bridgeAvailable = ['legacy-product-value-bridge-v3.12','legacy-product-value-bridge-v3.13',
         'legacy-product-value-bridge-v3.14'].includes(bundle.bridgeSchema);
+      const ingestionResume=bundle.officialIngestionResume;
+      if(bridgeAvailable&&ingestionResume?.schema==='legacy-official-ingestion-resume-v3.15'
+        &&ingestionResume.sourceCutoff===bundle.sourceCutoff&&!officialSnapshotsByCutoff.has(bundle.sourceCutoff)){
+        officialSnapshotsByCutoff.set(bundle.sourceCutoff,Promise.resolve({availability:'available',sourceFailures:[],
+          calendarSessions:ingestionResume.calendarSessions??[],financialFacts:ingestionResume.financialFacts??[],
+          priceObservations:ingestionResume.priceObservations??[],corporateActionSnapshots:ingestionResume.corporateActionSnapshots??[],
+          valuations:ingestionResume.reportedValuations??[],valuationHistory:[],twseIndex:[],tpexIndex:[],revenues:[],foreignFlow:null}));
+      }
       if (bridgeAvailable && !officialSnapshotsByCutoff.has(bundle.sourceCutoff)) {
         officialSnapshotsByCutoff.set(bundle.sourceCutoff,loadOfficialTwMarketSnapshot({ cutoff:bundle.sourceCutoff,
           candidates:authorityCandidates,peerCandidates:authorityPeers,
@@ -1464,20 +1542,27 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
           analysisGeneratedAt: revision.revision.analysisGeneratedAt,
           noChangeMessage: revision.disposition === 'unchanged' ? `已於 ${bundle.sourceCutoff} 檢查，無重大變化` : null };
       });
-      const decisionPayloads=decisions.map((decision)=>{
-        const immutableFacts=decision.analysisRevision?.facts;
+      const immutableFactsByDecision=decisions.map((decision)=>immutableAnalysisFacts(decision.analysisRevision?.facts??decision));
+      const decisionPayloads=immutableFactsByDecision.map((immutableFacts,index)=>{
+        const decision=decisions[index];
         invariant(immutableFacts && immutableFacts.symbol===decision.symbol
           && immutableFacts.materialChangeHash===decision.materialChangeHash,
         'immutable analysis fact payload required');
         return { symbol:decision.symbol,materialChangeHash:decision.materialChangeHash,
           bundle:immutableBundle('legacy_analysis_fact_payload_v3_13',immutableFacts) };
       });
-      return immutableBundle('legacy_analysis_revision_result_v3_11', { schema: 'legacy-analysis-revision-result-v3.11', decisions,
+      // decisionPayloads already carries the complete immutable fact plane for
+      // persistence. Avoid serializing that same plane a second time under each
+      // projection decision's revision metadata. The next stage also consumes only
+      // the official calendar/coverage summary; complete authority rows remain in
+      // the succeeded facts result. This is a transport projection, not data loss.
+      const projectionDecisions=decisions.map((decision)=>projectionDecision(immutableAnalysisFacts(decision)));
+      return immutableBundle('legacy_analysis_revision_result_v3_11', { schema: 'legacy-analysis-revision-result-v3.11', decisions:projectionDecisions,
         decisionPayloads,
         sourceCandidates: bundle.factsResult?.sourceCandidates ?? [],
         dislocationCandidates: bundle.factsResult?.dislocationCandidates ?? [],
         marketAnalysis: bundle.factsResult?.marketAnalysis ?? null,
-        officialAuthority:bundle.factsResult?.officialAuthority??null,
+        officialAuthority:compactAnalysisOfficialAuthority(bundle.factsResult?.officialAuthority),
         projectionFreshnessSchedule:bundle.factsResult?.projectionFreshnessSchedule??[],
         discoveryDelta: bundle.factsResult?.discoveryDelta ?? { added: [], exited: [], continued: [], unchangedReasons: [] } });
     },
@@ -1544,10 +1629,9 @@ async function main() {
   assertExactRuntimeEnvironment(process.env);
   const runtimeEnvironment = hydrateRuntimeCredentials(process.env, undefined, { requireReferences: true });
   if (!runtimeEnvironment.STOCKINSIDER_REVIEWED_COMMIT_SHA) throw new Error('reviewed_runtime_environment_incomplete');
-  // Load the production-only database driver only after dry-run/config checks, so
-  // the reviewed CLI can be verified without installing runtime dependencies.
-  const { createPostgresLegacyProducerAdapter } = require('./postgres-legacy-producer-adapter');
-  const adapter = createPostgresLegacyProducerAdapter({ connectionString: runtimeEnvironment.STOCKINSIDER_DATABASE_URL });
+  const { createSupabaseRestLegacyProducerAdapter } = require('./supabase-rest-legacy-producer-adapter');
+  const adapter = createSupabaseRestLegacyProducerAdapter({supabaseUrl:runtimeEnvironment.STOCKINSIDER_SUPABASE_URL,
+    serviceRoleKey:runtimeEnvironment.STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY});
   const workerBytes = runtimeBundleBytes(path.resolve(__dirname, '..', '..'));
   const optionalCredential = (reference) => {
     try { return resolveCredentialReference(reference); } catch { return null; }
@@ -1576,6 +1660,7 @@ if (require.main === module) main().catch((error) => {
 });
 
 module.exports = { args, buildLegacyCandidateDecision, buildStageHandlers, extractRevisionCandidates,
+  compactAnalysisOfficialAuthority,immutableAnalysisFacts,projectionDecision,
   valuationAuthorityInput,materialDecisionValue,exactSectorPeReference,financialSemanticIdentity,newFinancialFactsV314,
   resolveOfficialAuthorityCandidatesV314,streamOfficialIngestionV314,
   validEmbeddedOfficialValuationRef,marketAllowsNewPosition,

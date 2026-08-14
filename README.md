@@ -74,7 +74,8 @@ cp .env.example .env
 - 目前 runtime 仍會盡量從 `.env` 的 `#Thread` / `#Instagram` 區塊救援，但正式配置應改成 namespaced `THREADS_*` / `INSTAGRAM_*`。
 
 V3.14 tracked runtime 不讀取上述 raw login/cookie 設定。它要求
-`STOCKINSIDER_DATABASE_URL_REF=keychain:stockinsider-runtime:database-url` 與
+`STOCKINSIDER_SUPABASE_URL_REF=keychain:stockinsider-runtime:supabase-url`、
+`STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY_REF=keychain:stockinsider-runtime:supabase-service-role-key` 與
 `INTERNAL_API_KEY_REF=keychain:stockinsider-runtime:internal-api-key`；Threads
 OAuth、YouTube API/captions 也只由 `scripts/runtime/credential-resolver.js`
 的 allowlisted Keychain reference 取得。完整的非啟用驗證與 17×3 connector
@@ -212,8 +213,9 @@ npm run worker:auth-sources:dry
 ```
 
 `dry` 只驗證固定 config，不寫資料。其他命令必須同時具備 reviewed
-`STOCKINSIDER_REVIEWED_COMMIT_SHA`、`STOCKINSIDER_DATABASE_URL` 與
-`INTERNAL_API_KEY`；正式 runtime 尚未 activation 時不得把手動執行當成替代排程。
+`STOCKINSIDER_REVIEWED_COMMIT_SHA`、`STOCKINSIDER_SUPABASE_URL`、
+`STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY` 與 `INTERNAL_API_KEY`；正式 runtime
+尚未 activation 時不得把手動執行當成替代排程。
 
 ### 5.1.4 Linux Virtual Server Runbook
 
