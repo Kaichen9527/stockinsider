@@ -437,6 +437,28 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
     `.loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-${round}.md`,
   );
 
+  if (statusRecord.requirementsStatus === `v3_16_round_${round}_pass_p0_0_p1_0_p2_0`) {
+    const currentMarkerV316 = '## V3.15 opportunity recovery';
+    const currentStartV316 = tasksText.lastIndexOf(currentMarkerV316);
+    assert.ok(currentStartV316 >= 0, 'one operative V3.16 recovery task section exists');
+    const currentTasksV316 = tasksText.slice(currentStartV316);
+    assert.equal(statusRecord.requirementsGateStatus, 'pass_p0_0_p1_0_p2_0');
+    assert.equal(statusRecord.requirementsPendingTree, null);
+    assert.equal(statusRecord.requirementsPendingEvidence, null);
+    assert.equal(statusRecord.architectureGateStatus, 'pass_p0_0_p1_0_p2_0');
+    assert.equal(statusRecord.architectureReviewRound, 20);
+    assert.equal(statusRecord.architecturePendingRound, null);
+    assert.equal(statusRecord.architecturePendingTree, null);
+    assert.equal(statusRecord.architecturePendingEvidence, null);
+    assert.equal(statusRecord.designStatus, 'v3_16_architecture_round_20_pass_p0_0_p1_0_p2_0');
+    assert.equal(statusRecord.loopStage, 'v3_16_architecture_round_20_pass_exact_freeze_pending');
+    assert.equal(statusRecord.exactCommitReviewStatus, 'v3_16_exact_range_pass_p0_0_p1_0_p2_0');
+    assert.match(currentTasksV316, /- \[x\] Obtain fresh Requirements Round 138 PASS/u);
+    assert.match(currentTasksV316, /protected external artifact remains the landing check/u);
+    assert.match(currentTasksV316, /- \[ \] Obtain superseding fresh Requirements, Architecture, exact-review/u);
+    return;
+  }
+
   if (statusRecord.requirementsGateStatus === `pass_v3_15_round_${round}`) {
     const currentMarkerV315 = '## V3.15 opportunity recovery';
     const currentStartV315 = tasksText.lastIndexOf(currentMarkerV315);
