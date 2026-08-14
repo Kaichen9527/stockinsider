@@ -638,9 +638,9 @@ async function loadOfficialTwMarketSnapshot({ cutoff, candidates = [], peerCandi
   const valuationHistory = combinedValuationRequests.flatMap((request,index)=>{
     const result = historicalValuationResults[index]; if (result.status!=='fulfilled') return [];
     return request.exchange==='TWSE'
-      ? parseTwseHistoricalValuationRows(result.value.payload,{collectedAt,sourceUrl:request.url,allowedSymbols:candidateSymbols})
+      ? parseTwseHistoricalValuationRows(result.value.payload,{collectedAt,sourceUrl:request.url,allowedSymbols:allowedValuationSymbols})
       : parseTpexHistoricalValuationRows(result.value.payload,{collectedAt,sourceUrl:request.url,session:request.session,
-        allowedSymbols:candidateSymbols});
+        allowedSymbols:allowedValuationSymbols});
   }).filter((row)=>row.session<=cutoffSession).map((row)=>({...row,
     canonicalSector:valuationIdentityBySymbol.get(row.symbol)?.canonicalSector??'unknown'}));
   const effectivePriceBackfill=priceBackfillSymbols.length?priceBackfillSymbols
