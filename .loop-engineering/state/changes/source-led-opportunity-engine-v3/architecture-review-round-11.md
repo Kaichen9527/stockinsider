@@ -1,20 +1,20 @@
 # V3.15 protected Architecture compatibility evidence
 
 Date: 2026-08-14
-Review authority: fresh Architecture Round 45, carried at the protected worker's
+Review authority: fresh Architecture Round 46, carried at the protected worker's
 stable compatibility path after the immutable Requirements carrier.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `8cccb21f0b6cced023543118a606e63adf225c9d`
-- Requirements implementation commit: `acadd4e5531cd390257403b7186d16af6f87420d`
-- Requirements evidence carrier: `9e3b541ce4ae3982dee1d64f17ee665686513a45`
-- Final repair-closure commit/tree: `9e3b541ce4ae3982dee1d64f17ee665686513a45` / `a8df6adabe0cf9f47fe67eb9d4dda59dcb85a44e`
-- Full reviewed implementation range: `8cccb21f0b6cced023543118a606e63adf225c9d..9e3b541ce4ae3982dee1d64f17ee665686513a45`
+- Protected implementation parent: `3b4c51d15468a9cd37b6899edec7090d09838631`
+- Requirements implementation commit: `c127cba9737ed033aa74c7d9dfa3fb1263888eea`
+- Requirements evidence carrier: `286e0089c6f20f76f5d054f54fc37ed3dacd773d`
+- Final repair-closure commit/tree: `286e0089c6f20f76f5d054f54fc37ed3dacd773d` / `287378bbb56d075f8ed8f2f2fbf7b07aace6f1d4`
+- Full reviewed implementation range: `3b4c51d15468a9cd37b6899edec7090d09838631..286e0089c6f20f76f5d054f54fc37ed3dacd773d`
 - Active graph: `734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717`
-- Canonical evidence: this protected Round 45 compatibility carrier.
+- Canonical evidence: this protected Round 46 compatibility carrier.
 
 ## Architecture closure
 
@@ -215,3 +215,15 @@ authoritative only when it is an ordered canonical superset; divergence still re
 both planes and fails the existing bound. This changes no provider authority, ranking,
 DecisionEnvelope, database grant, scheduler, public mutation, LINE, dispatch or
 Promotion boundary. Architecture result: `PASS`, `P0=0 P1=0 P2=0`.
+
+Round 46 reviews method-specific valuation as a closed authority adapter inside the
+existing producer DAG. The PE path consumes only the official income/EPS denominator
+it needs; PB/ROE, NAV and EV methods retain their separate balance and capital inputs.
+An implied denominator is derived only from same-period official facts, remains
+in-memory and provenance-bound, and never broadens the database writer or public API.
+The historical loader's candidate-plus-peer allowlist is the existing bounded roster;
+it does not alter candidate selection, 60→30→20 limits or DecisionEnvelope authority.
+Future-period, accounting, session, exchange and peer-count checks remain fail-closed.
+This introduces no grant, scheduler, public mutation, score/action threshold, LINE,
+dispatch, automatic trading or Promotion boundary. Architecture result: `PASS`,
+`P0=0 P1=0 P2=0`.
