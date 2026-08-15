@@ -437,6 +437,36 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
     `.loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-${round}.md`,
   );
 
+  if (statusRecord.requirementsStatus === `v3_16_9_round_${round}_pass_p0_0_p1_0_p2_0`) {
+    const currentMarkerV3169 = '## V3.16.9 official-ingestion transaction-time recovery';
+    const currentStartV3169 = tasksText.lastIndexOf(currentMarkerV3169);
+    assert.ok(currentStartV3169 >= 0, 'one operative V3.16.9 recovery task section exists');
+    const currentTasksV3169 = tasksText.slice(currentStartV3169);
+    assert.ok(round >= 142, 'V3.16.9 Requirements round never regresses');
+    assert.equal(statusRecord.requirementsGateStatus, 'pass_p0_0_p1_0_p2_0');
+    assert.equal(statusRecord.requirementsPendingTree, null);
+    assert.equal(statusRecord.requirementsPendingEvidence, null);
+    assert.equal(statusRecord.architectureGateStatus, 'pass_p0_0_p1_0_p2_0');
+    assert.ok(statusRecord.architectureReviewRound >= 22, 'V3.16.9 Architecture round never regresses');
+    assert.equal(statusRecord.architecturePendingRound, null);
+    assert.equal(statusRecord.architecturePendingTree, null);
+    assert.equal(statusRecord.architecturePendingEvidence, null);
+    assert.equal(statusRecord.architectureReviewEvidence,
+      `.loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-${statusRecord.architectureReviewRound}.md`);
+    assert.equal(statusRecord.designStatus,
+      `v3_16_9_architecture_round_${statusRecord.architectureReviewRound}_pass_p0_0_p1_0_p2_0`);
+    assert.equal(statusRecord.loopStage, 'v3_16_9_exact_review_pass_protected_gate_pending');
+    assert.equal(statusRecord.implementationStatus, 'v3_16_9_exact_review_pass_protected_gate_pending');
+    assert.equal(statusRecord.exactCommitReviewStatus, 'v3_16_9_exact_range_pass_p0_0_p1_0_p2_0');
+    assert.match(currentTasksV3169, new RegExp(
+      `- \\[x\\] Obtain fresh Requirements Round ${round}, Architecture Round ${statusRecord.architectureReviewRound}`,
+      'u',
+    ));
+    assert.match(currentTasksV3169, /Protected Code Gate remains the landing check/u);
+    assert.match(currentTasksV3169, /- \[ \] Apply the reviewed successor migration/u);
+    return;
+  }
+
   if (statusRecord.requirementsStatus === `v3_16_round_${round}_pass_p0_0_p1_0_p2_0`) {
     const currentMarkerV316 = '## V3.15 opportunity recovery';
     const currentStartV316 = tasksText.lastIndexOf(currentMarkerV316);
@@ -1300,16 +1330,22 @@ const structuralExecutors = {
     assert.match(tasks, /model-runner-v3[.]6/u);
     assert.ok(tasks.lastIndexOf('model-runner-v3.6') > tasks.lastIndexOf('model-runner-v3.5'));
     assert.doesNotThrow(() => assertTaskStatusNextWorkConsistent(tasks, status));
+    const operativeRequirementsTask = status.requirementsStatus.startsWith('v3_16_9_')
+      ? `- [x] Obtain fresh Requirements Round ${status.requirementsReviewRound}, Architecture Round ${status.architectureReviewRound} and exact-range`
+      : '- [x] Obtain fresh Requirements Round 138 PASS';
+    const operativeProtectedGateDeclaration = status.requirementsStatus.startsWith('v3_16_9_')
+      ? 'Protected Code Gate remains the landing check'
+      : 'protected external artifact remains the landing check';
     for (const [label, mutatedTasks, mutatedStatus] of [
       ['review round drift', tasks, { ...status, requirementsReviewRound: status.requirementsReviewRound - 1 }],
       ['pending evidence drift', tasks, { ...status, requirementsPendingEvidence: 'requirements-review-round-131.md' }],
       ['operative requirements disposition drift', tasks.replace(
-        '- [x] Obtain fresh Requirements Round 138 PASS',
-        '- [ ] Obtain fresh Requirements Round 138 PASS',
+        operativeRequirementsTask,
+        operativeRequirementsTask.replace('- [x]', '- [ ]'),
       ), status],
       ['protected-gate declaration removed', tasks.replace(
-        'protected external artifact remains the landing check',
-        'protected external artifact is not the landing check',
+        operativeProtectedGateDeclaration,
+        operativeProtectedGateDeclaration.replace('remains', 'is not'),
       ), status],
     ]) {
       assert.throws(

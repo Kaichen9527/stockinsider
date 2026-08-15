@@ -1780,10 +1780,38 @@ This approval authorizes implementation only. It does not authorize production m
   and synchronously renew the exact lease after every successful chunk.
 - [x] Obtain fresh Requirements and Architecture PASS over an immutable repair
   tree.
-- [ ] Freeze the exact implementation commit and obtain exact-range plus
-  protected Code Gate PASS evidence.
-- [ ] Activate the exact reviewed runtime, resume the immutable occurrence to
-  terminal success, prove a second idempotent invocation, deploy the same source
-  to `stockinsider-three`, and complete API plus visible Safari verification.
+- [x] Freeze exact implementation `6c986eca0da0904b9af173e13359a457cfee0060`,
+  obtain exact-range review plus protected Code Gate PASS, and merge PR #70.
+- [x] Apply the reviewed V3.16.8 migration and attempt exact runtime activation.
+  Run `21c5a5a4-aa32-7abf-ac99-7e5f1e54d89e` failed closed at the first PE
+  chunk; installer rollback completed and Web was not deployed.
+- [ ] Superseded by the V3.16.9 transaction-time recovery below.
+
+## V3.16.9 official-ingestion transaction-time recovery
+
+- [x] Record the production RED run, safe typed diagnostic and verified runtime
+  rollback in `v3.16.9-transaction-time-amendment.md`.
+- [x] Separate evidence knowledge time from database transaction time for
+  private same-ingestion dependencies; remove silent dependency skips and add
+  an apply-twice executable regression.
+- [x] Obtain fresh Requirements Round 142, Architecture Round 22 and exact-range
+  review PASS for exact implementation `430b810885213fafe6ec26c80594d2d257d7108d`.
+  Protected Code Gate remains the landing check for its direct evidence child.
+- [x] Diagnose the protected product gate failure as a canonical Loop
+  requirements/status evidence-path drift and add the V3.16.9-active mutation
+  regression without changing the product, migration or runtime contract.
+- [x] Obtain fresh Requirements Round 143 PASS with `P0=0 P1=0 P2=0` for
+  immutable tree `7a9184f84c84c305379da3118953eeaf42e2e1d3`.
+- [x] Obtain fresh Architecture Round 23 PASS with `P0=0 P1=0 P2=0` for
+  immutable tree `0214c6bc03d8804d8a9120ae1495d00b0c9b35da`.
+- [x] Obtain fresh Requirements Round 143, Architecture Round 23 and exact-range
+  review PASS for the protected gate repair rooted at
+  `d30cc374b33b31d0e976949ac21e9a56b00d6479`; the external exact-review
+  attestation remains the landing authority for the final source commit.
+- [ ] Apply the reviewed successor migration, activate the exact runtime and
+  require two terminal producer invocations before Web deployment.
+- [ ] Deploy the identical reviewed source to `stockinsider-three`; verify
+  release identity, APIs, nonzero last-good stock visibility, health,
+  performance and the rendered production UI in Safari.
   Do not reset the database password and do not enable LINE, dispatch, automatic
   trading, V3 Promotion or fabricated evaluation cohorts.
