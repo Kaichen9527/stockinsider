@@ -437,6 +437,32 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
     `.loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-${round}.md`,
   );
 
+  if (statusRecord.requirementsStatus === `v3_16_9_round_${round}_pass_p0_0_p1_0_p2_0`) {
+    const currentMarkerV3169 = '## V3.16.9 official-ingestion transaction-time recovery';
+    const currentStartV3169 = tasksText.lastIndexOf(currentMarkerV3169);
+    assert.ok(currentStartV3169 >= 0, 'one operative V3.16.9 recovery task section exists');
+    const currentTasksV3169 = tasksText.slice(currentStartV3169);
+    assert.equal(round, 142);
+    assert.equal(statusRecord.requirementsGateStatus, 'pass_p0_0_p1_0_p2_0');
+    assert.equal(statusRecord.requirementsPendingTree, null);
+    assert.equal(statusRecord.requirementsPendingEvidence, null);
+    assert.equal(statusRecord.architectureGateStatus, 'pass_p0_0_p1_0_p2_0');
+    assert.equal(statusRecord.architectureReviewRound, 22);
+    assert.equal(statusRecord.architecturePendingRound, null);
+    assert.equal(statusRecord.architecturePendingTree, null);
+    assert.equal(statusRecord.architecturePendingEvidence, null);
+    assert.equal(statusRecord.architectureReviewEvidence,
+      '.loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-22.md');
+    assert.equal(statusRecord.designStatus, 'v3_16_9_architecture_round_22_pass_p0_0_p1_0_p2_0');
+    assert.equal(statusRecord.loopStage, 'v3_16_9_exact_review_pass_protected_gate_pending');
+    assert.equal(statusRecord.implementationStatus, 'v3_16_9_exact_review_pass_protected_gate_pending');
+    assert.equal(statusRecord.exactCommitReviewStatus, 'v3_16_9_exact_range_pass_p0_0_p1_0_p2_0');
+    assert.match(currentTasksV3169, /- \[x\] Obtain fresh Requirements Round 142, Architecture Round 22/u);
+    assert.match(currentTasksV3169, /Protected Code Gate remains the landing check/u);
+    assert.match(currentTasksV3169, /- \[ \] Apply the reviewed successor migration/u);
+    return;
+  }
+
   if (statusRecord.requirementsStatus === `v3_16_round_${round}_pass_p0_0_p1_0_p2_0`) {
     const currentMarkerV316 = '## V3.15 opportunity recovery';
     const currentStartV316 = tasksText.lastIndexOf(currentMarkerV316);
