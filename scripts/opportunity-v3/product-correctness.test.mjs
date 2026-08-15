@@ -609,6 +609,9 @@ const checks = {
     assert.match(adapterSource,
       /appendLegacyOfficialIngestionChunk:[\s\S]*JSON[.]stringify\(input[.]items\)/u,
       'direct PostgreSQL persistence must encode the reviewed JavaScript item array as JSONB');
+    assert.match(adapterSource,
+      /appendLegacyOfficialIngestionChunk:[\s\S]*itemOrdinal=input[.]ordinal[\s\S]*fieldPath=`officialIngestion[.]\$\{input[.]kind\}`[\s\S]*failureOrigin='persistence'[\s\S]*invariantCode='database_constraint_rejected'/u,
+      'direct PostgreSQL chunk failures retain bounded stage and ordinal diagnostics');
     const workerSource = readFileSync(path.join(root, 'scripts/runtime/auth-source-worker-cli.js'), 'utf8');
     assert.match(workerSource,
       /createPostgresLegacyProducerAdapter[\s\S]*resolvePostgresConnectionReference\('keychain:stockinsider-runtime:database-url'\)/u,

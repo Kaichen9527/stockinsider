@@ -660,7 +660,7 @@ acceptanceTest('DI-003','V3.13 official facts and 252-session peer authority rea
   assert.match(workerSource,/compatibility valuationInputs forbidden/u);
   assert.doesNotMatch(workerSource,/financialFacts:\s*[(]acquisitionSnapshot[?][.]financialFacts[^\n]+slice[(]0,600[)]/u);
   assert.match(workerSource,/const financialFacts=newFinancialFactsV314\(snapshot[?][.]financialFacts[?][?]\[\],priorFinancialRows\)/u);
-  assert.match(workerSource,/\['financial_facts',financialFacts,5\]/u);
+  assert.match(workerSource,/\['financial_facts',financialFacts,50\]/u);
   assert.match(workerSource,/priorFinancialRows:bundle[.]financialRows[?][?]\[\]/u);
   assert.match(workerSource,/items[.]slice\(offset,offset[+]chunkSize\)/u);
   const missingSharesInput=worker.valuationAuthorityInput(candidate,facts,
