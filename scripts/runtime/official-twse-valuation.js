@@ -543,7 +543,11 @@ async function loadOfficialTwMarketSnapshot({ cutoff, candidates = [], peerCandi
   if (!Array.isArray(priceBackfillSymbols) || priceBackfillSymbols.length > 20) throw new Error('price_backfill_bound');
   if (!Array.isArray(corporateActionBackfillSessions) || corporateActionBackfillSessions.length > 260)
     throw new Error('corporate_action_backfill_bound');
-  const collectedAt = new Date().toISOString().replace('.000Z','Z');
+  // `cutoff` is the immutable acquisition boundary for a logical producer run.
+  // Use it as the fact-plane collection identity so a bounded retry of the same
+  // run produces byte-identical chunks. PostgreSQL `recorded_at` still preserves
+  // the wall-clock ingestion time.
+  const collectedAt = new Date(cutoff).toISOString().replace('.000Z','Z');
   const normalizedCandidates=candidates.map((row)=>({symbol:String(row?.symbol??row),exchange:String(row?.exchange??''),
     canonicalSector:row?.canonicalSector??'unknown'})).filter((row)=>/^\d{4}$/u.test(row.symbol)).slice(0,30);
   const normalizedPeers=peerCandidates.map((row)=>({symbol:String(row?.symbol??''),exchange:String(row?.exchange??''),

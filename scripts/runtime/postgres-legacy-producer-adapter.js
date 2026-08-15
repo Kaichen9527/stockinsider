@@ -126,13 +126,23 @@ function createPostgresLegacyProducerAdapter({ connectionString }) {
       'select public.append_legacy_runtime_failure_diagnostic_v3_14($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16) as diagnostic_id',
       [input.runId,input.jobId,input.ownerToken,input.stage,input.jobKind,input.failureCode,input.origin,input.invariantCode,input.sqlstate,
         input.constraint,input.itemOrdinal,input.fieldPath,input.inputHash,input.producerSha,input.diagnosticHash,input.recordedAt]))?.diagnostic_id),
-    appendLegacyOfficialIngestionChunk: async (input) => Boolean((await one(
-      'select public.append_legacy_official_ingestion_chunk_rest_v3_15($1,$2,$3,$4,$5,$6,$7,$8,$9) as accepted',
-      // node-postgres encodes a JavaScript Array as a PostgreSQL array literal.
-      // Serialize explicitly so the function receives the reviewed JSONB array
-      // contract instead of a JSON string/scalar or database array.
-      [input.runId,input.jobId,input.ownerToken,input.kind,input.ordinal,JSON.stringify(input.items),input.chunkHash,
-        input.producerSha,input.sourceCutoff]))?.accepted),
+    appendLegacyOfficialIngestionChunk: async (input) => {
+      try {
+        return Boolean((await one(
+          'select public.append_legacy_official_ingestion_chunk_rest_v3_15($1,$2,$3,$4,$5,$6,$7,$8,$9) as accepted',
+          // node-postgres encodes a JavaScript Array as a PostgreSQL array literal.
+          // Serialize explicitly so the function receives the reviewed JSONB array
+          // contract instead of a JSON string/scalar or database array.
+          [input.runId,input.jobId,input.ownerToken,input.kind,input.ordinal,JSON.stringify(input.items),input.chunkHash,
+            input.producerSha,input.sourceCutoff]))?.accepted);
+      } catch (error) {
+        error.itemOrdinal=input.ordinal;
+        error.fieldPath=`officialIngestion.${input.kind}`;
+        error.failureOrigin='persistence';
+        error.invariantCode='database_constraint_rejected';
+        throw error;
+      }
+    },
     failLegacyProducerJob: async (input) => completion(await one('select * from public.fail_legacy_producer_job_v3_11($1,$2,$3,$4)', [input.runId, input.jobId, input.ownerToken, input.failure])),
     close: () => pool.end(),
   });

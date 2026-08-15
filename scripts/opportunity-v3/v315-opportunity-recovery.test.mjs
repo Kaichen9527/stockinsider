@@ -83,6 +83,8 @@ test('V315 official TPEX history uses Gregorian query authority and scales lots/
   assert.equal(snapshot.priceObservations.length,1);
   assert.equal(snapshot.priceObservations[0].volume,6_128_000);
   assert.equal(snapshot.priceObservations[0].turnoverTwd,10_757_327_000);
+  assert.equal(snapshot.priceObservations[0].collectedAt,'2026-08-13T10:20:00Z',
+    'logical-run retries must retain the immutable collection identity');
   assert.ok(snapshot.valuationHistory.some((row)=>row.symbol==='8101'&&row.session==='2026-08-03'),
     `same-sector peer history must survive the authoritative loader filter: ${JSON.stringify(requested)}`);
 });
@@ -487,7 +489,9 @@ test('V315 production repair pre-applies bounded official chunks and makes termi
     producerSha:'a'.repeat(40),snapshot:{calendarSessions:rows(300),financialFacts:rows(41),priceObservations:rows(41),
       corporateActionSnapshots:rows(11),valuations:rows(21),valuationHistory:rows(20)},persistChunk:async(row)=>seen.push(row)});
   for(const kind of ['financial_facts','price_observations','corporate_action_snapshots','reported_valuations'])
-    assert.ok(seen.filter((row)=>row.kind===kind).every((row)=>row.items.length<=5),`${kind} gateway-safe apply`);
+    assert.ok(seen.filter((row)=>row.kind===kind).every((row)=>row.items.length<=50),`${kind} gateway-safe apply`);
+  assert.equal(seen.filter((row)=>row.kind==='reported_valuations').length,1,
+    'bounded batches avoid thousands of per-run round trips');
   assert.ok(seen.filter((row)=>row.kind==='trading_sessions').every((row)=>row.items.length<=200));
 });
 

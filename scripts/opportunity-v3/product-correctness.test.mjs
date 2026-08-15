@@ -285,8 +285,8 @@ const checks = {
     assert.equal(packageJson.scripts['agent:runtime:install'], 'node scripts/runtime/reviewed-runtime-installer-cli.js');
     assert.equal(packageJson.scripts['agent:runtime:activate-reviewed'], 'node scripts/runtime/reviewed-runtime-installer-cli.js --activate');
     const localPlatform = runtime('local-runtime-platform.js');
-    assert.equal(localPlatform.OWNER_ACTIVATION_MAXIMUM_SECONDS, 14_400,
-      'reviewed first-run bootstrap admits the bounded official backfill window');
+    assert.equal(localPlatform.OWNER_ACTIVATION_MAXIMUM_SECONDS, 21_600,
+      'reviewed first-run bootstrap admits bounded official backfill plus provider retries');
     let longBootstrapPolls = 0;
     await localPlatform.startOwnerAndWait('com.stockinsider.test-owner',
       localPlatform.OWNER_ACTIVATION_MAXIMUM_SECONDS, {
@@ -609,6 +609,9 @@ const checks = {
     assert.match(adapterSource,
       /appendLegacyOfficialIngestionChunk:[\s\S]*JSON[.]stringify\(input[.]items\)/u,
       'direct PostgreSQL persistence must encode the reviewed JavaScript item array as JSONB');
+    assert.match(adapterSource,
+      /appendLegacyOfficialIngestionChunk:[\s\S]*itemOrdinal=input[.]ordinal[\s\S]*fieldPath=`officialIngestion[.]\$\{input[.]kind\}`[\s\S]*failureOrigin='persistence'[\s\S]*invariantCode='database_constraint_rejected'/u,
+      'direct PostgreSQL chunk failures retain bounded stage and ordinal diagnostics');
     const workerSource = readFileSync(path.join(root, 'scripts/runtime/auth-source-worker-cli.js'), 'utf8');
     assert.match(workerSource,
       /createPostgresLegacyProducerAdapter[\s\S]*resolvePostgresConnectionReference\('keychain:stockinsider-runtime:database-url'\)/u,
