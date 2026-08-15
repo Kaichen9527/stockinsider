@@ -9,7 +9,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const requiredRuntime = ['SUPABASE_URL', 'OPPORTUNITY_V3_SUPABASE_PROJECT_REF',
   'SUPABASE_SERVICE_ROLE_KEY', 'OPPORTUNITY_V3_SERVICE_ROLE_KEY_SHA256'];
 const deployment = process.env.SOURCE_LED_OPPORTUNITY_V3 ?? 'disabled';
-const expectedHostPinSha256 = 'e7ce9c035f2af2de47e180bbaa50ff1a914c7098afc43112edf951a9162611d4';
+const expectedHostPinSha256 = '0982f6abe1d9a60697186c11c2fbada42e437a92c276accf47413e40ae22ddba';
 const { loadHostPins, verifyCurrentNode } = createRequire(import.meta.url)('../model-runner-v3/hostPreflight.js');
 
 function closedArguments(argv) {
@@ -96,7 +96,7 @@ const checks = {
   requested: {
     status: requested.valid &&
       (requested.expectMode === null || requested.expectMode === deployment) &&
-      (requested.requireHostPin === null || requested.requireHostPin === 'model-runner-host-pins-v3.8')
+      (requested.requireHostPin === null || requested.requireHostPin === 'model-runner-host-pins-v3.9')
       ? 'pass' : 'fail',
     expectMode: requested.expectMode,
     requireHostPin: requested.requireHostPin,

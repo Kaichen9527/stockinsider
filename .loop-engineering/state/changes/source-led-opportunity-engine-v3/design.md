@@ -123,9 +123,9 @@ catalog and these current roots: `runtime-transaction-contract.md` v3.17,
 `acceptance-evidence-contract.md` v3.13.0,
 `factor-correctness-amendment.md` v3.11.6,
 `authority-supersession-contract.md` v3.2, `auth-principal-contract.md` v3.8,
-`trading-calendar-contract.md` v3.4, and `model-runner-contract.md` v3.6 with 884-byte identity SHA-256
-`f3db935442cb0d837be9c6ddf566caefd752edb83817f8a47741282969cf9029`, host fixture
-SHA-256 `e7ce9c035f2af2de47e180bbaa50ff1a914c7098afc43112edf951a9162611d4`,
+`trading-calendar-contract.md` v3.4, and `model-runner-contract.md` v3.6 with 882-byte identity SHA-256
+`df7867e2a936d3f2b0fce5ddfc1eec705707bbaf919c43c2ccc6d21f509b43c7`, host fixture
+SHA-256 `0982f6abe1d9a60697186c11c2fbada42e437a92c276accf47413e40ae22ddba`,
 and acceptance `1.46.0/320`. Hash-preimage schema tags inside fenced canonical
 preimages are data, not active contract references. Model-runner identity remains
 independent of the opportunity runtime tuple.
