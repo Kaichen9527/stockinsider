@@ -13,6 +13,7 @@ const PRIOR_LABELS = Object.freeze([
   'com.stockinsider.data-collect', 'com.stockinsider.night-shift', 'com.stockinsider.research-daemon',
 ]);
 const OWNER_LABEL = 'com.stockinsider.auth-source-worker';
+const OWNER_ACTIVATION_MAXIMUM_SECONDS = 3600;
 
 function fail(code) { const error = new Error(code); error.code = code; throw error; }
 function atomicCanonical(filename, value) {
@@ -112,7 +113,7 @@ function launchctl(args, tolerateMissing = false) {
   return result;
 }
 function plistPath(label) { return path.join(os.homedir(), 'Library', 'LaunchAgents', `${label}.plist`); }
-async function startOwnerAndWait(label, maximumSeconds = 1500, dependencies = {}) {
+async function startOwnerAndWait(label, maximumSeconds = OWNER_ACTIVATION_MAXIMUM_SECONDS, dependencies = {}) {
   const invokeLaunchctl = dependencies.launchctl ?? launchctl;
   const waitOneSecond = dependencies.waitOneSecond ?? (() => new Promise((resolve) => setTimeout(resolve, 1000)));
   if (typeof invokeLaunchctl !== 'function' || typeof waitOneSecond !== 'function') fail('scheduler_activation_failed');
@@ -435,6 +436,6 @@ function createLocalRuntimePlatform({ runtimeRoot, preparedRoot, manifest, revie
   return Object.freeze({ filesystem, journal, scheduler });
 }
 
-module.exports = { OWNER_LABEL, PRIOR_LABELS, acquireActivationLock, atomicCanonical, captureSchedulerRollback,
+module.exports = { OWNER_ACTIVATION_MAXIMUM_SECONDS, OWNER_LABEL, PRIOR_LABELS, acquireActivationLock, atomicCanonical, captureSchedulerRollback,
   createLocalRuntimePlatform, ownedRegularBytes, recoverInterruptedActivation, replaceOwnerAndWait, startOwnerAndWait,
   validateActivationJournal, validateRollbackPackage };

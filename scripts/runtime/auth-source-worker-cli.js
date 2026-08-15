@@ -1703,9 +1703,14 @@ async function main() {
   assertExactRuntimeEnvironment(process.env);
   const runtimeEnvironment = hydrateRuntimeCredentials(process.env, undefined, { requireReferences: true });
   if (!runtimeEnvironment.STOCKINSIDER_REVIEWED_COMMIT_SHA) throw new Error('reviewed_runtime_environment_incomplete');
-  const { createSupabaseRestLegacyProducerAdapter } = require('./supabase-rest-legacy-producer-adapter');
-  const adapter = createSupabaseRestLegacyProducerAdapter({supabaseUrl:runtimeEnvironment.STOCKINSIDER_SUPABASE_URL,
-    serviceRoleKey:runtimeEnvironment.STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY});
+  // Durable production stages can materialize bounded fact-plane reads that
+  // exceed PostgREST's statement timeout.  Use the reviewed direct PostgreSQL
+  // adapter with the same Keychain-only credential boundary; HTTP remains for
+  // the read-only Web capture and external source APIs.
+  const { resolvePostgresConnectionReference } = require('./credential-resolver');
+  const { createPostgresLegacyProducerAdapter } = require('./postgres-legacy-producer-adapter');
+  const adapter = createPostgresLegacyProducerAdapter({ connectionString:
+    resolvePostgresConnectionReference('keychain:stockinsider-runtime:database-url') });
   const workerBytes = runtimeBundleBytes(path.resolve(__dirname, '..', '..'));
   const optionalCredential = (reference) => {
     try { return resolveCredentialReference(reference); } catch { return null; }
