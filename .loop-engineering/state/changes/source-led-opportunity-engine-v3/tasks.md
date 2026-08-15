@@ -1802,8 +1802,10 @@ This approval authorizes implementation only. It does not authorize production m
   regression without changing the product, migration or runtime contract.
 - [x] Obtain fresh Requirements Round 143 PASS with `P0=0 P1=0 P2=0` for
   immutable tree `7a9184f84c84c305379da3118953eeaf42e2e1d3`.
-- [ ] Obtain fresh Architecture Round 23 and a superseding exact-range review
-  before updating the protected PR subject.
+- [x] Obtain fresh Architecture Round 23 PASS with `P0=0 P1=0 P2=0` for
+  immutable tree `0214c6bc03d8804d8a9120ae1495d00b0c9b35da`.
+- [ ] Freeze and independently review the superseding exact implementation
+  range before updating the protected PR subject.
 - [ ] Apply the reviewed successor migration, activate the exact runtime and
   require two terminal producer invocations before Web deployment.
 - [ ] Deploy the identical reviewed source to `stockinsider-three`; verify
