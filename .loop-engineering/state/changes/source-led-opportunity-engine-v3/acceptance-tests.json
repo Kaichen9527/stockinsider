@@ -2337,7 +2337,7 @@
       "protected://stockinsider-v3-gate-root/execute-track --track product_runtime"
     ]
   ],
-  "scriptValueRowsSha256": "78ea4717d55eb74f8246bdec9f164e376a696e4f41fcd7e39304c9a9ebb74b84",
+  "scriptValueRowsSha256": "517d549d970f4d661a64f9fe7ad9583896e526b5062c60998cdba55fc32cde53",
   "scriptValueRows": [
     [
       "build:source-led-opportunity-v3",

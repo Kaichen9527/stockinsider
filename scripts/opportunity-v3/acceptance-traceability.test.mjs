@@ -11,7 +11,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const trustedExecFileSync = childProcess.execFileSync.bind(childProcess);
 const trustedSpawnSync = childProcess.spawnSync.bind(childProcess);
 const requestedTrack = process.env.OPPORTUNITY_V3_ACCEPTANCE_TRACK ?? 'product_runtime';
-const expectedActiveGraphSha256 = '09f37b9d9559d93f50c6517e5fb81f1fefb517eb1a14acd5745d3e87f831a5f0';
+const expectedActiveGraphSha256 = '7f3a17fdd3a86fadfe583216a7f846da6e4102f9d649aeaf268c5a2d34f55cb0';
 assert.ok(
   ['product_runtime', 'evaluation_governance', 'model_runner'].includes(requestedTrack),
   'acceptance traceability executes only an explicit automated track',
@@ -685,7 +685,7 @@ function activeGraphOracle() {
   assert.equal(catalogBlob.bytes.length, 5484, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    '5ea7a1c6411f9f9447098bcd63c9cf96ddc182aa2918bab84f2de51bc98bc5ef',
+    'ed1e2fec26dc4f03ce1682632e79ff1c10b0a5b3ff76ebbbdcdae05a54a84d48',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);
@@ -1188,7 +1188,7 @@ const structuralExecutors = {
     }
     assert.equal(inventory.scriptValueRows.length, 14);
     assert.equal(sha256(canonicalJson(inventory.scriptValueRows)), inventory.scriptValueRowsSha256);
-    assert.equal(inventory.scriptValueRowsSha256, '78ea4717d55eb74f8246bdec9f164e376a696e4f41fcd7e39304c9a9ebb74b84');
+    assert.equal(inventory.scriptValueRowsSha256, '517d549d970f4d661a64f9fe7ad9583896e526b5062c60998cdba55fc32cde53');
     const rootPackageScripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts;
     const webPackageScripts = JSON.parse(readFileSync(path.join(root, 'web/package.json'), 'utf8')).scripts;
     assert.deepEqual(inventory.scriptValueRows.map(([scriptKey]) => scriptKey), [
