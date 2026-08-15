@@ -1,18 +1,18 @@
 # V3.16.2 fresh Architecture activation-window evidence
 
 Date: 2026-08-15
-Review authority: fresh Architecture Round 54, independently reviewing the
-Requirements Round 173 carrier and activation-window repair.
+Review authority: fresh Architecture Round 55, independently reviewing the
+Requirements Round 174 carrier and activation-window repair closure.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
 - Protected implementation parent: `08b6816ac98efbcbfaba25cda6fc0be7af586cbf`
-- Implementation commit: `97f99ffd3505cb915716633cadd2b17c19cb658d`
-- Requirements evidence carrier: `9e8769736af17205ccb7beab6e452c64cec145f1`
-- Requirements carrier tree: `1468d79094ad8ea61f21945a8ebdc4b295906c9c`
-- Full reviewed implementation/evidence range: `08b6816ac98efbcbfaba25cda6fc0be7af586cbf..9e8769736af17205ccb7beab6e452c64cec145f1`
+- Implementation repair commit: `d67041c422bb1c73b1af9c8a3ade611fa2041b49`
+- Requirements evidence carrier: `76c1ed8b44c9fecb72eb6f6dad30afd15d9d5940`
+- Requirements carrier tree: `cf125bd0ba3b1a7fde892ab076697d110c2d4f33`
+- Full reviewed implementation/evidence range: `08b6816ac98efbcbfaba25cda6fc0be7af586cbf..76c1ed8b44c9fecb72eb6f6dad30afd15d9d5940`
 
 ## Architecture closure
 
@@ -32,7 +32,7 @@ SHA, so interruption and later resume cannot reinterpret or duplicate provider d
 The 20-symbol/260-retained-session price and 252-session valuation authority bounds
 are unchanged. No new scheduler,
 RPC, public mutation surface, provider, decision heuristic, action quota or release
-compatibility path is introduced. Requirements Round 173 is PASS at
+compatibility path is introduced. Requirements Round 174 is PASS at
 P0=0/P1=0/P2=0, `git diff --check` passes, and product correctness is `106/106`.
 The protected gate must still run all authoritative tracks against this exact carrier.
 Evaluation governance remains honestly blocked for non-fabricated elapsed cohorts
