@@ -24,15 +24,15 @@ async function runWithLeaseHeartbeat({ adapter, lease, claim, ownerToken, leaseS
       try { heartbeatResult = await controller.stop(); }
       catch (error) { heartbeatResult = { state: 'error', pulses: 0, error }; }
     }
-    if (handlerError) throw handlerError;
     const ranLongEnoughToRequirePulse = Date.now() - startedAt >= interval;
     if (heartbeatResult?.state !== 'healthy' ||
       (ranLongEnoughToRequirePulse && !(Number.isInteger(heartbeatResult.pulses) && heartbeatResult.pulses > 0))) {
       const error = new Error('producer_lease_lost');
       error.code = 'producer_lease_lost';
-      error.cause = heartbeatResult?.error ?? null;
+      error.cause = handlerError ?? heartbeatResult?.error ?? null;
       throw error;
     }
+    if (handlerError) throw handlerError;
     return output;
   }
   let stopped = false;
