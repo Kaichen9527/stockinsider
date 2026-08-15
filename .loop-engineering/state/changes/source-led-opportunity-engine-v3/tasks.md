@@ -1780,10 +1780,26 @@ This approval authorizes implementation only. It does not authorize production m
   and synchronously renew the exact lease after every successful chunk.
 - [x] Obtain fresh Requirements and Architecture PASS over an immutable repair
   tree.
-- [ ] Freeze the exact implementation commit and obtain exact-range plus
-  protected Code Gate PASS evidence.
-- [ ] Activate the exact reviewed runtime, resume the immutable occurrence to
-  terminal success, prove a second idempotent invocation, deploy the same source
-  to `stockinsider-three`, and complete API plus visible Safari verification.
+- [x] Freeze exact implementation `6c986eca0da0904b9af173e13359a457cfee0060`,
+  obtain exact-range review plus protected Code Gate PASS, and merge PR #70.
+- [x] Apply the reviewed V3.16.8 migration and attempt exact runtime activation.
+  Run `21c5a5a4-aa32-7abf-ac99-7e5f1e54d89e` failed closed at the first PE
+  chunk; installer rollback completed and Web was not deployed.
+- [ ] Superseded by the V3.16.9 transaction-time recovery below.
+
+## V3.16.9 official-ingestion transaction-time recovery
+
+- [x] Record the production RED run, safe typed diagnostic and verified runtime
+  rollback in `v3.16.9-transaction-time-amendment.md`.
+- [x] Separate evidence knowledge time from database transaction time for
+  private same-ingestion dependencies; remove silent dependency skips and add
+  an apply-twice executable regression.
+- [ ] Obtain fresh Requirements, Architecture, exact-range and protected Code
+  Gate PASS for a new immutable source/evidence pair.
+- [ ] Apply the reviewed successor migration, activate the exact runtime and
+  require two terminal producer invocations before Web deployment.
+- [ ] Deploy the identical reviewed source to `stockinsider-three`; verify
+  release identity, APIs, nonzero last-good stock visibility, health,
+  performance and the rendered production UI in Safari.
   Do not reset the database password and do not enable LINE, dispatch, automatic
   trading, V3 Promotion or fabricated evaluation cohorts.

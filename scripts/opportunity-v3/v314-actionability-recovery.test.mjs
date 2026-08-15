@@ -316,7 +316,9 @@ test('V314-008 Web and runtime share exact release compatibility authority', () 
   assert.match(migrationApply,/stockinsider-reviewed-v3-migration-v1/u);
   assert.match(migrationApply,/productionDatabaseMigrationAuthorized/u);
   assert.match(migrationApply,/20260816_official_ingestion_partial_resume_v3_16[.]sql/u);
+  assert.match(migrationApply,/20260816_official_ingestion_transaction_time_v3_16_9[.]sql/u);
   assert.match(migrationApply,/partialResume/u);
+  assert.match(migrationApply,/transactionTimeDependency/u);
   assert.doesNotMatch(migrationApply,/error[?][.]message|connectionString.*process[.]env/u);
   const runbook=readFileSync(path.join(root,'docs/operations_runbook.md'),'utf8');
   assert.match(runbook,/STOCKINSIDER_REVIEWED_RELEASE_SHA=<reviewed-commit>/u);

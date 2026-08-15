@@ -28,6 +28,8 @@ const claimHandoffMigrationPath = path.join(root, 'migrations/20260816_claim_han
 const claimHandoffSql = fs.readFileSync(claimHandoffMigrationPath, 'utf8');
 const partialResumeMigrationPath = path.join(root, 'migrations/20260816_official_ingestion_partial_resume_v3_16.sql');
 const partialResumeSql = fs.readFileSync(partialResumeMigrationPath, 'utf8');
+const transactionTimeMigrationPath = path.join(root, 'migrations/20260816_official_ingestion_transaction_time_v3_16_9.sql');
+const transactionTimeSql = fs.readFileSync(transactionTimeMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -321,6 +323,12 @@ before(() => {
     command(pg.psql, [
       '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', partialResumeMigrationPath,
+    ]);
+  }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', transactionTimeMigrationPath,
     ]);
   }
 });
@@ -823,6 +831,48 @@ test('V3.15 production-sized authority lookup and staged resume are installed',(
   assert.deepEqual(value,{symbolIndex:true,exactRegistryHash:true,boundedSymbolTable:true,resumeTransport:true,
     partialResumeTransport:true,chunkGraphTransport:true,completionAuthority:true});
   assert.doesNotMatch(partialResumeSql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.doesNotMatch(transactionTimeSql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+});
+
+test('V3.16.9 resolves same-run calendar dependencies by knowledge and transaction time without weakening point-in-time reads',()=>{
+  const stockId='71690000-0000-4000-8000-000000000001';
+  const principal='a11d4e67-7d0a-4c44-8a9d-1d5c3b875001';
+  const collectedAt='2026-08-15T02:41:24Z';
+  const result=JSON.parse(psql(`
+    BEGIN;
+    INSERT INTO public.internal_principal_role_bindings_v3(principal_id,role,valid_from,valid_to,status,configuration_hash,recorded_at)
+    VALUES('${principal}','opportunity_runner','2026-01-01',NULL,'active',repeat('7',64),clock_timestamp())
+    ON CONFLICT DO NOTHING;
+    INSERT INTO public.stocks(id,symbol) VALUES('${stockId}','9169') ON CONFLICT DO NOTHING;
+    SELECT * FROM public.append_trading_session_v3(ROW('2026-08-14','TWSE',
+      '2026-08-14T01:00:00Z','2026-08-14T05:30:00Z','completed','twse',
+      '${collectedAt}','${collectedAt}','twse-annual-calendar:2026:2026-08-14:transaction-time-owner')
+      ::public.trading_session_input_v3,'${principal}');
+    DO $public_reader_remains_point_in_time$
+    BEGIN
+      PERFORM public.append_exchange_reported_valuation_v3_13(ROW('${stockId}','TWSE','2026-08-14',100,10,2,
+        '2026-08-14T06:30:00Z','2026-08-14T06:30:00Z','${collectedAt}',
+        'twse-openapi:BWIBBU_ALL:2026-08-14:9169')::public.exchange_reported_valuation_input_v3_13,'${principal}');
+      RAISE EXCEPTION 'public_point_in_time_reader_unexpectedly_succeeded';
+    EXCEPTION WHEN SQLSTATE 'PT409' THEN
+      IF SQLERRM<>'calendar_authority_mismatch' THEN RAISE;END IF;
+    END $public_reader_remains_point_in_time$;
+    SELECT * FROM public.append_exchange_reported_valuation_transaction_v3_16_9(ROW('${stockId}','TWSE','2026-08-14',100,10,2,
+      '2026-08-14T06:30:00Z','2026-08-14T06:30:00Z','${collectedAt}',
+      'twse-openapi:BWIBBU_ALL:2026-08-14:9169')::public.exchange_reported_valuation_input_v3_13,'${principal}');
+    SELECT jsonb_build_object(
+      'pointInTime',(SELECT count(*) FROM public.resolve_legacy_trading_session_authority_v3_13(
+        '2026-08-14','TWSE','${collectedAt}') session WHERE session.status='completed'),
+      'transactionDependency',(SELECT count(*) FROM public.resolve_legacy_trading_session_dependency_v3_16_9_internal(
+        '2026-08-14','TWSE','${collectedAt}',clock_timestamp()) session WHERE session.status='completed'),
+      'reportedRows',(SELECT count(*) FROM public.opportunity_exchange_reported_pe_v3
+        WHERE stock_id='${stockId}' AND session_date='2026-08-14'))::text;
+    ROLLBACK;
+  `,['-Atq']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual(result,{pointInTime:0,transactionDependency:1,reportedRows:1});
+  assert.match(transactionTimeSql,/IF v_stock IS NULL THEN RAISE EXCEPTION[\s\S]*instrument_dependency_unavailable/u);
+  assert.match(transactionTimeSql,/IF v_session_authority IS NULL THEN RAISE EXCEPTION[\s\S]*calendar_dependency_unavailable/u);
+  assert.doesNotMatch(transactionTimeSql,/v_session_authority IS NULL THEN CONTINUE/u);
 });
 
 test('V3.14 completion persists a non-empty exact decision revision and heartbeat',()=>{
