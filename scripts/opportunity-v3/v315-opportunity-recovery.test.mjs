@@ -502,6 +502,35 @@ test('V315 production repair pre-applies bounded official chunks and makes termi
   assert.ok(seen.filter((row)=>row.kind==='trading_sessions').every((row)=>row.items.length<=200));
 });
 
+test('V316 direct claim transaction raises only its local statement timeout and always closes the transaction',async()=>{
+  const {CLAIM_STATEMENT_TIMEOUT_MS,claimWithBoundedStatementTimeout}=
+    runtime('postgres-legacy-producer-adapter.js');
+  assert.equal(CLAIM_STATEMENT_TIMEOUT_MS,1_200_000);
+  const successfulQueries=[];
+  const successfulClient={
+    query:async(text,values)=>{successfulQueries.push([text,values]);
+      return text.startsWith('select claimed.*')?{rows:[{job_id:'facts-barrier'}]}:{rows:[]};},
+    release:()=>successfulQueries.push(['RELEASE']),
+  };
+  const claimed=await claimWithBoundedStatementTimeout({connect:async()=>successfulClient},
+    'select claimed.* from fixture_claim($1) claimed',['run']);
+  assert.equal(claimed.job_id,'facts-barrier');
+  assert.deepEqual(successfulQueries.map(([text])=>text),[
+    'BEGIN',"SET LOCAL statement_timeout = '1200s'",'select claimed.* from fixture_claim($1) claimed','COMMIT','RELEASE',
+  ]);
+  const failedQueries=[];
+  const failedClient={
+    query:async(text)=>{failedQueries.push(text);if(text.startsWith('select claimed.*')){
+      const error=new Error('canceling statement due to statement timeout');error.code='57014';throw error;}return {rows:[]};},
+    release:()=>failedQueries.push('RELEASE'),
+  };
+  await assert.rejects(()=>claimWithBoundedStatementTimeout({connect:async()=>failedClient},
+    'select claimed.* from fixture_claim($1) claimed',['run']),{code:'57014'});
+  assert.deepEqual(failedQueries,[
+    'BEGIN',"SET LOCAL statement_timeout = '1200s'",'select claimed.* from fixture_claim($1) claimed','ROLLBACK','RELEASE',
+  ]);
+});
+
 test('V315 official ingestion keeps valid PB when the exchange PE exceeds the authority range',async()=>{
   const {streamOfficialIngestionV314}=runtime('auth-source-worker-cli.js');const seen=[];
   const observation={symbol:'1711',exchange:'TWSE',session:'2026-08-13',sourceRef:'twse-openapi:BWIBBU_ALL:2026-08-13:1711'};
