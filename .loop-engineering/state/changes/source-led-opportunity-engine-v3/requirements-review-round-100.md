@@ -24,8 +24,9 @@ finite local activation-window defect, not a data, credential or decision-qualit
 finding.
 
 The repair changes only the maximum one-shot owner wait from 3,600 to 14,400
-seconds. The initial acquisition remains bounded to at most 20 symbols and 252
-sessions. Database leases continue to expire independently, long handlers still
+seconds. The initial acquisition remains bounded to at most 20 price symbols, 260
+retained price sessions per symbol and 252 valuation sessions per exchange.
+Database leases continue to expire independently, long handlers still
 require worker-thread pulses, nonzero launchd exit still fails immediately, and the
 14,400-second ceiling still fails closed and restores the captured scheduler/runtime
 state. A running job is never reclassified as terminal success.

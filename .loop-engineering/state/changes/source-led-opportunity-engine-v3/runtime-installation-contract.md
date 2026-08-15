@@ -294,7 +294,8 @@ three owners are disabled only after the new release, proposed plist and rollbac
 package all rehash. The new owner is loaded only after all three exact prior states
 are recorded and observed disabled. Doctor must pass before `complete`.
 The one-shot owner wait is finite at 14,400 seconds. This window admits the
-reviewed at-most-20-symbol, at-most-252-session initial official bootstrap; the
+reviewed at-most-20-symbol, at-most-260-price-session and
+at-most-252-valuation-session initial official bootstrap; the
 former 3,600-second limit was shorter than a production-observed healthy bootstrap
 and could terminate it despite continuing lease heartbeats. Exit status remains the
 authority: a nonzero terminal exit or expiry of the 14,400-second window is

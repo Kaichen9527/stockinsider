@@ -13,7 +13,8 @@ const PRIOR_LABELS = Object.freeze([
   'com.stockinsider.data-collect', 'com.stockinsider.night-shift', 'com.stockinsider.research-daemon',
 ]);
 const OWNER_LABEL = 'com.stockinsider.auth-source-worker';
-// The first reviewed run can include the bounded 20-symbol/252-session official
+// The first reviewed run can include the bounded 20-symbol/260-price-session
+// and 252-valuation-session official
 // bootstrap. Production evidence on 2026-08-15 showed that a healthy run can
 // exceed one hour while its durable lease continues to heartbeat. Keep the
 // activation transaction finite, but do not kill a healthy bounded bootstrap at

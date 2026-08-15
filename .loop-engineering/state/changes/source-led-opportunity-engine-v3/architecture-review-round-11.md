@@ -29,7 +29,8 @@ to fail closed. If the owner is still nonterminal at 14,400 seconds, the same
 Immutable ingestion chunks stay bound to run, job, cutoff, ordinal, hash and producer
 SHA, so interruption and later resume cannot reinterpret or duplicate provider data.
 
-The 20-symbol price and 252-session authority bounds are unchanged. No new scheduler,
+The 20-symbol/260-retained-session price and 252-session valuation authority bounds
+are unchanged. No new scheduler,
 RPC, public mutation surface, provider, decision heuristic, action quota or release
 compatibility path is introduced. Requirements Round 173 is PASS at
 P0=0/P1=0/P2=0, `git diff --check` passes, and product correctness is `106/106`.
