@@ -922,8 +922,8 @@ const checks = {
         async connect(){Atomics.add(new Int32Array(workerData.stateBuffer),3,1);}
         async query(){
           Atomics.add(new Int32Array(workerData.stateBuffer),4,1);
-          if(this.identity===1)throw new Error('transient_pooler_transport');
-          if(this.identity===2)setTimeout(()=>this.emit('error',new Error('pooler_connection_lifetime')),0);
+          if(this.identity<=4)throw new Error('transient_pooler_transport');
+          if(this.identity===5)setTimeout(()=>this.emit('error',new Error('pooler_connection_lifetime')),0);
           return {rows:[{alive:true}]};
         }
         async end(){Atomics.add(new Int32Array(workerData.stateBuffer),5,1);}
@@ -938,7 +938,7 @@ const checks = {
         leaseSeconds: 120, heartbeatIntervalMs: 5, stateBuffer: reconnectBuffer },
     });
     await new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => reject(new Error('heartbeat reconnect test timeout')), 1500);
+      const timeout = setTimeout(() => reject(new Error('heartbeat reconnect test timeout')), 5000);
       const observe = () => {
         if (Atomics.load(reconnectState, 1) >= 2 && Atomics.load(reconnectState, 5) >= 3) {
           clearTimeout(timeout); resolve(); return;
@@ -950,8 +950,8 @@ const checks = {
     });
     Atomics.store(reconnectState, 0, 1);
     await new Promise((resolve) => reconnectWorker.once('exit', resolve));
-    assert.ok(Atomics.load(reconnectState, 1) >= 2 && Atomics.load(reconnectState, 2) >= 3,
-      'the executable heartbeat worker retries transport failures and gives every pulse a fresh client');
+    assert.ok(Atomics.load(reconnectState, 1) >= 2 && Atomics.load(reconnectState, 2) >= 6,
+      'the executable heartbeat worker survives a complete reconnect window and gives every pulse a fresh client');
     assert.equal(Atomics.load(reconnectState, 2), Atomics.load(reconnectState, 3));
     assert.equal(Atomics.load(reconnectState, 3), Atomics.load(reconnectState, 4));
     assert.equal(Atomics.load(reconnectState, 4), Atomics.load(reconnectState, 5),
@@ -959,8 +959,8 @@ const checks = {
     assert.match(threadedAdapter.POSTGRES_HEARTBEAT_WORKER_SOURCE,
       /heartbeat_legacy_producer_job_v3_11/u);
     assert.match(threadedAdapter.POSTGRES_HEARTBEAT_WORKER_SOURCE,
-      /reconnectDelays = \[0, 250, 500, 1000\][\s\S]*pulseOnce[\s\S]*connectionTimeoutMillis: 5000[\s\S]*client[.]end\(\)/u,
-      'every heartbeat pulse uses a bounded ephemeral client and retries within the 120-second lease');
+      /reconnectDelays = \[0, 250, 500, 1000\][\s\S]*reconnectDeadlineMs[\s\S]*pulseOnce[\s\S]*connectionTimeoutMillis: 5000[\s\S]*client[.]end\(\)/u,
+      'every heartbeat pulse uses bounded ephemeral clients and retries until the closed lease deadline');
     assert.doesNotMatch(threadedAdapter.POSTGRES_HEARTBEAT_WORKER_SOURCE,/postgres(?:ql)?:\/\//u,
       'heartbeat worker source must not interpolate the database credential');
   },

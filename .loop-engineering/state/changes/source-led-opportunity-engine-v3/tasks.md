@@ -1768,3 +1768,22 @@ This approval authorizes implementation only. It does not authorize production m
   PASS evidence for the activation-window repair; resume the same immutable source
   cutoff, obtain two terminal producers, deploy the matching reviewed Vercel release
   and complete read-only Safari verification.
+
+## V3.16.8 official-ingestion lease recovery
+
+- [x] Record the production RED run `54aa220b-e057-f8a8-092e-e455ba523bbf`:
+  the V3.16.7 final claim crossed the repaired statement timeout, then a 50-row
+  financial apply starved heartbeat renewal until the 120-second lease expired;
+  installer rollback completed and Web remained unchanged.
+- [x] Restore the approved ≤20-row application bound for every official dataset,
+  retry transient heartbeat connection windows until the real lease deadline,
+  and synchronously renew the exact lease after every successful chunk.
+- [x] Obtain fresh Requirements and Architecture PASS over an immutable repair
+  tree.
+- [ ] Freeze the exact implementation commit and obtain exact-range plus
+  protected Code Gate PASS evidence.
+- [ ] Activate the exact reviewed runtime, resume the immutable occurrence to
+  terminal success, prove a second idempotent invocation, deploy the same source
+  to `stockinsider-three`, and complete API plus visible Safari verification.
+  Do not reset the database password and do not enable LINE, dispatch, automatic
+  trading, V3 Promotion or fabricated evaluation cohorts.

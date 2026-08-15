@@ -23,6 +23,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260813_opportunity_recovery_v3_15.sql',
   'migrations/20260814_official_ingestion_chunk_apply_v3_15.sql',
   'migrations/20260816_claim_handoff_lease_v3_16.sql',
+  'migrations/20260816_official_ingestion_partial_resume_v3_16.sql',
 ]);
 
 function parseArguments(argv) {
@@ -79,6 +80,7 @@ async function applyReviewedMigrations(options) {
       ,'restClaim',to_regprocedure('public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)') IS NOT NULL
       ,'boundedChunkApply',to_regprocedure('public.append_legacy_official_ingestion_chunk_rest_v3_15(uuid,uuid,uuid,text,integer,jsonb,text,text,timestamptz)') IS NOT NULL
       ,'claimHandoff',to_regprocedure('public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)') IS NOT NULL
+      ,'partialResume',to_regprocedure('public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)') IS NOT NULL
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',

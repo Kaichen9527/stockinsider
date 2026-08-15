@@ -659,8 +659,8 @@ acceptanceTest('DI-003','V3.13 official facts and 252-session peer authority rea
   assert.doesNotMatch(workerSource,/valuationInput:\s*\{\s*[.][.][.]persistedValuationInput/u);
   assert.match(workerSource,/compatibility valuationInputs forbidden/u);
   assert.doesNotMatch(workerSource,/financialFacts:\s*[(]acquisitionSnapshot[?][.]financialFacts[^\n]+slice[(]0,600[)]/u);
-  assert.match(workerSource,/const financialFacts=newFinancialFactsV314\(snapshot[?][.]financialFacts[?][?]\[\],priorFinancialRows\)/u);
-  assert.match(workerSource,/\['financial_facts',financialFacts,50\]/u);
+  assert.match(workerSource,/const financialFacts=resumeAllowed[\s\S]*newFinancialFactsV314\(snapshot[?][.]financialFacts[?][?]\[\],[\s\S]*priorFinancialRows/u);
+  assert.match(workerSource,/\['financial_facts','financialFacts',financialFacts,20\]/u);
   assert.match(workerSource,/priorFinancialRows:bundle[.]financialRows[?][?]\[\]/u);
   assert.match(workerSource,/items[.]slice\(offset,offset[+]chunkSize\)/u);
   const missingSharesInput=worker.valuationAuthorityInput(candidate,facts,
@@ -968,6 +968,7 @@ test('generic migration discovery is a closed legacy allowlist and the V3.13 pla
     'migrations/20260813_opportunity_recovery_v3_15.sql',
     'migrations/20260814_official_ingestion_chunk_apply_v3_15.sql',
     'migrations/20260816_claim_handoff_lease_v3_16.sql',
+    'migrations/20260816_official_ingestion_partial_resume_v3_16.sql',
   ]);
   assert.ok(plan.migrations.every((row)=>/^[0-9a-f]{64}$/u.test(row.sha256)&&row.additiveOnly));
   assert.match(plan.orderedChainSha256,/^[0-9a-f]{64}$/u);
