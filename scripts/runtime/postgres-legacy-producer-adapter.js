@@ -1,6 +1,51 @@
 'use strict';
 
 const { Pool } = require('pg');
+const { Worker } = require('node:worker_threads');
+
+// The official fact handler performs bounded but CPU-heavy parsing. A timer on the
+// main event loop cannot renew a lease while that parsing is synchronous, so the
+// heartbeat owns a separate JS event loop and PostgreSQL connection. Credentials and
+// owner tokens are passed only through workerData memory, never argv, env, disk or logs.
+const POSTGRES_HEARTBEAT_WORKER_SOURCE = String.raw`
+'use strict';
+const { workerData } = require('node:worker_threads');
+const state = new Int32Array(workerData.stateBuffer);
+(async () => {
+  const { Client } = require('pg');
+  const client = new Client({ connectionString: workerData.connectionString,
+    application_name: 'stockinsider-auth-source-heartbeat-v3-11' });
+  await client.connect();
+  while (Atomics.load(state, 0) === 0) {
+    const row = (await client.query(
+      'select public.heartbeat_legacy_producer_job_v3_11($1,$2,$3,$4) as alive',
+      [workerData.runId, workerData.jobId, workerData.ownerToken, workerData.leaseSeconds],
+    )).rows[0];
+    if (row?.alive !== true) { Atomics.store(state, 0, 1); break; }
+    Atomics.add(state, 1, 1);
+    await new Promise((resolve) => setTimeout(resolve, workerData.heartbeatIntervalMs));
+  }
+  await client.end();
+})().catch(() => { Atomics.store(state, 0, 2); });
+`;
+
+function beginThreadedPostgresHeartbeat({ connectionString, runId, jobId, ownerToken, leaseSeconds,
+  heartbeatIntervalMs, WorkerClass = Worker }) {
+  const stateBuffer = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 2);
+  const state = new Int32Array(stateBuffer);
+  const worker = new WorkerClass(POSTGRES_HEARTBEAT_WORKER_SOURCE, { eval: true, workerData: {
+    connectionString, runId, jobId, ownerToken, leaseSeconds, heartbeatIntervalMs, stateBuffer,
+  } });
+  let stopped = false;
+  return Object.freeze({
+    stop: async () => {
+      if (!stopped) { stopped = true; await worker.terminate(); }
+      const code = Atomics.load(state, 0);
+      return Object.freeze({ state: code === 0 ? 'healthy' : code === 1 ? 'lost' : 'error',
+        pulses: Atomics.load(state, 1) });
+    },
+  });
+}
 
 function createPostgresLegacyProducerAdapter({ connectionString }) {
   // Keep one connection available for lease heartbeats while a durable ingestion
@@ -70,6 +115,7 @@ function createPostgresLegacyProducerAdapter({ connectionString }) {
       'select public.heartbeat_legacy_producer_job_v3_11($1,$2,$3,$4) as alive',
       [input.runId, input.jobId, input.ownerToken, input.leaseSeconds],
     ))?.alive),
+    beginLegacyProducerHeartbeat: async (input) => beginThreadedPostgresHeartbeat({ connectionString, ...input }),
     completeLegacyProducerJob: async (input) => completion(await one(`select completed.* from
       (select set_config('stockinsider.legacy_authority_hash',$7,true) marker) configured
       cross join lateral public.complete_legacy_producer_job_v3_14(
@@ -92,4 +138,5 @@ function createPostgresLegacyProducerAdapter({ connectionString }) {
   });
 }
 
-module.exports = { createPostgresLegacyProducerAdapter };
+module.exports = { createPostgresLegacyProducerAdapter, beginThreadedPostgresHeartbeat,
+  POSTGRES_HEARTBEAT_WORKER_SOURCE };

@@ -8,13 +8,39 @@ const { safeFailureDiagnostic } = require('./safe-diagnostics');
 const TERMINAL = new Set(['succeeded', 'failed', 'cancelled', 'non_trading_occurrence']);
 
 async function runWithLeaseHeartbeat({ adapter, lease, claim, ownerToken, leaseSeconds, handler, heartbeatIntervalMs }) {
+  const interval = heartbeatIntervalMs ?? Math.max(1000, Math.floor(leaseSeconds * 1000 / 3));
+  if (typeof adapter.beginLegacyProducerHeartbeat === 'function') {
+    const startedAt = Date.now();
+    const controller = await adapter.beginLegacyProducerHeartbeat({ runId: lease.runId, jobId: claim.jobId,
+      ownerToken, leaseSeconds, heartbeatIntervalMs: interval });
+    let output;
+    let handlerError = null;
+    let heartbeatResult = null;
+    try {
+      output = await handler(Object.freeze({ ...claim, ownerToken }));
+    } catch (error) {
+      handlerError = error;
+    } finally {
+      try { heartbeatResult = await controller.stop(); }
+      catch (error) { heartbeatResult = { state: 'error', pulses: 0, error }; }
+    }
+    if (handlerError) throw handlerError;
+    const ranLongEnoughToRequirePulse = Date.now() - startedAt >= interval;
+    if (heartbeatResult?.state !== 'healthy' ||
+      (ranLongEnoughToRequirePulse && !(Number.isInteger(heartbeatResult.pulses) && heartbeatResult.pulses > 0))) {
+      const error = new Error('producer_lease_lost');
+      error.code = 'producer_lease_lost';
+      error.cause = heartbeatResult?.error ?? null;
+      throw error;
+    }
+    return output;
+  }
   let stopped = false;
   let leaseLost = false;
   let heartbeatError = null;
   let stopLoop;
   let heartbeatTimer = null;
   const stoppedSignal = new Promise((resolve) => { stopLoop = resolve; });
-  const interval = heartbeatIntervalMs ?? Math.max(1000, Math.floor(leaseSeconds * 1000 / 3));
   const loop = (async () => {
     while (!stopped) {
       await Promise.race([new Promise((resolve) => {
