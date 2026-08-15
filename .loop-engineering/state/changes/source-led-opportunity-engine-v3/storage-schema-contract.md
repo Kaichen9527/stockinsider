@@ -689,7 +689,7 @@ the active owner/job-token SHA-256, lease, producer commit/hash manifest, idempo
 and input schema before a write. Acquire accepts only the exact owner/commit/worker/
 exact config bytes/config hash/UUID/120-second tuple, recomputes and persists the
 closed seed authority, derives the scheduled occurrence/cutoff/trading
-authority exactly under `runtime-installation-contract.md` v1.12, atomically freezes
+authority exactly under `runtime-installation-contract.md` v1.13, atomically freezes
 the run-owned paged authority manifest/root, creates the payload/input/job identities in that
 order, returns
 the run and execution-ordinal-zero job, and accepts no caller time. Claim preserves the

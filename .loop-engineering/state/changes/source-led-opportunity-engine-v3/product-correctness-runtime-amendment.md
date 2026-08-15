@@ -44,7 +44,7 @@ must never be copied into evaluation-governance maturity.
 
 ## Tracked producer and scheduler ownership
 
-`runtime-installation-contract.md` v1.12 is the sole owner of:
+`runtime-installation-contract.md` v1.13 is the sole owner of:
 
 - the tracked worker/config paths;
 - byte-exact installation and review-attestation manifests plus golden hashes;
