@@ -1,40 +1,38 @@
-# V3.16.1 fresh Architecture heartbeat-resume evidence
+# V3.16.2 fresh Architecture activation-window evidence
 
 Date: 2026-08-15
-Review authority: fresh Architecture Round 53, independently reviewing the
-Requirements Round 172 carrier and threaded heartbeat repair.
+Review authority: fresh Architecture Round 54, independently reviewing the
+Requirements Round 173 carrier and activation-window repair.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `0a7f4d9355e2f4c121e394623502ceda9c4fc80a`
-- Requirements implementation commit: `0f6f1f67fcc116c002f8a881bd328bb4ab9a0a26`
-- Requirements evidence carrier: `de5960d660221f0d9f7f0af3ba0a7eaa000a8372`
-- Final repair-closure commit/tree: `de5960d660221f0d9f7f0af3ba0a7eaa000a8372` / `656b20daa8b76cfc8dde95d92a0405aefc96dcdb`
-- Full reviewed implementation range: `0a7f4d9355e2f4c121e394623502ceda9c4fc80a..de5960d660221f0d9f7f0af3ba0a7eaa000a8372`
-- Active graph: `7f3a17fdd3a86fadfe583216a7f846da6e4102f9d649aeaf268c5a2d34f55cb0`
+- Protected implementation parent: `08b6816ac98efbcbfaba25cda6fc0be7af586cbf`
+- Implementation commit: `97f99ffd3505cb915716633cadd2b17c19cb658d`
+- Requirements evidence carrier: `9e8769736af17205ccb7beab6e452c64cec145f1`
+- Requirements carrier tree: `1468d79094ad8ea61f21945a8ebdc4b295906c9c`
+- Full reviewed implementation/evidence range: `08b6816ac98efbcbfaba25cda6fc0be7af586cbf..9e8769736af17205ccb7beab6e452c64cec145f1`
 
 ## Architecture closure
 
-The repair preserves the single tracked producer, immutable run/job graph,
-idempotency and rollback boundaries. PostgreSQL heartbeat work has a dedicated
-worker-thread event loop and one job-scoped connection, so CPU-bound parsing on the
-main thread cannot suspend lease authority. Shared atomic state reports healthy,
-lost or error plus successful pulse count back to the handler before completion.
+The repair preserves the sole launchd owner, owner-only activation lock, captured
+rollback package, fsynced activation journal and exact reviewed runtime pointer. It
+extends only the finite period in which the installer observes the one-shot owner.
+The wait performs no long-lived database transaction and grants no additional
+database authority.
 
-The worker receives the already resolved connection string and owner token only in
-structured-clone memory; neither appears in argv, environment, disk, source text or
-diagnostics. Direct PostgreSQL remains confined to the reviewed local runtime and
-same Keychain reference. Failure, loss or a missing long-handler pulse prevents
-completion and preserves rollback. No producer, scheduler, role, database schema or
-public mutation surface is added.
+Database-clock leases remain independent and must be renewed by the worker-thread
+heartbeat. A lost lease, missing pulse, worker error or nonzero launchd exit continues
+to fail closed. If the owner is still nonterminal at 14,400 seconds, the same
+`scheduler_activation_failed` inverse restores the captured scheduler and runtime.
+Immutable ingestion chunks stay bound to run, job, cutoff, ordinal, hash and producer
+SHA, so interruption and later resume cannot reinterpret or duplicate provider data.
 
-The worker-thread delta changes no bounded chunk schema, hash, item order, database
-authority, decision heuristic or candidate quota. Requirements Round 172 is PASS at
-P0=0/P1=0/P2=0, focused runtime regression passes, and product correctness is
-106/106. The complete authoritative workflow must still rerun product/runtime,
-model-runner, migration, browser, performance and structural owners against the
-exact Architecture carrier before merge. Evaluation governance remains honestly
-blocked for non-fabricated elapsed cohorts and is not treated as evidence of future
-returns.
+The 20-symbol price and 252-session authority bounds are unchanged. No new scheduler,
+RPC, public mutation surface, provider, decision heuristic, action quota or release
+compatibility path is introduced. Requirements Round 173 is PASS at
+P0=0/P1=0/P2=0, `git diff --check` passes, and product correctness is `106/106`.
+The protected gate must still run all authoritative tracks against this exact carrier.
+Evaluation governance remains honestly blocked for non-fabricated elapsed cohorts
+and is not treated as evidence of future returns.
