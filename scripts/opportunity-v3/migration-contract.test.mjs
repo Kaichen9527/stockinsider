@@ -26,6 +26,8 @@ const opportunityRecoverySql = fs.readFileSync(opportunityRecoveryMigrationPath,
 const officialChunkMigrationPath = path.join(root, 'migrations/20260814_official_ingestion_chunk_apply_v3_15.sql');
 const claimHandoffMigrationPath = path.join(root, 'migrations/20260816_claim_handoff_lease_v3_16.sql');
 const claimHandoffSql = fs.readFileSync(claimHandoffMigrationPath, 'utf8');
+const partialResumeMigrationPath = path.join(root, 'migrations/20260816_official_ingestion_partial_resume_v3_16.sql');
+const partialResumeSql = fs.readFileSync(partialResumeMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -313,6 +315,12 @@ before(() => {
     command(pg.psql, [
       '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', claimHandoffMigrationPath,
+    ]);
+  }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', partialResumeMigrationPath,
     ]);
   }
 });
@@ -805,11 +813,16 @@ test('V3.15 production-sized authority lookup and staged resume are installed',(
       'public.resolve_legacy_instrument_symbol_authority_v3_13_internal(text,timestamptz)'::regprocedure))>0,
     'resumeTransport',position('legacy-official-ingestion-resume-v3.15' in pg_get_functiondef(
       'public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)'::regprocedure))>0,
+    'partialResumeTransport',position('legacy-official-ingestion-partial-resume-v3.16' in pg_get_functiondef(
+      'public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)'::regprocedure))>0,
+    'chunkGraphTransport',position('itemCount' in pg_get_functiondef(
+      'public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)'::regprocedure))>0,
     'completionAuthority',position('run.authority_hash=p_authority_hash' in pg_get_functiondef(
       'public.complete_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,bytea,jsonb,text,text)'::regprocedure))>0
   )::text;`,['-At']).trim());
   assert.deepEqual(value,{symbolIndex:true,exactRegistryHash:true,boundedSymbolTable:true,resumeTransport:true,
-    completionAuthority:true});
+    partialResumeTransport:true,chunkGraphTransport:true,completionAuthority:true});
+  assert.doesNotMatch(partialResumeSql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
 });
 
 test('V3.14 completion persists a non-empty exact decision revision and heartbeat',()=>{

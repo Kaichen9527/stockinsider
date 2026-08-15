@@ -1350,8 +1350,13 @@ function immutableAnalysisFacts(decision){
   return Object.freeze(completeFacts);
 }
 
-async function streamOfficialIngestionV314({claim,snapshot,sourceCutoff,producerSha,persistChunk,priorFinancialRows=[]}){
-  const financialFacts=newFinancialFactsV314(snapshot?.financialFacts??[],priorFinancialRows);
+async function streamOfficialIngestionV314({claim,snapshot,sourceCutoff,producerSha,persistChunk,priorFinancialRows=[],resume=null}){
+  const resumeAllowed=resume&&['legacy-official-ingestion-resume-v3.15',
+    'legacy-official-ingestion-partial-resume-v3.16'].includes(resume.schema)&&resume.sourceCutoff===sourceCutoff;
+  const resumedFinancialFacts=resumeAllowed&&Array.isArray(resume.financialFacts)?resume.financialFacts:[];
+  const financialFacts=resumeAllowed
+    ?[...resumedFinancialFacts,...newFinancialFactsV314(snapshot?.financialFacts??[],[...priorFinancialRows,...resumedFinancialFacts])]
+    :newFinancialFactsV314(snapshot?.financialFacts??[],priorFinancialRows);
   const reportedValuations=[...(snapshot?.valuations??[]),...(snapshot?.valuationHistory??[])].flatMap((row)=>{
     if(!row||typeof row!=='object')return [];
     // Older synthetic contract owners intentionally omit the metric fields. Keep
@@ -1364,16 +1369,38 @@ async function streamOfficialIngestionV314({claim,snapshot,sourceCutoff,producer
     return peRatio===null&&pbRatio===null?[]:[{...row,peRatio,pbRatio}];
   });
   const datasets=[
-    ['trading_sessions',snapshot?.calendarSessions??[],200],
-    ['financial_facts',financialFacts,50],
-    ['price_observations',snapshot?.priceObservations??[],50],
-    ['corporate_action_snapshots',snapshot?.corporateActionSnapshots??[],50],
-    ['reported_valuations',reportedValuations,50],
+    // Production evidence from run 54aa220b showed that a 50-row financial
+    // apply can monopolize the managed pooler past the closed 120-second lease.
+    // Keep every authoritative application transaction at the already-approved
+    // <=20-row bound so the independently threaded heartbeat can always regain
+    // a backend before the lease deadline.
+    ['trading_sessions','calendarSessions',snapshot?.calendarSessions??[],20],
+    ['financial_facts','financialFacts',financialFacts,20],
+    ['price_observations','priceObservations',snapshot?.priceObservations??[],20],
+    ['corporate_action_snapshots','corporateActionSnapshots',snapshot?.corporateActionSnapshots??[],20],
+    ['reported_valuations','reportedValuations',reportedValuations,20],
   ];
   const chunks=[];const counts={};
-  for(const [kind,items,chunkSize] of datasets){
+  const resumeChunks=resumeAllowed&&Array.isArray(resume.chunks)?resume.chunks:[];
+  for(const [kind,resumeKey,items,chunkSize] of datasets){
     counts[kind]=items.length;
-    for(let offset=0,ordinal=0;offset<items.length;offset+=chunkSize,ordinal+=1){
+    const existingItems=resumeAllowed&&Array.isArray(resume[resumeKey])?resume[resumeKey]:[];
+    const existingChunks=resumeChunks.filter((row)=>row?.kind===kind);
+    invariant(existingItems.length<=items.length&&canonicalJson(items.slice(0,existingItems.length))===canonicalJson(existingItems),
+      'official ingestion resume prefix conflict');
+    let existingOffset=0;
+    for(let index=0;index<existingChunks.length;index+=1){
+      const member=existingChunks[index];
+      invariant(member.ordinal===index&&Number.isInteger(member.itemCount)&&member.itemCount>=0&&member.itemCount<=200
+        &&/^[0-9a-f]{64}$/u.test(member.chunkHash),'official ingestion resume chunk graph conflict');
+      const members=existingItems.slice(existingOffset,existingOffset+member.itemCount);
+      invariant(members.length===member.itemCount&&sha256(canonicalJson(['official-ingestion-chunk-v3.14',kind,index,members]))===member.chunkHash,
+        'official ingestion resume chunk hash conflict');
+      chunks.push({kind,ordinal:index,itemCount:member.itemCount,chunkHash:member.chunkHash});
+      existingOffset+=member.itemCount;
+    }
+    invariant(existingOffset===existingItems.length,'official ingestion resume item conservation conflict');
+    for(let offset=existingOffset,ordinal=existingChunks.length;offset<items.length;offset+=chunkSize,ordinal+=1){
       const members=items.slice(offset,offset+chunkSize);
       const chunkHash=sha256(canonicalJson(['official-ingestion-chunk-v3.14',kind,ordinal,members]));
       if(persistChunk)await persistChunk({runId:claim.runId,jobId:claim.jobId,ownerToken:claim.ownerToken,kind,ordinal,items:members,
@@ -1577,7 +1604,7 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         .slice(0, 30);
       const officialIngestion=bridgeAvailable?await streamOfficialIngestionV314({claim,snapshot:acquisitionSnapshot,
         sourceCutoff:bundle.sourceCutoff,producerSha:sourceCommitSha,persistChunk:persistOfficialIngestionChunk,
-        priorFinancialRows:bundle.financialRows??[]}):null;
+        priorFinancialRows:bundle.financialRows??[],resume:ingestionResume}):null;
       return immutableBundle('legacy_facts_refresh_result_v3_11', { schema: 'legacy-facts-refresh-result-v3.11', decisions,
         shallowObservations, sourceCandidates, dislocationCandidates: boundedDislocationCandidates, marketAnalysis,
         officialAuthority:officialCalendar?{calendar:officialCalendar,coverage:officialCoverage}:null,
@@ -1717,7 +1744,17 @@ async function main() {
   };
   const stageHandlers = buildStageHandlers(validated, runtimeEnvironment.STOCKINSIDER_REVIEWED_COMMIT_SHA, sha256(workerBytes), {
     internalApiKey: runtimeEnvironment.INTERNAL_API_KEY,
-    persistOfficialIngestionChunk:adapter.appendLegacyOfficialIngestionChunk,
+    persistOfficialIngestionChunk:async(input)=>{
+      const accepted=await adapter.appendLegacyOfficialIngestionChunk(input);
+      if(accepted!==true)throw new Error('official_ingestion_chunk_rejected');
+      // Renew synchronously on the same reviewed connection boundary after each
+      // bounded apply.  This prevents a busy single-backend transaction pooler
+      // from starving the background pulse between consecutive chunks.
+      const alive=await adapter.heartbeatLegacyProducerJob({runId:input.runId,jobId:input.jobId,
+        ownerToken:input.ownerToken,leaseSeconds:validated.config.leaseSeconds});
+      if(alive!==true){const error=new Error('producer_lease_lost');error.code='producer_lease_lost';throw error;}
+      return true;
+    },
     sourceCredentials: {
       threadsAccessToken:optionalCredential('keychain:stockinsider-runtime:threads-access-token'),
       youtubeApiKey:optionalCredential('keychain:stockinsider-runtime:youtube-api-key'),

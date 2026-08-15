@@ -713,10 +713,10 @@ test('V314-016 official ingestion streams bounded idempotency-addressed chunks a
     producerSha:'a'.repeat(40),snapshot:{calendarSessions:rows(401),financialFacts:rows(201),priceObservations:rows(401),
       corporateActionSnapshots:rows(41),valuations:rows(201),valuationHistory:rows(200)},persistChunk:async(row)=>seen.push(row)});
   assert.equal(seen.filter((row)=>row.kind==='terminal').length,1);
-  assert.ok(seen.filter((row)=>row.kind!=='terminal').every((row)=>row.items.length<=200));
+  assert.ok(seen.filter((row)=>row.kind!=='terminal').every((row)=>row.items.length<=20));
   assert.ok(seen.filter((row)=>['financial_facts','price_observations','reported_valuations'].includes(row.kind))
-    .every((row)=>row.items.length<=50));
-  assert.equal(seen.filter((row)=>row.kind==='reported_valuations').length,9);
+    .every((row)=>row.items.length<=20));
+  assert.equal(seen.filter((row)=>row.kind==='reported_valuations').length,21);
   assert.equal(summary.counts.trading_sessions,401);assert.equal(summary.counts.reported_valuations,401);
   assert.match(summary.terminalRoot,/^[0-9a-f]{64}$/u);
 });
@@ -740,6 +740,29 @@ test('V314-016b a staged ingestion resume is replayed without refetching mutable
     readCanonical:Buffer.from(canonical),readJson:bundle,readHash:sha256(canonical)});
   assert.equal(output.json.officialIngestion.schema,'legacy-official-ingestion-v3.14');
   assert.deepEqual(persisted.map((row)=>row.kind),['terminal']);
+});
+
+test('V316-016c an interrupted legacy chunk graph is verified and continued without identity conflicts',async()=>{
+  const {streamOfficialIngestionV314}=runtime('auth-source-worker-cli.js');
+  const {canonicalJson,sha256}=runtime('codec.js');
+  const sessions=Array.from({length:45},(_,ordinal)=>({ordinal,session:`s${ordinal}`}));
+  const first=sessions.slice(0,15);const second=sessions.slice(15,30);
+  const existing=[first,second].map((items,ordinal)=>({kind:'trading_sessions',ordinal,itemCount:items.length,
+    chunkHash:sha256(canonicalJson(['official-ingestion-chunk-v3.14','trading_sessions',ordinal,items]))}));
+  const persisted=[];
+  const summary=await streamOfficialIngestionV314({claim:{runId:'run',jobId:'job',ownerToken:'token'},
+    sourceCutoff:'2026-08-16T00:00:00Z',producerSha:'a'.repeat(40),snapshot:{calendarSessions:sessions},
+    resume:{schema:'legacy-official-ingestion-partial-resume-v3.16',sourceCutoff:'2026-08-16T00:00:00Z',
+      calendarSessions:sessions.slice(0,30),financialFacts:[],priceObservations:[],corporateActionSnapshots:[],
+      reportedValuations:[],chunks:existing},persistChunk:async(row)=>persisted.push(row)});
+  assert.deepEqual(summary.chunks.slice(0,2),existing);
+  assert.deepEqual(persisted.filter((row)=>row.kind==='trading_sessions').map((row)=>[row.ordinal,row.items.length]),[[2,15]]);
+  assert.equal(persisted.at(-1).kind,'terminal');
+  await assert.rejects(streamOfficialIngestionV314({claim:{runId:'run',jobId:'job'},
+    sourceCutoff:'2026-08-16T00:00:00Z',producerSha:'a'.repeat(40),snapshot:{calendarSessions:sessions},
+    resume:{schema:'legacy-official-ingestion-partial-resume-v3.16',sourceCutoff:'2026-08-16T00:00:00Z',
+      calendarSessions:[{ordinal:999}],financialFacts:[],priceObservations:[],corporateActionSnapshots:[],
+      reportedValuations:[],chunks:[existing[0]]}}),/official ingestion resume prefix conflict/u);
 });
 
 test('V314-016a unchanged financial semantics are not appended on every collection heartbeat', () => {

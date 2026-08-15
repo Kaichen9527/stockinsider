@@ -20,6 +20,14 @@ const state = new Int32Array(workerData.stateBuffer);
   // depends on a socket surviving between the 40-second heartbeat intervals.
   // Four fresh attempts complete within the reviewed 120-second lease budget.
   const reconnectDelays = [0, 250, 500, 1000];
+  // The claim itself has just renewed the lease.  A managed transaction pooler
+  // can temporarily give its only available backend to an official-ingestion
+  // apply call, so exhausting one four-attempt reconnect window is not evidence
+  // that ownership was lost.  Continue bounded reconnect windows until the
+  // last confirmed lease is genuinely near expiry; a database false remains
+  // an immediate, authoritative lease loss.
+  let lastSuccessfulPulseAt = Date.now();
+  const reconnectDeadlineMs = Math.max(5000, workerData.leaseSeconds * 1000 - 5000);
   const pulseOnce = async () => {
     const client = new Client({ connectionString: workerData.connectionString,
       application_name: 'stockinsider-auth-source-heartbeat-v3-11',
@@ -41,14 +49,20 @@ const state = new Int32Array(workerData.stateBuffer);
   };
   while (Atomics.load(state, 0) === 0) {
     let outcome = null;
-    for (const delay of reconnectDelays) {
-      if (delay > 0) await new Promise((resolve) => setTimeout(resolve, delay));
-      if (Atomics.load(state, 0) !== 0) break;
-      try { outcome = await pulseOnce(); break; } catch { /* use a fresh client for the next attempt */ }
+    while (outcome === null && Atomics.load(state, 0) === 0) {
+      for (const delay of reconnectDelays) {
+        if (delay > 0) await new Promise((resolve) => setTimeout(resolve, delay));
+        if (Atomics.load(state, 0) !== 0) break;
+        try { outcome = await pulseOnce(); break; } catch { /* use a fresh client for the next attempt */ }
+      }
+      if (outcome === null && Date.now() - lastSuccessfulPulseAt >= reconnectDeadlineMs) {
+        Atomics.store(state, 0, 2);
+        break;
+      }
     }
     if (Atomics.load(state, 0) !== 0) break;
-    if (outcome === null) { Atomics.store(state, 0, 2); break; }
     if (!outcome) { Atomics.store(state, 0, 1); break; }
+    lastSuccessfulPulseAt = Date.now();
     Atomics.add(state, 1, 1);
     await new Promise((resolve) => setTimeout(resolve, workerData.heartbeatIntervalMs));
   }
