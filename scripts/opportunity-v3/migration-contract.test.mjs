@@ -872,6 +872,7 @@ test('V3.16.9 resolves same-run calendar dependencies by knowledge and transacti
   assert.deepEqual(result,{pointInTime:0,transactionDependency:1,reportedRows:1});
   assert.match(transactionTimeSql,/IF v_stock IS NULL THEN RAISE EXCEPTION[\s\S]*instrument_dependency_unavailable/u);
   assert.match(transactionTimeSql,/IF v_session_authority IS NULL THEN RAISE EXCEPTION[\s\S]*calendar_dependency_unavailable/u);
+  assert.match(transactionTimeSql,/CONSTRAINT='calendar_dependency_unavailable'/u);
   assert.doesNotMatch(transactionTimeSql,/v_session_authority IS NULL THEN CONTINUE/u);
 });
 

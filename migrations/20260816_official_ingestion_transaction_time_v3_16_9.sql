@@ -65,7 +65,8 @@ BEGIN
     (p_input).exchange::text::public.tw_market_v3,(p_input).collected_at,v_now) session
   WHERE session.status='completed' AND session.close_at<=(p_input).collected_at;
   IF v_session_count<>1 THEN
-    RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='calendar_dependency_unavailable';
+    RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='calendar_dependency_unavailable',
+      CONSTRAINT='calendar_dependency_unavailable';
   END IF;
   PERFORM pg_advisory_xact_lock(hashtextextended(jsonb_build_array('exchange_reported_valuation',
     (p_input).stock_id,(p_input).exchange,(p_input).session_date)::text,0));
@@ -147,7 +148,8 @@ BEGIN
         v_item->>'symbol',(v_item->>'collectedAt')::timestamptz) selected
       WHERE selected.instrument_type='common_stock' AND selected.listing_status='active'
         AND selected.provider::text=v_item->>'provider' AND(selected.valid_to IS NULL OR (v_item->>'collectedAt')::timestamptz<selected.valid_to);
-      IF v_stock IS NULL THEN RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='instrument_dependency_unavailable';END IF;
+      IF v_stock IS NULL THEN RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='instrument_dependency_unavailable',
+        CONSTRAINT='instrument_dependency_unavailable';END IF;
       PERFORM public.append_financial_fact_v3(ROW(v_stock,(v_item->>'factKey')::public.financial_fact_key_v3,
         NULLIF(v_item->>'periodStart','')::date,(v_item->>'periodEnd')::date,
         (v_item->>'durationKind')::public.financial_duration_kind_v3,(v_item->>'value')::double precision,
@@ -175,8 +177,10 @@ BEGIN
       FROM public.resolve_legacy_trading_session_dependency_v3_16_9_internal(v_session,
         v_exchange::text::public.tw_market_v3,(v_item->>'collectedAt')::timestamptz,v_now) selected
       WHERE selected.status='completed' AND selected.close_at<=(v_item->>'collectedAt')::timestamptz;
-      IF v_stock IS NULL THEN RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='instrument_dependency_unavailable';END IF;
-      IF v_session_authority IS NULL THEN RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='calendar_dependency_unavailable';END IF;
+      IF v_stock IS NULL THEN RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='instrument_dependency_unavailable',
+        CONSTRAINT='instrument_dependency_unavailable';END IF;
+      IF v_session_authority IS NULL THEN RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='calendar_dependency_unavailable',
+        CONSTRAINT='calendar_dependency_unavailable';END IF;
       PERFORM public.append_price_authority_v3(ROW('raw_price',ROW(v_stock,v_exchange,v_session,v_session_authority,
         (v_item->>'open')::double precision,(v_item->>'high')::double precision,(v_item->>'low')::double precision,
         (v_item->>'close')::double precision,(v_item->>'volume')::double precision,(v_item->>'turnoverTwd')::double precision,
@@ -195,7 +199,8 @@ BEGIN
       FROM public.resolve_legacy_trading_session_dependency_v3_16_9_internal(v_session,
         v_exchange::text::public.tw_market_v3,(v_item->>'collectedAt')::timestamptz,v_now) selected
       WHERE selected.status='completed' AND selected.close_at<=(v_item->>'collectedAt')::timestamptz;
-      IF v_session_authority IS NULL THEN RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='calendar_dependency_unavailable';END IF;
+      IF v_session_authority IS NULL THEN RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='calendar_dependency_unavailable',
+        CONSTRAINT='calendar_dependency_unavailable';END IF;
       SELECT coalesce(array_agg(ROW(value->>'feedIdentity',(value->>'responseByteCount')::integer,
         value->>'responseSha256',(value->>'parsedRowCount')::integer)::public.corporate_action_feed_evidence_input_v3
         ORDER BY ordinality),ARRAY[]::public.corporate_action_feed_evidence_input_v3[]) INTO v_feed_evidence
@@ -225,11 +230,14 @@ BEGIN
           AND source_timestamp<=(v_item->>'collectedAt')::timestamptz
           AND collected_at<=(v_item->>'collectedAt')::timestamptz AND recorded_at<=v_now
         ORDER BY source_timestamp DESC,collected_at DESC,recorded_at DESC,observation_id LIMIT 1;END IF;
-      IF v_stock IS NULL THEN RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='instrument_dependency_unavailable';END IF;
-      IF v_close IS NULL THEN RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='price_dependency_unavailable';END IF;
+      IF v_stock IS NULL THEN RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='instrument_dependency_unavailable',
+        CONSTRAINT='instrument_dependency_unavailable';END IF;
+      IF v_close IS NULL THEN RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='price_dependency_unavailable',
+        CONSTRAINT='price_dependency_unavailable';END IF;
       IF NOT(coalesce(v_item->>'peRatio','')~'^[0-9]+([.][0-9]+)?$' AND(v_item->>'peRatio')::double precision>0)
         AND NOT(coalesce(v_item->>'pbRatio','')~'^[0-9]+([.][0-9]+)?$' AND(v_item->>'pbRatio')::double precision>0)
-      THEN RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='valuation_metric_unavailable';END IF;
+      THEN RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='valuation_metric_unavailable',
+        CONSTRAINT='valuation_metric_unavailable';END IF;
       PERFORM public.append_exchange_reported_valuation_transaction_v3_16_9(ROW(v_stock,v_exchange,v_session,v_close,
         CASE WHEN coalesce(v_item->>'peRatio','')~'^[0-9]+([.][0-9]+)?$' AND(v_item->>'peRatio')::double precision>0 THEN(v_item->>'peRatio')::double precision END,
         CASE WHEN coalesce(v_item->>'pbRatio','')~'^[0-9]+([.][0-9]+)?$' AND(v_item->>'pbRatio')::double precision>0 THEN(v_item->>'pbRatio')::double precision END,
