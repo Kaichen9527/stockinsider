@@ -1778,8 +1778,9 @@ This approval authorizes implementation only. It does not authorize production m
 - [x] Restore the approved ≤20-row application bound for every official dataset,
   retry transient heartbeat connection windows until the real lease deadline,
   and synchronously renew the exact lease after every successful chunk.
-- [ ] Obtain fresh Requirements and Architecture PASS over an immutable repair
-  tree, freeze the exact implementation commit, and obtain exact-range plus
+- [x] Obtain fresh Requirements and Architecture PASS over an immutable repair
+  tree.
+- [ ] Freeze the exact implementation commit and obtain exact-range plus
   protected Code Gate PASS evidence.
 - [ ] Activate the exact reviewed runtime, resume the immutable occurrence to
   terminal success, prove a second idempotent invocation, deploy the same source
