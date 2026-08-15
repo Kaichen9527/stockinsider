@@ -285,6 +285,8 @@ const checks = {
     assert.equal(packageJson.scripts['agent:runtime:install'], 'node scripts/runtime/reviewed-runtime-installer-cli.js');
     assert.equal(packageJson.scripts['agent:runtime:activate-reviewed'], 'node scripts/runtime/reviewed-runtime-installer-cli.js --activate');
     const localPlatform = runtime('local-runtime-platform.js');
+    assert.equal(localPlatform.OWNER_ACTIVATION_MAXIMUM_SECONDS, 3600,
+      'reviewed first-run bootstrap admits the bounded official backfill window');
     assert.equal(typeof localPlatform.captureSchedulerRollback, 'function');
     assert.equal(typeof localPlatform.createLocalRuntimePlatform, 'function');
     const transientLaunchctlRows = ['', '"LastExitStatus" = 0;'];
@@ -589,6 +591,13 @@ const checks = {
     const adapterSource = readFileSync(path.join(root, 'scripts/runtime/postgres-legacy-producer-adapter.js'), 'utf8');
     assert.match(adapterSource, /set_config\('stockinsider[.]legacy_authority_hash',\$5,true\)[\s\S]*length\(configured[.]marker\)\*0/u,
       'transaction-pooler-safe claims explicitly carry the worker authority cache state');
+    assert.match(adapterSource,
+      /acquireLegacyProducerLease:[\s\S]*completionAuthorityHash\s*=\s*value[.]authorityHash[\s\S]*completeLegacyProducerJob:[\s\S]*set_config\('stockinsider[.]legacy_authority_hash',\$7,true\)/u,
+      'a resumed non-source barrier retains the lease authority through terminal completion');
+    const workerSource = readFileSync(path.join(root, 'scripts/runtime/auth-source-worker-cli.js'), 'utf8');
+    assert.match(workerSource,
+      /createPostgresLegacyProducerAdapter[\s\S]*resolvePostgresConnectionReference\('keychain:stockinsider-runtime:database-url'\)/u,
+      'production uses the reviewed direct PostgreSQL adapter instead of the PostgREST statement-timeout path');
     assert.equal(parser.LEGACY_RADAR_FETCH_TIMEOUT_MS, 60000, 'bootstrap producer reads admit the measured Vercel cold legacy path');
     const authorityPages = [['roster', null, null, [[
       '00000000-0000-4000-8000-000000002330', '2330', 'TWSE', 'common_stock', 'active', '台灣積體電路製造', '台積電',

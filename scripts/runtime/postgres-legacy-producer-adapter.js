@@ -4,7 +4,8 @@ const { Pool } = require('pg');
 
 function createPostgresLegacyProducerAdapter({ connectionString }) {
   const pool = new Pool({ connectionString, max: 1, application_name: 'stockinsider-auth-source-worker-v3-11' });
-  let cachedAuthorityHash = '';
+  let cachedAuthorityPagesHash = '';
+  let completionAuthorityHash = '';
   const one = async (text, values) => (await pool.query(text, values)).rows[0] ?? null;
   const lease = (row) => row && Object.freeze({
     runId: row.run_id,
@@ -37,18 +38,28 @@ function createPostgresLegacyProducerAdapter({ connectionString }) {
     nextJob: row.next_job,
   });
   return Object.freeze({
-    acquireLegacyProducerLease: async (input) => lease(await one('select * from public.acquire_legacy_producer_lease_v3_11($1,$2,$3,$4,$5,$6,$7)',
-      [input.ownerLabel, input.sourceCommitSha, input.workerSha256, input.configBytes, input.configSha256, input.ownerToken, input.leaseSeconds])),
+    acquireLegacyProducerLease: async (input) => {
+      const value = lease(await one('select * from public.acquire_legacy_producer_lease_v3_11($1,$2,$3,$4,$5,$6,$7)',
+        [input.ownerLabel, input.sourceCommitSha, input.workerSha256, input.configBytes, input.configSha256,
+          input.ownerToken, input.leaseSeconds]));
+      // A restarted worker can resume directly at a barrier whose claim omits
+      // the authority pages.  The lease still binds the run's immutable
+      // authority identity, so retain it for terminal completion.
+      if (/^[0-9a-f]{64}$/u.test(value?.authorityHash ?? '')) completionAuthorityHash = value.authorityHash;
+      return value;
+    },
     claimLegacyProducerJob: async (input) => {
       const row = await one(`select claimed.* from
         (select set_config('stockinsider.legacy_authority_hash',$5,true) marker) configured
         cross join lateral public.claim_legacy_producer_job_v3_11(
           $1,$2,$3,$4+(length(configured.marker)*0)
-        ) claimed`, [input.runId, input.jobId, input.ownerToken, input.leaseSeconds, cachedAuthorityHash]);
+        ) claimed`, [input.runId, input.jobId, input.ownerToken, input.leaseSeconds, cachedAuthorityPagesHash]);
       const value = claim(row);
+      if (/^[0-9a-f]{64}$/u.test(value?.authorityHash ?? '')) completionAuthorityHash = value.authorityHash;
       if (Array.isArray(value?.readJson?.authorityPages) && value.readJson.authorityPages.length > 0 &&
         typeof value.readJson.authorityHash === 'string' && /^[0-9a-f]{64}$/u.test(value.readJson.authorityHash)) {
-        cachedAuthorityHash = value.readJson.authorityHash;
+        cachedAuthorityPagesHash = value.readJson.authorityHash;
+        completionAuthorityHash = value.readJson.authorityHash;
       }
       return value;
     },
@@ -56,8 +67,12 @@ function createPostgresLegacyProducerAdapter({ connectionString }) {
       'select public.heartbeat_legacy_producer_job_v3_11($1,$2,$3,$4) as alive',
       [input.runId, input.jobId, input.ownerToken, input.leaseSeconds],
     ))?.alive),
-    completeLegacyProducerJob: async (input) => completion(await one('select * from public.complete_legacy_producer_job_v3_14($1,$2,$3,$4,$5,$6)',
-      [input.runId, input.jobId, input.ownerToken, Buffer.from(input.resultCanonical), input.resultJson, input.resultHash])),
+    completeLegacyProducerJob: async (input) => completion(await one(`select completed.* from
+      (select set_config('stockinsider.legacy_authority_hash',$7,true) marker) configured
+      cross join lateral public.complete_legacy_producer_job_v3_14(
+        $1,$2,$3,$4,$5,$6 || substring(configured.marker from 1 for 0)
+      ) completed`, [input.runId, input.jobId, input.ownerToken, Buffer.from(input.resultCanonical), input.resultJson,
+      input.resultHash, completionAuthorityHash])),
     appendLegacyRuntimeFailureDiagnostic: async (input) => Boolean((await one(
       'select public.append_legacy_runtime_failure_diagnostic_v3_14($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16) as diagnostic_id',
       [input.runId,input.jobId,input.ownerToken,input.stage,input.jobKind,input.failureCode,input.origin,input.invariantCode,input.sqlstate,
