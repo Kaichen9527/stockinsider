@@ -1754,3 +1754,7 @@ This approval authorizes implementation only. It does not authorize production m
 - [ ] Obtain fresh Requirements, Architecture, exact-range and protected aggregate
   PASS evidence for the heartbeat repair; then run two terminal reviewed producers,
   deploy the matching Vercel release and complete read-only Safari verification.
+- [x] Reproduce the stronger production heartbeat root after PR #60: a referenced
+  main-thread timer still cannot run during CPU-bound official parsing. Move the
+  PostgreSQL heartbeat onto a memory-only worker thread, require pulses for a long
+  handler and retain fail-closed rollback with zero incomplete chunks.

@@ -1,37 +1,37 @@
 # V3.16.1 fresh Architecture heartbeat-resume evidence
 
 Date: 2026-08-15
-Review authority: fresh Architecture Round 52, independently reviewing the
-Requirements Round 171 carrier and durable heartbeat repair.
+Review authority: fresh Architecture Round 53, independently reviewing the
+Requirements Round 172 carrier and threaded heartbeat repair.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `d3449f04aaf45c2db95f8132810d593d24adc672`
-- Requirements implementation commit: `f6e795707a320f8554b99e4dd7556be88642a97d`
-- Requirements evidence carrier: `d70c7f6305fe08636934e29520b227aa308867a0`
-- Final repair-closure commit/tree: `d70c7f6305fe08636934e29520b227aa308867a0` / `6b58d3e72e8bd9555dbd30d780bbe167b9ef7f96`
-- Full reviewed implementation range: `d3449f04aaf45c2db95f8132810d593d24adc672..d70c7f6305fe08636934e29520b227aa308867a0`
+- Protected implementation parent: `0a7f4d9355e2f4c121e394623502ceda9c4fc80a`
+- Requirements implementation commit: `0f6f1f67fcc116c002f8a881bd328bb4ab9a0a26`
+- Requirements evidence carrier: `de5960d660221f0d9f7f0af3ba0a7eaa000a8372`
+- Final repair-closure commit/tree: `de5960d660221f0d9f7f0af3ba0a7eaa000a8372` / `656b20daa8b76cfc8dde95d92a0405aefc96dcdb`
+- Full reviewed implementation range: `0a7f4d9355e2f4c121e394623502ceda9c4fc80a..de5960d660221f0d9f7f0af3ba0a7eaa000a8372`
 - Active graph: `7f3a17fdd3a86fadfe583216a7f846da6e4102f9d649aeaf268c5a2d34f55cb0`
 
 ## Architecture closure
 
 The repair preserves the single tracked producer, immutable run/job graph,
-idempotency and rollback boundaries. The heartbeat is a referenced lifecycle task
-owned by the active handler and is cleared deterministically at termination. A
-second, bounded PostgreSQL pool connection isolates heartbeats from the one active
-ingestion write; it does not add a producer, scheduler, role, credential or public
-mutation surface.
+idempotency and rollback boundaries. PostgreSQL heartbeat work has a dedicated
+worker-thread event loop and one job-scoped connection, so CPU-bound parsing on the
+main thread cannot suspend lease authority. Shared atomic state reports healthy,
+lost or error plus successful pulse count back to the handler before completion.
 
-Direct PostgreSQL remains confined to the reviewed local runtime and the same
-Keychain reference. Failure or heartbeat loss still prevents completion and restores
-the prior scheduler and runtime pointer. The release remains compatible with the
-existing additive schema and keeps V3, LINE, dispatch, automatic trading and
-Promotion disabled.
+The worker receives the already resolved connection string and owner token only in
+structured-clone memory; neither appears in argv, environment, disk, source text or
+diagnostics. Direct PostgreSQL remains confined to the reviewed local runtime and
+same Keychain reference. Failure, loss or a missing long-handler pulse prevents
+completion and preserves rollback. No producer, scheduler, role, database schema or
+public mutation surface is added.
 
-The timer/pool delta changes no bounded chunk schema, hash, item order, database
-authority, decision heuristic or candidate quota. Requirements Round 171 is PASS at
+The worker-thread delta changes no bounded chunk schema, hash, item order, database
+authority, decision heuristic or candidate quota. Requirements Round 172 is PASS at
 P0=0/P1=0/P2=0, focused runtime regression passes, and product correctness is
 106/106. The complete authoritative workflow must still rerun product/runtime,
 model-runner, migration, browser, performance and structural owners against the

@@ -852,6 +852,36 @@ const checks = {
     assert.match(readFileSync(path.join(root,'scripts/runtime/postgres-legacy-producer-adapter.js'),'utf8'),
       /new Pool\(\{ connectionString, max: 2,/u,
       'heartbeat must have a second PostgreSQL connection while ingestion writes are active');
+
+    const { Worker } = await import('node:worker_threads');
+    const pulseBuffer = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT);
+    const pulseState = new Int32Array(pulseBuffer);
+    const pulseWorker = new Worker(`const {workerData}=require('node:worker_threads');
+      const state=new Int32Array(workerData); setInterval(()=>Atomics.add(state,0,1),1);`,
+    { eval: true, workerData: pulseBuffer });
+    let threadedPulses = 0;
+    const threaded = await runtime('auth-source-worker.js').runWithLeaseHeartbeat({
+      adapter: { beginLegacyProducerHeartbeat: async () => ({ stop: async () => {
+        threadedPulses = Atomics.load(pulseState, 0); await pulseWorker.terminate();
+        return { state: 'healthy', pulses: threadedPulses };
+      } }) },
+      lease: { runId: 'threaded-run' }, claim: { jobId: 'threaded-job' }, ownerToken: 'owner',
+      leaseSeconds: 120, heartbeatIntervalMs: 10,
+      handler: async () => { const until=Date.now()+75; while(Date.now()<until) { /* block main event loop */ }
+        return { status: 'complete' }; },
+    });
+    assert.deepEqual(threaded, { status: 'complete' });
+    assert.ok(threadedPulses > 0, 'separate heartbeat event loop must progress while the handler blocks');
+    await assert.rejects(runtime('auth-source-worker.js').runWithLeaseHeartbeat({
+      adapter: { beginLegacyProducerHeartbeat: async () => ({ stop: async () => ({ state: 'lost', pulses: 1 }) }) },
+      lease: { runId: 'threaded-lost' }, claim: { jobId: 'threaded-lost-job' }, ownerToken: 'owner',
+      leaseSeconds: 120, heartbeatIntervalMs: 10, handler: async () => ({ status: 'complete' }),
+    }), /producer_lease_lost/u);
+    const threadedAdapter = runtime('postgres-legacy-producer-adapter.js');
+    assert.match(threadedAdapter.POSTGRES_HEARTBEAT_WORKER_SOURCE,
+      /heartbeat_legacy_producer_job_v3_11/u);
+    assert.doesNotMatch(threadedAdapter.POSTGRES_HEARTBEAT_WORKER_SOURCE,/postgres(?:ql)?:\/\//u,
+      'heartbeat worker source must not interpolate the database credential');
   },
   'PCR-007': () => {
     const revisions = Array.from({ length: 2549 }, (_, index) => ({ identityKey: String(index).padStart(4, '0') })); let cursor = null; let seen = 0;
