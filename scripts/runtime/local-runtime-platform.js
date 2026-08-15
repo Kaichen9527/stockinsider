@@ -19,7 +19,7 @@ const OWNER_LABEL = 'com.stockinsider.auth-source-worker';
 // exceed one hour while its durable lease continues to heartbeat. Keep the
 // activation transaction finite, but do not kill a healthy bounded bootstrap at
 // the former 3,600-second boundary.
-const OWNER_ACTIVATION_MAXIMUM_SECONDS = 6 * 3600;
+const OWNER_ACTIVATION_MAXIMUM_SECONDS = 4 * 3600;
 
 function fail(code) { const error = new Error(code); error.code = code; throw error; }
 function atomicCanonical(filename, value) {
