@@ -11,7 +11,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const trustedExecFileSync = childProcess.execFileSync.bind(childProcess);
 const trustedSpawnSync = childProcess.spawnSync.bind(childProcess);
 const requestedTrack = process.env.OPPORTUNITY_V3_ACCEPTANCE_TRACK ?? 'product_runtime';
-const expectedActiveGraphSha256 = '734b013bdfd750bfdf87ceb731f9db5033d9d4c8614323e1a884d8b43cb7c717';
+const expectedActiveGraphSha256 = '09f37b9d9559d93f50c6517e5fb81f1fefb517eb1a14acd5745d3e87f831a5f0';
 assert.ok(
   ['product_runtime', 'evaluation_governance', 'model_runner'].includes(requestedTrack),
   'acceptance traceability executes only an explicit automated track',
