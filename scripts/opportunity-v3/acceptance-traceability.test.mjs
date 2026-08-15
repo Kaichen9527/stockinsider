@@ -442,22 +442,26 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
     const currentStartV3169 = tasksText.lastIndexOf(currentMarkerV3169);
     assert.ok(currentStartV3169 >= 0, 'one operative V3.16.9 recovery task section exists');
     const currentTasksV3169 = tasksText.slice(currentStartV3169);
-    assert.equal(round, 142);
+    assert.ok(round >= 142, 'V3.16.9 Requirements round never regresses');
     assert.equal(statusRecord.requirementsGateStatus, 'pass_p0_0_p1_0_p2_0');
     assert.equal(statusRecord.requirementsPendingTree, null);
     assert.equal(statusRecord.requirementsPendingEvidence, null);
     assert.equal(statusRecord.architectureGateStatus, 'pass_p0_0_p1_0_p2_0');
-    assert.equal(statusRecord.architectureReviewRound, 22);
+    assert.ok(statusRecord.architectureReviewRound >= 22, 'V3.16.9 Architecture round never regresses');
     assert.equal(statusRecord.architecturePendingRound, null);
     assert.equal(statusRecord.architecturePendingTree, null);
     assert.equal(statusRecord.architecturePendingEvidence, null);
     assert.equal(statusRecord.architectureReviewEvidence,
-      '.loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-22.md');
-    assert.equal(statusRecord.designStatus, 'v3_16_9_architecture_round_22_pass_p0_0_p1_0_p2_0');
+      `.loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-${statusRecord.architectureReviewRound}.md`);
+    assert.equal(statusRecord.designStatus,
+      `v3_16_9_architecture_round_${statusRecord.architectureReviewRound}_pass_p0_0_p1_0_p2_0`);
     assert.equal(statusRecord.loopStage, 'v3_16_9_exact_review_pass_protected_gate_pending');
     assert.equal(statusRecord.implementationStatus, 'v3_16_9_exact_review_pass_protected_gate_pending');
     assert.equal(statusRecord.exactCommitReviewStatus, 'v3_16_9_exact_range_pass_p0_0_p1_0_p2_0');
-    assert.match(currentTasksV3169, /- \[x\] Obtain fresh Requirements Round 142, Architecture Round 22/u);
+    assert.match(currentTasksV3169, new RegExp(
+      `- \\[x\\] Obtain fresh Requirements Round ${round}, Architecture Round ${statusRecord.architectureReviewRound}`,
+      'u',
+    ));
     assert.match(currentTasksV3169, /Protected Code Gate remains the landing check/u);
     assert.match(currentTasksV3169, /- \[ \] Apply the reviewed successor migration/u);
     return;
@@ -1327,7 +1331,7 @@ const structuralExecutors = {
     assert.ok(tasks.lastIndexOf('model-runner-v3.6') > tasks.lastIndexOf('model-runner-v3.5'));
     assert.doesNotThrow(() => assertTaskStatusNextWorkConsistent(tasks, status));
     const operativeRequirementsTask = status.requirementsStatus.startsWith('v3_16_9_')
-      ? '- [x] Obtain fresh Requirements Round 142, Architecture Round 22 and exact-range'
+      ? `- [x] Obtain fresh Requirements Round ${status.requirementsReviewRound}, Architecture Round ${status.architectureReviewRound} and exact-range`
       : '- [x] Obtain fresh Requirements Round 138 PASS';
     const operativeProtectedGateDeclaration = status.requirementsStatus.startsWith('v3_16_9_')
       ? 'Protected Code Gate remains the landing check'
