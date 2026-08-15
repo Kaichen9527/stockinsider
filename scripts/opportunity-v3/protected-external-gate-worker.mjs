@@ -790,6 +790,8 @@ function prepare(attestation, subjectRoot) {
   execFileSync('/usr/bin/git', ['init', target], { cwd: baseRoot, stdio: 'inherit' });
   const localTargets = [
     attestation.subjectCommitSha,
+    attestation.baseCommitSha,
+    attestation.registryCommitSha,
     ...Object.values(reviewSources).map(({ ref }) => `${ref}:${ref}`),
   ];
   execFileSync('/usr/bin/git', ['fetch', '--no-tags', baseRoot, ...localTargets], { cwd: target, stdio: 'inherit' });
