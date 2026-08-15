@@ -1,36 +1,39 @@
-# V3.16 fresh Architecture repair-closure evidence
+# V3.16.1 fresh Architecture runtime-resume evidence
 
 Date: 2026-08-15
-Review authority: fresh Architecture Round 49, independently reviewing the
-Requirements Round 168 carrier and final structural repair subject.
+Review authority: fresh Architecture Round 50, independently reviewing the
+Requirements Round 169 carrier and PostgreSQL runtime-resume repair.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `ca7a077741692692cbe9d8e481825f188f1affe6`
-- Requirements implementation commit: `240a46c0bcc02406481f26b45e682033a984cba3`
-- Requirements evidence carrier: `ce2789fdc5ab8fea8a8995eab317a6c25a7155f4`
-- Final repair-closure commit/tree: `ce2789fdc5ab8fea8a8995eab317a6c25a7155f4` / `2ebb191430da0c0ec8f2f66dd8989c61b4a01184`
-- Full reviewed implementation range: `ca7a077741692692cbe9d8e481825f188f1affe6..ce2789fdc5ab8fea8a8995eab317a6c25a7155f4`
+- Protected implementation parent: `d2767236dbb3cfce5bb37a30daf8aa952697262e`
+- Requirements implementation commit: `f67f2af77b42ee4b2c0386a4c542ecb7bbce6eaf`
+- Requirements evidence carrier: `2a461382f4a232d4c2cc5a1193d2eef9896e191d`
+- Final repair-closure commit/tree: `2a461382f4a232d4c2cc5a1193d2eef9896e191d` / `617e218538a757b30b50903efb95e09656c9d044`
+- Full reviewed implementation range: `d2767236dbb3cfce5bb37a30daf8aa952697262e..2a461382f4a232d4c2cc5a1193d2eef9896e191d`
 - Active graph: `7f3a17fdd3a86fadfe583216a7f846da6e4102f9d649aeaf268c5a2d34f55cb0`
 
 ## Architecture closure
 
-The one-producer DAG, 60→30→20 funnel, official point-in-time facts,
-method-specific valuation, separated ranking/decision envelopes, compact projection,
-readonly compatibility adapter and rollback boundaries remain unchanged. Missing
-calendar or stale producer authority may disable actions but cannot erase a
-checksum-valid last-good research projection.
+The repair preserves the single tracked producer, immutable run/job graph, lease,
+idempotency and rollback boundaries. Direct PostgreSQL is used only behind the
+reviewed local runtime's Keychain reference for database-heavy durable stages; the
+Web consumer and external source acquisition remain unchanged. Claim and completion
+carry the same authority identity across process restart, including a direct resume
+at `facts_refresh`.
 
-The only post-Round-48 delta synchronizes protected structural ownership with the
-base-reviewed v3.9 host oracle. Active catalog, script-value rows, amendment version
-and exact Codex version now agree across the protected subject. This does not expand
-the model runner's `influence:none` boundary, candidate authority, database mutation
-roles, scheduler ownership, Web schema, decision threshold or deployment authority.
+The 60-minute activation observation is bounded and covers only the initial reviewed
+owner run. Failure still restores the prior scheduler and active runtime pointer.
+There is no new public mutation surface, database role, environment secret, decision
+heuristic, candidate quota or promotion path. The release remains compatible with
+the existing additive schema and keeps V3, LINE, dispatch and automatic trading
+disabled.
 
-Requirements Round 168 is PASS at P0=0/P1=0/P2=0. The clean detached structural
-closure is 3/3 PASS; ordinary full product diagnostic and protected model-runner are
-PASS. Evaluation governance remains honestly blocked for elapsed cohorts and does
-not block this code and staged activation architecture. This PASS authorizes exact
-review only and no LINE, dispatch, automatic trade or Promotion.
+Requirements Round 169 is PASS at P0=0/P1=0/P2=0. Product correctness passes
+`106/106`, and the complete authoritative workflow must rerun product/runtime,
+model-runner, migration, browser, performance and structural owners against the
+exact Architecture carrier before merge. Evaluation governance remains honestly
+blocked for non-fabricated elapsed cohorts and is not treated as evidence of future
+returns.
