@@ -3,7 +3,10 @@
 const { Pool } = require('pg');
 
 function createPostgresLegacyProducerAdapter({ connectionString }) {
-  const pool = new Pool({ connectionString, max: 1, application_name: 'stockinsider-auth-source-worker-v3-11' });
+  // Keep one connection available for lease heartbeats while a durable ingestion
+  // write is using the other connection.  A single-connection pool can queue the
+  // heartbeat behind a slow official chunk append until the 120-second lease dies.
+  const pool = new Pool({ connectionString, max: 2, application_name: 'stockinsider-auth-source-worker-v3-11' });
   let cachedAuthorityPagesHash = '';
   let completionAuthorityHash = '';
   const one = async (text, values) => (await pool.query(text, values)).rows[0] ?? null;

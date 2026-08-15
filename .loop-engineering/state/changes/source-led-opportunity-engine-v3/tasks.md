@@ -1746,3 +1746,11 @@ This approval authorizes implementation only. It does not authorize production m
   credential; keep the existing Keychain value, add one strict Supabase/libpq
   connection resolver shared by migration, bootstrap and direct doctor, and prove the
   reviewed boundary connects while rejecting foreign hosts and disabled TLS.
+- [x] Reproduce the production direct-PostgreSQL resume failures without resetting
+  credentials: preserve authority at a resumed barrier, encode official arrays as
+  JSONB, and close the long-handler heartbeat lifecycle with a referenced timer plus
+  a second bounded pool connection. Evidence:
+  `v3.16.1-heartbeat-resume-amendment.md`.
+- [ ] Obtain fresh Requirements, Architecture, exact-range and protected aggregate
+  PASS evidence for the heartbeat repair; then run two terminal reviewed producers,
+  deploy the matching Vercel release and complete read-only Safari verification.
