@@ -1815,3 +1815,15 @@ This approval authorizes implementation only. It does not authorize production m
   performance and the rendered production UI in Safari.
   Do not reset the database password and do not enable LINE, dispatch, automatic
   trading, V3 Promotion or fabricated evaluation cohorts.
+
+## V3.16.10 same-transaction dependency visibility recovery
+
+- [x] Record reviewed run `762daa51-3de5-71bb-d1b6-4b2d17a98833`, its typed
+  `calendar_dependency_unavailable` diagnostic and automatic runtime rollback.
+- [x] Make only the private same-ingestion calendar dependency resolver
+  `VOLATILE`; retain all two-clock, bounded and public point-in-time semantics.
+- [x] Add a fresh-database regression that completes a staged calendar and its
+  dependent price row in one terminal statement; migration suite passes 54/54.
+- [ ] Freeze and review the exact implementation, pass the protected Code Gate,
+  apply the successor migration, activate two terminal exact producers, deploy
+  the identical Vercel source and complete read-only Safari verification.
