@@ -1797,6 +1797,13 @@ This approval authorizes implementation only. It does not authorize production m
 - [x] Obtain fresh Requirements Round 142, Architecture Round 22 and exact-range
   review PASS for exact implementation `430b810885213fafe6ec26c80594d2d257d7108d`.
   Protected Code Gate remains the landing check for its direct evidence child.
+- [x] Diagnose the protected product gate failure as a canonical Loop
+  requirements/status evidence-path drift and add the V3.16.9-active mutation
+  regression without changing the product, migration or runtime contract.
+- [x] Obtain fresh Requirements Round 143 PASS with `P0=0 P1=0 P2=0` for
+  immutable tree `7a9184f84c84c305379da3118953eeaf42e2e1d3`.
+- [ ] Obtain fresh Architecture Round 23 and a superseding exact-range review
+  before updating the protected PR subject.
 - [ ] Apply the reviewed successor migration, activate the exact runtime and
   require two terminal producer invocations before Web deployment.
 - [ ] Deploy the identical reviewed source to `stockinsider-three`; verify
