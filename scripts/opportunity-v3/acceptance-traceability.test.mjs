@@ -1326,16 +1326,22 @@ const structuralExecutors = {
     assert.match(tasks, /model-runner-v3[.]6/u);
     assert.ok(tasks.lastIndexOf('model-runner-v3.6') > tasks.lastIndexOf('model-runner-v3.5'));
     assert.doesNotThrow(() => assertTaskStatusNextWorkConsistent(tasks, status));
+    const operativeRequirementsTask = status.requirementsStatus.startsWith('v3_16_9_')
+      ? '- [x] Obtain fresh Requirements Round 142, Architecture Round 22 and exact-range'
+      : '- [x] Obtain fresh Requirements Round 138 PASS';
+    const operativeProtectedGateDeclaration = status.requirementsStatus.startsWith('v3_16_9_')
+      ? 'Protected Code Gate remains the landing check'
+      : 'protected external artifact remains the landing check';
     for (const [label, mutatedTasks, mutatedStatus] of [
       ['review round drift', tasks, { ...status, requirementsReviewRound: status.requirementsReviewRound - 1 }],
       ['pending evidence drift', tasks, { ...status, requirementsPendingEvidence: 'requirements-review-round-131.md' }],
       ['operative requirements disposition drift', tasks.replace(
-        '- [x] Obtain fresh Requirements Round 138 PASS',
-        '- [ ] Obtain fresh Requirements Round 138 PASS',
+        operativeRequirementsTask,
+        operativeRequirementsTask.replace('- [x]', '- [ ]'),
       ), status],
       ['protected-gate declaration removed', tasks.replace(
-        'protected external artifact remains the landing check',
-        'protected external artifact is not the landing check',
+        operativeProtectedGateDeclaration,
+        operativeProtectedGateDeclaration.replace('remains', 'is not'),
       ), status],
     ]) {
       assert.throws(
