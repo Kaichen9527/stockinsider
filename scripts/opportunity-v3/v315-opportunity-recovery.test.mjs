@@ -471,6 +471,7 @@ test('V315 migration is additive, bounded, upgrade-safe, and binds authority to 
 
 test('V315 production repair pre-applies bounded official chunks and makes terminal completion constant-work',async()=>{
   const repairSql=readFileSync(path.join(root,'migrations/20260814_official_ingestion_chunk_apply_v3_15.sql'),'utf8');
+  const handoffSql=readFileSync(path.join(root,'migrations/20260816_claim_handoff_lease_v3_16.sql'),'utf8');
   assert.doesNotMatch(repairSql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
   assert.match(repairSql,/legacy_official_ingestion_applications_v3_15/u);
   assert.match(repairSql,/apply_legacy_official_ingestion_chunk_base_v3_15/u);
@@ -479,6 +480,12 @@ test('V315 production repair pre-applies bounded official chunks and makes termi
   assert.match(repairSql,/chunk[.]chunk_kind<>'terminal'[\s\S]*legacy_official_ingestion_applications_v3_15/u);
   assert.match(repairSql,/REVOKE ALL[\s\S]*FROM PUBLIC,anon,authenticated,service_role/u);
   assert.match(repairSql,/GRANT EXECUTE[\s\S]*append_legacy_official_ingestion_chunk_rest_v3_15[\s\S]*TO service_role/u);
+  assert.doesNotMatch(handoffSql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(handoffSql,/v_claim:=public[.]claim_legacy_producer_job_authoritative_v3_16[\s\S]*?v_now:=date_trunc\('second',clock_timestamp\(\)\)/u);
+  assert.match(handoffSql,/run[.]status='running'[\s\S]*?run[.]owner_token_hash=v_owner_hash FOR UPDATE[\s\S]*?job[.]status='leased'[\s\S]*?job[.]owner_token_hash=v_owner_hash FOR UPDATE/u);
+  assert.match(handoffSql,/SET heartbeat_at=v_now,lease_expires_at=v_now\+interval '120 seconds'/u);
+  assert.doesNotMatch(handoffSql,/lease_expires_at\s*>=\s*v_now/u);
+  assert.match(handoffSql,/claim_legacy_producer_job_v3_11\(uuid,uuid,uuid,integer\)[\s\S]*OWNER TO legacy_correctness_rpc_owner/u);
   const adapterSource=readFileSync(path.join(root,'scripts/runtime/supabase-rest-legacy-producer-adapter.js'),'utf8');
   const postgresSource=readFileSync(path.join(root,'scripts/runtime/postgres-legacy-producer-adapter.js'),'utf8');
   assert.match(adapterSource,/rpc\('append_legacy_official_ingestion_chunk_rest_v3_15'/u);

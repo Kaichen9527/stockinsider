@@ -23,6 +23,9 @@ const actionabilityRecoveryMigrationPath = path.join(root, 'migrations/20260811_
 const actionabilityRecoverySql = fs.readFileSync(actionabilityRecoveryMigrationPath, 'utf8');
 const opportunityRecoveryMigrationPath = path.join(root, 'migrations/20260813_opportunity_recovery_v3_15.sql');
 const opportunityRecoverySql = fs.readFileSync(opportunityRecoveryMigrationPath, 'utf8');
+const officialChunkMigrationPath = path.join(root, 'migrations/20260814_official_ingestion_chunk_apply_v3_15.sql');
+const claimHandoffMigrationPath = path.join(root, 'migrations/20260816_claim_handoff_lease_v3_16.sql');
+const claimHandoffSql = fs.readFileSync(claimHandoffMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -300,6 +303,18 @@ before(() => {
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', opportunityRecoveryMigrationPath,
     ]);
   }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', officialChunkMigrationPath,
+    ]);
+  }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', claimHandoffMigrationPath,
+    ]);
+  }
 });
 
 after(() => {
@@ -533,6 +548,19 @@ test('migration applies twice and exposes the exact granted/private function bou
   assert.match(opportunityRecoverySql,/append_legacy_runtime_health_rest_v3_15/u);
   assert.match(opportunityRecoverySql,/read_legacy_runtime_health_rest_v3_15/u);
   assert.match(opportunityRecoverySql,/LIMIT 3000/u);
+  assert.doesNotMatch(claimHandoffSql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(claimHandoffSql,/claim_legacy_producer_job_authoritative_v3_16/u);
+  assert.match(claimHandoffSql,/v_claim:=public[.]claim_legacy_producer_job_authoritative_v3_16[\s\S]*?clock_timestamp\(\)/u,
+    'handoff clock starts only after predecessor materialization returns');
+  assert.match(claimHandoffSql,/run[.]status='running'[\s\S]*?run[.]owner_token_hash=v_owner_hash FOR UPDATE/u);
+  assert.match(claimHandoffSql,/job[.]status='leased'[\s\S]*?job[.]owner_token_hash=v_owner_hash FOR UPDATE/u);
+  assert.equal((claimHandoffSql.match(/interval '120 seconds'/gu)??[]).length,3);
+  assert.doesNotMatch(claimHandoffSql,/lease_expires_at\s*>=\s*v_now/u,
+    'the transaction-owned handoff does not reject the entry-time lease after materialization');
+  assert.match(claimHandoffSql,/REVOKE ALL[\s\S]*claim_legacy_producer_job_authoritative_v3_16[\s\S]*FROM PUBLIC,anon,authenticated,service_role/u);
+  assert.match(claimHandoffSql,/GRANT EXECUTE[\s\S]*claim_legacy_producer_job_authoritative_v3_16[\s\S]*TO legacy_correctness_rpc_owner/u);
+  assert.match(claimHandoffSql,/GRANT EXECUTE[\s\S]*claim_legacy_producer_job_v3_11[\s\S]*TO service_role/u);
+  assert.match(claimHandoffSql,/claim_legacy_producer_job_v3_11\(uuid,uuid,uuid,integer\)[\s\S]*OWNER TO legacy_correctness_rpc_owner/u);
   assert.match(actionabilityRecoverySql,/legacy-product-value-bridge-v3[.]14/u);
   const v314Completion=actionabilityRecoverySql.match(
     /CREATE OR REPLACE FUNCTION public[.]complete_legacy_producer_job_v3_14[\s\S]*?END \$complete\$;/u,
@@ -741,11 +769,11 @@ test('V3.14 official chunks persist under the exact lease, replay idempotently, 
       'leased',1,5,encode(extensions.digest(convert_to('${ownerToken}','utf8'),'sha256'),'hex'),clock_timestamp(),
       clock_timestamp(),clock_timestamp()+interval '120 seconds',NULL,NULL,clock_timestamp());
     SET ROLE service_role;
-    SELECT public.append_legacy_official_ingestion_chunk_v3_14('${runId}','${jobId}','${ownerToken}',
+    SELECT public.append_legacy_official_ingestion_chunk_rest_v3_15('${runId}','${jobId}','${ownerToken}',
       'trading_sessions',0,${sqlLiteral(JSON.stringify(sessionItems))}::jsonb,'${chunkHash}','${producerSha}','${sourceCutoff}');
-    SELECT public.append_legacy_official_ingestion_chunk_v3_14('${runId}','${jobId}','${ownerToken}',
+    SELECT public.append_legacy_official_ingestion_chunk_rest_v3_15('${runId}','${jobId}','${ownerToken}',
       'trading_sessions',0,${sqlLiteral(JSON.stringify(sessionItems))}::jsonb,'${chunkHash}','${producerSha}','${sourceCutoff}');
-    SELECT public.append_legacy_official_ingestion_chunk_v3_14('${runId}','${jobId}','${ownerToken}',
+    SELECT public.append_legacy_official_ingestion_chunk_rest_v3_15('${runId}','${jobId}','${ownerToken}',
       'terminal',0,${sqlLiteral(JSON.stringify(terminalItems))}::jsonb,'${terminalRoot}','${producerSha}','${sourceCutoff}');
     RESET ROLE;
     CREATE TEMP TABLE v314_pre_completion AS SELECT count(*)::integer session_rows
@@ -765,7 +793,7 @@ test('V3.14 official chunks persist under the exact lease, replay idempotently, 
       'jobStatus',(SELECT status FROM public.legacy_producer_jobs_v3_11 WHERE job_id='${jobId}'))::text;
     ROLLBACK;
   `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
-  assert.deepEqual(result,{chunkRows:2,preCompletionRows:0,sessionRows:1,nextCutoffRows:1,jobStatus:'succeeded'});
+  assert.deepEqual(result,{chunkRows:2,preCompletionRows:1,sessionRows:1,nextCutoffRows:1,jobStatus:'succeeded'});
 });
 
 test('V3.15 production-sized authority lookup and staged resume are installed',()=>{
