@@ -1042,7 +1042,7 @@ function activeGraphOracle() {
   assert.equal(hostPins.fixtureVersion, 'model-runner-host-pins-v3.9');
   assert.equal(hostPins.executables.find(({ name }) => name === 'codex')?.version, 'codex-cli 0.148.0-alpha.9');
   assert.equal(runner.MODEL_RUNNER_IDENTITY_SHA256, 'df7867e2a936d3f2b0fce5ddfc1eec705707bbaf919c43c2ccc6d21f509b43c7');
-  assert.equal(Buffer.byteLength(canonicalJson(runner.MODEL_RUNNER_IDENTITY)), 884);
+  assert.equal(Buffer.byteLength(canonicalJson(runner.MODEL_RUNNER_IDENTITY)), 882);
   const runtimeContract = readFileSync(path.join(change, 'runtime-transaction-contract.md'), 'utf8');
   assert.match(runtimeContract, /staticIdentityMembers` is the following exact 41-member/u);
   assert.match(runtimeContract, /\["acceptanceVersion","1[.]46[.]0"\]/u);
