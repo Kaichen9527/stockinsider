@@ -1,18 +1,18 @@
-# V3.16.2 fresh Requirements activation-window evidence
+# V3.16.2 fresh Requirements activation-window closure evidence
 
 Date: 2026-08-15
-Review authority: fresh Requirements Round 175, independently reviewing the
-activation-window repair and its corrected price/valuation bound language after
-the V3.16.1 production replay.
+Review authority: fresh Requirements Round 176, independently reviewing the full
+activation-window repair, active-owner version alignment and frozen graph closure
+after the V3.16.1 production replay.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
 - Protected implementation parent: `08b6816ac98efbcbfaba25cda6fc0be7af586cbf`
-- Final repair-closure commit/tree: `d67041c422bb1c73b1af9c8a3ade611fa2041b49` / `2200f89578dbc79c0cf3adcf287abbcc74091f26`
-- Full reviewed range: `08b6816ac98efbcbfaba25cda6fc0be7af586cbf..d67041c422bb1c73b1af9c8a3ade611fa2041b49`
-- Active graph: `b01991fd587c395c20438b824aa23f5e84b851ee0a5f46cbc2a00fd79419fbc8`
+- Final repair-closure commit/tree: `c30727c03f3b9d81bf32a6decea0ce82780e6151` / `a7e9200e018edafac91efaa271ef0764bf1f1257`
+- Full reviewed range: `08b6816ac98efbcbfaba25cda6fc0be7af586cbf..c30727c03f3b9d81bf32a6decea0ce82780e6151`
+- Active graph: `71abf84b4ae6b4703fd0559807fba15553c1f5a68c56e19039aae44173727b9d`
 
 ## Requirements closure
 
@@ -33,7 +33,10 @@ require worker-thread pulses, nonzero launchd exit still fails immediately, and 
 state. A running job is never reclassified as terminal success.
 
 The bound language distinguishes the 260 retained price sessions from the 252
-valuation sessions, closing the exact-range documentation finding. The executable
+valuation sessions. The runtime-installation v1.13 header, all four active prose and
+catalog owners, the catalog authority tags and the frozen active-graph oracle are
+byte-consistent, closing the protected gate's complete version/graph finding class.
+The executable
 regression observes a successful exit only after crossing the former
 one-hour boundary, while existing nonzero and timeout cases remain. `git diff
 --check` passes and the complete product correctness suite passes `106/106`.
