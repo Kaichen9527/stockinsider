@@ -13,7 +13,12 @@ const PRIOR_LABELS = Object.freeze([
   'com.stockinsider.data-collect', 'com.stockinsider.night-shift', 'com.stockinsider.research-daemon',
 ]);
 const OWNER_LABEL = 'com.stockinsider.auth-source-worker';
-const OWNER_ACTIVATION_MAXIMUM_SECONDS = 3600;
+// The first reviewed run can include the bounded 20-symbol/252-session official
+// bootstrap. Production evidence on 2026-08-15 showed that a healthy run can
+// exceed one hour while its durable lease continues to heartbeat. Keep the
+// activation transaction finite, but do not kill a healthy bounded bootstrap at
+// the former 3,600-second boundary.
+const OWNER_ACTIVATION_MAXIMUM_SECONDS = 4 * 3600;
 
 function fail(code) { const error = new Error(code); error.code = code; throw error; }
 function atomicCanonical(filename, value) {

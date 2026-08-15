@@ -1,6 +1,6 @@
 # Runtime Installation Contract: source-led-opportunity-engine-v3
 
-Version: `stockinsider-runtime-installation-v1.12`
+Version: `stockinsider-runtime-installation-v1.13`
 
 This contract is the sole authority for packaging, installing, rolling back and
 diagnosing the production-capable local data producer. It does not authorize an
@@ -293,6 +293,14 @@ Each phase is written before its next side effect and replay is idempotent. The 
 three owners are disabled only after the new release, proposed plist and rollback
 package all rehash. The new owner is loaded only after all three exact prior states
 are recorded and observed disabled. Doctor must pass before `complete`.
+The one-shot owner wait is finite at 14,400 seconds. This window admits the
+reviewed at-most-20-symbol, at-most-252-session initial official bootstrap; the
+former 3,600-second limit was shorter than a production-observed healthy bootstrap
+and could terminate it despite continuing lease heartbeats. Exit status remains the
+authority: a nonzero terminal exit or expiry of the 14,400-second window is
+`scheduler_activation_failed` and executes the same rollback. Extending the wait
+does not extend a database lease, suppress heartbeat loss, or make a nonterminal run
+successful.
 
 Failure or restart at any phase before `complete` runs the exact inverse: unload the
 new label when it was not installed previously (otherwise restore its captured prior
