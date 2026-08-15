@@ -3,6 +3,8 @@
 const { Pool } = require('pg');
 const { Worker } = require('node:worker_threads');
 
+const CLAIM_STATEMENT_TIMEOUT_MS = 1_200_000;
+
 // The official fact handler performs bounded but CPU-heavy parsing. A timer on the
 // main event loop cannot renew a lease while that parsing is synchronous, so the
 // heartbeat owns a separate JS event loop and PostgreSQL connection. Credentials and
@@ -74,6 +76,23 @@ function beginThreadedPostgresHeartbeat({ connectionString, runId, jobId, ownerT
   });
 }
 
+async function claimWithBoundedStatementTimeout(pool, text, values) {
+  const client = await pool.connect();
+  let discardClient = false;
+  try {
+    await client.query('BEGIN');
+    await client.query(`SET LOCAL statement_timeout = '${CLAIM_STATEMENT_TIMEOUT_MS / 1000}s'`);
+    const result = await client.query(text, values);
+    await client.query('COMMIT');
+    return result.rows[0] ?? null;
+  } catch (error) {
+    try { await client.query('ROLLBACK'); } catch { discardClient = true; }
+    throw error;
+  } finally {
+    client.release(discardClient);
+  }
+}
+
 function createPostgresLegacyProducerAdapter({ connectionString }) {
   // Keep one connection available for lease heartbeats while a durable ingestion
   // write is using the other connection.  A single-connection pool can queue the
@@ -124,7 +143,7 @@ function createPostgresLegacyProducerAdapter({ connectionString }) {
       return value;
     },
     claimLegacyProducerJob: async (input) => {
-      const row = await one(`select claimed.* from
+      const row = await claimWithBoundedStatementTimeout(pool, `select claimed.* from
         (select set_config('stockinsider.legacy_authority_hash',$5,true) marker) configured
         cross join lateral public.claim_legacy_producer_job_v3_11(
           $1,$2,$3,$4+(length(configured.marker)*0)
@@ -175,5 +194,5 @@ function createPostgresLegacyProducerAdapter({ connectionString }) {
   });
 }
 
-module.exports = { createPostgresLegacyProducerAdapter, beginThreadedPostgresHeartbeat,
-  POSTGRES_HEARTBEAT_WORKER_SOURCE };
+module.exports = { CLAIM_STATEMENT_TIMEOUT_MS, createPostgresLegacyProducerAdapter,
+  beginThreadedPostgresHeartbeat, claimWithBoundedStatementTimeout, POSTGRES_HEARTBEAT_WORKER_SOURCE };
