@@ -1,36 +1,36 @@
-# V3.16 fresh Requirements repair-closure evidence
+# V3.16.1 fresh Requirements runtime-resume evidence
 
 Date: 2026-08-15
-Review authority: fresh Requirements Round 168, independently reviewing the
-fully rebased V3.16 implementation after the protected v3.9 structural repair.
+Review authority: fresh Requirements Round 169, independently reviewing the
+production runtime-resume repair after the observed facts-refresh claim timeout.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `ca7a077741692692cbe9d8e481825f188f1affe6`
-- Final repair-closure commit/tree: `240a46c0bcc02406481f26b45e682033a984cba3` / `fa3ed430b462458721566b8638280ef09d0e68d4`
-- Full reviewed range: `ca7a077741692692cbe9d8e481825f188f1affe6..240a46c0bcc02406481f26b45e682033a984cba3`
+- Protected implementation parent: `d2767236dbb3cfce5bb37a30daf8aa952697262e`
+- Final repair-closure commit/tree: `f67f2af77b42ee4b2c0386a4c542ecb7bbce6eaf` / `de89c5fd9cec3809fba9d29a0f3011c7afde2680`
+- Full reviewed range: `d2767236dbb3cfce5bb37a30daf8aa952697262e..f67f2af77b42ee4b2c0386a4c542ecb7bbce6eaf`
 - Active graph: `7f3a17fdd3a86fadfe583216a7f846da6e4102f9d649aeaf268c5a2d34f55cb0`
 
 ## Requirements closure
 
-The implementation preserves last-good research visibility while disabling actions
-when authority is stale or incomplete; separates research ranking from the sole
-decision authority; repairs official point-in-time acquisition and valuation inputs;
-surfaces near-buy, waiting and typed data blockers without a buy quota; and prevents
-one incomplete cited brief from aborting the projection. It does not enable LINE,
-dispatch, automatic trading or Promotion.
+The repair addresses the reproduced production failure without weakening data,
+decision or release authority. The tracked producer now uses the reviewed direct
+PostgreSQL adapter for durable claim and completion work, retaining the same
+Keychain-only database reference. HTTP remains limited to read-only Web capture and
+external source APIs. A restarted process retains the immutable run authority from
+lease acquisition through terminal completion, including when it resumes at a
+non-source barrier whose claim omits authority pages.
 
-The protected product-runtime failure was limited to three structural owners that
-still asserted the pre-v3.9 active catalog, script-value rows, amendment version and
-Codex version. The repair reconciles those exact immutable bytes with the reviewed
-v3.9 oracle for `codex-cli 0.148.0-alpha.9`. A clean detached subject rerun of
-`HYB-007`, `GOV-004` and `GOV-001` passes 3/3. Product semantic execution had already
-passed 269/272 before the structural assertions, while the ordinary full diagnostic
-product track and protected model-runner track both passed.
+The reviewed activation wait remains bounded but admits up to 60 minutes for the
+first official backfill instead of rolling back near the end of the 3,426-job source
+phase. Scheduler ownership, rollback journaling, one-producer authority, 60→30→20
+candidate bounds, point-in-time facts, decision thresholds and public API behavior
+are unchanged. The repair does not reset or expose credentials and does not enable
+LINE, dispatch, automatic trading or Promotion.
 
-The requirements, decision thresholds, SQL mutation authority and all 31 PCR
-boundaries are otherwise unchanged. Evaluation governance remains honestly
-`blocked/non_fabricated_elapsed_cohorts_unavailable`. This PASS covers requirements
-completeness and code authority only; it does not claim proven future returns.
+`git diff --check`, syntax checks, focused PCR-002/PCR-005 and the complete product
+correctness suite pass `106/106`. Evaluation governance remains honestly
+`blocked/non_fabricated_elapsed_cohorts_unavailable`; this Requirements PASS does
+not claim proven future returns.
