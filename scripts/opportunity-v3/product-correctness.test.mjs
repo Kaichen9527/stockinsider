@@ -911,7 +911,7 @@ const checks = {
     await new Promise((resolve) => setTimeout(resolve, 0));
     assert.deepEqual(await failedController.stop(), { state: 'error', pulses: 0 },
       'an unexpected heartbeat worker exit cannot be misreported as a healthy prior pulse');
-    const reconnectBuffer = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 3);
+    const reconnectBuffer = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 6);
     const reconnectState = new Int32Array(reconnectBuffer);
     const mockPg = String.raw`
       const Module=require('node:module');
@@ -919,12 +919,14 @@ const checks = {
       const originalLoad=Module._load;
       class Client extends EventEmitter {
         constructor(){ super();this.identity=Atomics.add(new Int32Array(workerData.stateBuffer),2,1)+1; }
-        async connect(){}
+        async connect(){Atomics.add(new Int32Array(workerData.stateBuffer),3,1);}
         async query(){
-          if(this.identity===1)setTimeout(()=>this.emit('error',new Error('pooler_connection_lifetime')),0);
+          Atomics.add(new Int32Array(workerData.stateBuffer),4,1);
+          if(this.identity===1)throw new Error('transient_pooler_transport');
+          if(this.identity===2)setTimeout(()=>this.emit('error',new Error('pooler_connection_lifetime')),0);
           return {rows:[{alive:true}]};
         }
-        async end(){}
+        async end(){Atomics.add(new Int32Array(workerData.stateBuffer),5,1);}
       }
       Module._load=function(request,parent,isMain){
         if(request==='pg')return {Client};
@@ -938,7 +940,7 @@ const checks = {
     await new Promise((resolve, reject) => {
       const timeout = setTimeout(() => reject(new Error('heartbeat reconnect test timeout')), 1500);
       const observe = () => {
-        if (Atomics.load(reconnectState, 1) >= 2 && Atomics.load(reconnectState, 2) >= 2) {
+        if (Atomics.load(reconnectState, 1) >= 2 && Atomics.load(reconnectState, 5) >= 3) {
           clearTimeout(timeout); resolve(); return;
         }
         setTimeout(observe, 5);
@@ -948,13 +950,17 @@ const checks = {
     });
     Atomics.store(reconnectState, 0, 1);
     await new Promise((resolve) => reconnectWorker.once('exit', resolve));
-    assert.ok(Atomics.load(reconnectState, 1) >= 2 && Atomics.load(reconnectState, 2) >= 2,
-      'the executable heartbeat worker reconnects and resumes pulses after an idle pooler error');
+    assert.ok(Atomics.load(reconnectState, 1) >= 2 && Atomics.load(reconnectState, 2) >= 3,
+      'the executable heartbeat worker retries transport failures and gives every pulse a fresh client');
+    assert.equal(Atomics.load(reconnectState, 2), Atomics.load(reconnectState, 3));
+    assert.equal(Atomics.load(reconnectState, 3), Atomics.load(reconnectState, 4));
+    assert.equal(Atomics.load(reconnectState, 4), Atomics.load(reconnectState, 5),
+      'every connected heartbeat client is queried once and closed before the next interval');
     assert.match(threadedAdapter.POSTGRES_HEARTBEAT_WORKER_SOURCE,
       /heartbeat_legacy_producer_job_v3_11/u);
     assert.match(threadedAdapter.POSTGRES_HEARTBEAT_WORKER_SOURCE,
-      /reconnectDelays = \[250, 500, 1000, 2000, 4000, 8000\][\s\S]*connectionTimeoutMillis: 5000[\s\S]*selected[.]on\('error'[\s\S]*await close\(\)/u,
-      'heartbeat reconnects within the 120-second lease instead of dying on a pooler connection-lifetime rollover');
+      /reconnectDelays = \[0, 250, 500, 1000\][\s\S]*pulseOnce[\s\S]*connectionTimeoutMillis: 5000[\s\S]*client[.]end\(\)/u,
+      'every heartbeat pulse uses a bounded ephemeral client and retries within the 120-second lease');
     assert.doesNotMatch(threadedAdapter.POSTGRES_HEARTBEAT_WORKER_SOURCE,/postgres(?:ql)?:\/\//u,
       'heartbeat worker source must not interpolate the database credential');
   },
