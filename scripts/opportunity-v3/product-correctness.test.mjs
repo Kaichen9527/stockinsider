@@ -824,6 +824,34 @@ const checks = {
       stageHandlers: { [stages[0]]: async () => { await new Promise((resolve) => setTimeout(resolve, 5)); return runtime('codec.js').immutableBundle('lost', []); } },
       ownerToken: '00000000-0000-4000-8000-000000000001' });
     assert.equal(lost.disposition, 'lease_lost'); assert.equal(failedAfterLoss, false);
+
+    let releaseLongHandler;
+    const longHandlerGate = new Promise((resolve) => { releaseLongHandler = resolve; });
+    const realSetTimeout = globalThis.setTimeout;
+    const heartbeatTimers = [];
+    globalThis.setTimeout = (...args) => {
+      const timer = realSetTimeout(...args); heartbeatTimers.push(timer); return timer;
+    };
+    try {
+      const protectedHandler = runtime('auth-source-worker.js').runWithLeaseHeartbeat({
+        adapter: { heartbeatLegacyProducerJob: async () => true },
+        lease: { runId: 'long-run' }, claim: { jobId: 'long-job' }, ownerToken: 'owner',
+        leaseSeconds: 120, heartbeatIntervalMs: 60_000,
+        handler: async () => { await longHandlerGate; return { status: 'complete' }; },
+      });
+      await new Promise((resolve) => realSetTimeout(resolve, 0));
+      assert.equal(heartbeatTimers.length, 1);
+      assert.equal(heartbeatTimers[0].hasRef(), true, 'lease heartbeat timer must keep the worker alive');
+      releaseLongHandler();
+      assert.deepEqual(await protectedHandler, { status: 'complete' });
+      assert.equal(heartbeatTimers[0]._destroyed, true, 'stopped heartbeat timer must be cleared');
+    } finally {
+      globalThis.setTimeout = realSetTimeout;
+      releaseLongHandler?.();
+    }
+    assert.match(readFileSync(path.join(root,'scripts/runtime/postgres-legacy-producer-adapter.js'),'utf8'),
+      /new Pool\(\{ connectionString, max: 2,/u,
+      'heartbeat must have a second PostgreSQL connection while ingestion writes are active');
   },
   'PCR-007': () => {
     const revisions = Array.from({ length: 2549 }, (_, index) => ({ identityKey: String(index).padStart(4, '0') })); let cursor = null; let seen = 0;

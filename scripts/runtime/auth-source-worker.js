@@ -12,13 +12,17 @@ async function runWithLeaseHeartbeat({ adapter, lease, claim, ownerToken, leaseS
   let leaseLost = false;
   let heartbeatError = null;
   let stopLoop;
+  let heartbeatTimer = null;
   const stoppedSignal = new Promise((resolve) => { stopLoop = resolve; });
   const interval = heartbeatIntervalMs ?? Math.max(1000, Math.floor(leaseSeconds * 1000 / 3));
   const loop = (async () => {
     while (!stopped) {
       await Promise.race([new Promise((resolve) => {
-        const timer = setTimeout(resolve, interval);
-        if (typeof timer.unref === 'function') timer.unref();
+        // This timer is intentionally referenced.  Official market acquisition can
+        // spend minutes awaiting provider promises whose sockets do not themselves
+        // keep the Node event loop referenced; unref'ing this timer allowed the
+        // durable PostgreSQL lease to expire while the handler was still healthy.
+        heartbeatTimer = setTimeout(() => { heartbeatTimer = null; resolve(); }, interval);
       }), stoppedSignal]);
       if (stopped) break;
       try {
@@ -42,6 +46,10 @@ async function runWithLeaseHeartbeat({ adapter, lease, claim, ownerToken, leaseS
     return output;
   } finally {
     stopped = true;
+    if (heartbeatTimer !== null) {
+      clearTimeout(heartbeatTimer);
+      heartbeatTimer = null;
+    }
     stopLoop();
     await loop;
   }

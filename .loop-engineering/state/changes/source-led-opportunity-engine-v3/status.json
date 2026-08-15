@@ -312,9 +312,9 @@
     "evaluation_governance": "blocked/non_fabricated_elapsed_cohorts_unavailable",
     "model_runner": "reviewed_head_local_diagnostic_pass_17_of_17_and_disabled_host_pin_v3_8_doctor_pass;protected_external_attestation_pending"
   },
-  "releaseStatus": "v3_14_web_live;v3_16_exact_review_pass;authoritative_gate_and_coordinated_production_activation_pending",
+  "releaseStatus": "v3_14_web_live;v3_16_1_heartbeat_repair_implemented;fresh_gates_and_coordinated_production_activation_pending",
   "createdAt": "2026-07-18T21:22:18+08:00",
-  "updatedAt": "2026-08-14T23:10:00+08:00",
+  "updatedAt": "2026-08-15T13:30:12+08:00",
   "baselineDomain": "stock-recommendation-engine",
   "amendmentClass": "v3_15_opportunity_recovery_product_truth",
   "supersedesForFutureWork": [
@@ -339,7 +339,7 @@
     "homepage ranking promotion before real evaluation cohorts",
     "absolute prevention of all code execution or Codex-private scratch writes"
   ],
-  "blockedReason": "Authoritative Code Gate, protected external gate and coordinated production activation remain; promotion_gate waits for non_fabricated_elapsed_cohorts",
+  "blockedReason": "V3.16.1 heartbeat repair fresh gates, protected external gate and coordinated production activation remain; promotion_gate waits for non_fabricated_elapsed_cohorts",
   "nextHumanResponse": "none; user authorized completing V3.15 and production deployment without stepwise confirmation; do not reset the database password",
   "releaseEvidence": {
     "exactImplementationCommit": "184390953048209730c22828548858c28fa3b6b7",
