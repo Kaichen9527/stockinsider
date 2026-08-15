@@ -13,19 +13,57 @@ const { workerData } = require('node:worker_threads');
 const state = new Int32Array(workerData.stateBuffer);
 (async () => {
   const { Client } = require('pg');
-  const client = new Client({ connectionString: workerData.connectionString,
-    application_name: 'stockinsider-auth-source-heartbeat-v3-11' });
-  await client.connect();
-  while (Atomics.load(state, 0) === 0) {
+  // After a pulse at t=0 the next attempt begins near t=40s.  Six bounded
+  // reconnects, including 5s connect/query ceilings, finish before t=91s and
+  // leave more than 29s of the reviewed 120s lease as safety margin.
+  const reconnectDelays = [250, 500, 1000, 2000, 4000, 8000];
+  let client = null;
+  let connectionFailed = false;
+  const close = async () => {
+    if (!client) return;
+    const selected = client;
+    client = null;
+    connectionFailed = false;
+    await Promise.race([
+      selected.end().catch(() => {}),
+      new Promise((resolve) => setTimeout(resolve, 1000)),
+    ]);
+  };
+  const connect = async () => {
+    const selected = new Client({ connectionString: workerData.connectionString,
+      application_name: 'stockinsider-auth-source-heartbeat-v3-11',
+      connectionTimeoutMillis: 5000, query_timeout: 5000, statement_timeout: 5000 });
+    selected.on('error', () => { if (selected === client) connectionFailed = true; });
+    client = selected;
+    await selected.connect();
+  };
+  const pulse = async () => {
+    if (!client) await connect();
+    if (connectionFailed) { await close(); throw new Error('heartbeat_connection_replaced'); }
     const row = (await client.query(
       'select public.heartbeat_legacy_producer_job_v3_11($1,$2,$3,$4) as alive',
       [workerData.runId, workerData.jobId, workerData.ownerToken, workerData.leaseSeconds],
     )).rows[0];
-    if (row?.alive !== true) { Atomics.store(state, 0, 1); break; }
+    return row?.alive === true;
+  };
+  while (Atomics.load(state, 0) === 0) {
+    let alive = false;
+    try {
+      alive = await pulse();
+    } catch {
+      await close();
+      for (const delay of reconnectDelays) {
+        await new Promise((resolve) => setTimeout(resolve, delay));
+        if (Atomics.load(state, 0) !== 0) break;
+        try { alive = await pulse(); break; } catch { await close(); }
+      }
+      if (!alive && Atomics.load(state, 0) === 0) { Atomics.store(state, 0, 2); break; }
+    }
+    if (!alive) { if (Atomics.load(state, 0) === 0) Atomics.store(state, 0, 1); break; }
     Atomics.add(state, 1, 1);
     await new Promise((resolve) => setTimeout(resolve, workerData.heartbeatIntervalMs));
   }
-  await client.end();
+  await close();
 })().catch(() => { Atomics.store(state, 0, 2); });
 `;
 
@@ -37,6 +75,9 @@ function beginThreadedPostgresHeartbeat({ connectionString, runId, jobId, ownerT
     connectionString, runId, jobId, ownerToken, leaseSeconds, heartbeatIntervalMs, stateBuffer,
   } });
   let stopped = false;
+  const markWorkerError = () => { if (!stopped) Atomics.compareExchange(state, 0, 0, 2); };
+  worker.on?.('error', markWorkerError);
+  worker.on?.('exit', markWorkerError);
   return Object.freeze({
     stop: async () => {
       if (!stopped) { stopped = true; await worker.terminate(); }

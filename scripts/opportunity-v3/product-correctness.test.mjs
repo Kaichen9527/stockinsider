@@ -892,9 +892,30 @@ const checks = {
       lease: { runId: 'threaded-lost' }, claim: { jobId: 'threaded-lost-job' }, ownerToken: 'owner',
       leaseSeconds: 120, heartbeatIntervalMs: 10, handler: async () => ({ status: 'complete' }),
     }), /producer_lease_lost/u);
+    await assert.rejects(runtime('auth-source-worker.js').runWithLeaseHeartbeat({
+      adapter: { beginLegacyProducerHeartbeat: async () => ({ stop: async () => ({ state: 'error', pulses: 8 }) }) },
+      lease: { runId: 'threaded-handler-lost' }, claim: { jobId: 'threaded-handler-lost-job' }, ownerToken: 'owner',
+      leaseSeconds: 120, heartbeatIntervalMs: 10,
+      handler: async () => { const error = new Error('official_ingestion_lease_mismatch'); error.code = 'PT409'; throw error; },
+    }), (error) => error?.code === 'producer_lease_lost' && error?.cause?.code === 'PT409');
     const threadedAdapter = runtime('postgres-legacy-producer-adapter.js');
+    const { EventEmitter } = await import('node:events');
+    class FailedHeartbeatWorker extends EventEmitter {
+      constructor() { super(); queueMicrotask(() => this.emit('error', new Error('pooler_connection_lifetime'))); }
+      async terminate() {}
+    }
+    const failedController = await threadedAdapter.beginThreadedPostgresHeartbeat({
+      connectionString: 'redacted-connection-reference', runId: 'run', jobId: 'job', ownerToken: 'owner',
+      leaseSeconds: 120, heartbeatIntervalMs: 40_000, WorkerClass: FailedHeartbeatWorker,
+    });
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    assert.deepEqual(await failedController.stop(), { state: 'error', pulses: 0 },
+      'an unexpected heartbeat worker exit cannot be misreported as a healthy prior pulse');
     assert.match(threadedAdapter.POSTGRES_HEARTBEAT_WORKER_SOURCE,
       /heartbeat_legacy_producer_job_v3_11/u);
+    assert.match(threadedAdapter.POSTGRES_HEARTBEAT_WORKER_SOURCE,
+      /reconnectDelays = \[250, 500, 1000, 2000, 4000, 8000\][\s\S]*connectionTimeoutMillis: 5000[\s\S]*selected[.]on\('error'[\s\S]*await close\(\)/u,
+      'heartbeat reconnects within the 120-second lease instead of dying on a pooler connection-lifetime rollover');
     assert.doesNotMatch(threadedAdapter.POSTGRES_HEARTBEAT_WORKER_SOURCE,/postgres(?:ql)?:\/\//u,
       'heartbeat worker source must not interpolate the database credential');
   },
