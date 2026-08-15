@@ -911,6 +911,45 @@ const checks = {
     await new Promise((resolve) => setTimeout(resolve, 0));
     assert.deepEqual(await failedController.stop(), { state: 'error', pulses: 0 },
       'an unexpected heartbeat worker exit cannot be misreported as a healthy prior pulse');
+    const reconnectBuffer = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 3);
+    const reconnectState = new Int32Array(reconnectBuffer);
+    const mockPg = String.raw`
+      const Module=require('node:module');
+      const {EventEmitter}=require('node:events');
+      const originalLoad=Module._load;
+      class Client extends EventEmitter {
+        constructor(){ super();this.identity=Atomics.add(new Int32Array(workerData.stateBuffer),2,1)+1; }
+        async connect(){}
+        async query(){
+          if(this.identity===1)setTimeout(()=>this.emit('error',new Error('pooler_connection_lifetime')),0);
+          return {rows:[{alive:true}]};
+        }
+        async end(){}
+      }
+      Module._load=function(request,parent,isMain){
+        if(request==='pg')return {Client};
+        return originalLoad.call(this,request,parent,isMain);
+      };
+    `;
+    const reconnectWorker = new Worker(mockPg + threadedAdapter.POSTGRES_HEARTBEAT_WORKER_SOURCE, {
+      eval: true, workerData: { connectionString: 'memory-only', runId: 'run', jobId: 'job', ownerToken: 'owner',
+        leaseSeconds: 120, heartbeatIntervalMs: 5, stateBuffer: reconnectBuffer },
+    });
+    await new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => reject(new Error('heartbeat reconnect test timeout')), 1500);
+      const observe = () => {
+        if (Atomics.load(reconnectState, 1) >= 2 && Atomics.load(reconnectState, 2) >= 2) {
+          clearTimeout(timeout); resolve(); return;
+        }
+        setTimeout(observe, 5);
+      };
+      reconnectWorker.once('error', reject);
+      observe();
+    });
+    Atomics.store(reconnectState, 0, 1);
+    await new Promise((resolve) => reconnectWorker.once('exit', resolve));
+    assert.ok(Atomics.load(reconnectState, 1) >= 2 && Atomics.load(reconnectState, 2) >= 2,
+      'the executable heartbeat worker reconnects and resumes pulses after an idle pooler error');
     assert.match(threadedAdapter.POSTGRES_HEARTBEAT_WORKER_SOURCE,
       /heartbeat_legacy_producer_job_v3_11/u);
     assert.match(threadedAdapter.POSTGRES_HEARTBEAT_WORKER_SOURCE,
