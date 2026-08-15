@@ -594,6 +594,9 @@ const checks = {
     assert.match(adapterSource,
       /acquireLegacyProducerLease:[\s\S]*completionAuthorityHash\s*=\s*value[.]authorityHash[\s\S]*completeLegacyProducerJob:[\s\S]*set_config\('stockinsider[.]legacy_authority_hash',\$7,true\)/u,
       'a resumed non-source barrier retains the lease authority through terminal completion');
+    assert.match(adapterSource,
+      /appendLegacyOfficialIngestionChunk:[\s\S]*JSON[.]stringify\(input[.]items\)/u,
+      'direct PostgreSQL persistence must encode the reviewed JavaScript item array as JSONB');
     const workerSource = readFileSync(path.join(root, 'scripts/runtime/auth-source-worker-cli.js'), 'utf8');
     assert.match(workerSource,
       /createPostgresLegacyProducerAdapter[\s\S]*resolvePostgresConnectionReference\('keychain:stockinsider-runtime:database-url'\)/u,
