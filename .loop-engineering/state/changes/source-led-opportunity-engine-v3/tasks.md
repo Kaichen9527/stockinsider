@@ -1794,8 +1794,9 @@ This approval authorizes implementation only. It does not authorize production m
 - [x] Separate evidence knowledge time from database transaction time for
   private same-ingestion dependencies; remove silent dependency skips and add
   an apply-twice executable regression.
-- [ ] Obtain fresh Requirements, Architecture, exact-range and protected Code
-  Gate PASS for a new immutable source/evidence pair.
+- [x] Obtain fresh Requirements Round 142, Architecture Round 22 and exact-range
+  review PASS for exact implementation `430b810885213fafe6ec26c80594d2d257d7108d`.
+  Protected Code Gate remains the landing check for its direct evidence child.
 - [ ] Apply the reviewed successor migration, activate the exact runtime and
   require two terminal producer invocations before Web deployment.
 - [ ] Deploy the identical reviewed source to `stockinsider-three`; verify
