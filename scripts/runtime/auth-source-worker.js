@@ -81,7 +81,8 @@ async function runDurableAuthSourceWorker({ configBytes, adapter, sourceCommitSh
       }
       const failure = error?.code === 'provider_unavailable' ? 'provider_unavailable' : 'data_integrity_failure';
       const failureDiagnostic=safeFailureDiagnostic(error,{runId:lease.runId,jobId:claim.jobId,stage:claim.stage,
-        jobKind:claim.jobKind,origin:'handler',failureCode:failure,inputHash:claim.readHash,producerSha:sourceCommitSha,
+        jobKind:claim.jobKind,origin:error?.failureOrigin??'handler',failureCode:failure,
+        itemOrdinal:error?.itemOrdinal,fieldPath:error?.fieldPath,inputHash:claim.readHash,producerSha:sourceCommitSha,
         recordedAt:new Date().toISOString()});
       await adapter.appendLegacyRuntimeFailureDiagnostic({...failureDiagnostic,ownerToken});
       const terminal = await adapter.failLegacyProducerJob({ runId: lease.runId, jobId: claim.jobId, ownerToken, failure });

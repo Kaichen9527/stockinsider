@@ -454,9 +454,10 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
     { key: 'action', eyebrow: 'ACTIONABLE NOW', title: '現在可行動', description: '完整正式決策，或明確標示為研究型小量分批；相對估值不冒充正式目標價。',
       items: rankedResearch.filter((signal) => ['buy', 'accumulate', 'research_starter'].includes(effectiveAction(signal))) },
     { key: 'wait', eyebrow: 'CONDITION WATCH', title: '等待條件', description: '估值或題材仍值得追蹤，但突破、收復支撐、合理乖離或風險條件尚未達成。',
-      items: rankedResearch.filter((signal) => ['wait_value','wait_market','wait_breakout', 'wait_reclaim', 'avoid_chase', 'avoid'].includes(effectiveAction(signal))) },
+      items: rankedResearch.filter((signal) => ['wait_value','wait_market','wait_breakout', 'wait_reclaim', 'avoid_chase', 'avoid'].includes(effectiveAction(signal))
+        ||(effectiveAction(signal)==='unavailable'&&signal.proximityToAction===true)) },
     { key: 'research', eyebrow: 'SOURCE SIGNALS', title: '新來源待研究', description: '來源已出現，但估值、技術或基本面資料尚缺；資料缺失不會被翻譯成「不買」。',
-      items: rankedResearch.filter((signal) => effectiveAction(signal) === 'unavailable') },
+      items: rankedResearch.filter((signal) => effectiveAction(signal) === 'unavailable'&&signal.proximityToAction!==true) },
   ];
   if (['legacy-radar-v3.13.0','legacy-radar-v3.14.0'].includes(radar.sourceLedCorrectness?.schema??'') || rankedResearch.length > 0) return (
     <div className="space-y-0">
@@ -1068,9 +1069,10 @@ function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
         wait_value:'等待價格',wait_market:'等待大盤',wait_breakout: '等待突破', wait_reclaim: '等待收復支撐', avoid_chase: '不追價',
     avoid: '暫時避開', unavailable: '資料待補',
   } as const;
+  const actionLabel=action==='unavailable'&&signal.proximityToAction===true?'接近買點・待深度驗證':actionLabels[action];
   const actionTone = ['buy', 'accumulate', 'research_starter'].includes(action)
     ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
-        : ['wait_value','wait_market','wait_breakout', 'wait_reclaim', 'avoid_chase'].includes(action)
+        : ['wait_value','wait_market','wait_breakout', 'wait_reclaim', 'avoid_chase'].includes(action)||signal.proximityToAction===true
       ? 'border-sky-500/25 bg-sky-500/10 text-sky-700 dark:text-sky-300'
       : 'border-amber-500/25 bg-amber-500/8 text-amber-800 dark:text-amber-300';
   const valuation = envelope?.valuationSummary;
@@ -1094,7 +1096,7 @@ function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
   const provenance = signal.sourceProvenance;
 
   return (
-    <article data-testid="decision-card" data-numeric-budget="six financial or trigger values; stock identity excluded" aria-label={`${signal.chineseName || signal.symbol} ${signal.symbol} ${actionLabels[action]}`} className="overflow-hidden rounded-[1.35rem] border border-line bg-surface shadow-[0_10px_34px_rgba(8,18,26,0.06)]">
+    <article data-testid="decision-card" data-numeric-budget="six financial or trigger values; stock identity excluded" aria-label={`${signal.chineseName || signal.symbol} ${signal.symbol} ${actionLabel}`} className="overflow-hidden rounded-[1.35rem] border border-line bg-surface shadow-[0_10px_34px_rgba(8,18,26,0.06)]">
       <div className="p-4 sm:p-5">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
@@ -1107,12 +1109,15 @@ function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
             </h4>
           </div>
           <span className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold ${actionTone}`}>
-            {actionLabels[action]}
+            {actionLabel}
           </span>
         </div>
 
         <p className="mt-3 line-clamp-2 text-sm leading-6 text-slate-650 dark:text-emerald-100/72">
-          {signal.projectionReadOnly ? '研究投影已過期；保留 last-good 估值供唯讀參考，但停止所有買進型動作。' : envelope?.whyNow || signal.sourceSummary}
+          {signal.projectionReadOnly ? '研究投影已過期；保留 last-good 估值供唯讀參考，但停止所有買進型動作。'
+            :signal.proximityToAction===true&&action==='unavailable'
+              ?'研究排序、覆蓋與核心三軸已達接近買點；等待深度估值與正式決策驗證。'
+              :envelope?.whyNow || signal.sourceSummary}
         </p>
 
         <dl data-testid="collapsed-decision-metrics" className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-4">

@@ -47,7 +47,7 @@ const WARNINGS: EngineWarningV3[] = [
   'prior_lineage_missing', 'valuation_missing', 'shadow_only',
 ];
 const SOURCE_KEYS = [
-  'bulltalk', 'earnings_call', 'instagram', 'investanchors', 'mops_material_event', 'podcast',
+  'bulltalk', 'earnings_call', 'instagram', 'investanchors', 'official_market_factor', 'mops_material_event', 'podcast',
   'ptt', 'public_broker_research', 'telegram', 'threads', 'youtube',
 ];
 const DOCUMENT_OUTCOMES = [

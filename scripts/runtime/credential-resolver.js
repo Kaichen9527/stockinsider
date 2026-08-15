@@ -5,6 +5,8 @@ const { invariant } = require('./codec');
 
 const KEYCHAIN_REFERENCES = Object.freeze({
   'keychain:stockinsider-runtime:database-url': Object.freeze({ service: 'stockinsider-runtime', account: 'database-url' }),
+  'keychain:stockinsider-runtime:supabase-url': Object.freeze({ service: 'stockinsider-runtime', account: 'supabase-url' }),
+  'keychain:stockinsider-runtime:supabase-service-role-key': Object.freeze({ service: 'stockinsider-runtime', account: 'supabase-service-role-key' }),
   'keychain:stockinsider-runtime:internal-api-key': Object.freeze({ service: 'stockinsider-runtime', account: 'internal-api-key' }),
   'keychain:stockinsider-runtime:activation-authority-hmac': Object.freeze({ service: 'stockinsider-runtime', account: 'activation-authority-hmac' }),
   'keychain:stockinsider-runtime:threads-access-token': Object.freeze({ service: 'stockinsider-runtime', account: 'threads-access-token' }),
@@ -12,7 +14,8 @@ const KEYCHAIN_REFERENCES = Object.freeze({
   'keychain:stockinsider-runtime:youtube-oauth-token': Object.freeze({ service: 'stockinsider-runtime', account: 'youtube-oauth-token' }),
 });
 const RUNTIME_ENVIRONMENT_KEYS = Object.freeze([
-  'HOME', 'INTERNAL_API_KEY_REF', 'NODE_ENV', 'PATH', 'STOCKINSIDER_DATABASE_URL_REF',
+  'HOME', 'INTERNAL_API_KEY_REF', 'NODE_ENV', 'PATH', 'STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY_REF',
+  'STOCKINSIDER_SUPABASE_URL_REF',
   'STOCKINSIDER_REVIEWED_COMMIT_SHA', 'TZ',
 ]);
 const DARWIN_TEXT_ENCODING_KEY = '__CF_USER_TEXT_ENCODING';
@@ -51,26 +54,54 @@ function resolveCredentialReference(reference, spawn = spawnSync) {
   return value;
 }
 
+function resolvePostgresConnectionReference(reference, resolver = resolveCredentialReference) {
+  invariant(reference === 'keychain:stockinsider-runtime:database-url',
+    'runtime database credential reference not allowed');
+  let parsed;
+  try { parsed = new URL(resolver(reference)); }
+  catch { invariant(false, 'runtime database credential invalid'); }
+  const parameterKeys = [...parsed.searchParams.keys()];
+  invariant(['postgres:','postgresql:'].includes(parsed.protocol) && parsed.username.length > 0 &&
+    parsed.password.length > 0 && /(?:^|\.)pooler\.supabase\.com$|(?:^|\.)supabase\.co$/u.test(parsed.hostname) &&
+    ['', '5432', '6543'].includes(parsed.port) && parsed.pathname === '/postgres' && parsed.hash === '' &&
+    parameterKeys.length === 1 && parameterKeys[0] === 'sslmode' &&
+    parsed.searchParams.getAll('sslmode').length === 1 && parsed.searchParams.get('sslmode') === 'require',
+  'runtime database credential invalid');
+  // pg-connection-string >=2.9 changed `sslmode=require` to certificate
+  // verification semantics. The stored Supabase pooler URL uses libpq's
+  // encrypted-transport `require` contract, so make that interpretation
+  // explicit instead of weakening or rewriting the credential itself.
+  parsed.searchParams.set('uselibpqcompat', 'true');
+  return parsed.toString();
+}
+
 function hydrateRuntimeCredentials(environment = process.env, resolver = resolveCredentialReference, { requireReferences = false } = {}) {
   if (requireReferences) {
-    invariant(environment.STOCKINSIDER_DATABASE_URL_REF === 'keychain:stockinsider-runtime:database-url' &&
+    invariant(environment.STOCKINSIDER_SUPABASE_URL_REF === 'keychain:stockinsider-runtime:supabase-url' &&
+      environment.STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY_REF === 'keychain:stockinsider-runtime:supabase-service-role-key' &&
       environment.INTERNAL_API_KEY_REF === 'keychain:stockinsider-runtime:internal-api-key' &&
-      !environment.STOCKINSIDER_DATABASE_URL && !environment.INTERNAL_API_KEY,
+      !environment.STOCKINSIDER_SUPABASE_URL && !environment.STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY
+      && !environment.STOCKINSIDER_DATABASE_URL && !environment.INTERNAL_API_KEY,
     'runtime credential references required');
   }
   const result = { ...environment };
-  if (!result.STOCKINSIDER_DATABASE_URL && result.STOCKINSIDER_DATABASE_URL_REF) {
-    result.STOCKINSIDER_DATABASE_URL = resolver(result.STOCKINSIDER_DATABASE_URL_REF);
+  if (!result.STOCKINSIDER_SUPABASE_URL && result.STOCKINSIDER_SUPABASE_URL_REF) {
+    result.STOCKINSIDER_SUPABASE_URL = resolver(result.STOCKINSIDER_SUPABASE_URL_REF);
+  }
+  if (!result.STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY && result.STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY_REF) {
+    result.STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY = resolver(result.STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY_REF);
   }
   if (!result.INTERNAL_API_KEY && result.INTERNAL_API_KEY_REF) {
     result.INTERNAL_API_KEY = resolver(result.INTERNAL_API_KEY_REF);
   }
-  invariant(typeof result.STOCKINSIDER_DATABASE_URL === 'string' && result.STOCKINSIDER_DATABASE_URL.length >= 16,
-    'runtime database credential unavailable');
+  invariant(typeof result.STOCKINSIDER_SUPABASE_URL === 'string' && /^https:\/\/[a-z0-9-]+\.supabase\.co$/u.test(result.STOCKINSIDER_SUPABASE_URL),
+    'runtime Supabase URL unavailable');
+  invariant(typeof result.STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY === 'string'
+    && result.STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY.length >= 32,'runtime Supabase credential unavailable');
   invariant(typeof result.INTERNAL_API_KEY === 'string' && result.INTERNAL_API_KEY.length >= 16,
     'runtime internal credential unavailable');
   return Object.freeze(result);
 }
 
 module.exports = { KEYCHAIN_REFERENCES, RUNTIME_ENVIRONMENT_KEYS, assertExactRuntimeEnvironment,
-  hydrateRuntimeCredentials, resolveCredentialReference };
+  hydrateRuntimeCredentials, resolveCredentialReference, resolvePostgresConnectionReference };

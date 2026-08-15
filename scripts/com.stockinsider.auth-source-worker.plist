@@ -14,7 +14,8 @@
       <string>NODE_ENV=production</string>
       <string>TZ=Asia/Taipei</string>
       <string>STOCKINSIDER_REVIEWED_COMMIT_SHA=__REVIEWED_COMMIT_SHA__</string>
-      <string>STOCKINSIDER_DATABASE_URL_REF=keychain:stockinsider-runtime:database-url</string>
+      <string>STOCKINSIDER_SUPABASE_URL_REF=keychain:stockinsider-runtime:supabase-url</string>
+      <string>STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY_REF=keychain:stockinsider-runtime:supabase-service-role-key</string>
       <string>INTERNAL_API_KEY_REF=keychain:stockinsider-runtime:internal-api-key</string>
       <string>__PINNED_NODE22__</string>
       <string>__RUNTIME_CURRENT__/scripts/runtime/auth-source-worker-cli.js</string>

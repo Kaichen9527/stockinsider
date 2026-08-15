@@ -21,6 +21,8 @@ const decisionIntegrityMigrationPath = path.join(root, 'migrations/20260809_deci
 const decisionIntegritySql = fs.readFileSync(decisionIntegrityMigrationPath, 'utf8');
 const actionabilityRecoveryMigrationPath = path.join(root, 'migrations/20260811_actionability_recovery_v3_14.sql');
 const actionabilityRecoverySql = fs.readFileSync(actionabilityRecoveryMigrationPath, 'utf8');
+const opportunityRecoveryMigrationPath = path.join(root, 'migrations/20260813_opportunity_recovery_v3_15.sql');
+const opportunityRecoverySql = fs.readFileSync(opportunityRecoveryMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -292,6 +294,12 @@ before(() => {
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', actionabilityRecoveryMigrationPath,
     ]);
   }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', opportunityRecoveryMigrationPath,
+    ]);
+  }
 });
 
 after(() => {
@@ -302,6 +310,62 @@ after(() => {
     env: { ...process.env, LC_ALL: 'C' },
   });
   fs.rmSync(cluster.directory, { recursive: true, force: true });
+});
+
+test('V3.14 acceptance upgrade accepts the deployed V3.11 predecessor identity', () => {
+  const marker = 'DO $acceptance_upgrade$';
+  const start = actionabilityRecoverySql.indexOf(marker);
+  const endMarker = '$acceptance_upgrade$;';
+  const end = actionabilityRecoverySql.indexOf(endMarker, start) + endMarker.length;
+  assert.ok(start >= 0 && end > start, 'acceptance upgrade block is extractable');
+  const acceptanceUpgradeSql = actionabilityRecoverySql.slice(start, end);
+
+  psql(`DO $downgrade_production_predecessor$
+  DECLARE v_regprocedure regprocedure;v_definition text;
+  BEGIN
+    FOREACH v_regprocedure IN ARRAY ARRAY[
+      'public.begin_opportunity_run_v3(opportunity_mode_v3,opportunity_run_purpose_v3,timestamp with time zone,text,uuid)'::regprocedure,
+      'public.seal_opportunity_run_inputs_v3(uuid,text)'::regprocedure,
+      'public.complete_opportunity_job_v3(uuid,text,text,opportunity_job_counts_v3)'::regprocedure,
+      'public.select_opportunity_public_projection_v3(timestamp with time zone)'::regprocedure
+    ] LOOP
+      SELECT pg_get_functiondef(v_regprocedure) INTO STRICT v_definition;
+      v_definition := replace(v_definition,'1.46.0','1.44.6');
+      v_definition := replace(v_definition,
+        'c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729',
+        'ebaa6dbdaa7dd55bb261187008f51e930919e7c0cfe07732d531e01267e67c41');
+      EXECUTE v_definition;
+    END LOOP;
+  END $downgrade_production_predecessor$;`);
+
+  psql(acceptanceUpgradeSql);
+  psql(acceptanceUpgradeSql);
+  const result = JSON.parse(psql(`SELECT jsonb_build_object(
+    'versions',(
+      SELECT bool_and(position('1.46.0' in pg_get_functiondef(proc))>0)
+      FROM unnest(ARRAY[
+        'public.begin_opportunity_run_v3(opportunity_mode_v3,opportunity_run_purpose_v3,timestamp with time zone,text,uuid)'::regprocedure,
+        'public.seal_opportunity_run_inputs_v3(uuid,text)'::regprocedure,
+        'public.complete_opportunity_job_v3(uuid,text,text,opportunity_job_counts_v3)'::regprocedure
+      ]) proc
+    ),
+    'comparison',(
+      SELECT bool_and(position(
+        'c81d16af92ec44fc2386165cd70f9665662e2052c680f831c78cf7d324020729'
+        in pg_get_functiondef(proc))>0)
+      FROM unnest(ARRAY[
+        'public.begin_opportunity_run_v3(opportunity_mode_v3,opportunity_run_purpose_v3,timestamp with time zone,text,uuid)'::regprocedure,
+        'public.select_opportunity_public_projection_v3(timestamp with time zone)'::regprocedure
+      ]) proc
+    ),
+    'historicalRows',(
+      SELECT position('1.44.6' in pg_get_constraintdef(oid))>0
+      FROM pg_constraint
+      WHERE conrelid='public.opportunity_public_projections_v3'::regclass
+        AND conname='opportunity_projection_acceptance_v3_14_check'
+    )
+  )::text;`,['-Atq']));
+  assert.deepEqual(result,{versions:true,comparison:true,historicalRows:true});
 });
 
 const functions = [
@@ -465,6 +529,10 @@ test('allocation and projection persist only hash-valid authoritative decision g
 });
 
 test('migration applies twice and exposes the exact granted/private function boundary', () => {
+  assert.match(opportunityRecoverySql,/claim_legacy_producer_job_rest_v3_15/u);
+  assert.match(opportunityRecoverySql,/append_legacy_runtime_health_rest_v3_15/u);
+  assert.match(opportunityRecoverySql,/read_legacy_runtime_health_rest_v3_15/u);
+  assert.match(opportunityRecoverySql,/LIMIT 3000/u);
   assert.match(actionabilityRecoverySql,/legacy-product-value-bridge-v3[.]14/u);
   const v314Completion=actionabilityRecoverySql.match(
     /CREATE OR REPLACE FUNCTION public[.]complete_legacy_producer_job_v3_14[\s\S]*?END \$complete\$;/u,
@@ -683,9 +751,10 @@ test('V3.14 official chunks persist under the exact lease, replay idempotently, 
     CREATE TEMP TABLE v314_pre_completion AS SELECT count(*)::integer session_rows
       FROM public.tw_trading_sessions_v3 WHERE session_id='2026-08-07' AND market='TWSE';
     WITH output(value) AS(VALUES(${sqlLiteral(JSON.stringify(completionPayload))}::jsonb))
-      SELECT completion.status FROM output CROSS JOIN LATERAL public.complete_legacy_producer_job_v3_14(
+      SELECT completion.status FROM output CROSS JOIN LATERAL public.complete_legacy_producer_job_rest_v3_15(
         '${runId}','${jobId}','${ownerToken}',convert_to(output.value::text,'utf8'),output.value,
-        encode(extensions.digest(convert_to(output.value::text,'utf8'),'sha256'),'hex')) completion;
+        encode(extensions.digest(convert_to(output.value::text,'utf8'),'sha256'),'hex'),
+        encode(extensions.digest(convert_to('{}','utf8'),'sha256'),'hex')) completion;
     SELECT jsonb_build_object(
       'chunkRows',(SELECT count(*) FROM public.legacy_official_ingestion_chunks_v3_14 WHERE job_id='${jobId}'),
       'preCompletionRows',(SELECT session_rows FROM v314_pre_completion),
@@ -697,6 +766,22 @@ test('V3.14 official chunks persist under the exact lease, replay idempotently, 
     ROLLBACK;
   `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
   assert.deepEqual(result,{chunkRows:2,preCompletionRows:0,sessionRows:1,nextCutoffRows:1,jobStatus:'succeeded'});
+});
+
+test('V3.15 production-sized authority lookup and staged resume are installed',()=>{
+  const value=JSON.parse(psql(`SELECT jsonb_build_object(
+    'symbolIndex',to_regclass('public.stock_instruments_v3_symbol_authority_v3_15') IS NOT NULL,
+    'exactRegistryHash',position('registry.stream_key_hash=encode' in pg_get_functiondef(
+      'public.resolve_legacy_instrument_authority_v3_13_internal(uuid,timestamptz)'::regprocedure))>0,
+    'boundedSymbolTable',position('FROM public.stock_instruments_v3 authority' in pg_get_functiondef(
+      'public.resolve_legacy_instrument_symbol_authority_v3_13_internal(text,timestamptz)'::regprocedure))>0,
+    'resumeTransport',position('legacy-official-ingestion-resume-v3.15' in pg_get_functiondef(
+      'public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)'::regprocedure))>0,
+    'completionAuthority',position('run.authority_hash=p_authority_hash' in pg_get_functiondef(
+      'public.complete_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,bytea,jsonb,text,text)'::regprocedure))>0
+  )::text;`,['-At']).trim());
+  assert.deepEqual(value,{symbolIndex:true,exactRegistryHash:true,boundedSymbolTable:true,resumeTransport:true,
+    completionAuthority:true});
 });
 
 test('V3.14 completion persists a non-empty exact decision revision and heartbeat',()=>{
@@ -3042,9 +3127,12 @@ test('authority registries enforce exact 64/65 family bounds and serialized boun
   assert.match(functionDefinitions.resolve_legacy_instrument_authority_v3_13,
     /opportunity_authority_selected_stream_count_v3_internal\('instrument_roster'/u);
   assert.match(functionDefinitions.resolve_legacy_instrument_authority_v3_13_internal,/LIMIT 65/u);
-  assert.match(functionDefinitions.resolve_legacy_instrument_symbol_authority_v3_13_internal,/LIMIT 20001/u);
+  assert.match(functionDefinitions.resolve_legacy_instrument_symbol_authority_v3_13_internal,
+    /FROM public[.]stock_instruments_v3 authority[\s\S]*?LIMIT 3/u);
+  assert.match(functionDefinitions.resolve_legacy_instrument_symbol_authority_v3_13_internal,
+    /v_stream_count>2[\s\S]*?authority_revision_conflict/u);
   assert.doesNotMatch(functionDefinitions.resolve_legacy_instrument_symbol_authority_v3_13_internal,
-    /FROM public[.]stock_instruments_v3 candidate/u);
+    /convert_from\(registry[.]stream_key_canonical/u);
   assert.match(functionDefinitions.resolve_legacy_sector_authority_v3_13,
     /opportunity_authority_selected_stream_count_v3_internal\('sector_assignment'/u);
   assert.match(functionDefinitions.resolve_legacy_sector_authority_v3_13_internal,/LIMIT 65/u);

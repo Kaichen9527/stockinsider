@@ -281,6 +281,9 @@ test('V314-007 runtime diagnostics never serialize SQL text or connection creden
   assert.equal(diagnostic.stage,'candidate_funnel');
   assert.equal(diagnostic.jobKind,'candidate_batch');
   assert.equal(diagnostic.origin,'persistence');
+  const barrier=safeFailureDiagnostic(new Error('completion failed'),{stage:'facts_refresh',jobKind:'stage_barrier',
+    origin:'handler',producerSha:'b'.repeat(40)});
+  assert.equal(barrier.jobKind,'stage_barrier');
 });
 
 test('V314-008 Web and runtime share exact release compatibility authority', () => {
@@ -628,14 +631,19 @@ test('V314-014aa MOPS rejects dimensional segment and scenario contexts', () => 
 
 test('V314-014b MOPS loader binds the requested official URL into parsed provenance', async () => {
   const {loadMopsFinancialHistoryV314,MOPS_INLINE_URL}=runtime('official-mops-v314.js');
+  const requested=[];
   const html=`<html><xbrli:context id="duration"><xbrli:startDate>2026-01-01</xbrli:startDate><xbrli:endDate>2026-03-31</xbrli:endDate></xbrli:context>
     <ix:nonNumeric name="tifrs-ar:ReviewAuditDate" contextRef="duration">2026-05-12</ix:nonNumeric>
     <ix:nonFraction name="ifrs-full:Revenue" contextRef="duration" unitRef="TWD">1000</ix:nonFraction></html>`;
   const result=await loadMopsFinancialHistoryV314({cutoff:'2026-08-11T00:00:00Z',
-    candidates:[{symbol:'2330',exchange:'TWSE'}],fetchImpl:async(url)=>new Response(
-      url.includes('SSEASON=3')||url.includes('SSEASON=2')?'<h4>not found</h4>':html,
-      {status:200,headers:{'content-type':'text/html'}})});
+    candidates:[{symbol:'2330',exchange:'TWSE'}],fetchImpl:async(url)=>{
+      requested.push(String(url));
+      return new Response(url.includes('SSEASON=3')||url.includes('SSEASON=2')?'<h4>not found</h4>':html,
+        {status:200,headers:{'content-type':'text/html'}});
+    }});
   assert.ok(result.facts.length>0);assert.ok(result.facts.every((row)=>row.sourceUrl.startsWith(MOPS_INLINE_URL)));
+  assert.ok(requested.some((url)=>url.includes('SYEAR=2026')&&url.includes('SSEASON=2')));
+  assert.equal(requested.some((url)=>url.includes('SYEAR=2026')&&url.includes('SSEASON=3')),false);
 });
 
 test('V314-014c MOPS fact selection preserves cycle history without crossing the 128-row authority bound',()=>{
@@ -653,7 +661,7 @@ test('V314-014c MOPS fact selection preserves cycle history without crossing the
   const selected=selectLatestMopsFacts(facts);
   assert.ok(selected.length<=128);
   assert.equal(selected.filter((row)=>row.factKey==='quarterly_revenue').length,12);
-  assert.equal(selected.filter((row)=>row.factKey==='quarterly_operating_income').length,4);
+  assert.equal(selected.filter((row)=>row.factKey==='quarterly_operating_income').length,8);
   assert.equal(selected.filter((row)=>row.factKey==='total_assets').length,1);
 });
 
@@ -706,8 +714,31 @@ test('V314-016 official ingestion streams bounded idempotency-addressed chunks a
       corporateActionSnapshots:rows(41),valuations:rows(201),valuationHistory:rows(200)},persistChunk:async(row)=>seen.push(row)});
   assert.equal(seen.filter((row)=>row.kind==='terminal').length,1);
   assert.ok(seen.filter((row)=>row.kind!=='terminal').every((row)=>row.items.length<=200));
+  assert.ok(seen.filter((row)=>['financial_facts','price_observations','reported_valuations'].includes(row.kind))
+    .every((row)=>row.items.length<=20));
   assert.equal(summary.counts.trading_sessions,401);assert.equal(summary.counts.reported_valuations,401);
   assert.match(summary.terminalRoot,/^[0-9a-f]{64}$/u);
+});
+
+test('V314-016b a staged ingestion resume is replayed without refetching mutable provider state', async () => {
+  const {buildStageHandlers}=runtime('auth-source-worker-cli.js');
+  const {canonicalJson,sha256}=runtime('codec.js');
+  const {validateAuthSourceDagConfig}=runtime('source-run-config.js');
+  const config=validateAuthSourceDagConfig(readFileSync(path.join(root,'config/runtime/auth-source-dag.json')));
+  const sourceCutoff='2026-08-11T00:00:00Z';const persisted=[];
+  const bundle={sourceCutoff,bridgeSchema:'legacy-product-value-bridge-v3.14',candidateResult:{candidates:[],discoveryDelta:{}},
+    candidateAuthorityRows:[],peerUniverseRows:[],sourceProvenanceRows:[],financialRows:[],priceRows:[],legacyPriceRows:[],
+    benchmarkRows:[],dislocationCandidates:[],projectionFreshnessSchedule:[],reportedPeBackfillSessions:[],
+    officialPriceBackfillSymbols:[],corporateActionBackfillSessions:[],officialIngestionResume:{
+      schema:'legacy-official-ingestion-resume-v3.15',sourceCutoff,calendarSessions:[],financialFacts:[],
+      priceObservations:[],corporateActionSnapshots:[],reportedValuations:[]}};
+  const canonical=canonicalJson(bundle);
+  const handlers=buildStageHandlers(config,'a'.repeat(40),'b'.repeat(64),{fetchImpl:async()=>{
+    throw new Error('provider fetch must not run during immutable resume');},persistOfficialIngestionChunk:async(row)=>persisted.push(row)});
+  const output=await handlers.facts_refresh({runId:'run',jobId:'job',ownerToken:'token',readKind:'candidate_fact_plane',
+    readCanonical:Buffer.from(canonical),readJson:bundle,readHash:sha256(canonical)});
+  assert.equal(output.json.officialIngestion.schema,'legacy-official-ingestion-v3.14');
+  assert.deepEqual(persisted.map((row)=>row.kind),['terminal']);
 });
 
 test('V314-016a unchanged financial semantics are not appended on every collection heartbeat', () => {

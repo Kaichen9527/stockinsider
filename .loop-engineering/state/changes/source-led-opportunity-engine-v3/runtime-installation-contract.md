@@ -241,18 +241,19 @@ order specified here; booleans use `<true/>|<false/>`; there is exactly one fina
 and no BOM/CR/trailing spaces. It represents this fixed semantic object:
 label `com.stockinsider.auth-source-worker`; `ProgramArguments` exactly
 `[/usr/bin/env,"-i",HOME=<owner-home>,PATH=/usr/bin:/bin,NODE_ENV=production,
-TZ=Asia/Taipei,STOCKINSIDER_REVIEWED_COMMIT_SHA=<sha>,<two fixed credential refs>,
+TZ=Asia/Taipei,STOCKINSIDER_REVIEWED_COMMIT_SHA=<sha>,<three fixed credential refs>,
 pinnedNode22Path,current/scripts/runtime/auth-source-worker-cli.js,"--config",
 current/config/runtime/auth-source-dag.json]`; `StartCalendarInterval` exactly the
 five weekday 18:20 entries; `RunAtLoad=false`; `KeepAlive=false`;
 `ProcessType=Background`; `ThrottleInterval=60`; working directory is the active
 release; stdout/stderr are fixed files under the runtime root. The plist has no
-`EnvironmentVariables` dictionary: `/usr/bin/env -i` creates the exact seven-key
+`EnvironmentVariables` dictionary: `/usr/bin/env -i` creates the exact eight-key
 environment containing `HOME`, `PATH`, `NODE_ENV`, `TZ`, the exact reviewed commit SHA,
-and the two fixed references
-`keychain:stockinsider-runtime:database-url` and
+and the three fixed references
+`keychain:stockinsider-runtime:supabase-url`,
+`keychain:stockinsider-runtime:supabase-service-role-key`, and
 `keychain:stockinsider-runtime:internal-api-key`. The reviewed worker resolves only
-those names through `/usr/bin/security` before constructing the database/API clients;
+those names through `/usr/bin/security` before constructing the REST/API clients;
 secret values never enter the plist,
 manifest or package. Unknown plist keys, shell command strings, relative executable
 paths, inherited ambient variables (including `NODE_OPTIONS`, `DYLD_*`, proxy, Git and

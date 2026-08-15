@@ -63,7 +63,7 @@ function createPostgresLegacyProducerAdapter({ connectionString }) {
       [input.runId,input.jobId,input.ownerToken,input.stage,input.jobKind,input.failureCode,input.origin,input.invariantCode,input.sqlstate,
         input.constraint,input.itemOrdinal,input.fieldPath,input.inputHash,input.producerSha,input.diagnosticHash,input.recordedAt]))?.diagnostic_id),
     appendLegacyOfficialIngestionChunk: async (input) => Boolean((await one(
-      'select public.append_legacy_official_ingestion_chunk_v3_14($1,$2,$3,$4,$5,$6,$7,$8,$9) as accepted',
+      'select public.append_legacy_official_ingestion_chunk_rest_v3_15($1,$2,$3,$4,$5,$6,$7,$8,$9) as accepted',
       [input.runId,input.jobId,input.ownerToken,input.kind,input.ordinal,input.items,input.chunkHash,input.producerSha,input.sourceCutoff]))?.accepted),
     failLegacyProducerJob: async (input) => completion(await one('select * from public.fail_legacy_producer_job_v3_11($1,$2,$3,$4)', [input.runId, input.jobId, input.ownerToken, input.failure])),
     close: () => pool.end(),

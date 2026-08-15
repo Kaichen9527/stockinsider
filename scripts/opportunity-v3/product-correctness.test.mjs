@@ -167,7 +167,7 @@ const checks = {
     assert.ok(!readFileSync(path.join(root, 'scripts/runtime/auth-source-worker-cli.js'), 'utf8').includes('.agent/'));
     const bundle = runtime('tracked-runtime-bundle.js');
     assert.deepEqual([...bundle.TRACKED_RUNTIME_PATHS].sort(), bundle.TRACKED_RUNTIME_PATHS);
-    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 45);
+    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 47);
     assert.equal(bundle.runtimeBundleSha256(root), sha256(bundle.runtimeBundleBytes(root)));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/auth-source-worker-cli.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/tracked-runtime-bundle.js'));
@@ -184,6 +184,7 @@ const checks = {
       for (const additiveMember of [
         'scripts/runtime/market-analysis.js',
         'scripts/runtime/official-twse-valuation.js',
+        'scripts/runtime/official-factor-discovery-v315.js',
         'scripts/runtime/underreaction-score.js',
       ]) unlinkSync(path.join(bundleRoot, additiveMember));
       assert.throws(() => bundle.runtimeBundleSha256(bundleRoot), { code: 'ENOENT' });
@@ -227,17 +228,39 @@ const checks = {
       assert.deepEqual((await Promise.all([runNonce(), runNonce()])).sort(), [0, 1]);
     } finally { rmSync(nonceRoot, { recursive: true, force: true }); }
     const credentials = runtime('credential-resolver.js').hydrateRuntimeCredentials({
-      STOCKINSIDER_DATABASE_URL_REF: 'keychain:stockinsider-runtime:database-url',
+      STOCKINSIDER_SUPABASE_URL_REF: 'keychain:stockinsider-runtime:supabase-url',
+      STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY_REF: 'keychain:stockinsider-runtime:supabase-service-role-key',
       INTERNAL_API_KEY_REF: 'keychain:stockinsider-runtime:internal-api-key',
-    }, (reference) => reference.endsWith('database-url') ? 'postgresql://test/stockinsider' : 'test-internal-api-key');
-    assert.equal(credentials.STOCKINSIDER_DATABASE_URL, 'postgresql://test/stockinsider');
+    }, (reference) => reference.endsWith('supabase-url') ? 'https://fixture.supabase.co'
+      :reference.endsWith('supabase-service-role-key')?'fixture-service-role-key'.padEnd(40,'x'):'test-internal-api-key');
+    assert.equal(credentials.STOCKINSIDER_SUPABASE_URL, 'https://fixture.supabase.co');
+    assert.equal(credentials.STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY,'fixture-service-role-key'.padEnd(40,'x'));
     assert.equal(credentials.INTERNAL_API_KEY, 'test-internal-api-key');
+    const postgresUrl=runtime('credential-resolver.js').resolvePostgresConnectionReference(
+      'keychain:stockinsider-runtime:database-url',()=>
+        'postgresql://postgres.fixture:secret@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres?sslmode=require');
+    const parsedPostgresUrl=new URL(postgresUrl);
+    assert.equal(parsedPostgresUrl.searchParams.get('sslmode'),'require');
+    assert.equal(parsedPostgresUrl.searchParams.get('uselibpqcompat'),'true');
+    assert.throws(()=>runtime('credential-resolver.js').resolvePostgresConnectionReference(
+      'keychain:stockinsider-runtime:database-url',()=>
+        'postgresql://postgres.fixture:secret@evil.example:6543/postgres?sslmode=require'),
+    /runtime database credential invalid/u);
+    assert.throws(()=>runtime('credential-resolver.js').resolvePostgresConnectionReference(
+      'keychain:stockinsider-runtime:database-url',()=>
+        'postgresql://postgres.fixture:secret@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres?sslmode=disable'),
+    /runtime database credential invalid/u);
+    assert.throws(()=>runtime('credential-resolver.js').resolvePostgresConnectionReference(
+      'keychain:stockinsider-runtime:database-url',()=>
+        'postgresql://postgres.fixture:secret@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres?sslmode=require&options=-csearch_path%3Devil'),
+    /runtime database credential invalid/u);
     assert.throws(() => runtime('credential-resolver.js').hydrateRuntimeCredentials({
       STOCKINSIDER_DATABASE_URL: 'postgresql://ambient/forbidden', INTERNAL_API_KEY: 'ambient-forbidden-key',
     }, () => 'unused', { requireReferences: true }), /runtime credential references required/u);
     const isolatedEnvironment = { HOME: '/Users/test', PATH: '/usr/bin:/bin', NODE_ENV: 'production', TZ: 'Asia/Taipei',
       STOCKINSIDER_REVIEWED_COMMIT_SHA: '1'.repeat(40),
-      STOCKINSIDER_DATABASE_URL_REF: 'keychain:stockinsider-runtime:database-url',
+      STOCKINSIDER_SUPABASE_URL_REF: 'keychain:stockinsider-runtime:supabase-url',
+      STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY_REF: 'keychain:stockinsider-runtime:supabase-service-role-key',
       INTERNAL_API_KEY_REF: 'keychain:stockinsider-runtime:internal-api-key' };
     assert.doesNotThrow(() => runtime('credential-resolver.js').assertExactRuntimeEnvironment(isolatedEnvironment));
     const darwinEnvironment = { ...isolatedEnvironment,
@@ -391,6 +414,27 @@ const checks = {
         recover: async () => {}, begin: async () => {}, write: async () => {}, rollback: async () => {},
       } });
     assert.equal(activated.disposition, 'activated'); assert.deepEqual(activationCalls, ['stage','verify','publish','disable','load','health-observation']);
+    const readonlyDoctor = passingRuntimeDoctor(manifest, reviewedRelease);
+    readonlyDoctor.status = 'fail';
+    readonlyDoctor.observation.consumerCompatibility = 'consumer_newer';
+    readonlyDoctor.observation.projectionFreshness = 'stale';
+    const readonlyCalls = [];
+    const readonlyBootstrap = await runtime('auth-source-worker-installation.js').activateTrackedRuntimeRelease({
+      manifest, reviewedRelease, ...testActivationProof,
+      filesystem: { captureActivePointer: async () => 'old', stage: async () => {}, verifyStaged: async () => {},
+        publishRelease: async () => {}, writeHealthObservation: async () => readonlyCalls.push('health-observation'),
+        restoreActivePointer: async () => readonlyCalls.push('restore-pointer'), cleanupIncomplete: async () => {} },
+      scheduler: { capture: async () => 'owners', disablePriorOwners: async () => {}, loadNewOwner: async () => {},
+        doctor: async () => readonlyDoctor, restore: async () => readonlyCalls.push('restore-scheduler') },
+      journal: { recover: async () => {}, begin: async () => {}, write: async () => {}, rollback: async () => {} },
+    });
+    assert.equal(readonlyBootstrap.disposition, 'activated_readonly_bootstrap');
+    assert.deepEqual(readonlyCalls, ['health-observation']);
+    readonlyDoctor.observation.consumerCommitSha = '0'.repeat(40);
+    const mismatchedConsumer = runtime('auth-source-worker-installation.js').assessActivationHealth;
+    assert.throws(() => mismatchedConsumer(runtime('runtime-health.js').buildInstalledRuntimeHealthObservation({
+      manifest: { ...manifest, manifestSha256: '7'.repeat(64) }, reviewedRelease, doctor: readonlyDoctor,
+    }), reviewedRelease), { code: 'scheduler_activation_failed' });
   },
   'PCR-002': () => {
     const { manifest, reviewedRelease } = runtimeRelease(); const validate = runtime('auth-source-worker-installation.js').validateRuntimeInstallationManifest;
@@ -485,7 +529,7 @@ const checks = {
     }
     const observer = runtime('runtime-health-observer.js');
     const database = await observer.observeDatabase(root, { legacyRadarBaseUrl: 'https://example.test' },
-      () => 'postgresql://doctor-read-only', ReadOnlyDoctorClient);
+      () => 'postgresql://doctor:read-only@db.fixture.supabase.co/postgres?sslmode=require', ReadOnlyDoctorClient);
     assert.equal(database.stateSchema, 'stockinsider-producer-state-v1');
     assert.equal(database.lastTerminalStatus, 'success'); assert.equal(database.projectionFreshness, 'fresh');
     assert.equal(await observer.observeConsumer({ legacyRadarBaseUrl: 'https://example.test' },
@@ -714,6 +758,9 @@ const checks = {
     assert.equal(analysis.json.decisions[0].evaluationDisposition, 'unchanged');
     assert.equal(analysis.json.decisions[0].analysisGeneratedAt, originalGeneratedAt);
     assert.equal(analysis.json.decisions[0].decisionBrief.action,'wait_reclaim');
+    assert.equal(analysis.json.decisions[0].analysisRevision.facts,undefined,
+      'projection transport retains revision identity without duplicating the immutable fact payload');
+    assert.equal(analysis.json.decisions[0].analysisRevision.revisionId,'revision-9999');
     assert.deepEqual(analysis.json.decisionPayloads[0].bundle.json,priorFacts);
     assert.equal(analysis.json.sourceCandidates.length, 40);
     assert.equal(analysis.json.dislocationCandidates.length, 30);
@@ -1084,7 +1131,8 @@ const checks = {
     const workflow = readFileSync(path.join(root, '.github/workflows/source-led-opportunity-v3.yml'), 'utf8');
     for (const token of ['研究與進場判斷','四軸研究評分','乖離率與本益比脈絡','基本面品質','時機風險',
       '乖離率（BIAS）','交易所','模型','min-w-0','break-words','sourceSignals','新來源訊號','估值待補',
-      'decisionEnvelope','現在可行動','等待條件','新來源待研究','估值來源：{signal.valuationExchange']) assert.ok(component.includes(token), token);
+      'decisionEnvelope','現在可行動','等待條件','新來源待研究','signal.proximityToAction===true',
+      '接近買點・待深度驗證','估值來源：{signal.valuationExchange']) assert.ok(component.includes(token), token);
     for (const token of ['exchangeReportedPe','modelComparablePe','bias20Pct','timingRisk']) assert.ok(types.includes(token), token);
     assert.match(gateRunner, /PLAYWRIGHT_BROWSERS_PATH: '0'/u);
     assert.match(gateRunner, /const traceHome = track === 'model_runner' \? process\.env\.HOME \?\? '' : '\/tmp';/u);

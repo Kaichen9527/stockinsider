@@ -11,7 +11,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const trustedExecFileSync = childProcess.execFileSync.bind(childProcess);
 const trustedSpawnSync = childProcess.spawnSync.bind(childProcess);
 const requestedTrack = process.env.OPPORTUNITY_V3_ACCEPTANCE_TRACK ?? 'product_runtime';
-const expectedActiveGraphSha256 = 'b3a5773fba3d90ceed82555caf036fd11db4764f6a4f6ebe496ba61b571c8ff5';
+const expectedActiveGraphSha256 = '7f3a17fdd3a86fadfe583216a7f846da6e4102f9d649aeaf268c5a2d34f55cb0';
 assert.ok(
   ['product_runtime', 'evaluation_governance', 'model_runner'].includes(requestedTrack),
   'acceptance traceability executes only an explicit automated track',
@@ -437,6 +437,52 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
     `.loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-${round}.md`,
   );
 
+  if (statusRecord.requirementsStatus === `v3_16_round_${round}_pass_p0_0_p1_0_p2_0`) {
+    const currentMarkerV316 = '## V3.15 opportunity recovery';
+    const currentStartV316 = tasksText.lastIndexOf(currentMarkerV316);
+    assert.ok(currentStartV316 >= 0, 'one operative V3.16 recovery task section exists');
+    const currentTasksV316 = tasksText.slice(currentStartV316);
+    assert.equal(statusRecord.requirementsGateStatus, 'pass_p0_0_p1_0_p2_0');
+    assert.equal(statusRecord.requirementsPendingTree, null);
+    assert.equal(statusRecord.requirementsPendingEvidence, null);
+    assert.equal(statusRecord.architectureGateStatus, 'pass_p0_0_p1_0_p2_0');
+    assert.equal(statusRecord.architectureReviewRound, 20);
+    assert.equal(statusRecord.architecturePendingRound, null);
+    assert.equal(statusRecord.architecturePendingTree, null);
+    assert.equal(statusRecord.architecturePendingEvidence, null);
+    assert.equal(statusRecord.designStatus, 'v3_16_architecture_round_20_pass_p0_0_p1_0_p2_0');
+    assert.equal(statusRecord.loopStage, 'v3_16_architecture_round_20_pass_exact_freeze_pending');
+    assert.equal(statusRecord.exactCommitReviewStatus, 'v3_16_exact_range_pass_p0_0_p1_0_p2_0');
+    assert.match(currentTasksV316, /- \[x\] Obtain fresh Requirements Round 138 PASS/u);
+    assert.match(currentTasksV316, /protected external artifact remains the landing check/u);
+    assert.match(currentTasksV316, /- \[ \] Obtain superseding fresh Requirements, Architecture, exact-review/u);
+    return;
+  }
+
+  if (statusRecord.requirementsGateStatus === `pass_v3_15_round_${round}`) {
+    const currentMarkerV315 = '## V3.15 opportunity recovery';
+    const currentStartV315 = tasksText.lastIndexOf(currentMarkerV315);
+    assert.ok(currentStartV315 >= 0, 'one operative V3.15 task section exists');
+    const currentTasksV315 = tasksText.slice(currentStartV315);
+    assert.equal(statusRecord.requirementsStatus, `v3_15_round_${round}_pass`);
+    assert.equal(statusRecord.requirementsPendingTree, null);
+    assert.equal(statusRecord.requirementsPendingEvidence, null);
+    assert.match(currentTasksV315, new RegExp(`- \\[x\\] Obtain fresh Requirements Round ${round} PASS`, 'u'));
+    assert.equal(statusRecord.architectureGateStatus, 'pass_v3_15_round_19');
+    assert.equal(statusRecord.architectureReviewRound, 19);
+    assert.equal(statusRecord.architecturePendingRound, null);
+    assert.equal(statusRecord.architecturePendingTree, null);
+    assert.equal(statusRecord.architecturePendingEvidence, null);
+    assert.equal(statusRecord.designStatus, 'v3_15_architecture_round_19_pass');
+    assert.equal(statusRecord.loopStage, 'v3_15_exact_review_repair_closure_pass_protected_gate_pending');
+    assert.equal(statusRecord.implementationStatus, 'v3_15_exact_review_repair_closure_pass');
+    assert.equal(statusRecord.exactCommitReviewStatus,
+      'v3_15_repair_and_full_range_pass_p0_0_p1_0_p2_0');
+    assert.match(statusRecord.blockedReason, /protected Code Gate/u);
+    assert.match(currentTasksV315, /protected external artifact remains the landing check/u);
+    return;
+  }
+
   if (statusRecord.requirementsGateStatus === `pass_v3_14_round_${round}`) {
     const currentMarkerV314 = '### V3.14 Actionability Recovery — user-authorized implementation';
     const currentStartV314 = tasksText.lastIndexOf(currentMarkerV314);
@@ -639,7 +685,7 @@ function activeGraphOracle() {
   assert.equal(catalogBlob.bytes.length, 5484, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    '5ea7a1c6411f9f9447098bcd63c9cf96ddc182aa2918bab84f2de51bc98bc5ef',
+    'ed1e2fec26dc4f03ce1682632e79ff1c10b0a5b3ff76ebbbdcdae05a54a84d48',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);
@@ -984,8 +1030,8 @@ function activeGraphOracle() {
     /Amendment version: `hybrid-product-v3[.]2`/u,
   );
   const hostAmendment = readFileSync(path.join(change, 'host-pin-compatibility-amendment.md'), 'utf8');
-  assert.match(hostAmendment, /Amendment version: `model-runner-host-pin-amendment-v3[.]8`/u);
-  assert.match(hostAmendment, /codex-cli 0[.]147[.]0-alpha[.]6[.]5/u);
+  assert.match(hostAmendment, /Amendment version: `model-runner-host-pin-amendment-v3[.]9`/u);
+  assert.match(hostAmendment, /codex-cli 0[.]148[.]0-alpha[.]9/u);
   assert.match(hostAmendment, /exact pin/u);
   const hostPinBytes = readFileSync(path.join(change, 'model-runner-host-pins-v3.json'), 'utf8');
   const hostPins = JSON.parse(hostPinBytes);
@@ -996,7 +1042,7 @@ function activeGraphOracle() {
   assert.equal(hostPins.fixtureVersion, 'model-runner-host-pins-v3.9');
   assert.equal(hostPins.executables.find(({ name }) => name === 'codex')?.version, 'codex-cli 0.148.0-alpha.9');
   assert.equal(runner.MODEL_RUNNER_IDENTITY_SHA256, 'df7867e2a936d3f2b0fce5ddfc1eec705707bbaf919c43c2ccc6d21f509b43c7');
-  assert.equal(Buffer.byteLength(canonicalJson(runner.MODEL_RUNNER_IDENTITY)), 884);
+  assert.equal(Buffer.byteLength(canonicalJson(runner.MODEL_RUNNER_IDENTITY)), 882);
   const runtimeContract = readFileSync(path.join(change, 'runtime-transaction-contract.md'), 'utf8');
   assert.match(runtimeContract, /staticIdentityMembers` is the following exact 41-member/u);
   assert.match(runtimeContract, /\["acceptanceVersion","1[.]46[.]0"\]/u);
@@ -1142,7 +1188,7 @@ const structuralExecutors = {
     }
     assert.equal(inventory.scriptValueRows.length, 14);
     assert.equal(sha256(canonicalJson(inventory.scriptValueRows)), inventory.scriptValueRowsSha256);
-    assert.equal(inventory.scriptValueRowsSha256, 'b39a564c1897e091a6162891123bf389f8228d5973a6a032557229962c803d62');
+    assert.equal(inventory.scriptValueRowsSha256, '517d549d970f4d661a64f9fe7ad9583896e526b5062c60998cdba55fc32cde53');
     const rootPackageScripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts;
     const webPackageScripts = JSON.parse(readFileSync(path.join(root, 'web/package.json'), 'utf8')).scripts;
     assert.deepEqual(inventory.scriptValueRows.map(([scriptKey]) => scriptKey), [
@@ -1258,12 +1304,12 @@ const structuralExecutors = {
       ['review round drift', tasks, { ...status, requirementsReviewRound: status.requirementsReviewRound - 1 }],
       ['pending evidence drift', tasks, { ...status, requirementsPendingEvidence: 'requirements-review-round-131.md' }],
       ['operative requirements disposition drift', tasks.replace(
-        '- [x] Run fresh Requirements Round 137 over commit',
-        '- [ ] Run fresh Requirements Round 137 over commit',
+        '- [x] Obtain fresh Requirements Round 138 PASS',
+        '- [ ] Obtain fresh Requirements Round 138 PASS',
       ), status],
-      ['pending-round declaration removed', tasks.replace(
-        '- [x] Obtain independent fresh Architecture Round 18 PASS',
-        '- [ ] Obtain independent fresh Architecture Round 18 PASS',
+      ['protected-gate declaration removed', tasks.replace(
+        'protected external artifact remains the landing check',
+        'protected external artifact is not the landing check',
       ), status],
     ]) {
       assert.throws(

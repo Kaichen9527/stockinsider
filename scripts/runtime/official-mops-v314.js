@@ -26,6 +26,24 @@ const BOOK_VALUE_CONCEPTS = Object.freeze(new Set(['bookvaluepershare', 'netasse
 const SHARE_CONCEPTS = Object.freeze(new Set(['weightedaveragenumberofdilutedsharesoutstanding',
   'dilutedweightedaveragenumberofsharesoutstanding']));
 
+async function fetchMopsWithRetry(request, fetchImpl, attempts = 4) {
+  let failure = null;
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    try {
+      const response = await fetchImpl(request.url, { headers:{ Accept:'text/html', 'user-agent':'StockInsider/3.14' },
+        redirect:'error', signal:AbortSignal.timeout(12000) });
+      if (!response?.ok || response.redirected) throw new Error('mops_unavailable');
+      const bytes = Buffer.from(await response.arrayBuffer());
+      if (bytes.length < 100 || bytes.length > 12_000_000) throw new Error('mops_size');
+      return { request, bytes };
+    } catch (error) {
+      failure = error;
+      if (attempt + 1 < attempts) await new Promise((resolve) => setTimeout(resolve, 250 * (attempt + 1)));
+    }
+  }
+  throw failure ?? new Error('mops_unavailable');
+}
+
 function attributes(text) {
   const output = {};
   for (const match of String(text).matchAll(/([A-Za-z_:][A-Za-z0-9_.:-]*)\s*=\s*(["'])(.*?)\2/gu))
@@ -147,7 +165,7 @@ function selectLatestMopsFacts(facts) {
   for(const rows of Map.groupBy(heads,(row)=>`${row.symbol}:${row.exchange}:${row.factKey}`).values()){
     const ordered=[...rows].sort((left,right)=>String(left.periodEnd).localeCompare(String(right.periodEnd)));
     const key=ordered[0]?.factKey;const limit=ordered[0]?.durationKind==='instant'?1
-      :['quarterly_revenue','quarterly_net_income_attributable_to_common'].includes(key)?12:4;
+      :['quarterly_revenue','quarterly_net_income_attributable_to_common'].includes(key)?12:8;
     bounded.push(...ordered.slice(-limit));
   }
   for(const rows of Map.groupBy(bounded,(row)=>`${row.symbol}:${row.exchange}`).values())
@@ -155,10 +173,14 @@ function selectLatestMopsFacts(facts) {
   return bounded;
 }
 
-function quarterCoordinates(cutoff, count = 8) {
+function quarterCoordinates(cutoff, count = 6) {
   const date = new Date(cutoff); const currentQuarter = Math.floor(date.getUTCMonth() / 3) + 1; const output = [];
+  // The current civil quarter has not closed and therefore cannot have a
+  // point-in-time quarterly filing. Start with the most recently completed
+  // quarter instead of spending one provider request per candidate on a known
+  // non-existent report (and triggering the MOPS WAF before useful work).
   for (let offset = 0; offset < count; offset += 1) {
-    const serial = date.getUTCFullYear() * 4 + currentQuarter - 1 - offset;
+    const serial = date.getUTCFullYear() * 4 + currentQuarter - 2 - offset;
     output.push({ year:Math.floor(serial / 4), quarter:(serial % 4) + 1 });
   }
   return output;
@@ -166,29 +188,21 @@ function quarterCoordinates(cutoff, count = 8) {
 
 async function loadMopsFinancialHistoryV314({ cutoff, candidates = [], fetchImpl = globalThis.fetch } = {}) {
   if (!Array.isArray(candidates) || candidates.length > 30) throw new Error('mops_candidate_bound');
-  const requests = candidates.flatMap((candidate) => quarterCoordinates(cutoff,10).map(({ year, quarter }) => ({
+  const coordinates=quarterCoordinates(cutoff);
+  const requests = coordinates.flatMap(({year,quarter})=>candidates.map((candidate) => ({
     symbol:String(candidate.symbol), exchange:String(candidate.exchange),
     url:`${MOPS_INLINE_URL}?step=1&CO_ID=${candidate.symbol}&SYEAR=${year}&SSEASON=${quarter}&REPORT_ID=C`,
   }))).filter((row) => /^\d{4}$/u.test(row.symbol) && ['TWSE', 'TPEX'].includes(row.exchange));
   const collectedAt = new Date().toISOString().replace('.000Z', 'Z'); const facts = []; const sourceHashes = {}; const sourceFailures = [];
-  for (let offset = 0; offset < requests.length; offset += 8) {
-    const batch = requests.slice(offset, offset + 8);
-    const results = await Promise.allSettled(batch.map(async (request) => {
-      const response = await fetchImpl(request.url, { headers:{ Accept:'text/html', 'user-agent':'StockInsider/3.14' },
-        redirect:'error', signal:AbortSignal.timeout(12000) });
-      if (!response?.ok || response.redirected) throw new Error('mops_unavailable');
-      const bytes = Buffer.from(await response.arrayBuffer()); if (bytes.length < 100 || bytes.length > 12_000_000)
-        throw new Error('mops_size');
-      return { request, bytes };
+  for (let offset = 0; offset < requests.length; offset += 1) {
+    const request = requests[offset];
+    const result = await Promise.allSettled([fetchMopsWithRetry(request, fetchImpl)]).then(([entry]) => entry);
+    if (result.status === 'rejected') { sourceFailures.push({ url:request.url, reason:'official_source_unavailable' }); continue; }
+    sourceHashes[request.url] = sha256(result.value.bytes);
+    facts.push(...parseMopsInlineFacts(result.value.bytes.toString('utf8'), {
+      ...request, sourceUrl:request.url, collectedAt,
     }));
-    results.forEach((result, index) => {
-      const request = batch[index];
-      if (result.status === 'rejected') { sourceFailures.push({ url:request.url, reason:'official_source_unavailable' }); return; }
-      sourceHashes[request.url] = sha256(result.value.bytes);
-      facts.push(...parseMopsInlineFacts(result.value.bytes.toString('utf8'), {
-        ...request, sourceUrl:request.url, collectedAt,
-      }));
-    });
+    if(fetchImpl===globalThis.fetch)await new Promise((resolve)=>setTimeout(resolve,350));
   }
   return Object.freeze({ facts:Object.freeze(selectLatestMopsFacts(facts)), sourceHashes:Object.freeze(sourceHashes),
     sourceFailures:Object.freeze(sourceFailures) });
