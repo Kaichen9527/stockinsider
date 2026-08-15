@@ -529,6 +529,16 @@ test('V316 direct claim transaction raises only its local statement timeout and 
   assert.deepEqual(failedQueries,[
     'BEGIN',"SET LOCAL statement_timeout = '1200s'",'select claimed.* from fixture_claim($1) claimed','ROLLBACK','RELEASE',
   ]);
+  let discarded=null;
+  const brokenClient={
+    query:async(text)=>{if(text==='ROLLBACK')throw new Error('connection_lost_during_rollback');
+      if(text.startsWith('select claimed.*')){const error=new Error('authoritative_claim_error');error.code='57014';throw error;}
+      return {rows:[]};},
+    release:(discard)=>{discarded=discard;},
+  };
+  await assert.rejects(()=>claimWithBoundedStatementTimeout({connect:async()=>brokenClient},
+    'select claimed.* from fixture_claim($1) claimed',['run']),(error)=>error.code==='57014');
+  assert.equal(discarded,true,'a client whose rollback fails must be destroyed instead of re-entering the pool');
 });
 
 test('V315 official ingestion keeps valid PB when the exchange PE exceeds the authority range',async()=>{

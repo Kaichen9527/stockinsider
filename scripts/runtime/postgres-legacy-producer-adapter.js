@@ -78,6 +78,7 @@ function beginThreadedPostgresHeartbeat({ connectionString, runId, jobId, ownerT
 
 async function claimWithBoundedStatementTimeout(pool, text, values) {
   const client = await pool.connect();
+  let discardClient = false;
   try {
     await client.query('BEGIN');
     await client.query(`SET LOCAL statement_timeout = '${CLAIM_STATEMENT_TIMEOUT_MS / 1000}s'`);
@@ -85,10 +86,10 @@ async function claimWithBoundedStatementTimeout(pool, text, values) {
     await client.query('COMMIT');
     return result.rows[0] ?? null;
   } catch (error) {
-    try { await client.query('ROLLBACK'); } catch { /* preserve the authoritative claim error */ }
+    try { await client.query('ROLLBACK'); } catch { discardClient = true; }
     throw error;
   } finally {
-    client.release();
+    client.release(discardClient);
   }
 }
 
