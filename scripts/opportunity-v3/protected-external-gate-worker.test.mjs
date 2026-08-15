@@ -82,6 +82,8 @@ test('subject preparation pins Node from the protected base', () => {
   assert.doesNotMatch(action, /node-version-file:/u);
   assert.match(worker, /\['init', target\]/u);
   assert.match(worker, /\['fetch', '--no-tags', baseRoot, [.]\.\.localTargets\]/u);
+  assert.match(worker, /attestation[.]baseCommitSha,/u);
+  assert.match(worker, /attestation[.]registryCommitSha,/u);
   assert.match(worker, /subject checkout has no configured remote/u);
   assert.match(worker, /subject checkout has no credential-bearing Git config/u);
   assert.doesNotMatch(worker, /\['worktree', 'add'/u);
