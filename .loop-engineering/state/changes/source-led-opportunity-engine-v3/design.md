@@ -87,7 +87,7 @@ canonical authority tags immediately below are the only design-side declarations
 catalog identity, active-file topology and the shortened product-correctness owner.
 Their JSON payloads use RFC 8785 key order and are permitted exactly once only.
 
-<!-- GOV-004-AUTHORITY {"catalogBytes":5484,"catalogSha256":"ed1e2fec26dc4f03ce1682632e79ff1c10b0a5b3ff76ebbbdcdae05a54a84d48","kind":"design-catalog-identity"} -->
+<!-- GOV-004-AUTHORITY {"catalogBytes":5484,"catalogSha256":"f11d8e6e04373c3bdfabf217eb911f1e5c85d1f9060756a567fae4c1fca75412","kind":"design-catalog-identity"} -->
 <!-- GOV-004-AUTHORITY {"activeFiles":50,"kind":"design-active-file-topology"} -->
 <!-- GOV-004-AUTHORITY {"kind":"design-product-correctness-owner","owner":"product-correctness-runtime-v3.11.11"} -->
 
@@ -115,7 +115,7 @@ catalog and these current roots: `runtime-transaction-contract.md` v3.17,
 `source-adapter-contract.md` v3.3, `financial-data-contract.md` v3.3,
 `valuation-contract.md` v3.4, `decision-contract.md` v3.3,
 `data-contract.md` v3.6, `v3-detail-contract.md` v3.3,
-`legacy-compatibility-contract.md` v3.2, `runtime-installation-contract.md` v1.12,
+`legacy-compatibility-contract.md` v3.2, `runtime-installation-contract.md` v1.13,
 `discovery-correctness-contract.md` v3.11.1,
 `technical-decision-contract.md` v3.11.1, the tagged PCR owner,
 `analysis-revision-contract.md` v3.11.2,

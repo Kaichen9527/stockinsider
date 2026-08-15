@@ -11,7 +11,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const trustedExecFileSync = childProcess.execFileSync.bind(childProcess);
 const trustedSpawnSync = childProcess.spawnSync.bind(childProcess);
 const requestedTrack = process.env.OPPORTUNITY_V3_ACCEPTANCE_TRACK ?? 'product_runtime';
-const expectedActiveGraphSha256 = '7f3a17fdd3a86fadfe583216a7f846da6e4102f9d649aeaf268c5a2d34f55cb0';
+const expectedActiveGraphSha256 = '71abf84b4ae6b4703fd0559807fba15553c1f5a68c56e19039aae44173727b9d';
 assert.ok(
   ['product_runtime', 'evaluation_governance', 'model_runner'].includes(requestedTrack),
   'acceptance traceability executes only an explicit automated track',
@@ -685,7 +685,7 @@ function activeGraphOracle() {
   assert.equal(catalogBlob.bytes.length, 5484, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    'ed1e2fec26dc4f03ce1682632e79ff1c10b0a5b3ff76ebbbdcdae05a54a84d48',
+    'f11d8e6e04373c3bdfabf217eb911f1e5c85d1f9060756a567fae4c1fca75412',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);

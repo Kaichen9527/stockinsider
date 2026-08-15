@@ -1758,3 +1758,13 @@ This approval authorizes implementation only. It does not authorize production m
   main-thread timer still cannot run during CPU-bound official parsing. Move the
   PostgreSQL heartbeat onto a memory-only worker thread, require pulses for a long
   handler and retain fail-closed rollback with zero incomplete chunks.
+- [x] Reproduce the post-PR #61 activation-window root: the healthy reviewed run
+  heartbeated through the CPU-bound phase and durably wrote 960 trading sessions,
+  1,315 financial facts and 1,775 price observations, but the installer killed it
+  exactly at the former 3,600-second owner wait and rolled back. Extend only the
+  finite reviewed activation wait to 14,400 seconds and prove a successful owner
+  exit after second 3,601 is not misclassified as scheduler failure.
+- [ ] Obtain fresh Requirements, Architecture, exact-range and protected aggregate
+  PASS evidence for the activation-window repair; resume the same immutable source
+  cutoff, obtain two terminal producers, deploy the matching reviewed Vercel release
+  and complete read-only Safari verification.

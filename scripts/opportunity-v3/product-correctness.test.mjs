@@ -285,8 +285,20 @@ const checks = {
     assert.equal(packageJson.scripts['agent:runtime:install'], 'node scripts/runtime/reviewed-runtime-installer-cli.js');
     assert.equal(packageJson.scripts['agent:runtime:activate-reviewed'], 'node scripts/runtime/reviewed-runtime-installer-cli.js --activate');
     const localPlatform = runtime('local-runtime-platform.js');
-    assert.equal(localPlatform.OWNER_ACTIVATION_MAXIMUM_SECONDS, 3600,
+    assert.equal(localPlatform.OWNER_ACTIVATION_MAXIMUM_SECONDS, 14_400,
       'reviewed first-run bootstrap admits the bounded official backfill window');
+    let longBootstrapPolls = 0;
+    await localPlatform.startOwnerAndWait('com.stockinsider.test-owner',
+      localPlatform.OWNER_ACTIVATION_MAXIMUM_SECONDS, {
+        launchctl: (args) => {
+          if (args[0] === 'start') return { status: 0, stdout: '' };
+          longBootstrapPolls += 1;
+          return { status: 0, stdout: longBootstrapPolls === 3602 ? '"LastExitStatus" = 0;' : '' };
+        },
+        waitOneSecond: async () => {},
+      });
+    assert.equal(longBootstrapPolls, 3602,
+      'a healthy bounded bootstrap that crosses one hour remains activation-eligible');
     assert.equal(typeof localPlatform.captureSchedulerRollback, 'function');
     assert.equal(typeof localPlatform.createLocalRuntimePlatform, 'function');
     const transientLaunchctlRows = ['', '"LastExitStatus" = 0;'];
