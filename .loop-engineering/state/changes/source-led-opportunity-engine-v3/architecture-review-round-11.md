@@ -1,37 +1,36 @@
-# V3.16 fresh Architecture compatibility evidence
+# V3.16 fresh Architecture repair-closure evidence
 
 Date: 2026-08-15
-Review authority: fresh Architecture Round 48, independently reviewing the
-Requirements Round 167 carrier and fully rebased subject.
+Review authority: fresh Architecture Round 49, independently reviewing the
+Requirements Round 168 carrier and final structural repair subject.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
 - Protected implementation parent: `ca7a077741692692cbe9d8e481825f188f1affe6`
-- Requirements implementation commit: `415778fb64ea2ec238d9e6295c6c6999ba83bcbd`
-- Requirements evidence carrier: `6b04dbef837f4d3c2f4829f6584ca0ac5eeaf217`
-- Final repair-closure commit/tree: `6b04dbef837f4d3c2f4829f6584ca0ac5eeaf217` / `2f5c003ef4c1774e371d6f20a29f5548e32a2f58`
-- Full reviewed implementation range: `ca7a077741692692cbe9d8e481825f188f1affe6..6b04dbef837f4d3c2f4829f6584ca0ac5eeaf217`
-- Active graph: `09f37b9d9559d93f50c6517e5fb81f1fefb517eb1a14acd5745d3e87f831a5f0`
+- Requirements implementation commit: `240a46c0bcc02406481f26b45e682033a984cba3`
+- Requirements evidence carrier: `ce2789fdc5ab8fea8a8995eab317a6c25a7155f4`
+- Final repair-closure commit/tree: `ce2789fdc5ab8fea8a8995eab317a6c25a7155f4` / `2ebb191430da0c0ec8f2f66dd8989c61b4a01184`
+- Full reviewed implementation range: `ca7a077741692692cbe9d8e481825f188f1affe6..ce2789fdc5ab8fea8a8995eab317a6c25a7155f4`
+- Active graph: `7f3a17fdd3a86fadfe583216a7f846da6e4102f9d649aeaf268c5a2d34f55cb0`
 
 ## Architecture closure
 
 The one-producer DAG, 60→30→20 funnel, official point-in-time facts,
-method-specific valuation, separated ranking/decision envelopes, compact projection
-and readonly compatibility adapter remain unchanged. The protected gate now transfers
-the attested subject, base, registry and evidence objects into a credential-free
-repository before validating ancestry. That gate repair is base-owned and does not
-expand candidate authority.
+method-specific valuation, separated ranking/decision envelopes, compact projection,
+readonly compatibility adapter and rollback boundaries remain unchanged. Missing
+calendar or stale producer authority may disable actions but cannot erase a
+checksum-valid last-good research projection.
 
-The exact v3.9 host oracle remains `influence:none` and cannot mutate Supabase,
-ranking, DecisionEnvelope or production state. The subject/base oracle bytes match;
-the runner still verifies exact path/stat/hash/version/codesign/notarization and uses
-the closed sandbox/network/write boundary. No database role, RPC, migration order,
-scheduler owner, Web schema, decision threshold or rollback path changes arise from
-the rebase.
+The only post-Round-48 delta synchronizes protected structural ownership with the
+base-reviewed v3.9 host oracle. Active catalog, script-value rows, amendment version
+and exact Codex version now agree across the protected subject. This does not expand
+the model runner's `influence:none` boundary, candidate authority, database mutation
+roles, scheduler ownership, Web schema, decision threshold or deployment authority.
 
-Requirements Round 167 is PASS at P0=0/P1=0. Model-runner 18/18 and disabled v3.9
-doctor pass. Evaluation governance remains honestly blocked for elapsed cohorts and
-does not block this code and staged activation architecture. This PASS authorizes
-exact review only and no LINE, dispatch, automatic trade or Promotion.
+Requirements Round 168 is PASS at P0=0/P1=0/P2=0. The clean detached structural
+closure is 3/3 PASS; ordinary full product diagnostic and protected model-runner are
+PASS. Evaluation governance remains honestly blocked for elapsed cohorts and does
+not block this code and staged activation architecture. This PASS authorizes exact
+review only and no LINE, dispatch, automatic trade or Promotion.
