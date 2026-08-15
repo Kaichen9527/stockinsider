@@ -1,39 +1,39 @@
-# V3.16.1 fresh Requirements JSONB-resume evidence
+# V3.16.1 fresh Requirements heartbeat-resume evidence
 
 Date: 2026-08-15
-Review authority: fresh Requirements Round 170, independently reviewing the
-production JSONB transport repair after the observed official-chunk rejection.
+Review authority: fresh Requirements Round 171, independently reviewing the
+production heartbeat-resume repair after the observed long-handler lease expiry.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `0a0eeea1474c1c8e8999cf5822a1ffb9875de1a7`
-- Final repair-closure commit/tree: `cbf24637f8d34b6a3c62f206a615831c8a95d9ec` / `5237b8488938dcd3db3f529a3ad35a27b9126e53`
-- Full reviewed range: `0a0eeea1474c1c8e8999cf5822a1ffb9875de1a7..cbf24637f8d34b6a3c62f206a615831c8a95d9ec`
+- Protected implementation parent: `d3449f04aaf45c2db95f8132810d593d24adc672`
+- Final repair-closure commit/tree: `f6e795707a320f8554b99e4dd7556be88642a97d` / `5caa9e6ed7436ed8179728a3dee766cf7e5c12b0`
+- Full reviewed range: `d3449f04aaf45c2db95f8132810d593d24adc672..f6e795707a320f8554b99e4dd7556be88642a97d`
 - Active graph: `7f3a17fdd3a86fadfe583216a7f846da6e4102f9d649aeaf268c5a2d34f55cb0`
 
 ## Requirements closure
 
 The repair addresses the reproduced production failure without weakening data,
-decision or release authority. The tracked producer now uses the reviewed direct
-PostgreSQL adapter for durable claim and completion work, retaining the same
-Keychain-only database reference. HTTP remains limited to read-only Web capture and
-external source APIs. A restarted process retains the immutable run authority from
-lease acquisition through terminal completion, including when it resumes at a
-non-source barrier whose claim omits authority pages.
+decision or release authority. The tracked producer reached `facts_refresh` after
+3,426 succeeded jobs, then its heartbeat remained at claim time throughout a
+long-lived official acquisition. The 120-second lease expired with zero official
+chunks written, and activation restored the prior runtime. This is a verified
+runtime-lifecycle defect, not a credential or market-data conclusion.
 
-The reviewed activation wait remains bounded but admits up to 60 minutes for the
-first official backfill instead of rolling back near the end of the 3,426-job source
-phase. Scheduler ownership, rollback journaling, one-producer authority, 60→30→20
-candidate bounds, point-in-time facts, decision thresholds and public API behavior
-are unchanged. The repair does not reset or expose credentials and does not enable
-LINE, dispatch, automatic trading or Promotion.
+The heartbeat timer now stays referenced during the handler and is cleared at
+termination. The direct adapter exposes two bounded PostgreSQL connections so a
+heartbeat is not queued behind the one official ingestion write. Scheduler
+ownership, rollback journaling, one-producer authority, 60→30→20 candidate bounds,
+point-in-time facts, decision thresholds and public API behavior are unchanged. The
+repair neither resets nor exposes credentials and does not enable LINE, dispatch,
+automatic trading or Promotion.
 
-The direct adapter now serializes official item arrays explicitly as JSON before the
-parameter reaches the JSONB RPC signature; node-postgres can no longer reinterpret
-them as PostgreSQL array literals. `git diff --check`, syntax checks and focused
-PCR-005 pass. The protected gate must rerun the complete `106/106` suite.
+`git diff --check`, syntax checks, the referenced-timer/cleanup regression and the
+two-connection boundary pass. The complete product correctness suite is `106/106`.
+The protected gate must still rerun every authoritative track against the final
+Architecture carrier.
 Evaluation governance remains honestly
 `blocked/non_fabricated_elapsed_cohorts_unavailable`; this Requirements PASS does
 not claim proven future returns.
