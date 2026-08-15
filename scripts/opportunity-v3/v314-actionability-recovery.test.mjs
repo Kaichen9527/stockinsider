@@ -763,6 +763,12 @@ test('V316-016c an interrupted legacy chunk graph is verified and continued with
     resume:{schema:'legacy-official-ingestion-partial-resume-v3.16',sourceCutoff:'2026-08-16T00:00:00Z',
       calendarSessions:[{ordinal:999}],financialFacts:[],priceObservations:[],corporateActionSnapshots:[],
       reportedValuations:[],chunks:[existing[0]]}}),/official ingestion resume prefix conflict/u);
+  await assert.rejects(streamOfficialIngestionV314({claim:{runId:'run',jobId:'job'},
+    sourceCutoff:'2026-08-16T00:00:00Z',producerSha:'a'.repeat(40),snapshot:{calendarSessions:[],
+      financialFacts:[{symbol:'2330',value:2}]},resume:{schema:'legacy-official-ingestion-partial-resume-v3.16',
+      sourceCutoff:'2026-08-16T00:00:00Z',calendarSessions:[],financialFacts:[{symbol:'2330',value:1}],
+      priceObservations:[],corporateActionSnapshots:[],reportedValuations:[],chunks:[]}}),
+  /official ingestion resumed financial prefix conflict/u);
 });
 
 test('V314-016a unchanged financial semantics are not appended on every collection heartbeat', () => {
