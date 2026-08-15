@@ -1,7 +1,7 @@
 # V3.16.2 fresh Requirements activation-window evidence
 
 Date: 2026-08-15
-Review authority: fresh Requirements Round 173, independently reviewing the
+Review authority: fresh Requirements Round 174, independently reviewing the
 activation-window repair after the V3.16.1 production replay.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
@@ -9,8 +9,8 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `08b6816ac98efbcbfaba25cda6fc0be7af586cbf`
-- Final implementation commit/tree: `97f99ffd3505cb915716633cadd2b17c19cb658d` / `19f03ab63c75ef92ecda164f24037b4254e85e33`
-- Full reviewed range: `08b6816ac98efbcbfaba25cda6fc0be7af586cbf..97f99ffd3505cb915716633cadd2b17c19cb658d`
+- Final implementation repair commit/tree: `d67041c422bb1c73b1af9c8a3ade611fa2041b49` / `2200f89578dbc79c0cf3adcf287abbcc74091f26`
+- Full reviewed range: `08b6816ac98efbcbfaba25cda6fc0be7af586cbf..d67041c422bb1c73b1af9c8a3ade611fa2041b49`
 - Scheduler config SHA-256: `1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2`
 
 ## Requirements closure
@@ -31,7 +31,9 @@ require worker-thread pulses, nonzero launchd exit still fails immediately, and 
 14,400-second ceiling still fails closed and restores the captured scheduler/runtime
 state. A running job is never reclassified as terminal success.
 
-The executable regression observes a successful exit only after crossing the former
+The bound language distinguishes the 260 retained price sessions from the 252
+valuation sessions, closing the exact-range documentation finding. The executable
+regression observes a successful exit only after crossing the former
 one-hour boundary, while existing nonzero and timeout cases remain. `git diff
 --check` passes and the complete product correctness suite passes `106/106`.
 No database password rotation, V3 promotion, LINE, dispatch or automatic trading is
