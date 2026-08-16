@@ -27,10 +27,14 @@ BEGIN
 
   SELECT coalesce(jsonb_agg(candidate.value ORDER BY candidate.ordinality),'[]'::jsonb)
   INTO v_bounded_candidates
-  FROM jsonb_array_elements(coalesce(p_candidate_result->'candidates','[]'::jsonb))
-    WITH ORDINALITY candidate(value,ordinality)
-  WHERE coalesce((candidate.value->>'deepSelected')::boolean,false)
-  AND candidate.ordinality<=10;
+  FROM (
+    SELECT candidate.value,candidate.ordinality
+    FROM jsonb_array_elements(coalesce(p_candidate_result->'candidates','[]'::jsonb))
+      WITH ORDINALITY candidate(value,ordinality)
+    WHERE coalesce((candidate.value->>'deepSelected')::boolean,false)
+    ORDER BY candidate.ordinality
+    LIMIT 10
+  ) candidate;
 
   v_bounded_result:=jsonb_set(p_candidate_result,'{candidates}',v_bounded_candidates,true);
   v_result:=public.read_legacy_candidate_fact_plane_v3_16_11_internal(
