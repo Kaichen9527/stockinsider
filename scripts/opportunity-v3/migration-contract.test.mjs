@@ -42,6 +42,9 @@ const analysisPayloadReuseSql = fs.readFileSync(analysisPayloadReuseMigrationPat
 const financialFactRecollectionMigrationPath = path.join(root,
   'migrations/20260816_financial_fact_recollection_idempotency_v3_16_16.sql');
 const financialFactRecollectionSql = fs.readFileSync(financialFactRecollectionMigrationPath, 'utf8');
+const analysisPayloadExactReuseMigrationPath = path.join(root,
+  'migrations/20260817_analysis_payload_exact_reuse_v3_16_18.sql');
+const analysisPayloadExactReuseSql = fs.readFileSync(analysisPayloadExactReuseMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -145,6 +148,18 @@ test('V3.16.16 preserves true recollection time without consuming a financial fa
     /REVOKE ALL ON FUNCTION public[.]append_financial_fact_pre_v3_16_16[\s\S]*service_role/u);
   assert.doesNotMatch(financialFactRecollectionSql,
     /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+});
+
+test('V3.16.18 resolves same-cutoff immutable payloads and skips payload-less legacy metadata',()=>{
+  assert.match(analysisPayloadExactReuseSql,
+    /claim_legacy_producer_job_v3_11[\s\S]*RENAME TO claim_legacy_producer_job_authoritative_v3_16_18/u);
+  assert.match(analysisPayloadExactReuseSql,
+    /candidate[.]source_cutoff<=v_cutoff[\s\S]*candidate[.]material_change_hash=decision[.]value->>'materialChangeHash'/u);
+  assert.match(analysisPayloadExactReuseSql,
+    /JOIN public[.]legacy_analysis_revision_payloads_v3_13[\s\S]*LIMIT 1/u);
+  assert.doesNotMatch(analysisPayloadExactReuseSql,/analysis_prior_payload_missing/u);
+  assert.match(analysisPayloadExactReuseSql,
+    /resolve_legacy_analysis_prior_payloads_v3_16_18\(jsonb\)[\s\S]*OWNER TO opportunity_v3_rpc_owner/u);
 });
 const appendBoundaryCanonicalHash = sha256Canonical([
   ['title', appendBoundarySourceFields[0]],
@@ -397,6 +412,12 @@ before(() => {
     command(pg.psql, [
       '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', financialFactRecollectionMigrationPath,
+    ]);
+  }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', analysisPayloadExactReuseMigrationPath,
     ]);
   }
 });
@@ -1934,8 +1955,11 @@ test('V3.13 invalid completion is zero-write and analysis claims replay the exac
       prior_revision_id,research_maturity,formal_research_status,new_position_action,fundamental_snapshot_hash,
       technical_decision_hash,valuation_input_hash,locked_claims,narrative_template_version,sentence_claim_refs,
       narrative,narrative_hash,analysis_generated_at,producer_commit_sha,recorded_at)
-    VALUES('51960000-0000-4000-8000-000000000001','9196','2026-08-07T10:20:00Z',repeat('e',64),NULL,
+    VALUES('51960000-0000-4000-8000-000000000001','9196','2026-08-08T10:20:00Z',repeat('e',64),NULL,
       'source_signal','valuation_review','valuation_review',repeat('1',64),NULL,NULL,'[]','fixture','[]','fixture',
+      repeat('2',64),'2026-08-07T10:20:00Z',repeat('a',40),'2026-08-07T10:20:00Z'),
+      ('51960000-0000-4000-8000-000000000002','9197','2026-08-07T10:20:00Z',repeat('f',64),NULL,
+      'source_signal','valuation_review','valuation_review',repeat('1',64),NULL,NULL,'[]','legacy','[]','legacy',
       repeat('2',64),'2026-08-07T10:20:00Z',repeat('a',40),'2026-08-07T10:20:00Z');
     INSERT INTO public.legacy_analysis_revision_payloads_v3_13(revision_id,symbol,material_change_hash,
       payload_canonical,payload_json,payload_sha256,recorded_at)
@@ -1969,7 +1993,10 @@ test('V3.13 invalid completion is zero-write and analysis claims replay the exac
        'stage_barrier',4,NULL,1,NULL,'51960000-0000-4000-8000-000000000011',repeat('5',64),repeat('5',64),
        'queued',0,5,NULL,NULL,NULL,NULL,NULL,NULL);
     WITH value AS(SELECT jsonb_build_object('schema','legacy-facts-refresh-result-v3.11','decisions',
-      jsonb_build_array(jsonb_build_object('symbol','9196','materialChangeHash',repeat('e',64)))) payload)
+      jsonb_build_array(
+        jsonb_build_object('symbol','9196','materialChangeHash',repeat('e',64)),
+        jsonb_build_object('symbol','9197','materialChangeHash',repeat('f',64))
+      )) payload)
     INSERT INTO public.legacy_producer_job_results_v3_11(job_id,result_canonical,result_json,result_hash)
     SELECT '51960000-0000-4000-8000-000000000011',convert_to(payload::text,'utf8'),payload,
       encode(extensions.digest(convert_to(payload::text,'utf8'),'sha256'),'hex') FROM value;
@@ -1987,6 +2014,8 @@ test('V3.13 invalid completion is zero-write and analysis claims replay the exac
     SELECT jsonb_build_object(
       'brief',(SELECT read_json#>>'{priorRevisions,0,facts,decisionBrief,action}' FROM exact_claim),
       'collected',(SELECT read_json#>>'{priorRevisions,0,facts,sourceCollectedAt}' FROM exact_claim),
+      'priorSymbols',(SELECT jsonb_agg(value->>'symbol' ORDER BY value->>'symbol')
+        FROM exact_claim CROSS JOIN LATERAL jsonb_array_elements(read_json->'priorRevisions') prior(value)),
       'hashValid',(SELECT read_hash=encode(extensions.digest(read_canonical,'sha256'),'hex') FROM exact_claim),
       'invalidRows',(SELECT count(*) FROM invalid_complete),
       'jobStatus',(SELECT status::text FROM public.legacy_producer_jobs_v3_11
@@ -1995,7 +2024,7 @@ test('V3.13 invalid completion is zero-write and analysis claims replay the exac
         WHERE revision_id<>'51960000-0000-4000-8000-000000000001'))::text;
     ROLLBACK;
   `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
-  assert.deepEqual(result,{brief:'wait_reclaim',collected:'2026-08-07T10:15:00Z',hashValid:true,
+  assert.deepEqual(result,{brief:'wait_reclaim',collected:'2026-08-07T10:15:00Z',priorSymbols:['9196'],hashValid:true,
     invalidRows:0,jobStatus:'leased',newPayloadRows:0});
 });
 
