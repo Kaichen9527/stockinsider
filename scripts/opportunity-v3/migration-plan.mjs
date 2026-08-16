@@ -18,6 +18,7 @@ const migrationPaths = [
   'migrations/20260816_claim_handoff_lease_v3_16.sql',
   'migrations/20260816_official_ingestion_partial_resume_v3_16.sql',
   'migrations/20260816_official_ingestion_transaction_time_v3_16_9.sql',
+  'migrations/20260816_official_ingestion_same_transaction_visibility_v3_16_10.sql',
 ];
 const migrations = migrationPaths.map((relativePath) => {
   const bytes = fs.readFileSync(path.join(root, relativePath));

@@ -25,6 +25,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260816_claim_handoff_lease_v3_16.sql',
   'migrations/20260816_official_ingestion_partial_resume_v3_16.sql',
   'migrations/20260816_official_ingestion_transaction_time_v3_16_9.sql',
+  'migrations/20260816_official_ingestion_same_transaction_visibility_v3_16_10.sql',
 ]);
 
 function parseArguments(argv) {
@@ -83,6 +84,8 @@ async function applyReviewedMigrations(options) {
       ,'claimHandoff',to_regprocedure('public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)') IS NOT NULL
       ,'partialResume',to_regprocedure('public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)') IS NOT NULL
       ,'transactionTimeDependency',to_regprocedure('public.resolve_legacy_trading_session_dependency_v3_16_9_internal(date,public.tw_market_v3,timestamptz,timestamptz)') IS NOT NULL
+      ,'sameTransactionVisibility',(SELECT provolatile='v' FROM pg_proc
+        WHERE oid='public.resolve_legacy_trading_session_dependency_v3_16_9_internal(date,public.tw_market_v3,timestamptz,timestamptz)'::regprocedure)
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',

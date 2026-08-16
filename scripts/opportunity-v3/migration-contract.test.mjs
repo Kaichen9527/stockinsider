@@ -30,6 +30,9 @@ const partialResumeMigrationPath = path.join(root, 'migrations/20260816_official
 const partialResumeSql = fs.readFileSync(partialResumeMigrationPath, 'utf8');
 const transactionTimeMigrationPath = path.join(root, 'migrations/20260816_official_ingestion_transaction_time_v3_16_9.sql');
 const transactionTimeSql = fs.readFileSync(transactionTimeMigrationPath, 'utf8');
+const sameTransactionVisibilityMigrationPath = path.join(root,
+  'migrations/20260816_official_ingestion_same_transaction_visibility_v3_16_10.sql');
+const sameTransactionVisibilitySql = fs.readFileSync(sameTransactionVisibilityMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -743,6 +746,7 @@ test('V3.14 official chunks persist under the exact lease, replay idempotently, 
   const runId='71400000-0000-4000-8000-000000000001';
   const jobId='71400000-0000-4000-8000-000000000002';
   const ownerToken='71400000-0000-4000-8000-000000000003';
+  const stockId='71400000-0000-4000-8000-000000000010';
   const producerSha='a'.repeat(40);
   const sourceCutoff='2026-08-11T00:00:00Z';
   const session={market:'TWSE',session:'2026-08-07',status:'completed',
@@ -751,9 +755,14 @@ test('V3.14 official chunks persist under the exact lease, replay idempotently, 
     sourceRef:'twse-annual-calendar:2026:2026-08-07'};
   const sessionItems=[session];
   const chunkHash=sha256Canonical(['official-ingestion-chunk-v3.14','trading_sessions',0,sessionItems]);
-  const counts={trading_sessions:1,financial_facts:0,price_observations:0,
+  const priceItems=[{symbol:'9168',exchange:'TWSE',session:'2026-08-07',open:100,high:104,low:99,close:102,
+    volume:1000,turnoverTwd:102000,provider:'twse',sourceTimestamp:'2026-08-07T05:30:00.000Z',
+    collectedAt:'2026-08-07T06:00:00.000Z',sourceRef:'twse-rwd:STOCK_DAY:2026-08-07:9168'}];
+  const priceHash=sha256Canonical(['official-ingestion-chunk-v3.14','price_observations',0,priceItems]);
+  const counts={trading_sessions:1,financial_facts:0,price_observations:1,
     corporate_action_snapshots:0,reported_valuations:0};
-  const chunks=[{kind:'trading_sessions',ordinal:0,itemCount:1,chunkHash}];
+  const chunks=[{kind:'trading_sessions',ordinal:0,itemCount:1,chunkHash},
+    {kind:'price_observations',ordinal:0,itemCount:1,chunkHash:priceHash}];
   const terminalRoot=sha256Canonical(['official-ingestion-terminal-v3.14',sourceCutoff,counts,chunks]);
   const terminalItems=[{sourceCutoff,counts,chunks,terminalRoot}];
   const officialIngestion={schema:'legacy-official-ingestion-v3.14',sourceCutoff,counts,chunks,terminalRoot};
@@ -764,6 +773,18 @@ test('V3.14 official chunks persist under the exact lease, replay idempotently, 
     INSERT INTO public.internal_principal_role_bindings_v3(principal_id,role,valid_from,valid_to,status,configuration_hash,recorded_at)
     VALUES('a11d4e67-7d0a-4c44-8a9d-1d5c3b875001','opportunity_runner','2026-01-01',NULL,'active',repeat('7',64),clock_timestamp())
     ON CONFLICT DO NOTHING;
+    INSERT INTO public.stocks(id,symbol) VALUES('${stockId}','9168') ON CONFLICT DO NOTHING;
+    WITH key(canonical) AS(VALUES(convert_to('["instrument_roster","${stockId}"]','utf8')))
+    INSERT INTO public.opportunity_authority_stream_registry_v3(
+      family,stream_key_hash,stream_key_canonical,registered_at)
+    SELECT 'instrument_roster',encode(extensions.digest(canonical,'sha256'),'hex'),canonical,'2026-01-01' FROM key
+    ON CONFLICT DO NOTHING;
+    INSERT INTO public.stock_instruments_v3(instrument_authority_id,stock_id,symbol,exchange,instrument_type,
+      listing_status,official_legal_name,official_short_name,provider,source_timestamp,valid_from,valid_to,
+      roster_version,recorded_at)
+    VALUES('71400000-0000-4000-8000-000000000011','${stockId}','9168','TWSE','common_stock','active',
+      'Same Transaction Fixture','T9168','twse','2026-01-01','2026-01-01',NULL,
+      'tw-instrument-roster-v3.0','2026-01-01') ON CONFLICT DO NOTHING;
     INSERT INTO public.legacy_producer_runs_v3_11(run_id,owner_label,owner_token_hash,producer_commit_sha,worker_sha256,
       scheduler_config_canonical,scheduler_config_sha256,legacy_seed_symbols,legacy_seed_set_hash,scheduled_occurrence_id,
       source_cutoff,trading_date,trading_session_authority_hash,authority_canonical,authority_json,authority_hash,status,
@@ -788,6 +809,8 @@ test('V3.14 official chunks persist under the exact lease, replay idempotently, 
     SELECT public.append_legacy_official_ingestion_chunk_rest_v3_15('${runId}','${jobId}','${ownerToken}',
       'trading_sessions',0,${sqlLiteral(JSON.stringify(sessionItems))}::jsonb,'${chunkHash}','${producerSha}','${sourceCutoff}');
     SELECT public.append_legacy_official_ingestion_chunk_rest_v3_15('${runId}','${jobId}','${ownerToken}',
+      'price_observations',0,${sqlLiteral(JSON.stringify(priceItems))}::jsonb,'${priceHash}','${producerSha}','${sourceCutoff}');
+    SELECT public.append_legacy_official_ingestion_chunk_rest_v3_15('${runId}','${jobId}','${ownerToken}',
       'trading_sessions',0,${sqlLiteral(JSON.stringify(sessionItems))}::jsonb,'${chunkHash}','${producerSha}','${sourceCutoff}');
     SELECT public.append_legacy_official_ingestion_chunk_rest_v3_15('${runId}','${jobId}','${ownerToken}',
       'terminal',0,${sqlLiteral(JSON.stringify(terminalItems))}::jsonb,'${terminalRoot}','${producerSha}','${sourceCutoff}');
@@ -803,13 +826,16 @@ test('V3.14 official chunks persist under the exact lease, replay idempotently, 
       'chunkRows',(SELECT count(*) FROM public.legacy_official_ingestion_chunks_v3_14 WHERE job_id='${jobId}'),
       'preCompletionRows',(SELECT session_rows FROM v314_pre_completion),
       'sessionRows',(SELECT count(*) FROM public.tw_trading_sessions_v3 WHERE session_id='2026-08-07' AND market='TWSE'),
+      'priceRows',(SELECT count(*) FROM public.opportunity_price_observations_v3
+        WHERE stock_id='${stockId}' AND session_id='2026-08-07' AND exchange='TWSE'),
       'nextCutoffRows',(SELECT count(*) FROM public.resolve_legacy_trading_session_authority_v3_13(
         '2026-08-07','TWSE',(SELECT max(recorded_at)+interval '1 microsecond'
           FROM public.tw_trading_sessions_v3 WHERE session_id='2026-08-07' AND market='TWSE'))),
       'jobStatus',(SELECT status FROM public.legacy_producer_jobs_v3_11 WHERE job_id='${jobId}'))::text;
     ROLLBACK;
   `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
-  assert.deepEqual(result,{chunkRows:2,preCompletionRows:1,sessionRows:1,nextCutoffRows:1,jobStatus:'succeeded'});
+  assert.deepEqual(result,{chunkRows:3,preCompletionRows:1,sessionRows:1,priceRows:1,
+    nextCutoffRows:1,jobStatus:'succeeded'});
 });
 
 test('V3.15 production-sized authority lookup and staged resume are installed',()=>{
@@ -832,6 +858,7 @@ test('V3.15 production-sized authority lookup and staged resume are installed',(
     partialResumeTransport:true,chunkGraphTransport:true,completionAuthority:true});
   assert.doesNotMatch(partialResumeSql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
   assert.doesNotMatch(transactionTimeSql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.doesNotMatch(sameTransactionVisibilitySql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
 });
 
 test('V3.16.9 resolves same-run calendar dependencies by knowledge and transaction time without weakening point-in-time reads',()=>{
@@ -906,6 +933,8 @@ test('V3.16.9 resolves same-run calendar dependencies by knowledge and transacti
   assert.match(transactionTimeSql,/IF v_session_authority IS NULL THEN RAISE EXCEPTION[\s\S]*calendar_dependency_unavailable/u);
   assert.match(transactionTimeSql,/CONSTRAINT='calendar_dependency_unavailable'/u);
   assert.doesNotMatch(transactionTimeSql,/v_session_authority IS NULL THEN CONTINUE/u);
+  assert.match(sameTransactionVisibilitySql,
+    /ALTER FUNCTION public[.]resolve_legacy_trading_session_dependency_v3_16_9_internal\([\s\S]*\) VOLATILE/u);
 });
 
 test('V3.14 completion persists a non-empty exact decision revision and heartbeat',()=>{
