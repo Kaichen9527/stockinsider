@@ -29,6 +29,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260816_calendar_dependency_recovery_occurrence_v3_16_11.sql',
   'migrations/20260816_candidate_fact_plane_bound_v3_16_12.sql',
   'migrations/20260816_analysis_payload_reuse_v3_16_15.sql',
+  'migrations/20260816_financial_fact_recollection_idempotency_v3_16_16.sql',
 ]);
 
 function parseArguments(argv) {
@@ -111,6 +112,14 @@ async function applyReviewedMigrations(options) {
           WHERE oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure)
         AND (SELECT pg_get_userbyid(proowner)='opportunity_v3_rpc_owner' FROM pg_proc
           WHERE oid='public.enrich_legacy_analysis_prior_payloads_v3_16_15(jsonb)'::regprocedure)
+      ,'financialFactRecollection',to_regprocedure(
+        'public.append_financial_fact_pre_v3_16_16(public.financial_fact_input_v3,uuid)') IS NOT NULL
+        AND has_function_privilege('service_role',
+          'public.append_financial_fact_v3(public.financial_fact_input_v3,uuid)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.append_financial_fact_pre_v3_16_16(public.financial_fact_input_v3,uuid)','EXECUTE')
+        AND (SELECT pg_get_userbyid(proowner)='opportunity_v3_rpc_owner' FROM pg_proc
+          WHERE oid='public.append_financial_fact_v3(public.financial_fact_input_v3,uuid)'::regprocedure)
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',

@@ -974,6 +974,7 @@ test('generic migration discovery is a closed legacy allowlist and the V3.13 pla
     'migrations/20260816_calendar_dependency_recovery_occurrence_v3_16_11.sql',
     'migrations/20260816_candidate_fact_plane_bound_v3_16_12.sql',
     'migrations/20260816_analysis_payload_reuse_v3_16_15.sql',
+    'migrations/20260816_financial_fact_recollection_idempotency_v3_16_16.sql',
   ]);
   assert.ok(plan.migrations.every((row)=>/^[0-9a-f]{64}$/u.test(row.sha256)&&row.additiveOnly));
   assert.match(plan.orderedChainSha256,/^[0-9a-f]{64}$/u);

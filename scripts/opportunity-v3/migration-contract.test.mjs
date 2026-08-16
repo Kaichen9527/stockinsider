@@ -39,6 +39,9 @@ const calendarRecoverySql = fs.readFileSync(calendarRecoveryMigrationPath, 'utf8
 const analysisPayloadReuseMigrationPath = path.join(root,
   'migrations/20260816_analysis_payload_reuse_v3_16_15.sql');
 const analysisPayloadReuseSql = fs.readFileSync(analysisPayloadReuseMigrationPath, 'utf8');
+const financialFactRecollectionMigrationPath = path.join(root,
+  'migrations/20260816_financial_fact_recollection_idempotency_v3_16_16.sql');
+const financialFactRecollectionSql = fs.readFileSync(financialFactRecollectionMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -126,6 +129,19 @@ test('V3.16.15 restores immutable analysis payload reuse outside the lease hando
   assert.match(analysisPayloadReuseSql,/octet_length\(v_claim[.]read_canonical\)>3145728/u);
   assert.match(analysisPayloadReuseSql,
     /enrich_legacy_analysis_prior_payloads_v3_16_15\(jsonb\)[\s\S]*OWNER TO opportunity_v3_rpc_owner/u);
+});
+
+test('V3.16.16 preserves true recollection time without consuming a financial fact revision',()=>{
+  assert.match(financialFactRecollectionSql,
+    /append_financial_fact_v3[\s\S]*RENAME TO append_financial_fact_pre_v3_16_16/u);
+  assert.match(financialFactRecollectionSql,
+    /fact[.]source_ref=\(input\)[.]source_ref AND fact[.]collected_at<=\(input\)[.]collected_at/u);
+  assert.match(financialFactRecollectionSql,
+    /'append_financial_fact_v3'[\s\S]*'idempotent'/u);
+  assert.match(financialFactRecollectionSql,
+    /REVOKE ALL ON FUNCTION public[.]append_financial_fact_pre_v3_16_16[\s\S]*service_role/u);
+  assert.doesNotMatch(financialFactRecollectionSql,
+    /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
 });
 const appendBoundaryCanonicalHash = sha256Canonical([
   ['title', appendBoundarySourceFields[0]],
@@ -372,6 +388,12 @@ before(() => {
     command(pg.psql, [
       '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', analysisPayloadReuseMigrationPath,
+    ]);
+  }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', financialFactRecollectionMigrationPath,
     ]);
   }
 });
@@ -6591,7 +6613,7 @@ test('V3.13 projection guard serializes every writer, rejects non-monotonic time
   assert.equal(new Date(result.newest).toISOString(),'2026-01-01T00:25:01.000Z');
 });
 
-test('V3.13 financial fact append authority rejects future reported periods and the 129th distinct series row',()=>{
+test('V3.16.16 financial fact append is recollection-idempotent and still rejects the 129th distinct series row',()=>{
   const result=JSON.parse(psql(`
     BEGIN;
     INSERT INTO public.internal_principal_role_bindings_v3(principal_id,role,valid_from,valid_to,status,configuration_hash,recorded_at)
@@ -6609,6 +6631,12 @@ test('V3.13 financial fact append authority rejects future reported periods and 
           'twse-openapi:series-bound:'||i)::public.financial_fact_input_v3,
           'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
       END LOOP;
+      PERFORM public.append_financial_fact_v3(ROW(
+        '71300000-0000-4000-8000-000000000080','net_asset_value',NULL,date '2025-01-02','instant',
+        1::double precision,'TWD','twse','official_filing','reported','reported_period',
+        date '2025-01-02'::timestamptz,date '2025-01-02'::timestamptz,
+        clock_timestamp()-interval '1 second',NULL,'twse-openapi:series-bound:1'
+      )::public.financial_fact_input_v3,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
       BEGIN
         v_day:=date '2025-06-01';
         PERFORM public.append_financial_fact_v3(ROW(
@@ -6641,7 +6669,9 @@ test('V3.13 financial fact append authority rejects future reported periods and 
           AND function_name='append_financial_fact_v3'))::text;
     ROLLBACK;
   `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
-  assert.deepEqual(result,{facts:128,series:1,audits:128});
+  assert.deepEqual(result,{facts:128,series:1,audits:129});
+  assert.match(financialFactRecollectionSql,/fact[.]collected_at<=\(input\)[.]collected_at[\s\S]*'idempotent'/u);
+  assert.doesNotMatch(financialFactRecollectionSql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
 });
 
 test('DI-008 parser output crosses job completion and persistence before an adjusted read', async () => {
