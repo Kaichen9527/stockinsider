@@ -36,6 +36,9 @@ const sameTransactionVisibilitySql = fs.readFileSync(sameTransactionVisibilityMi
 const calendarRecoveryMigrationPath = path.join(root,
   'migrations/20260816_calendar_dependency_recovery_occurrence_v3_16_11.sql');
 const calendarRecoverySql = fs.readFileSync(calendarRecoveryMigrationPath, 'utf8');
+const analysisPayloadReuseMigrationPath = path.join(root,
+  'migrations/20260816_analysis_payload_reuse_v3_16_15.sql');
+const analysisPayloadReuseSql = fs.readFileSync(analysisPayloadReuseMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -111,6 +114,18 @@ test('V3.16.12 bounds deep fact authority while preserving the complete candidat
   assert.match(sql, /has_schema_privilege\('opportunity_v3_rpc_owner','public','CREATE'\)[\s\S]*OR v_owner_create/u);
   assert.match(apply, /20260816_candidate_fact_plane_bound_v3_16_12[.]sql/u);
   assert.match(apply, /'candidateFactPlaneBound'[\s\S]*read_legacy_candidate_fact_plane_v3_16_11_internal[\s\S]*NOT has_function_privilege\('legacy_correctness_rpc_owner'[\s\S]*has_function_privilege\('legacy_correctness_rpc_owner'/u);
+});
+
+test('V3.16.15 restores immutable analysis payload reuse outside the lease handoff', () => {
+  assert.match(analysisPayloadReuseSql,
+    /claim_legacy_producer_job_v3_11[\s\S]*RENAME TO claim_legacy_producer_job_authoritative_v3_16_15/u);
+  assert.match(analysisPayloadReuseSql,
+    /legacy_analysis_revision_payloads_v3_13[\s\S]*analysis_prior_payload_missing/u);
+  assert.match(analysisPayloadReuseSql,
+    /claim_legacy_producer_job_authoritative_v3_16_15[\s\S]*enrich_legacy_analysis_prior_payloads_v3_16_15/u);
+  assert.match(analysisPayloadReuseSql,/octet_length\(v_claim[.]read_canonical\)>3145728/u);
+  assert.match(analysisPayloadReuseSql,
+    /enrich_legacy_analysis_prior_payloads_v3_16_15\(jsonb\)[\s\S]*OWNER TO opportunity_v3_rpc_owner/u);
 });
 const appendBoundaryCanonicalHash = sha256Canonical([
   ['title', appendBoundarySourceFields[0]],
@@ -351,6 +366,12 @@ before(() => {
     command(pg.psql, [
       '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', transactionTimeMigrationPath,
+    ]);
+  }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', analysisPayloadReuseMigrationPath,
     ]);
   }
 });
@@ -1880,7 +1901,7 @@ test('V3.13 invalid completion is zero-write and analysis claims replay the exac
   const codec=runtime('codec.js');
   const priorFact={symbol:'9196',materialChangeHash:'e'.repeat(64),
     decisionBrief:{action:'wait_reclaim',thesis:['a','b','c'],risks:['d','e','f']},
-    analysisGeneratedAt:'2026-08-07T10:20:00Z'};
+    sourceCollectedAt:'2026-08-07T10:15:00Z',analysisGeneratedAt:'2026-08-07T10:20:00Z'};
   const priorBundle=codec.immutableBundle('legacy_analysis_fact_payload_v3_13',priorFact);
   const result=JSON.parse(psql(`
     BEGIN;
@@ -1940,6 +1961,7 @@ test('V3.13 invalid completion is zero-write and analysis claims replay the exac
       encode(extensions.digest(convert_to('{}','utf8'),'sha256'),'hex'));
     SELECT jsonb_build_object(
       'brief',(SELECT read_json#>>'{priorRevisions,0,facts,decisionBrief,action}' FROM exact_claim),
+      'collected',(SELECT read_json#>>'{priorRevisions,0,facts,sourceCollectedAt}' FROM exact_claim),
       'hashValid',(SELECT read_hash=encode(extensions.digest(read_canonical,'sha256'),'hex') FROM exact_claim),
       'invalidRows',(SELECT count(*) FROM invalid_complete),
       'jobStatus',(SELECT status::text FROM public.legacy_producer_jobs_v3_11
@@ -1948,7 +1970,8 @@ test('V3.13 invalid completion is zero-write and analysis claims replay the exac
         WHERE revision_id<>'51960000-0000-4000-8000-000000000001'))::text;
     ROLLBACK;
   `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
-  assert.deepEqual(result,{brief:'wait_reclaim',hashValid:true,invalidRows:0,jobStatus:'leased',newPayloadRows:0});
+  assert.deepEqual(result,{brief:'wait_reclaim',collected:'2026-08-07T10:15:00Z',hashValid:true,
+    invalidRows:0,jobStatus:'leased',newPayloadRows:0});
 });
 
 test('legacy producer advances exactly once for newly recorded material authority outside the scheduled cutoff', () => {

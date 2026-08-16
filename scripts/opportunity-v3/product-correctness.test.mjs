@@ -776,7 +776,8 @@ const checks = {
     const priorAuthority=citedPublicationEvidence('claim-9999');
     const priorFacts={symbol:'9999',...priorAuthority,materialChangeHash,materialChangedBecause:[],
       researchMaturity:'source_signal',decisionBrief:{...priorAuthority.decisionBrief,action:'wait_reclaim'}};
-    const analysisRead = runtime('codec.js').immutableBundle('analysis_revision_input', { factsResult: { decisions: [priorFacts],
+    const reevaluatedFacts={...priorFacts,sourceCollectedAt:'2026-08-01T10:19:00Z'};
+    const analysisRead = runtime('codec.js').immutableBundle('analysis_revision_input', { factsResult: { decisions: [reevaluatedFacts],
       sourceCandidates: capped.json.sourceCandidates, dislocationCandidates: capped.json.dislocationCandidates },
       sourceCutoff: '2026-08-01T10:20:00Z', priorRevisions: [{ symbol: '9999', revisionId: 'revision-9999',
         materialChangeHash, analysisGeneratedAt: originalGeneratedAt,facts:priorFacts }] });
@@ -789,6 +790,9 @@ const checks = {
       'projection transport retains revision identity without duplicating the immutable fact payload');
     assert.equal(analysis.json.decisions[0].analysisRevision.revisionId,'revision-9999');
     assert.deepEqual(analysis.json.decisionPayloads[0].bundle.json,priorFacts);
+    assert.notEqual(analysis.json.decisionPayloads[0].bundle.json.sourceCollectedAt,
+      reevaluatedFacts.sourceCollectedAt,
+      'a no-change evaluation reuses the immutable prior acquisition timestamp');
     assert.equal(analysis.json.sourceCandidates.length, 40);
     assert.equal(analysis.json.dislocationCandidates.length, 30);
     const publicationAnalysis={...analysis.json,
