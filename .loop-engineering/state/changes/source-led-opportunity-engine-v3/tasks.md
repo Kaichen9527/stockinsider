@@ -1853,3 +1853,6 @@ This approval authorizes implementation only. It does not authorize production m
   security-definer scheduler resolver to `opportunity_v3_rpc_owner`, retaining
   only `EXECUTE` for the legacy scheduler, and invoking that exact role path in
   the fresh-database migration suite.
+- [x] Bound the production candidate fact plane to ten fully evidenced deep
+  candidates while preserving the complete 60-candidate discovery ledger and
+  enforcing the existing 3 MiB claim envelope.
