@@ -1846,3 +1846,6 @@ This approval authorizes implementation only. It does not authorize production m
 - [ ] Freeze exact implementation, complete protected review/Code Gate, apply
   production migration, pass two exact terminal producer invocations, deploy
   the identical Web source, API smoke and Safari UI verification.
+- [x] Repair production SQLSTATE `42501` by granting both restricted function
+  owners schema `CREATE` only inside the migration transaction and revoking it
+  before commit; add ordered grant/revoke migration-contract regressions.

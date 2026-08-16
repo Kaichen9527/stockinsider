@@ -7,6 +7,11 @@
 
 BEGIN;
 
+-- PostgreSQL requires the new owner to retain CREATE on the containing schema
+-- while ownership is transferred. Keep the capability transaction-scoped and
+-- revoke it before commit, matching the existing V3.13-V3.15 owner handoff.
+GRANT CREATE ON SCHEMA public TO opportunity_v3_rpc_owner,legacy_correctness_rpc_owner;
+
 CREATE INDEX IF NOT EXISTS legacy_producer_occurrence_terminal_v3_16_11
   ON public.legacy_producer_runs_v3_11(scheduled_occurrence_id,status,terminal_at DESC,run_id);
 CREATE INDEX IF NOT EXISTS trading_session_recovery_recorded_v3_16_11
@@ -103,6 +108,8 @@ REVOKE ALL ON FUNCTION public.resolve_legacy_scheduled_occurrence_v3_11(text,tex
   FROM PUBLIC,anon,authenticated,service_role;
 GRANT EXECUTE ON FUNCTION public.resolve_legacy_scheduled_occurrence_v3_11(text,text)
   TO legacy_correctness_rpc_owner;
+
+REVOKE CREATE ON SCHEMA public FROM opportunity_v3_rpc_owner,legacy_correctness_rpc_owner;
 
 DO $calendar_recovery_contract$
 BEGIN
