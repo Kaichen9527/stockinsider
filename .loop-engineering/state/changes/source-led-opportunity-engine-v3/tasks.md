@@ -1858,3 +1858,5 @@ This approval authorizes implementation only. It does not authorize production m
   enforcing the existing 3 MiB claim envelope.
 - [x] Include the V3.16.12 bound migration in the closed reviewed production
   apply plan and verify its private-helper privilege boundary after apply.
+- [x] Make the V3.16.12 owner transfer production-safe by granting schema CREATE
+  only inside the migration transaction and proving it is revoked at completion.

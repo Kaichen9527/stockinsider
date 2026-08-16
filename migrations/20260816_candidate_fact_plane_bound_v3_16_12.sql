@@ -1,5 +1,10 @@
 BEGIN;
 
+-- PostgreSQL requires the target owner to hold CREATE on the containing schema
+-- even when ALTER OWNER resolves to the existing owner. Keep that authority
+-- transaction-local and revoke it before postconditions.
+GRANT CREATE ON SCHEMA public TO opportunity_v3_rpc_owner;
+
 -- V3.16.12 keeps the complete 60-candidate discovery ledger visible while
 -- bounding expensive, fully evidenced deep-research facts to the first ten
 -- deterministic deep candidates. The prior implementation materialized up to
@@ -60,9 +65,10 @@ REVOKE ALL ON FUNCTION public.read_legacy_candidate_fact_plane_v3_11(timestamptz
   FROM PUBLIC,anon,authenticated,service_role;
 GRANT EXECUTE ON FUNCTION public.read_legacy_candidate_fact_plane_v3_11(timestamptz,jsonb)
   TO legacy_correctness_rpc_owner;
+REVOKE CREATE ON SCHEMA public FROM opportunity_v3_rpc_owner;
 
 DO $postconditions$
-DECLARE v_owner text;v_internal_legacy boolean;v_wrapper_legacy boolean;
+DECLARE v_owner text;v_internal_legacy boolean;v_wrapper_legacy boolean;v_owner_create boolean;
 BEGIN
   SELECT owner.rolname INTO v_owner FROM pg_proc function
   JOIN pg_roles owner ON owner.oid=function.proowner
@@ -71,7 +77,8 @@ BEGIN
     'public.read_legacy_candidate_fact_plane_v3_16_11_internal(timestamptz,jsonb)','EXECUTE');
   v_wrapper_legacy:=has_function_privilege('legacy_correctness_rpc_owner',
     'public.read_legacy_candidate_fact_plane_v3_11(timestamptz,jsonb)','EXECUTE');
-  IF v_owner<>'opportunity_v3_rpc_owner' OR v_internal_legacy OR NOT v_wrapper_legacy
+  v_owner_create:=has_schema_privilege('opportunity_v3_rpc_owner','public','CREATE');
+  IF v_owner<>'opportunity_v3_rpc_owner' OR v_internal_legacy OR NOT v_wrapper_legacy OR v_owner_create
   THEN RAISE EXCEPTION 'candidate_fact_plane_authority_unavailable';END IF;
 END
 $postconditions$;
