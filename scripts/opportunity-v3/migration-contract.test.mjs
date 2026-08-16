@@ -100,11 +100,15 @@ const appendBoundaryRawHash = sha256Canonical({
 test('V3.16.12 bounds deep fact authority while preserving the complete candidate ledger', () => {
   const sql = fs.readFileSync(path.join(root,
     'migrations/20260816_candidate_fact_plane_bound_v3_16_12.sql'), 'utf8');
+  const apply = fs.readFileSync(path.join(root,
+    'scripts/opportunity-v3/apply-reviewed-migrations.mjs'), 'utf8');
   assert.match(sql, /ORDER BY candidate\.ordinality\s+LIMIT 10/u);
   assert.match(sql, /jsonb_set\(v_result,'\{candidateResult\}',p_candidate_result,true\)/u);
   assert.match(sql, /v_bytes>3145728/u);
   assert.match(sql, /REVOKE ALL ON FUNCTION public\.read_legacy_candidate_fact_plane_v3_16_11_internal[\s\S]*legacy_correctness_rpc_owner/u);
   assert.match(sql, /GRANT EXECUTE ON FUNCTION public\.read_legacy_candidate_fact_plane_v3_11[\s\S]*TO legacy_correctness_rpc_owner/u);
+  assert.match(apply, /20260816_candidate_fact_plane_bound_v3_16_12[.]sql/u);
+  assert.match(apply, /'candidateFactPlaneBound'[\s\S]*read_legacy_candidate_fact_plane_v3_16_11_internal[\s\S]*NOT has_function_privilege\('legacy_correctness_rpc_owner'[\s\S]*has_function_privilege\('legacy_correctness_rpc_owner'/u);
 });
 const appendBoundaryCanonicalHash = sha256Canonical([
   ['title', appendBoundarySourceFields[0]],

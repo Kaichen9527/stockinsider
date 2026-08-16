@@ -1856,3 +1856,5 @@ This approval authorizes implementation only. It does not authorize production m
 - [x] Bound the production candidate fact plane to ten fully evidenced deep
   candidates while preserving the complete 60-candidate discovery ledger and
   enforcing the existing 3 MiB claim envelope.
+- [x] Include the V3.16.12 bound migration in the closed reviewed production
+  apply plan and verify its private-helper privilege boundary after apply.

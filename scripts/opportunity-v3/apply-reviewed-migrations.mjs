@@ -27,6 +27,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260816_official_ingestion_transaction_time_v3_16_9.sql',
   'migrations/20260816_official_ingestion_same_transaction_visibility_v3_16_10.sql',
   'migrations/20260816_calendar_dependency_recovery_occurrence_v3_16_11.sql',
+  'migrations/20260816_candidate_fact_plane_bound_v3_16_12.sql',
 ]);
 
 function parseArguments(argv) {
@@ -91,6 +92,12 @@ async function applyReviewedMigrations(options) {
         WHERE oid='public.resolve_legacy_scheduled_occurrence_v3_11(text,text)'::regprocedure)
       ,'calendarRecoveryHelper',(SELECT provolatile='s' AND prosecdef FROM pg_proc
         WHERE oid='public.resolve_legacy_calendar_recovery_cutoff_v3_16_11_internal(text)'::regprocedure)
+      ,'candidateFactPlaneBound',to_regprocedure(
+        'public.read_legacy_candidate_fact_plane_v3_16_11_internal(timestamptz,jsonb)') IS NOT NULL
+        AND NOT has_function_privilege('legacy_correctness_rpc_owner',
+          'public.read_legacy_candidate_fact_plane_v3_16_11_internal(timestamptz,jsonb)','EXECUTE')
+        AND has_function_privilege('legacy_correctness_rpc_owner',
+          'public.read_legacy_candidate_fact_plane_v3_11(timestamptz,jsonb)','EXECUTE')
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',
