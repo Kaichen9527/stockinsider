@@ -940,6 +940,8 @@ test('V3.16.9 resolves same-run calendar dependencies by knowledge and transacti
   assert.match(sameTransactionVisibilitySql,
     /ALTER FUNCTION public[.]resolve_legacy_trading_session_dependency_v3_16_9_internal\([\s\S]*\) VOLATILE/u);
   assert.match(calendarRecoverySql,
+    /resolve_legacy_calendar_recovery_cutoff_v3_16_11_internal/u);
+  assert.match(calendarRecoverySql,
     /diagnostic[.]constraint_name='calendar_dependency_unavailable'/u);
   assert.match(calendarRecoverySql,
     /authority[.]recorded_at>run[.]source_cutoff AND authority[.]recorded_at<=run[.]terminal_at/u);
@@ -949,6 +951,10 @@ test('V3.16.9 resolves same-run calendar dependencies by knowledge and transacti
     /legacy-producer-calendar-dependency-recovery-v1/u);
   assert.doesNotMatch(calendarRecoverySql,
     /v_recovery_cutoff:=date_trunc\('second',clock_timestamp\(\)\)/u);
+  assert.match(calendarRecoverySql,
+    /OWNER TO opportunity_v3_rpc_owner[\s\S]*GRANT EXECUTE[\s\S]*TO legacy_correctness_rpc_owner/u);
+  assert.doesNotMatch(calendarRecoverySql,
+    /GRANT EXECUTE[\s\S]*TO (?:service_role|anon|authenticated)/u);
 });
 
 test('V3.14 completion persists a non-empty exact decision revision and heartbeat',()=>{

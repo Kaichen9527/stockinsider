@@ -7,6 +7,33 @@
 
 BEGIN;
 
+CREATE OR REPLACE FUNCTION public.resolve_legacy_calendar_recovery_cutoff_v3_16_11_internal(
+  p_base_occurrence_id text
+) RETURNS timestamptz
+LANGUAGE sql STABLE SECURITY DEFINER SET search_path='' AS $helper$
+  SELECT run.terminal_at
+  FROM public.legacy_producer_runs_v3_11 run
+  WHERE p_base_occurrence_id~'^[0-9a-f]{64}$'
+    AND run.scheduled_occurrence_id=p_base_occurrence_id AND run.status='failed'
+    AND run.failure_code='data_integrity_failure'
+    AND EXISTS(SELECT 1 FROM public.legacy_runtime_failure_diagnostics_v3_14 diagnostic
+      WHERE diagnostic.run_id=run.run_id AND diagnostic.stage='facts_refresh'
+        AND diagnostic.failure_origin='persistence'
+        AND diagnostic.invariant_code='database_constraint_rejected'
+        AND diagnostic.constraint_name='calendar_dependency_unavailable')
+    AND EXISTS(SELECT 1 FROM public.tw_trading_sessions_v3 authority
+      WHERE authority.recorded_at>run.source_cutoff AND authority.recorded_at<=run.terminal_at
+        AND authority.source_timestamp<=run.terminal_at AND authority.collected_at<=run.terminal_at)
+  ORDER BY run.terminal_at DESC,run.run_id LIMIT 1
+$helper$;
+
+ALTER FUNCTION public.resolve_legacy_calendar_recovery_cutoff_v3_16_11_internal(text)
+  OWNER TO opportunity_v3_rpc_owner;
+REVOKE ALL ON FUNCTION public.resolve_legacy_calendar_recovery_cutoff_v3_16_11_internal(text)
+  FROM PUBLIC,anon,authenticated,service_role;
+GRANT EXECUTE ON FUNCTION public.resolve_legacy_calendar_recovery_cutoff_v3_16_11_internal(text)
+  TO legacy_correctness_rpc_owner;
+
 CREATE OR REPLACE FUNCTION public.resolve_legacy_scheduled_occurrence_v3_11(
   p_owner_label text,p_config_hash text
 ) RETURNS public.legacy_scheduled_occurrence_v3_11
@@ -44,19 +71,7 @@ BEGIN
   -- Only the typed, immutable calendar-dependency diagnostic opens recovery.
   -- Requiring calendar authority recorded between cutoff and terminal proves
   -- that advancing to the database-owned terminal boundary can add authority.
-  SELECT run.terminal_at INTO v_failed_terminal
-  FROM public.legacy_producer_runs_v3_11 run
-  WHERE run.scheduled_occurrence_id=v_base_id AND run.status='failed'
-    AND run.failure_code='data_integrity_failure'
-    AND EXISTS(SELECT 1 FROM public.legacy_runtime_failure_diagnostics_v3_14 diagnostic
-      WHERE diagnostic.run_id=run.run_id AND diagnostic.stage='facts_refresh'
-        AND diagnostic.failure_origin='persistence'
-        AND diagnostic.invariant_code='database_constraint_rejected'
-        AND diagnostic.constraint_name='calendar_dependency_unavailable')
-    AND EXISTS(SELECT 1 FROM public.tw_trading_sessions_v3 authority
-      WHERE authority.recorded_at>run.source_cutoff AND authority.recorded_at<=run.terminal_at
-        AND authority.source_timestamp<=run.terminal_at AND authority.collected_at<=run.terminal_at)
-  ORDER BY run.terminal_at DESC,run.run_id LIMIT 1;
+  v_failed_terminal:=public.resolve_legacy_calendar_recovery_cutoff_v3_16_11_internal(v_base_id);
   IF v_failed_terminal IS NOT NULL THEN
     v_recovery_cutoff:=date_trunc('second',v_failed_terminal);
     IF v_recovery_cutoff>v_cutoff AND v_recovery_cutoff<=v_now THEN
@@ -88,6 +103,12 @@ BEGIN
     WHERE namespace.nspname='public' AND function.proname='resolve_legacy_scheduled_occurrence_v3_11'
       AND function.provolatile='v' AND function.prosecdef)
   THEN RAISE EXCEPTION 'calendar_recovery_resolver_contract_unavailable';END IF;
+  IF NOT EXISTS(SELECT 1 FROM pg_proc function JOIN pg_namespace namespace ON namespace.oid=function.pronamespace
+    JOIN pg_roles owner ON owner.oid=function.proowner
+    WHERE namespace.nspname='public'
+      AND function.proname='resolve_legacy_calendar_recovery_cutoff_v3_16_11_internal'
+      AND function.provolatile='s' AND function.prosecdef AND owner.rolname='opportunity_v3_rpc_owner')
+  THEN RAISE EXCEPTION 'calendar_recovery_helper_contract_unavailable';END IF;
 END $calendar_recovery_contract$;
 
 COMMIT;

@@ -323,6 +323,7 @@ test('V314-008 Web and runtime share exact release compatibility authority', () 
   assert.match(migrationApply,/transactionTimeDependency/u);
   assert.match(migrationApply,/sameTransactionVisibility/u);
   assert.match(migrationApply,/calendarRecovery/u);
+  assert.match(migrationApply,/calendarRecoveryHelper/u);
   assert.doesNotMatch(migrationApply,/error[?][.]message|connectionString.*process[.]env/u);
   const runbook=readFileSync(path.join(root,'docs/operations_runbook.md'),'utf8');
   assert.match(runbook,/STOCKINSIDER_REVIEWED_RELEASE_SHA=<reviewed-commit>/u);

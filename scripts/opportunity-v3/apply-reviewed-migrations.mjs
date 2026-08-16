@@ -89,6 +89,8 @@ async function applyReviewedMigrations(options) {
         WHERE oid='public.resolve_legacy_trading_session_dependency_v3_16_9_internal(date,public.tw_market_v3,timestamptz,timestamptz)'::regprocedure)
       ,'calendarRecovery',(SELECT provolatile='v' AND prosecdef FROM pg_proc
         WHERE oid='public.resolve_legacy_scheduled_occurrence_v3_11(text,text)'::regprocedure)
+      ,'calendarRecoveryHelper',(SELECT provolatile='s' AND prosecdef FROM pg_proc
+        WHERE oid='public.resolve_legacy_calendar_recovery_cutoff_v3_16_11_internal(text)'::regprocedure)
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',

@@ -1839,6 +1839,8 @@ This approval authorizes implementation only. It does not authorize production m
   retry wall clock cannot advance it and normal occurrences remain unchanged.
 - [x] Add the additive migration to the reviewed apply chain and pass the fresh
   migration suite 54/54, including apply-twice and closed resolver checks.
+- [x] Close exact-review P1 cross-owner RLS reachability with a private
+  `opportunity_v3_rpc_owner` helper granted only to the legacy scheduler owner.
 - [ ] Freeze exact implementation, complete protected review/Code Gate, apply
   production migration, pass two exact terminal producer invocations, deploy
   the identical Web source, API smoke and Safari UI verification.
