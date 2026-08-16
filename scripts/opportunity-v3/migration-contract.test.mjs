@@ -689,6 +689,8 @@ test('migration applies twice and exposes the exact granted/private function bou
     serviceExecute:true,anonExecute:false,authenticatedExecute:false,publicExecute:false});
   assert.doesNotMatch(evaluationClockSql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
   assert.match(evaluationClockSql,/claim_legacy_producer_job_evaluation_clock_base_v3_16_20/u);
+  assert.match(evaluationClockSql,/v_claim[.]read_kind IS NULL OR v_claim[.]read_kind NOT IN/u,
+    'the source-sync claim must bypass the evaluation-clock wrapper under SQL three-valued logic');
   assert.match(evaluationClockSql,/run[.]started_at[\s\S]*?'evaluationTimestamp'/u);
   const evaluationClockBoundary=JSON.parse(psql(`
     SELECT jsonb_build_object(
