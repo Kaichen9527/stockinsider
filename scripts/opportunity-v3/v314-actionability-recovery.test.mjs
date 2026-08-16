@@ -767,6 +767,23 @@ test('V316-016c an interrupted legacy chunk graph is verified and continued with
   assert.deepEqual(summary.chunks.slice(0,2),existing);
   assert.deepEqual(persisted.filter((row)=>row.kind==='trading_sessions').map((row)=>[row.ordinal,row.items.length]),[[2,15]]);
   assert.equal(persisted.at(-1).kind,'terminal');
+  const resumedFact={symbol:'2330',factKey:'quarterly_revenue',periodStart:'2026-01-01',periodEnd:'2026-03-31',
+    durationKind:'quarterly',value:100,unit:'TWD_thousand',authorityTier:'official_filing',
+    filingPublishedAt:'2026-05-10T00:00:00Z',sourceTimestamp:'2026-05-10T00:00:00Z',
+    collectedAt:'2026-08-16T00:01:00Z',sourceRef:'twse-mops-inline:2026-03-31:2330:'+'a'.repeat(64),
+    filingRestatementId:null,estimateKind:'reported',estimateHorizon:'reported_period'};
+  const financialChunk={kind:'financial_facts',ordinal:0,itemCount:1,
+    chunkHash:sha256(canonicalJson(['official-ingestion-chunk-v3.14','financial_facts',0,[resumedFact]]))};
+  const recollection=[];
+  const recollected=await streamOfficialIngestionV314({claim:{runId:'run',jobId:'job',ownerToken:'token'},
+    sourceCutoff:'2026-08-16T00:00:00Z',producerSha:'a'.repeat(40),snapshot:{calendarSessions:[],
+      financialFacts:[{...resumedFact,collectedAt:'2026-08-16T00:05:00Z'}]},
+    resume:{schema:'legacy-official-ingestion-partial-resume-v3.16',sourceCutoff:'2026-08-16T00:00:00Z',
+      calendarSessions:[],financialFacts:[resumedFact],priceObservations:[],corporateActionSnapshots:[],
+      reportedValuations:[],chunks:[financialChunk]},persistChunk:async(row)=>recollection.push(row)});
+  assert.deepEqual(recollected.chunks[0],financialChunk,
+    'a later collection heartbeat must preserve the already-staged immutable fact chunk');
+  assert.deepEqual(recollection.map((row)=>row.kind),['terminal']);
   await assert.rejects(streamOfficialIngestionV314({claim:{runId:'run',jobId:'job'},
     sourceCutoff:'2026-08-16T00:00:00Z',producerSha:'a'.repeat(40),snapshot:{calendarSessions:sessions},
     resume:{schema:'legacy-official-ingestion-partial-resume-v3.16',sourceCutoff:'2026-08-16T00:00:00Z',

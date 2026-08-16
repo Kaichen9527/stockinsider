@@ -1294,7 +1294,8 @@ function financialSemanticIdentity(row){
 }
 
 function newFinancialFactsV314(facts,priorRows=[]){
-  const seen=new Set((Array.isArray(priorRows)?priorRows:[]).filter((row)=>Array.isArray(row)&&row.length>=16)
+  const seen=new Set((Array.isArray(priorRows)?priorRows:[])
+    .filter((row)=>(Array.isArray(row)&&row.length>=16)||(row&&typeof row==='object'&&!Array.isArray(row)))
     .map(financialSemanticIdentity));
   return (Array.isArray(facts)?facts:[]).filter((row)=>{
     const identity=financialSemanticIdentity(row);if(seen.has(identity))return false;seen.add(identity);return true;
@@ -1354,8 +1355,9 @@ async function streamOfficialIngestionV314({claim,snapshot,sourceCutoff,producer
   const resumeAllowed=resume&&['legacy-official-ingestion-resume-v3.15',
     'legacy-official-ingestion-partial-resume-v3.16'].includes(resume.schema)&&resume.sourceCutoff===sourceCutoff;
   const resumedFinancialFacts=resumeAllowed&&Array.isArray(resume.financialFacts)?resume.financialFacts:[];
-  if(resumeAllowed)invariant(canonicalJson((snapshot?.financialFacts??[]).slice(0,resumedFinancialFacts.length))
-    ===canonicalJson(resumedFinancialFacts),'official ingestion resumed financial prefix conflict');
+  if(resumeAllowed)invariant(canonicalJson((snapshot?.financialFacts??[]).slice(0,resumedFinancialFacts.length)
+    .map(financialSemanticIdentity))===canonicalJson(resumedFinancialFacts.map(financialSemanticIdentity)),
+  'official ingestion resumed financial prefix conflict');
   const financialFacts=resumeAllowed
     ?[...resumedFinancialFacts,...newFinancialFactsV314(snapshot?.financialFacts??[],[...priorFinancialRows,...resumedFinancialFacts])]
     :newFinancialFactsV314(snapshot?.financialFacts??[],priorFinancialRows);
