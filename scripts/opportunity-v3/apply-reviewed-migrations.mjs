@@ -31,6 +31,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260816_analysis_payload_reuse_v3_16_15.sql',
   'migrations/20260816_financial_fact_recollection_idempotency_v3_16_16.sql',
   'migrations/20260817_analysis_payload_exact_reuse_v3_16_18.sql',
+  'migrations/20260817_runtime_health_bootstrap_v3_16_19.sql',
 ]);
 
 function parseArguments(argv) {
@@ -133,6 +134,15 @@ async function applyReviewedMigrations(options) {
           WHERE oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure)
         AND (SELECT pg_get_userbyid(proowner)='opportunity_v3_rpc_owner' FROM pg_proc
           WHERE oid='public.resolve_legacy_analysis_prior_payloads_v3_16_18(jsonb)'::regprocedure)
+      ,'runtimeHealthBootstrap',(SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner'
+          AND prosecdef
+        FROM pg_proc WHERE oid='public.append_legacy_runtime_health_rest_v3_15(text,text,text,bytea,jsonb,text,timestamptz)'::regprocedure)
+        AND has_function_privilege('service_role',
+          'public.append_legacy_runtime_health_rest_v3_15(text,text,text,bytea,jsonb,text,timestamptz)','EXECUTE')
+        AND NOT has_function_privilege('anon',
+          'public.append_legacy_runtime_health_rest_v3_15(text,text,text,bytea,jsonb,text,timestamptz)','EXECUTE')
+        AND NOT has_function_privilege('authenticated',
+          'public.append_legacy_runtime_health_rest_v3_15(text,text,text,bytea,jsonb,text,timestamptz)','EXECUTE')
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',

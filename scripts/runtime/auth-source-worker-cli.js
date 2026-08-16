@@ -98,6 +98,28 @@ function readRuntimeHealthObservation(sourceCommitSha, workerSha256, configSha25
   }
 }
 
+function readRuntimeManifestSha256(sourceCommitSha, workerSha256, configSha256) {
+  const runtimeRoot = process.env.STOCKINSIDER_RUNTIME_ROOT
+    ? path.resolve(process.env.STOCKINSIDER_RUNTIME_ROOT)
+    : path.join(os.homedir(), 'Library', 'Application Support', 'StockInsiderRuntime');
+  const filename = path.join(runtimeRoot, 'current', 'installation-manifest.json');
+  try {
+    const text = fs.readFileSync(filename, 'utf8');
+    const value = JSON.parse(text);
+    invariant(`${canonicalJson(value)}\n` === text, 'runtime installation manifest noncanonical');
+    invariant(value?.schema === 'stockinsider-runtime-installation-v1.1'
+      && value.commitSha === sourceCommitSha
+      && value.worker?.repositoryPath === 'scripts/runtime/auth-source-worker-cli.js'
+      && value.worker?.sha256 === workerSha256
+      && value.config?.repositoryPath === 'config/runtime/auth-source-dag.json'
+      && value.config?.sha256 === configSha256,
+    'runtime installation manifest identity mismatch');
+    return sha256(canonicalJson(value));
+  } catch {
+    return null;
+  }
+}
+
 function sourceText(raw) {
   const values = [];
   const walk = (value) => {
@@ -1714,7 +1736,8 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         .slice(0, Math.max(0, 60 - decisions.length));
       const runtimeHealthObservation = readRuntimeHealthObservation(sourceCommitSha, workerSha256, validated.sha256);
       const producerIdentity = { commitSha: sourceCommitSha, workerSha256, configSha256: validated.sha256,
-        runtimeManifestSha256:runtimeHealthObservation?.runtimeManifestSha256??null,
+        runtimeManifestSha256:readRuntimeManifestSha256(sourceCommitSha,workerSha256,validated.sha256)
+          ??runtimeHealthObservation?.runtimeManifestSha256??runtimeHealthObservation?.manifestSha256??null,
         ...(runtimeHealthObservation ? { runtimeHealthObservation } : {}) };
       const legacyPayloads = bundle.legacyPayloads;
       invariant(legacyPayloads && ['daily', 'hot', 'weekly', 'home'].every((window) =>
@@ -1815,5 +1838,5 @@ module.exports = { args, buildLegacyCandidateDecision, buildStageHandlers, extra
   researchRankingFromScore,validOfficialFactRow,
   validEmbeddedOfficialValuationRef,marketAllowsNewPosition,
   extractMatchedEvidenceSnippet, LEGACY_RADAR_FETCH_TIMEOUT_MS, legacyFactInput, legacyQualityInput, loadLegacyRadarPayloads,
-  main,officialCitation,readBundle,readRuntimeHealthObservation,
+  main,officialCitation,readBundle,readRuntimeHealthObservation,readRuntimeManifestSha256,
   priceResearchAxes, tickerHasStockContext, uuidFromHash, valuationFactInput,valuationResearchAxis };
