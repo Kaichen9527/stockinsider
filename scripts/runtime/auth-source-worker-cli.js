@@ -880,7 +880,9 @@ function buildDecisionMaterial({ candidate, facts, fundamental, quality, biasHis
     risk: materialRiskState(candidate, valuation, technical),
     factor: ['factor', quality.availability, quality.availableWeight,
       Number.isFinite(quality.score) ? clampDecile(quality.score / 10) : null,
-      biasHistory.availability, biasHistory.availability === 'available' ? biasHistory.current.label : null, null,
+      biasHistory.availability, biasHistory.availability === 'available' ? biasHistory.current.label : null,
+      ['decision',actionDecision.action,actionDecision.reason,
+        materialDecisionValue(actionDecision.decisionEnvelope)],
       timingRiskStatus(technical, actionDecision.reason), clampDecile(reportedPercentile * 10),
       reportedPeSectorBand(valuation?.reportedPe)],
   });

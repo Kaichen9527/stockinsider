@@ -268,6 +268,12 @@ acceptanceTest('DI-001','V3.13 decision envelope closes all eight user actions w
   assert.equal(firstDecision.materialChangeHash,heartbeatDecision.materialChangeHash,
     'evaluation cutoff alone cannot create a material revision');
   assert.deepEqual(firstDecision.materialIdentity,heartbeatDecision.materialIdentity);
+  const marketAuthorizedDecision=runtime('auth-source-worker-cli.js').buildLegacyCandidateDecision({
+    candidate:materialCandidate,facts:[],history:priceRows,benchmark:priceRows,
+    sourceCutoff:'2026-08-08T10:20:00Z',marketAnalysis:{status:'risk_on'} });
+  assert.notEqual(firstDecision.materialChangeHash,marketAuthorizedDecision.materialChangeHash,
+    'a market-authority blocker change must create a new immutable analysis revision');
+  assert.notDeepEqual(firstDecision.materialIdentity,marketAuthorizedDecision.materialIdentity);
   const sameEnvelope=decide(formalInput('breakout_confirmed'));
   const disclosedPriceCard=(price)=>addResearchDecisions(legacy,[], '2026-08-07T10:20:00Z',[{
     symbol:'9103',name:'價格身分',claimId:'claim-price',claimAsOf:'2026-08-07T09:00:00Z',
