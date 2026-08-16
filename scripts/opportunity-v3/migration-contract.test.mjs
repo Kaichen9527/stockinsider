@@ -45,6 +45,9 @@ const financialFactRecollectionSql = fs.readFileSync(financialFactRecollectionMi
 const analysisPayloadExactReuseMigrationPath = path.join(root,
   'migrations/20260817_analysis_payload_exact_reuse_v3_16_18.sql');
 const analysisPayloadExactReuseSql = fs.readFileSync(analysisPayloadExactReuseMigrationPath, 'utf8');
+const runtimeHealthBootstrapMigrationPath = path.join(root,
+  'migrations/20260817_runtime_health_bootstrap_v3_16_19.sql');
+const runtimeHealthBootstrapSql = fs.readFileSync(runtimeHealthBootstrapMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -420,6 +423,12 @@ before(() => {
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', analysisPayloadExactReuseMigrationPath,
     ]);
   }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', runtimeHealthBootstrapMigrationPath,
+    ]);
+  }
 });
 
 after(() => {
@@ -651,6 +660,24 @@ test('allocation and projection persist only hash-valid authoritative decision g
 test('migration applies twice and exposes the exact granted/private function boundary', () => {
   assert.match(opportunityRecoverySql,/claim_legacy_producer_job_rest_v3_15/u);
   assert.match(opportunityRecoverySql,/append_legacy_runtime_health_rest_v3_15/u);
+  assert.doesNotMatch(runtimeHealthBootstrapSql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(runtimeHealthBootstrapSql,
+    /append_legacy_runtime_health_rest_v3_15[\s\S]*?OWNER TO legacy_correctness_rpc_owner/u);
+  const runtimeHealthBoundary=JSON.parse(psql(`
+    SELECT jsonb_build_object(
+      'owner',pg_get_userbyid(p.proowner),
+      'securityDefiner',p.prosecdef,
+      'serviceExecute',has_function_privilege('service_role',p.oid,'EXECUTE'),
+      'anonExecute',has_function_privilege('anon',p.oid,'EXECUTE'),
+      'authenticatedExecute',has_function_privilege('authenticated',p.oid,'EXECUTE'),
+      'publicExecute',EXISTS(SELECT 1 FROM aclexplode(coalesce(p.proacl,acldefault('f',p.proowner)))
+        WHERE grantee=0 AND privilege_type='EXECUTE')
+    )::text
+    FROM pg_proc p
+    WHERE p.oid='public.append_legacy_runtime_health_rest_v3_15(text,text,text,bytea,jsonb,text,timestamptz)'::regprocedure;
+  `,['-At']).trim());
+  assert.deepEqual(runtimeHealthBoundary,{owner:'legacy_correctness_rpc_owner',securityDefiner:true,
+    serviceExecute:true,anonExecute:false,authenticatedExecute:false,publicExecute:false});
   assert.match(opportunityRecoverySql,/read_legacy_runtime_health_rest_v3_15/u);
   assert.match(opportunityRecoverySql,/LIMIT 3000/u);
   assert.doesNotMatch(claimHandoffSql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);

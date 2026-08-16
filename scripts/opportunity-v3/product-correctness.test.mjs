@@ -455,6 +455,23 @@ const checks = {
     assert.equal(validate(manifest, reviewedRelease).manifestSha256.length, 64);
     assert.throws(() => validate({ ...manifest, surprise: true }, reviewedRelease), { code: 'attestation_schema_mismatch' });
     assert.throws(() => validate({ ...manifest, worker: { ...manifest.worker, sha256: '0'.repeat(64) } }, reviewedRelease), { code: 'staged_hash_mismatch' });
+    const runtimeRoot=mkdtempSync(path.join(os.tmpdir(),'stockinsider-runtime-manifest-'));
+    mkdirSync(path.join(runtimeRoot,'current'));
+    writeFileSync(path.join(runtimeRoot,'current','installation-manifest.json'),`${canonicalJson(manifest)}\n`);
+    const priorRuntimeRoot=process.env.STOCKINSIDER_RUNTIME_ROOT;
+    process.env.STOCKINSIDER_RUNTIME_ROOT=runtimeRoot;
+    try {
+      const readManifest=runtime('auth-source-worker-cli.js').readRuntimeManifestSha256;
+      assert.equal(readManifest(manifest.commitSha,manifest.worker.sha256,manifest.config.sha256),
+        createHash('sha256').update(canonicalJson(manifest)).digest('hex'));
+      assert.equal(readManifest('0'.repeat(40),manifest.worker.sha256,manifest.config.sha256),null);
+      writeFileSync(path.join(runtimeRoot,'current','installation-manifest.json'),`${canonicalJson(manifest)}\n `);
+      assert.equal(readManifest(manifest.commitSha,manifest.worker.sha256,manifest.config.sha256),null);
+    } finally {
+      if(priorRuntimeRoot===undefined)delete process.env.STOCKINSIDER_RUNTIME_ROOT;
+      else process.env.STOCKINSIDER_RUNTIME_ROOT=priorRuntimeRoot;
+      rmSync(runtimeRoot,{recursive:true,force:true});
+    }
   },
   'PCR-003': async () => {
     const { manifest, reviewedRelease } = runtimeRelease(); const calls = [];
