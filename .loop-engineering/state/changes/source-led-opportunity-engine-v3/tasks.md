@@ -1849,3 +1849,7 @@ This approval authorizes implementation only. It does not authorize production m
 - [x] Repair production SQLSTATE `42501` by granting both restricted function
   owners schema `CREATE` only inside the migration transaction and revoking it
   before commit; add ordered grant/revoke migration-contract regressions.
+- [x] Repair the post-apply activation SQLSTATE `42501` by restoring the
+  security-definer scheduler resolver to `opportunity_v3_rpc_owner`, retaining
+  only `EXECUTE` for the legacy scheduler, and invoking that exact role path in
+  the fresh-database migration suite.

@@ -953,6 +953,10 @@ test('V3.16.9 resolves same-run calendar dependencies by knowledge and transacti
     /v_recovery_cutoff:=date_trunc\('second',clock_timestamp\(\)\)/u);
   assert.match(calendarRecoverySql,
     /OWNER TO opportunity_v3_rpc_owner[\s\S]*GRANT EXECUTE[\s\S]*TO legacy_correctness_rpc_owner/u);
+  assert.match(calendarRecoverySql,
+    /ALTER FUNCTION public[.]resolve_legacy_scheduled_occurrence_v3_11\(text,text\)[\s\S]*OWNER TO opportunity_v3_rpc_owner[\s\S]*GRANT EXECUTE ON FUNCTION public[.]resolve_legacy_scheduled_occurrence_v3_11\(text,text\)[\s\S]*TO legacy_correctness_rpc_owner/u);
+  assert.doesNotMatch(calendarRecoverySql,
+    /ALTER FUNCTION public[.]resolve_legacy_scheduled_occurrence_v3_11\(text,text\)[\s\S]*OWNER TO legacy_correctness_rpc_owner/u);
   assert.doesNotMatch(calendarRecoverySql,
     /GRANT EXECUTE[\s\S]*TO (?:service_role|anon|authenticated)/u);
   assert.match(calendarRecoverySql,
@@ -969,6 +973,29 @@ test('V3.16.9 resolves same-run calendar dependencies by knowledge and transacti
     calendarRecoverySql.indexOf('ALTER FUNCTION public.resolve_legacy_calendar_recovery_cutoff_v3_16_11_internal'));
   assert.ok(calendarRecoverySql.indexOf('REVOKE CREATE ON SCHEMA public') >
     calendarRecoverySql.indexOf('ALTER FUNCTION public.resolve_legacy_scheduled_occurrence_v3_11'));
+
+  const resolverAuthority=JSON.parse(psql(`
+    SET ROLE legacy_correctness_rpc_owner;
+    WITH resolved AS MATERIALIZED(
+      SELECT * FROM public.resolve_legacy_scheduled_occurrence_v3_11(
+        'com.stockinsider.auth-source-worker',
+        '1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2'
+      )
+    )
+    SELECT jsonb_build_object(
+      'rows',(SELECT count(*) FROM resolved),
+      'resolverOwner',(SELECT owner.rolname FROM pg_proc function
+        JOIN pg_roles owner ON owner.oid=function.proowner
+        WHERE function.oid='public.resolve_legacy_scheduled_occurrence_v3_11(text,text)'::regprocedure),
+      'legacyExecute',has_function_privilege(
+        'legacy_correctness_rpc_owner',
+        'public.resolve_legacy_scheduled_occurrence_v3_11(text,text)',
+        'EXECUTE'
+      )
+    )::text;
+    RESET ROLE;
+  `,['-Atq']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual(resolverAuthority,{rows:1,resolverOwner:'opportunity_v3_rpc_owner',legacyExecute:true});
 });
 
 test('V3.14 completion persists a non-empty exact decision revision and heartbeat',()=>{
