@@ -48,6 +48,9 @@ const analysisPayloadExactReuseSql = fs.readFileSync(analysisPayloadExactReuseMi
 const runtimeHealthBootstrapMigrationPath = path.join(root,
   'migrations/20260817_runtime_health_bootstrap_v3_16_19.sql');
 const runtimeHealthBootstrapSql = fs.readFileSync(runtimeHealthBootstrapMigrationPath, 'utf8');
+const evaluationClockMigrationPath = path.join(root,
+  'migrations/20260817_evaluation_clock_v3_16_20.sql');
+const evaluationClockSql = fs.readFileSync(evaluationClockMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -429,6 +432,12 @@ before(() => {
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', runtimeHealthBootstrapMigrationPath,
     ]);
   }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', evaluationClockMigrationPath,
+    ]);
+  }
 });
 
 after(() => {
@@ -678,6 +687,26 @@ test('migration applies twice and exposes the exact granted/private function bou
   `,['-At']).trim());
   assert.deepEqual(runtimeHealthBoundary,{owner:'legacy_correctness_rpc_owner',securityDefiner:true,
     serviceExecute:true,anonExecute:false,authenticatedExecute:false,publicExecute:false});
+  assert.doesNotMatch(evaluationClockSql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(evaluationClockSql,/claim_legacy_producer_job_evaluation_clock_base_v3_16_20/u);
+  assert.match(evaluationClockSql,/v_claim[.]read_kind IS NULL OR v_claim[.]read_kind NOT IN/u,
+    'the source-sync claim must bypass the evaluation-clock wrapper under SQL three-valued logic');
+  assert.match(evaluationClockSql,/run[.]started_at[\s\S]*?'evaluationTimestamp'/u);
+  const evaluationClockBoundary=JSON.parse(psql(`
+    SELECT jsonb_build_object(
+      'owner',pg_get_userbyid(wrapper.proowner),
+      'securityDefiner',wrapper.prosecdef,
+      'serviceExecute',has_function_privilege('service_role',wrapper.oid,'EXECUTE'),
+      'baseOwner',pg_get_userbyid(base.proowner),
+      'baseServiceExecute',has_function_privilege('service_role',base.oid,'EXECUTE')
+    )::text
+    FROM pg_proc wrapper CROSS JOIN pg_proc base
+    WHERE wrapper.oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure
+      AND base.oid=
+        'public.claim_legacy_producer_job_evaluation_clock_base_v3_16_20(uuid,uuid,uuid,integer)'::regprocedure;
+  `,['-At']).trim());
+  assert.deepEqual(evaluationClockBoundary,{owner:'legacy_correctness_rpc_owner',securityDefiner:true,
+    serviceExecute:true,baseOwner:'legacy_correctness_rpc_owner',baseServiceExecute:false});
   assert.match(opportunityRecoverySql,/read_legacy_runtime_health_rest_v3_15/u);
   assert.match(opportunityRecoverySql,/LIMIT 3000/u);
   assert.doesNotMatch(claimHandoffSql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
