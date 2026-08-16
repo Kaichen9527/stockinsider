@@ -107,6 +107,8 @@ test('V3.16.12 bounds deep fact authority while preserving the complete candidat
   assert.match(sql, /v_bytes>3145728/u);
   assert.match(sql, /REVOKE ALL ON FUNCTION public\.read_legacy_candidate_fact_plane_v3_16_11_internal[\s\S]*legacy_correctness_rpc_owner/u);
   assert.match(sql, /GRANT EXECUTE ON FUNCTION public\.read_legacy_candidate_fact_plane_v3_11[\s\S]*TO legacy_correctness_rpc_owner/u);
+  assert.match(sql, /GRANT CREATE ON SCHEMA public TO opportunity_v3_rpc_owner[\s\S]*REVOKE CREATE ON SCHEMA public FROM opportunity_v3_rpc_owner/u);
+  assert.match(sql, /has_schema_privilege\('opportunity_v3_rpc_owner','public','CREATE'\)[\s\S]*OR v_owner_create/u);
   assert.match(apply, /20260816_candidate_fact_plane_bound_v3_16_12[.]sql/u);
   assert.match(apply, /'candidateFactPlaneBound'[\s\S]*read_legacy_candidate_fact_plane_v3_16_11_internal[\s\S]*NOT has_function_privilege\('legacy_correctness_rpc_owner'[\s\S]*has_function_privilege\('legacy_correctness_rpc_owner'/u);
 });
