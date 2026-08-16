@@ -33,6 +33,9 @@ const transactionTimeSql = fs.readFileSync(transactionTimeMigrationPath, 'utf8')
 const sameTransactionVisibilityMigrationPath = path.join(root,
   'migrations/20260816_official_ingestion_same_transaction_visibility_v3_16_10.sql');
 const sameTransactionVisibilitySql = fs.readFileSync(sameTransactionVisibilityMigrationPath, 'utf8');
+const calendarRecoveryMigrationPath = path.join(root,
+  'migrations/20260816_calendar_dependency_recovery_occurrence_v3_16_11.sql');
+const calendarRecoverySql = fs.readFileSync(calendarRecoveryMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -859,6 +862,7 @@ test('V3.15 production-sized authority lookup and staged resume are installed',(
   assert.doesNotMatch(partialResumeSql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
   assert.doesNotMatch(transactionTimeSql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
   assert.doesNotMatch(sameTransactionVisibilitySql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.doesNotMatch(calendarRecoverySql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
 });
 
 test('V3.16.9 resolves same-run calendar dependencies by knowledge and transaction time without weakening point-in-time reads',()=>{
@@ -935,6 +939,28 @@ test('V3.16.9 resolves same-run calendar dependencies by knowledge and transacti
   assert.doesNotMatch(transactionTimeSql,/v_session_authority IS NULL THEN CONTINUE/u);
   assert.match(sameTransactionVisibilitySql,
     /ALTER FUNCTION public[.]resolve_legacy_trading_session_dependency_v3_16_9_internal\([\s\S]*\) VOLATILE/u);
+  assert.match(calendarRecoverySql,
+    /resolve_legacy_calendar_recovery_cutoff_v3_16_11_internal/u);
+  assert.match(calendarRecoverySql,
+    /diagnostic[.]constraint_name='calendar_dependency_unavailable'/u);
+  assert.match(calendarRecoverySql,
+    /authority[.]recorded_at>run[.]source_cutoff AND authority[.]recorded_at<=run[.]terminal_at/u);
+  assert.match(calendarRecoverySql,
+    /v_recovery_cutoff:=date_trunc\('second',v_failed_terminal\)/u);
+  assert.match(calendarRecoverySql,
+    /legacy-producer-calendar-dependency-recovery-v1/u);
+  assert.doesNotMatch(calendarRecoverySql,
+    /v_recovery_cutoff:=date_trunc\('second',clock_timestamp\(\)\)/u);
+  assert.match(calendarRecoverySql,
+    /OWNER TO opportunity_v3_rpc_owner[\s\S]*GRANT EXECUTE[\s\S]*TO legacy_correctness_rpc_owner/u);
+  assert.doesNotMatch(calendarRecoverySql,
+    /GRANT EXECUTE[\s\S]*TO (?:service_role|anon|authenticated)/u);
+  assert.match(calendarRecoverySql,
+    /NOT EXISTS\(SELECT 1 FROM public[.]legacy_producer_runs_v3_11 success[\s\S]*success[.]status='success'/u);
+  assert.match(calendarRecoverySql,
+    /legacy_producer_occurrence_terminal_v3_16_11[\s\S]*scheduled_occurrence_id,status,terminal_at DESC,run_id/u);
+  assert.match(calendarRecoverySql,
+    /trading_session_recovery_recorded_v3_16_11[\s\S]*recorded_at,source_timestamp,collected_at/u);
 });
 
 test('V3.14 completion persists a non-empty exact decision revision and heartbeat',()=>{

@@ -340,14 +340,14 @@
     "P1": 0,
     "P2": 0
   },
-  "verificationStatus": "v3_16_9_local_code_gate_pass;protected_external_attestation_pending",
-  "verificationGateConclusion": "v3_16_9_local_code_gate_pass;protected_external_gate_and_shadow_activation_pending;promotion_blocked_non_fabricated_elapsed_cohorts_unavailable",
+  "verificationStatus": "v3_16_11_calendar_recovery_local_migration_pass;full_code_gate_pending",
+  "verificationGateConclusion": "v3_16_11_repair_in_progress;protected_external_gate_and_shadow_activation_pending;promotion_blocked_non_fabricated_elapsed_cohorts_unavailable",
   "verificationTracks": {
     "product_runtime": "exact_430b810_local_diagnostic_pass_typecheck_lint_build_63_routes_base_61_product_108_migration_54_legacy_2_playwright_8_performance_4_dependency_audit_0;protected_external_attestation_pending",
     "evaluation_governance": "blocked/non_fabricated_elapsed_cohorts_unavailable",
     "model_runner": "exact_430b810_local_diagnostic_pass_18_of_18_and_disabled_host_pin_v3_9_doctor_pass;protected_external_attestation_pending"
   },
-  "releaseStatus": "v3_14_web_live;v3_16_8_merged_and_migrated_but_runtime_rolled_back;v3_16_9_transaction_time_repair_in_progress;web_not_deployed",
+  "releaseStatus": "v3_14_web_live;v3_16_10_merged_and_migrated_but_runtime_rolled_back;v3_16_11_calendar_recovery_in_progress;web_not_deployed",
   "createdAt": "2026-07-18T21:22:18+08:00",
   "updatedAt": "2026-08-16T05:34:18+08:00",
   "baselineDomain": "stock-recommendation-engine",
@@ -374,7 +374,7 @@
     "homepage ranking promotion before real evaluation cohorts",
     "absolute prevention of all code execution or Codex-private scratch writes"
   ],
-  "blockedReason": "V3.16.9 protected external gate and coordinated production activation remain; promotion_gate waits for non_fabricated_elapsed_cohorts",
+  "blockedReason": "V3.16.11 protected external gate and coordinated production activation remain; promotion_gate waits for non_fabricated_elapsed_cohorts",
   "nextHumanResponse": "none; user authorized completing V3.15 and production deployment without stepwise confirmation; do not reset the database password",
   "releaseEvidence": {
     "exactImplementationCommit": "184390953048209730c22828548858c28fa3b6b7",
@@ -395,6 +395,7 @@
   "v313DecisionIntegrityAmendment": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/source-led-opportunity-engine-v3.13-decision-integrity-amendment.md",
   "v314ActionabilityRecoveryAmendment": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/source-led-opportunity-engine-v3.14-actionability-recovery-amendment.md",
   "v3169TransactionTimeAmendment": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v3.16.9-transaction-time-amendment.md",
+  "v31611CalendarRecoveryAmendment": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v3.16.11-calendar-recovery-amendment.md",
   "v3169RedBaseline": {
     "runId": "21c5a5a4-aa32-7abf-ac99-7e5f1e54d89e",
     "producerCommit": "6c986eca0da0904b9af173e13359a457cfee0060",
