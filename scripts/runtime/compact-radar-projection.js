@@ -320,7 +320,7 @@ function citedDecisionBrief(brief, citations, provenance) {
 function landingLane(card) {
   const action=card?.decisionEnvelope?.userAction;
   if(['buy','accumulate','research_starter'].includes(action))return 'actionable';
-  if(card?.proximityToAction===true||['wait_value','wait_market','wait_breakout','wait_reclaim','avoid_chase'].includes(action)){
+  if(card?.proximityToAction===true||['wait_value','wait_market','wait_breakout','wait_reclaim','avoid_chase','avoid'].includes(action)){
     return 'waiting';
   }
   return 'research';
