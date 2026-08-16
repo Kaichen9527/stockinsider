@@ -12,6 +12,8 @@ const CARD_BUCKETS = Object.freeze([
   'recentFormal7d', 'fallbackOpportunities90d', 'hotTracking',
 ]);
 const DECISION_BRIEF_UNAVAILABLE_REASON = 'insufficient_cited_decision_brief';
+const LANDING_LANE_LIMITS = Object.freeze({ actionable: 6, waiting: 12, research: 12 });
+const RADAR_PAYLOAD_MAXIMUM_BYTES = 150000;
 
 function omitProjectionHeartbeat(value) {
   if (Array.isArray(value)) return value.map(omitProjectionHeartbeat);
@@ -315,6 +317,36 @@ function citedDecisionBrief(brief, citations, provenance) {
   return brief;
 }
 
+function landingLane(card) {
+  const action=card?.decisionEnvelope?.userAction;
+  if(['buy','accumulate','research_starter'].includes(action))return 'actionable';
+  if(card?.proximityToAction===true||['wait_value','wait_market','wait_breakout','wait_reclaim','avoid_chase'].includes(action)){
+    return 'waiting';
+  }
+  return 'research';
+}
+
+function selectLandingSourceSignals(cards) {
+  const selected=[];
+  const counts={actionable:0,waiting:0,research:0};
+  for(const card of cards){
+    const lane=landingLane(card);
+    if(counts[lane]>=LANDING_LANE_LIMITS[lane])continue;
+    counts[lane]+=1;
+    selected.push(card);
+  }
+  return selected;
+}
+
+function removeLowestPrioritySignal(cards) {
+  for(const lane of ['research','waiting','actionable']){
+    for(let index=cards.length-1;index>=0;index-=1){
+      if(landingLane(cards[index])===lane)return [...cards.slice(0,index),...cards.slice(index+1)];
+    }
+  }
+  return cards;
+}
+
 function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates = [], marketAnalysis = null) {
   const clean = stripCorrectnessAdditions(legacyPayload);
   invariant(Array.isArray(clean.opportunities), 'legacy opportunities required');
@@ -355,6 +387,10 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
           :unboundView.opportunityAction};
       const decisionBrief=availableBrief??Object.freeze({availability:'unavailable',
         reason:DECISION_BRIEF_UNAVAILABLE_REASON});
+      // The compact projection is a landing-page index, not the immutable detail
+      // record. Keep one canonical citation copy here. Complete evidence remains
+      // in the decision revision payload addressed by decisionRevisionId.
+      const publicCitations=citations;
       const card = {
       symbol: decision.symbol, chineseName: typeof decision.name === 'string'
         ? [...decision.name.normalize('NFC')].slice(0,20).join('') : null, researchMaturity: 'source_signal',
@@ -362,11 +398,11 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
       decisionEnvelope:publicView.decisionEnvelope,decisionRevisionId:publicView.decisionRevisionId,
       discoveredAt: decision.claimAsOf ?? decision.sourceEffectiveAt ?? null,
       sourceClass: decision.sourceClass ?? 'community', sourceSummary: [...String(decision.sourceSummary ?? decision.raw ?? '來源訊號待研究').normalize('NFC').replace(/[\r\n]+/gu, ' ')].slice(0, 40).join(''),
-      evidenceRefs: citations.map((row) => row.ref),
+      evidenceRefs: publicCitations.map((row) => row.ref),
       valuationStatus: publicView.decisionEnvelope.valuationReadiness, technicalState: decision.technical?.technicalState
         ?? decision.researchScore?.priceContext?.technicalState ?? 'unavailable',
       changedBecause: signalReasons.has(decision.reason) ? decision.reason : 'new_source_evidence',
-      sourceProvenance, sourceProvenances: citations, citations,
+      sourceProvenance, citations:publicCitations,
       decisionBrief,
       researchRanking:decision.researchRanking??null,
       proximityToAction:decision.researchRanking?.lane==='near_buy',
@@ -422,7 +458,7 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
   invariant(decisions.length + sourceCandidates.length <= 60, 'radar discovery bound');
   const publicMarketAnalysis = normalizedMarketAnalysis(marketAnalysis);
   const layered = addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates, publicMarketAnalysis);
-  const publishableSourceSignals=layered.sourceSignals.filter((card)=>{
+  const publishableSourceSignals=selectLandingSourceSignals(layered.sourceSignals.filter((card)=>{
     const validBrief=card.decisionBrief&&card.citations?.length>0
       &&((card.decisionBrief.availability==='unavailable'
           &&card.decisionBrief.reason===DECISION_BRIEF_UNAVAILABLE_REASON
@@ -430,37 +466,43 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
         ||citedDecisionBrief(card.decisionBrief,card.citations,card.sourceProvenance));
     const validProvenance=validPrimaryProvenance(card.sourceProvenance,card.citations??[]);
     return Boolean(validBrief&&validProvenance);
-  });
-  const publishableLayered={...layered,sourceSignals:publishableSourceSignals};
-  const publishableSymbols=new Set(publishableSourceSignals.map((card)=>card.symbol));
-  const publicDiscoveryDelta={...discoveryDelta,
-    added:(discoveryDelta?.added??[]).filter((symbol)=>publishableSymbols.has(symbol)),
-    continued:(discoveryDelta?.continued??[]).filter((symbol)=>publishableSymbols.has(symbol)),
-    unchangedReasons:(discoveryDelta?.unchangedReasons??[]).filter((row)=>publishableSymbols.has(row?.symbol))};
-  invariant(new Set(publishableLayered.sourceSignals.map((card)=>card.symbol)).size===publishableLayered.sourceSignals.length,
+  }));
+  invariant(new Set(publishableSourceSignals.map((card)=>card.symbol)).size===publishableSourceSignals.length,
     'one current decision card per symbol required');
   const priorCorrectness = priorProjection?.sourceLedCorrectness;
-  const materialContentHash = sha256(canonicalJson(omitProjectionHeartbeat({ legacy:publishableLayered.legacy,sourceSignals:publishableLayered.sourceSignals,
-    discoveryDelta:publicDiscoveryDelta,underreactionMarket:publicMarketAnalysis })));
-  const resolvedMaterialChanged = materialChanged ?? priorCorrectness?.contentHash !== materialContentHash;
-  const resolvedContentAsOf = resolvedMaterialChanged ? contentAsOf
-    : priorCorrectness?.contentAsOf ?? priorCorrectness?.asOf ?? contentAsOf;
-  const freshness = assessProjectionFreshness({ contentAsOf:resolvedContentAsOf,evaluatedAt,publishedAt,
-    now:new Date(publishedAt),tradingSessions:freshnessSchedule });
-  const payload = {
-    ...publishableLayered.legacy,
-    sourceSignals: publishableLayered.sourceSignals,
-    discoveryDelta: publicDiscoveryDelta,
-    underreactionMarket: publicMarketAnalysis,
-    sourceAcquisitionHealth:sourceAcquisitionHealth??legacyPayload.sourceAcquisitionHealth??null,
-    releaseIdentity:{schema:schemaVersion,producerCommitSha:producerIdentity?.commitSha??null,
-      runtimeManifestSha256:producerIdentity?.runtimeManifestSha256??null,migrationLevel:'decision-integrity-v3.14'},
-    sourceLedCorrectness: { schema: schemaVersion, window, asOf,
-      contentAsOf: resolvedContentAsOf, evaluatedAt, publishedAt,
-      nextExpectedAt:freshness.nextExpectedAt,
-      freshnessSchedule:freshnessSchedule.slice(0,80),contentHash:materialContentHash,producerIdentity },
+  const buildPayload=(selectedSignals)=>{
+    const publishableSymbols=new Set(selectedSignals.map((card)=>card.symbol));
+    const publicDiscoveryDelta={...discoveryDelta,
+      added:(discoveryDelta?.added??[]).filter((symbol)=>publishableSymbols.has(symbol)),
+      continued:(discoveryDelta?.continued??[]).filter((symbol)=>publishableSymbols.has(symbol)),
+      unchangedReasons:(discoveryDelta?.unchangedReasons??[]).filter((row)=>publishableSymbols.has(row?.symbol))};
+    const materialContentHash = sha256(canonicalJson(omitProjectionHeartbeat({ legacy:layered.legacy,
+      sourceSignals:selectedSignals,discoveryDelta:publicDiscoveryDelta,underreactionMarket:publicMarketAnalysis })));
+    const resolvedMaterialChanged = materialChanged ?? priorCorrectness?.contentHash !== materialContentHash;
+    const resolvedContentAsOf = resolvedMaterialChanged ? contentAsOf
+      : priorCorrectness?.contentAsOf ?? priorCorrectness?.asOf ?? contentAsOf;
+    const freshness = assessProjectionFreshness({ contentAsOf:resolvedContentAsOf,evaluatedAt,publishedAt,
+      now:new Date(publishedAt),tradingSessions:freshnessSchedule });
+    return {
+      ...layered.legacy,sourceSignals:selectedSignals,discoveryDelta:publicDiscoveryDelta,
+      underreactionMarket:publicMarketAnalysis,
+      sourceAcquisitionHealth:sourceAcquisitionHealth??legacyPayload.sourceAcquisitionHealth??null,
+      releaseIdentity:{schema:schemaVersion,producerCommitSha:producerIdentity?.commitSha??null,
+        runtimeManifestSha256:producerIdentity?.runtimeManifestSha256??null,migrationLevel:'decision-integrity-v3.14'},
+      sourceLedCorrectness:{schema:schemaVersion,window,asOf,contentAsOf:resolvedContentAsOf,evaluatedAt,publishedAt,
+        nextExpectedAt:freshness.nextExpectedAt,freshnessSchedule:freshnessSchedule.slice(0,80),
+        contentHash:materialContentHash,producerIdentity},
+    };
   };
-  bounded(payload, 150000, 'radar payload');
+  let selectedSignals=publishableSourceSignals;
+  let payload=buildPayload(selectedSignals);
+  while(Buffer.byteLength(canonicalJson(payload))>RADAR_PAYLOAD_MAXIMUM_BYTES&&selectedSignals.length>0){
+    const reduced=removeLowestPrioritySignal(selectedSignals);
+    invariant(reduced.length<selectedSignals.length,'radar source signal compaction stalled');
+    selectedSignals=reduced;
+    payload=buildPayload(selectedSignals);
+  }
+  bounded(payload, RADAR_PAYLOAD_MAXIMUM_BYTES, 'radar payload');
   const canonical = canonicalJson(payload);
   const payloadChecksum = sha256(canonical);
   const storageWindow = window === 'hot' ? 'three_day' : window;
@@ -477,5 +519,6 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
 
 module.exports = { CARD_BUCKETS, DECISION_BRIEF_UNAVAILABLE_REASON, addResearchDecisions, decisionRevisionIdentityBundle,
   citedDecisionBrief, derivePublicOpportunityView, immutableDecisionRevisionCard, navigableCitations,
-  publishCompactRadarProjection, stripCorrectnessAdditions, validCitation, validHttpsUrl, validInstant,
+  landingLane, publishCompactRadarProjection, selectLandingSourceSignals, stripCorrectnessAdditions,
+  validCitation, validHttpsUrl, validInstant,
   validPrimaryProvenance };

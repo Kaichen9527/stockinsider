@@ -1046,8 +1046,11 @@ const checks = {
       window: 'daily', asOf: '2026-08-01T10:20:00Z', producerIdentity: { commitSha: 'a'.repeat(40) },
       legacyPayload: { opportunities: [], boundedLegacyPadding: 'x'.repeat(110_000) },
     });
-    assert.equal(compact.payload.sourceSignals.length, 30, 'all bounded top-30 source signals remain visible');
+    assert.equal(compact.payload.sourceSignals.length, 12,
+      'the Landing research lane publishes its bounded top 12 while immutable revisions retain the full set');
     assert.ok(runtime('codec.js').byteLength(compact.payload) <= 150_000, 'worst-case named source signals fit the compact payload');
+    assert.ok(compact.payload.sourceSignals.every((signal) => !Object.hasOwn(signal, 'sourceProvenances')),
+      'the compact index carries one citation collection rather than duplicate provenance arrays');
     assert.ok(compact.payload.sourceSignals.every((signal) => !Object.hasOwn(signal, 'researchDecision')),
       'source-signal cards omit duplicated optional recommendation metadata that the UI never consumes');
     const projection = runtime('compact-radar-projection.js');

@@ -32,7 +32,8 @@ test('compact radar projection is bounded and has deterministic cache identity',
   assert.ok(Buffer.byteLength(JSON.stringify(first.payload)) <= 150000);
   assert.equal(first.etag, second.etag);
   assert.equal(first.payload.opportunities.length, 0);
-  assert.equal(first.payload.sourceSignals.length, 30);
+  assert.equal(first.payload.sourceSignals.length, 12);
+  assert.ok(first.payload.sourceSignals.every((card) => !Object.hasOwn(card, 'sourceProvenances')));
   assert.equal(first.storageWindow, 'daily');
   assert.equal(first.projectionKey, `legacy-radar-v3.11:daily:2026-08-01T00:00:00Z:${first.payloadChecksum}`);
 
@@ -68,6 +69,11 @@ test('compact radar projection is bounded and has deterministic cache identity',
   const producerProjection = publishCompactRadarProjection({ decisions: [], legacyPayload: producerInput,
     window: 'daily', asOf: '2026-08-01T00:00:00Z', producerIdentity: { runId: 'bootstrap' } });
   assert.ok(Buffer.byteLength(JSON.stringify(producerProjection.payload)) <= 150000);
+  const combinedProjection = publishCompactRadarProjection({ decisions, legacyPayload: producerInput,
+    window: 'daily', asOf: '2026-08-01T00:00:00Z', producerIdentity: { runId: 'production-shaped' } });
+  assert.ok(Buffer.byteLength(JSON.stringify(combinedProjection.payload)) <= 150000);
+  assert.ok(combinedProjection.payload.sourceSignals.length > 0);
+  assert.ok(combinedProjection.payload.sourceSignals.length <= 12);
   for (const route of ['daily', 'hot', 'weekly']) {
     const routeSource = readFileSync(path.join(root, `web/src/app/api/radar/${route}/route.ts`), 'utf8');
     assert.match(routeSource, /producerRead[\s\S]*compactProducerRadarPayload/u);
