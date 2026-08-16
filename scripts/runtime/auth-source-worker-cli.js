@@ -1337,6 +1337,14 @@ function projectionDecision(decision){
   return Object.freeze({...decision,analysisRevision:Object.freeze(analysisRevision)});
 }
 
+function decisionRevisionBundleKind(card){
+  const version=card?.decisionEnvelope?.version;
+  invariant(['decision-envelope-v3.13.0','decision-envelope-v3.14.0'].includes(version),
+    'decision revision envelope version unavailable');
+  return version==='decision-envelope-v3.14.0'
+    ?'legacy_decision_revision_v3_14':'legacy_decision_revision_v3_13';
+}
+
 const ANALYSIS_PROVENANCE_KEYS=new Set(
   ['sourceKey','sourceUrl','sourcePublishedAt','sourceCollectedAt','sourceName','kolIdentity']);
 
@@ -1732,7 +1740,7 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
       const home=projections.find((projection)=>projection.storageWindow==='home');
       const decisionRevisions=(home?.payload?.sourceSignals??[]).map((card)=>({
         symbol:card.symbol,decisionRevisionId:card.decisionRevisionId,
-        bundle:immutableBundle('legacy_decision_revision_v3_14',immutableDecisionRevisionCard(card)),
+        bundle:immutableBundle(decisionRevisionBundleKind(card),immutableDecisionRevisionCard(card)),
         identityBundle:decisionRevisionIdentityBundle(card),
         sourceLedCorrectness:home.payload.sourceLedCorrectness,
       }));
