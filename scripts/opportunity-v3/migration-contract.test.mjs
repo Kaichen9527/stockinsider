@@ -137,6 +137,9 @@ test('V3.16.16 preserves true recollection time without consuming a financial fa
   assert.match(financialFactRecollectionSql,
     /fact[.]source_ref=\(input\)[.]source_ref AND fact[.]collected_at<=\(input\)[.]collected_at/u);
   assert.match(financialFactRecollectionSql,
+    /pg_advisory_xact_lock\(hashtextextended\(concat_ws\('\|',\s*\(input\)[.]stock_id,\(input\)[.]fact_key,coalesce\(\(input\)[.]period_start::text,''\),\s*\(input\)[.]period_end,\(input\)[.]duration_kind\),0\)\)/u,
+    'the recollection lookup must use the predecessor exact series lock');
+  assert.match(financialFactRecollectionSql,
     /'append_financial_fact_v3'[\s\S]*'idempotent'/u);
   assert.match(financialFactRecollectionSql,
     /REVOKE ALL ON FUNCTION public[.]append_financial_fact_pre_v3_16_16[\s\S]*service_role/u);

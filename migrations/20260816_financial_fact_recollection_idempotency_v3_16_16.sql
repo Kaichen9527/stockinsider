@@ -32,9 +32,12 @@ BEGIN
   IF (input).collected_at<(input).source_timestamp OR (input).collected_at>v_now
   THEN RAISE EXCEPTION USING ERRCODE='PT422',MESSAGE='invalid_authority_request';END IF;
 
-  PERFORM pg_advisory_xact_lock(hashtextextended(concat_ws('|','financial_fact_recollection',
-    (input).stock_id,(input).fact_key,coalesce((input).period_start::text,''),(input).period_end,
-    (input).duration_kind,(input).source_ref),0));
+  -- Use the predecessor's exact series lock.  This serializes the lookup with
+  -- both another recollection and a genuine new revision; using a narrower
+  -- recollection-only key would permit two first observers to miss each other.
+  PERFORM pg_advisory_xact_lock(hashtextextended(concat_ws('|',
+    (input).stock_id,(input).fact_key,coalesce((input).period_start::text,''),
+    (input).period_end,(input).duration_kind),0));
   SELECT fact.fact_id,fact.recorded_at INTO v_existing,v_existing_recorded_at
   FROM public.opportunity_financial_facts_v3 fact
   WHERE fact.stock_id=(input).stock_id AND fact.fact_key=(input).fact_key
