@@ -546,16 +546,43 @@ test('V316 direct claim transaction raises only its local statement timeout and 
 
 test('V315 official ingestion keeps valid PB when the exchange PE exceeds the authority range',async()=>{
   const {streamOfficialIngestionV314}=runtime('auth-source-worker-cli.js');const seen=[];
-  const observation={symbol:'1711',exchange:'TWSE',session:'2026-08-13',sourceRef:'twse-openapi:BWIBBU_ALL:2026-08-13:1711'};
+  const observation={symbol:'1711',exchange:'TWSE',session:'2026-08-13',sourceRef:'twse-openapi:BWIBBU_ALL:2026-08-13:1711',
+    close:40,closeSourceRef:'twse-openapi:official-close:2026-08-13:1711'};
   const summary=await streamOfficialIngestionV314({claim:{runId:'run',jobId:'job'},
     sourceCutoff:'2026-08-14T00:00:00Z',producerSha:'a'.repeat(40),snapshot:{valuations:[
       {...observation,peRatio:23.4,pbRatio:1.47},
-      {...observation,symbol:'1712',sourceRef:'twse-openapi:BWIBBU_ALL:2026-08-13:1712',peRatio:305.38,pbRatio:2.44},
-      {...observation,symbol:'1713',sourceRef:'twse-openapi:BWIBBU_ALL:2026-08-13:1713',peRatio:305.38,pbRatio:140},
+      {...observation,symbol:'1712',sourceRef:'twse-openapi:BWIBBU_ALL:2026-08-13:1712',
+        closeSourceRef:'twse-openapi:official-close:2026-08-13:1712',peRatio:305.38,pbRatio:2.44},
+      {...observation,symbol:'1713',sourceRef:'twse-openapi:BWIBBU_ALL:2026-08-13:1713',
+        closeSourceRef:'twse-openapi:official-close:2026-08-13:1713',peRatio:305.38,pbRatio:140},
     ]},persistChunk:async(row)=>seen.push(row)});
   const rows=seen.filter((row)=>row.kind==='reported_valuations').flatMap((row)=>row.items);
   assert.equal(summary.counts.reported_valuations,2);
   assert.deepEqual(rows.map((row)=>[row.symbol,row.peRatio,row.pbRatio]),[
     ['1711',23.4,1.47],['1712',null,2.44],
   ]);
+});
+
+test('V31613 reported valuations defer rows without an official same-session close dependency',async()=>{
+  const {streamOfficialIngestionV314}=runtime('auth-source-worker-cli.js');const seen=[];
+  const snapshot={
+    priceObservations:[{symbol:'2330',exchange:'TWSE',session:'2026-08-13',close:100,
+      sourceRef:'twse-rwd:STOCK_DAY:2026-08-13:2330'}],
+    valuations:[{symbol:'2317',exchange:'TWSE',session:'2026-08-13',peRatio:18,pbRatio:2.1,
+      sourceRef:'twse-openapi:BWIBBU_ALL:2026-08-13:2317',close:105,
+      closeSourceRef:'twse-openapi:official-close:2026-08-13:2317'}],
+    valuationHistory:[
+      {symbol:'2330',session:'2026-08-13',peRatio:22,pbRatio:5,
+        sourceRef:'twse-rwd:BWIBBU_d:2026-08-13:2330'},
+      {symbol:'2303',session:'2026-08-13',peRatio:20,pbRatio:3,
+        sourceRef:'twse-rwd:BWIBBU_d:2026-08-13:2303'},
+    ],
+  };
+  const summary=await streamOfficialIngestionV314({claim:{runId:'run',jobId:'job'},
+    sourceCutoff:'2026-08-14T00:00:00Z',producerSha:'a'.repeat(40),snapshot,
+    persistChunk:async(row)=>seen.push(row)});
+  const rows=seen.filter((row)=>row.kind==='reported_valuations').flatMap((row)=>row.items);
+  assert.deepEqual(rows.map((row)=>[row.symbol,row.close]),[['2317',105],['2330',100]]);
+  assert.equal(summary.counts.reported_valuations,2);
+  assert.deepEqual(summary.deferred,{reportedValuationPriceDependencyUnavailable:1});
 });
