@@ -8,7 +8,7 @@ import { runControlledProjectionPerformanceOracle } from './performance-harness.
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const require = createRequire(import.meta.url);
-const { publishCompactRadarProjection } = require(path.join(root, 'scripts/runtime/compact-radar-projection.js'));
+const { landingLane, publishCompactRadarProjection, selectLandingSourceSignals } = require(path.join(root, 'scripts/runtime/compact-radar-projection.js'));
 const { compactProducerRadarPayload, producerRadarPayloadBytes } = require(path.join(root, 'web/src/lib/radar-producer-payload.js'));
 
 test('compact radar projection is bounded and has deterministic cache identity', () => {
@@ -32,7 +32,8 @@ test('compact radar projection is bounded and has deterministic cache identity',
   assert.ok(Buffer.byteLength(JSON.stringify(first.payload)) <= 150000);
   assert.equal(first.etag, second.etag);
   assert.equal(first.payload.opportunities.length, 0);
-  assert.equal(first.payload.sourceSignals.length, 30);
+  assert.equal(first.payload.sourceSignals.length, 12);
+  assert.ok(first.payload.sourceSignals.every((card) => !Object.hasOwn(card, 'sourceProvenances')));
   assert.equal(first.storageWindow, 'daily');
   assert.equal(first.projectionKey, `legacy-radar-v3.11:daily:2026-08-01T00:00:00Z:${first.payloadChecksum}`);
 
@@ -68,6 +69,11 @@ test('compact radar projection is bounded and has deterministic cache identity',
   const producerProjection = publishCompactRadarProjection({ decisions: [], legacyPayload: producerInput,
     window: 'daily', asOf: '2026-08-01T00:00:00Z', producerIdentity: { runId: 'bootstrap' } });
   assert.ok(Buffer.byteLength(JSON.stringify(producerProjection.payload)) <= 150000);
+  const combinedProjection = publishCompactRadarProjection({ decisions, legacyPayload: producerInput,
+    window: 'daily', asOf: '2026-08-01T00:00:00Z', producerIdentity: { runId: 'production-shaped' } });
+  assert.ok(Buffer.byteLength(JSON.stringify(combinedProjection.payload)) <= 150000);
+  assert.ok(combinedProjection.payload.sourceSignals.length > 0);
+  assert.ok(combinedProjection.payload.sourceSignals.length <= 12);
   for (const route of ['daily', 'hot', 'weekly']) {
     const routeSource = readFileSync(path.join(root, `web/src/app/api/radar/${route}/route.ts`), 'utf8');
     assert.match(routeSource, /producerRead[\s\S]*compactProducerRadarPayload/u);
@@ -79,6 +85,22 @@ test('compact radar reader remains a projection-only indexed LIMIT 2 read', () =
   assert.match(source, /legacy_radar_projections_v3_11/u);
   assert.match(source, /\.limit\(2\)/u);
   assert.doesNotMatch(source, /runAuthSourceWorker|executeSourceRunTransaction|provider|deepResearch/u);
+});
+
+test('Landing lane selection applies the exact 6/12/12 caps across mixed actions', () => {
+  const cards = [
+    ...Array.from({ length: 8 }, (_, index) => ({ symbol:`a${index}`,decisionEnvelope:{userAction:'buy'} })),
+    ...Array.from({ length: 10 }, (_, index) => ({ symbol:`w${index}`,decisionEnvelope:{userAction:'wait_breakout'} })),
+    ...Array.from({ length: 10 }, (_, index) => ({ symbol:`v${index}`,decisionEnvelope:{userAction:'avoid'} })),
+    ...Array.from({ length: 16 }, (_, index) => ({ symbol:`r${index}`,decisionEnvelope:{userAction:'unavailable'} })),
+  ];
+  const selected=selectLandingSourceSignals(cards);
+  const counts=selected.reduce((result,card)=>{
+    const lane=landingLane(card);result[lane]=(result[lane]??0)+1;return result;
+  },{});
+  assert.deepEqual(counts,{actionable:6,waiting:12,research:12});
+  assert.equal(selected.filter((card)=>card.decisionEnvelope.userAction==='avoid').length,2,
+    'avoid shares the waiting cap instead of leaking through the research lane');
 });
 
 test('controlled performance oracle reserves its PostgreSQL port and short socket directory', () => {
