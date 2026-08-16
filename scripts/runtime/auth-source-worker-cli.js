@@ -1359,16 +1359,35 @@ async function streamOfficialIngestionV314({claim,snapshot,sourceCutoff,producer
   const financialFacts=resumeAllowed
     ?[...resumedFinancialFacts,...newFinancialFactsV314(snapshot?.financialFacts??[],[...priorFinancialRows,...resumedFinancialFacts])]
     :newFinancialFactsV314(snapshot?.financialFacts??[],priorFinancialRows);
+  const priceCloseByDependency=new Map((snapshot?.priceObservations??[]).flatMap((row)=>{
+    const close=Number(row?.close);
+    return row&&/^[0-9]{4}$/u.test(String(row.symbol??''))&&['TWSE','TPEX'].includes(String(row.exchange??''))
+      &&/^\d{4}-\d{2}-\d{2}$/u.test(String(row.session??''))&&Number.isFinite(close)&&close>0
+      ?[[`${row.exchange}:${row.symbol}:${row.session}`,close]]:[];
+  }));
+  let reportedValuationPriceDependencyUnavailable=0;
   const reportedValuations=[...(snapshot?.valuations??[]),...(snapshot?.valuationHistory??[])].flatMap((row)=>{
     if(!row||typeof row!=='object')return [];
     // Older synthetic contract owners intentionally omit the metric fields. Keep
     // those fixtures transport-compatible, while production observations are
     // normalized to the same closed ranges enforced by the V3.13 append RPC.
     if(!Object.hasOwn(row,'peRatio')&&!Object.hasOwn(row,'pbRatio'))return [row];
+    const exchange=['TWSE','TPEX'].includes(String(row.exchange??''))?String(row.exchange)
+      :String(row.sourceRef??'').startsWith('twse-')?'TWSE'
+      :String(row.sourceRef??'').startsWith('tpex-')?'TPEX':null;
+    invariant(exchange&&/^[0-9]{4}$/u.test(String(row.symbol??''))
+      &&/^\d{4}-\d{2}-\d{2}$/u.test(String(row.session??''))
+      &&validOfficialReportedValuationSourceRef(exchange,row.sourceRef),'official reported valuation provenance');
     const pe=Number(row.peRatio);const pb=Number(row.pbRatio);
     const peRatio=Number.isFinite(pe)&&pe>0&&pe<=200?pe:null;
     const pbRatio=Number.isFinite(pb)&&pb>0&&pb<=100?pb:null;
-    return peRatio===null&&pbRatio===null?[]:[{...row,peRatio,pbRatio}];
+    if(peRatio===null&&pbRatio===null)return [];
+    const expectedCloseSourceRef=`${exchange.toLowerCase()}-openapi:official-close:${row.session}:${row.symbol}`;
+    const embeddedClose=Number(row.close);
+    const close=Number.isFinite(embeddedClose)&&embeddedClose>0&&row.closeSourceRef===expectedCloseSourceRef
+      ?embeddedClose:priceCloseByDependency.get(`${exchange}:${row.symbol}:${row.session}`);
+    if(!(Number.isFinite(close)&&close>0)){reportedValuationPriceDependencyUnavailable+=1;return [];}
+    return [{...row,exchange,close,peRatio,pbRatio}];
   });
   const datasets=[
     // Production evidence from run 54aa220b showed that a 50-row financial
@@ -1414,7 +1433,7 @@ async function streamOfficialIngestionV314({claim,snapshot,sourceCutoff,producer
   if(persistChunk)await persistChunk({runId:claim.runId,jobId:claim.jobId,ownerToken:claim.ownerToken,kind:'terminal',ordinal:0,
     items:[{sourceCutoff,counts,chunks,terminalRoot}],chunkHash:terminalRoot,producerSha,sourceCutoff});
   return Object.freeze({schema:'legacy-official-ingestion-v3.14',sourceCutoff,counts:Object.freeze(counts),
-    chunks:Object.freeze(chunks),terminalRoot});
+    chunks:Object.freeze(chunks),terminalRoot,deferred:Object.freeze({reportedValuationPriceDependencyUnavailable})});
 }
 
 function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
