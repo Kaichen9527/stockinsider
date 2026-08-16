@@ -103,7 +103,7 @@ BEGIN
 END $resolver$;
 
 ALTER FUNCTION public.resolve_legacy_scheduled_occurrence_v3_11(text,text)
-  OWNER TO legacy_correctness_rpc_owner;
+  OWNER TO opportunity_v3_rpc_owner;
 REVOKE ALL ON FUNCTION public.resolve_legacy_scheduled_occurrence_v3_11(text,text)
   FROM PUBLIC,anon,authenticated,service_role;
 GRANT EXECUTE ON FUNCTION public.resolve_legacy_scheduled_occurrence_v3_11(text,text)
@@ -117,6 +117,12 @@ BEGIN
     WHERE namespace.nspname='public' AND function.proname='resolve_legacy_scheduled_occurrence_v3_11'
       AND function.provolatile='v' AND function.prosecdef)
   THEN RAISE EXCEPTION 'calendar_recovery_resolver_contract_unavailable';END IF;
+  IF NOT EXISTS(SELECT 1 FROM pg_proc function JOIN pg_namespace namespace ON namespace.oid=function.pronamespace
+    JOIN pg_roles owner ON owner.oid=function.proowner
+    WHERE namespace.nspname='public' AND function.proname='resolve_legacy_scheduled_occurrence_v3_11'
+      AND owner.rolname='opportunity_v3_rpc_owner'
+      AND has_function_privilege('legacy_correctness_rpc_owner',function.oid,'EXECUTE'))
+  THEN RAISE EXCEPTION 'calendar_recovery_resolver_authority_unavailable';END IF;
   IF NOT EXISTS(SELECT 1 FROM pg_proc function JOIN pg_namespace namespace ON namespace.oid=function.pronamespace
     JOIN pg_roles owner ON owner.oid=function.proowner
     WHERE namespace.nspname='public'
