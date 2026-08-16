@@ -196,6 +196,24 @@ acceptanceTest('DI-001','V3.13 decision envelope closes all eight user actions w
     legacyPayloads:{daily:legacy,hot:legacy,weekly:legacy,home:legacy}});
   const firstStage=await handlers.compact_radar_projection({readKind:'compact_projection_input',readJson:firstRead.json,
     readCanonical:firstRead.canonical,readHash:firstRead.hash});
+  const v314Envelope=runtime('decision-envelope-v314.js').deriveDecisionEnvelopeV314({
+    ...formalInput('breakout_confirmed'),qualityReadiness:'available',marketReadiness:'available',marketRegime:'risk_on',
+  });
+  const mixedVersionRead=runtime('codec.js').immutableBundle('compact_projection_input',{analysisResult:{
+    decisions:[stageDecision],sourceCandidates:[{symbol:'1102',name:'相容層研究訊號',sourceClass:'official',
+      sourceSummary:'官方研究待補',lastEvaluatedAt:'2026-08-07T10:20:00Z',
+      decisionEnvelope:v314Envelope,
+      claimId:'claim-stage-v313',claimAsOf:'2026-08-07T09:00:00Z',sourceKey:'mops',sourceName:'公開資訊觀測站',
+      sourceUrl:'https://mops.twse.com.tw/mops/web/index',sourcePublishedAt:'2026-08-07T09:00:00Z',
+      sourceCollectedAt:'2026-08-07T09:30:00Z'}],dislocationCandidates:[],projectionFreshnessSchedule:schedule},
+    sourceCutoff:'2026-08-07T10:20:00Z',legacyPayloads:{daily:legacy,hot:legacy,weekly:legacy,home:legacy}});
+  const mixedVersionStage=await handlers.compact_radar_projection({readKind:'compact_projection_input',
+    readJson:mixedVersionRead.json,readCanonical:mixedVersionRead.canonical,readHash:mixedVersionRead.hash});
+  assert.deepEqual(Object.fromEntries(mixedVersionStage.json.decisionRevisions.map((revision)=>[
+    revision.bundle.json.decisionEnvelope.version,revision.bundle.kind])),{
+    'decision-envelope-v3.14.0':'legacy_decision_revision_v3_14',
+    'decision-envelope-v3.13.0':'legacy_decision_revision_v3_13',
+  },'mixed compatibility cards must use the bundle kind matching their decision-envelope version');
   const secondEnvelope=decide({...formalInput('breakout_confirmed'),lastEvaluatedAt:'2026-08-08T10:20:00Z'});
   assert.equal(secondEnvelope.decisionRevisionId,stageDecision.decisionEnvelope.decisionRevisionId);
   const priorProjections=Object.fromEntries(firstStage.json.projections.map((projection)=>[projection.storageWindow,projection.payload]));
