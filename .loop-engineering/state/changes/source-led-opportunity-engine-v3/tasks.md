@@ -1827,3 +1827,18 @@ This approval authorizes implementation only. It does not authorize production m
 - [ ] Freeze and review the exact implementation, pass the protected Code Gate,
   apply the successor migration, activate two terminal exact producers, deploy
   the identical Vercel source and complete read-only Safari verification.
+
+## V3.16.11 deterministic calendar-dependency recovery occurrence
+
+- [x] Record reviewed run `eaa4a33b-69f1-b9b0-1fd2-92e4ebf3a5ab`, typed price
+  chunk-18 `calendar_dependency_unavailable`, 960/1,315/360 persisted official
+  items and automatic rollback to producer `184390953048209730c22828548858c28fa3b6b7`.
+- [x] Preserve the base occurrence and add a recovery only for the exact typed
+  diagnostic plus official authority recorded between base cutoff and terminal.
+- [x] Bind recovery identity/cutoff to the database-owned failed terminal time;
+  retry wall clock cannot advance it and normal occurrences remain unchanged.
+- [x] Add the additive migration to the reviewed apply chain and pass the fresh
+  migration suite 54/54, including apply-twice and closed resolver checks.
+- [ ] Freeze exact implementation, complete protected review/Code Gate, apply
+  production migration, pass two exact terminal producer invocations, deploy
+  the identical Web source, API smoke and Safari UI verification.

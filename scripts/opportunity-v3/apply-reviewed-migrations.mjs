@@ -26,6 +26,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260816_official_ingestion_partial_resume_v3_16.sql',
   'migrations/20260816_official_ingestion_transaction_time_v3_16_9.sql',
   'migrations/20260816_official_ingestion_same_transaction_visibility_v3_16_10.sql',
+  'migrations/20260816_calendar_dependency_recovery_occurrence_v3_16_11.sql',
 ]);
 
 function parseArguments(argv) {
@@ -86,6 +87,8 @@ async function applyReviewedMigrations(options) {
       ,'transactionTimeDependency',to_regprocedure('public.resolve_legacy_trading_session_dependency_v3_16_9_internal(date,public.tw_market_v3,timestamptz,timestamptz)') IS NOT NULL
       ,'sameTransactionVisibility',(SELECT provolatile='v' FROM pg_proc
         WHERE oid='public.resolve_legacy_trading_session_dependency_v3_16_9_internal(date,public.tw_market_v3,timestamptz,timestamptz)'::regprocedure)
+      ,'calendarRecovery',(SELECT provolatile='v' AND prosecdef FROM pg_proc
+        WHERE oid='public.resolve_legacy_scheduled_occurrence_v3_11(text,text)'::regprocedure)
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',
