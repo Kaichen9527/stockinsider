@@ -1674,6 +1674,9 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
     },
     analysis_revision: async (claim) => {
       const bundle = readBundle(claim, 'analysis_revision_input');
+      const evaluationTimestamp = bundle.evaluationTimestamp ?? bundle.sourceCutoff;
+      invariant(typeof evaluationTimestamp === 'string' && Number.isFinite(Date.parse(evaluationTimestamp))
+        && Date.parse(evaluationTimestamp) >= Date.parse(bundle.sourceCutoff), 'analysis evaluation timestamp unavailable');
       const priorBySymbol = new Map((bundle.priorRevisions ?? []).map((revision) => [revision.symbol, revision]));
       const decisions = (bundle.factsResult?.decisions ?? []).map((decision) => {
         const priorRevision=priorBySymbol.get(decision.symbol) ?? null;
@@ -1694,9 +1697,9 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         return { ...revisionDecision, analysisRevision: revision.revision,
           materialChangedBecause: revision.disposition === 'unchanged' ? [] : reasons,
           evaluationDisposition: revision.disposition === 'unchanged' ? 'unchanged' : 'appended',
-          lastEvaluatedAt:bundle.sourceCutoff,
+          lastEvaluatedAt:evaluationTimestamp,
           analysisGeneratedAt: revision.revision.analysisGeneratedAt,
-          noChangeMessage: revision.disposition === 'unchanged' ? `已於 ${bundle.sourceCutoff} 檢查，無重大變化` : null };
+          noChangeMessage: revision.disposition === 'unchanged' ? `已於 ${evaluationTimestamp} 檢查，無重大變化` : null };
       });
       const immutableFactsByDecision=decisions.map((decision)=>immutableAnalysisFacts(decision.analysisRevision?.facts??decision));
       const decisionPayloads=immutableFactsByDecision.map((immutableFacts,index)=>{
@@ -1724,6 +1727,9 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
     },
     compact_radar_projection: async (claim) => {
       const bundle = readBundle(claim, 'compact_projection_input');
+      const evaluationTimestamp = bundle.evaluationTimestamp ?? bundle.sourceCutoff;
+      invariant(typeof evaluationTimestamp === 'string' && Number.isFinite(Date.parse(evaluationTimestamp))
+        && Date.parse(evaluationTimestamp) >= Date.parse(bundle.sourceCutoff), 'projection evaluation timestamp unavailable');
       const decisions = bundle.analysisResult?.decisions ?? [];
       const sourceCandidates = bundle.analysisResult?.sourceCandidates ?? [];
       const dislocationCandidates = bundle.analysisResult?.dislocationCandidates ?? [];
@@ -1757,7 +1763,8 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         discoveryDelta: bundle.analysisResult?.discoveryDelta ?? { added: [], exited: [], continued: [], unchangedReasons: [] },
         freshnessSchedule:bundle.analysisResult?.projectionFreshnessSchedule??[],
         schemaVersion:'legacy-radar-v3.14.0',
-        window, asOf: bundle.sourceCutoff, evaluatedAt:bundle.sourceCutoff,publishedAt:bundle.sourceCutoff,
+        window, asOf: bundle.sourceCutoff, contentAsOf:bundle.sourceCutoff,
+        evaluatedAt:evaluationTimestamp,publishedAt:evaluationTimestamp,
         priorProjection:priorProjections[window==='hot'?'three_day':window]??null,
         producerIdentity, legacyPayload: legacyPayloads[window] }));
       const home=projections.find((projection)=>projection.storageWindow==='home');
