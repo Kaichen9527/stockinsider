@@ -955,6 +955,12 @@ test('V3.16.9 resolves same-run calendar dependencies by knowledge and transacti
     /OWNER TO opportunity_v3_rpc_owner[\s\S]*GRANT EXECUTE[\s\S]*TO legacy_correctness_rpc_owner/u);
   assert.doesNotMatch(calendarRecoverySql,
     /GRANT EXECUTE[\s\S]*TO (?:service_role|anon|authenticated)/u);
+  assert.match(calendarRecoverySql,
+    /NOT EXISTS\(SELECT 1 FROM public[.]legacy_producer_runs_v3_11 success[\s\S]*success[.]status='success'/u);
+  assert.match(calendarRecoverySql,
+    /legacy_producer_occurrence_terminal_v3_16_11[\s\S]*scheduled_occurrence_id,status,terminal_at DESC,run_id/u);
+  assert.match(calendarRecoverySql,
+    /trading_session_recovery_recorded_v3_16_11[\s\S]*recorded_at,source_timestamp,collected_at/u);
 });
 
 test('V3.14 completion persists a non-empty exact decision revision and heartbeat',()=>{

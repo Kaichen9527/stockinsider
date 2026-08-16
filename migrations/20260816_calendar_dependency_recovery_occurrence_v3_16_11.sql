@@ -7,6 +7,11 @@
 
 BEGIN;
 
+CREATE INDEX IF NOT EXISTS legacy_producer_occurrence_terminal_v3_16_11
+  ON public.legacy_producer_runs_v3_11(scheduled_occurrence_id,status,terminal_at DESC,run_id);
+CREATE INDEX IF NOT EXISTS trading_session_recovery_recorded_v3_16_11
+  ON public.tw_trading_sessions_v3(recorded_at,source_timestamp,collected_at);
+
 CREATE OR REPLACE FUNCTION public.resolve_legacy_calendar_recovery_cutoff_v3_16_11_internal(
   p_base_occurrence_id text
 ) RETURNS timestamptz
@@ -16,6 +21,8 @@ LANGUAGE sql STABLE SECURITY DEFINER SET search_path='' AS $helper$
   WHERE p_base_occurrence_id~'^[0-9a-f]{64}$'
     AND run.scheduled_occurrence_id=p_base_occurrence_id AND run.status='failed'
     AND run.failure_code='data_integrity_failure'
+    AND NOT EXISTS(SELECT 1 FROM public.legacy_producer_runs_v3_11 success
+      WHERE success.scheduled_occurrence_id=p_base_occurrence_id AND success.status='success')
     AND EXISTS(SELECT 1 FROM public.legacy_runtime_failure_diagnostics_v3_14 diagnostic
       WHERE diagnostic.run_id=run.run_id AND diagnostic.stage='facts_refresh'
         AND diagnostic.failure_origin='persistence'
