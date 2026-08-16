@@ -196,6 +196,19 @@ acceptanceTest('DI-001','V3.13 decision envelope closes all eight user actions w
     legacyPayloads:{daily:legacy,hot:legacy,weekly:legacy,home:legacy}});
   const firstStage=await handlers.compact_radar_projection({readKind:'compact_projection_input',readJson:firstRead.json,
     readCanonical:firstRead.canonical,readHash:firstRead.hash});
+  const evaluationClockRead=runtime('codec.js').immutableBundle('compact_projection_input',{
+    analysisResult:{decisions:[stageDecision],sourceCandidates:[],dislocationCandidates:[],
+      projectionFreshnessSchedule:schedule},sourceCutoff:'2026-08-07T10:20:00Z',
+    evaluationTimestamp:'2026-08-08T10:30:00Z',
+    legacyPayloads:{daily:legacy,hot:legacy,weekly:legacy,home:legacy}});
+  const evaluationClockStage=await handlers.compact_radar_projection({readKind:'compact_projection_input',
+    readJson:evaluationClockRead.json,readCanonical:evaluationClockRead.canonical,
+    readHash:evaluationClockRead.hash});
+  assert.ok(evaluationClockStage.json.projections.every((projection)=>
+    projection.payload.sourceLedCorrectness.contentAsOf==='2026-08-07T10:20:00Z'
+      &&projection.payload.sourceLedCorrectness.evaluatedAt==='2026-08-08T10:30:00Z'
+      &&projection.payload.sourceLedCorrectness.publishedAt==='2026-08-08T10:30:00Z'),
+  'immutable run-start heartbeat must not rewrite the point-in-time content cutoff');
   const v314Envelope=runtime('decision-envelope-v314.js').deriveDecisionEnvelopeV314({
     ...formalInput('breakout_confirmed'),qualityReadiness:'available',marketReadiness:'available',marketRegime:'risk_on',
   });
@@ -246,7 +259,7 @@ acceptanceTest('DI-001','V3.13 decision envelope closes all eight user actions w
     researchScore:{...oldDisclosure.researchScore,priceContext:{currentPrice:101}}};
   const analysisInput=runtime('codec.js').immutableBundle('analysis_revision_input',{factsResult:{decisions:[currentDisclosure],
     sourceCandidates:[],dislocationCandidates:[],projectionFreshnessSchedule:schedule},
-    sourceCutoff:'2026-08-08T10:20:00Z',priorRevisions:[{
+    sourceCutoff:'2026-08-08T10:20:00Z',evaluationTimestamp:'2026-08-09T10:20:00Z',priorRevisions:[{
     symbol:'1101',revisionId:'analysis-prior',materialChangeHash:disclosureHash,
     analysisGeneratedAt:'2026-08-07T10:20:00Z',facts:oldDisclosure}]});
   const analysisStage=await handlers.analysis_revision({readKind:'analysis_revision_input',readJson:analysisInput.json,
@@ -256,6 +269,8 @@ acceptanceTest('DI-001','V3.13 decision envelope closes all eight user actions w
     'unchanged analysis lineage retains the current disclosure price');
   assert.deepEqual(analysisStage.json.decisions[0].decisionBrief,oldDisclosure.decisionBrief,
     'unchanged lineage retains prior cited narrative authority');
+  assert.equal(analysisStage.json.decisions[0].lastEvaluatedAt,'2026-08-09T10:20:00Z');
+  assert.match(analysisStage.json.decisions[0].noChangeMessage,/2026-08-09T10:20:00Z/u);
   const disclosureCompactInput=runtime('codec.js').immutableBundle('compact_projection_input',{
     analysisResult:analysisStage.json,sourceCutoff:'2026-08-08T10:20:00Z',
     legacyPayloads:{daily:legacy,hot:legacy,weekly:legacy,home:legacy}});
