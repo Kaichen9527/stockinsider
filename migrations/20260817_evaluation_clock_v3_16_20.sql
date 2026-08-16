@@ -22,7 +22,7 @@ DECLARE
 BEGIN
   v_claim:=public.claim_legacy_producer_job_evaluation_clock_base_v3_16_20(
     p_run,p_job,p_token,p_lease);
-  IF v_claim.run_id IS NULL OR v_claim.read_kind NOT IN (
+  IF v_claim.run_id IS NULL OR v_claim.read_kind IS NULL OR v_claim.read_kind NOT IN (
     'analysis_revision_input','compact_projection_input'
   ) THEN
     RETURN v_claim;
