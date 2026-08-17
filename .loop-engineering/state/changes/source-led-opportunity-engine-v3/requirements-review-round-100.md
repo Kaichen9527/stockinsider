@@ -9,9 +9,9 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `330973bcd8b06db399d82ceb194b74c3d8e4d521`
-- Final repair-closure commit/tree: `49edac4bcf471b01ba41a96114929331db62aca3` / `accce9940560471caef6b8f135c2843c7806abb6`
-- Full reviewed range: `330973bcd8b06db399d82ceb194b74c3d8e4d521..49edac4bcf471b01ba41a96114929331db62aca3`
-- Active graph: `377a22989728a8276833a11ae8a29ab669eef40f53a2a7285acdd135798a9c0a`
+- Final repair-closure commit/tree: `3d97bcda5442971b526af42e3e7b71926126922a` / `6adf0aa5b13e29fee111bff838cc05031be1fd6c`
+- Full reviewed range: `330973bcd8b06db399d82ceb194b74c3d8e4d521..3d97bcda5442971b526af42e3e7b71926126922a`
+- Active graph: `176ae0d91ca1912d7bcb68cc48c0e94a18ab01e47956e55456ef434400bd2ea7`
 
 ## Requirements closure
 
@@ -41,6 +41,14 @@ The additive migration applies twice on a fresh database and its executable
 performance passes `5/5`, typecheck, lint and production build pass, and model-runner
 passes `18/18` with disabled host-pin v3.9 doctor PASS. No password reset, credential
 rotation, LINE, dispatch, automatic trading or V3 Promotion is introduced.
+
+Protected owner execution exposed one traceability root rather than a product
+requirement defect: the new amendment lacked its canonical version header and the
+script-value registry still described the predecessor product-correctness command.
+The repair adds the canonical declaration, updates and re-hashes the closed command
+registry, and binds current-task disposition to the machine-readable release phase.
+The three formerly failing structural owners now pass `3/3`; no requirement scope,
+authority boundary, public interface, migration behavior, or action rule changed.
 Evaluation governance remains honestly
 `blocked/non_fabricated_elapsed_cohorts_unavailable`; this Requirements PASS makes
 no claim that future returns are proven.
