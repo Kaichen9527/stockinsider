@@ -1,42 +1,46 @@
-# V3.16.2 fresh Architecture activation-window evidence
+# V3.16.21 single independent Architecture review
 
-Date: 2026-08-15
-Review authority: fresh Architecture Round 57, independently reviewing the
-Requirements Round 176 carrier and complete activation-window repair closure.
+Date: 2026-08-17
+Review authority: the one permitted independent Architecture review for V3.16.21,
+performed read-only after the fresh Requirements PASS carrier.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `08b6816ac98efbcbfaba25cda6fc0be7af586cbf`
-- Requirements implementation commit: `c30727c03f3b9d81bf32a6decea0ce82780e6151`
-- Requirements evidence carrier: `4296c551abfc967387ef9a7f6a0af75c14ff9186`
-- Final repair-closure commit/tree: `4296c551abfc967387ef9a7f6a0af75c14ff9186` / `c15141174d88aaf93aff6f2051d88d2f68b840bb`
-- Full reviewed implementation range: `08b6816ac98efbcbfaba25cda6fc0be7af586cbf..4296c551abfc967387ef9a7f6a0af75c14ff9186`
-- Active graph: `71abf84b4ae6b4703fd0559807fba15553c1f5a68c56e19039aae44173727b9d`
+- Protected implementation parent: `330973bcd8b06db399d82ceb194b74c3d8e4d521`
+- Requirements implementation commit: `49edac4bcf471b01ba41a96114929331db62aca3`
+- Requirements evidence carrier: `e2a6b3aaca8c314033e98df9faf442e731350042`
+- Final repair-closure commit/tree: `e2a6b3aaca8c314033e98df9faf442e731350042` / `ef1163c7b04a8ede908a183e4cfc43316a7a6366`
+- Full reviewed implementation range: `330973bcd8b06db399d82ceb194b74c3d8e4d521..e2a6b3aaca8c314033e98df9faf442e731350042`
+- Active graph: `377a22989728a8276833a11ae8a29ab669eef40f53a2a7285acdd135798a9c0a`
 
 ## Architecture closure
 
-The repair preserves the sole launchd owner, owner-only activation lock, captured
-rollback package, fsynced activation journal and exact reviewed runtime pointer. It
-extends only the finite period in which the installer observes the one-shot owner.
-The wait performs no long-lived database transaction and grants no additional
-database authority.
+The provider boundary is append-only and race-safe: the request key has a unique
+constraint, `INSERT ... ON CONFLICT` serializes contenders, immutable triggers reject
+update/delete, and a differing winner is recorded only as redacted hashes in the
+conflict ledger. Service role can execute the exact leased RPC but cannot insert into
+the tables or execute the wrapped private claim function.
 
-Database-clock leases remain independent and must be renewed by the worker-thread
-heartbeat. A lost lease, missing pulse, worker error or nonzero launchd exit continues
-to fail closed. If the owner is still nonterminal at 14,400 seconds, the same
-`scheduler_activation_failed` inverse restores the captured scheduler and runtime.
-Immutable ingestion chunks stay bound to run, job, cutoff, ordinal, hash and producer
-SHA, so interruption and later resume cannot reinterpret or duplicate provider data.
+The stage graph captures response bytes before any parser consumes them. Downstream
+candidate, fact, analysis and projection work reads a detached, deeply frozen
+normalized payload. The final claim injects a sorted provider lineage and advances
+the evaluation clock to the latest stored `fetched_at`, so retry determinism and
+point-in-time eligibility use the same database evidence. Predecessor projection
+health is explicitly non-authoritative.
 
-The 20-symbol/260-retained-session price and 252-session valuation authority bounds
-are unchanged. Runtime-installation v1.13 is consistently owned by its header,
-catalog and every active cross-contract edge; catalog identity tags and the frozen
-active graph resolve to the same reviewed subject. No new scheduler,
-RPC, public mutation surface, provider, decision heuristic, action quota or release
-compatibility path is introduced. Requirements Round 176 is PASS at
-P0=0/P1=0/P2=0, `git diff --check` passes, and product correctness is `106/106`.
-The protected gate must still run all authoritative tracks against this exact carrier.
-Evaluation governance remains honestly blocked for non-fabricated elapsed cohorts
-and is not treated as evidence of future returns.
+The Web request path performs only the compact projection read and one bounded
+runtime-health read in parallel. The same effective-health function controls public
+and authenticated responses. Action envelopes are removed on mismatch even for a
+client that ignores health metadata, while last-good cards remain navigable to an
+exact revision or a safe research-only view. The research-only view bounds text and
+blockers, accepts only HTTPS provenance URLs and introduces no mutating surface.
+
+Migration rollback is additive-object retention plus scheduler stop; runtime and
+Vercel retain independent captured rollback targets. The sole launchd owner,
+reviewed manifest/tree/hash binding and disabled V3/LINE/dispatch/automatic-trading
+boundaries remain unchanged. Requirements PASS is P0=0/P1=0/P2=0, migration is
+apply-twice safe, and the implementation test matrix is green. Evaluation remains
+honestly blocked for non-fabricated elapsed cohorts and is not promoted by this
+Architecture PASS.
