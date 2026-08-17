@@ -1202,7 +1202,7 @@ function officialCitation(ref, evaluatedAt, {publishedAt=null,collectedAt=null}=
   if (typeof ref !== 'string' || ref.length === 0) return null;
   const twse=ref.startsWith('twse-')||ref.startsWith('twse:');const tpex=ref.startsWith('tpex-')||ref.startsWith('tpex:');
   const mops=ref.match(/^(?:twse|tpex)-mops-inline:(\d{4})-(\d{2})-\d{2}:(\d{4}):/u);
-  const sourceUrl=mops?`${MOPS_INLINE_URL}?step=1&CO_ID=${mops[3]}&SYEAR=${mops[1]}&SSEASON=${Math.ceil(Number(mops[2])/3)}&REPORT_ID=C`
+  const sourceUrl=mops?`${MOPS_INLINE_URL}?step=1&CO_ID=${mops[3]}&SYEAR=${Number(mops[1])-1911}&SSEASON=${Math.ceil(Number(mops[2])/3)}&REPORT_ID=C`
     :ref.includes('financial-statement')?(twse?'https://openapi.twse.com.tw/':tpex?'https://www.tpex.org.tw/openapi/':null)
     :ref.includes('monthly-revenue')?(twse?TWSE_REVENUE_URL:tpex?TPEX_REVENUE_URL:null)
       :ref.includes('STOCK_DAY')||ref.includes('tradingStock')?(twse?TWSE_PRICE_HISTORY_URL:tpex?TPEX_PRICE_HISTORY_URL:null)

@@ -192,7 +192,12 @@ async function loadMopsFinancialHistoryV314({ cutoff, candidates = [], fetchImpl
   const coordinates=quarterCoordinates(cutoff);
   const requests = coordinates.flatMap(({year,quarter})=>candidates.map((candidate) => ({
     symbol:String(candidate.symbol), exchange:String(candidate.exchange),
-    url:`${MOPS_INLINE_URL}?step=1&CO_ID=${candidate.symbol}&SYEAR=${year}&SSEASON=${quarter}&REPORT_ID=C`,
+    // MOPS' inline XBRL endpoint names SYEAR after the ROC reporting year,
+    // while the point-in-time scheduler and fact periods use Gregorian years.
+    // Keep the internal period authority Gregorian and translate only at the
+    // provider boundary; sending 2026 here returns a successful HTML response
+    // whose body says the filing does not exist.
+    url:`${MOPS_INLINE_URL}?step=1&CO_ID=${candidate.symbol}&SYEAR=${year-1911}&SSEASON=${quarter}&REPORT_ID=C`,
   }))).filter((row) => /^\d{4}$/u.test(row.symbol) && ['TWSE', 'TPEX'].includes(row.exchange));
   if(typeof collectedAt!=='string'||!Number.isFinite(Date.parse(collectedAt)))throw new Error('mops_collected_at');
   collectedAt = new Date(collectedAt).toISOString().replace('.000Z', 'Z'); const facts = []; const sourceHashes = {}; const sourceFailures = [];
