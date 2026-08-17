@@ -9,8 +9,8 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `cde4915db22f279a891b478540a2ebdab54876fb`
-- Final repair-closure commit/tree: `8a8e4304c52958c2c1c23bfdb4929fbb8a570a5a` / `09a0e7019d13f3ed70f812f917dc99cd2ee9c75d`
-- Full reviewed range: `cde4915db22f279a891b478540a2ebdab54876fb..8a8e4304c52958c2c1c23bfdb4929fbb8a570a5a`
+- Final repair-closure commit/tree: `5add5b8dcd559edadef96b5d6fdc46bb4f89ff22` / `558d0d950bd7e5f7521a0c4e5a4deefca28babe2`
+- Full reviewed range: `cde4915db22f279a891b478540a2ebdab54876fb..5add5b8dcd559edadef96b5d6fdc46bb4f89ff22`
 - Active graph: `b07516d0b650da847d8e0cba59edf2c25672e88443582a0e696e093a13e80525`
 
 ## Requirements closure
@@ -37,7 +37,7 @@ authority is shown as a typed blocker rather than `avoid` or a fabricated buy.
 
 The additive migration applies twice on a fresh database and its executable
 `appended -> reused -> conflict` lifecycle passes. Product correctness passes
-`116/116`, V3.16.21 focused coverage passes `7/7`, migration passes `60/60`,
+`117/117`, V3.16.21 focused coverage passes `8/8`, migration passes `60/60`,
 performance passes `5/5`, typecheck, lint and production build pass, and model-runner
 passes `28/28` with disabled host-pin v3.9 doctor PASS. No password reset, credential
 rotation, LINE, dispatch, automatic trading or V3 Promotion is introduced.
@@ -60,3 +60,11 @@ the complete roster integrity check. Mixed acquisition timestamps, an unknown
 predecessor SQL shape, excess public grants or a changed point-in-time cutoff fail
 closed. This closes the forensic four-hour runtime path without weakening source
 authority, provenance, lease, retry or pooler requirements.
+
+The operator-visible migration plan now derives the same ordered migration chain
+as the reviewed apply command and therefore includes the roster-chunk snapshot
+migration. A regression executes the real planner and requires exact parity with
+the apply-chain declaration, preventing an operator from approving a displayed
+plan that omits code the reviewed CLI will execute. This closes the final P1 found
+during read-only release preparation without changing schema authority or runtime
+semantics.
