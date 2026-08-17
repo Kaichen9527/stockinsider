@@ -57,6 +57,9 @@ const providerAcquisitionSql = fs.readFileSync(providerAcquisitionMigrationPath,
 const rosterChunkSnapshotMigrationPath = path.join(root,
   'migrations/20260817_official_ingestion_roster_chunk_snapshot_v3_16_21.sql');
 const rosterChunkSnapshotSql = fs.readFileSync(rosterChunkSnapshotMigrationPath, 'utf8');
+const projectionEvaluationSupersessionMigrationPath = path.join(root,
+  'migrations/20260817_projection_evaluation_supersession_v3_16_21.sql');
+const projectionEvaluationSupersessionSql = fs.readFileSync(projectionEvaluationSupersessionMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -454,6 +457,12 @@ before(() => {
     command(pg.psql, [
       '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', rosterChunkSnapshotMigrationPath,
+    ]);
+  }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', projectionEvaluationSupersessionMigrationPath,
     ]);
   }
 });
@@ -1022,6 +1031,62 @@ test('V3.16.21 validates one roster snapshot per bounded official ingestion chun
   `,['-Atq']).trim());
   assert.deepEqual(installed,{marker:true,publicCalls:0,internalCalls:3,globalChecks:1,
     owner:'opportunity_v3_rpc_owner',serviceExecute:false});
+});
+
+test('V3.16.21 appends a newer reviewed evaluation at one content cutoff and rejects ambiguity',()=>{
+  const codec=runtime('codec.js');
+  const cutoff='2026-08-16T03:26:56Z';
+  const worker='e'.repeat(64);
+  const projection=(commit,evaluatedAt,marker,{identity=true}={})=>{
+    const payload={marker,sourceSignals:[],releaseIdentity:{producerCommitSha:identity?commit:null},
+      sourceLedCorrectness:{schema:'legacy-radar-v3.14.0',window:'home',asOf:cutoff,
+        evaluatedAt,publishedAt:evaluatedAt,contentHash:codec.sha256(marker),
+        producerIdentity:{commitSha:identity?commit:null,workerSha256:identity?worker:null}}};
+    const canonical=codec.canonicalJson(payload);const hash=codec.sha256(canonical);
+    return {commit,canonical,hash,key:`legacy-radar-v3.11:home:${cutoff}:${hash}`,payload};
+  };
+  const first=projection('a'.repeat(40),'2026-08-17T01:00:00Z','first-reviewed-release');
+  const second=projection('b'.repeat(40),'2026-08-17T02:00:00Z','second-reviewed-release');
+  const sameProducer=projection('b'.repeat(40),'2026-08-17T03:00:00Z','nondeterministic-same-producer');
+  const equalTime=projection('c'.repeat(40),'2026-08-17T02:00:00Z','equal-time-disagreement');
+  const missingIdentity=projection('d'.repeat(40),'2026-08-17T04:00:00Z','missing-release-identity',{identity:false});
+  const insert=(row)=>`INSERT INTO public.legacy_radar_projections_v3_11(
+      projection_key,"window",as_of,producer_commit_sha,worker_sha256,material_change_root,
+      payload_canonical,payload_json,payload_sha256)
+    VALUES(${sqlLiteral(row.key)},'home','${cutoff}',${sqlLiteral(row.commit)},'${worker}',repeat('f',64),
+      decode('${Buffer.from(row.canonical).toString('hex')}','hex'),${sqlLiteral(row.canonical)}::jsonb,'${row.hash}')`;
+  const result=JSON.parse(psql(`BEGIN;
+    ${insert(first)};
+    ${insert(second)};
+    DO $same_producer$ BEGIN BEGIN ${insert(sameProducer)};
+      RAISE EXCEPTION 'expected_same_producer_rejection';
+    EXCEPTION WHEN SQLSTATE 'PT409' THEN
+      IF SQLERRM<>'projection_same_producer_nondeterminism' THEN RAISE;END IF;
+    END;END $same_producer$;
+    DO $equal_time$ BEGIN BEGIN ${insert(equalTime)};
+      RAISE EXCEPTION 'expected_equal_time_rejection';
+    EXCEPTION WHEN SQLSTATE 'PT409' THEN
+      IF SQLERRM<>'projection_evaluation_time_conflict' THEN RAISE;END IF;
+    END;END $equal_time$;
+    DO $missing_identity$ BEGIN BEGIN ${insert(missingIdentity)};
+      RAISE EXCEPTION 'expected_identity_rejection';
+    EXCEPTION WHEN SQLSTATE 'PT409' THEN
+      IF SQLERRM<>'projection_release_identity_invalid' THEN RAISE;END IF;
+    END;END $missing_identity$;
+    SELECT jsonb_build_object(
+      'rows',(SELECT count(*) FROM public.legacy_radar_projections_v3_11 WHERE as_of='${cutoff}'),
+      'newest',(SELECT producer_commit_sha FROM public.legacy_radar_projections_v3_11
+        WHERE as_of='${cutoff}' ORDER BY created_at DESC,projection_id ASC LIMIT 1),
+      'owner',(SELECT pg_get_userbyid(proowner) FROM pg_proc
+        WHERE oid='public.guard_legacy_radar_projection_insert_v3_13()'::regprocedure),
+      'serviceExecute',has_function_privilege('service_role',
+        'public.guard_legacy_radar_projection_insert_v3_13()','EXECUTE'),
+      'ownerCreate',has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE'))::text;
+    ROLLBACK;`,['-Atq']));
+  assert.deepEqual(result,{rows:2,newest:'b'.repeat(40),owner:'legacy_correctness_rpc_owner',
+    serviceExecute:false,ownerCreate:false});
+  assert.match(projectionEvaluationSupersessionSql,/NEW[.]producer_commit_sha=v_latest[.]producer_commit_sha/u);
+  assert.match(projectionEvaluationSupersessionSql,/v_new_evaluated_at<=v_latest_evaluated_at/u);
 });
 
 test('V3.14 official chunks persist under the exact lease, replay idempotently, and complete before DB reread', () => {

@@ -21,7 +21,18 @@ test('V31621 operator migration plan exactly matches the reviewed apply chain',(
   const planned=declaredMigrationPaths(plan,'migrationPaths');
   const reviewed=declaredMigrationPaths(apply,'MIGRATIONS');
   assert.deepEqual(planned,reviewed,'the displayed production plan cannot omit or reorder a reviewed migration');
-  assert.equal(planned.at(-1),'migrations/20260817_official_ingestion_roster_chunk_snapshot_v3_16_21.sql');
+  assert.equal(planned.at(-1),'migrations/20260817_projection_evaluation_supersession_v3_16_21.sql');
+});
+
+test('V31621 projection repair separates immutable content cutoff from reviewed evaluation order',()=>{
+  const migration=fs.readFileSync(path.join(root,
+    'migrations/20260817_projection_evaluation_supersession_v3_16_21.sql'),'utf8');
+  assert.doesNotMatch(migration,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(migration,/NEW[.]as_of<v_latest[.]as_of/u);
+  assert.match(migration,/v_new_evaluated_at<=v_latest_evaluated_at/u);
+  assert.match(migration,/NEW[.]producer_commit_sha=v_latest[.]producer_commit_sha/u);
+  assert.match(migration,/projection_release_identity_invalid/u);
+  assert.match(migration,/REVOKE CREATE ON SCHEMA public FROM legacy_correctness_rpc_owner/u);
 });
 
 test('V31621 production-cardinality repair keeps pooler-safe chunks and snapshots roster integrity once',()=>{

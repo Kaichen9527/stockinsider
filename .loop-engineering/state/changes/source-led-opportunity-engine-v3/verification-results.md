@@ -181,3 +181,26 @@ activation or deployment.
 - This is mutable diagnostic evidence only. Exact commit review, protected Code
   Gate, exact production migration, two terminal producers, Vercel smoke and Safari
   remain pending.
+
+## V3.16.21 projection-evaluation supersession diagnostic (2026-08-17)
+
+- Production run `f7d1cef1-95aa-32e4-96db-58368e851eb6` is terminal forensic
+  evidence only. Its compact projection completion collided with predecessor
+  producer `950e4f5433e4fd9a42697cca6a5f66a223f473b9` at the same immutable market
+  cutoff; automatic runtime rollback to `184390953048209730c22828548858c28fa3b6b7`
+  is complete and Web action authority remains disabled.
+- Exact immutable input replay completes four compact projections and 12 decision
+  revisions. Daily/three-day/weekly/home raw payloads are respectively 141,574,
+  122,009, 140,090 and 141,573 bytes, all under 150,000.
+- Fresh PostgreSQL coverage appends a strictly later, differently reviewed producer
+  at one content cutoff, and rejects same-producer nondeterminism, equal-time
+  disagreement and incomplete embedded release identity with typed PT409 errors.
+- Completion rejection now records `origin=rpc_validation` and invariant
+  `projection_supersession_conflict` without SQL, payload, URI or secret text.
+- Complete precommit diagnostics PASS: typecheck, lint, production build (63 static
+  pages), base product `61/61`, product correctness `118/118`, fresh PostgreSQL
+  migration `61/61`, legacy `2/2`, Playwright `8/8`, performance `5/5`, model-runner
+  `18/18` and disabled host-pin v3.9 doctor.
+- This remains precommit diagnostic evidence. Exact review/protected gate,
+  production migration/runtime x2, matching Web deploy, smoke and Safari remain
+  pending. Requirements/Architecture are not reopened.

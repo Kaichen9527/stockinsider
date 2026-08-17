@@ -18,13 +18,14 @@
   Requirements Round 100 PASS plus independent Architecture Round 11 PASS. These
   gates are closed and must not be rerun for the bounded production-cardinality
   implementation repair.
-- [ ] Freeze one bounded V3.16.21 production-cardinality repair tree: validate the
-  complete instrument roster once per pooler-safe 20-row official chunk, preserve
-  all indexed point-in-time symbol semantics, and keep the public/private grant
-  boundary unchanged.
+- [ ] Freeze one bounded V3.16.21 production-cardinality repair tree and projection-
+  evaluation supersession repair: retain the closed 20-row roster snapshot, then
+  separate immutable content cutoff from reviewed evaluation/publish ordering. Allow
+  only a different reviewed producer with exact release identity and strictly later
+  evaluation/publish times; reject same-producer nondeterminism and equal-time conflict.
 - [ ] Create the exact implementation commit, complete exact diff/repair/full-range
   review with P0=0/P1=0, and pass the protected Code Gate.
-- [ ] Apply only the exact reviewed cardinality migration, activate the matching
+- [ ] Apply only the exact reviewed cardinality and projection-supersession migrations, activate the matching
   tracked runtime and complete two terminal producer invocations. Do not reset any
   password and do not enable LINE, dispatch, auto-trading or Promotion.
 - [ ] Deploy the same reviewed release to `stockinsider-three`; complete read-only

@@ -35,6 +35,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260817_evaluation_clock_v3_16_20.sql',
   'migrations/20260817_provider_acquisition_v3_16_21.sql',
   'migrations/20260817_official_ingestion_roster_chunk_snapshot_v3_16_21.sql',
+  'migrations/20260817_projection_evaluation_supersession_v3_16_21.sql',
 ]);
 
 function parseArguments(argv) {
@@ -179,6 +180,14 @@ async function applyReviewedMigrations(options) {
           'public.apply_legacy_official_ingestion_chunk_base_v3_15(uuid,uuid,uuid,text,integer,jsonb,text,text,timestamptz)'::regprocedure)
         AND NOT has_function_privilege('service_role',
           'public.apply_legacy_official_ingestion_chunk_base_v3_15(uuid,uuid,uuid,text,integer,jsonb,text,text,timestamptz)','EXECUTE')
+      ,'projectionEvaluationSupersession',(SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner'
+          AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%projection_same_producer_nondeterminism%'
+          AND pg_get_functiondef(oid) LIKE '%projection_evaluation_time_conflict%'
+        FROM pg_proc WHERE oid='public.guard_legacy_radar_projection_insert_v3_13()'::regprocedure)
+        AND NOT has_function_privilege('service_role',
+          'public.guard_legacy_radar_projection_insert_v3_13()','EXECUTE')
+        AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',

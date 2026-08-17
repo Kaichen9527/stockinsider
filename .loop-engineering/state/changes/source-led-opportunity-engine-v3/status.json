@@ -1,6 +1,6 @@
 {
   "changeId": "source-led-opportunity-engine-v3",
-  "loopStage": "v3_16_21_architecture_passed_bounded_cardinality_repair",
+  "loopStage": "v3_16_21_architecture_passed_bounded_projection_supersession_repair",
   "requirementsStatus": "v3_16_21_round_100_pass_p0_0_p1_0_p2_0",
   "designStatus": "v3_16_21_architecture_round_11_pass_p0_0_p1_0_p2_0",
   "requirementsGateStatus": "pass_v3_16_21",
@@ -340,16 +340,16 @@
     "P1": 0,
     "P2": 0
   },
-  "verificationStatus": "v3_16_21_requirements_architecture_pass;forensic_activation_rolled_back;cardinality_repair_local_migration_60_pass;exact_code_gate_pending",
+  "verificationStatus": "v3_16_21_requirements_architecture_pass;forensic_activations_68691805_and_f7d1cef1_rolled_back;cardinality_repair_pass;projection_supersession_focused_pass;exact_code_gate_pending",
   "verificationGateConclusion": "v3_16_21_single_release_in_progress;promotion_blocked_non_fabricated_elapsed_cohorts_unavailable",
   "verificationTracks": {
-    "product_runtime": "exact_430b810_local_diagnostic_pass_typecheck_lint_build_63_routes_base_61_product_108_migration_54_legacy_2_playwright_8_performance_4_dependency_audit_0;protected_external_attestation_pending",
+    "product_runtime": "v3_16_21_precommit_diagnostic_pass_base_61_product_118_migration_61_legacy_2_playwright_8_performance_5_typecheck_lint_build_63;exact_tree_attestation_pending",
     "evaluation_governance": "blocked/non_fabricated_elapsed_cohorts_unavailable",
-    "model_runner": "exact_430b810_local_diagnostic_pass_18_of_18_and_disabled_host_pin_v3_9_doctor_pass;protected_external_attestation_pending"
+    "model_runner": "v3_16_21_precommit_diagnostic_pass_18_of_18_and_disabled_host_pin_v3_9_doctor;exact_tree_attestation_pending"
   },
-  "releaseStatus": "v3_16_21_base_migration_applied;forensic_runtime_68691805_rolled_back;cardinality_repair_in_progress;web_not_deployed",
+  "releaseStatus": "v3_16_21_cardinality_migration_applied;projection_supersession_unapplied;forensic_runtime_f7d1cef1_rolled_back;reviewed_bootstrap_51ea21f_live_actions_disabled",
   "createdAt": "2026-07-18T21:22:18+08:00",
-  "updatedAt": "2026-08-17T13:30:00+08:00",
+  "updatedAt": "2026-08-17T15:40:58+08:00",
   "baselineDomain": "stock-recommendation-engine",
   "amendmentClass": "v3_15_opportunity_recovery_product_truth",
   "supersedesForFutureWork": [
@@ -374,7 +374,7 @@
     "homepage ranking promotion before real evaluation cohorts",
     "absolute prevention of all code execution or Codex-private scratch writes"
   ],
-  "blockedReason": "V3.16.21 bounded production-cardinality repair exact review, protected Code Gate and coordinated production activation remain; promotion_gate waits for non_fabricated_elapsed_cohorts",
+  "blockedReason": "V3.16.21 bounded projection-evaluation supersession repair exact review, protected Code Gate and coordinated production activation remain; promotion_gate waits for non_fabricated_elapsed_cohorts",
   "nextHumanResponse": "none; user authorized V3.16.21 production closure without stepwise confirmation; do not reset the database password",
   "historicalReleaseEvidenceV311SupersededDoNotExecute": {
     "exactImplementationCommit": "184390953048209730c22828548858c28fa3b6b7",

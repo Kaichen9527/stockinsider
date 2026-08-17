@@ -881,6 +881,22 @@ const checks = {
       ownerToken: '00000000-0000-4000-8000-000000000001' });
     assert.equal(lost.disposition, 'lease_lost'); assert.equal(failedAfterLoss, false);
 
+    let completionDiagnostic=null;
+    const completionRejected=await runtime('auth-source-worker.js').runDurableAuthSourceWorker({
+      configBytes:readFileSync(path.join(root,'config/runtime/auth-source-dag.json')),
+      adapter:{acquireLegacyProducerLease:async()=>({runId:'completion-run',job:{jobId:'completion-job'},disposition:'created'}),
+        claimLegacyProducerJob:async()=>({jobId:'completion-job',stage:'compact_radar_projection',jobKind:'stage_barrier',
+          readHash:'c'.repeat(64)}),heartbeatLegacyProducerJob:async()=>true,
+        completeLegacyProducerJob:async()=>{throw Object.assign(new Error('projection_evaluation_time_conflict'),{code:'PT409'});},
+        appendLegacyRuntimeFailureDiagnostic:async(value)=>{completionDiagnostic=value;return true;},
+        failLegacyProducerJob:async()=>({status:'failed'})},sourceCommitSha:'a'.repeat(40),
+      workerBytes:Buffer.from('reviewed-worker'),ownerToken:'00000000-0000-4000-8000-000000000001',
+      stageHandlers:{compact_radar_projection:async()=>runtime('codec.js').immutableBundle('projection',[])}});
+    assert.equal(completionRejected.disposition,'failed');
+    assert.deepEqual({origin:completionDiagnostic.origin,invariantCode:completionDiagnostic.invariantCode,
+      sqlstate:completionDiagnostic.sqlstate},{origin:'rpc_validation',
+      invariantCode:'projection_supersession_conflict',sqlstate:'PT409'});
+
     let releaseLongHandler;
     const longHandlerGate = new Promise((resolve) => { releaseLongHandler = resolve; });
     const realSetTimeout = globalThis.setTimeout;

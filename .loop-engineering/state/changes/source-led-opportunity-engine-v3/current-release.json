@@ -16,10 +16,10 @@
     "shadowActivation": "pending"
   },
   "production": {
-    "migration": "v3.16.21_applied_cardinality_repair_unapplied",
-    "runtime": "forensic_run_68691805_rolled_back_safe_184390953048209730c22828548858c28fa3b6b7",
-    "web": "predecessor_live_not_matching_v3.16.21",
-    "projection": "predecessor_last_good_readonly",
+    "migration": "v3.16.21_cardinality_applied_projection_supersession_unapplied",
+    "runtime": "forensic_runs_68691805_and_f7d1cef1_rolled_back_safe_184390953048209730c22828548858c28fa3b6b7",
+    "web": "reviewed_bootstrap_51ea21f_live_actions_disabled",
+    "projection": "predecessor_950e4f_last_good_readonly_same_cutoff_conflict",
     "promotion": "blocked/non_fabricated_elapsed_cohorts_unavailable"
   },
   "forbidden": {
