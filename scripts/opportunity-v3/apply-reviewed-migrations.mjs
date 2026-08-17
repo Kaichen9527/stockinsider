@@ -34,6 +34,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260817_runtime_health_bootstrap_v3_16_19.sql',
   'migrations/20260817_evaluation_clock_v3_16_20.sql',
   'migrations/20260817_provider_acquisition_v3_16_21.sql',
+  'migrations/20260817_official_ingestion_roster_chunk_snapshot_v3_16_21.sql',
 ]);
 
 function parseArguments(argv) {
@@ -169,6 +170,15 @@ async function applyReviewedMigrations(options) {
           FROM pg_proc WHERE oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure)
         AND NOT has_function_privilege('service_role',
           'public.claim_legacy_producer_job_provider_acquisition_base_v3_16_21(uuid,uuid,uuid,integer)','EXECUTE')
+      ,'rosterChunkSnapshot',(SELECT pg_get_userbyid(proowner)='opportunity_v3_rpc_owner'
+          AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%instrument_roster_chunk_snapshot_v3_16_21%'
+          AND pg_get_functiondef(oid) NOT LIKE '%public.resolve_legacy_instrument_symbol_authority_v3_13(%'
+          AND pg_get_functiondef(oid) LIKE '%public.resolve_legacy_instrument_symbol_authority_v3_13_internal(%'
+        FROM pg_proc WHERE oid=
+          'public.apply_legacy_official_ingestion_chunk_base_v3_15(uuid,uuid,uuid,text,integer,jsonb,text,text,timestamptz)'::regprocedure)
+        AND NOT has_function_privilege('service_role',
+          'public.apply_legacy_official_ingestion_chunk_base_v3_15(uuid,uuid,uuid,text,integer,jsonb,text,text,timestamptz)','EXECUTE')
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',

@@ -14,12 +14,17 @@
   partial retry, conflict quarantine and past-cohort exclusion.
 - [x] Implement shared public/internal effective health, action fail-safe,
   last-good visibility and navigable research-only details.
-- [ ] Freeze one V3.16.21 immutable implementation tree and obtain exactly one fresh
-  Requirements PASS plus one independent Architecture PASS. Do not start another
-  numbered review loop for a repeated finding class.
+- [x] Freeze the V3.16.21 contract implementation and obtain the sole fresh
+  Requirements Round 100 PASS plus independent Architecture Round 11 PASS. These
+  gates are closed and must not be rerun for the bounded production-cardinality
+  implementation repair.
+- [ ] Freeze one bounded V3.16.21 production-cardinality repair tree: validate the
+  complete instrument roster once per pooler-safe 20-row official chunk, preserve
+  all indexed point-in-time symbol semantics, and keep the public/private grant
+  boundary unchanged.
 - [ ] Create the exact implementation commit, complete exact diff/repair/full-range
   review with P0=0/P1=0, and pass the protected Code Gate.
-- [ ] Apply only the exact reviewed additive migration, activate the matching
+- [ ] Apply only the exact reviewed cardinality migration, activate the matching
   tracked runtime and complete two terminal producer invocations. Do not reset any
   password and do not enable LINE, dispatch, auto-trading or Promotion.
 - [ ] Deploy the same reviewed release to `stockinsider-three`; complete read-only

@@ -3,10 +3,25 @@ import path from 'node:path';
 import {createRequire} from 'node:module';
 import {fileURLToPath} from 'node:url';
 import test from 'node:test';
+import fs from 'node:fs';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
 const require=createRequire(import.meta.url);
 const runtime=(file)=>require(path.join(root,'scripts/runtime',file));
+
+test('V31621 production-cardinality repair keeps pooler-safe chunks and snapshots roster integrity once',()=>{
+  const migration=fs.readFileSync(path.join(root,
+    'migrations/20260817_official_ingestion_roster_chunk_snapshot_v3_16_21.sql'),'utf8');
+  const worker=fs.readFileSync(path.join(root,'scripts/runtime/auth-source-worker-cli.js'),'utf8');
+  assert.doesNotMatch(migration,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(migration,/official_ingestion_mixed_acquisition_time/u);
+  assert.match(migration,/opportunity_authority_selected_stream_count_v3_internal/u);
+  assert.match(migration,/resolve_legacy_instrument_symbol_authority_v3_13_internal/u);
+  assert.doesNotMatch(migration,/jsonb_array_length\(p_items\)>20/u,
+    'the database repair must not silently redefine the existing chunk contract');
+  const chunkSizes=[...worker.matchAll(/^\s*\['(?:trading_sessions|financial_facts|price_observations|corporate_action_snapshots|reported_valuations)'[^\n]+,20\],?$/gmu)];
+  assert.ok(chunkSizes.length>=5,'all official datasets retain the reviewed 20-row pooler bound');
+});
 
 function claim(runId='00000000-0000-4000-8000-000000000001') {
   return {runId,jobId:'00000000-0000-4000-8000-000000000002',
