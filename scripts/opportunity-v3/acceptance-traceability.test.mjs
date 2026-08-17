@@ -462,9 +462,12 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
     const active=tasksText.slice(start,tasksText.indexOf('## Architecture checkpoint',start));
     assert.match(active,/\[x\] Mark every historical password\/credential rotation item/u);
     assert.match(active,/All older unchecked production, migration, gate, activation and credential items[\s\S]*superseded\/do_not_execute/u);
-    if(currentRelease.phase==='architecture_passed')assert.equal(
-      currentRelease.actionQueue[0],'freeze_cardinality_repair_tree',
-      'the bounded implementation repair is the sole next step after closed contract gates');
+    if(currentRelease.phase==='architecture_passed'){
+      assert.equal(currentRelease.actionQueue[0],'freeze_cardinality_repair_tree',
+        'the bounded implementation repair is the sole next step after closed contract gates');
+      assert.match(active,/- \[ \] Freeze one bounded V3[.]16[.]21 production-cardinality repair tree/u,
+        'the bounded implementation repair remains pending until its immutable tree is frozen');
+    }
     if(['exact_review_passed','production_rollout','complete_with_concerns'].includes(currentRelease.phase))
       assert.doesNotMatch(active,/- \[ \] Freeze one bounded V3[.]16[.]21 production-cardinality repair tree/u,
         'the bounded implementation repair cannot remain pending after exact review');
