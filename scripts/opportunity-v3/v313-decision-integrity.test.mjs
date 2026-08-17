@@ -943,11 +943,11 @@ acceptanceTest('DI-005','V3.13 projection freshness uses scheduled trading runs,
   const staleHealth=assessProjectionFreshness({...base,now:new Date('2026-08-10T13:00:00Z')});
   const staleProjection=withProjectionHealth({sourceSignals:[card],sourceLedCorrectness:{schema:'legacy-radar-v3.14.0',window:'home'},
     loadStatus:'ready',loadWarnings:[]},staleHealth);
-  const staleCard=publication.validatePublishedDecisionCard(staleProjection.sourceSignals[0]);
-  assert.ok(staleCard);const readonlyResult=publication.buildPublishedDecisionDetailResult(staleCard);
-  assert.equal(readonlyResult.statusCode,409);assert.equal(readonlyResult.cacheControl,'no-store');
-  assert.equal('decisionEnvelope' in readonlyResult.body,false);
-  assert.equal('valuationSummary' in readonlyResult.body,false);
+  const staleCard=staleProjection.sourceSignals[0];
+  assert.ok(staleCard);assert.equal(staleCard.decisionEnvelope,undefined);
+  assert.equal(staleCard.decisionRevisionId,card.decisionRevisionId);
+  assert.equal(staleCard.lastKnownAction,'buy');assert.equal(staleCard.projectionReadOnly,true);
+  assert.equal(publication.validatePublishedDecisionCard(staleCard),null);
   const deepDiveRoute=readFileSync(path.join(root,'web/src/app/api/stocks/[symbol]/deep-dive/route.ts'),'utf8');
   const insightRoute=readFileSync(path.join(root,'web/src/app/api/stocks/[symbol]/insight/route.ts'),'utf8');
   assert.match(deepDiveRoute,/headers:\{'Cache-Control':result[.]cacheControl\}/u);
@@ -1014,6 +1014,10 @@ test('generic migration discovery is a closed legacy allowlist and the V3.13 pla
     'migrations/20260816_candidate_fact_plane_bound_v3_16_12.sql',
     'migrations/20260816_analysis_payload_reuse_v3_16_15.sql',
     'migrations/20260816_financial_fact_recollection_idempotency_v3_16_16.sql',
+    'migrations/20260817_analysis_payload_exact_reuse_v3_16_18.sql',
+    'migrations/20260817_runtime_health_bootstrap_v3_16_19.sql',
+    'migrations/20260817_evaluation_clock_v3_16_20.sql',
+    'migrations/20260817_provider_acquisition_v3_16_21.sql',
   ]);
   assert.ok(plan.migrations.every((row)=>/^[0-9a-f]{64}$/u.test(row.sha256)&&row.additiveOnly));
   assert.match(plan.orderedChainSha256,/^[0-9a-f]{64}$/u);
@@ -1396,8 +1400,8 @@ acceptanceTest('DI-011','V3.13 stale-readonly projection disables compatibility 
     sourceLedCorrectness:{schema:'legacy-radar-v3.14.0',window:'daily'},loadStatus:'ready',loadWarnings:[]};
   const degraded=withProjectionHealth(projection,{status:'stale_readonly',reason:'missed_scheduled_runs',
     missedExpectedRuns:1,actionsEnabled:false,calendarAuthority:'tw_trading_sessions_v3'});
-  assert.equal(degraded.sourceSignals[0].decisionEnvelope.decisionRevisionId,'revision-immutable');
-  assert.equal(degraded.sourceSignals[0].decisionEnvelope.userAction,'buy');
+  assert.equal(degraded.sourceSignals[0].decisionEnvelope,undefined);
+  assert.equal(degraded.sourceSignals[0].decisionRevisionId,'revision-immutable');
   assert.equal(degraded.sourceSignals[0].projectionReadOnly,true);
   assert.equal(degraded.sourceSignals[0].lastKnownAction,'buy');
   assert.equal(degraded.sourceSignals[0].newPositionAction,'valuation_review');

@@ -203,6 +203,24 @@ function createPostgresLegacyProducerAdapter({ connectionString }) {
         throw error;
       }
     },
+    readLegacyProviderAcquisition: async (input) => (await one(
+      'select public.read_legacy_provider_acquisition_v3_16_21($1,$2,$3) as envelope',
+      [input.provider,input.requestKey,input.sourceCutoff]))?.envelope ?? null,
+    freezeLegacyProviderAcquisition: async (input) => {
+      try {
+        return (await one(`select public.freeze_legacy_provider_acquisition_v3_16_21(
+          $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15) as result`,
+        [input.runId,input.jobId,input.ownerToken,input.provider,input.requestKey,input.stage,
+          input.sourceCutoff,input.fetchedAt,input.responseSha256,input.responseBytes,
+          input.normalizedPayload,input.normalizedPayloadSha256,input.terminalStatus,input.evidenceRoot,
+          input.actionEligible]))?.result ?? null;
+      } catch (error) {
+        error.fieldPath='providerAcquisition';
+        error.failureOrigin='persistence';
+        error.invariantCode='provider_acquisition_persistence_rejected';
+        throw error;
+      }
+    },
     failLegacyProducerJob: async (input) => completion(await one('select * from public.fail_legacy_producer_job_v3_11($1,$2,$3,$4)', [input.runId, input.jobId, input.ownerToken, input.failure])),
     close: () => pool.end(),
   });

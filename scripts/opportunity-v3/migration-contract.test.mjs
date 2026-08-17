@@ -51,6 +51,9 @@ const runtimeHealthBootstrapSql = fs.readFileSync(runtimeHealthBootstrapMigratio
 const evaluationClockMigrationPath = path.join(root,
   'migrations/20260817_evaluation_clock_v3_16_20.sql');
 const evaluationClockSql = fs.readFileSync(evaluationClockMigrationPath, 'utf8');
+const providerAcquisitionMigrationPath = path.join(root,
+  'migrations/20260817_provider_acquisition_v3_16_21.sql');
+const providerAcquisitionSql = fs.readFileSync(providerAcquisitionMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -436,6 +439,12 @@ before(() => {
     command(pg.psql, [
       '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', evaluationClockMigrationPath,
+    ]);
+  }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', providerAcquisitionMigrationPath,
     ]);
   }
 });
@@ -882,6 +891,103 @@ test('migration applies twice and exposes the exact granted/private function bou
       },
     ],
   });
+});
+
+test('V3.16.21 freezes one provider revision, reuses it, and quarantines conflicting bytes',()=>{
+  assert.doesNotMatch(providerAcquisitionSql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(providerAcquisitionSql,/p_fetched_at<v_started_at/u);
+  assert.match(providerAcquisitionSql,/legacy_provider_acquisition_conflicts_v3_16_21/u);
+  assert.match(providerAcquisitionSql,/greatest\(\(v_claim[.]read_json->>'evaluationTimestamp'\)::timestamptz,v_evidence_at\)/u,
+    'current evaluation advances to the immutable DB-frozen evidence clock without backdating fetchedAt');
+  const result=JSON.parse(psql(`
+    BEGIN;
+    CREATE TEMP TABLE provider_fixture AS
+    SELECT '72100000-0000-4000-8000-000000000001'::uuid run_id,
+      '72100000-0000-4000-8000-000000000002'::uuid job_id,
+      '72100000-0000-4000-8000-000000000003'::uuid owner_token,
+      '2026-08-17T02:00:00Z'::timestamptz source_cutoff,
+      date_trunc('second',clock_timestamp()) fetched_at,
+      '{"prices":[123]}'::jsonb payload,
+      '{"prices":[124]}'::jsonb conflict_payload;
+    INSERT INTO public.legacy_producer_runs_v3_11(run_id,owner_label,owner_token_hash,producer_commit_sha,
+      worker_sha256,scheduler_config_canonical,scheduler_config_sha256,legacy_seed_symbols,legacy_seed_set_hash,
+      scheduled_occurrence_id,source_cutoff,trading_date,trading_session_authority_hash,authority_canonical,
+      authority_json,authority_hash,status,started_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,
+      logical_run_key,attempt)
+    SELECT run_id,'com.stockinsider.auth-source-worker',
+      encode(extensions.digest(convert_to(owner_token::text,'utf8'),'sha256'),'hex'),repeat('a',40),repeat('b',64),
+      decode('${legacyRuntimeConfigHex}','hex'),'1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2',
+      (SELECT array_agg(value ORDER BY ordinal) FROM jsonb_array_elements_text(
+        convert_from(decode('${legacyRuntimeConfigHex}','hex'),'utf8')::jsonb->'legacySeedSymbols')
+        WITH ORDINALITY seed(value,ordinal)),
+      'e6d9c09b8b552f5d9eaf389b76d2d90daa2d89578433d2a1ad63286888b3b743','v31621-freeze',
+      source_cutoff,NULL,NULL,convert_to('{}','utf8'),'{}',
+      encode(extensions.digest(convert_to('{}','utf8'),'sha256'),'hex'),'running',fetched_at-interval '1 second',
+      fetched_at,fetched_at+interval '120 seconds',NULL,NULL,repeat('e',64),1 FROM provider_fixture;
+    INSERT INTO public.legacy_producer_jobs_v3_11(job_id,run_id,stage,job_kind,stage_ordinal,shard_ordinal,
+      execution_ordinal,revision_id,predecessor_job_id,input_hash,payload_hash,status,attempt,max_attempts,
+      owner_token_hash,leased_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,recorded_at)
+    SELECT job_id,run_id,'facts_refresh','stage_barrier',3,NULL,0,NULL,NULL,repeat('1',64),repeat('2',64),
+      'leased',1,5,encode(extensions.digest(convert_to(owner_token::text,'utf8'),'sha256'),'hex'),
+      fetched_at-interval '1 second',fetched_at,fetched_at+interval '120 seconds',NULL,NULL,fetched_at
+      FROM provider_fixture;
+    CREATE TEMP TABLE acquisition_args AS WITH material AS(SELECT *,
+      encode(extensions.digest(convert_to(public.legacy_canonical_json_v3_13(payload),'utf8'),'sha256'),'hex') payload_sha
+      FROM provider_fixture), evidence AS(SELECT *,encode(extensions.digest(convert_to(
+        public.legacy_canonical_json_v3_13(jsonb_build_array('provider-acquisition-revision-v3.16.21',
+          'official_tw_market',repeat('c',64),run_id::text,'facts_refresh',
+          to_char(source_cutoff AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS"Z"'),
+          to_char(fetched_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS"Z"'),repeat('d',64),42,
+          payload_sha,'complete',true)),'utf8'),'sha256'),'hex') evidence_root FROM material)
+      SELECT * FROM evidence;
+    CREATE TEMP TABLE conflict_args AS WITH material AS(SELECT *,
+      encode(extensions.digest(convert_to(public.legacy_canonical_json_v3_13(conflict_payload),'utf8'),'sha256'),'hex') payload_sha
+      FROM provider_fixture), evidence AS(SELECT *,encode(extensions.digest(convert_to(
+        public.legacy_canonical_json_v3_13(jsonb_build_array('provider-acquisition-revision-v3.16.21',
+          'official_tw_market',repeat('c',64),run_id::text,'facts_refresh',
+          to_char(source_cutoff AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS"Z"'),
+          to_char(fetched_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS"Z"'),repeat('f',64),43,
+          payload_sha,'complete',true)),'utf8'),'sha256'),'hex') evidence_root FROM material)
+      SELECT * FROM evidence;
+    GRANT SELECT ON provider_fixture,acquisition_args,conflict_args TO service_role;
+    SET ROLE service_role;
+    CREATE TEMP TABLE first_freeze AS SELECT public.freeze_legacy_provider_acquisition_v3_16_21(run_id,job_id,owner_token,
+        'official_tw_market',repeat('c',64),'facts_refresh',source_cutoff,fetched_at,repeat('d',64),42,
+        payload,payload_sha,'complete',evidence_root,true) value FROM acquisition_args;
+    CREATE TEMP TABLE reused_freeze AS WITH selected AS(SELECT * FROM provider_fixture), stored AS(
+      SELECT public.read_legacy_provider_acquisition_v3_16_21(
+        'official_tw_market',repeat('c',64),selected.source_cutoff) value FROM selected)
+      SELECT public.freeze_legacy_provider_acquisition_v3_16_21(selected.run_id,selected.job_id,selected.owner_token,
+        'official_tw_market',repeat('c',64),'facts_refresh',selected.source_cutoff,selected.fetched_at,
+        stored.value->>'responseSha256',(stored.value->>'responseBytes')::integer,stored.value->'normalizedPayload',
+        stored.value->>'normalizedPayloadSha256',stored.value->>'terminalStatus',stored.value->>'evidenceRoot',
+        (stored.value->>'actionEligible')::boolean) value FROM selected CROSS JOIN stored;
+    CREATE TEMP TABLE conflict_freeze AS SELECT public.freeze_legacy_provider_acquisition_v3_16_21(run_id,job_id,owner_token,
+        'official_tw_market',repeat('c',64),'facts_refresh',source_cutoff,fetched_at,repeat('f',64),43,
+        conflict_payload,payload_sha,'complete',evidence_root,true) value FROM conflict_args;
+    RESET ROLE;
+    SELECT jsonb_build_object(
+      'first',(SELECT value->>'disposition' FROM first_freeze),
+      'second',(SELECT value->>'disposition' FROM reused_freeze),
+      'conflict',(SELECT value->>'disposition' FROM conflict_freeze),
+      'revisionRows',(SELECT count(*) FROM public.legacy_provider_acquisition_revisions_v3_16_21),
+      'conflictRows',(SELECT count(*) FROM public.legacy_provider_acquisition_conflicts_v3_16_21),
+      'serviceInsert',has_table_privilege('service_role','public.legacy_provider_acquisition_revisions_v3_16_21','INSERT'),
+      'serviceFreeze',has_function_privilege('service_role',
+        'public.freeze_legacy_provider_acquisition_v3_16_21(uuid,uuid,uuid,text,text,text,timestamptz,timestamptz,text,integer,jsonb,text,text,text,boolean)','EXECUTE'),
+      'serviceBaseClaim',has_function_privilege('service_role',
+        'public.claim_legacy_producer_job_provider_acquisition_base_v3_16_21(uuid,uuid,uuid,integer)','EXECUTE'),
+      'lineageWrapper',EXISTS(SELECT 1 FROM pg_proc WHERE oid=
+        'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure
+        AND pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+        AND pg_get_functiondef(oid) LIKE '%providerAcquisitions%'),
+      'immutableTrigger',EXISTS(SELECT 1 FROM pg_trigger WHERE tgrelid=
+        'public.legacy_provider_acquisition_revisions_v3_16_21'::regclass AND NOT tgisinternal)
+    )::text;
+    ROLLBACK;
+  `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual(result,{first:'appended',second:'reused',conflict:'conflict',revisionRows:1,conflictRows:1,
+    serviceInsert:false,serviceFreeze:true,serviceBaseClaim:false,lineageWrapper:true,immutableTrigger:true});
 });
 
 test('V3.14 official chunks persist under the exact lease, replay idempotently, and complete before DB reread', () => {

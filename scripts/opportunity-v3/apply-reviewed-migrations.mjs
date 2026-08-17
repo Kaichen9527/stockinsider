@@ -33,6 +33,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260817_analysis_payload_exact_reuse_v3_16_18.sql',
   'migrations/20260817_runtime_health_bootstrap_v3_16_19.sql',
   'migrations/20260817_evaluation_clock_v3_16_20.sql',
+  'migrations/20260817_provider_acquisition_v3_16_21.sql',
 ]);
 
 function parseArguments(argv) {
@@ -155,6 +156,19 @@ async function applyReviewedMigrations(options) {
         AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
           FROM pg_proc WHERE oid=
             'public.claim_legacy_producer_job_evaluation_clock_base_v3_16_20(uuid,uuid,uuid,integer)'::regprocedure)
+      ,'providerAcquisition',to_regclass(
+        'public.legacy_provider_acquisition_revisions_v3_16_21') IS NOT NULL
+        AND to_regclass('public.legacy_provider_acquisition_conflicts_v3_16_21') IS NOT NULL
+        AND has_function_privilege('service_role',
+          'public.read_legacy_provider_acquisition_v3_16_21(text,text,timestamptz)','EXECUTE')
+        AND has_function_privilege('service_role',
+          'public.freeze_legacy_provider_acquisition_v3_16_21(uuid,uuid,uuid,text,text,text,timestamptz,timestamptz,text,integer,jsonb,text,text,text,boolean)','EXECUTE')
+        AND NOT has_table_privilege('service_role',
+          'public.legacy_provider_acquisition_revisions_v3_16_21','INSERT')
+        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure)
+        AND NOT has_function_privilege('service_role',
+          'public.claim_legacy_producer_job_provider_acquisition_base_v3_16_21(uuid,uuid,uuid,integer)','EXECUTE')
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',

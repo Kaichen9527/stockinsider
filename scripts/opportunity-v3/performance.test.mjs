@@ -83,8 +83,10 @@ test('compact radar projection is bounded and has deterministic cache identity',
 test('compact radar reader remains a projection-only indexed LIMIT 2 read', () => {
   const source = readFileSync(path.join(root, 'web/src/lib/opportunity-v3/compact-radar-read.ts'), 'utf8');
   assert.match(source, /legacy_radar_projections_v3_11/u);
+  assert.match(source, /legacy_runtime_health_observations_v3_11/u);
   assert.match(source, /\.limit\(2\)/u);
-  assert.doesNotMatch(source, /runAuthSourceWorker|executeSourceRunTransaction|provider|deepResearch/u);
+  assert.doesNotMatch(source,
+    /runAuthSourceWorker|executeSourceRunTransaction|acquireFrozenProviderEnvelope|loadOfficialTwMarketSnapshot|deepResearch/u);
 });
 
 test('Landing lane selection applies the exact 6/12/12 caps across mixed actions', () => {

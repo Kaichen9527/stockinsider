@@ -98,28 +98,38 @@ To run a skill: read the skill file, follow its instructions, output report to `
 
 This repository is initialized with Loop Engineering v5 using the `codex-only` profile. For Loop workflow commands and gates, read `AGENTS.loop-engineering.md`, `docs/engineering/LOOP_ENGINEERING.md`, and `.loop-engineering/policy.yaml`. These Loop instructions are additive: preserve this StockInsider guide, existing `.agent/skills/`, OpenSpec artifacts, Supabase/Vercel rules, and secrets protections.
 
-## Data Sources (All Automated)
+## Data Source Capabilities
 
-| Source | Connector | Schedule | Status |
+The rows below describe configured capabilities, not live success. Connector,
+credential, transcript and document truth comes only from the latest typed runtime
+health/projection terminal outcomes. `auth_failed`, `missing_endpoint`,
+`provider_failed`, `metadata_only` and zero documents must never be reported as
+active acquisition.
+
+| Source | Connector | Schedule | Capability |
 |--------|-----------|----------|--------|
-| InvestAnchors | source-sync | Daily 01:00 TW | Active |
-| Threads | source-sync | Daily 01:05 TW | Active |
-| Instagram | source-sync | Daily 01:10 TW | Active |
-| Telegram | source-sync | Daily 01:15 TW | Active |
-| PTT Stock | source-sync | Daily 01:20 TW | Active |
-| BullTalk | source-sync | Daily 01:25 TW | Active |
-| YouTube/Podcast | podcast-sync + transcribe | Daily 01:45-01:55 TW | Active |
-| Anue 投顧報告 | broker-report-ingest | Mon/Thu 09:00 TW | Active |
-| 法說會 | earnings-call-ingest | Weekdays 10:00 TW | Active |
-| MOPS 重大訊息 | mops-filing-ingest | Weekdays 10:30 TW | Active |
-| KOL 追蹤 | 11 KOLs in KOL_SEEDS | Via source-sync | Active |
-| 社群提及反饋 | dynamic-mention-scan | Weekdays 08:15 TW | Active |
-| 月營收/基本面 | revenue-ingestion | In pipeline-run | Active |
+| InvestAnchors | source-sync | Daily 01:00 TW | Configured |
+| Threads | source-sync | Daily 01:05 TW | Configured; OAuth required |
+| Instagram | source-sync | Daily 01:10 TW | Configured; auth required |
+| Telegram | source-sync | Daily 01:15 TW | Configured |
+| PTT Stock | source-sync | Daily 01:20 TW | Configured |
+| BullTalk | source-sync | Daily 01:25 TW | Configured |
+| YouTube/Podcast | podcast-sync + transcribe | Daily 01:45-01:55 TW | Configured; transcript authority required |
+| Anue 投顧報告 | broker-report-ingest | Mon/Thu 09:00 TW | Configured |
+| 法說會 | earnings-call-ingest | Weekdays 10:00 TW | Configured |
+| MOPS 重大訊息 | mops-filing-ingest | Weekdays 10:30 TW | Configured |
+| KOL 追蹤 | approved roster | Via source-sync | Configured; per-profile terminal required |
+| 社群提及反饋 | dynamic-mention-scan | Weekdays 08:15 TW | Configured |
+| 月營收/基本面 | revenue-ingestion | In pipeline-run | Configured |
 
 ## Rules for Automated Agents
 
 - Never modify `.env`, `.env.local`, or any secrets files
-- All Supabase writes must go through `requireInternalAuth()` guarded endpoints
+- Application/data writes must go through `requireInternalAuth()` guarded endpoints.
+  The only schema exception is a user-authorized additive production migration
+  executed by `db:v3:apply-reviewed` from an exact clean reviewed source commit and
+  its validated attestation commit. Raw `psql`, generic migration runners and
+  unreviewed SQL remain forbidden.
 - Always run `cd web && npm run build` after code changes to verify compilation
 - Create a branch and PR for non-trivial changes; never push directly to main
 - Write reports to `.agent/reports/` with ISO timestamp prefix

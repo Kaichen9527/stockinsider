@@ -1,7 +1,17 @@
 {
   "profile": "codex-only",
   "created": [
+    ".codex/config.toml",
+    ".codex/agents/acceptance-test-designer.toml",
+    ".codex/agents/architecture-checker.toml",
+    ".codex/agents/requirements-checker.toml",
+    ".codex/agents/security-checker.toml",
+    ".codex/agents/diff-checker.toml"
+  ],
+  "skipped_existing": [
     "AGENTS.loop-engineering.md",
+    "AGENTS.md",
+    "CLAUDE.md",
     "docs/engineering/LOOP_ENGINEERING.md",
     ".loop-engineering/policy.yaml",
     ".loop-engineering/commands.json",
@@ -13,20 +23,8 @@
     ".agents/skills/loop-amend/SKILL.md",
     ".agents/skills/loop-change/SKILL.md",
     ".agents/skills/loop-verify/SKILL.md",
-    ".agents/skills/loop-release/SKILL.md",
-    ".codex/config.toml",
-    ".codex/agents/acceptance-test-designer.toml",
-    ".codex/agents/architecture-checker.toml",
-    ".codex/agents/requirements-checker.toml",
-    ".codex/agents/security-checker.toml",
-    ".codex/agents/diff-checker.toml"
+    ".agents/skills/loop-release/SKILL.md"
   ],
-  "skipped_existing": [
-    "AGENTS.md",
-    "CLAUDE.md"
-  ],
-  "warnings": [
-    "specify CLI missing; install Spec Kit then rerun loop-init"
-  ],
-  "timestamp": "2026-06-22T22:30:29.332134"
+  "warnings": [],
+  "timestamp": "2026-08-17T10:16:06.897441"
 }

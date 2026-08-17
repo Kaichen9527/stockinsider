@@ -1911,3 +1911,21 @@ remain mandatory; no production state changed. Evidence:
 ## Mandatory Stop
 
 After PASS, update review evidence and status, then stop. Main implementation routes to Terra only after the Loop change approval checkpoint.
+
+## V3.16.21 single-release authority (2026-08-17)
+
+- Historical closure: PR #89 merged; its final protected root, Requirements,
+  Architecture and exact review passed. V3.16.20 migration is present. These gates
+  are inputs, not pending work, and must not start a new numbered round.
+- Forensic activation: V3.16.20 did not receive action authority and rolled back to
+  `184390953048209730c22828548858c28fa3b6b7`. It is not restarted.
+- Current release: `current-release.json` / V3.16.21 is the sole action queue.
+  Implementation contains frozen provider acquisition, real collection time,
+  immutable reuse/conflict quarantine, shared health fail-safe and research-only
+  detail navigation.
+- Current gate state: focused provenance and fresh-database migration tests PASS;
+  one fresh Requirements review, one independent Architecture review, exact review,
+  full Code Gate and Shadow Activation Gate remain pending.
+- Production exclusions: no database password reset or credential rotation; no LINE,
+  dispatch, automatic trading or Promotion. Evaluation remains honestly
+  `blocked/non_fabricated_elapsed_cohorts_unavailable`.

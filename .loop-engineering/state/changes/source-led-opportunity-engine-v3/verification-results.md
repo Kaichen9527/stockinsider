@@ -143,3 +143,24 @@ ranking axis, and an official facts-to-Web `buy` publication fixture.
 This remains mutable repair-worktree evidence. It neither constitutes fresh
 Requirements PASS nor authorizes a production migration, credential use, runtime
 activation or deployment.
+
+## V3.16.21 focused implementation verification (2026-08-17)
+
+- Permanent canonical repository verified at
+  `/Users/kaerchen/Desktop/20_stock/StockInsider/repo`; remote main and PR #89
+  objects are available. Old dirty worktrees remain preserved.
+- V3.16.20 activation journal is `rolled_back`; the known-good runtime pointer is
+  `184390953048209730c22828548858c28fa3b6b7`.
+- Frozen provider unit coverage PASS: true `fetchedAt`, response bytes/hash,
+  same-input reuse without refetch, partial-key retry, conflict quarantine,
+  past-evaluation exclusion and secret-safe diagnostics.
+- V3.16.21 additive migration PASS on a fresh PostgreSQL database with apply twice;
+  executable persistence proves `appended -> reused -> conflict`, append-only
+  trigger presence and service-role RPC-only writes.
+- Effective health matrix PASS: checksum, runtime, consumer, manifest, migration or
+  acquisition mismatch disables actions; checksum-valid research remains last-good
+  read-only, checksum conflict clears it.
+- Typecheck and lint PASS after research-only detail and shared health changes.
+- Pending: full product/runtime, migration, browser, performance, model-runner,
+  exact-review/protected root, production migration/runtime x2, Vercel smoke and
+  Safari verification.

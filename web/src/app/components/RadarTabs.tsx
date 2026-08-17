@@ -425,9 +425,9 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
 	                ? '待估值補齊'
 	                : '點進查看估值與來源'}
 	        </p>
-	        {rec.projectionReadOnly || !availableResearchDecision?.decisionRevisionId ? <span data-testid="readonly-detail-unavailable" className="inline-flex min-h-11 max-w-full items-center rounded-full border border-line px-3.5 py-1.5 text-center text-sm font-semibold text-slate-500 dark:text-emerald-100/55">
-	          {rec.projectionReadOnly?'舊快照無決策詳情':'決策版本待補'}
-	        </span> : <Link
+	        {rec.projectionReadOnly || !availableResearchDecision?.decisionRevisionId ? <Link href={`/stock/${rec.symbol}`} data-testid="research-only-detail-link" className="inline-flex min-h-11 max-w-full items-center rounded-full border border-line px-3.5 py-1.5 text-center text-sm font-semibold text-slate-600 dark:text-emerald-100/70">
+	          {rec.projectionReadOnly?'查看唯讀研究':'查看研究資料'} →
+	        </Link> : <Link
 	          href={`/stock/${rec.symbol}?decisionRevisionId=${encodeURIComponent(availableResearchDecision.decisionRevisionId)}`}
           data-testid={isPrimary ? 'view-insight-link' : undefined}
           className="inline-flex min-h-11 shrink-0 items-center rounded-full bg-amber-300 px-3.5 py-1.5 text-sm font-semibold text-slate-900 transition hover:bg-amber-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 dark:bg-amber-300 dark:text-slate-950"
@@ -1092,7 +1092,7 @@ function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
   const revision = signal.decisionRevisionId ?? envelope?.decisionRevisionId ?? null;
   const href = revision
     ? signal.detailHref ?? `/stock/${signal.symbol}?decisionRevisionId=${encodeURIComponent(revision)}`
-    : null;
+    : signal.detailHref ?? `/stock/${signal.symbol}`;
   const provenance = signal.sourceProvenance;
 
   return (
@@ -1150,11 +1150,9 @@ function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
               : <span>{provenance?.sourceName || sourceTypeLabel[signal.sourceClass] || signal.sourceClass}</span>}
             <span className="sr-only">；發布、收集與評估日期請展開研究依據。</span>
           </div>
-          {href ? <Link href={href} className="inline-flex min-h-11 items-center rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 dark:bg-amber-300 dark:text-slate-950 dark:hover:bg-amber-200">
-            查看決策摘要 →
-          </Link> : <span data-testid="readonly-detail-unavailable" className="inline-flex min-h-11 items-center rounded-full border border-line px-4 py-2 text-sm font-semibold text-slate-500 dark:text-emerald-100/55">
-            舊快照無決策詳情
-          </span>}
+          <Link href={href} data-testid={revision?'decision-detail-link':'research-only-detail-link'} className="inline-flex min-h-11 items-center rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 dark:bg-amber-300 dark:text-slate-950 dark:hover:bg-amber-200">
+            {revision?'查看決策摘要':'查看唯讀研究'} →
+          </Link>
         </div>
       </div>
 

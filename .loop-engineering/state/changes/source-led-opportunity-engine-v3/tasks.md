@@ -1,6 +1,37 @@
 <!-- /autoplan restore point: /Users/kaerchen/.gstack/projects/Kaichen9527-stockinsider/codex-source-led-opportunity-engine-v3-autoplan-restore-20260724-191533.md -->
 # Tasks: source-led-opportunity-engine-v3
 
+## V3.16.21 single release closure — only active action queue
+
+- [x] Establish `/Users/kaerchen/Desktop/20_stock/StockInsider/repo` as the
+  permanent canonical repository and preserve the old dirty worktrees without broad
+  deletion.
+- [x] Record V3.16.20 as a forensic activation that rolled back safely; do not
+  restart it and do not grant it action authority.
+- [x] Mark every historical password/credential rotation item
+  `superseded/do_not_execute`; the database password must not be reset.
+- [x] Implement frozen provider acquisition, real `fetchedAt`, immutable reuse,
+  partial retry, conflict quarantine and past-cohort exclusion.
+- [x] Implement shared public/internal effective health, action fail-safe,
+  last-good visibility and navigable research-only details.
+- [ ] Freeze one V3.16.21 immutable implementation tree and obtain exactly one fresh
+  Requirements PASS plus one independent Architecture PASS. Do not start another
+  numbered review loop for a repeated finding class.
+- [ ] Create the exact implementation commit, complete exact diff/repair/full-range
+  review with P0=0/P1=0, and pass the protected Code Gate.
+- [ ] Apply only the exact reviewed additive migration, activate the matching
+  tracked runtime and complete two terminal producer invocations. Do not reset any
+  password and do not enable LINE, dispatch, auto-trading or Promotion.
+- [ ] Deploy the same reviewed release to `stockinsider-three`; complete read-only
+  smoke, performance, nonzero-card, revision-consistency and Safari checks.
+- [ ] Publish the release-state evidence carrier and close the Goal as
+  `DONE_WITH_CONCERNS`; only third-party terminal failures and real-cohort evaluation
+  governance may remain concerns.
+
+All older unchecked production, migration, gate, activation and credential items
+below are a historical ledger and are `superseded/do_not_execute` unless referenced
+by `current-release.json`. They are not the current action queue.
+
 ## Architecture checkpoint — Sol only
 
 - [x] Capture repository and production baseline without mutation.
@@ -1412,24 +1443,24 @@ This approval authorizes implementation only. It does not authorize production m
   `603f6da509c9976f1f8c2ead1a056c76b3bf68b7..d1d62b787baf505ac2fa036e25fc385079103e8d`,
   record `CHANGES_REQUIRED P0=0 P1=0 P2=1`, and replace nullable SQL comparisons
   with one exact six-key threshold authority schema shared by SQL, runtime and Web.
-- [ ] Freeze the repair commit, pass repair-range and full-range closure review,
+- [x] Superseded by V3.16.21 current-release; do_not_execute: freeze the repair commit, pass repair-range and full-range closure review,
   then refresh the authoritative Verification Code Gate.
 - [x] Restore checksum-valid V3.12/V3.13 last-good cards as read-only while keeping
   action authority disabled; align all counts, tabs, reports and links.
 - [x] Repair unchanged `seedMembership` and add typed redacted failure diagnostics.
-- [ ] Replay the failed 2026-08-10 candidate funnel in the production successor run
+- [x] Superseded by V3.16.21 current-release; do_not_execute: replay the failed 2026-08-10 candidate funnel in the production successor run
   and prove terminal success after credential rotation and activation authority.
 - [x] Implement `ResearchRankingEnvelopeV314`, monotonic missing-axis scoring and
   `DecisionEnvelopeV314` with `wait_value`/`wait_market`.
 - [x] Add official calendar/bootstrap/backfill authority, V3.14 additive migration
   and truthful 51-attempt terminal conservation in code and executable fixtures.
-- [ ] Apply the reviewed additive migration and run official production bootstrap/
+- [x] Superseded by V3.16.21 current-release; do_not_execute: apply the reviewed additive migration and run official production bootstrap/
   backfill after the remaining gates and credential rotation.
 - [x] Implement the bounded three-section Landing, same-revision detail and
   `legacy-radar-v3.14.0` additive API.
-- [ ] Pass fresh Requirements and Architecture, full product/runtime/model/migration/
+- [x] Superseded by V3.16.21 current-release; do_not_execute: pass fresh Requirements and Architecture, full product/runtime/model/migration/
   browser/performance tests, exact diff review and repair/full-range closure.
-- [ ] Rotate the exposed DB credential, merge the reviewed PRs, apply migration and
+- [x] Superseded and forbidden; do_not_execute credential rotation: rotate the exposed DB credential, merge the reviewed PRs, apply migration and
   bootstrap, run the producer twice, deploy the exact release and pass canary/rollback.
 - [x] Implement the shared trading-session freshness policy, evaluation heartbeat,
   last-good read-only and typed degraded projection behavior.
@@ -1659,9 +1690,9 @@ This approval authorizes implementation only. It does not authorize production m
   `6/6`, performance `4/4`, typecheck/lint/build PASS; model-runner `17/17` and
   disabled host-pin v3.7 doctor PASS; evaluation contract `12/12` PASS and formal
   governance honestly `blocked/non_fabricated_elapsed_cohorts_unavailable`.
-- [ ] Obtain the protected `stockinsider-v3-gate-root` aggregate artifact for the
+- [x] Superseded by V3.16.21 current-release; do_not_execute: obtain the protected `stockinsider-v3-gate-root` aggregate artifact for the
   final evidence tree. Local diagnostics cannot self-attest this external gate.
-- [ ] Form one authoritative release candidate. Do not apply production migration,
+- [x] Superseded by V3.16.21 current-release; do_not_execute: form one authoritative release candidate. Do not apply production migration,
   install/activate the source-writing runtime or coordinate Web publication without
   explicit V3.13 production-write authority.
 
@@ -1694,11 +1725,11 @@ This approval authorizes implementation only. It does not authorize production m
   while individual authority rows are valid. Add ≤20-row application chunks, an
   immutable applied-chunk ledger, interruption-safe replay and constant-work terminal
   completion; rehearse the successor migration twice with rollback.
-- [ ] Obtain superseding fresh Requirements, Architecture, exact-review and protected
+- [x] Superseded by V3.16.21 current-release; do_not_execute: obtain superseding fresh Requirements, Architecture, exact-review and protected
   Code Gate evidence for the bounded chunk-application repair.
-- [ ] Apply the additive production migration, install the exact reviewed runtime,
+- [x] Superseded by V3.16.21 current-release; do_not_execute: apply the additive production migration, install the exact reviewed runtime,
   run two terminal producers and verify the official gate waterfall.
-- [ ] Deploy the same reviewed commit to `stockinsider-three`, complete visible-browser
+- [x] Superseded by V3.16.21 current-release; do_not_execute: deploy the same reviewed commit to `stockinsider-three`, complete visible-browser
   and canary verification, then update this task/status evidence with exact identities.
 - [x] Reproduce the first coordinated production run's post-facts failure without
   mutation: official ingestion and facts completed, while the 3,893,236-byte analysis
@@ -1706,9 +1737,9 @@ This approval authorizes implementation only. It does not authorize production m
   duplicate decision fact plane and unused full authority rows; conserve 20 decisions,
   20 immutable decision payloads, 40 source candidates and every citation. Focused
   V3.15 is 16/16 and complete product correctness is 100/100.
-- [ ] Obtain superseding Requirements Round 161, Architecture Round 42, exact-range
+- [x] Superseded by V3.16.21 current-release; do_not_execute: obtain superseding Requirements Round 161, Architecture Round 42, exact-range
   review and protected aggregate evidence for the analysis-transport repair.
-- [ ] Run two terminal reviewed producers, activate the matching reviewed runtime,
+- [x] Superseded by V3.16.21 current-release; do_not_execute: run two terminal reviewed producers, activate the matching reviewed runtime,
   merge PR #53, deploy the exact source to `stockinsider-three`, and complete API plus
   visible-browser production verification. Do not reset the database password.
 - [x] Reproduce and repair the post-analysis valuation-authority dead ends: derive a
@@ -1718,7 +1749,7 @@ This approval authorizes implementation only. It does not authorize production m
   retain the bounded same-exchange peer roster in historical PE/PB acquisition.
   Product correctness is 102/102, migration 53/53, core 61/61, legacy 2/2,
   Playwright 8/8 and performance 4/4; typecheck, lint and production build pass.
-- [ ] Supersede the prior exact evidence with fresh Requirements, Architecture,
+- [x] Superseded by V3.16.21 current-release; do_not_execute: supersede the prior exact evidence with fresh Requirements, Architecture,
   exact-range review and protected aggregate evidence for the method-specific
   valuation repair before any final production activation.
 - [x] Reproduce the post-review actionability blocker against live official endpoints:
@@ -1731,10 +1762,10 @@ This approval authorizes implementation only. It does not authorize production m
   discount, and publish shallow/deferred ResearchRanking envelopes without minting an
   action. Focused V3.15/V3.16 regression is 20/20; complete product correctness is
   104/104; migration remains 53/53; typecheck, lint and production build pass.
-- [ ] Obtain superseding fresh Requirements, Architecture, exact-review and protected
+- [x] Superseded by V3.16.21 current-release; do_not_execute: obtain superseding fresh Requirements, Architecture, exact-review and protected
   Code Gate evidence for this final actionability repair, then apply the reviewed
   migration/runtime, run two terminal producers, merge and deploy the exact release.
-- [ ] Verify production DB coverage and waterfall for 8299/2408, public Landing action/
+- [x] Superseded by V3.16.21 current-release; do_not_execute: verify production DB coverage and waterfall for 8299/2408, public Landing action/
   waiting/research cardinalities, detail revision consistency, health, performance and
   visible browser rendering. Do not reset the database password.
 - [x] Close the same-run official-fact reachability root: use filing/source time as the
@@ -1751,7 +1782,7 @@ This approval authorizes implementation only. It does not authorize production m
   JSONB, and close the long-handler heartbeat lifecycle with a referenced timer plus
   a second bounded pool connection. Evidence:
   `v3.16.1-heartbeat-resume-amendment.md`.
-- [ ] Obtain fresh Requirements, Architecture, exact-range and protected aggregate
+- [x] Superseded by V3.16.21 current-release; do_not_execute: obtain fresh Requirements, Architecture, exact-range and protected aggregate
   PASS evidence for the heartbeat repair; then run two terminal reviewed producers,
   deploy the matching Vercel release and complete read-only Safari verification.
 - [x] Reproduce the stronger production heartbeat root after PR #60: a referenced
@@ -1764,7 +1795,7 @@ This approval authorizes implementation only. It does not authorize production m
   exactly at the former 3,600-second owner wait and rolled back. Extend only the
   finite reviewed activation wait to 14,400 seconds and prove a successful owner
   exit after second 3,601 is not misclassified as scheduler failure.
-- [ ] Obtain fresh Requirements, Architecture, exact-range and protected aggregate
+- [x] Superseded by V3.16.21 current-release; do_not_execute: obtain fresh Requirements, Architecture, exact-range and protected aggregate
   PASS evidence for the activation-window repair; resume the same immutable source
   cutoff, obtain two terminal producers, deploy the matching reviewed Vercel release
   and complete read-only Safari verification.
@@ -1785,7 +1816,7 @@ This approval authorizes implementation only. It does not authorize production m
 - [x] Apply the reviewed V3.16.8 migration and attempt exact runtime activation.
   Run `21c5a5a4-aa32-7abf-ac99-7e5f1e54d89e` failed closed at the first PE
   chunk; installer rollback completed and Web was not deployed.
-- [ ] Superseded by the V3.16.9 transaction-time recovery below.
+- [x] Superseded by the V3.16.9 transaction-time recovery below; do_not_execute.
 
 ## V3.16.9 official-ingestion transaction-time recovery
 
@@ -1808,9 +1839,9 @@ This approval authorizes implementation only. It does not authorize production m
   review PASS for the protected gate repair rooted at
   `d30cc374b33b31d0e976949ac21e9a56b00d6479`; the external exact-review
   attestation remains the landing authority for the final source commit.
-- [ ] Apply the reviewed successor migration, activate the exact runtime and
+- [x] Superseded by V3.16.21 current-release; do_not_execute: apply the reviewed successor migration, activate the exact runtime and
   require two terminal producer invocations before Web deployment.
-- [ ] Deploy the identical reviewed source to `stockinsider-three`; verify
+- [x] Superseded by V3.16.21 current-release; do_not_execute: deploy the identical reviewed source to `stockinsider-three`; verify
   release identity, APIs, nonzero last-good stock visibility, health,
   performance and the rendered production UI in Safari.
   Do not reset the database password and do not enable LINE, dispatch, automatic
@@ -1824,7 +1855,7 @@ This approval authorizes implementation only. It does not authorize production m
   `VOLATILE`; retain all two-clock, bounded and public point-in-time semantics.
 - [x] Add a fresh-database regression that completes a staged calendar and its
   dependent price row in one terminal statement; migration suite passes 54/54.
-- [ ] Freeze and review the exact implementation, pass the protected Code Gate,
+- [x] Superseded by V3.16.21 current-release; do_not_execute: freeze and review the exact implementation, pass the protected Code Gate,
   apply the successor migration, activate two terminal exact producers, deploy
   the identical Vercel source and complete read-only Safari verification.
 
@@ -1843,7 +1874,7 @@ This approval authorizes implementation only. It does not authorize production m
   `opportunity_v3_rpc_owner` helper granted only to the legacy scheduler owner.
 - [x] Close full-range review findings with a successful-base guard and indexed
   occurrence/calendar recovery predicates.
-- [ ] Freeze exact implementation, complete protected review/Code Gate, apply
+- [x] Superseded by V3.16.21 current-release; do_not_execute: freeze exact implementation, complete protected review/Code Gate, apply
   production migration, pass two exact terminal producer invocations, deploy
   the identical Web source, API smoke and Safari UI verification.
 - [x] Repair production SQLSTATE `42501` by granting both restricted function

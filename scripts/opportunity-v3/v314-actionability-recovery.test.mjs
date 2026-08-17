@@ -14,6 +14,7 @@ function independentEnvironment(){const environment={...process.env,OPPORTUNITY_
 let migrationEvidenceResult=null;
 const MIGRATION_EVIDENCE_PATTERN=[
   'migration applies twice and exposes the exact granted/private function boundary',
+  'V3[.]16[.]21 freezes one provider revision',
   'V3[.]14 official chunks persist under the exact lease, replay idempotently, and complete before DB reread',
   'V3[.]13 database derives successful-empty, missing, auth and provider terminals from 51 connector attempts',
 ].join('|');
@@ -95,7 +96,8 @@ test('V314-001 calendar authority loss preserves checksum-valid last-good resear
   assert.equal(payload.sourceSignals[0].projectionReadOnly, true);
   assert.equal(payload.sourceSignals[0].newPositionAction, 'valuation_review');
   assert.equal(payload.sourceSignals[0].decisionEnvelope, undefined);
-  assert.equal(payload.sourceSignals[0].detailHref, undefined);
+  assert.equal(payload.sourceSignals[0].detailHref, '/stock/4760');
+  assert.equal(payload.sourceSignals[0].researchOnlyDetail, true);
   assert.deepEqual(payload.sourceSignals[0].projectionBlockers,
     ['legacy_schema_without_v314_decision_authority']);
   assert.equal(payload.compatibilityAdapter.version, 'legacy-readonly-adapter-v3.14.0');
@@ -108,6 +110,8 @@ test('V314-001 calendar authority loss preserves checksum-valid last-good resear
   assert.equal(incompatible.sourceSignals[0].projectionReadOnly,true);
   assert.equal(incompatible.sourceSignals[0].newPositionAction,'valuation_review');
   assert.equal(incompatible.sourceSignals[0].lastKnownAction,'buy');
+  assert.equal(incompatible.sourceSignals[0].decisionEnvelope,undefined,
+    'a client that ignores health cannot observe an actionable envelope from a readonly projection');
   assert.deepEqual(incompatible.loadWarnings,['projection_release_identity_incompatible']);
 });
 
@@ -290,7 +294,7 @@ test('V314-008 Web and runtime share exact release compatibility authority', () 
   const { assessReleaseCompatibility } = require(path.join(root,
     'web/src/lib/opportunity-v3/release-compatibility-runtime.js'));
   const identity={producerCommitSha:'a'.repeat(40),runtimeManifestSha256:'b'.repeat(64),
-    migrationLevel:'decision-integrity-v3.14'};
+    migrationLevel:'provider-acquisition-v3.16.21'};
   assert.deepEqual(assessReleaseCompatibility({schema:'legacy-radar-v3.14.0',releaseIdentity:identity,
     expectedConsumerSha:'a'.repeat(40),expectedRuntimeManifestSha:'b'.repeat(64)}),
   {compatible:true,reason:'compatible'});
@@ -303,7 +307,7 @@ test('V314-008 Web and runtime share exact release compatibility authority', () 
       expectedRuntimeManifestSha:'b'.repeat(64)},'identity_missing'],
     [{schema:'legacy-radar-v3.14.0',releaseIdentity:identity,expectedConsumerSha:'a'.repeat(40),
       expectedRuntimeManifestSha:'c'.repeat(64)},'runtime_mismatch'],
-    [{schema:'legacy-radar-v3.14.0',releaseIdentity:{...identity,migrationLevel:'decision-integrity-v3.13'},
+    [{schema:'legacy-radar-v3.14.0',releaseIdentity:{...identity,migrationLevel:'decision-integrity-v3.14'},
       expectedConsumerSha:'a'.repeat(40),expectedRuntimeManifestSha:'b'.repeat(64)},'migration_mismatch'],
   ];
   for(const [input,reason] of cases)assert.equal(assessReleaseCompatibility(input).reason,reason);
@@ -319,6 +323,7 @@ test('V314-008 Web and runtime share exact release compatibility authority', () 
   assert.match(migrationApply,/20260816_official_ingestion_transaction_time_v3_16_9[.]sql/u);
   assert.match(migrationApply,/20260816_official_ingestion_same_transaction_visibility_v3_16_10[.]sql/u);
   assert.match(migrationApply,/20260816_calendar_dependency_recovery_occurrence_v3_16_11[.]sql/u);
+  assert.match(migrationApply,/20260817_provider_acquisition_v3_16_21[.]sql/u);
   assert.match(migrationApply,/partialResume/u);
   assert.match(migrationApply,/transactionTimeDependency/u);
   assert.match(migrationApply,/sameTransactionVisibility/u);
@@ -404,7 +409,7 @@ test('V314-009 official calendar and backfill coverage remain typed and non-synt
     evaluatedAt:'2026-08-11T00:00:00Z'}),/official calendar/u);
   const applied=appliedV314MigrationEvidence();
   assert.match(applied,/V3\.14 official chunks persist under the exact lease, replay idempotently, and complete before DB reread/u);
-  assert.match(applied,/# pass 3/u);
+  assert.match(applied,/# pass 4/u);
   assert.match(applied,/# fail 0/u);
 });
 
@@ -543,7 +548,7 @@ test('V314-011 every approved profile/provider has one honest terminal outcome',
   assert.ok(acquired.itemOutcomes.some((row)=>row.acquisitionDisposition==='metadata_only'));
   const applied=appliedV314MigrationEvidence();
   assert.match(applied,/V3\.13 database derives successful-empty, missing, auth and provider terminals from 51 connector attempts/u);
-  assert.match(applied,/# pass 3/u);
+  assert.match(applied,/# pass 4/u);
   assert.match(applied,/# fail 0/u);
 });
 
@@ -557,7 +562,7 @@ test('V314-012 migration persists redacted diagnostics append-only with recorded
   const applied=appliedV314MigrationEvidence();
   assert.match(applied,/migration applies twice and exposes the exact granted\/private function boundary/u);
   assert.match(applied,/V3\.14 official chunks persist under the exact lease, replay idempotently, and complete before DB reread/u);
-  assert.match(applied,/# pass 3/u);
+  assert.match(applied,/# pass 4/u);
   assert.match(applied,/# fail 0/u);
   assert.match(applied,/# skipped 0/u);
 });
@@ -736,6 +741,7 @@ test('V314-016b a staged ingestion resume is replayed without refetching mutable
   const {validateAuthSourceDagConfig}=runtime('source-run-config.js');
   const config=validateAuthSourceDagConfig(readFileSync(path.join(root,'config/runtime/auth-source-dag.json')));
   const sourceCutoff='2026-08-11T00:00:00Z';const persisted=[];
+  const runId='31416000-0000-4000-8000-000000000001';
   const bundle={sourceCutoff,bridgeSchema:'legacy-product-value-bridge-v3.14',candidateResult:{candidates:[],discoveryDelta:{}},
     candidateAuthorityRows:[],peerUniverseRows:[],sourceProvenanceRows:[],financialRows:[],priceRows:[],legacyPriceRows:[],
     benchmarkRows:[],dislocationCandidates:[],projectionFreshnessSchedule:[],reportedPeBackfillSessions:[],
@@ -743,9 +749,17 @@ test('V314-016b a staged ingestion resume is replayed without refetching mutable
       schema:'legacy-official-ingestion-resume-v3.15',sourceCutoff,calendarSessions:[],financialFacts:[],
       priceObservations:[],corporateActionSnapshots:[],reportedValuations:[]}};
   const canonical=canonicalJson(bundle);
+  const {normalizedProviderEnvelope}=runtime('provider-acquisition-v31621.js');
   const handlers=buildStageHandlers(config,'a'.repeat(40),'b'.repeat(64),{fetchImpl:async()=>{
-    throw new Error('provider fetch must not run during immutable resume');},persistOfficialIngestionChunk:async(row)=>persisted.push(row)});
-  const output=await handlers.facts_refresh({runId:'run',jobId:'job',ownerToken:'token',readKind:'candidate_fact_plane',
+    throw new Error('provider fetch must not run during immutable resume');},readProviderAcquisition:async(input)=>
+    normalizedProviderEnvelope({provider:input.provider,requestKey:input.requestKey,runId,stage:'facts_refresh',
+      sourceCutoff,fetchedAt:'2026-08-11T00:00:01Z',responseEvidence:{responseSha256:'c'.repeat(64),responseBytes:0},
+      normalizedPayload:{availability:'available',sourceFailures:[],calendarSessions:[],financialFacts:[],
+        priceObservations:[],corporateActionSnapshots:[],valuations:[],valuationHistory:[],twseIndex:[],tpexIndex:[],
+        revenues:[],foreignFlow:null},terminalStatus:'complete',actionEligible:true}),
+    persistOfficialIngestionChunk:async(row)=>persisted.push(row)});
+  const output=await handlers.facts_refresh({runId,jobId:'31416000-0000-4000-8000-000000000002',
+    ownerToken:'31416000-0000-4000-8000-000000000003',readKind:'candidate_fact_plane',
     readCanonical:Buffer.from(canonical),readJson:bundle,readHash:sha256(canonical)});
   assert.equal(output.json.officialIngestion.schema,'legacy-official-ingestion-v3.14');
   assert.deepEqual(persisted.map((row)=>row.kind),['terminal']);
@@ -939,7 +953,8 @@ test('V314-019 exact-review compatibility boundaries accept V3.14 and remain fai
   assert.match(radar,/signal[.]projectionReadOnly===true[\s\S]*?validatePublishedDecisionCard/u);
   assert.match(radar,/const href = revision/u);
   assert.match(radar,/rec[.]symbol[}]\?decisionRevisionId=.*availableResearchDecision[.]decisionRevisionId/u);
-  assert.match(radar,/readonly-detail-unavailable/u);
+  assert.match(radar,/research-only-detail-link/u);
+  assert.match(radar,/查看唯讀研究/u);
   assert.match(migration,/LEFT JOIN candidate_sector candidate[\s\S]*?WHERE candidate[.]stock_id IS NULL/u);
   assert.match(migration,/PARTITION BY exchange,canonical_sector_key/u);
   assert.match(migration,/WHEN sector_rank<=8 THEN 0/u);

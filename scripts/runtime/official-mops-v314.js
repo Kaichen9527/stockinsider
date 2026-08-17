@@ -186,14 +186,16 @@ function quarterCoordinates(cutoff, count = 6) {
   return output;
 }
 
-async function loadMopsFinancialHistoryV314({ cutoff, candidates = [], fetchImpl = globalThis.fetch } = {}) {
+async function loadMopsFinancialHistoryV314({ cutoff, candidates = [], fetchImpl = globalThis.fetch,
+  collectedAt = new Date().toISOString() } = {}) {
   if (!Array.isArray(candidates) || candidates.length > 30) throw new Error('mops_candidate_bound');
   const coordinates=quarterCoordinates(cutoff);
   const requests = coordinates.flatMap(({year,quarter})=>candidates.map((candidate) => ({
     symbol:String(candidate.symbol), exchange:String(candidate.exchange),
     url:`${MOPS_INLINE_URL}?step=1&CO_ID=${candidate.symbol}&SYEAR=${year}&SSEASON=${quarter}&REPORT_ID=C`,
   }))).filter((row) => /^\d{4}$/u.test(row.symbol) && ['TWSE', 'TPEX'].includes(row.exchange));
-  const collectedAt = new Date().toISOString().replace('.000Z', 'Z'); const facts = []; const sourceHashes = {}; const sourceFailures = [];
+  if(typeof collectedAt!=='string'||!Number.isFinite(Date.parse(collectedAt)))throw new Error('mops_collected_at');
+  collectedAt = new Date(collectedAt).toISOString().replace('.000Z', 'Z'); const facts = []; const sourceHashes = {}; const sourceFailures = [];
   for (let offset = 0; offset < requests.length; offset += 1) {
     const request = requests[offset];
     const result = await Promise.allSettled([fetchMopsWithRetry(request, fetchImpl)]).then(([entry]) => entry);

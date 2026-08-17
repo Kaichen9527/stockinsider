@@ -38,6 +38,7 @@ const TRACKED_RUNTIME_PATHS = Object.freeze([
   'scripts/runtime/official-twse-valuation.js',
   'scripts/runtime/postgres-legacy-producer-adapter.js',
   'scripts/runtime/projection-freshness.js',
+  'scripts/runtime/provider-acquisition-v31621.js',
   'scripts/runtime/public-projection.js',
   'scripts/runtime/reported-pe-authority.js',
   'scripts/runtime/research-ranking-v314.js',

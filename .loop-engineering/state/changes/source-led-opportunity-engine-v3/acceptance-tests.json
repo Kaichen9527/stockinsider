@@ -4348,7 +4348,7 @@
       "requirement": "R13/Safety",
       "layer": "contract",
       "setup": "Enumerate every package, launchd, installer and doctor reference to the production-capable auth source worker while ignored .agent content and a tracked runtime worker both exist.",
-      "expected": "Only scripts/runtime/auth-source-worker-cli.js is executable authority, its exact closed 29-member tracked transitive bundle (including the closed Keychain credential resolver) is Git reviewed and bound by one digest across package/install/lease/doctor paths, and ignored .agent worker bytes are rejected."
+      "expected": "Only scripts/runtime/auth-source-worker-cli.js is executable authority, its exact closed 48-member tracked transitive bundle (including the frozen provider-acquisition and closed Keychain credential resolver modules) is Git reviewed and bound by one digest across package/install/lease/doctor paths, and ignored .agent worker bytes are rejected."
     },
     {
       "id": "PCR-002",

@@ -1,11 +1,11 @@
 {
-  "bootstrap": "npm install && cd web && npm install",
-  "run": "cd web && npm run dev",
-  "verify_fast": "cd web && npm run lint && npm run build",
-  "verify_full": "cd web && npm run lint && npm run build && PLAYWRIGHT_SKIP_WEBSERVER=1 E2E_BASE_URL=${E2E_BASE_URL:-http://127.0.0.1:3012} npm exec playwright test e2e/investor.spec.ts e2e/deep-dive-story.spec.ts e2e/radar-layering.spec.ts --reporter=line",
-  "e2e": "cd web && PLAYWRIGHT_SKIP_WEBSERVER=1 E2E_BASE_URL=${E2E_BASE_URL:-http://127.0.0.1:3012} npm exec playwright test e2e/investor.spec.ts e2e/deep-dive-story.spec.ts e2e/radar-layering.spec.ts --reporter=line",
-  "migration": "Manual only: apply a single reviewed migration to Supabase; never run npm run db:migrate without explicit approval.",
+  "bootstrap": "npm ci && npm --prefix web ci",
+  "run": "npm --prefix web run dev",
+  "verify_fast": "npm run typecheck:source-led-opportunity-v3 && npm run lint:source-led-opportunity-v3 && npm run build:source-led-opportunity-v3",
+  "verify_full": "npm run diagnostic:source-led-opportunity-v3:product-runtime && npm run test:model-runner-v3",
+  "e2e": "npm --prefix web run test:e2e:v3-correctness",
+  "migration": "Production schema exception only: with explicit production authority, run npm run db:v3:apply-reviewed -- --source-commit <exact-reviewed-sha> --attestation-commit <validated-evidence-sha>; never use raw psql, db:migrate, or an unreviewed tree.",
   "release_check": "npm run audit:recommendation-gates && npm run audit:valuation-sanity && npm run audit:revaluation-loop && npm run audit:radar-live-availability && npm run audit:source-health && npm run audit:api-payload-size && npm run audit:supabase-egress-risk",
   "deploy": "Manual only: Vercel preview/production deploy requires explicit user approval after loop-release.",
-  "note": "StockInsider Loop commands use real project checks. Loop release evaluates readiness only; it must not auto-merge, auto-deploy, or modify secrets."
+  "note": "StockInsider Loop commands use the authoritative V3 product/runtime and model-runner checks. Loop release evaluates readiness only; it must not infer merge/deploy authority or modify secrets."
 }

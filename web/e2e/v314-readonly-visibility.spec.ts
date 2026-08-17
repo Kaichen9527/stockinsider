@@ -11,8 +11,11 @@ test('V3.14 V3.12 last-good compatibility preserves all 46 unique stocks and 30 
   await expect(page.getByRole('link',{name:'深度分析 →'})).toHaveCount(0);
   await page.getByRole('button',{name:/社群發現 30/u}).click();
   await expect(page.getByRole('article')).toHaveCount(30);
-  await expect(page.getByTestId('readonly-detail-unavailable')).toHaveCount(30);
+  await expect(page.getByTestId('research-only-detail-link')).toHaveCount(30);
   await expect(page.getByRole('link',{name:'查看決策摘要 →'})).toHaveCount(0);
+  await page.getByTestId('research-only-detail-link').first().click();
+  await expect(page.getByTestId('research-only-detail')).toContainText('ACTION DISABLED');
+  await expect(page.getByTestId('research-only-blockers')).toContainText('legacy_schema_without_v314_decision_authority');
   await assertNoConsoleErrors();
 });
 

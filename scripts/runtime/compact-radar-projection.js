@@ -457,6 +457,9 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
   invariant(legacyPayload && typeof legacyPayload === 'object' && !Array.isArray(legacyPayload), 'legacy radar payload required');
   invariant(decisions.length + sourceCandidates.length <= 60, 'radar discovery bound');
   const publicMarketAnalysis = normalizedMarketAnalysis(marketAnalysis);
+  // The captured legacy payload is research input, never current release
+  // authority. Only the tracked run's frozen lineage may enable actions.
+  const publicAcquisitionHealth=sourceAcquisitionHealth??null;
   const layered = addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates, publicMarketAnalysis);
   const publishableSourceSignals=selectLandingSourceSignals(layered.sourceSignals.filter((card)=>{
     const validBrief=card.decisionBrief&&card.citations?.length>0
@@ -486,12 +489,18 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
     return {
       ...layered.legacy,sourceSignals:selectedSignals,discoveryDelta:publicDiscoveryDelta,
       underreactionMarket:publicMarketAnalysis,
-      sourceAcquisitionHealth:sourceAcquisitionHealth??legacyPayload.sourceAcquisitionHealth??null,
+      sourceAcquisitionHealth:publicAcquisitionHealth,
       releaseIdentity:{schema:schemaVersion,producerCommitSha:producerIdentity?.commitSha??null,
-        runtimeManifestSha256:producerIdentity?.runtimeManifestSha256??null,migrationLevel:'decision-integrity-v3.14'},
+        runtimeManifestSha256:producerIdentity?.runtimeManifestSha256??null,migrationLevel:'provider-acquisition-v3.16.21'},
       sourceLedCorrectness:{schema:schemaVersion,window,asOf,contentAsOf:resolvedContentAsOf,evaluatedAt,publishedAt,
         nextExpectedAt:freshness.nextExpectedAt,freshnessSchedule:freshnessSchedule.slice(0,80),
-        contentHash:materialContentHash,producerIdentity},
+        contentHash:materialContentHash,producerIdentity,
+        acquisitionAuthority:publicAcquisitionHealth?{
+          status:publicAcquisitionHealth.acquisitionAuthority??'unavailable',
+          evidenceRoot:publicAcquisitionHealth.acquisitionEvidenceRoot??null,
+          fetchedAt:publicAcquisitionHealth.fetchedAt??null,
+          terminalStatus:publicAcquisitionHealth.terminalStatus??null,
+        }:null},
     };
   };
   let selectedSignals=publishableSourceSignals;
