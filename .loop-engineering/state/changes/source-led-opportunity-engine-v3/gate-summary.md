@@ -1929,3 +1929,19 @@ After PASS, update review evidence and status, then stop. Main implementation ro
 - Production exclusions: no database password reset or credential rotation; no LINE,
   dispatch, automatic trading or Promotion. Evaluation remains honestly
   `blocked/non_fabricated_elapsed_cohorts_unavailable`.
+
+## V3.16.21 production-cardinality forensic closure (2026-08-17)
+
+- The sole fresh Requirements Round 100 and independent Architecture Round 11 are
+  already PASS and are not reopened.
+- Exact production run `68691805-c80c-39df-26e5-ae9715d80318` froze 22,448 official
+  valuation-history rows, then exposed one implementation P1: the public symbol
+  resolver repeated the full ~1,979-stream roster check for every row. At the
+  retained 20-row pooler bound the run could not complete inside four hours.
+- The activation was stopped before timeout, automatically rolled back to
+  `184390953048209730c22828548858c28fa3b6b7`, and its one-time authority was
+  destroyed. No Web deploy or action authority occurred.
+- The bounded repair validates the roster once per immutable-fetchedAt chunk and
+  uses the existing indexed internal resolver per row. Fresh PostgreSQL apply-twice
+  and privilege coverage passes `60/60`; exact review and the protected Code Gate
+  remain pending.

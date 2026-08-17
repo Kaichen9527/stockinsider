@@ -8,12 +8,12 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `330973bcd8b06db399d82ceb194b74c3d8e4d521`
-- Requirements implementation commit: `3d97bcda5442971b526af42e3e7b71926126922a`
-- Requirements evidence carrier: `4f301dd975a9c425a3caa3114dff322dcac0172b`
-- Final repair-closure commit/tree: `4f301dd975a9c425a3caa3114dff322dcac0172b` / `cd39dfcec04b4ba00cc43e79f55554a9c7bdeb77`
-- Full reviewed implementation range: `330973bcd8b06db399d82ceb194b74c3d8e4d521..4f301dd975a9c425a3caa3114dff322dcac0172b`
-- Active graph: `176ae0d91ca1912d7bcb68cc48c0e94a18ab01e47956e55456ef434400bd2ea7`
+- Protected implementation parent: `cde4915db22f279a891b478540a2ebdab54876fb`
+- Requirements implementation commit: `5add5b8dcd559edadef96b5d6fdc46bb4f89ff22`
+- Requirements evidence carrier: `64e29b274bee6e47e2930304cf99656720d3250e`
+- Final repair-closure commit/tree: `64e29b274bee6e47e2930304cf99656720d3250e` / `0fb3151300a0f9bc01b6693107503d73b296e75e`
+- Full reviewed implementation range: `cde4915db22f279a891b478540a2ebdab54876fb..64e29b274bee6e47e2930304cf99656720d3250e`
+- Active graph: `b07516d0b650da847d8e0cba59edf2c25672e88443582a0e696e093a13e80525`
 
 ## Architecture closure
 
@@ -50,3 +50,19 @@ database, network, public API, or deployment edge. It makes the active amendment
 declare the cataloged release version, makes the command inventory equal the actual
 closed product suite, and checks current action disposition against the release
 phase. Focused repair closure is `3/3` PASS and the active graph is re-sealed above.
+
+The production-cardinality repair changes only the internal SQL execution plan for
+official ingestion. One closed chunk shares one immutable acquisition timestamp,
+validates the complete authority roster once, and then resolves each of at most
+twenty rows through the already indexed private resolver. The public resolver,
+wire envelopes, provider acquisition revisions, transaction leases, migration
+authority, grants and Web interfaces are unchanged. The new additive migration
+guards the predecessor body, applies twice, preserves the private owner and cannot
+turn a partial or conflicting roster into action authority.
+
+The release operator and the reviewed apply CLI now consume one ordered migration
+chain. The displayed plan cannot omit the roster-chunk snapshot while the mutation
+path applies it, because a product regression executes the planner and compares it
+exactly with the reviewed chain. This preserves the existing approval boundary:
+read-only planning describes the same additive SQL that the exact reviewed CLI may
+execute, with no password, credential, public grant, or rollback-policy expansion.

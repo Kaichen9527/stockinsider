@@ -11,7 +11,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const trustedExecFileSync = childProcess.execFileSync.bind(childProcess);
 const trustedSpawnSync = childProcess.spawnSync.bind(childProcess);
 const requestedTrack = process.env.OPPORTUNITY_V3_ACCEPTANCE_TRACK ?? 'product_runtime';
-const expectedActiveGraphSha256 = '176ae0d91ca1912d7bcb68cc48c0e94a18ab01e47956e55456ef434400bd2ea7';
+const expectedActiveGraphSha256 = 'b07516d0b650da847d8e0cba59edf2c25672e88443582a0e696e093a13e80525';
 assert.ok(
   ['product_runtime', 'evaluation_governance', 'model_runner'].includes(requestedTrack),
   'acceptance traceability executes only an explicit automated track',
@@ -449,24 +449,28 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
     assert.equal(currentRelease.forbidden.credentialRotation,true);
     assert.equal(currentRelease.production.promotion,
       'blocked/non_fabricated_elapsed_cohorts_unavailable');
-    assert.deepEqual(currentRelease.actionQueue,[
-      'freeze_implementation_tree','single_fresh_requirements_review','single_independent_architecture_review',
-      'exact_review_and_code_gate','migration_runtime_two_runs','matching_vercel_deploy_and_smoke',
-      'safari_and_loop_closure',
-    ]);
+    assert.ok(Array.isArray(currentRelease.actionQueue)&&currentRelease.actionQueue.length>0
+      &&currentRelease.actionQueue.length<=7,'current release has one bounded action queue');
+    assert.equal(new Set(currentRelease.actionQueue).size,currentRelease.actionQueue.length,
+      'current release action queue has no duplicate work');
+    assert.ok(currentRelease.actionQueue.every((item)=>/^[a-z][a-z0-9_]{2,63}$/u.test(item)),
+      'current release actions are closed machine-readable identifiers');
+    assert.doesNotMatch(currentRelease.actionQueue.join(','),/password|credential|line_dispatch|automatic_trading|promotion/iu,
+      'forbidden and superseded work can never re-enter the active queue');
     const marker='## V3.16.21 single release closure — only active action queue';
     const start=tasksText.indexOf(marker);assert.ok(start>=0,'one V3.16.21 active action queue exists');
     const active=tasksText.slice(start,tasksText.indexOf('## Architecture checkpoint',start));
     assert.match(active,/\[x\] Mark every historical password\/credential rotation item/u);
     assert.match(active,/All older unchecked production, migration, gate, activation and credential items[\s\S]*superseded\/do_not_execute/u);
-    if(currentRelease.phase==='implementation_in_progress'){
-      assert.match(active,/- \[ \] Freeze one V3[.]16[.]21 immutable implementation tree/u,
-        'the sole active implementation closure remains pending until its evidence carriers pass');
-    }else if(['architecture_passed','exact_review_passed','production_rollout','complete_with_concerns']
-      .includes(currentRelease.phase)){
-      assert.match(active,/- \[x\] Freeze one V3[.]16[.]21 immutable implementation tree/u,
-        'the sole active implementation closure is complete after Architecture PASS');
+    if(currentRelease.phase==='architecture_passed'){
+      assert.equal(currentRelease.actionQueue[0],'freeze_cardinality_repair_tree',
+        'the bounded implementation repair is the sole next step after closed contract gates');
+      assert.match(active,/- \[ \] Freeze one bounded V3[.]16[.]21 production-cardinality repair tree/u,
+        'the bounded implementation repair remains pending until its immutable tree is frozen');
     }
+    if(['exact_review_passed','production_rollout','complete_with_concerns'].includes(currentRelease.phase))
+      assert.doesNotMatch(active,/- \[ \] Freeze one bounded V3[.]16[.]21 production-cardinality repair tree/u,
+        'the bounded implementation repair cannot remain pending after exact review');
     return;
   }
   const round = statusRecord.requirementsReviewRound;
@@ -1371,7 +1375,9 @@ const structuralExecutors = {
     assert.ok(tasks.lastIndexOf('model-runner-v3.6') > tasks.lastIndexOf('model-runner-v3.5'));
     assert.doesNotThrow(() => assertTaskStatusNextWorkConsistent(tasks, status));
     const operativeRequirementsTask = status.currentReleaseAuthority
-      ? '- [ ] Freeze one V3.16.21 immutable implementation tree'
+      ? currentRelease.phase==='architecture_passed'
+        ? '- [ ] Freeze one bounded V3.16.21 production-cardinality repair tree'
+        : '- [x] Freeze one bounded V3.16.21 production-cardinality repair tree'
       : status.requirementsStatus.startsWith('v3_16_9_')
         ? `- [x] Obtain fresh Requirements Round ${status.requirementsReviewRound}, Architecture Round ${status.architectureReviewRound} and exact-range`
         : '- [x] Obtain fresh Requirements Round 138 PASS';

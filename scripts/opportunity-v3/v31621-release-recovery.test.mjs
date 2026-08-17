@@ -3,10 +3,40 @@ import path from 'node:path';
 import {createRequire} from 'node:module';
 import {fileURLToPath} from 'node:url';
 import test from 'node:test';
+import fs from 'node:fs';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
 const require=createRequire(import.meta.url);
 const runtime=(file)=>require(path.join(root,'scripts/runtime',file));
+
+function declaredMigrationPaths(source,constantName) {
+  const body=source.match(new RegExp(`const ${constantName}\\s*=\\s*(?:Object[.]freeze[(])?([\\s\\S]*?\\])[;)]`,'u'))?.[1];
+  assert.ok(body,`${constantName} migration declaration`);
+  return [...body.matchAll(/['"](migrations\/[^'"]+[.]sql)['"]/gu)].map((match)=>match[1]);
+}
+
+test('V31621 operator migration plan exactly matches the reviewed apply chain',()=>{
+  const plan=fs.readFileSync(path.join(root,'scripts/opportunity-v3/migration-plan.mjs'),'utf8');
+  const apply=fs.readFileSync(path.join(root,'scripts/opportunity-v3/apply-reviewed-migrations.mjs'),'utf8');
+  const planned=declaredMigrationPaths(plan,'migrationPaths');
+  const reviewed=declaredMigrationPaths(apply,'MIGRATIONS');
+  assert.deepEqual(planned,reviewed,'the displayed production plan cannot omit or reorder a reviewed migration');
+  assert.equal(planned.at(-1),'migrations/20260817_official_ingestion_roster_chunk_snapshot_v3_16_21.sql');
+});
+
+test('V31621 production-cardinality repair keeps pooler-safe chunks and snapshots roster integrity once',()=>{
+  const migration=fs.readFileSync(path.join(root,
+    'migrations/20260817_official_ingestion_roster_chunk_snapshot_v3_16_21.sql'),'utf8');
+  const worker=fs.readFileSync(path.join(root,'scripts/runtime/auth-source-worker-cli.js'),'utf8');
+  assert.doesNotMatch(migration,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(migration,/official_ingestion_mixed_acquisition_time/u);
+  assert.match(migration,/opportunity_authority_selected_stream_count_v3_internal/u);
+  assert.match(migration,/resolve_legacy_instrument_symbol_authority_v3_13_internal/u);
+  assert.doesNotMatch(migration,/jsonb_array_length\(p_items\)>20/u,
+    'the database repair must not silently redefine the existing chunk contract');
+  const chunkSizes=[...worker.matchAll(/^\s*\['(?:trading_sessions|financial_facts|price_observations|corporate_action_snapshots|reported_valuations)'[^\n]+,20\],?$/gmu)];
+  assert.ok(chunkSizes.length>=5,'all official datasets retain the reviewed 20-row pooler bound');
+});
 
 function claim(runId='00000000-0000-4000-8000-000000000001') {
   return {runId,jobId:'00000000-0000-4000-8000-000000000002',

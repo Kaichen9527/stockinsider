@@ -164,3 +164,20 @@ activation or deployment.
 - Pending: full product/runtime, migration, browser, performance, model-runner,
   exact-review/protected root, production migration/runtime x2, Vercel smoke and
   Safari verification.
+
+## V3.16.21 production-cardinality repair diagnostic (2026-08-17)
+
+- Forensic run `68691805-c80c-39df-26e5-ae9715d80318` retained truthful frozen
+  provider timestamps and hashes but was not eligible for release: repeated global
+  roster validation made 22,448 valuation rows exceed the finite activation window.
+- Automatic runtime rollback is verified at
+  `184390953048209730c22828548858c28fa3b6b7`; Web was not changed and action
+  authority was not published.
+- The additive, apply-twice repair keeps each official chunk at 20 rows, rejects
+  mixed acquisition timestamps, executes one complete roster integrity check per
+  chunk, and performs three indexed internal symbol-resolution paths.
+- Focused V3.16.21 suite passes `7/7`; fresh-database migration suite passes
+  `60/60`, including owner/grant closure and installed-function cardinality.
+- This is mutable diagnostic evidence only. Exact commit review, protected Code
+  Gate, exact production migration, two terminal producers, Vercel smoke and Safari
+  remain pending.

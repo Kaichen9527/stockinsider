@@ -54,6 +54,9 @@ const evaluationClockSql = fs.readFileSync(evaluationClockMigrationPath, 'utf8')
 const providerAcquisitionMigrationPath = path.join(root,
   'migrations/20260817_provider_acquisition_v3_16_21.sql');
 const providerAcquisitionSql = fs.readFileSync(providerAcquisitionMigrationPath, 'utf8');
+const rosterChunkSnapshotMigrationPath = path.join(root,
+  'migrations/20260817_official_ingestion_roster_chunk_snapshot_v3_16_21.sql');
+const rosterChunkSnapshotSql = fs.readFileSync(rosterChunkSnapshotMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -445,6 +448,12 @@ before(() => {
     command(pg.psql, [
       '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', providerAcquisitionMigrationPath,
+    ]);
+  }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', rosterChunkSnapshotMigrationPath,
     ]);
   }
 });
@@ -988,6 +997,31 @@ test('V3.16.21 freezes one provider revision, reuses it, and quarantines conflic
   `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
   assert.deepEqual(result,{first:'appended',second:'reused',conflict:'conflict',revisionRows:1,conflictRows:1,
     serviceInsert:false,serviceFreeze:true,serviceBaseClaim:false,lineageWrapper:true,immutableTrigger:true});
+});
+
+test('V3.16.21 validates one roster snapshot per bounded official ingestion chunk',()=>{
+  assert.doesNotMatch(rosterChunkSnapshotSql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(rosterChunkSnapshotSql,/v_public_occurrences<>3/u,
+    'the upgrade refuses an unknown predecessor instead of silently weakening it');
+  const installed=JSON.parse(psql(`
+    SELECT jsonb_build_object(
+      'marker',position('instrument_roster_chunk_snapshot_v3_16_21' IN pg_get_functiondef(oid))>0,
+      'publicCalls',(length(pg_get_functiondef(oid))-length(replace(pg_get_functiondef(oid),
+        'public.resolve_legacy_instrument_symbol_authority_v3_13(','')))
+        / length('public.resolve_legacy_instrument_symbol_authority_v3_13('),
+      'internalCalls',(length(pg_get_functiondef(oid))-length(replace(pg_get_functiondef(oid),
+        'public.resolve_legacy_instrument_symbol_authority_v3_13_internal(','')))
+        / length('public.resolve_legacy_instrument_symbol_authority_v3_13_internal('),
+      'globalChecks',(length(pg_get_functiondef(oid))-length(replace(pg_get_functiondef(oid),
+        'opportunity_authority_selected_stream_count_v3_internal(','')))
+        / length('opportunity_authority_selected_stream_count_v3_internal('),
+      'owner',pg_get_userbyid(proowner),
+      'serviceExecute',has_function_privilege('service_role',oid,'EXECUTE'))::text
+    FROM pg_proc WHERE oid=
+      'public.apply_legacy_official_ingestion_chunk_base_v3_15(uuid,uuid,uuid,text,integer,jsonb,text,text,timestamptz)'::regprocedure;
+  `,['-Atq']).trim());
+  assert.deepEqual(installed,{marker:true,publicCalls:0,internalCalls:3,globalChecks:1,
+    owner:'opportunity_v3_rpc_owner',serviceExecute:false});
 });
 
 test('V3.14 official chunks persist under the exact lease, replay idempotently, and complete before DB reread', () => {

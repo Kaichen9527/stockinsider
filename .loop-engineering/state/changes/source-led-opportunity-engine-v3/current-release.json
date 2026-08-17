@@ -1,23 +1,23 @@
 {
   "schema": "stockinsider-current-release-v1",
   "version": "v3.16.21",
-  "phase": "implementation_in_progress",
+  "phase": "architecture_passed",
   "source": {
-    "baseCommit": "330973bcd8b06db399d82ceb194b74c3d8e4d521",
+    "baseCommit": "cde4915db22f279a891b478540a2ebdab54876fb",
     "exactCommit": null,
     "exactTree": null,
     "attestationCommit": null
   },
   "gates": {
-    "requirements": "pending_single_fresh_review",
-    "architecture": "pending_after_requirements",
+    "requirements": "pass",
+    "architecture": "pass",
     "exactReview": "pending",
     "code": "pending",
     "shadowActivation": "pending"
   },
   "production": {
-    "migration": "v3.16.20_applied_v3.16.21_unapplied",
-    "runtime": "rollback_safe_184390953048209730c22828548858c28fa3b6b7",
+    "migration": "v3.16.21_applied_cardinality_repair_unapplied",
+    "runtime": "forensic_run_68691805_rolled_back_safe_184390953048209730c22828548858c28fa3b6b7",
     "web": "predecessor_live_not_matching_v3.16.21",
     "projection": "predecessor_last_good_readonly",
     "promotion": "blocked/non_fabricated_elapsed_cohorts_unavailable"
@@ -30,11 +30,10 @@
     "v3Promotion": true
   },
   "actionQueue": [
-    "freeze_implementation_tree",
-    "single_fresh_requirements_review",
-    "single_independent_architecture_review",
+    "freeze_cardinality_repair_tree",
     "exact_review_and_code_gate",
-    "migration_runtime_two_runs",
+    "apply_cardinality_migration",
+    "exact_runtime_two_terminal_runs",
     "matching_vercel_deploy_and_smoke",
     "safari_and_loop_closure"
   ]
