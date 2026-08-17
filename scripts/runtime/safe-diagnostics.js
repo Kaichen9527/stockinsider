@@ -8,15 +8,16 @@ const STAGES=new Set(['source_sync','mention_claim_extraction','candidate_funnel
 const ORIGINS=new Set(['handler','rpc_validation','persistence','provider','runtime']);
 const JOB_KINDS=new Set(['source_root','revision_shard','stage_barrier','candidate_batch','analysis_batch','projection_batch','terminal']);
 const INVARIANT_CODES=new Set(['candidate_seed_membership_missing','database_constraint_rejected','provider_timeout',
-  'authentication_rejected','data_integrity_failure']);
+  'authentication_rejected','projection_supersession_conflict','data_integrity_failure']);
 function text(value){return typeof value==='string'?value:String(value??'');}
 function invariantCode(error){
   if(INVARIANT_CODES.has(text(error?.invariantCode)))return text(error.invariantCode);
-  const raw=text(error?.code||error?.message||'data_integrity_failure').toLowerCase();
+  const raw=`${text(error?.code)}:${text(error?.message||'data_integrity_failure')}`.toLowerCase();
   if(raw.includes('seed')&&raw.includes('membership'))return 'candidate_seed_membership_missing';
   if(raw.includes('constraint'))return 'database_constraint_rejected';
   if(raw.includes('timeout'))return 'provider_timeout';
   if(raw.includes('auth'))return 'authentication_rejected';
+  if(raw.includes('projection_'))return 'projection_supersession_conflict';
   return 'data_integrity_failure';
 }
 function safeFailureDiagnostic(error,{runId=null,jobId=null,stage='worker_terminal',jobKind='terminal',origin='runtime',

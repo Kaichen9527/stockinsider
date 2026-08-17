@@ -102,8 +102,14 @@ async function runDurableAuthSourceWorker({ configBytes, adapter, sourceCommitSh
       invariant(typeof handler === 'function', `missing stage handler: ${claim.stage}`);
       const output = await runWithLeaseHeartbeat({ adapter, lease, claim, ownerToken,
         leaseSeconds: validated.config.leaseSeconds, handler, heartbeatIntervalMs });
-      const completion = await adapter.completeLegacyProducerJob({ runId: lease.runId, jobId: claim.jobId, ownerToken,
-        resultCanonical: output.canonical, resultJson: output.json, resultHash: output.hash });
+      let completion;
+      try {
+        completion = await adapter.completeLegacyProducerJob({ runId: lease.runId, jobId: claim.jobId, ownerToken,
+          resultCanonical: output.canonical, resultJson: output.json, resultHash: output.hash });
+      } catch (error) {
+        if (error && typeof error === 'object') error.failureOrigin = 'rpc_validation';
+        throw error;
+      }
       invariant(completion && typeof completion.status === 'string', 'producer lease lost before completion');
       completedJobs += 1;
       invariant(completedJobs <= 12000, 'durable job conservation bound');

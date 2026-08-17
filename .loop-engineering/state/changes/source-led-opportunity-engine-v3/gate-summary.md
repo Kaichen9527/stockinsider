@@ -1923,9 +1923,10 @@ After PASS, update review evidence and status, then stop. Main implementation ro
   Implementation contains frozen provider acquisition, real collection time,
   immutable reuse/conflict quarantine, shared health fail-safe and research-only
   detail navigation.
-- Current gate state: focused provenance and fresh-database migration tests PASS;
-  one fresh Requirements review, one independent Architecture review, exact review,
-  full Code Gate and Shadow Activation Gate remain pending.
+- Current gate state: the sole V3.16.21 Requirements Round 100 and independent
+  Architecture Round 11 are PASS and closed. Focused provenance and fresh-database
+  migration tests PASS; exact review, full Code Gate and Shadow Activation Gate
+  remain pending.
 - Production exclusions: no database password reset or credential rotation; no LINE,
   dispatch, automatic trading or Promotion. Evaluation remains honestly
   `blocked/non_fabricated_elapsed_cohorts_unavailable`.
@@ -1945,3 +1946,20 @@ After PASS, update review evidence and status, then stop. Main implementation ro
   uses the existing indexed internal resolver per row. Fresh PostgreSQL apply-twice
   and privilege coverage passes `60/60`; exact review and the protected Code Gate
   remain pending.
+
+## V3.16.21 projection-evaluation forensic closure (2026-08-17)
+
+- Forensic run `f7d1cef1-95aa-32e4-96db-58368e851eb6` completed every handler
+  through compact projection, then the production V3.13 trigger rejected the same
+  market cutoff because predecessor producer `950e4f5433e4fd9a42697cca6a5f66a223f473b9`
+  had already published a different release payload there. Runtime rolled back to
+  `184390953048209730c22828548858c28fa3b6b7`; Web action authority stayed disabled.
+- An immutable in-memory replay of the claimed input succeeds with four compact
+  projections and 12 decision revisions. The four raw projection sizes are
+  141,574 / 122,009 / 140,090 / 141,573 bytes, each within the 150 KB contract.
+- The bounded repair separates content cutoff from reviewed evaluation order. It
+  permits only a different exact producer with complete row/payload identity and
+  strictly later evaluation/publish clocks. Same-producer drift, equal-time
+  disagreement, missing identity and time regression remain fail-closed.
+- Requirements Round 100 and Architecture Round 11 remain the sole closed contract
+  gates. Exact implementation review and the protected Code Gate remain pending.

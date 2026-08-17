@@ -288,6 +288,10 @@ test('V314-007 runtime diagnostics never serialize SQL text or connection creden
   const barrier=safeFailureDiagnostic(new Error('completion failed'),{stage:'facts_refresh',jobKind:'stage_barrier',
     origin:'handler',producerSha:'b'.repeat(40)});
   assert.equal(barrier.jobKind,'stage_barrier');
+  const projection=safeFailureDiagnostic(Object.assign(new Error('projection_evaluation_time_conflict'),{code:'PT409'}),
+    {stage:'compact_radar_projection',jobKind:'stage_barrier',origin:'rpc_validation',producerSha:'b'.repeat(40)});
+  assert.deepEqual({origin:projection.origin,invariantCode:projection.invariantCode,sqlstate:projection.sqlstate},
+    {origin:'rpc_validation',invariantCode:'projection_supersession_conflict',sqlstate:'PT409'});
 });
 
 test('V314-008 Web and runtime share exact release compatibility authority', () => {
