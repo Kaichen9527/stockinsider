@@ -1963,3 +1963,20 @@ After PASS, update review evidence and status, then stop. Main implementation ro
   disagreement, missing identity and time regression remain fail-closed.
 - Requirements Round 100 and Architecture Round 11 remain the sole closed contract
   gates. Exact implementation review and the protected Code Gate remain pending.
+
+## V3.16.21 authoritative release closure — 2026-08-17
+
+- The sole Requirements Round 100 and Architecture Round 11 remain PASS and were
+  not reopened.
+- Exact implementation `ded5acafe57fd1b82cf44ed03879b1281d8f39b3`, tree
+  `19b770d6c5c8e039b94c5dbb7cad341b615b8074`, exact review and protected run
+  `32021648447` all PASS with P0=0/P1=0/P2=0.
+- Shadow Activation PASS: additive migration apply-twice, exact tracked runtime,
+  terminal success plus retained-success idempotency, doctor PASS, matching Vercel
+  production, read-only smoke, performance and Safari navigation.
+- Code/Shadow release status is `DONE_WITH_CONCERNS`. Formal action authority stays
+  disabled until official coverage is complete. Promotion remains
+  `blocked/non_fabricated_elapsed_cohorts_unavailable`; no synthetic cohort exists.
+- Full immutable identities and production observations are in
+  `v3.16.21-release-state-evidence.md`. This release-state carrier does not redefine
+  runtime source and does not start a new product gate round.

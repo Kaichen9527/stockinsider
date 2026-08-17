@@ -18,25 +18,29 @@
   Requirements Round 100 PASS plus independent Architecture Round 11 PASS. These
   gates are closed and must not be rerun for the bounded production-cardinality
   implementation repair.
-- [ ] Freeze one bounded V3.16.21 production-cardinality repair tree and projection-
+- [x] Freeze one bounded V3.16.21 production-cardinality repair tree and projection-
   evaluation supersession repair: retain the closed 20-row roster snapshot, then
   separate immutable content cutoff from reviewed evaluation/publish ordering. Allow
   only a different reviewed producer with exact release identity and strictly later
   evaluation/publish times; reject same-producer nondeterminism and equal-time conflict.
-- [ ] Create the exact implementation commit, complete exact diff/repair/full-range
+- [x] Create the exact implementation commit, complete exact diff/repair/full-range
   review with P0=0/P1=0, and pass the protected Code Gate.
-- [ ] Apply only the exact reviewed cardinality and projection-supersession migrations, activate the matching
+- [x] Apply only the exact reviewed cardinality and projection-supersession migrations, activate the matching
   tracked runtime and complete two terminal producer invocations. Do not reset any
   password and do not enable LINE, dispatch, auto-trading or Promotion.
-- [ ] Deploy the same reviewed release to `stockinsider-three`; complete read-only
+- [x] Deploy the same reviewed release to `stockinsider-three`; complete read-only
   smoke, performance, nonzero-card, revision-consistency and Safari checks.
-- [ ] Publish the release-state evidence carrier and close the Goal as
+- [x] Publish the release-state evidence carrier and close the Goal as
   `DONE_WITH_CONCERNS`; only third-party terminal failures and real-cohort evaluation
   governance may remain concerns.
 
 All older unchecked production, migration, gate, activation and credential items
 below are a historical ledger and are `superseded/do_not_execute` unless referenced
 by `current-release.json`. They are not the current action queue.
+
+Release closure evidence is recorded in `v3.16.21-release-state-evidence.md`.
+The sole remaining machine action is `monitor_elapsed_evidence`; it cannot be
+completed before real time elapses and must never be replaced by synthetic cohorts.
 
 ## Architecture checkpoint — Sol only
 

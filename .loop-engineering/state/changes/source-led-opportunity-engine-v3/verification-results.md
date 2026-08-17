@@ -204,3 +204,24 @@ activation or deployment.
 - This remains precommit diagnostic evidence. Exact review/protected gate,
   production migration/runtime x2, matching Web deploy, smoke and Safari remain
   pending. Requirements/Architecture are not reopened.
+
+## V3.16.21 authoritative production verification — PASS WITH CONCERNS
+
+- Protected run `32021648447` PASS: Requirements, Architecture, exact review,
+  product/runtime, model-runner and root.
+- Exact source/tree/evidence: `ded5acafe57fd1b82cf44ed03879b1281d8f39b3` /
+  `19b770d6c5c8e039b94c5dbb7cad341b615b8074` /
+  `620e3b98575086a3d89f7ba35a5db89178aa23dd`.
+- Runtime run `1d26ffd2-de98-39c5-a65c-482cb62ac9d0` PASS 3,447/3,447;
+  second invocation `retained_success`; doctor PASS; stuck=0; single owner.
+- Vercel `dpl_8ko9HPokaWe2fRUTUWSdJGyvgKia` is live at
+  `https://stockinsider-three.vercel.app`; exact consumer/producer/manifest match.
+- Homepage/Radar/health/detail/V3-disabled smoke PASS. Homepage is 147,125 bytes;
+  Radar payloads are 111,130-129,246 bytes; warm aggregate p95 is 1,006 ms; five
+  concurrent reads are all below 10 seconds.
+- Safari PASS: stock research 23, social discovery 12, navigable cards and matching
+  2605 decision revision. Evidence paths and complete identities are recorded in
+  `v3.16.21-release-state-evidence.md`.
+- Concern: incomplete official coverage disables formal actions but preserves
+  nonzero research; third-party failures remain typed; real-cohort Promotion remains
+  `blocked/non_fabricated_elapsed_cohorts_unavailable`.

@@ -1,25 +1,25 @@
 {
   "schema": "stockinsider-current-release-v1",
   "version": "v3.16.21",
-  "phase": "architecture_passed",
+  "phase": "complete_with_concerns",
   "source": {
-    "baseCommit": "cde4915db22f279a891b478540a2ebdab54876fb",
-    "exactCommit": null,
-    "exactTree": null,
-    "attestationCommit": null
+    "baseCommit": "afb685a337bd41d9613092c51be9391a45ee1781",
+    "exactCommit": "ded5acafe57fd1b82cf44ed03879b1281d8f39b3",
+    "exactTree": "19b770d6c5c8e039b94c5dbb7cad341b615b8074",
+    "attestationCommit": "620e3b98575086a3d89f7ba35a5db89178aa23dd"
   },
   "gates": {
     "requirements": "pass",
     "architecture": "pass",
-    "exactReview": "pending",
-    "code": "pending",
-    "shadowActivation": "pending"
+    "exactReview": "pass",
+    "code": "pass",
+    "shadowActivation": "pass"
   },
   "production": {
-    "migration": "v3.16.21_cardinality_applied_projection_supersession_unapplied",
-    "runtime": "forensic_runs_68691805_and_f7d1cef1_rolled_back_safe_184390953048209730c22828548858c28fa3b6b7",
-    "web": "reviewed_bootstrap_51ea21f_live_actions_disabled",
-    "projection": "predecessor_950e4f_last_good_readonly_same_cutoff_conflict",
+    "migration": "v3.16.21_additive_apply_twice_verified",
+    "runtime": "exact_ded5aca_terminal_success_then_retained_success",
+    "web": "dpl_8ko9HPokaWe2fRUTUWSdJGyvgKia_live_on_stockinsider_three_vercel_app",
+    "projection": "exact_ded5aca_fresh_last_good_readonly_nonzero_research",
     "promotion": "blocked/non_fabricated_elapsed_cohorts_unavailable"
   },
   "forbidden": {
@@ -29,12 +29,12 @@
     "automaticTrading": true,
     "v3Promotion": true
   },
+  "concerns": [
+    "official_coverage_incomplete_action_authority_disabled",
+    "third_party_connector_terminal_failures",
+    "blocked_non_fabricated_elapsed_cohorts_unavailable"
+  ],
   "actionQueue": [
-    "freeze_cardinality_repair_tree",
-    "exact_review_and_code_gate",
-    "apply_cardinality_migration",
-    "exact_runtime_two_terminal_runs",
-    "matching_vercel_deploy_and_smoke",
-    "safari_and_loop_closure"
+    "monitor_elapsed_evidence"
   ]
 }

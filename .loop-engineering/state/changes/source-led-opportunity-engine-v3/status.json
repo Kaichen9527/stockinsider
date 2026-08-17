@@ -1,6 +1,6 @@
 {
   "changeId": "source-led-opportunity-engine-v3",
-  "loopStage": "v3_16_21_architecture_passed_bounded_projection_supersession_repair",
+  "loopStage": "v3_16_21_complete_with_concerns",
   "requirementsStatus": "v3_16_21_round_100_pass_p0_0_p1_0_p2_0",
   "designStatus": "v3_16_21_architecture_round_11_pass_p0_0_p1_0_p2_0",
   "requirementsGateStatus": "pass_v3_16_21",
@@ -340,16 +340,16 @@
     "P1": 0,
     "P2": 0
   },
-  "verificationStatus": "v3_16_21_requirements_architecture_pass;forensic_activations_68691805_and_f7d1cef1_rolled_back;cardinality_repair_pass;projection_supersession_focused_pass;exact_code_gate_pending",
-  "verificationGateConclusion": "v3_16_21_single_release_in_progress;promotion_blocked_non_fabricated_elapsed_cohorts_unavailable",
+  "verificationStatus": "v3_16_21_exact_review_protected_code_shadow_activation_production_smoke_safari_pass",
+  "verificationGateConclusion": "v3_16_21_done_with_concerns;promotion_blocked_non_fabricated_elapsed_cohorts_unavailable",
   "verificationTracks": {
-    "product_runtime": "v3_16_21_precommit_diagnostic_pass_base_61_product_118_migration_61_legacy_2_playwright_8_performance_5_typecheck_lint_build_63;exact_tree_attestation_pending",
+    "product_runtime": "pass_exact_ded5aca_base_61_product_118_migration_61_legacy_2_playwright_8_performance_5_typecheck_lint_build",
     "evaluation_governance": "blocked/non_fabricated_elapsed_cohorts_unavailable",
-    "model_runner": "v3_16_21_precommit_diagnostic_pass_18_of_18_and_disabled_host_pin_v3_9_doctor;exact_tree_attestation_pending"
+    "model_runner": "pass_protected_model_runner_and_host_pin_v3_9_doctor"
   },
-  "releaseStatus": "v3_16_21_cardinality_migration_applied;projection_supersession_unapplied;forensic_runtime_f7d1cef1_rolled_back;reviewed_bootstrap_51ea21f_live_actions_disabled",
+  "releaseStatus": "v3_16_21_exact_runtime_and_web_live;nonzero_research;actions_disabled_until_official_coverage_complete",
   "createdAt": "2026-07-18T21:22:18+08:00",
-  "updatedAt": "2026-08-17T15:40:58+08:00",
+  "updatedAt": "2026-08-17T20:10:00+08:00",
   "baselineDomain": "stock-recommendation-engine",
   "amendmentClass": "v3_15_opportunity_recovery_product_truth",
   "supersedesForFutureWork": [
@@ -374,8 +374,8 @@
     "homepage ranking promotion before real evaluation cohorts",
     "absolute prevention of all code execution or Codex-private scratch writes"
   ],
-  "blockedReason": "V3.16.21 bounded projection-evaluation supersession repair exact review, protected Code Gate and coordinated production activation remain; promotion_gate waits for non_fabricated_elapsed_cohorts",
-  "nextHumanResponse": "none; user authorized V3.16.21 production closure without stepwise confirmation; do not reset the database password",
+  "blockedReason": "release_complete; formal action authority waits for complete official price/relative/financial coverage and promotion_gate waits for non_fabricated_elapsed_cohorts",
+  "nextHumanResponse": "none; monitor real elapsed evidence and third-party connector terminal outcomes; do not reset the database password",
   "historicalReleaseEvidenceV311SupersededDoNotExecute": {
     "exactImplementationCommit": "184390953048209730c22828548858c28fa3b6b7",
     "exactImplementationTree": "3bf8ec477e20b7fd32f72f5b1170742fdb860964",
@@ -417,6 +417,7 @@
   },
   "currentReleaseAuthority": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/current-release.json",
   "v31621Amendment": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v3.16.21-frozen-acquisition-release-amendment.md",
+  "v31621ReleaseEvidence": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v3.16.21-release-state-evidence.md",
   "authority": {
     "architectureAmendmentRequestedByUser": true,
     "hybridProductAmendmentApprovedByUser": true,
