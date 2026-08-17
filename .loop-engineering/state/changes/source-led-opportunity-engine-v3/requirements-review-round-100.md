@@ -8,10 +8,10 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `330973bcd8b06db399d82ceb194b74c3d8e4d521`
-- Final repair-closure commit/tree: `3d97bcda5442971b526af42e3e7b71926126922a` / `6adf0aa5b13e29fee111bff838cc05031be1fd6c`
-- Full reviewed range: `330973bcd8b06db399d82ceb194b74c3d8e4d521..3d97bcda5442971b526af42e3e7b71926126922a`
-- Active graph: `176ae0d91ca1912d7bcb68cc48c0e94a18ab01e47956e55456ef434400bd2ea7`
+- Protected implementation parent: `cde4915db22f279a891b478540a2ebdab54876fb`
+- Final repair-closure commit/tree: `8a8e4304c52958c2c1c23bfdb4929fbb8a570a5a` / `09a0e7019d13f3ed70f812f917dc99cd2ee9c75d`
+- Full reviewed range: `cde4915db22f279a891b478540a2ebdab54876fb..8a8e4304c52958c2c1c23bfdb4929fbb8a570a5a`
+- Active graph: `b07516d0b650da847d8e0cba59edf2c25672e88443582a0e696e093a13e80525`
 
 ## Requirements closure
 
@@ -37,9 +37,9 @@ authority is shown as a typed blocker rather than `avoid` or a fabricated buy.
 
 The additive migration applies twice on a fresh database and its executable
 `appended -> reused -> conflict` lifecycle passes. Product correctness passes
-`115/115`, V3.16.21 focused coverage passes `6/6`, migration passes `59/59`,
+`116/116`, V3.16.21 focused coverage passes `7/7`, migration passes `60/60`,
 performance passes `5/5`, typecheck, lint and production build pass, and model-runner
-passes `18/18` with disabled host-pin v3.9 doctor PASS. No password reset, credential
+passes `28/28` with disabled host-pin v3.9 doctor PASS. No password reset, credential
 rotation, LINE, dispatch, automatic trading or V3 Promotion is introduced.
 
 Protected owner execution exposed one traceability root rather than a product
@@ -52,3 +52,11 @@ authority boundary, public interface, migration behavior, or action rule changed
 Evaluation governance remains honestly
 `blocked/non_fabricated_elapsed_cohorts_unavailable`; this Requirements PASS makes
 no claim that future returns are proven.
+
+The production-cardinality successor preserves the reviewed 20-row transaction
+bound while moving full instrument-roster validation from every row to once per
+single-timestamp chunk. Every row still uses the indexed internal resolver after
+the complete roster integrity check. Mixed acquisition timestamps, an unknown
+predecessor SQL shape, excess public grants or a changed point-in-time cutoff fail
+closed. This closes the forensic four-hour runtime path without weakening source
+authority, provenance, lease, retry or pooler requirements.
