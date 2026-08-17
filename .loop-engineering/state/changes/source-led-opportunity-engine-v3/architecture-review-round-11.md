@@ -9,11 +9,11 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `330973bcd8b06db399d82ceb194b74c3d8e4d521`
-- Requirements implementation commit: `49edac4bcf471b01ba41a96114929331db62aca3`
-- Requirements evidence carrier: `e2a6b3aaca8c314033e98df9faf442e731350042`
-- Final repair-closure commit/tree: `e2a6b3aaca8c314033e98df9faf442e731350042` / `ef1163c7b04a8ede908a183e4cfc43316a7a6366`
-- Full reviewed implementation range: `330973bcd8b06db399d82ceb194b74c3d8e4d521..e2a6b3aaca8c314033e98df9faf442e731350042`
-- Active graph: `377a22989728a8276833a11ae8a29ab669eef40f53a2a7285acdd135798a9c0a`
+- Requirements implementation commit: `3d97bcda5442971b526af42e3e7b71926126922a`
+- Requirements evidence carrier: `4f301dd975a9c425a3caa3114dff322dcac0172b`
+- Final repair-closure commit/tree: `4f301dd975a9c425a3caa3114dff322dcac0172b` / `cd39dfcec04b4ba00cc43e79f55554a9c7bdeb77`
+- Full reviewed implementation range: `330973bcd8b06db399d82ceb194b74c3d8e4d521..4f301dd975a9c425a3caa3114dff322dcac0172b`
+- Active graph: `176ae0d91ca1912d7bcb68cc48c0e94a18ab01e47956e55456ef434400bd2ea7`
 
 ## Architecture closure
 
@@ -44,3 +44,9 @@ boundaries remain unchanged. Requirements PASS is P0=0/P1=0/P2=0, migration is
 apply-twice safe, and the implementation test matrix is green. Evaluation remains
 honestly blocked for non-fabricated elapsed cohorts and is not promoted by this
 Architecture PASS.
+
+The protected traceability repair is architecturally bounded: it adds no runtime,
+database, network, public API, or deployment edge. It makes the active amendment
+declare the cataloged release version, makes the command inventory equal the actual
+closed product suite, and checks current action disposition against the release
+phase. Focused repair closure is `3/3` PASS and the active graph is re-sealed above.
