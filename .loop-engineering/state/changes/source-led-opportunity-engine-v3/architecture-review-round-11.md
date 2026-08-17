@@ -9,10 +9,10 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `cde4915db22f279a891b478540a2ebdab54876fb`
-- Requirements implementation commit: `8a8e4304c52958c2c1c23bfdb4929fbb8a570a5a`
-- Requirements evidence carrier: `47bf09fd78bce3088a316fcdb433eed504f88feb`
-- Final repair-closure commit/tree: `47bf09fd78bce3088a316fcdb433eed504f88feb` / `f99fea0159a201648dbd72a122c2c4813529f4f1`
-- Full reviewed implementation range: `cde4915db22f279a891b478540a2ebdab54876fb..47bf09fd78bce3088a316fcdb433eed504f88feb`
+- Requirements implementation commit: `5add5b8dcd559edadef96b5d6fdc46bb4f89ff22`
+- Requirements evidence carrier: `64e29b274bee6e47e2930304cf99656720d3250e`
+- Final repair-closure commit/tree: `64e29b274bee6e47e2930304cf99656720d3250e` / `0fb3151300a0f9bc01b6693107503d73b296e75e`
+- Full reviewed implementation range: `cde4915db22f279a891b478540a2ebdab54876fb..64e29b274bee6e47e2930304cf99656720d3250e`
 - Active graph: `b07516d0b650da847d8e0cba59edf2c25672e88443582a0e696e093a13e80525`
 
 ## Architecture closure
@@ -59,3 +59,10 @@ wire envelopes, provider acquisition revisions, transaction leases, migration
 authority, grants and Web interfaces are unchanged. The new additive migration
 guards the predecessor body, applies twice, preserves the private owner and cannot
 turn a partial or conflicting roster into action authority.
+
+The release operator and the reviewed apply CLI now consume one ordered migration
+chain. The displayed plan cannot omit the roster-chunk snapshot while the mutation
+path applies it, because a product regression executes the planner and compares it
+exactly with the reviewed chain. This preserves the existing approval boundary:
+read-only planning describes the same additive SQL that the exact reviewed CLI may
+execute, with no password, credential, public grant, or rollback-policy expansion.
