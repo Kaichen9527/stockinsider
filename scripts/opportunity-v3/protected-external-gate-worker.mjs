@@ -21,6 +21,7 @@ import { fileURLToPath } from 'node:url';
 const baseRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const changeRelative = '.loop-engineering/state/changes/source-led-opportunity-engine-v3';
 const registryRelative = `${changeRelative}/external-gate-release-registry-v1.json`;
+const modelOracleReuseRelative = '.github/protected-model-oracle-reuse-v1.json';
 const attestationKeys = [
   'baseCommitSha', 'checkRun', 'registryCommitSha', 'registryPath', 'registrySha256',
   'registryTreeSha', 'releaseId', 'releaseSha256', 'repository', 'schema',
@@ -474,6 +475,12 @@ const MODEL_ORACLE_PATHS = Object.freeze([
   'scripts/model-runner-v3',
 ]);
 
+const modelOracleReuseKeys = Object.freeze([
+  'artifactDigest', 'artifactId', 'artifactName', 'completedAt', 'expiresAt',
+  'jobId', 'requiredRunnerLabels', 'rootJobId', 'schema', 'subjectCommitSha',
+  'workflowRunId',
+]);
+
 function assertSubjectModelOracleEqualsProtectedBase(subjectRoot, subjectCommitSha) {
   const listing = (root, commit) => git(root, [
     'ls-tree', '-r', '--full-tree', commit, '--', ...MODEL_ORACLE_PATHS,
@@ -485,8 +492,115 @@ function assertSubjectModelOracleEqualsProtectedBase(subjectRoot, subjectCommitS
   );
 }
 
+function publicGithubJson(url, label) {
+  assert.match(url, /^https:\/\/api[.]github[.]com\/repos\/Kaichen9527\/stockinsider\/actions\//u,
+    `${label} closed GitHub API URL`);
+  const bytes = execFileSync('/usr/bin/curl', [
+    '--fail', '--silent', '--show-error', '--location', '--max-time', '15',
+    '--header', 'Accept: application/vnd.github+json',
+    '--header', 'X-GitHub-Api-Version: 2022-11-28',
+    '--header', 'User-Agent: stockinsider-protected-model-oracle-v1',
+    url,
+  ], { encoding: 'utf8', maxBuffer: 4 * 1024 * 1024 });
+  return JSON.parse(bytes);
+}
+
+function readModelOracleReuse() {
+  const bytes = treeBlob(baseRoot, git(baseRoot, ['rev-parse', 'HEAD^{tree}']),
+    modelOracleReuseRelative, 'protected model oracle reuse record');
+  const value = JSON.parse(bytes);
+  exactKeys(value, modelOracleReuseKeys, 'protected model oracle reuse record');
+  assert.equal(value.schema, 'stockinsider-protected-model-oracle-reuse-v1', 'model oracle reuse schema');
+  sha(value.subjectCommitSha, 'model oracle reuse subjectCommitSha');
+  for (const key of ['artifactId', 'jobId', 'rootJobId', 'workflowRunId']) {
+    assert.equal(Number.isSafeInteger(value[key]) && value[key] > 0, true, `model oracle reuse ${key}`);
+  }
+  assert.match(value.artifactDigest, /^sha256:[0-9a-f]{64}$/u, 'model oracle artifact digest');
+  assert.equal(value.artifactName,
+    `opportunity-gate-result-model-runner-code-gate-${value.subjectCommitSha}`,
+    'model oracle artifact name');
+  assert.deepEqual(value.requiredRunnerLabels, ['ARM64', 'macOS', 'self-hosted'],
+    'model oracle runner labels');
+  for (const key of ['completedAt', 'expiresAt']) {
+    assert.match(value[key], /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$/u, `model oracle reuse ${key}`);
+  }
+  assert.ok(Date.parse(value.expiresAt) > Date.now(), 'model oracle reuse evidence has not expired');
+  return value;
+}
+
+function trustedReusableHostModelOracle(subjectRoot, attestation) {
+  const reuse = readModelOracleReuse();
+  const listing = (root, commit) => git(root, [
+    'ls-tree', '-r', '--full-tree', commit, '--', ...MODEL_ORACLE_PATHS,
+  ]);
+  assert.equal(git(subjectRoot, ['cat-file', '-t', reuse.subjectCommitSha]), 'commit',
+    'reused model oracle subject exists');
+  assert.equal(listing(subjectRoot, attestation.subjectCommitSha), listing(subjectRoot, reuse.subjectCommitSha),
+    'reused live oracle is allowed only for byte-identical model-runner inputs');
+
+  const artifact = publicGithubJson(
+    `https://api.github.com/repos/Kaichen9527/stockinsider/actions/artifacts/${reuse.artifactId}`,
+    'model oracle artifact',
+  );
+  assert.equal(artifact.id, reuse.artifactId, 'model oracle artifact id');
+  assert.equal(artifact.name, reuse.artifactName, 'model oracle artifact name from GitHub');
+  assert.equal(artifact.digest, reuse.artifactDigest, 'model oracle artifact digest from GitHub');
+  assert.equal(artifact.expired, false, 'model oracle artifact is live');
+  assert.equal(artifact.expires_at, reuse.expiresAt, 'model oracle artifact expiry');
+  assert.equal(artifact.workflow_run?.id, reuse.workflowRunId, 'model oracle artifact workflow run');
+  assert.equal(artifact.workflow_run?.head_sha, reuse.subjectCommitSha, 'model oracle artifact subject');
+
+  const workflow = publicGithubJson(
+    `https://api.github.com/repos/Kaichen9527/stockinsider/actions/runs/${reuse.workflowRunId}`,
+    'model oracle workflow',
+  );
+  assert.equal(workflow.id, reuse.workflowRunId, 'model oracle workflow id');
+  assert.equal(workflow.head_sha, reuse.subjectCommitSha, 'model oracle workflow subject');
+  assert.equal(workflow.event, 'pull_request_target', 'model oracle workflow event');
+  assert.equal(workflow.conclusion, 'success', 'model oracle workflow conclusion');
+  assert.equal(workflow.path, '.github/workflows/source-led-opportunity-external-gate.yml',
+    'model oracle workflow path');
+
+  const jobs = publicGithubJson(
+    `https://api.github.com/repos/Kaichen9527/stockinsider/actions/runs/${reuse.workflowRunId}/jobs?per_page=100`,
+    'model oracle jobs',
+  ).jobs;
+  assert.ok(Array.isArray(jobs), 'model oracle jobs array');
+  const modelJob = jobs.find(({ id }) => id === reuse.jobId);
+  assert.ok(modelJob, 'model oracle job exists');
+  assert.equal(modelJob.name, 'model-runner-code-gate', 'model oracle job name');
+  assert.equal(modelJob.head_sha, reuse.subjectCommitSha, 'model oracle job subject');
+  assert.equal(modelJob.conclusion, 'success', 'model oracle job conclusion');
+  assert.equal(modelJob.completed_at, reuse.completedAt, 'model oracle job completion');
+  assert.deepEqual([...modelJob.labels].toSorted(), reuse.requiredRunnerLabels,
+    'model oracle trusted runner labels');
+  const rootJob = jobs.find(({ id }) => id === reuse.rootJobId);
+  assert.ok(rootJob, 'model oracle root job exists');
+  assert.equal(rootJob.name, 'stockinsider-v3-gate-root', 'model oracle root job name');
+  assert.equal(rootJob.head_sha, reuse.subjectCommitSha, 'model oracle root subject');
+  assert.equal(rootJob.conclusion, 'success', 'model oracle root conclusion');
+  return {
+    stderr: Buffer.alloc(0),
+    stdout: Buffer.from(`${canonicalJson({
+      artifactDigest: reuse.artifactDigest,
+      artifactId: reuse.artifactId,
+      mode: 'content_addressed_reuse',
+      priorSubjectCommitSha: reuse.subjectCommitSha,
+      status: 'pass',
+      workflowRunId: reuse.workflowRunId,
+    })}\n`),
+  };
+}
+
 function trustedHostModelOracle(subjectRoot, attestation, nodeExecutable) {
   assertSubjectModelOracleEqualsProtectedBase(subjectRoot, attestation.subjectCommitSha);
+  const reuse = readModelOracleReuse();
+  const listing = (root, commit) => git(root, [
+    'ls-tree', '-r', '--full-tree', commit, '--', ...MODEL_ORACLE_PATHS,
+  ]);
+  if (listing(subjectRoot, attestation.subjectCommitSha) === listing(subjectRoot, reuse.subjectCommitSha)) {
+    return trustedReusableHostModelOracle(subjectRoot, attestation);
+  }
   const runnerHome = process.env.HOME;
   assert.equal(typeof runnerHome, 'string', 'runner HOME required for trusted host oracle');
   const authentication = path.join(absolute(runnerHome, 'runner HOME'), '.codex', 'auth.json');

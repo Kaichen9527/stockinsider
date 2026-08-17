@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - '.github/workflows/source-led-opportunity-v3.yml'
+      - '.github/protected-model-oracle-reuse-v1.json'
       - '.loop-engineering/state/changes/source-led-opportunity-engine-v3/**'
       - 'migrations/20260724_source_led_opportunity_engine_v3.sql'
       - 'scripts/model-runner-v3/**'
