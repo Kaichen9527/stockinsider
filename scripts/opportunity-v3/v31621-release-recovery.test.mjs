@@ -9,6 +9,21 @@ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
 const require=createRequire(import.meta.url);
 const runtime=(file)=>require(path.join(root,'scripts/runtime',file));
 
+function declaredMigrationPaths(source,constantName) {
+  const body=source.match(new RegExp(`const ${constantName}\\s*=\\s*(?:Object[.]freeze[(])?([\\s\\S]*?\\])[;)]`,'u'))?.[1];
+  assert.ok(body,`${constantName} migration declaration`);
+  return [...body.matchAll(/['"](migrations\/[^'"]+[.]sql)['"]/gu)].map((match)=>match[1]);
+}
+
+test('V31621 operator migration plan exactly matches the reviewed apply chain',()=>{
+  const plan=fs.readFileSync(path.join(root,'scripts/opportunity-v3/migration-plan.mjs'),'utf8');
+  const apply=fs.readFileSync(path.join(root,'scripts/opportunity-v3/apply-reviewed-migrations.mjs'),'utf8');
+  const planned=declaredMigrationPaths(plan,'migrationPaths');
+  const reviewed=declaredMigrationPaths(apply,'MIGRATIONS');
+  assert.deepEqual(planned,reviewed,'the displayed production plan cannot omit or reorder a reviewed migration');
+  assert.equal(planned.at(-1),'migrations/20260817_official_ingestion_roster_chunk_snapshot_v3_16_21.sql');
+});
+
 test('V31621 production-cardinality repair keeps pooler-safe chunks and snapshots roster integrity once',()=>{
   const migration=fs.readFileSync(path.join(root,
     'migrations/20260817_official_ingestion_roster_chunk_snapshot_v3_16_21.sql'),'utf8');
