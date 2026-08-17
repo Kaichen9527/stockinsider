@@ -1372,7 +1372,9 @@ const structuralExecutors = {
     assert.ok(tasks.lastIndexOf('model-runner-v3.6') > tasks.lastIndexOf('model-runner-v3.5'));
     assert.doesNotThrow(() => assertTaskStatusNextWorkConsistent(tasks, status));
     const operativeRequirementsTask = status.currentReleaseAuthority
-      ? '- [ ] Freeze one V3.16.21 immutable implementation tree'
+      ? currentRelease.phase==='architecture_passed'
+        ? '- [ ] Freeze one bounded V3.16.21 production-cardinality repair tree'
+        : '- [x] Freeze one bounded V3.16.21 production-cardinality repair tree'
       : status.requirementsStatus.startsWith('v3_16_9_')
         ? `- [x] Obtain fresh Requirements Round ${status.requirementsReviewRound}, Architecture Round ${status.architectureReviewRound} and exact-range`
         : '- [x] Obtain fresh Requirements Round 138 PASS';
