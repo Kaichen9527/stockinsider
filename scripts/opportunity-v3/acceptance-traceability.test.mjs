@@ -459,6 +459,14 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
     const active=tasksText.slice(start,tasksText.indexOf('## Architecture checkpoint',start));
     assert.match(active,/\[x\] Mark every historical password\/credential rotation item/u);
     assert.match(active,/All older unchecked production, migration, gate, activation and credential items[\s\S]*superseded\/do_not_execute/u);
+    if(currentRelease.phase==='implementation_in_progress'){
+      assert.match(active,/- \[ \] Freeze one V3[.]16[.]21 immutable implementation tree/u,
+        'the sole active implementation closure remains pending until its evidence carriers pass');
+    }else if(['architecture_passed','exact_review_passed','production_rollout','complete_with_concerns']
+      .includes(currentRelease.phase)){
+      assert.match(active,/- \[x\] Freeze one V3[.]16[.]21 immutable implementation tree/u,
+        'the sole active implementation closure is complete after Architecture PASS');
+    }
     return;
   }
   const round = statusRecord.requirementsReviewRound;
