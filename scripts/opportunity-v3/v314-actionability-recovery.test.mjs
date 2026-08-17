@@ -660,8 +660,10 @@ test('V314-014b MOPS loader binds the requested official URL into parsed provena
         {status:200,headers:{'content-type':'text/html'}});
     }});
   assert.ok(result.facts.length>0);assert.ok(result.facts.every((row)=>row.sourceUrl.startsWith(MOPS_INLINE_URL)));
-  assert.ok(requested.some((url)=>url.includes('SYEAR=2026')&&url.includes('SSEASON=2')));
-  assert.equal(requested.some((url)=>url.includes('SYEAR=2026')&&url.includes('SSEASON=3')),false);
+  assert.ok(requested.some((url)=>url.includes('SYEAR=115')&&url.includes('SSEASON=2')));
+  assert.equal(requested.some((url)=>url.includes('SYEAR=115')&&url.includes('SSEASON=3')),false);
+  assert.equal(requested.some((url)=>url.includes('SYEAR=2026')),false,
+    'MOPS accepts ROC reporting years; a Gregorian SYEAR silently returns a not-found document');
 });
 
 test('V314-014c MOPS fact selection preserves cycle history without crossing the 128-row authority bound',()=>{
@@ -907,7 +909,7 @@ test('V314-019 exact-review compatibility boundaries accept V3.14 and remain fai
   const mopsCitation=worker.officialCitation(mopsRef,'2026-02-11T00:00:00Z',{
     publishedAt:'2026-02-10T00:00:00Z',collectedAt:'2026-02-11T00:00:00Z'});
   assert.equal(mopsCitation.sourceUrl,
-    'https://mopsov.twse.com.tw/server-java/t164sb01?step=1&CO_ID=2330&SYEAR=2025&SSEASON=4&REPORT_ID=C');
+    'https://mopsov.twse.com.tw/server-java/t164sb01?step=1&CO_ID=2330&SYEAR=114&SSEASON=4&REPORT_ID=C');
   const webValidation=await import('../../web/src/lib/opportunity-v3/decision-publication.ts');
   assert.equal(webValidation.validateDecisionEnvelopeV313(malformedThreshold,
     malformedThreshold.decisionRevisionId),null);
