@@ -6,8 +6,26 @@ import { parseDecisionRevisionQuery, selectUniquePublishedDecisionCard } from '@
 import RevisionBoundDecisionBrief, {
   RevisionBoundDecisionUnavailable,
 } from './RevisionBoundDecisionBrief';
+import ResearchOnlyDetail from './ResearchOnlyDetail';
 
 export const dynamic = 'force-dynamic';
+
+const RESEARCH_BUCKETS = ['sourceSignals', 'earlyWatchlist', 'earlySignals', 'partiallyVerified', 'validatedIdeas',
+  'opportunities', 'scenarioUpsideCandidates', 'hotTracking', 'recentFormal7d', 'fallbackOpportunities90d'] as const;
+
+function selectResearchOnlyCard(projection: Record<string, unknown> | null, symbol: string,
+  decisionRevisionId?: string): Record<string, unknown> | null {
+  if (!projection) return null;
+  for (const bucket of RESEARCH_BUCKETS) {
+    const cards = projection[bucket];
+    if (!Array.isArray(cards)) continue;
+    const matches = cards.filter((card): card is Record<string, unknown> => Boolean(card && typeof card === 'object'
+      && !Array.isArray(card) && (card as Record<string, unknown>).symbol === symbol
+      && (!decisionRevisionId || (card as Record<string, unknown>).decisionRevisionId === decisionRevisionId)));
+    if (matches.length === 1) return matches[0];
+  }
+  return null;
+}
 
 export default async function StockDetail({
   params,
@@ -39,6 +57,12 @@ export default async function StockDetail({
       return <RevisionBoundDecisionBrief symbol={normalizedSymbol} envelope={fixture.decisionEnvelope}
         card={fixture as unknown as Record<string, unknown>}/>;
     }
+    if (!validRequestedRevision) {
+      const {v314ReadonlyRadar}=await import('../../v314-readonly-fixture/fixture-data');
+      const researchCard=selectResearchOnlyCard(v314ReadonlyRadar as unknown as Record<string,unknown>,normalizedSymbol);
+      if(researchCard)return <ResearchOnlyDetail symbol={normalizedSymbol} card={researchCard}
+        projectionBlockers={['legacy_schema_without_v314_decision_authority']}/>;
+    }
   } else {
     const projection = validRequestedRevision
       ? await loadPublishedDecisionRevision(normalizedSymbol, validRequestedRevision).catch(() => null)
@@ -48,6 +72,16 @@ export default async function StockDetail({
     if (resolved) {
       return <RevisionBoundDecisionBrief symbol={normalizedSymbol} envelope={resolved.envelope}
         card={resolved.card}/>;
+    }
+    {
+      const researchCard = selectResearchOnlyCard(projection as Record<string, unknown> | null, normalizedSymbol,
+        validRequestedRevision ?? undefined);
+      if (researchCard) {
+        const health = projection?.projectionHealth as {actionBlockers?:unknown}|undefined;
+        return <ResearchOnlyDetail symbol={normalizedSymbol} card={researchCard}
+          projectionBlockers={Array.isArray(health?.actionBlockers)
+            ? health.actionBlockers.filter((value):value is string=>typeof value==='string') : []}/>;
+      }
     }
   }
 

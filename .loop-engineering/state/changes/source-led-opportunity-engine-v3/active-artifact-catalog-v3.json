@@ -49,6 +49,7 @@
     "technical-decision-contract.md",
     "trading-calendar-contract.md",
     "v3-detail-contract.md",
+    "v3.16.21-frozen-acquisition-release-amendment.md",
     "valuation-contract.md"
   ],
   "owners": [
@@ -207,6 +208,10 @@
     [
       "v3-detail-contract.md",
       "opportunity-detail-v3.3"
+    ],
+    [
+      "v3.16.21-frozen-acquisition-release-amendment.md",
+      "source-led-opportunity-release-v3.16.21"
     ],
     [
       "valuation-contract.md",

@@ -60,14 +60,15 @@ function weekdaySessions(year) {
   return output;
 }
 
-async function loadOfficialTradingCalendarV314({ cutoff, fetchImpl = globalThis.fetch } = {}) {
+async function loadOfficialTradingCalendarV314({ cutoff, fetchImpl = globalThis.fetch, collectedAt = new Date().toISOString() } = {}) {
   if (typeof cutoff !== 'string' || !Number.isFinite(Date.parse(cutoff))) throw new Error('calendar_cutoff');
+  if (typeof collectedAt !== 'string' || !Number.isFinite(Date.parse(collectedAt))) throw new Error('calendar_collected_at');
   const cutoffInstant = Date.parse(cutoff); const cutoffSession = new Date(cutoffInstant).toISOString().slice(0, 10);
   const currentYear = Number(cutoffSession.slice(0, 4));
   // January/February cutoffs cannot reach the 300 completed-session authority floor from
   // only the current and immediately preceding calendar years.
   const years = [currentYear - 2, currentYear - 1, currentYear];
-  const collectedAt = new Date().toISOString().replace('.000Z', 'Z'); const calendarSessions = []; const sourceHashes = {};
+  collectedAt = new Date(collectedAt).toISOString().replace('.000Z', 'Z'); const calendarSessions = []; const sourceHashes = {};
   for (const year of years) {
     const twseUrl = `${TWSE_ANNUAL_URL}?response=json&date=${year}0101`;
     const tpexUrl = `${TPEX_ANNUAL_URL}/trading_date_${year - 1911}.htm`;

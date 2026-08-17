@@ -535,7 +535,8 @@ async function loadCorporateActionSnapshotsRange({calendarSessions,fetchImpl,col
 }
 
 async function loadOfficialTwMarketSnapshot({ cutoff, candidates = [], peerCandidates = [], valuationBackfillSessions = [],
-  priceBackfillSymbols = [],corporateActionBackfillSessions=[],fetchImpl = globalThis.fetch } = {}) {
+  priceBackfillSymbols = [],corporateActionBackfillSessions=[],fetchImpl = globalThis.fetch,
+  collectedAt = new Date().toISOString() } = {}) {
   if (typeof cutoff !== 'string' || !Number.isFinite(Date.parse(cutoff))) throw new Error('official_snapshot_cutoff');
   if (!Array.isArray(candidates) || candidates.length > 30) throw new Error('official_candidate_bound');
   if (!Array.isArray(peerCandidates) || peerCandidates.length > 240) throw new Error('official_peer_bound');
@@ -543,11 +544,11 @@ async function loadOfficialTwMarketSnapshot({ cutoff, candidates = [], peerCandi
   if (!Array.isArray(priceBackfillSymbols) || priceBackfillSymbols.length > 20) throw new Error('price_backfill_bound');
   if (!Array.isArray(corporateActionBackfillSessions) || corporateActionBackfillSessions.length > 260)
     throw new Error('corporate_action_backfill_bound');
-  // `cutoff` is the immutable acquisition boundary for a logical producer run.
-  // Use it as the fact-plane collection identity so a bounded retry of the same
-  // run produces byte-identical chunks. PostgreSQL `recorded_at` still preserves
-  // the wall-clock ingestion time.
-  const collectedAt = new Date(cutoff).toISOString().replace('.000Z','Z');
+  // The source cutoff is the provider query boundary, not a collection clock.
+  // Retries reuse a frozen acquisition envelope; never backdate collection time
+  // to the cutoff to manufacture point-in-time availability.
+  if(typeof collectedAt!=='string'||!Number.isFinite(Date.parse(collectedAt)))throw new Error('official_snapshot_collected_at');
+  collectedAt = new Date(collectedAt).toISOString().replace('.000Z','Z');
   const normalizedCandidates=candidates.map((row)=>({symbol:String(row?.symbol??row),exchange:String(row?.exchange??''),
     canonicalSector:row?.canonicalSector??'unknown'})).filter((row)=>/^\d{4}$/u.test(row.symbol)).slice(0,30);
   const normalizedPeers=peerCandidates.map((row)=>({symbol:String(row?.symbol??''),exchange:String(row?.exchange??''),
@@ -562,9 +563,9 @@ async function loadOfficialTwMarketSnapshot({ cutoff, candidates = [], peerCandi
   // --unhandled-rejections=strict is enabled).
   const settle=(promise)=>promise.then((value)=>({status:'fulfilled',value}),
     (reason)=>({status:'rejected',reason}));
-  const calendarPromise=settle(loadOfficialTradingCalendarV314({cutoff,fetchImpl}));
+  const calendarPromise=settle(loadOfficialTradingCalendarV314({cutoff,fetchImpl,collectedAt}));
   const mopsPromise=settle(loadMopsFinancialHistoryV314({cutoff,
-    candidates:normalizedCandidates.filter((row)=>['TWSE','TPEX'].includes(row.exchange)),fetchImpl}));
+    candidates:normalizedCandidates.filter((row)=>['TWSE','TPEX'].includes(row.exchange)),fetchImpl,collectedAt}));
   const sources = [SOURCE_URL,TPEX_SOURCE_URL,TWSE_REVENUE_URL,TPEX_REVENUE_URL,TWSE_INDEX_URL,TPEX_INDEX_URL,
     TWSE_CLOSE_URL,TPEX_CLOSE_URL];
   const values = await Promise.allSettled(sources.map((url)=>retryOfficial(()=>fetchJsonBounded(url,fetchImpl))));
@@ -730,7 +731,8 @@ async function loadOfficialTwMarketSnapshot({ cutoff, candidates = [], peerCandi
     tpexIndex,foreignFlow,sourceFailures,sourceHashes });
 }
 
-async function loadOfficialCoarseMarketSnapshot({cutoff,universe=[],fetchImpl=globalThis.fetch}={}){
+async function loadOfficialCoarseMarketSnapshot({cutoff,universe=[],fetchImpl=globalThis.fetch,
+  collectedAt=new Date().toISOString()}={}){
   if(typeof cutoff!=='string'||!Number.isFinite(Date.parse(cutoff)))throw new Error('official_coarse_cutoff');
   if(!Array.isArray(universe)||universe.length>3000)throw new Error('official_coarse_universe_bound');
   const normalized=universe.flatMap((row)=>{
@@ -741,7 +743,8 @@ async function loadOfficialCoarseMarketSnapshot({cutoff,universe=[],fetchImpl=gl
   });
   const allowedSymbols=new Set(normalized.map((row)=>row.symbol));
   const identityBySymbol=new Map(normalized.map((row)=>[row.symbol,row]));
-  const collectedAt=new Date().toISOString().replace('.000Z','Z');
+  if(typeof collectedAt!=='string'||!Number.isFinite(Date.parse(collectedAt)))throw new Error('official_coarse_collected_at');
+  collectedAt=new Date(collectedAt).toISOString().replace('.000Z','Z');
   const cutoffSession=new Date(cutoff).toISOString().slice(0,10);
   const sources=[SOURCE_URL,TPEX_SOURCE_URL,TWSE_REVENUE_URL,TPEX_REVENUE_URL,TWSE_CLOSE_URL,TPEX_CLOSE_URL];
   const settled=await Promise.allSettled(sources.map((url)=>retryOfficial(()=>fetchJsonBounded(url,fetchImpl))));

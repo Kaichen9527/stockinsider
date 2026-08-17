@@ -11,7 +11,10 @@ export type CompactRadarProjection = {
     publishedAt?: string;
     nextExpectedAt?: string;
     freshnessSchedule?: Array<{ session_id?: string | null; close_at?: string | null; status?: string | null }>;
-    producerIdentity?: { commitSha?: string | null; runtimeManifestSha256?: string | null };
+    producerIdentity?: { commitSha?: string | null; workerSha256?: string | null;
+      configSha256?: string | null; runtimeManifestSha256?: string | null };
+    acquisitionAuthority?: { status?: string | null; evidenceRoot?: string | null;
+      fetchedAt?: string | null; terminalStatus?: string | null } | null;
   };
   opportunities: Array<Record<string, unknown>>;
   [key: string]: unknown;

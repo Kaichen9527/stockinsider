@@ -1,13 +1,13 @@
 {
   "changeId": "source-led-opportunity-engine-v3",
-  "loopStage": "v3_16_9_exact_review_pass_protected_gate_pending",
-  "requirementsStatus": "v3_16_9_round_143_pass_p0_0_p1_0_p2_0",
-  "designStatus": "v3_16_9_architecture_round_23_pass_p0_0_p1_0_p2_0",
-  "requirementsGateStatus": "pass_p0_0_p1_0_p2_0",
+  "loopStage": "v3_16_21_single_release_implementation_in_progress",
+  "requirementsStatus": "v3_16_21_single_fresh_review_pending",
+  "designStatus": "v3_16_21_architecture_waits_for_requirements",
+  "requirementsGateStatus": "pending_v3_16_21",
   "requirementsReviewRound": 143,
   "requirementsReviewTree": "7a9184f84c84c305379da3118953eeaf42e2e1d3",
   "requirementsReviewEvidence": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements-review-round-143.md",
-  "architectureGateStatus": "pass_p0_0_p1_0_p2_0",
+  "architectureGateStatus": "pending_v3_16_21",
   "architectureReviewRound": 23,
   "architectureReviewTree": "0214c6bc03d8804d8a9120ae1495d00b0c9b35da",
   "architectureReviewEvidence": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-round-23.md",
@@ -242,7 +242,7 @@
   "round143RequirementsVerdict": "PASS P0=0 P1=0 P2=0",
   "requirementsPendingTree": null,
   "requirementsPendingEvidence": null,
-  "implementationStatus": "v3_16_9_exact_review_pass_protected_gate_pending",
+  "implementationStatus": "v3_16_21_frozen_acquisition_and_health_implementation_in_progress",
   "v314ExactImplementationParent": "75e329471da257c2855d4de04d71e05a589e6c72",
   "v314ExactImplementationCommit": "db55309e17887d59d2f6001f5577114ab6cc343b",
   "v314ExactImplementationTree": "5a2079035e19c15627477afd3e758c3bd80c0b6b",
@@ -314,7 +314,7 @@
   "v3169ExactCommitReviewVerdict": "PASS P0=0 P1=0 P2=0",
   "v3169ProtectedGateRepairCommit": "d30cc374b33b31d0e976949ac21e9a56b00d6479",
   "v3169ProtectedGateRepairTree": "90ba5a260f190e3e4979209716e34e021f8c943a",
-  "exactCommitReviewStatus": "v3_16_9_exact_range_pass_p0_0_p1_0_p2_0",
+  "exactCommitReviewStatus": "v3_16_21_pending_single_exact_range_review",
   "v313ExactCommitReviewEvidence": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/exact-commit-review-v3.13.md",
   "v313ExactCommitReviewFindings": {
     "P0": 0,
@@ -340,16 +340,16 @@
     "P1": 0,
     "P2": 0
   },
-  "verificationStatus": "v3_16_11_calendar_recovery_local_migration_pass;full_code_gate_pending",
-  "verificationGateConclusion": "v3_16_11_repair_in_progress;protected_external_gate_and_shadow_activation_pending;promotion_blocked_non_fabricated_elapsed_cohorts_unavailable",
+  "verificationStatus": "v3_16_21_local_focused_provenance_migration_health_pass;full_code_gate_pending",
+  "verificationGateConclusion": "v3_16_21_single_release_in_progress;promotion_blocked_non_fabricated_elapsed_cohorts_unavailable",
   "verificationTracks": {
     "product_runtime": "exact_430b810_local_diagnostic_pass_typecheck_lint_build_63_routes_base_61_product_108_migration_54_legacy_2_playwright_8_performance_4_dependency_audit_0;protected_external_attestation_pending",
     "evaluation_governance": "blocked/non_fabricated_elapsed_cohorts_unavailable",
     "model_runner": "exact_430b810_local_diagnostic_pass_18_of_18_and_disabled_host_pin_v3_9_doctor_pass;protected_external_attestation_pending"
   },
-  "releaseStatus": "v3_14_web_live;v3_16_10_merged_and_migrated_but_runtime_rolled_back;v3_16_11_calendar_recovery_in_progress;web_not_deployed",
+  "releaseStatus": "v3_16_20_migration_applied_forensic_runtime_rolled_back;v3_16_21_implementation_in_progress;web_not_deployed",
   "createdAt": "2026-07-18T21:22:18+08:00",
-  "updatedAt": "2026-08-16T05:34:18+08:00",
+  "updatedAt": "2026-08-17T10:00:00+08:00",
   "baselineDomain": "stock-recommendation-engine",
   "amendmentClass": "v3_15_opportunity_recovery_product_truth",
   "supersedesForFutureWork": [
@@ -374,9 +374,9 @@
     "homepage ranking promotion before real evaluation cohorts",
     "absolute prevention of all code execution or Codex-private scratch writes"
   ],
-  "blockedReason": "V3.16.11 protected external gate and coordinated production activation remain; promotion_gate waits for non_fabricated_elapsed_cohorts",
-  "nextHumanResponse": "none; user authorized completing V3.15 and production deployment without stepwise confirmation; do not reset the database password",
-  "releaseEvidence": {
+  "blockedReason": "V3.16.21 exact review, protected Code Gate and coordinated production activation remain; promotion_gate waits for non_fabricated_elapsed_cohorts",
+  "nextHumanResponse": "none; user authorized V3.16.21 production closure without stepwise confirmation; do not reset the database password",
+  "historicalReleaseEvidenceV311SupersededDoNotExecute": {
     "exactImplementationCommit": "184390953048209730c22828548858c28fa3b6b7",
     "exactImplementationTree": "3bf8ec477e20b7fd32f72f5b1170742fdb860964",
     "exactReviewEvidenceCommit": "422f785931661c5658004ad1714496285fee697d",
@@ -413,8 +413,10 @@
     "rankingContract": "missing_non_renormalizing_v314_envelope",
     "discoveryVisibility": "reproduced_source_signals_hardcoded_empty",
     "productionFacts": "v313_tables_and_official_fact_backfill_not_activated",
-    "credentialSafety": "rotation_required_before_production_write"
+    "credentialSafety": "superseded_do_not_execute_user_confirmed_no_password_reset"
   },
+  "currentReleaseAuthority": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/current-release.json",
+  "v31621Amendment": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v3.16.21-frozen-acquisition-release-amendment.md",
   "authority": {
     "architectureAmendmentRequestedByUser": true,
     "hybridProductAmendmentApprovedByUser": true,

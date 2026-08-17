@@ -1601,6 +1601,8 @@ export interface RadarDailyPayload {
     freshnessStatus?: 'fresh' | 'stale_readonly' | 'unavailable';
     researchVisibility?: 'live' | 'last_good_readonly' | 'none';
     actionAuthority?: 'enabled' | 'disabled';
+    acquisitionAuthority?: 'enabled' | 'disabled';
+    actionBlockers?: string[];
     reason: string;
     missedExpectedRuns: number;
     contentAsOf: string | null;

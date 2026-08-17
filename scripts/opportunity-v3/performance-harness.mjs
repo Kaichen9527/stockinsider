@@ -149,6 +149,7 @@ export async function runControlledProjectionPerformanceOracle({ root }) {
 
     let providerCalls = 0;
     let projectionReads = 0;
+    let runtimeHealthReads = 0;
     const asOf = new Date(Math.floor(Date.now() / 1000) * 1000).toISOString();
     const basePayload = {
       opportunities: [], sourceSignals: [], scenarioUpsideCandidates: [], hotTracking: [], fallbackOpportunities90d: [],
@@ -160,6 +161,13 @@ export async function runControlledProjectionPerformanceOracle({ root }) {
     };
     projectionServer = createServer((request, response) => {
       const url = new URL(request.url ?? '/', 'http://127.0.0.1');
+      if (request.method === 'GET' && url.pathname === '/rest/v1/legacy_runtime_health_observations_v3_11') {
+        runtimeHealthReads += 1;
+        response.setHeader('content-type', 'application/json');
+        response.setHeader('content-range', '*/0');
+        response.end('[]');
+        return;
+      }
       if (request.method !== 'GET' || url.pathname !== '/rest/v1/legacy_radar_projections_v3_11') {
         providerCalls += 1;
         response.statusCode = 503;
@@ -209,6 +217,7 @@ export async function runControlledProjectionPerformanceOracle({ root }) {
     await waitForProductionServer(`${baseUrl}/api/radar/daily`, nextServer, nextLogs);
     providerCalls = 0;
     projectionReads = 0;
+    runtimeHealthReads = 0;
     const routeLatencies = [];
     for (let index = 0; index < 20; index += 1) {
       const started = performance.now();
@@ -234,6 +243,8 @@ export async function runControlledProjectionPerformanceOracle({ root }) {
     assert.equal(providerCalls, 0, 'projection reads never call providers or deep research');
     assert.equal(projectionReads, routeLatencies.length + responses.length,
       'every production read is accounted for by exactly one compact projection query');
+    assert.equal(runtimeHealthReads, routeLatencies.length + responses.length,
+      'every production read has one bounded runtime-health authority query');
   } finally {
     await stopProcess(nextServer);
     if (projectionServer) await new Promise((resolve) => projectionServer.close(resolve));

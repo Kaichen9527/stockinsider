@@ -15,6 +15,8 @@ export type ProjectionHealth = {
   freshnessStatus: 'fresh' | 'stale_readonly' | 'unavailable';
   researchVisibility: 'live' | 'last_good_readonly' | 'none';
   actionAuthority: 'enabled' | 'disabled';
+  acquisitionAuthority?: 'enabled' | 'disabled';
+  actionBlockers?: string[];
   reason: 'on_schedule' | 'missed_scheduled_runs' | 'calendar_authority_unavailable' | 'evaluation_timestamp_missing' | 'release_identity_incompatible';
   missedExpectedRuns: number;
   contentAsOf: string | null;

@@ -12,13 +12,26 @@ function readonlyCard(value: unknown, legacySchema = false): unknown {
   card.projectionReadOnly = true;
   const envelope = card.decisionEnvelope;
   if (envelope && typeof envelope === 'object' && !Array.isArray(envelope)) {
-    card.lastKnownAction = (envelope as Record<string, unknown>).userAction;
+    const typedEnvelope=envelope as Record<string,unknown>;
+    card.lastKnownAction = typedEnvelope.userAction;
+    if (typeof card.decisionRevisionId !== 'string' && typeof typedEnvelope.decisionRevisionId === 'string') {
+      card.decisionRevisionId=typedEnvelope.decisionRevisionId;
+    }
+    // A consumer that ignores projectionHealth must still be unable to mistake
+    // a last-good card for current action authority.  The immutable revision id
+    // remains navigable; its detail reader independently returns stale-readonly.
+    delete card.decisionEnvelope;
   }
   if (legacySchema) {
     if (!card.lastKnownAction && typeof card.newPositionAction === 'string') card.lastKnownAction = card.newPositionAction;
     delete card.decisionEnvelope;
     delete card.decisionRevisionId;
-    delete card.detailHref;
+    if (typeof card.symbol === 'string' && /^\d{4}$/u.test(card.symbol)) {
+      card.detailHref = `/stock/${card.symbol}`;
+      card.researchOnlyDetail = true;
+    } else {
+      delete card.detailHref;
+    }
     card.projectionBlockers = ['legacy_schema_without_v314_decision_authority'];
   }
   if ('newPositionAction' in card) card.newPositionAction = 'valuation_review';

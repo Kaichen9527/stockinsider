@@ -23,6 +23,10 @@ const migrationPaths = [
   'migrations/20260816_candidate_fact_plane_bound_v3_16_12.sql',
   'migrations/20260816_analysis_payload_reuse_v3_16_15.sql',
   'migrations/20260816_financial_fact_recollection_idempotency_v3_16_16.sql',
+  'migrations/20260817_analysis_payload_exact_reuse_v3_16_18.sql',
+  'migrations/20260817_runtime_health_bootstrap_v3_16_19.sql',
+  'migrations/20260817_evaluation_clock_v3_16_20.sql',
+  'migrations/20260817_provider_acquisition_v3_16_21.sql',
 ];
 const migrations = migrationPaths.map((relativePath) => {
   const bytes = fs.readFileSync(path.join(root, relativePath));

@@ -1,46 +1,54 @@
-# V3.16.2 fresh Requirements activation-window closure evidence
+# V3.16.21 single fresh Requirements review
 
-Date: 2026-08-15
-Review authority: fresh Requirements Round 176, independently reviewing the full
-activation-window repair, active-owner version alignment and frozen graph closure
-after the V3.16.1 production replay.
+Date: 2026-08-17
+Review authority: the one permitted fresh Requirements review for the V3.16.21
+successor release, performed read-only against the immutable implementation subject.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `08b6816ac98efbcbfaba25cda6fc0be7af586cbf`
-- Final repair-closure commit/tree: `c30727c03f3b9d81bf32a6decea0ce82780e6151` / `a7e9200e018edafac91efaa271ef0764bf1f1257`
-- Full reviewed range: `08b6816ac98efbcbfaba25cda6fc0be7af586cbf..c30727c03f3b9d81bf32a6decea0ce82780e6151`
-- Active graph: `71abf84b4ae6b4703fd0559807fba15553c1f5a68c56e19039aae44173727b9d`
+- Protected implementation parent: `330973bcd8b06db399d82ceb194b74c3d8e4d521`
+- Final repair-closure commit/tree: `3d97bcda5442971b526af42e3e7b71926126922a` / `6adf0aa5b13e29fee111bff838cc05031be1fd6c`
+- Full reviewed range: `330973bcd8b06db399d82ceb194b74c3d8e4d521..3d97bcda5442971b526af42e3e7b71926126922a`
+- Active graph: `176ae0d91ca1912d7bcb68cc48c0e94a18ab01e47956e55456ef434400bd2ea7`
 
 ## Requirements closure
 
-Production run `8d98b930-46cb-428c-619d-d3c731850808` renewed its database
-lease throughout `facts_refresh` and durably appended 960 trading sessions, 1,315
-financial facts and 1,775 price observations. The installer then terminated the
-healthy owner exactly at its fixed 3,600-second wait and executed the reviewed
-rollback. There was no preceding heartbeat loss. The RED condition is therefore a
-finite local activation-window defect, not a data, credential or decision-quality
-finding.
+The implementation satisfies the V3.16.21 frozen-acquisition contract without
+reopening the already-passed V3.16.20 gates. Every live provider request is captured
+once into an append-only, hash-bound envelope with its real `fetchedAt`; a retry
+reuses the completed request key, a conflicting response is quarantined, and the
+database prevents service-role table writes outside the exact leased RPC.
 
-The repair changes only the maximum one-shot owner wait from 3,600 to 14,400
-seconds. The initial acquisition remains bounded to at most 20 price symbols, 260
-retained price sessions per symbol and 252 valuation sessions per exchange.
-Database leases continue to expire independently, long handlers still
-require worker-thread pulses, nonzero launchd exit still fails immediately, and the
-14,400-second ceiling still fails closed and restores the captured scheduler/runtime
-state. A running job is never reclassified as terminal success.
+The database-owned evaluation clock advances to the latest immutable acquisition
+time for the current run. It never rewrites `fetchedAt` or the source cutoff, so a
+current analysis can use evidence that actually arrived while a historical cohort
+cannot consume evidence fetched in its future. Action authority binds the complete
+provider lineage and official coverage, not one mutable fact fetch or a predecessor
+projection.
 
-The bound language distinguishes the 260 retained price sessions from the 252
-valuation sessions. The runtime-installation v1.13 header, all four active prose and
-catalog owners, the catalog authority tags and the frozen active-graph oracle are
-byte-consistent, closing the protected gate's complete version/graph finding class.
-The executable
-regression observes a successful exit only after crossing the former
-one-hour boundary, while existing nonzero and timeout cases remain. `git diff
---check` passes and the complete product correctness suite passes `106/106`.
-No database password rotation, V3 promotion, LINE, dispatch or automatic trading is
-introduced. Evaluation governance remains honestly
-`blocked/non_fabricated_elapsed_cohorts_unavailable` and this PASS does not claim
-proven future returns.
+Public Radar and authenticated health use the same checksum, freshness, runtime,
+consumer/producer, manifest, migration and acquisition checks. Every mismatch
+disables action; checksum-valid research remains visible as read-only and checksum
+conflict alone clears it. Legacy V3.12 cards and stale V3.14 cards remain navigable
+through a bounded research-only detail whose source link accepts HTTPS only. Missing
+authority is shown as a typed blocker rather than `avoid` or a fabricated buy.
+
+The additive migration applies twice on a fresh database and its executable
+`appended -> reused -> conflict` lifecycle passes. Product correctness passes
+`115/115`, V3.16.21 focused coverage passes `6/6`, migration passes `59/59`,
+performance passes `5/5`, typecheck, lint and production build pass, and model-runner
+passes `18/18` with disabled host-pin v3.9 doctor PASS. No password reset, credential
+rotation, LINE, dispatch, automatic trading or V3 Promotion is introduced.
+
+Protected owner execution exposed one traceability root rather than a product
+requirement defect: the new amendment lacked its canonical version header and the
+script-value registry still described the predecessor product-correctness command.
+The repair adds the canonical declaration, updates and re-hashes the closed command
+registry, and binds current-task disposition to the machine-readable release phase.
+The three formerly failing structural owners now pass `3/3`; no requirement scope,
+authority boundary, public interface, migration behavior, or action rule changed.
+Evaluation governance remains honestly
+`blocked/non_fabricated_elapsed_cohorts_unavailable`; this Requirements PASS makes
+no claim that future returns are proven.

@@ -8,6 +8,7 @@ import { sha256Canonical } from '@/lib/opportunity-v3/canonical';
 import { requireInternalAuth } from '@/lib/internal-auth';
 import { assessProjectionFreshness, type ProjectionHealth } from '@/lib/opportunity-v3/projection-freshness';
 import { resolveReviewedConsumerCommitSha } from '@/lib/opportunity-v3/reviewed-release-identity';
+import { deriveEffectiveProjectionHealth } from '@/lib/opportunity-v3/effective-health';
 
 type Row = Record<string, unknown>;
 
@@ -199,6 +200,19 @@ export async function GET(request: Request) {
         schedulerRollbackPackageSha256: null, manifestSha256: null,
       });
     }
+    const releaseIdentity=runtimePayload?.releaseIdentity as Row|undefined;
+    const sourceAcquisitionHealth=runtimePayload?.sourceAcquisitionHealth as Row|undefined;
+    const expectedManifest=process.env.STOCKINSIDER_RUNTIME_MANIFEST_SHA256;
+    projectionHealth=deriveEffectiveProjectionHealth({freshness:projectionHealth,
+      checksumMatches,runtimeHealthy:sourceLedRuntime.status==='pass',
+      releaseCompatible:releaseIdentity?.producerCommitSha===consumerCommitSha
+        &&directProducerCommit===consumerCommitSha,
+      manifestCompatible:typeof expectedManifest==='string'&&/^[0-9a-f]{64}$/u.test(expectedManifest)
+        &&releaseIdentity?.runtimeManifestSha256===expectedManifest
+        &&sourceLedRuntime.producer.manifestSha256===expectedManifest,
+      migrationCompatible:releaseIdentity?.migrationLevel==='provider-acquisition-v3.16.21',
+      acquisitionAuthoritative:sourceAcquisitionHealth?.acquisitionAuthority==='authoritative'
+        &&/^[0-9a-f]{64}$/u.test(String(sourceAcquisitionHealth?.acquisitionEvidenceRoot??''))});
 
     // Credential status per platform
     const { data: creds } = await supabase

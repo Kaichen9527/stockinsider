@@ -74,6 +74,7 @@ test('V315 official TPEX history uses Gregorian query authority and scales lots/
     return new Response('{}',{status:200});
   };
   const snapshot=await official.loadOfficialTwMarketSnapshot({cutoff:'2026-08-13T10:20:00Z',
+    collectedAt:'2026-08-13T10:21:00Z',
     candidates:[{symbol:'8299',exchange:'TPEX',canonicalSector:'semiconductor'}],
     peerCandidates:[{symbol:'8101',exchange:'TPEX',canonicalSector:'semiconductor'}],
     valuationBackfillSessions:[['TPEX','2026-08-03']],
@@ -83,8 +84,8 @@ test('V315 official TPEX history uses Gregorian query authority and scales lots/
   assert.equal(snapshot.priceObservations.length,1);
   assert.equal(snapshot.priceObservations[0].volume,6_128_000);
   assert.equal(snapshot.priceObservations[0].turnoverTwd,10_757_327_000);
-  assert.equal(snapshot.priceObservations[0].collectedAt,'2026-08-13T10:20:00Z',
-    'logical-run retries must retain the immutable collection identity');
+  assert.equal(snapshot.priceObservations[0].collectedAt,'2026-08-13T10:21:00Z',
+    'the authority loader must preserve the real acquisition time supplied by the frozen envelope');
   assert.ok(snapshot.valuationHistory.some((row)=>row.symbol==='8101'&&row.session==='2026-08-03'),
     `same-sector peer history must survive the authoritative loader filter: ${JSON.stringify(requested)}`);
 });
@@ -252,7 +253,8 @@ test('V315 candidate funnel combines source-led and official full-market candida
     coarseUniverseRows:universe,coarseUniverseSchema:'official-coarse-universe-v3.15'};
   const readCanonical=Buffer.from(canonicalJson(readJson));
   const result=await handlers.candidate_funnel({readKind:'candidate_funnel_input',readJson,readCanonical,
-    readHash:sha256(readCanonical)});
+    readHash:sha256(readCanonical),runId:'72000000-0000-4000-8000-000000000001',
+    jobId:'72000000-0000-4000-8000-000000000002',ownerToken:'72000000-0000-4000-8000-000000000003'});
   const phison=result.json.candidates.find((row)=>row.symbol==='8299');
   assert.ok(phison);assert.equal(phison.deepSelected,true);assert.equal(phison.seedMembership,'out_of_seed');
   assert.ok(result.json.factorDiscovery.selected>=1);assert.ok(result.json.candidates.length<=60);

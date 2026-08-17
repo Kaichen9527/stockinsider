@@ -167,9 +167,10 @@ const checks = {
     assert.ok(!readFileSync(path.join(root, 'scripts/runtime/auth-source-worker-cli.js'), 'utf8').includes('.agent/'));
     const bundle = runtime('tracked-runtime-bundle.js');
     assert.deepEqual([...bundle.TRACKED_RUNTIME_PATHS].sort(), bundle.TRACKED_RUNTIME_PATHS);
-    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 47);
+    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 48);
     assert.equal(bundle.runtimeBundleSha256(root), sha256(bundle.runtimeBundleBytes(root)));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/auth-source-worker-cli.js'));
+    assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/provider-acquisition-v31621.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/tracked-runtime-bundle.js'));
     const bundleRoot = mkdtempSync(path.join(os.tmpdir(), 'runtime-bundle-nofollow-'));
     try {
@@ -613,7 +614,10 @@ const checks = {
         return { ok: true, arrayBuffer: async () => { fetchCount += 1; return Buffer.from(canonicalJson(legacyPayload)); } };
       },
     });
-    const captured = await handlers.source_sync({ authorityHash: 'c'.repeat(64), payloadJson: [null,null,null,'2026-08-01T10:20:00Z'] });
+    const captured = await handlers.source_sync({ authorityHash: 'c'.repeat(64),
+      runId:'72200000-0000-4000-8000-000000000001',jobId:'72200000-0000-4000-8000-000000000002',
+      ownerToken:'72200000-0000-4000-8000-000000000003',
+      payloadJson: [null,null,null,'2026-08-01T10:20:00Z'] });
     assert.equal(fetchCount, 3); assert.deepEqual(Object.keys(captured.json.legacyPayloads).sort(), ['daily','home','hot','weekly']);
     assert.equal(captured.json.legacyPayloadHashes.home, captured.json.legacyPayloadHashes.daily);
     const parser = runtime('auth-source-worker-cli.js');
@@ -738,6 +742,10 @@ const checks = {
     const firstCandidateRead = runtime('codec.js').immutableBundle('candidate_funnel_input', candidateInput);
     const firstCandidate = await handlers.candidate_funnel({ readKind: 'candidate_funnel_input', readCanonical: firstCandidateRead.canonical,
       readJson: firstCandidateRead.json, readHash: firstCandidateRead.hash });
+    const firstCandidateAgain = await handlers.candidate_funnel({ readKind: 'candidate_funnel_input',
+      readCanonical: firstCandidateRead.canonical, readJson: firstCandidateRead.json, readHash: firstCandidateRead.hash });
+    assert.equal(firstCandidateAgain.hash, firstCandidate.hash,
+      'the same frozen candidate input must produce the same immutable result hash');
     assert.equal(firstCandidate.json.candidates[0].disposition, 'promoted');
     const repeatCandidateRead = runtime('codec.js').immutableBundle('candidate_funnel_input', { ...candidateInput,
       priorLedger: [{ stockId: firstCandidate.json.candidates[0].stockId, materialEvidenceHash: firstCandidate.json.candidates[0].materialEvidenceHash }] });
@@ -781,6 +789,10 @@ const checks = {
     sourceCutoff: '2026-08-01T10:20:00Z' });
     const capped = await handlers.facts_refresh({ readKind: 'candidate_fact_plane', readCanonical: factRead.canonical,
       readJson: factRead.json, readHash: factRead.hash });
+    const cappedAgain = await handlers.facts_refresh({ readKind: 'candidate_fact_plane', readCanonical: factRead.canonical,
+      readJson: factRead.json, readHash: factRead.hash });
+    assert.equal(cappedAgain.hash, capped.hash,
+      'the same frozen fact plane must produce the same immutable result hash');
     assert.equal(capped.json.decisions.length, 20); assert.equal(capped.json.shallowObservations.length, 10);
     assert.equal(capped.json.sourceCandidates.length, 40);
     assert.deepEqual(capped.json.sourceCandidates.map((candidate) => candidate.symbol).sort(),
@@ -800,6 +812,10 @@ const checks = {
         materialChangeHash, analysisGeneratedAt: originalGeneratedAt,facts:priorFacts }] });
     const analysis = await handlers.analysis_revision({ readKind: 'analysis_revision_input', readCanonical: analysisRead.canonical,
       readJson: analysisRead.json, readHash: analysisRead.hash });
+    const analysisAgain = await handlers.analysis_revision({ readKind: 'analysis_revision_input',
+      readCanonical: analysisRead.canonical, readJson: analysisRead.json, readHash: analysisRead.hash });
+    assert.equal(analysisAgain.hash, analysis.hash,
+      'the same frozen fact decision plane must produce the same immutable analysis hash');
     assert.equal(analysis.json.decisions[0].evaluationDisposition, 'unchanged');
     assert.equal(analysis.json.decisions[0].analysisGeneratedAt, originalGeneratedAt);
     assert.equal(analysis.json.decisions[0].decisionBrief.action,'wait_reclaim');
@@ -824,6 +840,10 @@ const checks = {
     });
     const mixedProjection = await handlers.compact_radar_projection({ readKind: 'compact_projection_input',
       readCanonical: mixedProjectionRead.canonical, readJson: mixedProjectionRead.json, readHash: mixedProjectionRead.hash });
+    const mixedProjectionAgain = await handlers.compact_radar_projection({ readKind: 'compact_projection_input',
+      readCanonical: mixedProjectionRead.canonical, readJson: mixedProjectionRead.json, readHash: mixedProjectionRead.hash });
+    assert.equal(mixedProjectionAgain.hash, mixedProjection.hash,
+      'the same frozen acquisition and decision plane must produce the same projection hash');
     assert.equal(mixedProjection.json.projections.length, 4);
     assert.ok(mixedProjection.json.projections.every((projection) => projection.payload.sourceSignals.length <= 30));
     assert.ok(mixedProjection.json.projections[0].payload.sourceSignals.some((signal) =>

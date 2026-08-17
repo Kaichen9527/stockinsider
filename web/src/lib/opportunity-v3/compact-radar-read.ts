@@ -5,6 +5,9 @@ import { assessProjectionFreshness } from './projection-freshness';
 import { withProjectionHealth } from './projection-readonly';
 import { sha256Canonical } from './canonical.ts';
 import { assessReleaseCompatibility } from './release-compatibility';
+import { assessTrackedRuntimeHealth, runtimeObservationMatchesProducer,
+  type RuntimeHealthObservation } from './runtime-health';
+import { deriveEffectiveProjectionHealth } from './effective-health';
 
 export { compactRadarEtag, validateCompactRadarProjectionRow, type CompactRadarProjection } from './compact-radar-validation';
 
@@ -47,6 +50,8 @@ function unavailableProjection(
       freshnessStatus: 'unavailable', researchVisibility: 'none', actionAuthority: 'disabled',
       contentAsOf: null, evaluatedAt: null, publishedAt: null, nextExpectedAt: null,
       calendarAuthority: 'tw_trading_sessions_v3', actionsEnabled: false,
+      acquisitionAuthority: 'disabled', actionBlockers: [reason === 'projection_conflict'
+        ? 'checksum_conflict' : 'projection_missing'],
     },
   };
 }
@@ -60,10 +65,14 @@ export async function loadCompactRadarProjection(
     if (!legacyCorrectnessProjectionEnabled()) return null;
     const client = getSupabaseServerClient();
     const storageWindow = window === 'hot' ? 'three_day' : window;
-    const { data, error } = await client.from('legacy_radar_projections_v3_11')
-      .select('payload_json,payload_sha256,as_of,created_at,projection_id')
-      .eq('window', storageWindow).order('as_of', { ascending: false }).order('created_at', { ascending: false })
-      .order('projection_id', { ascending: true }).limit(2);
+    const [{ data, error }, { data:runtimeRows, error:runtimeError }] = await Promise.all([
+      client.from('legacy_radar_projections_v3_11')
+        .select('payload_json,payload_sha256,as_of,created_at,projection_id')
+        .eq('window', storageWindow).order('as_of', { ascending: false }).order('created_at', { ascending: false })
+        .order('projection_id', { ascending: true }).limit(2),
+      client.from('legacy_runtime_health_observations_v3_11')
+        .select('observation_json,recorded_at').order('recorded_at',{ascending:false}).limit(1),
+    ]);
     if (error || !Array.isArray(data)) return unavailableProjection(window, 'projection_store_unavailable');
     if (data.length === 0) return unavailableProjection(window, 'projection_missing');
     const selected = selectCompactRadarProjectionRows(window, data as Array<Record<string, unknown>>);
@@ -77,8 +86,24 @@ export async function loadCompactRadarProjection(
     const compatibility=assessReleaseCompatibility({schema:correctness.schema,
       releaseIdentity:selected.releaseIdentity,expectedConsumerSha:process.env.STOCKINSIDER_REVIEWED_RELEASE_SHA,
       expectedRuntimeManifestSha:process.env.STOCKINSIDER_RUNTIME_MANIFEST_SHA256});
-    if(!compatibility.compatible)health={...health,actionsEnabled:false,actionAuthority:'disabled',
-      researchVisibility:'last_good_readonly',reason:'release_identity_incompatible'};
+    const producer=correctness.producerIdentity;
+    const observation=(runtimeRows?.[0]?.observation_json??null) as Partial<RuntimeHealthObservation>|null;
+    const observationMatches=runtimeError==null&&runtimeObservationMatchesProducer(observation??undefined,{
+      commitSha:typeof producer?.commitSha==='string'?producer.commitSha:null,
+      workerSha256:typeof producer?.workerSha256==='string'?producer.workerSha256:null,
+      schedulerConfigSha256:typeof producer?.configSha256==='string'?producer.configSha256:null,
+    });
+    let runtimeHealthy=false;
+    if(observationMatches&&observation)try{runtimeHealthy=assessTrackedRuntimeHealth(observation as RuntimeHealthObservation).status==='pass';}
+    catch{runtimeHealthy=false;}
+    const releaseIdentity=selected.releaseIdentity as Record<string,unknown>|undefined;
+    const acquisition=selected.sourceAcquisitionHealth as Record<string,unknown>|undefined;
+    health=deriveEffectiveProjectionHealth({freshness:health,runtimeHealthy,
+      releaseCompatible:compatibility.compatible||compatibility.reason!=='consumer_mismatch',
+      manifestCompatible:compatibility.compatible||compatibility.reason!=='runtime_mismatch',
+      migrationCompatible:releaseIdentity?.migrationLevel==='provider-acquisition-v3.16.21',
+      acquisitionAuthoritative:acquisition?.acquisitionAuthority==='authoritative'
+        &&/^[0-9a-f]{64}$/u.test(String(acquisition?.acquisitionEvidenceRoot??''))});
     return withProjectionHealth(selected, health);
   } catch (error) {
     if (error instanceof RadarProjectionValidationError) return unavailableProjection(window,
@@ -92,10 +117,14 @@ export async function loadCompactRadarDecisionRevision(symbol: string, decisionR
   try {
     if (!legacyCorrectnessProjectionEnabled()) return null;
     const client=getSupabaseServerClient();
-    const {data,error}=await client.from('legacy_decision_revisions_v3_13')
-      .select('decision_payload_json,decision_payload_sha256,recorded_at')
-      .eq('symbol',symbol).eq('decision_revision_id',decisionRevisionId)
-      .order('recorded_at',{ascending:false}).limit(2);
+    const [{data,error},{data:runtimeRows,error:runtimeError}]=await Promise.all([
+      client.from('legacy_decision_revisions_v3_13')
+        .select('decision_payload_json,decision_payload_sha256,recorded_at')
+        .eq('symbol',symbol).eq('decision_revision_id',decisionRevisionId)
+        .order('recorded_at',{ascending:false}).limit(2),
+      client.from('legacy_runtime_health_observations_v3_11')
+        .select('observation_json,recorded_at').order('recorded_at',{ascending:false}).limit(1),
+    ]);
     if(error||!Array.isArray(data)||data.length!==1)return null;
     const exact=data[0]?.decision_payload_json;
     if(!exact||typeof exact!=='object'||Array.isArray(exact)
@@ -122,11 +151,26 @@ export async function loadCompactRadarDecisionRevision(symbol: string, decisionR
     const exactCompatibility=assessReleaseCompatibility({schema:correctness.schema,
       releaseIdentity:{producerCommitSha:correctness.producerIdentity?.commitSha,
         runtimeManifestSha256:correctness.producerIdentity?.runtimeManifestSha256,
-        migrationLevel:'decision-integrity-v3.14'},
+        migrationLevel:'provider-acquisition-v3.16.21'},
       expectedConsumerSha:process.env.STOCKINSIDER_REVIEWED_RELEASE_SHA,
       expectedRuntimeManifestSha:process.env.STOCKINSIDER_RUNTIME_MANIFEST_SHA256});
-    if(!exactCompatibility.compatible)health={...health,actionsEnabled:false,actionAuthority:'disabled',
-      researchVisibility:'last_good_readonly',reason:'release_identity_incompatible'};
+    const producer=correctness.producerIdentity;
+    const observation=(runtimeRows?.[0]?.observation_json??null) as Partial<RuntimeHealthObservation>|null;
+    const observationMatches=runtimeError==null&&runtimeObservationMatchesProducer(observation??undefined,{
+      commitSha:typeof producer?.commitSha==='string'?producer.commitSha:null,
+      workerSha256:typeof producer?.workerSha256==='string'?producer.workerSha256:null,
+      schedulerConfigSha256:typeof producer?.configSha256==='string'?producer.configSha256:null,
+    });
+    let runtimeHealthy=false;
+    if(observationMatches&&observation)try{runtimeHealthy=assessTrackedRuntimeHealth(observation as RuntimeHealthObservation).status==='pass';}
+    catch{runtimeHealthy=false;}
+    const acquisition=correctness.acquisitionAuthority;
+    health=deriveEffectiveProjectionHealth({freshness:health,runtimeHealthy,
+      releaseCompatible:exactCompatibility.compatible||exactCompatibility.reason!=='consumer_mismatch',
+      manifestCompatible:exactCompatibility.compatible||exactCompatibility.reason!=='runtime_mismatch',
+      migrationCompatible:exactCompatibility.compatible||exactCompatibility.reason!=='migration_mismatch',
+      acquisitionAuthoritative:acquisition?.status==='authoritative'
+        &&/^[0-9a-f]{64}$/u.test(String(acquisition?.evidenceRoot??''))});
     const exactProjection={...unavailableProjection('home','projection_missing'),
       asOf:correctness.asOf,loadStatus:'ready' as const,loadWarnings:[],
       sourceLedCorrectness:correctness,sourceSignals:[exact as Record<string,unknown>]};

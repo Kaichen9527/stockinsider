@@ -89,7 +89,7 @@ paths:
 The worker digest is not the entrypoint file digest. It is SHA-256 over the canonical
 `stockinsider-tracked-runtime-bundle-v1` manifest emitted by
 `scripts/runtime/tracked-runtime-bundle.js`. That manifest binds the sorted path,
-byte length and exact file SHA-256 for the closed 29-member transitive worker source
+byte length and exact file SHA-256 for the closed 48-member transitive worker source
 set; the bundle-manifest implementation is itself a member. A missing, additional or
 changed member changes the reviewed worker identity, the runtime lease identity and
 the installation manifest. Ignored `.agent` content is never a member or authority.
@@ -97,6 +97,8 @@ the installation manifest. Ignored `.agent` content is never a member or authori
 The exhaustive ASCII-sorted member set is:
 
 ```text
+config/runtime/approved-source-roster-v3.13.json
+config/runtime/projection-freshness-policy.json
 scripts/runtime/action-decision.js
 scripts/runtime/analysis-material-change.js
 scripts/runtime/analysis-revision.js
@@ -110,22 +112,39 @@ scripts/runtime/candidate-valuation.js
 scripts/runtime/codec.js
 scripts/runtime/compact-radar-projection.js
 scripts/runtime/credential-resolver.js
+scripts/runtime/decision-envelope-v314.js
+scripts/runtime/decision-envelope.js
 scripts/runtime/discovery-disposition.js
 scripts/runtime/factor-score.js
 scripts/runtime/factor-snapshot.js
 scripts/runtime/fundamental-quality.js
+scripts/runtime/market-analysis.js
+scripts/runtime/official-calendar-v314.js
+scripts/runtime/official-factor-discovery-v315.js
+scripts/runtime/official-market-authority-v314.js
+scripts/runtime/official-mops-v314.js
+scripts/runtime/official-source-acquisition.js
+scripts/runtime/official-twse-valuation.js
 scripts/runtime/postgres-legacy-producer-adapter.js
+scripts/runtime/projection-freshness.js
+scripts/runtime/provider-acquisition-v31621.js
 scripts/runtime/public-projection.js
 scripts/runtime/reported-pe-authority.js
+scripts/runtime/research-ranking-v314.js
+scripts/runtime/safe-diagnostics.js
 scripts/runtime/source-run-config.js
+scripts/runtime/supabase-rest-legacy-producer-adapter.js
 scripts/runtime/technical-entry-geometry.js
 scripts/runtime/technical-plane.js
 scripts/runtime/technical-state.js
 scripts/runtime/tracked-runtime-bundle.js
+scripts/runtime/underreaction-score.js
 scripts/runtime/valuation-comparables.js
 scripts/runtime/valuation-evidence.js
+scripts/runtime/valuation-method-bridge.js
 scripts/runtime/valuation-method.js
 scripts/runtime/valuation-operating-bridge.js
+web/src/lib/opportunity-v3/release-compatibility-runtime.js
 ```
 
 The resolved runtime root is

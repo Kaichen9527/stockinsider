@@ -2337,7 +2337,7 @@
       "protected://stockinsider-v3-gate-root/execute-track --track product_runtime"
     ]
   ],
-  "scriptValueRowsSha256": "517d549d970f4d661a64f9fe7ad9583896e526b5062c60998cdba55fc32cde53",
+  "scriptValueRowsSha256": "f95d723b585eb1ea458ede7af079ac625165b98f830f58c01de4431a30f053ce",
   "scriptValueRows": [
     [
       "build:source-led-opportunity-v3",
@@ -2369,7 +2369,7 @@
     ],
     [
       "test:source-led-opportunity-v3:product-correctness",
-      "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs"
+      "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs"
     ],
     [
       "typecheck:source-led-opportunity-v3",
@@ -4348,7 +4348,7 @@
       "requirement": "R13/Safety",
       "layer": "contract",
       "setup": "Enumerate every package, launchd, installer and doctor reference to the production-capable auth source worker while ignored .agent content and a tracked runtime worker both exist.",
-      "expected": "Only scripts/runtime/auth-source-worker-cli.js is executable authority, its exact closed 29-member tracked transitive bundle (including the closed Keychain credential resolver) is Git reviewed and bound by one digest across package/install/lease/doctor paths, and ignored .agent worker bytes are rejected."
+      "expected": "Only scripts/runtime/auth-source-worker-cli.js is executable authority, its exact closed 48-member tracked transitive bundle (including the frozen provider-acquisition and closed Keychain credential resolver modules) is Git reviewed and bound by one digest across package/install/lease/doctor paths, and ignored .agent worker bytes are rejected."
     },
     {
       "id": "PCR-002",

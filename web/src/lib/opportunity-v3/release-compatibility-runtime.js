@@ -1,7 +1,7 @@
 'use strict';
 
 function assessReleaseCompatibility({schema,releaseIdentity,expectedConsumerSha,expectedRuntimeManifestSha,
-  requiredMigration='decision-integrity-v3.14'}){
+  requiredMigration='provider-acquisition-v3.16.21'}){
   if(schema!=='legacy-radar-v3.14.0')return Object.freeze({compatible:false,reason:'legacy_schema'});
   if(!releaseIdentity||typeof releaseIdentity!=='object'||Array.isArray(releaseIdentity))
     return Object.freeze({compatible:false,reason:'identity_missing'});
