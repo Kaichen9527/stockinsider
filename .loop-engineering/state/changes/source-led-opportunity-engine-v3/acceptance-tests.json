@@ -2337,7 +2337,7 @@
       "protected://stockinsider-v3-gate-root/execute-track --track product_runtime"
     ]
   ],
-  "scriptValueRowsSha256": "f95d723b585eb1ea458ede7af079ac625165b98f830f58c01de4431a30f053ce",
+  "scriptValueRowsSha256": "67df975cef0058a42d06fb4ebc9152385e23501847f4d9f091d32d6994ee1e9a",
   "scriptValueRows": [
     [
       "build:source-led-opportunity-v3",
@@ -2385,7 +2385,7 @@
     ],
     [
       "verify:source-led-opportunity-v3:model-runner",
-      "node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track model_runner && npm run test:model-runner-v3 && npm run v3:doctor -- --expect-mode disabled --require-host-pin model-runner-host-pins-v3.9"
+      "node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track model_runner && npm run test:model-runner-v3 && npm run v3:doctor -- --expect-mode disabled --require-host-pin model-runner-host-pins-v3.10"
     ],
     [
       "verify:source-led-opportunity-v3:product-runtime",
@@ -4228,8 +4228,8 @@
       "id": "MR3-019",
       "requirement": "Safety",
       "layer": "macos/security/meta",
-      "setup": "Parse the 2,137-byte canonical host fixture, mutate its digest/schema/approval, absolute Node/Git/Codex path, stat/hash/version, bundle identifiers/CDHashes, Team ID, designated requirements and notarized assessment, then race observable replacements at every check.",
-      "expected": "Only model-runner-host-pins-v3.9 with SHA-256 0982f6abe1d9a60697186c11c2fbada42e437a92c276accf47413e40ae22ddba and every exact pinned identity passes; mismatch is exit 5 with no task model/apply/tuple, observable race authorizes no result and no learned/fallback value exists."
+      "setup": "Parse the 2,141-byte canonical host fixture, mutate its digest/schema/approval, absolute Node/Git/Codex path, stat/hash/version, bundle identifiers/CDHashes, Team ID, designated requirements and notarized assessment, then race observable replacements at every check.",
+      "expected": "Only model-runner-host-pins-v3.10 with SHA-256 d0f13d519035963fb8a1895f89fc0cf90104094eda460bc6bc9a02e031edc937 and every exact pinned identity passes; mismatch is exit 5 with no task model/apply/tuple, observable race authorizes no result and no learned/fallback value exists."
     },
     {
       "id": "MR3-020",

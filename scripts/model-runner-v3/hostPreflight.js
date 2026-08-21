@@ -7,8 +7,8 @@ const { spawnSync } = require('node:child_process');
 const { assert, RunnerError } = require('./artifacts');
 const { canonicalJson, parseJsonWithNoDuplicateKeys, sha256 } = require('./canonicalJson');
 
-const PIN_FIXTURE_SHA256 = '0982f6abe1d9a60697186c11c2fbada42e437a92c276accf47413e40ae22ddba';
-const PIN_FIXTURE_BYTES = 2138;
+const PIN_FIXTURE_SHA256 = 'd0f13d519035963fb8a1895f89fc0cf90104094eda460bc6bc9a02e031edc937';
+const PIN_FIXTURE_BYTES = 2142;
 let stableAncestorIdentity = null;
 
 function loadHostPins(filename) {
@@ -27,7 +27,7 @@ function loadHostPins(filename) {
   } catch {
     throw new RunnerError(5);
   }
-  assert(canonicalJson(fixture) === raw && fixture.fixtureVersion === 'model-runner-host-pins-v3.9', 5);
+  assert(canonicalJson(fixture) === raw && fixture.fixtureVersion === 'model-runner-host-pins-v3.10', 5);
   assert(fixture.platform === 'darwin' && fixture.architecture === 'arm64' && Array.isArray(fixture.executables), 5);
   const node = fixture.executables.find((entry) => entry.name === 'node');
   assert(node && typeof node.path === 'string' && typeof node.realpath === 'string' && node.version === 'v22.14.0', 5);
@@ -108,10 +108,45 @@ function assertAncestorIdentity(current, expected) {
   return true;
 }
 
+function hostProbeEnvironment() {
+  const environment = { PATH: '/usr/bin:/bin:/usr/sbin:/sbin', LANG: 'C', LC_ALL: 'C' };
+  // Candidate-side host probes deliberately run without a credential-bearing HOME.
+  // Apple Git resolves xcrun's cache from TMPDIR, so dropping the already-vetted
+  // sandbox directory here made an otherwise pinned probe fall back to a denied
+  // system temp path. Admit that one directory only in the non-credential mode.
+  if (process.env.OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH !== '1') return environment;
+  const temporaryDirectory = process.env.TMPDIR ?? '';
+  const codexHome = process.env.CODEX_HOME ?? '';
+  assert(
+    path.isAbsolute(temporaryDirectory) && process.env.HOME === temporaryDirectory && path.isAbsolute(codexHome),
+    5,
+  );
+  let stat;
+  let codexHomeStat;
+  try {
+    stat = fs.lstatSync(temporaryDirectory, { bigint: true });
+    codexHomeStat = fs.lstatSync(codexHome, { bigint: true });
+  } catch (error) {
+    if (error instanceof RunnerError) throw error;
+    throw new RunnerError(5);
+  }
+  assert(
+    stat.isDirectory() && !stat.isSymbolicLink() && Number(stat.uid) === process.getuid()
+      && (stat.mode & 0o077n) === 0n,
+    5,
+  );
+  assert(
+    codexHomeStat.isDirectory() && !codexHomeStat.isSymbolicLink()
+      && Number(codexHomeStat.uid) === process.getuid() && (codexHomeStat.mode & 0o077n) === 0n,
+    5,
+  );
+  return { ...environment, CODEX_HOME: codexHome, HOME: temporaryDirectory, TMPDIR: temporaryDirectory };
+}
+
 function checkedCommand(command, args) {
   const result = spawnSync(command, args, {
     encoding: 'utf8',
-    env: { PATH: '/usr/bin:/bin:/usr/sbin:/sbin', LANG: 'C', LC_ALL: 'C' },
+    env: hostProbeEnvironment(),
     shell: false,
     timeout: 30_000,
     maxBuffer: 2 * 1024 * 1024,
@@ -139,7 +174,7 @@ function validatedVersionOutput(command, stdout, stderr) {
 function checkedVersion(command, args) {
   const result = spawnSync(command, args, {
     encoding: 'utf8',
-    env: { PATH: '/usr/bin:/bin:/usr/sbin:/sbin', LANG: 'C', LC_ALL: 'C' },
+    env: hostProbeEnvironment(),
     shell: false,
     timeout: 30_000,
     maxBuffer: 2 * 1024 * 1024,
@@ -210,4 +245,5 @@ module.exports = {
   assertAncestorIdentity,
   validatedVersionOutput,
   requiresGatekeeperAssessment,
+  hostProbeEnvironment,
 };
