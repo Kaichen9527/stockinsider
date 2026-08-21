@@ -1,70 +1,78 @@
-# V3.16.21 single fresh Requirements review
+# V3.17 single fresh Requirements review
 
-Date: 2026-08-17
-Review authority: the one permitted fresh Requirements review for the V3.16.21
-successor release, performed read-only against the immutable implementation subject.
+Date: 2026-08-21
+
+Review authority: the one permitted fresh Requirements review for the V3.17
+source-led actionability successor. This review is read-only and reviews the
+immutable implementation subject below; it does not authorize data writes,
+runtime activation, deployment, password reset, LINE, dispatch, automatic
+trading, Promotion, or invented evaluation cohorts.
+
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `cde4915db22f279a891b478540a2ebdab54876fb`
-- Final repair-closure commit/tree: `5add5b8dcd559edadef96b5d6fdc46bb4f89ff22` / `558d0d950bd7e5f7521a0c4e5a4deefca28babe2`
-- Full reviewed range: `cde4915db22f279a891b478540a2ebdab54876fb..5add5b8dcd559edadef96b5d6fdc46bb4f89ff22`
-- Active graph: `b07516d0b650da847d8e0cba59edf2c25672e88443582a0e696e093a13e80525`
+- Protected implementation parent: `01aedbab4ab0035712439b86a327313c40d3e481`
+- Final repair-closure commit/tree: `0c4375d304330d2336ac3ceafe35480cb3ae932d` / `d019882195dcf6aefc6168def836b1fa448dc825`
+- Full reviewed range: `01aedbab4ab0035712439b86a327313c40d3e481..0c4375d304330d2336ac3ceafe35480cb3ae932d`
+- Active graph: `b58c133371d2982de94b683b25fd279c86ceab119a81842066984fedd7bd7fe0`
 
 ## Requirements closure
 
-The implementation satisfies the V3.16.21 frozen-acquisition contract without
-reopening the already-passed V3.16.20 gates. Every live provider request is captured
-once into an append-only, hash-bound envelope with its real `fetchedAt`; a retry
-reuses the completed request key, a conflicting response is quarantined, and the
-database prevents service-role table writes outside the exact leased RPC.
+The implementation closes the observed UI and product-truth failures without
+creating a buy quota or weakening formal action authority. The unlayered global
+anchor colour inheritance is removed; semantic colour tokens are registered;
+and the browser regression measures computed light/dark contrast at desktop and
+mobile rather than trusting Tailwind class strings. Every tested decision-summary
+CTA is at least 4.5:1.
 
-The database-owned evaluation clock advances to the latest immutable acquisition
-time for the current run. It never rewrites `fetchedAt` or the source cutoff, so a
-current analysis can use evidence that actually arrived while a historical cohort
-cannot consume evidence fetched in its future. Action authority binds the complete
-provider lineage and official coverage, not one mutable fact fetch or a predecessor
-projection.
+The candidate funnel is source-led: eligible source outcomes are the only
+candidate nominators. TWSE/TPEx data remains bounded enrichment for symbol
+validation, facts, peers, benchmarks, technical inputs and liquidity, and cannot
+displace a linked source event. InvestAnchors is explicitly internal-methodology
+only with no acquisition, product source, model input, logged paid text, excerpt,
+screenshot or derivative summary. Telegram is explicitly `not_authorized` and is
+neither acquired nor sent to a model. Podcast, YouTube and Threads retain honest
+terminal outcomes; metadata-only, OAuth failure, provider failure, login-wall and
+zero-write results cannot become a thesis.
 
-Public Radar and authenticated health use the same checksum, freshness, runtime,
-consumer/producer, manifest, migration and acquisition checks. Every mismatch
-disables action; checksum-valid research remains visible as read-only and checksum
-conflict alone clears it. Legacy V3.12 cards and stale V3.14 cards remain navigable
-through a bounded research-only detail whose source link accepts HTTPS only. Missing
-authority is shown as a typed blocker rather than `avoid` or a fabricated buy.
+The producer now forms its decision input from the deterministic union of the
+persisted authority plane and the current frozen acquisition before valuation,
+technical and decision work. It computes official turnover liquidity rather than
+leaving the liquidity gate null. Source snapshots remain immutable and action
+authority is still governed only by the Decision Envelope. `ResearchNextStep` and
+`ResearchSnapshot` are deliberately non-executable: they preserve a stale,
+checksum-valid support/reclaim/breakout research card in the waiting lane, show
+the exact data gate, and never turn incomplete data into a buy.
 
-The additive migration applies twice on a fresh database and its executable
-`appended -> reused -> conflict` lifecycle passes. Product correctness passes
-`117/117`, V3.16.21 focused coverage passes `8/8`, migration passes `60/60`,
-performance passes `5/5`, typecheck, lint and production build pass, and model-runner
-passes `28/28` with disabled host-pin v3.9 doctor PASS. No password reset, credential
-rotation, LINE, dispatch, automatic trading or V3 Promotion is introduced.
+Every V3.17 source card is structurally bound to the same symbol, price, next
+research step and decision revision as its detail snapshot. The snapshot carries
+bounded provenance, valuation, fundamental and technical values or precise missing
+values, plus a five-gate waterfall. It is validated before publication and is
+served as a same-revision research-only detail even while global action authority
+is disabled. Legacy action aliases are derived from the effective health and can
+no longer show an executable-looking conclusion beside a disabled envelope.
 
-Protected owner execution exposed one traceability root rather than a product
-requirement defect: the new amendment lacked its canonical version header and the
-script-value registry still described the predecessor product-correctness command.
-The repair adds the canonical declaration, updates and re-hashes the closed command
-registry, and binds current-task disposition to the machine-readable release phase.
-The three formerly failing structural owners now pass `3/3`; no requirement scope,
-authority boundary, public interface, migration behavior, or action rule changed.
+The Loop current-release pointer now represents V3.17 instead of treating V3.16.21
+history or a fixed review number as active work. Its action queue is bounded, old
+credential reset tasks remain `superseded/do_not_execute`, and the active graph is
+computed from the reviewed tree rather than a copied predecessor hash. This avoids
+reopening historical gates merely because an authorized active amendment changes
+the graph.
+
+## Executed evidence
+
+- Full local product/runtime diagnostic on the subject: typecheck, lint and
+  production build PASS; core 61/61; product correctness 121/121; migration
+  61/61; legacy regression 2/2; Playwright 9/9; performance 5/5.
+- V3.17 focused coverage proves same-run frozen union/liquidity, source-only
+  selection, no paid-methodology acquisition, stale research snapshot preservation,
+  support waiting-lane routing, same-revision navigation and computed CTA contrast.
+- Existing value/valuation, stop geometry, formal/relative action matrix,
+  point-in-time and source-conservation regressions remain in the full suite.
+
 Evaluation governance remains honestly
-`blocked/non_fabricated_elapsed_cohorts_unavailable`; this Requirements PASS makes
-no claim that future returns are proven.
-
-The production-cardinality successor preserves the reviewed 20-row transaction
-bound while moving full instrument-roster validation from every row to once per
-single-timestamp chunk. Every row still uses the indexed internal resolver after
-the complete roster integrity check. Mixed acquisition timestamps, an unknown
-predecessor SQL shape, excess public grants or a changed point-in-time cutoff fail
-closed. This closes the forensic four-hour runtime path without weakening source
-authority, provenance, lease, retry or pooler requirements.
-
-The operator-visible migration plan now derives the same ordered migration chain
-as the reviewed apply command and therefore includes the roster-chunk snapshot
-migration. A regression executes the real planner and requires exact parity with
-the apply-chain declaration, preventing an operator from approving a displayed
-plan that omits code the reviewed CLI will execute. This closes the final P1 found
-during read-only release preparation without changing schema authority or runtime
-semantics.
+`blocked/non_fabricated_elapsed_cohorts_unavailable`. This Requirements PASS
+confirms implementation requirements only; it makes no claim that future returns
+are proven or that production contains a minimum number of buy candidates.
