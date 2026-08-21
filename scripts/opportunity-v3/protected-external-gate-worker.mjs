@@ -462,6 +462,8 @@ function candidateSandbox(subjectRoot, scratch, environment, executable, args, {
     ], {
       ...environment,
       CODEX_HOME: policyRoot,
+      OPPORTUNITY_V3_PROTECTED_CANDIDATE_POLICY: policyRoot,
+      OPPORTUNITY_V3_PROTECTED_CANDIDATE_SCRATCH: scratch,
       PATH: `${appleDeveloperToolchain.gitBin}${path.delimiter}${environment.PATH}`,
     }, `sandboxed ${executable} ${args.join(' ')}`);
   } finally {
@@ -727,7 +729,7 @@ function executeTrack(subjectRoot, track, identity, attestation) {
         'scripts/model-runner-v3/model-runner-v3.test.js'], 'test:model-runner-v3');
       verify(executeClosedCandidate, modelNodeExecutable, ['scripts/run-node22.js', '--experimental-strip-types',
         'scripts/opportunity-v3/doctor.mjs', '--expect-mode', 'disabled', '--require-host-pin',
-        'model-runner-host-pins-v3.9'], 'disabled model runner doctor');
+        'model-runner-host-pins-v3.10'], 'disabled model runner doctor');
       const oracle = trustedHostModelOracle(subjectRoot, attestation, modelNodeExecutable);
       outputs.push(oracle);
       measured.push({ ...measuredResult(oracle, 'trusted protected-base exact-subject model oracle'), ownsPartitionCount: false });

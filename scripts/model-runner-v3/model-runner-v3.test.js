@@ -40,6 +40,9 @@ const {
   PIN_FIXTURE_BYTES,
   ancestorIdentity,
   assertAncestorIdentity,
+  CANDIDATE_POLICY_ENV,
+  CANDIDATE_SCRATCH_ENV,
+  hostProbeEnvironment,
   loadHostPins,
   requiresGatekeeperAssessment,
   validatedVersionOutput,
@@ -237,10 +240,10 @@ ordinaryTest('operation and resource identities are deterministic and bound', ()
     resourceAttemptOrdinal: 0,
   }), /^[a-f0-9]{64}$/);
   assert.equal(MODEL_RUNNER_IDENTITY_SHA256.length, 64);
-  assert.equal(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)), 882);
-  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'codexVersion'), ['codexVersion', '0.148.0-alpha.9']);
+  assert.equal(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)), 884);
+  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'codexVersion'), ['codexVersion', '0.148.0-alpha.21']);
   assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'contractVersion'), ['contractVersion', 'model-runner-v3.6']);
-  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'hostPinVersion'), ['hostPinVersion', 'model-runner-host-pins-v3.9']);
+  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'hostPinVersion'), ['hostPinVersion', 'model-runner-host-pins-v3.10']);
 });
 
 ordinaryTest('task locks, contiguous reservations and resource hash chains fail closed', () => {
@@ -308,8 +311,8 @@ ordinaryTest('host pin fixture has an exact hash-bound format', async () => {
   const fixture = path.resolve(__dirname, '../../.loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json');
   assert.equal(fs.statSync(fixture).size, PIN_FIXTURE_BYTES);
   const pins = loadHostPins(fixture);
-  assert.equal(pins.fixtureVersion, 'model-runner-host-pins-v3.9');
-  assert.equal(pins.executables.find((entry) => entry.name === 'codex').version, 'codex-cli 0.148.0-alpha.9');
+  assert.equal(pins.fixtureVersion, 'model-runner-host-pins-v3.10');
+  assert.equal(pins.executables.find((entry) => entry.name === 'codex').version, 'codex-cli 0.148.0-alpha.21');
   assert.equal(verifyCurrentNode(pins), true);
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-pins-'));
   const altered = path.join(directory, 'pins.json');
@@ -376,8 +379,8 @@ ordinaryTest('version probes admit only closed known sandbox diagnostics', () =>
   assert.equal(validatedVersionOutput('/usr/bin/git', stdout, ''), stdout);
   assert.equal(validatedVersionOutput('/usr/bin/git', stdout, denial), stdout);
   assert.equal(validatedVersionOutput('/usr/bin/git', stdout, `${denial}${denial}`), stdout);
-  assert.equal(validatedVersionOutput(codex, 'codex-cli 0.148.0-alpha.9\n', aliasWarning),
-    'codex-cli 0.148.0-alpha.9\n');
+  assert.equal(validatedVersionOutput(codex, 'codex-cli 0.148.0-alpha.21\n', aliasWarning),
+    'codex-cli 0.148.0-alpha.21\n');
   expectExit(5, () => validatedVersionOutput('/usr/bin/git', stdout, denial.trimEnd()));
   expectExit(5, () => validatedVersionOutput('/usr/bin/git', stdout, `${denial}${denial}${denial}`));
   expectExit(5, () => validatedVersionOutput('/usr/bin/git', stdout, `${denial}${denial}unexpected\n`));
@@ -386,6 +389,98 @@ ordinaryTest('version probes admit only closed known sandbox diagnostics', () =>
   expectExit(5, () => validatedVersionOutput(codex, stdout, `${aliasWarning}${aliasWarning}`));
   expectExit(5, () => validatedVersionOutput('/usr/bin/git', stdout, aliasWarning));
   expectExit(5, () => validatedVersionOutput(codex, stdout, `unexpected ${aliasWarning}`));
+});
+
+ordinaryTest('non-credential host probes retain only the verified private sandbox directory', () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-host-probe-'));
+  const policyDirectory = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-host-policy-'));
+  const original = {
+    [CANDIDATE_POLICY_ENV]: process.env[CANDIDATE_POLICY_ENV],
+    [CANDIDATE_SCRATCH_ENV]: process.env[CANDIDATE_SCRATCH_ENV],
+    OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH: process.env.OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH,
+  };
+  try {
+    fs.chmodSync(directory, 0o700);
+    // The protected runner keeps CODEX_HOME separate from HOME/TMPDIR. Keeping it
+    // outside the temporary HOME also prevents Codex from attempting to create
+    // aliases in the credentialless scratch directory.
+    const codexHome = policyDirectory;
+    process.env[CANDIDATE_POLICY_ENV] = codexHome;
+    process.env[CANDIDATE_SCRATCH_ENV] = directory;
+    process.env.OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH = '1';
+    assert.deepEqual(hostProbeEnvironment(), {
+      CODEX_HOME: codexHome,
+      HOME: directory,
+      LANG: 'C',
+      LC_ALL: 'C',
+      PATH: '/usr/bin:/bin:/usr/sbin:/sbin',
+      TMPDIR: directory,
+    });
+    delete process.env[CANDIDATE_POLICY_ENV];
+    delete process.env[CANDIDATE_SCRATCH_ENV];
+    const inheritedTemporaryDirectory = process.env.TMPDIR;
+    process.env.TMPDIR = directory;
+    assert.deepEqual(hostProbeEnvironment(), {
+      CODEX_HOME: directory,
+      HOME: directory,
+      LANG: 'C',
+      LC_ALL: 'C',
+      PATH: '/usr/bin:/bin:/usr/sbin:/sbin',
+      TMPDIR: directory,
+    });
+    if (inheritedTemporaryDirectory === undefined) delete process.env.TMPDIR;
+    else process.env.TMPDIR = inheritedTemporaryDirectory;
+    process.env[CANDIDATE_POLICY_ENV] = codexHome;
+    process.env[CANDIDATE_SCRATCH_ENV] = directory;
+    process.env[CANDIDATE_SCRATCH_ENV] = path.join(directory, 'missing');
+    expectExit(5, () => hostProbeEnvironment());
+    process.env[CANDIDATE_SCRATCH_ENV] = directory;
+    delete process.env[CANDIDATE_POLICY_ENV];
+    expectExit(5, () => hostProbeEnvironment());
+    process.env[CANDIDATE_POLICY_ENV] = codexHome;
+    fs.chmodSync(directory, 0o755);
+    expectExit(5, () => hostProbeEnvironment());
+  } finally {
+    for (const [key, value] of Object.entries(original)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+    fs.chmodSync(directory, 0o700);
+    fs.rmSync(directory, { recursive: true, force: true });
+    fs.rmSync(policyDirectory, { recursive: true, force: true });
+  }
+});
+
+ordinaryTest('disabled doctor accepts only the protected v3.9 compatibility selector for the exact v3.10 fixture', () => {
+  const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-doctor-scratch-'));
+  const policy = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-doctor-policy-'));
+  const original = {
+    [CANDIDATE_POLICY_ENV]: process.env[CANDIDATE_POLICY_ENV],
+    [CANDIDATE_SCRATCH_ENV]: process.env[CANDIDATE_SCRATCH_ENV],
+    OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH: process.env.OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH,
+  };
+  try {
+    fs.chmodSync(scratch, 0o700);
+    fs.chmodSync(policy, 0o700);
+    process.env[CANDIDATE_POLICY_ENV] = policy;
+    process.env[CANDIDATE_SCRATCH_ENV] = scratch;
+    process.env.OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH = '1';
+    const doctor = path.resolve(__dirname, '../opportunity-v3/doctor.mjs');
+    const compatible = spawnSync(process.execPath, [doctor, '--expect-mode', 'disabled', '--require-host-pin',
+      'model-runner-host-pins-v3.9'], { encoding: 'utf8', env: process.env });
+    assert.equal(compatible.status, 0, compatible.stderr);
+    assert.equal(JSON.parse(compatible.stdout).checks.requested.status, 'pass');
+    const rejected = spawnSync(process.execPath, [doctor, '--expect-mode', 'disabled', '--require-host-pin',
+      'model-runner-host-pins-v3.8'], { encoding: 'utf8', env: process.env });
+    assert.equal(rejected.status, 1);
+  } finally {
+    for (const [key, value] of Object.entries(original)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+    fs.rmSync(scratch, { recursive: true, force: true });
+    fs.rmSync(policy, { recursive: true, force: true });
+  }
 });
 
 ordinaryTest('only the explicit non-credential sandbox defers Gatekeeper to the trusted host oracle', () => {

@@ -255,8 +255,8 @@ registry-pinned command catalog; it does not trust an npm script as bootstrap au
 then runs the model track traceability reconciliation for exactly 28 IDs,
 `npm run test:model-runner-v3`, then
 `npm run v3:doctor -- --expect-mode disabled --require-host-pin
-model-runner-host-pins-v3.9`; doctor must reproduce the fixture's exact
-`codex-cli 0.148.0-alpha.9` bytes and report deployment mode disabled. It is a
+model-runner-host-pins-v3.10`; doctor must reproduce the fixture's exact
+`codex-cli 0.148.0-alpha.21` bytes and report deployment mode disabled. It is a
 required Code Gate input when a Code Gate is assembled; it is deliberately collected
 on the pinned self-hosted runner rather than represented as a skipped pull-request
 aggregate job.
