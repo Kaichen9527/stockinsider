@@ -9,7 +9,7 @@ process.env.OPPORTUNITY_V3_UI_FIXTURE = 'enabled';
 
 export default defineConfig({
   testDir: './e2e',
-  testMatch: ['v3-correctness.spec.ts', 'radar-layering.spec.ts', 'v314-readonly-visibility.spec.ts', 'deep-dive-story.spec.ts'],
+  testMatch: ['v3-correctness.spec.ts', 'radar-layering.spec.ts', 'v314-readonly-visibility.spec.ts', 'v317-source-led-actionability.spec.ts', 'deep-dive-story.spec.ts'],
   timeout: 90_000,
   workers: 1,
   reporter: [['list']],

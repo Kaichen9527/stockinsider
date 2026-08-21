@@ -50,6 +50,7 @@
     "trading-calendar-contract.md",
     "v3-detail-contract.md",
     "v3.16.21-frozen-acquisition-release-amendment.md",
+    "v3.17-source-led-actionability-amendment.md",
     "valuation-contract.md"
   ],
   "owners": [
@@ -212,6 +213,10 @@
     [
       "v3.16.21-frozen-acquisition-release-amendment.md",
       "source-led-opportunity-release-v3.16.21"
+    ],
+    [
+      "v3.17-source-led-actionability-amendment.md",
+      "source-led-opportunity-actionability-v3.17.0"
     ],
     [
       "valuation-contract.md",

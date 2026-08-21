@@ -50,7 +50,7 @@ async function observeDatabaseRest(config,resolver,fetchImpl){
     ?Buffer.from(projection.payload_canonical.slice(2),'hex'):null;
   const checksumMatches=canonical&&sha256(canonical)===projection.payload_sha256;
   const correctness=projection?.payload_json?.sourceLedCorrectness??{};
-  const projectionHealth=['legacy-radar-v3.13.0','legacy-radar-v3.14.0'].includes(correctness.schema)
+  const projectionHealth=['legacy-radar-v3.13.0','legacy-radar-v3.14.0','legacy-radar-v3.17.0'].includes(correctness.schema)
     ?assessProjectionFreshness({contentAsOf:correctness.contentAsOf??projection.as_of,
       evaluatedAt:correctness.evaluatedAt??projection.as_of,publishedAt:correctness.publishedAt??projection.as_of,
       tradingSessions:Array.isArray(correctness.freshnessSchedule)?correctness.freshnessSchedule:[]})
@@ -96,7 +96,7 @@ async function observeDatabase(releaseRoot, config, resolver, clientFactory,fetc
     const checksumMatches = projection && Buffer.isBuffer(projection.payload_canonical) &&
       sha256(projection.payload_canonical) === projection.payload_sha256;
     const correctness = projection?.payload_json?.sourceLedCorrectness ?? {};
-    const projectionHealth = ['legacy-radar-v3.13.0','legacy-radar-v3.14.0']
+    const projectionHealth = ['legacy-radar-v3.13.0','legacy-radar-v3.14.0','legacy-radar-v3.17.0']
       .includes(projection?.payload_json?.sourceLedCorrectness?.schema)
       ? assessProjectionFreshness({
       contentAsOf: correctness.contentAsOf ?? projection.as_of,

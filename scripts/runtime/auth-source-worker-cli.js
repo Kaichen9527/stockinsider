@@ -20,6 +20,8 @@ const { decisionRevisionIdentityBundle, immutableDecisionRevisionCard,
   publishCompactRadarProjection } = require('./compact-radar-projection');
 const { computeUnderreactionResearchScore } = require('./underreaction-score');
 const { computeResearchRankingV314 } = require('./research-ranking-v314');
+const { deriveResearchNextStep } = require('./research-next-step-v317');
+const { buildResearchSnapshotV317 } = require('./research-snapshot-v317');
 const { safeFailureDiagnostic } = require('./safe-diagnostics');
 const { buildOfficialTradingScheduleV314, coverageReportV314 } = require('./official-market-authority-v314');
 const { loadOfficialTwMarketSnapshot,loadOfficialCoarseMarketSnapshot, SOURCE_URL, TPEX_SOURCE_URL, TWSE_REVENUE_URL, TPEX_REVENUE_URL,
@@ -208,6 +210,13 @@ function canonicalUtc(value, label) {
 function extractRevisionCandidates(bundle) {
   const frozen = bundle.frozenRevision;
   invariant(frozen && typeof frozen.revisionId === 'string', 'frozen revision unavailable');
+  // Telegram content is not authorized for this product's AI/ML processing,
+  // and paid InvestAnchors material is methodology-only. Keep their terminal
+  // acquisition outcome observable, but never turn either into a candidate.
+  if(['telegram','investanchors'].includes(String(frozen.sourceKey))) {
+    return Object.freeze({ linked:[],rejected:[],deferred:[],conservation:Object.freeze({
+      sourceKey:String(frozen.sourceKey),outcome:'not_authorized',candidateCount:0 }) });
+  }
   const pages = Array.isArray(bundle.authorityPages) ? bundle.authorityPages : [];
   const rowsByKind = (kind) => pages.filter((page) => Array.isArray(page) && page[0] === kind)
     .flatMap((page) => Array.isArray(page[3]) ? page[3] : []);
@@ -625,12 +634,12 @@ function valuationFactInput(rows, sourceCutoff = null) {
   };
 }
 
-function persistedOfficialSnapshot(bundle, acquisition) {
+function persistedOfficialSnapshot(bundle, acquisition, candidateIdentities = []) {
   const hasFinite=(value)=>value!==null&&value!==''&&Number.isFinite(Number(value));
-  const reportedRows = (bundle.reportedPeRows ?? []).filter((row)=>Array.isArray(row) && row.length>=12
+  const persistedReportedRows = (bundle.reportedPeRows ?? []).filter((row)=>Array.isArray(row) && row.length>=12
     && /^\d{4}$/u.test(String(row[0])) && (hasFinite(row[5])
       || row.length>=13&&hasFinite(row[6]) || row[18]==='authority_conflict'));
-  const normalized = reportedRows.map((row)=>{const v313=row.length>=13;const conflict=v313&&row[18]==='authority_conflict';
+  const normalized = persistedReportedRows.map((row)=>{const v313=row.length>=13;const conflict=v313&&row[18]==='authority_conflict';
     const nullable=(value)=>value===null||value===''?null:Number.isFinite(Number(value))?Number(value):null;
     const nullableText=(value)=>value===null||value===undefined||value===''?null:String(value);
     return { symbol:String(row[0]),sector:String(row[1] ?? 'unknown'),
@@ -649,36 +658,62 @@ function persistedOfficialSnapshot(bundle, acquisition) {
       .filter((entry)=>Array.isArray(entry)&&typeof entry[1]==='string').map((entry)=>String(entry[1])):[],
     sourceUrl:String(row[2])==='TWSE'?SOURCE_URL:TPEX_SOURCE_URL,
     authority:'exchange_reported_history' };});
+  const identityBySymbol=new Map((candidateIdentities??[]).filter((row)=>row&&typeof row.symbol==='string')
+    .map((row)=>[row.symbol,row]));
+  const calendarIdentity=new Map((acquisition?.calendarSessions??[]).filter((row)=>row&&typeof row.session==='string')
+    .map((row)=>[`${row.market}:${row.session}`,row]));
+  const acquiredValuationRows=(acquisition?.valuations??[]).filter((row)=>row&&typeof row==='object'
+    &&/^\d{4}$/u.test(String(row.symbol))&&['TWSE','TPEX'].includes(String(row.exchange))
+    &&/^\d{4}-\d{2}-\d{2}$/u.test(String(row.session))).map((row)=>{
+      const identity=identityBySymbol.get(String(row.symbol));
+      const calendar=calendarIdentity.get(`${row.exchange}:${row.session}`);
+      return {...row,stockId:String(identity?.stockId??''),sector:String(identity?.canonicalSector??row.canonicalSector??'unknown'),
+        canonicalSector:String(identity?.canonicalSector??row.canonicalSector??'unknown'),
+        tradingSessionAuthorityHash:calendar?sha256(canonicalJson([calendar.market,calendar.session,calendar.sourceRef,calendar.sourceSha256])):'',
+        // `collectedAt` documents when this worker observed the response; it is
+        // never substituted for the exchange's point-in-time source clock.
+        publishedAt:row.sourceTimestamp??null,sourceTimestamp:row.sourceTimestamp??null,
+        metricSources:{},metricSourceRefs:[],authority:'exchange_reported',inlineAcquisition:true};
+    });
+  const reportedRows=[...normalized,...acquiredValuationRows];
   const latestSessionByExchange=new Map();
-  for(const row of normalized) if(!latestSessionByExchange.has(row.exchange)
+  for(const row of reportedRows) if(!latestSessionByExchange.has(row.exchange)
     ||row.session>latestSessionByExchange.get(row.exchange))latestSessionByExchange.set(row.exchange,row.session);
-  const valuations = normalized.filter((row)=>row.session===latestSessionByExchange.get(row.exchange))
+  const valuations = reportedRows.filter((row)=>row.session===latestSessionByExchange.get(row.exchange))
     .map((row)=>({ ...row,authority:'exchange_reported' }));
-  const valuationHistory = normalized.filter((row)=>row.session!==latestSessionByExchange.get(row.exchange));
-  const revenues = (bundle.legacyRevenueRows ?? []).filter((row)=>Array.isArray(row) && row.length>=8)
+  const valuationHistory = reportedRows.filter((row)=>row.session!==latestSessionByExchange.get(row.exchange));
+  const persistedRevenues = (bundle.legacyRevenueRows ?? []).filter((row)=>Array.isArray(row) && row.length>=8)
     .map((row)=>({ symbol:String(row[0]),asOf:String(row[1]),monthlyRevenue:Number(row[2]),
       yoyGrowth:Number(row[3]),momGrowth:Number(row[4]),sourceUrl:String(row[5]),collectedAt:String(row[6]),
       sourceRef:String(row[7]),authority:'exchange_reported' }))
     .filter((row)=>Number.isFinite(row.monthlyRevenue)
       && Date.parse(row.filingPublishedAt??row.asOf)<=Date.parse(bundle.sourceCutoff)
       && Date.parse(row.sourceTimestamp??row.asOf)<=Date.parse(bundle.sourceCutoff));
+  const acquiredRevenues=(acquisition?.revenues??[]).filter((row)=>row&&typeof row==='object'
+    &&/^\d{4}$/u.test(String(row.symbol))&&Number.isFinite(Number(row.monthlyRevenue)));
+  const revenues=[...persistedRevenues,...acquiredRevenues];
   const persistedTwseIndex = (bundle.benchmarkRows ?? []).filter(Array.isArray)
     .map((row)=>({ session:String(row[0]),close:Number(row[1]) })).filter((row)=>Number.isFinite(row.close));
   const twseIndex=(acquisition?.twseIndex?.length??0)>=122?acquisition.twseIndex:persistedTwseIndex;
-  const financialFacts=(bundle.financialRows??[]).filter((row)=>Array.isArray(row)&&row.length>=13)
+  const persistedFinancialFacts=(bundle.financialRows??[]).filter((row)=>Array.isArray(row)&&row.length>=13)
     .map((row)=>({symbol:String(row[0]),factKey:String(row[1]),periodStart:row[2]===null?null:String(row[2]),
       periodEnd:String(row[3]),durationKind:String(row[4]),value:Number(row[5]),unit:String(row[6]),
       authorityTier:String(row[7]),filingPublishedAt:String(row[8]),sourceTimestamp:String(row[9]),
       collectedAt:String(row[10]),sourceRef:String(row[12])})).filter((row)=>Number.isFinite(row.value));
-  const priceObservations=(bundle.priceRows??[]).filter((row)=>Array.isArray(row)&&row.length>=9&&Array.isArray(row[8]))
+  const financialFacts=[...persistedFinancialFacts,...(acquisition?.financialFacts??[]).filter((row)=>row&&typeof row==='object'
+    &&/^\d{4}$/u.test(String(row.symbol))&&Number.isFinite(Number(row.value)))];
+  const persistedPriceObservations=(bundle.priceRows??[]).filter((row)=>Array.isArray(row)&&row.length>=9&&Array.isArray(row[8]))
     .map((row)=>({symbol:String(row[0]),session:String(row[1]),open:Number(row[2]),high:Number(row[3]),
       low:Number(row[4]),close:Number(row[5]),volume:Number(row[6]),adjustmentEvidenceRef:String(row[7]),
-      adjustmentEvidence:row[8],exchange:String(row[8]?.[3]??'').startsWith('twse-')?'TWSE'
+      adjustmentEvidence:row[8],turnoverTwd:Number.isFinite(Number(row[9]))?Number(row[9]):null,
+      exchange:String(row[8]?.[3]??'').startsWith('twse-')?'TWSE'
         :String(row[8]?.[3]??'').startsWith('tpex-')?'TPEX':'',rawSourceRef:String(row[8]?.[3]??''),
       rawSourceUrl:String(row[8]?.[3]??'').startsWith('twse-')?TWSE_PRICE_HISTORY_URL:TPEX_PRICE_HISTORY_URL}))
     .filter((row)=>['TWSE','TPEX'].includes(row.exchange)&&Number.isFinite(row.close));
+  const priceObservations=[...persistedPriceObservations,...(acquisition?.priceObservations??[]).filter((row)=>row&&typeof row==='object'
+    &&/^\d{4}$/u.test(String(row.symbol))&&['TWSE','TPEX'].includes(String(row.exchange))&&Number.isFinite(Number(row.close)))];
   return { schema:'official-tw-market-decision-snapshot-v1',cutoff:bundle.sourceCutoff,
-    valuations,valuationHistory,reportedRows:normalized,revenues,financialFacts,priceObservations,
+    valuations,valuationHistory,reportedRows,revenues,financialFacts,priceObservations,
     twseIndex,tpexIndex:acquisition?.tpexIndex??[],foreignFlow:acquisition?.foreignFlow??null,
     sourceFailures:acquisition?.sourceFailures ?? [] };
 }
@@ -818,6 +853,47 @@ function researchHistory(rows, symbol) {
     .sort((left, right) => left.session.localeCompare(right.session))
     .filter((row, index, all) => index === 0 || row.session !== all[index - 1].session)
     .slice(-130);
+}
+
+function officialPriceRowsForResearch(snapshot) {
+  return (snapshot?.priceObservations ?? []).filter((row)=>row&&typeof row==='object'
+    &&/^\d{4}$/u.test(String(row.symbol))&&/^\d{4}-\d{2}-\d{2}$/u.test(String(row.session))
+    &&[row.open,row.high,row.low,row.close,row.volume].every((value)=>Number.isFinite(Number(value))))
+    .map((row)=>[String(row.symbol),String(row.session),Number(row.open),Number(row.high),Number(row.low),
+      Number(row.close),Number(row.volume),typeof row.rawSourceRef==='string'?row.rawSourceRef:row.sourceRef??null]);
+}
+
+// The frozen official envelope is authoritative for this run before it is
+// persisted. Convert its immutable fact records to the same closed row shape
+// used by the valuation and quality bridges, preserving the provider's actual
+// published/source/collection timestamps. This lets a first run evaluate its
+// own frozen input without pretending a later retry knew it at the cutoff.
+function officialFactRowsForDecision(snapshot, symbol) {
+  return (snapshot?.financialFacts ?? []).filter((row)=>row&&typeof row==='object'
+    &&String(row.symbol)===String(symbol)&&typeof row.sourceRef==='string'&&row.sourceRef.length>0)
+    .map((row)=>[String(row.symbol),String(row.factKey),row.periodStart===null||row.periodStart===undefined?null:String(row.periodStart),
+      String(row.periodEnd),String(row.durationKind),Number(row.value),String(row.unit),String(row.authorityTier),
+      String(row.filingPublishedAt),String(row.sourceTimestamp),String(row.collectedAt),
+      row.filingRestatementId??null,String(row.sourceRef),row.filingRestatementId??null,
+      row.estimateKind??'reported',row.estimateHorizon??'reported_period'])
+    .filter((row)=>Number.isFinite(row[5])&&row[7]==='official_filing');
+}
+
+function officialLiquidityScore(candidate, snapshot) {
+  const rows=(snapshot?.priceObservations ?? []).filter((row)=>row?.symbol===candidate?.symbol
+    &&Number.isFinite(Number(row.close))&&Number.isFinite(Number(row.volume))&&Number(row.volume)>=0)
+    .sort((left,right)=>String(left.session).localeCompare(String(right.session))).slice(-20);
+  if(rows.length<20)return null;
+  const validSessions=rows.filter((row)=>Number(row.volume)>0&&Number(row.close)>0);
+  if(validSessions.length<18)return null;
+  const turnovers=validSessions.map((row)=>Number.isFinite(Number(row.turnoverTwd))
+    ?Number(row.turnoverTwd):Number(row.close)*Number(row.volume)).filter((value)=>Number.isFinite(value)&&value>0)
+    .sort((left,right)=>left-right);
+  if(turnovers.length<18)return null;
+  const medianTurnover=turnovers[Math.floor(turnovers.length/2)];
+  const score=medianTurnover>=1_000_000_000?100:medianTurnover>=500_000_000?90
+    :medianTurnover>=200_000_000?78:medianTurnover>=80_000_000?65:medianTurnover>=20_000_000?50:30;
+  return score;
 }
 
 const HEARTBEAT_ONLY_KEYS = new Set([
@@ -1471,7 +1547,7 @@ async function streamOfficialIngestionV314({claim,snapshot,sourceCutoff,producer
     chunks:Object.freeze(chunks),terminalRoot,deferred:Object.freeze({reportedValuationPriceDependencyUnavailable})});
 }
 
-function providerAcquisitionLineageHealth(value, evaluationTimestamp, coverage) {
+function providerAcquisitionLineageHealth(value, evaluationTimestamp) {
   const evaluatedAt=Date.parse(evaluationTimestamp??'');
   const rawRows=Array.isArray(value)?value:[];
   const rows=rawRows.filter((row)=>row&&typeof row==='object'&&!Array.isArray(row))
@@ -1492,7 +1568,9 @@ function providerAcquisitionLineageHealth(value, evaluationTimestamp, coverage) 
   if(rows.some((row)=>Date.parse(row.fetchedAt)>evaluatedAt))blockers.push('frozen_acquisition_future_evidence');
   if(rows.some((row)=>actionRequired.includes(row.provider)&&row.actionEligible!==true))
     blockers.push('frozen_acquisition_action_ineligible');
-  if(coverage?.ready!==true)blockers.push('official_coverage_incomplete');
+  // Per-symbol financial/price/peer coverage belongs to that symbol's Gate
+  // waterfall.  A missing bridge for one research candidate must not revoke
+  // the frozen lineage of every checksum-valid card.
   const uniqueBlockers=[...new Set(blockers)];
   return Object.freeze({authoritative:uniqueBlockers.length===0,
     evidenceRoot:rows.length?sha256(canonicalJson(['provider-acquisition-lineage-v3.16.21',rows])):null,
@@ -1592,8 +1670,12 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         :{schema:'official-coarse-market-snapshot-v3.15',cutoff:bundle.sourceCutoff,collectedAt:null,
           universe:coarseUniverseRows,valuations:[],revenues:[],sourceFailures:[{reason:'frozen_provider_acquisition_unavailable'}]};
       const factorDiscovery=buildOfficialFactorCandidatesV315({snapshot:coarseSnapshot,cutoff:bundle.sourceCutoff,limit:40});
-      const outcomes=[...sourceOutcomes,...factorDiscovery.candidates];
-      const funnel = buildCandidateFunnel({ outcomes, seedSymbols: bundle.seedSymbols ?? [], priorLedger: bundle.priorLedger ?? [] });
+      // Official market data verifies a source-led candidate and supplies peers;
+      // it is never allowed to nominate or displace a source candidate.  This
+      // preserves the bounded 60→30→20 funnel without quietly turning it back
+      // into an all-market factor screener.
+      const funnel = buildCandidateFunnel({ outcomes: sourceOutcomes,
+        seedSymbols: bundle.seedSymbols ?? [], priorLedger: bundle.priorLedger ?? [] });
       return immutableBundle('legacy_candidate_funnel_result_v3_11', { schema: 'legacy-candidate-funnel-result-v3.11',
         candidates: funnel.candidateLedger, discoverySummary: funnel.discoverySummary,
         discoveryDelta: funnel.discoveryDelta,factorDiscovery:factorDiscovery.waterfall,
@@ -1639,7 +1721,9 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         :bridgeAvailable?{availability:'unavailable',reason:'frozen_provider_acquisition_unavailable',
           valuations:[],valuationHistory:[],revenues:[],twseIndex:[],financialFacts:[],priceObservations:[],
           corporateActionSnapshots:[],tpexIndex:[],foreignFlow:null,sourceFailures:[]}:null;
-      const officialSnapshot = bridgeAvailable ? persistedOfficialSnapshot(bundle,acquisitionSnapshot) : null;
+      const officialSnapshot = bridgeAvailable ? persistedOfficialSnapshot(bundle,acquisitionSnapshot,candidates) : null;
+      const enrichedCandidates=candidates.map((candidate)=>({ ...candidate,
+        liquidityScore: officialLiquidityScore(candidate,officialSnapshot) }));
       const officialCalendar=bridgeAvailable&&(acquisitionSnapshot?.calendarSessions?.length??0)>0
         ?buildOfficialTradingScheduleV314({calendarSessions:acquisitionSnapshot.calendarSessions,
           evaluatedAt:bundle.sourceCutoff}):null;
@@ -1652,7 +1736,11 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
           &&row.session<=new Date(Date.parse(bundle.sourceCutoff)+14*86_400_000).toISOString().slice(0,10))
         .map((row)=>({session_id:row.session,close_at:row.closeAt,status:row.status})):[];
       const dislocationInputs = Array.isArray(bundle.dislocationCandidates) ? bundle.dislocationCandidates : [];
-      const researchPriceRows = [...(bundle.priceRows ?? []), ...(bundle.legacyPriceRows ?? [])];
+      // The frozen response leads this union. `researchHistory` then resolves a
+      // same-session duplicate deterministically without a retry reaching back
+      // to a live provider or allowing stale persisted rows to mask this run.
+      const researchPriceRows = [...officialPriceRowsForResearch(officialSnapshot), ...(bundle.priceRows ?? []),
+        ...(bundle.legacyPriceRows ?? [])];
       const marketAnalysis = buildMarketAnalysis({ asOf: bundle.sourceCutoff,
         taiex: indexComponent(officialSnapshot?.twseIndex), otc: indexComponent(officialSnapshot?.tpexIndex),
         breadth: bundle.marketBreadth && Number(bundle.marketBreadth.trackedCount) >= 20
@@ -1661,8 +1749,9 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         foreignFlow: officialSnapshot?.foreignFlow ?? null });
       invariant(bundle.valuationInputs===undefined || bundle.valuationInputs===null
         || Object.keys(bundle.valuationInputs).length===0,'compatibility valuationInputs forbidden');
-      const decisions = candidates.filter((candidate) => candidate.deepSelected === true).map((candidate) => {
-        const facts = (bundle.financialRows ?? []).filter((row) => Array.isArray(row) && row[0] === candidate.symbol);
+      const decisions = enrichedCandidates.filter((candidate) => candidate.deepSelected === true).map((candidate) => {
+        const facts = [...officialFactRowsForDecision(officialSnapshot,candidate.symbol),
+          ...(bundle.financialRows ?? []).filter((row) => Array.isArray(row) && row[0] === candidate.symbol)];
         const history = researchHistory(researchPriceRows, candidate.symbol);
         const legacyBenchmark = (bundle.benchmarkRows ?? []).filter(Array.isArray)
           .map((row) => ({ session: row[0], close: row[1] }))
@@ -1675,7 +1764,7 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         return buildLegacyCandidateDecision({ candidate, facts, history, benchmark, sourceCutoff: bundle.sourceCutoff,
           valuationInput:persistedValuationInput,researchScore,marketAnalysis });
       });
-      const shallowObservations = candidates.filter((candidate) => candidate.shallowSelected === true && candidate.deepSelected !== true)
+      const shallowObservations = enrichedCandidates.filter((candidate) => candidate.shallowSelected === true && candidate.deepSelected !== true)
         .map((candidate) => {
           const latest = researchPriceRows.filter((row) => Array.isArray(row) && row[0] === candidate.symbol)
             .sort((left, right) => String(right[1]).localeCompare(String(left[1])))[0];
@@ -1686,7 +1775,7 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
             lastEvaluatedAt: bundle.sourceCutoff,researchScore,
             researchRanking:researchRankingFromScore(candidate,researchScore,{softBlockers:['deep_research_not_selected']}) };
         });
-      const deferredSignals = candidates.filter((candidate) => candidate.shallowSelected !== true).map((candidate) => {
+      const deferredSignals = enrichedCandidates.filter((candidate) => candidate.shallowSelected !== true).map((candidate) => {
         const researchScore=buildResearchScore(candidate,{priceRows:researchPriceRows,
           officialSnapshot,sourceCutoff:bundle.sourceCutoff});
         return {...candidate,lastEvaluatedAt:bundle.sourceCutoff,researchScore,
@@ -1798,8 +1887,7 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         && Date.parse(evaluationTimestamp) >= Date.parse(bundle.sourceCutoff), 'projection evaluation timestamp unavailable');
       const decisions = bundle.analysisResult?.decisions ?? [];
       const sourceCandidates = bundle.analysisResult?.sourceCandidates ?? [];
-      const dislocationCandidates = bundle.analysisResult?.dislocationCandidates ?? [];
-      const projectionSignals = [...sourceCandidates, ...dislocationCandidates]
+      const projectionSignals = [...sourceCandidates]
         .sort((left, right) => (right.researchRanking?.rankingScore??right.researchScore?.underreactionScore??-1)
           -(left.researchRanking?.rankingScore??left.researchScore?.underreactionScore??-1)
           || (right.sourcePriority ?? 0) - (left.sourcePriority ?? 0) || String(left.symbol ?? '').localeCompare(String(right.symbol ?? '')))
@@ -1817,7 +1905,7 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
       const priorProjections=bundle.priorProjections&&typeof bundle.priorProjections==='object'
         ?bundle.priorProjections:{};
       const acquisitionLineageHealth=providerAcquisitionLineageHealth(bundle.providerAcquisitions,
-        evaluationTimestamp,bundle.analysisResult?.officialAuthority?.coverage);
+        evaluationTimestamp);
       const projections = ['daily', 'hot', 'weekly', 'home'].map((window) => publishCompactRadarProjection({ decisions,
         sourceCandidates: projectionSignals,
         marketAnalysis: bundle.analysisResult?.marketAnalysis ?? null,
@@ -1835,7 +1923,7 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         }:null,
         discoveryDelta: bundle.analysisResult?.discoveryDelta ?? { added: [], exited: [], continued: [], unchangedReasons: [] },
         freshnessSchedule:bundle.analysisResult?.projectionFreshnessSchedule??[],
-        schemaVersion:'legacy-radar-v3.14.0',
+        schemaVersion:'legacy-radar-v3.17.0',
         window, asOf: bundle.sourceCutoff, contentAsOf:bundle.sourceCutoff,
         evaluatedAt:evaluationTimestamp,publishedAt:evaluationTimestamp,
         priorProjection:priorProjections[window==='hot'?'three_day':window]??null,
@@ -1926,4 +2014,5 @@ module.exports = { args, buildLegacyCandidateDecision, buildStageHandlers, extra
   validEmbeddedOfficialValuationRef,marketAllowsNewPosition,
   extractMatchedEvidenceSnippet, LEGACY_RADAR_FETCH_TIMEOUT_MS, legacyFactInput, legacyQualityInput, loadLegacyRadarPayloads,
   main,officialCitation,readBundle,readRuntimeHealthObservation,readRuntimeManifestSha256,
-  priceResearchAxes, tickerHasStockContext, uuidFromHash, valuationFactInput,valuationResearchAxis };
+  priceResearchAxes, tickerHasStockContext, uuidFromHash, valuationFactInput,valuationResearchAxis,
+  persistedOfficialSnapshot,officialPriceRowsForResearch,officialFactRowsForDecision,officialLiquidityScore };

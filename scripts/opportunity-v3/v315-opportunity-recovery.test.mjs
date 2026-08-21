@@ -234,7 +234,7 @@ test('V315 official factor discovery admits out-of-source undervaluation researc
   assert.ok(!missingFundamental||missingFundamental.factorEvidence.rankingScore<=phison.factorEvidence.rankingScore);
 });
 
-test('V315 candidate funnel combines source-led and official full-market candidates before 60-30-20 selection',async()=>{
+test('V317 candidate funnel keeps official full-market factors out of the source-led 60-30-20 selection',async()=>{
   const {canonicalJson,sha256}=runtime('codec.js');
   const config=runtime('source-run-config.js').validateAuthSourceDagConfig(
     readFileSync(path.join(root,'config/runtime/auth-source-dag.json')));
@@ -255,9 +255,8 @@ test('V315 candidate funnel combines source-led and official full-market candida
   const result=await handlers.candidate_funnel({readKind:'candidate_funnel_input',readJson,readCanonical,
     readHash:sha256(readCanonical),runId:'72000000-0000-4000-8000-000000000001',
     jobId:'72000000-0000-4000-8000-000000000002',ownerToken:'72000000-0000-4000-8000-000000000003'});
-  const phison=result.json.candidates.find((row)=>row.symbol==='8299');
-  assert.ok(phison);assert.equal(phison.deepSelected,true);assert.equal(phison.seedMembership,'out_of_seed');
-  assert.ok(result.json.factorDiscovery.selected>=1);assert.ok(result.json.candidates.length<=60);
+  assert.equal(result.json.candidates.find((row)=>row.symbol==='8299'),undefined);
+  assert.ok(result.json.factorDiscovery.selected>=1);assert.equal(result.json.candidates.length,0);
 });
 
 test('V316 shallow official research can reach the near-buy lane without minting a buy action',()=>{

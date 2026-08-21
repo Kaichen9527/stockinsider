@@ -108,10 +108,10 @@ active acquisition.
 
 | Source | Connector | Schedule | Capability |
 |--------|-----------|----------|--------|
-| InvestAnchors | source-sync | Daily 01:00 TW | Configured |
+| InvestAnchors | — | — | Internal methodology only; not a product source and paid content is never acquired, stored or displayed |
 | Threads | source-sync | Daily 01:05 TW | Configured; OAuth required |
 | Instagram | source-sync | Daily 01:10 TW | Configured; auth required |
-| Telegram | source-sync | Daily 01:15 TW | Configured |
+| Telegram | — | — | Not authorized for candidate extraction or model input; no content acquisition |
 | PTT Stock | source-sync | Daily 01:20 TW | Configured |
 | BullTalk | source-sync | Daily 01:25 TW | Configured |
 | YouTube/Podcast | podcast-sync + transcribe | Daily 01:45-01:55 TW | Configured; transcript authority required |

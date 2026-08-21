@@ -1,25 +1,25 @@
 {
   "schema": "stockinsider-current-release-v1",
-  "version": "v3.16.21",
-  "phase": "architecture_passed",
+  "version": "v3.17",
+  "phase": "implementation_in_progress",
   "source": {
-    "baseCommit": "cde4915db22f279a891b478540a2ebdab54876fb",
+    "baseCommit": "01aedbab4ab0035712439b86a327313c40d3e481",
     "exactCommit": null,
     "exactTree": null,
     "attestationCommit": null
   },
   "gates": {
-    "requirements": "pass",
-    "architecture": "pass",
+    "requirements": "pending",
+    "architecture": "pending",
     "exactReview": "pending",
     "code": "pending",
     "shadowActivation": "pending"
   },
   "production": {
-    "migration": "v3.16.21_cardinality_applied_projection_supersession_unapplied",
-    "runtime": "forensic_runs_68691805_and_f7d1cef1_rolled_back_safe_184390953048209730c22828548858c28fa3b6b7",
-    "web": "reviewed_bootstrap_51ea21f_live_actions_disabled",
-    "projection": "predecessor_950e4f_last_good_readonly_same_cutoff_conflict",
+    "migration": "v3_16_21_additive_chain_applied_v3_17_no_schema_change_rehearsal_pending",
+    "runtime": "v3_16_20_forensic_run_rolled_back_safe_184390953048209730c22828548858c28fa3b6b7",
+    "web": "v3_16_21_web_live_action_disabled_v3_17_matching_release_pending",
+    "projection": "last_good_research_visible_v3_17_same_revision_detail_pending",
     "promotion": "blocked/non_fabricated_elapsed_cohorts_unavailable"
   },
   "forbidden": {
@@ -30,11 +30,12 @@
     "v3Promotion": true
   },
   "actionQueue": [
-    "freeze_cardinality_repair_tree",
+    "freeze_v317_source_led_tree",
+    "fresh_requirements_and_architecture",
     "exact_review_and_code_gate",
-    "apply_cardinality_migration",
-    "exact_runtime_two_terminal_runs",
+    "migration_runtime_two_terminal_runs",
     "matching_vercel_deploy_and_smoke",
-    "safari_and_loop_closure"
+    "safari_verification",
+    "release_state_closure"
   ]
 }

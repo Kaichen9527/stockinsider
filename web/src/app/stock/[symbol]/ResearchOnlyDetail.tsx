@@ -47,6 +47,20 @@ export default function ResearchOnlyDetail({ symbol, card, projectionBlockers = 
   const coverage = finiteNumber(ranking?.coverage ?? card.scoreCoverage);
   const revisionId = text(card.decisionRevisionId);
   const sourceUrl = httpsUrl(source?.sourceUrl);
+  const snapshot=card.researchSnapshot&&typeof card.researchSnapshot==='object'&&!Array.isArray(card.researchSnapshot)
+    ?card.researchSnapshot as Record<string,unknown>:null;
+  const valuation=snapshot?.valuation&&typeof snapshot.valuation==='object'&&!Array.isArray(snapshot.valuation)
+    ?snapshot.valuation as Record<string,unknown>:null;
+  const technical=snapshot?.technical&&typeof snapshot.technical==='object'&&!Array.isArray(snapshot.technical)
+    ?snapshot.technical as Record<string,unknown>:null;
+  const fundamental=snapshot?.fundamental&&typeof snapshot.fundamental==='object'&&!Array.isArray(snapshot.fundamental)
+    ?snapshot.fundamental as Record<string,unknown>:null;
+  const nextStep=snapshot?.researchNextStep&&typeof snapshot.researchNextStep==='object'&&!Array.isArray(snapshot.researchNextStep)
+    ?snapshot.researchNextStep as Record<string,unknown>:null;
+  const thesis=Array.isArray(fundamental?.thesis)?fundamental.thesis.filter((value):value is string=>typeof value==='string').slice(0,3):[];
+  const risks=Array.isArray(fundamental?.risks)?fundamental.risks.filter((value):value is string=>typeof value==='string').slice(0,3):[];
+  const waterfall=Array.isArray(snapshot?.gateWaterfall)
+    ?snapshot.gateWaterfall.filter((value):value is Record<string,unknown>=>Boolean(value&&typeof value==='object'&&!Array.isArray(value))).slice(0,5):[];
 
   return <main data-testid="research-only-detail" className="min-h-screen px-5 py-8 text-slate-950 dark:text-emerald-50 md:px-10">
     <section className="mx-auto max-w-[900px] rounded-[2rem] border border-sky-300/40 bg-sky-50 p-6 dark:bg-sky-950/30 md:p-8">
@@ -67,6 +81,37 @@ export default function ResearchOnlyDetail({ symbol, card, projectionBlockers = 
       <ul data-testid="research-only-blockers" className="mt-3 space-y-2 text-sm leading-6">
         {reasonList.map((reason) => <li key={reason} className="rounded-xl bg-white/70 px-3 py-2 font-mono text-xs dark:bg-slate-950/45">{reason}</li>)}
       </ul>
+      <section data-testid="research-snapshot-detail" className="mt-8 grid gap-4 lg:grid-cols-2">
+        <div className="rounded-2xl border border-sky-300/35 bg-white/65 p-5 dark:bg-slate-950/35">
+          <h2 className="text-sm font-semibold tracking-[0.12em]">估值與基本面</h2>
+          <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+            <div><dt className="text-slate-500">目前 PE</dt><dd className="mt-1 font-semibold">{finiteNumber(valuation?.currentPe)?.toFixed(2) ?? '待官方資料'}</dd></div>
+            <div><dt className="text-slate-500">歷史／同業 PE</dt><dd className="mt-1 font-semibold">{finiteNumber(valuation?.historyPeMedian)?.toFixed(2) ?? '—'} / {finiteNumber(valuation?.sectorPe)?.toFixed(2) ?? '—'}</dd></div>
+            <div><dt className="text-slate-500">營收年增</dt><dd className="mt-1 font-semibold">{finiteNumber(fundamental?.revenueYoy) == null ? '待補' : `${finiteNumber(fundamental?.revenueYoy)?.toFixed(1)}%`}</dd></div>
+            <div><dt className="text-slate-500">品質分數</dt><dd className="mt-1 font-semibold">{finiteNumber(fundamental?.qualityScore)?.toFixed(1) ?? '待補'}</dd></div>
+          </dl>
+          {thesis.length>0?<><h3 className="mt-5 text-xs font-semibold tracking-[0.12em] text-slate-500">研究論點</h3><ul className="mt-2 space-y-2 text-sm leading-6">{thesis.map((item,index)=><li key={`thesis-${index}`}>{index+1}. {item}</li>)}</ul></>:null}
+          {risks.length>0?<><h3 className="mt-5 text-xs font-semibold tracking-[0.12em] text-slate-500">風險</h3><ul className="mt-2 space-y-2 text-sm leading-6">{risks.map((item,index)=><li key={`risk-${index}`}>{index+1}. {item}</li>)}</ul></>:null}
+        </div>
+        <div className="rounded-2xl border border-sky-300/35 bg-white/65 p-5 dark:bg-slate-950/35">
+          <h2 className="text-sm font-semibold tracking-[0.12em]">技術狀態與下一步</h2>
+          <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+            <div><dt className="text-slate-500">技術狀態</dt><dd className="mt-1 font-semibold">{text(technical?.state) ?? '待補'}</dd></div>
+            <div><dt className="text-slate-500">下一步</dt><dd className="mt-1 font-semibold">{text(nextStep?.kind) ?? 'data_needed'}</dd></div>
+            <div><dt className="text-slate-500">BIAS 20 / 60 / 120</dt><dd className="mt-1 font-semibold">{finiteNumber(technical?.bias20Pct)?.toFixed(1) ?? '—'} / {finiteNumber(technical?.bias60Pct)?.toFixed(1) ?? '—'} / {finiteNumber(technical?.bias120Pct)?.toFixed(1) ?? '—'}%</dd></div>
+            <div><dt className="text-slate-500">RSI / MACD / ATR</dt><dd className="mt-1 font-semibold">{finiteNumber(technical?.rsi14)?.toFixed(1) ?? '—'} / {finiteNumber(technical?.macd)?.toFixed(2) ?? '—'} / {finiteNumber(technical?.atr)?.toFixed(2) ?? '—'}</dd></div>
+            <div><dt className="text-slate-500">觸發價</dt><dd className="mt-1 font-semibold">{finiteNumber((nextStep?.trigger as Record<string,unknown>|null)?.threshold)?.toFixed(2) ?? '待條件'}</dd></div>
+            <div><dt className="text-slate-500">失效價</dt><dd className="mt-1 font-semibold">{finiteNumber(nextStep?.invalidation)?.toFixed(2) ?? '待補'}</dd></div>
+          </dl>
+          <p className="mt-5 text-sm leading-6 text-slate-600 dark:text-emerald-100/70">{text(nextStep?.reason) ?? '正式決策仍待資料補齊。'} 本頁僅呈現同一研究 revision 的資料，不會從舊推薦或即時抓取補出結論。</p>
+        </div>
+      </section>
+      {waterfall.length>0?<section data-testid="research-gate-waterfall" className="mt-5 rounded-2xl border border-sky-300/35 bg-white/65 p-5 dark:bg-slate-950/35">
+        <h2 className="text-sm font-semibold tracking-[0.12em]">Gate waterfall</h2>
+        <ol className="mt-4 grid gap-2 sm:grid-cols-2">
+          {waterfall.map((gate,index)=>{const status=text(gate.status,24) ?? 'missing';const reason=text(gate.reason,120) ?? 'data_required';return <li key={`${text(gate.gate,24) ?? index}-${reason}`} className="rounded-xl border border-line px-3 py-2 text-sm"><span className={status==='pass'?'font-semibold text-emerald-700 dark:text-emerald-300':'font-semibold text-amber-800 dark:text-amber-300'}>{text(gate.gate,24) ?? 'gate'} · {status}</span><span className="mt-1 block text-xs text-slate-500 dark:text-emerald-100/60">{reason}</span></li>;})}
+        </ol>
+      </section>:null}
       {sourceUrl ? <a className="mt-6 inline-flex min-h-11 items-center underline underline-offset-4" href={sourceUrl} target="_blank" rel="noreferrer">查看原始來源</a> : null}
     </section>
   </main>;
