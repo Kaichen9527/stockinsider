@@ -1,68 +1,75 @@
-# V3.16.21 single independent Architecture review
+# V3.17 single independent Architecture review
 
-Date: 2026-08-17
-Review authority: the one permitted independent Architecture review for V3.16.21,
-performed read-only after the fresh Requirements PASS carrier.
+Date: 2026-08-21
+
+Review authority: the one permitted independent Architecture review following the
+fresh V3.17 Requirements evidence. This is read-only review of the exact source
+and evidence carrier below. It grants no production data write, runtime activation,
+deployment, password reset, credential rotation, LINE, dispatch, automatic trading
+or Promotion authority.
+
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `cde4915db22f279a891b478540a2ebdab54876fb`
-- Requirements implementation commit: `5add5b8dcd559edadef96b5d6fdc46bb4f89ff22`
-- Requirements evidence carrier: `64e29b274bee6e47e2930304cf99656720d3250e`
-- Final repair-closure commit/tree: `64e29b274bee6e47e2930304cf99656720d3250e` / `0fb3151300a0f9bc01b6693107503d73b296e75e`
-- Full reviewed implementation range: `cde4915db22f279a891b478540a2ebdab54876fb..64e29b274bee6e47e2930304cf99656720d3250e`
-- Active graph: `b07516d0b650da847d8e0cba59edf2c25672e88443582a0e696e093a13e80525`
+- Protected implementation parent: `01aedbab4ab0035712439b86a327313c40d3e481`
+- Requirements implementation commit: `0c4375d304330d2336ac3ceafe35480cb3ae932d`
+- Requirements evidence carrier: `5cadadeb8416761c97357472be4e4ce0b5f7540b`
+- Final repair-closure commit/tree: `5cadadeb8416761c97357472be4e4ce0b5f7540b` / `91fc1ea4c98d1d65cb2bfbb9cac8806d622cb29f`
+- Full reviewed implementation range: `01aedbab4ab0035712439b86a327313c40d3e481..5cadadeb8416761c97357472be4e4ce0b5f7540b`
+- Active graph: `b58c133371d2982de94b683b25fd279c86ceab119a81842066984fedd7bd7fe0`
 
 ## Architecture closure
 
-The provider boundary is append-only and race-safe: the request key has a unique
-constraint, `INSERT ... ON CONFLICT` serializes contenders, immutable triggers reject
-update/delete, and a differing winner is recorded only as redacted hashes in the
-conflict ledger. Service role can execute the exact leased RPC but cannot insert into
-the tables or execute the wrapped private claim function.
+The V3.17 design separates three independent concerns that previously collapsed
+into an empty landing page: source-led research visibility, per-stock research
+readiness, and executable action authority. The Decision Envelope remains the only
+authority for a formal action. `ResearchNextStep` is an explicit, bounded routing
+contract, while `ResearchSnapshot` is a typed immutable detail representation. A
+global integrity, runtime, manifest, migration, release-identity or frozen-lineage
+mismatch disables actions but keeps checksum-valid research visible as read-only.
+One stock's missing valuation or financial data now remains its own waterfall gate;
+it cannot suppress unrelated source-backed research.
 
-The stage graph captures response bytes before any parser consumes them. Downstream
-candidate, fact, analysis and projection work reads a detached, deeply frozen
-normalized payload. The final claim injects a sorted provider lineage and advances
-the evaluation clock to the latest stored `fetched_at`, so retry determinism and
-point-in-time eligibility use the same database evidence. Predecessor projection
-health is explicitly non-authoritative.
+The producer ordering is closed and deterministic: frozen acquisition is combined
+with persisted authority before facts, valuation, technical inputs, official liquidity,
+decision and compact projection are calculated. This removes the prior one-run lag
+where newly acquired facts were only visible to a later decision. It retains the
+V3.16.21 immutable-acquisition rules: completed request keys are reused, partial
+retry is bounded to missing keys, response conflicts quarantine, true `fetchedAt`
+is never backdated, and later knowledge cannot leak into a prior cohort.
 
-The Web request path performs only the compact projection read and one bounded
-runtime-health read in parallel. The same effective-health function controls public
-and authenticated responses. Action envelopes are removed on mismatch even for a
-client that ignores health metadata, while last-good cards remain navigable to an
-exact revision or a safe research-only view. The research-only view bounds text and
-blockers, accepts only HTTPS provenance URLs and introduces no mutating surface.
+The public path remains projection-only. Landing cards use a compact, validated
+payload and preserve the exact revision link. Detail reads the same revision and,
+when the cited formal brief is unavailable, renders the validated research snapshot
+instead of falling back to an empty legacy page. Snapshot and card must agree on
+symbol, price and next step. Published source provenance permits only bounded HTTPS
+URLs, diagnostics stay redacted, and no route performs discovery, deep research or
+mutation on a page request.
 
-Migration rollback is additive-object retention plus scheduler stop; runtime and
-Vercel retain independent captured rollback targets. The sole launchd owner,
-reviewed manifest/tree/hash binding and disabled V3/LINE/dispatch/automatic-trading
-boundaries remain unchanged. Requirements PASS is P0=0/P1=0/P2=0, migration is
-apply-twice safe, and the implementation test matrix is green. Evaluation remains
-honestly blocked for non-fabricated elapsed cohorts and is not promoted by this
-Architecture PASS.
+The source boundary is intentionally narrow. Authorized document revision → entity
+link → candidate event is the only nomination path. Official market data enriches
+only the bounded candidate set. InvestAnchors' paid material and Telegram content
+are excluded from acquisition, persistence, model input and public UI; source
+connectors instead surface terminal capability/authorization outcomes. This retains
+the legal and provenance boundary while preserving evidence links for authorized
+public sources.
 
-The protected traceability repair is architecturally bounded: it adds no runtime,
-database, network, public API, or deployment edge. It makes the active amendment
-declare the cataloged release version, makes the command inventory equal the actual
-closed product suite, and checks current action disposition against the release
-phase. Focused repair closure is `3/3` PASS and the active graph is re-sealed above.
+The CSS repair removes a cascade bypass rather than painting a one-off button. The
+global anchor inheritance rule is gone and accent tokens are declared in the active
+theme so semantic Link/Button variants yield measurable foreground/background
+contrast in both themes. The browser test exercises desktop/mobile, keyboard and
+same-revision navigation together with the light/dark contrast calculation.
 
-The production-cardinality repair changes only the internal SQL execution plan for
-official ingestion. One closed chunk shares one immutable acquisition timestamp,
-validates the complete authority roster once, and then resolves each of at most
-twenty rows through the already indexed private resolver. The public resolver,
-wire envelopes, provider acquisition revisions, transaction leases, migration
-authority, grants and Web interfaces are unchanged. The new additive migration
-guards the predecessor body, applies twice, preserves the private owner and cannot
-turn a partial or conflicting roster into action authority.
+Loop control is now a versioned current-release state machine rather than a
+historical prose queue. It derives the active graph from the reviewed tree and
+keeps password reset and credential rotation outside the action queue. This is a
+control-plane-only change: no database role, schema privilege, public API or runtime
+scheduler boundary is expanded.
 
-The release operator and the reviewed apply CLI now consume one ordered migration
-chain. The displayed plan cannot omit the roster-chunk snapshot while the mutation
-path applies it, because a product regression executes the planner and compares it
-exactly with the reviewed chain. This preserves the existing approval boundary:
-read-only planning describes the same additive SQL that the exact reviewed CLI may
-execute, with no password, credential, public grant, or rollback-policy expansion.
+The full local product/runtime diagnostic is green: typecheck, lint and production
+build PASS; core 61/61; product correctness 121/121; migration 61/61; legacy 2/2;
+Playwright 9/9; performance 5/5. Evaluation governance remains
+`blocked/non_fabricated_elapsed_cohorts_unavailable`; this Architecture PASS does
+not make a future-return, minimum-buy-card or Promotion claim.
