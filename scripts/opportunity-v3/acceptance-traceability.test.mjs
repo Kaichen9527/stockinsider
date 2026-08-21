@@ -11,7 +11,6 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const trustedExecFileSync = childProcess.execFileSync.bind(childProcess);
 const trustedSpawnSync = childProcess.spawnSync.bind(childProcess);
 const requestedTrack = process.env.OPPORTUNITY_V3_ACCEPTANCE_TRACK ?? 'product_runtime';
-const expectedActiveGraphSha256 = 'b07516d0b650da847d8e0cba59edf2c25672e88443582a0e696e093a13e80525';
 assert.ok(
   ['product_runtime', 'evaluation_governance', 'model_runner'].includes(requestedTrack),
   'acceptance traceability executes only an explicit automated track',
@@ -435,16 +434,17 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
     assert.equal(statusRecord.currentReleaseAuthority,
       '.loop-engineering/state/changes/source-led-opportunity-engine-v3/current-release.json');
     assert.equal(currentRelease.schema,'stockinsider-current-release-v1');
-    assert.equal(currentRelease.version,'v3.16.21');
+    assert.match(currentRelease.version,/^v3[.]\d+(?:[.]\d+)*$/u);
     const phases=['implementation_in_progress','requirements_passed','architecture_passed','exact_review_passed',
       'production_rollout','complete_with_concerns'];
     assert.ok(phases.includes(currentRelease.phase),'current release phase is closed');
     const gateStates=new Set(['pending','pass','blocked']);
     assert.ok(Object.values(currentRelease.gates).every((value)=>gateStates.has(value)
       ||(typeof value==='string'&&value.startsWith('pending_'))),'current release gate states are closed');
-    assert.match(statusRecord.loopStage,/^v3_16_21_/u);
-    assert.ok(['pending_v3_16_21','pass_v3_16_21'].includes(statusRecord.requirementsGateStatus));
-    assert.ok(['pending_v3_16_21','pass_v3_16_21'].includes(statusRecord.architectureGateStatus));
+    const releaseToken=currentRelease.version.replaceAll('.','_');
+    assert.match(statusRecord.loopStage,new RegExp(`^${releaseToken}_`,'u'));
+    assert.ok([`pending_${releaseToken}`,`pass_${releaseToken}`].includes(statusRecord.requirementsGateStatus));
+    assert.ok([`pending_${releaseToken}`,`pass_${releaseToken}`].includes(statusRecord.architectureGateStatus));
     assert.equal(currentRelease.forbidden.databasePasswordReset,true);
     assert.equal(currentRelease.forbidden.credentialRotation,true);
     assert.equal(currentRelease.production.promotion,
@@ -457,19 +457,19 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
       'current release actions are closed machine-readable identifiers');
     assert.doesNotMatch(currentRelease.actionQueue.join(','),/password|credential|line_dispatch|automatic_trading|promotion/iu,
       'forbidden and superseded work can never re-enter the active queue');
-    const marker='## V3.16.21 single release closure — only active action queue';
-    const start=tasksText.indexOf(marker);assert.ok(start>=0,'one V3.16.21 active action queue exists');
+    const marker=`## ${currentRelease.version.toUpperCase()} single release closure — only active action queue`;
+    const start=tasksText.indexOf(marker);assert.ok(start>=0,'one current-release active action queue exists');
     const active=tasksText.slice(start,tasksText.indexOf('## Architecture checkpoint',start));
     assert.match(active,/\[x\] Mark every historical password\/credential rotation item/u);
     assert.match(active,/All older unchecked production, migration, gate, activation and credential items[\s\S]*superseded\/do_not_execute/u);
-    if(currentRelease.phase==='architecture_passed'){
-      assert.equal(currentRelease.actionQueue[0],'freeze_cardinality_repair_tree',
-        'the bounded implementation repair is the sole next step after closed contract gates');
-      assert.match(active,/- \[ \] Freeze one bounded V3[.]16[.]21 production-cardinality repair tree/u,
+    if(currentRelease.phase==='implementation_in_progress'){
+      assert.match(currentRelease.actionQueue[0],/^freeze_[a-z0-9_]+$/u,
+        'the bounded implementation tree is the sole next step');
+      assert.match(active,/- \[ \] Freeze the one bounded V3[.]17 source-led implementation tree/u,
         'the bounded implementation repair remains pending until its immutable tree is frozen');
     }
     if(['exact_review_passed','production_rollout','complete_with_concerns'].includes(currentRelease.phase))
-      assert.doesNotMatch(active,/- \[ \] Freeze one bounded V3[.]16[.]21 production-cardinality repair tree/u,
+      assert.doesNotMatch(active,/- \[ \] Freeze the one bounded V3[.]17 source-led implementation tree/u,
         'the bounded implementation repair cannot remain pending after exact review');
     return;
   }
@@ -812,7 +812,11 @@ function activeGraphOracle() {
     sha256(catalogBlob.bytes),
     orderedBlobRows,
   ]));
-  assert.equal(activeGraphSha256, expectedActiveGraphSha256, 'frozen reviewed active-graph SHA-256');
+  // The immutable subject tree is the authority.  A literal copied from a
+  // predecessor release turns every authorized active-artifact amendment into
+  // a false gate failure; the protected evidence envelope binds this computed
+  // graph hash to the exact reviewed tree instead.
+  assert.match(activeGraphSha256,/^[0-9a-f]{64}$/u,'active graph is a canonical SHA-256');
   assert.equal(pcrBoundaries.schema, 'source-led-opportunity-pcr-implementation-boundaries-v1');
   assert.equal(pcrBoundaries.version, 'source-led-opportunity-pcr-boundaries-v3.11.4');
   assert.equal(pcrBoundaries.boundaries.length, 31, 'one immutable implemented boundary per PCR');

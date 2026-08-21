@@ -3444,6 +3444,13 @@ function detectCrossThemeKeys(text: string) {
 }
 
 async function scrapeInvestAnchors(symbolContext?: SymbolScopedStockContext | null) {
+  // Product policy deliberately excludes paid/private InvestAnchors material.
+  // A human may keep a private URL/date/type reading checklist, but this
+  // connector must not fetch, persist, summarize, or derive stock claims.
+  return { connector: 'investanchors', recordsWritten: 0, fetchedPosts: 0, entityId: null,
+    errorCode: 'not_authorized', degradedReason: 'internal_methodology_only', timedOut: false,
+    sessionMode: 'not_applicable' as const };
+  /* c8 ignore start -- retained historic implementation for migration rollback only.
   try {
     return await _scrapeInvestAnchorsInner(symbolContext);
   } catch (err) {
@@ -3513,7 +3520,7 @@ async function scrapeInvestAnchors(symbolContext?: SymbolScopedStockContext | nu
     }
     await markLatestRunningConnectorFailed('investanchors', msg);
     throw err;
-  }
+  } c8 ignore stop */
 }
 
 async function _scrapeInvestAnchorsInner(symbolContext?: SymbolScopedStockContext | null) {
@@ -5713,6 +5720,12 @@ async function _scrapeInstagramInner(symbolContext?: SymbolScopedStockContext | 
 }
 
 async function scrapeTelegram(symbolContext?: SymbolScopedStockContext | null) {
+  // Telegram Terms do not authorize AI/ML claim extraction for this product.
+  // Do not fetch public previews as a fallback; expose only this typed state.
+  return { connector: 'telegram', recordsWritten: 0, fetchedPosts: 0, entityId: null,
+    errorCode: 'not_authorized', degradedReason: 'telegram_terms_ml_not_authorized',
+    sessionMode: 'not_applicable' as const };
+  /* c8 ignore start -- retained historic implementation for migration rollback only.
   try {
     return await _scrapeTelegramInner(symbolContext);
   } catch (err) {
@@ -5733,7 +5746,7 @@ async function scrapeTelegram(symbolContext?: SymbolScopedStockContext | null) {
       metadata: { mode: 'fallback_watchlist', records_written: fallback.recordsWritten },
     });
     return fallback;
-  }
+  } c8 ignore stop */
 }
 
 async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | null) {
@@ -6452,25 +6465,20 @@ function detectSocialBrokerSignal(text: string) {
 export async function runSourceDiscovery(options?: { dryRun?: boolean }) {
   const dryRun = Boolean(options?.dryRun);
   const supabase = getSupabaseServerClient();
-  const [docsRes, investanchorsDocsRes, stocksRes] = await Promise.all([
+  const [docsRes, stocksRes] = await Promise.all([
     supabase
       .from('source_raw_documents')
       .select('id,platform,title,summary,document_url,symbols,collected_at,published_at,metadata,source_entity_id,confidence')
+      .neq('platform', 'investanchors')
       .order('collected_at', { ascending: false })
       .limit(80),
-    supabase
-      .from('source_raw_documents')
-      .select('id,platform,title,summary,document_url,symbols,collected_at,published_at,metadata,source_entity_id,confidence')
-      .eq('platform', 'investanchors')
-      .order('collected_at', { ascending: false })
-      .limit(160),
     supabase.from('stocks').select('id,symbol,name,market').eq('market', 'TW').limit(3000),
   ]);
-  if (docsRes.error || investanchorsDocsRes.error || stocksRes.error) {
-    throw new Error(docsRes.error?.message || investanchorsDocsRes.error?.message || stocksRes.error?.message || 'Failed to load source discovery inputs');
+  if (docsRes.error || stocksRes.error) {
+    throw new Error(docsRes.error?.message || stocksRes.error?.message || 'Failed to load source discovery inputs');
   }
   const documents = (docsRes.data as Row[]) || [];
-  const investanchorsDocuments = (investanchorsDocsRes.data as Row[]) || [];
+  const investanchorsDocuments: Row[] = [];
   const stockBySymbol = new Map<string, Row>();
   for (const stock of (stocksRes.data as Row[]) || []) {
     const symbol = String(stock.symbol || '');

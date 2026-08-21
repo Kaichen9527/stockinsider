@@ -2,10 +2,12 @@
 
 const { bounded, canonicalJson, immutableBundle, invariant, sha256 } = require('./codec');
 const { serializeCorrectnessPublicUnion } = require('./public-projection');
-const { compatibilityAction, unavailableDecisionEnvelope, validateDecisionEnvelopeV313,
-  overrideDecisionEnvelopeAction } = require('./decision-envelope');
+const { compatibilityAction, unavailableDecisionEnvelope, overrideDecisionEnvelopeAction, validateDecisionEnvelopeV313,
+  } = require('./decision-envelope');
 const { validateDecisionEnvelopeV314 } = require('./decision-envelope-v314');
 const { assessProjectionFreshness } = require('./projection-freshness');
+const { deriveResearchNextStep } = require('./research-next-step-v317');
+const { buildResearchSnapshotV317 } = require('./research-snapshot-v317');
 
 const CARD_BUCKETS = Object.freeze([
   'opportunities', 'scenarioUpsideCandidates', 'earlyWatchlist',
@@ -318,9 +320,17 @@ function citedDecisionBrief(brief, citations, provenance) {
 }
 
 function landingLane(card) {
-  const action=card?.decisionEnvelope?.userAction;
+  const envelopeAction=card?.decisionEnvelope?.userAction;
+  // The formal envelope alone controls executable action.  ResearchNextStep is
+  // deliberately a separate, non-executable routing hint for an incomplete or
+  // globally read-only decision.  It keeps a support/reclaim/breakout setup
+  // visible without relabelling it as a buy.
+  const nextAction=card?.researchNextStep?.kind;
+  const action=card?.projectionReadOnly===true
+    ?(nextAction==='ready'?'wait_refresh':nextAction??'unavailable')
+    :(envelopeAction==='unavailable'?(nextAction==='ready'?'wait_refresh':nextAction??envelopeAction):envelopeAction);
   if(['buy','accumulate','research_starter'].includes(action))return 'actionable';
-  if(card?.proximityToAction===true||['wait_value','wait_market','wait_breakout','wait_reclaim','avoid_chase','avoid'].includes(action)){
+  if(card?.proximityToAction===true||['wait_value','wait_market','wait_breakout','wait_reclaim','wait_refresh','avoid_chase','avoid'].includes(action)){
     return 'waiting';
   }
   return 'research';
@@ -347,7 +357,8 @@ function removeLowestPrioritySignal(cards) {
   return cards;
 }
 
-function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates = [], marketAnalysis = null) {
+function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates = [], marketAnalysis = null,
+  { researchSnapshotEnabled = false } = {}) {
   const clean = stripCorrectnessAdditions(legacyPayload);
   invariant(Array.isArray(clean.opportunities), 'legacy opportunities required');
   const bySymbol = new Map(decisions.filter((decision) => typeof decision?.symbol === 'string')
@@ -378,7 +389,10 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
       const authorityDecision=decision.decisionEnvelope===undefined
         ?{...decision,decisionEnvelope:unavailableDecisionEnvelope({evaluatedAt:decision.lastEvaluatedAt??asOf,
           symbol:decision.symbol})}:decision;
-      const effectiveDecision=!availableBrief&&authorityDecision.decisionEnvelope?.userAction!=='unavailable'
+      // V3.17 gives a missing cited brief a research-only detail view. Earlier
+      // compatibility schemas retain their original unavailable envelope.
+      const effectiveDecision=!researchSnapshotEnabled&&!availableBrief
+        &&authorityDecision.decisionEnvelope?.userAction!=='unavailable'
         ?{...authorityDecision,decisionEnvelope:overrideDecisionEnvelopeAction(authorityDecision.decisionEnvelope,'unavailable',
           DECISION_BRIEF_UNAVAILABLE_REASON)}:authorityDecision;
       const unboundView=derivePublicOpportunityView(effectiveDecision,marketAnalysis);
@@ -391,6 +405,22 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
       // record. Keep one canonical citation copy here. Complete evidence remains
       // in the decision revision payload addressed by decisionRevisionId.
       const publicCitations=citations;
+      const researchNextStep=researchSnapshotEnabled?deriveResearchNextStep({
+        decisionEnvelope: publicView.decisionEnvelope,
+        technicalState: decision.technical?.technicalState ?? decision.researchScore?.priceContext?.technicalState ?? null,
+        trigger: decision.technical?.trigger ?? null,
+        invalidation: decision.technical?.invalidation ?? null,
+        nextUnlock: publicView.decisionEnvelope.nextUnlock ?? null,
+        missingAxes: decision.researchRanking?.missingAxes ?? [],
+        blockers: decision.researchRanking?.softBlockers ?? [],
+      }):null;
+      const researchSnapshot=researchSnapshotEnabled?buildResearchSnapshotV317({candidate:{...decision,sourceProvenance},
+        decision:{...decision,decisionBrief},researchScore:decision.researchScore,
+        // An evaluation heartbeat is not new research. Bind the snapshot to
+        // the immutable analysis input so an unchanged rerun keeps the same
+        // decision revision and detail URL.
+        sourceCutoff:decision.analysisGeneratedAt??decision.analysisRevision?.analysisGeneratedAt
+          ??decision.sourceCutoff??asOf,researchNextStep}):null;
       const card = {
       symbol: decision.symbol, chineseName: typeof decision.name === 'string'
         ? [...decision.name.normalize('NFC')].slice(0,20).join('') : null, researchMaturity: 'source_signal',
@@ -404,8 +434,11 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
       changedBecause: signalReasons.has(decision.reason) ? decision.reason : 'new_source_evidence',
       sourceProvenance, citations:publicCitations,
       decisionBrief,
+      ...(researchNextStep?{researchNextStep}:{}),
+      ...(researchSnapshot?{researchSnapshot}:{}),
       researchRanking:decision.researchRanking??null,
       proximityToAction:decision.researchRanking?.lane==='near_buy',
+      ...(researchSnapshot?.gateWaterfall?{gateWaterfall:researchSnapshot.gateWaterfall}:{}),
       nextUnlock:publicView.decisionEnvelope.nextUnlock??null,
       ...publicView,
       ...(Number.isFinite(decision.researchScore?.underreactionScore) ? {
@@ -451,7 +484,7 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
   sourceAcquisitionHealth = null,
   freshnessSchedule = [],window, asOf, evaluatedAt = asOf, publishedAt = asOf, contentAsOf = asOf,
   materialChanged = null, priorProjection = null, producerIdentity, legacyPayload,
-  schemaVersion = 'legacy-radar-v3.13.0' }) {
+  schemaVersion = 'legacy-radar-v3.14.0' }) {
   invariant(['daily', 'hot', 'weekly', 'home'].includes(window), 'radar window');
   invariant(decisions.length <= 60, 'radar card bound');
   invariant(legacyPayload && typeof legacyPayload === 'object' && !Array.isArray(legacyPayload), 'legacy radar payload required');
@@ -460,12 +493,17 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
   // The captured legacy payload is research input, never current release
   // authority. Only the tracked run's frozen lineage may enable actions.
   const publicAcquisitionHealth=sourceAcquisitionHealth??null;
-  const layered = addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates, publicMarketAnalysis);
+  const researchSnapshotEnabled=schemaVersion==='legacy-radar-v3.17.0';
+  const layered = addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates, publicMarketAnalysis,
+    {researchSnapshotEnabled});
   const publishableSourceSignals=selectLandingSourceSignals(layered.sourceSignals.filter((card)=>{
     const validBrief=card.decisionBrief&&card.citations?.length>0
-      &&((card.decisionBrief.availability==='unavailable'
+      &&((researchSnapshotEnabled&&card.decisionBrief.availability==='unavailable'
           &&card.decisionBrief.reason===DECISION_BRIEF_UNAVAILABLE_REASON
-          &&card.decisionEnvelope.userAction==='unavailable')
+          &&card.researchSnapshot?.version==='research-snapshot-v3.17.0')
+        ||(!researchSnapshotEnabled&&card.decisionBrief.availability==='unavailable'
+          &&card.decisionBrief.reason===DECISION_BRIEF_UNAVAILABLE_REASON
+          &&card.decisionEnvelope?.userAction==='unavailable')
         ||citedDecisionBrief(card.decisionBrief,card.citations,card.sourceProvenance));
     const validProvenance=validPrimaryProvenance(card.sourceProvenance,card.citations??[]);
     return Boolean(validBrief&&validProvenance);
@@ -490,6 +528,13 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
       ...layered.legacy,sourceSignals:selectedSignals,discoveryDelta:publicDiscoveryDelta,
       underreactionMarket:publicMarketAnalysis,
       sourceAcquisitionHealth:publicAcquisitionHealth,
+      sourceWatermark:{sourceCutoff:contentAsOf,
+        acquisitionAuthority:publicAcquisitionHealth?.acquisitionAuthority??'unavailable',
+        evidenceRoot:publicAcquisitionHealth?.acquisitionEvidenceRoot??null,
+        fetchedAt:publicAcquisitionHealth?.fetchedAt??null,
+        terminalStatus:publicAcquisitionHealth?.terminalStatus??null},
+      authorizationStatus:{telegram:'not_authorized',investanchors:'internal_methodology_only',
+        sourceClaims:'authorized_terminal_outcomes_required'},
       releaseIdentity:{schema:schemaVersion,producerCommitSha:producerIdentity?.commitSha??null,
         runtimeManifestSha256:producerIdentity?.runtimeManifestSha256??null,migrationLevel:'provider-acquisition-v3.16.21'},
       sourceLedCorrectness:{schema:schemaVersion,window,asOf,contentAsOf:resolvedContentAsOf,evaluatedAt,publishedAt,

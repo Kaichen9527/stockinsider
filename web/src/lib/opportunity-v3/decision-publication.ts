@@ -13,8 +13,13 @@ const POINTS = ['thesis:0', 'thesis:1', 'thesis:2', 'risk:0', 'risk:1', 'risk:2'
 const DECISION_REVISION_PATTERN = /^decision-v3[.](?:13|14):[0-9a-f]{64}$/u;
 export const DECISION_BRIEF_UNAVAILABLE_REASON = 'insufficient_cited_decision_brief' as const;
 export const STALE_READONLY_REASON = 'projection_stale_readonly' as const;
+const RESEARCH_NEXT_STEP_KINDS = new Set([
+  'ready', 'wait_reclaim', 'wait_breakout', 'wait_value', 'wait_market',
+  'wait_refresh', 'avoid_chase', 'avoid', 'data_needed',
+]);
+const RESEARCH_GATE_NAMES = ['source', 'fundamental', 'valuation', 'technical', 'liquidity'];
 
-export type PublishedDecisionDetailAvailability = 'available'|'unavailable'|'stale_readonly';
+export type PublishedDecisionDetailAvailability = 'available'|'research_only'|'unavailable'|'stale_readonly';
 
 export interface ValidatedPublishedDecisionCard {
   card: Record<string,unknown>; envelope: DecisionEnvelopeV313; thesis:string[]; risks:string[];
@@ -137,6 +142,66 @@ function validPlanShape(entry:Record<string,unknown>,hasGeometry:boolean,hasNoGe
 function sameStringArray(left:unknown,right:unknown){
   return Array.isArray(left)&&Array.isArray(right)&&left.length===right.length
     &&left.every((value,index)=>value===right[index]);
+}
+
+function validResearchSnapshot(value: unknown): boolean {
+  if(!value||typeof value!=='object'||Array.isArray(value))return false;
+  const snapshot=value as Record<string,unknown>;
+  if(snapshot.version!=='research-snapshot-v3.17.0'
+    ||typeof snapshot.snapshotId!=='string'||!/^research-v3[.]17:[0-9a-f]{64}$/u.test(snapshot.snapshotId)
+    ||!nonempty(snapshot.symbol)||!/^\d{4}$/u.test(snapshot.symbol)
+    ||(snapshot.currentPrice!==null&&!finitePositive(snapshot.currentPrice))
+    ||(snapshot.sourceCutoff!==null&&!validRfc3339Instant(snapshot.sourceCutoff))
+    ||!validProvenance(snapshot.provenance))return false;
+  const valuation=snapshot.valuation;const technical=snapshot.technical;const fundamental=snapshot.fundamental;
+  if(!valuation||typeof valuation!=='object'||Array.isArray(valuation)
+    ||!technical||typeof technical!=='object'||Array.isArray(technical)
+    ||!fundamental||typeof fundamental!=='object'||Array.isArray(fundamental))return false;
+  const valuationRow=valuation as Record<string,unknown>;const technicalRow=technical as Record<string,unknown>;
+  const fundamentalRow=fundamental as Record<string,unknown>;
+  if(!exactObjectKeys(valuationRow,['currentPe','historyPeMedian','sectorPe','asOf','provisionalRelativeValue'])
+    ||!['currentPe','historyPeMedian','sectorPe'].every((key)=>valuationRow[key]===null||finitePositive(valuationRow[key]))
+    ||(valuationRow.asOf!==null&&!validAsOf(valuationRow.asOf)))return false;
+  const technicalKeys=['state','bias20Pct','bias60Pct','bias120Pct','rsi14','macd','atr','volumeRatio20',
+    'relativeStrength20Pct','trigger','invalidation'];
+  if(!exactObjectKeys(technicalRow,technicalKeys)
+    ||(technicalRow.state!==null&&!nonempty(technicalRow.state))
+    ||!['bias20Pct','bias60Pct','bias120Pct','rsi14','macd','atr','volumeRatio20','relativeStrength20Pct']
+      .every((key)=>technicalRow[key]===null||(typeof technicalRow[key]==='number'&&Number.isFinite(technicalRow[key]))))return false;
+  if(!exactObjectKeys(fundamentalRow,['revenueYoy','qualityScore','thesis','risks'])
+    ||!['revenueYoy','qualityScore'].every((key)=>fundamentalRow[key]===null
+      ||(typeof fundamentalRow[key]==='number'&&Number.isFinite(fundamentalRow[key])))
+    ||!['thesis','risks'].every((key)=>Array.isArray(fundamentalRow[key])
+      &&(fundamentalRow[key] as unknown[]).length<=3
+      &&(fundamentalRow[key] as unknown[]).every((item)=>nonempty(item)&&item.length<=240)))return false;
+  const waterfall=snapshot.gateWaterfall;
+  if(!Array.isArray(waterfall)||waterfall.length!==RESEARCH_GATE_NAMES.length
+    ||new Set(waterfall.map((row)=>row&&typeof row==='object'&&!Array.isArray(row)
+      ?(row as Record<string,unknown>).gate:null)).size!==RESEARCH_GATE_NAMES.length
+    ||!RESEARCH_GATE_NAMES.every((gate)=>waterfall.some((row)=>row&&typeof row==='object'&&!Array.isArray(row)
+      &&(row as Record<string,unknown>).gate===gate))
+    ||waterfall.some((row)=>!row||typeof row!=='object'||Array.isArray(row)
+      ||!exactObjectKeys(row as Record<string,unknown>,['gate','status','reason'])
+      ||!['pass','waiting','missing'].includes(String((row as Record<string,unknown>).status))
+      ||!nonempty((row as Record<string,unknown>).reason)||String((row as Record<string,unknown>).reason).length>160))return false;
+  return snapshot.researchNextStep===null||validResearchNextStep(snapshot.researchNextStep);
+}
+
+function validResearchNextStep(value: unknown): boolean {
+  if(!value||typeof value!=='object'||Array.isArray(value))return false;
+  const step=value as Record<string,unknown>;
+  if(!exactObjectKeys(step,['version','kind','actionAuthority','reason','trigger','invalidation','unlockPrice','blockers'])
+    ||step.version!=='research-next-step-v3.17.0'||!RESEARCH_NEXT_STEP_KINDS.has(String(step.kind))
+    ||!['enabled','disabled'].includes(String(step.actionAuthority))||!nonempty(step.reason)
+    ||String(step.reason).length>160||(step.invalidation!==null&&!finitePositive(step.invalidation))
+    ||(step.unlockPrice!==null&&!finitePositive(step.unlockPrice))||!Array.isArray(step.blockers)
+    ||(step.blockers as unknown[]).length>8||(step.blockers as unknown[]).some((item)=>!nonempty(item)||item.length>160)
+    ||new Set(step.blockers as unknown[]).size!==(step.blockers as unknown[]).length)return false;
+  if(step.trigger===null)return true;
+  if(!step.trigger||typeof step.trigger!=='object'||Array.isArray(step.trigger))return false;
+  const trigger=step.trigger as Record<string,unknown>;
+  return exactObjectKeys(trigger,['kind','threshold'])&&['reclaim','breakout'].includes(String(trigger.kind))
+    &&finitePositive(trigger.threshold);
 }
 
 export function validateDecisionEnvelopeV313(value: unknown, outerRevisionId?: string): DecisionEnvelopeV313 | null {
@@ -329,6 +394,16 @@ export function validatePublishedDecisionCard(value: unknown): ValidatedPublishe
     &&JSON.stringify(card.decisionEnvelope)!==JSON.stringify(nested))return null;
   const envelope=validateDecisionEnvelopeV313(card.decisionEnvelope??nested,String(card.decisionRevisionId));
   if(!envelope)return null;
+  if(card.researchSnapshot!==undefined&&!validResearchSnapshot(card.researchSnapshot))return null;
+  if(card.researchSnapshot){
+    const snapshot=card.researchSnapshot as Record<string,unknown>;
+    if(snapshot.symbol!==card.symbol
+      ||(typeof card.currentPrice==='number'&&typeof snapshot.currentPrice==='number'
+        &&card.currentPrice!==snapshot.currentPrice))return null;
+  }
+  if(card.researchNextStep!==undefined&&!validResearchNextStep(card.researchNextStep))return null;
+  if(card.researchSnapshot&&card.researchNextStep
+    &&JSON.stringify((card.researchSnapshot as Record<string,unknown>).researchNextStep)!==JSON.stringify(card.researchNextStep))return null;
   const projectionReadOnly=card.projectionReadOnly===true;
   if((card.projectionReadOnly!==undefined&&!projectionReadOnly)
     ||(projectionReadOnly&&(!ACTIONS.has(card.lastKnownAction as DecisionEnvelopeV313['userAction'])
@@ -347,10 +422,10 @@ export function validatePublishedDecisionCard(value: unknown): ValidatedPublishe
   const record=brief as Record<string,unknown>;
   if(record.availability==='unavailable'){
     if(Object.keys(record).length!==2||record.reason!==DECISION_BRIEF_UNAVAILABLE_REASON
-      ||envelope.userAction!=='unavailable')return null;
+      ||(envelope.userAction!=='unavailable'&&!validResearchSnapshot(card.researchSnapshot)))return null;
     return {card,envelope,thesis:[],risks:[],citations,provenance,
       briefAvailability:'unavailable',briefBlocker:DECISION_BRIEF_UNAVAILABLE_REASON,
-      detailAvailability:projectionReadOnly?'stale_readonly':'unavailable',
+      detailAvailability:projectionReadOnly?'stale_readonly':validResearchSnapshot(card.researchSnapshot)?'research_only':'unavailable',
       lastKnownAction:projectionReadOnly?envelope.userAction:null};
   }
   const thesis=record.thesis;const risks=record.risks;const evidence=record.evidence;
@@ -375,6 +450,14 @@ export function validatePublishedDecisionCard(value: unknown): ValidatedPublishe
 export function buildPublishedDecisionDetailResult(validated:ValidatedPublishedDecisionCard){
   const {card,envelope}=validated;
   if(validated.detailAvailability==='stale_readonly'){
+    // A V3.17 frozen snapshot is safe to read even when the action authority
+    // is stale. Keep the prior V3.14 409 contract for cards without one.
+    if(validResearchSnapshot(card.researchSnapshot)){
+      return {statusCode:200,cacheControl:'no-store',body:{schema:'stock-detail-v3.17.0' as const,
+        status:'research_only' as const,symbol:String(card.symbol),decisionRevisionId:envelope.decisionRevisionId,
+        decisionEnvelope:envelope,researchSnapshot:card.researchSnapshot,sourceProvenance:card.sourceProvenance,
+        citations:card.citations,actionAuthority:'disabled' as const,staleReason:STALE_READONLY_REASON}};
+    }
     return {statusCode:409,cacheControl:'no-store',body:{schema:'stock-detail-v3.13.0' as const,
       status:'stale_readonly' as const,symbol:String(card.symbol),
       decisionRevisionId:envelope.decisionRevisionId,reason:STALE_READONLY_REASON,
@@ -384,6 +467,12 @@ export function buildPublishedDecisionDetailResult(validated:ValidatedPublishedD
     return {statusCode:409,cacheControl:'no-store',body:{schema:'stock-detail-v3.13.0' as const,
       status:'unavailable' as const,symbol:String(card.symbol),
       decisionRevisionId:envelope.decisionRevisionId,reason:validated.briefBlocker}};
+  }
+  if(validated.detailAvailability==='research_only'){
+    return {statusCode:200,cacheControl:'no-store',body:{schema:'stock-detail-v3.17.0' as const,
+      status:'research_only' as const,symbol:String(card.symbol),decisionRevisionId:envelope.decisionRevisionId,
+      decisionEnvelope:envelope,researchSnapshot:card.researchSnapshot,sourceProvenance:card.sourceProvenance,
+      citations:card.citations,actionAuthority:'disabled' as const}};
   }
   // Freshness is evaluated at request time. A shared cache entry created immediately
   // before the next scheduled-run boundary must never preserve an actionable envelope

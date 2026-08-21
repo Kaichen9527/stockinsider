@@ -14,6 +14,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-danger: var(--danger);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -40,10 +43,6 @@ body {
     radial-gradient(circle at 80% 10%, rgba(180, 83, 9, 0.16), transparent 25%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 40%);
   min-height: 100vh;
-}
-
-a {
-  color: inherit;
 }
 
 .bg-surface {

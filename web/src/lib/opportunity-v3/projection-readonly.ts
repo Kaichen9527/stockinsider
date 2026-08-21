@@ -6,7 +6,7 @@ const CARD_BUCKETS = [
   'earlyWatchlist', 'earlySignals', 'partiallyVerified', 'validatedIdeas', 'sourceSignals',
 ] as const;
 
-function readonlyCard(value: unknown, legacySchema = false): unknown {
+function readonlyCard(value: unknown, legacySchema = false, preserveResearchSnapshot = false): unknown {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return value;
   const card = structuredClone(value) as Record<string, unknown>;
   card.projectionReadOnly = true;
@@ -17,14 +17,20 @@ function readonlyCard(value: unknown, legacySchema = false): unknown {
     if (typeof card.decisionRevisionId !== 'string' && typeof typedEnvelope.decisionRevisionId === 'string') {
       card.decisionRevisionId=typedEnvelope.decisionRevisionId;
     }
-    // A consumer that ignores projectionHealth must still be unable to mistake
-    // a last-good card for current action authority.  The immutable revision id
-    // remains navigable; its detail reader independently returns stale-readonly.
-    delete card.decisionEnvelope;
+    if (preserveResearchSnapshot) {
+      // V3.17 keeps an immutable envelope/snapshot for same-revision detail.
+      // Action authority is separately disabled by projectionHealth.
+      card.actionAuthorityDisabled = true;
+    } else {
+      // Existing V3.14 compatibility remains non-actionable and does not
+      // accidentally gain the V3.17 research-only detail contract.
+      delete card.decisionEnvelope;
+      card.newPositionAction = 'valuation_review';
+      card.opportunityAction = 'evidence_watch';
+    }
   }
   if (legacySchema) {
     if (!card.lastKnownAction && typeof card.newPositionAction === 'string') card.lastKnownAction = card.newPositionAction;
-    delete card.decisionEnvelope;
     delete card.decisionRevisionId;
     if (typeof card.symbol === 'string' && /^\d{4}$/u.test(card.symbol)) {
       card.detailHref = `/stock/${card.symbol}`;
@@ -34,6 +40,10 @@ function readonlyCard(value: unknown, legacySchema = false): unknown {
     }
     card.projectionBlockers = ['legacy_schema_without_v314_decision_authority'];
   }
+  // Compatibility fields are derived from the same effective health as the
+  // envelope.  A stale projection must not leave a second, executable-looking
+  // legacy action behind; V3.17 retains the immutable envelope only for its
+  // research snapshot/detail reader.
   if ('newPositionAction' in card) card.newPositionAction = 'valuation_review';
   if ('opportunityAction' in card) card.opportunityAction = 'evidence_watch';
   const researchDecision = card.researchDecision;
@@ -49,7 +59,8 @@ function readonlyCard(value: unknown, legacySchema = false): unknown {
 
 export function withProjectionHealth(selected: CompactRadarProjection, health: ProjectionHealth): CompactRadarProjection {
   const payload = structuredClone(selected) as CompactRadarProjection;
-  const legacySchema = payload.sourceLedCorrectness.schema !== 'legacy-radar-v3.14.0';
+  const v317Schema=payload.sourceLedCorrectness.schema==='legacy-radar-v3.17.0';
+  const legacySchema = !['legacy-radar-v3.14.0','legacy-radar-v3.17.0'].includes(payload.sourceLedCorrectness.schema);
   const effectiveHealth=legacySchema?{...health,actionsEnabled:false,actionAuthority:'disabled' as const,
     researchVisibility:'last_good_readonly' as const}:health;
   payload.projectionHealth = effectiveHealth;
@@ -62,7 +73,8 @@ export function withProjectionHealth(selected: CompactRadarProjection, health: P
   for (const bucket of CARD_BUCKETS) {
     const cards = payload[bucket];
     if (!Array.isArray(cards)) continue;
-    payload[bucket] = (effectiveHealth.researchVisibility === 'none' ? [] : cards.map((card)=>readonlyCard(card,legacySchema))) as Array<Record<string, unknown>>;
+    payload[bucket] = (effectiveHealth.researchVisibility === 'none' ? []
+      : cards.map((card)=>readonlyCard(card,legacySchema,v317Schema))) as Array<Record<string, unknown>>;
   }
   payload.loadStatus = effectiveHealth.researchVisibility === 'none' ? 'unavailable' : 'degraded';
   payload.loadWarnings = legacySchema
