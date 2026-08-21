@@ -468,6 +468,14 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
       assert.match(active,/- \[ \] Freeze the one bounded V3[.]17 source-led implementation tree/u,
         'the bounded implementation repair remains pending until its immutable tree is frozen');
     }
+    if(currentRelease.phase==='architecture_passed'){
+      assert.equal(currentRelease.actionQueue[0],'exact_review_and_code_gate',
+        'only exact review and the Code Gate follow the two permitted contract reviews');
+      assert.doesNotMatch(active,/- \[ \] Freeze the one bounded V3[.]17 source-led implementation tree/u,
+        'the frozen implementation cannot remain pending after Architecture PASS');
+      assert.doesNotMatch(active,/- \[ \] Run exactly one fresh Requirements review and one independent Architecture/u,
+        'the one permitted Requirements/Architecture pair cannot remain pending');
+    }
     if(['exact_review_passed','production_rollout','complete_with_concerns'].includes(currentRelease.phase))
       assert.doesNotMatch(active,/- \[ \] Freeze the one bounded V3[.]17 source-led implementation tree/u,
         'the bounded implementation repair cannot remain pending after exact review');

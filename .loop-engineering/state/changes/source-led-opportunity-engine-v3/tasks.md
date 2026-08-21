@@ -7,10 +7,10 @@
   disabled; V3.16.20 forensic activation remains rolled back and is never restarted.
 - [x] Mark every historical password/credential rotation item `superseded/do_not_execute`.
   The database password must not be reset.
-- [ ] Freeze the one bounded V3.17 source-led implementation tree: semantic CTA
+- [x] Freeze the one bounded V3.17 source-led implementation tree: semantic CTA
   contrast, source-only funnel, frozen same-run official union/liquidity, visible
   waiting research and same-revision research-only detail.
-- [ ] Run exactly one fresh Requirements review and one independent Architecture
+- [x] Run exactly one fresh Requirements review and one independent Architecture
   review for that immutable V3.17 tree; repair a common root once rather than
   creating numbered review loops.
 - [ ] Create the exact implementation commit, complete exact diff/repair/full-range

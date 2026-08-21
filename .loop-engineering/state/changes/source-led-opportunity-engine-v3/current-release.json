@@ -1,7 +1,7 @@
 {
   "schema": "stockinsider-current-release-v1",
   "version": "v3.17",
-  "phase": "implementation_in_progress",
+  "phase": "architecture_passed",
   "source": {
     "baseCommit": "01aedbab4ab0035712439b86a327313c40d3e481",
     "exactCommit": null,
@@ -9,8 +9,8 @@
     "attestationCommit": null
   },
   "gates": {
-    "requirements": "pending",
-    "architecture": "pending",
+    "requirements": "pass",
+    "architecture": "pass",
     "exactReview": "pending",
     "code": "pending",
     "shadowActivation": "pending"
@@ -30,8 +30,6 @@
     "v3Promotion": true
   },
   "actionQueue": [
-    "freeze_v317_source_led_tree",
-    "fresh_requirements_and_architecture",
     "exact_review_and_code_gate",
     "migration_runtime_two_terminal_runs",
     "matching_vercel_deploy_and_smoke",
