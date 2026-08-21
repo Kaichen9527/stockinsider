@@ -416,6 +416,22 @@ ordinaryTest('non-credential host probes retain only the verified private sandbo
       PATH: '/usr/bin:/bin:/usr/sbin:/sbin',
       TMPDIR: directory,
     });
+    delete process.env[CANDIDATE_POLICY_ENV];
+    delete process.env[CANDIDATE_SCRATCH_ENV];
+    const inheritedTemporaryDirectory = process.env.TMPDIR;
+    process.env.TMPDIR = directory;
+    assert.deepEqual(hostProbeEnvironment(), {
+      CODEX_HOME: directory,
+      HOME: directory,
+      LANG: 'C',
+      LC_ALL: 'C',
+      PATH: '/usr/bin:/bin:/usr/sbin:/sbin',
+      TMPDIR: directory,
+    });
+    if (inheritedTemporaryDirectory === undefined) delete process.env.TMPDIR;
+    else process.env.TMPDIR = inheritedTemporaryDirectory;
+    process.env[CANDIDATE_POLICY_ENV] = codexHome;
+    process.env[CANDIDATE_SCRATCH_ENV] = directory;
     process.env[CANDIDATE_SCRATCH_ENV] = path.join(directory, 'missing');
     expectExit(5, () => hostProbeEnvironment());
     process.env[CANDIDATE_SCRATCH_ENV] = directory;

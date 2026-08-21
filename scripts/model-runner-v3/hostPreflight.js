@@ -110,6 +110,16 @@ function assertAncestorIdentity(current, expected) {
   return true;
 }
 
+function privateSandboxDirectory(value) {
+  if (typeof value !== 'string' || !path.isAbsolute(value)) return null;
+  try {
+    const stat = fs.lstatSync(value, { bigint: true });
+    if (!stat.isDirectory() || stat.isSymbolicLink() || Number(stat.uid) !== process.getuid() ||
+      (stat.mode & 0o077n) !== 0n) return null;
+    return value;
+  } catch { return null; }
+}
+
 function hostProbeEnvironment() {
   const environment = { PATH: '/usr/bin:/bin:/usr/sbin:/sbin', LANG: 'C', LC_ALL: 'C' };
   // Candidate-side host probes deliberately run without a credential-bearing HOME.
@@ -121,32 +131,20 @@ function hostProbeEnvironment() {
   // protected worker therefore passes its two pre-created, non-secret roots in
   // dedicated handles. They still receive the full private-directory checks
   // below before a pinned child sees them as HOME/TMPDIR/CODEX_HOME.
-  const temporaryDirectory = process.env[CANDIDATE_SCRATCH_ENV] ?? '';
-  const codexHome = process.env[CANDIDATE_POLICY_ENV] ?? '';
-  assert(
-    path.isAbsolute(temporaryDirectory) && path.isAbsolute(codexHome)
-      && temporaryDirectory !== codexHome,
-    5,
-  );
-  let stat;
-  let codexHomeStat;
-  try {
-    stat = fs.lstatSync(temporaryDirectory, { bigint: true });
-    codexHomeStat = fs.lstatSync(codexHome, { bigint: true });
-  } catch (error) {
-    if (error instanceof RunnerError) throw error;
-    throw new RunnerError(5);
-  }
-  assert(
-    stat.isDirectory() && !stat.isSymbolicLink() && Number(stat.uid) === process.getuid()
-      && (stat.mode & 0o077n) === 0n,
-    5,
-  );
-  assert(
-    codexHomeStat.isDirectory() && !codexHomeStat.isSymbolicLink()
-      && Number(codexHomeStat.uid) === process.getuid() && (codexHomeStat.mode & 0o077n) === 0n,
-    5,
-  );
+  const requestedScratch = process.env[CANDIDATE_SCRATCH_ENV];
+  const requestedPolicy = process.env[CANDIDATE_POLICY_ENV];
+  const suppliedScratch = privateSandboxDirectory(requestedScratch);
+  const suppliedPolicy = privateSandboxDirectory(requestedPolicy);
+  const handlesWereSupplied = requestedScratch !== undefined || requestedPolicy !== undefined;
+  const suppliedPair = suppliedScratch !== null && suppliedPolicy !== null && suppliedScratch !== suppliedPolicy;
+  // `codex sandbox` may deliberately discard non-profile environment keys. Its
+  // own TMPDIR remains the only writable, credential-free directory exposed to
+  // a non-credential child. It is an acceptable fallback only when it already
+  // passes the same private-directory invariant; HOME is never inherited.
+  assert(!handlesWereSupplied || suppliedPair, 5);
+  const temporaryDirectory = suppliedPair ? suppliedScratch : privateSandboxDirectory(process.env.TMPDIR);
+  const codexHome = suppliedPair ? suppliedPolicy : temporaryDirectory;
+  assert(temporaryDirectory !== null && codexHome !== null, 5);
   return { ...environment, CODEX_HOME: codexHome, HOME: temporaryDirectory, TMPDIR: temporaryDirectory };
 }
 
