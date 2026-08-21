@@ -943,6 +943,31 @@ export interface DecisionEnvelopeV313 {
   evaluatedAt: string | null;
 }
 
+export interface ResearchNextStepV317 {
+  version: 'research-next-step-v3.17.0';
+  kind: 'ready' | 'wait_reclaim' | 'wait_breakout' | 'wait_value' | 'wait_market' | 'wait_refresh' | 'avoid_chase' | 'avoid' | 'data_needed';
+  actionAuthority: 'enabled' | 'disabled';
+  reason: string;
+  trigger: { kind: 'reclaim' | 'breakout'; threshold: number } | null;
+  invalidation: number | null;
+  unlockPrice: number | null;
+  blockers: string[];
+}
+
+export interface ResearchSnapshotV317 {
+  version: 'research-snapshot-v3.17.0';
+  snapshotId: string;
+  symbol: string | null;
+  currentPrice: number | null;
+  valuation: { currentPe: number | null; historyPeMedian: number | null; sectorPe: number | null; asOf: string | null; provisionalRelativeValue: unknown | null };
+  technical: { state: string | null; bias20Pct: number | null; bias60Pct: number | null; bias120Pct: number | null; rsi14: number | null; macd: number | null; atr: number | null; volumeRatio20: number | null; relativeStrength20Pct: number | null; trigger: unknown | null; invalidation: unknown | null };
+  fundamental: { revenueYoy: number | null; qualityScore: number | null; thesis: string[]; risks: string[] };
+  gateWaterfall?: Array<{ gate: 'source'|'fundamental'|'valuation'|'technical'|'liquidity'; status: 'pass'|'waiting'|'missing'; reason: string }>;
+  provenance: Record<string, unknown>;
+  sourceCutoff: string | null;
+  researchNextStep: ResearchNextStepV317 | null;
+}
+
 type ReportedPeUnavailableReasonV313 = 'authority_conflict' | 'non_positive_reported_pe'
   | 'insufficient_own_history' | 'sector_reference_insufficient' | 'missing_official_pe'
   | 'missing_shares_outstanding' | 'calendar_authority_mismatch' | 'manifest_missing'
@@ -1505,6 +1530,9 @@ export interface SourceSignalCard {
     missingAxes:string[];axes:Record<string,number|null> } | null;
   proximityToAction?: boolean;
   nextUnlock?: { kind:'max_entry';price:number;requiredMarginPct:number;requiredRewardRisk:number } | null;
+  researchNextStep?: ResearchNextStepV317 | null;
+  researchSnapshot?: ResearchSnapshotV317 | null;
+  gateWaterfall?: NonNullable<ResearchSnapshotV317['gateWaterfall']>;
   decisionBrief?: { thesis: [string,string,string] | string[]; risks: [string,string,string] | string[];
     evidence: Array<{ point: 'thesis:0'|'thesis:1'|'thesis:2'|'risk:0'|'risk:1'|'risk:2'; refs: string[] }> }
     | { availability:'unavailable'; reason:'insufficient_cited_decision_brief' } | null;
@@ -1589,7 +1617,7 @@ export interface DiscoveryDeltaV311 {
 export interface RadarDailyPayload {
   asOf: string;
   sourceLedCorrectness?: {
-    schema: 'legacy-radar-v3.11.3'|'legacy-radar-v3.12.0'|'legacy-radar-v3.13.0'|'legacy-radar-v3.14.0'|'legacy-radar-v3.17.0'|'legacy-radar-v3.18.0';
+    schema: 'legacy-radar-v3.11.3'|'legacy-radar-v3.12.0'|'legacy-radar-v3.13.0'|'legacy-radar-v3.14.0'|'legacy-radar-v3.17.0';
     window: 'daily'|'hot'|'weekly'|'home';
     asOf: string;
   };
@@ -1613,6 +1641,8 @@ export interface RadarDailyPayload {
     actionsEnabled: boolean;
   };
   sourceAcquisitionHealth?: unknown;
+  sourceWatermark?: { sourceCutoff:string; acquisitionAuthority:string; evidenceRoot:string|null; fetchedAt:string|null; terminalStatus:string|null };
+  authorizationStatus?: { telegram:'not_authorized'; investanchors:'internal_methodology_only'; sourceClaims:'authorized_terminal_outcomes_required' };
   releaseIdentity?: { schema:string;producerCommitSha:string|null };
   degradedSources?: string[];
   lastUpdatedAt?: string | null;

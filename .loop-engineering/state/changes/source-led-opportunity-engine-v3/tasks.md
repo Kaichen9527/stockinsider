@@ -1,25 +1,24 @@
 <!-- /autoplan restore point: /Users/kaerchen/.gstack/projects/Kaichen9527-stockinsider/codex-source-led-opportunity-engine-v3-autoplan-restore-20260724-191533.md -->
 # Tasks: source-led-opportunity-engine-v3
 
-## V3.18 single release closure — only active action queue
+## V3.17 single release closure — only active action queue
 
 - [x] Preserve V3.16.21 as a predecessor: old formal-action authority remains
   disabled; V3.16.20 forensic activation remains rolled back and is never restarted.
 - [x] Mark every historical password/credential rotation item `superseded/do_not_execute`.
   The database password must not be reset.
-- [x] Freeze the one bounded V3.18 source-led implementation tree: source-nominated
-  candidates retained through twenty completed source sessions, topic-scoped approved
-  source acquisition, compact landing cards, immutable same-revision research dossier,
-  V3.18 schema/health compatibility and semantic CTA contrast.
+- [ ] Freeze the one bounded V3.17 source-led implementation tree: semantic CTA
+  contrast, source-only funnel, frozen same-run official union/liquidity, visible
+  waiting research and same-revision research-only detail.
 - [ ] Run exactly one fresh Requirements review and one independent Architecture
-  review against this host-compatible frozen tree. Any finding must be consolidated
-  into one root-cause repair tree before the reviews restart.
+  review for that immutable V3.17 tree; repair a common root once rather than
+  creating numbered review loops.
 - [ ] Create the exact implementation commit, complete exact diff/repair/full-range
   review with P0=0/P1=0, and pass the protected Code Gate.
-- [ ] Apply only the exact reviewed cardinality and projection-supersession migrations, activate the matching
-  tracked runtime and complete two terminal producer invocations. Do not reset any
-  password and do not enable LINE, dispatch, auto-trading or Promotion.
-- [ ] Deploy the same reviewed release to `stockinsider-three`; complete read-only
+- [ ] Rehearse the reviewed additive migration chain, activate the matching runtime
+  and complete two terminal producer invocations. Do not reset any password and do
+  not enable LINE, dispatch, auto-trading or Promotion.
+- [ ] Deploy the exact reviewed release to `stockinsider-three`; complete read-only
   smoke, performance, nonzero-card, revision-consistency and Safari checks.
 - [ ] Publish the release-state evidence carrier and close the Goal as
   `DONE_WITH_CONCERNS`; only third-party terminal failures and real-cohort evaluation

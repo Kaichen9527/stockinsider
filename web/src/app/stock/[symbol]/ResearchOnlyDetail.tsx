@@ -47,29 +47,20 @@ export default function ResearchOnlyDetail({ symbol, card, projectionBlockers = 
   const coverage = finiteNumber(ranking?.coverage ?? card.scoreCoverage);
   const revisionId = text(card.decisionRevisionId);
   const sourceUrl = httpsUrl(source?.sourceUrl);
-  // A V3.18 dossier lives only in the exact immutable detail revision. It is
-  // intentionally preferred over the landing snapshot, while the V3.17
-  // snapshot remains a safe compatibility fallback.
-  const dossier=card.researchDossier&&typeof card.researchDossier==='object'&&!Array.isArray(card.researchDossier)
-    ?card.researchDossier as Record<string,unknown>:null;
   const snapshot=card.researchSnapshot&&typeof card.researchSnapshot==='object'&&!Array.isArray(card.researchSnapshot)
     ?card.researchSnapshot as Record<string,unknown>:null;
-  const valuation=(dossier?.valuation??snapshot?.valuation)&&typeof (dossier?.valuation??snapshot?.valuation)==='object'&&!Array.isArray(dossier?.valuation??snapshot?.valuation)
-    ?(dossier?.valuation??snapshot?.valuation) as Record<string,unknown>:null;
-  const technical=(dossier?.technical??snapshot?.technical)&&typeof (dossier?.technical??snapshot?.technical)==='object'&&!Array.isArray(dossier?.technical??snapshot?.technical)
-    ?(dossier?.technical??snapshot?.technical) as Record<string,unknown>:null;
-  const fundamental=(dossier?.fundamental??snapshot?.fundamental)&&typeof (dossier?.fundamental??snapshot?.fundamental)==='object'&&!Array.isArray(dossier?.fundamental??snapshot?.fundamental)
-    ?(dossier?.fundamental??snapshot?.fundamental) as Record<string,unknown>:null;
+  const valuation=snapshot?.valuation&&typeof snapshot.valuation==='object'&&!Array.isArray(snapshot.valuation)
+    ?snapshot.valuation as Record<string,unknown>:null;
+  const technical=snapshot?.technical&&typeof snapshot.technical==='object'&&!Array.isArray(snapshot.technical)
+    ?snapshot.technical as Record<string,unknown>:null;
+  const fundamental=snapshot?.fundamental&&typeof snapshot.fundamental==='object'&&!Array.isArray(snapshot.fundamental)
+    ?snapshot.fundamental as Record<string,unknown>:null;
   const nextStep=snapshot?.researchNextStep&&typeof snapshot.researchNextStep==='object'&&!Array.isArray(snapshot.researchNextStep)
     ?snapshot.researchNextStep as Record<string,unknown>:null;
   const thesis=Array.isArray(fundamental?.thesis)?fundamental.thesis.filter((value):value is string=>typeof value==='string').slice(0,3):[];
   const risks=Array.isArray(fundamental?.risks)?fundamental.risks.filter((value):value is string=>typeof value==='string').slice(0,3):[];
   const waterfall=Array.isArray(snapshot?.gateWaterfall)
     ?snapshot.gateWaterfall.filter((value):value is Record<string,unknown>=>Boolean(value&&typeof value==='object'&&!Array.isArray(value))).slice(0,5):[];
-  const formalRange=valuation?.formalRange&&typeof valuation.formalRange==='object'&&!Array.isArray(valuation.formalRange)
-    ?valuation.formalRange as Record<string,unknown>:null;
-  const relative=valuation?.relative&&typeof valuation.relative==='object'&&!Array.isArray(valuation.relative)
-    ?valuation.relative as Record<string,unknown>:null;
 
   return <main data-testid="research-only-detail" className="min-h-screen px-5 py-8 text-slate-950 dark:text-emerald-50 md:px-10">
     <section className="mx-auto max-w-[900px] rounded-[2rem] border border-sky-300/40 bg-sky-50 p-6 dark:bg-sky-950/30 md:p-8">
@@ -94,9 +85,8 @@ export default function ResearchOnlyDetail({ symbol, card, projectionBlockers = 
         <div className="rounded-2xl border border-sky-300/35 bg-white/65 p-5 dark:bg-slate-950/35">
           <h2 className="text-sm font-semibold tracking-[0.12em]">估值與基本面</h2>
           <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
-            <div><dt className="text-slate-500">估值方法／狀態</dt><dd className="mt-1 font-semibold">{text(valuation?.method) ?? '待選擇'} / {text(valuation?.status) ?? '待官方資料'}</dd></div>
-            <div><dt className="text-slate-500">Bear／Base／Bull</dt><dd className="mt-1 font-semibold">{finiteNumber(formalRange?.bear)?.toFixed(2) ?? '—'} / {finiteNumber(formalRange?.base)?.toFixed(2) ?? '—'} / {finiteNumber(formalRange?.bull)?.toFixed(2) ?? '—'}</dd></div>
-            <div><dt className="text-slate-500">PE／歷史／同業</dt><dd className="mt-1 font-semibold">{finiteNumber(relative?.current ?? valuation?.currentPe)?.toFixed(2) ?? '待官方資料'} / {finiteNumber(relative?.ownHistoryMedian ?? valuation?.historyPeMedian)?.toFixed(2) ?? '—'} / {finiteNumber(relative?.sector ?? valuation?.sectorPe)?.toFixed(2) ?? '—'}</dd></div>
+            <div><dt className="text-slate-500">目前 PE</dt><dd className="mt-1 font-semibold">{finiteNumber(valuation?.currentPe)?.toFixed(2) ?? '待官方資料'}</dd></div>
+            <div><dt className="text-slate-500">歷史／同業 PE</dt><dd className="mt-1 font-semibold">{finiteNumber(valuation?.historyPeMedian)?.toFixed(2) ?? '—'} / {finiteNumber(valuation?.sectorPe)?.toFixed(2) ?? '—'}</dd></div>
             <div><dt className="text-slate-500">營收年增</dt><dd className="mt-1 font-semibold">{finiteNumber(fundamental?.revenueYoy) == null ? '待補' : `${finiteNumber(fundamental?.revenueYoy)?.toFixed(1)}%`}</dd></div>
             <div><dt className="text-slate-500">品質分數</dt><dd className="mt-1 font-semibold">{finiteNumber(fundamental?.qualityScore)?.toFixed(1) ?? '待補'}</dd></div>
           </dl>
@@ -107,11 +97,11 @@ export default function ResearchOnlyDetail({ symbol, card, projectionBlockers = 
           <h2 className="text-sm font-semibold tracking-[0.12em]">技術狀態與下一步</h2>
           <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
             <div><dt className="text-slate-500">技術狀態</dt><dd className="mt-1 font-semibold">{text(technical?.state) ?? '待補'}</dd></div>
-            <div><dt className="text-slate-500">下一步</dt><dd className="mt-1 font-semibold">{text((dossier?.ranking as Record<string,unknown>|null)?.readiness) ?? text(nextStep?.kind) ?? 'data_needed'}</dd></div>
+            <div><dt className="text-slate-500">下一步</dt><dd className="mt-1 font-semibold">{text(nextStep?.kind) ?? 'data_needed'}</dd></div>
             <div><dt className="text-slate-500">BIAS 20 / 60 / 120</dt><dd className="mt-1 font-semibold">{finiteNumber(technical?.bias20Pct)?.toFixed(1) ?? '—'} / {finiteNumber(technical?.bias60Pct)?.toFixed(1) ?? '—'} / {finiteNumber(technical?.bias120Pct)?.toFixed(1) ?? '—'}%</dd></div>
             <div><dt className="text-slate-500">RSI / MACD / ATR</dt><dd className="mt-1 font-semibold">{finiteNumber(technical?.rsi14)?.toFixed(1) ?? '—'} / {finiteNumber(technical?.macd)?.toFixed(2) ?? '—'} / {finiteNumber(technical?.atr)?.toFixed(2) ?? '—'}</dd></div>
-            <div><dt className="text-slate-500">觸發價</dt><dd className="mt-1 font-semibold">{finiteNumber(technical?.trigger ?? (nextStep?.trigger as Record<string,unknown>|null)?.threshold)?.toFixed(2) ?? '待條件'}</dd></div>
-            <div><dt className="text-slate-500">失效價</dt><dd className="mt-1 font-semibold">{finiteNumber(technical?.invalidation ?? nextStep?.invalidation)?.toFixed(2) ?? '待補'}</dd></div>
+            <div><dt className="text-slate-500">觸發價</dt><dd className="mt-1 font-semibold">{finiteNumber((nextStep?.trigger as Record<string,unknown>|null)?.threshold)?.toFixed(2) ?? '待條件'}</dd></div>
+            <div><dt className="text-slate-500">失效價</dt><dd className="mt-1 font-semibold">{finiteNumber(nextStep?.invalidation)?.toFixed(2) ?? '待補'}</dd></div>
           </dl>
           <p className="mt-5 text-sm leading-6 text-slate-600 dark:text-emerald-100/70">{text(nextStep?.reason) ?? '正式決策仍待資料補齊。'} 本頁僅呈現同一研究 revision 的資料，不會從舊推薦或即時抓取補出結論。</p>
         </div>

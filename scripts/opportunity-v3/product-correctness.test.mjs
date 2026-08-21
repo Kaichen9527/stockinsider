@@ -167,12 +167,11 @@ const checks = {
     assert.ok(!readFileSync(path.join(root, 'scripts/runtime/auth-source-worker-cli.js'), 'utf8').includes('.agent/'));
     const bundle = runtime('tracked-runtime-bundle.js');
     assert.deepEqual([...bundle.TRACKED_RUNTIME_PATHS].sort(), bundle.TRACKED_RUNTIME_PATHS);
-    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 51);
+    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 50);
     assert.equal(bundle.runtimeBundleSha256(root), sha256(bundle.runtimeBundleBytes(root)));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/auth-source-worker-cli.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/provider-acquisition-v31621.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/research-next-step-v317.js'));
-    assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/research-dossier-v318.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/research-snapshot-v317.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/tracked-runtime-bundle.js'));
     const bundleRoot = mkdtempSync(path.join(os.tmpdir(), 'runtime-bundle-nofollow-'));
@@ -849,9 +848,9 @@ const checks = {
       'the same frozen acquisition and decision plane must produce the same projection hash');
     assert.equal(mixedProjection.json.projections.length, 4);
     assert.ok(mixedProjection.json.projections.every((projection) => projection.payload.sourceSignals.length <= 30));
-    assert.ok(mixedProjection.json.projections[0].payload.sourceSignals.some((signal) =>
+    assert.ok(!mixedProjection.json.projections[0].payload.sourceSignals.some((signal) =>
       dislocationCandidates.some((candidate) => candidate.symbol === signal.symbol)),
-    'ranked market dislocations can enter the compact signal projection without corrupting the durable source partition');
+    'official factor scans verify source-led candidates but cannot nominate a card into the source-led projection');
   },
   'PCR-006': async () => {
     const stages = runtime('source-run-config.js').LEGACY_STAGES; const completed = []; let nextIndex = 0; let interrupted = false;
@@ -1366,7 +1365,7 @@ const checks = {
       encoding: 'utf8',
       env: { ...process.env, FORCE_COLOR: '0', NO_COLOR: '1' },
     });
-    assert.match(output, /8 passed/u);
+    assert.match(output, /9 passed/u);
     assert.doesNotMatch(output, /skipped/u);
   },
   'PCR-025': () => {

@@ -145,7 +145,7 @@ export async function loadCompactRadarDecisionRevision(symbol: string, decisionR
       throw new RadarProjectionValidationError('projection_conflict');
     }
     const correctness=heartbeats[0]?.source_led_correctness as CompactRadarProjection['sourceLedCorrectness']|undefined;
-    if(!correctness||!['legacy-radar-v3.13.0','legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0'].includes(correctness.schema)
+    if(!correctness||!['legacy-radar-v3.13.0','legacy-radar-v3.14.0','legacy-radar-v3.17.0'].includes(correctness.schema)
       ||correctness.window!=='home')return null;
     let health=assessProjectionFreshness({
       contentAsOf:correctness.contentAsOf??correctness.asOf,

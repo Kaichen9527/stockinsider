@@ -50,9 +50,13 @@ export default async function StockDetail({
   }
 
   if (process.env.OPPORTUNITY_V3_UI_FIXTURE === 'enabled') {
-    const { v313FixtureSignals, v313DetailFailureFixtures } = await import('../../v313-decision-fixture/fixture-data');
-    const fixture = [...v313FixtureSignals, ...v313DetailFailureFixtures].find((candidate) => candidate.symbol === normalizedSymbol
+    const { v313FixtureSignals, v313DetailFailureFixtures, v317ResearchOnlyFixture, v317ResearchDataNeededFixture } = await import('../../v313-decision-fixture/fixture-data');
+    const fixture = [...v313FixtureSignals, ...v313DetailFailureFixtures, v317ResearchOnlyFixture, v317ResearchDataNeededFixture].find((candidate) => candidate.symbol === normalizedSymbol
       && (!validRequestedRevision || candidate.decisionRevisionId === validRequestedRevision));
+    if (fixture?.researchSnapshot) {
+      return <ResearchOnlyDetail symbol={normalizedSymbol} card={fixture as unknown as Record<string, unknown>}
+        projectionBlockers={['action_authority_disabled']}/>;
+    }
     if (fixture?.decisionEnvelope) {
       return <RevisionBoundDecisionBrief symbol={normalizedSymbol} envelope={fixture.decisionEnvelope}
         card={fixture as unknown as Record<string, unknown>}/>;
@@ -70,6 +74,15 @@ export default async function StockDetail({
     const resolved = selectUniquePublishedDecisionCard(projection as Record<string, unknown> | null,
       normalizedSymbol, validRequestedRevision??undefined);
     if (resolved) {
+      // A checksum-valid readonly revision remains useful research.  It must
+      // never render an executable action, but hiding its valuation/technical
+      // snapshot was worse than an honest stale-readonly detail page.
+      if (resolved.card.projectionReadOnly === true || resolved.briefAvailability === 'unavailable') {
+        const health = projection?.projectionHealth as {actionBlockers?:unknown}|undefined;
+        return <ResearchOnlyDetail symbol={normalizedSymbol} card={resolved.card}
+          projectionBlockers={Array.isArray(health?.actionBlockers)
+            ? health.actionBlockers.filter((value):value is string=>typeof value==='string') : []}/>;
+      }
       return <RevisionBoundDecisionBrief symbol={normalizedSymbol} envelope={resolved.envelope}
         card={resolved.card}/>;
     }

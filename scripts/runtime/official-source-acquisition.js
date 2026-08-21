@@ -334,9 +334,15 @@ async function acquireApprovedSources({roster,credentials={},fetchImpl=globalThi
   for(let offset=0;offset<roster.profiles.length;offset+=4) {
     const batch=await Promise.all(roster.profiles.slice(offset,offset+4).map(async(profile)=>{
       const sourceKeys=['threads','podcast','youtube'];
-      const settled=await Promise.allSettled([threads(profile,roster,credentials,fetchImpl,collectedAt),
-        podcast(profile,fetchImpl,collectedAt,resolveHost),youtube(profile,credentials,fetchImpl,collectedAt)]);
-      const attempts=settled.map((result,index)=>result.status==='fulfilled'?result.value:failedAttempt(sourceKeys[index],result.reason));
+      // Paid/private material may inform an operator's personal methodology,
+      // but it is never acquired, stored, summarized, or used as a product
+      // claim without an explicit redistribution licence.
+      const attempts=profile.sourcePolicy==='internal_methodology_only'
+        ?sourceKeys.map((sourceKey)=>({documents:[],items:[],attempt:attempt(sourceKey,'missing_endpoint',
+          `${sourceKey}_endpoint_missing`,{kind:'configuration',itemCount:0,documentCount:0})}))
+        :await Promise.allSettled([threads(profile,roster,credentials,fetchImpl,collectedAt),
+          podcast(profile,fetchImpl,collectedAt,resolveHost),youtube(profile,credentials,fetchImpl,collectedAt)])
+          .then((settled)=>settled.map((result,index)=>result.status==='fulfilled'?result.value:failedAttempt(sourceKeys[index],result.reason)));
       const acquired=attempts.flatMap((row)=>row.documents);
       return {acquired,items:attempts.flatMap((row)=>row.items??[]),attempts:attempts.map((row)=>
         ({profileId:profile.id,...row.attempt})),outcome:terminal(profile,acquired)};

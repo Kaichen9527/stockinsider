@@ -122,8 +122,8 @@ export default async function Home() {
     shadowEnabled: v3PublicEnabled(),
   });
   const symbolNameMap = new Map<string, string>();
-  const revisionBoundSourceLed = ['legacy-radar-v3.17.0','legacy-radar-v3.18.0'].includes(radar.sourceLedCorrectness?.schema ?? '');
-  const allCards = revisionBoundSourceLed ? [
+  const v317SourceLed = radar.sourceLedCorrectness?.schema === 'legacy-radar-v3.17.0';
+  const allCards = v317SourceLed ? [
     ...(radar.sourceSignals || []),
   ] : [
     ...(radar.opportunities || []),
@@ -142,6 +142,7 @@ export default async function Home() {
     const zh = item.chineseName || item.name || item.symbol;
     symbolNameMap.set(item.symbol, zh);
   }
+  const decisionRevisionBySymbol = new Map((radar.sourceSignals || []).map((card) => [card.symbol, card.decisionRevisionId]));
   const visibleReports = (radar.reports || []).filter((memo) => {
     const relatedSymbol = memo.relatedSymbols[0] || null;
     if (!relatedSymbol) return false;
@@ -149,7 +150,7 @@ export default async function Home() {
     // A V3.17 landing memo is only visible when it is bound to the card's
     // immutable decision revision.  Historical memo rows otherwise belong in
     // the paginated archive rather than creating an unlinked detail entry.
-    if (!revisionBoundSourceLed) return true;
+    if (!v317SourceLed) return true;
     const memoRecord=memo as unknown as Record<string,unknown>;
     return typeof memoRecord.decisionRevisionId === 'string'
       && memoRecord.decisionRevisionId === decisionRevisionBySymbol.get(relatedSymbol);
