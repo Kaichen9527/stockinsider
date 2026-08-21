@@ -1,11 +1,11 @@
-# V3.17 Requirements repair-closure review
+# V3.17 Requirements host-pin repair-closure review
 
 Date: 2026-08-21
 
-Review authority: read-only closure of the sole V3.17 Requirements review after
-the protected Code Gate exposed a stale active-catalog identity constant. This
-repair preserves the same contract and is reviewed against the immutable repair
-subject below; it does not authorize data writes,
+Review authority: independent read-only closure of the bounded V3.17 host-pin
+repair after the protected Code Gate correctly rejected the host's changed Codex
+binary and candidate sandbox topology. This repair preserves the V3.17 product
+contract and is reviewed against the immutable repair subject below; it does not authorize data writes,
 runtime activation, deployment, password reset, LINE, dispatch, automatic
 trading, Promotion, or invented evaluation cohorts.
 
@@ -15,9 +15,9 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `01aedbab4ab0035712439b86a327313c40d3e481`
-- Final repair-closure commit/tree: `ae8ad6efe11212e4eb67100f0541ee555683a251` / `2b9d90f89bb3242d6eab1af9974ea6d818393ccc`
-- Full reviewed range: `01aedbab4ab0035712439b86a327313c40d3e481..ae8ad6efe11212e4eb67100f0541ee555683a251`
-- Active graph: `1549b1e456e9c9dc1e72f3a0482c3c1fd286e1fb7e4a49457c38f9613d2426ae`
+- Final repair-closure commit/tree: `5871350e93a4f9e77f9f06d91e4117ad6e87f1cd` / `fb3a2b351b0435e322b825e381c186babafa6aac`
+- Full reviewed range: `01aedbab4ab0035712439b86a327313c40d3e481..5871350e93a4f9e77f9f06d91e4117ad6e87f1cd`
+- Active graph: `45230c430dedfab8794c1f0aaaa010b28ba06bcd40f67965ae5dbc9843fedc5d`
 
 ## Requirements closure
 
@@ -62,15 +62,25 @@ computed from the reviewed tree rather than a copied predecessor hash. This avoi
 reopening historical gates merely because an authorized active amendment changes
 the graph.
 
-The repair updates the two canonical authority tags and their executable oracle
-from the tracked 5,829-byte catalog and SHA-256. It does not change the catalog
-contents, runtime boundary, data acquisition policy, decision thresholds, public
-schema or evaluation policy; it makes the protected graph identity accurately
-detect those contents.
+The host-pin amendment uses the independently observed and signed local Codex
+binary (`codex-cli 0.148.0-alpha.21`), its exact file hash, CodeDirectory hash,
+bundle identity and notarization constraints. It changes neither pin matching nor
+signature verification: an unpinned binary still fails closed. The runner's
+canonical identity, execution state and both journals now carry the same updated
+identity, so a stale identity cannot silently create a proposal or journal record.
+
+The protected worker passes two pre-created, non-secret path handles through the
+candidate sandbox: its owner-private scratch and separate owner-private policy
+root. Codex may rewrite `HOME`/`TMPDIR` for its child, so the host probe resolves
+only those handles, validates absolute type, UID, no-symlink and mode `0700`, and
+then supplies them to pinned Git/Codex subprocesses. Missing, equal, symlinked,
+foreign-owned or group/world-accessible paths fail closed; no ambient environment
+or credential-bearing HOME is inherited. The regression suite covers the accepted
+topology plus missing and unsafe roots.
 
 ## Executed evidence
 
-- Full local product/runtime diagnostic on the subject: typecheck, lint and
+- Full local product/runtime diagnostic on the final subject: typecheck, lint and
   production build PASS; core 61/61; product correctness 121/121; migration
   61/61; legacy regression 2/2; Playwright 9/9; performance 5/5.
 - V3.17 focused coverage proves same-run frozen union/liquidity, source-only
@@ -78,6 +88,8 @@ detect those contents.
   support waiting-lane routing, same-revision navigation and computed CTA contrast.
 - Existing value/valuation, stop geometry, formal/relative action matrix,
   point-in-time and source-conservation regressions remain in the full suite.
+- Credentialless candidate model-runner suite PASS 17/17; disabled doctor PASS
+  with exact `model-runner-host-pins-v3.10` fixture hash.
 
 Evaluation governance remains honestly
 `blocked/non_fabricated_elapsed_cohorts_unavailable`. This Requirements PASS
