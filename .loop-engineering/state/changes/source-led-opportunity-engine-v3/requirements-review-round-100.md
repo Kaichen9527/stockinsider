@@ -1,10 +1,11 @@
-# V3.17 single fresh Requirements review
+# V3.17 Requirements repair-closure review
 
 Date: 2026-08-21
 
-Review authority: the one permitted fresh Requirements review for the V3.17
-source-led actionability successor. This review is read-only and reviews the
-immutable implementation subject below; it does not authorize data writes,
+Review authority: read-only closure of the sole V3.17 Requirements review after
+the protected Code Gate exposed a stale active-catalog identity constant. This
+repair preserves the same contract and is reviewed against the immutable repair
+subject below; it does not authorize data writes,
 runtime activation, deployment, password reset, LINE, dispatch, automatic
 trading, Promotion, or invented evaluation cohorts.
 
@@ -14,9 +15,9 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `01aedbab4ab0035712439b86a327313c40d3e481`
-- Final repair-closure commit/tree: `0c4375d304330d2336ac3ceafe35480cb3ae932d` / `d019882195dcf6aefc6168def836b1fa448dc825`
-- Full reviewed range: `01aedbab4ab0035712439b86a327313c40d3e481..0c4375d304330d2336ac3ceafe35480cb3ae932d`
-- Active graph: `b58c133371d2982de94b683b25fd279c86ceab119a81842066984fedd7bd7fe0`
+- Final repair-closure commit/tree: `ae8ad6efe11212e4eb67100f0541ee555683a251` / `2b9d90f89bb3242d6eab1af9974ea6d818393ccc`
+- Full reviewed range: `01aedbab4ab0035712439b86a327313c40d3e481..ae8ad6efe11212e4eb67100f0541ee555683a251`
+- Active graph: `1549b1e456e9c9dc1e72f3a0482c3c1fd286e1fb7e4a49457c38f9613d2426ae`
 
 ## Requirements closure
 
@@ -60,6 +61,12 @@ credential reset tasks remain `superseded/do_not_execute`, and the active graph 
 computed from the reviewed tree rather than a copied predecessor hash. This avoids
 reopening historical gates merely because an authorized active amendment changes
 the graph.
+
+The repair updates the two canonical authority tags and their executable oracle
+from the tracked 5,829-byte catalog and SHA-256. It does not change the catalog
+contents, runtime boundary, data acquisition policy, decision thresholds, public
+schema or evaluation policy; it makes the protected graph identity accurately
+detect those contents.
 
 ## Executed evidence
 
