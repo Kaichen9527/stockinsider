@@ -451,6 +451,38 @@ ordinaryTest('non-credential host probes retain only the verified private sandbo
   }
 });
 
+ordinaryTest('disabled doctor accepts only the protected v3.9 compatibility selector for the exact v3.10 fixture', () => {
+  const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-doctor-scratch-'));
+  const policy = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-doctor-policy-'));
+  const original = {
+    [CANDIDATE_POLICY_ENV]: process.env[CANDIDATE_POLICY_ENV],
+    [CANDIDATE_SCRATCH_ENV]: process.env[CANDIDATE_SCRATCH_ENV],
+    OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH: process.env.OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH,
+  };
+  try {
+    fs.chmodSync(scratch, 0o700);
+    fs.chmodSync(policy, 0o700);
+    process.env[CANDIDATE_POLICY_ENV] = policy;
+    process.env[CANDIDATE_SCRATCH_ENV] = scratch;
+    process.env.OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH = '1';
+    const doctor = path.resolve(__dirname, '../opportunity-v3/doctor.mjs');
+    const compatible = spawnSync(process.execPath, [doctor, '--expect-mode', 'disabled', '--require-host-pin',
+      'model-runner-host-pins-v3.9'], { encoding: 'utf8', env: process.env });
+    assert.equal(compatible.status, 0, compatible.stderr);
+    assert.equal(JSON.parse(compatible.stdout).checks.requested.status, 'pass');
+    const rejected = spawnSync(process.execPath, [doctor, '--expect-mode', 'disabled', '--require-host-pin',
+      'model-runner-host-pins-v3.8'], { encoding: 'utf8', env: process.env });
+    assert.equal(rejected.status, 1);
+  } finally {
+    for (const [key, value] of Object.entries(original)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+    fs.rmSync(scratch, { recursive: true, force: true });
+    fs.rmSync(policy, { recursive: true, force: true });
+  }
+});
+
 ordinaryTest('only the explicit non-credential sandbox defers Gatekeeper to the trusted host oracle', () => {
   assert.equal(requiresGatekeeperAssessment(true, undefined), true);
   assert.equal(requiresGatekeeperAssessment(true, '0'), true);

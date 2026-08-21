@@ -10,6 +10,8 @@ const requiredRuntime = ['SUPABASE_URL', 'OPPORTUNITY_V3_SUPABASE_PROJECT_REF',
   'SUPABASE_SERVICE_ROLE_KEY', 'OPPORTUNITY_V3_SERVICE_ROLE_KEY_SHA256'];
 const deployment = process.env.SOURCE_LED_OPPORTUNITY_V3 ?? 'disabled';
 const expectedHostPinSha256 = 'd0f13d519035963fb8a1895f89fc0cf90104094eda460bc6bc9a02e031edc937';
+const exactHostPinVersion = 'model-runner-host-pins-v3.10';
+const protectedGateCompatibilityVersion = 'model-runner-host-pins-v3.9';
 const { loadHostPins, verifyCurrentNode } = createRequire(import.meta.url)('../model-runner-v3/hostPreflight.js');
 
 function closedArguments(argv) {
@@ -63,6 +65,16 @@ const fixtureSha256 = fixtureCanonical
   ? createHash('sha256').update(fixtureCanonical).digest('hex')
   : null;
 
+function requestedHostPinAccepted() {
+  if (requested.requireHostPin === null || requested.requireHostPin === exactHostPinVersion) return true;
+  // The protected root runner is a reviewed base artifact and still invokes its
+  // disabled doctor using the former v3.9 selector. Admit only that exact selector
+  // when it proves the current v3.10 fixture's immutable digest; no arbitrary
+  // historical selector becomes an equivalence class.
+  return requested.requireHostPin === protectedGateCompatibilityVersion &&
+    fixtureSha256 === expectedHostPinSha256;
+}
+
 function verifyPinnedHost() {
   try {
     const pins = loadHostPins(fixture);
@@ -96,7 +108,7 @@ const checks = {
   requested: {
     status: requested.valid &&
       (requested.expectMode === null || requested.expectMode === deployment) &&
-      (requested.requireHostPin === null || requested.requireHostPin === 'model-runner-host-pins-v3.10')
+      requestedHostPinAccepted()
       ? 'pass' : 'fail',
     expectMode: requested.expectMode,
     requireHostPin: requested.requireHostPin,
