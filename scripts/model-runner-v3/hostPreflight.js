@@ -9,6 +9,8 @@ const { canonicalJson, parseJsonWithNoDuplicateKeys, sha256 } = require('./canon
 
 const PIN_FIXTURE_SHA256 = 'd0f13d519035963fb8a1895f89fc0cf90104094eda460bc6bc9a02e031edc937';
 const PIN_FIXTURE_BYTES = 2142;
+const CANDIDATE_POLICY_ENV = 'OPPORTUNITY_V3_PROTECTED_CANDIDATE_POLICY';
+const CANDIDATE_SCRATCH_ENV = 'OPPORTUNITY_V3_PROTECTED_CANDIDATE_SCRATCH';
 let stableAncestorIdentity = null;
 
 function loadHostPins(filename) {
@@ -115,10 +117,15 @@ function hostProbeEnvironment() {
   // sandbox directory here made an otherwise pinned probe fall back to a denied
   // system temp path. Admit that one directory only in the non-credential mode.
   if (process.env.OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH !== '1') return environment;
-  const temporaryDirectory = process.env.TMPDIR ?? '';
-  const codexHome = process.env.CODEX_HOME ?? '';
+  // `codex sandbox` intentionally rewrites HOME and TMPDIR for its child. The
+  // protected worker therefore passes its two pre-created, non-secret roots in
+  // dedicated handles. They still receive the full private-directory checks
+  // below before a pinned child sees them as HOME/TMPDIR/CODEX_HOME.
+  const temporaryDirectory = process.env[CANDIDATE_SCRATCH_ENV] ?? '';
+  const codexHome = process.env[CANDIDATE_POLICY_ENV] ?? '';
   assert(
-    path.isAbsolute(temporaryDirectory) && process.env.HOME === temporaryDirectory && path.isAbsolute(codexHome),
+    path.isAbsolute(temporaryDirectory) && path.isAbsolute(codexHome)
+      && temporaryDirectory !== codexHome,
     5,
   );
   let stat;
@@ -246,4 +253,6 @@ module.exports = {
   validatedVersionOutput,
   requiresGatekeeperAssessment,
   hostProbeEnvironment,
+  CANDIDATE_POLICY_ENV,
+  CANDIDATE_SCRATCH_ENV,
 };

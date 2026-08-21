@@ -462,6 +462,8 @@ function candidateSandbox(subjectRoot, scratch, environment, executable, args, {
     ], {
       ...environment,
       CODEX_HOME: policyRoot,
+      OPPORTUNITY_V3_PROTECTED_CANDIDATE_POLICY: policyRoot,
+      OPPORTUNITY_V3_PROTECTED_CANDIDATE_SCRATCH: scratch,
       PATH: `${appleDeveloperToolchain.gitBin}${path.delimiter}${environment.PATH}`,
     }, `sandboxed ${executable} ${args.join(' ')}`);
   } finally {

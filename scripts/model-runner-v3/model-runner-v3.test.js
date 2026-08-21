@@ -40,6 +40,8 @@ const {
   PIN_FIXTURE_BYTES,
   ancestorIdentity,
   assertAncestorIdentity,
+  CANDIDATE_POLICY_ENV,
+  CANDIDATE_SCRATCH_ENV,
   hostProbeEnvironment,
   loadHostPins,
   requiresGatekeeperAssessment,
@@ -393,10 +395,9 @@ ordinaryTest('non-credential host probes retain only the verified private sandbo
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-host-probe-'));
   const policyDirectory = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-host-policy-'));
   const original = {
-    CODEX_HOME: process.env.CODEX_HOME,
-    HOME: process.env.HOME,
+    [CANDIDATE_POLICY_ENV]: process.env[CANDIDATE_POLICY_ENV],
+    [CANDIDATE_SCRATCH_ENV]: process.env[CANDIDATE_SCRATCH_ENV],
     OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH: process.env.OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH,
-    TMPDIR: process.env.TMPDIR,
   };
   try {
     fs.chmodSync(directory, 0o700);
@@ -404,9 +405,8 @@ ordinaryTest('non-credential host probes retain only the verified private sandbo
     // outside the temporary HOME also prevents Codex from attempting to create
     // aliases in the credentialless scratch directory.
     const codexHome = policyDirectory;
-    process.env.CODEX_HOME = codexHome;
-    process.env.HOME = directory;
-    process.env.TMPDIR = directory;
+    process.env[CANDIDATE_POLICY_ENV] = codexHome;
+    process.env[CANDIDATE_SCRATCH_ENV] = directory;
     process.env.OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH = '1';
     assert.deepEqual(hostProbeEnvironment(), {
       CODEX_HOME: codexHome,
@@ -416,9 +416,12 @@ ordinaryTest('non-credential host probes retain only the verified private sandbo
       PATH: '/usr/bin:/bin:/usr/sbin:/sbin',
       TMPDIR: directory,
     });
-    process.env.TMPDIR = path.join(directory, 'missing');
+    process.env[CANDIDATE_SCRATCH_ENV] = path.join(directory, 'missing');
     expectExit(5, () => hostProbeEnvironment());
-    process.env.TMPDIR = directory;
+    process.env[CANDIDATE_SCRATCH_ENV] = directory;
+    delete process.env[CANDIDATE_POLICY_ENV];
+    expectExit(5, () => hostProbeEnvironment());
+    process.env[CANDIDATE_POLICY_ENV] = codexHome;
     fs.chmodSync(directory, 0o755);
     expectExit(5, () => hostProbeEnvironment());
   } finally {
