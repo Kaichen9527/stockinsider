@@ -1,10 +1,10 @@
-# V3.17 single independent Architecture review
+# V3.17 Architecture repair-closure review
 
 Date: 2026-08-21
 
-Review authority: the one permitted independent Architecture review following the
-fresh V3.17 Requirements evidence. This is read-only review of the exact source
-and evidence carrier below. It grants no production data write, runtime activation,
+Review authority: independent, read-only closure after the V3.17 Requirements
+catalog-identity repair. This review covers the exact source and evidence carrier
+below. It grants no production data write, runtime activation,
 deployment, password reset, credential rotation, LINE, dispatch, automatic trading
 or Promotion authority.
 
@@ -14,11 +14,11 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `01aedbab4ab0035712439b86a327313c40d3e481`
-- Requirements implementation commit: `0c4375d304330d2336ac3ceafe35480cb3ae932d`
-- Requirements evidence carrier: `5cadadeb8416761c97357472be4e4ce0b5f7540b`
-- Final repair-closure commit/tree: `5cadadeb8416761c97357472be4e4ce0b5f7540b` / `91fc1ea4c98d1d65cb2bfbb9cac8806d622cb29f`
-- Full reviewed implementation range: `01aedbab4ab0035712439b86a327313c40d3e481..5cadadeb8416761c97357472be4e4ce0b5f7540b`
-- Active graph: `b58c133371d2982de94b683b25fd279c86ceab119a81842066984fedd7bd7fe0`
+- Requirements implementation commit: `ae8ad6efe11212e4eb67100f0541ee555683a251`
+- Requirements evidence carrier: `95bd864d980e48fa2aa60431af7e5de7f54ece47`
+- Final repair-closure commit/tree: `95bd864d980e48fa2aa60431af7e5de7f54ece47` / `95dac017c8223f1bcbec7a2f6b1ff15c9dc7993b`
+- Full reviewed implementation range: `01aedbab4ab0035712439b86a327313c40d3e481..95bd864d980e48fa2aa60431af7e5de7f54ece47`
+- Active graph: `1549b1e456e9c9dc1e72f3a0482c3c1fd286e1fb7e4a49457c38f9613d2426ae`
 
 ## Architecture closure
 
@@ -67,6 +67,12 @@ historical prose queue. It derives the active graph from the reviewed tree and
 keeps password reset and credential rotation outside the action queue. This is a
 control-plane-only change: no database role, schema privilege, public API or runtime
 scheduler boundary is expanded.
+
+The repair closes a control-plane identity drift only: the catalog was expanded
+for V3.17 while two canonical tags and the executable oracle still identified the
+prior 5,659-byte blob. The repaired values bind the exact current 5,829-byte
+catalog; no source, decision, runtime, schema or presentation dependency is
+introduced by this closure.
 
 The full local product/runtime diagnostic is green: typecheck, lint and production
 build PASS; core 61/61; product correctness 121/121; migration 61/61; legacy 2/2;
