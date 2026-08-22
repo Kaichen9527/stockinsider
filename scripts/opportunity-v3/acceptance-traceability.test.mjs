@@ -756,10 +756,10 @@ function activeGraphOracle() {
   assertCleanReviewedExecutionRoot(subjectTree);
   const catalogBlob = subjectTreeBlob(subjectTree, activeCatalogRepositoryPath);
   assert.deepEqual(catalogBlob.bytes, activeCatalogBytes, 'catalog working bytes equal reviewed subject tree');
-  assert.equal(catalogBlob.bytes.length, 5659, 'catalog exact tracked byte length including LF');
+  assert.equal(catalogBlob.bytes.length, 6008, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    '7aae892590bf4604ead4bea422294bba38435797be6d66f6ff50dec3200037e3',
+    '2d2749853f85aeaa913024be67df4c73cf2b2224b57fbfcc3313cc25818d7699',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);
@@ -771,16 +771,16 @@ function activeGraphOracle() {
     .sort();
   assert.deepEqual(activeContractFiles, expectedContractFiles);
   const activeArtifactFiles = activeCatalog.activeFiles;
-  assert.equal(activeArtifactFiles.length, 51);
+  assert.equal(activeArtifactFiles.length, 53);
   assert.equal(new Set(activeArtifactFiles).size, activeArtifactFiles.length);
   assert.deepEqual(activeArtifactFiles, [...activeArtifactFiles].toSorted(), 'catalog active-file ASCII order');
-  assert.equal(activeCatalog.owners.length, 41, 'catalog owner row count');
+  assert.equal(activeCatalog.owners.length, 43, 'catalog owner row count');
   assert.deepEqual(
     activeCatalog.owners.map(([file]) => file),
     activeCatalog.owners.map(([file]) => file).toSorted(),
     'catalog owner ASCII order',
   );
-  assert.equal(new Set(activeCatalog.owners.map(([file]) => file)).size, 41, 'catalog owner uniqueness');
+  assert.equal(new Set(activeCatalog.owners.map(([file]) => file)).size, 43, 'catalog owner uniqueness');
   for (const [file] of activeCatalog.owners) assert.ok(activeArtifactFiles.includes(file), `${file} owner must be active`);
   const orderedBlobRows = activeArtifactFiles.map((file) => {
     const repositoryPath = `.loop-engineering/state/changes/source-led-opportunity-engine-v3/${file}`;
