@@ -517,7 +517,7 @@ export function buildPublishedDecisionDetailResult(validated:ValidatedPublishedD
     // A V3.17 frozen snapshot is safe to read even when the action authority
     // is stale. Keep the prior V3.14 409 contract for cards without one.
     if(validResearchSnapshot(card.researchSnapshot)){
-      return {statusCode:200,cacheControl:'no-store',body:{schema:'stock-detail-v3.17.0' as const,
+      return {statusCode:200,cacheControl:'no-store',body:{schema:researchDetailSchema,
         status:'research_only' as const,symbol:String(card.symbol),decisionRevisionId:envelope.decisionRevisionId,
         decisionEnvelope:envelope,researchSnapshot:card.researchSnapshot,sourceProvenance:card.sourceProvenance,
         citations:card.citations,researchDossier:card.researchDossier??null,
@@ -534,7 +534,7 @@ export function buildPublishedDecisionDetailResult(validated:ValidatedPublishedD
       decisionRevisionId:envelope.decisionRevisionId,reason:validated.briefBlocker}};
   }
   if(validated.detailAvailability==='research_only'){
-    return {statusCode:200,cacheControl:'no-store',body:{schema:'stock-detail-v3.17.0' as const,
+    return {statusCode:200,cacheControl:'no-store',body:{schema:researchDetailSchema,
       status:'research_only' as const,symbol:String(card.symbol),decisionRevisionId:envelope.decisionRevisionId,
       decisionEnvelope:envelope,researchSnapshot:card.researchSnapshot,sourceProvenance:card.sourceProvenance,
       citations:card.citations,researchDossier:card.researchDossier??null,actionAuthority:'disabled' as const}};
