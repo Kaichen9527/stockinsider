@@ -927,6 +927,9 @@ const checks = {
     assert.match(readFileSync(path.join(root,'scripts/runtime/postgres-legacy-producer-adapter.js'),'utf8'),
       /new Pool\(\{ connectionString, max: 2,/u,
       'heartbeat must have a second PostgreSQL connection while ingestion writes are active');
+    assert.match(readFileSync(path.join(root,'scripts/runtime/postgres-legacy-producer-adapter.js'),'utf8'),
+      /connectionTimeoutMillis: POOL_CONNECTION_TIMEOUT_MS, idleTimeoutMillis: POOL_IDLE_TIMEOUT_MS[\s\S]*?withTransientPoolReconnect/u,
+      'a stale transaction-pooler connection has a bounded connect and one idempotent pool replacement instead of indefinitely blocking the next stage claim');
 
     const { Worker } = await import('node:worker_threads');
     const pulseBuffer = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT);
