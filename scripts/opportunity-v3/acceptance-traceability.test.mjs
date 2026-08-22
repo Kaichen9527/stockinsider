@@ -442,9 +442,10 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
     const gateStates=new Set(['pending','pass','blocked']);
     assert.ok(Object.values(currentRelease.gates).every((value)=>gateStates.has(value)
       ||(typeof value==='string'&&value.startsWith('pending_'))),'current release gate states are closed');
-    assert.match(statusRecord.loopStage,/^v3_16_21_/u);
-    assert.ok(['pending_v3_16_21','pass_v3_16_21'].includes(statusRecord.requirementsGateStatus));
-    assert.ok(['pending_v3_16_21','pass_v3_16_21'].includes(statusRecord.architectureGateStatus));
+    const releaseToken=currentRelease.version.replaceAll('.','_');
+    assert.match(statusRecord.loopStage,new RegExp(`^${releaseToken}_`,'u'));
+    assert.ok([`pending_${releaseToken}`,`pass_${releaseToken}`].includes(statusRecord.requirementsGateStatus));
+    assert.ok([`pending_${releaseToken}`,`pass_${releaseToken}`].includes(statusRecord.architectureGateStatus));
     assert.equal(currentRelease.forbidden.databasePasswordReset,true);
     assert.equal(currentRelease.forbidden.credentialRotation,true);
     assert.equal(currentRelease.production.promotion,
@@ -457,7 +458,7 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
       'current release actions are closed machine-readable identifiers');
     assert.doesNotMatch(currentRelease.actionQueue.join(','),/password|credential|line_dispatch|automatic_trading|promotion/iu,
       'forbidden and superseded work can never re-enter the active queue');
-    const marker='## V3.16.21 single release closure — only active action queue';
+    const marker=`## ${currentRelease.version.toUpperCase()} single release closure — only active action queue`;
     const start=tasksText.indexOf(marker);assert.ok(start>=0,'one V3.16.21 active action queue exists');
     const active=tasksText.slice(start,tasksText.indexOf('## Architecture checkpoint',start));
     assert.match(active,/\[x\] Mark every historical password\/credential rotation item/u);
