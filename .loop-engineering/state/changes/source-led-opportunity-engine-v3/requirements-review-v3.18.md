@@ -9,8 +9,8 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `88c9e4c7c619ac777f6d717d9fd7019864d85537`
-- Final repair-closure commit/tree: `601e1a3b8d14681131dd727ac7ea24868c2fa726` / `fe671f79fc85790856719db0d4fa11aaacbc7f3e`
-- Full reviewed range: `88c9e4c7c619ac777f6d717d9fd7019864d85537..601e1a3b8d14681131dd727ac7ea24868c2fa726`
+- Final repair-closure commit/tree: `61a4b83302916d7638c3dd77ef5c7fda0506520a` / `159987ad378c8e5b9416086f1036427a2d1e99e4`
+- Full reviewed range: `88c9e4c7c619ac777f6d717d9fd7019864d85537..61a4b83302916d7638c3dd77ef5c7fda0506520a`
 - Active graph: `3859743065324e8c1c9cca2a460ab8ba15c5dc91319b543eaa3898a3db834ddd`
 
 ## Requirements closure
@@ -50,6 +50,11 @@ candidate-ledger migration remains rehearsal-only. No database password reset,
 credential rotation, LINE, dispatch, automated trading, V3 activation or
 Promotion is introduced.
 
+The Shadow harness admits `PATH` only when it equals its existing closed,
+allowlisted executable path. This preserves the zero-ambient-variable boundary
+while permitting the project-local npm and Playwright processes required by the
+PCR browser checks; arbitrary PATH injection remains rejected.
+
 ## Executable evidence examined
 
 - Local protected-candidate diagnostic: `acceptance-traceability` product/runtime
@@ -59,6 +64,8 @@ Promotion is introduced.
 - Focused V3.18 source/dossier/runtime-bundle suite: `5/5` PASS.
 - V3.14 recovery suite: `33/33` PASS; source-acquisition conservation and
   contract-frozen control-state mutation regressions also PASS.
+- Detached Shadow runtime-installation rehearsal: PASS after the project-local
+  Chromium prerequisite is installed under `PLAYWRIGHT_BROWSERS_PATH=0`.
 
 These are local diagnostics, not a candidate-minted protected artifact. This
 Requirements PASS authorizes exactly one independent Architecture review; it
