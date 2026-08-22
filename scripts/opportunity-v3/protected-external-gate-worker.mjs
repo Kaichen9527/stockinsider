@@ -66,19 +66,19 @@ const gatePolicies = Object.freeze({
 });
 const reviewSources = Object.freeze({
   requirements: {
-    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-requirements-evidence',
-    path: `${changeRelative}/requirements-review-round-100.md`,
+    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v318-requirements-evidence',
+    path: `${changeRelative}/requirements-review-v3.18.md`,
     finalLine: 'Final repair-closure commit/tree',
     rangeLine: 'Full reviewed range',
   },
   architecture: {
-    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-architecture-evidence-v2',
-    path: `${changeRelative}/architecture-review-round-11.md`,
+    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v318-architecture-evidence',
+    path: `${changeRelative}/architecture-review-v3.18.md`,
     finalLine: 'Final repair-closure commit/tree',
     rangeLine: 'Full reviewed implementation range',
   },
   'exact-review': {
-    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-exact-review-evidence',
+    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v318-exact-review-evidence',
     path: `${changeRelative}/exact-commit-review-final.md`,
     finalLine: 'Final reviewed repair/tree',
     rangeLine: 'Full final range',
