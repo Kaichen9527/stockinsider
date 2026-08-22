@@ -3,7 +3,7 @@ import { validatePublishedDecisionCard } from './decision-publication.ts';
 
 export type CompactRadarProjection = {
   sourceLedCorrectness: {
-    schema: 'legacy-radar-v3.11.3' | 'legacy-radar-v3.12.0' | 'legacy-radar-v3.13.0' | 'legacy-radar-v3.14.0';
+    schema: 'legacy-radar-v3.11.3' | 'legacy-radar-v3.12.0' | 'legacy-radar-v3.13.0' | 'legacy-radar-v3.14.0' | 'legacy-radar-v3.17.0' | 'legacy-radar-v3.18.0';
     window: 'daily' | 'hot' | 'weekly' | 'home';
     asOf: string;
     contentAsOf?: string;
@@ -62,13 +62,13 @@ export function validateCompactRadarProjectionRow(
   if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return null;
   const value = payload as CompactRadarProjection;
   const sourceSignals=value.sourceSignals;
-  const decisionSchema=['legacy-radar-v3.13.0','legacy-radar-v3.14.0'].includes(value.sourceLedCorrectness?.schema);
+  const decisionSchema=['legacy-radar-v3.13.0','legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0'].includes(value.sourceLedCorrectness?.schema);
   const validDecisionCards=!decisionSchema||(
     Array.isArray(sourceSignals)&&sourceSignals.length<=30
     &&sourceSignals.every((card)=>validatePublishedDecisionCard(card)!==null)
     &&sourceSignals.every(validProvisionalRelativeValue)
     &&new Set(sourceSignals.map((card)=>(card as Record<string,unknown>).symbol)).size===sourceSignals.length);
-  if (!['legacy-radar-v3.11.3', 'legacy-radar-v3.12.0', 'legacy-radar-v3.13.0','legacy-radar-v3.14.0'].includes(value.sourceLedCorrectness?.schema)
+  if (!['legacy-radar-v3.11.3', 'legacy-radar-v3.12.0', 'legacy-radar-v3.13.0','legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0'].includes(value.sourceLedCorrectness?.schema)
     || value.sourceLedCorrectness?.window !== window || !Array.isArray(value.opportunities)
     || value.opportunities.length > 60 || typeof row?.payload_sha256 !== 'string'
     ||!validDecisionCards

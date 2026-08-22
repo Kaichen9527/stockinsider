@@ -1592,8 +1592,18 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         :{schema:'official-coarse-market-snapshot-v3.15',cutoff:bundle.sourceCutoff,collectedAt:null,
           universe:coarseUniverseRows,valuations:[],revenues:[],sourceFailures:[{reason:'frozen_provider_acquisition_unavailable'}]};
       const factorDiscovery=buildOfficialFactorCandidatesV315({snapshot:coarseSnapshot,cutoff:bundle.sourceCutoff,limit:40});
-      const outcomes=[...sourceOutcomes,...factorDiscovery.candidates];
-      const funnel = buildCandidateFunnel({ outcomes, seedSymbols: bundle.seedSymbols ?? [], priorLedger: bundle.priorLedger ?? [] });
+      // Official market data verifies a source-led candidate and supplies peers;
+      // it is never allowed to nominate or displace a source candidate.  This
+      // preserves the bounded 60→30→20 funnel without quietly turning it back
+      // into an all-market factor screener.
+      const funnel = buildCandidateFunnel({ outcomes: sourceOutcomes,
+        seedSymbols: bundle.seedSymbols ?? [], priorLedger: bundle.priorLedger ?? [],
+        // The run's frozen cutoff, not wall-clock retry time, identifies the
+        // completed candidate session.  A no-new source response therefore
+        // preserves its last-good cards for the bounded 20-session window.
+        currentSession:typeof bundle.sourceCutoff==='string'?bundle.sourceCutoff.slice(0,10):null,
+        completedSessions:bundle.completedTradingSessions ?? bundle.calendarSessions ?? [],
+        sourceAvailable:bundle.sourceAvailable!==false });
       return immutableBundle('legacy_candidate_funnel_result_v3_11', { schema: 'legacy-candidate-funnel-result-v3.11',
         candidates: funnel.candidateLedger, discoverySummary: funnel.discoverySummary,
         discoveryDelta: funnel.discoveryDelta,factorDiscovery:factorDiscovery.waterfall,
@@ -1835,18 +1845,23 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         }:null,
         discoveryDelta: bundle.analysisResult?.discoveryDelta ?? { added: [], exited: [], continued: [], unchangedReasons: [] },
         freshnessSchedule:bundle.analysisResult?.projectionFreshnessSchedule??[],
-        schemaVersion:'legacy-radar-v3.14.0',
+        schemaVersion:'legacy-radar-v3.18.0',
         window, asOf: bundle.sourceCutoff, contentAsOf:bundle.sourceCutoff,
         evaluatedAt:evaluationTimestamp,publishedAt:evaluationTimestamp,
         priorProjection:priorProjections[window==='hot'?'three_day':window]??null,
         producerIdentity, legacyPayload: legacyPayloads[window] }));
       const home=projections.find((projection)=>projection.storageWindow==='home');
-      const decisionRevisions=(home?.payload?.sourceSignals??[]).map((card)=>({
-        symbol:card.symbol,decisionRevisionId:card.decisionRevisionId,
-        bundle:immutableBundle(decisionRevisionBundleKind(card),immutableDecisionRevisionCard(card)),
-        identityBundle:decisionRevisionIdentityBundle(card),
+      const decisionRevisions=(home?.decisionRevisionCards??[]).map((revisionCard)=>{
+        // Keep the landing projection compact. The full dossier is persisted
+        // only in the immutable revision object addressed by this card's
+        // decisionRevisionId, so a detail request cannot accidentally read a
+        // different revision or cause the radar API to exceed its payload cap.
+        return {
+        symbol:revisionCard.symbol,decisionRevisionId:revisionCard.decisionRevisionId,
+        bundle:immutableBundle(decisionRevisionBundleKind(revisionCard),immutableDecisionRevisionCard(revisionCard)),
+        identityBundle:decisionRevisionIdentityBundle(revisionCard),
         sourceLedCorrectness:home.payload.sourceLedCorrectness,
-      }));
+      };});
       return immutableBundle('legacy_compact_projection_result_v3_11', {
         schema: 'legacy-compact-projection-result-v3.11', projections,decisionRevisions,
       });

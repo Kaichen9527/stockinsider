@@ -435,8 +435,8 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
     assert.equal(statusRecord.currentReleaseAuthority,
       '.loop-engineering/state/changes/source-led-opportunity-engine-v3/current-release.json');
     assert.equal(currentRelease.schema,'stockinsider-current-release-v1');
-    assert.equal(currentRelease.version,'v3.16.21');
-    const phases=['implementation_in_progress','requirements_passed','architecture_passed','exact_review_passed',
+    assert.match(currentRelease.version,/^v3[.]\d+(?:[.]\d+)*$/u);
+    const phases=['implementation_in_progress','contract_frozen','requirements_passed','architecture_passed','exact_review_passed',
       'production_rollout','complete_with_concerns'];
     assert.ok(phases.includes(currentRelease.phase),'current release phase is closed');
     const gateStates=new Set(['pending','pass','blocked']);
@@ -462,14 +462,14 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
     const active=tasksText.slice(start,tasksText.indexOf('## Architecture checkpoint',start));
     assert.match(active,/\[x\] Mark every historical password\/credential rotation item/u);
     assert.match(active,/All older unchecked production, migration, gate, activation and credential items[\s\S]*superseded\/do_not_execute/u);
-    if(currentRelease.phase==='architecture_passed'){
-      assert.equal(currentRelease.actionQueue[0],'freeze_cardinality_repair_tree',
-        'the bounded implementation repair is the sole next step after closed contract gates');
-      assert.match(active,/- \[ \] Freeze one bounded V3[.]16[.]21 production-cardinality repair tree/u,
+    if(currentRelease.phase==='implementation_in_progress'){
+      assert.match(currentRelease.actionQueue[0],/^freeze_[a-z0-9_]+$/u,
+        'the bounded implementation tree is the sole next step');
+      assert.match(active,new RegExp(`- \\[ \\] Freeze the one bounded ${currentRelease.version.toUpperCase().replace('.', '[.]')} source-led implementation tree`,'u'),
         'the bounded implementation repair remains pending until its immutable tree is frozen');
     }
     if(['exact_review_passed','production_rollout','complete_with_concerns'].includes(currentRelease.phase))
-      assert.doesNotMatch(active,/- \[ \] Freeze one bounded V3[.]16[.]21 production-cardinality repair tree/u,
+      assert.doesNotMatch(active,new RegExp(`- \\[ \\] Freeze the one bounded ${currentRelease.version.toUpperCase().replace('.', '[.]')} source-led implementation tree`,'u'),
         'the bounded implementation repair cannot remain pending after exact review');
     return;
   }
@@ -1375,9 +1375,9 @@ const structuralExecutors = {
     assert.ok(tasks.lastIndexOf('model-runner-v3.6') > tasks.lastIndexOf('model-runner-v3.5'));
     assert.doesNotThrow(() => assertTaskStatusNextWorkConsistent(tasks, status));
     const operativeRequirementsTask = status.currentReleaseAuthority
-      ? currentRelease.phase==='architecture_passed'
-        ? '- [ ] Freeze one bounded V3.16.21 production-cardinality repair tree'
-        : '- [x] Freeze one bounded V3.16.21 production-cardinality repair tree'
+      ? currentRelease.phase==='implementation_in_progress'
+        ? '- [ ] Freeze the one bounded V3.18 source-led implementation tree'
+        : '- [x] Freeze the one bounded V3.18 source-led implementation tree'
       : status.requirementsStatus.startsWith('v3_16_9_')
         ? `- [x] Obtain fresh Requirements Round ${status.requirementsReviewRound}, Architecture Round ${status.architectureReviewRound} and exact-range`
         : '- [x] Obtain fresh Requirements Round 138 PASS';

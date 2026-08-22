@@ -139,6 +139,128 @@ function sameStringArray(left:unknown,right:unknown){
     &&left.every((value,index)=>value===right[index]);
 }
 
+function validResearchSnapshot(value: unknown): boolean {
+  if(!value||typeof value!=='object'||Array.isArray(value))return false;
+  const snapshot=value as Record<string,unknown>;
+  if(snapshot.version!=='research-snapshot-v3.17.0'
+    ||typeof snapshot.snapshotId!=='string'||!/^research-v3[.]17:[0-9a-f]{64}$/u.test(snapshot.snapshotId)
+    ||!nonempty(snapshot.symbol)||!/^\d{4}$/u.test(snapshot.symbol)
+    ||(snapshot.currentPrice!==null&&!finitePositive(snapshot.currentPrice))
+    ||(snapshot.sourceCutoff!==null&&!validRfc3339Instant(snapshot.sourceCutoff))
+    ||!validProvenance(snapshot.provenance))return false;
+  const valuation=snapshot.valuation;const technical=snapshot.technical;const fundamental=snapshot.fundamental;
+  if(!valuation||typeof valuation!=='object'||Array.isArray(valuation)
+    ||!technical||typeof technical!=='object'||Array.isArray(technical)
+    ||!fundamental||typeof fundamental!=='object'||Array.isArray(fundamental))return false;
+  const valuationRow=valuation as Record<string,unknown>;const technicalRow=technical as Record<string,unknown>;
+  const fundamentalRow=fundamental as Record<string,unknown>;
+  if(!exactObjectKeys(valuationRow,['currentPe','historyPeMedian','sectorPe','asOf','provisionalRelativeValue'])
+    ||!['currentPe','historyPeMedian','sectorPe'].every((key)=>valuationRow[key]===null||finitePositive(valuationRow[key]))
+    ||(valuationRow.asOf!==null&&!validAsOf(valuationRow.asOf)))return false;
+  const technicalKeys=['state','bias20Pct','bias60Pct','bias120Pct','rsi14','macd','atr','volumeRatio20',
+    'relativeStrength20Pct','trigger','invalidation'];
+  if(!exactObjectKeys(technicalRow,technicalKeys)
+    ||(technicalRow.state!==null&&!nonempty(technicalRow.state))
+    ||!['bias20Pct','bias60Pct','bias120Pct','rsi14','macd','atr','volumeRatio20','relativeStrength20Pct']
+      .every((key)=>technicalRow[key]===null||(typeof technicalRow[key]==='number'&&Number.isFinite(technicalRow[key]))))return false;
+  if(!exactObjectKeys(fundamentalRow,['revenueYoy','qualityScore','thesis','risks'])
+    ||!['revenueYoy','qualityScore'].every((key)=>fundamentalRow[key]===null
+      ||(typeof fundamentalRow[key]==='number'&&Number.isFinite(fundamentalRow[key])))
+    ||!['thesis','risks'].every((key)=>Array.isArray(fundamentalRow[key])
+      &&(fundamentalRow[key] as unknown[]).length<=3
+      &&(fundamentalRow[key] as unknown[]).every((item)=>nonempty(item)&&item.length<=240)))return false;
+  const waterfall=snapshot.gateWaterfall;
+  if(!Array.isArray(waterfall)||waterfall.length!==RESEARCH_GATE_NAMES.length
+    ||new Set(waterfall.map((row)=>row&&typeof row==='object'&&!Array.isArray(row)
+      ?(row as Record<string,unknown>).gate:null)).size!==RESEARCH_GATE_NAMES.length
+    ||!RESEARCH_GATE_NAMES.every((gate)=>waterfall.some((row)=>row&&typeof row==='object'&&!Array.isArray(row)
+      &&(row as Record<string,unknown>).gate===gate))
+    ||waterfall.some((row)=>!row||typeof row!=='object'||Array.isArray(row)
+      ||!exactObjectKeys(row as Record<string,unknown>,['gate','status','reason'])
+      ||!['pass','waiting','missing'].includes(String((row as Record<string,unknown>).status))
+      ||!nonempty((row as Record<string,unknown>).reason)||String((row as Record<string,unknown>).reason).length>160))return false;
+  return snapshot.researchNextStep===null||validResearchNextStep(snapshot.researchNextStep);
+}
+
+function validResearchNextStep(value: unknown): boolean {
+  if(!value||typeof value!=='object'||Array.isArray(value))return false;
+  const step=value as Record<string,unknown>;
+  if(!exactObjectKeys(step,['version','kind','actionAuthority','reason','trigger','invalidation','unlockPrice','blockers'])
+    ||step.version!=='research-next-step-v3.17.0'||!RESEARCH_NEXT_STEP_KINDS.has(String(step.kind))
+    ||!['enabled','disabled'].includes(String(step.actionAuthority))||!nonempty(step.reason)
+    ||String(step.reason).length>160||(step.invalidation!==null&&!finitePositive(step.invalidation))
+    ||(step.unlockPrice!==null&&!finitePositive(step.unlockPrice))||!Array.isArray(step.blockers)
+    ||(step.blockers as unknown[]).length>8||(step.blockers as unknown[]).some((item)=>!nonempty(item)||item.length>160)
+    ||new Set(step.blockers as unknown[]).size!==(step.blockers as unknown[]).length)return false;
+  if(step.trigger===null)return true;
+  if(!step.trigger||typeof step.trigger!=='object'||Array.isArray(step.trigger))return false;
+  const trigger=step.trigger as Record<string,unknown>;
+  return exactObjectKeys(trigger,['kind','threshold'])&&['reclaim','breakout'].includes(String(trigger.kind))
+    &&finitePositive(trigger.threshold);
+}
+
+function validResearchDossier(value:unknown,symbol:string,revisionId:string):boolean{
+  if(!value||typeof value!=='object'||Array.isArray(value))return false;
+  const dossier=value as Record<string,unknown>;
+  if(dossier.version!=='research-dossier-v3.18.0'||typeof dossier.dossierId!=='string'
+    ||!/^research-v3[.]18:[0-9a-f]{64}$/u.test(dossier.dossierId)
+    ||dossier.symbol!==symbol||dossier.decisionRevisionId!==revisionId)return false;
+  if((dossier.sourceCutoff!==null&&!validRfc3339Instant(dossier.sourceCutoff)))return false;
+  const valuation=dossier.valuation;const technical=dossier.technical;const fundamental=dossier.fundamental;
+  const ranking=dossier.ranking;const citations=dossier.citations;const blockers=dossier.blockers;
+  if(!valuation||typeof valuation!=='object'||Array.isArray(valuation)
+    ||!technical||typeof technical!=='object'||Array.isArray(technical)
+    ||!fundamental||typeof fundamental!=='object'||Array.isArray(fundamental)
+    ||!ranking||typeof ranking!=='object'||Array.isArray(ranking)
+    ||!Array.isArray(citations)||citations.length>16||!Array.isArray(blockers)||blockers.length>12)return false;
+  const valuationRow=valuation as Record<string,unknown>;const technicalRow=technical as Record<string,unknown>;
+  const fundamentalRow=fundamental as Record<string,unknown>;const rankingRow=ranking as Record<string,unknown>;
+  const nullableText=(item:unknown,maximum:number)=>item===null||(nonempty(item)&&item.length<=maximum);
+  const finiteOrNull=(item:unknown)=>item===null||(typeof item==='number'&&Number.isFinite(item));
+  const uniqueTextArray=(item:unknown,maximum:number,length=160)=>Array.isArray(item)&&item.length<=maximum
+    &&item.every((entry)=>nonempty(entry)&&entry.length<=length)&&new Set(item).size===item.length;
+  const range=valuationRow.formalRange;
+  const validRange=range===null||Boolean(range&&typeof range==='object'&&!Array.isArray(range)
+    &&exactObjectKeys(range as Record<string,unknown>,['bear','base','bull'])
+    &&finitePositive((range as Record<string,unknown>).bear)&&finitePositive((range as Record<string,unknown>).base)
+    &&finitePositive((range as Record<string,unknown>).bull)
+    &&Number((range as Record<string,unknown>).bear)<=Number((range as Record<string,unknown>).base)
+    &&Number((range as Record<string,unknown>).base)<=Number((range as Record<string,unknown>).bull));
+  const relative=valuationRow.relative;
+  const validRelative=relative===null||Boolean(relative&&typeof relative==='object'&&!Array.isArray(relative)
+    &&exactObjectKeys(relative as Record<string,unknown>,['current','ownHistoryMedian','sector','ownSessionCount','peerCount'])
+    &&['current','ownHistoryMedian','sector','ownSessionCount','peerCount'].every((key)=>finiteOrNull((relative as Record<string,unknown>)[key])));
+  const bridge=valuationRow.bridge;
+  const validBridge=bridge===null||Boolean(bridge&&typeof bridge==='object'&&!Array.isArray(bridge)
+    &&exactObjectKeys(bridge as Record<string,unknown>,['availability','reason','eps','dilutedShares','netDebt'])
+    &&nullableText((bridge as Record<string,unknown>).availability,48)&&nullableText((bridge as Record<string,unknown>).reason,160)
+    &&['eps','dilutedShares','netDebt'].every((key)=>finiteOrNull((bridge as Record<string,unknown>)[key])));
+  const validValuation=exactObjectKeys(valuationRow,['status','blocker','method','asOf','eps','bridge','formalRange','relative','scenarios','sourceRefs'])
+    &&nullableText(valuationRow.status,48)&&nullableText(valuationRow.blocker,160)&&nullableText(valuationRow.method,48)
+    &&nullableText(valuationRow.asOf,40)&&finiteOrNull(valuationRow.eps)&&validBridge&&validRange&&validRelative
+    &&Array.isArray(valuationRow.scenarios)&&valuationRow.scenarios.length<=3&&uniqueTextArray(valuationRow.sourceRefs,8,240);
+  const technicalNumbers=['trigger','invalidation','support','resistance','ma20','ma60','ma120','bias20Pct','bias60Pct','bias120Pct',
+    'rsi14','macd','atr','volumeRatio20','relativeStrength20Pct'];
+  const validTechnical=exactObjectKeys(technicalRow,['availability','reason','state','trigger','entryZone','invalidation','support','resistance',
+    'ma20','ma60','ma120','bias20Pct','bias60Pct','bias120Pct','rsi14','macd','atr','volumeRatio20','relativeStrength20Pct'])
+    &&['availability','reason','state'].every((key)=>nullableText(technicalRow[key],key==='reason'?160:48))
+    &&technicalNumbers.every((key)=>finiteOrNull(technicalRow[key]))
+    &&Array.isArray(technicalRow.entryZone)&&technicalRow.entryZone.length<=2
+    &&technicalRow.entryZone.every((entry)=>finitePositive(entry));
+  const validFundamental=exactObjectKeys(fundamentalRow,['thesis','risks','qualityScore','revenueYoy','latestChange','asOf'])
+    &&uniqueTextArray(fundamentalRow.thesis,3,240)&&uniqueTextArray(fundamentalRow.risks,3,240)
+    &&finiteOrNull(fundamentalRow.qualityScore)&&finiteOrNull(fundamentalRow.revenueYoy)
+    &&nullableText(fundamentalRow.latestChange,240)&&nullableText(fundamentalRow.asOf,40);
+  const validRanking=exactObjectKeys(rankingRow,['score','coverage','readiness','missingAxes'])
+    &&finiteOrNull(rankingRow.score)&&(rankingRow.coverage===null
+      ||(typeof rankingRow.coverage==='number'&&Number.isFinite(rankingRow.coverage)&&rankingRow.coverage>=0&&rankingRow.coverage<=1))
+    &&['actionable','near_action','waiting','data_needed'].includes(String(rankingRow.readiness))
+    &&uniqueTextArray(rankingRow.missingAxes,8,160);
+  return validValuation&&validTechnical&&validFundamental&&validRanking
+    && citations.every(validCitation)&&blockers.every((blocker)=>nonempty(blocker)&&blocker.length<=160)
+    &&new Set(blockers).size===blockers.length;
+}
+
 export function validateDecisionEnvelopeV313(value: unknown, outerRevisionId?: string): DecisionEnvelopeV313 | null {
   if(!value||typeof value!=='object'||Array.isArray(value))return null;
   const envelope=value as Record<string,unknown>;
@@ -329,6 +451,17 @@ export function validatePublishedDecisionCard(value: unknown): ValidatedPublishe
     &&JSON.stringify(card.decisionEnvelope)!==JSON.stringify(nested))return null;
   const envelope=validateDecisionEnvelopeV313(card.decisionEnvelope??nested,String(card.decisionRevisionId));
   if(!envelope)return null;
+  if(card.researchDossier!==undefined&&!validResearchDossier(card.researchDossier,String(card.symbol),envelope.decisionRevisionId))return null;
+  if(card.researchSnapshot!==undefined&&!validResearchSnapshot(card.researchSnapshot))return null;
+  if(card.researchSnapshot){
+    const snapshot=card.researchSnapshot as Record<string,unknown>;
+    if(snapshot.symbol!==card.symbol
+      ||(typeof card.currentPrice==='number'&&typeof snapshot.currentPrice==='number'
+        &&card.currentPrice!==snapshot.currentPrice))return null;
+  }
+  if(card.researchNextStep!==undefined&&!validResearchNextStep(card.researchNextStep))return null;
+  if(card.researchSnapshot&&card.researchNextStep
+    &&JSON.stringify((card.researchSnapshot as Record<string,unknown>).researchNextStep)!==JSON.stringify(card.researchNextStep))return null;
   const projectionReadOnly=card.projectionReadOnly===true;
   if((card.projectionReadOnly!==undefined&&!projectionReadOnly)
     ||(projectionReadOnly&&(!ACTIONS.has(card.lastKnownAction as DecisionEnvelopeV313['userAction'])
@@ -375,6 +508,15 @@ export function validatePublishedDecisionCard(value: unknown): ValidatedPublishe
 export function buildPublishedDecisionDetailResult(validated:ValidatedPublishedDecisionCard){
   const {card,envelope}=validated;
   if(validated.detailAvailability==='stale_readonly'){
+    // A V3.17 frozen snapshot is safe to read even when the action authority
+    // is stale. Keep the prior V3.14 409 contract for cards without one.
+    if(validResearchSnapshot(card.researchSnapshot)){
+      return {statusCode:200,cacheControl:'no-store',body:{schema:'stock-detail-v3.17.0' as const,
+        status:'research_only' as const,symbol:String(card.symbol),decisionRevisionId:envelope.decisionRevisionId,
+        decisionEnvelope:envelope,researchSnapshot:card.researchSnapshot,sourceProvenance:card.sourceProvenance,
+        citations:card.citations,researchDossier:card.researchDossier??null,
+        actionAuthority:'disabled' as const,staleReason:STALE_READONLY_REASON}};
+    }
     return {statusCode:409,cacheControl:'no-store',body:{schema:'stock-detail-v3.13.0' as const,
       status:'stale_readonly' as const,symbol:String(card.symbol),
       decisionRevisionId:envelope.decisionRevisionId,reason:STALE_READONLY_REASON,
@@ -385,6 +527,12 @@ export function buildPublishedDecisionDetailResult(validated:ValidatedPublishedD
       status:'unavailable' as const,symbol:String(card.symbol),
       decisionRevisionId:envelope.decisionRevisionId,reason:validated.briefBlocker}};
   }
+  if(validated.detailAvailability==='research_only'){
+    return {statusCode:200,cacheControl:'no-store',body:{schema:'stock-detail-v3.17.0' as const,
+      status:'research_only' as const,symbol:String(card.symbol),decisionRevisionId:envelope.decisionRevisionId,
+      decisionEnvelope:envelope,researchSnapshot:card.researchSnapshot,sourceProvenance:card.sourceProvenance,
+      citations:card.citations,researchDossier:card.researchDossier??null,actionAuthority:'disabled' as const}};
+  }
   // Freshness is evaluated at request time. A shared cache entry created immediately
   // before the next scheduled-run boundary must never preserve an actionable envelope
   // after that boundary, so every revision-bound detail response is origin-only.
@@ -392,7 +540,7 @@ export function buildPublishedDecisionDetailResult(validated:ValidatedPublishedD
     body:{schema:'stock-detail-v3.13.0' as const,status:'ready' as const,symbol:String(card.symbol),
       decisionRevisionId:envelope.decisionRevisionId,decisionEnvelope:envelope,
       decisionBrief:card.decisionBrief,valuationSummary:envelope.valuationSummary,
-      sourceProvenance:card.sourceProvenance,citations:card.citations}};
+      sourceProvenance:card.sourceProvenance,citations:card.citations,researchDossier:card.researchDossier??null}};
 }
 
 export function selectUniquePublishedDecisionCard(projection: Record<string,unknown>|null,symbol:string,revisionId?:string){

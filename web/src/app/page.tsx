@@ -122,7 +122,10 @@ export default async function Home() {
     shadowEnabled: v3PublicEnabled(),
   });
   const symbolNameMap = new Map<string, string>();
-  const allCards = [
+  const revisionBoundSourceLed = ['legacy-radar-v3.17.0','legacy-radar-v3.18.0'].includes(radar.sourceLedCorrectness?.schema ?? '');
+  const allCards = revisionBoundSourceLed ? [
+    ...(radar.sourceSignals || []),
+  ] : [
     ...(radar.opportunities || []),
     ...(radar.scenarioUpsideCandidates || []),
     ...(radar.hotTracking || []),
@@ -142,7 +145,14 @@ export default async function Home() {
   const visibleReports = (radar.reports || []).filter((memo) => {
     const relatedSymbol = memo.relatedSymbols[0] || null;
     if (!relatedSymbol) return false;
-    return Boolean(symbolNameMap.get(relatedSymbol));
+    if (!symbolNameMap.get(relatedSymbol)) return false;
+    // A V3.17 landing memo is only visible when it is bound to the card's
+    // immutable decision revision.  Historical memo rows otherwise belong in
+    // the paginated archive rather than creating an unlinked detail entry.
+    if (!revisionBoundSourceLed) return true;
+    const memoRecord=memo as unknown as Record<string,unknown>;
+    return typeof memoRecord.decisionRevisionId === 'string'
+      && memoRecord.decisionRevisionId === decisionRevisionBySymbol.get(relatedSymbol);
   });
   const marketHighlight = radar.marketHighlightSummary;
   const sourceHealth = radar.sourceHealthSummary;

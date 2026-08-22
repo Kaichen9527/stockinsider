@@ -210,7 +210,8 @@ export async function GET(request: Request) {
       manifestCompatible:typeof expectedManifest==='string'&&/^[0-9a-f]{64}$/u.test(expectedManifest)
         &&releaseIdentity?.runtimeManifestSha256===expectedManifest
         &&sourceLedRuntime.producer.manifestSha256===expectedManifest,
-      migrationCompatible:releaseIdentity?.migrationLevel==='provider-acquisition-v3.16.21',
+      migrationCompatible:releaseIdentity?.migrationLevel===(sourceCorrectness?.schema==='legacy-radar-v3.18.0'
+        ?'candidate-ledger-retention-v3.18':'provider-acquisition-v3.16.21'),
       acquisitionAuthoritative:sourceAcquisitionHealth?.acquisitionAuthority==='authoritative'
         &&/^[0-9a-f]{64}$/u.test(String(sourceAcquisitionHealth?.acquisitionEvidenceRoot??''))});
 

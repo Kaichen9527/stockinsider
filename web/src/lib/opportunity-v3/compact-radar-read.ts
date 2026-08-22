@@ -9,6 +9,11 @@ import { assessTrackedRuntimeHealth, runtimeObservationMatchesProducer,
   type RuntimeHealthObservation } from './runtime-health';
 import { deriveEffectiveProjectionHealth } from './effective-health';
 
+function requiredMigrationLevel(schema: unknown): string {
+  return schema === 'legacy-radar-v3.18.0'
+    ? 'candidate-ledger-retention-v3.18' : 'provider-acquisition-v3.16.21';
+}
+
 export { compactRadarEtag, validateCompactRadarProjectionRow, type CompactRadarProjection } from './compact-radar-validation';
 
 export class RadarProjectionUnavailableError extends Error {
@@ -101,7 +106,7 @@ export async function loadCompactRadarProjection(
     health=deriveEffectiveProjectionHealth({freshness:health,runtimeHealthy,
       releaseCompatible:compatibility.compatible||compatibility.reason!=='consumer_mismatch',
       manifestCompatible:compatibility.compatible||compatibility.reason!=='runtime_mismatch',
-      migrationCompatible:releaseIdentity?.migrationLevel==='provider-acquisition-v3.16.21',
+      migrationCompatible:releaseIdentity?.migrationLevel===requiredMigrationLevel(correctness.schema),
       acquisitionAuthoritative:acquisition?.acquisitionAuthority==='authoritative'
         &&/^[0-9a-f]{64}$/u.test(String(acquisition?.acquisitionEvidenceRoot??''))});
     return withProjectionHealth(selected, health);
@@ -140,7 +145,7 @@ export async function loadCompactRadarDecisionRevision(symbol: string, decisionR
       throw new RadarProjectionValidationError('projection_conflict');
     }
     const correctness=heartbeats[0]?.source_led_correctness as CompactRadarProjection['sourceLedCorrectness']|undefined;
-    if(!correctness||!['legacy-radar-v3.13.0','legacy-radar-v3.14.0'].includes(correctness.schema)
+    if(!correctness||!['legacy-radar-v3.13.0','legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0'].includes(correctness.schema)
       ||correctness.window!=='home')return null;
     let health=assessProjectionFreshness({
       contentAsOf:correctness.contentAsOf??correctness.asOf,
@@ -151,7 +156,7 @@ export async function loadCompactRadarDecisionRevision(symbol: string, decisionR
     const exactCompatibility=assessReleaseCompatibility({schema:correctness.schema,
       releaseIdentity:{producerCommitSha:correctness.producerIdentity?.commitSha,
         runtimeManifestSha256:correctness.producerIdentity?.runtimeManifestSha256,
-        migrationLevel:'provider-acquisition-v3.16.21'},
+        migrationLevel:requiredMigrationLevel(correctness.schema)},
       expectedConsumerSha:process.env.STOCKINSIDER_REVIEWED_RELEASE_SHA,
       expectedRuntimeManifestSha:process.env.STOCKINSIDER_RUNTIME_MANIFEST_SHA256});
     const producer=correctness.producerIdentity;

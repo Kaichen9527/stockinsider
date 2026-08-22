@@ -1,28 +1,19 @@
 <!-- /autoplan restore point: /Users/kaerchen/.gstack/projects/Kaichen9527-stockinsider/codex-source-led-opportunity-engine-v3-autoplan-restore-20260724-191533.md -->
 # Tasks: source-led-opportunity-engine-v3
 
-## V3.16.21 single release closure — only active action queue
+## V3.18 single release closure — only active action queue
 
-- [x] Establish `/Users/kaerchen/Desktop/20_stock/StockInsider/repo` as the
-  permanent canonical repository and preserve the old dirty worktrees without broad
-  deletion.
-- [x] Record V3.16.20 as a forensic activation that rolled back safely; do not
-  restart it and do not grant it action authority.
-- [x] Mark every historical password/credential rotation item
-  `superseded/do_not_execute`; the database password must not be reset.
-- [x] Implement frozen provider acquisition, real `fetchedAt`, immutable reuse,
-  partial retry, conflict quarantine and past-cohort exclusion.
-- [x] Implement shared public/internal effective health, action fail-safe,
-  last-good visibility and navigable research-only details.
-- [x] Freeze the V3.16.21 contract implementation and obtain the sole fresh
-  Requirements Round 100 PASS plus independent Architecture Round 11 PASS. These
-  gates are closed and must not be rerun for the bounded production-cardinality
-  implementation repair.
-- [ ] Freeze one bounded V3.16.21 production-cardinality repair tree and projection-
-  evaluation supersession repair: retain the closed 20-row roster snapshot, then
-  separate immutable content cutoff from reviewed evaluation/publish ordering. Allow
-  only a different reviewed producer with exact release identity and strictly later
-  evaluation/publish times; reject same-producer nondeterminism and equal-time conflict.
+- [x] Preserve V3.16.21 as a predecessor: old formal-action authority remains
+  disabled; V3.16.20 forensic activation remains rolled back and is never restarted.
+- [x] Mark every historical password/credential rotation item `superseded/do_not_execute`.
+  The database password must not be reset.
+- [x] Freeze the one bounded V3.18 source-led implementation tree: source-nominated
+  candidates retained through twenty completed source sessions, topic-scoped approved
+  source acquisition, compact landing cards, immutable same-revision research dossier,
+  V3.18 schema/health compatibility and semantic CTA contrast.
+- [ ] Run exactly one fresh Requirements review and one independent Architecture
+  review for that immutable V3.18 tree; repair a common root once rather than
+  creating numbered review loops.
 - [ ] Create the exact implementation commit, complete exact diff/repair/full-range
   review with P0=0/P1=0, and pass the protected Code Gate.
 - [ ] Apply only the exact reviewed cardinality and projection-supersession migrations, activate the matching
