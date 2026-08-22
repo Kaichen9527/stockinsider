@@ -17,7 +17,7 @@ const { selectBiasTechnicalHistory } = require('./bias-technical-history');
 const { appendAnalysisRevision } = require('./analysis-revision');
 const { hashMaterialAnalysisChange, materialChangedReasons } = require('./analysis-material-change');
 const { decisionRevisionIdentityBundle, immutableDecisionRevisionCard,
-  publishCompactRadarProjection } = require('./compact-radar-projection');
+  publishCompactRadarProjection, collectDecisionRevisionCards } = require('./compact-radar-projection');
 const { computeUnderreactionResearchScore } = require('./underreaction-score');
 const { computeResearchRankingV314 } = require('./research-ranking-v314');
 const { safeFailureDiagnostic } = require('./safe-diagnostics');
@@ -1851,7 +1851,8 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         priorProjection:priorProjections[window==='hot'?'three_day':window]??null,
         producerIdentity, legacyPayload: legacyPayloads[window] }));
       const home=projections.find((projection)=>projection.storageWindow==='home');
-      const decisionRevisions=(home?.decisionRevisionCards??[]).map((revisionCard)=>{
+      invariant(home?.payload?.sourceLedCorrectness?.window==='home','home projection authority unavailable');
+      const decisionRevisions=collectDecisionRevisionCards(projections).map((revisionCard)=>{
         // Keep the landing projection compact. The full dossier is persisted
         // only in the immutable revision object addressed by this card's
         // decisionRevisionId, so a detail request cannot accidentally read a
