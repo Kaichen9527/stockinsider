@@ -9,8 +9,8 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `88c9e4c7c619ac777f6d717d9fd7019864d85537`
-- Final repair-closure commit/tree: `7dee9ac259e0b23c3f9cfbfc8d05bf7aa26a3a46` / `8735fc828c7e740c6082e982ad94cda2cb571f1e`
-- Full reviewed implementation range: `88c9e4c7c619ac777f6d717d9fd7019864d85537..7dee9ac259e0b23c3f9cfbfc8d05bf7aa26a3a46`
+- Final repair-closure commit/tree: `0ded709c3d3ffbe3dce6dd67f44f9ed7e09d1feb` / `82f11c25fd3351177a9264e682ab30510d9b7eb3`
+- Full reviewed implementation range: `88c9e4c7c619ac777f6d717d9fd7019864d85537..0ded709c3d3ffbe3dce6dd67f44f9ed7e09d1feb`
 - Active graph: `3859743065324e8c1c9cca2a460ab8ba15c5dc91319b543eaa3898a3db834ddd`
 
 ## Architecture closure
@@ -26,6 +26,12 @@ only those candidates; the unique decision revision emits a compact projection
 and the same revision's full dossier. There is no reverse path by which an
 official full-market fetch, a seed list, paid InvestAnchors text or Telegram
 content can nominate a card.
+
+The detached Shadow process accepts no inherited execution path. It admits the
+same literal allowlisted PATH that it constructs for each child and rejects any
+other value before it opens a repository or executes a command. That is the
+minimal boundary which makes project-local npm/Playwright PCRs executable
+without converting ambient PATH into authority.
 
 The cardinality and authority boundaries remain closed. The funnel retains at
 most 60 candidates, has deterministic source-session accounting, and carries
@@ -53,6 +59,9 @@ identities are all proven later.
   PASS.
 - Full local product/runtime traceability diagnostic: `272/272` PASS, zero
   failed/skipped/todo; scratch-HOME browser suite: `9/9` PASS.
+- Detached Shadow migration, runtime-installation, disabled-Web, runtime-doctor
+  and rollback-lock rehearsals: PASS with the exact closed PATH and
+  project-local browser binary.
 
 No production migration, source write, runtime activation, Web deployment,
 password reset, credential rotation, LINE, dispatch, automatic trading or
