@@ -141,6 +141,7 @@ for (const repositoryPath of authorityPaths) {
 const subjectArgs = [
   '--experimental-strip-types',
   '--test',
+  '--test-concurrency=1',
   'scripts/opportunity-v3/acceptance-traceability.test.mjs',
 ];
 const result = spawnSync(process.execPath, subjectArgs, {
