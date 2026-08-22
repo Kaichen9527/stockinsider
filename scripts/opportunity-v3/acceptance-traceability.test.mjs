@@ -1395,9 +1395,9 @@ const structuralExecutors = {
       ['current release pointer drift', tasks, { ...status, currentReleaseAuthority: 'historical-status.json' }],
       ['operative requirements disposition drift', tasks.replace(
         operativeRequirementsTask,
-        status.currentReleaseAuthority
-          ? operativeRequirementsTask.replace('- [ ]', '- [x]')
-          : operativeRequirementsTask.replace('- [x]', '- [ ]'),
+        operativeRequirementsTask.includes('- [x]')
+          ? operativeRequirementsTask.replace('- [x]', '- [ ]')
+          : operativeRequirementsTask.replace('- [ ]', '- [x]'),
       ), status],
       ['protected-gate declaration removed', tasks.replace(
         operativeProtectedGateDeclaration,

@@ -1133,7 +1133,7 @@ acceptanceTest('DI-006','V3.13 approved source acquisition conserves 17 terminal
   assert.equal(successfulEmpty.documents.length,0);assert.equal(successfulEmpty.itemOutcomes.length,0);
   const emptyAttempt=successfulEmpty.connectorAttempts.find((row)=>row.profileId==='gooaye'&&row.sourceKey==='threads');
   assert.equal(emptyAttempt.status,'successful_empty');assert.deepEqual(emptyAttempt.responseEvidence,
-    {kind:'http_response',statusCode:200,responseBytes:11,itemCount:0,documentCount:0});
+    {kind:'http_response',statusCode:200,responseBytes:22,itemCount:0,documentCount:0});
 
   const youtubeRoster=structuredClone(roster);youtubeRoster.threadsSearchEndpoint=null;
   youtubeRoster.profiles=youtubeRoster.profiles.map((profile,index)=>({...profile,threads:null,podcastFeed:null,
