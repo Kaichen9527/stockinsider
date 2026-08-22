@@ -199,7 +199,7 @@ function runtimeDoctor(subject) {
     '--expect-mode',
     'disabled',
     '--require-host-pin',
-    'model-runner-host-pins-v3.10',
+    'model-runner-host-pins-v3.11',
   ], subject);
 }
 
