@@ -42,6 +42,24 @@ test('V3.18 keeps no-new source candidates through twenty completed sessions wit
   assert.deepEqual(expired.discoveryDelta.exited,['2303']);
 });
 
+test('V3.18 reserves the full bounded ledger for still-retained cards and types fresh overflow',()=>{
+  const {buildCandidateFunnel}=runtime('candidate-funnel.js');
+  const sessions=['2026-08-01','2026-08-02'];
+  const retainedSymbols=Array.from({length:60},(_,index)=>String(1000+index));
+  const incomingSymbols=Array.from({length:60},(_,index)=>String(2000+index));
+  const first=buildCandidateFunnel({outcomes:retainedSymbols.map(outcome),seedSymbols:[],priorLedger:[],
+    currentSession:sessions[0],completedSessions:sessions});
+  const burst=buildCandidateFunnel({outcomes:incomingSymbols.map(outcome),seedSymbols:[],priorLedger:first.candidateLedger,
+    currentSession:sessions[1],completedSessions:sessions});
+  assert.equal(burst.candidateLedger.length,60);
+  assert.deepEqual(burst.candidateLedger.map((candidate)=>candidate.symbol).sort(),retainedSymbols,
+    'an in-window research card cannot be silently evicted by a fresh-source burst');
+  assert.equal(burst.discoverySummary.deferred,60);
+  assert.deepEqual(burst.discoveryDelta.deferred.map((entry)=>entry.symbol).sort(),incomingSymbols);
+  assert.ok(burst.discoveryDelta.deferred.every((entry)=>entry.reason==='candidate_capacity_reserved_for_retention'));
+  assert.deepEqual(burst.discoveryDelta.exited,[],'only session expiry or integrity conflict may exit a retained card');
+});
+
 test('V3.18 dossier stays within one decision revision and makes missing data explicit instead of negative',async()=>{
   const projection=runtime('compact-radar-projection.js');
   const publication=await import('../../web/src/lib/opportunity-v3/decision-publication.ts');

@@ -127,10 +127,15 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
     lastObservedSession:sessionId(currentSession),
     retentionCountedThroughSession:sessionId(currentSession),retainedSessionCount:0,
   })]));
-  const retained=(priorLedger??[]).filter((prior)=>prior&&typeof prior==='object'&&typeof prior.stockId==='string'
+  const prior = (priorLedger ?? []).filter((row) => row && typeof row === 'object');
+  // A completed ledger is already bounded to the coarse-universe cap.  Keep
+  // that invariant explicit: if it is ever violated, silently choosing a
+  // subset would turn a persistence defect into an unexplained disappearance.
+  invariant(prior.length <= 60, 'candidate retention ledger bound');
+  const retained=prior.filter((prior)=>typeof prior.stockId==='string'
     &&!currentByStock.has(prior.stockId)).map((prior)=>retainedCandidate(prior,{currentSession,completedSessions,
       retentionSessions,sourceAvailable})).filter(Boolean);
-  const deduped = [...currentByStock.values(),...retained].sort((left, right) => right.sourcePriority - left.sourcePriority
+  const candidateOrder=(left, right) => right.sourcePriority - left.sourcePriority
       || effectiveTimestamp(right.claimAsOf) - effectiveTimestamp(left.claimAsOf)
       || left.symbol.localeCompare(right.symbol);
   // A source-led card that remains inside its bounded 20-session retention
@@ -172,7 +177,9 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
       deferred: deferredCurrent.length,
     },
     discoveryDelta: Object.freeze({ added, exited, continued, unchangedReasons,
-      retained:deduped.filter((row)=>row.retainedSessionCount>0).map((row)=>row.symbol).sort() }),
+      retained:deduped.filter((row)=>row.retainedSessionCount>0).map((row)=>row.symbol).sort(),
+      deferred: deferredCurrent,
+    }),
   });
 }
 
