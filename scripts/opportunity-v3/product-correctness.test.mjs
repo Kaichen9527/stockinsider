@@ -167,11 +167,12 @@ const checks = {
     assert.ok(!readFileSync(path.join(root, 'scripts/runtime/auth-source-worker-cli.js'), 'utf8').includes('.agent/'));
     const bundle = runtime('tracked-runtime-bundle.js');
     assert.deepEqual([...bundle.TRACKED_RUNTIME_PATHS].sort(), bundle.TRACKED_RUNTIME_PATHS);
-    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 50);
+    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 51);
     assert.equal(bundle.runtimeBundleSha256(root), sha256(bundle.runtimeBundleBytes(root)));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/auth-source-worker-cli.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/provider-acquisition-v31621.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/research-next-step-v317.js'));
+    assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/research-dossier-v318.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/research-snapshot-v317.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/tracked-runtime-bundle.js'));
     const bundleRoot = mkdtempSync(path.join(os.tmpdir(), 'runtime-bundle-nofollow-'));
