@@ -127,16 +127,36 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
     lastObservedSession:sessionId(currentSession),
     retentionCountedThroughSession:sessionId(currentSession),retainedSessionCount:0,
   })]));
-  const retained=(priorLedger??[]).filter((prior)=>prior&&typeof prior==='object'&&typeof prior.stockId==='string'
+  const prior = (priorLedger ?? []).filter((row) => row && typeof row === 'object');
+  // A completed ledger is already bounded to the coarse-universe cap.  Keep
+  // that invariant explicit: if it is ever violated, silently choosing a
+  // subset would turn a persistence defect into an unexplained disappearance.
+  invariant(prior.length <= 60, 'candidate retention ledger bound');
+  const retained=prior.filter((prior)=>typeof prior.stockId==='string'
     &&!currentByStock.has(prior.stockId)).map((prior)=>retainedCandidate(prior,{currentSession,completedSessions,
       retentionSessions,sourceAvailable})).filter(Boolean);
-  const deduped = [...currentByStock.values(),...retained].sort((left, right) => right.sourcePriority - left.sourcePriority
+  const candidateOrder=(left, right) => right.sourcePriority - left.sourcePriority
       || effectiveTimestamp(right.claimAsOf) - effectiveTimestamp(left.claimAsOf)
-      || left.symbol.localeCompare(right.symbol))
-    .slice(0, 60)
+      || left.symbol.localeCompare(right.symbol);
+  // A source-led card that remains inside its bounded 20-session retention
+  // window is last-good research, not optional ranking material.  Reserving
+  // its slot before admitting fresh claims prevents a burst of new evidence
+  // from silently evicting it.  Fresh claims that cannot fit remain durably
+  // represented by their already-persisted claim outcome and receive a typed
+  // deferred disposition rather than disappearing from the audit trail.
+  const reservedRetained = retained.sort(candidateOrder);
+  const availableFreshSlots = 60 - reservedRetained.length;
+  invariant(availableFreshSlots >= 0, 'candidate retention reservation bound');
+  const orderedCurrent = [...currentByStock.values()].sort(candidateOrder);
+  const admittedCurrent = orderedCurrent.slice(0, availableFreshSlots);
+  const deferredCurrent = orderedCurrent.slice(availableFreshSlots).map((candidate) => Object.freeze({
+    symbol: candidate.symbol,
+    stockId: candidate.stockId,
+    reason: 'candidate_capacity_reserved_for_retention',
+  }));
+  const deduped = [...admittedCurrent,...reservedRetained].sort(candidateOrder)
     .map((candidate, index) => Object.freeze({ ...candidate, shallowSelected: index < 30, deepSelected: index < 20 }));
   const currentIds = new Set(deduped.map((candidate) => candidate.stockId));
-  const prior = (priorLedger ?? []).filter((row) => row && typeof row === 'object');
   const added = deduped.filter((row) => row.disposition === 'promoted').map((row) => row.symbol);
   const continued = deduped.filter((row) => row.disposition === 'refreshed' || row.disposition === 'unchanged')
     .map((row) => row.symbol);
@@ -154,9 +174,12 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
       unchanged: deduped.filter((row) => row.disposition === 'unchanged').length,
       sourceSignals: deduped.filter((row) => row.researchDisposition === 'source_signal_only').length,
       rejected: outcomes.filter((row) => row.link?.disposition !== 'linked' || row.claimEligible === false).length,
+      deferred: deferredCurrent.length,
     },
     discoveryDelta: Object.freeze({ added, exited, continued, unchangedReasons,
-      retained:deduped.filter((row)=>row.retainedSessionCount>0).map((row)=>row.symbol).sort() }),
+      retained:deduped.filter((row)=>row.retainedSessionCount>0).map((row)=>row.symbol).sort(),
+      deferred: deferredCurrent,
+    }),
   });
 }
 
