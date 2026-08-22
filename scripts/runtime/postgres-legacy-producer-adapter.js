@@ -4,6 +4,8 @@ const { Pool } = require('pg');
 const { Worker } = require('node:worker_threads');
 
 const CLAIM_STATEMENT_TIMEOUT_MS = 1_200_000;
+const POOL_CONNECTION_TIMEOUT_MS = 15_000;
+const POOL_IDLE_TIMEOUT_MS = 30_000;
 
 // The official fact handler performs bounded but CPU-heavy parsing. A timer on the
 // main event loop cannot renew a lease while that parsing is synchronous, so the
@@ -107,13 +109,41 @@ async function claimWithBoundedStatementTimeout(pool, text, values) {
   }
 }
 
+function transientPoolTransportFailure(error) {
+  const code = String(error?.code ?? '');
+  const message = String(error?.message ?? '');
+  return ['ECONNRESET', 'ECONNREFUSED', 'ETIMEDOUT', 'EPIPE', '57P01'].includes(code) ||
+    /(?:timeout exceeded when trying to connect|connection terminated unexpectedly|socket hang up|connection.*closed)/iu.test(message);
+}
+
 function createPostgresLegacyProducerAdapter({ connectionString }) {
   // Keep one connection available for lease heartbeats while a durable ingestion
   // write is using the other connection.  A single-connection pool can queue the
   // heartbeat behind a slow official chunk append until the 120-second lease dies.
-  const pool = new Pool({ connectionString, max: 2, application_name: 'stockinsider-auth-source-worker-v3-11' });
+  const createPool = () => new Pool({ connectionString, max: 2,
+    connectionTimeoutMillis: POOL_CONNECTION_TIMEOUT_MS, idleTimeoutMillis: POOL_IDLE_TIMEOUT_MS,
+    application_name: 'stockinsider-auth-source-worker-v3-11' });
+  let pool = createPool();
+  const withTransientPoolReconnect = async (operation) => {
+    try {
+      return await operation(pool);
+    } catch (error) {
+      // A transaction-pooler transport timeout has no authoritative SQL result
+      // for the caller.  Reclaiming the same job with the same owner token is
+      // idempotent; replace the poisoned local pool once, while all SQL and
+      // data-integrity failures retain their normal fail-closed path.
+      if (!transientPoolTransportFailure(error)) throw error;
+      const previous = pool;
+      pool = createPool();
+      try { await previous.end(); } catch { /* stale pool is no longer authoritative */ }
+      return operation(pool);
+    }
+  };
   let cachedAuthorityPagesHash = '';
   let completionAuthorityHash = '';
+  // Only the lease claim may be retried after a pooler transport failure.  A
+  // generic query retry can duplicate an append/complete write when the pooler
+  // drops its reply after PostgreSQL has already committed it.
   const one = async (text, values) => (await pool.query(text, values)).rows[0] ?? null;
   const lease = (row) => row && Object.freeze({
     runId: row.run_id,
@@ -157,11 +187,11 @@ function createPostgresLegacyProducerAdapter({ connectionString }) {
       return value;
     },
     claimLegacyProducerJob: async (input) => {
-      const row = await claimWithBoundedStatementTimeout(pool, `select claimed.* from
+      const row = await withTransientPoolReconnect((activePool) => claimWithBoundedStatementTimeout(activePool, `select claimed.* from
         (select set_config('stockinsider.legacy_authority_hash',$5,true) marker) configured
         cross join lateral public.claim_legacy_producer_job_v3_11(
           $1,$2,$3,$4+(length(configured.marker)*0)
-        ) claimed`, [input.runId, input.jobId, input.ownerToken, input.leaseSeconds, cachedAuthorityPagesHash]);
+        ) claimed`, [input.runId, input.jobId, input.ownerToken, input.leaseSeconds, cachedAuthorityPagesHash]));
       const value = claim(row);
       if (/^[0-9a-f]{64}$/u.test(value?.authorityHash ?? '')) completionAuthorityHash = value.authorityHash;
       if (Array.isArray(value?.readJson?.authorityPages) && value.readJson.authorityPages.length > 0 &&
