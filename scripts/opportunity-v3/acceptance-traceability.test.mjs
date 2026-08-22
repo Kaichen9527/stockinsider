@@ -797,7 +797,7 @@ function activeGraphOracle() {
   assert.equal(catalogBlob.bytes.length, 6009, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    'ac330164bb6ec6a0dd20e46248fafac053e3ee50c6dc6207061068639d6e32fb',
+    '9f7d845df3f2d12c7d2adae5dae87aac890e4c2eee59161c40f8e563e5908c4e',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);
@@ -1304,7 +1304,7 @@ const structuralExecutors = {
     }
     assert.equal(inventory.scriptValueRows.length, 14);
     assert.equal(sha256(canonicalJson(inventory.scriptValueRows)), inventory.scriptValueRowsSha256);
-    assert.equal(inventory.scriptValueRowsSha256, 'ed7d5e569840d4a9b086f35676d186d993957ba367d306dc20f1fdf5f1347e7d');
+    assert.equal(inventory.scriptValueRowsSha256, 'b9a282a300815b887010cca2586d032bb12a9b78a7f23f28fdb5e20959bf0ae7');
     const rootPackageScripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts;
     const webPackageScripts = JSON.parse(readFileSync(path.join(root, 'web/package.json'), 'utf8')).scripts;
     assert.deepEqual(inventory.scriptValueRows.map(([scriptKey]) => scriptKey), [
