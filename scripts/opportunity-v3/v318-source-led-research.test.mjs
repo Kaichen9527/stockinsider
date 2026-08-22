@@ -71,6 +71,7 @@ test('V3.18 dossier stays within one decision revision and makes missing data ex
   assert.equal(validated?.detailAvailability,'research_only');
   const response=publication.buildPublishedDecisionDetailResult(validated);
   assert.equal(response.statusCode,200);
+  assert.equal(response.body.schema,'stock-detail-v3.18.0');
   assert.equal(response.body.researchDossier.decisionRevisionId,card.decisionRevisionId);
   const changed=projection.publishCompactRadarProjection({
     decisions:[],sourceCandidates:[{...candidate,fundamental:{latestChange:'官方月營收較前期改善'}}],
