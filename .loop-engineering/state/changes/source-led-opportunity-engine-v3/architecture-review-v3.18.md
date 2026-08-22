@@ -8,14 +8,17 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `d719d6dace387cdf10917ba7553791d2d4c0ec3e`
-- Final repair-closure commit/tree: `d1c92509d98186709b7efadaef616eb136b8f1fc` / `74311fdafda0e1dc9eb08085fb443a8df824f386`
-- Full reviewed implementation range: `d719d6dace387cdf10917ba7553791d2d4c0ec3e..d1c92509d98186709b7efadaef616eb136b8f1fc`
-- Active graph: `ed543c0aed46a579b57cc08b242ec0b1ca08e2ccbfca55f4685f6b4f8d87005b`
+- Protected implementation parent: `88c9e4c7c619ac777f6d717d9fd7019864d85537`
+- Final repair-closure commit/tree: `7dee9ac259e0b23c3f9cfbfc8d05bf7aa26a3a46` / `8735fc828c7e740c6082e982ad94cda2cb571f1e`
+- Full reviewed implementation range: `88c9e4c7c619ac777f6d717d9fd7019864d85537..7dee9ac259e0b23c3f9cfbfc8d05bf7aa26a3a46`
+- Active graph: `3859743065324e8c1c9cca2a460ab8ba15c5dc91319b543eaa3898a3db834ddd`
 
 ## Architecture closure
 
-The release has one bounded, source-led data flow: approved public acquisition
+The host pin is a protected-base bootstrap, while the release candidate contains
+no alternate host oracle. The active catalog's V3.17 predecessor is present in
+the frozen graph before its V3.18 extension. The release has one bounded,
+source-led data flow: approved public acquisition
 emits typed terminal outcomes; entity-linked source claims nominate candidates;
 the candidate ledger retains complete last-good candidates through a bounded
 twenty-session window; official facts, valuation and technical evidence enrich
