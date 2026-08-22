@@ -476,6 +476,20 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
       assert.match(active,/- \[ \] Run exactly one fresh Requirements review and one independent Architecture/u,
         'a contract-frozen release must keep its one-time reviews pending');
     }
+    if(currentRelease.phase==='requirements_passed'){
+      assert.equal(currentRelease.gates.requirements,'pass',
+        'Requirements-pass phase has a closed Requirements gate');
+      assert.equal(currentRelease.gates.architecture,'pending',
+        'Architecture remains the next independent gate');
+      assert.equal(currentRelease.actionQueue[0],'architecture_once',
+        'Architecture is the sole next V3.18 review');
+      assert.match(active,new RegExp(`- \\[x\\] Freeze the one bounded ${currentRelease.version.toUpperCase().replace('.', '[.]')} source-led implementation tree`,'u'),
+        'the frozen implementation tree remains immutable through Architecture review');
+      assert.match(active,/- \[x\] Fresh Requirements review PASS with `P0=0 P1=0 P2=0`/u,
+        'Requirements evidence must be closed before Architecture review');
+      assert.match(active,/- \[ \] Run one independent Architecture review/u,
+        'Architecture review must remain pending after Requirements PASS');
+    }
     if(['exact_review_passed','production_rollout','complete_with_concerns'].includes(currentRelease.phase))
       assert.doesNotMatch(active,new RegExp(`- \\[ \\] Freeze the one bounded ${currentRelease.version.toUpperCase().replace('.', '[.]')} source-led implementation tree`,'u'),
         'the bounded implementation repair cannot remain pending after exact review');
