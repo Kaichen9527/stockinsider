@@ -507,11 +507,12 @@ export function validatePublishedDecisionCard(value: unknown): ValidatedPublishe
 
 export function buildPublishedDecisionDetailResult(validated:ValidatedPublishedDecisionCard){
   const {card,envelope}=validated;
+  const researchDetailSchema=card.researchDossier===undefined?'stock-detail-v3.17.0' as const:'stock-detail-v3.18.0' as const;
   if(validated.detailAvailability==='stale_readonly'){
     // A V3.17 frozen snapshot is safe to read even when the action authority
     // is stale. Keep the prior V3.14 409 contract for cards without one.
     if(validResearchSnapshot(card.researchSnapshot)){
-      return {statusCode:200,cacheControl:'no-store',body:{schema:'stock-detail-v3.17.0' as const,
+      return {statusCode:200,cacheControl:'no-store',body:{schema:researchDetailSchema,
         status:'research_only' as const,symbol:String(card.symbol),decisionRevisionId:envelope.decisionRevisionId,
         decisionEnvelope:envelope,researchSnapshot:card.researchSnapshot,sourceProvenance:card.sourceProvenance,
         citations:card.citations,researchDossier:card.researchDossier??null,
@@ -528,7 +529,7 @@ export function buildPublishedDecisionDetailResult(validated:ValidatedPublishedD
       decisionRevisionId:envelope.decisionRevisionId,reason:validated.briefBlocker}};
   }
   if(validated.detailAvailability==='research_only'){
-    return {statusCode:200,cacheControl:'no-store',body:{schema:'stock-detail-v3.17.0' as const,
+    return {statusCode:200,cacheControl:'no-store',body:{schema:researchDetailSchema,
       status:'research_only' as const,symbol:String(card.symbol),decisionRevisionId:envelope.decisionRevisionId,
       decisionEnvelope:envelope,researchSnapshot:card.researchSnapshot,sourceProvenance:card.sourceProvenance,
       citations:card.citations,researchDossier:card.researchDossier??null,actionAuthority:'disabled' as const}};
@@ -537,7 +538,7 @@ export function buildPublishedDecisionDetailResult(validated:ValidatedPublishedD
   // before the next scheduled-run boundary must never preserve an actionable envelope
   // after that boundary, so every revision-bound detail response is origin-only.
   return {statusCode:200,cacheControl:'no-store',
-    body:{schema:'stock-detail-v3.13.0' as const,status:'ready' as const,symbol:String(card.symbol),
+    body:{schema:card.researchDossier===undefined?'stock-detail-v3.13.0' as const:'stock-detail-v3.18.0' as const,status:'ready' as const,symbol:String(card.symbol),
       decisionRevisionId:envelope.decisionRevisionId,decisionEnvelope:envelope,
       decisionBrief:card.decisionBrief,valuationSummary:envelope.valuationSummary,
       sourceProvenance:card.sourceProvenance,citations:card.citations,researchDossier:card.researchDossier??null}};
