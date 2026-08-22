@@ -49,6 +49,9 @@ function retainedCandidate(prior,{currentSession,completedSessions,retentionSess
   const retained=retainedSessionCount(prior,currentSession,completedSessions);
   if(retained>retentionSessions)return null;
   const evidence=Array.isArray(prior.evidence)?prior.evidence:[];
+  const retentionReason=sourceAvailable
+    ?'source_evidence_retained_within_20_sessions'
+    :'source_unavailable_retained_last_good';
   return Object.freeze({ ...prior,
     firstObservedSession:sessionId(prior.firstObservedSession)??sessionId(prior.lastObservedSession)??sessionId(currentSession),
     lastObservedSession:sessionId(prior.lastObservedSession)??sessionId(currentSession),
@@ -56,7 +59,11 @@ function retainedCandidate(prior,{currentSession,completedSessions,retentionSess
       ??sessionId(prior.retentionCountedThroughSession)??sessionId(prior.lastObservedSession),
     retainedSessionCount:retained,
     disposition:'unchanged',
-    reason:sourceAvailable?'source_evidence_retained_within_20_sessions':'source_unavailable_retained_last_good',
+    // `reason` is persisted in the pre-existing closed ledger enum. Retention
+    // is semantically unchanged material evidence, while the V3.18-specific
+    // explanation belongs in additive metadata rather than a new enum value.
+    reason:'same_material_evidence',
+    retentionReason,
     sourcePriority:Number.isFinite(prior.sourcePriority)?Math.max(0,prior.sourcePriority-0.01):0,
     evidence:Object.freeze(evidence),
     evidenceCount:Number.isInteger(prior.evidenceCount)?prior.evidenceCount:evidence.length,
