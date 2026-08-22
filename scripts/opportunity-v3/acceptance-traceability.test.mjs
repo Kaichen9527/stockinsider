@@ -1110,13 +1110,13 @@ function activeGraphOracle() {
   const hostPinBytes = readFileSync(path.join(change, 'model-runner-host-pins-v3.json'), 'utf8');
   const hostPins = JSON.parse(hostPinBytes);
   const hostPinCanonical = canonicalJson(hostPins);
-  assert.equal(Buffer.byteLength(hostPinBytes), 2141);
-  assert.equal(Buffer.byteLength(hostPinCanonical), 2140);
-  assert.equal(sha256(hostPinCanonical), '86ca1054b4e3e131ee9db618ec7280257cf9d6deeeb677e9a29f113771386264');
-  assert.equal(hostPins.fixtureVersion, 'model-runner-host-pins-v3.11');
-  assert.equal(hostPins.executables.find(({ name }) => name === 'codex')?.version, 'codex-cli 0.149.0-alpha.4');
-  assert.equal(runner.MODEL_RUNNER_IDENTITY_SHA256, '7c35ae3e001a7a42d5cfd697a46562838af668c49445243a53c18567ad4da482');
-  assert.equal(Buffer.byteLength(canonicalJson(runner.MODEL_RUNNER_IDENTITY)), 883);
+  assert.equal(Buffer.byteLength(hostPinBytes), 2145);
+  assert.equal(Buffer.byteLength(hostPinCanonical), 2144);
+  assert.equal(sha256(hostPinCanonical), 'c09b9fdb863cff18e3d5c97773faaf52ea37787b66c96e094d13ceaddf4bca38');
+  assert.equal(hostPins.fixtureVersion, 'model-runner-host-pins-v3.12');
+  assert.equal(hostPins.executables.find(({ name }) => name === 'codex')?.version, 'codex-cli 0.149.0-alpha.4.1');
+  assert.equal(runner.MODEL_RUNNER_IDENTITY_SHA256, '1d5ec7aa125d8dc45c093b61cab8ba67c8e9c55edf28936ff7a357e5cc8744c1');
+  assert.equal(Buffer.byteLength(canonicalJson(runner.MODEL_RUNNER_IDENTITY)), 885);
   const runtimeContract = readFileSync(path.join(change, 'runtime-transaction-contract.md'), 'utf8');
   assert.match(runtimeContract, /staticIdentityMembers` is the following exact 41-member/u);
   assert.match(runtimeContract, /\["acceptanceVersion","1[.]46[.]0"\]/u);
@@ -1353,7 +1353,7 @@ const structuralExecutors = {
       key === 'verify:source-led-opportunity-v3:model-runner')?.[1];
     assert.equal(
       modelAggregate,
-      'node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track model_runner && npm run test:model-runner-v3 && npm run v3:doctor -- --expect-mode disabled --require-host-pin model-runner-host-pins-v3.11',
+      'node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track model_runner && npm run test:model-runner-v3 && npm run v3:doctor -- --expect-mode disabled --require-host-pin model-runner-host-pins-v3.12',
       'model aggregate is the frozen fourteenth script authority',
     );
     const packageModelAggregate = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts[
