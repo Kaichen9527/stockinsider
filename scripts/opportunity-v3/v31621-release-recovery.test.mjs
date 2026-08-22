@@ -21,7 +21,17 @@ test('V31621 operator migration plan exactly matches the reviewed apply chain',(
   const planned=declaredMigrationPaths(plan,'migrationPaths');
   const reviewed=declaredMigrationPaths(apply,'MIGRATIONS');
   assert.deepEqual(planned,reviewed,'the displayed production plan cannot omit or reorder a reviewed migration');
-  assert.equal(planned.at(-1),'migrations/20260817_projection_evaluation_supersession_v3_16_21.sql');
+  assert.equal(planned.at(-1),'migrations/20260822_candidate_ledger_retention_v3_18.sql');
+});
+
+test('V3.18 candidate retention reuses only the preceding immutable terminal ledger',()=>{
+  const migration=fs.readFileSync(path.join(root,
+    'migrations/20260822_candidate_ledger_retention_v3_18.sql'),'utf8');
+  assert.doesNotMatch(migration,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(migration,/result[.]result_json->'candidates'/u);
+  assert.match(migration,/candidateLedgerContract/u);
+  assert.match(migration,/jsonb_array_length\(v_prior_ledger\)>60/u);
+  assert.match(migration,/REVOKE CREATE ON SCHEMA public FROM legacy_correctness_rpc_owner/u);
 });
 
 test('V31621 projection repair separates immutable content cutoff from reviewed evaluation order',()=>{

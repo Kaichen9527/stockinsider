@@ -8,12 +8,17 @@
   --line: rgba(17, 24, 39, 0.1);
   --accent: #0f766e;
   --accent-strong: #b45309;
+  --cta-background: #0f766e;
+  --cta-foreground: #ffffff;
   --danger: #be123c;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-danger: var(--danger);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -27,6 +32,8 @@
     --line: rgba(236, 253, 245, 0.24);
     --accent: #5eead4;
     --accent-strong: #f59e0b;
+    --cta-background: #fbbf24;
+    --cta-foreground: #0f172a;
     --danger: #fb7185;
   }
 }
@@ -40,10 +47,6 @@ body {
     radial-gradient(circle at 80% 10%, rgba(180, 83, 9, 0.16), transparent 25%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 40%);
   min-height: 100vh;
-}
-
-a {
-  color: inherit;
 }
 
 .bg-surface {
@@ -64,6 +67,23 @@ a {
 
 .bg-accent {
   background-color: var(--accent);
+}
+
+/* Never rely on inherited text colour for an interactive filled control.
+   Several older cards combined a dark background with a body-level foreground,
+   which made their labels effectively invisible in one colour scheme. */
+.cta-primary {
+  background-color: var(--cta-background);
+  color: var(--cta-foreground);
+}
+
+.cta-primary:hover {
+  filter: brightness(1.06);
+}
+
+.cta-primary:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 2px;
 }
 
 .bg-accent-soft {

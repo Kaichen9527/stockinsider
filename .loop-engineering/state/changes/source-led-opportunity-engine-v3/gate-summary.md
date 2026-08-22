@@ -1,5 +1,30 @@
 # Gate Summary: source-led-opportunity-engine-v3
 
+## V3.18 single fresh Requirements review — PASS
+
+The sole V3.18 fresh Requirements review examined immutable commit
+`ba741a80f8952e9f69c91f8ae72a6c74406494b1`, tree
+`e751ea63f5a067f6341250cac5e850fde2bb8014`, and the full range from
+`d719d6dace387cdf10917ba7553791d2d4c0ec3e`. It returned `PASS P0=0 P1=0
+P2=0`. The candidate ledger preserves source-nominated research through exactly
+twenty completed sessions, the decision envelope remains the sole action authority,
+the same revision owns the compact card and full dossier, and V3.18 Web/runtime
+compatibility remains additive and disabled until later release gates. The local
+candidate diagnostic is `272/272` with scratch-HOME browser evidence `9/9`; it is
+not a protected external artifact. Architecture is the sole next review.
+
+## V3.18 independent Architecture review — PASS
+
+The single Architecture review examined immutable commit
+`d1c92509d98186709b7efadaef616eb136b8f1fc`, tree
+`74311fdafda0e1dc9eb08085fb443a8df824f386`, and returned `PASS P0=0 P1=0
+P2=0`. It confirmed the closed acquisition → source-led candidate ledger →
+official enrichment → decision revision → compact projection/dossier flow, with
+no all-market nomination path. The V3.18 SQL wrapper is additive and preserves
+lease/ownership boundaries; runtime bundle, Web schema and detail revision
+identity move together. Exact review and the protected Code Gate are the sole
+next code gates; no production operation is authorized by this record.
+
 ## Gate Sequence
 
 First obtain a zero-P0/P1 fresh Requirements Gate. Only then request a separate fresh Architecture Gate to decide whether the contract is feasible and safe to hand to Terra, with particular attention to:

@@ -58,6 +58,46 @@ export const v313FixtureSignals=[
   nearBuy,
 ];
 
+const v317FixtureBase=signal('2303','V3.17 支撐區研究股票',envelope(`decision-v3.13:${'3'.repeat(64)}`,'unavailable','none'));
+export const v317ResearchOnlyFixture={...v317FixtureBase,projectionReadOnly:true,lastKnownAction:'unavailable' as const,
+  currentPrice:45.2,
+  technicalState:'at_support',researchNextStep:{version:'research-next-step-v3.17.0' as const,kind:'wait_refresh' as const,
+    actionAuthority:'disabled' as const,reason:'action_authority_disabled',trigger:null,invalidation:43.5,unlockPrice:null,
+    blockers:['missing:fundamental','missing:valuation','action_authority_disabled']},
+  researchSnapshot:{version:'research-snapshot-v3.17.0' as const,snapshotId:`research-v3.17:${'3'.repeat(64)}`,
+    symbol:'2303',currentPrice:45.2,valuation:{currentPe:null,historyPeMedian:null,sectorPe:null,asOf:null,provisionalRelativeValue:null},
+    technical:{state:'at_support',bias20Pct:0.4,bias60Pct:-4.6,bias120Pct:-8.2,rsi14:48,macd:-0.12,atr:1.1,
+      volumeRatio20:0.92,relativeStrength20Pct:2.1,trigger:null,invalidation:43.5},
+    fundamental:{revenueYoy:null,qualityScore:null,thesis:['來源訊號：公開且已連結的研究事件。','技術狀態：at_support'],
+      risks:['尚缺資料：fundamental、valuation','下一步條件：action_authority_disabled']},
+    gateWaterfall:[{gate:'source',status:'pass',reason:'authorized_linked_source'},
+      {gate:'fundamental',status:'missing',reason:'official_fundamental_data_required'},
+      {gate:'valuation',status:'missing',reason:'official_valuation_history_and_peer_data_required'},
+      {gate:'technical',status:'pass',reason:'technical_at_support'},
+      {gate:'liquidity',status:'missing',reason:'official_turnover_data_required'}],
+    provenance:v317FixtureBase.sourceProvenance!,sourceCutoff:'2026-08-20T10:20:00Z',researchNextStep:{version:'research-next-step-v3.17.0' as const,kind:'wait_refresh' as const,
+      actionAuthority:'disabled' as const,reason:'action_authority_disabled',trigger:null,invalidation:43.5,unlockPrice:null,
+      blockers:['missing:fundamental','missing:valuation','action_authority_disabled']}},
+};
+
+export const v317ResearchDataNeededFixture={...signal('2472','V3.17 資料待補股票',envelope(`decision-v3.13:${'4'.repeat(64)}`,'unavailable','none')),
+  projectionReadOnly:true,lastKnownAction:'unavailable' as const,currentPrice:81.5,technicalState:'unavailable',
+  researchNextStep:{version:'research-next-step-v3.17.0' as const,kind:'data_needed' as const,actionAuthority:'disabled' as const,
+    reason:'data_required_for_formal_decision',trigger:null,invalidation:null,unlockPrice:null,blockers:['missing:fundamental','missing:technical']},
+  researchSnapshot:{version:'research-snapshot-v3.17.0' as const,snapshotId:`research-v3.17:${'4'.repeat(64)}`,
+    symbol:'2472',currentPrice:81.5,valuation:{currentPe:null,historyPeMedian:null,sectorPe:null,asOf:null,provisionalRelativeValue:null},
+    technical:{state:null,bias20Pct:null,bias60Pct:null,bias120Pct:null,rsi14:null,macd:null,atr:null,volumeRatio20:null,relativeStrength20Pct:null,trigger:null,invalidation:null},
+    fundamental:{revenueYoy:null,qualityScore:null,thesis:['來源訊號：公開且已連結的研究事件。'],risks:['尚缺資料：fundamental、technical']},
+    gateWaterfall:[{gate:'source',status:'pass',reason:'authorized_linked_source'},
+      {gate:'fundamental',status:'missing',reason:'official_fundamental_data_required'},
+      {gate:'valuation',status:'missing',reason:'official_valuation_history_and_peer_data_required'},
+      {gate:'technical',status:'missing',reason:'adjusted_ohlcv_history_required'},
+      {gate:'liquidity',status:'missing',reason:'official_turnover_data_required'}],
+    provenance:v317FixtureBase.sourceProvenance!,sourceCutoff:'2026-08-20T10:20:00Z',researchNextStep:{version:'research-next-step-v3.17.0' as const,
+      kind:'data_needed' as const,actionAuthority:'disabled' as const,reason:'data_required_for_formal_decision',trigger:null,
+      invalidation:null,unlockPrice:null,blockers:['missing:fundamental','missing:technical']}},
+};
+
 const malformed=signal('9104','錯誤來源股票',envelope(`decision-v3.13:${'d'.repeat(64)}`,
   'research_starter','conditional_research'));
 malformed.citations=[{...malformed.citations![0],sourceUrl:'https://',evaluatedAt:'2026-99-99T00:00:00Z'}];

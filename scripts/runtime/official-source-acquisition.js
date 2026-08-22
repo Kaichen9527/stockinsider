@@ -290,13 +290,26 @@ async function threads(profile,roster,credentials,fetchImpl,collectedAt) {
   if(!profile.threads) return {documents:[],items:[],attempt:attempt('threads','missing_endpoint','threads_profile_missing')};
   if(!roster.threadsSearchEndpoint) return {documents:[],items:[],attempt:attempt('threads','missing_endpoint','threads_search_endpoint_missing')};
   if(!credentials.threadsAccessToken) return {documents:[],items:[],attempt:attempt('threads','auth_failed','threads_oauth_missing')};
-  const endpoint=new URL(roster.threadsSearchEndpoint); invariant(endpoint.origin==='https://graph.threads.net','threads endpoint authority');
-  invariant(endpoint.pathname==='/keyword_search','threads keyword-search endpoint authority');
-  endpoint.searchParams.set('q',profile.threads);endpoint.searchParams.set('search_type','RECENT');
-  endpoint.searchParams.set('fields','id,username,text,permalink,timestamp');
-  endpoint.searchParams.set('access_token',credentials.threadsAccessToken);
-  const response=await boundedFetch(endpoint.toString(),{headers:{Accept:'application/json'}},fetchImpl);
-  const rows=JSON.parse(response.bytes.toString('utf8')).data ?? [];
+  const configuredQueries=Array.isArray(profile.threadsKeywords)?profile.threadsKeywords:[];
+  const queries=[...new Set(configuredQueries.map((value)=>compactText(value,80)).filter((value)=>value.length>=2&&value.length<=80))]
+    .slice(0,2);
+  // Keyword Search is a topic endpoint, not an author-timeline endpoint. A
+  // handle alone is retained only as the compatibility fallback for profiles
+  // without a reviewed topic scope; it must never be reported as a successful
+  // author acquisition unless a returned row also matches that author.
+  if(queries.length===0)queries.push(String(profile.threads).replace(/^@/u,''));
+  const responses=await Promise.all(queries.map(async(query)=>{
+    const endpoint=new URL(roster.threadsSearchEndpoint); invariant(endpoint.origin==='https://graph.threads.net','threads endpoint authority');
+    invariant(endpoint.pathname==='/keyword_search','threads keyword-search endpoint authority');
+    endpoint.searchParams.set('q',query);endpoint.searchParams.set('search_type','RECENT');
+    endpoint.searchParams.set('fields','id,username,text,permalink,timestamp');
+    endpoint.searchParams.set('access_token',credentials.threadsAccessToken);
+    return boundedFetch(endpoint.toString(),{headers:{Accept:'application/json'}},fetchImpl,1_000_000);
+  }));
+  const rows=[...new Map(responses.flatMap((response)=>{
+    const data=JSON.parse(response.bytes.toString('utf8')).data;
+    return Array.isArray(data)?data:[];
+  }).filter((row)=>row?.id).map((row)=>[String(row.id),row])).values()];
   const approvedUsername=String(profile.threads).replace(/^@/u,'').toLowerCase();
   const documents=rows.slice(0,10).filter((row)=>row?.id&&row?.text&&row?.permalink
     &&String(row.username??'').replace(/^@/u,'').toLowerCase()===approvedUsername).map((row)=>documentRevision({
@@ -307,7 +320,8 @@ async function threads(profile,roster,credentials,fetchImpl,collectedAt) {
     ...itemDisposition(document)}));
   return {documents,items,attempt:attempt('threads',documents.length?'items_found':'successful_empty',
     documents.length?'threads_items_observed':'threads_successful_empty',
-  {kind:'http_response',statusCode:response.statusCode,responseBytes:response.responseBytes,itemCount:items.length,documentCount:documents.length})};
+  {kind:'http_response',statusCode:responses.every((response)=>response.statusCode===200)?200:null,
+    responseBytes:responses.reduce((sum,response)=>sum+response.responseBytes,0),itemCount:items.length,documentCount:documents.length})};
 }
 
 function terminal(profile,documents) {
@@ -320,9 +334,15 @@ async function acquireApprovedSources({roster,credentials={},fetchImpl=globalThi
   for(let offset=0;offset<roster.profiles.length;offset+=4) {
     const batch=await Promise.all(roster.profiles.slice(offset,offset+4).map(async(profile)=>{
       const sourceKeys=['threads','podcast','youtube'];
-      const settled=await Promise.allSettled([threads(profile,roster,credentials,fetchImpl,collectedAt),
-        podcast(profile,fetchImpl,collectedAt,resolveHost),youtube(profile,credentials,fetchImpl,collectedAt)]);
-      const attempts=settled.map((result,index)=>result.status==='fulfilled'?result.value:failedAttempt(sourceKeys[index],result.reason));
+      // Paid/private material may inform an operator's personal methodology,
+      // but it is never acquired, stored, summarized, or used as a product
+      // claim without an explicit redistribution licence.
+      const attempts=profile.sourcePolicy==='internal_methodology_only'
+        ?sourceKeys.map((sourceKey)=>({documents:[],items:[],attempt:attempt(sourceKey,'missing_endpoint',
+          `${sourceKey}_endpoint_missing`,{kind:'configuration',itemCount:0,documentCount:0})}))
+        :await Promise.allSettled([threads(profile,roster,credentials,fetchImpl,collectedAt),
+          podcast(profile,fetchImpl,collectedAt,resolveHost),youtube(profile,credentials,fetchImpl,collectedAt)])
+          .then((settled)=>settled.map((result,index)=>result.status==='fulfilled'?result.value:failedAttempt(sourceKeys[index],result.reason)));
       const acquired=attempts.flatMap((row)=>row.documents);
       return {acquired,items:attempts.flatMap((row)=>row.items??[]),attempts:attempts.map((row)=>
         ({profileId:profile.id,...row.attempt})),outcome:terminal(profile,acquired)};

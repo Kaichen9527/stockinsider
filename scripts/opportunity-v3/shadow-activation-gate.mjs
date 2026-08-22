@@ -40,7 +40,11 @@ function assertClosedParentEnvironment() {
   assert.equal(process.env.SOURCE_LED_OPPORTUNITY_V3, 'disabled');
   assert.equal(process.env.TZ, 'UTC');
   const platformInjected = new Set(['__CF_USER_TEXT_ENCODING']);
-  const expected = new Set(['NODE_ENV', 'SOURCE_LED_OPPORTUNITY_V3', 'TZ']);
+  // Product PCRs deliberately invoke project-local npm/Playwright helpers.  The
+  // parent is still closed: PATH is admitted only when it is the exact
+  // allowlisted executable set that runNode supplies to every child.
+  assert.equal(process.env.PATH, controlledPath, 'shadow parent PATH');
+  const expected = new Set(['NODE_ENV', 'PATH', 'SOURCE_LED_OPPORTUNITY_V3', 'TZ']);
   for (const key of Object.keys(process.env)) {
     assert.ok(expected.has(key) || platformInjected.has(key), `ambient environment is forbidden: ${key}`);
   }

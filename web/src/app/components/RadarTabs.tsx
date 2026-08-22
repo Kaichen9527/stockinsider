@@ -13,10 +13,10 @@ const sourceTypeLabel: Record<string, string> = {
   official: '官方資料',
   financial: '財務數據',
   public_research: '公開研究',
-  investanchors: '定錨投筆',
+  investanchors: '未授權付費來源（不納入候選）',
   threads: 'Threads',
   instagram: 'Instagram',
-  telegram: 'Telegram',
+  telegram: 'Telegram（未授權）',
   bulltalk: '股市爆料同學會',
   ptt: 'PTT Stock',
   kol: '台股 KOL',
@@ -441,9 +441,14 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
 
 function StocksTab({ radar }: { radar: RadarDailyPayload }) {
   const decisionActionOrder = { buy: 0, accumulate: 1, research_starter: 2, wait_value:3,wait_market:4,wait_breakout: 5,
-    wait_reclaim: 6, avoid_chase: 7, unavailable: 8, avoid: 9 } as const;
-  const effectiveAction=(signal:SourceSignalCard)=>signal.projectionReadOnly
-    ?'unavailable':signal.decisionEnvelope?.userAction??'unavailable';
+    wait_reclaim: 6, wait_refresh: 7, avoid_chase: 8, unavailable: 9, avoid: 10, data_needed: 11, ready: 12 } as const;
+  const effectiveAction=(signal:SourceSignalCard)=>{
+    const envelopeAction=signal.decisionEnvelope?.userAction??'unavailable';
+    const next=signal.researchNextStep?.kind;
+    if(signal.projectionReadOnly)return next==='ready'?'wait_refresh':next??'unavailable';
+    if(envelopeAction==='unavailable')return next==='ready'?'wait_refresh':next??envelopeAction;
+    return envelopeAction;
+  };
   const rankedResearch = [...(radar.sourceSignals ?? [])]
     .filter((signal)=>signal.projectionReadOnly===true
       ||validatePublishedDecisionCard(signal as unknown as Record<string,unknown>)!==null)
@@ -454,10 +459,10 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
     { key: 'action', eyebrow: 'ACTIONABLE NOW', title: '現在可行動', description: '完整正式決策，或明確標示為研究型小量分批；相對估值不冒充正式目標價。',
       items: rankedResearch.filter((signal) => ['buy', 'accumulate', 'research_starter'].includes(effectiveAction(signal))) },
     { key: 'wait', eyebrow: 'CONDITION WATCH', title: '等待條件', description: '估值或題材仍值得追蹤，但突破、收復支撐、合理乖離或風險條件尚未達成。',
-      items: rankedResearch.filter((signal) => ['wait_value','wait_market','wait_breakout', 'wait_reclaim', 'avoid_chase', 'avoid'].includes(effectiveAction(signal))
+      items: rankedResearch.filter((signal) => ['wait_value','wait_market','wait_breakout', 'wait_reclaim', 'wait_refresh', 'avoid_chase', 'avoid'].includes(effectiveAction(signal))
         ||(effectiveAction(signal)==='unavailable'&&signal.proximityToAction===true)) },
     { key: 'research', eyebrow: 'SOURCE SIGNALS', title: '新來源待研究', description: '來源已出現，但估值、技術或基本面資料尚缺；資料缺失不會被翻譯成「不買」。',
-      items: rankedResearch.filter((signal) => effectiveAction(signal) === 'unavailable'&&signal.proximityToAction!==true) },
+      items: rankedResearch.filter((signal) => ['unavailable','data_needed'].includes(effectiveAction(signal))&&signal.proximityToAction!==true) },
   ];
   if (['legacy-radar-v3.13.0','legacy-radar-v3.14.0'].includes(radar.sourceLedCorrectness?.schema??'') || rankedResearch.length > 0) return (
     <div className="space-y-0">
@@ -1063,16 +1068,22 @@ function SourceSignalDiagnostics({ signal }: { signal: SourceSignalCard }) {
 
 function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
   const envelope = signal.decisionEnvelope;
-  const action = signal.projectionReadOnly ? 'unavailable' : envelope?.userAction ?? 'unavailable';
+  const nextStep=signal.researchNextStep;
+  const envelopeAction=envelope?.userAction ?? 'unavailable';
+  const action = signal.projectionReadOnly
+    ? (nextStep?.kind==='ready'?'wait_refresh':nextStep?.kind??'unavailable')
+    : envelopeAction==='unavailable'
+      ? (nextStep?.kind==='ready'?'wait_refresh':nextStep?.kind??envelopeAction)
+      : envelopeAction;
   const actionLabels = {
     buy: '可買進', accumulate: '可分批', research_starter: '研究型小量分批',
-        wait_value:'等待價格',wait_market:'等待大盤',wait_breakout: '等待突破', wait_reclaim: '等待收復支撐', avoid_chase: '不追價',
-    avoid: '暫時避開', unavailable: '資料待補',
+        wait_value:'等待價格',wait_market:'等待大盤',wait_breakout: '等待突破', wait_reclaim: '等待收復支撐', wait_refresh:'等待資料刷新',
+    avoid_chase: '不追價', avoid: '暫時避開', unavailable: '資料待補', data_needed:'資料待補', ready:'待權限恢復',
   } as const;
   const actionLabel=action==='unavailable'&&signal.proximityToAction===true?'接近買點・待深度驗證':actionLabels[action];
   const actionTone = ['buy', 'accumulate', 'research_starter'].includes(action)
     ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
-        : ['wait_value','wait_market','wait_breakout', 'wait_reclaim', 'avoid_chase'].includes(action)||signal.proximityToAction===true
+        : ['wait_value','wait_market','wait_breakout', 'wait_reclaim', 'wait_refresh', 'avoid_chase'].includes(action)||signal.proximityToAction===true
       ? 'border-sky-500/25 bg-sky-500/10 text-sky-700 dark:text-sky-300'
       : 'border-amber-500/25 bg-amber-500/8 text-amber-800 dark:text-amber-300';
   const valuation = envelope?.valuationSummary;
@@ -1082,8 +1093,8 @@ function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
     : valuation?.relativeBand ?? provisional?.referenceBand ?? null;
   const triggerValue = envelope?.entryPlan?.trigger && typeof envelope.entryPlan.trigger === 'object'
     ? envelope.entryPlan.trigger.threshold ?? null
-    : null;
-  const invalidation = envelope?.entryPlan?.invalidation ?? null;
+    : nextStep?.trigger?.threshold ?? null;
+  const invalidation = envelope?.entryPlan?.invalidation ?? nextStep?.invalidation ?? null;
   const missingCount = new Set([
     ...(envelope?.blockers ?? []),
     ...(signal.missingAxes ?? []),
@@ -1114,7 +1125,7 @@ function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
         </div>
 
         <p className="mt-3 line-clamp-2 text-sm leading-6 text-slate-650 dark:text-emerald-100/72">
-          {signal.projectionReadOnly ? '研究投影已過期；保留 last-good 估值供唯讀參考，但停止所有買進型動作。'
+          {signal.projectionReadOnly ? `研究投影目前唯讀；${nextStep?.reason === 'support_must_be_reclaimed' ? '需先收復支撐。' : nextStep?.reason === 'breakout_not_confirmed' ? '等待突破確認。' : '暫停所有買進型動作，等待資料刷新。'}`
             :signal.proximityToAction===true&&action==='unavailable'
               ?'研究排序、覆蓋與核心三軸已達接近買點；等待深度估值與正式決策驗證。'
               :envelope?.whyNow || signal.sourceSummary}
@@ -1150,7 +1161,7 @@ function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
               : <span>{provenance?.sourceName || sourceTypeLabel[signal.sourceClass] || signal.sourceClass}</span>}
             <span className="sr-only">；發布、收集與評估日期請展開研究依據。</span>
           </div>
-          <Link href={href} data-testid={revision?'decision-detail-link':'research-only-detail-link'} className="inline-flex min-h-11 items-center rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 dark:bg-amber-300 dark:text-slate-950 dark:hover:bg-amber-200">
+          <Link href={href} data-testid={revision?'decision-detail-link':'research-only-detail-link'} className="cta-primary inline-flex min-h-11 items-center rounded-full px-4 py-2 text-sm font-semibold transition">
             {revision?'查看決策摘要':'查看唯讀研究'} →
           </Link>
         </div>
@@ -1174,7 +1185,7 @@ function DiscoveryTab({ radar }: { radar: RadarDailyPayload }) {
   return (
     <div className="space-y-4">
       <p className="text-sm text-slate-500 dark:text-emerald-100/70">
-        社群發現不是雜訊列表，而是從 PTT、股市爆料同學會、Threads、定錨投筆、Podcast 等來源抓到的早期候選池。這些股票已經有故事，但還在驗證與估值補強階段。
+        這裡只顯示已授權且已完成實體連結的來源訊號。付費內容、未授權 Telegram、只有 metadata 的影片或 Podcast 都不會被當成投資論點。
       </p>
       {delta ? (
         <section aria-label="每日股票發現變化" className="grid grid-cols-2 gap-2 rounded-[1.25rem] border border-line bg-surface p-3 text-xs sm:grid-cols-4">

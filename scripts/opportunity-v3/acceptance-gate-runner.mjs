@@ -87,6 +87,7 @@ const traceEnvironment = {
     ? '/usr/bin:/bin'
     : postgresEnvironment.PATH ?? '/usr/local/bin:/usr/bin:/bin',
   HOME: traceHome,
+  PLAYWRIGHT_BROWSERS_PATH: '0',
   TMPDIR: traceTemp,
   LC_ALL: 'C',
   LANG: 'C',
@@ -141,6 +142,7 @@ for (const repositoryPath of authorityPaths) {
 const subjectArgs = [
   '--experimental-strip-types',
   '--test',
+  '--test-concurrency=1',
   'scripts/opportunity-v3/acceptance-traceability.test.mjs',
 ];
 const result = spawnSync(process.execPath, subjectArgs, {

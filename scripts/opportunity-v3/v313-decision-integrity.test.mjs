@@ -1020,6 +1020,7 @@ test('generic migration discovery is a closed legacy allowlist and the V3.13 pla
     'migrations/20260817_provider_acquisition_v3_16_21.sql',
     'migrations/20260817_official_ingestion_roster_chunk_snapshot_v3_16_21.sql',
     'migrations/20260817_projection_evaluation_supersession_v3_16_21.sql',
+    'migrations/20260822_candidate_ledger_retention_v3_18.sql',
   ]);
   assert.ok(plan.migrations.every((row)=>/^[0-9a-f]{64}$/u.test(row.sha256)&&row.additiveOnly));
   assert.match(plan.orderedChainSha256,/^[0-9a-f]{64}$/u);
@@ -1132,7 +1133,7 @@ acceptanceTest('DI-006','V3.13 approved source acquisition conserves 17 terminal
   assert.equal(successfulEmpty.documents.length,0);assert.equal(successfulEmpty.itemOutcomes.length,0);
   const emptyAttempt=successfulEmpty.connectorAttempts.find((row)=>row.profileId==='gooaye'&&row.sourceKey==='threads');
   assert.equal(emptyAttempt.status,'successful_empty');assert.deepEqual(emptyAttempt.responseEvidence,
-    {kind:'http_response',statusCode:200,responseBytes:11,itemCount:0,documentCount:0});
+    {kind:'http_response',statusCode:200,responseBytes:22,itemCount:0,documentCount:0});
 
   const youtubeRoster=structuredClone(roster);youtubeRoster.threadsSearchEndpoint=null;
   youtubeRoster.profiles=youtubeRoster.profiles.map((profile,index)=>({...profile,threads:null,podcastFeed:null,

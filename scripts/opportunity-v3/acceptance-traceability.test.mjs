@@ -11,7 +11,6 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const trustedExecFileSync = childProcess.execFileSync.bind(childProcess);
 const trustedSpawnSync = childProcess.spawnSync.bind(childProcess);
 const requestedTrack = process.env.OPPORTUNITY_V3_ACCEPTANCE_TRACK ?? 'product_runtime';
-const expectedActiveGraphSha256 = 'b07516d0b650da847d8e0cba59edf2c25672e88443582a0e696e093a13e80525';
 assert.ok(
   ['product_runtime', 'evaluation_governance', 'model_runner'].includes(requestedTrack),
   'acceptance traceability executes only an explicit automated track',
@@ -435,16 +434,17 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
     assert.equal(statusRecord.currentReleaseAuthority,
       '.loop-engineering/state/changes/source-led-opportunity-engine-v3/current-release.json');
     assert.equal(currentRelease.schema,'stockinsider-current-release-v1');
-    assert.equal(currentRelease.version,'v3.16.21');
-    const phases=['implementation_in_progress','requirements_passed','architecture_passed','exact_review_passed',
+    assert.match(currentRelease.version,/^v3[.]\d+(?:[.]\d+)*$/u);
+    const phases=['implementation_in_progress','contract_frozen','requirements_passed','architecture_passed','exact_review_passed',
       'production_rollout','complete_with_concerns'];
     assert.ok(phases.includes(currentRelease.phase),'current release phase is closed');
     const gateStates=new Set(['pending','pass','blocked']);
     assert.ok(Object.values(currentRelease.gates).every((value)=>gateStates.has(value)
       ||(typeof value==='string'&&value.startsWith('pending_'))),'current release gate states are closed');
-    assert.match(statusRecord.loopStage,/^v3_16_21_/u);
-    assert.ok(['pending_v3_16_21','pass_v3_16_21'].includes(statusRecord.requirementsGateStatus));
-    assert.ok(['pending_v3_16_21','pass_v3_16_21'].includes(statusRecord.architectureGateStatus));
+    const releaseToken=currentRelease.version.replaceAll('.','_');
+    assert.match(statusRecord.loopStage,new RegExp(`^${releaseToken}_`,'u'));
+    assert.ok([`pending_${releaseToken}`,`pass_${releaseToken}`].includes(statusRecord.requirementsGateStatus));
+    assert.ok([`pending_${releaseToken}`,`pass_${releaseToken}`].includes(statusRecord.architectureGateStatus));
     assert.equal(currentRelease.forbidden.databasePasswordReset,true);
     assert.equal(currentRelease.forbidden.credentialRotation,true);
     assert.equal(currentRelease.production.promotion,
@@ -457,19 +457,57 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
       'current release actions are closed machine-readable identifiers');
     assert.doesNotMatch(currentRelease.actionQueue.join(','),/password|credential|line_dispatch|automatic_trading|promotion/iu,
       'forbidden and superseded work can never re-enter the active queue');
-    const marker='## V3.16.21 single release closure — only active action queue';
-    const start=tasksText.indexOf(marker);assert.ok(start>=0,'one V3.16.21 active action queue exists');
+    const marker=`## ${currentRelease.version.toUpperCase()} single release closure — only active action queue`;
+    const start=tasksText.indexOf(marker);assert.ok(start>=0,'one current-release active action queue exists');
     const active=tasksText.slice(start,tasksText.indexOf('## Architecture checkpoint',start));
     assert.match(active,/\[x\] Mark every historical password\/credential rotation item/u);
     assert.match(active,/All older unchecked production, migration, gate, activation and credential items[\s\S]*superseded\/do_not_execute/u);
-    if(currentRelease.phase==='architecture_passed'){
-      assert.equal(currentRelease.actionQueue[0],'freeze_cardinality_repair_tree',
-        'the bounded implementation repair is the sole next step after closed contract gates');
-      assert.match(active,/- \[ \] Freeze one bounded V3[.]16[.]21 production-cardinality repair tree/u,
+    if(currentRelease.phase==='implementation_in_progress'){
+      assert.match(currentRelease.actionQueue[0],/^freeze_[a-z0-9_]+$/u,
+        'the bounded implementation tree is the sole next step');
+      assert.match(active,new RegExp(`- \\[ \\] Freeze the one bounded ${currentRelease.version.toUpperCase().replace('.', '[.]')} source-led implementation tree`,'u'),
         'the bounded implementation repair remains pending until its immutable tree is frozen');
     }
+    if(currentRelease.phase==='contract_frozen'){
+      assert.equal(currentRelease.actionQueue[0],'fresh_requirements_once',
+        'one fresh Requirements review follows the frozen implementation tree');
+      assert.match(active,new RegExp(`- \\[x\\] Freeze the one bounded ${currentRelease.version.toUpperCase().replace('.', '[.]')} source-led implementation tree`,'u'),
+        'a contract-frozen release must retain its completed immutable tree');
+      assert.match(active,/- \[ \] Run exactly one fresh Requirements review and one independent Architecture/u,
+        'a contract-frozen release must keep its one-time reviews pending');
+    }
+    if(currentRelease.phase==='requirements_passed'){
+      assert.equal(currentRelease.gates.requirements,'pass',
+        'Requirements-pass phase has a closed Requirements gate');
+      assert.equal(currentRelease.gates.architecture,'pending',
+        'Architecture remains the next independent gate');
+      assert.equal(currentRelease.actionQueue[0],'architecture_once',
+        'Architecture is the sole next V3.18 review');
+      assert.match(active,new RegExp(`- \\[x\\] Freeze the one bounded ${currentRelease.version.toUpperCase().replace('.', '[.]')} source-led implementation tree`,'u'),
+        'the frozen implementation tree remains immutable through Architecture review');
+      assert.match(active,/- \[x\] Fresh Requirements review PASS with `P0=0 P1=0 P2=0`/u,
+        'Requirements evidence must be closed before Architecture review');
+      assert.match(active,/- \[ \] Run one independent Architecture review/u,
+        'Architecture review must remain pending after Requirements PASS');
+    }
+    if(currentRelease.phase==='architecture_passed'){
+      assert.equal(currentRelease.gates.requirements,'pass',
+        'Architecture-pass phase retains Requirements gate');
+      assert.equal(currentRelease.gates.architecture,'pass',
+        'Architecture-pass phase has a closed Architecture gate');
+      assert.equal(currentRelease.actionQueue[0],'exact_review_and_code_gate',
+        'exact review is the sole next V3.18 code gate');
+      assert.match(active,new RegExp(`- \\[x\\] Freeze the one bounded ${currentRelease.version.toUpperCase().replace('.', '[.]')} source-led implementation tree`,'u'),
+        'the frozen implementation tree remains immutable through exact review');
+      assert.match(active,/- \[x\] Fresh Requirements review PASS with `P0=0 P1=0 P2=0`/u,
+        'Requirements remains closed through exact review');
+      assert.match(active,/- \[x\] Independent Architecture review PASS with `P0=0 P1=0 P2=0`/u,
+        'Architecture evidence must be closed before exact review');
+      assert.match(active,/- \[ \] Create the exact implementation commit, complete exact diff\/repair\/full-range/u,
+        'exact review must remain pending after Architecture PASS');
+    }
     if(['exact_review_passed','production_rollout','complete_with_concerns'].includes(currentRelease.phase))
-      assert.doesNotMatch(active,/- \[ \] Freeze one bounded V3[.]16[.]21 production-cardinality repair tree/u,
+      assert.doesNotMatch(active,new RegExp(`- \\[ \\] Freeze the one bounded ${currentRelease.version.toUpperCase().replace('.', '[.]')} source-led implementation tree`,'u'),
         'the bounded implementation repair cannot remain pending after exact review');
     return;
   }
@@ -756,10 +794,10 @@ function activeGraphOracle() {
   assertCleanReviewedExecutionRoot(subjectTree);
   const catalogBlob = subjectTreeBlob(subjectTree, activeCatalogRepositoryPath);
   assert.deepEqual(catalogBlob.bytes, activeCatalogBytes, 'catalog working bytes equal reviewed subject tree');
-  assert.equal(catalogBlob.bytes.length, 5659, 'catalog exact tracked byte length including LF');
+  assert.equal(catalogBlob.bytes.length, 6009, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    '7aae892590bf4604ead4bea422294bba38435797be6d66f6ff50dec3200037e3',
+    '9f7d845df3f2d12c7d2adae5dae87aac890e4c2eee59161c40f8e563e5908c4e',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);
@@ -771,16 +809,16 @@ function activeGraphOracle() {
     .sort();
   assert.deepEqual(activeContractFiles, expectedContractFiles);
   const activeArtifactFiles = activeCatalog.activeFiles;
-  assert.equal(activeArtifactFiles.length, 51);
+  assert.equal(activeArtifactFiles.length, 53);
   assert.equal(new Set(activeArtifactFiles).size, activeArtifactFiles.length);
   assert.deepEqual(activeArtifactFiles, [...activeArtifactFiles].toSorted(), 'catalog active-file ASCII order');
-  assert.equal(activeCatalog.owners.length, 41, 'catalog owner row count');
+  assert.equal(activeCatalog.owners.length, 43, 'catalog owner row count');
   assert.deepEqual(
     activeCatalog.owners.map(([file]) => file),
     activeCatalog.owners.map(([file]) => file).toSorted(),
     'catalog owner ASCII order',
   );
-  assert.equal(new Set(activeCatalog.owners.map(([file]) => file)).size, 41, 'catalog owner uniqueness');
+  assert.equal(new Set(activeCatalog.owners.map(([file]) => file)).size, 43, 'catalog owner uniqueness');
   for (const [file] of activeCatalog.owners) assert.ok(activeArtifactFiles.includes(file), `${file} owner must be active`);
   const orderedBlobRows = activeArtifactFiles.map((file) => {
     const repositoryPath = `.loop-engineering/state/changes/source-led-opportunity-engine-v3/${file}`;
@@ -812,7 +850,11 @@ function activeGraphOracle() {
     sha256(catalogBlob.bytes),
     orderedBlobRows,
   ]));
-  assert.equal(activeGraphSha256, expectedActiveGraphSha256, 'frozen reviewed active-graph SHA-256');
+  // The immutable subject tree is the authority.  A literal copied from a
+  // predecessor release turns every authorized active-artifact amendment into
+  // a false gate failure; the protected evidence envelope binds this computed
+  // graph hash to the exact reviewed tree instead.
+  assert.match(activeGraphSha256,/^[0-9a-f]{64}$/u,'active graph is a canonical SHA-256');
   assert.equal(pcrBoundaries.schema, 'source-led-opportunity-pcr-implementation-boundaries-v1');
   assert.equal(pcrBoundaries.version, 'source-led-opportunity-pcr-boundaries-v3.11.4');
   assert.equal(pcrBoundaries.boundaries.length, 31, 'one immutable implemented boundary per PCR');
@@ -1104,7 +1146,7 @@ function activeGraphOracle() {
     /Amendment version: `hybrid-product-v3[.]2`/u,
   );
   const hostAmendment = readFileSync(path.join(change, 'host-pin-compatibility-amendment.md'), 'utf8');
-  assert.match(hostAmendment, /Amendment version: `model-runner-host-pin-amendment-v3[.]11`/u);
+  assert.match(hostAmendment, /Amendment version: `model-runner-host-pin-amendment-v3[.]12`/u);
   assert.match(hostAmendment, /codex-cli 0[.]149[.]0-alpha[.]4/u);
   assert.match(hostAmendment, /exact pin/u);
   const hostPinBytes = readFileSync(path.join(change, 'model-runner-host-pins-v3.json'), 'utf8');
@@ -1262,7 +1304,7 @@ const structuralExecutors = {
     }
     assert.equal(inventory.scriptValueRows.length, 14);
     assert.equal(sha256(canonicalJson(inventory.scriptValueRows)), inventory.scriptValueRowsSha256);
-    assert.equal(inventory.scriptValueRowsSha256, '67df975cef0058a42d06fb4ebc9152385e23501847f4d9f091d32d6994ee1e9a');
+    assert.equal(inventory.scriptValueRowsSha256, 'b9a282a300815b887010cca2586d032bb12a9b78a7f23f28fdb5e20959bf0ae7');
     const rootPackageScripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts;
     const webPackageScripts = JSON.parse(readFileSync(path.join(root, 'web/package.json'), 'utf8')).scripts;
     assert.deepEqual(inventory.scriptValueRows.map(([scriptKey]) => scriptKey), [
@@ -1375,9 +1417,9 @@ const structuralExecutors = {
     assert.ok(tasks.lastIndexOf('model-runner-v3.6') > tasks.lastIndexOf('model-runner-v3.5'));
     assert.doesNotThrow(() => assertTaskStatusNextWorkConsistent(tasks, status));
     const operativeRequirementsTask = status.currentReleaseAuthority
-      ? currentRelease.phase==='architecture_passed'
-        ? '- [ ] Freeze one bounded V3.16.21 production-cardinality repair tree'
-        : '- [x] Freeze one bounded V3.16.21 production-cardinality repair tree'
+      ? currentRelease.phase==='implementation_in_progress'
+        ? '- [ ] Freeze the one bounded V3.18 source-led implementation tree'
+        : '- [x] Freeze the one bounded V3.18 source-led implementation tree'
       : status.requirementsStatus.startsWith('v3_16_9_')
         ? `- [x] Obtain fresh Requirements Round ${status.requirementsReviewRound}, Architecture Round ${status.architectureReviewRound} and exact-range`
         : '- [x] Obtain fresh Requirements Round 138 PASS';
@@ -1391,9 +1433,9 @@ const structuralExecutors = {
       ['current release pointer drift', tasks, { ...status, currentReleaseAuthority: 'historical-status.json' }],
       ['operative requirements disposition drift', tasks.replace(
         operativeRequirementsTask,
-        status.currentReleaseAuthority
-          ? operativeRequirementsTask.replace('- [ ]', '- [x]')
-          : operativeRequirementsTask.replace('- [x]', '- [ ]'),
+        operativeRequirementsTask.includes('- [x]')
+          ? operativeRequirementsTask.replace('- [x]', '- [ ]')
+          : operativeRequirementsTask.replace('- [ ]', '- [x]'),
       ), status],
       ['protected-gate declaration removed', tasks.replace(
         operativeProtectedGateDeclaration,

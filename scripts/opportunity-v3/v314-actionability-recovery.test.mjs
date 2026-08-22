@@ -953,7 +953,7 @@ test('V314-019 exact-review compatibility boundaries accept V3.14 and remain fai
   const radar=readFileSync(path.join(root,'web/src/app/components/RadarTabs.tsx'),'utf8');
   const migration=readFileSync(path.join(root,'migrations/20260811_actionability_recovery_v3_14.sql'),'utf8');
   assert.match(route,/decision-v3\[\.\]\(\?:13\|14\)/u);
-  assert.match(doctor,/\['legacy-radar-v3[.]13[.]0','legacy-radar-v3[.]14[.]0'\]/u);
+  assert.match(doctor,/\['legacy-radar-v3[.]13[.]0','legacy-radar-v3[.]14[.]0','legacy-radar-v3[.]17[.]0','legacy-radar-v3[.]18[.]0'\]/u);
   assert.match(audit,/decision-v3\[\.\]\(\?:13\|14\)/u);
   assert.match(audit,/valuation-assumptions-audit-v3[.]14/u);
   assert.match(radar,/signal[.]projectionReadOnly===true[\s\S]*?validatePublishedDecisionCard/u);

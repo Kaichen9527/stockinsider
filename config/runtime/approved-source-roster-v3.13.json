@@ -1,23 +1,23 @@
 {
   "schema": "approved-source-roster-v3.13",
   "profiles": [
-    {"id":"gooaye","name":"股癌","threads":"stockcancer","youtubeHandle":"stockcancer","podcastFeed":"https://feeds.soundon.fm/podcasts/954689a5-3096-43a4-a80b-7810b219cef3.xml"},
+    {"id":"gooaye","name":"股癌","threads":"stockcancer","threadsKeywords":["台股","產業"],"youtubeHandle":"stockcancer","podcastFeed":"https://feeds.soundon.fm/podcasts/954689a5-3096-43a4-a80b-7810b219cef3.xml"},
     {"id":"micmarket","name":"麥克風的市場開講","threads":null,"youtubeHandle":"MicMarket","podcastFeed":null},
-    {"id":"chenweytai","name":"陳唯泰","threads":"chenweytai","youtubeHandle":"chenweytai","podcastFeed":null},
-    {"id":"twstock888","name":"小車","threads":"twstock888","youtubeHandle":"twstock888","podcastFeed":null},
+    {"id":"chenweytai","name":"陳唯泰","threads":"chenweytai","threadsKeywords":["台股","財報"],"youtubeHandle":"chenweytai","podcastFeed":null},
+    {"id":"twstock888","name":"小車","threads":"twstock888","threadsKeywords":["台股","籌碼"],"youtubeHandle":"twstock888","podcastFeed":null},
     {"id":"allenfinance","name":"艾倫的財經筆記","threads":null,"youtubeHandle":"allenfinance","podcastFeed":null},
-    {"id":"agerli","name":"阿格力","threads":"agerli.tw","youtubeHandle":"agerli","podcastFeed":null},
-    {"id":"investaddict","name":"投資癮","threads":"investaddict_tw","youtubeHandle":"investaddict","podcastFeed":"https://feeds.soundon.fm/podcasts/686ddd56-9b4d-4585-8e9d-31e722f989cf.xml"},
+    {"id":"agerli","name":"阿格力","threads":"agerli.tw","threadsKeywords":["台股","價值"],"youtubeHandle":"agerli","podcastFeed":null},
+    {"id":"investaddict","name":"投資癮","threads":"investaddict_tw","threadsKeywords":["台股","產業"],"youtubeHandle":"investaddict","podcastFeed":"https://feeds.soundon.fm/podcasts/686ddd56-9b4d-4585-8e9d-31e722f989cf.xml"},
     {"id":"stockhermit","name":"股市隱者","threads":null,"youtubeHandle":"stockhermit","podcastFeed":null},
-    {"id":"zhangzhenqing","name":"張真卿","threads":"zhangzhenqing","youtubeHandle":"zhangzhenqing","podcastFeed":null},
-    {"id":"ikala_stevecc","name":"程世嘉","threads":"ikala_stevecc","youtubeHandle":null,"podcastFeed":null},
-    {"id":"investanchors","name":"定錨投筆","threads":null,"youtubeHandle":"investanchors","podcastFeed":null},
-    {"id":"yutinghao","name":"游庭皓的財經皓角","threads":"yutinghaofinance","youtubeChannelId":"UC0lbAQVpenvfA2QqzsRtL_g","podcastFeed":"https://feeds.soundcloud.com/users/soundcloud:users:735679489/sounds.rss"},
+    {"id":"zhangzhenqing","name":"張真卿","threads":"zhangzhenqing","threadsKeywords":["台股","技術分析"],"youtubeHandle":"zhangzhenqing","podcastFeed":null},
+    {"id":"ikala_stevecc","name":"程世嘉","threads":"ikala_stevecc","threadsKeywords":["AI","產業"],"youtubeHandle":null,"podcastFeed":null},
+    {"id":"investanchors","name":"定錨投筆","threads":null,"youtubeHandle":"investanchors","podcastFeed":null,"sourcePolicy":"internal_methodology_only"},
+    {"id":"yutinghao","name":"游庭皓的財經皓角","threads":"yutinghaofinance","threadsKeywords":["總經","台股"],"youtubeChannelId":"UC0lbAQVpenvfA2QqzsRtL_g","podcastFeed":"https://feeds.soundcloud.com/users/soundcloud:users:735679489/sounds.rss"},
     {"id":"miula","name":"M觀點","threads":null,"youtubeChannelId":"UCT3uWFvKLVpRnEealmRwvrw","podcastFeed":"https://feeds.soundon.fm/podcasts/b8f5a471-f4f7-4763-9678-65887beda63a.xml"},
     {"id":"macromicro","name":"財經M平方","threads":null,"youtubeChannelId":"UC6LU7FUBvbFCh_cQasrHZ_Q","podcastFeed":null},
     {"id":"statementdog","name":"財報狗","threads":null,"youtubeHandle":"StatementdogAcademy","podcastFeed":"https://feed.firstory.me/rss/user/clcftm46z000201z45w1c47fi"},
     {"id":"johnstock888","name":"John 林睿閔","threads":null,"youtubeHandle":null,"podcastFeed":null},
-    {"id":"s178178","name":"郭哲榮分析師","threads":"s178178","youtubeHandle":null,"podcastFeed":null}
+    {"id":"s178178","name":"郭哲榮分析師","threads":"s178178","threadsKeywords":["台股","法人"],"youtubeHandle":null,"podcastFeed":null}
   ],
   "threadsSearchEndpoint": "https://graph.threads.net/keyword_search"
 }

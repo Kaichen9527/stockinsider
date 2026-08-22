@@ -2,10 +2,13 @@
 
 const { bounded, canonicalJson, immutableBundle, invariant, sha256 } = require('./codec');
 const { serializeCorrectnessPublicUnion } = require('./public-projection');
-const { compatibilityAction, unavailableDecisionEnvelope, validateDecisionEnvelopeV313,
-  overrideDecisionEnvelopeAction } = require('./decision-envelope');
+const { compatibilityAction, unavailableDecisionEnvelope, overrideDecisionEnvelopeAction, validateDecisionEnvelopeV313,
+  } = require('./decision-envelope');
 const { validateDecisionEnvelopeV314 } = require('./decision-envelope-v314');
 const { assessProjectionFreshness } = require('./projection-freshness');
+const { deriveResearchNextStep } = require('./research-next-step-v317');
+const { buildResearchSnapshotV317 } = require('./research-snapshot-v317');
+const { buildResearchDossierV318 } = require('./research-dossier-v318');
 
 const CARD_BUCKETS = Object.freeze([
   'opportunities', 'scenarioUpsideCandidates', 'earlyWatchlist',
@@ -45,6 +48,17 @@ function decisionRevisionIdentityBundle(card) {
     const envelope = { ...identityMaterial.decisionEnvelope };
     delete envelope.decisionRevisionId;
     identityMaterial.decisionEnvelope = envelope;
+  }
+  // A V3.18 dossier is part of the immutable decision revision.  Its two
+  // identifiers are derived from this same identity, so strip only those
+  // cyclic fields before hashing; all display facts, evidence and blockers
+  // remain identity-bearing material.
+  if (identityMaterial.researchDossier && typeof identityMaterial.researchDossier === 'object'
+      && !Array.isArray(identityMaterial.researchDossier)) {
+    const dossier = { ...identityMaterial.researchDossier };
+    delete dossier.dossierId;
+    delete dossier.decisionRevisionId;
+    identityMaterial.researchDossier = dossier;
   }
   return immutableBundle('legacy_decision_revision_identity_v3_13',
     ['decision-revision-v3.13.2', identityMaterial]);
@@ -318,9 +332,17 @@ function citedDecisionBrief(brief, citations, provenance) {
 }
 
 function landingLane(card) {
-  const action=card?.decisionEnvelope?.userAction;
+  const envelopeAction=card?.decisionEnvelope?.userAction;
+  // The formal envelope alone controls executable action.  ResearchNextStep is
+  // deliberately a separate, non-executable routing hint for an incomplete or
+  // globally read-only decision.  It keeps a support/reclaim/breakout setup
+  // visible without relabelling it as a buy.
+  const nextAction=card?.researchNextStep?.kind;
+  const action=card?.projectionReadOnly===true
+    ?(nextAction==='ready'?'wait_refresh':nextAction??'unavailable')
+    :(envelopeAction==='unavailable'?(nextAction==='ready'?'wait_refresh':nextAction??envelopeAction):envelopeAction);
   if(['buy','accumulate','research_starter'].includes(action))return 'actionable';
-  if(card?.proximityToAction===true||['wait_value','wait_market','wait_breakout','wait_reclaim','avoid_chase','avoid'].includes(action)){
+  if(card?.proximityToAction===true||['wait_value','wait_market','wait_breakout','wait_reclaim','wait_refresh','avoid_chase','avoid'].includes(action)){
     return 'waiting';
   }
   return 'research';
@@ -347,7 +369,8 @@ function removeLowestPrioritySignal(cards) {
   return cards;
 }
 
-function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates = [], marketAnalysis = null) {
+function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates = [], marketAnalysis = null,
+  { researchSnapshotEnabled = false, researchDossierEnabled = false } = {}) {
   const clean = stripCorrectnessAdditions(legacyPayload);
   invariant(Array.isArray(clean.opportunities), 'legacy opportunities required');
   const bySymbol = new Map(decisions.filter((decision) => typeof decision?.symbol === 'string')
@@ -378,7 +401,10 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
       const authorityDecision=decision.decisionEnvelope===undefined
         ?{...decision,decisionEnvelope:unavailableDecisionEnvelope({evaluatedAt:decision.lastEvaluatedAt??asOf,
           symbol:decision.symbol})}:decision;
-      const effectiveDecision=!availableBrief&&authorityDecision.decisionEnvelope?.userAction!=='unavailable'
+      // V3.17 gives a missing cited brief a research-only detail view. Earlier
+      // compatibility schemas retain their original unavailable envelope.
+      const effectiveDecision=!researchSnapshotEnabled&&!availableBrief
+        &&authorityDecision.decisionEnvelope?.userAction!=='unavailable'
         ?{...authorityDecision,decisionEnvelope:overrideDecisionEnvelopeAction(authorityDecision.decisionEnvelope,'unavailable',
           DECISION_BRIEF_UNAVAILABLE_REASON)}:authorityDecision;
       const unboundView=derivePublicOpportunityView(effectiveDecision,marketAnalysis);
@@ -391,6 +417,22 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
       // record. Keep one canonical citation copy here. Complete evidence remains
       // in the decision revision payload addressed by decisionRevisionId.
       const publicCitations=citations;
+      const researchNextStep=researchSnapshotEnabled?deriveResearchNextStep({
+        decisionEnvelope: publicView.decisionEnvelope,
+        technicalState: decision.technical?.technicalState ?? decision.researchScore?.priceContext?.technicalState ?? null,
+        trigger: decision.technical?.trigger ?? null,
+        invalidation: decision.technical?.invalidation ?? null,
+        nextUnlock: publicView.decisionEnvelope.nextUnlock ?? null,
+        missingAxes: decision.researchRanking?.missingAxes ?? [],
+        blockers: decision.researchRanking?.softBlockers ?? [],
+      }):null;
+      const researchSnapshot=researchSnapshotEnabled?buildResearchSnapshotV317({candidate:{...decision,sourceProvenance},
+        decision:{...decision,decisionBrief},researchScore:decision.researchScore,
+        // An evaluation heartbeat is not new research. Bind the snapshot to
+        // the immutable analysis input so an unchanged rerun keeps the same
+        // decision revision and detail URL.
+        sourceCutoff:decision.analysisGeneratedAt??decision.analysisRevision?.analysisGeneratedAt
+          ??decision.sourceCutoff??asOf,researchNextStep}):null;
       const card = {
       symbol: decision.symbol, chineseName: typeof decision.name === 'string'
         ? [...decision.name.normalize('NFC')].slice(0,20).join('') : null, researchMaturity: 'source_signal',
@@ -404,8 +446,11 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
       changedBecause: signalReasons.has(decision.reason) ? decision.reason : 'new_source_evidence',
       sourceProvenance, citations:publicCitations,
       decisionBrief,
+      ...(researchNextStep?{researchNextStep}:{}),
+      ...(researchSnapshot?{researchSnapshot}:{}),
       researchRanking:decision.researchRanking??null,
       proximityToAction:decision.researchRanking?.lane==='near_buy',
+      ...(researchSnapshot?.gateWaterfall?{gateWaterfall:researchSnapshot.gateWaterfall}:{}),
       nextUnlock:publicView.decisionEnvelope.nextUnlock??null,
       ...publicView,
       ...(Number.isFinite(decision.researchScore?.underreactionScore) ? {
@@ -442,16 +487,62 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
         } : {}),
       } : {}),
     };
-      return bindDecisionRevisionCard(card);
+      if (!researchDossierEnabled) return bindDecisionRevisionCard(card);
+      // The dossier is first included without its derived IDs so its factual
+      // content participates in the decision revision hash.  Rebuild it after
+      // binding to attach the exact same revision ID shown by the detail URL.
+      const draftDossier = buildResearchDossierV318({ candidate: decision,
+        decision: { ...decision, decisionEnvelope: publicView.decisionEnvelope, decisionBrief },
+        sourceCutoff: decision.analysisGeneratedAt ?? decision.analysisRevision?.analysisGeneratedAt
+          ?? decision.sourceCutoff ?? asOf });
+      const bound = bindDecisionRevisionCard({ ...card, researchDossier: draftDossier });
+      return Object.freeze({ ...bound, researchDossier: buildResearchDossierV318({ candidate: decision,
+        decision: { ...decision, decisionEnvelope: bound.decisionEnvelope, decisionBrief },
+        sourceCutoff: decision.analysisGeneratedAt ?? decision.analysisRevision?.analysisGeneratedAt
+          ?? decision.sourceCutoff ?? asOf }) });
     });
   return { legacy: alignLegacyMarketView(clean, marketAnalysis), sourceSignals };
+}
+
+function compactLandingSignal(card) {
+  if (!card || typeof card !== 'object' || Array.isArray(card)) return card;
+  const compact = { ...card };
+  // Full facts, citations and decision are available only through the
+  // immutable revision.  Never make the Radar request path carry a second
+  // mutable-looking copy of the dossier.
+  delete compact.researchDossier;
+  return compact;
+}
+
+// Each Radar window has its own byte budget.  A card that survives in daily,
+// hot or weekly but is compacted out of home must still resolve its immutable
+// detail URL, so persist the union rather than treating home as a hidden
+// authority.  Equal revision IDs are required to have identical immutable
+// material; disagreement is a producer defect, not a tie to pick arbitrarily.
+function collectDecisionRevisionCards(projections) {
+  const byIdentity = new Map();
+  for (const projection of Array.isArray(projections) ? projections : []) {
+    for (const card of Array.isArray(projection?.decisionRevisionCards) ? projection.decisionRevisionCards : []) {
+      invariant(card && typeof card === 'object' && !Array.isArray(card)
+        && /^\d{4}$/u.test(String(card.symbol ?? ''))
+        && typeof card.decisionRevisionId === 'string', 'decision revision card identity required');
+      const key = `${card.symbol}:${card.decisionRevisionId}`;
+      const prior = byIdentity.get(key);
+      if (prior) {
+        invariant(canonicalJson(immutableDecisionRevisionCard(prior))
+          === canonicalJson(immutableDecisionRevisionCard(card)), 'decision revision window conflict');
+      } else byIdentity.set(key, card);
+    }
+  }
+  return Object.freeze([...byIdentity.values()].sort((left, right) => String(left.symbol).localeCompare(String(right.symbol))
+    || String(left.decisionRevisionId).localeCompare(String(right.decisionRevisionId))));
 }
 
 function publishCompactRadarProjection({ decisions, sourceCandidates = [], discoveryDelta, marketAnalysis = null,
   sourceAcquisitionHealth = null,
   freshnessSchedule = [],window, asOf, evaluatedAt = asOf, publishedAt = asOf, contentAsOf = asOf,
   materialChanged = null, priorProjection = null, producerIdentity, legacyPayload,
-  schemaVersion = 'legacy-radar-v3.13.0' }) {
+  schemaVersion = 'legacy-radar-v3.14.0' }) {
   invariant(['daily', 'hot', 'weekly', 'home'].includes(window), 'radar window');
   invariant(decisions.length <= 60, 'radar card bound');
   invariant(legacyPayload && typeof legacyPayload === 'object' && !Array.isArray(legacyPayload), 'legacy radar payload required');
@@ -460,12 +551,18 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
   // The captured legacy payload is research input, never current release
   // authority. Only the tracked run's frozen lineage may enable actions.
   const publicAcquisitionHealth=sourceAcquisitionHealth??null;
-  const layered = addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates, publicMarketAnalysis);
+  const researchSnapshotEnabled=['legacy-radar-v3.17.0','legacy-radar-v3.18.0'].includes(schemaVersion);
+  const researchDossierEnabled=schemaVersion==='legacy-radar-v3.18.0';
+  const layered = addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates, publicMarketAnalysis,
+    {researchSnapshotEnabled,researchDossierEnabled});
   const publishableSourceSignals=selectLandingSourceSignals(layered.sourceSignals.filter((card)=>{
     const validBrief=card.decisionBrief&&card.citations?.length>0
-      &&((card.decisionBrief.availability==='unavailable'
+      &&((researchSnapshotEnabled&&card.decisionBrief.availability==='unavailable'
           &&card.decisionBrief.reason===DECISION_BRIEF_UNAVAILABLE_REASON
-          &&card.decisionEnvelope.userAction==='unavailable')
+          &&card.researchSnapshot?.version==='research-snapshot-v3.17.0')
+        ||(!researchSnapshotEnabled&&card.decisionBrief.availability==='unavailable'
+          &&card.decisionBrief.reason===DECISION_BRIEF_UNAVAILABLE_REASON
+          &&card.decisionEnvelope?.userAction==='unavailable')
         ||citedDecisionBrief(card.decisionBrief,card.citations,card.sourceProvenance));
     const validProvenance=validPrimaryProvenance(card.sourceProvenance,card.citations??[]);
     return Boolean(validBrief&&validProvenance);
@@ -479,19 +576,29 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
       added:(discoveryDelta?.added??[]).filter((symbol)=>publishableSymbols.has(symbol)),
       continued:(discoveryDelta?.continued??[]).filter((symbol)=>publishableSymbols.has(symbol)),
       unchangedReasons:(discoveryDelta?.unchangedReasons??[]).filter((row)=>publishableSymbols.has(row?.symbol))};
+    const compactSignals=selectedSignals.map(compactLandingSignal);
     const materialContentHash = sha256(canonicalJson(omitProjectionHeartbeat({ legacy:layered.legacy,
-      sourceSignals:selectedSignals,discoveryDelta:publicDiscoveryDelta,underreactionMarket:publicMarketAnalysis })));
+      sourceSignals:compactSignals,discoveryDelta:publicDiscoveryDelta,underreactionMarket:publicMarketAnalysis })));
     const resolvedMaterialChanged = materialChanged ?? priorCorrectness?.contentHash !== materialContentHash;
     const resolvedContentAsOf = resolvedMaterialChanged ? contentAsOf
       : priorCorrectness?.contentAsOf ?? priorCorrectness?.asOf ?? contentAsOf;
     const freshness = assessProjectionFreshness({ contentAsOf:resolvedContentAsOf,evaluatedAt,publishedAt,
       now:new Date(publishedAt),tradingSessions:freshnessSchedule });
     return {
-      ...layered.legacy,sourceSignals:selectedSignals,discoveryDelta:publicDiscoveryDelta,
+      ...layered.legacy,sourceSignals:compactSignals,discoveryDelta:publicDiscoveryDelta,
       underreactionMarket:publicMarketAnalysis,
       sourceAcquisitionHealth:publicAcquisitionHealth,
+      sourceWatermark:{sourceCutoff:contentAsOf,
+        acquisitionAuthority:publicAcquisitionHealth?.acquisitionAuthority??'unavailable',
+        evidenceRoot:publicAcquisitionHealth?.acquisitionEvidenceRoot??null,
+        fetchedAt:publicAcquisitionHealth?.fetchedAt??null,
+        terminalStatus:publicAcquisitionHealth?.terminalStatus??null},
+      authorizationStatus:{telegram:'not_authorized',investanchors:'internal_methodology_only',
+        sourceClaims:'authorized_terminal_outcomes_required'},
       releaseIdentity:{schema:schemaVersion,producerCommitSha:producerIdentity?.commitSha??null,
-        runtimeManifestSha256:producerIdentity?.runtimeManifestSha256??null,migrationLevel:'provider-acquisition-v3.16.21'},
+        runtimeManifestSha256:producerIdentity?.runtimeManifestSha256??null,
+        migrationLevel:schemaVersion==='legacy-radar-v3.18.0'
+          ?'candidate-ledger-retention-v3.18':'provider-acquisition-v3.16.21'},
       sourceLedCorrectness:{schema:schemaVersion,window,asOf,contentAsOf:resolvedContentAsOf,evaluatedAt,publishedAt,
         nextExpectedAt:freshness.nextExpectedAt,freshnessSchedule:freshnessSchedule.slice(0,80),
         contentHash:materialContentHash,producerIdentity,
@@ -522,6 +629,7 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
     payloadChecksum,
     etag: `\"sha256:${payloadChecksum}\"`,
     producerIdentity,
+    decisionRevisionCards: Object.freeze(selectedSignals),
     bundle: immutableBundle('legacy_radar_projection_v3_11', payload),
   });
 }
@@ -529,5 +637,6 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
 module.exports = { CARD_BUCKETS, DECISION_BRIEF_UNAVAILABLE_REASON, addResearchDecisions, decisionRevisionIdentityBundle,
   citedDecisionBrief, derivePublicOpportunityView, immutableDecisionRevisionCard, navigableCitations,
   landingLane, publishCompactRadarProjection, selectLandingSourceSignals, stripCorrectnessAdditions,
+  compactLandingSignal, collectDecisionRevisionCards,
   validCitation, validHttpsUrl, validInstant,
   validPrimaryProvenance };
