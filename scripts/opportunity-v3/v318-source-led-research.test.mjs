@@ -28,7 +28,10 @@ test('V3.18 keeps no-new source candidates through twenty completed sessions wit
   assert.equal(retained.candidateLedger.length,1);
   assert.equal(retained.candidateLedger[0].retainedSessionCount,20);
   assert.equal(retained.candidateLedger[0].disposition,'unchanged');
-  assert.equal(retained.candidateLedger[0].reason,'source_evidence_retained_within_20_sessions');
+  assert.equal(retained.candidateLedger[0].reason,'same_material_evidence',
+    'the persisted ledger reason remains within its closed enum');
+  assert.equal(retained.candidateLedger[0].retentionReason,'source_evidence_retained_within_20_sessions',
+    'the V3.18-specific retention explanation is additive metadata');
   assert.equal(retained.discoveryDelta.added.length,0);
   assert.deepEqual(retained.discoveryDelta.retained,['2303']);
   const retry=buildCandidateFunnel({outcomes:[],seedSymbols:[],priorLedger:retained.candidateLedger,
@@ -36,7 +39,8 @@ test('V3.18 keeps no-new source candidates through twenty completed sessions wit
   assert.equal(retry.candidateLedger[0].retainedSessionCount,20,
     'the same frozen cutoff retry cannot consume a second retention session');
   const unavailable=buildCandidateFunnel({outcomes:[],seedSymbols:[],priorLedger:first.candidateLedger,currentSession:sessions[1],completedSessions:sessions,sourceAvailable:false});
-  assert.equal(unavailable.candidateLedger[0].reason,'source_unavailable_retained_last_good');
+  assert.equal(unavailable.candidateLedger[0].reason,'same_material_evidence');
+  assert.equal(unavailable.candidateLedger[0].retentionReason,'source_unavailable_retained_last_good');
   const expired=buildCandidateFunnel({outcomes:[],seedSymbols:[],priorLedger:first.candidateLedger,currentSession:sessions[21],completedSessions:sessions});
   assert.equal(expired.candidateLedger.length,0);
   assert.deepEqual(expired.discoveryDelta.exited,['2303']);
