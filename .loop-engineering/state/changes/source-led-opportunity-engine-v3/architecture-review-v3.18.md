@@ -1,19 +1,27 @@
-# V3.18 independent Architecture review
+# V3.18 independent Architecture review — protected catalog repair closure
 
-Date: 2026-08-22
-Review authority: the sole independent, read-only Architecture review following
-the V3.18 Requirements PASS.
+Date: 2026-08-23
+Review authority: independent, read-only Architecture review following the
+fresh V3.18 protected-catalog repair Requirements PASS.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
 - Protected implementation parent: `88c9e4c7c619ac777f6d717d9fd7019864d85537`
-- Final repair-closure commit/tree: `0ded709c3d3ffbe3dce6dd67f44f9ed7e09d1feb` / `82f11c25fd3351177a9264e682ab30510d9b7eb3`
-- Full reviewed implementation range: `88c9e4c7c619ac777f6d717d9fd7019864d85537..0ded709c3d3ffbe3dce6dd67f44f9ed7e09d1feb`
-- Active graph: `3859743065324e8c1c9cca2a460ab8ba15c5dc91319b543eaa3898a3db834ddd`
+- Final repair-closure commit/tree: `b00459f57f8ba06aaa81fae141627a9bc762f0c7` / `e962592061038b44b0f906dab75d86a66a0128cc`
+- Full reviewed implementation range: `88c9e4c7c619ac777f6d717d9fd7019864d85537..b00459f57f8ba06aaa81fae141627a9bc762f0c7`
+- Active graph: `729370999da4668cc5d8291e0e160a44c2d1a14edaae9a871f95be9e0203ac6d`
 
 ## Architecture closure
+
+The repair updates only the closed control-plane identity bundle. The catalog
+remains the single owner list; its tracked SHA is declared identically by the
+design, evidence contract and executable structural oracle, while the
+acceptance inventory independently binds the actual 14 script values. This
+prevents a catalog topology extension from leaving the protected gate with a
+predecessor digest. No data flow, migration SQL, connector capability,
+projection shape, runtime activation or public decision policy changes.
 
 The host pin is a protected-base bootstrap, while the release candidate contains
 no alternate host oracle. The active catalog's V3.17 predecessor is present in
