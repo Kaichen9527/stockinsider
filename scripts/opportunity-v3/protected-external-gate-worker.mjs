@@ -66,19 +66,19 @@ const gatePolicies = Object.freeze({
 });
 const reviewSources = Object.freeze({
   requirements: {
-    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-requirements-evidence',
-    path: `${changeRelative}/requirements-review-round-100.md`,
+    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v318-requirements-evidence',
+    path: `${changeRelative}/requirements-review-v3.18.md`,
     finalLine: 'Final repair-closure commit/tree',
     rangeLine: 'Full reviewed range',
   },
   architecture: {
-    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-architecture-evidence-v2',
-    path: `${changeRelative}/architecture-review-round-11.md`,
+    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v318-architecture-evidence',
+    path: `${changeRelative}/architecture-review-v3.18.md`,
     finalLine: 'Final repair-closure commit/tree',
     rangeLine: 'Full reviewed implementation range',
   },
   'exact-review': {
-    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-exact-review-evidence',
+    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v318-exact-review-evidence',
     path: `${changeRelative}/exact-commit-review-final.md`,
     finalLine: 'Final reviewed repair/tree',
     rangeLine: 'Full final range',
@@ -729,7 +729,7 @@ function executeTrack(subjectRoot, track, identity, attestation) {
         'scripts/model-runner-v3/model-runner-v3.test.js'], 'test:model-runner-v3');
       verify(executeClosedCandidate, modelNodeExecutable, ['scripts/run-node22.js', '--experimental-strip-types',
         'scripts/opportunity-v3/doctor.mjs', '--expect-mode', 'disabled', '--require-host-pin',
-        'model-runner-host-pins-v3.10'], 'disabled model runner doctor');
+        'model-runner-host-pins-v3.11'], 'disabled model runner doctor');
       const oracle = trustedHostModelOracle(subjectRoot, attestation, modelNodeExecutable);
       outputs.push(oracle);
       measured.push({ ...measuredResult(oracle, 'trusted protected-base exact-subject model oracle'), ownsPartitionCount: false });
