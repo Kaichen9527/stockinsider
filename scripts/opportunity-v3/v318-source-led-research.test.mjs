@@ -81,6 +81,15 @@ test('V3.18 dossier stays within one decision revision and makes missing data ex
   });
   assert.notEqual(changed.decisionRevisionCards[0].decisionRevisionId,revisionCard.decisionRevisionId,
     'detail-only material must create a new immutable decision revision');
+  const {collectDecisionRevisionCards}=projection;
+  const weeklyOnly={...revisionCard,symbol:'2304',decisionRevisionId:`decision-v3.14:${'f'.repeat(64)}`,
+    decisionEnvelope:{...revisionCard.decisionEnvelope,decisionRevisionId:`decision-v3.14:${'f'.repeat(64)}`},
+    researchDossier:{...revisionCard.researchDossier,symbol:'2304',decisionRevisionId:`decision-v3.14:${'f'.repeat(64)}`}};
+  const persisted=collectDecisionRevisionCards([{decisionRevisionCards:[revisionCard]},{decisionRevisionCards:[weeklyOnly]}]);
+  assert.deepEqual(persisted.map((item)=>item.symbol),['2303','2304'],
+    'a card visible only outside home still receives its immutable detail revision');
+  assert.throws(()=>collectDecisionRevisionCards([{decisionRevisionCards:[revisionCard]},
+    {decisionRevisionCards:[{...revisionCard,sourceSummary:'conflicting payload'}]}]),/window conflict/u);
 });
 
 test('V3.18 uses an explicit contrasting CTA rather than inherited foreground colour',()=>{

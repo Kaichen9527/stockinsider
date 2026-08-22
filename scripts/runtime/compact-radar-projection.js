@@ -514,6 +514,30 @@ function compactLandingSignal(card) {
   return compact;
 }
 
+// Each Radar window has its own byte budget.  A card that survives in daily,
+// hot or weekly but is compacted out of home must still resolve its immutable
+// detail URL, so persist the union rather than treating home as a hidden
+// authority.  Equal revision IDs are required to have identical immutable
+// material; disagreement is a producer defect, not a tie to pick arbitrarily.
+function collectDecisionRevisionCards(projections) {
+  const byIdentity = new Map();
+  for (const projection of Array.isArray(projections) ? projections : []) {
+    for (const card of Array.isArray(projection?.decisionRevisionCards) ? projection.decisionRevisionCards : []) {
+      invariant(card && typeof card === 'object' && !Array.isArray(card)
+        && /^\d{4}$/u.test(String(card.symbol ?? ''))
+        && typeof card.decisionRevisionId === 'string', 'decision revision card identity required');
+      const key = `${card.symbol}:${card.decisionRevisionId}`;
+      const prior = byIdentity.get(key);
+      if (prior) {
+        invariant(canonicalJson(immutableDecisionRevisionCard(prior))
+          === canonicalJson(immutableDecisionRevisionCard(card)), 'decision revision window conflict');
+      } else byIdentity.set(key, card);
+    }
+  }
+  return Object.freeze([...byIdentity.values()].sort((left, right) => String(left.symbol).localeCompare(String(right.symbol))
+    || String(left.decisionRevisionId).localeCompare(String(right.decisionRevisionId))));
+}
+
 function publishCompactRadarProjection({ decisions, sourceCandidates = [], discoveryDelta, marketAnalysis = null,
   sourceAcquisitionHealth = null,
   freshnessSchedule = [],window, asOf, evaluatedAt = asOf, publishedAt = asOf, contentAsOf = asOf,
@@ -613,6 +637,6 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
 module.exports = { CARD_BUCKETS, DECISION_BRIEF_UNAVAILABLE_REASON, addResearchDecisions, decisionRevisionIdentityBundle,
   citedDecisionBrief, derivePublicOpportunityView, immutableDecisionRevisionCard, navigableCitations,
   landingLane, publishCompactRadarProjection, selectLandingSourceSignals, stripCorrectnessAdditions,
-  compactLandingSignal,
+  compactLandingSignal, collectDecisionRevisionCards,
   validCitation, validHttpsUrl, validInstant,
   validPrimaryProvenance };
