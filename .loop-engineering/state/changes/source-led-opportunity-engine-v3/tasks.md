@@ -11,9 +11,11 @@
   candidates retained through twenty completed source sessions, topic-scoped approved
   source acquisition, compact landing cards, immutable same-revision research dossier,
   V3.18 schema/health compatibility and semantic CTA contrast.
-- [ ] Run exactly one fresh Requirements review and one independent Architecture
-  review for that immutable V3.18 tree; repair a common root once rather than
-  creating numbered review loops.
+- [x] Fresh Requirements review PASS with `P0=0 P1=0 P2=0`; evidence:
+  `requirements-review-v3.18.md` for immutable tree
+  `e751ea63f5a067f6341250cac5e850fde2bb8014`.
+- [ ] Run one independent Architecture review for that immutable V3.18 tree;
+  repair a common root once rather than creating numbered review loops.
 - [ ] Create the exact implementation commit, complete exact diff/repair/full-range
   review with P0=0/P1=0, and pass the protected Code Gate.
 - [ ] Apply only the exact reviewed cardinality and projection-supersession migrations, activate the matching
