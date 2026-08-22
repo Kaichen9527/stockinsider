@@ -116,3 +116,9 @@ test('V3.18 uses reviewed topic scopes for Threads and still requires the approv
   assert.deepEqual(threadDocuments.map((row)=>[row.profileId,row.stableConnectorDocumentId]),[['gooaye','gooaye-topic-1']]);
   assert.equal(result.connectorAttempts.length,51);
 });
+
+test('V3.18 research dossier code is part of the reviewed runtime bundle identity',()=>{
+  const {TRACKED_RUNTIME_PATHS,runtimeBundleSha256}=runtime('tracked-runtime-bundle.js');
+  assert.ok(TRACKED_RUNTIME_PATHS.includes('scripts/runtime/research-dossier-v318.js'));
+  assert.match(runtimeBundleSha256(root),/^[0-9a-f]{64}$/u);
+});
