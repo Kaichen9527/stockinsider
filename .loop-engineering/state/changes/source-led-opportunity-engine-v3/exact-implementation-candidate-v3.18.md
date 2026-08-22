@@ -22,3 +22,8 @@ authority remain pending.
 This marker is sealed only after the one fresh Requirements and independent
 Architecture evidence commits. It makes this host-rebased tree the sole V3.18
 exact-review subject; later evidence may add no implementation path.
+
+The final repair binds the Shadow parent PATH to the existing literal child
+allowlist. This closes the verified-worktree browser PCR path without admitting
+ambient executable lookup; the exact review evidence records the subject and
+tree rather than modifying this non-active marker after sealing.
