@@ -7,7 +7,8 @@
   disabled; V3.16.20 forensic activation remains rolled back and is never restarted.
 - [x] Mark every historical password/credential rotation item `superseded/do_not_execute`.
   The database password must not be reset.
-- [x] Freeze the one bounded V3.18 source-led implementation tree: source-nominated
+- [x] Freeze the one bounded V3.18 source-led implementation tree on the current
+  protected host-compatible base: source-nominated
   candidates retained through twenty completed source sessions, topic-scoped approved
   source acquisition, compact landing cards, immutable same-revision research dossier,
   V3.18 schema/health compatibility and semantic CTA contrast.

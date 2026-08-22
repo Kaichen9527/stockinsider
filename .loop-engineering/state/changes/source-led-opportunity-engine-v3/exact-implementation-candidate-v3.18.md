@@ -6,10 +6,9 @@ not change the frozen active graph or grant any runtime, migration, Web,
 trading, dispatch, LINE or Promotion authority.
 
 The exact subject is the immutable commit carrying this marker. Its reviewed
-range begins at the protected base commit
-`d719d6dace387cdf10917ba7553791d2d4c0ec3e`; the exact commit and tree
-identifiers are recorded by the evidence-only review child, rather than being
-self-referential in this marker.
+range begins at the protected base recorded by `current-release.json`; the
+exact commit and tree identifiers are recorded by the evidence-only review
+child, rather than being self-referential in this marker.
 
 The sealed subject includes the V3.18 source-led candidate retention, bounded
 revision dossier, additive migration, Web compatibility and the one-time
