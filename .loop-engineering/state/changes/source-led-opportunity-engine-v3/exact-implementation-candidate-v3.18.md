@@ -18,3 +18,7 @@ as a typed outcome, and returns policy-excluded source revisions as standard
 zero-claim terminal envelopes. The complete local product diagnostics are
 required against this exact tree; protected external evidence and production
 authority remain pending.
+
+This marker is sealed only after the one fresh Requirements and independent
+Architecture evidence commits. It makes this host-rebased tree the sole V3.18
+exact-review subject; later evidence may add no implementation path.
