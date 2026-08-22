@@ -490,6 +490,22 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
       assert.match(active,/- \[ \] Run one independent Architecture review/u,
         'Architecture review must remain pending after Requirements PASS');
     }
+    if(currentRelease.phase==='architecture_passed'){
+      assert.equal(currentRelease.gates.requirements,'pass',
+        'Architecture-pass phase retains Requirements gate');
+      assert.equal(currentRelease.gates.architecture,'pass',
+        'Architecture-pass phase has a closed Architecture gate');
+      assert.equal(currentRelease.actionQueue[0],'exact_review_and_code_gate',
+        'exact review is the sole next V3.18 code gate');
+      assert.match(active,new RegExp(`- \\[x\\] Freeze the one bounded ${currentRelease.version.toUpperCase().replace('.', '[.]')} source-led implementation tree`,'u'),
+        'the frozen implementation tree remains immutable through exact review');
+      assert.match(active,/- \[x\] Fresh Requirements review PASS with `P0=0 P1=0 P2=0`/u,
+        'Requirements remains closed through exact review');
+      assert.match(active,/- \[x\] Independent Architecture review PASS with `P0=0 P1=0 P2=0`/u,
+        'Architecture evidence must be closed before exact review');
+      assert.match(active,/- \[ \] Create the exact implementation commit, complete exact diff\/repair\/full-range/u,
+        'exact review must remain pending after Architecture PASS');
+    }
     if(['exact_review_passed','production_rollout','complete_with_concerns'].includes(currentRelease.phase))
       assert.doesNotMatch(active,new RegExp(`- \\[ \\] Freeze the one bounded ${currentRelease.version.toUpperCase().replace('.', '[.]')} source-led implementation tree`,'u'),
         'the bounded implementation repair cannot remain pending after exact review');
