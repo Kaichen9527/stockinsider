@@ -8,10 +8,10 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `d719d6dace387cdf10917ba7553791d2d4c0ec3e`
-- Final repair-closure commit/tree: `ba741a80f8952e9f69c91f8ae72a6c74406494b1` / `e751ea63f5a067f6341250cac5e850fde2bb8014`
-- Full reviewed range: `d719d6dace387cdf10917ba7553791d2d4c0ec3e..ba741a80f8952e9f69c91f8ae72a6c74406494b1`
-- Active graph: `ed543c0aed46a579b57cc08b242ec0b1ca08e2ccbfca55f4685f6b4f8d87005b`
+- Protected implementation parent: `88c9e4c7c619ac777f6d717d9fd7019864d85537`
+- Final repair-closure commit/tree: `601e1a3b8d14681131dd727ac7ea24868c2fa726` / `fe671f79fc85790856719db0d4fa11aaacbc7f3e`
+- Full reviewed range: `88c9e4c7c619ac777f6d717d9fd7019864d85537..601e1a3b8d14681131dd727ac7ea24868c2fa726`
+- Active graph: `3859743065324e8c1c9cca2a460ab8ba15c5dc91319b543eaa3898a3db834ddd`
 
 ## Requirements closure
 
@@ -39,7 +39,10 @@ revision owns the full V3.18 dossier with valuation bridge/scenarios,
 fundamentals, technical condition, thesis, risks, citations, dates and exact
 blockers; missing data stay explicit rather than being translated to `avoid`.
 
-Runtime and Web accept the additive V3.18 projection schema together. The
+The rebase includes the V3.17 amendment named by the active catalog before the
+V3.18 layer, so the protected tree can recompute its entire graph rather than
+referencing a missing predecessor artifact. Runtime and Web accept the additive
+V3.18 projection schema together. The
 runtime bundle includes the dossier module, every daily/hot/weekly card's
 revision is persisted, decision detail returns the exact revision-bound
 dossier, and the CTA foreground is explicit in both themes. The additive
