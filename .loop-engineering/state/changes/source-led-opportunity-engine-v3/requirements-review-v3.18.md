@@ -1,19 +1,29 @@
-# V3.18 single fresh Requirements review
+# V3.18 fresh Requirements review — protected catalog repair closure
 
-Date: 2026-08-22
-Review authority: the sole fresh, read-only Requirements review for the frozen
-V3.18 successor release.
+Date: 2026-08-23
+Review authority: independent, read-only Requirements review of the immutable
+V3.18 protected-catalog repair tree.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
 - Protected implementation parent: `88c9e4c7c619ac777f6d717d9fd7019864d85537`
-- Final repair-closure commit/tree: `61a4b83302916d7638c3dd77ef5c7fda0506520a` / `159987ad378c8e5b9416086f1036427a2d1e99e4`
-- Full reviewed range: `88c9e4c7c619ac777f6d717d9fd7019864d85537..61a4b83302916d7638c3dd77ef5c7fda0506520a`
-- Active graph: `3859743065324e8c1c9cca2a460ab8ba15c5dc91319b543eaa3898a3db834ddd`
+- Final repair-closure commit/tree: `629d96598d8770173a94036085cd16b0b68693ff` / `6f3fa0220fa4e15149a7310176964b71e6dafc63`
+- Full reviewed range: `88c9e4c7c619ac777f6d717d9fd7019864d85537..629d96598d8770173a94036085cd16b0b68693ff`
+- Active graph: `729370999da4668cc5d8291e0e160a44c2d1a14edaae9a871f95be9e0203ac6d`
 
 ## Requirements closure
+
+The repair closes one P1 contract-drift class found only by the protected
+product/runtime harness: the immutable active-artifact catalog, its two
+canonical authority tags, and the accepted script-value registry must be
+updated together. The repaired tree binds the 6,009-byte catalog to
+`9f7d845df3f2d12c7d2adae5dae87aac890e4c2eee59161c40f8e563e5908c4e` and
+the 14-row script registry to
+`b9a282a300815b887010cca2586d032bb12a9b78a7f23f28fdb5e20959bf0ae7`.
+No product rule, candidate, valuation, source, action authority, runtime mode,
+or production configuration changes in this repair.
 
 The V3.18 tree preserves source-led nomination. Only approved, entity-linked
 public source evidence can nominate a research candidate; official TWSE, TPEx
