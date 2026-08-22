@@ -468,6 +468,14 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
       assert.match(active,new RegExp(`- \\[ \\] Freeze the one bounded ${currentRelease.version.toUpperCase().replace('.', '[.]')} source-led implementation tree`,'u'),
         'the bounded implementation repair remains pending until its immutable tree is frozen');
     }
+    if(currentRelease.phase==='contract_frozen'){
+      assert.equal(currentRelease.actionQueue[0],'fresh_requirements_once',
+        'one fresh Requirements review follows the frozen implementation tree');
+      assert.match(active,new RegExp(`- \\[x\\] Freeze the one bounded ${currentRelease.version.toUpperCase().replace('.', '[.]')} source-led implementation tree`,'u'),
+        'a contract-frozen release must retain its completed immutable tree');
+      assert.match(active,/- \\[ \\] Run exactly one fresh Requirements review and one independent Architecture/u,
+        'a contract-frozen release must keep its one-time reviews pending');
+    }
     if(['exact_review_passed','production_rollout','complete_with_concerns'].includes(currentRelease.phase))
       assert.doesNotMatch(active,new RegExp(`- \\[ \\] Freeze the one bounded ${currentRelease.version.toUpperCase().replace('.', '[.]')} source-led implementation tree`,'u'),
         'the bounded implementation repair cannot remain pending after exact review');
