@@ -144,6 +144,23 @@ test('V3.18 uses reviewed topic scopes for Threads and still requires the approv
   assert.equal(result.connectorAttempts.length,51);
 });
 
+test('V3.18 preserves policy-excluded source terminals without breaking the mention barrier envelope',()=>{
+  const {extractRevisionCandidates}=runtime('auth-source-worker-cli.js');
+  for(const sourceKey of ['telegram','investanchors']){
+    const result=extractRevisionCandidates({frozenRevision:{
+      revisionId:`71300000-0000-4000-8000-0000000000${sourceKey==='telegram'?'31':'32'}`,
+      sourceKey,rawFieldPayload:{text:'2330 未經授權的內容不得參與研究。'},
+    }});
+    assert.equal(result.schema,'legacy-mention-claim-result-v3.11');
+    assert.equal(result.parseOutcome,'processed_no_claim');
+    assert.equal(result.documentOutcome.reason,`${sourceKey}_content_not_authorized`);
+    assert.deepEqual(result.candidates,[]);
+    assert.deepEqual(result.claimOutcomes,[]);
+    assert.deepEqual(result.entityOutcomes,[]);
+    assert.equal(result.conservation.outcome,'not_authorized');
+  }
+});
+
 test('V3.18 research dossier code is part of the reviewed runtime bundle identity',()=>{
   const {TRACKED_RUNTIME_PATHS,runtimeBundleSha256}=runtime('tracked-runtime-bundle.js');
   assert.ok(TRACKED_RUNTIME_PATHS.includes('scripts/runtime/research-dossier-v318.js'));

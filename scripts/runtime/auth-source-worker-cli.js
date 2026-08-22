@@ -208,6 +208,21 @@ function canonicalUtc(value, label) {
 function extractRevisionCandidates(bundle) {
   const frozen = bundle.frozenRevision;
   invariant(frozen && typeof frozen.revisionId === 'string', 'frozen revision unavailable');
+  // Telegram content is not authorized for this product's AI/ML processing,
+  // and paid InvestAnchors material is methodology-only. Keep their terminal
+  // acquisition outcome observable, but never turn either into a candidate.
+  // The downstream mention barrier consumes the standard extraction envelope,
+  // so policy denial must be a terminal zero-claim document outcome rather
+  // than a shape-changing early return that can abort unrelated source work.
+  if(['telegram','investanchors'].includes(String(frozen.sourceKey))) {
+    const sourceKey=String(frozen.sourceKey);
+    return Object.freeze({ schema: 'legacy-mention-claim-result-v3.11', revisionId:frozen.revisionId,
+      candidates:Object.freeze([]), parseOutcome:'processed_no_claim',
+      documentOutcome:Object.freeze({outcome:'processed_no_claim',reason:`${sourceKey}_content_not_authorized`}),
+      claimOutcomes:Object.freeze([]), entityOutcomes:Object.freeze([]),
+      conservation:Object.freeze({documentCount:1,claimCount:0,entityCount:0,linkedEntityCount:0,rejectedEntityCount:0,
+        sourceKey,outcome:'not_authorized',candidateCount:0}) });
+  }
   const pages = Array.isArray(bundle.authorityPages) ? bundle.authorityPages : [];
   const rowsByKind = (kind) => pages.filter((page) => Array.isArray(page) && page[0] === kind)
     .flatMap((page) => Array.isArray(page[3]) ? page[3] : []);
