@@ -435,7 +435,7 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
       '.loop-engineering/state/changes/source-led-opportunity-engine-v3/current-release.json');
     assert.equal(currentRelease.schema,'stockinsider-current-release-v1');
     assert.match(currentRelease.version,/^v3[.]\d+(?:[.]\d+)*$/u);
-    const phases=['implementation_in_progress','requirements_passed','architecture_passed','exact_review_passed',
+    const phases=['implementation_in_progress','contract_frozen','requirements_passed','architecture_passed','exact_review_passed',
       'production_rollout','complete_with_concerns'];
     assert.ok(phases.includes(currentRelease.phase),'current release phase is closed');
     const gateStates=new Set(['pending','pass','blocked']);
@@ -465,7 +465,7 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
     if(currentRelease.phase==='implementation_in_progress'){
       assert.match(currentRelease.actionQueue[0],/^freeze_[a-z0-9_]+$/u,
         'the bounded implementation tree is the sole next step');
-      assert.match(active,/- \[ \] Freeze the one bounded V3[.]17 source-led implementation tree/u,
+      assert.match(active,new RegExp(`- \\[ \\] Freeze the one bounded ${currentRelease.version.toUpperCase().replace('.', '[.]')} source-led implementation tree`,'u'),
         'the bounded implementation repair remains pending until its immutable tree is frozen');
     }
     if(currentRelease.phase==='contract_frozen'){
@@ -507,7 +507,7 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
         'exact review must remain pending after Architecture PASS');
     }
     if(['exact_review_passed','production_rollout','complete_with_concerns'].includes(currentRelease.phase))
-      assert.doesNotMatch(active,/- \[ \] Freeze the one bounded V3[.]17 source-led implementation tree/u,
+      assert.doesNotMatch(active,new RegExp(`- \\[ \\] Freeze the one bounded ${currentRelease.version.toUpperCase().replace('.', '[.]')} source-led implementation tree`,'u'),
         'the bounded implementation repair cannot remain pending after exact review');
     return;
   }

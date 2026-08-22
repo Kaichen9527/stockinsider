@@ -8,6 +8,7 @@ const { validateDecisionEnvelopeV314 } = require('./decision-envelope-v314');
 const { assessProjectionFreshness } = require('./projection-freshness');
 const { deriveResearchNextStep } = require('./research-next-step-v317');
 const { buildResearchSnapshotV317 } = require('./research-snapshot-v317');
+const { buildResearchDossierV318 } = require('./research-dossier-v318');
 
 const CARD_BUCKETS = Object.freeze([
   'opportunities', 'scenarioUpsideCandidates', 'earlyWatchlist',
@@ -369,7 +370,7 @@ function removeLowestPrioritySignal(cards) {
 }
 
 function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates = [], marketAnalysis = null,
-  { researchSnapshotEnabled = false } = {}) {
+  { researchSnapshotEnabled = false, researchDossierEnabled = false } = {}) {
   const clean = stripCorrectnessAdditions(legacyPayload);
   invariant(Array.isArray(clean.opportunities), 'legacy opportunities required');
   const bySymbol = new Map(decisions.filter((decision) => typeof decision?.symbol === 'string')
@@ -513,30 +514,6 @@ function compactLandingSignal(card) {
   return compact;
 }
 
-// Each Radar window has its own byte budget.  A card that survives in daily,
-// hot or weekly but is compacted out of home must still resolve its immutable
-// detail URL, so persist the union rather than treating home as a hidden
-// authority.  Equal revision IDs are required to have identical immutable
-// material; disagreement is a producer defect, not a tie to pick arbitrarily.
-function collectDecisionRevisionCards(projections) {
-  const byIdentity = new Map();
-  for (const projection of Array.isArray(projections) ? projections : []) {
-    for (const card of Array.isArray(projection?.decisionRevisionCards) ? projection.decisionRevisionCards : []) {
-      invariant(card && typeof card === 'object' && !Array.isArray(card)
-        && /^\d{4}$/u.test(String(card.symbol ?? ''))
-        && typeof card.decisionRevisionId === 'string', 'decision revision card identity required');
-      const key = `${card.symbol}:${card.decisionRevisionId}`;
-      const prior = byIdentity.get(key);
-      if (prior) {
-        invariant(canonicalJson(immutableDecisionRevisionCard(prior))
-          === canonicalJson(immutableDecisionRevisionCard(card)), 'decision revision window conflict');
-      } else byIdentity.set(key, card);
-    }
-  }
-  return Object.freeze([...byIdentity.values()].sort((left, right) => String(left.symbol).localeCompare(String(right.symbol))
-    || String(left.decisionRevisionId).localeCompare(String(right.decisionRevisionId))));
-}
-
 function publishCompactRadarProjection({ decisions, sourceCandidates = [], discoveryDelta, marketAnalysis = null,
   sourceAcquisitionHealth = null,
   freshnessSchedule = [],window, asOf, evaluatedAt = asOf, publishedAt = asOf, contentAsOf = asOf,
@@ -550,9 +527,10 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
   // The captured legacy payload is research input, never current release
   // authority. Only the tracked run's frozen lineage may enable actions.
   const publicAcquisitionHealth=sourceAcquisitionHealth??null;
-  const researchSnapshotEnabled=schemaVersion==='legacy-radar-v3.17.0';
+  const researchSnapshotEnabled=['legacy-radar-v3.17.0','legacy-radar-v3.18.0'].includes(schemaVersion);
+  const researchDossierEnabled=schemaVersion==='legacy-radar-v3.18.0';
   const layered = addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates, publicMarketAnalysis,
-    {researchSnapshotEnabled});
+    {researchSnapshotEnabled,researchDossierEnabled});
   const publishableSourceSignals=selectLandingSourceSignals(layered.sourceSignals.filter((card)=>{
     const validBrief=card.decisionBrief&&card.citations?.length>0
       &&((researchSnapshotEnabled&&card.decisionBrief.availability==='unavailable'
@@ -635,6 +613,6 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
 module.exports = { CARD_BUCKETS, DECISION_BRIEF_UNAVAILABLE_REASON, addResearchDecisions, decisionRevisionIdentityBundle,
   citedDecisionBrief, derivePublicOpportunityView, immutableDecisionRevisionCard, navigableCitations,
   landingLane, publishCompactRadarProjection, selectLandingSourceSignals, stripCorrectnessAdditions,
-  compactLandingSignal, collectDecisionRevisionCards,
+  compactLandingSignal,
   validCitation, validHttpsUrl, validInstant,
   validPrimaryProvenance };

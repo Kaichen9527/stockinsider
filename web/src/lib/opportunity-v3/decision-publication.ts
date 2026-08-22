@@ -204,6 +204,68 @@ function validResearchNextStep(value: unknown): boolean {
     &&finitePositive(trigger.threshold);
 }
 
+function validResearchDossier(value:unknown,symbol:string,revisionId:string):boolean{
+  if(!value||typeof value!=='object'||Array.isArray(value))return false;
+  const dossier=value as Record<string,unknown>;
+  if(dossier.version!=='research-dossier-v3.18.0'||typeof dossier.dossierId!=='string'
+    ||!/^research-v3[.]18:[0-9a-f]{64}$/u.test(dossier.dossierId)
+    ||dossier.symbol!==symbol||dossier.decisionRevisionId!==revisionId)return false;
+  if((dossier.sourceCutoff!==null&&!validRfc3339Instant(dossier.sourceCutoff)))return false;
+  const valuation=dossier.valuation;const technical=dossier.technical;const fundamental=dossier.fundamental;
+  const ranking=dossier.ranking;const citations=dossier.citations;const blockers=dossier.blockers;
+  if(!valuation||typeof valuation!=='object'||Array.isArray(valuation)
+    ||!technical||typeof technical!=='object'||Array.isArray(technical)
+    ||!fundamental||typeof fundamental!=='object'||Array.isArray(fundamental)
+    ||!ranking||typeof ranking!=='object'||Array.isArray(ranking)
+    ||!Array.isArray(citations)||citations.length>16||!Array.isArray(blockers)||blockers.length>12)return false;
+  const valuationRow=valuation as Record<string,unknown>;const technicalRow=technical as Record<string,unknown>;
+  const fundamentalRow=fundamental as Record<string,unknown>;const rankingRow=ranking as Record<string,unknown>;
+  const nullableText=(item:unknown,maximum:number)=>item===null||(nonempty(item)&&item.length<=maximum);
+  const finiteOrNull=(item:unknown)=>item===null||(typeof item==='number'&&Number.isFinite(item));
+  const uniqueTextArray=(item:unknown,maximum:number,length=160)=>Array.isArray(item)&&item.length<=maximum
+    &&item.every((entry)=>nonempty(entry)&&entry.length<=length)&&new Set(item).size===item.length;
+  const range=valuationRow.formalRange;
+  const validRange=range===null||Boolean(range&&typeof range==='object'&&!Array.isArray(range)
+    &&exactObjectKeys(range as Record<string,unknown>,['bear','base','bull'])
+    &&finitePositive((range as Record<string,unknown>).bear)&&finitePositive((range as Record<string,unknown>).base)
+    &&finitePositive((range as Record<string,unknown>).bull)
+    &&Number((range as Record<string,unknown>).bear)<=Number((range as Record<string,unknown>).base)
+    &&Number((range as Record<string,unknown>).base)<=Number((range as Record<string,unknown>).bull));
+  const relative=valuationRow.relative;
+  const validRelative=relative===null||Boolean(relative&&typeof relative==='object'&&!Array.isArray(relative)
+    &&exactObjectKeys(relative as Record<string,unknown>,['current','ownHistoryMedian','sector','ownSessionCount','peerCount'])
+    &&['current','ownHistoryMedian','sector','ownSessionCount','peerCount'].every((key)=>finiteOrNull((relative as Record<string,unknown>)[key])));
+  const bridge=valuationRow.bridge;
+  const validBridge=bridge===null||Boolean(bridge&&typeof bridge==='object'&&!Array.isArray(bridge)
+    &&exactObjectKeys(bridge as Record<string,unknown>,['availability','reason','eps','dilutedShares','netDebt'])
+    &&nullableText((bridge as Record<string,unknown>).availability,48)&&nullableText((bridge as Record<string,unknown>).reason,160)
+    &&['eps','dilutedShares','netDebt'].every((key)=>finiteOrNull((bridge as Record<string,unknown>)[key])));
+  const validValuation=exactObjectKeys(valuationRow,['status','blocker','method','asOf','eps','bridge','formalRange','relative','scenarios','sourceRefs'])
+    &&nullableText(valuationRow.status,48)&&nullableText(valuationRow.blocker,160)&&nullableText(valuationRow.method,48)
+    &&nullableText(valuationRow.asOf,40)&&finiteOrNull(valuationRow.eps)&&validBridge&&validRange&&validRelative
+    &&Array.isArray(valuationRow.scenarios)&&valuationRow.scenarios.length<=3&&uniqueTextArray(valuationRow.sourceRefs,8,240);
+  const technicalNumbers=['trigger','invalidation','support','resistance','ma20','ma60','ma120','bias20Pct','bias60Pct','bias120Pct',
+    'rsi14','macd','atr','volumeRatio20','relativeStrength20Pct'];
+  const validTechnical=exactObjectKeys(technicalRow,['availability','reason','state','trigger','entryZone','invalidation','support','resistance',
+    'ma20','ma60','ma120','bias20Pct','bias60Pct','bias120Pct','rsi14','macd','atr','volumeRatio20','relativeStrength20Pct'])
+    &&['availability','reason','state'].every((key)=>nullableText(technicalRow[key],key==='reason'?160:48))
+    &&technicalNumbers.every((key)=>finiteOrNull(technicalRow[key]))
+    &&Array.isArray(technicalRow.entryZone)&&technicalRow.entryZone.length<=2
+    &&technicalRow.entryZone.every((entry)=>finitePositive(entry));
+  const validFundamental=exactObjectKeys(fundamentalRow,['thesis','risks','qualityScore','revenueYoy','latestChange','asOf'])
+    &&uniqueTextArray(fundamentalRow.thesis,3,240)&&uniqueTextArray(fundamentalRow.risks,3,240)
+    &&finiteOrNull(fundamentalRow.qualityScore)&&finiteOrNull(fundamentalRow.revenueYoy)
+    &&nullableText(fundamentalRow.latestChange,240)&&nullableText(fundamentalRow.asOf,40);
+  const validRanking=exactObjectKeys(rankingRow,['score','coverage','readiness','missingAxes'])
+    &&finiteOrNull(rankingRow.score)&&(rankingRow.coverage===null
+      ||(typeof rankingRow.coverage==='number'&&Number.isFinite(rankingRow.coverage)&&rankingRow.coverage>=0&&rankingRow.coverage<=1))
+    &&['actionable','near_action','waiting','data_needed'].includes(String(rankingRow.readiness))
+    &&uniqueTextArray(rankingRow.missingAxes,8,160);
+  return validValuation&&validTechnical&&validFundamental&&validRanking
+    && citations.every(validCitation)&&blockers.every((blocker)=>nonempty(blocker)&&blocker.length<=160)
+    &&new Set(blockers).size===blockers.length;
+}
+
 export function validateDecisionEnvelopeV313(value: unknown, outerRevisionId?: string): DecisionEnvelopeV313 | null {
   if(!value||typeof value!=='object'||Array.isArray(value))return null;
   const envelope=value as Record<string,unknown>;
@@ -394,6 +456,7 @@ export function validatePublishedDecisionCard(value: unknown): ValidatedPublishe
     &&JSON.stringify(card.decisionEnvelope)!==JSON.stringify(nested))return null;
   const envelope=validateDecisionEnvelopeV313(card.decisionEnvelope??nested,String(card.decisionRevisionId));
   if(!envelope)return null;
+  if(card.researchDossier!==undefined&&!validResearchDossier(card.researchDossier,String(card.symbol),envelope.decisionRevisionId))return null;
   if(card.researchSnapshot!==undefined&&!validResearchSnapshot(card.researchSnapshot))return null;
   if(card.researchSnapshot){
     const snapshot=card.researchSnapshot as Record<string,unknown>;
@@ -457,7 +520,8 @@ export function buildPublishedDecisionDetailResult(validated:ValidatedPublishedD
       return {statusCode:200,cacheControl:'no-store',body:{schema:'stock-detail-v3.17.0' as const,
         status:'research_only' as const,symbol:String(card.symbol),decisionRevisionId:envelope.decisionRevisionId,
         decisionEnvelope:envelope,researchSnapshot:card.researchSnapshot,sourceProvenance:card.sourceProvenance,
-        citations:card.citations,actionAuthority:'disabled' as const,staleReason:STALE_READONLY_REASON}};
+        citations:card.citations,researchDossier:card.researchDossier??null,
+        actionAuthority:'disabled' as const,staleReason:STALE_READONLY_REASON}};
     }
     return {statusCode:409,cacheControl:'no-store',body:{schema:'stock-detail-v3.13.0' as const,
       status:'stale_readonly' as const,symbol:String(card.symbol),
@@ -473,7 +537,7 @@ export function buildPublishedDecisionDetailResult(validated:ValidatedPublishedD
     return {statusCode:200,cacheControl:'no-store',body:{schema:'stock-detail-v3.17.0' as const,
       status:'research_only' as const,symbol:String(card.symbol),decisionRevisionId:envelope.decisionRevisionId,
       decisionEnvelope:envelope,researchSnapshot:card.researchSnapshot,sourceProvenance:card.sourceProvenance,
-      citations:card.citations,actionAuthority:'disabled' as const}};
+      citations:card.citations,researchDossier:card.researchDossier??null,actionAuthority:'disabled' as const}};
   }
   // Freshness is evaluated at request time. A shared cache entry created immediately
   // before the next scheduled-run boundary must never preserve an actionable envelope

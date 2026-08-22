@@ -1,8 +1,8 @@
 'use strict';
 
 function assessReleaseCompatibility({schema,releaseIdentity,expectedConsumerSha,expectedRuntimeManifestSha,
-  requiredMigration='provider-acquisition-v3.16.21'}){
-  if(!['legacy-radar-v3.14.0','legacy-radar-v3.17.0'].includes(schema))return Object.freeze({compatible:false,reason:'legacy_schema'});
+  requiredMigration}){
+  if(!['legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0'].includes(schema))return Object.freeze({compatible:false,reason:'legacy_schema'});
   if(!releaseIdentity||typeof releaseIdentity!=='object'||Array.isArray(releaseIdentity))
     return Object.freeze({compatible:false,reason:'identity_missing'});
   if(!/^[0-9a-f]{40}$/u.test(String(expectedConsumerSha??''))||releaseIdentity.producerCommitSha!==expectedConsumerSha)

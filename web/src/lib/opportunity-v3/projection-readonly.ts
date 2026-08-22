@@ -59,8 +59,8 @@ function readonlyCard(value: unknown, legacySchema = false, preserveResearchSnap
 
 export function withProjectionHealth(selected: CompactRadarProjection, health: ProjectionHealth): CompactRadarProjection {
   const payload = structuredClone(selected) as CompactRadarProjection;
-  const v317Schema=payload.sourceLedCorrectness.schema==='legacy-radar-v3.17.0';
-  const legacySchema = !['legacy-radar-v3.14.0','legacy-radar-v3.17.0'].includes(payload.sourceLedCorrectness.schema);
+  const revisionBoundSchema=['legacy-radar-v3.17.0','legacy-radar-v3.18.0'].includes(payload.sourceLedCorrectness.schema);
+  const legacySchema = !['legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0'].includes(payload.sourceLedCorrectness.schema);
   const effectiveHealth=legacySchema?{...health,actionsEnabled:false,actionAuthority:'disabled' as const,
     researchVisibility:'last_good_readonly' as const}:health;
   payload.projectionHealth = effectiveHealth;
@@ -74,7 +74,7 @@ export function withProjectionHealth(selected: CompactRadarProjection, health: P
     const cards = payload[bucket];
     if (!Array.isArray(cards)) continue;
     payload[bucket] = (effectiveHealth.researchVisibility === 'none' ? []
-      : cards.map((card)=>readonlyCard(card,legacySchema,v317Schema))) as Array<Record<string, unknown>>;
+      : cards.map((card)=>readonlyCard(card,legacySchema,revisionBoundSchema))) as Array<Record<string, unknown>>;
   }
   payload.loadStatus = effectiveHealth.researchVisibility === 'none' ? 'unavailable' : 'degraded';
   payload.loadWarnings = legacySchema

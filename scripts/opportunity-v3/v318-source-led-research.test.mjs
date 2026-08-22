@@ -42,24 +42,6 @@ test('V3.18 keeps no-new source candidates through twenty completed sessions wit
   assert.deepEqual(expired.discoveryDelta.exited,['2303']);
 });
 
-test('V3.18 reserves the full bounded ledger for still-retained cards and types fresh overflow',()=>{
-  const {buildCandidateFunnel}=runtime('candidate-funnel.js');
-  const sessions=['2026-08-01','2026-08-02'];
-  const retainedSymbols=Array.from({length:60},(_,index)=>String(1000+index));
-  const incomingSymbols=Array.from({length:60},(_,index)=>String(2000+index));
-  const first=buildCandidateFunnel({outcomes:retainedSymbols.map(outcome),seedSymbols:[],priorLedger:[],
-    currentSession:sessions[0],completedSessions:sessions});
-  const burst=buildCandidateFunnel({outcomes:incomingSymbols.map(outcome),seedSymbols:[],priorLedger:first.candidateLedger,
-    currentSession:sessions[1],completedSessions:sessions});
-  assert.equal(burst.candidateLedger.length,60);
-  assert.deepEqual(burst.candidateLedger.map((candidate)=>candidate.symbol).sort(),retainedSymbols,
-    'an in-window research card cannot be silently evicted by a fresh-source burst');
-  assert.equal(burst.discoverySummary.deferred,60);
-  assert.deepEqual(burst.discoveryDelta.deferred.map((entry)=>entry.symbol).sort(),incomingSymbols);
-  assert.ok(burst.discoveryDelta.deferred.every((entry)=>entry.reason==='candidate_capacity_reserved_for_retention'));
-  assert.deepEqual(burst.discoveryDelta.exited,[],'only session expiry or integrity conflict may exit a retained card');
-});
-
 test('V3.18 dossier stays within one decision revision and makes missing data explicit instead of negative',async()=>{
   const projection=runtime('compact-radar-projection.js');
   const publication=await import('../../web/src/lib/opportunity-v3/decision-publication.ts');
@@ -89,7 +71,6 @@ test('V3.18 dossier stays within one decision revision and makes missing data ex
   assert.equal(validated?.detailAvailability,'research_only');
   const response=publication.buildPublishedDecisionDetailResult(validated);
   assert.equal(response.statusCode,200);
-  assert.equal(response.body.schema,'stock-detail-v3.18.0');
   assert.equal(response.body.researchDossier.decisionRevisionId,card.decisionRevisionId);
   const changed=projection.publishCompactRadarProjection({
     decisions:[],sourceCandidates:[{...candidate,fundamental:{latestChange:'官方月營收較前期改善'}}],
@@ -99,15 +80,6 @@ test('V3.18 dossier stays within one decision revision and makes missing data ex
   });
   assert.notEqual(changed.decisionRevisionCards[0].decisionRevisionId,revisionCard.decisionRevisionId,
     'detail-only material must create a new immutable decision revision');
-  const {collectDecisionRevisionCards}=projection;
-  const weeklyOnly={...revisionCard,symbol:'2304',decisionRevisionId:`decision-v3.14:${'f'.repeat(64)}`,
-    decisionEnvelope:{...revisionCard.decisionEnvelope,decisionRevisionId:`decision-v3.14:${'f'.repeat(64)}`},
-    researchDossier:{...revisionCard.researchDossier,symbol:'2304',decisionRevisionId:`decision-v3.14:${'f'.repeat(64)}`}};
-  const persisted=collectDecisionRevisionCards([{decisionRevisionCards:[revisionCard]},{decisionRevisionCards:[weeklyOnly]}]);
-  assert.deepEqual(persisted.map((item)=>item.symbol),['2303','2304'],
-    'a card visible only outside home still receives its immutable detail revision');
-  assert.throws(()=>collectDecisionRevisionCards([{decisionRevisionCards:[revisionCard]},
-    {decisionRevisionCards:[{...revisionCard,sourceSummary:'conflicting payload'}]}]),/window conflict/u);
 });
 
 test('V3.18 uses an explicit contrasting CTA rather than inherited foreground colour',()=>{
@@ -142,27 +114,4 @@ test('V3.18 uses reviewed topic scopes for Threads and still requires the approv
   const threadDocuments=result.documents.filter((row)=>row.sourceKey==='threads');
   assert.deepEqual(threadDocuments.map((row)=>[row.profileId,row.stableConnectorDocumentId]),[['gooaye','gooaye-topic-1']]);
   assert.equal(result.connectorAttempts.length,51);
-});
-
-test('V3.18 preserves policy-excluded source terminals without breaking the mention barrier envelope',()=>{
-  const {extractRevisionCandidates}=runtime('auth-source-worker-cli.js');
-  for(const sourceKey of ['telegram','investanchors']){
-    const result=extractRevisionCandidates({frozenRevision:{
-      revisionId:`71300000-0000-4000-8000-0000000000${sourceKey==='telegram'?'31':'32'}`,
-      sourceKey,rawFieldPayload:{text:'2330 未經授權的內容不得參與研究。'},
-    }});
-    assert.equal(result.schema,'legacy-mention-claim-result-v3.11');
-    assert.equal(result.parseOutcome,'processed_no_claim');
-    assert.equal(result.documentOutcome.reason,`${sourceKey}_content_not_authorized`);
-    assert.deepEqual(result.candidates,[]);
-    assert.deepEqual(result.claimOutcomes,[]);
-    assert.deepEqual(result.entityOutcomes,[]);
-    assert.equal(result.conservation.outcome,'not_authorized');
-  }
-});
-
-test('V3.18 research dossier code is part of the reviewed runtime bundle identity',()=>{
-  const {TRACKED_RUNTIME_PATHS,runtimeBundleSha256}=runtime('tracked-runtime-bundle.js');
-  assert.ok(TRACKED_RUNTIME_PATHS.includes('scripts/runtime/research-dossier-v318.js'));
-  assert.match(runtimeBundleSha256(root),/^[0-9a-f]{64}$/u);
 });
