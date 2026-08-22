@@ -87,6 +87,7 @@ const traceEnvironment = {
     ? '/usr/bin:/bin'
     : postgresEnvironment.PATH ?? '/usr/local/bin:/usr/bin:/bin',
   HOME: traceHome,
+  PLAYWRIGHT_BROWSERS_PATH: '0',
   TMPDIR: traceTemp,
   LC_ALL: 'C',
   LANG: 'C',
