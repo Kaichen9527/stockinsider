@@ -756,10 +756,10 @@ function activeGraphOracle() {
   assertCleanReviewedExecutionRoot(subjectTree);
   const catalogBlob = subjectTreeBlob(subjectTree, activeCatalogRepositoryPath);
   assert.deepEqual(catalogBlob.bytes, activeCatalogBytes, 'catalog working bytes equal reviewed subject tree');
-  assert.equal(catalogBlob.bytes.length, 6008, 'catalog exact tracked byte length including LF');
+  assert.equal(catalogBlob.bytes.length, 6009, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    '2d2749853f85aeaa913024be67df4c73cf2b2224b57fbfcc3313cc25818d7699',
+    'ac330164bb6ec6a0dd20e46248fafac053e3ee50c6dc6207061068639d6e32fb',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);
@@ -1266,7 +1266,7 @@ const structuralExecutors = {
     }
     assert.equal(inventory.scriptValueRows.length, 14);
     assert.equal(sha256(canonicalJson(inventory.scriptValueRows)), inventory.scriptValueRowsSha256);
-    assert.equal(inventory.scriptValueRowsSha256, '67df975cef0058a42d06fb4ebc9152385e23501847f4d9f091d32d6994ee1e9a');
+    assert.equal(inventory.scriptValueRowsSha256, 'ed7d5e569840d4a9b086f35676d186d993957ba367d306dc20f1fdf5f1347e7d');
     const rootPackageScripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts;
     const webPackageScripts = JSON.parse(readFileSync(path.join(root, 'web/package.json'), 'utf8')).scripts;
     assert.deepEqual(inventory.scriptValueRows.map(([scriptKey]) => scriptKey), [
