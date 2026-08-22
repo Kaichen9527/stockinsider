@@ -473,7 +473,7 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
         'one fresh Requirements review follows the frozen implementation tree');
       assert.match(active,new RegExp(`- \\[x\\] Freeze the one bounded ${currentRelease.version.toUpperCase().replace('.', '[.]')} source-led implementation tree`,'u'),
         'a contract-frozen release must retain its completed immutable tree');
-      assert.match(active,/- \\[ \\] Run exactly one fresh Requirements review and one independent Architecture/u,
+      assert.match(active,/- \[ \] Run exactly one fresh Requirements review and one independent Architecture/u,
         'a contract-frozen release must keep its one-time reviews pending');
     }
     if(['exact_review_passed','production_rollout','complete_with_concerns'].includes(currentRelease.phase))
