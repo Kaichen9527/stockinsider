@@ -41,6 +41,7 @@ const TRACKED_RUNTIME_PATHS = Object.freeze([
   'scripts/runtime/provider-acquisition-v31621.js',
   'scripts/runtime/public-projection.js',
   'scripts/runtime/reported-pe-authority.js',
+  'scripts/runtime/research-dossier-v318.js',
   'scripts/runtime/research-next-step-v317.js',
   'scripts/runtime/research-ranking-v314.js',
   'scripts/runtime/research-snapshot-v317.js',
