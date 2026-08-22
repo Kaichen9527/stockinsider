@@ -8,6 +8,7 @@ const { validateDecisionEnvelopeV314 } = require('./decision-envelope-v314');
 const { assessProjectionFreshness } = require('./projection-freshness');
 const { deriveResearchNextStep } = require('./research-next-step-v317');
 const { buildResearchSnapshotV317 } = require('./research-snapshot-v317');
+const { buildResearchDossierV318 } = require('./research-dossier-v318');
 
 const CARD_BUCKETS = Object.freeze([
   'opportunities', 'scenarioUpsideCandidates', 'earlyWatchlist',
@@ -47,6 +48,17 @@ function decisionRevisionIdentityBundle(card) {
     const envelope = { ...identityMaterial.decisionEnvelope };
     delete envelope.decisionRevisionId;
     identityMaterial.decisionEnvelope = envelope;
+  }
+  // A V3.18 dossier is part of the immutable decision revision.  Its two
+  // identifiers are derived from this same identity, so strip only those
+  // cyclic fields before hashing; all display facts, evidence and blockers
+  // remain identity-bearing material.
+  if (identityMaterial.researchDossier && typeof identityMaterial.researchDossier === 'object'
+      && !Array.isArray(identityMaterial.researchDossier)) {
+    const dossier = { ...identityMaterial.researchDossier };
+    delete dossier.dossierId;
+    delete dossier.decisionRevisionId;
+    identityMaterial.researchDossier = dossier;
   }
   return immutableBundle('legacy_decision_revision_identity_v3_13',
     ['decision-revision-v3.13.2', identityMaterial]);
@@ -358,7 +370,7 @@ function removeLowestPrioritySignal(cards) {
 }
 
 function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates = [], marketAnalysis = null,
-  { researchSnapshotEnabled = false } = {}) {
+  { researchSnapshotEnabled = false, researchDossierEnabled = false } = {}) {
   const clean = stripCorrectnessAdditions(legacyPayload);
   invariant(Array.isArray(clean.opportunities), 'legacy opportunities required');
   const bySymbol = new Map(decisions.filter((decision) => typeof decision?.symbol === 'string')
@@ -475,9 +487,31 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
         } : {}),
       } : {}),
     };
-      return bindDecisionRevisionCard(card);
+      if (!researchDossierEnabled) return bindDecisionRevisionCard(card);
+      // The dossier is first included without its derived IDs so its factual
+      // content participates in the decision revision hash.  Rebuild it after
+      // binding to attach the exact same revision ID shown by the detail URL.
+      const draftDossier = buildResearchDossierV318({ candidate: decision,
+        decision: { ...decision, decisionEnvelope: publicView.decisionEnvelope, decisionBrief },
+        sourceCutoff: decision.analysisGeneratedAt ?? decision.analysisRevision?.analysisGeneratedAt
+          ?? decision.sourceCutoff ?? asOf });
+      const bound = bindDecisionRevisionCard({ ...card, researchDossier: draftDossier });
+      return Object.freeze({ ...bound, researchDossier: buildResearchDossierV318({ candidate: decision,
+        decision: { ...decision, decisionEnvelope: bound.decisionEnvelope, decisionBrief },
+        sourceCutoff: decision.analysisGeneratedAt ?? decision.analysisRevision?.analysisGeneratedAt
+          ?? decision.sourceCutoff ?? asOf }) });
     });
   return { legacy: alignLegacyMarketView(clean, marketAnalysis), sourceSignals };
+}
+
+function compactLandingSignal(card) {
+  if (!card || typeof card !== 'object' || Array.isArray(card)) return card;
+  const compact = { ...card };
+  // Full facts, citations and decision are available only through the
+  // immutable revision.  Never make the Radar request path carry a second
+  // mutable-looking copy of the dossier.
+  delete compact.researchDossier;
+  return compact;
 }
 
 function publishCompactRadarProjection({ decisions, sourceCandidates = [], discoveryDelta, marketAnalysis = null,
@@ -493,9 +527,10 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
   // The captured legacy payload is research input, never current release
   // authority. Only the tracked run's frozen lineage may enable actions.
   const publicAcquisitionHealth=sourceAcquisitionHealth??null;
-  const researchSnapshotEnabled=schemaVersion==='legacy-radar-v3.17.0';
+  const researchSnapshotEnabled=['legacy-radar-v3.17.0','legacy-radar-v3.18.0'].includes(schemaVersion);
+  const researchDossierEnabled=schemaVersion==='legacy-radar-v3.18.0';
   const layered = addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates, publicMarketAnalysis,
-    {researchSnapshotEnabled});
+    {researchSnapshotEnabled,researchDossierEnabled});
   const publishableSourceSignals=selectLandingSourceSignals(layered.sourceSignals.filter((card)=>{
     const validBrief=card.decisionBrief&&card.citations?.length>0
       &&((researchSnapshotEnabled&&card.decisionBrief.availability==='unavailable'
@@ -517,15 +552,16 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
       added:(discoveryDelta?.added??[]).filter((symbol)=>publishableSymbols.has(symbol)),
       continued:(discoveryDelta?.continued??[]).filter((symbol)=>publishableSymbols.has(symbol)),
       unchangedReasons:(discoveryDelta?.unchangedReasons??[]).filter((row)=>publishableSymbols.has(row?.symbol))};
+    const compactSignals=selectedSignals.map(compactLandingSignal);
     const materialContentHash = sha256(canonicalJson(omitProjectionHeartbeat({ legacy:layered.legacy,
-      sourceSignals:selectedSignals,discoveryDelta:publicDiscoveryDelta,underreactionMarket:publicMarketAnalysis })));
+      sourceSignals:compactSignals,discoveryDelta:publicDiscoveryDelta,underreactionMarket:publicMarketAnalysis })));
     const resolvedMaterialChanged = materialChanged ?? priorCorrectness?.contentHash !== materialContentHash;
     const resolvedContentAsOf = resolvedMaterialChanged ? contentAsOf
       : priorCorrectness?.contentAsOf ?? priorCorrectness?.asOf ?? contentAsOf;
     const freshness = assessProjectionFreshness({ contentAsOf:resolvedContentAsOf,evaluatedAt,publishedAt,
       now:new Date(publishedAt),tradingSessions:freshnessSchedule });
     return {
-      ...layered.legacy,sourceSignals:selectedSignals,discoveryDelta:publicDiscoveryDelta,
+      ...layered.legacy,sourceSignals:compactSignals,discoveryDelta:publicDiscoveryDelta,
       underreactionMarket:publicMarketAnalysis,
       sourceAcquisitionHealth:publicAcquisitionHealth,
       sourceWatermark:{sourceCutoff:contentAsOf,
@@ -536,7 +572,9 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
       authorizationStatus:{telegram:'not_authorized',investanchors:'internal_methodology_only',
         sourceClaims:'authorized_terminal_outcomes_required'},
       releaseIdentity:{schema:schemaVersion,producerCommitSha:producerIdentity?.commitSha??null,
-        runtimeManifestSha256:producerIdentity?.runtimeManifestSha256??null,migrationLevel:'provider-acquisition-v3.16.21'},
+        runtimeManifestSha256:producerIdentity?.runtimeManifestSha256??null,
+        migrationLevel:schemaVersion==='legacy-radar-v3.18.0'
+          ?'candidate-ledger-retention-v3.18':'provider-acquisition-v3.16.21'},
       sourceLedCorrectness:{schema:schemaVersion,window,asOf,contentAsOf:resolvedContentAsOf,evaluatedAt,publishedAt,
         nextExpectedAt:freshness.nextExpectedAt,freshnessSchedule:freshnessSchedule.slice(0,80),
         contentHash:materialContentHash,producerIdentity,
@@ -567,6 +605,7 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
     payloadChecksum,
     etag: `\"sha256:${payloadChecksum}\"`,
     producerIdentity,
+    decisionRevisionCards: Object.freeze(selectedSignals),
     bundle: immutableBundle('legacy_radar_projection_v3_11', payload),
   });
 }
@@ -574,5 +613,6 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
 module.exports = { CARD_BUCKETS, DECISION_BRIEF_UNAVAILABLE_REASON, addResearchDecisions, decisionRevisionIdentityBundle,
   citedDecisionBrief, derivePublicOpportunityView, immutableDecisionRevisionCard, navigableCitations,
   landingLane, publishCompactRadarProjection, selectLandingSourceSignals, stripCorrectnessAdditions,
+  compactLandingSignal,
   validCitation, validHttpsUrl, validInstant,
   validPrimaryProvenance };

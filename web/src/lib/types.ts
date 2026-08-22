@@ -1617,7 +1617,7 @@ export interface DiscoveryDeltaV311 {
 export interface RadarDailyPayload {
   asOf: string;
   sourceLedCorrectness?: {
-    schema: 'legacy-radar-v3.11.3'|'legacy-radar-v3.12.0'|'legacy-radar-v3.13.0'|'legacy-radar-v3.14.0'|'legacy-radar-v3.17.0';
+    schema: 'legacy-radar-v3.11.3'|'legacy-radar-v3.12.0'|'legacy-radar-v3.13.0'|'legacy-radar-v3.14.0'|'legacy-radar-v3.17.0'|'legacy-radar-v3.18.0';
     window: 'daily'|'hot'|'weekly'|'home';
     asOf: string;
   };

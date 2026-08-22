@@ -8,6 +8,8 @@
   --line: rgba(17, 24, 39, 0.1);
   --accent: #0f766e;
   --accent-strong: #b45309;
+  --cta-background: #0f766e;
+  --cta-foreground: #ffffff;
   --danger: #be123c;
 }
 
@@ -30,6 +32,8 @@
     --line: rgba(236, 253, 245, 0.24);
     --accent: #5eead4;
     --accent-strong: #f59e0b;
+    --cta-background: #fbbf24;
+    --cta-foreground: #0f172a;
     --danger: #fb7185;
   }
 }
@@ -63,6 +67,23 @@ body {
 
 .bg-accent {
   background-color: var(--accent);
+}
+
+/* Never rely on inherited text colour for an interactive filled control.
+   Several older cards combined a dark background with a body-level foreground,
+   which made their labels effectively invisible in one colour scheme. */
+.cta-primary {
+  background-color: var(--cta-background);
+  color: var(--cta-foreground);
+}
+
+.cta-primary:hover {
+  filter: brightness(1.06);
+}
+
+.cta-primary:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 2px;
 }
 
 .bg-accent-soft {

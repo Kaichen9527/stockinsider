@@ -155,7 +155,7 @@ export default async function SourcesPage({
             </select>
             <input type="date" name="from" defaultValue={from} className="rounded-xl border border-line bg-surface-strong px-3 py-2 text-sm" />
             <input type="date" name="to" defaultValue={to} className="rounded-xl border border-line bg-surface-strong px-3 py-2 text-sm" />
-            <button type="submit" className="rounded-xl bg-accent px-4 py-2 text-sm text-white hover:opacity-90">搜尋</button>
+            <button type="submit" className="cta-primary rounded-xl px-4 py-2 text-sm font-medium">搜尋</button>
           </form>
 
           <div className="mt-4 text-sm text-slate-600 dark:text-emerald-100/70">

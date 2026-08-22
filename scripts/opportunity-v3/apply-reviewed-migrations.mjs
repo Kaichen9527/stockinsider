@@ -36,6 +36,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260817_provider_acquisition_v3_16_21.sql',
   'migrations/20260817_official_ingestion_roster_chunk_snapshot_v3_16_21.sql',
   'migrations/20260817_projection_evaluation_supersession_v3_16_21.sql',
+  'migrations/20260822_candidate_ledger_retention_v3_18.sql',
 ]);
 
 function parseArguments(argv) {
@@ -187,6 +188,17 @@ async function applyReviewedMigrations(options) {
         FROM pg_proc WHERE oid='public.guard_legacy_radar_projection_insert_v3_13()'::regprocedure)
         AND NOT has_function_privilege('service_role',
           'public.guard_legacy_radar_projection_insert_v3_13()','EXECUTE')
+        AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
+      ,'candidateLedgerRetention',to_regprocedure(
+        'public.claim_legacy_producer_job_candidate_retention_base_v3_18(uuid,uuid,uuid,integer)') IS NOT NULL
+        AND has_function_privilege('service_role',
+          'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.claim_legacy_producer_job_candidate_retention_base_v3_18(uuid,uuid,uuid,integer)','EXECUTE')
+        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%candidateLedgerContract%'
+          AND pg_get_functiondef(oid) LIKE '%sourceAvailable%'
+          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure)
         AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');

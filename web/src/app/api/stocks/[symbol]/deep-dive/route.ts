@@ -25,7 +25,8 @@ export async function GET(request:Request,context:{params:Promise<{symbol:string
     return NextResponse.json({schema:'stock-detail-v3.17.0',status:'research_only',symbol,
       decisionRevisionId:resolved.envelope.decisionRevisionId,decisionEnvelope:resolved.envelope,
       researchSnapshot:snapshot,sourceProvenance:resolved.card.sourceProvenance,
-      citations:resolved.card.citations,actionAuthority:'disabled'}, {status:200,headers:{'Cache-Control':'no-store'}});
+      citations:resolved.card.citations,researchDossier:resolved.card.researchDossier??null,
+      actionAuthority:'disabled'}, {status:200,headers:{'Cache-Control':'no-store'}});
   }
   const result=buildPublishedDecisionDetailResult(resolved);
   return NextResponse.json(result.body,{status:result.statusCode,
