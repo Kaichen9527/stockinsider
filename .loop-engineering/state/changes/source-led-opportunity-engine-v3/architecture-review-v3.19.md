@@ -12,10 +12,10 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Total-order repair commit/tree: `a67bc72c0fb11cc97340216a88e55dbf8be7ea7c` / `e6e6726abbcc77b4bfd1403140f29812fff41e1a`
-- Final repair-closure commit/tree: `f4fd05b42023b2a5aa81340dcd7d46a156b42f06` / `8f2da62764caecf6b07db9438e4e1dae6c5640e6`
-- Full reviewed implementation range: `0fe9e359bbf518c01c2dda7b5e54fc00cdc5cafa..f4fd05b42023b2a5aa81340dcd7d46a156b42f06`
-- Active graph: `cfc135973718c924114f367953fac9e38cc48918df54832efa27205fc997622a`
+- Total-order repair commit/tree: `cddea71114ac5a8a004cbe5315c5a1ef7e197059` / `cd97e844948704f05bb5708f83e246f7e3fa8f16`
+- Final repair-closure commit/tree: `fe0be84f986790bf03de43b06879d43a8f33aa4c` / `b181a411170cade6ec000f83b3302a2d9aa13bb7`
+- Full reviewed implementation range: `0fe9e359bbf518c01c2dda7b5e54fc00cdc5cafa..fe0be84f986790bf03de43b06879d43a8f33aa4c`
+- Active graph: `e447c1a156dd5befc4012a677841e429b89a236e6766408c0197b58532603bb6`
 
 ## Architecture closure
 
@@ -66,6 +66,12 @@ can generate unbounded evidence, but contains no broad cleanup behaviour. The
 same bundle includes the worker, disk policy, readiness mapping and manifest
 inputs, so a manifest/hash/consumer mismatch disables actions rather than
 letting Web and producer announce different authority.
+
+The protected product gate now reuses the same catalog identity for the active
+graph oracle and the evidence contract, and derives active release task text
+from `current-release.json` rather than a stale V3.18 literal. This closes the
+only metadata drift that could make a correct V3.19 product tree appear
+incomplete without weakening any fail-closed rule.
 
 The dark/light semantic CTA tokens, tab semantics and keyboard navigation are
 contained in the presentation layer and do not alter decision or data authority.
