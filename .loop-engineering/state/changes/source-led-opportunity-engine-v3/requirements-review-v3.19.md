@@ -12,11 +12,14 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `3bacd58c86f01c469b7d634e0f6df036ae7152a2`
-- Candidate commit/tree: `b44f662b105e3bd0cf29c808f256f791fc962c52` /
-  `51f715d5b7e5cd3811b761a16e7496aea3cddefc`
-- Reviewed range:
-  `3bacd58c86f01c469b7d634e0f6df036ae7152a2..b44f662b105e3bd0cf29c808f256f791fc962c52`
+- Protected implementation parent: `0fe9e359bbf518c01c2dda7b5e54fc00cdc5cafa`
+- Original candidate commit/tree: `36bf020c9b4fd3940e74365d10a0c2cf0afd4f14` /
+  `42856d9840af50c6245170d36efeddd8b464bc6c`
+- Final repair-closure commit/tree: `a67bc72c0fb11cc97340216a88e55dbf8be7ea7c` /
+  `e6e6726abbcc77b4bfd1403140f29812fff41e1a`
+- Full reviewed range:
+  `0fe9e359bbf518c01c2dda7b5e54fc00cdc5cafa..a67bc72c0fb11cc97340216a88e55dbf8be7ea7c`
+- Active graph: `cfc135973718c924114f367953fac9e38cc48918df54832efa27205fc997622a`
 
 ## Requirements closure
 
@@ -39,8 +42,12 @@ Source acquisition has a bounded, append-only and source-led authority path.
 An authorized document revision is persisted before it becomes a frozen source
 revision or enters claim extraction. The additive cursor advances only after a
 completed source-sync transaction and bounds selection to documents changed
-after the prior consumed high-water mark. A same-run successor is released only
-from its just-persisted frozen revision; metadata-only, rejected, unchanged,
+after the prior consumed high-water mark. Exact review found that a timestamp
+alone is not a total cursor order: a provider batch can legitimately persist two
+revisions at the same timestamp. The single repair carries both `recorded_at`
+and `revision_id`, compares that lexicographic pair on selection, and writes the
+same pair after consumption. A same-run successor is released only from its
+just-persisted frozen revision; metadata-only, rejected, unchanged,
 provider-failed and OAuth-unavailable outcomes remain typed terminal outcomes
 and cannot become thesis. Official market data can validate, enrich or reject a
 source-nominated symbol, never nominate it. InvestAnchors and Telegram admit
