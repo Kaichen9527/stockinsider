@@ -1418,8 +1418,8 @@ const structuralExecutors = {
     assert.doesNotThrow(() => assertTaskStatusNextWorkConsistent(tasks, status));
     const operativeRequirementsTask = status.currentReleaseAuthority
       ? currentRelease.phase==='implementation_in_progress'
-        ? '- [ ] Freeze the one bounded V3.18 source-led implementation tree'
-        : '- [x] Freeze the one bounded V3.18 source-led implementation tree'
+        ? `- [ ] Freeze the one bounded ${currentRelease.version.toUpperCase()} source-led implementation tree`
+        : `- [x] Freeze the one bounded ${currentRelease.version.toUpperCase()} source-led implementation tree`
       : status.requirementsStatus.startsWith('v3_16_9_')
         ? `- [x] Obtain fresh Requirements Round ${status.requirementsReviewRound}, Architecture Round ${status.architectureReviewRound} and exact-range`
         : '- [x] Obtain fresh Requirements Round 138 PASS';
