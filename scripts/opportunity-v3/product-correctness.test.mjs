@@ -930,6 +930,9 @@ const checks = {
     assert.match(readFileSync(path.join(root,'scripts/runtime/postgres-legacy-producer-adapter.js'),'utf8'),
       /connectionTimeoutMillis: POOL_CONNECTION_TIMEOUT_MS, idleTimeoutMillis: POOL_IDLE_TIMEOUT_MS,[\s\S]*?query_timeout: POOL_QUERY_TIMEOUT_MS, statement_timeout: POOL_STATEMENT_TIMEOUT_MS,[\s\S]*?withTransientPoolReconnect/u,
       'a stale transaction-pooler connection has a bounded connect and one idempotent pool replacement, while every non-claim query is bounded before it can starve the lease heartbeat');
+    assert.match(readFileSync(path.join(root,'scripts/runtime/postgres-legacy-producer-adapter.js'),'utf8'),
+      /const created = new Pool\([\s\S]*?created\.on\('error', \(\) => \{\}\);[\s\S]*?return created;/u,
+      'an idle pooler transport error is contained by the reviewed pool so it cannot terminate a durable run before its lease reaches a terminal outcome');
 
     const { Worker } = await import('node:worker_threads');
     const pulseBuffer = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT);

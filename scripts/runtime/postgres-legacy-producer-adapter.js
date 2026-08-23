@@ -126,10 +126,19 @@ function createPostgresLegacyProducerAdapter({ connectionString }) {
   // Keep one connection available for lease heartbeats while a durable ingestion
   // write is using the other connection.  A single-connection pool can queue the
   // heartbeat behind a slow official chunk append until the 120-second lease dies.
-  const createPool = () => new Pool({ connectionString, max: 2,
-    connectionTimeoutMillis: POOL_CONNECTION_TIMEOUT_MS, idleTimeoutMillis: POOL_IDLE_TIMEOUT_MS,
-    query_timeout: POOL_QUERY_TIMEOUT_MS, statement_timeout: POOL_STATEMENT_TIMEOUT_MS,
-    application_name: 'stockinsider-auth-source-worker-v3-11' });
+  const createPool = () => {
+    const created = new Pool({ connectionString, max: 2,
+      connectionTimeoutMillis: POOL_CONNECTION_TIMEOUT_MS, idleTimeoutMillis: POOL_IDLE_TIMEOUT_MS,
+      query_timeout: POOL_QUERY_TIMEOUT_MS, statement_timeout: POOL_STATEMENT_TIMEOUT_MS,
+      application_name: 'stockinsider-auth-source-worker-v3-11' });
+    // `pg` emits an error on the pool when an idle checked-in client is retired
+    // by the managed pooler.  Without this listener Node treats that transport
+    // event as an uncaught exception and kills the scheduler before the durable
+    // worker can terminalize or safely resume its lease.  The pool removes the
+    // bad idle client itself; the next bounded query obtains a fresh one.
+    created.on('error', () => {});
+    return created;
+  };
   let pool = createPool();
   const withTransientPoolReconnect = async (operation) => {
     try {
