@@ -1,33 +1,33 @@
-# V3.18 independent Architecture review — bounded pooler RPC repair closure
+# V3.18 independent Architecture review — idle pooler transport containment closure
 
 Date: 2026-08-23
 Review authority: independent, read-only Architecture review following the
-fresh V3.18 pooler-deadline Requirements PASS.
+fresh V3.18 idle-pooler containment Requirements PASS.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `25eb4ecb92fed0112500ddd6caaeef147ecc67c5`
-- Final repair-closure commit/tree: `0e0b3a1cee6c3084a35197be60528d3f2fcd0cd8` / `b9b0a947ceab3b4fcd6e431c6e82d191b3fca19e`
-- Full reviewed implementation range: `25eb4ecb92fed0112500ddd6caaeef147ecc67c5..0e0b3a1cee6c3084a35197be60528d3f2fcd0cd8`
+- Protected implementation parent: `80994d9e54caf3787826dff314203e9eb72fd565`
+- Final repair-closure commit/tree: `5ada36b969f4deeb359f420093ec4e6d387cf066` / `11cdf2582398afb86525f66f88e8631561c0b0b4`
+- Full reviewed implementation range: `80994d9e54caf3787826dff314203e9eb72fd565..5ada36b969f4deeb359f420093ec4e6d387cf066`
 - Active graph: `729370999da4668cc5d8291e0e160a44c2d1a14edaae9a871f95be9e0203ac6d`
 
 ## Architecture closure
 
-The repair applies one bounded transport policy at the shared `Pool`
-construction boundary. `query_timeout` closes a client-side wait and
-`statement_timeout` closes an executing server statement, both at 20 seconds.
-Their combined purpose is architectural rather than a throughput preference:
-they guarantee a general producer RPC returns before the 120-second durable
-lease expires, so the outer job handler can record a typed terminal outcome.
+The repair applies one containment policy at the shared `Pool` construction
+boundary. PostgreSQL may emit an asynchronous error for an idle pooled client
+whose transport was retired. The listener consumes that transport event so it
+cannot terminate Node outside the durable worker's terminal-outcome boundary.
+The existing 20-second client and server deadlines remain responsible for
+bounded database operations below the 120-second lease.
 
 The claim RPC remains a distinct, explicitly idempotent retry boundary. General
-append, refresh and completion writes do not inherit that retry behavior,
-because replaying an operation after a lost reply could duplicate a committed
-mutation. Thus the repair preserves the single-DAG, leased ownership and
-immutable-predecessor recovery model; it merely makes the pooler boundary
-observable and terminal.
+append, refresh and completion writes do not inherit retry behavior, because
+replaying an operation after a lost reply could duplicate a committed mutation.
+Thus the repair preserves the single-DAG, leased ownership and immutable-
+predecessor recovery model; it makes a pooler retirement non-fatal while the
+outer job remains the terminal authority.
 
 The host pin is a protected-base bootstrap, while the release candidate contains
 no alternate host oracle. The active catalog's V3.17 predecessor is present in
@@ -68,9 +68,10 @@ identities are all proven later.
 ## Executable evidence examined
 
 - Product correctness suite: `129/129` PASS with zero failed, skipped or todo,
-  including the 31 PCR boundaries and the new bounded-pool regression.
-- Static code inspection confirms no producer `Pool` construction can omit the
-  paired 20-second query and statement deadlines.
+  including the 31 PCR boundaries and the idle-client containment regression.
+- Static code inspection confirms no general producer `Pool` construction can
+  omit the asynchronous idle-client error listener or the paired 20-second
+  query and statement deadlines.
 
 No production migration, source write, password reset, credential rotation,
 LINE, dispatch, automatic trading or Promotion occurred during this review.
