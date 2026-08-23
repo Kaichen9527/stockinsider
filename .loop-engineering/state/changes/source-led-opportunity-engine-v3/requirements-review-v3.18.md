@@ -1,29 +1,37 @@
-# V3.18 fresh Requirements review — protected catalog repair closure
+# V3.18 fresh Requirements review — bounded pooler RPC repair closure
 
 Date: 2026-08-23
 Review authority: independent, read-only Requirements review of the immutable
-V3.18 protected-catalog repair tree.
+V3.18 pooler-deadline repair tree.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `88c9e4c7c619ac777f6d717d9fd7019864d85537`
-- Final repair-closure commit/tree: `629d96598d8770173a94036085cd16b0b68693ff` / `6f3fa0220fa4e15149a7310176964b71e6dafc63`
-- Full reviewed range: `88c9e4c7c619ac777f6d717d9fd7019864d85537..629d96598d8770173a94036085cd16b0b68693ff`
+- Protected implementation parent: `6d89cedda35ce29b66b67b796b9f356c807ba535`
+- Final repair-closure commit/tree: `25eb4ecb92fed0112500ddd6caaeef147ecc67c5` / `99fc72aa88c700c514f52ea1e559b76d66ec37f4`
+- Full reviewed range: `6d89cedda35ce29b66b67b796b9f356c807ba535..25eb4ecb92fed0112500ddd6caaeef147ecc67c5`
 - Active graph: `729370999da4668cc5d8291e0e160a44c2d1a14edaae9a871f95be9e0203ac6d`
 
 ## Requirements closure
 
-The repair closes one P1 contract-drift class found only by the protected
-product/runtime harness: the immutable active-artifact catalog, its two
-canonical authority tags, and the accepted script-value registry must be
-updated together. The repaired tree binds the 6,009-byte catalog to
-`9f7d845df3f2d12c7d2adae5dae87aac890e4c2eee59161c40f8e563e5908c4e` and
-the 14-row script registry to
-`b9a282a300815b887010cca2586d032bb12a9b78a7f23f28fdb5e20959bf0ae7`.
-No product rule, candidate, valuation, source, action authority, runtime mode,
-or production configuration changes in this repair.
+The repair closes the P1 producer-liveness failure found during the first
+reviewed runtime activation attempt. The general database pool could wait on a
+transaction-pooler operation without a query or statement deadline. The
+separate heartbeat client could therefore stop renewing a 120-second lease
+while the outer producer remained awaiting a non-terminal pool query.
+
+Every pooled, non-claim RPC now has both a 20-second client query deadline and
+a 20-second server statement deadline. This is below the lease duration and
+ensures the durable job reaches a typed terminal failure instead of remaining
+`running`. The repair deliberately introduces no generic mutation retry: only
+the already-specialized idempotent claim path may retry its allowlisted
+transport condition. A lost append/completion response remains fail-closed and
+is resumed only from its immutable predecessor on a later reviewed run.
+
+No candidate rule, valuation, source acquisition, decision threshold,
+migration, credential, runtime mode, notification, automated-trading or
+Promotion behavior changes in this repair.
 
 The V3.18 tree preserves source-led nomination. Only approved, entity-linked
 public source evidence can nominate a research candidate; official TWSE, TPEx
@@ -67,18 +75,14 @@ PCR browser checks; arbitrary PATH injection remains rejected.
 
 ## Executable evidence examined
 
-- Local protected-candidate diagnostic: `acceptance-traceability` product/runtime
-  partition `272/272`, with zero failed, skipped or todo; this includes the 31
-  PCR boundaries, V3.13–V3.18 regression owners and active-graph closure.
-- Scratch-HOME project-local Chromium browser suite: `9/9` PASS.
-- Focused V3.18 source/dossier/runtime-bundle suite: `5/5` PASS.
-- V3.14 recovery suite: `33/33` PASS; source-acquisition conservation and
-  contract-frozen control-state mutation regressions also PASS.
-- Detached Shadow runtime-installation rehearsal: PASS after the project-local
-  Chromium prerequisite is installed under `PLAYWRIGHT_BROWSERS_PATH=0`.
+- Product correctness suite: `129/129` PASS, zero failed, skipped or todo. It
+  includes PCR-001 through PCR-031 and the V3.13–V3.18 regression owners.
+- The added structural assertion verifies every general `Pool` construction in
+  the producer adapter supplies both bounded `query_timeout` and
+  `statement_timeout` values.
 
-These are local diagnostics, not a candidate-minted protected artifact. This
-Requirements PASS authorizes exactly one independent Architecture review; it
-does not authorize migration, runtime activation, production deployment or a
-claim that future returns have been proven. Evaluation governance remains
+These are local diagnostics, not a protected artifact. This Requirements PASS
+authorizes exactly one independent Architecture review. It does not authorize
+migration, runtime activation, production deployment or a claim that future
+returns have been proven. Evaluation governance remains
 `blocked/non_fabricated_elapsed_cohorts_unavailable` until real cohorts mature.
