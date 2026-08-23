@@ -12,11 +12,13 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Requirements-evidence parent: `b44f662b105e3bd0cf29c808f256f791fc962c52`
-- Requirements-evidence commit/tree: `7024de4a0e8b78d4bfaf971d177306f7726af6b1` /
-  `497405cea8b44032054066d8f2f8f3f4c76440af`
-- V3.19 implementation range:
-  `3bacd58c86f01c469b7d634e0f6df036ae7152a2..7024de4a0e8b78d4bfaf971d177306f7726af6b1`
+- Total-order repair commit/tree: `a67bc72c0fb11cc97340216a88e55dbf8be7ea7c` /
+  `e6e6726abbcc77b4bfd1403140f29812fff41e1a`
+- Final repair-closure commit/tree: `f646093ea8194476ab692df2ac041a4f3b5cc090` /
+  `f5f8827d14dc4e05e3a1d78602d426570aa9a76c`
+- Full reviewed implementation range:
+  `0fe9e359bbf518c01c2dda7b5e54fc00cdc5cafa..f646093ea8194476ab692df2ac041a4f3b5cc090`
+- Active graph: `cfc135973718c924114f367953fac9e38cc48918df54832efa27205fc997622a`
 
 ## Architecture closure
 
@@ -39,7 +41,9 @@ revision before it inserts a frozen input, advances the cursor only for rows
 actually consumed by a successful terminal transaction, and may release a
 same-run successor only from that newly frozen input. Thus retrying a cutoff
 cannot silently refetch provider state or scan the historical corpus. The
-migration is additive, wraps its named predecessor once, has explicit service
+migration records its cursor as the lexicographic `(recorded_at, revision_id)`
+pair. This closes the timestamp-tie loss case while preserving no-replay
+semantics. It wraps its named predecessor once, has explicit service
 grants and owner-only RLS, and exposes no public write capability.
 
 Acquisition, decision and Web boundaries remain separated. Raw member-only
