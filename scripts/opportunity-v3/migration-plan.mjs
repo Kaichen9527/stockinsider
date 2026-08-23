@@ -30,6 +30,7 @@ const migrationPaths = [
   'migrations/20260817_official_ingestion_roster_chunk_snapshot_v3_16_21.sql',
   'migrations/20260817_projection_evaluation_supersession_v3_16_21.sql',
   'migrations/20260822_candidate_ledger_retention_v3_18.sql',
+  'migrations/20260823_release_reconciliation_v3_19.sql',
 ];
 const migrations = migrationPaths.map((relativePath) => {
   const bytes = fs.readFileSync(path.join(root, relativePath));

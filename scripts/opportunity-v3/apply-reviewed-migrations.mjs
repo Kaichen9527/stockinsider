@@ -37,6 +37,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260817_official_ingestion_roster_chunk_snapshot_v3_16_21.sql',
   'migrations/20260817_projection_evaluation_supersession_v3_16_21.sql',
   'migrations/20260822_candidate_ledger_retention_v3_18.sql',
+  'migrations/20260823_release_reconciliation_v3_19.sql',
 ]);
 
 function parseArguments(argv) {
@@ -199,6 +200,17 @@ async function applyReviewedMigrations(options) {
           AND pg_get_functiondef(oid) LIKE '%candidateLedgerContract%'
           AND pg_get_functiondef(oid) LIKE '%sourceAvailable%'
           FROM pg_proc WHERE oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure)
+        AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
+      ,'releaseReconciliation',to_regclass('public.legacy_release_checkpoints_v3_19') IS NOT NULL
+        AND to_regprocedure('public.read_legacy_release_checkpoints_v3_19()') IS NOT NULL
+        AND has_function_privilege('service_role','public.read_legacy_release_checkpoints_v3_19()','EXECUTE')
+        AND NOT has_table_privilege('service_role','public.legacy_release_checkpoints_v3_19','INSERT')
+        AND to_regclass('public.legacy_source_sync_cursors_v3_19') IS NOT NULL
+        AND to_regprocedure('public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)') IS NOT NULL
+        AND position('legacy_source_sync_cursors_v3_19' IN pg_get_functiondef(
+          'public.read_legacy_discovery_authority_v3_11(uuid,text,text)'::regprocedure))>0
+        AND position('v319_same_run_successor_conflict' IN pg_get_functiondef(
+          'public.complete_legacy_producer_job_v3_11(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
         AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');

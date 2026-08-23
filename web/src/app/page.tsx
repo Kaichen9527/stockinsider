@@ -122,7 +122,7 @@ export default async function Home() {
     shadowEnabled: v3PublicEnabled(),
   });
   const symbolNameMap = new Map<string, string>();
-  const revisionBoundSourceLed = ['legacy-radar-v3.17.0','legacy-radar-v3.18.0'].includes(radar.sourceLedCorrectness?.schema ?? '');
+  const revisionBoundSourceLed = ['legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0'].includes(radar.sourceLedCorrectness?.schema ?? '');
   const allCards = revisionBoundSourceLed ? [
     ...(radar.sourceSignals || []),
   ] : [

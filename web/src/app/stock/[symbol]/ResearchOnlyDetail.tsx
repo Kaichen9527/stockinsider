@@ -18,6 +18,37 @@ function httpsUrl(value: unknown): string | null {
   } catch { return null; }
 }
 
+const blockerLabel: Record<string,string> = {
+  action_authority_disabled:'目前為唯讀研究，買進動作已停用',
+  authoritative_decision_pending:'正式決策仍待完成',
+  authoritative_decision_envelope_missing:'正式決策資料尚未建立',
+  projection_stale:'研究快照已過期，等待下一次評估',
+  projection_missing:'研究投影尚未建立',
+  projection_conflict:'研究資料校驗衝突，暫停顯示動作',
+  checksum_conflict:'研究資料校驗衝突，暫停顯示動作',
+  runtime_doctor_failed:'資料生產健康檢查尚未通過',
+  consumer_producer_incompatible:'網站與資料生產版本尚未同步',
+  manifest_incompatible:'資料生產版本識別尚未同步',
+  migration_incompatible:'資料結構版本尚未同步',
+  frozen_acquisition_authority_unavailable:'來源封存驗證尚未完成',
+  legacy_schema_without_v314_decision_authority:'舊研究快照缺少現行決策權威',
+  support_must_be_reclaimed:'股價需先收復支撐，才重新評估進場',
+  breakout_not_confirmed:'等待量價突破確認',
+  entry_price_above_required_value_gate:'現價高於所需安全邊際，等待合理價格',
+  market_regime_gate:'市場條件尚未通過',
+  price_extended_wait_for_reset:'短期乖離偏高，等待回到合理區間',
+  data_required_for_formal_decision:'正式決策所需資料仍待補齊',
+  research_axes_incomplete:'研究所需核心資料尚未齊全',
+  valuation_authority_incomplete:'官方估值資料尚未齊全',
+  research_authority_incomplete:'研究權威鏈尚未完成',
+};
+
+function displayBlocker(value: string): string {
+  if (blockerLabel[value]) return blockerLabel[value];
+  if (value.startsWith('missing:')) return `尚缺資料：${value.slice(8).replaceAll('_','、')}`;
+  return '研究條件待補；請查看資料來源與下一步。';
+}
+
 function blockers(card: Record<string, unknown>): string[] {
   const values = [
     ...(Array.isArray(card.projectionBlockers) ? card.projectionBlockers : []),
@@ -88,7 +119,7 @@ export default function ResearchOnlyDetail({ symbol, card, projectionBlockers = 
       </dl>
       <h2 className="mt-7 text-sm font-semibold tracking-[0.12em]">尚待解除</h2>
       <ul data-testid="research-only-blockers" className="mt-3 space-y-2 text-sm leading-6">
-        {reasonList.map((reason) => <li key={reason} className="rounded-xl bg-white/70 px-3 py-2 font-mono text-xs dark:bg-slate-950/45">{reason}</li>)}
+        {reasonList.map((reason) => <li key={reason} className="rounded-xl bg-white/70 px-3 py-2 text-xs dark:bg-slate-950/45">{displayBlocker(reason)}</li>)}
       </ul>
       <section data-testid="research-snapshot-detail" className="mt-8 grid gap-4 lg:grid-cols-2">
         <div className="rounded-2xl border border-sky-300/35 bg-white/65 p-5 dark:bg-slate-950/35">
@@ -113,7 +144,7 @@ export default function ResearchOnlyDetail({ symbol, card, projectionBlockers = 
             <div><dt className="text-slate-500">觸發價</dt><dd className="mt-1 font-semibold">{finiteNumber(technical?.trigger ?? (nextStep?.trigger as Record<string,unknown>|null)?.threshold)?.toFixed(2) ?? '待條件'}</dd></div>
             <div><dt className="text-slate-500">失效價</dt><dd className="mt-1 font-semibold">{finiteNumber(technical?.invalidation ?? nextStep?.invalidation)?.toFixed(2) ?? '待補'}</dd></div>
           </dl>
-          <p className="mt-5 text-sm leading-6 text-slate-600 dark:text-emerald-100/70">{text(nextStep?.reason) ?? '正式決策仍待資料補齊。'} 本頁僅呈現同一研究 revision 的資料，不會從舊推薦或即時抓取補出結論。</p>
+          <p className="mt-5 text-sm leading-6 text-slate-600 dark:text-emerald-100/70">{nextStep?.reason ? displayBlocker(String(nextStep.reason)) : '正式決策仍待資料補齊。'} 本頁僅呈現同一研究 revision 的資料，不會從舊推薦或即時抓取補出結論。</p>
         </div>
       </section>
       {waterfall.length>0?<section data-testid="research-gate-waterfall" className="mt-5 rounded-2xl border border-sky-300/35 bg-white/65 p-5 dark:bg-slate-950/35">

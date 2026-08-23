@@ -103,7 +103,7 @@ function readiness({ envelope, ranking, technical }) {
 // The dossier is a deterministic display projection of data that already
 // belongs to one immutable analysis revision. It never calculates a target,
 // fabricates a thesis, or changes a DecisionEnvelope action.
-function buildResearchDossierV318({ candidate = {}, decision = {}, sourceCutoff = null } = {}) {
+function buildResearchDossierV318({ candidate = {}, decision = {}, sourceCutoff = null, researchReadiness = null } = {}) {
   const envelope=decision.decisionEnvelope ?? candidate.decisionEnvelope ?? null;
   const ranking=decision.researchRanking ?? candidate.researchRanking ?? null;
   const researchScore=decision.researchScore ?? candidate.researchScore ?? null;
@@ -125,10 +125,13 @@ function buildResearchDossierV318({ candidate = {}, decision = {}, sourceCutoff 
       qualityScore:finite(researchScore?.axes?.fundamental?.score),revenueYoy:finite(researchScore?.axes?.fundamental?.yoyGrowth),
       latestChange:shortText(fundamental.latestChange,240),asOf:shortText(fundamental.asOf,40)}),
     ranking:Object.freeze({score:finite(ranking?.rankingScore),coverage:finite(ranking?.coverage),
-      readiness:null,missingAxes:Object.freeze(uniqueStrings(ranking?.missingAxes,8))}),
+      readiness:shortText(researchReadiness?.status,32),missingAxes:Object.freeze(uniqueStrings(ranking?.missingAxes,8))}),
+    researchReadiness:researchReadiness&&typeof researchReadiness==='object'
+      ?Object.freeze({version:shortText(researchReadiness.version,40),status:shortText(researchReadiness.status,32),
+        reason:shortText(researchReadiness.reason,160),blockers:Object.freeze(uniqueStrings(researchReadiness.blockers,12))}):null,
     citations:Object.freeze(citations),blockers:Object.freeze(blockers),
   };
-  const readinessValue=readiness({envelope,ranking,technical});
+  const readinessValue=researchReadiness?.status??readiness({envelope,ranking,technical});
   const finalized={...material,ranking:Object.freeze({...material.ranking,readiness:readinessValue})};
   return Object.freeze({version:'research-dossier-v3.18.0',
     dossierId:`research-v3.18:${sha256(canonicalJson(finalized))}`,...finalized});

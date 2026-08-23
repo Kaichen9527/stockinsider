@@ -9,6 +9,7 @@ const { canonicalJson, invariant, sha256 } = require('./codec');
 // changes the reviewed worker identity used by the lease and installation manifest.
 const TRACKED_RUNTIME_PATHS = Object.freeze([
   'config/runtime/approved-source-roster-v3.13.json',
+  'config/runtime/artifact-retention-v3.19.json',
   'config/runtime/projection-freshness-policy.json',
   'scripts/runtime/action-decision.js',
   'scripts/runtime/analysis-material-change.js',
@@ -44,7 +45,9 @@ const TRACKED_RUNTIME_PATHS = Object.freeze([
   'scripts/runtime/research-dossier-v318.js',
   'scripts/runtime/research-next-step-v317.js',
   'scripts/runtime/research-ranking-v314.js',
+  'scripts/runtime/research-readiness-v319.js',
   'scripts/runtime/research-snapshot-v317.js',
+  'scripts/runtime/runtime-disk-policy-v319.js',
   'scripts/runtime/safe-diagnostics.js',
   'scripts/runtime/source-run-config.js',
   'scripts/runtime/supabase-rest-legacy-producer-adapter.js',

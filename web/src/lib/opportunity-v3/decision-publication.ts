@@ -17,6 +17,7 @@ const RESEARCH_NEXT_STEP_KINDS = new Set([
   'ready', 'wait_reclaim', 'wait_breakout', 'wait_value', 'wait_market',
   'wait_refresh', 'avoid_chase', 'avoid', 'data_needed',
 ]);
+const RESEARCH_READINESS_V319 = new Set(['actionable', 'near_action', 'wait_condition', 'data_needed']);
 const RESEARCH_GATE_NAMES = ['source', 'fundamental', 'valuation', 'technical', 'liquidity'];
 
 export type PublishedDecisionDetailAvailability = 'available'|'research_only'|'unavailable'|'stale_readonly';
@@ -204,6 +205,20 @@ function validResearchNextStep(value: unknown): boolean {
     &&finitePositive(trigger.threshold);
 }
 
+function validResearchReadinessV319(value: unknown): boolean {
+  if(!value||typeof value!=='object'||Array.isArray(value))return false;
+  const readiness=value as Record<string,unknown>;
+  return exactObjectKeys(readiness,['version','status','reason','blockers','rankingScore','coverage'])
+    &&readiness.version==='research-readiness-v3.19.0'&&RESEARCH_READINESS_V319.has(String(readiness.status))
+    &&nonempty(readiness.reason)&&String(readiness.reason).length<=160&&Array.isArray(readiness.blockers)
+    &&(readiness.blockers as unknown[]).length<=12&&(readiness.blockers as unknown[]).every((item)=>nonempty(item)&&item.length<=160)
+    &&new Set(readiness.blockers as unknown[]).size===(readiness.blockers as unknown[]).length
+    &&(readiness.rankingScore===null||(typeof readiness.rankingScore==='number'&&Number.isFinite(readiness.rankingScore)
+      &&readiness.rankingScore>=0&&readiness.rankingScore<=100))
+    &&(readiness.coverage===null||(typeof readiness.coverage==='number'&&Number.isFinite(readiness.coverage)
+      &&readiness.coverage>=0&&readiness.coverage<=1));
+}
+
 function validResearchDossier(value:unknown,symbol:string,revisionId:string):boolean{
   if(!value||typeof value!=='object'||Array.isArray(value))return false;
   const dossier=value as Record<string,unknown>;
@@ -259,8 +274,10 @@ function validResearchDossier(value:unknown,symbol:string,revisionId:string):boo
   const validRanking=exactObjectKeys(rankingRow,['score','coverage','readiness','missingAxes'])
     &&finiteOrNull(rankingRow.score)&&(rankingRow.coverage===null
       ||(typeof rankingRow.coverage==='number'&&Number.isFinite(rankingRow.coverage)&&rankingRow.coverage>=0&&rankingRow.coverage<=1))
-    &&['actionable','near_action','waiting','data_needed'].includes(String(rankingRow.readiness))
+    &&['actionable','near_action','waiting','wait_condition','data_needed'].includes(String(rankingRow.readiness))
     &&uniqueTextArray(rankingRow.missingAxes,8,160);
+  const dossierReadiness=dossier.researchReadiness;
+  if(dossierReadiness!==null&&dossierReadiness!==undefined&&!validResearchReadinessV319(dossierReadiness))return false;
   return validValuation&&validTechnical&&validFundamental&&validRanking
     && citations.every(validCitation)&&blockers.every((blocker)=>nonempty(blocker)&&blocker.length<=160)
     &&new Set(blockers).size===blockers.length;
@@ -458,6 +475,9 @@ export function validatePublishedDecisionCard(value: unknown): ValidatedPublishe
   if(!envelope)return null;
   if(card.researchDossier!==undefined&&!validResearchDossier(card.researchDossier,String(card.symbol),envelope.decisionRevisionId))return null;
   if(card.researchSnapshot!==undefined&&!validResearchSnapshot(card.researchSnapshot))return null;
+  if(card.researchReadiness!==undefined&&!validResearchReadinessV319(card.researchReadiness))return null;
+  if(card.researchDossier&&card.researchReadiness
+    &&JSON.stringify((card.researchDossier as Record<string,unknown>).researchReadiness)!==JSON.stringify(card.researchReadiness))return null;
   if(card.researchSnapshot){
     const snapshot=card.researchSnapshot as Record<string,unknown>;
     if(snapshot.symbol!==card.symbol
@@ -512,7 +532,8 @@ export function validatePublishedDecisionCard(value: unknown): ValidatedPublishe
 
 export function buildPublishedDecisionDetailResult(validated:ValidatedPublishedDecisionCard){
   const {card,envelope}=validated;
-  const researchDetailSchema=card.researchDossier===undefined?'stock-detail-v3.17.0' as const:'stock-detail-v3.18.0' as const;
+  const researchDetailSchema=card.researchReadiness!==undefined?'stock-detail-v3.19.0' as const
+    :card.researchDossier===undefined?'stock-detail-v3.17.0' as const:'stock-detail-v3.18.0' as const;
   if(validated.detailAvailability==='stale_readonly'){
     // A V3.17 frozen snapshot is safe to read even when the action authority
     // is stale. Keep the prior V3.14 409 contract for cards without one.
@@ -543,7 +564,8 @@ export function buildPublishedDecisionDetailResult(validated:ValidatedPublishedD
   // before the next scheduled-run boundary must never preserve an actionable envelope
   // after that boundary, so every revision-bound detail response is origin-only.
   return {statusCode:200,cacheControl:'no-store',
-    body:{schema:card.researchDossier===undefined?'stock-detail-v3.13.0' as const:'stock-detail-v3.18.0' as const,status:'ready' as const,symbol:String(card.symbol),
+    body:{schema:card.researchReadiness!==undefined?'stock-detail-v3.19.0' as const
+      :card.researchDossier===undefined?'stock-detail-v3.13.0' as const:'stock-detail-v3.18.0' as const,status:'ready' as const,symbol:String(card.symbol),
       decisionRevisionId:envelope.decisionRevisionId,decisionEnvelope:envelope,
       decisionBrief:card.decisionBrief,valuationSummary:envelope.valuationSummary,
       sourceProvenance:card.sourceProvenance,citations:card.citations,researchDossier:card.researchDossier??null}};

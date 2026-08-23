@@ -14,6 +14,7 @@ export type RuntimeHealthObservation = {
   consumerCommitSha?: string | null; consumerCompatibility: 'compatible' | 'producer_newer' | 'consumer_newer' | 'unknown';
   producerCommitSha?: string | null; reviewedTreeSha?: string | null; workerSha256?: string | null;
   schedulerConfigSha256?: string | null; schedulerRollbackPackageSha256?: string | null; manifestSha256?: string | null;
+  diskHealth?: { status?: 'pass' | 'warn' | 'fail'; reasons?: string[] } | null;
 };
 
 export function runtimeObservationMatchesProducer(observation: Partial<RuntimeHealthObservation> | undefined,
@@ -29,7 +30,7 @@ const REASON_ORDER = [
   'scheduler_rollback_package_missing','scheduler_rollback_hash_mismatch','activation_journal_incomplete','active_pointer_invalid',
   'scheduler_plist_mismatch','scheduler_owner_mismatch','competing_scheduler','lease_invalid','state_schema_mismatch',
   'last_run_nonterminal','last_run_failed','negative_run_duration','stuck_runs_present','projection_missing','projection_hash_mismatch',
-  'projection_stale','consumer_producer_incompatible',
+  'projection_stale','consumer_producer_incompatible','disk_capacity_low','source_audit_capacity_exceeded',
 ] as const;
 
 const terminalStatuses = ['success', 'failed', 'cancelled'] as const;
@@ -60,6 +61,8 @@ export function assessTrackedRuntimeHealth(observation: RuntimeHealthObservation
   add(terminalStatus === 'failed' || terminalStatus === 'cancelled', 'last_run_failed');
   add(projectionFreshness === 'missing', 'projection_missing'); add(projectionFreshness === 'invalid', 'projection_hash_mismatch'); add(projectionFreshness === 'stale', 'projection_stale');
   add(consumerCompatibility !== 'compatible', 'consumer_producer_incompatible');
+  add(observation.diskHealth?.reasons?.includes('disk_capacity_low') === true, 'disk_capacity_low');
+  add(observation.diskHealth?.reasons?.includes('source_audit_capacity_exceeded') === true, 'source_audit_capacity_exceeded');
   const checkedAt = new Date(observation.checkedAt ?? Date.now()).toISOString().replace(/\.\d{3}Z$/u, 'Z');
   return {
     schema: 'stockinsider-runtime-health-v1.1', status: present.size === 0 ? 'pass' : 'fail', checkedAt,
@@ -69,7 +72,8 @@ export function assessTrackedRuntimeHealth(observation: RuntimeHealthObservation
     scheduler: { owner: observation.schedulerOwner, ownerPlistSha256: observation.ownerPlistSha256 ?? null,
       competingOwners: [...new Set(observation.competingOwners ?? [])].sort().slice(0, 8), leaseStatus },
     runtime: { stateSchema: observation.stateSchema, lastTerminalRunAt: observation.lastTerminalRunAt ?? null,
-      lastTerminalStatus: terminalStatus, stuckRunCount: Math.max(0, Math.trunc(observation.stuckRunCount ?? 0)) },
+      lastTerminalStatus: terminalStatus, stuckRunCount: Math.max(0, Math.trunc(observation.stuckRunCount ?? 0)),
+      disk: observation.diskHealth ?? null },
     projection: { asOf: observation.projectionAsOf ?? null, checksum: observation.projectionChecksum ?? null, freshness: projectionFreshness },
     consumer: { commitSha: observation.consumerCommitSha ?? null, acceptedProducerSchema: 'stockinsider-producer-state-v1', compatibility: consumerCompatibility },
     reasons: REASON_ORDER.filter((reason) => present.has(reason)),

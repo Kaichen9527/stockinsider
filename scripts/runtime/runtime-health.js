@@ -11,7 +11,7 @@ const REASON_ORDER = Object.freeze([
   'competing_scheduler', 'lease_invalid', 'state_schema_mismatch',
   'last_run_nonterminal', 'last_run_failed', 'negative_run_duration', 'stuck_runs_present',
   'projection_missing', 'projection_hash_mismatch', 'projection_stale',
-  'consumer_producer_incompatible',
+  'consumer_producer_incompatible', 'disk_capacity_low', 'source_audit_capacity_exceeded',
 ]);
 
 const TERMINAL_STATUSES = Object.freeze(['success', 'failed', 'cancelled']);
@@ -61,6 +61,8 @@ function assessTrackedRuntimeHealth(observation) {
   add(projectionFreshness === 'invalid', 'projection_hash_mismatch');
   add(projectionFreshness === 'stale', 'projection_stale');
   add(consumerCompatibility !== 'compatible', 'consumer_producer_incompatible');
+  add(observation.diskHealth?.reasons?.includes('disk_capacity_low'), 'disk_capacity_low');
+  add(observation.diskHealth?.reasons?.includes('source_audit_capacity_exceeded'), 'source_audit_capacity_exceeded');
   const reasons = REASON_ORDER.filter((reason) => present.has(reason));
   const competingOwners = [...new Set(observation.competingOwners ?? [])].sort().slice(0, 8);
   const stuckRunCount = Math.max(0, Math.trunc(observation.stuckRunCount ?? 0));
@@ -86,6 +88,7 @@ function assessTrackedRuntimeHealth(observation) {
       lastTerminalRunAt: observation.lastTerminalRunAt ?? null,
       lastTerminalStatus: terminalStatus,
       stuckRunCount,
+      disk: observation.diskHealth ?? null,
     },
     projection: {
       asOf: observation.projectionAsOf ?? null,
@@ -134,6 +137,7 @@ function buildInstalledRuntimeHealthObservation({ manifest, reviewedRelease, doc
     schedulerRollbackPackageSha256: manifest.schedulerRollback.sha256,
     stateSchema: observed.stateSchema ?? null,
     stuckRunCount: observed.stuckRunCount ?? 0,
+    diskHealth: observed.diskHealth ?? null,
     workerHashMatches: observed.workerSha256 === reviewedRelease.workerSha256,
     workerSha256: reviewedRelease.workerSha256,
   });

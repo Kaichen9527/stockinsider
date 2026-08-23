@@ -954,6 +954,15 @@ export interface ResearchNextStepV317 {
   blockers: string[];
 }
 
+export interface ResearchReadinessV319 {
+  version: 'research-readiness-v3.19.0';
+  status: 'actionable' | 'near_action' | 'wait_condition' | 'data_needed';
+  reason: string;
+  blockers: string[];
+  rankingScore: number | null;
+  coverage: number | null;
+}
+
 export interface ResearchSnapshotV317 {
   version: 'research-snapshot-v3.17.0';
   snapshotId: string;
@@ -1531,6 +1540,7 @@ export interface SourceSignalCard {
   proximityToAction?: boolean;
   nextUnlock?: { kind:'max_entry';price:number;requiredMarginPct:number;requiredRewardRisk:number } | null;
   researchNextStep?: ResearchNextStepV317 | null;
+  researchReadiness?: ResearchReadinessV319 | null;
   researchSnapshot?: ResearchSnapshotV317 | null;
   gateWaterfall?: NonNullable<ResearchSnapshotV317['gateWaterfall']>;
   decisionBrief?: { thesis: [string,string,string] | string[]; risks: [string,string,string] | string[];
@@ -1617,7 +1627,7 @@ export interface DiscoveryDeltaV311 {
 export interface RadarDailyPayload {
   asOf: string;
   sourceLedCorrectness?: {
-    schema: 'legacy-radar-v3.11.3'|'legacy-radar-v3.12.0'|'legacy-radar-v3.13.0'|'legacy-radar-v3.14.0'|'legacy-radar-v3.17.0'|'legacy-radar-v3.18.0';
+    schema: 'legacy-radar-v3.11.3'|'legacy-radar-v3.12.0'|'legacy-radar-v3.13.0'|'legacy-radar-v3.14.0'|'legacy-radar-v3.17.0'|'legacy-radar-v3.18.0'|'legacy-radar-v3.19.0';
     window: 'daily'|'hot'|'weekly'|'home';
     asOf: string;
   };

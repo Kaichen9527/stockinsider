@@ -154,7 +154,14 @@ function nameHasStockContext(text, name, symbol) {
   const stockWords = /(?:股票|個股|台股|代號|股價|買進|賣出|看多|看空|本益比|籌碼|財報|EPS|營收|法說|目標價)/iu;
   while (offset >= 0) {
     const local = text.slice(Math.max(0, offset - 16), Math.min(text.length, offset + name.length + 16));
-    if (stockWords.test(local) || tickerHasStockContext(local, String(symbol))) return true;
+    // A verified active symbol adjacent to its verified company name provides
+    // enough entity context. Bare numbers remain rejected: this branch still
+    // requires both the exact master symbol and an exact master name/alias.
+    const escapedSymbol=String(symbol).replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
+    const escapedName=name.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
+    const explicitSymbolAndName=new RegExp(`(^|[^0-9])${escapedSymbol}\\s*(?:[（(][^)）]{0,12}[)）])?\\s*${escapedName}`, 'u').test(local)
+      ||new RegExp(`${escapedName}\\s*(?:[（(][^)）]{0,12}[)）])?\\s*${escapedSymbol}(?=[^0-9]|$)`, 'u').test(local);
+    if (explicitSymbolAndName || stockWords.test(local) || tickerHasStockContext(local, String(symbol))) return true;
     offset = text.indexOf(name, offset + name.length);
   }
   return false;
@@ -210,20 +217,29 @@ function canonicalUtc(value, label) {
 function extractRevisionCandidates(bundle) {
   const frozen = bundle.frozenRevision;
   invariant(frozen && typeof frozen.revisionId === 'string', 'frozen revision unavailable');
-  // Telegram content is not authorized for this product's AI/ML processing,
-  // and paid InvestAnchors material is methodology-only. Keep their terminal
-  // acquisition outcome observable, but never turn either into a candidate.
-  // The downstream mention barrier consumes the standard extraction envelope,
-  // so policy denial must be a terminal zero-claim document outcome rather
-  // than a shape-changing early return that can abort unrelated source work.
-  if(['telegram','investanchors'].includes(String(frozen.sourceKey))) {
+  // Telegram and member-only InvestAnchors material are accepted only after a
+  // reviewed operator has reduced it to a bounded structured claim with a
+  // navigable citation. Raw messages/articles are never replayed into the
+  // model. The standard envelope preserves conservation for unavailable or
+  // metadata-only input instead of silently treating it as source success.
+  const requiresStructuredAuthorization=['telegram','investanchors'].includes(String(frozen.sourceKey));
+  const structuredAuthorized=frozen.contentAuthorization==='structured_claim_authorized'
+    && frozen.structuredClaim===true;
+  if(requiresStructuredAuthorization&&!structuredAuthorized) {
     const sourceKey=String(frozen.sourceKey);
     return Object.freeze({ schema: 'legacy-mention-claim-result-v3.11', revisionId:frozen.revisionId,
       candidates:Object.freeze([]), parseOutcome:'processed_no_claim',
-      documentOutcome:Object.freeze({outcome:'processed_no_claim',reason:`${sourceKey}_content_not_authorized`}),
+      documentOutcome:Object.freeze({outcome:'processed_no_claim',reason:`${sourceKey}_structured_claim_authorization_required`}),
       claimOutcomes:Object.freeze([]), entityOutcomes:Object.freeze([]),
       conservation:Object.freeze({documentCount:1,claimCount:0,entityCount:0,linkedEntityCount:0,rejectedEntityCount:0,
         sourceKey,outcome:'not_authorized',candidateCount:0}) });
+  }
+  if(frozen.acquisitionDisposition==='metadata_only'||frozen.analysisDisposition==='no_claim'){
+    return Object.freeze({schema:'legacy-mention-claim-result-v3.11',revisionId:frozen.revisionId,candidates:Object.freeze([]),
+      parseOutcome:'processed_no_claim',documentOutcome:Object.freeze({outcome:'processed_no_claim',reason:'metadata_only_no_claim'}),
+      claimOutcomes:Object.freeze([]),entityOutcomes:Object.freeze([]),
+      conservation:Object.freeze({documentCount:1,claimCount:0,entityCount:0,linkedEntityCount:0,rejectedEntityCount:0,
+        sourceKey:String(frozen.sourceKey),outcome:'metadata_only',candidateCount:0})});
   }
   const pages = Array.isArray(bundle.authorityPages) ? bundle.authorityPages : [];
   const rowsByKind = (kind) => pages.filter((page) => Array.isArray(page) && page[0] === kind)
@@ -1937,7 +1953,7 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         }:null,
         discoveryDelta: bundle.analysisResult?.discoveryDelta ?? { added: [], exited: [], continued: [], unchangedReasons: [] },
         freshnessSchedule:bundle.analysisResult?.projectionFreshnessSchedule??[],
-        schemaVersion:'legacy-radar-v3.18.0',
+        schemaVersion:'legacy-radar-v3.19.0',
         window, asOf: bundle.sourceCutoff, contentAsOf:bundle.sourceCutoff,
         evaluatedAt:evaluationTimestamp,publishedAt:evaluationTimestamp,
         priorProjection:priorProjections[window==='hot'?'three_day':window]??null,

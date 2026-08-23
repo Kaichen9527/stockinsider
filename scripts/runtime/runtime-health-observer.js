@@ -6,6 +6,7 @@ const { canonicalJson, sha256 } = require('./codec');
 const { resolveCredentialReference, resolvePostgresConnectionReference } = require('./credential-resolver');
 const { runtimeBundleSha256 } = require('./tracked-runtime-bundle');
 const { assessProjectionFreshness } = require('./projection-freshness');
+const { assessRuntimeDiskPolicy } = require('./runtime-disk-policy-v319');
 const { assessReleaseCompatibility } = require('../../web/src/lib/opportunity-v3/release-compatibility-runtime');
 
 function canonicalFile(filename) {
@@ -50,7 +51,7 @@ async function observeDatabaseRest(config,resolver,fetchImpl){
     ?Buffer.from(projection.payload_canonical.slice(2),'hex'):null;
   const checksumMatches=canonical&&sha256(canonical)===projection.payload_sha256;
   const correctness=projection?.payload_json?.sourceLedCorrectness??{};
-  const projectionHealth=['legacy-radar-v3.13.0','legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0'].includes(correctness.schema)
+  const projectionHealth=['legacy-radar-v3.13.0','legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0'].includes(correctness.schema)
     ?assessProjectionFreshness({contentAsOf:correctness.contentAsOf??projection.as_of,
       evaluatedAt:correctness.evaluatedAt??projection.as_of,publishedAt:correctness.publishedAt??projection.as_of,
       tradingSessions:Array.isArray(correctness.freshnessSchedule)?correctness.freshnessSchedule:[]})
@@ -96,7 +97,7 @@ async function observeDatabase(releaseRoot, config, resolver, clientFactory,fetc
     const checksumMatches = projection && Buffer.isBuffer(projection.payload_canonical) &&
       sha256(projection.payload_canonical) === projection.payload_sha256;
     const correctness = projection?.payload_json?.sourceLedCorrectness ?? {};
-    const projectionHealth = ['legacy-radar-v3.13.0','legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0']
+    const projectionHealth = ['legacy-radar-v3.13.0','legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0']
       .includes(projection?.payload_json?.sourceLedCorrectness?.schema)
       ? assessProjectionFreshness({
       contentAsOf: correctness.contentAsOf ?? projection.as_of,
@@ -181,6 +182,9 @@ async function observeRuntimeHealth({ releaseRoot, runtimeRoot, manifest, review
   const installation = canonicalFile(path.join(releaseRoot, 'installation-manifest.json'));
   const journal = canonicalFile(path.join(runtimeRoot, 'activation-journal.json'));
   const config = canonicalFile(path.join(releaseRoot, 'config/runtime/auth-source-dag.json'));
+  const diskPolicy = canonicalFile(path.join(releaseRoot, 'config/runtime/artifact-retention-v3.19.json'));
+  const diskHealth = assessRuntimeDiskPolicy({ policy: diskPolicy, runtimeRoot,
+    sourceAuditRoot: path.join(runtimeRoot, 'app', '.agent', 'artifacts', 'source-audits') });
   const database = await observeDatabase(releaseRoot, config, resolver, clientFactory,fetchImpl);
   const consumerCommitSha = await observeConsumer(config, resolver, fetchImpl);
   const owner = schedulerRows.find((row) => row.label === 'com.stockinsider.auth-source-worker');
@@ -191,7 +195,7 @@ async function observeRuntimeHealth({ releaseRoot, runtimeRoot, manifest, review
     releaseIdentity:database.releaseIdentity,expectedConsumerSha:reviewedRelease.commitSha,
     expectedRuntimeManifestSha:runtimeManifestSha256});
   return {
-    status: 'pass',
+    status: diskHealth.status === 'fail' ? 'fail' : 'pass',
     observation: {
       activationJournalComplete: journal.commitSha === manifest.commitSha && journal.phase === 'new_owner_loaded',
       activePointerValid: fs.realpathSync(path.join(runtimeRoot, 'current')) === fs.realpathSync(releaseRoot),
@@ -220,6 +224,7 @@ async function observeRuntimeHealth({ releaseRoot, runtimeRoot, manifest, review
       schedulerRollbackPackageSha256: sha256(fs.readFileSync(path.join(releaseRoot, 'scheduler-rollback-package.json'))),
       stateSchema: database.stateSchema,
       stuckRunCount: database.stuckRunCount,
+      diskHealth,
       workerSha256: runtimeBundleSha256(releaseRoot),
     },
   };

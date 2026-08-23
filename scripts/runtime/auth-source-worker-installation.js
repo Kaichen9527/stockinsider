@@ -9,9 +9,13 @@ const SHA64 = /^[0-9a-f]{64}$/u;
 const RFC3339_SECONDS = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/u;
 const SHA256 = /^[0-9a-f]{64}$/u;
 const READONLY_BOOTSTRAP_REASONS = new Set([
+  'last_run_nonterminal',
+  'projection_missing',
   'projection_stale',
   'consumer_producer_incompatible',
 ]);
+const ACTIVATION_HEARTBEAT_MAXIMUM_SECONDS = 120;
+const ACTIVATION_HEARTBEAT_POLL_MILLISECONDS = 2_000;
 
 class RuntimeInstallationError extends Error {
   constructor(reason) { super(reason); this.code = reason; }
@@ -56,6 +60,36 @@ function assessActivationHealth(observation, reviewedRelease) {
   return Object.freeze({ disposition: 'activated_readonly_bootstrap', health });
 }
 
+function hasFirstHeartbeat(doctor, reviewedRelease) {
+  const observation = doctor?.observation;
+  if (!observation || observation.producerCommitSha !== reviewedRelease.commitSha) return false;
+  if (observation.lastRunNonterminal === true && observation.leaseStatus === 'active') return true;
+  return observation.lastTerminalStatus === 'success' && typeof observation.lastTerminalRunAt === 'string';
+}
+
+async function waitForFirstHeartbeat({ scheduler, reviewedRelease, maximumSeconds = ACTIVATION_HEARTBEAT_MAXIMUM_SECONDS,
+  pollMilliseconds = ACTIVATION_HEARTBEAT_POLL_MILLISECONDS, wait = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds)),
+  now = () => Date.now() }) {
+  requireCondition(scheduler && typeof scheduler.doctor === 'function' && Number.isInteger(maximumSeconds) && maximumSeconds > 0
+    && Number.isInteger(pollMilliseconds) && pollMilliseconds > 0 && typeof wait === 'function' && typeof now === 'function',
+  'scheduler_activation_failed');
+  const deadline = now() + maximumSeconds * 1000;
+  let latest = null;
+  do {
+    latest = await scheduler.doctor(reviewedRelease);
+    if (hasFirstHeartbeat(latest, reviewedRelease)) return latest;
+    // A terminal producer failure or an unusable doctor result is already a
+    // decisive activation failure. Waiting out the full registration budget
+    // would only repeat the old stuck-installer behaviour.
+    if (latest?.observation?.producerCommitSha === reviewedRelease.commitSha
+      && ['failed', 'cancelled'].includes(latest.observation.lastTerminalStatus)) return latest;
+    if (latest?.status === 'fail' && !latest?.observation) requireCondition(false, 'scheduler_activation_failed');
+    if (now() >= deadline) break;
+    await wait(Math.min(pollMilliseconds, Math.max(1, deadline - now())));
+  } while (now() < deadline);
+  requireCondition(false, 'scheduler_activation_failed');
+}
+
 async function activateTrackedRuntimeRelease({ manifest, reviewedRelease, scheduler, filesystem, journal,
   activationAuthority, verifyActivationAuthority }) {
   const validated = validateRuntimeInstallationManifest(manifest, reviewedRelease);
@@ -78,7 +112,11 @@ async function activateTrackedRuntimeRelease({ manifest, reviewedRelease, schedu
     await phase('old_owners_disabled');
     await scheduler.loadNewOwner(validated);
     await phase('new_owner_loaded');
-    const doctor = await scheduler.doctor(validated);
+    // Do not await the producer's full terminal result. Its first durable
+    // heartbeat proves that the new owner registered and took responsibility;
+    // the release state machine will later demand terminal success + doctor
+    // PASS before enabling actions or deploying the consumer.
+    const doctor = await waitForFirstHeartbeat({ scheduler, reviewedRelease });
     // A newly reviewed producer cannot be fully healthy until it has published
     // its first same-release projection. Build the typed observation first so
     // assessActivationHealth can admit only the closed read-only bootstrap
@@ -106,4 +144,5 @@ async function activateTrackedRuntimeRelease({ manifest, reviewedRelease, schedu
 }
 
 module.exports = { INSTALLATION_SCHEMA, RuntimeInstallationError, activateTrackedRuntimeRelease,
-  assessActivationHealth, validateRuntimeInstallationManifest };
+  assessActivationHealth, hasFirstHeartbeat, waitForFirstHeartbeat, validateRuntimeInstallationManifest,
+  ACTIVATION_HEARTBEAT_MAXIMUM_SECONDS, ACTIVATION_HEARTBEAT_POLL_MILLISECONDS };
