@@ -1788,6 +1788,19 @@ test('V3.13 source acquisition persists seventeen terminals, citation, and typed
         IF SQLERRM<>'authority_revision_conflict' THEN RAISE;END IF;
       END;
     END $source_tie_conflict$;
+    CREATE TEMP TABLE v319_reentrant_successor AS
+    SELECT public.schedule_legacy_source_shard_successor_v3_19(
+      (SELECT run_id FROM v313_run),(SELECT job_id FROM v313_run),
+      (SELECT job.job_id FROM public.legacy_producer_jobs_v3_11 job
+        WHERE job.run_id=(SELECT run_id FROM v313_run) AND job.stage='mention_claim_extraction'
+          AND job.job_kind='stage_barrier' AND job.status='cancelled'),
+      (SELECT result.result_hash FROM public.legacy_producer_job_results_v3_11 result
+        WHERE result.job_id=(SELECT job_id FROM v313_run)),
+      (SELECT job.shard_ordinal FROM public.legacy_producer_jobs_v3_11 job
+        JOIN v313_complete completion ON completion.next_job->>'jobId'=job.job_id::text),
+      (SELECT job.revision_id FROM public.legacy_producer_jobs_v3_11 job
+        JOIN v313_complete completion ON completion.next_job->>'jobId'=job.job_id::text)
+    ) successor;
     SELECT jsonb_build_object(
       'profileCount',(SELECT count(*) FROM public.legacy_source_acquisition_outcomes_v3_13 WHERE source_run_id=(SELECT run_id FROM v313_run)),
       'terminalCount',(SELECT count(*) FROM public.legacy_source_acquisition_outcomes_v3_13 WHERE source_run_id=(SELECT run_id FROM v313_run)
@@ -1843,15 +1856,18 @@ test('V3.13 source acquisition persists seventeen terminals, citation, and typed
         JOIN v313_complete completion ON completion.next_job->>'jobId'=job.job_id::text
         WHERE job.run_id=(SELECT run_id FROM v313_run) AND job.stage='mention_claim_extraction'
           AND job.job_kind='revision_shard' AND job.status='queued'
-          AND job.revision_id IS NOT NULL))::text;
+          AND job.revision_id IS NOT NULL),
+      'v319ReentrantSuccessor',(SELECT successor->>'jobId' FROM v319_reentrant_successor))::text;
     ROLLBACK;
   `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
-  assert.deepEqual(applied,{profileCount:17,terminalCount:17,newDocuments:2,
+  const {v319ReentrantSuccessor,...appliedStable}=applied;
+  assert.deepEqual(appliedStable,{profileCount:17,terminalCount:17,newDocuments:2,
     citation:'https://creator.example/e/applied',transcriptReadyItems:4,metadataClaims:0,
     processingDocuments:2,processedNoClaim:1,processingClaims:4,processingEntities:4,linkedEntities:1,rejectedEntities:3,
     repeatUnchanged:2,repeatDeferred:3,repeatRejected:2,repeatMixedTerminal:'provider_failed',repeatFrozenAuthorities:1,
     postCutoffGrantDeferred:2,mixedFailureTerminal:'provider_failed',runBoundAppendContexts:2,
     staleAppendRows:0,staleAppendAudits:0,v319CancelledBarrier:1,v319ReplacementShard:1});
+  assert.match(v319ReentrantSuccessor,/^[0-9a-f-]{36}$/u);
   assert.equal(parsed.candidates[0].link.disposition,'linked');assert.equal(parsed.candidates[0].symbol,'2330');
 });
 

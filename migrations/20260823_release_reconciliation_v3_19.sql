@@ -147,6 +147,7 @@ LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $schedule_successor$
 DECLARE
   v_payload jsonb;v_payload_bytes bytea;v_payload_hash text;v_successor uuid;
   v_execution_ordinal integer;v_uuid_hash text;v_existing public.legacy_producer_jobs_v3_11%ROWTYPE;
+  v_barrier_status public.opportunity_legacy_producer_job_status_v3_11;
 BEGIN
   IF p_source_result_hash !~ '^[0-9a-f]{64}$' OR p_first_ordinal<0 OR p_first_revision IS NULL THEN
     RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='v319_same_run_successor_input_invalid';
@@ -158,9 +159,9 @@ BEGIN
   IF NOT FOUND THEN
     RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='v319_same_run_successor_predecessor_conflict';
   END IF;
-  SELECT job.execution_ordinal+1 INTO v_execution_ordinal
+  SELECT job.status,job.execution_ordinal+1 INTO v_barrier_status,v_execution_ordinal
   FROM public.legacy_producer_jobs_v3_11 job
-  WHERE job.job_id=p_successor_job AND job.run_id=p_run AND job.status='queued'
+  WHERE job.job_id=p_successor_job AND job.run_id=p_run
     AND job.stage='mention_claim_extraction' AND job.job_kind='stage_barrier'
   FOR UPDATE;
   IF NOT FOUND THEN
@@ -174,6 +175,20 @@ BEGIN
     p_source_result_hash,'mention_claim_extraction','revision_shard',p_first_ordinal,p_first_revision);
   v_payload_bytes:=convert_to(v_payload::text,'utf8');
   v_payload_hash:=encode(extensions.digest(v_payload_bytes,'sha256'),'hex');
+  SELECT * INTO v_existing FROM public.legacy_producer_jobs_v3_11 job WHERE job.job_id=v_successor;
+  IF v_existing.job_id IS NOT NULL THEN
+    IF v_existing.run_id<>p_run OR v_existing.stage<>'mention_claim_extraction'
+      OR v_existing.job_kind<>'revision_shard' OR v_existing.shard_ordinal<>p_first_ordinal
+      OR v_existing.execution_ordinal<>v_execution_ordinal OR v_existing.revision_id<>p_first_revision
+      OR v_existing.input_hash<>v_payload_hash OR v_barrier_status<>'cancelled'
+    THEN
+      RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='v319_same_run_successor_identity_conflict';
+    END IF;
+    RETURN jsonb_build_object('jobId',v_successor,'stage','mention_claim_extraction');
+  END IF;
+  IF v_barrier_status<>'queued' THEN
+    RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='v319_same_run_successor_transition_conflict';
+  END IF;
   UPDATE public.legacy_producer_jobs_v3_11 job
   SET status='cancelled',terminal_at=date_trunc('second',clock_timestamp()),failure_code='cancelled',
     owner_token_hash=NULL,leased_at=NULL,heartbeat_at=NULL,lease_expires_at=NULL
@@ -181,7 +196,6 @@ BEGIN
   IF NOT FOUND THEN
     RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='v319_same_run_successor_transition_conflict';
   END IF;
-  SELECT * INTO v_existing FROM public.legacy_producer_jobs_v3_11 job WHERE job.job_id=v_successor;
   IF v_existing.job_id IS NULL THEN
     INSERT INTO public.legacy_producer_jobs_v3_11(
       job_id,run_id,stage,job_kind,stage_ordinal,shard_ordinal,execution_ordinal,revision_id,
@@ -195,11 +209,6 @@ BEGIN
     INSERT INTO public.legacy_producer_job_payloads_v3_11(
       job_id,payload_canonical,payload_json,payload_hash,recorded_at
     ) VALUES(v_successor,v_payload_bytes,v_payload,v_payload_hash,date_trunc('second',clock_timestamp()));
-  ELSIF v_existing.run_id<>p_run OR v_existing.stage<>'mention_claim_extraction'
-    OR v_existing.job_kind<>'revision_shard' OR v_existing.shard_ordinal<>p_first_ordinal
-    OR v_existing.revision_id<>p_first_revision OR v_existing.input_hash<>v_payload_hash
-  THEN
-    RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='v319_same_run_successor_identity_conflict';
   END IF;
   RETURN jsonb_build_object('jobId',v_successor,'stage','mention_claim_extraction');
 END $schedule_successor$;
