@@ -1,30 +1,27 @@
 <!-- /autoplan restore point: /Users/kaerchen/.gstack/projects/Kaichen9527-stockinsider/codex-source-led-opportunity-engine-v3-autoplan-restore-20260724-191533.md -->
 # Tasks: source-led-opportunity-engine-v3
 
-## V3.18 single release closure — only active action queue
+## V3.19 single release closure — only active action queue
 
 - [x] Preserve V3.16.21 as a predecessor: old formal-action authority remains
   disabled; V3.16.20 forensic activation remains rolled back and is never restarted.
 - [x] Mark every historical password/credential rotation item `superseded/do_not_execute`.
   The database password must not be reset.
-- [x] Freeze the one bounded V3.18 source-led implementation tree on the current
-  protected host-compatible base: source-nominated
-  candidates retained through twenty completed source sessions, topic-scoped approved
-  source acquisition, compact landing cards, immutable same-revision research dossier,
-  V3.18 schema/health compatibility and semantic CTA contrast.
+- [x] Freeze one bounded V3.19 successor tree on `3bacd58c86f01c469b7d634e0f6df036ae7152a2`:
+  bounded installer handoff, source-led readiness lanes, same-revision dossier,
+  reviewed runtime disk policy, V3.19 schema/health compatibility and semantic CTA contrast.
 - [ ] Run exactly one fresh Requirements review and one independent Architecture
-  review for that immutable V3.18 tree; repair a common root once rather than
+  review for that immutable V3.19 tree; repair a common root once rather than
   creating numbered review loops.
 - [ ] Create the exact implementation commit, complete exact diff/repair/full-range
   review with P0=0/P1=0, and pass the protected Code Gate.
 - [ ] Rehearse the reviewed additive migration chain, activate the matching runtime
   and complete two terminal producer invocations. Do not reset any password and do
   not enable LINE, dispatch, auto-trading or Promotion.
-- [ ] Deploy the exact reviewed release to `stockinsider-three`; complete read-only
+- [ ] Deploy the exact reviewed release to both existing Vercel projects; complete read-only
   smoke, performance, nonzero-card, revision-consistency and Safari checks.
-- [ ] Publish the release-state evidence carrier and close the Goal as
-  `DONE_WITH_CONCERNS`; only third-party terminal failures and real-cohort evaluation
-  governance may remain concerns.
+- [ ] Publish the release-state evidence carrier and close the single release checkpoint as
+  `closed`; only third-party terminal failures and real-cohort evaluation governance may remain concerns.
 
 All older unchecked production, migration, gate, activation and credential items
 below are a historical ledger and are `superseded/do_not_execute` unless referenced

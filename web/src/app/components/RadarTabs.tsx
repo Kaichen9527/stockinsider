@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { DiscoveredStockCard, RadarDailyPayload, RecommendationCard, SourceSignalCard, ThemeHeatCard } from '@/lib/types';
 import { validatePublishedDecisionCard } from '@/lib/opportunity-v3/decision-publication';
 
@@ -13,10 +13,10 @@ const sourceTypeLabel: Record<string, string> = {
   official: '官方資料',
   financial: '財務數據',
   public_research: '公開研究',
-  investanchors: '未授權付費來源（不納入候選）',
+  investanchors: '定錨（需授權結構化摘要）',
   threads: 'Threads',
   instagram: 'Instagram',
-  telegram: 'Telegram（未授權）',
+  telegram: 'Telegram（需授權訊息）',
   bulltalk: '股市爆料同學會',
   ptt: 'PTT Stock',
   kol: '台股 KOL',
@@ -220,7 +220,7 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
       : isHistoricalObservation(rec)
         ? { label: '待重估觀察', cls: 'bg-slate-950/8 text-slate-600 dark:text-emerald-100/65' }
         : rec.recommendationBucket === 'high_conviction'
-      ? { label: '高信念正式推薦', cls: 'bg-accent text-white' }
+      ? { label: '高信念正式推薦', cls: 'cta-primary' }
       : rec.recommendationBucket === 'early_formal'
         ? { label: '正式推薦', cls: 'bg-teal-600/12 text-teal-700 dark:text-teal-300' }
         : rec.recommendationBucket === 'scenario_upside'
@@ -455,16 +455,27 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
     .sort((left, right) => (decisionActionOrder[effectiveAction(left)]
       - decisionActionOrder[effectiveAction(right)])
       || (right.underreactionScore ?? 0) - (left.underreactionScore ?? 0)).slice(0, 30);
+  const lane=(signal:SourceSignalCard)=>{
+    if(signal.researchReadiness?.status)return signal.researchReadiness.status;
+    const action=effectiveAction(signal);
+    if(['buy','accumulate','research_starter'].includes(action))return 'actionable';
+    // V3.17/V3.18 last-good payloads did not have ResearchReadinessV319.  Keep a
+    // technically valid support/breakout setup visible in the waiting lane even
+    // when a stale overlay temporarily turns its action into wait_refresh.
+    const technicalState=signal.researchSnapshot?.technical?.state??signal.technicalState;
+    if(['wait_value','wait_market','wait_breakout','wait_reclaim','avoid_chase'].includes(action)
+      || ['at_support','breakout_pending','reclaim_required'].includes(technicalState??''))return 'wait_condition';
+    return signal.proximityToAction===true?'near_action':'data_needed';
+  };
   const signalSections = [
     { key: 'action', eyebrow: 'ACTIONABLE NOW', title: '現在可行動', description: '完整正式決策，或明確標示為研究型小量分批；相對估值不冒充正式目標價。',
-      items: rankedResearch.filter((signal) => ['buy', 'accumulate', 'research_starter'].includes(effectiveAction(signal))) },
+      items: rankedResearch.filter((signal) => lane(signal)==='actionable') },
     { key: 'wait', eyebrow: 'CONDITION WATCH', title: '等待條件', description: '估值或題材仍值得追蹤，但突破、收復支撐、合理乖離或風險條件尚未達成。',
-      items: rankedResearch.filter((signal) => ['wait_value','wait_market','wait_breakout', 'wait_reclaim', 'wait_refresh', 'avoid_chase', 'avoid'].includes(effectiveAction(signal))
-        ||(effectiveAction(signal)==='unavailable'&&signal.proximityToAction===true)) },
+      items: rankedResearch.filter((signal) => ['near_action','wait_condition'].includes(lane(signal))) },
     { key: 'research', eyebrow: 'SOURCE SIGNALS', title: '新來源待研究', description: '來源已出現，但估值、技術或基本面資料尚缺；資料缺失不會被翻譯成「不買」。',
-      items: rankedResearch.filter((signal) => ['unavailable','data_needed'].includes(effectiveAction(signal))&&signal.proximityToAction!==true) },
+      items: rankedResearch.filter((signal) => lane(signal)==='data_needed') },
   ];
-  if (['legacy-radar-v3.13.0','legacy-radar-v3.14.0'].includes(radar.sourceLedCorrectness?.schema??'') || rankedResearch.length > 0) return (
+  if (['legacy-radar-v3.13.0','legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0'].includes(radar.sourceLedCorrectness?.schema??'') || rankedResearch.length > 0) return (
     <div className="space-y-0">
       {radar.projectionHealth?.status !== 'fresh' ? (
         <section role="status" className="mb-6 rounded-2xl border border-amber-500/30 bg-amber-500/8 px-5 py-4 text-sm text-amber-850 dark:text-amber-200">
@@ -489,7 +500,8 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
             </div>
           ) : (
             <p className="rounded-2xl border border-dashed border-line px-5 py-6 text-sm text-slate-500 dark:text-emerald-100/55">
-              {section.key === 'action' ? '目前沒有通過完整決策條件的可行動標的；系統不會用配額製造買進名單。' : '目前沒有標的落在此區。'}
+              {section.key === 'action' ? '目前沒有通過完整決策條件的可行動標的；系統不會用配額製造買進名單。'
+                : section.key === 'wait' ? '目前沒有接近買點或等待條件中的標的。' : '目前沒有新來源待研究標的。'}
             </p>
           )}
         </section>
@@ -804,7 +816,7 @@ function ThemeCard({ theme, index }: { theme: ThemeHeatCard; index: number }) {
             <span className="text-accent font-medium">{theme.relatedSymbols.join(', ')}</span>
           </p>
         </div>
-        <div className="rounded-2xl bg-accent px-4 py-3 text-right text-white shrink-0">
+        <div className="cta-primary rounded-2xl px-4 py-3 text-right shrink-0">
           <p className="text-[11px] tracking-[0.2em]">熱度</p>
           <p className="text-2xl font-semibold">{theme.heatScore.toFixed(2)}</p>
         </div>
@@ -1080,7 +1092,11 @@ function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
         wait_value:'等待價格',wait_market:'等待大盤',wait_breakout: '等待突破', wait_reclaim: '等待收復支撐', wait_refresh:'等待資料刷新',
     avoid_chase: '不追價', avoid: '暫時避開', unavailable: '資料待補', data_needed:'資料待補', ready:'待權限恢復',
   } as const;
-  const actionLabel=action==='unavailable'&&signal.proximityToAction===true?'接近買點・待深度驗證':actionLabels[action];
+  const readinessLabel={actionable:'現在可行動',near_action:'接近買點',wait_condition:'等待條件',data_needed:'資料待補'} as const;
+  const readiness=signal.researchReadiness?.status;
+  const actionLabel=signal.projectionReadOnly&&readiness
+    ? `${readinessLabel[readiness]}・唯讀`
+    : action==='unavailable'&&signal.proximityToAction===true?'接近買點・待深度驗證':actionLabels[action];
   const actionTone = ['buy', 'accumulate', 'research_starter'].includes(action)
     ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
         : ['wait_value','wait_market','wait_breakout', 'wait_reclaim', 'wait_refresh', 'avoid_chase'].includes(action)||signal.proximityToAction===true
@@ -1185,7 +1201,7 @@ function DiscoveryTab({ radar }: { radar: RadarDailyPayload }) {
   return (
     <div className="space-y-4">
       <p className="text-sm text-slate-500 dark:text-emerald-100/70">
-        這裡只顯示已授權且已完成實體連結的來源訊號。付費內容、未授權 Telegram、只有 metadata 的影片或 Podcast 都不會被當成投資論點。
+        這裡只顯示已授權且已完成實體連結的來源訊號。定錨會員內容與 Telegram 只有在授權結構化摘要、原始 citation 與股票連結都齊全時才可形成研究 claim；只有 metadata 的影片或 Podcast 不會被當成投資論點。
       </p>
       {delta ? (
         <section aria-label="每日股票發現變化" className="grid grid-cols-2 gap-2 rounded-[1.25rem] border border-line bg-surface p-3 text-xs sm:grid-cols-4">
@@ -1225,12 +1241,6 @@ function DiscoveryTab({ radar }: { radar: RadarDailyPayload }) {
 
 export function RadarTabs({ radar }: Props) {
   const [activeTab, setActiveTab] = useState<TabKey>('stocks');
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    const timer = window.setTimeout(() => setMounted(true), 0);
-    return () => window.clearTimeout(timer);
-  }, []);
 
   const visibleStockCount = new Set([
     ...(radar.opportunities || []), ...(radar.scenarioUpsideCandidates || []),
@@ -1249,22 +1259,27 @@ export function RadarTabs({ radar }: Props) {
     ]).size },
   ];
 
-  if (!mounted) {
-    return (
-      <div className="rounded-[1.5rem] border border-line bg-surface-strong p-6 text-sm text-slate-500 dark:text-emerald-100/65">
-        推薦股票整理中，正在載入最新估值、情境與社群訊號…
-      </div>
-    );
-  }
-
   return (
     <div>
       {/* Tab bar — full-width underline style */}
-      <div className="mb-8 flex flex-wrap items-center border-b border-line">
-        {tabs.map((tab) => (
+      <div role="tablist" aria-label="雷達內容" className="mb-8 flex flex-wrap items-center border-b border-line">
+        {tabs.map((tab,index) => (
           <button
             key={tab.key}
+            id={`radar-tab-${tab.key}`}
+            role="tab"
+            aria-selected={activeTab===tab.key}
+            aria-controls={`radar-panel-${tab.key}`}
+            tabIndex={activeTab===tab.key?0:-1}
             onClick={() => setActiveTab(tab.key)}
+            onKeyDown={(event)=>{
+              if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
+              event.preventDefault();
+              const next=event.key==='Home'?0:event.key==='End'?tabs.length-1
+                :(index+(event.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;
+              setActiveTab(tabs[next].key);
+              document.getElementById(`radar-tab-${tabs[next].key}`)?.focus();
+            }}
             className={`-mb-px flex min-w-0 items-center gap-2 border-b-2 px-3 py-3 text-base font-medium transition sm:px-6 ${
               activeTab === tab.key
                 ? 'border-accent text-accent'
@@ -1283,9 +1298,11 @@ export function RadarTabs({ radar }: Props) {
         ))}
       </div>
 
-      {activeTab === 'stocks' && <StocksTab radar={radar} />}
-      {activeTab === 'themes' && <ThemesTab radar={radar} />}
-      {activeTab === 'discovery' && <DiscoveryTab radar={radar} />}
+      <div id={`radar-panel-${activeTab}`} role="tabpanel" aria-labelledby={`radar-tab-${activeTab}`} tabIndex={0}>
+        {activeTab === 'stocks' && <StocksTab radar={radar} />}
+        {activeTab === 'themes' && <ThemesTab radar={radar} />}
+        {activeTab === 'discovery' && <DiscoveryTab radar={radar} />}
+      </div>
     </div>
   );
 }

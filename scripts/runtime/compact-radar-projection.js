@@ -9,6 +9,7 @@ const { assessProjectionFreshness } = require('./projection-freshness');
 const { deriveResearchNextStep } = require('./research-next-step-v317');
 const { buildResearchSnapshotV317 } = require('./research-snapshot-v317');
 const { buildResearchDossierV318 } = require('./research-dossier-v318');
+const { deriveResearchReadinessV319 } = require('./research-readiness-v319');
 
 const CARD_BUCKETS = Object.freeze([
   'opportunities', 'scenarioUpsideCandidates', 'earlyWatchlist',
@@ -332,6 +333,10 @@ function citedDecisionBrief(brief, citations, provenance) {
 }
 
 function landingLane(card) {
+  const readiness = card?.researchReadiness?.status;
+  if (readiness === 'actionable') return 'actionable';
+  if (readiness === 'near_action' || readiness === 'wait_condition') return 'waiting';
+  if (readiness === 'data_needed') return 'research';
   const envelopeAction=card?.decisionEnvelope?.userAction;
   // The formal envelope alone controls executable action.  ResearchNextStep is
   // deliberately a separate, non-executable routing hint for an incomplete or
@@ -370,7 +375,7 @@ function removeLowestPrioritySignal(cards) {
 }
 
 function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates = [], marketAnalysis = null,
-  { researchSnapshotEnabled = false, researchDossierEnabled = false } = {}) {
+  { researchSnapshotEnabled = false, researchDossierEnabled = false, researchReadinessEnabled = false } = {}) {
   const clean = stripCorrectnessAdditions(legacyPayload);
   invariant(Array.isArray(clean.opportunities), 'legacy opportunities required');
   const bySymbol = new Map(decisions.filter((decision) => typeof decision?.symbol === 'string')
@@ -433,6 +438,9 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
         // decision revision and detail URL.
         sourceCutoff:decision.analysisGeneratedAt??decision.analysisRevision?.analysisGeneratedAt
           ??decision.sourceCutoff??asOf,researchNextStep}):null;
+      const researchReadiness=researchReadinessEnabled?deriveResearchReadinessV319({decisionEnvelope:publicView.decisionEnvelope,
+        researchRanking:decision.researchRanking,technicalState:decision.technical?.technicalState
+          ??decision.researchScore?.priceContext?.technicalState??null,researchNextStep}):null;
       const card = {
       symbol: decision.symbol, chineseName: typeof decision.name === 'string'
         ? [...decision.name.normalize('NFC')].slice(0,20).join('') : null, researchMaturity: 'source_signal',
@@ -449,7 +457,7 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
       ...(researchNextStep?{researchNextStep}:{}),
       ...(researchSnapshot?{researchSnapshot}:{}),
       researchRanking:decision.researchRanking??null,
-      proximityToAction:decision.researchRanking?.lane==='near_buy',
+      ...(researchReadiness?{researchReadiness,proximityToAction:researchReadiness.status==='near_action'}:{}),
       ...(researchSnapshot?.gateWaterfall?{gateWaterfall:researchSnapshot.gateWaterfall}:{}),
       nextUnlock:publicView.decisionEnvelope.nextUnlock??null,
       ...publicView,
@@ -494,12 +502,12 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
       const draftDossier = buildResearchDossierV318({ candidate: decision,
         decision: { ...decision, decisionEnvelope: publicView.decisionEnvelope, decisionBrief },
         sourceCutoff: decision.analysisGeneratedAt ?? decision.analysisRevision?.analysisGeneratedAt
-          ?? decision.sourceCutoff ?? asOf });
+          ?? decision.sourceCutoff ?? asOf, researchReadiness });
       const bound = bindDecisionRevisionCard({ ...card, researchDossier: draftDossier });
       return Object.freeze({ ...bound, researchDossier: buildResearchDossierV318({ candidate: decision,
         decision: { ...decision, decisionEnvelope: bound.decisionEnvelope, decisionBrief },
         sourceCutoff: decision.analysisGeneratedAt ?? decision.analysisRevision?.analysisGeneratedAt
-          ?? decision.sourceCutoff ?? asOf }) });
+          ?? decision.sourceCutoff ?? asOf, researchReadiness }) });
     });
   return { legacy: alignLegacyMarketView(clean, marketAnalysis), sourceSignals };
 }
@@ -551,10 +559,11 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
   // The captured legacy payload is research input, never current release
   // authority. Only the tracked run's frozen lineage may enable actions.
   const publicAcquisitionHealth=sourceAcquisitionHealth??null;
-  const researchSnapshotEnabled=['legacy-radar-v3.17.0','legacy-radar-v3.18.0'].includes(schemaVersion);
-  const researchDossierEnabled=schemaVersion==='legacy-radar-v3.18.0';
+  const researchSnapshotEnabled=['legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0'].includes(schemaVersion);
+  const researchDossierEnabled=['legacy-radar-v3.18.0','legacy-radar-v3.19.0'].includes(schemaVersion);
+  const researchReadinessEnabled=schemaVersion==='legacy-radar-v3.19.0';
   const layered = addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates, publicMarketAnalysis,
-    {researchSnapshotEnabled,researchDossierEnabled});
+    {researchSnapshotEnabled,researchDossierEnabled,researchReadinessEnabled});
   const publishableSourceSignals=selectLandingSourceSignals(layered.sourceSignals.filter((card)=>{
     const validBrief=card.decisionBrief&&card.citations?.length>0
       &&((researchSnapshotEnabled&&card.decisionBrief.availability==='unavailable'
@@ -593,12 +602,14 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
         evidenceRoot:publicAcquisitionHealth?.acquisitionEvidenceRoot??null,
         fetchedAt:publicAcquisitionHealth?.fetchedAt??null,
         terminalStatus:publicAcquisitionHealth?.terminalStatus??null},
-      authorizationStatus:{telegram:'not_authorized',investanchors:'internal_methodology_only',
+      authorizationStatus:{telegram:'structured_claim_authorization_required',
+        investanchors:'structured_claim_authorization_required',
         sourceClaims:'authorized_terminal_outcomes_required'},
       releaseIdentity:{schema:schemaVersion,producerCommitSha:producerIdentity?.commitSha??null,
         runtimeManifestSha256:producerIdentity?.runtimeManifestSha256??null,
-        migrationLevel:schemaVersion==='legacy-radar-v3.18.0'
-          ?'candidate-ledger-retention-v3.18':'provider-acquisition-v3.16.21'},
+        migrationLevel:schemaVersion==='legacy-radar-v3.19.0'
+          ?'release-reconciliation-v3.19':schemaVersion==='legacy-radar-v3.18.0'
+            ?'candidate-ledger-retention-v3.18':'provider-acquisition-v3.16.21'},
       sourceLedCorrectness:{schema:schemaVersion,window,asOf,contentAsOf:resolvedContentAsOf,evaluatedAt,publishedAt,
         nextExpectedAt:freshness.nextExpectedAt,freshnessSchedule:freshnessSchedule.slice(0,80),
         contentHash:materialContentHash,producerIdentity,

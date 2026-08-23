@@ -35,7 +35,7 @@ test('V317 preserves a research-only detail and waiting next step while global a
   assert.equal(card.researchSnapshot.gateWaterfall.find((gate)=>gate.gate==='technical').status,'pass');
   assert.equal(card.researchSnapshot.gateWaterfall.find((gate)=>gate.gate==='valuation').status,'missing');
   assert.equal(card.gateWaterfall.find((gate)=>gate.gate==='technical').status,'pass');
-  assert.deepEqual(published.payload.authorizationStatus,{telegram:'not_authorized',investanchors:'internal_methodology_only',
+  assert.deepEqual(published.payload.authorizationStatus,{telegram:'structured_claim_authorization_required',investanchors:'structured_claim_authorization_required',
     sourceClaims:'authorized_terminal_outcomes_required'});
   const readonly=withProjectionHealth(published.payload,{status:'stale_readonly',reason:'missed_scheduled_runs',
     missedExpectedRuns:1,actionsEnabled:false,actionAuthority:'disabled',researchVisibility:'last_good_readonly',
@@ -77,7 +77,7 @@ test('V317 evaluates the current frozen official union and emits a real liquidit
   assert.equal(worker.officialPriceRowsForResearch(snapshot).length,20);
 });
 
-test('V317 never acquires paid methodology-only sources and leaves no black anchor override',async()=>{
+test('V317 never acquires paid source text and leaves no black anchor override',async()=>{
   const acquisition=runtime('official-source-acquisition.js');
   const roster=JSON.parse(readFileSync(path.join(root,'config/runtime/approved-source-roster-v3.13.json'),'utf8'));
   let requests=0;
@@ -85,7 +85,9 @@ test('V317 never acquires paid methodology-only sources and leaves no black anch
     fetchImpl:async()=>{requests+=1;return new Response('{}',{status:404});}});
   const investAnchorsAttempts=output.connectorAttempts.filter((row)=>row.profileId==='investanchors');
   assert.equal(investAnchorsAttempts.length,3);
-  assert.ok(investAnchorsAttempts.every((row)=>row.status==='missing_endpoint'));
+  assert.deepEqual(investAnchorsAttempts.map((row)=>[row.sourceKey,row.status]),[
+    ['threads','missing_endpoint'],['podcast','missing_endpoint'],['youtube','auth_failed'],
+  ]);
   assert.equal(output.documents.some((row)=>row.profileId==='investanchors'),false);
   assert.equal(output.connectorAttempts.length,51);
   assert.ok(requests>=0);

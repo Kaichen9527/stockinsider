@@ -1,0 +1,7 @@
+{
+  "schema": "stockinsider-artifact-retention-v3.19.0",
+  "sourceAuditMaxBytes": 21474836480,
+  "sourceAuditRetentionDays": 14,
+  "minimumFreeBytes": 34359738368,
+  "warningFreeBytes": 42949672960
+}

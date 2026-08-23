@@ -52,6 +52,7 @@
     "v3.16.21-frozen-acquisition-release-amendment.md",
     "v3.17-source-led-actionability-amendment.md",
     "v3.18-source-led-research-dossier-amendment.md",
+    "v3.19-release-reconciliation-amendment.md",
     "valuation-contract.md"
   ],
   "owners": [
@@ -222,6 +223,10 @@
     [
       "v3.18-source-led-research-dossier-amendment.md",
       "source-led-opportunity-research-dossier-v3.18.0"
+    ],
+    [
+      "v3.19-release-reconciliation-amendment.md",
+      "source-led-opportunity-release-v3.19.0"
     ],
     [
       "valuation-contract.md",

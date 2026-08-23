@@ -148,7 +148,7 @@ test('V3.18 uses reviewed topic scopes for Threads and still requires the approv
   assert.equal(result.connectorAttempts.length,51);
 });
 
-test('V3.18 preserves policy-excluded source terminals without breaking the mention barrier envelope',()=>{
+test('V3.19 preserves unapproved or metadata-only source terminals and accepts only structured authorized claims',()=>{
   const {extractRevisionCandidates}=runtime('auth-source-worker-cli.js');
   for(const sourceKey of ['telegram','investanchors']){
     const result=extractRevisionCandidates({frozenRevision:{
@@ -157,12 +157,28 @@ test('V3.18 preserves policy-excluded source terminals without breaking the ment
     }});
     assert.equal(result.schema,'legacy-mention-claim-result-v3.11');
     assert.equal(result.parseOutcome,'processed_no_claim');
-    assert.equal(result.documentOutcome.reason,`${sourceKey}_content_not_authorized`);
+    assert.equal(result.documentOutcome.reason,`${sourceKey}_structured_claim_authorization_required`);
     assert.deepEqual(result.candidates,[]);
     assert.deepEqual(result.claimOutcomes,[]);
     assert.deepEqual(result.entityOutcomes,[]);
     assert.equal(result.conservation.outcome,'not_authorized');
   }
+  const metadataOnly=extractRevisionCandidates({frozenRevision:{
+    revisionId:'71300000-0000-4000-8000-000000000033',sourceKey:'youtube',analysisDisposition:'no_claim',
+    rawFieldPayload:{text:'2330 只有影片 metadata。'},
+  }});
+  assert.equal(metadataOnly.documentOutcome.reason,'metadata_only_no_claim');
+  assert.deepEqual(metadataOnly.candidates,[]);
+  const authorized=extractRevisionCandidates({authorityPages:[['roster',null,null,[
+    ['stock-2330','2330','TWSE','common_stock','active','台灣積體電路製造','台積電'],
+  ]]],frozenRevision:{revisionId:'71300000-0000-4000-8000-000000000034',sourceKey:'investanchors',
+    contentAuthorization:'structured_claim_authorized',structuredClaim:true,
+    rawFieldPayload:{text:'2330 台積電先進製程需求的結構化研究摘要。'},
+    sourceCollectedAt:'2026-08-20T10:00:00Z',sourcePublishedAt:'2026-08-20T09:00:00Z',
+  }});
+  assert.equal(authorized.parseOutcome,'processed_with_claims');
+  assert.deepEqual(authorized.candidates.map((candidate)=>candidate.symbol),['2330']);
+  assert.equal(authorized.candidates[0].sourceKey,'investanchors');
 });
 
 test('V3.18 research dossier code is part of the reviewed runtime bundle identity',()=>{

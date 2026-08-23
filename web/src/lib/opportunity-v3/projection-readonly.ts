@@ -59,8 +59,8 @@ function readonlyCard(value: unknown, legacySchema = false, preserveResearchSnap
 
 export function withProjectionHealth(selected: CompactRadarProjection, health: ProjectionHealth): CompactRadarProjection {
   const payload = structuredClone(selected) as CompactRadarProjection;
-  const revisionBoundSchema=['legacy-radar-v3.17.0','legacy-radar-v3.18.0'].includes(payload.sourceLedCorrectness.schema);
-  const legacySchema = !['legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0'].includes(payload.sourceLedCorrectness.schema);
+  const revisionBoundSchema=['legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0'].includes(payload.sourceLedCorrectness.schema);
+  const legacySchema = !['legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0'].includes(payload.sourceLedCorrectness.schema);
   const effectiveHealth=legacySchema?{...health,actionsEnabled:false,actionAuthority:'disabled' as const,
     researchVisibility:'last_good_readonly' as const}:health;
   payload.projectionHealth = effectiveHealth;

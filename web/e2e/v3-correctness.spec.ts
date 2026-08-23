@@ -38,7 +38,7 @@ test('PCR-024 exercises the decision matrix at 320px, 200% zoom, keyboard, reduc
   await expect(availableCard.getByText('動作：等待技術觸發')).toBeVisible();
   await expect(availableCard.getByText('技術：需先收復支撐')).toBeVisible();
   const unavailableCard = page.getByRole('article', { name: /9006/u });
-  await expect(page.getByRole('button', { name: /股票研究/u })).toBeVisible();
+  await expect(page.getByRole('tab', { name: /股票研究/u })).toBeVisible();
   await expect(page.getByRole('heading', { name: '研究證據待補（非建議）' })).toBeVisible();
   await expect(page.getByRole('heading', { name: '研究完成／暫不進場（非買進建議）' })).toBeVisible();
   await expect(page.getByRole('heading', { name: '高信念正式推薦' })).toHaveCount(0);
