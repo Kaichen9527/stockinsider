@@ -87,8 +87,8 @@ canonical authority tags immediately below are the only design-side declarations
 catalog identity, active-file topology and the shortened product-correctness owner.
 Their JSON payloads use RFC 8785 key order and are permitted exactly once only.
 
-<!-- GOV-004-AUTHORITY {"catalogBytes":6009,"catalogSha256":"9f7d845df3f2d12c7d2adae5dae87aac890e4c2eee59161c40f8e563e5908c4e","kind":"design-catalog-identity"} -->
-<!-- GOV-004-AUTHORITY {"activeFiles":53,"kind":"design-active-file-topology"} -->
+<!-- GOV-004-AUTHORITY {"catalogBytes":6169,"catalogSha256":"a12c2a8d47e3c2ead33c260d9e4e8c1c198f9a8684eeac0c4e7611cd10277f50","kind":"design-catalog-identity"} -->
+<!-- GOV-004-AUTHORITY {"activeFiles":54,"kind":"design-active-file-topology"} -->
 <!-- GOV-004-AUTHORITY {"kind":"design-product-correctness-owner","owner":"product-correctness-runtime-v3.11.11"} -->
 
 `GOV-004` parses every tag across the active graph, rejects a missing, repeated,

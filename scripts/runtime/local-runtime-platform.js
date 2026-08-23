@@ -13,13 +13,13 @@ const PRIOR_LABELS = Object.freeze([
   'com.stockinsider.data-collect', 'com.stockinsider.night-shift', 'com.stockinsider.research-daemon',
 ]);
 const OWNER_LABEL = 'com.stockinsider.auth-source-worker';
-// The first reviewed run can include the bounded 20-symbol/260-price-session
-// and 252-valuation-session official
-// bootstrap. Production evidence on 2026-08-15 showed that a healthy run can
-// exceed one hour while its durable lease continues to heartbeat. Keep the
-// activation transaction finite, but do not kill a healthy bounded bootstrap at
-// the former 3,600-second boundary.
-const OWNER_ACTIVATION_MAXIMUM_SECONDS = 4 * 3600;
+// Activation owns only the scheduler hand-off.  A producer run is a separately
+// durable, lease-backed state machine and may legitimately take much longer
+// than installation.  Waiting for that terminal run here used to leave an
+// interrupted install at `old_owners_disabled` for up to four hours.  The
+// installer now waits at most two minutes for registration/first heartbeat;
+// release-state reconciliation owns the terminal-run wait.
+const OWNER_ACTIVATION_MAXIMUM_SECONDS = 120;
 
 function fail(code) { const error = new Error(code); error.code = code; throw error; }
 function atomicCanonical(filename, value) {
@@ -127,13 +127,18 @@ async function startOwnerAndWait(label, maximumSeconds = OWNER_ACTIVATION_MAXIMU
   for (let elapsed = 0; elapsed <= maximumSeconds; elapsed += 1) {
     const state = invokeLaunchctl(['list', label]);
     const output = state.stdout ?? '';
-    if (!/"PID"\s*=\s*\d+/u.test(output)) {
-      const exitStatus = output.match(/"LastExitStatus"\s*=\s*(-?\d+)/u);
-      if (exitStatus) {
-        if (Number(exitStatus[1]) === 0) return;
-        fail('scheduler_activation_failed');
-      }
-    }
+    // `launchctl list <label>` succeeding is the registration proof. A
+    // one-shot owner may have no PID because it has not begun work yet or it
+    // already completed; neither state is an installation failure. A reported
+    // non-zero exit is the only terminal scheduler failure we can safely infer
+    // at this boundary.
+    const exitStatus = output.match(/"LastExitStatus"\s*=\s*(-?\d+)/u);
+    if (exitStatus && Number(exitStatus[1]) !== 0) fail('scheduler_activation_failed');
+    if (state.status === 0) return Object.freeze({
+      registered: true,
+      pid: /"PID"\s*=\s*\d+/u.test(output),
+      lastExitStatus: exitStatus ? Number(exitStatus[1]) : null,
+    });
     if (elapsed < maximumSeconds) await waitOneSecond();
   }
   fail('scheduler_activation_failed');

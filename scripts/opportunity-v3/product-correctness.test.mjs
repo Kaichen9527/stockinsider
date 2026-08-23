@@ -138,6 +138,7 @@ function passingRuntimeDoctor(manifest, reviewedRelease) {
   return { status: 'pass', observation: {
     activationJournalComplete: true, activePointerValid: true, competingOwners: [],
     configSha256: reviewedRelease.configSha256, consumerCommitSha: reviewedRelease.commitSha,
+    producerCommitSha: reviewedRelease.commitSha,
     consumerCompatibility: 'compatible', lastRunNonterminal: false, lastTerminalRunAt: '2026-08-01T04:30:00Z',
     lastTerminalStatus: 'success', leaseStatus: 'absent', manifestCanonical: true, manifestPresent: true,
     negativeRunDuration: false, ownerPlistSha256: '9'.repeat(64), projectionAsOf: '2026-08-01T04:30:00Z',
@@ -167,12 +168,15 @@ const checks = {
     assert.ok(!readFileSync(path.join(root, 'scripts/runtime/auth-source-worker-cli.js'), 'utf8').includes('.agent/'));
     const bundle = runtime('tracked-runtime-bundle.js');
     assert.deepEqual([...bundle.TRACKED_RUNTIME_PATHS].sort(), bundle.TRACKED_RUNTIME_PATHS);
-    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 51);
+    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 54);
     assert.equal(bundle.runtimeBundleSha256(root), sha256(bundle.runtimeBundleBytes(root)));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/auth-source-worker-cli.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/provider-acquisition-v31621.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/research-next-step-v317.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/research-dossier-v318.js'));
+    assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/research-readiness-v319.js'));
+    assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/runtime-disk-policy-v319.js'));
+    assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('config/runtime/artifact-retention-v3.19.json'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/research-snapshot-v317.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/tracked-runtime-bundle.js'));
     const bundleRoot = mkdtempSync(path.join(os.tmpdir(), 'runtime-bundle-nofollow-'));
@@ -289,39 +293,59 @@ const checks = {
     assert.equal(packageJson.scripts['agent:runtime:install'], 'node scripts/runtime/reviewed-runtime-installer-cli.js');
     assert.equal(packageJson.scripts['agent:runtime:activate-reviewed'], 'node scripts/runtime/reviewed-runtime-installer-cli.js --activate');
     const localPlatform = runtime('local-runtime-platform.js');
-    assert.equal(localPlatform.OWNER_ACTIVATION_MAXIMUM_SECONDS, 14_400,
-      'reviewed first-run bootstrap admits the bounded official backfill window');
-    let longBootstrapPolls = 0;
-    await localPlatform.startOwnerAndWait('com.stockinsider.test-owner',
+    assert.equal(localPlatform.OWNER_ACTIVATION_MAXIMUM_SECONDS, 120,
+      'scheduler hand-off is bounded; the durable run owns long backfills');
+    let registrationPolls = 0;
+    const registered = await localPlatform.startOwnerAndWait('com.stockinsider.test-owner',
       localPlatform.OWNER_ACTIVATION_MAXIMUM_SECONDS, {
         launchctl: (args) => {
           if (args[0] === 'start') return { status: 0, stdout: '' };
-          longBootstrapPolls += 1;
-          return { status: 0, stdout: longBootstrapPolls === 3602 ? '"LastExitStatus" = 0;' : '' };
+          registrationPolls += 1;
+          return { status: 0, stdout: '' };
         },
         waitOneSecond: async () => {},
       });
-    assert.equal(longBootstrapPolls, 3602,
-      'a healthy bounded bootstrap that crosses one hour remains activation-eligible');
+    assert.equal(registrationPolls, 1,
+      'launchctl registration completes without awaiting the producer terminal result');
+    assert.deepEqual(registered, { registered: true, pid: false, lastExitStatus: null });
     assert.equal(typeof localPlatform.captureSchedulerRollback, 'function');
     assert.equal(typeof localPlatform.createLocalRuntimePlatform, 'function');
-    const transientLaunchctlRows = ['', '"LastExitStatus" = 0;'];
     const launchctlCalls = [];
     await localPlatform.startOwnerAndWait('com.stockinsider.test-owner', 1, {
       launchctl: (args) => {
         launchctlCalls.push(args);
-        return { status: 0, stdout: args[0] === 'start' ? '' : transientLaunchctlRows.shift() };
+        return { status: 0, stdout: '' };
       },
       waitOneSecond: async () => {},
     });
     assert.deepEqual(launchctlCalls, [
       ['start', 'com.stockinsider.test-owner'],
       ['list', 'com.stockinsider.test-owner'],
-      ['list', 'com.stockinsider.test-owner'],
     ]);
     await assert.rejects(localPlatform.startOwnerAndWait('com.stockinsider.test-owner', 0, {
       launchctl: (args) => ({ status: 0, stdout: args[0] === 'start' ? '' : '"LastExitStatus" = 78;' }),
       waitOneSecond: async () => {},
+    }), { code: 'scheduler_activation_failed' });
+    const installation = runtime('auth-source-worker-installation.js');
+    assert.equal(installation.ACTIVATION_HEARTBEAT_MAXIMUM_SECONDS, 120);
+    let heartbeatPolls = 0;
+    const firstHeartbeat = await installation.waitForFirstHeartbeat({
+      scheduler: { doctor: async () => {
+        heartbeatPolls += 1;
+        return heartbeatPolls === 1
+          ? { observation: { producerCommitSha: '0'.repeat(40), leaseStatus: 'active', lastRunNonterminal: true } }
+          : { observation: { producerCommitSha: 'a'.repeat(40), leaseStatus: 'active', lastRunNonterminal: true } };
+      } },
+      reviewedRelease: { commitSha: 'a'.repeat(40) }, maximumSeconds: 1, pollMilliseconds: 1,
+      wait: async () => {}, now: (() => { let tick = 0; return () => tick++ === 0 ? 0 : 1; })(),
+    });
+    assert.equal(heartbeatPolls, 2);
+    assert.equal(firstHeartbeat.observation.producerCommitSha, 'a'.repeat(40));
+    await assert.rejects(installation.waitForFirstHeartbeat({
+      scheduler: { doctor: async () => ({ observation: {
+        producerCommitSha: '0'.repeat(40), leaseStatus: 'absent', lastRunNonterminal: false,
+      } }) }, reviewedRelease: { commitSha: 'a'.repeat(40) }, maximumSeconds: 1, pollMilliseconds: 1,
+      wait: async () => {}, now: (() => { let tick = 0; return () => ++tick; })(),
     }), { code: 'scheduler_activation_failed' });
     const ownerReplacementCalls = [];
     await localPlatform.replaceOwnerAndWait('com.stockinsider.test-owner', '/tmp/test-owner.plist',
@@ -482,7 +506,9 @@ const checks = {
     const result = await runtime('auth-source-worker-installation.js').activateTrackedRuntimeRelease({ manifest, reviewedRelease,
       ...testActivationProof,
       filesystem: { captureActivePointer: async () => 'old', stage: async () => calls.push('stage'), verifyStaged: async () => calls.push('verify'), publishRelease: async () => calls.push('publish'), writeHealthObservation: async () => calls.push('health-observation'), restoreActivePointer: async () => calls.push('restore-pointer'), cleanupIncomplete: async () => calls.push('cleanup') },
-      scheduler: { capture: async () => 'owners', disablePriorOwners: async () => calls.push('disable'), loadNewOwner: async () => calls.push('load'), doctor: async () => ({ status: 'fail' }), restore: async () => calls.push('restore-scheduler') },
+      scheduler: { capture: async () => 'owners', disablePriorOwners: async () => calls.push('disable'), loadNewOwner: async () => calls.push('load'), doctor: async () => ({ status: 'fail', observation: {
+        producerCommitSha: reviewedRelease.commitSha, leaseStatus: 'active', lastRunNonterminal: true,
+      } }), restore: async () => calls.push('restore-scheduler') },
       journal: { recover: async () => calls.push('recover'), begin: async () => calls.push('captured'),
         write: async (phase) => calls.push(phase), rollback: async () => calls.push('journal-rollback') } });
     assert.equal(result.disposition, 'rolled_back'); assert.ok(calls.indexOf('restore-scheduler') < calls.indexOf('restore-pointer'));
@@ -497,7 +523,9 @@ const checks = {
       verifyStaged: async () => {}, publishRelease: async () => { residue = true; }, writeHealthObservation: async () => {},
       restoreActivePointer: async () => {}, cleanupIncomplete: async () => { residue = false; } };
     const retryScheduler = { capture: async () => 'owners', disablePriorOwners: async () => {}, loadNewOwner: async () => {},
-      doctor: async () => (++doctorAttempts === 1 ? { status: 'fail' } : passingRuntimeDoctor(manifest, reviewedRelease)),
+      doctor: async () => (++doctorAttempts === 1 ? { status: 'fail', observation: {
+        producerCommitSha: reviewedRelease.commitSha, leaseStatus: 'active', lastRunNonterminal: true,
+      } } : passingRuntimeDoctor(manifest, reviewedRelease)),
       restore: async () => {} };
     const retryJournal = { recover: async () => {}, begin: async () => {}, write: async () => {}, rollback: async () => {} };
     const firstAttempt = await runtime('auth-source-worker-installation.js').activateTrackedRuntimeRelease({ manifest,

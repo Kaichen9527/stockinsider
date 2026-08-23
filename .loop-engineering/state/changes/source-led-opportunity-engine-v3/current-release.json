@@ -1,9 +1,9 @@
 {
   "schema": "stockinsider-current-release-v1",
-  "version": "v3.18",
+  "version": "v3.19",
   "phase": "contract_frozen",
   "source": {
-    "baseCommit": "88c9e4c7c619ac777f6d717d9fd7019864d85537",
+    "baseCommit": "3bacd58c86f01c469b7d634e0f6df036ae7152a2",
     "exactCommit": null,
     "exactTree": null,
     "attestationCommit": null
@@ -16,10 +16,10 @@
     "shadowActivation": "pending"
   },
   "production": {
-    "migration": "candidate_ledger_retention_v3_18_rehearsal_pending",
-    "runtime": "v3_16_20_forensic_run_rolled_back_safe_184390953048209730c22828548858c28fa3b6b7",
-    "web": "v3_16_21_web_live_v3_18_matching_release_pending",
-    "projection": "last_good_research_visible_v3_18_dossier_pending",
+    "migration": "release_reconciliation_v3_19_rehearsal_pending",
+    "runtime": "v3_18_forensic_activation_must_terminalize_before_v3_19_stage",
+    "web": "matching_v3_19_reviewed_release_pending",
+    "projection": "last_good_research_visible_v3_19_readiness_pending",
     "promotion": "blocked/non_fabricated_elapsed_cohorts_unavailable"
   },
   "forbidden": {
