@@ -640,6 +640,8 @@ test('release reconciliation scopes transient owner CREATE rights and restores t
   assert.match(releaseReconciliationSql,
     /CREATE OR REPLACE FUNCTION public[.]append_legacy_source_shard_v3_19[\s\S]*?job[.]stage='source_sync' AND job[.]status='succeeded'[\s\S]*?CREATE OR REPLACE FUNCTION public[.]schedule_legacy_source_shard_successor_v3_19[\s\S]*?status='cancelled'[\s\S]*?INSERT INTO public[.]legacy_producer_job_payloads_v3_11[\s\S]*?REVOKE ALL ON FUNCTION[\s\S]*?FROM PUBLIC, anon, authenticated, service_role;[\s\S]*?TO opportunity_v3_rpc_owner;/u,
     'cross-owner writes must preserve immutable payloads, cancel only the unused barrier, and append a replacement shard');
+  assert.match(releaseReconciliationSql,/jsonb_array_length\(p_selected_rows\)>272/u,
+    'the V3.19 frozen-shard bound must admit every V3.13-legal source document envelope');
   assert.match(releaseReconciliationSql,
     /ALTER TABLE public[.]legacy_source_sync_cursors_v3_19 OWNER TO opportunity_v3_rpc_owner;[\s\S]*?SET ROLE opportunity_v3_rpc_owner;[\s\S]*?CREATE OR REPLACE FUNCTION public[.]complete_legacy_producer_job_v3_11[\s\S]*?RESET ROLE;[\s\S]*?REVOKE CREATE ON SCHEMA public FROM legacy_correctness_rpc_owner,opportunity_v3_rpc_owner;[\s\S]*?COMMIT;/u);
   assert.match(releaseReconciliationSql,/ELSIF NOT\(v_old=2 AND v_new=2\) THEN/u,

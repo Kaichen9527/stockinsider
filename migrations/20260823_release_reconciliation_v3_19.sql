@@ -96,7 +96,7 @@ DECLARE
   v_revision uuid;v_selected_bytes bytea;v_selected_hash text;v_inserted integer;
 BEGIN
   IF p_source_result_hash !~ '^[0-9a-f]{64}$'
-    OR jsonb_typeof(p_selected_rows)<>'array' OR jsonb_array_length(p_selected_rows)>200 THEN
+    OR jsonb_typeof(p_selected_rows)<>'array' OR jsonb_array_length(p_selected_rows)>272 THEN
     RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='v319_source_shard_shape_invalid';
   END IF;
   PERFORM 1 FROM public.legacy_producer_jobs_v3_11 job
