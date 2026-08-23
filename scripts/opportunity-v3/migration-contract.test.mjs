@@ -63,6 +63,9 @@ const projectionEvaluationSupersessionSql = fs.readFileSync(projectionEvaluation
 const candidateRetentionMigrationPath = path.join(root,
   'migrations/20260822_candidate_ledger_retention_v3_18.sql');
 const candidateRetentionSql = fs.readFileSync(candidateRetentionMigrationPath, 'utf8');
+const releaseReconciliationMigrationPath = path.join(root,
+  'migrations/20260823_release_reconciliation_v3_19.sql');
+const releaseReconciliationSql = fs.readFileSync(releaseReconciliationMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -487,6 +490,12 @@ before(() => {
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', candidateRetentionMigrationPath,
     ]);
   }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', releaseReconciliationMigrationPath,
+    ]);
+  }
 });
 
 after(() => {
@@ -622,6 +631,47 @@ test('migration declares the complete closed V3 catalog', () => {
   });
   assert.doesNotMatch(sql, /(?<!\.)\bgen_random_bytes\s*\(/u, 'security-definer paths must schema-qualify pgcrypto');
   assert.doesNotMatch(sql, /\boutput_counts\s+jsonb\b/u, 'job counts must use the named composite');
+});
+
+test('release reconciliation scopes transient owner CREATE rights and restores the executor role', () => {
+  assert.doesNotMatch(releaseReconciliationSql, /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(releaseReconciliationSql,
+    /GRANT CREATE ON SCHEMA public TO legacy_correctness_rpc_owner,opportunity_v3_rpc_owner;[\s\S]*?ALTER TABLE public[.]legacy_release_checkpoints_v3_19 OWNER TO legacy_correctness_rpc_owner;[\s\S]*?SET ROLE legacy_correctness_rpc_owner;[\s\S]*?RESET ROLE;/u);
+  assert.match(releaseReconciliationSql,
+    /CREATE OR REPLACE FUNCTION public[.]append_legacy_source_shard_v3_19[\s\S]*?job[.]stage='source_sync' AND job[.]status='succeeded'[\s\S]*?CREATE OR REPLACE FUNCTION public[.]schedule_legacy_source_shard_successor_v3_19[\s\S]*?status='cancelled'[\s\S]*?INSERT INTO public[.]legacy_producer_job_payloads_v3_11[\s\S]*?REVOKE ALL ON FUNCTION[\s\S]*?FROM PUBLIC, anon, authenticated, service_role;[\s\S]*?TO opportunity_v3_rpc_owner;/u,
+    'cross-owner writes must preserve immutable payloads, cancel only the unused barrier, and append a replacement shard');
+  assert.match(releaseReconciliationSql,
+    /ALTER TABLE public[.]legacy_source_sync_cursors_v3_19 OWNER TO opportunity_v3_rpc_owner;[\s\S]*?SET ROLE opportunity_v3_rpc_owner;[\s\S]*?CREATE OR REPLACE FUNCTION public[.]complete_legacy_producer_job_v3_11[\s\S]*?RESET ROLE;[\s\S]*?REVOKE CREATE ON SCHEMA public FROM legacy_correctness_rpc_owner,opportunity_v3_rpc_owner;[\s\S]*?COMMIT;/u);
+  assert.match(releaseReconciliationSql,/ELSIF NOT\(v_old=2 AND v_new=2\) THEN/u,
+    'the exact two-marker installed shape must be idempotent; all other shapes fail closed');
+  assert.equal((releaseReconciliationSql.match(/SET ROLE /gu) ?? []).length, 2);
+  assert.equal((releaseReconciliationSql.match(/RESET ROLE;/gu) ?? []).length, 2);
+  const installed = JSON.parse(psql(`
+    SELECT jsonb_build_object(
+      'checkpointTable',to_regclass('public.legacy_release_checkpoints_v3_19') IS NOT NULL,
+      'cursorTable',to_regclass('public.legacy_source_sync_cursors_v3_19') IS NOT NULL,
+      'readerOwner',pg_get_userbyid((
+        SELECT proowner FROM pg_proc WHERE oid='public.read_legacy_release_checkpoints_v3_19()'::regprocedure)),
+      'completionOwner',pg_get_userbyid((
+        SELECT proowner FROM pg_proc WHERE oid=
+          'public.complete_legacy_producer_job_v3_11(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure)),
+      'legacyCreate',has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE'),
+      'opportunityCreate',has_schema_privilege('opportunity_v3_rpc_owner','public','CREATE'),
+      'opportunityFrozenInsert',has_table_privilege('opportunity_v3_rpc_owner',
+        'public.legacy_frozen_source_revisions_v3_11','INSERT'),
+      'opportunityShardHelper',has_function_privilege('opportunity_v3_rpc_owner',
+        'public.append_legacy_source_shard_v3_19(uuid,uuid,text,jsonb)','EXECUTE'),
+      'serviceShardHelper',has_function_privilege('service_role',
+        'public.append_legacy_source_shard_v3_19(uuid,uuid,text,jsonb)','EXECUTE'),
+      'serviceFrozenInsert',has_table_privilege('service_role',
+        'public.legacy_frozen_source_revisions_v3_11','INSERT')
+    )::text;
+  `,['-At']).trim());
+  assert.deepEqual(installed,{
+    checkpointTable:true,cursorTable:true,readerOwner:'legacy_correctness_rpc_owner',
+    completionOwner:'opportunity_v3_rpc_owner',legacyCreate:false,opportunityCreate:false,
+    opportunityFrozenInsert:false,opportunityShardHelper:true,serviceShardHelper:false,serviceFrozenInsert:false,
+  });
 });
 
 test('migration includes the exact three view security modes', () => {
@@ -1595,7 +1645,8 @@ test('V3.13 source acquisition persists seventeen terminals, citation, and typed
       canonical_content_sha256,recorded_at)
     SELECT (SELECT run_id FROM v313_run),selection_ordinal,(value->>0)::public.source_key_v3,(value->>1)::uuid,
       convert_to(value::text,'utf8'),value,encode(extensions.digest(convert_to(value::text,'utf8'),'sha256'),'hex'),
-      value->>7,value->>8,value->>9,value->>10,clock_timestamp() FROM selected;
+      value->>7,value->>8,value->>9,value->>10,clock_timestamp() FROM selected
+    ON CONFLICT(run_id,revision_id) DO NOTHING;
     WITH selected AS(SELECT revision_id FROM public.legacy_frozen_source_revisions_v3_11
       WHERE run_id=(SELECT run_id FROM v313_run) AND selected_revision_row_json->>4='episode-applied'),payload AS(
       SELECT jsonb_build_array('v313-followup','mention_claim_extraction','revision_shard',0,revision_id) value FROM selected)
@@ -1603,7 +1654,8 @@ test('V3.13 source acquisition persists seventeen terminals, citation, and typed
       execution_ordinal,revision_id,predecessor_job_id,input_hash,payload_hash,status,attempt,max_attempts,
       owner_token_hash,leased_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,recorded_at)
     SELECT '71300000-0000-4000-8000-000000000011',(SELECT run_id FROM v313_run),'mention_claim_extraction',
-      'revision_shard',1,0,2,revision_id,(SELECT job_id FROM v313_run),
+      'revision_shard',1,0,(SELECT max(execution_ordinal)+1 FROM public.legacy_producer_jobs_v3_11
+        WHERE run_id=(SELECT run_id FROM v313_run)),revision_id,(SELECT job_id FROM v313_run),
       encode(extensions.digest(convert_to(value::text,'utf8'),'sha256'),'hex'),
       encode(extensions.digest(convert_to(value::text,'utf8'),'sha256'),'hex'),'queued',0,5,NULL,NULL,NULL,NULL,NULL,NULL,
       clock_timestamp() FROM selected,payload;
@@ -1783,7 +1835,15 @@ test('V3.13 source acquisition persists seventeen terminals, citation, and typed
       'staleAppendRows',(SELECT count(*) FROM public.source_document_revisions_v3
         WHERE stable_connector_document_id='stale-authority-probe'),
       'staleAppendAudits',(SELECT count(*) FROM public.opportunity_rpc_audit_v3
-        WHERE function_name='append_source_document_revision_v3' AND subject_id IS NULL))::text;
+        WHERE function_name='append_source_document_revision_v3' AND subject_id IS NULL),
+      'v319CancelledBarrier',(SELECT count(*) FROM public.legacy_producer_jobs_v3_11 job
+        WHERE job.run_id=(SELECT run_id FROM v313_run) AND job.stage='mention_claim_extraction'
+          AND job.job_kind='stage_barrier' AND job.status='cancelled'),
+      'v319ReplacementShard',(SELECT count(*) FROM public.legacy_producer_jobs_v3_11 job
+        JOIN v313_complete completion ON completion.next_job->>'jobId'=job.job_id::text
+        WHERE job.run_id=(SELECT run_id FROM v313_run) AND job.stage='mention_claim_extraction'
+          AND job.job_kind='revision_shard' AND job.status='queued'
+          AND job.revision_id IS NOT NULL))::text;
     ROLLBACK;
   `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
   assert.deepEqual(applied,{profileCount:17,terminalCount:17,newDocuments:2,
@@ -1791,7 +1851,7 @@ test('V3.13 source acquisition persists seventeen terminals, citation, and typed
     processingDocuments:2,processedNoClaim:1,processingClaims:4,processingEntities:4,linkedEntities:1,rejectedEntities:3,
     repeatUnchanged:2,repeatDeferred:3,repeatRejected:2,repeatMixedTerminal:'provider_failed',repeatFrozenAuthorities:1,
     postCutoffGrantDeferred:2,mixedFailureTerminal:'provider_failed',runBoundAppendContexts:2,
-    staleAppendRows:0,staleAppendAudits:0});
+    staleAppendRows:0,staleAppendAudits:0,v319CancelledBarrier:1,v319ReplacementShard:1});
   assert.equal(parsed.candidates[0].link.disposition,'linked');assert.equal(parsed.candidates[0].symbol,'2330');
 });
 

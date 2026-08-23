@@ -3,7 +3,11 @@ BEGIN;
 -- V3.19 records release progress separately from producer state.  It is
 -- append-only evidence: scheduler ownership and action authority remain
 -- derived from the reviewed runtime, manifest and projection identities.
-GRANT CREATE ON SCHEMA public TO legacy_correctness_rpc_owner;
+-- These owner roles deliberately do not retain CREATE on public.  The
+-- migration needs it transiently because PostgreSQL requires both ownership
+-- of a replaced function and CREATE on its schema; role boundaries are reset
+-- and revoked before COMMIT.
+GRANT CREATE ON SCHEMA public TO legacy_correctness_rpc_owner,opportunity_v3_rpc_owner;
 
 CREATE TABLE IF NOT EXISTS public.legacy_release_checkpoints_v3_19 (
   checkpoint_id uuid PRIMARY KEY DEFAULT extensions.gen_random_uuid(),
@@ -35,6 +39,8 @@ CREATE INDEX IF NOT EXISTS legacy_release_checkpoints_v3_19_recorded_idx
 
 ALTER TABLE public.legacy_release_checkpoints_v3_19 ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.legacy_release_checkpoints_v3_19 OWNER TO legacy_correctness_rpc_owner;
+
+SET ROLE legacy_correctness_rpc_owner;
 
 DO $immutable_trigger$
 BEGIN
@@ -73,6 +79,140 @@ REVOKE ALL ON TABLE public.legacy_release_checkpoints_v3_19 FROM PUBLIC, anon, a
 REVOKE ALL ON FUNCTION public.read_legacy_release_checkpoints_v3_19() FROM PUBLIC, anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.read_legacy_release_checkpoints_v3_19() TO service_role;
 
+-- The V3.19 completion wrapper reads source revisions under the opportunity
+-- owner, while the frozen ledger and job transport are deliberately owned by
+-- legacy_correctness_rpc_owner.  Do not grant cross-owner DML: RLS would still
+-- reject it and a grant would widen the table surface.  These two narrowly
+-- scoped helpers validate the completed source job, mutate only its immutable
+-- shard / queued successor, and are executable solely by the no-login
+-- opportunity owner.
+CREATE OR REPLACE FUNCTION public.append_legacy_source_shard_v3_19(
+  p_run uuid,p_completed_source_job uuid,p_source_result_hash text,p_selected_rows jsonb
+) RETURNS jsonb
+LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $append_source_shard$
+DECLARE
+  v_initial_count integer;v_next_ordinal integer;v_first_ordinal integer:=NULL;
+  v_first_revision uuid:=NULL;v_appended integer:=0;v_item jsonb;v_source_key public.source_key_v3;
+  v_revision uuid;v_selected_bytes bytea;v_selected_hash text;v_inserted integer;
+BEGIN
+  IF p_source_result_hash !~ '^[0-9a-f]{64}$'
+    OR jsonb_typeof(p_selected_rows)<>'array' OR jsonb_array_length(p_selected_rows)>200 THEN
+    RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='v319_source_shard_shape_invalid';
+  END IF;
+  PERFORM 1 FROM public.legacy_producer_jobs_v3_11 job
+  JOIN public.legacy_producer_job_results_v3_11 result ON result.job_id=job.job_id
+  WHERE job.run_id=p_run AND job.job_id=p_completed_source_job
+    AND job.stage='source_sync' AND job.status='succeeded' AND result.result_hash=p_source_result_hash;
+  IF NOT FOUND THEN
+    RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='v319_source_shard_predecessor_conflict';
+  END IF;
+  SELECT count(*),coalesce(max(frozen.selection_ordinal),-1)+1
+  INTO v_initial_count,v_next_ordinal
+  FROM public.legacy_frozen_source_revisions_v3_11 frozen WHERE frozen.run_id=p_run;
+  FOR v_item IN SELECT item.value FROM jsonb_array_elements(p_selected_rows) item
+  LOOP
+    IF jsonb_typeof(v_item)<>'array' OR jsonb_array_length(v_item)<>11
+      OR nullif(v_item->>0,'') IS NULL OR nullif(v_item->>1,'') IS NULL THEN
+      RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='v319_source_shard_row_invalid';
+    END IF;
+    v_source_key:=(v_item->>0)::public.source_key_v3;
+    v_revision:=(v_item->>1)::uuid;
+    v_selected_bytes:=convert_to(v_item::text,'utf8');
+    v_selected_hash:=encode(extensions.digest(v_selected_bytes,'sha256'),'hex');
+    INSERT INTO public.legacy_frozen_source_revisions_v3_11(
+      run_id,selection_ordinal,source_key,revision_id,selected_revision_row_canonical,
+      selected_revision_row_json,selected_revision_row_hash,raw_field_payload_algorithm_version,
+      ingestion_content_revision_sha256,canonical_content_algorithm_version,canonical_content_sha256
+    ) VALUES(
+      p_run,v_next_ordinal,v_source_key,v_revision,v_selected_bytes,v_item,v_selected_hash,
+      v_item->>7,v_item->>8,v_item->>9,v_item->>10
+    ) ON CONFLICT(run_id,revision_id) DO NOTHING;
+    GET DIAGNOSTICS v_inserted=ROW_COUNT;
+    IF v_inserted=1 THEN
+      IF v_first_ordinal IS NULL THEN
+        v_first_ordinal:=v_next_ordinal;v_first_revision:=v_revision;
+      END IF;
+      v_next_ordinal:=v_next_ordinal+1;v_appended:=v_appended+1;
+    END IF;
+  END LOOP;
+  RETURN jsonb_build_object('initialCount',v_initial_count,'firstOrdinal',v_first_ordinal,
+    'firstRevision',v_first_revision,'appended',v_appended);
+END $append_source_shard$;
+
+CREATE OR REPLACE FUNCTION public.schedule_legacy_source_shard_successor_v3_19(
+  p_run uuid,p_completed_source_job uuid,p_successor_job uuid,p_source_result_hash text,
+  p_first_ordinal integer,p_first_revision uuid
+) RETURNS jsonb
+LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $schedule_successor$
+DECLARE
+  v_payload jsonb;v_payload_bytes bytea;v_payload_hash text;v_successor uuid;
+  v_execution_ordinal integer;v_uuid_hash text;v_existing public.legacy_producer_jobs_v3_11%ROWTYPE;
+BEGIN
+  IF p_source_result_hash !~ '^[0-9a-f]{64}$' OR p_first_ordinal<0 OR p_first_revision IS NULL THEN
+    RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='v319_same_run_successor_input_invalid';
+  END IF;
+  PERFORM 1 FROM public.legacy_producer_jobs_v3_11 job
+  JOIN public.legacy_producer_job_results_v3_11 result ON result.job_id=job.job_id
+  WHERE job.run_id=p_run AND job.job_id=p_completed_source_job
+    AND job.stage='source_sync' AND job.status='succeeded' AND result.result_hash=p_source_result_hash;
+  IF NOT FOUND THEN
+    RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='v319_same_run_successor_predecessor_conflict';
+  END IF;
+  SELECT job.execution_ordinal+1 INTO v_execution_ordinal
+  FROM public.legacy_producer_jobs_v3_11 job
+  WHERE job.job_id=p_successor_job AND job.run_id=p_run AND job.status='queued'
+    AND job.stage='mention_claim_extraction' AND job.job_kind='stage_barrier'
+  FOR UPDATE;
+  IF NOT FOUND THEN
+    RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='v319_same_run_successor_conflict';
+  END IF;
+  v_uuid_hash:=encode(extensions.digest(convert_to(
+    'legacy-v319-source-shard:'||p_run::text||':'||p_first_ordinal::text||':'||p_first_revision::text,'utf8'),'sha256'),'hex');
+  v_successor:=(substr(v_uuid_hash,1,8)||'-'||substr(v_uuid_hash,9,4)||'-'||substr(v_uuid_hash,13,4)||'-'||
+    substr(v_uuid_hash,17,4)||'-'||substr(v_uuid_hash,21,12))::uuid;
+  v_payload:=jsonb_build_array('e6d9c09b8b552f5d9eaf389b76d2d90daa2d89578433d2a1ad63286888b3b743',
+    p_source_result_hash,'mention_claim_extraction','revision_shard',p_first_ordinal,p_first_revision);
+  v_payload_bytes:=convert_to(v_payload::text,'utf8');
+  v_payload_hash:=encode(extensions.digest(v_payload_bytes,'sha256'),'hex');
+  UPDATE public.legacy_producer_jobs_v3_11 job
+  SET status='cancelled',terminal_at=date_trunc('second',clock_timestamp()),failure_code='cancelled',
+    owner_token_hash=NULL,leased_at=NULL,heartbeat_at=NULL,lease_expires_at=NULL
+  WHERE job.job_id=p_successor_job AND job.status='queued';
+  IF NOT FOUND THEN
+    RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='v319_same_run_successor_transition_conflict';
+  END IF;
+  SELECT * INTO v_existing FROM public.legacy_producer_jobs_v3_11 job WHERE job.job_id=v_successor;
+  IF v_existing.job_id IS NULL THEN
+    INSERT INTO public.legacy_producer_jobs_v3_11(
+      job_id,run_id,stage,job_kind,stage_ordinal,shard_ordinal,execution_ordinal,revision_id,
+      predecessor_job_id,input_hash,payload_hash,status,attempt,max_attempts,owner_token_hash,leased_at,
+      heartbeat_at,lease_expires_at,terminal_at,failure_code,recorded_at
+    ) VALUES(
+      v_successor,p_run,'mention_claim_extraction','revision_shard',1,p_first_ordinal,v_execution_ordinal,
+      p_first_revision,p_completed_source_job,v_payload_hash,v_payload_hash,'queued',0,5,NULL,NULL,NULL,NULL,NULL,NULL,
+      date_trunc('second',clock_timestamp())
+    );
+    INSERT INTO public.legacy_producer_job_payloads_v3_11(
+      job_id,payload_canonical,payload_json,payload_hash,recorded_at
+    ) VALUES(v_successor,v_payload_bytes,v_payload,v_payload_hash,date_trunc('second',clock_timestamp()));
+  ELSIF v_existing.run_id<>p_run OR v_existing.stage<>'mention_claim_extraction'
+    OR v_existing.job_kind<>'revision_shard' OR v_existing.shard_ordinal<>p_first_ordinal
+    OR v_existing.revision_id<>p_first_revision OR v_existing.input_hash<>v_payload_hash
+  THEN
+    RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='v319_same_run_successor_identity_conflict';
+  END IF;
+  RETURN jsonb_build_object('jobId',v_successor,'stage','mention_claim_extraction');
+END $schedule_successor$;
+
+REVOKE ALL ON FUNCTION public.append_legacy_source_shard_v3_19(uuid,uuid,text,jsonb),
+  public.schedule_legacy_source_shard_successor_v3_19(uuid,uuid,uuid,text,integer,uuid)
+  FROM PUBLIC, anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.append_legacy_source_shard_v3_19(uuid,uuid,text,jsonb),
+  public.schedule_legacy_source_shard_successor_v3_19(uuid,uuid,uuid,text,integer,uuid)
+  TO opportunity_v3_rpc_owner;
+
+RESET ROLE;
+
 -- The producer used to freeze every retained source revision before source_sync.
 -- This cursor records only the highest *consumed* revision timestamp.  A failed
 -- run is not eligible as a later cursor and no source evidence is mutated.
@@ -88,6 +228,8 @@ ALTER TABLE public.legacy_source_sync_cursors_v3_19 OWNER TO opportunity_v3_rpc_
 -- Existing last-good research stays in the V3.18 ledger. V3.19 begins from
 -- documents that arrive or change after this reviewed reconciliation, instead
 -- of reprocessing the historical corpus as if it were fresh.
+SET ROLE opportunity_v3_rpc_owner;
+
 INSERT INTO public.legacy_source_sync_cursors_v3_19(
   source_run_id,source_document_high_water_at,source_document_high_water_revision_id
 )
@@ -133,7 +275,10 @@ BEGIN
             ORDER BY prior.source_cutoff DESC,prior.terminal_at DESC,prior.run_id DESC LIMIT 1
           ),ROW('-infinity'::timestamptz,'00000000-0000-0000-0000-000000000000'::uuid))$$);
     EXECUTE v_definition;
-  ELSIF NOT(v_old=0 AND v_new=2) THEN
+  -- The replacement retains the old predicate as its leading conjunct, so an
+  -- already-installed definition has exactly two old and two new markers.
+  -- Any other shape is a non-authoritative predecessor and must fail closed.
+  ELSIF NOT(v_old=2 AND v_new=2) THEN
     RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='v319_source_cursor_predecessor_conflict';
   END IF;
 END $v319_cursor_selection$;
@@ -155,9 +300,9 @@ CREATE OR REPLACE FUNCTION public.complete_legacy_producer_job_v3_11(
 ) RETURNS TABLE(status text,next_job jsonb)
 LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $v319_completion$
 DECLARE
-  v_status text;v_next jsonb;v_stage text;v_initial_count integer;v_ordinal integer;
+  v_status text;v_next jsonb;v_stage text;v_initial_count integer;
   v_first_ordinal integer:=NULL;v_first_revision uuid:=NULL;v_row record;v_selected jsonb;
-  v_selected_bytes bytea;v_selected_hash text;v_payload jsonb;v_payload_bytes bytea;v_payload_hash text;
+  v_selected_rows jsonb:='[]'::jsonb;v_append jsonb;
 BEGIN
   SELECT job.stage::text INTO v_stage
   FROM public.legacy_producer_jobs_v3_11 job
@@ -169,18 +314,12 @@ BEGIN
     status:=v_status;next_job:=v_next;RETURN NEXT;RETURN;
   END IF;
 
-  SELECT count(*) INTO v_initial_count
-  FROM public.legacy_frozen_source_revisions_v3_11 frozen WHERE frozen.run_id=p_run;
-  SELECT coalesce(max(frozen.selection_ordinal),-1)+1 INTO v_ordinal
-  FROM public.legacy_frozen_source_revisions_v3_11 frozen WHERE frozen.run_id=p_run;
   FOR v_row IN
     SELECT revision.*
     FROM public.legacy_source_document_persistence_v3_13 persisted
     JOIN public.source_document_revisions_v3 revision ON revision.revision_id=persisted.revision_id
     WHERE persisted.source_run_id=p_run AND persisted.disposition='new_revision'
       AND revision.acquisition_status='complete'
-      AND NOT EXISTS(SELECT 1 FROM public.legacy_frozen_source_revisions_v3_11 frozen
-        WHERE frozen.run_id=p_run AND frozen.revision_id=revision.revision_id)
     ORDER BY revision.source_key,revision.recorded_at,revision.revision_id
   LOOP
     v_selected:=jsonb_build_array(v_row.source_key,v_row.revision_id,v_row.revision_family_key,
@@ -189,36 +328,19 @@ BEGIN
       to_char(v_row.collected_at AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS"Z"'),
       v_row.raw_field_payload_algorithm_version,v_row.ingestion_content_revision_sha256,
       v_row.canonical_content_algorithm_version,v_row.ingestion_canonical_content_hash_v3);
-    v_selected_bytes:=convert_to(v_selected::text,'utf8');
-    v_selected_hash:=encode(extensions.digest(v_selected_bytes,'sha256'),'hex');
-    INSERT INTO public.legacy_frozen_source_revisions_v3_11(run_id,selection_ordinal,source_key,revision_id,
-      selected_revision_row_canonical,selected_revision_row_json,selected_revision_row_hash,
-      raw_field_payload_algorithm_version,ingestion_content_revision_sha256,canonical_content_algorithm_version,
-      canonical_content_sha256)
-    VALUES(p_run,v_ordinal,v_row.source_key,v_row.revision_id,v_selected_bytes,v_selected,v_selected_hash,
-      v_row.raw_field_payload_algorithm_version,v_row.ingestion_content_revision_sha256,
-      v_row.canonical_content_algorithm_version,v_row.ingestion_canonical_content_hash_v3);
-    IF v_first_ordinal IS NULL THEN v_first_ordinal:=v_ordinal;v_first_revision:=v_row.revision_id;END IF;
-    v_ordinal:=v_ordinal+1;
+    v_selected_rows:=v_selected_rows||jsonb_build_array(v_selected);
   END LOOP;
+  v_append:=public.append_legacy_source_shard_v3_19(p_run,p_job,p_hash,v_selected_rows);
+  v_initial_count:=(v_append->>'initialCount')::integer;
+  v_first_ordinal:=NULLIF(v_append->>'firstOrdinal','')::integer;
+  v_first_revision:=NULLIF(v_append->>'firstRevision','')::uuid;
 
   -- With no cursor-selected document the predecessor created a barrier. Turn
   -- that still-queued successor into the first fresh shard; terminal rows are
   -- never rewritten and the normal shard chain handles remaining revisions.
   IF v_initial_count=0 AND v_first_ordinal IS NOT NULL AND v_next->>'stage'='mention_claim_extraction' THEN
-    v_payload:=jsonb_build_array('e6d9c09b8b552f5d9eaf389b76d2d90daa2d89578433d2a1ad63286888b3b743',
-      p_hash,'mention_claim_extraction','revision_shard',v_first_ordinal,v_first_revision);
-    v_payload_bytes:=convert_to(v_payload::text,'utf8');
-    v_payload_hash:=encode(extensions.digest(v_payload_bytes,'sha256'),'hex');
-    UPDATE public.legacy_producer_jobs_v3_11 job
-    SET job_kind='revision_shard'::public.opportunity_legacy_producer_job_kind_v3_11,
-      shard_ordinal=v_first_ordinal,revision_id=v_first_revision,input_hash=v_payload_hash,payload_hash=v_payload_hash
-    WHERE job.job_id=(v_next->>'jobId')::uuid AND job.run_id=p_run AND job.status='queued'
-      AND job.stage='mention_claim_extraction' AND job.job_kind='stage_barrier';
-    IF NOT FOUND THEN RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='v319_same_run_successor_conflict';END IF;
-    UPDATE public.legacy_producer_job_payloads_v3_11 payload
-    SET payload_canonical=v_payload_bytes,payload_json=v_payload,payload_hash=v_payload_hash
-    WHERE payload.job_id=(v_next->>'jobId')::uuid;
+    v_next:=public.schedule_legacy_source_shard_successor_v3_19(
+      p_run,p_job,(v_next->>'jobId')::uuid,p_hash,v_first_ordinal,v_first_revision);
   END IF;
 
   INSERT INTO public.legacy_source_sync_cursors_v3_19(
@@ -244,5 +366,7 @@ REVOKE ALL ON FUNCTION public.complete_legacy_producer_job_v3_11(uuid,uuid,uuid,
   FROM PUBLIC, anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.complete_legacy_producer_job_v3_11(uuid,uuid,uuid,bytea,jsonb,text) TO service_role;
 
-REVOKE CREATE ON SCHEMA public FROM legacy_correctness_rpc_owner;
+RESET ROLE;
+
+REVOKE CREATE ON SCHEMA public FROM legacy_correctness_rpc_owner,opportunity_v3_rpc_owner;
 COMMIT;
