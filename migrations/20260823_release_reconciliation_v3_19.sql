@@ -79,6 +79,7 @@ GRANT EXECUTE ON FUNCTION public.read_legacy_release_checkpoints_v3_19() TO serv
 CREATE TABLE IF NOT EXISTS public.legacy_source_sync_cursors_v3_19 (
   source_run_id uuid PRIMARY KEY REFERENCES public.legacy_producer_runs_v3_11(run_id) ON DELETE RESTRICT,
   source_document_high_water_at timestamptz NOT NULL,
+  source_document_high_water_revision_id uuid NOT NULL,
   recorded_at timestamptz NOT NULL DEFAULT clock_timestamp()
 );
 ALTER TABLE public.legacy_source_sync_cursors_v3_19 ENABLE ROW LEVEL SECURITY;
@@ -87,8 +88,10 @@ ALTER TABLE public.legacy_source_sync_cursors_v3_19 OWNER TO opportunity_v3_rpc_
 -- Existing last-good research stays in the V3.18 ledger. V3.19 begins from
 -- documents that arrive or change after this reviewed reconciliation, instead
 -- of reprocessing the historical corpus as if it were fresh.
-INSERT INTO public.legacy_source_sync_cursors_v3_19(source_run_id,source_document_high_water_at)
-SELECT latest.run_id,max(revision.recorded_at)
+INSERT INTO public.legacy_source_sync_cursors_v3_19(
+  source_run_id,source_document_high_water_at,source_document_high_water_revision_id
+)
+SELECT latest.run_id,high_water.recorded_at,high_water.revision_id
 FROM (
   SELECT run.run_id
   FROM public.legacy_producer_runs_v3_11 run
@@ -96,8 +99,12 @@ FROM (
   ORDER BY run.source_cutoff DESC,run.terminal_at DESC,run.run_id DESC
   LIMIT 1
 ) latest
-JOIN public.source_document_revisions_v3 revision ON true
-GROUP BY latest.run_id
+CROSS JOIN LATERAL (
+  SELECT revision.recorded_at,revision.revision_id
+  FROM public.source_document_revisions_v3 revision
+  ORDER BY revision.recorded_at DESC,revision.revision_id DESC
+  LIMIT 1
+) high_water
 ON CONFLICT(source_run_id) DO NOTHING;
 
 -- Replace the two selected-revision scans in the reviewed authority reader
@@ -118,13 +125,13 @@ BEGIN
     v_definition:=replace(v_definition,
       'd.collected_at<=v_run.source_cutoff AND d.recorded_at<=v_run.source_cutoff',
       $$d.collected_at<=v_run.source_cutoff AND d.recorded_at<=v_run.source_cutoff
-          AND d.recorded_at>coalesce((
-            SELECT cursor.source_document_high_water_at
+          AND (d.recorded_at,d.revision_id)>coalesce((
+            SELECT ROW(cursor.source_document_high_water_at,cursor.source_document_high_water_revision_id)
             FROM public.legacy_producer_runs_v3_11 prior
             JOIN public.legacy_source_sync_cursors_v3_19 cursor ON cursor.source_run_id=prior.run_id
             WHERE prior.status='success' AND prior.source_cutoff<v_run.source_cutoff
             ORDER BY prior.source_cutoff DESC,prior.terminal_at DESC,prior.run_id DESC LIMIT 1
-          ),'-infinity'::timestamptz)$$);
+          ),ROW('-infinity'::timestamptz,'00000000-0000-0000-0000-000000000000'::uuid))$$);
     EXECUTE v_definition;
   ELSIF NOT(v_old=0 AND v_new=2) THEN
     RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='v319_source_cursor_predecessor_conflict';
@@ -214,12 +221,18 @@ BEGIN
     WHERE payload.job_id=(v_next->>'jobId')::uuid;
   END IF;
 
-  INSERT INTO public.legacy_source_sync_cursors_v3_19(source_run_id,source_document_high_water_at)
-  SELECT p_run,max(revision.recorded_at)
-  FROM public.legacy_frozen_source_revisions_v3_11 frozen
-  JOIN public.source_document_revisions_v3 revision ON revision.revision_id=frozen.revision_id
-  WHERE frozen.run_id=p_run
-  HAVING count(*)>0
+  INSERT INTO public.legacy_source_sync_cursors_v3_19(
+    source_run_id,source_document_high_water_at,source_document_high_water_revision_id
+  )
+  SELECT p_run,high_water.recorded_at,high_water.revision_id
+  FROM (
+    SELECT revision.recorded_at,revision.revision_id
+    FROM public.legacy_frozen_source_revisions_v3_11 frozen
+    JOIN public.source_document_revisions_v3 revision ON revision.revision_id=frozen.revision_id
+    WHERE frozen.run_id=p_run
+    ORDER BY revision.recorded_at DESC,revision.revision_id DESC
+    LIMIT 1
+  ) high_water
   ON CONFLICT(source_run_id) DO NOTHING;
   status:=v_status;next_job:=v_next;RETURN NEXT;
 END $v319_completion$;
