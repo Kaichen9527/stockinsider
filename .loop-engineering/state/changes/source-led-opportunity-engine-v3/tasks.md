@@ -7,7 +7,7 @@
   disabled; V3.16.20 forensic activation remains rolled back and is never restarted.
 - [x] Mark every historical password/credential rotation item `superseded/do_not_execute`.
   The database password must not be reset.
-- [x] Freeze the one bounded V3.19 successor tree on `3bacd58c86f01c469b7d634e0f6df036ae7152a2`:
+- [x] Freeze the one bounded V3.19 source-led implementation tree on `3bacd58c86f01c469b7d634e0f6df036ae7152a2`:
   bounded installer handoff, source-led readiness lanes, same-revision dossier,
   reviewed runtime disk policy, V3.19 schema/health compatibility and semantic CTA contrast.
 - [ ] Run exactly one fresh Requirements review and one independent Architecture
