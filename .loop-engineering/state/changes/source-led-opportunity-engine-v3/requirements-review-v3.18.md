@@ -1,33 +1,33 @@
-# V3.18 fresh Requirements review — bounded pooler RPC repair closure
+# V3.18 fresh Requirements review — idle pooler transport containment closure
 
 Date: 2026-08-23
 Review authority: independent, read-only Requirements review of the immutable
-V3.18 pooler-deadline repair tree.
+V3.18 idle-pooler transport containment repair tree.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `6d89cedda35ce29b66b67b796b9f356c807ba535`
-- Final repair-closure commit/tree: `25eb4ecb92fed0112500ddd6caaeef147ecc67c5` / `99fc72aa88c700c514f52ea1e559b76d66ec37f4`
-- Full reviewed range: `6d89cedda35ce29b66b67b796b9f356c807ba535..25eb4ecb92fed0112500ddd6caaeef147ecc67c5`
+- Protected implementation parent: `de7eb5fa702ec9aab02d436ed9df1617a2af4d41`
+- Final repair-closure commit/tree: `80994d9e54caf3787826dff314203e9eb72fd565` / `357331a81c2183f996d63b1612a7055015e417c6`
+- Full reviewed range: `de7eb5fa702ec9aab02d436ed9df1617a2af4d41..80994d9e54caf3787826dff314203e9eb72fd565`
 - Active graph: `729370999da4668cc5d8291e0e160a44c2d1a14edaae9a871f95be9e0203ac6d`
 
 ## Requirements closure
 
-The repair closes the P1 producer-liveness failure found during the first
-reviewed runtime activation attempt. The general database pool could wait on a
-transaction-pooler operation without a query or statement deadline. The
-separate heartbeat client could therefore stop renewing a 120-second lease
-while the outer producer remained awaiting a non-terminal pool query.
+The repair closes the P1 producer-liveness failure found during the reviewed
+runtime activation attempt. A managed PostgreSQL pooler can emit an `error` on
+an idle checked-in client after its transport has been retired. Without a pool
+`error` listener, Node treats that event as unhandled and exits before the
+outer durable worker can persist its terminal result.
 
-Every pooled, non-claim RPC now has both a 20-second client query deadline and
-a 20-second server statement deadline. This is below the lease duration and
-ensures the durable job reaches a typed terminal failure instead of remaining
-`running`. The repair deliberately introduces no generic mutation retry: only
-the already-specialized idempotent claim path may retry its allowlisted
-transport condition. A lost append/completion response remains fail-closed and
-is resumed only from its immutable predecessor on a later reviewed run.
+Every shared producer pool now has one intentionally no-op `error` listener.
+The existing 20-second query and statement deadlines remain in place, and the
+outer job path remains responsible for its typed terminal result. The repair
+does not add a generic mutation retry: only the existing specialized,
+idempotent claim path may retry its allowlisted transport condition. A lost
+append or completion response remains fail-closed and is resumed only from its
+immutable predecessor on a later reviewed run.
 
 No candidate rule, valuation, source acquisition, decision threshold,
 migration, credential, runtime mode, notification, automated-trading or
@@ -77,9 +77,9 @@ PCR browser checks; arbitrary PATH injection remains rejected.
 
 - Product correctness suite: `129/129` PASS, zero failed, skipped or todo. It
   includes PCR-001 through PCR-031 and the V3.13–V3.18 regression owners.
-- The added structural assertion verifies every general `Pool` construction in
-  the producer adapter supplies both bounded `query_timeout` and
-  `statement_timeout` values.
+- The added structural assertion verifies every general producer `Pool`
+  construction installs an idle-client `error` listener, while preserving the
+  paired bounded query and statement deadlines.
 
 These are local diagnostics, not a protected artifact. This Requirements PASS
 authorizes exactly one independent Architecture review. It does not authorize
