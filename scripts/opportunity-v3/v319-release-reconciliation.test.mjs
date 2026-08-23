@@ -59,6 +59,11 @@ test('V3.19 release reconciliation migration is additive, private and in the rev
   assert.match(migration,/read_legacy_release_checkpoints_v3_19\(\)[\s\S]*SECURITY DEFINER/u);
   assert.match(migration,/REVOKE ALL ON TABLE public[.]legacy_release_checkpoints_v3_19 FROM PUBLIC, anon, authenticated, service_role/u);
   assert.match(migration,/legacy_source_sync_cursors_v3_19/u);
+  assert.match(migration,/source_document_high_water_revision_id uuid NOT NULL/u);
+  assert.match(migration,/\(d\.recorded_at,d\.revision_id\)>coalesce\(/u,
+    'a timestamp-only cursor could skip a same-batch source revision');
+  assert.match(migration,/ORDER BY revision\.recorded_at DESC,revision\.revision_id DESC/u,
+    'cursor writes must preserve the revision-ID tiebreaker');
   assert.match(migration,/v319_source_cursor_predecessor_conflict/u);
   assert.match(migration,/v319_same_run_successor_conflict/u);
   assert.match(migration,/persisted[.]disposition='new_revision'[\s\S]*legacy_frozen_source_revisions_v3_11/u);
