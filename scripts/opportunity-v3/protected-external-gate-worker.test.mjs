@@ -107,6 +107,16 @@ test('review envelopes require reviewed-parent evidence with an exact closed dif
   assert.doesNotMatch(worker, /evidenceOnlyPaths\.includes\(source\.path\)/u);
 });
 
+test('the protected root fetches the V3.19 immutable review evidence branches', () => {
+  for (const reference of [
+    'codex/source-led-opportunity-engine-v3-v319-requirements-evidence',
+    'codex/source-led-opportunity-engine-v3-v319-architecture-evidence',
+    'codex/source-led-opportunity-engine-v3-v319-exact-review-evidence',
+    'requirements-review-v3.19.md',
+    'architecture-review-v3.19.md',
+  ]) assert.match(worker, new RegExp(reference.replace(/[.]/gu, '\\.'), 'u'));
+});
+
 test('each candidate command is isolated in a process group that is cleared on return', () => {
   assert.match(worker, /const detached = process\.platform !== 'win32';/u);
   assert.match(worker, /process\.kill\(-result\.pid, 'SIGKILL'\);/u);
