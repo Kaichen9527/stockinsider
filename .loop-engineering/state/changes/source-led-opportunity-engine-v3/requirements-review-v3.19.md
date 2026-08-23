@@ -13,10 +13,13 @@ Findings: `P0=0 P1=0 P2=0`
 ## Immutable subject
 
 - Protected implementation parent: `3bacd58c86f01c469b7d634e0f6df036ae7152a2`
-- Candidate commit/tree: `b44f662b105e3bd0cf29c808f256f791fc962c52` /
+- Original candidate commit/tree: `b44f662b105e3bd0cf29c808f256f791fc962c52` /
   `51f715d5b7e5cd3811b761a16e7496aea3cddefc`
-- Reviewed range:
-  `3bacd58c86f01c469b7d634e0f6df036ae7152a2..b44f662b105e3bd0cf29c808f256f791fc962c52`
+- Final repair-closure commit/tree: `a05c28d453f074e3101ece5289969196d698ddd9` /
+  `7ac94b7716f82df5f1f781eef74337515645d371`
+- Full reviewed range:
+  `3bacd58c86f01c469b7d634e0f6df036ae7152a2..a05c28d453f074e3101ece5289969196d698ddd9`
+- Active graph: `cfc135973718c924114f367953fac9e38cc48918df54832efa27205fc997622a`
 
 ## Requirements closure
 
@@ -39,8 +42,12 @@ Source acquisition has a bounded, append-only and source-led authority path.
 An authorized document revision is persisted before it becomes a frozen source
 revision or enters claim extraction. The additive cursor advances only after a
 completed source-sync transaction and bounds selection to documents changed
-after the prior consumed high-water mark. A same-run successor is released only
-from its just-persisted frozen revision; metadata-only, rejected, unchanged,
+after the prior consumed high-water mark. Exact review found that a timestamp
+alone is not a total cursor order: a provider batch can legitimately persist two
+revisions at the same timestamp. The single repair carries both `recorded_at`
+and `revision_id`, compares that lexicographic pair on selection, and writes the
+same pair after consumption. A same-run successor is released only from its
+just-persisted frozen revision; metadata-only, rejected, unchanged,
 provider-failed and OAuth-unavailable outcomes remain typed terminal outcomes
 and cannot become thesis. Official market data can validate, enrich or reject a
 source-nominated symbol, never nominate it. InvestAnchors and Telegram admit
