@@ -6,6 +6,12 @@ const { Worker } = require('node:worker_threads');
 const CLAIM_STATEMENT_TIMEOUT_MS = 1_200_000;
 const POOL_CONNECTION_TIMEOUT_MS = 15_000;
 const POOL_IDLE_TIMEOUT_MS = 30_000;
+// Every non-claim RPC has to yield before the independently threaded heartbeat
+// exhausts its 120-second lease.  Writes are deliberately not replayed after a
+// reply-loss: a timeout is terminal/fail-closed, while the durable job can be
+// resumed from its immutable predecessor on a later reviewed run.
+const POOL_QUERY_TIMEOUT_MS = 20_000;
+const POOL_STATEMENT_TIMEOUT_MS = 20_000;
 
 // The official fact handler performs bounded but CPU-heavy parsing. A timer on the
 // main event loop cannot renew a lease while that parsing is synchronous, so the
@@ -122,6 +128,7 @@ function createPostgresLegacyProducerAdapter({ connectionString }) {
   // heartbeat behind a slow official chunk append until the 120-second lease dies.
   const createPool = () => new Pool({ connectionString, max: 2,
     connectionTimeoutMillis: POOL_CONNECTION_TIMEOUT_MS, idleTimeoutMillis: POOL_IDLE_TIMEOUT_MS,
+    query_timeout: POOL_QUERY_TIMEOUT_MS, statement_timeout: POOL_STATEMENT_TIMEOUT_MS,
     application_name: 'stockinsider-auth-source-worker-v3-11' });
   let pool = createPool();
   const withTransientPoolReconnect = async (operation) => {

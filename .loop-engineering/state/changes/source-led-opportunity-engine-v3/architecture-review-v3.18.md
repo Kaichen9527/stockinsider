@@ -1,27 +1,33 @@
-# V3.18 independent Architecture review — protected catalog repair closure
+# V3.18 independent Architecture review — bounded pooler RPC repair closure
 
 Date: 2026-08-23
 Review authority: independent, read-only Architecture review following the
-fresh V3.18 protected-catalog repair Requirements PASS.
+fresh V3.18 pooler-deadline Requirements PASS.
 Result: `PASS`
 Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `88c9e4c7c619ac777f6d717d9fd7019864d85537`
-- Final repair-closure commit/tree: `b00459f57f8ba06aaa81fae141627a9bc762f0c7` / `e962592061038b44b0f906dab75d86a66a0128cc`
-- Full reviewed implementation range: `88c9e4c7c619ac777f6d717d9fd7019864d85537..b00459f57f8ba06aaa81fae141627a9bc762f0c7`
+- Protected implementation parent: `25eb4ecb92fed0112500ddd6caaeef147ecc67c5`
+- Final repair-closure commit/tree: `0e0b3a1cee6c3084a35197be60528d3f2fcd0cd8` / `b9b0a947ceab3b4fcd6e431c6e82d191b3fca19e`
+- Full reviewed implementation range: `25eb4ecb92fed0112500ddd6caaeef147ecc67c5..0e0b3a1cee6c3084a35197be60528d3f2fcd0cd8`
 - Active graph: `729370999da4668cc5d8291e0e160a44c2d1a14edaae9a871f95be9e0203ac6d`
 
 ## Architecture closure
 
-The repair updates only the closed control-plane identity bundle. The catalog
-remains the single owner list; its tracked SHA is declared identically by the
-design, evidence contract and executable structural oracle, while the
-acceptance inventory independently binds the actual 14 script values. This
-prevents a catalog topology extension from leaving the protected gate with a
-predecessor digest. No data flow, migration SQL, connector capability,
-projection shape, runtime activation or public decision policy changes.
+The repair applies one bounded transport policy at the shared `Pool`
+construction boundary. `query_timeout` closes a client-side wait and
+`statement_timeout` closes an executing server statement, both at 20 seconds.
+Their combined purpose is architectural rather than a throughput preference:
+they guarantee a general producer RPC returns before the 120-second durable
+lease expires, so the outer job handler can record a typed terminal outcome.
+
+The claim RPC remains a distinct, explicitly idempotent retry boundary. General
+append, refresh and completion writes do not inherit that retry behavior,
+because replaying an operation after a lost reply could duplicate a committed
+mutation. Thus the repair preserves the single-DAG, leased ownership and
+immutable-predecessor recovery model; it merely makes the pooler boundary
+observable and terminal.
 
 The host pin is a protected-base bootstrap, while the release candidate contains
 no alternate host oracle. The active catalog's V3.17 predecessor is present in
@@ -61,20 +67,15 @@ identities are all proven later.
 
 ## Executable evidence examined
 
-- Migration lifecycle and privilege suite: `62/62` PASS, including V3.18 prior
-  ledger retention and apply-twice coverage.
-- V3.18 source, dossier, revision-union, CTA and runtime-bundle suite: `5/5`
-  PASS.
-- Full local product/runtime traceability diagnostic: `272/272` PASS, zero
-  failed/skipped/todo; scratch-HOME browser suite: `9/9` PASS.
-- Detached Shadow migration, runtime-installation, disabled-Web, runtime-doctor
-  and rollback-lock rehearsals: PASS with the exact closed PATH and
-  project-local browser binary.
+- Product correctness suite: `129/129` PASS with zero failed, skipped or todo,
+  including the 31 PCR boundaries and the new bounded-pool regression.
+- Static code inspection confirms no producer `Pool` construction can omit the
+  paired 20-second query and statement deadlines.
 
-No production migration, source write, runtime activation, Web deployment,
-password reset, credential rotation, LINE, dispatch, automatic trading or
-Promotion occurred during this review. This Architecture PASS authorizes the
-exact implementation/review evidence sequence only; the protected Code Gate
-and all production operations remain pending. Evaluation governance remains
+No production migration, source write, password reset, credential rotation,
+LINE, dispatch, automatic trading or Promotion occurred during this review.
+This Architecture PASS authorizes the exact implementation/review evidence
+sequence only; the protected Code Gate and all production operations remain
+pending. Evaluation governance remains
 `blocked/non_fabricated_elapsed_cohorts_unavailable` and is not represented as
 future-return validation.
