@@ -14,9 +14,9 @@ Findings: `P0=0 P1=0 P2=0`
 
 - Protected implementation parent: `0fe9e359bbf518c01c2dda7b5e54fc00cdc5cafa`
 - Original candidate commit/tree: `36bf020c9b4fd3940e74365d10a0c2cf0afd4f14` / `42856d9840af50c6245170d36efeddd8b464bc6c`
-- Final repair-closure commit/tree: `a67bc72c0fb11cc97340216a88e55dbf8be7ea7c` / `e6e6726abbcc77b4bfd1403140f29812fff41e1a`
-- Full reviewed range: `0fe9e359bbf518c01c2dda7b5e54fc00cdc5cafa..a67bc72c0fb11cc97340216a88e55dbf8be7ea7c`
-- Active graph: `cfc135973718c924114f367953fac9e38cc48918df54832efa27205fc997622a`
+- Final repair-closure commit/tree: `cddea71114ac5a8a004cbe5315c5a1ef7e197059` / `cd97e844948704f05bb5708f83e246f7e3fa8f16`
+- Full reviewed range: `0fe9e359bbf518c01c2dda7b5e54fc00cdc5cafa..cddea71114ac5a8a004cbe5315c5a1ef7e197059`
+- Active graph: `e447c1a156dd5befc4012a677841e429b89a236e6766408c0197b58532603bb6`
 
 ## Requirements closure
 
@@ -60,6 +60,14 @@ Envelope remains the sole action authority. V3.19 exposes a bounded compact
 projection and keeps the full dossier behind its matching revision, including
 valuation scenarios, fundamentals, technical state, thesis, risks, citations,
 dates and explicit blockers.
+
+The protected product track additionally exposed stale catalog and release-task
+metadata left behind by the V3.19 amendment. The repair binds the current
+54-file/44-owner catalog identity in both executable and evidence authority,
+includes the V3.19 product-correctness owner in the immutable script registry,
+and parameterizes the active-release task assertion by the machine-readable
+release version. The complete 272-PCR trace then reaches only its expected
+owner set, and the CI recheck remains the release authority.
 
 The migration is additive and RLS-protected. Capacity policy only observes and
 fails closed below the reviewed disk floor; it does not delete evidence. No
