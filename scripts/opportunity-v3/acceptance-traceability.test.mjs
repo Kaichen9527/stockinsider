@@ -794,10 +794,10 @@ function activeGraphOracle() {
   assertCleanReviewedExecutionRoot(subjectTree);
   const catalogBlob = subjectTreeBlob(subjectTree, activeCatalogRepositoryPath);
   assert.deepEqual(catalogBlob.bytes, activeCatalogBytes, 'catalog working bytes equal reviewed subject tree');
-  assert.equal(catalogBlob.bytes.length, 6009, 'catalog exact tracked byte length including LF');
+  assert.equal(catalogBlob.bytes.length, 6169, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    '9f7d845df3f2d12c7d2adae5dae87aac890e4c2eee59161c40f8e563e5908c4e',
+    'a12c2a8d47e3c2ead33c260d9e4e8c1c198f9a8684eeac0c4e7611cd10277f50',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);
@@ -809,16 +809,16 @@ function activeGraphOracle() {
     .sort();
   assert.deepEqual(activeContractFiles, expectedContractFiles);
   const activeArtifactFiles = activeCatalog.activeFiles;
-  assert.equal(activeArtifactFiles.length, 53);
+  assert.equal(activeArtifactFiles.length, 54);
   assert.equal(new Set(activeArtifactFiles).size, activeArtifactFiles.length);
   assert.deepEqual(activeArtifactFiles, [...activeArtifactFiles].toSorted(), 'catalog active-file ASCII order');
-  assert.equal(activeCatalog.owners.length, 43, 'catalog owner row count');
+  assert.equal(activeCatalog.owners.length, 44, 'catalog owner row count');
   assert.deepEqual(
     activeCatalog.owners.map(([file]) => file),
     activeCatalog.owners.map(([file]) => file).toSorted(),
     'catalog owner ASCII order',
   );
-  assert.equal(new Set(activeCatalog.owners.map(([file]) => file)).size, 43, 'catalog owner uniqueness');
+  assert.equal(new Set(activeCatalog.owners.map(([file]) => file)).size, 44, 'catalog owner uniqueness');
   for (const [file] of activeCatalog.owners) assert.ok(activeArtifactFiles.includes(file), `${file} owner must be active`);
   const orderedBlobRows = activeArtifactFiles.map((file) => {
     const repositoryPath = `.loop-engineering/state/changes/source-led-opportunity-engine-v3/${file}`;
@@ -1304,7 +1304,7 @@ const structuralExecutors = {
     }
     assert.equal(inventory.scriptValueRows.length, 14);
     assert.equal(sha256(canonicalJson(inventory.scriptValueRows)), inventory.scriptValueRowsSha256);
-    assert.equal(inventory.scriptValueRowsSha256, 'b9a282a300815b887010cca2586d032bb12a9b78a7f23f28fdb5e20959bf0ae7');
+    assert.equal(inventory.scriptValueRowsSha256, '0fbf9d7e747002947aaca4120f5e87c5fab4f383453f84036681d14c71f3a2f5');
     const rootPackageScripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts;
     const webPackageScripts = JSON.parse(readFileSync(path.join(root, 'web/package.json'), 'utf8')).scripts;
     assert.deepEqual(inventory.scriptValueRows.map(([scriptKey]) => scriptKey), [

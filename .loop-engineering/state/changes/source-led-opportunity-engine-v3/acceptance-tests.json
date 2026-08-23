@@ -2337,7 +2337,7 @@
       "protected://stockinsider-v3-gate-root/execute-track --track product_runtime"
     ]
   ],
-  "scriptValueRowsSha256": "b9a282a300815b887010cca2586d032bb12a9b78a7f23f28fdb5e20959bf0ae7",
+  "scriptValueRowsSha256": "0fbf9d7e747002947aaca4120f5e87c5fab4f383453f84036681d14c71f3a2f5",
   "scriptValueRows": [
     [
       "build:source-led-opportunity-v3",
@@ -2369,7 +2369,7 @@
     ],
     [
       "test:source-led-opportunity-v3:product-correctness",
-      "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs"
+      "OPPORTUNITY_V3_PCR_PREIMPLEMENTATION_BASELINE= OPPORTUNITY_V3_ACCEPTANCE_OWNER_CHILD= OPPORTUNITY_V3_ACCEPTANCE_CASE= node scripts/run-node22.js --experimental-strip-types --test --test-concurrency=1 scripts/opportunity-v3/product-correctness.test.mjs scripts/opportunity-v3/v313-decision-integrity.test.mjs scripts/opportunity-v3/v314-actionability-recovery.test.mjs scripts/opportunity-v3/v315-opportunity-recovery.test.mjs scripts/opportunity-v3/v31621-release-recovery.test.mjs scripts/opportunity-v3/v317-source-led-actionability.test.mjs scripts/opportunity-v3/v318-source-led-research.test.mjs scripts/opportunity-v3/v319-release-reconciliation.test.mjs"
     ],
     [
       "typecheck:source-led-opportunity-v3",
