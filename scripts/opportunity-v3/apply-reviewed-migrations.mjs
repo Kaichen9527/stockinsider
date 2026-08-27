@@ -243,7 +243,7 @@ async function applyReviewedMigrations(options) {
           AND pg_get_functiondef(oid) LIKE '%candidateLedgerContract%'
           AND pg_get_functiondef(oid) LIKE '%sourceAvailable%'
           FROM pg_proc WHERE oid=
-            'public.claim_legacy_producer_job_candidate_authority_base_v3_19_10(uuid,uuid,uuid,integer)'::regprocedure)
+            'public.claim_legacy_producer_job_candidate_retention_base_v3_18(uuid,uuid,uuid,integer)'::regprocedure)
         AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
       ,'candidateRetentionAuthority',to_regprocedure(
           'public.claim_legacy_producer_job_candidate_authority_base_v3_19_10(uuid,uuid,uuid,integer)') IS NOT NULL

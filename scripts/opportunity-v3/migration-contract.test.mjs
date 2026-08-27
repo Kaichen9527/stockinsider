@@ -209,6 +209,7 @@ test('V3.19.10 restores retained candidate authority only from the exact prior i
   const apply=fs.readFileSync(path.join(root,'scripts/opportunity-v3/apply-reviewed-migrations.mjs'),'utf8');
   assert.match(apply,/20260828_candidate_retention_authority_v3_19_10[.]sql/u);
   assert.match(apply,/'candidateRetentionAuthority'[\s\S]*candidateAuthorityContract/u);
+  assert.match(apply,/'candidateLedgerRetention'[\s\S]*candidateLedgerContract[\s\S]*claim_legacy_producer_job_candidate_retention_base_v3_18/u);
 });
 
 test('V3.16.15 restores immutable analysis payload reuse outside the lease handoff', () => {
