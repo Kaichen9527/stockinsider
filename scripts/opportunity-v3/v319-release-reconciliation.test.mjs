@@ -74,5 +74,15 @@ test('V3.19 release reconciliation migration is additive, private and in the rev
   assert.match(migration,/persisted[.]disposition='new_revision'[\s\S]*legacy_frozen_source_revisions_v3_11/u);
   assert.doesNotMatch(migration,/DELETE FROM public[.]legacy_frozen_source_revisions_v3_11/u);
   assert.match(apply,/20260823_release_reconciliation_v3_19[.]sql/u);
+  assert.match(apply,/20260827_runtime_diagnostic_contract_v3_19_1[.]sql/u);
   assert.match(apply,/'releaseReconciliation'[\s\S]*read_legacy_release_checkpoints_v3_19/u);
+});
+
+test('V3.19.1 runtime diagnostic contract preserves projection conflicts',()=>{
+  const migration=readFileSync(path.join(root,
+    'migrations/20260827_runtime_diagnostic_contract_v3_19_1.sql'),'utf8');
+  assert.doesNotMatch(migration,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(migration,/legacy_runtime_failure_diagnostics_v3_14_invariant_code_check/u);
+  assert.match(migration,/'projection_supersession_conflict'/u);
+  assert.match(migration,/BEGIN;[\s\S]*COMMIT;/u);
 });

@@ -66,6 +66,9 @@ const candidateRetentionSql = fs.readFileSync(candidateRetentionMigrationPath, '
 const releaseReconciliationMigrationPath = path.join(root,
   'migrations/20260823_release_reconciliation_v3_19.sql');
 const releaseReconciliationSql = fs.readFileSync(releaseReconciliationMigrationPath, 'utf8');
+const runtimeDiagnosticContractMigrationPath = path.join(root,
+  'migrations/20260827_runtime_diagnostic_contract_v3_19_1.sql');
+const runtimeDiagnosticContractSql = fs.readFileSync(runtimeDiagnosticContractMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -496,6 +499,12 @@ before(() => {
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', releaseReconciliationMigrationPath,
     ]);
   }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', runtimeDiagnosticContractMigrationPath,
+    ]);
+  }
 });
 
 after(() => {
@@ -674,6 +683,17 @@ test('release reconciliation scopes transient owner CREATE rights and restores t
     completionOwner:'opportunity_v3_rpc_owner',legacyCreate:false,opportunityCreate:false,
     opportunityFrozenInsert:false,opportunityShardHelper:true,serviceShardHelper:false,serviceFrozenInsert:false,
   });
+});
+
+test('runtime diagnostic persistence accepts every closed runtime invariant', () => {
+  assert.doesNotMatch(runtimeDiagnosticContractSql,
+    /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(runtimeDiagnosticContractSql,/'projection_supersession_conflict'/u);
+  const definition = psql(`SELECT pg_get_constraintdef(oid)
+    FROM pg_constraint
+    WHERE conrelid='public.legacy_runtime_failure_diagnostics_v3_14'::regclass
+      AND conname='legacy_runtime_failure_diagnostics_v3_14_invariant_code_check';`);
+  assert.match(definition,/projection_supersession_conflict/u);
 });
 
 test('migration includes the exact three view security modes', () => {
