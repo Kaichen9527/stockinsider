@@ -77,8 +77,10 @@ test('V3.19 release reconciliation migration is additive, private and in the rev
   assert.match(apply,/20260823_release_reconciliation_v3_19[.]sql/u);
   assert.match(apply,/20260827_runtime_diagnostic_contract_v3_19_1[.]sql/u);
   assert.match(apply,/'releaseReconciliation'[\s\S]*read_legacy_release_checkpoints_v3_19/u);
-  assert.match(apply,/'v319_same_run_successor_conflict'[\s\S]*complete_legacy_producer_job_authoritative_v3_19/u,
-    'the production postcondition must inspect the authoritative function that owns the guard');
+  assert.match(apply,/'v319_same_run_successor_conflict'[\s\S]*schedule_legacy_source_shard_successor_v3_19/u,
+    'the production postcondition must inspect the successor scheduler that owns the guard');
+  assert.doesNotMatch(apply,/'v319_same_run_successor_conflict'[\s\S]{0,240}complete_legacy_producer_job/u,
+    'completion functions do not own the same-run successor guard');
   assert.match(apply,/const v3192Superseded=await reviewedMigrationIsSuperseded\([\s\S]*for\(const migration of plan[.]migrations\)/u,
     'successor authority must be frozen before older migrations can replace the inspected function');
 });
