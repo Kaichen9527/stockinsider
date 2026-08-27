@@ -78,6 +78,9 @@ const decisionIdentityDossierSql = fs.readFileSync(decisionIdentityDossierMigrat
 const evaluationSchemaCompatibilityMigrationPath = path.join(root,
   'migrations/20260828_legacy_evaluation_schema_v3_19_6.sql');
 const evaluationSchemaCompatibilitySql = fs.readFileSync(evaluationSchemaCompatibilityMigrationPath, 'utf8');
+const reusedAcquisitionLineageMigrationPath = path.join(root,
+  'migrations/20260828_reused_acquisition_lineage_v3_19_7.sql');
+const reusedAcquisitionLineageSql = fs.readFileSync(reusedAcquisitionLineageMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -137,6 +140,20 @@ const appendBoundaryRawHash = sha256Canonical({
   version: 'raw-field-payload-v3.0',
   adapterVersion: 'source-adapter-v3.3',
   fields: appendBoundarySourceFields,
+});
+
+test('V3.19.7 reconstructs current-run lineage only from immutable, hash-bound acquisition references',()=>{
+  assert.doesNotMatch(reusedAcquisitionLineageSql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(reusedAcquisitionLineageSql,/legacy_producer_job_results_v3_11/u);
+  assert.match(reusedAcquisitionLineageSql,/job[.]run_id=p_run AND job[.]status='succeeded'/u);
+  assert.match(reusedAcquisitionLineageSql,/revision[.]request_key=referenced[.]reference->>'requestKey'/u);
+  assert.match(reusedAcquisitionLineageSql,/revision[.]evidence_root=referenced[.]reference->>'evidenceRoot'/u);
+  assert.match(reusedAcquisitionLineageSql,
+    /revision[.]normalized_payload_sha256=referenced[.]reference->>'normalizedPayloadSha256'/u);
+  assert.match(reusedAcquisitionLineageSql,/claim_legacy_producer_job_provider_acquisition_base_v3_16_21/u);
+  assert.match(reusedAcquisitionLineageSql,/octet_length\(v_claim[.]read_canonical\)>3145728/u);
+  assert.match(reusedAcquisitionLineageSql,/REVOKE ALL ON FUNCTION public[.]resolve_legacy_provider_acquisition_lineage_v3_19_7_internal[\s\S]*service_role/u);
+  assert.match(reusedAcquisitionLineageSql,/REVOKE CREATE ON SCHEMA public FROM legacy_correctness_rpc_owner/u);
 });
 
 test('V3.16.12 bounds deep fact authority while preserving the complete candidate ledger', () => {
@@ -530,6 +547,12 @@ before(() => {
     command(pg.psql, [
       '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', evaluationSchemaCompatibilityMigrationPath,
+    ]);
+  }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', reusedAcquisitionLineageMigrationPath,
     ]);
   }
 });
