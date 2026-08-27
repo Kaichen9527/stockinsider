@@ -797,7 +797,7 @@ function activeGraphOracle() {
   assert.equal(catalogBlob.bytes.length, 6169, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    'a12c2a8d47e3c2ead33c260d9e4e8c1c198f9a8684eeac0c4e7611cd10277f50',
+    'f90b9aa0cccb32578055d533b996eae6e833b7766505e0898c23a4cb5e87f6d0',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);
@@ -1146,8 +1146,8 @@ function activeGraphOracle() {
     /Amendment version: `hybrid-product-v3[.]2`/u,
   );
   const hostAmendment = readFileSync(path.join(change, 'host-pin-compatibility-amendment.md'), 'utf8');
-  assert.match(hostAmendment, /Amendment version: `model-runner-host-pin-amendment-v3[.]12`/u);
-  assert.match(hostAmendment, /codex-cli 0[.]149[.]0-alpha[.]4/u);
+  assert.match(hostAmendment, /Amendment version: `model-runner-host-pin-amendment-v3[.]13`/u);
+  assert.match(hostAmendment, /codex-cli 0[.]150[.]0-alpha[.]8/u);
   assert.match(hostAmendment, /exact pin/u);
   const hostPinBytes = readFileSync(path.join(change, 'model-runner-host-pins-v3.json'), 'utf8');
   const hostPins = JSON.parse(hostPinBytes);
@@ -1304,7 +1304,7 @@ const structuralExecutors = {
     }
     assert.equal(inventory.scriptValueRows.length, 14);
     assert.equal(sha256(canonicalJson(inventory.scriptValueRows)), inventory.scriptValueRowsSha256);
-    assert.equal(inventory.scriptValueRowsSha256, '0fbf9d7e747002947aaca4120f5e87c5fab4f383453f84036681d14c71f3a2f5');
+    assert.equal(inventory.scriptValueRowsSha256, 'd789006f32d46011d87b4dfbfa8ba6ee8c93bebd8f7f367676a4ed303e80b71b');
     const rootPackageScripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts;
     const webPackageScripts = JSON.parse(readFileSync(path.join(root, 'web/package.json'), 'utf8')).scripts;
     assert.deepEqual(inventory.scriptValueRows.map(([scriptKey]) => scriptKey), [

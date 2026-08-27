@@ -1,6 +1,6 @@
 # V3.19 fresh Requirements review — release reconciliation
 
-Date: 2026-08-23
+Date: 2026-08-27
 
 Review authority: independent, read-only Requirements review of the immutable
 V3.19 release-reconciliation candidate. No runtime, database, Vercel or source
@@ -12,11 +12,11 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `0fe9e359bbf518c01c2dda7b5e54fc00cdc5cafa`
-- Original candidate commit/tree: `36bf020c9b4fd3940e74365d10a0c2cf0afd4f14` / `42856d9840af50c6245170d36efeddd8b464bc6c`
-- Final repair-closure commit/tree: `cddea71114ac5a8a004cbe5315c5a1ef7e197059` / `cd97e844948704f05bb5708f83e246f7e3fa8f16`
-- Full reviewed range: `0fe9e359bbf518c01c2dda7b5e54fc00cdc5cafa..cddea71114ac5a8a004cbe5315c5a1ef7e197059`
-- Active graph: `e447c1a156dd5befc4012a677841e429b89a236e6766408c0197b58532603bb6`
+- Protected implementation parent: `a04b8e64422a5239482a7df490e01e01e03f9fea`
+- Original candidate commit/tree: `b96724c70b3c9fd80fc66ac2f877aaecbdc19c4c` / `9940136130f1f8d0664522bee4e3ff5cdf5fe726`
+- Final repair-closure commit/tree: `b96724c70b3c9fd80fc66ac2f877aaecbdc19c4c` / `9940136130f1f8d0664522bee4e3ff5cdf5fe726`
+- Full reviewed range: `a04b8e64422a5239482a7df490e01e01e03f9fea..b96724c70b3c9fd80fc66ac2f877aaecbdc19c4c`
+- Active graph: `4baf35c1a17cc7c7cd451e71b29e34e9b83c90ee03ca18822fcf4f7f47b19a7b`
 
 ## Requirements closure
 
@@ -68,6 +68,13 @@ includes the V3.19 product-correctness owner in the immutable script registry,
 and parameterizes the active-release task assertion by the machine-readable
 release version. The complete 272-PCR trace then reaches only its expected
 owner set, and the CI recheck remains the release authority.
+
+The current protected base also advances the exact Codex host fixture to
+`model-runner-host-pins-v3.13`. The repair closes the full dependent authority
+set: catalog SHA, both canonical catalog tags, the frozen script-value digest,
+and the amendment oracle all bind the same base-owned `0.150.0-alpha.8`
+identity. This is a closed exact-value repair; no version range, compatibility
+fallback, bypass or candidate-selected host identity is introduced.
 
 The migration is additive and RLS-protected. Capacity policy only observes and
 fails closed below the reviewed disk floor; it does not delete evidence. No

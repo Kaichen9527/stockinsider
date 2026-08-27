@@ -1,6 +1,6 @@
 # V3.19 independent Architecture review — release reconciliation
 
-Date: 2026-08-23
+Date: 2026-08-27
 
 Review authority: independent, read-only Architecture review following the
 fresh V3.19 Requirements PASS. No runtime, database, Vercel or source operation
@@ -12,10 +12,10 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Total-order repair commit/tree: `cddea71114ac5a8a004cbe5315c5a1ef7e197059` / `cd97e844948704f05bb5708f83e246f7e3fa8f16`
-- Final repair-closure commit/tree: `fe0be84f986790bf03de43b06879d43a8f33aa4c` / `b181a411170cade6ec000f83b3302a2d9aa13bb7`
-- Full reviewed implementation range: `0fe9e359bbf518c01c2dda7b5e54fc00cdc5cafa..fe0be84f986790bf03de43b06879d43a8f33aa4c`
-- Active graph: `e447c1a156dd5befc4012a677841e429b89a236e6766408c0197b58532603bb6`
+- Implementation repair commit/tree: `b96724c70b3c9fd80fc66ac2f877aaecbdc19c4c` / `9940136130f1f8d0664522bee4e3ff5cdf5fe726`
+- Final repair-closure commit/tree: `1c8c3a9653ae5bad932b8dd214e389ef55e49edb` / `4435e055fca5f8cc80e97b352c784801587d73e3`
+- Full reviewed implementation range: `a04b8e64422a5239482a7df490e01e01e03f9fea..1c8c3a9653ae5bad932b8dd214e389ef55e49edb`
+- Active graph: `4baf35c1a17cc7c7cd451e71b29e34e9b83c90ee03ca18822fcf4f7f47b19a7b`
 
 ## Architecture closure
 
@@ -72,6 +72,13 @@ graph oracle and the evidence contract, and derives active release task text
 from `current-release.json` rather than a stale V3.18 literal. This closes the
 only metadata drift that could make a correct V3.19 product tree appear
 incomplete without weakening any fail-closed rule.
+
+The host compatibility bootstrap remains owned by the protected base. Its
+V3.13 catalog row, immutable amendment header, fixture, package-script command,
+runner identity and external-worker doctor selector are one atomic identity.
+The repair updates only dependent exact-value assertions and canonical tags,
+so the external gate still rejects any unreviewed binary, semver range,
+candidate fallback or cross-tree attestation.
 
 The dark/light semantic CTA tokens, tab semantics and keyboard navigation are
 contained in the presentation layer and do not alter decision or data authority.

@@ -26,6 +26,11 @@ test('V3.19 release state advances once per closed checkpoint and cannot skip ru
 
 test('V3.19 disk policy fails closed below the reviewed capacity floor without deleting artifacts',()=>{
   const {assessRuntimeDiskPolicy}=runtime('runtime-disk-policy-v319.js');
+  const {canonicalJson}=runtime('codec.js');
+  const policyPath=path.join(root,'config/runtime/artifact-retention-v3.19.json');
+  const policyText=readFileSync(policyPath,'utf8');
+  assert.equal(policyText,`${canonicalJson(JSON.parse(policyText))}\n`,
+    'the installed doctor reads this policy through the canonical-file trust boundary');
   const policy={schema:'stockinsider-artifact-retention-v3.19.0',sourceAuditMaxBytes:1000,sourceAuditRetentionDays:14,
     minimumFreeBytes:100,warningFreeBytes:200};
   const health=assessRuntimeDiskPolicy({policy,runtimeRoot:root,sourceAuditRoot:null,
