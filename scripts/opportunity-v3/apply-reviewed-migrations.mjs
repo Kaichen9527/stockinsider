@@ -42,6 +42,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql',
   'migrations/20260828_decision_revision_identity_dossier_v3_19_3.sql',
   'migrations/20260828_legacy_evaluation_schema_v3_19_6.sql',
+  'migrations/20260828_reused_acquisition_lineage_v3_19_7.sql',
 ]);
 const V3192_PROJECTION_DOSSIER_MIGRATION =
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql';
@@ -273,6 +274,17 @@ async function applyReviewedMigrations(options) {
           AND constraint_row.conname='legacy_evaluation_schema_v314_check'
           AND constraint_row.contype='c')
         AND NOT has_schema_privilege('opportunity_v3_rpc_owner','public','CREATE')
+      ,'reusedAcquisitionLineage',to_regprocedure(
+          'public.resolve_legacy_provider_acquisition_lineage_v3_19_7_internal(uuid)') IS NOT NULL
+        AND position('providerAcquisitions' IN pg_get_functiondef(
+          'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure))>0
+        AND position('coarseProviderAcquisition' IN pg_get_functiondef(
+          'public.resolve_legacy_provider_acquisition_lineage_v3_19_7_internal(uuid)'::regprocedure))>0
+        AND position('providerAcquisition' IN pg_get_functiondef(
+          'public.resolve_legacy_provider_acquisition_lineage_v3_19_7_internal(uuid)'::regprocedure))>0
+        AND NOT has_function_privilege('service_role',
+          'public.resolve_legacy_provider_acquisition_lineage_v3_19_7_internal(uuid)','EXECUTE')
+        AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',

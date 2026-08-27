@@ -145,3 +145,19 @@ test('V3.19.6 admits every supported compact evaluation schema without reopening
   assert.match(apply,/20260828_legacy_evaluation_schema_v3_19_6[.]sql/u);
   assert.match(apply,/'evaluationSchemaCompatibility'/u);
 });
+
+test('V3.19.7 binds reused frozen acquisitions to the current immutable job graph',()=>{
+  const migration=readFileSync(path.join(root,
+    'migrations/20260828_reused_acquisition_lineage_v3_19_7.sql'),'utf8');
+  const apply=readFileSync(path.join(root,'scripts/opportunity-v3/apply-reviewed-migrations.mjs'),'utf8');
+  assert.doesNotMatch(migration,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(migration,/resolve_legacy_provider_acquisition_lineage_v3_19_7_internal/u);
+  assert.match(migration,/result[.]result_json->'providerAcquisitions'/u);
+  assert.match(migration,/result[.]result_json->'coarseProviderAcquisition'/u);
+  assert.match(migration,/result[.]result_json->'providerAcquisition'/u);
+  assert.match(migration,/revision[.]evidence_root=referenced[.]reference->>'evidenceRoot'/u);
+  assert.match(migration,/revision[.]normalized_payload_sha256=referenced[.]reference->>'normalizedPayloadSha256'/u);
+  assert.match(migration,/REVOKE CREATE ON SCHEMA public FROM legacy_correctness_rpc_owner/u);
+  assert.match(apply,/20260828_reused_acquisition_lineage_v3_19_7[.]sql/u);
+  assert.match(apply,/'reusedAcquisitionLineage'/u);
+});
