@@ -72,6 +72,9 @@ const runtimeDiagnosticContractSql = fs.readFileSync(runtimeDiagnosticContractMi
 const projectionDossierContractMigrationPath = path.join(root,
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql');
 const projectionDossierContractSql = fs.readFileSync(projectionDossierContractMigrationPath, 'utf8');
+const decisionIdentityDossierMigrationPath = path.join(root,
+  'migrations/20260828_decision_revision_identity_dossier_v3_19_3.sql');
+const decisionIdentityDossierSql = fs.readFileSync(decisionIdentityDossierMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -514,6 +517,12 @@ before(() => {
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', projectionDossierContractMigrationPath,
     ]);
   }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', decisionIdentityDossierMigrationPath,
+    ]);
+  }
 });
 
 after(() => {
@@ -710,7 +719,7 @@ test('V3.19.2 installs the compact projection comparison without weakening detai
     /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
   const definition = psql(`SELECT pg_get_functiondef(
     'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure);`);
-  assert.equal((definition.match(/'researchDossier'/gu) ?? []).length, 1);
+  assert.equal((definition.match(/'researchDossier'/gu) ?? []).length, 2);
   assert.doesNotMatch(definition.replaceAll(' ',''),
     /value#>'\{bundle,json\}'ORDERBYvalue->>'decisionRevisionId'/u);
   assert.equal(psql(`SELECT has_schema_privilege(
@@ -6636,6 +6645,14 @@ test('V3.13 completion binds exact decision payload set and classifies only afte
   assert.match(sql,/v_expected_projection_key:='legacy-radar-v3[.]11:'[\s\S]*?projection_key_collision/u);
 });
 
+test('V3.19.3 reconstructs decision identity from the worker non-cyclic dossier material',()=>{
+  assert.doesNotMatch(decisionIdentityDossierSql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(decisionIdentityDossierSql,/jsonb_typeof\(v_item#>'\{bundle,json,researchDossier\}'\)='object'/u);
+  assert.match(decisionIdentityDossierSql,/\(\(v_item#>'\{bundle,json,researchDossier\}'\)-'dossierId'::text\)-'decisionRevisionId'::text/u);
+  assert.match(decisionIdentityDossierSql,/decision_revision_identity_conflict/u);
+  assert.match(decisionIdentityDossierSql,/REVOKE CREATE ON SCHEMA public FROM opportunity_v3_rpc_owner/u);
+});
+
 test('V3.13 service role completes compact persistence and equal-time heartbeat disagreement fails closed',()=>{
   const codec=runtime('codec.js');
   const projectionCodec=runtime('compact-radar-projection.js');
@@ -6668,7 +6685,9 @@ test('V3.13 service role completes compact persistence and equal-time heartbeat 
   const identityBundle=projectionCodec.decisionRevisionIdentityBundle(draftCard);
   const revisionId=`decision-v3.13:${identityBundle.hash}`;
   const card={...draftCard,decisionRevisionId:revisionId,
-    decisionEnvelope:{...draftCard.decisionEnvelope,decisionRevisionId:revisionId}};
+    decisionEnvelope:{...draftCard.decisionEnvelope,decisionRevisionId:revisionId},
+    researchDossier:{...draftCard.researchDossier,
+      dossierId:`research-v3.18:${'9'.repeat(64)}`,decisionRevisionId:revisionId}};
   const revisionBundle=codec.immutableBundle('legacy_decision_revision_v3_13',card);
   const compactResult=(sourceCutoff,publishedAt,selectedCard=card,selectedIdentity=identityBundle,
     selectedRevision=revisionBundle)=>{
