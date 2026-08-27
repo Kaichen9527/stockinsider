@@ -15,6 +15,15 @@ function canonicalFile(filename) {
   return value;
 }
 
+function effectiveLeaseStatus(run, leases, now = Date.now()) {
+  if (!Array.isArray(leases)) throw new Error('runtime lease contract');
+  if (leases.length > 1) return 'invalid';
+  const leaseExpiresAt = leases.length === 1 ? leases[0]?.lease_expires_at
+    : run?.status === 'running' ? run?.lease_expires_at : null;
+  if (typeof leaseExpiresAt !== 'string') return 'absent';
+  return Date.parse(leaseExpiresAt) >= now ? 'active' : 'expired';
+}
+
 function restCredentials(resolver){
   const supabaseUrl=resolver('keychain:stockinsider-runtime:supabase-url');
   const serviceRoleKey=resolver('keychain:stockinsider-runtime:supabase-service-role-key');
@@ -45,8 +54,11 @@ async function observeDatabaseRest(config,resolver,fetchImpl){
     throw new Error('runtime REST health contract');
   const run=health.lastRun&&typeof health.lastRun==='object'?health.lastRun:null;const leases=health.leases;
   const projection=Array.isArray(projections)?projections[0]??null:null;
-  const now=Date.now();const leaseStatus=leases.length===0?'absent':leases.length!==1?'invalid'
-    :Date.parse(leases[0].lease_expires_at)>=now?'active':'expired';
+  // Lease acquisition durably creates and heartbeats the run before the first
+  // heavyweight job claim becomes visible.  Treat that bounded run lease as
+  // the activation heartbeat when no job lease exists yet; otherwise a healthy
+  // cold start is rolled back while the authoritative claim is still running.
+  const leaseStatus=effectiveLeaseStatus(run,leases);
   const canonical=typeof projection?.payload_canonical==='string'&&/^\\x[0-9a-f]+$/iu.test(projection.payload_canonical)
     ?Buffer.from(projection.payload_canonical.slice(2),'hex'):null;
   const checksumMatches=canonical&&sha256(canonical)===projection.payload_sha256;
@@ -92,8 +104,7 @@ async function observeDatabase(releaseRoot, config, resolver, clientFactory,fetc
     await client.query('COMMIT');
     const run = runResult.rows[0] ?? null; const projection = projectionResult.rows[0] ?? null;
     const leases = leaseResult.rows;
-    const leaseStatus = leases.length === 0 ? 'absent' : leases.length !== 1 ? 'invalid'
-      : Date.parse(leases[0].lease_expires_at) >= Date.now() ? 'active' : 'expired';
+    const leaseStatus = effectiveLeaseStatus(run, leases);
     const checksumMatches = projection && Buffer.isBuffer(projection.payload_canonical) &&
       sha256(projection.payload_canonical) === projection.payload_sha256;
     const correctness = projection?.payload_json?.sourceLedCorrectness ?? {};
@@ -230,4 +241,5 @@ async function observeRuntimeHealth({ releaseRoot, runtimeRoot, manifest, review
   };
 }
 
-module.exports = { observeConsumer, observeDatabase, observeRuntimeHealth, publishRuntimeHealthObservation };
+module.exports = { effectiveLeaseStatus, observeConsumer, observeDatabase, observeRuntimeHealth,
+  publishRuntimeHealthObservation };

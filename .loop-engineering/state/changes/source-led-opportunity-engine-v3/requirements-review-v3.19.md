@@ -1,9 +1,9 @@
-# V3.19 fresh Requirements review — heavyweight lease acquisition repair
+# V3.19 fresh Requirements review — activation heartbeat closure
 
 Date: 2026-08-27
 
 Review authority: independent, read-only Requirements review of the immutable
-V3.19 lease-acquisition repair candidate. No runtime, database, Vercel or source
+V3.19 activation-heartbeat repair candidate. No runtime, database, Vercel or source
 operation was performed as part of this review.
 
 Result: `PASS`
@@ -12,13 +12,25 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `931f5771ddb625bc65975643c5dbbee9c09f807a`
-- Original candidate commit/tree: `29ec3f71e8b99b9162123fe5ece987e9ccf81074` / `87e3b970051e89dab4edc15a5fd9d3af0ec35f9e`
-- Final repair-closure commit/tree: `29ec3f71e8b99b9162123fe5ece987e9ccf81074` / `87e3b970051e89dab4edc15a5fd9d3af0ec35f9e`
-- Full reviewed range: `931f5771ddb625bc65975643c5dbbee9c09f807a..29ec3f71e8b99b9162123fe5ece987e9ccf81074`
+- Protected implementation parent: `5d91a48a18ee932cc9b18eaa8868ac19f50a8f6c`
+- Original candidate commit/tree: `08ede5bfcb1dcd578aea41c34e83bdc15d1aed31` / `b2280e9a847cb83a1ede8d48f714742a41868bf2`
+- Final repair-closure commit/tree: `08ede5bfcb1dcd578aea41c34e83bdc15d1aed31` / `b2280e9a847cb83a1ede8d48f714742a41868bf2`
+- Full reviewed range: `5d91a48a18ee932cc9b18eaa8868ac19f50a8f6c..08ede5bfcb1dcd578aea41c34e83bdc15d1aed31`
 - Active graph: `4baf35c1a17cc7c7cd451e71b29e34e9b83c90ee03ca18822fcf4f7f47b19a7b`
 
 ## Requirements closure
+
+The reviewed production retry proved that lease acquisition now completes
+inside its heavyweight bound: the new run was durably created and heartbeated
+in fourteen seconds. The installer nevertheless rolled it back because health
+classified an empty job-lease set as `absent` while the first heavyweight job
+claim was still materializing. The runtime health contract already exposes the
+run-level `lease_expires_at`; the repair treats that bounded run lease as the
+first activation heartbeat only when the run is `running` and no job lease is
+visible. A visible job lease remains authoritative once present, multiple job
+leases remain invalid, and expired or terminal run leases cannot pass. This
+closes the activation race without extending the two-minute installer budget or
+weakening terminal-run, scheduler-owner, manifest, consumer or projection gates.
 
 The production forensic activation showed that lease acquisition materializes
 the same bounded frozen authority pages as job claim, but the PostgreSQL adapter
@@ -95,8 +107,10 @@ V3 Promotion or public mutating endpoint is introduced.
 
 ## Executable evidence examined
 
-- Product/runtime correctness: `133/133` PASS, including all `PCR-001` through
+- Product/runtime correctness baseline: `133/133` PASS, including all `PCR-001` through
   `PCR-031`; zero failed, skipped or todo.
+- Focused activation/REST-doctor regression: `25/25` PASS, including active,
+  expired, terminal, job-owned and multiple-lease cases.
 - Migration contract/rehearsal suite: `62/62` PASS.
 - Source-led unit suite: `61/61` PASS; legacy V1/V2 regression: `2/2` PASS.
 - Browser V3 correctness suite: `9/9` PASS.

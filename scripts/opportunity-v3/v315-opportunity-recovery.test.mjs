@@ -430,6 +430,31 @@ test('V315 REST doctor reads private producer state only through the bounded hea
   assert.equal(calls.some((url)=>url.includes('/legacy_producer_jobs_v3_11?')),false);
 });
 
+test('V319 activation accepts the bounded run lease before the first heavyweight job claim is visible',async()=>{
+  const observer=runtime('runtime-health-observer.js');
+  const now=Date.parse('2026-08-27T08:00:00Z');
+  const running={status:'running',lease_expires_at:'2026-08-27T08:02:00Z'};
+  assert.equal(observer.effectiveLeaseStatus(running,[],now),'active');
+  assert.equal(observer.effectiveLeaseStatus({...running,lease_expires_at:'2026-08-27T07:59:59Z'},[],now),'expired');
+  assert.equal(observer.effectiveLeaseStatus({status:'success',lease_expires_at:'2026-08-27T08:02:00Z'},[],now),'absent');
+  assert.equal(observer.effectiveLeaseStatus(running,[{lease_expires_at:'2026-08-27T08:02:00Z'}],now),'active');
+  assert.equal(observer.effectiveLeaseStatus(running,[{lease_expires_at:'2026-08-27T08:02:00Z'},
+    {lease_expires_at:'2026-08-27T08:02:00Z'}],now),'invalid');
+
+  const calls=[];
+  const fetchImpl=async(url)=>{calls.push(String(url));
+    if(String(url).includes('/rpc/read_legacy_runtime_health_rest_v3_15'))return new Response(JSON.stringify({
+      lastRun:{...running,started_at:'2026-08-27T07:59:00Z',heartbeat_at:'2026-08-27T08:00:00Z',
+        lease_expires_at:'2999-08-27T08:02:00Z',producer_commit_sha:'a'.repeat(40),
+        worker_sha256:'b'.repeat(64),scheduler_config_sha256:'c'.repeat(64)},
+      leases:[],stuckRunCount:0}),{status:200});
+    return new Response('[]',{status:200});};
+  const resolver=(reference)=>reference.endsWith('supabase-url')?'https://fixture.supabase.co':'s'.repeat(40);
+  const result=await observer.observeDatabase(root,{},resolver,undefined,fetchImpl);
+  assert.equal(result.lastRunNonterminal,true);
+  assert.equal(result.leaseStatus,'active');
+});
+
 test('V315 migration is additive, bounded, upgrade-safe, and binds authority to REST claim and completion',()=>{
   const sql=readFileSync(path.join(root,'migrations/20260813_opportunity_recovery_v3_15.sql'),'utf8');
   const v314=readFileSync(path.join(root,'migrations/20260811_actionability_recovery_v3_14.sql'),'utf8');

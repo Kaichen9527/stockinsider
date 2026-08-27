@@ -1,4 +1,4 @@
-# V3.19 independent Architecture review — heavyweight lease acquisition repair
+# V3.19 independent Architecture review — activation heartbeat closure
 
 Date: 2026-08-27
 
@@ -12,12 +12,22 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Implementation repair commit/tree: `29ec3f71e8b99b9162123fe5ece987e9ccf81074` / `87e3b970051e89dab4edc15a5fd9d3af0ec35f9e`
-- Final repair-closure commit/tree: `85824e6bed832f42105e2351990ef553324cad00` / `f99c74811a07cd24c09ec236087b4bbd068d7b50`
-- Full reviewed implementation range: `931f5771ddb625bc65975643c5dbbee9c09f807a..85824e6bed832f42105e2351990ef553324cad00`
+- Implementation repair commit/tree: `08ede5bfcb1dcd578aea41c34e83bdc15d1aed31` / `b2280e9a847cb83a1ede8d48f714742a41868bf2`
+- Final repair-closure commit/tree: `0a1a35f780584e501bcda697e582d931a27caa16` / `3d8bbca14efb1cfb47656b262baeb40d32df6e7e`
+- Full reviewed implementation range: `5d91a48a18ee932cc9b18eaa8868ac19f50a8f6c..0a1a35f780584e501bcda697e582d931a27caa16`
 - Active graph: `4baf35c1a17cc7c7cd451e71b29e34e9b83c90ee03ca18822fcf4f7f47b19a7b`
 
 ## Architecture closure
+
+Activation health now models the two durable lease phases explicitly. Before a
+job claim is visible, the current running producer's bounded run lease is the
+registration heartbeat; after a job is claimed, the unique job lease is the
+authority. The shared `effectiveLeaseStatus` function is used by both the
+minimum-privilege REST observer and the direct PostgreSQL observer, preventing
+doctor/API disagreement. It rejects multiple job leases, never promotes a
+terminal run's residual timestamp, and reports an expired lease as expired.
+This preserves the two-minute installer boundary while allowing the already
+bounded heavyweight claim to continue under the durable producer state machine.
 
 The runtime adapter now separates ordinary RPC latency authority from the two
 heavyweight, idempotent orchestration RPCs. `acquire_legacy_producer_lease` and
@@ -99,8 +109,10 @@ Promotion or public mutating endpoint is in the reviewed architecture.
 
 ## Executable evidence examined
 
-- Product/runtime correctness: `133/133` PASS, including `PCR-001` through
+- Product/runtime correctness baseline: `133/133` PASS, including `PCR-001` through
   `PCR-031`; zero failed, skipped or todo.
+- Focused activation/REST-doctor regression: `25/25` PASS across run-lease and
+  job-lease transitions.
 - Migration contract/rehearsal suite: `62/62` PASS, including the additive
   V3.19 cursor/function postconditions.
 - Source-led unit: `61/61` PASS; V1/V2 regression: `2/2` PASS.
