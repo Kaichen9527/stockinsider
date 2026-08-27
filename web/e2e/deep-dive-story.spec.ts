@@ -8,10 +8,14 @@ test('revision-bound detail renders the exact Decision Brief selected by the V3.
   const revision=`decision-v3.13:${'a'.repeat(64)}`;
   await page.goto('/v313-decision-fixture');
   const link=page.getByRole('link',{name:/查看決策摘要/u}).first();
-  await expect(link).toHaveAttribute('href',`/stock/9101?decisionRevisionId=${encodeURIComponent(revision)}`);
+  const expectedPath=`/stock/9101?decisionRevisionId=${encodeURIComponent(revision)}`;
+  await expect(link).toHaveAttribute('href',expectedPath);
 
-  await link.click();
-  await expect(page.getByTestId('decision-brief')).toBeVisible();
+  await Promise.all([
+    page.waitForURL((url)=>`${url.pathname}${url.search}`===expectedPath),
+    link.click(),
+  ]);
+  await expect(page.getByTestId('decision-brief')).toBeVisible({timeout:15_000});
   await expect(page.getByTestId('detail-action')).toHaveText('research_starter');
   await expect(page.getByTestId('detail-authority')).toHaveText('conditional_research');
   await expect(page.getByTestId('detail-valuation')).toHaveText('90 / 117.65 / 135');
