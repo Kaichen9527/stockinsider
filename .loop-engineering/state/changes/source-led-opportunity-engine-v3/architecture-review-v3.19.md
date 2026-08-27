@@ -1,4 +1,4 @@
-# V3.19 independent Architecture review — readonly bootstrap closure
+# V3.19 independent Architecture review — provider envelope persistence closure
 
 Date: 2026-08-27
 
@@ -12,12 +12,22 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Implementation repair commit/tree: `e82cb6ddbaab7ada092678181715a58b4ff682b7` / `b5b7dc992c4162e17bbf4cb7634b90af70521223`
-- Final repair-closure commit/tree: `a40c3d9dd6e873aef7ed01a184802f8c70b68ef3` / `30b58cb2f6e4ddcb352fc1894675e7b519fc17e1`
-- Full reviewed implementation range: `688ba7b2ab730407dc0c42a953d49a583925e6b5..a40c3d9dd6e873aef7ed01a184802f8c70b68ef3`
+- Implementation repair commit/tree: `21458664c00dac046fbeaab24aacf35920771d00` / `9cac23f6fee7323e715a9989d427b0e5c1ff6704`
+- Final repair-closure commit/tree: `e6cdc3a19181cdf2494d617451606fe12b5950a9` / `e3ac43be387d3d60fafa7cd8e50a9b4cf73ac65a`
+- Full reviewed implementation range: `9cd4c3051c6286e76ce5ba801736cde50471e5aa..e6cdc3a19181cdf2494d617451606fe12b5950a9`
 - Active graph: `4baf35c1a17cc7c7cd451e71b29e34e9b83c90ee03ca18822fcf4f7f47b19a7b`
 
 ## Architecture closure
+
+Provider-envelope persistence now has the same explicit heavyweight statement
+and client timeout as lease acquisition and claim, while retaining different
+replay semantics. `freezeLegacyProviderAcquisition` executes once inside the
+bounded transaction helper and never enters `withTransientPoolReconnect`.
+Because the database function owns a unique provider/request/cutoff identity
+and conflict quarantine, a successor can safely resolve an already committed
+envelope after an ambiguous reply; the active process must still fail closed.
+All ordinary RPCs retain 20-second bounds, completion retains its independent
+budget, and the heartbeat continues on a separate connection.
 
 Release ordering now has an explicit, non-authoritative bridge state. Runtime
 and its manifest are staged first; a hash-shaped predecessor Web consumer may
