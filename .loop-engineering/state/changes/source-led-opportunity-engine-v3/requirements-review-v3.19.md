@@ -1,9 +1,9 @@
-# V3.19 fresh Requirements review — readonly bootstrap closure
+# V3.19 fresh Requirements review — provider envelope persistence closure
 
 Date: 2026-08-27
 
 Review authority: independent, read-only Requirements review of the immutable
-V3.19 readonly-bootstrap repair candidate. No runtime, database, Vercel or source
+V3.19 provider-envelope persistence repair candidate. No runtime, database, Vercel or source
 operation was performed as part of this review.
 
 Result: `PASS`
@@ -12,13 +12,24 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `688ba7b2ab730407dc0c42a953d49a583925e6b5`
-- Original candidate commit/tree: `e82cb6ddbaab7ada092678181715a58b4ff682b7` / `b5b7dc992c4162e17bbf4cb7634b90af70521223`
-- Final repair-closure commit/tree: `e82cb6ddbaab7ada092678181715a58b4ff682b7` / `b5b7dc992c4162e17bbf4cb7634b90af70521223`
-- Full reviewed range: `688ba7b2ab730407dc0c42a953d49a583925e6b5..e82cb6ddbaab7ada092678181715a58b4ff682b7`
+- Protected implementation parent: `9cd4c3051c6286e76ce5ba801736cde50471e5aa`
+- Original candidate commit/tree: `21458664c00dac046fbeaab24aacf35920771d00` / `9cac23f6fee7323e715a9989d427b0e5c1ff6704`
+- Final repair-closure commit/tree: `21458664c00dac046fbeaab24aacf35920771d00` / `9cac23f6fee7323e715a9989d427b0e5c1ff6704`
+- Full reviewed range: `9cd4c3051c6286e76ce5ba801736cde50471e5aa..21458664c00dac046fbeaab24aacf35920771d00`
 - Active graph: `4baf35c1a17cc7c7cd451e71b29e34e9b83c90ee03ca18822fcf4f7f47b19a7b`
 
 ## Requirements closure
+
+The first reviewed production run terminalized after three completed jobs with
+an allowlisted `facts_refresh / providerAcquisition` persistence timeout. The
+frozen official snapshot is a bounded multi-megabyte immutable envelope whose
+unique provider/request/cutoff key and conflict checks make the database write
+idempotent, but it was incorrectly sent through the ordinary 20-second client
+timer. The repair gives only this freeze operation the existing 1,200-second
+heavyweight transaction budget. It does not replay an ambiguous transport
+result, alter provider acquisition, widen ingestion or completion writes, or
+weaken the independent lease heartbeat. A later durable run either reads the
+committed envelope by the same immutable key or appends the still-missing key.
 
 The production activation sequence exposed a circular rollout dependency: the
 reviewed runtime and manifest must exist before the matching Web build can be
