@@ -130,3 +130,18 @@ test('V3.19.3 validates bound dossier identities with the worker cyclic fields r
   assert.match(migration,/'decisionRevisionId'/u);
   assert.match(apply,/20260828_decision_revision_identity_dossier_v3_19_3[.]sql/u);
 });
+
+test('V3.19.6 admits every supported compact evaluation schema without reopening CREATE',()=>{
+  const migration=readFileSync(path.join(root,
+    'migrations/20260828_legacy_evaluation_schema_v3_19_6.sql'),'utf8');
+  const apply=readFileSync(path.join(root,'scripts/opportunity-v3/apply-reviewed-migrations.mjs'),'utf8');
+  assert.doesNotMatch(migration,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(migration,/legacy_evaluation_schema_v314_check/u);
+  for(const version of ['3.13.0','3.14.0','3.17.0','3.18.0','3.19.0']) {
+    assert.match(migration,new RegExp(`legacy-radar-v${version.replaceAll('.', '[.]')}`,'u'));
+  }
+  assert.match(migration,/REVOKE CREATE ON SCHEMA public FROM opportunity_v3_rpc_owner/u);
+  assert.match(migration,/v3196_evaluation_schema_contract_unavailable/u);
+  assert.match(apply,/20260828_legacy_evaluation_schema_v3_19_6[.]sql/u);
+  assert.match(apply,/'evaluationSchemaCompatibility'/u);
+});

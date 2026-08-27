@@ -41,6 +41,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260827_runtime_diagnostic_contract_v3_19_1.sql',
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql',
   'migrations/20260828_decision_revision_identity_dossier_v3_19_3.sql',
+  'migrations/20260828_legacy_evaluation_schema_v3_19_6.sql',
 ]);
 const V3192_PROJECTION_DOSSIER_MIGRATION =
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql';
@@ -259,6 +260,18 @@ async function applyReviewedMigrations(options) {
         AND (SELECT pg_get_userbyid(proowner)='opportunity_v3_rpc_owner' AND prosecdef
           FROM pg_proc WHERE oid=
             'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure)
+        AND NOT has_schema_privilege('opportunity_v3_rpc_owner','public','CREATE')
+      ,'evaluationSchemaCompatibility',(SELECT
+          position('legacy-radar-v3.13.0' IN pg_get_constraintdef(constraint_row.oid))>0
+          AND position('legacy-radar-v3.14.0' IN pg_get_constraintdef(constraint_row.oid))>0
+          AND position('legacy-radar-v3.17.0' IN pg_get_constraintdef(constraint_row.oid))>0
+          AND position('legacy-radar-v3.18.0' IN pg_get_constraintdef(constraint_row.oid))>0
+          AND position('legacy-radar-v3.19.0' IN pg_get_constraintdef(constraint_row.oid))>0
+        FROM pg_constraint constraint_row
+        WHERE constraint_row.conrelid=
+            'public.legacy_decision_revision_evaluations_v3_13'::regclass
+          AND constraint_row.conname='legacy_evaluation_schema_v314_check'
+          AND constraint_row.contype='c')
         AND NOT has_schema_privilege('opportunity_v3_rpc_owner','public','CREATE')
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');

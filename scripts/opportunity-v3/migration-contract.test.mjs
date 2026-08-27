@@ -75,6 +75,9 @@ const projectionDossierContractSql = fs.readFileSync(projectionDossierContractMi
 const decisionIdentityDossierMigrationPath = path.join(root,
   'migrations/20260828_decision_revision_identity_dossier_v3_19_3.sql');
 const decisionIdentityDossierSql = fs.readFileSync(decisionIdentityDossierMigrationPath, 'utf8');
+const evaluationSchemaCompatibilityMigrationPath = path.join(root,
+  'migrations/20260828_legacy_evaluation_schema_v3_19_6.sql');
+const evaluationSchemaCompatibilitySql = fs.readFileSync(evaluationSchemaCompatibilityMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -521,6 +524,12 @@ before(() => {
     command(pg.psql, [
       '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', decisionIdentityDossierMigrationPath,
+    ]);
+  }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', evaluationSchemaCompatibilityMigrationPath,
     ]);
   }
 });
@@ -6651,6 +6660,29 @@ test('V3.19.3 reconstructs decision identity from the worker non-cyclic dossier 
   assert.match(decisionIdentityDossierSql,/\(\(v_item#>'\{bundle,json,researchDossier\}'\)-'dossierId'::text\)-'decisionRevisionId'::text/u);
   assert.match(decisionIdentityDossierSql,/decision_revision_identity_conflict/u);
   assert.match(decisionIdentityDossierSql,/REVOKE CREATE ON SCHEMA public FROM opportunity_v3_rpc_owner/u);
+});
+
+test('V3.19.6 keeps compact evaluation schema persistence closed and V3.19-compatible',()=>{
+  assert.doesNotMatch(evaluationSchemaCompatibilitySql,
+    /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(evaluationSchemaCompatibilitySql,/legacy_evaluation_schema_v314_check/u);
+  assert.match(evaluationSchemaCompatibilitySql,/legacy-radar-v3[.]19[.]0/u);
+  assert.match(evaluationSchemaCompatibilitySql,
+    /REVOKE CREATE ON SCHEMA public FROM opportunity_v3_rpc_owner/u);
+  const applied=JSON.parse(psql(`SELECT jsonb_build_object(
+    'definition',pg_get_constraintdef(constraint_row.oid),
+    'ownerCreate',has_schema_privilege('opportunity_v3_rpc_owner','public','CREATE')
+  )::text
+  FROM pg_constraint constraint_row
+  WHERE constraint_row.conrelid=
+      'public.legacy_decision_revision_evaluations_v3_13'::regclass
+    AND constraint_row.conname='legacy_evaluation_schema_v314_check'
+    AND constraint_row.contype='c';`,['-Atq']));
+  for(const version of ['3.13.0','3.14.0','3.17.0','3.18.0','3.19.0']) {
+    assert.match(applied.definition,new RegExp(`legacy-radar-v${version.replaceAll('.', '[.]')}`,'u'));
+  }
+  assert.doesNotMatch(applied.definition,/legacy-radar-v3[.]20[.]0/u);
+  assert.equal(applied.ownerCreate,false);
 });
 
 test('V3.13 service role completes compact persistence and equal-time heartbeat disagreement fails closed',()=>{
