@@ -100,3 +100,13 @@ test('V3.19.2 compares compact landing cards with full detail revisions without 
   assert.match(apply,/20260827_decision_revision_dossier_projection_v3_19_2[.]sql/u);
   assert.match(apply,/'decisionRevisionDossierProjection'/u);
 });
+
+test('V3.19.3 validates bound dossier identities with the worker cyclic fields removed',()=>{
+  const migration=readFileSync(path.join(root,
+    'migrations/20260828_decision_revision_identity_dossier_v3_19_3.sql'),'utf8');
+  const apply=readFileSync(path.join(root,'scripts/opportunity-v3/apply-reviewed-migrations.mjs'),'utf8');
+  assert.match(migration,/v3193_decision_identity_contract/u);
+  assert.match(migration,/'dossierId'/u);
+  assert.match(migration,/'decisionRevisionId'/u);
+  assert.match(apply,/20260828_decision_revision_identity_dossier_v3_19_3[.]sql/u);
+});

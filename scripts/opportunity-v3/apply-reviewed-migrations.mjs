@@ -40,6 +40,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260823_release_reconciliation_v3_19.sql',
   'migrations/20260827_runtime_diagnostic_contract_v3_19_1.sql',
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql',
+  'migrations/20260828_decision_revision_identity_dossier_v3_19_3.sql',
 ]);
 
 function parseArguments(argv) {
@@ -220,6 +221,8 @@ async function applyReviewedMigrations(options) {
           'public.complete_legacy_producer_job_v3_11(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
         AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
       ,'decisionRevisionDossierProjection',position('researchDossier' IN pg_get_functiondef(
+          'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
+        AND position('dossierId' IN pg_get_functiondef(
           'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
         AND position('decision_revision_projection_mismatch' IN pg_get_functiondef(
           'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
