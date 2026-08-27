@@ -104,7 +104,12 @@ async function claimWithBoundedStatementTimeout(pool, text, values) {
   try {
     await client.query('BEGIN');
     await client.query(`SET LOCAL statement_timeout = '${CLAIM_STATEMENT_TIMEOUT_MS / 1000}s'`);
-    const result = await client.query(text, values);
+    // The pool's 20-second query timeout protects ordinary writes, but lease
+    // acquisition and job claim materialize bounded frozen authority pages and
+    // can legitimately take longer. Override the client-side timer only for
+    // this transaction's reviewed, idempotent RPC; the server-side timeout
+    // above remains the authoritative upper bound.
+    const result = await client.query({ text, values, query_timeout: CLAIM_STATEMENT_TIMEOUT_MS });
     await client.query('COMMIT');
     return result.rows[0] ?? null;
   } catch (error) {
@@ -193,9 +198,10 @@ function createPostgresLegacyProducerAdapter({ connectionString }) {
   });
   return Object.freeze({
     acquireLegacyProducerLease: async (input) => {
-      const value = lease(await one('select * from public.acquire_legacy_producer_lease_v3_11($1,$2,$3,$4,$5,$6,$7)',
+      const value = lease(await withTransientPoolReconnect((activePool) => claimWithBoundedStatementTimeout(activePool,
+        'select * from public.acquire_legacy_producer_lease_v3_11($1,$2,$3,$4,$5,$6,$7)',
         [input.ownerLabel, input.sourceCommitSha, input.workerSha256, input.configBytes, input.configSha256,
-          input.ownerToken, input.leaseSeconds]));
+          input.ownerToken, input.leaseSeconds])));
       // A restarted worker can resume directly at a barrier whose claim omits
       // the authority pages.  The lease still binds the run's immutable
       // authority identity, so retain it for terminal completion.

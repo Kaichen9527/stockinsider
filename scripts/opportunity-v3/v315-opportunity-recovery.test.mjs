@@ -512,7 +512,9 @@ test('V316 direct claim transaction raises only its local statement timeout and 
   assert.equal(CLAIM_STATEMENT_TIMEOUT_MS,1_200_000);
   const successfulQueries=[];
   const successfulClient={
-    query:async(text,values)=>{successfulQueries.push([text,values]);
+    query:async(input,values)=>{const text=typeof input==='string'?input:input.text;
+      successfulQueries.push([text,typeof input==='string'?values:input.values,
+        typeof input==='string'?null:input.query_timeout]);
       return text.startsWith('select claimed.*')?{rows:[{job_id:'facts-barrier'}]}:{rows:[]};},
     release:()=>successfulQueries.push(['RELEASE']),
   };
@@ -522,9 +524,11 @@ test('V316 direct claim transaction raises only its local statement timeout and 
   assert.deepEqual(successfulQueries.map(([text])=>text),[
     'BEGIN',"SET LOCAL statement_timeout = '1200s'",'select claimed.* from fixture_claim($1) claimed','COMMIT','RELEASE',
   ]);
+  assert.equal(successfulQueries[2][2],CLAIM_STATEMENT_TIMEOUT_MS,
+    'the heavyweight RPC must override the pool client timeout without widening ordinary writes');
   const failedQueries=[];
   const failedClient={
-    query:async(text)=>{failedQueries.push(text);if(text.startsWith('select claimed.*')){
+    query:async(input)=>{const text=typeof input==='string'?input:input.text;failedQueries.push(text);if(text.startsWith('select claimed.*')){
       const error=new Error('canceling statement due to statement timeout');error.code='57014';throw error;}return {rows:[]};},
     release:()=>failedQueries.push('RELEASE'),
   };
@@ -535,7 +539,7 @@ test('V316 direct claim transaction raises only its local statement timeout and 
   ]);
   let discarded=null;
   const brokenClient={
-    query:async(text)=>{if(text==='ROLLBACK')throw new Error('connection_lost_during_rollback');
+    query:async(input)=>{const text=typeof input==='string'?input:input.text;if(text==='ROLLBACK')throw new Error('connection_lost_during_rollback');
       if(text.startsWith('select claimed.*')){const error=new Error('authoritative_claim_error');error.code='57014';throw error;}
       return {rows:[]};},
     release:(discard)=>{discarded=discard;},
