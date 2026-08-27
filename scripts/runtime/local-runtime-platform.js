@@ -129,16 +129,12 @@ async function startOwnerAndWait(label, maximumSeconds = OWNER_ACTIVATION_MAXIMU
     const output = state.stdout ?? '';
     // `launchctl list <label>` succeeding is the registration proof. A
     // one-shot owner may have no PID because it has not begun work yet or it
-    // already completed; neither state is an installation failure. A reported
-    // non-zero exit is the only terminal scheduler failure we can safely infer
-    // at this boundary.
+    // already completed. launchd can retain LastExitStatus across unload/load
+    // and start, so it cannot identify the current invocation at this boundary.
+    // The separately bounded first-heartbeat/terminal doctor is the execution
+    // health authority and will roll activation back on a real failure.
     const exitStatus = output.match(/"LastExitStatus"\s*=\s*(-?\d+)/u);
     const hasPid = /"PID"\s*=\s*\d+/u.test(output);
-    // launchd retains LastExitStatus from the preceding invocation while the
-    // newly started one is already alive.  A live PID is current evidence and
-    // must win over that stale status; otherwise activation kills a healthy
-    // durable worker between stage completions.
-    if (!hasPid && exitStatus && Number(exitStatus[1]) !== 0) fail('scheduler_activation_failed');
     if (state.status === 0) return Object.freeze({
       registered: true,
       pid: hasPid,

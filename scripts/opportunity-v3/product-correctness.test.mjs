@@ -329,10 +329,12 @@ const checks = {
     });
     assert.deepEqual(runningWithStaleExit, { registered: true, pid: true, lastExitStatus: 78 },
       'a live launchd PID overrides the previous invocation exit status');
-    await assert.rejects(localPlatform.startOwnerAndWait('com.stockinsider.test-owner', 0, {
+    const registeredBeforePid = await localPlatform.startOwnerAndWait('com.stockinsider.test-owner', 0, {
       launchctl: (args) => ({ status: 0, stdout: args[0] === 'start' ? '' : '"LastExitStatus" = 78;' }),
       waitOneSecond: async () => {},
-    }), { code: 'scheduler_activation_failed' });
+    });
+    assert.deepEqual(registeredBeforePid, { registered: true, pid: false, lastExitStatus: 78 },
+      'scheduler registration does not reinterpret retained exit state as current execution health');
     const installation = runtime('auth-source-worker-installation.js');
     assert.equal(installation.ACTIVATION_HEARTBEAT_MAXIMUM_SECONDS, 120);
     let heartbeatPolls = 0;
