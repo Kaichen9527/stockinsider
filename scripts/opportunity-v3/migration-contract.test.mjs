@@ -69,6 +69,9 @@ const releaseReconciliationSql = fs.readFileSync(releaseReconciliationMigrationP
 const runtimeDiagnosticContractMigrationPath = path.join(root,
   'migrations/20260827_runtime_diagnostic_contract_v3_19_1.sql');
 const runtimeDiagnosticContractSql = fs.readFileSync(runtimeDiagnosticContractMigrationPath, 'utf8');
+const projectionDossierContractMigrationPath = path.join(root,
+  'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql');
+const projectionDossierContractSql = fs.readFileSync(projectionDossierContractMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -505,6 +508,12 @@ before(() => {
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', runtimeDiagnosticContractMigrationPath,
     ]);
   }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', projectionDossierContractMigrationPath,
+    ]);
+  }
 });
 
 after(() => {
@@ -694,6 +703,18 @@ test('runtime diagnostic persistence accepts every closed runtime invariant', ()
     WHERE conrelid='public.legacy_runtime_failure_diagnostics_v3_14'::regclass
       AND conname='legacy_runtime_failure_diagnostics_v3_14_invariant_code_check';`);
   assert.match(definition,/projection_supersession_conflict/u);
+});
+
+test('V3.19.2 installs the compact projection comparison without weakening detail revisions', () => {
+  assert.doesNotMatch(projectionDossierContractSql,
+    /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  const definition = psql(`SELECT pg_get_functiondef(
+    'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure);`);
+  assert.equal((definition.match(/'researchDossier'/gu) ?? []).length, 1);
+  assert.doesNotMatch(definition.replaceAll(' ',''),
+    /value#>'\{bundle,json\}'ORDERBYvalue->>'decisionRevisionId'/u);
+  assert.equal(psql(`SELECT has_schema_privilege(
+    'opportunity_v3_rpc_owner','public','CREATE')::text;`, ['-At']).trim(), 'false');
 });
 
 test('migration includes the exact three view security modes', () => {
@@ -6642,7 +6663,8 @@ test('V3.13 service role completes compact persistence and equal-time heartbeat 
       thesis:['a','b','c'],risks:['d','e','f'],evidence:[
         {point:'thesis:0',refs:['claim-9197']},{point:'thesis:1',refs:['claim-9197']},
         {point:'thesis:2',refs:['claim-9197']},{point:'risk:0',refs:['claim-9197']},
-        {point:'risk:1',refs:['claim-9197']},{point:'risk:2',refs:['claim-9197']}]}};
+        {point:'risk:1',refs:['claim-9197']},{point:'risk:2',refs:['claim-9197']}]},
+    researchDossier:{version:'research-dossier-v3.18.0',summary:'detail-only immutable research dossier'}};
   const identityBundle=projectionCodec.decisionRevisionIdentityBundle(draftCard);
   const revisionId=`decision-v3.13:${identityBundle.hash}`;
   const card={...draftCard,decisionRevisionId:revisionId,
@@ -6650,12 +6672,14 @@ test('V3.13 service role completes compact persistence and equal-time heartbeat 
   const revisionBundle=codec.immutableBundle('legacy_decision_revision_v3_13',card);
   const compactResult=(sourceCutoff,publishedAt,selectedCard=card,selectedIdentity=identityBundle,
     selectedRevision=revisionBundle)=>{
+    const landingCard=structuredClone(selectedCard);
+    delete landingCard.researchDossier;
     const correctness={schema:'legacy-radar-v3.13.0',window:'home',asOf:sourceCutoff,
       contentAsOf:'2026-08-07T10:20:00Z',evaluatedAt:'2026-08-08T10:20:00Z',publishedAt,
       nextExpectedAt:'2026-08-10T10:20:00Z',freshnessSchedule:[],contentHash:'d'.repeat(64),
       producerIdentity:{commitSha:'a'.repeat(40)}};
     const projections=['daily','home','three_day','weekly'].map((storageWindow)=>{
-      const payload={sourceSignals:storageWindow==='home'?[selectedCard]:[],sourceLedCorrectness:{...correctness,
+      const payload={sourceSignals:storageWindow==='home'?[landingCard]:[],sourceLedCorrectness:{...correctness,
         window:storageWindow==='three_day'?'hot':storageWindow}};
       const canonical=codec.canonicalJson(payload);const payloadChecksum=codec.sha256(canonical);
       return {projectionKey:`legacy-radar-v3.11:${storageWindow}:${sourceCutoff}:${payloadChecksum}`,
