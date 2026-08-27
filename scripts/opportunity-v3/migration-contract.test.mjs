@@ -526,6 +526,12 @@ before(() => {
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', decisionIdentityDossierMigrationPath,
     ]);
   }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, [
+      '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', evaluationSchemaCompatibilityMigrationPath,
+    ]);
+  }
 });
 
 after(() => {
@@ -6663,6 +6669,20 @@ test('V3.19.6 keeps compact evaluation schema persistence closed and V3.19-compa
   assert.match(evaluationSchemaCompatibilitySql,/legacy-radar-v3[.]19[.]0/u);
   assert.match(evaluationSchemaCompatibilitySql,
     /REVOKE CREATE ON SCHEMA public FROM opportunity_v3_rpc_owner/u);
+  const applied=JSON.parse(psql(`SELECT jsonb_build_object(
+    'definition',pg_get_constraintdef(constraint_row.oid),
+    'ownerCreate',has_schema_privilege('opportunity_v3_rpc_owner','public','CREATE')
+  )::text
+  FROM pg_constraint constraint_row
+  WHERE constraint_row.conrelid=
+      'public.legacy_decision_revision_evaluations_v3_13'::regclass
+    AND constraint_row.conname='legacy_evaluation_schema_v314_check'
+    AND constraint_row.contype='c';`,['-Atq']));
+  for(const version of ['3.13.0','3.14.0','3.17.0','3.18.0','3.19.0']) {
+    assert.match(applied.definition,new RegExp(`legacy-radar-v${version.replaceAll('.', '[.]')}`,'u'));
+  }
+  assert.doesNotMatch(applied.definition,/legacy-radar-v3[.]20[.]0/u);
+  assert.equal(applied.ownerCreate,false);
 });
 
 test('V3.13 service role completes compact persistence and equal-time heartbeat disagreement fails closed',()=>{
