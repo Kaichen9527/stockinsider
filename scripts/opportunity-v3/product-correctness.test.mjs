@@ -322,6 +322,13 @@ const checks = {
       ['start', 'com.stockinsider.test-owner'],
       ['list', 'com.stockinsider.test-owner'],
     ]);
+    const runningWithStaleExit = await localPlatform.startOwnerAndWait('com.stockinsider.test-owner', 0, {
+      launchctl: (args) => ({ status: 0, stdout: args[0] === 'start' ? ''
+        : '"PID" = 4312;\n"LastExitStatus" = 78;' }),
+      waitOneSecond: async () => {},
+    });
+    assert.deepEqual(runningWithStaleExit, { registered: true, pid: true, lastExitStatus: 78 },
+      'a live launchd PID overrides the previous invocation exit status');
     await assert.rejects(localPlatform.startOwnerAndWait('com.stockinsider.test-owner', 0, {
       launchctl: (args) => ({ status: 0, stdout: args[0] === 'start' ? '' : '"LastExitStatus" = 78;' }),
       waitOneSecond: async () => {},

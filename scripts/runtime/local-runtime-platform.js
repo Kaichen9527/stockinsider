@@ -133,10 +133,15 @@ async function startOwnerAndWait(label, maximumSeconds = OWNER_ACTIVATION_MAXIMU
     // non-zero exit is the only terminal scheduler failure we can safely infer
     // at this boundary.
     const exitStatus = output.match(/"LastExitStatus"\s*=\s*(-?\d+)/u);
-    if (exitStatus && Number(exitStatus[1]) !== 0) fail('scheduler_activation_failed');
+    const hasPid = /"PID"\s*=\s*\d+/u.test(output);
+    // launchd retains LastExitStatus from the preceding invocation while the
+    // newly started one is already alive.  A live PID is current evidence and
+    // must win over that stale status; otherwise activation kills a healthy
+    // durable worker between stage completions.
+    if (!hasPid && exitStatus && Number(exitStatus[1]) !== 0) fail('scheduler_activation_failed');
     if (state.status === 0) return Object.freeze({
       registered: true,
-      pid: /"PID"\s*=\s*\d+/u.test(output),
+      pid: hasPid,
       lastExitStatus: exitStatus ? Number(exitStatus[1]) : null,
     });
     if (elapsed < maximumSeconds) await waitOneSecond();
