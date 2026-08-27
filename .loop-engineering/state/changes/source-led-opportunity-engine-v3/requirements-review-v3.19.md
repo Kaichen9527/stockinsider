@@ -1,9 +1,9 @@
-# V3.19 fresh Requirements review — activation heartbeat closure
+# V3.19 fresh Requirements review — doctor identity closure
 
 Date: 2026-08-27
 
 Review authority: independent, read-only Requirements review of the immutable
-V3.19 activation-heartbeat repair candidate. No runtime, database, Vercel or source
+V3.19 doctor-identity repair candidate. No runtime, database, Vercel or source
 operation was performed as part of this review.
 
 Result: `PASS`
@@ -12,13 +12,23 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `5d91a48a18ee932cc9b18eaa8868ac19f50a8f6c`
-- Original candidate commit/tree: `08ede5bfcb1dcd578aea41c34e83bdc15d1aed31` / `b2280e9a847cb83a1ede8d48f714742a41868bf2`
-- Final repair-closure commit/tree: `08ede5bfcb1dcd578aea41c34e83bdc15d1aed31` / `b2280e9a847cb83a1ede8d48f714742a41868bf2`
-- Full reviewed range: `5d91a48a18ee932cc9b18eaa8868ac19f50a8f6c..08ede5bfcb1dcd578aea41c34e83bdc15d1aed31`
+- Protected implementation parent: `d3598ca881f83e9cfd0410bf644b3bf4d944cb26`
+- Original candidate commit/tree: `c58b7ce2275700269bd76561426a567a7fed32e5` / `c5ebbf5064f9605a602f7ee74d01f73e585cfa08`
+- Final repair-closure commit/tree: `c58b7ce2275700269bd76561426a567a7fed32e5` / `c5ebbf5064f9605a602f7ee74d01f73e585cfa08`
+- Full reviewed range: `d3598ca881f83e9cfd0410bf644b3bf4d944cb26..c58b7ce2275700269bd76561426a567a7fed32e5`
 - Active graph: `4baf35c1a17cc7c7cd451e71b29e34e9b83c90ee03ca18822fcf4f7f47b19a7b`
 
 ## Requirements closure
+
+The second reviewed production retry confirmed that the database observer
+returned both the active run lease and the exact reviewed producer commit, but
+the composed installer observation omitted `producerCommitSha`. The
+first-heartbeat contract therefore could not compare the observation to the
+reviewed release and timed out even though the worker was healthy. The repair
+adds one pure producer-heartbeat projection shared by the composed doctor
+observation. It carries the producer identity together with run/terminal and
+lease state, and its regression asserts the complete object. No fallback,
+wildcard identity or consumer-derived substitute is admitted.
 
 The reviewed production retry proved that lease acquisition now completes
 inside its heavyweight bound: the new run was durably created and heartbeated

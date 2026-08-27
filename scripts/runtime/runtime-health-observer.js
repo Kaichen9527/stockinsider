@@ -24,6 +24,16 @@ function effectiveLeaseStatus(run, leases, now = Date.now()) {
   return Date.parse(leaseExpiresAt) >= now ? 'active' : 'expired';
 }
 
+function producerHeartbeatObservation(database) {
+  return Object.freeze({
+    lastRunNonterminal: database.lastRunNonterminal,
+    lastTerminalRunAt: database.lastTerminalRunAt,
+    lastTerminalStatus: database.lastTerminalStatus,
+    leaseStatus: database.leaseStatus,
+    producerCommitSha: database.producerCommitSha,
+  });
+}
+
 function restCredentials(resolver){
   const supabaseUrl=resolver('keychain:stockinsider-runtime:supabase-url');
   const serviceRoleKey=resolver('keychain:stockinsider-runtime:supabase-service-role-key');
@@ -216,10 +226,7 @@ async function observeRuntimeHealth({ releaseRoot, runtimeRoot, manifest, review
       consumerCompatibility: consumerCommitSha === reviewedRelease.commitSha&&releaseCompatibility.compatible
         ? 'compatible':releaseCompatibility.reason,
       releaseCompatibility,
-      lastRunNonterminal: database.lastRunNonterminal,
-      lastTerminalRunAt: database.lastTerminalRunAt,
-      lastTerminalStatus: database.lastTerminalStatus,
-      leaseStatus: database.leaseStatus,
+      ...producerHeartbeatObservation(database),
       manifestCanonical: canonicalJson(installation) === canonicalJson(manifest),
       manifestPresent: true,
       runtimeManifestSha256,
@@ -241,5 +248,5 @@ async function observeRuntimeHealth({ releaseRoot, runtimeRoot, manifest, review
   };
 }
 
-module.exports = { effectiveLeaseStatus, observeConsumer, observeDatabase, observeRuntimeHealth,
-  publishRuntimeHealthObservation };
+module.exports = { effectiveLeaseStatus, producerHeartbeatObservation, observeConsumer, observeDatabase,
+  observeRuntimeHealth, publishRuntimeHealthObservation };
