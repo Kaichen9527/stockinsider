@@ -1,9 +1,9 @@
-# V3.19 fresh Requirements review — doctor identity closure
+# V3.19 fresh Requirements review — readonly bootstrap closure
 
 Date: 2026-08-27
 
 Review authority: independent, read-only Requirements review of the immutable
-V3.19 doctor-identity repair candidate. No runtime, database, Vercel or source
+V3.19 readonly-bootstrap repair candidate. No runtime, database, Vercel or source
 operation was performed as part of this review.
 
 Result: `PASS`
@@ -12,13 +12,25 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `d3598ca881f83e9cfd0410bf644b3bf4d944cb26`
-- Original candidate commit/tree: `c58b7ce2275700269bd76561426a567a7fed32e5` / `c5ebbf5064f9605a602f7ee74d01f73e585cfa08`
-- Final repair-closure commit/tree: `c58b7ce2275700269bd76561426a567a7fed32e5` / `c5ebbf5064f9605a602f7ee74d01f73e585cfa08`
-- Full reviewed range: `d3598ca881f83e9cfd0410bf644b3bf4d944cb26..c58b7ce2275700269bd76561426a567a7fed32e5`
+- Protected implementation parent: `688ba7b2ab730407dc0c42a953d49a583925e6b5`
+- Original candidate commit/tree: `e82cb6ddbaab7ada092678181715a58b4ff682b7` / `b5b7dc992c4162e17bbf4cb7634b90af70521223`
+- Final repair-closure commit/tree: `e82cb6ddbaab7ada092678181715a58b4ff682b7` / `b5b7dc992c4162e17bbf4cb7634b90af70521223`
+- Full reviewed range: `688ba7b2ab730407dc0c42a953d49a583925e6b5..e82cb6ddbaab7ada092678181715a58b4ff682b7`
 - Active graph: `4baf35c1a17cc7c7cd451e71b29e34e9b83c90ee03ca18822fcf4f7f47b19a7b`
 
 ## Requirements closure
+
+The production activation sequence exposed a circular rollout dependency: the
+reviewed runtime and manifest must exist before the matching Web build can be
+deployed, while activation previously required that already-deployed Web to
+identify as the new runtime commit. The repair admits a known, well-formed
+predecessor consumer only as `activated_readonly_bootstrap`. It still requires
+a valid projection checksum and fresh-or-stale projection, requires the
+consumer/producer incompatibility to remain explicit, and accepts no health
+reason outside the closed readonly set. A missing or malformed consumer
+identity still fails activation. The state remains action-disabled until the
+matching reviewed Web is deployed; this closes ordering deadlock without
+granting recommendation authority to an incompatible consumer.
 
 The second reviewed production retry confirmed that the database observer
 returned both the active run lease and the exact reviewed producer commit, but
@@ -117,7 +129,7 @@ V3 Promotion or public mutating endpoint is introduced.
 
 ## Executable evidence examined
 
-- Product/runtime correctness baseline: `133/133` PASS, including all `PCR-001` through
+- Product/runtime correctness baseline: `134/134` PASS, including all `PCR-001` through
   `PCR-031`; zero failed, skipped or todo.
 - Focused activation/REST-doctor regression: `25/25` PASS, including active,
   expired, terminal, job-owned and multiple-lease cases.
