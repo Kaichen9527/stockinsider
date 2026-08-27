@@ -1,4 +1,4 @@
-# V3.19 independent Architecture review — release reconciliation
+# V3.19 independent Architecture review — heavyweight lease acquisition repair
 
 Date: 2026-08-27
 
@@ -12,12 +12,24 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Implementation repair commit/tree: `b96724c70b3c9fd80fc66ac2f877aaecbdc19c4c` / `9940136130f1f8d0664522bee4e3ff5cdf5fe726`
-- Final repair-closure commit/tree: `1c8c3a9653ae5bad932b8dd214e389ef55e49edb` / `4435e055fca5f8cc80e97b352c784801587d73e3`
-- Full reviewed implementation range: `a04b8e64422a5239482a7df490e01e01e03f9fea..1c8c3a9653ae5bad932b8dd214e389ef55e49edb`
+- Implementation repair commit/tree: `29ec3f71e8b99b9162123fe5ece987e9ccf81074` / `87e3b970051e89dab4edc15a5fd9d3af0ec35f9e`
+- Final repair-closure commit/tree: `85824e6bed832f42105e2351990ef553324cad00` / `f99c74811a07cd24c09ec236087b4bbd068d7b50`
+- Full reviewed implementation range: `931f5771ddb625bc65975643c5dbbee9c09f807a..85824e6bed832f42105e2351990ef553324cad00`
 - Active graph: `4baf35c1a17cc7c7cd451e71b29e34e9b83c90ee03ca18822fcf4f7f47b19a7b`
 
 ## Architecture closure
+
+The runtime adapter now separates ordinary RPC latency authority from the two
+heavyweight, idempotent orchestration RPCs. `acquire_legacy_producer_lease` and
+`claim_legacy_producer_job` each execute inside an explicit transaction with a
+1,200-second database statement timeout and the matching node-postgres
+client-side query timeout. Pool creation, connection establishment and every
+non-claim append/completion RPC retain their existing 15/20-second bounds. A
+transport-level reconnect can replay acquisition or claim once because the
+database owns their immutable occurrence/job identities; it still cannot replay
+an append whose committed result may have been lost with the response. This
+preserves lease safety while allowing the bounded frozen authority snapshot to
+finish on the production dataset.
 
 The V3.19 architecture makes the producer a durable state machine instead of
 making installation wait for producer completion. A runtime installer waits no
