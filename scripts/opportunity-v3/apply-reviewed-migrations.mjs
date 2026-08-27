@@ -43,6 +43,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260828_decision_revision_identity_dossier_v3_19_3.sql',
   'migrations/20260828_legacy_evaluation_schema_v3_19_6.sql',
   'migrations/20260828_reused_acquisition_lineage_v3_19_7.sql',
+  'migrations/20260828_candidate_retention_authority_v3_19_10.sql',
 ]);
 const V3192_PROJECTION_DOSSIER_MIGRATION =
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql';
@@ -232,6 +233,8 @@ async function applyReviewedMigrations(options) {
         AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
       ,'candidateLedgerRetention',to_regprocedure(
         'public.claim_legacy_producer_job_candidate_retention_base_v3_18(uuid,uuid,uuid,integer)') IS NOT NULL
+        AND to_regprocedure(
+          'public.claim_legacy_producer_job_candidate_authority_base_v3_19_10(uuid,uuid,uuid,integer)') IS NOT NULL
         AND has_function_privilege('service_role',
           'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)','EXECUTE')
         AND NOT has_function_privilege('service_role',
@@ -239,6 +242,19 @@ async function applyReviewedMigrations(options) {
         AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
           AND pg_get_functiondef(oid) LIKE '%candidateLedgerContract%'
           AND pg_get_functiondef(oid) LIKE '%sourceAvailable%'
+          FROM pg_proc WHERE oid=
+            'public.claim_legacy_producer_job_candidate_authority_base_v3_19_10(uuid,uuid,uuid,integer)'::regprocedure)
+        AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
+      ,'candidateRetentionAuthority',to_regprocedure(
+          'public.claim_legacy_producer_job_candidate_authority_base_v3_19_10(uuid,uuid,uuid,integer)') IS NOT NULL
+        AND has_function_privilege('service_role',
+          'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.claim_legacy_producer_job_candidate_authority_base_v3_19_10(uuid,uuid,uuid,integer)','EXECUTE')
+        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%candidateAuthorityContract%'
+          AND pg_get_functiondef(oid) LIKE '%legacy_candidate_discovery_ledger_v3_11%'
+          AND pg_get_functiondef(oid) LIKE '%candidate_retention_authority_conflict%'
           FROM pg_proc WHERE oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure)
         AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
       ,'releaseReconciliation',to_regclass('public.legacy_release_checkpoints_v3_19') IS NOT NULL

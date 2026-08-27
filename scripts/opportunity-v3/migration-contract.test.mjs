@@ -81,6 +81,9 @@ const evaluationSchemaCompatibilitySql = fs.readFileSync(evaluationSchemaCompati
 const reusedAcquisitionLineageMigrationPath = path.join(root,
   'migrations/20260828_reused_acquisition_lineage_v3_19_7.sql');
 const reusedAcquisitionLineageSql = fs.readFileSync(reusedAcquisitionLineageMigrationPath, 'utf8');
+const candidateRetentionAuthorityMigrationPath = path.join(root,
+  'migrations/20260828_candidate_retention_authority_v3_19_10.sql');
+const candidateRetentionAuthoritySql = fs.readFileSync(candidateRetentionAuthorityMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -183,6 +186,29 @@ test('V3.18 retains the immutable prior candidate ledger without widening the so
   assert.match(candidateRetentionSql,/REVOKE CREATE ON SCHEMA public FROM legacy_correctness_rpc_owner/u);
   const apply=fs.readFileSync(path.join(root,'scripts/opportunity-v3/apply-reviewed-migrations.mjs'),'utf8');
   assert.match(apply,/'candidateLedgerRetention'[\s\S]*claim_legacy_producer_job_candidate_retention_base_v3_18[\s\S]*candidateLedgerContract/u);
+});
+
+test('V3.19.10 restores retained candidate authority only from the exact prior immutable ledger',()=>{
+  assert.doesNotMatch(candidateRetentionAuthoritySql,
+    /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(candidateRetentionAuthoritySql,
+    /claim_legacy_producer_job_candidate_authority_base_v3_19_10/u);
+  assert.match(candidateRetentionAuthoritySql,
+    /prior[.]status='success' AND prior[.]source_cutoff<v_cutoff/u);
+  assert.match(candidateRetentionAuthoritySql,
+    /ledger[.]source_run_id=v_prior_run[\s\S]*ledger[.]stock_id::text=candidate[.]value->>'stockId'/u);
+  assert.match(candidateRetentionAuthoritySql,/candidate_retention_authority_missing/u);
+  assert.match(candidateRetentionAuthoritySql,/candidate_retention_authority_cardinality/u);
+  assert.match(candidateRetentionAuthoritySql,/candidate_retention_authority_conflict/u);
+  assert.match(candidateRetentionAuthoritySql,/'sourceKey',authority[.]source_key::text/u);
+  assert.match(candidateRetentionAuthoritySql,/'researchDisposition',authority[.]research_disposition::text/u);
+  assert.match(candidateRetentionAuthoritySql,/'seedMembership',authority[.]seed_membership::text/u);
+  assert.match(candidateRetentionAuthoritySql,/candidate-authority-v3[.]19[.]10/u);
+  assert.match(candidateRetentionAuthoritySql,
+    /REVOKE CREATE ON SCHEMA public FROM legacy_correctness_rpc_owner/u);
+  const apply=fs.readFileSync(path.join(root,'scripts/opportunity-v3/apply-reviewed-migrations.mjs'),'utf8');
+  assert.match(apply,/20260828_candidate_retention_authority_v3_19_10[.]sql/u);
+  assert.match(apply,/'candidateRetentionAuthority'[\s\S]*candidateAuthorityContract/u);
 });
 
 test('V3.16.15 restores immutable analysis payload reuse outside the lease handoff', () => {
