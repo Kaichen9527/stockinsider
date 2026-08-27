@@ -1,9 +1,9 @@
-# V3.19 fresh Requirements review — release reconciliation
+# V3.19 fresh Requirements review — heavyweight lease acquisition repair
 
 Date: 2026-08-27
 
 Review authority: independent, read-only Requirements review of the immutable
-V3.19 release-reconciliation candidate. No runtime, database, Vercel or source
+V3.19 lease-acquisition repair candidate. No runtime, database, Vercel or source
 operation was performed as part of this review.
 
 Result: `PASS`
@@ -12,13 +12,25 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Protected implementation parent: `a04b8e64422a5239482a7df490e01e01e03f9fea`
-- Original candidate commit/tree: `b96724c70b3c9fd80fc66ac2f877aaecbdc19c4c` / `9940136130f1f8d0664522bee4e3ff5cdf5fe726`
-- Final repair-closure commit/tree: `b96724c70b3c9fd80fc66ac2f877aaecbdc19c4c` / `9940136130f1f8d0664522bee4e3ff5cdf5fe726`
-- Full reviewed range: `a04b8e64422a5239482a7df490e01e01e03f9fea..b96724c70b3c9fd80fc66ac2f877aaecbdc19c4c`
+- Protected implementation parent: `931f5771ddb625bc65975643c5dbbee9c09f807a`
+- Original candidate commit/tree: `29ec3f71e8b99b9162123fe5ece987e9ccf81074` / `87e3b970051e89dab4edc15a5fd9d3af0ec35f9e`
+- Final repair-closure commit/tree: `29ec3f71e8b99b9162123fe5ece987e9ccf81074` / `87e3b970051e89dab4edc15a5fd9d3af0ec35f9e`
+- Full reviewed range: `931f5771ddb625bc65975643c5dbbee9c09f807a..29ec3f71e8b99b9162123fe5ece987e9ccf81074`
 - Active graph: `4baf35c1a17cc7c7cd451e71b29e34e9b83c90ee03ca18822fcf4f7f47b19a7b`
 
 ## Requirements closure
+
+The production forensic activation showed that lease acquisition materializes
+the same bounded frozen authority pages as job claim, but the PostgreSQL adapter
+sent acquisition through the ordinary 20-second query path. The database work
+was still bounded and idempotent, yet the client cancelled it before the
+reviewed 1,200-second transaction bound and the scheduler could never obtain a
+first job lease. The repair routes only lease acquisition and claim through the
+existing heavyweight transaction helper, explicitly sets both the local
+PostgreSQL statement timeout and the node-postgres query timeout to 1,200
+seconds, and keeps every other read/write RPC at 20 seconds. Transport replay
+remains limited to the acquisition/claim operations whose database identities
+are immutable and idempotent; append and completion writes are not replayed.
 
 V3.19 closes a release-integrity delta without reopening the completed V3.18
 gate. The amendment is present in the active artifact catalog and defines one
