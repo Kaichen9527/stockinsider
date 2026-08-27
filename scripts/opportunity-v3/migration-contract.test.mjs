@@ -75,6 +75,9 @@ const projectionDossierContractSql = fs.readFileSync(projectionDossierContractMi
 const decisionIdentityDossierMigrationPath = path.join(root,
   'migrations/20260828_decision_revision_identity_dossier_v3_19_3.sql');
 const decisionIdentityDossierSql = fs.readFileSync(decisionIdentityDossierMigrationPath, 'utf8');
+const evaluationSchemaCompatibilityMigrationPath = path.join(root,
+  'migrations/20260828_legacy_evaluation_schema_v3_19_6.sql');
+const evaluationSchemaCompatibilitySql = fs.readFileSync(evaluationSchemaCompatibilityMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -6651,6 +6654,15 @@ test('V3.19.3 reconstructs decision identity from the worker non-cyclic dossier 
   assert.match(decisionIdentityDossierSql,/\(\(v_item#>'\{bundle,json,researchDossier\}'\)-'dossierId'::text\)-'decisionRevisionId'::text/u);
   assert.match(decisionIdentityDossierSql,/decision_revision_identity_conflict/u);
   assert.match(decisionIdentityDossierSql,/REVOKE CREATE ON SCHEMA public FROM opportunity_v3_rpc_owner/u);
+});
+
+test('V3.19.6 keeps compact evaluation schema persistence closed and V3.19-compatible',()=>{
+  assert.doesNotMatch(evaluationSchemaCompatibilitySql,
+    /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(evaluationSchemaCompatibilitySql,/legacy_evaluation_schema_v314_check/u);
+  assert.match(evaluationSchemaCompatibilitySql,/legacy-radar-v3[.]19[.]0/u);
+  assert.match(evaluationSchemaCompatibilitySql,
+    /REVOKE CREATE ON SCHEMA public FROM opportunity_v3_rpc_owner/u);
 });
 
 test('V3.13 service role completes compact persistence and equal-time heartbeat disagreement fails closed',()=>{
