@@ -36,6 +36,7 @@ const migrationPaths = [
   'migrations/20260828_decision_revision_identity_dossier_v3_19_3.sql',
   'migrations/20260828_legacy_evaluation_schema_v3_19_6.sql',
   'migrations/20260828_reused_acquisition_lineage_v3_19_7.sql',
+  'migrations/20260828_candidate_retention_authority_v3_19_10.sql',
 ];
 const migrations = migrationPaths.map((relativePath) => {
   const bytes = fs.readFileSync(path.join(root, relativePath));
