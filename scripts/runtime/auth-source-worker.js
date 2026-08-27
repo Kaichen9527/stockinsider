@@ -6,8 +6,10 @@ const { validateAuthSourceDagConfig } = require('./source-run-config');
 const { safeFailureDiagnostic } = require('./safe-diagnostics');
 
 const TERMINAL = new Set(['succeeded', 'failed', 'cancelled', 'non_trading_occurrence']);
+const AUTHORITATIVE_COMPLETION = Symbol('authoritative_producer_completion');
 
-async function runWithLeaseHeartbeat({ adapter, lease, claim, ownerToken, leaseSeconds, handler, heartbeatIntervalMs }) {
+async function runWithLeaseHeartbeat({ adapter, lease, claim, ownerToken, leaseSeconds, handler, complete,
+  heartbeatIntervalMs }) {
   const interval = heartbeatIntervalMs ?? Math.max(1000, Math.floor(leaseSeconds * 1000 / 3));
   if (typeof adapter.beginLegacyProducerHeartbeat === 'function') {
     const startedAt = Date.now();
@@ -17,7 +19,12 @@ async function runWithLeaseHeartbeat({ adapter, lease, claim, ownerToken, leaseS
     let handlerError = null;
     let heartbeatResult = null;
     try {
-      output = await handler(Object.freeze({ ...claim, ownerToken }));
+      const handlerOutput = await handler(Object.freeze({ ...claim, ownerToken }));
+      if (typeof complete === 'function') {
+        const completion = await complete(handlerOutput);
+        invariant(completion && typeof completion.status === 'string', 'producer lease lost before completion');
+        output = Object.freeze({ [AUTHORITATIVE_COMPLETION]: true, completion });
+      } else output = handlerOutput;
     } catch (error) {
       handlerError = error;
     } finally {
@@ -25,8 +32,9 @@ async function runWithLeaseHeartbeat({ adapter, lease, claim, ownerToken, leaseS
       catch (error) { heartbeatResult = { state: 'error', pulses: 0, error }; }
     }
     const ranLongEnoughToRequirePulse = Date.now() - startedAt >= interval;
-    if (heartbeatResult?.state !== 'healthy' ||
-      (ranLongEnoughToRequirePulse && !(Number.isInteger(heartbeatResult.pulses) && heartbeatResult.pulses > 0))) {
+    const completionCommitted = output?.[AUTHORITATIVE_COMPLETION] === true;
+    if (!completionCommitted && (heartbeatResult?.state !== 'healthy' ||
+      (ranLongEnoughToRequirePulse && !(Number.isInteger(heartbeatResult.pulses) && heartbeatResult.pulses > 0)))) {
       const error = new Error('producer_lease_lost');
       error.code = 'producer_lease_lost';
       error.cause = handlerError ?? heartbeatResult?.error ?? null;
@@ -62,8 +70,20 @@ async function runWithLeaseHeartbeat({ adapter, lease, claim, ownerToken, leaseS
     }
   })();
   try {
-    const output = await handler(Object.freeze({ ...claim, ownerToken }));
+    const handlerOutput = await handler(Object.freeze({ ...claim, ownerToken }));
     if (leaseLost) {
+      const error = new Error('producer_lease_lost');
+      error.code = 'producer_lease_lost';
+      error.cause = heartbeatError;
+      throw error;
+    }
+    let output = handlerOutput;
+    if (typeof complete === 'function') {
+      const completion = await complete(handlerOutput);
+      invariant(completion && typeof completion.status === 'string', 'producer lease lost before completion');
+      output = Object.freeze({ [AUTHORITATIVE_COMPLETION]: true, completion });
+    }
+    if (leaseLost && output?.[AUTHORITATIVE_COMPLETION] !== true) {
       const error = new Error('producer_lease_lost');
       error.code = 'producer_lease_lost';
       error.cause = heartbeatError;
@@ -100,17 +120,25 @@ async function runDurableAuthSourceWorker({ configBytes, adapter, sourceCommitSh
     try {
       const handler = stageHandlers?.[claim.stage];
       invariant(typeof handler === 'function', `missing stage handler: ${claim.stage}`);
-      const output = await runWithLeaseHeartbeat({ adapter, lease, claim, ownerToken,
-        leaseSeconds: validated.config.leaseSeconds, handler, heartbeatIntervalMs });
-      let completion;
-      try {
-        completion = await adapter.completeLegacyProducerJob({ runId: lease.runId, jobId: claim.jobId, ownerToken,
-          resultCanonical: output.canonical, resultJson: output.json, resultHash: output.hash });
-      } catch (error) {
-        if (error && typeof error === 'object') error.failureOrigin = 'rpc_validation';
-        throw error;
-      }
-      invariant(completion && typeof completion.status === 'string', 'producer lease lost before completion');
+      const protectedCompletion = await runWithLeaseHeartbeat({ adapter, lease, claim, ownerToken,
+        leaseSeconds: validated.config.leaseSeconds, heartbeatIntervalMs,
+        handler,
+        complete: async (output) => {
+          let completion;
+          try {
+            completion = await adapter.completeLegacyProducerJob({ runId: lease.runId, jobId: claim.jobId, ownerToken,
+              resultCanonical: output.canonical, resultJson: output.json, resultHash: output.hash });
+          } catch (error) {
+            if (error && typeof error === 'object') error.failureOrigin = 'rpc_validation';
+            throw error;
+          }
+          // A non-null completion is the database's authoritative proof that the
+          // lease was valid when the result committed. The heartbeat controller
+          // may correctly observe a terminal row as no longer alive while it is
+          // stopping, so that final observation cannot override the commit.
+          return completion;
+        } });
+      const completion = protectedCompletion.completion;
       completedJobs += 1;
       invariant(completedJobs <= 12000, 'durable job conservation bound');
       if (TERMINAL.has(completion.status)) return Object.freeze({ ...completion, completedJobs });

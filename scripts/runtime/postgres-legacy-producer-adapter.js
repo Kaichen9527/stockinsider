@@ -12,6 +12,7 @@ const POOL_IDLE_TIMEOUT_MS = 30_000;
 // resumed from its immutable predecessor on a later reviewed run.
 const POOL_QUERY_TIMEOUT_MS = 20_000;
 const POOL_STATEMENT_TIMEOUT_MS = 20_000;
+const HEARTBEAT_STOP_TIMEOUT_MS = 2_000;
 
 // The official fact handler performs bounded but CPU-heavy parsing. A timer on the
 // main event loop cannot renew a lease while that parsing is synchronous, so the
@@ -78,7 +79,7 @@ const state = new Int32Array(workerData.stateBuffer);
 `;
 
 function beginThreadedPostgresHeartbeat({ connectionString, runId, jobId, ownerToken, leaseSeconds,
-  heartbeatIntervalMs, WorkerClass = Worker }) {
+  heartbeatIntervalMs, WorkerClass = Worker, stopTimeoutMs = HEARTBEAT_STOP_TIMEOUT_MS }) {
   const stateBuffer = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 2);
   const state = new Int32Array(stateBuffer);
   const worker = new WorkerClass(POSTGRES_HEARTBEAT_WORKER_SOURCE, { eval: true, workerData: {
@@ -90,7 +91,21 @@ function beginThreadedPostgresHeartbeat({ connectionString, runId, jobId, ownerT
   worker.on?.('exit', markWorkerError);
   return Object.freeze({
     stop: async () => {
-      if (!stopped) { stopped = true; await worker.terminate(); }
+      if (!stopped) {
+        stopped = true;
+        // A pooler connection can be inside native socket teardown when the
+        // stage finishes. Do not let Worker.terminate() hold the scheduler
+        // forever. Once stopping begins the thread no longer owns liveness, so
+        // unref it and bound the termination acknowledgement.
+        worker.unref?.();
+        let timeout = null;
+        const terminated = await Promise.race([
+          Promise.resolve(worker.terminate()).then(() => true, () => false),
+          new Promise((resolve) => { timeout = setTimeout(() => resolve(false), stopTimeoutMs); }),
+        ]);
+        if (timeout !== null) clearTimeout(timeout);
+        if (!terminated) Atomics.compareExchange(state, 0, 0, 2);
+      }
       const code = Atomics.load(state, 0);
       return Object.freeze({ state: code === 0 ? 'healthy' : code === 1 ? 'lost' : 'error',
         pulses: Atomics.load(state, 1) });
@@ -285,5 +300,5 @@ function createPostgresLegacyProducerAdapter({ connectionString }) {
   });
 }
 
-module.exports = { CLAIM_STATEMENT_TIMEOUT_MS, createPostgresLegacyProducerAdapter,
+module.exports = { CLAIM_STATEMENT_TIMEOUT_MS, HEARTBEAT_STOP_TIMEOUT_MS, createPostgresLegacyProducerAdapter,
   beginThreadedPostgresHeartbeat, claimWithBoundedStatementTimeout, POSTGRES_HEARTBEAT_WORKER_SOURCE };
