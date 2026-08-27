@@ -919,6 +919,40 @@ const checks = {
       ownerToken: '00000000-0000-4000-8000-000000000001' });
     assert.equal(lost.disposition, 'lease_lost'); assert.equal(failedAfterLoss, false);
 
+    let completionHeartbeatStopped = false;
+    let completionInvoked = false;
+    const completionProtected = await runtime('auth-source-worker.js').runDurableAuthSourceWorker({
+      configBytes: readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')),
+      adapter: {
+        acquireLegacyProducerLease: async () => ({ runId: 'completion-protected-run',
+          job: { jobId: 'completion-protected-job' }, disposition: 'created' }),
+        claimLegacyProducerJob: async () => ({ jobId: 'completion-protected-job',
+          stage: 'compact_radar_projection' }),
+        heartbeatLegacyProducerJob: async () => true,
+        beginLegacyProducerHeartbeat: async () => ({ stop: async () => {
+          completionHeartbeatStopped = true;
+          // A successful completion terminalizes the job before the controller
+          // stops, so a final heartbeat may correctly observe `false`.
+          return { state: 'lost', pulses: 1 };
+        } }),
+        completeLegacyProducerJob: async () => {
+          assert.equal(completionHeartbeatStopped, false,
+            'the lease heartbeat must remain active until the completion RPC commits');
+          completionInvoked = true;
+          return { status: 'succeeded' };
+        },
+        appendLegacyRuntimeFailureDiagnostic: async () => true,
+        failLegacyProducerJob: async () => { throw new Error('must not fail a committed completion'); },
+      },
+      sourceCommitSha: 'a'.repeat(40), workerBytes: Buffer.from('reviewed-worker'),
+      heartbeatIntervalMs: 10, ownerToken: '00000000-0000-4000-8000-000000000001',
+      stageHandlers: { compact_radar_projection: async () =>
+        runtime('codec.js').immutableBundle('projection', []) },
+    });
+    assert.equal(completionInvoked, true);
+    assert.equal(completionHeartbeatStopped, true);
+    assert.equal(completionProtected.status, 'succeeded');
+
     let completionDiagnostic=null;
     const completionRejected=await runtime('auth-source-worker.js').runDurableAuthSourceWorker({
       configBytes:readFileSync(path.join(root,'config/runtime/auth-source-dag.json')),
@@ -1021,6 +1055,22 @@ const checks = {
     await new Promise((resolve) => setTimeout(resolve, 0));
     assert.deepEqual(await failedController.stop(), { state: 'error', pulses: 0 },
       'an unexpected heartbeat worker exit cannot be misreported as a healthy prior pulse');
+    class HangingHeartbeatWorker extends EventEmitter {
+      constructor() { super(); this.wasUnreferenced = false; }
+      unref() { this.wasUnreferenced = true; }
+      terminate() { return new Promise(() => {}); }
+    }
+    const hangingWorker = new HangingHeartbeatWorker();
+    const boundedStopController = await threadedAdapter.beginThreadedPostgresHeartbeat({
+      connectionString: 'redacted-connection-reference', runId: 'run', jobId: 'job', ownerToken: 'owner',
+      leaseSeconds: 120, heartbeatIntervalMs: 40_000, stopTimeoutMs: 5,
+      WorkerClass: class { constructor() { return hangingWorker; } },
+    });
+    const boundedStopStartedAt = Date.now();
+    assert.deepEqual(await boundedStopController.stop(), { state: 'error', pulses: 0 });
+    assert.equal(hangingWorker.wasUnreferenced, true);
+    assert.ok(Date.now() - boundedStopStartedAt < 250,
+      'heartbeat worker termination must be bounded even while native socket teardown is stuck');
     const reconnectBuffer = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 6);
     const reconnectState = new Int32Array(reconnectBuffer);
     const mockPg = String.raw`
