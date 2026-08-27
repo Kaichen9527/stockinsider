@@ -969,6 +969,12 @@ const checks = {
       /acquireLegacyProducerLease:[\s\S]*?withTransientPoolReconnect\(\(activePool\) => claimWithBoundedStatementTimeout\(activePool,[\s\S]*?acquire_legacy_producer_lease_v3_11/u,
       'lease acquisition uses the same bounded heavyweight transaction path as claim instead of the ordinary 20-second RPC path');
     assert.match(readFileSync(path.join(root,'scripts/runtime/postgres-legacy-producer-adapter.js'),'utf8'),
+      /freezeLegacyProviderAcquisition:[\s\S]*?claimWithBoundedStatementTimeout\(pool,[\s\S]*?freeze_legacy_provider_acquisition_v3_16_21/u,
+      'the immutable multi-megabyte provider envelope uses the bounded heavyweight transaction budget');
+    assert.doesNotMatch(readFileSync(path.join(root,'scripts/runtime/postgres-legacy-producer-adapter.js'),'utf8'),
+      /freezeLegacyProviderAcquisition:[\s\S]*?withTransientPoolReconnect[\s\S]*?freeze_legacy_provider_acquisition_v3_16_21/u,
+      'provider-envelope persistence must not replay after an ambiguous transport result');
+    assert.match(readFileSync(path.join(root,'scripts/runtime/postgres-legacy-producer-adapter.js'),'utf8'),
       /const created = new Pool\([\s\S]*?created\.on\('error', \(\) => \{\}\);[\s\S]*?return created;/u,
       'an idle pooler transport error is contained by the reviewed pool so it cannot terminate a durable run before its lease reaches a terminal outcome');
 

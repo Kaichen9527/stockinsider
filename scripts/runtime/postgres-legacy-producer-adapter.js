@@ -6,7 +6,7 @@ const { Worker } = require('node:worker_threads');
 const CLAIM_STATEMENT_TIMEOUT_MS = 1_200_000;
 const POOL_CONNECTION_TIMEOUT_MS = 15_000;
 const POOL_IDLE_TIMEOUT_MS = 30_000;
-// Every non-claim RPC has to yield before the independently threaded heartbeat
+// Every ordinary RPC has to yield before the independently threaded heartbeat
 // exhausts its 120-second lease.  Writes are deliberately not replayed after a
 // reply-loss: a timeout is terminal/fail-closed, while the durable job can be
 // resumed from its immutable predecessor on a later reviewed run.
@@ -260,7 +260,14 @@ function createPostgresLegacyProducerAdapter({ connectionString }) {
       [input.provider,input.requestKey,input.sourceCutoff]))?.envelope ?? null,
     freezeLegacyProviderAcquisition: async (input) => {
       try {
-        return (await one(`select public.freeze_legacy_provider_acquisition_v3_16_21(
+        // The frozen official snapshot is a bounded, multi-megabyte immutable
+        // envelope.  Its unique provider/request/cutoff identity and conflict
+        // checks make the database write idempotent, but materialization can
+        // exceed the ordinary 20-second client timer.  Use the existing closed
+        // heavyweight transaction budget without transport replay: a lost
+        // response remains terminal and the durable successor run can safely
+        // read the committed envelope by its immutable key.
+        return (await claimWithBoundedStatementTimeout(pool, `select public.freeze_legacy_provider_acquisition_v3_16_21(
           $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15) as result`,
         [input.runId,input.jobId,input.ownerToken,input.provider,input.requestKey,input.stage,
           input.sourceCutoff,input.fetchedAt,input.responseSha256,input.responseBytes,
