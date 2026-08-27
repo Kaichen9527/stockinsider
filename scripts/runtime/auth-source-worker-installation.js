@@ -51,7 +51,11 @@ function assessActivationHealth(observation, reviewedRelease) {
   const health = assessTrackedRuntimeHealth(observation);
   if (health.status === 'pass') return Object.freeze({ disposition: 'activated', health });
   const reasons = health.reasons ?? [];
-  const readonlyBootstrap = observation.consumerCommitSha === reviewedRelease.commitSha
+  // Runtime must stage and produce its manifest before the matching Web build
+  // can be deployed. Admit a known, hash-shaped predecessor consumer only as
+  // action-disabled readonly bootstrap; compatibility remains an explicit
+  // health failure until Web is replaced by the reviewed release.
+  const readonlyBootstrap = SHA40.test(observation.consumerCommitSha ?? '')
     && SHA256.test(observation.projectionChecksum ?? '')
     && ['fresh', 'stale'].includes(observation.projectionFreshness)
     && reasons.includes('consumer_producer_incompatible')

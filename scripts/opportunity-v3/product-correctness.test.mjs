@@ -473,10 +473,17 @@ const checks = {
     assert.equal(readonlyBootstrap.disposition, 'activated_readonly_bootstrap');
     assert.deepEqual(readonlyCalls, ['health-observation']);
     readonlyDoctor.observation.consumerCommitSha = '0'.repeat(40);
-    const mismatchedConsumer = runtime('auth-source-worker-installation.js').assessActivationHealth;
-    assert.throws(() => mismatchedConsumer(runtime('runtime-health.js').buildInstalledRuntimeHealthObservation({
+    const assessBootstrap = runtime('auth-source-worker-installation.js').assessActivationHealth;
+    const predecessorBootstrap = assessBootstrap(runtime('runtime-health.js').buildInstalledRuntimeHealthObservation({
       manifest: { ...manifest, manifestSha256: '7'.repeat(64) }, reviewedRelease, doctor: readonlyDoctor,
-    }), reviewedRelease), { code: 'scheduler_activation_failed' });
+    }), reviewedRelease);
+    assert.equal(predecessorBootstrap.disposition,'activated_readonly_bootstrap',
+      'a known predecessor consumer cannot deadlock the manifest-first readonly rollout');
+    readonlyDoctor.observation.consumerCommitSha = null;
+    assert.throws(() => assessBootstrap(runtime('runtime-health.js').buildInstalledRuntimeHealthObservation({
+      manifest: { ...manifest, manifestSha256: '7'.repeat(64) }, reviewedRelease, doctor: readonlyDoctor,
+    }), reviewedRelease), { code: 'scheduler_activation_failed' },
+    'an unavailable or malformed consumer identity cannot enter readonly bootstrap');
   },
   'PCR-002': () => {
     const { manifest, reviewedRelease } = runtimeRelease(); const validate = runtime('auth-source-worker-installation.js').validateRuntimeInstallationManifest;
