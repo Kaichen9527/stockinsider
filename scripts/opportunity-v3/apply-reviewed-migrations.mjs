@@ -248,7 +248,7 @@ async function applyReviewedMigrations(options) {
         AND position('legacy_source_sync_cursors_v3_19' IN pg_get_functiondef(
           'public.read_legacy_discovery_authority_v3_11(uuid,text,text)'::regprocedure))>0
         AND position('v319_same_run_successor_conflict' IN pg_get_functiondef(
-          'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
+          'public.schedule_legacy_source_shard_successor_v3_19(uuid,uuid,uuid,text,integer,uuid)'::regprocedure))>0
         AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
       ,'decisionRevisionDossierProjection',position('researchDossier' IN pg_get_functiondef(
           'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
