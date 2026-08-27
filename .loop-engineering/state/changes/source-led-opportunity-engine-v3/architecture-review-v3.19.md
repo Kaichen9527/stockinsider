@@ -1,4 +1,4 @@
-# V3.19 independent Architecture review — activation heartbeat closure
+# V3.19 independent Architecture review — doctor identity closure
 
 Date: 2026-08-27
 
@@ -12,12 +12,21 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Implementation repair commit/tree: `08ede5bfcb1dcd578aea41c34e83bdc15d1aed31` / `b2280e9a847cb83a1ede8d48f714742a41868bf2`
-- Final repair-closure commit/tree: `0a1a35f780584e501bcda697e582d931a27caa16` / `3d8bbca14efb1cfb47656b262baeb40d32df6e7e`
-- Full reviewed implementation range: `5d91a48a18ee932cc9b18eaa8868ac19f50a8f6c..0a1a35f780584e501bcda697e582d931a27caa16`
+- Implementation repair commit/tree: `c58b7ce2275700269bd76561426a567a7fed32e5` / `c5ebbf5064f9605a602f7ee74d01f73e585cfa08`
+- Final repair-closure commit/tree: `ebd3502c2c6380d7f10893446c70719b1b34db1b` / `4f0ac3f768c3c5e1bfce391600b1bdb885a29d7f`
+- Full reviewed implementation range: `d3598ca881f83e9cfd0410bf644b3bf4d944cb26..ebd3502c2c6380d7f10893446c70719b1b34db1b`
 - Active graph: `4baf35c1a17cc7c7cd451e71b29e34e9b83c90ee03ca18822fcf4f7f47b19a7b`
 
 ## Architecture closure
+
+The composed runtime observation now has a single producer-heartbeat boundary.
+`producerHeartbeatObservation` carries the database-owned producer commit,
+run/terminal state and effective lease state into the installer doctor without
+recomputing identity from the consumer, manifest or projection. This makes
+`hasFirstHeartbeat` compare two explicit reviewed identities and closes the
+previous omission that made every production heartbeat unmatchable. The helper
+is pure and regression-tested, while the surrounding health overlay retains
+its independent manifest, consumer, scheduler, disk and projection checks.
 
 Activation health now models the two durable lease phases explicitly. Before a
 job claim is visible, the current running producer's bounded run lease is the
