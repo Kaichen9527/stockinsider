@@ -729,7 +729,7 @@ function executeTrack(subjectRoot, track, identity, attestation) {
         'scripts/model-runner-v3/model-runner-v3.test.js'], 'test:model-runner-v3');
       verify(executeClosedCandidate, modelNodeExecutable, ['scripts/run-node22.js', '--experimental-strip-types',
         'scripts/opportunity-v3/doctor.mjs', '--expect-mode', 'disabled', '--require-host-pin',
-        'model-runner-host-pins-v3.12'], 'disabled model runner doctor');
+        'model-runner-host-pins-v3.13'], 'disabled model runner doctor');
       const oracle = trustedHostModelOracle(subjectRoot, attestation, modelNodeExecutable);
       outputs.push(oracle);
       measured.push({ ...measuredResult(oracle, 'trusted protected-base exact-subject model oracle'), ownsPartitionCount: false });
