@@ -453,6 +453,11 @@ test('V319 activation accepts the bounded run lease before the first heavyweight
   const result=await observer.observeDatabase(root,{},resolver,undefined,fetchImpl);
   assert.equal(result.lastRunNonterminal,true);
   assert.equal(result.leaseStatus,'active');
+
+  assert.deepEqual(observer.producerHeartbeatObservation(result),{
+    lastRunNonterminal:true,lastTerminalRunAt:null,lastTerminalStatus:null,
+    leaseStatus:'active',producerCommitSha:'a'.repeat(40),
+  },'the installer doctor carries the reviewed producer identity into first-heartbeat matching');
 });
 
 test('V315 migration is additive, bounded, upgrade-safe, and binds authority to REST claim and completion',()=>{
