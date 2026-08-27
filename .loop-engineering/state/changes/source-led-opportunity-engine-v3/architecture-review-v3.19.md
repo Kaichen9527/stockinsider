@@ -1,4 +1,4 @@
-# V3.19 independent Architecture review — doctor identity closure
+# V3.19 independent Architecture review — readonly bootstrap closure
 
 Date: 2026-08-27
 
@@ -12,12 +12,23 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Implementation repair commit/tree: `c58b7ce2275700269bd76561426a567a7fed32e5` / `c5ebbf5064f9605a602f7ee74d01f73e585cfa08`
-- Final repair-closure commit/tree: `ebd3502c2c6380d7f10893446c70719b1b34db1b` / `4f0ac3f768c3c5e1bfce391600b1bdb885a29d7f`
-- Full reviewed implementation range: `d3598ca881f83e9cfd0410bf644b3bf4d944cb26..ebd3502c2c6380d7f10893446c70719b1b34db1b`
+- Implementation repair commit/tree: `e82cb6ddbaab7ada092678181715a58b4ff682b7` / `b5b7dc992c4162e17bbf4cb7634b90af70521223`
+- Final repair-closure commit/tree: `a40c3d9dd6e873aef7ed01a184802f8c70b68ef3` / `30b58cb2f6e4ddcb352fc1894675e7b519fc17e1`
+- Full reviewed implementation range: `688ba7b2ab730407dc0c42a953d49a583925e6b5..a40c3d9dd6e873aef7ed01a184802f8c70b68ef3`
 - Active graph: `4baf35c1a17cc7c7cd451e71b29e34e9b83c90ee03ca18822fcf4f7f47b19a7b`
 
 ## Architecture closure
+
+Release ordering now has an explicit, non-authoritative bridge state. Runtime
+and its manifest are staged first; a hash-shaped predecessor Web consumer may
+observe that runtime only through `activated_readonly_bootstrap`, with
+`consumer_producer_incompatible` retained as an action blocker. The bridge is
+available only when projection integrity and freshness are known and every
+other health reason is in the closed readonly set. Null or malformed consumer
+identity, checksum failure, scheduler failure, disk failure, manifest failure,
+or any unclassified reason still fails closed. Deploying the same reviewed Web
+identity removes the compatibility blocker and is the only path from this
+bridge to full runtime health.
 
 The composed runtime observation now has a single producer-heartbeat boundary.
 `producerHeartbeatObservation` carries the database-owned producer commit,
@@ -118,7 +129,7 @@ Promotion or public mutating endpoint is in the reviewed architecture.
 
 ## Executable evidence examined
 
-- Product/runtime correctness baseline: `133/133` PASS, including `PCR-001` through
+- Product/runtime correctness baseline: `134/134` PASS, including `PCR-001` through
   `PCR-031`; zero failed, skipped or todo.
 - Focused activation/REST-doctor regression: `25/25` PASS across run-lease and
   job-lease transitions.
