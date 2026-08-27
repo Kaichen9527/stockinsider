@@ -1248,36 +1248,53 @@ function legacyQualityMaterial(facts,researchScore=null) {
     :Number.isFinite(netIncome)&&Number.isFinite(value(dilutedRow))&&Number.isFinite(value(bookRow))
       &&value(dilutedRow)>0&&value(bookRow)>0&&[3,6,9,12].includes(periodMonth)
       ?netIncome/(value(dilutedRow)*value(bookRow))*(12/periodMonth):null;
-  const officialRevenueGrowth=Number(researchScore?.axes?.fundamental?.yoyGrowth);
+  const fundamentalAxis=researchScore?.axes?.fundamental;
+  const officialRevenueGrowth=fundamentalAxis?.trustworthy===true
+    ?Number(fundamentalAxis.yoyGrowth):Number.NaN;
   const usedRows = [roeRow,...(Number.isFinite(derivedRoe)
     ?[netIncomeRow,...(equityRow?[equityRow]:[dilutedRow,bookRow])]:[])];
   if (Number.isFinite(revenue) && revenue !== 0 && Number.isFinite(operating)) usedRows.push(revenueRow, operatingRow);
   if (Number.isFinite(netIncome) && netIncome !== 0 && Number.isFinite(ocf) && Number.isFinite(capex)) usedRows.push(netIncomeRow, ocfRow, capexRow);
   if (Number.isFinite(ebitda) && ebitda > 0 && Number.isFinite(debt)) usedRows.push(ebitdaRow, debtRow, ...(Number.isFinite(cash) ? [cashRow] : []));
   if (Number.isFinite(interest) && interest > 0 && Number.isFinite(operating)) usedRows.push(interestRow, operatingRow);
+  const supplementalEvidence=Number.isFinite(officialRevenueGrowth)?[{
+    sourceRef:fundamentalAxis?.sourceRef,
+    asOf:fundamentalAxis?.asOf,
+  }]:[];
   return { input: { roe:Number.isFinite(value(roeRow))?value(roeRow):derivedRoe,
     revenueGrowth:Number.isFinite(officialRevenueGrowth)?officialRevenueGrowth/100:null,
     operatingMargin: Number.isFinite(revenue) && revenue !== 0 && Number.isFinite(operating) ? operating / revenue : null,
     freeCashFlowConversion: Number.isFinite(netIncome) && netIncome !== 0 && Number.isFinite(ocf) && Number.isFinite(capex) ? (ocf - Math.abs(capex)) / Math.abs(netIncome) : null,
     netDebtToEbitda: Number.isFinite(ebitda) && ebitda > 0 && Number.isFinite(debt) ? (debt - (Number.isFinite(cash) ? cash : 0)) / ebitda : null,
     interestCoverage: Number.isFinite(interest) && interest > 0 && Number.isFinite(operating) ? operating / interest : null },
-  usedRows: [...new Set(usedRows.filter(Boolean))] };
+  usedRows: [...new Set(usedRows.filter(Boolean))], supplementalEvidence };
 }
 
 function legacyQualityInput(facts) {
   return legacyQualityMaterial(facts).input;
 }
 
-function legacyFundamentalNarrative(candidate, usedRows, quality, sourceCutoff, additionalEvidenceRefs=[]) {
+function legacyFundamentalNarrative(candidate, usedRows, quality, sourceCutoff, additionalEvidence=[]) {
   const score = Number.isFinite(quality.score) ? Math.round(quality.score) : null;
   invariant(usedRows.every((row) => typeof row[12] === 'string' && row[12].length > 0), 'quality fact evidence unavailable');
-  const directRefs = [...new Set([...usedRows.map((row) => row[12]),...additionalEvidenceRefs]
+  const supplemental=(Array.isArray(additionalEvidence)?additionalEvidence:[])
+    .filter((item)=>item&&typeof item==='object'
+      &&typeof item.sourceRef==='string'&&item.sourceRef.length>0
+      &&typeof item.asOf==='string'&&item.asOf.length>0)
+    .map((item)=>({sourceRef:item.sourceRef,asOf:canonicalUtc(item.asOf,'supplemental fundamental as-of')}));
+  invariant(supplemental.every((item)=>Date.parse(item.asOf)<=Date.parse(sourceCutoff)),
+    'fundamental evidence after cutoff');
+  const directRefs = [...new Set([...usedRows.map((row) => row[12]),...supplemental.map((item)=>item.sourceRef)]
     .filter((value) => typeof value === 'string' && value.length > 0))];
-  const qualityEvidence = usedRows.map((row) => [row[1], row[5], canonicalUtc(row[9], 'quality fact as-of'), row[12]]);
+  const qualityEvidence = [
+    ...usedRows.map((row) => [row[1], row[5], canonicalUtc(row[9], 'quality fact as-of'), row[12]]),
+    ...supplemental.map((item)=>['official_revenue_growth',null,item.asOf,item.sourceRef]),
+  ];
   const evidenceRefs = score === null ? [candidate.claimId].filter((value) => typeof value === 'string' && value.length > 0)
     : directRefs.length <= 8 ? directRefs : [`fundamental-input-set:${sha256(canonicalJson(qualityEvidence))}`];
   invariant(evidenceRefs.length > 0, 'legacy fundamental evidence unavailable');
-  const factAsOf = usedRows.map((row) => canonicalUtc(row[9], 'quality fact as-of'))
+  const factAsOf = [...usedRows.map((row) => canonicalUtc(row[9], 'quality fact as-of')),
+    ...supplemental.map((item)=>item.asOf)]
     .sort((left, right) => Date.parse(left) - Date.parse(right)).at(-1);
   const narrativeAsOf = score === null ? canonicalUtc(candidate.claimAsOf, 'candidate claim as-of') : factAsOf;
   invariant(typeof narrativeAsOf === 'string' && Date.parse(narrativeAsOf) <= Date.parse(sourceCutoff), 'fundamental evidence after cutoff');
@@ -1322,7 +1339,7 @@ function buildLegacyCandidateDecision({ candidate, facts, history, benchmark, so
   const qualityMaterial = legacyQualityMaterial(facts,researchScore);
   const quality = calculateFundamentalQualityAxes(qualityMaterial.input);
   const fundamental = legacyFundamentalNarrative(candidate, qualityMaterial.usedRows, quality, sourceCutoff,
-    [researchScore?.axes?.fundamental?.sourceRef].filter(Boolean));
+    qualityMaterial.supplementalEvidence);
   const plane = calculateAdjustedTechnicalPlane({ rows: history, asOf: sourceCutoff, benchmark });
   const biasHistory = selectBiasTechnicalHistory({ rows: history, asOf: sourceCutoff });
   const valuation = evaluateCandidateValuation({ stockId: candidate.stockId, subjectStockId: candidate.stockId,

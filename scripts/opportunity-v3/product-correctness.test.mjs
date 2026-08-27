@@ -1510,6 +1510,22 @@ test('public fundamental provenance remains bounded and fail-closed outside the 
     history: ohlcv(130), benchmark: ohlcv(130), sourceCutoff: '2030-01-01T00:00:00Z' });
   assert.deepEqual(factBacked.fundamental.evidenceRefs, ['official-roe']);
   assert.equal(factBacked.fundamental.asOf, '2026-06-01T00:00:00Z');
+  const revenueOnlyScore = { axes: { fundamental: { trustworthy: true, score: 76, yoyGrowth: 13.2,
+    asOf: '2026-07-01', sourceRef: 'twse-openapi:monthly-revenue:2026-07:2337' } } };
+  const revenueOnly = runtime('auth-source-worker-cli.js').buildLegacyCandidateDecision({ candidate,
+    facts: [], history: ohlcv(130), benchmark: ohlcv(130), sourceCutoff: '2030-01-01T00:00:00Z',
+    researchScore: revenueOnlyScore });
+  assert.deepEqual(revenueOnly.fundamental.evidenceRefs, ['twse-openapi:monthly-revenue:2026-07:2337']);
+  assert.equal(revenueOnly.fundamental.asOf, '2026-07-01T00:00:00Z');
+  assert.throws(() => runtime('auth-source-worker-cli.js').buildLegacyCandidateDecision({ candidate,
+    facts: [], history: ohlcv(130), benchmark: ohlcv(130), sourceCutoff: '2030-01-01T00:00:00Z',
+    researchScore: { axes: { fundamental: { ...revenueOnlyScore.axes.fundamental, asOf: '2031-01-01' } } } }),
+  /fundamental evidence after cutoff/u);
+  const untrustedRevenue = runtime('auth-source-worker-cli.js').buildLegacyCandidateDecision({ candidate,
+    facts: [], history: ohlcv(130), benchmark: ohlcv(130), sourceCutoff: '2030-01-01T00:00:00Z',
+    researchScore: { axes: { fundamental: { ...revenueOnlyScore.axes.fundamental, trustworthy: false } } } });
+  assert.deepEqual(untrustedRevenue.fundamental.evidenceRefs, ['claim-2337']);
+  assert.equal(untrustedRevenue.fundamental.asOf, '2026-06-01T00:00:00Z');
   const complete = [row('roe', .2, '2026-01-01T00:00:00Z', 'r1'), row('quarterly_revenue', 100, '2026-01-01T00:00:00Z', 'r2'),
     row('quarterly_operating_income', 20, '2026-01-01T00:00:00Z', 'r3'), row('quarterly_net_income', 10, '2026-01-01T00:00:00Z', 'r4'),
     row('operating_cash_flow', 20, '2026-01-01T00:00:00Z', 'r5'), row('capital_expenditure', 5, '2026-01-01T00:00:00Z', 'r6'),
