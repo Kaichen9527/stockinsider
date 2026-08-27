@@ -38,6 +38,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260817_projection_evaluation_supersession_v3_16_21.sql',
   'migrations/20260822_candidate_ledger_retention_v3_18.sql',
   'migrations/20260823_release_reconciliation_v3_19.sql',
+  'migrations/20260827_runtime_diagnostic_contract_v3_19_1.sql',
 ]);
 
 function parseArguments(argv) {
@@ -91,6 +92,11 @@ async function applyReviewedMigrations(options) {
       'decisionRevisions',to_regclass('public.legacy_decision_revisions_v3_13') IS NOT NULL,
       'candidateRead',to_regprocedure('public.read_legacy_candidate_fact_plane_v3_11(timestamptz,jsonb)') IS NOT NULL,
       'projectionSelect',to_regprocedure('public.select_opportunity_public_projection_v3(timestamptz)') IS NOT NULL
+      ,'runtimeDiagnosticContract',(SELECT position('projection_supersession_conflict' in
+        pg_get_constraintdef(constraint_row.oid))>0
+        FROM pg_constraint constraint_row
+        WHERE constraint_row.conrelid='public.legacy_runtime_failure_diagnostics_v3_14'::regclass
+          AND constraint_row.conname='legacy_runtime_failure_diagnostics_v3_14_invariant_code_check')
       ,'restClaim',to_regprocedure('public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)') IS NOT NULL
       ,'boundedChunkApply',to_regprocedure('public.append_legacy_official_ingestion_chunk_rest_v3_15(uuid,uuid,uuid,text,integer,jsonb,text,text,timestamptz)') IS NOT NULL
       ,'claimHandoff',to_regprocedure('public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)') IS NOT NULL
