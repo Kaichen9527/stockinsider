@@ -42,6 +42,24 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql',
   'migrations/20260828_decision_revision_identity_dossier_v3_19_3.sql',
 ]);
+const V3192_PROJECTION_DOSSIER_MIGRATION =
+  'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql';
+
+async function reviewedMigrationIsSuperseded(client, relativePath) {
+  if (relativePath !== V3192_PROJECTION_DOSSIER_MIGRATION) return false;
+  const result = await client.query(`SELECT CASE
+    WHEN to_regprocedure(
+      'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)') IS NULL
+      THEN false
+    ELSE position('jsonb_typeof(v_item#>''{bundle,json,researchDossier}'')' IN pg_get_functiondef(
+      'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
+      AND position('''dossierId''' IN pg_get_functiondef(
+      'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
+      AND position('decision_revision_identity_conflict' IN pg_get_functiondef(
+      'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
+    END AS superseded`);
+  return result.rows[0]?.superseded === true;
+}
 
 function parseArguments(argv) {
   const result = { apply:false,sourceCommit:null,attestationCommit:null };
@@ -84,10 +102,22 @@ async function applyReviewedMigrations(options) {
     application_name:'stockinsider-reviewed-v3-migration',statement_timeout:180000,query_timeout:180000});
   await client.connect();
   let locked=false;
+  const supersededMigrations=[];
   try {
     await client.query("SELECT pg_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0))");
     locked=true;
-    for(const migration of plan.migrations)await client.query(migration.bytes.toString('utf8'));
+    // Freeze successor detection before replaying any older migration. Earlier
+    // migrations can temporarily replace the authoritative function body and
+    // must not erase evidence that the stronger successor was already installed.
+    const v3192Superseded=await reviewedMigrationIsSuperseded(
+      client,V3192_PROJECTION_DOSSIER_MIGRATION);
+    for(const migration of plan.migrations) {
+      if(v3192Superseded && migration.relativePath===V3192_PROJECTION_DOSSIER_MIGRATION) {
+        supersededMigrations.push(migration.relativePath);
+        continue;
+      }
+      await client.query(migration.bytes.toString('utf8'));
+    }
     const verified=(await client.query(`SELECT jsonb_build_object(
       'v314Diagnostics',to_regclass('public.legacy_runtime_failure_diagnostics_v3_14') IS NOT NULL,
       'v314Chunks',to_regclass('public.legacy_official_ingestion_chunks_v3_14') IS NOT NULL,
@@ -218,7 +248,7 @@ async function applyReviewedMigrations(options) {
         AND position('legacy_source_sync_cursors_v3_19' IN pg_get_functiondef(
           'public.read_legacy_discovery_authority_v3_11(uuid,text,text)'::regprocedure))>0
         AND position('v319_same_run_successor_conflict' IN pg_get_functiondef(
-          'public.complete_legacy_producer_job_v3_11(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
+          'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
         AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
       ,'decisionRevisionDossierProjection',position('researchDossier' IN pg_get_functiondef(
           'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
@@ -235,7 +265,7 @@ async function applyReviewedMigrations(options) {
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',
       sourceCommit:options.sourceCommit,attestationCommit:options.attestationCommit,
       orderedChainSha256:plan.chainSha256,migrations:plan.migrations.map(({relativePath,sha256})=>[relativePath,sha256]),
-      verified});
+      supersededMigrations:Object.freeze(supersededMigrations),verified});
   } finally {
     if(locked)try{await client.query("SELECT pg_advisory_unlock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0))");}
       catch{/* session close releases the lock */}
@@ -249,4 +279,5 @@ if(import.meta.url===`file://${process.argv[1]}`) {
     .catch(()=>{process.stderr.write('reviewed V3 migration apply failed\n');process.exitCode=1;});
 }
 
-export { MIGRATIONS, applyReviewedMigrations, parseArguments, reviewedMigrationPlan };
+export { MIGRATIONS, applyReviewedMigrations, parseArguments, reviewedMigrationIsSuperseded,
+  reviewedMigrationPlan };

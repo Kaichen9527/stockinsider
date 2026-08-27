@@ -4,6 +4,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { readFileSync } from 'node:fs';
+import { reviewedMigrationIsSuperseded } from './apply-reviewed-migrations.mjs';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
 const require=createRequire(import.meta.url);
@@ -76,6 +77,23 @@ test('V3.19 release reconciliation migration is additive, private and in the rev
   assert.match(apply,/20260823_release_reconciliation_v3_19[.]sql/u);
   assert.match(apply,/20260827_runtime_diagnostic_contract_v3_19_1[.]sql/u);
   assert.match(apply,/'releaseReconciliation'[\s\S]*read_legacy_release_checkpoints_v3_19/u);
+  assert.match(apply,/'v319_same_run_successor_conflict'[\s\S]*complete_legacy_producer_job_authoritative_v3_19/u,
+    'the production postcondition must inspect the authoritative function that owns the guard');
+  assert.match(apply,/const v3192Superseded=await reviewedMigrationIsSuperseded\([\s\S]*for\(const migration of plan[.]migrations\)/u,
+    'successor authority must be frozen before older migrations can replace the inspected function');
+});
+
+test('V3.19.4 reviewed replay skips only V3.19.2 after the stronger V3.19.3 contract is installed',async()=>{
+  const queries=[];
+  const client={query:async(sql)=>{queries.push(sql);return {rows:[{superseded:true}]};}};
+  assert.equal(await reviewedMigrationIsSuperseded(client,
+    'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql'),true);
+  assert.equal(queries.length,1);
+  assert.match(queries[0],/jsonb_typeof\(v_item#>''\{bundle,json,researchDossier\}''\)/u);
+  assert.match(queries[0],/decision_revision_identity_conflict/u);
+  assert.equal(await reviewedMigrationIsSuperseded(client,
+    'migrations/20260827_runtime_diagnostic_contract_v3_19_1.sql'),false);
+  assert.equal(queries.length,1,'unrelated migrations cannot be skipped');
 });
 
 test('V3.19.1 runtime diagnostic contract preserves projection conflicts',()=>{
