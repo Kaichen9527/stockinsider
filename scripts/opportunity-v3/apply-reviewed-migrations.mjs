@@ -39,6 +39,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260822_candidate_ledger_retention_v3_18.sql',
   'migrations/20260823_release_reconciliation_v3_19.sql',
   'migrations/20260827_runtime_diagnostic_contract_v3_19_1.sql',
+  'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql',
 ]);
 
 function parseArguments(argv) {
@@ -218,6 +219,14 @@ async function applyReviewedMigrations(options) {
         AND position('v319_same_run_successor_conflict' IN pg_get_functiondef(
           'public.complete_legacy_producer_job_v3_11(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
         AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
+      ,'decisionRevisionDossierProjection',position('researchDossier' IN pg_get_functiondef(
+          'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
+        AND position('decision_revision_projection_mismatch' IN pg_get_functiondef(
+          'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
+        AND (SELECT pg_get_userbyid(proowner)='opportunity_v3_rpc_owner' AND prosecdef
+          FROM pg_proc WHERE oid=
+            'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure)
+        AND NOT has_schema_privilege('opportunity_v3_rpc_owner','public','CREATE')
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',

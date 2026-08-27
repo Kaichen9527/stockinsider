@@ -86,3 +86,17 @@ test('V3.19.1 runtime diagnostic contract preserves projection conflicts',()=>{
   assert.match(migration,/'projection_supersession_conflict'/u);
   assert.match(migration,/BEGIN;[\s\S]*COMMIT;/u);
 });
+
+test('V3.19.2 compares compact landing cards with full detail revisions without dropping dossiers',()=>{
+  const migration=readFileSync(path.join(root,
+    'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql'),'utf8');
+  const apply=readFileSync(path.join(root,'scripts/opportunity-v3/apply-reviewed-migrations.mjs'),'utf8');
+  assert.doesNotMatch(migration,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(migration,/complete_legacy_producer_job_authoritative_v3_19/u);
+  assert.match(migration,/\(value#>'\{bundle,json\}'\)-'researchDossier'/u);
+  assert.match(migration,/v_old_count<>1 OR v_new_count<>0/u);
+  assert.match(migration,/owner\.rolname='opportunity_v3_rpc_owner'/u);
+  assert.match(migration,/REVOKE CREATE ON SCHEMA public FROM opportunity_v3_rpc_owner/u);
+  assert.match(apply,/20260827_decision_revision_dossier_projection_v3_19_2[.]sql/u);
+  assert.match(apply,/'decisionRevisionDossierProjection'/u);
+});
