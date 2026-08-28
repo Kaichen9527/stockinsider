@@ -1,5 +1,30 @@
 # Gate Summary: source-led-opportunity-engine-v3
 
+## V3.19.16 production release closure — 2026-08-28
+
+- Exact source `04d02619c228f361e362a9f803151ad2081ae64d`, tree
+  `dccb0b789e576d4a0448c00d46a793903a48cad5`; exact review PASS with
+  `P0=0 P1=0 P2=0`; protected Code Gate PASS; PR #135 merged without bypass.
+- The reviewed additive migration was applied twice. Runtime manifest
+  `a5ac23873cc61a1b2a8db29ba9c5f9bd61177302316b58a30b35993e31e63f7d`
+  is active. Run 1 completed six jobs and Run 2 returned `retained_success` for
+  the same frozen authority hash. Strict doctor PASS: one scheduler owner,
+  zero competitors, zero stuck runs and fresh projection.
+- Both existing Vercel projects run the identical reviewed release in `hkg1`:
+  `stockinsider-three.vercel.app` uses deployment
+  `dpl_Bs9Mwi9jePjjKMRzKmuVWrTNNwUc`; `stockinsider-three-one.vercel.app`
+  uses `dpl_2fFHciSEGoHQreVoxuFCKGUNGAkn`.
+- Production smoke PASS: homepage and three Radar APIs return 200, internal
+  health is PASS, V3 remains the exact disabled 404, API/SSR expose the same
+  six unique stocks, all six have one readiness lane, and all revision-bound
+  details are navigable. Homepage is 241,332 bytes, daily JSON is 146,932
+  bytes, observed maximum warm p95 is 1,448 ms and five-route concurrency is
+  1,227 ms.
+- Safari desktop and 390x844 responsive checks PASS for landing lanes and a
+  same-revision research detail. This is `DONE_WITH_CONCERNS`: third-party
+  OAuth failures remain typed terminal outcomes and Promotion stays
+  `blocked/non_fabricated_elapsed_cohorts_unavailable`.
+
 ## V3.18 single fresh Requirements review — PASS
 
 The sole V3.18 fresh Requirements review examined immutable commit

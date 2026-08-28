@@ -1,0 +1,80 @@
+{
+  "schema": "stockinsider-release-state-v319-v1",
+  "release": "v3.19.16",
+  "phase": "closed",
+  "updatedAt": "2026-08-28T06:11:03Z",
+  "source": {
+    "reviewedCommit": "04d02619c228f361e362a9f803151ad2081ae64d",
+    "reviewedTree": "dccb0b789e576d4a0448c00d46a793903a48cad5",
+    "attestationCommit": "1e6f5e1ccdad9569a6676a547765fc666915ac2e",
+    "mainMergeCommit": "6aaa017618f15a0082efb2cafe8c08b32947be1c",
+    "activeGraphSha256": "4baf35c1a17cc7c7cd451e71b29e34e9b83c90ee03ca18822fcf4f7f47b19a7b"
+  },
+  "checkpoint": [
+    "workspace_ready",
+    "contract_passed",
+    "implementation_reviewed",
+    "runtime_staged",
+    "run1_terminal",
+    "web_deployed",
+    "run2_terminal",
+    "verified",
+    "closed"
+  ],
+  "runtime": {
+    "manifestSha256": "a5ac23873cc61a1b2a8db29ba9c5f9bd61177302316b58a30b35993e31e63f7d",
+    "workerSha256": "c5ad275b9eb3f6308e64a72c32eaa68fff18f3b84ec5b26219b42236c60e434e",
+    "configSha256": "1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2",
+    "rollbackCommit": "f92306873b977e0cb784ee6700507e9955807da1",
+    "run1": {
+      "runId": "ba74dea6-73e9-0678-2414-3c09354d9ace",
+      "status": "success",
+      "completedJobs": 6
+    },
+    "run2": {
+      "status": "retained_success",
+      "frozenAuthorityHash": "1268d19f947e7d3339a7224a5cbc4b85950707d2037ebc7e8b4bb872d5c89f98"
+    },
+    "doctor": {
+      "status": "pass",
+      "schedulerOwner": "com.stockinsider.auth-source-worker",
+      "competingOwners": 0,
+      "stuckRuns": 0,
+      "projectionFreshness": "fresh"
+    }
+  },
+  "deployments": [
+    {
+      "project": "stockinsider",
+      "deploymentId": "dpl_Bs9Mwi9jePjjKMRzKmuVWrTNNwUc",
+      "alias": "https://stockinsider-three.vercel.app",
+      "functionRegion": "hkg1",
+      "rollbackDeploymentId": "dpl_CxFxZUejaNH8EUhFrGFean3HpJM6"
+    },
+    {
+      "project": "stockinsider-three",
+      "deploymentId": "dpl_2fFHciSEGoHQreVoxuFCKGUNGAkn",
+      "alias": "https://stockinsider-three-one.vercel.app",
+      "functionRegion": "hkg1",
+      "rollbackDeploymentId": "dpl_CASeWs7kLT3LwMnK3X414pPJw8cT"
+    }
+  ],
+  "verification": {
+    "releaseIdentityCompatible": true,
+    "radarSchema": "legacy-radar-v3.19.0",
+    "apiUniqueStocks": 6,
+    "ssrUniqueStocks": 6,
+    "readinessConservation": "6/6",
+    "detailRevisionConsistency": "6/6_each_alias",
+    "homepageBytes": 241332,
+    "dailyBytes": 146932,
+    "warmP95MsMax": 1448,
+    "fiveRouteConcurrentMsMax": 1227,
+    "opportunityV3": "disabled_404",
+    "safari": "desktop_and_390x844_mobile_pass"
+  },
+  "concerns": [
+    "third_party_oauth_terminal_failures_may_remain_auth_failed",
+    "evaluation_governance_blocked/non_fabricated_elapsed_cohorts_unavailable"
+  ]
+}

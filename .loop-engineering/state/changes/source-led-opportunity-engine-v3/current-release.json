@@ -1,25 +1,30 @@
 {
   "schema": "stockinsider-current-release-v1",
-  "version": "v3.19",
-  "phase": "contract_frozen",
+  "version": "v3.19.16",
+  "phase": "complete_with_concerns",
   "source": {
-    "baseCommit": "3bacd58c86f01c469b7d634e0f6df036ae7152a2",
-    "exactCommit": null,
-    "exactTree": null,
-    "attestationCommit": null
+    "baseCommit": "91d283a0c412d25d8d483ccd6ecb9df74e11e9c7",
+    "exactCommit": "04d02619c228f361e362a9f803151ad2081ae64d",
+    "exactTree": "dccb0b789e576d4a0448c00d46a793903a48cad5",
+    "attestationCommit": "1e6f5e1ccdad9569a6676a547765fc666915ac2e",
+    "mainMergeCommit": "6aaa017618f15a0082efb2cafe8c08b32947be1c"
   },
   "gates": {
-    "requirements": "pending",
-    "architecture": "pending",
-    "exactReview": "pending",
-    "code": "pending",
-    "shadowActivation": "pending"
+    "requirements": "pass",
+    "architecture": "pass",
+    "exactReview": "pass",
+    "code": "pass",
+    "shadowActivation": "pass",
+    "promotion": "blocked"
   },
   "production": {
-    "migration": "release_reconciliation_v3_19_rehearsal_pending",
-    "runtime": "v3_18_forensic_activation_must_terminalize_before_v3_19_stage",
-    "web": "matching_v3_19_reviewed_release_pending",
-    "projection": "last_good_research_visible_v3_19_readiness_pending",
+    "migration": "v3_19_16_applied_twice_from_exact_reviewed_sql",
+    "runtime": "active_exact_reviewed_tree_two_terminal_invocations",
+    "runtimeManifestSha256": "a5ac23873cc61a1b2a8db29ba9c5f9bd61177302316b58a30b35993e31e63f7d",
+    "run1": "ba74dea6-73e9-0678-2414-3c09354d9ace/succeeded",
+    "run2": "retained_success/same_frozen_authority_hash",
+    "web": "dual_vercel_aliases_reviewed_prebuilt",
+    "projection": "legacy-radar-v3.19.0/fresh/nonzero_research",
     "promotion": "blocked/non_fabricated_elapsed_cohorts_unavailable"
   },
   "forbidden": {
@@ -30,11 +35,8 @@
     "v3Promotion": true
   },
   "actionQueue": [
-    "fresh_requirements_once",
-    "architecture_once",
-    "exact_review_and_code_gate",
-    "migration_runtime_two_terminal_runs",
-    "matching_vercel_deploy_and_smoke",
-    "safari_verification"
-  ]
+    "wait_for_real_cohorts"
+  ],
+  "closedAt": "2026-08-28T06:11:03Z",
+  "releaseCarrier": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/release-state-v3.19.16.json"
 }
