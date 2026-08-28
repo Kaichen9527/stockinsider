@@ -2426,6 +2426,10 @@ test('legacy producer resolves one scheduled occurrence and resumes the same det
   const sourceResult={schema:'legacy-source-sync-result-v3.11',sourceAcquisition:emptyAcquisition};
   const result = JSON.parse(psql(`
     BEGIN;
+    -- The resolver deliberately advances material cutoffs on whole-second
+    -- boundaries. Wait across that boundary so this fixture proves that the
+    -- newly installed V3.20 KOL authorities create one catch-up occurrence.
+    SELECT pg_sleep(2);
     CREATE TEMP TABLE legacy_lease_capture AS
       SELECT * FROM public.acquire_legacy_producer_lease_v3_11(
         'com.stockinsider.auth-source-worker',repeat('a',40),repeat('b',64),
