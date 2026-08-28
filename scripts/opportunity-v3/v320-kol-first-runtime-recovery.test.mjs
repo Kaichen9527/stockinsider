@@ -84,6 +84,22 @@ test('V3.20 records Telegram publication time only when the public message provi
     investanchors:'structured_claim_authorization_required',sourceClaims:'authorized_terminal_outcomes_required'});
 });
 
+test('V3.20 projection is a second KOL-first boundary: it strips legacy cards and rejects official-only source signals',()=>{
+  const projection=runtime('compact-radar-projection.js').publishCompactRadarProjection({
+    decisions:[],sourceCandidates:[
+      {...kolOutcome({symbol:'6419',sourceKey:'official_market_factor',authority:'official_market_factor'}),
+        sourceName:'Official market factor',sourceUrl:'https://example.test/official'},
+      kolOutcome({symbol:'2330'}),
+    ],discoveryDelta:{added:['6419','2330'],exited:[],continued:[],unchangedReasons:[]},
+    legacyPayload:{opportunities:[{symbol:'6419',sourceType:'official_market_factor'}],earlyWatchlist:[{symbol:'2605'}]},
+    freshnessSchedule:[{session_id:'2026-08-28',status:'completed'}],window:'daily',asOf:'2026-08-28T10:20:00Z',
+    producerIdentity:{commitSha:'a'.repeat(40)},schemaVersion:'legacy-radar-v3.20.0'});
+  assert.deepEqual(projection.payload.opportunities,[]);
+  assert.deepEqual(projection.payload.earlyWatchlist,[]);
+  assert.deepEqual(projection.payload.sourceSignals.map((row)=>row.symbol),['2330']);
+  assert.deepEqual(projection.payload.discoveryDelta.added,['2330']);
+});
+
 test('V3.20 bounds live and reused connector envelopes without refetching or losing item conservation',()=>{
   const acquisition=runtime('official-source-acquisition.js');
   const html=Array.from({length:20},(_,index)=>`<div data-post="example/${index+1}"><div class="tgme_widget_message_text">${index+1} 台股研究</div><time datetime="2026-08-28T${String(index%10).padStart(2,'0')}:00:00Z"></time></div>`).join('');

@@ -102,6 +102,9 @@ const v320SourceCompletionCardinalityRepairSql = fs.readFileSync(
 const v320KolSourceAuthoritySeedMigrationPath = path.join(root,
   'migrations/20260829_v320_kol_source_authority_seed.sql');
 const v320KolSourceAuthoritySeedSql = fs.readFileSync(v320KolSourceAuthoritySeedMigrationPath, 'utf8');
+const v320KolProjectionMarkerMigrationPath = path.join(root,
+  'migrations/20260829_v320_kol_projection_marker.sql');
+const v320KolProjectionMarkerSql = fs.readFileSync(v320KolProjectionMarkerMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -177,6 +180,11 @@ test('V3.20 widens only the KOL connector matrix and installs an exact-identity 
   assert.match(v320KolSourceAuthoritySeedSql,/aa07af55ed6f178ecf811bb6ca8081217a738dffb98b3746055669db0d145356/u);
   assert.match(v320KolSourceAuthoritySeedSql,/telegram:gooaye/u);
   assert.match(v320KolSourceAuthoritySeedSql,/investanchors:investanchors/u);
+  assert.doesNotMatch(v320KolProjectionMarkerSql,
+    /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(v320KolProjectionMarkerSql,/legacyRadarCompatibility/u);
+  assert.match(v320KolProjectionMarkerSql,/v320_kol_projection_marker_predecessor_conflict/u);
+  assert.match(v320KolProjectionMarkerSql,/claim_legacy_producer_job_authoritative_v3_13/u);
   const compactSourceDefinition=sourceDefinition.replace(/\s+/gu,' ');
   assert.match(compactSourceDefinition,
     /v_attempt_provider\+v_attempt_auth\+v_attempt_missing\+v_attempt_success<>\(CASE WHEN p_json#>>'\{sourceAcquisition,schema\}'='official-source-acquisition-v3[.]20' THEN 5 ELSE 3 END\)/u);
@@ -186,6 +194,10 @@ test('V3.20 widens only the KOL connector matrix and installs an exact-identity 
     'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure);`,['-At']);
   for(const required of ['claim_legacy_producer_job_pre_kol_authority_v3_20','structured_claim_authorized','rightsAttested'])
     assert.match(claimDefinition,new RegExp(required,'u'));
+  const compactInputDefinition=psql(`SELECT pg_get_functiondef(
+    'public.claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)'::regprocedure);`,['-At']);
+  assert.match(compactInputDefinition,/legacyRadarCompatibility/u,
+    'the KOL-first source-sync marker reaches compact_projection_input through the delegation chain');
   const reaped=psql(`BEGIN;
     INSERT INTO public.legacy_producer_runs_v3_11(
       run_id,owner_label,owner_token_hash,producer_commit_sha,worker_sha256,scheduler_config_canonical,
@@ -776,7 +788,8 @@ before(() => {
   }
   for (const migration of [candidateRetentionAuthorityMigrationPath,fullCandidateRetentionAuthorityMigrationPath,
     retainedCandidateJsonbCardinalityMigrationPath,finalClaimHandoffMigrationPath,v320RuntimeRecoveryMigrationPath,
-    v320SourceCompletionCardinalityRepairMigrationPath,v320KolSourceAuthoritySeedMigrationPath]) {
+    v320SourceCompletionCardinalityRepairMigrationPath,v320KolSourceAuthoritySeedMigrationPath,
+    v320KolProjectionMarkerMigrationPath]) {
     for (let application = 0; application < 2; application += 1) {
       command(pg.psql, ['-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
         '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', migration]);
