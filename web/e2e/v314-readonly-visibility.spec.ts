@@ -14,7 +14,7 @@ test('V3.14 V3.12 last-good compatibility preserves all 46 unique stocks and 30 
   await expect(page.getByTestId('research-only-detail-link')).toHaveCount(30);
   await expect(page.getByRole('link',{name:'查看決策摘要 →'})).toHaveCount(0);
   await page.getByTestId('research-only-detail-link').first().click();
-  await expect(page.getByTestId('research-only-detail')).toContainText('ACTION DISABLED');
+  await expect(page.getByTestId('research-only-detail')).toContainText('研究模式 · 買進動作已停用');
   await expect(page.getByTestId('research-only-blockers')).toContainText('舊研究快照缺少現行決策權威');
   await assertNoConsoleErrors();
 });

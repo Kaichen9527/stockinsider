@@ -1,5 +1,13 @@
 import Link from 'next/link';
-import { displayResearchDiagnostic } from '@/lib/opportunity-v3/research-display';
+import {
+  displayResearchDiagnostic,
+  displayResearchGate,
+  displayResearchGateStatus,
+  displayResearchReadiness,
+  displayTechnicalState,
+  displayValuationMethod,
+  displayValuationStatus,
+} from '@/lib/opportunity-v3/research-display';
 
 function finiteNumber(value: unknown): number | null {
   return typeof value === 'number' && Number.isFinite(value) ? value : null;
@@ -75,7 +83,7 @@ export default function ResearchOnlyDetail({ symbol, card, projectionBlockers = 
   return <main data-testid="research-only-detail" className="min-h-screen px-5 py-8 text-slate-950 dark:text-emerald-50 md:px-10">
     <section className="mx-auto max-w-[900px] rounded-[2rem] border border-sky-300/40 bg-sky-50 p-6 dark:bg-sky-950/30 md:p-8">
       <Link href="/" className="inline-flex min-h-11 items-center rounded-full border border-current px-4 text-sm">回到雷達首頁</Link>
-      <p className="mt-8 text-xs tracking-[0.2em] text-sky-700 dark:text-sky-300">RESEARCH-ONLY · ACTION DISABLED</p>
+      <p className="mt-8 text-xs tracking-[0.2em] text-sky-700 dark:text-sky-300">研究模式 · 買進動作已停用</p>
       <h1 className="mt-2 text-3xl font-semibold">{name ? `${name} ` : ''}{symbol}</h1>
       <p className="mt-3 text-base leading-7">{sourceSummary}</p>
       {revisionId ? <p data-testid="research-only-decision-revision" className="mt-2 break-all font-mono text-xs text-sky-800 dark:text-sky-200">決策版本：{revisionId}</p> : null}
@@ -95,7 +103,7 @@ export default function ResearchOnlyDetail({ symbol, card, projectionBlockers = 
         <div className="rounded-2xl border border-sky-300/35 bg-white/65 p-5 dark:bg-slate-950/35">
           <h2 className="text-sm font-semibold tracking-[0.12em]">估值與基本面</h2>
           <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
-            <div><dt className="text-slate-500">估值方法／狀態</dt><dd className="mt-1 font-semibold">{text(valuation?.method) ?? '待選擇'} / {text(valuation?.status) ?? '待官方資料'}</dd></div>
+            <div><dt className="text-slate-500">估值方法／狀態</dt><dd className="mt-1 font-semibold">{displayValuationMethod(valuation?.method)} / {displayValuationStatus(valuation?.status)}</dd></div>
             <div><dt className="text-slate-500">Bear／Base／Bull</dt><dd className="mt-1 font-semibold">{finiteNumber(formalRange?.bear)?.toFixed(2) ?? '—'} / {finiteNumber(formalRange?.base)?.toFixed(2) ?? '—'} / {finiteNumber(formalRange?.bull)?.toFixed(2) ?? '—'}</dd></div>
             <div><dt className="text-slate-500">PE／歷史／同業</dt><dd className="mt-1 font-semibold">{finiteNumber(relative?.current ?? valuation?.currentPe)?.toFixed(2) ?? '待官方資料'} / {finiteNumber(relative?.ownHistoryMedian ?? valuation?.historyPeMedian)?.toFixed(2) ?? '—'} / {finiteNumber(relative?.sector ?? valuation?.sectorPe)?.toFixed(2) ?? '—'}</dd></div>
             <div><dt className="text-slate-500">營收年增</dt><dd className="mt-1 font-semibold">{finiteNumber(fundamental?.revenueYoy) == null ? '待補' : `${finiteNumber(fundamental?.revenueYoy)?.toFixed(1)}%`}</dd></div>
@@ -107,8 +115,8 @@ export default function ResearchOnlyDetail({ symbol, card, projectionBlockers = 
         <div className="rounded-2xl border border-sky-300/35 bg-white/65 p-5 dark:bg-slate-950/35">
           <h2 className="text-sm font-semibold tracking-[0.12em]">技術狀態與下一步</h2>
           <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
-            <div><dt className="text-slate-500">技術狀態</dt><dd className="mt-1 font-semibold">{text(technical?.state) ?? '待補'}</dd></div>
-            <div><dt className="text-slate-500">下一步</dt><dd className="mt-1 font-semibold">{text((dossier?.ranking as Record<string,unknown>|null)?.readiness) ?? text(nextStep?.kind) ?? 'data_needed'}</dd></div>
+            <div><dt className="text-slate-500">技術狀態</dt><dd className="mt-1 font-semibold">{displayTechnicalState(technical?.state)}</dd></div>
+            <div><dt className="text-slate-500">下一步</dt><dd className="mt-1 font-semibold">{displayResearchReadiness((dossier?.ranking as Record<string,unknown>|null)?.readiness ?? nextStep?.kind)}</dd></div>
             <div><dt className="text-slate-500">BIAS 20 / 60 / 120</dt><dd className="mt-1 font-semibold">{finiteNumber(technical?.bias20Pct)?.toFixed(1) ?? '—'} / {finiteNumber(technical?.bias60Pct)?.toFixed(1) ?? '—'} / {finiteNumber(technical?.bias120Pct)?.toFixed(1) ?? '—'}%</dd></div>
             <div><dt className="text-slate-500">RSI / MACD / ATR</dt><dd className="mt-1 font-semibold">{finiteNumber(technical?.rsi14)?.toFixed(1) ?? '—'} / {finiteNumber(technical?.macd)?.toFixed(2) ?? '—'} / {finiteNumber(technical?.atr)?.toFixed(2) ?? '—'}</dd></div>
             <div><dt className="text-slate-500">觸發價</dt><dd className="mt-1 font-semibold">{finiteNumber(technical?.trigger ?? (nextStep?.trigger as Record<string,unknown>|null)?.threshold)?.toFixed(2) ?? '待條件'}</dd></div>
@@ -118,9 +126,9 @@ export default function ResearchOnlyDetail({ symbol, card, projectionBlockers = 
         </div>
       </section>
       {waterfall.length>0?<section data-testid="research-gate-waterfall" className="mt-5 rounded-2xl border border-sky-300/35 bg-white/65 p-5 dark:bg-slate-950/35">
-        <h2 className="text-sm font-semibold tracking-[0.12em]">Gate waterfall</h2>
+        <h2 className="text-sm font-semibold tracking-[0.12em]">研究條件檢核</h2>
         <ol className="mt-4 grid gap-2 sm:grid-cols-2">
-          {waterfall.map((gate,index)=>{const status=text(gate.status,24) ?? 'missing';const reason=text(gate.reason,120) ?? 'data_required';return <li key={`${text(gate.gate,24) ?? index}-${reason}`} className="rounded-xl border border-line px-3 py-2 text-sm"><span className={status==='pass'?'font-semibold text-emerald-700 dark:text-emerald-300':'font-semibold text-amber-800 dark:text-amber-300'}>{text(gate.gate,24) ?? '研究條件'} · {status}</span><span className="mt-1 block text-xs text-slate-500 dark:text-emerald-100/60">{displayResearchDiagnostic(reason)}</span></li>;})}
+          {waterfall.map((gate,index)=>{const status=text(gate.status,24) ?? 'missing';const reason=text(gate.reason,120) ?? 'data_required';return <li key={`${text(gate.gate,24) ?? index}-${reason}`} className="rounded-xl border border-line px-3 py-2 text-sm"><span className={status==='pass'?'font-semibold text-emerald-700 dark:text-emerald-300':'font-semibold text-amber-800 dark:text-amber-300'}>{displayResearchGate(gate.gate)} · {displayResearchGateStatus(status)}</span><span className="mt-1 block text-xs text-slate-500 dark:text-emerald-100/60">{displayResearchDiagnostic(reason)}</span></li>;})}
         </ol>
       </section>:null}
       {sourceUrl ? <a className="mt-6 inline-flex min-h-11 items-center underline underline-offset-4" href={sourceUrl} target="_blank" rel="noreferrer">查看原始來源</a> : null}

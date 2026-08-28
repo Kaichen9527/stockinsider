@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import type { DiscoveredStockCard, RadarDailyPayload, RecommendationCard, SourceSignalCard, ThemeHeatCard } from '@/lib/types';
 import { validatePublishedDecisionCard } from '@/lib/opportunity-v3/decision-publication';
+import { displayResearchDiagnostic } from '@/lib/opportunity-v3/research-display';
 
 type Props = {
   radar: RadarDailyPayload;
@@ -1015,12 +1016,8 @@ function SourceSignalDiagnostics({ signal }: { signal: SourceSignalCard }) {
     't:reclaim':'技術面必須先收復','t:breakout_pending':'等待突破確認',
     't:breakout_confirmed':'量價與相對強度已確認突破','t:at_support':'接近 MA20 支撐與合理乖離',
     't:extended':'技術面過度延伸',
-  }[reason] ?? reason.replaceAll('_', ' '));
-  const explainRisk = (reason: string) => reason.startsWith('missing:')
-    ? `待補證據：${reason.slice(8).replaceAll(',', '、')}`
-    : ({ valuation_target_missing:'正式估值未完成，因此不顯示目標價；相對估值與條件式行動另行呈現',
-      reclaim_first:'必須先收復支撐再考慮進場',coverage_lt_70:'研究覆蓋率低於 70%' }[reason]
-      ?? reason.replaceAll('_', ' '));
+  }[reason] ?? '其他研究訊號待覆核');
+  const explainRisk = (reason: string) => displayResearchDiagnostic(reason);
   return (
     <article className="rounded-[1.25rem] border border-line bg-surface p-4">
       <div className="flex items-start justify-between gap-3">
