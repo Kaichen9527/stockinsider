@@ -175,6 +175,16 @@ async function boundedFetch(url, options, fetchImpl, maximumBytes=4_000_000,{all
 }
 
 const SOURCE_CONNECTORS = Object.freeze(['threads','podcast','youtube','telegram','investanchors']);
+// The persisted source plane is bounded per connector and per profile
+// (5 + 2 + 3 + 10 + 10 = 30). Keep collection within the same closed
+// contract rather than discovering overflow after freezing provider evidence.
+const MAX_DOCUMENTS_PER_CONNECTOR = Object.freeze({
+  threads: 5,
+  podcast: 2,
+  youtube: 3,
+  telegram: 10,
+  investanchors: 10,
+});
 
 function attempt(sourceKey,status,reasonCode,{kind='configuration',statusCode=null,responseBytes=0,itemCount=0,documentCount=0}={}) {
   invariant(SOURCE_CONNECTORS.includes(sourceKey)&&CONNECTOR_ATTEMPT.has(status),'connector attempt terminal');
@@ -212,7 +222,8 @@ function parseTelegramPublicPosts(html, minimumId = 0) {
     try { publishedAt=normalizedSourceInstant(dateMatch?.[1],{nullable:true}); } catch { publishedAt=null; }
     rows.push(Object.freeze({id,body,publishedAt}));
   }
-  return Object.freeze(rows.sort((left,right)=>left.id-right.id).slice(-20));
+  return Object.freeze(rows.sort((left,right)=>left.id-right.id)
+    .slice(-MAX_DOCUMENTS_PER_CONNECTOR.telegram));
 }
 
 function boundedStructuredClaim(claim, profile, collectedAt) {
@@ -246,7 +257,7 @@ async function podcast(profile,fetchImpl,collectedAt,resolveHost) {
   const feed=await boundedFetch(feedUrl,{headers:{Accept:'application/rss+xml, application/xml, text/xml'}},fetchImpl,8_000_000,
     {allowedOrigins:new Set([feedOrigin]),resolveHost});
   const episodes=parsePodcastFeed(feed.bytes.toString('utf8'),profile); const documents=[];
-  for(const episode of episodes.slice(0,3)) {
+  for(const episode of episodes.slice(0,MAX_DOCUMENTS_PER_CONNECTOR.podcast)) {
     if(!episode.transcriptUrl) continue;
     try {
       const transcriptUrl=allowedUrl(episode.transcriptUrl,transcriptOrigins);
@@ -262,7 +273,7 @@ async function podcast(profile,fetchImpl,collectedAt,resolveHost) {
         terminalDisposition:'rejected'}));
     }
   }
-  const itemRows=episodes.slice(0,3).map((episode)=>({sourceKey:'podcast',profileId:profile.id,
+  const itemRows=episodes.slice(0,MAX_DOCUMENTS_PER_CONNECTOR.podcast).map((episode)=>({sourceKey:'podcast',profileId:profile.id,
     stableId:String(episode.stableId),sourceUrl:approvedHttpsUrl(episode.sourceUrl),
     publishedAt:normalizedSourceInstant(episode.publishedAt,{nullable:true}),
     ...itemDisposition(documents.find((document)=>document.stableConnectorDocumentId===String(episode.stableId)))}));
@@ -280,7 +291,7 @@ async function youtube(profile,credentials,fetchImpl,collectedAt) {
   const channelJson=JSON.parse(channel.bytes.toString('utf8')); const uploads=channelJson.items?.[0]?.contentDetails?.relatedPlaylists?.uploads;
   if(!uploads) return {documents:[],items:[],attempt:attempt('youtube','successful_empty','youtube_channel_successful_empty',
     {kind:'http_response',statusCode:channel.statusCode,responseBytes:channel.responseBytes,itemCount:0,documentCount:0})};
-  const playlist=await boundedFetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${encodeURIComponent(uploads)}&maxResults=3&key=${encodeURIComponent(credentials.youtubeApiKey)}`,{headers:{Accept:'application/json'}},fetchImpl);
+  const playlist=await boundedFetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${encodeURIComponent(uploads)}&maxResults=${MAX_DOCUMENTS_PER_CONNECTOR.youtube}&key=${encodeURIComponent(credentials.youtubeApiKey)}`,{headers:{Accept:'application/json'}},fetchImpl);
   const videos=JSON.parse(playlist.bytes.toString('utf8')).items ?? [];
   if(!credentials.youtubeOauthToken) {
     const items=videos.filter((video)=>video?.snippet?.resourceId?.videoId)
@@ -351,7 +362,7 @@ async function threads(profile,roster,credentials,fetchImpl,collectedAt) {
     return Array.isArray(data)?data:[];
   }).filter((row)=>row?.id).map((row)=>[String(row.id),row])).values()];
   const approvedUsername=String(profile.threads).replace(/^@/u,'').toLowerCase();
-  const documents=rows.slice(0,10).filter((row)=>row?.id&&row?.text&&row?.permalink
+  const documents=rows.slice(0,MAX_DOCUMENTS_PER_CONNECTOR.threads).filter((row)=>row?.id&&row?.text&&row?.permalink
     &&String(row.username??'').replace(/^@/u,'').toLowerCase()===approvedUsername).map((row)=>documentRevision({
     sourceKey:'threads',profile,stableId:row.id,title:`Threads · ${profile.name}`,sourceUrl:approvedHttpsUrl(row.permalink,'threads.net'),
     publishedAt:row.timestamp,transcript:row.text,collectedAt}));
@@ -395,7 +406,8 @@ async function investanchors(profile,credentials,collectedAt) {
   // credential/authorization absence, rather than pretending that a paid
   // article was fetched or successfully parsed.
   if (!claims) return {documents:[],items:[],attempt:attempt('investanchors','auth_failed','investanchors_auth_missing')};
-  const documents=claims.map((claim)=>boundedStructuredClaim(claim,profile,collectedAt)).filter(Boolean).slice(0,20);
+  const documents=claims.map((claim)=>boundedStructuredClaim(claim,profile,collectedAt)).filter(Boolean)
+    .slice(0,MAX_DOCUMENTS_PER_CONNECTOR.investanchors);
   const items=documents.map((document)=>({sourceKey:'investanchors',profileId:profile.id,
     stableId:document.stableConnectorDocumentId,sourceUrl:document.canonicalUrlCandidate,publishedAt:document.publishedAt,
     ...itemDisposition(document)}));
@@ -447,4 +459,4 @@ async function acquireApprovedSources({roster,credentials={},fetchImpl=globalThi
 
 module.exports={ acquireApprovedSources,approvedHttpsUrl,documentRevision,normalizedSourceInstant,
   parsePodcastFeed,isPublicAddress,resolvePublicAddresses,CONNECTOR_ATTEMPT,TERMINAL,SOURCE_CONNECTORS,
-  boundedStructuredClaim,htmlText,parseTelegramPublicPosts };
+  MAX_DOCUMENTS_PER_CONNECTOR,boundedStructuredClaim,htmlText,parseTelegramPublicPosts };

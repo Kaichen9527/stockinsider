@@ -99,6 +99,9 @@ const v320SourceCompletionCardinalityRepairMigrationPath = path.join(root,
   'migrations/20260829_v320_source_completion_cardinality_repair.sql');
 const v320SourceCompletionCardinalityRepairSql = fs.readFileSync(
   v320SourceCompletionCardinalityRepairMigrationPath, 'utf8');
+const v320KolSourceAuthoritySeedMigrationPath = path.join(root,
+  'migrations/20260829_v320_kol_source_authority_seed.sql');
+const v320KolSourceAuthoritySeedSql = fs.readFileSync(v320KolSourceAuthoritySeedMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -163,6 +166,17 @@ test('V3.20 widens only the KOL connector matrix and installs an exact-identity 
     /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
   assert.match(v320SourceCompletionCardinalityRepairSql,/v320_source_completion_cardinality_predecessor_conflict/u);
   assert.match(v320SourceCompletionCardinalityRepairSql,/official-source-acquisition-v3[.]20/u);
+  assert.doesNotMatch(v320KolSourceAuthoritySeedSql,
+    /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(v320KolSourceAuthoritySeedSql,/SECURITY DEFINER\s+SET search_path=''/u);
+  assert.match(v320KolSourceAuthoritySeedSql,
+    /REVOKE ALL ON FUNCTION public[.]seed_v320_kol_source_authorities\(\) FROM PUBLIC/u);
+  assert.match(v320KolSourceAuthoritySeedSql,/stockinsider_runtime_v319/u);
+  assert.match(v320KolSourceAuthoritySeedSql,/v320_kol_source_authority_identity_conflict/u);
+  assert.match(v320KolSourceAuthoritySeedSql,/v320_kol_source_reviewer_binding_postcondition_failed/u);
+  assert.match(v320KolSourceAuthoritySeedSql,/aa07af55ed6f178ecf811bb6ca8081217a738dffb98b3746055669db0d145356/u);
+  assert.match(v320KolSourceAuthoritySeedSql,/telegram:gooaye/u);
+  assert.match(v320KolSourceAuthoritySeedSql,/investanchors:investanchors/u);
   const compactSourceDefinition=sourceDefinition.replace(/\s+/gu,' ');
   assert.match(compactSourceDefinition,
     /v_attempt_provider\+v_attempt_auth\+v_attempt_missing\+v_attempt_success<>\(CASE WHEN p_json#>>'\{sourceAcquisition,schema\}'='official-source-acquisition-v3[.]20' THEN 5 ELSE 3 END\)/u);
@@ -551,7 +565,21 @@ before(() => {
     CREATE ROLE stockinsider_managed_migrator LOGIN NOSUPERUSER CREATEROLE BYPASSRLS;
     CREATE SCHEMA extensions;
     CREATE EXTENSION pgcrypto WITH SCHEMA extensions;
-    CREATE TABLE public.source_entities(id uuid PRIMARY KEY,source_key text,display_name text);
+    -- The production table carries its full source-profile shape. Keep
+    -- optional fields nullable in this focused legacy fixture because several
+    -- unrelated historical tests deliberately insert only an identity UUID.
+    CREATE TABLE public.source_entities(
+      id uuid PRIMARY KEY,
+      platform varchar(40),
+      entity_type varchar(40),
+      display_name varchar(255),
+      source_key varchar(255) UNIQUE,
+      profile_url text,
+      status varchar(20) NOT NULL DEFAULT 'active',
+      metadata jsonb NOT NULL DEFAULT '{}'::jsonb,
+      created_at timestamptz NOT NULL DEFAULT clock_timestamp(),
+      updated_at timestamptz NOT NULL DEFAULT clock_timestamp()
+    );
     CREATE TABLE public.stocks(id uuid PRIMARY KEY, symbol text);
     CREATE TABLE public.stock_signals(
       id uuid PRIMARY KEY DEFAULT extensions.gen_random_uuid(),
@@ -748,7 +776,7 @@ before(() => {
   }
   for (const migration of [candidateRetentionAuthorityMigrationPath,fullCandidateRetentionAuthorityMigrationPath,
     retainedCandidateJsonbCardinalityMigrationPath,finalClaimHandoffMigrationPath,v320RuntimeRecoveryMigrationPath,
-    v320SourceCompletionCardinalityRepairMigrationPath]) {
+    v320SourceCompletionCardinalityRepairMigrationPath,v320KolSourceAuthoritySeedMigrationPath]) {
     for (let application = 0; application < 2; application += 1) {
       command(pg.psql, ['-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
         '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', migration]);
@@ -1848,8 +1876,9 @@ test('V3.13 source acquisition persists seventeen terminals, citation, and typed
   assert.ok(mixedFailureAttempt);
   Object.assign(mixedFailureAttempt,{status:'provider_failed',reasonCode:'provider_transport_failed',
     responseEvidence:{kind:'transport_error',statusCode:null,responseBytes:0,itemCount:0,documentCount:0}});
-  assert.equal(acquisition.outcomes.length,17);assert.equal(acquisition.documents.length,6);
-  assert.equal(acquisition.documents.filter((document)=>document.terminalDisposition==='rejected').length,2);
+  assert.equal(acquisition.outcomes.length,17);assert.equal(acquisition.documents.length,4);
+  assert.equal(acquisition.documents.filter((document)=>document.terminalDisposition==='rejected').length,0,
+    'the V3.20 podcast bound retains the two newest publisher transcript records');
   const authorityPages=[
     ['roster',0,'a'.repeat(64),[['123e4567-e89b-42d3-a456-426614173330','2330','TWSE','common_stock','active','台灣積體電路製造股份有限公司','台積電']]],
     ['taxonomy',0,'b'.repeat(64),[['123e4567-e89b-42d3-a456-426614173330','2330','TWSE','semiconductor']]],
@@ -2148,7 +2177,7 @@ test('V3.13 source acquisition persists seventeen terminals, citation, and typed
   assert.deepEqual(appliedStable,{profileCount:17,terminalCount:17,newDocuments:2,
     citation:'https://creator.example/e/applied',transcriptReadyItems:4,metadataClaims:0,
     processingDocuments:2,processedNoClaim:1,processingClaims:4,processingEntities:4,linkedEntities:1,rejectedEntities:3,
-    repeatUnchanged:2,repeatDeferred:3,repeatRejected:2,repeatMixedTerminal:'provider_failed',repeatFrozenAuthorities:1,
+    repeatUnchanged:2,repeatDeferred:3,repeatRejected:0,repeatMixedTerminal:'provider_failed',repeatFrozenAuthorities:1,
     postCutoffGrantDeferred:2,mixedFailureTerminal:'provider_failed',runBoundAppendContexts:2,
     staleAppendRows:0,staleAppendAudits:0,v319CancelledBarrier:1,v319ReplacementShard:1});
   assert.match(v319ReentrantSuccessor,/^[0-9a-f-]{36}$/u);
@@ -2481,6 +2510,14 @@ test('legacy producer resolves one scheduled occurrence and resumes the same det
         'legacy-job:'||(SELECT run_id FROM legacy_lease_capture)::text||':0','utf8'),'sha256'),'hex') h) expected),
       'scheduledHour',(SELECT extract(hour FROM source_cutoff AT TIME ZONE 'Asia/Taipei') FROM legacy_lease_capture),
       'scheduledMinute',(SELECT extract(minute FROM source_cutoff AT TIME ZONE 'Asia/Taipei') FROM legacy_lease_capture),
+      'materialRefresh',(SELECT (SELECT source_cutoff FROM legacy_lease_capture)>=date_trunc('second',max(recorded_at))+interval '1 second'
+        FROM public.source_identity_authorities_v3
+        WHERE source_identity_id IN(
+          '712771ff-b763-5045-8f8c-dd6466d6e6c0'::uuid,
+          '09d40273-9595-5a1c-8a0c-ee1624745473'::uuid,
+          '8cddda0f-0143-5df3-98d0-31a525e765fa'::uuid,
+          'c6067995-32ee-5886-a56f-067eccac29e4'::uuid
+        )),
       'weekday',(SELECT extract(isodow FROM source_cutoff AT TIME ZONE 'Asia/Taipei') FROM legacy_lease_capture)
     )::text;
     ROLLBACK;
@@ -2496,8 +2533,10 @@ test('legacy producer resolves one scheduled occurrence and resumes the same det
     newRun: true, terminalFail: 'cancelled', terminalJob: 'cancelled', reaped: 1,
     reapedJob: 'retryable', jobDeterministic: true,
   });
-  assert.equal(Number(result.scheduledHour), 18); assert.equal(Number(result.scheduledMinute), 20);
-  assert.ok(Number(result.weekday) >= 1 && Number(result.weekday) <= 5);
+  assert.equal(result.materialRefresh,true,
+    'new V3.20 KOL authorities intentionally trigger one authenticated material-authority refresh');
+  assert.ok((Number(result.scheduledHour)===18 && Number(result.scheduledMinute)===20)||result.materialRefresh);
+  assert.ok(Number(result.weekday) >= 1 && Number(result.weekday) <= (result.materialRefresh ? 7 : 5));
 });
 
 test('legacy analysis completion persists a typed material-revision evaluation', () => {
@@ -2674,6 +2713,7 @@ test('V3.13 invalid completion is zero-write and analysis claims replay the exac
 test('legacy producer advances exactly once for newly recorded material authority outside the scheduled cutoff', () => {
   const result = JSON.parse(psql(`
     BEGIN;
+    SELECT pg_sleep(2);
     INSERT INTO public.stocks(id,symbol)
     VALUES('59000000-0000-4000-8000-000000000001','9998');
     INSERT INTO public.stock_instruments_v3(
@@ -2683,9 +2723,9 @@ test('legacy producer advances exactly once for newly recorded material authorit
     ) VALUES(
       '59000000-0000-4000-8000-000000000002',
       '59000000-0000-4000-8000-000000000001','9998','TWSE','common_stock','active',
-      'Material Refresh Fixture','MRF','twse',date_trunc('second',clock_timestamp())-interval '2 seconds',
+      'Material Refresh Fixture','MRF','twse',date_trunc('second',clock_timestamp())-interval '1 second',
       '2020-01-01T00:00:00Z',NULL,'tw-instrument-roster-v3.0',
-      date_trunc('second',clock_timestamp())-interval '2 seconds'
+      date_trunc('second',clock_timestamp())-interval '1 second'
     );
     WITH first AS MATERIALIZED (
       SELECT * FROM public.resolve_legacy_scheduled_occurrence_v3_11(
