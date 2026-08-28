@@ -1,5 +1,31 @@
 # Verification Results: source-led-opportunity-engine-v3
 
+## V3.19.16 authoritative production verification — 2026-08-28
+
+- Reviewed source/tree: `04d02619c228f361e362a9f803151ad2081ae64d` /
+  `dccb0b789e576d4a0448c00d46a793903a48cad5`; exact review and protected
+  Code Gate PASS with zero P0/P1/P2.
+- Migration apply-twice PASS without resetting or changing the existing
+  database password. Minimum runtime role remains limited to the reviewed nine
+  RPCs and has no direct table or schema-create authority.
+- Runtime Run 1: `ba74dea6-73e9-0678-2414-3c09354d9ace`, terminal success,
+  six completed jobs. Run 2: terminal `retained_success` with frozen authority
+  hash `1268d19f947e7d3339a7224a5cbc4b85950707d2037ebc7e8b4bb872d5c89f98`.
+  Strict doctor PASS after Run 2; consumer, producer, tree, manifest, migration
+  and projection identities agree; stuck runs are zero.
+- Dual Vercel production smoke PASS. Both aliases return nonzero SSR research,
+  matching API/DOM stock cardinality `6/6`, valid readiness conservation,
+  revision-consistent details, fresh health and exact disabled V3 404. Payload
+  and latency gates pass after aligning both projects to `hkg1`.
+- Safari operated directly on production: desktop landing showed the three
+  research lanes and six source cards; a card opened a traceable research-only
+  detail with the same revision, valuation blockers, fundamentals, technical
+  trigger/stop and citation. The 390x844 responsive view remained readable and
+  navigable.
+- No LINE, dispatch, automatic trading or Promotion was enabled. Evaluation
+  governance remains `blocked/non_fabricated_elapsed_cohorts_unavailable`; no
+  synthetic cohort was generated and no future-return PASS is claimed.
+
 Recorded at `2026-07-27T01:17:26+08:00` before exact implementation commit.
 
 Final gate refresh recorded at `2026-07-27T02:01:47+08:00` after exact-commit diff review PASS.
