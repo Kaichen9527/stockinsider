@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { DecisionEnvelopeV313 } from '@/lib/types';
 import { validatePublishedDecisionCard } from '@/lib/opportunity-v3/decision-publication';
+import { displayResearchDiagnostic } from '@/lib/opportunity-v3/research-display';
 
 const actionLabel: Record<DecisionEnvelopeV313['userAction'], string> = {
   buy: '可買進', accumulate: '可分批', research_starter: '研究型小量分批',
@@ -50,7 +51,8 @@ export default function RevisionBoundDecisionBrief({ symbol, envelope, card }: {
   const range=validated.envelope.valuationSummary.formalRange??validated.envelope.valuationSummary.relativeBand;
   const rangeText=range?('bear' in range?`${range.bear} / ${range.base} / ${range.bull}`
     :`${range.low} / ${range.base} / ${range.high}`):null;
-  const blockerText=envelope.blockers.length>0?envelope.blockers.join('、'):'valuation_unavailable';
+  const blockerText=envelope.blockers.length>0?envelope.blockers.map(displayResearchDiagnostic).join('、')
+    :displayResearchDiagnostic('valuation_unavailable');
   // The landing card is intentionally compact.  A V3.18 dossier is validated
   // with the same immutable revision as the envelope, so this detail page can
   // show the evidence behind a formal action without issuing a new analysis.
@@ -76,5 +78,5 @@ export default function RevisionBoundDecisionBrief({ symbol, envelope, card }: {
 
 export function RevisionBoundDecisionUnavailable({symbol,revisionId,reason}:{symbol:string;revisionId:string;reason:string}){
   const publishRevision=/^decision-v3[.](?:13|14):[0-9a-f]{64}$/u.test(revisionId);
-  return <main data-testid="detail-unavailable" className="min-h-screen px-5 py-8 text-slate-950 dark:text-emerald-50 md:px-10"><section className="mx-auto max-w-[760px] rounded-[2rem] border border-amber-300/40 bg-amber-50 p-6 dark:bg-amber-950/30"><Link href="/" className="inline-flex min-h-11 items-center rounded-full border border-current px-4 text-sm">回到雷達首頁</Link><h1 className="mt-8 text-2xl font-semibold">{symbol} 決策版本暫時無法顯示</h1><p className="mt-3">精確 revision 未取得完整且一致的決策摘要；本頁不回退到 legacy 資料，也不產生買進建議。</p><p className="mt-4 font-mono text-xs">{reason}{publishRevision?<><span aria-hidden="true"> · </span><span data-testid="detail-revision">{revisionId}</span></>:null}</p></section></main>;
+  return <main data-testid="detail-unavailable" className="min-h-screen px-5 py-8 text-slate-950 dark:text-emerald-50 md:px-10"><section className="mx-auto max-w-[760px] rounded-[2rem] border border-amber-300/40 bg-amber-50 p-6 dark:bg-amber-950/30"><Link href="/" className="inline-flex min-h-11 items-center rounded-full border border-current px-4 text-sm">回到雷達首頁</Link><h1 className="mt-8 text-2xl font-semibold">{symbol} 決策版本暫時無法顯示</h1><p className="mt-3">精確 revision 未取得完整且一致的決策摘要；本頁不回退到 legacy 資料，也不產生買進建議。</p><p className="mt-4 text-sm">{displayResearchDiagnostic(reason)}{publishRevision?<><span aria-hidden="true"> · </span><span data-testid="detail-revision" className="font-mono text-xs">{revisionId}</span></>:null}</p></section></main>;
 }

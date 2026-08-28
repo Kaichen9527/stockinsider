@@ -157,18 +157,19 @@ test('V3.13 Landing has three exclusive action sections and at most six collapse
   await expect(page.getByTestId('detail-citations').getByRole('link', { name: '授權來源 fixture' }))
     .toHaveAttribute('href', 'https://example.com/fixture');
   await page.goto(`/stock/9103?decisionRevisionId=${encodeURIComponent(`decision-v3.13:${'c'.repeat(64)}`)}`);
-  await expect(page.getByTestId('detail-valuation')).toHaveText('尚缺：diluted_shares、cash_debt');
+  await expect(page.getByTestId('detail-valuation')).toHaveText('尚缺：稀釋後加權股數待補、現金與負債資料待補');
   await expect(page.getByText('已反映')).toHaveCount(0);
   await page.goto('/stock/9101');
   await expect(page.getByTestId('detail-action')).toHaveText('research_starter');
   await page.goto('/stock/9199');
-  await expect(page.getByTestId('detail-unavailable')).toContainText('authoritative_decision_envelope_missing');
+  await expect(page.getByTestId('detail-unavailable')).toContainText('正式決策資料尚未建立');
+  await expect(page.getByTestId('detail-unavailable')).not.toContainText('authoritative_decision_envelope_missing');
   await expect(page.getByText(/可買進|可分批|研究型小量分批/u)).toHaveCount(0);
   await page.goto(`/stock/9105?decisionRevisionId=${encodeURIComponent(`decision-v3.13:${'e'.repeat(64)}`)}`);
-  await expect(page.getByTestId('detail-unavailable')).toContainText('projection_stale_readonly');
+  await expect(page.getByTestId('detail-unavailable')).toContainText('研究快照已過期，目前僅顯示上次結果');
   await expect(page.getByText(/可買進|可分批|研究型小量分批/u)).toHaveCount(0);
   await page.goto(`/stock/9104?decisionRevisionId=${encodeURIComponent(`decision-v3.13:${'d'.repeat(64)}`)}`);
-  await expect(page.getByTestId('detail-unavailable')).toContainText('revision_envelope_brief_or_provenance_invalid');
+  await expect(page.getByTestId('detail-unavailable')).toContainText('研究版本資料尚未完整同步');
   for (const suffix of [
     'bad&refresh=1',
     `decision-v3.13:${'A'.repeat(64)}&refresh=1`,
@@ -176,7 +177,7 @@ test('V3.13 Landing has three exclusive action sections and at most six collapse
     `decision-v3.13:${'a'.repeat(64)}&decisionRevisionId=decision-v3.13:${'b'.repeat(64)}&refresh=1`,
   ]) {
     await page.goto(`/stock/9101?decisionRevisionId=${suffix}`);
-    await expect(page.getByTestId('detail-unavailable')).toContainText('decision_revision_parameter_invalid_or_ambiguous');
+    await expect(page.getByTestId('detail-unavailable')).toContainText('研究版本參數無效或重複');
     await expect(page.getByText('深度分析準備中')).toHaveCount(0);
     await expect(page.getByTestId('detail-revision')).toHaveCount(0);
   }
@@ -184,7 +185,7 @@ test('V3.13 Landing has three exclusive action sections and at most six collapse
     `&decisionRevisionId=decision-v3.13:${'b'.repeat(64)}`;
   await page.goto(`/stock/9101/technical?${duplicateQuery}`);
   await expect(page.getByTestId('detail-unavailable'))
-    .toContainText('decision_revision_parameter_invalid_or_ambiguous');
+    .toContainText('研究版本參數無效或重複');
   for(const apiPath of ['deep-dive','insight']){
     const response=await page.request.get(`/api/stocks/9101/${apiPath}?${duplicateQuery}`);
     expect(response.status()).toBe(409);

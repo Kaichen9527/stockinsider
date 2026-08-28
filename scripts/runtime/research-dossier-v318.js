@@ -128,7 +128,8 @@ function buildResearchDossierV318({ candidate = {}, decision = {}, sourceCutoff 
       readiness:shortText(researchReadiness?.status,32),missingAxes:Object.freeze(uniqueStrings(ranking?.missingAxes,8))}),
     researchReadiness:researchReadiness&&typeof researchReadiness==='object'
       ?Object.freeze({version:shortText(researchReadiness.version,40),status:shortText(researchReadiness.status,32),
-        reason:shortText(researchReadiness.reason,160),blockers:Object.freeze(uniqueStrings(researchReadiness.blockers,12))}):null,
+        reason:shortText(researchReadiness.reason,160),blockers:Object.freeze(uniqueStrings(researchReadiness.blockers,12)),
+        rankingScore:finite(researchReadiness.rankingScore),coverage:finite(researchReadiness.coverage)}):null,
     citations:Object.freeze(citations),blockers:Object.freeze(blockers),
   };
   const readinessValue=researchReadiness?.status??readiness({envelope,ranking,technical});

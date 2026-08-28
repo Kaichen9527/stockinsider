@@ -29,7 +29,8 @@ test('stale V3.14 card preserves its exact revision link and reaches a typed rea
   await expect(link).toHaveAttribute('href',`/stock/9106?decisionRevisionId=${encodeURIComponent(revision)}`);
   await link.click();
   await expect(page.getByTestId('detail-revision')).toHaveText(revision);
-  await expect(page.getByTestId('detail-unavailable')).toContainText('projection_stale_readonly');
+  await expect(page.getByTestId('detail-unavailable')).toContainText('研究快照已過期，目前僅顯示上次結果');
+  await expect(page.getByTestId('detail-unavailable')).not.toContainText('projection_stale_readonly');
   await expect(page.getByTestId('decision-brief')).toHaveCount(0);
   await assertNoConsoleErrors();
 });

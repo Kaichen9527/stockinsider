@@ -64,7 +64,7 @@ test('V3.18 reserves the full bounded ledger for still-retained cards and types 
   assert.deepEqual(burst.discoveryDelta.exited,[],'only session expiry or integrity conflict may exit a retained card');
 });
 
-test('V3.18 dossier stays within one decision revision and makes missing data explicit instead of negative',async()=>{
+test('V3.19 dossier stays within one decision revision and keeps the full readiness contract',async()=>{
   const projection=runtime('compact-radar-projection.js');
   const publication=await import('../../web/src/lib/opportunity-v3/decision-publication.ts');
   const asOf='2026-08-20T10:20:00Z';
@@ -79,13 +79,17 @@ test('V3.18 dossier stays within one decision revision and makes missing data ex
     decisions:[],sourceCandidates:[candidate],
     discoveryDelta:{added:['2303'],exited:[],continued:[],unchangedReasons:[]},legacyPayload:{opportunities:[]},
     freshnessSchedule:[{session_id:'2026-08-20',status:'completed'}],window:'daily',asOf,
-    producerIdentity:{commitSha:'a'.repeat(40)},schemaVersion:'legacy-radar-v3.18.0',
+    producerIdentity:{commitSha:'a'.repeat(40)},schemaVersion:'legacy-radar-v3.19.0',
   });
   const card=published.payload.sourceSignals[0];
   const revisionCard=published.decisionRevisionCards[0];
   assert.equal('researchDossier' in card,false,'the landing payload remains compact');
   const dossier=revisionCard.researchDossier;
   assert.equal(dossier.decisionRevisionId,card.decisionRevisionId);
+  assert.deepEqual(dossier.researchReadiness,revisionCard.researchReadiness,
+    'the persisted dossier and landing readiness must keep the identical closed V3.19 contract');
+  assert.equal(dossier.researchReadiness.rankingScore,52);
+  assert.equal(dossier.researchReadiness.coverage,.35);
   assert.equal(dossier.ranking.readiness,'data_needed');
   assert.equal(dossier.valuation.formalRange,null);
   assert.equal(dossier.valuation.status,'valuation_review');
@@ -93,13 +97,13 @@ test('V3.18 dossier stays within one decision revision and makes missing data ex
   assert.equal(validated?.detailAvailability,'research_only');
   const response=publication.buildPublishedDecisionDetailResult(validated);
   assert.equal(response.statusCode,200);
-  assert.equal(response.body.schema,'stock-detail-v3.18.0');
+  assert.equal(response.body.schema,'stock-detail-v3.19.0');
   assert.equal(response.body.researchDossier.decisionRevisionId,card.decisionRevisionId);
   const changed=projection.publishCompactRadarProjection({
     decisions:[],sourceCandidates:[{...candidate,fundamental:{latestChange:'官方月營收較前期改善'}}],
     discoveryDelta:{added:['2303'],exited:[],continued:[],unchangedReasons:[]},legacyPayload:{opportunities:[]},
     freshnessSchedule:[{session_id:'2026-08-20',status:'completed'}],window:'daily',asOf,
-    producerIdentity:{commitSha:'a'.repeat(40)},schemaVersion:'legacy-radar-v3.18.0',
+    producerIdentity:{commitSha:'a'.repeat(40)},schemaVersion:'legacy-radar-v3.19.0',
   });
   assert.notEqual(changed.decisionRevisionCards[0].decisionRevisionId,revisionCard.decisionRevisionId,
     'detail-only material must create a new immutable decision revision');
