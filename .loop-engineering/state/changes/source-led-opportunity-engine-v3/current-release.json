@@ -1,25 +1,25 @@
 {
   "schema": "stockinsider-current-release-v1",
-  "version": "v3.19",
-  "phase": "contract_frozen",
+  "version": "v3.20",
+  "phase": "architecture_passed",
   "source": {
-    "baseCommit": "3bacd58c86f01c469b7d634e0f6df036ae7152a2",
+    "baseCommit": "6aaa017618f15a0082efb2cafe8c08b32947be1c",
     "exactCommit": null,
     "exactTree": null,
     "attestationCommit": null
   },
   "gates": {
-    "requirements": "pending",
-    "architecture": "pending",
+    "requirements": "pass",
+    "architecture": "pass",
     "exactReview": "pending",
     "code": "pending",
     "shadowActivation": "pending"
   },
   "production": {
-    "migration": "release_reconciliation_v3_19_rehearsal_pending",
-    "runtime": "v3_18_forensic_activation_must_terminalize_before_v3_19_stage",
-    "web": "matching_v3_19_reviewed_release_pending",
-    "projection": "last_good_research_visible_v3_19_readiness_pending",
+    "migration": "kol_first_runtime_recovery_v3_20_rehearsal_pending",
+    "runtime": "exact_reviewed_v3_20_runtime_stage_pending",
+    "web": "matching_v3_20_reviewed_release_pending",
+    "projection": "kol_first_projection_v3_20_pending",
     "promotion": "blocked/non_fabricated_elapsed_cohorts_unavailable"
   },
   "forbidden": {
@@ -30,11 +30,10 @@
     "v3Promotion": true
   },
   "actionQueue": [
-    "fresh_requirements_once",
-    "architecture_once",
     "exact_review_and_code_gate",
     "migration_runtime_two_terminal_runs",
     "matching_vercel_deploy_and_smoke",
-    "safari_verification"
+    "safari_verification",
+    "release_evidence_closure"
   ]
 }

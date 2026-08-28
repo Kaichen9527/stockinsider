@@ -459,7 +459,8 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
       'forbidden and superseded work can never re-enter the active queue');
     const marker=`## ${currentRelease.version.toUpperCase()} single release closure — only active action queue`;
     const start=tasksText.indexOf(marker);assert.ok(start>=0,'one current-release active action queue exists');
-    const active=tasksText.slice(start,tasksText.indexOf('## Architecture checkpoint',start));
+    const nextReleaseOrLedger=tasksText.indexOf('\n## ',start+marker.length);
+    const active=tasksText.slice(start,nextReleaseOrLedger<0?tasksText.length:nextReleaseOrLedger);
     assert.match(active,/\[x\] Mark every historical password\/credential rotation item/u);
     assert.match(active,/All older unchecked production, migration, gate, activation and credential items[\s\S]*superseded\/do_not_execute/u);
     if(currentRelease.phase==='implementation_in_progress'){
@@ -1304,7 +1305,7 @@ const structuralExecutors = {
     }
     assert.equal(inventory.scriptValueRows.length, 14);
     assert.equal(sha256(canonicalJson(inventory.scriptValueRows)), inventory.scriptValueRowsSha256);
-    assert.equal(inventory.scriptValueRowsSha256, 'd789006f32d46011d87b4dfbfa8ba6ee8c93bebd8f7f367676a4ed303e80b71b');
+    assert.equal(inventory.scriptValueRowsSha256, '55df7f271ac2f706c3d01685feffb76791dfeceb7045514b2042e081f970dbbe');
     const rootPackageScripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts;
     const webPackageScripts = JSON.parse(readFileSync(path.join(root, 'web/package.json'), 'utf8')).scripts;
     assert.deepEqual(inventory.scriptValueRows.map(([scriptKey]) => scriptKey), [
@@ -3310,7 +3311,7 @@ const suiteOwnerVariants = [
     'V3.13 official facts and 252-session peer authority reach a formal valuation without hidden inputs',
     'V3.13 FULL detail remains authoritative while LIGHT fills only genuinely missing leaves',
     'V3.13 projection freshness uses scheduled trading runs, not a 24-hour wall clock',
-    'V3.13 approved source acquisition conserves 17 terminal outcomes and only ingests creator transcripts',
+    'V3.20 approved source acquisition conserves the five-connector terminal matrix and only ingests analyzable source material',
     'V3.13 official statement parser requires reported diluted shares and never derives the 30.04 shortcut',
     'V3.13 official close and bounded raw OHLCV parsers retain exchange authority and reject bad geometry',
     'V3.13 entity linking rejects naked calendar years even when they are listed symbols',

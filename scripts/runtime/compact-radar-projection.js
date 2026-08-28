@@ -559,9 +559,9 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
   // The captured legacy payload is research input, never current release
   // authority. Only the tracked run's frozen lineage may enable actions.
   const publicAcquisitionHealth=sourceAcquisitionHealth??null;
-  const researchSnapshotEnabled=['legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0'].includes(schemaVersion);
-  const researchDossierEnabled=['legacy-radar-v3.18.0','legacy-radar-v3.19.0'].includes(schemaVersion);
-  const researchReadinessEnabled=schemaVersion==='legacy-radar-v3.19.0';
+  const researchSnapshotEnabled=['legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0','legacy-radar-v3.20.0'].includes(schemaVersion);
+  const researchDossierEnabled=['legacy-radar-v3.18.0','legacy-radar-v3.19.0','legacy-radar-v3.20.0'].includes(schemaVersion);
+  const researchReadinessEnabled=['legacy-radar-v3.19.0','legacy-radar-v3.20.0'].includes(schemaVersion);
   const layered = addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates, publicMarketAnalysis,
     {researchSnapshotEnabled,researchDossierEnabled,researchReadinessEnabled});
   const publishableSourceSignals=selectLandingSourceSignals(layered.sourceSignals.filter((card)=>{
@@ -602,13 +602,16 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
         evidenceRoot:publicAcquisitionHealth?.acquisitionEvidenceRoot??null,
         fetchedAt:publicAcquisitionHealth?.fetchedAt??null,
         terminalStatus:publicAcquisitionHealth?.terminalStatus??null},
-      authorizationStatus:{telegram:'structured_claim_authorization_required',
-        investanchors:'structured_claim_authorization_required',
-        sourceClaims:'authorized_terminal_outcomes_required'},
+      authorizationStatus:schemaVersion==='legacy-radar-v3.20.0'
+        ?{telegram:'public_channel_cursor_required',investanchors:'structured_claim_authorization_required',
+          sourceClaims:'authorized_terminal_outcomes_required'}
+        :{telegram:'structured_claim_authorization_required',investanchors:'structured_claim_authorization_required',
+          sourceClaims:'authorized_terminal_outcomes_required'},
       releaseIdentity:{schema:schemaVersion,producerCommitSha:producerIdentity?.commitSha??null,
         runtimeManifestSha256:producerIdentity?.runtimeManifestSha256??null,
-        migrationLevel:schemaVersion==='legacy-radar-v3.19.0'
-          ?'release-reconciliation-v3.19':schemaVersion==='legacy-radar-v3.18.0'
+        migrationLevel:schemaVersion==='legacy-radar-v3.20.0'
+          ?'kol-first-runtime-recovery-v3.20':schemaVersion==='legacy-radar-v3.19.0'
+            ?'release-reconciliation-v3.19':schemaVersion==='legacy-radar-v3.18.0'
             ?'candidate-ledger-retention-v3.18':'provider-acquisition-v3.16.21'},
       sourceLedCorrectness:{schema:schemaVersion,window,asOf,contentAsOf:resolvedContentAsOf,evaluatedAt,publishedAt,
         nextExpectedAt:freshness.nextExpectedAt,freshnessSchedule:freshnessSchedule.slice(0,80),

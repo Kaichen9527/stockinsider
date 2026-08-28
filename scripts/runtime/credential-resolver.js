@@ -12,6 +12,11 @@ const KEYCHAIN_REFERENCES = Object.freeze({
   'keychain:stockinsider-runtime:threads-access-token': Object.freeze({ service: 'stockinsider-runtime', account: 'threads-access-token' }),
   'keychain:stockinsider-runtime:youtube-api-key': Object.freeze({ service: 'stockinsider-runtime', account: 'youtube-api-key' }),
   'keychain:stockinsider-runtime:youtube-oauth-token': Object.freeze({ service: 'stockinsider-runtime', account: 'youtube-oauth-token' }),
+  // These optional values contain only incremental cursors and bounded,
+  // redistribution-authorized claim envelopes.  They are deliberately
+  // separate from the runtime's connection and provider credentials.
+  'keychain:stockinsider-runtime:telegram-cursors-json': Object.freeze({ service: 'stockinsider-runtime', account: 'telegram-cursors-json' }),
+  'keychain:stockinsider-runtime:investanchors-structured-claims-json': Object.freeze({ service: 'stockinsider-runtime', account: 'investanchors-structured-claims-json' }),
 });
 const RUNTIME_ENVIRONMENT_KEYS = Object.freeze([
   'HOME', 'INTERNAL_API_KEY_REF', 'NODE_ENV', 'PATH', 'STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY_REF',

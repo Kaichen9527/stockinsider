@@ -431,7 +431,7 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
 	        </Link> : <Link
 	          href={`/stock/${rec.symbol}?decisionRevisionId=${encodeURIComponent(availableResearchDecision.decisionRevisionId)}`}
           data-testid={isPrimary ? 'view-insight-link' : undefined}
-          className="inline-flex min-h-11 shrink-0 items-center rounded-full bg-amber-300 px-3.5 py-1.5 text-sm font-semibold text-slate-900 transition hover:bg-amber-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 dark:bg-amber-300 dark:text-slate-950"
+          className="cta-primary inline-flex min-h-11 shrink-0 items-center rounded-full px-3.5 py-1.5 text-sm font-semibold transition"
 	        >
 	          深度分析 →
 	        </Link>}
@@ -476,7 +476,7 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
     { key: 'research', eyebrow: 'SOURCE SIGNALS', title: '新來源待研究', description: '來源已出現，但估值、技術或基本面資料尚缺；資料缺失不會被翻譯成「不買」。',
       items: rankedResearch.filter((signal) => lane(signal)==='data_needed') },
   ];
-  if (['legacy-radar-v3.13.0','legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0'].includes(radar.sourceLedCorrectness?.schema??'') || rankedResearch.length > 0) return (
+  if (['legacy-radar-v3.13.0','legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0','legacy-radar-v3.20.0'].includes(radar.sourceLedCorrectness?.schema??'') || rankedResearch.length > 0) return (
     <div className="space-y-0">
       {radar.projectionHealth?.status !== 'fresh' ? (
         <section role="status" className="mb-6 rounded-2xl border border-amber-500/30 bg-amber-500/8 px-5 py-4 text-sm text-amber-850 dark:text-amber-200">
@@ -973,7 +973,7 @@ function DiscoveredCard({ stock }: { stock: DiscoveredStockCard }) {
         <div className="text-xs text-slate-500 dark:text-emerald-100/70">
           這是社群早期題材卡，代表故事已被市場發現，但還沒全部升級成正式推薦。
         </div>
-        <Link href={`/stock/${stock.symbol}`} className="shrink-0 rounded-full bg-amber-300 px-3.5 py-1.5 text-sm font-semibold text-slate-900 transition hover:bg-amber-200 dark:bg-amber-300 dark:text-slate-950">
+        <Link href={`/stock/${stock.symbol}`} className="cta-primary shrink-0 rounded-full px-3.5 py-1.5 text-sm font-semibold transition">
           深度分析 →
         </Link>
       </div>
@@ -1069,7 +1069,7 @@ function SourceSignalDiagnostics({ signal }: { signal: SourceSignalCard }) {
       {(signal.riskReasons?.length ?? 0) > 0 ? <p className="mt-1 text-xs leading-5 text-amber-700 dark:text-amber-300">風險：{signal.riskReasons?.map(explainRisk).join('、')}</p> : null}
       <div className="mt-4 flex items-center justify-between gap-3">
         <time className="text-xs text-slate-500 dark:text-emerald-100/55" dateTime={signal.discoveredAt}>{signal.discoveredAt}</time>
-        <Link href={`/stock/${signal.symbol}`} className="rounded-full bg-amber-300 px-3 py-1.5 text-sm font-semibold text-slate-950 transition hover:bg-amber-200">查看研究 →</Link>
+        <Link href={`/stock/${signal.symbol}`} className="cta-primary rounded-full px-3 py-1.5 text-sm font-semibold transition">查看研究 →</Link>
       </div>
     </article>
   );

@@ -1,13 +1,13 @@
 {
   "changeId": "source-led-opportunity-engine-v3",
-  "loopStage": "v3_19_contract_frozen_requirements_pending",
-  "requirementsStatus": "v3_19_contract_frozen_single_fresh_review_pending",
-  "designStatus": "v3_19_contract_frozen_requirements_pending",
-  "requirementsGateStatus": "pending_v3_19",
+  "loopStage": "v3_20_architecture_passed_exact_review_pending",
+  "requirementsStatus": "v3_20_single_fresh_review_passed",
+  "designStatus": "v3_20_architecture_passed",
+  "requirementsGateStatus": "pass_v3_20",
   "requirementsReviewRound": null,
   "requirementsReviewTree": null,
   "requirementsReviewEvidence": null,
-  "architectureGateStatus": "pending_v3_19",
+  "architectureGateStatus": "pass_v3_20",
   "architectureReviewRound": null,
   "architectureReviewTree": null,
   "architectureReviewEvidence": null,
@@ -340,16 +340,16 @@
     "P1": 0,
     "P2": 0
   },
-  "verificationStatus": "v3_19_contract_frozen;single_requirements_and_architecture_reviews_pending;runtime_web_release_checkpoint_pending",
-  "verificationGateConclusion": "v3_19_single_release_in_progress;promotion_blocked_non_fabricated_elapsed_cohorts_unavailable",
+  "verificationStatus": "v3_20_architecture_passed;exact_review_code_gate_runtime_web_release_checkpoint_pending",
+  "verificationGateConclusion": "v3_20_single_release_in_progress;promotion_blocked_non_fabricated_elapsed_cohorts_unavailable",
   "verificationTracks": {
-    "product_runtime": "v3_19_implementation_tests_in_progress;exact_tree_attestation_pending",
+    "product_runtime": "v3_20_implementation_tests_passed;exact_tree_attestation_pending",
     "evaluation_governance": "blocked/non_fabricated_elapsed_cohorts_unavailable",
-    "model_runner": "v3_19_precommit_diagnostic_pending;exact_tree_attestation_pending"
+    "model_runner": "v3_20_precommit_diagnostic_passed;exact_tree_attestation_pending"
   },
-  "releaseStatus": "v3_19_release_reconciliation_contract_frozen;v3_18_predecessor_evidence_preserved;no_goal_no_heartbeat_no_database_password_reset",
+  "releaseStatus": "v3_20_kol_first_runtime_recovery_architecture_passed;v3_19_predecessor_evidence_preserved;no_goal_no_heartbeat_no_database_password_reset",
   "createdAt": "2026-07-18T21:22:18+08:00",
-  "updatedAt": "2026-08-23T00:00:00+08:00",
+  "updatedAt": "2026-08-28T21:55:00+08:00",
   "baselineDomain": "stock-recommendation-engine",
   "amendmentClass": "v3_15_opportunity_recovery_product_truth",
   "supersedesForFutureWork": [
@@ -374,8 +374,8 @@
     "homepage ranking promotion before real evaluation cohorts",
     "absolute prevention of all code execution or Codex-private scratch writes"
   ],
-  "blockedReason": "V3.19 one-time Requirements and Architecture reviews, reviewed migration/runtime two-run reconciliation, matching dual-Vercel deployment and Safari verification remain; promotion_gate waits for non_fabricated_elapsed_cohorts",
-  "nextHumanResponse": "none; user authorized V3.19 production closure without stepwise confirmation; do not create Goal, heartbeat or cron and do not reset the database password",
+  "blockedReason": "V3.20 exact review, protected Code Gate, reviewed migration/runtime two-run reconciliation, matching dual-Vercel deployment and Safari verification remain; promotion_gate waits for non_fabricated_elapsed_cohorts",
+  "nextHumanResponse": "none; user authorized V3.20 production closure without stepwise confirmation; do not create Goal, heartbeat or cron and do not reset the database password",
   "historicalReleaseEvidenceV311SupersededDoNotExecute": {
     "exactImplementationCommit": "184390953048209730c22828548858c28fa3b6b7",
     "exactImplementationTree": "3bf8ec477e20b7fd32f72f5b1170742fdb860964",
@@ -420,6 +420,7 @@
   "v317Amendment": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v3.17-source-led-actionability-amendment.md",
   "v318Amendment": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v3.18-source-led-research-dossier-amendment.md",
   "v319Amendment": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v3.19-release-reconciliation-amendment.md",
+  "v320Amendment": ".loop-engineering/state/changes/source-led-opportunity-engine-v3/v3.20-kol-first-runtime-recovery-amendment.md",
   "authority": {
     "architectureAmendmentRequestedByUser": true,
     "hybridProductAmendmentApprovedByUser": true,
