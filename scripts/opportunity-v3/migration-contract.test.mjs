@@ -155,6 +155,10 @@ test('V3.20 widens only the KOL connector matrix and installs an exact-identity 
   const sourceDefinition=psql(`SELECT pg_get_functiondef(
     'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure);`,['-At']);
   for(const required of ['telegram','investanchors','official-source-acquisition-v3.20'])assert.match(sourceDefinition,new RegExp(required,'u'));
+  const claimDefinition=psql(`SELECT pg_get_functiondef(
+    'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure);`,['-At']);
+  for(const required of ['claim_legacy_producer_job_pre_kol_authority_v3_20','structured_claim_authorized','rightsAttested'])
+    assert.match(claimDefinition,new RegExp(required,'u'));
   const reaped=psql(`BEGIN;
     INSERT INTO public.legacy_producer_runs_v3_11(
       run_id,owner_label,owner_token_hash,producer_commit_sha,worker_sha256,scheduler_config_canonical,
