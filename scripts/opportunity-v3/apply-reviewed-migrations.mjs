@@ -50,6 +50,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260828_kol_first_runtime_recovery_v3_20.sql',
   'migrations/20260829_v320_source_completion_cardinality_repair.sql',
   'migrations/20260829_v320_kol_source_authority_seed.sql',
+  'migrations/20260829_v320_kol_projection_marker.sql',
 ]);
 const V3192_PROJECTION_DOSSIER_MIGRATION =
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql';
@@ -356,8 +357,17 @@ async function applyReviewedMigrations(options) {
           has_function_privilege('stockinsider_runtime_v319',
             'public.terminalize_legacy_expired_producer_run_v3_20(uuid,uuid,text,text,text)','EXECUTE')
           AND has_function_privilege('stockinsider_runtime_v319',
-            'public.reap_legacy_expired_producer_run_v3_20(text,text,text)','EXECUTE'))
+          'public.reap_legacy_expired_producer_run_v3_20(text,text,text)','EXECUTE'))
         AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
+      ,'v320KolProjectionMarker',(SELECT
+          (length(pg_get_functiondef(
+            'public.claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)'::regprocedure
+          ))-length(replace(pg_get_functiondef(
+            'public.claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)'::regprocedure
+          ),'legacyRadarCompatibility','')))/length('legacyRadarCompatibility'))=2
+          AND position('v_source_result.result_json->''legacyRadarCompatibility''' IN pg_get_functiondef(
+            'public.claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)'::regprocedure
+          ))>0)
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',

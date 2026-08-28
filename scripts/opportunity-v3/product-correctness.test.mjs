@@ -675,36 +675,26 @@ const checks = {
     assert.equal(selected.config.legacyRadarBaseUrl, 'https://stockinsider-three.vercel.app');
     assert.equal(selected.seedSetHash, 'e6d9c09b8b552f5d9eaf389b76d2d90daa2d89578433d2a1ad63286888b3b743');
     assert.deepEqual(selected.config.stages.map((stage) => stage.name), runtime('source-run-config.js').LEGACY_STAGES);
-    const legacyPayload = { opportunities: [], generatedAt: '2026-08-01T10:20:00Z' };
-    let fetchCount = 0;
+    const fetchedUrls = [];
     const handlers = runtime('auth-source-worker-cli.js').buildStageHandlers(selected, 'a'.repeat(40), 'b'.repeat(64), {
       internalApiKey: 'test-internal-key-000000000000',
-      fetchImpl: async (_url, options) => {
-        assert.equal(options.headers.Authorization, 'Bearer test-internal-key-000000000000');
-        assert.equal(options.headers['X-StockInsider-Projection-Source'], 'tracked-producer');
-        return { ok: true, arrayBuffer: async () => { fetchCount += 1; return Buffer.from(canonicalJson(legacyPayload)); } };
+      fetchImpl: async (url) => {
+        fetchedUrls.push(String(url));
+        return new Response('{}', { status: 404, headers: { 'content-type': 'application/json' } });
       },
     });
     const captured = await handlers.source_sync({ authorityHash: 'c'.repeat(64),
       runId:'72200000-0000-4000-8000-000000000001',jobId:'72200000-0000-4000-8000-000000000002',
       ownerToken:'72200000-0000-4000-8000-000000000003',
       payloadJson: [null,null,null,'2026-08-01T10:20:00Z'] });
-    assert.equal(fetchCount, 3); assert.deepEqual(Object.keys(captured.json.legacyPayloads).sort(), ['daily','home','hot','weekly']);
+    assert.equal(fetchedUrls.some((url)=>url.includes('/api/radar/')),false,
+      'V3.20 source sync never reads an old Radar projection');
+    assert.deepEqual(Object.keys(captured.json.legacyPayloads).sort(), ['daily','home','hot','weekly']);
     assert.equal(captured.json.legacyPayloadHashes.home, captured.json.legacyPayloadHashes.daily);
-    const unavailableLegacyHandlers = runtime('auth-source-worker-cli.js').buildStageHandlers(selected, 'a'.repeat(40), 'b'.repeat(64), {
-      internalApiKey: 'test-internal-key-000000000000',
-      fetchImpl: async (url) => {
-        if (String(url).includes('/api/radar/')) return { ok: false, status: 503, arrayBuffer: async () => Buffer.alloc(0) };
-        return { ok: true, arrayBuffer: async () => Buffer.from('{}') };
-      },
-    });
-    const unavailableLegacy = await unavailableLegacyHandlers.source_sync({ authorityHash: 'd'.repeat(64),
-      runId:'72200000-0000-4000-8000-000000000011',jobId:'72200000-0000-4000-8000-000000000012',
-      ownerToken:'72200000-0000-4000-8000-000000000013',payloadJson:[null,null,null,'2026-08-01T10:20:00Z'] });
-    assert.equal(unavailableLegacy.json.legacyRadarCompatibility,'unavailable_readonly_shell',
-      'a stale predecessor Web is a compatibility fallback, never a producer dependency');
-    assert.deepEqual(unavailableLegacy.json.legacyPayloads.daily.opportunities,[]);
-    assert.equal(unavailableLegacy.json.sourceAcquisition.schema,'official-source-acquisition-v3.20');
+    assert.equal(captured.json.legacyRadarCompatibility,'intentionally_not_acquired_kol_first',
+      'a stale predecessor Web is not a V3.20 producer dependency');
+    assert.deepEqual(captured.json.legacyPayloads.daily.opportunities,[]);
+    assert.equal(captured.json.sourceAcquisition.schema,'official-source-acquisition-v3.20');
     const parser = runtime('auth-source-worker-cli.js');
     const adapterSource = readFileSync(path.join(root, 'scripts/runtime/postgres-legacy-producer-adapter.js'), 'utf8');
     assert.match(adapterSource, /set_config\('stockinsider[.]legacy_authority_hash',\$5,true\)[\s\S]*length\(configured[.]marker\)\*0/u,
@@ -808,20 +798,24 @@ const checks = {
       readJson: uncachedRead.json, readHash: uncachedRead.hash }), /frozen authority cache unavailable/u);
     const retryRead = runtime('codec.js').immutableBundle('compact_projection_input', { analysisResult: { decisions: [],
       sourceCandidates: [{ symbol: '2330', name: '台積電', disposition: 'promoted', reason: 'new_source_evidence',
-        sourceClass: 'official', raw: '2330', sourceSummary: '台積電財報更新', lastEvaluatedAt: '2026-08-01T10:20:00Z',
-        ...citedPublicationEvidence('claim-2330') }] },
+        raw: '2330', sourceSummary: '核准 KOL 的台積電研究更新', lastEvaluatedAt: '2026-08-01T10:20:00Z',
+        ...citedPublicationEvidence('claim-2330'), sourceClass: 'kol', sourceKey:'telegram',
+        sourceName:'核准 KOL',sourceUrl:'https://t.me/example/2330',nominationAuthority:'public_telegram_channel' }] },
       sourceCutoff: '2026-08-01T10:20:00Z', legacyPayloads: captured.json.legacyPayloads,
-      legacyPayloadHashes: captured.json.legacyPayloadHashes, legacySourceResultHash: captured.hash });
+      legacyPayloadHashes: captured.json.legacyPayloadHashes, legacySourceResultHash: captured.hash,
+      legacyRadarCompatibility:captured.json.legacyRadarCompatibility });
     const projected = await handlers.compact_radar_projection({ readKind: 'compact_projection_input',
       readCanonical: retryRead.canonical, readJson: retryRead.json, readHash: retryRead.hash });
-    assert.equal(projected.json.projections.length, 4); assert.equal(fetchCount, 3,
-      'a compact retry reuses the persisted source result and never refetches changed public payloads');
+    assert.equal(projected.json.projections.length, 4); assert.ok(fetchedUrls.length > 0,
+      'a compact retry reuses the persisted source result and never refetches approved-source inputs');
+    assert.equal(projected.json.projections[0].payload.releaseIdentity.schema, 'legacy-radar-v3.20.0',
+      'only the persisted KOL-first marker selects the V3.20 public contract');
     assert.deepEqual(projected.json.projections[0].payload.discoveryDelta,
       { added: [], exited: [], continued: [], unchangedReasons: [] });
     assert.equal(projected.json.projections[0].payload.sourceSignals[0].chineseName, '台積電',
       'compact public projection carries the official source-signal name');
-    assert.equal(projected.json.projections[0].payload.sourceSignals[0].sourceSummary, '台積電財報更新',
-      'compact public projection carries bounded source context instead of repeating the ticker');
+    assert.equal(projected.json.projections[0].payload.sourceSignals[0].sourceSummary, '核准 KOL 的台積電研究更新',
+      'compact public projection carries bounded KOL context instead of repeating the ticker');
     const candidateInput = { mentionResult: { candidates: [{ stockId: '00000000-0000-4000-8000-000000009999', symbol: '9999',
       raw: '新公司', claimId: 'claim-9999', mentionId: 'mention-9999', sourceKey: 'threads',
       nominationAuthority: 'approved_kol_threads_api', revisionId: null }] }, seedSymbols: seeds() };
