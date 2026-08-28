@@ -84,6 +84,36 @@ test('V3.20 records Telegram publication time only when the public message provi
     investanchors:'structured_claim_authorization_required',sourceClaims:'authorized_terminal_outcomes_required'});
 });
 
+test('V3.20 bounds live and reused connector envelopes without refetching or losing item conservation',()=>{
+  const acquisition=runtime('official-source-acquisition.js');
+  const html=Array.from({length:20},(_,index)=>`<div data-post="example/${index+1}"><div class="tgme_widget_message_text">${index+1} 台股研究</div><time datetime="2026-08-28T${String(index%10).padStart(2,'0')}:00:00Z"></time></div>`).join('');
+  assert.deepEqual(acquisition.parseTelegramPublicPosts(html).map((row)=>row.id),[11,12,13,14,15,16,17,18,19,20]);
+  const documents=Array.from({length:20},(_,index)=>({profileId:'investanchors',sourceKey:'telegram',
+    stableConnectorDocumentId:`investanchors:${index+1}`,publishedAt:`2026-08-${String(index+1).padStart(2,'0')}T09:00:00Z`,
+    collectedAt:'2026-08-28T10:20:00Z'}));
+  const frozen={schema:'official-source-acquisition-v3.20',documents,itemOutcomes:documents.map((row)=>({
+    profileId:row.profileId,sourceKey:row.sourceKey,stableId:row.stableConnectorDocumentId,
+    acquisitionDisposition:'transcript_ready',analysisDisposition:'eligible_for_claim_extraction'})),
+    connectorAttempts:[{profileId:'investanchors',sourceKey:'telegram',status:'items_found',
+      responseEvidence:{itemCount:20,documentCount:20}}],outcomes:[{profileId:'investanchors',documentCount:20}]};
+  const bounded=runtime('auth-source-worker-cli.js').boundedSourceAcquisitionV320(frozen);
+  assert.equal(frozen.documents.length,20,'the provider envelope remains immutable evidence');
+  assert.deepEqual(bounded.documents.map((row)=>row.stableConnectorDocumentId),
+    ['investanchors:11','investanchors:12','investanchors:13','investanchors:14','investanchors:15',
+      'investanchors:16','investanchors:17','investanchors:18','investanchors:19','investanchors:20']);
+  assert.equal(bounded.itemOutcomes.length,10);
+  assert.deepEqual(bounded.connectorAttempts[0].responseEvidence,{itemCount:10,documentCount:10});
+  assert.equal(bounded.outcomes[0].documentCount,10);
+});
+
+test('V3.20 authority bootstrap appends only the new public Telegram and structured-claim identities',()=>{
+  const bootstrap=readFileSync(path.join(root,'scripts/runtime/production-authority-bootstrap.js'),'utf8');
+  assert.match(bootstrap,/approved-source-roster-v3[.]20/u);
+  assert.match(bootstrap,/telegramPublicChannel/u);
+  assert.match(bootstrap,/structured_claim_authorized/u);
+  assert.match(bootstrap,/sourceIdentityVersion=\['telegram','investanchors'\]/u);
+});
+
 test('V3.20 turns a lost lease into an authoritative recoverable terminal instead of leaving a stuck run',async()=>{
   const stages=runtime('source-run-config.js').LEGACY_STAGES;
   let call=null;let reaped=null;
