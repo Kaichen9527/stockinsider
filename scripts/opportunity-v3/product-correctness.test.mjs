@@ -691,6 +691,20 @@ const checks = {
       payloadJson: [null,null,null,'2026-08-01T10:20:00Z'] });
     assert.equal(fetchCount, 3); assert.deepEqual(Object.keys(captured.json.legacyPayloads).sort(), ['daily','home','hot','weekly']);
     assert.equal(captured.json.legacyPayloadHashes.home, captured.json.legacyPayloadHashes.daily);
+    const unavailableLegacyHandlers = runtime('auth-source-worker-cli.js').buildStageHandlers(selected, 'a'.repeat(40), 'b'.repeat(64), {
+      internalApiKey: 'test-internal-key-000000000000',
+      fetchImpl: async (url) => {
+        if (String(url).includes('/api/radar/')) return { ok: false, status: 503, arrayBuffer: async () => Buffer.alloc(0) };
+        return { ok: true, arrayBuffer: async () => Buffer.from('{}') };
+      },
+    });
+    const unavailableLegacy = await unavailableLegacyHandlers.source_sync({ authorityHash: 'd'.repeat(64),
+      runId:'72200000-0000-4000-8000-000000000011',jobId:'72200000-0000-4000-8000-000000000012',
+      ownerToken:'72200000-0000-4000-8000-000000000013',payloadJson:[null,null,null,'2026-08-01T10:20:00Z'] });
+    assert.equal(unavailableLegacy.json.legacyRadarCompatibility,'unavailable_readonly_shell',
+      'a stale predecessor Web is a compatibility fallback, never a producer dependency');
+    assert.deepEqual(unavailableLegacy.json.legacyPayloads.daily.opportunities,[]);
+    assert.equal(unavailableLegacy.json.sourceAcquisition.schema,'official-source-acquisition-v3.20');
     const parser = runtime('auth-source-worker-cli.js');
     const adapterSource = readFileSync(path.join(root, 'scripts/runtime/postgres-legacy-producer-adapter.js'), 'utf8');
     assert.match(adapterSource, /set_config\('stockinsider[.]legacy_authority_hash',\$5,true\)[\s\S]*length\(configured[.]marker\)\*0/u,
