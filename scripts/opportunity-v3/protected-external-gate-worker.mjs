@@ -85,6 +85,24 @@ const reviewSources = Object.freeze({
   },
 });
 
+function reviewSource(check, attestation = null) {
+  const source = reviewSources[check];
+  assert.ok(source, 'closed review check');
+  if (check !== 'exact-review' || attestation === null) return source;
+  // Exact-review evidence is about one immutable subject commit.  Keep the
+  // Requirements and Architecture evidence on their already graph-bound
+  // immutable refs, but fetch the exact review from its subject-addressed
+  // append-only ref so one later review cannot move an earlier PR's proof.
+  return {
+    ...source,
+    ref: `refs/remotes/origin/evidence/source-led-opportunity-v3-exact-review-${attestation.subjectCommitSha}`,
+  };
+}
+
+function reviewSourceValues(attestation) {
+  return Object.keys(reviewSources).map((check) => reviewSource(check, attestation));
+}
+
 function canonicalJson(value) {
   if (value === null) return 'null';
   if (typeof value === 'boolean') return value ? 'true' : 'false';
@@ -243,8 +261,7 @@ function baseResult(check, identity, attestation) {
 }
 
 function captureReview(subjectRoot, check, identity, attestation) {
-  const source = reviewSources[check];
-  assert.ok(source, 'closed review check');
+  const source = reviewSource(check, attestation);
   const evidenceCommitSha = git(subjectRoot, ['rev-parse', source.ref]);
   sha(evidenceCommitSha, 'evidence commit');
   const evidenceTreeSha = git(subjectRoot, ['rev-parse', `${evidenceCommitSha}^{tree}`]);
@@ -896,7 +913,7 @@ function prepare(attestation, subjectRoot) {
   assert.equal(git(baseRoot, ['status', '--porcelain=v1', '--untracked-files=all']), '', 'prepare base clean');
   const remoteTargets = [
     attestation.subjectCommitSha,
-    ...Object.values(reviewSources).map(({ ref }) => {
+    ...reviewSourceValues(attestation).map(({ ref }) => {
       const remoteBranch = ref.replace('refs/remotes/origin/', 'refs/heads/');
       return `${remoteBranch}:${ref}`;
     }),
@@ -908,7 +925,7 @@ function prepare(attestation, subjectRoot) {
     attestation.subjectCommitSha,
     attestation.baseCommitSha,
     attestation.registryCommitSha,
-    ...Object.values(reviewSources).map(({ ref }) => `${ref}:${ref}`),
+    ...reviewSourceValues(attestation).map(({ ref }) => `${ref}:${ref}`),
   ];
   execFileSync('/usr/bin/git', ['fetch', '--no-tags', baseRoot, ...localTargets], { cwd: target, stdio: 'inherit' });
   execFileSync('/usr/bin/git', ['checkout', '--detach', attestation.subjectCommitSha], { cwd: target, stdio: 'inherit' });
