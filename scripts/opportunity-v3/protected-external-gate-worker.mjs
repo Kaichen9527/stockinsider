@@ -100,6 +100,23 @@ const graphBoundReviewSources = Object.freeze({
       rangeLine: 'Full reviewed implementation range',
     }),
   }),
+  // V3.20's final amendment graph adds the graph-authoritative KOL/runtime
+  // artifact. The protected worker runs from the base branch, so this mapping
+  // belongs here before a PR with that graph can prove its own reviews.
+  '13081345293dcb3306c68420270ca82ea090fa18a0ecb878ccd8da08d63e0587': Object.freeze({
+    requirements: Object.freeze({
+      ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-requirements-evidence',
+      path: `${changeRelative}/requirements-review-v3.20.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+    architecture: Object.freeze({
+      ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-architecture-evidence',
+      path: `${changeRelative}/architecture-review-v3.20.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed implementation range',
+    }),
+  }),
   '5f985e391799fd8332df16c2151f75cc95dfb643a087912d92df2845a435016e': Object.freeze({
     requirements: reviewSources.requirements,
     architecture: reviewSources.architecture,
