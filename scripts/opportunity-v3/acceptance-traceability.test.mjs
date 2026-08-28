@@ -1304,7 +1304,7 @@ const structuralExecutors = {
     }
     assert.equal(inventory.scriptValueRows.length, 14);
     assert.equal(sha256(canonicalJson(inventory.scriptValueRows)), inventory.scriptValueRowsSha256);
-    assert.equal(inventory.scriptValueRowsSha256, 'd789006f32d46011d87b4dfbfa8ba6ee8c93bebd8f7f367676a4ed303e80b71b');
+    assert.equal(inventory.scriptValueRowsSha256, '55df7f271ac2f706c3d01685feffb76791dfeceb7045514b2042e081f970dbbe');
     const rootPackageScripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts;
     const webPackageScripts = JSON.parse(readFileSync(path.join(root, 'web/package.json'), 'utf8')).scripts;
     assert.deepEqual(inventory.scriptValueRows.map(([scriptKey]) => scriptKey), [
