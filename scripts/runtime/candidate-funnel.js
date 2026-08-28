@@ -2,6 +2,7 @@
 
 const { canonicalJson, immutableBundle, invariant, sha256 } = require('./codec');
 const { deriveDiscoveryDisposition } = require('./discovery-disposition');
+const { hasCandidateNominationAuthority, nominationRejectionReason } = require('./candidate-nomination-authority');
 
 const SOURCE_CLASS_PRIORITY = Object.freeze({ official: 100, public_research: 85, curated_thesis: 70, community: 50 });
 
@@ -46,6 +47,7 @@ function retainedSessionCount(prior, currentSession, completedSessions) {
 }
 
 function retainedCandidate(prior,{currentSession,completedSessions,retentionSessions,sourceAvailable}) {
+  if (!hasCandidateNominationAuthority(prior)) return null;
   const retained=retainedSessionCount(prior,currentSession,completedSessions);
   if(retained>retentionSessions)return null;
   const evidence=Array.isArray(prior.evidence)?prior.evidence:[];
@@ -74,8 +76,26 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
   currentSession = null, completedSessions = [], retentionSessions = 20 }) {
   invariant(Number.isInteger(retentionSessions)&&retentionSessions>0&&retentionSessions<=60,'candidate retention bound');
   const observations = [];
+  const authorityRejected = [];
+  const linked=[];
+  const nominatedStockIds=new Set();
   for (const outcome of outcomes) {
     if (outcome.link?.disposition !== 'linked' || outcome.claimEligible === false) continue;
+    const nominationAuthorized=hasCandidateNominationAuthority(outcome);
+    linked.push({outcome,nominationAuthorized});
+    if(nominationAuthorized)nominatedStockIds.add(outcome.link.stockId);
+  }
+  for (const {outcome,nominationAuthorized} of linked) {
+    // An official claim can corroborate a company already surfaced by an
+    // approved KOL, but it can never create that candidate on its own. Do not
+    // permit arbitrary community or market-factor material to piggyback.
+    const supportingOfficial=!nominationAuthorized&&outcome.sourceClass==='official'
+      &&nominatedStockIds.has(outcome.link.stockId);
+    if (!nominationAuthorized&&!supportingOfficial) {
+      authorityRejected.push(Object.freeze({ symbol: outcome.link.symbol ?? outcome.symbol ?? null,
+        stockId: outcome.link.stockId ?? outcome.stockId ?? null, reason: nominationRejectionReason(outcome) }));
+      continue;
+    }
     const evidenceHash = sha256(canonicalJson([outcome.link.stockId, outcome.claimId, outcome.raw]));
     observations.push({
       stockId: outcome.link.stockId,
@@ -94,6 +114,9 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
       sourceUrl: outcome.sourceUrl ?? null,
       sourceName: outcome.sourceName ?? null,
       kolIdentity: outcome.kolIdentity ?? null,
+      nominationAuthority: outcome.nominationAuthority,
+      structuredClaim: outcome.structuredClaim === true,
+      rightsAttested: outcome.rightsAttested === true,
       sourcePublishedAt: outcome.sourcePublishedAt ?? outcome.claimAsOf ?? null,
       sourceCollectedAt: outcome.sourceCollectedAt ?? null,
       evidenceHash,
@@ -111,7 +134,9 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
     byStock.set(observation.stockId, selected);
   }
   const candidates = [...byStock.values()].map((evidence) => {
-    const representative = evidence[0];
+    // Keep a real nomination as the candidate identity even when an official
+    // corroboration has a higher source-priority score.
+    const representative = evidence.find((row)=>hasCandidateNominationAuthority(row)) ?? evidence[0];
     const materialEvidenceHash = sha256(canonicalJson(evidence.map((row) => ({
       claimId: row.claimId, evidenceHash: row.evidenceHash, revisionId: row.revisionId,
       sourceKey: row.sourceKey, claimAsOf: row.claimAsOf,
@@ -124,7 +149,8 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
         sourcePriority: row.sourcePriority, claimAsOf: row.claimAsOf, raw: row.raw,
         sourceSummary: row.sourceSummary, sourceUrl: row.sourceUrl, sourceName: row.sourceName,
         kolIdentity: row.kolIdentity, sourcePublishedAt: row.sourcePublishedAt,
-        sourceCollectedAt: row.sourceCollectedAt, evidenceHash: row.evidenceHash })),
+        sourceCollectedAt: row.sourceCollectedAt, nominationAuthority: row.nominationAuthority,
+        structuredClaim: row.structuredClaim, rightsAttested: row.rightsAttested, evidenceHash: row.evidenceHash })),
       evidenceCount: evidence.length, ...disposition };
   });
   const currentByStock=new Map(candidates.map((candidate)=>[candidate.stockId,Object.freeze({ ...candidate,
@@ -139,7 +165,8 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
   // that invariant explicit: if it is ever violated, silently choosing a
   // subset would turn a persistence defect into an unexplained disappearance.
   invariant(prior.length <= 60, 'candidate retention ledger bound');
-  const retained=prior.filter((prior)=>typeof prior.stockId==='string'
+  const authorityRevokedPrior=prior.filter((row)=>typeof row?.stockId==='string'&&!hasCandidateNominationAuthority(row));
+  const retained=prior.filter((prior)=>typeof prior.stockId==='string'&&hasCandidateNominationAuthority(prior)
     &&!currentByStock.has(prior.stockId)).map((prior)=>retainedCandidate(prior,{currentSession,completedSessions,
       retentionSessions,sourceAvailable})).filter(Boolean);
   const candidateOrder=(left, right) => right.sourcePriority - left.sourcePriority
@@ -168,7 +195,7 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
   const continued = deduped.filter((row) => row.disposition === 'refreshed' || row.disposition === 'unchanged')
     .map((row) => row.symbol);
   const exited = prior.filter((row) => typeof row.stockId === 'string' && !currentIds.has(row.stockId)
-      &&retainedSessionCount(row,currentSession,completedSessions)>retentionSessions)
+      &&(!hasCandidateNominationAuthority(row)||retainedSessionCount(row,currentSession,completedSessions)>retentionSessions))
     .map((row) => row.symbol).filter((symbol) => typeof symbol === 'string').sort();
   const unchangedReasons = deduped.filter((row) => row.disposition === 'unchanged')
     .map((row) => ({ symbol: row.symbol, reason: row.reason })).sort((a, b) => a.symbol.localeCompare(b.symbol));
@@ -180,12 +207,15 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
       refreshed: deduped.filter((row) => row.disposition === 'refreshed').length,
       unchanged: deduped.filter((row) => row.disposition === 'unchanged').length,
       sourceSignals: deduped.filter((row) => row.researchDisposition === 'source_signal_only').length,
-      rejected: outcomes.filter((row) => row.link?.disposition !== 'linked' || row.claimEligible === false).length,
+      rejected: outcomes.filter((row) => row.link?.disposition !== 'linked' || row.claimEligible === false).length + authorityRejected.length + authorityRevokedPrior.length,
       deferred: deferredCurrent.length,
     },
     discoveryDelta: Object.freeze({ added, exited, continued, unchangedReasons,
       retained:deduped.filter((row)=>row.retainedSessionCount>0).map((row)=>row.symbol).sort(),
       deferred: deferredCurrent,
+      exitedDetails: authorityRevokedPrior.map((row)=>Object.freeze({symbol:row.symbol,reason:'nomination_authority_revoked'}))
+        .filter((row)=>typeof row.symbol==='string').sort((a,b)=>a.symbol.localeCompare(b.symbol)),
+      rejected: authorityRejected,
     }),
   });
 }

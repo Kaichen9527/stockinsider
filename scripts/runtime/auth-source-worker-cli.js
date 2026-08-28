@@ -32,6 +32,7 @@ const { buildMarketAnalysis } = require('./market-analysis');
 const { buildOfficialFactorCandidatesV315 } = require('./official-factor-discovery-v315');
 const { runtimeBundleBytes } = require('./tracked-runtime-bundle');
 const { acquireApprovedSources } = require('./official-source-acquisition');
+const { nominationAuthorityForSource } = require('./candidate-nomination-authority');
 const { acquireFrozenProviderEnvelope } = require('./provider-acquisition-v31621');
 const approvedSourceRoster = require('../../config/runtime/approved-source-roster-v3.13.json');
 const { assertExactRuntimeEnvironment, hydrateRuntimeCredentials, resolveCredentialReference } = require('./credential-resolver');
@@ -44,6 +45,22 @@ const SOURCE_CLASS_BY_KEY = Object.freeze({
   ptt: 'community', public_broker_research: 'public_research', telegram: 'community',
   threads: 'community', youtube: 'curated_thesis',
 });
+const LEGACY_PERSISTED_SOURCE_KEYS = Object.freeze(new Set(['threads','podcast','youtube']));
+
+// This projection is retained solely to regression-test V3.13 readers against
+// a V3.20 acquisition object.  Production source_sync submits the complete
+// five-connector V3.20 object after the additive migration widens its closed
+// persistence matrix; Telegram and authorized InvestAnchors claims are never
+// silently dropped from the durable document/claim stream.
+function legacySourceAcquisitionCompatibilityV320(acquisition) {
+  invariant(acquisition?.schema === 'official-source-acquisition-v3.20', 'v320 source acquisition required');
+  const include=(row)=>LEGACY_PERSISTED_SOURCE_KEYS.has(String(row?.sourceKey ?? ''));
+  return Object.freeze({ ...acquisition, schema: 'official-source-acquisition-v3.13',
+    documents: acquisition.documents.filter(include),
+    itemOutcomes: acquisition.itemOutcomes.filter(include),
+    connectorAttempts: acquisition.connectorAttempts.filter(include),
+  });
+}
 
 async function loadLegacyRadarPayloads(baseUrl, fetchImpl = globalThis.fetch, internalApiKey = process.env.INTERNAL_API_KEY) {
   invariant(typeof baseUrl === 'string' && /^https?:\/\/[^/?#]+(?::\d+)?$/u.test(baseUrl), 'legacy radar base URL');
@@ -154,6 +171,10 @@ function nameHasStockContext(text, name, symbol) {
   const stockWords = /(?:股票|個股|台股|代號|股價|買進|賣出|看多|看空|本益比|籌碼|財報|EPS|營收|法說|目標價)/iu;
   while (offset >= 0) {
     const local = text.slice(Math.max(0, offset - 16), Math.min(text.length, offset + name.length + 16));
+    // A generic market phrase (for example, 「新興市場 ETF」) is not a
+    // company mention.  It may look like the Taiwanese issuer 新興 (2605),
+    // so require an explicit ticker or company-context phrase before linking.
+    const genericMarketPhrase = /(?:新興市場|emerging\s+markets?)\s*(?:ETF|基金|指數|市場)/iu.test(local);
     // A verified active symbol adjacent to its verified company name provides
     // enough entity context. Bare numbers remain rejected: this branch still
     // requires both the exact master symbol and an exact master name/alias.
@@ -161,7 +182,7 @@ function nameHasStockContext(text, name, symbol) {
     const escapedName=name.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
     const explicitSymbolAndName=new RegExp(`(^|[^0-9])${escapedSymbol}\\s*(?:[（(][^)）]{0,12}[)）])?\\s*${escapedName}`, 'u').test(local)
       ||new RegExp(`${escapedName}\\s*(?:[（(][^)）]{0,12}[)）])?\\s*${escapedSymbol}(?=[^0-9]|$)`, 'u').test(local);
-    if (explicitSymbolAndName || stockWords.test(local) || tickerHasStockContext(local, String(symbol))) return true;
+    if (explicitSymbolAndName || tickerHasStockContext(local, String(symbol)) || (!genericMarketPhrase && stockWords.test(local))) return true;
     offset = text.indexOf(name, offset + name.length);
   }
   return false;
@@ -222,9 +243,11 @@ function extractRevisionCandidates(bundle) {
   // navigable citation. Raw messages/articles are never replayed into the
   // model. The standard envelope preserves conservation for unavailable or
   // metadata-only input instead of silently treating it as source success.
-  const requiresStructuredAuthorization=['telegram','investanchors'].includes(String(frozen.sourceKey));
+  const requiresStructuredAuthorization=['investanchors','research_inbox'].includes(String(frozen.sourceKey));
   const structuredAuthorized=frozen.contentAuthorization==='structured_claim_authorized'
     && frozen.structuredClaim===true;
+  const nominationAuthority=nominationAuthorityForSource({sourceKey:frozen.sourceKey,
+    structuredClaim:structuredAuthorized,rightsAttested:frozen.rightsAttested===true});
   if(requiresStructuredAuthorization&&!structuredAuthorized) {
     const sourceKey=String(frozen.sourceKey);
     return Object.freeze({ schema: 'legacy-mention-claim-result-v3.11', revisionId:frozen.revisionId,
@@ -277,7 +300,9 @@ function extractRevisionCandidates(bundle) {
       claimAsOf: sourceEffectiveAt,
       mentionId: uuidFromHash(`mention:${frozen.revisionId}:${stockId}:${raw}`), claimEligible: true,
       link: { disposition: 'linked', stockId, symbol },
-      sourceClass: SOURCE_CLASS_BY_KEY[frozen.sourceKey] ?? 'community' }];
+      sourceClass: SOURCE_CLASS_BY_KEY[frozen.sourceKey] ?? 'community', nominationAuthority,
+      structuredClaim:structuredAuthorized,rightsAttested:frozen.rightsAttested===true,
+      sourceProfileId: typeof frozen.profileId==='string'?frozen.profileId:null }];
   });
   // Authority pages may legitimately repeat an identical active roster head
   // (for example, when an upgrade-safe snapshot carries the same instrument
@@ -1661,7 +1686,8 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         acquireFrozen({provider:'approved_sources',stage:'source_sync',sourceCutoff,
           requestMaterial:{rosterSchema:approvedSourceRoster.schema,profiles:approvedSourceRoster.profiles.map((row)=>row.id).sort(),
             credentialAvailability:{threads:Boolean(sourceCredentials.threadsAccessToken),
-              youtubeApiKey:Boolean(sourceCredentials.youtubeApiKey),youtubeOauth:Boolean(sourceCredentials.youtubeOauthToken)}},claim,
+              youtubeApiKey:Boolean(sourceCredentials.youtubeApiKey),youtubeOauth:Boolean(sourceCredentials.youtubeOauthToken),
+              investAnchorsStructuredClaims:Array.isArray(sourceCredentials.investAnchorsStructuredClaims)}},claim,
           actionEligible:false,
           acquire:({fetchImpl:capturedFetch,collectionStartedAt})=>acquireApprovedSources({roster:approvedSourceRoster,
             credentials:sourceCredentials,fetchImpl:capturedFetch,now:new Date(collectionStartedAt)})}),
@@ -1782,7 +1808,6 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         .filter((row)=>row.session>=new Date(Date.parse(bundle.sourceCutoff)-35*86_400_000).toISOString().slice(0,10)
           &&row.session<=new Date(Date.parse(bundle.sourceCutoff)+14*86_400_000).toISOString().slice(0,10))
         .map((row)=>({session_id:row.session,close_at:row.closeAt,status:row.status})):[];
-      const dislocationInputs = Array.isArray(bundle.dislocationCandidates) ? bundle.dislocationCandidates : [];
       // The frozen response leads this union. `researchHistory` then resolves a
       // same-session duplicate deterministically without a retry reaching back
       // to a live provider or allowing stale persisted rows to mask this run.
@@ -1829,20 +1854,6 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
           researchRanking:researchRankingFromScore(candidate,researchScore,
             {softBlockers:['shallow_research_not_selected','deep_research_not_selected']})};
       });
-      const dislocationCandidates = dislocationInputs.map((row) => {
-        const candidate = { stockId: row.stockId, symbol: row.symbol, name: row.name ?? null,
-          canonicalSector: row.canonicalSector ?? 'unknown', sourceClass: 'price_dislocation', sourcePriority: 62,
-          claimId: row.sourceRef, sourceKey:'official',sourceName:'TWSE／TPEx 官方行情',
-          sourceUrl:'https://openapi.twse.com.tw/',claimAsOf:bundle.sourceCutoff,
-          sourcePublishedAt:bundle.sourceCutoff,sourceCollectedAt:bundle.sourceCutoff,
-          disposition: 'promoted', reason: 'price_dislocation',
-          sourceSummary: `${row.symbol} 近 60 個交易日自高點回落 ${Math.abs(Number(row.drawdown60Pct)).toFixed(1)}%，納入基本面未惡化檢查。`,
-          lastEvaluatedAt: bundle.sourceCutoff };
-        const researchScore=buildResearchScore(candidate,{priceRows:researchPriceRows,officialSnapshot,
-          stats:row,sourceCutoff:bundle.sourceCutoff});
-        return { ...candidate, researchMaturity: 'fundamental_review', newPositionAction: 'valuation_review',researchScore,
-          researchRanking:researchRankingFromScore(candidate,researchScore,{softBlockers:['deep_research_not_selected']}) };
-      });
       const decisionSymbols = new Set(decisions.map((row) => row.symbol));
       const sourceCandidates = [...shallowObservations, ...deferredSignals]
         .filter((row) => !decisionSymbols.has(row.symbol))
@@ -1850,18 +1861,11 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
           || (right.sourcePriority ?? 0) - (left.sourcePriority ?? 0) || left.symbol.localeCompare(right.symbol))
         .filter((row, index, all) => all.findIndex((candidate) => candidate.symbol === row.symbol) === index)
         .slice(0, Math.max(0, 60 - decisions.length));
-      const candidateSymbols = new Set([...decisionSymbols, ...sourceCandidates.map((row) => row.symbol)]);
-      const boundedDislocationCandidates = dislocationCandidates
-        .filter((row) => !candidateSymbols.has(row.symbol))
-        .sort((left, right) => (right.researchScore?.underreactionScore ?? -1) - (left.researchScore?.underreactionScore ?? -1)
-          || (right.sourcePriority ?? 0) - (left.sourcePriority ?? 0) || left.symbol.localeCompare(right.symbol))
-        .filter((row, index, all) => all.findIndex((candidate) => candidate.symbol === row.symbol) === index)
-        .slice(0, 30);
       const officialIngestion=bridgeAvailable?await streamOfficialIngestionV314({claim,snapshot:acquisitionSnapshot,
         sourceCutoff:bundle.sourceCutoff,producerSha:sourceCommitSha,persistChunk:persistOfficialIngestionChunk,
         priorFinancialRows:bundle.financialRows??[],resume:ingestionResume}):null;
       return immutableBundle('legacy_facts_refresh_result_v3_11', { schema: 'legacy-facts-refresh-result-v3.11', decisions,
-        shallowObservations, sourceCandidates, dislocationCandidates: boundedDislocationCandidates, marketAnalysis,
+        shallowObservations, sourceCandidates, dislocationCandidates: [], marketAnalysis,
         officialAuthority:officialCalendar?{calendar:officialCalendar,coverage:officialCoverage}:null,
         projectionFreshnessSchedule:projectionFreshnessSchedule.length?projectionFreshnessSchedule
           :(bundle.projectionFreshnessSchedule??[]).slice(0,80),
@@ -1920,7 +1924,9 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
       return immutableBundle('legacy_analysis_revision_result_v3_11', { schema: 'legacy-analysis-revision-result-v3.11', decisions:projectionDecisions,
         decisionPayloads,
         sourceCandidates: bundle.factsResult?.sourceCandidates ?? [],
-        dislocationCandidates: bundle.factsResult?.dislocationCandidates ?? [],
+        // Compatibility-only: market data may enrich a KOL candidate but can
+        // never contribute a separate nominated card to the projection.
+        dislocationCandidates: [],
         marketAnalysis: bundle.factsResult?.marketAnalysis ?? null,
         officialAuthority:compactAnalysisOfficialAuthority(bundle.factsResult?.officialAuthority),
         providerAcquisition:bundle.factsResult?.providerAcquisition??null,
@@ -1970,7 +1976,7 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         }:null,
         discoveryDelta: bundle.analysisResult?.discoveryDelta ?? { added: [], exited: [], continued: [], unchangedReasons: [] },
         freshnessSchedule:bundle.analysisResult?.projectionFreshnessSchedule??[],
-        schemaVersion:'legacy-radar-v3.19.0',
+        schemaVersion:'legacy-radar-v3.20.0',
         window, asOf: bundle.sourceCutoff, contentAsOf:bundle.sourceCutoff,
         evaluatedAt:evaluationTimestamp,publishedAt:evaluationTimestamp,
         priorProjection:priorProjections[window==='hot'?'three_day':window]??null,
@@ -2019,6 +2025,10 @@ async function main() {
   const optionalCredential = (reference) => {
     try { return resolveCredentialReference(reference); } catch { return null; }
   };
+  const optionalJsonCredential = (reference, fallback) => {
+    const value=optionalCredential(reference); if(!value) return fallback;
+    try { return JSON.parse(value); } catch { return fallback; }
+  };
   const stageHandlers = buildStageHandlers(validated, runtimeEnvironment.STOCKINSIDER_REVIEWED_COMMIT_SHA, sha256(workerBytes), {
     internalApiKey: runtimeEnvironment.INTERNAL_API_KEY,
     readProviderAcquisition:(input)=>adapter.readLegacyProviderAcquisition(input),
@@ -2043,6 +2053,8 @@ async function main() {
       threadsAccessToken:optionalCredential('keychain:stockinsider-runtime:threads-access-token'),
       youtubeApiKey:optionalCredential('keychain:stockinsider-runtime:youtube-api-key'),
       youtubeOauthToken:optionalCredential('keychain:stockinsider-runtime:youtube-oauth-token'),
+      telegramCursors:optionalJsonCredential('keychain:stockinsider-runtime:telegram-cursors-json',{}),
+      investAnchorsStructuredClaims:optionalJsonCredential('keychain:stockinsider-runtime:investanchors-structured-claims-json',null),
     },
   });
   try {
@@ -2068,4 +2080,5 @@ module.exports = { args, buildLegacyCandidateDecision, buildStageHandlers, extra
   extractMatchedEvidenceSnippet, LEGACY_RADAR_FETCH_TIMEOUT_MS, legacyFactInput, legacyQualityInput, loadLegacyRadarPayloads,
   main,officialCitation,readBundle,readRuntimeHealthObservation,readRuntimeManifestSha256,
   priceResearchAxes, tickerHasStockContext, uuidFromHash, valuationFactInput,valuationResearchAxis,
-  persistedOfficialSnapshot,officialPriceRowsForResearch,officialFactRowsForDecision,officialLiquidityScore };
+  persistedOfficialSnapshot,officialPriceRowsForResearch,officialFactRowsForDecision,officialLiquidityScore,
+  legacySourceAcquisitionCompatibilityV320 };

@@ -46,6 +46,11 @@ function readonlyCard(value: unknown, legacySchema = false, preserveResearchSnap
   // research snapshot/detail reader.
   if ('newPositionAction' in card) card.newPositionAction = 'valuation_review';
   if ('opportunityAction' in card) card.opportunityAction = 'evidence_watch';
+  // Keep the immutable decision revision byte-for-byte intact.  Freshness is
+  // a runtime overlay: `projectionReadOnly`/`actionAuthorityDisabled` are the
+  // sole executable-action authority.  Rewriting the envelope or snapshot
+  // here would make the same decisionRevisionId describe two different
+  // decisions and cause the detail validator to fail closed.
   const researchDecision = card.researchDecision;
   if (researchDecision && typeof researchDecision === 'object' && !Array.isArray(researchDecision)) {
     card.researchDecision = {
@@ -59,8 +64,8 @@ function readonlyCard(value: unknown, legacySchema = false, preserveResearchSnap
 
 export function withProjectionHealth(selected: CompactRadarProjection, health: ProjectionHealth): CompactRadarProjection {
   const payload = structuredClone(selected) as CompactRadarProjection;
-  const revisionBoundSchema=['legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0'].includes(payload.sourceLedCorrectness.schema);
-  const legacySchema = !['legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0'].includes(payload.sourceLedCorrectness.schema);
+  const revisionBoundSchema=['legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0','legacy-radar-v3.20.0'].includes(payload.sourceLedCorrectness.schema);
+  const legacySchema = !['legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0','legacy-radar-v3.20.0'].includes(payload.sourceLedCorrectness.schema);
   const effectiveHealth=legacySchema?{...health,actionsEnabled:false,actionAuthority:'disabled' as const,
     researchVisibility:'last_good_readonly' as const}:health;
   payload.projectionHealth = effectiveHealth;
