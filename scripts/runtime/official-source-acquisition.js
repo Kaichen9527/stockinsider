@@ -196,6 +196,25 @@ function htmlText(value) {
     .replace(/\s+/gu, ' ').trim();
 }
 
+// Public Telegram pages do not provide an API cursor, but each rendered
+// message has a stable numeric ID and, when available, an explicit datetime.
+// Keep an absent datetime absent: collection time is evidence of acquisition,
+// never evidence that the author published at that moment.
+function parseTelegramPublicPosts(html, minimumId = 0) {
+  const rows=[];
+  for (const match of String(html ?? '').matchAll(/data-post="[^/]+\/(\d+)"([\s\S]*?)(?=data-post="|$)/giu)) {
+    const id=Number(match[1]); const scope=match[2] ?? '';
+    const textMatch=/tgme_widget_message_text[^>]*>([\s\S]*?)<\/div>/iu.exec(scope);
+    const body=htmlText(textMatch?.[1] ?? '');
+    if (!Number.isInteger(id) || id <= minimumId || body.length === 0) continue;
+    const dateMatch=/<time\b[^>]*\bdatetime=["']([^"']+)["']/iu.exec(scope);
+    let publishedAt=null;
+    try { publishedAt=normalizedSourceInstant(dateMatch?.[1],{nullable:true}); } catch { publishedAt=null; }
+    rows.push(Object.freeze({id,body,publishedAt}));
+  }
+  return Object.freeze(rows.sort((left,right)=>left.id-right.id).slice(-20));
+}
+
 function boundedStructuredClaim(claim, profile, collectedAt) {
   if (!claim || typeof claim !== 'object') return null;
   const symbol = typeof claim.symbol === 'string' && /^\d{4}$/u.test(claim.symbol) ? claim.symbol : null;
@@ -354,11 +373,9 @@ async function telegram(profile,credentials,fetchImpl,collectedAt,resolveHost) {
   const response = await boundedFetch(url,{headers:{Accept:'text/html'}},fetchImpl,2_000_000,
     {allowedOrigins:new Set(['https://t.me']),resolveHost});
   const cursor = Number(credentials.telegramCursors?.[profile.id] ?? 0);
-  const rows = [...response.bytes.toString('utf8').matchAll(/data-post="[^/]+\/(\d+)"[\s\S]{0,10000}?tgme_widget_message_text[^>]*>([\s\S]*?)<\/div>/giu)]
-    .map((match)=>({id:Number(match[1]),body:htmlText(match[2])})).filter((row)=>Number.isInteger(row.id)&&row.id>cursor&&row.body.length>0)
-    .slice(-20);
+  const rows = parseTelegramPublicPosts(response.bytes.toString('utf8'),cursor);
   const documents=rows.map((row)=>documentRevision({sourceKey:'telegram',profile,stableId:`${channel}:${row.id}`,
-    title:`Telegram · ${profile.name}`,sourceUrl:`https://t.me/${channel}/${row.id}`,publishedAt:collectedAt,
+    title:`Telegram · ${profile.name}`,sourceUrl:`https://t.me/${channel}/${row.id}`,publishedAt:row.publishedAt,
     transcript:row.body.slice(0,1200),collectedAt}));
   const items=documents.map((document)=>({sourceKey:'telegram',profileId:profile.id,
     stableId:document.stableConnectorDocumentId,sourceUrl:document.canonicalUrlCandidate,publishedAt:document.publishedAt,
@@ -430,4 +447,4 @@ async function acquireApprovedSources({roster,credentials={},fetchImpl=globalThi
 
 module.exports={ acquireApprovedSources,approvedHttpsUrl,documentRevision,normalizedSourceInstant,
   parsePodcastFeed,isPublicAddress,resolvePublicAddresses,CONNECTOR_ATTEMPT,TERMINAL,SOURCE_CONNECTORS,
-  boundedStructuredClaim,htmlText };
+  boundedStructuredClaim,htmlText,parseTelegramPublicPosts };
