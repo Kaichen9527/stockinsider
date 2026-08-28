@@ -171,8 +171,12 @@ test('V31621 action authority commits to the complete provider lineage rather th
   assert.deepEqual(ready.blockers,[]);
   const missingLegacy=providerAcquisitionLineageHealth(lineage.filter((row)=>row.provider!=='legacy_radar'),
     '2026-08-17T01:00:01Z',{ready:true});
-  assert.equal(missingLegacy.authoritative,false);
-  assert.ok(missingLegacy.blockers.includes('frozen_acquisition_missing_legacy_radar'));
+  assert.equal(missingLegacy.authoritative,true,
+    'a predecessor Radar snapshot is never a KOL-first nomination or action authority');
+  const staleLegacy=providerAcquisitionLineageHealth([...lineage,{...member('legacy_radar'),terminalStatus:'provider_failed'}],
+    '2026-08-17T01:00:01Z',{ready:true});
+  assert.equal(staleLegacy.authoritative,true,
+    'a stale readonly compatibility payload cannot block a new reviewed producer run');
   const future=providerAcquisitionLineageHealth(lineage,'2026-08-17T00:59:59Z',{ready:true});
   assert.equal(future.authoritative,false);assert.ok(future.blockers.includes('frozen_acquisition_future_evidence'));
   const legacy={opportunities:[],scenarioUpsideCandidates:[],earlyWatchlist:[],recentFormal7d:[],

@@ -47,6 +47,20 @@ const SOURCE_CLASS_BY_KEY = Object.freeze({
 });
 const LEGACY_PERSISTED_SOURCE_KEYS = Object.freeze(new Set(['threads','podcast','youtube']));
 
+// A prior Web projection is a compatibility surface, never a producer
+// dependency.  The V3.20 source of truth is the approved KOL acquisition
+// followed by official verification.  During a Web/runtime release change the
+// predecessor projection can legitimately be stale or unavailable; retaining
+// a minimal, empty compatibility shell lets the producer publish the new KOL
+// cards instead of creating a circular "old Web must be healthy before new Web
+// can be produced" failure.
+function emptyLegacyRadarPayloadsV320() {
+  const payload = Object.freeze({ opportunities: [], scenarioUpsideCandidates: [], earlyWatchlist: [],
+    recentFormal7d: [], fallbackOpportunities90d: [], hotTracking: [], hotThemes: [],
+    discoveredStocks: [], reports: [], connectorStatus: [] });
+  return Object.freeze({ daily: payload, hot: payload, weekly: payload, home: payload });
+}
+
 // This projection is retained solely to regression-test V3.13 readers against
 // a V3.20 acquisition object.  Production source_sync submits the complete
 // five-connector V3.20 object after the additive migration widens its closed
@@ -1623,25 +1637,29 @@ function providerAcquisitionLineageHealth(value, evaluationTimestamp) {
     .filter((row)=>/^[a-z0-9_]{2,40}$/u.test(row.provider)&&/^[0-9a-f]{64}$/u.test(row.requestKey)
       &&/^[0-9a-f]{64}$/u.test(row.evidenceRoot)&&Number.isFinite(Date.parse(row.fetchedAt)))
     .sort((left,right)=>left.provider.localeCompare(right.provider)||left.requestKey.localeCompare(right.requestKey));
-  const providers=new Set(rows.map((row)=>row.provider));
-  const required=['approved_sources','legacy_radar','official_tw_market'];
-  const actionRequired=['legacy_radar','official_coarse_market','official_tw_market'];
+  // legacy_radar is a read-only payload compatibility adapter.  It can never
+  // nominate a stock or authorize an action, so a stale predecessor Web must
+  // not poison the KOL-first release lineage.
+  const authorityRows=rows.filter((row)=>row.provider!=='legacy_radar');
+  const providers=new Set(authorityRows.map((row)=>row.provider));
+  const required=['approved_sources','official_tw_market'];
+  const actionRequired=['official_coarse_market','official_tw_market'];
   const blockers=[];
   for(const provider of required)if(!providers.has(provider))blockers.push(`frozen_acquisition_missing_${provider}`);
-  if(rows.length===0)blockers.push('frozen_acquisition_lineage_missing');
+  if(authorityRows.length===0)blockers.push('frozen_acquisition_lineage_missing');
   if(rows.length!==rawRows.length)blockers.push('frozen_acquisition_lineage_invalid');
-  if(rows.some((row)=>row.terminalStatus!=='complete'))blockers.push('frozen_acquisition_terminal_incomplete');
-  if(rows.some((row)=>Date.parse(row.fetchedAt)>evaluatedAt))blockers.push('frozen_acquisition_future_evidence');
-  if(rows.some((row)=>actionRequired.includes(row.provider)&&row.actionEligible!==true))
+  if(authorityRows.some((row)=>row.terminalStatus!=='complete'))blockers.push('frozen_acquisition_terminal_incomplete');
+  if(authorityRows.some((row)=>Date.parse(row.fetchedAt)>evaluatedAt))blockers.push('frozen_acquisition_future_evidence');
+  if(authorityRows.some((row)=>actionRequired.includes(row.provider)&&row.actionEligible!==true))
     blockers.push('frozen_acquisition_action_ineligible');
   // Per-symbol financial/price/peer coverage belongs to that symbol's Gate
   // waterfall.  A missing bridge for one research candidate must not revoke
   // the frozen lineage of every checksum-valid card.
   const uniqueBlockers=[...new Set(blockers)];
   return Object.freeze({authoritative:uniqueBlockers.length===0,
-    evidenceRoot:rows.length?sha256(canonicalJson(['provider-acquisition-lineage-v3.16.21',rows])):null,
-    fetchedAt:rows.length?rows.map((row)=>row.fetchedAt).sort().at(-1):null,
-    terminalStatus:rows.length&&rows.every((row)=>row.terminalStatus==='complete')?'complete':'unavailable',
+    evidenceRoot:authorityRows.length?sha256(canonicalJson(['provider-acquisition-lineage-v3.20',authorityRows])):null,
+    fetchedAt:authorityRows.length?authorityRows.map((row)=>row.fetchedAt).sort().at(-1):null,
+    terminalStatus:authorityRows.length&&authorityRows.every((row)=>row.terminalStatus==='complete')?'complete':'unavailable',
     blockers:uniqueBlockers});
 }
 
@@ -1692,11 +1710,15 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
           acquire:({fetchImpl:capturedFetch,collectionStartedAt})=>acquireApprovedSources({roster:approvedSourceRoster,
             credentials:sourceCredentials,fetchImpl:capturedFetch,now:new Date(collectionStartedAt)})}),
       ]);
-      const legacyPayloads=requiredPayload(legacyAcquisition,'legacy radar');
+      const legacyRadarAvailable=legacyAcquisition?.envelope?.terminalStatus==='complete'
+        &&legacyAcquisition.envelope.normalizedPayload;
+      const legacyPayloads=legacyRadarAvailable
+        ?legacyAcquisition.envelope.normalizedPayload:emptyLegacyRadarPayloadsV320();
       const sourceAcquisition=requiredPayload(approvedAcquisition,'approved source');
       return immutableBundle('legacy_source_sync_result_v3_11', {
         schema: 'legacy-source-sync-result-v3.11', authorityHash: claim.authorityHash,
         sourceCutoff, legacyPayloads,sourceAcquisition,
+        legacyRadarCompatibility:legacyRadarAvailable?'captured':'unavailable_readonly_shell',
         providerAcquisitions:[legacyAcquisition.envelope,approvedAcquisition.envelope].map(({normalizedPayload,...row})=>row),
         legacyPayloadHashes: Object.fromEntries(Object.entries(legacyPayloads)
           .map(([window, payload]) => [window, sha256(canonicalJson(payload))])),
