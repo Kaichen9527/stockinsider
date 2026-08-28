@@ -48,6 +48,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260828_retained_candidate_jsonb_cardinality_v3_19_12.sql',
   'migrations/20260828_final_claim_handoff_lease_v3_19_16.sql',
   'migrations/20260828_kol_first_runtime_recovery_v3_20.sql',
+  'migrations/20260829_v320_source_completion_cardinality_repair.sql',
 ]);
 const V3192_PROJECTION_DOSSIER_MIGRATION =
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql';
