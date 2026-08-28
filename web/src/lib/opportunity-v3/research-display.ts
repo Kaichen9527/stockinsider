@@ -33,12 +33,124 @@ const diagnosticLabels: Readonly<Record<string,string>> = Object.freeze({
   fundamental_quality_authority_missing:'基本面品質資料尚未齊全',
   research_authority_incomplete:'研究權威鏈尚未完成',
   valuation_unavailable:'估值資料尚未齊全',
+  valuation_target_missing:'正式估值未完成，因此不顯示目標價',
+  reclaim_first:'必須先收復支撐再考慮進場',
+  coverage_lt_70:'研究覆蓋率低於 70%',
+  relative_evidence_incomplete:'相對估值、基本面或價格證據尚未完整',
+  market_evidence_incomplete:'大盤證據不完整，暫不形成進場候選',
+  market_or_timing_gate_not_met:'大盤或個股時機尚未同時通過',
+  underreaction_score_below_floor:'未反映分數低於研究門檻',
+});
+
+const missingAxisLabels: Readonly<Record<string,string>> = Object.freeze({
+  source:'來源證據',
+  fundamental:'基本面',
+  valuation:'估值',
+  technical:'技術面',
+  liquidity:'流動性',
+  market:'市場條件',
+});
+
+const valuationStatusLabels: Readonly<Record<string,string>> = Object.freeze({
+  normal:'資料完整',
+  complete:'資料完整',
+  relative_only:'僅有相對估值',
+  valuation_review:'估值資料待補',
+  missing:'估值資料待補',
+  stale:'估值資料已過期',
+  conflict:'估值資料有衝突',
+  unavailable:'估值資料待補',
+});
+
+const valuationMethodLabels: Readonly<Record<string,string>> = Object.freeze({
+  pe:'本益比（PE）',
+  normalized_pe:'正常化本益比',
+  ev_ebitda:'企業價值／EBITDA',
+  pb_roe:'股價淨值比／ROE',
+  residual_income:'剩餘利益模型',
+  nav:'淨資產價值（NAV）',
+  ev_sales:'企業價值／營收',
+});
+
+const technicalStateLabels: Readonly<Record<string,string>> = Object.freeze({
+  below_support:'已跌破支撐',
+  reclaim_required:'等待收復支撐',
+  at_support:'接近支撐',
+  breakout_pending:'等待突破確認',
+  breakout_confirmed:'突破已確認',
+  extended:'短期乖離偏高',
+  invalidated:'技術條件已失效',
+  unavailable:'技術資料待補',
+});
+
+const readinessLabels: Readonly<Record<string,string>> = Object.freeze({
+  actionable:'現在可行動',
+  near_action:'接近買點',
+  wait_condition:'等待條件',
+  data_needed:'資料待補',
+  ready:'等待決策權限',
+  wait_reclaim:'等待收復支撐',
+  wait_breakout:'等待突破確認',
+  wait_value:'等待合理價格',
+  wait_market:'等待市場條件',
+  wait_refresh:'等待資料更新',
+  avoid_chase:'不追價',
+  avoid:'暫時避開',
+  unavailable:'資料待補',
+});
+
+const gateLabels: Readonly<Record<string,string>> = Object.freeze({
+  source:'來源證據',
+  fundamental:'基本面',
+  valuation:'估值',
+  technical:'技術面',
+  liquidity:'流動性',
+  market:'市場條件',
+});
+
+const gateStatusLabels: Readonly<Record<string,string>> = Object.freeze({
+  pass:'已具備',
+  missing:'待補',
+  blocked:'未通過',
+  unavailable:'待補',
+  conflict:'資料衝突',
 });
 
 export function displayResearchDiagnostic(value: unknown): string {
   if(typeof value!=='string'||value.length===0)return '研究條件待補；請查看資料來源與下一步。';
-  if(value.startsWith('missing:'))return `尚缺資料：${value.slice(8).replaceAll('_','、')}`;
+  if(value.startsWith('missing:')) {
+    const axes=value.slice(8).split(',').map((axis)=>missingAxisLabels[axis]).filter(Boolean);
+    return axes.length>0 ? `尚缺資料：${axes.join('、')}` : '研究資料仍待補齊';
+  }
   const base=value.includes(':')?value.slice(0,value.indexOf(':')):value;
   if(diagnosticLabels[base])return diagnosticLabels[base];
   return '研究條件待補；請查看資料來源與下一步。';
+}
+
+function label(value: unknown, labels: Readonly<Record<string,string>>, fallback: string): string {
+  return typeof value==='string'&&labels[value] ? labels[value] : fallback;
+}
+
+export function displayValuationStatus(value: unknown): string {
+  return label(value,valuationStatusLabels,'估值資料待補');
+}
+
+export function displayValuationMethod(value: unknown): string {
+  return label(value,valuationMethodLabels,'待選擇');
+}
+
+export function displayTechnicalState(value: unknown): string {
+  return label(value,technicalStateLabels,'技術資料待補');
+}
+
+export function displayResearchReadiness(value: unknown): string {
+  return label(value,readinessLabels,'資料待補');
+}
+
+export function displayResearchGate(value: unknown): string {
+  return label(value,gateLabels,'研究條件');
+}
+
+export function displayResearchGateStatus(value: unknown): string {
+  return label(value,gateStatusLabels,'待補');
 }
