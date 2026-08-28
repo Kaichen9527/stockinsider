@@ -31,7 +31,7 @@ const { MOPS_INLINE_URL } = require('./official-mops-v314');
 const { buildMarketAnalysis } = require('./market-analysis');
 const { buildOfficialFactorCandidatesV315 } = require('./official-factor-discovery-v315');
 const { runtimeBundleBytes } = require('./tracked-runtime-bundle');
-const { acquireApprovedSources } = require('./official-source-acquisition');
+const { acquireApprovedSources, MAX_DOCUMENTS_PER_CONNECTOR } = require('./official-source-acquisition');
 const { nominationAuthorityForSource } = require('./candidate-nomination-authority');
 const { acquireFrozenProviderEnvelope } = require('./provider-acquisition-v31621');
 const approvedSourceRoster = require('../../config/runtime/approved-source-roster-v3.13.json');
@@ -74,6 +74,66 @@ function legacySourceAcquisitionCompatibilityV320(acquisition) {
     itemOutcomes: acquisition.itemOutcomes.filter(include),
     connectorAttempts: acquisition.connectorAttempts.filter(include),
   });
+}
+
+// Provider envelopes are immutable once acquired. Some older V3.20 envelopes
+// contain twenty Telegram or structured-claim records, while the reviewed
+// source plane accepts the bounded five-connector profile shape only. Build a
+// deterministic consumption view from the frozen envelope: retain the newest
+// allowed records, conserve their items and counters, and never refetch or
+// rewrite the acquisition evidence itself.
+function boundedSourceAcquisitionV320(acquisition) {
+  invariant(acquisition?.schema === 'official-source-acquisition-v3.20', 'v320 source acquisition required');
+  invariant(Array.isArray(acquisition.documents) && Array.isArray(acquisition.itemOutcomes)
+    && Array.isArray(acquisition.connectorAttempts) && Array.isArray(acquisition.outcomes),
+  'v320 source acquisition arrays required');
+  const documentKey=(row)=>`${String(row?.profileId ?? '')}\u0000${String(row?.sourceKey ?? '')}\u0000${String(row?.stableConnectorDocumentId ?? '')}`;
+  const itemKey=(row)=>`${String(row?.profileId ?? '')}\u0000${String(row?.sourceKey ?? '')}\u0000${String(row?.stableId ?? '')}`;
+  const connectorKey=(row)=>`${String(row?.profileId ?? '')}\u0000${String(row?.sourceKey ?? '')}`;
+  const documentsByConnector=new Map();
+  for (const [index,row] of acquisition.documents.entries()) {
+    const sourceKey=String(row?.sourceKey ?? ''); const cap=MAX_DOCUMENTS_PER_CONNECTOR[sourceKey];
+    invariant(Number.isInteger(cap) && cap > 0 && documentKey(row).split('\u0000').every(Boolean), 'v320 source document identity');
+    const key=connectorKey(row); const values=documentsByConnector.get(key) ?? [];
+    values.push({index,row}); documentsByConnector.set(key,values);
+  }
+  const selectedDocumentKeys=new Set();
+  for (const values of documentsByConnector.values()) {
+    const sourceKey=String(values[0].row.sourceKey); const cap=MAX_DOCUMENTS_PER_CONNECTOR[sourceKey];
+    values.sort((left,right)=>String(left.row.publishedAt ?? left.row.collectedAt ?? '').localeCompare(
+      String(right.row.publishedAt ?? right.row.collectedAt ?? ''))
+      ||String(left.row.stableConnectorDocumentId).localeCompare(String(right.row.stableConnectorDocumentId))
+      ||left.index-right.index);
+    for (const value of values.slice(-cap)) selectedDocumentKeys.add(documentKey(value.row));
+  }
+  const allDocumentKeys=new Set(acquisition.documents.map(documentKey));
+  invariant(allDocumentKeys.size===acquisition.documents.length, 'v320 source document identity collision');
+  const documents=acquisition.documents.filter((row)=>selectedDocumentKeys.has(documentKey(row)));
+  const itemOutcomes=acquisition.itemOutcomes.filter((row)=>{
+    const key=itemKey(row); return !allDocumentKeys.has(key) || selectedDocumentKeys.has(key);
+  });
+  const documentCounts=new Map(); const itemCounts=new Map();
+  for (const row of documents) documentCounts.set(connectorKey(row),(documentCounts.get(connectorKey(row)) ?? 0)+1);
+  for (const row of itemOutcomes) itemCounts.set(connectorKey(row),(itemCounts.get(connectorKey(row)) ?? 0)+1);
+  const connectorAttempts=acquisition.connectorAttempts.map((row)=>{
+    const key=connectorKey(row); const evidence=row?.responseEvidence ?? {};
+    return Object.freeze({ ...row,responseEvidence:Object.freeze({ ...evidence,
+      itemCount:itemCounts.get(key) ?? 0,documentCount:documentCounts.get(key) ?? 0 }) });
+  });
+  const profileCounts=new Map();
+  for (const row of documents) profileCounts.set(String(row.profileId),(profileCounts.get(String(row.profileId)) ?? 0)+1);
+  invariant([...profileCounts.values()].every((count)=>count<=30), 'v320 source profile document bound');
+  const outcomes=acquisition.outcomes.map((row)=>Object.freeze({ ...row,
+    documentCount:profileCounts.get(String(row?.profileId ?? '')) ?? 0 }));
+  for (const row of connectorAttempts) {
+    const cap=MAX_DOCUMENTS_PER_CONNECTOR[String(row?.sourceKey ?? '')];
+    invariant(Number.isInteger(cap) && row.responseEvidence.documentCount<=cap
+      && row.responseEvidence.itemCount>=row.responseEvidence.documentCount, 'v320 source connector bound');
+  }
+  invariant(documents.every((row)=>itemOutcomes.some((item)=>itemKey(item)===documentKey(row))),
+    'v320 source document item conservation');
+  return Object.freeze({ ...acquisition,documents:Object.freeze(documents),itemOutcomes:Object.freeze(itemOutcomes),
+    connectorAttempts:Object.freeze(connectorAttempts),outcomes:Object.freeze(outcomes) });
 }
 
 async function loadLegacyRadarPayloads(baseUrl, fetchImpl = globalThis.fetch, internalApiKey = process.env.INTERNAL_API_KEY) {
@@ -1714,7 +1774,7 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         &&legacyAcquisition.envelope.normalizedPayload;
       const legacyPayloads=legacyRadarAvailable
         ?legacyAcquisition.envelope.normalizedPayload:emptyLegacyRadarPayloadsV320();
-      const sourceAcquisition=requiredPayload(approvedAcquisition,'approved source');
+      const sourceAcquisition=boundedSourceAcquisitionV320(requiredPayload(approvedAcquisition,'approved source'));
       return immutableBundle('legacy_source_sync_result_v3_11', {
         schema: 'legacy-source-sync-result-v3.11', authorityHash: claim.authorityHash,
         sourceCutoff, legacyPayloads,sourceAcquisition,
@@ -2103,4 +2163,4 @@ module.exports = { args, buildLegacyCandidateDecision, buildStageHandlers, extra
   main,officialCitation,readBundle,readRuntimeHealthObservation,readRuntimeManifestSha256,
   priceResearchAxes, tickerHasStockContext, uuidFromHash, valuationFactInput,valuationResearchAxis,
   persistedOfficialSnapshot,officialPriceRowsForResearch,officialFactRowsForDecision,officialLiquidityScore,
-  legacySourceAcquisitionCompatibilityV320 };
+  legacySourceAcquisitionCompatibilityV320,boundedSourceAcquisitionV320 };

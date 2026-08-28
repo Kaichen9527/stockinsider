@@ -21,7 +21,7 @@ test('V31621 operator migration plan exactly matches the reviewed apply chain',(
   const planned=declaredMigrationPaths(plan,'migrationPaths');
   const reviewed=declaredMigrationPaths(apply,'MIGRATIONS');
   assert.deepEqual(planned,reviewed,'the displayed production plan cannot omit or reorder a reviewed migration');
-  assert.equal(planned.at(-1),'migrations/20260829_v320_source_completion_cardinality_repair.sql');
+  assert.equal(planned.at(-1),'migrations/20260829_v320_kol_source_authority_seed.sql');
 });
 
 test('V3.18 candidate retention reuses only the preceding immutable terminal ledger',()=>{
