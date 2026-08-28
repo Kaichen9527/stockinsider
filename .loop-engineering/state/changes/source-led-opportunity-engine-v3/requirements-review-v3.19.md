@@ -1,10 +1,11 @@
-# V3.20 Requirements review compatibility bridge for the protected V3.19 gate
+# V3.20 Requirements repair-closure review for the protected V3.19 gate
 
 Date: 2026-08-29
 
-Review authority: this immutable compatibility envelope carries the already
-independent V3.20 Requirements review into the protected base's fixed V3.19
-review-source location. It does not re-run, weaken, or replace that review.
+Review authority: an independent repair-closure review of the V3.20
+acceptance-registry correction. This immutable envelope is placed at the
+protected base's fixed V3.19 review-source location; it neither weakens the
+underlying Requirements contract nor trusts candidate-provided gate output.
 
 Result: `PASS`
 
@@ -12,17 +13,17 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Final repair-closure commit/tree: `42f15635438afe82cb0424b58171eb195abb3e4a` / `f339f81b4a77e2429bb8c06ef60e52dce1f8a03d`
-- Full reviewed range: `6aaa017618f15a0082efb2cafe8c08b32947be1c..42f15635438afe82cb0424b58171eb195abb3e4a`
-- Active graph: `4baf35c1a17cc7c7cd451e71b29e34e9b83c90ee03ca18822fcf4f7f47b19a7b`
+- Final repair-closure commit/tree: `5f797a695412ba9a9ccca4c124dae86a08bd1889` / `914f3afb13f43e466a10d76ad73ff094a41b66e2`
+- Full reviewed range: `6aaa017618f15a0082efb2cafe8c08b32947be1c..5f797a695412ba9a9ccca4c124dae86a08bd1889`
+- Active graph: `5f985e391799fd8332df16c2151f75cc95dfb643a087912d92df2845a435016e`
 
 ## Bridge assertion
 
-The canonical V3.20 Requirements evidence remains
-`requirements-review-v3.20.md` in the reviewed source tree. This compatibility
-copy has identical immutable identity fields so the base-owned gate can verify
-the reviewed V3.20 repair without trusting code from the candidate checkout.
-The reviewed scope is the expired-run reaper and recovery path, KOL-first
-candidate authority, five-connector terminal-outcome matrix, entity-link guard,
-bounded KOL-only deep analysis, additive projection contract and Web
-compatibility. The independent review recorded `PASS` with `P0=0 P1=0 P2=0`.
+The repair closes one P1 class: package.json added the V3.20 KOL-first runtime
+regression suite while the immutable acceptance script registry still named the
+older command. The protected harness correctly rejected that split-brain state.
+The reviewed repair binds the exact package command into the registry and its
+canonical digest, so an omitted suite or a silently altered command fails the
+same traceability boundary. No candidate authority, ranking, runtime, provider
+or production setting changed. The review recorded `PASS` with
+`P0=0 P1=0 P2=0`.
