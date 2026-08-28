@@ -34,6 +34,11 @@ function producerHeartbeatObservation(database) {
   });
 }
 
+function activationJournalComplete(journal, commitSha) {
+  return journal?.commitSha === commitSha
+    && ['new_owner_loaded', 'doctor_passed', 'complete'].includes(journal?.phase);
+}
+
 function restCredentials(resolver){
   const supabaseUrl=resolver('keychain:stockinsider-runtime:supabase-url');
   const serviceRoleKey=resolver('keychain:stockinsider-runtime:supabase-service-role-key');
@@ -218,13 +223,13 @@ async function observeRuntimeHealth({ releaseRoot, runtimeRoot, manifest, review
   return {
     status: diskHealth.status === 'fail' ? 'fail' : 'pass',
     observation: {
-      activationJournalComplete: journal.commitSha === manifest.commitSha && journal.phase === 'new_owner_loaded',
+      activationJournalComplete: activationJournalComplete(journal, manifest.commitSha),
       activePointerValid: fs.realpathSync(path.join(runtimeRoot, 'current')) === fs.realpathSync(releaseRoot),
       competingOwners,
       configSha256: sha256(fs.readFileSync(path.join(releaseRoot, 'config/runtime/auth-source-dag.json'))),
       consumerCommitSha,
-      consumerCompatibility: consumerCommitSha === reviewedRelease.commitSha&&releaseCompatibility.compatible
-        ? 'compatible':releaseCompatibility.reason,
+      consumerCompatibility: consumerCommitSha !== reviewedRelease.commitSha ? 'unknown'
+        : releaseCompatibility.compatible ? 'compatible' : releaseCompatibility.reason,
       releaseCompatibility,
       ...producerHeartbeatObservation(database),
       manifestCanonical: canonicalJson(installation) === canonicalJson(manifest),
@@ -248,5 +253,5 @@ async function observeRuntimeHealth({ releaseRoot, runtimeRoot, manifest, review
   };
 }
 
-module.exports = { effectiveLeaseStatus, producerHeartbeatObservation, observeConsumer, observeDatabase,
+module.exports = { activationJournalComplete, effectiveLeaseStatus, producerHeartbeatObservation, observeConsumer, observeDatabase,
   observeRuntimeHealth, publishRuntimeHealthObservation };

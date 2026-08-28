@@ -48,6 +48,8 @@ const TRACKED_RUNTIME_PATHS = Object.freeze([
   'scripts/runtime/research-readiness-v319.js',
   'scripts/runtime/research-snapshot-v317.js',
   'scripts/runtime/runtime-disk-policy-v319.js',
+  'scripts/runtime/runtime-health-observer.js',
+  'scripts/runtime/runtime-health.js',
   'scripts/runtime/safe-diagnostics.js',
   'scripts/runtime/source-run-config.js',
   'scripts/runtime/supabase-rest-legacy-producer-adapter.js',
@@ -61,6 +63,7 @@ const TRACKED_RUNTIME_PATHS = Object.freeze([
   'scripts/runtime/valuation-method-bridge.js',
   'scripts/runtime/valuation-method.js',
   'scripts/runtime/valuation-operating-bridge.js',
+  'scripts/runtime_doctor.js',
   'web/src/lib/opportunity-v3/release-compatibility-runtime.js',
 ]);
 
