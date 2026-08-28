@@ -1652,7 +1652,11 @@ export interface RadarDailyPayload {
   };
   sourceAcquisitionHealth?: unknown;
   sourceWatermark?: { sourceCutoff:string; acquisitionAuthority:string; evidenceRoot:string|null; fetchedAt:string|null; terminalStatus:string|null };
-  authorizationStatus?: { telegram:'not_authorized'; investanchors:'internal_methodology_only'; sourceClaims:'authorized_terminal_outcomes_required' };
+  authorizationStatus?: {
+    telegram:'not_authorized'|'structured_claim_authorization_required'|'public_channel_cursor_required';
+    investanchors:'internal_methodology_only'|'structured_claim_authorization_required';
+    sourceClaims:'authorized_terminal_outcomes_required';
+  };
   releaseIdentity?: { schema:string;producerCommitSha:string|null };
   degradedSources?: string[];
   lastUpdatedAt?: string | null;
