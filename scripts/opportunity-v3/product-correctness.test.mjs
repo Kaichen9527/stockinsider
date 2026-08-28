@@ -623,8 +623,13 @@ const checks = {
       'the authoritative doctor refreshes and publishes terminal runtime health before assessment');
     const trackedPaths = runtime('tracked-runtime-bundle.js').TRACKED_RUNTIME_PATHS;
     for (const controlPlanePath of ['scripts/runtime/runtime-health-observer.js', 'scripts/runtime/runtime-health.js',
-      'scripts/runtime_doctor.js']) assert.ok(trackedPaths.includes(controlPlanePath),
-      `${controlPlanePath} must be sealed into the reviewed runtime identity`);
+      'scripts/runtime_doctor.js']) {
+      assert.ok(trackedPaths.includes(controlPlanePath),
+        `${controlPlanePath} must be sealed into the reviewed runtime identity`);
+      assert.match(execFileSync('/usr/bin/git', ['ls-files', '--stage', '--', controlPlanePath],
+        { cwd: root, encoding: 'utf8' }), /^100644 /u,
+      `${controlPlanePath} must use the sealed regular-file mode required by the installer`);
+    }
     const database = await observer.observeDatabase(root, { legacyRadarBaseUrl: 'https://example.test' },
       () => 'postgresql://doctor:read-only@db.fixture.supabase.co/postgres?sslmode=require', ReadOnlyDoctorClient);
     assert.equal(database.stateSchema, 'stockinsider-producer-state-v1');
