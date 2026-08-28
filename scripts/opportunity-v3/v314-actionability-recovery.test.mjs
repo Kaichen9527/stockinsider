@@ -540,8 +540,8 @@ test('V314-011 every approved profile/provider has one honest terminal outcome',
     if(String(url).endsWith('failure.xml'))throw new Error('provider offline');
     throw new Error('offline');},
     now:new Date('2026-08-11T00:00:00Z')});
-  assert.equal(acquired.connectorAttempts.length,51);
-  assert.equal(new Set(acquired.connectorAttempts.map((row)=>`${row.profileId}:${row.sourceKey}`)).size,51);
+  assert.equal(acquired.connectorAttempts.length,85);
+  assert.equal(new Set(acquired.connectorAttempts.map((row)=>`${row.profileId}:${row.sourceKey}`)).size,85);
   assert.ok(acquired.connectorAttempts.every((row)=>CONNECTOR_ATTEMPT.has(row.status)));
   const statuses=new Set(acquired.connectorAttempts.map((row)=>row.status));
   for(const status of ['auth_failed','metadata_only','provider_failed','items_found','missing_endpoint'])
@@ -953,7 +953,7 @@ test('V314-019 exact-review compatibility boundaries accept V3.14 and remain fai
   const radar=readFileSync(path.join(root,'web/src/app/components/RadarTabs.tsx'),'utf8');
   const migration=readFileSync(path.join(root,'migrations/20260811_actionability_recovery_v3_14.sql'),'utf8');
   assert.match(route,/decision-v3\[\.\]\(\?:13\|14\)/u);
-  assert.match(doctor,/\['legacy-radar-v3[.]13[.]0','legacy-radar-v3[.]14[.]0','legacy-radar-v3[.]17[.]0','legacy-radar-v3[.]18[.]0','legacy-radar-v3[.]19[.]0'\]/u);
+  assert.match(doctor,/\['legacy-radar-v3[.]13[.]0','legacy-radar-v3[.]14[.]0','legacy-radar-v3[.]17[.]0','legacy-radar-v3[.]18[.]0','legacy-radar-v3[.]19[.]0','legacy-radar-v3[.]20[.]0'\]/u);
   assert.match(audit,/decision-v3\[\.\]\(\?:13\|14\)/u);
   assert.match(audit,/valuation-assumptions-audit-v3[.]14/u);
   assert.match(radar,/signal[.]projectionReadOnly===true[\s\S]*?validatePublishedDecisionCard/u);

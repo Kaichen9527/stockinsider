@@ -84,12 +84,13 @@ test('V317 never acquires paid source text and leaves no black anchor override',
   const output=await acquisition.acquireApprovedSources({roster,credentials:{},now:new Date('2026-08-20T10:20:00Z'),
     fetchImpl:async()=>{requests+=1;return new Response('{}',{status:404});}});
   const investAnchorsAttempts=output.connectorAttempts.filter((row)=>row.profileId==='investanchors');
-  assert.equal(investAnchorsAttempts.length,3);
+  assert.equal(investAnchorsAttempts.length,5);
   assert.deepEqual(investAnchorsAttempts.map((row)=>[row.sourceKey,row.status]),[
     ['threads','missing_endpoint'],['podcast','missing_endpoint'],['youtube','auth_failed'],
+    ['telegram','missing_endpoint'],['investanchors','auth_failed'],
   ]);
   assert.equal(output.documents.some((row)=>row.profileId==='investanchors'),false);
-  assert.equal(output.connectorAttempts.length,51);
+  assert.equal(output.connectorAttempts.length,85);
   assert.ok(requests>=0);
   const css=readFileSync(path.join(root,'web/src/app/globals.css'),'utf8');
   assert.doesNotMatch(css,/^a\s*\{\s*color:\s*inherit;\s*\}/mu);

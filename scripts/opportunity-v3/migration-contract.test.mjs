@@ -92,6 +92,9 @@ const retainedCandidateJsonbCardinalityMigrationPath = path.join(root,
 const finalClaimHandoffMigrationPath = path.join(root,
   'migrations/20260828_final_claim_handoff_lease_v3_19_16.sql');
 const finalClaimHandoffSql = fs.readFileSync(finalClaimHandoffMigrationPath, 'utf8');
+const v320RuntimeRecoveryMigrationPath = path.join(root,
+  'migrations/20260828_kol_first_runtime_recovery_v3_20.sql');
+const v320RuntimeRecoverySql = fs.readFileSync(v320RuntimeRecoveryMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -132,6 +135,76 @@ const lifecycleNewerSourceContentHash = sha256Canonical([
   ['summary', lifecycleNewerSourceFields[1]],
   ['body', lifecycleNewerSourceFields[2]],
 ]);
+
+test('V3.20 widens only the KOL connector matrix and installs an exact-identity expired-lease reaper',()=>{
+  assert.doesNotMatch(v320RuntimeRecoverySql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(v320RuntimeRecoverySql,/official-source-acquisition-v3[.]20/u);
+  assert.match(v320RuntimeRecoverySql,/\('threads','podcast','youtube','telegram','investanchors'\)/u);
+  assert.match(v320RuntimeRecoverySql,/lease_expired_identity_ambiguous/u);
+  assert.match(v320RuntimeRecoverySql,/reap_legacy_expired_producer_run_v3_20/u);
+  const installed=JSON.parse(psql(`SELECT jsonb_build_object(
+    'reaper',to_regprocedure('public.reap_legacy_expired_producer_run_v3_20(text,text,text)') IS NOT NULL,
+    'terminalizer',to_regprocedure('public.terminalize_legacy_expired_producer_run_v3_20(uuid,uuid,text,text,text)') IS NOT NULL,
+    'serviceReaper',has_function_privilege('service_role',
+      'public.reap_legacy_expired_producer_run_v3_20(text,text,text)','EXECUTE'),
+    'schema',(SELECT position('legacy-radar-v3.20.0' IN pg_get_constraintdef(oid))>0
+      FROM pg_constraint WHERE conrelid='public.legacy_decision_revision_evaluations_v3_13'::regclass
+        AND conname='legacy_evaluation_schema_v314_check')
+  )::text;`,['-At']));
+  assert.deepEqual(installed,{reaper:true,terminalizer:true,serviceReaper:true,schema:true});
+  const sourceDefinition=psql(`SELECT pg_get_functiondef(
+    'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure);`,['-At']);
+  for(const required of ['telegram','investanchors','official-source-acquisition-v3.20'])assert.match(sourceDefinition,new RegExp(required,'u'));
+  const reaped=psql(`BEGIN;
+    INSERT INTO public.legacy_producer_runs_v3_11(
+      run_id,owner_label,owner_token_hash,producer_commit_sha,worker_sha256,scheduler_config_canonical,
+      scheduler_config_sha256,legacy_seed_symbols,legacy_seed_set_hash,scheduled_occurrence_id,source_cutoff,
+      trading_date,trading_session_authority_hash,authority_canonical,authority_json,authority_hash,status,
+      started_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,logical_run_key,attempt
+    ) VALUES(
+      '32000000-0000-4000-8000-000000000001','com.stockinsider.auth-source-worker',repeat('1',64),
+      repeat('a',40),repeat('b',64),decode('${legacyRuntimeConfigHex}','hex'),
+      '1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2',
+      (SELECT array_agg(value ORDER BY ordinal) FROM jsonb_array_elements_text(convert_from(
+        decode('${legacyRuntimeConfigHex}','hex'),'utf8')::jsonb->'legacySeedSymbols') WITH ORDINALITY seed(value,ordinal)),
+      'e6d9c09b8b552f5d9eaf389b76d2d90daa2d89578433d2a1ad63286888b3b743','v320-expired-reaper',
+      '2026-08-28T10:20:00Z','2026-08-28',NULL,convert_to('{}','utf8'),'{}'::jsonb,
+      encode(extensions.digest(convert_to('{}','utf8'),'sha256'),'hex'),'running',clock_timestamp()-interval '5 minutes',
+      clock_timestamp()-interval '4 minutes',clock_timestamp()-interval '3 minutes',NULL,NULL,repeat('2',64),1
+    );
+    INSERT INTO public.legacy_producer_jobs_v3_11(
+      job_id,run_id,stage,job_kind,stage_ordinal,shard_ordinal,execution_ordinal,revision_id,predecessor_job_id,
+      input_hash,payload_hash,status,attempt,max_attempts,owner_token_hash,leased_at,heartbeat_at,lease_expires_at,
+      terminal_at,failure_code
+    ) VALUES(
+      '32000000-0000-4000-8000-000000000002','32000000-0000-4000-8000-000000000001','facts_refresh',
+      'stage_barrier',3,NULL,0,NULL,NULL,repeat('3',64),repeat('4',64),'leased',1,5,repeat('5',64),
+      clock_timestamp()-interval '5 minutes',clock_timestamp()-interval '4 minutes',clock_timestamp()-interval '3 minutes',NULL,NULL
+    );
+    SELECT public.reap_legacy_expired_producer_run_v3_20(repeat('a',40),repeat('b',64),
+      '1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2');
+    SELECT jsonb_build_object(
+      'runStatus',run.status::text,
+      'jobStatus',job.status::text,
+      'diagnostics',diagnostic.count
+    )::text
+    FROM (
+      SELECT status FROM public.legacy_producer_runs_v3_11
+      WHERE run_id='32000000-0000-4000-8000-000000000001'
+    ) run
+    CROSS JOIN LATERAL (
+      SELECT status FROM public.legacy_producer_jobs_v3_11
+      WHERE job_id='32000000-0000-4000-8000-000000000002'
+    ) job
+    CROSS JOIN LATERAL (
+      SELECT count(*) FROM public.legacy_runtime_failure_diagnostics_v3_14
+      WHERE run_id='32000000-0000-4000-8000-000000000001' AND failure_code='lease_expired'
+    ) diagnostic;
+    ROLLBACK;`,['-At']).trim().split('\n');
+  assert.equal(reaped.find((line)=>line==='failed_recoverable'),'failed_recoverable');
+  assert.deepEqual(JSON.parse(reaped.find((line)=>line.startsWith('{'))),
+    {runStatus:'failed',jobStatus:'failed',diagnostics:1});
+});
 const lifecycleNewerSourceParseOutput = executeWorkerPayload('source_parse_batch', [
   '123e4567-e89b-42d3-a456-426614173004', 1, 'threads',
   '123e4567-e89b-42d3-a456-426614173001', 'lifecycle-post-newer',
@@ -655,6 +728,13 @@ before(() => {
       '-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
       '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', reusedAcquisitionLineageMigrationPath,
     ]);
+  }
+  for (const migration of [candidateRetentionAuthorityMigrationPath,fullCandidateRetentionAuthorityMigrationPath,
+    retainedCandidateJsonbCardinalityMigrationPath,finalClaimHandoffMigrationPath,v320RuntimeRecoveryMigrationPath]) {
+    for (let application = 0; application < 2; application += 1) {
+      command(pg.psql, ['-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+        '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', migration]);
+    }
   }
 });
 
@@ -1252,10 +1332,7 @@ test('V3.16.21 freezes one provider revision, reuses it, and quarantines conflic
         'public.freeze_legacy_provider_acquisition_v3_16_21(uuid,uuid,uuid,text,text,text,timestamptz,timestamptz,text,integer,jsonb,text,text,text,boolean)','EXECUTE'),
       'serviceBaseClaim',has_function_privilege('service_role',
         'public.claim_legacy_producer_job_provider_acquisition_base_v3_16_21(uuid,uuid,uuid,integer)','EXECUTE'),
-      'lineageWrapper',EXISTS(SELECT 1 FROM pg_proc WHERE oid=
-        'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure
-        AND pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
-        AND pg_get_functiondef(oid) LIKE '%providerAcquisitions%'),
+      'lineageWrapper',public.verify_legacy_claim_delegation_chain_v3_20(),
       'immutableTrigger',EXISTS(SELECT 1 FROM pg_trigger WHERE tgrelid=
         'public.legacy_provider_acquisition_revisions_v3_16_21'::regclass AND NOT tgisinternal)
     )::text;
@@ -1769,7 +1846,9 @@ test('V3.13 source acquisition persists seventeen terminals, citation, and typed
     sourceCollectedAt:'2026-08-09T10:20:00Z',rawFieldPayload:{text:'2019 年與 2026 年的總體經濟回顧。'}},authorityPages});
   assert.equal(parsedNoClaim.parseOutcome,'processed_no_claim');assert.equal(parsedNoClaim.candidates.length,0);
   assert.deepEqual(parsedNoClaim.entityOutcomes.map((row)=>row.outcome),['rejected','rejected']);
-  const payload={schema:'legacy-source-sync-result-v3.11',sourceAcquisition:acquisition};
+  const payload={schema:'legacy-source-sync-result-v3.11',
+    sourceAcquisition:runtime('auth-source-worker-cli.js').legacySourceAcquisitionCompatibilityV320(acquisition),
+    sourceAcquisitionV320:acquisition};
   const repeatAcquisition=structuredClone(acquisition);
   repeatAcquisition.connectorAttempts.filter((attempt)=>attempt.profileId===mixedFailureProfile
     &&attempt.status!=='items_found').forEach((attempt)=>Object.assign(attempt,{status:'successful_empty',
@@ -1788,7 +1867,9 @@ test('V3.13 source acquisition persists seventeen terminals, citation, and typed
     &&attempt.sourceKey==='threads'),{status:'items_found',reasonCode:'threads_items_observed',
     responseEvidence:{kind:'http_response',statusCode:200,responseBytes:128,itemCount:1,documentCount:1}});
   repeatAcquisition.outcomes.find((outcome)=>outcome.profileId===mixedFailureProfile).documentCount+=1;
-  const repeatPayload={schema:'legacy-source-sync-result-v3.11',sourceAcquisition:repeatAcquisition};
+  const repeatPayload={schema:'legacy-source-sync-result-v3.11',
+    sourceAcquisition:runtime('auth-source-worker-cli.js').legacySourceAcquisitionCompatibilityV320(repeatAcquisition),
+    sourceAcquisitionV320:repeatAcquisition};
   const applied=JSON.parse(psql(`
     BEGIN;
     INSERT INTO public.internal_principal_role_bindings_v3(principal_id,role,valid_from,valid_to,status,configuration_hash,recorded_at)
@@ -2938,6 +3019,16 @@ test('applied catalog exposes exact composite arities, named indexes and primary
     '43a951d6f087eebc8aed8a8a02bccbdef886577dd0c22c50bb4ca07fac221569');
   const { schema:sourceCatalogSchema,...expectedSourceCatalog }=JSON.parse(sourceCatalogFixtureBytes);
   assert.equal(sourceCatalogSchema,'v313-source-plane-catalog-oracle-v1');
+  // V3.20 widens the two source-key CHECKs, but leaves the V3.13 catalog
+  // otherwise byte-identical. Keep the original fixture immutable and derive
+  // the reviewed additive contract explicitly here.
+  const expectedSourceCatalogV320=structuredClone(expectedSourceCatalog);
+  const sourceKeyV313="CHECK (source_key = ANY (ARRAY['threads'::source_key_v3, 'podcast'::source_key_v3, 'youtube'::source_key_v3]))";
+  const sourceKeyV320="CHECK (source_key = ANY (ARRAY['threads'::source_key_v3, 'podcast'::source_key_v3, 'youtube'::source_key_v3, 'telegram'::source_key_v3, 'investanchors'::source_key_v3]))";
+  for(const relation of ['legacy_frozen_source_authorities_v3_13','legacy_source_connector_attempts_v3_13']){
+    expectedSourceCatalogV320.constraints[relation]=expectedSourceCatalogV320.constraints[relation]
+      .map(([kind,definition])=>[kind,definition===sourceKeyV313?sourceKeyV320:definition]);
+  }
   const sourceTables=Object.keys(expectedSourceCatalog.columns);
   const expectedCompositeArities = Object.fromEntries([
     ['source_identity_authority_input_v3', 7],
@@ -3155,8 +3246,8 @@ test('applied catalog exposes exact composite arities, named indexes and primary
       'acl',(SELECT jsonb_object_agg(relname,grants ORDER BY relname) FROM source_acl)
     )::text;
   `,['-At']).trim());
-  assert.deepEqual(sourceCatalog,expectedSourceCatalog,
-    'all eight source relations byte-match the independent columns/constraints/triggers/RLS/owner/ACL oracle');
+  assert.deepEqual(sourceCatalog,expectedSourceCatalogV320,
+    'V3.20 changes only the reviewed five-connector source-key constraints');
   const sourceContractSql=decisionIntegritySql.replace(/\s+/gu,' ');
   for(const required of [
     "successful_empty' OR (response_kind='http_response' AND response_status_code BETWEEN 200 AND 299",
@@ -6786,7 +6877,7 @@ test('V3.19.3 reconstructs decision identity from the worker non-cyclic dossier 
   assert.match(decisionIdentityDossierSql,/REVOKE CREATE ON SCHEMA public FROM opportunity_v3_rpc_owner/u);
 });
 
-test('V3.19.6 keeps compact evaluation schema persistence closed and V3.19-compatible',()=>{
+test('V3.20 keeps compact evaluation schema persistence closed and V3.20-compatible',()=>{
   assert.doesNotMatch(evaluationSchemaCompatibilitySql,
     /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
   assert.match(evaluationSchemaCompatibilitySql,/legacy_evaluation_schema_v314_check/u);
@@ -6802,10 +6893,9 @@ test('V3.19.6 keeps compact evaluation schema persistence closed and V3.19-compa
       'public.legacy_decision_revision_evaluations_v3_13'::regclass
     AND constraint_row.conname='legacy_evaluation_schema_v314_check'
     AND constraint_row.contype='c';`,['-Atq']));
-  for(const version of ['3.13.0','3.14.0','3.17.0','3.18.0','3.19.0']) {
+  for(const version of ['3.13.0','3.14.0','3.17.0','3.18.0','3.19.0','3.20.0']) {
     assert.match(applied.definition,new RegExp(`legacy-radar-v${version.replaceAll('.', '[.]')}`,'u'));
   }
-  assert.doesNotMatch(applied.definition,/legacy-radar-v3[.]20[.]0/u);
   assert.equal(applied.ownerCreate,false);
 });
 

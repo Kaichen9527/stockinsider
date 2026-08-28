@@ -1031,6 +1031,7 @@ test('generic migration discovery is a closed legacy allowlist and the V3.13 pla
     'migrations/20260828_full_candidate_retention_authority_v3_19_11.sql',
     'migrations/20260828_retained_candidate_jsonb_cardinality_v3_19_12.sql',
     'migrations/20260828_final_claim_handoff_lease_v3_19_16.sql',
+    'migrations/20260828_kol_first_runtime_recovery_v3_20.sql',
   ]);
   assert.ok(plan.migrations.every((row)=>/^[0-9a-f]{64}$/u.test(row.sha256)&&row.additiveOnly));
   assert.match(plan.orderedChainSha256,/^[0-9a-f]{64}$/u);
@@ -1045,7 +1046,7 @@ test('V3.13 operator docs and positive consumers use tracked authority and exact
   const runbook=readFileSync(path.join(root,'docs/operations_runbook.md'),'utf8');
   const readme=readFileSync(path.join(root,'README.md'),'utf8');
   assert.match(runbook,/V3[.]14 reviewed release and activation/u);
-  assert.match(runbook,/17×3 terminal matrix/u);
+  assert.match(runbook,/17×5 terminal matrix/u);
   assert.match(runbook,/items_found.*successful_empty.*metadata_only.*missing_endpoint.*auth_failed.*provider_failed/su);
   assert.match(runbook,/STOCKINSIDER_SUPABASE_URL_REF=keychain:stockinsider-runtime:supabase-url/u);
   assert.match(runbook,/STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY_REF=keychain:stockinsider-runtime:supabase-service-role-key/u);
@@ -1063,7 +1064,7 @@ test('V3.13 operator docs and positive consumers use tracked authority and exact
   }
 });
 
-acceptanceTest('DI-006','V3.13 approved source acquisition conserves 17 terminal outcomes and only ingests creator transcripts',async()=>{
+acceptanceTest('DI-006','V3.20 approved source acquisition conserves the five-connector terminal matrix and only ingests analyzable source material',async()=>{
   const roster=structuredClone(JSON.parse(readFileSync(path.join(root,'config/runtime/approved-source-roster-v3.13.json'),'utf8')));
   assert.equal(roster.threadsSearchEndpoint,'https://graph.threads.net/keyword_search');
   roster.profiles[0].podcastFeed='https://creator.example/feed.xml';
@@ -1102,7 +1103,7 @@ acceptanceTest('DI-006','V3.13 approved source acquisition conserves 17 terminal
     publishedAt:'2026-08-07T08:00:00',transcript:'內容',collectedAt:'2026-08-09T10:20:00Z'}),
   /source timestamp authority/u);
   assert.equal(Object.hasOwn(result.outcomes.find((row)=>row.profileId==='gooaye'),'status'),false);
-  assert.equal(result.connectorAttempts.length,51);
+  assert.equal(result.connectorAttempts.length,85);
   assert.equal(result.connectorAttempts.find((row)=>row.profileId==='gooaye'&&row.sourceKey==='podcast').status,'items_found');
   assert.equal(runtime('official-source-acquisition.js').parsePodcastFeed(
     rss.replaceAll('podcast:transcript','podcasting:transcript'),roster.profiles[0])[0].transcriptUrl,null);
@@ -1253,6 +1254,7 @@ acceptanceTest('DI-006','V3.13 approved source acquisition conserves 17 terminal
       link:{disposition:'linked',stockId:'stock-2330',symbol:'2330'}},
     {claimId:'threads-claim',mentionId:'threads-mention',revisionId:'threads-revision',sourceKey:'threads',
       sourceClass:'community',sourceUrl:'https://www.threads.net/@stockcancer/post/1',raw:'2330 產業觀察',claimAsOf:'2026-08-07T09:00:00Z',
+      nominationAuthority:'approved_kol_threads_api',
       link:{disposition:'linked',stockId:'stock-2330',symbol:'2330'}},
   ],seedSymbols:[],priorLedger:[]});
   assert.equal(merged.candidateLedger.length,1);assert.equal(merged.candidateLedger[0].evidenceCount,2);

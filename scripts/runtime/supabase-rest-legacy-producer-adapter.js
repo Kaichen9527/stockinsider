@@ -122,6 +122,17 @@ function createSupabaseRestLegacyProducerAdapter({supabaseUrl,serviceRoleKey,fet
     },
     failLegacyProducerJob:async(input)=>completion(await rpc('fail_legacy_producer_job_v3_11',{
       p_run:input.runId,p_job:input.jobId,p_token:input.ownerToken,p_failure:input.failure})),
+    terminalizeExpiredLegacyProducerRun:async(input)=>{
+      const disposition=await rpc('terminalize_legacy_expired_producer_run_v3_20',{
+        p_run:input.runId,p_job:input.jobId,p_commit:input.sourceCommitSha,p_worker_sha256:input.workerSha256,
+        p_config_sha256:input.configSha256});
+      return Object.freeze({disposition:typeof disposition==='string'?disposition:null,terminalized:disposition==='failed_recoverable'});
+    },
+    reapExpiredLegacyProducerRun:async(input)=>{
+      const disposition=await rpc('reap_legacy_expired_producer_run_v3_20',{
+        p_commit:input.sourceCommitSha,p_worker_sha256:input.workerSha256,p_config_sha256:input.configSha256});
+      return Object.freeze({disposition:typeof disposition==='string'?disposition:null,terminalized:disposition==='failed_recoverable'});
+    },
     close:async()=>{},
   });
 }
