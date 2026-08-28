@@ -114,8 +114,11 @@ test('the protected root selects closed graph-bound Requirements/Architecture ev
     'codex/source-led-opportunity-engine-v3-v320-requirements-evidence',
     'codex/source-led-opportunity-engine-v3-v320-architecture-evidence',
     'codex/source-led-opportunity-engine-v3-v319-exact-review-evidence',
+    'codex/source-led-opportunity-engine-v3-v320-exact-review-evidence',
     'requirements-review-v3.19.md',
     'architecture-review-v3.19.md',
+    'requirements-review-v3.20.md',
+    'architecture-review-v3.20.md',
   ]) assert.match(worker, new RegExp(reference.replace(/[.]/gu, '\\.'), 'u'));
   assert.match(worker, /evidence\/source-led-opportunity-v3-exact-review-\$\{attestation[.]subjectCommitSha\}/u);
   assert.match(worker, /function reviewSource\(check, attestation = null, identity = null\)/u);

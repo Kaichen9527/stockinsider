@@ -296,6 +296,16 @@ function createPostgresLegacyProducerAdapter({ connectionString }) {
       }
     },
     failLegacyProducerJob: async (input) => completion(await one('select * from public.fail_legacy_producer_job_v3_11($1,$2,$3,$4)', [input.runId, input.jobId, input.ownerToken, input.failure])),
+    terminalizeExpiredLegacyProducerRun: async (input) => {
+      const disposition=(await one('select public.terminalize_legacy_expired_producer_run_v3_20($1,$2,$3,$4,$5) as disposition',
+        [input.runId,input.jobId,input.sourceCommitSha,input.workerSha256,input.configSha256]))?.disposition ?? null;
+      return Object.freeze({disposition,terminalized:disposition==='failed_recoverable'});
+    },
+    reapExpiredLegacyProducerRun: async (input) => {
+      const disposition=(await one('select public.reap_legacy_expired_producer_run_v3_20($1,$2,$3) as disposition',
+        [input.sourceCommitSha,input.workerSha256,input.configSha256]))?.disposition ?? null;
+      return Object.freeze({disposition,terminalized:disposition==='failed_recoverable'});
+    },
     close: () => pool.end(),
   });
 }

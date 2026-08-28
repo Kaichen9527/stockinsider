@@ -56,8 +56,12 @@ environment variables are not the V3.14 contract:
 - optional Keychain references for `threads-access-token`, `youtube-api-key`
   and `youtube-oauth-token`, resolved by the tracked credential resolver.
 
-Every one of the 17 approved profiles must terminate all three connector
-attempts (`threads`, `podcast`, `youtube`), producing exactly 51 attempt rows.
+Every one of the 17 approved profiles must terminate all five connector
+attempts (`threads`, `podcast`, `youtube`, `telegram`, `investanchors`), producing
+exactly 85 attempt rows. Only KOL-authorized material may nominate a candidate:
+official exchange data enriches and vetoes it but never creates one. Telegram is
+limited to public `t.me/s/...` channels; InvestAnchors accepts only an authorized,
+bounded structured claim and never stores member article text.
 Allowed terminal statuses are `items_found`, `successful_empty`,
 `metadata_only`, `missing_endpoint`, `auth_failed`, and `provider_failed`.
 Threads uses the Meta OAuth keyword-search endpoint; Podcast uses an approved
@@ -74,9 +78,9 @@ release tuple (never to a branch name or `VERCEL_GIT_COMMIT_SHA`):
 Deploy the same reviewed commit, activate the tracked scheduler, then run the
 producer twice. Both runs must terminate successfully; the second must prove
 no-change idempotency. Action authority remains disabled until the projection is
-`legacy-radar-v3.14.0`, producer commit and runtime manifest exactly match the two
-Web values, migration level is `decision-integrity-v3.14`, and freshness is `fresh`.
-Inspect the 17×3 terminal matrix and official coverage waterfall. Missing OAuth is
+`legacy-radar-v3.20.0`, producer commit and runtime manifest exactly match the two
+Web values, migration level is `kol-first-runtime-recovery-v3.20`, and freshness is `fresh`.
+Inspect the 17×5 terminal matrix and KOL-nomination coverage waterfall. Missing OAuth is
 an honest `auth_failed`, never a synthesized success.
 
 On any smoke failure, stop the scheduler, restore the prior runtime pointer/plist and

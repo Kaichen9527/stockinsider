@@ -3310,7 +3310,7 @@ const suiteOwnerVariants = [
     'V3.13 official facts and 252-session peer authority reach a formal valuation without hidden inputs',
     'V3.13 FULL detail remains authoritative while LIGHT fills only genuinely missing leaves',
     'V3.13 projection freshness uses scheduled trading runs, not a 24-hour wall clock',
-    'V3.13 approved source acquisition conserves 17 terminal outcomes and only ingests creator transcripts',
+    'V3.20 approved source acquisition conserves the five-connector terminal matrix and only ingests analyzable source material',
     'V3.13 official statement parser requires reported diluted shares and never derives the 30.04 shortcut',
     'V3.13 official close and bounded raw OHLCV parsers retain exchange authority and reject bad geometry',
     'V3.13 entity linking rejects naked calendar years even when they are listed symbols',
