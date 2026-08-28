@@ -249,7 +249,7 @@ async function appendSourceIdentities(client) {
 }
 
 async function appendApprovedProfileIdentities(client) {
-  invariant(approvedSourceRoster.schema === 'approved-source-roster-v3.13' &&
+  invariant(['approved-source-roster-v3.13','approved-source-roster-v3.20'].includes(approvedSourceRoster.schema) &&
     approvedSourceRoster.profiles.length === 17, 'approved profile roster unavailable');
   const requested = approvedSourceRoster.profiles.flatMap((profile) => [
     profile.threads ? { sourceKey:'threads',sourceClass:'community',profileUrl:`https://www.threads.net/@${profile.threads}` } : null,
@@ -257,18 +257,29 @@ async function appendApprovedProfileIdentities(client) {
     profile.youtubeChannelId || profile.youtubeHandle ? { sourceKey:'youtube',sourceClass:'curated_thesis',
       profileUrl:profile.youtubeChannelId ? `https://www.youtube.com/channel/${profile.youtubeChannelId}` :
         `https://www.youtube.com/@${profile.youtubeHandle}` } : null,
-  ].filter(Boolean).map((source) => ({
-    id:uuidFromIdentity(`stockinsider:v313-source:${source.sourceKey}:${profile.id}`),
-    platform:source.sourceKey,entityType:source.sourceKey === 'threads' ? 'kol' : 'channel',displayName:profile.name,
-    sourceIdentityKey:`v313:${source.sourceKey}:${profile.id}`,distributionIdentity:`${source.sourceKey}:${profile.id}`,
+    typeof profile.telegramPublicChannel === 'string' && /^[A-Za-z][A-Za-z0-9_]{4,63}$/u.test(profile.telegramPublicChannel.replace(/^@/u,''))
+      ? { sourceKey:'telegram',sourceClass:'community',entityType:'channel',
+        profileUrl:`https://t.me/${profile.telegramPublicChannel.replace(/^@/u,'')}` } : null,
+    profile.id === 'investanchors' && profile.sourcePolicy === 'structured_claim_authorized'
+      ? { sourceKey:'investanchors',sourceClass:'curated_thesis',entityType:'site',profileUrl:'https://investanchors.com' } : null,
+  ].filter(Boolean).map((source) => {
+    // Existing three-connector identities are immutable V3.13 records. V3.20
+    // adds only Telegram and structured InvestAnchors identities, avoiding a
+    // duplicate active authority for the same distribution identity.
+    const sourceIdentityVersion=['telegram','investanchors'].includes(source.sourceKey) ? 'v320' : 'v313';
+    return ({
+    id:uuidFromIdentity(`stockinsider:${sourceIdentityVersion}-source:${source.sourceKey}:${profile.id}`),
+    platform:source.sourceKey,entityType:source.entityType ?? (source.sourceKey === 'threads' ? 'kol' : 'channel'),displayName:profile.name,
+    sourceIdentityKey:`${sourceIdentityVersion}:${source.sourceKey}:${profile.id}`,distributionIdentity:`${source.sourceKey}:${profile.id}`,
     ...source,
-  })));
+  });
+  }));
   await client.query(`WITH requested AS (SELECT * FROM jsonb_to_recordset($1::jsonb) AS x(
       id uuid,platform text,"entityType" text,"displayName" text,"sourceIdentityKey" text,"profileUrl" text))
     INSERT INTO public.source_entities(id,platform,entity_type,display_name,source_key,profile_url,status,metadata,created_at,updated_at)
     SELECT id,platform,"entityType","displayName","sourceIdentityKey","profileUrl",'active',
-      jsonb_build_object('authority','approved-source-roster-v3.13'),clock_timestamp(),clock_timestamp()
-    FROM requested ON CONFLICT(source_key) DO NOTHING`, [JSON.stringify(requested)]);
+      jsonb_build_object('authority',$2::text),clock_timestamp(),clock_timestamp()
+    FROM requested ON CONFLICT(source_key) DO NOTHING`, [JSON.stringify(requested), approvedSourceRoster.schema]);
   const authorityRows = requested.map((row) => ({ sourceIdentityId:row.id,sourceKey:row.sourceKey,
     sourceClass:row.sourceClass,distributionIdentity:row.distributionIdentity,validFrom:new Date(0).toISOString() }));
   await client.query(`WITH requested AS (SELECT * FROM jsonb_to_recordset($1::jsonb) AS x(

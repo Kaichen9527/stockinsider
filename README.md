@@ -78,7 +78,7 @@ V3.14 tracked runtime 不讀取上述 raw login/cookie 設定。它要求
 `STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY_REF=keychain:stockinsider-runtime:supabase-service-role-key` 與
 `INTERNAL_API_KEY_REF=keychain:stockinsider-runtime:internal-api-key`；Threads
 OAuth、YouTube API/captions 也只由 `scripts/runtime/credential-resolver.js`
-的 allowlisted Keychain reference 取得。完整的非啟用驗證與 17×3 connector
+的 allowlisted Keychain reference 取得。完整的非啟用驗證與 17×5 connector
 terminal-status 程序見 [operations runbook](docs/operations_runbook.md)。
 
 ## 3. 安裝依賴

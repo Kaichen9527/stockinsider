@@ -168,7 +168,7 @@ const checks = {
     assert.ok(!readFileSync(path.join(root, 'scripts/runtime/auth-source-worker-cli.js'), 'utf8').includes('.agent/'));
     const bundle = runtime('tracked-runtime-bundle.js');
     assert.deepEqual([...bundle.TRACKED_RUNTIME_PATHS].sort(), bundle.TRACKED_RUNTIME_PATHS);
-    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 57);
+    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 59);
     assert.equal(bundle.runtimeBundleSha256(root), sha256(bundle.runtimeBundleBytes(root)));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/auth-source-worker-cli.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/provider-acquisition-v31621.js'));
@@ -178,6 +178,7 @@ const checks = {
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/runtime-disk-policy-v319.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('config/runtime/artifact-retention-v3.19.json'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/research-snapshot-v317.js'));
+    assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/reap-expired-producer-run-v320-cli.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/tracked-runtime-bundle.js'));
     const bundleRoot = mkdtempSync(path.join(os.tmpdir(), 'runtime-bundle-nofollow-'));
     try {
@@ -674,22 +675,26 @@ const checks = {
     assert.equal(selected.config.legacyRadarBaseUrl, 'https://stockinsider-three.vercel.app');
     assert.equal(selected.seedSetHash, 'e6d9c09b8b552f5d9eaf389b76d2d90daa2d89578433d2a1ad63286888b3b743');
     assert.deepEqual(selected.config.stages.map((stage) => stage.name), runtime('source-run-config.js').LEGACY_STAGES);
-    const legacyPayload = { opportunities: [], generatedAt: '2026-08-01T10:20:00Z' };
-    let fetchCount = 0;
+    const fetchedUrls = [];
     const handlers = runtime('auth-source-worker-cli.js').buildStageHandlers(selected, 'a'.repeat(40), 'b'.repeat(64), {
       internalApiKey: 'test-internal-key-000000000000',
-      fetchImpl: async (_url, options) => {
-        assert.equal(options.headers.Authorization, 'Bearer test-internal-key-000000000000');
-        assert.equal(options.headers['X-StockInsider-Projection-Source'], 'tracked-producer');
-        return { ok: true, arrayBuffer: async () => { fetchCount += 1; return Buffer.from(canonicalJson(legacyPayload)); } };
+      fetchImpl: async (url) => {
+        fetchedUrls.push(String(url));
+        return new Response('{}', { status: 404, headers: { 'content-type': 'application/json' } });
       },
     });
     const captured = await handlers.source_sync({ authorityHash: 'c'.repeat(64),
       runId:'72200000-0000-4000-8000-000000000001',jobId:'72200000-0000-4000-8000-000000000002',
       ownerToken:'72200000-0000-4000-8000-000000000003',
       payloadJson: [null,null,null,'2026-08-01T10:20:00Z'] });
-    assert.equal(fetchCount, 3); assert.deepEqual(Object.keys(captured.json.legacyPayloads).sort(), ['daily','home','hot','weekly']);
+    assert.equal(fetchedUrls.some((url)=>url.includes('/api/radar/')),false,
+      'V3.20 source sync never reads an old Radar projection');
+    assert.deepEqual(Object.keys(captured.json.legacyPayloads).sort(), ['daily','home','hot','weekly']);
     assert.equal(captured.json.legacyPayloadHashes.home, captured.json.legacyPayloadHashes.daily);
+    assert.equal(captured.json.legacyRadarCompatibility,'intentionally_not_acquired_kol_first',
+      'a stale predecessor Web is not a V3.20 producer dependency');
+    assert.deepEqual(captured.json.legacyPayloads.daily.opportunities,[]);
+    assert.equal(captured.json.sourceAcquisition.schema,'official-source-acquisition-v3.20');
     const parser = runtime('auth-source-worker-cli.js');
     const adapterSource = readFileSync(path.join(root, 'scripts/runtime/postgres-legacy-producer-adapter.js'), 'utf8');
     assert.match(adapterSource, /set_config\('stockinsider[.]legacy_authority_hash',\$5,true\)[\s\S]*length\(configured[.]marker\)\*0/u,
@@ -793,22 +798,27 @@ const checks = {
       readJson: uncachedRead.json, readHash: uncachedRead.hash }), /frozen authority cache unavailable/u);
     const retryRead = runtime('codec.js').immutableBundle('compact_projection_input', { analysisResult: { decisions: [],
       sourceCandidates: [{ symbol: '2330', name: '台積電', disposition: 'promoted', reason: 'new_source_evidence',
-        sourceClass: 'official', raw: '2330', sourceSummary: '台積電財報更新', lastEvaluatedAt: '2026-08-01T10:20:00Z',
-        ...citedPublicationEvidence('claim-2330') }] },
+        raw: '2330', sourceSummary: '核准 KOL 的台積電研究更新', lastEvaluatedAt: '2026-08-01T10:20:00Z',
+        ...citedPublicationEvidence('claim-2330'), sourceClass: 'kol', sourceKey:'telegram',
+        sourceName:'核准 KOL',sourceUrl:'https://t.me/example/2330',nominationAuthority:'public_telegram_channel' }] },
       sourceCutoff: '2026-08-01T10:20:00Z', legacyPayloads: captured.json.legacyPayloads,
-      legacyPayloadHashes: captured.json.legacyPayloadHashes, legacySourceResultHash: captured.hash });
+      legacyPayloadHashes: captured.json.legacyPayloadHashes, legacySourceResultHash: captured.hash,
+      legacyRadarCompatibility:captured.json.legacyRadarCompatibility });
     const projected = await handlers.compact_radar_projection({ readKind: 'compact_projection_input',
       readCanonical: retryRead.canonical, readJson: retryRead.json, readHash: retryRead.hash });
-    assert.equal(projected.json.projections.length, 4); assert.equal(fetchCount, 3,
-      'a compact retry reuses the persisted source result and never refetches changed public payloads');
+    assert.equal(projected.json.projections.length, 4); assert.ok(fetchedUrls.length > 0,
+      'a compact retry reuses the persisted source result and never refetches approved-source inputs');
+    assert.equal(projected.json.projections[0].payload.releaseIdentity.schema, 'legacy-radar-v3.20.0',
+      'only the persisted KOL-first marker selects the V3.20 public contract');
     assert.deepEqual(projected.json.projections[0].payload.discoveryDelta,
       { added: [], exited: [], continued: [], unchangedReasons: [] });
     assert.equal(projected.json.projections[0].payload.sourceSignals[0].chineseName, '台積電',
       'compact public projection carries the official source-signal name');
-    assert.equal(projected.json.projections[0].payload.sourceSignals[0].sourceSummary, '台積電財報更新',
-      'compact public projection carries bounded source context instead of repeating the ticker');
+    assert.equal(projected.json.projections[0].payload.sourceSignals[0].sourceSummary, '核准 KOL 的台積電研究更新',
+      'compact public projection carries bounded KOL context instead of repeating the ticker');
     const candidateInput = { mentionResult: { candidates: [{ stockId: '00000000-0000-4000-8000-000000009999', symbol: '9999',
-      raw: '新公司', claimId: 'claim-9999', mentionId: 'mention-9999', sourceKey: 'threads', revisionId: null }] }, seedSymbols: seeds() };
+      raw: '新公司', claimId: 'claim-9999', mentionId: 'mention-9999', sourceKey: 'threads',
+      nominationAuthority: 'approved_kol_threads_api', revisionId: null }] }, seedSymbols: seeds() };
     const firstCandidateRead = runtime('codec.js').immutableBundle('candidate_funnel_input', candidateInput);
     const firstCandidate = await handlers.candidate_funnel({ readKind: 'candidate_funnel_input', readCanonical: firstCandidateRead.canonical,
       readJson: firstCandidateRead.json, readHash: firstCandidateRead.hash });
@@ -818,16 +828,16 @@ const checks = {
       'the same frozen candidate input must produce the same immutable result hash');
     assert.equal(firstCandidate.json.candidates[0].disposition, 'promoted');
     const repeatCandidateRead = runtime('codec.js').immutableBundle('candidate_funnel_input', { ...candidateInput,
-      priorLedger: [{ stockId: firstCandidate.json.candidates[0].stockId, materialEvidenceHash: firstCandidate.json.candidates[0].materialEvidenceHash }] });
+      priorLedger: [firstCandidate.json.candidates[0]] });
     const repeatCandidate = await handlers.candidate_funnel({ readKind: 'candidate_funnel_input', readCanonical: repeatCandidateRead.canonical,
       readJson: repeatCandidateRead.json, readHash: repeatCandidateRead.hash });
     assert.equal(repeatCandidate.json.candidates[0].disposition, 'unchanged');
     const provenanceInput = runtime('codec.js').immutableBundle('candidate_funnel_input', { mentionResult: { candidates: [
-      { stockId: '00000000-0000-4000-8000-000000008888', symbol: '8888', raw: 'older', claimId: 'claim-first', mentionId: 'mention-first', sourceKey: 'threads', revisionId: 'rev-first', sourceClass: 'community', sourcePriority: 40 },
-      { stockId: '00000000-0000-4000-8000-000000008888', symbol: '8888', raw: 'newer', claimId: 'claim-last', mentionId: 'mention-last', sourceKey: 'mops', revisionId: 'rev-last', sourceClass: 'official', sourcePriority: 95 },
-      { stockId: '00000000-0000-4000-8000-000000007777', symbol: '7777', raw: 'older equal priority', claimId: 'claim-older-equal', claimAsOf: '2026-07-31T10:00:00Z', mentionId: 'mention-older-equal', sourceKey: 'threads', revisionId: 'zzzz-older', sourceClass: 'community', sourcePriority: 50 },
-      { stockId: '00000000-0000-4000-8000-000000007777', symbol: '7777', raw: 'newer equal priority', claimId: 'claim-newer-equal', claimAsOf: '2026-08-01T10:00:00Z', mentionId: 'mention-newer-equal', sourceKey: 'threads', revisionId: 'aaaa-newer', sourceClass: 'community', sourcePriority: 50 },
-      { stockId: '00000000-0000-4000-8000-000000001111', symbol: '1111', raw: 'low', claimId: 'claim-low', mentionId: 'mention-low', sourceKey: 'threads', revisionId: 'rev-low', sourceClass: 'community', sourcePriority: 10 },
+      { stockId: '00000000-0000-4000-8000-000000008888', symbol: '8888', raw: 'older', claimId: 'claim-first', mentionId: 'mention-first', sourceKey: 'threads', nominationAuthority: 'approved_kol_threads_api', revisionId: 'rev-first', sourceClass: 'kol', sourcePriority: 40 },
+      { stockId: '00000000-0000-4000-8000-000000008888', symbol: '8888', raw: 'newer', claimId: 'claim-last', mentionId: 'mention-last', sourceKey: 'threads', nominationAuthority: 'approved_kol_threads_api', revisionId: 'rev-last', sourceClass: 'kol', sourcePriority: 95 },
+      { stockId: '00000000-0000-4000-8000-000000007777', symbol: '7777', raw: 'older equal priority', claimId: 'claim-older-equal', claimAsOf: '2026-07-31T10:00:00Z', mentionId: 'mention-older-equal', sourceKey: 'threads', nominationAuthority: 'approved_kol_threads_api', revisionId: 'zzzz-older', sourceClass: 'kol', sourcePriority: 50 },
+      { stockId: '00000000-0000-4000-8000-000000007777', symbol: '7777', raw: 'newer equal priority', claimId: 'claim-newer-equal', claimAsOf: '2026-08-01T10:00:00Z', mentionId: 'mention-newer-equal', sourceKey: 'threads', nominationAuthority: 'approved_kol_threads_api', revisionId: 'aaaa-newer', sourceClass: 'kol', sourcePriority: 50 },
+      { stockId: '00000000-0000-4000-8000-000000001111', symbol: '1111', raw: 'low', claimId: 'claim-low', mentionId: 'mention-low', sourceKey: 'threads', nominationAuthority: 'approved_kol_threads_api', revisionId: 'rev-low', sourceClass: 'kol', sourcePriority: 10 },
     ] }, seedSymbols: seeds() });
     const provenance = await handlers.candidate_funnel({ readKind: 'candidate_funnel_input', readCanonical: provenanceInput.canonical,
       readJson: provenanceInput.json, readHash: provenanceInput.hash });
@@ -868,8 +878,8 @@ const checks = {
     assert.deepEqual(capped.json.sourceCandidates.map((candidate) => candidate.symbol).sort(),
       sixtyCandidates.filter((candidate) => !candidate.deepSelected).map((candidate) => candidate.symbol).sort(),
       'the persisted source-candidate plane remains the exact non-deep candidate partition');
-    assert.equal(capped.json.dislocationCandidates.length, 30,
-      'market dislocations remain separately bounded instead of replacing source-led candidates');
+    assert.equal(capped.json.dislocationCandidates.length, 0,
+      'market dislocations enrich KOL candidates but cannot nominate cards into the source-led funnel');
     assert.ok(capped.json.shallowObservations.every((candidate) => candidate.shallowStatus === 'enriched_observation'));
     const materialChangeHash = 'd'.repeat(64); const originalGeneratedAt = '2026-07-31T10:20:00Z';
     const priorAuthority=citedPublicationEvidence('claim-9999');
@@ -897,7 +907,7 @@ const checks = {
       reevaluatedFacts.sourceCollectedAt,
       'a no-change evaluation reuses the immutable prior acquisition timestamp');
     assert.equal(analysis.json.sourceCandidates.length, 40);
-    assert.equal(analysis.json.dislocationCandidates.length, 30);
+    assert.equal(analysis.json.dislocationCandidates.length, 0);
     const publicationAnalysis={...analysis.json,
       sourceCandidates:analysis.json.sourceCandidates.map((candidate,index)=>({...candidate,
         ...citedPublicationEvidence(candidate.claimId??`source-candidate-${index}`)})),
@@ -1213,10 +1223,11 @@ const checks = {
     assert.deepEqual([disposition.reason, disposition.researchDisposition, disposition.seedMembership], ['new_out_of_seed_symbol','source_signal_only','out_of_seed']);
     const funnel = runtime('candidate-funnel.js').buildCandidateFunnel({ outcomes: [{
       name: '新公司', sourceSummary: '新公司 9999 財報轉強。', raw: '9999', claimId: 'c', mentionId: 'm',
-      sourceClass: 'official', link: { disposition: 'linked', stockId: 's', symbol: '9999' },
+      sourceKey: 'threads', nominationAuthority: 'approved_kol_threads_api', sourceClass: 'kol',
+      link: { disposition: 'linked', stockId: 's', symbol: '9999' },
     }], seedSymbols: seeds(), priorLedger: [] });
     assert.deepEqual([funnel.candidateLedger[0].name, funnel.candidateLedger[0].sourceSummary],
-      ['新公司', '新公司 9999 財報轉強。'], 'official identity and source context survive funnel ranking');
+      ['新公司', '新公司 9999 財報轉強。'], 'KOL identity and source context survive funnel ranking');
     const worstCaseSignals = Array.from({ length: 30 }, (_, index) => ({
       symbol: String(1000 + index), name: '名'.repeat(40), disposition: 'promoted', reason: 'new_source_evidence',
       sourceClass: 'official', sourceSummary: '摘'.repeat(180), raw: String(1000 + index), claimId: `claim-${index}`,

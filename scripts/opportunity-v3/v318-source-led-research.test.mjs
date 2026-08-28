@@ -11,9 +11,10 @@ const runtime=(name)=>require(path.join(root,'scripts/runtime',name));
 
 function outcome(symbol='2303') {
   return {raw:'公開研究提及成熟製程庫存回補',claimId:`claim-${symbol}`,mentionId:`mention-${symbol}`,
-    claimAsOf:'2026-08-03T09:00:00Z',sourceKey:'ptt',sourceName:'公開討論區',
-    sourceUrl:'https://www.ptt.cc/bbs/Stock/index.html',sourcePublishedAt:'2026-08-03T09:00:00Z',
+    claimAsOf:'2026-08-03T09:00:00Z',sourceKey:'telegram',sourceName:'公開 Telegram 頻道',
+    sourceUrl:'https://t.me/s/stockinsider_public',sourcePublishedAt:'2026-08-03T09:00:00Z',
     sourceCollectedAt:'2026-08-03T09:10:00Z',sourceClass:'community',sourcePriority:60,
+    nominationAuthority:'public_telegram_channel',
     link:{disposition:'linked',stockId:`stock-${symbol}`,symbol},claimEligible:true};
 }
 
@@ -149,14 +150,14 @@ test('V3.18 uses reviewed topic scopes for Threads and still requires the approv
   assert.ok(queries.includes('產業'));
   const threadDocuments=result.documents.filter((row)=>row.sourceKey==='threads');
   assert.deepEqual(threadDocuments.map((row)=>[row.profileId,row.stableConnectorDocumentId]),[['gooaye','gooaye-topic-1']]);
-  assert.equal(result.connectorAttempts.length,51);
+  assert.equal(result.connectorAttempts.length,85);
 });
 
-test('V3.19 preserves unapproved or metadata-only source terminals and accepts only structured authorized claims',()=>{
+test('V3.20 preserves unauthorized paid-source and metadata-only terminals while accepting public Telegram claims',()=>{
   const {extractRevisionCandidates}=runtime('auth-source-worker-cli.js');
-  for(const sourceKey of ['telegram','investanchors']){
+  for(const sourceKey of ['investanchors']){
     const result=extractRevisionCandidates({frozenRevision:{
-      revisionId:`71300000-0000-4000-8000-0000000000${sourceKey==='telegram'?'31':'32'}`,
+      revisionId:'71300000-0000-4000-8000-000000000032',
       sourceKey,rawFieldPayload:{text:'2330 未經授權的內容不得參與研究。'},
     }});
     assert.equal(result.schema,'legacy-mention-claim-result-v3.11');
@@ -176,13 +177,21 @@ test('V3.19 preserves unapproved or metadata-only source terminals and accepts o
   const authorized=extractRevisionCandidates({authorityPages:[['roster',null,null,[
     ['stock-2330','2330','TWSE','common_stock','active','台灣積體電路製造','台積電'],
   ]]],frozenRevision:{revisionId:'71300000-0000-4000-8000-000000000034',sourceKey:'investanchors',
-    contentAuthorization:'structured_claim_authorized',structuredClaim:true,
+    contentAuthorization:'structured_claim_authorized',structuredClaim:true,rightsAttested:true,
     rawFieldPayload:{text:'2330 台積電先進製程需求的結構化研究摘要。'},
     sourceCollectedAt:'2026-08-20T10:00:00Z',sourcePublishedAt:'2026-08-20T09:00:00Z',
   }});
   assert.equal(authorized.parseOutcome,'processed_with_claims');
   assert.deepEqual(authorized.candidates.map((candidate)=>candidate.symbol),['2330']);
   assert.equal(authorized.candidates[0].sourceKey,'investanchors');
+  const telegram=extractRevisionCandidates({authorityPages:[['roster',null,null,[
+    ['stock-2330','2330','TWSE','common_stock','active','台灣積體電路製造','台積電'],
+  ]]],frozenRevision:{revisionId:'71300000-0000-4000-8000-000000000035',sourceKey:'telegram',
+    rawFieldPayload:{text:'2330 台積電先進製程需求持續增加。'},
+    sourceCollectedAt:'2026-08-20T10:00:00Z',sourcePublishedAt:'2026-08-20T09:00:00Z',
+  }});
+  assert.equal(telegram.parseOutcome,'processed_with_claims');
+  assert.equal(telegram.candidates[0].nominationAuthority,'public_telegram_channel');
 });
 
 test('V3.18 research dossier code is part of the reviewed runtime bundle identity',()=>{

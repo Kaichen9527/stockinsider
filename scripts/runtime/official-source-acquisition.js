@@ -174,8 +174,20 @@ async function boundedFetch(url, options, fetchImpl, maximumBytes=4_000_000,{all
   return { bytes,contentType:String(response.headers?.get?.('content-type') ?? ''),statusCode:response.status,responseBytes:bytes.length };
 }
 
+const SOURCE_CONNECTORS = Object.freeze(['threads','podcast','youtube','telegram','investanchors']);
+// The persisted source plane is bounded per connector and per profile
+// (5 + 2 + 3 + 10 + 10 = 30). Keep collection within the same closed
+// contract rather than discovering overflow after freezing provider evidence.
+const MAX_DOCUMENTS_PER_CONNECTOR = Object.freeze({
+  threads: 5,
+  podcast: 2,
+  youtube: 3,
+  telegram: 10,
+  investanchors: 10,
+});
+
 function attempt(sourceKey,status,reasonCode,{kind='configuration',statusCode=null,responseBytes=0,itemCount=0,documentCount=0}={}) {
-  invariant(['threads','podcast','youtube'].includes(sourceKey)&&CONNECTOR_ATTEMPT.has(status),'connector attempt terminal');
+  invariant(SOURCE_CONNECTORS.includes(sourceKey)&&CONNECTOR_ATTEMPT.has(status),'connector attempt terminal');
   invariant(/^[a-z0-9_]{2,80}$/u.test(reasonCode),'connector attempt reason');
   return Object.freeze({sourceKey,status,reasonCode,responseEvidence:Object.freeze({kind,statusCode,responseBytes,itemCount,documentCount})});
 }
@@ -186,6 +198,45 @@ function failedAttempt(sourceKey,error) {
   return {documents:[],items:[],attempt:attempt(sourceKey,status,
     status==='auth_failed'?'provider_auth_rejected':status==='missing_endpoint'?'provider_endpoint_missing':'provider_transport_failed',
     {kind:statusCode===null?'transport_error':'http_response',statusCode,responseBytes:0,itemCount:0,documentCount:0})};
+}
+
+function htmlText(value) {
+  return String(value ?? '').replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/giu, ' ')
+    .replace(/<[^>]+>/gu, ' ').replace(/&nbsp;/giu, ' ').replace(/&amp;/giu, '&')
+    .replace(/\s+/gu, ' ').trim();
+}
+
+// Public Telegram pages do not provide an API cursor, but each rendered
+// message has a stable numeric ID and, when available, an explicit datetime.
+// Keep an absent datetime absent: collection time is evidence of acquisition,
+// never evidence that the author published at that moment.
+function parseTelegramPublicPosts(html, minimumId = 0) {
+  const rows=[];
+  for (const match of String(html ?? '').matchAll(/data-post="[^/]+\/(\d+)"([\s\S]*?)(?=data-post="|$)/giu)) {
+    const id=Number(match[1]); const scope=match[2] ?? '';
+    const textMatch=/tgme_widget_message_text[^>]*>([\s\S]*?)<\/div>/iu.exec(scope);
+    const body=htmlText(textMatch?.[1] ?? '');
+    if (!Number.isInteger(id) || id <= minimumId || body.length === 0) continue;
+    const dateMatch=/<time\b[^>]*\bdatetime=["']([^"']+)["']/iu.exec(scope);
+    let publishedAt=null;
+    try { publishedAt=normalizedSourceInstant(dateMatch?.[1],{nullable:true}); } catch { publishedAt=null; }
+    rows.push(Object.freeze({id,body,publishedAt}));
+  }
+  return Object.freeze(rows.sort((left,right)=>left.id-right.id)
+    .slice(-MAX_DOCUMENTS_PER_CONNECTOR.telegram));
+}
+
+function boundedStructuredClaim(claim, profile, collectedAt) {
+  if (!claim || typeof claim !== 'object') return null;
+  const symbol = typeof claim.symbol === 'string' && /^\d{4}$/u.test(claim.symbol) ? claim.symbol : null;
+  const citation = typeof claim.citation === 'string' ? claim.citation : null;
+  const shortSummary = compactText(claim.shortSummary ?? claim.summary ?? '', 280);
+  const catalyst = compactText(claim.catalyst ?? '', 180);
+  const risk = compactText(claim.risk ?? '', 180);
+  if (!symbol || !citation || !shortSummary || !catalyst || !risk || claim.rightsAttested !== true) return null;
+  return documentRevision({sourceKey:'investanchors',profile,stableId:claim.claimId ?? sha256(`${citation}:${symbol}:${shortSummary}`),
+    title:`${profile.name} · ${symbol}`,sourceUrl:citation,publishedAt:claim.publishedAt ?? collectedAt,
+    transcript:`${symbol}。催化：${catalyst}。風險：${risk}。摘要：${shortSummary}`,collectedAt});
 }
 
 function itemDisposition(document) {
@@ -206,7 +257,7 @@ async function podcast(profile,fetchImpl,collectedAt,resolveHost) {
   const feed=await boundedFetch(feedUrl,{headers:{Accept:'application/rss+xml, application/xml, text/xml'}},fetchImpl,8_000_000,
     {allowedOrigins:new Set([feedOrigin]),resolveHost});
   const episodes=parsePodcastFeed(feed.bytes.toString('utf8'),profile); const documents=[];
-  for(const episode of episodes.slice(0,3)) {
+  for(const episode of episodes.slice(0,MAX_DOCUMENTS_PER_CONNECTOR.podcast)) {
     if(!episode.transcriptUrl) continue;
     try {
       const transcriptUrl=allowedUrl(episode.transcriptUrl,transcriptOrigins);
@@ -222,7 +273,7 @@ async function podcast(profile,fetchImpl,collectedAt,resolveHost) {
         terminalDisposition:'rejected'}));
     }
   }
-  const itemRows=episodes.slice(0,3).map((episode)=>({sourceKey:'podcast',profileId:profile.id,
+  const itemRows=episodes.slice(0,MAX_DOCUMENTS_PER_CONNECTOR.podcast).map((episode)=>({sourceKey:'podcast',profileId:profile.id,
     stableId:String(episode.stableId),sourceUrl:approvedHttpsUrl(episode.sourceUrl),
     publishedAt:normalizedSourceInstant(episode.publishedAt,{nullable:true}),
     ...itemDisposition(documents.find((document)=>document.stableConnectorDocumentId===String(episode.stableId)))}));
@@ -240,7 +291,7 @@ async function youtube(profile,credentials,fetchImpl,collectedAt) {
   const channelJson=JSON.parse(channel.bytes.toString('utf8')); const uploads=channelJson.items?.[0]?.contentDetails?.relatedPlaylists?.uploads;
   if(!uploads) return {documents:[],items:[],attempt:attempt('youtube','successful_empty','youtube_channel_successful_empty',
     {kind:'http_response',statusCode:channel.statusCode,responseBytes:channel.responseBytes,itemCount:0,documentCount:0})};
-  const playlist=await boundedFetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${encodeURIComponent(uploads)}&maxResults=3&key=${encodeURIComponent(credentials.youtubeApiKey)}`,{headers:{Accept:'application/json'}},fetchImpl);
+  const playlist=await boundedFetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${encodeURIComponent(uploads)}&maxResults=${MAX_DOCUMENTS_PER_CONNECTOR.youtube}&key=${encodeURIComponent(credentials.youtubeApiKey)}`,{headers:{Accept:'application/json'}},fetchImpl);
   const videos=JSON.parse(playlist.bytes.toString('utf8')).items ?? [];
   if(!credentials.youtubeOauthToken) {
     const items=videos.filter((video)=>video?.snippet?.resourceId?.videoId)
@@ -311,7 +362,7 @@ async function threads(profile,roster,credentials,fetchImpl,collectedAt) {
     return Array.isArray(data)?data:[];
   }).filter((row)=>row?.id).map((row)=>[String(row.id),row])).values()];
   const approvedUsername=String(profile.threads).replace(/^@/u,'').toLowerCase();
-  const documents=rows.slice(0,10).filter((row)=>row?.id&&row?.text&&row?.permalink
+  const documents=rows.slice(0,MAX_DOCUMENTS_PER_CONNECTOR.threads).filter((row)=>row?.id&&row?.text&&row?.permalink
     &&String(row.username??'').replace(/^@/u,'').toLowerCase()===approvedUsername).map((row)=>documentRevision({
     sourceKey:'threads',profile,stableId:row.id,title:`Threads · ${profile.name}`,sourceUrl:approvedHttpsUrl(row.permalink,'threads.net'),
     publishedAt:row.timestamp,transcript:row.text,collectedAt}));
@@ -324,16 +375,58 @@ async function threads(profile,roster,credentials,fetchImpl,collectedAt) {
     responseBytes:responses.reduce((sum,response)=>sum+response.responseBytes,0),itemCount:items.length,documentCount:documents.length})};
 }
 
+async function telegram(profile,credentials,fetchImpl,collectedAt,resolveHost) {
+  const channel = typeof profile.telegramPublicChannel === 'string' ? profile.telegramPublicChannel.replace(/^@/u, '') : '';
+  if (!/^[A-Za-z][A-Za-z0-9_]{4,63}$/u.test(channel)) {
+    return {documents:[],items:[],attempt:attempt('telegram','missing_endpoint','telegram_public_channel_missing')};
+  }
+  const url = `https://t.me/s/${channel}`;
+  const response = await boundedFetch(url,{headers:{Accept:'text/html'}},fetchImpl,2_000_000,
+    {allowedOrigins:new Set(['https://t.me']),resolveHost});
+  const cursor = Number(credentials.telegramCursors?.[profile.id] ?? 0);
+  const rows = parseTelegramPublicPosts(response.bytes.toString('utf8'),cursor);
+  const documents=rows.map((row)=>documentRevision({sourceKey:'telegram',profile,stableId:`${channel}:${row.id}`,
+    title:`Telegram · ${profile.name}`,sourceUrl:`https://t.me/${channel}/${row.id}`,publishedAt:row.publishedAt,
+    transcript:row.body.slice(0,1200),collectedAt}));
+  const items=documents.map((document)=>({sourceKey:'telegram',profileId:profile.id,
+    stableId:document.stableConnectorDocumentId,sourceUrl:document.canonicalUrlCandidate,publishedAt:document.publishedAt,
+    ...itemDisposition(document)}));
+  return {documents,items,attempt:attempt('telegram',documents.length?'items_found':'successful_empty',
+    documents.length?'telegram_public_items_observed':'telegram_public_successful_empty',
+    {kind:'http_response',statusCode:response.statusCode,responseBytes:response.responseBytes,itemCount:items.length,documentCount:documents.length})};
+}
+
+async function investanchors(profile,credentials,collectedAt) {
+  if (profile.sourcePolicy !== 'structured_claim_authorized') {
+    return {documents:[],items:[],attempt:attempt('investanchors','missing_endpoint','investanchors_claim_endpoint_missing')};
+  }
+  const claims = Array.isArray(credentials.investAnchorsStructuredClaims) ? credentials.investAnchorsStructuredClaims : null;
+  // The terminal outcome is intentionally ordinary `auth_failed`: the
+  // persisted connector contract treats a missing authorized claim feed as a
+  // credential/authorization absence, rather than pretending that a paid
+  // article was fetched or successfully parsed.
+  if (!claims) return {documents:[],items:[],attempt:attempt('investanchors','auth_failed','investanchors_auth_missing')};
+  const documents=claims.map((claim)=>boundedStructuredClaim(claim,profile,collectedAt)).filter(Boolean)
+    .slice(0,MAX_DOCUMENTS_PER_CONNECTOR.investanchors);
+  const items=documents.map((document)=>({sourceKey:'investanchors',profileId:profile.id,
+    stableId:document.stableConnectorDocumentId,sourceUrl:document.canonicalUrlCandidate,publishedAt:document.publishedAt,
+    ...itemDisposition(document)}));
+  return {documents,items,attempt:attempt('investanchors',documents.length?'items_found':'successful_empty',
+    documents.length?'investanchors_structured_claims_observed':'investanchors_structured_claims_empty',
+    {kind:'keychain_structured_claim',itemCount:items.length,documentCount:documents.length})};
+}
+
 function terminal(profile,documents) {
   return Object.freeze({profileId:profile.id,profileName:profile.name,documentCount:documents.length});
 }
 
 async function acquireApprovedSources({roster,credentials={},fetchImpl=globalThis.fetch,resolveHost,now=new Date()}={}) {
-  invariant(roster?.schema==='approved-source-roster-v3.13'&&Array.isArray(roster.profiles)&&roster.profiles.length===17,'approved source roster');
+  invariant(['approved-source-roster-v3.13','approved-source-roster-v3.20'].includes(roster?.schema)
+    &&Array.isArray(roster.profiles)&&roster.profiles.length===17,'approved source roster');
   const collectedAt=now.toISOString(); const documents=[]; const itemOutcomes=[]; const connectorAttempts=[]; const outcomes=[];
   for(let offset=0;offset<roster.profiles.length;offset+=4) {
     const batch=await Promise.all(roster.profiles.slice(offset,offset+4).map(async(profile)=>{
-      const sourceKeys=['threads','podcast','youtube'];
+      const sourceKeys=SOURCE_CONNECTORS;
       // Paid/private material may inform an operator's personal methodology,
       // but it is never acquired, stored, summarized, or used as a product
       // claim without an explicit redistribution licence.
@@ -341,7 +434,8 @@ async function acquireApprovedSources({roster,credentials={},fetchImpl=globalThi
         ?sourceKeys.map((sourceKey)=>({documents:[],items:[],attempt:attempt(sourceKey,'missing_endpoint',
           `${sourceKey}_endpoint_missing`,{kind:'configuration',itemCount:0,documentCount:0})}))
         :await Promise.allSettled([threads(profile,roster,credentials,fetchImpl,collectedAt),
-          podcast(profile,fetchImpl,collectedAt,resolveHost),youtube(profile,credentials,fetchImpl,collectedAt)])
+          podcast(profile,fetchImpl,collectedAt,resolveHost),youtube(profile,credentials,fetchImpl,collectedAt),
+          telegram(profile,credentials,fetchImpl,collectedAt,resolveHost),investanchors(profile,credentials,collectedAt)])
           .then((settled)=>settled.map((result,index)=>result.status==='fulfilled'?result.value:failedAttempt(sourceKeys[index],result.reason)));
       const acquired=attempts.flatMap((row)=>row.documents);
       return {acquired,items:attempts.flatMap((row)=>row.items??[]),attempts:attempts.map((row)=>
@@ -351,7 +445,7 @@ async function acquireApprovedSources({roster,credentials={},fetchImpl=globalThi
       connectorAttempts.push(...result.attempts);outcomes.push(result.outcome);}
   }
   invariant(outcomes.length===17&&new Set(outcomes.map((row)=>row.profileId)).size===17,'approved source outcome conservation');
-  invariant(connectorAttempts.length===51&&new Set(connectorAttempts.map((row)=>`${row.profileId}:${row.sourceKey}`)).size===51,
+  invariant(connectorAttempts.length===85&&new Set(connectorAttempts.map((row)=>`${row.profileId}:${row.sourceKey}`)).size===85,
     'connector attempt conservation');
   invariant(new Set(documents.map((row)=>`${row.sourceKey}:${row.profileId}:${row.stableConnectorDocumentId}`)).size===documents.length,
     'source document identity collision');
@@ -360,8 +454,9 @@ async function acquireApprovedSources({roster,credentials={},fetchImpl=globalThi
   invariant(itemOutcomes.every((item)=>item.analysisDisposition===(item.acquisitionDisposition==='transcript_ready'
     ?'eligible_for_claim_extraction':item.acquisitionDisposition==='metadata_only'?'no_claim':item.acquisitionDisposition)),
     'source item analysis eligibility conservation');
-  return Object.freeze({schema:'official-source-acquisition-v3.13',collectedAt,documents,itemOutcomes,connectorAttempts,outcomes});
+  return Object.freeze({schema:'official-source-acquisition-v3.20',collectedAt,documents,itemOutcomes,connectorAttempts,outcomes});
 }
 
 module.exports={ acquireApprovedSources,approvedHttpsUrl,documentRevision,normalizedSourceInstant,
-  parsePodcastFeed,isPublicAddress,resolvePublicAddresses,CONNECTOR_ATTEMPT,TERMINAL };
+  parsePodcastFeed,isPublicAddress,resolvePublicAddresses,CONNECTOR_ATTEMPT,TERMINAL,SOURCE_CONNECTORS,
+  MAX_DOCUMENTS_PER_CONNECTOR,boundedStructuredClaim,htmlText,parseTelegramPublicPosts };

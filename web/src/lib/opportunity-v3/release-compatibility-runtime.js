@@ -2,7 +2,7 @@
 
 function assessReleaseCompatibility({schema,releaseIdentity,expectedConsumerSha,expectedRuntimeManifestSha,
   requiredMigration}){
-  if(!['legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0'].includes(schema))return Object.freeze({compatible:false,reason:'legacy_schema'});
+  if(!['legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0','legacy-radar-v3.20.0'].includes(schema))return Object.freeze({compatible:false,reason:'legacy_schema'});
   if(!releaseIdentity||typeof releaseIdentity!=='object'||Array.isArray(releaseIdentity))
     return Object.freeze({compatible:false,reason:'identity_missing'});
   if(!/^[0-9a-f]{40}$/u.test(String(expectedConsumerSha??''))||releaseIdentity.producerCommitSha!==expectedConsumerSha)
@@ -10,8 +10,9 @@ function assessReleaseCompatibility({schema,releaseIdentity,expectedConsumerSha,
   if(!/^[0-9a-f]{64}$/u.test(String(expectedRuntimeManifestSha??''))
     ||releaseIdentity.runtimeManifestSha256!==expectedRuntimeManifestSha)
     return Object.freeze({compatible:false,reason:'runtime_mismatch'});
-  const expectedMigration=requiredMigration??(schema==='legacy-radar-v3.19.0'
-    ?'release-reconciliation-v3.19':schema==='legacy-radar-v3.18.0'
+  const expectedMigration=requiredMigration??(schema==='legacy-radar-v3.20.0'
+    ?'kol-first-runtime-recovery-v3.20':schema==='legacy-radar-v3.19.0'
+      ?'release-reconciliation-v3.19':schema==='legacy-radar-v3.18.0'
       ?'candidate-ledger-retention-v3.18':'provider-acquisition-v3.16.21');
   if(releaseIdentity.migrationLevel!==expectedMigration)
     return Object.freeze({compatible:false,reason:'migration_mismatch'});

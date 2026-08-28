@@ -66,23 +66,38 @@ const gatePolicies = Object.freeze({
 });
 const reviewSources = Object.freeze({
   requirements: {
-    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v319-requirements-evidence',
-    path: `${changeRelative}/requirements-review-v3.19.md`,
-    finalLine: 'Final repair-closure commit/tree',
+    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-requirements-evidence',
+    path: `${changeRelative}/requirements-review-v3.20.md`,
+    finalLine: 'Final reviewed implementation commit/tree',
     rangeLine: 'Full reviewed range',
   },
   architecture: {
-    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v319-architecture-evidence',
-    path: `${changeRelative}/architecture-review-v3.19.md`,
-    finalLine: 'Final repair-closure commit/tree',
+    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-architecture-evidence',
+    path: `${changeRelative}/architecture-review-v3.20.md`,
+    finalLine: 'Final reviewed implementation commit/tree',
     rangeLine: 'Full reviewed implementation range',
   },
   'exact-review': {
-    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v319-exact-review-evidence',
+    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-exact-review-evidence',
     path: `${changeRelative}/exact-commit-review-final.md`,
     finalLine: 'Final reviewed repair/tree',
     rangeLine: 'Full final range',
   },
+});
+
+const v319ReviewSources = Object.freeze({
+  requirements: Object.freeze({
+    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v319-requirements-evidence',
+    path: `${changeRelative}/requirements-review-v3.19.md`,
+    finalLine: 'Final repair-closure commit/tree',
+    rangeLine: 'Full reviewed range',
+  }),
+  architecture: Object.freeze({
+    ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v319-architecture-evidence',
+    path: `${changeRelative}/architecture-review-v3.19.md`,
+    finalLine: 'Final repair-closure commit/tree',
+    rangeLine: 'Full reviewed implementation range',
+  }),
 });
 
 const graphBoundReviewSources = Object.freeze({
@@ -100,9 +115,23 @@ const graphBoundReviewSources = Object.freeze({
       rangeLine: 'Full reviewed implementation range',
     }),
   }),
+  '13081345293dcb3306c68420270ca82ea090fa18a0ecb878ccd8da08d63e0587': Object.freeze({
+    requirements: Object.freeze({
+      ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-requirements-evidence',
+      path: `${changeRelative}/requirements-review-v3.20.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+    architecture: Object.freeze({
+      ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-architecture-evidence',
+      path: `${changeRelative}/architecture-review-v3.20.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed implementation range',
+    }),
+  }),
   '5f985e391799fd8332df16c2151f75cc95dfb643a087912d92df2845a435016e': Object.freeze({
-    requirements: reviewSources.requirements,
-    architecture: reviewSources.architecture,
+    requirements: v319ReviewSources.requirements,
+    architecture: v319ReviewSources.architecture,
   }),
 });
 

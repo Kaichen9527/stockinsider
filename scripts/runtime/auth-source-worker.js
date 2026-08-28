@@ -109,6 +109,14 @@ async function runDurableAuthSourceWorker({ configBytes, adapter, sourceCommitSh
   invariant(adapter && ['acquireLegacyProducerLease', 'claimLegacyProducerJob', 'heartbeatLegacyProducerJob',
     'completeLegacyProducerJob','appendLegacyRuntimeFailureDiagnostic','failLegacyProducerJob']
     .every((name) => typeof adapter[name] === 'function'), 'durable PostgreSQL adapter');
+  // A previous process can be interrupted after its lease expires but before
+  // it writes a terminal result.  Reap only the exact reviewed identity that
+  // this worker is about to use; a different release remains untouched and
+  // the next acquisition cannot inherit a stale owner.
+  if (typeof adapter.reapExpiredLegacyProducerRun === 'function') {
+    await adapter.reapExpiredLegacyProducerRun({ sourceCommitSha, workerSha256: sha256(workerBytes),
+      configSha256: validated.sha256 });
+  }
   const lease = await adapter.acquireLegacyProducerLease({ ownerLabel: validated.config.ownerLabel, sourceCommitSha,
     workerSha256: sha256(workerBytes), configBytes: validated.bytes, configSha256: validated.sha256, ownerToken, leaseSeconds: validated.config.leaseSeconds });
   if (!lease || lease.disposition === 'owner_already_leased' || TERMINAL.has(lease.status)) return Object.freeze(lease ?? { disposition: 'lease_unavailable' });
@@ -145,7 +153,17 @@ async function runDurableAuthSourceWorker({ configBytes, adapter, sourceCommitSh
       job = completion.nextJob ?? null;
     } catch (error) {
       if (error?.code === 'producer_lease_lost' || error?.message === 'producer lease lost before completion') {
-        return Object.freeze({ disposition: 'lease_lost', runId: lease.runId, completedJobs });
+        // The former behaviour returned a local `lease_lost` value and left a
+        // durable run in `running` forever.  A reviewed runtime can only reap
+        // its exact expired identity; any mismatch leaves the safe readonly
+        // state intact instead of terminalizing another release's work.
+        let terminal=null;
+        if (typeof adapter.terminalizeExpiredLegacyProducerRun === 'function') {
+          terminal=await adapter.terminalizeExpiredLegacyProducerRun({runId:lease.runId,jobId:claim.jobId,
+            sourceCommitSha,workerSha256:sha256(workerBytes),configSha256:validated.sha256});
+        }
+        return Object.freeze({ disposition: terminal?.disposition ?? 'lease_lost', runId: lease.runId,
+          completedJobs, failure: 'lease_expired', terminalized: terminal?.terminalized === true });
       }
       const failure = error?.code === 'provider_unavailable' ? 'provider_unavailable' : 'data_integrity_failure';
       const failureDiagnostic=safeFailureDiagnostic(error,{runId:lease.runId,jobId:claim.jobId,stage:claim.stage,
