@@ -602,9 +602,11 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
         evidenceRoot:publicAcquisitionHealth?.acquisitionEvidenceRoot??null,
         fetchedAt:publicAcquisitionHealth?.fetchedAt??null,
         terminalStatus:publicAcquisitionHealth?.terminalStatus??null},
-      authorizationStatus:{telegram:'structured_claim_authorization_required',
-        investanchors:'structured_claim_authorization_required',
-        sourceClaims:'authorized_terminal_outcomes_required'},
+      authorizationStatus:schemaVersion==='legacy-radar-v3.20.0'
+        ?{telegram:'public_channel_cursor_required',investanchors:'structured_claim_authorization_required',
+          sourceClaims:'authorized_terminal_outcomes_required'}
+        :{telegram:'structured_claim_authorization_required',investanchors:'structured_claim_authorization_required',
+          sourceClaims:'authorized_terminal_outcomes_required'},
       releaseIdentity:{schema:schemaVersion,producerCommitSha:producerIdentity?.commitSha??null,
         runtimeManifestSha256:producerIdentity?.runtimeManifestSha256??null,
         migrationLevel:schemaVersion==='legacy-radar-v3.20.0'

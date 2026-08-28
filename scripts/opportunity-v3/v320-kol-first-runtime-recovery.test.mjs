@@ -71,6 +71,19 @@ test('V3.20 produces a complete five-connector terminal matrix and metadata-only
   assert.equal(result.connectorAttempts.length,85,'the complete V3.20 terminal evidence is retained beside the legacy projection');
 });
 
+test('V3.20 records Telegram publication time only when the public message provides one and advertises cursor authority',()=>{
+  const acquisition=runtime('official-source-acquisition.js');
+  const parsed=acquisition.parseTelegramPublicPosts('<div data-post="example/11"><div class="tgme_widget_message_text">2605 新興航運</div><time datetime="2026-08-28T09:00:00Z"></time></div><div data-post="example/12"><div class="tgme_widget_message_text">2330 台積電</div></div>');
+  assert.deepEqual(parsed,[{id:11,body:'2605 新興航運',publishedAt:'2026-08-28T09:00:00.000Z'},
+    {id:12,body:'2330 台積電',publishedAt:null}]);
+  const projection=runtime('compact-radar-projection.js').publishCompactRadarProjection({decisions:[],sourceCandidates:[],
+    discoveryDelta:{added:[],exited:[],continued:[],unchangedReasons:[]},legacyPayload:{opportunities:[]},
+    freshnessSchedule:[{session_id:'2026-08-28',status:'completed'}],window:'daily',asOf:'2026-08-28T10:20:00Z',
+    producerIdentity:{commitSha:'a'.repeat(40)},schemaVersion:'legacy-radar-v3.20.0'});
+  assert.deepEqual(projection.payload.authorizationStatus,{telegram:'public_channel_cursor_required',
+    investanchors:'structured_claim_authorization_required',sourceClaims:'authorized_terminal_outcomes_required'});
+});
+
 test('V3.20 turns a lost lease into an authoritative recoverable terminal instead of leaving a stuck run',async()=>{
   const stages=runtime('source-run-config.js').LEGACY_STAGES;
   let call=null;let reaped=null;
