@@ -10,6 +10,7 @@ const { deriveResearchNextStep } = require('./research-next-step-v317');
 const { buildResearchSnapshotV317 } = require('./research-snapshot-v317');
 const { buildResearchDossierV318 } = require('./research-dossier-v318');
 const { deriveResearchReadinessV319 } = require('./research-readiness-v319');
+const { hasCandidateNominationAuthority } = require('./candidate-nomination-authority');
 
 const CARD_BUCKETS = Object.freeze([
   'opportunities', 'scenarioUpsideCandidates', 'earlyWatchlist',
@@ -375,9 +376,16 @@ function removeLowestPrioritySignal(cards) {
 }
 
 function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates = [], marketAnalysis = null,
-  { researchSnapshotEnabled = false, researchDossierEnabled = false, researchReadinessEnabled = false } = {}) {
+  { researchSnapshotEnabled = false, researchDossierEnabled = false, researchReadinessEnabled = false,
+    kolFirst = false } = {}) {
   const clean = stripCorrectnessAdditions(legacyPayload);
   invariant(Array.isArray(clean.opportunities), 'legacy opportunities required');
+  if (kolFirst) {
+    // The candidate funnel is authoritative, but this second boundary prevents
+    // a frozen legacy projection from reviving official-only cards after its
+    // nomination authority has been revoked.
+    for (const bucket of [...CARD_BUCKETS, 'earlySignals', 'partiallyVerified', 'validatedIdeas']) clean[bucket]=[];
+  }
   const bySymbol = new Map(decisions.filter((decision) => typeof decision?.symbol === 'string')
     .map((decision) => [decision.symbol, decision]));
   for (const bucket of CARD_BUCKETS) {
@@ -389,7 +397,10 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
     });
   }
   const signalReasons = new Set(['new_in_seed_symbol', 'new_out_of_seed_symbol', 'new_source_evidence', 'material_source_change', 'price_dislocation']);
-  const signalPool = mergedSourceSignals([...decisions, ...sourceCandidates]);
+  const hasKOLAuthority=(row)=>hasCandidateNominationAuthority(row)
+    ||Array.isArray(row?.sourceEvidence)&&row.sourceEvidence.some(hasCandidateNominationAuthority);
+  const signalPool = mergedSourceSignals((kolFirst ? [...decisions, ...sourceCandidates].filter(hasKOLAuthority)
+    : [...decisions, ...sourceCandidates]));
   const sourceSignals = signalPool.sort((left, right) => (right.researchRanking?.rankingScore
       ??right.researchScore?.underreactionScore??-1)-(left.researchRanking?.rankingScore
         ??left.researchScore?.underreactionScore??-1) || (right.sourcePriority ?? 0) - (left.sourcePriority ?? 0)
@@ -563,7 +574,8 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
   const researchDossierEnabled=['legacy-radar-v3.18.0','legacy-radar-v3.19.0','legacy-radar-v3.20.0'].includes(schemaVersion);
   const researchReadinessEnabled=['legacy-radar-v3.19.0','legacy-radar-v3.20.0'].includes(schemaVersion);
   const layered = addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates, publicMarketAnalysis,
-    {researchSnapshotEnabled,researchDossierEnabled,researchReadinessEnabled});
+    {researchSnapshotEnabled,researchDossierEnabled,researchReadinessEnabled,
+      kolFirst:schemaVersion==='legacy-radar-v3.20.0'});
   const publishableSourceSignals=selectLandingSourceSignals(layered.sourceSignals.filter((card)=>{
     const validBrief=card.decisionBrief&&card.citations?.length>0
       &&((researchSnapshotEnabled&&card.decisionBrief.availability==='unavailable'

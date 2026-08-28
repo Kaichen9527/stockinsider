@@ -1757,29 +1757,26 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
   return {
     source_sync: async (claim) => {
       const sourceCutoff=claim.payloadJson?.[3]??null;
-      const [legacyAcquisition,approvedAcquisition] = await Promise.all([
-        acquireFrozen({provider:'legacy_radar',stage:'source_sync',sourceCutoff,
-          requestMaterial:{baseUrl:legacyRadarBaseUrl,windows:Object.keys(LEGACY_RADAR_PATHS).sort()},claim,
-          acquire:({fetchImpl:capturedFetch})=>loadLegacyRadarPayloads(legacyRadarBaseUrl,capturedFetch,internalApiKey)}),
-        acquireFrozen({provider:'approved_sources',stage:'source_sync',sourceCutoff,
-          requestMaterial:{rosterSchema:approvedSourceRoster.schema,profiles:approvedSourceRoster.profiles.map((row)=>row.id).sort(),
-            credentialAvailability:{threads:Boolean(sourceCredentials.threadsAccessToken),
-              youtubeApiKey:Boolean(sourceCredentials.youtubeApiKey),youtubeOauth:Boolean(sourceCredentials.youtubeOauthToken),
-              investAnchorsStructuredClaims:Array.isArray(sourceCredentials.investAnchorsStructuredClaims)}},claim,
-          actionEligible:false,
-          acquire:({fetchImpl:capturedFetch,collectionStartedAt})=>acquireApprovedSources({roster:approvedSourceRoster,
-            credentials:sourceCredentials,fetchImpl:capturedFetch,now:new Date(collectionStartedAt)})}),
-      ]);
-      const legacyRadarAvailable=legacyAcquisition?.envelope?.terminalStatus==='complete'
-        &&legacyAcquisition.envelope.normalizedPayload;
-      const legacyPayloads=legacyRadarAvailable
-        ?legacyAcquisition.envelope.normalizedPayload:emptyLegacyRadarPayloadsV320();
+      // V3.20 is deliberately KOL-first. A prior Radar projection can neither
+      // nominate a stock nor be a producer dependency: reading it here caused
+      // circular activation and let stale official-market cards bypass the
+      // nomination authority funnel. Keep only an empty compatibility shell
+      // for the additive public schema.
+      const approvedAcquisition = await acquireFrozen({provider:'approved_sources',stage:'source_sync',sourceCutoff,
+        requestMaterial:{rosterSchema:approvedSourceRoster.schema,profiles:approvedSourceRoster.profiles.map((row)=>row.id).sort(),
+          credentialAvailability:{threads:Boolean(sourceCredentials.threadsAccessToken),
+            youtubeApiKey:Boolean(sourceCredentials.youtubeApiKey),youtubeOauth:Boolean(sourceCredentials.youtubeOauthToken),
+            investAnchorsStructuredClaims:Array.isArray(sourceCredentials.investAnchorsStructuredClaims)}},claim,
+        actionEligible:false,
+        acquire:({fetchImpl:capturedFetch,collectionStartedAt})=>acquireApprovedSources({roster:approvedSourceRoster,
+          credentials:sourceCredentials,fetchImpl:capturedFetch,now:new Date(collectionStartedAt)})});
+      const legacyPayloads=emptyLegacyRadarPayloadsV320();
       const sourceAcquisition=boundedSourceAcquisitionV320(requiredPayload(approvedAcquisition,'approved source'));
       return immutableBundle('legacy_source_sync_result_v3_11', {
         schema: 'legacy-source-sync-result-v3.11', authorityHash: claim.authorityHash,
         sourceCutoff, legacyPayloads,sourceAcquisition,
-        legacyRadarCompatibility:legacyRadarAvailable?'captured':'unavailable_readonly_shell',
-        providerAcquisitions:[legacyAcquisition.envelope,approvedAcquisition.envelope].map(({normalizedPayload,...row})=>row),
+        legacyRadarCompatibility:'intentionally_not_acquired_kol_first',
+        providerAcquisitions:[approvedAcquisition.envelope].map(({normalizedPayload,...row})=>row),
         legacyPayloadHashes: Object.fromEntries(Object.entries(legacyPayloads)
           .map(([window, payload]) => [window, sha256(canonicalJson(payload))])),
       });
@@ -2039,6 +2036,12 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         legacyPayloads[window] && typeof legacyPayloads[window] === 'object'), 'legacy radar capture unavailable');
       const priorProjections=bundle.priorProjections&&typeof bundle.priorProjections==='object'
         ?bundle.priorProjections:{};
+      // A historical compact-input fixture is still a compatibility payload.
+      // Only source_sync's immutable KOL-first marker may select the V3.20
+      // public contract; otherwise an old source payload would be silently
+      // reinterpreted and its valid historical revision cards would disappear.
+      const projectionSchemaVersion=bundle.legacyRadarCompatibility==='intentionally_not_acquired_kol_first'
+        ?'legacy-radar-v3.20.0':'legacy-radar-v3.19.0';
       const acquisitionLineageHealth=providerAcquisitionLineageHealth(bundle.providerAcquisitions,
         evaluationTimestamp);
       const projections = ['daily', 'hot', 'weekly', 'home'].map((window) => publishCompactRadarProjection({ decisions,
@@ -2058,7 +2061,7 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         }:null,
         discoveryDelta: bundle.analysisResult?.discoveryDelta ?? { added: [], exited: [], continued: [], unchangedReasons: [] },
         freshnessSchedule:bundle.analysisResult?.projectionFreshnessSchedule??[],
-        schemaVersion:'legacy-radar-v3.20.0',
+        schemaVersion:projectionSchemaVersion,
         window, asOf: bundle.sourceCutoff, contentAsOf:bundle.sourceCutoff,
         evaluatedAt:evaluationTimestamp,publishedAt:evaluationTimestamp,
         priorProjection:priorProjections[window==='hot'?'three_day':window]??null,
