@@ -85,9 +85,35 @@ const reviewSources = Object.freeze({
   },
 });
 
-function reviewSource(check, attestation = null) {
+const graphBoundReviewSources = Object.freeze({
+  '4baf35c1a17cc7c7cd451e71b29e34e9b83c90ee03ca18822fcf4f7f47b19a7b': Object.freeze({
+    requirements: Object.freeze({
+      ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-requirements-evidence',
+      path: `${changeRelative}/requirements-review-v3.20.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+    architecture: Object.freeze({
+      ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-architecture-evidence',
+      path: `${changeRelative}/architecture-review-v3.20.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed implementation range',
+    }),
+  }),
+  '5f985e391799fd8332df16c2151f75cc95dfb643a087912d92df2845a435016e': Object.freeze({
+    requirements: reviewSources.requirements,
+    architecture: reviewSources.architecture,
+  }),
+});
+
+function reviewSource(check, attestation = null, identity = null) {
   const source = reviewSources[check];
   assert.ok(source, 'closed review check');
+  if (check !== 'exact-review' && identity !== null) {
+    const graphSources = graphBoundReviewSources[identity.activeGraphSha256];
+    assert.ok(graphSources, `${check} active graph evidence source`);
+    return graphSources[check];
+  }
   if (check !== 'exact-review' || attestation === null) return source;
   // Exact-review evidence is about one immutable subject commit.  Keep the
   // Requirements and Architecture evidence on their already graph-bound
@@ -100,7 +126,11 @@ function reviewSource(check, attestation = null) {
 }
 
 function reviewSourceValues(attestation) {
-  return Object.keys(reviewSources).map((check) => reviewSource(check, attestation));
+  const values = [reviewSource('exact-review', attestation)];
+  for (const graphSources of Object.values(graphBoundReviewSources)) {
+    values.push(graphSources.requirements, graphSources.architecture);
+  }
+  return [...new Map(values.map((source) => [source.ref, source])).values()];
 }
 
 function canonicalJson(value) {
@@ -261,7 +291,7 @@ function baseResult(check, identity, attestation) {
 }
 
 function captureReview(subjectRoot, check, identity, attestation) {
-  const source = reviewSource(check, attestation);
+  const source = reviewSource(check, attestation, identity);
   const evidenceCommitSha = git(subjectRoot, ['rev-parse', source.ref]);
   sha(evidenceCommitSha, 'evidence commit');
   const evidenceTreeSha = git(subjectRoot, ['rev-parse', `${evidenceCommitSha}^{tree}`]);
