@@ -53,6 +53,7 @@
     "v3.17-source-led-actionability-amendment.md",
     "v3.18-source-led-research-dossier-amendment.md",
     "v3.19-release-reconciliation-amendment.md",
+    "v3.20-kol-first-runtime-recovery-amendment.md",
     "valuation-contract.md"
   ],
   "owners": [
@@ -227,6 +228,10 @@
     [
       "v3.19-release-reconciliation-amendment.md",
       "source-led-opportunity-release-v3.19.0"
+    ],
+    [
+      "v3.20-kol-first-runtime-recovery-amendment.md",
+      "source-led-opportunity-release-v3.20.0"
     ],
     [
       "valuation-contract.md",
