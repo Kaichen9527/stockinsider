@@ -224,6 +224,69 @@ REVOKE ALL ON FUNCTION public.reap_legacy_expired_producer_run_v3_20(text,text,t
 GRANT EXECUTE ON FUNCTION public.reap_legacy_expired_producer_run_v3_20(text,text,text)
   TO service_role;
 
+-- An authorized InvestAnchors claim is persisted as a bounded source-document
+-- revision, but the historical frozen-revision record predates structured
+-- claim metadata.  The final wrapper carries that fact into the exact
+-- revision-shard read without exposing a new direct table or function grant.
+-- Only the closed V3.20 source-sync contract can persist this source key.
+DO $v320_claim_structured_authority_handoff$
+BEGIN
+  IF to_regprocedure(
+    'public.claim_legacy_producer_job_pre_kol_authority_v3_20(uuid,uuid,uuid,integer)'
+  ) IS NULL THEN
+    ALTER FUNCTION public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)
+      RENAME TO claim_legacy_producer_job_pre_kol_authority_v3_20;
+  END IF;
+END $v320_claim_structured_authority_handoff$;
+
+CREATE OR REPLACE FUNCTION public.claim_legacy_producer_job_v3_11(
+  p_run uuid,p_job uuid,p_token uuid,p_lease integer
+) RETURNS public.legacy_producer_claim_v3_11
+LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $kol_claim$
+DECLARE v_claim public.legacy_producer_claim_v3_11;
+BEGIN
+  v_claim:=public.claim_legacy_producer_job_pre_kol_authority_v3_20(
+    p_run,p_job,p_token,p_lease);
+  IF v_claim.run_id IS NULL OR v_claim.job_kind IS DISTINCT FROM 'revision_shard'
+    OR v_claim.read_kind IS DISTINCT FROM 'frozen_revision_authority'
+    OR v_claim.read_json#>>'{frozenRevision,sourceKey}' IS DISTINCT FROM 'investanchors' THEN
+    RETURN v_claim;
+  END IF;
+  v_claim.read_json:=v_claim.read_json||jsonb_build_object('frozenRevision',
+    (v_claim.read_json->'frozenRevision')||jsonb_build_object(
+      'contentAuthorization','structured_claim_authorized',
+      'structuredClaim',true,'rightsAttested',true));
+  v_claim.read_canonical:=convert_to(v_claim.read_json::text,'utf8');
+  v_claim.read_hash:=encode(extensions.digest(v_claim.read_canonical,'sha256'),'hex');
+  IF octet_length(v_claim.read_canonical)>3145728 THEN
+    RAISE EXCEPTION USING ERRCODE='PT413',MESSAGE='bound_violation';
+  END IF;
+  RETURN v_claim;
+END $kol_claim$;
+
+ALTER FUNCTION public.claim_legacy_producer_job_pre_kol_authority_v3_20(
+  uuid,uuid,uuid,integer) OWNER TO legacy_correctness_rpc_owner;
+ALTER FUNCTION public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)
+  OWNER TO legacy_correctness_rpc_owner;
+REVOKE ALL ON FUNCTION public.claim_legacy_producer_job_pre_kol_authority_v3_20(
+  uuid,uuid,uuid,integer) FROM PUBLIC,anon,authenticated,service_role;
+REVOKE ALL ON FUNCTION public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)
+  FROM PUBLIC,anon,authenticated;
+GRANT EXECUTE ON FUNCTION public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)
+  TO service_role;
+DO $v320_claim_runtime_role_reconciliation$
+BEGIN
+  IF EXISTS(SELECT 1 FROM pg_roles WHERE rolname='stockinsider_runtime_v319') THEN
+    -- A rehearsal database may intentionally omit the optional dedicated
+    -- runtime role.  Production has it, and there we must remove inherited
+    -- execute rights from the hidden predecessor before granting the final
+    -- wrapper only.
+    EXECUTE 'REVOKE ALL ON FUNCTION public.claim_legacy_producer_job_pre_kol_authority_v3_20(uuid,uuid,uuid,integer) FROM stockinsider_runtime_v319';
+    GRANT EXECUTE ON FUNCTION public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)
+      TO stockinsider_runtime_v319;
+  END IF;
+END $v320_claim_runtime_role_reconciliation$;
+
 -- Later claim wrappers intentionally delegate rather than repeat the provider
 -- lineage payload. Validate the closed predecessor chain itself, rather than
 -- falsely requiring every final wrapper to contain an implementation detail
@@ -232,8 +295,10 @@ CREATE OR REPLACE FUNCTION public.verify_legacy_claim_delegation_chain_v3_20()
 RETURNS boolean
 LANGUAGE sql STABLE SECURITY DEFINER SET search_path='' AS $claim_chain$
   SELECT
-    position('claim_legacy_producer_job_pre_handoff_v3_19_16' IN pg_get_functiondef(
+    position('claim_legacy_producer_job_pre_kol_authority_v3_20' IN pg_get_functiondef(
       'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure))>0
+    AND position('claim_legacy_producer_job_pre_handoff_v3_19_16' IN pg_get_functiondef(
+      'public.claim_legacy_producer_job_pre_kol_authority_v3_20(uuid,uuid,uuid,integer)'::regprocedure))>0
     AND position('claim_legacy_producer_job_full_candidate_authority_base_v3_19_11' IN pg_get_functiondef(
       'public.claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)'::regprocedure))>0
     AND position('claim_legacy_producer_job_candidate_authority_base_v3_19_10' IN pg_get_functiondef(
@@ -279,6 +344,13 @@ BEGIN
     OR has_function_privilege('service_role',
       'public.verify_legacy_claim_delegation_chain_v3_20()','EXECUTE')
   THEN RAISE EXCEPTION 'v320_claim_delegation_chain_failed'; END IF;
+  IF NOT (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+      AND pg_get_functiondef(oid) LIKE '%structured_claim_authorized%'
+      AND pg_get_functiondef(oid) LIKE '%claim_legacy_producer_job_pre_kol_authority_v3_20%'
+      FROM pg_proc WHERE oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure)
+    OR has_function_privilege('service_role',
+      'public.claim_legacy_producer_job_pre_kol_authority_v3_20(uuid,uuid,uuid,integer)','EXECUTE')
+  THEN RAISE EXCEPTION 'v320_claim_structured_authority_boundary_failed'; END IF;
   IF NOT (SELECT pg_get_userbyid(proowner)='opportunity_v3_rpc_owner' AND prosecdef
       FROM pg_proc WHERE oid='public.append_legacy_expired_producer_diagnostic_v3_20(uuid,uuid,text,text,text,text,text,timestamptz)'::regprocedure)
     OR NOT has_function_privilege('legacy_correctness_rpc_owner',
