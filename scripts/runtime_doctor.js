@@ -6,6 +6,8 @@ const crypto = require('crypto');
 const { spawnSync } = require('child_process');
 const { canonicalJson, sha256 } = require('./runtime/codec');
 const { assessTrackedRuntimeHealth } = require('./runtime/runtime-health');
+const { buildInstalledRuntimeHealthObservation } = require('./runtime/runtime-health');
+const { observeRuntimeHealth, publishRuntimeHealthObservation } = require('./runtime/runtime-health-observer');
 const { resolveCredentialReference } = require('./runtime/credential-resolver');
 const { runtimeBundleSha256 } = require('./runtime/tracked-runtime-bundle');
 
@@ -128,6 +130,61 @@ async function fetchTrackedHealth(config) {
   };
 }
 
+function schedulerObservationRow(label) {
+  const status = parseLaunchctlPrint(label);
+  const plist = path.join(HOME_DIR, 'Library', 'LaunchAgents', `${label}.plist`);
+  return Object.freeze({
+    label,
+    enabled: status.loaded,
+    plistSha256: fileHash(plist),
+  });
+}
+
+function writeCanonicalAtomic(filename, value) {
+  const temporary = `${filename}.next-${crypto.randomBytes(16).toString('hex')}`;
+  const descriptor = fs.openSync(temporary, fs.constants.O_CREAT | fs.constants.O_EXCL | fs.constants.O_WRONLY, 0o600);
+  try {
+    fs.writeFileSync(descriptor, `${canonicalJson(value)}\n`);
+    fs.fsyncSync(descriptor);
+  } finally { fs.closeSync(descriptor); }
+  fs.renameSync(temporary, filename);
+  const directory = fs.openSync(path.dirname(filename), fs.constants.O_RDONLY);
+  try { fs.fsyncSync(directory); } finally { fs.closeSync(directory); }
+}
+
+async function refreshTrackedObservation({ releaseRoot, manifest, rollbackPackage, proposedPlistBytes }) {
+  const runtimeRoot = TRACKED_RUNTIME_ROOT;
+  const reviewedRelease = Object.freeze({
+    commitSha: manifest.commitSha,
+    treeSha: manifest.reviewedTreeSha,
+    workerSha256: manifest.worker?.sha256,
+    configSha256: manifest.config?.sha256,
+    reviewAttestationSha256: manifest.reviewAttestationSha256,
+  });
+  const rawDoctor = await observeRuntimeHealth({
+    releaseRoot,
+    runtimeRoot,
+    manifest,
+    reviewedRelease,
+    proposedPlistBytes,
+    rollbackPackage,
+    schedulerRows: [
+      'com.stockinsider.data-collect',
+      'com.stockinsider.night-shift',
+      'com.stockinsider.research-daemon',
+      'com.stockinsider.auth-source-worker',
+    ].map(schedulerObservationRow),
+  });
+  const normalized = buildInstalledRuntimeHealthObservation({
+    manifest: Object.freeze({ ...manifest, manifestSha256: sha256(Buffer.from(canonicalJson(manifest))) }),
+    reviewedRelease,
+    doctor: rawDoctor,
+  });
+  writeCanonicalAtomic(path.join(releaseRoot, 'runtime-health-observation.json'), normalized);
+  await publishRuntimeHealthObservation({ releaseRoot, observation: normalized });
+  return normalized;
+}
+
 async function trackedMain() {
   const failures = [];
   let report;
@@ -152,7 +209,10 @@ async function trackedMain() {
       'com.stockinsider.night-shift',
       'com.stockinsider.research-daemon',
     ].filter((label) => parseLaunchctlPrint(label).loaded);
-    const localHealth = assessTrackedRuntimeHealth(observation);
+    const rollbackPackage = readCanonical(rollbackPath);
+    const refreshedObservation = await refreshTrackedObservation({ releaseRoot, manifest, rollbackPackage,
+      proposedPlistBytes: fs.readFileSync(plistPath) });
+    const localHealth = assessTrackedRuntimeHealth(refreshedObservation);
     const publicHealth = await fetchTrackedHealth(readCanonical(configPath));
 
     if (manifest.commitSha !== commitSha) failures.push('manifest commit does not match active pointer');
@@ -426,6 +486,8 @@ module.exports = {
   oneShotSchedulerHealthy,
   readCanonical,
   trackedIdentityCompatible,
+  refreshTrackedObservation,
+  writeCanonicalAtomic,
   trackedMain,
   trackedRuntimeAvailable,
 };

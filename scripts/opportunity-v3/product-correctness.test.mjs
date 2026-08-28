@@ -168,7 +168,7 @@ const checks = {
     assert.ok(!readFileSync(path.join(root, 'scripts/runtime/auth-source-worker-cli.js'), 'utf8').includes('.agent/'));
     const bundle = runtime('tracked-runtime-bundle.js');
     assert.deepEqual([...bundle.TRACKED_RUNTIME_PATHS].sort(), bundle.TRACKED_RUNTIME_PATHS);
-    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 54);
+    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 57);
     assert.equal(bundle.runtimeBundleSha256(root), sha256(bundle.runtimeBundleBytes(root)));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/auth-source-worker-cli.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/provider-acquisition-v31621.js'));
@@ -607,6 +607,29 @@ const checks = {
       }
     }
     const observer = runtime('runtime-health-observer.js');
+    assert.equal(observer.activationJournalComplete({ commitSha: 'a'.repeat(40), phase: 'new_owner_loaded' }, 'a'.repeat(40)), true);
+    assert.equal(observer.activationJournalComplete({ commitSha: 'a'.repeat(40), phase: 'doctor_passed' }, 'a'.repeat(40)), true);
+    assert.equal(observer.activationJournalComplete({ commitSha: 'a'.repeat(40), phase: 'complete' }, 'a'.repeat(40)), true,
+      'a terminal health refresh must preserve a completed activation journal');
+    assert.equal(observer.activationJournalComplete({ commitSha: 'a'.repeat(40), phase: 'captured' }, 'a'.repeat(40)), false);
+    assert.equal(observer.activationJournalComplete({ commitSha: 'b'.repeat(40), phase: 'complete' }, 'a'.repeat(40)), false);
+    const observerSource = readFileSync(path.join(root, 'scripts/runtime/runtime-health-observer.js'), 'utf8');
+    assert.match(observerSource,
+      /consumerCommitSha\s*!==\s*reviewedRelease[.]commitSha\s*[?]\s*'unknown'/u,
+      'a stale Web consumer cannot inherit a compatible projection reason');
+    const doctorSource = readFileSync(path.join(root, 'scripts/runtime_doctor.js'), 'utf8');
+    assert.match(doctorSource,
+      /refreshTrackedObservation[\s\S]*observeRuntimeHealth[\s\S]*writeCanonicalAtomic[\s\S]*publishRuntimeHealthObservation/u,
+      'the authoritative doctor refreshes and publishes terminal runtime health before assessment');
+    const trackedPaths = runtime('tracked-runtime-bundle.js').TRACKED_RUNTIME_PATHS;
+    for (const controlPlanePath of ['scripts/runtime/runtime-health-observer.js', 'scripts/runtime/runtime-health.js',
+      'scripts/runtime_doctor.js']) {
+      assert.ok(trackedPaths.includes(controlPlanePath),
+        `${controlPlanePath} must be sealed into the reviewed runtime identity`);
+      assert.match(execFileSync('/usr/bin/git', ['ls-files', '--stage', '--', controlPlanePath],
+        { cwd: root, encoding: 'utf8' }), /^100644 /u,
+      `${controlPlanePath} must use the sealed regular-file mode required by the installer`);
+    }
     const database = await observer.observeDatabase(root, { legacyRadarBaseUrl: 'https://example.test' },
       () => 'postgresql://doctor:read-only@db.fixture.supabase.co/postgres?sslmode=require', ReadOnlyDoctorClient);
     assert.equal(database.stateSchema, 'stockinsider-producer-state-v1');
