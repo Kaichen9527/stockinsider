@@ -45,6 +45,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260828_reused_acquisition_lineage_v3_19_7.sql',
   'migrations/20260828_candidate_retention_authority_v3_19_10.sql',
   'migrations/20260828_full_candidate_retention_authority_v3_19_11.sql',
+  'migrations/20260828_retained_candidate_jsonb_cardinality_v3_19_12.sql',
 ]);
 const V3192_PROJECTION_DOSSIER_MIGRATION =
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql';
@@ -267,6 +268,28 @@ async function applyReviewedMigrations(options) {
             'public.enrich_legacy_retained_candidate_authority_v3_19_11_internal(uuid,jsonb)'::regprocedure)
         AND NOT has_function_privilege('service_role',
           'public.enrich_legacy_retained_candidate_authority_v3_19_11_internal(uuid,jsonb)','EXECUTE')
+        AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
+      ,'retainedCandidateJsonbCardinality',to_regprocedure(
+          'public.read_legacy_prior_candidate_result_v3_19_12_internal(uuid)') IS NOT NULL
+        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%jsonb_agg(result.result_json->''candidates''%'
+          AND pg_get_functiondef(oid) NOT LIKE '%max(result.result_json->''candidates'')%'
+          AND pg_get_functiondef(oid) LIKE '%candidate_retention_full_result_cardinality%'
+          FROM pg_proc WHERE oid=
+            'public.read_legacy_prior_candidate_result_v3_19_12_internal(uuid)'::regprocedure)
+        AND NOT has_function_privilege('service_role',
+          'public.read_legacy_prior_candidate_result_v3_19_12_internal(uuid)','EXECUTE')
+        AND position('candidate-ledger-v3.19.12' IN pg_get_functiondef(
+          'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure))>0
+        AND (NOT EXISTS(SELECT 1 FROM pg_roles WHERE rolname='stockinsider_runtime_v319') OR (
+          has_function_privilege('stockinsider_runtime_v319',
+            'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)','EXECUTE')
+          AND NOT has_function_privilege('stockinsider_runtime_v319',
+            'public.claim_legacy_producer_job_candidate_authority_base_v3_19_10(uuid,uuid,uuid,integer)','EXECUTE')
+          AND NOT has_function_privilege('stockinsider_runtime_v319',
+            'public.claim_legacy_producer_job_full_candidate_authority_base_v3_19_11(uuid,uuid,uuid,integer)','EXECUTE')
+          AND NOT has_function_privilege('stockinsider_runtime_v319',
+            'public.read_legacy_prior_candidate_result_v3_19_12_internal(uuid)','EXECUTE')))
         AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
       ,'releaseReconciliation',to_regclass('public.legacy_release_checkpoints_v3_19') IS NOT NULL
         AND to_regprocedure('public.read_legacy_release_checkpoints_v3_19()') IS NOT NULL

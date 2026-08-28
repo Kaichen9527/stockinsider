@@ -87,6 +87,8 @@ const candidateRetentionAuthoritySql = fs.readFileSync(candidateRetentionAuthori
 const fullCandidateRetentionAuthorityMigrationPath = path.join(root,
   'migrations/20260828_full_candidate_retention_authority_v3_19_11.sql');
 const fullCandidateRetentionAuthoritySql = fs.readFileSync(fullCandidateRetentionAuthorityMigrationPath, 'utf8');
+const retainedCandidateJsonbCardinalityMigrationPath = path.join(root,
+  'migrations/20260828_retained_candidate_jsonb_cardinality_v3_19_12.sql');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -235,6 +237,23 @@ test('V3.19.11 restores complete retained objects before exact-ledger authority 
   const apply=fs.readFileSync(path.join(root,'scripts/opportunity-v3/apply-reviewed-migrations.mjs'),'utf8');
   assert.match(apply,/20260828_full_candidate_retention_authority_v3_19_11[.]sql/u);
   assert.match(apply,/'candidateRetentionAuthority'[\s\S]*enrich_legacy_retained_candidate_authority_v3_19_11_internal/u);
+});
+
+test('V3.19.12 selects the sole retained JSONB candidate result without an unsupported aggregate',()=>{
+  const sql=fs.readFileSync(path.join(root,
+    'migrations/20260828_retained_candidate_jsonb_cardinality_v3_19_12.sql'),'utf8');
+  assert.doesNotMatch(sql,/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.doesNotMatch(sql,/max\(result[.]result_json->'candidates'\)/u);
+  assert.match(sql,/jsonb_agg\(result[.]result_json->'candidates'[\s\S]*->0/u);
+  assert.match(sql,/candidate_retention_full_result_cardinality/u);
+  assert.match(sql,/read_legacy_prior_candidate_result_v3_19_12_internal/u);
+  assert.match(sql,/candidate-ledger-v3[.]19[.]12/u);
+  assert.match(sql,/runtime_role_reconciliation/u);
+  assert.match(sql,/rolname='stockinsider_runtime_v319'[\s\S]*rolconnlimit=6/u);
+  assert.match(sql,/REVOKE EXECUTE[\s\S]*claim_legacy_producer_job_candidate_authority_base_v3_19_10/u);
+  assert.match(sql,/GRANT EXECUTE[\s\S]*claim_legacy_producer_job_v3_11[\s\S]*stockinsider_runtime_v319/u);
+  const apply=fs.readFileSync(path.join(root,'scripts/opportunity-v3/apply-reviewed-migrations.mjs'),'utf8');
+  assert.match(apply,/20260828_retained_candidate_jsonb_cardinality_v3_19_12[.]sql/u);
 });
 
 test('V3.16.15 restores immutable analysis payload reuse outside the lease handoff', () => {
@@ -7598,4 +7617,88 @@ test('public selector is one point-in-time statement across cold, active, failed
     [byLabel.tie.availability, byLabel.tie.unavailable_reason, byLabel.tie.selected_run_id],
     ['unavailable', 'latest_matching_failed', null],
   );
+});
+
+test('V3.19.12 executes the production-shaped JSONB cardinality read and reconciles exactly nine runtime RPCs',()=>{
+  psql(`
+    CREATE ROLE stockinsider_runtime_v319 LOGIN NOINHERIT NOSUPERUSER NOCREATEDB NOCREATEROLE
+      NOREPLICATION NOBYPASSRLS CONNECTION LIMIT 6;
+    GRANT CONNECT ON DATABASE postgres TO stockinsider_runtime_v319;
+    GRANT USAGE ON SCHEMA public TO stockinsider_runtime_v319;
+    GRANT EXECUTE ON FUNCTION
+      public.acquire_legacy_producer_lease_v3_11(text,text,text,bytea,text,uuid,integer),
+      public.heartbeat_legacy_producer_job_v3_11(uuid,uuid,uuid,integer),
+      public.complete_legacy_producer_job_v3_14(uuid,uuid,uuid,bytea,jsonb,text),
+      public.fail_legacy_producer_job_v3_11(uuid,uuid,uuid,public.opportunity_legacy_producer_failure_code_v3_11),
+      public.append_legacy_runtime_failure_diagnostic_v3_14(uuid,uuid,uuid,text,text,text,text,text,text,text,integer,text,text,text,text,timestamptz),
+      public.append_legacy_official_ingestion_chunk_rest_v3_15(uuid,uuid,uuid,text,integer,jsonb,text,text,timestamptz),
+      public.read_legacy_provider_acquisition_v3_16_21(text,text,timestamptz),
+      public.freeze_legacy_provider_acquisition_v3_16_21(uuid,uuid,uuid,text,text,text,timestamptz,timestamptz,text,integer,jsonb,text,text,text,boolean)
+      TO stockinsider_runtime_v319;
+    GRANT EXECUTE ON FUNCTION public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)
+      TO stockinsider_runtime_v319;
+  `);
+  for(const filename of [candidateRetentionAuthorityMigrationPath,
+    fullCandidateRetentionAuthorityMigrationPath,retainedCandidateJsonbCardinalityMigrationPath]){
+    for(let application=0;application<2;application+=1)command(pg.psql,[
+      '-X','-v','ON_ERROR_STOP=1','-h',cluster.socket,'-p',String(cluster.port),
+      '-U','stockinsider_managed_migrator','-d','postgres','-f',filename,
+    ]);
+  }
+  const result=JSON.parse(psql(`BEGIN;
+    GRANT EXECUTE ON FUNCTION public.read_legacy_prior_candidate_result_v3_19_12_internal(uuid)
+      TO stockinsider_managed_migrator;
+    INSERT INTO public.legacy_producer_runs_v3_11(
+      run_id,owner_label,owner_token_hash,producer_commit_sha,worker_sha256,
+      scheduler_config_canonical,scheduler_config_sha256,legacy_seed_symbols,legacy_seed_set_hash,
+      scheduled_occurrence_id,source_cutoff,trading_date,trading_session_authority_hash,
+      authority_canonical,authority_json,authority_hash,status,started_at,heartbeat_at,
+      lease_expires_at,terminal_at,failure_code,logical_run_key,attempt,recorded_at
+    ) VALUES(
+      '31912000-0000-4000-8000-000000000001','com.stockinsider.auth-source-worker',repeat('1',64),
+      repeat('2',40),repeat('3',64),decode('${legacyRuntimeConfigHex}','hex'),
+      '1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2',
+      (SELECT array_agg(value ORDER BY ordinal) FROM jsonb_array_elements_text(
+        convert_from(decode('${legacyRuntimeConfigHex}','hex'),'utf8')::jsonb->'legacySeedSymbols'
+      ) WITH ORDINALITY seed(value,ordinal)),
+      'e6d9c09b8b552f5d9eaf389b76d2d90daa2d89578433d2a1ad63286888b3b743',
+      'v31912-jsonb-cardinality-fixture','2026-08-27T10:20:00Z','2026-08-27',NULL,
+      convert_to('{}','utf8'),'{}'::jsonb,
+      encode(extensions.digest(convert_to('{}','utf8'),'sha256'),'hex'),'success',
+      '2026-08-27T10:20:01Z','2026-08-27T10:20:02Z','2026-08-27T10:20:02Z',
+      '2026-08-27T10:20:03Z',NULL,repeat('4',64),1,'2026-08-27T10:20:01Z');
+    INSERT INTO public.legacy_producer_jobs_v3_11(
+      job_id,run_id,stage,job_kind,stage_ordinal,shard_ordinal,execution_ordinal,revision_id,
+      predecessor_job_id,input_hash,payload_hash,status,attempt,max_attempts,owner_token_hash,
+      leased_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,recorded_at
+    ) VALUES(
+      '31912000-0000-4000-8000-000000000002','31912000-0000-4000-8000-000000000001',
+      'candidate_funnel','stage_barrier',2,NULL,0,NULL,NULL,repeat('5',64),repeat('6',64),
+      'succeeded',1,5,NULL,NULL,NULL,NULL,'2026-08-27T10:20:03Z',NULL,'2026-08-27T10:20:01Z');
+    WITH payload(value) AS(VALUES('{"candidates":[{"stockId":"31912000-0000-4000-8000-000000000003","symbol":"2330","citation":"fixture:2330"}]}'::jsonb))
+    INSERT INTO public.legacy_producer_job_results_v3_11(job_id,result_canonical,result_json,result_hash,recorded_at)
+    SELECT '31912000-0000-4000-8000-000000000002',convert_to(value::text,'utf8'),value,
+      encode(extensions.digest(convert_to(value::text,'utf8'),'sha256'),'hex'),'2026-08-27T10:20:03Z'
+    FROM payload;
+    SELECT jsonb_build_object(
+      'candidate',public.read_legacy_prior_candidate_result_v3_19_12_internal(
+        '31912000-0000-4000-8000-000000000001')->0,
+      'directExecuteCount',(SELECT count(*) FROM pg_proc function_row
+        CROSS JOIN LATERAL aclexplode(coalesce(function_row.proacl,
+          acldefault('f',function_row.proowner))) grant_row
+        JOIN pg_roles grantee ON grantee.oid=grant_row.grantee
+        WHERE grantee.rolname='stockinsider_runtime_v319'
+          AND grant_row.privilege_type='EXECUTE'),
+      'currentExecute',has_function_privilege('stockinsider_runtime_v319',
+        'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)','EXECUTE'),
+      'oldBaseExecute',has_function_privilege('stockinsider_runtime_v319',
+        'public.claim_legacy_producer_job_candidate_authority_base_v3_19_10(uuid,uuid,uuid,integer)','EXECUTE'),
+      'newHelperExecute',has_function_privilege('stockinsider_runtime_v319',
+        'public.read_legacy_prior_candidate_result_v3_19_12_internal(uuid)','EXECUTE'))::text;
+    ROLLBACK;
+  `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
+  assert.deepEqual(result.candidate,{stockId:'31912000-0000-4000-8000-000000000003',symbol:'2330',citation:'fixture:2330'});
+  assert.deepEqual({directExecuteCount:Number(result.directExecuteCount),currentExecute:result.currentExecute,
+    oldBaseExecute:result.oldBaseExecute,newHelperExecute:result.newHelperExecute},
+  {directExecuteCount:9,currentExecute:true,oldBaseExecute:false,newHelperExecute:false});
 });
