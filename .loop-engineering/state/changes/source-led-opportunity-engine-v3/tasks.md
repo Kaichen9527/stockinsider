@@ -1,7 +1,33 @@
 <!-- /autoplan restore point: /Users/kaerchen/.gstack/projects/Kaichen9527-stockinsider/codex-source-led-opportunity-engine-v3-autoplan-restore-20260724-191533.md -->
 # Tasks: source-led-opportunity-engine-v3
 
-## V3.19 single release closure — only active action queue
+## V3.20 single release closure — only active action queue
+
+- [x] Preserve V3.19 as a predecessor and mark all earlier operational queues
+  `superseded/do_not_execute`; V3 action authority remains disabled until the
+  exact V3.20 runtime, manifest, migration and Web identity agree.
+- [x] Mark every historical password/credential rotation item `superseded/do_not_execute`.
+  The database password must not be reset.
+- [x] Freeze the one bounded V3.20 source-led implementation tree on
+  `5aa733c158276cbe0c407c5559195e0d7b6c0838`: exact lease recovery,
+  KOL-first nomination authority, five connector outcomes and V3.20 projection compatibility.
+- [x] Fresh Requirements review PASS with `P0=0 P1=0 P2=0`.
+- [x] Independent Architecture review PASS with `P0=0 P1=0 P2=0`.
+- [ ] Create the exact implementation commit, complete exact diff/repair/full-range
+  review with P0=0/P1=0, and pass the protected Code Gate.
+- [ ] Rehearse the reviewed additive migration chain, activate the matching runtime
+  and complete two terminal producer invocations. Do not reset any password and do
+  not enable LINE, dispatch, auto-trading or Promotion.
+- [ ] Deploy the exact reviewed release to both existing Vercel projects; complete read-only
+  smoke, performance, nonzero-card, revision-consistency and Safari checks.
+- [ ] Publish the release-state evidence carrier and close the single release checkpoint as
+  `closed`; only third-party terminal failures and real-cohort evaluation governance may remain concerns.
+
+All older unchecked production, migration, gate, activation and credential items
+below are a historical ledger and are `superseded/do_not_execute` unless referenced
+by `current-release.json`. They are not the current action queue.
+
+## V3.19 single release closure — historical ledger
 
 - [x] Preserve V3.16.21 as a predecessor: old formal-action authority remains
   disabled; V3.16.20 forensic activation remains rolled back and is never restarted.

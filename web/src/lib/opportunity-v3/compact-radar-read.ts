@@ -10,8 +10,9 @@ import { assessTrackedRuntimeHealth, runtimeObservationMatchesProducer,
 import { deriveEffectiveProjectionHealth } from './effective-health';
 
 function requiredMigrationLevel(schema: unknown): string {
-  return schema === 'legacy-radar-v3.19.0'
-    ? 'release-reconciliation-v3.19' : schema === 'legacy-radar-v3.18.0'
+  return schema === 'legacy-radar-v3.20.0'
+    ? 'kol-first-runtime-recovery-v3.20' : schema === 'legacy-radar-v3.19.0'
+      ? 'release-reconciliation-v3.19' : schema === 'legacy-radar-v3.18.0'
       ? 'candidate-ledger-retention-v3.18' : 'provider-acquisition-v3.16.21';
 }
 
@@ -146,7 +147,7 @@ export async function loadCompactRadarDecisionRevision(symbol: string, decisionR
       throw new RadarProjectionValidationError('projection_conflict');
     }
     const correctness=heartbeats[0]?.source_led_correctness as CompactRadarProjection['sourceLedCorrectness']|undefined;
-    if(!correctness||!['legacy-radar-v3.13.0','legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0'].includes(correctness.schema)
+    if(!correctness||!['legacy-radar-v3.13.0','legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0','legacy-radar-v3.20.0'].includes(correctness.schema)
       ||correctness.window!=='home')return null;
     let health=assessProjectionFreshness({
       contentAsOf:correctness.contentAsOf??correctness.asOf,
