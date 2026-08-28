@@ -459,7 +459,8 @@ function assertTaskStatusNextWorkConsistent(tasksText, statusRecord) {
       'forbidden and superseded work can never re-enter the active queue');
     const marker=`## ${currentRelease.version.toUpperCase()} single release closure — only active action queue`;
     const start=tasksText.indexOf(marker);assert.ok(start>=0,'one current-release active action queue exists');
-    const active=tasksText.slice(start,tasksText.indexOf('## Architecture checkpoint',start));
+    const nextReleaseOrLedger=tasksText.indexOf('\n## ',start+marker.length);
+    const active=tasksText.slice(start,nextReleaseOrLedger<0?tasksText.length:nextReleaseOrLedger);
     assert.match(active,/\[x\] Mark every historical password\/credential rotation item/u);
     assert.match(active,/All older unchecked production, migration, gate, activation and credential items[\s\S]*superseded\/do_not_execute/u);
     if(currentRelease.phase==='implementation_in_progress'){
