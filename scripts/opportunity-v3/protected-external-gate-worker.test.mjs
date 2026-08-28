@@ -107,14 +107,20 @@ test('review envelopes require reviewed-parent evidence with an exact closed dif
   assert.doesNotMatch(worker, /evidenceOnlyPaths\.includes\(source\.path\)/u);
 });
 
-test('the protected root fetches the V3.19 immutable review evidence branches', () => {
+test('the protected root selects closed graph-bound Requirements/Architecture evidence and subject-addressed exact review evidence', () => {
   for (const reference of [
     'codex/source-led-opportunity-engine-v3-v319-requirements-evidence',
     'codex/source-led-opportunity-engine-v3-v319-architecture-evidence',
+    'codex/source-led-opportunity-engine-v3-v320-requirements-evidence',
+    'codex/source-led-opportunity-engine-v3-v320-architecture-evidence',
     'codex/source-led-opportunity-engine-v3-v319-exact-review-evidence',
     'requirements-review-v3.19.md',
     'architecture-review-v3.19.md',
   ]) assert.match(worker, new RegExp(reference.replace(/[.]/gu, '\\.'), 'u'));
+  assert.match(worker, /evidence\/source-led-opportunity-v3-exact-review-\$\{attestation[.]subjectCommitSha\}/u);
+  assert.match(worker, /function reviewSource\(check, attestation = null, identity = null\)/u);
+  assert.match(worker, /function reviewSourceValues\(attestation\)/u);
+  assert.match(worker, /active graph evidence source/u);
 });
 
 test('each candidate command is isolated in a process group that is cleared on return', () => {
