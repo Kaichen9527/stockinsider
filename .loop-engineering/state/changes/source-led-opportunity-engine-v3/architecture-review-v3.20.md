@@ -1,10 +1,11 @@
-# V3.20 independent Architecture review — KOL-first runtime recovery
+# V3.20 fresh Architecture review — KOL-first runtime recovery
 
-Date: 2026-08-28
+Date: 2026-08-29
 
-Review authority: one independent, read-only Architecture review following the
-V3.20 fresh Requirements PASS. No production database, scheduler, Vercel,
-source connector or browser session was mutated for this review.
+Review authority: one independent, read-only Architecture review after the
+V3.20 Requirements PASS. No production database, scheduler, Vercel project,
+provider, Safari state, LINE, dispatch, automatic trading, Promotion, or
+evaluation-governance state was mutated.
 
 Result: `PASS`
 
@@ -12,58 +13,46 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Parent commit/tree: `6aaa017618f15a0082efb2cafe8c08b32947be1c` /
-  `dccb0b789e576d4a0448c00d46a793903a48cad5`
-- Final reviewed implementation commit/tree: `42f15635438afe82cb0424b58171eb195abb3e4a` / `f339f81b4a77e2429bb8c06ef60e52dce1f8a03d`
-- Full reviewed implementation range: `6aaa017618f15a0082efb2cafe8c08b32947be1c..42f15635438afe82cb0424b58171eb195abb3e4a`
-- Active graph: `4baf35c1a17cc7c7cd451e71b29e34e9b83c90ee03ca18822fcf4f7f47b19a7b`
+- Requirements-reviewed parent/tree: `c783f8171233efd77adf21405fe91723e48b318c` / `9b87d174de9c71cf5dac9e6e59d68f3d0ad3fd6c`
+- Final reviewed implementation commit/tree: `2ee6b3b843fdc52473bc28135e5b406191f84eda` / `0ef23dc6e92a076e2bc60c13de9ae803ea39dbd9`
+- Full reviewed implementation range: `501dc2fba28d06731a85469ba3fbc4b8f250528c..2ee6b3b843fdc52473bc28135e5b406191f84eda`
+- Active graph: `13081345293dcb3306c68420270ca82ea090fa18a0ecb878ccd8da08d63e0587`
 
-## Architecture closure
+## Architecture result
 
-The runtime recovery path stays narrow. A new worker first asks the database to
-reap at most one expired lease with its exact reviewed identity, then acquires a
-new lease. The terminalizer takes row locks on the running run and leased job,
-writes a fixed-shape redacted diagnostic through the owner boundary, cancels
-only remaining queued/retryable jobs for that run and terminalizes the run.
-The runtime role receives RPC execution only, not table or schema privileges;
-the migration verifier follows the actual predecessor wrapper chain instead of
-requiring provider lineage text in a delegating wrapper.
+- The worker is a single restartable DAG. Source acquisition freezes bounded
+  inputs first; subsequent claims, 60→30→20 selection, facts, valuation,
+  decision and compact projection consume those immutable inputs. A provider
+  retry cannot silently refetch and alter an existing cutoff.
+- The V3.20 reaper has an exact identity gate and writes a durable,
+  allowlisted diagnostic before a lease-expired terminal. It is distinct from
+  normal cancellation and does not grant the runtime role table privileges.
+- `CandidateNominationAuthorityV320` forms the only nomination boundary.
+  Official market observations and retention ledgers are downstream validators
+  only. The compact projection repeats that boundary, so stale legacy cards
+  cannot revive through a compatibility path.
+- Five acquisition connectors have one explicit terminal outcome per
+  expected pair. Rights and transcript availability are checked before claims
+  can affect a thesis; protected content is represented only by structured,
+  attested facts and citations.
+- The Web reads the compact projection on the request path and overlays health
+  without changing decision bytes. Every visible candidate has exactly one
+  readiness lane and a revision-bound dossier or safe research-only detail.
+- The active artifact catalog now declares the V3.20 amendment, and the
+  protected root selects V3.20 review evidence for that graph rather than
+  accepting semantically unrelated V3.19 proof.
 
-Candidate authority is a one-way graph. The KOL nomination set is closed in
-one small module, checked both for new observations and prior-ledger retention.
-An official observation is admitted only as corroboration for a same-stock KOL
-nomination already present in the current bounded selection, and the candidate
-representative remains the KOL source. This prevents full-market factors,
-price dislocations, peers, seeds and low-multiple scans from re-entering the
-funnel through ranking or retention.
+## Verified evidence
 
-The five connector acquisition layer keeps provider concerns isolated. Each
-profile gets one outcome per source key regardless of missing endpoint or
-credential; source documents are durable only when analyzable. Public Telegram
-is restricted to its public mirror, and structured InvestAnchors claims remain
-bounded/citation-bearing without retaining member text. Entity-link context is
-validated before the candidate layer, including the 2605 generic ETF guard.
+- Product/runtime: `149/149` PASS; migration contract/rehearsal: `74/74`
+  PASS; source-led core: `63/63` PASS; legacy V1/V2: `2/2` PASS.
+- Browser correctness: `9/9` PASS; performance: `5/5` PASS; typecheck, lint,
+  production build, protected-worker tests and `git diff --check` PASS.
+- The review inspected the range for authority widening, full-market
+  nomination regressions, lease terminalization holes, SQL owner/privilege
+  drift, source-rights leakage, stale action authority, decision revision
+  mismatch, and API compatibility. No P0/P1/P2 finding remains.
 
-The projection contract is additive. V3.20 identity is accepted by the
-runtime, Web and health readers. Freshness is a health overlay, not a mutation
-of the decision envelope: the UI disables action authority while preserving the
-original revision-bound dossier and citations. The compact request path remains
-projection-only and the full dossier remains behind its revision URL.
-
-No public mutating endpoint, credential reset, dispatch, LINE, automatic trade,
-Promotion or evaluation shortcut is introduced. The additive migration preserves
-the older V3.13 51-row source contract for its old schema and enforces 85 rows
-only for the V3.20 schema, so historic payloads do not become invalid.
-
-## Evidence examined
-
-- Product/runtime: `146/146` PASS; migration: `74/74` PASS; source-led:
-  `63/63` PASS; legacy: `2/2` PASS; performance: `5/5` PASS.
-- Browser: `9/9` PASS, including keyboard, zoom, reduced-motion and theme
-  cases; TypeScript typecheck and production build PASS; lint has zero errors.
-- Static review: additive migration only, exact identity reaper, no table DML
-  grant to the runtime role, no `official_market_factor` nomination branch,
-  and `git diff --check` PASS.
-
-This Architecture PASS authorizes an exact implementation commit and one
-exact-range review. Production activity remains separately gated.
+This PASS authorizes exactly one exact-commit review. It does not authorize
+production migration, runtime activation, Vercel deployment, a claim of
+future returns, or any prohibited action.
