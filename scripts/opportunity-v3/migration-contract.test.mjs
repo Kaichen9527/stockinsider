@@ -95,6 +95,10 @@ const finalClaimHandoffSql = fs.readFileSync(finalClaimHandoffMigrationPath, 'ut
 const v320RuntimeRecoveryMigrationPath = path.join(root,
   'migrations/20260828_kol_first_runtime_recovery_v3_20.sql');
 const v320RuntimeRecoverySql = fs.readFileSync(v320RuntimeRecoveryMigrationPath, 'utf8');
+const v320SourceCompletionCardinalityRepairMigrationPath = path.join(root,
+  'migrations/20260829_v320_source_completion_cardinality_repair.sql');
+const v320SourceCompletionCardinalityRepairSql = fs.readFileSync(
+  v320SourceCompletionCardinalityRepairMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -155,6 +159,15 @@ test('V3.20 widens only the KOL connector matrix and installs an exact-identity 
   const sourceDefinition=psql(`SELECT pg_get_functiondef(
     'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure);`,['-At']);
   for(const required of ['telegram','investanchors','official-source-acquisition-v3.20'])assert.match(sourceDefinition,new RegExp(required,'u'));
+  assert.doesNotMatch(v320SourceCompletionCardinalityRepairSql,
+    /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(v320SourceCompletionCardinalityRepairSql,/v320_source_completion_cardinality_predecessor_conflict/u);
+  assert.match(v320SourceCompletionCardinalityRepairSql,/official-source-acquisition-v3[.]20/u);
+  const compactSourceDefinition=sourceDefinition.replace(/\s+/gu,' ');
+  assert.match(compactSourceDefinition,
+    /v_attempt_provider\+v_attempt_auth\+v_attempt_missing\+v_attempt_success<>\(CASE WHEN p_json#>>'\{sourceAcquisition,schema\}'='official-source-acquisition-v3[.]20' THEN 5 ELSE 3 END\)/u);
+  assert.match(compactSourceDefinition,
+    /WHEN v_attempt_missing=\(CASE WHEN p_json#>>'\{sourceAcquisition,schema\}'='official-source-acquisition-v3[.]20' THEN 5 ELSE 3 END\) THEN 'missing_endpoint'/u);
   const claimDefinition=psql(`SELECT pg_get_functiondef(
     'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure);`,['-At']);
   for(const required of ['claim_legacy_producer_job_pre_kol_authority_v3_20','structured_claim_authorized','rightsAttested'])
@@ -734,7 +747,8 @@ before(() => {
     ]);
   }
   for (const migration of [candidateRetentionAuthorityMigrationPath,fullCandidateRetentionAuthorityMigrationPath,
-    retainedCandidateJsonbCardinalityMigrationPath,finalClaimHandoffMigrationPath,v320RuntimeRecoveryMigrationPath]) {
+    retainedCandidateJsonbCardinalityMigrationPath,finalClaimHandoffMigrationPath,v320RuntimeRecoveryMigrationPath,
+    v320SourceCompletionCardinalityRepairMigrationPath]) {
     for (let application = 0; application < 2; application += 1) {
       command(pg.psql, ['-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
         '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', migration]);
