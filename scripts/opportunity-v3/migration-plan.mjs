@@ -39,6 +39,7 @@ const migrationPaths = [
   'migrations/20260828_candidate_retention_authority_v3_19_10.sql',
   'migrations/20260828_full_candidate_retention_authority_v3_19_11.sql',
   'migrations/20260828_retained_candidate_jsonb_cardinality_v3_19_12.sql',
+  'migrations/20260828_final_claim_handoff_lease_v3_19_16.sql',
 ];
 const migrations = migrationPaths.map((relativePath) => {
   const bytes = fs.readFileSync(path.join(root, relativePath));

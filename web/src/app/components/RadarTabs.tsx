@@ -1174,9 +1174,9 @@ function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
               : <span>{provenance?.sourceName || sourceTypeLabel[signal.sourceClass] || signal.sourceClass}</span>}
             <span className="sr-only">；發布、收集與評估日期請展開研究依據。</span>
           </div>
-          <Link href={href} data-testid={revision?'decision-detail-link':'research-only-detail-link'} className="cta-primary inline-flex min-h-11 items-center rounded-full px-4 py-2 text-sm font-semibold transition">
+          <a href={href} data-testid={revision?'decision-detail-link':'research-only-detail-link'} className="cta-primary inline-flex min-h-11 items-center rounded-full px-4 py-2 text-sm font-semibold transition">
             {revision?'查看決策摘要':'查看唯讀研究'} →
-          </Link>
+          </a>
         </div>
       </div>
 

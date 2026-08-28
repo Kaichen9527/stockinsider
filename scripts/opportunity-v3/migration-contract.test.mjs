@@ -89,6 +89,9 @@ const fullCandidateRetentionAuthorityMigrationPath = path.join(root,
 const fullCandidateRetentionAuthoritySql = fs.readFileSync(fullCandidateRetentionAuthorityMigrationPath, 'utf8');
 const retainedCandidateJsonbCardinalityMigrationPath = path.join(root,
   'migrations/20260828_retained_candidate_jsonb_cardinality_v3_19_12.sql');
+const finalClaimHandoffMigrationPath = path.join(root,
+  'migrations/20260828_final_claim_handoff_lease_v3_19_16.sql');
+const finalClaimHandoffSql = fs.readFileSync(finalClaimHandoffMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -254,6 +257,33 @@ test('V3.19.12 selects the sole retained JSONB candidate result without an unsup
   assert.match(sql,/GRANT EXECUTE[\s\S]*claim_legacy_producer_job_v3_11[\s\S]*stockinsider_runtime_v319/u);
   const apply=fs.readFileSync(path.join(root,'scripts/opportunity-v3/apply-reviewed-migrations.mjs'),'utf8');
   assert.match(apply,/20260828_retained_candidate_jsonb_cardinality_v3_19_12[.]sql/u);
+});
+
+test('V3.19.16 refreshes the lease after the complete successor claim chain',()=>{
+  assert.doesNotMatch(finalClaimHandoffSql,
+    /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(finalClaimHandoffSql,
+    /claim_legacy_producer_job_v3_11[\s\S]*RENAME TO claim_legacy_producer_job_pre_handoff_v3_19_16/u);
+  assert.match(finalClaimHandoffSql,
+    /v_claim:=public[.]claim_legacy_producer_job_pre_handoff_v3_19_16/u);
+  const predecessorCall=finalClaimHandoffSql.indexOf(
+    'v_claim:=public.claim_legacy_producer_job_pre_handoff_v3_19_16');
+  const postMaterializationClock=finalClaimHandoffSql.indexOf(
+    "v_now:=date_trunc('second',clock_timestamp())");
+  const claimLeaseRefresh=finalClaimHandoffSql.indexOf(
+    "v_claim.lease_expires_at:=v_now+interval '120 seconds'");
+  assert.ok(predecessorCall>=0 && postMaterializationClock>predecessorCall
+    && claimLeaseRefresh>postMaterializationClock);
+  assert.match(finalClaimHandoffSql,
+    /REVOKE EXECUTE[\s\S]*claim_legacy_producer_job_pre_handoff_v3_19_16[\s\S]*stockinsider_runtime_v319/u);
+  assert.match(finalClaimHandoffSql,
+    /GRANT EXECUTE[\s\S]*claim_legacy_producer_job_v3_11[\s\S]*stockinsider_runtime_v319/u);
+  assert.match(finalClaimHandoffSql,
+    /REVOKE CREATE ON SCHEMA public FROM legacy_correctness_rpc_owner/u);
+  const apply=fs.readFileSync(path.join(root,
+    'scripts/opportunity-v3/apply-reviewed-migrations.mjs'),'utf8');
+  assert.match(apply,/20260828_final_claim_handoff_lease_v3_19_16[.]sql/u);
+  assert.match(apply,/'finalClaimHandoff'[\s\S]*claim_legacy_producer_job_pre_handoff_v3_19_16/u);
 });
 
 test('V3.16.15 restores immutable analysis payload reuse outside the lease handoff', () => {
@@ -7639,7 +7669,8 @@ test('V3.19.12 executes the production-shaped JSONB cardinality read and reconci
       TO stockinsider_runtime_v319;
   `);
   for(const filename of [candidateRetentionAuthorityMigrationPath,
-    fullCandidateRetentionAuthorityMigrationPath,retainedCandidateJsonbCardinalityMigrationPath]){
+    fullCandidateRetentionAuthorityMigrationPath,retainedCandidateJsonbCardinalityMigrationPath,
+    finalClaimHandoffMigrationPath]){
     for(let application=0;application<2;application+=1)command(pg.psql,[
       '-X','-v','ON_ERROR_STOP=1','-h',cluster.socket,'-p',String(cluster.port),
       '-U','stockinsider_managed_migrator','-d','postgres','-f',filename,
@@ -7693,12 +7724,16 @@ test('V3.19.12 executes the production-shaped JSONB cardinality read and reconci
         'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)','EXECUTE'),
       'oldBaseExecute',has_function_privilege('stockinsider_runtime_v319',
         'public.claim_legacy_producer_job_candidate_authority_base_v3_19_10(uuid,uuid,uuid,integer)','EXECUTE'),
+      'preHandoffExecute',has_function_privilege('stockinsider_runtime_v319',
+        'public.claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)','EXECUTE'),
       'newHelperExecute',has_function_privilege('stockinsider_runtime_v319',
         'public.read_legacy_prior_candidate_result_v3_19_12_internal(uuid)','EXECUTE'))::text;
     ROLLBACK;
   `,['-At']).trim().split('\n').find((line)=>line.startsWith('{')));
   assert.deepEqual(result.candidate,{stockId:'31912000-0000-4000-8000-000000000003',symbol:'2330',citation:'fixture:2330'});
   assert.deepEqual({directExecuteCount:Number(result.directExecuteCount),currentExecute:result.currentExecute,
-    oldBaseExecute:result.oldBaseExecute,newHelperExecute:result.newHelperExecute},
-  {directExecuteCount:9,currentExecute:true,oldBaseExecute:false,newHelperExecute:false});
+    oldBaseExecute:result.oldBaseExecute,preHandoffExecute:result.preHandoffExecute,
+    newHelperExecute:result.newHelperExecute},
+  {directExecuteCount:9,currentExecute:true,oldBaseExecute:false,preHandoffExecute:false,
+    newHelperExecute:false});
 });
