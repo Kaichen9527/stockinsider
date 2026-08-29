@@ -149,6 +149,7 @@ test('candidate model code receives no credential and is enclosed by a base-owne
   assert.match(worker, /PATH: `\$\{appleDeveloperToolchain[.]gitBin\}\$\{path[.]delimiter\}\$\{environment[.]PATH\}`/u);
   assert.match(worker, /'"\/System\/Library\/OpenSSL" = "read"'/u);
   assert.match(worker, /trustedHostModelOracle/u);
+  assert.match(worker, /OPPORTUNITY_V3_PROTECTED_HOST_PREFLIGHT_SCRATCH/u);
   assert.match(worker, /content_addressed_reuse/u);
   assert.match(worker, /byte-identical model-runner inputs/u);
   assert.match(worker, /model oracle artifact digest from GitHub/u);
