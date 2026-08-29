@@ -1038,6 +1038,7 @@ test('generic migration discovery is a closed legacy allowlist and the V3.13 pla
     'migrations/20260830_v320_kol_retention_bridge.sql',
     'migrations/20260830_v320_expired_unclaimed_run_reaper.sql',
     'migrations/20260830_v320_kol_claim_payload_compaction.sql',
+    'migrations/20260830_v320_kol_retention_owner_boundary.sql',
   ]);
   assert.ok(plan.migrations.every((row)=>/^[0-9a-f]{64}$/u.test(row.sha256)&&row.additiveOnly));
   assert.match(plan.orderedChainSha256,/^[0-9a-f]{64}$/u);

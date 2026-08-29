@@ -115,6 +115,10 @@ const v320KolClaimPayloadCompactionMigrationPath = path.join(root,
   'migrations/20260830_v320_kol_claim_payload_compaction.sql');
 const v320KolClaimPayloadCompactionSql = fs.readFileSync(
   v320KolClaimPayloadCompactionMigrationPath, 'utf8');
+const v320KolRetentionOwnerBoundaryMigrationPath = path.join(root,
+  'migrations/20260830_v320_kol_retention_owner_boundary.sql');
+const v320KolRetentionOwnerBoundarySql = fs.readFileSync(
+  v320KolRetentionOwnerBoundaryMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -379,6 +383,39 @@ test('V3.20.2 compacts the candidate claim transport before a worker lease can e
   assert.match(apply,/20260830_v320_kol_claim_payload_compaction\.sql/u);
   assert.match(apply,/v320KolClaimPayloadCompaction/u);
   assert.match(plan,/20260830_v320_kol_claim_payload_compaction\.sql/u);
+});
+
+test('V3.20.3 keeps KOL retention source authority behind its owning RPC boundary',()=>{
+  assert.doesNotMatch(v320KolRetentionOwnerBoundarySql,
+    /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(v320KolRetentionOwnerBoundarySql,
+    /read_v320_authorized_investanchors_revision_ids_internal/u);
+  assert.match(v320KolRetentionOwnerBoundarySql,
+    /ALTER FUNCTION public\.read_v320_authorized_investanchors_revision_ids_internal\(timestamptz\)\s+OWNER TO opportunity_v3_rpc_owner/u);
+  const legacyReader=v320KolRetentionOwnerBoundarySql.match(
+    /CREATE OR REPLACE FUNCTION public\.read_v320_revalidated_kol_retention_internal[\s\S]*?END \$retained\$;/u)?.[0]??'';
+  assert.match(legacyReader,/read_v320_authorized_investanchors_revision_ids_internal/u);
+  assert.doesNotMatch(legacyReader,/source_document_revisions_v3|source_identity_authorities_v3/u,
+    'the legacy helper must not directly read opportunity-owned source relations');
+  assert.match(v320KolRetentionOwnerBoundarySql,
+    /GRANT EXECUTE ON FUNCTION public\.read_v320_authorized_investanchors_revision_ids_internal\(timestamptz\)\s+TO legacy_correctness_rpc_owner/u);
+  assert.match(v320KolRetentionOwnerBoundarySql,/v320_kol_retention_owner_boundary_postcondition_failed/u);
+  const verifiedOutput=psql(`SET ROLE legacy_correctness_rpc_owner;
+    SELECT jsonb_build_object(
+      'retentionReadable',jsonb_typeof(public.read_v320_revalidated_kol_retention_internal(clock_timestamp()))='array',
+      'sourceBridgeExecutable',has_function_privilege('legacy_correctness_rpc_owner',
+        'public.read_v320_authorized_investanchors_revision_ids_internal(timestamptz)','EXECUTE'),
+      'serviceCannotCall',NOT has_function_privilege('service_role',
+        'public.read_v320_authorized_investanchors_revision_ids_internal(timestamptz)','EXECUTE')
+    )::text;
+    RESET ROLE;`,['-At']).trim();
+  const verified=JSON.parse(verifiedOutput.split('\n').find((line)=>line.startsWith('{'))??'null');
+  assert.deepEqual(verified,{retentionReadable:true,sourceBridgeExecutable:true,serviceCannotCall:true});
+  const apply=fs.readFileSync(path.join(root,'scripts/opportunity-v3/apply-reviewed-migrations.mjs'),'utf8');
+  const plan=fs.readFileSync(path.join(root,'scripts/opportunity-v3/migration-plan.mjs'),'utf8');
+  assert.match(apply,/20260830_v320_kol_retention_owner_boundary\.sql/u);
+  assert.match(apply,/'v320KolRetentionOwnerBoundary'[\s\S]*read_v320_authorized_investanchors_revision_ids_internal/u);
+  assert.match(plan,/20260830_v320_kol_retention_owner_boundary\.sql/u);
 });
 const lifecycleNewerSourceParseOutput = executeWorkerPayload('source_parse_batch', [
   '123e4567-e89b-42d3-a456-426614173004', 1, 'threads',
@@ -922,7 +959,8 @@ before(() => {
     retainedCandidateJsonbCardinalityMigrationPath,finalClaimHandoffMigrationPath,v320RuntimeRecoveryMigrationPath,
     v320SourceCompletionCardinalityRepairMigrationPath,v320KolSourceAuthoritySeedMigrationPath,
     v320KolProjectionMarkerMigrationPath,v320KolRetentionBridgeMigrationPath,
-    v320ExpiredUnclaimedRunReaperMigrationPath]) {
+    v320ExpiredUnclaimedRunReaperMigrationPath,v320KolClaimPayloadCompactionMigrationPath,
+    v320KolRetentionOwnerBoundaryMigrationPath]) {
     for (let application = 0; application < 2; application += 1) {
       command(pg.psql, ['-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
         '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', migration]);

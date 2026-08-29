@@ -54,6 +54,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260830_v320_kol_retention_bridge.sql',
   'migrations/20260830_v320_expired_unclaimed_run_reaper.sql',
   'migrations/20260830_v320_kol_claim_payload_compaction.sql',
+  'migrations/20260830_v320_kol_retention_owner_boundary.sql',
 ]);
 const V3192_PROJECTION_DOSSIER_MIGRATION =
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql';
@@ -405,6 +406,25 @@ async function applyReviewedMigrations(options) {
         AND (NOT EXISTS(SELECT 1 FROM pg_roles WHERE rolname='stockinsider_runtime_v319') OR
           NOT has_function_privilege('stockinsider_runtime_v319',
             'public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)','EXECUTE'))
+      ,'v320KolRetentionOwnerBoundary',to_regprocedure(
+          'public.read_v320_authorized_investanchors_revision_ids_internal(timestamptz)') IS NOT NULL
+        AND (SELECT pg_get_userbyid(proowner)='opportunity_v3_rpc_owner' AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%source_document_revisions_v3%'
+          FROM pg_proc WHERE oid=
+            'public.read_v320_authorized_investanchors_revision_ids_internal(timestamptz)'::regprocedure)
+        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%read_v320_authorized_investanchors_revision_ids_internal%'
+          AND pg_get_functiondef(oid) NOT LIKE '%source_document_revisions_v3%'
+          FROM pg_proc WHERE oid=
+            'public.read_v320_revalidated_kol_retention_internal(timestamptz)'::regprocedure)
+        AND has_function_privilege('legacy_correctness_rpc_owner',
+          'public.read_v320_authorized_investanchors_revision_ids_internal(timestamptz)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.read_v320_authorized_investanchors_revision_ids_internal(timestamptz)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.read_v320_revalidated_kol_retention_internal(timestamptz)','EXECUTE')
+        AND NOT has_schema_privilege('opportunity_v3_rpc_owner','public','CREATE')
+        AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',

@@ -47,6 +47,7 @@ const migrationPaths = [
   'migrations/20260830_v320_kol_retention_bridge.sql',
   'migrations/20260830_v320_expired_unclaimed_run_reaper.sql',
   'migrations/20260830_v320_kol_claim_payload_compaction.sql',
+  'migrations/20260830_v320_kol_retention_owner_boundary.sql',
 ];
 const migrations = migrationPaths.map((relativePath) => {
   const bytes = fs.readFileSync(path.join(root, relativePath));
