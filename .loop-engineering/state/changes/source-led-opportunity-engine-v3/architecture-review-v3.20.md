@@ -1,9 +1,9 @@
-# V3.20 fresh Architecture review — KOL-first runtime recovery
+# V3.20 fresh Architecture review — catalog-integrity repair
 
 Date: 2026-08-29
 
 Review authority: one independent, read-only Architecture review after the
-V3.20 Requirements PASS. No production database, scheduler, Vercel project,
+V3.20 catalog-integrity Requirements PASS. No production database, scheduler, Vercel project,
 provider, Safari state, LINE, dispatch, automatic trading, Promotion, or
 evaluation-governance state was mutated.
 
@@ -13,10 +13,10 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Requirements-reviewed parent/tree: `c783f8171233efd77adf21405fe91723e48b318c` / `9b87d174de9c71cf5dac9e6e59d68f3d0ad3fd6c`
-- Final reviewed implementation commit/tree: `2ee6b3b843fdc52473bc28135e5b406191f84eda` / `0ef23dc6e92a076e2bc60c13de9ae803ea39dbd9`
-- Full reviewed implementation range: `501dc2fba28d06731a85469ba3fbc4b8f250528c..2ee6b3b843fdc52473bc28135e5b406191f84eda`
-- Active graph: `13081345293dcb3306c68420270ca82ea090fa18a0ecb878ccd8da08d63e0587`
+- Requirements-reviewed parent/tree: `ef3dbb25a599e9d132aec24041ddca96f244e003` / `4956500b66ae588059dfd71ff8125fd5aff54194`
+- Final reviewed implementation commit/tree: `01599c20d11044c0d0bac730df393c5c383ff78c` / `8386474b92f1f8a1e95c0b895258f31f77d1f334`
+- Full reviewed implementation range: `681abfb09e13596fe7185b1ae090229b2fd29a63..01599c20d11044c0d0bac730df393c5c383ff78c`
+- Active graph: `329de76e514164f7ebd1905708491aa15e80c9ce34eb0fb7be3eb03786cdcf64`
 
 ## Architecture result
 
@@ -38,9 +38,10 @@ Findings: `P0=0 P1=0 P2=0`
 - The Web reads the compact projection on the request path and overlays health
   without changing decision bytes. Every visible candidate has exactly one
   readiness lane and a revision-bound dossier or safe research-only detail.
-- The active artifact catalog now declares the V3.20 amendment, and the
-  protected root selects V3.20 review evidence for that graph rather than
-  accepting semantically unrelated V3.19 proof.
+- The active artifact catalog now has one internally consistent authority
+  declaration: executable byte digest, active-file count, owner count and the
+  two GOV-004 design/evidence declarations are updated together. The repair
+  does not alter the KOL-first data flow, public contract or runtime authority.
 
 ## Verified evidence
 
@@ -48,6 +49,9 @@ Findings: `P0=0 P1=0 P2=0`
   PASS; source-led core: `63/63` PASS; legacy V1/V2: `2/2` PASS.
 - Browser correctness: `9/9` PASS; performance: `5/5` PASS; typecheck, lint,
   production build, protected-worker tests and `git diff --check` PASS.
+- The exact focused protected-harness reproduction passes both affected owners:
+  `HYB-007` and `GOV-004`. This confirms the repaired declarative authority and
+  executable catalog validation describe the same immutable artifact.
 - The review inspected the range for authority widening, full-market
   nomination regressions, lease terminalization holes, SQL owner/privilege
   drift, source-rights leakage, stale action authority, decision revision
