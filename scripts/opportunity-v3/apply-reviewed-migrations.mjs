@@ -53,6 +53,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260829_v320_kol_projection_marker.sql',
   'migrations/20260830_v320_kol_retention_bridge.sql',
   'migrations/20260830_v320_expired_unclaimed_run_reaper.sql',
+  'migrations/20260830_v320_kol_claim_payload_compaction.sql',
 ]);
 const V3192_PROJECTION_DOSSIER_MIGRATION =
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql';
@@ -389,6 +390,21 @@ async function applyReviewedMigrations(options) {
             'public.read_v320_revalidated_kol_retention_internal(timestamptz)','EXECUTE')
           AND NOT has_function_privilege('stockinsider_runtime_v319',
             'public.claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1(uuid,uuid,uuid,integer)','EXECUTE')))
+      ,'v320KolClaimPayloadCompaction',to_regprocedure(
+          'public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)') IS NOT NULL
+        AND public.verify_legacy_claim_delegation_chain_v3_20()
+        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%sourceCutoff%'
+          AND pg_get_functiondef(oid) NOT LIKE '%coarseUniverseRows%'
+          FROM pg_proc WHERE oid=
+            'public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)'::regprocedure)
+        AND NOT has_function_privilege('service_role',
+          'public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.verify_legacy_claim_delegation_chain_v3_20()','EXECUTE')
+        AND (NOT EXISTS(SELECT 1 FROM pg_roles WHERE rolname='stockinsider_runtime_v319') OR
+          NOT has_function_privilege('stockinsider_runtime_v319',
+            'public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)','EXECUTE'))
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',

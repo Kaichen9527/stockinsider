@@ -111,6 +111,10 @@ const v320KolRetentionBridgeSql = fs.readFileSync(v320KolRetentionBridgeMigratio
 const v320ExpiredUnclaimedRunReaperMigrationPath = path.join(root,
   'migrations/20260830_v320_expired_unclaimed_run_reaper.sql');
 const v320ExpiredUnclaimedRunReaperSql = fs.readFileSync(v320ExpiredUnclaimedRunReaperMigrationPath, 'utf8');
+const v320KolClaimPayloadCompactionMigrationPath = path.join(root,
+  'migrations/20260830_v320_kol_claim_payload_compaction.sql');
+const v320KolClaimPayloadCompactionSql = fs.readFileSync(
+  v320KolClaimPayloadCompactionMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -349,6 +353,26 @@ test('V3.20.1 bridges only a revalidated InvestAnchors structured claim across e
   assert.match(v320KolRetentionBridgeSql,/v320_kol_retention_bridge_postcondition_failed/u);
   const apply=fs.readFileSync(path.join(root,'scripts/opportunity-v3/apply-reviewed-migrations.mjs'),'utf8');
   assert.match(apply,/20260830_v320_kol_retention_bridge\.sql/u);
+});
+
+test('V3.20.2 compacts the candidate claim transport before a worker lease can expire',()=>{
+  assert.doesNotMatch(v320KolClaimPayloadCompactionSql,
+    /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(v320KolClaimPayloadCompactionSql,
+    /CREATE OR REPLACE FUNCTION public\.claim_legacy_producer_job_authoritative_v3_16/u);
+  const compactClaim=v320KolClaimPayloadCompactionSql.match(
+    /CREATE OR REPLACE FUNCTION public\.claim_legacy_producer_job_authoritative_v3_16[\s\S]*?END \$kol_compact_claim\$;/u)?.[0]??'';
+  assert.match(compactClaim,/claim_legacy_mention_barrier_transport_v3_15/u);
+  assert.match(compactClaim,/claim_legacy_producer_job_authoritative_v3_15/u);
+  assert.match(compactClaim,/'sourceCutoff'/u);
+  assert.doesNotMatch(compactClaim,/coarseUniverseRows|official-coarse-universe/u);
+  assert.match(v320KolClaimPayloadCompactionSql,/verify_legacy_claim_delegation_chain_v3_20/u);
+  assert.match(v320KolClaimPayloadCompactionSql,/v320_kol_claim_payload_compaction_postcondition_failed/u);
+  const apply=fs.readFileSync(path.join(root,'scripts/opportunity-v3/apply-reviewed-migrations.mjs'),'utf8');
+  const plan=fs.readFileSync(path.join(root,'scripts/opportunity-v3/migration-plan.mjs'),'utf8');
+  assert.match(apply,/20260830_v320_kol_claim_payload_compaction\.sql/u);
+  assert.match(apply,/v320KolClaimPayloadCompaction/u);
+  assert.match(plan,/20260830_v320_kol_claim_payload_compaction\.sql/u);
 });
 const lifecycleNewerSourceParseOutput = executeWorkerPayload('source_parse_batch', [
   '123e4567-e89b-42d3-a456-426614173004', 1, 'threads',
