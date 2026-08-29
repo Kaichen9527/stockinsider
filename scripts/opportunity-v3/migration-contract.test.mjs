@@ -189,6 +189,9 @@ test('V3.20 widens only the KOL connector matrix and installs an exact-identity 
   assert.match(v320KolProjectionMarkerSql,/claim_legacy_producer_job_authoritative_v3_13/u);
   assert.match(v320KolProjectionMarkerSql,/\[\[:space:\]\]\*/u,
     'the marker repair accepts PostgreSQL whitespace canonicalization without widening its closed predecessor grammar');
+  assert.match(v320KolProjectionMarkerSql,
+    /v_marker_count<>2 OR v_marker_reference_count<>1 OR v_old_count<>0/u,
+    'the marker repair requires its closed two-marker, one-JSON-read postcondition');
   const compactSourceDefinition=sourceDefinition.replace(/\s+/gu,' ');
   assert.match(compactSourceDefinition,
     /v_attempt_provider\+v_attempt_auth\+v_attempt_missing\+v_attempt_success<>\(CASE WHEN p_json#>>'\{sourceAcquisition,schema\}'='official-source-acquisition-v3[.]20' THEN 5 ELSE 3 END\)/u);
