@@ -47,6 +47,14 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260828_full_candidate_retention_authority_v3_19_11.sql',
   'migrations/20260828_retained_candidate_jsonb_cardinality_v3_19_12.sql',
   'migrations/20260828_final_claim_handoff_lease_v3_19_16.sql',
+  'migrations/20260828_kol_first_runtime_recovery_v3_20.sql',
+  'migrations/20260829_v320_source_completion_cardinality_repair.sql',
+  'migrations/20260829_v320_kol_source_authority_seed.sql',
+  'migrations/20260829_v320_kol_projection_marker.sql',
+  'migrations/20260830_v320_kol_retention_bridge.sql',
+  'migrations/20260830_v320_expired_unclaimed_run_reaper.sql',
+  'migrations/20260830_v320_kol_claim_payload_compaction.sql',
+  'migrations/20260830_v320_kol_retention_owner_boundary.sql',
 ]);
 const V3192_PROJECTION_DOSSIER_MIGRATION =
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql';
@@ -140,7 +148,7 @@ async function applyReviewedMigrations(options) {
       ,'claimHandoff',to_regprocedure('public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)') IS NOT NULL
       ,'finalClaimHandoff',to_regprocedure('public.claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)') IS NOT NULL
         AND (SELECT position('v_claim.lease_expires_at:=v_now+interval ''120 seconds''' IN pg_get_functiondef(oid))>0
-          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure)
+          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)'::regprocedure)
       ,'partialResume',to_regprocedure('public.claim_legacy_producer_job_rest_v3_15(uuid,uuid,uuid,integer,text)') IS NOT NULL
       ,'transactionTimeDependency',to_regprocedure('public.resolve_legacy_trading_session_dependency_v3_16_9_internal(date,public.tw_market_v3,timestamptz,timestamptz)') IS NOT NULL
       ,'sameTransactionVisibility',(SELECT provolatile='v' FROM pg_proc
@@ -203,7 +211,7 @@ async function applyReviewedMigrations(options) {
         AND NOT has_function_privilege('service_role',
           'public.claim_legacy_producer_job_evaluation_clock_base_v3_16_20(uuid,uuid,uuid,integer)','EXECUTE')
         AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
-          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure)
+          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)'::regprocedure)
         AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
           FROM pg_proc WHERE oid=
             'public.claim_legacy_producer_job_evaluation_clock_base_v3_16_20(uuid,uuid,uuid,integer)'::regprocedure)
@@ -251,7 +259,7 @@ async function applyReviewedMigrations(options) {
           AND pg_get_functiondef(oid) LIKE '%candidateLedgerContract%'
           AND pg_get_functiondef(oid) LIKE '%sourceAvailable%'
           AND pg_get_functiondef(oid) LIKE '%legacy_producer_job_results_v3_11%'
-          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure)
+          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)'::regprocedure)
         AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
       ,'candidateRetentionAuthority',to_regprocedure(
           'public.claim_legacy_producer_job_candidate_authority_base_v3_19_10(uuid,uuid,uuid,integer)') IS NOT NULL
@@ -262,7 +270,7 @@ async function applyReviewedMigrations(options) {
         AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
           AND pg_get_functiondef(oid) LIKE '%candidateAuthorityContract%'
           AND pg_get_functiondef(oid) LIKE '%enrich_legacy_retained_candidate_authority_v3_19_11_internal%'
-          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure)
+          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)'::regprocedure)
         AND to_regprocedure(
           'public.enrich_legacy_retained_candidate_authority_v3_19_11_internal(uuid,jsonb)') IS NOT NULL
         AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
@@ -284,7 +292,7 @@ async function applyReviewedMigrations(options) {
         AND NOT has_function_privilege('service_role',
           'public.read_legacy_prior_candidate_result_v3_19_12_internal(uuid)','EXECUTE')
         AND position('candidate-ledger-v3.19.12' IN pg_get_functiondef(
-          'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure))>0
+          'public.claim_legacy_producer_job_pre_handoff_v3_19_16(uuid,uuid,uuid,integer)'::regprocedure))>0
         AND (NOT EXISTS(SELECT 1 FROM pg_roles WHERE rolname='stockinsider_runtime_v319') OR (
           has_function_privilege('stockinsider_runtime_v319',
             'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)','EXECUTE')
@@ -322,6 +330,7 @@ async function applyReviewedMigrations(options) {
           AND position('legacy-radar-v3.17.0' IN pg_get_constraintdef(constraint_row.oid))>0
           AND position('legacy-radar-v3.18.0' IN pg_get_constraintdef(constraint_row.oid))>0
           AND position('legacy-radar-v3.19.0' IN pg_get_constraintdef(constraint_row.oid))>0
+          AND position('legacy-radar-v3.20.0' IN pg_get_constraintdef(constraint_row.oid))>0
         FROM pg_constraint constraint_row
         WHERE constraint_row.conrelid=
             'public.legacy_decision_revision_evaluations_v3_13'::regclass
@@ -330,14 +339,91 @@ async function applyReviewedMigrations(options) {
         AND NOT has_schema_privilege('opportunity_v3_rpc_owner','public','CREATE')
       ,'reusedAcquisitionLineage',to_regprocedure(
           'public.resolve_legacy_provider_acquisition_lineage_v3_19_7_internal(uuid)') IS NOT NULL
-        AND position('providerAcquisitions' IN pg_get_functiondef(
-          'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure))>0
+        AND to_regprocedure('public.verify_legacy_claim_delegation_chain_v3_20()') IS NOT NULL
+        AND public.verify_legacy_claim_delegation_chain_v3_20()
         AND position('coarseProviderAcquisition' IN pg_get_functiondef(
           'public.resolve_legacy_provider_acquisition_lineage_v3_19_7_internal(uuid)'::regprocedure))>0
         AND position('providerAcquisition' IN pg_get_functiondef(
           'public.resolve_legacy_provider_acquisition_lineage_v3_19_7_internal(uuid)'::regprocedure))>0
         AND NOT has_function_privilege('service_role',
           'public.resolve_legacy_provider_acquisition_lineage_v3_19_7_internal(uuid)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.verify_legacy_claim_delegation_chain_v3_20()','EXECUTE')
+        AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
+      ,'v320RuntimeRecovery',to_regprocedure(
+          'public.terminalize_legacy_expired_producer_run_v3_20(uuid,uuid,text,text,text)') IS NOT NULL
+        AND to_regprocedure('public.reap_legacy_expired_producer_run_v3_20(text,text,text)') IS NOT NULL
+        AND has_function_privilege('service_role',
+          'public.terminalize_legacy_expired_producer_run_v3_20(uuid,uuid,text,text,text)','EXECUTE')
+        AND has_function_privilege('service_role',
+          'public.reap_legacy_expired_producer_run_v3_20(text,text,text)','EXECUTE')
+        AND (NOT EXISTS(SELECT 1 FROM pg_roles WHERE rolname='stockinsider_runtime_v319') OR
+          has_function_privilege('stockinsider_runtime_v319',
+            'public.terminalize_legacy_expired_producer_run_v3_20(uuid,uuid,text,text,text)','EXECUTE')
+          AND has_function_privilege('stockinsider_runtime_v319',
+          'public.reap_legacy_expired_producer_run_v3_20(text,text,text)','EXECUTE'))
+        AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
+      ,'v320KolProjectionMarker',(SELECT
+          (length(pg_get_functiondef(
+            'public.claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)'::regprocedure
+          ))-length(replace(pg_get_functiondef(
+            'public.claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)'::regprocedure
+          ),'legacyRadarCompatibility','')))/length('legacyRadarCompatibility'))=2
+          AND position('v_source_result.result_json->''legacyRadarCompatibility''' IN pg_get_functiondef(
+            'public.claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)'::regprocedure
+          ))>0)
+      ,'v320KolRetentionBridge',to_regprocedure(
+        'public.read_v320_revalidated_kol_retention_internal(timestamptz)') IS NOT NULL
+        AND to_regprocedure(
+          'public.claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1(uuid,uuid,uuid,integer)') IS NOT NULL
+        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%read_v320_revalidated_kol_retention_internal%'
+          AND pg_get_functiondef(oid) LIKE '%kolRetentionAuthorityContract%'
+          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure)
+        AND NOT has_function_privilege('service_role',
+          'public.read_v320_revalidated_kol_retention_internal(timestamptz)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1(uuid,uuid,uuid,integer)','EXECUTE')
+        AND (NOT EXISTS(SELECT 1 FROM pg_roles WHERE rolname='stockinsider_runtime_v319') OR (
+          has_function_privilege('stockinsider_runtime_v319',
+            'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)','EXECUTE')
+          AND NOT has_function_privilege('stockinsider_runtime_v319',
+            'public.read_v320_revalidated_kol_retention_internal(timestamptz)','EXECUTE')
+          AND NOT has_function_privilege('stockinsider_runtime_v319',
+            'public.claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1(uuid,uuid,uuid,integer)','EXECUTE')))
+      ,'v320KolClaimPayloadCompaction',to_regprocedure(
+          'public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)') IS NOT NULL
+        AND public.verify_legacy_claim_delegation_chain_v3_20()
+        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%sourceCutoff%'
+          AND pg_get_functiondef(oid) NOT LIKE '%coarseUniverseRows%'
+          FROM pg_proc WHERE oid=
+            'public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)'::regprocedure)
+        AND NOT has_function_privilege('service_role',
+          'public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.verify_legacy_claim_delegation_chain_v3_20()','EXECUTE')
+        AND (NOT EXISTS(SELECT 1 FROM pg_roles WHERE rolname='stockinsider_runtime_v319') OR
+          NOT has_function_privilege('stockinsider_runtime_v319',
+            'public.claim_legacy_producer_job_authoritative_v3_16(uuid,uuid,uuid,integer)','EXECUTE'))
+      ,'v320KolRetentionOwnerBoundary',to_regprocedure(
+          'public.read_v320_authorized_investanchors_revision_ids_internal(timestamptz)') IS NOT NULL
+        AND (SELECT pg_get_userbyid(proowner)='opportunity_v3_rpc_owner' AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%source_document_revisions_v3%'
+          FROM pg_proc WHERE oid=
+            'public.read_v320_authorized_investanchors_revision_ids_internal(timestamptz)'::regprocedure)
+        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%read_v320_authorized_investanchors_revision_ids_internal%'
+          AND pg_get_functiondef(oid) NOT LIKE '%source_document_revisions_v3%'
+          FROM pg_proc WHERE oid=
+            'public.read_v320_revalidated_kol_retention_internal(timestamptz)'::regprocedure)
+        AND has_function_privilege('legacy_correctness_rpc_owner',
+          'public.read_v320_authorized_investanchors_revision_ids_internal(timestamptz)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.read_v320_authorized_investanchors_revision_ids_internal(timestamptz)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.read_v320_revalidated_kol_retention_internal(timestamptz)','EXECUTE')
+        AND NOT has_schema_privilege('opportunity_v3_rpc_owner','public','CREATE')
         AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');

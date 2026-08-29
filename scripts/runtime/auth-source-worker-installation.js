@@ -24,6 +24,10 @@ const ACTIVATION_FAILURE_REASONS = new Set([
   'active_pointer_invalid', 'active_runtime_conflict', 'scheduler_activation_failed',
   'scheduler_capture_invalid', 'scheduler_snapshot_changed', 'staged_hash_mismatch',
 ]);
+const ACTIVATION_FAILURE_STAGES = new Set([
+  'stage_release', 'verify_release', 'publish_release', 'disable_prior_owners',
+  'load_new_owner', 'first_heartbeat', 'health_assessment', 'publish_health',
+]);
 
 function requireCondition(condition, reason) { if (!condition) throw new RuntimeInstallationError(reason); }
 function exactKeys(value, keys) { return value && canonicalJson(Object.keys(value).sort()) === canonicalJson([...keys].sort()); }
@@ -64,11 +68,18 @@ function assessActivationHealth(observation, reviewedRelease) {
   return Object.freeze({ disposition: 'activated_readonly_bootstrap', health });
 }
 
-function hasFirstHeartbeat(doctor, reviewedRelease) {
+function hasFirstHeartbeat(doctor, reviewedRelease, activationStartedAt = Number.NEGATIVE_INFINITY) {
   const observation = doctor?.observation;
   if (!observation || observation.producerCommitSha !== reviewedRelease.commitSha) return false;
   if (observation.lastRunNonterminal === true && observation.leaseStatus === 'active') return true;
-  return observation.lastTerminalStatus === 'success' && typeof observation.lastTerminalRunAt === 'string';
+  // A previous activation of the same reviewed commit can have terminalized
+  // before this scheduler replacement begins.  That immutable failure (or an
+  // earlier success) is evidence about the predecessor attempt, not a
+  // heartbeat for the owner we just loaded.  Only a terminal observation made
+  // at or after this activation boundary can satisfy the bootstrap.
+  const terminalAt = Date.parse(observation.lastTerminalRunAt ?? '');
+  return observation.lastTerminalStatus === 'success' && Number.isFinite(terminalAt)
+    && terminalAt >= activationStartedAt;
 }
 
 async function waitForFirstHeartbeat({ scheduler, reviewedRelease, maximumSeconds = ACTIVATION_HEARTBEAT_MAXIMUM_SECONDS,
@@ -77,15 +88,18 @@ async function waitForFirstHeartbeat({ scheduler, reviewedRelease, maximumSecond
   requireCondition(scheduler && typeof scheduler.doctor === 'function' && Number.isInteger(maximumSeconds) && maximumSeconds > 0
     && Number.isInteger(pollMilliseconds) && pollMilliseconds > 0 && typeof wait === 'function' && typeof now === 'function',
   'scheduler_activation_failed');
-  const deadline = now() + maximumSeconds * 1000;
+  const activationStartedAt = now();
+  const deadline = activationStartedAt + maximumSeconds * 1000;
   let latest = null;
   do {
     latest = await scheduler.doctor(reviewedRelease);
-    if (hasFirstHeartbeat(latest, reviewedRelease)) return latest;
+    if (hasFirstHeartbeat(latest, reviewedRelease, activationStartedAt)) return latest;
     // A terminal producer failure or an unusable doctor result is already a
     // decisive activation failure. Waiting out the full registration budget
     // would only repeat the old stuck-installer behaviour.
+    const terminalAt = Date.parse(latest?.observation?.lastTerminalRunAt ?? '');
     if (latest?.observation?.producerCommitSha === reviewedRelease.commitSha
+      && Number.isFinite(terminalAt) && terminalAt >= activationStartedAt
       && ['failed', 'cancelled'].includes(latest.observation.lastTerminalStatus)) return latest;
     if (latest?.status === 'fail' && !latest?.observation) requireCondition(false, 'scheduler_activation_failed');
     if (now() >= deadline) break;
@@ -95,7 +109,7 @@ async function waitForFirstHeartbeat({ scheduler, reviewedRelease, maximumSecond
 }
 
 async function activateTrackedRuntimeRelease({ manifest, reviewedRelease, scheduler, filesystem, journal,
-  activationAuthority, verifyActivationAuthority }) {
+  activationAuthority, verifyActivationAuthority, now = () => Date.now() }) {
   const validated = validateRuntimeInstallationManifest(manifest, reviewedRelease);
   requireCondition(typeof verifyActivationAuthority === 'function' && activationAuthority &&
     await verifyActivationAuthority(activationAuthority) === true, 'production_runtime_activation_authority_required');
@@ -107,46 +121,56 @@ async function activateTrackedRuntimeRelease({ manifest, reviewedRelease, schedu
   const priorPointer = await filesystem.captureActivePointer();
   const phase = async (name) => journal.write(name);
   await journal.begin({ priorScheduler, priorPointer });
+  let failureStage = 'stage_release';
   try {
     await filesystem.stage(validated);
+    failureStage = 'verify_release';
     await filesystem.verifyStaged(validated);
+    failureStage = 'publish_release';
     await filesystem.publishRelease(validated);
     await phase('release_published');
+    failureStage = 'disable_prior_owners';
     await scheduler.disablePriorOwners(priorScheduler);
     await phase('old_owners_disabled');
+    failureStage = 'load_new_owner';
     await scheduler.loadNewOwner(validated);
     await phase('new_owner_loaded');
     // Do not await the producer's full terminal result. Its first durable
     // heartbeat proves that the new owner registered and took responsibility;
     // the release state machine will later demand terminal success + doctor
     // PASS before enabling actions or deploying the consumer.
-    const doctor = await waitForFirstHeartbeat({ scheduler, reviewedRelease });
+    failureStage = 'first_heartbeat';
+    const doctor = await waitForFirstHeartbeat({ scheduler, reviewedRelease, now });
     // A newly reviewed producer cannot be fully healthy until it has published
     // its first same-release projection. Build the typed observation first so
     // assessActivationHealth can admit only the closed read-only bootstrap
     // reasons; malformed or broader failing doctor output still rolls back.
+    failureStage = 'health_assessment';
     requireCondition(doctor?.observation && typeof doctor.observation === 'object', 'scheduler_activation_failed');
     requireCondition(typeof filesystem.writeHealthObservation === 'function', 'scheduler_activation_failed');
     const observation = buildInstalledRuntimeHealthObservation({ manifest: validated, reviewedRelease, doctor });
     const activationHealth = assessActivationHealth(observation, reviewedRelease);
+    failureStage = 'publish_health';
     await filesystem.writeHealthObservation(observation);
     await phase('doctor_passed');
     await phase('complete');
     return Object.freeze({ disposition: activationHealth.disposition, manifestSha256: validated.manifestSha256 });
   } catch (error) {
+    const reason = ACTIVATION_FAILURE_REASONS.has(error?.code) ? error.code : 'scheduler_activation_failed';
     try {
       await scheduler.restore(priorScheduler);
       await filesystem.restoreActivePointer(priorPointer);
       await filesystem.cleanupIncomplete();
-      await journal.rollback();
+      await journal.rollback({ reason, stage: ACTIVATION_FAILURE_STAGES.has(failureStage) ? failureStage : 'health_assessment' });
     } catch {
       throw new RuntimeInstallationError('scheduler_rollback_failed');
     }
-    const reason = ACTIVATION_FAILURE_REASONS.has(error?.code) ? error.code : 'scheduler_activation_failed';
-    return Object.freeze({ disposition: 'rolled_back', reason, manifestSha256: validated.manifestSha256 });
+    return Object.freeze({ disposition: 'rolled_back', reason,
+      failureStage: ACTIVATION_FAILURE_STAGES.has(failureStage) ? failureStage : 'health_assessment',
+      manifestSha256: validated.manifestSha256 });
   }
 }
 
 module.exports = { INSTALLATION_SCHEMA, RuntimeInstallationError, activateTrackedRuntimeRelease,
   assessActivationHealth, hasFirstHeartbeat, waitForFirstHeartbeat, validateRuntimeInstallationManifest,
-  ACTIVATION_HEARTBEAT_MAXIMUM_SECONDS, ACTIVATION_HEARTBEAT_POLL_MILLISECONDS };
+  ACTIVATION_FAILURE_STAGES, ACTIVATION_HEARTBEAT_MAXIMUM_SECONDS, ACTIVATION_HEARTBEAT_POLL_MILLISECONDS };

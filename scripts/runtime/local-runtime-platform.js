@@ -20,6 +20,14 @@ const OWNER_LABEL = 'com.stockinsider.auth-source-worker';
 // installer now waits at most two minutes for registration/first heartbeat;
 // release-state reconciliation owns the terminal-run wait.
 const OWNER_ACTIVATION_MAXIMUM_SECONDS = 120;
+const ROLLBACK_FAILURE_REASONS = new Set([
+  'active_pointer_invalid', 'active_runtime_conflict', 'scheduler_activation_failed',
+  'scheduler_capture_invalid', 'scheduler_snapshot_changed', 'staged_hash_mismatch',
+]);
+const ROLLBACK_FAILURE_STAGES = new Set([
+  'stage_release', 'verify_release', 'publish_release', 'disable_prior_owners',
+  'load_new_owner', 'first_heartbeat', 'health_assessment', 'publish_health',
+]);
 
 function fail(code) { const error = new Error(code); error.code = code; throw error; }
 function atomicCanonical(filename, value) {
@@ -232,8 +240,10 @@ function restoreRow(row) {
 }
 
 function validateActivationJournal(value, runtimeRoot) {
-  if (!exactKeys(value, ['schema','commitSha','phase','priorPointer','priorManifestSha256','priorScheduler','releaseRoot',
-    'stagingRoot','rollbackPackageSha256','recordedAt']) || value.schema !== 'stockinsider-runtime-activation-journal-v3' ||
+  const baseKeys=['schema','commitSha','phase','priorPointer','priorManifestSha256','priorScheduler','releaseRoot',
+    'stagingRoot','rollbackPackageSha256','recordedAt'];
+  const hasRollbackFailure=Object.hasOwn(value ?? {},'rollbackFailure');
+  if (!exactKeys(value,hasRollbackFailure?[...baseKeys,'rollbackFailure']:baseKeys) || value.schema !== 'stockinsider-runtime-activation-journal-v3' ||
     !/^[0-9a-f]{40}$/u.test(value.commitSha) ||
     !(value.priorPointer === null || /^releases\/[0-9a-f]{40}$/u.test(value.priorPointer)) ||
     !(value.priorManifestSha256 === null || /^[0-9a-f]{64}$/u.test(value.priorManifestSha256)) ||
@@ -244,6 +254,10 @@ function validateActivationJournal(value, runtimeRoot) {
     path.dirname(value.stagingRoot) !== path.join(runtimeRoot, 'releases') ||
     !/^[.]staging-[0-9a-f]{32}$/u.test(path.basename(value.stagingRoot))) fail('scheduler_rollback_failed');
   validateRollbackPackage(value.priorScheduler);
+  if (hasRollbackFailure && (value.phase!=='rolled_back' || !exactKeys(value.rollbackFailure,['reason','stage']) ||
+    !ROLLBACK_FAILURE_REASONS.has(value.rollbackFailure.reason) || !ROLLBACK_FAILURE_STAGES.has(value.rollbackFailure.stage))) {
+    fail('scheduler_rollback_failed');
+  }
   if (sha256(`${canonicalJson(value.priorScheduler)}\n`) !== value.rollbackPackageSha256) fail('scheduler_rollback_failed');
 }
 function validatePriorInstallationManifest(manifest, commitSha, failure = 'scheduler_rollback_failed') {
@@ -440,14 +454,18 @@ function createLocalRuntimePlatform({ runtimeRoot, preparedRoot, manifest, revie
         phase, ...journalContext, rollbackPackageSha256: rollbackPackage.sha256,
         recordedAt: new Date().toISOString().replace(/\.\d{3}Z$/u, 'Z') });
     },
-    rollback: async () => atomicCanonical(journalPath, { schema: 'stockinsider-runtime-activation-journal-v3',
-      commitSha: manifest.commitSha, phase: 'rolled_back', ...(journalContext ?? {}),
-      rollbackPackageSha256: rollbackPackage.sha256,
-      recordedAt: new Date().toISOString().replace(/\.\d{3}Z$/u, 'Z') }),
+    rollback: async (failure = null) => {
+      const rollbackFailure = failure && ROLLBACK_FAILURE_REASONS.has(failure.reason) &&
+        ROLLBACK_FAILURE_STAGES.has(failure.stage) ? { reason: failure.reason, stage: failure.stage } : null;
+      atomicCanonical(journalPath, { schema: 'stockinsider-runtime-activation-journal-v3',
+        commitSha: manifest.commitSha, phase: 'rolled_back', ...(journalContext ?? {}),
+        ...(rollbackFailure ? { rollbackFailure } : {}), rollbackPackageSha256: rollbackPackage.sha256,
+        recordedAt: new Date().toISOString().replace(/\.\d{3}Z$/u, 'Z') });
+    },
   };
   return Object.freeze({ filesystem, journal, scheduler });
 }
 
-module.exports = { OWNER_ACTIVATION_MAXIMUM_SECONDS, OWNER_LABEL, PRIOR_LABELS, acquireActivationLock, atomicCanonical, captureSchedulerRollback,
+module.exports = { OWNER_ACTIVATION_MAXIMUM_SECONDS, OWNER_LABEL, PRIOR_LABELS, ROLLBACK_FAILURE_REASONS, ROLLBACK_FAILURE_STAGES, acquireActivationLock, atomicCanonical, captureSchedulerRollback,
   createLocalRuntimePlatform, ownedRegularBytes, recoverInterruptedActivation, replaceOwnerAndWait, startOwnerAndWait,
   validateActivationJournal, validateRollbackPackage };

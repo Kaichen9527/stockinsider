@@ -24,14 +24,14 @@ const { deriveResearchNextStep } = require('./research-next-step-v317');
 const { buildResearchSnapshotV317 } = require('./research-snapshot-v317');
 const { safeFailureDiagnostic } = require('./safe-diagnostics');
 const { buildOfficialTradingScheduleV314, coverageReportV314 } = require('./official-market-authority-v314');
-const { loadOfficialTwMarketSnapshot,loadOfficialCoarseMarketSnapshot, SOURCE_URL, TPEX_SOURCE_URL, TWSE_REVENUE_URL, TPEX_REVENUE_URL,
+const { loadOfficialTwMarketSnapshot, SOURCE_URL, TPEX_SOURCE_URL, TWSE_REVENUE_URL, TPEX_REVENUE_URL,
   TWSE_PRICE_HISTORY_URL, TPEX_PRICE_HISTORY_URL, validateReportedValuation,
   validOfficialReportedValuationSourceRef } = require('./official-twse-valuation');
 const { MOPS_INLINE_URL } = require('./official-mops-v314');
 const { buildMarketAnalysis } = require('./market-analysis');
-const { buildOfficialFactorCandidatesV315 } = require('./official-factor-discovery-v315');
 const { runtimeBundleBytes } = require('./tracked-runtime-bundle');
-const { acquireApprovedSources } = require('./official-source-acquisition');
+const { acquireApprovedSources, MAX_DOCUMENTS_PER_CONNECTOR } = require('./official-source-acquisition');
+const { nominationAuthorityForSource } = require('./candidate-nomination-authority');
 const { acquireFrozenProviderEnvelope } = require('./provider-acquisition-v31621');
 const approvedSourceRoster = require('../../config/runtime/approved-source-roster-v3.13.json');
 const { assertExactRuntimeEnvironment, hydrateRuntimeCredentials, resolveCredentialReference } = require('./credential-resolver');
@@ -44,6 +44,96 @@ const SOURCE_CLASS_BY_KEY = Object.freeze({
   ptt: 'community', public_broker_research: 'public_research', telegram: 'community',
   threads: 'community', youtube: 'curated_thesis',
 });
+const LEGACY_PERSISTED_SOURCE_KEYS = Object.freeze(new Set(['threads','podcast','youtube']));
+
+// A prior Web projection is a compatibility surface, never a producer
+// dependency.  The V3.20 source of truth is the approved KOL acquisition
+// followed by official verification.  During a Web/runtime release change the
+// predecessor projection can legitimately be stale or unavailable; retaining
+// a minimal, empty compatibility shell lets the producer publish the new KOL
+// cards instead of creating a circular "old Web must be healthy before new Web
+// can be produced" failure.
+function emptyLegacyRadarPayloadsV320() {
+  const payload = Object.freeze({ opportunities: [], scenarioUpsideCandidates: [], earlyWatchlist: [],
+    recentFormal7d: [], fallbackOpportunities90d: [], hotTracking: [], hotThemes: [],
+    discoveredStocks: [], reports: [], connectorStatus: [] });
+  return Object.freeze({ daily: payload, hot: payload, weekly: payload, home: payload });
+}
+
+// This projection is retained solely to regression-test V3.13 readers against
+// a V3.20 acquisition object.  Production source_sync submits the complete
+// five-connector V3.20 object after the additive migration widens its closed
+// persistence matrix; Telegram and authorized InvestAnchors claims are never
+// silently dropped from the durable document/claim stream.
+function legacySourceAcquisitionCompatibilityV320(acquisition) {
+  invariant(acquisition?.schema === 'official-source-acquisition-v3.20', 'v320 source acquisition required');
+  const include=(row)=>LEGACY_PERSISTED_SOURCE_KEYS.has(String(row?.sourceKey ?? ''));
+  return Object.freeze({ ...acquisition, schema: 'official-source-acquisition-v3.13',
+    documents: acquisition.documents.filter(include),
+    itemOutcomes: acquisition.itemOutcomes.filter(include),
+    connectorAttempts: acquisition.connectorAttempts.filter(include),
+  });
+}
+
+// Provider envelopes are immutable once acquired. Some older V3.20 envelopes
+// contain twenty Telegram or structured-claim records, while the reviewed
+// source plane accepts the bounded five-connector profile shape only. Build a
+// deterministic consumption view from the frozen envelope: retain the newest
+// allowed records, conserve their items and counters, and never refetch or
+// rewrite the acquisition evidence itself.
+function boundedSourceAcquisitionV320(acquisition) {
+  invariant(acquisition?.schema === 'official-source-acquisition-v3.20', 'v320 source acquisition required');
+  invariant(Array.isArray(acquisition.documents) && Array.isArray(acquisition.itemOutcomes)
+    && Array.isArray(acquisition.connectorAttempts) && Array.isArray(acquisition.outcomes),
+  'v320 source acquisition arrays required');
+  const documentKey=(row)=>`${String(row?.profileId ?? '')}\u0000${String(row?.sourceKey ?? '')}\u0000${String(row?.stableConnectorDocumentId ?? '')}`;
+  const itemKey=(row)=>`${String(row?.profileId ?? '')}\u0000${String(row?.sourceKey ?? '')}\u0000${String(row?.stableId ?? '')}`;
+  const connectorKey=(row)=>`${String(row?.profileId ?? '')}\u0000${String(row?.sourceKey ?? '')}`;
+  const documentsByConnector=new Map();
+  for (const [index,row] of acquisition.documents.entries()) {
+    const sourceKey=String(row?.sourceKey ?? ''); const cap=MAX_DOCUMENTS_PER_CONNECTOR[sourceKey];
+    invariant(Number.isInteger(cap) && cap > 0 && documentKey(row).split('\u0000').every(Boolean), 'v320 source document identity');
+    const key=connectorKey(row); const values=documentsByConnector.get(key) ?? [];
+    values.push({index,row}); documentsByConnector.set(key,values);
+  }
+  const selectedDocumentKeys=new Set();
+  for (const values of documentsByConnector.values()) {
+    const sourceKey=String(values[0].row.sourceKey); const cap=MAX_DOCUMENTS_PER_CONNECTOR[sourceKey];
+    values.sort((left,right)=>String(left.row.publishedAt ?? left.row.collectedAt ?? '').localeCompare(
+      String(right.row.publishedAt ?? right.row.collectedAt ?? ''))
+      ||String(left.row.stableConnectorDocumentId).localeCompare(String(right.row.stableConnectorDocumentId))
+      ||left.index-right.index);
+    for (const value of values.slice(-cap)) selectedDocumentKeys.add(documentKey(value.row));
+  }
+  const allDocumentKeys=new Set(acquisition.documents.map(documentKey));
+  invariant(allDocumentKeys.size===acquisition.documents.length, 'v320 source document identity collision');
+  const documents=acquisition.documents.filter((row)=>selectedDocumentKeys.has(documentKey(row)));
+  const itemOutcomes=acquisition.itemOutcomes.filter((row)=>{
+    const key=itemKey(row); return !allDocumentKeys.has(key) || selectedDocumentKeys.has(key);
+  });
+  const documentCounts=new Map(); const itemCounts=new Map();
+  for (const row of documents) documentCounts.set(connectorKey(row),(documentCounts.get(connectorKey(row)) ?? 0)+1);
+  for (const row of itemOutcomes) itemCounts.set(connectorKey(row),(itemCounts.get(connectorKey(row)) ?? 0)+1);
+  const connectorAttempts=acquisition.connectorAttempts.map((row)=>{
+    const key=connectorKey(row); const evidence=row?.responseEvidence ?? {};
+    return Object.freeze({ ...row,responseEvidence:Object.freeze({ ...evidence,
+      itemCount:itemCounts.get(key) ?? 0,documentCount:documentCounts.get(key) ?? 0 }) });
+  });
+  const profileCounts=new Map();
+  for (const row of documents) profileCounts.set(String(row.profileId),(profileCounts.get(String(row.profileId)) ?? 0)+1);
+  invariant([...profileCounts.values()].every((count)=>count<=30), 'v320 source profile document bound');
+  const outcomes=acquisition.outcomes.map((row)=>Object.freeze({ ...row,
+    documentCount:profileCounts.get(String(row?.profileId ?? '')) ?? 0 }));
+  for (const row of connectorAttempts) {
+    const cap=MAX_DOCUMENTS_PER_CONNECTOR[String(row?.sourceKey ?? '')];
+    invariant(Number.isInteger(cap) && row.responseEvidence.documentCount<=cap
+      && row.responseEvidence.itemCount>=row.responseEvidence.documentCount, 'v320 source connector bound');
+  }
+  invariant(documents.every((row)=>itemOutcomes.some((item)=>itemKey(item)===documentKey(row))),
+    'v320 source document item conservation');
+  return Object.freeze({ ...acquisition,documents:Object.freeze(documents),itemOutcomes:Object.freeze(itemOutcomes),
+    connectorAttempts:Object.freeze(connectorAttempts),outcomes:Object.freeze(outcomes) });
+}
 
 async function loadLegacyRadarPayloads(baseUrl, fetchImpl = globalThis.fetch, internalApiKey = process.env.INTERNAL_API_KEY) {
   invariant(typeof baseUrl === 'string' && /^https?:\/\/[^/?#]+(?::\d+)?$/u.test(baseUrl), 'legacy radar base URL');
@@ -154,6 +244,10 @@ function nameHasStockContext(text, name, symbol) {
   const stockWords = /(?:股票|個股|台股|代號|股價|買進|賣出|看多|看空|本益比|籌碼|財報|EPS|營收|法說|目標價)/iu;
   while (offset >= 0) {
     const local = text.slice(Math.max(0, offset - 16), Math.min(text.length, offset + name.length + 16));
+    // A generic market phrase (for example, 「新興市場 ETF」) is not a
+    // company mention.  It may look like the Taiwanese issuer 新興 (2605),
+    // so require an explicit ticker or company-context phrase before linking.
+    const genericMarketPhrase = /(?:新興市場|emerging\s+markets?)\s*(?:ETF|基金|指數|市場)/iu.test(local);
     // A verified active symbol adjacent to its verified company name provides
     // enough entity context. Bare numbers remain rejected: this branch still
     // requires both the exact master symbol and an exact master name/alias.
@@ -161,7 +255,7 @@ function nameHasStockContext(text, name, symbol) {
     const escapedName=name.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
     const explicitSymbolAndName=new RegExp(`(^|[^0-9])${escapedSymbol}\\s*(?:[（(][^)）]{0,12}[)）])?\\s*${escapedName}`, 'u').test(local)
       ||new RegExp(`${escapedName}\\s*(?:[（(][^)）]{0,12}[)）])?\\s*${escapedSymbol}(?=[^0-9]|$)`, 'u').test(local);
-    if (explicitSymbolAndName || stockWords.test(local) || tickerHasStockContext(local, String(symbol))) return true;
+    if (explicitSymbolAndName || tickerHasStockContext(local, String(symbol)) || (!genericMarketPhrase && stockWords.test(local))) return true;
     offset = text.indexOf(name, offset + name.length);
   }
   return false;
@@ -222,9 +316,11 @@ function extractRevisionCandidates(bundle) {
   // navigable citation. Raw messages/articles are never replayed into the
   // model. The standard envelope preserves conservation for unavailable or
   // metadata-only input instead of silently treating it as source success.
-  const requiresStructuredAuthorization=['telegram','investanchors'].includes(String(frozen.sourceKey));
+  const requiresStructuredAuthorization=['investanchors','research_inbox'].includes(String(frozen.sourceKey));
   const structuredAuthorized=frozen.contentAuthorization==='structured_claim_authorized'
     && frozen.structuredClaim===true;
+  const nominationAuthority=nominationAuthorityForSource({sourceKey:frozen.sourceKey,
+    structuredClaim:structuredAuthorized,rightsAttested:frozen.rightsAttested===true});
   if(requiresStructuredAuthorization&&!structuredAuthorized) {
     const sourceKey=String(frozen.sourceKey);
     return Object.freeze({ schema: 'legacy-mention-claim-result-v3.11', revisionId:frozen.revisionId,
@@ -277,7 +373,9 @@ function extractRevisionCandidates(bundle) {
       claimAsOf: sourceEffectiveAt,
       mentionId: uuidFromHash(`mention:${frozen.revisionId}:${stockId}:${raw}`), claimEligible: true,
       link: { disposition: 'linked', stockId, symbol },
-      sourceClass: SOURCE_CLASS_BY_KEY[frozen.sourceKey] ?? 'community' }];
+      sourceClass: SOURCE_CLASS_BY_KEY[frozen.sourceKey] ?? 'community', nominationAuthority,
+      structuredClaim:structuredAuthorized,rightsAttested:frozen.rightsAttested===true,
+      sourceProfileId: typeof frozen.profileId==='string'?frozen.profileId:null }];
   });
   // Authority pages may legitimately repeat an identical active roster head
   // (for example, when an upgrade-safe snapshot carries the same instrument
@@ -1598,25 +1696,33 @@ function providerAcquisitionLineageHealth(value, evaluationTimestamp) {
     .filter((row)=>/^[a-z0-9_]{2,40}$/u.test(row.provider)&&/^[0-9a-f]{64}$/u.test(row.requestKey)
       &&/^[0-9a-f]{64}$/u.test(row.evidenceRoot)&&Number.isFinite(Date.parse(row.fetchedAt)))
     .sort((left,right)=>left.provider.localeCompare(right.provider)||left.requestKey.localeCompare(right.requestKey));
-  const providers=new Set(rows.map((row)=>row.provider));
-  const required=['approved_sources','legacy_radar','official_tw_market'];
-  const actionRequired=['legacy_radar','official_coarse_market','official_tw_market'];
+  // legacy_radar is a read-only payload compatibility adapter.  It can never
+  // nominate a stock or authorize an action, so a stale predecessor Web must
+  // not poison the KOL-first release lineage.
+  const authorityRows=rows.filter((row)=>row.provider!=='legacy_radar');
+  const providers=new Set(authorityRows.map((row)=>row.provider));
+  const required=['approved_sources','official_tw_market'];
+  // V3.20's official plane validates a stock *after* an approved KOL source
+  // nominates it.  Requiring the retired full-market coarse acquisition here
+  // would both reintroduce an all-market scan and wrongly disable a complete
+  // source-led decision when that unrelated scan is unavailable.
+  const actionRequired=['official_tw_market'];
   const blockers=[];
   for(const provider of required)if(!providers.has(provider))blockers.push(`frozen_acquisition_missing_${provider}`);
-  if(rows.length===0)blockers.push('frozen_acquisition_lineage_missing');
+  if(authorityRows.length===0)blockers.push('frozen_acquisition_lineage_missing');
   if(rows.length!==rawRows.length)blockers.push('frozen_acquisition_lineage_invalid');
-  if(rows.some((row)=>row.terminalStatus!=='complete'))blockers.push('frozen_acquisition_terminal_incomplete');
-  if(rows.some((row)=>Date.parse(row.fetchedAt)>evaluatedAt))blockers.push('frozen_acquisition_future_evidence');
-  if(rows.some((row)=>actionRequired.includes(row.provider)&&row.actionEligible!==true))
+  if(authorityRows.some((row)=>row.terminalStatus!=='complete'))blockers.push('frozen_acquisition_terminal_incomplete');
+  if(authorityRows.some((row)=>Date.parse(row.fetchedAt)>evaluatedAt))blockers.push('frozen_acquisition_future_evidence');
+  if(authorityRows.some((row)=>actionRequired.includes(row.provider)&&row.actionEligible!==true))
     blockers.push('frozen_acquisition_action_ineligible');
   // Per-symbol financial/price/peer coverage belongs to that symbol's Gate
   // waterfall.  A missing bridge for one research candidate must not revoke
   // the frozen lineage of every checksum-valid card.
   const uniqueBlockers=[...new Set(blockers)];
   return Object.freeze({authoritative:uniqueBlockers.length===0,
-    evidenceRoot:rows.length?sha256(canonicalJson(['provider-acquisition-lineage-v3.16.21',rows])):null,
-    fetchedAt:rows.length?rows.map((row)=>row.fetchedAt).sort().at(-1):null,
-    terminalStatus:rows.length&&rows.every((row)=>row.terminalStatus==='complete')?'complete':'unavailable',
+    evidenceRoot:authorityRows.length?sha256(canonicalJson(['provider-acquisition-lineage-v3.20',authorityRows])):null,
+    fetchedAt:authorityRows.length?authorityRows.map((row)=>row.fetchedAt).sort().at(-1):null,
+    terminalStatus:authorityRows.length&&authorityRows.every((row)=>row.terminalStatus==='complete')?'complete':'unavailable',
     blockers:uniqueBlockers});
 }
 
@@ -1654,24 +1760,26 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
   return {
     source_sync: async (claim) => {
       const sourceCutoff=claim.payloadJson?.[3]??null;
-      const [legacyAcquisition,approvedAcquisition] = await Promise.all([
-        acquireFrozen({provider:'legacy_radar',stage:'source_sync',sourceCutoff,
-          requestMaterial:{baseUrl:legacyRadarBaseUrl,windows:Object.keys(LEGACY_RADAR_PATHS).sort()},claim,
-          acquire:({fetchImpl:capturedFetch})=>loadLegacyRadarPayloads(legacyRadarBaseUrl,capturedFetch,internalApiKey)}),
-        acquireFrozen({provider:'approved_sources',stage:'source_sync',sourceCutoff,
-          requestMaterial:{rosterSchema:approvedSourceRoster.schema,profiles:approvedSourceRoster.profiles.map((row)=>row.id).sort(),
-            credentialAvailability:{threads:Boolean(sourceCredentials.threadsAccessToken),
-              youtubeApiKey:Boolean(sourceCredentials.youtubeApiKey),youtubeOauth:Boolean(sourceCredentials.youtubeOauthToken)}},claim,
-          actionEligible:false,
-          acquire:({fetchImpl:capturedFetch,collectionStartedAt})=>acquireApprovedSources({roster:approvedSourceRoster,
-            credentials:sourceCredentials,fetchImpl:capturedFetch,now:new Date(collectionStartedAt)})}),
-      ]);
-      const legacyPayloads=requiredPayload(legacyAcquisition,'legacy radar');
-      const sourceAcquisition=requiredPayload(approvedAcquisition,'approved source');
+      // V3.20 is deliberately KOL-first. A prior Radar projection can neither
+      // nominate a stock nor be a producer dependency: reading it here caused
+      // circular activation and let stale official-market cards bypass the
+      // nomination authority funnel. Keep only an empty compatibility shell
+      // for the additive public schema.
+      const approvedAcquisition = await acquireFrozen({provider:'approved_sources',stage:'source_sync',sourceCutoff,
+        requestMaterial:{rosterSchema:approvedSourceRoster.schema,profiles:approvedSourceRoster.profiles.map((row)=>row.id).sort(),
+          credentialAvailability:{threads:Boolean(sourceCredentials.threadsAccessToken),
+            youtubeApiKey:Boolean(sourceCredentials.youtubeApiKey),youtubeOauth:Boolean(sourceCredentials.youtubeOauthToken),
+            investAnchorsStructuredClaims:Array.isArray(sourceCredentials.investAnchorsStructuredClaims)}},claim,
+        actionEligible:false,
+        acquire:({fetchImpl:capturedFetch,collectionStartedAt})=>acquireApprovedSources({roster:approvedSourceRoster,
+          credentials:sourceCredentials,fetchImpl:capturedFetch,now:new Date(collectionStartedAt)})});
+      const legacyPayloads=emptyLegacyRadarPayloadsV320();
+      const sourceAcquisition=boundedSourceAcquisitionV320(requiredPayload(approvedAcquisition,'approved source'));
       return immutableBundle('legacy_source_sync_result_v3_11', {
         schema: 'legacy-source-sync-result-v3.11', authorityHash: claim.authorityHash,
         sourceCutoff, legacyPayloads,sourceAcquisition,
-        providerAcquisitions:[legacyAcquisition.envelope,approvedAcquisition.envelope].map(({normalizedPayload,...row})=>row),
+        legacyRadarCompatibility:'intentionally_not_acquired_kol_first',
+        providerAcquisitions:[approvedAcquisition.envelope].map(({normalizedPayload,...row})=>row),
         legacyPayloadHashes: Object.fromEntries(Object.entries(legacyPayloads)
           .map(([window, payload]) => [window, sha256(canonicalJson(payload))])),
       });
@@ -1700,21 +1808,16 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         ...candidate, raw: candidate.raw, claimId: candidate.claimId, mentionId: candidate.mentionId,
         claimEligible: true, link: { disposition: 'linked', stockId: candidate.stockId, symbol: candidate.symbol },
       }));
-      const coarseUniverseRows=Array.isArray(bundle.coarseUniverseRows)?bundle.coarseUniverseRows.slice(0,3000):[];
-      const coarseAcquisition=coarseUniverseRows.length?await acquireFrozen({provider:'official_coarse_market',
-          stage:'candidate_funnel',sourceCutoff:bundle.sourceCutoff,
-          requestMaterial:{universe:coarseUniverseRows},claim,
-          acquire:({fetchImpl:capturedFetch,collectionStartedAt})=>loadOfficialCoarseMarketSnapshot({cutoff:bundle.sourceCutoff,
-            universe:coarseUniverseRows,fetchImpl:capturedFetch,collectedAt:collectionStartedAt})}):null;
-      const coarseSnapshot=coarseAcquisition?.envelope?.terminalStatus==='complete'
-        ?coarseAcquisition.envelope.normalizedPayload
-        :{schema:'official-coarse-market-snapshot-v3.15',cutoff:bundle.sourceCutoff,collectedAt:null,
-          universe:coarseUniverseRows,valuations:[],revenues:[],sourceFailures:[{reason:'frozen_provider_acquisition_unavailable'}]};
-      const factorDiscovery=buildOfficialFactorCandidatesV315({snapshot:coarseSnapshot,cutoff:bundle.sourceCutoff,limit:40});
-      // Official market data verifies a source-led candidate and supplies peers;
-      // it is never allowed to nominate or displace a source candidate.  This
-      // preserves the bounded 60→30→20 funnel without quietly turning it back
-      // into an all-market factor screener.
+      // Deliberately do not acquire the former `official_coarse_market` plane
+      // here.  It made candidate selection wait for a six-source all-market
+      // query over up to 3,000 symbols before looking at any KOL claim.  That
+      // violates the V3.20 KOL-first authority boundary and was the stalled
+      // candidate_funnel's only unbounded external dependency.  Official
+      // TWSE/TPEx facts are acquired later, bounded to the source-led
+      // candidates and their peers, in facts_refresh.
+      const factorDiscovery=Object.freeze({mode:'disabled_kol_first',universe:0,
+        valued:0,eligible:0,selected:0,sourceFailures:0,
+        reason:'official_market_factor_nomination_disallowed'});
       const funnel = buildCandidateFunnel({ outcomes: sourceOutcomes,
         seedSymbols: bundle.seedSymbols ?? [], priorLedger: bundle.priorLedger ?? [],
         // The run's frozen cutoff, not wall-clock retry time, identifies the
@@ -1725,8 +1828,8 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         sourceAvailable:bundle.sourceAvailable!==false });
       return immutableBundle('legacy_candidate_funnel_result_v3_11', { schema: 'legacy-candidate-funnel-result-v3.11',
         candidates: funnel.candidateLedger, discoverySummary: funnel.discoverySummary,
-        discoveryDelta: funnel.discoveryDelta,factorDiscovery:factorDiscovery.waterfall,
-        coarseProviderAcquisition:coarseAcquisition?(({normalizedPayload,...row})=>row)(coarseAcquisition.envelope):null });
+        discoveryDelta: funnel.discoveryDelta,factorDiscovery,
+        coarseProviderAcquisition:null });
     },
     facts_refresh: async (claim) => {
       const bundle = readBundle(claim, 'candidate_fact_plane');
@@ -1782,7 +1885,6 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         .filter((row)=>row.session>=new Date(Date.parse(bundle.sourceCutoff)-35*86_400_000).toISOString().slice(0,10)
           &&row.session<=new Date(Date.parse(bundle.sourceCutoff)+14*86_400_000).toISOString().slice(0,10))
         .map((row)=>({session_id:row.session,close_at:row.closeAt,status:row.status})):[];
-      const dislocationInputs = Array.isArray(bundle.dislocationCandidates) ? bundle.dislocationCandidates : [];
       // The frozen response leads this union. `researchHistory` then resolves a
       // same-session duplicate deterministically without a retry reaching back
       // to a live provider or allowing stale persisted rows to mask this run.
@@ -1829,20 +1931,6 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
           researchRanking:researchRankingFromScore(candidate,researchScore,
             {softBlockers:['shallow_research_not_selected','deep_research_not_selected']})};
       });
-      const dislocationCandidates = dislocationInputs.map((row) => {
-        const candidate = { stockId: row.stockId, symbol: row.symbol, name: row.name ?? null,
-          canonicalSector: row.canonicalSector ?? 'unknown', sourceClass: 'price_dislocation', sourcePriority: 62,
-          claimId: row.sourceRef, sourceKey:'official',sourceName:'TWSE／TPEx 官方行情',
-          sourceUrl:'https://openapi.twse.com.tw/',claimAsOf:bundle.sourceCutoff,
-          sourcePublishedAt:bundle.sourceCutoff,sourceCollectedAt:bundle.sourceCutoff,
-          disposition: 'promoted', reason: 'price_dislocation',
-          sourceSummary: `${row.symbol} 近 60 個交易日自高點回落 ${Math.abs(Number(row.drawdown60Pct)).toFixed(1)}%，納入基本面未惡化檢查。`,
-          lastEvaluatedAt: bundle.sourceCutoff };
-        const researchScore=buildResearchScore(candidate,{priceRows:researchPriceRows,officialSnapshot,
-          stats:row,sourceCutoff:bundle.sourceCutoff});
-        return { ...candidate, researchMaturity: 'fundamental_review', newPositionAction: 'valuation_review',researchScore,
-          researchRanking:researchRankingFromScore(candidate,researchScore,{softBlockers:['deep_research_not_selected']}) };
-      });
       const decisionSymbols = new Set(decisions.map((row) => row.symbol));
       const sourceCandidates = [...shallowObservations, ...deferredSignals]
         .filter((row) => !decisionSymbols.has(row.symbol))
@@ -1850,18 +1938,11 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
           || (right.sourcePriority ?? 0) - (left.sourcePriority ?? 0) || left.symbol.localeCompare(right.symbol))
         .filter((row, index, all) => all.findIndex((candidate) => candidate.symbol === row.symbol) === index)
         .slice(0, Math.max(0, 60 - decisions.length));
-      const candidateSymbols = new Set([...decisionSymbols, ...sourceCandidates.map((row) => row.symbol)]);
-      const boundedDislocationCandidates = dislocationCandidates
-        .filter((row) => !candidateSymbols.has(row.symbol))
-        .sort((left, right) => (right.researchScore?.underreactionScore ?? -1) - (left.researchScore?.underreactionScore ?? -1)
-          || (right.sourcePriority ?? 0) - (left.sourcePriority ?? 0) || left.symbol.localeCompare(right.symbol))
-        .filter((row, index, all) => all.findIndex((candidate) => candidate.symbol === row.symbol) === index)
-        .slice(0, 30);
       const officialIngestion=bridgeAvailable?await streamOfficialIngestionV314({claim,snapshot:acquisitionSnapshot,
         sourceCutoff:bundle.sourceCutoff,producerSha:sourceCommitSha,persistChunk:persistOfficialIngestionChunk,
         priorFinancialRows:bundle.financialRows??[],resume:ingestionResume}):null;
       return immutableBundle('legacy_facts_refresh_result_v3_11', { schema: 'legacy-facts-refresh-result-v3.11', decisions,
-        shallowObservations, sourceCandidates, dislocationCandidates: boundedDislocationCandidates, marketAnalysis,
+        shallowObservations, sourceCandidates, dislocationCandidates: [], marketAnalysis,
         officialAuthority:officialCalendar?{calendar:officialCalendar,coverage:officialCoverage}:null,
         projectionFreshnessSchedule:projectionFreshnessSchedule.length?projectionFreshnessSchedule
           :(bundle.projectionFreshnessSchedule??[]).slice(0,80),
@@ -1920,7 +2001,9 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
       return immutableBundle('legacy_analysis_revision_result_v3_11', { schema: 'legacy-analysis-revision-result-v3.11', decisions:projectionDecisions,
         decisionPayloads,
         sourceCandidates: bundle.factsResult?.sourceCandidates ?? [],
-        dislocationCandidates: bundle.factsResult?.dislocationCandidates ?? [],
+        // Compatibility-only: market data may enrich a KOL candidate but can
+        // never contribute a separate nominated card to the projection.
+        dislocationCandidates: [],
         marketAnalysis: bundle.factsResult?.marketAnalysis ?? null,
         officialAuthority:compactAnalysisOfficialAuthority(bundle.factsResult?.officialAuthority),
         providerAcquisition:bundle.factsResult?.providerAcquisition??null,
@@ -1951,6 +2034,12 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         legacyPayloads[window] && typeof legacyPayloads[window] === 'object'), 'legacy radar capture unavailable');
       const priorProjections=bundle.priorProjections&&typeof bundle.priorProjections==='object'
         ?bundle.priorProjections:{};
+      // A historical compact-input fixture is still a compatibility payload.
+      // Only source_sync's immutable KOL-first marker may select the V3.20
+      // public contract; otherwise an old source payload would be silently
+      // reinterpreted and its valid historical revision cards would disappear.
+      const projectionSchemaVersion=bundle.legacyRadarCompatibility==='intentionally_not_acquired_kol_first'
+        ?'legacy-radar-v3.20.0':'legacy-radar-v3.19.0';
       const acquisitionLineageHealth=providerAcquisitionLineageHealth(bundle.providerAcquisitions,
         evaluationTimestamp);
       const projections = ['daily', 'hot', 'weekly', 'home'].map((window) => publishCompactRadarProjection({ decisions,
@@ -1970,7 +2059,7 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         }:null,
         discoveryDelta: bundle.analysisResult?.discoveryDelta ?? { added: [], exited: [], continued: [], unchangedReasons: [] },
         freshnessSchedule:bundle.analysisResult?.projectionFreshnessSchedule??[],
-        schemaVersion:'legacy-radar-v3.19.0',
+        schemaVersion:projectionSchemaVersion,
         window, asOf: bundle.sourceCutoff, contentAsOf:bundle.sourceCutoff,
         evaluatedAt:evaluationTimestamp,publishedAt:evaluationTimestamp,
         priorProjection:priorProjections[window==='hot'?'three_day':window]??null,
@@ -2019,6 +2108,10 @@ async function main() {
   const optionalCredential = (reference) => {
     try { return resolveCredentialReference(reference); } catch { return null; }
   };
+  const optionalJsonCredential = (reference, fallback) => {
+    const value=optionalCredential(reference); if(!value) return fallback;
+    try { return JSON.parse(value); } catch { return fallback; }
+  };
   const stageHandlers = buildStageHandlers(validated, runtimeEnvironment.STOCKINSIDER_REVIEWED_COMMIT_SHA, sha256(workerBytes), {
     internalApiKey: runtimeEnvironment.INTERNAL_API_KEY,
     readProviderAcquisition:(input)=>adapter.readLegacyProviderAcquisition(input),
@@ -2043,6 +2136,8 @@ async function main() {
       threadsAccessToken:optionalCredential('keychain:stockinsider-runtime:threads-access-token'),
       youtubeApiKey:optionalCredential('keychain:stockinsider-runtime:youtube-api-key'),
       youtubeOauthToken:optionalCredential('keychain:stockinsider-runtime:youtube-oauth-token'),
+      telegramCursors:optionalJsonCredential('keychain:stockinsider-runtime:telegram-cursors-json',{}),
+      investAnchorsStructuredClaims:optionalJsonCredential('keychain:stockinsider-runtime:investanchors-structured-claims-json',null),
     },
   });
   try {
@@ -2068,4 +2163,5 @@ module.exports = { args, buildLegacyCandidateDecision, buildStageHandlers, extra
   extractMatchedEvidenceSnippet, LEGACY_RADAR_FETCH_TIMEOUT_MS, legacyFactInput, legacyQualityInput, loadLegacyRadarPayloads,
   main,officialCitation,readBundle,readRuntimeHealthObservation,readRuntimeManifestSha256,
   priceResearchAxes, tickerHasStockContext, uuidFromHash, valuationFactInput,valuationResearchAxis,
-  persistedOfficialSnapshot,officialPriceRowsForResearch,officialFactRowsForDecision,officialLiquidityScore };
+  persistedOfficialSnapshot,officialPriceRowsForResearch,officialFactRowsForDecision,officialLiquidityScore,
+  legacySourceAcquisitionCompatibilityV320,boundedSourceAcquisitionV320 };

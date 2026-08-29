@@ -21,7 +21,7 @@ test('V31621 operator migration plan exactly matches the reviewed apply chain',(
   const planned=declaredMigrationPaths(plan,'migrationPaths');
   const reviewed=declaredMigrationPaths(apply,'MIGRATIONS');
   assert.deepEqual(planned,reviewed,'the displayed production plan cannot omit or reorder a reviewed migration');
-  assert.equal(planned.at(-1),'migrations/20260828_final_claim_handoff_lease_v3_19_16.sql');
+  assert.equal(planned.at(-1),'migrations/20260830_v320_kol_retention_owner_boundary.sql');
 });
 
 test('V3.18 candidate retention reuses only the preceding immutable terminal ledger',()=>{
@@ -171,8 +171,12 @@ test('V31621 action authority commits to the complete provider lineage rather th
   assert.deepEqual(ready.blockers,[]);
   const missingLegacy=providerAcquisitionLineageHealth(lineage.filter((row)=>row.provider!=='legacy_radar'),
     '2026-08-17T01:00:01Z',{ready:true});
-  assert.equal(missingLegacy.authoritative,false);
-  assert.ok(missingLegacy.blockers.includes('frozen_acquisition_missing_legacy_radar'));
+  assert.equal(missingLegacy.authoritative,true,
+    'a predecessor Radar snapshot is never a KOL-first nomination or action authority');
+  const staleLegacy=providerAcquisitionLineageHealth([...lineage,{...member('legacy_radar'),terminalStatus:'provider_failed'}],
+    '2026-08-17T01:00:01Z',{ready:true});
+  assert.equal(staleLegacy.authoritative,true,
+    'a stale readonly compatibility payload cannot block a new reviewed producer run');
   const future=providerAcquisitionLineageHealth(lineage,'2026-08-17T00:59:59Z',{ready:true});
   assert.equal(future.authoritative,false);assert.ok(future.blockers.includes('frozen_acquisition_future_evidence'));
   const legacy={opportunities:[],scenarioUpsideCandidates:[],earlyWatchlist:[],recentFormal7d:[],

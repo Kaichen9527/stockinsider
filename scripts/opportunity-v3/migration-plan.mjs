@@ -40,6 +40,14 @@ const migrationPaths = [
   'migrations/20260828_full_candidate_retention_authority_v3_19_11.sql',
   'migrations/20260828_retained_candidate_jsonb_cardinality_v3_19_12.sql',
   'migrations/20260828_final_claim_handoff_lease_v3_19_16.sql',
+  'migrations/20260828_kol_first_runtime_recovery_v3_20.sql',
+  'migrations/20260829_v320_source_completion_cardinality_repair.sql',
+  'migrations/20260829_v320_kol_source_authority_seed.sql',
+  'migrations/20260829_v320_kol_projection_marker.sql',
+  'migrations/20260830_v320_kol_retention_bridge.sql',
+  'migrations/20260830_v320_expired_unclaimed_run_reaper.sql',
+  'migrations/20260830_v320_kol_claim_payload_compaction.sql',
+  'migrations/20260830_v320_kol_retention_owner_boundary.sql',
 ];
 const migrations = migrationPaths.map((relativePath) => {
   const bytes = fs.readFileSync(path.join(root, relativePath));

@@ -198,8 +198,8 @@ graph; static fixtures and planned PCR boundaries are the immutable requirement 
 The active graph oracle validates the two canonical authority tags below, ASCII order,
 duplicate and active-graph closure,
 
-<!-- GOV-004-AUTHORITY {"catalogBytes":6169,"catalogSha256":"f90b9aa0cccb32578055d533b996eae6e833b7766505e0898c23a4cb5e87f6d0","kind":"evidence-catalog-identity"} -->
-<!-- GOV-004-AUTHORITY {"activeFiles":54,"kind":"evidence-file-owner-topology","owners":44} -->
+<!-- GOV-004-AUTHORITY {"catalogBytes":6337,"catalogSha256":"a561a57b19f4d32b234fcc2f67451f5c79cda2f7d577d73a3c76a05e2711f6cb","kind":"evidence-catalog-identity"} -->
+<!-- GOV-004-AUTHORITY {"activeFiles":55,"kind":"evidence-file-owner-topology","owners":45} -->
 
 then recomputes every `[path,blobOid,byteLength,sha256]` row and compares the result to
 the frozen active-graph SHA embedded in the executable oracle. It independently perturbs

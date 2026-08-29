@@ -1627,7 +1627,7 @@ export interface DiscoveryDeltaV311 {
 export interface RadarDailyPayload {
   asOf: string;
   sourceLedCorrectness?: {
-    schema: 'legacy-radar-v3.11.3'|'legacy-radar-v3.12.0'|'legacy-radar-v3.13.0'|'legacy-radar-v3.14.0'|'legacy-radar-v3.17.0'|'legacy-radar-v3.18.0'|'legacy-radar-v3.19.0';
+    schema: 'legacy-radar-v3.11.3'|'legacy-radar-v3.12.0'|'legacy-radar-v3.13.0'|'legacy-radar-v3.14.0'|'legacy-radar-v3.17.0'|'legacy-radar-v3.18.0'|'legacy-radar-v3.19.0'|'legacy-radar-v3.20.0';
     window: 'daily'|'hot'|'weekly'|'home';
     asOf: string;
   };
@@ -1652,7 +1652,11 @@ export interface RadarDailyPayload {
   };
   sourceAcquisitionHealth?: unknown;
   sourceWatermark?: { sourceCutoff:string; acquisitionAuthority:string; evidenceRoot:string|null; fetchedAt:string|null; terminalStatus:string|null };
-  authorizationStatus?: { telegram:'not_authorized'; investanchors:'internal_methodology_only'; sourceClaims:'authorized_terminal_outcomes_required' };
+  authorizationStatus?: {
+    telegram:'not_authorized'|'structured_claim_authorization_required'|'public_channel_cursor_required';
+    investanchors:'internal_methodology_only'|'structured_claim_authorization_required';
+    sourceClaims:'authorized_terminal_outcomes_required';
+  };
   releaseIdentity?: { schema:string;producerCommitSha:string|null };
   degradedSources?: string[];
   lastUpdatedAt?: string | null;

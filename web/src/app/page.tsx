@@ -122,7 +122,7 @@ export default async function Home() {
     shadowEnabled: v3PublicEnabled(),
   });
   const symbolNameMap = new Map<string, string>();
-  const revisionBoundSourceLed = ['legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0'].includes(radar.sourceLedCorrectness?.schema ?? '');
+  const revisionBoundSourceLed = ['legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0','legacy-radar-v3.20.0'].includes(radar.sourceLedCorrectness?.schema ?? '');
   const allCards = revisionBoundSourceLed ? [
     ...(radar.sourceSignals || []),
   ] : [
@@ -159,6 +159,12 @@ export default async function Home() {
   const sourceHealth = radar.sourceHealthSummary;
   const priceHealth = radar.dataHealth;
   const underreactionMarket = radar.underreactionMarket;
+  // Compact V3.20 projections intentionally omit legacy runtime diagnostics.
+  // The landing page is a consumer of both compact and legacy payloads, so it
+  // must preserve the research cards instead of throwing during SSR when the
+  // optional legacy fields are absent.
+  const agentStatus = radar.agentStatus ?? { lastSuccessfulRunAt: null };
+  const connectorStatus = Array.isArray(radar.connectorStatus) ? radar.connectorStatus : [];
   const socialSourceDetails =
     (sourceHealth?.connectorDetails || []).filter((item) => ['threads', 'investanchors', 'instagram', 'telegram', 'podcast', 'youtube', 'ptt', 'bulltalk'].includes(item.connector));
 
@@ -225,7 +231,7 @@ export default async function Home() {
                     {sourceHealth ? `${sourceHealth.successfulSources} 正常 / ${sourceHealth.degradedSources} 待補` : '待補'}
                   </p>
                   <p className="mt-2 text-xs leading-5 text-slate-600 dark:text-emerald-100/62">
-                    寫入 {sourceHealth?.recordsWritten24h ?? 0} 筆 · 最近成功 {formatTaipeiDateTime(sourceHealth?.lastSuccessfulRunAt || radar.agentStatus.lastSuccessfulRunAt, 'short')}
+                    寫入 {sourceHealth?.recordsWritten24h ?? 0} 筆 · 最近成功 {formatTaipeiDateTime(sourceHealth?.lastSuccessfulRunAt || agentStatus.lastSuccessfulRunAt, 'short')}
                   </p>
                 </div>
               </div>
@@ -241,10 +247,10 @@ export default async function Home() {
                   <div className="absolute right-0 z-30 mt-2 w-[320px] rounded-2xl border border-line bg-surface p-3 shadow-xl">
                     <p className="text-xs tracking-[0.24em] text-slate-500 dark:text-emerald-100/55">來源同步摘要</p>
                     <p className="mt-1 text-xs text-slate-600 dark:text-emerald-100/70">
-                      最近成功：{formatTaipeiDateTime(radar.agentStatus.lastSuccessfulRunAt)}
+                      最近成功：{formatTaipeiDateTime(agentStatus.lastSuccessfulRunAt)}
                     </p>
                     <div className="mt-3 max-h-56 space-y-2 overflow-auto">
-                      {radar.connectorStatus.map((item) => (
+                      {connectorStatus.map((item) => (
                         <div key={item.connector} className="rounded-xl border border-line bg-surface-strong px-2 py-2 text-xs">
                           <div className="flex items-center justify-between gap-2">
                             <span>{connectorLabel[item.connector] || item.connector}</span>

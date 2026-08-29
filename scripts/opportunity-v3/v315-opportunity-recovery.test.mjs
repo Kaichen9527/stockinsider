@@ -234,29 +234,30 @@ test('V315 official factor discovery admits out-of-source undervaluation researc
   assert.ok(!missingFundamental||missingFundamental.factorEvidence.rankingScore<=phison.factorEvidence.rankingScore);
 });
 
-test('V317 candidate funnel keeps official full-market factors out of the source-led 60-30-20 selection',async()=>{
+test('V320 candidate funnel does not acquire or rank the full official market before KOL nominations',async()=>{
   const {canonicalJson,sha256}=runtime('codec.js');
   const config=runtime('source-run-config.js').validateAuthSourceDagConfig(
     readFileSync(path.join(root,'config/runtime/auth-source-dag.json')));
-  const universe=Array.from({length:10},(_,index)=>[`00000000-0000-4000-8000-${String(index+1).padStart(12,'0')}`,
-    index===0?'8299':String(8100+index),'TPEX','semiconductor',index===0?'群聯':`同業${index}`]);
-  const tpexValuations=universe.map((row,index)=>({Date:'1150813',SecuritiesCompanyCode:row[1],CompanyName:row[4],
-    PriceEarningRatio:String(index===0?12:24+index),PriceBookRatio:'3',YieldRatio:'1'}));
-  const tpexRevenue=universe.map((row)=>({'出表日期':'1150813','公司代號':row[1],'公司名稱':row[4],'資料年月':'11507',
-    '營業收入-當月營收':'1000000','營業收入-去年同月增減(%)':'25','營業收入-上月比較增減(%)':'5'}));
-  const tpexQuotes=universe.map((row,index)=>({Date:'1150813',SecuritiesCompanyCode:row[1],Close:String(index===0?2280:100)}));
-  const fetchImpl=async(url)=>new Response(JSON.stringify(String(url).includes('peratio_analysis')?tpexValuations
-    :String(url).includes('mopsfin_t187ap05_O')?tpexRevenue:String(url).includes('tpex_mainboard_quotes')?tpexQuotes:[]),{status:200});
+  const universe=Array.from({length:3000},(_,index)=>[`00000000-0000-4000-8000-${String(index+1).padStart(12,'0')}`,
+    index===0?'8299':String(1000+index).slice(-4),'TPEX','semiconductor',index===0?'群聯':`同業${index}`]);
+  let fetchCalls=0;
+  const fetchImpl=async()=>{fetchCalls+=1;throw new Error('candidate funnel must not fetch the official coarse market');};
   const handlers=runtime('auth-source-worker-cli.js').buildStageHandlers(config,'a'.repeat(40),'b'.repeat(64),{
     fetchImpl,internalApiKey:'fixture-internal-api-key-000000'});
-  const readJson={mentionResult:{candidates:[]},seedSymbols:[],priorLedger:[],sourceCutoff:'2026-08-13T10:20:00Z',
+  const readJson={mentionResult:{candidates:[{stockId:universe[0][0],symbol:'8299',raw:'核准 KOL 提及群聯',
+    claimId:'claim-8299',mentionId:'mention-8299',sourceKey:'investanchors',
+    nominationAuthority:'investanchors_structured_claim',structuredClaim:true,
+    rightsAttested:true}]},seedSymbols:[],priorLedger:[],sourceCutoff:'2026-08-13T10:20:00Z',
     coarseUniverseRows:universe,coarseUniverseSchema:'official-coarse-universe-v3.15'};
   const readCanonical=Buffer.from(canonicalJson(readJson));
   const result=await handlers.candidate_funnel({readKind:'candidate_funnel_input',readJson,readCanonical,
     readHash:sha256(readCanonical),runId:'72000000-0000-4000-8000-000000000001',
     jobId:'72000000-0000-4000-8000-000000000002',ownerToken:'72000000-0000-4000-8000-000000000003'});
-  assert.equal(result.json.candidates.find((row)=>row.symbol==='8299'),undefined);
-  assert.ok(result.json.factorDiscovery.selected>=1);assert.equal(result.json.candidates.length,0);
+  assert.equal(fetchCalls,0,'only facts_refresh may acquire official verification for source-led symbols');
+  assert.equal(result.json.candidates.find((row)=>row.symbol==='8299')?.disposition,'promoted');
+  assert.deepEqual(result.json.factorDiscovery,{mode:'disabled_kol_first',universe:0,valued:0,eligible:0,
+    selected:0,sourceFailures:0,reason:'official_market_factor_nomination_disallowed'});
+  assert.equal(result.json.coarseProviderAcquisition,null);
 });
 
 test('V316 shallow official research can reach the near-buy lane without minting a buy action',()=>{
