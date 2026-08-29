@@ -189,8 +189,21 @@ test('V3.20 widens only the KOL connector matrix and installs an exact-identity 
   assert.match(v320KolProjectionMarkerSql,/claim_legacy_producer_job_authoritative_v3_13/u);
   assert.match(v320KolProjectionMarkerSql,/\[\[:space:\]\]\*/u,
     'the marker repair accepts PostgreSQL whitespace canonicalization without widening its closed predecessor grammar');
+  assert.match(v320KolProjectionMarkerSql,/v_bare_plain_pattern/u,
+    'the marker repair keeps the non-coalesced bare predecessor as a separate closed form');
   assert.match(v320KolProjectionMarkerSql,/v_bare_coalesced_pattern/u,
     'the marker repair also recognizes the deployed closed coalesced read-count predecessor');
+  assert.doesNotMatch(v320KolProjectionMarkerSql,/v_bare_pattern\s+text:=/u,
+    'a prefix-only bare grammar would overlap the coalesced deployed form and is forbidden');
+  const deployedCoalescedCompactPredecessor =
+    "'legacySourceResultHash',v_source_result.result_hash);v_read_count:=coalesce(jsonb_array_length(v_prior.result_json->'decisions'),0)";
+  const barePlainGrammar =
+    /'legacySourceResultHash',v_source_result\.result_hash\);v_read_count:=jsonb_array_length\(v_prior\.result_json->'decisions'\)/u;
+  const bareCoalescedGrammar =
+    /'legacySourceResultHash',v_source_result\.result_hash\);v_read_count:=coalesce\(jsonb_array_length\(v_prior\.result_json->'decisions'\),0\)/u;
+  assert.equal([barePlainGrammar,bareCoalescedGrammar]
+    .filter((grammar)=>grammar.test(deployedCoalescedCompactPredecessor)).length,1,
+  'the deployed coalesced predecessor must select exactly one closed migration replacement');
   assert.ok(v320KolProjectionMarkerSql.includes("v_prior[.]result_json")
     && v320KolProjectionMarkerSql.includes("''decisions''"),
   'the coalesced predecessor remains bound to the exact prior-decision read');
