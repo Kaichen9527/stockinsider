@@ -68,11 +68,18 @@ function assessActivationHealth(observation, reviewedRelease) {
   return Object.freeze({ disposition: 'activated_readonly_bootstrap', health });
 }
 
-function hasFirstHeartbeat(doctor, reviewedRelease) {
+function hasFirstHeartbeat(doctor, reviewedRelease, activationStartedAt = Number.NEGATIVE_INFINITY) {
   const observation = doctor?.observation;
   if (!observation || observation.producerCommitSha !== reviewedRelease.commitSha) return false;
   if (observation.lastRunNonterminal === true && observation.leaseStatus === 'active') return true;
-  return observation.lastTerminalStatus === 'success' && typeof observation.lastTerminalRunAt === 'string';
+  // A previous activation of the same reviewed commit can have terminalized
+  // before this scheduler replacement begins.  That immutable failure (or an
+  // earlier success) is evidence about the predecessor attempt, not a
+  // heartbeat for the owner we just loaded.  Only a terminal observation made
+  // at or after this activation boundary can satisfy the bootstrap.
+  const terminalAt = Date.parse(observation.lastTerminalRunAt ?? '');
+  return observation.lastTerminalStatus === 'success' && Number.isFinite(terminalAt)
+    && terminalAt >= activationStartedAt;
 }
 
 async function waitForFirstHeartbeat({ scheduler, reviewedRelease, maximumSeconds = ACTIVATION_HEARTBEAT_MAXIMUM_SECONDS,
@@ -81,15 +88,18 @@ async function waitForFirstHeartbeat({ scheduler, reviewedRelease, maximumSecond
   requireCondition(scheduler && typeof scheduler.doctor === 'function' && Number.isInteger(maximumSeconds) && maximumSeconds > 0
     && Number.isInteger(pollMilliseconds) && pollMilliseconds > 0 && typeof wait === 'function' && typeof now === 'function',
   'scheduler_activation_failed');
-  const deadline = now() + maximumSeconds * 1000;
+  const activationStartedAt = now();
+  const deadline = activationStartedAt + maximumSeconds * 1000;
   let latest = null;
   do {
     latest = await scheduler.doctor(reviewedRelease);
-    if (hasFirstHeartbeat(latest, reviewedRelease)) return latest;
+    if (hasFirstHeartbeat(latest, reviewedRelease, activationStartedAt)) return latest;
     // A terminal producer failure or an unusable doctor result is already a
     // decisive activation failure. Waiting out the full registration budget
     // would only repeat the old stuck-installer behaviour.
+    const terminalAt = Date.parse(latest?.observation?.lastTerminalRunAt ?? '');
     if (latest?.observation?.producerCommitSha === reviewedRelease.commitSha
+      && Number.isFinite(terminalAt) && terminalAt >= activationStartedAt
       && ['failed', 'cancelled'].includes(latest.observation.lastTerminalStatus)) return latest;
     if (latest?.status === 'fail' && !latest?.observation) requireCondition(false, 'scheduler_activation_failed');
     if (now() >= deadline) break;
@@ -99,7 +109,7 @@ async function waitForFirstHeartbeat({ scheduler, reviewedRelease, maximumSecond
 }
 
 async function activateTrackedRuntimeRelease({ manifest, reviewedRelease, scheduler, filesystem, journal,
-  activationAuthority, verifyActivationAuthority }) {
+  activationAuthority, verifyActivationAuthority, now = () => Date.now() }) {
   const validated = validateRuntimeInstallationManifest(manifest, reviewedRelease);
   requireCondition(typeof verifyActivationAuthority === 'function' && activationAuthority &&
     await verifyActivationAuthority(activationAuthority) === true, 'production_runtime_activation_authority_required');
@@ -130,7 +140,7 @@ async function activateTrackedRuntimeRelease({ manifest, reviewedRelease, schedu
     // the release state machine will later demand terminal success + doctor
     // PASS before enabling actions or deploying the consumer.
     failureStage = 'first_heartbeat';
-    const doctor = await waitForFirstHeartbeat({ scheduler, reviewedRelease });
+    const doctor = await waitForFirstHeartbeat({ scheduler, reviewedRelease, now });
     // A newly reviewed producer cannot be fully healthy until it has published
     // its first same-release projection. Build the typed observation first so
     // assessActivationHealth can admit only the closed read-only bootstrap

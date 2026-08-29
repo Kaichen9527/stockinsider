@@ -152,6 +152,7 @@ function passingRuntimeDoctor(manifest, reviewedRelease) {
 const testActivationProof = Object.freeze({
   activationAuthority: Object.freeze({ schema: 'test-authority' }),
   verifyActivationAuthority: async () => true,
+  now: () => Date.parse('2026-08-01T04:00:00Z'),
 });
 function peRows(count, stockId = 'subject') {
   return Array.from({ length: count }, (_, index) => ({ stockId, authority: 'official', value: 8 + index / 1000,
@@ -351,6 +352,21 @@ const checks = {
     });
     assert.equal(heartbeatPolls, 2);
     assert.equal(firstHeartbeat.observation.producerCommitSha, 'a'.repeat(40));
+    let staleFailurePolls = 0;
+    const recoveredFromStaleFailure = await installation.waitForFirstHeartbeat({
+      scheduler: { doctor: async () => {
+        staleFailurePolls += 1;
+        return staleFailurePolls === 1
+          ? { observation: { producerCommitSha: 'a'.repeat(40), leaseStatus: 'absent', lastRunNonterminal: false,
+            lastTerminalStatus: 'failed', lastTerminalRunAt: '1970-01-01T00:00:00Z' } }
+          : { observation: { producerCommitSha: 'a'.repeat(40), leaseStatus: 'active', lastRunNonterminal: true } };
+      } },
+      reviewedRelease: { commitSha: 'a'.repeat(40) }, maximumSeconds: 1, pollMilliseconds: 1,
+      wait: async () => {}, now: (() => { let tick = 0; return () => tick++ === 0 ? 1_000 : 1_001; })(),
+    });
+    assert.equal(staleFailurePolls, 2,
+      'a failed predecessor run of the same commit cannot short-circuit a replacement owner');
+    assert.equal(recoveredFromStaleFailure.observation.lastRunNonterminal, true);
     await assert.rejects(installation.waitForFirstHeartbeat({
       scheduler: { doctor: async () => ({ observation: {
         producerCommitSha: '0'.repeat(40), leaseStatus: 'absent', lastRunNonterminal: false,
