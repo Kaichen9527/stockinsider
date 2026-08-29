@@ -1379,6 +1379,10 @@ describe('closed HTTP body value schemas', () => {
     );
     assert.match(pageSource, /\(radar\.reports \|\| \[\]\)\.filter/u);
     assert.match(pageSource, /\(sourceHealth\?\.connectorDetails \|\| \[\]\)\.filter/u);
+    assert.match(pageSource, /const agentStatus = radar\.agentStatus \?\? \{ lastSuccessfulRunAt: null \}/u);
+    assert.match(pageSource, /const connectorStatus = Array\.isArray\(radar\.connectorStatus\) \? radar\.connectorStatus : \[\]/u);
+    assert.doesNotMatch(pageSource, /radar\.agentStatus\.lastSuccessfulRunAt/u);
+    assert.doesNotMatch(pageSource, /radar\.connectorStatus\.map/u);
     assert.ok(
       pageSource.indexOf('<ShadowOpportunityV3') <
         pageSource.indexOf('<RadarTabs radar={radar}'),
