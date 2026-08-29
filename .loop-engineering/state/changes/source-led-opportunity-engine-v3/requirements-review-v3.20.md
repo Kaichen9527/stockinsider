@@ -3,7 +3,7 @@
 Date: 2026-08-29
 
 Review authority: one independent, read-only Requirements review of the
-immutable V3.20 implementation tree. No production database, scheduler,
+immutable V3.20 catalog-integrity repair tree. No production database, scheduler,
 Vercel deployment, provider acquisition, Safari state, LINE, dispatch,
 automatic trading, Promotion, or evaluation-governance state was mutated.
 
@@ -13,14 +13,14 @@ Findings: `P0=0 P1=0 P2=0`
 
 ## Immutable subject
 
-- Parent commit/tree: `501dc2fba28d06731a85469ba3fbc4b8f250528c` /
+- Parent commit/tree: `681abfb09e13596fe7185b1ae090229b2fd29a63` /
   `f6fdfb8c3f1c3cbb46582c0c1c767b3870fd31ed`
-- Final reviewed implementation commit/tree: `c783f8171233efd77adf21405fe91723e48b318c` / `9b87d174de9c71cf5dac9e6e59d68f3d0ad3fd6c`
-- Full reviewed range: `501dc2fba28d06731a85469ba3fbc4b8f250528c..c783f8171233efd77adf21405fe91723e48b318c`
-- Active graph: `13081345293dcb3306c68420270ca82ea090fa18a0ecb878ccd8da08d63e0587`
-- Scope: recovery of the expired producer lease, KOL-first nomination and
-  acquisition, exact source authority, projection visibility, and the
-  graph/evidence binding that prevents V3.20 from reusing V3.19 review proof.
+- Final reviewed implementation commit/tree: `ef3dbb25a599e9d132aec24041ddca96f244e003` / `4956500b66ae588059dfd71ff8125fd5aff54194`
+- Full reviewed range: `681abfb09e13596fe7185b1ae090229b2fd29a63..ef3dbb25a599e9d132aec24041ddca96f244e003`
+- Active graph: `329de76e514164f7ebd1905708491aa15e80c9ce34eb0fb7be3eb03786cdcf64`
+- Scope: one root-cause repair that synchronizes the exact active-catalog
+  bytes, digest, file count, owner count and both GOV-004 authority-tag
+  documents. It does not alter nomination, valuation, runtime mode or API behavior.
 
 ## Requirement closure
 
@@ -42,6 +42,10 @@ Findings: `P0=0 P1=0 P2=0`
 - The V3.20 amendment is now in the active artifact graph. The protected gate
   maps that graph to V3.20 Requirements and Architecture evidence; it cannot
   silently substitute the V3.19 evidence chain.
+- All five stale catalog assertions are repaired together: executable byte and
+  topology checks plus the design and evidence authority tags. The focused
+  protected-harness reproduction passes both prior failing owners, `HYB-007`
+  and `GOV-004`.
 
 ## Executable evidence examined
 
