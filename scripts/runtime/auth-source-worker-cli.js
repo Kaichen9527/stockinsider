@@ -24,12 +24,11 @@ const { deriveResearchNextStep } = require('./research-next-step-v317');
 const { buildResearchSnapshotV317 } = require('./research-snapshot-v317');
 const { safeFailureDiagnostic } = require('./safe-diagnostics');
 const { buildOfficialTradingScheduleV314, coverageReportV314 } = require('./official-market-authority-v314');
-const { loadOfficialTwMarketSnapshot,loadOfficialCoarseMarketSnapshot, SOURCE_URL, TPEX_SOURCE_URL, TWSE_REVENUE_URL, TPEX_REVENUE_URL,
+const { loadOfficialTwMarketSnapshot, SOURCE_URL, TPEX_SOURCE_URL, TWSE_REVENUE_URL, TPEX_REVENUE_URL,
   TWSE_PRICE_HISTORY_URL, TPEX_PRICE_HISTORY_URL, validateReportedValuation,
   validOfficialReportedValuationSourceRef } = require('./official-twse-valuation');
 const { MOPS_INLINE_URL } = require('./official-mops-v314');
 const { buildMarketAnalysis } = require('./market-analysis');
-const { buildOfficialFactorCandidatesV315 } = require('./official-factor-discovery-v315');
 const { runtimeBundleBytes } = require('./tracked-runtime-bundle');
 const { acquireApprovedSources, MAX_DOCUMENTS_PER_CONNECTOR } = require('./official-source-acquisition');
 const { nominationAuthorityForSource } = require('./candidate-nomination-authority');
@@ -1703,7 +1702,11 @@ function providerAcquisitionLineageHealth(value, evaluationTimestamp) {
   const authorityRows=rows.filter((row)=>row.provider!=='legacy_radar');
   const providers=new Set(authorityRows.map((row)=>row.provider));
   const required=['approved_sources','official_tw_market'];
-  const actionRequired=['official_coarse_market','official_tw_market'];
+  // V3.20's official plane validates a stock *after* an approved KOL source
+  // nominates it.  Requiring the retired full-market coarse acquisition here
+  // would both reintroduce an all-market scan and wrongly disable a complete
+  // source-led decision when that unrelated scan is unavailable.
+  const actionRequired=['official_tw_market'];
   const blockers=[];
   for(const provider of required)if(!providers.has(provider))blockers.push(`frozen_acquisition_missing_${provider}`);
   if(authorityRows.length===0)blockers.push('frozen_acquisition_lineage_missing');
@@ -1805,21 +1808,16 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         ...candidate, raw: candidate.raw, claimId: candidate.claimId, mentionId: candidate.mentionId,
         claimEligible: true, link: { disposition: 'linked', stockId: candidate.stockId, symbol: candidate.symbol },
       }));
-      const coarseUniverseRows=Array.isArray(bundle.coarseUniverseRows)?bundle.coarseUniverseRows.slice(0,3000):[];
-      const coarseAcquisition=coarseUniverseRows.length?await acquireFrozen({provider:'official_coarse_market',
-          stage:'candidate_funnel',sourceCutoff:bundle.sourceCutoff,
-          requestMaterial:{universe:coarseUniverseRows},claim,
-          acquire:({fetchImpl:capturedFetch,collectionStartedAt})=>loadOfficialCoarseMarketSnapshot({cutoff:bundle.sourceCutoff,
-            universe:coarseUniverseRows,fetchImpl:capturedFetch,collectedAt:collectionStartedAt})}):null;
-      const coarseSnapshot=coarseAcquisition?.envelope?.terminalStatus==='complete'
-        ?coarseAcquisition.envelope.normalizedPayload
-        :{schema:'official-coarse-market-snapshot-v3.15',cutoff:bundle.sourceCutoff,collectedAt:null,
-          universe:coarseUniverseRows,valuations:[],revenues:[],sourceFailures:[{reason:'frozen_provider_acquisition_unavailable'}]};
-      const factorDiscovery=buildOfficialFactorCandidatesV315({snapshot:coarseSnapshot,cutoff:bundle.sourceCutoff,limit:40});
-      // Official market data verifies a source-led candidate and supplies peers;
-      // it is never allowed to nominate or displace a source candidate.  This
-      // preserves the bounded 60→30→20 funnel without quietly turning it back
-      // into an all-market factor screener.
+      // Deliberately do not acquire the former `official_coarse_market` plane
+      // here.  It made candidate selection wait for a six-source all-market
+      // query over up to 3,000 symbols before looking at any KOL claim.  That
+      // violates the V3.20 KOL-first authority boundary and was the stalled
+      // candidate_funnel's only unbounded external dependency.  Official
+      // TWSE/TPEx facts are acquired later, bounded to the source-led
+      // candidates and their peers, in facts_refresh.
+      const factorDiscovery=Object.freeze({mode:'disabled_kol_first',universe:0,
+        valued:0,eligible:0,selected:0,sourceFailures:0,
+        reason:'official_market_factor_nomination_disallowed'});
       const funnel = buildCandidateFunnel({ outcomes: sourceOutcomes,
         seedSymbols: bundle.seedSymbols ?? [], priorLedger: bundle.priorLedger ?? [],
         // The run's frozen cutoff, not wall-clock retry time, identifies the
@@ -1830,8 +1828,8 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         sourceAvailable:bundle.sourceAvailable!==false });
       return immutableBundle('legacy_candidate_funnel_result_v3_11', { schema: 'legacy-candidate-funnel-result-v3.11',
         candidates: funnel.candidateLedger, discoverySummary: funnel.discoverySummary,
-        discoveryDelta: funnel.discoveryDelta,factorDiscovery:factorDiscovery.waterfall,
-        coarseProviderAcquisition:coarseAcquisition?(({normalizedPayload,...row})=>row)(coarseAcquisition.envelope):null });
+        discoveryDelta: funnel.discoveryDelta,factorDiscovery,
+        coarseProviderAcquisition:null });
     },
     facts_refresh: async (claim) => {
       const bundle = readBundle(claim, 'candidate_fact_plane');
