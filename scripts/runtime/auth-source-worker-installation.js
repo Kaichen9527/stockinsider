@@ -146,15 +146,15 @@ async function activateTrackedRuntimeRelease({ manifest, reviewedRelease, schedu
     await phase('complete');
     return Object.freeze({ disposition: activationHealth.disposition, manifestSha256: validated.manifestSha256 });
   } catch (error) {
+    const reason = ACTIVATION_FAILURE_REASONS.has(error?.code) ? error.code : 'scheduler_activation_failed';
     try {
       await scheduler.restore(priorScheduler);
       await filesystem.restoreActivePointer(priorPointer);
       await filesystem.cleanupIncomplete();
-      await journal.rollback();
+      await journal.rollback({ reason, stage: ACTIVATION_FAILURE_STAGES.has(failureStage) ? failureStage : 'health_assessment' });
     } catch {
       throw new RuntimeInstallationError('scheduler_rollback_failed');
     }
-    const reason = ACTIVATION_FAILURE_REASONS.has(error?.code) ? error.code : 'scheduler_activation_failed';
     return Object.freeze({ disposition: 'rolled_back', reason,
       failureStage: ACTIVATION_FAILURE_STAGES.has(failureStage) ? failureStage : 'health_assessment',
       manifestSha256: validated.manifestSha256 });

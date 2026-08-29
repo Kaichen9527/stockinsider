@@ -520,6 +520,7 @@ const checks = {
   },
   'PCR-003': async () => {
     const { manifest, reviewedRelease } = runtimeRelease(); const calls = [];
+    let rollbackFailure = null;
     const result = await runtime('auth-source-worker-installation.js').activateTrackedRuntimeRelease({ manifest, reviewedRelease,
       ...testActivationProof,
       filesystem: { captureActivePointer: async () => 'old', stage: async () => calls.push('stage'), verifyStaged: async () => calls.push('verify'), publishRelease: async () => calls.push('publish'), writeHealthObservation: async () => calls.push('health-observation'), restoreActivePointer: async () => calls.push('restore-pointer'), cleanupIncomplete: async () => calls.push('cleanup') },
@@ -527,10 +528,12 @@ const checks = {
         producerCommitSha: reviewedRelease.commitSha, leaseStatus: 'active', lastRunNonterminal: true,
       } }), restore: async () => calls.push('restore-scheduler') },
       journal: { recover: async () => calls.push('recover'), begin: async () => calls.push('captured'),
-        write: async (phase) => calls.push(phase), rollback: async () => calls.push('journal-rollback') } });
+        write: async (phase) => calls.push(phase), rollback: async (failure) => { rollbackFailure = failure; calls.push('journal-rollback'); } } });
     assert.equal(result.disposition, 'rolled_back'); assert.ok(calls.indexOf('restore-scheduler') < calls.indexOf('restore-pointer'));
     assert.equal(result.failureStage, 'health_assessment',
       'activation rollback reports a closed operational stage without exposing diagnostics or credentials');
+    assert.deepEqual(rollbackFailure, { reason: 'scheduler_activation_failed', stage: 'health_assessment' },
+      'the durable rollback journal receives the same closed diagnostic as the returned result');
     assert.ok(calls.indexOf('restore-pointer') < calls.indexOf('cleanup'));
     assert.ok(calls.indexOf('cleanup') < calls.indexOf('journal-rollback'));
     assert.deepEqual(calls.slice(0, 4), ['recover','captured','stage','verify']);
