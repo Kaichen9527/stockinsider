@@ -169,6 +169,8 @@ test('V3.20 widens only the KOL connector matrix and installs an exact-identity 
     /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
   assert.match(v320SourceCompletionCardinalityRepairSql,/v320_source_completion_cardinality_predecessor_conflict/u);
   assert.match(v320SourceCompletionCardinalityRepairSql,/official-source-acquisition-v3[.]20/u);
+  assert.match(v320SourceCompletionCardinalityRepairSql,/regexp_replace\(v_definition,E'\\\\s\+'/u,
+    'the migration accepts PostgreSQL whitespace canonicalization for an already-installed equivalent wrapper');
   assert.doesNotMatch(v320KolSourceAuthoritySeedSql,
     /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
   assert.match(v320KolSourceAuthoritySeedSql,/SECURITY DEFINER\s+SET search_path=''/u);
