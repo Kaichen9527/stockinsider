@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import {
+  chmodSync,
   lstatSync,
   mkdirSync,
   mkdtempSync,
@@ -691,10 +692,20 @@ function trustedHostModelOracle(subjectRoot, attestation, nodeExecutable) {
   const stat = lstatSync(authentication);
   assert.equal(stat.isFile() && !stat.isSymbolicLink() && stat.uid === process.getuid() && (stat.mode & 0o077) === 0,
     true, 'trusted host oracle authentication boundary');
-  return run(baseRoot, nodeExecutable, [
-    '--test', 'scripts/model-runner-v3/model-runner-v3.test.js',
-  ], { ...process.env, OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH: '0', OPPORTUNITY_V3_PROTECTED_LIVE_ONLY: '1' },
-  'trusted protected-base host model oracle');
+  const hostScratch = mkdtempSync(path.join(os.tmpdir(), 'stockinsider-v3-host-oracle-'));
+  try {
+    chmodSync(hostScratch, 0o700);
+    return run(baseRoot, nodeExecutable, [
+      '--test', 'scripts/model-runner-v3/model-runner-v3.test.js',
+    ], {
+      ...process.env,
+      OPPORTUNITY_V3_PROTECTED_HOST_PREFLIGHT_SCRATCH: hostScratch,
+      OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH: '0',
+      OPPORTUNITY_V3_PROTECTED_LIVE_ONLY: '1',
+    }, 'trusted protected-base host model oracle');
+  } finally {
+    rmSync(hostScratch, { force: true, recursive: true });
+  }
 }
 
 function measuredResult(output, label) {

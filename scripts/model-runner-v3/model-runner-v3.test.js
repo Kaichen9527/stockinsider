@@ -42,6 +42,7 @@ const {
   assertAncestorIdentity,
   CANDIDATE_POLICY_ENV,
   CANDIDATE_SCRATCH_ENV,
+  HOST_ORACLE_SCRATCH_ENV,
   hostProbeEnvironment,
   loadHostPins,
   requiresGatekeeperAssessment,
@@ -448,6 +449,41 @@ ordinaryTest('non-credential host probes retain only the verified private sandbo
     fs.chmodSync(directory, 0o700);
     fs.rmSync(directory, { recursive: true, force: true });
     fs.rmSync(policyDirectory, { recursive: true, force: true });
+  }
+});
+
+ordinaryTest('trusted live host probes admit only an explicit private cache scratch', () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-host-oracle-'));
+  const original = {
+    [HOST_ORACLE_SCRATCH_ENV]: process.env[HOST_ORACLE_SCRATCH_ENV],
+    OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH: process.env.OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH,
+  };
+  try {
+    fs.chmodSync(directory, 0o700);
+    process.env.OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH = '0';
+    process.env[HOST_ORACLE_SCRATCH_ENV] = directory;
+    assert.deepEqual(hostProbeEnvironment(), {
+      CODEX_HOME: directory,
+      HOME: directory,
+      LANG: 'C',
+      LC_ALL: 'C',
+      PATH: '/usr/bin:/bin:/usr/sbin:/sbin',
+      TMPDIR: directory,
+    });
+    process.env[HOST_ORACLE_SCRATCH_ENV] = path.join(directory, 'missing');
+    expectExit(5, () => hostProbeEnvironment());
+    delete process.env[HOST_ORACLE_SCRATCH_ENV];
+    assert.deepEqual(hostProbeEnvironment(), {
+      LANG: 'C',
+      LC_ALL: 'C',
+      PATH: '/usr/bin:/bin:/usr/sbin:/sbin',
+    });
+  } finally {
+    for (const [key, value] of Object.entries(original)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+    fs.rmSync(directory, { recursive: true, force: true });
   }
 });
 

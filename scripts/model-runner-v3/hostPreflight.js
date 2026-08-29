@@ -11,6 +11,7 @@ const PIN_FIXTURE_SHA256 = '23de0561f8714d5177ff77dd40c1325e06bedaade8a420acf3b0
 const PIN_FIXTURE_BYTES = 2141;
 const CANDIDATE_POLICY_ENV = 'OPPORTUNITY_V3_PROTECTED_CANDIDATE_POLICY';
 const CANDIDATE_SCRATCH_ENV = 'OPPORTUNITY_V3_PROTECTED_CANDIDATE_SCRATCH';
+const HOST_ORACLE_SCRATCH_ENV = 'OPPORTUNITY_V3_PROTECTED_HOST_PREFLIGHT_SCRATCH';
 let stableAncestorIdentity = null;
 
 function loadHostPins(filename) {
@@ -122,11 +123,22 @@ function privateSandboxDirectory(value) {
 
 function hostProbeEnvironment() {
   const environment = { PATH: '/usr/bin:/bin:/usr/sbin:/sbin', LANG: 'C', LC_ALL: 'C' };
+  const requestedHostScratch = process.env[HOST_ORACLE_SCRATCH_ENV];
+  const hostScratch = privateSandboxDirectory(requestedHostScratch);
   // Candidate-side host probes deliberately run without a credential-bearing HOME.
   // Apple Git resolves xcrun's cache from TMPDIR, so dropping the already-vetted
   // sandbox directory here made an otherwise pinned probe fall back to a denied
   // system temp path. Admit that one directory only in the non-credential mode.
-  if (process.env.OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH !== '1') return environment;
+  if (process.env.OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH !== '1') {
+    // The trusted live oracle verifies the operating-system account's auth file
+    // before it starts this test. Its helper processes must still not inherit
+    // that account's HOME: codesign/xcrun need a writable cache on the GitHub
+    // runner, so accept only an explicit 0700 scratch directory prepared by
+    // the protected-base worker. An absent handle preserves direct host tests.
+    if (requestedHostScratch === undefined) return environment;
+    assert(hostScratch !== null, 5);
+    return { ...environment, CODEX_HOME: hostScratch, HOME: hostScratch, TMPDIR: hostScratch };
+  }
   // `codex sandbox` intentionally rewrites HOME and TMPDIR for its child. The
   // protected worker therefore passes its two pre-created, non-secret roots in
   // dedicated handles. They still receive the full private-directory checks
@@ -253,4 +265,5 @@ module.exports = {
   hostProbeEnvironment,
   CANDIDATE_POLICY_ENV,
   CANDIDATE_SCRATCH_ENV,
+  HOST_ORACLE_SCRATCH_ENV,
 };
