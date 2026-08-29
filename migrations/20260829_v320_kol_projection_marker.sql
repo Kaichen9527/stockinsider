@@ -14,13 +14,16 @@ DECLARE
   v_definition text;
   -- PostgreSQL may reformat function bodies before a reviewed migration is
   -- replayed. Use the closed POSIX whitespace grammar rather than a literal
-  -- source layout when recognizing the two permitted predecessor forms.
-  v_with_prior_pattern text:=E'''legacySourceResultHash'',[[:space:]]*v_source_result[.]result_hash,[[:space:]]*''priorProjections''';
+  -- source layout when recognizing the permitted predecessor forms.  The
+  -- authoritative wrapper always retains legacyPayloadHashes immediately
+  -- before legacySourceResultHash; matching that pair prevents an unrelated
+  -- jsonb_build_object from being selected as a predecessor.
+  v_with_prior_pattern text:=E'''legacyPayloadHashes'',[[:space:]]*v_source_result[.]result_json[[:space:]]*->[[:space:]]*''legacyPayloadHashes'',[[:space:]]*''legacySourceResultHash'',[[:space:]]*v_source_result[.]result_hash,[[:space:]]*''priorProjections''';
   -- Keep the bare predecessors mutually exclusive.  The former prefix-only
   -- rule also matched the coalesced variant below, so a valid deployed body
   -- was counted twice and correctly failed closed as an unknown predecessor.
-  v_bare_plain_pattern text:=E'''legacySourceResultHash'',[[:space:]]*v_source_result[.]result_hash[)][[:space:]]*;[[:space:]]*v_read_count[[:space:]]*:=[[:space:]]*jsonb_array_length[[:space:]]*[(][[:space:]]*v_prior[.]result_json[[:space:]]*->[[:space:]]*''decisions''[[:space:]]*[)]''';
-  v_bare_coalesced_pattern text:=E'''legacySourceResultHash'',[[:space:]]*v_source_result[.]result_hash[)][[:space:]]*;[[:space:]]*v_read_count[[:space:]]*:=[[:space:]]*coalesce[[:space:]]*[(][[:space:]]*jsonb_array_length[[:space:]]*[(][[:space:]]*v_prior[.]result_json[[:space:]]*->[[:space:]]*''decisions''[[:space:]]*[)][[:space:]]*,[[:space:]]*0[[:space:]]*[)]''';
+  v_bare_plain_pattern text:=E'''legacyPayloadHashes'',[[:space:]]*v_source_result[.]result_json[[:space:]]*->[[:space:]]*''legacyPayloadHashes'',[[:space:]]*''legacySourceResultHash'',[[:space:]]*v_source_result[.]result_hash[)][[:space:]]*;[[:space:]]*v_read_count[[:space:]]*:=[[:space:]]*jsonb_array_length[[:space:]]*[(][[:space:]]*v_prior[.]result_json[[:space:]]*->[[:space:]]*''decisions''[[:space:]]*[)]''';
+  v_bare_coalesced_pattern text:=E'''legacyPayloadHashes'',[[:space:]]*v_source_result[.]result_json[[:space:]]*->[[:space:]]*''legacyPayloadHashes'',[[:space:]]*''legacySourceResultHash'',[[:space:]]*v_source_result[.]result_hash[)][[:space:]]*;[[:space:]]*v_read_count[[:space:]]*:=[[:space:]]*coalesce[[:space:]]*[(][[:space:]]*jsonb_array_length[[:space:]]*[(][[:space:]]*v_prior[.]result_json[[:space:]]*->[[:space:]]*''decisions''[[:space:]]*[)][[:space:]]*,[[:space:]]*0[[:space:]]*[)]''';
   v_marker_reference_pattern text:=E'v_source_result[.]result_json[[:space:]]*->[[:space:]]*''legacyRadarCompatibility''';
   v_with_prior_replacement text:=$new$'legacySourceResultHash',v_source_result.result_hash,
         'legacyRadarCompatibility',v_source_result.result_json->'legacyRadarCompatibility',

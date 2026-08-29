@@ -196,11 +196,11 @@ test('V3.20 widens only the KOL connector matrix and installs an exact-identity 
   assert.doesNotMatch(v320KolProjectionMarkerSql,/v_bare_pattern\s+text:=/u,
     'a prefix-only bare grammar would overlap the coalesced deployed form and is forbidden');
   const deployedCoalescedCompactPredecessor =
-    "'legacySourceResultHash',v_source_result.result_hash);v_read_count:=coalesce(jsonb_array_length(v_prior.result_json->'decisions'),0)";
+    "'legacyPayloadHashes',v_source_result.result_json->'legacyPayloadHashes','legacySourceResultHash',v_source_result.result_hash);v_read_count:=coalesce(jsonb_array_length(v_prior.result_json->'decisions'),0)";
   const barePlainGrammar =
-    /'legacySourceResultHash',v_source_result\.result_hash\);v_read_count:=jsonb_array_length\(v_prior\.result_json->'decisions'\)/u;
+    /'legacyPayloadHashes',v_source_result\.result_json->'legacyPayloadHashes','legacySourceResultHash',v_source_result\.result_hash\);v_read_count:=jsonb_array_length\(v_prior\.result_json->'decisions'\)/u;
   const bareCoalescedGrammar =
-    /'legacySourceResultHash',v_source_result\.result_hash\);v_read_count:=coalesce\(jsonb_array_length\(v_prior\.result_json->'decisions'\),0\)/u;
+    /'legacyPayloadHashes',v_source_result\.result_json->'legacyPayloadHashes','legacySourceResultHash',v_source_result\.result_hash\);v_read_count:=coalesce\(jsonb_array_length\(v_prior\.result_json->'decisions'\),0\)/u;
   assert.equal([barePlainGrammar,bareCoalescedGrammar]
     .filter((grammar)=>grammar.test(deployedCoalescedCompactPredecessor)).length,1,
   'the deployed coalesced predecessor must select exactly one closed migration replacement');
