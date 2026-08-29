@@ -117,6 +117,24 @@ const graphBoundReviewSources = Object.freeze({
       rangeLine: 'Full reviewed implementation range',
     }),
   }),
+  // V3.20's catalog-integrity repair changes the active graph because its
+  // protected authority bytes changed. These immutable evidence refs are
+  // registered from a normal bootstrap change while the prior graph remains
+  // authoritative, so a candidate cannot select its own review source.
+  '329de76e514164f7ebd1905708491aa15e80c9ce34eb0fb7be3eb03786cdcf64': Object.freeze({
+    requirements: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-ef3dbb25a599e9d132aec24041ddca96f244e003',
+      path: `${changeRelative}/requirements-review-v3.20.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+    architecture: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-01599c20d11044c0d0bac730df393c5c383ff78c',
+      path: `${changeRelative}/architecture-review-v3.20.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed implementation range',
+    }),
+  }),
   '5f985e391799fd8332df16c2151f75cc95dfb643a087912d92df2845a435016e': Object.freeze({
     requirements: reviewSources.requirements,
     architecture: reviewSources.architecture,
