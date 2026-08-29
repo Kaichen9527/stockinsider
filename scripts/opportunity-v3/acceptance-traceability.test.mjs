@@ -795,10 +795,10 @@ function activeGraphOracle() {
   assertCleanReviewedExecutionRoot(subjectTree);
   const catalogBlob = subjectTreeBlob(subjectTree, activeCatalogRepositoryPath);
   assert.deepEqual(catalogBlob.bytes, activeCatalogBytes, 'catalog working bytes equal reviewed subject tree');
-  assert.equal(catalogBlob.bytes.length, 6169, 'catalog exact tracked byte length including LF');
+  assert.equal(catalogBlob.bytes.length, 6337, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    'f90b9aa0cccb32578055d533b996eae6e833b7766505e0898c23a4cb5e87f6d0',
+    'a561a57b19f4d32b234fcc2f67451f5c79cda2f7d577d73a3c76a05e2711f6cb',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);
