@@ -35,6 +35,24 @@ test('V3.20 admits only KOL-authorized nominations and evicts legacy official-on
   assert.equal(official.discoveryDelta.rejected[0].reason,'nomination_authority_revoked');
 });
 
+test('V3.20.1 retains only a DB-revalidated historical InvestAnchors structured claim',()=>{
+  const {buildCandidateFunnel}=runtime('candidate-funnel.js');
+  const historical={...kolOutcome({symbol:'1723',sourceKey:'investanchors',authority:'investanchors_structured_claim'}),
+    structuredClaim:false,rightsAttested:false,firstObservedSession:'2026-08-27',
+    lastObservedSession:'2026-08-27',retentionCountedThroughSession:'2026-08-27'};
+  const unbridged=buildCandidateFunnel({outcomes:[],priorLedger:[historical],seedSymbols:[],
+    currentSession:'2026-08-28',completedSessions:['2026-08-27','2026-08-28']});
+  assert.equal(unbridged.candidateLedger.length,0,
+    'a legacy source key alone is never enough to retain a paid-source claim');
+  const revalidated={...historical,structuredClaim:true,rightsAttested:true,
+    kolRetentionAuthority:'revalidated_investanchors_structured_claim_v3_20_1'};
+  const retained=buildCandidateFunnel({outcomes:[],priorLedger:[revalidated],seedSymbols:[],
+    currentSession:'2026-08-28',completedSessions:['2026-08-27','2026-08-28']});
+  assert.deepEqual(retained.candidateLedger.map((row)=>row.symbol),['1723']);
+  assert.equal(retained.candidateLedger[0].nominationAuthority,'investanchors_structured_claim');
+  assert.equal(retained.candidateLedger[0].retentionReason,'source_evidence_retained_within_20_sessions');
+});
+
 test('V3.20 rejects the 2605 new-emerging-market ETF false positive but accepts a public Telegram nomination',()=>{
   const {extractRevisionCandidates}=runtime('auth-source-worker-cli.js');
   const authorityPages=[['roster',null,null,[

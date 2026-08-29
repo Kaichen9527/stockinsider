@@ -51,6 +51,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260829_v320_source_completion_cardinality_repair.sql',
   'migrations/20260829_v320_kol_source_authority_seed.sql',
   'migrations/20260829_v320_kol_projection_marker.sql',
+  'migrations/20260830_v320_kol_retention_bridge.sql',
 ]);
 const V3192_PROJECTION_DOSSIER_MIGRATION =
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql';
@@ -368,6 +369,25 @@ async function applyReviewedMigrations(options) {
           AND position('v_source_result.result_json->''legacyRadarCompatibility''' IN pg_get_functiondef(
             'public.claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)'::regprocedure
           ))>0)
+      ,'v320KolRetentionBridge',to_regprocedure(
+        'public.read_v320_revalidated_kol_retention_internal(timestamptz)') IS NOT NULL
+        AND to_regprocedure(
+          'public.claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1(uuid,uuid,uuid,integer)') IS NOT NULL
+        AND (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+          AND pg_get_functiondef(oid) LIKE '%read_v320_revalidated_kol_retention_internal%'
+          AND pg_get_functiondef(oid) LIKE '%kolRetentionAuthorityContract%'
+          FROM pg_proc WHERE oid='public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure)
+        AND NOT has_function_privilege('service_role',
+          'public.read_v320_revalidated_kol_retention_internal(timestamptz)','EXECUTE')
+        AND NOT has_function_privilege('service_role',
+          'public.claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1(uuid,uuid,uuid,integer)','EXECUTE')
+        AND (NOT EXISTS(SELECT 1 FROM pg_roles WHERE rolname='stockinsider_runtime_v319') OR (
+          has_function_privilege('stockinsider_runtime_v319',
+            'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)','EXECUTE')
+          AND NOT has_function_privilege('stockinsider_runtime_v319',
+            'public.read_v320_revalidated_kol_retention_internal(timestamptz)','EXECUTE')
+          AND NOT has_function_privilege('stockinsider_runtime_v319',
+            'public.claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1(uuid,uuid,uuid,integer)','EXECUTE')))
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',

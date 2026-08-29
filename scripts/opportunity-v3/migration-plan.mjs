@@ -44,6 +44,7 @@ const migrationPaths = [
   'migrations/20260829_v320_source_completion_cardinality_repair.sql',
   'migrations/20260829_v320_kol_source_authority_seed.sql',
   'migrations/20260829_v320_kol_projection_marker.sql',
+  'migrations/20260830_v320_kol_retention_bridge.sql',
 ];
 const migrations = migrationPaths.map((relativePath) => {
   const bytes = fs.readFileSync(path.join(root, relativePath));

@@ -105,6 +105,9 @@ const v320KolSourceAuthoritySeedSql = fs.readFileSync(v320KolSourceAuthoritySeed
 const v320KolProjectionMarkerMigrationPath = path.join(root,
   'migrations/20260829_v320_kol_projection_marker.sql');
 const v320KolProjectionMarkerSql = fs.readFileSync(v320KolProjectionMarkerMigrationPath, 'utf8');
+const v320KolRetentionBridgeMigrationPath = path.join(root,
+  'migrations/20260830_v320_kol_retention_bridge.sql');
+const v320KolRetentionBridgeSql = fs.readFileSync(v320KolRetentionBridgeMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -217,8 +220,12 @@ test('V3.20 widens only the KOL connector matrix and installs an exact-identity 
     /WHEN v_attempt_missing=\(CASE WHEN p_json#>>'\{sourceAcquisition,schema\}'='official-source-acquisition-v3[.]20' THEN 5 ELSE 3 END\) THEN 'missing_endpoint'/u);
   const claimDefinition=psql(`SELECT pg_get_functiondef(
     'public.claim_legacy_producer_job_v3_11(uuid,uuid,uuid,integer)'::regprocedure);`,['-At']);
-  for(const required of ['claim_legacy_producer_job_pre_kol_authority_v3_20','structured_claim_authorized','rightsAttested'])
+  for(const required of ['claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1','kolRetentionAuthorityContract'])
     assert.match(claimDefinition,new RegExp(required,'u'));
+  const preBridgeDefinition=psql(`SELECT pg_get_functiondef(
+    'public.claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1(uuid,uuid,uuid,integer)'::regprocedure);`,['-At']);
+  for(const required of ['claim_legacy_producer_job_pre_kol_authority_v3_20','structured_claim_authorized','rightsAttested'])
+    assert.match(preBridgeDefinition,new RegExp(required,'u'));
   const compactInputDefinition=psql(`SELECT pg_get_functiondef(
     'public.claim_legacy_producer_job_authoritative_v3_13(uuid,uuid,uuid,integer)'::regprocedure);`,['-At']);
   assert.match(compactInputDefinition,/legacyRadarCompatibility/u,
@@ -272,6 +279,24 @@ test('V3.20 widens only the KOL connector matrix and installs an exact-identity 
   assert.equal(reaped.find((line)=>line==='failed_recoverable'),'failed_recoverable');
   assert.deepEqual(JSON.parse(reaped.find((line)=>line.startsWith('{'))),
     {runStatus:'failed',jobStatus:'failed',diagnostics:1});
+});
+
+test('V3.20.1 bridges only a revalidated InvestAnchors structured claim across empty runs',()=>{
+  assert.doesNotMatch(v320KolRetentionBridgeSql,
+    /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(v320KolRetentionBridgeSql,/read_v320_revalidated_kol_retention_internal/u);
+  assert.match(v320KolRetentionBridgeSql,/candidate\.value->>'sourceKey'='investanchors'/u);
+  assert.match(v320KolRetentionBridgeSql,/ledger\.source_key='investanchors'::public\.source_key_v3/u);
+  assert.match(v320KolRetentionBridgeSql,/source_identity_authorities_v3/u);
+  assert.match(v320KolRetentionBridgeSql,/investanchors_structured_claim/u);
+  assert.match(v320KolRetentionBridgeSql,/structuredClaim',true/u);
+  assert.match(v320KolRetentionBridgeSql,/rightsAttested',true/u);
+  assert.match(v320KolRetentionBridgeSql,/claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1/u);
+  assert.match(v320KolRetentionBridgeSql,/candidate-ledger-v3\.20\.1/u);
+  assert.match(v320KolRetentionBridgeSql,/candidate-authority-v3\.20\.1/u);
+  assert.match(v320KolRetentionBridgeSql,/v320_kol_retention_bridge_postcondition_failed/u);
+  const apply=fs.readFileSync(path.join(root,'scripts/opportunity-v3/apply-reviewed-migrations.mjs'),'utf8');
+  assert.match(apply,/20260830_v320_kol_retention_bridge\.sql/u);
 });
 const lifecycleNewerSourceParseOutput = executeWorkerPayload('source_parse_batch', [
   '123e4567-e89b-42d3-a456-426614173004', 1, 'threads',
@@ -814,7 +839,7 @@ before(() => {
   for (const migration of [candidateRetentionAuthorityMigrationPath,fullCandidateRetentionAuthorityMigrationPath,
     retainedCandidateJsonbCardinalityMigrationPath,finalClaimHandoffMigrationPath,v320RuntimeRecoveryMigrationPath,
     v320SourceCompletionCardinalityRepairMigrationPath,v320KolSourceAuthoritySeedMigrationPath,
-    v320KolProjectionMarkerMigrationPath]) {
+    v320KolProjectionMarkerMigrationPath,v320KolRetentionBridgeMigrationPath]) {
     for (let application = 0; application < 2; application += 1) {
       command(pg.psql, ['-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
         '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', migration]);
