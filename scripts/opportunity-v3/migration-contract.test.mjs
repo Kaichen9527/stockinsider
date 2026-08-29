@@ -189,6 +189,11 @@ test('V3.20 widens only the KOL connector matrix and installs an exact-identity 
   assert.match(v320KolProjectionMarkerSql,/claim_legacy_producer_job_authoritative_v3_13/u);
   assert.match(v320KolProjectionMarkerSql,/\[\[:space:\]\]\*/u,
     'the marker repair accepts PostgreSQL whitespace canonicalization without widening its closed predecessor grammar');
+  assert.match(v320KolProjectionMarkerSql,/v_bare_coalesced_pattern/u,
+    'the marker repair also recognizes the deployed closed coalesced read-count predecessor');
+  assert.ok(v320KolProjectionMarkerSql.includes("v_prior[.]result_json")
+    && v320KolProjectionMarkerSql.includes("''decisions''"),
+  'the coalesced predecessor remains bound to the exact prior-decision read');
   assert.match(v320KolProjectionMarkerSql,
     /v_marker_count<>2 OR v_marker_reference_count<>1 OR v_old_count<>0/u,
     'the marker repair requires its closed two-marker, one-JSON-read postcondition');
