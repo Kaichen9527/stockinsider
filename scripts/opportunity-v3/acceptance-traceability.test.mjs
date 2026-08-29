@@ -810,16 +810,16 @@ function activeGraphOracle() {
     .sort();
   assert.deepEqual(activeContractFiles, expectedContractFiles);
   const activeArtifactFiles = activeCatalog.activeFiles;
-  assert.equal(activeArtifactFiles.length, 54);
+  assert.equal(activeArtifactFiles.length, 55);
   assert.equal(new Set(activeArtifactFiles).size, activeArtifactFiles.length);
   assert.deepEqual(activeArtifactFiles, [...activeArtifactFiles].toSorted(), 'catalog active-file ASCII order');
-  assert.equal(activeCatalog.owners.length, 44, 'catalog owner row count');
+  assert.equal(activeCatalog.owners.length, 45, 'catalog owner row count');
   assert.deepEqual(
     activeCatalog.owners.map(([file]) => file),
     activeCatalog.owners.map(([file]) => file).toSorted(),
     'catalog owner ASCII order',
   );
-  assert.equal(new Set(activeCatalog.owners.map(([file]) => file)).size, 44, 'catalog owner uniqueness');
+  assert.equal(new Set(activeCatalog.owners.map(([file]) => file)).size, 45, 'catalog owner uniqueness');
   for (const [file] of activeCatalog.owners) assert.ok(activeArtifactFiles.includes(file), `${file} owner must be active`);
   const orderedBlobRows = activeArtifactFiles.map((file) => {
     const repositoryPath = `.loop-engineering/state/changes/source-led-opportunity-engine-v3/${file}`;
