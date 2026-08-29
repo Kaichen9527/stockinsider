@@ -52,6 +52,7 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260829_v320_kol_source_authority_seed.sql',
   'migrations/20260829_v320_kol_projection_marker.sql',
   'migrations/20260830_v320_kol_retention_bridge.sql',
+  'migrations/20260830_v320_expired_unclaimed_run_reaper.sql',
 ]);
 const V3192_PROJECTION_DOSSIER_MIGRATION =
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql';

@@ -108,6 +108,9 @@ const v320KolProjectionMarkerSql = fs.readFileSync(v320KolProjectionMarkerMigrat
 const v320KolRetentionBridgeMigrationPath = path.join(root,
   'migrations/20260830_v320_kol_retention_bridge.sql');
 const v320KolRetentionBridgeSql = fs.readFileSync(v320KolRetentionBridgeMigrationPath, 'utf8');
+const v320ExpiredUnclaimedRunReaperMigrationPath = path.join(root,
+  'migrations/20260830_v320_expired_unclaimed_run_reaper.sql');
+const v320ExpiredUnclaimedRunReaperSql = fs.readFileSync(v320ExpiredUnclaimedRunReaperMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -278,6 +281,55 @@ test('V3.20 widens only the KOL connector matrix and installs an exact-identity 
     ROLLBACK;`,['-At']).trim().split('\n');
   assert.equal(reaped.find((line)=>line==='failed_recoverable'),'failed_recoverable');
   assert.deepEqual(JSON.parse(reaped.find((line)=>line.startsWith('{'))),
+    {runStatus:'failed',jobStatus:'failed',diagnostics:1});
+});
+
+test('V3.20.2 terminalizes one exact expired run even before its first job claim',()=>{
+  assert.doesNotMatch(v320ExpiredUnclaimedRunReaperSql,
+    /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE|DELETE\s+FROM)\b/iu);
+  assert.match(v320ExpiredUnclaimedRunReaperSql,/lease_expired_unclaimed_job_missing/u);
+  assert.match(v320ExpiredUnclaimedRunReaperSql,/job[.]status IN \('queued','retryable'\)/u);
+  assert.match(v320ExpiredUnclaimedRunReaperSql,/RETURN 'failed_recoverable'/u);
+  assert.match(v320ExpiredUnclaimedRunReaperSql,
+    /GRANT EXECUTE ON FUNCTION public[.]reap_legacy_expired_producer_run_v3_20\(text,text,text\)\s+TO service_role/u);
+  const unclaimed=psql(`BEGIN;
+    INSERT INTO public.legacy_producer_runs_v3_11(
+      run_id,owner_label,owner_token_hash,producer_commit_sha,worker_sha256,scheduler_config_canonical,
+      scheduler_config_sha256,legacy_seed_symbols,legacy_seed_set_hash,scheduled_occurrence_id,source_cutoff,
+      trading_date,trading_session_authority_hash,authority_canonical,authority_json,authority_hash,status,
+      started_at,heartbeat_at,lease_expires_at,terminal_at,failure_code,logical_run_key,attempt
+    ) VALUES(
+      '32000000-0000-4000-8000-000000000003','com.stockinsider.auth-source-worker',repeat('6',64),
+      repeat('a',40),repeat('b',64),decode('${legacyRuntimeConfigHex}','hex'),
+      '1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2',
+      (SELECT array_agg(value ORDER BY ordinal) FROM jsonb_array_elements_text(convert_from(
+        decode('${legacyRuntimeConfigHex}','hex'),'utf8')::jsonb->'legacySeedSymbols') WITH ORDINALITY seed(value,ordinal)),
+      'e6d9c09b8b552f5d9eaf389b76d2d90daa2d89578433d2a1ad63286888b3b743',
+      'v320-expired-unclaimed-reaper','2026-08-28T10:20:00Z','2026-08-28',NULL,convert_to('{}','utf8'),'{}'::jsonb,
+      encode(extensions.digest(convert_to('{}','utf8'),'sha256'),'hex'),'running',clock_timestamp()-interval '5 minutes',
+      clock_timestamp()-interval '4 minutes',clock_timestamp()-interval '3 minutes',NULL,NULL,repeat('7',64),1
+    );
+    INSERT INTO public.legacy_producer_jobs_v3_11(
+      job_id,run_id,stage,job_kind,stage_ordinal,shard_ordinal,execution_ordinal,revision_id,predecessor_job_id,
+      input_hash,payload_hash,status,attempt,max_attempts,owner_token_hash,leased_at,heartbeat_at,lease_expires_at,
+      terminal_at,failure_code
+    ) VALUES(
+      '32000000-0000-4000-8000-000000000004','32000000-0000-4000-8000-000000000003','source_sync',
+      'stage_barrier',0,NULL,0,NULL,NULL,repeat('8',64),repeat('9',64),'queued',1,5,NULL,NULL,NULL,NULL,NULL,NULL
+    );
+    SELECT public.reap_legacy_expired_producer_run_v3_20(repeat('a',40),repeat('b',64),
+      '1ead338d6a56194a51c64ac2adbf36551a410c327ce08ba18f9224e34471c3c2');
+    SELECT jsonb_build_object(
+      'runStatus',(SELECT status::text FROM public.legacy_producer_runs_v3_11
+        WHERE run_id='32000000-0000-4000-8000-000000000003'),
+      'jobStatus',(SELECT status::text FROM public.legacy_producer_jobs_v3_11
+        WHERE job_id='32000000-0000-4000-8000-000000000004'),
+      'diagnostics',(SELECT count(*) FROM public.legacy_runtime_failure_diagnostics_v3_14
+        WHERE run_id='32000000-0000-4000-8000-000000000003' AND failure_code='lease_expired')
+    )::text;
+    ROLLBACK;`,['-At']).trim().split('\n');
+  assert.equal(unclaimed.find((line)=>line==='failed_recoverable'),'failed_recoverable');
+  assert.deepEqual(JSON.parse(unclaimed.find((line)=>line.startsWith('{'))),
     {runStatus:'failed',jobStatus:'failed',diagnostics:1});
 });
 
@@ -839,7 +891,8 @@ before(() => {
   for (const migration of [candidateRetentionAuthorityMigrationPath,fullCandidateRetentionAuthorityMigrationPath,
     retainedCandidateJsonbCardinalityMigrationPath,finalClaimHandoffMigrationPath,v320RuntimeRecoveryMigrationPath,
     v320SourceCompletionCardinalityRepairMigrationPath,v320KolSourceAuthoritySeedMigrationPath,
-    v320KolProjectionMarkerMigrationPath,v320KolRetentionBridgeMigrationPath]) {
+    v320KolProjectionMarkerMigrationPath,v320KolRetentionBridgeMigrationPath,
+    v320ExpiredUnclaimedRunReaperMigrationPath]) {
     for (let application = 0; application < 2; application += 1) {
       command(pg.psql, ['-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
         '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', migration]);
