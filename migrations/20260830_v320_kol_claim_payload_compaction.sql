@@ -6,6 +6,13 @@ BEGIN;
 -- handler could begin its lease heartbeat.  Keep the reviewed wrapper chain
 -- intact while replacing that one historical implementation with the bounded
 -- KOL-first transport: source cutoff plus immutable source claims only.
+-- PostgreSQL requires the destination owner to have CREATE on the containing
+-- schema while a function ownership transfer is performed.  The predecessor
+-- is owned by opportunity_v3_rpc_owner, while the verifier is owned by the
+-- narrowly-scoped legacy correctness owner.  Grant only the transaction-local
+-- capability needed for those transfers and revoke it before commit.
+GRANT CREATE ON SCHEMA public TO opportunity_v3_rpc_owner,legacy_correctness_rpc_owner;
+
 CREATE OR REPLACE FUNCTION public.claim_legacy_producer_job_authoritative_v3_16(
   p_run uuid,p_job uuid,p_token uuid,p_lease integer
 ) RETURNS public.legacy_producer_claim_v3_11
@@ -77,7 +84,7 @@ LANGUAGE sql STABLE SECURITY DEFINER SET search_path='' AS $claim_chain$
 $claim_chain$;
 
 ALTER FUNCTION public.claim_legacy_producer_job_authoritative_v3_16(
-  uuid,uuid,uuid,integer) OWNER TO legacy_correctness_rpc_owner;
+  uuid,uuid,uuid,integer) OWNER TO opportunity_v3_rpc_owner;
 ALTER FUNCTION public.verify_legacy_claim_delegation_chain_v3_20()
   OWNER TO legacy_correctness_rpc_owner;
 REVOKE ALL ON FUNCTION public.claim_legacy_producer_job_authoritative_v3_16(
@@ -87,9 +94,11 @@ REVOKE ALL ON FUNCTION public.verify_legacy_claim_delegation_chain_v3_20()
 GRANT EXECUTE ON FUNCTION public.claim_legacy_producer_job_authoritative_v3_16(
   uuid,uuid,uuid,integer) TO legacy_correctness_rpc_owner;
 
+REVOKE CREATE ON SCHEMA public FROM opportunity_v3_rpc_owner,legacy_correctness_rpc_owner;
+
 DO $v320_kol_claim_payload_compaction_postconditions$
 BEGIN
-  IF NOT (SELECT pg_get_userbyid(proowner)='legacy_correctness_rpc_owner' AND prosecdef
+  IF NOT (SELECT pg_get_userbyid(proowner)='opportunity_v3_rpc_owner' AND prosecdef
       AND pg_get_functiondef(oid) LIKE '%sourceCutoff%'
       AND pg_get_functiondef(oid) NOT LIKE '%coarseUniverseRows%'
       AND pg_get_functiondef(oid) LIKE '%claim_legacy_mention_barrier_transport_v3_15%'
@@ -101,6 +110,8 @@ BEGIN
     OR NOT public.verify_legacy_claim_delegation_chain_v3_20()
     OR has_function_privilege('service_role',
       'public.verify_legacy_claim_delegation_chain_v3_20()','EXECUTE')
+    OR has_schema_privilege('opportunity_v3_rpc_owner','public','CREATE')
+    OR has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
   THEN RAISE EXCEPTION 'v320_kol_claim_payload_compaction_postcondition_failed'; END IF;
   IF EXISTS(SELECT 1 FROM pg_roles WHERE rolname='stockinsider_runtime_v319')
     AND (NOT has_function_privilege('stockinsider_runtime_v319',

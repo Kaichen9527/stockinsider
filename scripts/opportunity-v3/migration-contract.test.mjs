@@ -366,6 +366,12 @@ test('V3.20.2 compacts the candidate claim transport before a worker lease can e
   assert.match(compactClaim,/claim_legacy_producer_job_authoritative_v3_15/u);
   assert.match(compactClaim,/'sourceCutoff'/u);
   assert.doesNotMatch(compactClaim,/coarseUniverseRows|official-coarse-universe/u);
+  assert.match(v320KolClaimPayloadCompactionSql,
+    /GRANT CREATE ON SCHEMA public TO opportunity_v3_rpc_owner,legacy_correctness_rpc_owner;[\s\S]*?ALTER FUNCTION public[.]claim_legacy_producer_job_authoritative_v3_16\([\s\S]*?OWNER TO opportunity_v3_rpc_owner;[\s\S]*?ALTER FUNCTION public[.]verify_legacy_claim_delegation_chain_v3_20\(\)[\s\S]*?OWNER TO legacy_correctness_rpc_owner;[\s\S]*?REVOKE CREATE ON SCHEMA public FROM opportunity_v3_rpc_owner,legacy_correctness_rpc_owner;/u,
+    'the compaction repair must use transaction-scoped CREATE only for the two existing owner boundaries');
+  assert.match(v320KolClaimPayloadCompactionSql,
+    /pg_get_userbyid\(proowner\)='opportunity_v3_rpc_owner'[\s\S]*?has_schema_privilege\('opportunity_v3_rpc_owner','public','CREATE'\)[\s\S]*?has_schema_privilege\('legacy_correctness_rpc_owner','public','CREATE'\)/u,
+    'postconditions must retain the predecessor owner and verify both temporary schema capabilities are revoked');
   assert.match(v320KolClaimPayloadCompactionSql,/verify_legacy_claim_delegation_chain_v3_20/u);
   assert.match(v320KolClaimPayloadCompactionSql,/v320_kol_claim_payload_compaction_postcondition_failed/u);
   const apply=fs.readFileSync(path.join(root,'scripts/opportunity-v3/apply-reviewed-migrations.mjs'),'utf8');
