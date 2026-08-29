@@ -12,8 +12,12 @@ SET ROLE legacy_correctness_rpc_owner;
 DO $v320_kol_projection_marker$
 DECLARE
   v_definition text;
-  v_with_prior_pattern text:=E'''legacySourceResultHash'',\\s*v_source_result\\.result_hash,\\s*''priorProjections''';
-  v_bare_pattern text:=E'''legacySourceResultHash'',\\s*v_source_result\\.result_hash\\)\\s*;\\s*v_read_count''';
+  -- PostgreSQL may reformat function bodies before a reviewed migration is
+  -- replayed. Use the closed POSIX whitespace grammar rather than a literal
+  -- source layout when recognizing the two permitted predecessor forms.
+  v_with_prior_pattern text:=E'''legacySourceResultHash'',[[:space:]]*v_source_result[.]result_hash,[[:space:]]*''priorProjections''';
+  v_bare_pattern text:=E'''legacySourceResultHash'',[[:space:]]*v_source_result[.]result_hash[)][[:space:]]*;[[:space:]]*v_read_count''';
+  v_marker_reference_pattern text:=E'v_source_result[.]result_json[[:space:]]*->[[:space:]]*''legacyRadarCompatibility''';
   v_with_prior_replacement text:=$new$'legacySourceResultHash',v_source_result.result_hash,
         'legacyRadarCompatibility',v_source_result.result_json->'legacyRadarCompatibility',
         'priorProjections'$new$;
@@ -21,6 +25,7 @@ DECLARE
         'legacyRadarCompatibility',v_source_result.result_json->'legacyRadarCompatibility');v_read_count$new$;
   v_old_count integer;
   v_marker_count integer;
+  v_marker_reference_count integer;
 BEGIN
   -- The currently exported entry point is only a final handoff wrapper.  The
   -- compact input is constructed by this closed authoritative predecessor;
@@ -31,8 +36,9 @@ BEGIN
 
   v_marker_count:=(length(v_definition)-length(replace(v_definition,'legacyRadarCompatibility','')))
     / length('legacyRadarCompatibility');
+  SELECT count(*) FROM regexp_matches(v_definition,v_marker_reference_pattern,'g') INTO v_marker_reference_count;
   IF v_marker_count>0 THEN
-    IF v_marker_count<>2 OR position('v_source_result.result_json->''legacyRadarCompatibility''' IN v_definition)=0 THEN
+    IF v_marker_count<>2 OR v_marker_reference_count<>1 THEN
       RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='v320_kol_projection_marker_postcondition_failed';
     END IF;
     RETURN;
@@ -53,10 +59,10 @@ BEGIN
   ) INTO STRICT v_definition;
   v_marker_count:=(length(v_definition)-length(replace(v_definition,'legacyRadarCompatibility','')))
     / length('legacyRadarCompatibility');
+  SELECT count(*) FROM regexp_matches(v_definition,v_marker_reference_pattern,'g') INTO v_marker_reference_count;
   SELECT (SELECT count(*) FROM regexp_matches(v_definition,v_with_prior_pattern,'g'))+
     (SELECT count(*) FROM regexp_matches(v_definition,v_bare_pattern,'g')) INTO v_old_count;
-  IF v_marker_count<>2 OR v_old_count<>0
-    OR position('v_source_result.result_json->''legacyRadarCompatibility''' IN v_definition)=0
+  IF v_marker_count<>2 OR v_marker_reference_count<>1 OR v_old_count<>0
   THEN
     RAISE EXCEPTION USING ERRCODE='PT409',MESSAGE='v320_kol_projection_marker_postcondition_failed';
   END IF;
