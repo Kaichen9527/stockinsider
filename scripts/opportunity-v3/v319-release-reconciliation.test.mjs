@@ -32,6 +32,11 @@ test('V3.19 disk policy fails closed below the reviewed capacity floor without d
   const policyText=readFileSync(policyPath,'utf8');
   assert.equal(policyText,`${canonicalJson(JSON.parse(policyText))}\n`,
     'the installed doctor reads this policy through the canonical-file trust boundary');
+  const reviewedPolicy=JSON.parse(policyText);
+  assert.equal(reviewedPolicy.minimumFreeBytes,30*1024**3,
+    'the release plan requires a real 30 GiB hard floor, not an undocumented higher gate');
+  assert.equal(reviewedPolicy.warningFreeBytes,32*1024**3,
+    'capacity between 30 and 32 GiB remains observable as a warning without blocking recovery');
   const policy={schema:'stockinsider-artifact-retention-v3.19.0',sourceAuditMaxBytes:1000,sourceAuditRetentionDays:14,
     minimumFreeBytes:100,warningFreeBytes:200};
   const health=assessRuntimeDiskPolicy({policy,runtimeRoot:root,sourceAuditRoot:null,
