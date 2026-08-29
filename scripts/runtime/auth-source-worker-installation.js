@@ -24,6 +24,10 @@ const ACTIVATION_FAILURE_REASONS = new Set([
   'active_pointer_invalid', 'active_runtime_conflict', 'scheduler_activation_failed',
   'scheduler_capture_invalid', 'scheduler_snapshot_changed', 'staged_hash_mismatch',
 ]);
+const ACTIVATION_FAILURE_STAGES = new Set([
+  'stage_release', 'verify_release', 'publish_release', 'disable_prior_owners',
+  'load_new_owner', 'first_heartbeat', 'health_assessment', 'publish_health',
+]);
 
 function requireCondition(condition, reason) { if (!condition) throw new RuntimeInstallationError(reason); }
 function exactKeys(value, keys) { return value && canonicalJson(Object.keys(value).sort()) === canonicalJson([...keys].sort()); }
@@ -107,28 +111,36 @@ async function activateTrackedRuntimeRelease({ manifest, reviewedRelease, schedu
   const priorPointer = await filesystem.captureActivePointer();
   const phase = async (name) => journal.write(name);
   await journal.begin({ priorScheduler, priorPointer });
+  let failureStage = 'stage_release';
   try {
     await filesystem.stage(validated);
+    failureStage = 'verify_release';
     await filesystem.verifyStaged(validated);
+    failureStage = 'publish_release';
     await filesystem.publishRelease(validated);
     await phase('release_published');
+    failureStage = 'disable_prior_owners';
     await scheduler.disablePriorOwners(priorScheduler);
     await phase('old_owners_disabled');
+    failureStage = 'load_new_owner';
     await scheduler.loadNewOwner(validated);
     await phase('new_owner_loaded');
     // Do not await the producer's full terminal result. Its first durable
     // heartbeat proves that the new owner registered and took responsibility;
     // the release state machine will later demand terminal success + doctor
     // PASS before enabling actions or deploying the consumer.
+    failureStage = 'first_heartbeat';
     const doctor = await waitForFirstHeartbeat({ scheduler, reviewedRelease });
     // A newly reviewed producer cannot be fully healthy until it has published
     // its first same-release projection. Build the typed observation first so
     // assessActivationHealth can admit only the closed read-only bootstrap
     // reasons; malformed or broader failing doctor output still rolls back.
+    failureStage = 'health_assessment';
     requireCondition(doctor?.observation && typeof doctor.observation === 'object', 'scheduler_activation_failed');
     requireCondition(typeof filesystem.writeHealthObservation === 'function', 'scheduler_activation_failed');
     const observation = buildInstalledRuntimeHealthObservation({ manifest: validated, reviewedRelease, doctor });
     const activationHealth = assessActivationHealth(observation, reviewedRelease);
+    failureStage = 'publish_health';
     await filesystem.writeHealthObservation(observation);
     await phase('doctor_passed');
     await phase('complete');
@@ -143,10 +155,12 @@ async function activateTrackedRuntimeRelease({ manifest, reviewedRelease, schedu
       throw new RuntimeInstallationError('scheduler_rollback_failed');
     }
     const reason = ACTIVATION_FAILURE_REASONS.has(error?.code) ? error.code : 'scheduler_activation_failed';
-    return Object.freeze({ disposition: 'rolled_back', reason, manifestSha256: validated.manifestSha256 });
+    return Object.freeze({ disposition: 'rolled_back', reason,
+      failureStage: ACTIVATION_FAILURE_STAGES.has(failureStage) ? failureStage : 'health_assessment',
+      manifestSha256: validated.manifestSha256 });
   }
 }
 
 module.exports = { INSTALLATION_SCHEMA, RuntimeInstallationError, activateTrackedRuntimeRelease,
   assessActivationHealth, hasFirstHeartbeat, waitForFirstHeartbeat, validateRuntimeInstallationManifest,
-  ACTIVATION_HEARTBEAT_MAXIMUM_SECONDS, ACTIVATION_HEARTBEAT_POLL_MILLISECONDS };
+  ACTIVATION_FAILURE_STAGES, ACTIVATION_HEARTBEAT_MAXIMUM_SECONDS, ACTIVATION_HEARTBEAT_POLL_MILLISECONDS };

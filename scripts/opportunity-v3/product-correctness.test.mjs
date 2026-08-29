@@ -529,6 +529,8 @@ const checks = {
       journal: { recover: async () => calls.push('recover'), begin: async () => calls.push('captured'),
         write: async (phase) => calls.push(phase), rollback: async () => calls.push('journal-rollback') } });
     assert.equal(result.disposition, 'rolled_back'); assert.ok(calls.indexOf('restore-scheduler') < calls.indexOf('restore-pointer'));
+    assert.equal(result.failureStage, 'health_assessment',
+      'activation rollback reports a closed operational stage without exposing diagnostics or credentials');
     assert.ok(calls.indexOf('restore-pointer') < calls.indexOf('cleanup'));
     assert.ok(calls.indexOf('cleanup') < calls.indexOf('journal-rollback'));
     assert.deepEqual(calls.slice(0, 4), ['recover','captured','stage','verify']);
