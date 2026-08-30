@@ -1,8 +1,13 @@
 import { randomUUID } from 'crypto';
+import { normalizeRelatedStockSymbols } from './stock-symbol';
+import { calculateTechnicalFeatures } from './technical-features-v2';
+import { classifyCandidateStage, STAGE_RULESET_VERSION, type MarketRiskRegime } from './stage-classifier';
 import { existsSync, readFileSync } from 'fs';
 import path from 'path';
 import { Client as LineClient } from '@line/bot-sdk';
 import { getSupabaseServerClient } from './supabase-server';
+import { loadLatestSourceRunLedger } from './source-run-ledger';
+import { CLOUD_SOURCE_CONNECTORS, sourceExecutionPolicy } from './source-policy';
 import { isDemoMode } from './data-mode';
 import { mergeAuthoritativeDeepDiveLeaves } from './deep-dive-merge';
 import type {
@@ -53,6 +58,7 @@ import type {
   SourceCoverageView,
   SourceSearchPayload,
   SourceSearchResultItem,
+  SourceSignalCard,
   StockDeepDivePayload,
   StockDeepDivePendingPayload,
   StockInsightPayload,
@@ -4132,7 +4138,7 @@ function brokerEvidenceSearchStatusFromRows(
   if (!rows.length) {
     return {
       status: fallbackSummary ? 'pending' : 'not_attempted',
-      summary: fallbackSummary || '尚未看到本輪券商/外資搜尋紀錄，下一輪重估需補鉅亨外資評等、FactSet、MoneyDJ 與社群券商線索。',
+      summary: fallbackSummary || '尚未看到本輪授權券商研究紀錄；下一輪重估需補授權 API、使用者有權上傳的 PDF、公司 IR 或法說資料。',
       lastAttemptAt: null,
       nextAttemptAt: nextAttemptAt || null,
       sourceCount: 0,
@@ -5010,20 +5016,22 @@ function buildRecommendationConfidence(
 
 function buildRadarTechnicalSnapshotFromSignalRow(row: Row | null | undefined): StockDeepDivePayload['technicalSnapshot'] | null {
   if (!row) return null;
-  const ma20 = row.ma_short != null ? toFiniteNumber(row.ma_short, Number.NaN) : Number.NaN;
-  const ma60 = row.ma_mid != null ? toFiniteNumber(row.ma_mid, Number.NaN) : Number.NaN;
-  const ma120 = row.ma_long != null ? toFiniteNumber(row.ma_long, Number.NaN) : Number.NaN;
+  // The legacy stock_signals schema stores 5/10/20-day averages in the
+  // short/mid/long columns.  Never relabel them as MA20/60/120.
+  const ma5 = row.ma_short != null ? toFiniteNumber(row.ma_short, Number.NaN) : Number.NaN;
+  const ma10 = row.ma_mid != null ? toFiniteNumber(row.ma_mid, Number.NaN) : Number.NaN;
+  const ma20 = row.ma_long != null ? toFiniteNumber(row.ma_long, Number.NaN) : Number.NaN;
   const rsi = row.rsi != null ? toFiniteNumber(row.rsi, Number.NaN) : Number.NaN;
   const macd = row.macd != null ? toFiniteNumber(row.macd, Number.NaN) : Number.NaN;
   const macdSignal = row.macd_signal != null ? toFiniteNumber(row.macd_signal, Number.NaN) : Number.NaN;
-  const hasTechnical = [ma20, ma60, ma120, rsi, macd, macdSignal].some((value) => Number.isFinite(value));
+  const hasTechnical = [ma5, ma10, ma20, rsi, macd, macdSignal].some((value) => Number.isFinite(value));
   if (!hasTechnical) return null;
   return {
-    ma5: null,
-    ma10: null,
+    ma5: Number.isFinite(ma5) ? ma5 : null,
+    ma10: Number.isFinite(ma10) ? ma10 : null,
     ma20: Number.isFinite(ma20) ? ma20 : null,
-    ma60: Number.isFinite(ma60) ? ma60 : null,
-    ma120: Number.isFinite(ma120) ? ma120 : null,
+    ma60: null,
+    ma120: null,
     ma240: null,
     rsi: Number.isFinite(rsi) ? rsi : null,
     macd: Number.isFinite(macd) ? macd : null,
@@ -5732,7 +5740,7 @@ function buildMarketValuationAdjustment(params: {
       'Forward EPS 或 normalized PE/PB 有外部佐證',
       '券商 consensus / target PE 上修',
       '具名客戶、訂單、法說或官方公告補強',
-      brokerHit ? null : '美系券商 / FactSet / 鉅亨外資評等或 MoneyDJ 外資摘要命中',
+      brokerHit ? null : '授權券商 API、使用者有權上傳的 PDF 或公司 IR 命中',
       scenarioScore != null && scenarioScore >= 85 ? null : '情境 checklist 達成率提高到可升 Base 門檻',
       leadLagSupports ? null : '海外同族群 lead-lag 或台股族群資金輪動確認',
     ],
@@ -6736,7 +6744,7 @@ function buildThemeNextRefreshPlan(
   });
   plans.push({
     sourceGroup: '券商/外資報告',
-    action: '搜尋外資評等、FactSet、MoneyDJ/鉅亨/UDN 目標價與 EPS 調整。',
+    action: '檢查授權券商 API、使用者有權上傳的 PDF、公司 IR 與法說中的目標價及 EPS 調整。',
     reason: '券商目標價或 EPS 上修可成為重估 ledger 的佐證。',
     status: missingSources.some((item) => /券商|外資|公開研究/.test(item)) ? 'scheduled' : 'complete',
   });
@@ -9375,7 +9383,7 @@ function applyRecommendationGateMetadata(rec: RecommendationCard): Recommendatio
 	    nextEvidenceSearchPlan:
 	      rec.nextEvidenceSearchPlan ||
 	      (staleReason || status === 'needs_revaluation' || status === 'scenario_only'
-	        ? ['鉅亨外資評等 / FactSet / MoneyDJ / UDN 券商摘要', '最新月營收、EPS、毛利率與 Forward PE', 'Threads / Instagram / Telegram / PTT 社群券商轉述', '具名客戶、訂單、法說或官方公告']
+	        ? ['授權券商 API / 使用者有權上傳 PDF / 公司 IR', '最新月營收、EPS、毛利率與 Forward PE', 'Threads / Instagram / Telegram / PTT 社群券商轉述', '具名客戶、訂單、法說或官方公告']
 	        : null),
     revaluationJobSummary:
       indexed.revaluationJobSummary ||
@@ -11137,8 +11145,6 @@ async function recordSourceHealth(sourceKey: string, parseSuccessRatio: number, 
 }
 
 type TWSERow = { Code: string; ClosingPrice: string; OpeningPrice: string; HighestPrice: string; LowestPrice: string; TradeVolume: string; Change: string };
-type YahooChartBar = { time: string; open: number; high: number; low: number; close: number };
-
 let twseCacheData: TWSERow[] | null = null;
 let twseCacheTime = 0;
 
@@ -11174,53 +11180,6 @@ async function fetchTWSELivePrice(symbol: string): Promise<{ price: number; open
   const change = parseFloat(String(row.Change).replace(/[^0-9.-]/g, '')) || 0;
   if (!Number.isFinite(price) || price <= 0) return null;
   return { price, open: Number.isFinite(open) ? open : price, high: Number.isFinite(high) ? high : price, low: Number.isFinite(low) ? low : price, volume: Number.isFinite(volume) ? volume : 0, change };
-}
-
-async function fetchYahooHistChart(symbol: string): Promise<YahooChartBar[] | null> {
-  const suffixCandidates = [`${symbol}.TW`, `${symbol}.TWO`, symbol];
-  for (const ticker of suffixCandidates) {
-    try {
-      const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=2y`;
-      const res = await fetch(url, {
-        headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0', accept: 'application/json' },
-        signal: AbortSignal.timeout(12_000),
-      });
-      if (!res.ok) continue;
-      const json = await res.json() as {
-        chart?: {
-          result?: Array<{
-            timestamp?: number[];
-            indicators?: { quote?: Array<{ open?: number[]; high?: number[]; low?: number[]; close?: number[] }> };
-          }>;
-        };
-      };
-      const result = json.chart?.result?.[0];
-      if (!result) continue;
-      const timestamps = result.timestamp || [];
-      const quote = result.indicators?.quote?.[0];
-      if (!quote || timestamps.length === 0) continue;
-      const bars: YahooChartBar[] = [];
-      for (let i = 0; i < timestamps.length; i++) {
-        const close = quote.close?.[i];
-        const open = quote.open?.[i];
-        const high = quote.high?.[i];
-        const low = quote.low?.[i];
-        if (!Number.isFinite(close) || !close) continue;
-        const date = new Date(timestamps[i] * 1000).toISOString().slice(0, 10);
-        bars.push({
-          time: date,
-          open: Number.isFinite(open) && open ? Number(open.toFixed(2)) : Number(close.toFixed(2)),
-          high: Number.isFinite(high) && high ? Number(high.toFixed(2)) : Number(close.toFixed(2)),
-          low: Number.isFinite(low) && low ? Number(low.toFixed(2)) : Number(close.toFixed(2)),
-          close: Number(close.toFixed(2)),
-        });
-      }
-      if (bars.length > 0) return bars;
-    } catch {
-      continue;
-    }
-  }
-  return null;
 }
 
 async function ensureAgentProfiles() {
@@ -11444,7 +11403,7 @@ function dedupeChartRows(rows: Row[]) {
     .map((entry) => entry[1]);
 }
 
-function mapResearchMemo(raw: Row): ResearchMemoView {
+function mapResearchMemo(raw: Row, stockSymbolById: ReadonlyMap<string, string> = new Map()): ResearchMemoView {
   return {
     title: String(raw.title || ''),
     slug: String(raw.slug || ''),
@@ -11454,7 +11413,7 @@ function mapResearchMemo(raw: Row): ResearchMemoView {
     recommendationState: raw.recommendation_state ? normalizeRecommendationState(raw.recommendation_state) : null,
     catalystCalendar: Array.isArray(raw.catalyst_calendar) ? (raw.catalyst_calendar as Array<Record<string, unknown>>) : [],
     entryExitRules: (raw.entry_exit_rules as Record<string, unknown>) || {},
-    relatedSymbols: Array.isArray(raw.related_symbols) ? raw.related_symbols.map((item) => String(item)) : [],
+    relatedSymbols: normalizeRelatedStockSymbols(raw.related_symbols, stockSymbolById),
   };
 }
 
@@ -12217,29 +12176,8 @@ function fallbackDailyDashboardData() {
 }
 
 async function fetchHistoricalPrices(symbol: string): Promise<Array<{ time: string; open: number; high: number; low: number; close: number }> | null> {
-  try {
-    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}.TW?range=2y&interval=1d`;
-    const res = await fetch(url, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; StockInsider/1.0)' },
-      next: { revalidate: 86400 },
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
-    const result = data?.chart?.result?.[0];
-    if (!result?.timestamp || !result?.indicators?.quote?.[0]) return null;
-    const q = result.indicators.quote[0];
-    return (result.timestamp as number[])
-      .map((ts: number, i: number) => ({
-        time: new Date(ts * 1000).toISOString().slice(0, 10),
-        open: round(q.open?.[i] ?? 0, 2),
-        high: round(q.high?.[i] ?? 0, 2),
-        low: round(q.low?.[i] ?? 0, 2),
-        close: round(q.close?.[i] ?? 0, 2),
-      }))
-      .filter((c) => c.close > 0);
-  } catch {
-    return null;
-  }
+  const rows = await fetchTwStockDailyBars(symbol, DEEP_DIVE_DAILY_BAR_BUFFER).catch(() => null);
+  return rows?.map(({ time, open, high, low, close }) => ({ time, open, high, low, close })) || null;
 }
 
 async function fetchStockQuote(symbol: string): Promise<{ name: string; price: number; changePct: number; volume: number | null } | null> {
@@ -12253,25 +12191,7 @@ async function fetchStockQuote(symbol: string): Promise<{ name: string; price: n
     };
   }
 
-  try {
-    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}.TW?range=1d&interval=1d`;
-    const res = await fetch(url, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; StockInsider/1.0)' },
-      next: { revalidate: 3600 },
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
-    const meta = data?.chart?.result?.[0]?.meta;
-    if (!meta) return null;
-    return {
-      name: meta.shortName || meta.symbol || symbol,
-      price: meta.regularMarketPrice ?? 0,
-      changePct: meta.regularMarketChangePercent ?? 0,
-      volume: meta.regularMarketVolume ?? null,
-    };
-  } catch {
-    return null;
-  }
+  return null;
 }
 
 async function fallbackStockInsight(symbol: string): Promise<StockInsightPayload | null> {
@@ -13151,10 +13071,10 @@ async function getLatestStockRecord(symbol: string) {
 
 async function getMinimalStockInsight(stock: Row, symbol: string): Promise<StockInsightPayload> {
   const supabaseServer = getSupabaseServerClient();
-  const [quote, liveSnapshot, yahooChartRes, signalRes] = await Promise.all([
+  const [quote, liveSnapshot, twChartRes, signalRes] = await Promise.all([
     fetchStockQuote(symbol),
     fetchTWSELivePrice(symbol).catch(() => null),
-    fetchYahooHistChart(symbol).catch(() => null),
+    withFallbackTimeout(fetchTwStockDailyBars(symbol, DEEP_DIVE_DAILY_BAR_BUFFER).catch(() => null), null, 4500),
     withQueryTimeout(
       supabaseServer
         .from('stock_signals')
@@ -13168,12 +13088,8 @@ async function getMinimalStockInsight(stock: Row, symbol: string): Promise<Stock
   ]);
   const signalRows = (signalRes.data as Row[]) || [];
   const signalChart = buildChartFromSignalRows(signalRows);
-  const twChartRes =
-    yahooChartRes && yahooChartRes.length >= 20
-      ? null
-      : await withFallbackTimeout(fetchTwStockDailyBars(symbol, DEEP_DIVE_DAILY_BAR_BUFFER).catch(() => null), null, 4500);
   const twChart = twChartRes && twChartRes.length > 0 ? twChartRes.map(({ time, open, high, low, close }) => ({ time, open, high, low, close })) : [];
-  const chart = yahooChartRes && yahooChartRes.length > 0 ? yahooChartRes : twChart.length > 0 ? twChart : signalChart;
+  const chart = twChart.length > 0 ? twChart : signalChart;
   const closes = chart.map((item) => item.close).filter((value) => Number.isFinite(value) && value > 0);
   const technical = closes.length >= 2 ? computeTechnicalSnapshot(closes) : null;
   const now = nowIso();
@@ -13186,16 +13102,9 @@ async function getMinimalStockInsight(stock: Row, symbol: string): Promise<Stock
     asOf: now,
     freshness: quote ? 'fresh' : 'missing',
     chart,
-    chartSource:
-      yahooChartRes && yahooChartRes.length > 0
-        ? 'yahoo'
-        : twChart.length > 0
-          ? 'twstock'
-          : chart.length > 0
-            ? 'stock_signals'
-            : 'minimal',
+    chartSource: twChart.length > 0 ? 'twstock' : chart.length > 0 ? 'stock_signals' : 'minimal',
     chartMissingReason:
-      chart.length > 0 ? null : '目前 Yahoo、node-twstock 與 stock_signals 都沒有足夠的日線資料，暫時只能先顯示輕量快照。',
+      chart.length > 0 ? null : '目前 TWSE／TPEx 與 stock_signals 都沒有足夠日線，暫時只能先顯示輕量快照。',
     indicators: {
       maShort: technical?.maShort ?? null,
       maMid: technical?.maMid ?? null,
@@ -13738,7 +13647,12 @@ async function getRadarPayload(windowType: ThemeHeatCard['windowType']): Promise
       ...fallbackOpportunities90dCandidatesDeduped,
     ]);
 
-    const memoRows = ((memosRes.data as Row[]) || []).map(mapResearchMemo);
+    const researchSymbolByStockId = new Map(
+      syncedRecommendationRowsWithDate
+        .map((item) => [String(item.row.stock_id || ''), String(item.mapped.symbol || '')] as const)
+        .filter(([stockId, symbol]) => Boolean(stockId && symbol)),
+    );
+    const memoRows = ((memosRes.data as Row[]) || []).map((row) => mapResearchMemo(row, researchSymbolByStockId));
     const reportKinds: ResearchMemoView['reportKind'][] = windowType === 'weekly' ? ['weekly_conviction', 'hot_theme', 'deep_dive'] : ['daily_radar', 'hot_theme', 'deep_dive'];
     const reports = selectUniqueResearchReports(memoRows.filter((memo) => reportKinds.includes(memo.reportKind)), 6);
 
@@ -13905,8 +13819,7 @@ async function getRadarPayload(windowType: ThemeHeatCard['windowType']): Promise
       .filter((item) => Boolean(item.chineseName))
       .filter((item) => !recommendationIsOverScenarioTarget(item));
     const finalDiscoveredStocks = (canonicalDiscoveredStocks.length > 0 ? canonicalDiscoveredStocks : finalEarlyWatchlist.map(earlyWatchToDiscovered))
-      .filter((item) => Boolean(item.chineseName))
-      .filter((item) => item.targetPrice != null && item.expectedUpsidePct != null);
+      .filter((item) => Boolean(item.chineseName));
 
     const lastUpdatedAt = (latestPipelineRes.data?.[0] as Row | undefined)?.finished_at
       ? String((latestPipelineRes.data?.[0] as Row).finished_at)
@@ -14021,6 +13934,41 @@ export async function getDailyRadarData(): Promise<RadarDailyPayload> {
   return getRadarPayload('daily');
 }
 
+export async function getPersistedRadarStages(sourceSignals: SourceSignalCard[]): Promise<NonNullable<RadarDailyPayload['stages']>> {
+  const found = [...sourceSignals];
+  if (found.length === 0 || shouldUseDemoFallback()) return { found, waiting: [], actionable: [] };
+  try {
+    const supabase = getSupabaseServerClient();
+    const snapshotsRes = await supabase
+      .from('candidate_daily_stage_snapshots')
+      .select('stock_id,lifecycle_stage,session_date')
+      .order('session_date', { ascending: false })
+      .limit(5000);
+    if (snapshotsRes.error) throw new Error(snapshotsRes.error.message);
+    const latestStageByStockId = new Map<string, string>();
+    for (const row of (snapshotsRes.data as Row[]) || []) {
+      const stockId = String(row.stock_id || '');
+      if (stockId && !latestStageByStockId.has(stockId)) latestStageByStockId.set(stockId, String(row.lifecycle_stage || 'found'));
+    }
+    const stockIds = [...latestStageByStockId.keys()];
+    const stocksRes = stockIds.length > 0
+      ? await supabase.from('stocks').select('id,symbol').in('id', stockIds)
+      : { data: [], error: null };
+    if (stocksRes.error) throw new Error(stocksRes.error.message);
+    const stageBySymbol = new Map(((stocksRes.data as Row[]) || []).map((row) => [
+      String(row.symbol || '').toUpperCase(),
+      latestStageByStockId.get(String(row.id || '')) || 'found',
+    ]));
+    return {
+      found,
+      waiting: found.filter((signal) => stageBySymbol.get(signal.symbol.toUpperCase()) === 'waiting'),
+      actionable: found.filter((signal) => stageBySymbol.get(signal.symbol.toUpperCase()) === 'actionable'),
+    };
+  } catch {
+    return { found, waiting: [], actionable: [] };
+  }
+}
+
 export async function getHotRadarData(): Promise<RadarDailyPayload> {
   return getRadarPayload('three_day');
 }
@@ -14115,8 +14063,11 @@ export async function getThemeDetail(themeKey: string): Promise<ThemeDetailPaylo
       })
       .slice(0, 10);
 
+    const stockSymbolById = new Map(
+      ((stocksRes.data as Row[]) || []).map((row) => [String(row.id || ''), String(row.symbol || '')] as const),
+    );
     const reports = ((memosRes.data as Row[]) || [])
-      .map(mapResearchMemo)
+      .map((row) => mapResearchMemo(row, stockSymbolById))
       .filter((memo) => memo.relatedSymbols.some((symbol) => themeSymbols.has(symbol)) || memo.slug.includes(themeKey))
       .slice(0, 8);
 
@@ -15506,7 +15457,7 @@ export async function getStockDeepDive(symbol: string): Promise<StockDeepDivePay
         summary:
           brokerViews.length > 0
             ? `已整理 ${brokerViews.length} 筆公開券商/外資評等或目標價，僅作估值佐證與 consensus，不單獨決定推薦。`
-            : '尚未命中公開外資/券商評等；將持續搜尋鉅亨外資評等、MoneyDJ/新聞摘要與手動匯入報告。',
+            : '尚未命中可合法使用的外資/券商評等；將等待授權 API、使用者有權上傳的 PDF 或公開公司 IR。',
         sourceTypes: ['broker_report', 'public_research'],
         searched: true,
         matched: brokerViews.length > 0,
@@ -16184,9 +16135,9 @@ export async function getStockDeepDive(symbol: string): Promise<StockDeepDivePay
                   entryExitRules: {},
                   relatedSymbols: [normalizedSymbol],
                 }
-              : mapResearchMemo(memo))
+              : mapResearchMemo(memo, new Map([[String(stock.id || ''), normalizedSymbol]])))
           : memo
-            ? mapResearchMemo(memo)
+            ? mapResearchMemo(memo, new Map([[String(stock.id || ''), normalizedSymbol]]))
             : ((reportRes.data?.[0] as Row | undefined)
                 ? {
                     title: String((reportRes.data?.[0] as Row).title || ''),
@@ -16281,7 +16232,7 @@ type StockResearchRefreshResult = {
   }>;
 };
 
-const SOURCE_SYNC_CONNECTORS = ['investanchors', 'threads', 'instagram', 'telegram', 'ptt', 'bulltalk', 'googlenews', 'anue', 'udn', 'mobile01', 'twse_insider'] as const;
+const SOURCE_SYNC_CONNECTORS = ['threads', 'telegram', 'ptt', 'bulltalk', 'gdelt', 'twse_insider'] as const;
 
 function compactTargetSnapshot(payload: StockDeepDivePayload | null) {
   if (!payload) return null;
@@ -16310,10 +16261,10 @@ async function refreshSingleStockMarketData(symbol: string) {
   const supabaseServer = getSupabaseServerClient();
   const now = nowIso();
   const asOfDate = asIsoDate(now);
-  const [twQuote, liveSnapshot, historicalBars, revenueData, valuesData, epsData, institutionalData, marginTrades, shortSales, officialSbl, yahooFundamentalRes] = await Promise.all([
+  const [twQuote, liveSnapshot, historicalBars, revenueData, valuesData, epsData, institutionalData, marginTrades, shortSales, officialSbl] = await Promise.all([
     fetchTwStockQuote(normalizedSymbol).catch(() => null),
     fetchTWSELivePrice(normalizedSymbol).catch(() => null),
-    fetchYahooHistChart(normalizedSymbol).catch(() => null),
+    fetchTwStockDailyBars(normalizedSymbol, DEEP_DIVE_DAILY_BAR_BUFFER).catch(() => null),
     fetchTwStockRevenue(normalizedSymbol).catch(() => null),
     fetchTwStockValues(normalizedSymbol).catch(() => null),
     fetchTwStockEpsTtm(normalizedSymbol).catch(() => null),
@@ -16321,12 +16272,6 @@ async function refreshSingleStockMarketData(symbol: string) {
     fetchTwStockMarginTrades(normalizedSymbol).catch(() => null),
     fetchTwStockShortSales(normalizedSymbol).catch(() => null),
     fetchTwseOfficialSblShortSales(normalizedSymbol).catch(() => null),
-    fetch(
-      `https://query1.finance.yahoo.com/v10/finance/quoteSummary/${normalizedSymbol}.TW?modules=financialData,defaultKeyStatistics,summaryDetail`,
-      { headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0' }, signal: AbortSignal.timeout(10_000) },
-    )
-      .then(async (res) => (res.ok ? res.json() : null))
-      .catch(() => null),
   ]);
 
   const quoteName = twQuote?.name || normalizedSymbol;
@@ -16349,7 +16294,7 @@ async function refreshSingleStockMarketData(symbol: string) {
       {
         stock_id: stock.id,
         as_of: now,
-        source: twQuote ? 'node-twstock' : liveSnapshot ? 'twse-openapi' : 'yahoo-finance',
+        source: twQuote ? 'node-twstock' : 'twse-tpex-open-data',
         source_key: `single-stock-refresh:${normalizedSymbol}`,
         price: latestPrice,
         volume: latestVolume,
@@ -16429,10 +16374,8 @@ async function refreshSingleStockMarketData(symbol: string) {
   const pbRatio = valuesData?.pbRatio ?? null;
   const epsTtm = epsData?.epsTtm ?? null;
   const revenueRunRate = revenueData?.revenue != null ? revenueData.revenue * 12 : null;
-  const yahooResult = (yahooFundamentalRes as { quoteSummary?: { result?: Array<{ financialData?: Record<string, number | undefined> }> } } | null)?.quoteSummary?.result?.[0];
-  const yahooFinancialData = yahooResult?.financialData || {};
-  const grossMargin = yahooFinancialData.grossMargins != null ? Number(yahooFinancialData.grossMargins) * 100 : null;
-  const operatingMargin = yahooFinancialData.operatingMargins != null ? Number(yahooFinancialData.operatingMargins) * 100 : null;
+  const grossMargin = null;
+  const operatingMargin = null;
   const hasFundamentalValue = [peRatio, pbRatio, epsTtm, revenueRunRate, grossMargin, operatingMargin].some((value) => value != null && value !== 0);
   if (hasFundamentalValue) {
     await supabaseServer.from('fundamental_snapshots').upsert(
@@ -16445,7 +16388,7 @@ async function refreshSingleStockMarketData(symbol: string) {
         pe_ratio: peRatio,
         pb_ratio: pbRatio,
         revenue_run_rate: revenueRunRate,
-        source_url: `https://finance.yahoo.com/quote/${normalizedSymbol}.TW`,
+        source_url: `https://www.twse.com.tw/zh/trading/historical/bwibbu-day.html?stockNo=${normalizedSymbol}`,
       },
       { onConflict: 'stock_id,as_of_date' },
     );
@@ -16472,7 +16415,9 @@ export async function runStockResearchRefresh(options: {
   const freshnessBefore = deepDiveBefore?.summaryCard?.freshness || 'missing';
   const targetSnapshotBefore = compactTargetSnapshot(deepDiveBefore);
   const latestSourceAtBefore = deepDiveBefore?.targetSnapshot?.latestSourceAt || deepDiveBefore?.summaryCard?.latestSourceAt || null;
-  const requestedConnectors = (options.connectors || SOURCE_SYNC_CONNECTORS).map((item) => String(item));
+  const requestedConnectors = (options.connectors || SOURCE_SYNC_CONNECTORS)
+    .map((item) => String(item))
+    .filter((connector) => sourceExecutionPolicy(connector).disposition === 'active');
   const queuedSteps = ['source_sync', 'single_stock_market_refresh', 'thesis_refresh', 'research_report_build', 'deep_dive_build'];
   if (options.dryRun) {
     return {
@@ -16762,20 +16707,20 @@ export async function runRevaluationQueue(options?: {
           stock_id: stockId,
           symbol,
           job_id: jobId,
-          search_surface: 'public_broker_sources',
-          search_keywords: ['鉅亨外資評等', 'FactSet', 'MoneyDJ', '目標價', 'Forward EPS', symbol],
+          search_surface: 'authorized_broker_sources',
+          search_keywords: ['授權券商 API', '使用者上傳 PDF', '公司 IR', '目標價', 'Forward EPS', symbol],
           status: brokerRecordsAfter > brokerRecordsBefore ? 'hit' : 'miss',
           records_found: Math.max(0, brokerRecordsAfter - brokerRecordsBefore),
           records_written: Math.max(0, brokerRecordsAfter - brokerRecordsBefore),
           summary:
             brokerRecordsAfter > brokerRecordsBefore
-              ? `公開券商/FactSet 來源新增 ${brokerRecordsAfter - brokerRecordsBefore} 筆。`
-              : '公開券商/FactSet 來源本輪未新增可驗證資料。',
+              ? `授權券商或使用者提供來源新增 ${brokerRecordsAfter - brokerRecordsBefore} 筆。`
+              : '授權券商或使用者提供來源本輪未新增可驗證資料。',
           metadata: { before: brokerRecordsBefore, after: brokerRecordsAfter },
         });
       }
 
-      const connectors = options?.connectors || ['telegram', 'ptt', 'bulltalk', 'anue', 'udn'];
+      const connectors = options?.connectors || ['telegram', 'ptt', 'bulltalk', 'gdelt', 'twse_insider'];
       const refreshResult = await runStockResearchRefresh({
         symbol,
         force: true,
@@ -18434,6 +18379,27 @@ export async function searchSourceDocuments(params?: {
   const toIso = parseDateBoundary(to, true);
 
   const supabase = getSupabaseServerClient();
+  const themeRes = themeKey
+    ? await supabase
+        .from('theme_heat')
+        .select('related_symbols')
+        .eq('theme_key', themeKey)
+        .order('as_of_date', { ascending: false })
+        .limit(1)
+    : { data: [] as unknown[], error: null };
+  if (themeRes.error) throw new Error(themeRes.error.message);
+  const themeSymbols = (((themeRes.data as Row[])?.[0]?.related_symbols as unknown[]) || [])
+    .map(String)
+    .filter((value) => /^[A-Z0-9.-]{1,20}$/u.test(value));
+  const evidenceVerificationStatus: VerificationStatus | null = evidenceLevel === '估值層'
+    ? '已證實'
+    : evidenceLevel === '佐證層'
+      ? '部分證實'
+      : evidenceLevel === '傳言層'
+        ? '未證實'
+        : null;
+  const effectiveVerificationStatus = verificationStatus || evidenceVerificationStatus;
+
   let query = supabase
     .from('source_raw_documents')
     .select('id,platform,title,summary,document_url,published_at,collected_at,symbols,confidence,source_entity_id,metadata,source_entities(display_name,entity_type)', { count: 'estimated' })
@@ -18455,38 +18421,48 @@ export async function searchSourceDocuments(params?: {
       : `title.ilike.%${escaped}%,summary.ilike.%${escaped}%`;
     query = query.or(fields);
   }
+  if (symbol) query = query.contains('symbols', [symbol]);
+  if (effectiveVerificationStatus === '已證實') query = query.gte('confidence', 0.65);
+  if (effectiveVerificationStatus === '部分證實') query = query.gte('confidence', 0.35).lt('confidence', 0.65);
+  if (effectiveVerificationStatus === '未證實') query = query.or('confidence.is.null,confidence.lt.0.35');
+  if (themeSymbols.length > 0) {
+    query = query.or(themeSymbols.map((item) => `symbols.cs.${JSON.stringify([item])}`).join(','));
+  }
 
   const start = (page - 1) * pageSize;
   const end = start + pageSize - 1;
-  const needsClientSideFiltering = Boolean(symbol || verificationStatus || themeKey || runId || evidenceLevel);
+  const needsClientSideFiltering = Boolean(runId);
   const fetchStart = needsClientSideFiltering ? 0 : start;
-  const fetchEnd = needsClientSideFiltering ? Math.max(399, end) : end;
-  const [docsRes, runsRes, auditsRes, themeRes] = await Promise.all([
+  const fetchEnd = needsClientSideFiltering ? Math.max(9_999, end) : end;
+  let auditsQuery = supabase
+    .from('source_audits')
+    .select('id,connector_run_id,platform,target_url,status,notes,created_at,snapshot_path,screenshot_path')
+    .order('created_at', { ascending: false });
+  auditsQuery = runId ? auditsQuery.eq('connector_run_id', runId).limit(500) : auditsQuery.limit(20);
+  const [docsRes, runsRes, auditsRes, coverageRes, sourceRunLedger] = await Promise.all([
     query.range(fetchStart, fetchEnd),
     supabase
       .from('connector_runs')
       .select('id,connector_name,platform,status,records_written,error_summary,started_at,finished_at')
       .order('started_at', { ascending: false })
       .limit(20),
-    supabase
-      .from('source_audits')
-      .select('id,connector_run_id,platform,target_url,status,notes,created_at,snapshot_path,screenshot_path')
-      .order('created_at', { ascending: false })
-      .limit(20),
-    themeKey
-      ? supabase
-          .from('theme_heat')
-          .select('related_symbols')
-          .eq('theme_key', themeKey)
-          .order('as_of_date', { ascending: false })
-          .limit(1)
-      : Promise.resolve({ data: [], error: null } as unknown as { data: unknown[]; error: null }),
+    auditsQuery,
+    supabase.rpc('source_document_coverage', {
+      p_from: fromIso,
+      p_to: toIso,
+      p_platform: platform && platform !== 'all' ? platform : null,
+      p_query: q,
+      p_symbol: symbol,
+      p_verification_status: effectiveVerificationStatus,
+      p_theme_symbols: themeSymbols.length > 0 ? themeSymbols : null,
+    }),
+    loadLatestSourceRunLedger(),
   ]);
   const { data, error, count } = docsRes;
   if (error) throw new Error(error.message);
   if (runsRes.error) throw new Error(runsRes.error.message);
   if (auditsRes.error) throw new Error(auditsRes.error.message);
-  if (themeRes.error) throw new Error(themeRes.error.message);
+  if (coverageRes.error) throw new Error(coverageRes.error.message);
 
   let mapped = ((data as Row[]) || [])
     .filter((row) => !isSourceDocNoise(row))
@@ -18538,15 +18514,6 @@ export async function searchSourceDocuments(params?: {
     });
   }
 
-  if (themeKey) {
-    const themeSymbols = new Set(
-      (((themeRes.data as Row[])?.[0]?.related_symbols as unknown[]) || []).map(String).filter(Boolean),
-    );
-    if (themeSymbols.size > 0) {
-      mapped = mapped.filter((item) => item.symbols.some((sym) => themeSymbols.has(sym)));
-    }
-  }
-
   if (runId) {
     const matchingAudits = ((auditsRes.data as Row[]) || []).filter((row) => String(row.connector_run_id || '') === runId);
     const targetUrls = matchingAudits.map((row) => String(row.target_url || '')).filter(Boolean);
@@ -18558,7 +18525,6 @@ export async function searchSourceDocuments(params?: {
     });
   }
 
-  const coverageMap = new Map<string, number>();
   mapped = mapped.sort((a, b) => {
     const aTs = a.publishedAt || a.collectedAt;
     const bTs = b.publishedAt || b.collectedAt;
@@ -18566,10 +18532,6 @@ export async function searchSourceDocuments(params?: {
   });
   const filteredTotal = mapped.length;
   const pagedItems = needsClientSideFiltering ? mapped.slice(start, start + pageSize) : mapped;
-
-  for (const row of pagedItems) {
-    coverageMap.set(row.platform, (coverageMap.get(row.platform) || 0) + 1);
-  }
 
   return {
     page,
@@ -18587,10 +18549,13 @@ export async function searchSourceDocuments(params?: {
       to,
     },
     latestSourceAt: mapped[0]?.publishedAt || mapped[0]?.collectedAt || null,
-    coverage: Array.from(coverageMap.entries())
-      .map(([name, c]) => ({ platform: name, count: c }))
-      .sort((a, b) => b.count - a.count),
+    coverage: ((coverageRes.data as Row[]) || []).map((row) => ({
+      platform: String(row.platform || ''),
+      count: Number(row.count || 0),
+    })),
+    coverageScope: 'complete_filtered_result',
     items: pagedItems,
+    sourceRunLedger,
     connectorStatus: (await getConnectorStatusSummary()).map(compactSourceSearchConnectorStatus),
     recentRuns: ((runsRes.data as Row[]) || []).map((row) => ({
       id: String(row.id || ''),
@@ -18734,28 +18699,20 @@ export async function getStockInsight(symbol: string): Promise<StockInsightPaylo
     const latestSignal = (signalRes.data?.[0] as Row | undefined) || null;
     if (!latestSignal) return null;
 
-    // Try real Yahoo Finance OHLCV first; fallback to stored/synthetic bars from stock_signals.
-    const yahooChart = stock.market === 'TW' ? await fetchYahooHistChart(String(stock.symbol)).catch(() => null) : null;
+    // Official TWSE/TPEx daily bars are authoritative; stored signals are the only fallback.
+    const officialDailyBars = stock.market === 'TW'
+      ? await withFallbackTimeout(fetchTwStockDailyBars(String(stock.symbol), DEEP_DIVE_DAILY_BAR_BUFFER).catch(() => null), null, 4500)
+      : null;
     let chart: StockInsightPayload['chart'];
     let chartSource: StockInsightPayload['chartSource'] = 'missing';
     let chartMissingReason: string | null = null;
-    if (yahooChart && yahooChart.length >= 5) {
-      chart = yahooChart.slice(-DEEP_DIVE_DAILY_BAR_TARGET);
-      chartSource = 'yahoo';
+    if (officialDailyBars && officialDailyBars.length >= 5) {
+      chart = officialDailyBars.slice(-DEEP_DIVE_DAILY_BAR_TARGET).map(({ time, open, high, low, close }) => ({ time, open, high, low, close }));
+      chartSource = 'twstock';
     } else {
-      const twDailyBars =
-        stock.market === 'TW'
-          ? await withFallbackTimeout(fetchTwStockDailyBars(String(stock.symbol), DEEP_DIVE_DAILY_BAR_BUFFER).catch(() => null), null, 4500)
-          : null;
-      if (twDailyBars && twDailyBars.length >= 5) {
-        chart = twDailyBars.slice(-DEEP_DIVE_DAILY_BAR_TARGET).map(({ time, open, high, low, close }) => ({ time, open, high, low, close }));
-        chartSource = 'twstock';
-      } else {
-        chart = buildChartFromSignalRows((signalRes.data as Row[]) || []);
-        chartSource = chart.length > 0 ? 'stock_signals' : 'missing';
-        chartMissingReason =
-          chart.length > 0 ? null : 'Yahoo 歷史 OHLC、node-twstock 與 stock_signals 都沒有足夠日線，暫時無法建立 K 線。';
-      }
+      chart = buildChartFromSignalRows((signalRes.data as Row[]) || []);
+      chartSource = chart.length > 0 ? 'stock_signals' : 'missing';
+      chartMissingReason = chart.length > 0 ? null : 'TWSE／TPEx 與 stock_signals 都沒有足夠日線，暫時無法建立 K 線。';
     }
     const chartCloses = chart.map((item) => item.close).filter((value) => Number.isFinite(value) && value > 0);
     const derivedTechnical = chartCloses.length >= 2 ? computeTechnicalSnapshot(chartCloses) : null;
@@ -18907,26 +18864,32 @@ export async function runIngestionBatch(options?: { dryRun?: boolean }): Promise
   const iso = now.toISOString();
   const asOfDate = asIsoDate(iso);
 
-  const snapshotRows = [
-    {
-      market: 'TW' as const,
-      as_of: iso,
-      source: 'tw-market-public',
-      source_key: 'api.twse.mi-index',
-      sector_flows: { Semiconductors: 0.83, 'AI Servers': 0.71, Shipping: 0.42 },
-      index_state: { taiex: 'bullish', trend_score: 0.74 },
-      source_timestamp: new Date(now.getTime() - 10 * 60 * 1000).toISOString(),
-    },
-    {
-      market: 'US' as const,
-      as_of: iso,
-      source: 'us-market-public',
-      source_key: 'api.stooq.indices',
-      sector_flows: { Technology: 0.68, Healthcare: 0.44, Energy: 0.39 },
-      index_state: { sp500: 'neutral', nasdaq: 'bullish', trend_score: 0.61 },
-      source_timestamp: new Date(now.getTime() - 25 * 60 * 1000).toISOString(),
-    },
-  ];
+  const officialMarketRows = dryRun ? [] : await fetchTWSEAllPrices();
+  const marketMoves = officialMarketRows.flatMap((row) => {
+    const close = Number(String(row.ClosingPrice || '').replace(/,/gu, ''));
+    const change = Number(String(row.Change || '').replace(/[^0-9.-]/gu, ''));
+    return Number.isFinite(close) && close > 0 && Number.isFinite(change) ? [change / Math.max(0.01, close - change)] : [];
+  });
+  const advancingRatio = marketMoves.length > 0 ? marketMoves.filter((value) => value > 0).length / marketMoves.length : null;
+  const marketRegime = advancingRatio == null
+    ? 'unknown'
+    : advancingRatio <= 0.3
+      ? 'breakdown'
+      : advancingRatio <= 0.42
+        ? 'risk_off'
+        : advancingRatio >= 0.58
+          ? 'risk_on'
+          : 'selective';
+  const snapshotRows = officialMarketRows.length > 0 ? [{
+    market: 'TW' as const,
+    as_of: iso,
+    source: 'twse-openapi',
+    source_key: 'api.twse.stock-day-all-breadth',
+    sector_flows: {},
+    index_state: { regime: marketRegime, advancing_ratio: advancingRatio, securities_observed: marketMoves.length },
+    source_timestamp: iso,
+  }] : [];
+  const allowDemoSeedWrites = shouldUseDemoFallback() && process.env.ALLOW_DEMO_SEED_WRITES === 'true';
 
   const stockSeeds = TW_STORY_RESEARCH_SEEDS.map((seed) => ({
     symbol: seed.symbol,
@@ -18939,7 +18902,7 @@ export async function runIngestionBatch(options?: { dryRun?: boolean }): Promise
     volume: seed.volume,
   }));
 
-  const institutionalSeeds = TW_STORY_RESEARCH_SEEDS.map((seed) => ({
+  const institutionalSeeds = (allowDemoSeedWrites ? TW_STORY_RESEARCH_SEEDS : []).map((seed) => ({
     symbol: seed.symbol,
     name: seed.name,
     market: seed.market,
@@ -18950,7 +18913,7 @@ export async function runIngestionBatch(options?: { dryRun?: boolean }): Promise
     thesis_summary: seed.reportSummary,
   }));
 
-  const socialSeeds = TW_STORY_RESEARCH_SEEDS.flatMap((seed) =>
+  const socialSeeds = (allowDemoSeedWrites ? TW_STORY_RESEARCH_SEEDS : []).flatMap((seed) =>
     seed.socialSignals.map((signal) => ({
       symbol: seed.symbol,
       name: seed.name,
@@ -18965,6 +18928,7 @@ export async function runIngestionBatch(options?: { dryRun?: boolean }): Promise
       source_url: signal.sourceUrl || null,
     })),
   );
+  let stockSignalsWritten = dryRun ? stockSeeds.length : 0;
 
   if (!dryRun) {
     await supabaseServer.from('pipeline_runs').insert({
@@ -18992,6 +18956,7 @@ export async function runIngestionBatch(options?: { dryRun?: boolean }): Promise
           { onConflict: 'market,as_of' }
         );
         if (error) throw new Error(error.message);
+        stockSignalsWritten += 1;
       }
 
       for (const seed of stockSeeds) {
@@ -18999,13 +18964,21 @@ export async function runIngestionBatch(options?: { dryRun?: boolean }): Promise
         await recordSourceHealth(seed.source_key, 0.95, 1);
         const stock = await ensureStock(seed.symbol, seed.market, seed.name, seed.sector);
 
-        // Fetch live price from TWSE (TW stocks only); fallback to seed data
-        const liveData = seed.market === 'TW' ? await fetchTWSELivePrice(seed.symbol) : null;
-        const livePrice = liveData?.price ?? seed.prices[seed.prices.length - 1];
-        const liveVolume = liveData?.volume ?? seed.volume;
+        // Fetch licensed official market history; seed prices never qualify as fresh evidence.
+        const [liveData, officialBars] = seed.market === 'TW'
+          ? await Promise.all([
+              fetchTWSELivePrice(seed.symbol).catch(() => null),
+              fetchTwStockDailyBars(seed.symbol, DEEP_DIVE_DAILY_BAR_BUFFER).catch(() => null),
+            ])
+          : [null, null];
+        const officialCloses = (officialBars || []).map((bar) => bar.close).filter((value) => Number.isFinite(value) && value > 0);
+        const livePrice = liveData?.price ?? officialCloses.at(-1) ?? null;
+        if (livePrice == null) continue;
+        const liveVolume = liveData?.volume ?? officialBars?.at(-1)?.volume ?? null;
 
-        // Build realistic price series: replace the last value with live price for technical indicators
-        const priceSeries = [...seed.prices.slice(0, -1), livePrice];
+        const priceSeries = officialCloses.length > 0
+          ? [...officialCloses.slice(0, -1), livePrice]
+          : [livePrice];
         const technical = computeTechnicalSnapshot(priceSeries);
         const sourceTimestamp = liveData
           ? new Date(now.getTime() - 5 * 60 * 1000).toISOString()
@@ -19015,8 +18988,8 @@ export async function runIngestionBatch(options?: { dryRun?: boolean }): Promise
           {
             stock_id: stock.id,
             as_of: iso,
-            source: liveData ? 'twse-openapi' : seed.source,
-            source_key: liveData ? `api.twse.price.${seed.symbol}` : seed.source_key,
+            source: 'twse-tpex-open-data',
+            source_key: `api.twse-tpex.price.${seed.symbol}`,
             price: livePrice,
             volume: liveVolume,
             ma_short: technical.maShort,
@@ -19034,8 +19007,8 @@ export async function runIngestionBatch(options?: { dryRun?: boolean }): Promise
               low: liveData?.low ?? null,
               change: liveData?.change ?? null,
             },
-            technical_meta: { indicator_set: ['MA', 'RSI', 'MACD'], live_price: liveData !== null },
-            freshness_status: freshnessStatus(sourceTimestamp, now),
+            technical_meta: { indicator_set: ['MA5', 'MA10', 'MA20', 'RSI', 'MACD'], live_price: liveData !== null, official_history: Boolean(officialBars) },
+            freshness_status: 'fresh',
             source_timestamp: sourceTimestamp,
             ingested_at: iso,
           },
@@ -19043,31 +19016,62 @@ export async function runIngestionBatch(options?: { dryRun?: boolean }): Promise
         );
         if (error) throw new Error(error.message);
 
-        // Fetch and store Yahoo historical chart bars as individual daily signals (skip today)
-        if (seed.market === 'TW') {
-          const histBars = await fetchYahooHistChart(seed.symbol).catch(() => null);
-          if (histBars && histBars.length > 1) {
-            const barsToStore = histBars.slice(0, -1); // exclude today (already written above)
-            for (const bar of barsToStore) {
+        if (seed.market === 'TW' && officialBars && officialBars.length > 1) {
+            const historicalRows = officialBars.slice(0, -1).map((bar) => {
               const barIso = `${bar.time}T12:00:00.000Z`;
-              await supabaseServer.from('stock_signals').upsert(
-                {
+              return {
                   stock_id: stock.id,
                   as_of: barIso,
-                  source: 'yahoo-finance',
-                  source_key: `api.yahoo.hist.${seed.symbol}`,
+                  source: 'twse-tpex-open-data',
+                  source_key: `api.twse-tpex.hist.${seed.symbol}`,
                   price: bar.close,
                   volume: null,
                   chip_metrics: { open: bar.open, high: bar.high, low: bar.low },
-                  technical_meta: { indicator_set: [], from_yahoo_hist: true },
+                  technical_meta: { indicator_set: [], official_history: true },
                   freshness_status: 'stale',
                   source_timestamp: barIso,
                   ingested_at: iso,
-                },
-                { onConflict: 'stock_id,as_of' }
-              );
-            }
-          }
+                };
+            });
+            const { error: historyError } = await supabaseServer
+              .from('stock_signals')
+              .upsert(historicalRows, { onConflict: 'stock_id,as_of' });
+            if (historyError) throw new Error(historyError.message);
+        }
+
+        if (officialBars && officialBars.length > 0) {
+          const technicalFeatures = calculateTechnicalFeatures(officialBars.map((bar) => ({
+            session: bar.time,
+            high: bar.high,
+            low: bar.low,
+            close: bar.close,
+            volume: bar.volume ?? 0,
+          })));
+          const { error: featureError } = await supabaseServer.from('technical_feature_snapshots').upsert({
+            stock_id: stock.id,
+            session_date: technicalFeatures.sessionDate,
+            close: technicalFeatures.close,
+            volume: technicalFeatures.volume,
+            ma5: technicalFeatures.ma5,
+            ma20: technicalFeatures.ma20,
+            ma60: technicalFeatures.ma60,
+            ma120: technicalFeatures.ma120,
+            ma240: technicalFeatures.ma240,
+            ma60_slope: technicalFeatures.ma60Slope,
+            volume_ratio_20_median: technicalFeatures.volumeRatio20Median,
+            atr14: technicalFeatures.atr14,
+            rsi14: technicalFeatures.rsi14,
+            obv: technicalFeatures.obv,
+            institutional_flow_5d_norm: technicalFeatures.institutionalFlow5dNorm,
+            institutional_flow_20d_norm: technicalFeatures.institutionalFlow20dNorm,
+            market_regime: marketRegime,
+            peer_catchdown_block: false,
+            as_of: `${technicalFeatures.sessionDate}T13:30:00+08:00`,
+            available_at: iso,
+            provenance: { source: 'twse_tpex_official_market_data' },
+            ruleset_version: technicalFeatures.rulesetVersion,
+          }, { onConflict: 'stock_id,session_date,ruleset_version' });
+          if (featureError) throw new Error(featureError.message);
         }
       }
 
@@ -19113,7 +19117,7 @@ export async function runIngestionBatch(options?: { dryRun?: boolean }): Promise
         if (error) throw new Error(error.message);
       }
 
-      for (const seed of TW_STORY_RESEARCH_SEEDS) {
+      for (const seed of allowDemoSeedWrites ? TW_STORY_RESEARCH_SEEDS : []) {
         const stock = await ensureStock(seed.symbol, seed.market, seed.name, seed.sector);
         for (const event of seed.companyEvents) {
           const { error } = await supabaseServer.from('company_events').upsert(
@@ -19182,7 +19186,7 @@ export async function runIngestionBatch(options?: { dryRun?: boolean }): Promise
           details: {
             as_of: asOfDate,
             snapshots: snapshotRows.length,
-            stock_signals: stockSeeds.length,
+            stock_signals: stockSignalsWritten,
             institutional_signals: institutionalSeeds.length,
             social_signals: socialSeeds.length,
             company_events: TW_STORY_RESEARCH_SEEDS.length,
@@ -19199,7 +19203,7 @@ export async function runIngestionBatch(options?: { dryRun?: boolean }): Promise
     return {
       asOf: asOfDate,
       snapshots: snapshotRows.length,
-      stockSignals: stockSeeds.length,
+      stockSignals: stockSignalsWritten,
       institutionalSignals: institutionalSeeds.length,
       socialSignals: socialSeeds.length,
       runId,
@@ -20049,7 +20053,8 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
   const supabaseServer = getSupabaseServerClient();
 
   const insiderSinceIso = new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString();
-  const [storiesRes, stocksRes, signalsRes, marketRes, revenueRes, fundamentalsRes, socialRes, valuationRes, brokerRes, thesisRes, insiderRes] = await Promise.all([
+  const sourceMentionSinceIso = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+  const [storiesRes, stocksRes, signalsRes, marketRes, revenueRes, fundamentalsRes, socialRes, valuationRes, brokerRes, thesisRes, insiderRes, mentionsRes, technicalFeaturesRes, priorStagesRes] = await Promise.all([
     supabaseServer.from('story_candidates').select('*').eq('as_of_date', asOf),
     supabaseServer.from('stocks').select('*'),
     supabaseServer.from('stock_signals').select('*').order('as_of', { ascending: false }).limit(300),
@@ -20067,9 +20072,12 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
       .gte('collected_at', insiderSinceIso)
       .order('collected_at', { ascending: false })
       .limit(1500),
+    supabaseServer.from('candidate_source_mentions').select('*').gte('available_at', sourceMentionSinceIso).order('available_at', { ascending: false }).limit(10000),
+    supabaseServer.from('technical_feature_snapshots').select('*').order('session_date', { ascending: false }).limit(3000),
+    supabaseServer.from('candidate_daily_stage_snapshots').select('id,stock_id,session_date,lifecycle_stage,hard_gate_results').lt('session_date', asOf).order('session_date', { ascending: false }).limit(3000),
   ]);
 
-  if (storiesRes.error || stocksRes.error || signalsRes.error || marketRes.error || revenueRes.error || fundamentalsRes.error || socialRes.error || valuationRes.error || brokerRes.error || thesisRes.error || insiderRes.error) {
+  if (storiesRes.error || stocksRes.error || signalsRes.error || marketRes.error || revenueRes.error || fundamentalsRes.error || socialRes.error || valuationRes.error || brokerRes.error || thesisRes.error || insiderRes.error || mentionsRes.error || technicalFeaturesRes.error || priorStagesRes.error) {
     throw new Error(
       storiesRes.error?.message ||
         stocksRes.error?.message ||
@@ -20081,6 +20089,9 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
         brokerRes.error?.message ||
         thesisRes.error?.message ||
         insiderRes.error?.message ||
+        mentionsRes.error?.message ||
+        technicalFeaturesRes.error?.message ||
+        priorStagesRes.error?.message ||
         socialRes.error?.message ||
         'Failed to load thesis ranking sources',
     );
@@ -20102,6 +20113,22 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
     if (!stockId) continue;
     const current = socialByStock.get(stockId) || [];
     socialByStock.set(stockId, [...current, row]);
+  }
+  const mentionsByStock = new Map<string, Row[]>();
+  for (const row of (mentionsRes.data as Row[]) || []) {
+    const stockId = String(row.stock_id || '');
+    if (!stockId) continue;
+    mentionsByStock.set(stockId, [...(mentionsByStock.get(stockId) || []), row]);
+  }
+  const technicalFeaturesByStock = new Map<string, Row>();
+  for (const row of (technicalFeaturesRes.data as Row[]) || []) {
+    const stockId = String(row.stock_id || '');
+    if (stockId && !technicalFeaturesByStock.has(stockId)) technicalFeaturesByStock.set(stockId, row);
+  }
+  const priorStageByStock = new Map<string, Row>();
+  for (const row of (priorStagesRes.data as Row[]) || []) {
+    const stockId = String(row.stock_id || '');
+    if (stockId && !priorStageByStock.has(stockId)) priorStageByStock.set(stockId, row);
   }
   const valuationByStock = new Map<string, { baseTarget: number | null; upsideTarget: number | null }>();
   for (const row of (valuationRes.data as Row[]) || []) {
@@ -20150,6 +20177,10 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
   }
 
   const twMarket = (marketRes.data?.[0] as Row | undefined) || null;
+  const rawMarketRegime = String(((twMarket?.index_state as Row | undefined) || {}).regime || 'unknown');
+  const marketRegime: MarketRiskRegime = ['risk_on', 'selective', 'risk_off', 'breakdown'].includes(rawMarketRegime)
+    ? rawMarketRegime as MarketRiskRegime
+    : 'unknown';
   const symbolByStockId = new Map<string, string>();
   const stockIdBySymbol = new Map<string, string>();
   for (const [stockId, row] of stockMap.entries()) {
@@ -20211,9 +20242,13 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
         const revenue = revenueByStock.get(stockId);
         const fundamentals = fundamentalsByStock.get(stockId);
         const socialRows = socialByStock.get(stockId) || [];
-        const marketScore = clamp(toFiniteNumber(((twMarket?.index_state as Row | undefined) || {}).trend_score, 0.6));
-        const revenueScore = clamp((toFiniteNumber(revenue?.yoy_growth, 0) / 50) * 0.5 + 0.5);
-        const valuationRelief = clamp(1 - Math.min(toFiniteNumber(fundamentals?.pe_ratio, 20) / 40, 1) + 0.35);
+        const marketScore = ({ risk_on: 0.85, selective: 0.55, risk_off: 0.2, breakdown: 0, unknown: 0 } as const)[marketRegime];
+        const revenueYoy = revenue?.yoy_growth == null ? null : toFiniteNumber(revenue.yoy_growth, Number.NaN);
+        const revenueScore = revenueYoy != null && Number.isFinite(revenueYoy) ? clamp((revenueYoy / 50) * 0.5 + 0.5) : 0;
+        const peRatio = fundamentals?.pe_ratio == null ? null : toFiniteNumber(fundamentals.pe_ratio, Number.NaN);
+        const valuationRelief = peRatio != null && Number.isFinite(peRatio) && peRatio > 0
+          ? clamp(1 - Math.min(peRatio / 40, 1) + 0.35)
+          : 0;
         const communitySignalScore = round(
           clamp(
             mean(
@@ -20248,7 +20283,7 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
         const timingScore = round(clamp(technicalScore * 0.7 + marketScore * 0.3), 4);
         const insiderSignalScore = round(
           clamp(
-            mean(insiderByStock.get(stockId) || [0.5]),
+            mean(insiderByStock.get(stockId) || []),
             0,
             1,
           ),
@@ -20512,6 +20547,182 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
           if (valuationRows.length > 0) {
             const { error: valuationError } = await supabaseServer.from('valuation_cases').upsert(valuationRows, { onConflict: 'story_candidate_id,case_type' });
             if (valuationError) throw new Error(valuationError.message);
+          }
+
+          const mentionRows = mentionsByStock.get(stockId) || [];
+          const recentMentionCutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
+          const recentMentions = mentionRows.filter((row) => new Date(String(row.mentioned_at || row.available_at || '')).getTime() >= recentMentionCutoff);
+          const olderMentions = mentionRows.filter((row) => new Date(String(row.mentioned_at || row.available_at || '')).getTime() < recentMentionCutoff);
+          const independentHashes = new Set(recentMentions.map((row) => String(row.independent_content_hash || row.source_url || '')).filter(Boolean));
+          const mentionPlatforms = new Set(recentMentions.map((row) => String(row.platform || '')).filter(Boolean));
+          const latestMentionMs = Math.max(0, ...recentMentions.map((row) => new Date(String(row.mentioned_at || row.available_at || '')).getTime()).filter(Number.isFinite));
+          const discussionBurst = olderMentions.length > 0
+            ? Math.min(100, (recentMentions.length / 7) / Math.max(0.01, olderMentions.length / 23) * 50)
+            : Math.min(100, recentMentions.length * 20);
+          const sourceReliability = mean(recentMentions.map((row) => toFiniteNumber(row.confidence, 0)));
+          const financialFields = [revenue?.monthly_revenue, revenue?.yoy_growth, fundamentals?.eps_ttm, fundamentals?.pe_ratio, fundamentals?.pb_ratio];
+          const financialCompleteness = financialFields.filter((value) => value != null && Number.isFinite(Number(value))).length / financialFields.length * 100;
+          const feature = technicalFeaturesByStock.get(stockId) || null;
+          const featureNumber = (key: string): number | null => {
+            if (feature?.[key] == null) return null;
+            const value = Number(feature[key]);
+            return Number.isFinite(value) ? value : null;
+          };
+          const technicalClose = featureNumber('close');
+          const technicalMa20 = featureNumber('ma20');
+          const technicalMa60 = featureNumber('ma60');
+          const technicalMa120 = featureNumber('ma120');
+          const technicalMa240 = featureNumber('ma240');
+          const technicalAtr14 = featureNumber('atr14');
+          const technicalRsi14 = featureNumber('rsi14');
+          const technicalVolumeRatio = featureNumber('volume_ratio_20_median');
+          const technicalMa60Slope = featureNumber('ma60_slope');
+          const trendAligned = technicalClose != null && technicalMa20 != null && technicalMa60 != null
+            && technicalClose > technicalMa20 && technicalClose > technicalMa60 && technicalMa20 > technicalMa60
+            && technicalMa60Slope != null && technicalMa60Slope >= 0;
+          const breakoutLong = technicalClose != null && technicalVolumeRatio != null && technicalVolumeRatio >= 1.3
+            && ((technicalMa240 != null && technicalClose > technicalMa240) || (technicalMa240 == null && technicalMa120 != null && technicalClose > technicalMa120));
+          const baseUpsidePct = baseTarget && price > 0 ? round(((baseTarget - price) / price) * 100, 2) : null;
+          const bearDownsidePct = stopLoss && price > 0 ? round(((stopLoss - price) / price) * 100, 2) : null;
+          const rewardRiskRatio = baseTarget && stopLoss < price && price > 0 ? round((baseTarget - price) / (price - stopLoss), 3) : null;
+          const baseInput = {
+            discovery: {
+              independentSources: Math.min(100, independentHashes.size / 3 * 100),
+              platformDiversity: Math.min(100, mentionPlatforms.size / 3 * 100),
+              discussionBurst,
+              recency: latestMentionMs > 0 ? Math.max(0, 100 - (Date.now() - latestMentionMs) / (7 * 24 * 60 * 60 * 1000) * 100) : 0,
+              sourceReliability,
+            },
+            research: {
+              valuationMarginOfSafety: baseUpsidePct == null ? 0 : Math.max(0, Math.min(100, baseUpsidePct / 25 * 100)),
+              financialBridge: financialCompleteness,
+              officialEvidenceAndCounterEvidence: evidenceScore * 100,
+              brokerEvidence: brokerValuation ? 80 : 0,
+              industryRotation: timingScore * 100,
+              overseasPeers: 0,
+            },
+            actionability: {
+              movingAveragesAndRelativeStrength: trendAligned || breakoutLong ? 100 : technicalClose != null && technicalMa20 != null && technicalClose > technicalMa20 ? 45 : 0,
+              priceVolume: technicalVolumeRatio == null ? 0 : Math.min(100, technicalVolumeRatio / 1.3 * 100),
+              institutionalFlows: featureNumber('institutional_flow_20d_norm') == null ? 0 : Math.max(0, Math.min(100, 50 + Number(feature?.institutional_flow_20d_norm) * 50)),
+              marketRegime: ({ risk_on: 100, selective: 60, risk_off: 20, breakdown: 0, unknown: 0 } as const)[marketRegime],
+              industryRotation: timingScore * 100,
+              overseasPeers: 0,
+              overheatRisk: technicalRsi14 == null || technicalAtr14 == null || technicalMa20 == null || technicalClose == null
+                ? 0
+                : technicalRsi14 < 75 && technicalClose <= technicalMa20 + 2 * technicalAtr14 ? 100 : 0,
+            },
+            confidence: {
+              completeness: ([baseTarget, upsideTarget, stopLoss, technicalMa20, technicalMa60, fundamentals?.eps_ttm, revenue?.monthly_revenue]
+                .filter((value) => value != null && Number.isFinite(Number(value))).length / 7) * 100,
+              freshness: isBlocked ? 0 : 100,
+              traceability: valuationSource === 'valuation_cases' ? 90 : valuationSource === 'broker_report' ? 80 : valuationSource === 'thesis_model' ? 60 : 0,
+              crossSourceConsistency: Math.min(100, mentionPlatforms.size / 3 * 100),
+            },
+            valuation: {
+              hasBearBaseBull: Boolean(stopLoss > 0 && baseTarget && upsideTarget),
+              baseUpsidePct,
+              rewardRiskRatio,
+              hasMaterialOfficialCounterEvidence: reviewRequired,
+            },
+            technical: {
+              close: technicalClose,
+              ma20: technicalMa20,
+              ma60: technicalMa60,
+              ma120: technicalMa120,
+              ma240: technicalMa240,
+              ma60Slope: technicalMa60Slope,
+              volumeRatio20Median: technicalVolumeRatio,
+              atr14: technicalAtr14,
+              rsi14: technicalRsi14,
+              breakoutAboveLongMa: breakoutLong,
+            },
+            marketRegime,
+            peerCatchdownBlock: Boolean(feature?.peer_catchdown_block),
+            staleOrFallback: isBlocked || isFallbackValuation || !feature,
+            previousStage: (priorStageByStock.get(stockId)?.lifecycle_stage as 'found' | 'waiting' | 'actionable' | undefined) || null,
+          };
+          const preStreakEvaluation = classifyCandidateStage({ ...baseInput, consecutiveActionableCloses: 2 });
+          const actionableEligiblePreStreak = preStreakEvaluation.stage === 'actionable';
+          const priorHardGates = (priorStageByStock.get(stockId)?.hard_gate_results as Row | undefined) || {};
+          const consecutiveActionableCloses = actionableEligiblePreStreak
+            ? (priorHardGates.actionable_eligible_pre_streak === true ? 2 : 1)
+            : 0;
+          const stageResult = classifyCandidateStage({ ...baseInput, consecutiveActionableCloses });
+          const snapshotRes = await supabaseServer.from('candidate_daily_stage_snapshots').upsert({
+            stock_id: stockId,
+            session_date: asOf,
+            lifecycle_stage: stageResult.stage,
+            discovery_score: stageResult.scores.discovery,
+            research_score: stageResult.scores.research,
+            actionability_score: stageResult.scores.actionability,
+            data_confidence_score: stageResult.scores.dataConfidence,
+            base_upside_pct: baseUpsidePct,
+            bear_downside_pct: bearDownsidePct,
+            reward_risk_ratio: rewardRiskRatio,
+            market_regime: marketRegime,
+            hard_gate_results: {
+              technical_passed: stageResult.technicalHardGatePassed,
+              actionable_eligible_pre_streak: actionableEligiblePreStreak,
+              consecutive_actionable_closes: consecutiveActionableCloses,
+              stale_or_fallback: baseInput.staleOrFallback,
+              peer_catchdown_block: baseInput.peerCatchdownBlock,
+            },
+            unmet_conditions: stageResult.unmetConditions,
+            promotion_reasons: stageResult.promotionReasons,
+            as_of: nowIsoValue,
+            available_at: nowIsoValue,
+            ruleset_version: STAGE_RULESET_VERSION,
+            model_version: 'candidate-stage-v2.0.0',
+            provenance: { recommendation_id: recRes.data.id, story_candidate_id: storyId },
+          }, { onConflict: 'stock_id,session_date,ruleset_version,model_version' }).select('id').single();
+          if (snapshotRes.error || !snapshotRes.data) throw new Error(snapshotRes.error?.message || 'Failed writing lifecycle snapshot');
+          const previousStage = priorStageByStock.get(stockId)?.lifecycle_stage ? String(priorStageByStock.get(stockId)?.lifecycle_stage) : null;
+          if (previousStage !== stageResult.stage) {
+            const { error: eventError } = await supabaseServer.from('candidate_stage_events').upsert({
+              stock_id: stockId,
+              from_stage: previousStage,
+              to_stage: stageResult.stage,
+              reason_codes: stageResult.promotionReasons.length > 0 ? stageResult.promotionReasons : stageResult.unmetConditions,
+              consecutive_sessions_passed: consecutiveActionableCloses,
+              as_of: nowIsoValue,
+              available_at: nowIsoValue,
+              ruleset_version: STAGE_RULESET_VERSION,
+              snapshot_id: snapshotRes.data.id,
+            }, { onConflict: 'stock_id,snapshot_id,to_stage', ignoreDuplicates: true });
+            if (eventError) throw new Error(eventError.message);
+          }
+
+          if (stopLoss > 0 && baseTarget && upsideTarget && price > 0) {
+            const sector = String(stock.sector || '').toLowerCase();
+            const primaryMethod = sector.includes('financial') || sector.includes('bank') ? 'forward_pb'
+              : sector.includes('memory') || sector.includes('cyclical') ? 'normalized_pe'
+                : 'forward_pe';
+            const { error: snapshotError } = await supabaseServer.from('valuation_snapshots').insert({
+              stock_id: stockId,
+              valuation_horizon_months: 12,
+              primary_method: primaryMethod,
+              cross_check_method: null,
+              current_price: price,
+              historical_pe_percentile: null,
+              historical_pb_percentile: null,
+              bear_target: stopLoss,
+              base_target: baseTarget,
+              bull_target: upsideTarget,
+              probability_weighted_target: round(stopLoss * 0.25 + baseTarget * 0.5 + upsideTarget * 0.25, 2),
+              base_upside_pct: baseUpsidePct,
+              bear_downside_pct: bearDownsidePct,
+              reward_risk_ratio: rewardRiskRatio,
+              earnings_bridge: { financial_completeness: financialCompleteness },
+              assumption_ledger: [{ source: valuationSource, confidence: valuationConfidence }],
+              catalysts: story.catalyst_summary ? [story.catalyst_summary] : [],
+              invalidation_conditions: [stopLoss],
+              as_of: nowIsoValue,
+              available_at: nowIsoValue,
+              provenance: { recommendation_id: recRes.data.id, story_candidate_id: storyId },
+              model_version: 'valuation-v2.0.0',
+            });
+            if (snapshotError) throw new Error(snapshotError.message);
           }
 
           const persistedStoryState: StoryThesisState =
@@ -21172,14 +21383,12 @@ export async function runDynamicMentionScan(options?: { dryRun?: boolean }) {
 
   const supabase = getSupabaseServerClient();
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-
-  // Use pre-extracted symbols/mentions for the high-frequency scan so this job
-  // does not repeatedly pull raw social text or full transcripts from disk.
-  const [docsRes, transcriptsRes] = await Promise.all([
-    supabase.from('source_raw_documents').select('symbols, sentiment_label, platform').gte('collected_at', sevenDaysAgo).limit(500),
-    supabase.from('podcast_transcripts').select('extracted_mentions, extracted_thesis').gte('created_at', thirtyDaysAgo).limit(100),
+  const [mentionsRes, stocksRes] = await Promise.all([
+    supabase.from('candidate_source_mentions').select('stock_id,stance,platform').gte('available_at', sevenDaysAgo).limit(10000),
+    supabase.from('stocks').select('id,symbol').eq('market', 'TW').limit(10000),
   ]);
+  if (mentionsRes.error || stocksRes.error) throw new Error(mentionsRes.error?.message || stocksRes.error?.message || 'candidate mention scan failed');
+  const symbolByStockId = new Map(((stocksRes.data as Row[]) || []).map((row) => [String(row.id || ''), String(row.symbol || '')]));
 
   const seedSymbols: Set<string> = new Set(TW_STORY_RESEARCH_SEEDS.map((s) => s.symbol));
   const mentionMap = new Map<string, { count: number; bullish: number; bearish: number; platforms: Set<string> }>();
@@ -21193,15 +21402,11 @@ export async function runDynamicMentionScan(options?: { dryRun?: boolean }) {
     if (platform) entry.platforms.add(platform);
   }
 
-  for (const doc of (docsRes.data || []) as Array<{ symbols?: unknown; sentiment_label?: string; platform?: string }>) {
-    // Use pre-extracted symbols field first
-    const syms = Array.isArray(doc.symbols) ? (doc.symbols as string[]) : [];
-    for (const sym of syms) recordMention(String(sym), doc.sentiment_label || null, doc.platform);
-  }
-
-  for (const tr of (transcriptsRes.data || []) as Array<{ extracted_mentions?: unknown }>) {
-    const mentions = Array.isArray(tr.extracted_mentions) ? (tr.extracted_mentions as string[]) : [];
-    for (const sym of mentions) recordMention(String(sym), null, 'podcast');
+  for (const mention of (mentionsRes.data as Row[]) || []) {
+    const symbol = symbolByStockId.get(String(mention.stock_id || '')) || '';
+    if (!symbol) continue;
+    const stance = String(mention.stance || 'neutral');
+    recordMention(symbol, stance === 'positive' ? 'bullish' : stance === 'negative' ? 'bearish' : 'neutral', String(mention.platform || 'unknown'));
   }
 
   const today = asIsoDate(nowIso());
@@ -21304,41 +21509,29 @@ export async function runRevenueIngestion(options?: { dryRun?: boolean }) {
     // non-blocking: MOPS might not be available outside TW market hours
   }
 
-  // Fetch fundamentals from Yahoo Finance for each TW stock (batched)
+  // Official TWSE/TPEx values only. Missing margin fields remain null.
   for (const stock of stocks.slice(0, 40)) {
     try {
       const [twValues, twEps] = await Promise.all([
         fetchTwStockValues(stock.symbol).catch(() => null),
         fetchTwStockEpsTtm(stock.symbol).catch(() => null),
       ]);
-      const yahooRes = await fetch(
-        `https://query1.finance.yahoo.com/v10/finance/quoteSummary/${stock.symbol}.TW?modules=financialData,defaultKeyStatistics,summaryDetail`,
-        { headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0' }, signal: AbortSignal.timeout(10_000) },
-      ).catch(() => null);
-      type YahooModule = Record<string, number | undefined>;
-      const yahooJson = yahooRes?.ok
-        ? await yahooRes.json() as { quoteSummary?: { result?: Array<{ financialData?: YahooModule; defaultKeyStatistics?: YahooModule; summaryDetail?: YahooModule }> } }
-        : null;
-      const result = yahooJson?.quoteSummary?.result?.[0];
-      const fd = result?.financialData || {};
-      const ks = result?.defaultKeyStatistics || {};
-      const sd = result?.summaryDetail || {};
-      const epsTtm = fd.trailingEps ?? twEps?.epsTtm ?? null;
-      const peRatio = sd.trailingPE ?? ks.forwardPE ?? twValues?.peRatio ?? null;
-      const pbRatio = ks.priceToBook ?? twValues?.pbRatio ?? null;
-      const revenueRunRate = fd.totalRevenue ?? null;
+      const epsTtm = twEps?.epsTtm ?? null;
+      const peRatio = twValues?.peRatio ?? null;
+      const pbRatio = twValues?.pbRatio ?? null;
+      const revenueRunRate = null;
       if ([epsTtm, peRatio, pbRatio, revenueRunRate].every((value) => value == null)) continue;
       await supabase.from('fundamental_snapshots').upsert(
         {
           stock_id: stock.id,
           as_of_date: today,
           eps_ttm: epsTtm,
-          gross_margin: fd.grossMargins != null ? Number(fd.grossMargins) * 100 : null,
-          operating_margin: fd.operatingMargins != null ? Number(fd.operatingMargins) * 100 : null,
+          gross_margin: null,
+          operating_margin: null,
           pe_ratio: peRatio,
           pb_ratio: pbRatio,
           revenue_run_rate: revenueRunRate,
-          source_url: `https://finance.yahoo.com/quote/${stock.symbol}.TW`,
+          source_url: `https://www.twse.com.tw/zh/trading/historical/bwibbu-day.html?stockNo=${stock.symbol}`,
         },
         { onConflict: 'stock_id,as_of_date' },
       );
@@ -21386,7 +21579,7 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
     }
   }
   try {
-    const shouldRunIngestion = !skipIngestion && (mode === 'full' || dryRun);
+    const shouldRunIngestion = !skipIngestion;
     const ingestion = await executeStep(
       'ingestion',
       async () => runIngestionBatch({ dryRun }),
@@ -21410,12 +21603,12 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
     const revenueIngestion = await executeStep(
       'revenue_ingestion',
       async () => runRevenueIngestion({ dryRun }),
-      mode !== 'full',
+      false,
       { runId: 'skip-revenue-ingestion', dryRun, revenueRecords: 0, fundamentalRecords: 0 },
     );
 
     const recommendation = await executeStep('recommendation', async () =>
-      runRecommendationBatch({ dryRun, timeoutMs: mode === 'core' && !dryRun ? Number(process.env.RECOMMENDATION_BATCH_TIMEOUT_MS || 15_000) : undefined }),
+      runRecommendationBatch({ dryRun, timeoutMs: mode === 'core' && !dryRun ? Number(process.env.RECOMMENDATION_BATCH_TIMEOUT_MS || 600_000) : undefined }),
     );
     let reportIngest: Record<string, unknown> = { runId: 'skip-report-ingest', dryRun, filesFound: 0, recordsWritten: 0 };
     let sourceSync: Array<Record<string, unknown>> = [];
@@ -21425,16 +21618,11 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
     if (mode === 'full') {
       const researchV2 = await import('./research-v2');
       reportIngest = await executeStep('report_ingest', async () => researchV2.runReportIngest({ dryRun }));
-      sourceSync = await executeStep('source_sync', async () =>
-        Promise.all([
-          researchV2.runSourceSync({ connector: 'investanchors', dryRun }),
-          researchV2.runSourceSync({ connector: 'ptt', dryRun }),
-          researchV2.runSourceSync({ connector: 'bulltalk', dryRun }),
-          researchV2.runSourceSync({ connector: 'threads', dryRun }),
-          researchV2.runSourceSync({ connector: 'instagram', dryRun }),
-          researchV2.runSourceSync({ connector: 'telegram', dryRun }),
-        ]),
-      );
+      sourceSync = await executeStep('source_sync', async () => Promise.all(
+        CLOUD_SOURCE_CONNECTORS
+          .filter((connector) => sourceExecutionPolicy(connector).disposition === 'active')
+          .map((connector) => researchV2.runSourceSync({ connector, dryRun })),
+      ));
       sourceDiscovery = await executeStep('source_discovery', async () => researchV2.runSourceDiscovery({ dryRun }));
       thesisRefresh = await executeStep('thesis_refresh', async () => researchV2.runThesisRefresh({ dryRun }));
       researchReportBuild = await executeStep('research_report_build', async () => researchV2.runResearchReportBuild({ dryRun }));
@@ -21523,14 +21711,11 @@ export async function runPipelineResearchFlow(options?: { dryRun?: boolean }) {
   const startedAt = Date.now();
   const researchV2 = await import('./research-v2');
   const reportIngest = await researchV2.runReportIngest({ dryRun });
-  const sourceSync = await Promise.all([
-    researchV2.runSourceSync({ connector: 'investanchors', dryRun }),
-    researchV2.runSourceSync({ connector: 'ptt', dryRun }),
-    researchV2.runSourceSync({ connector: 'bulltalk', dryRun }),
-    researchV2.runSourceSync({ connector: 'threads', dryRun }),
-    researchV2.runSourceSync({ connector: 'instagram', dryRun }),
-    researchV2.runSourceSync({ connector: 'telegram', dryRun }),
-  ]);
+  const sourceSync = await Promise.all(
+    CLOUD_SOURCE_CONNECTORS
+      .filter((connector) => sourceExecutionPolicy(connector).disposition === 'active')
+      .map((connector) => researchV2.runSourceSync({ connector, dryRun })),
+  );
   const sourceDiscovery = await researchV2.runSourceDiscovery({ dryRun });
   const thesisRefresh = await researchV2.runThesisRefresh({ dryRun });
   const researchReportBuild = await researchV2.runResearchReportBuild({ dryRun });
@@ -21551,10 +21736,12 @@ export async function runPipelineResearchFlow(options?: { dryRun?: boolean }) {
 export async function runPipelineDispatchFlow(options?: { dryRun?: boolean }) {
   const dryRun = Boolean(options?.dryRun);
   const startedAt = Date.now();
+  const classification = await runThesisRank({ dryRun });
   const dispatch = await dispatchLineEvents({ dryRun });
   return {
     dryRun,
     durationMs: Date.now() - startedAt,
+    classification,
     dispatch,
   };
 }
@@ -21665,14 +21852,19 @@ export async function runMonitoringChecks() {
     const now = new Date();
     const sinceIso = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString();
 
-    const [pipelineRes, recRes, sourceHealthRes] = await Promise.all([
+    const [pipelineRes, recRes, sourceHealthRes, sourceLedgerRes] = await Promise.all([
       supabaseServer.from('pipeline_runs').select('*').gte('started_at', sinceIso).order('started_at', { ascending: false }).limit(100),
       supabaseServer.from('recommendations').select('id,is_blocked,created_at').gte('created_at', sinceIso).limit(500),
       supabaseServer.from('source_health_checks').select('*').gte('checked_at', sinceIso).order('checked_at', { ascending: false }).limit(300),
+      supabaseServer.from('source_run_ledger')
+        .select('connector,attempted_at,succeeded_at,terminal_reason,terminal_detail,auth_status,fetched,matched,written,next_expected_at')
+        .gte('attempted_at', new Date(now.getTime() - 72 * 60 * 60 * 1000).toISOString())
+        .order('attempted_at', { ascending: false })
+        .limit(1000),
     ]);
 
-    if (pipelineRes.error || recRes.error || sourceHealthRes.error) {
-      throw new Error(pipelineRes.error?.message || recRes.error?.message || sourceHealthRes.error?.message || 'monitoring query failed');
+    if (pipelineRes.error || recRes.error || sourceHealthRes.error || sourceLedgerRes.error) {
+      throw new Error(pipelineRes.error?.message || recRes.error?.message || sourceHealthRes.error?.message || sourceLedgerRes.error?.message || 'monitoring query failed');
     }
 
     const alerts: Array<{ type: string; level: 'warning' | 'critical'; message: string; context?: Record<string, unknown> }> = [];
@@ -21715,18 +21907,60 @@ export async function runMonitoringChecks() {
       });
     }
 
+    const sourceLedgerRows = (sourceLedgerRes.data as Row[]) || [];
+    const successfulTerminals = new Set(['success', 'successful_empty', 'duplicate_only']);
+    for (const connector of CLOUD_SOURCE_CONNECTORS) {
+      const policy = sourceExecutionPolicy(connector);
+      if (policy.disposition !== 'active') continue;
+      const attempts = sourceLedgerRows.filter((row) => String(row.connector || '') === connector);
+      const latestTwo = attempts.slice(0, 2);
+      const immediateFailure = attempts.find((row) => {
+        const attemptedAt = Date.parse(String(row.attempted_at || ''));
+        return Number.isFinite(attemptedAt) && attemptedAt >= now.getTime() - 24 * 60 * 60 * 1000
+          && ['auth_failed', 'parser_failed'].includes(String(row.terminal_reason || ''));
+      });
+      if (immediateFailure) {
+        alerts.push({
+          type: `source_${String(immediateFailure.terminal_reason)}`,
+          level: 'critical',
+          message: `${connector} ${String(immediateFailure.terminal_reason)}: ${String(immediateFailure.terminal_detail || 'no detail')}`,
+          context: { connector, attempt: immediateFailure },
+        });
+      }
+      if (latestTwo.length === 2 && latestTwo.every((row) => !successfulTerminals.has(String(row.terminal_reason || '')))) {
+        alerts.push({
+          type: 'source_two_consecutive_failures',
+          level: 'critical',
+          message: `${connector} failed two consecutive scheduled attempts`,
+          context: { connector, attempts: latestTwo },
+        });
+      }
+      const lastSuccess = attempts.find((row) => successfulTerminals.has(String(row.terminal_reason || '')));
+      const cadenceHours = policy.cadenceHours || 24;
+      const lastSuccessMs = lastSuccess ? Date.parse(String(lastSuccess.attempted_at || '')) : Number.NaN;
+      if (!Number.isFinite(lastSuccessMs) || now.getTime() - lastSuccessMs > cadenceHours * 2 * 60 * 60 * 1000) {
+        alerts.push({
+          type: 'source_missed_two_expected_runs',
+          level: 'critical',
+          message: `${connector} has no successful terminal outcome within two expected cadences`,
+          context: { connector, cadenceHours, lastSuccessAt: Number.isFinite(lastSuccessMs) ? new Date(lastSuccessMs).toISOString() : null },
+        });
+      }
+    }
+
     return {
       checkedAt: now.toISOString(),
       alerts,
     };
-  } catch {
+  } catch (error) {
     return {
       checkedAt: nowIso(),
       alerts: [
         {
-          type: 'demo_fallback',
-          level: 'warning' as const,
-          message: 'Supabase unreachable, monitoring is running in fallback mode',
+          type: 'monitoring_query_failed',
+          level: 'critical' as const,
+          message: `Monitoring could not verify production state: ${safeErrorMessage(error)}`,
+          context: { terminalReason: 'monitoring_unverified' },
         },
       ],
     };

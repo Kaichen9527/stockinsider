@@ -11,6 +11,7 @@ const platformLabel: Record<string, string> = {
   telegram: 'Telegram',
   ptt: 'PTT Stock',
   bulltalk: '股市爆料同學會',
+  gdelt: 'GDELT 新聞發現',
   googlenews: 'Google News',
   anue: '鉅亨網',
   udn: 'UDN',
@@ -85,7 +86,9 @@ export default async function SourcesPage({
         query: { q: q || null, symbol: symbol || null, platform: platform || null, verificationStatus: (verificationStatus as VerificationStatus) || null, themeKey: themeKey || null, runId: runId || null, evidenceLevel: (evidenceLevel as '傳言層' | '佐證層' | '估值層') || null, from: from || null, to: to || null },
         latestSourceAt: null,
         coverage: [],
+        coverageScope: 'complete_filtered_result' as const,
         items: [],
+        sourceRunLedger: [],
         connectorStatus: [],
         recentRuns: [],
         recentAudits: [],
@@ -183,9 +186,46 @@ export default async function SourcesPage({
               錯誤：{sourceSearchError}。目前先顯示空狀態，請稍後重試或檢查 Supabase 查詢 timeout。
             </div>
           ) : null}
+          <article className="mb-6 rounded-2xl border border-line bg-surface-strong p-4">
+            <div className="flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <p className="text-xs tracking-[0.2em] text-slate-500 dark:text-emerald-100/55">統一來源執行帳本</p>
+                <p className="mt-1 text-sm text-slate-600 dark:text-emerald-100/70">只有 HTTP、terminal status 與實際寫入結果一致才算成功；0 writes 會標明原因。</p>
+              </div>
+              <span className="rounded-full border border-line px-3 py-1 text-xs">{result.sourceRunLedger.length} 個來源</span>
+            </div>
+            <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+              {result.sourceRunLedger.map((item) => {
+                const healthy = ['success', 'successful_empty', 'duplicate_only'].includes(item.terminalReason);
+                return (
+                  <div key={`ledger-${item.connector}`} className="rounded-xl border border-line bg-surface p-3 text-xs">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="font-semibold">{platformLabel[item.connector] || item.connector}</span>
+                      <span className={`rounded-full px-2.5 py-0.5 ${healthy ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300' : 'bg-amber-500/15 text-amber-700 dark:text-amber-300'}`}>
+                        {item.terminalReason}
+                      </span>
+                    </div>
+                    <p className="mt-2 text-slate-600 dark:text-emerald-100/70">
+                      fetched {item.fetched} · matched {item.matched} · new {item.newCount} · duplicate {item.duplicate} · written {item.written}
+                    </p>
+                    <p className="mt-1 text-slate-500 dark:text-emerald-100/55">最近嘗試：{formatTaipeiDateTime(item.attemptedAt)} · 下次：{formatTaipeiDateTime(item.nextExpectedAt, '不自動執行')}</p>
+                    <p className="mt-1 text-slate-500 dark:text-emerald-100/55">授權：{item.authStatus} · {item.licenseBasis}</p>
+                    {item.terminalDetail ? <p className="mt-1 text-amber-700 dark:text-amber-300">原因：{item.terminalDetail}</p> : null}
+                  </div>
+                );
+              })}
+              {result.sourceRunLedger.length === 0 ? <p className="text-sm text-slate-500 dark:text-emerald-100/65">Migration 套用後，第一筆正式執行會出現在這裡；沒有 ledger 不會顯示成功。</p> : null}
+            </div>
+          </article>
+
+          <article className="mb-6 rounded-2xl border border-amber-500/25 bg-amber-500/8 p-4 text-sm text-amber-900 dark:text-amber-100">
+            <p className="font-semibold">來源政策</p>
+            <p className="mt-1 leading-6">YouTube、Google News、UDN、鉅亨網與 Mobile01 已退役，停止排程但保留歷史供稽核。股市爆料同學會在取得 CMoney API／合作授權前封鎖自動抓取；InvestAnchors 僅接受有權使用的結構化研究結論。</p>
+          </article>
+
           <div className="mb-6 grid gap-4 lg:grid-cols-2">
             <article className="rounded-2xl border border-line bg-surface-strong p-4">
-              <p className="text-xs tracking-[0.2em] text-slate-500 dark:text-emerald-100/55">Connector 狀態</p>
+              <p className="text-xs tracking-[0.2em] text-slate-500 dark:text-emerald-100/55">Legacy Connector 狀態（相容期）</p>
               <div className="mt-3 grid gap-2">
                 {result.connectorStatus.map((item) => (
                   <div key={`connector-${item.connector}`} className="rounded-xl border border-line bg-surface p-3 text-xs">

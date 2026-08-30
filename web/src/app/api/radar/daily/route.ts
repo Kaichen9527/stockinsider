@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDailyRadarData } from '@/lib/domain';
+import { getDailyRadarData, getPersistedRadarStages } from '@/lib/domain';
 import { legacyCorrectnessProjectionEnabled, loadPublishedRadarProjection,
   RadarProjectionUnavailableError } from '@/lib/radar-projection-read';
 import { requireExactInternalBearer } from '@/lib/internal-auth';
 import { compactProducerRadarPayload } from '@/lib/radar-producer-payload';
 import { radarResponseHeaders } from '@/lib/radar-response-policy';
+import type { RadarDailyPayload } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -321,6 +322,11 @@ function compactRadarPayload(data: Record<string, unknown>) {
   return compacted;
 }
 
+async function withRadarStages(data: Record<string, unknown>) {
+  const payload = data as unknown as RadarDailyPayload;
+  return { ...data, stages: await getPersistedRadarStages(payload.sourceSignals || []) };
+}
+
 export async function GET(request: NextRequest) {
   try {
     const producerRead = request.headers.get('x-stockinsider-projection-source') === 'tracked-producer';
@@ -329,11 +335,12 @@ export async function GET(request: NextRequest) {
     }
     const compact = producerRead ? null : await loadPublishedRadarProjection('daily');
     if (compact) {
-      return NextResponse.json(compact, { headers: NO_STORE });
+      return NextResponse.json(await withRadarStages(compact as unknown as Record<string, unknown>), { headers: NO_STORE });
     }
     const data = await getDailyRadarData();
     const legacy = compactRadarPayload(data as unknown as Record<string, unknown>);
-    return NextResponse.json(producerRead ? compactProducerRadarPayload(legacy) : legacy, { headers: NO_STORE });
+    const response = producerRead ? compactProducerRadarPayload(legacy) : legacy;
+    return NextResponse.json(await withRadarStages(response as Record<string, unknown>), { headers: NO_STORE });
   } catch (error) {
     if (legacyCorrectnessProjectionEnabled() && error instanceof RadarProjectionUnavailableError) {
       return NextResponse.json({ error: 'radar_projection_unavailable', retryable: true }, { status: 503, headers: NO_STORE });

@@ -19,7 +19,6 @@ export const SOURCE_ROWS_V3 = [
   ['public_broker_research', 'public_research', true, 'verified_publication', 'none', 604_800, 1000],
   ['telegram', 'community', true, 'none', 'none', 259_200, 1000],
   ['threads', 'community', true, 'none', 'none', 259_200, 1000],
-  ['youtube', 'curated_thesis', true, 'thesis_only', 'none', 604_800, 1000],
 ] as const;
 
 export const SOURCE_FUNNEL_POLICY_HASH_V3 = sha256Canonical({

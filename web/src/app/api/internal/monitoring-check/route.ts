@@ -21,12 +21,13 @@ export async function POST(req: Request) {
     const result = await runMonitoringChecks();
     if (!dryRun) {
       for (const alert of result.alerts) {
-        await sendOpsAlert({
+        const delivery = await sendOpsAlert({
           level: alert.level,
           title: `StockInsider monitor: ${alert.type}`,
           message: alert.message,
           context: alert.context,
-        }).catch(() => undefined);
+        });
+        if (!delivery.delivered) throw new Error(`ops_alert_not_delivered:${delivery.reason}`);
       }
     }
 

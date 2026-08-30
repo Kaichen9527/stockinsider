@@ -22,13 +22,8 @@
         <string>3020</string>
     </dict>
 
-    <key>StartCalendarInterval</key>
-    <dict>
-        <key>Hour</key>
-        <integer>8</integer>
-        <key>Minute</key>
-        <integer>0</integer>
-    </dict>
+    <key>Disabled</key>
+    <true/>
 
     <key>StandardOutPath</key>
     <string>/Users/kaerchen/Desktop/20_stock/StockInsider/.agent/reports/playwright-sync-stdout.log</string>
@@ -36,7 +31,5 @@
     <key>StandardErrorPath</key>
     <string>/Users/kaerchen/Desktop/20_stock/StockInsider/.agent/reports/playwright-sync-stderr.log</string>
 
-    <key>RunAtLoad</key>
-    <false/>
 </dict>
 </plist>

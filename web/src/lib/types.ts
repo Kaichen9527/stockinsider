@@ -1633,6 +1633,11 @@ export interface RadarDailyPayload {
   };
   loadStatus?: 'ok' | 'degraded' | 'unavailable';
   loadWarnings?: string[];
+  stages?: {
+    found: SourceSignalCard[];
+    waiting: SourceSignalCard[];
+    actionable: SourceSignalCard[];
+  };
   projectionHealth?: {
     status: 'fresh' | 'stale_readonly' | 'unavailable';
     integrityStatus?: 'valid' | 'conflict' | 'missing';
@@ -2176,7 +2181,9 @@ export interface SourceSearchPayload {
   };
   latestSourceAt: string | null;
   coverage: Array<{ platform: string; count: number }>;
+  coverageScope: 'complete_filtered_result';
   items: SourceSearchResultItem[];
+  sourceRunLedger: import('./source-run-ledger').SourceRunLedgerView[];
   connectorStatus: ConnectorStatusView[];
   recentRuns: SourceConnectorRunView[];
   recentAudits: SourceAuditView[];

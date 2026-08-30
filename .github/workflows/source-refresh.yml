@@ -1,0 +1,58 @@
+name: Public Source Refresh
+
+on:
+  schedule:
+    # Asia/Taipei 06:30, 12:30, 18:30 and 23:30.
+    - cron: '30 22 * * *'
+    - cron: '30 4 * * *'
+    - cron: '30 10 * * *'
+    - cron: '30 15 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (no writes to DB)'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: stockinsider-production-data-writes
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      APP_URL: ${{ secrets.APP_URL }}
+      EXPECTED_APP_URL: https://stockinsider-three.vercel.app
+      INTERNAL_API_KEY: ${{ secrets.INTERNAL_API_KEY }}
+      DRY_RUN: ${{ inputs.dry_run || 'false' }}
+      BULLTALK_LICENSED: ${{ secrets.BULLTALK_LICENSED }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+      - name: Refresh Telegram public channels
+        run: node scripts/call_internal_api.mjs /api/internal/source-sync "{\"connector\":\"telegram\",\"dryRun\":$DRY_RUN}" | tee /tmp/telegram.json
+      - name: Refresh Threads official API
+        run: node scripts/call_internal_api.mjs /api/internal/source-sync "{\"connector\":\"threads\",\"dryRun\":$DRY_RUN}" | tee /tmp/threads.json
+      - name: Refresh PTT metadata
+        run: node scripts/call_internal_api.mjs /api/internal/source-sync "{\"connector\":\"ptt\",\"dryRun\":$DRY_RUN}" | tee /tmp/ptt.json
+      - name: Discover GDELT metadata
+        run: node scripts/call_internal_api.mjs /api/internal/source-sync "{\"connector\":\"gdelt\",\"dryRun\":$DRY_RUN}" | tee /tmp/gdelt.json
+      - name: Refresh licensed BullTalk feed
+        if: env.BULLTALK_LICENSED == 'true'
+        run: node scripts/call_internal_api.mjs /api/internal/source-sync "{\"connector\":\"bulltalk\",\"dryRun\":$DRY_RUN}" | tee /tmp/bulltalk.json
+      - name: Upload source terminal results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-refresh-${{ github.run_id }}
+          path: /tmp/*.json
+          retention-days: 14
