@@ -10,6 +10,7 @@ import {
 } from '@/lib/source-run-ledger';
 import type { SourceSyncResult } from '@/lib/types';
 import { runIsolatedSourceBatch } from '@/lib/source-batch';
+import { classifySourceSyncTerminal } from '@/lib/source-health';
 import { assertThreadsTokenAvailable } from '@/lib/threads-token';
 
 const PARSER_VERSION = 'source-sync-v2.0.0';
@@ -33,20 +34,7 @@ function authStatus(result: SourceSyncResult) {
 }
 
 function terminalReason(result: SourceSyncResult): SourceTerminalReason {
-  const fetched = Number(result.fetchedPosts || 0);
-  const written = Number(result.recordsWritten || 0);
-  const duplicates = Number(result.duplicatesSkipped || 0);
-  const matched = Number(result.matchedDirectHits || 0) + Number(result.matchedIndustryHits || 0);
-  const reason = `${result.errorCode || ''} ${result.degradedReason || ''}`;
-  if (/auth|oauth|credential|login|vault|token/iu.test(reason)) return 'auth_failed';
-  if (result.timedOut) return 'failed';
-  if (written > 0 && reason.trim()) return 'partial';
-  if (written > 0) return 'success';
-  if (matched > 0 && duplicates >= matched) return 'duplicate_only';
-  if (matched > 0) return 'parser_failed';
-  if (fetched > 0) return 'successful_empty';
-  if (reason.trim()) return 'failed';
-  return 'successful_empty';
+  return classifySourceSyncTerminal(result);
 }
 
 function publicResult(raw: Partial<SourceSyncResult> & Pick<SourceSyncResult, 'runId' | 'dryRun' | 'connector' | 'recordsWritten' | 'entityId'>, licenseBasis: string): SourceResult {

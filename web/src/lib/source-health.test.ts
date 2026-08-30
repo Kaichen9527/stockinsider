@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { activeSourceHealthFailures, type SourceHealthRun } from './source-health.ts';
+import { activeSourceHealthFailures, classifySourceSyncTerminal, type SourceHealthRun } from './source-health.ts';
 
 function run(overrides: Partial<SourceHealthRun> = {}): SourceHealthRun {
   return {
@@ -38,4 +38,26 @@ test('an active source that misses its next expected run is unhealthy', () => {
     nextExpectedAt: '2026-08-30T18:00:00.000Z',
   })], Date.parse('2026-08-30T18:00:01.000Z'));
   assert.equal(failures[0]?.reason, 'missed_deadline');
+});
+
+test('duplicate Telegram documents are not misclassified from their symbol count', () => {
+  assert.equal(classifySourceSyncTerminal({
+    fetchedPosts: 82,
+    recordsWritten: 0,
+    duplicatesSkipped: 12,
+    candidateDocuments: 12,
+    matchedDirectHits: 36,
+    matchedIndustryHits: 0,
+  }), 'duplicate_only');
+});
+
+test('unwritten candidates remain a parser failure when they are not duplicates', () => {
+  assert.equal(classifySourceSyncTerminal({
+    fetchedPosts: 12,
+    recordsWritten: 0,
+    duplicatesSkipped: 0,
+    candidateDocuments: 3,
+    matchedDirectHits: 3,
+    matchedIndustryHits: 0,
+  }), 'parser_failed');
 });

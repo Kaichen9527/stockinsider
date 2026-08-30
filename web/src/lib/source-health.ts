@@ -1,4 +1,5 @@
 import type { SourceTerminalReason } from './source-run-ledger';
+import type { SourceSyncResult } from './types';
 
 const SUCCESSFUL_TERMINALS = new Set<SourceTerminalReason>([
   'success',
@@ -20,6 +21,30 @@ export type SourceHealthFailure = {
   latestTerminalReason: SourceTerminalReason | null;
   failedRunCount: number;
 };
+
+/**
+ * Classify an ingestion result without comparing document counts to symbol-hit
+ * counts. A single candidate document can legitimately contain several symbols.
+ */
+export function classifySourceSyncTerminal(
+  result: Pick<SourceSyncResult, 'fetchedPosts' | 'recordsWritten' | 'duplicatesSkipped' | 'matchedDirectHits' | 'matchedIndustryHits' | 'candidateDocuments' | 'errorCode' | 'degradedReason' | 'timedOut'>,
+): SourceTerminalReason {
+  const fetched = Number(result.fetchedPosts || 0);
+  const written = Number(result.recordsWritten || 0);
+  const duplicates = Number(result.duplicatesSkipped || 0);
+  const candidates = Number(result.candidateDocuments || 0);
+  const matched = Number(result.matchedDirectHits || 0) + Number(result.matchedIndustryHits || 0);
+  const reason = `${result.errorCode || ''} ${result.degradedReason || ''}`;
+  if (/auth|oauth|credential|login|vault|token/iu.test(reason)) return 'auth_failed';
+  if (result.timedOut) return 'failed';
+  if (written > 0 && reason.trim()) return 'partial';
+  if (written > 0) return 'success';
+  if (candidates > 0 && duplicates >= candidates) return 'duplicate_only';
+  if (candidates > 0 || matched > 0) return 'parser_failed';
+  if (fetched > 0) return 'successful_empty';
+  if (reason.trim()) return 'failed';
+  return 'successful_empty';
+}
 
 export function activeSourceHealthFailures(
   activeConnectors: readonly string[],

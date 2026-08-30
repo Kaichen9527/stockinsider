@@ -1289,6 +1289,7 @@ type SourceSyncRunShape = {
   errorCode?: string | null;
   matchedDirectHits?: number;
   matchedIndustryHits?: number;
+  candidateDocuments?: number;
   searchedKeywords?: string[];
   matchedSymbols?: string[];
   authFailureReason?: string | null;
@@ -3330,6 +3331,7 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
     duplicatesSkipped: cursorDuplicatesSkipped + Math.max(0, records.length - count),
     matchedDirectHits: new Set(records.flatMap((record) => record.symbols)).size,
     matchedIndustryHits: 0,
+    candidateDocuments: records.length,
     entityId: String(entity.id),
     watermarkBefore: JSON.stringify(Object.fromEntries([...cursorBefore.entries()].sort())),
     watermarkAfter: JSON.stringify(Object.fromEntries([...cursorAfter.entries()].sort())),
