@@ -45,8 +45,6 @@ jobs:
         run: node scripts/call_internal_api.mjs /api/internal/dynamic-mention-scan "{\"dryRun\":$DRY_RUN}" | tee /tmp/dynamic-mention-scan.json
       - name: Source quality and KOL discovery
         run: node scripts/call_internal_api.mjs /api/internal/source-discovery "{\"dryRun\":$DRY_RUN}" | tee /tmp/source-discovery.json
-      - name: Authorized podcast RSS metadata
-        run: node scripts/call_internal_api.mjs /api/internal/podcast-sync "{\"dryRun\":$DRY_RUN}" | tee /tmp/podcast-sync.json
       - name: Thesis refresh
         run: node scripts/call_internal_api.mjs /api/internal/thesis-refresh "{\"dryRun\":$DRY_RUN}" | tee /tmp/thesis-refresh.json
       - name: Research report build
