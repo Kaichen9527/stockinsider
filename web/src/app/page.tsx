@@ -81,11 +81,11 @@ function socialSourceSummary(item: SocialSourceDetail) {
 }
 
 function socialSourceAuthHint(item: SocialSourceDetail) {
-  if (item.connector !== 'threads' && item.connector !== 'instagram') return null;
-  const missing = item.missingRecommendedCookieNames || [];
-  if (missing.length > 0) return `Cookie 待補欄位：${missing.join('、')}`;
-  if (item.fallbackCookieSource) return `Cookie 來源：${item.fallbackCookieSource}`;
-  return null;
+  if (item.connector !== 'threads') return null;
+  if (/blocked_auth|app_review|vault|token/i.test(item.displayFailureReason || item.failureReason || item.degradedReason || '')) {
+    return '等待 Meta App Review 與 Supabase Vault 官方 token；不使用 Cookie 或非官方 fallback。';
+  }
+  return 'Threads 僅使用官方 Keyword Search API。';
 }
 
 const reportKindLabel: Record<string, string> = {
@@ -168,7 +168,7 @@ export default async function Home() {
   const agentStatus = radar.agentStatus ?? { lastSuccessfulRunAt: null };
   const connectorStatus = Array.isArray(radar.connectorStatus) ? radar.connectorStatus : [];
   const socialSourceDetails =
-    (sourceHealth?.connectorDetails || []).filter((item) => ['threads', 'investanchors', 'instagram', 'telegram', 'podcast', 'ptt', 'bulltalk'].includes(item.connector));
+    (sourceHealth?.connectorDetails || []).filter((item) => ['threads', 'investanchors', 'telegram', 'podcast', 'ptt', 'bulltalk'].includes(item.connector));
 
   return (
     <main className="min-h-screen px-5 py-6 text-slate-950 dark:text-emerald-50 md:px-10 lg:px-14">

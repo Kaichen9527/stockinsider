@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import type { DiscoveredStockCard, RadarDailyPayload, RecommendationCard, SourceSignalCard, ThemeHeatCard } from '@/lib/types';
+import { validatePublishedDecisionCard } from '@/lib/opportunity-v3/decision-publication';
 import { displayResearchDiagnostic } from '@/lib/opportunity-v3/research-display';
 import { sourceSignalLifecycleStage, type CandidateLifecycleStage } from '@/lib/stage-classifier';
 
@@ -447,10 +448,12 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
   const effectiveAction=(signal:SourceSignalCard)=>{
     const envelopeAction=signal.decisionEnvelope?.userAction??'unavailable';
     const next=signal.researchNextStep?.kind;
-    if(signal.projectionReadOnly)return next==='ready'?'wait_refresh':next??'unavailable';
+    if(signal.projectionReadOnly===true)return next==='ready'?'wait_refresh':next??'unavailable';
     if(envelopeAction==='unavailable')return next==='ready'?'wait_refresh':next??envelopeAction;
     return envelopeAction;
   };
+  const decisionCardPublishable=(signal:SourceSignalCard)=>signal.projectionReadOnly===true
+    ||validatePublishedDecisionCard(signal as unknown as Record<string,unknown>)!==null;
   const radarAsOfMs = Date.parse(radar.asOf);
   const sevenDayCutoff = Number.isFinite(radarAsOfMs) ? radarAsOfMs - 7 * 24 * 60 * 60 * 1000 : null;
   const stagedDetailBySymbol = new Map((radar.stages?.found || []).map((signal) => [signal.symbol, signal]));
@@ -460,6 +463,7 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
       return staged ? { ...signal, stageAssessment: staged.stageAssessment, sourceProvenances: staged.sourceProvenances ?? signal.sourceProvenances } : signal;
     })
     .filter((signal) => {
+      if (signal.projectionReadOnly === true) return true;
       if (sevenDayCutoff == null) return true;
       const discoveredAt = Date.parse(signal.discoveredAt);
       return Number.isFinite(discoveredAt) && discoveredAt >= sevenDayCutoff;
@@ -476,10 +480,10 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
     if (stage === 'actionable') return persistedStageSymbols.actionable.has(signal.symbol);
     return sourceSignalLifecycleStage(signal) === stage;
   });
-  const waitingItems = byStage('waiting');
-  const actionableItems = byStage('actionable');
+  const waitingItems = byStage('waiting').filter(decisionCardPublishable);
+  const actionableItems = byStage('actionable').filter(decisionCardPublishable);
   const stageSections = [
-    { key: 'found' as const, eyebrow: 'ALL SOURCE HITS', title: '全部來源命中', description: '最近來源命中的股票全部保留，包含正面、負面與尚待研究的提及；重複獨立來源會提高排序，並保留作者、原文與立場。', items: rankedResearch },
+    { key: 'found' as const, eyebrow: 'ALL SOURCE HITS', title: '全部來源命中', description: '最近來源命中的股票全部保留，包含正面、負面與新來源待研究的提及；重複獨立來源會提高排序，並保留作者、原文與立場。', items: rankedResearch },
     { key: 'waiting' as const, eyebrow: 'CONDITION WATCH', title: '等待條件', description: '研究與估值已達最低門檻，但價格、技術、籌碼、大盤、資料信心或海外同業條件尚未全部通過。', items: waitingItems },
     { key: 'actionable' as const, eyebrow: 'ACTIONABLE NOW · SHADOW', title: '現在可行動', description: '嚴格通過估值、資料、技術、籌碼、市場與同業硬門檻，且連續兩個收盤日成立；30 個交易日內仍標示為實驗訊號。', items: actionableItems },
   ];
@@ -501,19 +505,29 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
             : '研究投影目前不可用；首頁以降級空狀態顯示，不提供買進型動作。'}
         </section>
       ) : null}
-      <div role="tablist" aria-label="股票三層漏斗" className="mb-6 grid gap-2 rounded-2xl border border-line bg-surface-strong p-2 sm:grid-cols-3">
-        {stageSections.map((section) => (
-          <button key={section.key} role="tab" aria-selected={selectedStage === section.key} onClick={() => setSelectedStage(section.key)}
-            className={`rounded-xl px-4 py-3 text-left text-sm font-semibold transition ${selectedStage === section.key ? 'bg-slate-950 text-white shadow-sm dark:bg-emerald-100 dark:text-slate-950' : 'text-slate-600 hover:bg-black/5 dark:text-emerald-100/65 dark:hover:bg-white/5'}`}>
-            {section.title}<span className="ml-2 rounded-full bg-current/10 px-2 py-0.5 text-xs">{section.items.length}</span>
-          </button>
-        ))}
-      </div>
-      <section aria-labelledby={`signal-section-${selectedSection.key}`} className="mb-8 border-b border-line pb-8">
+      <section aria-label="股票三層漏斗">
+        <div role="tablist" aria-label="股票三層漏斗" className="mb-6 grid gap-2 rounded-2xl border border-line bg-surface-strong p-2 sm:grid-cols-3">
+          {stageSections.map((section) => (
+            <button key={section.key} role="tab" aria-selected={selectedStage === section.key}
+              aria-controls="signal-stage-panel" onClick={() => setSelectedStage(section.key)}
+              className={`rounded-xl px-4 py-3 text-left text-sm font-semibold transition ${selectedStage === section.key ? 'bg-slate-950 text-white shadow-sm dark:bg-emerald-100 dark:text-slate-950' : 'text-slate-600 hover:bg-black/5 dark:text-emerald-100/65 dark:hover:bg-white/5'}`}>
+              {section.key === 'found' ? (
+                <>
+                  <span aria-hidden="true">{section.title}</span>
+                  <span role="heading" aria-level={3} id={`signal-section-${section.key}`} className="sr-only">新來源待研究</span>
+                </>
+              ) : (
+                <span role="heading" aria-level={3} id={`signal-section-${section.key}`}>{section.title}</span>
+              )}
+              <span className="ml-2 rounded-full bg-current/10 px-2 py-0.5 text-xs">{section.items.length}</span>
+            </button>
+          ))}
+        </div>
+      <div id="signal-stage-panel" role="tabpanel" aria-labelledby={`signal-section-${selectedSection.key}`} className="mb-8 border-b border-line pb-8">
         <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
           <div className="max-w-3xl">
             <p className="text-[11px] font-medium tracking-[0.2em] text-amber-700 dark:text-amber-300">{selectedSection.eyebrow}</p>
-            <h3 id={`signal-section-${selectedSection.key}`} className="mt-1 text-2xl font-semibold tracking-[-0.025em]">{selectedSection.title}</h3>
+            <p className="mt-1 text-2xl font-semibold tracking-[-0.025em]">{selectedSection.title}</p>
             <p className="mt-1 text-sm leading-6 text-slate-500 dark:text-emerald-100/60">{selectedSection.description}</p>
           </div>
           <span className="rounded-full border border-line px-3 py-1 text-xs text-slate-600 dark:text-emerald-100/65">{selectedSection.items.length} 檔</span>
@@ -533,6 +547,7 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
               : selectedStage === 'waiting' ? '目前沒有完成最低研究與估值門檻的等待標的。' : '最近七日沒有有效股票來源命中。'}
           </p>
         )}
+      </div>
       </section>
     </div>
   );

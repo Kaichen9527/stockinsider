@@ -4,7 +4,7 @@ import { requireExactInternalBearer, requireInternalAuth } from './internal-auth
 import { activeSourceConnectorKeys, APPROVED_TELEGRAM_PUBLIC_CHANNELS, RETIRED_SOURCE_CONNECTORS, sourceExecutionPolicy } from './source-policy.ts';
 
 const ENV_KEYS = [
-  'INTERNAL_API_KEY', 'CRON_SECRET', 'THREADS_ACCESS_TOKEN',
+  'INTERNAL_API_KEY', 'CRON_SECRET', 'THREADS_OFFICIAL_API_ENABLED',
   'TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED', 'PTT_METADATA_AUTHORIZED',
   'BULLTALK_LICENSED', 'BULLTALK_AUTHORIZED_FEED_URL',
 ] as const;
@@ -40,13 +40,13 @@ test('Threads and licensed sources report explicit blocks instead of false succe
     assert.equal(sourceExecutionPolicy('telegram').disposition, 'blocked_license');
     assert.equal(sourceExecutionPolicy('bulltalk').disposition, 'blocked_license');
   });
-  withEnvironment({ THREADS_ACCESS_TOKEN: 'token' }, () => {
+  withEnvironment({ THREADS_OFFICIAL_API_ENABLED: 'true' }, () => {
     assert.equal(sourceExecutionPolicy('threads').disposition, 'active');
   });
 });
 
 test('retired connectors remain explicitly queryable as historical-only policy', () => {
-  assert.deepEqual([...RETIRED_SOURCE_CONNECTORS], ['youtube', 'googlenews', 'anue', 'udn', 'mobile01']);
+  assert.deepEqual([...RETIRED_SOURCE_CONNECTORS], ['youtube', 'googlenews', 'anue', 'udn', 'mobile01', 'instagram']);
   for (const connector of RETIRED_SOURCE_CONNECTORS) {
     assert.equal(sourceExecutionPolicy(connector).disposition, 'retired');
     assert.equal(sourceExecutionPolicy(connector).licenseBasis, 'historical_audit_only');
@@ -68,7 +68,7 @@ test('connector=all includes only sources authorized in the current runtime', ()
   withEnvironment({}, () => {
     assert.deepEqual(activeSourceConnectorKeys(), ['gdelt', 'twse_insider']);
   });
-  withEnvironment({ THREADS_ACCESS_TOKEN: 'token', TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED: 'true' }, () => {
+  withEnvironment({ THREADS_OFFICIAL_API_ENABLED: 'true', TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED: 'true' }, () => {
     assert.deepEqual(activeSourceConnectorKeys(), ['telegram', 'threads', 'gdelt', 'twse_insider']);
   });
 });

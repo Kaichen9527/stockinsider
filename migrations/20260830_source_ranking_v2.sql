@@ -50,9 +50,9 @@ VALUES
   ('ptt','blocked_license','PTT Stock','metadata_only_rights_review_required',NULL,NULL),
   ('bulltalk','blocked_license','股市爆料同學會','cmoney_api_or_authorized_export_required',NULL,NULL),
   ('gdelt','active','GDELT 新聞中介資料','gdelt_metadata_and_source_links',NULL,NULL),
-  ('investanchors','manual_only','InvestAnchors','authorized_structured_conclusions_only',NULL,NULL),
-  ('instagram','manual_only','Instagram','authenticated_review_only',NULL,NULL),
-  ('podcast','active','Podcast RSS','creator_authorized_rss_metadata',NULL,NULL),
+  ('investanchors','manual_only','InvestAnchors','private_research_lead_official_source_rederivation_only',NULL,NULL),
+  ('instagram','retired','Instagram','historical_audit_only','2026-08-30'::timestamptz,'retired_no_official_connector'),
+  ('podcast','manual_only','Podcast RSS','creator_authorized_rss_metadata',NULL,NULL),
   ('twse_insider','active','TWSE/TPEx/MOPS','official_open_data',NULL,NULL),
   ('youtube','retired','YouTube','historical_audit_only','2026-08-30'::timestamptz,'retired_by_source_ranking_v2'),
   ('googlenews','retired','Google News','historical_audit_only','2026-08-30'::timestamptz,'retired_by_source_ranking_v2'),
@@ -269,6 +269,72 @@ AS $$
   ORDER BY COUNT(*) DESC, d.platform ASC;
 $$;
 
+CREATE OR REPLACE FUNCTION public.read_threads_source_secret()
+RETURNS TEXT
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+  SELECT decrypted_secret
+  FROM vault.decrypted_secrets
+  WHERE name = 'threads_access_token'
+  ORDER BY updated_at DESC
+  LIMIT 1;
+$$;
+
+CREATE OR REPLACE FUNCTION public.refresh_threads_source_secret(
+  p_secret TEXT,
+  p_token_hash TEXT,
+  p_refreshed_at TIMESTAMPTZ,
+  p_expires_at TIMESTAMPTZ
+)
+RETURNS UUID
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+DECLARE
+  v_secret_id UUID;
+  v_secret_name CONSTANT TEXT := 'threads_access_token';
+BEGIN
+  IF p_secret IS NULL OR p_secret = ''
+    OR p_token_hash IS NULL OR p_token_hash !~ '^[0-9a-f]{64}$'
+    OR p_refreshed_at IS NULL OR p_expires_at IS NULL OR p_expires_at <= p_refreshed_at THEN
+    RAISE EXCEPTION 'invalid_threads_refresh_payload' USING ERRCODE = '22023';
+  END IF;
+  PERFORM pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(v_secret_name, 0));
+  SELECT id INTO v_secret_id
+  FROM vault.decrypted_secrets
+  WHERE name = v_secret_name
+  ORDER BY updated_at DESC
+  LIMIT 1;
+  IF v_secret_id IS NULL THEN
+    SELECT vault.create_secret(p_secret, v_secret_name, 'StockInsider official Threads API long-lived token') INTO v_secret_id;
+  ELSE
+    PERFORM vault.update_secret(v_secret_id, p_secret, v_secret_name, 'StockInsider official Threads API long-lived token');
+  END IF;
+  INSERT INTO public.source_credentials_registry
+    (platform,status,credential_ref,last_validated_at,error_message,metadata,updated_at)
+  VALUES
+    ('threads','valid','SUPABASE_VAULT:threads_access_token',p_refreshed_at,NULL,
+      pg_catalog.jsonb_build_object(
+        'mode','threads_official_keyword_api',
+        'last_refreshed_at',p_refreshed_at,
+        'expires_at',p_expires_at,
+        'token_hash',p_token_hash
+      ),p_refreshed_at)
+  ON CONFLICT (platform) DO UPDATE SET
+    status = EXCLUDED.status,
+    credential_ref = EXCLUDED.credential_ref,
+    last_validated_at = EXCLUDED.last_validated_at,
+    error_message = NULL,
+    metadata = EXCLUDED.metadata,
+    updated_at = EXCLUDED.updated_at;
+  RETURN v_secret_id;
+END;
+$$;
+
 ALTER TABLE public.source_run_ledger ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.source_connector_registry ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.candidate_source_mentions ENABLE ROW LEVEL SECURITY;
@@ -291,5 +357,9 @@ GRANT ALL ON public.source_run_ledger, public.source_connector_registry,
   public.peer_market_snapshots TO service_role;
 REVOKE ALL ON FUNCTION public.source_document_coverage(TIMESTAMPTZ,TIMESTAMPTZ,TEXT,TEXT,TEXT,TEXT,TEXT[]) FROM PUBLIC, anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.source_document_coverage(TIMESTAMPTZ,TIMESTAMPTZ,TEXT,TEXT,TEXT,TEXT,TEXT[]) TO service_role;
+REVOKE ALL ON FUNCTION public.read_threads_source_secret() FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.refresh_threads_source_secret(TEXT,TEXT,TIMESTAMPTZ,TIMESTAMPTZ) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.read_threads_source_secret() TO service_role;
+GRANT EXECUTE ON FUNCTION public.refresh_threads_source_secret(TEXT,TEXT,TIMESTAMPTZ,TIMESTAMPTZ) TO service_role;
 
 COMMIT;

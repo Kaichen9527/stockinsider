@@ -18,7 +18,7 @@ hostname; the production build guard verifies the system environment variables.
    secret into the repository:
    - `APP_URL=https://stockinsider-three.vercel.app`
    - `INTERNAL_API_KEY` and `CRON_SECRET`
-   - `THREADS_ACCESS_TOKEN`
+   - `THREADS_OFFICIAL_API_ENABLED=false` until Meta App Review passes
    - `TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED=true` only after the channel-use basis is recorded
    - `PTT_METADATA_AUTHORIZED=true` only after metadata-use review
    - BullTalk variables only after a CMoney partner/API agreement
@@ -27,8 +27,8 @@ hostname; the production build guard verifies the system environment variables.
 4. Enable GitHub `source-refresh.yml` and `night-shift.yml`. Require their JSON
    artifacts to show accepted terminal reasons and explicit write outcomes.
 5. After one successful cloud source cycle, unload the installed
-   `com.stockinsider.auth-source-worker` LaunchAgent. Keep authenticated sources
-   manual-only until a reviewed Codex Scheduled task is explicitly created.
+   `com.stockinsider.auth-source-worker` LaunchAgent. Threads stays `blocked_auth`
+   until App Review passes and the long-lived token is written to Supabase Vault.
 6. Deploy `deployment/legacy-vercel` to the legacy project. Verify HTTP 308 for
    paths and query strings, confirm it has zero cron jobs, and monitor for seven
    days. Delete the legacy project only after the observation window.

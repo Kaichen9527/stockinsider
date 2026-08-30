@@ -5,13 +5,21 @@ import { activeSourceConnectorKeys, sourceExecutionPolicy } from '@/lib/source-p
 import {
   nextExpectedAt,
   recordSourceRunLedger,
+  syncSourceConnectorRegistry,
   type SourceTerminalReason,
 } from '@/lib/source-run-ledger';
 import type { SourceSyncResult } from '@/lib/types';
+import { runIsolatedSourceBatch } from '@/lib/source-batch';
+import { assertThreadsTokenAvailable } from '@/lib/threads-token';
 
 const PARSER_VERSION = 'source-sync-v2.0.0';
 
 type SourceResult = SourceSyncResult & {
+  fetched: number;
+  matched: number;
+  new: number;
+  duplicate: number;
+  written: number;
   terminalReason: SourceTerminalReason;
   licenseBasis: string;
   authStatus: 'authorized' | 'missing' | 'rejected' | 'not_applicable';
@@ -19,7 +27,7 @@ type SourceResult = SourceSyncResult & {
 
 function authStatus(result: SourceSyncResult) {
   const reason = `${result.errorCode || ''} ${result.degradedReason || ''}`;
-  if (/missing|oauth|credential/iu.test(reason)) return 'missing' as const;
+  if (/missing|oauth|credential|vault|token/iu.test(reason)) return 'missing' as const;
   if (/auth|login|rejected/iu.test(reason)) return 'rejected' as const;
   return result.sessionMode === 'not_applicable' ? 'not_applicable' as const : 'authorized' as const;
 }
@@ -30,7 +38,7 @@ function terminalReason(result: SourceSyncResult): SourceTerminalReason {
   const duplicates = Number(result.duplicatesSkipped || 0);
   const matched = Number(result.matchedDirectHits || 0) + Number(result.matchedIndustryHits || 0);
   const reason = `${result.errorCode || ''} ${result.degradedReason || ''}`;
-  if (/auth|oauth|credential|login/iu.test(reason)) return 'auth_failed';
+  if (/auth|oauth|credential|login|vault|token/iu.test(reason)) return 'auth_failed';
   if (result.timedOut) return 'failed';
   if (written > 0 && reason.trim()) return 'partial';
   if (written > 0) return 'success';
@@ -49,8 +57,17 @@ function publicResult(raw: Partial<SourceSyncResult> & Pick<SourceSyncResult, 'r
     duplicatesSkipped: Number(raw.duplicatesSkipped || 0),
     sessionRefreshed: Boolean(raw.sessionRefreshed),
   };
+  const fetched = Number(result.fetchedPosts || 0);
+  const matched = Number(result.matchedDirectHits || 0) + Number(result.matchedIndustryHits || 0);
+  const duplicate = Number(result.duplicatesSkipped || 0);
+  const written = Number(result.recordsWritten || 0);
   return {
     ...result,
+    fetched,
+    matched,
+    new: written,
+    duplicate,
+    written,
     terminalReason: terminalReason(result),
     licenseBasis,
     authStatus: authStatus(result),
@@ -59,6 +76,7 @@ function publicResult(raw: Partial<SourceSyncResult> & Pick<SourceSyncResult, 'r
 
 async function recordPolicyBlock(connector: string, attemptedAt: string) {
   const policy = sourceExecutionPolicy(connector);
+  await syncSourceConnectorRegistry(policy, PARSER_VERSION);
   const terminalReason: SourceTerminalReason = policy.disposition === 'retired'
     ? 'retired'
     : policy.disposition === 'manual_only'
@@ -101,22 +119,22 @@ async function executeConnector(connector: string, dryRun: boolean, symbol: stri
   }
 
   try {
+    if (dryRun && connector === 'threads') await assertThreadsTokenAvailable();
+    if (!dryRun) await syncSourceConnectorRegistry(policy, PARSER_VERSION);
     const raw = await runSourceSync({ connector, dryRun, ...(symbol ? { symbol } : {}) });
     const result = publicResult(raw, policy.licenseBasis);
     if (!dryRun) {
-      const matched = Number(result.matchedDirectHits || 0) + Number(result.matchedIndustryHits || 0);
-      const duplicate = Number(result.duplicatesSkipped || 0);
       await recordSourceRunLedger({
         externalRunId: result.runId,
         connector,
         expectedAt: attemptedAt,
         attemptedAt,
         succeededAt: ['success', 'successful_empty', 'duplicate_only'].includes(result.terminalReason) ? new Date().toISOString() : null,
-        fetched: Number(result.fetchedPosts || 0),
-        matched,
-        newCount: Math.max(0, matched - duplicate),
-        written: Number(result.recordsWritten || 0),
-        duplicate,
+        fetched: result.fetched,
+        matched: result.matched,
+        newCount: result.new,
+        written: result.written,
+        duplicate: result.duplicate,
         authStatus: result.authStatus,
         terminalReason: result.terminalReason,
         terminalDetail: result.errorCode || result.degradedReason || null,
@@ -141,8 +159,8 @@ async function executeConnector(connector: string, dryRun: boolean, symbol: stri
         newCount: 0,
         written: 0,
         duplicate: 0,
-        authStatus: /auth|oauth|credential/iu.test(error.message) ? 'rejected' : 'not_applicable',
-        terminalReason: /auth|oauth|credential/iu.test(error.message) ? 'auth_failed' : 'failed',
+        authStatus: /auth|oauth|credential|vault|token/iu.test(error.message) ? 'rejected' : 'not_applicable',
+        terminalReason: /auth|oauth|credential|vault|token/iu.test(error.message) ? 'auth_failed' : 'failed',
         terminalDetail: error.message.slice(0, 500),
         parserVersion: PARSER_VERSION,
         policy,
@@ -167,28 +185,52 @@ export async function POST(req: Request) {
     const symbol = (body?.symbol ? String(body.symbol) : (searchParams.get('symbol') || '')).toUpperCase();
 
     if (connector === 'all') {
-      const results: SourceResult[] = [];
-      for (const item of activeSourceConnectorKeys()) results.push(await executeConnector(item, dryRun, symbol));
+      const results = await runIsolatedSourceBatch(
+        activeSourceConnectorKeys(),
+        (item) => executeConnector(item, dryRun, symbol),
+        (item, caught) => {
+          const error = caught as Error & { result?: Record<string, unknown> };
+          const policy = sourceExecutionPolicy(item);
+          const failed = publicResult({
+            runId: `batch-failed-${item}-${Date.now()}`,
+            dryRun,
+            connector: item,
+            recordsWritten: 0,
+            fetchedPosts: 0,
+            entityId: null,
+            errorCode: error.message,
+            degradedReason: error.message,
+            sessionMode: 'not_applicable',
+          }, policy.licenseBasis);
+          if (typeof error.result?.terminalReason === 'string') {
+            failed.terminalReason = error.result.terminalReason as SourceTerminalReason;
+          }
+          return failed;
+        },
+      );
+      const acceptedReasons = new Set<SourceTerminalReason>(['success', 'successful_empty', 'duplicate_only']);
+      const failures = results.filter((row) => !acceptedReasons.has(row.terminalReason));
       return NextResponse.json({
-        ok: true,
+        ok: failures.length === 0,
         result: {
           connector: 'all',
           recordsWritten: results.reduce((sum, row) => sum + row.recordsWritten, 0),
           fetchedPosts: results.reduce((sum, row) => sum + Number(row.fetchedPosts || 0), 0),
           duplicatesSkipped: results.reduce((sum, row) => sum + Number(row.duplicatesSkipped || 0), 0),
+          failureCount: failures.length,
           results,
         },
         meta: { dryRun, connector: 'all', symbol: symbol || null, authSource: auth.authSource },
-      });
+      }, { status: failures.length === 0 ? 200 : 502 });
     }
 
     const result = await executeConnector(connector, dryRun, symbol);
     const accepted = ['success', 'successful_empty', 'duplicate_only'].includes(result.terminalReason);
     return NextResponse.json({
-      ok: accepted || dryRun,
+      ok: accepted,
       result,
       meta: { runId: result.runId, dryRun, connector, symbol: symbol || null, authSource: auth.authSource },
-    }, { status: accepted || dryRun ? 200 : 502 });
+    }, { status: accepted ? 200 : 502 });
   } catch (caught) {
     const error = caught as Error & { status?: number; result?: Record<string, unknown> };
     return NextResponse.json({ ok: false, error: error.message, result: error.result ?? null }, { status: error.status ?? 500 });

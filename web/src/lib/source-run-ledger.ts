@@ -77,6 +77,36 @@ export async function recordSourceRunLedger(input: SourceRunLedgerInput): Promis
   if (error) throw new Error(`source_run_ledger_write_failed:${error.message}`);
 }
 
+const SOURCE_DISPLAY_NAMES: Record<string, string> = {
+  telegram: 'Telegram',
+  threads: 'Threads',
+  ptt: 'PTT Stock',
+  bulltalk: '股市爆料同學會',
+  gdelt: 'GDELT 新聞中介資料',
+  twse_insider: 'TWSE/TPEx/MOPS',
+  investanchors: 'InvestAnchors',
+  instagram: 'Instagram',
+  youtube: 'YouTube',
+  googlenews: 'Google News',
+  udn: 'UDN',
+  anue: '鉅亨網',
+  mobile01: 'Mobile01',
+};
+
+export async function syncSourceConnectorRegistry(policy: SourceExecutionPolicy, parserVersion: string): Promise<void> {
+  const { error } = await getSupabaseServerClient().from('source_connector_registry').upsert({
+    connector: policy.connector,
+    lifecycle: policy.disposition,
+    display_name: SOURCE_DISPLAY_NAMES[policy.connector] ?? policy.connector,
+    license_basis: policy.licenseBasis,
+    parser_version: parserVersion,
+    retired_at: policy.disposition === 'retired' ? new Date().toISOString() : null,
+    retirement_reason: policy.disposition === 'retired' ? policy.terminalReason : null,
+    updated_at: new Date().toISOString(),
+  }, { onConflict: 'connector' });
+  if (error) throw new Error(`source_connector_registry_write_failed:${error.message}`);
+}
+
 export function nextExpectedAt(attemptedAt: string, cadenceHours: number | null): string | null {
   if (!cadenceHours) return null;
   return new Date(new Date(attemptedAt).getTime() + cadenceHours * 60 * 60 * 1000).toISOString();

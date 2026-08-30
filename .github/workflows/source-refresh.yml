@@ -32,27 +32,17 @@ jobs:
       EXPECTED_APP_URL: https://stockinsider-three.vercel.app
       INTERNAL_API_KEY: ${{ secrets.INTERNAL_API_KEY }}
       DRY_RUN: ${{ inputs.dry_run || 'false' }}
-      BULLTALK_LICENSED: ${{ secrets.BULLTALK_LICENSED }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-      - name: Refresh Telegram public channels
-        run: node scripts/call_internal_api.mjs /api/internal/source-sync "{\"connector\":\"telegram\",\"dryRun\":$DRY_RUN}" | tee /tmp/telegram.json
-      - name: Refresh Threads official API
-        run: node scripts/call_internal_api.mjs /api/internal/source-sync "{\"connector\":\"threads\",\"dryRun\":$DRY_RUN}" | tee /tmp/threads.json
-      - name: Refresh PTT metadata
-        run: node scripts/call_internal_api.mjs /api/internal/source-sync "{\"connector\":\"ptt\",\"dryRun\":$DRY_RUN}" | tee /tmp/ptt.json
-      - name: Discover GDELT metadata
-        run: node scripts/call_internal_api.mjs /api/internal/source-sync "{\"connector\":\"gdelt\",\"dryRun\":$DRY_RUN}" | tee /tmp/gdelt.json
-      - name: Refresh licensed BullTalk feed
-        if: env.BULLTALK_LICENSED == 'true'
-        run: node scripts/call_internal_api.mjs /api/internal/source-sync "{\"connector\":\"bulltalk\",\"dryRun\":$DRY_RUN}" | tee /tmp/bulltalk.json
+      - name: Refresh every server-authorized source
+        run: node scripts/call_internal_api.mjs /api/internal/source-sync "{\"connector\":\"all\",\"dryRun\":$DRY_RUN}" | tee /tmp/source-refresh.json
       - name: Upload source terminal results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: source-refresh-${{ github.run_id }}
-          path: /tmp/*.json
+          path: /tmp/source-refresh.json
           retention-days: 14

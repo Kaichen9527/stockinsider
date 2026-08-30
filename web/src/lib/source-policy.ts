@@ -1,6 +1,11 @@
-export const RETIRED_SOURCE_CONNECTORS = ['youtube', 'googlenews', 'anue', 'udn', 'mobile01'] as const;
-export const MANUAL_SOURCE_CONNECTORS = ['investanchors', 'instagram'] as const;
+export const RETIRED_SOURCE_CONNECTORS = ['youtube', 'googlenews', 'anue', 'udn', 'mobile01', 'instagram'] as const;
+export const MANUAL_SOURCE_CONNECTORS = ['investanchors'] as const;
 export const CLOUD_SOURCE_CONNECTORS = ['telegram', 'threads', 'ptt', 'bulltalk', 'gdelt', 'twse_insider'] as const;
+export const SOURCE_CONNECTOR_KEYS = [
+  ...CLOUD_SOURCE_CONNECTORS,
+  ...MANUAL_SOURCE_CONNECTORS,
+  ...RETIRED_SOURCE_CONNECTORS,
+] as const;
 export const APPROVED_TELEGRAM_PUBLIC_CHANNELS = [
   'investanchors',
   'twstockanalysis',
@@ -33,15 +38,15 @@ export function sourceExecutionPolicy(connector: string): SourceExecutionPolicy 
     return {
       connector,
       disposition: 'manual_only',
-      licenseBasis: connector === 'investanchors' ? 'authorized_structured_claims_only' : 'authenticated_human_review_only',
-      terminalReason: 'authenticated_manual_review_required',
+      licenseBasis: 'private_research_lead_official_source_rederivation_only',
+      terminalReason: 'official_source_rederivation_required',
       cadenceHours: null,
     };
   }
   if (connector === 'threads') {
-    return process.env.THREADS_ACCESS_TOKEN
+    return enabled(process.env.THREADS_OFFICIAL_API_ENABLED)
       ? { connector, disposition: 'active', licenseBasis: 'threads_official_api', terminalReason: null, cadenceHours: 6 }
-      : { connector, disposition: 'blocked_auth', licenseBasis: 'threads_official_api', terminalReason: 'threads_oauth_missing', cadenceHours: 6 };
+      : { connector, disposition: 'blocked_auth', licenseBasis: 'threads_official_api', terminalReason: 'threads_app_review_or_vault_token_pending', cadenceHours: 6 };
   }
   if (connector === 'telegram') {
     return enabled(process.env.TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED)

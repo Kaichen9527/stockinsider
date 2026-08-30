@@ -160,8 +160,9 @@ POST /api/internal/report-build
 
 **Connector 狀態確認**：
 
-- Threads/Instagram：需設定 `.env` 的 Meta session cookies（`sessionid`, `csrftoken` 等）。若未設定，connector 自動降級為 watchlist seed 模式，並在 `source_credentials_registry` 標記 `status=missing`。
-- Telegram：需設定 `TELEGRAM_BOT_TOKEN`；公開頻道可透過 `t.me/s/{channel}` HTML 直接抓取，無需 Bot。若無 token，public channel 抓取仍可執行。
+- Threads：只使用官方 keyword-search API 與 Supabase Vault long-lived token；App Review 前保持 `blocked_auth`，沒有 cookie fallback。
+- Instagram 已退役，InvestAnchors 僅作人工參考；兩者都不進正式 ingestion。
+- Telegram：只抓七個核准公開頻道的 `t.me/s/{channel}` metadata、股票命中與原文連結，不讀 Bot 私人群組。
 - Podcast sync：從 `kol_profiles` (approved) 的 `metadata.youtubeUrl` 抓播放清單，或試 RSS。
 - Podcast transcribe：對 `transcript_status='pending'` 的 episode 嘗試取 YouTube 字幕；若取不到標記 `transcript_unavailable`。
 
