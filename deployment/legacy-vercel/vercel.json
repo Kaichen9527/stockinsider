@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "https://stockinsider-three.vercel.app/$1",
+      "permanent": true
+    }
+  ]
+}

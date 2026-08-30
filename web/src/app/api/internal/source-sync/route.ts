@@ -1,8 +1,175 @@
 import { NextResponse } from 'next/server';
 import { requireInternalAuth } from '@/lib/internal-auth';
 import { runSourceSync } from '@/lib/research-v2';
+import { activeSourceConnectorKeys, sourceExecutionPolicy } from '@/lib/source-policy';
+import {
+  nextExpectedAt,
+  recordSourceRunLedger,
+  syncSourceConnectorRegistry,
+  type SourceTerminalReason,
+} from '@/lib/source-run-ledger';
+import type { SourceSyncResult } from '@/lib/types';
+import { runIsolatedSourceBatch } from '@/lib/source-batch';
+import { assertThreadsTokenAvailable } from '@/lib/threads-token';
 
-const ALL_CONNECTORS = ['investanchors', 'threads', 'instagram', 'telegram', 'ptt', 'bulltalk', 'googlenews', 'anue', 'udn', 'mobile01', 'twse_insider'] as const;
+const PARSER_VERSION = 'source-sync-v2.0.0';
+
+type SourceResult = SourceSyncResult & {
+  fetched: number;
+  matched: number;
+  new: number;
+  duplicate: number;
+  written: number;
+  terminalReason: SourceTerminalReason;
+  licenseBasis: string;
+  authStatus: 'authorized' | 'missing' | 'rejected' | 'not_applicable';
+};
+
+function authStatus(result: SourceSyncResult) {
+  const reason = `${result.errorCode || ''} ${result.degradedReason || ''}`;
+  if (/missing|oauth|credential|vault|token/iu.test(reason)) return 'missing' as const;
+  if (/auth|login|rejected/iu.test(reason)) return 'rejected' as const;
+  return result.sessionMode === 'not_applicable' ? 'not_applicable' as const : 'authorized' as const;
+}
+
+function terminalReason(result: SourceSyncResult): SourceTerminalReason {
+  const fetched = Number(result.fetchedPosts || 0);
+  const written = Number(result.recordsWritten || 0);
+  const duplicates = Number(result.duplicatesSkipped || 0);
+  const matched = Number(result.matchedDirectHits || 0) + Number(result.matchedIndustryHits || 0);
+  const reason = `${result.errorCode || ''} ${result.degradedReason || ''}`;
+  if (/auth|oauth|credential|login|vault|token/iu.test(reason)) return 'auth_failed';
+  if (result.timedOut) return 'failed';
+  if (written > 0 && reason.trim()) return 'partial';
+  if (written > 0) return 'success';
+  if (matched > 0 && duplicates >= matched) return 'duplicate_only';
+  if (matched > 0) return 'parser_failed';
+  if (fetched > 0) return 'successful_empty';
+  if (reason.trim()) return 'failed';
+  return 'successful_empty';
+}
+
+function publicResult(raw: Partial<SourceSyncResult> & Pick<SourceSyncResult, 'runId' | 'dryRun' | 'connector' | 'recordsWritten' | 'entityId'>, licenseBasis: string): SourceResult {
+  const result: SourceSyncResult = {
+    ...raw,
+    watermarkBefore: raw.watermarkBefore ?? null,
+    watermarkAfter: raw.watermarkAfter ?? null,
+    duplicatesSkipped: Number(raw.duplicatesSkipped || 0),
+    sessionRefreshed: Boolean(raw.sessionRefreshed),
+  };
+  const fetched = Number(result.fetchedPosts || 0);
+  const matched = Number(result.matchedDirectHits || 0) + Number(result.matchedIndustryHits || 0);
+  const duplicate = Number(result.duplicatesSkipped || 0);
+  const written = Number(result.recordsWritten || 0);
+  return {
+    ...result,
+    fetched,
+    matched,
+    new: written,
+    duplicate,
+    written,
+    terminalReason: terminalReason(result),
+    licenseBasis,
+    authStatus: authStatus(result),
+  };
+}
+
+async function recordPolicyBlock(connector: string, attemptedAt: string) {
+  const policy = sourceExecutionPolicy(connector);
+  await syncSourceConnectorRegistry(policy, PARSER_VERSION);
+  const terminalReason: SourceTerminalReason = policy.disposition === 'retired'
+    ? 'retired'
+    : policy.disposition === 'manual_only'
+      ? 'manual_only'
+      : policy.disposition === 'blocked_auth'
+        ? 'auth_failed'
+        : 'license_blocked';
+  await recordSourceRunLedger({
+    externalRunId: null,
+    connector,
+    expectedAt: attemptedAt,
+    attemptedAt,
+    succeededAt: null,
+    fetched: 0,
+    matched: 0,
+    newCount: 0,
+    written: 0,
+    duplicate: 0,
+    authStatus: policy.disposition === 'blocked_auth' ? 'missing' : 'not_applicable',
+    terminalReason,
+    terminalDetail: policy.terminalReason,
+    parserVersion: PARSER_VERSION,
+    policy,
+    nextExpectedAt: nextExpectedAt(attemptedAt, policy.cadenceHours),
+  });
+  return { policy, terminalReason };
+}
+
+async function executeConnector(connector: string, dryRun: boolean, symbol: string): Promise<SourceResult> {
+  const policy = sourceExecutionPolicy(connector);
+  const attemptedAt = new Date().toISOString();
+  if (policy.disposition !== 'active') {
+    const blocked = dryRun
+      ? { policy, terminalReason: policy.disposition === 'retired' ? 'retired' as const : policy.disposition === 'manual_only' ? 'manual_only' as const : policy.disposition === 'blocked_auth' ? 'auth_failed' as const : 'license_blocked' as const }
+      : await recordPolicyBlock(connector, attemptedAt);
+    const error = new Error(policy.terminalReason || policy.disposition) as Error & { status?: number; result?: Record<string, unknown> };
+    error.status = policy.disposition === 'retired' ? 410 : 409;
+    error.result = { connector, terminalReason: blocked.terminalReason, licenseBasis: policy.licenseBasis, authStatus: policy.disposition === 'blocked_auth' ? 'missing' : 'not_applicable' };
+    throw error;
+  }
+
+  try {
+    if (dryRun && connector === 'threads') await assertThreadsTokenAvailable();
+    if (!dryRun) await syncSourceConnectorRegistry(policy, PARSER_VERSION);
+    const raw = await runSourceSync({ connector, dryRun, ...(symbol ? { symbol } : {}) });
+    const result = publicResult(raw, policy.licenseBasis);
+    if (!dryRun) {
+      await recordSourceRunLedger({
+        externalRunId: result.runId,
+        connector,
+        expectedAt: attemptedAt,
+        attemptedAt,
+        succeededAt: ['success', 'successful_empty', 'duplicate_only'].includes(result.terminalReason) ? new Date().toISOString() : null,
+        fetched: result.fetched,
+        matched: result.matched,
+        newCount: result.new,
+        written: result.written,
+        duplicate: result.duplicate,
+        authStatus: result.authStatus,
+        terminalReason: result.terminalReason,
+        terminalDetail: result.errorCode || result.degradedReason || null,
+        parserVersion: PARSER_VERSION,
+        policy,
+        nextExpectedAt: nextExpectedAt(attemptedAt, policy.cadenceHours),
+        metadata: { symbol: symbol || null, dryRun },
+      });
+    }
+    return result;
+  } catch (caught) {
+    const error = caught as Error & { status?: number; result?: Record<string, unknown> };
+    if (!error.result && !dryRun) {
+      await recordSourceRunLedger({
+        externalRunId: null,
+        connector,
+        expectedAt: attemptedAt,
+        attemptedAt,
+        succeededAt: null,
+        fetched: 0,
+        matched: 0,
+        newCount: 0,
+        written: 0,
+        duplicate: 0,
+        authStatus: /auth|oauth|credential|vault|token/iu.test(error.message) ? 'rejected' : 'not_applicable',
+        terminalReason: /auth|oauth|credential|vault|token/iu.test(error.message) ? 'auth_failed' : 'failed',
+        terminalDetail: error.message.slice(0, 500),
+        parserVersion: PARSER_VERSION,
+        policy,
+        nextExpectedAt: nextExpectedAt(attemptedAt, policy.cadenceHours),
+      });
+    }
+    throw error;
+  }
+}
 
 export async function POST(req: Request) {
   const auth = requireInternalAuth(req);
@@ -10,137 +177,66 @@ export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}));
     const { searchParams } = new URL(req.url);
-    // Support connector via body OR URL query string (for Vercel cron which can't send body)
-    const connector = body?.connector ? String(body.connector) : (searchParams.get('connector') || 'investanchors');
-    const dryRun = Boolean(body?.dryRun);
-    const statusOnly = Boolean(body?.statusOnly) || searchParams.get('statusOnly') === '1';
-    const symbol = body?.symbol ? String(body.symbol).toUpperCase() : (searchParams.get('symbol') || '').toUpperCase();
-    if (statusOnly) {
-      const statusResult = (item: string) => ({
-        connector: item,
-        runId: `status-only-${Date.now()}`,
-        recordsWritten: 0,
-        fetchedPosts: 0,
-        watermarkBefore: null,
-        watermarkAfter: null,
-        duplicatesSkipped: 0,
-        sessionRefreshed: false,
-        errorCode: null,
-        matchedDirectHits: 0,
-        matchedIndustryHits: 0,
-        timedOut: false,
-        degradedReason: 'status_only_skip: canonical source writes are handled by local launchd worker',
-        sessionMode: null,
-      });
-      const results = connector === 'all' ? ALL_CONNECTORS.map((item) => statusResult(item)) : [statusResult(connector)];
-      return NextResponse.json({
-        ok: true,
-        result:
-          connector === 'all'
-            ? {
-                connector: 'all',
-                recordsWritten: 0,
-                fetchedPosts: 0,
-                watermarkBefore: null,
-                watermarkAfter: null,
-                duplicatesSkipped: 0,
-                sessionRefreshed: false,
-                errorCode: null,
-                matchedDirectHits: 0,
-                matchedIndustryHits: 0,
-                timedOut: false,
-                degradedReason: 'status_only_skip',
-                sessionMode: null,
-                results,
-              }
-            : results[0],
-        meta: { runId: `status-only-${Date.now()}`, dryRun, statusOnly: true, connector, symbol: symbol || null },
-      });
+    if (Boolean(body?.statusOnly) || searchParams.get('statusOnly') === '1') {
+      return NextResponse.json({ ok: false, error: 'status_only_sync_retired', terminalReason: 'failed' }, { status: 400 });
     }
+    const connector = body?.connector ? String(body.connector) : (searchParams.get('connector') || 'telegram');
+    const dryRun = Boolean(body?.dryRun);
+    const symbol = (body?.symbol ? String(body.symbol) : (searchParams.get('symbol') || '')).toUpperCase();
+
     if (connector === 'all') {
-      const results = [] as Array<{
-        connector: string;
-        runId: string;
-        recordsWritten: number;
-        fetchedPosts: number;
-        watermarkBefore: string | null;
-        watermarkAfter: string | null;
-        duplicatesSkipped: number;
-        sessionRefreshed: boolean;
-        errorCode: string | null;
-        matchedDirectHits: number;
-        matchedIndustryHits: number;
-        timedOut: boolean;
-        degradedReason: string | null;
-        sessionMode: string | null;
-      }>;
-      for (const item of ALL_CONNECTORS) {
-        const result = await runSourceSync({ connector: item, dryRun, ...(symbol ? { symbol } : {}) });
-        results.push({
-          connector: item,
-          runId: String(result.runId || ''),
-          recordsWritten: Number(result.recordsWritten || 0),
-          fetchedPosts: Number(result.fetchedPosts ?? result.recordsWritten ?? 0),
-          watermarkBefore: result.watermarkBefore ?? null,
-          watermarkAfter: result.watermarkAfter ?? null,
-          duplicatesSkipped: Number(result.duplicatesSkipped || 0),
-          sessionRefreshed: Boolean(result.sessionRefreshed),
-          errorCode: result.errorCode ?? null,
-          matchedDirectHits: Number(result.matchedDirectHits || 0),
-          matchedIndustryHits: Number(result.matchedIndustryHits || 0),
-          timedOut: Boolean(result.timedOut),
-          degradedReason: result.degradedReason ?? null,
-          sessionMode: result.sessionMode ?? null,
-        });
-      }
+      const results = await runIsolatedSourceBatch(
+        activeSourceConnectorKeys(),
+        (item) => executeConnector(item, dryRun, symbol),
+        (item, caught) => {
+          const error = caught as Error & { result?: Record<string, unknown> };
+          const policy = sourceExecutionPolicy(item);
+          const failed = publicResult({
+            runId: `batch-failed-${item}-${Date.now()}`,
+            dryRun,
+            connector: item,
+            recordsWritten: 0,
+            fetchedPosts: 0,
+            entityId: null,
+            errorCode: error.message,
+            degradedReason: error.message,
+            sessionMode: 'not_applicable',
+          }, policy.licenseBasis);
+          if (typeof error.result?.terminalReason === 'string') {
+            failed.terminalReason = error.result.terminalReason as SourceTerminalReason;
+          }
+          return failed;
+        },
+      );
+      const acceptedReasons = new Set<SourceTerminalReason>(['success', 'successful_empty', 'duplicate_only']);
+      const failures = results.filter((row) => !acceptedReasons.has(row.terminalReason));
       return NextResponse.json({
-        ok: true,
+        ok: failures.length === 0,
         result: {
           connector: 'all',
           recordsWritten: results.reduce((sum, row) => sum + row.recordsWritten, 0),
-          fetchedPosts: results.reduce((sum, row) => sum + row.fetchedPosts, 0),
-          watermarkBefore: null,
-          watermarkAfter: null,
-        duplicatesSkipped: results.reduce((sum, row) => sum + row.duplicatesSkipped, 0),
-        sessionRefreshed: false,
-        errorCode: null,
-        matchedDirectHits: results.reduce((sum, row) => sum + row.matchedDirectHits, 0),
-        matchedIndustryHits: results.reduce((sum, row) => sum + row.matchedIndustryHits, 0),
-        timedOut: results.some((row) => row.timedOut),
-        degradedReason: results.some((row) => row.degradedReason) ? 'see_results' : null,
-        sessionMode: null,
-        results,
-      },
-        meta: { runId: `batch-${Date.now()}`, dryRun, connector: 'all', symbol: symbol || null },
-      });
+          fetchedPosts: results.reduce((sum, row) => sum + Number(row.fetchedPosts || 0), 0),
+          duplicatesSkipped: results.reduce((sum, row) => sum + Number(row.duplicatesSkipped || 0), 0),
+          failureCount: failures.length,
+          results,
+        },
+        meta: { dryRun, connector: 'all', symbol: symbol || null, authSource: auth.authSource },
+      }, { status: failures.length === 0 ? 200 : 502 });
     }
-    const result = await runSourceSync({ connector, dryRun, ...(symbol ? { symbol } : {}) });
+
+    const result = await executeConnector(connector, dryRun, symbol);
+    const accepted = ['success', 'successful_empty', 'duplicate_only'].includes(result.terminalReason);
     return NextResponse.json({
-      ok: true,
-      result: {
-        connector: result.connector,
-        recordsWritten: result.recordsWritten,
-        fetchedPosts: result.fetchedPosts ?? result.recordsWritten ?? 0,
-        entityId: result.entityId,
-        watermarkBefore: result.watermarkBefore ?? null,
-        watermarkAfter: result.watermarkAfter ?? null,
-        duplicatesSkipped: result.duplicatesSkipped ?? 0,
-        sessionRefreshed: Boolean(result.sessionRefreshed),
-        errorCode: result.errorCode ?? null,
-        matchedDirectHits: Number(result.matchedDirectHits || 0),
-        matchedIndustryHits: Number(result.matchedIndustryHits || 0),
-        timedOut: Boolean(result.timedOut),
-        degradedReason: result.degradedReason ?? null,
-        sessionMode: result.sessionMode ?? null,
-      },
-      meta: { runId: result.runId, dryRun, connector, symbol: symbol || null },
-    });
-  } catch (error) {
-    return NextResponse.json({ ok: false, error: (error as Error).message, errorCode: 'source_sync_failed' }, { status: 500 });
+      ok: accepted,
+      result,
+      meta: { runId: result.runId, dryRun, connector, symbol: symbol || null, authSource: auth.authSource },
+    }, { status: accepted ? 200 : 502 });
+  } catch (caught) {
+    const error = caught as Error & { status?: number; result?: Record<string, unknown> };
+    return NextResponse.json({ ok: false, error: error.message, result: error.result ?? null }, { status: error.status ?? 500 });
   }
 }
 
-// Vercel cron triggers via GET; mirror POST logic
 export async function GET(req: Request) {
   return POST(req);
 }

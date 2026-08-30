@@ -1610,7 +1610,21 @@ export interface SourceSignalCard {
   sourceProvenances?: Array<{
     ref: string; sourceKey: string | null; sourceName: string | null; sourceUrl: string;
     kolIdentity: string | null; publishedAt: string | null; collectedAt: string | null; evaluatedAt: string | null;
+    stance?: 'positive' | 'negative' | 'neutral' | 'mixed' | null;
   }>;
+  stageAssessment?: {
+    stage: 'found' | 'waiting' | 'actionable';
+    sessionDate: string;
+    discoveryScore: number;
+    researchScore: number;
+    actionabilityScore: number;
+    dataConfidenceScore: number;
+    baseUpsidePct: number | null;
+    rewardRiskRatio: number | null;
+    unmetConditions: string[];
+    promotionReasons: string[];
+    rulesetVersion: string;
+  };
   citations?: Array<{
     ref: string; sourceKey: string | null; sourceName: string | null; sourceUrl: string;
     kolIdentity: string | null; publishedAt: string | null; collectedAt: string | null; evaluatedAt: string | null;
@@ -1633,6 +1647,11 @@ export interface RadarDailyPayload {
   };
   loadStatus?: 'ok' | 'degraded' | 'unavailable';
   loadWarnings?: string[];
+  stages?: {
+    found: SourceSignalCard[];
+    waiting: SourceSignalCard[];
+    actionable: SourceSignalCard[];
+  };
   projectionHealth?: {
     status: 'fresh' | 'stale_readonly' | 'unavailable';
     integrityStatus?: 'valid' | 'conflict' | 'missing';
@@ -2176,7 +2195,9 @@ export interface SourceSearchPayload {
   };
   latestSourceAt: string | null;
   coverage: Array<{ platform: string; count: number }>;
+  coverageScope: 'complete_filtered_result';
   items: SourceSearchResultItem[];
+  sourceRunLedger: import('./source-run-ledger').SourceRunLedgerView[];
   connectorStatus: ConnectorStatusView[];
   recentRuns: SourceConnectorRunView[];
   recentAudits: SourceAuditView[];

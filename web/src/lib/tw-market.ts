@@ -130,6 +130,28 @@ function ohlcNumber(value: unknown) {
   return toFiniteNumber(value);
 }
 
+export function parseTpexTradingStockRows(payload: Record<string, unknown>) {
+  const tables = Array.isArray(payload.tables) ? payload.tables as Array<Record<string, unknown>> : [];
+  const data = tables.flatMap((table) => Array.isArray(table.data) ? table.data as unknown[][] : []);
+  return data.flatMap((item) => {
+    const roc = String(item[0] || '').match(/^(\d{3})\/(\d{2})\/(\d{2})$/u);
+    const lots = ohlcNumber(item[1]);
+    const open = ohlcNumber(item[3]);
+    const high = ohlcNumber(item[4]);
+    const low = ohlcNumber(item[5]);
+    const close = ohlcNumber(item[6]);
+    if (!roc || open == null || high == null || low == null || close == null) return [];
+    return [{
+      time: `${Number(roc[1]) + 1911}-${roc[2]}-${roc[3]}`,
+      open,
+      high,
+      low,
+      close,
+      volume: lots == null ? null : Math.round(lots * 1000),
+    }];
+  });
+}
+
 async function getTwStockClient() {
   if (!twStockClientPromise) {
     twStockClientPromise = (async () => {
@@ -201,52 +223,89 @@ export async function fetchTwStockValues(symbol: string) {
 }
 
 export async function fetchTwStockDailyBars(symbol: string, daysBack = 120) {
-  const client = await getTwStockClient();
-  if (!client) return null;
-  const dates = buildRecentDates(Math.max(Math.ceil(daysBack * 1.6), 20));
   const rows: Array<{ time: string; open: number; high: number; low: number; close: number; volume: number | null }> = [];
-  const exchanges: Array<'TWSE' | 'TPEx' | undefined> = [undefined, 'TWSE', 'TPEx'];
-
-  for (const date of dates) {
-    for (const exchange of exchanges) {
-      try {
-        const data = await withTwStockTimeout(client.stocks.values({ symbol, date, exchange }));
-        const open =
-          ohlcNumber((data as { openPrice?: unknown }).openPrice) ??
-          ohlcNumber((data as { openingPrice?: unknown }).openingPrice);
-        const high =
-          ohlcNumber((data as { highPrice?: unknown }).highPrice) ??
-          ohlcNumber((data as { highestPrice?: unknown }).highestPrice);
-        const low =
-          ohlcNumber((data as { lowPrice?: unknown }).lowPrice) ??
-          ohlcNumber((data as { lowestPrice?: unknown }).lowestPrice);
-        const close =
-          ohlcNumber((data as { closePrice?: unknown }).closePrice) ??
-          ohlcNumber((data as { closingPrice?: unknown }).closingPrice) ??
-          ohlcNumber((data as { lastPrice?: unknown }).lastPrice);
-        const volume =
-          ohlcNumber((data as { volume?: unknown }).volume) ??
-          ohlcNumber((data as { tradeVolume?: unknown }).tradeVolume) ??
-          ohlcNumber((data as { totalVoluem?: unknown }).totalVoluem);
-        if (open == null || high == null || low == null || close == null) continue;
-        rows.push({
-          time: date,
-          open: Number(open.toFixed(2)),
-          high: Number(high.toFixed(2)),
-          low: Number(low.toFixed(2)),
-          close: Number(close.toFixed(2)),
-          volume: volume == null ? null : Number(volume.toFixed(0)),
-        });
-        break;
-      } catch {
-        continue;
-      }
+  const monthCount = Math.min(24, Math.max(2, Math.ceil(daysBack / 18) + 2));
+  const monthStarts = Array.from({ length: monthCount }, (_, offset) => {
+    const value = new Date();
+    value.setUTCDate(1);
+    value.setUTCMonth(value.getUTCMonth() - offset);
+    return `${value.getUTCFullYear()}${String(value.getUTCMonth() + 1).padStart(2, '0')}01`;
+  });
+  const monthlyResults = await Promise.all(monthStarts.map(async (date) => {
+    try {
+      const response = await fetch(`https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=${date}&stockNo=${encodeURIComponent(symbol)}&response=json`, {
+        headers: { accept: 'application/json', 'user-agent': 'StockInsider/2.0 official-market-data' },
+        signal: AbortSignal.timeout(8_000),
+      });
+      if (!response.ok) return [];
+      const payload = await response.json() as { stat?: string; data?: string[][] };
+      if (payload.stat !== 'OK' || !Array.isArray(payload.data)) return [];
+      return payload.data.flatMap((item) => {
+        const roc = String(item[0] || '').match(/^(\d{3})\/(\d{2})\/(\d{2})$/u);
+        const volume = ohlcNumber(item[1]);
+        const open = ohlcNumber(item[3]);
+        const high = ohlcNumber(item[4]);
+        const low = ohlcNumber(item[5]);
+        const close = ohlcNumber(item[6]);
+        if (!roc || open == null || high == null || low == null || close == null) return [];
+        return [{
+          time: `${Number(roc[1]) + 1911}-${roc[2]}-${roc[3]}`,
+          open, high, low, close,
+          volume: volume == null ? null : Math.round(volume),
+        }];
+      });
+    } catch {
+      return [];
     }
-    if (rows.length >= daysBack) break;
+  }));
+  rows.push(...monthlyResults.flat());
+
+  if (rows.length === 0) {
+    const tpexMonthlyResults = await Promise.all(monthStarts.map(async (date) => {
+      const month = `${date.slice(0, 4)}/${date.slice(4, 6)}/01`;
+      try {
+        const response = await fetch(`https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=${encodeURIComponent(symbol)}&date=${month}&response=json`, {
+          headers: { accept: 'application/json', 'user-agent': 'StockInsider/2.0 official-market-data' },
+          signal: AbortSignal.timeout(8_000),
+        });
+        if (!response.ok) return [];
+        return parseTpexTradingStockRows(await response.json() as Record<string, unknown>);
+      } catch {
+        return [];
+      }
+    }));
+    rows.push(...tpexMonthlyResults.flat());
   }
 
+  if (rows.length === 0) {
+    try {
+      const response = await fetch('https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes', {
+        headers: { accept: 'application/json', 'user-agent': 'StockInsider/2.0 official-market-data' },
+        signal: AbortSignal.timeout(10_000),
+      });
+      const payload = response.ok ? await response.json() as Array<Record<string, unknown>> : [];
+      const item = payload.find((row) => String(row.SecuritiesCompanyCode || '') === symbol);
+      const date = String(item?.Date || '').match(/^(\d{3})(\d{2})(\d{2})$/u);
+      const open = ohlcNumber(item?.Open);
+      const high = ohlcNumber(item?.High);
+      const low = ohlcNumber(item?.Low);
+      const close = ohlcNumber(item?.Close);
+      if (date && open != null && high != null && low != null && close != null) {
+        rows.push({
+          time: `${Number(date[1]) + 1911}-${date[2]}-${date[3]}`,
+          open, high, low, close,
+          volume: ohlcNumber(item?.TradingShares),
+        });
+      }
+    } catch {
+      // TPEx historical series remains unknown until an authorized historical feed is configured.
+    }
+  }
   if (rows.length === 0) return null;
-  return rows.sort((a, b) => a.time.localeCompare(b.time));
+  return rows
+    .sort((a, b) => a.time.localeCompare(b.time))
+    .filter((row, index, values) => index === values.findIndex((item) => item.time === row.time))
+    .slice(-daysBack);
 }
 
 export async function fetchTwStockInstitutional(symbol: string) {

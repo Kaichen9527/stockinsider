@@ -1992,15 +1992,15 @@ const semanticExecutors = {
       }
       case 'FNL-006': {
         const status = sourceAvailability([
-          { sourceKey: 'threads', configured: true, access: 'authorized', health: 'healthy' },
-          { sourceKey: 'youtube', configured: true, access: 'authorized', health: 'failed' },
-          { sourceKey: 'mops_material_event', configured: true, access: 'authorized', health: 'healthy' },
+          { sourceKey: 'threads', configured: true, access: 'authorized', health: 'ok' },
+          { sourceKey: 'telegram', configured: true, access: 'authorized', health: 'failed' },
+          { sourceKey: 'mops_material_event', configured: true, access: 'authorized', health: 'ok' },
         ]);
         assert.equal(status.status, 'degraded');
         assert.equal(status.eligibleCount, 2);
         assert.deepEqual(status.sources.filter(({ eligible }) => !eligible).map(
           ({ sourceKey, reason }) => [sourceKey, reason],
-        ), [['youtube', 'connector_failed']]);
+        ), [['telegram', 'connector_failed']]);
         const remaining = Array.from({ length: 40 }, (_, index) => ({
           id: index,
           group: index % 2 ? 'mops_material_event' : 'threads',

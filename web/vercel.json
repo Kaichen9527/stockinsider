@@ -1,20 +1,8 @@
 {
   "crons": [
     {
-      "path": "/api/internal/pipeline-research-run",
-      "schedule": "30 12 * * *"
-    },
-    {
-      "path": "/api/internal/pipeline-run",
-      "schedule": "45 12 * * *"
-    },
-    {
-      "path": "/api/internal/pipeline-dispatch-run",
-      "schedule": "55 12 * * *"
-    },
-    {
       "path": "/api/internal/monitoring-check",
-      "schedule": "5 13 * * *"
+      "schedule": "0 12 * * *"
     }
   ]
 }

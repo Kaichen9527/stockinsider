@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseServerClient } from '@/lib/supabase-server';
 import { resolveDataMode } from '@/lib/data-mode';
-import { summarizeMetaEnvConfig } from '@/lib/source-auth';
+import { SOURCE_CONNECTOR_KEYS, sourceExecutionPolicy } from '@/lib/source-policy';
 import { assessTrackedRuntimeHealth, runtimeObservationMatchesProducer } from '@/lib/opportunity-v3/runtime-health';
 import type { RuntimeHealthObservation } from '@/lib/opportunity-v3/runtime-health';
 import { sha256Canonical } from '@/lib/opportunity-v3/canonical';
@@ -9,6 +9,7 @@ import { requireInternalAuth } from '@/lib/internal-auth';
 import { assessProjectionFreshness, type ProjectionHealth } from '@/lib/opportunity-v3/projection-freshness';
 import { resolveReviewedConsumerCommitSha } from '@/lib/opportunity-v3/reviewed-release-identity';
 import { deriveEffectiveProjectionHealth } from '@/lib/opportunity-v3/effective-health';
+import { activeSourceHealthFailures as evaluateActiveSourceHealth, type SourceHealthRun } from '@/lib/source-health';
 
 type Row = Record<string, unknown>;
 
@@ -36,21 +37,18 @@ export async function GET(request: Request) {
   }
   const dataMode = resolveDataMode();
   const fallbackUsed = dataMode === 'demo';
-  const metaEnvConfig = summarizeMetaEnvConfig();
   const env = {
     INTERNAL_API_KEY: !!process.env.INTERNAL_API_KEY,
     CRON_SECRET: !!process.env.CRON_SECRET,
     SUPABASE_URL: !!(process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL),
     SUPABASE_SERVICE_KEY: !!(process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY),
-    meta_cookies: !!process.env.sessionid,
-    TELEGRAM_BOT_TOKEN: !!process.env.TELEGRAM_BOT_TOKEN,
+    THREADS_OFFICIAL_API_ENABLED: process.env.THREADS_OFFICIAL_API_ENABLED === 'true',
     YOUTUBE_API_KEY: !!process.env.YOUTUBE_API_KEY,
     OPENAI_API_KEY: !!process.env.OPENAI_API_KEY,
     OPENROUTER_API_KEY: !!process.env.OPENROUTER_API_KEY,
-    metaCookieConfig: metaEnvConfig,
   };
 
-  let connectors: Array<{ platform: string; status: string; lastCheckedAt: string | null; errorMessage: string | null }> = [];
+  let connectors: Array<{ platform: string; status: string; lastCheckedAt: string | null; errorMessage: string | null; metadata: Record<string, unknown> | null }> = [];
   let lastCronRuns: Array<{ connector: string; lastSuccessAt: string | null; lastStatus: string; lastRunAt: string | null; lastRecordsWritten: number; lastErrorSummary: string | null }> = [];
   let connectorStatus: Array<{
     connector: string;
@@ -61,11 +59,18 @@ export async function GET(request: Request) {
     lastSuccessAt: string | null;
     lastRecordsWritten: number;
     lastErrorSummary: string | null;
+    disposition: ReturnType<typeof sourceExecutionPolicy>['disposition'];
+    licenseBasis: string;
+    terminalReason: string | null;
+    credentialExpiresAt: string | null;
+    credentialExpiryWarning: boolean;
   }> = [];
   let marketRegimeUpdatedAt: string | null = null;
   let themeHeatUpdatedAt: string | null = null;
   let dataCollectLastSuccessAt: string | null = null;
   let researchPipelineLastSuccessAt: string | null = null;
+  let sourceHealthRuns: SourceHealthRun[] = [];
+  let databaseHealthy = true;
   let sourceLedRuntime = assessTrackedRuntimeHealth({
     manifestPresent: false, manifestCanonical: false, reviewBindingValid: false,
     workerHashMatches: false, configHashMatches: false,
@@ -220,7 +225,7 @@ export async function GET(request: Request) {
     // Credential status per platform
     const { data: creds } = await supabase
       .from('source_credentials_registry')
-      .select('platform,status,updated_at,error_message')
+      .select('platform,status,updated_at,error_message,metadata')
       .order('updated_at', { ascending: false });
 
     if (creds) {
@@ -237,8 +242,26 @@ export async function GET(request: Request) {
           status: String(c.status || 'unknown'),
           lastCheckedAt: c.updated_at ? String(c.updated_at) : null,
           errorMessage: c.error_message ? String(c.error_message) : null,
+          metadata: c.metadata && typeof c.metadata === 'object' ? c.metadata as Record<string, unknown> : null,
         }));
     }
+
+    const { data: ledgerRuns, error: ledgerError } = await supabase
+      .from('source_run_ledger')
+      .select('connector,attempted_at,next_expected_at,terminal_reason,auth_status')
+      .order('attempted_at', { ascending: false })
+      .limit(500);
+    if (ledgerError) throw new Error('source_run_ledger_health_read_failed');
+    sourceHealthRuns = (ledgerRuns ?? []).map((raw) => {
+      const row = raw as Row;
+      return {
+        connector: String(row.connector || ''),
+        attemptedAt: String(row.attempted_at || ''),
+        nextExpectedAt: row.next_expected_at ? String(row.next_expected_at) : null,
+        terminalReason: String(row.terminal_reason || 'failed') as SourceHealthRun['terminalReason'],
+        authStatus: String(row.auth_status || 'not_applicable') as SourceHealthRun['authStatus'],
+      };
+    }).filter((row) => Boolean(row.connector && row.attemptedAt));
 
     // Last successful cron run per connector
     const { data: runs } = await supabase
@@ -248,7 +271,7 @@ export async function GET(request: Request) {
       .limit(200);
 
     if (runs) {
-      const validConnectors = new Set(['investanchors', 'threads', 'instagram', 'telegram', 'podcast', 'youtube', 'ptt', 'bulltalk', 'googlenews', 'anue', 'udn', 'mobile01', 'twse_insider']);
+      const validConnectors = new Set<string>([...SOURCE_CONNECTOR_KEYS, 'podcast']);
       const byConnector = new Map<string, { lastStatus: string; lastRunAt: string | null; lastRecordsWritten: number; lastErrorSummary: string | null }>();
       const successByConnector = new Map<string, string | null>();
       const nowMs = Date.now();
@@ -288,25 +311,22 @@ export async function GET(request: Request) {
       new Set<string>([
         ...connectors.map((item) => item.platform),
         ...lastCronRuns.map((item) => item.connector),
-        'investanchors',
-        'threads',
-        'instagram',
-        'telegram',
+        ...SOURCE_CONNECTOR_KEYS,
         'podcast',
-        'youtube',
-        'ptt',
-        'bulltalk',
-        'googlenews',
-        'anue',
-        'udn',
-        'mobile01',
-        'twse_insider',
       ]),
     );
 
     connectorStatus = connectorNames.map((name) => {
       const credential = connectors.find((item) => item.platform === name);
       const run = lastCronRuns.find((item) => item.connector === name);
+      const policy = name === 'podcast'
+        ? { disposition: 'manual_only' as const, licenseBasis: 'creator_authorized_rss_only', terminalReason: 'authorized_feed_required' }
+        : sourceExecutionPolicy(name);
+      const rawExpiresAt = credential?.metadata?.expires_at;
+      const credentialExpiresAt = typeof rawExpiresAt === 'string' ? rawExpiresAt : null;
+      const credentialExpiryWarning = name === 'threads'
+        && credentialExpiresAt !== null
+        && Date.parse(credentialExpiresAt) - Date.now() < 14 * 24 * 60 * 60 * 1000;
       return {
         connector: name,
         credentialStatus: credential?.status || 'unknown',
@@ -316,6 +336,11 @@ export async function GET(request: Request) {
         lastSuccessAt: run?.lastSuccessAt || null,
         lastRecordsWritten: run?.lastRecordsWritten || 0,
         lastErrorSummary: run?.lastErrorSummary || credential?.errorMessage || null,
+        disposition: policy.disposition,
+        licenseBasis: policy.licenseBasis,
+        terminalReason: policy.terminalReason,
+        credentialExpiresAt,
+        credentialExpiryWarning,
       };
     });
 
@@ -346,17 +371,38 @@ export async function GET(request: Request) {
     dataCollectLastSuccessAt = dataCollectData?.[0]?.finished_at ? String(dataCollectData[0].finished_at) : null;
     researchPipelineLastSuccessAt = pipelineData?.[0]?.finished_at ? String(pipelineData[0].finished_at) : null;
   } catch {
-    // Supabase not configured — return env section only
+    // A missing database is a real health failure, but never expose credentials or raw errors.
+    databaseHealthy = false;
   }
 
+  const activeConnectorNames = connectorStatus
+    .filter((item) => item.disposition === 'active')
+    .map((item) => item.connector);
+  const ledgerFailures = evaluateActiveSourceHealth(activeConnectorNames, sourceHealthRuns);
+  const expiryFailures = connectorStatus
+    .filter((item) => item.disposition === 'active' && item.credentialExpiryWarning)
+    .map((item) => ({
+      connector: item.connector,
+      reason: 'credential_expiring' as const,
+      latestTerminalReason: null,
+      failedRunCount: 0,
+    }));
+  const activeSourceFailures = [...ledgerFailures, ...expiryFailures];
+  // Demo mode intentionally serves local fixtures without a database. Keep the
+  // database diagnostic visible, but reserve fail-closed readiness for live data.
+  const databaseRequirementMet = dataMode === 'demo' || databaseHealthy;
+  const ok = databaseRequirementMet && activeSourceFailures.length === 0;
+
   return NextResponse.json({
-    ok: true,
+    ok,
     dataMode,
     fallbackUsed,
     env,
     connectors,
     lastCronRuns,
     connectorStatus,
+    activeSourceFailures,
+    databaseHealthy,
     marketRegimeUpdatedAt,
     themeHeatUpdatedAt,
     dataCollectLastSuccessAt,
@@ -364,5 +410,5 @@ export async function GET(request: Request) {
     sourceLedRuntime,
     projectionHealth,
     checkedAt: new Date().toISOString(),
-  }, { headers: { 'Cache-Control': 'private, no-store' } });
+  }, { status: ok ? 200 : 503, headers: { 'Cache-Control': 'private, no-store' } });
 }

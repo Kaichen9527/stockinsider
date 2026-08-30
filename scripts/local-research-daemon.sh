@@ -97,7 +97,7 @@ run_cycle() {
 
   ensure_web_server
 
-  local connectors=(threads instagram telegram investanchors)
+  local connectors=(all)
   for connector in "${connectors[@]}"; do
     run_job "/api/internal/source-sync" "{\"dryRun\":false,\"connector\":\"${connector}\"}" "source-sync:${connector}"
   done

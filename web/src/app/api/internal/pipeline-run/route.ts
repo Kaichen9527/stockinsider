@@ -4,6 +4,8 @@ import { getLatestIngestionState, runPipelineFlow } from '@/lib/domain';
 import { requireInternalAuth } from '@/lib/internal-auth';
 import { withRetry } from '@/lib/retry';
 
+export const maxDuration = 800;
+
 // Vercel cron triggers via GET
 export async function GET(req: Request) {
   return POST(req);

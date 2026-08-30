@@ -4,20 +4,12 @@ import { createHash, randomUUID } from 'crypto';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
 import { getSupabaseServerClient } from './supabase-server';
-import {
-  createMetaSessionStore,
-  resolveInvestAnchorsCredential,
-  resolveMetaAuthConfig,
-  THREADS_CANONICAL_DOMAIN,
-  THREADS_CANONICAL_ORIGIN,
-  THREADS_LEGACY_DOMAIN,
-  THREADS_LEGACY_ORIGIN,
-  type MetaAuthConfig,
-  type MetaPlatform,
-  type PersistedMetaSessionState,
-} from './source-auth';
+import { THREADS_CANONICAL_ORIGIN } from './source-auth';
+import { APPROVED_TELEGRAM_PUBLIC_CHANNELS, RETIRED_SOURCE_CONNECTORS } from './source-policy';
+import { getThreadsTokenForRun, threadsTokenRegistryMetadata } from './threads-token';
 
 type Row = Record<string, unknown>;
+const AUTHORIZED_BROKER_SOURCE_MODES = ['manual_pdf', 'manual_csv', 'imported_pdf'] as const;
 
 const ROOT_DIR = path.resolve(process.cwd(), '..');
 const MATERIALS_DIR = path.join(ROOT_DIR, 'materials');
@@ -27,9 +19,7 @@ const ARTIFACTS_DIR = process.env.VERCEL
   : path.join(ROOT_DIR, '.agent', 'artifacts', 'source-audits');
 const execFileAsync = promisify(execFile);
 
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || process.env.BOT_TOKEN || '';
 const SOURCE_RAW_CONTENT_MAX_CHARS = Math.max(500, Number(process.env.SOURCE_RAW_CONTENT_MAX_CHARS || 4000));
-const DEFAULT_TELEGRAM_CHANNEL_NAMES = ['investanchors', 'twstockanalysis', 'Gooaye', 'johnstock888', 'eaglewealth', 'a178178', 'musclestock'];
 const DEFAULT_STORY_CANDIDATE_TOP_N = 50;
 const DEFAULT_SOURCE_SYNC_LOOKBACK_HOURS = 24;
 const US_BROKER_KEYWORDS = [
@@ -73,6 +63,7 @@ const KOL_SEEDS = [
       threadsUsername: 'stockcancer',
       telegramUrl: 'https://t.me/s/Gooaye',
       podcastName: '股癌 Gooaye',
+      rssUrl: 'https://feeds.soundon.fm/podcasts/954689a5-3096-43a4-a80b-7810b219cef3.xml',
       spotifyUrl: 'https://open.spotify.com/show/6xkNsQwVfWaB6MvdYhD5pW',
       appleUrl: 'https://podcasts.apple.com/tw/podcast/%E8%82%A1%E7%99%8C/id1535838033',
     },
@@ -148,6 +139,7 @@ const KOL_SEEDS = [
       youtubeUrl: 'https://www.youtube.com/@investaddict',
       instagramUrl: 'https://www.instagram.com/investaddict_tw/',
       podcastName: '投資癮',
+      rssUrl: 'https://feeds.soundon.fm/podcasts/686ddd56-9b4d-4585-8e9d-31e722f989cf.xml',
     },
   },
   {
@@ -207,6 +199,7 @@ const KOL_SEEDS = [
       youtubeUrl: 'https://www.youtube.com/@yutinghaofinance',
       youtubeChannelId: 'UC0lbAQVpenvfA2QqzsRtL_g',
       podcastName: '游庭皓的財經皓角',
+      rssUrl: 'https://feeds.soundcloud.com/users/soundcloud:users:735679489/sounds.rss',
       appleUrl: 'https://podcasts.apple.com/tw/podcast/id1488295306',
       keywords: ['台股', '產業趨勢', '資金流向', '總經', '財經皓角'],
       sourcePriority: 0.74,
@@ -222,6 +215,7 @@ const KOL_SEEDS = [
       youtubeUrl: 'https://www.youtube.com/channel/UCT3uWFvKLVpRnEealmRwvrw',
       youtubeChannelId: 'UCT3uWFvKLVpRnEealmRwvrw',
       podcastName: 'M觀點 | 科技X商業X投資',
+      rssUrl: 'https://feeds.soundon.fm/podcasts/b8f5a471-f4f7-4763-9678-65887beda63a.xml',
       websiteUrl: 'https://miula.tw/miula_perspective/',
       keywords: ['科技趨勢', 'AI', '半導體', '商業模式', '投資觀點'],
       sourcePriority: 0.68,
@@ -251,6 +245,7 @@ const KOL_SEEDS = [
     profileUrl: 'https://podcasts.apple.com/tw/podcast/id1513810531',
     metadata: {
       podcastName: '財報狗 - 掌握台股美股時事議題',
+      rssUrl: 'https://feed.firstory.me/rss/user/clcftm46z000201z45w1c47fi',
       appleUrl: 'https://podcasts.apple.com/tw/podcast/id1513810531',
       youtubeUrl: 'https://www.youtube.com/@StatementdogAcademy',
       websiteUrl: 'https://statementdog.com/',
@@ -470,39 +465,9 @@ function unique<T>(values: T[]) {
   return Array.from(new Set(values));
 }
 
-function looksLikeThreadsLoginWall(text: string) {
-  const normalized = compactText(text).toLowerCase();
-  if (!normalized) return false;
-  const patterns = [
-    'scan to get the app',
-    'log in with your instagram account',
-    'use the app',
-    'threads.net/login',
-    'threads.com/login',
-    'log in or sign up for threads',
-    'sign up for threads',
-  ];
-  return patterns.some((pattern) => normalized.includes(pattern));
-}
 
-function normalizeThreadsUrl(url: string) {
-  return compactText(url).replace(THREADS_LEGACY_ORIGIN, THREADS_CANONICAL_ORIGIN);
-}
 
-function isThreadsLoginUrl(url: string) {
-  const normalized = normalizeThreadsUrl(url).toLowerCase();
-  return normalized.includes('/login');
-}
 
-function detectLegacyThreadsSession(session: PersistedMetaSessionState | null) {
-  if (!session?.cookies?.length) return false;
-  const domains = new Set(
-    session.cookies
-      .map((cookie) => compactText(cookie.domain).toLowerCase())
-      .filter(Boolean),
-  );
-  return domains.has(THREADS_LEGACY_DOMAIN) && !domains.has(THREADS_CANONICAL_DOMAIN);
-}
 
 function extractTwSymbolsWithContext(text: string, validSymbols?: Set<string>) {
   const symbols = new Set<string>();
@@ -1350,115 +1315,6 @@ type SourceDocMatchType = 'direct_symbol' | 'alias' | 'indirect' | 'none';
 type SourceDocCrawlMode = 'symbol_scoped' | 'market_scan' | 'account_feed' | 'public_search' | 'author_watch' | 'channel_scan';
 type SourceStoryAxis = 'stock' | 'industry' | 'kol';
 
-type MetaSessionMode = NonNullable<SourceSyncRunShape['sessionMode']>;
-
-type MetaSessionValidationResult = {
-  validatedSearch: boolean;
-  validatedAuthorPage: boolean;
-  validatedUrl: string | null;
-  validatedUrlFinal: string | null;
-  failureReason: string | null;
-};
-
-type MetaBrowserCookie = {
-  name?: string;
-  value?: string;
-  domain?: string;
-  path?: string;
-  httpOnly?: boolean;
-  secure?: boolean;
-  sameSite?: 'Strict' | 'Lax' | 'None';
-  expires?: number;
-};
-
-type MetaInputCookie = MetaBrowserCookie & {
-  name: string;
-  value: string;
-};
-
-type MetaLocatorHandle = {
-  count: () => Promise<number>;
-  fill: (value: string) => Promise<unknown>;
-  click: () => Promise<unknown>;
-  innerText: () => Promise<string>;
-  getAttribute: (name: string) => Promise<string | null>;
-};
-
-type MetaLocatorFactory = {
-  first: () => MetaLocatorHandle;
-  innerText: () => Promise<string>;
-};
-
-type MetaRoleHandle = {
-  count: () => Promise<number>;
-  click: () => Promise<unknown>;
-};
-
-type MetaContextLike = {
-  cookies: (urls?: string[]) => Promise<MetaBrowserCookie[]>;
-  addCookies?: (cookies: MetaInputCookie[]) => Promise<unknown>;
-  clearCookies?: () => Promise<unknown>;
-};
-
-type MetaPageLike = {
-  goto: (url: string, options?: { waitUntil?: 'domcontentloaded' | 'load'; timeout?: number }) => Promise<unknown>;
-  waitForTimeout: (ms: number) => Promise<unknown>;
-  locator: (selector: string) => MetaLocatorFactory;
-  getByRole: (role: 'button', options: { name: RegExp }) => MetaRoleHandle;
-  evaluate: <T>(pageFunction: () => T | Promise<T>) => Promise<T>;
-  context: () => MetaContextLike;
-  url: () => string;
-  content: () => Promise<string>;
-  screenshot: (options: { type: 'png'; fullPage: boolean }) => Promise<Buffer>;
-  close: () => Promise<unknown>;
-};
-
-type MetaSessionRefreshResult = {
-  ok: boolean;
-  sessionMode: MetaSessionMode;
-  loginStage: string | null;
-  cookieCount: number;
-  hasSessionId: boolean;
-  validatedUrl: string | null;
-  validatedUrlFinal: string | null;
-  validatedSearch: boolean;
-  validatedAuthorPage: boolean;
-  failureReason: string | null;
-};
-
-type ThreadsSessionPreflightResult = {
-  hasCookies: boolean;
-  sessionMode: MetaSessionMode;
-  sessionRefreshed: boolean;
-  validatedSearch: boolean;
-  validatedAuthorPage: boolean;
-  validatedUrl: string | null;
-  validatedUrlFinal: string | null;
-  failureReason: string | null;
-  legacyDomainDetected: boolean;
-  legacyDomainMigrated: boolean;
-};
-
-export type ThreadsAuthDebugResult = {
-  sessionModeBefore: MetaSessionMode;
-  sessionModeAfter: MetaSessionMode;
-  loginStage: string | null;
-  hasSessionFile: boolean;
-  sessionFilePath: string;
-  cookieCount: number;
-  validatedSearch: boolean;
-  validatedAuthorPage: boolean;
-  failureReason: string | null;
-  configWarning: string | null;
-  legacyDomainDetected?: boolean;
-  legacyDomainMigrated?: boolean;
-  validatedUrlFinal?: string | null;
-  fallbackCookieSource?: MetaAuthConfig['fallbackCookieSource'];
-  fallbackCookieNames?: string[];
-  missingRecommendedCookieNames?: string[];
-  envLastModifiedAt?: string | null;
-  preferredCookieSource?: 'persisted_session' | 'env_fallback' | 'fresh_login' | 'none';
-};
 
 type SymbolScopedStockContext = {
   symbol: string;
@@ -1762,118 +1618,6 @@ function shouldRetainSymbolScopedDoc(metadata: Record<string, unknown>, context?
   return false;
 }
 
-function decodeHtmlEntities(value: string) {
-  return value
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>');
-}
-
-function stripHtmlToText(html: string) {
-  return compactText(
-    decodeHtmlEntities(
-      html
-        .replace(/<script[\s\S]*?<\/script>/gi, ' ')
-        .replace(/<style[\s\S]*?<\/style>/gi, ' ')
-        .replace(/<br\s*\/?>/gi, '\n')
-        .replace(/<\/p>/gi, '\n')
-        .replace(/<[^>]+>/g, ' '),
-    ),
-  );
-}
-
-function normalizeInvestAnchorsUrl(href: string) {
-  const trimmed = compactText(href);
-  if (!trimmed) return null;
-  if (trimmed.startsWith('http')) return trimmed;
-  if (trimmed.startsWith('/')) return `https://investanchors.com${trimmed}`;
-  return `https://investanchors.com/${trimmed.replace(/^\.?\//, '')}`;
-}
-
-function classifyInvestAnchorsCategory(text: string) {
-  const lower = text.toLowerCase();
-  if (lower.includes('法說')) return 'earnings_call';
-  if (lower.includes('營運簡評')) return 'operations_brief';
-  if (lower.includes('週報')) return 'industry_weekly';
-  if (lower.includes('電子報')) return 'newsletter';
-  return 'generic';
-}
-
-function investAnchorsCategoryPriority(category: string) {
-  if (category === 'operations_brief') return 1;
-  if (category === 'earnings_call') return 2;
-  if (category === 'newsletter') return 3;
-  if (category === 'industry_weekly') return 4;
-  return 5;
-}
-
-function extractInvestAnchorsCardsFromHtml(html: string, sourcePage: string) {
-  const cards: Array<{
-    href: string;
-    title: string;
-    snippet: string;
-    category: string;
-    sourcePage: string;
-  }> = [];
-  const anchorPattern = /<a[^>]+href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi;
-  for (const match of html.matchAll(anchorPattern)) {
-    const href = normalizeInvestAnchorsUrl(match[1] || '');
-    if (!href || !href.startsWith('https://investanchors.com/')) continue;
-    if (href.includes('/user/register') || href.includes('/login')) continue;
-    const rawInner = String(match[2] || '');
-    const title = stripHtmlToText(rawInner).slice(0, 180);
-    if (!title || title.length < 6) continue;
-    const category = classifyInvestAnchorsCategory(title);
-    cards.push({
-      href,
-      title,
-      snippet: title,
-      category,
-      sourcePage,
-    });
-  }
-  return cards;
-}
-
-function buildCookieHeader(cookies: Array<{ name?: string; value?: string }>) {
-  return cookies
-    .filter((cookie) => cookie.name && cookie.value)
-    .map((cookie) => `${cookie.name}=${cookie.value}`)
-    .join('; ');
-}
-
-function scoreInvestAnchorsCard(card: {
-  title: string;
-  snippet: string;
-  category: string;
-  href: string;
-}, context?: SymbolScopedStockContext | null) {
-  const haystack = `${card.title}\n${card.snippet}\n${card.href}`;
-  const matchedStockTerms = context ? extractMatchedTerms(haystack, context.stockQueryTerms) : [];
-  const matchedIndustryTerms = context ? extractMatchedTerms(haystack, context.industryQueryTerms) : [];
-  return {
-    matchedStockTerms,
-    matchedIndustryTerms,
-    score: matchedStockTerms.length * 10 + matchedIndustryTerms.length * 4 - investAnchorsCategoryPriority(card.category),
-  };
-}
-
-async function fetchInvestAnchorsArticleHtml(url: string, cookieHeader: string) {
-  const response = await fetch(url, {
-    headers: {
-      'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0',
-      cookie: cookieHeader,
-      accept: 'text/html,application/xhtml+xml',
-    },
-    signal: AbortSignal.timeout(8_000),
-  });
-  if (!response.ok) throw new Error(`investanchors_article_fetch_${response.status}`);
-  return await response.text();
-}
-
 function filterSymbolScopedDocs(
   docs: SourceRawDocInput[],
   connector: string,
@@ -1899,662 +1643,6 @@ function filterSymbolScopedDocs(
       };
     })
     .filter(Boolean) as SourceRawDocInput[];
-}
-
-function buildMetaSessionState(params: {
-  platform: MetaPlatform;
-  cookies: MetaBrowserCookie[];
-  userAgent?: string | null;
-  lastSuccessfulUrl?: string | null;
-  lastDegradedReason?: string | null;
-  existing?: PersistedMetaSessionState | null;
-}) {
-  const now = nowIso();
-  return {
-    platform: params.platform,
-    cookies: params.cookies
-      .filter((cookie) => cookie.name && cookie.value)
-      .map((cookie) => ({
-        name: String(cookie.name || ''),
-        value: String(cookie.value || ''),
-        domain: String(cookie.domain || (params.platform === 'threads' ? THREADS_CANONICAL_DOMAIN : '.instagram.com')),
-        path: String(cookie.path || '/'),
-        httpOnly: Boolean(cookie.httpOnly),
-        secure: Boolean(cookie.secure ?? true),
-        sameSite: cookie.sameSite,
-        expires: typeof cookie.expires === 'number' ? cookie.expires : undefined,
-      })),
-    userAgent: params.userAgent ?? params.existing?.userAgent ?? null,
-    createdAt: params.existing?.createdAt || now,
-    validatedAt: now,
-    expiredAt: null,
-    lastSuccessfulUrl: params.lastSuccessfulUrl ?? params.existing?.lastSuccessfulUrl ?? null,
-    lastDegradedReason: params.lastDegradedReason ?? params.existing?.lastDegradedReason ?? null,
-  } satisfies PersistedMetaSessionState;
-}
-
-function cookieDiagnostics(auth: MetaAuthConfig) {
-  return {
-    fallback_cookie_source: auth.fallbackCookieSource,
-    fallback_cookie_names: auth.fallbackCookieNames,
-    missing_recommended_cookie_names: auth.missingRecommendedCookieNames,
-    fallback_cookie_count: auth.fallbackCookies.length,
-    env_last_modified_at: auth.envLastModifiedAt,
-    duplicate_legacy_keys: auth.duplicateLegacyKeys,
-    config_warning: auth.configWarning,
-  };
-}
-
-function sessionTimestampMs(session: PersistedMetaSessionState | null) {
-  if (!session) return 0;
-  const candidates = [session.validatedAt, session.createdAt].map((value) => (value ? new Date(value).getTime() : 0));
-  return Math.max(...candidates.filter((value) => Number.isFinite(value)), 0);
-}
-
-function shouldPreferEnvFallbackCookies(auth: MetaAuthConfig, session: PersistedMetaSessionState | null) {
-  if (!session || auth.fallbackCookies.length === 0 || !auth.envLastModifiedAt) return false;
-  const envMs = new Date(auth.envLastModifiedAt).getTime();
-  return Number.isFinite(envMs) && envMs > sessionTimestampMs(session);
-}
-
-async function getPageBodyText(page: MetaPageLike) {
-  try {
-    return compactText(await page.locator('body').innerText());
-  } catch {
-    return '';
-  }
-}
-
-async function validateThreadsSession(page: MetaPageLike, symbol = '2454'): Promise<MetaSessionValidationResult> {
-  const homeUrl = `${THREADS_CANONICAL_ORIGIN}/`;
-  await page.goto(homeUrl, { waitUntil: 'domcontentloaded', timeout: 30_000 });
-  await page.waitForTimeout(2000);
-  const homeFinalUrl = normalizeThreadsUrl(typeof page.url === 'function' ? page.url() : homeUrl);
-  const homeText = await getPageBodyText(page);
-  if (!homeText || isThreadsLoginUrl(homeFinalUrl) || looksLikeThreadsLoginWall(homeText)) {
-    return {
-      validatedSearch: false,
-      validatedAuthorPage: false,
-      validatedUrl: homeUrl,
-      validatedUrlFinal: homeFinalUrl,
-      failureReason: 'home_page_still_login_wall',
-    };
-  }
-
-  const searchUrl = `${THREADS_CANONICAL_ORIGIN}/search?q=${encodeURIComponent(symbol)}`;
-  await page.goto(searchUrl, { waitUntil: 'domcontentloaded', timeout: 30_000 });
-  await page.waitForTimeout(2000);
-  const searchFinalUrl = normalizeThreadsUrl(typeof page.url === 'function' ? page.url() : searchUrl);
-  const searchText = await getPageBodyText(page);
-  if (!searchText || isThreadsLoginUrl(searchFinalUrl) || looksLikeThreadsLoginWall(searchText)) {
-    return {
-      validatedSearch: false,
-      validatedAuthorPage: false,
-      validatedUrl: searchUrl,
-      validatedUrlFinal: searchFinalUrl,
-      failureReason: 'search_page_still_login_wall',
-    };
-  }
-
-  const authorUrl = `${THREADS_CANONICAL_ORIGIN}/@stockcancer`;
-  await page.goto(authorUrl, { waitUntil: 'domcontentloaded', timeout: 30_000 });
-  await page.waitForTimeout(1500);
-  const authorFinalUrl = normalizeThreadsUrl(typeof page.url === 'function' ? page.url() : authorUrl);
-  const authorText = await getPageBodyText(page);
-  if (!authorText || isThreadsLoginUrl(authorFinalUrl) || looksLikeThreadsLoginWall(authorText)) {
-    return {
-      validatedSearch: true,
-      validatedAuthorPage: false,
-      validatedUrl: authorUrl,
-      validatedUrlFinal: authorFinalUrl,
-      failureReason: 'author_page_still_login_wall',
-    };
-  }
-
-  return {
-    validatedSearch: true,
-    validatedAuthorPage: true,
-    validatedUrl: authorUrl,
-    validatedUrlFinal: authorFinalUrl,
-    failureReason: null,
-  };
-}
-
-async function validateThreadsFallbackCookies(options: {
-  context: MetaContextLike;
-  page: MetaPageLike;
-  fallbackCookies: MetaInputCookie[];
-  sessionStore: ReturnType<typeof createMetaSessionStore>;
-  userAgent: string;
-  existingSession?: PersistedMetaSessionState | null;
-}): Promise<ThreadsSessionPreflightResult | null> {
-  const { context, page, fallbackCookies, sessionStore, userAgent, existingSession } = options;
-  if (fallbackCookies.length === 0) return null;
-  if (typeof context.clearCookies === 'function') await context.clearCookies().catch(() => undefined);
-  if (typeof context.addCookies === 'function') await context.addCookies(fallbackCookies);
-  const validation = await validateThreadsSession(page, '2454');
-  if (!validation.validatedSearch || !validation.validatedAuthorPage) {
-    if (typeof context.clearCookies === 'function') await context.clearCookies().catch(() => undefined);
-    return {
-      hasCookies: false,
-      sessionMode: 'missing',
-      sessionRefreshed: false,
-      validatedSearch: validation.validatedSearch,
-      validatedAuthorPage: validation.validatedAuthorPage,
-      validatedUrl: validation.validatedUrl,
-      validatedUrlFinal: validation.validatedUrlFinal,
-      failureReason: validation.failureReason || 'fallback_cookie_invalid',
-      legacyDomainDetected: false,
-      legacyDomainMigrated: false,
-    };
-  }
-  const cookies = await context.cookies([THREADS_CANONICAL_ORIGIN, THREADS_LEGACY_ORIGIN, 'https://www.instagram.com']);
-  await sessionStore.persistPreferred(
-    buildMetaSessionState({
-      platform: 'threads',
-      cookies,
-      userAgent,
-      existing: existingSession || null,
-      lastSuccessfulUrl: validation.validatedUrlFinal ?? validation.validatedUrl,
-    }),
-  );
-  return {
-    hasCookies: true,
-    sessionMode: 'cookie_fallback',
-    sessionRefreshed: true,
-    validatedSearch: true,
-    validatedAuthorPage: true,
-    validatedUrl: validation.validatedUrl,
-    validatedUrlFinal: validation.validatedUrlFinal,
-    failureReason: null,
-    legacyDomainDetected: false,
-    legacyDomainMigrated: false,
-  };
-}
-
-async function preflightThreadsSession(options: {
-  context: MetaContextLike;
-  page: MetaPageLike;
-  persistedSession: PersistedMetaSessionState | null;
-  fallbackCookies: MetaInputCookie[];
-  sessionStore: ReturnType<typeof createMetaSessionStore>;
-  username: string;
-  password: string;
-  userAgent: string;
-}): Promise<ThreadsSessionPreflightResult> {
-  const { context, page, persistedSession, fallbackCookies, sessionStore, username, password, userAgent } = options;
-  const legacyDomainDetected = detectLegacyThreadsSession(persistedSession);
-  const fallbackValidation = async (existingSession?: PersistedMetaSessionState | null) =>
-    await validateThreadsFallbackCookies({
-      context,
-      page,
-      fallbackCookies,
-      sessionStore,
-      userAgent,
-      existingSession,
-    });
-
-  if (persistedSession?.cookies?.length) {
-    const validation = await validateThreadsSession(page, '2454');
-    if (validation.validatedSearch && validation.validatedAuthorPage) {
-      return {
-        hasCookies: true,
-        sessionMode: 'persisted_session',
-        sessionRefreshed: false,
-        validatedSearch: true,
-        validatedAuthorPage: true,
-        validatedUrl: validation.validatedUrl,
-        validatedUrlFinal: validation.validatedUrlFinal,
-        failureReason: null,
-        legacyDomainDetected,
-        legacyDomainMigrated: false,
-      };
-    }
-
-    await sessionStore.clearPreferred('persisted_session_invalid');
-    if (typeof context.clearCookies === 'function') {
-      await context.clearCookies().catch(() => undefined);
-    }
-
-    const fallback = await fallbackValidation(persistedSession);
-    if (fallback?.hasCookies) {
-      return {
-        ...fallback,
-        legacyDomainDetected,
-        legacyDomainMigrated: legacyDomainDetected,
-      };
-    }
-
-    const refreshResult = await tryRefreshMetaSession(page, {
-      platform: 'threads',
-      username,
-      password,
-      sessionStore,
-      userAgent,
-    });
-
-    if (refreshResult.ok) {
-      return {
-        hasCookies: true,
-        sessionMode: refreshResult.sessionMode,
-        sessionRefreshed: true,
-        validatedSearch: refreshResult.validatedSearch,
-        validatedAuthorPage: refreshResult.validatedAuthorPage,
-        validatedUrl: refreshResult.validatedUrl,
-        validatedUrlFinal: refreshResult.validatedUrlFinal,
-        failureReason: null,
-        legacyDomainDetected,
-        legacyDomainMigrated: legacyDomainDetected,
-      };
-    }
-
-    return {
-      hasCookies: false,
-      sessionMode: 'missing',
-      sessionRefreshed: false,
-      validatedSearch: false,
-      validatedAuthorPage: false,
-      validatedUrl: validation.validatedUrl,
-      validatedUrlFinal: validation.validatedUrlFinal,
-      failureReason: fallback?.failureReason || 'persisted_session_invalid',
-      legacyDomainDetected,
-      legacyDomainMigrated: false,
-    };
-  }
-
-  if (fallbackCookies.length > 0) {
-    const fallback = await fallbackValidation(null);
-    if (fallback) return fallback;
-  }
-
-  const refreshResult = await tryRefreshMetaSession(page, {
-    platform: 'threads',
-    username,
-    password,
-    sessionStore,
-    userAgent,
-  });
-
-  return {
-    hasCookies: refreshResult.ok,
-    sessionMode: refreshResult.sessionMode,
-    sessionRefreshed: refreshResult.ok,
-    validatedSearch: refreshResult.validatedSearch,
-    validatedAuthorPage: refreshResult.validatedAuthorPage,
-    validatedUrl: refreshResult.validatedUrl,
-    validatedUrlFinal: refreshResult.validatedUrlFinal,
-    failureReason: refreshResult.ok ? null : refreshResult.failureReason || 'fresh_login_failed',
-    legacyDomainDetected: false,
-    legacyDomainMigrated: false,
-  };
-}
-
-async function tryInstagramBridgeSession(page: MetaPageLike, username: string, password: string) {
-  await page.goto('https://www.instagram.com/accounts/login/', { waitUntil: 'domcontentloaded', timeout: 60_000 });
-  await page.waitForTimeout(2500);
-
-  const userSelectors = [
-    'input[name="username"]',
-    'input[name="email"]',
-    'input[autocomplete="username"]',
-    'input[name="text"]',
-    'input[type="email"]',
-  ];
-  const passSelectors = [
-    'input[name="password"]',
-    'input[name="pass"]',
-    'input[type="password"]',
-    'input[autocomplete="current-password"]',
-  ];
-
-  let userFilled = false;
-  for (const selector of userSelectors) {
-    const field = page.locator(selector).first();
-    if ((await field.count()) > 0) {
-      await field.fill(username);
-      userFilled = true;
-      break;
-    }
-  }
-  if (!userFilled) {
-    return { ok: false, cookieCount: 0, failureReason: 'instagram_login_form_not_found' };
-  }
-
-  let passFilled = false;
-  for (const selector of passSelectors) {
-    const field = page.locator(selector).first();
-    if ((await field.count()) > 0) {
-      await field.fill(password);
-      passFilled = true;
-      break;
-    }
-  }
-  if (!passFilled) {
-    return { ok: false, cookieCount: 0, failureReason: 'instagram_login_form_not_found' };
-  }
-
-  let clicked = false;
-  const submit = page.locator('button[type="submit"]').first();
-  if ((await submit.count()) > 0) {
-    await submit.click();
-    clicked = true;
-  }
-  if (!clicked) {
-    clicked = await page.evaluate(() => {
-      const candidates = Array.from(document.querySelectorAll('button, div[role="button"]')) as HTMLElement[];
-      const target = candidates.find((element) => /^(log in|登入|sign in)$/i.test((element.textContent || '').replace(/\s+/g, ' ').trim()));
-      if (!target) return false;
-      target.click();
-      return true;
-    });
-  }
-  if (!clicked) {
-    return { ok: false, cookieCount: 0, failureReason: 'instagram_login_submit_not_found' };
-  }
-
-  let cookies: MetaBrowserCookie[] = [];
-  let hasSession = false;
-  for (let attempt = 0; attempt < 15; attempt += 1) {
-    await page.waitForTimeout(1000);
-    cookies = await page.context().cookies([THREADS_CANONICAL_ORIGIN, THREADS_LEGACY_ORIGIN, 'https://www.instagram.com']);
-    hasSession = cookies.some((cookie) => cookie.name === 'sessionid' && Boolean(cookie.value));
-    if (hasSession) break;
-  }
-
-  const bodyText = await getPageBodyText(page);
-  const normalizedBodyText = bodyText.toLowerCase();
-  const failureReason =
-    normalizedBodyText.includes('incorrect password') || normalizedBodyText.includes('wrong password')
-      ? 'invalid_credentials'
-      : normalizedBodyText.includes('suspend') || normalizedBodyText.includes('checkpoint') || normalizedBodyText.includes('confirm it was you')
-        ? 'checkpoint_required'
-        : normalizedBodyText.includes('try again later') || normalizedBodyText.includes('wait a few minutes')
-          ? 'rate_limited'
-          : 'instagram_bridge_no_session_cookie';
-
-  return {
-    ok: hasSession,
-    cookieCount: cookies.length,
-    failureReason: hasSession ? null : failureReason,
-  };
-}
-
-async function tryRefreshMetaSession(page: MetaPageLike, options: {
-  platform: MetaPlatform;
-  username: string;
-  password: string;
-  sessionStore?: ReturnType<typeof createMetaSessionStore>;
-  userAgent?: string | null;
-  persistOnSuccess?: boolean;
-}): Promise<MetaSessionRefreshResult> {
-  if (!options.username || !options.password) {
-    return {
-      ok: false,
-      sessionMode: 'missing',
-      loginStage: null,
-      cookieCount: 0,
-      hasSessionId: false,
-      validatedUrl: null,
-      validatedUrlFinal: null,
-      validatedSearch: false,
-      validatedAuthorPage: false,
-      failureReason: 'missing_credentials',
-    };
-  }
-
-  try {
-    let loginStage: MetaSessionRefreshResult['loginStage'] = 'open_login_page';
-    await page.goto(`${THREADS_CANONICAL_ORIGIN}/login`, { waitUntil: 'domcontentloaded', timeout: 60_000 });
-    await page.waitForTimeout(1500);
-
-    const userSelectors = [
-      'input[name="text"]',
-      'input[name="username"]',
-      'input[name="email"]',
-      'input[autocomplete="username"]',
-      'input[type="email"]',
-    ];
-    const passSelectors = [
-      'input[name="password"]',
-      'input[name="pass"]',
-      'input[type="password"]',
-      'input[autocomplete="current-password"]',
-    ];
-
-    let userFilled = false;
-    for (const selector of userSelectors) {
-      const field = page.locator(selector).first();
-      if ((await field.count()) > 0) {
-        loginStage = 'locate_username_field';
-        await field.fill(options.username);
-        userFilled = true;
-        break;
-      }
-    }
-    if (!userFilled) {
-      return {
-        ok: false,
-        sessionMode: 'missing',
-        loginStage: 'locate_username_field',
-        cookieCount: 0,
-        hasSessionId: false,
-        validatedUrl: null,
-        validatedUrlFinal: null,
-        validatedSearch: false,
-        validatedAuthorPage: false,
-        failureReason: 'login_form_not_found',
-      };
-    }
-
-    let passFilled = false;
-    for (const selector of passSelectors) {
-      const field = page.locator(selector).first();
-      if ((await field.count()) > 0) {
-        loginStage = 'locate_password_field';
-        await field.fill(options.password);
-        passFilled = true;
-        break;
-      }
-    }
-    if (!passFilled) {
-      return {
-        ok: false,
-        sessionMode: 'missing',
-        loginStage: 'locate_password_field',
-        cookieCount: 0,
-        hasSessionId: false,
-        validatedUrl: null,
-        validatedUrlFinal: null,
-        validatedSearch: false,
-        validatedAuthorPage: false,
-        failureReason: 'login_form_not_found',
-      };
-    }
-
-    let clicked = false;
-    const submit = page.locator('button[type="submit"]').first();
-    if ((await submit.count()) > 0) {
-      loginStage = 'submit_login';
-      await submit.click();
-      clicked = true;
-    }
-    if (!clicked) {
-      clicked = await page.evaluate(() => {
-        const candidates = Array.from(document.querySelectorAll('button, div[role="button"]')) as HTMLElement[];
-        const target = candidates.find((element) => /^(log in|登入|sign in)$/i.test((element.textContent || '').replace(/\s+/g, ' ').trim()));
-        if (!target) return false;
-        target.click();
-        return true;
-      });
-      if (clicked) loginStage = 'submit_login';
-    }
-    if (!clicked) {
-      const continueButton = page.locator('div[role="button"]').first();
-      if ((await continueButton.count()) > 0) {
-        const label = compactText(await continueButton.innerText().catch(() => ''));
-        if (/continue|繼續|log in|登入|sign in/i.test(label)) {
-          loginStage = 'submit_login';
-          await continueButton.click();
-          clicked = true;
-        }
-      }
-    }
-    if (!clicked) {
-      return {
-        ok: false,
-        sessionMode: 'missing',
-        loginStage: 'submit_login',
-        cookieCount: 0,
-        hasSessionId: false,
-        validatedUrl: null,
-        validatedUrlFinal: null,
-        validatedSearch: false,
-        validatedAuthorPage: false,
-        failureReason: 'login_submit_not_found',
-      };
-    }
-
-    loginStage = 'post_login_wait';
-    let cookies: MetaBrowserCookie[] = [];
-    let hasSession = false;
-    for (let attempt = 0; attempt < 12; attempt += 1) {
-      await page.waitForTimeout(1000);
-      loginStage = 'read_cookies';
-      cookies = await page.context().cookies([THREADS_CANONICAL_ORIGIN, THREADS_LEGACY_ORIGIN, 'https://www.instagram.com']);
-      hasSession = cookies.some((cookie) => cookie.name === 'sessionid' && Boolean(cookie.value));
-      if (hasSession) break;
-    }
-    if (!hasSession) {
-      loginStage = 'open_instagram_login_page';
-      const instagramBridge = await tryInstagramBridgeSession(page, options.username, options.password);
-      if (!instagramBridge.ok) {
-        const postSubmitText = await getPageBodyText(page);
-        const normalizedPostSubmitText = compactText(postSubmitText).toLowerCase();
-        const failureReason =
-          instagramBridge.failureReason ||
-          (normalizedPostSubmitText.includes('incorrect password') || normalizedPostSubmitText.includes('wrong password')
-            ? 'invalid_credentials'
-            : normalizedPostSubmitText.includes('try again later') || normalizedPostSubmitText.includes('wait a few minutes')
-              ? 'rate_limited'
-              : 'login_submitted_but_no_session_cookie');
-        return {
-          ok: false,
-          sessionMode: 'missing',
-          loginStage,
-          cookieCount: Math.max(cookies.length, instagramBridge.cookieCount),
-          hasSessionId: false,
-          validatedUrl: null,
-          validatedUrlFinal: null,
-          validatedSearch: false,
-          validatedAuthorPage: false,
-          failureReason,
-        };
-      }
-      cookies = await page.context().cookies([THREADS_CANONICAL_ORIGIN, THREADS_LEGACY_ORIGIN, 'https://www.instagram.com']);
-      hasSession = cookies.some((cookie) => cookie.name === 'sessionid' && Boolean(cookie.value));
-    }
-
-    loginStage = 'validate_search_page';
-    const validation =
-      options.platform === 'threads'
-        ? await validateThreadsSession(page, '2454')
-        : { validatedSearch: true, validatedAuthorPage: true, validatedUrl: null, validatedUrlFinal: null, failureReason: null };
-    if (!validation.validatedSearch || !validation.validatedAuthorPage) {
-      return {
-        ok: false,
-        sessionMode: 'missing',
-        loginStage,
-        cookieCount: cookies.length,
-        hasSessionId: true,
-        validatedUrl: validation.validatedUrl,
-        validatedUrlFinal: validation.validatedUrlFinal,
-        validatedSearch: validation.validatedSearch,
-        validatedAuthorPage: validation.validatedAuthorPage,
-        failureReason: validation.failureReason || 'search_page_still_login_wall',
-      };
-    }
-
-    loginStage = 'persist_session';
-    if (options.persistOnSuccess !== false && hasSession && options.sessionStore) {
-      const existing = await options.sessionStore.loadPreferred();
-      try {
-        await options.sessionStore.persistPreferred(
-          buildMetaSessionState({
-            platform: options.platform,
-            cookies,
-            userAgent: options.userAgent ?? null,
-            existing,
-            lastSuccessfulUrl: validation.validatedUrlFinal ?? validation.validatedUrl ?? `${THREADS_CANONICAL_ORIGIN}/search`,
-          }),
-        );
-      } catch {
-        return {
-          ok: false,
-          sessionMode: 'missing',
-          loginStage,
-          cookieCount: cookies.length,
-          hasSessionId: true,
-          validatedUrl: validation.validatedUrl,
-          validatedUrlFinal: validation.validatedUrlFinal,
-          validatedSearch: validation.validatedSearch,
-          validatedAuthorPage: validation.validatedAuthorPage,
-          failureReason: 'session_persist_failed',
-        };
-      }
-    }
-    return {
-      ok: true,
-      sessionMode: 'fresh_login',
-      loginStage,
-      cookieCount: cookies.length,
-      hasSessionId: true,
-      validatedUrl: validation.validatedUrl,
-      validatedUrlFinal: validation.validatedUrlFinal,
-      validatedSearch: validation.validatedSearch,
-      validatedAuthorPage: validation.validatedAuthorPage,
-      failureReason: null,
-    };
-  } catch (error) {
-    return {
-      ok: false,
-      sessionMode: 'missing',
-      loginStage: 'open_login_page',
-      cookieCount: 0,
-      hasSessionId: false,
-      validatedUrl: null,
-      validatedUrlFinal: null,
-      validatedSearch: false,
-      validatedAuthorPage: false,
-      failureReason: compactText((error as Error)?.message) || 'meta_login_failed',
-    };
-  }
-}
-
-async function persistMetaSessionFromContext(options: {
-  platform: MetaPlatform;
-  context: MetaContextLike;
-  sessionStore: ReturnType<typeof createMetaSessionStore>;
-  userAgent?: string | null;
-  lastSuccessfulUrl?: string | null;
-  lastDegradedReason?: string | null;
-  validatedSearch?: boolean;
-  validatedAuthorPage?: boolean;
-}) {
-  const cookies = await options.context.cookies([THREADS_CANONICAL_ORIGIN, THREADS_LEGACY_ORIGIN, 'https://www.instagram.com']);
-  if (!cookies.some((cookie) => cookie.name === 'sessionid' && Boolean(cookie.value))) return false;
-  if (options.platform === 'threads' && (!options.validatedSearch || !options.validatedAuthorPage)) return false;
-  const existing = await options.sessionStore.loadPreferred();
-  await options.sessionStore.persistPreferred(
-    buildMetaSessionState({
-      platform: options.platform,
-      cookies,
-      userAgent: options.userAgent ?? null,
-      existing,
-      lastSuccessfulUrl: options.lastSuccessfulUrl ?? existing?.lastSuccessfulUrl ?? null,
-      lastDegradedReason: options.lastDegradedReason ?? null,
-    }),
-  );
-  return true;
 }
 
 async function startConnectorRun(connectorName: string, platform: string, metadata?: Record<string, unknown>) {
@@ -3059,6 +2147,50 @@ async function upsertSourceRawDocuments(items: SourceRawDocInput[]) {
     { onConflict: 'platform,document_url', ignoreDuplicates: true },
   );
   if (error) throw new Error(error.message);
+
+  const mentionedSymbols = unique(newItems.flatMap((item) => item.symbols || []).filter((symbol) => /^\d{4}$/u.test(symbol)));
+  if (mentionedSymbols.length > 0) {
+    const { data: stocks, error: stocksError } = await supabase
+      .from('stocks')
+      .select('id,symbol')
+      .in('symbol', mentionedSymbols);
+    if (stocksError) throw new Error(stocksError.message);
+    const stockIdBySymbol = new Map(((stocks as Row[]) || []).map((row) => [compactText(row.symbol), compactText(row.id)]));
+    const availableAt = nowIso();
+    const mentionRows = newItems.flatMap((item) => (item.symbols || []).flatMap((symbol) => {
+      const stockId = stockIdBySymbol.get(symbol);
+      if (!stockId || !item.documentUrl) return [];
+      const stance = item.sentimentLabel === 'bullish'
+        ? 'positive'
+        : item.sentimentLabel === 'bearish'
+          ? 'negative'
+          : item.sentimentLabel === 'mixed'
+            ? 'mixed'
+            : 'neutral';
+      return [{
+        stock_id: stockId,
+        source_document_id: null,
+        platform: item.platform,
+        source_name: compactText(item.metadata?.source_name || item.platform),
+        author_name: compactText(item.metadata?.author_name) || null,
+        source_url: item.documentUrl,
+        stance,
+        independent_content_hash: sha256Hex(compactText(`${item.title}\n${item.summary}`).toLowerCase()),
+        mentioned_at: item.publishedAt || availableAt,
+        as_of: item.publishedAt || availableAt,
+        available_at: availableAt,
+        confidence: Math.max(0, Math.min(100, Number(item.confidence ?? 0.5) * 100)),
+        provenance: { retention_mode: item.metadata?.retention_mode || 'source_document', source_entity_id: item.sourceEntityId },
+        ruleset_version: 'source-ranking-v2.0.0',
+      }];
+    }));
+    if (mentionRows.length > 0) {
+      const { error: mentionError } = await supabase
+        .from('candidate_source_mentions')
+        .upsert(mentionRows, { onConflict: 'stock_id,platform,source_url' });
+      if (mentionError) throw new Error(mentionError.message);
+    }
+  }
   return newItems.length;
 }
 
@@ -3269,7 +2401,7 @@ async function ingestManualBrokerImports(supabase: ReturnType<typeof getSupabase
 }
 
 async function rebuildBrokerConsensusSnapshots(supabase: ReturnType<typeof getSupabaseServerClient>, asOfDate: string) {
-  const { data } = await supabase.from('broker_report_documents').select('*').order('report_date', { ascending: false }).limit(2000);
+  const { data } = await supabase.from('broker_report_documents').select('*').in('source_mode', [...AUTHORIZED_BROKER_SOURCE_MODES]).order('report_date', { ascending: false }).limit(2000);
   const rows = ((data as Row[]) || []).filter((row) => row.stock_id);
   const byStock = new Map<string, Row[]>();
   for (const row of rows) {
@@ -3443,395 +2575,6 @@ function detectCrossThemeKeys(text: string) {
   return themes;
 }
 
-async function scrapeInvestAnchors(symbolContext?: SymbolScopedStockContext | null) {
-  // Product policy deliberately excludes paid/private InvestAnchors material.
-  // A human may keep a private URL/date/type reading checklist, but this
-  // connector must not fetch, persist, summarize, or derive stock claims.
-  return { connector: 'investanchors', recordsWritten: 0, fetchedPosts: 0, entityId: null,
-    errorCode: 'not_authorized', degradedReason: 'internal_methodology_only', timedOut: false,
-    sessionMode: 'not_applicable' as const };
-  /* c8 ignore start -- retained historic implementation for migration rollback only.
-  try {
-    return await _scrapeInvestAnchorsInner(symbolContext);
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    if (/investanchors_timeout/i.test(msg)) {
-      if (symbolContext) {
-        await upsertCredentialRegistry('investanchors', 'invalid', {
-          credential_ref: process.env.Account || process.env.INVESTANCHORS_ACCOUNT ? 'Account/Password' : null,
-          error_message: msg.slice(0, 500),
-          metadata: { mode: 'symbol_scoped_timeout', symbol: symbolContext.symbol },
-        });
-        return {
-          connector: 'investanchors',
-          recordsWritten: 0,
-          fetchedPosts: 0,
-          entityId: null,
-          errorCode: 'investanchors_timeout',
-          matchedDirectHits: 0,
-          matchedIndustryHits: 0,
-          degradedReason: 'article_fetch_timeout',
-          timedOut: true,
-        };
-      }
-      const fallback = await syncGenericWatchlistConnector('investanchors');
-      await finishLatestRunningConnector('investanchors', fallback.recordsWritten > 0 ? 'partial' : 'failed', fallback.recordsWritten, msg);
-      await upsertCredentialRegistry('investanchors', fallback.recordsWritten > 0 ? 'configured' : 'invalid', {
-        credential_ref: process.env.Account || process.env.INVESTANCHORS_ACCOUNT ? 'Account/Password' : null,
-        error_message: msg.slice(0, 500),
-        metadata: { mode: 'timeout_fallback_watchlist', records_written: fallback.recordsWritten },
-      });
-      return {
-        ...fallback,
-        errorCode: 'investanchors_timeout_fallback',
-      };
-    }
-    if (/executable|chromium|browser|playwright/i.test(msg)) {
-      console.warn('[source-sync] investanchors: Playwright not available in serverless, falling back to watchlist');
-      if (symbolContext) {
-        const investAnchorsCredential = resolveInvestAnchorsCredential();
-        await upsertCredentialRegistry('investanchors', 'invalid', {
-          credential_ref: investAnchorsCredential.hasCredential ? 'INVESTANCHORS_ACCOUNT/INVESTANCHORS_PASSWORD' : null,
-          error_message: 'playwright_unavailable',
-          metadata: { mode: 'symbol_scoped', symbol: symbolContext.symbol },
-        });
-        return {
-          connector: 'investanchors',
-          recordsWritten: 0,
-          fetchedPosts: 0,
-          entityId: null,
-          errorCode: 'playwright_unavailable',
-          matchedDirectHits: 0,
-          matchedIndustryHits: 0,
-          degradedReason: 'playwright_unavailable',
-          timedOut: false,
-          sessionMode: 'not_applicable' as const,
-        };
-      }
-      const fallback = await syncGenericWatchlistConnector('investanchors');
-      await finishLatestRunningConnector('investanchors', fallback.recordsWritten > 0 ? 'partial' : 'failed', fallback.recordsWritten, msg);
-      const investAnchorsCredential = resolveInvestAnchorsCredential();
-      await upsertCredentialRegistry('investanchors', 'invalid', {
-        credential_ref: investAnchorsCredential.hasCredential ? 'INVESTANCHORS_ACCOUNT/INVESTANCHORS_PASSWORD' : null,
-        error_message: 'playwright_unavailable',
-        metadata: { mode: 'fallback_watchlist', records_written: fallback.recordsWritten },
-      });
-      return fallback;
-    }
-    await markLatestRunningConnectorFailed('investanchors', msg);
-    throw err;
-  } c8 ignore stop */
-}
-
-async function _scrapeInvestAnchorsInner(symbolContext?: SymbolScopedStockContext | null) {
-  const { chromium } = await import('playwright');
-  await ensureDefaultWatchlists();
-  await ensureDefaultKolProfiles();
-  const connectorRunId = await startConnectorRun('source-sync', 'investanchors', {
-    mode: symbolContext ? 'playwright_symbol_search' : 'playwright_login',
-    crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
-    query_symbol: symbolContext?.symbol || null,
-    query_terms: symbolContext?.queryTerms || [],
-  });
-  const agentRunId = await startAgentRun('source_sync', { connector: 'investanchors', symbol: symbolContext?.symbol || null });
-  const connectorBudgetMs = resolveTimeoutMs('INVESTANCHORS_TIMEOUT_MS', 60_000);
-  const connectorStartedAt = Date.now();
-  const ensureWithinBudget = (stage: string) => {
-    if (Date.now() - connectorStartedAt > connectorBudgetMs) {
-      throw new Error(`investanchors_timeout:${stage}`);
-    }
-  };
-  const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
-  page.setDefaultNavigationTimeout(12_000);
-  page.setDefaultTimeout(12_000);
-  const { account, password, hasCredential } = resolveInvestAnchorsCredential();
-  const records: Array<{ title: string; summary: string; contentText: string; publishedAt: string | null; documentUrl: string; symbols: string[]; metadata?: Record<string, unknown> }> = [];
-  let entityId = '';
-  let matchedDirectHits = 0;
-  let matchedIndustryHits = 0;
-  let timedOut = false;
-
-  try {
-    let loginSucceeded = false;
-    if (hasCredential) {
-      try {
-        ensureWithinBudget('open_login');
-        await page.goto('https://investanchors.com/user/register/new', { waitUntil: 'domcontentloaded', timeout: 12_000 });
-        await page.locator('input[placeholder*="Email"], input[type="email"]').first().fill(account);
-        await page.locator('input[placeholder*="密碼"], input[type="password"]').first().fill(password);
-        await page.getByRole('button', { name: '登入' }).first().click();
-        await page.waitForTimeout(2200);
-        loginSucceeded = true;
-        await upsertCredentialRegistry('investanchors', 'configured', { credential_ref: 'INVESTANCHORS_ACCOUNT/INVESTANCHORS_PASSWORD', metadata: { mode: 'playwright_login' } });
-      } catch (error) {
-        await upsertCredentialRegistry('investanchors', 'invalid', {
-          credential_ref: 'INVESTANCHORS_ACCOUNT/INVESTANCHORS_PASSWORD',
-          error_message: (error as Error).message,
-          metadata: { mode: 'playwright_login' },
-        });
-        ensureWithinBudget('login_fallback_home');
-        await page.goto('https://investanchors.com/', { waitUntil: 'domcontentloaded', timeout: 12_000 });
-      }
-    } else {
-      await upsertCredentialRegistry('investanchors', 'missing', { credential_ref: 'INVESTANCHORS_ACCOUNT/INVESTANCHORS_PASSWORD' });
-    }
-
-    const [{ data: stocksData }] = await Promise.all([
-      getSupabaseServerClient().from('stocks').select('symbol').eq('market', 'TW'),
-    ]);
-    const validSymbols = new Set(((stocksData as Row[]) || []).map((row) => String(row.symbol || '')).filter(Boolean));
-    const pageTargets = symbolContext
-      ? [
-          'https://investanchors.com/user/vip_contents/investanchors_index',
-          'https://investanchors.com/user/vip_contents',
-        ]
-      : ['https://investanchors.com/'];
-    const candidateCards: Array<{ href: string; title: string; snippet: string; category: string; sourcePage: string }> = [];
-    let bodyText = '';
-    for (const targetUrl of pageTargets) {
-      ensureWithinBudget(`open_${slugify(targetUrl)}`);
-      await page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 12_000 });
-      await page.waitForTimeout(900);
-      const html = await page.content();
-      bodyText = `${bodyText}\n${stripHtmlToText(html)}`.trim();
-      for (const card of extractInvestAnchorsCardsFromHtml(html, targetUrl)) {
-        candidateCards.push(card);
-      }
-    }
-    const cookieHeader = buildCookieHeader(await page.context().cookies(['https://investanchors.com']));
-    const dedup = new Set<string>();
-    const shortlistedCards = symbolContext
-      ? unique(
-          candidateCards
-            .map((card) => {
-              const scoring = scoreInvestAnchorsCard(card, symbolContext);
-              return {
-                ...card,
-                matchedStockTerms: scoring.matchedStockTerms,
-                matchedIndustryTerms: scoring.matchedIndustryTerms,
-                score: scoring.score,
-              };
-            })
-            .filter((card) => card.score > 0)
-            .sort((a, b) => {
-              if (b.score !== a.score) return b.score - a.score;
-              return investAnchorsCategoryPriority(a.category) - investAnchorsCategoryPriority(b.category);
-            })
-            .slice(0, 6)
-            .map((card) => JSON.stringify(card)),
-        ).map((item) => JSON.parse(item) as {
-          href: string;
-          title: string;
-          snippet: string;
-          category: string;
-          sourcePage: string;
-          matchedStockTerms: string[];
-          matchedIndustryTerms: string[];
-          score: number;
-        })
-      : candidateCards.slice(0, 6).map((card) => ({
-          ...card,
-          matchedStockTerms: [] as string[],
-          matchedIndustryTerms: [] as string[],
-          score: 0,
-        }));
-
-    for (const card of shortlistedCards) {
-      ensureWithinBudget('article_loop');
-      try {
-        const html = await fetchInvestAnchorsArticleHtml(card.href, cookieHeader);
-        const text = stripHtmlToText(html);
-        if (!text) continue;
-        const title = firstNonEmpty(
-          html.match(/<meta[^>]+property="og:title"[^>]+content="([^"]+)"/i)?.[1],
-          html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1],
-          card.title,
-          card.href.split('/').filter(Boolean).pop(),
-        );
-        if (!title || dedup.has(title)) continue;
-        dedup.add(title);
-        const textBundle = `${title}\n${text}`;
-        const matchedStockTerms = symbolContext ? unique([...card.matchedStockTerms, ...extractMatchedTerms(textBundle, symbolContext.stockQueryTerms)]) : [];
-        const matchedIndustryTerms = symbolContext ? unique([...card.matchedIndustryTerms, ...extractMatchedTerms(textBundle, symbolContext.industryQueryTerms)]) : [];
-        const storyAxis: SourceStoryAxis = matchedStockTerms.length > 0 ? 'stock' : matchedIndustryTerms.length > 0 ? 'industry' : 'kol';
-        if (symbolContext && matchedStockTerms.length === 0 && matchedIndustryTerms.length === 0) continue;
-        const publishedAt = safeDateString(
-          html.match(/<time[^>]+datetime="([^"]+)"/i)?.[1] ||
-            text.match(/(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{2},\s+\d{4}\s+\d{2}:\d{2}/)?.[0],
-        );
-        const summary = text.slice(0, 900);
-        const symbols = resolveContextSymbols({
-          text: textBundle,
-          validSymbols,
-          context: symbolContext,
-          matchedStockTerms,
-          matchedIndustryTerms,
-        }).slice(0, 8);
-        const directHitStrength = computeDirectHitStrength({
-          context: symbolContext,
-          title,
-          summary,
-          contentText: text,
-          documentUrl: card.href,
-          symbols,
-          storyAxis,
-          matchedStockTerms,
-          matchedIndustryTerms,
-        });
-        const matchType = symbolContext
-          ? classifySymbolScopedMatch({
-              context: symbolContext,
-              title,
-              summary,
-              contentText: text,
-              documentUrl: card.href,
-              symbols,
-            })
-          : 'none';
-        if (symbolContext && storyAxis === 'stock' && (matchType === 'direct_symbol' || matchType === 'alias')) matchedDirectHits += 1;
-        if (symbolContext && storyAxis === 'industry' && matchedIndustryTerms.length > 0) matchedIndustryHits += 1;
-        records.push({
-          title,
-          summary,
-          contentText: text.slice(0, 8000),
-          publishedAt,
-          documentUrl: card.href,
-          symbols,
-          metadata: {
-            connector: 'html_fetch',
-            origin: 'investanchors',
-            story_axis: storyAxis,
-            query_mode: storyAxis === 'industry' ? 'industry_card' : 'stock_card',
-            matched_stock_terms: matchedStockTerms,
-            matched_industry_terms: matchedIndustryTerms,
-            matched_terms: unique([...matchedStockTerms, ...matchedIndustryTerms]),
-            direct_hit_strength: directHitStrength,
-            category: card.category,
-          },
-        });
-        await createSourceAudit({
-          connectorRunId,
-          platform: 'investanchors',
-          targetUrl: card.href,
-          status: 'success',
-          htmlContent: html.slice(0, 200000),
-          notes: title,
-          metadata: {
-            category: card.category,
-            story_axis: storyAxis,
-            query_mode: storyAxis === 'industry' ? 'industry_card' : 'stock_card',
-          },
-        });
-      } catch (error) {
-        const message = (error as Error).message;
-        if (/timeout/i.test(message)) timedOut = true;
-        await createSourceAudit({
-          connectorRunId,
-          platform: 'investanchors',
-          targetUrl: card.href,
-          status: 'failed',
-          notes: message,
-        });
-      }
-      ensureWithinBudget('article_after_each');
-      if (records.length >= (symbolContext ? 6 : 10)) break;
-    }
-
-    if (!symbolContext && records.length === 0) {
-      records.push({
-        title: '定錨首頁產業摘要',
-        summary: bodyText.slice(0, 1200),
-        contentText: bodyText.slice(0, 5000),
-        publishedAt: null,
-        documentUrl: 'https://investanchors.com/',
-        symbols: unique((bodyText.match(/\b\d{4}\b/g) || []).slice(0, 5)),
-        metadata: { connector: 'playwright', origin: 'investanchors', story_axis: 'industry' },
-      });
-    }
-    if (hasCredential && !loginSucceeded) {
-      await upsertCredentialRegistry('investanchors', 'invalid', {
-        credential_ref: 'INVESTANCHORS_ACCOUNT/INVESTANCHORS_PASSWORD',
-        error_message: 'login_failed',
-        metadata: { mode: 'playwright_login' },
-      });
-    }
-  } finally {
-    await page.close().catch(() => undefined);
-    await browser.close().catch(() => undefined);
-  }
-
-  const entity = await upsertSourceEntity({
-    platform: 'investanchors',
-    entityType: 'site',
-    displayName: '定錨產業筆記',
-    sourceKey: 'site.investanchors',
-    profileUrl: 'https://investanchors.com/',
-    metadata: { connector: 'playwright' },
-  });
-  entityId = String(entity.id);
-
-  const count = await upsertSourceRawDocuments(
-    filterSymbolScopedDocs(records.map((item) => ({
-      sourceEntityId: String(entity.id),
-      platform: 'investanchors',
-      documentUrl: item.documentUrl,
-      title: item.title,
-      summary: item.summary,
-      contentText: item.contentText,
-      publishedAt: item.publishedAt,
-      symbols: item.symbols,
-      sentimentLabel: 'bullish',
-      confidence: 0.72,
-      metadata: { connector: 'playwright', origin: 'investanchors', ...(item.metadata || {}) },
-    })), 'investanchors', symbolContext),
-  );
-  await upsertCredentialRegistry('investanchors', count > 0 ? 'valid' : 'invalid', {
-    credential_ref: hasCredential ? 'INVESTANCHORS_ACCOUNT/INVESTANCHORS_PASSWORD' : null,
-    error_message: count > 0 ? null : timedOut ? 'timeout_partial' : 'no_records_written',
-    metadata: {
-      mode: symbolContext ? 'symbol_scoped_index_html_fetch' : 'playwright_login',
-      records_written: count,
-      matched_direct_hits: matchedDirectHits,
-      matched_industry_hits: matchedIndustryHits,
-      timed_out: timedOut,
-    },
-  });
-  const taskId = await writeAgentTask({
-    agentRunId,
-    agentRole: 'Source Connector Agent',
-    taskType: 'source-sync',
-    status: 'success',
-    inputPayload: { connector: 'investanchors' },
-    outputSummary: `synced ${count} investanchors records`,
-  });
-  await writeAgentFinding(taskId, `定錨投筆同步 ${count} 筆內容`, { source_refs: records.map((item) => item.documentUrl), confidence: 0.77 });
-  await finishAgentRun(agentRunId, 'success', { connector: 'investanchors', records_written: count, symbol: symbolContext?.symbol || null });
-  await finishConnectorRun(connectorRunId, count > 0 ? 'success' : 'partial', count, {
-    metadata: {
-      entity_id: entity.id,
-      crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
-      query_symbol: symbolContext?.symbol || null,
-      query_terms: symbolContext?.queryTerms || [],
-      matched_direct_hits: matchedDirectHits,
-      matched_industry_hits: matchedIndustryHits,
-      timed_out: timedOut,
-    },
-  });
-  return {
-    connector: 'investanchors',
-    recordsWritten: count,
-    fetchedPosts: records.length,
-    entityId,
-    errorCode: count > 0 ? null : timedOut ? 'timeout_partial' : symbolContext ? 'symbol_search_no_hit' : null,
-    matchedDirectHits,
-    matchedIndustryHits,
-    degradedReason: count > 0 ? null : timedOut ? 'article_fetch_timeout' : 'no_symbol_hits',
-    timedOut,
-    sessionMode: 'not_applicable' as const,
-  };
-}
-
 async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
   const supabase = getSupabaseServerClient();
   const baseUrl = 'https://www.ptt.cc/bbs/Stock/index.html';
@@ -3870,6 +2613,7 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
     baseUrl,
     ...searchTerms.map((term) => `https://www.ptt.cc/bbs/Stock/search?page=1&q=${encodeURIComponent(term)}`),
   ];
+  let failedPageFetches = 0;
   for (const targetPage of targetPages) {
     let currentUrl = targetPage;
     for (let page = 0; page < (symbolContext ? 1 : targetPage === baseUrl ? 4 : 2); page++) {
@@ -3883,6 +2627,7 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
         if (!prevMatch || symbolContext) break;
         currentUrl = `https://www.ptt.cc${prevMatch[1]}`;
       } catch {
+        failedPageFetches += 1;
         break;
       }
     }
@@ -3900,6 +2645,7 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
   const docs: SourceRawDocInput[] = [];
   const pttSignalRows: Array<Record<string, unknown>> = [];
   let articlesFetched = 0;
+  let articleFetchFailures = 0;
   let pushCommentsParsed = 0;
   const matchedSymbols = new Set<string>();
 
@@ -3949,6 +2695,7 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
       const commentText = comments.map((item) => `${item.tag} ${item.text}`).join('\n').slice(0, 3000);
       contentText = compactText([bodyText, commentText].filter(Boolean).join('\n\n推噓留言：\n')) || title;
     } catch {
+      articleFetchFailures += 1;
       // Use title only on fetch failure.
     }
 
@@ -3976,7 +2723,9 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
       documentUrl: articleUrl,
       title,
       summary: title,
-      contentText,
+      // Use full text only transiently for symbol/sentiment extraction.  The
+      // retained record is metadata + title + original URL, not a copied post.
+      contentText: title,
       symbols,
       sentimentLabel,
       confidence: symbols.length > 0 ? Math.min(0.82, 0.58 + Math.min(0.18, Math.abs(pushScore) / 80)) : 0.42,
@@ -3995,6 +2744,7 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
         excluded_false_positives: extracted.excludedFalsePositives,
         page_depth: Math.floor(allMatches.indexOf(match) / 20),
         query_mode: symbolContext ? 'search' : 'board_scan',
+        retention_mode: 'metadata_link_only',
       },
     });
     for (const symbol of symbols) {
@@ -4033,7 +2783,16 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
   return {
     connector: 'ptt',
     recordsWritten: count,
+    fetchedPosts: articlesFetched,
+    duplicatesSkipped: Math.max(0, docs.length - count),
+    matchedDirectHits: matchedSymbols.size,
+    matchedIndustryHits: 0,
     entityId: String(entity.id),
+    errorCode: null,
+    degradedReason: failedPageFetches > 0 || articleFetchFailures > 0
+      ? `ptt_fetch_partial:pages=${failedPageFetches},articles=${articleFetchFailures}`
+      : null,
+    sessionMode: 'not_applicable' as const,
     articlesFetched,
     pushCommentsParsed,
     matchedSymbols: [...matchedSymbols],
@@ -4048,1705 +2807,344 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
 }
 
 async function scrapeBullTalk(symbolContext?: SymbolScopedStockContext | null) {
-  const baseUrl = 'https://www.cmoney.tw/forum/';
-  const headers = { 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' };
-
+  const feedUrl = compactText(process.env.BULLTALK_AUTHORIZED_FEED_URL);
+  if (process.env.BULLTALK_LICENSED !== 'true' || !feedUrl) {
+    return { connector: 'bulltalk', recordsWritten: 0, fetchedPosts: 0, entityId: null,
+      errorCode: 'license_missing', degradedReason: 'bulltalk_authorized_feed_missing', sessionMode: 'not_applicable' as const };
+  }
+  const parsedFeedUrl = new URL(feedUrl);
+  if (parsedFeedUrl.protocol !== 'https:') throw new Error('bulltalk_authorized_feed_requires_https');
   const entity = await upsertSourceEntity({
     platform: 'bulltalk',
     entityType: 'site',
-    displayName: '股市爆料同學會',
-    sourceKey: 'site.bulltalk',
-    profileUrl: baseUrl,
+    displayName: '股市爆料同學會授權熱門榜',
+    sourceKey: 'authorized.bulltalk.feed',
+    profileUrl: feedUrl,
   });
-
-  const docs: SourceRawDocInput[] = [];
-  const sections = symbolContext
-    ? [{ url: `https://www.cmoney.tw/forum/stock/${symbolContext.symbol}`, label: `${symbolContext.name}(${symbolContext.symbol})` }]
-    : [
-        { url: 'https://www.cmoney.tw/forum/', label: '首頁' },
-        { url: 'https://www.cmoney.tw/forum/article-list?topicId=1', label: '台股' },
-        { url: 'https://www.cmoney.tw/forum/article-list?topicId=5', label: '熱門' },
-      ];
-
-  for (const section of sections) {
-    try {
-      const html = await fetch(section.url, { headers, signal: AbortSignal.timeout(10_000) }).then((r) => r.text());
-
-      // Extract article links and titles from HTML
-      // CMoney forum uses patterns like <a href="/forum/article/...">title</a>
-      const articlePattern = /href="(\/forum\/article[^"]+)"[^>]*>([^<]{4,})<\/a>/g;
-      const articleMatches = Array.from(html.matchAll(articlePattern));
-
-      // Also try extracting from data attributes or JSON-LD if present
-      const titlePattern = /class="[^"]*(?:article-title|post-title|title)[^"]*"[^>]*>([^<]{4,})<\/a>/g;
-      const titleMatches = Array.from(html.matchAll(titlePattern));
-
-      const seen = new Set<string>();
-      const rawMatches = [...articleMatches, ...titleMatches];
-
-      for (const m of rawMatches.slice(0, 30)) {
-        const href = m[1] || '';
-        const title = compactText(m[2] || m[1] || '');
-        if (!title || title.length < 4) continue;
-        const docUrl = href.startsWith('http') ? href : `https://www.cmoney.tw${href}`;
-        if (seen.has(docUrl)) continue;
-        seen.add(docUrl);
-
-        const symbols = unique((String(m[2] || '').match(/\b\d{4}\b/g) || []));
-        const sentimentLabel = /多|漲|噴|飆|利多|看好|翻倍/.test(title) ? 'bullish'
-          : /空|跌|崩|利空|看壞|套牢/.test(title) ? 'bearish' : 'neutral';
-
-        docs.push({
-          sourceEntityId: String(entity.id),
-          platform: 'bulltalk',
-          documentUrl: docUrl,
-          title,
-          summary: title,
-          contentText: title,
-          symbols,
-          sentimentLabel,
-          confidence: symbols.length > 0 ? 0.58 : 0.42,
-          metadata: { connector: 'http', section: section.label },
-        });
-      }
-
-      // Fallback: if no article links found, extract text content with stock symbols
-      if (docs.length === 0 && !symbolContext) {
-        const plainText = compactText(html.replace(/<[^>]+>/g, ' ')).slice(0, 6000);
-        const symbols = unique((plainText.match(/\b\d{4}\b/g) || []));
-        docs.push({
-          sourceEntityId: String(entity.id),
-          platform: 'bulltalk',
-          documentUrl: section.url,
-          title: `股市爆料同學會 ${section.label}`,
-          summary: `股市爆料同學會 ${section.label} 頁面摘要`,
-          contentText: plainText,
-          symbols,
-          sentimentLabel: 'neutral',
-          confidence: 0.40,
-          metadata: { connector: 'http', section: section.label, fallback: true },
-        });
-      } else if (symbolContext && docs.length === 0) {
-        const plainText = compactText(html.replace(/<[^>]+>/g, ' ')).slice(0, 3000);
-        const title = compactText((html.match(/<title>(.*?)<\/title>/i) || [])[1] || `${symbolContext.name}(${symbolContext.symbol}) 今日股價與討論`);
-        docs.push({
-          sourceEntityId: String(entity.id),
-          platform: 'bulltalk',
-          documentUrl: section.url,
-          title,
-          summary: title,
-          contentText: plainText,
-          symbols: [symbolContext.symbol],
-          sentimentLabel: 'neutral',
-          confidence: 0.46,
-          metadata: { connector: 'http', section: section.label, symbol_page: true },
-        });
-      }
-    } catch {
-      // Non-fatal per section
-    }
-  }
-
-  const count = await upsertSourceRawDocuments(filterSymbolScopedDocs(docs, 'bulltalk', symbolContext));
-  return { connector: 'bulltalk', recordsWritten: count, entityId: String(entity.id) };
-}
-
-async function scrapeGoogleNewsTW(symbolContext?: SymbolScopedStockContext | null) {
-  const queries = symbolContext
-    ? unique([
-        `${symbolContext.symbol} ${symbolContext.name} 台股`,
-        `${symbolContext.name} 法說`,
-        `${symbolContext.name} 營收`,
-        ...symbolContext.aliases.slice(0, 2).map((alias) => `${alias} 台股`),
-      ])
-    : [
-        '台股+分析', '台股+投資報告', '半導體+台股', 'AI+伺服器+台股', '台股+法人買賣',
-        '外資+買超+台股', '投信+買超+台股', '台股+法說會', '台股+財報+超預期',
-        '台股+漲停+主力', '台股+突破+季線', '台股+轉機股', '電動車+台股概念股',
-        '台積電+分析', '聯發科+展望', '台股+小型股+飆漲',
-      ];
-  const headers = { 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' };
-
-  const entity = await upsertSourceEntity({
-    platform: 'googlenews',
-    entityType: 'site',
-    displayName: 'Google News 台股',
-    sourceKey: 'site.googlenews.tw',
-    profileUrl: 'https://news.google.com',
+  const token = compactText(process.env.BULLTALK_AUTHORIZED_FEED_TOKEN);
+  const response = await fetch(feedUrl, {
+    headers: { accept: 'application/json,text/csv', ...(token ? { authorization: `Bearer ${token}` } : {}) },
+    signal: AbortSignal.timeout(15_000),
   });
-
-  const docs: SourceRawDocInput[] = [];
-  const seen = new Set<string>();
-
-  for (const query of queries) {
-    try {
-      const url = `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant`;
-      const xml = await fetch(url, { headers, signal: AbortSignal.timeout(10_000) }).then((r) => r.text());
-
-      // Parse RSS items
-      const items = Array.from(xml.matchAll(/<item>([\s\S]*?)<\/item>/g));
-      for (const item of items.slice(0, 25)) {
-        const block = item[1];
-        const titleMatch = block.match(/<title>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/title>/);
-        const linkMatch = block.match(/<link>(.*?)<\/link>/);
-        const descMatch = block.match(/<description>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?<\/description>/);
-        const pubDateMatch = block.match(/<pubDate>(.*?)<\/pubDate>/);
-
-        const title = compactText(titleMatch?.[1] || '');
-        const link = (linkMatch?.[1] || '').trim();
-        const description = compactText((descMatch?.[1] || '').replace(/<[^>]+>/g, ' '));
-        if (!title || !link || seen.has(link)) continue;
-        seen.add(link);
-
-        const allText = `${title} ${description}`;
-        const symbols = unique((allText.match(/\b[1-9]\d{3}\b/g) || []).filter((s) => Number(s) >= 1101 && Number(s) <= 9999));
-        if (symbols.length === 0) continue;
-
-        const sentimentLabel = /利多|漲|看好|買進|強勢|突破|創高|翻倍/.test(allText) ? 'bullish'
-          : /利空|跌|看壞|賣出|破底|警示|下修/.test(allText) ? 'bearish' : 'neutral';
-
-        const pubDate = pubDateMatch?.[1] ? new Date(pubDateMatch[1]).toISOString() : null;
-
-        docs.push({
-          sourceEntityId: String(entity.id),
-          platform: 'googlenews',
-          documentUrl: link,
-          title,
-          summary: description || title,
-          contentText: allText.slice(0, 3000),
-          symbols,
-          sentimentLabel,
-          confidence: 0.60,
-          metadata: { connector: 'http', query, publishedAt: pubDate, query_mode: symbolContext ? 'symbol_search' : 'market_search' },
-        });
-      }
-    } catch {
-      // Non-fatal per query
-    }
-  }
-
-  const count = await upsertSourceRawDocuments(filterSymbolScopedDocs(docs, 'googlenews', symbolContext));
-  return { connector: 'googlenews', recordsWritten: count, entityId: String(entity.id) };
-}
-
-async function scrapeAnueNews(symbolContext?: SymbolScopedStockContext | null) {
-  const entity = await upsertSourceEntity({
-    platform: 'anue',
-    entityType: 'site',
-    displayName: '鉅亨網台股新聞',
-    sourceKey: 'site.anue.tw_stock',
-    profileUrl: 'https://news.cnyes.com/news/cat/tw_stock',
-  });
-
-  const docs: SourceRawDocInput[] = [];
-
-  if (symbolContext) {
-    for (const term of symbolContext.queryTerms.slice(0, 4)) {
-      try {
-        const url = `https://news.cnyes.com/search?q=${encodeURIComponent(term)}`;
-        const html = await fetch(url, {
-          headers: { 'User-Agent': 'Mozilla/5.0 StockInsiderBot/1.0', 'Accept': 'text/html' },
-          signal: AbortSignal.timeout(10_000),
-        }).then((res) => res.text());
-        const items = Array.from(html.matchAll(/<a href="(\/news\/id\/\d+)"><p title="([^"]+)"[^>]*>(.*?)<\/p><\/a>[\s\S]{0,500}?<p class="s5flkzr">(.*?)<\/p>/g));
-        for (const item of items.slice(0, 20)) {
-          const title = compactText(item[2] || item[3] || '');
-          if (!title) continue;
-          const summary = compactText((item[4] || '').replace(/<[^>]+>/g, ' '));
-          const allText = `${title} ${summary}`;
-          const symbols = unique((allText.match(/\b[1-9]\d{3}\b/g) || []).filter((s) => Number(s) >= 1101 && Number(s) <= 9999));
-          docs.push({
-            sourceEntityId: String(entity.id),
-            platform: 'anue',
-            documentUrl: `https://news.cnyes.com${item[1]}`,
-            title,
-            summary: summary || title,
-            contentText: allText.slice(0, 3000),
-            symbols,
-            sentimentLabel: /利多|漲|看好|買進|強勢|突破|創高/.test(allText) ? 'bullish' : /利空|跌|看壞|賣出|破底|警示|下修/.test(allText) ? 'bearish' : 'neutral',
-            confidence: 0.64,
-            metadata: { connector: 'http', search_term: term, query_mode: 'symbol_search' },
-          });
-        }
-      } catch {
-        // Non-fatal per term
-      }
-    }
+  if (!response.ok) throw new Error(`bulltalk_authorized_feed_http_${response.status}`);
+  const contentType = response.headers.get('content-type') || '';
+  let rows: Row[] = [];
+  if (contentType.includes('json')) {
+    const payload = await response.json() as unknown;
+    rows = (Array.isArray(payload) ? payload : (payload && typeof payload === 'object' && Array.isArray((payload as Row).data) ? (payload as Row).data : [])) as Row[];
   } else {
-    const categories = ['tw_stock', 'tw_stock_news', 'tw_report'];
-    for (const cat of categories) {
-      try {
-        const url = `https://news.cnyes.com/api/v3/news/category/${cat}?limit=30`;
-        const res = await fetch(url, {
-          headers: { 'User-Agent': 'Mozilla/5.0 StockInsiderBot/1.0', 'Accept': 'application/json' },
-          signal: AbortSignal.timeout(10_000),
-        });
-        if (!res.ok) continue;
-        const data = await res.json();
-        const items: Array<Record<string, unknown>> = data?.items?.data || [];
-        for (const item of items) {
-          const title = compactText(String(item.title || ''));
-          if (!title) continue;
-          const docUrl = String(item.url || `https://news.cnyes.com/news/id/${item.newsId}`);
-          const summary = compactText(String(item.summary || item.intro || ''));
-          const symbols = unique((Array.isArray(item.stocks) ? item.stocks : []).map((s: Record<string, unknown>) => String(s.code || '')).filter(Boolean));
-          const allText = `${title} ${summary}`;
-          const sentimentLabel = /利多|漲|看好|買進|強勢|突破|創高/.test(allText) ? 'bullish'
-            : /利空|跌|看壞|賣出|破底|警示|下修/.test(allText) ? 'bearish' : 'neutral';
-          const pubAt = item.publishAt ? new Date(Number(item.publishAt) * 1000).toISOString() : undefined;
-          docs.push({
-            sourceEntityId: String(entity.id),
-            platform: 'anue',
-            documentUrl: docUrl,
-            title,
-            summary: summary || title,
-            contentText: allText.slice(0, 3000),
-            symbols,
-            sentimentLabel,
-            confidence: symbols.length > 0 ? 0.65 : 0.50,
-            metadata: { connector: 'http', category: cat },
-            ...(pubAt ? { publishedAt: pubAt } : {}),
-          });
-        }
-      } catch {
-        // Non-fatal per category
-      }
-    }
+    const lines = (await response.text()).split(/\r?\n/u).filter(Boolean);
+    const headers = (lines.shift() || '').split(',').map((item) => compactText(item).toLowerCase());
+    rows = lines.map((line) => Object.fromEntries(line.split(',').map((value, index) => [headers[index], compactText(value)])));
   }
-
-  const count = await upsertSourceRawDocuments(filterSymbolScopedDocs(docs, 'anue', symbolContext));
-  return { connector: 'anue', recordsWritten: count, entityId: String(entity.id) };
+  const docs: SourceRawDocInput[] = rows.slice(0, 500).flatMap((row) => {
+    const title = compactText(row.title || row.name || row.summary);
+    const documentUrl = compactText(row.url || row.document_url || row.source_url);
+    const rawSymbols = Array.isArray(row.symbols) ? row.symbols.map(String) : compactText(row.symbols || row.symbol).split(/[|;\s]+/u);
+    const symbols = unique(rawSymbols.map((item) => item.toUpperCase()).filter((item) => /^\d{4}$/u.test(item)));
+    if (!title || !documentUrl || !/^https:\/\//u.test(documentUrl) || symbols.length === 0) return [];
+    if (symbolContext && !symbols.includes(symbolContext.symbol)) return [];
+    const stance = compactText(row.stance || row.sentiment).toLowerCase();
+    const sentimentLabel = ['bullish', 'positive'].includes(stance) ? 'bullish' : ['bearish', 'negative'].includes(stance) ? 'bearish' : 'neutral';
+    return [{
+      sourceEntityId: String(entity.id), platform: 'bulltalk', documentUrl, title,
+      summary: title, contentText: title, symbols, sentimentLabel, confidence: 0.7,
+      publishedAt: safeDateString(row.published_at || row.publishedAt || null),
+      metadata: {
+        connector: 'authorized_feed', retention_mode: 'metadata_link_only',
+        mention_count: Number(row.mention_count || row.mentions || 0),
+        comment_count: Number(row.comment_count || row.comments || 0),
+        engagement_count: Number(row.engagement_count || row.engagement || 0),
+        rank: Number(row.rank || 0), license_basis: 'cmoney_partner_or_api_license',
+      },
+    }];
+  });
+  const count = await upsertSourceRawDocuments(filterSymbolScopedDocs(docs, 'bulltalk', symbolContext));
+  return { connector: 'bulltalk', recordsWritten: count, fetchedPosts: rows.length,
+    duplicatesSkipped: Math.max(0, docs.length - count), matchedDirectHits: new Set(docs.flatMap((doc) => doc.symbols)).size,
+    matchedIndustryHits: 0, entityId: String(entity.id), errorCode: null, sessionMode: 'not_applicable' as const };
 }
 
-async function scrapeUdnFinance(symbolContext?: SymbolScopedStockContext | null) {
-  const pages = symbolContext
-    ? unique([
-        `https://money.udn.com/search/result/1001/${encodeURIComponent(symbolContext.name)}`,
-        `https://money.udn.com/search/result/1001/${encodeURIComponent(symbolContext.symbol)}`,
-      ]).map((url) => ({ url, label: 'symbol_search' }))
-    : [
-        { url: 'https://money.udn.com/money/cate/5591', label: '台股新聞' },
-        { url: 'https://money.udn.com/money/cate/12017', label: '台股焦點' },
-      ];
-  const headers = { 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' };
+const GDELT_RETIRED_HOSTS = [
+  'news.google.com',
+  'youtube.com',
+  'youtu.be',
+  'udn.com',
+  'money.udn.com',
+  'anue.com',
+  'news.cnyes.com',
+  'mobile01.com',
+] as const;
 
-  const entity = await upsertSourceEntity({
-    platform: 'udn',
-    entityType: 'site',
-    displayName: 'UDN 經濟日報',
-    sourceKey: 'site.udn.finance',
-    profileUrl: 'https://money.udn.com',
-  });
-
-  const docs: SourceRawDocInput[] = [];
-  const seen = new Set<string>();
-
-  for (const page of pages) {
-    try {
-      const html = await fetch(page.url, { headers, signal: AbortSignal.timeout(10_000) }).then((r) => r.text());
-
-      const structuredItems = Array.from(
-        html.matchAll(
-          /"@type":"NewsArticle","@id":"([^"]+)","url":"([^"]+)","name":"([^"]+)","headline":"([^"]+)","description":"([^"]+)","datePublished":"([^"]+)"/g,
-        ),
-      );
-      const matches = structuredItems.length > 0
-        ? structuredItems.map((item) => ({ href: item[2], title: compactText(item[4] || item[3] || ''), summary: compactText(item[5] || ''), publishedAt: safeDateString(item[6]) }))
-        : Array.from(html.matchAll(/href="(\/money\/story\/[^"]+)"[^>]*>([^<]{4,})<\/a>/g)).map((item) => ({ href: `https://money.udn.com${item[1]}`, title: compactText(item[2]), summary: '', publishedAt: null }));
-
-      for (const m of matches.slice(0, 30)) {
-        const href = m.href;
-        const title = compactText(m.title);
-        if (!title || title.length < 6) continue;
-        const docUrl = href.startsWith('http') ? href : `https://money.udn.com${href}`;
-        if (seen.has(docUrl)) continue;
-        seen.add(docUrl);
-
-        const symbols = unique((`${title} ${m.summary}`.match(/\b[1-9]\d{3}\b/g) || []).filter((s) => Number(s) >= 1101 && Number(s) <= 9999));
-
-        const sentimentLabel = /利多|漲|看好|買進|強勢|突破|創高/.test(title) ? 'bullish'
-          : /利空|跌|看壞|賣出|破底|警示|下修/.test(title) ? 'bearish' : 'neutral';
-
-        docs.push({
-          sourceEntityId: String(entity.id),
-          platform: 'udn',
-          documentUrl: docUrl,
-          title,
-          summary: m.summary || title,
-          contentText: `${title} ${m.summary || ''}`.trim(),
-          symbols,
-          sentimentLabel,
-          confidence: symbols.length > 0 ? 0.58 : 0.40,
-          publishedAt: m.publishedAt,
-          metadata: { connector: 'http', section: page.label, query_mode: symbolContext ? 'symbol_search' : 'category_feed' },
-        });
-      }
-    } catch {
-      // Non-fatal per page
-    }
-  }
-
-  const count = await upsertSourceRawDocuments(filterSymbolScopedDocs(docs, 'udn', symbolContext));
-  return { connector: 'udn', recordsWritten: count, entityId: String(entity.id) };
+function parseGdeltSeenDate(value: unknown): string | null {
+  const raw = compactText(value);
+  const match = raw.match(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/u);
+  if (!match) return safeDateString(raw || null);
+  return `${match[1]}-${match[2]}-${match[3]}T${match[4]}:${match[5]}:${match[6]}Z`;
 }
 
-async function scrapeMobile01Finance(symbolContext?: SymbolScopedStockContext | null) {
-  const url = 'https://www.mobile01.com/topiclist.php?f=291';
-  const headers = { 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' };
-
-  const entity = await upsertSourceEntity({
-    platform: 'mobile01',
-    entityType: 'site',
-    displayName: 'Mobile01 投資理財',
-    sourceKey: 'site.mobile01.finance',
-    profileUrl: url,
-  });
-
-  const docs: SourceRawDocInput[] = [];
-
-  if (symbolContext) {
-    return {
-      connector: 'mobile01',
-      recordsWritten: 0,
-      entityId: String(entity.id),
-      errorCode: 'symbol_search_unavailable',
-    };
-  }
-
+function isRetiredNewsHost(value: string): boolean {
   try {
-    const html = await fetch(url, { headers, signal: AbortSignal.timeout(10_000) }).then((r) => r.text());
-
-    // Mobile01 topic links: <a href="topicdetail.php?f=291&t=XXXXX...">title</a>
-    const topicPattern = /href="(topicdetail\.php\?[^"]*f=291[^"]*)"[^>]*>([^<]{4,})<\/a>/g;
-    const matches = Array.from(html.matchAll(topicPattern));
-
-    const seen = new Set<string>();
-    for (const m of matches.slice(0, 40)) {
-      const href = m[1];
-      const title = compactText(m[2]);
-      if (!title || title.length < 6) continue;
-      const docUrl = `https://www.mobile01.com/${href}`;
-      if (seen.has(docUrl)) continue;
-      seen.add(docUrl);
-
-      const symbols = unique((title.match(/\b[1-9]\d{3}\b/g) || []).filter((s) => Number(s) >= 1101 && Number(s) <= 9999));
-
-      const sentimentLabel = /利多|漲|看好|買進|強勢|賺/.test(title) ? 'bullish'
-        : /利空|跌|看壞|賣出|賠|套牢/.test(title) ? 'bearish' : 'neutral';
-
-      docs.push({
-        sourceEntityId: String(entity.id),
-        platform: 'mobile01',
-        documentUrl: docUrl,
-        title,
-        summary: title,
-        contentText: title,
-        symbols,
-        sentimentLabel,
-        confidence: symbols.length > 0 ? 0.52 : 0.38,
-        metadata: { connector: 'http' },
-      });
-    }
+    const host = new URL(value).hostname.toLowerCase().replace(/^www\./u, '');
+    return GDELT_RETIRED_HOSTS.some((item) => host === item || host.endsWith(`.${item}`));
   } catch {
-    // Non-fatal
+    return true;
   }
-
-  const count = await upsertSourceRawDocuments(filterSymbolScopedDocs(docs, 'mobile01', symbolContext));
-  return { connector: 'mobile01', recordsWritten: count, entityId: String(entity.id) };
 }
 
-async function syncGenericWatchlistConnector(platform: 'threads' | 'instagram' | 'telegram' | 'investanchors') {
+async function scrapeGdeltMetadata(symbolContext?: SymbolScopedStockContext | null): Promise<SourceSyncRunShape> {
   const supabase = getSupabaseServerClient();
-  const { data, error } = await supabase.from('source_watchlists').select('*').eq('platform', platform).eq('enabled', true).order('priority', { ascending: false });
-  if (error) throw new Error(error.message);
-  const watchlists = (data as Row[]) || [];
-  if (watchlists.length === 0) {
-    await upsertCredentialRegistry(platform, 'missing', { metadata: { reason: 'no watchlist' } });
-    return { connector: platform, recordsWritten: 0, entityId: null };
-  }
+  const { data: stockData, error: stockError } = await supabase
+    .from('stocks')
+    .select('symbol,name')
+    .eq('market', 'TW')
+    .limit(10000);
+  if (stockError) throw new Error(stockError.message);
+  const stocks = ((stockData as Row[]) || [])
+    .map((row) => ({ symbol: compactText(row.symbol).toUpperCase(), name: compactText(row.name) }))
+    .filter((row) => /^\d{4}$/u.test(row.symbol) && row.name.length >= 2)
+    .filter((row) => !symbolContext || row.symbol === symbolContext.symbol);
+
+  const endpoint = new URL('https://api.gdeltproject.org/api/v2/doc/doc');
+  endpoint.searchParams.set('query', symbolContext
+    ? `("${symbolContext.symbol}" OR "${symbolContext.name}") sourcecountry:Taiwan`
+    : '("台股" OR "臺股" OR "台灣股市") sourcecountry:Taiwan');
+  endpoint.searchParams.set('mode', 'ArtList');
+  endpoint.searchParams.set('format', 'json');
+  endpoint.searchParams.set('maxrecords', '250');
+  endpoint.searchParams.set('timespan', '1d');
+  endpoint.searchParams.set('sort', 'HybridRel');
+  const response = await fetch(endpoint, {
+    headers: { accept: 'application/json', 'user-agent': 'StockInsider/2.0 metadata-discovery' },
+    signal: AbortSignal.timeout(20_000),
+  });
+  if (!response.ok) throw new Error(`gdelt_http_${response.status}`);
+  const payload = await response.json() as { articles?: Array<Record<string, unknown>> };
+  if (!Array.isArray(payload.articles)) throw new Error('gdelt_parser_missing_articles');
 
   const entity = await upsertSourceEntity({
-    platform,
-    entityType: platform === 'telegram' ? 'channel' : 'site',
-    displayName: platform === 'threads' ? 'Threads watchlist' : platform === 'instagram' ? 'Instagram watchlist' : 'Telegram watchlist',
-    sourceKey: `site.${platform}.watchlist`,
+    platform: 'gdelt',
+    entityType: 'site',
+    displayName: 'GDELT DOC 2.0',
+    sourceKey: 'site.gdelt.doc2',
+    profileUrl: 'https://www.gdeltproject.org/',
+    metadata: { retention_mode: 'metadata_link_only' },
   });
-
-  const count = await upsertSourceRawDocuments(
-    watchlists.map((item) => ({
+  const docs: SourceRawDocInput[] = payload.articles.flatMap((article) => {
+    const title = compactText(article.title);
+    const documentUrl = compactText(article.url);
+    if (!title || !/^https:\/\//u.test(documentUrl) || isRetiredNewsHost(documentUrl)) return [];
+    const symbols = stocks
+      .filter((stock) => title.includes(stock.symbol) || title.includes(stock.name))
+      .map((stock) => stock.symbol);
+    if (symbols.length === 0) return [];
+    return [{
       sourceEntityId: String(entity.id),
-      platform,
-      documentUrl: String(item.watch_value || ''),
-      title: `${platform} watchlist: ${String(item.watch_value || '')}`,
-      summary: `${platform} 目前採 watchlist 模式，等待登入 session 或 cookies 後做實際增量抓取。`,
-      contentText: `${platform} watchlist seed ${String(item.watch_value || '')}`,
+      platform: 'gdelt',
+      documentUrl,
+      title,
+      summary: title,
+      contentText: title,
+      publishedAt: parseGdeltSeenDate(article.seendate),
+      symbols: unique(symbols),
       sentimentLabel: 'neutral',
-      confidence: 0.35,
-      metadata: { watch_type: item.watch_type, placeholder: true },
-    })),
-  );
-  await upsertCredentialRegistry(platform, 'missing', { metadata: { reason: 'watchlist_only_seed' } });
+      confidence: 0.62,
+      metadata: {
+        connector: 'gdelt_doc_2',
+        retention_mode: 'metadata_link_only',
+        original_domain: compactText(article.domain),
+        source_country: compactText(article.sourcecountry),
+        language: compactText(article.language),
+        license_basis: 'gdelt_metadata_and_source_links',
+      },
+    }];
+  });
+  const count = await upsertSourceRawDocuments(docs);
+  const matchedSymbols = unique(docs.flatMap((doc) => doc.symbols || []));
   return {
-    connector: platform,
+    connector: 'gdelt',
     recordsWritten: count,
-    fetchedPosts: 0,
+    fetchedPosts: payload.articles.length,
+    duplicatesSkipped: Math.max(0, docs.length - count),
+    matchedDirectHits: docs.length,
+    matchedIndustryHits: 0,
+    matchedSymbols,
     entityId: String(entity.id),
-    errorCode: 'watchlist_only_seed',
+    errorCode: null,
+    degradedReason: null,
+    sessionMode: 'not_applicable',
+    metadata: { retained_metadata_rows: docs.length, excluded_retired_domains: true },
   };
 }
 
-function buildThreadsSearchTargets(symbolContext: SymbolScopedStockContext, watchlists: Row[]) {
-  const stockQueries = unique([
-    symbolContext.symbol,
-    `${symbolContext.symbol} ${symbolContext.name}`,
-    `${symbolContext.name} 台股`,
-    `${symbolContext.name} 法說`,
-    `${symbolContext.name} 目標價`,
-    `${symbolContext.name} 美系外資 目標價`,
-    `${symbolContext.name} FactSet EPS`,
-    `${symbolContext.name} Morgan Stanley`,
-    ...symbolContext.aliases.slice(0, 2).map((alias) => `${alias} 台股`),
-  ]).slice(0, 9);
-  const industryQueries = unique([
-    ...symbolContext.industryQueryTerms,
-    symbolContext.sector ? `${symbolContext.sector} 龍頭` : null,
-    symbolContext.themeName ? `${symbolContext.themeName} 受惠股` : null,
-  ].filter(Boolean) as string[]).slice(0, 4);
-  const authorTargets = watchlists
-    .filter((item) => String(item.watch_type || '') === 'author')
-    .slice(0, 6)
-    .map((item) => ({
-      watch_type: 'author',
-      watch_value: String(item.watch_value || ''),
-      target_url: '',
-      story_axis: 'kol' as SourceStoryAxis,
-      query_mode: 'author_scan',
-    }));
-  return [
-    ...stockQueries.map((term) => ({
-      watch_type: 'symbol_search',
-      watch_value: term,
-      target_url: `${THREADS_CANONICAL_ORIGIN}/search?q=${encodeURIComponent(term)}`,
-      story_axis: 'stock' as SourceStoryAxis,
-      query_mode: 'stock_search',
-    })),
-    ...industryQueries.map((term) => ({
-      watch_type: 'industry_search',
-      watch_value: term,
-      target_url: `${THREADS_CANONICAL_ORIGIN}/search?q=${encodeURIComponent(term)}`,
-      story_axis: 'industry' as SourceStoryAxis,
-      query_mode: 'industry_search',
-    })),
-    ...authorTargets,
-  ];
-}
-
-function buildThreadsMarketDiscoveryTargets(stocksRows: Row[]) {
-  const limit = Math.max(8, Math.min(80, Number(process.env.THREADS_MARKET_STOCK_SEARCH_LIMIT || 36)));
-  const stocks = stocksRows
-    .map((row) => ({
-      symbol: compactText(row.symbol).toUpperCase(),
-      name: compactText(row.name),
-      sector: compactText(row.sector),
-    }))
-    .filter((row) => /^\d{4}$/.test(row.symbol) && row.name && row.name !== row.symbol);
-  const prioritySymbols = ['3008', '2337', '2408', '2327', '2492', '3026', '3711', '3231', '2356', '3034'];
-  const priority = prioritySymbols
-    .map((symbol) => stocks.find((row) => row.symbol === symbol))
-    .filter((row): row is { symbol: string; name: string; sector: string } => Boolean(row));
-  const rotationPool = stocks.filter((row) => !prioritySymbols.includes(row.symbol));
-  const rotationOffset = rotationPool.length > 0 ? Math.floor(Date.now() / (60 * 60 * 1000)) % rotationPool.length : 0;
-  const rotated = [...rotationPool.slice(rotationOffset), ...rotationPool.slice(0, rotationOffset)].slice(0, Math.max(0, limit - priority.length));
-  const stockTargets = unique([...priority, ...rotated].flatMap((stock) => [
-    `${stock.symbol} ${stock.name}`,
-    `${stock.name} 台股`,
-    `${stock.name} 美系外資 目標價`,
-  ])).slice(0, limit * 2);
-  const themeTargets = [
-    '台股 推薦',
-    '台股 潛力股',
-    '台股 法說 目標價',
-    '台股 美系外資 EPS',
-    '台股 資金輪動',
-    '大立光 光通訊 目標價',
-    'MLCC 被動元件 台股',
-    '成熟製程 台股',
-    'AI PC 台股',
-    'CPU 概念股 台股',
-  ];
-  return [...themeTargets, ...stockTargets].map((term) => ({
-    watch_type: 'keyword',
-    watch_value: term,
-    target_url: `${THREADS_CANONICAL_ORIGIN}/search?q=${encodeURIComponent(term)}`,
-    story_axis: 'stock' as SourceStoryAxis,
-    query_mode: 'all_tw_stock_search',
-    crawl_mode: 'public_search' as SourceDocCrawlMode,
-    source_surface: 'threads_public_search',
-  }));
-}
-
-async function scrapeThreads(symbolContext?: SymbolScopedStockContext | null) {
-  try {
-    return await _scrapeThreadsInner(symbolContext);
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    if (/^threads_timeout:/i.test(msg)) {
-      await finishLatestRunningConnector('threads', 'partial', 0, msg);
-      await upsertCredentialRegistry('threads', 'invalid', {
-        credential_ref: 'THREADS_SESSION_STATE/THREADS_USERNAME/THREADS_PASSWORD',
-        error_message: msg,
-        metadata: { mode: symbolContext ? 'playwright_symbol_search' : 'playwright_cookie', timed_out: true, symbol: symbolContext?.symbol || null },
-      });
-      return {
-        connector: 'threads',
-        recordsWritten: 0,
-        fetchedPosts: 0,
-        entityId: null,
-        errorCode: 'timeout_partial',
-        matchedDirectHits: 0,
-        matchedIndustryHits: 0,
-        degradedReason: 'timeout_partial',
-        timedOut: true,
-        sessionMode: 'missing' as const,
-      };
-    }
-    if (/executable|chromium|browser|playwright/i.test(msg)) {
-      console.warn('[source-sync] threads: Playwright not available in serverless, falling back to watchlist');
-      if (symbolContext) {
-        return {
-          connector: 'threads',
-          recordsWritten: 0,
-          fetchedPosts: 0,
-          entityId: null,
-          errorCode: 'symbol_search_partial',
-          matchedDirectHits: 0,
-          matchedIndustryHits: 0,
-          degradedReason: 'playwright_unavailable',
-          timedOut: false,
-          sessionMode: 'missing' as const,
-        };
-      }
-      const fallback = await syncGenericWatchlistConnector('threads');
-      await finishLatestRunningConnector('threads', fallback.recordsWritten > 0 ? 'partial' : 'failed', fallback.recordsWritten, msg);
-      await upsertCredentialRegistry('threads', 'invalid', {
-        credential_ref: 'THREADS_SESSION_STATE/THREADS_USERNAME/THREADS_PASSWORD',
-        error_message: 'playwright_unavailable',
-        metadata: { mode: 'fallback_watchlist', records_written: fallback.recordsWritten },
-      });
-      return fallback;
-    }
-    await markLatestRunningConnectorFailed('threads', msg);
-    throw err;
-  }
-}
-
-async function _scrapeThreadsInner(symbolContext?: SymbolScopedStockContext | null) {
+async function scrapeThreadsOfficialApi(symbolContext?: SymbolScopedStockContext | null): Promise<SourceSyncRunShape> {
   const supabase = getSupabaseServerClient();
-  const threadsAuth = resolveMetaAuthConfig('threads');
-  const threadsSessionStore = createMetaSessionStore('threads', threadsAuth.sessionStatePath);
-  const persistedThreadsSessionRaw = await threadsSessionStore.loadPreferred();
-  const envFallbackIsNewer = shouldPreferEnvFallbackCookies(threadsAuth, persistedThreadsSessionRaw);
-  const persistedThreadsSession = envFallbackIsNewer ? null : persistedThreadsSessionRaw;
+  const tokenState = await getThreadsTokenForRun();
   const connectorRunId = await startConnectorRun('source-sync', 'threads', {
-    mode: symbolContext ? 'playwright_symbol_search' : 'playwright_cookie',
+    mode: 'threads_official_keyword_api',
     crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
     query_symbol: symbolContext?.symbol || null,
-    query_terms: symbolContext?.queryTerms || [],
-    session_mode: persistedThreadsSession ? 'persisted_session' : threadsAuth.fallbackCookies.length > 0 ? 'cookie_fallback' : 'missing',
-    env_fallback_preferred: envFallbackIsNewer,
-    cookie_diagnostics: cookieDiagnostics(threadsAuth),
-    config_error: threadsAuth.configError,
   });
-  const agentRunId = await startAgentRun('source_sync', { connector: 'threads', symbol: symbolContext?.symbol || null });
+  const agentRunId = await startAgentRun('source_sync', { connector: 'threads', mode: 'official_api', symbol: symbolContext?.symbol || null });
   const watermarkBefore = await getSourceWatermark('threads');
-  const connectorBudgetMs = resolveTimeoutMs('THREADS_TIMEOUT_MS', 75_000);
-  const connectorStartedAt = Date.now();
-  const ensureWithinBudget = (stage: string) => {
-    if (Date.now() - connectorStartedAt > connectorBudgetMs) {
-      throw new Error(`threads_timeout:${stage}`);
-    }
-  };
-
-  const browserUserAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
-  const initialCookies = persistedThreadsSession?.cookies?.length ? persistedThreadsSession.cookies : threadsAuth.fallbackCookies;
-  let sessionMode: SourceSyncRunShape['sessionMode'] =
-    persistedThreadsSession?.cookies?.length ? 'persisted_session' : initialCookies.length > 0 ? 'cookie_fallback' : 'missing';
-  let hasCookies = initialCookies.length > 0;
-  let sessionRefreshed = false;
-  let authFailureReason: string | null = null;
-  let legacyDomainDetected = false;
-  let legacyDomainMigrated = false;
-  let validatedUrlFinal: string | null = null;
-
-  const { data, error } = await supabase.from('source_watchlists').select('*').eq('platform', 'threads').eq('enabled', true).order('priority', { ascending: false });
-  if (error) throw new Error(error.message);
-  const watchlists = (data as Row[]) || [];
-  const [{ data: latestSuccess }, { data: stocksData }] = await Promise.all([
-    supabase.from('connector_runs').select('finished_at').eq('platform', 'threads').eq('status', 'success').order('finished_at', { ascending: false }).limit(1),
-    supabase.from('stocks').select('symbol,name,sector').eq('market', 'TW'),
+  const [{ data: watchlistData, error: watchlistError }, { data: stockData, error: stockError }] = await Promise.all([
+    supabase.from('source_watchlists').select('*').eq('platform', 'threads').eq('enabled', true).order('priority', { ascending: false }),
+    supabase.from('stocks').select('symbol,name').eq('market', 'TW'),
   ]);
-  const lastSuccessAt = latestSuccess?.[0]?.finished_at ? String(latestSuccess[0].finished_at) : null;
-  const stocksRows = (stocksData as Row[]) || [];
-  const validSymbols = new Set(stocksRows.map((row) => String(row.symbol || '')).filter(Boolean));
+  if (watchlistError || stockError) throw new Error(watchlistError?.message || stockError?.message || 'threads_context_unavailable');
+  const watchlists = (watchlistData as Row[]) || [];
+  const stocksRows = (stockData as Row[]) || [];
+  const validSymbols = new Set(stocksRows.map((row) => compactText(row.symbol).toUpperCase()).filter((item) => /^\d{4}$/u.test(item)));
   const stockNamesBySymbol = new Map(stocksRows.map((row) => [compactText(row.symbol).toUpperCase(), compactText(row.name)] as const));
   const aliasesBySymbol = new Map(stocksRows.map((row) => {
     const symbol = compactText(row.symbol).toUpperCase();
     return [symbol, getSymbolAliases(symbol, compactText(row.name))] as const;
   }));
-
-  const { chromium } = await import('playwright');
-  const browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext({ userAgent: browserUserAgent });
-  if (hasCookies) {
-    await context.addCookies(initialCookies);
-  }
-  const page = await context.newPage();
-  const preflight = await preflightThreadsSession({
-    context,
-    page,
-    persistedSession: persistedThreadsSession,
-    fallbackCookies: threadsAuth.fallbackCookies,
-    sessionStore: threadsSessionStore,
-    username: threadsAuth.username,
-    password: threadsAuth.password,
-    userAgent: browserUserAgent,
-  });
-  sessionMode = preflight.sessionMode;
-  hasCookies = preflight.hasCookies;
-  sessionRefreshed = preflight.sessionRefreshed;
-  authFailureReason = preflight.failureReason;
-  legacyDomainDetected = preflight.legacyDomainDetected;
-  legacyDomainMigrated = preflight.legacyDomainMigrated;
-  validatedUrlFinal = preflight.validatedUrlFinal;
-
-  if (!hasCookies) {
-    console.warn('[source-sync] threads connector skipped: Meta session cookies not configured and login refresh failed.');
-    await upsertCredentialRegistry('threads', 'missing', {
-      credential_ref: 'THREADS_SESSION_STATE/THREADS_USERNAME/THREADS_PASSWORD',
-      metadata: {
-        reason: authFailureReason || 'no_meta_cookies_or_login_failed',
-        config_error: threadsAuth.configError,
-        cookie_diagnostics: cookieDiagnostics(threadsAuth),
-        duplicate_legacy_keys: threadsAuth.duplicateLegacyKeys,
-      },
-    });
-    await finishConnectorRun(connectorRunId, 'skipped', 0, {
-      metadata: {
-        reason: 'missing_credentials',
-        config_error: threadsAuth.configError,
-        cookie_diagnostics: cookieDiagnostics(threadsAuth),
-        duplicate_legacy_keys: threadsAuth.duplicateLegacyKeys,
-      },
-    });
-    await finishAgentRun(agentRunId, 'failed', {
-      reason: 'missing_credentials',
-      config_error: threadsAuth.configError,
-    });
-    await page.close().catch(() => undefined);
-    await context.close().catch(() => undefined);
-    await browser.close().catch(() => undefined);
-    return symbolContext
-      ? {
-          connector: 'threads',
-          recordsWritten: 0,
-          fetchedPosts: 0,
-          entityId: null,
-          errorCode: authFailureReason || 'missing_credentials',
-          matchedDirectHits: 0,
-          matchedIndustryHits: 0,
-          degradedReason: authFailureReason || 'missing_credentials',
-          timedOut: false,
-          sessionMode,
-          failureReason: authFailureReason,
-          legacyDomainDetected,
-          legacyDomainMigrated,
-          validatedUrlFinal,
-        }
-      : await syncGenericWatchlistConnector('threads');
-  }
-
+  const approvedAuthors = new Set([
+    ...KOL_SEEDS.map((seed) => compactText(seed.metadata?.threadsUsername)).filter(Boolean),
+    ...watchlists.filter((row) => String(row.watch_type || '') === 'author').map((row) => compactText(row.watch_value)),
+  ].map((value) => value.replace(/^@/u, '').toLocaleLowerCase('en-US')));
+  const queries = unique(symbolContext
+    ? [symbolContext.symbol, symbolContext.name, ...symbolContext.aliases, ...symbolContext.industryQueryTerms]
+    : [
+        '台股', '財報', '籌碼', '產業輪動', '法說會', '目標價',
+        ...watchlists.filter((row) => ['keyword', 'hashtag'].includes(String(row.watch_type || ''))).map((row) => compactText(row.watch_value)),
+      ]).filter((value) => value.length >= 2).slice(0, 12);
   const entity = await upsertSourceEntity({
     platform: 'threads',
     entityType: 'site',
-    displayName: 'Threads KOL',
-    sourceKey: 'site.threads.kol',
+    displayName: 'Threads official keyword API',
+    sourceKey: 'api.threads.keyword_search',
   });
-
-  const records: Array<{ title: string; summary: string; contentText: string; publishedAt: string | null; documentUrl: string; symbols: string[]; metadata?: Record<string, unknown> }> = [];
-  const searchedKeywords = new Set<string>();
-  let failedFetches = 0;
-  let duplicateInRun = 0;
+  const records: SourceRawDocInput[] = [];
   let fetchedPosts = 0;
-  let matchedDirectHits = 0;
-  let matchedIndustryHits = 0;
-  let authBlockedFetches = 0;
-  const seenDocUrls = new Set<string>();
-  const accountFeedTargets: Array<Record<string, unknown>> = hasCookies
-    ? [
-        {
-          watch_type: 'account_feed',
-          watch_value: 'Threads 登入首頁推薦流',
-          target_url: `${THREADS_CANONICAL_ORIGIN}/`,
-          story_axis: 'stock' as SourceStoryAxis,
-          query_mode: 'account_feed',
-          crawl_mode: 'account_feed' as SourceDocCrawlMode,
-          source_surface: 'threads_account_feed',
-        },
-        {
-          watch_type: 'account_feed',
-          watch_value: 'Threads following / recommended feed',
-          target_url: `${THREADS_CANONICAL_ORIGIN}/following`,
-          story_axis: 'stock' as SourceStoryAxis,
-          query_mode: 'account_feed',
-          crawl_mode: 'account_feed' as SourceDocCrawlMode,
-          source_surface: 'threads_account_feed',
-        },
-      ]
-    : [];
-
-  try {
-    const scopedSearchTargets: Array<Record<string, unknown>> = symbolContext ? buildThreadsSearchTargets(symbolContext, watchlists) : [];
-    const marketDiscoveryTargets: Array<Record<string, unknown>> = symbolContext ? [] : buildThreadsMarketDiscoveryTargets(stocksRows);
-    const targetItems: Array<Record<string, unknown>> = symbolContext
-      ? scopedSearchTargets
-      : [
-          ...accountFeedTargets,
-          ...marketDiscoveryTargets,
-          ...BROKER_DISCOVERY_SEARCH_TERMS.map((term) => ({
-            watch_type: 'keyword',
-            watch_value: term,
-            target_url: `${THREADS_CANONICAL_ORIGIN}/search?q=${encodeURIComponent(term)}`,
-            story_axis: 'stock' as SourceStoryAxis,
-            query_mode: 'broker_search',
-            crawl_mode: 'public_search' as SourceDocCrawlMode,
-            source_surface: 'threads_public_search',
-          })),
-          ...watchlists.slice(0, 8).map((item) => ({ ...item, target_url: '' })),
-        ];
-    for (const watchItem of targetItems) {
-      const watchType = String(watchItem.watch_type || '');
-      const watchValue = String(watchItem.watch_value || '');
-      if (watchValue) searchedKeywords.add(watchValue);
-      const storyAxis = String(watchItem.story_axis || 'kol') as SourceStoryAxis;
-      const queryMode = String(watchItem.query_mode || (watchType === 'author' ? 'author_scan' : watchType === 'industry_search' ? 'industry_search' : 'stock_search'));
-      const crawlMode = String(watchItem.crawl_mode || (queryMode === 'account_feed' ? 'account_feed' : watchType === 'author' ? 'author_watch' : 'public_search')) as SourceDocCrawlMode;
-      const sourceSurface = String(watchItem.source_surface || (queryMode === 'account_feed' ? 'threads_account_feed' : watchType === 'author' ? 'threads_author_watch' : 'threads_public_search'));
-      let targetUrl = '';
-      if (watchItem.target_url) targetUrl = String(watchItem.target_url);
-      else if (watchType === 'author') targetUrl = `${THREADS_CANONICAL_ORIGIN}/@${watchValue}`;
-      else if (watchType === 'keyword' || watchType === 'hashtag') targetUrl = `${THREADS_CANONICAL_ORIGIN}/search?q=${encodeURIComponent(watchValue)}`;
-      else if (watchType === 'url') targetUrl = watchValue;
-      targetUrl = normalizeThreadsUrl(targetUrl);
-      if (!targetUrl) continue;
-
-      try {
-        ensureWithinBudget(`open_${slugify(targetUrl)}`);
-        await page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 20_000 });
-        await page.waitForTimeout(3000);
-        let bodyText = compactText(await page.locator('body').innerText());
-        let loginWall = bodyText.length < 100 || looksLikeThreadsLoginWall(bodyText);
-        if (loginWall && !sessionRefreshed) {
-          const refreshResult = await tryRefreshMetaSession(page, {
-            platform: 'threads',
-            username: threadsAuth.username,
-            password: threadsAuth.password,
-            sessionStore: threadsSessionStore,
-            userAgent: browserUserAgent,
-          });
-          if (refreshResult.ok) {
-            sessionRefreshed = true;
-            sessionMode = refreshResult.sessionMode;
-            authFailureReason = null;
-            ensureWithinBudget(`retry_${slugify(targetUrl)}`);
-            await page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 20_000 });
-            await page.waitForTimeout(3000);
-            bodyText = compactText(await page.locator('body').innerText());
-            loginWall = bodyText.length < 100 || looksLikeThreadsLoginWall(bodyText);
-          } else {
-            authFailureReason = refreshResult.failureReason || 'fresh_login_failed';
-          }
-        }
-        if (loginWall) {
-          failedFetches += 1;
-          authBlockedFetches += 1;
-          await createSourceAudit({
-            connectorRunId,
-            platform: 'threads',
-            targetUrl,
-            status: 'failed',
-            notes: authFailureReason || (looksLikeThreadsLoginWall(bodyText) ? 'login wall detected' : 'body too short, likely blocked'),
-          });
-          continue;
-        }
-        await persistMetaSessionFromContext({
-          platform: 'threads',
-          context,
-          sessionStore: threadsSessionStore,
-          userAgent: browserUserAgent,
-          lastSuccessfulUrl: targetUrl,
-          validatedSearch: true,
-          validatedAuthorPage: true,
-        });
-          const postUrls = await page
-          .evaluate(() => {
-            const anchors = Array.from(document.querySelectorAll('a[href*="/post/"]')) as HTMLAnchorElement[];
-            const urls = anchors
-              .map((anchor) => anchor.getAttribute('href') || '')
-              .map((href) => {
-                if (!href) return null;
-                if (href.startsWith('http')) return href;
-                if (href.startsWith('/')) return `https://www.threads.com${href}`;
-                return null;
-              })
-              .filter((item): item is string => Boolean(item));
-            return Array.from(new Set(urls)).slice(0, 8);
-          })
-          .catch(() => [] as string[]);
-
-        for (const postUrl of postUrls) {
-          ensureWithinBudget('post_loop');
-          const normalizedPostUrl = normalizeThreadsUrl(postUrl);
-          if (!normalizedPostUrl) continue;
-          if (seenDocUrls.has(normalizedPostUrl)) {
-            duplicateInRun += 1;
-            continue;
-          }
-          seenDocUrls.add(normalizedPostUrl);
-          fetchedPosts += 1;
-
-          try {
-            await page.goto(normalizedPostUrl, { waitUntil: 'domcontentloaded', timeout: 20_000 });
-            await page.waitForTimeout(1200);
-            const postBody = compactText(await page.locator('body').innerText());
-            if (postBody.length < 40) {
-              duplicateInRun += 1;
-              continue;
-            }
-            const postLines = postBody.split('\n').map(compactText).filter((line) => line.length > 10);
-            const contentText = postLines.slice(0, 10).join('\n').slice(0, 4000) || postBody.slice(0, 4000);
-            const summary = postLines.find((line) => line.length >= 24) || postBody.slice(0, 300);
-            const textBundle = `${summary}\n${contentText}`;
-            const matchedStockTerms = symbolContext ? extractMatchedTerms(textBundle, symbolContext.stockQueryTerms) : [];
-            const matchedIndustryTerms = symbolContext ? extractMatchedTerms(textBundle, symbolContext.industryQueryTerms) : [];
-            const symbols = resolveContextSymbols({
-              text: textBundle,
-              validSymbols,
-              stockNamesBySymbol,
-              aliasesBySymbol,
-              context: symbolContext,
-              matchedStockTerms,
-              matchedIndustryTerms,
-            });
-            if (symbols.length === 0) continue;
-            const directHitStrength = computeDirectHitStrength({
-              context: symbolContext,
-              title: summary,
-              summary,
-              contentText,
-              documentUrl: normalizedPostUrl,
-              symbols,
-              storyAxis,
-              matchedStockTerms,
-              matchedIndustryTerms,
-            });
-            const matchType = symbolContext
-              ? classifySymbolScopedMatch({
-                  context: symbolContext,
-                  title: summary,
-                  summary,
-                  contentText,
-                  documentUrl: normalizedPostUrl,
-                  symbols,
-                })
-              : 'none';
-            if (symbolContext && storyAxis === 'stock' && (matchType === 'direct_symbol' || matchType === 'alias')) matchedDirectHits += 1;
-            if (symbolContext && storyAxis === 'industry' && matchedIndustryTerms.length > 0) matchedIndustryHits += 1;
-            const publishedAt = await page.locator('time').first().getAttribute('datetime').then((value) => safeDateString(value)).catch(() => null);
-            records.push({
-              title: `Threads: ${watchValue} - ${summary.slice(0, 60)}`,
-              summary: summary.slice(0, 300),
-              contentText,
-              publishedAt,
-              documentUrl: normalizedPostUrl,
-              symbols,
-              metadata: {
-                watch_type: watchType,
-                watch_value: watchValue,
-                target_url: targetUrl,
-                story_axis: storyAxis,
-                query_mode: queryMode,
-                crawl_mode: crawlMode,
-                source_surface: sourceSurface,
-                query_keyword: watchValue,
-                matched_symbol_reason: symbols.length > 0 ? 'symbol_or_alias_in_threads_text' : null,
-                source_account: watchType === 'author' ? watchValue : null,
-                session_mode: sessionMode,
-                matched_terms: unique([...matchedStockTerms, ...matchedIndustryTerms]),
-                matched_stock_terms: matchedStockTerms,
-                matched_industry_terms: matchedIndustryTerms,
-                direct_hit_strength: directHitStrength,
-              },
-            });
-          } catch {
-            failedFetches += 1;
-          }
-        }
-
-        if (postUrls.length === 0) {
-          const paragraphs = bodyText.split('\n').map(compactText).filter((t) => t.length > 20).slice(0, 20);
-          for (const para of paragraphs) {
-            const matchedStockTerms = symbolContext ? extractMatchedTerms(para, symbolContext.stockQueryTerms) : [];
-            const matchedIndustryTerms = symbolContext ? extractMatchedTerms(para, symbolContext.industryQueryTerms) : [];
-            const symbols = resolveContextSymbols({
-              text: para,
-              validSymbols,
-              stockNamesBySymbol,
-              aliasesBySymbol,
-              context: symbolContext,
-              matchedStockTerms,
-              matchedIndustryTerms,
-            });
-            if (symbols.length === 0) continue;
-            const docUrl = `${targetUrl}#${slugify(para.slice(0, 40))}`;
-            if (seenDocUrls.has(docUrl)) {
-              duplicateInRun += 1;
-              continue;
-            }
-            seenDocUrls.add(docUrl);
-            const matchType = symbolContext
-              ? classifySymbolScopedMatch({
-                  context: symbolContext,
-                  title: para,
-                  summary: para,
-                  contentText: para,
-                  documentUrl: docUrl,
-                  symbols,
-                })
-              : 'none';
-            if (symbolContext && storyAxis === 'stock' && (matchType === 'direct_symbol' || matchType === 'alias')) matchedDirectHits += 1;
-            if (symbolContext && storyAxis === 'industry' && matchedIndustryTerms.length > 0) matchedIndustryHits += 1;
-            records.push({
-              title: `Threads: ${watchValue} - ${para.slice(0, 60)}`,
-              summary: para.slice(0, 300),
-              contentText: para,
-              publishedAt: null,
-              documentUrl: docUrl,
-              symbols,
-              metadata: {
-                watch_type: watchType,
-                watch_value: watchValue,
-                target_url: targetUrl,
-                fallback_paragraph: true,
-                story_axis: storyAxis,
-                query_mode: queryMode,
-                crawl_mode: crawlMode,
-                source_surface: sourceSurface,
-                query_keyword: watchValue,
-                matched_symbol_reason: symbols.length > 0 ? 'symbol_or_alias_in_threads_text' : null,
-                source_account: watchType === 'author' ? watchValue : null,
-                session_mode: sessionMode,
-                matched_terms: unique([...matchedStockTerms, ...matchedIndustryTerms]),
-                matched_stock_terms: matchedStockTerms,
-                matched_industry_terms: matchedIndustryTerms,
-                direct_hit_strength: computeDirectHitStrength({
-                  context: symbolContext,
-                  title: para,
-                  summary: para,
-                  contentText: para,
-                  documentUrl: docUrl,
-                  symbols,
-                  storyAxis,
-                  matchedStockTerms,
-                  matchedIndustryTerms,
-                }),
-              },
-            });
-          }
-        }
-        const screenshot = await page.screenshot({ type: 'png', fullPage: false });
-        await createSourceAudit({
-          connectorRunId,
-          platform: 'threads',
-          sourceEntityId: String(entity.id),
-          targetUrl,
-          status: 'success',
-          htmlContent: await page.content(),
-          screenshotBase64: screenshot.toString('base64'),
-          notes: `${watchValue} posts=${postUrls.length}`,
-        });
-      } catch (err) {
-        failedFetches += 1;
-        await createSourceAudit({ connectorRunId, platform: 'threads', targetUrl, status: 'failed', notes: (err as Error).message });
+  let failedQueries = 0;
+  let firstFailure: string | null = null;
+  let authRejected = false;
+  const seenIds = new Set<string>();
+  for (const query of queries) {
+    try {
+      const endpoint = new URL('https://graph.threads.net/keyword_search');
+      endpoint.searchParams.set('q', query);
+      endpoint.searchParams.set('search_type', 'RECENT');
+      endpoint.searchParams.set('fields', 'id,username,text,permalink,timestamp');
+      endpoint.searchParams.set('access_token', tokenState.token);
+      const response = await fetch(endpoint, { headers: { accept: 'application/json' }, signal: AbortSignal.timeout(15_000) });
+      if (!response.ok) {
+        if (response.status === 401 || response.status === 403) authRejected = true;
+        throw new Error(`threads_api_http_${response.status}`);
       }
+      const payload = await response.json() as { data?: Array<{ id?: string; username?: string; text?: string; permalink?: string; timestamp?: string }> };
+      for (const row of payload.data || []) {
+        if (!row.id || seenIds.has(row.id)) continue;
+        seenIds.add(row.id);
+        fetchedPosts += 1;
+        const username = compactText(row.username).replace(/^@/u, '').toLocaleLowerCase('en-US');
+        if (approvedAuthors.size > 0 && !approvedAuthors.has(username)) continue;
+        const text = compactText(row.text).slice(0, 1200);
+        if (!text || !row.permalink) continue;
+        const extracted = extractTwSymbolsWithEvidence(text, { validSymbols, stockNamesBySymbol, aliasesBySymbol });
+        if (extracted.symbols.length === 0) continue;
+        records.push({
+          sourceEntityId: String(entity.id),
+          platform: 'threads',
+          documentUrl: row.permalink,
+          title: `Threads @${username}: ${text.slice(0, 72)}`,
+          summary: text.slice(0, 300),
+          contentText: text,
+          publishedAt: safeDateString(row.timestamp || null),
+          symbols: extracted.symbols,
+          sentimentLabel: 'neutral',
+          confidence: 0.55,
+          metadata: {
+            connector: 'threads_official_keyword_api',
+            stable_id: row.id,
+            source_account: username,
+            query_keyword: query,
+            crawl_mode: symbolContext ? 'symbol_scoped' : 'public_search',
+            source_surface: 'threads_official_api',
+            excluded_false_positives: extracted.excludedFalsePositives,
+          },
+        });
+      }
+    } catch (error) {
+      failedQueries += 1;
+      firstFailure ||= compactText((error as Error).message) || 'threads_api_query_failed';
     }
-  } finally {
-    await page.close().catch(() => undefined);
-    await context.close().catch(() => undefined);
-    await browser.close().catch(() => undefined);
   }
-
-  const count = await upsertSourceRawDocuments(
-    filterSymbolScopedDocs(records.map((item) => ({
-      sourceEntityId: String(entity.id),
-      platform: 'threads',
-      documentUrl: item.documentUrl,
-      title: item.title,
-      summary: item.summary,
-      contentText: item.contentText,
-      publishedAt: item.publishedAt,
-      symbols: item.symbols,
-      sentimentLabel: 'neutral',
-      confidence: 0.55,
-      metadata: { connector: 'playwright_cookie', last_success_at: lastSuccessAt, ...(item.metadata || {}) },
-    })), 'threads', symbolContext),
-  );
+  if (authRejected) {
+    await upsertCredentialRegistry('threads', 'invalid', {
+      credential_ref: 'SUPABASE_VAULT:threads_access_token',
+      error_message: firstFailure || 'threads_api_auth_rejected',
+      metadata: { ...threadsTokenRegistryMetadata(tokenState), failed_queries: failedQueries },
+    });
+    await finishConnectorRun(connectorRunId, 'failed', 0, { error_summary: firstFailure || 'threads_api_auth_rejected' });
+    await finishAgentRun(agentRunId, 'failed', { connector: 'threads', error: firstFailure || 'threads_api_auth_rejected' });
+    throw new Error(`threads_api_auth_rejected:${firstFailure || 'unknown'}`);
+  }
+  const count = await upsertSourceRawDocuments(filterSymbolScopedDocs(records, 'threads', symbolContext));
+  const duplicatesSkipped = Math.max(0, records.length - count);
   const watermarkAfter = await getSourceWatermark('threads');
-  const matchedSymbols = unique(records.flatMap((item) => item.symbols || []).filter(Boolean));
-
-  const credStatus: 'valid' | 'invalid' = count > 0 && failedFetches < watchlists.length ? 'valid' : 'invalid';
-  await upsertCredentialRegistry('threads', credStatus, {
-    credential_ref: 'THREADS_SESSION_STATE/THREADS_USERNAME/THREADS_PASSWORD',
-      metadata: {
-        mode: 'playwright_cookie',
-        session_mode: sessionMode,
-        legacy_domain_detected: legacyDomainDetected,
-        legacy_domain_migrated: legacyDomainMigrated,
-        records_written: count,
-      failed_fetches: failedFetches,
-      watchlist_count: watchlists.length,
-      last_success_at: lastSuccessAt,
-      session_refreshed: sessionRefreshed,
-      config_error: threadsAuth.configError,
-      cookie_diagnostics: cookieDiagnostics(threadsAuth),
-      duplicate_legacy_keys: threadsAuth.duplicateLegacyKeys,
-      fallback_cookie_source: threadsAuth.fallbackCookieSource,
-      duplicates_skipped: duplicateInRun,
-      fetched_posts: fetchedPosts,
-      matched_direct_hits: matchedDirectHits,
-      matched_industry_hits: matchedIndustryHits,
-      watermark_before: watermarkBefore,
-      watermark_after: watermarkAfter,
-      auth_failure_reason: authFailureReason,
-      auth_blocked_fetches: authBlockedFetches,
-      searched_keywords: [...searchedKeywords],
-      matched_symbols: matchedSymbols,
-    },
-  });
-
-  const taskId = await writeAgentTask({ agentRunId, agentRole: 'Source Connector Agent', taskType: 'source-sync', status: 'success', inputPayload: { connector: 'threads' }, outputSummary: `synced ${count} threads records` });
-  await writeAgentFinding(taskId, `Threads 同步 ${count} 筆內容`, { confidence: 0.6 });
-  await finishAgentRun(agentRunId, 'success', { connector: 'threads', records_written: count, symbol: symbolContext?.symbol || null });
-  const threadsDegradedReason =
-    count === 0
-      ? authFailureReason
-        ? authFailureReason
-        : authBlockedFetches > 0
-          ? 'fresh_login_failed'
-          : 'valid_session_but_no_direct_hits'
-      : null;
-  const threadsSourceSurfaces = unique([
-    ...records.map((item) => compactText(item.metadata?.source_surface)).filter(Boolean),
-    ...(!symbolContext && accountFeedTargets.length > 0 ? ['threads_account_feed'] : []),
-    ...(!symbolContext ? ['threads_public_search', 'threads_author_watch'] : ['threads_symbol_scoped']),
-  ]);
-  await finishConnectorRun(connectorRunId, count > 0 ? 'success' : 'partial', count, {
-    error_summary: threadsDegradedReason,
+  const degradedReason = failedQueries > 0 ? `threads_api_failed_queries:${failedQueries}:${firstFailure || 'unknown'}` : null;
+  await finishConnectorRun(connectorRunId, degradedReason ? 'partial' : 'success', count, {
+    error_summary: degradedReason,
     metadata: {
-      entity_id: entity.id,
-      crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
-      query_symbol: symbolContext?.symbol || null,
-      query_terms: symbolContext?.queryTerms || [],
-      source_surfaces: threadsSourceSurfaces,
-      account_feed_attempted: !symbolContext && accountFeedTargets.length > 0,
-      session_refreshed: sessionRefreshed,
-      session_mode: sessionMode,
-      legacy_domain_detected: legacyDomainDetected,
-      legacy_domain_migrated: legacyDomainMigrated,
-      validated_url_final: validatedUrlFinal,
-      duplicates_skipped: duplicateInRun,
+      mode: 'threads_official_keyword_api',
       fetched_posts: fetchedPosts,
-      watermark_before: watermarkBefore,
-      watermark_after: watermarkAfter,
-      last_success_at: lastSuccessAt,
-      matched_direct_hits: matchedDirectHits,
-      matched_industry_hits: matchedIndustryHits,
-      degraded_reason: threadsDegradedReason,
-      config_error: threadsAuth.configError,
-      cookie_diagnostics: cookieDiagnostics(threadsAuth),
+      matched_posts: records.length,
+      records_written: count,
+      duplicates_skipped: duplicatesSkipped,
+      searched_keywords: queries,
+      approved_author_count: approvedAuthors.size,
     },
   });
+  await upsertCredentialRegistry('threads', 'valid', {
+    credential_ref: 'SUPABASE_VAULT:threads_access_token',
+    metadata: { ...threadsTokenRegistryMetadata(tokenState), records_written: count, fetched_posts: fetchedPosts },
+  });
+  await finishAgentRun(agentRunId, degradedReason ? 'failed' : 'success', { connector: 'threads', records_written: count, fetched_posts: fetchedPosts });
   return {
     connector: 'threads',
     recordsWritten: count,
     fetchedPosts,
     entityId: String(entity.id),
-    sessionRefreshed,
-    duplicatesSkipped: duplicateInRun,
     watermarkBefore,
     watermarkAfter,
-    errorCode: hasCookies ? null : 'missing_credentials',
-    matchedDirectHits,
-    matchedIndustryHits,
-    searchedKeywords: [...searchedKeywords],
-    matchedSymbols,
-    authFailureReason,
-    degradedReason: threadsDegradedReason,
-    sessionMode,
-    failureReason: authFailureReason,
-    legacyDomainDetected,
-    legacyDomainMigrated,
-    validatedUrlFinal,
-    cookieDiagnostics: cookieDiagnostics(threadsAuth),
-  } as SourceSyncRunShape;
+    duplicatesSkipped,
+    sessionRefreshed: tokenState.refreshed,
+    errorCode: degradedReason ? 'provider_partial' : null,
+    matchedDirectHits: records.reduce((sum, row) => sum + (row.symbols?.length || 0), 0),
+    matchedIndustryHits: 0,
+    searchedKeywords: queries,
+    matchedSymbols: unique(records.flatMap((row) => row.symbols || [])),
+    degradedReason,
+    timedOut: false,
+    sessionMode: 'not_applicable',
+  };
 }
 
-export async function runThreadsAuthDebug(options?: {
-  forceLogin?: boolean;
-  ignoreFallbackCookies?: boolean;
-  persistOnSuccess?: boolean;
-}): Promise<ThreadsAuthDebugResult> {
-  const forceLogin = Boolean(options?.forceLogin);
-  const ignoreFallbackCookies = Boolean(options?.ignoreFallbackCookies);
-  const persistOnSuccess = options?.persistOnSuccess !== false;
-  const threadsAuth = resolveMetaAuthConfig('threads', {
-    allowLegacyFallback: true,
-    ignoreFallbackCookies,
-  });
-  const sessionStore = createMetaSessionStore('threads', threadsAuth.sessionStatePath);
-  const persistedBeforeRaw = await sessionStore.loadPreferred();
-  const envFallbackIsNewer = shouldPreferEnvFallbackCookies(threadsAuth, persistedBeforeRaw);
-  const persistedBefore = envFallbackIsNewer ? null : persistedBeforeRaw;
-  const sessionModeBefore: MetaSessionMode = persistedBefore?.cookies?.length
-    ? 'persisted_session'
-    : threadsAuth.fallbackCookies.length > 0
-      ? 'cookie_fallback'
-      : 'missing';
-
-  if (forceLogin) await sessionStore.clearPreferred('force_login');
-
-  const connectorRunId = await startConnectorRun('threads-auth-debug', 'threads', {
-    mode: 'threads_auth_debug',
-    force_login: forceLogin,
-    ignore_fallback_cookies: ignoreFallbackCookies,
-    persist_on_success: persistOnSuccess,
-    session_mode_before: sessionModeBefore,
-    config_warning: threadsAuth.configWarning,
-  });
-
-  const { chromium } = await import('playwright');
-  const browser = await chromium.launch({ headless: true });
-  const browserUserAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
-  const context = await browser.newContext({ userAgent: browserUserAgent });
-  const page = await context.newPage();
-
-  let sessionModeAfter: MetaSessionMode = forceLogin ? 'missing' : sessionModeBefore;
-  let loginStage: string | null = null;
-  let failureReason: string | null = null;
-  let validatedSearch = false;
-  let validatedAuthorPage = false;
-  let cookieCount = 0;
-  let validatedUrl: string | null = null;
-  let validatedUrlFinal: string | null = null;
-  const legacyDomainDetected = detectLegacyThreadsSession(persistedBefore);
-  let legacyDomainMigrated = false;
-  let preferredCookieSource: ThreadsAuthDebugResult['preferredCookieSource'] =
-    persistedBefore?.cookies?.length ? 'persisted_session' : threadsAuth.fallbackCookies.length > 0 ? 'env_fallback' : 'none';
-
-  try {
-    if (!forceLogin && persistedBefore?.cookies?.length) {
-      await context.addCookies(persistedBefore.cookies);
-      const validation = await validateThreadsSession(page, '2454');
-      validatedSearch = validation.validatedSearch;
-      validatedAuthorPage = validation.validatedAuthorPage;
-      validatedUrl = validation.validatedUrl;
-      validatedUrlFinal = validation.validatedUrlFinal;
-      failureReason = validation.failureReason;
-      if (validation.validatedSearch && validation.validatedAuthorPage) {
-        const cookies = await context.cookies([THREADS_CANONICAL_ORIGIN, THREADS_LEGACY_ORIGIN, 'https://www.instagram.com']);
-        cookieCount = cookies.length;
-        sessionModeAfter = 'persisted_session';
-        loginStage = 'validate_search_page';
-        if (persistOnSuccess) {
-          await sessionStore.persistPreferred(
-            buildMetaSessionState({
-              platform: 'threads',
-              cookies,
-              userAgent: browserUserAgent,
-              existing: persistedBefore,
-              lastSuccessfulUrl: validatedUrlFinal ?? validatedUrl,
-            }),
-          );
-        }
-      } else {
-        await sessionStore.clearPreferred('persisted_session_invalid');
-        sessionModeAfter = 'missing';
-        failureReason = 'persisted_session_invalid';
-        legacyDomainMigrated = legacyDomainDetected;
-      }
-    }
-
-    if (sessionModeAfter !== 'persisted_session' && !forceLogin && threadsAuth.fallbackCookies.length > 0) {
-      const fallback = await validateThreadsFallbackCookies({
-        context,
-        page,
-        fallbackCookies: threadsAuth.fallbackCookies,
-        sessionStore,
-        userAgent: browserUserAgent,
-        existingSession: persistedBeforeRaw,
-      });
-      if (fallback?.hasCookies) {
-        sessionModeAfter = 'cookie_fallback';
-        loginStage = 'validate_env_fallback_cookie';
-        failureReason = null;
-        validatedSearch = fallback.validatedSearch;
-        validatedAuthorPage = fallback.validatedAuthorPage;
-        validatedUrl = fallback.validatedUrl;
-        validatedUrlFinal = fallback.validatedUrlFinal;
-        cookieCount = (await context.cookies([THREADS_CANONICAL_ORIGIN, THREADS_LEGACY_ORIGIN, 'https://www.instagram.com'])).length;
-        preferredCookieSource = 'env_fallback';
-      } else if (fallback) {
-        failureReason = `${fallback.failureReason || 'fallback_cookie_invalid'}; missing recommended cookies: ${threadsAuth.missingRecommendedCookieNames.join(', ') || 'none'}`;
-      }
-    }
-
-    if (sessionModeAfter !== 'persisted_session' && sessionModeAfter !== 'cookie_fallback') {
-      const refresh = await tryRefreshMetaSession(page, {
-        platform: 'threads',
-        username: threadsAuth.username,
-        password: threadsAuth.password,
-        sessionStore,
-        userAgent: browserUserAgent,
-        persistOnSuccess,
-      });
-      sessionModeAfter = refresh.sessionMode;
-      loginStage = refresh.loginStage;
-      failureReason = refresh.failureReason || failureReason;
-      validatedSearch = refresh.validatedSearch;
-      validatedAuthorPage = refresh.validatedAuthorPage;
-      cookieCount = refresh.cookieCount;
-      validatedUrl = refresh.validatedUrl;
-      validatedUrlFinal = refresh.validatedUrlFinal;
-      if (legacyDomainDetected && refresh.ok) legacyDomainMigrated = true;
-      if (refresh.ok) preferredCookieSource = 'fresh_login';
-    }
-
-    const hasSessionFile = await fs.access(threadsAuth.sessionStatePath).then(() => true).catch(() => false);
-    await createSourceAudit({
-      connectorRunId,
-      platform: 'threads',
-      targetUrl: validatedUrlFinal || validatedUrl || `${THREADS_CANONICAL_ORIGIN}/login`,
-      status: sessionModeAfter === 'fresh_login' || sessionModeAfter === 'persisted_session' || sessionModeAfter === 'cookie_fallback' ? 'success' : 'failed',
-      htmlContent: await page.content().catch(() => null),
-      screenshotBase64: await page.screenshot({ type: 'png', fullPage: false }).then((buffer) => buffer.toString('base64')).catch(() => null),
-      notes: failureReason || `${sessionModeAfter} auth debug`,
-      metadata: {
-        login_stage: loginStage,
-        session_mode_before: sessionModeBefore,
-        session_mode_after: sessionModeAfter,
-        validated_search: validatedSearch,
-        validated_author_page: validatedAuthorPage,
-        cookie_count: cookieCount,
-        validated_url_final: validatedUrlFinal,
-        legacy_domain_detected: legacyDomainDetected,
-        legacy_domain_migrated: legacyDomainMigrated,
-        config_warning: threadsAuth.configWarning,
-        cookie_diagnostics: cookieDiagnostics(threadsAuth),
-        preferred_cookie_source: preferredCookieSource,
-      },
-    });
-    await finishConnectorRun(
-      connectorRunId,
-      sessionModeAfter === 'fresh_login' || sessionModeAfter === 'persisted_session' || sessionModeAfter === 'cookie_fallback' ? 'success' : 'failed',
-      0,
-      {
-        error_summary: failureReason,
-        metadata: {
-          mode: 'threads_auth_debug',
-          force_login: forceLogin,
-          ignore_fallback_cookies: ignoreFallbackCookies,
-          persist_on_success: persistOnSuccess,
-          session_mode_before: sessionModeBefore,
-          session_mode_after: sessionModeAfter,
-          login_stage: loginStage,
-          validated_search: validatedSearch,
-          validated_author_page: validatedAuthorPage,
-          cookie_count: cookieCount,
-          validated_url: validatedUrl,
-          validated_url_final: validatedUrlFinal,
-          legacy_domain_detected: legacyDomainDetected,
-          legacy_domain_migrated: legacyDomainMigrated,
-          config_warning: threadsAuth.configWarning,
-          cookie_diagnostics: cookieDiagnostics(threadsAuth),
-          preferred_cookie_source: preferredCookieSource,
-        },
-      },
-    );
-    return {
-      sessionModeBefore,
-      sessionModeAfter,
-      loginStage,
-      hasSessionFile,
-      sessionFilePath: threadsAuth.sessionStatePath,
-      cookieCount,
-      validatedSearch,
-      validatedAuthorPage,
-      failureReason,
-      configWarning: threadsAuth.configWarning,
-      legacyDomainDetected,
-      legacyDomainMigrated,
-      validatedUrlFinal,
-      fallbackCookieSource: threadsAuth.fallbackCookieSource,
-      fallbackCookieNames: threadsAuth.fallbackCookieNames,
-      missingRecommendedCookieNames: threadsAuth.missingRecommendedCookieNames,
-      envLastModifiedAt: threadsAuth.envLastModifiedAt,
-      preferredCookieSource,
-    };
-  } catch (error) {
-    failureReason = compactText((error as Error)?.message) || 'threads_auth_debug_failed';
-    await finishConnectorRun(connectorRunId, 'failed', 0, {
-      error_summary: failureReason,
-      metadata: {
-        mode: 'threads_auth_debug',
-        session_mode_before: sessionModeBefore,
-        session_mode_after: sessionModeAfter,
-        login_stage: loginStage,
-        validated_search: validatedSearch,
-        validated_author_page: validatedAuthorPage,
-        cookie_count: cookieCount,
-        validated_url_final: validatedUrlFinal,
-        legacy_domain_detected: legacyDomainDetected,
-        legacy_domain_migrated: legacyDomainMigrated,
-        config_warning: threadsAuth.configWarning,
-        cookie_diagnostics: cookieDiagnostics(threadsAuth),
-        preferred_cookie_source: preferredCookieSource,
-      },
-    }).catch(() => undefined);
-    return {
-      sessionModeBefore,
-      sessionModeAfter,
-      loginStage,
-      hasSessionFile: false,
-      sessionFilePath: threadsAuth.sessionStatePath,
-      cookieCount,
-      validatedSearch,
-      validatedAuthorPage,
-      failureReason,
-      configWarning: threadsAuth.configWarning,
-      legacyDomainDetected,
-      legacyDomainMigrated,
-      validatedUrlFinal,
-      fallbackCookieSource: threadsAuth.fallbackCookieSource,
-      fallbackCookieNames: threadsAuth.fallbackCookieNames,
-      missingRecommendedCookieNames: threadsAuth.missingRecommendedCookieNames,
-      envLastModifiedAt: threadsAuth.envLastModifiedAt,
-      preferredCookieSource,
-    };
-  } finally {
-    await page.close().catch(() => undefined);
-    await context.close().catch(() => undefined);
-    await browser.close().catch(() => undefined);
-  }
-}
-
-async function scrapeInstagram(symbolContext?: SymbolScopedStockContext | null) {
-  try {
-    return await _scrapeInstagramInner(symbolContext);
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    if (/executable|chromium|browser|playwright/i.test(msg)) {
-      console.warn('[source-sync] instagram: Playwright not available in serverless, falling back to watchlist');
-      if (symbolContext) {
-        return { connector: 'instagram', recordsWritten: 0, fetchedPosts: 0, entityId: null, errorCode: 'symbol_search_partial', sessionMode: 'missing' as const };
-      }
-      const fallback = await syncGenericWatchlistConnector('instagram');
-      await finishLatestRunningConnector('instagram', fallback.recordsWritten > 0 ? 'partial' : 'failed', fallback.recordsWritten, msg);
-      await upsertCredentialRegistry('instagram', 'invalid', {
-        credential_ref: 'INSTAGRAM_SESSION_STATE/INSTAGRAM_USERNAME/INSTAGRAM_PASSWORD',
-        error_message: 'playwright_unavailable',
-        metadata: { mode: 'fallback_watchlist', records_written: fallback.recordsWritten },
-      });
-      return fallback;
-    }
-    await markLatestRunningConnectorFailed('instagram', msg);
-    throw err;
-  }
-}
-
-async function _scrapeInstagramInner(symbolContext?: SymbolScopedStockContext | null) {
-  const supabase = getSupabaseServerClient();
-  const instagramAuth = resolveMetaAuthConfig('instagram');
-  const instagramSessionStore = createMetaSessionStore('instagram', instagramAuth.sessionStatePath);
-  const persistedInstagramSession = await instagramSessionStore.loadPreferred();
-  const connectorRunId = await startConnectorRun('source-sync', 'instagram', {
-    mode: symbolContext ? 'playwright_author_symbol_filter' : 'playwright_cookie',
-    crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
-    query_symbol: symbolContext?.symbol || null,
-    query_terms: symbolContext?.queryTerms || [],
-    session_mode: persistedInstagramSession ? 'persisted_session' : instagramAuth.fallbackCookies.length > 0 ? 'cookie_fallback' : 'missing',
-    config_error: instagramAuth.configError,
-  });
-  const agentRunId = await startAgentRun('source_sync', { connector: 'instagram', symbol: symbolContext?.symbol || null });
-  const watermarkBefore = await getSourceWatermark('instagram');
-
-  const browserUserAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
-  const initialCookies = persistedInstagramSession?.cookies?.length ? persistedInstagramSession.cookies : instagramAuth.fallbackCookies;
-  let hasCookies = initialCookies.length > 0;
-  let sessionRefreshed = false;
-  let sessionMode: SourceSyncRunShape['sessionMode'] =
-    persistedInstagramSession?.cookies?.length ? 'persisted_session' : initialCookies.length > 0 ? 'cookie_fallback' : 'missing';
-
-  const [{ data, error }, stocksRes] = await Promise.all([
-    supabase.from('source_watchlists').select('*').eq('platform', 'instagram').eq('watch_type', 'author').eq('enabled', true).order('priority', { ascending: false }),
-    supabase.from('stocks').select('symbol,name').eq('market', 'TW'),
-  ]);
-  if (error || stocksRes.error) throw new Error(error?.message || stocksRes.error?.message || 'failed loading instagram context');
-  const watchlists = (data as Row[]) || [];
-  const stocksRows = (stocksRes.data as Row[]) || [];
-  const validSymbols = new Set(stocksRows.map((row) => compactText(row.symbol).toUpperCase()).filter((item) => /^\d{4}$/.test(item)));
-  const stockNamesBySymbol = new Map(stocksRows.map((row) => [compactText(row.symbol).toUpperCase(), compactText(row.name)] as const));
-  const aliasesBySymbol = new Map(stocksRows.map((row) => {
-    const symbol = compactText(row.symbol).toUpperCase();
-    return [symbol, getSymbolAliases(symbol, compactText(row.name))] as const;
-  }));
-
-  const { chromium } = await import('playwright');
-  const browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext({ userAgent: browserUserAgent });
-  if (hasCookies) {
-    await context.addCookies(initialCookies);
-  }
-  const page = await context.newPage();
-  if (!hasCookies) {
-    const refreshResult = await tryRefreshMetaSession(page, {
-      platform: 'instagram',
-      username: instagramAuth.username,
-      password: instagramAuth.password,
-      sessionStore: instagramSessionStore,
-      userAgent: browserUserAgent,
-    });
-    sessionRefreshed = refreshResult.ok;
-    hasCookies = refreshResult.ok;
-    if (refreshResult.ok) sessionMode = refreshResult.sessionMode;
-  }
-  if (!hasCookies) {
-    console.warn('[source-sync] instagram connector skipped: Meta session cookies not configured and login refresh failed.');
-    await upsertCredentialRegistry('instagram', 'missing', {
-      credential_ref: 'INSTAGRAM_SESSION_STATE/INSTAGRAM_USERNAME/INSTAGRAM_PASSWORD',
-      metadata: {
-        reason: 'no_meta_cookies_or_login_failed',
-        config_error: instagramAuth.configError,
-        duplicate_legacy_keys: instagramAuth.duplicateLegacyKeys,
-      },
-    });
-    await finishConnectorRun(connectorRunId, 'skipped', 0, {
-      metadata: {
-        reason: 'missing_credentials',
-        config_error: instagramAuth.configError,
-      },
-    });
-    await finishAgentRun(agentRunId, 'failed', { reason: 'missing_credentials', config_error: instagramAuth.configError });
-    await page.close().catch(() => undefined);
-    await context.close().catch(() => undefined);
-    await browser.close().catch(() => undefined);
-    return symbolContext
-      ? { connector: 'instagram', recordsWritten: 0, fetchedPosts: 0, entityId: null, errorCode: 'missing_credentials', sessionMode }
-      : await syncGenericWatchlistConnector('instagram');
-  }
-
-  const entity = await upsertSourceEntity({
-    platform: 'instagram',
-    entityType: 'site',
-    displayName: 'Instagram KOL',
-    sourceKey: 'site.instagram.kol',
-  });
-
-  const records: Array<{ title: string; summary: string; contentText: string; publishedAt: string | null; documentUrl: string; symbols: string[]; metadata?: Record<string, unknown> }> = [];
-  let failedFetches = 0;
-  let duplicateInRun = 0;
-  let fetchedPosts = 0;
-
-  try {
-    const scanTargets = [
-      { author: null as string | null, targetUrl: 'https://www.instagram.com/', sourceSurface: 'instagram_account_feed', crawlMode: 'account_feed' as SourceDocCrawlMode, queryKeyword: 'Instagram 登入首頁推薦流' },
-      { author: null as string | null, targetUrl: 'https://www.instagram.com/explore/', sourceSurface: 'instagram_account_feed', crawlMode: 'account_feed' as SourceDocCrawlMode, queryKeyword: 'Instagram explore feed' },
-      ...BROKER_DISCOVERY_SEARCH_TERMS.slice(0, 4).map((term) => ({
-        author: null as string | null,
-        targetUrl: `https://www.instagram.com/explore/search/keyword/?q=${encodeURIComponent(term)}`,
-        sourceSurface: 'instagram_public_search',
-        crawlMode: 'public_search' as SourceDocCrawlMode,
-        queryKeyword: term,
-      })),
-      ...watchlists.slice(0, 5).map((watchItem) => {
-        const author = String(watchItem.watch_value || '');
-        return { author, targetUrl: `https://www.instagram.com/${author}/`, sourceSurface: 'instagram_author_watch', crawlMode: 'author_watch' as SourceDocCrawlMode, queryKeyword: author };
-      }),
-    ];
-    for (const scanTarget of scanTargets) {
-      const author = scanTarget.author || 'account_feed';
-      const targetUrl = scanTarget.targetUrl;
-      try {
-        await page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 45_000 });
-        await page.waitForTimeout(3000);
-        const bodyText = compactText(await page.locator('body').innerText());
-        if (bodyText.length < 100) {
-          failedFetches += 1;
-          await createSourceAudit({ connectorRunId, platform: 'instagram', targetUrl, status: 'failed', notes: 'body too short, likely blocked' });
-          continue;
-        }
-        await persistMetaSessionFromContext({
-          platform: 'instagram',
-          context,
-          sessionStore: instagramSessionStore,
-          userAgent: browserUserAgent,
-          lastSuccessfulUrl: targetUrl,
-        });
-        const captions = bodyText.split('\n').map(compactText).filter((t) => t.length > 30 && !t.startsWith('http')).slice(0, 24);
-        const seenInPage = new Set<string>();
-        for (const caption of captions) {
-          const extracted = extractTwSymbolsWithEvidence(caption, { validSymbols, stockNamesBySymbol, aliasesBySymbol });
-          const symbols = extracted.symbols;
-          if (symbols.length === 0) continue;
-          const docUrl = `${targetUrl}#${slugify(caption.slice(0, 40))}`;
-          if (seenInPage.has(docUrl)) {
-            duplicateInRun += 1;
-            continue;
-          }
-          seenInPage.add(docUrl);
-          fetchedPosts += 1;
-          records.push({
-            title: `IG @${author}: ${caption.slice(0, 60)}`,
-            summary: caption.slice(0, 300),
-            contentText: caption,
-            publishedAt: null,
-            documentUrl: docUrl,
-            symbols,
-            metadata: {
-              author: scanTarget.author,
-              target_url: targetUrl,
-              source_surface: scanTarget.sourceSurface,
-              crawl_mode: scanTarget.crawlMode,
-              query_keyword: scanTarget.queryKeyword,
-              matched_symbol_reason: 'tw_symbol_with_name_or_stock_context',
-              session_mode: sessionMode,
-              excluded_false_positives: extracted.excludedFalsePositives,
-            },
-          });
-        }
-        const screenshot = await page.screenshot({ type: 'png', fullPage: false });
-        await createSourceAudit({ connectorRunId, platform: 'instagram', sourceEntityId: String(entity.id), targetUrl, status: 'success', htmlContent: await page.content(), screenshotBase64: screenshot.toString('base64'), notes: `${scanTarget.sourceSurface}:${author}` });
-      } catch (err) {
-        failedFetches += 1;
-        await createSourceAudit({ connectorRunId, platform: 'instagram', targetUrl, status: 'failed', notes: (err as Error).message });
-      }
-    }
-  } finally {
-    await page.close().catch(() => undefined);
-    await context.close().catch(() => undefined);
-    await browser.close().catch(() => undefined);
-  }
-
-  const count = await upsertSourceRawDocuments(
-    filterSymbolScopedDocs(records.map((item) => ({
-      sourceEntityId: String(entity.id),
-      platform: 'instagram',
-      documentUrl: item.documentUrl,
-      title: item.title,
-      summary: item.summary,
-      contentText: item.contentText,
-      publishedAt: item.publishedAt,
-      symbols: item.symbols,
-      sentimentLabel: 'neutral',
-      confidence: 0.52,
-      metadata: { connector: 'playwright_cookie', ...(item.metadata || {}) },
-    })), 'instagram', symbolContext),
-  );
-  const watermarkAfter = await getSourceWatermark('instagram');
-
-  const credStatus: 'valid' | 'invalid' = count > 0 && failedFetches < watchlists.length ? 'valid' : 'invalid';
-  await upsertCredentialRegistry('instagram', credStatus, {
-    credential_ref: 'INSTAGRAM_SESSION_STATE/INSTAGRAM_USERNAME/INSTAGRAM_PASSWORD',
-    metadata: {
-      mode: 'playwright_cookie',
-      session_mode: sessionMode,
-      records_written: count,
-      failed_fetches: failedFetches,
-      watchlist_count: watchlists.length,
-      session_refreshed: sessionRefreshed,
-      config_error: instagramAuth.configError,
-      duplicate_legacy_keys: instagramAuth.duplicateLegacyKeys,
-      fallback_cookie_source: instagramAuth.fallbackCookieSource,
-      duplicates_skipped: duplicateInRun,
-      fetched_posts: fetchedPosts,
-      watermark_before: watermarkBefore,
-      watermark_after: watermarkAfter,
-    },
-  });
-
-  const taskId = await writeAgentTask({ agentRunId, agentRole: 'Source Connector Agent', taskType: 'source-sync', status: 'success', inputPayload: { connector: 'instagram' }, outputSummary: `synced ${count} instagram records` });
-  await writeAgentFinding(taskId, `Instagram 同步 ${count} 筆內容`, { confidence: 0.57 });
-  await finishAgentRun(agentRunId, 'success', { connector: 'instagram', records_written: count, symbol: symbolContext?.symbol || null });
-  await finishConnectorRun(connectorRunId, count > 0 ? 'success' : 'partial', count, {
-    metadata: {
-      entity_id: entity.id,
-      crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
-      query_symbol: symbolContext?.symbol || null,
-      query_terms: symbolContext?.queryTerms || [],
-      source_surfaces: unique([
-        ...records.map((item) => compactText(item.metadata?.source_surface)).filter(Boolean),
-        ...(!symbolContext ? ['instagram_account_feed', 'instagram_public_search'] : []),
-        ...(!symbolContext && watchlists.length > 0 ? ['instagram_author_watch'] : []),
-      ]),
-      account_feed_attempted: !symbolContext,
-      session_refreshed: sessionRefreshed,
-      session_mode: sessionMode,
-      duplicates_skipped: duplicateInRun,
-      fetched_posts: fetchedPosts,
-      watermark_before: watermarkBefore,
-      watermark_after: watermarkAfter,
-    },
-  });
-  return {
-    connector: 'instagram',
-    recordsWritten: count,
-    fetchedPosts,
-    entityId: String(entity.id),
-    sessionRefreshed,
-    duplicatesSkipped: duplicateInRun,
-    watermarkBefore,
-    watermarkAfter,
-    errorCode: null,
-    sessionMode,
-  } as SourceSyncRunShape;
+async function scrapeThreads(symbolContext?: SymbolScopedStockContext | null) {
+  return scrapeThreadsOfficialApi(symbolContext);
 }
 
 async function scrapeTelegram(symbolContext?: SymbolScopedStockContext | null) {
-  // Telegram Terms do not authorize AI/ML claim extraction for this product.
-  // Do not fetch public previews as a fallback; expose only this typed state.
-  return { connector: 'telegram', recordsWritten: 0, fetchedPosts: 0, entityId: null,
-    errorCode: 'not_authorized', degradedReason: 'telegram_terms_ml_not_authorized',
-    sessionMode: 'not_applicable' as const };
-  /* c8 ignore start -- retained historic implementation for migration rollback only.
+  if (process.env.TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED !== 'true') {
+    return { connector: 'telegram', recordsWritten: 0, fetchedPosts: 0, entityId: null,
+      errorCode: 'not_authorized', degradedReason: 'telegram_public_channel_use_not_attested',
+      sessionMode: 'not_applicable' as const };
+  }
   try {
     return await _scrapeTelegramInner(symbolContext);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    if (symbolContext) {
-      await upsertCredentialRegistry('telegram', TELEGRAM_BOT_TOKEN ? 'invalid' : 'missing', {
-        credential_ref: TELEGRAM_BOT_TOKEN ? 'TELEGRAM_BOT_TOKEN' : null,
-        error_message: msg.slice(0, 500),
-        metadata: { mode: 'symbol_scoped_partial', records_written: 0 },
-      });
-      return { connector: 'telegram', recordsWritten: 0, fetchedPosts: 0, entityId: null, errorCode: 'symbol_search_partial', sessionMode: 'not_applicable' as const };
-    }
-    const fallback = await syncGenericWatchlistConnector('telegram');
-    await finishLatestRunningConnector('telegram', fallback.recordsWritten > 0 ? 'partial' : 'failed', fallback.recordsWritten, msg);
-    await upsertCredentialRegistry('telegram', TELEGRAM_BOT_TOKEN ? 'invalid' : 'missing', {
-      credential_ref: TELEGRAM_BOT_TOKEN ? 'TELEGRAM_BOT_TOKEN' : null,
+    await finishLatestRunningConnector('telegram', 'failed', 0, msg);
+    await upsertCredentialRegistry('telegram', 'invalid', {
+      credential_ref: 'TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED',
       error_message: msg.slice(0, 500),
-      metadata: { mode: 'fallback_watchlist', records_written: fallback.recordsWritten },
+      metadata: { mode: symbolContext ? 'symbol_scoped_failed' : 'public_channel_failed', records_written: 0 },
     });
-    return fallback;
-  } c8 ignore stop */
+    throw new Error(`telegram_connector_failed:${msg}`);
+  }
 }
 
 async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | null) {
@@ -5759,12 +3157,11 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
   });
   const agentRunId = await startAgentRun('source_sync', { connector: 'telegram', symbol: symbolContext?.symbol || null });
 
-  const [{ data, error }, stocksRes] = await Promise.all([
-    supabase.from('source_watchlists').select('*').eq('platform', 'telegram').eq('enabled', true).order('priority', { ascending: false }),
+  const [stocksRes, priorDocumentsRes] = await Promise.all([
     supabase.from('stocks').select('symbol,name').eq('market', 'TW'),
+    supabase.from('source_raw_documents').select('document_url,metadata').eq('platform', 'telegram').order('collected_at', { ascending: false }).limit(5000),
   ]);
-  if (error || stocksRes.error) throw new Error(error?.message || stocksRes.error?.message || 'failed loading telegram context');
-  const watchlists = (data as Row[]) || [];
+  if (stocksRes.error || priorDocumentsRes.error) throw new Error(stocksRes.error?.message || priorDocumentsRes.error?.message || 'failed loading telegram context');
   const stocksRows = (stocksRes.data as Row[]) || [];
   const validSymbols = new Set(stocksRows.map((row) => compactText(row.symbol).toUpperCase()).filter((item) => /^\d{4}$/.test(item)));
   const stockNamesBySymbol = new Map(stocksRows.map((row) => [compactText(row.symbol).toUpperCase(), compactText(row.name)] as const));
@@ -5772,13 +3169,14 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
     const symbol = compactText(row.symbol).toUpperCase();
     return [symbol, getSymbolAliases(symbol, compactText(row.name))] as const;
   }));
-
-  if (watchlists.length === 0) {
-    await upsertCredentialRegistry('telegram', 'missing', { metadata: { reason: 'no watchlist' } });
-    await finishConnectorRun(connectorRunId, 'skipped', 0, { metadata: { reason: 'no_watchlist' } });
-    await finishAgentRun(agentRunId, 'failed', { reason: 'no_watchlist' });
-    return { connector: 'telegram', recordsWritten: 0, entityId: null };
+  const cursorBefore = new Map<string, number>();
+  for (const row of (priorDocumentsRes.data as Row[]) || []) {
+    const metadata = row.metadata && typeof row.metadata === 'object' ? row.metadata as Row : {};
+    const channel = compactText(metadata.channel_name).replace(/^@/u, '').toLowerCase();
+    const messageId = Number(metadata.stable_message_id || /t\.me\/[^/]+\/(\d+)/u.exec(String(row.document_url || ''))?.[1]);
+    if (channel && Number.isInteger(messageId)) cursorBefore.set(channel, Math.max(cursorBefore.get(channel) || 0, messageId));
   }
+  const cursorAfter = new Map(cursorBefore);
 
   const entity = await upsertSourceEntity({
     platform: 'telegram',
@@ -5800,19 +3198,9 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
     excluded_examples: string[];
   }> = [];
   let fetchedPosts = 0;
+  let cursorDuplicatesSkipped = 0;
 
-  const watchByChannel = new Map<string, Row>();
-  for (const watchItem of watchlists) {
-    const rawUrl = String(watchItem.watch_value || '');
-    const channelMatch = rawUrl.match(/t\.me\/(?:s\/)?([^/?]+)/);
-    if (!channelMatch) continue;
-    const key = channelMatch[1].toLowerCase();
-    if (!watchByChannel.has(key)) watchByChannel.set(key, watchItem);
-  }
-  const channelNames = unique([
-    ...DEFAULT_TELEGRAM_CHANNEL_NAMES,
-    ...Array.from(watchByChannel.keys()),
-  ]).slice(0, 12);
+  const channelNames = [...APPROVED_TELEGRAM_PUBLIC_CHANNELS];
 
   for (const channelNameRaw of channelNames) {
     const channelName = channelNameRaw.replace(/^@/, '');
@@ -5824,34 +3212,45 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
     let channelFailure: string | null = null;
 
     try {
-      const html = await fetch(previewUrl, { headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0' }, signal: AbortSignal.timeout(15_000) }).then((res) => res.text());
-      const messageMatches = Array.from(html.matchAll(/<div class="tgme_widget_message_text[^"]*"[^>]*>([\s\S]*?)<\/div>/g));
-      const dateMatches = Array.from(html.matchAll(/<time[^>]+datetime="([^"]+)"/g));
-      const msgCount = Math.min(messageMatches.length, 20);
-      for (let i = 0; i < msgCount; i++) {
-        const rawMsg = (messageMatches[i]?.[1] || '').replace(/<[^>]+>/g, ' ');
+      const response = await fetch(previewUrl, { headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/2.0' }, signal: AbortSignal.timeout(15_000) });
+      if (!response.ok) throw new Error(`telegram_public_http_${response.status}`);
+      const html = await response.text();
+      const messageMatches = Array.from(html.matchAll(/data-post="[^/"]+\/(\d+)"([\s\S]*?)(?=data-post="|$)/gu)).slice(-20);
+      for (const messageMatch of messageMatches) {
+        const messageId = Number(messageMatch[1]);
+        const scope = messageMatch[2] || '';
+        const textMatch = /tgme_widget_message_text[^>]*>([\s\S]*?)<\/div>/u.exec(scope);
+        const rawMsg = (textMatch?.[1] || '').replace(/<[^>]+>/g, ' ');
         const msgText = compactText(rawMsg);
-        if (msgText.length < 15) continue;
-        const publishedAt = safeDateString(dateMatches[i]?.[1] || null);
+        if (!Number.isInteger(messageId) || msgText.length < 15) continue;
+        fetchedPosts += 1;
+        channelFetchedPosts += 1;
+        const cursorKey = channelName.toLowerCase();
+        cursorAfter.set(cursorKey, Math.max(cursorAfter.get(cursorKey) || 0, messageId));
+        if (messageId <= (cursorBefore.get(cursorKey) || 0)) {
+          cursorDuplicatesSkipped += 1;
+          continue;
+        }
+        const publishedAt = safeDateString(/<time\b[^>]*\bdatetime=["']([^"']+)["']/u.exec(scope)?.[1] || null);
         const extracted = extractTwSymbolsWithEvidence(msgText, { validSymbols, stockNamesBySymbol, aliasesBySymbol });
         const symbols = extracted.symbols;
         channelExclusions.push(...extracted.excludedFalsePositives);
         for (const symbol of symbols) channelSymbols.add(symbol);
-        const docUrl = `${previewUrl}#msg-${i}`;
-        fetchedPosts += 1;
-        channelFetchedPosts += 1;
+        const docUrl = `https://t.me/${channelName}/${messageId}`;
         if (symbols.length === 0) continue;
         records.push({
           title: `Telegram @${channelName}: ${msgText.slice(0, 60)}`,
-          summary: msgText.slice(0, 300),
-          contentText: msgText,
+          summary: msgText.slice(0, 160),
+          contentText: `Telegram @${channelName}: ${msgText.slice(0, 60)}`,
           publishedAt,
           documentUrl: docUrl,
           symbols,
           metadata: {
             channel_name: channelName,
+            stable_message_id: messageId,
             source_mode: 'public_channel_html',
             source_surface: 'telegram_public_channel',
+            retention_mode: 'metadata_link_only',
             crawl_mode: 'channel_scan',
             match_reason: 'tw_symbol_with_name_or_stock_context',
             excluded_false_positives: extracted.excludedFalsePositives,
@@ -5884,74 +3283,11 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
     });
   }
 
-  // Bot token mode: always collect from all groups the bot is a member of (public + private)
-  let botTokenValid = false;
-  if (TELEGRAM_BOT_TOKEN) {
-    try {
-      const meRes = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getMe`, { signal: AbortSignal.timeout(10_000) })
-        .then((res) => res.json()) as { ok?: boolean };
-      botTokenValid = Boolean(meRes.ok);
-
-      const botRes = await fetch(
-        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUpdates?limit=100&allowed_updates=["message","channel_post"]`,
-        { signal: AbortSignal.timeout(10_000) },
-      ).then((res) => res.json()) as { ok: boolean; result?: Array<{ message?: { text?: string; date?: number; chat?: { id?: number; username?: string; title?: string } }; channel_post?: { text?: string; date?: number; chat?: { id?: number; username?: string; title?: string } } }> };
-      if (botRes.ok && Array.isArray(botRes.result)) {
-        const seenChatIds = new Set<number>();
-        for (const update of botRes.result) {
-          const msg = update.message || update.channel_post;
-          if (!msg?.text) continue;
-          const msgText = compactText(msg.text);
-          if (msgText.length < 15) continue;
-          const chatTitle = msg.chat?.title || msg.chat?.username || String(msg.chat?.id || 'unknown');
-          const chatHandle = msg.chat?.username ? `https://t.me/${msg.chat.username}` : `tg://chat?id=${msg.chat?.id}`;
-          const publishedAt = msg.date ? new Date(msg.date * 1000).toISOString() : null;
-          const extracted = extractTwSymbolsWithEvidence(msgText, { validSymbols, stockNamesBySymbol, aliasesBySymbol });
-          const symbols = extracted.symbols;
-          if (symbols.length === 0) continue;
-          fetchedPosts += 1;
-          records.push({
-            title: `Telegram @${chatTitle}: ${msgText.slice(0, 60)}`,
-            summary: msgText.slice(0, 300),
-            contentText: msgText,
-            publishedAt,
-            documentUrl: chatHandle,
-            symbols,
-            metadata: {
-              chat_title: chatTitle,
-              source_mode: 'bot_getUpdates',
-              source_surface: 'telegram_bot_channel_or_group',
-              crawl_mode: 'channel_scan',
-              match_reason: 'tw_symbol_with_name_or_stock_context',
-              excluded_false_positives: extracted.excludedFalsePositives,
-            },
-          });
-          // Auto-register newly seen private groups (chat_id based)
-          const chatId = msg.chat?.id;
-          if (chatId && !seenChatIds.has(chatId)) {
-            seenChatIds.add(chatId);
-            await supabase.from('source_watchlists').upsert(
-              { platform: 'telegram', watch_type: 'chat_id', watch_value: String(chatId), enabled: true, priority: 6, updated_at: new Date().toISOString() },
-              { onConflict: 'platform,watch_value' },
-            );
-          }
-        }
-      }
-    } catch (_botErr) {
-      // bot token errors are non-fatal; HTML-scraped records still proceed
-    }
-  }
-
-  const telegramCredStatus: 'valid' | 'invalid' | 'missing' = !TELEGRAM_BOT_TOKEN
-    ? 'missing'
-    : records.length > 0
-      ? 'valid'
-      : 'invalid';
+  const telegramCredStatus: 'valid' | 'invalid' = fetchedPosts > 0 ? 'valid' : 'invalid';
   await upsertCredentialRegistry('telegram', telegramCredStatus, {
-    credential_ref: TELEGRAM_BOT_TOKEN ? 'TELEGRAM_BOT_TOKEN' : null,
+    credential_ref: 'TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED',
     metadata: {
-      mode: TELEGRAM_BOT_TOKEN ? 'html_plus_bot_getUpdates' : 'public_channel_html',
-      bot_token_valid: botTokenValid,
+      mode: 'public_channel_html',
       records_written: records.length,
       channel_breakdown: channelBreakdown,
     },
@@ -5987,7 +3323,22 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
       query_terms: symbolContext?.queryTerms || [],
     },
   });
-  return { connector: 'telegram', recordsWritten: count, fetchedPosts, entityId: String(entity.id), errorCode: null };
+  return {
+    connector: 'telegram',
+    recordsWritten: count,
+    fetchedPosts,
+    duplicatesSkipped: cursorDuplicatesSkipped + Math.max(0, records.length - count),
+    matchedDirectHits: new Set(records.flatMap((record) => record.symbols)).size,
+    matchedIndustryHits: 0,
+    entityId: String(entity.id),
+    watermarkBefore: JSON.stringify(Object.fromEntries([...cursorBefore.entries()].sort())),
+    watermarkAfter: JSON.stringify(Object.fromEntries([...cursorAfter.entries()].sort())),
+    errorCode: null,
+    degradedReason: channelBreakdown.some((channel) => channel.failure_reason)
+      ? `telegram_channels_failed:${channelBreakdown.filter((channel) => channel.failure_reason).length}`
+      : null,
+    sessionMode: 'not_applicable' as const,
+  };
 }
 
 function parseTwNumber(value: unknown) {
@@ -6256,10 +3607,10 @@ export async function runReportIngest(options?: { dryRun?: boolean }) {
 }
 
 export async function runSourceSync(options?: SourceSyncOptions): Promise<SourceSyncRunShape & { runId: string; dryRun: boolean }> {
-  const connector = options?.connector || 'investanchors';
+  const connector = options?.connector || 'twse_insider';
   const dryRun = Boolean(options?.dryRun);
   const symbolContext = options?.symbol ? await resolveSymbolScopedStockContext(options.symbol) : null;
-  const defaultSessionMode: SourceSyncRunShape['sessionMode'] = connector === 'threads' || connector === 'instagram' ? 'missing' : 'not_applicable';
+  const defaultSessionMode: SourceSyncRunShape['sessionMode'] = 'not_applicable';
   if (dryRun) {
     return {
       runId: randomUUID(),
@@ -6282,59 +3633,17 @@ export async function runSourceSync(options?: SourceSyncOptions): Promise<Source
   }
 
   const mapping: Record<string, (context?: SymbolScopedStockContext | null) => Promise<SourceSyncRunShape>> = {
-    investanchors: scrapeInvestAnchors,
     ptt: scrapePttStock,
     bulltalk: scrapeBullTalk,
-    googlenews: scrapeGoogleNewsTW,
-    anue: scrapeAnueNews,
-    udn: scrapeUdnFinance,
-    mobile01: scrapeMobile01Finance,
     threads: scrapeThreads,
-    instagram: scrapeInstagram,
     telegram: scrapeTelegram,
+    gdelt: scrapeGdeltMetadata,
     twse_insider: scrapeTwseInsider,
   };
   const runner = mapping[connector];
   if (!runner) throw new Error(`unsupported connector: ${connector}`);
   const watermarkBefore = await getSourceWatermark(connector);
-  const browserConnector = new Set(['investanchors', 'threads', 'instagram']).has(connector);
-  if (process.env.VERCEL && browserConnector) {
-    const connectorRunId = await startConnectorRun('source-sync', connector, {
-      mode: 'vercel_status_only',
-      reason: 'playwright_runtime_unavailable',
-      searched_targets: symbolContext ? ['symbol_scoped'] : ['visible_symbols', 'theme_keywords'],
-      query_symbol: symbolContext?.symbol || null,
-    });
-    await finishConnectorRun(connectorRunId, 'skipped', 0, {
-      error_summary: 'playwright_runtime_unavailable',
-      metadata: {
-        mode: 'vercel_status_only',
-        status_owner: 'serverless_status',
-        reason: 'browser connector is owned by local launchd worker',
-        query_symbol: symbolContext?.symbol || null,
-        searched_targets: symbolContext ? ['symbol_scoped'] : ['visible_symbols', 'theme_keywords'],
-      },
-    });
-    return {
-      runId: connectorRunId,
-      dryRun,
-      connector,
-      recordsWritten: 0,
-      fetchedPosts: 0,
-      entityId: null,
-      watermarkBefore,
-      watermarkAfter: watermarkBefore,
-      duplicatesSkipped: 0,
-      sessionRefreshed: false,
-      errorCode: 'playwright_runtime_unavailable',
-      matchedDirectHits: 0,
-      matchedIndustryHits: 0,
-      degradedReason: 'playwright_runtime_unavailable',
-      timedOut: false,
-      sessionMode: defaultSessionMode,
-    };
-  }
-  const selfManagedConnector = new Set(['investanchors', 'threads', 'instagram', 'telegram', 'twse_insider']).has(connector);
+  const selfManagedConnector = new Set(['threads', 'telegram', 'twse_insider']).has(connector);
   if (selfManagedConnector) {
     const result = await runner(symbolContext);
     return {
@@ -6477,8 +3786,8 @@ export async function runSourceDiscovery(options?: { dryRun?: boolean }) {
   if (docsRes.error || stocksRes.error) {
     throw new Error(docsRes.error?.message || stocksRes.error?.message || 'Failed to load source discovery inputs');
   }
-  const documents = (docsRes.data as Row[]) || [];
-  const investanchorsDocuments: Row[] = [];
+  const documents = ((docsRes.data as Row[]) || []).filter((doc) =>
+    !(RETIRED_SOURCE_CONNECTORS as readonly string[]).includes(compactText(doc.platform).toLowerCase()));
   const stockBySymbol = new Map<string, Row>();
   for (const stock of (stocksRes.data as Row[]) || []) {
     const symbol = String(stock.symbol || '');
@@ -6494,7 +3803,6 @@ export async function runSourceDiscovery(options?: { dryRun?: boolean }) {
       if (url.includes('threads.net') || url.includes('threads.com')) platform = 'threads';
       else if (url.includes('instagram.com')) platform = 'instagram';
       else if (url.includes('t.me')) platform = 'telegram';
-      else if (url.includes('youtube.com') || url.includes('youtu.be')) platform = 'kol';
       if (platform === 'unknown') continue;
       candidates.push({
         platform,
@@ -6511,7 +3819,6 @@ export async function runSourceDiscovery(options?: { dryRun?: boolean }) {
     .filter(Boolean) as typeof candidates;
 
   const asOfDate = asDate();
-  const extractedInvestanchorsSymbols = new Set<string>();
   const investanchorsRows: Array<Record<string, unknown>> = [];
   const extractMentionedSymbols = (doc: Row) => {
     const explicit = Array.isArray(doc.symbols) ? (doc.symbols as unknown[]).map(String) : [];
@@ -6528,58 +3835,12 @@ export async function runSourceDiscovery(options?: { dryRun?: boolean }) {
       });
   };
 
-  for (const doc of investanchorsDocuments) {
-    const symbols = extractMentionedSymbols(doc);
-    if (symbols.length === 0) continue;
-    const sourceTitle = compactText(doc.title || '定錨投筆提及個股').slice(0, 120);
-    const sourceSummary = compactText(doc.summary || '').slice(0, 500);
-    for (const symbol of symbols) {
-      const stock = stockBySymbol.get(symbol);
-      if (!stock) continue;
-      const stockId = String(stock.id || '');
-      const key = `${stockId}|investanchors_candidate|${asOfDate}`;
-      if (!stockId || extractedInvestanchorsSymbols.has(key)) continue;
-      extractedInvestanchorsSymbols.add(key);
-      investanchorsRows.push({
-        stock_id: stockId,
-        story_type: 'operating_turnaround',
-        title: `定錨提及 ${symbol}：${sourceTitle || String(stock.name || symbol)}`,
-        summary:
-          sourceSummary ||
-          `定錨投筆近期提及 ${symbol}，已先納入候選池；升級首頁前仍需補官方、財務與估值 bridge 驗證。`,
-        catalyst_summary: `定錨提及 ${symbol}，來源已進候選池；目前 verification=pending，需確認官方資料、月營收與估值橋接後才能升級推薦。`,
-        thesis_state: 'signal_candidate',
-        confidence: 0.42,
-        novelty_score: 0.58,
-        evidence_score: 0.25,
-        timing_score: 0,
-        verification_status: '未證實',
-        conditional_recommendation_note: '定錨提及已進候選池；待官方資料、財務快照、估值 bridge 與技術時機通過 audit 後才可升級首頁推薦。',
-        source_mix: [
-          {
-            source: '定錨投筆',
-            sourceType: 'investanchors',
-            title: sourceTitle,
-            summary: sourceSummary,
-            sourceUrl: doc.document_url || null,
-            verification: 'pending',
-          },
-        ],
-        related_themes: ['investanchors'],
-        discovered_at: nowIso(),
-        as_of_date: asOfDate,
-        updated_at: nowIso(),
-      });
-    }
-  }
-
-  const socialBrokerDocs: Array<Record<string, unknown>> = [];
   const socialBrokerMentionRows: Array<Record<string, unknown>> = [];
   const socialBrokerCandidateRows: Array<Record<string, unknown>> = [];
   const socialBrokerSeen = new Set<string>();
   for (const doc of documents) {
     const platform = compactText(doc.platform || '').toLowerCase();
-    if (!['threads', 'instagram', 'telegram', 'bulltalk', 'ptt', 'kol', 'youtube', 'podcast'].includes(platform)) continue;
+    if (!['threads', 'instagram', 'telegram', 'bulltalk', 'ptt', 'kol', 'podcast'].includes(platform)) continue;
     const text = `${doc.title || ''}\n${doc.summary || ''}\n${doc.content_text || ''}`;
     const brokerSignal = detectSocialBrokerSignal(text);
     if (!brokerSignal) continue;
@@ -6589,44 +3850,10 @@ export async function runSourceDiscovery(options?: { dryRun?: boolean }) {
       const stock = stockBySymbol.get(symbol);
       if (!stock) continue;
       const stockId = String(stock.id || '');
-      const reportDate = doc.published_at
-        ? String(doc.published_at).slice(0, 10)
-        : doc.collected_at
-          ? String(doc.collected_at).slice(0, 10)
-          : asOfDate;
       const sourceUrl = String(doc.document_url || '');
       const key = `${stockId}|${sourceUrl}|${brokerSignal.brokerName}`;
       if (!stockId || socialBrokerSeen.has(key)) continue;
       socialBrokerSeen.add(key);
-      const filePath = `social_broker_leak/${symbol}/${slugify(platform)}/${slugify(sourceUrl || String(doc.id || randomUUID())).slice(0, 100)}`;
-      socialBrokerDocs.push({
-        stock_id: stockId,
-        broker_name: brokerSignal.brokerName,
-        report_date: reportDate || asOfDate,
-        file_name: `social_broker_leak_${symbol}_${slugify(brokerSignal.brokerName)}_${reportDate || asOfDate}`,
-        file_path: filePath,
-        source_mode: 'social_broker_leak',
-        rating: null,
-        target_price: brokerSignal.targetPrice,
-        thesis_title: `社群轉述 ${brokerSignal.brokerName}：${symbol} 券商目標價 / EPS 線索`,
-        extracted_summary: brokerSignal.summary,
-        raw_text: String(text || '').slice(0, 8000),
-        metadata: {
-          source: 'social_broker_leak',
-          platform,
-          source_document_id: doc.id || null,
-          source_document_url: sourceUrl || null,
-          crawl_mode: (doc.metadata as Row | null)?.crawl_mode || null,
-          source_surface: (doc.metadata as Row | null)?.source_surface || null,
-          query_keyword: (doc.metadata as Row | null)?.query_keyword || null,
-          target_price_extracted: brokerSignal.targetPrice,
-          forward_eps_extracted: brokerSignal.forwardEps,
-          formal_base_eligible: false,
-          source_quality: 'social_broker_leak_requires_confirmation',
-          extracted_by: 'deterministic_broker_keyword_parser',
-        },
-        updated_at: nowIso(),
-      });
       socialBrokerMentionRows.push({
         stock_id: stockId,
         symbol,
@@ -6684,12 +3911,6 @@ export async function runSourceDiscovery(options?: { dryRun?: boolean }) {
     const { error: insertError } = await supabase.from('source_discovery_queue').insert(deduped);
     if (insertError) throw new Error(insertError.message);
   }
-  if (!dryRun && socialBrokerDocs.length > 0) {
-    const { error: brokerLeakError } = await supabase
-      .from('broker_report_documents')
-      .upsert(socialBrokerDocs, { onConflict: 'file_path' });
-    if (brokerLeakError) throw new Error(brokerLeakError.message);
-  }
   if (!dryRun && socialBrokerMentionRows.length > 0) {
     const { error: brokerMentionError } = await supabase
       .from('social_broker_mentions')
@@ -6712,10 +3933,10 @@ export async function runSourceDiscovery(options?: { dryRun?: boolean }) {
   return {
     runId: randomUUID(),
     dryRun,
-    recordsWritten: deduped.length + investanchorsRows.length + socialBrokerDocs.length + socialBrokerCandidateRows.length,
+    recordsWritten: deduped.length + investanchorsRows.length + socialBrokerMentionRows.length + socialBrokerCandidateRows.length,
     discoveryQueueRecordsWritten: deduped.length,
     investanchorsCandidateRecordsWritten: investanchorsRows.length,
-    socialBrokerLeakDocumentsWritten: socialBrokerDocs.length,
+    socialBrokerLeakDocumentsWritten: 0,
     socialBrokerMentionsWritten: socialBrokerMentionRows.length,
     socialBrokerCandidateRecordsWritten: socialBrokerCandidateRows.length,
     socialBrokerLeakSymbols: unique(
@@ -6735,19 +3956,6 @@ export async function runBrokerReportIngest(options?: { dryRun?: boolean; symbol
   if (dryRun) return { runId: randomUUID(), dryRun, reportsIngested: 0, sectionsWritten: 0 };
 
   const supabase = getSupabaseServerClient();
-  // Get all tracked TW stocks
-  const requestedSymbols = unique((options?.symbols || []).map((item) => String(item || '').toUpperCase()).filter(Boolean));
-  const topN = Number.isFinite(Number(options?.topN)) && Number(options?.topN) > 0
-    ? Number(options?.topN)
-    : requestedSymbols.length > 0
-      ? requestedSymbols.length
-      : resolveStoryCandidateTopN();
-  const queryLimit = Math.max(topN, 60);
-  const stockQuery = supabase.from('stocks').select('id,symbol,name,market').eq('market', 'TW');
-  const { data: stocksData } = requestedSymbols.length > 0
-    ? await stockQuery.in('symbol', requestedSymbols).limit(Math.max(requestedSymbols.length, 1))
-    : await stockQuery.limit(queryLimit);
-  const stocks = (stocksData as Row[]) || [];
   const today = asDate();
 
   let reportsIngested = 0;
@@ -6755,7 +3963,19 @@ export async function runBrokerReportIngest(options?: { dryRun?: boolean; symbol
   const manualImports = await ingestManualBrokerImports(supabase).catch(() => ({ reportsIngested: 0, sectionsWritten: 0 }));
   reportsIngested += manualImports.reportsIngested;
   sectionsWritten += manualImports.sectionsWritten;
+  const authorizedConsensusSnapshotsWritten = await rebuildBrokerConsensusSnapshots(supabase, today).catch(() => 0);
+  return {
+    runId: randomUUID(),
+    dryRun,
+    reportsIngested,
+    sectionsWritten,
+    consensusSnapshotsWritten: authorizedConsensusSnapshotsWritten,
+    sourceMode: 'user_owned_manual_imports_only',
+    retiredSourcesSkipped: ['anue', 'cnyes', 'moneydj'],
+  };
 
+  /* Retired 2026-08-30: historical implementation retained temporarily for audit only.
+     This block is not compiled and cannot issue Anue/Cnyes/MoneyDJ requests.
   for (const stock of stocks.slice(0, topN)) {
     const symbol = String(stock.symbol || '');
     const stockId = String(stock.id || '');
@@ -7060,6 +4280,7 @@ export async function runBrokerReportIngest(options?: { dryRun?: boolean; symbol
 
   const consensusSnapshotsWritten = await rebuildBrokerConsensusSnapshots(supabase, today).catch(() => 0);
   return { runId: randomUUID(), dryRun, reportsIngested, sectionsWritten, consensusSnapshotsWritten };
+  */
 }
 
 function ratingToTier(hasBrokerReport: boolean, evidenceScore: number, timingScore: number) {
@@ -7087,7 +4308,7 @@ export async function runThesisRefresh(options?: { dryRun?: boolean; symbols?: s
 
   const [stocksRes, reportsRes, recsRes, evidenceRes, rawDocsRes, valuationsRes, revenueRes, fundamentalsRes, podcastRes, themesRes, storiesRes, signalsRes] = await Promise.all([
     supabase.from('stocks').select('*'),
-    supabase.from('broker_report_documents').select('*').order('report_date', { ascending: false }),
+    supabase.from('broker_report_documents').select('*').in('source_mode', [...AUTHORIZED_BROKER_SOURCE_MODES]).order('report_date', { ascending: false }),
     supabase.from('recommendations').select('*').eq('as_of', today).order('score', { ascending: false }),
     supabase.from('story_evidence_items').select('*').order('source_timestamp', { ascending: false }),
     supabase.from('source_raw_documents').select('platform,title,summary,symbols,confidence,collected_at,published_at,metadata,source_entity_id').order('collected_at', { ascending: false }).limit(300),
@@ -8012,23 +5233,19 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
 
   const supabase = getSupabaseServerClient();
   await ensureDefaultKolProfiles();
-  await ensureDefaultWatchlists();
   const podcastRunId = await startConnectorRun('podcast-sync', 'podcast', { source: 'kol_profiles' });
-  const youtubeRunId = await startConnectorRun('podcast-sync', 'youtube', { source: 'kol_profiles', mode: 'youtube_playlist' });
   try {
     const { data: kolData, error: kolError } = await supabase.from('kol_profiles').select('*').eq('discovery_state', 'approved');
     if (kolError) throw new Error(kolError.message);
     const kols = (kolData as Row[]) || [];
 
     let totalEpisodes = 0;
-    let youtubeEpisodes = 0;
     let weakSignalsWritten = 0;
     const platformsUsed = new Set<string>();
     const searchedKeywords = unique([
       ...KOL_SEEDS.map((seed) => seed.displayName),
       '台股 KOL',
       'Podcast',
-      'YouTube',
       'CPU',
       'MLCC',
       '成熟製程',
@@ -8055,39 +5272,11 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
 
       const episodeItems: PodcastEpisodeCandidate[] = [];
 
-      const youtubeUrls = unique([...arrayFromMetadata(meta.youtubeUrl), ...arrayFromMetadata(meta.youtubeUrls)]);
-      for (const youtubeUrl of youtubeUrls) {
-        platformsUsed.add('youtube');
-        searchedUrls.push(youtubeUrl);
-        const ytItems = await fetchYoutubePlaylist(youtubeUrl, meta);
-        episodeItems.push(...ytItems.map((item) => ({ ...item, platform: 'youtube' as const })));
-      }
-
       const podcastName = String(meta.podcastName || String(kol.display_name || ''));
       const explicitRssUrls = arrayFromMetadata(meta.rssUrl).concat(arrayFromMetadata(meta.rssUrls));
       for (const rssUrl of unique(explicitRssUrls)) {
         searchedUrls.push(rssUrl);
         const rssItems = await fetchExplicitRssItems(rssUrl);
-        if (rssItems.length > 0) {
-          platformsUsed.add('rss');
-          episodeItems.push(...rssItems);
-        }
-      }
-
-      const appleUrls = arrayFromMetadata(meta.appleUrl).concat(arrayFromMetadata(meta.appleUrls));
-      for (const appleUrl of unique(appleUrls)) {
-        searchedUrls.push(appleUrl);
-        const appleItems = await fetchApplePodcastRssItems(appleUrl);
-        if (appleItems.length > 0) {
-          platformsUsed.add('apple_podcast');
-          episodeItems.push(...appleItems);
-        }
-      }
-
-      if (episodeItems.length === 0 && podcastName) {
-        const rssGuess = `https://feeds.soundon.fm/podcasts/${slugify(podcastName)}.xml`;
-        searchedUrls.push(rssGuess);
-        const rssItems = await fetchExplicitRssItems(rssGuess);
         if (rssItems.length > 0) {
           platformsUsed.add('rss');
           episodeItems.push(...rssItems);
@@ -8121,7 +5310,6 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
         );
         if (error && !String(error.message).includes('duplicate')) throw new Error(error.message);
         totalEpisodes += 1;
-        if (ep.platform === 'youtube') youtubeEpisodes += 1;
 
         const weakText = compactText(`${ep.title}。${ep.description || ''}`);
         const weakInsights = extractPodcastInsights(weakText);
@@ -8129,7 +5317,7 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
         if (weakInsights.symbols.length > 0) {
           const docsWritten = await upsertSourceRawDocuments([{
             sourceEntityId,
-            platform: ep.platform === 'youtube' ? 'youtube' : 'podcast',
+            platform: 'podcast',
             documentUrl: ep.link,
             title: `[KOL影音弱訊號] ${kolName}: ${ep.title}`,
             summary: weakText.slice(0, 600),
@@ -8144,6 +5332,7 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
               kol_name: kolName,
               weak_signal_only: true,
               source_mode: ep.sourceMode || null,
+              license_basis: 'creator_published_rss',
             },
           }]);
           weakSignalsWritten += docsWritten;
@@ -8155,16 +5344,14 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
         uniqueEpisodes.length > 0
           ? null
           : searchedUrls.length === 0
-            ? 'missing_youtube_or_podcast_endpoint'
-            : process.env.YOUTUBE_API_KEY
-              ? 'no_recent_episode_found'
-              : 'no_recent_episode_found_youtube_api_key_missing';
+            ? 'missing_creator_rss_endpoint'
+            : 'no_recent_episode_found';
       if (failureReason) failureReasonByKol[kolName] = failureReason;
       kolBreakdown.push({
         kol: kolName,
         searchedUrls,
         episodesFound: uniqueEpisodes.length,
-        youtubeEpisodes: uniqueEpisodes.filter((item) => item.platform === 'youtube').length,
+        youtubeEpisodes: 0,
         weakSignalsWritten: kolWeakSignals,
         transcriptsReady: 0,
         failureReason,
@@ -8173,31 +5360,18 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
 
     const recordsWritten = totalEpisodes + weakSignalsWritten;
     await finishConnectorRun(podcastRunId, recordsWritten > 0 ? 'success' : 'partial', recordsWritten, {
-      error_summary: recordsWritten > 0 ? null : 'no_podcast_or_youtube_episodes_found',
+      error_summary: recordsWritten > 0 ? null : 'no_creator_authorized_rss_episodes_found',
       metadata: {
         searched_keywords: searchedKeywords,
         searched_targets: searchedKeywords,
         platforms: Array.from(platformsUsed),
         episodes_found: totalEpisodes,
-        youtube_episodes: youtubeEpisodes,
+        youtube_episodes: 0,
         weak_signals_written: weakSignalsWritten,
         matched_symbols: Array.from(matchedSymbols),
         kol_breakdown: kolBreakdown,
         failure_reason_by_kol: failureReasonByKol,
-        youtube_api_key_present: Boolean(process.env.YOUTUBE_API_KEY),
-      },
-    });
-    await finishConnectorRun(youtubeRunId, youtubeEpisodes + weakSignalsWritten > 0 ? 'success' : 'partial', youtubeEpisodes + weakSignalsWritten, {
-      error_summary: youtubeEpisodes + weakSignalsWritten > 0 ? null : 'no_youtube_episodes_found',
-      metadata: {
-        searched_keywords: searchedKeywords,
-        searched_targets: searchedKeywords,
-        episodes_found: youtubeEpisodes,
-        weak_signals_written: weakSignalsWritten,
-        matched_symbols: Array.from(matchedSymbols),
-        kol_breakdown: kolBreakdown,
-        failure_reason_by_kol: failureReasonByKol,
-        youtube_api_key_present: Boolean(process.env.YOUTUBE_API_KEY),
+        youtube_retired: true,
       },
     });
 
@@ -8213,7 +5387,6 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
   } catch (error) {
     const message = (error as Error).message;
     await finishConnectorRun(podcastRunId, 'failed', 0, { error_summary: message });
-    await finishConnectorRun(youtubeRunId, 'failed', 0, { error_summary: message });
     throw error;
   }
 }
@@ -8222,6 +5395,17 @@ export async function runPodcastTranscribe(options?: { dryRun?: boolean }) {
   const dryRun = Boolean(options?.dryRun);
   if (dryRun) return { runId: randomUUID(), dryRun, transcribed: 0, unavailable: 0, failed: 0 };
 
+  return {
+    runId: randomUUID(),
+    dryRun,
+    transcribed: 0,
+    unavailable: 0,
+    failed: 0,
+    terminalReason: 'manual_authorized_transcript_required',
+  };
+
+  /* Retired 2026-08-30: YouTube caption/audio transcription is intentionally inert.
+     Only manually supplied or creator-authorized transcripts may be processed.
   const supabase = getSupabaseServerClient();
   const { data, error } = await supabase.from('podcast_episodes').select('*').eq('transcript_status', 'pending').order('published_at', { ascending: false }).limit(10);
   if (error) throw new Error(error.message);
@@ -8311,89 +5495,77 @@ export async function runPodcastTranscribe(options?: { dryRun?: boolean }) {
   }
 
   return { runId: randomUUID(), dryRun, transcribed, unavailable, failed };
+  */
 }
 
 // ────────────────────────────────────────────────
 // Earnings Call / 法說會 Ingest
 // ────────────────────────────────────────────────
 
+type OfficialDisclosureRow = {
+  symbol: string;
+  title: string;
+  description: string;
+  eventTimestamp: string;
+  sourceUrl: string;
+  market: 'TWSE' | 'TPEx';
+};
+
+async function fetchOfficialDisclosureRows(): Promise<OfficialDisclosureRow[]> {
+  const sources = [
+    { market: 'TWSE' as const, url: 'https://openapi.twse.com.tw/v1/opendata/t187ap04_L' },
+    { market: 'TPEx' as const, url: 'https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap04_O' },
+  ];
+  const responses = await Promise.all(sources.map(async (source) => {
+    const response = await fetch(source.url, { headers: { accept: 'application/json' }, signal: AbortSignal.timeout(15_000) });
+    if (!response.ok) throw new Error(`${source.market.toLowerCase()}_material_information_http_${response.status}`);
+    return { source, rows: await response.json() as Row[] };
+  }));
+  return responses.flatMap(({ source, rows }) => rows.flatMap((row) => {
+    const symbol = compactText(row['公司代號'] || row.SecuritiesCompanyCode).toUpperCase();
+    const title = compactText(row['主旨 '] || row['主旨']);
+    const description = compactText(row['說明']);
+    const eventTimestamp = parseRocDateToIso(row['發言日期'] || row.Date) || nowIso();
+    if (!/^\d{4}$/u.test(symbol) || !title) return [];
+    return [{ symbol, title, description, eventTimestamp, sourceUrl: source.url, market: source.market }];
+  }));
+}
+
+function disclosureTone(text: string): 'bullish' | 'cautious' | 'neutral' {
+  if (/看好|成長|展望正面|樂觀|上修|超預期|擴產|增資/u.test(text)) return 'bullish';
+  if (/謹慎|下修|保守|衰退|風險|挑戰|虧損|減資/u.test(text)) return 'cautious';
+  return 'neutral';
+}
+
 export async function runEarningsCallIngest(options?: { dryRun?: boolean }) {
   const dryRun = Boolean(options?.dryRun);
-  if (dryRun) return { runId: randomUUID(), dryRun, transcriptsIngested: 0, errors: 0 };
-
+  if (dryRun) return { runId: randomUUID(), dryRun, transcriptsIngested: 0, errors: 0, terminalReason: 'successful_empty' };
   const supabase = getSupabaseServerClient();
-  const { data: stocksData } = await supabase.from('stocks').select('id,symbol,name,market').eq('market', 'TW').limit(60);
-  const stocks = (stocksData as Row[]) || [];
-
+  const [{ data: stocksData, error: stocksError }, disclosures] = await Promise.all([
+    supabase.from('stocks').select('id,symbol').eq('market', 'TW'),
+    fetchOfficialDisclosureRows(),
+  ]);
+  if (stocksError) throw new Error(stocksError.message);
+  const stockIds = new Map(((stocksData as Row[]) || []).map((row) => [String(row.symbol || ''), String(row.id || '')]));
+  const calls = disclosures.filter((row) => /法說|法人說明會|業績說明會/u.test(`${row.title} ${row.description}`));
   let transcriptsIngested = 0;
-  let errors = 0;
-
-  for (const stock of stocks.slice(0, 40)) {
-    const symbol = String(stock.symbol || '');
-    const stockId = String(stock.id || '');
-    try {
-      // Fetch Anue news with 法說會 keyword for this stock
-      const anueRes = await fetch(
-        `https://news.cnyes.com/api/v3/news/category/tw_stock?limit=5&stock_code=${symbol}&keyword=${encodeURIComponent('法說會')}`,
-        { headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0', accept: 'application/json' }, signal: AbortSignal.timeout(10_000) },
-      );
-      if (!anueRes.ok) continue;
-      type AnueItem = { title?: string; content?: string; publishAt?: number; summary?: string };
-      const anueJson = await anueRes.json() as { items?: { data?: AnueItem[] } };
-      const articles = anueJson.items?.data || [];
-      if (articles.length === 0) continue;
-
-      for (const article of articles.slice(0, 3)) {
-        const title = String(article.title || '').trim();
-        if (!title) continue;
-
-        const eventTimestamp = article.publishAt
-          ? new Date(Number(article.publishAt) * 1000).toISOString()
-          : nowIso();
-
-        const allText = `${title} ${article.summary || ''} ${article.content || ''}`;
-
-        // Detect management tone
-        const bullishKeywords = /看好|成長|展望正面|樂觀|上修|超預期/;
-        const cautiousKeywords = /謹慎|下修|保守|衰退|風險|挑戰/;
-        const managementTone: 'bullish' | 'cautious' | 'neutral' = bullishKeywords.test(allText)
-          ? 'bullish'
-          : cautiousKeywords.test(allText) ? 'cautious' : 'neutral';
-
-        // Extract catalyst mentions
-        const catalystPatterns = [
-          /AI[\s·]?伺服器/g, /液冷/g, /先進封裝/g, /CoWoS/g, /HBM/g,
-          /法說會/g, /營收/g, /毛利率/g, /EPS/g, /訂單/g, /產能/g,
-          /漲價/g, /擴產/g, /新產品/g, /去庫存/g, /回補/g,
-        ];
-        const catalystMentions: string[] = [];
-        for (const pattern of catalystPatterns) {
-          const matches = allText.match(pattern);
-          if (matches) catalystMentions.push(...new Set(matches));
-        }
-
-        const excerpt = (article.summary || article.content || title).slice(0, 2000);
-
-        await supabase.from('conference_transcripts').upsert(
-          {
-            stock_id: stockId,
-            event_name: title.slice(0, 200),
-            transcript_excerpt: excerpt,
-            source_url: `https://news.cnyes.com/search?q=${encodeURIComponent(symbol + ' 法說會')}`,
-            event_timestamp: eventTimestamp,
-            management_tone: managementTone,
-            catalyst_mentions: catalystMentions,
-          },
-          { onConflict: 'stock_id,event_name,event_timestamp' },
-        );
-        transcriptsIngested += 1;
-      }
-    } catch {
-      errors += 1;
-    }
+  for (const call of calls) {
+    const stockId = stockIds.get(call.symbol);
+    if (!stockId) continue;
+    const { error } = await supabase.from('conference_transcripts').upsert({
+      stock_id: stockId,
+      event_name: call.title.slice(0, 200),
+      transcript_excerpt: (call.description || call.title).slice(0, 2000),
+      source_url: call.sourceUrl,
+      event_timestamp: call.eventTimestamp,
+      management_tone: disclosureTone(`${call.title} ${call.description}`),
+      catalyst_mentions: ['官方法說公告', call.market],
+    }, { onConflict: 'stock_id,event_name,event_timestamp' });
+    if (error) throw new Error(error.message);
+    transcriptsIngested += 1;
   }
-
-  return { runId: randomUUID(), dryRun, transcriptsIngested, errors };
+  return { runId: randomUUID(), dryRun, transcriptsIngested, errors: 0,
+    terminalReason: transcriptsIngested > 0 ? 'success' : 'successful_empty', source: 'TWSE_TPEx_OpenAPI' };
 }
 
 // ────────────────────────────────────────────────
@@ -8402,63 +5574,30 @@ export async function runEarningsCallIngest(options?: { dryRun?: boolean }) {
 
 export async function runMopsFilingIngest(options?: { dryRun?: boolean }) {
   const dryRun = Boolean(options?.dryRun);
-  if (dryRun) return { runId: randomUUID(), dryRun, filingsIngested: 0, errors: 0 };
-
+  if (dryRun) return { runId: randomUUID(), dryRun, filingsIngested: 0, errors: 0, terminalReason: 'successful_empty' };
   const supabase = getSupabaseServerClient();
-  const { data: stocksData } = await supabase.from('stocks').select('id,symbol,name,market').eq('market', 'TW').limit(60);
-  const stocks = (stocksData as Row[]) || [];
-
+  const [{ data: stocksData, error: stocksError }, disclosures] = await Promise.all([
+    supabase.from('stocks').select('id,symbol').eq('market', 'TW'),
+    fetchOfficialDisclosureRows(),
+  ]);
+  if (stocksError) throw new Error(stocksError.message);
+  const stockIds = new Map(((stocksData as Row[]) || []).map((row) => [String(row.symbol || ''), String(row.id || '')]));
   let filingsIngested = 0;
-  let errors = 0;
-
-  for (const stock of stocks.slice(0, 40)) {
-    const symbol = String(stock.symbol || '');
-    const stockId = String(stock.id || '');
-    try {
-      // Fetch Anue news for major filings/announcements
-      const anueRes = await fetch(
-        `https://news.cnyes.com/api/v3/news/category/tw_stock?limit=5&stock_code=${symbol}&keyword=${encodeURIComponent('重大訊息')}`,
-        { headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0', accept: 'application/json' }, signal: AbortSignal.timeout(10_000) },
-      );
-      if (!anueRes.ok) continue;
-      type AnueItem = { title?: string; content?: string; publishAt?: number; summary?: string };
-      const anueJson = await anueRes.json() as { items?: { data?: AnueItem[] } };
-      const articles = anueJson.items?.data || [];
-      if (articles.length === 0) continue;
-
-      for (const article of articles.slice(0, 3)) {
-        const title = String(article.title || '').trim();
-        if (!title) continue;
-
-        const eventTimestamp = article.publishAt
-          ? new Date(Number(article.publishAt) * 1000).toISOString()
-          : nowIso();
-
-        const allText = `${title} ${article.summary || ''} ${article.content || ''}`;
-        const managementTone: 'bullish' | 'cautious' | 'neutral' = /利多|正面|上修|成長/.test(allText)
-          ? 'bullish'
-          : /利空|負面|下修|虧損/.test(allText) ? 'cautious' : 'neutral';
-
-        const excerpt = (article.summary || article.content || title).slice(0, 2000);
-
-        await supabase.from('conference_transcripts').upsert(
-          {
-            stock_id: stockId,
-            event_name: `[MOPS] ${title.slice(0, 190)}`,
-            transcript_excerpt: excerpt,
-            source_url: `https://mops.twse.com.tw/mops/web/t05st01`,
-            event_timestamp: eventTimestamp,
-            management_tone: managementTone,
-            catalyst_mentions: [],
-          },
-          { onConflict: 'stock_id,event_name,event_timestamp' },
-        );
-        filingsIngested += 1;
-      }
-    } catch {
-      errors += 1;
-    }
+  for (const disclosure of disclosures) {
+    const stockId = stockIds.get(disclosure.symbol);
+    if (!stockId) continue;
+    const { error } = await supabase.from('conference_transcripts').upsert({
+      stock_id: stockId,
+      event_name: `[MOPS] ${disclosure.title.slice(0, 190)}`,
+      transcript_excerpt: (disclosure.description || disclosure.title).slice(0, 2000),
+      source_url: disclosure.sourceUrl,
+      event_timestamp: disclosure.eventTimestamp,
+      management_tone: disclosureTone(`${disclosure.title} ${disclosure.description}`),
+      catalyst_mentions: ['官方重大訊息', disclosure.market],
+    }, { onConflict: 'stock_id,event_name,event_timestamp' });
+    if (error) throw new Error(error.message);
+    filingsIngested += 1;
   }
-
-  return { runId: randomUUID(), dryRun, filingsIngested, errors };
+  return { runId: randomUUID(), dryRun, filingsIngested, errors: 0,
+    terminalReason: filingsIngested > 0 ? 'success' : 'successful_empty', source: 'TWSE_TPEx_OpenAPI' };
 }

@@ -21,6 +21,11 @@ StockInsider 是一個以 Supabase + Next.js + Python pipeline 為核心的投�
 Source-led Opportunity V3 的獨立本機驗證、環境契約與三條 release track 請見
 [docs/source-led-opportunity-v3.md](docs/source-led-opportunity-v3.md)。
 
+Source Ranking V2 將正式網址固定為 `https://stockinsider-three.vercel.app`，
+由 GitHub Actions 統一觸發正式資料寫入；Vercel cron 僅保留每日健康監控。
+來源授權、退役清單、三層候選漏斗與正式上線順序請見
+[docs/operations/source-ranking-v2-rollout.md](docs/operations/source-ranking-v2-rollout.md)。
+
 ## 2. 環境變數
 
 複製範本：
@@ -47,38 +52,33 @@ cp .env.example .env
 - `CRON_SECRET`
 - `SIGNAL_FRESHNESS_THRESHOLD_SECONDS`
 
-### Legacy V1/V2 optional configuration（不適用 V3.14 tracked runtime）
+### Source Ranking V2 optional configuration
 
 - `ALERT_WEBHOOK_URL`
 - `OPENROUTER_API_KEY`
 - `PREFECT_API_URL`
 - `OPSX_MUTATING_SMOKE`
-- `THREADS_USERNAME` / `THREADS_PASSWORD` / `THREADS_SESSION_STATE`（legacy only）
-- `INVESTANCHORS_ACCOUNT` / `INVESTANCHORS_PASSWORD`
-- `TELEGRAM_BOT_TOKEN`
-- `YOUTUBE_API_KEY`
+- `THREADS_OFFICIAL_API_ENABLED=false`（Meta App Review 與 Vault token 未完成前固定關閉）
 
 ### Legacy 變數用途
 
 - `INTERNAL_API_KEY` / `CRON_SECRET`：保護 `/api/internal/*` 端點
 - `OPSX_MUTATING_SMOKE=true`：讓 `opsx:test` 額外跑 non-dry-run smoke
-- `THREADS_USERNAME` / `THREADS_PASSWORD`：Threads 專用登入帳號
-- `THREADS_SESSION_STATE`：持久 session JSON 路徑；預設會落在 `.agent/vendor/threads-session.json`
-- `THREADS_COOKIE_FALLBACK_*`：只作人工救援，不建議當主路徑
-- `INVESTANCHORS_ACCOUNT` / `INVESTANCHORS_PASSWORD`：定錨投筆登入帳密
+- `TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED=true`：僅在七個核准公開頻道的使用依據已完成確認後啟用雲端增量同步
 
-### Meta / Threads 注意事項（legacy only）
+### Meta / Threads 注意事項
 
-- 不要再把 Threads 與 Instagram 共用同名 `sessionid/csrftoken/...` 當主配置。
-- 若 `.env` 內重複宣告 legacy Meta cookie，health-check 會回報 `env.metaCookieConfig.*.configError`。
-- 目前 runtime 仍會盡量從 `.env` 的 `#Thread` / `#Instagram` 區塊救援，但正式配置應改成 namespaced `THREADS_*` / `INSTAGRAM_*`。
+- 正式 runtime 只呼叫 `graph.threads.net/keyword_search`，不讀 cookie、帳密或 Instagram bridge。
+- Long-lived token 只放 Supabase Vault；registry 僅保存 hash、刷新與到期時間。
+- Instagram 已退役；InvestAnchors 僅作私人研究線索，正式內容必須由官方資料重新推導。
 
 V3.14 tracked runtime 不讀取上述 raw login/cookie 設定。它要求
 `STOCKINSIDER_SUPABASE_URL_REF=keychain:stockinsider-runtime:supabase-url`、
 `STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY_REF=keychain:stockinsider-runtime:supabase-service-role-key` 與
 `INTERNAL_API_KEY_REF=keychain:stockinsider-runtime:internal-api-key`；Threads
-OAuth、YouTube API/captions 也只由 `scripts/runtime/credential-resolver.js`
-的 allowlisted Keychain reference 取得。完整的非啟用驗證與 17×5 connector
+OAuth 也只由 `scripts/runtime/credential-resolver.js`
+的 allowlisted Keychain reference 取得。YouTube、Google News、UDN、鉅亨與
+Mobile01 已退役且只保留歷史稽核資料。完整的非啟用驗證與 connector
 terminal-status 程序見 [operations runbook](docs/operations_runbook.md)。
 
 ## 3. 安裝依賴
@@ -179,21 +179,7 @@ activation 完成後才依 runtime installation contract 執行 doctor 與 inter
 啟用後唯一允許的 producer DAG 是：來源同步 → mention/claim extraction →
 candidate funnel → facts refresh → analysis revision → compact radar projection。
 
-### 5.1.2 舊版一條龍 daemon（fallback）
-
-```bash
-cd /Users/kaerchen/Desktop/20_stock/StockInsider
-PORT=3010 INTERVAL_SECONDS=14400 ./scripts/local-research-daemon.sh
-```
-
-- 週期流程（每輪）：
-  `source-sync(threads,instagram,telegram,investanchors) -> source-discovery -> story-scan -> story-verify -> thesis-refresh -> thesis-rank -> research-report-build(top10) -> report-build`
-- Log 檔案：
-  - `.agent/research-daemon.log`
-  - `.agent/research-daemon-web.log`
-- macOS `launchd` 版本範本：`scripts/com.stockinsider.research-daemon.plist`
-
-### 5.1.3 Authenticated Source Worker（手動）
+### 5.1.2 Authenticated Source Worker（遷移期間手動）
 
 ```bash
 cd /Users/kaerchen/Desktop/20_stock/StockInsider

@@ -199,19 +199,7 @@ if [[ "${DATA_MODE_VALUE}" != "live" || "${FALLBACK_USED}" != "false" ]]; then
 fi
 echo "[OK] health-check passed: dataMode=live fallbackUsed=false"
 
-declare -a SOURCE_CONNECTORS=(
-  "investanchors"
-  "threads"
-  "instagram"
-  "telegram"
-  "ptt"
-  "bulltalk"
-  "googlenews"
-  "anue"
-  "udn"
-  "mobile01"
-  "twse_insider"
-)
+declare -a SOURCE_CONNECTORS=("all")
 declare -a RUN_IDS=()
 
 for connector in "${SOURCE_CONNECTORS[@]}"; do

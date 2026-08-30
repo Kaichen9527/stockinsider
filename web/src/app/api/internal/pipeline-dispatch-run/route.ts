@@ -3,6 +3,8 @@ import { sendOpsAlert } from '@/lib/alerts';
 import { runPipelineDispatchFlow } from '@/lib/domain';
 import { requireInternalAuth } from '@/lib/internal-auth';
 
+export const maxDuration = 800;
+
 export async function GET(req: Request) {
   return POST(req);
 }

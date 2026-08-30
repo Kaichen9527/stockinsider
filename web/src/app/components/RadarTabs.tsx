@@ -5,6 +5,7 @@ import { useState } from 'react';
 import type { DiscoveredStockCard, RadarDailyPayload, RecommendationCard, SourceSignalCard, ThemeHeatCard } from '@/lib/types';
 import { validatePublishedDecisionCard } from '@/lib/opportunity-v3/decision-publication';
 import { displayResearchDiagnostic } from '@/lib/opportunity-v3/research-display';
+import { sourceSignalLifecycleStage, type CandidateLifecycleStage } from '@/lib/stage-classifier';
 
 type Props = {
   radar: RadarDailyPayload;
@@ -18,7 +19,7 @@ const sourceTypeLabel: Record<string, string> = {
   threads: 'Threads',
   instagram: 'Instagram',
   telegram: 'Telegram（需授權訊息）',
-  bulltalk: '股市爆料同學會',
+  bulltalk: '股市爆料同學會（授權前不自動抓取）',
   ptt: 'PTT Stock',
   kol: '台股 KOL',
   news: '新聞',
@@ -441,41 +442,60 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
 	}
 
 function StocksTab({ radar }: { radar: RadarDailyPayload }) {
+  const [selectedStage, setSelectedStage] = useState<'found' | 'waiting' | 'actionable'>('found');
   const decisionActionOrder = { buy: 0, accumulate: 1, research_starter: 2, wait_value:3,wait_market:4,wait_breakout: 5,
     wait_reclaim: 6, wait_refresh: 7, avoid_chase: 8, unavailable: 9, avoid: 10, data_needed: 11, ready: 12 } as const;
   const effectiveAction=(signal:SourceSignalCard)=>{
     const envelopeAction=signal.decisionEnvelope?.userAction??'unavailable';
     const next=signal.researchNextStep?.kind;
-    if(signal.projectionReadOnly)return next==='ready'?'wait_refresh':next??'unavailable';
+    if(signal.projectionReadOnly===true)return next==='ready'?'wait_refresh':next??'unavailable';
     if(envelopeAction==='unavailable')return next==='ready'?'wait_refresh':next??envelopeAction;
     return envelopeAction;
   };
+  const decisionCardPublishable=(signal:SourceSignalCard)=>signal.projectionReadOnly===true
+    ||validatePublishedDecisionCard(signal as unknown as Record<string,unknown>)!==null;
+  const radarAsOfMs = Date.parse(radar.asOf);
+  const sevenDayCutoff = Number.isFinite(radarAsOfMs) ? radarAsOfMs - 7 * 24 * 60 * 60 * 1000 : null;
+  const stagedDetailBySymbol = new Map((radar.stages?.found || []).map((signal) => [signal.symbol, signal]));
   const rankedResearch = [...(radar.sourceSignals ?? [])]
-    .filter((signal)=>signal.projectionReadOnly===true
-      ||validatePublishedDecisionCard(signal as unknown as Record<string,unknown>)!==null)
+    .map((signal) => {
+      const staged = stagedDetailBySymbol.get(signal.symbol);
+      return staged ? { ...signal, stageAssessment: staged.stageAssessment, sourceProvenances: staged.sourceProvenances ?? signal.sourceProvenances } : signal;
+    })
+    .filter((signal) => {
+      if (signal.projectionReadOnly === true) return true;
+      if (sevenDayCutoff == null) return true;
+      const discoveredAt = Date.parse(signal.discoveredAt);
+      return Number.isFinite(discoveredAt) && discoveredAt >= sevenDayCutoff;
+    })
     .sort((left, right) => (decisionActionOrder[effectiveAction(left)]
       - decisionActionOrder[effectiveAction(right)])
-      || (right.underreactionScore ?? 0) - (left.underreactionScore ?? 0)).slice(0, 30);
-  const lane=(signal:SourceSignalCard)=>{
-    if(signal.researchReadiness?.status)return signal.researchReadiness.status;
-    const action=effectiveAction(signal);
-    if(['buy','accumulate','research_starter'].includes(action))return 'actionable';
-    // V3.17/V3.18 last-good payloads did not have ResearchReadinessV319.  Keep a
-    // technically valid support/breakout setup visible in the waiting lane even
-    // when a stale overlay temporarily turns its action into wait_refresh.
-    const technicalState=signal.researchSnapshot?.technical?.state??signal.technicalState;
-    if(['wait_value','wait_market','wait_breakout','wait_reclaim','avoid_chase'].includes(action)
-      || ['at_support','breakout_pending','reclaim_required'].includes(technicalState??''))return 'wait_condition';
-    return signal.proximityToAction===true?'near_action':'data_needed';
+      || (right.underreactionScore ?? 0) - (left.underreactionScore ?? 0));
+  const persistedStageSymbols = {
+    waiting: new Set((radar.stages?.waiting || []).map((signal) => signal.symbol)),
+    actionable: new Set((radar.stages?.actionable || []).map((signal) => signal.symbol)),
   };
-  const signalSections = [
-    { key: 'action', eyebrow: 'ACTIONABLE NOW', title: '現在可行動', description: '完整正式決策，或明確標示為研究型小量分批；相對估值不冒充正式目標價。',
-      items: rankedResearch.filter((signal) => lane(signal)==='actionable') },
-    { key: 'wait', eyebrow: 'CONDITION WATCH', title: '等待條件', description: '估值或題材仍值得追蹤，但突破、收復支撐、合理乖離或風險條件尚未達成。',
-      items: rankedResearch.filter((signal) => ['near_action','wait_condition'].includes(lane(signal))) },
-    { key: 'research', eyebrow: 'SOURCE SIGNALS', title: '新來源待研究', description: '來源已出現，但估值、技術或基本面資料尚缺；資料缺失不會被翻譯成「不買」。',
-      items: rankedResearch.filter((signal) => lane(signal)==='data_needed') },
+  const byStage = (stage: CandidateLifecycleStage) => rankedResearch.filter((signal) => {
+    if (stage === 'waiting') return persistedStageSymbols.waiting.has(signal.symbol);
+    if (stage === 'actionable') return persistedStageSymbols.actionable.has(signal.symbol);
+    return sourceSignalLifecycleStage(signal) === stage;
+  });
+  const waitingItems = byStage('waiting').filter(decisionCardPublishable);
+  const actionableItems = byStage('actionable').filter(decisionCardPublishable);
+  const stageSections = [
+    { key: 'found' as const, eyebrow: 'ALL SOURCE HITS', title: '全部來源命中', description: '最近來源命中的股票全部保留，包含正面、負面與新來源待研究的提及；重複獨立來源會提高排序，並保留作者、原文與立場。', items: rankedResearch },
+    { key: 'waiting' as const, eyebrow: 'CONDITION WATCH', title: '等待條件', description: '研究與估值已達最低門檻，但價格、技術、籌碼、大盤、資料信心或海外同業條件尚未全部通過。', items: waitingItems },
+    { key: 'actionable' as const, eyebrow: 'ACTIONABLE NOW · SHADOW', title: '現在可行動', description: '嚴格通過估值、資料、技術、籌碼、市場與同業硬門檻，且連續兩個收盤日成立；30 個交易日內仍標示為實驗訊號。', items: actionableItems },
   ];
+  const selectedSection = stageSections.find((section) => section.key === selectedStage) ?? stageSections[0];
+  const closestWaiting = [...waitingItems].sort((left, right) => {
+    const leftAssessment = left.stageAssessment;
+    const rightAssessment = right.stageAssessment;
+    return (rightAssessment?.actionabilityScore ?? -1) - (leftAssessment?.actionabilityScore ?? -1)
+      || (rightAssessment?.dataConfidenceScore ?? -1) - (leftAssessment?.dataConfidenceScore ?? -1)
+      || (rightAssessment?.researchScore ?? -1) - (leftAssessment?.researchScore ?? -1);
+  }).slice(0, 5);
+  const displayedItems = selectedStage === 'actionable' && selectedSection.items.length === 0 ? closestWaiting : selectedSection.items;
   if (['legacy-radar-v3.13.0','legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0','legacy-radar-v3.20.0'].includes(radar.sourceLedCorrectness?.schema??'') || rankedResearch.length > 0) return (
     <div className="space-y-0">
       {radar.projectionHealth?.status !== 'fresh' ? (
@@ -485,28 +505,50 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
             : '研究投影目前不可用；首頁以降級空狀態顯示，不提供買進型動作。'}
         </section>
       ) : null}
-      {signalSections.map((section) => (
-        <section key={section.key} aria-labelledby={`signal-section-${section.key}`} className="mb-8 border-b border-line pb-8 last:border-b-0">
-          <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-            <div className="max-w-3xl">
-              <p className="text-[11px] font-medium tracking-[0.2em] text-amber-700 dark:text-amber-300">{section.eyebrow}</p>
-              <h3 id={`signal-section-${section.key}`} className="mt-1 text-2xl font-semibold tracking-[-0.025em]">{section.title}</h3>
-              <p className="mt-1 text-sm leading-6 text-slate-500 dark:text-emerald-100/60">{section.description}</p>
-            </div>
-            <span className="rounded-full border border-line px-3 py-1 text-xs text-slate-600 dark:text-emerald-100/65">{section.items.length} 檔</span>
+      <section aria-label="股票三層漏斗">
+        <div role="tablist" aria-label="股票三層漏斗" className="mb-6 grid gap-2 rounded-2xl border border-line bg-surface-strong p-2 sm:grid-cols-3">
+          {stageSections.map((section) => (
+            <button key={section.key} role="tab" aria-selected={selectedStage === section.key}
+              aria-controls="signal-stage-panel" onClick={() => setSelectedStage(section.key)}
+              className={`rounded-xl px-4 py-3 text-left text-sm font-semibold transition ${selectedStage === section.key ? 'bg-slate-950 text-white shadow-sm dark:bg-emerald-100 dark:text-slate-950' : 'text-slate-600 hover:bg-black/5 dark:text-emerald-100/65 dark:hover:bg-white/5'}`}>
+              {section.key === 'found' ? (
+                <>
+                  <span aria-hidden="true">{section.title}</span>
+                  <span role="heading" aria-level={3} id={`signal-section-${section.key}`} className="sr-only">新來源待研究</span>
+                </>
+              ) : (
+                <span role="heading" aria-level={3} id={`signal-section-${section.key}`}>{section.title}</span>
+              )}
+              <span className="ml-2 rounded-full bg-current/10 px-2 py-0.5 text-xs">{section.items.length}</span>
+            </button>
+          ))}
+        </div>
+      <div id="signal-stage-panel" role="tabpanel" aria-labelledby={`signal-section-${selectedSection.key}`} className="mb-8 border-b border-line pb-8">
+        <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+          <div className="max-w-3xl">
+            <p className="text-[11px] font-medium tracking-[0.2em] text-amber-700 dark:text-amber-300">{selectedSection.eyebrow}</p>
+            <p className="mt-1 text-2xl font-semibold tracking-[-0.025em]">{selectedSection.title}</p>
+            <p className="mt-1 text-sm leading-6 text-slate-500 dark:text-emerald-100/60">{selectedSection.description}</p>
           </div>
-          {section.items.length > 0 ? (
-            <div className="grid gap-4 xl:grid-cols-2">
-              {section.items.map((signal) => <SourceSignalCardView key={`${section.key}-${signal.symbol}`} signal={signal} />)}
-            </div>
-          ) : (
-            <p className="rounded-2xl border border-dashed border-line px-5 py-6 text-sm text-slate-500 dark:text-emerald-100/55">
-              {section.key === 'action' ? '目前沒有通過完整決策條件的可行動標的；系統不會用配額製造買進名單。'
-                : section.key === 'wait' ? '目前沒有接近買點或等待條件中的標的。' : '目前沒有新來源待研究標的。'}
-            </p>
-          )}
-        </section>
-      ))}
+          <span className="rounded-full border border-line px-3 py-1 text-xs text-slate-600 dark:text-emerald-100/65">{selectedSection.items.length} 檔</span>
+        </div>
+        {selectedStage === 'actionable' && selectedSection.items.length === 0 && closestWaiting.length > 0 ? (
+          <p className="mb-4 rounded-2xl border border-amber-500/25 bg-amber-500/8 px-5 py-4 text-sm text-amber-800 dark:text-amber-200">
+            目前沒有通過全部硬門檻的可行動標的。以下固定顯示最接近達標的 {closestWaiting.length} 檔等待標的；它們不是買進建議，卡片內會列出缺少條件。
+          </p>
+        ) : null}
+        {displayedItems.length > 0 ? (
+          <div className="grid gap-4 xl:grid-cols-2">
+            {displayedItems.map((signal) => <SourceSignalCardView key={`${selectedSection.key}-${signal.symbol}-${signal.decisionRevisionId}`} signal={signal} />)}
+          </div>
+        ) : (
+          <p className="rounded-2xl border border-dashed border-line px-5 py-6 text-sm text-slate-500 dark:text-emerald-100/55">
+            {selectedStage === 'actionable' ? '目前沒有通過完整條件的可行動標的；系統不會用配額製造買進名單。'
+              : selectedStage === 'waiting' ? '目前沒有完成最低研究與估值門檻的等待標的。' : '最近七日沒有有效股票來源命中。'}
+          </p>
+        )}
+      </div>
+      </section>
     </div>
   );
   const namedFormal = (radar.opportunities || []).filter((r) => Boolean(r.chineseName));
@@ -574,7 +616,7 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
             : '研究投影目前不可用；首頁以降級空狀態顯示，不提供買進型動作。'}
         </section>
       ) : null}
-      {signalSections.map((section) => section.items.length > 0 ? (
+      {stageSections.map((section) => section.items.length > 0 ? (
         <section key={section.key} aria-labelledby={`signal-section-${section.key}`} className="mb-8 border-b border-line pb-8 last:border-b-0">
           <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
             <div className="max-w-3xl">
@@ -1018,6 +1060,18 @@ function SourceSignalDiagnostics({ signal }: { signal: SourceSignalCard }) {
     't:extended':'技術面過度延伸',
   }[reason] ?? '其他研究訊號待覆核');
   const explainRisk = (reason: string) => displayResearchDiagnostic(reason);
+  const conditionLabel = (condition: string) => ({
+    research_score_below_55: '研究分數未達 55', data_confidence_below_55: '資料信心未達 55',
+    bear_base_bull_missing: '缺 Bear／Base／Bull 情境', base_upside_below_8: 'Base 上行空間未達 8%',
+    reward_risk_below_1: '報酬風險比未達 1.0', material_official_counter_evidence: '存在重大官方反證',
+    research_score_below_70: '研究分數未達 70', actionability_below_65: '行動分數未達 65',
+    data_confidence_below_75: '資料信心未達 75', base_upside_below_12: 'Base 上行空間未達 12%',
+    reward_risk_below_1_5: '報酬風險比未達 1.5', requires_two_consecutive_closes: '尚未連續兩個收盤日通過',
+    technical_hard_gate_failed: '技術硬門檻未通過', negative_overseas_peer_catchdown: '海外同業補跌風險阻擋',
+    stale_or_fallback_data: '資料過期或僅有 fallback', market_risk_off_blocks_new_actionable: '大盤 risk-off，禁止新增可行動',
+    market_breakdown_forces_downgrade: '大盤 breakdown，強制降級',
+  }[condition] ?? condition);
+  const stageAssessment = signal.stageAssessment;
   return (
     <article className="rounded-[1.25rem] border border-line bg-surface p-4">
       <div className="flex items-start justify-between gap-3">
@@ -1065,6 +1119,18 @@ function SourceSignalDiagnostics({ signal }: { signal: SourceSignalCard }) {
       </dl>
       {signal.valuationAuthority === 'exchange_reported' ? <p className="mt-2 text-xs leading-5 text-slate-500 dark:text-emerald-100/55">估值來源：{signal.valuationExchange ?? '交易所'} · 當期 {signal.valuationAsOf ?? '日期待補'}{(signal.historyPeSessions?.length ?? 0) > 0 ? ` · 歷史樣本 ${signal.historyPeSessions?.join('、')}` : ''}</p> : null}
       <p className="mt-3 text-xs leading-5 text-sky-700 dark:text-sky-300">技術觸發：{technicalTrigger}</p>
+      {stageAssessment ? (
+        <div className="mt-3 rounded-xl border border-line bg-surface-strong p-3 text-xs leading-5">
+          <p className="font-semibold text-slate-800 dark:text-emerald-50">三層評分 · {stageAssessment.sessionDate}</p>
+          <p className="mt-1 text-slate-600 dark:text-emerald-100/70">
+            發現 {stageAssessment.discoveryScore.toFixed(1)} · 研究 {stageAssessment.researchScore.toFixed(1)} · 行動 {stageAssessment.actionabilityScore.toFixed(1)} · 資料信心 {stageAssessment.dataConfidenceScore.toFixed(1)}
+          </p>
+          <p className="mt-1 text-slate-600 dark:text-emerald-100/70">
+            Base 空間 {stageAssessment.baseUpsidePct == null ? '待補' : `${stageAssessment.baseUpsidePct.toFixed(1)}%`} · 報酬風險比 {stageAssessment.rewardRiskRatio == null ? '待補' : stageAssessment.rewardRiskRatio.toFixed(2)}
+          </p>
+          {stageAssessment.unmetConditions.length > 0 ? <p className="mt-1 text-amber-700 dark:text-amber-300">未達：{stageAssessment.unmetConditions.map(conditionLabel).join('、')}</p> : null}
+        </div>
+      ) : null}
       {(signal.positiveReasons?.length ?? 0) > 0 ? <p className="mt-1 text-xs leading-5 text-emerald-700 dark:text-emerald-300">加分：{signal.positiveReasons?.map(explainReason).join('、')}</p> : null}
       {(signal.riskReasons?.length ?? 0) > 0 ? <p className="mt-1 text-xs leading-5 text-amber-700 dark:text-amber-300">風險：{signal.riskReasons?.map(explainRisk).join('、')}</p> : null}
       <div className="mt-4 flex items-center justify-between gap-3">
@@ -1118,6 +1184,10 @@ function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
     ? signal.detailHref ?? `/stock/${signal.symbol}?decisionRevisionId=${encodeURIComponent(revision)}`
     : signal.detailHref ?? `/stock/${signal.symbol}`;
   const provenance = signal.sourceProvenance;
+  const provenanceItems = (signal.sourceProvenances?.length ? signal.sourceProvenances : provenance ? [{
+    ref: 'primary', ...provenance, stance: null,
+  }] : []).slice(0, 6);
+  const stanceLabel = { positive: '正向', negative: '負向', neutral: '中性', mixed: '多空混合' } as const;
 
   return (
     <article data-testid="decision-card" data-numeric-budget="six financial or trigger values; stock identity excluded" aria-label={`${signal.chineseName || signal.symbol} ${signal.symbol} ${actionLabel}`} className="overflow-hidden rounded-[1.35rem] border border-line bg-surface shadow-[0_10px_34px_rgba(8,18,26,0.06)]">
@@ -1169,9 +1239,13 @@ function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
         </dl>
 
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-3">
-          <div className="min-w-0 text-xs leading-5 text-slate-500 dark:text-emerald-100/55">
-            {provenance?.sourceUrl ? <a href={provenance.sourceUrl} target="_blank" rel="noreferrer" className="underline decoration-slate-300 underline-offset-2 hover:text-slate-800 dark:hover:text-emerald-50">{provenance.sourceName || sourceTypeLabel[signal.sourceClass] || signal.sourceClass}</a>
-              : <span>{provenance?.sourceName || sourceTypeLabel[signal.sourceClass] || signal.sourceClass}</span>}
+          <div className="flex min-w-0 flex-wrap gap-1.5 text-xs leading-5 text-slate-500 dark:text-emerald-100/55">
+            {provenanceItems.length > 0 ? provenanceItems.map((item) => (
+              <a key={`${item.ref}-${item.sourceUrl}`} href={item.sourceUrl || undefined} target="_blank" rel="noreferrer"
+                className="rounded-full border border-line bg-surface px-2.5 py-0.5 underline decoration-slate-300 underline-offset-2 hover:text-slate-800 dark:hover:text-emerald-50">
+                {item.sourceName || item.kolIdentity || sourceTypeLabel[signal.sourceClass] || signal.sourceClass}{item.stance ? ` · ${stanceLabel[item.stance]}` : ''}
+              </a>
+            )) : <span>{sourceTypeLabel[signal.sourceClass] || signal.sourceClass}</span>}
             <span className="sr-only">；發布、收集與評估日期請展開研究依據。</span>
           </div>
           <a href={href} data-testid={revision?'decision-detail-link':'research-only-detail-link'} className="cta-primary inline-flex min-h-11 items-center rounded-full px-4 py-2 text-sm font-semibold transition">

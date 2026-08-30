@@ -1,9 +1,13 @@
 import type { Metadata } from 'next';
 import './globals.css';
 
+export const CANONICAL_APP_URL = 'https://stockinsider-three.vercel.app';
+
 export const metadata: Metadata = {
+  metadataBase: new URL(CANONICAL_APP_URL),
   title: 'StockInsider',
   description: 'Taiwan story-driven opportunity radar for underpriced 1-3 month setups',
+  alternates: { canonical: '/' },
 };
 
 export default function RootLayout({
