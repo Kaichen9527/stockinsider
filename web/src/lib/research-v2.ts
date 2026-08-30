@@ -6,6 +6,7 @@ import { promisify } from 'util';
 import { getSupabaseServerClient } from './supabase-server';
 import { THREADS_CANONICAL_ORIGIN } from './source-auth';
 import { APPROVED_TELEGRAM_PUBLIC_CHANNELS, RETIRED_SOURCE_CONNECTORS } from './source-policy';
+import { fetchTextWithRetry, sourceFetchFailureCode } from './source-fetch';
 import { getThreadsTokenForRun, threadsTokenRegistryMetadata } from './threads-token';
 
 type Row = Record<string, unknown>;
@@ -2614,11 +2615,16 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
     ...searchTerms.map((term) => `https://www.ptt.cc/bbs/Stock/search?page=1&q=${encodeURIComponent(term)}`),
   ];
   let failedPageFetches = 0;
+  const pageFetchFailures = new Set<string>();
   for (const targetPage of targetPages) {
     let currentUrl = targetPage;
     for (let page = 0; page < (symbolContext ? 1 : targetPage === baseUrl ? 4 : 2); page++) {
       try {
-        const html = await fetch(currentUrl, { headers, signal: AbortSignal.timeout(8_000) }).then((res) => res.text());
+        const { text: html } = await fetchTextWithRetry({
+          url: currentUrl,
+          headers,
+          timeoutMs: 8_000,
+        });
         const titleMatches = Array.from(html.matchAll(/class="title">\s*<a href="([^"]+)">([^<]+)<\/a>/g));
         for (const m of titleMatches) {
           allMatches.push({ href: m[1], title: m[2] });
@@ -2626,8 +2632,9 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
         const prevMatch = html.match(/href="([^"]+)"[^>]*>‹ 上頁/);
         if (!prevMatch || symbolContext) break;
         currentUrl = `https://www.ptt.cc${prevMatch[1]}`;
-      } catch {
+      } catch (error) {
         failedPageFetches += 1;
+        pageFetchFailures.add(sourceFetchFailureCode(error));
         break;
       }
     }
@@ -2646,6 +2653,7 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
   const pttSignalRows: Array<Record<string, unknown>> = [];
   let articlesFetched = 0;
   let articleFetchFailures = 0;
+  const articleFetchFailureReasons = new Set<string>();
   let pushCommentsParsed = 0;
   const matchedSymbols = new Set<string>();
 
@@ -2683,7 +2691,11 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
     let comments: Array<{ tag: string; text: string }> = [];
 
     try {
-      const bodyHtml = await fetch(articleUrl, { headers, signal: AbortSignal.timeout(7_000) }).then((r) => r.text());
+      const { text: bodyHtml } = await fetchTextWithRetry({
+        url: articleUrl,
+        headers,
+        timeoutMs: 7_000,
+      });
       articlesFetched += 1;
       comments = parsePushComments(bodyHtml);
       pushCommentsParsed += comments.length;
@@ -2694,8 +2706,9 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
       const bodyText = stripHtml(bodyWithoutPushes).slice(0, 5000);
       const commentText = comments.map((item) => `${item.tag} ${item.text}`).join('\n').slice(0, 3000);
       contentText = compactText([bodyText, commentText].filter(Boolean).join('\n\n推噓留言：\n')) || title;
-    } catch {
+    } catch (error) {
       articleFetchFailures += 1;
+      articleFetchFailureReasons.add(sourceFetchFailureCode(error));
       // Use title only on fetch failure.
     }
 
@@ -2788,9 +2801,9 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
     matchedDirectHits: matchedSymbols.size,
     matchedIndustryHits: 0,
     entityId: String(entity.id),
-    errorCode: null,
+    errorCode: failedPageFetches > 0 || articleFetchFailures > 0 ? 'provider_partial' : null,
     degradedReason: failedPageFetches > 0 || articleFetchFailures > 0
-      ? `ptt_fetch_partial:pages=${failedPageFetches},articles=${articleFetchFailures}`
+      ? `ptt_fetch_partial:pages=${failedPageFetches},articles=${articleFetchFailures},page_errors=${[...pageFetchFailures].join('|') || 'none'},article_errors=${[...articleFetchFailureReasons].join('|') || 'none'}`
       : null,
     sessionMode: 'not_applicable' as const,
     articlesFetched,
@@ -2799,6 +2812,8 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
     metadata: {
       source_surface: 'ptt_stock_board',
       pages_scanned: targetPages.length,
+      page_fetch_errors: [...pageFetchFailures],
+      article_fetch_errors: [...articleFetchFailureReasons],
       articles_fetched: articlesFetched,
       push_comments_parsed: pushCommentsParsed,
       matched_symbols: [...matchedSymbols],
