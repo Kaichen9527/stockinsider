@@ -39,6 +39,8 @@ jobs:
         run: node scripts/call_internal_api.mjs /api/internal/pipeline-run "{\"dryRun\":$DRY_RUN,\"mode\":\"core\",\"syncTimeoutMs\":800000}" | tee /tmp/pipeline-run.json
       - name: MOPS material filings
         run: node scripts/call_internal_api.mjs /api/internal/mops-filing-ingest "{\"dryRun\":$DRY_RUN}" | tee /tmp/mops-filing-ingest.json
+      - name: Official insider ownership disclosures
+        run: node scripts/call_internal_api.mjs /api/internal/source-sync "{\"connector\":\"twse_insider\",\"dryRun\":$DRY_RUN}" | tee /tmp/twse-insider.json
       - name: Earnings calls
         run: node scripts/call_internal_api.mjs /api/internal/earnings-call-ingest "{\"dryRun\":$DRY_RUN}" | tee /tmp/earnings-call-ingest.json
       - name: Dynamic source mentions

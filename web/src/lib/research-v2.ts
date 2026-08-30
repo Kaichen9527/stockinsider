@@ -16,8 +16,10 @@ import {
   type MetaPlatform,
   type PersistedMetaSessionState,
 } from './source-auth';
+import { APPROVED_TELEGRAM_PUBLIC_CHANNELS, RETIRED_SOURCE_CONNECTORS } from './source-policy';
 
 type Row = Record<string, unknown>;
+const AUTHORIZED_BROKER_SOURCE_MODES = ['manual_pdf', 'manual_csv', 'imported_pdf'] as const;
 
 const ROOT_DIR = path.resolve(process.cwd(), '..');
 const MATERIALS_DIR = path.join(ROOT_DIR, 'materials');
@@ -30,7 +32,6 @@ const execFileAsync = promisify(execFile);
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || process.env.BOT_TOKEN || '';
 const THREADS_ACCESS_TOKEN = process.env.THREADS_ACCESS_TOKEN || '';
 const SOURCE_RAW_CONTENT_MAX_CHARS = Math.max(500, Number(process.env.SOURCE_RAW_CONTENT_MAX_CHARS || 4000));
-const DEFAULT_TELEGRAM_CHANNEL_NAMES = ['investanchors', 'twstockanalysis', 'Gooaye', 'johnstock888', 'eaglewealth', 'a178178', 'musclestock'];
 const DEFAULT_STORY_CANDIDATE_TOP_N = 50;
 const DEFAULT_SOURCE_SYNC_LOOKBACK_HOURS = 24;
 const US_BROKER_KEYWORDS = [
@@ -3319,7 +3320,7 @@ async function ingestManualBrokerImports(supabase: ReturnType<typeof getSupabase
 }
 
 async function rebuildBrokerConsensusSnapshots(supabase: ReturnType<typeof getSupabaseServerClient>, asOfDate: string) {
-  const { data } = await supabase.from('broker_report_documents').select('*').order('report_date', { ascending: false }).limit(2000);
+  const { data } = await supabase.from('broker_report_documents').select('*').in('source_mode', [...AUTHORIZED_BROKER_SOURCE_MODES]).order('report_date', { ascending: false }).limit(2000);
   const rows = ((data as Row[]) || []).filter((row) => row.stock_id);
   const byStock = new Map<string, Row[]>();
   for (const row of rows) {
@@ -6071,7 +6072,7 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
   let fetchedPosts = 0;
   let cursorDuplicatesSkipped = 0;
 
-  const channelNames = [...DEFAULT_TELEGRAM_CHANNEL_NAMES];
+  const channelNames = [...APPROVED_TELEGRAM_PUBLIC_CHANNELS];
 
   for (const channelNameRaw of channelNames) {
     const channelName = channelNameRaw.replace(/^@/, '');
@@ -6757,8 +6758,8 @@ export async function runSourceDiscovery(options?: { dryRun?: boolean }) {
   if (docsRes.error || stocksRes.error) {
     throw new Error(docsRes.error?.message || stocksRes.error?.message || 'Failed to load source discovery inputs');
   }
-  const documents = (docsRes.data as Row[]) || [];
-  const investanchorsDocuments: Row[] = [];
+  const documents = ((docsRes.data as Row[]) || []).filter((doc) =>
+    !(RETIRED_SOURCE_CONNECTORS as readonly string[]).includes(compactText(doc.platform).toLowerCase()));
   const stockBySymbol = new Map<string, Row>();
   for (const stock of (stocksRes.data as Row[]) || []) {
     const symbol = String(stock.symbol || '');
@@ -6774,7 +6775,6 @@ export async function runSourceDiscovery(options?: { dryRun?: boolean }) {
       if (url.includes('threads.net') || url.includes('threads.com')) platform = 'threads';
       else if (url.includes('instagram.com')) platform = 'instagram';
       else if (url.includes('t.me')) platform = 'telegram';
-      else if (url.includes('youtube.com') || url.includes('youtu.be')) platform = 'kol';
       if (platform === 'unknown') continue;
       candidates.push({
         platform,
@@ -6791,7 +6791,6 @@ export async function runSourceDiscovery(options?: { dryRun?: boolean }) {
     .filter(Boolean) as typeof candidates;
 
   const asOfDate = asDate();
-  const extractedInvestanchorsSymbols = new Set<string>();
   const investanchorsRows: Array<Record<string, unknown>> = [];
   const extractMentionedSymbols = (doc: Row) => {
     const explicit = Array.isArray(doc.symbols) ? (doc.symbols as unknown[]).map(String) : [];
@@ -6808,58 +6807,12 @@ export async function runSourceDiscovery(options?: { dryRun?: boolean }) {
       });
   };
 
-  for (const doc of investanchorsDocuments) {
-    const symbols = extractMentionedSymbols(doc);
-    if (symbols.length === 0) continue;
-    const sourceTitle = compactText(doc.title || '定錨投筆提及個股').slice(0, 120);
-    const sourceSummary = compactText(doc.summary || '').slice(0, 500);
-    for (const symbol of symbols) {
-      const stock = stockBySymbol.get(symbol);
-      if (!stock) continue;
-      const stockId = String(stock.id || '');
-      const key = `${stockId}|investanchors_candidate|${asOfDate}`;
-      if (!stockId || extractedInvestanchorsSymbols.has(key)) continue;
-      extractedInvestanchorsSymbols.add(key);
-      investanchorsRows.push({
-        stock_id: stockId,
-        story_type: 'operating_turnaround',
-        title: `定錨提及 ${symbol}：${sourceTitle || String(stock.name || symbol)}`,
-        summary:
-          sourceSummary ||
-          `定錨投筆近期提及 ${symbol}，已先納入候選池；升級首頁前仍需補官方、財務與估值 bridge 驗證。`,
-        catalyst_summary: `定錨提及 ${symbol}，來源已進候選池；目前 verification=pending，需確認官方資料、月營收與估值橋接後才能升級推薦。`,
-        thesis_state: 'signal_candidate',
-        confidence: 0.42,
-        novelty_score: 0.58,
-        evidence_score: 0.25,
-        timing_score: 0,
-        verification_status: '未證實',
-        conditional_recommendation_note: '定錨提及已進候選池；待官方資料、財務快照、估值 bridge 與技術時機通過 audit 後才可升級首頁推薦。',
-        source_mix: [
-          {
-            source: '定錨投筆',
-            sourceType: 'investanchors',
-            title: sourceTitle,
-            summary: sourceSummary,
-            sourceUrl: doc.document_url || null,
-            verification: 'pending',
-          },
-        ],
-        related_themes: ['investanchors'],
-        discovered_at: nowIso(),
-        as_of_date: asOfDate,
-        updated_at: nowIso(),
-      });
-    }
-  }
-
-  const socialBrokerDocs: Array<Record<string, unknown>> = [];
   const socialBrokerMentionRows: Array<Record<string, unknown>> = [];
   const socialBrokerCandidateRows: Array<Record<string, unknown>> = [];
   const socialBrokerSeen = new Set<string>();
   for (const doc of documents) {
     const platform = compactText(doc.platform || '').toLowerCase();
-    if (!['threads', 'instagram', 'telegram', 'bulltalk', 'ptt', 'kol', 'youtube', 'podcast'].includes(platform)) continue;
+    if (!['threads', 'instagram', 'telegram', 'bulltalk', 'ptt', 'kol', 'podcast'].includes(platform)) continue;
     const text = `${doc.title || ''}\n${doc.summary || ''}\n${doc.content_text || ''}`;
     const brokerSignal = detectSocialBrokerSignal(text);
     if (!brokerSignal) continue;
@@ -6869,44 +6822,10 @@ export async function runSourceDiscovery(options?: { dryRun?: boolean }) {
       const stock = stockBySymbol.get(symbol);
       if (!stock) continue;
       const stockId = String(stock.id || '');
-      const reportDate = doc.published_at
-        ? String(doc.published_at).slice(0, 10)
-        : doc.collected_at
-          ? String(doc.collected_at).slice(0, 10)
-          : asOfDate;
       const sourceUrl = String(doc.document_url || '');
       const key = `${stockId}|${sourceUrl}|${brokerSignal.brokerName}`;
       if (!stockId || socialBrokerSeen.has(key)) continue;
       socialBrokerSeen.add(key);
-      const filePath = `social_broker_leak/${symbol}/${slugify(platform)}/${slugify(sourceUrl || String(doc.id || randomUUID())).slice(0, 100)}`;
-      socialBrokerDocs.push({
-        stock_id: stockId,
-        broker_name: brokerSignal.brokerName,
-        report_date: reportDate || asOfDate,
-        file_name: `social_broker_leak_${symbol}_${slugify(brokerSignal.brokerName)}_${reportDate || asOfDate}`,
-        file_path: filePath,
-        source_mode: 'social_broker_leak',
-        rating: null,
-        target_price: brokerSignal.targetPrice,
-        thesis_title: `社群轉述 ${brokerSignal.brokerName}：${symbol} 券商目標價 / EPS 線索`,
-        extracted_summary: brokerSignal.summary,
-        raw_text: String(text || '').slice(0, 8000),
-        metadata: {
-          source: 'social_broker_leak',
-          platform,
-          source_document_id: doc.id || null,
-          source_document_url: sourceUrl || null,
-          crawl_mode: (doc.metadata as Row | null)?.crawl_mode || null,
-          source_surface: (doc.metadata as Row | null)?.source_surface || null,
-          query_keyword: (doc.metadata as Row | null)?.query_keyword || null,
-          target_price_extracted: brokerSignal.targetPrice,
-          forward_eps_extracted: brokerSignal.forwardEps,
-          formal_base_eligible: false,
-          source_quality: 'social_broker_leak_requires_confirmation',
-          extracted_by: 'deterministic_broker_keyword_parser',
-        },
-        updated_at: nowIso(),
-      });
       socialBrokerMentionRows.push({
         stock_id: stockId,
         symbol,
@@ -6964,12 +6883,6 @@ export async function runSourceDiscovery(options?: { dryRun?: boolean }) {
     const { error: insertError } = await supabase.from('source_discovery_queue').insert(deduped);
     if (insertError) throw new Error(insertError.message);
   }
-  if (!dryRun && socialBrokerDocs.length > 0) {
-    const { error: brokerLeakError } = await supabase
-      .from('broker_report_documents')
-      .upsert(socialBrokerDocs, { onConflict: 'file_path' });
-    if (brokerLeakError) throw new Error(brokerLeakError.message);
-  }
   if (!dryRun && socialBrokerMentionRows.length > 0) {
     const { error: brokerMentionError } = await supabase
       .from('social_broker_mentions')
@@ -6992,10 +6905,10 @@ export async function runSourceDiscovery(options?: { dryRun?: boolean }) {
   return {
     runId: randomUUID(),
     dryRun,
-    recordsWritten: deduped.length + investanchorsRows.length + socialBrokerDocs.length + socialBrokerCandidateRows.length,
+    recordsWritten: deduped.length + investanchorsRows.length + socialBrokerMentionRows.length + socialBrokerCandidateRows.length,
     discoveryQueueRecordsWritten: deduped.length,
     investanchorsCandidateRecordsWritten: investanchorsRows.length,
-    socialBrokerLeakDocumentsWritten: socialBrokerDocs.length,
+    socialBrokerLeakDocumentsWritten: 0,
     socialBrokerMentionsWritten: socialBrokerMentionRows.length,
     socialBrokerCandidateRecordsWritten: socialBrokerCandidateRows.length,
     socialBrokerLeakSymbols: unique(
@@ -7015,19 +6928,6 @@ export async function runBrokerReportIngest(options?: { dryRun?: boolean; symbol
   if (dryRun) return { runId: randomUUID(), dryRun, reportsIngested: 0, sectionsWritten: 0 };
 
   const supabase = getSupabaseServerClient();
-  // Get all tracked TW stocks
-  const requestedSymbols = unique((options?.symbols || []).map((item) => String(item || '').toUpperCase()).filter(Boolean));
-  const topN = Number.isFinite(Number(options?.topN)) && Number(options?.topN) > 0
-    ? Number(options?.topN)
-    : requestedSymbols.length > 0
-      ? requestedSymbols.length
-      : resolveStoryCandidateTopN();
-  const queryLimit = Math.max(topN, 60);
-  const stockQuery = supabase.from('stocks').select('id,symbol,name,market').eq('market', 'TW');
-  const { data: stocksData } = requestedSymbols.length > 0
-    ? await stockQuery.in('symbol', requestedSymbols).limit(Math.max(requestedSymbols.length, 1))
-    : await stockQuery.limit(queryLimit);
-  const stocks = (stocksData as Row[]) || [];
   const today = asDate();
 
   let reportsIngested = 0;
@@ -7380,7 +7280,7 @@ export async function runThesisRefresh(options?: { dryRun?: boolean; symbols?: s
 
   const [stocksRes, reportsRes, recsRes, evidenceRes, rawDocsRes, valuationsRes, revenueRes, fundamentalsRes, podcastRes, themesRes, storiesRes, signalsRes] = await Promise.all([
     supabase.from('stocks').select('*'),
-    supabase.from('broker_report_documents').select('*').order('report_date', { ascending: false }),
+    supabase.from('broker_report_documents').select('*').in('source_mode', [...AUTHORIZED_BROKER_SOURCE_MODES]).order('report_date', { ascending: false }),
     supabase.from('recommendations').select('*').eq('as_of', today).order('score', { ascending: false }),
     supabase.from('story_evidence_items').select('*').order('source_timestamp', { ascending: false }),
     supabase.from('source_raw_documents').select('platform,title,summary,symbols,confidence,collected_at,published_at,metadata,source_entity_id').order('collected_at', { ascending: false }).limit(300),

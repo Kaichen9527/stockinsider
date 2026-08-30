@@ -83,6 +83,15 @@ export type CandidateStageResult = {
   rulesetVersion: typeof STAGE_RULESET_VERSION;
 };
 
+export type ActionableCloseStreakInput = {
+  eligibleThisRun: boolean;
+  currentTechnicalSessionDate: string | null;
+  previousTechnicalSessionDate: string | null;
+  expectedPreviousTechnicalSessionDate: string | null;
+  previousEligible: boolean;
+  previousConsecutiveCloses: number;
+};
+
 function bounded(value: number): number {
   return Math.max(0, Math.min(100, Number.isFinite(value) ? value : 0));
 }
@@ -135,6 +144,20 @@ export function scoreDataConfidence(factors: ConfidenceFactors): number {
 
 function hasNumber(value: number | null): value is number {
   return value != null && Number.isFinite(value);
+}
+
+/**
+ * Advance the hard-gate streak only when a new market session follows the
+ * immediately preceding available session. Re-runs on weekends or on the same
+ * close preserve the streak without manufacturing another qualifying close.
+ */
+export function advanceActionableCloseStreak(input: ActionableCloseStreakInput): number {
+  if (!input.eligibleThisRun || !input.currentTechnicalSessionDate) return 0;
+  if (!input.previousEligible || !input.previousTechnicalSessionDate) return 1;
+  const previousStreak = Math.max(1, Math.min(2, Math.floor(input.previousConsecutiveCloses || 0)));
+  if (input.currentTechnicalSessionDate === input.previousTechnicalSessionDate) return previousStreak;
+  if (input.expectedPreviousTechnicalSessionDate !== input.previousTechnicalSessionDate) return 1;
+  return Math.min(2, previousStreak + 1);
 }
 
 export function technicalActionGate(input: CandidateStageInput['technical']): boolean {

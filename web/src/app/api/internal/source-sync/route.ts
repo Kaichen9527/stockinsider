@@ -74,6 +74,7 @@ async function recordPolicyBlock(connector: string, attemptedAt: string) {
     succeededAt: null,
     fetched: 0,
     matched: 0,
+    newCount: 0,
     written: 0,
     duplicate: 0,
     authStatus: policy.disposition === 'blocked_auth' ? 'missing' : 'not_applicable',
@@ -103,6 +104,8 @@ async function executeConnector(connector: string, dryRun: boolean, symbol: stri
     const raw = await runSourceSync({ connector, dryRun, ...(symbol ? { symbol } : {}) });
     const result = publicResult(raw, policy.licenseBasis);
     if (!dryRun) {
+      const matched = Number(result.matchedDirectHits || 0) + Number(result.matchedIndustryHits || 0);
+      const duplicate = Number(result.duplicatesSkipped || 0);
       await recordSourceRunLedger({
         externalRunId: result.runId,
         connector,
@@ -110,9 +113,10 @@ async function executeConnector(connector: string, dryRun: boolean, symbol: stri
         attemptedAt,
         succeededAt: ['success', 'successful_empty', 'duplicate_only'].includes(result.terminalReason) ? new Date().toISOString() : null,
         fetched: Number(result.fetchedPosts || 0),
-        matched: Number(result.matchedDirectHits || 0) + Number(result.matchedIndustryHits || 0),
+        matched,
+        newCount: Math.max(0, matched - duplicate),
         written: Number(result.recordsWritten || 0),
-        duplicate: Number(result.duplicatesSkipped || 0),
+        duplicate,
         authStatus: result.authStatus,
         terminalReason: result.terminalReason,
         terminalDetail: result.errorCode || result.degradedReason || null,
@@ -134,6 +138,7 @@ async function executeConnector(connector: string, dryRun: boolean, symbol: stri
         succeededAt: null,
         fetched: 0,
         matched: 0,
+        newCount: 0,
         written: 0,
         duplicate: 0,
         authStatus: /auth|oauth|credential/iu.test(error.message) ? 'rejected' : 'not_applicable',

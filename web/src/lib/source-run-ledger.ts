@@ -21,6 +21,7 @@ export type SourceRunLedgerInput = {
   succeededAt: string | null;
   fetched: number;
   matched: number;
+  newCount: number;
   written: number;
   duplicate: number;
   authStatus: 'authorized' | 'missing' | 'rejected' | 'not_applicable';
@@ -61,7 +62,7 @@ export async function recordSourceRunLedger(input: SourceRunLedgerInput): Promis
     succeeded_at: input.succeededAt,
     fetched: Math.max(0, input.fetched),
     matched: Math.max(0, input.matched),
-    new_count: Math.max(0, input.written),
+    new_count: Math.max(0, input.newCount),
     duplicate: Math.max(0, input.duplicate),
     written: Math.max(0, input.written),
     auth_status: input.authStatus,

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { calculateTechnicalFeatures } from './technical-features-v2.ts';
+import { calculateTechnicalFeatures, normalizeInstitutionalFlows } from './technical-features-v2.ts';
 
 test('golden fixture keeps MA5/20/60/120/240 identities explicit', () => {
   const bars = Array.from({ length: 240 }, (_, index) => {
@@ -31,4 +31,16 @@ test('insufficient history remains null and cannot masquerade as long MA', () =>
   assert.equal(result.ma60, null);
   assert.equal(result.ma120, null);
   assert.equal(result.ma240, null);
+});
+
+test('institutional 5/20 day flow is normalized by official traded volume and deduped by session', () => {
+  const days = Array.from({ length: 20 }, (_, index) => ({
+    session: `2026-08-${String(28 - index).padStart(2, '0')}`,
+    net: 100,
+    volume: 1_000,
+  }));
+  days.unshift({ session: '2026-08-28', net: 200, volume: 1_000 });
+  const result = normalizeInstitutionalFlows(days);
+  assert.equal(result.normalized5d, 0.12);
+  assert.equal(result.normalized20d, 0.105);
 });

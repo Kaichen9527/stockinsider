@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 import { normalizeRelatedStockSymbols } from './stock-symbol';
-import { calculateTechnicalFeatures } from './technical-features-v2';
-import { classifyCandidateStage, STAGE_RULESET_VERSION, type MarketRiskRegime } from './stage-classifier';
+import { calculateTechnicalFeatures, normalizeInstitutionalFlows, type InstitutionalFlowDay } from './technical-features-v2';
+import { advanceActionableCloseStreak, classifyCandidateStage, sourceSignalLifecycleStage, STAGE_RULESET_VERSION, type MarketRiskRegime } from './stage-classifier';
 import { existsSync, readFileSync } from 'fs';
 import path from 'path';
 import { Client as LineClient } from '@line/bot-sdk';
@@ -89,6 +89,7 @@ import {
 } from './tw-market';
 
 const RISK_DISCLOSURE = '本服務僅提供研究資訊，非投資建議，投資決策與風險由使用者自行承擔。';
+const AUTHORIZED_BROKER_SOURCE_MODES = ['manual_pdf', 'manual_csv', 'imported_pdf'] as const;
 
 type Row = Record<string, unknown>;
 
@@ -12212,7 +12213,7 @@ async function fallbackStockInsight(symbol: string): Promise<StockInsightPayload
     asOf: chart.length > 0 ? `${chart[chart.length - 1].time}T00:00:00Z` : nowIso(),
     freshness: chart.length > 0 ? freshnessFromTimestamp(`${chart[chart.length - 1].time}T00:00:00Z`, 72) : 'missing',
     chart,
-    chartSource: chart.length > 0 ? 'yahoo' : 'missing',
+    chartSource: chart.length > 0 ? 'twstock' : 'missing',
     chartMissingReason: chart.length > 0 ? null : '來源 producer 與行情來源均不可用；不以 seed 合成 K 線。',
     indicators: {
       maShort: technical?.maShort ?? null,
@@ -12347,7 +12348,6 @@ async function getDiscoveredStocks(): Promise<DiscoveredStockCard[]> {
     const supabase = getSupabaseServerClient();
     const topNRaw = Number(process.env.STORY_CANDIDATE_TOP_N || 50);
     const topN = Number.isFinite(topNRaw) ? Math.max(10, Math.min(200, Math.floor(topNRaw))) : 50;
-    const seedSymbols: Set<string> = new Set(TW_STORY_RESEARCH_SEEDS.map((s) => s.symbol));
     const since = new Date(Date.now() - 14 * 86400000).toISOString();
 
     const [socialRes, brokerRes, transcriptRes, podcastRes, stocksRes, storyRes, valuationRes, thesisRes, recommendationRes] = await Promise.all([
@@ -12359,6 +12359,7 @@ async function getDiscoveredStocks(): Promise<DiscoveredStockCard[]> {
       supabase
         .from('broker_report_documents')
         .select('stock_id, broker_name, extracted_summary, rating, target_price, created_at')
+        .in('source_mode', [...AUTHORIZED_BROKER_SOURCE_MODES])
         .gte('created_at', since)
         .limit(200),
       supabase
@@ -12411,7 +12412,6 @@ async function getDiscoveredStocks(): Promise<DiscoveredStockCard[]> {
       const num = parseInt(sym, 10);
       if (isNaN(num) || num < 1101 || num > 9999) return;
       if (!stockBySymbol.has(sym)) return;
-      if (seedSymbols.has(sym)) return;
       const existing = mentionMap.get(sym);
       if (existing) {
         existing.count++;
@@ -13935,37 +13935,94 @@ export async function getDailyRadarData(): Promise<RadarDailyPayload> {
 }
 
 export async function getPersistedRadarStages(sourceSignals: SourceSignalCard[]): Promise<NonNullable<RadarDailyPayload['stages']>> {
-  const found = [...sourceSignals];
-  if (found.length === 0 || shouldUseDemoFallback()) return { found, waiting: [], actionable: [] };
+  const fallbackStages = () => ({
+    found: [...sourceSignals],
+    waiting: sourceSignals.filter((signal) => sourceSignalLifecycleStage(signal) === 'waiting'),
+    actionable: sourceSignals.filter((signal) => sourceSignalLifecycleStage(signal) === 'actionable'),
+  });
+  if (sourceSignals.length === 0 || shouldUseDemoFallback()) return fallbackStages();
   try {
     const supabase = getSupabaseServerClient();
     const snapshotsRes = await supabase
       .from('candidate_daily_stage_snapshots')
-      .select('stock_id,lifecycle_stage,session_date')
+      .select('stock_id,lifecycle_stage,session_date,discovery_score,research_score,actionability_score,data_confidence_score,base_upside_pct,reward_risk_ratio,unmet_conditions,promotion_reasons,ruleset_version')
       .order('session_date', { ascending: false })
       .limit(5000);
     if (snapshotsRes.error) throw new Error(snapshotsRes.error.message);
-    const latestStageByStockId = new Map<string, string>();
+    const latestStageByStockId = new Map<string, Row>();
     for (const row of (snapshotsRes.data as Row[]) || []) {
       const stockId = String(row.stock_id || '');
-      if (stockId && !latestStageByStockId.has(stockId)) latestStageByStockId.set(stockId, String(row.lifecycle_stage || 'found'));
+      if (stockId && !latestStageByStockId.has(stockId)) latestStageByStockId.set(stockId, row);
     }
     const stockIds = [...latestStageByStockId.keys()];
-    const stocksRes = stockIds.length > 0
-      ? await supabase.from('stocks').select('id,symbol').in('id', stockIds)
-      : { data: [], error: null };
-    if (stocksRes.error) throw new Error(stocksRes.error.message);
-    const stageBySymbol = new Map(((stocksRes.data as Row[]) || []).map((row) => [
-      String(row.symbol || '').toUpperCase(),
-      latestStageByStockId.get(String(row.id || '')) || 'found',
-    ]));
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    const [stocksRes, mentionsRes] = stockIds.length > 0
+      ? await Promise.all([
+          supabase.from('stocks').select('id,symbol').in('id', stockIds),
+          supabase.from('candidate_source_mentions')
+            .select('stock_id,platform,source_name,author_name,source_url,stance,mentioned_at,available_at')
+            .in('stock_id', stockIds)
+            .gte('available_at', sevenDaysAgo)
+            .order('available_at', { ascending: false })
+            .limit(5000),
+        ])
+      : [{ data: [], error: null }, { data: [], error: null }];
+    if (stocksRes.error || mentionsRes.error) throw new Error(stocksRes.error?.message || mentionsRes.error?.message || 'stage provenance query failed');
+    const symbolByStockId = new Map(((stocksRes.data as Row[]) || []).map((row) => [String(row.id || ''), String(row.symbol || '').toUpperCase()]));
+    const snapshotBySymbol = new Map([...latestStageByStockId.entries()].flatMap(([stockId, snapshot]) => {
+      const symbol = symbolByStockId.get(stockId);
+      return symbol ? [[symbol, snapshot] as const] : [];
+    }));
+    const mentionsBySymbol = new Map<string, Row[]>();
+    for (const mention of (mentionsRes.data as Row[]) || []) {
+      const symbol = symbolByStockId.get(String(mention.stock_id || ''));
+      if (!symbol) continue;
+      mentionsBySymbol.set(symbol, [...(mentionsBySymbol.get(symbol) || []), mention]);
+    }
+    const jsonStringArray = (value: unknown) => Array.isArray(value) ? value.map(String) : [];
+    const enriched = sourceSignals.map((signal) => {
+      const symbol = signal.symbol.toUpperCase();
+      const snapshot = snapshotBySymbol.get(symbol);
+      const stage = String(snapshot?.lifecycle_stage || sourceSignalLifecycleStage(signal)) as 'found' | 'waiting' | 'actionable';
+      const mentionProvenance = (mentionsBySymbol.get(symbol) || []).slice(0, 6).map((mention, index) => ({
+        ref: `mention:${index + 1}`,
+        sourceKey: String(mention.platform || '') || null,
+        sourceName: String(mention.source_name || mention.platform || '') || null,
+        sourceUrl: String(mention.source_url || ''),
+        kolIdentity: String(mention.author_name || '') || null,
+        publishedAt: String(mention.mentioned_at || '') || null,
+        collectedAt: String(mention.available_at || '') || null,
+        evaluatedAt: String(mention.available_at || '') || null,
+        stance: (['positive', 'negative', 'neutral', 'mixed'].includes(String(mention.stance || '')) ? String(mention.stance) : null) as 'positive' | 'negative' | 'neutral' | 'mixed' | null,
+      }));
+      return {
+        ...signal,
+        ...(mentionProvenance.length > 0 ? { sourceProvenances: mentionProvenance } : {}),
+        ...(snapshot ? {
+          stageAssessment: {
+            stage,
+            sessionDate: String(snapshot.session_date || ''),
+            discoveryScore: toFiniteNumber(snapshot.discovery_score, 0),
+            researchScore: toFiniteNumber(snapshot.research_score, 0),
+            actionabilityScore: toFiniteNumber(snapshot.actionability_score, 0),
+            dataConfidenceScore: toFiniteNumber(snapshot.data_confidence_score, 0),
+            baseUpsidePct: snapshot.base_upside_pct == null ? null : toFiniteNumber(snapshot.base_upside_pct, 0),
+            rewardRiskRatio: snapshot.reward_risk_ratio == null ? null : toFiniteNumber(snapshot.reward_risk_ratio, 0),
+            unmetConditions: jsonStringArray(snapshot.unmet_conditions),
+            promotionReasons: jsonStringArray(snapshot.promotion_reasons),
+            rulesetVersion: String(snapshot.ruleset_version || ''),
+          },
+        } : {}),
+      };
+    });
     return {
-      found,
-      waiting: found.filter((signal) => stageBySymbol.get(signal.symbol.toUpperCase()) === 'waiting'),
-      actionable: found.filter((signal) => stageBySymbol.get(signal.symbol.toUpperCase()) === 'actionable'),
+      found: enriched,
+      waiting: enriched.filter((signal) => signal.stageAssessment?.stage === 'waiting'),
+      actionable: enriched.filter((signal) => signal.stageAssessment?.stage === 'actionable'),
     };
-  } catch {
-    return { found, waiting: [], actionable: [] };
+  } catch (error) {
+    console.error('persisted_radar_stage_read_failed', safeErrorMessage(error));
+    return fallbackStages();
   }
 }
 
@@ -14210,7 +14267,7 @@ export async function getStockDeepDive(symbol: string): Promise<StockDeepDivePay
       withQueryTimeout(supabaseServer.from('research_memos').select('*').eq('stock_id', String(stock.id)).order('updated_at', { ascending: false }).limit(1), []),
       withQueryTimeout(supabaseServer.from('social_signals').select('*').eq('stock_id', String(stock.id)).order('source_timestamp', { ascending: false }).limit(20), []),
       withQueryTimeout(supabaseServer.from('thesis_models').select('*').eq('stock_id', String(stock.id)).order('as_of_date', { ascending: false }).limit(1), []),
-      withQueryTimeout(supabaseServer.from('broker_report_documents').select('*').eq('stock_id', String(stock.id)).order('report_date', { ascending: false }).limit(5), []),
+      withQueryTimeout(supabaseServer.from('broker_report_documents').select('*').eq('stock_id', String(stock.id)).in('source_mode', [...AUTHORIZED_BROKER_SOURCE_MODES]).order('report_date', { ascending: false }).limit(5), []),
       withQueryTimeout(supabaseServer.from('research_reports').select('*').eq('stock_id', String(stock.id)).order('created_at', { ascending: false }).limit(3), []),
       withQueryTimeout(
         supabaseServer
@@ -16541,7 +16598,8 @@ async function countBrokerDocsForStock(stockId: string) {
     const res = await getSupabaseServerClient()
       .from('broker_report_documents')
       .select('id', { count: 'exact', head: true })
-      .eq('stock_id', stockId);
+      .eq('stock_id', stockId)
+      .in('source_mode', [...AUTHORIZED_BROKER_SOURCE_MODES]);
     return Number(res.count || 0);
   } catch {
     return 0;
@@ -18965,16 +19023,52 @@ export async function runIngestionBatch(options?: { dryRun?: boolean }): Promise
         const stock = await ensureStock(seed.symbol, seed.market, seed.name, seed.sector);
 
         // Fetch licensed official market history; seed prices never qualify as fresh evidence.
-        const [liveData, officialBars] = seed.market === 'TW'
+        const [liveData, officialBars, institutionalData, priorFlowSignals] = seed.market === 'TW'
           ? await Promise.all([
               fetchTWSELivePrice(seed.symbol).catch(() => null),
               fetchTwStockDailyBars(seed.symbol, DEEP_DIVE_DAILY_BAR_BUFFER).catch(() => null),
+              fetchTwStockInstitutional(seed.symbol).catch(() => null),
+              supabaseServer
+                .from('stock_signals')
+                .select('as_of,volume,chip_metrics')
+                .eq('stock_id', stock.id)
+                .order('as_of', { ascending: false })
+                .limit(30)
+                .then(({ data, error }) => {
+                  if (error) throw new Error(error.message);
+                  return (data as Row[]) || [];
+                }),
             ])
-          : [null, null];
+          : [null, null, null, [] as Row[]];
         const officialCloses = (officialBars || []).map((bar) => bar.close).filter((value) => Number.isFinite(value) && value > 0);
         const livePrice = liveData?.price ?? officialCloses.at(-1) ?? null;
         if (livePrice == null) continue;
         const liveVolume = liveData?.volume ?? officialBars?.at(-1)?.volume ?? null;
+        const institutionalNet = institutionalData
+          ? [institutionalData.foreignNet, institutionalData.investmentTrustNet, institutionalData.dealerNet]
+              .filter((value): value is number => value != null && Number.isFinite(value))
+              .reduce((sum, value) => sum + value, 0)
+          : null;
+        const priorFlowDays: InstitutionalFlowDay[] = priorFlowSignals.map((row) => {
+          const chip = (row.chip_metrics as Row | null) || {};
+          const netValues = [chip.foreign_net, chip.investment_trust_net, chip.dealer_net]
+            .map((value) => value == null ? null : Number(value))
+            .filter((value): value is number => value != null && Number.isFinite(value));
+          const volume = row.volume == null ? null : Number(row.volume);
+          return {
+            session: String(chip.institutional_date || row.as_of || '').slice(0, 10),
+            net: netValues.length > 0 ? netValues.reduce((sum, value) => sum + value, 0) : null,
+            volume: volume != null && Number.isFinite(volume) ? volume : null,
+          };
+        });
+        const normalizedInstitutional = normalizeInstitutionalFlows([
+          {
+            session: institutionalData?.date || officialBars?.at(-1)?.time || asOfDate,
+            net: institutionalNet,
+            volume: liveVolume,
+          },
+          ...priorFlowDays,
+        ]);
 
         const priceSeries = officialCloses.length > 0
           ? [...officialCloses.slice(0, -1), livePrice]
@@ -18999,9 +19093,10 @@ export async function runIngestionBatch(options?: { dryRun?: boolean }): Promise
             macd: technical.macd,
             macd_signal: technical.macdSignal,
             chip_metrics: {
-              foreign_net: seed.market === 'TW' ? 12000 : null,
-              investment_trust_net: seed.market === 'TW' ? 3300 : null,
-              dealer_net: seed.market === 'TW' ? -900 : null,
+              foreign_net: institutionalData?.foreignNet ?? null,
+              investment_trust_net: institutionalData?.investmentTrustNet ?? null,
+              dealer_net: institutionalData?.dealerNet ?? null,
+              institutional_date: institutionalData?.date ?? null,
               open: liveData?.open ?? null,
               high: liveData?.high ?? null,
               low: liveData?.low ?? null,
@@ -19046,7 +19141,7 @@ export async function runIngestionBatch(options?: { dryRun?: boolean }): Promise
             low: bar.low,
             close: bar.close,
             volume: bar.volume ?? 0,
-          })));
+          })), normalizedInstitutional);
           const { error: featureError } = await supabaseServer.from('technical_feature_snapshots').upsert({
             stock_id: stock.id,
             session_date: technicalFeatures.sessionDate,
@@ -20063,7 +20158,7 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
     supabaseServer.from('fundamental_snapshots').select('*').eq('as_of_date', asOf),
     supabaseServer.from('social_signals').select('*').order('source_timestamp', { ascending: false }).limit(200),
     supabaseServer.from('valuation_cases').select('stock_id,case_type,target_price,updated_at').order('updated_at', { ascending: false }).limit(2000),
-    supabaseServer.from('broker_report_documents').select('stock_id,target_price,report_date,updated_at').order('report_date', { ascending: false }).limit(1000),
+    supabaseServer.from('broker_report_documents').select('stock_id,target_price,report_date,updated_at,source_mode').in('source_mode', [...AUTHORIZED_BROKER_SOURCE_MODES]).order('report_date', { ascending: false }).limit(1000),
     supabaseServer.from('thesis_models').select('stock_id,target_price_low,target_price_high,confidence,as_of_date,updated_at').order('as_of_date', { ascending: false }).limit(1000),
     supabaseServer
       .from('source_raw_documents')
@@ -20121,9 +20216,15 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
     mentionsByStock.set(stockId, [...(mentionsByStock.get(stockId) || []), row]);
   }
   const technicalFeaturesByStock = new Map<string, Row>();
+  const technicalSessionDatesByStock = new Map<string, string[]>();
   for (const row of (technicalFeaturesRes.data as Row[]) || []) {
     const stockId = String(row.stock_id || '');
     if (stockId && !technicalFeaturesByStock.has(stockId)) technicalFeaturesByStock.set(stockId, row);
+    const sessionDate = String(row.session_date || '');
+    if (!stockId || !sessionDate) continue;
+    const sessionDates = technicalSessionDatesByStock.get(stockId) || [];
+    if (!sessionDates.includes(sessionDate)) sessionDates.push(sessionDate);
+    technicalSessionDatesByStock.set(stockId, sessionDates);
   }
   const priorStageByStock = new Map<string, Row>();
   for (const row of (priorStagesRes.data as Row[]) || []) {
@@ -20645,9 +20746,17 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
           const preStreakEvaluation = classifyCandidateStage({ ...baseInput, consecutiveActionableCloses: 2 });
           const actionableEligiblePreStreak = preStreakEvaluation.stage === 'actionable';
           const priorHardGates = (priorStageByStock.get(stockId)?.hard_gate_results as Row | undefined) || {};
-          const consecutiveActionableCloses = actionableEligiblePreStreak
-            ? (priorHardGates.actionable_eligible_pre_streak === true ? 2 : 1)
-            : 0;
+          const technicalSessionDates = technicalSessionDatesByStock.get(stockId) || [];
+          const technicalSessionDate = technicalSessionDates[0] || null;
+          const expectedPreviousTechnicalSessionDate = technicalSessionDates[1] || null;
+          const consecutiveActionableCloses = advanceActionableCloseStreak({
+            eligibleThisRun: actionableEligiblePreStreak,
+            currentTechnicalSessionDate: technicalSessionDate,
+            previousTechnicalSessionDate: priorHardGates.technical_session_date ? String(priorHardGates.technical_session_date) : null,
+            expectedPreviousTechnicalSessionDate,
+            previousEligible: priorHardGates.actionable_eligible_pre_streak === true,
+            previousConsecutiveCloses: toFiniteNumber(priorHardGates.consecutive_actionable_closes, 0),
+          });
           const stageResult = classifyCandidateStage({ ...baseInput, consecutiveActionableCloses });
           const snapshotRes = await supabaseServer.from('candidate_daily_stage_snapshots').upsert({
             stock_id: stockId,
@@ -20665,6 +20774,7 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
               technical_passed: stageResult.technicalHardGatePassed,
               actionable_eligible_pre_streak: actionableEligiblePreStreak,
               consecutive_actionable_closes: consecutiveActionableCloses,
+              technical_session_date: technicalSessionDate,
               stale_or_fallback: baseInput.staleOrFallback,
               peer_catchdown_block: baseInput.peerCatchdownBlock,
             },
@@ -21390,7 +21500,6 @@ export async function runDynamicMentionScan(options?: { dryRun?: boolean }) {
   if (mentionsRes.error || stocksRes.error) throw new Error(mentionsRes.error?.message || stocksRes.error?.message || 'candidate mention scan failed');
   const symbolByStockId = new Map(((stocksRes.data as Row[]) || []).map((row) => [String(row.id || ''), String(row.symbol || '')]));
 
-  const seedSymbols: Set<string> = new Set(TW_STORY_RESEARCH_SEEDS.map((s) => s.symbol));
   const mentionMap = new Map<string, { count: number; bullish: number; bearish: number; platforms: Set<string> }>();
 
   function recordMention(sym: string, sentiment: string | null, platform?: string) {
@@ -21411,14 +21520,15 @@ export async function runDynamicMentionScan(options?: { dryRun?: boolean }) {
 
   const today = asIsoDate(nowIso());
   let signalsWritten = 0;
-  const candidates = [...mentionMap.entries()].filter(([sym, d]) => !seedSymbols.has(sym) && d.count >= 3);
+  const candidates = [...mentionMap.entries()].filter(([, data]) => data.count >= 3);
+  const failures: string[] = [];
 
   for (const [symbol, data] of candidates) {
     try {
       const stock = await ensureStock(symbol, 'TW', symbol, null);
       const sentiment = data.bullish > data.bearish ? 'bullish' : data.bearish > data.bullish ? 'bearish' : 'neutral';
       const confidence = Math.min(0.6, 0.2 + data.count * 0.05);
-      await supabase.from('social_signals').upsert(
+      const { error } = await supabase.from('social_signals').upsert(
         {
           stock_id: stock.id,
           source_type: 'community_scan',
@@ -21434,10 +21544,15 @@ export async function runDynamicMentionScan(options?: { dryRun?: boolean }) {
         },
         { onConflict: 'source_key' },
       );
+      if (error) throw new Error(error.message);
       signalsWritten += 1;
-    } catch {
-      // skip individual errors
+    } catch (error) {
+      failures.push(`${symbol}:${(error as Error).message}`);
     }
+  }
+
+  if (failures.length > 0) {
+    throw new Error(`dynamic_mention_partial_failure:${failures.slice(0, 10).join('|')}`);
   }
 
   return { runId: randomUUID(), dryRun, symbolsFound: candidates.length, signalsWritten };

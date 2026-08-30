@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  advanceActionableCloseStreak,
   classifyCandidateStage,
   scoreActionability,
   scoreDataConfidence,
@@ -45,6 +46,41 @@ test('candidate reaches actionable only after two qualifying closes', () => {
   const oneClose = classifyCandidateStage(input({ consecutiveActionableCloses: 1 }));
   assert.equal(oneClose.stage, 'waiting');
   assert(oneClose.unmetConditions.includes('requires_two_consecutive_closes'));
+});
+
+test('qualifying close streak advances only across distinct consecutive market sessions', () => {
+  assert.equal(advanceActionableCloseStreak({
+    eligibleThisRun: true,
+    currentTechnicalSessionDate: '2026-08-28',
+    previousTechnicalSessionDate: '2026-08-27',
+    expectedPreviousTechnicalSessionDate: '2026-08-27',
+    previousEligible: true,
+    previousConsecutiveCloses: 1,
+  }), 2);
+  assert.equal(advanceActionableCloseStreak({
+    eligibleThisRun: true,
+    currentTechnicalSessionDate: '2026-08-28',
+    previousTechnicalSessionDate: '2026-08-28',
+    expectedPreviousTechnicalSessionDate: '2026-08-27',
+    previousEligible: true,
+    previousConsecutiveCloses: 1,
+  }), 1, 'same-session reruns must not advance the streak');
+  assert.equal(advanceActionableCloseStreak({
+    eligibleThisRun: true,
+    currentTechnicalSessionDate: '2026-08-28',
+    previousTechnicalSessionDate: '2026-08-26',
+    expectedPreviousTechnicalSessionDate: '2026-08-27',
+    previousEligible: true,
+    previousConsecutiveCloses: 1,
+  }), 1, 'a missing intervening session resets the streak');
+  assert.equal(advanceActionableCloseStreak({
+    eligibleThisRun: false,
+    currentTechnicalSessionDate: '2026-08-28',
+    previousTechnicalSessionDate: '2026-08-27',
+    expectedPreviousTechnicalSessionDate: '2026-08-27',
+    previousEligible: true,
+    previousConsecutiveCloses: 2,
+  }), 0);
 });
 
 test('risk-off, breakdown, stale data and peer catch-down block actionable', () => {

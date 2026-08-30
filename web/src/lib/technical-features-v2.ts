@@ -10,6 +10,12 @@ export type TechnicalBar = {
   volume: number;
 };
 
+export type InstitutionalFlowDay = {
+  session: string;
+  net: number | null;
+  volume: number | null;
+};
+
 function lastFinite(values: number[], minimumLength: number): number | null {
   if (values.length < minimumLength) return null;
   const value = values.at(-1);
@@ -21,6 +27,24 @@ function median(values: number[]): number | null {
   if (finite.length === 0) return null;
   const mid = Math.floor(finite.length / 2);
   return finite.length % 2 ? finite[mid] : (finite[mid - 1] + finite[mid]) / 2;
+}
+
+export function normalizeInstitutionalFlows(days: InstitutionalFlowDay[]) {
+  const uniqueBySession = new Map<string, InstitutionalFlowDay>();
+  for (const day of days
+    .filter((candidate) => /^\d{4}-\d{2}-\d{2}$/u.test(candidate.session))
+    .sort((left, right) => right.session.localeCompare(left.session))) {
+    if (!uniqueBySession.has(day.session)) uniqueBySession.set(day.session, day);
+  }
+  const uniqueDays = [...uniqueBySession.values()];
+  const normalized = (window: number) => {
+    const selected = uniqueDays.slice(0, window).filter((day) => day.net != null && Number.isFinite(day.net));
+    const volume = selected.reduce((sum, day) => sum + (day.volume != null && Number.isFinite(day.volume) && day.volume > 0 ? day.volume : 0), 0);
+    if (selected.length === 0 || volume <= 0) return null;
+    const net = selected.reduce((sum, day) => sum + Number(day.net), 0);
+    return Math.max(-1, Math.min(1, net / volume));
+  };
+  return { normalized5d: normalized(5), normalized20d: normalized(20) };
 }
 
 export function calculateTechnicalFeatures(

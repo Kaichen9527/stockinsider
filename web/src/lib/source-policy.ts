@@ -1,6 +1,15 @@
 export const RETIRED_SOURCE_CONNECTORS = ['youtube', 'googlenews', 'anue', 'udn', 'mobile01'] as const;
 export const MANUAL_SOURCE_CONNECTORS = ['investanchors', 'instagram'] as const;
 export const CLOUD_SOURCE_CONNECTORS = ['telegram', 'threads', 'ptt', 'bulltalk', 'gdelt', 'twse_insider'] as const;
+export const APPROVED_TELEGRAM_PUBLIC_CHANNELS = [
+  'investanchors',
+  'twstockanalysis',
+  'Gooaye',
+  'johnstock888',
+  'eaglewealth',
+  'a178178',
+  'musclestock',
+] as const;
 
 export type SourcePolicyDisposition = 'active' | 'blocked_auth' | 'blocked_license' | 'manual_only' | 'retired';
 
@@ -59,5 +68,5 @@ export function sourceExecutionPolicy(connector: string): SourceExecutionPolicy 
 }
 
 export function activeSourceConnectorKeys(): string[] {
-  return [...CLOUD_SOURCE_CONNECTORS];
+  return CLOUD_SOURCE_CONNECTORS.filter((connector) => sourceExecutionPolicy(connector).disposition === 'active');
 }

@@ -21,6 +21,11 @@ StockInsider 是一個以 Supabase + Next.js + Python pipeline 為核心的投�
 Source-led Opportunity V3 的獨立本機驗證、環境契約與三條 release track 請見
 [docs/source-led-opportunity-v3.md](docs/source-led-opportunity-v3.md)。
 
+Source Ranking V2 將正式網址固定為 `https://stockinsider-three.vercel.app`，
+由 GitHub Actions 統一觸發正式資料寫入；Vercel cron 僅保留每日健康監控。
+來源授權、退役清單、三層候選漏斗與正式上線順序請見
+[docs/operations/source-ranking-v2-rollout.md](docs/operations/source-ranking-v2-rollout.md)。
+
 ## 2. 環境變數
 
 複製範本：
@@ -56,7 +61,7 @@ cp .env.example .env
 - `THREADS_USERNAME` / `THREADS_PASSWORD` / `THREADS_SESSION_STATE`（legacy only）
 - `INVESTANCHORS_ACCOUNT` / `INVESTANCHORS_PASSWORD`
 - `TELEGRAM_BOT_TOKEN`
-- `YOUTUBE_API_KEY`
+- `THREADS_ACCESS_TOKEN`（官方 Threads keyword API；未配置時來源狀態為 `blocked_auth`）
 
 ### Legacy 變數用途
 
@@ -66,6 +71,7 @@ cp .env.example .env
 - `THREADS_SESSION_STATE`：持久 session JSON 路徑；預設會落在 `.agent/vendor/threads-session.json`
 - `THREADS_COOKIE_FALLBACK_*`：只作人工救援，不建議當主路徑
 - `INVESTANCHORS_ACCOUNT` / `INVESTANCHORS_PASSWORD`：定錨投筆登入帳密
+- `TELEGRAM_SOURCE_AUTHORIZED=true`：僅在七個核准公開頻道的使用依據已完成確認後啟用雲端增量同步
 
 ### Meta / Threads 注意事項（legacy only）
 
@@ -77,8 +83,9 @@ V3.14 tracked runtime 不讀取上述 raw login/cookie 設定。它要求
 `STOCKINSIDER_SUPABASE_URL_REF=keychain:stockinsider-runtime:supabase-url`、
 `STOCKINSIDER_SUPABASE_SERVICE_ROLE_KEY_REF=keychain:stockinsider-runtime:supabase-service-role-key` 與
 `INTERNAL_API_KEY_REF=keychain:stockinsider-runtime:internal-api-key`；Threads
-OAuth、YouTube API/captions 也只由 `scripts/runtime/credential-resolver.js`
-的 allowlisted Keychain reference 取得。完整的非啟用驗證與 17×5 connector
+OAuth 也只由 `scripts/runtime/credential-resolver.js`
+的 allowlisted Keychain reference 取得。YouTube、Google News、UDN、鉅亨與
+Mobile01 已退役且只保留歷史稽核資料。完整的非啟用驗證與 connector
 terminal-status 程序見 [operations runbook](docs/operations_runbook.md)。
 
 ## 3. 安裝依賴

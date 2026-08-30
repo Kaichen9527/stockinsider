@@ -453,7 +453,12 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
   };
   const radarAsOfMs = Date.parse(radar.asOf);
   const sevenDayCutoff = Number.isFinite(radarAsOfMs) ? radarAsOfMs - 7 * 24 * 60 * 60 * 1000 : null;
+  const stagedDetailBySymbol = new Map((radar.stages?.found || []).map((signal) => [signal.symbol, signal]));
   const rankedResearch = [...(radar.sourceSignals ?? [])]
+    .map((signal) => {
+      const staged = stagedDetailBySymbol.get(signal.symbol);
+      return staged ? { ...signal, stageAssessment: staged.stageAssessment, sourceProvenances: staged.sourceProvenances ?? signal.sourceProvenances } : signal;
+    })
     .filter((signal) => {
       if (sevenDayCutoff == null) return true;
       const discoveredAt = Date.parse(signal.discoveredAt);
@@ -479,7 +484,13 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
     { key: 'actionable' as const, eyebrow: 'ACTIONABLE NOW · SHADOW', title: '現在可行動', description: '嚴格通過估值、資料、技術、籌碼、市場與同業硬門檻，且連續兩個收盤日成立；30 個交易日內仍標示為實驗訊號。', items: actionableItems },
   ];
   const selectedSection = stageSections.find((section) => section.key === selectedStage) ?? stageSections[0];
-  const closestWaiting = waitingItems.slice(0, 5);
+  const closestWaiting = [...waitingItems].sort((left, right) => {
+    const leftAssessment = left.stageAssessment;
+    const rightAssessment = right.stageAssessment;
+    return (rightAssessment?.actionabilityScore ?? -1) - (leftAssessment?.actionabilityScore ?? -1)
+      || (rightAssessment?.dataConfidenceScore ?? -1) - (leftAssessment?.dataConfidenceScore ?? -1)
+      || (rightAssessment?.researchScore ?? -1) - (leftAssessment?.researchScore ?? -1);
+  }).slice(0, 5);
   const displayedItems = selectedStage === 'actionable' && selectedSection.items.length === 0 ? closestWaiting : selectedSection.items;
   if (['legacy-radar-v3.13.0','legacy-radar-v3.14.0','legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0','legacy-radar-v3.20.0'].includes(radar.sourceLedCorrectness?.schema??'') || rankedResearch.length > 0) return (
     <div className="space-y-0">
@@ -1034,6 +1045,18 @@ function SourceSignalDiagnostics({ signal }: { signal: SourceSignalCard }) {
     't:extended':'技術面過度延伸',
   }[reason] ?? '其他研究訊號待覆核');
   const explainRisk = (reason: string) => displayResearchDiagnostic(reason);
+  const conditionLabel = (condition: string) => ({
+    research_score_below_55: '研究分數未達 55', data_confidence_below_55: '資料信心未達 55',
+    bear_base_bull_missing: '缺 Bear／Base／Bull 情境', base_upside_below_8: 'Base 上行空間未達 8%',
+    reward_risk_below_1: '報酬風險比未達 1.0', material_official_counter_evidence: '存在重大官方反證',
+    research_score_below_70: '研究分數未達 70', actionability_below_65: '行動分數未達 65',
+    data_confidence_below_75: '資料信心未達 75', base_upside_below_12: 'Base 上行空間未達 12%',
+    reward_risk_below_1_5: '報酬風險比未達 1.5', requires_two_consecutive_closes: '尚未連續兩個收盤日通過',
+    technical_hard_gate_failed: '技術硬門檻未通過', negative_overseas_peer_catchdown: '海外同業補跌風險阻擋',
+    stale_or_fallback_data: '資料過期或僅有 fallback', market_risk_off_blocks_new_actionable: '大盤 risk-off，禁止新增可行動',
+    market_breakdown_forces_downgrade: '大盤 breakdown，強制降級',
+  }[condition] ?? condition);
+  const stageAssessment = signal.stageAssessment;
   return (
     <article className="rounded-[1.25rem] border border-line bg-surface p-4">
       <div className="flex items-start justify-between gap-3">
@@ -1081,6 +1104,18 @@ function SourceSignalDiagnostics({ signal }: { signal: SourceSignalCard }) {
       </dl>
       {signal.valuationAuthority === 'exchange_reported' ? <p className="mt-2 text-xs leading-5 text-slate-500 dark:text-emerald-100/55">估值來源：{signal.valuationExchange ?? '交易所'} · 當期 {signal.valuationAsOf ?? '日期待補'}{(signal.historyPeSessions?.length ?? 0) > 0 ? ` · 歷史樣本 ${signal.historyPeSessions?.join('、')}` : ''}</p> : null}
       <p className="mt-3 text-xs leading-5 text-sky-700 dark:text-sky-300">技術觸發：{technicalTrigger}</p>
+      {stageAssessment ? (
+        <div className="mt-3 rounded-xl border border-line bg-surface-strong p-3 text-xs leading-5">
+          <p className="font-semibold text-slate-800 dark:text-emerald-50">三層評分 · {stageAssessment.sessionDate}</p>
+          <p className="mt-1 text-slate-600 dark:text-emerald-100/70">
+            發現 {stageAssessment.discoveryScore.toFixed(1)} · 研究 {stageAssessment.researchScore.toFixed(1)} · 行動 {stageAssessment.actionabilityScore.toFixed(1)} · 資料信心 {stageAssessment.dataConfidenceScore.toFixed(1)}
+          </p>
+          <p className="mt-1 text-slate-600 dark:text-emerald-100/70">
+            Base 空間 {stageAssessment.baseUpsidePct == null ? '待補' : `${stageAssessment.baseUpsidePct.toFixed(1)}%`} · 報酬風險比 {stageAssessment.rewardRiskRatio == null ? '待補' : stageAssessment.rewardRiskRatio.toFixed(2)}
+          </p>
+          {stageAssessment.unmetConditions.length > 0 ? <p className="mt-1 text-amber-700 dark:text-amber-300">未達：{stageAssessment.unmetConditions.map(conditionLabel).join('、')}</p> : null}
+        </div>
+      ) : null}
       {(signal.positiveReasons?.length ?? 0) > 0 ? <p className="mt-1 text-xs leading-5 text-emerald-700 dark:text-emerald-300">加分：{signal.positiveReasons?.map(explainReason).join('、')}</p> : null}
       {(signal.riskReasons?.length ?? 0) > 0 ? <p className="mt-1 text-xs leading-5 text-amber-700 dark:text-amber-300">風險：{signal.riskReasons?.map(explainRisk).join('、')}</p> : null}
       <div className="mt-4 flex items-center justify-between gap-3">
@@ -1135,8 +1170,9 @@ function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
     : signal.detailHref ?? `/stock/${signal.symbol}`;
   const provenance = signal.sourceProvenance;
   const provenanceItems = (signal.sourceProvenances?.length ? signal.sourceProvenances : provenance ? [{
-    ref: 'primary', ...provenance,
+    ref: 'primary', ...provenance, stance: null,
   }] : []).slice(0, 6);
+  const stanceLabel = { positive: '正向', negative: '負向', neutral: '中性', mixed: '多空混合' } as const;
 
   return (
     <article data-testid="decision-card" data-numeric-budget="six financial or trigger values; stock identity excluded" aria-label={`${signal.chineseName || signal.symbol} ${signal.symbol} ${actionLabel}`} className="overflow-hidden rounded-[1.35rem] border border-line bg-surface shadow-[0_10px_34px_rgba(8,18,26,0.06)]">
@@ -1192,7 +1228,7 @@ function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
             {provenanceItems.length > 0 ? provenanceItems.map((item) => (
               <a key={`${item.ref}-${item.sourceUrl}`} href={item.sourceUrl || undefined} target="_blank" rel="noreferrer"
                 className="rounded-full border border-line bg-surface px-2.5 py-0.5 underline decoration-slate-300 underline-offset-2 hover:text-slate-800 dark:hover:text-emerald-50">
-                {item.sourceName || item.kolIdentity || sourceTypeLabel[signal.sourceClass] || signal.sourceClass}
+                {item.sourceName || item.kolIdentity || sourceTypeLabel[signal.sourceClass] || signal.sourceClass}{item.stance ? ` · ${stanceLabel[item.stance]}` : ''}
               </a>
             )) : <span>{sourceTypeLabel[signal.sourceClass] || signal.sourceClass}</span>}
             <span className="sr-only">；發布、收集與評估日期請展開研究依據。</span>

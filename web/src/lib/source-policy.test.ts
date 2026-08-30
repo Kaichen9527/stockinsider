@@ -1,8 +1,7 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { requireExactInternalBearer, requireInternalAuth } from './internal-auth.ts';
-import { RETIRED_SOURCE_CONNECTORS, sourceExecutionPolicy } from './source-policy.ts';
+import { activeSourceConnectorKeys, APPROVED_TELEGRAM_PUBLIC_CHANNELS, RETIRED_SOURCE_CONNECTORS, sourceExecutionPolicy } from './source-policy.ts';
 
 const ENV_KEYS = [
   'INTERNAL_API_KEY', 'CRON_SECRET', 'THREADS_ACCESS_TOKEN',
@@ -55,10 +54,7 @@ test('retired connectors remain explicitly queryable as historical-only policy',
 });
 
 test('approved roster has exactly seven unique Telegram cursors', () => {
-  const roster = JSON.parse(readFileSync(new URL('../../../config/runtime/approved-source-roster-v3.13.json', import.meta.url), 'utf8')) as {
-    profiles: Array<{ telegramPublicChannel?: string }>;
-  };
-  const channels = roster.profiles.map((profile) => profile.telegramPublicChannel).filter((value): value is string => Boolean(value));
+  const channels = [...APPROVED_TELEGRAM_PUBLIC_CHANNELS];
   assert.equal(channels.length, 7);
   assert.equal(new Set(channels.map((value) => value.toLowerCase())).size, 7);
 });
@@ -66,4 +62,13 @@ test('approved roster has exactly seven unique Telegram cursors', () => {
 test('GDELT is active metadata discovery and retired publishers stay retired', () => {
   assert.equal(sourceExecutionPolicy('gdelt').disposition, 'active');
   assert.equal(sourceExecutionPolicy('gdelt').licenseBasis, 'gdelt_metadata_and_source_links');
+});
+
+test('connector=all includes only sources authorized in the current runtime', () => {
+  withEnvironment({}, () => {
+    assert.deepEqual(activeSourceConnectorKeys(), ['gdelt', 'twse_insider']);
+  });
+  withEnvironment({ THREADS_ACCESS_TOKEN: 'token', TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED: 'true' }, () => {
+    assert.deepEqual(activeSourceConnectorKeys(), ['telegram', 'threads', 'gdelt', 'twse_insider']);
+  });
 });

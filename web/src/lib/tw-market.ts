@@ -130,6 +130,28 @@ function ohlcNumber(value: unknown) {
   return toFiniteNumber(value);
 }
 
+export function parseTpexTradingStockRows(payload: Record<string, unknown>) {
+  const tables = Array.isArray(payload.tables) ? payload.tables as Array<Record<string, unknown>> : [];
+  const data = tables.flatMap((table) => Array.isArray(table.data) ? table.data as unknown[][] : []);
+  return data.flatMap((item) => {
+    const roc = String(item[0] || '').match(/^(\d{3})\/(\d{2})\/(\d{2})$/u);
+    const lots = ohlcNumber(item[1]);
+    const open = ohlcNumber(item[3]);
+    const high = ohlcNumber(item[4]);
+    const low = ohlcNumber(item[5]);
+    const close = ohlcNumber(item[6]);
+    if (!roc || open == null || high == null || low == null || close == null) return [];
+    return [{
+      time: `${Number(roc[1]) + 1911}-${roc[2]}-${roc[3]}`,
+      open,
+      high,
+      low,
+      close,
+      volume: lots == null ? null : Math.round(lots * 1000),
+    }];
+  });
+}
+
 async function getTwStockClient() {
   if (!twStockClientPromise) {
     twStockClientPromise = (async () => {
@@ -237,6 +259,23 @@ export async function fetchTwStockDailyBars(symbol: string, daysBack = 120) {
     }
   }));
   rows.push(...monthlyResults.flat());
+
+  if (rows.length === 0) {
+    const tpexMonthlyResults = await Promise.all(monthStarts.map(async (date) => {
+      const month = `${date.slice(0, 4)}/${date.slice(4, 6)}/01`;
+      try {
+        const response = await fetch(`https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=${encodeURIComponent(symbol)}&date=${month}&response=json`, {
+          headers: { accept: 'application/json', 'user-agent': 'StockInsider/2.0 official-market-data' },
+          signal: AbortSignal.timeout(8_000),
+        });
+        if (!response.ok) return [];
+        return parseTpexTradingStockRows(await response.json() as Record<string, unknown>);
+      } catch {
+        return [];
+      }
+    }));
+    rows.push(...tpexMonthlyResults.flat());
+  }
 
   if (rows.length === 0) {
     try {
