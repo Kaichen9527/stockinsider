@@ -19,6 +19,10 @@ export type PublishedRadarSnapshot = {
   payload: RadarDailyPayload;
 };
 
+export function radarPublicSnapshotsEnabled() {
+  return process.env.RADAR_PUBLIC_SNAPSHOTS_ENABLED !== 'disabled';
+}
+
 function compactText(value: unknown, max = 160) {
   if (typeof value !== 'string') return value ?? null;
   return value.length > max ? `${value.slice(0, max - 1)}…` : value;
@@ -193,7 +197,18 @@ export async function publishRadarPublicSnapshots(input: {
 export async function loadLatestRadarPublicSnapshot(window: PublicRadarWindow): Promise<PublishedRadarSnapshot | null> {
   const cached = memory.get(window);
   if (cached && cached.expiresAt > Date.now()) return cached.value;
-  const supabase = getSupabaseServerClient();
+  let supabase: ReturnType<typeof getSupabaseServerClient>;
+  try {
+    supabase = getSupabaseServerClient();
+  } catch (error) {
+    // Local demo/E2E builds intentionally run without production credentials.
+    // A missing snapshot client means "no published snapshot is available" and
+    // must preserve the existing read-only fallback instead of turning every
+    // public route into a 500. Production read/query failures still fail closed
+    // below and never silently authorize an actionable card.
+    if ((error as Error).message === 'Missing SUPABASE URL/key for server client') return null;
+    throw error;
+  }
   const [read, stateRead] = await Promise.all([
     supabase.from('radar_public_snapshots').select('id,etag,content_as_of,published_at,payload_json').eq('window_key', window).eq('status', 'valid').order('published_at', { ascending: false }).limit(1).maybeSingle(),
     supabase.from('radar_publication_state').select('status,last_attempt_at,terminal_reason').eq('window_key', window).maybeSingle(),

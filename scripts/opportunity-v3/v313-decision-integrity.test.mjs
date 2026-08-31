@@ -955,7 +955,12 @@ acceptanceTest('DI-005','V3.13 projection freshness uses scheduled trading runs,
   assert.match(insightRoute,/import \{ GET as getDecisionRevision \} from '[.][.]\/deep-dive\/route'/u);
   for(const state of ['fresh','stale_readonly','degraded','checksum_conflict','error'])
     assert.deepEqual(radarResponseHeaders(state),{'Cache-Control':'private, no-store'});
-  for(const window of ['daily','hot','weekly']){
+  const dailyRoute=readFileSync(path.join(root,'web/src/app/api/radar/daily/route.ts'),'utf8');
+  assert.match(dailyRoute,/loadLatestRadarPublicSnapshot\('daily'\)/u);
+  assert.match(dailyRoute,/if-none-match/u);
+  assert.match(dailyRoute,/public, max-age=60, stale-while-revalidate=300/u);
+  assert.match(dailyRoute,/published[.]stale[^?]*\? 'no-store, max-age=0'/su);
+  for(const window of ['hot','weekly']){
     const route=readFileSync(path.join(root,`web/src/app/api/radar/${window}/route.ts`),'utf8');
     assert.match(route,/radarResponseHeaders\('fresh'\)/u);
     assert.doesNotMatch(route,/ETag|if-none-match|s-maxage|stale-while-revalidate|public,/u);

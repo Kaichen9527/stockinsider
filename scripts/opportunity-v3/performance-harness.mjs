@@ -205,7 +205,8 @@ export async function runControlledProjectionPerformanceOracle({ root }) {
       env: {
         ...process.env,
         NODE_ENV: 'production', SOURCE_LED_OPPORTUNITY_V3: 'disabled', LEGACY_RADAR_CORRECTNESS_PROJECTION: 'enabled',
-        OPPORTUNITY_V3_UI_FIXTURE: 'disabled', SUPABASE_URL: `http://127.0.0.1:${projectionAddress.port}`,
+        OPPORTUNITY_V3_UI_FIXTURE: 'disabled', RADAR_PUBLIC_SNAPSHOTS_ENABLED: 'disabled',
+        SUPABASE_URL: `http://127.0.0.1:${projectionAddress.port}`,
         SUPABASE_SERVICE_ROLE_KEY: 'controlled-projection-service-role-key',
         NEXT_PUBLIC_SUPABASE_URL: `http://127.0.0.1:${projectionAddress.port}`,
         NEXT_PUBLIC_SUPABASE_ANON_KEY: 'controlled-projection-anon-key',
