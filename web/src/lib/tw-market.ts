@@ -15,6 +15,7 @@ type TwStockModule = {
 let twStockClientPromise: Promise<InstanceType<TwStockModule['TwStock']> | null> | null = null;
 const TWSTOCK_REQUEST_TIMEOUT_MS = 2500;
 const OFFICIAL_MARKET_MAX_CONCURRENCY = 4;
+const OFFICIAL_VALUATION_BACKFILL_MONTHS_PER_CYCLE = 12;
 let officialMarketActive = 0;
 const officialMarketWaiters: Array<() => void> = [];
 const officialHostPace = new Map<string, Promise<void>>();
@@ -288,6 +289,12 @@ export function isOfficialValuationSourceUrl(value: unknown) {
     || /https:\/\/www\.tpex\.org\.tw\/www\/zh-tw\/afterTrading\/peQryDate\?/u.test(sourceUrl);
 }
 
+export function selectOfficialValuationBackfillMonths(monthlyStarts: string[], knownMonths: Set<string>) {
+  return monthlyStarts
+    .filter((monthStart) => !knownMonths.has(`${monthStart.slice(0, 4)}-${monthStart.slice(4, 6)}`))
+    .slice(-OFFICIAL_VALUATION_BACKFILL_MONTHS_PER_CYCLE);
+}
+
 export function parseTwseValuationPanel(payload: Record<string, unknown>, date: string, symbols: Set<string>) {
   const rows = Array.isArray(payload.data) ? payload.data as unknown[][] : [];
   const result = new Map<string, TwValuationHistoryPoint>();
@@ -389,10 +396,12 @@ export async function fetchTwMarketValuationHistory(
     if (exchangeBySymbol?.get(symbol) === 'TPEx') return;
     const history = histories.get(symbol) || [];
     const knownMonths = new Set(history.map((point) => point.date.slice(0, 7)));
-    const missingMonths = monthlyStarts.filter((monthStart) => !knownMonths.has(`${monthStart.slice(0, 4)}-${monthStart.slice(4, 6)}`));
+    const missingMonths = selectOfficialValuationBackfillMonths(monthlyStarts, knownMonths);
     const recovered = await Promise.all(missingMonths.map(async (monthStart) => {
       const sourceUrl = `https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU?date=${monthStart}&stockNo=${encodeURIComponent(symbol)}&response=json`;
-      const payload = await fetchOfficialJson<Record<string, unknown>>(sourceUrl, 10_000);
+      // Historical gaps are retried by the next daily cycle. Avoid extending the
+      // 19:00 production window with transient retries for non-current evidence.
+      const payload = await fetchOfficialJson<Record<string, unknown>>(sourceUrl, 8_000, 1);
       return payload ? parseTwseStockValuationHistory(payload, sourceUrl).sort((left, right) => left.date.localeCompare(right.date)).at(-1) || null : null;
     }));
     const merged = new Map(history.map((point) => [point.date.slice(0, 7), point]));

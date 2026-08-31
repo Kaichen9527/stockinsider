@@ -1,12 +1,24 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { isOfficialValuationSourceUrl, parseTpexTradingStockRows, parseTpexValuationPanel, parseTwseStockValuationHistory, parseTwseValuationPanel } from './tw-market.ts';
+import { isOfficialValuationSourceUrl, parseTpexTradingStockRows, parseTpexValuationPanel, parseTwseStockValuationHistory, parseTwseValuationPanel, selectOfficialValuationBackfillMonths } from './tw-market.ts';
 
 test('valuation cache accepts only official TWSE and TPEx history endpoints', () => {
   assert.equal(isOfficialValuationSourceUrl('https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?date=20260828&selectType=ALL&response=json'), true);
   assert.equal(isOfficialValuationSourceUrl('https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU?date=20240801&stockNo=2330&response=json'), true);
   assert.equal(isOfficialValuationSourceUrl('https://www.tpex.org.tw/www/zh-tw/afterTrading/peQryDate?date=2026/08/28&response=json'), true);
   assert.equal(isOfficialValuationSourceUrl('https://example.com/BWIBBU?stockNo=2330'), false);
+});
+
+test('official valuation backfill is bounded and advances through missing months', () => {
+  const months = Array.from({ length: 24 }, (_, index) => {
+    const date = new Date(Date.UTC(2024, index, 1));
+    return `${date.getUTCFullYear()}${String(date.getUTCMonth() + 1).padStart(2, '0')}01`;
+  });
+  const first = selectOfficialValuationBackfillMonths(months, new Set());
+  assert.equal(first.length, 12);
+  assert.deepEqual(first, months.slice(-12));
+  const known = new Set(first.map((month) => `${month.slice(0, 4)}-${month.slice(4, 6)}`));
+  assert.deepEqual(selectOfficialValuationBackfillMonths(months, known), months.slice(0, 12));
 });
 
 test('TPEx official monthly rows normalize ROC dates and trading lots', () => {
