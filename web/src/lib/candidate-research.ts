@@ -206,9 +206,19 @@ export async function runCandidateResearchCycle(options: {
     const startedAt = new Date().toISOString();
     const result: Row = { symbol: stock.symbol, stockId: stock.id };
     try {
+      // The source plane may have created a placeholder whose name is just its
+      // ticker. Normalize it from the official roster before requesting prices:
+      // a temporary market-data outage must never leak a ticker as a company
+      // name in the found-stage card.
+      const officialName = stockMaster.get(stock.symbol)?.name;
+      if (officialName && officialName !== stock.name) {
+        const update = await supabase.from('stocks').update({ name: officialName, updated_at: evaluatedAt }).eq('id', stock.id);
+        if (update.error) throw new Error(update.error.message);
+        stock.name = officialName;
+      }
       const officialMultiples = officialValuationHistory.get(stock.symbol) || [];
       const values = officialMultiples.at(-1) || null;
-      const [bars, institutional, eps, fetchedRevenue, priorRevenueRes, historicalFundamentalsRes, priorStageRes, priorFlowsRes] = await Promise.all([
+      const [fetchedBars, institutional, eps, fetchedRevenue, priorRevenueRes, historicalFundamentalsRes, priorStageRes, priorFlowsRes] = await Promise.all([
         fetchTwStockDailyBars(stock.symbol, 520),
         fetchTwStockInstitutional(stock.symbol).catch(() => null),
         fetchTwStockEpsTtm(stock.symbol).catch(() => null),
@@ -218,18 +228,16 @@ export async function runCandidateResearchCycle(options: {
         supabase.from('candidate_daily_stage_snapshots').select('*').eq('stock_id', stock.id).eq('ruleset_version', STAGE_RULESET_VERSION).eq('model_version', CANDIDATE_STAGE_MODEL_VERSION).order('session_date', { ascending: false }).limit(1),
         supabase.from('stock_signals').select('as_of,volume,chip_metrics').eq('stock_id', stock.id).order('as_of', { ascending: false }).limit(30),
       ]);
+      // A price feed may expose a newer provisional date before that date is in
+      // the official completed-session ledger. It is not eligible for technical
+      // features, stage transitions, or the two-adjacent-close confirmation.
+      const bars = (fetchedBars || []).filter((bar) => bar.time <= latestMarketSession);
       if (!bars || bars.length === 0) throw new Error('official_price_history_missing');
       const queryError = priorRevenueRes.error || historicalFundamentalsRes.error || priorStageRes.error || priorFlowsRes.error;
       if (queryError) throw new Error(queryError.message);
       const latestBar = bars.at(-1)!;
       const priceMatchesMarketSession = latestBar.time === latestMarketSession;
       const valuationMatchesMarketSession = values?.date === latestBar.time;
-      const officialName = stockMaster.get(stock.symbol)?.name;
-      if (officialName && officialName !== stock.name) {
-        const update = await supabase.from('stocks').update({ name: officialName, updated_at: evaluatedAt }).eq('id', stock.id);
-        if (update.error) throw new Error(update.error.message);
-        stock.name = officialName;
-      }
       const priorFlows: InstitutionalFlowDay[] = (((priorFlowsRes.data as Row[]) || []).map((row) => {
         const chip = rowRelation(row.chip_metrics) || {};
         const nets = [chip.foreign_net, chip.investment_trust_net, chip.dealer_net].map(numberOrNull).filter((item): item is number => item != null);

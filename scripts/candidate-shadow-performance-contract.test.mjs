@@ -45,6 +45,21 @@ test('candidate research reads the durable official calendar and fails fast on a
   assert.match(market, /officialHostUnavailableUntil\.set\(host/u);
 });
 
+test('official roster normalization happens before a missing price history can fail closed', () => {
+  const research = readFileSync(new URL('../web/src/lib/candidate-research.ts', import.meta.url), 'utf8');
+  const normalizeAt = research.indexOf("const officialName = stockMaster.get(stock.symbol)?.name");
+  const priceGateAt = research.indexOf("if (!bars || bars.length === 0) throw new Error('official_price_history_missing')");
+  assert.ok(normalizeAt >= 0);
+  assert.ok(priceGateAt >= 0);
+  assert.ok(normalizeAt < priceGateAt);
+});
+
+test('candidate technical features and the core scheduler remain bound to official completed sessions', () => {
+  const research = readFileSync(new URL('../web/src/lib/candidate-research.ts', import.meta.url), 'utf8');
+  assert.match(research, /const bars = \(fetchedBars \|\| \[\]\)\.filter\(\(bar\) => bar\.time <= latestMarketSession\)/u);
+  assert.match(domain, /executeNonCriticalStep\('recommendation',[\s\S]{0,320}mode !== 'full'/u);
+});
+
 test('GitHub write workflows are manual-only and VPS timers own the approved cadence', () => {
   assert.doesNotMatch(sourceWorkflow, /^\s*schedule:/mu);
   assert.doesNotMatch(researchWorkflow, /^\s*schedule:/mu);
