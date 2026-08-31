@@ -17,8 +17,15 @@ test('migration is additive and installs research, shadow and last-good publicat
   assert.match(migration, /CREATE TABLE IF NOT EXISTS public\.candidate_shadow_session_observations/u);
   assert.match(migration, /CREATE TABLE IF NOT EXISTS public\.radar_public_snapshots/u);
   assert.match(migration, /UNIQUE \(session_date, ruleset_version, model_version\)/u);
-  assert.match(migration, /session_model_key TEXT GENERATED ALWAYS/u);
+  assert.match(migration, /ON public\.valuation_snapshots \(stock_id, session_date, model_version\)/u);
+  assert.doesNotMatch(migration, /GENERATED ALWAYS[\s\S]*session_date::text/u);
   assert.doesNotMatch(migration, /DROP TABLE|TRUNCATE/u);
+});
+
+test('valuation writes use the same official-session composite idempotency key as the migration', () => {
+  const research = readFileSync(new URL('../web/src/lib/candidate-research.ts', import.meta.url), 'utf8');
+  assert.match(research, /onConflict: 'stock_id,session_date,model_version'/u);
+  assert.doesNotMatch(research, /onConflict: 'session_model_key'/u);
 });
 
 test('GitHub write workflows are manual-only and VPS timers own the approved cadence', () => {

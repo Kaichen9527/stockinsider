@@ -115,17 +115,13 @@ FROM ranked
 WHERE snapshots.id = ranked.id
   AND ranked.row_number = 1;
 
-ALTER TABLE public.valuation_snapshots
-  ADD COLUMN IF NOT EXISTS session_model_key TEXT GENERATED ALWAYS AS (
-    CASE
-      WHEN session_date IS NULL THEN NULL
-      ELSE stock_id::text || ':' || session_date::text || ':' || model_version
-    END
-  ) STORED;
-
-CREATE UNIQUE INDEX IF NOT EXISTS uq_valuation_snapshot_session_model_key
-  ON public.valuation_snapshots (session_model_key)
-  WHERE session_model_key IS NOT NULL;
+-- A composite unique key avoids a generated text expression. PostgreSQL's
+-- date-to-text cast is locale/DateStyle dependent and therefore not immutable,
+-- so it is invalid inside a stored generated column on production Postgres.
+-- NULL session dates remain distinct for preserved historical rows; every new
+-- candidate-research write supplies a non-null official session date.
+CREATE UNIQUE INDEX IF NOT EXISTS uq_valuation_snapshot_stock_session_model
+  ON public.valuation_snapshots (stock_id, session_date, model_version);
 
 CREATE TABLE IF NOT EXISTS public.candidate_shadow_session_observations (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
