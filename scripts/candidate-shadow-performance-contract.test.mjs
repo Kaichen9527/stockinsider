@@ -28,6 +28,7 @@ test('valuation writes use the same official-session composite idempotency key a
   const research = readFileSync(new URL('../web/src/lib/candidate-research.ts', import.meta.url), 'utf8');
   assert.match(research, /onConflict: 'stock_id,session_date,model_version'/u);
   assert.doesNotMatch(research, /onConflict: 'session_model_key'/u);
+  assert.match(research, /new Map\(\s*\(officialValuationHistory\.get\(stock\.symbol\) \|\| \[\]\)\.map\(\(point\) => \[point\.date, point\]\)/u);
 });
 
 test('candidate research reads the durable official calendar and fails fast on an unavailable official host', () => {
@@ -52,6 +53,9 @@ test('official roster normalization happens before a missing price history can f
   assert.ok(normalizeAt >= 0);
   assert.ok(priceGateAt >= 0);
   assert.ok(normalizeAt < priceGateAt);
+  assert.match(research, /name: official\?\.name \|\| storedName, storedName/u);
+  assert.match(research, /officialName && officialName !== stock\.storedName/u);
+  assert.match(research, /stock\.storedName = officialName/u);
 });
 
 test('candidate technical features and the core scheduler remain bound to official completed sessions', () => {

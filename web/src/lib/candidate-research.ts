@@ -125,7 +125,7 @@ export async function runCandidateResearchCycle(options: {
   ]);
   if (mentionsRes.error || priorStagesRes.error || marketRes.error) throw new Error(mentionsRes.error?.message || priorStagesRes.error?.message || marketRes.error?.message || 'candidate_universe_failed');
   const stockMaster = new Map(master.map((item) => [item.symbol, item]));
-  const candidates = new Map<string, { id: string; symbol: string; name: string; market: 'TW' | 'US'; sector: string | null }>();
+  const candidates = new Map<string, { id: string; symbol: string; name: string; storedName: string; market: 'TW' | 'US'; sector: string | null }>();
   const mentionsByStock = new Map<string, Row[]>();
   for (const mention of (mentionsRes.data as Row[]) || []) {
     const stock = rowRelation(mention.stocks);
@@ -134,7 +134,8 @@ export async function runCandidateResearchCycle(options: {
     const symbol = String(stock.symbol || '');
     if (!id || !/^\d{4}$/u.test(symbol)) continue;
     const official = stockMaster.get(symbol);
-    candidates.set(id, { id, symbol, name: official?.name || String(stock.name || symbol), market: 'TW', sector: stock.sector ? String(stock.sector) : null });
+    const storedName = String(stock.name || symbol);
+    candidates.set(id, { id, symbol, name: official?.name || storedName, storedName, market: 'TW', sector: stock.sector ? String(stock.sector) : null });
     const stockMentions = mentionsByStock.get(id);
     if (stockMentions) stockMentions.push(mention);
     else mentionsByStock.set(id, [mention]);
@@ -146,7 +147,8 @@ export async function runCandidateResearchCycle(options: {
     const symbol = String(stock.symbol || '');
     if (!id || !/^\d{4}$/u.test(symbol) || candidates.has(id)) continue;
     const official = stockMaster.get(symbol);
-    candidates.set(id, { id, symbol, name: official?.name || String(stock.name || symbol), market: 'TW', sector: stock.sector ? String(stock.sector) : null });
+    const storedName = String(stock.name || symbol);
+    candidates.set(id, { id, symbol, name: official?.name || storedName, storedName, market: 'TW', sector: stock.sector ? String(stock.sector) : null });
   }
   const seedSymbols = (options.seedSymbols || []).filter((seed) => seed.market === 'TW');
   if (seedSymbols.length > 0) {
@@ -156,7 +158,10 @@ export async function runCandidateResearchCycle(options: {
       const id = String(stock.id || '');
       const symbol = String(stock.symbol || '');
       const seed = seedSymbols.find((item) => item.symbol === symbol);
-      if (id && seed) candidates.set(id, { id, symbol, name: stockMaster.get(symbol)?.name || String(stock.name || seed.name), market: 'TW', sector: stock.sector ? String(stock.sector) : seed.sector });
+      if (id && seed) {
+        const storedName = String(stock.name || seed.name);
+        candidates.set(id, { id, symbol, name: stockMaster.get(symbol)?.name || storedName, storedName, market: 'TW', sector: stock.sector ? String(stock.sector) : seed.sector });
+      }
     }
   }
   const universe = [...candidates.values()];
@@ -211,12 +216,18 @@ export async function runCandidateResearchCycle(options: {
       // a temporary market-data outage must never leak a ticker as a company
       // name in the found-stage card.
       const officialName = stockMaster.get(stock.symbol)?.name;
-      if (officialName && officialName !== stock.name) {
+      if (officialName && officialName !== stock.storedName) {
         const update = await supabase.from('stocks').update({ name: officialName, updated_at: evaluatedAt }).eq('id', stock.id);
         if (update.error) throw new Error(update.error.message);
         stock.name = officialName;
+        stock.storedName = officialName;
       }
-      const officialMultiples = officialValuationHistory.get(stock.symbol) || [];
+      // Cache and live official history may overlap on a monthly publication
+      // date. Deduplicate before the bulk UPSERT: PostgreSQL correctly rejects
+      // an ON CONFLICT batch that would update the same row twice.
+      const officialMultiples = [...new Map(
+        (officialValuationHistory.get(stock.symbol) || []).map((point) => [point.date, point]),
+      ).values()].sort((left, right) => left.date.localeCompare(right.date));
       const values = officialMultiples.at(-1) || null;
       const [fetchedBars, institutional, eps, fetchedRevenue, priorRevenueRes, historicalFundamentalsRes, priorStageRes, priorFlowsRes] = await Promise.all([
         fetchTwStockDailyBars(stock.symbol, 520),
