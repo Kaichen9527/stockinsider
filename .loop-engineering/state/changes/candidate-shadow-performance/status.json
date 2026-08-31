@@ -1,0 +1,17 @@
+{
+  "changeId": "candidate-shadow-performance",
+  "loopStage": "implementation",
+  "requirementsStatus": "approved",
+  "designStatus": "approved",
+  "implementationStatus": "in_progress",
+  "verificationStatus": "pending",
+  "releaseStatus": "pending",
+  "createdAt": "2026-08-31T00:00:00+08:00",
+  "updatedAt": "2026-08-31T00:00:00+08:00",
+  "authority": {
+    "implementationAuthorized": true,
+    "productionMigrationAuthorized": true,
+    "productionDeploymentAuthorized": true,
+    "threadsInScope": false
+  }
+}

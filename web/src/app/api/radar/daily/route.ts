@@ -6,6 +6,8 @@ import { requireExactInternalBearer } from '@/lib/internal-auth';
 import { compactProducerRadarPayload } from '@/lib/radar-producer-payload';
 import { radarResponseHeaders } from '@/lib/radar-response-policy';
 import type { RadarDailyPayload } from '@/lib/types';
+import { loadLatestRadarPublicSnapshot } from '@/lib/radar-public-snapshot';
+import { hasCandidateStageCards } from '@/lib/candidate-stage-contract';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -324,7 +326,7 @@ function compactRadarPayload(data: Record<string, unknown>) {
 
 async function withRadarStages(data: Record<string, unknown>) {
   const payload = data as unknown as RadarDailyPayload;
-  return { ...data, stages: await getPersistedRadarStages(payload.sourceSignals || []) };
+  return hasCandidateStageCards(payload) ? data : { ...data, stages: await getPersistedRadarStages() };
 }
 
 export async function GET(request: NextRequest) {
@@ -332,6 +334,24 @@ export async function GET(request: NextRequest) {
     const producerRead = request.headers.get('x-stockinsider-projection-source') === 'tracked-producer';
     if (producerRead && !requireExactInternalBearer(request)) {
       return NextResponse.json({ error: 'authentication_rejected' }, { status: 401, headers: NO_STORE });
+    }
+    if (!producerRead) {
+      const published = await loadLatestRadarPublicSnapshot('daily');
+      if (published) {
+        const ageMs = Date.now() - Date.parse(published.contentAsOf);
+        const remainingFreshMs = 26 * 60 * 60 * 1000 - ageMs;
+        const cacheControl = published.stale || remainingFreshMs <= 10 * 60 * 1000
+          ? 'no-store, max-age=0'
+          : 'public, max-age=60, stale-while-revalidate=300';
+        const headers = {
+          'cache-control': cacheControl,
+          etag: published.etag,
+          'x-stockinsider-snapshot-published-at': published.publishedAt,
+          'x-stockinsider-snapshot-stale': String(published.stale),
+        };
+        if (request.headers.get('if-none-match') === published.etag) return new NextResponse(null, { status: 304, headers });
+        return NextResponse.json(published.payload, { headers });
+      }
     }
     const compact = producerRead ? null : await loadPublishedRadarProjection('daily');
     if (compact) {

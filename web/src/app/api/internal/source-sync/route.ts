@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { requireInternalAuth } from '@/lib/internal-auth';
 import { runSourceSync } from '@/lib/research-v2';
-import { activeSourceConnectorKeys, sourceExecutionPolicy } from '@/lib/source-policy';
+import { scheduledSourceConnectorKeys, sourceExecutionPolicy } from '@/lib/source-policy';
 import {
   nextExpectedAt,
   recordSourceRunLedger,
@@ -12,6 +12,7 @@ import type { SourceSyncResult } from '@/lib/types';
 import { runIsolatedSourceBatch } from '@/lib/source-batch';
 import { classifySourceSyncTerminal } from '@/lib/source-health';
 import { assertThreadsTokenAvailable } from '@/lib/threads-token';
+import { acquireProductionWriteLease, releaseProductionWriteLease } from '@/lib/production-write-lease';
 
 const PARSER_VERSION = 'source-sync-v2.0.0';
 
@@ -162,6 +163,7 @@ async function executeConnector(connector: string, dryRun: boolean, symbol: stri
 export async function POST(req: Request) {
   const auth = requireInternalAuth(req);
   if (!auth.ok) return NextResponse.json({ ok: false, error: auth.error }, { status: auth.status });
+  let leaseOwner: string | null = null;
   try {
     const body = await req.json().catch(() => ({}));
     const { searchParams } = new URL(req.url);
@@ -171,10 +173,14 @@ export async function POST(req: Request) {
     const connector = body?.connector ? String(body.connector) : (searchParams.get('connector') || 'telegram');
     const dryRun = Boolean(body?.dryRun);
     const symbol = (body?.symbol ? String(body.symbol) : (searchParams.get('symbol') || '')).toUpperCase();
+    if (!dryRun) {
+      leaseOwner = await acquireProductionWriteLease(3_600);
+      if (!leaseOwner) return NextResponse.json({ ok: false, error: 'production_write_cycle_already_running' }, { status: 409 });
+    }
 
     if (connector === 'all') {
       const results = await runIsolatedSourceBatch(
-        activeSourceConnectorKeys(),
+        scheduledSourceConnectorKeys(),
         (item) => executeConnector(item, dryRun, symbol),
         (item, caught) => {
           const error = caught as Error & { result?: Record<string, unknown> };
@@ -198,8 +204,22 @@ export async function POST(req: Request) {
       );
       const acceptedReasons = new Set<SourceTerminalReason>(['success', 'successful_empty', 'duplicate_only']);
       const failures = results.filter((row) => !acceptedReasons.has(row.terminalReason));
+      let publication: Record<string, unknown> | null = null;
+      let publicationError: string | null = null;
+      if (!dryRun) {
+        try {
+          const [{ getDailyRadarData, getPersistedRadarStages }, { publishRadarPublicSnapshots }] = await Promise.all([
+            import('@/lib/domain'), import('@/lib/radar-public-snapshot'),
+          ]);
+          const [payload, stages] = await Promise.all([getDailyRadarData(), getPersistedRadarStages()]);
+          publication = await publishRadarPublicSnapshots({ payload, stages });
+        } catch (error) {
+          publicationError = (error as Error).message.slice(0, 500);
+        }
+      }
+      const ok = failures.length === 0 && publicationError == null;
       return NextResponse.json({
-        ok: failures.length === 0,
+        ok,
         result: {
           connector: 'all',
           recordsWritten: results.reduce((sum, row) => sum + row.recordsWritten, 0),
@@ -207,9 +227,11 @@ export async function POST(req: Request) {
           duplicatesSkipped: results.reduce((sum, row) => sum + Number(row.duplicatesSkipped || 0), 0),
           failureCount: failures.length,
           results,
+          publication,
+          publicationError,
         },
         meta: { dryRun, connector: 'all', symbol: symbol || null, authSource: auth.authSource },
-      }, { status: failures.length === 0 ? 200 : 502 });
+      }, { status: ok ? 200 : 502 });
     }
 
     const result = await executeConnector(connector, dryRun, symbol);
@@ -222,6 +244,8 @@ export async function POST(req: Request) {
   } catch (caught) {
     const error = caught as Error & { status?: number; result?: Record<string, unknown> };
     return NextResponse.json({ ok: false, error: error.message, result: error.result ?? null }, { status: error.status ?? 500 });
+  } finally {
+    if (leaseOwner) await releaseProductionWriteLease(leaseOwner).catch(() => undefined);
   }
 }
 

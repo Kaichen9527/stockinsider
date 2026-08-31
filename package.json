@@ -6,6 +6,7 @@
     "pg": "^8.18.0"
   },
   "scripts": {
+    "test:candidate-shadow-performance": "node scripts/run-node22.js --experimental-strip-types --test web/src/lib/candidate-research.test.ts web/src/lib/stage-classifier.test.ts web/src/lib/source-policy.test.ts && node --test scripts/candidate-shadow-performance-contract.test.mjs",
     "prevercel-build": "node scripts/assert_canonical_vercel_project.mjs",
     "vercel-build": "next build",
     "db:apply-schema": "node apply_schema.js",
@@ -135,7 +136,7 @@
     "typecheck:source-led-opportunity-v3": "node scripts/run-node22.js web/node_modules/typescript/bin/tsc -p web/tsconfig.json --noEmit --pretty false",
     "lint:source-led-opportunity-v3": "npm --prefix web run lint -- --quiet",
     "build:source-led-opportunity-v3": "npm --prefix web run build",
-    "diagnostic:source-led-opportunity-v3:product-runtime": "npm run typecheck:source-led-opportunity-v3 && npm run lint:source-led-opportunity-v3 && npm run build:source-led-opportunity-v3 && npm run test:source-led-opportunity-v3 && npm run test:source-led-opportunity-v3:product-correctness && npm run test:source-led-opportunity-v3:migration && npm run test:legacy-v1-v2-regression && npm --prefix web run test:e2e:v3-correctness && npm run test:source-led-opportunity-v3:performance",
+    "diagnostic:source-led-opportunity-v3:product-runtime": "npm run typecheck:source-led-opportunity-v3 && npm run lint:source-led-opportunity-v3 && npm run test:candidate-shadow-performance && npm run build:source-led-opportunity-v3 && npm run test:source-led-opportunity-v3 && npm run test:source-led-opportunity-v3:product-correctness && npm run test:source-led-opportunity-v3:migration && npm run test:legacy-v1-v2-regression && npm --prefix web run test:e2e:v3-correctness && npm run test:source-led-opportunity-v3:performance",
     "verify:source-led-opportunity-v3:product-runtime": "node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track product_runtime && npm run diagnostic:source-led-opportunity-v3:product-runtime",
     "verify:source-led-opportunity-v3:evaluation-governance": "node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track evaluation_governance && node scripts/run-node22.js --experimental-strip-types --test --test-name-pattern=\"evaluation and product-value readiness|hybrid verified-change product boundary\" web/src/lib/opportunity-v3/opportunity-v3.test.ts && node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/evaluation-governance-gate.mjs --require-backtest-dates 120 --require-live-dates 20 --require-attempt-roster 252",
     "verify:source-led-opportunity-v3:model-runner": "node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track model_runner && npm run test:model-runner-v3 && npm run v3:doctor -- --expect-mode disabled --require-host-pin model-runner-host-pins-v3.13",

@@ -2,10 +2,11 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import type { DiscoveredStockCard, RadarDailyPayload, RecommendationCard, SourceSignalCard, ThemeHeatCard } from '@/lib/types';
+import type { CandidateStageCard, DiscoveredStockCard, RadarDailyPayload, RecommendationCard, SourceSignalCard, ThemeHeatCard } from '@/lib/types';
 import { validatePublishedDecisionCard } from '@/lib/opportunity-v3/decision-publication';
 import { displayResearchDiagnostic } from '@/lib/opportunity-v3/research-display';
 import { sourceSignalLifecycleStage, type CandidateLifecycleStage } from '@/lib/stage-classifier';
+import { hasCandidateStageCards } from '@/lib/candidate-stage-contract';
 
 type Props = {
   radar: RadarDailyPayload;
@@ -441,8 +442,81 @@ export function StockCard({ rec, isPrimary }: { rec: RecommendationCard; isPrima
 	  );
 	}
 
+const candidateConditionLabel: Record<string, string> = {
+  research_score_below_55: '研究分數未達 55', data_confidence_below_55: '資料信心未達 55',
+  bear_base_bull_missing: '缺少 bear/base/bull 完整估值', base_upside_below_8: 'Base 上行空間未達 8%',
+  reward_risk_below_1: '報酬風險比未達 1', research_score_below_70: '研究分數未達 70',
+  actionability_below_65: '行動分數未達 65', data_confidence_below_75: '資料信心未達 75',
+  base_upside_below_12: 'Base 上行空間未達 12%', reward_risk_below_1_5: '報酬風險比未達 1.5',
+  requires_two_consecutive_closes: '等待第二個相鄰收盤日確認', technical_hard_gate_failed: '技術硬門檻尚未通過',
+  stale_or_fallback_data: '資料過期或仍是 fallback', market_risk_off_blocks_new_actionable: '大盤 risk-off 暫停新增行動',
+  market_breakdown_forces_downgrade: '大盤 breakdown 強制降級', negative_overseas_peer_catchdown: '海外同業補跌風險阻擋',
+  market_regime_missing: '缺少可用的大盤狀態',
+};
+
+function CandidateStageCardView({ card }: { card: CandidateStageCard }) {
+  return (
+    <article className="rounded-[1.5rem] border border-line bg-surface-strong p-5" data-testid={`candidate-stage-${card.symbol}`}>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="text-xs tracking-[0.18em] text-slate-500 dark:text-emerald-100/50">{card.symbol} · {card.lifecycleStage.toUpperCase()}</p>
+          <Link href={card.detailHref} className="mt-1 block text-xl font-semibold hover:text-accent">{card.chineseName}</Link>
+          <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/55">來源 {card.mentionCount} 筆 · 最新 {formatTaipeiDateTime(card.latestMentionAt, 'compact')}</p>
+        </div>
+        <div className="rounded-2xl border border-line px-3 py-2 text-right text-xs">
+          <p>研究 {card.scores.research.toFixed(1)} · 行動 {card.scores.actionability.toFixed(1)}</p>
+          <p className="mt-1">信心 {card.scores.dataConfidence.toFixed(1)} · 收盤確認 {card.consecutiveCloses.passed}/2</p>
+        </div>
+      </div>
+      <div className="mt-4 grid gap-2 text-xs sm:grid-cols-3">
+        <div className="rounded-xl bg-slate-950/5 p-3 dark:bg-white/5"><span className="text-slate-500">現價</span><strong className="mt-1 block">{card.valuation.currentPrice?.toFixed(2) ?? '待補'}</strong></div>
+        <div className="rounded-xl bg-slate-950/5 p-3 dark:bg-white/5"><span className="text-slate-500">Base 目標</span><strong className="mt-1 block">{card.valuation.baseTarget?.toFixed(2) ?? '待補'}</strong></div>
+        <div className="rounded-xl bg-slate-950/5 p-3 dark:bg-white/5"><span className="text-slate-500">Base 空間</span><strong className="mt-1 block">{card.valuation.baseUpsidePct == null ? '待補' : `${card.valuation.baseUpsidePct.toFixed(1)}%`}</strong></div>
+      </div>
+      <div className="mt-4 flex flex-wrap gap-2 text-xs">
+        {card.sources.slice(0, 5).map((source, index) => (
+          <a key={`${source.sourceUrl}-${index}`} href={source.sourceUrl} target="_blank" rel="noreferrer" className="rounded-full border border-line px-3 py-1 hover:border-accent">
+            {source.platform}{source.author ? ` · ${source.author}` : ''}{source.stance ? ` · ${source.stance}` : ''}
+          </a>
+        ))}
+      </div>
+      <div className="mt-4 rounded-xl border border-line p-3 text-xs leading-5 text-slate-600 dark:text-emerald-100/65">
+        <p className="font-semibold text-slate-800 dark:text-emerald-50">尚未達成</p>
+        <p className="mt-1">{card.unmetConditions.length ? card.unmetConditions.slice(0, 5).map((item) => candidateConditionLabel[item] || item).join('、') : '目前條件已通過'}</p>
+        <p className="mt-2 text-slate-500">技術日 {card.technical.sessionDate || '待補'} · MA20 {card.technical.ma20?.toFixed(2) ?? '-'} · MA60 {card.technical.ma60?.toFixed(2) ?? '-'} · RSI {card.technical.rsi14?.toFixed(1) ?? '-'}</p>
+      </div>
+    </article>
+  );
+}
+
+function CandidateStagesView({ radar }: { radar: RadarDailyPayload }) {
+  const [selected, setSelected] = useState<'found' | 'waiting' | 'actionable'>('found');
+  const stages = radar.stages!;
+  const closest = [...stages.waiting].sort((a, b) => b.scores.actionability - a.scores.actionability || b.scores.dataConfidence - a.scores.dataConfidence).slice(0, 5);
+  const actual = stages[selected];
+  const displayed = selected === 'actionable' && actual.length === 0 ? closest : actual;
+  const shadow = radar.shadowProgress;
+  return (
+    <div>
+      <div role="tablist" aria-label="股票三層漏斗" className="mb-6 grid gap-2 rounded-2xl border border-line bg-surface-strong p-2 sm:grid-cols-3">
+        {(['found','waiting','actionable'] as const).map((stage) => (
+          <button key={stage} role="tab" aria-selected={selected === stage} onClick={() => setSelected(stage)} className={`rounded-xl px-4 py-3 text-left text-sm font-semibold ${selected === stage ? 'bg-slate-950 text-white dark:bg-emerald-100 dark:text-slate-950' : 'text-slate-600 dark:text-emerald-100/65'}`}>
+            {stage === 'found' ? '全部來源命中' : stage === 'waiting' ? '等待條件' : '現在可行動'} <span className="ml-2 text-xs">{stages[stage].length}</span>
+          </button>
+        ))}
+      </div>
+      {selected === 'actionable' ? <p className="mb-4 rounded-2xl border border-amber-500/25 bg-amber-500/8 px-5 py-4 text-sm text-amber-800 dark:text-amber-200">實驗訊號 · live {shadow?.qualifying ?? 0}/{shadow?.required ?? 30}（已觀察 {shadow?.observed ?? 0} 個真實交易日）。{actual.length === 0 && closest.length ? `目前未達完整硬門檻，以下顯示最接近的 ${closest.length} 檔等待標的。` : ''}</p> : null}
+      <div className="grid gap-4 xl:grid-cols-2">
+        {displayed.map((card) => <CandidateStageCardView key={`${selected}-${card.symbol}`} card={card} />)}
+      </div>
+      {displayed.length === 0 ? <p className="rounded-2xl border border-dashed border-line px-5 py-6 text-sm text-slate-500">{selected === 'found' ? '最近七日沒有有效股票來源命中。' : selected === 'waiting' ? '目前沒有完成最低研究與估值門檻的等待標的。' : '目前沒有通過全部硬門檻的可行動標的。'}</p> : null}
+    </div>
+  );
+}
+
 function StocksTab({ radar }: { radar: RadarDailyPayload }) {
   const [selectedStage, setSelectedStage] = useState<'found' | 'waiting' | 'actionable'>('found');
+  if (hasCandidateStageCards(radar)) return <CandidateStagesView radar={radar} />;
   const decisionActionOrder = { buy: 0, accumulate: 1, research_starter: 2, wait_value:3,wait_market:4,wait_breakout: 5,
     wait_reclaim: 6, wait_refresh: 7, avoid_chase: 8, unavailable: 9, avoid: 10, data_needed: 11, ready: 12 } as const;
   const effectiveAction=(signal:SourceSignalCard)=>{
@@ -456,12 +530,7 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
     ||validatePublishedDecisionCard(signal as unknown as Record<string,unknown>)!==null;
   const radarAsOfMs = Date.parse(radar.asOf);
   const sevenDayCutoff = Number.isFinite(radarAsOfMs) ? radarAsOfMs - 7 * 24 * 60 * 60 * 1000 : null;
-  const stagedDetailBySymbol = new Map((radar.stages?.found || []).map((signal) => [signal.symbol, signal]));
   const rankedResearch = [...(radar.sourceSignals ?? [])]
-    .map((signal) => {
-      const staged = stagedDetailBySymbol.get(signal.symbol);
-      return staged ? { ...signal, stageAssessment: staged.stageAssessment, sourceProvenances: staged.sourceProvenances ?? signal.sourceProvenances } : signal;
-    })
     .filter((signal) => {
       if (signal.projectionReadOnly === true) return true;
       if (sevenDayCutoff == null) return true;
@@ -472,8 +541,8 @@ function StocksTab({ radar }: { radar: RadarDailyPayload }) {
       - decisionActionOrder[effectiveAction(right)])
       || (right.underreactionScore ?? 0) - (left.underreactionScore ?? 0));
   const persistedStageSymbols = {
-    waiting: new Set((radar.stages?.waiting || []).map((signal) => signal.symbol)),
-    actionable: new Set((radar.stages?.actionable || []).map((signal) => signal.symbol)),
+    waiting: new Set(rankedResearch.filter((signal) => sourceSignalLifecycleStage(signal) === 'waiting').map((signal) => signal.symbol)),
+    actionable: new Set(rankedResearch.filter((signal) => sourceSignalLifecycleStage(signal) === 'actionable').map((signal) => signal.symbol)),
   };
   const byStage = (stage: CandidateLifecycleStage) => rankedResearch.filter((signal) => {
     if (stage === 'waiting') return persistedStageSymbols.waiting.has(signal.symbol);
@@ -1315,7 +1384,7 @@ export function RadarTabs({ radar }: Props) {
 
   const visibleStockCount = new Set([
     ...(radar.opportunities || []), ...(radar.scenarioUpsideCandidates || []),
-    ...(radar.earlyWatchlist || []), ...(radar.hotTracking || []), ...(radar.sourceSignals || []),
+    ...(radar.earlyWatchlist || []), ...(radar.hotTracking || []), ...(radar.sourceSignals || []), ...(radar.stages?.found || []),
   ].filter((item) => Boolean(item.symbol)).map((item) => item.symbol)).size;
   const tabs: { key: TabKey; label: string; count: number }[] = [
     {
@@ -1327,6 +1396,7 @@ export function RadarTabs({ radar }: Props) {
     { key: 'discovery', label: '社群發現', count: new Set([
       ...(radar.discoveredStocks || []).filter((item) => Boolean(item.chineseName)).map((item) => item.symbol),
       ...(radar.sourceSignals || []).map((item) => item.symbol),
+      ...(radar.stages?.found || []).map((item) => item.symbol),
     ]).size },
   ];
 

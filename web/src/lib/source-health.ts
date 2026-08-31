@@ -36,6 +36,7 @@ export function classifySourceSyncTerminal(
   const matched = Number(result.matchedDirectHits || 0) + Number(result.matchedIndustryHits || 0);
   const reason = `${result.errorCode || ''} ${result.degradedReason || ''}`;
   if (/auth|oauth|credential|login|vault|token/iu.test(reason)) return 'auth_failed';
+  if (/parser|parse_zero|zero_messages/iu.test(reason)) return 'parser_failed';
   if (result.timedOut) return 'failed';
   if (written > 0 && reason.trim()) return 'partial';
   if (written > 0) return 'success';

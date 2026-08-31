@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { requireExactInternalBearer, requireInternalAuth } from './internal-auth.ts';
-import { activeSourceConnectorKeys, APPROVED_TELEGRAM_PUBLIC_CHANNELS, RETIRED_SOURCE_CONNECTORS, sourceExecutionPolicy } from './source-policy.ts';
+import { activeSourceConnectorKeys, APPROVED_TELEGRAM_PUBLIC_CHANNELS, RETIRED_SOURCE_CONNECTORS, scheduledSourceConnectorKeys, sourceExecutionPolicy } from './source-policy.ts';
 
 const ENV_KEYS = [
   'INTERNAL_API_KEY', 'CRON_SECRET', 'THREADS_OFFICIAL_API_ENABLED',
@@ -70,5 +70,6 @@ test('connector=all includes only sources authorized in the current runtime', ()
   });
   withEnvironment({ THREADS_OFFICIAL_API_ENABLED: 'true', TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED: 'true' }, () => {
     assert.deepEqual(activeSourceConnectorKeys(), ['telegram', 'threads', 'gdelt', 'twse_insider']);
+    assert.deepEqual(scheduledSourceConnectorKeys(), ['telegram', 'gdelt', 'twse_insider']);
   });
 });

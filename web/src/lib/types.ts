@@ -1631,6 +1631,69 @@ export interface SourceSignalCard {
   }>;
 }
 
+export interface CandidateStageCard {
+  symbol: string;
+  chineseName: string;
+  market: 'TW' | 'US';
+  lifecycleStage: 'found' | 'waiting' | 'actionable';
+  latestMentionAt: string;
+  mentionCount: number;
+  sources: Array<{
+    platform: string;
+    author: string | null;
+    sourceUrl: string;
+    stance: 'positive' | 'negative' | 'neutral' | 'mixed' | null;
+    mentionedAt: string;
+  }>;
+  scores: {
+    discovery: number;
+    research: number;
+    actionability: number;
+    dataConfidence: number;
+  };
+  valuation: {
+    status: 'complete' | 'missing' | 'stale';
+    currentPrice: number | null;
+    bearTarget: number | null;
+    baseTarget: number | null;
+    bullTarget: number | null;
+    probabilityWeightedTarget: number | null;
+    baseUpsidePct: number | null;
+    bearDownsidePct: number | null;
+    rewardRiskRatio: number | null;
+    method: string | null;
+  };
+  technical: {
+    sessionDate: string | null;
+    close: number | null;
+    ma20: number | null;
+    ma60: number | null;
+    ma120: number | null;
+    ma240: number | null;
+    rsi14: number | null;
+    volumeRatio20Median: number | null;
+    marketRegime: string;
+    hardGatePassed: boolean;
+  };
+  consecutiveCloses: { passed: number; required: 2; technicalSessionDate: string | null };
+  classificationReplayHash: string | null;
+  unmetConditions: string[];
+  promotionReasons: string[];
+  dataAsOf: string | null;
+  stale: boolean;
+  detailHref: string;
+}
+
+export interface CandidateShadowProgress {
+  observed: number;
+  qualifying: number;
+  required: 30;
+  remaining: number;
+  startedOn: string | null;
+  latestSession: string | null;
+  blockers: string[];
+}
+
 export interface DiscoveryDeltaV311 {
   added: string[];
   exited: string[];
@@ -1647,10 +1710,14 @@ export interface RadarDailyPayload {
   };
   loadStatus?: 'ok' | 'degraded' | 'unavailable';
   loadWarnings?: string[];
+  schemaVersion?: 'radar-public-v2';
+  snapshotPublishedAt?: string | null;
+  snapshotStale?: boolean;
+  shadowProgress?: CandidateShadowProgress;
   stages?: {
-    found: SourceSignalCard[];
-    waiting: SourceSignalCard[];
-    actionable: SourceSignalCard[];
+    found: CandidateStageCard[];
+    waiting: CandidateStageCard[];
+    actionable: CandidateStageCard[];
   };
   projectionHealth?: {
     status: 'fresh' | 'stale_readonly' | 'unavailable';

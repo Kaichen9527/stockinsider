@@ -1,12 +1,6 @@
 name: Public Source Refresh
 
 on:
-  schedule:
-    # Asia/Taipei 06:30, 12:30, 18:30 and 23:30.
-    - cron: '30 22 * * *'
-    - cron: '30 4 * * *'
-    - cron: '30 10 * * *'
-    - cron: '30 15 * * *'
   workflow_dispatch:
     inputs:
       dry_run:

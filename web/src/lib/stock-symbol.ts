@@ -16,3 +16,16 @@ export function normalizeRelatedStockSymbols(values: unknown, stockSymbolById: R
   }
   return output;
 }
+
+export function normalizeSourceDocumentSymbols(value: unknown, fallback: string[] = []): string[] {
+  let values: unknown[] = [];
+  if (Array.isArray(value)) values = value;
+  else if (typeof value === 'string') values = value.split(/[\s,，、;；|/]+/u);
+  else if (value && typeof value === 'object') {
+    const row = value as Record<string, unknown>;
+    const nested = row.symbols ?? row.symbol ?? row.stock_symbols ?? row.stock_symbol ?? row.code;
+    values = Array.isArray(nested) ? nested : nested == null ? [] : [nested];
+  }
+  const normalized = normalizeRelatedStockSymbols(values);
+  return normalized.length > 0 ? normalized : normalizeRelatedStockSymbols(fallback);
+}
