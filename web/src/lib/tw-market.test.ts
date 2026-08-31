@@ -1,6 +1,44 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { isOfficialValuationSourceUrl, parseTpexTradingStockRows, parseTpexValuationPanel, parseTwseStockValuationHistory, parseTwseValuationPanel, selectOfficialValuationBackfillMonths } from './tw-market.ts';
+import { fetchOfficialJson, isOfficialValuationSourceUrl, parseTpexTradingStockRows, parseTpexValuationPanel, parseTwseStockValuationHistory, parseTwseValuationPanel, resetOfficialMarketRequestStateForTests, selectOfficialValuationBackfillMonths } from './tw-market.ts';
+
+test('a single transient official-host failure does not blackhole the next request', async (t) => {
+  const originalFetch = globalThis.fetch;
+  let calls = 0;
+  t.after(() => {
+    globalThis.fetch = originalFetch;
+    resetOfficialMarketRequestStateForTests();
+  });
+  resetOfficialMarketRequestStateForTests();
+  globalThis.fetch = (async () => {
+    calls += 1;
+    if (calls === 1) throw new Error('transient_official_timeout');
+    return new Response(JSON.stringify({ stat: 'OK' }), { status: 200, headers: { 'content-type': 'application/json' } });
+  }) as typeof fetch;
+
+  assert.equal(await fetchOfficialJson<{ stat: string }>('https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20260801&stockNo=2330&response=json', 1_000), null);
+  assert.deepEqual(await fetchOfficialJson<{ stat: string }>('https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20260801&stockNo=2330&response=json', 1_000), { stat: 'OK' });
+});
+
+test('a non-retryable official response breaks the host failure streak', async (t) => {
+  const originalFetch = globalThis.fetch;
+  let calls = 0;
+  t.after(() => {
+    globalThis.fetch = originalFetch;
+    resetOfficialMarketRequestStateForTests();
+  });
+  resetOfficialMarketRequestStateForTests();
+  globalThis.fetch = (async () => {
+    calls += 1;
+    if ([1, 3, 5].includes(calls)) throw new Error('transient_official_timeout');
+    if ([2, 4].includes(calls)) return new Response('', { status: 404 });
+    return new Response(JSON.stringify({ stat: 'OK' }), { status: 200, headers: { 'content-type': 'application/json' } });
+  }) as typeof fetch;
+
+  const url = 'https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20260801&stockNo=2330&response=json';
+  for (let attempt = 0; attempt < 5; attempt += 1) assert.equal(await fetchOfficialJson<{ stat: string }>(url, 1_000), null);
+  assert.deepEqual(await fetchOfficialJson<{ stat: string }>(url, 1_000), { stat: 'OK' });
+});
 
 test('valuation cache accepts only official TWSE and TPEx history endpoints', () => {
   assert.equal(isOfficialValuationSourceUrl('https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?date=20260828&selectType=ALL&response=json'), true);
