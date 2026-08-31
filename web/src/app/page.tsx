@@ -6,7 +6,7 @@ import { ShadowOpportunityV3 } from './components/ShadowOpportunityV3';
 import { loadOpportunityEngineV3 } from '@/lib/opportunity-v3/projection';
 import { layerHomepageOpportunityV3, v3PublicEnabled } from '@/lib/opportunity-v3/deployment';
 import { loadPublishedRadarProjection } from '@/lib/radar-projection-read';
-import { loadLatestRadarPublicSnapshot } from '@/lib/radar-public-snapshot';
+import { loadLatestRadarPublicSnapshot, radarPublicSnapshotsEnabled } from '@/lib/radar-public-snapshot';
 import { hasCandidateStageCards } from '@/lib/candidate-stage-contract';
 
 export const dynamic = 'force-dynamic';
@@ -115,7 +115,8 @@ function wholeSecondUtcOrNow(value: string | null | undefined) {
 }
 
 export default async function Home() {
-  const publicSnapshot = await loadLatestRadarPublicSnapshot('home');
+  const snapshotReadsEnabled = radarPublicSnapshotsEnabled();
+  const publicSnapshot = snapshotReadsEnabled ? await loadLatestRadarPublicSnapshot('home') : null;
   const publishedRadar = publicSnapshot ? null : await loadPublishedRadarProjection('home');
   const legacyRadar = (publicSnapshot?.payload ?? publishedRadar ?? await getDailyRadarData()) as Awaited<ReturnType<typeof getDailyRadarData>>;
   const v3ProjectionCutoff = wholeSecondUtcOrNow(legacyRadar.asOf);
@@ -125,7 +126,9 @@ export default async function Home() {
     shadowEnabled: v3PublicEnabled() && !publicSnapshot,
   });
   const opportunityEngineV3 = layered.opportunityEngineV3;
-  const radar = hasCandidateStageCards(layered.radar) ? layered.radar : { ...layered.radar, stages: await getPersistedRadarStages() };
+  const radar = hasCandidateStageCards(layered.radar)
+    ? layered.radar
+    : { ...layered.radar, stages: snapshotReadsEnabled ? await getPersistedRadarStages() : { found: [], waiting: [], actionable: [] } };
   const symbolNameMap = new Map<string, string>();
   const revisionBoundSourceLed = ['legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0','legacy-radar-v3.20.0'].includes(radar.sourceLedCorrectness?.schema ?? '');
   const allCards = revisionBoundSourceLed ? [

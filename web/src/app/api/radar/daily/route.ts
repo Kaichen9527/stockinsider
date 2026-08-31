@@ -6,7 +6,7 @@ import { requireExactInternalBearer } from '@/lib/internal-auth';
 import { compactProducerRadarPayload } from '@/lib/radar-producer-payload';
 import { radarResponseHeaders } from '@/lib/radar-response-policy';
 import type { RadarDailyPayload } from '@/lib/types';
-import { loadLatestRadarPublicSnapshot } from '@/lib/radar-public-snapshot';
+import { loadLatestRadarPublicSnapshot, radarPublicSnapshotsEnabled } from '@/lib/radar-public-snapshot';
 import { hasCandidateStageCards } from '@/lib/candidate-stage-contract';
 
 export const dynamic = 'force-dynamic';
@@ -326,7 +326,9 @@ function compactRadarPayload(data: Record<string, unknown>) {
 
 async function withRadarStages(data: Record<string, unknown>) {
   const payload = data as unknown as RadarDailyPayload;
-  return hasCandidateStageCards(payload) ? data : { ...data, stages: await getPersistedRadarStages() };
+  if (hasCandidateStageCards(payload)) return data;
+  if (!radarPublicSnapshotsEnabled()) return { ...data, stages: { found: [], waiting: [], actionable: [] } };
+  return { ...data, stages: await getPersistedRadarStages() };
 }
 
 export async function GET(request: NextRequest) {
@@ -335,7 +337,7 @@ export async function GET(request: NextRequest) {
     if (producerRead && !requireExactInternalBearer(request)) {
       return NextResponse.json({ error: 'authentication_rejected' }, { status: 401, headers: NO_STORE });
     }
-    if (!producerRead) {
+    if (!producerRead && radarPublicSnapshotsEnabled()) {
       const published = await loadLatestRadarPublicSnapshot('daily');
       if (published) {
         const ageMs = Date.now() - Date.parse(published.contentAsOf);

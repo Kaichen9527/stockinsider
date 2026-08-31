@@ -6,6 +6,7 @@ const port = new URL(baseURL).port || '3101';
 const internalKey = process.env.E2E_INTERNAL_API_KEY || 'stockinsider-v3-e2e-internal-key';
 process.env.E2E_INTERNAL_API_KEY = internalKey;
 process.env.OPPORTUNITY_V3_UI_FIXTURE = 'enabled';
+process.env.RADAR_PUBLIC_SNAPSHOTS_ENABLED = 'disabled';
 
 export default defineConfig({
   testDir: './e2e',
@@ -16,7 +17,7 @@ export default defineConfig({
   use: { baseURL },
   webServer: skipWebServer ? undefined : {
     command: `bash -lc 'npm run build; set -a; source ../.env 2>/dev/null || true; set +a; DATA_MODE=demo SOURCE_LED_OPPORTUNITY_V3=disabled OPPORTUNITY_V3_UI_FIXTURE=enabled npm run start -- --port ${port}'`,
-    env: { ...process.env, INTERNAL_API_KEY: internalKey, DATA_MODE: 'demo', SOURCE_LED_OPPORTUNITY_V3: 'disabled', OPPORTUNITY_V3_UI_FIXTURE: 'enabled' },
+    env: { ...process.env, INTERNAL_API_KEY: internalKey, DATA_MODE: 'demo', SOURCE_LED_OPPORTUNITY_V3: 'disabled', OPPORTUNITY_V3_UI_FIXTURE: 'enabled', RADAR_PUBLIC_SNAPSHOTS_ENABLED: 'disabled' },
     url: baseURL,
     reuseExistingServer: false,
     timeout: 120_000,
