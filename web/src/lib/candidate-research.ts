@@ -222,7 +222,12 @@ export async function runCandidateResearchCycle(options: {
         stock.name = officialName;
         stock.storedName = officialName;
       }
-      const officialMultiples = officialValuationHistory.get(stock.symbol) || [];
+      // Cache and live official history may overlap on a monthly publication
+      // date. Deduplicate before the bulk UPSERT: PostgreSQL correctly rejects
+      // an ON CONFLICT batch that would update the same row twice.
+      const officialMultiples = [...new Map(
+        (officialValuationHistory.get(stock.symbol) || []).map((point) => [point.date, point]),
+      ).values()].sort((left, right) => left.date.localeCompare(right.date));
       const values = officialMultiples.at(-1) || null;
       const [fetchedBars, institutional, eps, fetchedRevenue, priorRevenueRes, historicalFundamentalsRes, priorStageRes, priorFlowsRes] = await Promise.all([
         fetchTwStockDailyBars(stock.symbol, 520),

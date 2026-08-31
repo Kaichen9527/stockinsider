@@ -28,6 +28,7 @@ test('valuation writes use the same official-session composite idempotency key a
   const research = readFileSync(new URL('../web/src/lib/candidate-research.ts', import.meta.url), 'utf8');
   assert.match(research, /onConflict: 'stock_id,session_date,model_version'/u);
   assert.doesNotMatch(research, /onConflict: 'session_model_key'/u);
+  assert.match(research, /new Map\(\s*\(officialValuationHistory\.get\(stock\.symbol\) \|\| \[\]\)\.map\(\(point\) => \[point\.date, point\]\)/u);
 });
 
 test('candidate research reads the durable official calendar and fails fast on an unavailable official host', () => {
