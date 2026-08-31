@@ -21716,7 +21716,11 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
     }
   }
   try {
-    const shouldRunIngestion = !skipIngestion;
+    // The scheduled core cycle is candidate-first and already acquires official
+    // price, chip, earnings, revenue and valuation inputs per candidate. Keep
+    // the legacy fixed-seed ingestion only in the manual full recovery mode so
+    // it cannot consume the 19:00 candidate research window.
+    const shouldRunIngestion = mode === 'full' && !skipIngestion;
     const ingestion = await executeStep(
       'ingestion',
       async () => runIngestionBatch({ dryRun }),
@@ -21740,7 +21744,7 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
     const revenueIngestion = await executeStep(
       'revenue_ingestion',
       async () => runRevenueIngestion({ dryRun }),
-      false,
+      mode !== 'full',
       { runId: 'skip-revenue-ingestion', dryRun, revenueRecords: 0, fundamentalRecords: 0 },
     );
 
