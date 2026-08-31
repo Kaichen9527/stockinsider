@@ -230,7 +230,7 @@ export async function runCandidateResearchCycle(options: {
       ).values()].sort((left, right) => left.date.localeCompare(right.date));
       const values = officialMultiples.at(-1) || null;
       const [fetchedBars, institutional, eps, fetchedRevenue, priorRevenueRes, historicalFundamentalsRes, priorStageRes, priorFlowsRes] = await Promise.all([
-        fetchTwStockDailyBars(stock.symbol, 520),
+        fetchTwStockDailyBars(stock.symbol, 520, marketSessions, exchangeBySymbol.get(stock.symbol) || null),
         fetchTwStockInstitutional(stock.symbol).catch(() => null),
         fetchTwStockEpsTtm(stock.symbol).catch(() => null),
         fetchTwStockRevenue(stock.symbol, 16).catch(() => null),
