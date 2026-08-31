@@ -24,6 +24,8 @@ const officialHostPace = new Map<string, Promise<void>>();
 const officialHostNextRequestAt = new Map<string, number>();
 const officialHostUnavailableUntil = new Map<string, number>();
 const officialHostConsecutiveFailures = new Map<string, number>();
+type DailyBar = { time: string; open: number; high: number; low: number; close: number; volume: number | null };
+const twseMarketDailyRows = new Map<string, Promise<Map<string, DailyBar>>>();
 
 async function withOfficialMarketSlot<T>(work: () => Promise<T>): Promise<T> {
   if (officialMarketActive >= OFFICIAL_MARKET_MAX_CONCURRENCY) {
@@ -71,6 +73,7 @@ export function resetOfficialMarketRequestStateForTests() {
   officialHostNextRequestAt.clear();
   officialHostUnavailableUntil.clear();
   officialHostConsecutiveFailures.clear();
+  twseMarketDailyRows.clear();
 }
 
 function recordOfficialHostSuccess(host: string) {
@@ -106,7 +109,7 @@ export async function fetchOfficialJson<T>(url: string, timeoutMs: number): Prom
         signal: AbortSignal.timeout(timeoutMs),
       });
         if (!response.ok) {
-          if (response.status === 403 || response.status === 429 || response.status >= 500) recordOfficialHostRetryableFailure(host);
+          if (response.status === 403 || response.status === 428 || response.status === 429 || response.status >= 500) recordOfficialHostRetryableFailure(host);
           else recordOfficialHostSuccess(host);
           return null;
         }
@@ -459,8 +462,65 @@ export async function fetchTwMarketValuationHistory(
   return histories;
 }
 
-export async function fetchTwStockDailyBars(symbol: string, daysBack = 120) {
-  const rows: Array<{ time: string; open: number; high: number; low: number; close: number; volume: number | null }> = [];
+function parseTwseMarketDailyRows(payload: Record<string, unknown>, session: string): Map<string, DailyBar> {
+  const table = (Array.isArray(payload.tables) ? payload.tables : [])
+    .find((value) => {
+      const fields = value && typeof value === 'object' && Array.isArray((value as Record<string, unknown>).fields)
+        ? (value as Record<string, unknown>).fields as unknown[]
+        : [];
+      return fields.includes('證券代號') && fields.includes('開盤價') && fields.includes('最高價') && fields.includes('最低價') && fields.includes('收盤價');
+    }) as Record<string, unknown> | undefined;
+  if (!table || !Array.isArray(table.fields) || !Array.isArray(table.data)) return new Map();
+  const fields = table.fields.map((value) => String(value));
+  const position = (field: string) => fields.indexOf(field);
+  const [symbolIndex, volumeIndex, openIndex, highIndex, lowIndex, closeIndex] = [
+    position('證券代號'), position('成交股數'), position('開盤價'), position('最高價'), position('最低價'), position('收盤價'),
+  ];
+  if ([symbolIndex, volumeIndex, openIndex, highIndex, lowIndex, closeIndex].some((index) => index < 0)) return new Map();
+  const result = new Map<string, DailyBar>();
+  for (const value of table.data) {
+    if (!Array.isArray(value)) continue;
+    const symbol = String(value[symbolIndex] || '').trim();
+    const open = ohlcNumber(value[openIndex]);
+    const high = ohlcNumber(value[highIndex]);
+    const low = ohlcNumber(value[lowIndex]);
+    const close = ohlcNumber(value[closeIndex]);
+    if (!/^\d{4}$/u.test(symbol) || open == null || high == null || low == null || close == null) continue;
+    result.set(symbol, { time: session, open, high, low, close, volume: ohlcNumber(value[volumeIndex]) });
+  }
+  return result;
+}
+
+async function fetchTwseMarketDailyRows(session: string): Promise<Map<string, DailyBar>> {
+  const cached = twseMarketDailyRows.get(session);
+  if (cached) return cached;
+  const request = (async () => {
+    const endpoint = new URL('https://www.twse.com.tw/exchangeReport/MI_INDEX');
+    endpoint.searchParams.set('response', 'json');
+    endpoint.searchParams.set('date', compactTwseDate(session));
+    endpoint.searchParams.set('type', 'ALLBUT0999');
+    const payload = await fetchOfficialJson<Record<string, unknown>>(endpoint.toString(), 12_000);
+    return payload ? parseTwseMarketDailyRows(payload, session) : new Map<string, DailyBar>();
+  })();
+  twseMarketDailyRows.set(session, request);
+  return request;
+}
+
+export async function fetchTwStockDailyBars(
+  symbol: string,
+  daysBack = 120,
+  officialSessions: string[] | null = null,
+  exchange: 'TWSE' | 'TPEx' | null = null,
+) {
+  if (exchange !== 'TPEx' && officialSessions && officialSessions.length > 0) {
+    const sessions = [...new Set(officialSessions.filter((session) => /^\d{4}-\d{2}-\d{2}$/u.test(session)))].sort().slice(-daysBack);
+    const rows = (await Promise.all(sessions.map(fetchTwseMarketDailyRows)))
+      .map((marketRows) => marketRows.get(symbol))
+      .filter((row): row is DailyBar => row != null)
+      .sort((left, right) => left.time.localeCompare(right.time));
+    if (rows.length > 0) return rows;
+  }
+  const rows: DailyBar[] = [];
   const monthCount = Math.min(36, Math.max(2, Math.ceil(daysBack / 18) + 2));
   const monthStarts = Array.from({ length: monthCount }, (_, offset) => {
     const value = new Date();
@@ -470,7 +530,15 @@ export async function fetchTwStockDailyBars(symbol: string, daysBack = 120) {
   });
   const monthlyResults = await Promise.all(monthStarts.map(async (date) => {
     try {
-      const payload = await fetchOfficialJson<{ stat?: string; data?: string[][] }>(`https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=${date}&stockNo=${encodeURIComponent(symbol)}&response=json`, 8_000);
+      // The newer `/rwd` endpoint is served behind a JavaScript-only CDN
+      // challenge from the VPS network.  Use TWSE's still-official JSON
+      // exchangeReport endpoint instead; it is a documented machine-readable
+      // endpoint and avoids treating an HTML challenge page as missing prices.
+      const endpoint = new URL('https://www.twse.com.tw/exchangeReport/STOCK_DAY');
+      endpoint.searchParams.set('response', 'json');
+      endpoint.searchParams.set('date', date);
+      endpoint.searchParams.set('stockNo', symbol);
+      const payload = await fetchOfficialJson<{ stat?: string; data?: string[][] }>(endpoint.toString(), 8_000);
       if (!payload) return [];
       if (payload.stat !== 'OK' || !Array.isArray(payload.data)) return [];
       return payload.data.flatMap((item) => {

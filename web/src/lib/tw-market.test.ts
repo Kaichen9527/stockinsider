@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { fetchOfficialJson, isOfficialValuationSourceUrl, parseTpexTradingStockRows, parseTpexValuationPanel, parseTwseStockValuationHistory, parseTwseValuationPanel, resetOfficialMarketRequestStateForTests, selectOfficialValuationBackfillMonths } from './tw-market.ts';
+import { fetchOfficialJson, fetchTwStockDailyBars, isOfficialValuationSourceUrl, parseTpexTradingStockRows, parseTpexValuationPanel, parseTwseStockValuationHistory, parseTwseValuationPanel, resetOfficialMarketRequestStateForTests, selectOfficialValuationBackfillMonths } from './tw-market.ts';
 
 test('a single transient official-host failure does not blackhole the next request', async (t) => {
   const originalFetch = globalThis.fetch;
@@ -59,6 +59,25 @@ test('queued official requests respect an open circuit instead of clearing it', 
   assert.equal(calls, 3);
 });
 
+test('a CDN challenge response opens the official host circuit instead of becoming a false missing-price result', async (t) => {
+  const originalFetch = globalThis.fetch;
+  let calls = 0;
+  t.after(() => {
+    globalThis.fetch = originalFetch;
+    resetOfficialMarketRequestStateForTests();
+  });
+  resetOfficialMarketRequestStateForTests();
+  globalThis.fetch = (async () => {
+    calls += 1;
+    return new Response('<html>challenge</html>', { status: 428, headers: { 'content-type': 'text/html' } });
+  }) as typeof fetch;
+
+  const url = 'https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20260828&type=ALLBUT0999';
+  const results = await Promise.all(Array.from({ length: 8 }, () => fetchOfficialJson<Record<string, unknown>>(url, 1_000)));
+  assert.deepEqual(results, Array(8).fill(null));
+  assert.equal(calls, 3);
+});
+
 test('official requests are serialized per host while other work is queued', async (t) => {
   const originalFetch = globalThis.fetch;
   let inFlight = 0;
@@ -79,6 +98,33 @@ test('official requests are serialized per host while other work is queued', asy
   const results = await Promise.all(['2330', '2303', '2317'].map((symbol) => fetchOfficialJson<{ stat: string }>(`https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20260801&stockNo=${symbol}&response=json`, 1_000)));
   assert.deepEqual(results, [{ stat: 'OK' }, { stat: 'OK' }, { stat: 'OK' }]);
   assert.equal(maxInFlight, 1);
+});
+
+test('candidate daily bars share the official all-stock market endpoint rather than the JavaScript-gated per-stock route', async (t) => {
+  const originalFetch = globalThis.fetch;
+  const requested: URL[] = [];
+  t.after(() => {
+    globalThis.fetch = originalFetch;
+    resetOfficialMarketRequestStateForTests();
+  });
+  resetOfficialMarketRequestStateForTests();
+  globalThis.fetch = (async (input) => {
+    requested.push(new URL(String(input)));
+    return new Response(JSON.stringify({
+      tables: [{
+        fields: ['證券代號', '證券名稱', '成交股數', '成交筆數', '成交金額', '開盤價', '最高價', '最低價', '收盤價'],
+        data: [['2880', '華南金', '1,234', '100', '30,000', '30.00', '31.00', '29.50', '30.50']],
+      }],
+    }), { status: 200, headers: { 'content-type': 'application/json' } });
+  }) as typeof fetch;
+
+  const bars = await fetchTwStockDailyBars('2880', 2, ['2026-08-27', '2026-08-28'], 'TWSE');
+  if (!bars) throw new Error('expected official TWSE daily bars');
+  assert.equal(bars.length, 2);
+  assert.equal(requested.length, 2);
+  assert.ok(requested.every((url) => url.pathname === '/exchangeReport/MI_INDEX'));
+  assert.ok(requested.every((url) => url.searchParams.get('response') === 'json'));
+  assert.ok(requested.every((url) => url.searchParams.get('type') === 'ALLBUT0999'));
 });
 
 test('valuation cache accepts only official TWSE and TPEx history endpoints', () => {
