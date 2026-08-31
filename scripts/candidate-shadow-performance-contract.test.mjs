@@ -57,6 +57,12 @@ test('orphaned production lease recovery remains authenticated, owner-bound and 
   assert.doesNotMatch(lease, /\.delete\(\)/u);
 });
 
+test('scheduled core pipeline is candidate-first and leaves legacy seed ingestion to manual full recovery', () => {
+  assert.match(domain, /const shouldRunIngestion = mode === 'full' && !skipIngestion/u);
+  assert.match(domain, /'revenue_ingestion',[\s\S]{0,180}mode !== 'full'/u);
+  assert.match(domain, /const candidateResearch = await executeStep\('candidate_research'/u);
+});
+
 test('Threads stays outside the VPS scheduler and the 20:00 monitor owns missing-run/publication alerts', () => {
   assert.match(sourcePolicy, /activeSourceConnectorKeys\(\)\.filter\(\(connector\) => connector !== 'threads'\)/u);
   assert.match(domain, /candidate_research_run_missing/u);
