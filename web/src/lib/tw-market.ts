@@ -17,11 +17,13 @@ const TWSTOCK_REQUEST_TIMEOUT_MS = 2500;
 const OFFICIAL_MARKET_MAX_CONCURRENCY = 4;
 const OFFICIAL_VALUATION_BACKFILL_MONTHS_PER_CYCLE = 12;
 const OFFICIAL_HOST_CIRCUIT_BREAKER_MS = 5 * 60 * 1000;
+const OFFICIAL_HOST_FAILURE_THRESHOLD = 3;
 let officialMarketActive = 0;
 const officialMarketWaiters: Array<() => void> = [];
 const officialHostPace = new Map<string, Promise<void>>();
 const officialHostNextRequestAt = new Map<string, number>();
 const officialHostUnavailableUntil = new Map<string, number>();
+const officialHostConsecutiveFailures = new Map<string, number>();
 
 async function withOfficialMarketSlot<T>(work: () => Promise<T>): Promise<T> {
   if (officialMarketActive >= OFFICIAL_MARKET_MAX_CONCURRENCY) {
@@ -57,7 +59,29 @@ async function waitForOfficialHostPace(url: string) {
   }
 }
 
-async function fetchOfficialJson<T>(url: string, timeoutMs: number): Promise<T | null> {
+export function resetOfficialMarketRequestStateForTests() {
+  officialMarketActive = 0;
+  officialMarketWaiters.length = 0;
+  officialHostPace.clear();
+  officialHostNextRequestAt.clear();
+  officialHostUnavailableUntil.clear();
+  officialHostConsecutiveFailures.clear();
+}
+
+function recordOfficialHostSuccess(host: string) {
+  officialHostConsecutiveFailures.delete(host);
+  officialHostUnavailableUntil.delete(host);
+}
+
+function recordOfficialHostRetryableFailure(host: string) {
+  const failures = (officialHostConsecutiveFailures.get(host) || 0) + 1;
+  officialHostConsecutiveFailures.set(host, failures);
+  if (failures >= OFFICIAL_HOST_FAILURE_THRESHOLD) {
+    officialHostUnavailableUntil.set(host, Date.now() + OFFICIAL_HOST_CIRCUIT_BREAKER_MS);
+  }
+}
+
+export async function fetchOfficialJson<T>(url: string, timeoutMs: number): Promise<T | null> {
   const host = new URL(url).hostname;
   if ((officialHostUnavailableUntil.get(host) || 0) > Date.now()) return null;
   try {
@@ -74,15 +98,17 @@ async function fetchOfficialJson<T>(url: string, timeoutMs: number): Promise<T |
       return { retryable: false, data: await response.json() as T };
     });
     if (result.data != null) {
-      officialHostUnavailableUntil.delete(host);
+      recordOfficialHostSuccess(host);
       return result.data;
     }
-    if (result.retryable) officialHostUnavailableUntil.set(host, Date.now() + OFFICIAL_HOST_CIRCUIT_BREAKER_MS);
+    if (result.retryable) recordOfficialHostRetryableFailure(host);
+    else recordOfficialHostSuccess(host);
     return null;
   } catch {
-    // One unreachable official host must not consume the whole research window.
-    // Later symbols fail closed while the durable last-good cache remains usable.
-    officialHostUnavailableUntil.set(host, Date.now() + OFFICIAL_HOST_CIRCUIT_BREAKER_MS);
+    // A single timeout or 5xx is transient evidence, not proof that every
+    // symbol and month on the host is unavailable. Open the host circuit only
+    // after consecutive retryable failures, then retain fail-closed behavior.
+    recordOfficialHostRetryableFailure(host);
     return null;
   }
 }
