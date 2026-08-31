@@ -21704,8 +21704,12 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
       throw error;
     }
   }
-  async function executeNonCriticalStep<T>(step: string, work: () => Promise<T>, fallbackValue: T): Promise<T> {
+  async function executeNonCriticalStep<T>(step: string, work: () => Promise<T>, fallbackValue: T, shouldSkip = false): Promise<T> {
     const stepStartedAt = Date.now();
+    if (shouldSkip) {
+      stepStatus.push({ step, status: 'skipped', durationMs: Date.now() - stepStartedAt });
+      return fallbackValue;
+    }
     try {
       const result = await work();
       stepStatus.push({ step, status: 'success', durationMs: Date.now() - stepStartedAt });
@@ -21763,6 +21767,7 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
     const recommendation = await executeNonCriticalStep('recommendation', async () =>
       runRecommendationBatch({ dryRun, timeoutMs: mode === 'core' && !dryRun ? Number(process.env.RECOMMENDATION_BATCH_TIMEOUT_MS || 600_000) : undefined }),
       recommendationFallback,
+      mode !== 'full',
     );
     let reportIngest: Record<string, unknown> = { runId: 'skip-report-ingest', dryRun, filesFound: 0, recordsWritten: 0 };
     let sourceSync: Array<Record<string, unknown>> = [];
