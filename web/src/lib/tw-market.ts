@@ -16,10 +16,12 @@ let twStockClientPromise: Promise<InstanceType<TwStockModule['TwStock']> | null>
 const TWSTOCK_REQUEST_TIMEOUT_MS = 2500;
 const OFFICIAL_MARKET_MAX_CONCURRENCY = 4;
 const OFFICIAL_VALUATION_BACKFILL_MONTHS_PER_CYCLE = 12;
+const OFFICIAL_HOST_CIRCUIT_BREAKER_MS = 5 * 60 * 1000;
 let officialMarketActive = 0;
 const officialMarketWaiters: Array<() => void> = [];
 const officialHostPace = new Map<string, Promise<void>>();
 const officialHostNextRequestAt = new Map<string, number>();
+const officialHostUnavailableUntil = new Map<string, number>();
 
 async function withOfficialMarketSlot<T>(work: () => Promise<T>): Promise<T> {
   if (officialMarketActive >= OFFICIAL_MARKET_MAX_CONCURRENCY) {
@@ -55,26 +57,34 @@ async function waitForOfficialHostPace(url: string) {
   }
 }
 
-async function fetchOfficialJson<T>(url: string, timeoutMs: number, attempts = 3): Promise<T | null> {
-  for (let attempt = 0; attempt < attempts; attempt += 1) {
-    try {
-      const result = await withOfficialMarketSlot(async () => {
-        await waitForOfficialHostPace(url);
-        const response = await fetch(url, {
-          headers: { accept: 'application/json', 'user-agent': 'StockInsider/2.1 official-market-data' },
-          signal: AbortSignal.timeout(timeoutMs),
-        });
-        if (!response.ok) return { retryable: response.status === 403 || response.status === 429 || response.status >= 500, data: null };
-        return { retryable: false, data: await response.json() as T };
+async function fetchOfficialJson<T>(url: string, timeoutMs: number): Promise<T | null> {
+  const host = new URL(url).hostname;
+  if ((officialHostUnavailableUntil.get(host) || 0) > Date.now()) return null;
+  try {
+    const result = await withOfficialMarketSlot(async () => {
+      if ((officialHostUnavailableUntil.get(host) || 0) > Date.now()) {
+        return { retryable: false, data: null };
+      }
+      await waitForOfficialHostPace(url);
+      const response = await fetch(url, {
+        headers: { accept: 'application/json', 'user-agent': 'StockInsider/2.1 official-market-data' },
+        signal: AbortSignal.timeout(timeoutMs),
       });
-      if (result.data != null) return result.data;
-      if (!result.retryable) return null;
-    } catch {
-      // Retry bounded official-source timeouts and transient network failures.
+      if (!response.ok) return { retryable: response.status === 403 || response.status === 429 || response.status >= 500, data: null };
+      return { retryable: false, data: await response.json() as T };
+    });
+    if (result.data != null) {
+      officialHostUnavailableUntil.delete(host);
+      return result.data;
     }
-    if (attempt + 1 < attempts) await delay(500 * (attempt + 1));
+    if (result.retryable) officialHostUnavailableUntil.set(host, Date.now() + OFFICIAL_HOST_CIRCUIT_BREAKER_MS);
+    return null;
+  } catch {
+    // One unreachable official host must not consume the whole research window.
+    // Later symbols fail closed while the durable last-good cache remains usable.
+    officialHostUnavailableUntil.set(host, Date.now() + OFFICIAL_HOST_CIRCUIT_BREAKER_MS);
+    return null;
   }
-  return null;
 }
 
 async function withTwStockTimeout<T>(promise: Promise<T>, timeoutMs = TWSTOCK_REQUEST_TIMEOUT_MS): Promise<T> {
@@ -401,7 +411,7 @@ export async function fetchTwMarketValuationHistory(
       const sourceUrl = `https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU?date=${monthStart}&stockNo=${encodeURIComponent(symbol)}&response=json`;
       // Historical gaps are retried by the next daily cycle. Avoid extending the
       // 19:00 production window with transient retries for non-current evidence.
-      const payload = await fetchOfficialJson<Record<string, unknown>>(sourceUrl, 8_000, 1);
+      const payload = await fetchOfficialJson<Record<string, unknown>>(sourceUrl, 8_000);
       return payload ? parseTwseStockValuationHistory(payload, sourceUrl).sort((left, right) => left.date.localeCompare(right.date)).at(-1) || null : null;
     }));
     const merged = new Map(history.map((point) => [point.date.slice(0, 7), point]));

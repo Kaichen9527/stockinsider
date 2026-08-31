@@ -96,7 +96,19 @@ export async function runCandidateResearchCycle(options: {
   if (dryRun) return { runId: randomUUID(), dryRun: true, candidateCount: 0, completedCount: 0, failedCount: 0, technicalSessionDate: null, items: [] };
   const supabase = getSupabaseServerClient();
   const runId = randomUUID();
-  const [master, marketSessions] = await Promise.all([fetchTwStockMaster(), fetchTwMarketTradingSessions(1320)]);
+  const [master, persistedSessionsRes] = await Promise.all([
+    fetchTwStockMaster(),
+    supabase.rpc('candidate_research_official_sessions', { p_cutoff: evaluatedAt, p_limit: 1320 }),
+  ]);
+  if (persistedSessionsRes.error) throw new Error(`official_trading_calendar_read_failed:${persistedSessionsRes.error.message}`);
+  let marketSessions = (((persistedSessionsRes.data as Array<{ session_date?: unknown }>) || [])
+    .map((row) => String(row.session_date || ''))
+    .filter((session) => /^\d{4}-\d{2}-\d{2}$/u.test(session)))
+    .sort();
+  // The database plane is an official, cutoff-bound authority cache maintained by
+  // the ingestion pipeline. Only bootstrap from the live endpoint when that plane
+  // has not yet accumulated enough sessions to classify two adjacent closes.
+  if (marketSessions.length < 2) marketSessions = await fetchTwMarketTradingSessions(1320);
   if (master.length === 0) throw new Error('official_stock_master_missing');
   if (marketSessions.length < 2) throw new Error('official_trading_calendar_missing');
   const latestMarketSession = marketSessions.at(-1)!;

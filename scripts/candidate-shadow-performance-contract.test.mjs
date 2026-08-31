@@ -3,6 +3,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import test from 'node:test';
 
 const migration = readFileSync(new URL('../migrations/20260831_candidate_shadow_performance.sql', import.meta.url), 'utf8');
+const calendarMigration = readFileSync(new URL('../migrations/20260831_candidate_research_official_calendar.sql', import.meta.url), 'utf8');
 const sourceWorkflow = readFileSync(new URL('../.github/workflows/source-refresh.yml', import.meta.url), 'utf8');
 const researchWorkflow = readFileSync(new URL('../.github/workflows/night-shift.yml', import.meta.url), 'utf8');
 const sourceTimer = readFileSync(new URL('../deployment/vps/systemd/stockinsider-source-refresh.timer', import.meta.url), 'utf8');
@@ -27,6 +28,21 @@ test('valuation writes use the same official-session composite idempotency key a
   const research = readFileSync(new URL('../web/src/lib/candidate-research.ts', import.meta.url), 'utf8');
   assert.match(research, /onConflict: 'stock_id,session_date,model_version'/u);
   assert.doesNotMatch(research, /onConflict: 'session_model_key'/u);
+});
+
+test('candidate research reads the durable official calendar and fails fast on an unavailable official host', () => {
+  const research = readFileSync(new URL('../web/src/lib/candidate-research.ts', import.meta.url), 'utf8');
+  const market = readFileSync(new URL('../web/src/lib/tw-market.ts', import.meta.url), 'utf8');
+  assert.match(calendarMigration, /CREATE OR REPLACE FUNCTION public\.candidate_research_official_sessions/u);
+  assert.match(calendarMigration, /authority\.market = 'TWSE'::public\.tw_market_v3/u);
+  assert.match(calendarMigration, /authority\.recorded_at <= p_cutoff/u);
+  assert.match(calendarMigration, /resolved\.semantic_heads = 1/u);
+  assert.match(calendarMigration, /GRANT EXECUTE[\s\S]*TO service_role/u);
+  assert.doesNotMatch(calendarMigration, /DROP TABLE|TRUNCATE/u);
+  assert.match(research, /supabase\.rpc\('candidate_research_official_sessions'/u);
+  assert.match(research, /if \(marketSessions\.length < 2\) marketSessions = await fetchTwMarketTradingSessions/u);
+  assert.match(market, /OFFICIAL_HOST_CIRCUIT_BREAKER_MS = 5 \* 60 \* 1000/u);
+  assert.match(market, /officialHostUnavailableUntil\.set\(host/u);
 });
 
 test('GitHub write workflows are manual-only and VPS timers own the approved cadence', () => {
