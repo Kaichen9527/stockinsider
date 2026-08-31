@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { buildConservativeOfficialScenario } from './candidate-valuation.ts';
+import { isCandidateHistoricalPriceAccessEnabled } from './candidate-research-policy.ts';
 
 const historicalPeRatios = [10, 12, 14, 16, 18, 20, 22, 24, 26, 28];
 const historicalPbRatios = [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7];
@@ -54,4 +55,10 @@ test('reported price and PE stay internally consistent when EPS dates differ', (
 
 test('insufficient historical multiple evidence does not create a target', () => {
   assert.equal(buildConservativeOfficialScenario({ price: 100, epsTtm: 5, peRatio: 20, pbRatio: null, revenueYoyPct: 20, sector: 'technology', historicalPeRatios: [18, 20], historicalPbRatios: [] }), null);
+});
+
+test('candidate historical research is enabled unless production explicitly blocks unavailable official history', () => {
+  assert.equal(isCandidateHistoricalPriceAccessEnabled(undefined), true);
+  assert.equal(isCandidateHistoricalPriceAccessEnabled('true'), true);
+  assert.equal(isCandidateHistoricalPriceAccessEnabled('false'), false);
 });

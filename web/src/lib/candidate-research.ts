@@ -20,6 +20,7 @@ import {
   type TwValuationHistoryPoint,
 } from './tw-market';
 import { buildConservativeOfficialScenario } from './candidate-valuation';
+import { isCandidateHistoricalPriceAccessEnabled } from './candidate-research-policy';
 import { scheduledSourceConnectorKeys, sourceExecutionPolicy } from './source-policy';
 import { loadLatestSourceRunLedger } from './source-run-ledger';
 import type { CandidateShadowProgress, CandidateStageCard } from './types';
@@ -93,7 +94,10 @@ export async function runCandidateResearchCycle(options: {
 }) {
   const dryRun = Boolean(options.dryRun);
   const evaluatedAt = new Date().toISOString();
-  if (dryRun) return { runId: randomUUID(), dryRun: true, candidateCount: 0, completedCount: 0, failedCount: 0, technicalSessionDate: null, items: [] };
+  if (dryRun) return {
+    runId: randomUUID(), dryRun: true, candidateCount: 0, completedCount: 0, failedCount: 0,
+    technicalSessionDate: null, blocked: false, terminalReason: null, items: [],
+  };
   const supabase = getSupabaseServerClient();
   const runId = randomUUID();
   const [master, persistedSessionsRes] = await Promise.all([
@@ -166,6 +170,41 @@ export async function runCandidateResearchCycle(options: {
   }
   const universe = [...candidates.values()];
   const exchangeBySymbol = new Map(master.map((stock) => [stock.symbol, stock.exchange]));
+  if (!isCandidateHistoricalPriceAccessEnabled()) {
+    const terminalReason = 'official_historical_price_access_unavailable';
+    const blockedRun = await supabase.from('candidate_research_runs').insert({
+      id: runId,
+      evaluation_at: evaluatedAt,
+      status: 'failed',
+      candidate_count: universe.length,
+      completed_count: 0,
+      failed_count: 0,
+      terminal_reason: terminalReason,
+      ruleset_version: STAGE_RULESET_VERSION,
+      model_version: CANDIDATE_RESEARCH_MODEL_VERSION,
+      pipeline_run_id: options.pipelineRunId || null,
+      summary: {
+        blocked: true,
+        terminal_reason: terminalReason,
+        latest_market_session: latestMarketSession,
+        candidate_count: universe.length,
+        remediation: 'configure an authorized historical TWSE/TPEx price feed before enabling candidate research',
+      },
+      finished_at: new Date().toISOString(),
+    });
+    if (blockedRun.error) throw new Error(blockedRun.error.message);
+    return {
+      runId,
+      dryRun: false,
+      candidateCount: universe.length,
+      completedCount: 0,
+      failedCount: 0,
+      technicalSessionDate: null,
+      blocked: true,
+      terminalReason,
+      items: [],
+    };
+  }
   const historyStart = new Date(evaluationReferenceMs);
   historyStart.setUTCFullYear(historyStart.getUTCFullYear() - 5);
   const cachedFundamentalsRes = universe.length === 0
@@ -456,7 +495,17 @@ export async function runCandidateResearchCycle(options: {
   const runUpdate = await supabase.from('candidate_research_runs').update({ status: failedCount === 0 ? 'success' : completedCount > 0 ? 'partial' : 'failed', completed_count: completedCount, failed_count: failedCount, technical_session_date: technicalSessionDate, terminal_reason: failedCount ? 'per_stock_failures' : null, summary: { items }, finished_at: new Date().toISOString() }).eq('id', runId);
   if (runUpdate.error) throw new Error(runUpdate.error.message);
   if (failClosedWriteFailures > 0) throw new Error(`candidate_fail_closed_snapshot_failed:${failClosedWriteFailures}`);
-  return { runId, dryRun: false, candidateCount: universe.length, completedCount, failedCount, technicalSessionDate, items };
+  return {
+    runId,
+    dryRun: false,
+    candidateCount: universe.length,
+    completedCount,
+    failedCount,
+    technicalSessionDate,
+    blocked: false,
+    terminalReason: failedCount ? 'per_stock_failures' : null,
+    items,
+  };
 }
 
 export async function loadCandidateStageCards(): Promise<{ found: CandidateStageCard[]; waiting: CandidateStageCard[]; actionable: CandidateStageCard[] }> {

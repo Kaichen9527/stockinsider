@@ -21704,7 +21704,13 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
       throw error;
     }
   }
-  async function executeNonCriticalStep<T>(step: string, work: () => Promise<T>, fallbackValue: T, shouldSkip = false): Promise<T> {
+  async function executeNonCriticalStep<T>(
+    step: string,
+    work: () => Promise<T>,
+    fallbackValue: T,
+    shouldSkip = false,
+    terminalFailure?: (result: T) => string | null,
+  ): Promise<T> {
     const stepStartedAt = Date.now();
     if (shouldSkip) {
       stepStatus.push({ step, status: 'skipped', durationMs: Date.now() - stepStartedAt });
@@ -21712,6 +21718,11 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
     }
     try {
       const result = await work();
+      const failure = terminalFailure?.(result) || null;
+      if (failure) {
+        stepStatus.push({ step, status: 'failed', durationMs: Date.now() - stepStartedAt, error: failure });
+        return result;
+      }
       stepStatus.push({ step, status: 'success', durationMs: Date.now() - stepStartedAt });
       return result;
     } catch (error) {
@@ -21752,11 +21763,31 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
       { runId: 'skip-revenue-ingestion', dryRun, revenueRecords: 0, fundamentalRecords: 0 },
     );
 
-    const candidateResearch = await executeStep('candidate_research', async () => runCandidateResearchCycle({
+    const candidateResearchFallback = {
+      runId: randomUUID(),
       dryRun,
-      pipelineRunId,
-      seedSymbols: TW_STORY_RESEARCH_SEEDS.map((seed) => ({ symbol: seed.symbol, name: seed.name, market: seed.market, sector: seed.sector })),
-    }));
+      candidateCount: 0,
+      completedCount: 0,
+      failedCount: 0,
+      technicalSessionDate: null,
+      blocked: true,
+      terminalReason: 'candidate_research_unavailable',
+      items: [],
+    };
+    const candidateResearch = await executeNonCriticalStep(
+      'candidate_research',
+      async () => runCandidateResearchCycle({
+        dryRun,
+        pipelineRunId,
+        seedSymbols: TW_STORY_RESEARCH_SEEDS.map((seed) => ({ symbol: seed.symbol, name: seed.name, market: seed.market, sector: seed.sector })),
+      }),
+      candidateResearchFallback,
+      false,
+      // A blocked official historical feed is a failed research step, not a
+      // successful empty cycle.  Keep source publication alive, but prevent a
+      // shadow observation or any new stage promotion from this run.
+      (result) => result.blocked ? `candidate_research_blocked:${result.terminalReason || 'unknown'}` : null,
+    );
 
     const recommendationFallback = {
       asOf: asIsoDate(nowIso()), written: 0, blocked: 0, runId: pipelineRunId,
