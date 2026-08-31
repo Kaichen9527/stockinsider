@@ -195,6 +195,7 @@ export async function publishRadarPublicSnapshots(input: {
 }
 
 export async function loadLatestRadarPublicSnapshot(window: PublicRadarWindow): Promise<PublishedRadarSnapshot | null> {
+  if (!radarPublicSnapshotsEnabled()) return null;
   const cached = memory.get(window);
   if (cached && cached.expiresAt > Date.now()) return cached.value;
   let supabase: ReturnType<typeof getSupabaseServerClient>;
