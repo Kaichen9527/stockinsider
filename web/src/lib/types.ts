@@ -2230,6 +2230,8 @@ export interface SourceSyncResult {
   errorCode?: string | null;
   matchedDirectHits?: number;
   matchedIndustryHits?: number;
+  /** Candidate source documents before de-duplication; distinct from symbol-hit counts. */
+  candidateDocuments?: number;
   timedOut?: boolean;
   degradedReason?: string | null;
   sessionMode?: 'persisted_session' | 'fresh_login' | 'cookie_fallback' | 'missing' | 'not_applicable';
