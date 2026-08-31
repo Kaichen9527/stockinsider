@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+import http from 'node:http';
+import https from 'node:https';
+
 const CANONICAL_APP_URL = 'https://stockinsider-three.vercel.app';
 
 function fail(message, details = null) {
@@ -25,17 +28,45 @@ try {
   fail('payload must be valid JSON');
 }
 
-const response = await fetch(`${appUrl}${endpoint}`, {
-  method: 'POST',
-  headers: {
-    authorization: `Bearer ${internalApiKey}`,
-    'content-type': 'application/json',
-  },
-  body: JSON.stringify(payload),
-  signal: AbortSignal.timeout(Number(process.env.INTERNAL_API_TIMEOUT_MS || 25 * 60 * 1000)),
-});
+const timeoutMs = Number(process.env.INTERNAL_API_TIMEOUT_MS || 25 * 60 * 1000);
+if (!Number.isFinite(timeoutMs) || timeoutMs <= 0) fail('INTERNAL_API_TIMEOUT_MS must be a positive number');
 
-const bodyText = await response.text();
+function postJson(urlText, bodyText) {
+  return new Promise((resolve, reject) => {
+    const url = new URL(urlText);
+    const transport = url.protocol === 'https:' ? https : http;
+    const request = transport.request(url, {
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${internalApiKey}`,
+        'content-type': 'application/json',
+        'content-length': Buffer.byteLength(bodyText),
+      },
+    }, (response) => {
+      const chunks = [];
+      response.on('data', (chunk) => chunks.push(chunk));
+      response.on('end', () => {
+        clearTimeout(deadline);
+        resolve({
+          ok: Boolean(response.statusCode && response.statusCode >= 200 && response.statusCode < 300),
+          status: response.statusCode || 0,
+          bodyText: Buffer.concat(chunks).toString('utf8'),
+        });
+      });
+    });
+    const deadline = setTimeout(() => {
+      request.destroy(new Error(`internal endpoint timed out after ${timeoutMs}ms`));
+    }, timeoutMs);
+    request.on('error', (error) => {
+      clearTimeout(deadline);
+      reject(error);
+    });
+    request.end(bodyText);
+  });
+}
+
+const response = await postJson(`${appUrl}${endpoint}`, JSON.stringify(payload));
+const bodyText = response.bodyText;
 let body;
 try {
   body = JSON.parse(bodyText);

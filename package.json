@@ -6,7 +6,7 @@
     "pg": "^8.18.0"
   },
   "scripts": {
-    "test:candidate-shadow-performance": "node scripts/run-node22.js --experimental-strip-types --test web/src/lib/candidate-research.test.ts web/src/lib/stage-classifier.test.ts web/src/lib/source-policy.test.ts && node --test scripts/candidate-shadow-performance-contract.test.mjs",
+    "test:candidate-shadow-performance": "node scripts/run-node22.js --experimental-strip-types --test web/src/lib/candidate-research.test.ts web/src/lib/stage-classifier.test.ts web/src/lib/source-policy.test.ts && node --test scripts/candidate-shadow-performance-contract.test.mjs scripts/call-internal-api.test.mjs",
     "prevercel-build": "node scripts/assert_canonical_vercel_project.mjs",
     "vercel-build": "next build",
     "db:apply-schema": "node apply_schema.js",
