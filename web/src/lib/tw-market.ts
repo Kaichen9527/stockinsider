@@ -282,6 +282,12 @@ export type TwValuationHistoryPoint = {
   sourceUrl: string;
 };
 
+export function isOfficialValuationSourceUrl(value: unknown) {
+  const sourceUrl = String(value || '');
+  return /https:\/\/www\.twse\.com\.tw\/rwd\/zh\/afterTrading\/BWIBBU(?:_d)?\?/u.test(sourceUrl)
+    || /https:\/\/www\.tpex\.org\.tw\/www\/zh-tw\/afterTrading\/peQryDate\?/u.test(sourceUrl);
+}
+
 export function parseTwseValuationPanel(payload: Record<string, unknown>, date: string, symbols: Set<string>) {
   const rows = Array.isArray(payload.data) ? payload.data as unknown[][] : [];
   const result = new Map<string, TwValuationHistoryPoint>();
@@ -342,13 +348,24 @@ export async function fetchTwMarketValuationHistory(
   tradingSessions: string[],
   monthsBack = 60,
   exchangeBySymbol?: Map<string, 'TWSE' | 'TPEx'>,
+  existingHistory?: Map<string, TwValuationHistoryPoint[]>,
 ) {
   const requestedSymbols = new Set(symbols.filter((symbol) => /^\d{4}$/u.test(symbol)));
   const latestSessionByMonth = new Map<string, string>();
   for (const session of [...tradingSessions].sort()) latestSessionByMonth.set(session.slice(0, 7), session);
   const sampleSessions = [...latestSessionByMonth.values()].sort().slice(-monthsBack);
   const histories = new Map<string, TwValuationHistoryPoint[]>();
-  await Promise.all(sampleSessions.map(async (session) => {
+  for (const symbol of requestedSymbols) {
+    const trusted = (existingHistory?.get(symbol) || []).filter((point) => isOfficialValuationSourceUrl(point.sourceUrl));
+    if (trusted.length > 0) histories.set(symbol, [...trusted]);
+  }
+  const latestSession = sampleSessions.at(-1);
+  const sessionsToFetch = sampleSessions.filter((session) => {
+    if (session === latestSession) return true;
+    const month = session.slice(0, 7);
+    return [...requestedSymbols].some((symbol) => !(histories.get(symbol) || []).some((point) => point.date.slice(0, 7) === month));
+  });
+  await Promise.all(sessionsToFetch.map(async (session) => {
     const compactDate = compactTwseDate(session);
     const tpexDate = session.replace(/-/g, '/');
     const [twsePayload, tpexPayload] = await Promise.all([

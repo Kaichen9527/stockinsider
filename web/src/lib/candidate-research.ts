@@ -16,6 +16,8 @@ import {
   fetchTwMarketTradingSessions,
   fetchTwStockMaster,
   fetchTwStockRevenue,
+  isOfficialValuationSourceUrl,
+  type TwValuationHistoryPoint,
 } from './tw-market';
 import { buildConservativeOfficialScenario } from './candidate-valuation';
 import { scheduledSourceConnectorKeys, sourceExecutionPolicy } from './source-policy';
@@ -147,7 +149,33 @@ export async function runCandidateResearchCycle(options: {
   }
   const universe = [...candidates.values()];
   const exchangeBySymbol = new Map(master.map((stock) => [stock.symbol, stock.exchange]));
-  const officialValuationHistory = await fetchTwMarketValuationHistory(universe.map((stock) => stock.symbol), marketSessions, 60, exchangeBySymbol);
+  const historyStart = new Date(evaluationReferenceMs);
+  historyStart.setUTCFullYear(historyStart.getUTCFullYear() - 5);
+  const cachedFundamentalsRes = universe.length === 0
+    ? { data: [] as Row[], error: null }
+    : await supabase.from('fundamental_snapshots')
+      .select('stock_id,as_of_date,pe_ratio,pb_ratio,source_url')
+      .in('stock_id', universe.map((stock) => stock.id))
+      .gte('as_of_date', historyStart.toISOString().slice(0, 10))
+      .lte('as_of_date', latestMarketSession)
+      .order('as_of_date', { ascending: true })
+      .limit(10000);
+  if (cachedFundamentalsRes.error) throw new Error(cachedFundamentalsRes.error.message);
+  const symbolByStockId = new Map(universe.map((stock) => [stock.id, stock.symbol]));
+  const cachedOfficialHistory = new Map<string, TwValuationHistoryPoint[]>();
+  for (const row of (cachedFundamentalsRes.data as Row[]) || []) {
+    const symbol = symbolByStockId.get(String(row.stock_id || ''));
+    const sourceUrl = String(row.source_url || '');
+    const date = String(row.as_of_date || '');
+    if (!symbol || !/^\d{4}-\d{2}-\d{2}$/u.test(date) || !isOfficialValuationSourceUrl(sourceUrl)) continue;
+    const point = { date, peRatio: numberOrNull(row.pe_ratio), pbRatio: numberOrNull(row.pb_ratio), sourceUrl };
+    const history = cachedOfficialHistory.get(symbol);
+    if (history) history.push(point);
+    else cachedOfficialHistory.set(symbol, [point]);
+  }
+  const officialValuationHistory = await fetchTwMarketValuationHistory(
+    universe.map((stock) => stock.symbol), marketSessions, 60, exchangeBySymbol, cachedOfficialHistory,
+  );
   const indexState = rowRelation(((marketRes.data as Row[]) || [])[0]?.index_state) || {};
   const marketAsOf = String(((marketRes.data as Row[]) || [])[0]?.as_of || '').slice(0, 10);
   const marketRegime = (marketAsOf === latestMarketSession && ['risk_on', 'selective', 'risk_off', 'breakdown'].includes(String(indexState.regime)) ? String(indexState.regime) : 'unknown') as MarketRiskRegime;
@@ -238,7 +266,7 @@ export async function runCandidateResearchCycle(options: {
       }
       const peByDate = new Map<string, number>();
       const pbByDate = new Map<string, number>();
-      const trustedHistoricalFundamentals = historicalFundamentals.filter((row) => /BWIBBU_d|peQryDate/u.test(String(row.source_url || '')));
+      const trustedHistoricalFundamentals = historicalFundamentals.filter((row) => isOfficialValuationSourceUrl(row.source_url));
       for (const row of trustedHistoricalFundamentals) {
         const pe = numberOrNull(row.pe_ratio);
         const pb = numberOrNull(row.pb_ratio);
