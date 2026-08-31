@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { fetchOfficialJson, isOfficialValuationSourceUrl, parseTpexTradingStockRows, parseTpexValuationPanel, parseTwseStockValuationHistory, parseTwseValuationPanel, resetOfficialMarketRequestStateForTests, selectOfficialValuationBackfillMonths } from './tw-market.ts';
+import { fetchOfficialJson, fetchTwStockDailyBars, isOfficialValuationSourceUrl, parseTpexTradingStockRows, parseTpexValuationPanel, parseTwseStockValuationHistory, parseTwseValuationPanel, resetOfficialMarketRequestStateForTests, selectOfficialValuationBackfillMonths } from './tw-market.ts';
 
 test('a single transient official-host failure does not blackhole the next request', async (t) => {
   const originalFetch = globalThis.fetch;
@@ -79,6 +79,31 @@ test('official requests are serialized per host while other work is queued', asy
   const results = await Promise.all(['2330', '2303', '2317'].map((symbol) => fetchOfficialJson<{ stat: string }>(`https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20260801&stockNo=${symbol}&response=json`, 1_000)));
   assert.deepEqual(results, [{ stat: 'OK' }, { stat: 'OK' }, { stat: 'OK' }]);
   assert.equal(maxInFlight, 1);
+});
+
+test('TWSE daily bars use the official exchangeReport JSON endpoint rather than the JavaScript-gated rwd route', async (t) => {
+  const originalFetch = globalThis.fetch;
+  const requested: URL[] = [];
+  t.after(() => {
+    globalThis.fetch = originalFetch;
+    resetOfficialMarketRequestStateForTests();
+  });
+  resetOfficialMarketRequestStateForTests();
+  globalThis.fetch = (async (input) => {
+    requested.push(new URL(String(input)));
+    return new Response(JSON.stringify({
+      stat: 'OK',
+      data: [['115/08/28', '1,234', '30.00', '31.00', '29.50', '30.50', '0.50', '100', '200']],
+    }), { status: 200, headers: { 'content-type': 'application/json' } });
+  }) as typeof fetch;
+
+  const bars = await fetchTwStockDailyBars('2880', 1);
+  if (!bars) throw new Error('expected official TWSE daily bars');
+  assert.equal(bars.length, 1);
+  assert.ok(requested.length >= 2);
+  assert.ok(requested.every((url) => url.pathname === '/exchangeReport/STOCK_DAY'));
+  assert.ok(requested.every((url) => url.searchParams.get('response') === 'json'));
+  assert.ok(requested.every((url) => url.searchParams.get('stockNo') === '2880'));
 });
 
 test('valuation cache accepts only official TWSE and TPEx history endpoints', () => {

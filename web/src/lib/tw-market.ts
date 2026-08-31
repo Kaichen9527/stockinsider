@@ -470,7 +470,15 @@ export async function fetchTwStockDailyBars(symbol: string, daysBack = 120) {
   });
   const monthlyResults = await Promise.all(monthStarts.map(async (date) => {
     try {
-      const payload = await fetchOfficialJson<{ stat?: string; data?: string[][] }>(`https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=${date}&stockNo=${encodeURIComponent(symbol)}&response=json`, 8_000);
+      // The newer `/rwd` endpoint is served behind a JavaScript-only CDN
+      // challenge from the VPS network.  Use TWSE's still-official JSON
+      // exchangeReport endpoint instead; it is a documented machine-readable
+      // endpoint and avoids treating an HTML challenge page as missing prices.
+      const endpoint = new URL('https://www.twse.com.tw/exchangeReport/STOCK_DAY');
+      endpoint.searchParams.set('response', 'json');
+      endpoint.searchParams.set('date', date);
+      endpoint.searchParams.set('stockNo', symbol);
+      const payload = await fetchOfficialJson<{ stat?: string; data?: string[][] }>(endpoint.toString(), 8_000);
       if (!payload) return [];
       if (payload.stat !== 'OK' || !Array.isArray(payload.data)) return [];
       return payload.data.flatMap((item) => {
