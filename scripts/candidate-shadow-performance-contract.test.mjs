@@ -52,6 +52,9 @@ test('official roster normalization happens before a missing price history can f
   assert.ok(normalizeAt >= 0);
   assert.ok(priceGateAt >= 0);
   assert.ok(normalizeAt < priceGateAt);
+  assert.match(research, /name: official\?\.name \|\| storedName, storedName/u);
+  assert.match(research, /officialName && officialName !== stock\.storedName/u);
+  assert.match(research, /stock\.storedName = officialName/u);
 });
 
 test('candidate technical features and the core scheduler remain bound to official completed sessions', () => {
