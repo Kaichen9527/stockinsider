@@ -1,5 +1,7 @@
 import { randomUUID } from 'crypto';
-import { normalizeRelatedStockSymbols } from './stock-symbol';
+import { normalizeRelatedStockSymbols, normalizeSourceDocumentSymbols } from './stock-symbol';
+import { loadActiveCandidateSourceErrors, loadCandidateShadowProgress, loadCandidateStageCards, recordCandidateShadowObservation, runCandidateResearchCycle } from './candidate-research';
+import { publishRadarPublicSnapshots } from './radar-public-snapshot';
 import { calculateTechnicalFeatures, normalizeInstitutionalFlows, type InstitutionalFlowDay } from './technical-features-v2';
 import { advanceActionableCloseStreak, classifyCandidateStage, sourceSignalLifecycleStage, STAGE_RULESET_VERSION, type MarketRiskRegime } from './stage-classifier';
 import { existsSync, readFileSync } from 'fs';
@@ -7,7 +9,7 @@ import path from 'path';
 import { Client as LineClient } from '@line/bot-sdk';
 import { getSupabaseServerClient } from './supabase-server';
 import { loadLatestSourceRunLedger } from './source-run-ledger';
-import { CLOUD_SOURCE_CONNECTORS, sourceExecutionPolicy } from './source-policy';
+import { scheduledSourceConnectorKeys, sourceExecutionPolicy } from './source-policy';
 import { isDemoMode } from './data-mode';
 import { mergeAuthoritativeDeepDiveLeaves } from './deep-dive-merge';
 import type {
@@ -80,6 +82,7 @@ import {
   fetchTwStockDailyBars,
   fetchTwStockEpsTtm,
   fetchTwStockInstitutional,
+  fetchTwMarketTradingSessions,
   fetchTwStockMarginTrades,
   fetchTwStockQuote,
   fetchTwStockRevenue,
@@ -6245,14 +6248,14 @@ function passiveComponentMlccTextMatches(text: string) {
 }
 
 function passiveComponentMlccDocMatches(doc: Row) {
-  const docSymbols = ((doc.symbols as string[]) || []).map(String);
+  const docSymbols = normalizeSourceDocumentSymbols(doc.symbols);
   if (docSymbols.some((symbol) => PASSIVE_COMPONENT_MLCC_SYMBOL_SET.has(symbol))) return true;
   return passiveComponentMlccTextMatches(`${String(doc.title || '')} ${String(doc.summary || '')} ${String(doc.content_text || '')}`);
 }
 
 function discoveryThemeDocMatches(theme: DiscoveryThemeTaxonomy, doc: Row) {
   const symbolSet = new Set<string>(theme.symbols.map((item) => String(item.symbol)));
-  const docSymbols = ((doc.symbols as string[]) || []).map(String);
+  const docSymbols = normalizeSourceDocumentSymbols(doc.symbols);
   if (docSymbols.some((symbol) => symbolSet.has(symbol))) return true;
   const text = `${String(doc.title || '')} ${String(doc.summary || '')} ${String(doc.content_text || '')}`.toLowerCase();
   return theme.keywords.some((keyword) => text.includes(keyword.toLowerCase()));
@@ -6260,7 +6263,7 @@ function discoveryThemeDocMatches(theme: DiscoveryThemeTaxonomy, doc: Row) {
 
 function discoveryThemeDocSymbols(theme: DiscoveryThemeTaxonomy, docs: Row[]) {
   const symbolSet = new Set<string>(theme.symbols.map((item) => String(item.symbol)));
-  return new Set(docs.flatMap((doc) => (((doc.symbols as string[]) || []).map(String).filter((symbol) => symbolSet.has(symbol)))));
+  return new Set(docs.flatMap((doc) => normalizeSourceDocumentSymbols(doc.symbols).filter((symbol) => symbolSet.has(symbol))));
 }
 
 function globalLeadLagBasketForTheme(themeKey: string | null | undefined) {
@@ -12444,7 +12447,7 @@ async function getDiscoveredStocks(): Promise<DiscoveredStockCard[]> {
 
     // 社群來源
     for (const doc of (socialRes.data as Row[]) || []) {
-      const symbols: string[] = [...((doc.symbols as string[]) || [])];
+      const symbols: string[] = normalizeSourceDocumentSymbols(doc.symbols);
       if (symbols.length === 0) {
         const extracted = extractSymbolsWithContext(`${String(doc.title || '')} ${String(doc.summary || '')}`);
         for (const sym of extracted) {
@@ -13934,7 +13937,15 @@ export async function getDailyRadarData(): Promise<RadarDailyPayload> {
   return getRadarPayload('daily');
 }
 
-export async function getPersistedRadarStages(sourceSignals: SourceSignalCard[]): Promise<NonNullable<RadarDailyPayload['stages']>> {
+export async function getPersistedRadarStages(): Promise<NonNullable<RadarDailyPayload['stages']>> {
+  return loadCandidateStageCards();
+}
+
+export async function getLegacyPersistedRadarStages(sourceSignals: SourceSignalCard[]): Promise<{
+  found: SourceSignalCard[];
+  waiting: SourceSignalCard[];
+  actionable: SourceSignalCard[];
+}> {
   const fallbackStages = () => ({
     found: [...sourceSignals],
     waiting: sourceSignals.filter((signal) => sourceSignalLifecycleStage(signal) === 'waiting'),
@@ -19377,7 +19388,7 @@ export async function runThemeScan(options?: { dryRun?: boolean }): Promise<Agen
         const relatedSymbolSet = new Set<string>(relatedSymbols.map(String));
         // Gather real social docs from source_raw_documents that mention any symbol in this theme
         const themeSocialDocs = allSocialDocs.filter((doc) => {
-          const docSymbols = (doc.symbols as string[]) || [];
+          const docSymbols = normalizeSourceDocumentSymbols(doc.symbols);
           return relatedSymbols.some((sym) => docSymbols.includes(sym));
         });
         const supportingEvidence = mergeSourceCoverage([
@@ -19392,7 +19403,7 @@ export async function runThemeScan(options?: { dryRun?: boolean }): Promise<Agen
               summary: String(doc.summary || doc.title || '來源命中此主題關聯股票。'),
               source_url: String(doc.document_url || '') || null,
               source_timestamp: String(doc.published_at || doc.collected_at || nowIso()),
-              symbols: ((doc.symbols as string[]) || relatedSymbols).map(String).filter((symbol) => relatedSymbolSet.has(symbol)),
+              symbols: normalizeSourceDocumentSymbols(doc.symbols, relatedSymbols).filter((symbol) => relatedSymbolSet.has(symbol)),
               confidence: toFiniteNumber(doc.confidence, 0.35),
               weight: communityWeightForSource(sourceType),
               verification_status: toFiniteNumber(doc.confidence, 0) >= 0.55 ? '部分證實' : '未證實',
@@ -19458,7 +19469,7 @@ export async function runThemeScan(options?: { dryRun?: boolean }): Promise<Agen
         }
       }
       const passiveDocs = allSocialDocs.filter(passiveComponentMlccDocMatches);
-      const passiveDocSymbols = new Set(passiveDocs.flatMap((doc) => ((doc.symbols as string[]) || []).map(String)));
+      const passiveDocSymbols = new Set(passiveDocs.flatMap((doc) => normalizeSourceDocumentSymbols(doc.symbols)));
       const passiveRelatedSymbols = PASSIVE_COMPONENT_MLCC_THEME.symbols.map((item) => item.symbol);
       const passiveCoverage = mergeSourceCoverage([
         ...passiveDocs.slice(0, 12).map((doc) => {
@@ -19471,7 +19482,7 @@ export async function runThemeScan(options?: { dryRun?: boolean }): Promise<Agen
             summary: String(doc.summary || doc.title || ''),
             source_url: String(doc.document_url || '') || null,
             source_timestamp: String(doc.published_at || doc.collected_at || nowIso()),
-            symbols: ((doc.symbols as string[]) || passiveRelatedSymbols).filter((symbol) => PASSIVE_COMPONENT_MLCC_SYMBOL_SET.has(String(symbol))),
+            symbols: normalizeSourceDocumentSymbols(doc.symbols, passiveRelatedSymbols).filter((symbol) => PASSIVE_COMPONENT_MLCC_SYMBOL_SET.has(String(symbol))),
             confidence: toFiniteNumber(doc.confidence, 0.5),
             weight: communityWeightForSource(sourceType),
             verification_status: toFiniteNumber(doc.confidence, 0.45) >= 0.55 ? '部分證實' : '未證實',
@@ -19531,7 +19542,7 @@ export async function runThemeScan(options?: { dryRun?: boolean }): Promise<Agen
               summary: String(doc.summary || doc.title || ''),
               source_url: String(doc.document_url || '') || null,
               source_timestamp: String(doc.published_at || doc.collected_at || nowIso()),
-              symbols: (((doc.symbols as string[]) || relatedSymbols).map(String)).filter((symbol) => relatedSymbols.includes(symbol)),
+              symbols: normalizeSourceDocumentSymbols(doc.symbols, relatedSymbols).filter((symbol) => relatedSymbols.includes(symbol)),
               confidence: toFiniteNumber(doc.confidence, 0.48),
               weight: communityWeightForSource(sourceType),
               verification_status: toFiniteNumber(doc.confidence, 0.45) >= 0.55 ? '部分證實' : '未證實',
@@ -19678,7 +19689,7 @@ export async function runStoryScan(options?: { dryRun?: boolean }): Promise<Agen
             const seed = TW_STORY_RESEARCH_SEEDS[index];
             // Social-first: prefer real docs from source_raw_documents
             const socialDocs = allSocialDocs.filter((doc) =>
-              ((doc.symbols as string[]) || []).includes(seed.symbol),
+              normalizeSourceDocumentSymbols(doc.symbols).includes(seed.symbol),
             );
             const socialConfidence = socialDocs.length > 0
               ? clamp(mean(socialDocs.map((d) => toFiniteNumber(d.confidence, 0.35))))
@@ -19720,7 +19731,7 @@ export async function runStoryScan(options?: { dryRun?: boolean }): Promise<Agen
           );
           const passiveRows = passiveStocks.map((stock, index) => {
             const candidate = PASSIVE_COMPONENT_MLCC_THEME.symbols[index];
-            const directDocs = passiveDocs.filter((doc) => ((doc.symbols as string[]) || []).map(String).includes(candidate.symbol));
+            const directDocs = passiveDocs.filter((doc) => normalizeSourceDocumentSymbols(doc.symbols).includes(candidate.symbol));
             const evidenceDocs = directDocs.length > 0 ? directDocs : passiveDocs;
             const confidence = round(
               clamp(
@@ -19773,7 +19784,7 @@ export async function runStoryScan(options?: { dryRun?: boolean }): Promise<Agen
             );
             const themeRows = themeStocks.map((stock, index) => {
               const candidate = discoveryTheme.symbols[index];
-              const directDocs = themeDocs.filter((doc) => ((doc.symbols as string[]) || []).map(String).includes(candidate.symbol));
+              const directDocs = themeDocs.filter((doc) => normalizeSourceDocumentSymbols(doc.symbols).includes(candidate.symbol));
               const evidenceDocs = directDocs.length > 0 ? directDocs : themeDocs;
               const confidence = round(
                 clamp(
@@ -21693,6 +21704,17 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
       throw error;
     }
   }
+  async function executeNonCriticalStep<T>(step: string, work: () => Promise<T>, fallbackValue: T): Promise<T> {
+    const stepStartedAt = Date.now();
+    try {
+      const result = await work();
+      stepStatus.push({ step, status: 'success', durationMs: Date.now() - stepStartedAt });
+      return result;
+    } catch (error) {
+      stepStatus.push({ step, status: 'failed', durationMs: Date.now() - stepStartedAt, error: (error as Error).message });
+      return fallbackValue;
+    }
+  }
   try {
     const shouldRunIngestion = !skipIngestion;
     const ingestion = await executeStep(
@@ -21722,8 +21744,21 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
       { runId: 'skip-revenue-ingestion', dryRun, revenueRecords: 0, fundamentalRecords: 0 },
     );
 
-    const recommendation = await executeStep('recommendation', async () =>
+    const candidateResearch = await executeStep('candidate_research', async () => runCandidateResearchCycle({
+      dryRun,
+      pipelineRunId,
+      seedSymbols: TW_STORY_RESEARCH_SEEDS.map((seed) => ({ symbol: seed.symbol, name: seed.name, market: seed.market, sector: seed.sector })),
+    }));
+
+    const recommendationFallback = {
+      asOf: asIsoDate(nowIso()), written: 0, blocked: 0, runId: pipelineRunId,
+      dryRun: false as const, agentRunId: pipelineRunId, timedOut: false, durationMs: 0,
+      stepStatus: [] as RecommendationStepStatus[], startedRoles: [] as string[],
+      workflow: { themeScanRunId: pipelineRunId, storyScanRunId: pipelineRunId, storyVerifyRunId: pipelineRunId, reportBuildRunId: pipelineRunId, thesisAgentRunId: pipelineRunId },
+    };
+    const recommendation = await executeNonCriticalStep('recommendation', async () =>
       runRecommendationBatch({ dryRun, timeoutMs: mode === 'core' && !dryRun ? Number(process.env.RECOMMENDATION_BATCH_TIMEOUT_MS || 600_000) : undefined }),
+      recommendationFallback,
     );
     let reportIngest: Record<string, unknown> = { runId: 'skip-report-ingest', dryRun, filesFound: 0, recordsWritten: 0 };
     let sourceSync: Array<Record<string, unknown>> = [];
@@ -21734,8 +21769,7 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
       const researchV2 = await import('./research-v2');
       reportIngest = await executeStep('report_ingest', async () => researchV2.runReportIngest({ dryRun }));
       sourceSync = await executeStep('source_sync', async () => Promise.all(
-        CLOUD_SOURCE_CONNECTORS
-          .filter((connector) => sourceExecutionPolicy(connector).disposition === 'active')
+        scheduledSourceConnectorKeys()
           .map((connector) => researchV2.runSourceSync({ connector, dryRun })),
       ));
       sourceDiscovery = await executeStep('source_discovery', async () => researchV2.runSourceDiscovery({ dryRun }));
@@ -21761,6 +21795,22 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
       { sent: 0, skipped: 0, failed: 0, attempts: 0, runId: 'skip-line-dispatch', dryRun },
     );
 
+    let publication: Record<string, unknown> = { publishedAt: null, results: [] };
+    let shadowObservation: Record<string, unknown> | null = null;
+    if (!dryRun) {
+      const stages = await executeStep('candidate_stage_projection', async () => loadCandidateStageCards());
+      const radarPayload = await executeStep('radar_payload_build', async () => getDailyRadarData());
+      const activeSourceErrors = await executeStep('active_source_health', async () => loadActiveCandidateSourceErrors());
+      shadowObservation = await executeStep('shadow_observation', async () => recordCandidateShadowObservation({
+        pipelineRunId,
+        publicationId: null,
+        stages,
+        technicalSessionDate: candidateResearch.technicalSessionDate || null,
+        activeSourceErrors,
+      }));
+      publication = await executeStep('radar_publication', async () => publishRadarPublicSnapshots({ payload: radarPayload, stages, pipelineRunId }));
+    }
+
     const durationMs = Date.now() - startedAt;
     if (supabaseServer) {
       await supabaseServer
@@ -21782,6 +21832,7 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
       ingestion,
       dynamicMentionScan,
       revenueIngestion,
+      candidateResearch,
       recommendation,
       reportIngest,
       sourceSync,
@@ -21790,6 +21841,8 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
       researchReportBuild,
       deepDive,
       dispatch,
+      publication,
+      shadowObservation,
     };
   } catch (error) {
     const err = error as Error & { timedOut?: boolean; failedStep?: string; durationMs?: number; stepStatus?: RecommendationStepStatus[] };
@@ -21827,8 +21880,7 @@ export async function runPipelineResearchFlow(options?: { dryRun?: boolean }) {
   const researchV2 = await import('./research-v2');
   const reportIngest = await researchV2.runReportIngest({ dryRun });
   const sourceSync = await Promise.all(
-    CLOUD_SOURCE_CONNECTORS
-      .filter((connector) => sourceExecutionPolicy(connector).disposition === 'active')
+    scheduledSourceConnectorKeys()
       .map((connector) => researchV2.runSourceSync({ connector, dryRun })),
   );
   const sourceDiscovery = await researchV2.runSourceDiscovery({ dryRun });
@@ -21967,7 +22019,7 @@ export async function runMonitoringChecks() {
     const now = new Date();
     const sinceIso = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString();
 
-    const [pipelineRes, recRes, sourceHealthRes, sourceLedgerRes] = await Promise.all([
+    const [pipelineRes, recRes, sourceHealthRes, sourceLedgerRes, latestTechnicalRes, candidateRunsRes, publicationStateRes, officialSessions] = await Promise.all([
       supabaseServer.from('pipeline_runs').select('*').gte('started_at', sinceIso).order('started_at', { ascending: false }).limit(100),
       supabaseServer.from('recommendations').select('id,is_blocked,created_at').gte('created_at', sinceIso).limit(500),
       supabaseServer.from('source_health_checks').select('*').gte('checked_at', sinceIso).order('checked_at', { ascending: false }).limit(300),
@@ -21976,10 +22028,14 @@ export async function runMonitoringChecks() {
         .gte('attempted_at', new Date(now.getTime() - 72 * 60 * 60 * 1000).toISOString())
         .order('attempted_at', { ascending: false })
         .limit(1000),
+      supabaseServer.from('technical_feature_snapshots').select('session_date,available_at').order('session_date', { ascending: false }).limit(1),
+      supabaseServer.from('candidate_research_runs').select('status,technical_session_date,started_at,finished_at,terminal_reason').order('started_at', { ascending: false }).limit(3),
+      supabaseServer.from('radar_publication_state').select('window_key,status,last_attempt_at,last_success_snapshot_id,terminal_reason').in('window_key', ['home', 'daily']),
+      fetchTwMarketTradingSessions(10),
     ]);
 
-    if (pipelineRes.error || recRes.error || sourceHealthRes.error || sourceLedgerRes.error) {
-      throw new Error(pipelineRes.error?.message || recRes.error?.message || sourceHealthRes.error?.message || sourceLedgerRes.error?.message || 'monitoring query failed');
+    if (pipelineRes.error || recRes.error || sourceHealthRes.error || sourceLedgerRes.error || latestTechnicalRes.error || candidateRunsRes.error || publicationStateRes.error) {
+      throw new Error(pipelineRes.error?.message || recRes.error?.message || sourceHealthRes.error?.message || sourceLedgerRes.error?.message || latestTechnicalRes.error?.message || candidateRunsRes.error?.message || publicationStateRes.error?.message || 'monitoring query failed');
     }
 
     const alerts: Array<{ type: string; level: 'warning' | 'critical'; message: string; context?: Record<string, unknown> }> = [];
@@ -22012,7 +22068,19 @@ export async function runMonitoringChecks() {
 
     const healthRows = (sourceHealthRes.data as Row[]) || [];
     const parseThreshold = Number(process.env.SOURCE_MIN_PARSE_SUCCESS_RATIO || 0.6);
-    const unhealthy = healthRows.filter((row) => Number(row.parse_success_ratio || 1) < parseThreshold);
+    const monitoredConnectors = new Set(scheduledSourceConnectorKeys());
+    const sourceHealthConnectorByKey: Record<string, string> = {
+      'site.ptt.stock': 'ptt',
+      'authorized.bulltalk.feed': 'bulltalk',
+      'site.gdelt.doc2': 'gdelt',
+      'site.telegram.channels': 'telegram',
+      'site.twse.insider': 'twse_insider',
+    };
+    const unhealthy = healthRows.filter((row) => {
+      const sourceKey = String(row.source_key || '');
+      const isScheduled = monitoredConnectors.has(sourceHealthConnectorByKey[sourceKey] || '');
+      return isScheduled && Number(row.parse_success_ratio || 1) < parseThreshold;
+    });
     if (unhealthy.length > 0) {
       alerts.push({
         type: 'source_parse_ratio_low',
@@ -22024,9 +22092,8 @@ export async function runMonitoringChecks() {
 
     const sourceLedgerRows = (sourceLedgerRes.data as Row[]) || [];
     const successfulTerminals = new Set(['success', 'successful_empty', 'duplicate_only']);
-    for (const connector of CLOUD_SOURCE_CONNECTORS) {
+    for (const connector of scheduledSourceConnectorKeys()) {
       const policy = sourceExecutionPolicy(connector);
-      if (policy.disposition !== 'active') continue;
       const attempts = sourceLedgerRows.filter((row) => String(row.connector || '') === connector);
       const latestTwo = attempts.slice(0, 2);
       const immediateFailure = attempts.find((row) => {
@@ -22059,6 +22126,60 @@ export async function runMonitoringChecks() {
           level: 'critical',
           message: `${connector} has no successful terminal outcome within two expected cadences`,
           context: { connector, cadenceHours, lastSuccessAt: Number.isFinite(lastSuccessMs) ? new Date(lastSuccessMs).toISOString() : null },
+        });
+      }
+    }
+
+    const taipeiParts = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', hourCycle: 'h23' }).formatToParts(now);
+    const taipeiValue = Object.fromEntries(taipeiParts.map((part) => [part.type, part.value]));
+    const taipeiDate = `${taipeiValue.year}-${taipeiValue.month}-${taipeiValue.day}`;
+    const latestTechnicalSession = String(((latestTechnicalRes.data as Row[]) || [])[0]?.session_date || '');
+    const officialLatestSession = officialSessions.at(-1) || '';
+    const candidateRuns = (candidateRunsRes.data as Row[]) || [];
+    const latestCandidateRun = candidateRuns[0];
+    const currentCandidateRunSucceeded = latestCandidateRun
+      && String(latestCandidateRun.technical_session_date || '') === taipeiDate
+      && ['success', 'partial'].includes(String(latestCandidateRun.status || ''));
+    const failedPublication = ((publicationStateRes.data as Row[]) || []).find((row) => String(row.status || '') === 'failed');
+    if (failedPublication) {
+      alerts.push({
+        type: 'radar_publication_failed',
+        level: 'critical',
+        message: `${String(failedPublication.window_key)} last publication failed: ${String(failedPublication.terminal_reason || 'unknown')}`,
+        context: { publication: failedPublication },
+      });
+    }
+    if (officialLatestSession === taipeiDate && Number(taipeiValue.hour || 0) >= 20 && latestTechnicalSession !== taipeiDate) {
+      alerts.push({
+        type: 'candidate_research_missing',
+        level: 'critical',
+        message: `No current candidate research snapshot for trading session ${taipeiDate}`,
+        context: { officialLatestSession, latestTechnicalSession },
+      });
+    }
+    if (officialLatestSession === taipeiDate && Number(taipeiValue.hour || 0) >= 20 && !currentCandidateRunSucceeded) {
+      alerts.push({
+        type: 'candidate_research_run_missing',
+        level: 'critical',
+        message: `No successful or partial candidate research run for trading session ${taipeiDate}`,
+        context: { latestCandidateRun: latestCandidateRun || null },
+      });
+    }
+    if (officialLatestSession === taipeiDate && latestTechnicalSession === taipeiDate && Number(taipeiValue.hour || 0) >= 20) {
+      const progress = await loadCandidateShadowProgress();
+      if (progress.latestSession !== latestTechnicalSession) {
+        alerts.push({
+          type: 'shadow_session_missing',
+          level: 'critical',
+          message: `No canonical shadow observation for trading session ${latestTechnicalSession}`,
+          context: { latestTechnicalSession, shadowProgress: progress },
+        });
+      } else if (progress.blockers.length > 0) {
+        alerts.push({
+          type: 'shadow_session_not_qualifying',
+          level: 'warning',
+          message: `Shadow observation ${latestTechnicalSession} is not qualifying`,
+          context: { blockers: progress.blockers, shadowProgress: progress },
         });
       }
     }

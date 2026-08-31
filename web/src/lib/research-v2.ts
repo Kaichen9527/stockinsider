@@ -3299,9 +3299,16 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
     });
   }
 
+  const parserFailure = fetchedPosts === 0;
+  if (parserFailure) {
+    for (const channel of channelBreakdown) {
+      if (!channel.failure_reason) channel.failure_reason = 'telegram_parser_zero_messages';
+    }
+  }
   const telegramCredStatus: 'valid' | 'invalid' = fetchedPosts > 0 ? 'valid' : 'invalid';
   await upsertCredentialRegistry('telegram', telegramCredStatus, {
     credential_ref: 'TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED',
+    error_message: parserFailure ? 'telegram_parser_zero_messages' : null,
     metadata: {
       mode: 'public_channel_html',
       records_written: records.length,
@@ -3325,10 +3332,10 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
     })), 'telegram', symbolContext),
   );
 
-  const taskId = await writeAgentTask({ agentRunId, agentRole: 'Source Connector Agent', taskType: 'source-sync', status: 'success', inputPayload: { connector: 'telegram' }, outputSummary: `synced ${count} telegram records` });
+  const taskId = await writeAgentTask({ agentRunId, agentRole: 'Source Connector Agent', taskType: 'source-sync', status: parserFailure ? 'failed' : 'success', inputPayload: { connector: 'telegram' }, outputSummary: parserFailure ? 'Telegram parser returned zero messages across the approved roster' : `synced ${count} telegram records` });
   await writeAgentFinding(taskId, `Telegram 同步 ${count} 筆訊息`, { confidence: 0.55 });
-  await finishAgentRun(agentRunId, 'success', { connector: 'telegram', records_written: count, symbol: symbolContext?.symbol || null });
-  await finishConnectorRun(connectorRunId, count > 0 ? 'success' : 'partial', count, {
+  await finishAgentRun(agentRunId, parserFailure ? 'failed' : 'success', { connector: 'telegram', records_written: count, symbol: symbolContext?.symbol || null, terminal_reason: parserFailure ? 'telegram_parser_zero_messages' : null });
+  await finishConnectorRun(connectorRunId, parserFailure ? 'failed' : count > 0 ? 'success' : 'partial', count, {
     metadata: {
       entity_id: entity.id,
       fetched_posts: fetchedPosts,
@@ -3350,7 +3357,7 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
     entityId: String(entity.id),
     watermarkBefore: JSON.stringify(Object.fromEntries([...cursorBefore.entries()].sort())),
     watermarkAfter: JSON.stringify(Object.fromEntries([...cursorAfter.entries()].sort())),
-    errorCode: null,
+    errorCode: parserFailure ? 'telegram_parser_zero_messages' : null,
     degradedReason: channelBreakdown.some((channel) => channel.failure_reason)
       ? `telegram_channels_failed:${channelBreakdown.filter((channel) => channel.failure_reason).length}`
       : null,

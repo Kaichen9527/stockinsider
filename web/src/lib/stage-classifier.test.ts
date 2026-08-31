@@ -86,6 +86,9 @@ test('qualifying close streak advances only across distinct consecutive market s
 test('risk-off, breakdown, stale data and peer catch-down block actionable', () => {
   assert.equal(classifyCandidateStage(input({ marketRegime: 'risk_off' })).stage, 'waiting');
   assert.equal(classifyCandidateStage(input({ marketRegime: 'breakdown', previousStage: 'actionable' })).stage, 'waiting');
+  const unknown = classifyCandidateStage(input({ marketRegime: 'unknown' }));
+  assert.equal(unknown.stage, 'waiting');
+  assert(unknown.unmetConditions.includes('market_regime_missing'));
   assert.equal(classifyCandidateStage(input({ staleOrFallback: true })).stage, 'waiting');
   assert.equal(classifyCandidateStage(input({ peerCatchdownBlock: true })).stage, 'waiting');
 });

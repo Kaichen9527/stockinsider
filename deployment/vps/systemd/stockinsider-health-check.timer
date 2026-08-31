@@ -1,0 +1,11 @@
+[Unit]
+Description=Check StockInsider health at 20:00 Asia/Taipei
+
+[Timer]
+OnCalendar=*-*-* 20:00:00 Asia/Taipei
+Persistent=true
+AccuracySec=1min
+Unit=stockinsider-health-check.service
+
+[Install]
+WantedBy=timers.target

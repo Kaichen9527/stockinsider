@@ -1,9 +1,6 @@
 name: AI Night-Shift Agent
 
 on:
-  schedule:
-    # UTC 18:00 = Taiwan 02:00 AM (daily)
-    - cron: '0 18 * * *'
   workflow_dispatch:
     inputs:
       task:

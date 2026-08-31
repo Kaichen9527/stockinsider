@@ -3,6 +3,7 @@ import { sendOpsAlert } from '@/lib/alerts';
 import { getLatestIngestionState, runPipelineFlow } from '@/lib/domain';
 import { requireInternalAuth } from '@/lib/internal-auth';
 import { withRetry } from '@/lib/retry';
+import { acquireProductionWriteLease, releaseProductionWriteLease } from '@/lib/production-write-lease';
 
 export const maxDuration = 800;
 
@@ -25,8 +26,15 @@ export async function POST(req: Request) {
   const mode = modeParam === 'full' ? 'full' : modeParam === 'core' ? 'core' : dryRun ? 'full' : 'core';
   const inProcessRetry = body?.inProcessRetry === true;
   const syncTimeoutMs = Number(body?.syncTimeoutMs || process.env.PIPELINE_SYNC_TIMEOUT_MS || 18_000);
+  let leaseOwner: string | null = null;
+  let ongoingFlow: Promise<Awaited<ReturnType<typeof runPipelineFlow>>> | null = null;
+  let flowFinished = false;
 
   try {
+    if (!dryRun) {
+      leaseOwner = await acquireProductionWriteLease(7_200);
+      if (!leaseOwner) return NextResponse.json({ ok: false, error: 'production_write_cycle_already_running' }, { status: 409 });
+    }
     if (skipIngestion) {
       const state = await getLatestIngestionState();
       if (!state.ok) {
@@ -43,6 +51,8 @@ export async function POST(req: Request) {
           { retries: 3, delaysMs: [60_000, 5 * 60_000, 15 * 60_000] }
         )
       : runPipelineFlow({ dryRun, mode, ...(skipIngestion ? { skipIngestion: true } : {}) });
+    ongoingFlow = flowPromise;
+    void flowPromise.then(() => { flowFinished = true; }, () => { flowFinished = true; });
 
     const timeoutPromise = new Promise<never>((_, reject) => {
       setTimeout(() => {
@@ -114,5 +124,17 @@ export async function POST(req: Request) {
       },
       { status: 500 }
     );
+  } finally {
+    if (leaseOwner) {
+      const owner = leaseOwner;
+      if (ongoingFlow && !flowFinished) {
+        void ongoingFlow.then(
+          () => releaseProductionWriteLease(owner),
+          () => releaseProductionWriteLease(owner),
+        ).catch(() => undefined);
+      } else {
+        await releaseProductionWriteLease(owner).catch(() => undefined);
+      }
+    }
   }
 }

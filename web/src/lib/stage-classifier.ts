@@ -1,6 +1,6 @@
 import type { RadarDailyPayload, SourceSignalCard } from './types';
 
-export const STAGE_RULESET_VERSION = 'source-ranking-v2.0.0';
+export const STAGE_RULESET_VERSION = 'source-ranking-v2.1.0';
 
 export type CandidateLifecycleStage = 'found' | 'waiting' | 'actionable';
 export type MarketRiskRegime = 'risk_on' | 'selective' | 'risk_off' | 'breakdown' | 'unknown';
@@ -207,7 +207,7 @@ export function classifyCandidateStage(input: CandidateStageInput): CandidateSta
     && technicalPassed
     && !input.peerCatchdownBlock
     && !input.staleOrFallback
-    && !['risk_off', 'breakdown'].includes(input.marketRegime);
+    && !['risk_off', 'breakdown', 'unknown'].includes(input.marketRegime);
 
   if (waitingEligible) {
     promotionReasons.push('minimum_research_and_valuation_complete');
@@ -222,6 +222,7 @@ export function classifyCandidateStage(input: CandidateStageInput): CandidateSta
     if (input.staleOrFallback) unmet.push('stale_or_fallback_data');
     if (input.marketRegime === 'risk_off') unmet.push('market_risk_off_blocks_new_actionable');
     if (input.marketRegime === 'breakdown') unmet.push('market_breakdown_forces_downgrade');
+    if (input.marketRegime === 'unknown') unmet.push('market_regime_missing');
   }
 
   const stage: CandidateLifecycleStage = actionableEligible ? 'actionable' : waitingEligible ? 'waiting' : 'found';
@@ -247,7 +248,11 @@ export function sourceSignalLifecycleStage(signal: SourceSignalCard): CandidateL
   return signal.proximityToAction ? 'waiting' : 'found';
 }
 
-export function buildRadarStages(payload: Pick<RadarDailyPayload, 'sourceSignals'>): NonNullable<RadarDailyPayload['stages']> {
+export function buildLegacySourceSignalStages(payload: Pick<RadarDailyPayload, 'sourceSignals'>): {
+  found: SourceSignalCard[];
+  waiting: SourceSignalCard[];
+  actionable: SourceSignalCard[];
+} {
   const found = [...(payload.sourceSignals ?? [])];
   return {
     found,

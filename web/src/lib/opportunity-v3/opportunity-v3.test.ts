@@ -1375,7 +1375,7 @@ describe('closed HTTP body value schemas', () => {
     const pageSource = readFileSync(path.join(root, 'src/app/page.tsx'), 'utf8');
     assert.match(
       pageSource,
-      /const publishedRadar = await loadPublishedRadarProjection\('home'\);[\s\S]*const legacyRadar = \(publishedRadar \?\? await getDailyRadarData\(\)\)[\s\S]*layerHomepageOpportunityV3\(\{[\s\S]*legacyRadar,[\s\S]*loadShadowEngine:[\s\S]*shadowEnabled: v3PublicEnabled\(\),/u,
+      /const publicSnapshot = await loadLatestRadarPublicSnapshot\('home'\);[\s\S]*const publishedRadar = publicSnapshot \? null : await loadPublishedRadarProjection\('home'\);[\s\S]*const legacyRadar = \(publicSnapshot\?\.payload \?\? publishedRadar \?\? await getDailyRadarData\(\)\)[\s\S]*layerHomepageOpportunityV3\(\{[\s\S]*legacyRadar,[\s\S]*loadShadowEngine:[\s\S]*shadowEnabled: v3PublicEnabled\(\) && !publicSnapshot,/u,
     );
     assert.match(pageSource, /\(radar\.reports \|\| \[\]\)\.filter/u);
     assert.match(pageSource, /\(sourceHealth\?\.connectorDetails \|\| \[\]\)\.filter/u);

@@ -14,6 +14,22 @@ type TwStockModule = {
 
 let twStockClientPromise: Promise<InstanceType<TwStockModule['TwStock']> | null> | null = null;
 const TWSTOCK_REQUEST_TIMEOUT_MS = 2500;
+const OFFICIAL_MARKET_MAX_CONCURRENCY = 8;
+let officialMarketActive = 0;
+const officialMarketWaiters: Array<() => void> = [];
+
+async function withOfficialMarketSlot<T>(work: () => Promise<T>): Promise<T> {
+  if (officialMarketActive >= OFFICIAL_MARKET_MAX_CONCURRENCY) {
+    await new Promise<void>((resolve) => officialMarketWaiters.push(resolve));
+  }
+  officialMarketActive += 1;
+  try {
+    return await work();
+  } finally {
+    officialMarketActive -= 1;
+    officialMarketWaiters.shift()?.();
+  }
+}
 
 async function withTwStockTimeout<T>(promise: Promise<T>, timeoutMs = TWSTOCK_REQUEST_TIMEOUT_MS): Promise<T> {
   return await Promise.race([
@@ -224,7 +240,7 @@ export async function fetchTwStockValues(symbol: string) {
 
 export async function fetchTwStockDailyBars(symbol: string, daysBack = 120) {
   const rows: Array<{ time: string; open: number; high: number; low: number; close: number; volume: number | null }> = [];
-  const monthCount = Math.min(24, Math.max(2, Math.ceil(daysBack / 18) + 2));
+  const monthCount = Math.min(36, Math.max(2, Math.ceil(daysBack / 18) + 2));
   const monthStarts = Array.from({ length: monthCount }, (_, offset) => {
     const value = new Date();
     value.setUTCDate(1);
@@ -233,10 +249,10 @@ export async function fetchTwStockDailyBars(symbol: string, daysBack = 120) {
   });
   const monthlyResults = await Promise.all(monthStarts.map(async (date) => {
     try {
-      const response = await fetch(`https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=${date}&stockNo=${encodeURIComponent(symbol)}&response=json`, {
+      const response = await withOfficialMarketSlot(() => fetch(`https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=${date}&stockNo=${encodeURIComponent(symbol)}&response=json`, {
         headers: { accept: 'application/json', 'user-agent': 'StockInsider/2.0 official-market-data' },
         signal: AbortSignal.timeout(8_000),
-      });
+      }));
       if (!response.ok) return [];
       const payload = await response.json() as { stat?: string; data?: string[][] };
       if (payload.stat !== 'OK' || !Array.isArray(payload.data)) return [];
@@ -264,10 +280,10 @@ export async function fetchTwStockDailyBars(symbol: string, daysBack = 120) {
     const tpexMonthlyResults = await Promise.all(monthStarts.map(async (date) => {
       const month = `${date.slice(0, 4)}/${date.slice(4, 6)}/01`;
       try {
-        const response = await fetch(`https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=${encodeURIComponent(symbol)}&date=${month}&response=json`, {
+        const response = await withOfficialMarketSlot(() => fetch(`https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=${encodeURIComponent(symbol)}&date=${month}&response=json`, {
           headers: { accept: 'application/json', 'user-agent': 'StockInsider/2.0 official-market-data' },
           signal: AbortSignal.timeout(8_000),
-        });
+        }));
         if (!response.ok) return [];
         return parseTpexTradingStockRows(await response.json() as Record<string, unknown>);
       } catch {
@@ -279,10 +295,10 @@ export async function fetchTwStockDailyBars(symbol: string, daysBack = 120) {
 
   if (rows.length === 0) {
     try {
-      const response = await fetch('https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes', {
+      const response = await withOfficialMarketSlot(() => fetch('https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes', {
         headers: { accept: 'application/json', 'user-agent': 'StockInsider/2.0 official-market-data' },
         signal: AbortSignal.timeout(10_000),
-      });
+      }));
       const payload = response.ok ? await response.json() as Array<Record<string, unknown>> : [];
       const item = payload.find((row) => String(row.SecuritiesCompanyCode || '') === symbol);
       const date = String(item?.Date || '').match(/^(\d{3})(\d{2})(\d{2})$/u);
@@ -306,6 +322,66 @@ export async function fetchTwStockDailyBars(symbol: string, daysBack = 120) {
     .sort((a, b) => a.time.localeCompare(b.time))
     .filter((row, index, values) => index === values.findIndex((item) => item.time === row.time))
     .slice(-daysBack);
+}
+
+export type TwStockMasterRecord = {
+  symbol: string;
+  name: string;
+  exchange: 'TWSE' | 'TPEx';
+};
+
+export async function fetchTwStockMaster(): Promise<TwStockMasterRecord[]> {
+  const headers = { accept: 'application/json', 'user-agent': 'StockInsider/2.1 official-stock-master' };
+  const [twse, tpex] = await Promise.all([
+    withOfficialMarketSlot(() => fetch('https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL', {
+      headers,
+      signal: AbortSignal.timeout(12_000),
+    })).then(async (response) => response.ok ? await response.json() as Array<Record<string, unknown>> : []).catch(() => []),
+    withOfficialMarketSlot(() => fetch('https://www.tpex.org.tw/openapi/v1/tpex_mainboard_quotes', {
+      headers,
+      signal: AbortSignal.timeout(12_000),
+    })).then(async (response) => response.ok ? await response.json() as Array<Record<string, unknown>> : []).catch(() => []),
+  ]);
+  const records = new Map<string, TwStockMasterRecord>();
+  for (const row of twse) {
+    const symbol = String(row.Code || '').trim();
+    const name = String(row.Name || row.CompanyName || '').trim();
+    if (/^\d{4}$/u.test(symbol) && name) records.set(symbol, { symbol, name, exchange: 'TWSE' });
+  }
+  for (const row of tpex) {
+    const symbol = String(row.SecuritiesCompanyCode || row.Code || '').trim();
+    const name = String(row.CompanyName || row.SecuritiesCompanyName || '').trim();
+    if (/^\d{4}$/u.test(symbol) && name && !records.has(symbol)) records.set(symbol, { symbol, name, exchange: 'TPEx' });
+  }
+  return [...records.values()];
+}
+
+export async function fetchTwMarketTradingSessions(daysBack = 80): Promise<string[]> {
+  const monthCount = Math.max(2, Math.ceil(daysBack / 18) + 1);
+  const months = Array.from({ length: monthCount }, (_, offset) => {
+    const value = new Date();
+    value.setUTCDate(1);
+    value.setUTCMonth(value.getUTCMonth() - offset);
+    return `${value.getUTCFullYear()}${String(value.getUTCMonth() + 1).padStart(2, '0')}01`;
+  });
+  const results = await Promise.all(months.map(async (date) => {
+    try {
+      const response = await withOfficialMarketSlot(() => fetch(`https://www.twse.com.tw/rwd/zh/afterTrading/FMTQIK?date=${date}&response=json`, {
+        headers: { accept: 'application/json', 'user-agent': 'StockInsider/2.1 official-trading-calendar' },
+        signal: AbortSignal.timeout(8_000),
+      }));
+      if (!response.ok) return [];
+      const payload = await response.json() as Record<string, unknown>;
+      const rows = Array.isArray(payload.data) ? payload.data as unknown[][] : [];
+      return rows.flatMap((row) => {
+        const roc = String(row[0] || '').match(/^(\d{3})\/(\d{2})\/(\d{2})$/u);
+        return roc ? [`${Number(roc[1]) + 1911}-${roc[2]}-${roc[3]}`] : [];
+      });
+    } catch {
+      return [];
+    }
+  }));
+  return [...new Set(results.flat())].sort().slice(-daysBack);
 }
 
 export async function fetchTwStockInstitutional(symbol: string) {
@@ -364,7 +440,9 @@ export async function fetchTwStockEpsTtm(symbol: string, quartersBack = 4) {
   const now = new Date();
   let year = now.getUTCFullYear();
   let quarter = Math.floor(now.getUTCMonth() / 3) + 1;
-  for (let i = 0; i < quartersBack + 1; i += 1) {
+  // Public filings can lag the current calendar quarter. Scan enough older
+  // periods to find four consecutive published quarters without fabricating gaps.
+  for (let i = 0; i < quartersBack + 3; i += 1) {
     quarter -= 1;
     if (quarter === 0) {
       quarter = 4;
@@ -374,32 +452,34 @@ export async function fetchTwStockEpsTtm(symbol: string, quartersBack = 4) {
   }
 
   let total = 0;
-  let hits = 0;
+  const periods: string[] = [];
+  let started = false;
   let latestLabel: string | null = null;
   for (const part of parts) {
     try {
       const data = await withTwStockTimeout(client.stocks.eps({ symbol, year: part.year, quarter: part.quarter }));
       const eps = toFiniteNumber(data.eps);
-      if (eps == null) continue;
+      if (eps == null) {
+        if (started) return null;
+        continue;
+      }
+      started = true;
       total += eps;
-      hits += 1;
-      if (!latestLabel) latestLabel = `${part.year}-Q${part.quarter}`;
-      if (hits >= 4) {
+      const label = `${part.year}-Q${part.quarter}`;
+      periods.push(label);
+      if (!latestLabel) latestLabel = label;
+      if (periods.length === 4) {
         return {
           asOfLabel: latestLabel,
           epsTtm: Number(total.toFixed(2)),
+          periods,
         };
       }
     } catch {
-      continue;
+      if (started) return null;
     }
   }
-  return hits > 0
-    ? {
-        asOfLabel: latestLabel,
-        epsTtm: Number(total.toFixed(2)),
-      }
-    : null;
+  return null;
 }
 
 export async function fetchTwStockMarginTrades(symbol: string) {

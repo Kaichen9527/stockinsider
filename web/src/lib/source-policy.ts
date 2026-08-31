@@ -75,3 +75,9 @@ export function sourceExecutionPolicy(connector: string): SourceExecutionPolicy 
 export function activeSourceConnectorKeys(): string[] {
   return CLOUD_SOURCE_CONNECTORS.filter((connector) => sourceExecutionPolicy(connector).disposition === 'active');
 }
+
+// Threads is intentionally outside the VPS scheduler, health SLA and shadow
+// qualification boundary until a separate rollout explicitly enables it.
+export function scheduledSourceConnectorKeys(): string[] {
+  return activeSourceConnectorKeys().filter((connector) => connector !== 'threads');
+}

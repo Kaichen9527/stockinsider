@@ -1,9 +1,6 @@
 name: Night-Shift Research Runtime
 
 on:
-  schedule:
-    # Asia/Taipei 19:00 daily. Public sources receive their final pre-run refresh at 18:30.
-    - cron: '0 11 * * *'
   workflow_dispatch:
     inputs:
       dry_run:

@@ -1,0 +1,11 @@
+[Unit]
+Description=Refresh StockInsider sources four times daily in Asia/Taipei
+
+[Timer]
+OnCalendar=*-*-* 06,12,18,23:30:00 Asia/Taipei
+Persistent=true
+AccuracySec=1min
+Unit=stockinsider-source-refresh.service
+
+[Install]
+WantedBy=timers.target

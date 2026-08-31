@@ -1,0 +1,11 @@
+[Unit]
+Description=Run StockInsider candidate research at 19:00 Asia/Taipei
+
+[Timer]
+OnCalendar=*-*-* 19:00:00 Asia/Taipei
+Persistent=true
+AccuracySec=1min
+Unit=stockinsider-research-cycle.service
+
+[Install]
+WantedBy=timers.target

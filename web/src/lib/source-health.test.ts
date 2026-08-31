@@ -61,3 +61,17 @@ test('unwritten candidates remain a parser failure when they are not duplicates'
     matchedIndustryHits: 0,
   }), 'parser_failed');
 });
+
+test('approved Telegram roster returning zero parsed messages is a parser failure, not an empty success', () => {
+  assert.equal(classifySourceSyncTerminal({
+    fetchedPosts: 0,
+    recordsWritten: 0,
+    duplicatesSkipped: 0,
+    matchedDirectHits: 0,
+    matchedIndustryHits: 0,
+    candidateDocuments: 0,
+    errorCode: 'telegram_parser_zero_messages',
+    degradedReason: 'telegram_channels_failed:7',
+    timedOut: false,
+  }), 'parser_failed');
+});
