@@ -11,7 +11,7 @@ WorkingDirectory=/opt/stockinsider/current
 EnvironmentFile=/etc/stockinsider/stockinsider.env
 Environment=APP_URL=http://127.0.0.1:3100
 Environment=EXPECTED_APP_URL=http://127.0.0.1:3100
-ExecStart=/usr/bin/flock -w 1800 /run/lock/stockinsider-production-write.lock /usr/bin/env APP_URL=http://127.0.0.1:3100 EXPECTED_APP_URL=http://127.0.0.1:3100 INTERNAL_API_TIMEOUT_MS=3700000 /usr/bin/node scripts/call_internal_api.mjs /api/internal/pipeline-run '{"dryRun":false,"mode":"core","syncTimeoutMs":3600000}'
+ExecStart=/usr/bin/flock -w 1800 /run/lock/stockinsider-production-write.lock /usr/bin/env APP_URL=http://127.0.0.1:3100 EXPECTED_APP_URL=http://127.0.0.1:3100 INTERNAL_API_TIMEOUT_MS=3700000 /usr/bin/node scripts/call_internal_api.mjs /api/internal/pipeline-run '{"dryRun":false,"mode":"core","syncTimeoutMs":3600000,"recoverOrphanedLease":true}'
 TimeoutStartSec=5600
 NoNewPrivileges=true
 PrivateTmp=true

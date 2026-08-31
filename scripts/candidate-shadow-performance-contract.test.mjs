@@ -7,6 +7,7 @@ const sourceWorkflow = readFileSync(new URL('../.github/workflows/source-refresh
 const researchWorkflow = readFileSync(new URL('../.github/workflows/night-shift.yml', import.meta.url), 'utf8');
 const sourceTimer = readFileSync(new URL('../deployment/vps/systemd/stockinsider-source-refresh.timer', import.meta.url), 'utf8');
 const researchTimer = readFileSync(new URL('../deployment/vps/systemd/stockinsider-research-cycle.timer', import.meta.url), 'utf8');
+const researchService = readFileSync(new URL('../deployment/vps/systemd/stockinsider-research-cycle.service', import.meta.url), 'utf8');
 const installer = readFileSync(new URL('../deployment/vps/install-systemd-schedules.sh', import.meta.url), 'utf8');
 const sourcePolicy = readFileSync(new URL('../web/src/lib/source-policy.ts', import.meta.url), 'utf8');
 const domain = readFileSync(new URL('../web/src/lib/domain.ts', import.meta.url), 'utf8');
@@ -33,6 +34,7 @@ test('GitHub write workflows are manual-only and VPS timers own the approved cad
   assert.doesNotMatch(researchWorkflow, /^\s*schedule:/mu);
   assert.match(sourceTimer, /06,12,18,23:30:00 Asia\/Taipei/u);
   assert.match(researchTimer, /19:00:00 Asia\/Taipei/u);
+  assert.match(researchService, /"recoverOrphanedLease":true/u);
   const sourceService = readFileSync(new URL('../deployment/vps/systemd/stockinsider-source-refresh.service', import.meta.url), 'utf8');
   assert.match(sourceService, /'\{"connector":"all","dryRun":false\}'/u);
   assert.match(installer, /TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED=true/u);
@@ -41,6 +43,18 @@ test('GitHub write workflows are manual-only and VPS timers own the approved cad
   for (const name of readdirSync(workflowDir).filter((item) => /\.ya?ml$/u.test(item))) {
     assert.doesNotMatch(readFileSync(new URL(name, workflowDir), 'utf8'), /^\s*schedule:/mu, `${name} must remain manual-only`);
   }
+});
+
+test('orphaned production lease recovery remains authenticated, owner-bound and older than the caller deadline', () => {
+  const route = readFileSync(new URL('../web/src/app/api/internal/pipeline-run/route.ts', import.meta.url), 'utf8');
+  const lease = readFileSync(new URL('../web/src/lib/production-write-lease.ts', import.meta.url), 'utf8');
+  assert.match(route, /requireInternalAuth\(req\)/u);
+  assert.match(route, /recoverOrphanedLease === true/u);
+  assert.match(route, /Math\.max\(PRODUCTION_WRITE_LEASE_STALE_AFTER_SECONDS, leaseTtlSeconds\)/u);
+  assert.match(lease, /PRODUCTION_WRITE_LEASE_STALE_AFTER_SECONDS = 3_900/u);
+  assert.match(lease, /p_owner_id: ownerId/u);
+  assert.match(lease, /Date\.now\(\) - acquiredAt < minimumAgeSeconds \* 1000/u);
+  assert.doesNotMatch(lease, /\.delete\(\)/u);
 });
 
 test('Threads stays outside the VPS scheduler and the 20:00 monitor owns missing-run/publication alerts', () => {

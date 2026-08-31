@@ -3,7 +3,12 @@ import { sendOpsAlert } from '@/lib/alerts';
 import { getLatestIngestionState, runPipelineFlow } from '@/lib/domain';
 import { requireInternalAuth } from '@/lib/internal-auth';
 import { withRetry } from '@/lib/retry';
-import { acquireProductionWriteLease, releaseProductionWriteLease } from '@/lib/production-write-lease';
+import {
+  acquireProductionWriteLease,
+  PRODUCTION_WRITE_LEASE_STALE_AFTER_SECONDS,
+  recoverStaleProductionWriteLease,
+  releaseProductionWriteLease,
+} from '@/lib/production-write-lease';
 
 export const maxDuration = 800;
 
@@ -26,13 +31,21 @@ export async function POST(req: Request) {
   const mode = modeParam === 'full' ? 'full' : modeParam === 'core' ? 'core' : dryRun ? 'full' : 'core';
   const inProcessRetry = body?.inProcessRetry === true;
   const syncTimeoutMs = Number(body?.syncTimeoutMs || process.env.PIPELINE_SYNC_TIMEOUT_MS || 18_000);
+  const recoverOrphanedLease = body?.recoverOrphanedLease === true;
+  const leaseTtlSeconds = Math.max(60, Math.min(7_200, Math.ceil(syncTimeoutMs / 1000) + 300));
   let leaseOwner: string | null = null;
   let ongoingFlow: Promise<Awaited<ReturnType<typeof runPipelineFlow>>> | null = null;
   let flowFinished = false;
 
   try {
     if (!dryRun) {
-      leaseOwner = await acquireProductionWriteLease(7_200);
+      leaseOwner = await acquireProductionWriteLease(leaseTtlSeconds);
+      if (!leaseOwner && recoverOrphanedLease) {
+        const recovered = await recoverStaleProductionWriteLease(
+          Math.max(PRODUCTION_WRITE_LEASE_STALE_AFTER_SECONDS, leaseTtlSeconds),
+        );
+        if (recovered) leaseOwner = await acquireProductionWriteLease(leaseTtlSeconds);
+      }
       if (!leaseOwner) return NextResponse.json({ ok: false, error: 'production_write_cycle_already_running' }, { status: 409 });
     }
     if (skipIngestion) {
