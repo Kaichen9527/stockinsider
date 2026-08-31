@@ -40,6 +40,47 @@ test('a non-retryable official response breaks the host failure streak', async (
   assert.deepEqual(await fetchOfficialJson<{ stat: string }>(url, 1_000), { stat: 'OK' });
 });
 
+test('queued official requests respect an open circuit instead of clearing it', async (t) => {
+  const originalFetch = globalThis.fetch;
+  let calls = 0;
+  t.after(() => {
+    globalThis.fetch = originalFetch;
+    resetOfficialMarketRequestStateForTests();
+  });
+  resetOfficialMarketRequestStateForTests();
+  globalThis.fetch = (async () => {
+    calls += 1;
+    throw new Error('official_host_timeout');
+  }) as typeof fetch;
+
+  const url = 'https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20260801&stockNo=2330&response=json';
+  const results = await Promise.all(Array.from({ length: 8 }, () => fetchOfficialJson<{ stat: string }>(url, 1_000)));
+  assert.deepEqual(results, Array(8).fill(null));
+  assert.equal(calls, 3);
+});
+
+test('official requests are serialized per host while other work is queued', async (t) => {
+  const originalFetch = globalThis.fetch;
+  let inFlight = 0;
+  let maxInFlight = 0;
+  t.after(() => {
+    globalThis.fetch = originalFetch;
+    resetOfficialMarketRequestStateForTests();
+  });
+  resetOfficialMarketRequestStateForTests();
+  globalThis.fetch = (async () => {
+    inFlight += 1;
+    maxInFlight = Math.max(maxInFlight, inFlight);
+    await new Promise((resolve) => setTimeout(resolve, 5));
+    inFlight -= 1;
+    return new Response(JSON.stringify({ stat: 'OK' }), { status: 200, headers: { 'content-type': 'application/json' } });
+  }) as typeof fetch;
+
+  const results = await Promise.all(['2330', '2303', '2317'].map((symbol) => fetchOfficialJson<{ stat: string }>(`https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY?date=20260801&stockNo=${symbol}&response=json`, 1_000)));
+  assert.deepEqual(results, [{ stat: 'OK' }, { stat: 'OK' }, { stat: 'OK' }]);
+  assert.equal(maxInFlight, 1);
+});
+
 test('valuation cache accepts only official TWSE and TPEx history endpoints', () => {
   assert.equal(isOfficialValuationSourceUrl('https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?date=20260828&selectType=ALL&response=json'), true);
   assert.equal(isOfficialValuationSourceUrl('https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU?date=20240801&stockNo=2330&response=json'), true);
