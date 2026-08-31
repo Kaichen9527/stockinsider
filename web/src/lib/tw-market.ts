@@ -42,7 +42,7 @@ function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function waitForOfficialHostPace(url: string) {
+async function withOfficialHostPace<T>(url: string, work: () => Promise<T>): Promise<T> {
   const host = new URL(url).hostname;
   const previous = officialHostPace.get(host) || Promise.resolve();
   let release: () => void = () => {};
@@ -52,8 +52,13 @@ async function waitForOfficialHostPace(url: string) {
   try {
     const waitMs = Math.max(0, (officialHostNextRequestAt.get(host) || 0) - Date.now());
     if (waitMs > 0) await delay(waitMs);
-    officialHostNextRequestAt.set(host, Date.now() + 300);
+    return await work();
   } finally {
+    // Keep the host lease through the complete request, not merely until its
+    // start time.  Otherwise four slow requests can be in flight to TWSE at
+    // once, producing a burst that looks like a host outage and poisons every
+    // later candidate in the same research cycle.
+    officialHostNextRequestAt.set(host, Date.now() + 300);
     release();
     if (officialHostPace.get(host) === current) officialHostPace.delete(host);
   }
@@ -81,36 +86,42 @@ function recordOfficialHostRetryableFailure(host: string) {
   }
 }
 
+function officialHostCircuitIsOpen(host: string) {
+  return (officialHostUnavailableUntil.get(host) || 0) > Date.now();
+}
+
 export async function fetchOfficialJson<T>(url: string, timeoutMs: number): Promise<T | null> {
   const host = new URL(url).hostname;
-  if ((officialHostUnavailableUntil.get(host) || 0) > Date.now()) return null;
-  try {
-    const result = await withOfficialMarketSlot(async () => {
-      if ((officialHostUnavailableUntil.get(host) || 0) > Date.now()) {
-        return { retryable: false, data: null };
-      }
-      await waitForOfficialHostPace(url);
+  if (officialHostCircuitIsOpen(host)) return null;
+  return await withOfficialMarketSlot(async () => {
+    // Re-check after acquiring both the global slot and the per-host lease.
+    // Requests queued before a circuit opens must not clear it or start a new
+    // round of requests against the unavailable host.
+    if (officialHostCircuitIsOpen(host)) return null;
+    return await withOfficialHostPace(url, async () => {
+      if (officialHostCircuitIsOpen(host)) return null;
+      try {
       const response = await fetch(url, {
         headers: { accept: 'application/json', 'user-agent': 'StockInsider/2.1 official-market-data' },
         signal: AbortSignal.timeout(timeoutMs),
       });
-      if (!response.ok) return { retryable: response.status === 403 || response.status === 429 || response.status >= 500, data: null };
-      return { retryable: false, data: await response.json() as T };
+        if (!response.ok) {
+          if (response.status === 403 || response.status === 429 || response.status >= 500) recordOfficialHostRetryableFailure(host);
+          else recordOfficialHostSuccess(host);
+          return null;
+        }
+        const data = await response.json() as T;
+        recordOfficialHostSuccess(host);
+        return data;
+      } catch {
+        // A single timeout or 5xx is transient evidence, not proof that every
+        // symbol and month on the host is unavailable. Open the host circuit only
+        // after consecutive retryable failures, then retain fail-closed behavior.
+        recordOfficialHostRetryableFailure(host);
+        return null;
+      }
     });
-    if (result.data != null) {
-      recordOfficialHostSuccess(host);
-      return result.data;
-    }
-    if (result.retryable) recordOfficialHostRetryableFailure(host);
-    else recordOfficialHostSuccess(host);
-    return null;
-  } catch {
-    // A single timeout or 5xx is transient evidence, not proof that every
-    // symbol and month on the host is unavailable. Open the host circuit only
-    // after consecutive retryable failures, then retain fail-closed behavior.
-    recordOfficialHostRetryableFailure(host);
-    return null;
-  }
+  });
 }
 
 async function withTwStockTimeout<T>(promise: Promise<T>, timeoutMs = TWSTOCK_REQUEST_TIMEOUT_MS): Promise<T> {
