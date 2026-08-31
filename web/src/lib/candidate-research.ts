@@ -245,7 +245,7 @@ export async function runCandidateResearchCycle(options: {
           assumption_ledger: [{ source: 'official_five_year_multiple_distribution', median_multiple: valuation.baseMultiple, sample_count: valuation.historicalSampleCount }, { source: 'official_monthly_revenue', half_pass_through_cap: 0.15 }],
           catalysts: [], invalidation_conditions: ['official earnings bridge deteriorates'], as_of: `${technical.sessionDate}T13:30:00+08:00`,
           available_at: evaluatedAt, provenance: { research_run_id: runId, sources: ['TWSE/TPEx','MOPS'] }, model_version: CANDIDATE_VALUATION_MODEL_VERSION,
-        }, { onConflict: 'session_model_key' });
+        }, { onConflict: 'stock_id,session_date,model_version' });
         if (valuationWrite.error) throw new Error(valuationWrite.error.message);
       }
       const recentMentions = mentionsByStock.get(stock.id) || [];
