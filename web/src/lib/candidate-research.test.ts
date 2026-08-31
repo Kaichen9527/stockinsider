@@ -26,8 +26,16 @@ test('official PE scenario holds reported multiple and uses conservative revenue
 });
 
 test('missing or loss-making official earnings do not manufacture targets', () => {
-  assert.equal(buildConservativeOfficialScenario({ price: 100, epsTtm: null, peRatio: 20, pbRatio: null, revenueYoyPct: 40, sector: null, historicalPeRatios, historicalPbRatios }), null);
+  assert.equal(buildConservativeOfficialScenario({ price: 100, epsTtm: null, peRatio: null, pbRatio: null, revenueYoyPct: 40, sector: null, historicalPeRatios, historicalPbRatios }), null);
   assert.equal(buildConservativeOfficialScenario({ price: 100, epsTtm: -1, peRatio: null, pbRatio: null, revenueYoyPct: 40, sector: 'technology', historicalPeRatios, historicalPbRatios }), null);
+});
+
+test('official exchange PE can supply its formula-implied trailing earnings without inventing EPS', () => {
+  const scenario = buildConservativeOfficialScenario({ price: 100, epsTtm: null, peRatio: 20, pbRatio: null, revenueYoyPct: null, sector: 'technology', historicalPeRatios, historicalPbRatios });
+  assert(scenario);
+  assert.equal(scenario.operatingDriver, 5);
+  assert.equal(scenario.operatingDriverSource, 'exchange_implied_ttm_eps');
+  assert.equal(scenario.baseTarget, 100);
 });
 
 test('revenue growth pass-through is capped and cannot create unlimited upside', () => {
