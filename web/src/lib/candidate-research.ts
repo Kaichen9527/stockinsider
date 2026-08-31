@@ -183,6 +183,7 @@ export async function runCandidateResearchCycle(options: {
       if (queryError) throw new Error(queryError.message);
       const latestBar = bars.at(-1)!;
       const priceMatchesMarketSession = latestBar.time === latestMarketSession;
+      const valuationMatchesMarketSession = values?.date === latestBar.time;
       const officialName = stockMaster.get(stock.symbol)?.name;
       if (officialName && officialName !== stock.name) {
         const update = await supabase.from('stocks').update({ name: officialName, updated_at: evaluatedAt }).eq('id', stock.id);
@@ -303,7 +304,7 @@ export async function runCandidateResearchCycle(options: {
         },
         confidence: {
           completeness: [technical.ma20, technical.ma60, technical.atr14, technical.rsi14, eps?.epsTtm, values?.peRatio, valuation?.baseTarget].filter((item) => item != null).length / 7 * 100,
-          freshness: priceMatchesMarketSession && marketRegime !== 'unknown' ? 100 : 0,
+          freshness: priceMatchesMarketSession && valuationMatchesMarketSession && marketRegime !== 'unknown' ? 100 : 0,
           traceability: officialEvidenceCount / 6 * 100,
           crossSourceConsistency: Math.min(100, Math.max(35, platforms.size / 3 * 100)),
         },
@@ -313,7 +314,7 @@ export async function runCandidateResearchCycle(options: {
           ma60Slope: technical.ma60Slope, volumeRatio20Median: technical.volumeRatio20Median, atr14: technical.atr14, rsi14: technical.rsi14,
           breakoutAboveLongMa: technical.volumeRatio20Median != null && technical.volumeRatio20Median >= 1.3 && technical.close > (technical.ma240 || technical.ma120 || Infinity),
         },
-        marketRegime, peerCatchdownBlock: false, staleOrFallback: !priceMatchesMarketSession || marketRegime === 'unknown',
+        marketRegime, peerCatchdownBlock: false, staleOrFallback: !priceMatchesMarketSession || !valuationMatchesMarketSession || marketRegime === 'unknown',
         previousStage: previous?.lifecycle_stage ? String(previous.lifecycle_stage) as CandidateLifecycleStage : null,
       };
       const preStreak = classifyCandidateStage({ ...baseInput, consecutiveActionableCloses: 2 });
