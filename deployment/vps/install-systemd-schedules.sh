@@ -21,6 +21,10 @@ if ! grep -Eq '^TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED=true$' /etc/stockinsider/sto
   echo "TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED=true is required for the approved Telegram schedule" >&2
   exit 1
 fi
+if ! grep -Eq '^CANDIDATE_HISTORICAL_PRICE_ACCESS_ENABLED=(true|false)$' /etc/stockinsider/stockinsider.env; then
+  echo "CANDIDATE_HISTORICAL_PRICE_ACCESS_ENABLED=true|false is required so research cannot silently use an unavailable price history" >&2
+  exit 1
+fi
 env_owner=$(stat -c '%U' /etc/stockinsider/stockinsider.env)
 env_mode=$(stat -c '%a' /etc/stockinsider/stockinsider.env)
 if [[ "$env_owner" != root || ! "$env_mode" =~ ^(600|640)$ ]]; then

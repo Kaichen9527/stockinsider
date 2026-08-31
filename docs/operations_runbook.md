@@ -115,6 +115,13 @@ ingestion, pipeline or ranking promotion during smoke.
 
 ## 2. Failure Handling
 
+### Candidate historical-price access blocked
+
+- `CANDIDATE_HISTORICAL_PRICE_ACCESS_ENABLED=false` is an explicit fail-closed state for a VPS that cannot obtain the required 520-session official TWSE/TPEx history.
+- The 19:00 cycle must still publish the latest `found` source cards and preserve the last-good public snapshot. It must not write per-stock failed snapshots, create target prices, promote `waiting` or `actionable`, or advance the live shadow counter.
+- Check the newest `candidate_research_runs.terminal_reason`. It must be `official_historical_price_access_unavailable`, never a successful empty run.
+- Enable it only after an authorized, point-in-time historical official feed is available from the VPS. Do not substitute an unlicensed scraper or bypass the official provider's protection layer.
+
 ### Ingestion failure
 
 - Check `pipeline_runs` latest `run_type=ingestion`.

@@ -92,10 +92,16 @@ test('orphaned production lease recovery remains authenticated, owner-bound and 
   assert.doesNotMatch(lease, /\.delete\(\)/u);
 });
 
-test('scheduled core pipeline is candidate-first and leaves legacy seed ingestion to manual full recovery', () => {
+test('scheduled core pipeline is candidate-first, isolates unavailable official history, and leaves legacy seed ingestion to manual full recovery', () => {
+  const research = readFileSync(new URL('../web/src/lib/candidate-research.ts', import.meta.url), 'utf8');
   assert.match(domain, /const shouldRunIngestion = mode === 'full' && !skipIngestion/u);
   assert.match(domain, /'revenue_ingestion',[\s\S]{0,180}mode !== 'full'/u);
-  assert.match(domain, /const candidateResearch = await executeStep\('candidate_research'/u);
+  assert.match(domain, /const candidateResearch = await executeNonCriticalStep\(\s*'candidate_research'/u);
+  assert.match(domain, /candidate_research_blocked:\$\{result\.terminalReason/u);
+  assert.match(research, /isCandidateHistoricalPriceAccessEnabled\(\)/u);
+  assert.match(research, /official_historical_price_access_unavailable/u);
+  assert.match(research, /status: 'failed'/u);
+  assert.match(installer, /CANDIDATE_HISTORICAL_PRICE_ACCESS_ENABLED=true\|false/u);
 });
 
 test('Threads stays outside the VPS scheduler and the 20:00 monitor owns missing-run/publication alerts', () => {
