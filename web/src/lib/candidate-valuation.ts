@@ -18,11 +18,13 @@ export function buildConservativeOfficialScenario(input: {
   const sector = String(input.sector || '').toLowerCase();
   const financial = /financial|bank|insurance|證券|銀行|金控|保險/u.test(sector);
   const cyclical = /memory|dram|nand|nor|steel|shipping|panel|cyclical|記憶體|鋼鐵|航運|面板/u.test(sector);
+  const exchangeImpliedEps = input.peRatio && input.peRatio > 0 ? input.price / input.peRatio : null;
+  const positiveEarningsDriver = input.epsTtm && input.epsTtm > 0 ? input.epsTtm : exchangeImpliedEps;
   const methods = selectValuationMethods({
-    profitable: (input.epsTtm || 0) > 0,
+    profitable: (positiveEarningsDriver || 0) > 0,
     cyclicalOrAssetIntensive: cyclical,
     financialInstitution: financial,
-    lossMaking: (input.epsTtm || 0) <= 0,
+    lossMaking: (positiveEarningsDriver || 0) <= 0,
     verifiedTurnaroundPath: false,
     stableCashFlow: false,
   });
@@ -31,6 +33,7 @@ export function buildConservativeOfficialScenario(input: {
   let baseMultiple: number | null = null;
   let growthFactor = 1;
   let historicalPercentile: number | null = null;
+  let operatingDriverSource: 'reported_and_exchange_implied_lower' | 'exchange_implied_ttm_eps' | 'book_value_per_share' | null = null;
   let multiples: [number, number, number] | null = null;
   const distribution = (values: number[]): [number, number, number] | null => {
     const sorted = values.filter((value) => Number.isFinite(value) && value > 0).sort((a, b) => a - b);
@@ -46,15 +49,21 @@ export function buildConservativeOfficialScenario(input: {
   if (financial && input.pbRatio && input.pbRatio > 0 && (multiples = distribution(input.historicalPbRatios))) {
     primaryMethod = 'forward_pb';
     operatingDriver = input.price / input.pbRatio;
+    operatingDriverSource = 'book_value_per_share';
     baseMultiple = multiples[1];
     historicalPercentile = percentileOf(input.historicalPbRatios, input.pbRatio);
-  } else if (input.epsTtm && input.epsTtm > 0 && input.peRatio && input.peRatio > 0 && (multiples = distribution(input.historicalPeRatios))) {
+  } else if (positiveEarningsDriver && input.peRatio && input.peRatio > 0 && (multiples = distribution(input.historicalPeRatios))) {
     primaryMethod = cyclical ? 'normalized_pe' : 'forward_pe';
     const revenuePassThrough = input.revenueYoyPct == null ? 0 : Math.max(-0.15, Math.min(0.15, input.revenueYoyPct / 100 * 0.5));
     growthFactor = 1 + revenuePassThrough;
     // Use the lower of reported EPS and the exchange-implied earnings driver so
     // mismatched publication dates cannot manufacture upside.
-    operatingDriver = Math.min(input.epsTtm, input.price / input.peRatio);
+    operatingDriver = input.epsTtm && input.epsTtm > 0
+      ? Math.min(input.epsTtm, input.price / input.peRatio)
+      : input.price / input.peRatio;
+    operatingDriverSource = input.epsTtm && input.epsTtm > 0
+      ? 'reported_and_exchange_implied_lower'
+      : 'exchange_implied_ttm_eps';
     baseMultiple = multiples[1];
     historicalPercentile = percentileOf(input.historicalPeRatios, input.peRatio);
   }
@@ -63,5 +72,5 @@ export function buildConservativeOfficialScenario(input: {
   const base = operatingDriver * growthFactor * multiples[1];
   const bull = operatingDriver * (growthFactor + 0.1) * multiples[2];
   const metrics = scenarioValuationMetrics({ currentPrice: input.price, bear, base, bull });
-  return { ...metrics, primaryMethod, growthFactor, operatingDriver: round(operatingDriver, 4), baseMultiple: round(baseMultiple, 3), historicalPercentile, historicalSampleCount: primaryMethod === 'forward_pb' ? input.historicalPbRatios.length : input.historicalPeRatios.length };
+  return { ...metrics, primaryMethod, growthFactor, operatingDriver: round(operatingDriver, 4), operatingDriverSource, baseMultiple: round(baseMultiple, 3), historicalPercentile, historicalSampleCount: primaryMethod === 'forward_pb' ? input.historicalPbRatios.length : input.historicalPeRatios.length };
 }

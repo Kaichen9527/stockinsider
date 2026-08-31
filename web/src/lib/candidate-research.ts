@@ -12,10 +12,10 @@ import {
   fetchTwStockDailyBars,
   fetchTwStockEpsTtm,
   fetchTwStockInstitutional,
+  fetchTwMarketValuationHistory,
   fetchTwMarketTradingSessions,
   fetchTwStockMaster,
   fetchTwStockRevenue,
-  fetchTwStockValues,
 } from './tw-market';
 import { buildConservativeOfficialScenario } from './candidate-valuation';
 import { scheduledSourceConnectorKeys, sourceExecutionPolicy } from './source-policy';
@@ -94,7 +94,7 @@ export async function runCandidateResearchCycle(options: {
   if (dryRun) return { runId: randomUUID(), dryRun: true, candidateCount: 0, completedCount: 0, failedCount: 0, technicalSessionDate: null, items: [] };
   const supabase = getSupabaseServerClient();
   const runId = randomUUID();
-  const [master, marketSessions] = await Promise.all([fetchTwStockMaster(), fetchTwMarketTradingSessions(80)]);
+  const [master, marketSessions] = await Promise.all([fetchTwStockMaster(), fetchTwMarketTradingSessions(1320)]);
   if (master.length === 0) throw new Error('official_stock_master_missing');
   if (marketSessions.length < 2) throw new Error('official_trading_calendar_missing');
   const latestMarketSession = marketSessions.at(-1)!;
@@ -146,6 +146,8 @@ export async function runCandidateResearchCycle(options: {
     }
   }
   const universe = [...candidates.values()];
+  const exchangeBySymbol = new Map(master.map((stock) => [stock.symbol, stock.exchange]));
+  const officialValuationHistory = await fetchTwMarketValuationHistory(universe.map((stock) => stock.symbol), marketSessions, 60, exchangeBySymbol);
   const indexState = rowRelation(((marketRes.data as Row[]) || [])[0]?.index_state) || {};
   const marketAsOf = String(((marketRes.data as Row[]) || [])[0]?.as_of || '').slice(0, 10);
   const marketRegime = (marketAsOf === latestMarketSession && ['risk_on', 'selective', 'risk_off', 'breakdown'].includes(String(indexState.regime)) ? String(indexState.regime) : 'unknown') as MarketRiskRegime;
@@ -164,14 +166,15 @@ export async function runCandidateResearchCycle(options: {
     const startedAt = new Date().toISOString();
     const result: Row = { symbol: stock.symbol, stockId: stock.id };
     try {
-      const [bars, institutional, values, eps, fetchedRevenue, priorRevenueRes, historicalFundamentalsRes, priorStageRes, priorFlowsRes] = await Promise.all([
+      const officialMultiples = officialValuationHistory.get(stock.symbol) || [];
+      const values = officialMultiples.at(-1) || null;
+      const [bars, institutional, eps, fetchedRevenue, priorRevenueRes, historicalFundamentalsRes, priorStageRes, priorFlowsRes] = await Promise.all([
         fetchTwStockDailyBars(stock.symbol, 520),
         fetchTwStockInstitutional(stock.symbol).catch(() => null),
-        fetchTwStockValues(stock.symbol).catch(() => null),
         fetchTwStockEpsTtm(stock.symbol).catch(() => null),
         fetchTwStockRevenue(stock.symbol, 16).catch(() => null),
         supabase.from('revenue_signals').select('*').eq('stock_id', stock.id).lte('as_of_date', evaluatedAt.slice(0, 10)).order('as_of_date', { ascending: false }).limit(1),
-        supabase.from('fundamental_snapshots').select('as_of_date,pe_ratio,pb_ratio').eq('stock_id', stock.id).lte('as_of_date', evaluatedAt.slice(0, 10)).gte('as_of_date', new Date(Date.now() - 5 * 365 * 86_400_000).toISOString().slice(0, 10)).order('as_of_date', { ascending: false }).limit(1500),
+        supabase.from('fundamental_snapshots').select('as_of_date,pe_ratio,pb_ratio,source_url').eq('stock_id', stock.id).lte('as_of_date', evaluatedAt.slice(0, 10)).gte('as_of_date', new Date(Date.now() - 5 * 365 * 86_400_000).toISOString().slice(0, 10)).order('as_of_date', { ascending: false }).limit(1500),
         supabase.from('candidate_daily_stage_snapshots').select('*').eq('stock_id', stock.id).eq('ruleset_version', STAGE_RULESET_VERSION).eq('model_version', CANDIDATE_STAGE_MODEL_VERSION).order('session_date', { ascending: false }).limit(1),
         supabase.from('stock_signals').select('as_of,volume,chip_metrics').eq('stock_id', stock.id).order('as_of', { ascending: false }).limit(30),
       ]);
@@ -222,13 +225,37 @@ export async function runCandidateResearchCycle(options: {
       const priorRevenue = ((priorRevenueRes.data as Row[]) || [])[0] || null;
       const revenueYoy = numberOrNull(priorRevenue?.yoy_growth);
       const historicalFundamentals = (historicalFundamentalsRes.data as Row[]) || [];
-      const historicalPeRatios = historicalFundamentals.map((row) => numberOrNull(row.pe_ratio)).filter((value): value is number => value != null && value > 0);
-      const historicalPbRatios = historicalFundamentals.map((row) => numberOrNull(row.pb_ratio)).filter((value): value is number => value != null && value > 0);
+      if (officialMultiples.length > 0) {
+        const historyWrite = await supabase.from('fundamental_snapshots').upsert(officialMultiples.map((point) => ({
+          stock_id: stock.id,
+          as_of_date: point.date,
+          pe_ratio: point.peRatio,
+          pb_ratio: point.pbRatio,
+          source_url: point.sourceUrl,
+        })), { onConflict: 'stock_id,as_of_date' });
+        if (historyWrite.error) throw new Error(historyWrite.error.message);
+      }
+      const peByDate = new Map<string, number>();
+      const pbByDate = new Map<string, number>();
+      const trustedHistoricalFundamentals = historicalFundamentals.filter((row) => /BWIBBU_d|peQryDate/u.test(String(row.source_url || '')));
+      for (const row of trustedHistoricalFundamentals) {
+        const pe = numberOrNull(row.pe_ratio);
+        const pb = numberOrNull(row.pb_ratio);
+        const date = String(row.as_of_date || '');
+        if (pe != null && pe > 0) peByDate.set(date, pe);
+        if (pb != null && pb > 0) pbByDate.set(date, pb);
+      }
+      for (const point of officialMultiples) {
+        if (point.peRatio != null && point.peRatio > 0) peByDate.set(point.date, point.peRatio);
+        if (point.pbRatio != null && point.pbRatio > 0) pbByDate.set(point.date, point.pbRatio);
+      }
+      const historicalPeRatios = [...peByDate.values()];
+      const historicalPbRatios = [...pbByDate.values()];
       if (eps?.epsTtm != null || values?.peRatio != null || values?.pbRatio != null) {
         const fundamental = await supabase.from('fundamental_snapshots').upsert({
           stock_id: stock.id, as_of_date: values?.date || technical.sessionDate, eps_ttm: eps?.epsTtm ?? null,
           gross_margin: null, operating_margin: null, pe_ratio: values?.peRatio ?? null, pb_ratio: values?.pbRatio ?? null,
-          revenue_run_rate: null, source_url: `https://www.twse.com.tw/zh/trading/historical/bwibbu-day.html?stockNo=${stock.symbol}`,
+          revenue_run_rate: null, source_url: values?.sourceUrl || `https://www.twse.com.tw/zh/trading/historical/bwibbu-day.html?stockNo=${stock.symbol}`,
         }, { onConflict: 'stock_id,as_of_date' });
         if (fundamental.error) throw new Error(fundamental.error.message);
       }
@@ -241,7 +268,7 @@ export async function runCandidateResearchCycle(options: {
           historical_pb_percentile: valuation.primaryMethod === 'forward_pb' ? valuation.historicalPercentile : null, bear_target: valuation.bearTarget,
           base_target: valuation.baseTarget, bull_target: valuation.bullTarget, probability_weighted_target: valuation.probabilityWeightedTarget,
           base_upside_pct: valuation.baseUpsidePct, bear_downside_pct: valuation.bearDownsidePct, reward_risk_ratio: valuation.rewardRiskRatio,
-          earnings_bridge: { eps_ttm: eps?.epsTtm ?? null, revenue_yoy_pct: revenueYoy, conservative_growth_factor: valuation.growthFactor },
+          earnings_bridge: { eps_ttm: eps?.epsTtm ?? null, exchange_implied_eps: valuation.operatingDriverSource === 'exchange_implied_ttm_eps' ? valuation.operatingDriver : null, operating_driver_source: valuation.operatingDriverSource, revenue_yoy_pct: revenueYoy, conservative_growth_factor: valuation.growthFactor },
           assumption_ledger: [{ source: 'official_five_year_multiple_distribution', median_multiple: valuation.baseMultiple, sample_count: valuation.historicalSampleCount }, { source: 'official_monthly_revenue', half_pass_through_cap: 0.15 }],
           catalysts: [], invalidation_conditions: ['official earnings bridge deteriorates'], as_of: `${technical.sessionDate}T13:30:00+08:00`,
           available_at: evaluatedAt, provenance: { research_run_id: runId, sources: ['TWSE/TPEx','MOPS'] }, model_version: CANDIDATE_VALUATION_MODEL_VERSION,
