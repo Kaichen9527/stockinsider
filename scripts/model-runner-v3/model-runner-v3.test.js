@@ -241,10 +241,10 @@ ordinaryTest('operation and resource identities are deterministic and bound', ()
     resourceAttemptOrdinal: 0,
   }), /^[a-f0-9]{64}$/);
   assert.equal(MODEL_RUNNER_IDENTITY_SHA256.length, 64);
-  assert.equal(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)), 883);
-  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'codexVersion'), ['codexVersion', '0.150.0-alpha.8']);
+  assert.equal(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)), 885);
+  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'codexVersion'), ['codexVersion', '0.151.0-alpha.7.2']);
   assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'contractVersion'), ['contractVersion', 'model-runner-v3.6']);
-  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'hostPinVersion'), ['hostPinVersion', 'model-runner-host-pins-v3.13']);
+  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'hostPinVersion'), ['hostPinVersion', 'model-runner-host-pins-v3.14']);
 });
 
 ordinaryTest('task locks, contiguous reservations and resource hash chains fail closed', () => {
@@ -312,8 +312,8 @@ ordinaryTest('host pin fixture has an exact hash-bound format', async () => {
   const fixture = path.resolve(__dirname, '../../.loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json');
   assert.equal(fs.statSync(fixture).size, PIN_FIXTURE_BYTES);
   const pins = loadHostPins(fixture);
-  assert.equal(pins.fixtureVersion, 'model-runner-host-pins-v3.13');
-  assert.equal(pins.executables.find((entry) => entry.name === 'codex').version, 'codex-cli 0.150.0-alpha.8');
+  assert.equal(pins.fixtureVersion, 'model-runner-host-pins-v3.14');
+  assert.equal(pins.executables.find((entry) => entry.name === 'codex').version, 'codex-cli 0.151.0-alpha.7.2');
   assert.equal(verifyCurrentNode(pins), true);
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-pins-'));
   const altered = path.join(directory, 'pins.json');
@@ -380,8 +380,8 @@ ordinaryTest('version probes admit only closed known sandbox diagnostics', () =>
   assert.equal(validatedVersionOutput('/usr/bin/git', stdout, ''), stdout);
   assert.equal(validatedVersionOutput('/usr/bin/git', stdout, denial), stdout);
   assert.equal(validatedVersionOutput('/usr/bin/git', stdout, `${denial}${denial}`), stdout);
-  assert.equal(validatedVersionOutput(codex, 'codex-cli 0.150.0-alpha.8\n', aliasWarning),
-    'codex-cli 0.150.0-alpha.8\n');
+  assert.equal(validatedVersionOutput(codex, 'codex-cli 0.151.0-alpha.7.2\n', aliasWarning),
+    'codex-cli 0.151.0-alpha.7.2\n');
   expectExit(5, () => validatedVersionOutput('/usr/bin/git', stdout, denial.trimEnd()));
   expectExit(5, () => validatedVersionOutput('/usr/bin/git', stdout, `${denial}${denial}${denial}`));
   expectExit(5, () => validatedVersionOutput('/usr/bin/git', stdout, `${denial}${denial}unexpected\n`));
@@ -487,7 +487,7 @@ ordinaryTest('trusted live host probes admit only an explicit private cache scra
   }
 });
 
-ordinaryTest('disabled doctor accepts only the protected v3.9 compatibility selector for the exact v3.13 fixture', () => {
+ordinaryTest('disabled doctor accepts only the protected v3.9 compatibility selector for the exact v3.14 fixture', () => {
   const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-doctor-scratch-'));
   const policy = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-doctor-policy-'));
   const original = {
