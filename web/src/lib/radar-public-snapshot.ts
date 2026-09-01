@@ -187,11 +187,22 @@ export async function publishRadarPublicSnapshots(input: {
     id: String(item.window === 'home' ? ids.homeId : ids.dailyId),
     window: item.window,
     etag: item.etag,
+    payloadHash: item.hash,
     bytes: item.bytes,
   }));
   memory.delete('home');
   memory.delete('daily');
-  return { publishedAt, results };
+  return { publishedAt, results, homePublicationId: String(ids.homeId), homePayloadHash: home.hash };
+}
+
+export async function markRadarPublicSnapshotsFailed(reason: string, attemptedAt = new Date().toISOString()) {
+  const result = await getSupabaseServerClient().rpc('mark_radar_publication_failed', {
+    p_terminal_reason: reason.slice(0, 500),
+    p_attempted_at: attemptedAt,
+  });
+  if (result.error) throw new Error(`radar_publication_failure_marker_failed:${result.error.message}`);
+  memory.delete('home');
+  memory.delete('daily');
 }
 
 export async function loadLatestRadarPublicSnapshot(window: PublicRadarWindow): Promise<PublishedRadarSnapshot | null> {

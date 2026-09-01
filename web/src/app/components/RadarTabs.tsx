@@ -461,7 +461,8 @@ function CandidateStageCardView({ card }: { card: CandidateStageCard }) {
         <div>
           <p className="text-xs tracking-[0.18em] text-slate-500 dark:text-emerald-100/50">{card.symbol} · {card.lifecycleStage.toUpperCase()}</p>
           <Link href={card.detailHref} className="mt-1 block text-xl font-semibold hover:text-accent">{card.chineseName}</Link>
-          <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/55">來源 {card.mentionCount} 筆 · 最新 {formatTaipeiDateTime(card.latestMentionAt, 'compact')}</p>
+          <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/55">來源 {card.effectiveMentionCount}/{card.rawMentionCount} 筆有效／原始 · {card.publisherCount} 個發布者 · {card.platformCount} 個平台</p>
+          <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/55">單一平台占比 {Math.round(card.dominantPlatformShare * 100)}% · 最新 {formatTaipeiDateTime(card.latestMentionAt, 'compact')}</p>
         </div>
         <div className="rounded-2xl border border-line px-3 py-2 text-right text-xs">
           <p>研究 {card.scores.research.toFixed(1)} · 行動 {card.scores.actionability.toFixed(1)}</p>
@@ -484,6 +485,7 @@ function CandidateStageCardView({ card }: { card: CandidateStageCard }) {
         <p className="font-semibold text-slate-800 dark:text-emerald-50">尚未達成</p>
         <p className="mt-1">{card.unmetConditions.length ? card.unmetConditions.slice(0, 5).map((item) => candidateConditionLabel[item] || item).join('、') : '目前條件已通過'}</p>
         <p className="mt-2 text-slate-500">技術日 {card.technical.sessionDate || '待補'} · MA20 {card.technical.ma20?.toFixed(2) ?? '-'} · MA60 {card.technical.ma60?.toFixed(2) ?? '-'} · RSI {card.technical.rsi14?.toFixed(1) ?? '-'}</p>
+        {card.riskAction ? <p className="mt-2 text-slate-500">風險狀態 {card.riskAction.state} · {card.riskAction.reasons.length ? card.riskAction.reasons.join('、') : '未觸發退出條件'}</p> : null}
       </div>
     </article>
   );

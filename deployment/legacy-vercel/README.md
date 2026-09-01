@@ -5,8 +5,7 @@ This directory is the entire production payload for the legacy Vercel project
 `stockinsider-three-one.vercel.app` and must contain no cron jobs or data-writing
 runtime.
 
-Deploy it only after the canonical project `stockinsider`
-(`prj_cYNVwaGMMbgAeCnw6UqbIrLvlKYC`) is healthy at
-`https://stockinsider-three.vercel.app`. Vercel maps `permanent: true` to an HTTP
-308 redirect. Observe redirect traffic and errors for seven days before deleting
-the legacy project.
+Deploy it only after the VPS is healthy at `http://5.104.83.211/`. Both Vercel
+aliases are redirect-only and own no cron or data-writing runtime. Vercel maps
+`permanent: true` to an HTTP 308 redirect. Observe redirect traffic and errors
+for seven days before deleting the legacy project.

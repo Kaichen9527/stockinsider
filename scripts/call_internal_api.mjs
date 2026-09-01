@@ -3,7 +3,7 @@
 import http from 'node:http';
 import https from 'node:https';
 
-const CANONICAL_APP_URL = 'https://stockinsider-three.vercel.app';
+const CANONICAL_APP_URL = 'http://5.104.83.211';
 
 function fail(message, details = null) {
   if (details !== null) process.stderr.write(`${JSON.stringify(details)}\n`);

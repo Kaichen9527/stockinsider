@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireInternalAuth } from '@/lib/internal-auth';
-import { runSourceSync } from '@/lib/research-v2';
+import { runPodcastSync, runSourceSync } from '@/lib/research-v2';
 import { scheduledSourceConnectorKeys, sourceExecutionPolicy } from '@/lib/source-policy';
 import {
   nextExpectedAt,
@@ -14,7 +14,7 @@ import { classifySourceSyncTerminal } from '@/lib/source-health';
 import { assertThreadsTokenAvailable } from '@/lib/threads-token';
 import { acquireProductionWriteLease, releaseProductionWriteLease } from '@/lib/production-write-lease';
 
-const PARSER_VERSION = 'source-sync-v2.0.0';
+const PARSER_VERSION = 'source-ranking-v2.2.0';
 
 type SourceResult = SourceSyncResult & {
   fetched: number;
@@ -110,7 +110,15 @@ async function executeConnector(connector: string, dryRun: boolean, symbol: stri
   try {
     if (dryRun && connector === 'threads') await assertThreadsTokenAvailable();
     if (!dryRun) await syncSourceConnectorRegistry(policy, PARSER_VERSION);
-    const raw = await runSourceSync({ connector, dryRun, ...(symbol ? { symbol } : {}) });
+    const raw = connector === 'podcast'
+      ? await runPodcastSync({ dryRun }).then((result) => ({
+          ...result, connector: 'podcast', fetchedPosts: result.episodesFound,
+          duplicatesSkipped: 0, matchedDirectHits: Number(result.weakSignalsWritten || 0),
+          matchedIndustryHits: 0, entityId: null, errorCode: null, degradedReason: null,
+          sessionMode: 'not_applicable' as const, watermarkBefore: null, watermarkAfter: null,
+          sessionRefreshed: false,
+        }))
+      : await runSourceSync({ connector, dryRun, ...(symbol ? { symbol } : {}) });
     const result = publicResult(raw, policy.licenseBasis);
     if (!dryRun) {
       await recordSourceRunLedger({
@@ -230,7 +238,7 @@ export async function POST(req: Request) {
           publication,
           publicationError,
         },
-        meta: { dryRun, connector: 'all', symbol: symbol || null, authSource: auth.authSource },
+        meta: { dryRun, connector: 'all', symbol: symbol || null, authSource: auth.authSource, writerIdentity: process.env.STOCKINSIDER_WRITER_RELEASE_ID || null },
       }, { status: ok ? 200 : 502 });
     }
 
@@ -239,7 +247,7 @@ export async function POST(req: Request) {
     return NextResponse.json({
       ok: accepted,
       result,
-      meta: { runId: result.runId, dryRun, connector, symbol: symbol || null, authSource: auth.authSource },
+      meta: { runId: result.runId, dryRun, connector, symbol: symbol || null, authSource: auth.authSource, writerIdentity: process.env.STOCKINSIDER_WRITER_RELEASE_ID || null },
     }, { status: accepted ? 200 : 502 });
   } catch (caught) {
     const error = caught as Error & { status?: number; result?: Record<string, unknown> };
