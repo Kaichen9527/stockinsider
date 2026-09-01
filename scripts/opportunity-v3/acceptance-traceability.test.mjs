@@ -3472,10 +3472,13 @@ function executeOwnerSuite(source, variant, caseId) {
   return true;
 }
 
-const protectedLiveOracleCaseIds = new Set(['MR3-004', 'MR3-005', 'MR3-007', 'MR3-009', 'MR3-015']);
+const protectedLiveOracleCaseIds = new Set([
+  'MR3-004', 'MR3-005', 'MR3-007', 'MR3-009', 'MR3-010', 'MR3-011', 'MR3-015', 'MR3-019',
+]);
 const protectedLiveOracleVariants = new Set([
   'pinned Codex blocks filesystem DNS TCP UDP HTTP HTTPS loopback private IP proxy and Unix sockets across direct setsid and double-fork paths',
   'pinned Codex propagates network denials through distinct ordinary process-group setsid fork double-fork and delayed descendants before an actual model attempt',
+  'host pin fixture has an exact hash-bound format',
 ]);
 
 function escapeRegex(value) {
