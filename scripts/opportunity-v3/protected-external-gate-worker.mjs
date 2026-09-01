@@ -102,6 +102,23 @@ const v319ReviewSources = Object.freeze({
 });
 
 const graphBoundReviewSources = Object.freeze({
+  // The signed-host compatibility amendment changes active authority bytes.
+  // Register its independent review refs from the preceding protected base so
+  // the candidate cannot select or modify its own review source.
+  '81dceab0d17b6c0f0c104ee3376f6d1dc5065a283040a4c1ee0ac40f574580d4': Object.freeze({
+    requirements: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-research-shadow-v2-requirements-90de150b',
+      path: `${changeRelative}/requirements-review-v3.20.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+    architecture: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-research-shadow-v2-architecture-fa523ba1',
+      path: `${changeRelative}/architecture-review-v3.20.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed implementation range',
+    }),
+  }),
   '4baf35c1a17cc7c7cd451e71b29e34e9b83c90ee03ca18822fcf4f7f47b19a7b': Object.freeze({
     requirements: Object.freeze({
       ref: 'refs/remotes/origin/codex/source-led-opportunity-engine-v3-v320-requirements-evidence',
