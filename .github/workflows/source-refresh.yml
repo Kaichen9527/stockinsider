@@ -23,7 +23,7 @@ jobs:
     timeout-minutes: 45
     env:
       APP_URL: ${{ secrets.APP_URL }}
-      EXPECTED_APP_URL: https://stockinsider-three.vercel.app
+      EXPECTED_APP_URL: http://5.104.83.211
       INTERNAL_API_KEY: ${{ secrets.INTERNAL_API_KEY }}
       DRY_RUN: ${{ inputs.dry_run || 'false' }}
     steps:

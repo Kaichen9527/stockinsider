@@ -1,6 +1,6 @@
 import type { RadarDailyPayload, SourceSignalCard } from './types';
 
-export const STAGE_RULESET_VERSION = 'source-ranking-v2.1.0';
+export const STAGE_RULESET_VERSION = 'source-ranking-v2.2.0';
 
 export type CandidateLifecycleStage = 'found' | 'waiting' | 'actionable';
 export type MarketRiskRegime = 'risk_on' | 'selective' | 'risk_off' | 'breakdown' | 'unknown';
@@ -11,6 +11,7 @@ type DiscoveryFactors = {
   discussionBurst: number;
   recency: number;
   sourceReliability: number;
+  platformCount?: number;
 };
 
 type ResearchFactors = {
@@ -101,13 +102,15 @@ function weighted(values: Array<[number, number]>): number {
 }
 
 export function scoreDiscovery(factors: DiscoveryFactors): number {
-  return weighted([
+  const score = weighted([
     [factors.independentSources, 0.35],
     [factors.platformDiversity, 0.20],
     [factors.discussionBurst, 0.20],
     [factors.recency, 0.15],
     [factors.sourceReliability, 0.10],
   ]);
+  const cap = (factors.platformCount || 0) <= 1 ? 60 : factors.platformCount === 2 ? 85 : 100;
+  return Math.min(score, cap);
 }
 
 export function scoreResearch(factors: ResearchFactors): number {

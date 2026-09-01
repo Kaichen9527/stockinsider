@@ -7,6 +7,7 @@ const ENV_KEYS = [
   'INTERNAL_API_KEY', 'CRON_SECRET', 'THREADS_OFFICIAL_API_ENABLED',
   'TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED', 'PTT_METADATA_AUTHORIZED',
   'BULLTALK_LICENSED', 'BULLTALK_AUTHORIZED_FEED_URL',
+  'PODCAST_RSS_ALLOWLIST',
 ] as const;
 
 function withEnvironment(values: Partial<Record<(typeof ENV_KEYS)[number], string>>, run: () => void) {
@@ -62,6 +63,14 @@ test('approved roster has exactly seven unique Telegram cursors', () => {
 test('GDELT is active metadata discovery and retired publishers stay retired', () => {
   assert.equal(sourceExecutionPolicy('gdelt').disposition, 'active');
   assert.equal(sourceExecutionPolicy('gdelt').licenseBasis, 'gdelt_metadata_and_source_links');
+});
+
+test('Podcast is manual-only until a creator-published HTTPS RSS feed is allowlisted', () => {
+  withEnvironment({}, () => assert.equal(sourceExecutionPolicy('podcast').disposition, 'manual_only'));
+  withEnvironment({ PODCAST_RSS_ALLOWLIST: 'https://creator.example/feed.xml' }, () => {
+    assert.equal(sourceExecutionPolicy('podcast').disposition, 'active');
+    assert.equal(sourceExecutionPolicy('podcast').licenseBasis, 'creator_published_rss_allowlist');
+  });
 });
 
 test('connector=all includes only sources authorized in the current runtime', () => {
