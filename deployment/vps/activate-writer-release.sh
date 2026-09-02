@@ -25,6 +25,23 @@ systemctl daemon-reload
 systemctl restart stockinsider-web.service
 systemctl is-active --quiet stockinsider-web.service
 
+# `systemctl is-active` only proves that the process was spawned. Next.js can
+# still need a short interval before it binds loopback, so registering the
+# writer immediately races startup and leaves the new service identity fenced
+# out of Supabase. Wait for the local HTTP listener before activating it.
+app_ready=false
+for _attempt in $(seq 1 30); do
+  if curl --fail --silent --show-error --max-time 2 http://127.0.0.1:3100/ >/dev/null; then
+    app_ready=true
+    break
+  fi
+  sleep 1
+done
+if [[ "$app_ready" != true ]]; then
+  echo "stockinsider web did not become ready on 127.0.0.1:3100" >&2
+  exit 1
+fi
+
 set -a
 source /etc/stockinsider/stockinsider.env
 set +a
