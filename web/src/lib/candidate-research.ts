@@ -733,6 +733,7 @@ export async function runCandidateResearchCycle(options: {
 export async function loadCandidateStageCards(): Promise<{ found: CandidateStageCard[]; waiting: CandidateStageCard[]; actionable: CandidateStageCard[] }> {
   const supabase = getSupabaseServerClient();
   const cutoff = new Date(Date.now() - 7 * 86_400_000).toISOString();
+  const mentionSelect = 'stock_id,platform,source_name,author_name,source_url,stance,independent_content_hash,mentioned_at,available_at,publisher_key,publisher_name,stocks(id,symbol,name,market)';
   const latest = (rows: Row[]) => {
     const selected = new Map<string, Row>();
     for (const row of rows) {
@@ -741,16 +742,26 @@ export async function loadCandidateStageCards(): Promise<{ found: CandidateStage
     }
     return selected;
   };
-  const [mentionsRes, stageRes] = await Promise.all([
-    supabase.from('candidate_source_mentions')
-      .select('stock_id,platform,source_name,author_name,source_url,stance,independent_content_hash,mentioned_at,available_at,publisher_key,publisher_name,stocks(id,symbol,name,market)')
-      .gte('available_at', cutoff).order('available_at', { ascending: false }).limit(10000),
-    supabase.from('candidate_daily_stage_snapshots')
-      .select('*,stocks(id,symbol,name,market)').eq('ruleset_version', STAGE_RULESET_VERSION).eq('model_version', CANDIDATE_STAGE_MODEL_VERSION)
-      .order('session_date', { ascending: false }).order('available_at', { ascending: false }).limit(5000),
-  ]);
-  if (mentionsRes.error || stageRes.error) throw new Error(mentionsRes.error?.message || stageRes.error?.message || 'candidate_stage_read_failed');
-  const recentMentions = (mentionsRes.data as Row[]) || [];
+  // PostgREST responses containing thousands of joined mention rows can be
+  // reset by the upstream proxy before Node receives a response. Page the
+  // complete seven-day plane so publication remains complete without one
+  // oversized fetch.
+  const stagePromise = supabase.from('candidate_daily_stage_snapshots')
+    .select('*,stocks(id,symbol,name,market)').eq('ruleset_version', STAGE_RULESET_VERSION).eq('model_version', CANDIDATE_STAGE_MODEL_VERSION)
+    .order('session_date', { ascending: false }).order('available_at', { ascending: false }).limit(5000);
+  const recentMentions: Row[] = [];
+  const mentionPageSize = 750;
+  for (let from = 0; from < 10_000; from += mentionPageSize) {
+    const page = await supabase.from('candidate_source_mentions').select(mentionSelect)
+      .gte('available_at', cutoff).order('available_at', { ascending: false })
+      .range(from, from + mentionPageSize - 1);
+    if (page.error) throw new Error(page.error.message);
+    const rows = (page.data as Row[]) || [];
+    recentMentions.push(...rows);
+    if (rows.length < mentionPageSize) break;
+  }
+  const stageRes = await stagePromise;
+  if (stageRes.error) throw new Error(stageRes.error.message || 'candidate_stage_read_failed');
   const recentStockIds = [...new Set(recentMentions.map((row) => String(row.stock_id || '')).filter(Boolean))];
   const stageByStock = latest((stageRes.data as Row[]) || []);
   const persistedStockIds = [...stageByStock.entries()].filter(([, stage]) => ['waiting', 'actionable'].includes(String(stage.lifecycle_stage))).map(([stockId]) => stockId);

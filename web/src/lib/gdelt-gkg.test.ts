@@ -46,3 +46,14 @@ test('GKG matching reads content columns, not record date, and excludes year-sha
   ]), ['2330']);
   assert.equal(parseGdeltSeenDate(columns[1]), '2026-09-02T12:00:00Z');
 });
+
+test('GKG ignores bare four-digit numbers and accepts only explicit ticker syntax or company names', () => {
+  const stocks = [
+    { symbol: '2330', name: '台積電' },
+    { symbol: '2002', name: '中鋼' },
+    { symbol: '1234', name: '黑松' },
+  ];
+  assert.deepEqual(matchGdeltStockSymbols('revenue reached 2330 and 2002 units in 1234 regions', stocks), []);
+  assert.deepEqual(matchGdeltStockSymbols('TWSE:2330 and $2002 moved while 1234 was a count', stocks), ['2330', '2002']);
+  assert.deepEqual(matchGdeltStockSymbols('台積電供應鏈展望', stocks), ['2330']);
+});
