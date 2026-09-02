@@ -1,7 +1,18 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { buildConservativeOfficialScenario } from './candidate-valuation.ts';
-import { candidatePriceRefreshDepth, isCandidateHistoricalPriceAccessEnabled } from './candidate-research-policy.ts';
+import { candidatePriceRefreshDepth, collectPagedAuthorityRows, isCandidateHistoricalPriceAccessEnabled } from './candidate-research-policy.ts';
+
+test('candidate authority readers continue past the PostgREST 1000-row response cap', async () => {
+  const authority = Array.from({ length: 1320 }, (_, index) => index);
+  const calls: Array<[number, number]> = [];
+  const rows = await collectPagedAuthorityRows(async (from, to) => {
+    calls.push([from, to]);
+    return authority.slice(from, to + 1);
+  }, { maxRows: 1320 });
+  assert.equal(rows.length, 1320);
+  assert.deepEqual(calls, [[0, 999], [1000, 1319]]);
+});
 
 const historicalPeRatios = [10, 12, 14, 16, 18, 20, 22, 24, 26, 28];
 const historicalPbRatios = [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7];

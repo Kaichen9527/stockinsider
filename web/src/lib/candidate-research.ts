@@ -19,7 +19,7 @@ import {
   type TwValuationHistoryPoint,
 } from './tw-market';
 import { buildConservativeOfficialScenario } from './candidate-valuation';
-import { candidatePriceRefreshDepth, isCandidateHistoricalPriceAccessEnabled } from './candidate-research-policy';
+import { candidatePriceRefreshDepth, collectPagedAuthorityRows, isCandidateHistoricalPriceAccessEnabled } from './candidate-research-policy';
 import { scheduledSourceConnectorKeys, sourceExecutionPolicy } from './source-policy';
 import { loadLatestSourceRunLedger } from './source-run-ledger';
 import type { CandidateShadowProgress, CandidateStageCard } from './types';
@@ -93,6 +93,30 @@ async function mapLimit<T, R>(items: T[], limit: number, work: (item: T) => Prom
   return results;
 }
 
+async function loadStockAuthority(supabase: ReturnType<typeof getSupabaseServerClient>, cutoff: string) {
+  return collectPagedAuthorityRows<Row>(async (from, to) => {
+    try {
+      const page = await supabase.rpc('candidate_research_stock_authority', { p_cutoff: cutoff }).range(from, to);
+      if (page.error) throw page.error;
+      return (page.data as Row[]) || [];
+    } catch (error) {
+      throw new Error(`official_stock_authority_read_failed:${error instanceof Error ? error.message : String(error)}`);
+    }
+  }, { maxRows: 5000 });
+}
+
+async function loadOfficialSessions(supabase: ReturnType<typeof getSupabaseServerClient>, cutoff: string) {
+  return collectPagedAuthorityRows<{ session_date?: unknown }>(async (from, to) => {
+    try {
+      const page = await supabase.rpc('candidate_research_official_sessions', { p_cutoff: cutoff, p_limit: 1320 }).range(from, to);
+      if (page.error) throw page.error;
+      return (page.data as Array<{ session_date?: unknown }>) || [];
+    } catch (error) {
+      throw new Error(`official_trading_calendar_read_failed:${error instanceof Error ? error.message : String(error)}`);
+    }
+  }, { maxRows: 1320 });
+}
+
 export async function runCandidateResearchCycle(options: {
   dryRun?: boolean;
   pipelineRunId?: string | null;
@@ -107,18 +131,16 @@ export async function runCandidateResearchCycle(options: {
   };
   const supabase = getSupabaseServerClient();
   const runId = randomUUID();
-  const [authorityRes, persistedSessionsRes] = await Promise.all([
-    supabase.rpc('candidate_research_stock_authority', { p_cutoff: evaluatedAt }),
-    supabase.rpc('candidate_research_official_sessions', { p_cutoff: evaluatedAt, p_limit: 1320 }),
+  const [authorityRows, persistedSessionRows] = await Promise.all([
+    loadStockAuthority(supabase, evaluatedAt),
+    loadOfficialSessions(supabase, evaluatedAt),
   ]);
-  if (authorityRes.error) throw new Error(`official_stock_authority_read_failed:${authorityRes.error.message}`);
-  const master = (((authorityRes.data as Row[]) || []).map((row) => ({
+  const master = (authorityRows.map((row) => ({
     stockId: String(row.stock_id || ''), symbol: String(row.symbol || ''), name: String(row.name || ''),
     exchange: String(row.exchange || '').toUpperCase() === 'TPEX' ? 'TPEx' as const : 'TWSE' as const,
     sector: row.sector ? String(row.sector) : null,
   })).filter((row) => row.stockId && /^\d{4}$/u.test(row.symbol) && row.name));
-  if (persistedSessionsRes.error) throw new Error(`official_trading_calendar_read_failed:${persistedSessionsRes.error.message}`);
-  let marketSessions = (((persistedSessionsRes.data as Array<{ session_date?: unknown }>) || [])
+  let marketSessions = (persistedSessionRows
     .map((row) => String(row.session_date || ''))
     .filter((session) => /^\d{4}-\d{2}-\d{2}$/u.test(session)))
     .sort();

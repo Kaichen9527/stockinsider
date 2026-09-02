@@ -14,3 +14,21 @@ export function candidatePriceRefreshDepth(knownSessions: string[], latestMarket
   if (unique.length < 240) return 1320;
   return unique.at(-1) === latestMarketSession ? 0 : 5;
 }
+
+export async function collectPagedAuthorityRows<T>(
+  readPage: (from: number, to: number) => Promise<T[]>,
+  options: { pageSize?: number; maxRows: number },
+): Promise<T[]> {
+  const pageSize = options.pageSize || 1000;
+  if (!Number.isInteger(pageSize) || pageSize <= 0 || !Number.isInteger(options.maxRows) || options.maxRows <= 0) {
+    throw new Error('invalid_authority_pagination');
+  }
+  const rows: T[] = [];
+  while (rows.length < options.maxRows) {
+    const requestSize = Math.min(pageSize, options.maxRows - rows.length);
+    const page = await readPage(rows.length, rows.length + requestSize - 1);
+    rows.push(...page);
+    if (page.length < requestSize) break;
+  }
+  return rows;
+}
