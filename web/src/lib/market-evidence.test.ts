@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { deriveMarketEvidence, parseForeignNetTwd, parseTaiexHistory, parseTpexDailyCloses, parseTpexIndex } from './market-evidence.ts';
+import { deriveMarketEvidence, missingOfficialIndexAuthorityRequests, parseForeignNetTwd, parseTaiexHistory, parseTpexDailyCloses, parseTpexIndex } from './market-evidence.ts';
 
 test('market evidence requires both indices, breadth and official flows', () => {
   const sessions = Array.from({ length: 520 }, (_, index) => ({ date: `2026-${String(Math.floor(index / 28) + 1).padStart(2, '0')}-${String(index % 28 + 1).padStart(2, '0')}`, close: 100 + index }));
@@ -19,6 +19,16 @@ test('missing market component disables risk budget', () => {
   assert.equal(evidence.status, 'data_incomplete');
   assert.equal(evidence.riskBudget, null);
   assert.ok(evidence.missingComponents.length === 4);
+});
+
+test('official index acquisition only requests authority dates absent from retained history', () => {
+  const sessions = ['2026-08-31', '2026-09-01'];
+  assert.deepEqual(missingOfficialIndexAuthorityRequests(sessions, [
+    { market: 'TWSE', session_date: '2026-08-31', index_close: 24000 },
+    { market: 'TWSE', session_date: '2026-09-01', index_close: null },
+    { market: 'TPEX', session_date: '2026-08-31', index_close: 260 },
+    { market: 'TPEX', session_date: '2026-09-01', index_close: 261 },
+  ]), { taiexMonths: ['2026-09-01'], tpexSessions: [] });
 });
 
 test('official market parsers normalize TWSE and TPEx evidence', () => {
