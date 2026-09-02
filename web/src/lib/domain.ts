@@ -9,7 +9,7 @@ import path from 'path';
 import { Client as LineClient } from '@line/bot-sdk';
 import { getSupabaseServerClient } from './supabase-server';
 import { loadLatestSourceRunLedger, type SourceRunLedgerView } from './source-run-ledger';
-import { scheduledSourceConnectorKeys, sourceExecutionPolicy } from './source-policy';
+import { scheduledSourceConnectorKeys, SOURCE_CONNECTOR_KEYS, sourceExecutionPolicy } from './source-policy';
 import { isDemoMode } from './data-mode';
 import { candidateMentionDiscoveryEligible } from './source-content-semantics';
 import { mergeAuthoritativeDeepDiveLeaves } from './deep-dive-merge';
@@ -11844,6 +11844,32 @@ function buildSourceHealthSummary(
       metadata: { disposition: ledger.sourceDisposition, auth_status: ledger.authStatus, license_basis: ledger.licenseBasis, fetched: ledger.fetched, matched: ledger.matched, duplicate: ledger.duplicate, next_expected_at: ledger.nextExpectedAt },
     } as typeof legacyConnectorDetails[number];
     connectorDetailsByKey.set(ledger.connector, ledgerDetail);
+  }
+  // Policy is authoritative even when the optional ledger read times out. A
+  // manual, blocked or retired connector must never fall back to stale legacy
+  // worker errors and appear as a failed active crawler on the homepage.
+  for (const connector of SOURCE_CONNECTOR_KEYS) {
+    const policy = sourceExecutionPolicy(connector);
+    if (policy.disposition === 'active') continue;
+    const existing = connectorDetailsByKey.get(connector);
+    if (!existing) continue;
+    connectorDetailsByKey.set(connector, {
+      ...existing,
+      status: policy.disposition,
+      lastTerminalStatus: policy.disposition,
+      normalizedFailureCode: null,
+      displayFailureReason: policy.terminalReason,
+      degradedReason: null,
+      failureReason: null,
+      canonicalWorkerStatus: policy.disposition,
+      workerFreshnessStatus: 'missing',
+      workerSlaStatus: 'missing',
+      statusOwner: 'source_policy',
+      ignoredServerlessSkip: false,
+      searched: false,
+      matched: false,
+      metadata: { ...(existing.metadata || {}), disposition: policy.disposition, license_basis: policy.licenseBasis },
+    });
   }
   const connectorDetails = [...connectorDetailsByKey.values()];
   return {

@@ -46,6 +46,10 @@ function socialSourceState(item: SocialSourceDetail) {
   const terminalStatus = item.lastTerminalStatus || item.status;
   const ignoredServerless = Boolean(item.ignoredServerlessSkip || item.statusOwner === 'serverless_status');
   const failedChannels = item.channelBreakdown?.filter((channel) => channel.failureReason).length || 0;
+  if (item.status === 'manual_only') return { label: '人工／授權來源', tone: 'text-slate-600 dark:text-emerald-100/70' };
+  if (item.status === 'blocked_auth') return { label: '等待官方授權', tone: 'text-amber-700 dark:text-amber-300' };
+  if (item.status === 'blocked_license') return { label: '授權前停用', tone: 'text-amber-700 dark:text-amber-300' };
+  if (item.status === 'retired') return { label: '已退役', tone: 'text-slate-500 dark:text-emerald-100/55' };
   if (written > 0 && ['failed', 'timed_out', 'partial'].includes(String(terminalStatus))) {
     return { label: terminalStatus === 'timed_out' ? '上次成功，本輪逾時' : '上次成功，本輪待補', tone: 'text-amber-700 dark:text-amber-300' };
   }
@@ -65,6 +69,9 @@ function socialSourceState(item: SocialSourceDetail) {
 }
 
 function socialSourceSummary(item: SocialSourceDetail) {
+  if (['manual_only', 'blocked_auth', 'blocked_license', 'retired'].includes(item.status)) {
+    return `${item.status} · 不納入自動排程、健康 SLA 或 Shadow`;
+  }
   if (item.connector === 'ptt') {
     const articles = item.articlesFetched ?? Number(item.metadata?.articles_fetched || item.metadata?.articlesFetched || 0);
     const comments = item.pushCommentsParsed ?? Number(item.metadata?.push_comments_parsed || item.metadata?.pushCommentsParsed || 0);

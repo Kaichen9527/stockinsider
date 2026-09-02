@@ -76,51 +76,56 @@ export function resetOfficialMarketRequestStateForTests() {
   twseMarketDailyRows.clear();
 }
 
-function recordOfficialHostSuccess(host: string) {
-  officialHostConsecutiveFailures.delete(host);
-  officialHostUnavailableUntil.delete(host);
+function officialCircuitKey(url: string) {
+  const parsed = new URL(url);
+  return `${parsed.hostname}${parsed.pathname}`;
 }
 
-function recordOfficialHostRetryableFailure(host: string) {
-  const failures = (officialHostConsecutiveFailures.get(host) || 0) + 1;
-  officialHostConsecutiveFailures.set(host, failures);
+function recordOfficialHostSuccess(circuitKey: string) {
+  officialHostConsecutiveFailures.delete(circuitKey);
+  officialHostUnavailableUntil.delete(circuitKey);
+}
+
+function recordOfficialHostRetryableFailure(circuitKey: string) {
+  const failures = (officialHostConsecutiveFailures.get(circuitKey) || 0) + 1;
+  officialHostConsecutiveFailures.set(circuitKey, failures);
   if (failures >= OFFICIAL_HOST_FAILURE_THRESHOLD) {
-    officialHostUnavailableUntil.set(host, Date.now() + OFFICIAL_HOST_CIRCUIT_BREAKER_MS);
+    officialHostUnavailableUntil.set(circuitKey, Date.now() + OFFICIAL_HOST_CIRCUIT_BREAKER_MS);
   }
 }
 
-function officialHostCircuitIsOpen(host: string) {
-  return (officialHostUnavailableUntil.get(host) || 0) > Date.now();
+function officialHostCircuitIsOpen(circuitKey: string) {
+  return (officialHostUnavailableUntil.get(circuitKey) || 0) > Date.now();
 }
 
 export async function fetchOfficialJson<T>(url: string, timeoutMs: number): Promise<T | null> {
-  const host = new URL(url).hostname;
-  if (officialHostCircuitIsOpen(host)) return null;
+  const circuitKey = officialCircuitKey(url);
+  if (officialHostCircuitIsOpen(circuitKey)) return null;
   return await withOfficialMarketSlot(async () => {
     // Re-check after acquiring both the global slot and the per-host lease.
     // Requests queued before a circuit opens must not clear it or start a new
     // round of requests against the unavailable host.
-    if (officialHostCircuitIsOpen(host)) return null;
+    if (officialHostCircuitIsOpen(circuitKey)) return null;
     return await withOfficialHostPace(url, async () => {
-      if (officialHostCircuitIsOpen(host)) return null;
+      if (officialHostCircuitIsOpen(circuitKey)) return null;
       try {
       const response = await fetch(url, {
         headers: { accept: 'application/json', 'user-agent': 'StockInsider/2.1 official-market-data' },
         signal: AbortSignal.timeout(timeoutMs),
       });
         if (!response.ok) {
-          if (response.status === 403 || response.status === 428 || response.status === 429 || response.status >= 500) recordOfficialHostRetryableFailure(host);
-          else recordOfficialHostSuccess(host);
+          if (response.status === 403 || response.status === 428 || response.status === 429 || response.status >= 500) recordOfficialHostRetryableFailure(circuitKey);
+          else recordOfficialHostSuccess(circuitKey);
           return null;
         }
         const data = await response.json() as T;
-        recordOfficialHostSuccess(host);
+        recordOfficialHostSuccess(circuitKey);
         return data;
       } catch {
         // A single timeout or 5xx is transient evidence, not proof that every
         // symbol and month on the host is unavailable. Open the host circuit only
         // after consecutive retryable failures, then retain fail-closed behavior.
-        recordOfficialHostRetryableFailure(host);
+        recordOfficialHostRetryableFailure(circuitKey);
         return null;
       }
     });
