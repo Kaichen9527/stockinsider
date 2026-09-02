@@ -27,7 +27,7 @@ import { candidateValuationPolicy } from './candidate-valuation-policy';
 import { buildDeterministicCandidateSections } from './candidate-detail';
 import { candidateRiskAction } from './candidate-risk-action';
 import { buildMarketEvidenceSnapshot } from './market-evidence';
-import { publisherKeyFor, relativeDiscussionBurst, roundRobinSourceLinks, sourceConcentration } from './source-content-semantics';
+import { candidateMentionDiscoveryEligible, publisherKeyFor, relativeDiscussionBurst, roundRobinSourceLinks, sourceConcentration } from './source-content-semantics';
 import { buildShadowReplayInputs, shadowReplayConflicts } from './shadow-policy-v2';
 
 type Row = Record<string, unknown>;
@@ -146,9 +146,10 @@ export async function runCandidateResearchCycle(options: {
   const candidates = new Map<string, { id: string; symbol: string; name: string; storedName: string; market: 'TW' | 'US'; sector: string | null }>();
   const mentionsByStock = new Map<string, Row[]>();
   const allMentions = (mentionsRes.data as Row[]) || [];
-  const recentMentions = allMentions.filter((mention) => String(mention.available_at || '') >= cutoff && String(mention.content_semantics || 'editorial_discussion') !== 'bulk_institutional_ranking');
+  const eligibleMentions = allMentions.filter((mention) => candidateMentionDiscoveryEligible(mention.provenance));
+  const recentMentions = eligibleMentions.filter((mention) => String(mention.available_at || '') >= cutoff && String(mention.content_semantics || 'editorial_discussion') !== 'bulk_institutional_ranking');
   const olderMentionsByStock = new Map<string, Row[]>();
-  for (const mention of allMentions.filter((mention) => String(mention.available_at || '') < cutoff)) {
+  for (const mention of eligibleMentions.filter((mention) => String(mention.available_at || '') < cutoff)) {
     const stockId = String(mention.stock_id || '');
     if (!stockId) continue;
     const rows = olderMentionsByStock.get(stockId) || [];
@@ -733,7 +734,7 @@ export async function runCandidateResearchCycle(options: {
 export async function loadCandidateStageCards(): Promise<{ found: CandidateStageCard[]; waiting: CandidateStageCard[]; actionable: CandidateStageCard[] }> {
   const supabase = getSupabaseServerClient();
   const cutoff = new Date(Date.now() - 7 * 86_400_000).toISOString();
-  const mentionSelect = 'stock_id,platform,source_name,author_name,source_url,stance,independent_content_hash,mentioned_at,available_at,publisher_key,publisher_name,stocks(id,symbol,name,market)';
+  const mentionSelect = 'stock_id,platform,source_name,author_name,source_url,stance,independent_content_hash,mentioned_at,available_at,publisher_key,publisher_name,provenance,stocks(id,symbol,name,market)';
   const latest = (rows: Row[]) => {
     const selected = new Map<string, Row>();
     for (const row of rows) {
@@ -757,7 +758,7 @@ export async function loadCandidateStageCards(): Promise<{ found: CandidateStage
       .range(from, from + mentionPageSize - 1);
     if (page.error) throw new Error(page.error.message);
     const rows = (page.data as Row[]) || [];
-    recentMentions.push(...rows);
+    recentMentions.push(...rows.filter((row) => candidateMentionDiscoveryEligible(row.provenance)));
     if (rows.length < mentionPageSize) break;
   }
   const stageRes = await stagePromise;
@@ -770,14 +771,14 @@ export async function loadCandidateStageCards(): Promise<{ found: CandidateStage
   const historicalOnlyIds = persistedStockIds.filter((stockId) => !recentStockIds.includes(stockId));
   const [historicalMentionsRes, technicalRes, valuationRes, trackingRes] = await Promise.all([
     historicalOnlyIds.length > 0
-      ? supabase.from('candidate_source_mentions').select('stock_id,platform,source_name,author_name,source_url,stance,independent_content_hash,mentioned_at,available_at,publisher_key,publisher_name,stocks(id,symbol,name,market)').in('stock_id', historicalOnlyIds).order('available_at', { ascending: false }).limit(5000)
+      ? supabase.from('candidate_source_mentions').select('stock_id,platform,source_name,author_name,source_url,stance,independent_content_hash,mentioned_at,available_at,publisher_key,publisher_name,provenance,stocks(id,symbol,name,market)').in('stock_id', historicalOnlyIds).order('available_at', { ascending: false }).limit(5000)
       : Promise.resolve({ data: [], error: null }),
     supabase.from('technical_feature_snapshots').select('*').in('stock_id', stockIds).order('session_date', { ascending: false }).limit(5000),
     supabase.from('valuation_snapshots').select('*').in('stock_id', stockIds).eq('model_version', CANDIDATE_VALUATION_MODEL_VERSION).order('session_date', { ascending: false }).limit(5000),
     supabase.from('candidate_signal_tracking').select('stock_id,risk_action,action_reasons,session_date').in('stock_id', stockIds).eq('model_version', CANDIDATE_STAGE_MODEL_VERSION).order('session_date', { ascending: false }).limit(5000),
   ]);
   if (historicalMentionsRes.error || technicalRes.error || valuationRes.error || trackingRes.error) throw new Error(historicalMentionsRes.error?.message || technicalRes.error?.message || valuationRes.error?.message || trackingRes.error?.message || 'candidate_stage_read_failed');
-  const mentions = [...recentMentions, ...((historicalMentionsRes.data as Row[]) || [])];
+  const mentions = [...recentMentions, ...(((historicalMentionsRes.data as Row[]) || []).filter((row) => candidateMentionDiscoveryEligible(row.provenance)))];
   const technicalByStock = latest((technicalRes.data as Row[]) || []);
   const valuationByStock = latest((valuationRes.data as Row[]) || []);
   const trackingByStock = latest((trackingRes.data as Row[]) || []);

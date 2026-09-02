@@ -11,6 +11,7 @@ import { getSupabaseServerClient } from './supabase-server';
 import { loadLatestSourceRunLedger, type SourceRunLedgerView } from './source-run-ledger';
 import { scheduledSourceConnectorKeys, sourceExecutionPolicy } from './source-policy';
 import { isDemoMode } from './data-mode';
+import { candidateMentionDiscoveryEligible } from './source-content-semantics';
 import { mergeAuthoritativeDeepDiveLeaves } from './deep-dive-merge';
 import type {
   AgentStatusSummary,
@@ -14014,7 +14015,7 @@ export async function getLegacyPersistedRadarStages(sourceSignals: SourceSignalC
       ? await Promise.all([
           supabase.from('stocks').select('id,symbol').in('id', stockIds),
           supabase.from('candidate_source_mentions')
-            .select('stock_id,platform,source_name,author_name,source_url,stance,mentioned_at,available_at')
+            .select('stock_id,platform,source_name,author_name,source_url,stance,mentioned_at,available_at,provenance')
             .in('stock_id', stockIds)
             .gte('available_at', sevenDaysAgo)
             .order('available_at', { ascending: false })
@@ -14028,7 +14029,7 @@ export async function getLegacyPersistedRadarStages(sourceSignals: SourceSignalC
       return symbol ? [[symbol, snapshot] as const] : [];
     }));
     const mentionsBySymbol = new Map<string, Row[]>();
-    for (const mention of (mentionsRes.data as Row[]) || []) {
+    for (const mention of ((mentionsRes.data as Row[]) || []).filter((row) => candidateMentionDiscoveryEligible(row.provenance))) {
       const symbol = symbolByStockId.get(String(mention.stock_id || ''));
       if (!symbol) continue;
       mentionsBySymbol.set(symbol, [...(mentionsBySymbol.get(symbol) || []), mention]);
@@ -20264,7 +20265,7 @@ export async function runThesisRank(options?: { dryRun?: boolean }) {
     socialByStock.set(stockId, [...current, row]);
   }
   const mentionsByStock = new Map<string, Row[]>();
-  for (const row of (mentionsRes.data as Row[]) || []) {
+  for (const row of ((mentionsRes.data as Row[]) || []).filter((mention) => candidateMentionDiscoveryEligible(mention.provenance))) {
     const stockId = String(row.stock_id || '');
     if (!stockId) continue;
     mentionsByStock.set(stockId, [...(mentionsByStock.get(stockId) || []), row]);
@@ -21548,7 +21549,7 @@ export async function runDynamicMentionScan(options?: { dryRun?: boolean }) {
   const supabase = getSupabaseServerClient();
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
   const [mentionsRes, stocksRes] = await Promise.all([
-    supabase.from('candidate_source_mentions').select('stock_id,stance,platform').gte('available_at', sevenDaysAgo).limit(10000),
+    supabase.from('candidate_source_mentions').select('stock_id,stance,platform,provenance').gte('available_at', sevenDaysAgo).limit(10000),
     supabase.from('stocks').select('id,symbol').eq('market', 'TW').limit(10000),
   ]);
   if (mentionsRes.error || stocksRes.error) throw new Error(mentionsRes.error?.message || stocksRes.error?.message || 'candidate mention scan failed');
@@ -21565,7 +21566,7 @@ export async function runDynamicMentionScan(options?: { dryRun?: boolean }) {
     if (platform) entry.platforms.add(platform);
   }
 
-  for (const mention of (mentionsRes.data as Row[]) || []) {
+  for (const mention of ((mentionsRes.data as Row[]) || []).filter((row) => candidateMentionDiscoveryEligible(row.provenance))) {
     const symbol = symbolByStockId.get(String(mention.stock_id || '')) || '';
     if (!symbol) continue;
     const stance = String(mention.stance || 'neutral');

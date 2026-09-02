@@ -1,12 +1,20 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  candidateMentionDiscoveryEligible,
   classifyPttContentSemantics,
   platformDiscoveryCap,
   relativeDiscussionBurst,
   roundRobinSourceLinks,
   sourceConcentration,
 } from './source-content-semantics.ts';
+
+test('invalidated source mentions remain auditable but leave discovery', () => {
+  assert.equal(candidateMentionDiscoveryEligible(null), true);
+  assert.equal(candidateMentionDiscoveryEligible({ discovery_eligible: true }), true);
+  assert.equal(candidateMentionDiscoveryEligible({ discovery_eligible: false }), false);
+  assert.equal(candidateMentionDiscoveryEligible({ invalidated: true }), false);
+});
 
 test('PTT institutional ranking is chip evidence instead of discovery', () => {
   assert.equal(classifyPttContentSemantics('[情報] 外資買超前20名排行'), 'bulk_institutional_ranking');
