@@ -11,6 +11,7 @@ export type OfficialCalendarBackfillEvidence = {
   market: 'TWSE' | 'TPEX';
   month: string;
   dates: string[];
+  closes: Record<string, number>;
   sourceUrl: string;
   responseSha256: string;
 };
@@ -29,6 +30,11 @@ function rocSession(value: unknown) {
   const output = `${year}-${match[2]}-${match[3]}`;
   const parsed = new Date(`${output}T00:00:00Z`);
   return Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === output ? output : null;
+}
+
+function finitePositive(value: unknown) {
+  const parsed = Number(String(value ?? '').replace(/,/gu, '').trim());
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
 }
 
 function pageMonth(page: OfficialCalendarBackfillPage) {
@@ -72,12 +78,19 @@ export function parseOfficialCalendarBackfillPage(value: unknown): OfficialCalen
     rows = Array.isArray(table?.data) ? table!.data as unknown[] : undefined;
   }
   if (!fields || !rows) return null;
-  const dateIndex = fields.map(String).indexOf('日期');
+  const names = fields.map(String);
+  const dateIndex = names.indexOf('日期');
+  const closeIndex = names.indexOf(page.market === 'TWSE' ? '收盤指數' : '櫃買指數');
+  if (closeIndex < 0) return null;
+  const closes: Record<string, number> = {};
   const dates = [...new Set(rows.flatMap((row) => {
     const date = Array.isArray(row) ? rocSession(row[dateIndex]) : null;
-    return date && date.slice(0, 7) === month ? [date] : [];
+    const close = Array.isArray(row) ? finitePositive(row[closeIndex]) : null;
+    if (!date || date.slice(0, 7) !== month || close == null) return [];
+    closes[date] = close;
+    return [date];
   }))].sort();
-  return dates.length > 0 ? { market: page.market, month, dates, sourceUrl: page.sourceUrl, responseSha256: page.responseSha256 } : null;
+  return dates.length > 0 ? { market: page.market, month, dates, closes, sourceUrl: page.sourceUrl, responseSha256: page.responseSha256 } : null;
 }
 
 export function officialCalendarBackfillBatchHash(pages: OfficialCalendarBackfillPage[]) {

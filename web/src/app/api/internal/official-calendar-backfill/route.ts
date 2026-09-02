@@ -49,5 +49,15 @@ export async function POST(request: Request) {
     const write = await supabase.from('tw_trading_sessions_v3').insert(rows);
     if (write.error) return NextResponse.json({ ok: false, error: write.error.message }, { status: 500 });
   }
+  const marketHistory = verified.dates.flatMap((date) => ([
+    { market: 'TWSE', evidence: verified.twse },
+    { market: 'TPEX', evidence: verified.tpex },
+  ] as const).map(({ market, evidence: item }) => ({
+    market, session_date: date, index_close: item.closes[date], source_urls: [item.sourceUrl],
+    as_of: `${date}T13:30:00+08:00`, available_at: availableAt,
+    provenance: { source: object.source, response_sha256: item.responseSha256, writer_release_id: releaseId },
+  })));
+  const marketWrite = await supabase.from('official_market_evidence_history').upsert(marketHistory, { onConflict: 'market,session_date' });
+  if (marketWrite.error) return NextResponse.json({ ok: false, error: marketWrite.error.message }, { status: 500 });
   return NextResponse.json({ ok: true, result: { accepted: verified.dates.length * 2, written: rows.length, duplicate: verified.dates.length * 2 - rows.length, releaseId } });
 }

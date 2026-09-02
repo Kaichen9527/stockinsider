@@ -7,6 +7,7 @@ export const MARKET_EVIDENCE_MODEL_VERSION = 'market-evidence-v2.0.0';
 const OFFICIAL_MARKET_HISTORY_MODEL_VERSION = 'official-market-history-v1.0.0';
 
 function numberOrNull(value: unknown) {
+  if (value == null || value === '' || typeof value === 'boolean') return null;
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : null;
 }
@@ -172,7 +173,10 @@ async function ingestOfficialMarketEvidence(sessionDate: string, evaluatedAt: st
     const payload = await fetchOfficialJson<Record<string, unknown>>(url, 12_000);
     return { date, url, close: payload ? parseTpexIndex(payload).find((row) => row.date === date)?.close ?? null : null };
   }));
-  const last20 = sessions.slice(-20);
+  // Use a 30-session observation window so a short halt or one missing daily
+  // print does not incorrectly remove an otherwise eligible stock from MA20
+  // breadth. `breadthForRoster` still computes the most recent 20 closes.
+  const last20 = sessions.slice(-30);
   const [twseDaily, tpexDaily] = await Promise.all([
     Promise.all(last20.map(async (date) => ({ date, rows: await fetchTwseMarketDailyRows(date) }))),
     Promise.all(last20.map(async (date) => {

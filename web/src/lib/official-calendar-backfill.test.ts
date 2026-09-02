@@ -17,6 +17,7 @@ test('accepts only hash-bound official monthly calendar evidence and intersects 
   const pages = [page('TWSE'), page('TPEX')];
   const parsed = pages.map(parseOfficialCalendarBackfillPage);
   assert.deepEqual(parsed.map((item) => item?.dates), [['2025-01-02','2025-01-03'],['2025-01-02','2025-01-03']]);
+  assert.deepEqual(parsed.map((item) => item?.closes), [{ '2025-01-02': 1, '2025-01-03': 2 }, { '2025-01-02': 250, '2025-01-03': 251 }]);
   assert.deepEqual(intersectOfficialCalendarPages(parsed.flatMap((item) => item ? [item] : []) )?.dates, ['2025-01-02','2025-01-03']);
   assert.match(officialCalendarBackfillBatchHash(pages), /^[0-9a-f]{64}$/u);
   assert.equal(parseOfficialCalendarBackfillPage({ ...pages[0], sourceUrl: 'https://example.com/?date=20250101&response=json' }), null);
