@@ -244,8 +244,9 @@ export async function runCandidateResearchCycle(options: {
     const symbol = String(stock.symbol || '');
     if (!id || !/^\d{4}$/u.test(symbol)) continue;
     const official = stockMaster.get(symbol);
+    if (!official) continue;
     const storedName = String(stock.name || symbol);
-    candidates.set(id, { id, symbol, name: official?.name || storedName, storedName, market: 'TW', sector: official?.sector || (stock.sector ? String(stock.sector) : null) });
+    candidates.set(id, { id, symbol, name: official.name, storedName, market: 'TW', sector: official.sector || (stock.sector ? String(stock.sector) : null) });
     const stockMentions = mentionsByStock.get(id);
     if (stockMentions) stockMentions.push(mention);
     else mentionsByStock.set(id, [mention]);
@@ -257,8 +258,9 @@ export async function runCandidateResearchCycle(options: {
     const symbol = String(stock.symbol || '');
     if (!id || !/^\d{4}$/u.test(symbol) || candidates.has(id)) continue;
     const official = stockMaster.get(symbol);
+    if (!official) continue;
     const storedName = String(stock.name || symbol);
-    candidates.set(id, { id, symbol, name: official?.name || storedName, storedName, market: 'TW', sector: official?.sector || (stock.sector ? String(stock.sector) : null) });
+    candidates.set(id, { id, symbol, name: official.name, storedName, market: 'TW', sector: official.sector || (stock.sector ? String(stock.sector) : null) });
   }
   const seedSymbols = (options.seedSymbols || []).filter((seed) => seed.market === 'TW');
   if (seedSymbols.length > 0) {
@@ -268,9 +270,10 @@ export async function runCandidateResearchCycle(options: {
       const id = String(stock.id || '');
       const symbol = String(stock.symbol || '');
       const seed = seedSymbols.find((item) => item.symbol === symbol);
-      if (id && seed) {
+      const official = stockMaster.get(symbol);
+      if (id && seed && official) {
         const storedName = String(stock.name || seed.name);
-        candidates.set(id, { id, symbol, name: stockMaster.get(symbol)?.name || storedName, storedName, market: 'TW', sector: stockMaster.get(symbol)?.sector || (stock.sector ? String(stock.sector) : seed.sector) });
+        candidates.set(id, { id, symbol, name: official.name, storedName, market: 'TW', sector: official.sector || (stock.sector ? String(stock.sector) : seed.sector) });
       }
     }
   }
@@ -436,7 +439,6 @@ export async function runCandidateResearchCycle(options: {
         .sort((left, right) => left.time.localeCompare(right.time)).slice(-1320);
       if (!bars || bars.length === 0) throw new Error('official_price_history_missing');
       const priceCoverageTerminal = technicalHistoryCoverageTerminalReason(bars.length);
-      if (priceCoverageTerminal) throw new Error(priceCoverageTerminal);
       const queryError = priorRevenueRes.error || historicalFundamentalsRes.error || priorStageRes.error || priorFlowsRes.error || cachedBarsRes.error || authorityBarsRes.error || authorityFactsRes.error || peerRelationshipsRes.error || priorTechnicalRes.error || trackingRes.error;
       if (queryError) throw new Error(queryError.message);
       const peerRelationships = (peerRelationshipsRes.data as Row[]) || [];
@@ -627,7 +629,7 @@ export async function runCandidateResearchCycle(options: {
           ma60Slope: technical.ma60Slope, volumeRatio20Median: technical.volumeRatio20Median, atr14: technical.atr14, rsi14: technical.rsi14,
           breakoutAboveLongMa: technical.volumeRatio20Median != null && technical.volumeRatio20Median >= 1.3 && technical.close > (technical.ma240 || technical.ma120 || Infinity),
         },
-        marketRegime, peerCatchdownBlock, staleOrFallback: !priceMatchesMarketSession || marketEvidence.status !== 'complete' || (valuation ? !valuationMatchesMarketSession : false),
+        marketRegime, peerCatchdownBlock, staleOrFallback: Boolean(priceCoverageTerminal) || !priceMatchesMarketSession || marketEvidence.status !== 'complete' || (valuation ? !valuationMatchesMarketSession : false),
         previousStage: previous?.lifecycle_stage ? String(previous.lifecycle_stage) as CandidateLifecycleStage : null,
       };
       const preStreak = classifyCandidateStage({ ...baseInput, consecutiveActionableCloses: 2 });
@@ -703,7 +705,7 @@ export async function runCandidateResearchCycle(options: {
         valuation: { status: valuation ? 'complete' : 'missing', currentPrice: technical.close, bearTarget: valuation?.bearTarget ?? null, baseTarget: valuation?.baseTarget ?? null, bullTarget: valuation?.bullTarget ?? null, probabilityWeightedTarget: valuation?.probabilityWeightedTarget ?? null, baseUpsidePct: valuation?.baseUpsidePct ?? null, bearDownsidePct: valuation?.bearDownsidePct ?? null, rewardRiskRatio: valuation?.rewardRiskRatio ?? null, method: publishedPrimaryMethod ?? valuationPolicy.basis },
         technical: { sessionDate: technical.sessionDate, close: technical.close, ma20: technical.ma20, ma60: technical.ma60, ma120: technical.ma120, ma240: technical.ma240, rsi14: technical.rsi14, volumeRatio20Median: technical.volumeRatio20Median, marketRegime, hardGatePassed: stage.technicalHardGatePassed },
         consecutiveCloses: { passed: streak, required: 2, technicalSessionDate: technical.sessionDate }, classificationReplayHash,
-        unmetConditions: [...stage.unmetConditions, ...(valuationPolicy.reason ? [valuationPolicy.reason] : [])], promotionReasons: stage.promotionReasons,
+        unmetConditions: [...stage.unmetConditions, ...(priceCoverageTerminal ? [priceCoverageTerminal] : []), ...(valuationPolicy.reason ? [valuationPolicy.reason] : [])], promotionReasons: stage.promotionReasons,
         dataAsOf: evaluatedAt, stale: baseInput.staleOrFallback, detailRevisionId: null, riskAction: null, detailHref: `/stock/${stock.symbol}`,
       };
       const sections = buildDeterministicCandidateSections({ card: detailCard, factIds, valuationBasis: valuationPolicy.basis, multipleMonthsCovered, sourceCount: recentMentions.length, publisherCount: concentration.publisherCount, platformCount: concentration.platformCount });
@@ -752,12 +754,13 @@ export async function runCandidateResearchCycle(options: {
       }, { onConflict: 'stock_id,session_date,model_version' });
       if (trackingWrite.error) throw new Error(trackingWrite.error.message);
       const valuationTerminalReason = valuation ? null : valuationPolicy.reason || 'no_defensible_valuation_method_from_official_inputs';
+      const researchTerminalReason = [priceCoverageTerminal, valuationTerminalReason].filter(Boolean).join(';') || null;
       const valuationStatus = valuation ? 'complete' : valuationPolicy.basis === 'no_defensible_valuation_method' ? 'no_defensible_method' : 'insufficient_official_evidence';
       // An explicit, evidence-backed inability to value is a completed research
       // terminal, not a partial run. It remains found and cannot pass valuation
       // gates, while operational completeness and Shadow can still be measured.
-      Object.assign(result, { status: 'success', stage: stage.stage, technicalSessionDate: technical.sessionDate, valuationStatus, valuationBasis: valuationPolicy.basis, detailRevisionId: String(detailWrite.data.id), scores: stage.scores, unmetConditions: detailCard.unmetConditions, classificationReplayHash, riskAction: risk });
-      const itemWrite = await supabase.from('candidate_research_run_items').upsert({ run_id: runId, stock_id: stock.id, symbol: stock.symbol, status: 'success', price_status: 'success', technical_status: 'success', fundamental_status: eps || values || priorRevenue || authorityFacts.length ? 'success' : 'missing', valuation_status: valuationStatus, classification_status: 'success', lifecycle_stage: stage.stage, terminal_reason: valuationTerminalReason, technical_session_date: technical.sessionDate, metrics: result, started_at: startedAt, finished_at: new Date().toISOString() }, { onConflict: 'run_id,stock_id' });
+      Object.assign(result, { status: 'success', stage: stage.stage, technicalSessionDate: technical.sessionDate, technicalCoverageStatus: priceCoverageTerminal ? 'insufficient_history' : 'complete', valuationStatus, valuationBasis: valuationPolicy.basis, detailRevisionId: String(detailWrite.data.id), scores: stage.scores, unmetConditions: detailCard.unmetConditions, classificationReplayHash, riskAction: risk });
+      const itemWrite = await supabase.from('candidate_research_run_items').upsert({ run_id: runId, stock_id: stock.id, symbol: stock.symbol, status: 'success', price_status: 'success', technical_status: priceCoverageTerminal ? 'insufficient_history' : 'success', fundamental_status: eps || values || priorRevenue || authorityFacts.length ? 'success' : 'missing', valuation_status: valuationStatus, classification_status: 'success', lifecycle_stage: stage.stage, terminal_reason: researchTerminalReason, technical_session_date: technical.sessionDate, metrics: result, started_at: startedAt, finished_at: new Date().toISOString() }, { onConflict: 'run_id,stock_id' });
       if (itemWrite.error) throw new Error(itemWrite.error.message);
       return result;
     } catch (error) {
