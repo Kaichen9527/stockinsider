@@ -188,7 +188,10 @@ export function buildCompactPublicRadarPayload(
     fallbackOpportunities90d: (hasCandidateStages ? [] : compactBucket(payload.fallbackOpportunities90d, 6)) as RadarDailyPayload['fallbackOpportunities90d'],
     hotTracking: (hasCandidateStages ? [] : compactBucket(payload.hotTracking, 6)) as RadarDailyPayload['hotTracking'],
     discoveredStocks: hasCandidateStages ? [] : (payload.discoveredStocks || []).slice(0, 20).map((item) => ({ ...item, sources: item.sources.slice(0, 5), sourceCoverage: item.sourceCoverage.slice(0, 5) })),
-    hotThemes: payload.hotThemes.slice(0, 8).map(compactTheme),
+    // Five themes are enough for the public discovery view. The complete
+    // research remains available on theme/detail routes, while the daily API
+    // stays comfortably below its 150 KB transport budget.
+    hotThemes: payload.hotThemes.slice(0, 5).map(compactTheme),
     sourceSignals: (payload.sourceSignals || []).slice(0, 12),
     sourceHealthSummary: compactSourceHealth(payload.sourceHealthSummary),
     connectorStatus: (payload.connectorStatus || []).slice(0, 20).map((item) => ({
@@ -211,7 +214,13 @@ export function buildCompactPublicRadarPayload(
       entryExitRules: {},
       relatedSymbols: report.relatedSymbols.slice(0, 8),
     })),
-    themeHypotheses: (payload.themeHypotheses || []).slice(0, 8).map((item) => ({ ...item, assumptions: item.assumptions.slice(0, 4), symbols: item.symbols.slice(0, 8), sourceUrls: item.sourceUrls.slice(0, 4) })),
+    themeHypotheses: (payload.themeHypotheses || []).slice(0, 4).map((item) => ({
+      ...item,
+      summary: String(compactText(item.summary, 180) || ''),
+      assumptions: item.assumptions.slice(0, 2).map((value) => String(compactText(value, 100) || '')),
+      symbols: item.symbols.slice(0, 6),
+      sourceUrls: item.sourceUrls.slice(0, 2),
+    })),
   };
 }
 

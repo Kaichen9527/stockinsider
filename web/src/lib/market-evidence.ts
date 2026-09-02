@@ -100,18 +100,44 @@ function breadthForRoster(history: Map<string, Array<{ date: string; close: numb
   return { numerator, observed, eligible: roster.size };
 }
 
+async function loadCompletedTradingSessions(sessionDate: string) {
+  const supabase = getSupabaseServerClient();
+  const unique = new Set<string>();
+  // The authority table is append-only and intentionally keeps several
+  // observations for the same market/session.  PostgREST caps an individual
+  // response at 1,000 rows, so applying a limit before de-duplication can turn
+  // 23k valid authority rows into fewer than the required 520 distinct days.
+  // Page the TWSE authority stream until the distinct calendar is complete.
+  for (let offset = 0; offset < 6_000 && unique.size < 520; offset += 1_000) {
+    const page = await supabase.from('tw_trading_sessions_v3')
+      .select('session_id')
+      .eq('status', 'completed')
+      .eq('market', 'TWSE')
+      .lte('session_id', sessionDate)
+      .order('session_id', { ascending: false })
+      .order('recorded_at', { ascending: false })
+      .range(offset, offset + 999);
+    if (page.error) throw new Error(`official_market_session_history_read_failed:${page.error.message}`);
+    for (const row of (page.data as Row[]) || []) {
+      const date = String(row.session_id || '');
+      if (/^\d{4}-\d{2}-\d{2}$/u.test(date)) unique.add(date);
+    }
+    if ((page.data || []).length < 1_000) break;
+  }
+  return [...unique].sort().slice(-520);
+}
+
 async function ingestOfficialMarketEvidence(sessionDate: string, evaluatedAt: string) {
   const supabase = getSupabaseServerClient();
-  const [sessionsRes, rosterRes, existingRes] = await Promise.all([
-    supabase.from('tw_trading_sessions_v3').select('session_id,status').eq('status', 'completed').lte('session_id', sessionDate).order('session_id', { ascending: false }).limit(700),
+  const [sessions, rosterRes, existingRes] = await Promise.all([
+    loadCompletedTradingSessions(sessionDate),
     supabase.from('stock_instruments_v3').select('symbol,exchange,instrument_type,listing_status,valid_from,valid_to,recorded_at').eq('instrument_type', 'common_stock').eq('listing_status', 'active').lte('valid_from', evaluatedAt).order('recorded_at', { ascending: false }).limit(10000),
     supabase.from('official_market_evidence_history').select('market,session_date,index_close,breadth_above_ma20,breadth_observed,breadth_eligible,foreign_net_twd,source_urls,available_at').lte('available_at', evaluatedAt).lte('session_date', sessionDate).order('session_date', { ascending: false }).limit(1400),
   ]);
-  if (sessionsRes.error || rosterRes.error) throw new Error(`official_market_prerequisite_failed:${sessionsRes.error?.message || rosterRes.error?.message}`);
+  if (rosterRes.error) throw new Error(`official_market_prerequisite_failed:${rosterRes.error.message}`);
   // The additive migration can be deployed independently. A missing table is a
   // critical deployment error, not permission to silently fall back to unknown.
   if (existingRes.error) throw new Error(`official_market_history_read_failed:${existingRes.error.message}`);
-  const sessions = [...new Set(((sessionsRes.data as Row[]) || []).map((row) => String(row.session_id)).filter((date) => /^\d{4}-\d{2}-\d{2}$/u.test(date)))].sort().slice(-520);
   if (sessions.length < 520 || sessions.at(-1) !== sessionDate) throw new Error('official_market_session_history_below_520');
   const existing = (existingRes.data as Row[]) || [];
   const latestRows = existing.filter((row) => row.session_date === sessionDate);

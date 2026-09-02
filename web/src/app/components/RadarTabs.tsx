@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { CandidateStageCard, DiscoveredStockCard, RadarDailyPayload, RecommendationCard, SourceSignalCard, ThemeHeatCard } from '@/lib/types';
 import { validatePublishedDecisionCard } from '@/lib/opportunity-v3/decision-publication';
 import { displayResearchDiagnostic } from '@/lib/opportunity-v3/research-display';
@@ -10,6 +10,8 @@ import { hasCandidateStageCards } from '@/lib/candidate-stage-contract';
 
 type Props = {
   radar: RadarDailyPayload;
+  hydrateFromDaily?: boolean;
+  initialStageCounts?: { found: number; waiting: number; actionable: number };
 };
 
 const sourceTypeLabel: Record<string, string> = {
@@ -491,7 +493,7 @@ function CandidateStageCardView({ card }: { card: CandidateStageCard }) {
   );
 }
 
-function CandidateStagesView({ radar }: { radar: RadarDailyPayload }) {
+function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyPayload; stageCounts?: Props['initialStageCounts'] }) {
   const [selected, setSelected] = useState<'found' | 'waiting' | 'actionable'>('found');
   const stages = radar.stages!;
   const closest = [...stages.waiting].sort((a, b) => b.scores.actionability - a.scores.actionability || b.scores.dataConfidence - a.scores.dataConfidence).slice(0, 5);
@@ -503,7 +505,7 @@ function CandidateStagesView({ radar }: { radar: RadarDailyPayload }) {
       <div role="tablist" aria-label="股票三層漏斗" className="mb-6 grid gap-2 rounded-2xl border border-line bg-surface-strong p-2 sm:grid-cols-3">
         {(['found','waiting','actionable'] as const).map((stage) => (
           <button key={stage} role="tab" aria-selected={selected === stage} onClick={() => setSelected(stage)} className={`rounded-xl px-4 py-3 text-left text-sm font-semibold ${selected === stage ? 'bg-slate-950 text-white dark:bg-emerald-100 dark:text-slate-950' : 'text-slate-600 dark:text-emerald-100/65'}`}>
-            {stage === 'found' ? '全部來源命中' : stage === 'waiting' ? '等待條件' : '現在可行動'} <span className="ml-2 text-xs">{stages[stage].length}</span>
+            {stage === 'found' ? '全部來源命中' : stage === 'waiting' ? '等待條件' : '現在可行動'} <span className="ml-2 text-xs">{stageCounts?.[stage] ?? stages[stage].length}</span>
           </button>
         ))}
       </div>
@@ -516,9 +518,9 @@ function CandidateStagesView({ radar }: { radar: RadarDailyPayload }) {
   );
 }
 
-function StocksTab({ radar }: { radar: RadarDailyPayload }) {
+function StocksTab({ radar, stageCounts }: { radar: RadarDailyPayload; stageCounts?: Props['initialStageCounts'] }) {
   const [selectedStage, setSelectedStage] = useState<'found' | 'waiting' | 'actionable'>('found');
-  if (hasCandidateStageCards(radar)) return <CandidateStagesView radar={radar} />;
+  if (hasCandidateStageCards(radar)) return <CandidateStagesView radar={radar} stageCounts={stageCounts} />;
   const decisionActionOrder = { buy: 0, accumulate: 1, research_starter: 2, wait_value:3,wait_market:4,wait_breakout: 5,
     wait_reclaim: 6, wait_refresh: 7, avoid_chase: 8, unavailable: 9, avoid: 10, data_needed: 11, ready: 12 } as const;
   const effectiveAction=(signal:SourceSignalCard)=>{
@@ -1381,29 +1383,52 @@ function DiscoveryTab({ radar }: { radar: RadarDailyPayload }) {
   );
 }
 
-export function RadarTabs({ radar }: Props) {
+export function RadarTabs({ radar, hydrateFromDaily = false, initialStageCounts }: Props) {
   const [activeTab, setActiveTab] = useState<TabKey>('stocks');
+  const [liveRadar, setLiveRadar] = useState(radar);
+  const [loadingFullSnapshot, setLoadingFullSnapshot] = useState(hydrateFromDaily);
+
+  useEffect(() => {
+    if (!hydrateFromDaily) return;
+    const controller = new AbortController();
+    let mounted = true;
+    void fetch('/api/radar/daily', { signal: controller.signal, headers: { accept: 'application/json' } })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(`radar_daily_${response.status}`);
+        const payload = await response.json() as RadarDailyPayload;
+        if (mounted && hasCandidateStageCards(payload)) setLiveRadar(payload);
+      })
+      .catch(() => undefined)
+      .finally(() => { if (mounted) setLoadingFullSnapshot(false); });
+    return () => {
+      mounted = false;
+      controller.abort();
+    };
+  }, [hydrateFromDaily]);
+
+  const displayRadar = liveRadar;
 
   const visibleStockCount = new Set([
-    ...(radar.opportunities || []), ...(radar.scenarioUpsideCandidates || []),
-    ...(radar.earlyWatchlist || []), ...(radar.hotTracking || []), ...(radar.sourceSignals || []), ...(radar.stages?.found || []),
+    ...(displayRadar.opportunities || []), ...(displayRadar.scenarioUpsideCandidates || []),
+    ...(displayRadar.earlyWatchlist || []), ...(displayRadar.hotTracking || []), ...(displayRadar.sourceSignals || []), ...(displayRadar.stages?.found || []),
   ].filter((item) => Boolean(item.symbol)).map((item) => item.symbol)).size;
   const tabs: { key: TabKey; label: string; count: number }[] = [
     {
       key: 'stocks',
       label: '股票研究',
-          count: visibleStockCount,
+      count: initialStageCounts?.found ?? visibleStockCount,
     },
-    { key: 'themes', label: '主題分析', count: radar.hotThemes.length },
+    { key: 'themes', label: '主題分析', count: displayRadar.hotThemes.length },
     { key: 'discovery', label: '社群發現', count: new Set([
-      ...(radar.discoveredStocks || []).filter((item) => Boolean(item.chineseName)).map((item) => item.symbol),
-      ...(radar.sourceSignals || []).map((item) => item.symbol),
-      ...(radar.stages?.found || []).map((item) => item.symbol),
+      ...(displayRadar.discoveredStocks || []).filter((item) => Boolean(item.chineseName)).map((item) => item.symbol),
+      ...(displayRadar.sourceSignals || []).map((item) => item.symbol),
+      ...(displayRadar.stages?.found || []).map((item) => item.symbol),
     ]).size },
   ];
 
   return (
     <div>
+      {loadingFullSnapshot ? <p role="status" className="mb-3 text-xs text-slate-500 dark:text-emerald-100/55">正在載入完整來源命中清單…</p> : null}
       {/* Tab bar — full-width underline style */}
       <div role="tablist" aria-label="雷達內容" className="mb-8 flex flex-wrap items-center border-b border-line">
         {tabs.map((tab,index) => (
@@ -1442,9 +1467,9 @@ export function RadarTabs({ radar }: Props) {
       </div>
 
       <div id={`radar-panel-${activeTab}`} role="tabpanel" aria-labelledby={`radar-tab-${activeTab}`} tabIndex={0}>
-        {activeTab === 'stocks' && <StocksTab radar={radar} />}
-        {activeTab === 'themes' && <ThemesTab radar={radar} />}
-        {activeTab === 'discovery' && <DiscoveryTab radar={radar} />}
+        {activeTab === 'stocks' && <StocksTab radar={displayRadar} stageCounts={initialStageCounts} />}
+        {activeTab === 'themes' && <ThemesTab radar={displayRadar} />}
+        {activeTab === 'discovery' && <DiscoveryTab radar={displayRadar} />}
       </div>
     </div>
   );

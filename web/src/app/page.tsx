@@ -135,6 +135,17 @@ export default async function Home() {
   const radar = hasCandidateStageCards(layered.radar)
     ? layered.radar
     : { ...layered.radar, stages: radarPublicSnapshotsEnabled() ? await getPersistedRadarStages() : { found: [], waiting: [], actionable: [] } };
+  const initialStageCounts = radar.stages ? {
+    found: radar.stages.found.length,
+    waiting: radar.stages.waiting.length,
+    actionable: radar.stages.actionable.length,
+  } : undefined;
+  // Keep the SSR/RSC response small. The browser replaces this preview with
+  // the complete immutable daily snapshot immediately after hydration.
+  const homeRadar = radar.stages ? {
+    ...radar,
+    stages: { ...radar.stages, found: radar.stages.found.slice(0, 12) },
+  } : radar;
   const symbolNameMap = new Map<string, string>();
   const revisionBoundSourceLed = ['legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0','legacy-radar-v3.20.0'].includes(radar.sourceLedCorrectness?.schema ?? '');
   const allCards = revisionBoundSourceLed ? [
@@ -383,7 +394,7 @@ export default async function Home() {
 
         <section className="rounded-[2rem] border border-line bg-surface p-6 backdrop-blur">
           {opportunityEngineV3 ? <ShadowOpportunityV3 engine={opportunityEngineV3} /> : null}
-          <RadarTabs radar={radar} />
+          <RadarTabs radar={homeRadar} hydrateFromDaily initialStageCounts={initialStageCounts} />
         </section>
 
         <section className="rounded-[2rem] border border-line bg-surface p-6 backdrop-blur">
