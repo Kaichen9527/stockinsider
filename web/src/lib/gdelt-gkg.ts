@@ -108,8 +108,18 @@ export function matchGdeltStockSymbols(
   stocks: Array<{ symbol: string; name: string }>,
 ): string[] {
   return stocks.filter((stock) => {
-    const symbolMatch = new RegExp(`(^|[^\\d])${stock.symbol}([^\\d]|$)`, 'u').test(searchable)
-      && !new RegExp(`${stock.symbol}\\s*年`, 'u').test(searchable);
-    return symbolMatch || searchable.includes(stock.name);
+    // A bare four-digit number in GKG metadata is overwhelmingly likely to be
+    // a year, amount, event code or address. Only accept symbols when the
+    // market/ticker syntax is explicit; company names remain valid metadata
+    // matches because GKG exposes organizations and all-names separately.
+    const escaped = stock.symbol.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
+    const symbolMatch = [
+      new RegExp(`(?:TWSE|TPEX|TPE|TAIEX)\\s*[:：-]\\s*${escaped}(?!\\d)`, 'iu'),
+      new RegExp(`(?:\\$|台股(?:代碼)?|股票代碼)\\s*${escaped}(?!\\d)`, 'iu'),
+      new RegExp(`(?<!\\d)${escaped}[.](?:TW|TWO)(?![A-Z])`, 'iu'),
+    ].some((pattern) => pattern.test(searchable));
+    const name = stock.name.trim();
+    const nameMatch = name.length >= 2 && !/^\d+$/u.test(name) && searchable.includes(name);
+    return symbolMatch || nameMatch;
   }).map((stock) => stock.symbol);
 }

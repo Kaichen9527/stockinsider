@@ -41,6 +41,7 @@ export function classifySourceSyncTerminal(
   if (written > 0 && reason.trim()) return 'partial';
   if (written > 0) return 'success';
   if (candidates > 0 && duplicates >= candidates) return 'duplicate_only';
+  if (fetched > 0 && duplicates >= fetched) return 'duplicate_only';
   if (candidates > 0 || matched > 0) return 'parser_failed';
   if (fetched > 0) return 'successful_empty';
   if (reason.trim()) return 'failed';

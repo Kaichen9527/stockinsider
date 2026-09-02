@@ -51,6 +51,16 @@ test('duplicate Telegram documents are not misclassified from their symbol count
   }), 'duplicate_only');
 });
 
+test('a fully duplicate PTT page is healthy even when candidate-document metadata is unavailable', () => {
+  assert.equal(classifySourceSyncTerminal({
+    fetchedPosts: 134,
+    recordsWritten: 0,
+    duplicatesSkipped: 134,
+    matchedDirectHits: 125,
+    matchedIndustryHits: 0,
+  }), 'duplicate_only');
+});
+
 test('unwritten candidates remain a parser failure when they are not duplicates', () => {
   assert.equal(classifySourceSyncTerminal({
     fetchedPosts: 12,
