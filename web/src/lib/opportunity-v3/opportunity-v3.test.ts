@@ -1385,7 +1385,7 @@ describe('closed HTTP body value schemas', () => {
     assert.doesNotMatch(pageSource, /radar\.connectorStatus\.map/u);
     assert.ok(
       pageSource.indexOf('<ShadowOpportunityV3') <
-        pageSource.indexOf('<RadarTabs radar={radar}'),
+        pageSource.indexOf('<RadarTabs'),
     );
     for (const route of [
       'src/app/api/radar/daily/route.ts',

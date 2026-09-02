@@ -35,6 +35,7 @@ test('valuation writes use the same official-session composite idempotency key a
 test('candidate research reads the durable official calendar and fails fast on an unavailable official host', () => {
   const research = readFileSync(new URL('../web/src/lib/candidate-research.ts', import.meta.url), 'utf8');
   const market = readFileSync(new URL('../web/src/lib/tw-market.ts', import.meta.url), 'utf8');
+  const marketEvidence = readFileSync(new URL('../web/src/lib/market-evidence.ts', import.meta.url), 'utf8');
   assert.match(calendarMigration, /CREATE OR REPLACE FUNCTION public\.candidate_research_official_sessions/u);
   assert.match(calendarMigration, /authority\.market = 'TWSE'::public\.tw_market_v3/u);
   assert.match(calendarMigration, /authority\.recorded_at <= p_cutoff/u);
@@ -44,7 +45,9 @@ test('candidate research reads the durable official calendar and fails fast on a
   assert.match(research, /supabase\.rpc\('candidate_research_official_sessions'/u);
   assert.match(research, /if \(marketSessions\.length < 2\) marketSessions = await fetchTwMarketTradingSessions/u);
   assert.match(market, /OFFICIAL_HOST_CIRCUIT_BREAKER_MS = 5 \* 60 \* 1000/u);
-  assert.match(market, /officialHostUnavailableUntil\.set\(host/u);
+  assert.match(market, /officialHostUnavailableUntil\.set\(circuitKey/u);
+  assert.match(marketEvidence, /\.eq\('market', 'TWSE'\)[\s\S]*\.range\(offset, offset \+ 999\)/u);
+  assert.match(marketEvidence, /offset < 6_000 && unique\.size < 520/u);
 });
 
 test('official roster normalization happens before a missing price history can fail closed', () => {
