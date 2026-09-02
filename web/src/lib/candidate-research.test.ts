@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { buildConservativeOfficialScenario } from './candidate-valuation.ts';
-import { isCandidateHistoricalPriceAccessEnabled } from './candidate-research-policy.ts';
+import { candidatePriceRefreshDepth, isCandidateHistoricalPriceAccessEnabled } from './candidate-research-policy.ts';
 
 const historicalPeRatios = [10, 12, 14, 16, 18, 20, 22, 24, 26, 28];
 const historicalPbRatios = [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7];
@@ -61,4 +61,11 @@ test('candidate historical research is enabled unless production explicitly bloc
   assert.equal(isCandidateHistoricalPriceAccessEnabled(undefined), true);
   assert.equal(isCandidateHistoricalPriceAccessEnabled('true'), true);
   assert.equal(isCandidateHistoricalPriceAccessEnabled('false'), false);
+});
+
+test('candidate price refresh reads durable coverage before selecting a bounded fetch depth', () => {
+  const sessions = Array.from({ length: 240 }, (_, index) => `2025-${String(Math.floor(index / 20) + 1).padStart(2, '0')}-${String(index % 20 + 1).padStart(2, '0')}`);
+  assert.equal(candidatePriceRefreshDepth(sessions.slice(0, 239), '2025-12-20'), 1320);
+  assert.equal(candidatePriceRefreshDepth(sessions.slice(0, 240), '2025-12-21'), 5);
+  assert.equal(candidatePriceRefreshDepth(sessions.slice(0, 240), '2025-12-20'), 0);
 });

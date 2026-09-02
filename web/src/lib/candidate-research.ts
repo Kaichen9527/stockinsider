@@ -19,7 +19,7 @@ import {
   type TwValuationHistoryPoint,
 } from './tw-market';
 import { buildConservativeOfficialScenario } from './candidate-valuation';
-import { isCandidateHistoricalPriceAccessEnabled } from './candidate-research-policy';
+import { candidatePriceRefreshDepth, isCandidateHistoricalPriceAccessEnabled } from './candidate-research-policy';
 import { scheduledSourceConnectorKeys, sourceExecutionPolicy } from './source-policy';
 import { loadLatestSourceRunLedger } from './source-run-ledger';
 import type { CandidateShadowProgress, CandidateStageCard } from './types';
@@ -317,8 +317,7 @@ export async function runCandidateResearchCycle(options: {
         (officialValuationHistory.get(stock.symbol) || []).map((point) => [point.date, point]),
       ).values()].sort((left, right) => left.date.localeCompare(right.date));
       const values = officialMultiples.at(-1) || null;
-      const [fetchedBars, institutional, eps, fetchedRevenue, priorRevenueRes, historicalFundamentalsRes, priorStageRes, priorFlowsRes, cachedBarsRes, authorityBarsRes, authorityFactsRes, peerRelationshipsRes, priorTechnicalRes, trackingRes] = await Promise.all([
-        fetchTwStockDailyBars(stock.symbol, 1320, marketSessions, exchangeBySymbol.get(stock.symbol) || null),
+      const [institutional, eps, fetchedRevenue, priorRevenueRes, historicalFundamentalsRes, priorStageRes, priorFlowsRes, cachedBarsRes, authorityBarsRes, authorityFactsRes, peerRelationshipsRes, priorTechnicalRes, trackingRes] = await Promise.all([
         fetchTwStockInstitutional(stock.symbol).catch(() => null),
         fetchTwStockEpsTtm(stock.symbol).catch(() => null),
         fetchTwStockRevenue(stock.symbol, 16).catch(() => null),
@@ -344,6 +343,13 @@ export async function runCandidateResearchCycle(options: {
         const open = numberOrNull(row.raw_open); const high = numberOrNull(row.raw_high); const low = numberOrNull(row.raw_low); const close = numberOrNull(row.raw_close);
         return open == null || high == null || low == null || close == null ? [] : [{ time: String(row.session_id), open, high, low, close, volume: numberOrNull(row.volume), sourceUrl: String(row.source_ref || '') }];
       });
+      const refreshDepth = candidatePriceRefreshDepth([...cachedBars, ...authorityBars].map((bar) => bar.time), latestMarketSession);
+      const fetchedBars = refreshDepth === 0 ? [] : await fetchTwStockDailyBars(
+        stock.symbol,
+        refreshDepth,
+        refreshDepth === 5 ? marketSessions.slice(-5) : marketSessions,
+        exchangeBySymbol.get(stock.symbol) || null,
+      );
       const bars = [...new Map([...authorityBars, ...cachedBars, ...(fetchedBars || [])].filter((bar) => bar.time <= latestMarketSession).map((bar) => [bar.time, bar])).values()]
         .sort((left, right) => left.time.localeCompare(right.time)).slice(-1320);
       if (!bars || bars.length === 0) throw new Error('official_price_history_missing');
