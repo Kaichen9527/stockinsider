@@ -8,6 +8,20 @@ const sessions = Array.isArray(input?.result?.sessions) ? input.result.sessions.
 if (sessions.length !== 520) throw new Error(`expected_520_sessions:${sessions.length}`);
 const monthLastSession = new Map();
 for (const session of sessions) monthLastSession.set(session.slice(0, 7), session);
+async function fetchOfficialPayload(market, month, sourceUrl) {
+  let lastError;
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+      const response = await fetch(sourceUrl, { signal: AbortSignal.timeout(30_000), headers: { accept: 'application/json' } });
+      if (!response.ok) throw new Error(`http_${response.status}`);
+      return await response.json();
+    } catch (error) {
+      lastError = error;
+      if (attempt < 3) await new Promise((resolve) => setTimeout(resolve, attempt * 750));
+    }
+  }
+  throw new Error(`${market}_${month}_fetch_failed:${lastError instanceof Error ? lastError.message : String(lastError)}`);
+}
 const pages = [];
 for (const [month, lastSession] of monthLastSession) {
   const requests = [
@@ -15,9 +29,7 @@ for (const [month, lastSession] of monthLastSession) {
     ['TPEX', `https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingIndex?date=${lastSession.replaceAll('-', '/')}&response=json`],
   ];
   for (const [market, sourceUrl] of requests) {
-    const response = await fetch(sourceUrl, { signal: AbortSignal.timeout(20_000), headers: { accept: 'application/json' } });
-    if (!response.ok) throw new Error(`${market}_${month}_http_${response.status}`);
-    const payload = await response.json();
+    const payload = await fetchOfficialPayload(market, month, sourceUrl);
     const responseSha256 = createHash('sha256').update(JSON.stringify(payload)).digest('hex');
     pages.push({ market, sourceUrl, payload, responseSha256 });
   }
