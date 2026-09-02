@@ -90,25 +90,105 @@ function compactSourceHealth(value: RadarDailyPayload['sourceHealthSummary']) {
   };
 }
 
+function compactCandidateStageCard(card: CandidateStageCard): CandidateStageCard {
+  const valuation = Object.fromEntries(Object.entries(card.valuation).filter(([key, value]) => key === 'status' || value != null)) as CandidateStageCard['valuation'];
+  const technical = Object.fromEntries(Object.entries(card.technical).filter(([key, value]) => ['sessionDate', 'marketRegime', 'hardGatePassed'].includes(key) || value != null)) as CandidateStageCard['technical'];
+  const compact = {
+    symbol: card.symbol,
+    chineseName: card.chineseName,
+    market: card.market,
+    lifecycleStage: card.lifecycleStage,
+    latestMentionAt: card.latestMentionAt,
+    mentionCount: card.mentionCount,
+    rawMentionCount: card.rawMentionCount,
+    effectiveMentionCount: card.effectiveMentionCount,
+    publisherCount: card.publisherCount,
+    platformCount: card.platformCount,
+    dominantPlatformShare: card.dominantPlatformShare,
+    // `latestMentionAt` already carries the ordering timestamp used by the
+    // public card. Per-link timestamps remain in the detail revision, avoiding
+    // the same ISO string being repeated hundreds of times in the Radar JSON.
+    sources: card.sources.slice(0, 5).map((source) => ({
+      platform: source.platform,
+      ...(source.author ? { author: source.author } : {}),
+      sourceUrl: source.sourceUrl,
+      ...(source.stance ? { stance: source.stance } : {}),
+    })),
+    scores: card.scores,
+    valuation,
+    technical,
+    consecutiveCloses: { passed: card.consecutiveCloses.passed, required: 2 },
+    unmetConditions: card.unmetConditions.slice(0, 8),
+    promotionReasons: card.promotionReasons.slice(0, 5),
+    stale: card.stale,
+    detailHref: card.detailHref,
+    ...(card.dataAsOf ? { dataAsOf: card.dataAsOf } : {}),
+    ...(card.detailRevisionId ? { detailRevisionId: card.detailRevisionId } : {}),
+    ...(card.riskAction ? { riskAction: card.riskAction } : {}),
+  };
+  return compact as CandidateStageCard;
+}
+
+function compactTheme(theme: RadarDailyPayload['hotThemes'][number]): RadarDailyPayload['hotThemes'][number] {
+  return {
+    themeKey: theme.themeKey,
+    themeName: theme.themeName,
+    windowType: theme.windowType,
+    marketRegime: theme.marketRegime,
+    heatScore: theme.heatScore,
+    capitalFlowSignals: {},
+    relatedSymbols: theme.relatedSymbols.slice(0, 12),
+    evidenceCount: theme.evidenceCount,
+    asOfDate: theme.asOfDate,
+    verificationStatus: theme.verificationStatus,
+    sourceCoverage: theme.sourceCoverage.slice(0, 4).map((source) => ({
+      sourceName: source.sourceName,
+      sourceType: source.sourceType,
+      summary: String(compactText(source.summary, 120) || ''),
+      sourceUrl: source.sourceUrl,
+      sourceTimestamp: source.sourceTimestamp,
+      symbols: source.symbols.slice(0, 8),
+      verificationStatus: source.verificationStatus,
+      confidence: source.confidence,
+      weight: source.weight,
+    })),
+    missingSources: theme.missingSources.slice(0, 5),
+    latestSourceAt: theme.latestSourceAt,
+    foreignPeerBasket: [],
+    leadLagSpreadPct: theme.leadLagSpreadPct ?? null,
+    overseasMomentumAsOf: theme.overseasMomentumAsOf ?? null,
+  };
+}
+
 export function buildCompactPublicRadarPayload(
   payload: RadarDailyPayload,
   stages: { found: CandidateStageCard[]; waiting: CandidateStageCard[]; actionable: CandidateStageCard[] },
   shadowProgress: CandidateShadowProgress,
 ): RadarDailyPayload {
   const compactBucket = (items: unknown[] | undefined, limit: number) => (items || []).slice(0, limit).map(compactLegacyCard);
+  const compactStages = {
+    found: stages.found.map(compactCandidateStageCard),
+    waiting: stages.waiting.map(compactCandidateStageCard),
+    actionable: stages.actionable.map(compactCandidateStageCard),
+  };
+  const hasCandidateStages = compactStages.found.length + compactStages.waiting.length + compactStages.actionable.length > 0;
   return {
     ...payload,
     schemaVersion: RADAR_PUBLIC_SCHEMA_VERSION,
     shadowProgress,
-    stages,
-    opportunities: compactBucket(payload.opportunities, 8) as RadarDailyPayload['opportunities'],
-    scenarioUpsideCandidates: compactBucket(payload.scenarioUpsideCandidates, 8) as RadarDailyPayload['scenarioUpsideCandidates'],
-    earlyWatchlist: compactBucket(payload.earlyWatchlist, 8) as RadarDailyPayload['earlyWatchlist'],
-    recentFormal7d: compactBucket(payload.recentFormal7d, 6) as RadarDailyPayload['recentFormal7d'],
-    fallbackOpportunities90d: compactBucket(payload.fallbackOpportunities90d, 6) as RadarDailyPayload['fallbackOpportunities90d'],
-    hotTracking: compactBucket(payload.hotTracking, 6) as RadarDailyPayload['hotTracking'],
-    discoveredStocks: (payload.discoveredStocks || []).slice(0, 20).map((item) => ({ ...item, sources: item.sources.slice(0, 5), sourceCoverage: item.sourceCoverage.slice(0, 5) })),
-    hotThemes: payload.hotThemes.slice(0, 8).map((theme) => ({ ...theme, sourceCoverage: theme.sourceCoverage.slice(0, 5), missingSources: theme.missingSources.slice(0, 5) })),
+    stages: compactStages,
+    // Candidate stages are the canonical stock plane. Keeping the same stocks
+    // in every legacy bucket doubled the public response and the server-rendered
+    // homepage. The compatibility keys remain for one release, but are empty
+    // once a canonical stage snapshot exists.
+    opportunities: (hasCandidateStages ? [] : compactBucket(payload.opportunities, 8)) as RadarDailyPayload['opportunities'],
+    scenarioUpsideCandidates: (hasCandidateStages ? [] : compactBucket(payload.scenarioUpsideCandidates, 8)) as RadarDailyPayload['scenarioUpsideCandidates'],
+    earlyWatchlist: (hasCandidateStages ? [] : compactBucket(payload.earlyWatchlist, 8)) as RadarDailyPayload['earlyWatchlist'],
+    recentFormal7d: (hasCandidateStages ? [] : compactBucket(payload.recentFormal7d, 6)) as RadarDailyPayload['recentFormal7d'],
+    fallbackOpportunities90d: (hasCandidateStages ? [] : compactBucket(payload.fallbackOpportunities90d, 6)) as RadarDailyPayload['fallbackOpportunities90d'],
+    hotTracking: (hasCandidateStages ? [] : compactBucket(payload.hotTracking, 6)) as RadarDailyPayload['hotTracking'],
+    discoveredStocks: hasCandidateStages ? [] : (payload.discoveredStocks || []).slice(0, 20).map((item) => ({ ...item, sources: item.sources.slice(0, 5), sourceCoverage: item.sourceCoverage.slice(0, 5) })),
+    hotThemes: payload.hotThemes.slice(0, 8).map(compactTheme),
     sourceSignals: (payload.sourceSignals || []).slice(0, 12),
     sourceHealthSummary: compactSourceHealth(payload.sourceHealthSummary),
     connectorStatus: (payload.connectorStatus || []).slice(0, 20).map((item) => ({

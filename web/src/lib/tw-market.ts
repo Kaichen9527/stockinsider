@@ -518,7 +518,13 @@ export async function fetchTwStockDailyBars(
   exchange: 'TWSE' | 'TPEx' | null = null,
 ) {
   if (exchange !== 'TPEx' && officialSessions && officialSessions.length > 0) {
-    const sessions = [...new Set(officialSessions.filter((session) => /^\d{4}-\d{2}-\d{2}$/u.test(session)))].sort().slice(-daysBack);
+    // Fetch newest sessions first.  The all-market endpoint occasionally times
+    // out on a much older archive date; if that opens the endpoint circuit, it
+    // must not flush every recent session that was still queued behind it and
+    // turn a listed stock into a false `official_price_history_missing` result.
+    // Results are sorted chronologically below, so request order is not exposed
+    // to indicator calculations.
+    const sessions = [...new Set(officialSessions.filter((session) => /^\d{4}-\d{2}-\d{2}$/u.test(session)))].sort().slice(-daysBack).reverse();
     const rows = (await Promise.all(sessions.map(fetchTwseMarketDailyRows)))
       .map((marketRows) => marketRows.get(symbol))
       .filter((row): row is DailyBar => row != null)

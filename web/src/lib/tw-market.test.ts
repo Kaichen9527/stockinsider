@@ -150,6 +150,31 @@ test('candidate daily bars share the official all-stock market endpoint rather t
   assert.ok(requested.every((url) => url.searchParams.get('type') === 'ALLBUT0999'));
 });
 
+test('candidate daily bars fetch recent sessions before an old archive failure opens the endpoint circuit', async (t) => {
+  const originalFetch = globalThis.fetch;
+  const requestedDates: string[] = [];
+  t.after(() => {
+    globalThis.fetch = originalFetch;
+    resetOfficialMarketRequestStateForTests();
+  });
+  resetOfficialMarketRequestStateForTests();
+  globalThis.fetch = (async (input) => {
+    const date = new URL(String(input)).searchParams.get('date') || '';
+    requestedDates.push(date);
+    if (date < '20260801') throw new Error('old_archive_timeout');
+    return new Response(JSON.stringify({
+      tables: [{
+        fields: ['證券代號', '證券名稱', '成交股數', '成交筆數', '成交金額', '開盤價', '最高價', '最低價', '收盤價'],
+        data: [['1216', '統一', '1,234', '100', '30,000', '75.00', '76.00', '74.50', '75.50']],
+      }],
+    }), { status: 200, headers: { 'content-type': 'application/json' } });
+  }) as typeof fetch;
+
+  const bars = await fetchTwStockDailyBars('1216', 5, ['2026-01-02', '2026-01-05', '2026-01-06', '2026-08-28', '2026-09-01'], 'TWSE');
+  assert.deepEqual(bars?.map((bar) => bar.time), ['2026-08-28', '2026-09-01']);
+  assert.deepEqual(requestedDates.slice(0, 2), ['20260901', '20260828']);
+});
+
 test('valuation cache accepts only official TWSE and TPEx history endpoints', () => {
   assert.equal(isOfficialValuationSourceUrl('https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?date=20260828&selectType=ALL&response=json'), true);
   assert.equal(isOfficialValuationSourceUrl('https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU?date=20240801&stockNo=2330&response=json'), true);

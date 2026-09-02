@@ -156,6 +156,13 @@ export default async function Home() {
     const zh = item.chineseName || item.name || item.symbol;
     symbolNameMap.set(item.symbol, zh);
   }
+  for (const stage of [
+    ...(radar.stages?.found || []),
+    ...(radar.stages?.waiting || []),
+    ...(radar.stages?.actionable || []),
+  ]) {
+    symbolNameMap.set(stage.symbol, stage.chineseName || stage.symbol);
+  }
   const decisionRevisionBySymbol = new Map((radar.sourceSignals || []).map((card) => [card.symbol, card.decisionRevisionId]));
   const visibleReports = (radar.reports || []).filter((memo) => {
     const relatedSymbol = memo.relatedSymbols[0] || null;
