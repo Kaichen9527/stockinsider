@@ -8,3 +8,9 @@
 export function isCandidateHistoricalPriceAccessEnabled(value = process.env.CANDIDATE_HISTORICAL_PRICE_ACCESS_ENABLED) {
   return value !== 'false';
 }
+
+export function candidatePriceRefreshDepth(knownSessions: string[], latestMarketSession: string) {
+  const unique = [...new Set(knownSessions.filter((session) => /^\d{4}-\d{2}-\d{2}$/u.test(session)))].sort();
+  if (unique.length < 240) return 1320;
+  return unique.at(-1) === latestMarketSession ? 0 : 5;
+}
