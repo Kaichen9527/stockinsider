@@ -114,9 +114,8 @@ async function ingestOfficialMarketEvidence(sessionDate: string, evaluatedAt: st
   const sessions = [...new Set(((sessionsRes.data as Row[]) || []).map((row) => String(row.session_id)).filter((date) => /^\d{4}-\d{2}-\d{2}$/u.test(date)))].sort().slice(-520);
   if (sessions.length < 520 || sessions.at(-1) !== sessionDate) throw new Error('official_market_session_history_below_520');
   const existing = (existingRes.data as Row[]) || [];
-  const marketCount = (market: string) => existing.filter((row) => row.market === market && numberOrNull(row.index_close) != null).length;
   const latestRows = existing.filter((row) => row.session_date === sessionDate);
-  const complete = marketCount('TWSE') >= 520 && marketCount('TPEX') >= 520
+  const complete = ['TWSE','TPEX'].every((market) => sessions.every((date) => existing.some((row) => row.market === market && row.session_date === date && numberOrNull(row.index_close) != null)))
     && latestRows.length === 2 && latestRows.every((row) => numberOrNull(row.breadth_observed) != null)
     && sessions.slice(-5).every((date) => ['TWSE','TPEX'].every((market) => existing.some((row) => row.market === market && row.session_date === date && numberOrNull(row.foreign_net_twd) != null)));
   if (complete) return;
@@ -179,21 +178,28 @@ async function ingestOfficialMarketEvidence(sessionDate: string, evaluatedAt: st
   ])));
   const flowByKey = new Map(flows.map((row) => [`${row.market}:${row.date}`, row]));
   const tpexByDate = new Map(tpexIndexPayloads.map((row) => [row.date, row]));
+  const existingByKey = new Map(existing.map((row) => [`${row.market}:${row.session_date}`, row]));
   const rows = sessions.flatMap((date) => (['TWSE','TPEX'] as const).map((market) => {
     const isLatest = date === sessionDate;
     const flow = flowByKey.get(`${market}:${date}`);
     const breadth = market === 'TWSE' ? twseBreadth : tpexBreadth;
-    const indexClose = market === 'TWSE' ? taiex.get(date) ?? null : tpexByDate.get(date)?.close ?? null;
+    const retained = existingByKey.get(`${market}:${date}`);
+    const fetchedIndexClose = market === 'TWSE' ? taiex.get(date) ?? null : tpexByDate.get(date)?.close ?? null;
+    const indexClose = fetchedIndexClose ?? numberOrNull(retained?.index_close);
+    const fetchedBreadthAvailable = isLatest && breadth.observed > 0;
     const indexUrl = market === 'TWSE'
       ? `https://www.twse.com.tw/rwd/zh/TAIEX/MI_5MINS_HIST?date=${date.slice(0, 7).replace(/-/gu, '')}01&response=json`
       : tpexByDate.get(date)?.url;
     return {
       market, session_date: date, index_close: indexClose,
-      breadth_above_ma20: isLatest ? breadth.numerator : null,
-      breadth_observed: isLatest ? breadth.observed : null,
-      breadth_eligible: isLatest ? breadth.eligible : null,
-      foreign_net_twd: flow?.value ?? null,
-      source_urls: [indexUrl, isLatest ? (market === 'TWSE' ? 'https://www.twse.com.tw/exchangeReport/MI_INDEX' : 'https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes') : null, flow?.url].filter(Boolean),
+      breadth_above_ma20: fetchedBreadthAvailable ? breadth.numerator : numberOrNull(retained?.breadth_above_ma20),
+      breadth_observed: fetchedBreadthAvailable ? breadth.observed : numberOrNull(retained?.breadth_observed),
+      breadth_eligible: fetchedBreadthAvailable ? breadth.eligible : numberOrNull(retained?.breadth_eligible),
+      foreign_net_twd: flow?.value ?? numberOrNull(retained?.foreign_net_twd),
+      source_urls: [...new Set([
+        ...(Array.isArray(retained?.source_urls) ? retained!.source_urls as unknown[] : []),
+        indexUrl, isLatest ? (market === 'TWSE' ? 'https://www.twse.com.tw/exchangeReport/MI_INDEX' : 'https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes') : null, flow?.url,
+      ].filter(Boolean))],
       as_of: `${date}T13:30:00+08:00`, available_at: evaluatedAt,
       provenance: { provider: market.toLowerCase(), official_only: true, model_version: OFFICIAL_MARKET_HISTORY_MODEL_VERSION },
     };
