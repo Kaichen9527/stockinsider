@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { deriveMarketEvidence, marketEvidenceWriteBatches, missingOfficialIndexAuthorityRequests, parseForeignNetTwd, parseTaiexHistory, parseTpexDailyCloses, parseTpexIndex } from './market-evidence.ts';
+import { deriveMarketEvidence, marketEvidenceToPublicSummary, marketEvidenceWriteBatches, missingOfficialIndexAuthorityRequests, parseForeignNetTwd, parseTaiexHistory, parseTpexDailyCloses, parseTpexIndex } from './market-evidence.ts';
 
 test('market evidence writes are split below transport body limits', () => {
   const rows = Array.from({ length: 201 }, (_, index) => index);
@@ -25,6 +25,18 @@ test('missing market component disables risk budget', () => {
   assert.equal(evidence.status, 'data_incomplete');
   assert.equal(evidence.riskBudget, null);
   assert.ok(evidence.missingComponents.length === 4);
+});
+
+test('canonical market evidence maps to the public homepage summary', () => {
+  const summary = marketEvidenceToPublicSummary({
+    status: 'complete', regime: 'selective', completeness_pct: 100, roster_coverage_pct: 99.3,
+    risk_budget: 'reduced', as_of: '2026-09-02T13:30:00+08:00', missing_components: [],
+    taiex_state: { bars: 520 }, tpex_state: { bars: 520 }, breadth_state: { observed: 1800 }, foreign_flow_state: { sessions: 5 },
+  });
+  assert.equal(summary?.status, 'selective_or_defensive');
+  assert.equal(summary?.completeness, 1);
+  assert.deepEqual(summary?.missingComponents, []);
+  assert.match(summary?.summary || '', /520 個交易日/u);
 });
 
 test('official index acquisition only requests authority dates absent from retained history', () => {
