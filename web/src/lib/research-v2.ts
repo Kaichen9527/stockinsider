@@ -8,7 +8,8 @@ import { THREADS_CANONICAL_ORIGIN } from './source-auth';
 import { APPROVED_TELEGRAM_PUBLIC_CHANNELS, RETIRED_SOURCE_CONNECTORS } from './source-policy';
 import { fetchTextWithRetry, sourceFetchFailureCode } from './source-fetch';
 import { getThreadsTokenForRun, threadsTokenRegistryMetadata } from './threads-token';
-import { classifyPttContentSemantics, publisherKeyFor, type SourceContentSemantics } from './source-content-semantics';
+import { classifyPttContentSemantics, GDELT_TW_MATCHER_VERSION, publisherKeyFor, type SourceContentSemantics } from './source-content-semantics';
+import { collectPagedAuthorityRows } from './candidate-research-policy';
 import { decodeSingleFileZip, gdeltGkgUrlsAfter, gdeltSearchableText, gdeltTransportReason, isRetiredNewsHost, matchGdeltStockSymbols, parseGdeltSeenDate, selectLatestGdeltGkgUrl } from './gdelt-gkg';
 
 type Row = Record<string, unknown>;
@@ -2223,7 +2224,14 @@ async function upsertSourceRawDocuments(items: SourceRawDocInput[]) {
         content_semantics: item.contentSemantics === 'metadata_only' ? 'metadata_only' : 'editorial_discussion',
         publisher_key: item.publisherKey || publisherKeyFor({ platform: item.platform, author: compactText(item.metadata?.author_name) || null, sourceUrl: item.documentUrl, sourceName: compactText(item.metadata?.source_name) || null }),
         publisher_name: item.publisherName || compactText(item.metadata?.author_name || item.metadata?.source_name) || null,
-        provenance: { retention_mode: item.metadata?.retention_mode || 'source_document', source_entity_id: item.sourceEntityId },
+        provenance: {
+          retention_mode: item.metadata?.retention_mode || 'source_document',
+          source_entity_id: item.sourceEntityId,
+          ...(item.platform === 'gdelt' ? {
+            discovery_eligible: item.metadata?.discovery_eligible === true,
+            matcher_version: item.metadata?.matcher_version || null,
+          } : {}),
+        },
         ruleset_version: 'source-ranking-v2.2.0',
       }];
     }));
@@ -2937,12 +2945,17 @@ async function scrapeBullTalk(symbolContext?: SymbolScopedStockContext | null) {
 
 async function scrapeGdeltMetadata(symbolContext?: SymbolScopedStockContext | null): Promise<SourceSyncRunShape> {
   const supabase = getSupabaseServerClient();
-  const [{ data: stockData, error: stockError }, { data: cursorData, error: cursorError }] = await Promise.all([
-    supabase.rpc('candidate_research_stock_authority', { p_cutoff: nowIso() }),
+  const authorityCutoff = nowIso();
+  const [stockData, { data: cursorData, error: cursorError }] = await Promise.all([
+    collectPagedAuthorityRows<Row>(async (from, to) => {
+      const page = await supabase.rpc('candidate_research_stock_authority', { p_cutoff: authorityCutoff }).range(from, to);
+      if (page.error) throw new Error(`gdelt_stock_authority_failed:${page.error.message}`);
+      return (page.data as Row[]) || [];
+    }, { maxRows: 5000 }),
     supabase.from('source_connector_cursors').select('cursor_value').eq('connector', 'gdelt_gkg').maybeSingle(),
   ]);
-  if (stockError || cursorError) throw new Error(stockError?.message || cursorError?.message || 'gdelt_context_failed');
-  const stocks = ((stockData as Row[]) || []).map((row) => ({
+  if (cursorError) throw new Error(cursorError.message || 'gdelt_context_failed');
+  const stocks = stockData.map((row) => ({
     symbol: compactText(row.symbol).toUpperCase(), name: compactText(row.name),
   })).filter((row) => /^\d{4}$/u.test(row.symbol) && row.name.length >= 2)
     .filter((row) => !symbolContext || row.symbol === symbolContext.symbol);
@@ -3006,7 +3019,7 @@ async function scrapeGdeltMetadata(symbolContext?: SymbolScopedStockContext | nu
         sourceEntityId: String(entity.id), platform: 'gdelt', documentUrl, title: summary, summary, contentText: summary,
         publishedAt, symbols: unique(symbols), sentimentLabel: 'neutral', confidence: 0.62,
         contentSemantics: 'metadata_only', publisherKey: `gdelt:publisher:${publisherName}`, publisherName,
-        metadata: { connector: 'gdelt_gkg_raw_v2', retention_mode: 'metadata_link_only', original_domain: publisherName, gkg_archive: gkgUrl, license_basis: 'gdelt_metadata_and_source_links' },
+        metadata: { connector: 'gdelt_gkg_raw_v2', retention_mode: 'metadata_link_only', original_domain: publisherName, gkg_archive: gkgUrl, license_basis: 'gdelt_metadata_and_source_links', discovery_eligible: true, matcher_version: GDELT_TW_MATCHER_VERSION },
       }];
     });
     matchedDocuments += docs.length;

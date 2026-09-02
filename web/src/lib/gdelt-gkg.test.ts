@@ -38,7 +38,7 @@ test('GKG matching reads content columns, not record date, and excludes year-sha
   const columns = Array.from({ length: 27 }, () => '');
   columns[0] = '20260902120000-1';
   columns[1] = '20260902120000';
-  columns[22] = '台積電,2330,2026 年市場展望';
+  columns[22] = '台灣,台積電,2330,2026 年市場展望';
   const searchable = gdeltSearchableText(columns);
   assert.deepEqual(matchGdeltStockSymbols(searchable, [
     { symbol: '2330', name: '台積電' },
@@ -55,5 +55,6 @@ test('GKG ignores bare four-digit numbers and accepts only explicit ticker synta
   ];
   assert.deepEqual(matchGdeltStockSymbols('revenue reached 2330 and 2002 units in 1234 regions', stocks), []);
   assert.deepEqual(matchGdeltStockSymbols('TWSE:2330 and $2002 moved while 1234 was a count', stocks), ['2330', '2002']);
-  assert.deepEqual(matchGdeltStockSymbols('台積電供應鏈展望', stocks), ['2330']);
+  assert.deepEqual(matchGdeltStockSymbols('台灣,台積電,供應鏈展望', stocks), ['2330']);
+  assert.deepEqual(matchGdeltStockSymbols('the world economy mentioned 世界 and 1234 companies', stocks), []);
 });

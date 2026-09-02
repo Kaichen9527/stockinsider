@@ -125,7 +125,7 @@ async function loadCandidateMentions(
   return collectPagedAuthorityRows<Row>(async (from, to) => {
     try {
       const page = await supabase.from('candidate_source_mentions')
-        .select('stock_id,platform,source_name,author_name,source_url,stance,independent_content_hash,mentioned_at,available_at,confidence,publisher_key,publisher_name,content_semantics,stocks(id,symbol,name,market,sector)')
+        .select('stock_id,platform,source_name,author_name,source_url,stance,independent_content_hash,mentioned_at,available_at,confidence,publisher_key,publisher_name,content_semantics,provenance,stocks(id,symbol,name,market,sector)')
         .gte('available_at', historyCutoff).lte('available_at', sourceCutoff)
         .order('available_at', { ascending: false }).range(from, to);
       if (page.error) throw page.error;
@@ -227,7 +227,7 @@ export async function runCandidateResearchCycle(options: {
   const stockMaster = new Map(master.map((item) => [item.symbol, item]));
   const candidates = new Map<string, { id: string; symbol: string; name: string; storedName: string; market: 'TW' | 'US'; sector: string | null }>();
   const mentionsByStock = new Map<string, Row[]>();
-  const eligibleMentions = allMentions.filter((mention) => candidateMentionDiscoveryEligible(mention.provenance));
+  const eligibleMentions = allMentions.filter((mention) => candidateMentionDiscoveryEligible(mention.provenance, String(mention.platform || '')));
   const recentMentions = eligibleMentions.filter((mention) => String(mention.available_at || '') >= cutoff && String(mention.content_semantics || 'editorial_discussion') !== 'bulk_institutional_ranking');
   const olderMentionsByStock = new Map<string, Row[]>();
   for (const mention of eligibleMentions.filter((mention) => String(mention.available_at || '') < cutoff)) {
@@ -855,7 +855,7 @@ export async function loadCandidateStageCards(): Promise<{ found: CandidateStage
       .range(from, from + mentionPageSize - 1);
     if (page.error) throw new Error(page.error.message);
     const rows = (page.data as Row[]) || [];
-    recentMentions.push(...rows.filter((row) => candidateMentionDiscoveryEligible(row.provenance)));
+    recentMentions.push(...rows.filter((row) => candidateMentionDiscoveryEligible(row.provenance, String(row.platform || ''))));
     if (rows.length < mentionPageSize) break;
   }
   const stageRes = await stagePromise;
@@ -875,7 +875,7 @@ export async function loadCandidateStageCards(): Promise<{ found: CandidateStage
     supabase.from('candidate_signal_tracking').select('stock_id,risk_action,action_reasons,session_date').in('stock_id', stockIds).eq('model_version', CANDIDATE_STAGE_MODEL_VERSION).order('session_date', { ascending: false }).limit(5000),
   ]);
   if (historicalMentionsRes.error || technicalRes.error || valuationRes.error || trackingRes.error) throw new Error(historicalMentionsRes.error?.message || technicalRes.error?.message || valuationRes.error?.message || trackingRes.error?.message || 'candidate_stage_read_failed');
-  const mentions = [...recentMentions, ...(((historicalMentionsRes.data as Row[]) || []).filter((row) => candidateMentionDiscoveryEligible(row.provenance)))];
+  const mentions = [...recentMentions, ...(((historicalMentionsRes.data as Row[]) || []).filter((row) => candidateMentionDiscoveryEligible(row.provenance, String(row.platform || ''))))];
   const technicalByStock = latest((technicalRes.data as Row[]) || []);
   const valuationByStock = latest((valuationRes.data as Row[]) || []);
   const trackingByStock = latest((trackingRes.data as Row[]) || []);

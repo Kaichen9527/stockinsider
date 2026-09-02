@@ -107,6 +107,7 @@ export function matchGdeltStockSymbols(
   searchable: string,
   stocks: Array<{ symbol: string; name: string }>,
 ): string[] {
+  const taiwanMarketContext = /(?:台灣|臺灣|台股|臺股|台北證券|Taiwan|Taipei|TWSE|TPEX|TAIEX)/iu.test(searchable);
   return stocks.filter((stock) => {
     // A bare four-digit number in GKG metadata is overwhelmingly likely to be
     // a year, amount, event code or address. Only accept symbols when the
@@ -119,7 +120,11 @@ export function matchGdeltStockSymbols(
       new RegExp(`(?<!\\d)${escaped}[.](?:TW|TWO)(?![A-Z])`, 'iu'),
     ].some((pattern) => pattern.test(searchable));
     const name = stock.name.trim();
-    const nameMatch = name.length >= 2 && !/^\d+$/u.test(name) && searchable.includes(name);
+    const escapedName = name.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
+    const nameMatch = taiwanMarketContext
+      && name.length >= 2
+      && !/^\d+$/u.test(name)
+      && new RegExp(`(?<![\\p{L}\\p{N}])${escapedName}(?![\\p{L}\\p{N}])`, 'iu').test(searchable);
     return symbolMatch || nameMatch;
   }).map((stock) => stock.symbol);
 }
