@@ -1,6 +1,12 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { deriveMarketEvidence, missingOfficialIndexAuthorityRequests, parseForeignNetTwd, parseTaiexHistory, parseTpexDailyCloses, parseTpexIndex } from './market-evidence.ts';
+import { deriveMarketEvidence, marketEvidenceWriteBatches, missingOfficialIndexAuthorityRequests, parseForeignNetTwd, parseTaiexHistory, parseTpexDailyCloses, parseTpexIndex } from './market-evidence.ts';
+
+test('market evidence writes are split below transport body limits', () => {
+  const rows = Array.from({ length: 201 }, (_, index) => index);
+  assert.deepEqual(marketEvidenceWriteBatches(rows).map((batch) => batch.length), [100, 100, 1]);
+  assert.throws(() => marketEvidenceWriteBatches(rows, 0), /invalid_market_evidence_batch_size/);
+});
 
 test('market evidence requires both indices, breadth and official flows', () => {
   const sessions = Array.from({ length: 520 }, (_, index) => ({ date: `2026-${String(Math.floor(index / 28) + 1).padStart(2, '0')}-${String(index % 28 + 1).padStart(2, '0')}`, close: 100 + index }));

@@ -279,10 +279,20 @@ export async function runCandidateResearchCycle(options: {
     if (history) history.push(point);
     else cachedOfficialHistory.set(symbol, [point]);
   }
-  const officialValuationHistory = await fetchTwMarketValuationHistory(
-    universe.map((stock) => stock.symbol), marketSessions, 60, exchangeBySymbol, cachedOfficialHistory,
-  );
-  const marketEvidence = await buildMarketEvidenceSnapshot(latestMarketSession, evaluatedAt, marketSessions);
+  let officialValuationHistory: Map<string, TwValuationHistoryPoint[]>;
+  try {
+    officialValuationHistory = await fetchTwMarketValuationHistory(
+      universe.map((stock) => stock.symbol), marketSessions, 60, exchangeBySymbol, cachedOfficialHistory,
+    );
+  } catch (error) {
+    throw new Error(`official_valuation_history_failed:${error instanceof Error ? error.message : String(error)}`);
+  }
+  let marketEvidence: Awaited<ReturnType<typeof buildMarketEvidenceSnapshot>>;
+  try {
+    marketEvidence = await buildMarketEvidenceSnapshot(latestMarketSession, evaluatedAt, marketSessions);
+  } catch (error) {
+    throw new Error(`official_market_evidence_failed:${error instanceof Error ? error.message : String(error)}`);
+  }
   const marketRegime = marketEvidence.regime as MarketRiskRegime;
   const runInsert = await supabase.from('candidate_research_runs').insert({
     id: runId,
