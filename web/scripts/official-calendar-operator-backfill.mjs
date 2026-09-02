@@ -62,7 +62,7 @@ const twseDates = new Map();
 const tpexDates = new Map();
 let written = 0;
 let duplicate = 0;
-for (let monthsBack = 0; monthsBack < 66; monthsBack += 1) {
+for (let monthsBack = 0; monthsBack < 67; monthsBack += 1) {
   const month = monthCoordinates(latestSession, monthsBack);
   const twseUrl = `https://www.twse.com.tw/rwd/zh/TAIEX/MI_5MINS_HIST?date=${month.compact}&response=json`;
   const tpexUrl = `https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingIndex?date=${month.slash}&response=json`;
