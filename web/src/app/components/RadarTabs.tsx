@@ -468,7 +468,10 @@ function CandidateStageCardView({ card }: { card: CandidateStageCard }) {
         </div>
         <div className="rounded-2xl border border-line px-3 py-2 text-right text-xs">
           <p>研究 {card.scores.research.toFixed(1)} · 行動 {card.scores.actionability.toFixed(1)}</p>
-          <p className="mt-1">信心 {card.scores.dataConfidence.toFixed(1)} · 收盤確認 {card.consecutiveCloses.passed}/2</p>
+          <p className="mt-1">
+            信心 {card.scores.dataConfidence.toFixed(1)}
+            {card.lifecycleStage === 'found' ? ` · 來源 ${card.scores.discovery.toFixed(1)}` : ` · 收盤確認 ${card.consecutiveCloses?.passed ?? 0}/2`}
+          </p>
         </div>
       </div>
       <div className="mt-4 grid gap-2 text-xs sm:grid-cols-3">
