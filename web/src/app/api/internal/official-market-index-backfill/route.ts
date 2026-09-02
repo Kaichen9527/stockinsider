@@ -48,18 +48,22 @@ export async function POST(request: Request) {
   const availableAt = String(object.availableAt || '');
   if (!Number.isFinite(Date.parse(availableAt)) || rows.length < 1 || rows.length > 300 || rows.some((row) => row.sessionDate > availableAt.slice(0, 10))) return NextResponse.json({ ok: false, error: 'invalid_official_index_evidence' }, { status: 422 });
   const supabase = getSupabaseServerClient();
-  const dates = [...new Set(rows.map((row) => row.sessionDate))];
-  const [writer, sessions, existing] = await Promise.all([
+  const [writer, sessions] = await Promise.all([
     supabase.from('production_writer_releases').select('release_id').eq('active', true).single(),
     officialSessions(availableAt),
-    supabase.from('official_market_evidence_history').select('*').in('session_date', dates),
   ]);
   if (writer.error || writer.data?.release_id !== releaseId) return NextResponse.json({ ok: false, error: 'writer_release_not_active' }, { status: 409 });
-  if (existing.error) return NextResponse.json({ ok: false, error: existing.error.message }, { status: 500 });
   const allowed = new Set(sessions.map((row) => String(row.session_date || '')));
-  if (rows.some((row) => !allowed.has(row.sessionDate))) return NextResponse.json({ ok: false, error: 'official_session_reference_missing' }, { status: 422 });
+  // Monthly authority responses include a few sessions just outside the
+  // rolling 520-session boundary. They are valid official evidence, but this
+  // endpoint persists only the requested point-in-time authority window.
+  const authoritativeRows = rows.filter((row) => allowed.has(row.sessionDate));
+  if (authoritativeRows.length < 1) return NextResponse.json({ ok: false, error: 'official_session_reference_missing' }, { status: 422 });
+  const dates = [...new Set(authoritativeRows.map((row) => row.sessionDate))];
+  const existing = await supabase.from('official_market_evidence_history').select('*').in('session_date', dates);
+  if (existing.error) return NextResponse.json({ ok: false, error: existing.error.message }, { status: 500 });
   const existingByKey = new Map((existing.data || []).map((row) => [`${row.market}:${row.session_date}`, row]));
-  const write = await supabase.from('official_market_evidence_history').upsert(rows.map((row) => {
+  const write = await supabase.from('official_market_evidence_history').upsert(authoritativeRows.map((row) => {
     const retained = existingByKey.get(`${row.market}:${row.sessionDate}`);
     return {
       market: row.market, session_date: row.sessionDate, index_close: row.close,
@@ -71,5 +75,5 @@ export async function POST(request: Request) {
     };
   }), { onConflict: 'market,session_date' });
   if (write.error) return NextResponse.json({ ok: false, error: write.error.message }, { status: 500 });
-  return NextResponse.json({ ok: true, result: { accepted: rows.length, releaseId } });
+  return NextResponse.json({ ok: true, result: { accepted: authoritativeRows.length, releaseId } });
 }
