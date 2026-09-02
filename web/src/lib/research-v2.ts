@@ -11,6 +11,7 @@ import { getThreadsTokenForRun, threadsTokenRegistryMetadata } from './threads-t
 import { classifyPttContentSemantics, GDELT_TW_MATCHER_VERSION, publisherKeyFor, type SourceContentSemantics } from './source-content-semantics';
 import { collectPagedAuthorityRows } from './candidate-research-policy';
 import { decodeSingleFileZip, gdeltGkgUrlsAfter, gdeltSearchableText, gdeltTransportReason, isRetiredNewsHost, matchGdeltStockSymbols, parseGdeltSeenDate, selectLatestGdeltGkgUrl } from './gdelt-gkg';
+import { isExpectedPttArticleMissing } from './ptt-policy';
 
 type Row = Record<string, unknown>;
 const AUTHORIZED_BROKER_SOURCE_MODES = ['manual_pdf', 'manual_csv', 'imported_pdf'] as const;
@@ -2703,6 +2704,7 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
   const pttSignalRows: Array<Record<string, unknown>> = [];
   let articlesFetched = 0;
   let articleFetchFailures = 0;
+  let unavailableArticlesSkipped = 0;
   const articleFetchFailureReasons = new Set<string>();
   let pushCommentsParsed = 0;
   const matchedSymbols = new Set<string>();
@@ -2760,8 +2762,16 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
       const commentText = comments.map((item) => `${item.tag} ${item.text}`).join('\n').slice(0, 3000);
       contentText = compactText([bodyText, commentText].filter(Boolean).join('\n\n推噓留言：\n')) || title;
     } catch (error) {
+      const failureCode = sourceFetchFailureCode(error);
+      if (isExpectedPttArticleMissing(failureCode)) {
+        // A post can disappear between the board/search listing request and
+        // the article request. Do not retain a dead link or degrade the whole
+        // connector for this expected listing race.
+        unavailableArticlesSkipped += 1;
+        continue;
+      }
       articleFetchFailures += 1;
-      articleFetchFailureReasons.add(sourceFetchFailureCode(error));
+      articleFetchFailureReasons.add(failureCode);
       // Use title only on fetch failure.
     }
 
@@ -2877,6 +2887,7 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
       pages_scanned: targetPages.length,
       page_fetch_errors: [...pageFetchFailures],
       article_fetch_errors: [...articleFetchFailureReasons],
+      unavailable_articles_skipped: unavailableArticlesSkipped,
       articles_fetched: articlesFetched,
       push_comments_parsed: pushCommentsParsed,
       matched_symbols: [...matchedSymbols],
