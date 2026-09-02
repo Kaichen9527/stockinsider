@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
 import { createClient } from '@supabase/supabase-js';
+import { readResponseTextWithin } from './official-operator-utils.mjs';
 
 const appUrl = String(process.env.OPERATOR_TUNNEL_URL || '').replace(/\/$/u, '');
 const internalKey = process.env.INTERNAL_API_KEY || '';
@@ -122,7 +123,8 @@ async function acquireExchange(exchange) {
         await delay(1_000 * attempt);
       }
       if (!response?.ok) continue;
-      const raw = await response.text();
+      const raw = await readResponseTextWithin(response, { timeoutMs: 15_000 }).catch(() => null);
+      if (raw == null) continue;
       let payload;
       try { payload = JSON.parse(raw); } catch { continue; }
       const table = exchange === 'TWSE' ? payload.data : payload.tables?.[0]?.data;

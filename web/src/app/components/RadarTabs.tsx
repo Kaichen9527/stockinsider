@@ -462,7 +462,7 @@ function CandidateStageCardView({ card }: { card: CandidateStageCard }) {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-xs tracking-[0.18em] text-slate-500 dark:text-emerald-100/50">{card.symbol} · {card.lifecycleStage.toUpperCase()}</p>
-          <Link href={card.detailHref} className="mt-1 block text-xl font-semibold hover:text-accent">{card.chineseName}</Link>
+          <Link href={card.detailHref || `/stock/${card.symbol}`} className="mt-1 block text-xl font-semibold hover:text-accent">{card.chineseName}</Link>
           <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/55">來源 {card.effectiveMentionCount}/{card.rawMentionCount} 筆有效／原始 · {card.publisherCount} 個發布者 · {card.platformCount} 個平台</p>
           <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/55">單一平台占比 {Math.round(card.dominantPlatformShare * 100)}% · 最新 {formatTaipeiDateTime(card.latestMentionAt, 'compact')}</p>
         </div>
