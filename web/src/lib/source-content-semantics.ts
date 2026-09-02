@@ -4,6 +4,12 @@ export type SourceContentSemantics =
   | 'official_chip_evidence'
   | 'metadata_only';
 
+export function candidateMentionDiscoveryEligible(provenance: unknown): boolean {
+  if (!provenance || typeof provenance !== 'object' || Array.isArray(provenance)) return true;
+  const record = provenance as Record<string, unknown>;
+  return record.discovery_eligible !== false && record.invalidated !== true;
+}
+
 const BULK_INSTITUTIONAL_PATTERNS = [
   /外資.*(?:買超|賣超).*(?:排行|前\s*\d+|TOP\s*\d+)/iu,
   /投信.*(?:買超|賣超).*(?:排行|前\s*\d+|TOP\s*\d+)/iu,
