@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { fetchOfficialJson, fetchTwStockDailyBars, isOfficialValuationSourceUrl, parseTpexTradingStockRows, parseTpexValuationPanel, parseTwseStockValuationHistory, parseTwseValuationPanel, resetOfficialMarketRequestStateForTests, selectOfficialValuationBackfillMonths } from './tw-market.ts';
+import { fetchOfficialJson, fetchTwMarketTradingSessions, fetchTwStockDailyBars, isOfficialValuationSourceUrl, parseTpexMarketTradingSessions, parseTpexTradingStockRows, parseTpexValuationPanel, parseTwseStockValuationHistory, parseTwseValuationPanel, resetOfficialMarketRequestStateForTests, selectOfficialValuationBackfillMonths } from './tw-market.ts';
 
 test('a single transient official-host failure does not blackhole the next request', async (t) => {
   const originalFetch = globalThis.fetch;
@@ -173,6 +173,51 @@ test('candidate daily bars fetch recent sessions before an old archive failure o
   const bars = await fetchTwStockDailyBars('1216', 5, ['2026-01-02', '2026-01-05', '2026-01-06', '2026-08-28', '2026-09-01'], 'TWSE');
   assert.deepEqual(bars?.map((bar) => bar.time), ['2026-08-28', '2026-09-01']);
   assert.deepEqual(requestedDates.slice(0, 2), ['20260901', '20260828']);
+});
+
+test('TPEx monthly index rows provide official trading sessions when TWSE archives are blocked', async (t) => {
+  const originalFetch = globalThis.fetch;
+  const requested: Array<{ url: URL; method: string; body: string }> = [];
+  t.after(() => {
+    globalThis.fetch = originalFetch;
+    resetOfficialMarketRequestStateForTests();
+  });
+  resetOfficialMarketRequestStateForTests();
+  globalThis.fetch = (async (input, init) => {
+    const url = new URL(String(input));
+    requested.push({ url, method: init?.method || 'GET', body: String(init?.body || '') });
+    if (url.hostname === 'www.twse.com.tw') {
+      return new Response('<html>FOR SECURITY REASONS</html>', { status: 200, headers: { 'content-type': 'text/html' } });
+    }
+    return new Response(JSON.stringify({
+      stat: 'ok',
+      tables: [{ data: [
+        ['2026/08/28', '270.00', '272.00', '269.00', '271.00', '1.00'],
+        ['2026/08/29', '-', '-', '-', '-', '-'],
+      ] }],
+    }), { status: 200, headers: { 'content-type': 'application/json' } });
+  }) as typeof fetch;
+
+  assert.deepEqual(await fetchTwMarketTradingSessions(1), ['2026-08-28']);
+  const tpexRequests = requested.filter((item) => item.url.hostname === 'www.tpex.org.tw');
+  assert.ok(tpexRequests.length >= 1);
+  assert.ok(tpexRequests.every((item) => item.method === 'POST'));
+  assert.ok(tpexRequests.every((item) => item.url.pathname === '/www/zh-tw/indexInfo/inx'));
+  assert.ok(tpexRequests.every((item) => /date=\d{4}%2F\d{2}%2F01/u.test(item.body)));
+});
+
+test('TPEx official calendar parser rejects malformed dates', () => {
+  assert.deepEqual(parseTpexMarketTradingSessions({
+    stat: 'ok',
+    tables: [{ data: [
+      ['2024/07/01', '273.72', '276.88', '273.72', '275.57'],
+      ['113/07/02', '275.00', '276.00', '274.00', '275.50'],
+      ['2024-07-03', '276.00', '277.00', '275.00', '276.50'],
+      ['', '277.00', '278.00', '276.00', '277.50'],
+      ['2024/07/04', '-', '-', '-', '-'],
+    ] }],
+  }), ['2024-07-01']);
+  assert.deepEqual(parseTpexMarketTradingSessions({ stat: '日期錯誤', tables: [{ data: [['2024/07/01', '', '', '', '275.57']] }] }), []);
 });
 
 test('valuation cache accepts only official TWSE and TPEx history endpoints', () => {
