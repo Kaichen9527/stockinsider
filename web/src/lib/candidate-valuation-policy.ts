@@ -3,6 +3,11 @@ export const CYCLICAL_ASSET_SYMBOLS = new Set([
 ]);
 export const FORWARD_BRIDGE_SYMBOLS = new Set(['1815','3715','6230']);
 export const TURNAROUND_SYMBOLS = new Set(['2332','4171']);
+export const VALUATION_REMEDIATION_SYMBOLS = new Set([
+  ...CYCLICAL_ASSET_SYMBOLS,
+  ...FORWARD_BRIDGE_SYMBOLS,
+  ...TURNAROUND_SYMBOLS,
+]);
 
 export type CandidateValuationBasis =
   | 'forward_12m'

@@ -23,7 +23,7 @@ import { candidatePriceRefreshDepth, collectBatchedAuthorityRows, collectPagedAu
 import { scheduledSourceConnectorKeys, sourceExecutionPolicy } from './source-policy';
 import { loadLatestSourceRunLedger } from './source-run-ledger';
 import type { CandidateShadowProgress, CandidateStageCard } from './types';
-import { candidateValuationPolicy } from './candidate-valuation-policy';
+import { candidateValuationPolicy, VALUATION_REMEDIATION_SYMBOLS } from './candidate-valuation-policy';
 import { buildDeterministicCandidateSections } from './candidate-detail';
 import { candidateRiskAction } from './candidate-risk-action';
 import { buildMarketEvidenceSnapshot } from './market-evidence';
@@ -267,13 +267,18 @@ export async function runCandidateResearchCycle(options: {
     candidates.set(id, { id, symbol, name: official.name, storedName, market: 'TW', sector: official.sector || (stock.sector ? String(stock.sector) : null) });
   }
   const seedSymbols = (options.seedSymbols || []).filter((seed) => seed.market === 'TW');
-  if (seedSymbols.length > 0) {
-    const seedRes = await supabase.from('stocks').select('id,symbol,name,market,sector').in('symbol', seedSymbols.map((seed) => seed.symbol)).eq('market', 'TW');
+  const seedBySymbol = new Map(seedSymbols.map((seed) => [seed.symbol, seed]));
+  for (const symbol of VALUATION_REMEDIATION_SYMBOLS) {
+    if (!seedBySymbol.has(symbol)) seedBySymbol.set(symbol, { symbol, name: symbol, market: 'TW', sector: null });
+  }
+  const persistentResearchSeeds = [...seedBySymbol.values()];
+  if (persistentResearchSeeds.length > 0) {
+    const seedRes = await supabase.from('stocks').select('id,symbol,name,market,sector').in('symbol', persistentResearchSeeds.map((seed) => seed.symbol)).eq('market', 'TW');
     if (seedRes.error) throw new Error(seedRes.error.message);
     for (const stock of (seedRes.data as Row[]) || []) {
       const id = String(stock.id || '');
       const symbol = String(stock.symbol || '');
-      const seed = seedSymbols.find((item) => item.symbol === symbol);
+      const seed = seedBySymbol.get(symbol);
       const official = stockMaster.get(symbol);
       if (id && seed && official) {
         const storedName = String(stock.name || seed.name);
