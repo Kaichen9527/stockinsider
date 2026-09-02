@@ -1,6 +1,13 @@
 import { atr, obv, rsi, sma } from 'indicatorts';
 
 export const TECHNICAL_FEATURE_RULESET_VERSION = 'technical-features-v2.0.0';
+export const MINIMUM_TECHNICAL_HISTORY_BARS = 240;
+
+export function technicalHistoryCoverageTerminalReason(barCount: number) {
+  return Number.isInteger(barCount) && barCount >= MINIMUM_TECHNICAL_HISTORY_BARS
+    ? null
+    : `official_price_history_coverage_below_${MINIMUM_TECHNICAL_HISTORY_BARS}`;
+}
 
 export type TechnicalBar = {
   session: string;

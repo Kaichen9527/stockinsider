@@ -1,6 +1,6 @@
 import { createHash, randomUUID } from 'crypto';
 import { getSupabaseServerClient } from './supabase-server';
-import { calculateTechnicalFeatures, normalizeInstitutionalFlows, type InstitutionalFlowDay } from './technical-features-v2';
+import { calculateTechnicalFeatures, normalizeInstitutionalFlows, technicalHistoryCoverageTerminalReason, type InstitutionalFlowDay } from './technical-features-v2';
 import {
   advanceActionableCloseStreak,
   classifyCandidateStage,
@@ -340,6 +340,8 @@ export async function runCandidateResearchCycle(options: {
       const bars = [...new Map([...authorityBars, ...cachedBars, ...(fetchedBars || [])].filter((bar) => bar.time <= latestMarketSession).map((bar) => [bar.time, bar])).values()]
         .sort((left, right) => left.time.localeCompare(right.time)).slice(-1320);
       if (!bars || bars.length === 0) throw new Error('official_price_history_missing');
+      const priceCoverageTerminal = technicalHistoryCoverageTerminalReason(bars.length);
+      if (priceCoverageTerminal) throw new Error(priceCoverageTerminal);
       const queryError = priorRevenueRes.error || historicalFundamentalsRes.error || priorStageRes.error || priorFlowsRes.error || cachedBarsRes.error || authorityBarsRes.error || authorityFactsRes.error || peerRelationshipsRes.error || priorTechnicalRes.error || trackingRes.error;
       if (queryError) throw new Error(queryError.message);
       const peerRelationships = (peerRelationshipsRes.data as Row[]) || [];

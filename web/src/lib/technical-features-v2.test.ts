@@ -1,6 +1,12 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { calculateTechnicalFeatures, normalizeInstitutionalFlows } from './technical-features-v2.ts';
+import { calculateTechnicalFeatures, normalizeInstitutionalFlows, technicalHistoryCoverageTerminalReason } from './technical-features-v2.ts';
+
+test('technical research cannot mark a two-bar price fragment complete', () => {
+  assert.equal(technicalHistoryCoverageTerminalReason(2), 'official_price_history_coverage_below_240');
+  assert.equal(technicalHistoryCoverageTerminalReason(239), 'official_price_history_coverage_below_240');
+  assert.equal(technicalHistoryCoverageTerminalReason(240), null);
+});
 
 test('golden fixture keeps MA5/20/60/120/240 identities explicit', () => {
   const bars = Array.from({ length: 240 }, (_, index) => {

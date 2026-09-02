@@ -44,6 +44,17 @@ function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function officialHostPaceDelayMs(url: string) {
+  const parsed = new URL(url);
+  // MI_INDEX returns the full TWSE roster for one historical session. The VPS
+  // is throttled when these large archives are requested at the generic 300ms
+  // cadence, which used to leave only two bars before the circuit opened.
+  // One request every 1.2 seconds keeps the deterministic 1,320-session
+  // backfill inside the one-hour research window without treating 429s as
+  // absent prices.
+  return parsed.pathname === '/exchangeReport/MI_INDEX' ? 1_200 : 300;
+}
+
 async function withOfficialHostPace<T>(url: string, work: () => Promise<T>): Promise<T> {
   const host = new URL(url).hostname;
   const previous = officialHostPace.get(host) || Promise.resolve();
@@ -60,7 +71,7 @@ async function withOfficialHostPace<T>(url: string, work: () => Promise<T>): Pro
     // start time.  Otherwise four slow requests can be in flight to TWSE at
     // once, producing a burst that looks like a host outage and poisons every
     // later candidate in the same research cycle.
-    officialHostNextRequestAt.set(host, Date.now() + 300);
+    officialHostNextRequestAt.set(host, Date.now() + officialHostPaceDelayMs(url));
     release();
     if (officialHostPace.get(host) === current) officialHostPace.delete(host);
   }
