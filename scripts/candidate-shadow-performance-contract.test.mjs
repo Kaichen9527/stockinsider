@@ -49,6 +49,9 @@ test('candidate research reads the durable official calendar and fails fast on a
   assert.match(market, /officialHostUnavailableUntil\.set\(circuitKey/u);
   assert.match(marketEvidence, /\.eq\('market', 'TWSE'\)[\s\S]*\.range\(offset, offset \+ 999\)/u);
   assert.match(marketEvidence, /offset < 6_000 && unique\.size < 520/u);
+  assert.match(marketEvidence, /loadOfficialMarketHistory\(sessionDate, evaluatedAt\)/u);
+  assert.match(marketEvidence, /official_market_evidence_history'[\s\S]{0,500}\.range\(offset, offset \+ pageSize - 1\)/u);
+  assert.doesNotMatch(marketEvidence, /official_market_evidence_history'[\s\S]{0,500}\.limit\(1400\)/u);
 });
 
 test('official roster normalization happens before a missing price history can fail closed', () => {

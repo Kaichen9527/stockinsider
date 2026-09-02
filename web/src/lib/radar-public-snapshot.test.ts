@@ -57,5 +57,9 @@ test('public Radar snapshot uses stages as the canonical stock plane and stays w
   assert.equal('currentPrice' in (compact.stages?.found[0]?.valuation || {}), false);
   assert.equal(compact.stages?.found[0]?.sources.length, 2);
   assert.equal('mentionedAt' in (compact.stages?.found[0]?.sources[0] || {}), false);
+  assert.equal('ma120' in (compact.stages?.found[0]?.technical || {}), false);
+  assert.equal('riskAction' in (compact.stages?.found[0] || {}), false);
+  assert.equal('consecutiveCloses' in (compact.stages?.found[0] || {}), false);
+  assert.equal(compact.stages?.found[0]?.unmetConditions.length, 4);
   assert.ok(Buffer.byteLength(JSON.stringify(compact)) <= 150_000);
 });

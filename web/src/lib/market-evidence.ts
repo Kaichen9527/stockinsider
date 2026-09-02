@@ -159,23 +159,49 @@ async function loadCompletedTradingSessions(sessionDate: string) {
   return [...unique].sort().slice(-520);
 }
 
+async function loadOfficialMarketHistory(sessionDate: string, evaluatedAt: string) {
+  const supabase = getSupabaseServerClient();
+  const rows: Row[] = [];
+  const pageSize = 750;
+  // Supabase/PostgREST deployments commonly cap a response at 1,000 rows.
+  // Two markets x 520 sessions already exceeds that cap, so a single
+  // `.limit(1400)` silently yields roughly 500 bars per index and leaves the
+  // market gate incomplete even when the authority table is fully populated.
+  for (let offset = 0; offset < 3_000; offset += pageSize) {
+    const page = await supabase.from('official_market_evidence_history')
+      .select('market,session_date,index_close,breadth_above_ma20,breadth_observed,breadth_eligible,foreign_net_twd,source_urls,available_at')
+      .lte('available_at', evaluatedAt).lte('session_date', sessionDate)
+      .order('session_date', { ascending: false }).order('market', { ascending: true })
+      .range(offset, offset + pageSize - 1);
+    if (page.error) throw new Error(`official_market_history_read_failed:${page.error.message}`);
+    const pageRows = (page.data as Row[]) || [];
+    rows.push(...pageRows);
+    if (pageRows.length < pageSize) break;
+    const coverage = new Map<string, Set<string>>();
+    for (const row of rows) {
+      if (numberOrNull(row.index_close) == null) continue;
+      const dates = coverage.get(String(row.market)) || new Set<string>();
+      dates.add(String(row.session_date));
+      coverage.set(String(row.market), dates);
+    }
+    if ((coverage.get('TWSE')?.size || 0) >= 520 && (coverage.get('TPEX')?.size || 0) >= 520) break;
+  }
+  return rows;
+}
+
 async function ingestOfficialMarketEvidence(sessionDate: string, evaluatedAt: string, suppliedSessions: string[] = []) {
   const supabase = getSupabaseServerClient();
   const supplied = [...new Set(suppliedSessions
     .filter((date) => /^\d{4}-\d{2}-\d{2}$/u.test(date) && date <= sessionDate))]
     .sort()
     .slice(-520);
-  const [sessions, rosterRes, existingRes] = await Promise.all([
+  const [sessions, rosterRes, existing] = await Promise.all([
     supplied.length >= 520 ? Promise.resolve(supplied) : loadCompletedTradingSessions(sessionDate),
     supabase.from('stock_instruments_v3').select('symbol,exchange,instrument_type,listing_status,valid_from,valid_to,recorded_at').eq('instrument_type', 'common_stock').eq('listing_status', 'active').lte('valid_from', evaluatedAt).order('recorded_at', { ascending: false }).limit(10000),
-    supabase.from('official_market_evidence_history').select('market,session_date,index_close,breadth_above_ma20,breadth_observed,breadth_eligible,foreign_net_twd,source_urls,available_at').lte('available_at', evaluatedAt).lte('session_date', sessionDate).order('session_date', { ascending: false }).limit(1400),
+    loadOfficialMarketHistory(sessionDate, evaluatedAt),
   ]);
   if (rosterRes.error) throw new Error(`official_market_prerequisite_failed:${rosterRes.error.message}`);
-  // The additive migration can be deployed independently. A missing table is a
-  // critical deployment error, not permission to silently fall back to unknown.
-  if (existingRes.error) throw new Error(`official_market_history_read_failed:${existingRes.error.message}`);
   if (sessions.length < 520 || sessions.at(-1) !== sessionDate) throw new Error('official_market_session_history_below_520');
-  const existing = (existingRes.data as Row[]) || [];
   const latestRows = existing.filter((row) => row.session_date === sessionDate);
   const complete = ['TWSE','TPEX'].every((market) => sessions.every((date) => existing.some((row) => row.market === market && row.session_date === date && numberOrNull(row.index_close) != null)))
     && latestRows.length === 2 && latestRows.every((row) => numberOrNull(row.breadth_observed) != null)
@@ -366,10 +392,7 @@ export async function buildMarketEvidenceSnapshot(sessionDate: string, evaluated
   const supabase = getSupabaseServerClient();
   await ingestOfficialMarketEvidence(sessionDate, evaluatedAt, officialSessions);
   const [official, market, flows] = await Promise.all([
-    supabase.from('official_market_evidence_history')
-      .select('market,session_date,index_close,breadth_above_ma20,breadth_observed,breadth_eligible,foreign_net_twd,source_urls,available_at')
-      .lte('available_at', evaluatedAt).lte('session_date', sessionDate)
-      .order('session_date', { ascending: false }).limit(1400),
+    loadOfficialMarketHistory(sessionDate, evaluatedAt).then((data): { data: Row[]; error: { message: string } | null } => ({ data, error: null })),
     supabase.from('opportunity_market_observations_v3')
       .select('observation_id,fact_key,scope_key,value,authority_date,breadth_numerator_count,breadth_observed_count,breadth_eligible_count,recorded_at,source_ref')
       .lte('recorded_at', evaluatedAt).lte('authority_date', sessionDate)

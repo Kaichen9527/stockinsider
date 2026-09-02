@@ -74,9 +74,13 @@ function compactLegacyCard(value: unknown) {
 
 function compactSourceHealth(value: RadarDailyPayload['sourceHealthSummary']) {
   if (!value) return undefined;
+  const homepageSocialConnectors = new Set(['threads', 'investanchors', 'telegram', 'podcast', 'ptt', 'bulltalk']);
   return {
     ...value,
-    connectorDetails: value.connectorDetails.map((item) => ({
+    // The full source registry remains on /sources. The homepage only renders
+    // these six social-source rows, so shipping retired market/news connectors
+    // here is duplicate payload with no visible consumer.
+    connectorDetails: value.connectorDetails.filter((item) => homepageSocialConnectors.has(item.connector)).map((item) => ({
       connector: item.connector, label: item.label, status: item.status, recordsWritten: item.recordsWritten,
       recordsWritten24h: item.recordsWritten24h, recordsWrittenThisRun: item.recordsWrittenThisRun,
       lastSuccessAt: item.lastSuccessAt, lastAttemptAt: item.lastAttemptAt, lastTerminalStatus: item.lastTerminalStatus,
@@ -91,8 +95,12 @@ function compactSourceHealth(value: RadarDailyPayload['sourceHealthSummary']) {
 }
 
 function compactCandidateStageCard(card: CandidateStageCard): CandidateStageCard {
+  const foundOnly = card.lifecycleStage === 'found';
   const valuation = Object.fromEntries(Object.entries(card.valuation).filter(([key, value]) => key === 'status' || value != null)) as CandidateStageCard['valuation'];
-  const technical = Object.fromEntries(Object.entries(card.technical).filter(([key, value]) => ['sessionDate', 'marketRegime', 'hardGatePassed'].includes(key) || value != null)) as CandidateStageCard['technical'];
+  const technical = Object.fromEntries(Object.entries(card.technical).filter(([key, value]) => {
+    if (value == null && !['sessionDate', 'marketRegime', 'hardGatePassed'].includes(key)) return false;
+    return !foundOnly || ['sessionDate', 'close', 'ma20', 'ma60', 'marketRegime', 'hardGatePassed'].includes(key);
+  })) as CandidateStageCard['technical'];
   const compact = {
     symbol: card.symbol,
     chineseName: card.chineseName,
@@ -106,7 +114,7 @@ function compactCandidateStageCard(card: CandidateStageCard): CandidateStageCard
     // `latestMentionAt` already carries the ordering timestamp used by the
     // public card. Per-link timestamps remain in the detail revision, avoiding
     // the same ISO string being repeated hundreds of times in the Radar JSON.
-    sources: card.sources.slice(0, 5).map((source) => ({
+    sources: (card.sources || []).slice(0, foundOnly ? 2 : 5).map((source) => ({
       platform: source.platform,
       ...(source.author ? { author: source.author } : {}),
       sourceUrl: source.sourceUrl,
@@ -115,12 +123,12 @@ function compactCandidateStageCard(card: CandidateStageCard): CandidateStageCard
     scores: card.scores,
     valuation,
     technical,
-    consecutiveCloses: { passed: card.consecutiveCloses.passed, required: 2 },
-    unmetConditions: card.unmetConditions.slice(0, 8),
-    ...(card.promotionReasons.length ? { promotionReasons: card.promotionReasons.slice(0, 5) } : {}),
+    ...(!foundOnly ? { consecutiveCloses: { passed: card.consecutiveCloses.passed, required: 2 } } : {}),
+    unmetConditions: (card.unmetConditions || []).slice(0, foundOnly ? 4 : 8),
+    ...(card.promotionReasons?.length ? { promotionReasons: card.promotionReasons.slice(0, 5) } : {}),
     ...(card.dataAsOf ? { dataAsOf: card.dataAsOf } : {}),
     ...(card.detailRevisionId ? { detailRevisionId: card.detailRevisionId } : {}),
-    ...(card.riskAction ? { riskAction: card.riskAction } : {}),
+    ...(!foundOnly && card.riskAction ? { riskAction: card.riskAction } : {}),
   };
   return compact as CandidateStageCard;
 }
@@ -193,15 +201,9 @@ export function buildCompactPublicRadarPayload(
     connectorStatus: (payload.connectorStatus || []).slice(0, 20).map((item) => ({
       connector: item.connector,
       credentialStatus: item.credentialStatus,
-      lastCheckedAt: item.lastCheckedAt,
       lastRunStatus: item.lastRunStatus,
-      lastRunAt: item.lastRunAt,
-      lastSuccessAt: item.lastSuccessAt,
       lastRecordsWritten: item.lastRecordsWritten,
-      lastErrorSummary: compactText(item.lastErrorSummary, 120) as string | null,
-      recordsWritten24h: item.recordsWritten24h,
-      failureReason: compactText(item.failureReason, 120) as string | null,
-    })),
+    })) as RadarDailyPayload['connectorStatus'],
     reports: (payload.reports || []).slice(0, 12).map((report) => ({
       ...report,
       summary: compactText(report.summary, 180) as string,
