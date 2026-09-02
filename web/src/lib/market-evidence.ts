@@ -12,6 +12,45 @@ function numberOrNull(value: unknown) {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+export function marketEvidenceToPublicSummary(row: Record<string, unknown> | null | undefined) {
+  if (!row) return null;
+  const complete = row.status === 'complete';
+  const regime = String(row.regime || 'unknown');
+  const missingComponents = Array.isArray(row.missing_components) ? row.missing_components.map(String) : [];
+  const completenessPct = numberOrNull(row.completeness_pct) || 0;
+  const rosterCoveragePct = numberOrNull(row.roster_coverage_pct);
+  const publicStatus = !complete
+    ? 'data_incomplete' as const
+    : regime === 'risk_on'
+      ? 'risk_on' as const
+      : 'selective_or_defensive' as const;
+  const riskBudget = row.risk_budget === 'normal'
+    ? '大盤支持正常風險預算。'
+    : row.risk_budget === 'reduced'
+      ? '大盤屬 selective，採縮小部位與選股優先。'
+      : complete
+        ? '大盤風險偏高，不新增 Actionable。'
+        : '資料未完整，不提供部位預算。';
+  const summary = complete
+    ? `TAIEX 與 TPEx 各 520 個交易日、breadth coverage ${rosterCoveragePct == null ? '待補' : `${rosterCoveragePct.toFixed(1)}%`}，外資 1/5 日資料完整；市場狀態 ${regime}。`
+    : `大盤資料完整度 ${completenessPct.toFixed(0)}%；尚缺 ${missingComponents.join('、') || '未命名元件'}。`;
+  return {
+    asOf: String(row.as_of || row.available_at || ''),
+    status: publicStatus,
+    completeness: completenessPct / 100,
+    riskBudget,
+    summary,
+    components: {
+      regime,
+      taiex: row.taiex_state || null,
+      tpex: row.tpex_state || null,
+      breadth: row.breadth_state || null,
+      foreignFlow: row.foreign_flow_state || null,
+    },
+    missingComponents,
+  };
+}
+
 function rocDate(value: unknown) {
   const match = String(value || '').trim().match(/^(\d{3})[\/-](\d{2})[\/-](\d{2})$/u);
   return match ? `${Number(match[1]) + 1911}-${match[2]}-${match[3]}` : null;

@@ -2,6 +2,7 @@ import { randomUUID } from 'crypto';
 import { normalizeRelatedStockSymbols, normalizeSourceDocumentSymbols } from './stock-symbol';
 import { loadActiveCandidateSourceErrors, loadCandidateShadowProgress, loadCandidateStageCards, recordCandidateShadowObservation, runCandidateResearchCycle } from './candidate-research';
 import { markRadarPublicSnapshotsFailed, publishRadarPublicSnapshots } from './radar-public-snapshot';
+import { MARKET_EVIDENCE_MODEL_VERSION, marketEvidenceToPublicSummary } from './market-evidence';
 import { calculateTechnicalFeatures, normalizeInstitutionalFlows, type InstitutionalFlowDay } from './technical-features-v2';
 import { advanceActionableCloseStreak, classifyCandidateStage, sourceSignalLifecycleStage, STAGE_RULESET_VERSION, type MarketRiskRegime } from './stage-classifier';
 import { existsSync, readFileSync } from 'fs';
@@ -13301,7 +13302,7 @@ async function getRadarPayload(windowType: ThemeHeatCard['windowType']): Promise
       degradedSources.push(source);
       loadWarnings.push(`${source}: ${message || 'degraded'}`);
     };
-    const [themesRes, recsRes, memosRes, marketRes, latestPipelineRes, agentStatus, connectorStatus, twseRows, sourceLedger] = await Promise.all([
+    const [themesRes, recsRes, memosRes, marketRes, candidateMarketRes, latestPipelineRes, agentStatus, connectorStatus, twseRows, sourceLedger] = await Promise.all([
       supabaseServer.from('theme_heat').select('*').eq('window_type', windowType).order('as_of_date', { ascending: false }).order('heat_score', { ascending: false }).limit(24),
       supabaseServer
         .from('recommendations')
@@ -13312,6 +13313,7 @@ async function getRadarPayload(windowType: ThemeHeatCard['windowType']): Promise
         .limit(500),
       supabaseServer.from('research_memos').select('*').order('updated_at', { ascending: false }).limit(30),
       supabaseServer.from('market_snapshots').select('*').eq('market', 'TW').order('as_of', { ascending: false }).limit(1),
+      supabaseServer.from('market_evidence_snapshots').select('session_date,status,regime,taiex_state,tpex_state,breadth_state,foreign_flow_state,completeness_pct,roster_coverage_pct,missing_components,risk_budget,as_of,available_at').eq('model_version', MARKET_EVIDENCE_MODEL_VERSION).order('session_date', { ascending: false }).order('available_at', { ascending: false }).limit(1).maybeSingle(),
       supabaseServer.from('pipeline_runs').select('run_type,status,finished_at,details').eq('run_type', 'recommendation').eq('status', 'success').order('finished_at', { ascending: false }).limit(1),
       withFallbackTimeout(
         getAgentStatusSummary().catch((error) => {
@@ -13343,18 +13345,20 @@ async function getRadarPayload(windowType: ThemeHeatCard['windowType']): Promise
       }), [], 3000),
     ]);
 
-    if (themesRes.error || recsRes.error || memosRes.error || marketRes.error || latestPipelineRes.error) {
+    if (themesRes.error || recsRes.error || memosRes.error || marketRes.error || candidateMarketRes.error || latestPipelineRes.error) {
       throw new Error(
         themesRes.error?.message ||
           recsRes.error?.message ||
           memosRes.error?.message ||
           marketRes.error?.message ||
+          candidateMarketRes.error?.message ||
           latestPipelineRes.error?.message ||
           'Failed to load radar payload',
       );
     }
 
     const themeRows = ((themesRes.data as Row[]) || []).map(mapThemeHeatRow);
+    const underreactionMarket = marketEvidenceToPublicSummary(candidateMarketRes.data as Row | null);
     const latestThemeDate = themeRows[0]?.asOfDate || asIsoDate(String((marketRes.data?.[0] as Row | undefined)?.as_of || nowIso()));
     const supabaseThemes = themeRows.filter((row) => row.asOfDate === latestThemeDate);
 
@@ -13974,6 +13978,7 @@ async function getRadarPayload(windowType: ThemeHeatCard['windowType']): Promise
       focusSummary,
       marketHighlightSummary,
       marketIndexSignal,
+      underreactionMarket,
       marketBreadthSummary: marketIndexSignal.breadthState || marketIndexSignal.summary,
       pluginSourceCoverageSummary,
       sourceHealthSummary,
