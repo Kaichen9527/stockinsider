@@ -49,6 +49,9 @@ test('public Radar snapshot uses stages as the canonical stock plane and stays w
   assert.equal(compact.opportunities.length, 0);
   assert.equal(compact.sourceSignals?.length, 1, 'one-release sourceSignals compatibility remains available');
   assert.equal('classificationReplayHash' in (compact.stages?.found[0] || {}), false);
+  assert.equal('market' in (compact.stages?.found[0] || {}), false);
+  assert.equal('mentionCount' in (compact.stages?.found[0] || {}), false);
+  assert.equal('promotionReasons' in (compact.stages?.found[0] || {}), false);
   assert.equal('currentPrice' in (compact.stages?.found[0]?.valuation || {}), false);
   assert.equal(compact.stages?.found[0]?.sources.length, 2);
   assert.equal('mentionedAt' in (compact.stages?.found[0]?.sources[0] || {}), false);
