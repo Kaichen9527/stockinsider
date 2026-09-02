@@ -8,6 +8,7 @@ import { layerHomepageOpportunityV3, v3PublicEnabled } from '@/lib/opportunity-v
 import { loadPublishedRadarProjection } from '@/lib/radar-projection-read';
 import { loadLatestRadarPublicSnapshot, radarPublicSnapshotsEnabled } from '@/lib/radar-public-snapshot';
 import { hasCandidateStageCards } from '@/lib/candidate-stage-contract';
+import { isHealthySourceTerminal } from '@/lib/source-terminal-policy';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,7 +29,7 @@ const connectorLabel: Record<string, string> = {
 };
 
 function connectorStatusLabel(status: string) {
-  if (status === 'success' || status === 'valid') return '正常';
+  if (isHealthySourceTerminal(status)) return '正常';
   if (status === 'running') return '同步中';
   if (status === 'partial' || status === 'degraded') return '部分成功';
   if (status === 'timed_out') return '逾時待重試';
@@ -55,12 +56,12 @@ function socialSourceState(item: SocialSourceDetail) {
   }
   if (item.workerFreshnessStatus === 'stale') return { label: 'worker 逾時', tone: 'text-amber-700 dark:text-amber-300' };
   if (item.workerFreshnessStatus === 'degraded') return { label: /session|cookie|auth|login/i.test(reason) ? '來源需登入' : '抓取失敗', tone: 'text-amber-700 dark:text-amber-300' };
-  if ((terminalStatus === 'success' || terminalStatus === 'valid') && writtenThisRun === 0) return { label: '已更新，暫無新增', tone: 'text-slate-600 dark:text-emerald-100/70' };
+  if (isHealthySourceTerminal(terminalStatus) && writtenThisRun === 0) return { label: '已更新，暫無新增', tone: 'text-slate-600 dark:text-emerald-100/70' };
   if (written > 0 && item.connector === 'telegram' && failedChannels > 0) return { label: '有寫入，部分頻道待補', tone: 'text-amber-700 dark:text-amber-300' };
   if (written > 0 && /auth_degraded/i.test(failureCode)) return { label: '先前有寫入，本輪 auth degraded', tone: 'text-amber-700 dark:text-amber-300' };
   if (written > 0 && ignoredServerless) return { label: '本機 worker 有寫入', tone: 'text-emerald-700 dark:text-emerald-300' };
   if (written > 0 && ['partial', 'failed', 'timed_out', 'skipped'].includes(String(terminalStatus))) return { label: '有寫入，部分待補', tone: 'text-amber-700 dark:text-amber-300' };
-  if (written > 0 && ['success', 'valid'].includes(String(terminalStatus))) return { label: '本機 worker 有寫入', tone: 'text-emerald-700 dark:text-emerald-300' };
+  if (written > 0 && isHealthySourceTerminal(terminalStatus)) return { label: '本機 worker 有寫入', tone: 'text-emerald-700 dark:text-emerald-300' };
   if (/session|cookie|auth|login|instagram_bridge/i.test(reason) || /auth_degraded/i.test(failureCode)) return { label: '來源需登入', tone: 'text-amber-700 dark:text-amber-300' };
   if (ignoredServerless || /playwright_runtime_unavailable/i.test(failureCode)) return { label: item.lastTerminalRunAt ? '已更新，暫無新增' : '尚未啟動', tone: 'text-slate-500 dark:text-emerald-100/55' };
   if (reason) return { label: '抓取失敗', tone: 'text-red-700 dark:text-red-300' };
