@@ -106,6 +106,19 @@ async function mapInBatches<T, U>(values: T[], batchSize: number, mapper: (value
   return output;
 }
 
+function retryDelay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export function marketEvidenceWriteBatches<T>(rows: T[], batchSize = 100): T[][] {
+  if (!Number.isInteger(batchSize) || batchSize <= 0) throw new Error('invalid_market_evidence_batch_size');
+  const batches: T[][] = [];
+  for (let offset = 0; offset < rows.length; offset += batchSize) {
+    batches.push(rows.slice(offset, offset + batchSize));
+  }
+  return batches;
+}
+
 function breadthForRoster(history: Map<string, Array<{ date: string; close: number }>>, roster: Set<string>) {
   let numerator = 0;
   let observed = 0;
@@ -257,9 +270,29 @@ async function ingestOfficialMarketEvidence(sessionDate: string, evaluatedAt: st
       provenance: { provider: market.toLowerCase(), official_only: true, model_version: OFFICIAL_MARKET_HISTORY_MODEL_VERSION },
     };
   }));
-  for (let offset = 0; offset < rows.length; offset += 500) {
-    const write = await supabase.from('official_market_evidence_history').upsert(rows.slice(offset, offset + 500), { onConflict: 'market,session_date' });
-    if (write.error) throw new Error(`official_market_history_write_failed:${write.error.message}`);
+  // Keep each REST request comfortably below proxy/body limits. A transport
+  // reset can reject the PostgREST promise rather than return `write.error`, so
+  // retry the exact idempotent market/session batch and retain a named terminal
+  // reason instead of leaking an unhelpful `TypeError: fetch failed`.
+  for (const batch of marketEvidenceWriteBatches(rows)) {
+    let lastError: unknown = null;
+    for (let attempt = 1; attempt <= 3; attempt += 1) {
+      try {
+        const write = await supabase.from('official_market_evidence_history').upsert(batch, { onConflict: 'market,session_date' });
+        if (!write.error) {
+          lastError = null;
+          break;
+        }
+        lastError = write.error;
+      } catch (error) {
+        lastError = error;
+      }
+      if (attempt < 3) await retryDelay(attempt * 500);
+    }
+    if (lastError) {
+      const message = lastError instanceof Error ? lastError.message : String((lastError as { message?: unknown })?.message || lastError);
+      throw new Error(`official_market_history_write_failed:${message}`);
+    }
   }
 }
 
