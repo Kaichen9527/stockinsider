@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import test from 'node:test';
-import { officialPriceBackfillBatchHash, parseOfficialPriceBackfillPage, type OfficialPriceBackfillPage } from './official-price-backfill.ts';
+import { collectPagedOfficialAuthorityRows, officialPriceBackfillBatchHash, parseOfficialPriceBackfillPage, type OfficialPriceBackfillPage } from './official-price-backfill.ts';
 
 function page(overrides: Partial<OfficialPriceBackfillPage> = {}): OfficialPriceBackfillPage {
   const responseText = String(overrides.responseText || JSON.stringify({ stat: 'OK',
@@ -39,4 +39,16 @@ test('derives official TPEx rows and normalizes trading lots to shares', () => {
     responseSha256: createHash('sha256').update(responseText).digest('hex'),
     sourceUrl: 'https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=6770&date=2025%2F08%2F01&response=json' });
   assert.equal(parseOfficialPriceBackfillPage(value)?.[0]?.volume, 2000);
+});
+
+test('collects every append-only authority row beyond the PostgREST page cap', async () => {
+  const source = Array.from({ length: 2002 }, (_, index) => ({ id: index }));
+  const calls: Array<[number, number]> = [];
+  const result = await collectPagedOfficialAuthorityRows(async (from, to) => {
+    calls.push([from, to]);
+    return { data: source.slice(from, to + 1), error: null };
+  });
+  assert.equal(result.error, null);
+  assert.equal(result.rows.length, 2002);
+  assert.deepEqual(calls, [[0, 999], [1000, 1999], [2000, 2999]]);
 });

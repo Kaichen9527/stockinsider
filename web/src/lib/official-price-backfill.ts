@@ -96,3 +96,17 @@ export function parseOfficialPriceBackfillPage(value: unknown): OfficialPriceBac
 export function officialPriceBackfillBatchHash(pages: OfficialPriceBackfillPage[]) {
   return createHash('sha256').update(JSON.stringify(pages)).digest('hex');
 }
+
+export async function collectPagedOfficialAuthorityRows<T>(fetchPage: (from: number, to: number) => PromiseLike<{
+  data: T[] | null;
+  error: { message: string } | null;
+}>) {
+  const rows: T[] = [];
+  for (let offset = 0; ; offset += 1000) {
+    const result = await fetchPage(offset, offset + 999);
+    if (result.error) return { rows: [] as T[], error: result.error.message };
+    const page = result.data || [];
+    rows.push(...page);
+    if (page.length < 1000) return { rows, error: null };
+  }
+}

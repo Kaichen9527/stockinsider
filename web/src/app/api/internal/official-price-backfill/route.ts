@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { requireInternalAuth } from '@/lib/internal-auth';
 import { getSupabaseServerClient } from '@/lib/supabase-server';
-import { officialPriceBackfillBatchHash, parseOfficialPriceBackfillPage, type OfficialPriceBackfillPage, type OfficialPriceBackfillRow } from '@/lib/official-price-backfill';
+import { collectPagedOfficialAuthorityRows, officialPriceBackfillBatchHash, parseOfficialPriceBackfillPage, type OfficialPriceBackfillPage, type OfficialPriceBackfillRow } from '@/lib/official-price-backfill';
 
 const BODY_LIMIT = 2_000_000;
 
@@ -46,14 +46,17 @@ export async function POST(request: Request) {
   const [writer, stocks, instruments, sessions] = await Promise.all([
     supabase.from('production_writer_releases').select('release_id').eq('active', true).single(),
     supabase.from('stocks').select('id,symbol').eq('market', 'TW').in('symbol', symbols),
-    supabase.from('stock_instruments_v3').select('symbol,exchange,instrument_type,listing_status').in('symbol', symbols).eq('instrument_type', 'common_stock').eq('listing_status', 'active'),
-    supabase.from('tw_trading_sessions_v3').select('session_id,market,status').in('session_id', dates).eq('status', 'completed'),
+    collectPagedOfficialAuthorityRows<{ symbol: string; exchange: string; instrument_type: string; listing_status: string }>((from, to) => supabase.from('stock_instruments_v3')
+      .select('symbol,exchange,instrument_type,listing_status').in('symbol', symbols)
+      .eq('instrument_type', 'common_stock').eq('listing_status', 'active').range(from, to)),
+    collectPagedOfficialAuthorityRows<{ session_id: string; market: string; status: string }>((from, to) => supabase.from('tw_trading_sessions_v3')
+      .select('session_id,market,status').in('session_id', dates).eq('status', 'completed').range(from, to)),
   ]);
   if (writer.error || writer.data?.release_id !== releaseId) return NextResponse.json({ ok: false, error: 'writer_release_not_active' }, { status: 409 });
-  if (stocks.error || instruments.error || sessions.error) return NextResponse.json({ ok: false, error: stocks.error?.message || instruments.error?.message || sessions.error?.message }, { status: 500 });
+  if (stocks.error || instruments.error || sessions.error) return NextResponse.json({ ok: false, error: stocks.error?.message || instruments.error || sessions.error }, { status: 500 });
   const stockBySymbol = new Map((stocks.data || []).map((row) => [String(row.symbol), String(row.id)]));
-  const officialInstruments = new Set((instruments.data || []).map((row) => `${row.exchange}:${row.symbol}`));
-  const officialSessions = new Set((sessions.data || []).map((row) => `${String(row.market).toUpperCase()}:${row.session_id}`));
+  const officialInstruments = new Set(instruments.rows.map((row) => `${row.exchange}:${row.symbol}`));
+  const officialSessions = new Set(sessions.rows.map((row) => `${String(row.market).toUpperCase()}:${row.session_id}`));
   if (uniqueRows.some((row) => !stockBySymbol.has(row.symbol) || !officialInstruments.has(`${row.exchange}:${row.symbol}`) || !officialSessions.has(`${row.exchange}:${row.sessionDate}`))) {
     return NextResponse.json({ ok: false, error: 'official_authority_reference_missing' }, { status: 422 });
   }
