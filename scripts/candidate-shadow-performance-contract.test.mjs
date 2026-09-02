@@ -156,6 +156,9 @@ test('production source writes require the active VPS release and production lea
   assert.match(activation, /requireInternalAuth\(request\)/u);
   assert.match(activation, /releaseId !== expectedReleaseId/u);
   assert.match(activation, /register_production_writer_release/u);
+  assert.match(activation, /previousReleaseId !== releaseId/u);
+  assert.match(activation, /release_production_write_lease/u);
+  assert.ok(activation.indexOf('release_production_write_lease') < activation.indexOf('register_production_writer_release'), 'orphaned stopped-release lease must clear before activating the successor');
   assert.match(deployActivation, /for _attempt in \$\(seq 1 30\)/u);
   assert.match(deployActivation, /curl --fail --silent --show-error --max-time 2 http:\/\/127\.0\.0\.1:3100\//u);
   assert.ok(deployActivation.indexOf('curl --fail') < deployActivation.indexOf('/api/internal/writer-release-activate'), 'readiness must precede writer registration');
