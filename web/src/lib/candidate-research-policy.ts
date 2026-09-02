@@ -32,3 +32,21 @@ export async function collectPagedAuthorityRows<T>(
   }
   return rows;
 }
+
+export async function collectBatchedAuthorityRows<TInput, TRow>(
+  inputs: TInput[],
+  readPage: (batch: TInput[], from: number, to: number) => Promise<TRow[]>,
+  options: { batchSize?: number; pageSize?: number; maxRowsPerBatch: number },
+): Promise<TRow[]> {
+  const batchSize = options.batchSize || 20;
+  if (!Number.isInteger(batchSize) || batchSize <= 0) throw new Error('invalid_authority_batch_size');
+  const rows: TRow[] = [];
+  for (let offset = 0; offset < inputs.length; offset += batchSize) {
+    const batch = inputs.slice(offset, offset + batchSize);
+    rows.push(...await collectPagedAuthorityRows(
+      (from, to) => readPage(batch, from, to),
+      { pageSize: options.pageSize, maxRows: options.maxRowsPerBatch },
+    ));
+  }
+  return rows;
+}

@@ -19,7 +19,7 @@ import {
   type TwValuationHistoryPoint,
 } from './tw-market';
 import { buildConservativeOfficialScenario } from './candidate-valuation';
-import { candidatePriceRefreshDepth, collectPagedAuthorityRows, isCandidateHistoricalPriceAccessEnabled } from './candidate-research-policy';
+import { candidatePriceRefreshDepth, collectBatchedAuthorityRows, collectPagedAuthorityRows, isCandidateHistoricalPriceAccessEnabled } from './candidate-research-policy';
 import { scheduledSourceConnectorKeys, sourceExecutionPolicy } from './source-policy';
 import { loadLatestSourceRunLedger } from './source-run-ledger';
 import type { CandidateShadowProgress, CandidateStageCard } from './types';
@@ -149,6 +149,30 @@ async function loadPriorCandidateStages(supabase: ReturnType<typeof getSupabaseS
       throw new Error(`prior_candidate_stages_read_failed:${error instanceof Error ? error.message : String(error)}`);
     }
   }, { maxRows: 3000 });
+}
+
+async function loadCachedFundamentalHistory(
+  supabase: ReturnType<typeof getSupabaseServerClient>,
+  stockIds: string[],
+  historyStart: string,
+  latestMarketSession: string,
+) {
+  return collectBatchedAuthorityRows<string, Row>(stockIds, async (batch, from, to) => {
+    try {
+      const page = await supabase.from('fundamental_snapshots')
+        .select('stock_id,as_of_date,pe_ratio,pb_ratio,source_url')
+        .in('stock_id', batch)
+        .gte('as_of_date', historyStart)
+        .lte('as_of_date', latestMarketSession)
+        .order('stock_id', { ascending: true })
+        .order('as_of_date', { ascending: true })
+        .range(from, to);
+      if (page.error) throw page.error;
+      return (page.data as Row[]) || [];
+    } catch (error) {
+      throw new Error(`candidate_fundamental_history_read_failed:${error instanceof Error ? error.message : String(error)}`);
+    }
+  }, { batchSize: 20, maxRowsPerBatch: 5000 });
 }
 
 export async function runCandidateResearchCycle(options: {
@@ -307,19 +331,17 @@ export async function runCandidateResearchCycle(options: {
   }
   const historyStart = new Date(evaluationReferenceMs);
   historyStart.setUTCFullYear(historyStart.getUTCFullYear() - 5);
-  const cachedFundamentalsRes = universe.length === 0
-    ? { data: [] as Row[], error: null }
-    : await supabase.from('fundamental_snapshots')
-      .select('stock_id,as_of_date,pe_ratio,pb_ratio,source_url')
-      .in('stock_id', universe.map((stock) => stock.id))
-      .gte('as_of_date', historyStart.toISOString().slice(0, 10))
-      .lte('as_of_date', latestMarketSession)
-      .order('as_of_date', { ascending: true })
-      .limit(10000);
-  if (cachedFundamentalsRes.error) throw new Error(cachedFundamentalsRes.error.message);
+  const cachedFundamentalRows = universe.length === 0
+    ? []
+    : await loadCachedFundamentalHistory(
+      supabase,
+      universe.map((stock) => stock.id),
+      historyStart.toISOString().slice(0, 10),
+      latestMarketSession,
+    );
   const symbolByStockId = new Map(universe.map((stock) => [stock.id, stock.symbol]));
   const cachedOfficialHistory = new Map<string, TwValuationHistoryPoint[]>();
-  for (const row of (cachedFundamentalsRes.data as Row[]) || []) {
+  for (const row of cachedFundamentalRows) {
     const symbol = symbolByStockId.get(String(row.stock_id || ''));
     const sourceUrl = String(row.source_url || '');
     const date = String(row.as_of_date || '');
