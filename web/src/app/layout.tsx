@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 
-export const CANONICAL_APP_URL = 'https://stockinsider-three.vercel.app';
+export const CANONICAL_APP_URL = 'http://5.104.83.211';
 
 export const metadata: Metadata = {
   metadataBase: new URL(CANONICAL_APP_URL),

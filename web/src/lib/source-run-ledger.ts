@@ -91,6 +91,7 @@ const SOURCE_DISPLAY_NAMES: Record<string, string> = {
   udn: 'UDN',
   anue: '鉅亨網',
   mobile01: 'Mobile01',
+  podcast: 'Podcast',
 };
 
 export async function syncSourceConnectorRegistry(policy: SourceExecutionPolicy, parserVersion: string): Promise<void> {
@@ -113,12 +114,16 @@ export function nextExpectedAt(attemptedAt: string, cadenceHours: number | null)
 }
 
 export async function loadLatestSourceRunLedger(): Promise<SourceRunLedgerView[]> {
-  const { data, error } = await getSupabaseServerClient()
-    .from('source_run_ledger')
-    .select('id,connector,expected_at,attempted_at,succeeded_at,fetched,matched,new_count,duplicate,written,auth_status,terminal_reason,terminal_detail,parser_version,license_basis,source_disposition,next_expected_at')
-    .order('attempted_at', { ascending: false })
-    .limit(250);
-  if (error) throw new Error(`source_run_ledger_read_failed:${error.message}`);
+  const supabase = getSupabaseServerClient();
+  const [{ data, error }, registry] = await Promise.all([
+    supabase.from('source_run_ledger')
+      .select('id,connector,expected_at,attempted_at,succeeded_at,fetched,matched,new_count,duplicate,written,auth_status,terminal_reason,terminal_detail,parser_version,license_basis,source_disposition,next_expected_at')
+      .order('attempted_at', { ascending: false }).limit(250),
+    supabase.from('source_connector_registry')
+      .select('connector,lifecycle,license_basis,parser_version,retirement_reason,updated_at')
+      .order('connector', { ascending: true }),
+  ]);
+  if (error || registry.error) throw new Error(`source_run_ledger_read_failed:${error?.message || registry.error?.message}`);
 
   const latestByConnector = new Map<string, SourceRunLedgerView>();
   for (const raw of data ?? []) {
@@ -143,6 +148,45 @@ export async function loadLatestSourceRunLedger(): Promise<SourceRunLedgerView[]
       licenseBasis: String(row.license_basis || ''),
       sourceDisposition: String(row.source_disposition || 'retired') as SourceRunLedgerView['sourceDisposition'],
       nextExpectedAt: row.next_expected_at ? String(row.next_expected_at) : null,
+    });
+  }
+  for (const raw of registry.data ?? []) {
+    const row = raw as Record<string, unknown>;
+    const connector = String(row.connector || '');
+    if (!connector) continue;
+    const disposition = String(row.lifecycle || 'retired') as SourceExecutionPolicy['disposition'];
+    const terminalReason: SourceTerminalReason = disposition === 'manual_only'
+      ? 'manual_only'
+      : disposition === 'blocked_auth'
+        ? 'auth_failed'
+        : disposition === 'blocked_license'
+          ? 'license_blocked'
+          : disposition === 'retired'
+            ? 'retired'
+            : 'failed';
+    const updatedAt = String(row.updated_at || '');
+    const existing = latestByConnector.get(connector);
+    if (existing && disposition === 'active') continue;
+    if (existing) {
+      latestByConnector.set(connector, {
+        ...existing,
+        authStatus: disposition === 'blocked_auth' ? 'missing' : 'not_applicable',
+        terminalReason,
+        terminalDetail: row.retirement_reason ? String(row.retirement_reason) : null,
+        parserVersion: String(row.parser_version || existing.parserVersion),
+        licenseBasis: String(row.license_basis || existing.licenseBasis),
+        sourceDisposition: disposition,
+        nextExpectedAt: null,
+      });
+      continue;
+    }
+    latestByConnector.set(connector, {
+      id: `registry:${connector}`, connector, expectedAt: updatedAt, attemptedAt: updatedAt,
+      succeededAt: null, fetched: 0, matched: 0, newCount: 0, duplicate: 0, written: 0,
+      authStatus: disposition === 'blocked_auth' ? 'missing' : 'not_applicable', terminalReason,
+      terminalDetail: row.retirement_reason ? String(row.retirement_reason) : null,
+      parserVersion: String(row.parser_version || ''), licenseBasis: String(row.license_basis || ''),
+      sourceDisposition: disposition, nextExpectedAt: null,
     });
   }
   return [...latestByConnector.values()];
