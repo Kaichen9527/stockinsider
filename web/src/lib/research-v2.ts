@@ -8,6 +8,8 @@ import { THREADS_CANONICAL_ORIGIN } from './source-auth';
 import { APPROVED_TELEGRAM_PUBLIC_CHANNELS, RETIRED_SOURCE_CONNECTORS } from './source-policy';
 import { fetchTextWithRetry, sourceFetchFailureCode } from './source-fetch';
 import { getThreadsTokenForRun, threadsTokenRegistryMetadata } from './threads-token';
+import { classifyPttContentSemantics, publisherKeyFor, type SourceContentSemantics } from './source-content-semantics';
+import { decodeSingleFileZip, gdeltGkgUrlsAfter, gdeltSearchableText, gdeltTransportReason, isRetiredNewsHost, matchGdeltStockSymbols, parseGdeltSeenDate, selectLatestGdeltGkgUrl } from './gdelt-gkg';
 
 type Row = Record<string, unknown>;
 const AUTHORIZED_BROKER_SOURCE_MODES = ['manual_pdf', 'manual_csv', 'imported_pdf'] as const;
@@ -15,9 +17,7 @@ const AUTHORIZED_BROKER_SOURCE_MODES = ['manual_pdf', 'manual_csv', 'imported_pd
 const ROOT_DIR = path.resolve(process.cwd(), '..');
 const MATERIALS_DIR = path.join(ROOT_DIR, 'materials');
 const BROKER_REPORT_IMPORT_DIR = path.join(MATERIALS_DIR, 'broker-reports');
-const ARTIFACTS_DIR = process.env.VERCEL
-  ? path.join('/tmp', 'stockinsider', 'source-audits')
-  : path.join(ROOT_DIR, '.agent', 'artifacts', 'source-audits');
+const SOURCE_AUDIT_BUCKET = process.env.SOURCE_AUDIT_STORAGE_BUCKET || 'private-source-audits';
 const execFileAsync = promisify(execFile);
 
 const SOURCE_RAW_CONTENT_MAX_CHARS = Math.max(500, Number(process.env.SOURCE_RAW_CONTENT_MAX_CHARS || 4000));
@@ -1341,6 +1341,9 @@ type SourceRawDocInput = {
   symbols?: string[];
   sentimentLabel?: string | null;
   confidence?: number | null;
+  contentSemantics?: SourceContentSemantics;
+  publisherKey?: string | null;
+  publisherName?: string | null;
   metadata?: Record<string, unknown>;
 };
 
@@ -1694,23 +1697,48 @@ async function createSourceAudit(params: {
   notes?: string | null;
   metadata?: Record<string, unknown>;
 }) {
-  await ensureDir(ARTIFACTS_DIR);
   const auditId = randomUUID();
-  const snapshotPath = path.join(ARTIFACTS_DIR, `${auditId}.html`);
-  const screenshotPath = params.screenshotBase64 ? path.join(ARTIFACTS_DIR, `${auditId}.png`) : null;
-  if (params.htmlContent) await fs.writeFile(snapshotPath, params.htmlContent, 'utf8');
-  if (params.screenshotBase64 && screenshotPath) await fs.writeFile(screenshotPath, Buffer.from(params.screenshotBase64, 'base64'));
   const supabase = getSupabaseServerClient();
+  let snapshotPath: string | null = null;
+  let screenshotPath: string | null = null;
+  const artifactErrors: string[] = [];
+  // Audits are metadata-only by default. A caller that explicitly provides a
+  // diagnostic attachment stores it in a private Supabase bucket; the VPS
+  // release directory is immutable and must never receive runtime artifacts.
+  if (params.htmlContent) {
+    snapshotPath = `${params.platform}/${auditId}.html`;
+    const upload = await supabase.storage.from(SOURCE_AUDIT_BUCKET).upload(
+      snapshotPath,
+      Buffer.from(params.htmlContent, 'utf8'),
+      { contentType: 'text/html; charset=utf-8', upsert: false },
+    );
+    if (upload.error) {
+      artifactErrors.push(`html:${upload.error.message}`);
+      snapshotPath = null;
+    }
+  }
+  if (params.screenshotBase64) {
+    screenshotPath = `${params.platform}/${auditId}.png`;
+    const upload = await supabase.storage.from(SOURCE_AUDIT_BUCKET).upload(
+      screenshotPath,
+      Buffer.from(params.screenshotBase64, 'base64'),
+      { contentType: 'image/png', upsert: false },
+    );
+    if (upload.error) {
+      artifactErrors.push(`screenshot:${upload.error.message}`);
+      screenshotPath = null;
+    }
+  }
   const { error } = await supabase.from('source_audits').insert({
     connector_run_id: params.connectorRunId,
     platform: params.platform,
     source_entity_id: params.sourceEntityId || null,
     target_url: params.targetUrl || null,
-    snapshot_path: params.htmlContent ? snapshotPath : null,
+    snapshot_path: snapshotPath,
     screenshot_path: screenshotPath,
     status: params.status,
     notes: params.notes || null,
-    metadata: params.metadata || {},
+    metadata: { ...(params.metadata || {}), artifact_storage: 'private_supabase_storage', artifact_errors: artifactErrors },
   });
   if (error) throw new Error(error.message);
 }
@@ -2132,6 +2160,14 @@ async function upsertSourceRawDocuments(items: SourceRawDocInput[]) {
       symbols: item.symbols || [],
       sentiment_label: item.sentimentLabel || null,
       confidence: item.confidence ?? null,
+      content_semantics: item.contentSemantics || 'editorial_discussion',
+      publisher_key: item.publisherKey || publisherKeyFor({
+        platform: item.platform,
+        author: compactText(item.metadata?.author_name) || null,
+        sourceUrl: item.documentUrl,
+        sourceName: compactText(item.metadata?.source_name) || null,
+      }),
+      publisher_name: item.publisherName || compactText(item.metadata?.author_name || item.metadata?.source_name) || null,
       metadata: {
         crawl_mode: 'market_scan',
         query_symbol: null,
@@ -2159,7 +2195,9 @@ async function upsertSourceRawDocuments(items: SourceRawDocInput[]) {
     if (stocksError) throw new Error(stocksError.message);
     const stockIdBySymbol = new Map(((stocks as Row[]) || []).map((row) => [compactText(row.symbol), compactText(row.id)]));
     const availableAt = nowIso();
-    const mentionRows = newItems.flatMap((item) => (item.symbols || []).flatMap((symbol) => {
+    const mentionRows = newItems
+      .filter((item) => (item.contentSemantics || 'editorial_discussion') !== 'bulk_institutional_ranking')
+      .flatMap((item) => (item.symbols || []).flatMap((symbol) => {
       const stockId = stockIdBySymbol.get(symbol);
       if (!stockId || !item.documentUrl) return [];
       const stance = item.sentimentLabel === 'bullish'
@@ -2182,8 +2220,11 @@ async function upsertSourceRawDocuments(items: SourceRawDocInput[]) {
         as_of: item.publishedAt || availableAt,
         available_at: availableAt,
         confidence: Math.max(0, Math.min(100, Number(item.confidence ?? 0.5) * 100)),
+        content_semantics: item.contentSemantics === 'metadata_only' ? 'metadata_only' : 'editorial_discussion',
+        publisher_key: item.publisherKey || publisherKeyFor({ platform: item.platform, author: compactText(item.metadata?.author_name) || null, sourceUrl: item.documentUrl, sourceName: compactText(item.metadata?.source_name) || null }),
+        publisher_name: item.publisherName || compactText(item.metadata?.author_name || item.metadata?.source_name) || null,
         provenance: { retention_mode: item.metadata?.retention_mode || 'source_document', source_entity_id: item.sourceEntityId },
-        ruleset_version: 'source-ranking-v2.0.0',
+        ruleset_version: 'source-ranking-v2.2.0',
       }];
     }));
     if (mentionRows.length > 0) {
@@ -2664,16 +2705,17 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
   };
   const stripHtml = (html: string) => compactText(html.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, ' '));
   const parsePushComments = (html: string) => {
-    const comments: Array<{ tag: string; text: string }> = [];
+    const comments: Array<{ tag: string; author: string | null; text: string }> = [];
     for (const match of html.matchAll(/<div class="push">([\s\S]*?)<\/div>/g)) {
       const block = match[1] || '';
       const tag = compactText(block.match(/<span[^>]*class="[^"]*\bpush-tag\b[^"]*"[^>]*>([\s\S]*?)<\/span>/)?.[1] || '');
+      const author = compactText(block.match(/<span[^>]*class="[^"]*\bpush-userid\b[^"]*"[^>]*>([\s\S]*?)<\/span>/)?.[1] || '') || null;
       const text = compactText(block.match(/<span[^>]*class="[^"]*\bpush-content\b[^"]*"[^>]*>([\s\S]*?)<\/span>/)?.[1] || '').replace(/^:\s*/, '');
-      if (tag || text) comments.push({ tag, text });
+      if (tag || text) comments.push({ tag, author, text });
     }
     return comments;
   };
-  const commentSentimentFrom = (comments: Array<{ tag: string; text: string }>) => {
+  const commentSentimentFrom = (comments: Array<{ tag: string; author: string | null; text: string }>) => {
     const text = comments.map((item) => item.text).join(' ');
     const bullish = (text.match(/噴|漲|利多|看好|突破|買|上修|目標價|轉強/g) || []).length;
     const bearish = (text.match(/跌|崩|利空|看壞|出貨|套|停損|轉弱|下修/g) || []).length;
@@ -2689,7 +2731,8 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
     seenArticles.add(match.href);
     const articleUrl = `https://www.ptt.cc${match.href}`;
     let contentText = title;
-    let comments: Array<{ tag: string; text: string }> = [];
+    let comments: Array<{ tag: string; author: string | null; text: string }> = [];
+    let articleAuthor: string | null = null;
 
     try {
       const { text: bodyHtml } = await fetchTextWithRetry({
@@ -2699,6 +2742,7 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
       });
       articlesFetched += 1;
       comments = parsePushComments(bodyHtml);
+      articleAuthor = compactText(bodyHtml.match(/article-meta-tag[^>]*>作者<\/span>\s*<span[^>]*class="article-meta-value"[^>]*>([^<]+)/u)?.[1] || '') || null;
       pushCommentsParsed += comments.length;
       const mainBlock = bodyHtml.match(/<div id="main-content">([\s\S]*?)<\/div>\s*<div id="article-polling"/)?.[1] ||
         bodyHtml.match(/<div id="main-content">([\s\S]*?)<\/div>/)?.[1] ||
@@ -2730,6 +2774,7 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
         : 'neutral';
     const sentimentLabel = commentSentiment !== 'neutral' ? commentSentiment : titleSentiment;
     const postType = postTypeFromTitle(title);
+    const contentSemantics = classifyPttContentSemantics(title, contentText);
 
     docs.push({
       sourceEntityId: String(entity.id),
@@ -2743,11 +2788,17 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
       symbols,
       sentimentLabel,
       confidence: symbols.length > 0 ? Math.min(0.82, 0.58 + Math.min(0.18, Math.abs(pushScore) / 80)) : 0.42,
+      contentSemantics,
+      publisherKey: publisherKeyFor({ platform: 'ptt', author: articleAuthor, sourceUrl: articleUrl }),
+      publisherName: articleAuthor,
       metadata: {
         connector: 'http',
         source_surface: 'ptt_stock_board',
         crawl_mode: symbolContext ? 'symbol_scoped' : 'board_scan',
         post_type: postType,
+        content_semantics: contentSemantics,
+        author_name: articleAuthor,
+        comment_evidence: comments.slice(0, 20).map((item) => ({ author: item.author, tag: item.tag, excerpt: item.text.slice(0, 120) })),
         push_score: pushScore,
         push_count: pushCount,
         boo_count: booCount,
@@ -2778,6 +2829,9 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
         metadata: {
           source_surface: 'ptt_stock_board',
           crawl_mode: symbolContext ? 'symbol_scoped' : 'board_scan',
+          content_semantics: contentSemantics,
+          author_name: articleAuthor,
+          comment_evidence: comments.slice(0, 20).map((item) => ({ author: item.author, tag: item.tag, excerpt: item.text.slice(0, 120) })),
           excluded_false_positives: extracted.excludedFalsePositives,
         },
         collected_at: nowIso(),
@@ -2881,115 +2935,105 @@ async function scrapeBullTalk(symbolContext?: SymbolScopedStockContext | null) {
     matchedIndustryHits: 0, entityId: String(entity.id), errorCode: null, sessionMode: 'not_applicable' as const };
 }
 
-const GDELT_RETIRED_HOSTS = [
-  'news.google.com',
-  'youtube.com',
-  'youtu.be',
-  'udn.com',
-  'money.udn.com',
-  'anue.com',
-  'news.cnyes.com',
-  'mobile01.com',
-] as const;
-
-function parseGdeltSeenDate(value: unknown): string | null {
-  const raw = compactText(value);
-  const match = raw.match(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/u);
-  if (!match) return safeDateString(raw || null);
-  return `${match[1]}-${match[2]}-${match[3]}T${match[4]}:${match[5]}:${match[6]}Z`;
-}
-
-function isRetiredNewsHost(value: string): boolean {
-  try {
-    const host = new URL(value).hostname.toLowerCase().replace(/^www\./u, '');
-    return GDELT_RETIRED_HOSTS.some((item) => host === item || host.endsWith(`.${item}`));
-  } catch {
-    return true;
-  }
-}
-
 async function scrapeGdeltMetadata(symbolContext?: SymbolScopedStockContext | null): Promise<SourceSyncRunShape> {
   const supabase = getSupabaseServerClient();
-  const { data: stockData, error: stockError } = await supabase
-    .from('stocks')
-    .select('symbol,name')
-    .eq('market', 'TW')
-    .limit(10000);
-  if (stockError) throw new Error(stockError.message);
-  const stocks = ((stockData as Row[]) || [])
-    .map((row) => ({ symbol: compactText(row.symbol).toUpperCase(), name: compactText(row.name) }))
-    .filter((row) => /^\d{4}$/u.test(row.symbol) && row.name.length >= 2)
+  const [{ data: stockData, error: stockError }, { data: cursorData, error: cursorError }] = await Promise.all([
+    supabase.rpc('candidate_research_stock_authority', { p_cutoff: nowIso() }),
+    supabase.from('source_connector_cursors').select('cursor_value').eq('connector', 'gdelt_gkg').maybeSingle(),
+  ]);
+  if (stockError || cursorError) throw new Error(stockError?.message || cursorError?.message || 'gdelt_context_failed');
+  const stocks = ((stockData as Row[]) || []).map((row) => ({
+    symbol: compactText(row.symbol).toUpperCase(), name: compactText(row.name),
+  })).filter((row) => /^\d{4}$/u.test(row.symbol) && row.name.length >= 2)
     .filter((row) => !symbolContext || row.symbol === symbolContext.symbol);
-
-  const endpoint = new URL('https://api.gdeltproject.org/api/v2/doc/doc');
-  endpoint.searchParams.set('query', symbolContext
-    ? `("${symbolContext.symbol}" OR "${symbolContext.name}") sourcecountry:Taiwan`
-    : '("台股" OR "臺股" OR "台灣股市") sourcecountry:Taiwan');
-  endpoint.searchParams.set('mode', 'ArtList');
-  endpoint.searchParams.set('format', 'json');
-  endpoint.searchParams.set('maxrecords', '250');
-  endpoint.searchParams.set('timespan', '1d');
-  endpoint.searchParams.set('sort', 'HybridRel');
-  const response = await fetch(endpoint, {
-    headers: { accept: 'application/json', 'user-agent': 'StockInsider/2.0 metadata-discovery' },
-    signal: AbortSignal.timeout(20_000),
-  });
-  if (!response.ok) throw new Error(`gdelt_http_${response.status}`);
-  const payload = await response.json() as { articles?: Array<Record<string, unknown>> };
-  if (!Array.isArray(payload.articles)) throw new Error('gdelt_parser_missing_articles');
-
+  let latestGkgUrl = '';
+  try {
+    const lastUpdateResponse = await fetch('https://data.gdeltproject.org/gdeltv2/lastupdate.txt', {
+      headers: { accept: 'text/plain', 'user-agent': 'StockInsider/2.2 GKG-metadata-discovery' },
+      signal: AbortSignal.timeout(20_000),
+    });
+    if (!lastUpdateResponse.ok) throw new Error(`gdelt_lastupdate_http_${lastUpdateResponse.status}`);
+    latestGkgUrl = selectLatestGdeltGkgUrl(await lastUpdateResponse.text());
+  } catch (error) {
+    if (/gdelt_.*_http_/u.test((error as Error).message)) throw error;
+    throw new Error(gdeltTransportReason(error));
+  }
   const entity = await upsertSourceEntity({
     platform: 'gdelt',
     entityType: 'site',
-    displayName: 'GDELT DOC 2.0',
-    sourceKey: 'site.gdelt.doc2',
+    displayName: 'GDELT GKG 2.1 Raw Feed',
+    sourceKey: 'site.gdelt.gkg2',
     profileUrl: 'https://www.gdeltproject.org/',
     metadata: { retention_mode: 'metadata_link_only' },
   });
-  const docs: SourceRawDocInput[] = payload.articles.flatMap((article) => {
-    const title = compactText(article.title);
-    const documentUrl = compactText(article.url);
-    if (!title || !/^https:\/\//u.test(documentUrl) || isRetiredNewsHost(documentUrl)) return [];
-    const symbols = stocks
-      .filter((stock) => title.includes(stock.symbol) || title.includes(stock.name))
-      .map((stock) => stock.symbol);
-    if (symbols.length === 0) return [];
-    return [{
-      sourceEntityId: String(entity.id),
-      platform: 'gdelt',
-      documentUrl,
-      title,
-      summary: title,
-      contentText: title,
-      publishedAt: parseGdeltSeenDate(article.seendate),
-      symbols: unique(symbols),
-      sentimentLabel: 'neutral',
-      confidence: 0.62,
-      metadata: {
-        connector: 'gdelt_doc_2',
-        retention_mode: 'metadata_link_only',
-        original_domain: compactText(article.domain),
-        source_country: compactText(article.sourcecountry),
-        language: compactText(article.language),
-        license_basis: 'gdelt_metadata_and_source_links',
-      },
-    }];
-  });
-  const count = await upsertSourceRawDocuments(docs);
-  const matchedSymbols = unique(docs.flatMap((doc) => doc.symbols || []));
+  const previousCursor = String((cursorData as Row | null)?.cursor_value || '') || null;
+  const archiveUrls = gdeltGkgUrlsAfter(previousCursor, latestGkgUrl);
+  if (archiveUrls.length === 0) {
+    return { connector: 'gdelt', recordsWritten: 0, fetchedPosts: 0, duplicatesSkipped: 0, matchedDirectHits: 0, matchedIndustryHits: 0, matchedSymbols: [], entityId: String(entity.id), errorCode: null, degradedReason: null, sessionMode: 'not_applicable', metadata: { disposition: 'duplicate_only', cursor: latestGkgUrl, adapter: 'gkg_raw_v2' } };
+  }
+  let count = 0;
+  let fetchedRows = 0;
+  let matchedDocuments = 0;
+  let archiveBytes = 0;
+  const matchedSymbols = new Set<string>();
+  for (const gkgUrl of archiveUrls) {
+    let archive: Buffer;
+    try {
+      const response = await fetch(gkgUrl, {
+        headers: { accept: 'application/zip', 'user-agent': 'StockInsider/2.2 GKG-metadata-discovery' },
+        signal: AbortSignal.timeout(45_000),
+      });
+      if (!response.ok) throw new Error(`gdelt_gkg_http_${response.status}`);
+      archive = Buffer.from(await response.arrayBuffer());
+    } catch (error) {
+      if (/gdelt_.*_http_/u.test((error as Error).message)) throw error;
+      throw new Error(gdeltTransportReason(error));
+    }
+    archiveBytes += archive.length;
+    const rows = decodeSingleFileZip(archive).split(/\r?\n/u).filter(Boolean);
+    fetchedRows += rows.length;
+    const docs: SourceRawDocInput[] = rows.flatMap((line) => {
+      const columns = line.split('\t');
+      const documentUrl = compactText(columns[4]);
+      if (!/^https?:\/\//u.test(documentUrl) || isRetiredNewsHost(documentUrl)) return [];
+      const symbols = matchGdeltStockSymbols(gdeltSearchableText(columns), stocks);
+      if (symbols.length === 0) return [];
+      const publishedAt = parseGdeltSeenDate(compactText(columns[1]));
+      let publisherName = 'unknown';
+      try { publisherName = new URL(documentUrl).hostname.replace(/^www\./u, ''); } catch { /* validated above */ }
+      const summary = `GDELT GKG 命中 ${symbols.join('、')}；原始發布者 ${publisherName}`;
+      return [{
+        sourceEntityId: String(entity.id), platform: 'gdelt', documentUrl, title: summary, summary, contentText: summary,
+        publishedAt, symbols: unique(symbols), sentimentLabel: 'neutral', confidence: 0.62,
+        contentSemantics: 'metadata_only', publisherKey: `gdelt:publisher:${publisherName}`, publisherName,
+        metadata: { connector: 'gdelt_gkg_raw_v2', retention_mode: 'metadata_link_only', original_domain: publisherName, gkg_archive: gkgUrl, license_basis: 'gdelt_metadata_and_source_links' },
+      }];
+    });
+    matchedDocuments += docs.length;
+    for (const symbol of docs.flatMap((doc) => doc.symbols || [])) matchedSymbols.add(symbol);
+    count += await upsertSourceRawDocuments(docs);
+    // Commit the cursor only after this archive's documents have been durably
+    // upserted. A later archive failure resumes from this exact boundary.
+    const cursorWrite = await supabase.from('source_connector_cursors').upsert({
+      connector: 'gdelt_gkg', cursor_value: gkgUrl,
+      cursor_metadata: { rows: rows.length, matched_documents: docs.length, archive_bytes: archive.length },
+      source_timestamp: parseGdeltSeenDate(gkgUrl.match(/(\d{14})/u)?.[1] || null), updated_at: nowIso(),
+    }, { onConflict: 'connector' });
+    if (cursorWrite.error) throw new Error(`gdelt_cursor_write_failed:${cursorWrite.error.message}`);
+  }
   return {
     connector: 'gdelt',
     recordsWritten: count,
-    fetchedPosts: payload.articles.length,
-    duplicatesSkipped: Math.max(0, docs.length - count),
-    matchedDirectHits: docs.length,
+    fetchedPosts: fetchedRows,
+    duplicatesSkipped: Math.max(0, matchedDocuments - count),
+    matchedDirectHits: matchedDocuments,
     matchedIndustryHits: 0,
-    matchedSymbols,
+    matchedSymbols: [...matchedSymbols],
     entityId: String(entity.id),
     errorCode: null,
     degradedReason: null,
     sessionMode: 'not_applicable',
-    metadata: { retained_metadata_rows: docs.length, excluded_retired_domains: true },
+    metadata: { retained_metadata_rows: matchedDocuments, excluded_retired_domains: true, adapter: 'gkg_raw_v2', cursor: archiveUrls.at(-1), archive_count: archiveUrls.length, archive_bytes: archiveBytes },
   };
 }
 
@@ -3696,7 +3740,7 @@ export async function runSourceSync(options?: SourceSyncOptions): Promise<Source
     const durationMs = Date.now() - startedAtMs;
     await finishConnectorRun(
       connectorRunId,
-      result.recordsWritten > 0 ? 'success' : 'partial',
+      result.errorCode || result.degradedReason || result.timedOut ? 'partial' : 'success',
       result.recordsWritten,
       {
         metadata: {
@@ -3713,9 +3757,10 @@ export async function runSourceSync(options?: SourceSyncOptions): Promise<Source
         },
       },
     );
-    await upsertCredentialRegistry(connector, result.recordsWritten > 0 ? 'valid' : 'invalid', {
+    const healthyTerminal = !result.errorCode && !result.degradedReason && !result.timedOut;
+    await upsertCredentialRegistry(connector, healthyTerminal ? 'valid' : 'invalid', {
       credential_ref: 'public_http',
-      error_message: result.recordsWritten > 0 ? null : 'no_records_written',
+      error_message: healthyTerminal ? null : result.errorCode || result.degradedReason || 'source_run_degraded',
       metadata: {
         mode: symbolContext ? 'symbol_scoped_http' : 'public_http',
         duration_ms: durationMs,
@@ -3761,7 +3806,7 @@ export async function runSourceSync(options?: SourceSyncOptions): Promise<Source
     fetchedPosts: result.fetchedPosts ?? result.recordsWritten,
     watermarkBefore,
     watermarkAfter: await getSourceWatermark(connector),
-    duplicatesSkipped: 0,
+    duplicatesSkipped: result.duplicatesSkipped ?? 0,
     sessionRefreshed: false,
     errorCode: result.errorCode ?? null,
     matchedDirectHits: result.matchedDirectHits ?? 0,
@@ -5256,12 +5301,18 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
   if (dryRun) return { runId: randomUUID(), dryRun, recordsWritten: 0, episodesFound: 0, platforms: [] as string[] };
 
   const supabase = getSupabaseServerClient();
+  const rssAllowlist = new Set(String(process.env.PODCAST_RSS_ALLOWLIST || '').split(',').map((value) => value.trim()).filter((value) => /^https:\/\//u.test(value)));
+  if (rssAllowlist.size === 0) throw new Error('podcast_rss_allowlist_missing');
   await ensureDefaultKolProfiles();
   const podcastRunId = await startConnectorRun('podcast-sync', 'podcast', { source: 'kol_profiles' });
   try {
-    const { data: kolData, error: kolError } = await supabase.from('kol_profiles').select('*').eq('discovery_state', 'approved');
-    if (kolError) throw new Error(kolError.message);
+    const [{ data: kolData, error: kolError }, { data: stockData, error: stockError }] = await Promise.all([
+      supabase.from('kol_profiles').select('*').eq('discovery_state', 'approved'),
+      supabase.from('stocks').select('symbol').eq('market', 'TW'),
+    ]);
+    if (kolError || stockError) throw new Error(kolError?.message || stockError?.message || 'podcast_context_failed');
     const kols = (kolData as Row[]) || [];
+    const validSymbols = new Set(((stockData as Row[]) || []).map((row) => String(row.symbol || '')).filter((symbol) => /^\d{4}$/u.test(symbol)));
 
     let totalEpisodes = 0;
     let weakSignalsWritten = 0;
@@ -5297,7 +5348,7 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
       const episodeItems: PodcastEpisodeCandidate[] = [];
 
       const podcastName = String(meta.podcastName || String(kol.display_name || ''));
-      const explicitRssUrls = arrayFromMetadata(meta.rssUrl).concat(arrayFromMetadata(meta.rssUrls));
+      const explicitRssUrls = arrayFromMetadata(meta.rssUrl).concat(arrayFromMetadata(meta.rssUrls)).filter((url) => rssAllowlist.has(url));
       for (const rssUrl of unique(explicitRssUrls)) {
         searchedUrls.push(rssUrl);
         const rssItems = await fetchExplicitRssItems(rssUrl);
@@ -5336,7 +5387,8 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
         totalEpisodes += 1;
 
         const weakText = compactText(`${ep.title}。${ep.description || ''}`);
-        const weakInsights = extractPodcastInsights(weakText);
+        const extracted = extractPodcastInsights(weakText);
+        const weakInsights = { ...extracted, symbols: extracted.symbols.filter((symbol) => validSymbols.has(symbol)) };
         for (const symbol of weakInsights.symbols) matchedSymbols.add(symbol);
         if (weakInsights.symbols.length > 0) {
           const docsWritten = await upsertSourceRawDocuments([{

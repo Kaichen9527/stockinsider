@@ -1,14 +1,14 @@
 import { randomUUID } from 'crypto';
 import { normalizeRelatedStockSymbols, normalizeSourceDocumentSymbols } from './stock-symbol';
 import { loadActiveCandidateSourceErrors, loadCandidateShadowProgress, loadCandidateStageCards, recordCandidateShadowObservation, runCandidateResearchCycle } from './candidate-research';
-import { publishRadarPublicSnapshots } from './radar-public-snapshot';
+import { markRadarPublicSnapshotsFailed, publishRadarPublicSnapshots } from './radar-public-snapshot';
 import { calculateTechnicalFeatures, normalizeInstitutionalFlows, type InstitutionalFlowDay } from './technical-features-v2';
 import { advanceActionableCloseStreak, classifyCandidateStage, sourceSignalLifecycleStage, STAGE_RULESET_VERSION, type MarketRiskRegime } from './stage-classifier';
 import { existsSync, readFileSync } from 'fs';
 import path from 'path';
 import { Client as LineClient } from '@line/bot-sdk';
 import { getSupabaseServerClient } from './supabase-server';
-import { loadLatestSourceRunLedger } from './source-run-ledger';
+import { loadLatestSourceRunLedger, type SourceRunLedgerView } from './source-run-ledger';
 import { scheduledSourceConnectorKeys, sourceExecutionPolicy } from './source-policy';
 import { isDemoMode } from './data-mode';
 import { mergeAuthoritativeDeepDiveLeaves } from './deep-dive-merge';
@@ -11681,10 +11681,11 @@ function authCookieStatusMessage(item: ConnectorStatusView) {
 function buildSourceHealthSummary(
   agentStatus: AgentStatusSummary,
   connectorStatus: ConnectorStatusView[],
+  sourceLedger: SourceRunLedgerView[] = [],
 ): NonNullable<RadarDailyPayload['sourceHealthSummary']> {
   const now = Date.now();
   const dayMs = 24 * 60 * 60 * 1000;
-  const connectorDetails = connectorStatus.map((item) => {
+  const legacyConnectorDetails = connectorStatus.map((item) => {
     const refreshCadenceHours = item.refreshCadenceHours || refreshCadenceHoursForConnector(item.connector);
     const refreshTier = item.refreshTier || refreshTierForConnector(item.connector);
     const workerFreshnessSlaMs = refreshCadenceHours * 60 * 60 * 1000;
@@ -11806,6 +11807,44 @@ function buildSourceHealthSummary(
       matchedSymbols: item.matchedSymbols || [],
     };
   });
+  const connectorDetailsByKey = new Map(legacyConnectorDetails.map((item) => [item.connector, item]));
+  const healthyTerminals = new Set(['success', 'successful_empty', 'duplicate_only']);
+  for (const ledger of sourceLedger) {
+    const existing = connectorDetailsByKey.get(ledger.connector);
+    const active = ledger.sourceDisposition === 'active';
+    const healthy = healthyTerminals.has(ledger.terminalReason);
+    const policyState = active ? ledger.terminalReason : ledger.sourceDisposition;
+    const ledgerDetail = {
+      ...(existing || {}),
+      connector: ledger.connector,
+      label: CONNECTOR_DISPLAY_LABELS[ledger.connector] || ledger.connector,
+      status: policyState,
+      recordsWritten: ledger.written,
+      recordsWritten24h: ledger.written,
+      recordsWrittenThisRun: ledger.written,
+      lastSuccessAt: ledger.succeededAt,
+      lastAttemptAt: ledger.attemptedAt,
+      lastAttemptStatus: policyState,
+      lastTerminalStatus: ledger.terminalReason,
+      lastTerminalRunAt: ledger.attemptedAt,
+      normalizedFailureCode: active && !healthy ? ledger.terminalReason : null,
+      displayFailureReason: active && !healthy ? ledger.terminalDetail || ledger.terminalReason : null,
+      degradedReason: active && !healthy ? ledger.terminalDetail || ledger.terminalReason : null,
+      failureReason: active && !healthy ? ledger.terminalDetail || ledger.terminalReason : null,
+      canonicalWorkerStatus: policyState,
+      workerFreshnessStatus: active ? (healthy ? 'fresh' : 'degraded') : 'missing',
+      workerSlaStatus: active ? (healthy ? 'fresh' : 'degraded') : 'missing',
+      statusOwner: 'source_run_ledger',
+      ignoredServerlessSkip: false,
+      searched: ledger.fetched > 0,
+      matched: ledger.matched > 0,
+      searchedTargets: existing?.searchedTargets || [],
+      matchedSymbols: existing?.matchedSymbols || [],
+      metadata: { disposition: ledger.sourceDisposition, auth_status: ledger.authStatus, license_basis: ledger.licenseBasis, fetched: ledger.fetched, matched: ledger.matched, duplicate: ledger.duplicate, next_expected_at: ledger.nextExpectedAt },
+    } as typeof legacyConnectorDetails[number];
+    connectorDetailsByKey.set(ledger.connector, ledgerDetail);
+  }
+  const connectorDetails = [...connectorDetailsByKey.values()];
   return {
     successfulSources: connectorDetails.filter((item) => item.recordsWritten > 0 && !item.degradedReason).length,
     degradedSources: connectorDetails.filter((item) => item.degradedReason || ['failed', 'invalid', 'degraded', 'timed_out'].includes(item.status)).length,
@@ -13235,7 +13274,7 @@ async function getRadarPayload(windowType: ThemeHeatCard['windowType']): Promise
       degradedSources.push(source);
       loadWarnings.push(`${source}: ${message || 'degraded'}`);
     };
-    const [themesRes, recsRes, memosRes, marketRes, latestPipelineRes, agentStatus, connectorStatus, twseRows] = await Promise.all([
+    const [themesRes, recsRes, memosRes, marketRes, latestPipelineRes, agentStatus, connectorStatus, twseRows, sourceLedger] = await Promise.all([
       supabaseServer.from('theme_heat').select('*').eq('window_type', windowType).order('as_of_date', { ascending: false }).order('heat_score', { ascending: false }).limit(24),
       supabaseServer
         .from('recommendations')
@@ -13271,6 +13310,10 @@ async function getRadarPayload(windowType: ThemeHeatCard['windowType']): Promise
         [],
         3000,
       ),
+      withFallbackTimeout(loadLatestSourceRunLedger().catch((error) => {
+        markDegraded('source_run_ledger', error);
+        return [];
+      }), [], 3000),
     ]);
 
     if (themesRes.error || recsRes.error || memosRes.error || marketRes.error || latestPipelineRes.error) {
@@ -13858,7 +13901,7 @@ async function getRadarPayload(windowType: ThemeHeatCard['windowType']): Promise
       marketFreshness,
       lastUpdatedAt,
     });
-    const sourceHealthSummary = buildSourceHealthSummary(agentStatus, connectorStatus);
+    const sourceHealthSummary = buildSourceHealthSummary(agentStatus, connectorStatus, sourceLedger);
     const pluginSourceCoverageSummary = buildPluginSourceCoverageSummary(sourceHealthSummary);
     const sanitizedConnectorStatus = sanitizeConnectorStatusForPayload(connectorStatus);
     const hotTrackingSymbols = unique([
@@ -21763,30 +21806,19 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
       { runId: 'skip-revenue-ingestion', dryRun, revenueRecords: 0, fundamentalRecords: 0 },
     );
 
-    const candidateResearchFallback = {
-      runId: randomUUID(),
-      dryRun,
-      candidateCount: 0,
-      completedCount: 0,
-      failedCount: 0,
-      technicalSessionDate: null,
-      blocked: true,
-      terminalReason: 'candidate_research_unavailable',
-      items: [],
-    };
-    const candidateResearch = await executeNonCriticalStep(
+    const candidateResearch = await executeStep(
       'candidate_research',
-      async () => runCandidateResearchCycle({
-        dryRun,
-        pipelineRunId,
-        seedSymbols: TW_STORY_RESEARCH_SEEDS.map((seed) => ({ symbol: seed.symbol, name: seed.name, market: seed.market, sector: seed.sector })),
-      }),
-      candidateResearchFallback,
-      false,
-      // A blocked official historical feed is a failed research step, not a
-      // successful empty cycle.  Keep source publication alive, but prevent a
-      // shadow observation or any new stage promotion from this run.
-      (result) => result.blocked ? `candidate_research_blocked:${result.terminalReason || 'unknown'}` : null,
+      async () => {
+        const result = await runCandidateResearchCycle({
+          dryRun,
+          pipelineRunId,
+          seedSymbols: TW_STORY_RESEARCH_SEEDS.map((seed) => ({ symbol: seed.symbol, name: seed.name, market: seed.market, sector: seed.sector })),
+        });
+        if (!dryRun && (result.blocked || result.failedCount > 0 || result.partialCount > 0)) {
+          throw new Error(`candidate_research_prerequisite_failed:${result.terminalReason || 'partial_or_failed_items'}`);
+        }
+        return result;
+      },
     );
 
     const recommendationFallback = {
@@ -21841,14 +21873,18 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
       const stages = await executeStep('candidate_stage_projection', async () => loadCandidateStageCards());
       const radarPayload = await executeStep('radar_payload_build', async () => getDailyRadarData());
       const activeSourceErrors = await executeStep('active_source_health', async () => loadActiveCandidateSourceErrors());
+      publication = await executeStep('radar_publication', async () => publishRadarPublicSnapshots({ payload: radarPayload, stages, pipelineRunId }));
       shadowObservation = await executeStep('shadow_observation', async () => recordCandidateShadowObservation({
         pipelineRunId,
-        publicationId: null,
+        publicationId: typeof publication.homePublicationId === 'string' ? publication.homePublicationId : null,
+        publicationPayloadHash: typeof publication.homePayloadHash === 'string' ? publication.homePayloadHash : null,
+        manifestId: candidateResearch.manifestId,
+        manifestHash: candidateResearch.manifestHash,
+        researchItems: candidateResearch.items,
         stages,
         technicalSessionDate: candidateResearch.technicalSessionDate || null,
         activeSourceErrors,
       }));
-      publication = await executeStep('radar_publication', async () => publishRadarPublicSnapshots({ payload: radarPayload, stages, pipelineRunId }));
     }
 
     const durationMs = Date.now() - startedAt;
@@ -21890,6 +21926,7 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
     const failedStep = err.failedStep || stepStatus[stepStatus.length - 1]?.step || null;
     const timedOut = Boolean(err.timedOut);
     if (supabaseServer) {
+      await markRadarPublicSnapshotsFailed(err.message, nowIso()).catch(() => undefined);
       await supabaseServer
         .from('pipeline_runs')
         .update({
@@ -22112,7 +22149,7 @@ export async function runMonitoringChecks() {
     const sourceHealthConnectorByKey: Record<string, string> = {
       'site.ptt.stock': 'ptt',
       'authorized.bulltalk.feed': 'bulltalk',
-      'site.gdelt.doc2': 'gdelt',
+      'site.gdelt.gkg2': 'gdelt',
       'site.telegram.channels': 'telegram',
       'site.twse.insider': 'twse_insider',
     };
@@ -22179,7 +22216,7 @@ export async function runMonitoringChecks() {
     const latestCandidateRun = candidateRuns[0];
     const currentCandidateRunSucceeded = latestCandidateRun
       && String(latestCandidateRun.technical_session_date || '') === taipeiDate
-      && ['success', 'partial'].includes(String(latestCandidateRun.status || ''));
+      && String(latestCandidateRun.status || '') === 'success';
     const failedPublication = ((publicationStateRes.data as Row[]) || []).find((row) => String(row.status || '') === 'failed');
     if (failedPublication) {
       alerts.push({
@@ -22201,7 +22238,7 @@ export async function runMonitoringChecks() {
       alerts.push({
         type: 'candidate_research_run_missing',
         level: 'critical',
-        message: `No successful or partial candidate research run for trading session ${taipeiDate}`,
+        message: `No fully successful candidate research run for trading session ${taipeiDate}`,
         context: { latestCandidateRun: latestCandidateRun || null },
       });
     }

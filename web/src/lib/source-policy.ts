@@ -1,6 +1,6 @@
 export const RETIRED_SOURCE_CONNECTORS = ['youtube', 'googlenews', 'anue', 'udn', 'mobile01', 'instagram'] as const;
 export const MANUAL_SOURCE_CONNECTORS = ['investanchors'] as const;
-export const CLOUD_SOURCE_CONNECTORS = ['telegram', 'threads', 'ptt', 'bulltalk', 'gdelt', 'twse_insider'] as const;
+export const CLOUD_SOURCE_CONNECTORS = ['telegram', 'threads', 'ptt', 'podcast', 'bulltalk', 'gdelt', 'twse_insider'] as const;
 export const SOURCE_CONNECTOR_KEYS = [
   ...CLOUD_SOURCE_CONNECTORS,
   ...MANUAL_SOURCE_CONNECTORS,
@@ -28,6 +28,10 @@ export type SourceExecutionPolicy = {
 
 function enabled(value: string | undefined): boolean {
   return value === 'true';
+}
+
+function hasAuthorizedPodcastRss(value: string | undefined): boolean {
+  return String(value || '').split(',').map((item) => item.trim()).some((item) => /^https:\/\//u.test(item));
 }
 
 export function sourceExecutionPolicy(connector: string): SourceExecutionPolicy {
@@ -62,6 +66,11 @@ export function sourceExecutionPolicy(connector: string): SourceExecutionPolicy 
     return enabled(process.env.BULLTALK_LICENSED) && Boolean(process.env.BULLTALK_AUTHORIZED_FEED_URL)
       ? { connector, disposition: 'active', licenseBasis: 'cmoney_partner_or_api_license', terminalReason: null, cadenceHours: 6 }
       : { connector, disposition: 'blocked_license', licenseBasis: 'cmoney_partner_license_required', terminalReason: 'bulltalk_authorized_feed_missing', cadenceHours: 6 };
+  }
+  if (connector === 'podcast') {
+    return hasAuthorizedPodcastRss(process.env.PODCAST_RSS_ALLOWLIST)
+      ? { connector, disposition: 'active', licenseBasis: 'creator_published_rss_allowlist', terminalReason: null, cadenceHours: 24 }
+      : { connector, disposition: 'manual_only', licenseBasis: 'creator_published_rss_required', terminalReason: 'podcast_rss_allowlist_missing', cadenceHours: null };
   }
   if (connector === 'gdelt') {
     return { connector, disposition: 'active', licenseBasis: 'gdelt_metadata_and_source_links', terminalReason: null, cadenceHours: 6 };

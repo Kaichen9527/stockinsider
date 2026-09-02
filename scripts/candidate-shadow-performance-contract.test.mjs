@@ -13,6 +13,7 @@ const installer = readFileSync(new URL('../deployment/vps/install-systemd-schedu
 const sourcePolicy = readFileSync(new URL('../web/src/lib/source-policy.ts', import.meta.url), 'utf8');
 const domain = readFileSync(new URL('../web/src/lib/domain.ts', import.meta.url), 'utf8');
 const snapshotPublisher = readFileSync(new URL('../web/src/lib/radar-public-snapshot.ts', import.meta.url), 'utf8');
+const v2Migration = readFileSync(new URL('../migrations/20260901_source_research_shadow_v2.sql', import.meta.url), 'utf8');
 
 test('migration is additive and installs research, shadow and last-good publication planes', () => {
   assert.match(migration, /CREATE TABLE IF NOT EXISTS public\.candidate_research_runs/u);
@@ -60,7 +61,8 @@ test('official roster normalization happens before a missing price history can f
 
 test('candidate technical features and the core scheduler remain bound to official completed sessions', () => {
   const research = readFileSync(new URL('../web/src/lib/candidate-research.ts', import.meta.url), 'utf8');
-  assert.match(research, /const bars = \(fetchedBars \|\| \[\]\)\.filter\(\(bar\) => bar\.time <= latestMarketSession\)/u);
+  assert.match(research, /cachedBars,[\s\S]{0,180}fetchedBars[\s\S]{0,180}bar\.time <= latestMarketSession/u);
+  assert.match(research, /p_limit: 1320/u);
   assert.match(domain, /executeNonCriticalStep\('recommendation',[\s\S]{0,320}mode !== 'full'/u);
 });
 
@@ -96,8 +98,8 @@ test('scheduled core pipeline is candidate-first, isolates unavailable official 
   const research = readFileSync(new URL('../web/src/lib/candidate-research.ts', import.meta.url), 'utf8');
   assert.match(domain, /const shouldRunIngestion = mode === 'full' && !skipIngestion/u);
   assert.match(domain, /'revenue_ingestion',[\s\S]{0,180}mode !== 'full'/u);
-  assert.match(domain, /const candidateResearch = await executeNonCriticalStep\(\s*'candidate_research'/u);
-  assert.match(domain, /candidate_research_blocked:\$\{result\.terminalReason/u);
+  assert.match(domain, /const candidateResearch = await executeStep\(\s*'candidate_research'/u);
+  assert.match(domain, /candidate_research_prerequisite_failed/u);
   assert.match(research, /isCandidateHistoricalPriceAccessEnabled\(\)/u);
   assert.match(research, /official_historical_price_access_unavailable/u);
   assert.match(research, /status: 'failed'/u);
@@ -122,4 +124,31 @@ test('shadow observations are canonical per official session and preserve confli
   assert.match(migration, /ON CONFLICT \(session_date, ruleset_version, model_version\) DO NOTHING/u);
   assert.match(migration, /reproducibility_status = 'conflict'/u);
   assert.match(migration, /same_session_replay_conflict/u);
+});
+
+test('shadow v2 freezes a source manifest and records publication-bound attempts', () => {
+  const research = readFileSync(new URL('../web/src/lib/candidate-research.ts', import.meta.url), 'utf8');
+  assert.match(v2Migration, /CREATE TABLE IF NOT EXISTS public\.candidate_shadow_manifests/u);
+  assert.match(v2Migration, /CREATE TABLE IF NOT EXISTS public\.candidate_shadow_attempts/u);
+  assert.match(v2Migration, /shadow_policy_version TEXT NOT NULL DEFAULT 'shadow-policy-v1'/u);
+  assert.match(v2Migration, /ALTER COLUMN shadow_policy_version SET DEFAULT 'shadow-policy-v2'/u);
+  assert.match(research, /SHADOW_POLICY_VERSION = 'shadow-policy-v2'/u);
+  assert.match(research, /Operational completeness counts a correctly terminal partial\/fail-closed/u);
+  assert.match(research, /manifestSymbols\.filter\(\(symbol\) => terminalBySymbol\.has\(symbol\) && replayBySymbol\.has\(symbol\)\)/u);
+  assert.match(research, /publicationId/u);
+  const publishAt = domain.indexOf("executeStep('radar_publication'");
+  const shadowAt = domain.indexOf("executeStep('shadow_observation'");
+  assert.ok(publishAt >= 0 && shadowAt > publishAt, 'publication must precede the shadow observation');
+});
+
+test('production source writes require the active VPS release and production lease', () => {
+  const serverClient = readFileSync(new URL('../web/src/lib/supabase-server.ts', import.meta.url), 'utf8');
+  const activation = readFileSync(new URL('../web/src/app/api/internal/writer-release-activate/route.ts', import.meta.url), 'utf8');
+  assert.match(v2Migration, /x-stockinsider-writer-release/u);
+  assert.match(v2Migration, /production_writer_release_rejected/u);
+  assert.match(v2Migration, /production_writer_lease_required/u);
+  assert.match(serverClient, /STOCKINSIDER_WRITER_RELEASE_ID/u);
+  assert.match(activation, /requireInternalAuth\(request\)/u);
+  assert.match(activation, /releaseId !== expectedReleaseId/u);
+  assert.match(activation, /register_production_writer_release/u);
 });

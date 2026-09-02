@@ -11,10 +11,14 @@ export function getSupabaseServerClient() {
     throw new Error('Missing SUPABASE URL/key for server client');
   }
 
+  const writerRelease = process.env.STOCKINSIDER_WRITER_RELEASE_ID?.trim();
   return createClient(url, serviceKey, {
     auth: {
       persistSession: false,
       autoRefreshToken: false,
     },
+    global: writerRelease
+      ? { headers: { 'x-stockinsider-writer-release': writerRelease } }
+      : undefined,
   });
 }
