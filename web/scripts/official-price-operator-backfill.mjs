@@ -62,6 +62,50 @@ const targets = symbols.filter((symbol) => stockIdBySymbol.has(symbol) && ['TWSE
 const availableAt = new Date().toISOString();
 const acquiredPages = [];
 let acquiredRows = 0;
+let written = 0;
+let duplicate = 0;
+let writeQueue = Promise.resolve();
+const requestState = new Map();
+
+async function pacedOfficialFetch(sourceUrl) {
+  const hostname = new URL(sourceUrl).hostname;
+  const state = requestState.get(hostname) || { count: 0, nextAt: 0 };
+  const intervalMs = hostname === 'www.twse.com.tw' ? 1_200 : 800;
+  const burstPauseMs = hostname === 'www.twse.com.tw' ? 15_000 : 6_000;
+  const waitMs = Math.max(0, state.nextAt - Date.now());
+  if (waitMs > 0) await delay(waitMs);
+  if (state.count > 0 && state.count % 10 === 0) await delay(burstPauseMs);
+  state.count += 1;
+  state.nextAt = Date.now() + intervalMs;
+  requestState.set(hostname, state);
+  const response = await fetch(sourceUrl, {
+    headers: { accept: 'application/json', 'user-agent': 'StockInsider/2.1 official-operator-backfill' },
+    signal: AbortSignal.timeout(12_000),
+  }).catch(() => null);
+  if (!response?.ok) {
+    state.nextAt = Date.now() + (hostname === 'www.twse.com.tw' ? 30_000 : 12_000);
+    requestState.set(hostname, state);
+  }
+  return response;
+}
+
+function flushAcquiredPages() {
+  const pages = acquiredPages.splice(0, 30);
+  if (pages.length === 0) return writeQueue;
+  writeQueue = writeQueue.then(async () => {
+    const batchHash = sha256(JSON.stringify(pages));
+    const response = await fetch(`${appUrl}/api/internal/official-price-backfill`, {
+      method: 'POST', headers: { authorization: `Bearer ${internalKey}`, 'content-type': 'application/json' },
+      body: JSON.stringify({ availableAt, batchHash, pages, source: 'official_exchange_operator_backfill_v1' }),
+      signal: AbortSignal.timeout(60_000),
+    });
+    const body = await response.json().catch(() => null);
+    if (!response.ok || body?.ok !== true) throw new Error(`backfill_write_failed:${response.status}:${body?.error || 'unknown'}`);
+    written += Number(body.result.written || 0);
+    duplicate += Number(body.result.duplicate || 0);
+  });
+  return writeQueue;
+}
 
 async function acquireExchange(exchange) {
   for (const [index, symbol] of targets.filter((value) => exchangeBySymbol.get(value) === exchange).entries()) {
@@ -73,9 +117,9 @@ async function acquireExchange(exchange) {
         : `https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=${symbol}&date=${encodeURIComponent(month.slash)}&response=json`;
       let response;
       for (let attempt = 1; attempt <= 3; attempt += 1) {
-        response = await fetch(sourceUrl, { headers: { accept: 'application/json', 'user-agent': 'StockInsider/2.1 official-operator-backfill' }, signal: AbortSignal.timeout(12_000) }).catch(() => null);
+        response = await pacedOfficialFetch(sourceUrl);
         if (response?.ok) break;
-        await delay(500 * attempt);
+        await delay(1_000 * attempt);
       }
       if (!response?.ok) continue;
       const raw = await response.text();
@@ -100,25 +144,16 @@ async function acquireExchange(exchange) {
         acquiredPages.push({ symbol, exchange, sourceUrl: normalizedUrl, responseText: raw, responseSha256 });
         acquiredRows += missingRows;
       }
-      await delay(350);
     }
+    await flushAcquiredPages();
     process.stdout.write(`${JSON.stringify({ exchange, symbol, completed: index + 1, coverage: known.size })}\n`);
   }
 }
 
 await Promise.all([acquireExchange('TWSE'), acquireExchange('TPEX')]);
-acquiredPages.sort((left, right) => left.symbol.localeCompare(right.symbol) || left.sourceUrl.localeCompare(right.sourceUrl));
-let written = 0; let duplicate = 0;
-for (let offset = 0; offset < acquiredPages.length; offset += 30) {
-  const pages = acquiredPages.slice(offset, offset + 30);
-  const batchHash = sha256(JSON.stringify(pages));
-  const response = await fetch(`${appUrl}/api/internal/official-price-backfill`, {
-    method: 'POST', headers: { authorization: `Bearer ${internalKey}`, 'content-type': 'application/json' },
-    body: JSON.stringify({ availableAt, batchHash, pages, source: 'official_exchange_operator_backfill_v1' }),
-    signal: AbortSignal.timeout(60_000),
-  });
-  const body = await response.json().catch(() => null);
-  if (!response.ok || body?.ok !== true) throw new Error(`backfill_write_failed:${response.status}:${body?.error || 'unknown'}`);
-  written += Number(body.result.written || 0); duplicate += Number(body.result.duplicate || 0);
-}
-process.stdout.write(`${JSON.stringify({ ok: true, targets: targets.length, pages: acquiredPages.length, acquiredRows, written, duplicate })}\n`);
+while (acquiredPages.length > 0) await flushAcquiredPages();
+await writeQueue;
+const failedTargets = targets.filter((symbol) => (knownBySymbol.get(symbol)?.size || 0) < 240
+  || !knownBySymbol.get(symbol)?.has(manifest.data.session_date));
+process.stdout.write(`${JSON.stringify({ ok: failedTargets.length === 0, targets: targets.length, acquiredRows, written, duplicate, failedTargets })}\n`);
+if (failedTargets.length > 0) process.exitCode = 1;
