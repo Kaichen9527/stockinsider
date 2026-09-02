@@ -78,6 +78,29 @@ test('a CDN challenge response opens the official host circuit instead of becomi
   assert.equal(calls, 3);
 });
 
+test('valuation endpoint failures do not blackhole the price-history endpoint on the same host', async (t) => {
+  const originalFetch = globalThis.fetch;
+  const calls: string[] = [];
+  t.after(() => {
+    globalThis.fetch = originalFetch;
+    resetOfficialMarketRequestStateForTests();
+  });
+  resetOfficialMarketRequestStateForTests();
+  globalThis.fetch = (async (input) => {
+    const url = new URL(String(input));
+    calls.push(url.pathname);
+    if (url.pathname.includes('BWIBBU_d')) return new Response('', { status: 429 });
+    return new Response(JSON.stringify({ stat: 'OK' }), { status: 200, headers: { 'content-type': 'application/json' } });
+  }) as typeof fetch;
+
+  const valuationUrl = 'https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?date=20260828&selectType=ALL&response=json';
+  for (let attempt = 0; attempt < 5; attempt += 1) assert.equal(await fetchOfficialJson(valuationUrl, 1_000), null);
+  const price = await fetchOfficialJson<{ stat: string }>('https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20260828&type=ALLBUT0999', 1_000);
+  assert.deepEqual(price, { stat: 'OK' });
+  assert.equal(calls.filter((path) => path.includes('BWIBBU_d')).length, 3);
+  assert.equal(calls.filter((path) => path.includes('MI_INDEX')).length, 1);
+});
+
 test('official requests are serialized per host while other work is queued', async (t) => {
   const originalFetch = globalThis.fetch;
   let inFlight = 0;
