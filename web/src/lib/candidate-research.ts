@@ -19,7 +19,7 @@ import {
   type TwValuationHistoryPoint,
 } from './tw-market';
 import { buildConservativeOfficialScenario } from './candidate-valuation';
-import { candidatePriceRefreshDepth, collectBatchedAuthorityRows, collectPagedAuthorityRows, isCandidateHistoricalPriceAccessEnabled } from './candidate-research-policy';
+import { candidatePriceRefreshDepth, collectBatchedAuthorityRows, collectPagedAuthorityRows, isCandidateHistoricalPriceAccessEnabled, isTransientResearchInfrastructureError } from './candidate-research-policy';
 import { scheduledSourceConnectorKeys, sourceExecutionPolicy } from './source-policy';
 import { loadLatestSourceRunLedger } from './source-run-ledger';
 import type { CandidateShadowProgress, CandidateStageCard } from './types';
@@ -55,6 +55,10 @@ function round(value: number, digits = 2) {
 
 function stableHash(value: unknown) {
   return createHash('sha256').update(JSON.stringify(value)).digest('hex');
+}
+
+async function waitForResearchRetry(attempt: number) {
+  await new Promise((resolve) => setTimeout(resolve, 500 * (attempt + 1)));
 }
 
 function stringArray(value: unknown): string[] {
@@ -380,7 +384,7 @@ export async function runCandidateResearchCycle(options: {
   });
   if (runInsert.error) throw new Error(runInsert.error.message);
 
-  const items = await mapLimit(universe, 4, async (stock) => {
+  const researchStock = async (stock: (typeof universe)[number], attempt = 0): Promise<Row> => {
     const startedAt = new Date().toISOString();
     const result: Row = { symbol: stock.symbol, stockId: stock.id };
     try {
@@ -765,6 +769,14 @@ export async function runCandidateResearchCycle(options: {
       return result;
     } catch (error) {
       const reason = (error as Error).message.slice(0, 500);
+      // Official APIs and Supabase can occasionally return a transient edge
+      // error after earlier idempotent writes have succeeded. Retry the whole
+      // stock task with the same run/session identity; every write is an upsert,
+      // so this closes the operational gap without changing research inputs.
+      if (attempt < 2 && isTransientResearchInfrastructureError(reason)) {
+        await waitForResearchRetry(attempt);
+        return researchStock(stock, attempt + 1);
+      }
       Object.assign(result, { status: 'failed', terminalReason: reason, technicalSessionDate: latestMarketSession, classificationReplayHash: stableHash({ stage: 'found', terminalReason: reason, failClosed: true }) });
       // A failed refresh must revoke any older waiting/actionable authority immediately.
       // Persist a fail-closed found snapshot for the current official session so the
@@ -803,7 +815,8 @@ export async function runCandidateResearchCycle(options: {
       if (failureWrite.error) result.ledgerError = failureWrite.error.message;
       return result;
     }
-  });
+  };
+  const items = await mapLimit(universe, 4, (stock) => researchStock(stock));
   const failedCount = items.filter((item) => item.status === 'failed').length;
   const partialCount = items.filter((item) => item.status === 'partial').length;
   const failClosedWriteFailures = items.filter((item) => item.snapshotError).length;

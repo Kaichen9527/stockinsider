@@ -1,7 +1,14 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { buildConservativeOfficialScenario } from './candidate-valuation.ts';
-import { candidatePriceRefreshDepth, collectBatchedAuthorityRows, collectPagedAuthorityRows, isCandidateHistoricalPriceAccessEnabled } from './candidate-research-policy.ts';
+import { candidatePriceRefreshDepth, collectBatchedAuthorityRows, collectPagedAuthorityRows, isCandidateHistoricalPriceAccessEnabled, isTransientResearchInfrastructureError } from './candidate-research-policy.ts';
+
+test('candidate research retries transient infrastructure errors only', () => {
+  assert.equal(isTransientResearchInfrastructureError('supabase.co | 520: Web server is returning an unknown error'), true);
+  assert.equal(isTransientResearchInfrastructureError('upstream request timed out'), true);
+  assert.equal(isTransientResearchInfrastructureError('official_multiple_coverage_below_48_of_60'), false);
+  assert.equal(isTransientResearchInfrastructureError('official_stock_master_missing'), false);
+});
 
 test('candidate authority readers continue past the PostgREST 1000-row response cap', async () => {
   const authority = Array.from({ length: 1320 }, (_, index) => index);

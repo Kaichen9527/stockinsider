@@ -15,6 +15,10 @@ export function candidatePriceRefreshDepth(knownSessions: string[], latestMarket
   return unique.at(-1) === latestMarketSession ? 0 : 5;
 }
 
+export function isTransientResearchInfrastructureError(reason: string) {
+  return /(?:\b(?:429|500|502|503|504|520|522|524)\b|timeout|timed out|fetch failed|network|connection reset|econnreset|socket hang up|temporarily unavailable)/iu.test(reason);
+}
+
 export async function collectPagedAuthorityRows<T>(
   readPage: (from: number, to: number) => Promise<T[]>,
   options: { pageSize?: number; maxRows: number },
