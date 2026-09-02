@@ -1,7 +1,14 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { buildConservativeOfficialScenario } from './candidate-valuation.ts';
-import { candidatePriceRefreshDepth, collectPagedAuthorityRows, isCandidateHistoricalPriceAccessEnabled } from './candidate-research-policy.ts';
+import { candidatePriceRefreshDepth, collectBatchedAuthorityRows, collectPagedAuthorityRows, isCandidateHistoricalPriceAccessEnabled, isTransientResearchInfrastructureError } from './candidate-research-policy.ts';
+
+test('candidate research retries transient infrastructure errors only', () => {
+  assert.equal(isTransientResearchInfrastructureError('supabase.co | 520: Web server is returning an unknown error'), true);
+  assert.equal(isTransientResearchInfrastructureError('upstream request timed out'), true);
+  assert.equal(isTransientResearchInfrastructureError('official_multiple_coverage_below_48_of_60'), false);
+  assert.equal(isTransientResearchInfrastructureError('official_stock_master_missing'), false);
+});
 
 test('candidate authority readers continue past the PostgREST 1000-row response cap', async () => {
   const authority = Array.from({ length: 1320 }, (_, index) => index);
@@ -22,6 +29,22 @@ test('bounded pagination also retains source rows after the first response page'
   );
   assert.equal(rows.length, 1979);
   assert.equal(rows.at(-1), 'mention-1978');
+});
+
+test('large UUID filters are split into bounded URL batches and each response is paginated', async () => {
+  const ids = Array.from({ length: 45 }, (_, index) => `stock-${index}`);
+  const calls: Array<{ batch: string[]; from: number; to: number }> = [];
+  const rows = await collectBatchedAuthorityRows(ids, async (batch, from, to) => {
+    calls.push({ batch: [...batch], from, to });
+    const available = batch.flatMap((id) => Array.from({ length: 60 }, (_, month) => `${id}:${month}`));
+    return available.slice(from, to + 1);
+  }, { batchSize: 20, pageSize: 1000, maxRowsPerBatch: 5000 });
+  assert.equal(rows.length, 2700);
+  assert.deepEqual(calls.map((call) => [call.batch.length, call.from, call.to]), [
+    [20, 0, 999], [20, 1000, 1999],
+    [20, 0, 999], [20, 1000, 1999],
+    [5, 0, 999],
+  ]);
 });
 
 const historicalPeRatios = [10, 12, 14, 16, 18, 20, 22, 24, 26, 28];

@@ -16,6 +16,13 @@ test('invalidated source mentions remain auditable but leave discovery', () => {
   assert.equal(candidateMentionDiscoveryEligible({ invalidated: true }), false);
 });
 
+test('legacy GDELT metadata remains auditable but only the Taiwan-context matcher enters discovery', () => {
+  assert.equal(candidateMentionDiscoveryEligible(null, 'gdelt'), false);
+  assert.equal(candidateMentionDiscoveryEligible({ discovery_eligible: true }, 'gdelt'), false);
+  assert.equal(candidateMentionDiscoveryEligible({ discovery_eligible: true, matcher_version: 'gdelt-tw-context-v2' }, 'gdelt'), true);
+  assert.equal(candidateMentionDiscoveryEligible({ discovery_eligible: true, matcher_version: 'gdelt-tw-context-v2', invalidated: true }, 'gdelt'), false);
+});
+
 test('PTT institutional ranking is chip evidence instead of discovery', () => {
   assert.equal(classifyPttContentSemantics('[情報] 外資買超前20名排行'), 'bulk_institutional_ranking');
   assert.equal(classifyPttContentSemantics('[心得] 2330 法說與需求觀察'), 'editorial_discussion');

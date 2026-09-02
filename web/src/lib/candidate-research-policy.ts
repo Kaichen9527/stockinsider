@@ -15,6 +15,10 @@ export function candidatePriceRefreshDepth(knownSessions: string[], latestMarket
   return unique.at(-1) === latestMarketSession ? 0 : 5;
 }
 
+export function isTransientResearchInfrastructureError(reason: string) {
+  return /(?:\b(?:429|500|502|503|504|520|522|524)\b|timeout|timed out|fetch failed|network|connection reset|econnreset|socket hang up|temporarily unavailable)/iu.test(reason);
+}
+
 export async function collectPagedAuthorityRows<T>(
   readPage: (from: number, to: number) => Promise<T[]>,
   options: { pageSize?: number; maxRows: number },
@@ -29,6 +33,24 @@ export async function collectPagedAuthorityRows<T>(
     const page = await readPage(rows.length, rows.length + requestSize - 1);
     rows.push(...page);
     if (page.length < requestSize) break;
+  }
+  return rows;
+}
+
+export async function collectBatchedAuthorityRows<TInput, TRow>(
+  inputs: TInput[],
+  readPage: (batch: TInput[], from: number, to: number) => Promise<TRow[]>,
+  options: { batchSize?: number; pageSize?: number; maxRowsPerBatch: number },
+): Promise<TRow[]> {
+  const batchSize = options.batchSize || 20;
+  if (!Number.isInteger(batchSize) || batchSize <= 0) throw new Error('invalid_authority_batch_size');
+  const rows: TRow[] = [];
+  for (let offset = 0; offset < inputs.length; offset += batchSize) {
+    const batch = inputs.slice(offset, offset + batchSize);
+    rows.push(...await collectPagedAuthorityRows(
+      (from, to) => readPage(batch, from, to),
+      { pageSize: options.pageSize, maxRows: options.maxRowsPerBatch },
+    ));
   }
   return rows;
 }

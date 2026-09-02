@@ -58,15 +58,19 @@ test('official roster normalization happens before a missing price history can f
   assert.ok(normalizeAt >= 0);
   assert.ok(priceGateAt >= 0);
   assert.ok(normalizeAt < priceGateAt);
-  assert.match(research, /name: official\?\.name \|\| storedName, storedName/u);
+  assert.match(research, /name: official\.name, storedName/u);
   assert.match(research, /officialName && officialName !== stock\.storedName/u);
   assert.match(research, /stock\.storedName = officialName/u);
+  assert.match(research, /const official = stockMaster\.get\(symbol\);[\s\S]{0,80}if \(!official\) continue/u);
 });
 
 test('candidate technical features and the core scheduler remain bound to official completed sessions', () => {
   const research = readFileSync(new URL('../web/src/lib/candidate-research.ts', import.meta.url), 'utf8');
   assert.match(research, /cachedBars,[\s\S]{0,180}fetchedBars[\s\S]{0,180}bar\.time <= latestMarketSession/u);
   assert.match(research, /p_limit: 1320/u);
+  assert.doesNotMatch(research, /if \(priceCoverageTerminal\) throw/u);
+  assert.match(research, /technical_status: priceCoverageTerminal \? 'insufficient_history' : 'success'/u);
+  assert.match(research, /staleOrFallback: Boolean\(priceCoverageTerminal\)/u);
   assert.match(domain, /executeNonCriticalStep\('recommendation',[\s\S]{0,320}mode !== 'full'/u);
 });
 
@@ -156,6 +160,9 @@ test('production source writes require the active VPS release and production lea
   assert.match(activation, /requireInternalAuth\(request\)/u);
   assert.match(activation, /releaseId !== expectedReleaseId/u);
   assert.match(activation, /register_production_writer_release/u);
+  assert.match(activation, /previousReleaseId !== releaseId/u);
+  assert.match(activation, /release_production_write_lease/u);
+  assert.ok(activation.indexOf('release_production_write_lease') < activation.indexOf('register_production_writer_release'), 'orphaned stopped-release lease must clear before activating the successor');
   assert.match(deployActivation, /for _attempt in \$\(seq 1 30\)/u);
   assert.match(deployActivation, /curl --fail --silent --show-error --max-time 2 http:\/\/127\.0\.0\.1:3100\//u);
   assert.ok(deployActivation.indexOf('curl --fail') < deployActivation.indexOf('/api/internal/writer-release-activate'), 'readiness must precede writer registration');

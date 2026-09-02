@@ -4,9 +4,19 @@ export type SourceContentSemantics =
   | 'official_chip_evidence'
   | 'metadata_only';
 
-export function candidateMentionDiscoveryEligible(provenance: unknown): boolean {
-  if (!provenance || typeof provenance !== 'object' || Array.isArray(provenance)) return true;
-  const record = provenance as Record<string, unknown>;
+export const GDELT_TW_MATCHER_VERSION = 'gdelt-tw-context-v2';
+
+export function candidateMentionDiscoveryEligible(provenance: unknown, platform = ''): boolean {
+  const record = provenance && typeof provenance === 'object' && !Array.isArray(provenance)
+    ? provenance as Record<string, unknown>
+    : null;
+  // Historical GDELT rows predate the Taiwan-context matcher and contain
+  // false positives from generic company names. Keep them auditable, but only
+  // a versioned, explicitly eligible match may enter the candidate universe.
+  if (platform.trim().toLowerCase() === 'gdelt') {
+    return record?.discovery_eligible === true && record.matcher_version === GDELT_TW_MATCHER_VERSION && record.invalidated !== true;
+  }
+  if (!record) return true;
   return record.discovery_eligible !== false && record.invalidated !== true;
 }
 
