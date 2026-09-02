@@ -127,10 +127,14 @@ async function loadCompletedTradingSessions(sessionDate: string) {
   return [...unique].sort().slice(-520);
 }
 
-async function ingestOfficialMarketEvidence(sessionDate: string, evaluatedAt: string) {
+async function ingestOfficialMarketEvidence(sessionDate: string, evaluatedAt: string, suppliedSessions: string[] = []) {
   const supabase = getSupabaseServerClient();
+  const supplied = [...new Set(suppliedSessions
+    .filter((date) => /^\d{4}-\d{2}-\d{2}$/u.test(date) && date <= sessionDate))]
+    .sort()
+    .slice(-520);
   const [sessions, rosterRes, existingRes] = await Promise.all([
-    loadCompletedTradingSessions(sessionDate),
+    supplied.length >= 520 ? Promise.resolve(supplied) : loadCompletedTradingSessions(sessionDate),
     supabase.from('stock_instruments_v3').select('symbol,exchange,instrument_type,listing_status,valid_from,valid_to,recorded_at').eq('instrument_type', 'common_stock').eq('listing_status', 'active').lte('valid_from', evaluatedAt).order('recorded_at', { ascending: false }).limit(10000),
     supabase.from('official_market_evidence_history').select('market,session_date,index_close,breadth_above_ma20,breadth_observed,breadth_eligible,foreign_net_twd,source_urls,available_at').lte('available_at', evaluatedAt).lte('session_date', sessionDate).order('session_date', { ascending: false }).limit(1400),
   ]);
@@ -302,9 +306,9 @@ export function deriveMarketEvidence(input: {
   };
 }
 
-export async function buildMarketEvidenceSnapshot(sessionDate: string, evaluatedAt: string) {
+export async function buildMarketEvidenceSnapshot(sessionDate: string, evaluatedAt: string, officialSessions: string[] = []) {
   const supabase = getSupabaseServerClient();
-  await ingestOfficialMarketEvidence(sessionDate, evaluatedAt);
+  await ingestOfficialMarketEvidence(sessionDate, evaluatedAt, officialSessions);
   const [official, market, flows] = await Promise.all([
     supabase.from('official_market_evidence_history')
       .select('market,session_date,index_close,breadth_above_ma20,breadth_observed,breadth_eligible,foreign_net_twd,source_urls,available_at')

@@ -43,7 +43,8 @@ test('candidate research reads the durable official calendar and fails fast on a
   assert.match(calendarMigration, /GRANT EXECUTE[\s\S]*TO service_role/u);
   assert.doesNotMatch(calendarMigration, /DROP TABLE|TRUNCATE/u);
   assert.match(research, /supabase\.rpc\('candidate_research_official_sessions'/u);
-  assert.match(research, /if \(marketSessions\.length < 2\) marketSessions = await fetchTwMarketTradingSessions/u);
+  assert.match(research, /if \(marketSessions\.length < 1320\)[\s\S]*fetchTwMarketTradingSessions\(1320\)/u);
+  assert.match(research, /buildMarketEvidenceSnapshot\(latestMarketSession, evaluatedAt, marketSessions\)/u);
   assert.match(market, /OFFICIAL_HOST_CIRCUIT_BREAKER_MS = 5 \* 60 \* 1000/u);
   assert.match(market, /officialHostUnavailableUntil\.set\(circuitKey/u);
   assert.match(marketEvidence, /\.eq\('market', 'TWSE'\)[\s\S]*\.range\(offset, offset \+ 999\)/u);
