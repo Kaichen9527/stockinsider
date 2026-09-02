@@ -1638,6 +1638,11 @@ export interface CandidateStageCard {
   lifecycleStage: 'found' | 'waiting' | 'actionable';
   latestMentionAt: string;
   mentionCount: number;
+  rawMentionCount: number;
+  effectiveMentionCount: number;
+  publisherCount: number;
+  platformCount: number;
+  dominantPlatformShare: number;
   sources: Array<{
     platform: string;
     author: string | null;
@@ -1681,6 +1686,8 @@ export interface CandidateStageCard {
   promotionReasons: string[];
   dataAsOf: string | null;
   stale: boolean;
+  detailRevisionId: string | null;
+  riskAction: { state: 'hold' | 'trim_no_chase' | 'hard_exit' | 'data_incomplete'; reasons: string[] } | null;
   detailHref: string;
 }
 
@@ -1692,6 +1699,7 @@ export interface CandidateShadowProgress {
   startedOn: string | null;
   latestSession: string | null;
   blockers: string[];
+  policyVersion?: string;
 }
 
 export interface DiscoveryDeltaV311 {

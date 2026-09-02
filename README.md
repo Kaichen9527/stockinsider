@@ -21,7 +21,7 @@ StockInsider 是一個以 Supabase + Next.js + Python pipeline 為核心的投�
 Source-led Opportunity V3 的獨立本機驗證、環境契約與三條 release track 請見
 [docs/source-led-opportunity-v3.md](docs/source-led-opportunity-v3.md)。
 
-Source Ranking V2 將正式網址固定為 `https://stockinsider-three.vercel.app`，
+Source Ranking V2 的正式服務目前固定為 `http://5.104.83.211`，兩個 Vercel alias 僅保留 308 轉址，
 由 GitHub Actions 統一觸發正式資料寫入；Vercel cron 僅保留每日健康監控。
 來源授權、退役清單、三層候選漏斗與正式上線順序請見
 [docs/operations/source-ranking-v2-rollout.md](docs/operations/source-ranking-v2-rollout.md)。
@@ -427,7 +427,7 @@ npx vercel deploy --prebuilt --prod
 4. production smoke（替換 `AUTH_TOKEN`）
 
 ```bash
-export PROD_BASE_URL="https://stockinsider-three.vercel.app"
+export PROD_BASE_URL="http://5.104.83.211"
 export AUTH_TOKEN="<INTERNAL_API_KEY_OR_CRON_SECRET>"
 
 curl -i "$PROD_BASE_URL/"

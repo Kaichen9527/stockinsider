@@ -2,7 +2,7 @@
 
 ## Immutable deployment identity
 
-- Canonical origin: `https://stockinsider-three.vercel.app`
+- Canonical origin: `http://5.104.83.211`
 - Canonical Vercel project: `stockinsider` / `prj_cYNVwaGMMbgAeCnw6UqbIrLvlKYC`
 - Legacy redirect project: `stockinsider-three` / `prj_1dlow0i7TwngAHfIT75OCU4VSp9e`
 - Legacy alias: `stockinsider-three-one.vercel.app`
@@ -16,7 +16,7 @@ hostname; the production build guard verifies the system environment variables.
    code. Verify all new tables, indexes and `source_document_coverage` exist.
 2. Configure the canonical project and GitHub environment without copying any
    secret into the repository:
-   - `APP_URL=https://stockinsider-three.vercel.app`
+   - `APP_URL=http://5.104.83.211`
    - `INTERNAL_API_KEY` and `CRON_SECRET`
    - `THREADS_OFFICIAL_API_ENABLED=false` until Meta App Review passes
    - `TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED=true` only after the channel-use basis is recorded

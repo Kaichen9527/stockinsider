@@ -9,7 +9,7 @@ function argValue(name, fallback = null) {
 }
 
 const localUrl = (argValue('--local-url', 'http://127.0.0.1:3012') || '').replace(/\/$/, '');
-const productionUrl = (argValue('--production-url', 'https://stockinsider-three.vercel.app') || '').replace(/\/$/, '');
+const productionUrl = (argValue('--production-url', 'http://5.104.83.211') || '').replace(/\/$/, '');
 const reportsDir = path.join(process.cwd(), '.agent', 'reports');
 
 async function fetchJson(url) {

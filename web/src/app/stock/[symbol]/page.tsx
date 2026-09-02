@@ -7,6 +7,8 @@ import RevisionBoundDecisionBrief, {
   RevisionBoundDecisionUnavailable,
 } from './RevisionBoundDecisionBrief';
 import ResearchOnlyDetail from './ResearchOnlyDetail';
+import CandidateDetailView from './CandidateDetailView';
+import { loadCandidateDetail } from '@/lib/candidate-detail';
 
 export const dynamic = 'force-dynamic';
 
@@ -47,6 +49,14 @@ export default async function StockDetail({
   if (revisionParameterPresent && !validRequestedRevision) {
     return <RevisionBoundDecisionUnavailable symbol={normalizedSymbol} revisionId="invalid"
       reason="decision_revision_parameter_invalid_or_ambiguous"/>;
+  }
+
+  // Candidate research is an independent append-only publication plane. It is
+  // readable even when no legacy decision envelope exists, so a valid found
+  // stock never collapses into an empty "decision unavailable" page.
+  if (!validRequestedRevision) {
+    const candidateDetail = await loadCandidateDetail(normalizedSymbol).catch(() => null);
+    if (candidateDetail) return <CandidateDetailView detail={candidateDetail}/>;
   }
 
   if (process.env.OPPORTUNITY_V3_UI_FIXTURE === 'enabled') {
