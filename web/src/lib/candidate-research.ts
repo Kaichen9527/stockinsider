@@ -122,10 +122,17 @@ export async function runCandidateResearchCycle(options: {
     .map((row) => String(row.session_date || ''))
     .filter((session) => /^\d{4}-\d{2}-\d{2}$/u.test(session)))
     .sort();
-  // The database plane is an official, cutoff-bound authority cache maintained by
-  // the ingestion pipeline. Only bootstrap from the live endpoint when that plane
-  // has not yet accumulated enough sessions to classify two adjacent closes.
-  if (marketSessions.length < 2) marketSessions = await fetchTwMarketTradingSessions(1320);
+  // The database authority remains primary, but its append-only calendar can be
+  // younger than the 1,320-session research horizon. Fill only the missing
+  // historical dates from TWSE's official monthly market feed, then keep the
+  // cutoff-bound union. This is real exchange history, never synthesized dates.
+  if (marketSessions.length < 1320) {
+    const officialHistory = await fetchTwMarketTradingSessions(1320);
+    marketSessions = [...new Set([...marketSessions, ...officialHistory])]
+      .filter((session) => session <= evaluatedAt.slice(0, 10))
+      .sort()
+      .slice(-1320);
+  }
   if (master.length === 0) throw new Error('official_stock_authority_missing');
   if (marketSessions.length < 2) throw new Error('official_trading_calendar_missing');
   const latestMarketSession = marketSessions.at(-1)!;
@@ -275,7 +282,7 @@ export async function runCandidateResearchCycle(options: {
   const officialValuationHistory = await fetchTwMarketValuationHistory(
     universe.map((stock) => stock.symbol), marketSessions, 60, exchangeBySymbol, cachedOfficialHistory,
   );
-  const marketEvidence = await buildMarketEvidenceSnapshot(latestMarketSession, evaluatedAt);
+  const marketEvidence = await buildMarketEvidenceSnapshot(latestMarketSession, evaluatedAt, marketSessions);
   const marketRegime = marketEvidence.regime as MarketRiskRegime;
   const runInsert = await supabase.from('candidate_research_runs').insert({
     id: runId,

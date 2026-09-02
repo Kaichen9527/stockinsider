@@ -43,7 +43,8 @@ test('candidate research reads the durable official calendar and fails fast on a
   assert.match(calendarMigration, /GRANT EXECUTE[\s\S]*TO service_role/u);
   assert.doesNotMatch(calendarMigration, /DROP TABLE|TRUNCATE/u);
   assert.match(research, /supabase\.rpc\('candidate_research_official_sessions'/u);
-  assert.match(research, /if \(marketSessions\.length < 2\) marketSessions = await fetchTwMarketTradingSessions/u);
+  assert.match(research, /if \(marketSessions\.length < 1320\)[\s\S]*fetchTwMarketTradingSessions\(1320\)/u);
+  assert.match(research, /buildMarketEvidenceSnapshot\(latestMarketSession, evaluatedAt, marketSessions\)/u);
   assert.match(market, /OFFICIAL_HOST_CIRCUIT_BREAKER_MS = 5 \* 60 \* 1000/u);
   assert.match(market, /officialHostUnavailableUntil\.set\(circuitKey/u);
   assert.match(marketEvidence, /\.eq\('market', 'TWSE'\)[\s\S]*\.range\(offset, offset \+ 999\)/u);
@@ -147,6 +148,7 @@ test('shadow v2 freezes a source manifest and records publication-bound attempts
 test('production source writes require the active VPS release and production lease', () => {
   const serverClient = readFileSync(new URL('../web/src/lib/supabase-server.ts', import.meta.url), 'utf8');
   const activation = readFileSync(new URL('../web/src/app/api/internal/writer-release-activate/route.ts', import.meta.url), 'utf8');
+  const deployActivation = readFileSync(new URL('../deployment/vps/activate-writer-release.sh', import.meta.url), 'utf8');
   assert.match(v2Migration, /x-stockinsider-writer-release/u);
   assert.match(v2Migration, /production_writer_release_rejected/u);
   assert.match(v2Migration, /production_writer_lease_required/u);
@@ -154,4 +156,7 @@ test('production source writes require the active VPS release and production lea
   assert.match(activation, /requireInternalAuth\(request\)/u);
   assert.match(activation, /releaseId !== expectedReleaseId/u);
   assert.match(activation, /register_production_writer_release/u);
+  assert.match(deployActivation, /for _attempt in \$\(seq 1 30\)/u);
+  assert.match(deployActivation, /curl --fail --silent --show-error --max-time 2 http:\/\/127\.0\.0\.1:3100\//u);
+  assert.ok(deployActivation.indexOf('curl --fail') < deployActivation.indexOf('/api/internal/writer-release-activate'), 'readiness must precede writer registration');
 });

@@ -102,6 +102,42 @@ const v319ReviewSources = Object.freeze({
 });
 
 const graphBoundReviewSources = Object.freeze({
+  // The final V3.14 catalog-identity closure propagates the corrected catalog
+  // digest into its two canonical authority comments. It retains the same
+  // independently reviewed signed-host and product authority.
+  '1c32b707a2e3d36e0ca01b4e78b9c20fa5bcef5eb34dce486063d9f694a2c9fc': Object.freeze({
+    requirements: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-research-shadow-v2-requirements-90de150b',
+      path: `${changeRelative}/requirements-review-v3.20.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+    architecture: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-research-shadow-v2-architecture-fa523ba1',
+      path: `${changeRelative}/architecture-review-v3.20.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed implementation range',
+    }),
+  }),
+  // V3.14 host-pin governance alignment corrects stale V3.13 catalog and
+  // traceability declarations without changing the independently reviewed
+  // signed host identity or product authority. Register the resulting graph
+  // from this bootstrap change so subsequent protected runs can bind the same
+  // immutable Requirements and Architecture reviews.
+  '8c4d36c50c2e4d2437429a4bf2dbc3911cfe69a59f9ae6a231dd7105a69b1c2c': Object.freeze({
+    requirements: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-research-shadow-v2-requirements-90de150b',
+      path: `${changeRelative}/requirements-review-v3.20.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+    architecture: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-research-shadow-v2-architecture-fa523ba1',
+      path: `${changeRelative}/architecture-review-v3.20.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed implementation range',
+    }),
+  }),
   // The signed-host compatibility amendment changes active authority bytes.
   // Register its independent review refs from the preceding protected base so
   // the candidate cannot select or modify its own review source.
