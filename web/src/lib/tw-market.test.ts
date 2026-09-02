@@ -145,7 +145,7 @@ test('candidate daily bars share the official all-stock market endpoint rather t
   if (!bars) throw new Error('expected official TWSE daily bars');
   assert.equal(bars.length, 2);
   assert.equal(requested.length, 2);
-  assert.ok(requested.every((url) => url.pathname === '/exchangeReport/MI_INDEX'));
+  assert.ok(requested.every((url) => url.pathname === '/rwd/zh/afterTrading/MI_INDEX'));
   assert.ok(requested.every((url) => url.searchParams.get('response') === 'json'));
   assert.ok(requested.every((url) => url.searchParams.get('type') === 'ALLBUT0999'));
 });

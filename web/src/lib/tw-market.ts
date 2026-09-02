@@ -52,7 +52,7 @@ function officialHostPaceDelayMs(url: string) {
   // One request every 1.2 seconds keeps the deterministic 1,320-session
   // backfill inside the one-hour research window without treating 429s as
   // absent prices.
-  return parsed.pathname === '/exchangeReport/MI_INDEX' ? 1_200 : 300;
+  return ['/exchangeReport/MI_INDEX', '/rwd/zh/afterTrading/MI_INDEX'].includes(parsed.pathname) ? 1_200 : 300;
 }
 
 async function withOfficialHostPace<T>(url: string, work: () => Promise<T>): Promise<T> {
@@ -507,16 +507,24 @@ function parseTwseMarketDailyRows(payload: Record<string, unknown>, session: str
   return result;
 }
 
-async function fetchTwseMarketDailyRows(session: string): Promise<Map<string, DailyBar>> {
+export async function fetchTwseMarketDailyRows(session: string): Promise<Map<string, DailyBar>> {
   const cached = twseMarketDailyRows.get(session);
   if (cached) return cached;
   const request = (async () => {
-    const endpoint = new URL('https://www.twse.com.tw/exchangeReport/MI_INDEX');
-    endpoint.searchParams.set('response', 'json');
-    endpoint.searchParams.set('date', compactTwseDate(session));
-    endpoint.searchParams.set('type', 'ALLBUT0999');
-    const payload = await fetchOfficialJson<Record<string, unknown>>(endpoint.toString(), 12_000);
-    return payload ? parseTwseMarketDailyRows(payload, session) : new Map<string, DailyBar>();
+    const endpoints = [
+      new URL('https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX'),
+      new URL('https://www.twse.com.tw/exchangeReport/MI_INDEX'),
+    ];
+    for (const endpoint of endpoints) {
+      endpoint.searchParams.set('response', 'json');
+      endpoint.searchParams.set('date', compactTwseDate(session));
+      endpoint.searchParams.set('type', 'ALLBUT0999');
+      const payload = await fetchOfficialJson<Record<string, unknown>>(endpoint.toString(), 12_000);
+      if (!payload) continue;
+      const rows = parseTwseMarketDailyRows(payload, session);
+      if (rows.size > 0) return rows;
+    }
+    return new Map<string, DailyBar>();
   })();
   twseMarketDailyRows.set(session, request);
   return request;
@@ -528,6 +536,7 @@ export async function fetchTwStockDailyBars(
   officialSessions: string[] | null = null,
   exchange: 'TWSE' | 'TPEx' | null = null,
 ) {
+  const rows: DailyBar[] = [];
   if (exchange !== 'TPEx' && officialSessions && officialSessions.length > 0) {
     // Fetch newest sessions first.  The all-market endpoint occasionally times
     // out on a much older archive date; if that opens the endpoint circuit, it
@@ -536,14 +545,19 @@ export async function fetchTwStockDailyBars(
     // Results are sorted chronologically below, so request order is not exposed
     // to indicator calculations.
     const sessions = [...new Set(officialSessions.filter((session) => /^\d{4}-\d{2}-\d{2}$/u.test(session)))].sort().slice(-daysBack).reverse();
-    const rows = (await Promise.all(sessions.map(fetchTwseMarketDailyRows)))
+    const bulkRows = (await Promise.all(sessions.map(fetchTwseMarketDailyRows)))
       .map((marketRows) => marketRows.get(symbol))
       .filter((row): row is DailyBar => row != null)
       .sort((left, right) => left.time.localeCompare(right.time));
-    if (rows.length > 0) return rows;
+    rows.push(...bulkRows);
+    if (rows.length >= Math.min(daysBack, 240)) return rows.slice(-daysBack);
   }
-  const rows: DailyBar[] = [];
-  const monthCount = Math.min(36, Math.max(2, Math.ceil(daysBack / 18) + 2));
+  // A full-market archive may be temporarily challenged for a bounded range of
+  // dates while newer and older sessions remain available.  A non-empty fragment
+  // is not sufficient evidence for MA240.  Fill the remaining coverage from the
+  // official per-stock monthly endpoint and merge both sources below.
+  const requiredCoverage = Math.min(daysBack, rows.length > 0 ? 260 : 1_320);
+  const monthCount = Math.min(60, Math.max(2, Math.ceil(Math.max(0, requiredCoverage - rows.length) / 18) + 2));
   const monthStarts = Array.from({ length: monthCount }, (_, offset) => {
     const value = new Date();
     value.setUTCDate(1);
@@ -583,7 +597,7 @@ export async function fetchTwStockDailyBars(
   }));
   rows.push(...monthlyResults.flat());
 
-  if (rows.length === 0) {
+  if (exchange === 'TPEx' || rows.length === 0) {
     const tpexMonthlyResults = await Promise.all(monthStarts.map(async (date) => {
       const month = `${date.slice(0, 4)}/${date.slice(4, 6)}/01`;
       try {
