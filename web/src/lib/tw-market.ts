@@ -109,7 +109,7 @@ function officialHostCircuitIsOpen(circuitKey: string) {
   return (officialHostUnavailableUntil.get(circuitKey) || 0) > Date.now();
 }
 
-export async function fetchOfficialJson<T>(url: string, timeoutMs: number): Promise<T | null> {
+async function fetchOfficialJsonRequest<T>(url: string, timeoutMs: number, init?: RequestInit): Promise<T | null> {
   const circuitKey = officialCircuitKey(url);
   if (officialHostCircuitIsOpen(circuitKey)) return null;
   return await withOfficialMarketSlot(async () => {
@@ -123,6 +123,7 @@ export async function fetchOfficialJson<T>(url: string, timeoutMs: number): Prom
       const response = await fetch(url, {
         headers: { accept: 'application/json', 'user-agent': 'StockInsider/2.1 official-market-data' },
         signal: AbortSignal.timeout(timeoutMs),
+        ...init,
       });
         if (!response.ok) {
           if (response.status === 403 || response.status === 428 || response.status === 429 || response.status >= 500) recordOfficialHostRetryableFailure(circuitKey);
@@ -141,6 +142,10 @@ export async function fetchOfficialJson<T>(url: string, timeoutMs: number): Prom
       }
     });
   });
+}
+
+export async function fetchOfficialJson<T>(url: string, timeoutMs: number): Promise<T | null> {
+  return await fetchOfficialJsonRequest<T>(url, timeoutMs);
 }
 
 async function withTwStockTimeout<T>(promise: Promise<T>, timeoutMs = TWSTOCK_REQUEST_TIMEOUT_MS): Promise<T> {
@@ -681,7 +686,7 @@ export async function fetchTwMarketTradingSessions(daysBack = 80): Promise<strin
     value.setUTCMonth(value.getUTCMonth() - offset);
     return `${value.getUTCFullYear()}${String(value.getUTCMonth() + 1).padStart(2, '0')}01`;
   });
-  const results = await Promise.all(months.map(async (date) => {
+  const twseResults = await Promise.all(months.map(async (date) => {
     try {
       const payload = await fetchOfficialJson<Record<string, unknown>>(`https://www.twse.com.tw/rwd/zh/afterTrading/FMTQIK?date=${date}&response=json`, 8_000);
       if (!payload) return [];
@@ -694,7 +699,43 @@ export async function fetchTwMarketTradingSessions(daysBack = 80): Promise<strin
       return [];
     }
   }));
-  return [...new Set(results.flat())].sort().slice(-daysBack);
+  const missingMonths = months.filter((_, index) => twseResults[index].length === 0);
+  const tpexResults = await Promise.all(missingMonths.map(async (date) => {
+    try {
+      const url = 'https://www.tpex.org.tw/www/zh-tw/indexInfo/inx';
+      const body = new URLSearchParams({
+        date: `${date.slice(0, 4)}/${date.slice(4, 6)}/01`,
+        response: 'json',
+      });
+      const payload = await fetchOfficialJsonRequest<Record<string, unknown>>(url, 8_000, {
+        method: 'POST',
+        body,
+        headers: {
+          accept: 'application/json',
+          'content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          'user-agent': 'StockInsider/2.1 official-market-calendar',
+        },
+      });
+      return parseTpexMarketTradingSessions(payload);
+    } catch {
+      return [];
+    }
+  }));
+  return [...new Set([...twseResults.flat(), ...tpexResults.flat()])].sort().slice(-daysBack);
+}
+
+export function parseTpexMarketTradingSessions(payload: unknown): string[] {
+  if (!payload || typeof payload !== 'object') return [];
+  if (String((payload as { stat?: unknown }).stat || '').toLowerCase() !== 'ok') return [];
+  const tables = Array.isArray((payload as { tables?: unknown }).tables)
+    ? (payload as { tables: Array<{ data?: unknown }> }).tables
+    : [];
+  const rows = Array.isArray(tables[0]?.data) ? tables[0].data as unknown[][] : [];
+  return rows.flatMap((row) => {
+    const date = String(row[0] || '').match(/^(\d{4})\/(\d{2})\/(\d{2})$/u);
+    const close = toFiniteNumber(row[4]);
+    return date && close != null ? [`${date[1]}-${date[2]}-${date[3]}`] : [];
+  });
 }
 
 export async function fetchTwStockInstitutional(symbol: string) {
