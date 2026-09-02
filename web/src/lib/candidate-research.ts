@@ -117,6 +117,40 @@ async function loadOfficialSessions(supabase: ReturnType<typeof getSupabaseServe
   }, { maxRows: 1320 });
 }
 
+async function loadCandidateMentions(
+  supabase: ReturnType<typeof getSupabaseServerClient>,
+  historyCutoff: string,
+  sourceCutoff: string,
+) {
+  return collectPagedAuthorityRows<Row>(async (from, to) => {
+    try {
+      const page = await supabase.from('candidate_source_mentions')
+        .select('stock_id,platform,source_name,author_name,source_url,stance,independent_content_hash,mentioned_at,available_at,confidence,publisher_key,publisher_name,content_semantics,stocks(id,symbol,name,market,sector)')
+        .gte('available_at', historyCutoff).lte('available_at', sourceCutoff)
+        .order('available_at', { ascending: false }).range(from, to);
+      if (page.error) throw page.error;
+      return (page.data as Row[]) || [];
+    } catch (error) {
+      throw new Error(`candidate_mentions_read_failed:${error instanceof Error ? error.message : String(error)}`);
+    }
+  }, { maxRows: 20000 });
+}
+
+async function loadPriorCandidateStages(supabase: ReturnType<typeof getSupabaseServerClient>) {
+  return collectPagedAuthorityRows<Row>(async (from, to) => {
+    try {
+      const page = await supabase.from('candidate_daily_stage_snapshots')
+        .select('stock_id,session_date,lifecycle_stage,hard_gate_results,stocks(id,symbol,name,market,sector)')
+        .in('lifecycle_stage', ['waiting', 'actionable'])
+        .order('session_date', { ascending: false }).range(from, to);
+      if (page.error) throw page.error;
+      return (page.data as Row[]) || [];
+    } catch (error) {
+      throw new Error(`prior_candidate_stages_read_failed:${error instanceof Error ? error.message : String(error)}`);
+    }
+  }, { maxRows: 3000 });
+}
+
 export async function runCandidateResearchCycle(options: {
   dryRun?: boolean;
   pipelineRunId?: string | null;
@@ -162,19 +196,13 @@ export async function runCandidateResearchCycle(options: {
   const sourceCutoff = `${latestMarketSession}T18:30:00+08:00`;
   const cutoff = new Date(evaluationReferenceMs - 7 * 24 * 60 * 60 * 1000).toISOString();
   const historyCutoff = new Date(evaluationReferenceMs - 35 * 24 * 60 * 60 * 1000).toISOString();
-  const [mentionsRes, priorStagesRes] = await Promise.all([
-    supabase.from('candidate_source_mentions')
-      .select('stock_id,platform,source_name,author_name,source_url,stance,independent_content_hash,mentioned_at,available_at,confidence,publisher_key,publisher_name,content_semantics,stocks(id,symbol,name,market,sector)')
-      .gte('available_at', historyCutoff).lte('available_at', sourceCutoff).order('available_at', { ascending: false }).limit(20000),
-    supabase.from('candidate_daily_stage_snapshots')
-      .select('stock_id,session_date,lifecycle_stage,hard_gate_results,stocks(id,symbol,name,market,sector)')
-      .in('lifecycle_stage', ['waiting', 'actionable']).order('session_date', { ascending: false }).limit(3000),
+  const [allMentions, priorStages] = await Promise.all([
+    loadCandidateMentions(supabase, historyCutoff, sourceCutoff),
+    loadPriorCandidateStages(supabase),
   ]);
-  if (mentionsRes.error || priorStagesRes.error) throw new Error(mentionsRes.error?.message || priorStagesRes.error?.message || 'candidate_universe_failed');
   const stockMaster = new Map(master.map((item) => [item.symbol, item]));
   const candidates = new Map<string, { id: string; symbol: string; name: string; storedName: string; market: 'TW' | 'US'; sector: string | null }>();
   const mentionsByStock = new Map<string, Row[]>();
-  const allMentions = (mentionsRes.data as Row[]) || [];
   const eligibleMentions = allMentions.filter((mention) => candidateMentionDiscoveryEligible(mention.provenance));
   const recentMentions = eligibleMentions.filter((mention) => String(mention.available_at || '') >= cutoff && String(mention.content_semantics || 'editorial_discussion') !== 'bulk_institutional_ranking');
   const olderMentionsByStock = new Map<string, Row[]>();
@@ -198,7 +226,7 @@ export async function runCandidateResearchCycle(options: {
     if (stockMentions) stockMentions.push(mention);
     else mentionsByStock.set(id, [mention]);
   }
-  for (const stage of (priorStagesRes.data as Row[]) || []) {
+  for (const stage of priorStages) {
     const stock = rowRelation(stage.stocks);
     if (!stock) continue;
     const id = String(stock.id || stage.stock_id || '');

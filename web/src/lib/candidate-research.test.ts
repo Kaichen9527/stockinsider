@@ -14,6 +14,16 @@ test('candidate authority readers continue past the PostgREST 1000-row response 
   assert.deepEqual(calls, [[0, 999], [1000, 1319]]);
 });
 
+test('bounded pagination also retains source rows after the first response page', async () => {
+  const sourceRows = Array.from({ length: 1979 }, (_, index) => `mention-${index}`);
+  const rows = await collectPagedAuthorityRows(
+    async (from, to) => sourceRows.slice(from, to + 1),
+    { maxRows: 20000 },
+  );
+  assert.equal(rows.length, 1979);
+  assert.equal(rows.at(-1), 'mention-1978');
+});
+
 const historicalPeRatios = [10, 12, 14, 16, 18, 20, 22, 24, 26, 28];
 const historicalPbRatios = [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7];
 
