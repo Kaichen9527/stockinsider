@@ -88,6 +88,24 @@ function monthStarts(sessions: string[]) {
   return [...new Set(sessions.map((date) => `${date.slice(0, 7)}-01`))];
 }
 
+export function missingOfficialIndexAuthorityRequests(
+  sessions: string[],
+  existing: Row[],
+) {
+  const byKey = new Map(existing.map((row) => [`${row.market}:${row.session_date}`, row]));
+  const taiexSessions = sessions.filter((date) => numberOrNull(byKey.get(`TWSE:${date}`)?.index_close) == null);
+  const tpexSessions = sessions.filter((date) => numberOrNull(byKey.get(`TPEX:${date}`)?.index_close) == null);
+  return { taiexMonths: monthStarts(taiexSessions), tpexSessions };
+}
+
+async function mapInBatches<T, U>(values: T[], batchSize: number, mapper: (value: T) => Promise<U>) {
+  const output: U[] = [];
+  for (let offset = 0; offset < values.length; offset += batchSize) {
+    output.push(...await Promise.all(values.slice(offset, offset + batchSize).map(mapper)));
+  }
+  return output;
+}
+
 function breadthForRoster(history: Map<string, Array<{ date: string; close: number }>>, roster: Set<string>) {
   let numerator = 0;
   let observed = 0;
@@ -160,7 +178,9 @@ async function ingestOfficialMarketEvidence(sessionDate: string, evaluatedAt: st
   const tpexRoster = new Set([...latestInstrument.values()].filter((row) => row.exchange === 'TPEX').map((row) => String(row.symbol)));
   if (twseRoster.size === 0 || tpexRoster.size === 0) throw new Error('official_market_active_common_roster_missing');
 
-  const taiexMonths = monthStarts(sessions);
+  const existingByKey = new Map(existing.map((row) => [`${row.market}:${row.session_date}`, row]));
+  const missingIndexAuthority = missingOfficialIndexAuthorityRequests(sessions, existing);
+  const taiexMonths = missingIndexAuthority.taiexMonths;
   const taiexPayloads = await Promise.all(taiexMonths.map(async (month) => {
     const date = month.replace(/-/gu, '');
     const url = `https://www.twse.com.tw/rwd/zh/TAIEX/MI_5MINS_HIST?date=${date}&response=json`;
@@ -168,11 +188,11 @@ async function ingestOfficialMarketEvidence(sessionDate: string, evaluatedAt: st
     return { url, rows: payload ? parseTaiexHistory(payload) : [] };
   }));
   const taiex = new Map(taiexPayloads.flatMap((result) => result.rows).filter((row) => sessions.includes(row.date)).map((row) => [row.date, row.close]));
-  const tpexIndexPayloads = await Promise.all(sessions.map(async (date) => {
+  const tpexIndexPayloads = await mapInBatches(missingIndexAuthority.tpexSessions, 8, async (date) => {
     const url = `https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingIndex?date=${date.replace(/-/gu, '/')}&response=json`;
     const payload = await fetchOfficialJson<Record<string, unknown>>(url, 12_000);
     return { date, url, close: payload ? parseTpexIndex(payload).find((row) => row.date === date)?.close ?? null : null };
-  }));
+  });
   // Use a 30-session observation window so a short halt or one missing daily
   // print does not incorrectly remove an otherwise eligible stock from MA20
   // breadth. `breadthForRoster` still computes the most recent 20 closes.
@@ -212,7 +232,6 @@ async function ingestOfficialMarketEvidence(sessionDate: string, evaluatedAt: st
   ])));
   const flowByKey = new Map(flows.map((row) => [`${row.market}:${row.date}`, row]));
   const tpexByDate = new Map(tpexIndexPayloads.map((row) => [row.date, row]));
-  const existingByKey = new Map(existing.map((row) => [`${row.market}:${row.session_date}`, row]));
   const rows = sessions.flatMap((date) => (['TWSE','TPEX'] as const).map((market) => {
     const isLatest = date === sessionDate;
     const flow = flowByKey.get(`${market}:${date}`);
