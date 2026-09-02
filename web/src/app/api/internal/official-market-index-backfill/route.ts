@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { requireInternalAuth } from '@/lib/internal-auth';
 import { getSupabaseServerClient } from '@/lib/supabase-server';
 import { collectPagedAuthorityRows } from '@/lib/candidate-research-policy';
-import { officialMarketIndexBatchHash, parseOfficialMarketIndexPage, type OfficialMarketIndexPage } from '@/lib/official-market-index-backfill';
+import { officialCalendarCorrections, officialMarketIndexBatchHash, parseOfficialMarketIndexPage, type OfficialMarketIndexPage } from '@/lib/official-market-index-backfill';
 
 const BODY_LIMIT = 1_000_000;
 
@@ -54,6 +54,16 @@ export async function POST(request: Request) {
   ]);
   if (writer.error || writer.data?.release_id !== releaseId) return NextResponse.json({ ok: false, error: 'writer_release_not_active' }, { status: 409 });
   const allowed = new Set(sessions.map((row) => String(row.session_date || '')));
+  const calendarCorrections = officialCalendarCorrections(pages, parsed as NonNullable<(typeof parsed)[number]>[], [...allowed]);
+  if (calendarCorrections.length > 0) {
+    const corrections = calendarCorrections.flatMap(({ date, sourceUrls }) => (['TWSE', 'TPEX'] as const).map((market) => ({
+      session_id: date, market, open_at: `${date}T09:00:00+08:00`, close_at: `${date}T13:30:00+08:00`,
+      status: 'cancelled', provider: market === 'TWSE' ? 'twse' : 'tpex', source_timestamp: availableAt,
+      collected_at: availableAt, source_ref: sourceUrls[market].slice(0, 120),
+    })));
+    const correctionWrite = await supabase.from('tw_trading_sessions_v3').upsert(corrections, { ignoreDuplicates: true });
+    if (correctionWrite.error) return NextResponse.json({ ok: false, error: correctionWrite.error.message }, { status: 500 });
+  }
   // Monthly authority responses include a few sessions just outside the
   // rolling 520-session boundary. They are valid official evidence, but this
   // endpoint persists only the requested point-in-time authority window.
@@ -75,5 +85,5 @@ export async function POST(request: Request) {
     };
   }), { onConflict: 'market,session_date' });
   if (write.error) return NextResponse.json({ ok: false, error: write.error.message }, { status: 500 });
-  return NextResponse.json({ ok: true, result: { accepted: authoritativeRows.length, releaseId } });
+  return NextResponse.json({ ok: true, result: { accepted: authoritativeRows.length, calendarCorrections: calendarCorrections.length * 2, releaseId } });
 }

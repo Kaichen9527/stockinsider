@@ -35,3 +35,21 @@ export function parseOfficialMarketIndexPage(page: OfficialMarketIndexPage): Off
   const rows = page.market === 'TWSE' ? parseTaiexHistory(page.payload) : parseTpexIndex(page.payload);
   return rows.map((row) => ({ market: page.market, sessionDate: row.date, close: row.close, sourceUrl: page.sourceUrl, responseSha256: page.responseSha256 }));
 }
+
+export function officialCalendarCorrections(pages: OfficialMarketIndexPage[], parsed: OfficialMarketIndexRow[][], completedSessions: string[]) {
+  const coverage = pages.map((page, index) => {
+    const rows = parsed[index] || [];
+    return { market: page.market, month: rows[0]?.sessionDate.slice(0, 7) || '', dates: new Set(rows.map((row) => row.sessionDate)), sourceUrl: page.sourceUrl };
+  });
+  const pairs = [...new Set(coverage.map((page) => page.month).filter(Boolean))].flatMap((month) => {
+    const twse = coverage.find((page) => page.month === month && page.market === 'TWSE');
+    const tpex = coverage.find((page) => page.month === month && page.market === 'TPEX');
+    return twse && tpex ? [{ month, twse, tpex }] : [];
+  });
+  return completedSessions.flatMap((date) => {
+    const pair = pairs.find((item) => item.month === date.slice(0, 7));
+    return pair && !pair.twse.dates.has(date) && !pair.tpex.dates.has(date)
+      ? [{ date, sourceUrls: { TWSE: pair.twse.sourceUrl, TPEX: pair.tpex.sourceUrl } }]
+      : [];
+  });
+}
