@@ -1,12 +1,12 @@
 import { createHash } from 'node:crypto';
 import { createClient } from '@supabase/supabase-js';
 
-const appUrl = String(process.env.APP_URL || 'http://5.104.83.211').replace(/\/$/u, '');
+const appUrl = String(process.env.OPERATOR_TUNNEL_URL || '').replace(/\/$/u, '');
 const internalKey = process.env.INTERNAL_API_KEY || '';
 const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const serviceKey = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 if (!internalKey || !supabaseUrl || !serviceKey) throw new Error('operator_backfill_environment_missing');
-if (appUrl !== 'http://5.104.83.211') throw new Error('operator_backfill_canonical_app_url_required');
+if (appUrl !== 'http://127.0.0.1:43100') throw new Error('operator_backfill_ssh_tunnel_required');
 
 const supabase = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false, autoRefreshToken: false } });
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
