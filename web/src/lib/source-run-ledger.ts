@@ -1,5 +1,7 @@
 import { getSupabaseServerClient } from './supabase-server';
 import type { SourceExecutionPolicy } from './source-policy';
+import { collectPagedAuthorityRows } from './candidate-research-policy';
+import { aggregateSourceRuns24h } from './source-run-ledger-metrics';
 
 export type SourceTerminalReason =
   | 'success'
@@ -51,6 +53,12 @@ export type SourceRunLedgerView = {
   licenseBasis: string;
   sourceDisposition: SourceExecutionPolicy['disposition'];
   nextExpectedAt: string | null;
+  runs24h: number;
+  fetched24h: number;
+  matched24h: number;
+  newCount24h: number;
+  duplicate24h: number;
+  written24h: number;
 };
 
 export async function recordSourceRunLedger(input: SourceRunLedgerInput): Promise<void> {
@@ -115,10 +123,18 @@ export function nextExpectedAt(attemptedAt: string, cadenceHours: number | null)
 
 export async function loadLatestSourceRunLedger(): Promise<SourceRunLedgerView[]> {
   const supabase = getSupabaseServerClient();
-  const [{ data, error }, registry] = await Promise.all([
+  const cutoff24hIso = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const [{ data, error }, recentRows, registry] = await Promise.all([
     supabase.from('source_run_ledger')
       .select('id,connector,expected_at,attempted_at,succeeded_at,fetched,matched,new_count,duplicate,written,auth_status,terminal_reason,terminal_detail,parser_version,license_basis,source_disposition,next_expected_at')
       .order('attempted_at', { ascending: false }).limit(250),
+    collectPagedAuthorityRows<Record<string, unknown>>(async (from, to) => {
+      const page = await supabase.from('source_run_ledger')
+        .select('connector,attempted_at,fetched,matched,new_count,duplicate,written')
+        .gte('attempted_at', cutoff24hIso).order('attempted_at', { ascending: true }).range(from, to);
+      if (page.error) throw new Error(page.error.message);
+      return (page.data as Record<string, unknown>[]) || [];
+    }, { maxRows: 5000 }),
     supabase.from('source_connector_registry')
       .select('connector,lifecycle,license_basis,parser_version,retirement_reason,updated_at')
       .order('connector', { ascending: true }),
@@ -126,10 +142,12 @@ export async function loadLatestSourceRunLedger(): Promise<SourceRunLedgerView[]
   if (error || registry.error) throw new Error(`source_run_ledger_read_failed:${error?.message || registry.error?.message}`);
 
   const latestByConnector = new Map<string, SourceRunLedgerView>();
+  const aggregates24h = aggregateSourceRuns24h(recentRows);
   for (const raw of data ?? []) {
     const row = raw as Record<string, unknown>;
     const connector = String(row.connector || '');
     if (!connector || latestByConnector.has(connector)) continue;
+    const aggregate = aggregates24h.get(connector) || { runs: 0, fetched: 0, matched: 0, newCount: 0, duplicate: 0, written: 0 };
     latestByConnector.set(connector, {
       id: String(row.id || ''),
       connector,
@@ -148,6 +166,8 @@ export async function loadLatestSourceRunLedger(): Promise<SourceRunLedgerView[]
       licenseBasis: String(row.license_basis || ''),
       sourceDisposition: String(row.source_disposition || 'retired') as SourceRunLedgerView['sourceDisposition'],
       nextExpectedAt: row.next_expected_at ? String(row.next_expected_at) : null,
+      runs24h: aggregate.runs, fetched24h: aggregate.fetched, matched24h: aggregate.matched,
+      newCount24h: aggregate.newCount, duplicate24h: aggregate.duplicate, written24h: aggregate.written,
     });
   }
   for (const raw of registry.data ?? []) {
@@ -187,6 +207,7 @@ export async function loadLatestSourceRunLedger(): Promise<SourceRunLedgerView[]
       terminalDetail: row.retirement_reason ? String(row.retirement_reason) : null,
       parserVersion: String(row.parser_version || ''), licenseBasis: String(row.license_basis || ''),
       sourceDisposition: disposition, nextExpectedAt: null,
+      runs24h: 0, fetched24h: 0, matched24h: 0, newCount24h: 0, duplicate24h: 0, written24h: 0,
     });
   }
   return [...latestByConnector.values()];

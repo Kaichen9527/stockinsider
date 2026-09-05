@@ -352,6 +352,7 @@ export type TwValuationHistoryPoint = {
   peRatio: number | null;
   pbRatio: number | null;
   sourceUrl: string;
+  parserVersion?: string;
 };
 
 export function isOfficialValuationSourceUrl(value: unknown) {
@@ -368,40 +369,69 @@ export function selectOfficialValuationBackfillMonths(monthlyStarts: string[], k
 
 export function parseTwseValuationPanel(payload: Record<string, unknown>, date: string, symbols: Set<string>) {
   const rows = Array.isArray(payload.data) ? payload.data as unknown[][] : [];
+  const fields = Array.isArray(payload.fields) ? payload.fields.map(normalizeOfficialFieldName) : [];
+  const symbolIndex = findOfficialFieldIndex(fields, ['證券代號', '股票代號']);
+  const peIndex = findOfficialFieldIndex(fields, ['本益比']);
+  const pbIndex = findOfficialFieldIndex(fields, ['股價淨值比']);
+  const indexes = fields.length > 0
+    ? { symbol: symbolIndex, pe: peIndex, pb: pbIndex }
+    : { symbol: 0, pe: 5, pb: 6 };
+  if (Object.values(indexes).some((index) => index < 0)) throw new Error('twse_valuation_schema_invalid');
   const result = new Map<string, TwValuationHistoryPoint>();
   for (const row of rows) {
-    const symbol = String(row[0] || '').trim();
+    const symbol = String(row[indexes.symbol] || '').trim();
     if (!symbols.has(symbol)) continue;
-    const peRatio = twseNumber(row[5]);
-    const pbRatio = twseNumber(row[6]);
+    const peRatio = twseNumber(row[indexes.pe]);
+    const pbRatio = twseNumber(row[indexes.pb]);
     if (peRatio == null && pbRatio == null) continue;
     result.set(symbol, {
       date,
       peRatio,
       pbRatio,
       sourceUrl: `https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?date=${compactTwseDate(date)}&selectType=ALL&response=json`,
+      parserVersion: 'twse-header-v1',
     });
   }
   return result;
 }
 
+function normalizeOfficialFieldName(value: unknown) {
+  return String(value || '').normalize('NFKC').replace(/[\s　]/gu, '').replace(/[()（）％%]/gu, '').toLowerCase();
+}
+
+function findOfficialFieldIndex(fields: string[], aliases: string[]) {
+  const normalizedAliases = aliases.map(normalizeOfficialFieldName);
+  return fields.findIndex((field) => normalizedAliases.includes(field));
+}
+
 export function parseTpexValuationPanel(payload: Record<string, unknown>, date: string, symbols: Set<string>) {
   const tables = Array.isArray(payload.tables) ? payload.tables as Array<Record<string, unknown>> : [];
-  const rows = tables.flatMap((table) => Array.isArray(table.data) ? table.data as unknown[][] : []);
   const result = new Map<string, TwValuationHistoryPoint>();
-  for (const row of rows) {
-    const symbol = String(row[0] || '').trim();
-    if (!symbols.has(symbol)) continue;
-    const peRatio = twseNumber(row[5]);
-    const pbRatio = twseNumber(row[6]);
-    if (peRatio == null && pbRatio == null) continue;
-    result.set(symbol, {
-      date,
-      peRatio,
-      pbRatio,
-      sourceUrl: `https://www.tpex.org.tw/www/zh-tw/afterTrading/peQryDate?date=${date.replace(/-/g, '/')}&cate=&response=json`,
-    });
+  let recognizedTable = false;
+  for (const table of tables) {
+    if (!Array.isArray(table.fields) || !Array.isArray(table.data)) continue;
+    const fields = table.fields.map(normalizeOfficialFieldName);
+    const symbolIndex = findOfficialFieldIndex(fields, ['股票代號', '證券代號']);
+    const peIndex = findOfficialFieldIndex(fields, ['本益比']);
+    const pbIndex = findOfficialFieldIndex(fields, ['股價淨值比']);
+    if (symbolIndex < 0 || peIndex < 0 || pbIndex < 0) continue;
+    recognizedTable = true;
+    for (const row of table.data as unknown[][]) {
+      const symbol = String(row[symbolIndex] || '').trim();
+      if (!symbols.has(symbol)) continue;
+      const peRatio = twseNumber(row[peIndex]);
+      const pbRatio = twseNumber(row[pbIndex]);
+      if (peRatio == null && pbRatio == null) continue;
+      result.set(symbol, {
+        date,
+        peRatio,
+        pbRatio,
+        sourceUrl: `https://www.tpex.org.tw/www/zh-tw/afterTrading/peQryDate?date=${date.replace(/-/g, '/')}&cate=&response=json`,
+        parserVersion: 'tpex-header-v2',
+      });
+    }
   }
+  if (!recognizedTable) throw new Error('tpex_valuation_schema_invalid');
   return result;
 }
 
@@ -417,6 +447,7 @@ export function parseTwseStockValuationHistory(payload: Record<string, unknown>,
       peRatio,
       pbRatio,
       sourceUrl,
+      parserVersion: 'twse-stock-history-v1',
     }];
   });
 }

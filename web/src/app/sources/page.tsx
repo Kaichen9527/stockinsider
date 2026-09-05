@@ -206,8 +206,9 @@ export default async function SourcesPage({
                       </span>
                     </div>
                     <p className="mt-2 text-slate-600 dark:text-emerald-100/70">
-                      fetched {item.fetched} · matched {item.matched} · new {item.newCount} · duplicate {item.duplicate} · written {item.written}
+                      本次：fetched {item.fetched} · matched {item.matched} · new {item.newCount} · duplicate {item.duplicate} · written {item.written}
                     </p>
+                    <p className="mt-1 text-slate-500 dark:text-emerald-100/55">近 24 小時（{item.runs24h} 次）：fetched {item.fetched24h} · matched {item.matched24h} · new {item.newCount24h} · duplicate {item.duplicate24h} · written {item.written24h}</p>
                     <p className="mt-1 text-slate-500 dark:text-emerald-100/55">最近嘗試：{formatTaipeiDateTime(item.attemptedAt)} · 下次：{formatTaipeiDateTime(item.nextExpectedAt, '不自動執行')}</p>
                     <p className="mt-1 text-slate-500 dark:text-emerald-100/55">授權：{item.authStatus} · {item.licenseBasis}</p>
                     {item.terminalDetail ? <p className="mt-1 text-amber-700 dark:text-amber-300">原因：{item.terminalDetail}</p> : null}
@@ -220,7 +221,7 @@ export default async function SourcesPage({
 
           <article className="mb-6 rounded-2xl border border-amber-500/25 bg-amber-500/8 p-4 text-sm text-amber-900 dark:text-amber-100">
             <p className="font-semibold">來源政策</p>
-            <p className="mt-1 leading-6">YouTube、Google News、UDN、鉅亨網與 Mobile01 已退役，停止排程但保留歷史供稽核。股市爆料同學會在取得 CMoney API／合作授權前封鎖自動抓取；InvestAnchors 僅接受有權使用的結構化研究結論。</p>
+            <p className="mt-1 leading-6">YouTube、Google News、UDN、鉅亨網、Mobile01 與 Instagram 已退役，停止排程但保留歷史供稽核。股市爆料同學會在取得 CMoney API／合作授權前封鎖自動抓取；InvestAnchors 僅作私人方法參考，公開研究一律由官方資料獨立推導。Threads 只有在官方 token canary 通過後才進排程。</p>
           </article>
 
           <div className="mb-6 grid gap-4 lg:grid-cols-2">

@@ -79,6 +79,6 @@ test('connector=all includes only sources authorized in the current runtime', ()
   });
   withEnvironment({ THREADS_OFFICIAL_API_ENABLED: 'true', TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED: 'true' }, () => {
     assert.deepEqual(activeSourceConnectorKeys(), ['telegram', 'threads', 'gdelt', 'twse_insider']);
-    assert.deepEqual(scheduledSourceConnectorKeys(), ['telegram', 'gdelt', 'twse_insider']);
+    assert.deepEqual(scheduledSourceConnectorKeys(), ['telegram', 'threads', 'gdelt', 'twse_insider']);
   });
 });

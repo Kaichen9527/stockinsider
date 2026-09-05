@@ -18545,8 +18545,8 @@ export async function searchSourceDocuments(params?: {
   const effectiveVerificationStatus = verificationStatus || evidenceVerificationStatus;
 
   let query = supabase
-    .from('source_raw_documents')
-    .select('id,platform,title,summary,document_url,published_at,collected_at,symbols,confidence,source_entity_id,metadata,source_entities(display_name,entity_type)', { count: 'estimated' })
+    .from('source_search_documents_v3')
+    .select('id,platform,title,summary,document_url,published_at,collected_at,symbols,confidence,source_entity_id,metadata', { count: 'estimated' })
     .order('collected_at', { ascending: false });
 
   if (platform && platform !== 'all') {
@@ -18607,12 +18607,18 @@ export async function searchSourceDocuments(params?: {
   if (runsRes.error) throw new Error(runsRes.error.message);
   if (auditsRes.error) throw new Error(auditsRes.error.message);
   if (coverageRes.error) throw new Error(coverageRes.error.message);
+  const sourceEntityIds = [...new Set(((data as Row[]) || []).map((row) => String(row.source_entity_id || '')).filter(Boolean))];
+  const entityRes = sourceEntityIds.length
+    ? await supabase.from('source_entities').select('id,display_name,entity_type').in('id', sourceEntityIds)
+    : { data: [] as unknown[], error: null };
+  if (entityRes.error) throw new Error(entityRes.error.message);
+  const sourceEntityById = new Map(((entityRes.data as Row[]) || []).map((row) => [String(row.id), row]));
 
   let mapped = ((data as Row[]) || [])
     .filter((row) => !isSourceDocNoise(row))
     .map((row): SourceSearchResultItem => {
       const confidence = row.confidence == null ? null : toFiniteNumber(row.confidence, 0);
-      const sourceEntity = Array.isArray(row.source_entities) ? (row.source_entities[0] as Row | undefined) : (row.source_entities as Row | undefined);
+      const sourceEntity = sourceEntityById.get(String(row.source_entity_id || ''));
       const symbols = Array.isArray(row.symbols) ? (row.symbols as unknown[]).map(String) : [];
       const crawlMode = sourceDocMetadataValue(row, 'crawl_mode') as SourceSearchResultItem['crawlMode'];
       const matchType = sourceDocMetadataValue(row, 'match_type') as SourceSearchResultItem['matchType'];

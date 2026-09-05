@@ -74,3 +74,32 @@ export function buildConservativeOfficialScenario(input: {
   const metrics = scenarioValuationMetrics({ currentPrice: input.price, bear, base, bull });
   return { ...metrics, primaryMethod, growthFactor, operatingDriver: round(operatingDriver, 4), operatingDriverSource, baseMultiple: round(baseMultiple, 3), historicalPercentile, historicalSampleCount: primaryMethod === 'forward_pb' ? input.historicalPbRatios.length : input.historicalPeRatios.length };
 }
+
+export function buildForwardEarningsScenario(input: {
+  price: number;
+  bearEps: number;
+  baseEps: number;
+  bullEps: number;
+  historicalPeRatios: number[];
+}) {
+  const sorted = input.historicalPeRatios.filter((value) => Number.isFinite(value) && value > 0).sort((left, right) => left - right);
+  if (sorted.length < 48 || input.bearEps <= 0 || input.baseEps <= 0 || input.bullEps <= 0 || input.price <= 0) return null;
+  const at = (percentile: number) => sorted[Math.min(sorted.length - 1, Math.max(0, Math.round((sorted.length - 1) * percentile)))];
+  const multiples = [at(0.25), at(0.5), at(0.75)] as const;
+  const metrics = scenarioValuationMetrics({
+    currentPrice: input.price,
+    bear: input.bearEps * multiples[0],
+    base: input.baseEps * multiples[1],
+    bull: input.bullEps * multiples[2],
+  });
+  return {
+    ...metrics,
+    primaryMethod: 'forward_pe' as const,
+    growthFactor: null,
+    operatingDriver: round(input.baseEps, 4),
+    operatingDriverSource: 'forward_earnings_bridge' as const,
+    baseMultiple: round(multiples[1], 3),
+    historicalPercentile: round(sorted.filter((value) => value <= input.price / input.baseEps).length / sorted.length * 100, 2),
+    historicalSampleCount: sorted.length,
+  };
+}
