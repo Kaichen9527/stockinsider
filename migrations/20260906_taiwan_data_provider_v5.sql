@@ -216,7 +216,9 @@ BEGIN
       p_job_id,v_order,v_attempt->>'provider',v_attempt->>'authorityTier',v_attempt->>'terminal',
       COALESCE(v_attempt->>'sourceUrl',''),(v_attempt->>'fetchedAt')::timestamptz,
       NULLIF(v_attempt->>'httpStatus','')::integer,v_attempt->>'responseSha256',(v_attempt->>'responseBytes')::integer,
-      v_attempt->'apiUsage',v_attempt->'normalizedPayload',v_attempt->>'detail'
+      NULLIF(v_attempt->'apiUsage','null'::jsonb),
+      NULLIF(v_attempt->'normalizedPayload','null'::jsonb),
+      v_attempt->>'detail'
     );
   END LOOP;
   v_terminal:=p_result->>'terminal';
