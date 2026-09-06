@@ -31,7 +31,8 @@ test('homepage decision stays consistent with its revision-bound detail envelope
   const link=card.getByRole('link',{name:/查看決策摘要/u});
   await expect(link).toHaveAttribute('href',`/stock/9101?decisionRevisionId=${encodeURIComponent(revision)}`);
   await link.click();
-  await expect(page.getByTestId('detail-revision')).toHaveText(revision);
+  await expect(page.getByTestId('detail-revision')).toHaveText('研究版本已鎖定，可在後端稽核。');
+  await expect(page.locator('body')).not.toContainText(revision);
   await expect(page.getByTestId('detail-action')).toHaveText('research_starter');
   await expect(page.getByTestId('detail-authority')).toHaveText('conditional_research');
   await expect(page.getByTestId('detail-valuation')).toHaveText('90 / 117.65 / 135');

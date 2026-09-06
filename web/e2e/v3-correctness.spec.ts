@@ -143,7 +143,8 @@ test('V3.13 Landing has three exclusive action sections and at most six collapse
   await page.evaluate(() => document.documentElement.classList.add('dark'));
   await expect(page.getByRole('article', { name: /9103/u })).toBeVisible();
   await links.first().click();
-  await expect(page.getByTestId('detail-revision')).toHaveText(`decision-v3.13:${'a'.repeat(64)}`);
+  await expect(page.getByTestId('detail-revision')).toHaveText('研究版本已鎖定，可在後端稽核。');
+  await expect(page.locator('body')).not.toContainText(`decision-v3.13:${'a'.repeat(64)}`);
   await expect(page.getByTestId('detail-action')).toHaveText('research_starter');
   await expect(page.getByTestId('detail-authority')).toHaveText('conditional_research');
   await expect(page.getByTestId('detail-valuation')).toHaveText('90 / 117.65 / 135');

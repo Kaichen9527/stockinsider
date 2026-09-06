@@ -36,7 +36,8 @@ test('V3.17 keeps a support setup in the waiting lane, makes its snapshot naviga
     }
     await supportCard.getByRole('link',{name:'查看決策摘要 →'}).click();
     await expect(page.getByTestId('research-only-detail')).toBeVisible();
-    await expect(page.getByTestId('research-only-decision-revision')).toContainText('decision-v3.13');
+    await expect(page.getByTestId('research-only-decision-revision')).toHaveText('研究版本已鎖定，可在後端稽核。');
+    await expect(page.locator('body')).not.toContainText('decision-v3.13');
     await expect(page.getByTestId('research-snapshot-detail')).toContainText('接近支撐');
     await expect(page.getByTestId('research-gate-waterfall')).toContainText('技術面 · 已具備');
   }
