@@ -1,5 +1,6 @@
 import { getSupabaseServerClient } from './supabase-server';
 import type { CandidateStageCard } from './types';
+import { chunkCandidateFactIds } from './candidate-detail-fact-batches';
 
 type Row = Record<string, unknown>;
 
@@ -116,16 +117,18 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
   const row = data as Row;
   const stock = stockRead.data as Row;
   const factIds = (Array.isArray(row.fact_ids) ? row.fact_ids : []).map(String);
-  const [dossiers, facts] = await Promise.all([
+  const [dossiers, factBatchResults] = await Promise.all([
     supabase.from('candidate_research_dossiers')
       .select('narrative_kind,content,validation_status,created_at')
       .eq('detail_snapshot_id', String(row.id)).eq('narrative_kind', 'codex_enriched').eq('validation_status', 'valid')
       .order('created_at', { ascending: false }).limit(1),
-    factIds.length ? supabase.from('candidate_official_facts')
+    Promise.all(chunkCandidateFactIds(factIds).map((batch) => supabase.from('candidate_official_facts')
       .select('fact_id,fact_key,period_end,value,unit,source_url,available_at')
-      .in('fact_id', factIds).order('period_end', { ascending: false }).limit(500) : Promise.resolve({ data: [], error: null }),
+      .in('fact_id', batch).order('period_end', { ascending: false }).limit(batch.length))),
   ]);
-  if (dossiers.error || facts.error) throw new Error(`candidate_detail_evidence_read_failed:${dossiers.error?.message || facts.error?.message}`);
+  const factsError = factBatchResults.find((result) => result.error)?.error;
+  if (dossiers.error || factsError) throw new Error(`candidate_detail_evidence_read_failed:${dossiers.error?.message || factsError?.message}`);
+  const factRows = factBatchResults.flatMap((result) => (result.data as Row[]) || []);
   const enriched = (dossiers.data?.[0] as Row | undefined) || null;
   const base = {
     revisionId: String(row.id), symbol: String(stock.symbol || symbol), chineseName: String(stock.name || symbol),
@@ -134,7 +137,7 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
     sections: (Array.isArray(row.sections) ? row.sections : []) as CandidateDetailSection[], factIds,
     sourceLinks: (Array.isArray(row.source_links) ? row.source_links : []) as CandidateDetailPayload['sourceLinks'],
     valuation: (row.valuation || {}) as CandidateDetailPayload['valuation'], technical: (row.technical || {}) as CandidateStageCard['technical'],
-    facts: ((facts.data as Row[]) || []).map((fact) => ({ factId: String(fact.fact_id), factKey: String(fact.fact_key), periodEnd: String(fact.period_end), value: fact.value == null ? null : Number(fact.value), unit: fact.unit ? String(fact.unit) : null, sourceUrl: publicHttpUrl(fact.source_url), availableAt: String(fact.available_at) })),
+    facts: factRows.map((fact) => ({ factId: String(fact.fact_id), factKey: String(fact.fact_key), periodEnd: String(fact.period_end), value: fact.value == null ? null : Number(fact.value), unit: fact.unit ? String(fact.unit) : null, sourceUrl: publicHttpUrl(fact.source_url), availableAt: String(fact.available_at) })),
     unmetConditions: Array.isArray((row.valuation as Row | null)?.unmetConditions) ? ((row.valuation as Row).unmetConditions as unknown[]).map(String) : [],
     asOf: String(row.as_of), availableAt: String(row.available_at), narrativeKind: 'deterministic_fact' as const,
   };
