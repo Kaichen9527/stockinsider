@@ -17,7 +17,7 @@ function jobBlock(jobId, nextJobId = null) {
   return workflow.slice(start, end);
 }
 
-test('the configured protected check belongs only to the final five-envelope aggregate', () => {
+test('the configured protected check belongs only to the four product-critical envelope aggregate', () => {
   assert.equal((workflow.match(/^    name: stockinsider-v3-gate-root$/gmu) ?? []).length, 1);
   const bootstrap = jobBlock('stockinsider-v3-gate-bootstrap', 'requirements');
   assert.match(bootstrap, /^    name: stockinsider-v3-gate-bootstrap$/mu);
@@ -26,12 +26,12 @@ test('the configured protected check belongs only to the final five-envelope agg
   assert.match(aggregate, /^    name: stockinsider-v3-gate-root$/mu);
   assert.match(
     aggregate,
-    /^    needs: \[requirements, architecture, product-runtime-code-gate, model-runner-code-gate, exact-review\]$/mu,
+    /^    needs: \[requirements, architecture, product-runtime-code-gate, exact-review\]$/mu,
   );
   assert.match(aggregate, /^    if: \$\{\{ always\(\) \}\}$/mu);
   for (const prerequisite of [
     'REQUIREMENTS_RESULT', 'ARCHITECTURE_RESULT', 'PRODUCT_RUNTIME_RESULT',
-    'MODEL_RUNNER_RESULT', 'EXACT_REVIEW_RESULT',
+    'EXACT_REVIEW_RESULT',
   ]) {
     assert.match(aggregate, new RegExp(`test "\\$${prerequisite}" = success`, 'u'));
   }
@@ -49,6 +49,7 @@ test('candidate execution waits for exact review and persistent execution is own
   assert.match(model, /github\.actor == github\.repository_owner/u);
   assert.match(model, /github\.triggering_actor == github\.repository_owner/u);
   assert.match(model, /^    runs-on: \[self-hosted, macOS, ARM64\]$/mu);
+  assert.match(model, /^    continue-on-error: true$/mu);
   for (const token of [
     'sudo apt-get install --yes postgresql',
     'postgres_bin="$(pg_config --bindir)"',
@@ -118,6 +119,8 @@ test('the protected root selects closed graph-bound Requirements/Architecture ev
     'architecture-review-v3.19.md',
     'requirements-review-v3.20.md',
     'architecture-review-v3.20.md',
+    'evidence/source-led-opportunity-v3-requirements-gate-bootstrap-20260906',
+    'evidence/source-led-opportunity-v3-architecture-gate-bootstrap-20260906',
   ]) assert.match(worker, new RegExp(reference.replace(/[.]/gu, '\\.'), 'u'));
   assert.match(worker, /13081345293dcb3306c68420270ca82ea090fa18a0ecb878ccd8da08d63e0587/u);
   assert.match(worker, /evidence\/source-led-opportunity-v3-exact-review-\$\{attestation[.]subjectCommitSha\}/u);
