@@ -38,6 +38,31 @@ export function financialFactAvailableAt(
     .every((value) => typeof value === 'string' && Number.isFinite(Date.parse(value)) && Date.parse(value) <= cutoff);
 }
 
+/**
+ * Production research follows every mention available when the run starts.
+ * Shadow evidence is a separate, immutable close-session cohort and therefore
+ * only accepts rows that existed at its fixed source cutoff.
+ */
+export function partitionCandidateMentionsByCutoff<T extends { available_at?: unknown }>(
+  mentions: T[],
+  productionCutoff: string,
+  shadowCutoff: string,
+) {
+  const productionCutoffMs = Date.parse(productionCutoff);
+  const shadowCutoffMs = Date.parse(shadowCutoff);
+  if (!Number.isFinite(productionCutoffMs) || !Number.isFinite(shadowCutoffMs)) {
+    throw new Error('invalid_candidate_source_cutoff');
+  }
+  const production = mentions.filter((mention) => {
+    const availableAtMs = Date.parse(String(mention.available_at || ''));
+    return Number.isFinite(availableAtMs) && availableAtMs <= productionCutoffMs;
+  });
+  return {
+    production,
+    shadow: production.filter((mention) => Date.parse(String(mention.available_at)) <= shadowCutoffMs),
+  };
+}
+
 export async function collectPagedAuthorityRows<T>(
   readPage: (from: number, to: number) => Promise<T[]>,
   options: { pageSize?: number; maxRows: number },

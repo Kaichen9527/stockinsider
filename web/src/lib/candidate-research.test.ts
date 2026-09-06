@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { buildConservativeOfficialScenario, buildEvEbitdaScenario, buildForwardEarningsScenario, buildTurnaroundEvSalesScenario } from './candidate-valuation.ts';
 import { normalizedCycleYearsObserved } from './candidate-financial-normalization.ts';
-import { candidatePriceRefreshDepth, collectBatchedAuthorityRows, collectPagedAuthorityRows, financialFactAvailableAt, isCandidateHistoricalPriceAccessEnabled, isTransientResearchInfrastructureError, rotatingShard } from './candidate-research-policy.ts';
+import { candidatePriceRefreshDepth, collectBatchedAuthorityRows, collectPagedAuthorityRows, financialFactAvailableAt, isCandidateHistoricalPriceAccessEnabled, isTransientResearchInfrastructureError, partitionCandidateMentionsByCutoff, rotatingShard } from './candidate-research-policy.ts';
 
 test('candidate research retries transient infrastructure errors only', () => {
   assert.equal(isTransientResearchInfrastructureError('supabase.co | 520: Web server is returning an unknown error'), true);
@@ -182,6 +182,30 @@ test('financial facts obtained after evaluation cannot enter point-in-time valua
   };
   assert.equal(financialFactAvailableAt(fact, '2026-09-06T10:00:00Z'), false);
   assert.equal(financialFactAvailableAt(fact, '2026-09-06T10:00:02Z'), true);
+});
+
+test('weekend and post-close mentions enter production without mutating the frozen shadow cohort', () => {
+  const mentions = [
+    { stock_id: 'before-close', available_at: '2026-09-04T10:20:00Z' },
+    { stock_id: 'weekend', available_at: '2026-09-05T03:00:00Z' },
+    { stock_id: 'future', available_at: '2026-09-07T03:00:01Z' },
+  ];
+  const windows = partitionCandidateMentionsByCutoff(
+    mentions,
+    '2026-09-07T03:00:00Z',
+    '2026-09-04T18:30:00+08:00',
+  );
+  assert.deepEqual(windows.production.map((row) => row.stock_id), ['before-close', 'weekend']);
+  assert.deepEqual(windows.shadow.map((row) => row.stock_id), ['before-close']);
+});
+
+test('candidate research loads production mentions through evaluation time but hashes only shadow-cutoff mentions', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const source = await readFile(new URL('./candidate-research.ts', import.meta.url), 'utf8');
+  assert.match(source, /loadCandidateMentions\(supabase, historyCutoff, productionSourceCutoff\)/u);
+  assert.match(source, /sourceMentionRevisionHash: stableHash\(shadowEligibleMentions/u);
+  assert.match(source, /candidate_symbols: proposedShadowUniverse\.map/u);
+  assert.match(source, /const universe = proposedUniverse/u);
 });
 
 test('shadow reruns bind financial availability to the frozen manifest cutoff', async () => {
