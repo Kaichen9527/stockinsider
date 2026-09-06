@@ -34,6 +34,44 @@ export function parseTaiwanQueueRequest(value: unknown): TaiwanQueueRequest | nu
   return { datasets: datasets as TaiwanDataset[], phase: object.phase as TaiwanRefreshPhase, sessionDate: object.sessionDate === undefined ? taipeiDate() : String(object.sessionDate), symbols: symbols as Array<{ symbol: string; exchange: TaiwanExchange }> };
 }
 
+/**
+ * Resolve the latest session for which production already has authoritative
+ * evidence.  The maintained calendar is preferred, while a persisted official
+ * closing-price row can advance a stale calendar without guessing weekdays or
+ * exchange holidays.
+ */
+export async function resolveLatestCompletedTaiwanSession(
+  supabase: ReturnType<typeof getSupabaseServerClient>,
+  onOrBefore: string,
+) {
+  const now = new Date().toISOString();
+  const [calendar, price] = await Promise.all([
+    supabase.from('tw_trading_sessions_v3')
+      .select('session_id')
+      .eq('status', 'completed')
+      .lte('session_id', onOrBefore)
+      .lte('close_at', now)
+      .order('session_id', { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase.from('official_price_history')
+      .select('session_date')
+      .lte('session_date', onOrBefore)
+      .lte('available_at', now)
+      .order('session_date', { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+  ]);
+  if (calendar.error && price.error) {
+    throw new Error(`latest_completed_trading_session_read_failed:${calendar.error.message};${price.error.message}`);
+  }
+  const candidates = [calendar.data?.session_id, price.data?.session_date]
+    .map((value) => String(value || ''))
+    .filter((value) => /^\d{4}-\d{2}-\d{2}$/u.test(value));
+  if (candidates.length === 0) throw new Error('latest_completed_trading_session_missing');
+  return candidates.sort().at(-1)!;
+}
+
 export async function requireActiveVpsWriter() {
   const releaseId = String(process.env.STOCKINSIDER_WRITER_RELEASE_ID || '');
   if (!/^[0-9a-f]{40}$/u.test(releaseId)) return { ok: false as const, error: 'writer_release_identity_missing' };

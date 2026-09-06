@@ -7,6 +7,7 @@ const provider = readFileSync(new URL('../web/src/lib/taiwan-data-provider.ts', 
 const refreshRoute = readFileSync(new URL('../web/src/app/api/internal/taiwan-data-refresh/route.ts', import.meta.url), 'utf8');
 const drainRoute = readFileSync(new URL('../web/src/app/api/internal/taiwan-data-queue-drain/route.ts', import.meta.url), 'utf8');
 const preliminaryRoute = readFileSync(new URL('../web/src/app/api/internal/radar-preliminary-publish/route.ts', import.meta.url), 'utf8');
+const runtime = readFileSync(new URL('../web/src/lib/taiwan-data-runtime.ts', import.meta.url), 'utf8');
 const masterCalendar = readFileSync(new URL('../deployment/vps/systemd/stockinsider-taiwan-data-master-calendar.timer', import.meta.url), 'utf8');
 const closePreliminary = readFileSync(new URL('../deployment/vps/systemd/stockinsider-taiwan-data-close-preliminary.timer', import.meta.url), 'utf8');
 const preliminary = readFileSync(new URL('../deployment/vps/systemd/stockinsider-taiwan-data-preliminary.timer', import.meta.url), 'utf8');
@@ -93,6 +94,9 @@ test('VPS timers separate the approved preliminary, final, pipeline and hourly d
   assert.match(installer, /call_internal_api_sequence\.mjs/u);
   const preliminaryService = readFileSync(new URL('../deployment/vps/systemd/stockinsider-taiwan-data-preliminary.service', import.meta.url), 'utf8');
   assert.match(preliminaryService, /\/api\/internal\/radar-preliminary-publish/u);
+  assert.match(preliminaryService, /"limit":100/u);
   assert.match(preliminaryRoute, /phase: 'preliminary'/u);
   assert.match(preliminaryRoute, /shadowObservationWritten: false/u);
+  assert.match(preliminaryRoute, /resolveLatestCompletedTaiwanSession/u);
+  assert.match(runtime, /from\('official_price_history'\)/u);
 });
