@@ -33,6 +33,12 @@ test('TPEx balance rows preserve endpoint-specific equity label and reject secur
   assert.equal(classifyFinancialResponse(200, 'text/html', '<html>temporary page</html>'), 'html_rejected');
 });
 
+test('MOPS 307 security body is classified as a security block instead of a generic network failure', () => {
+  const body = '<html><body>因為安全性考量，您所執行的頁面無法呈現。 FOR SECURITY REASONS, THIS PAGE CAN NOT BE ACCESSED.</body></html>';
+  assert.equal(classifyFinancialResponse(307, 'text/html; charset=UTF-8', body, 'html'), 'security_blocked');
+  assert.equal(classifyFinancialResponse(200, 'text/html; charset=UTF-8', '<html><body><ix:nonFraction>1</ix:nonFraction></body></html>', 'html'), null);
+});
+
 test('TPEx accepts the live alternate statement labels without emitting competing facts', () => {
   const result = parseTpexFinancialEndpoint('generalIncome', [{
     Date: '1150906', Year: '115', Season: '2', SecuritiesCompanyCode: '1240',

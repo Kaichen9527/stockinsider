@@ -3,16 +3,23 @@ export type ReportedFinancialFact = {
   factKey: string;
   periodStart: string | null;
   periodEnd: string;
-  durationKind?: 'quarterly' | 'quarter_end' | null;
+  durationKind?: 'quarterly' | 'instant' | 'quarter_end' | null;
   value: number;
   unit: string | null;
   sourceRef: string;
   filingRestatementId?: string | null;
   filingPublishedAt?: string | null;
+  provider?: string | null;
+  authorityTier?: string | null;
 };
 
 type QuarterlyPoint = { periodEnd: string; value: number; factIds: string[] };
 type SeriesDiagnosis = { points: QuarterlyPoint[]; issues: string[] };
+
+function authorityIdentity(fact: ReportedFinancialFact) {
+  const duration = fact.durationKind === 'quarter_end' ? 'instant' : String(fact.durationKind || '');
+  return `${fact.factKey}|${fact.periodStart || ''}|${fact.periodEnd}|${duration}`;
+}
 
 function finite(value: unknown): number | null {
   const parsed = Number(value);
@@ -82,6 +89,23 @@ export function discreteReportedQuarters(facts: ReportedFinancialFact[], factKey
     return reportedQuarterValues(facts, factKey).points;
   }
   return diagnoseDiscreteQuarters(facts, factKey).points;
+}
+
+/** Prefer official facts without losing a mirror quarter that an official YTD
+ * disclosure cannot yet reconstruct. Once the official series can derive that
+ * quarter, remove the mirror so downstream provenance and conflicts are based
+ * only on the authoritative filing. */
+export function preferOfficialReportedFinancialFacts(facts: ReportedFinancialFact[]) {
+  const official = facts.filter((fact) => fact.authorityTier === 'official_filing');
+  const officialIdentities = new Set(official.map(authorityIdentity));
+  const officialQuarterKeys = new Set<string>();
+  for (const factKey of new Set(official.map((fact) => fact.factKey))) {
+    const points = discreteReportedQuarters(official, factKey);
+    points.forEach((point) => officialQuarterKeys.add(`${factKey}|${point.periodEnd}`));
+  }
+  return facts.filter((fact) => fact.authorityTier === 'official_filing'
+    || (!officialIdentities.has(authorityIdentity(fact))
+      && !officialQuarterKeys.has(`${fact.factKey}|${fact.periodEnd}`)));
 }
 
 /** Weighted shares and EPS are rates/averages, not additive flows. */

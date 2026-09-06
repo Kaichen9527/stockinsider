@@ -18,7 +18,7 @@ export type TpexFinancialFact = {
   factKey: string;
   periodStart: string | null;
   periodEnd: string;
-  durationKind: 'quarterly' | 'quarter_end';
+  durationKind: 'quarterly' | 'instant';
   value: number;
   unit: 'TWD_thousand' | 'TWD_per_share';
   sourceRef: string;
@@ -103,14 +103,20 @@ function firstFiniteHeader(row: Row, headers: readonly string[]) {
   return null;
 }
 
-export function classifyFinancialResponse(status: number, contentType: string | null, body: string): FinancialAcquisitionTerminalReason | null {
+export function classifyFinancialResponse(
+  status: number,
+  contentType: string | null,
+  body: string,
+  expectedBody: 'json' | 'html' = 'json',
+): FinancialAcquisitionTerminalReason | null {
   const normalized = body.slice(0, 8_192).toLowerCase();
-  if (/captcha|access denied|forbidden|security (?:check|policy)|waf|cloudflare/u.test(normalized)) return 'security_blocked';
+  if (/captcha|access denied|forbidden|security (?:check|policy|reason)|for security reasons|安全性考量|waf|cloudflare/u.test(normalized)) return 'security_blocked';
   if (status === 404) return 'http_not_found';
   if (status === 429) return 'http_rate_limited';
   if (status >= 500) return 'http_server_error';
   if (status < 200 || status >= 300) return 'network_error';
-  if (/text\/html|application\/xhtml\+xml/u.test(contentType || '') || /^\s*<(?:!doctype|html|head|body)/u.test(body)) return 'html_rejected';
+  if (expectedBody === 'json'
+    && (/text\/html|application\/xhtml\+xml/u.test(contentType || '') || /^\s*<(?:!doctype|html|head|body)/u.test(body))) return 'html_rejected';
   if (!body.trim()) return 'empty_official_response';
   return null;
 }
@@ -143,7 +149,7 @@ export function parseTpexFinancialEndpoint(
       if (!selected) continue;
       facts.push({
         symbol, factKey, periodStart: isBalance ? null : period.periodStart, periodEnd: period.periodEnd,
-        durationKind: isBalance ? 'quarter_end' : 'quarterly', value: selected.value,
+        durationKind: isBalance ? 'instant' : 'quarterly', value: selected.value,
         unit: factKey === 'book_value_per_share' || factKey.endsWith('_eps') ? 'TWD_per_share' : 'TWD_thousand',
         sourceRef: `tpex-openapi:${endpoint}:${symbol}:${period.periodEnd}:${selected.header}`,
         sourceTimestamp, filingRestatementId: `tpex:${restatement}`,

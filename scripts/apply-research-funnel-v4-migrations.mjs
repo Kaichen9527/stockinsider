@@ -16,6 +16,7 @@ export const RESEARCH_FUNNEL_V4_MIGRATIONS = Object.freeze([
   'migrations/20260906_shadow_signal_v4.sql',
   'migrations/20260906_candidate_dossier_v4.sql',
   'migrations/20260906_taiwan_data_provider_v5.sql',
+  'migrations/20260906_finmind_financial_fallback_v5.sql',
 ]);
 
 function migrationPlan() {
