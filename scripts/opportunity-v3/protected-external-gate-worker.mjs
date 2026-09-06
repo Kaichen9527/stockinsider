@@ -45,7 +45,7 @@ const reviewKeys = [
   'reviewedTreeSha', 'verdict',
 ];
 const requiredChecks = [
-  'requirements', 'architecture', 'product-runtime-code-gate', 'model-runner-code-gate', 'exact-review',
+  'requirements', 'architecture', 'product-runtime-code-gate', 'exact-review',
 ];
 const gatePolicies = Object.freeze({
   requirements: { commands: [], count: 0, partition: null, review: true },
@@ -107,13 +107,13 @@ const graphBoundReviewSources = Object.freeze({
   // independently reviewed signed-host and product authority.
   '1c32b707a2e3d36e0ca01b4e78b9c20fa5bcef5eb34dce486063d9f694a2c9fc': Object.freeze({
     requirements: Object.freeze({
-      ref: 'refs/remotes/origin/evidence/source-research-shadow-v2-requirements-90de150b',
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-gate-bootstrap-20260906',
       path: `${changeRelative}/requirements-review-v3.20.md`,
       finalLine: 'Final reviewed implementation commit/tree',
       rangeLine: 'Full reviewed range',
     }),
     architecture: Object.freeze({
-      ref: 'refs/remotes/origin/evidence/source-research-shadow-v2-architecture-fa523ba1',
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-gate-bootstrap-20260906',
       path: `${changeRelative}/architecture-review-v3.20.md`,
       finalLine: 'Final reviewed implementation commit/tree',
       rangeLine: 'Full reviewed implementation range',
@@ -1048,7 +1048,7 @@ function parseArguments(argv) {
   if (verb !== 'prepare') assert.equal(typeof values['--output'], 'string', '--output required');
   if (verb === 'review') assert.ok(['requirements', 'architecture', 'exact-review'].includes(values['--check']), 'closed review check');
   if (verb === 'track') assert.ok(['product_runtime', 'model_runner'].includes(values['--track']), 'closed executable track');
-  if (verb === 'aggregate') assert.equal(values.inputs.length, requiredChecks.length, 'five aggregate inputs');
+  if (verb === 'aggregate') assert.equal(values.inputs.length, requiredChecks.length, 'four aggregate inputs');
   return values;
 }
 
