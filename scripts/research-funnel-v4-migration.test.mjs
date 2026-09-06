@@ -15,6 +15,7 @@ test('research funnel v4 migration plan is exact, additive and dry by default', 
     'migrations/20260906_shadow_signal_v4.sql',
     'migrations/20260906_candidate_dossier_v4.sql',
     'migrations/20260906_taiwan_data_provider_v5.sql',
+    'migrations/20260906_finmind_financial_fallback_v5.sql',
   ]);
   for (const relativePath of RESEARCH_FUNNEL_V4_MIGRATIONS) {
     const sql = fs.readFileSync(path.join(root, relativePath), 'utf8');
@@ -24,7 +25,7 @@ test('research funnel v4 migration plan is exact, additive and dry by default', 
   }
   const output = JSON.parse(execFileSync(process.execPath, ['scripts/apply-research-funnel-v4-migrations.mjs'], { cwd: root, encoding: 'utf8' }));
   assert.equal(output.applied, false);
-  assert.equal(output.migrations.length, 5);
+  assert.equal(output.migrations.length, 6);
   assert.ok(output.migrations.every((entry) => /^[0-9a-f]{64}$/u.test(entry.sha256) && entry.bytes > 0));
 });
 
@@ -41,6 +42,16 @@ test('runtime tables, append-only revisions and source identity are covered by t
   assert.match(sql, /GRANT ALL ON TABLE public[.]candidate_financial_acquisition_jobs_v4[\s\S]*TO service_role/u);
   assert.match(sql, /claim_candidate_financial_acquisition_jobs_v4/u);
   assert.match(sql, /complete_candidate_financial_acquisition_job_v4/u);
+  assert.match(sql, /v_provider = 'finmind' THEN 'https:\/\/api\.finmindtrade\.com\/api\/v4\/data'/u);
+  assert.ok(sql.includes("(v_fact #>> '{input,stock_id}')::uuid IS DISTINCT FROM v_job.stock_id"));
+  assert.ok(sql.includes("(v_fact #>> '{input,period_end}')::date IS DISTINCT FROM v_job.period_end"));
+  assert.match(sql, /v_provider IS DISTINCT FROM v_batch_provider/u);
+  assert.match(sql, /record_candidate_financial_fallback_v5/u);
+  assert.match(sql, /consecutive_failures integer NOT NULL DEFAULT 0/u);
+  assert.match(sql, /status='queued',attempts=LEAST\(attempts\+1,19\),consecutive_failures=0/u);
+  assert.match(sql, /'official_retry_at',p_next_attempt_at/u);
+  assert.match(sql, /Later retries of unchanged content are acquisition/u);
+  assert.match(sql, /fact[.]authority_tier::text='finmind_mirror'/u);
   assert.match(sql, /append_financial_fact_v3/u);
   assert.match(sql, /FOR UPDATE SKIP LOCKED/u);
   assert.match(sql, /lease_owner = p_owner/u);

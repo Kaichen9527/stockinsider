@@ -33,7 +33,7 @@ import { advanceRiskEpisode, candidateRiskAction } from './candidate-risk-action
 import { buildMarketEvidenceSnapshot } from './market-evidence';
 import { candidateMentionDiscoveryEligible, publisherKeyFor, relativeDiscussionBurst, roundRobinSourceLinks, sourceConcentration } from './source-content-semantics';
 import { buildShadowReplayInputs, replayFrozenCandidateClassification, shadowReplayConflicts } from './shadow-policy-v2';
-import { buildForwardEarningsBridge, discreteReportedQuarters, type ReportedFinancialFact } from './forward-earnings-bridge';
+import { buildForwardEarningsBridge, discreteReportedQuarters, preferOfficialReportedFinancialFacts, type ReportedFinancialFact } from './forward-earnings-bridge';
 import { brokerResearchFactor, industryRotationActionabilityFactor, officialResearchEvidenceFactor, overseasPriceActionabilityFactor, relationshipFactor } from './candidate-factor-builder';
 import { refreshCandidateOfficialFinancials } from './candidate-official-financials';
 import { hasConsecutiveFiscalQuarters, normalizedCycleYearsObserved } from './candidate-financial-normalization';
@@ -81,6 +81,7 @@ function rowRelation(value: unknown): Row | null {
 
 function officialAuthoritySourceUrl(value: unknown): string {
   const reference = String(value || '');
+  if (reference.startsWith('finmind:')) return 'https://api.finmindtrade.com/api/v4/data';
   const mops = reference.match(/^(?:twse|tpex)-mops-inline:(\d{4})-(\d{2})-\d{2}:(\d{4}):/u);
   if (mops) {
     return `https://mopsov.twse.com.tw/server-java/t164sb01?step=1&CO_ID=${mops[3]}&SYEAR=${Number(mops[1]) - 1911}&SSEASON=${Math.ceil(Number(mops[2]) / 3)}&REPORT_ID=C`;
@@ -143,8 +144,8 @@ async function mapLimit<T, R>(items: T[], limit: number, work: (item: T) => Prom
   return results;
 }
 
-function latestReportedInstantValue(facts: ReportedFinancialFact[], factKey: string) {
-  const candidates = facts.filter((fact) => fact.factKey === factKey && fact.durationKind === 'quarter_end'
+function latestReportedInstant(facts: ReportedFinancialFact[], factKey: string) {
+  const candidates = facts.filter((fact) => fact.factKey === factKey && ['instant', 'quarter_end'].includes(fact.durationKind || '')
     && fact.periodStart === null && Number.isFinite(fact.value));
   if (candidates.length === 0) return null;
   const latestPeriod = candidates.reduce((latest, fact) => fact.periodEnd > latest ? fact.periodEnd : latest, candidates[0].periodEnd);
@@ -152,7 +153,7 @@ function latestReportedInstantValue(facts: ReportedFinancialFact[], factKey: str
   // A latest-period value conflict must not fall through to a prior balance
   // sheet or a source-order accident.
   if (new Set(latest.map((fact) => fact.value)).size !== 1) return null;
-  return latest[0].value;
+  return { value: latest[0].value, factIds: latest.map((fact) => fact.factId) };
 }
 
 async function loadStockAuthority(supabase: ReturnType<typeof getSupabaseServerClient>, cutoff: string) {
@@ -566,7 +567,7 @@ async function executeCandidateResearchCycle(options: {
         supabase.from('stock_signals').select('as_of,volume,chip_metrics').eq('stock_id', stock.id).order('as_of', { ascending: false }).limit(30),
         supabase.from('official_price_history').select('session_date,open,high,low,close,volume,source_url,provenance,available_at').eq('stock_id', stock.id).lte('available_at', evaluatedAt).order('session_date', { ascending: true }).limit(1320),
         supabase.from('opportunity_price_observations_v3').select('session_id,raw_open,raw_high,raw_low,raw_close,volume,source_ref,source_timestamp,collected_at,recorded_at').eq('stock_id', stock.id).lte('recorded_at', authorityCutoff).order('session_id', { ascending: true }).order('recorded_at', { ascending: true }).limit(4000),
-        supabase.from('opportunity_financial_facts_v3').select('fact_id,fact_key,period_start,period_end,duration_kind,value,unit,filing_published_at,source_timestamp,collected_at,recorded_at,source_ref,estimate_kind,estimate_horizon,filing_restatement_id').eq('stock_id', stock.id)
+        supabase.from('opportunity_financial_facts_v3').select('fact_id,fact_key,period_start,period_end,duration_kind,value,unit,provider,authority_tier,filing_published_at,source_timestamp,collected_at,recorded_at,source_ref,estimate_kind,estimate_horizon,filing_restatement_id').eq('stock_id', stock.id)
           .lte('filing_published_at', authorityCutoff).lte('source_timestamp', authorityCutoff)
           .lte('collected_at', authorityCutoff).lte('recorded_at', authorityCutoff)
           .order('period_end', { ascending: false }).order('recorded_at', { ascending: false }).limit(2000),
@@ -782,7 +783,7 @@ async function executeCandidateResearchCycle(options: {
         if (fundamental.error) throw new Error(fundamental.error.message);
       }
       const multipleMonthsCovered = new Set(officialMultiples.map((point) => point.date.slice(0, 7))).size;
-      const reportedFacts: ReportedFinancialFact[] = ((authorityFactsRes.data as Row[]) || [])
+      const reportedFactRows: ReportedFinancialFact[] = ((authorityFactsRes.data as Row[]) || [])
         .filter((fact) => financialFactAvailableAt(fact, evaluatedAt))
         .flatMap((fact) => {
         const value = numberOrNull(fact.value);
@@ -792,26 +793,33 @@ async function executeCandidateResearchCycle(options: {
         const periodEnd = String(fact.period_end || '');
         const durationKind = String(fact.duration_kind || '');
         const validFlow = durationKind === 'quarterly' && typeof periodStart === 'string' && /^\d{4}-\d{2}-\d{2}$/u.test(periodStart);
-        const validInstant = durationKind === 'quarter_end' && periodStart === null;
+        const validInstant = ['instant', 'quarter_end'].includes(durationKind) && periodStart === null;
         if (String(fact.estimate_kind || '') !== 'reported' || value == null || !factId || !factKey || !/^\d{4}-\d{2}-\d{2}$/u.test(periodEnd) || (!validFlow && !validInstant)) return [];
-        return [{ factId, factKey, periodStart, periodEnd, durationKind: durationKind as 'quarterly' | 'quarter_end', value, unit: fact.unit ? String(fact.unit) : null, sourceRef: String(fact.source_ref || ''), filingRestatementId: fact.filing_restatement_id ? String(fact.filing_restatement_id) : null, filingPublishedAt: fact.filing_published_at ? String(fact.filing_published_at) : null }];
+        return [{ factId, factKey, periodStart, periodEnd, durationKind: durationKind as 'quarterly' | 'instant' | 'quarter_end', value, unit: fact.unit ? String(fact.unit) : null, sourceRef: String(fact.source_ref || ''), filingRestatementId: fact.filing_restatement_id ? String(fact.filing_restatement_id) : null, filingPublishedAt: fact.filing_published_at ? String(fact.filing_published_at) : null, provider: fact.provider ? String(fact.provider) : null, authorityTier: fact.authority_tier ? String(fact.authority_tier) : null }];
       });
+      const reportedFacts = preferOfficialReportedFinancialFacts(reportedFactRows);
+      const officialReportedFacts = reportedFacts.filter((fact) => fact.authorityTier === 'official_filing');
       const earningsBridge = buildForwardEarningsBridge(reportedFacts);
-      const operatingQuarterHistory = discreteReportedQuarters(reportedFacts, 'quarterly_operating_income');
+      const officialOperatingQuarterHistory = discreteReportedQuarters(officialReportedFacts, 'quarterly_operating_income');
+      const officialCommonIncomeQuarterHistory = discreteReportedQuarters(officialReportedFacts, 'quarterly_net_income_attributable_to_common');
       const commonIncomeQuarterHistory = discreteReportedQuarters(reportedFacts, 'quarterly_net_income_attributable_to_common');
       const revenueQuarterHistory = discreteReportedQuarters(reportedFacts, 'quarterly_revenue');
       const grossProfitQuarterHistory = discreteReportedQuarters(reportedFacts, 'quarterly_gross_profit');
       const dilutedEpsQuarterHistory = discreteReportedQuarters(reportedFacts, 'quarterly_diluted_eps');
       const dilutedShareQuarterHistory = discreteReportedQuarters(reportedFacts, 'diluted_weighted_average_shares');
       const basicEpsQuarterHistory = discreteReportedQuarters(reportedFacts, 'quarterly_basic_eps');
-      const latestBookValuePerShare = latestReportedInstantValue(reportedFacts, 'book_value_per_share');
-      const latestCommonEquity = latestReportedInstantValue(reportedFacts, 'total_equity');
-      const latestCashAndEquivalents = latestReportedInstantValue(reportedFacts, 'cash_and_equivalents');
-      const latestTotalDebt = latestReportedInstantValue(reportedFacts, 'total_debt');
-      const hasMaterialOfficialCounterEvidence = operatingQuarterHistory.slice(-2).length === 2
-        && operatingQuarterHistory.slice(-2).every((row) => row.value < 0)
-        && commonIncomeQuarterHistory.slice(-2).length === 2
-        && commonIncomeQuarterHistory.slice(-2).every((row) => row.value < 0);
+      const latestBookValueFact = latestReportedInstant(reportedFacts, 'book_value_per_share');
+      const latestCommonEquityFact = latestReportedInstant(reportedFacts, 'total_equity');
+      const latestCashFact = latestReportedInstant(reportedFacts, 'cash_and_equivalents');
+      const latestDebtFact = latestReportedInstant(reportedFacts, 'total_debt');
+      const latestBookValuePerShare = latestBookValueFact?.value ?? null;
+      const latestCommonEquity = latestCommonEquityFact?.value ?? null;
+      const latestCashAndEquivalents = latestCashFact?.value ?? null;
+      const latestTotalDebt = latestDebtFact?.value ?? null;
+      const hasMaterialOfficialCounterEvidence = officialOperatingQuarterHistory.slice(-2).length === 2
+        && officialOperatingQuarterHistory.slice(-2).every((row) => row.value < 0)
+        && officialCommonIncomeQuarterHistory.slice(-2).length === 2
+        && officialCommonIncomeQuarterHistory.slice(-2).every((row) => row.value < 0);
       const next12mBridgeComplete = earningsBridge.status === 'complete';
       const latestFourCommonIncome = commonIncomeQuarterHistory.slice(-4);
       const lossMaking = latestFourCommonIncome.length === 4
@@ -836,9 +844,9 @@ async function executeCandidateResearchCycle(options: {
         ? latestEbitdaQuarters.reduce((sum, row) => sum + row.value, 0)
         : null;
       const historicalEvEbitdaMultiples = reportedFacts.filter((fact) => fact.factKey === 'ev_ebitda_multiple'
-        && fact.durationKind === 'quarter_end' && fact.periodStart === null && fact.value > 0).map((fact) => fact.value);
+        && ['instant', 'quarter_end'].includes(fact.durationKind || '') && fact.periodStart === null && fact.value > 0).map((fact) => fact.value);
       const historicalEvSalesMultiples = reportedFacts.filter((fact) => fact.factKey === 'ev_sales_multiple'
-        && fact.durationKind === 'quarter_end' && fact.periodStart === null && fact.value > 0).map((fact) => fact.value);
+        && ['instant', 'quarter_end'].includes(fact.durationKind || '') && fact.periodStart === null && fact.value > 0).map((fact) => fact.value);
       const latestRevenueQuarters = revenueQuarterHistory.slice(-4);
       const latestGrossProfitQuarters = grossProfitQuarterHistory.slice(-4);
       const turnaroundRevenueGrossProfitBridgeComplete = hasConsecutiveFiscalQuarters(latestRevenueQuarters, 4)
@@ -964,6 +972,45 @@ async function executeCandidateResearchCycle(options: {
               })
             : buildConservativeOfficialScenario({ price: technical.close, epsTtm: eps?.epsTtm ?? null, peRatio: values?.peRatio ?? null, pbRatio: values?.pbRatio ?? null, revenueYoyPct: revenueYoy, sector: stock.sector, historicalPeRatios, historicalPbRatios });
       const valuation = valuationPolicy.canPublishTarget ? rawValuation : null;
+      const valuationFinancialFactIds = new Set<string>();
+      const includePoints = (points: Array<{ factIds: string[] }>) => points.forEach((point) => point.factIds.forEach((factId) => valuationFinancialFactIds.add(factId)));
+      const includeInstant = (point: { factIds: string[] } | null) => point?.factIds.forEach((factId) => valuationFinancialFactIds.add(factId));
+      if (valuation) {
+        if (valuationPolicy.basis === 'forward_12m' && earningsBridge.status === 'complete') earningsBridge.factIds.forEach((factId) => valuationFinancialFactIds.add(factId));
+        if (valuationPolicy.basis === 'normalized_cycle') includePoints(cycleEpsHistory);
+        if (valuationPolicy.basis === 'ev_ebitda') {
+          includePoints(latestEbitdaQuarters);
+          includePoints(turnaroundShareHistory.slice(-4));
+          includeInstant(latestCashFact);
+          includeInstant(latestDebtFact);
+        }
+        if (valuationPolicy.basis === 'turnaround_conditional') {
+          includePoints(latestRevenueQuarters);
+          includePoints(latestGrossProfitQuarters);
+          includePoints(turnaroundShareHistory);
+          includePoints(latestFourCommonIncome);
+          includeInstant(latestCashFact);
+          includeInstant(latestDebtFact);
+        }
+        if (valuationPolicy.basis === 'pb_reference') includeInstant(latestBookValueFact);
+        if (valuationPolicy.basis === 'financial_pb_roe') {
+          includeInstant(latestBookValueFact);
+          includeInstant(latestCommonEquityFact);
+          includePoints(latestFourCommonIncome);
+        }
+      }
+      const finMindFinancialFactIds = new Set(reportedFacts
+        .filter((fact) => fact.authorityTier === 'finmind_mirror' || fact.provider === 'finmind')
+        .map((fact) => fact.factId));
+      const usesFinMindFinancialEvidence = [...valuationFinancialFactIds].some((factId) => finMindFinancialFactIds.has(factId));
+      const usesFinMindEarningsBridgeEvidence = earningsBridge.status === 'complete'
+        && earningsBridge.factIds.some((factId) => finMindFinancialFactIds.has(factId));
+      const researchFinancialFactIds = new Set<string>(earningsBridge.status === 'complete' ? earningsBridge.factIds : []);
+      [cycleEpsHistory, latestEbitdaQuarters, turnaroundShareHistory, latestRevenueQuarters, latestGrossProfitQuarters, latestFourCommonIncome]
+        .forEach((points) => points.forEach((point) => point.factIds.forEach((factId) => researchFinancialFactIds.add(factId))));
+      [latestBookValueFact, latestCommonEquityFact, latestCashFact, latestDebtFact]
+        .forEach((point) => point?.factIds.forEach((factId) => researchFinancialFactIds.add(factId)));
+      const usesFinMindFinancialDecisionInput = [...researchFinancialFactIds].some((factId) => finMindFinancialFactIds.has(factId));
       const publishedPrimaryMethod = valuation
         ? valuationPolicy.basis === 'ttm_multiple_reference'
           ? valuation.primaryMethod === 'forward_pb' ? 'ttm_pb_reference' : 'ttm_pe_reference'
@@ -984,7 +1031,7 @@ async function executeCandidateResearchCycle(options: {
             : { status: earningsBridge.status, missing: earningsBridge.missing, eps_ttm: eps?.epsTtm ?? null, exchange_implied_eps: valuation.operatingDriverSource === 'exchange_implied_ttm_eps' ? valuation.operatingDriver : null, operating_driver_source: valuation.operatingDriverSource, revenue_yoy_pct: revenueYoy, conservative_growth_factor: valuation.growthFactor },
           assumption_ledger: [{ source: 'official_five_year_multiple_distribution', median_multiple: valuation.baseMultiple, sample_count: valuation.historicalSampleCount }, ...(earningsBridge.status === 'complete' ? earningsBridge.assumptions : [{ source: 'official_monthly_revenue', half_pass_through_cap: 0.15 }])],
           catalysts: [], invalidation_conditions: ['official earnings bridge deteriorates'], as_of: `${technical.sessionDate}T13:30:00+08:00`,
-          available_at: evaluatedAt, provenance: { research_run_id: runId, sources: ['TWSE/TPEx','MOPS'] }, model_version: CANDIDATE_VALUATION_MODEL_VERSION,
+          available_at: evaluatedAt, provenance: { research_run_id: runId, sources: usesFinMindFinancialEvidence ? ['TWSE/TPEx','MOPS','FinMind mirror'] : ['TWSE/TPEx','MOPS'] }, model_version: CANDIDATE_VALUATION_MODEL_VERSION,
           valuation_basis: valuationPolicy.basis, multiple_months_covered: multipleMonthsCovered, next_12m_bridge_complete: next12mBridgeComplete,
         }, { onConflict: 'stock_id,session_date,model_version' });
         if (valuationWrite.error) throw new Error(valuationWrite.error.message);
@@ -1006,6 +1053,7 @@ async function executeCandidateResearchCycle(options: {
         || institutional?.authorityTier === 'finmind_fallback'
         || values?.authorityTier === 'finmind_fallback'
         || fetchedRevenue?.authorityTier === 'finmind_fallback'
+        || usesFinMindFinancialDecisionInput
         || String(priorRevenue?.source_url || '').includes('api.finmindtrade.com');
       const fallbackEvidenceBlockers = usesFallbackEvidence ? ['candidate_evidence_uses_finmind_fallback'] : [];
       const officialEvidenceCount = [
@@ -1017,11 +1065,11 @@ async function executeCandidateResearchCycle(options: {
         marketEvidence.status === 'complete',
       ].filter(Boolean).length;
       const officialEvidenceFactor = officialResearchEvidenceFactor({
-        factKeys: reportedFacts.map((fact) => fact.factKey),
+        factKeys: officialReportedFacts.map((fact) => fact.factKey),
         hasPriceHistory: bars.length >= 240,
         hasInstitutionalFlow: institutional != null,
         hasMarketEvidence: marketEvidence.status === 'complete',
-        hasCounterEvidenceReview: reportedFacts.length > 0,
+        hasCounterEvidenceReview: officialReportedFacts.length > 0,
         asOf: latestMarketSession,
       });
       const brokerFactor = brokerResearchFactor(((brokerConsensusRes.data as Row[]) || []).map((row) => {
@@ -1134,7 +1182,7 @@ async function executeCandidateResearchCycle(options: {
         { fact_key: 'pe_ratio', value: values?.peRatio ?? null, unit: 'multiple', source_url: valuationSourceUrl, fact_kind: values?.authorityTier === 'finmind_fallback' ? 'fallback_numeric' : 'official_numeric', derivation: {} },
         { fact_key: 'pb_ratio', value: values?.pbRatio ?? null, unit: 'multiple', source_url: valuationSourceUrl, fact_kind: values?.authorityTier === 'finmind_fallback' ? 'fallback_numeric' : 'official_numeric', derivation: {} },
         { fact_key: 'monthly_revenue', value: numberOrNull(priorRevenue?.monthly_revenue), unit: 'TWD', source_url: monthlyRevenueSourceUrl, fact_kind: monthlyRevenueSourceUrl.includes('api.finmindtrade.com') ? 'fallback_numeric' : 'official_numeric', derivation: {} },
-        { fact_key: 'forward_base_eps', value: earningsBridge.status === 'complete' ? earningsBridge.scenarios.base.dilutedEps : null, unit: 'TWD/share', source_url: 'https://mops.twse.com.tw/', fact_kind: 'derived_calculation', derivation: { model_version: CANDIDATE_VALUATION_MODEL_VERSION, reported_fact_ids: earningsBridge.status === 'complete' ? earningsBridge.factIds : [] } },
+        { fact_key: 'forward_base_eps', value: earningsBridge.status === 'complete' ? earningsBridge.scenarios.base.dilutedEps : null, unit: 'TWD/share', source_url: usesFinMindEarningsBridgeEvidence ? 'https://api.finmindtrade.com/api/v4/data' : 'https://mops.twse.com.tw/', fact_kind: 'derived_calculation', derivation: { model_version: CANDIDATE_VALUATION_MODEL_VERSION, reported_fact_ids: earningsBridge.status === 'complete' ? earningsBridge.factIds : [], includes_finmind_mirror: usesFinMindEarningsBridgeEvidence } },
         { fact_key: 'bear_target', value: valuation?.bearTarget ?? null, unit: 'TWD', source_url: values?.sourceUrl || 'https://www.twse.com.tw/', fact_kind: 'derived_calculation', derivation: { model_version: CANDIDATE_VALUATION_MODEL_VERSION, formula: 'scenario_eps_x_historical_pe_p25' } },
         { fact_key: 'base_target', value: valuation?.baseTarget ?? null, unit: 'TWD', source_url: values?.sourceUrl || 'https://www.twse.com.tw/', fact_kind: 'derived_calculation', derivation: { model_version: CANDIDATE_VALUATION_MODEL_VERSION, formula: 'scenario_eps_x_historical_pe_p50' } },
         { fact_key: 'bull_target', value: valuation?.bullTarget ?? null, unit: 'TWD', source_url: values?.sourceUrl || 'https://www.twse.com.tw/', fact_kind: 'derived_calculation', derivation: { model_version: CANDIDATE_VALUATION_MODEL_VERSION, formula: 'scenario_eps_x_historical_pe_p75' } },
@@ -1153,6 +1201,9 @@ async function executeCandidateResearchCycle(options: {
         provenance: priceDerivedFactKeys.has(fact.fact_key) ? priceFactProvenance : researchFactSourceProvenance(fact.source_url),
       }));
       const authorityFacts = ((authorityFactsRes.data as Row[]) || []).filter((fact) => String(fact.estimate_kind || '') === 'reported').map((fact) => ({
+        ...(String(fact.authority_tier || '') === 'finmind_mirror'
+          ? { fact_kind: 'fallback_numeric', provenance: { upstream_fact_id: String(fact.fact_id || ''), upstream_source_ref: String(fact.source_ref || ''), provider: 'finmind_fallback', authorityTier: 'finmind_fallback', official: false } }
+          : { fact_kind: 'official_numeric', provenance: { upstream_fact_id: String(fact.fact_id || ''), upstream_source_ref: String(fact.source_ref || ''), provider: 'opportunity-v3-official-authority', authorityTier: 'official_primary', official: true } }),
         stock_id: stock.id,
         fact_key: String(fact.fact_key || ''),
         period_end: String(fact.period_end || ''),
@@ -1161,8 +1212,7 @@ async function executeCandidateResearchCycle(options: {
         as_of: String(fact.source_timestamp || fact.filing_published_at || ''),
         available_at: String(fact.collected_at || fact.source_timestamp || ''),
         source_url: officialAuthoritySourceUrl(fact.source_ref),
-        fact_kind: 'official_numeric', derivation: {},
-        provenance: { upstream_fact_id: String(fact.fact_id || ''), upstream_source_ref: String(fact.source_ref || ''), provider: 'opportunity-v3-official-authority', authorityTier: 'official_primary', official: true },
+        derivation: {},
       })).filter((fact) => fact.fact_key && /^\d{4}-\d{2}-\d{2}$/u.test(fact.period_end) && fact.value != null && fact.as_of && fact.available_at);
       const authorityFactWrite = authorityFacts.length ? await supabase.from('candidate_official_facts').upsert(authorityFacts, {
         onConflict: 'stock_id,fact_key,period_end,available_at', ignoreDuplicates: true,

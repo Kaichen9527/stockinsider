@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { buildForwardEarningsBridge, discreteReportedQuarters, type ReportedFinancialFact } from './forward-earnings-bridge.ts';
+import { buildForwardEarningsBridge, discreteReportedQuarters, preferOfficialReportedFinancialFacts, type ReportedFinancialFact } from './forward-earnings-bridge.ts';
 
 function fact(factKey: string, year: number, quarter: number, value: number, discrete = false): ReportedFinancialFact {
   const end = [`${year}-03-31`, `${year}-06-30`, `${year}-09-30`, `${year}-12-31`][quarter - 1];
@@ -68,6 +68,30 @@ test('restatement conflicts fail closed', () => {
   ];
   assert.deepEqual(discreteReportedQuarters(conflicting, 'quarterly_revenue'), []);
   assert.equal(buildForwardEarningsBridge(conflicting).status, 'insufficient');
+});
+
+test('official facts supersede mirror observations only for the same metric and reporting date', () => {
+  const mirror = { ...fact('quarterly_revenue', 2025, 2, 130, true), factId: 'mirror-q2', provider: 'finmind', authorityTier: 'finmind_mirror' };
+  const official = { ...mirror, factId: 'official-q2', value: 230, provider: 'mops', authorityTier: 'official_filing' };
+  const mirrorQ1 = { ...fact('quarterly_revenue', 2025, 1, 100, true), factId: 'mirror-q1', provider: 'finmind', authorityTier: 'finmind_mirror' };
+  assert.deepEqual(preferOfficialReportedFinancialFacts([mirror, official, mirrorQ1]).map((row) => row.factId), ['official-q2', 'mirror-q1']);
+});
+
+test('an official YTD context does not discard a distinct mirror quarter', () => {
+  const mirror = { ...fact('quarterly_revenue', 2025, 2, 130, true), factId: 'mirror-q2', provider: 'finmind', authorityTier: 'finmind_mirror' };
+  const officialYtd = { ...fact('quarterly_revenue', 2025, 2, 230), factId: 'official-ytd-q2', provider: 'mops', authorityTier: 'official_filing' };
+  assert.deepEqual(preferOfficialReportedFinancialFacts([mirror, officialYtd]).map((row) => row.factId), ['mirror-q2', 'official-ytd-q2']);
+});
+
+test('a complete official YTD series supersedes a reconstructible mirror quarter', () => {
+  const officialQ1 = { ...fact('quarterly_revenue', 2025, 1, 100), factId: 'official-q1', provider: 'mops', authorityTier: 'official_filing' };
+  const officialYtd = { ...fact('quarterly_revenue', 2025, 2, 230), factId: 'official-ytd-q2', provider: 'mops', authorityTier: 'official_filing' };
+  const mirrorQ2 = { ...fact('quarterly_revenue', 2025, 2, 130, true), factId: 'mirror-q2', provider: 'finmind', authorityTier: 'finmind_mirror' };
+  const preferred = preferOfficialReportedFinancialFacts([officialQ1, officialYtd, mirrorQ2]);
+  assert.deepEqual(preferred.map((row) => row.factId), ['official-q1', 'official-ytd-q2']);
+  assert.deepEqual(discreteReportedQuarters(preferred, 'quarterly_revenue')[1], {
+    periodEnd: '2025-06-30', value: 130, factIds: ['official-ytd-q2', 'official-q1'],
+  });
 });
 
 test('missing eight-quarter bridge inputs fail closed', () => {
