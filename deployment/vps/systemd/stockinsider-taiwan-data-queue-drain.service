@@ -1,5 +1,5 @@
 [Unit]
-Description=Drain StockInsider Taiwan data provider queue
+Description=Drain StockInsider Taiwan market and financial provider queues
 After=network-online.target stockinsider-web.service
 Wants=network-online.target
 Requires=stockinsider-web.service
@@ -11,8 +11,8 @@ WorkingDirectory=/opt/stockinsider/current
 EnvironmentFile=/etc/stockinsider/stockinsider.env
 Environment=APP_URL=http://127.0.0.1:3100
 Environment=EXPECTED_APP_URL=http://127.0.0.1:3100
-ExecStart=/usr/bin/flock -w 900 /run/lock/stockinsider-production-write.lock /usr/bin/env APP_URL=http://127.0.0.1:3100 EXPECTED_APP_URL=http://127.0.0.1:3100 INTERNAL_API_TIMEOUT_MS=600000 /usr/bin/node scripts/call_internal_api.mjs /api/internal/taiwan-data-queue-drain '{"limit":20}'
-TimeoutStartSec=700
+ExecStart=/usr/bin/flock -w 900 /run/lock/stockinsider-production-write.lock /usr/bin/env APP_URL=http://127.0.0.1:3100 EXPECTED_APP_URL=http://127.0.0.1:3100 INTERNAL_API_TIMEOUT_MS=900000 /usr/bin/node scripts/call_internal_api_sequence.mjs '[{"endpoint":"/api/internal/taiwan-data-queue-drain","payload":{"limit":20},"timeoutMs":600000},{"endpoint":"/api/internal/candidate-financial-queue-drain","payload":{"limit":20},"timeoutMs":900000}]'
+TimeoutStartSec=950
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectHome=true

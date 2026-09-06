@@ -321,10 +321,23 @@ function acquisitionTerminalReason(message: string) {
   return 'network_error';
 }
 
-export async function refreshCandidateOfficialFinancials(candidates: CandidateOfficialFinancial[], cutoff: string) {
+export type CandidateOfficialFinancialRefreshOptions = {
+  enqueueMissing?: boolean;
+  maxJobs?: number;
+};
+
+export async function refreshCandidateOfficialFinancials(
+  candidates: CandidateOfficialFinancial[],
+  cutoff: string,
+  options: CandidateOfficialFinancialRefreshOptions = {},
+) {
   const runnerPrincipal = fixedRunnerPrincipal();
   if (!runnerPrincipal) throw new Error('candidate_financial_runner_principal_missing');
   const collectedAt = new Date().toISOString();
+  const enqueueMissing = options.enqueueMissing !== false;
+  let remainingJobs = Number.isInteger(options.maxJobs)
+    ? Math.max(1, Math.min(240, Number(options.maxJobs)))
+    : Number.POSITIVE_INFINITY;
   const mopsCandidates = candidates.filter((candidate) => candidate.exchange === 'TWSE');
   const tpexCandidates = candidates.filter((candidate) => candidate.exchange === 'TPEX');
   const client = getOpportunityV3ServerClient();
@@ -336,7 +349,7 @@ export async function refreshCandidateOfficialFinancials(candidates: CandidateOf
     cursor_key: `${candidate.symbol}:${year}Q${quarter}`,
     source_url: `${MOPS_INLINE_URL}?step=1&CO_ID=${candidate.symbol}&SYEAR=${year - 1911}&SSEASON=${quarter}&REPORT_ID=C`,
   })));
-  if (desiredMopsJobs.length) {
+  if (enqueueMissing && desiredMopsJobs.length) {
     const queued = await client.from('candidate_financial_acquisition_jobs_v4').upsert(desiredMopsJobs, {
       onConflict: 'stock_id,endpoint_key,period_end,cursor_key',
       ignoreDuplicates: true,
@@ -353,18 +366,18 @@ export async function refreshCandidateOfficialFinancials(candidates: CandidateOf
       source_url: sourceUrl,
     })),
   );
-  if (desiredTpexJobs.length) {
+  if (enqueueMissing && desiredTpexJobs.length) {
     const queued = await client.from('candidate_financial_acquisition_jobs_v4').upsert(desiredTpexJobs, {
       onConflict: 'stock_id,endpoint_key,period_end,cursor_key', ignoreDuplicates: true,
     });
     if (queued.error) throw new Error(`candidate_tpex_financial_job_enqueue_failed:${queued.error.message}`);
   }
   const candidateById = new Map(mopsCandidates.map((candidate) => [candidate.stockId, candidate]));
-  const claimRead = mopsCandidates.length
+  const claimRead = mopsCandidates.length && remainingJobs > 0
     ? await client.rpc('claim_candidate_financial_acquisition_jobs_v4', {
       p_stock_ids: mopsCandidates.map((candidate) => candidate.stockId),
       p_endpoint_key: 'mops_inline',
-      p_limit: 60,
+      p_limit: Math.min(60, remainingJobs),
       p_owner: runnerPrincipal,
       p_claimed_at: collectedAt,
       p_lease_expires_at: new Date(Date.now() + FINANCIAL_JOB_LEASE_MS).toISOString(),
@@ -377,6 +390,8 @@ export async function refreshCandidateOfficialFinancials(candidates: CandidateOf
     if (!candidate || !match) return [];
     return [{ jobId: String(job.job_id), attempts: Number(job.attempts || 0), candidate, year: Number(match[1]), quarter: Number(match[2]) }];
   });
+  let claimedJobCount = claimedRows.length;
+  remainingJobs = Number.isFinite(remainingJobs) ? Math.max(0, remainingJobs - claimedRows.length) : remainingJobs;
   const outcomes = await mapLimit(claimedRows, 2, async ({ jobId, attempts, candidate, year, quarter }) => {
     try {
       const fetched = await fetchFiling(candidate, year, quarter, collectedAt);
@@ -437,12 +452,14 @@ export async function refreshCandidateOfficialFinancials(candidates: CandidateOf
   const tpexById = new Map(tpexCandidates.map((candidate) => [candidate.stockId, candidate]));
   const tpexFacts: ParsedFact[] = [];
   const tpexFailures: string[] = [];
+  const attemptedTpexSymbols = new Set<string>();
   let tpexFetchedEndpoints = 0;
   for (const [endpoint, sourceUrl] of Object.entries(TPEX_FINANCIAL_ENDPOINTS)) {
+    if (remainingJobs <= 0) break;
     const endpointKey = TPEX_JOB_KEYS[endpoint as keyof typeof TPEX_JOB_KEYS];
     const claim = tpexCandidates.length ? await client.rpc('claim_candidate_financial_acquisition_jobs_v4', {
       p_stock_ids: tpexCandidates.map((candidate) => candidate.stockId), p_endpoint_key: endpointKey,
-      p_limit: 60, p_owner: runnerPrincipal, p_claimed_at: collectedAt,
+      p_limit: Math.min(60, remainingJobs), p_owner: runnerPrincipal, p_claimed_at: collectedAt,
       p_lease_expires_at: new Date(Date.now() + FINANCIAL_JOB_LEASE_MS).toISOString(),
     }) : { data: [], error: null };
     if (claim.error) throw new Error(`candidate_tpex_financial_job_claim_failed:${claim.error.message}`);
@@ -450,6 +467,9 @@ export async function refreshCandidateOfficialFinancials(candidates: CandidateOf
       const candidate = tpexById.get(String(job.stock_id || ''));
       return candidate ? [{ jobId: String(job.job_id), attempts: Number(job.attempts || 0), candidate }] : [];
     });
+    claimedJobCount += jobs.length;
+    remainingJobs = Number.isFinite(remainingJobs) ? Math.max(0, remainingJobs - jobs.length) : remainingJobs;
+    for (const job of jobs) attemptedTpexSymbols.add(job.candidate.symbol);
     if (jobs.length === 0) continue;
     try {
       const response = await fetch(sourceUrl, { headers: { Accept: 'application/json', 'user-agent': 'StockInsider/4.0' }, redirect: 'error', signal: AbortSignal.timeout(20_000) });
@@ -487,11 +507,12 @@ export async function refreshCandidateOfficialFinancials(candidates: CandidateOf
   const failures = [...mopsFailures, ...tpexFailures];
   return {
     candidateCount: candidates.length,
+    claimedJobs: claimedJobCount,
     fetchedFilings: Math.max(0, claimedRows.length - outcomes.filter((row) => row.error).length) + tpexFetchedEndpoints,
     parsedFacts: facts.length,
     writtenFacts,
     symbolsWithFacts: [...new Set(facts.map((fact) => fact.symbol))],
-    attemptedSymbols: [...new Set([...claimedRows.map((job) => job.candidate.symbol), ...tpexCandidates.map((candidate) => candidate.symbol)])],
+    attemptedSymbols: [...new Set([...claimedRows.map((job) => job.candidate.symbol), ...attemptedTpexSymbols])],
     failures,
   };
 }

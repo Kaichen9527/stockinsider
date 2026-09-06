@@ -39,6 +39,9 @@ test('official financial refresh completes durable MOPS and TPEx jobs atomically
   assert.match(source, /TPEX_JOB_KEYS/u);
   assert.match(source, /claim_candidate_financial_acquisition_jobs_v4/u);
   assert.match(source, /FINANCIAL_JOB_LEASE_MS = 45 \* 60_000/u);
+  assert.match(source, /remainingJobs/u);
+  assert.match(source, /claimedJobs: claimedJobCount/u);
+  assert.match(source, /enqueueMissing !== false/u);
   assert.doesNotMatch(source, /rpc\('append_financial_fact_v3'/u);
 });
 

@@ -6,6 +6,7 @@ const migration = readFileSync(new URL('../migrations/20260906_taiwan_data_provi
 const provider = readFileSync(new URL('../web/src/lib/taiwan-data-provider.ts', import.meta.url), 'utf8');
 const refreshRoute = readFileSync(new URL('../web/src/app/api/internal/taiwan-data-refresh/route.ts', import.meta.url), 'utf8');
 const drainRoute = readFileSync(new URL('../web/src/app/api/internal/taiwan-data-queue-drain/route.ts', import.meta.url), 'utf8');
+const financialDrainRoute = readFileSync(new URL('../web/src/app/api/internal/candidate-financial-queue-drain/route.ts', import.meta.url), 'utf8');
 const preliminaryRoute = readFileSync(new URL('../web/src/app/api/internal/radar-preliminary-publish/route.ts', import.meta.url), 'utf8');
 const runtime = readFileSync(new URL('../web/src/lib/taiwan-data-runtime.ts', import.meta.url), 'utf8');
 const masterCalendar = readFileSync(new URL('../deployment/vps/systemd/stockinsider-taiwan-data-master-calendar.timer', import.meta.url), 'utf8');
@@ -56,6 +57,10 @@ test('VPS-only authenticated routes queue and drain the durable provider plane',
   assert.match(migration, /taiwan_data_result_identity_mismatch/u);
   assert.match(drainRoute, /disposition === 'retry_scheduled'/u);
   assert.doesNotMatch(migration, /DROP TABLE|TRUNCATE/u);
+  assert.match(financialDrainRoute, /requireExactInternalBearer/u);
+  assert.match(financialDrainRoute, /requireActiveVpsWriter/u);
+  assert.match(financialDrainRoute, /refreshCandidateOfficialFinancials/u);
+  assert.match(financialDrainRoute, /MAX_DRAIN_LIMIT = 20/u);
 });
 
 test('candidate-universe schedules include typed valuation, revenue and financial datasets', () => {
@@ -89,6 +94,10 @@ test('VPS timers separate the approved preliminary, final, pipeline and hourly d
   assert.match(readFileSync(new URL('../deployment/vps/systemd/stockinsider-research-cycle.timer', import.meta.url), 'utf8'), /21:00:00 Asia\/Taipei/u);
   assert.match(readFileSync(new URL('../deployment/vps/systemd/stockinsider-health-check.timer', import.meta.url), 'utf8'), /21:45:00 Asia\/Taipei/u);
   assert.match(drain, /00\.\.17,22\.\.23:10:00 Asia\/Taipei/u);
+  const drainService = readFileSync(new URL('../deployment/vps/systemd/stockinsider-taiwan-data-queue-drain.service', import.meta.url), 'utf8');
+  assert.match(drainService, /\/api\/internal\/taiwan-data-queue-drain/u);
+  assert.match(drainService, /\/api\/internal\/candidate-financial-queue-drain/u);
+  assert.match(drainService, /"limit":20/u);
   assert.doesNotMatch(installer, /FINMIND_API_TOKEN/u);
   assert.match(installer, /stockinsider-taiwan-data-master-calendar\.timer/u);
   assert.match(installer, /call_internal_api_sequence\.mjs/u);
