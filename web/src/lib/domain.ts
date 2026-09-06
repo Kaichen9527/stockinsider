@@ -22179,6 +22179,36 @@ export async function getLineDispatchDiagnostics(hours = 24) {
   }
 }
 
+function pipelineRecoveryScope(row: Row) {
+  const details = row.details && typeof row.details === 'object' && !Array.isArray(row.details)
+    ? row.details as Row
+    : {};
+  return `${String(row.run_type || row.workflow || 'pipeline')}:${String(details.mode || 'default')}`;
+}
+
+/**
+ * Return only failures which have not been superseded by a later successful
+ * run of the same pipeline mode. Older failures remain in the ledger for the
+ * incident history, but must not keep production health permanently red after
+ * a controlled recovery has completed.
+ */
+export function unrecoveredPipelineFailures(rows: Row[]) {
+  const latestSuccessByScope = new Map<string, number>();
+  for (const row of rows) {
+    if (String(row.status || '') !== 'success') continue;
+    const startedAt = Date.parse(String(row.started_at || row.finished_at || ''));
+    if (!Number.isFinite(startedAt)) continue;
+    const scope = pipelineRecoveryScope(row);
+    latestSuccessByScope.set(scope, Math.max(latestSuccessByScope.get(scope) || 0, startedAt));
+  }
+  return rows.filter((row) => {
+    if (String(row.status || '') !== 'failed') return false;
+    const startedAt = Date.parse(String(row.started_at || row.finished_at || ''));
+    if (!Number.isFinite(startedAt)) return true;
+    return startedAt > (latestSuccessByScope.get(pipelineRecoveryScope(row)) || 0);
+  });
+}
+
 export async function runMonitoringChecks() {
   if (shouldUseDemoFallback()) {
     return {
@@ -22221,7 +22251,7 @@ export async function runMonitoringChecks() {
     const alerts: Array<{ type: string; level: 'warning' | 'critical'; message: string; context?: Record<string, unknown> }> = [];
 
     const pipelineRuns = (pipelineRes.data as Row[]) || [];
-    const failedRuns = pipelineRuns.filter((row) => String(row.status || '') === 'failed');
+    const failedRuns = unrecoveredPipelineFailures(pipelineRuns);
     if (failedRuns.length > 0) {
       alerts.push({
         type: 'pipeline_failed',
