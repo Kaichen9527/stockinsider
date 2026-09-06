@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { requireExactInternalBearer } from '@/lib/internal-auth';
 import { needsCompletedTradingSession, type TaiwanDataset, type TaiwanExchange } from '@/lib/taiwan-data-provider';
-import { parseTaiwanQueueRequest, requireActiveVpsWriter, taiwanRefreshQueueKey } from '@/lib/taiwan-data-runtime';
+import { parseTaiwanQueueRequest, requireActiveVpsWriter, resolveLatestCompletedTaiwanSession, taiwanRefreshQueueKey } from '@/lib/taiwan-data-runtime';
 
 const BODY_LIMIT = 100_000;
 const DAILY_CLOSE_CANDIDATE_CAP = 280;
@@ -21,17 +21,12 @@ export async function POST(request: Request) {
   const hasExplicitSessionDate = Object.prototype.hasOwnProperty.call(requestBody, 'sessionDate');
   let sessionDate = input.sessionDate;
   if (!hasExplicitSessionDate && needsCompletedTradingSession(input.datasets)) {
-    const completed = await writer.supabase.from('tw_trading_sessions_v3')
-      .select('session_id')
-      .eq('status', 'completed')
-      .lte('session_id', input.sessionDate)
-      .lte('close_at', new Date().toISOString())
-      .order('session_id', { ascending: false })
-      .limit(1)
-      .maybeSingle();
-    if (completed.error) return NextResponse.json({ ok: false, error: `latest_completed_trading_session_read_failed:${completed.error.message}` }, { status: 500 });
-    if (!completed.data?.session_id) return NextResponse.json({ ok: false, error: 'latest_completed_trading_session_missing' }, { status: 503 });
-    sessionDate = String(completed.data.session_id);
+    try {
+      sessionDate = await resolveLatestCompletedTaiwanSession(writer.supabase, input.sessionDate);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'latest_completed_trading_session_missing';
+      return NextResponse.json({ ok: false, error: message }, { status: message.startsWith('latest_completed_trading_session_read_failed:') ? 500 : 503 });
+    }
   }
   // Official valuation and revenue endpoints are exchange-wide batches. Only
   // price and statement requests are candidate-scoped; this prevents N
