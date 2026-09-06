@@ -7,9 +7,10 @@ function stageCard(index: number): CandidateStageCard {
   return {
     symbol: String(1000 + index), chineseName: `測試公司 ${index}`, market: 'TW', lifecycleStage: 'found',
     latestMentionAt: '2026-09-01T13:30:00+08:00', mentionCount: 2, rawMentionCount: 2,
-    effectiveMentionCount: 2, publisherCount: 1, platformCount: 1, dominantPlatformShare: 1,
+    effectiveMentionCount: 2, publisherCount: 1, positivePublisherCount: 0,
+    negativePublisherCount: 0, generalPublisherCount: 1, platformCount: 1, dominantPlatformShare: 1,
     sources: Array.from({ length: 2 }, (_, sourceIndex) => ({
-      platform: 'telegram', author: null, sourceUrl: `https://t.me/example/${index}-${sourceIndex}`,
+      platform: 'telegram', sourceName: '範例頻道', publisherName: '範例頻道', author: null, sourceUrl: `https://t.me/example/${index}-${sourceIndex}`,
       stance: 'neutral', mentionedAt: '2026-09-01T13:30:00+08:00',
     })),
     scores: { discovery: 40, research: 20, actionability: 30, dataConfidence: 55 },
@@ -53,6 +54,7 @@ test('public Radar snapshot uses stages as the canonical stock plane and stays w
   assert.equal('mentionCount' in (compact.stages?.found[0] || {}), false);
   assert.equal('promotionReasons' in (compact.stages?.found[0] || {}), false);
   assert.equal('detailHref' in (compact.stages?.found[0] || {}), false);
+  assert.equal('detailRevisionId' in (compact.stages?.found[0] || {}), false);
   assert.equal('stale' in (compact.stages?.found[0] || {}), false);
   assert.equal('currentPrice' in (compact.stages?.found[0]?.valuation || {}), false);
   assert.equal(compact.stages?.found[0]?.sources.length, 2);

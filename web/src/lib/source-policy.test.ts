@@ -1,13 +1,13 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { requireExactInternalBearer, requireInternalAuth } from './internal-auth.ts';
-import { activeSourceConnectorKeys, APPROVED_TELEGRAM_PUBLIC_CHANNELS, RETIRED_SOURCE_CONNECTORS, scheduledSourceConnectorKeys, sourceExecutionPolicy } from './source-policy.ts';
+import { activeSourceConnectorKeys, APPROVED_TELEGRAM_PUBLIC_CHANNELS, RETIRED_SOURCE_CONNECTORS, UNAVAILABLE_TELEGRAM_PUBLIC_CHANNELS, authorizedPodcastRssAllowlist, podcastContentAnalyzable, scheduledSourceConnectorKeys, sourceExecutionPolicy } from './source-policy.ts';
 
 const ENV_KEYS = [
-  'INTERNAL_API_KEY', 'CRON_SECRET', 'THREADS_OFFICIAL_API_ENABLED',
+  'INTERNAL_API_KEY', 'CRON_SECRET', 'THREADS_OFFICIAL_API_ENABLED', 'THREADS_OFFICIAL_CANARY_ACTIVE',
   'TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED', 'PTT_METADATA_AUTHORIZED',
   'BULLTALK_LICENSED', 'BULLTALK_AUTHORIZED_FEED_URL',
-  'PODCAST_RSS_ALLOWLIST', 'TWSE_OFFICIAL_OPENAPI_ENABLED',
+  'PODCAST_RSS_ALLOWLIST', 'PODCAST_CONTENT_ANALYSIS_ALLOWLIST', 'TWSE_OFFICIAL_OPENAPI_ENABLED',
 ] as const;
 
 function withEnvironment(values: Partial<Record<(typeof ENV_KEYS)[number], string>>, run: () => void) {
@@ -42,6 +42,10 @@ test('Threads and licensed sources report explicit blocks instead of false succe
     assert.equal(sourceExecutionPolicy('bulltalk').disposition, 'blocked_license');
   });
   withEnvironment({ THREADS_OFFICIAL_API_ENABLED: 'true' }, () => {
+    assert.equal(sourceExecutionPolicy('threads').disposition, 'blocked_auth');
+    assert.equal(sourceExecutionPolicy('threads').terminalReason, 'threads_official_canary_inactive');
+  });
+  withEnvironment({ THREADS_OFFICIAL_API_ENABLED: 'true', THREADS_OFFICIAL_CANARY_ACTIVE: 'true' }, () => {
     assert.equal(sourceExecutionPolicy('threads').disposition, 'active');
   });
 });
@@ -54,10 +58,11 @@ test('retired connectors remain explicitly queryable as historical-only policy',
   }
 });
 
-test('approved roster has exactly seven unique Telegram cursors', () => {
+test('available Telegram channels have stable identities and unavailable channels never enter the crawler', () => {
   const channels = [...APPROVED_TELEGRAM_PUBLIC_CHANNELS];
-  assert.equal(channels.length, 7);
-  assert.equal(new Set(channels.map((value) => value.toLowerCase())).size, 7);
+  assert.equal(channels.length, 6);
+  assert.equal(new Set([...channels, ...UNAVAILABLE_TELEGRAM_PUBLIC_CHANNELS].map((value) => value.toLowerCase())).size, 7);
+  assert.deepEqual(UNAVAILABLE_TELEGRAM_PUBLIC_CHANNELS, ['twstockanalysis']);
 });
 
 test('GDELT is active metadata discovery and retired publishers stay retired', () => {
@@ -76,20 +81,34 @@ test('TWSE insider is excluded from VPS schedules until official egress is confi
   });
 });
 
-test('Podcast is manual-only until a creator-published HTTPS RSS feed is allowlisted', () => {
-  withEnvironment({}, () => assert.equal(sourceExecutionPolicy('podcast').disposition, 'manual_only'));
+test('Podcast creator-published RSS index is active independently of transcript rights', () => {
+  withEnvironment({}, () => assert.equal(sourceExecutionPolicy('podcast').disposition, 'active'));
   withEnvironment({ PODCAST_RSS_ALLOWLIST: 'https://creator.example/feed.xml' }, () => {
     assert.equal(sourceExecutionPolicy('podcast').disposition, 'active');
-    assert.equal(sourceExecutionPolicy('podcast').licenseBasis, 'creator_published_rss_allowlist');
+    assert.equal(sourceExecutionPolicy('podcast').licenseBasis, 'creator_published_rss_index_allowlist');
+  });
+});
+
+test('Podcast RSS indexing and content analysis are independently allowlisted', () => {
+  withEnvironment({
+    PODCAST_RSS_ALLOWLIST: 'https://creator.example/feed.xml,not-a-url',
+    PODCAST_CONTENT_ANALYSIS_ALLOWLIST: 'https://creator.example/paid-feed.xml',
+  }, () => {
+    assert.deepEqual(authorizedPodcastRssAllowlist(), [
+      'https://feeds.soundon.fm/podcasts/954689a5-3096-43a4-a80b-7810b219cef3.xml',
+      'https://creator.example/feed.xml',
+    ]);
+    assert.equal(podcastContentAnalyzable('https://creator.example/feed.xml'), false);
+    assert.equal(podcastContentAnalyzable('https://creator.example/paid-feed.xml'), true);
   });
 });
 
 test('connector=all includes only sources authorized in the current runtime', () => {
   withEnvironment({}, () => {
-    assert.deepEqual(activeSourceConnectorKeys(), ['gdelt']);
+    assert.deepEqual(activeSourceConnectorKeys(), ['podcast', 'gdelt']);
   });
-  withEnvironment({ THREADS_OFFICIAL_API_ENABLED: 'true', TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED: 'true' }, () => {
-    assert.deepEqual(activeSourceConnectorKeys(), ['telegram', 'threads', 'gdelt']);
-    assert.deepEqual(scheduledSourceConnectorKeys(), ['telegram', 'threads', 'gdelt']);
+  withEnvironment({ THREADS_OFFICIAL_API_ENABLED: 'true', THREADS_OFFICIAL_CANARY_ACTIVE: 'true', TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED: 'true' }, () => {
+    assert.deepEqual(activeSourceConnectorKeys(), ['telegram', 'threads', 'podcast', 'gdelt']);
+    assert.deepEqual(scheduledSourceConnectorKeys(), ['telegram', 'threads', 'podcast', 'gdelt']);
   });
 });

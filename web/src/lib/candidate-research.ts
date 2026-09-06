@@ -1,6 +1,6 @@
 import { createHash, randomUUID } from 'crypto';
 import { getSupabaseServerClient } from './supabase-server';
-import { calculateTechnicalFeatures, normalizeInstitutionalFlows, technicalHistoryCoverageTerminalReason, type InstitutionalFlowDay } from './technical-features-v2';
+import { calculateTechnicalFeatures, normalizeInstitutionalFlows, technicalHistoryCoverageTerminalReason, TECHNICAL_FEATURE_RULESET_VERSION, type InstitutionalFlowDay } from './technical-features-v2';
 import {
   advanceActionableCloseStreak,
   classifyCandidateStage,
@@ -18,27 +18,27 @@ import {
   isOfficialValuationSourceUrl,
   type TwValuationHistoryPoint,
 } from './tw-market';
-import { buildConservativeOfficialScenario, buildForwardEarningsScenario } from './candidate-valuation';
-import { candidatePriceRefreshDepth, collectBatchedAuthorityRows, collectPagedAuthorityRows, isCandidateHistoricalPriceAccessEnabled, isTransientResearchInfrastructureError, rotatingShard } from './candidate-research-policy';
+import { buildConservativeOfficialScenario, buildDriverMultipleScenario, buildForwardEarningsScenario } from './candidate-valuation';
+import { candidatePriceRefreshDepth, collectBatchedAuthorityRows, collectPagedAuthorityRows, financialFactAvailableAt, isCandidateHistoricalPriceAccessEnabled, isTransientResearchInfrastructureError } from './candidate-research-policy';
 import { scheduledSourceConnectorKeys, sourceExecutionPolicy } from './source-policy';
 import { loadLatestSourceRunLedger } from './source-run-ledger';
 import type { CandidateShadowProgress, CandidateStageCard } from './types';
 import { candidateValuationPolicy, VALUATION_REMEDIATION_SYMBOLS } from './candidate-valuation-policy';
 import { buildDeterministicCandidateSections } from './candidate-detail';
-import { candidateRiskAction, runningMaxDrawdown } from './candidate-risk-action';
+import { advanceRiskEpisode, candidateRiskAction } from './candidate-risk-action';
 import { buildMarketEvidenceSnapshot } from './market-evidence';
 import { candidateMentionDiscoveryEligible, publisherKeyFor, relativeDiscussionBurst, roundRobinSourceLinks, sourceConcentration } from './source-content-semantics';
 import { buildShadowReplayInputs, shadowReplayConflicts } from './shadow-policy-v2';
 import { buildForwardEarningsBridge, discreteReportedQuarters, type ReportedFinancialFact } from './forward-earnings-bridge';
-import { brokerResearchFactor, officialResearchEvidenceFactor, relationshipFactor } from './candidate-factor-builder';
+import { brokerResearchFactor, industryRotationActionabilityFactor, officialResearchEvidenceFactor, overseasPriceActionabilityFactor, relationshipFactor } from './candidate-factor-builder';
 import { refreshCandidateOfficialFinancials } from './candidate-official-financials';
 
 type Row = Record<string, unknown>;
 
-export const CANDIDATE_RESEARCH_MODEL_VERSION = 'candidate-research-v3.0.0';
-export const CANDIDATE_STAGE_MODEL_VERSION = 'candidate-stage-v3.0.0';
-export const CANDIDATE_VALUATION_MODEL_VERSION = 'valuation-v3.0.0';
-export const SHADOW_POLICY_VERSION = 'shadow-policy-v2';
+export const CANDIDATE_RESEARCH_MODEL_VERSION = 'candidate-research-v4.0.0';
+export const CANDIDATE_STAGE_MODEL_VERSION = 'candidate-stage-v4.0.0';
+export const CANDIDATE_VALUATION_MODEL_VERSION = 'valuation-v4.0.0';
+export const SHADOW_POLICY_VERSION = 'shadow-policy-v3';
 export const SHADOW_REQUIRED_SESSIONS = 30 as const;
 
 function numberOrNull(value: unknown): number | null {
@@ -337,27 +337,23 @@ async function executeCandidateResearchCycle(options: {
   }
   const requiredBridgeKeys = ['quarterly_revenue','quarterly_gross_profit','quarterly_operating_income','quarterly_net_income_attributable_to_common','quarterly_diluted_eps'];
   const financialRefreshBacklog = proposedUniverse.filter((stock) => requiredBridgeKeys.some((key) => (coverageByStock.get(stock.id)?.get(key)?.size || 0) < 8));
-  const priorFinancialRefreshState = await supabase.from('candidate_research_runs')
-    .select('summary')
-    .order('evaluation_at', { ascending: false })
-    .limit(1)
-    .maybeSingle();
-  if (priorFinancialRefreshState.error) throw new Error(`candidate_financial_refresh_state_read_failed:${priorFinancialRefreshState.error.message}`);
-  const priorFinancialSummary = rowRelation(priorFinancialRefreshState.data?.summary);
-  const priorFinancialCursor = Math.max(0, Math.floor(numberOrNull(priorFinancialSummary?.officialFinancialRefreshNextCursor) || 0));
-  // MOPS throttles individual filing reads. Rotate the deterministic 30-symbol
-  // shard after every cycle so an issuer whose statements can never form the
-  // generic bridge cannot permanently starve later candidates.
-  const financialRefreshShard = rotatingShard(financialRefreshBacklog, priorFinancialCursor, 30);
-  const selectedFinancialRefreshStocks = financialRefreshShard.items;
-  const nextFinancialRefreshCursor = financialRefreshShard.nextCursor;
+  const financialCursorRead = financialRefreshBacklog.length ? await supabase.from('candidate_financial_acquisition_cursors_v4')
+    .select('stock_id,last_collected_at,updated_at').in('stock_id', financialRefreshBacklog.map((stock) => stock.id)) : { data: [], error: null };
+  if (financialCursorRead.error) throw new Error(`candidate_financial_refresh_state_read_failed:${financialCursorRead.error.message}`);
+  const cursorByStock = new Map(((financialCursorRead.data as Row[]) || []).map((row) => [String(row.stock_id), Date.parse(String(row.last_collected_at || row.updated_at || '')) || 0]));
+  // Durable acquisition state, not the current run summary, controls progress.
+  // Missing/oldest candidates are processed first, so a blocked issuer cannot
+  // permanently starve every stock after it.
+  const selectedFinancialRefreshStocks = [...financialRefreshBacklog]
+    .sort((left, right) => (cursorByStock.get(left.id) || 0) - (cursorByStock.get(right.id) || 0) || left.symbol.localeCompare(right.symbol))
+    .slice(0, 30);
   const financialRefreshTargets = selectedFinancialRefreshStocks.flatMap((stock) => {
     const exchange = exchangeBySymbol.get(stock.symbol);
     return exchange ? [{ stockId: stock.id, symbol: stock.symbol, exchange: exchange === 'TPEx' ? 'TPEX' as const : 'TWSE' as const }] : [];
   });
   const officialFinancialRefresh = financialRefreshTargets.length > 0
     ? await refreshCandidateOfficialFinancials(financialRefreshTargets, evaluatedAt)
-    : { candidateCount: 0, fetchedFilings: 0, parsedFacts: 0, writtenFacts: 0, failures: [] as string[] };
+    : { candidateCount: 0, fetchedFilings: 0, parsedFacts: 0, writtenFacts: 0, symbolsWithFacts: [] as string[], attemptedSymbols: [] as string[], failures: [] as string[] };
   const authorityFrozenAt = new Date().toISOString();
   const [latestFinancialRevision, latestPriceRevision] = await Promise.all([
     supabase.from('opportunity_financial_facts_v3').select('recorded_at').lte('recorded_at', authorityFrozenAt).order('recorded_at', { ascending: false }).limit(1).maybeSingle(),
@@ -374,17 +370,28 @@ async function executeCandidateResearchCycle(options: {
     priceFactsRecordedThrough: latestPriceRevision.data?.recorded_at || null,
     officialFinancialRefreshBacklog: financialRefreshBacklog.length,
   };
+  const shadowCohortKey = `${SHADOW_POLICY_VERSION}:${STAGE_RULESET_VERSION}:${CANDIDATE_RESEARCH_MODEL_VERSION}`;
+  const canonicalInputHashes = {
+    candidateUniverse: stableHash(proposedUniverse.map((stock) => stock.symbol)),
+    sourceMentions: String(manifestInputVersions.sourceMentionRevisionHash),
+    financialAuthority: stableHash(manifestInputVersions.financialFactsRecordedThrough),
+    priceAuthority: stableHash(manifestInputVersions.priceFactsRecordedThrough),
+  };
   const proposedManifestHash = stableHash({ sessionDate: latestMarketSession, sourceCutoff, candidateSymbols: proposedUniverse.map((stock) => stock.symbol), inputVersions: manifestInputVersions });
   const manifestInsert = await supabase.from('candidate_shadow_manifests').upsert({
     session_date: latestMarketSession, policy_version: SHADOW_POLICY_VERSION, source_cutoff: sourceCutoff,
     candidate_symbols: proposedUniverse.map((stock) => stock.symbol), input_versions: manifestInputVersions,
+    ruleset_version: STAGE_RULESET_VERSION, model_version: CANDIDATE_RESEARCH_MODEL_VERSION,
+    cohort_key: shadowCohortKey, canonical_input_hashes: canonicalInputHashes,
     manifest_hash: proposedManifestHash, frozen_at: authorityFrozenAt,
-  }, { onConflict: 'session_date,policy_version', ignoreDuplicates: true });
+  }, { onConflict: 'session_date,policy_version,ruleset_version,model_version', ignoreDuplicates: true });
   if (manifestInsert.error) throw new Error(`shadow_manifest_write_failed:${manifestInsert.error.message}`);
-  const manifestRead = await supabase.from('candidate_shadow_manifests').select('id,candidate_symbols,manifest_hash,input_versions,frozen_at').eq('session_date', latestMarketSession).eq('policy_version', SHADOW_POLICY_VERSION).single();
+  const manifestRead = await supabase.from('candidate_shadow_manifests').select('id,candidate_symbols,manifest_hash,input_versions,canonical_input_hashes,frozen_at').eq('session_date', latestMarketSession).eq('policy_version', SHADOW_POLICY_VERSION).eq('ruleset_version', STAGE_RULESET_VERSION).eq('model_version', CANDIDATE_RESEARCH_MODEL_VERSION).single();
   if (manifestRead.error || !manifestRead.data) throw new Error(`shadow_manifest_read_failed:${manifestRead.error?.message || 'missing'}`);
-  const frozenSymbols = new Set((Array.isArray(manifestRead.data.candidate_symbols) ? manifestRead.data.candidate_symbols : []).map(String));
-  const universe = proposedUniverse.filter((stock) => frozenSymbols.has(stock.symbol));
+  // Shadow freezes a reproducibility cohort; it must not freeze production.
+  // New weekend/source mentions still enter `found` and the research queue in
+  // this run, while the observation below evaluates only manifest symbols.
+  const universe = proposedUniverse;
   const manifestId = String(manifestRead.data.id);
   const manifestHash = String(manifestRead.data.manifest_hash);
   const authorityCutoff = String(manifestRead.data.frozen_at || evaluatedAt);
@@ -507,11 +514,14 @@ async function executeCandidateResearchCycle(options: {
         supabase.from('stock_signals').select('as_of,volume,chip_metrics').eq('stock_id', stock.id).order('as_of', { ascending: false }).limit(30),
         supabase.from('official_price_history').select('session_date,open,high,low,close,volume').eq('stock_id', stock.id).lte('available_at', evaluatedAt).order('session_date', { ascending: true }).limit(1320),
         supabase.from('opportunity_price_observations_v3').select('session_id,raw_open,raw_high,raw_low,raw_close,volume,source_ref,source_timestamp,collected_at,recorded_at').eq('stock_id', stock.id).lte('recorded_at', authorityCutoff).order('session_id', { ascending: true }).order('recorded_at', { ascending: true }).limit(4000),
-        supabase.from('opportunity_financial_facts_v3').select('fact_id,fact_key,period_start,period_end,duration_kind,value,unit,filing_published_at,source_timestamp,collected_at,recorded_at,source_ref,estimate_kind,estimate_horizon').eq('stock_id', stock.id).lte('recorded_at', authorityCutoff).order('period_end', { ascending: false }).order('recorded_at', { ascending: false }).limit(2000),
+        supabase.from('opportunity_financial_facts_v3').select('fact_id,fact_key,period_start,period_end,duration_kind,value,unit,filing_published_at,source_timestamp,collected_at,recorded_at,source_ref,estimate_kind,estimate_horizon,filing_restatement_id').eq('stock_id', stock.id)
+          .lte('filing_published_at', authorityCutoff).lte('source_timestamp', authorityCutoff)
+          .lte('collected_at', authorityCutoff).lte('recorded_at', authorityCutoff)
+          .order('period_end', { ascending: false }).order('recorded_at', { ascending: false }).limit(2000),
         supabase.from('peer_relationships').select('id,peer_ticker,peer_market,relationship_type,product_subcategory,directionality,relationship_weight,version').eq('stock_id', stock.id).lte('effective_from', latestMarketSession).or(`effective_to.is.null,effective_to.gte.${latestMarketSession}`).limit(100),
-        supabase.from('technical_feature_snapshots').select('session_date,close,ma60').eq('stock_id', stock.id).eq('ruleset_version', 'technical-features-v2.0.0').lt('session_date', latestMarketSession).order('session_date', { ascending: false }).limit(1),
+        supabase.from('technical_feature_snapshots').select('session_date,close,ma60,ma120,ma240').eq('stock_id', stock.id).eq('ruleset_version', TECHNICAL_FEATURE_RULESET_VERSION).lt('session_date', latestMarketSession).order('session_date', { ascending: false }).limit(1),
         supabase.from('candidate_signal_tracking').select('session_date,reference_session_date,reference_price,max_drawdown_pct,close,signal_episode_id,initial_atr14,initial_stop_price,peak_close').eq('stock_id', stock.id).eq('model_version', CANDIDATE_STAGE_MODEL_VERSION).order('session_date', { ascending: false }).limit(1),
-        supabase.from('broker_consensus_snapshots').select('as_of_date,source_count,freshness_status').eq('stock_id', stock.id).lte('as_of_date', latestMarketSession).order('as_of_date', { ascending: false }).limit(1),
+        supabase.from('broker_consensus_snapshots').select('as_of_date,source_count,freshness_status,metadata').eq('stock_id', stock.id).lte('as_of_date', latestMarketSession).order('as_of_date', { ascending: false }).limit(1),
       ]);
       // A price feed may expose a newer provisional date before that date is in
       // the official completed-session ledger. It is not eligible for technical
@@ -537,7 +547,12 @@ async function executeCandidateResearchCycle(options: {
       const priceCoverageTerminal = technicalHistoryCoverageTerminalReason(bars.length);
       const queryError = priorRevenueRes.error || historicalFundamentalsRes.error || priorStageRes.error || priorFlowsRes.error || cachedBarsRes.error || authorityBarsRes.error || authorityFactsRes.error || peerRelationshipsRes.error || priorTechnicalRes.error || trackingRes.error || brokerConsensusRes.error;
       if (queryError) throw new Error(queryError.message);
-      const peerRelationships = (peerRelationshipsRes.data as Row[]) || [];
+      const peerRelationships = ((peerRelationshipsRes.data as Row[]) || []).filter((relationship) => {
+        const relationshipType = String(relationship.relationship_type || '');
+        const productSubcategory = String(relationship.product_subcategory || '').trim();
+        return ['customer', 'supplier', 'competitor', 'product_peer'].includes(relationshipType)
+          && productSubcategory.length > 0;
+      });
       const peerSnapshotsRes = peerRelationships.length ? await supabase.from('peer_market_snapshots')
         .select('peer_relationship_id,price_return_5d,price_return_20d,fundamental_signal,availability_status,catchdown_block,as_of,available_at')
         .in('peer_relationship_id', peerRelationships.map((row) => String(row.id))).lte('available_at', evaluatedAt)
@@ -556,15 +571,29 @@ async function executeCandidateResearchCycle(options: {
         const raw = fundamental ?? (return20d == null ? null : Math.max(-1, Math.min(1, return20d / 20)));
         return raw == null ? [] : [{ relationship, snapshot, score: raw }];
       });
-      const relationshipSignals = availablePeerSignals.map(({ relationship, snapshot, score }) => ({
+      const fundamentalRelationshipSignals = availablePeerSignals.flatMap(({ relationship, snapshot }) => {
+        const score = numberOrNull(snapshot.fundamental_signal);
+        return score == null ? [] : [{
         market: String(relationship.peer_market || ''), score,
         weight: numberOrNull(relationship.relationship_weight) ?? 0.5,
         asOf: snapshot.as_of ? String(snapshot.as_of) : null,
-      }));
-      const industryRotationFactor = relationshipFactor(relationshipSignals, 'domestic_rotation');
-      const overseasPeerFactor = relationshipFactor(relationshipSignals, 'overseas_peer');
+        evidenceKind: 'fundamental' as const,
+      }];
+      });
+      const priceRelationshipSignals = availablePeerSignals.flatMap(({ relationship, snapshot }) => {
+        const return20d = numberOrNull(snapshot.price_return_20d);
+        return return20d == null ? [] : [{
+          market: String(relationship.peer_market || ''), score: Math.max(-1, Math.min(1, return20d / 20)),
+          weight: numberOrNull(relationship.relationship_weight) ?? 0.5,
+          asOf: snapshot.as_of ? String(snapshot.as_of) : null,
+          evidenceKind: 'price' as const,
+        }];
+      });
+      const industryRotationFactor = relationshipFactor(fundamentalRelationshipSignals, 'domestic_rotation');
+      const overseasPeerFactor = relationshipFactor(fundamentalRelationshipSignals, 'overseas_peer');
+      const industryRotationPriceFactor = industryRotationActionabilityFactor(priceRelationshipSignals);
+      const overseasPriceFactor = overseasPriceActionabilityFactor(priceRelationshipSignals);
       const peerCatchdownBlock = availablePeerSignals.some(({ relationship, snapshot }) => relationship.directionality === 'negative_catchdown' && snapshot.catchdown_block === true);
-      const overseasPeerScore = overseasPeerFactor.score;
       const latestBar = bars.at(-1)!;
       const authoritativePriceRows = [...new Map([...authorityBars, ...(fetchedBars || [])].map((bar) => [bar.time, bar])).values()];
       if (authoritativePriceRows.length > 0) {
@@ -664,25 +693,68 @@ async function executeCandidateResearchCycle(options: {
         if (fundamental.error) throw new Error(fundamental.error.message);
       }
       const multipleMonthsCovered = new Set(officialMultiples.map((point) => point.date.slice(0, 7))).size;
-      const reportedFacts: ReportedFinancialFact[] = ((authorityFactsRes.data as Row[]) || []).flatMap((fact) => {
+      const reportedFacts: ReportedFinancialFact[] = ((authorityFactsRes.data as Row[]) || [])
+        .filter((fact) => financialFactAvailableAt(fact, evaluatedAt))
+        .flatMap((fact) => {
         const value = numberOrNull(fact.value);
         const factId = String(fact.fact_id || '');
         const factKey = String(fact.fact_key || '');
         const periodStart = String(fact.period_start || '');
         const periodEnd = String(fact.period_end || '');
         if (String(fact.estimate_kind || '') !== 'reported' || value == null || !factId || !factKey || !/^\d{4}-\d{2}-\d{2}$/u.test(periodStart) || !/^\d{4}-\d{2}-\d{2}$/u.test(periodEnd)) return [];
-        return [{ factId, factKey, periodStart, periodEnd, value, unit: fact.unit ? String(fact.unit) : null, sourceRef: String(fact.source_ref || '') }];
+        return [{ factId, factKey, periodStart, periodEnd, value, unit: fact.unit ? String(fact.unit) : null, sourceRef: String(fact.source_ref || ''), filingRestatementId: fact.filing_restatement_id ? String(fact.filing_restatement_id) : null, filingPublishedAt: fact.filing_published_at ? String(fact.filing_published_at) : null }];
       });
       const earningsBridge = buildForwardEarningsBridge(reportedFacts);
       const operatingQuarterHistory = discreteReportedQuarters(reportedFacts, 'quarterly_operating_income');
       const commonIncomeQuarterHistory = discreteReportedQuarters(reportedFacts, 'quarterly_net_income_attributable_to_common');
+      const dilutedEpsQuarterHistory = discreteReportedQuarters(reportedFacts, 'quarterly_diluted_eps');
+      const basicEpsQuarterHistory = discreteReportedQuarters(reportedFacts, 'quarterly_basic_eps');
+      const latestBookValuePerShare = reportedFacts.filter((fact) => fact.factKey === 'book_value_per_share' && fact.value > 0)
+        .sort((left, right) => left.periodEnd.localeCompare(right.periodEnd)).at(-1)?.value ?? null;
+      const latestCommonEquity = reportedFacts.filter((fact) => fact.factKey === 'total_equity' && fact.value > 0)
+        .sort((left, right) => left.periodEnd.localeCompare(right.periodEnd)).at(-1)?.value ?? null;
       const hasMaterialOfficialCounterEvidence = operatingQuarterHistory.slice(-2).length === 2
         && operatingQuarterHistory.slice(-2).every((row) => row.value < 0)
         && commonIncomeQuarterHistory.slice(-2).length === 2
         && commonIncomeQuarterHistory.slice(-2).every((row) => row.value < 0);
       const next12mBridgeComplete = earningsBridge.status === 'complete';
       const verifiedTurnaroundPath = earningsBridge.status === 'complete' && earningsBridge.verifiedTurnaroundPath;
-      const valuationPolicy = candidateValuationPolicy({ symbol: stock.symbol, multipleMonthsCovered, next12mBridgeComplete, verifiedTurnaroundPath });
+      const latestFourCommonIncome = commonIncomeQuarterHistory.slice(-4);
+      const lossMaking = latestFourCommonIncome.length === 4
+        ? latestFourCommonIncome.reduce((sum, row) => sum + row.value, 0) <= 0
+        : eps?.epsTtm != null ? eps.epsTtm <= 0 : false;
+      const sectorText = String(stock.sector || '').toLowerCase();
+      const financialBusiness = /(?:金融|銀行|保險|證券|金控|bank|financial|insurance|securities)/iu.test(sectorText);
+      const cyclicalBusiness = /(?:水泥|塑化|化工|鋼鐵|航運|記憶體|面板|造紙|原物料|cement|steel|shipping|chemical|memory|panel)/iu.test(sectorText);
+      const cycleEpsHistory = (dilutedEpsQuarterHistory.length ? dilutedEpsQuarterHistory : basicEpsQuarterHistory).slice(-20);
+      const cycleYearsObserved = cycleEpsHistory.length >= 2
+        ? (Date.parse(`${cycleEpsHistory.at(-1)!.periodEnd}T00:00:00Z`) - Date.parse(`${cycleEpsHistory[0].periodEnd}T00:00:00Z`)) / (365.25 * 86_400_000)
+        : 0;
+      const normalizedEps = cycleEpsHistory.length >= 20
+        ? cycleEpsHistory.reduce((sum, row) => sum + row.value, 0) / (cycleEpsHistory.length / 4)
+        : null;
+      const annualizedCommonIncome = latestFourCommonIncome.length === 4 ? latestFourCommonIncome.reduce((sum, row) => sum + row.value, 0) : null;
+      const valuationPolicy = candidateValuationPolicy({
+        symbol: stock.symbol,
+        multipleMonthsCovered,
+        next12mBridgeComplete,
+        verifiedTurnaroundPath,
+        businessModel: financialBusiness ? 'financial' : 'general',
+        lossMaking,
+        normalizedCycle: cyclicalBusiness ? {
+          normalizedEps,
+          cycleYearsObserved,
+          bookValuePerShare: latestBookValuePerShare,
+          pbMultiple: historicalPbRatios.length ? [...historicalPbRatios].sort((a, b) => a - b)[Math.floor(historicalPbRatios.length / 2)] : null,
+        } : undefined,
+        financial: financialBusiness ? {
+          commonEquity: latestCommonEquity,
+          bookValuePerShare: latestBookValuePerShare,
+          roe: annualizedCommonIncome != null && latestCommonEquity ? annualizedCommonIncome / latestCommonEquity : null,
+          pbMultiple: historicalPbRatios.length ? [...historicalPbRatios].sort((a, b) => a - b)[Math.floor(historicalPbRatios.length / 2)] : null,
+          roePeriodsObserved: commonIncomeQuarterHistory.length,
+        } : undefined,
+      });
       const rawValuation = valuationPolicy.basis === 'forward_12m' || valuationPolicy.basis === 'turnaround_conditional'
         ? earningsBridge.status === 'complete'
           ? buildForwardEarningsScenario({
@@ -693,7 +765,27 @@ async function executeCandidateResearchCycle(options: {
               historicalPeRatios,
             })
           : null
-        : buildConservativeOfficialScenario({ price: technical.close, epsTtm: eps?.epsTtm ?? null, peRatio: values?.peRatio ?? null, pbRatio: values?.pbRatio ?? null, revenueYoyPct: revenueYoy, sector: stock.sector, historicalPeRatios, historicalPbRatios });
+        : valuationPolicy.basis === 'normalized_cycle' && normalizedEps != null
+          ? buildDriverMultipleScenario({
+              price: technical.close,
+              bearDriver: normalizedEps * 0.75,
+              baseDriver: normalizedEps,
+              bullDriver: normalizedEps * 1.25,
+              historicalMultiples: historicalPeRatios,
+              primaryMethod: 'normalized_pe',
+              driverSource: 'normalized_cycle_eps',
+            })
+          : ['pb_reference', 'financial_pb_roe'].includes(valuationPolicy.basis) && latestBookValuePerShare != null
+            ? buildDriverMultipleScenario({
+                price: technical.close,
+                bearDriver: latestBookValuePerShare * 0.9,
+                baseDriver: latestBookValuePerShare,
+                bullDriver: latestBookValuePerShare * 1.1,
+                historicalMultiples: historicalPbRatios,
+                primaryMethod: 'forward_pb',
+                driverSource: 'reported_book_value_per_share',
+              })
+            : buildConservativeOfficialScenario({ price: technical.close, epsTtm: eps?.epsTtm ?? null, peRatio: values?.peRatio ?? null, pbRatio: values?.pbRatio ?? null, revenueYoyPct: revenueYoy, sector: stock.sector, historicalPeRatios, historicalPbRatios });
       const valuation = valuationPolicy.canPublishTarget ? rawValuation : null;
       const publishedPrimaryMethod = valuation
         ? valuationPolicy.basis === 'ttm_multiple_reference'
@@ -739,13 +831,20 @@ async function executeCandidateResearchCycle(options: {
         hasPriceHistory: bars.length >= 240,
         hasInstitutionalFlow: institutional != null,
         hasMarketEvidence: marketEvidence.status === 'complete',
+        hasCounterEvidenceReview: reportedFacts.length > 0,
         asOf: latestMarketSession,
       });
-      const brokerFactor = brokerResearchFactor(((brokerConsensusRes.data as Row[]) || []).map((row) => ({
-        sourceCount: Number(row.source_count || 0),
-        freshness: String(row.freshness_status || 'missing'),
-        asOf: row.as_of_date ? String(row.as_of_date) : null,
-      })));
+      const brokerFactor = brokerResearchFactor(((brokerConsensusRes.data as Row[]) || []).map((row) => {
+        const metadata = rowRelation(row.metadata) || {};
+        const permittedModes = stringArray(metadata.permitted_source_modes);
+        return {
+          sourceCount: Number(row.source_count || 0),
+          freshness: String(row.freshness_status || 'missing'),
+          asOf: row.as_of_date ? String(row.as_of_date) : null,
+          lawful: permittedModes.length > 0
+            && permittedModes.every((mode) => ['manual_pdf', 'manual_csv', 'imported_pdf'].includes(mode)),
+        };
+      }));
       const baseInput = {
         discovery: {
           independentSources: Math.min(100, concentration.publisherCount / 3 * 100), platformDiversity: Math.min(100, concentration.platformCount / 3 * 100),
@@ -765,7 +864,7 @@ async function executeCandidateResearchCycle(options: {
           movingAveragesAndRelativeStrength: technical.close > (technical.ma20 || Infinity) && technical.close > (technical.ma60 || Infinity) ? 100 : 0,
           priceVolume: technical.volumeRatio20Median == null ? 0 : bounded(technical.volumeRatio20Median / 1.3 * 100),
           institutionalFlows: technical.institutionalFlow20dNorm == null ? 0 : bounded(50 + technical.institutionalFlow20dNorm * 50),
-          marketRegime: marketRegimeScore(marketRegime), industryRotation: industryRotationFactor.score, overseasPeers: overseasPeerScore,
+          marketRegime: marketRegimeScore(marketRegime), industryRotation: industryRotationPriceFactor.score, overseasPrice: overseasPriceFactor.score,
           overheatRisk: technical.rsi14 != null && technical.atr14 != null && technical.ma20 != null && technical.rsi14 < 75 && technical.close <= technical.ma20 + 2 * technical.atr14 ? 100 : 0,
         },
         confidence: {
@@ -778,7 +877,11 @@ async function executeCandidateResearchCycle(options: {
         technical: {
           close: technical.close, ma20: technical.ma20, ma60: technical.ma60, ma120: technical.ma120, ma240: technical.ma240,
           ma60Slope: technical.ma60Slope, volumeRatio20Median: technical.volumeRatio20Median, atr14: technical.atr14, rsi14: technical.rsi14,
-          breakoutAboveLongMa: technical.volumeRatio20Median != null && technical.volumeRatio20Median >= 1.3 && technical.close > (technical.ma240 || technical.ma120 || Infinity),
+          priorClose: numberOrNull(((priorTechnicalRes.data as Row[]) || [])[0]?.close),
+          priorMa120: numberOrNull(((priorTechnicalRes.data as Row[]) || [])[0]?.ma120),
+          priorMa240: numberOrNull(((priorTechnicalRes.data as Row[]) || [])[0]?.ma240),
+          priorBreakoutAboveMa120: priorHardGates.breakout_above_ma120 === true || priorHardGates.breakout_persisted_ma120 === true,
+          priorBreakoutAboveMa240: priorHardGates.breakout_above_ma240 === true || priorHardGates.breakout_persisted_ma240 === true,
         },
         marketRegime, peerCatchdownBlock, staleOrFallback: Boolean(priceCoverageTerminal) || !priceMatchesMarketSession || marketEvidence.status !== 'complete' || (valuation ? !valuationMatchesMarketSession : false),
         previousStage: previous?.lifecycle_stage ? String(previous.lifecycle_stage) as CandidateLifecycleStage : null,
@@ -800,7 +903,7 @@ async function executeCandidateResearchCycle(options: {
         research_score: stage.scores.research, actionability_score: stage.scores.actionability, data_confidence_score: stage.scores.dataConfidence,
         base_upside_pct: valuation?.baseUpsidePct ?? null, bear_downside_pct: valuation?.bearDownsidePct ?? null,
         reward_risk_ratio: valuation?.rewardRiskRatio ?? null, market_regime: marketRegime,
-        hard_gate_results: { technical_passed: stage.technicalHardGatePassed, actionable_eligible_pre_streak: preStreak.stage === 'actionable', consecutive_actionable_closes: streak, technical_session_date: technical.sessionDate, stale_or_fallback: baseInput.staleOrFallback, peer_catchdown_block: peerCatchdownBlock, classification_replay_hash: classificationReplayHash, classification_replay_consistent: true, factor_evidence: { official: officialEvidenceFactor, broker: brokerFactor, industry_rotation: industryRotationFactor, overseas_peer: overseasPeerFactor } },
+        hard_gate_results: { technical_passed: stage.technicalHardGatePassed, actionable_eligible_pre_streak: preStreak.stage === 'actionable', consecutive_actionable_closes: streak, technical_session_date: technical.sessionDate, stale_or_fallback: baseInput.staleOrFallback, peer_catchdown_block: peerCatchdownBlock, breakout_above_ma120: baseInput.technical.priorClose != null && baseInput.technical.ma120 != null && baseInput.technical.priorMa120 != null && technical.close > baseInput.technical.ma120 && baseInput.technical.priorClose <= baseInput.technical.priorMa120, breakout_above_ma240: baseInput.technical.priorClose != null && baseInput.technical.ma240 != null && baseInput.technical.priorMa240 != null && technical.close > baseInput.technical.ma240 && baseInput.technical.priorClose <= baseInput.technical.priorMa240, classification_replay_hash: classificationReplayHash, classification_replay_consistent: true, factor_evidence: { official: officialEvidenceFactor, broker: brokerFactor, industry_fundamentals: industryRotationFactor, industry_rotation_price: industryRotationPriceFactor, overseas_peer: overseasPeerFactor, overseas_price: overseasPriceFactor } },
         unmet_conditions: stage.unmetConditions, promotion_reasons: stage.promotionReasons, as_of: evaluatedAt, available_at: evaluatedAt,
         ruleset_version: STAGE_RULESET_VERSION, model_version: CANDIDATE_STAGE_MODEL_VERSION,
         provenance: { candidate_research_run_id: runId, official_sources: ['TWSE','TPEx','MOPS'] },
@@ -866,8 +969,12 @@ async function executeCandidateResearchCycle(options: {
         symbol: stock.symbol, chineseName: stock.name, market: 'TW', lifecycleStage: stage.stage,
         latestMentionAt: latestMentionMs ? new Date(latestMentionMs).toISOString() : evaluatedAt,
         mentionCount: recentMentions.length, rawMentionCount: concentration.rawMentions, effectiveMentionCount: concentration.effectiveMentions,
-        publisherCount: concentration.publisherCount, platformCount: concentration.platformCount, dominantPlatformShare: concentration.dominantPlatformShare,
-        sources: sourceLinks.map((source) => ({ platform: source.platform, author: null, sourceUrl: source.url, stance: null, mentionedAt: source.publishedAt })),
+        publisherCount: concentration.publisherCount,
+        positivePublisherCount: new Set(recentMentions.filter((row) => ['positive', 'endorsement'].includes(String(row.stance || '').toLowerCase())).map((row) => String(row.publisher_key || row.author_name || row.source_name || row.platform))).size,
+        negativePublisherCount: new Set(recentMentions.filter((row) => String(row.stance || '').toLowerCase() === 'negative').map((row) => String(row.publisher_key || row.author_name || row.source_name || row.platform))).size,
+        generalPublisherCount: new Set(recentMentions.filter((row) => !['positive', 'endorsement', 'negative'].includes(String(row.stance || '').toLowerCase())).map((row) => String(row.publisher_key || row.author_name || row.source_name || row.platform))).size,
+        platformCount: concentration.platformCount, dominantPlatformShare: concentration.dominantPlatformShare,
+        sources: sourceLinks.map((source) => ({ platform: source.platform, sourceName: source.label, publisherName: source.label, author: null, sourceUrl: source.url, stance: null, mentionedAt: source.publishedAt })),
         scores: stage.scores,
         valuation: { status: valuation ? 'complete' : 'missing', currentPrice: technical.close, bearTarget: valuation?.bearTarget ?? null, baseTarget: valuation?.baseTarget ?? null, bullTarget: valuation?.bullTarget ?? null, probabilityWeightedTarget: valuation?.probabilityWeightedTarget ?? null, baseUpsidePct: valuation?.baseUpsidePct ?? null, bearDownsidePct: valuation?.bearDownsidePct ?? null, rewardRiskRatio: valuation?.rewardRiskRatio ?? null, method: publishedPrimaryMethod ?? valuationPolicy.basis },
         technical: { sessionDate: technical.sessionDate, close: technical.close, ma20: technical.ma20, ma60: technical.ma60, ma120: technical.ma120, ma240: technical.ma240, rsi14: technical.rsi14, volumeRatio20Median: technical.volumeRatio20Median, marketRegime, hardGatePassed: stage.technicalHardGatePassed },
@@ -875,7 +982,7 @@ async function executeCandidateResearchCycle(options: {
         unmetConditions: [...stage.unmetConditions, ...(priceCoverageTerminal ? [priceCoverageTerminal] : []), ...(valuationPolicy.reason ? [valuationPolicy.reason] : [])], promotionReasons: stage.promotionReasons,
         dataAsOf: evaluatedAt, stale: baseInput.staleOrFallback, detailRevisionId: null, riskAction: null, detailHref: `/stock/${stock.symbol}`,
       };
-      const factorEvidence = { official: officialEvidenceFactor, broker: brokerFactor, industry_rotation: industryRotationFactor, overseas_peer: overseasPeerFactor };
+      const factorEvidence = { official: officialEvidenceFactor, broker: brokerFactor, industry_fundamentals: industryRotationFactor, industry_rotation_price: industryRotationPriceFactor, overseas_peer: overseasPeerFactor, overseas_price: overseasPriceFactor };
       const sections = buildDeterministicCandidateSections({
         card: detailCard, factIds, valuationBasis: valuationPolicy.basis, multipleMonthsCovered,
         sourceCount: recentMentions.length, publisherCount: concentration.publisherCount, platformCount: concentration.platformCount,
@@ -885,53 +992,102 @@ async function executeCandidateResearchCycle(options: {
       });
       const historicalPrices = [...new Map(bars.map((bar) => [bar.time.slice(0, 7), { month: bar.time.slice(0, 7), close: bar.close }])).values()].slice(-60);
       const historicalMultiples = officialMultiples.slice(-60).map((point) => ({ date: point.date, peRatio: point.peRatio, pbRatio: point.pbRatio }));
-      const detailWrite = await supabase.from('candidate_detail_snapshots').upsert({
+      const detailPayload = {
         stock_id: stock.id, session_date: technical.sessionDate, lifecycle_stage: stage.stage,
         detail_kind: stage.stage === 'found' ? 'fact' : 'full', title: `${stock.name}（${stock.symbol}）營運與估值研究`,
         summary: sections[0].body, sections, fact_ids: factIds, source_links: sourceLinks,
-        valuation: { ...detailCard.valuation, basis: valuationPolicy.basis, monthsCovered: multipleMonthsCovered, next12mBridgeComplete, historicalPercentile: valuation?.historicalPercentile ?? null, historicalMultiples, historicalPrices, earningsBridge, factorEvidence, unmetConditions: detailCard.unmetConditions },
+        valuation: {
+          ...detailCard.valuation,
+          basis: valuationPolicy.basis,
+          monthsCovered: multipleMonthsCovered,
+          next12mBridgeComplete,
+          epsTtm: eps?.epsTtm ?? (earningsBridge.status === 'complete' ? earningsBridge.actual.latestEps : null),
+          forwardEps: earningsBridge.status === 'complete' ? earningsBridge.scenarios.base.dilutedEps : null,
+          normalizedEps,
+          bookValuePerShare: latestBookValuePerShare,
+          currentPe: values?.peRatio ?? null,
+          currentPb: values?.pbRatio ?? null,
+          fairMultiple: valuation?.baseMultiple ?? null,
+          historicalPercentile: valuation?.historicalPercentile ?? null,
+          historicalMultiples,
+          historicalPrices,
+          earningsBridge,
+          factorEvidence,
+          unmetConditions: detailCard.unmetConditions,
+        },
         technical: detailCard.technical, market_evidence_snapshot_id: marketEvidence.id, research_run_id: runId,
         ruleset_version: STAGE_RULESET_VERSION, model_version: CANDIDATE_RESEARCH_MODEL_VERSION,
         as_of: `${technical.sessionDate}T13:30:00+08:00`, available_at: evaluatedAt,
         provenance: { official_fact_ids: factIds, source: 'deterministic_candidate_research' },
-      }, { onConflict: 'stock_id,session_date,model_version' }).select('id').single();
-      if (detailWrite.error || !detailWrite.data) throw new Error(detailWrite.error?.message || 'candidate_detail_write_failed');
-      const dossierWrite = await supabase.from('candidate_research_dossiers').insert({
-        detail_snapshot_id: detailWrite.data.id, narrative_kind: 'deterministic_fact',
-        content: { summary: sections[0].body, sections }, claim_fact_map: Object.fromEntries(sections.map((section) => [section.key, section.factIds])),
-        validation_status: 'valid', rejection_reasons: [],
-      });
-      if (dossierWrite.error) throw new Error(dossierWrite.error.message);
-      const snapshotDetail = await supabase.from('candidate_daily_stage_snapshots').update({ detail_revision_id: detailWrite.data.id }).eq('id', snapshot.data.id);
+      };
+      const revisionHash = stableHash(detailPayload);
+      const identicalDetail = await supabase.from('candidate_detail_snapshots').select('id')
+        .eq('stock_id', stock.id).eq('session_date', technical.sessionDate).eq('model_version', CANDIDATE_RESEARCH_MODEL_VERSION)
+        .eq('revision_hash', revisionHash).maybeSingle();
+      if (identicalDetail.error) throw new Error(identicalDetail.error.message);
+      let detailRevisionId = identicalDetail.data?.id ? String(identicalDetail.data.id) : null;
+      let appendedDetail = false;
+      if (!detailRevisionId) {
+        const priorDetail = await supabase.from('candidate_detail_snapshots').select('id')
+          .eq('stock_id', stock.id).eq('model_version', CANDIDATE_RESEARCH_MODEL_VERSION)
+          .order('available_at', { ascending: false }).limit(1).maybeSingle();
+        if (priorDetail.error) throw new Error(priorDetail.error.message);
+        const detailWrite = await supabase.from('candidate_detail_snapshots').insert({
+          ...detailPayload,
+          revision_hash: revisionHash,
+          supersedes_revision_id: priorDetail.data?.id || null,
+        }).select('id').single();
+        if (detailWrite.error || !detailWrite.data) throw new Error(detailWrite.error?.message || 'candidate_detail_write_failed');
+        detailRevisionId = String(detailWrite.data.id);
+        appendedDetail = true;
+      }
+      if (!detailRevisionId) throw new Error('candidate_detail_revision_missing');
+      if (appendedDetail) {
+        const dossierWrite = await supabase.from('candidate_research_dossiers').insert({
+          detail_snapshot_id: detailRevisionId, narrative_kind: 'deterministic_fact',
+          content: { summary: sections[0].body, sections }, claim_fact_map: Object.fromEntries(sections.map((section) => [section.key, section.factIds])),
+          validation_status: 'valid', rejection_reasons: [],
+        });
+        if (dossierWrite.error) throw new Error(dossierWrite.error.message);
+      }
+      const snapshotDetail = await supabase.from('candidate_daily_stage_snapshots').update({ detail_revision_id: detailRevisionId }).eq('id', snapshot.data.id);
       if (snapshotDetail.error) throw new Error(snapshotDetail.error.message);
       const priorTracking = ((trackingRes.data as Row[]) || [])[0] || null;
       const priorTechnical = ((priorTechnicalRes.data as Row[]) || [])[0] || null;
-      const startsActionableEpisode = stage.stage === 'actionable' && previousStage !== 'actionable';
-      const signalEpisodeId = startsActionableEpisode
-        ? stableHash({ stockId: stock.id, sessionDate: technical.sessionDate, modelVersion: CANDIDATE_STAGE_MODEL_VERSION }).slice(0, 32)
-        : priorTracking?.signal_episode_id ? String(priorTracking.signal_episode_id) : null;
-      const initialAtr14 = startsActionableEpisode ? technical.atr14 : numberOrNull(priorTracking?.initial_atr14);
-      const canSetReference = Boolean(!startsActionableEpisode && signalEpisodeId && priorTracking && String(priorTracking.session_date) < technical.sessionDate);
-      const referencePrice = startsActionableEpisode ? null : numberOrNull(priorTracking?.reference_price) ?? (canSetReference ? technical.close : null);
-      const referenceSessionDate = startsActionableEpisode ? null : priorTracking?.reference_session_date ? String(priorTracking.reference_session_date) : referencePrice != null ? technical.sessionDate : null;
-      const initialStopPrice = startsActionableEpisode ? null : numberOrNull(priorTracking?.initial_stop_price) ?? (referencePrice != null && initialAtr14 != null ? referencePrice - 2 * initialAtr14 : null);
+      const expectedPreviousSessionDate = marketSessions[marketSessions.indexOf(technical.sessionDate) - 1] || null;
+      const episode = advanceRiskEpisode({
+        stage: stage.stage,
+        previousStage: previousStage as CandidateLifecycleStage | null,
+        sessionDate: technical.sessionDate,
+        priorSessionDate: priorTracking?.session_date ? String(priorTracking.session_date) : null,
+        expectedPreviousSessionDate,
+        close: technical.close,
+        atr14: technical.atr14,
+        episodeId: stableHash({ stockId: stock.id, sessionDate: technical.sessionDate, modelVersion: CANDIDATE_STAGE_MODEL_VERSION }).slice(0, 32),
+        prior: priorTracking ? {
+          signalEpisodeId: priorTracking.signal_episode_id ? String(priorTracking.signal_episode_id) : null,
+          referenceSessionDate: priorTracking.reference_session_date ? String(priorTracking.reference_session_date) : null,
+          referencePrice: numberOrNull(priorTracking.reference_price),
+          initialAtr14: numberOrNull(priorTracking.initial_atr14),
+          initialStopPrice: numberOrNull(priorTracking.initial_stop_price),
+          peakClose: numberOrNull(priorTracking.peak_close),
+          maxDrawdownPct: numberOrNull(priorTracking.max_drawdown_pct),
+        } : null,
+      });
       const priorTechnicalClose = numberOrNull(priorTechnical?.close);
       const priorTechnicalMa60 = numberOrNull(priorTechnical?.ma60);
-      const risk = candidateRiskAction({ close: technical.close, referencePrice, atr14: technical.atr14, initialStopPrice, ma20: technical.ma20, ma60: technical.ma60, priorCloseBelowMa60: priorTechnicalClose != null && priorTechnicalMa60 != null && priorTechnicalClose < priorTechnicalMa60, rsi14: technical.rsi14, baseTarget: valuation?.baseTarget ?? null, marketBreakdown: marketRegime === 'breakdown', materialOfficialCounterEvidence: hasMaterialOfficialCounterEvidence });
-      const returnPct = referencePrice && referencePrice > 0 ? (technical.close - referencePrice) / referencePrice * 100 : null;
-      const taiexReference = referenceSessionDate ? numberOrNull(marketEvidence.taiexCloseByDate[referenceSessionDate]) : null;
+      const risk = candidateRiskAction({ close: technical.close, referencePrice: episode.referencePrice, atr14: episode.initialAtr14, initialStopPrice: episode.initialStopPrice, ma20: technical.ma20, ma60: technical.ma60, priorCloseBelowMa60: false, currentSessionDate: technical.sessionDate, expectedPreviousSessionDate, priorSessionDate: priorTechnical?.session_date ? String(priorTechnical.session_date) : null, priorClose: priorTechnicalClose, priorMa60: priorTechnicalMa60, rsi14: technical.rsi14, baseTarget: valuation?.baseTarget ?? null, marketBreakdown: marketRegime === 'breakdown', materialOfficialCounterEvidence: hasMaterialOfficialCounterEvidence });
+      const returnPct = episode.referencePrice && episode.referencePrice > 0 ? (technical.close - episode.referencePrice) / episode.referencePrice * 100 : null;
+      const taiexReference = episode.referenceSessionDate ? numberOrNull(marketEvidence.taiexCloseByDate[episode.referenceSessionDate]) : null;
       const taiexCurrent = numberOrNull(marketEvidence.taiexCloseByDate[technical.sessionDate]);
       const taiexReturnPct = taiexReference && taiexReference > 0 && taiexCurrent != null
         ? (taiexCurrent - taiexReference) / taiexReference * 100
         : null;
       const taiexRelativeReturnPct = returnPct != null && taiexReturnPct != null ? returnPct - taiexReturnPct : null;
-      const peakClose = referencePrice == null ? numberOrNull(priorTracking?.peak_close) : Math.max(referencePrice, numberOrNull(priorTracking?.peak_close) ?? referencePrice, technical.close);
-      const priorMaxDrawdownPct = numberOrNull(priorTracking?.max_drawdown_pct);
-      const maxDrawdownPct = runningMaxDrawdown(priorMaxDrawdownPct, peakClose, technical.close);
       const trackingWrite = await supabase.from('candidate_signal_tracking').upsert({
-        stock_id: stock.id, session_date: technical.sessionDate, reference_session_date: referenceSessionDate, reference_price: referencePrice,
-        signal_episode_id: signalEpisodeId, initial_atr14: initialAtr14, initial_stop_price: initialStopPrice, peak_close: peakClose,
-        close: technical.close, taiex_relative_return_pct: taiexRelativeReturnPct, max_drawdown_pct: maxDrawdownPct,
+        stock_id: stock.id, session_date: technical.sessionDate, reference_session_date: episode.referenceSessionDate, reference_price: episode.referencePrice,
+        signal_episode_id: episode.signalEpisodeId, initial_atr14: episode.initialAtr14, initial_stop_price: episode.initialStopPrice, peak_close: episode.peakClose,
+        close: technical.close, taiex_relative_return_pct: taiexRelativeReturnPct, max_drawdown_pct: episode.maxDrawdownPct,
         target_hit: valuation?.baseTarget != null && technical.close >= valuation.baseTarget,
         stop_hit: risk.state === 'hard_exit' && risk.reasons.includes('initial_2atr_stop'), risk_action: risk.state,
         action_reasons: risk.reasons, as_of: `${technical.sessionDate}T13:30:00+08:00`, available_at: evaluatedAt, model_version: CANDIDATE_STAGE_MODEL_VERSION,
@@ -944,7 +1100,7 @@ async function executeCandidateResearchCycle(options: {
       // terminal, not a partial run. It remains found and cannot pass valuation
       // gates, while operational completeness and Shadow can still be measured.
       const researchReadiness = valuation ? 'valuation_ready' : 'evidence_gap';
-      Object.assign(result, { status: 'success', executionStatus: 'success', researchReadiness, stage: stage.stage, technicalSessionDate: technical.sessionDate, technicalCoverageStatus: priceCoverageTerminal ? 'insufficient_history' : 'complete', valuationStatus, valuationBasis: valuationPolicy.basis, detailRevisionId: String(detailWrite.data.id), scores: stage.scores, unmetConditions: detailCard.unmetConditions, classificationReplayHash, riskAction: risk });
+      Object.assign(result, { status: 'success', executionStatus: 'success', researchReadiness, stage: stage.stage, technicalSessionDate: technical.sessionDate, technicalCoverageStatus: priceCoverageTerminal ? 'insufficient_history' : 'complete', valuationStatus, valuationBasis: valuationPolicy.basis, detailRevisionId, scores: stage.scores, unmetConditions: detailCard.unmetConditions, classificationReplayHash, riskAction: risk });
       const itemWrite = await supabase.from('candidate_research_run_items').upsert({ run_id: runId, stock_id: stock.id, symbol: stock.symbol, status: 'success', execution_status: 'success', research_readiness: researchReadiness, valuation_method: valuationPolicy.basis, narrative_kind: 'deterministic_fact', price_status: 'success', technical_status: priceCoverageTerminal ? 'insufficient_history' : 'success', fundamental_status: eps || values || priorRevenue || authorityFacts.length ? 'success' : 'missing', valuation_status: valuationStatus, classification_status: 'success', lifecycle_stage: stage.stage, terminal_reason: researchTerminalReason, technical_session_date: technical.sessionDate, metrics: result, started_at: startedAt, finished_at: new Date().toISOString() }, { onConflict: 'run_id,stock_id' });
       if (itemWrite.error) throw new Error(itemWrite.error.message);
       return result;
@@ -1005,7 +1161,7 @@ async function executeCandidateResearchCycle(options: {
   const technicalSessionDate = items.map((item) => String(item.technicalSessionDate || '')).filter(Boolean).sort().at(-1) || null;
   const runStatus = failedCount === items.length && items.length > 0 ? 'failed' : failedCount > 0 || partialCount > 0 ? 'partial' : 'success';
   const terminalReason = failedCount > 0 ? 'per_stock_failures' : partialCount > 0 ? 'per_stock_partial_research' : null;
-  const runUpdate = await supabase.from('candidate_research_runs').update({ status: runStatus, completed_count: completedCount, failed_count: failedCount, technical_session_date: technicalSessionDate, terminal_reason: terminalReason, summary: { items, partialCount, marketEvidence, officialFinancialRefresh, officialFinancialRefreshTargets: financialRefreshTargets.map((target) => target.symbol), officialFinancialRefreshBacklog: financialRefreshBacklog.length, officialFinancialRefreshNextCursor: nextFinancialRefreshCursor }, finished_at: new Date().toISOString() }).eq('id', runId);
+  const runUpdate = await supabase.from('candidate_research_runs').update({ status: runStatus, completed_count: completedCount, failed_count: failedCount, technical_session_date: technicalSessionDate, terminal_reason: terminalReason, summary: { items, partialCount, marketEvidence, officialFinancialRefresh, officialFinancialRefreshTargets: financialRefreshTargets.map((target) => target.symbol), officialFinancialRefreshBacklog: financialRefreshBacklog.length, officialFinancialRefreshState: 'persistent_cursor_v4' }, finished_at: new Date().toISOString() }).eq('id', runId);
   if (runUpdate.error) throw new Error(runUpdate.error.message);
   if (failClosedWriteFailures > 0) throw new Error(`candidate_fail_closed_snapshot_failed:${failClosedWriteFailures}`);
   return {
@@ -1141,7 +1297,19 @@ export async function loadCandidateStageCards(): Promise<{ found: CandidateStage
       const sourceKey = String(row.independent_content_hash || sourceUrl || '');
       if (!sourceUrl || !sourceKey || seenSources.has(sourceKey)) return [];
       seenSources.add(sourceKey);
-      return [{ platform: String(row.platform || 'unknown'), author: row.author_name ? String(row.author_name) : null, sourceUrl, stance: row.stance ? String(row.stance) as CandidateStageCard['sources'][number]['stance'] : null, mentionedAt: String(row.mentioned_at || row.available_at || '') }];
+      return [{
+        platform: String(row.platform || 'unknown'),
+        sourceName: row.source_name ? String(row.source_name) : null,
+        publisherName: row.publisher_name ? String(row.publisher_name) : null,
+        author: row.author_name ? String(row.author_name) : null,
+        sourceUrl,
+        stance: row.stance
+          ? (String(row.stance).toLowerCase() === 'endorsement'
+              ? 'positive'
+              : String(row.stance).toLowerCase()) as CandidateStageCard['sources'][number]['stance']
+          : null,
+        mentionedAt: String(row.mentioned_at || row.available_at || ''),
+      }];
     });
     const sources = roundRobinSourceLinks(sourceCandidates, 2, 8);
     const concentration = sourceConcentration(stockMentions.map((row) => ({
@@ -1149,6 +1317,26 @@ export async function loadCandidateStageCards(): Promise<{ found: CandidateStage
       publisherKey: String(row.publisher_key || publisherKeyFor({ platform: String(row.platform || 'unknown'), author: row.author_name ? String(row.author_name) : null, sourceUrl: row.source_url ? String(row.source_url) : null, sourceName: row.source_name ? String(row.source_name) : null })),
       contentHash: String(row.independent_content_hash || row.source_url || randomUUID()),
     })));
+    const stancePublishers = new Map<string, Set<string>>([
+      ['positive', new Set<string>()],
+      ['negative', new Set<string>()],
+      ['general', new Set<string>()],
+    ]);
+    for (const row of stockMentions) {
+      const publisherKey = String(row.publisher_key || publisherKeyFor({
+        platform: String(row.platform || 'unknown'),
+        author: row.author_name ? String(row.author_name) : null,
+        sourceUrl: row.source_url ? String(row.source_url) : null,
+        sourceName: row.source_name ? String(row.source_name) : null,
+      }));
+      const stance = String(row.stance || '').toLowerCase();
+      const group = stance === 'positive' || stance === 'endorsement'
+        ? 'positive'
+        : stance === 'negative'
+          ? 'negative'
+          : 'general';
+      stancePublishers.get(group)?.add(publisherKey);
+    }
     const dataAsOf = technical?.available_at ? String(technical.available_at) : stage?.available_at ? String(stage.available_at) : null;
     const stale = hard.stale_or_fallback === true || !dataAsOf || Date.now() - Date.parse(dataAsOf) > 7 * 86_400_000;
     const lifecycleStage: CandidateLifecycleStage = storedLifecycleStage === 'actionable' && stale ? 'waiting' : storedLifecycleStage;
@@ -1159,6 +1347,9 @@ export async function loadCandidateStageCards(): Promise<{ found: CandidateStage
       symbol: String(stock.symbol || ''), chineseName: String(stock.name || stock.symbol || ''), market: String(stock.market || 'TW') === 'US' ? 'US' : 'TW', lifecycleStage,
       latestMentionAt, mentionCount: stockMentions.length, rawMentionCount: concentration.rawMentions,
       effectiveMentionCount: concentration.effectiveMentions, publisherCount: concentration.publisherCount,
+      positivePublisherCount: stancePublishers.get('positive')?.size || 0,
+      negativePublisherCount: stancePublishers.get('negative')?.size || 0,
+      generalPublisherCount: stancePublishers.get('general')?.size || 0,
       platformCount: concentration.platformCount, dominantPlatformShare: concentration.dominantPlatformShare, sources,
       scores: { discovery: numberOrNull(stage?.discovery_score) || 0, research: numberOrNull(stage?.research_score) || 0, actionability: numberOrNull(stage?.actionability_score) || 0, dataConfidence: numberOrNull(stage?.data_confidence_score) || 0 },
       valuation: { status: valuation ? valuationStale ? 'stale' : 'complete' : 'missing', currentPrice: numberOrNull(valuation?.current_price) ?? numberOrNull(technical?.close), bearTarget: numberOrNull(valuation?.bear_target), baseTarget: numberOrNull(valuation?.base_target), bullTarget: numberOrNull(valuation?.bull_target), probabilityWeightedTarget: numberOrNull(valuation?.probability_weighted_target), baseUpsidePct: valuation ? numberOrNull(stage?.base_upside_pct) : null, bearDownsidePct: valuation ? numberOrNull(stage?.bear_downside_pct) : null, rewardRiskRatio: valuation ? numberOrNull(stage?.reward_risk_ratio) : null, method: valuation?.primary_method ? String(valuation.primary_method) : null },
@@ -1174,12 +1365,26 @@ export async function loadCandidateStageCards(): Promise<{ found: CandidateStage
       detailHref: `/stock/${String(stock.symbol || '')}`,
     });
   }
-  const sortCards = (cards: CandidateStageCard[]) => cards.sort((a, b) => b.scores.discovery - a.scores.discovery || Date.parse(b.latestMentionAt) - Date.parse(a.latestMentionAt));
+  const sortFound = (cards: CandidateStageCard[]) => cards.sort((a, b) => {
+    return b.positivePublisherCount - a.positivePublisherCount
+      || b.scores.discovery - a.scores.discovery
+      || Date.parse(b.latestMentionAt) - Date.parse(a.latestMentionAt);
+  });
+  const sortWaiting = (cards: CandidateStageCard[]) => cards.sort((a, b) =>
+    (b.valuation.baseUpsidePct ?? Number.NEGATIVE_INFINITY) - (a.valuation.baseUpsidePct ?? Number.NEGATIVE_INFINITY)
+      || b.scores.research - a.scores.research
+      || b.scores.dataConfidence - a.scores.dataConfidence,
+  );
+  const sortActionable = (cards: CandidateStageCard[]) => cards.sort((a, b) =>
+    b.scores.actionability - a.scores.actionability
+      || (b.valuation.baseUpsidePct ?? Number.NEGATIVE_INFINITY) - (a.valuation.baseUpsidePct ?? Number.NEGATIVE_INFINITY)
+      || b.scores.research - a.scores.research,
+  );
   const allCards = [...cardsByStock.values()];
   return {
-    found: sortCards(recentStockIds.flatMap((stockId) => cardsByStock.get(stockId) ? [cardsByStock.get(stockId)!] : [])),
-    waiting: sortCards(allCards.filter((card) => card.lifecycleStage === 'waiting')),
-    actionable: sortCards(allCards.filter((card) => card.lifecycleStage === 'actionable' && !card.stale)),
+    found: sortFound(recentStockIds.flatMap((stockId) => cardsByStock.get(stockId) ? [cardsByStock.get(stockId)!] : [])),
+    waiting: sortWaiting(allCards.filter((card) => card.lifecycleStage === 'waiting')),
+    actionable: sortActionable(allCards.filter((card) => card.lifecycleStage === 'actionable' && !card.stale)),
   };
 }
 
@@ -1199,10 +1404,12 @@ export async function recordCandidateShadowObservation(input: {
   const candidates = [...candidateMap.values()];
   if (!input.technicalSessionDate || candidates.length === 0 || !input.manifestId || !input.manifestHash) return null;
   const supabase = getSupabaseServerClient();
-  const manifestRead = await supabase.from('candidate_shadow_manifests').select('candidate_symbols,manifest_hash').eq('id', input.manifestId).eq('policy_version', SHADOW_POLICY_VERSION).single();
+  const manifestRead = await supabase.from('candidate_shadow_manifests').select('candidate_symbols,manifest_hash,cohort_key,canonical_input_hashes').eq('id', input.manifestId).eq('policy_version', SHADOW_POLICY_VERSION).eq('ruleset_version', STAGE_RULESET_VERSION).eq('model_version', CANDIDATE_RESEARCH_MODEL_VERSION).single();
   if (manifestRead.error || !manifestRead.data) throw new Error(`shadow_manifest_missing:${manifestRead.error?.message || 'not_found'}`);
   if (String(manifestRead.data.manifest_hash) !== input.manifestHash) throw new Error('shadow_manifest_hash_mismatch');
   const manifestSymbols = (Array.isArray(manifestRead.data.candidate_symbols) ? manifestRead.data.candidate_symbols : []).map(String).sort();
+  const cohortKey = String(manifestRead.data.cohort_key || `${SHADOW_POLICY_VERSION}:${STAGE_RULESET_VERSION}:${CANDIDATE_RESEARCH_MODEL_VERSION}`);
+  const canonicalInputHashes = rowRelation(manifestRead.data.canonical_input_hashes) || {};
   const stageRead = await supabase.from('candidate_daily_stage_snapshots')
     .select('lifecycle_stage,hard_gate_results,available_at,stocks(symbol)')
     .eq('session_date', input.technicalSessionDate).eq('ruleset_version', STAGE_RULESET_VERSION).eq('model_version', CANDIDATE_STAGE_MODEL_VERSION);
@@ -1253,9 +1460,11 @@ export async function recordCandidateShadowObservation(input: {
   const finalBlockers = conflict ? [...new Set([...blockers, 'same_manifest_replay_conflict'])] : blockers;
   const attempt = await supabase.from('candidate_shadow_attempts').insert({
     manifest_id: input.manifestId, pipeline_run_id: input.pipelineRunId, publication_id: input.publicationId,
+    cohort_key: cohortKey, canonical_input_hashes: canonicalInputHashes,
     payload_hash: input.publicationPayloadHash, terminal_count: terminalBySymbol.size, candidate_count: manifestSymbols.length,
     completeness_pct: completeness, freshness_pct: freshness, replay_hash: replayHash,
     status: conflict ? 'conflict' : qualifying ? 'qualified' : 'failed', blockers: finalBlockers,
+    blocker_schema_version: 'shadow-blockers-v2', attempt_blockers: finalBlockers,
     started_at: observedAt, finished_at: observedAt,
   }).select('id').single();
   if (attempt.error || !attempt.data) throw new Error(`shadow_attempt_write_failed:${attempt.error?.message || 'missing'}`);
@@ -1268,11 +1477,20 @@ export async function recordCandidateShadowObservation(input: {
     reproducibility_status: conflict ? 'conflict' : 'matched', qualifying: qualifying && !conflict, blockers: finalBlockers,
     observed_at: observedAt, published_at: observedAt, shadow_policy_version: SHADOW_POLICY_VERSION,
     manifest_id: input.manifestId, attempt_id: attempt.data.id, payload_hash: input.publicationPayloadHash,
+    cohort_key: cohortKey, canonical_input_hashes: canonicalInputHashes,
+    blocker_schema_version: 'shadow-blockers-v2', attempt_blockers: finalBlockers, current_blockers: finalBlockers,
     updated_at: observedAt,
   };
   if (!existing.data) {
     const observation = await supabase.from('candidate_shadow_session_observations').insert(row);
     if (observation.error) throw new Error(`shadow_observation_write_failed:${observation.error.message}`);
+  } else if (!conflict) {
+    // Attempts are immutable evidence. The canonical daily row is the latest
+    // non-conflicting evaluation of the same frozen manifest, so a repaired
+    // publication/source condition can become the current daily status without
+    // erasing the earlier failed attempt.
+    const observation = await supabase.from('candidate_shadow_session_observations').update(row).eq('id', existing.data.id);
+    if (observation.error) throw new Error(`shadow_observation_update_failed:${observation.error.message}`);
   }
   return { sessionDate: input.technicalSessionDate, policyVersion: SHADOW_POLICY_VERSION, qualifying: qualifying && !conflict, conflict, completeness, freshness, blockers: finalBlockers, attemptId: String(attempt.data.id) };
 }

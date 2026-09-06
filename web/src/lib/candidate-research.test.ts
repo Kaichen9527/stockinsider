@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { buildConservativeOfficialScenario, buildForwardEarningsScenario } from './candidate-valuation.ts';
-import { candidatePriceRefreshDepth, collectBatchedAuthorityRows, collectPagedAuthorityRows, isCandidateHistoricalPriceAccessEnabled, isTransientResearchInfrastructureError, rotatingShard } from './candidate-research-policy.ts';
+import { candidatePriceRefreshDepth, collectBatchedAuthorityRows, collectPagedAuthorityRows, financialFactAvailableAt, isCandidateHistoricalPriceAccessEnabled, isTransientResearchInfrastructureError, rotatingShard } from './candidate-research-policy.ts';
 
 test('candidate research retries transient infrastructure errors only', () => {
   assert.equal(isTransientResearchInfrastructureError('supabase.co | 520: Web server is returning an unknown error'), true);
@@ -132,4 +132,21 @@ test('financial refresh shards rotate past permanently incomplete issuers', () =
   assert.deepEqual(second.items, backlog.slice(30, 60));
   assert.deepEqual(third.items, [...backlog.slice(60), ...backlog.slice(0, 25)]);
   assert.equal(third.nextCursor, 25);
+});
+
+test('financial facts obtained after evaluation cannot enter point-in-time valuation', () => {
+  const fact = {
+    filing_published_at: '2026-09-06T10:00:01Z',
+    source_timestamp: '2026-09-06T10:00:01Z',
+    collected_at: '2026-09-06T10:00:01Z',
+    recorded_at: '2026-09-06T10:00:02Z',
+  };
+  assert.equal(financialFactAvailableAt(fact, '2026-09-06T10:00:00Z'), false);
+  assert.equal(financialFactAvailableAt(fact, '2026-09-06T10:00:02Z'), true);
+});
+
+test('shadow reruns bind financial availability to the frozen manifest cutoff', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const source = await readFile(new URL('./candidate-research.ts', import.meta.url), 'utf8');
+  assert.match(source, /lte\('filing_published_at', authorityCutoff\)[\s\S]{0,180}lte\('recorded_at', authorityCutoff\)/u);
 });

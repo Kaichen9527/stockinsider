@@ -33,6 +33,10 @@ export type SourceRunLedgerInput = {
   policy: SourceExecutionPolicy;
   nextExpectedAt: string | null;
   metadata?: Record<string, unknown>;
+  /** Indexing can succeed even when creator permission forbids content analysis. */
+  indexUpdated?: boolean | null;
+  contentAnalyzable?: boolean | null;
+  validMatches?: number | null;
 };
 
 export type SourceRunLedgerView = {
@@ -59,6 +63,10 @@ export type SourceRunLedgerView = {
   newCount24h: number;
   duplicate24h: number;
   written24h: number;
+  indexUpdated: boolean;
+  contentAnalyzable: boolean;
+  validMatches: number;
+  metadata: Record<string, unknown>;
 };
 
 export async function recordSourceRunLedger(input: SourceRunLedgerInput): Promise<void> {
@@ -81,6 +89,9 @@ export async function recordSourceRunLedger(input: SourceRunLedgerInput): Promis
     source_disposition: input.policy.disposition,
     next_expected_at: input.nextExpectedAt,
     metadata: input.metadata ?? {},
+    index_updated: input.indexUpdated ?? false,
+    content_analyzable: input.contentAnalyzable ?? false,
+    valid_matches: Math.max(0, input.validMatches ?? input.matched),
   });
   if (error) throw new Error(`source_run_ledger_write_failed:${error.message}`);
 }
@@ -126,7 +137,7 @@ export async function loadLatestSourceRunLedger(): Promise<SourceRunLedgerView[]
   const cutoff24hIso = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
   const [{ data, error }, recentRows, registry] = await Promise.all([
     supabase.from('source_run_ledger')
-      .select('id,connector,expected_at,attempted_at,succeeded_at,fetched,matched,new_count,duplicate,written,auth_status,terminal_reason,terminal_detail,parser_version,license_basis,source_disposition,next_expected_at')
+      .select('id,connector,expected_at,attempted_at,succeeded_at,fetched,matched,new_count,duplicate,written,index_updated,content_analyzable,valid_matches,auth_status,terminal_reason,terminal_detail,parser_version,license_basis,source_disposition,next_expected_at,metadata')
       .order('attempted_at', { ascending: false }).limit(250),
     collectPagedAuthorityRows<Record<string, unknown>>(async (from, to) => {
       const page = await supabase.from('source_run_ledger')
@@ -168,6 +179,10 @@ export async function loadLatestSourceRunLedger(): Promise<SourceRunLedgerView[]
       nextExpectedAt: row.next_expected_at ? String(row.next_expected_at) : null,
       runs24h: aggregate.runs, fetched24h: aggregate.fetched, matched24h: aggregate.matched,
       newCount24h: aggregate.newCount, duplicate24h: aggregate.duplicate, written24h: aggregate.written,
+      indexUpdated: row.index_updated === true,
+      contentAnalyzable: row.content_analyzable === true,
+      validMatches: Number(row.valid_matches ?? row.matched ?? 0),
+      metadata: row.metadata && typeof row.metadata === 'object' && !Array.isArray(row.metadata) ? row.metadata as Record<string, unknown> : {},
     });
   }
   for (const raw of registry.data ?? []) {
@@ -197,6 +212,10 @@ export async function loadLatestSourceRunLedger(): Promise<SourceRunLedgerView[]
         licenseBasis: String(row.license_basis || existing.licenseBasis),
         sourceDisposition: disposition,
         nextExpectedAt: null,
+        indexUpdated: existing.indexUpdated,
+        contentAnalyzable: existing.contentAnalyzable,
+        validMatches: existing.validMatches,
+        metadata: existing.metadata,
       });
       continue;
     }
@@ -208,6 +227,8 @@ export async function loadLatestSourceRunLedger(): Promise<SourceRunLedgerView[]
       parserVersion: String(row.parser_version || ''), licenseBasis: String(row.license_basis || ''),
       sourceDisposition: disposition, nextExpectedAt: null,
       runs24h: 0, fetched24h: 0, matched24h: 0, newCount24h: 0, duplicate24h: 0, written24h: 0,
+      indexUpdated: false, contentAnalyzable: false, validMatches: 0,
+      metadata: {},
     });
   }
   return [...latestByConnector.values()];

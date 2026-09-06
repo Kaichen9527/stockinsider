@@ -103,3 +103,34 @@ export function buildForwardEarningsScenario(input: {
     historicalSampleCount: sorted.length,
   };
 }
+
+export function buildDriverMultipleScenario(input: {
+  price: number;
+  bearDriver: number;
+  baseDriver: number;
+  bullDriver: number;
+  historicalMultiples: number[];
+  primaryMethod: 'normalized_pe' | 'forward_pb';
+  driverSource: 'normalized_cycle_eps' | 'reported_book_value_per_share';
+}) {
+  const sorted = input.historicalMultiples.filter((value) => Number.isFinite(value) && value > 0).sort((left, right) => left - right);
+  if (sorted.length < 48 || input.price <= 0 || input.bearDriver <= 0 || input.baseDriver <= 0 || input.bullDriver <= 0) return null;
+  const at = (percentile: number) => sorted[Math.min(sorted.length - 1, Math.max(0, Math.round((sorted.length - 1) * percentile)))];
+  const multiples = [at(0.25), at(0.5), at(0.75)] as const;
+  const metrics = scenarioValuationMetrics({
+    currentPrice: input.price,
+    bear: input.bearDriver * multiples[0],
+    base: input.baseDriver * multiples[1],
+    bull: input.bullDriver * multiples[2],
+  });
+  return {
+    ...metrics,
+    primaryMethod: input.primaryMethod,
+    growthFactor: null,
+    operatingDriver: round(input.baseDriver, 4),
+    operatingDriverSource: input.driverSource,
+    baseMultiple: round(multiples[1], 3),
+    historicalPercentile: round(sorted.filter((value) => value <= input.price / input.baseDriver).length / sorted.length * 100, 2),
+    historicalSampleCount: sorted.length,
+  };
+}

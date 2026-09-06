@@ -12,7 +12,9 @@ test('candidate official MOPS history accepts only consolidated year-to-date fac
       <ix:nonFraction name="ifrs-full:ProfitLossFromOperatingActivities" contextRef="good" unitRef="TWD">250</ix:nonFraction>
       <ix:nonFraction name="ifrs-full:ProfitLossAttributableToOwnersOfParent" contextRef="good" unitRef="TWD">180</ix:nonFraction>
       <ix:nonFraction name="tifrs-notes:DilutedEarningsPerShare" contextRef="good" unitRef="EarningsPerShare">1.8</ix:nonFraction>
+      <ix:nonFraction name="tifrs-notes:BasicEarningsPerShare" contextRef="good" unitRef="EarningsPerShare">1.9</ix:nonFraction>
       <ix:nonFraction name="tifrs-notes:WeightedAverageNumberOfDilutedSharesOutstanding" contextRef="good" unitRef="Shares">100</ix:nonFraction>
+      <ix:nonFraction name="tifrs-notes:WeightedAverageNumberOfSharesOutstanding" contextRef="good" unitRef="Shares">99</ix:nonFraction>
       <ix:nonFraction name="ifrs-full:Revenue" contextRef="segment" unitRef="TWD">9999</ix:nonFraction>
       ${' '.repeat(120)}
     `;
@@ -22,10 +24,20 @@ test('candidate official MOPS history accepts only consolidated year-to-date fac
       collectedAt: '2026-08-11T00:00:00Z',
     });
     assert.deepEqual(facts.map((row) => row.factKey).sort(), [
-      'diluted_weighted_average_shares', 'quarterly_diluted_eps', 'quarterly_gross_profit',
+      'basic_weighted_average_shares', 'diluted_weighted_average_shares', 'quarterly_basic_eps', 'quarterly_diluted_eps', 'quarterly_gross_profit',
       'quarterly_net_income_attributable_to_common', 'quarterly_operating_income', 'quarterly_revenue',
     ]);
     assert.equal(facts.find((row) => row.factKey === 'quarterly_revenue')?.value, 1200);
     assert.equal(facts.every((row) => row.periodStart === '2026-01-01' && row.filingPublishedAt === '2026-08-11T00:00:00.000Z' && row.sourceTimestamp === '2026-08-11T00:00:00.000Z'), true);
     assert.equal(facts.every((row) => row.provider === 'mops'), true);
+});
+
+test('official financial refresh completes durable MOPS and TPEx jobs atomically', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const source = await readFile(new URL('./candidate-official-financials.ts', import.meta.url), 'utf8');
+  assert.match(source, /complete_candidate_financial_acquisition_job_v4/u);
+  assert.match(source, /TPEX_JOB_KEYS/u);
+  assert.match(source, /claim_candidate_financial_acquisition_jobs_v4/u);
+  assert.match(source, /FINANCIAL_JOB_LEASE_MS = 45 \* 60_000/u);
+  assert.doesNotMatch(source, /rpc\('append_financial_fact_v3'/u);
 });

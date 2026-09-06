@@ -25,6 +25,10 @@ type SourceResult = SourceSyncResult & {
   terminalReason: SourceTerminalReason;
   licenseBasis: string;
   authStatus: 'authorized' | 'missing' | 'rejected' | 'not_applicable';
+  indexUpdated: boolean;
+  contentAnalyzable: boolean;
+  validMatches: number;
+  newCount: number;
 };
 
 function authStatus(result: SourceSyncResult) {
@@ -50,6 +54,8 @@ function publicResult(raw: Partial<SourceSyncResult> & Pick<SourceSyncResult, 'r
   const matched = Number(result.matchedDirectHits || 0) + Number(result.matchedIndustryHits || 0);
   const duplicate = Number(result.duplicatesSkipped || 0);
   const written = Number(result.recordsWritten || 0);
+  const status = raw as typeof raw & { metadata?: Record<string, unknown>; indexUpdated?: boolean; contentAnalyzable?: boolean; validMatches?: number };
+  const metadata = status.metadata || {};
   return {
     ...result,
     fetched,
@@ -60,6 +66,10 @@ function publicResult(raw: Partial<SourceSyncResult> & Pick<SourceSyncResult, 'r
     terminalReason: terminalReason(result),
     licenseBasis,
     authStatus: authStatus(result),
+    indexUpdated: status.indexUpdated ?? (metadata.index_updated === true || fetched > 0),
+    contentAnalyzable: status.contentAnalyzable ?? (metadata.content_analyzable === true || !['podcast', 'gdelt'].includes(result.connector)),
+    validMatches: Math.max(0, Number(status.validMatches ?? metadata.valid_matches ?? matched)),
+    newCount: written,
   };
 }
 
@@ -117,6 +127,11 @@ async function executeConnector(connector: string, dryRun: boolean, symbol: stri
           matchedIndustryHits: 0, entityId: null, errorCode: null, degradedReason: null,
           sessionMode: 'not_applicable' as const, watermarkBefore: null, watermarkAfter: null,
           sessionRefreshed: false,
+          metadata: {
+            index_updated: result.indexUpdated === true,
+            content_analyzable: result.contentAnalyzable === true,
+            valid_matches: Number(result.validMatches || 0),
+          },
         }))
       : await runSourceSync({ connector, dryRun, ...(symbol ? { symbol } : {}) });
     const result = publicResult(raw, policy.licenseBasis);
@@ -138,7 +153,14 @@ async function executeConnector(connector: string, dryRun: boolean, symbol: stri
         parserVersion: PARSER_VERSION,
         policy,
         nextExpectedAt: nextExpectedAt(attemptedAt, policy.cadenceHours),
-        metadata: { symbol: symbol || null, dryRun },
+        metadata: {
+          ...(((raw as typeof raw & { metadata?: Record<string, unknown> }).metadata) || {}),
+          symbol: symbol || null,
+          dryRun,
+        },
+        indexUpdated: result.indexUpdated,
+        contentAnalyzable: result.contentAnalyzable,
+        validMatches: result.validMatches,
       });
     }
     return result;

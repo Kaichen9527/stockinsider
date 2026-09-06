@@ -1,6 +1,7 @@
-import { atr, obv, rsi, sma } from 'indicatorts';
+import { obv, rsi, sma } from 'indicatorts';
+import { wilderAtr14 } from './candidate-risk-action.ts';
 
-export const TECHNICAL_FEATURE_RULESET_VERSION = 'technical-features-v2.0.0';
+export const TECHNICAL_FEATURE_RULESET_VERSION = 'technical-features-v3.0.0';
 export const MINIMUM_TECHNICAL_HISTORY_BARS = 240;
 
 export function technicalHistoryCoverageTerminalReason(barCount: number) {
@@ -65,8 +66,6 @@ export function calculateTechnicalFeatures(
     || (index > 0 && bar.session <= bars[index - 1].session))) throw new Error('invalid_technical_bars');
 
   const closes = bars.map((bar) => bar.close);
-  const highs = bars.map((bar) => bar.high);
-  const lows = bars.map((bar) => bar.low);
   const volumes = bars.map((bar) => bar.volume);
   const ma = (period: number) => lastFinite(sma(closes, { period }), period);
   const ma60Series = sma(closes, { period: 60 });
@@ -75,7 +74,10 @@ export function calculateTechnicalFeatures(
     : null;
   const medianVolume20 = median(volumes.slice(-20));
   const latestVolume = volumes.at(-1)!;
-  const atr14 = lastFinite(atr(highs, lows, closes, { period: 14 }).atrLine, 14);
+  // indicatorts@2.2.2 uses an SMA of true range. The product contract uses
+  // Wilder smoothing, so keep the library for the other transparent formulas
+  // and calculate ATR through the explicitly versioned adapter.
+  const atr14 = wilderAtr14(bars.map((bar) => ({ high: bar.high, low: bar.low, close: bar.close })));
   const rsi14 = lastFinite(rsi(closes, { period: 14 }), 15);
   const obvValue = lastFinite(obv(closes, volumes), 1);
   return {

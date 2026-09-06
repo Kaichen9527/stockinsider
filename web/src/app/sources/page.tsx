@@ -197,6 +197,9 @@ export default async function SourcesPage({
             <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
               {result.sourceRunLedger.map((item) => {
                 const healthy = ['success', 'successful_empty', 'duplicate_only'].includes(item.terminalReason);
+                const channelBreakdown = Array.isArray(item.metadata?.channel_breakdown)
+                  ? item.metadata.channel_breakdown as Array<{ channel?: string; status?: string }>
+                  : [];
                 return (
                   <div key={`ledger-${item.connector}`} className="rounded-xl border border-line bg-surface p-3 text-xs">
                     <div className="flex items-center justify-between gap-3">
@@ -206,11 +209,12 @@ export default async function SourcesPage({
                       </span>
                     </div>
                     <p className="mt-2 text-slate-600 dark:text-emerald-100/70">
-                      本次：fetched {item.fetched} · matched {item.matched} · new {item.newCount} · duplicate {item.duplicate} · written {item.written}
+                      本次：index {item.indexUpdated ? 'updated' : 'unchanged'} · content {item.contentAnalyzable ? 'analyzable' : 'metadata only'} · valid matches {item.validMatches} · new {item.newCount}
                     </p>
                     <p className="mt-1 text-slate-500 dark:text-emerald-100/55">近 24 小時（{item.runs24h} 次）：fetched {item.fetched24h} · matched {item.matched24h} · new {item.newCount24h} · duplicate {item.duplicate24h} · written {item.written24h}</p>
                     <p className="mt-1 text-slate-500 dark:text-emerald-100/55">最近嘗試：{formatTaipeiDateTime(item.attemptedAt)} · 下次：{formatTaipeiDateTime(item.nextExpectedAt, '不自動執行')}</p>
                     <p className="mt-1 text-slate-500 dark:text-emerald-100/55">授權：{item.authStatus} · {item.licenseBasis}</p>
+                    {channelBreakdown.length > 0 ? <p className="mt-1 text-slate-500 dark:text-emerald-100/55">頻道：{channelBreakdown.map((channel) => `@${channel.channel || '?'} ${channel.status || 'unknown'}`).join(' · ')}</p> : null}
                     {item.terminalDetail ? <p className="mt-1 text-amber-700 dark:text-amber-300">原因：{item.terminalDetail}</p> : null}
                   </div>
                 );

@@ -24,6 +24,7 @@ test('revision-bound detail renders the exact Decision Brief selected by the V3.
   await expect(page.getByTestId('detail-thesis').locator('li')).toHaveCount(3);
   await expect(page.getByTestId('detail-risks').locator('li')).toHaveCount(3);
   await expect(page.getByTestId('detail-source-dates')).toContainText('評估：');
-  await expect(page.getByTestId('detail-revision')).toHaveText(revision);
+  await expect(page.getByTestId('detail-revision')).toHaveText('研究版本已鎖定，可在後端稽核。');
+  await expect(page.locator('body')).not.toContainText(revision);
   await assertNoConsoleErrors();
 });

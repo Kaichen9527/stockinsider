@@ -60,6 +60,30 @@ test('an unrelated price fact cannot support a customer certification claim', ()
   assert.ok(result.rejectionReasons.includes('section_1_fact_semantic_mismatch'));
 });
 
+test('arbitrary prose cannot become a public fact merely by citing an allowed ID', () => {
+  const result = validateCandidateDossierSubmission({
+    summary: '測試公司摘要引用一筆官方價格，並等待更多營運證據。', summaryFactIds: [factId],
+    sections: [{ key: 'viewpoint', title: '摘要', body: '測試公司目前只有官方價格資料。', factIds: [factId] }],
+    claims: [{ id: 'fabricated_fact', kind: 'fact', text: '這是一段無法由資料驗證的虛構敘述。', factIds: [factId] }],
+    allowedFactIds: [factId], factKeys: new Map([[factId, 'close']]), factKinds: new Map([[factId, 'official_numeric']]),
+    factMetadata: new Map([[factId, { factKey: 'close', factKind: 'official_numeric', unit: 'TWD', period: '2026-06-30', locator: 'close:2026-06-30', values: [100] }]]),
+  });
+  assert.ok(result.rejectionReasons.includes('claim_fabricated_fact_fact_semantic_mismatch'));
+  assert.ok(result.rejectionReasons.includes('claim_fabricated_fact_structured_context_required'));
+  assert.ok(result.rejectionReasons.includes('claim_fabricated_fact_official_numeric_value_required'));
+});
+
+test('arbitrary summary and section prose cannot borrow an unrelated allowed fact', () => {
+  const result = validateCandidateDossierSubmission({
+    summary: '測試公司已取得重要客戶，後續營運成長值得期待。', summaryFactIds: [factId],
+    sections: [{ key: 'viewpoint', title: '摘要', body: '管理團隊執行力很好，未來可望持續成長。', factIds: [factId] }],
+    allowedFactIds: [factId], factKeys: new Map([[factId, 'close']]), factKinds: new Map([[factId, 'official_numeric']]),
+    factMetadata: new Map([[factId, { factKey: 'close', factKind: 'official_numeric', unit: 'TWD', period: '2026-06-30', locator: 'close:2026-06-30', values: [100] }]]),
+  });
+  assert.ok(result.rejectionReasons.includes('summary_fact_semantic_mismatch'));
+  assert.ok(result.rejectionReasons.includes('section_1_fact_semantic_mismatch'));
+});
+
 test('a data-gap fact cannot be cited as proof that an operating milestone happened', () => {
   const gapId = '00000000-0000-4000-8000-000000000002';
   const result = validateCandidateDossierSubmission({
@@ -70,4 +94,45 @@ test('a data-gap fact cannot be cited as proof that an operating milestone happe
   });
   assert(result.rejectionReasons.includes('summary_data_gap_used_as_positive_evidence'));
   assert(result.rejectionReasons.includes('section_1_data_gap_used_as_positive_evidence'));
+});
+
+test('typed operational claims require semantically relevant facts and numeric context', () => {
+  const result = validateCandidateDossierSubmission({
+    summary: '測試公司研究摘要已綁定官方價格事實，但沒有營運證據。', summaryFactIds: [factId],
+    sections: [{ key: 'viewpoint', title: '摘要', body: '測試公司目前價格資料可供核對。', factIds: [factId] }],
+    claims: [{ id: 'customer_ship', kind: 'fact', text: '客戶認證完成並已經開始出貨 100 件。', factIds: [factId], metric: 'shipment', unit: 'units', period: '2026-Q2', locator: 'p.7' }],
+    allowedFactIds: [factId], factValues: new Map([[factId, [100]]]), factKeys: new Map([[factId, 'close']]),
+    factKinds: new Map([[factId, 'official_numeric']]),
+    factMetadata: new Map([[factId, { factKey: 'close', factKind: 'official_numeric', unit: 'TWD', period: '2026-06-30', locator: 'close:2026-06-30', values: [100] }]]),
+  });
+  assert(result.rejectionReasons.includes('claim_customer_ship_fact_semantic_mismatch'));
+  assert(result.rejectionReasons.includes('claim_customer_ship_fact_metadata_mismatch'));
+});
+
+test('derived calculation formulas must form a closed acyclic claim DAG', () => {
+  const result = validateCandidateDossierSubmission({
+    summary: '測試公司研究摘要引用官方事實，並將計算與假設分開揭露。', summaryFactIds: [factId],
+    sections: [{ key: 'viewpoint', title: '摘要', body: '測試公司的官方收盤價事實與推導分開呈現。', factIds: [factId] }],
+    claims: [
+      { id: 'derived_a', kind: 'derived_calculation', text: '推導值 A', factIds: [], formula: { expression: 'b * 2', inputs: ['derived_b'] } },
+      { id: 'derived_b', kind: 'derived_calculation', text: '推導值 B', factIds: [], formula: { expression: 'a / 2', inputs: ['derived_a'] } },
+    ],
+    allowedFactIds: [factId], factKeys: new Map([[factId, 'close']]), factKinds: new Map([[factId, 'official_numeric']]),
+  });
+  assert(result.rejectionReasons.includes('claim_formula_dag_cycle'));
+});
+
+test('a disclosed assumption and an acyclic calculation are accepted as distinct claim kinds', () => {
+  const result = validateCandidateDossierSubmission({
+    summary: '測試公司研究摘要引用官方收盤價事實，並將模型假設清楚標示。', summaryFactIds: [factId],
+    sections: [{ key: 'viewpoint', title: '摘要', body: '測試公司的官方資料與估值假設分開呈現。', factIds: [factId] }],
+    claims: [
+      { id: 'base_fact', kind: 'fact', text: '收盤價 100 元。', factIds: [factId], metric: 'close', unit: 'TWD', period: '2026-06-30', locator: 'close:2026-06-30' },
+      { id: 'growth_assumption', kind: 'assumption', text: 'Base 情境假設成長率維持不變。', factIds: [] },
+      { id: 'target', kind: 'derived_calculation', text: '依基礎值推導目標價。', factIds: [], formula: { expression: 'base_fact * 1.1', inputs: ['base_fact', 'growth_assumption'] } },
+    ],
+    allowedFactIds: [factId], factValues: new Map([[factId, [100]]]), factKeys: new Map([[factId, 'close']]), factKinds: new Map([[factId, 'official_numeric']]),
+    factMetadata: new Map([[factId, { factKey: 'close', factKind: 'official_numeric', unit: 'TWD', period: '2026-06-30', locator: 'close:2026-06-30', values: [100] }]]),
+  });
+  assert.deepEqual(result.rejectionReasons, []);
 });
