@@ -1429,9 +1429,140 @@ async function executeCandidateResearchCycle(options: {
         ruleset_version: STAGE_RULESET_VERSION,
         model_version: CANDIDATE_STAGE_MODEL_VERSION,
         provenance: { candidate_research_run_id: runId, failure: true },
-      }, { onConflict: 'stock_id,session_date,ruleset_version,model_version' });
+      }, { onConflict: 'stock_id,session_date,ruleset_version,model_version' }).select('id').single();
       if (failedSnapshot.error) result.snapshotError = failedSnapshot.error.message;
-      const failureWrite = await supabase.from('candidate_research_run_items').upsert({ run_id: runId, stock_id: stock.id, symbol: stock.symbol, status: 'failed', price_status: /price|bar/iu.test(reason) ? 'failed' : 'unknown', technical_status: 'failed', fundamental_status: 'unknown', valuation_status: 'missing', classification_status: 'failed', lifecycle_stage: 'found', terminal_reason: reason, technical_session_date: null, metrics: result, started_at: startedAt, finished_at: new Date().toISOString() }, { onConflict: 'run_id,stock_id' });
+      // Missing market history blocks technical analysis and valuation, but it
+      // must not make a valid source-discovered company page disappear. Keep a
+      // deterministic, source-specific fact page with explicit data gaps while
+      // the provider queue repairs price coverage. Infrastructure/write errors
+      // still fail closed and do not attempt to publish a misleading page.
+      if (!failedSnapshot.error && reason === 'official_price_history_missing') {
+        try {
+          const gapMentions = mentionsByStock.get(stock.id) || [];
+          const gapConcentration = sourceConcentration(gapMentions.map((row) => ({
+            platform: String(row.platform || 'unknown'),
+            publisherKey: String(row.publisher_key || publisherKeyFor({
+              platform: String(row.platform || 'unknown'),
+              author: row.author_name ? String(row.author_name) : null,
+              sourceUrl: row.source_url ? String(row.source_url) : null,
+              sourceName: row.source_name ? String(row.source_name) : null,
+            })),
+            contentHash: String(row.independent_content_hash || row.source_url || stableHash(row)),
+          })));
+          const sourceLinks = roundRobinSourceLinks(gapMentions.flatMap((row) => {
+            const url = sanitizePublicSourceUrl(row.source_url);
+            return url ? [{
+              platform: String(row.platform || 'unknown'),
+              label: String(row.source_name || row.author_name || row.platform || '來源'),
+              url,
+              publishedAt: String(row.mentioned_at || row.available_at || ''),
+            }] : [];
+          }));
+          const latestMentionMs = Math.max(0, ...gapMentions
+            .map((row) => Date.parse(String(row.mentioned_at || row.available_at || '')))
+            .filter(Number.isFinite));
+          const gapCard: CandidateStageCard = {
+            symbol: stock.symbol,
+            chineseName: stock.name,
+            market: 'TW',
+            lifecycleStage: 'found',
+            latestMentionAt: latestMentionMs ? new Date(latestMentionMs).toISOString() : evaluatedAt,
+            mentionCount: gapMentions.length,
+            rawMentionCount: gapConcentration.rawMentions,
+            effectiveMentionCount: gapConcentration.effectiveMentions,
+            publisherCount: gapConcentration.publisherCount,
+            positivePublisherCount: new Set(gapMentions.filter((row) => ['positive', 'endorsement'].includes(String(row.stance || '').toLowerCase())).map((row) => String(row.publisher_key || row.author_name || row.source_name || row.platform))).size,
+            negativePublisherCount: new Set(gapMentions.filter((row) => String(row.stance || '').toLowerCase() === 'negative').map((row) => String(row.publisher_key || row.author_name || row.source_name || row.platform))).size,
+            generalPublisherCount: new Set(gapMentions.filter((row) => !['positive', 'endorsement', 'negative'].includes(String(row.stance || '').toLowerCase())).map((row) => String(row.publisher_key || row.author_name || row.source_name || row.platform))).size,
+            platformCount: gapConcentration.platformCount,
+            dominantPlatformShare: gapConcentration.dominantPlatformShare,
+            sources: sourceLinks.map((source) => ({ platform: source.platform, sourceName: source.label, publisherName: source.label, author: null, sourceUrl: source.url, stance: null, mentionedAt: source.publishedAt })),
+            scores: { discovery: 0, research: 0, actionability: 0, dataConfidence: 0 },
+            valuation: { status: 'missing', currentPrice: null, bearTarget: null, baseTarget: null, bullTarget: null, probabilityWeightedTarget: null, baseUpsidePct: null, bearDownsidePct: null, rewardRiskRatio: null, method: 'insufficient_official_evidence' },
+            technical: { sessionDate: null, close: null, ma20: null, ma60: null, ma120: null, ma240: null, rsi14: null, volumeRatio20Median: null, marketRegime, hardGatePassed: false },
+            consecutiveCloses: { passed: 0, required: 2, technicalSessionDate: null },
+            classificationReplayHash: String(result.classificationReplayHash || ''),
+            unmetConditions: ['official_price_history_missing', 'bear_base_bull_missing', 'stale_or_fallback_data'],
+            promotionReasons: [],
+            dataAsOf: evaluatedAt,
+            stale: true,
+            detailRevisionId: null,
+            riskAction: { state: 'data_incomplete', reasons: ['risk_action_inputs_incomplete'] },
+            detailHref: `/stock/${stock.symbol}`,
+          };
+          const sections = buildDeterministicCandidateSections({
+            card: gapCard,
+            factIds: [],
+            valuationBasis: 'insufficient_official_evidence',
+            multipleMonthsCovered: 0,
+            sourceCount: gapMentions.length,
+            publisherCount: gapCard.publisherCount,
+            platformCount: gapCard.platformCount,
+            sector: stock.sector,
+          });
+          const detailPayload = {
+            stock_id: stock.id,
+            session_date: latestMarketSession,
+            lifecycle_stage: 'found' as const,
+            detail_kind: 'fact' as const,
+            publication_phase: 'preliminary' as const,
+            title: `${stock.name}（${stock.symbol}）來源命中與資料缺口`,
+            summary: sections[0].body,
+            sections,
+            fact_ids: [],
+            source_links: sourceLinks,
+            valuation: { ...gapCard.valuation, basis: 'insufficient_official_evidence', monthsCovered: 0, next12mBridgeComplete: false, unmetConditions: gapCard.unmetConditions },
+            technical: gapCard.technical,
+            market_evidence_snapshot_id: marketEvidence.id,
+            research_run_id: runId,
+            ruleset_version: STAGE_RULESET_VERSION,
+            model_version: CANDIDATE_RESEARCH_MODEL_VERSION,
+            as_of: evaluatedAt,
+            available_at: evaluatedAt,
+            provenance: { source: 'deterministic_candidate_research_data_gap', research_run_id: runId, terminal_reason: reason },
+          };
+          const revisionHash = stableHash(detailPayload);
+          const identicalDetail = await supabase.from('candidate_detail_snapshots').select('id')
+            .eq('stock_id', stock.id).eq('session_date', latestMarketSession).eq('model_version', CANDIDATE_RESEARCH_MODEL_VERSION)
+            .eq('revision_hash', revisionHash).maybeSingle();
+          if (identicalDetail.error) throw new Error(identicalDetail.error.message);
+          let detailRevisionId = identicalDetail.data?.id ? String(identicalDetail.data.id) : null;
+          let appendedDetail = false;
+          if (!detailRevisionId) {
+            const priorDetail = await supabase.from('candidate_detail_snapshots').select('id')
+              .eq('stock_id', stock.id).eq('model_version', CANDIDATE_RESEARCH_MODEL_VERSION)
+              .order('available_at', { ascending: false }).limit(1).maybeSingle();
+            if (priorDetail.error) throw new Error(priorDetail.error.message);
+            const detailWrite = await supabase.from('candidate_detail_snapshots').insert({
+              ...detailPayload,
+              revision_hash: revisionHash,
+              supersedes_revision_id: priorDetail.data?.id || null,
+            }).select('id').single();
+            if (detailWrite.error || !detailWrite.data) throw new Error(detailWrite.error?.message || 'candidate_detail_write_failed');
+            detailRevisionId = String(detailWrite.data.id);
+            appendedDetail = true;
+          }
+          if (!detailRevisionId) throw new Error('candidate_detail_revision_missing');
+          if (appendedDetail) {
+            const dossierWrite = await supabase.from('candidate_research_dossiers').insert({
+              detail_snapshot_id: detailRevisionId,
+              narrative_kind: 'deterministic_fact',
+              content: { summary: sections[0].body, sections },
+              claim_fact_map: {},
+              validation_status: 'valid',
+              rejection_reasons: [],
+            });
+            if (dossierWrite.error) throw new Error(dossierWrite.error.message);
+          }
+          const detailLink = await supabase.from('candidate_daily_stage_snapshots')
+            .update({ detail_revision_id: detailRevisionId }).eq('id', String(failedSnapshot.data?.id || ''));
+          if (detailLink.error) throw new Error(detailLink.error.message);
+          Object.assign(result, { detailRevisionId, researchReadiness: 'data_gap', narrativeKind: 'deterministic_fact' });
+        } catch (detailError) {
+          result.detailError = detailError instanceof Error ? detailError.message : String(detailError);
+        }
+      }
+      const failureWrite = await supabase.from('candidate_research_run_items').upsert({ run_id: runId, stock_id: stock.id, symbol: stock.symbol, status: 'failed', execution_status: 'failed', research_readiness: result.detailRevisionId ? 'data_gap' : 'unavailable', valuation_method: 'insufficient_official_evidence', narrative_kind: result.detailRevisionId ? 'deterministic_fact' : null, price_status: /price|bar/iu.test(reason) ? 'failed' : 'unknown', technical_status: 'failed', fundamental_status: 'unknown', valuation_status: 'missing', classification_status: 'failed', lifecycle_stage: 'found', terminal_reason: reason, technical_session_date: null, metrics: result, started_at: startedAt, finished_at: new Date().toISOString() }, { onConflict: 'run_id,stock_id' });
       if (failureWrite.error) result.ledgerError = failureWrite.error.message;
       return result;
     }
@@ -1439,7 +1570,7 @@ async function executeCandidateResearchCycle(options: {
   const items = await mapLimit(universe, 4, (stock) => researchStock(stock));
   const failedCount = items.filter((item) => item.status === 'failed').length;
   const partialCount = items.filter((item) => item.status === 'partial').length;
-  const failClosedWriteFailures = items.filter((item) => item.snapshotError).length;
+  const failClosedWriteFailures = items.filter((item) => item.snapshotError || item.detailError).length;
   const completedCount = items.length - failedCount;
   const technicalSessionDate = items.map((item) => String(item.technicalSessionDate || '')).filter(Boolean).sort().at(-1) || null;
   const runStatus = failedCount === items.length && items.length > 0 ? 'failed' : failedCount > 0 || partialCount > 0 ? 'partial' : 'success';
