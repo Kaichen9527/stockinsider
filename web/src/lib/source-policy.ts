@@ -76,7 +76,15 @@ export function sourceExecutionPolicy(connector: string): SourceExecutionPolicy 
     return { connector, disposition: 'active', licenseBasis: 'gdelt_metadata_and_source_links', terminalReason: null, cadenceHours: 6 };
   }
   if (connector === 'twse_insider') {
-    return { connector, disposition: 'active', licenseBasis: 'twse_open_data', terminalReason: null, cadenceHours: 24 };
+    return enabled(process.env.TWSE_OFFICIAL_OPENAPI_ENABLED)
+      ? { connector, disposition: 'active', licenseBasis: 'twse_open_data', terminalReason: null, cadenceHours: 24 }
+      : {
+          connector,
+          disposition: 'manual_only',
+          licenseBasis: 'twse_open_data',
+          terminalReason: 'twse_official_openapi_vps_egress_waf_blocked',
+          cadenceHours: null,
+        };
   }
   return { connector, disposition: 'retired', licenseBasis: 'unsupported_connector', terminalReason: 'connector_not_approved', cadenceHours: null };
 }
