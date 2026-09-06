@@ -9,6 +9,10 @@ export const TAIWAN_DATASETS = ['daily_price', 'daily_valuation', 'monthly_reven
 export type TaiwanDataset = typeof TAIWAN_DATASETS[number];
 export type TaiwanExchange = 'TWSE' | 'TPEX';
 export type TaiwanRefreshPhase = 'preliminary' | 'final';
+
+export function needsCompletedTradingSession(datasets: readonly TaiwanDataset[]) {
+  return datasets.some((dataset) => dataset !== 'stock_master' && dataset !== 'trading_calendar');
+}
 export type TaiwanProvider = 'twse' | 'tpex' | 'finmind';
 export type TaiwanAuthorityTier = 'official_primary' | 'finmind_fallback';
 export type TaiwanProviderTerminal =
