@@ -1,0 +1,11 @@
+[Unit]
+Description=Refresh Taiwan close preliminary dataset at 18:15 Asia/Taipei
+
+[Timer]
+OnCalendar=*-*-* 18:15:00 Asia/Taipei
+Persistent=true
+AccuracySec=1min
+Unit=stockinsider-taiwan-data-close-preliminary.service
+
+[Install]
+WantedBy=timers.target

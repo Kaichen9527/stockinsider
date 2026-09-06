@@ -1,4 +1,15 @@
+import { classifyCandidateStage, type CandidateStageInput } from './stage-classifier.ts';
+
 export type ShadowReplayCard = { symbol: string; stage: string; replayHash: string | null };
+
+export function replayFrozenCandidateClassification(value: unknown) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  try {
+    return classifyCandidateStage(value as CandidateStageInput);
+  } catch {
+    return null;
+  }
+}
 
 export function buildShadowReplayInputs(
   manifestSymbols: string[],

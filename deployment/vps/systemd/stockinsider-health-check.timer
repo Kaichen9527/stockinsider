@@ -1,8 +1,8 @@
 [Unit]
-Description=Check StockInsider health at 20:00 Asia/Taipei
+Description=Check StockInsider final publication health at 21:45 Asia/Taipei
 
 [Timer]
-OnCalendar=*-*-* 20:00:00 Asia/Taipei
+OnCalendar=*-*-* 21:45:00 Asia/Taipei
 Persistent=true
 AccuracySec=1min
 Unit=stockinsider-health-check.service

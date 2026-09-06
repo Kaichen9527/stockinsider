@@ -4,7 +4,8 @@ import { getSupabaseServerClient } from '@/lib/supabase-server';
 import { chunkCandidateFactIds } from '@/lib/candidate-detail-fact-batches';
 import {
   candidateDossierBundleId, candidateDossierInputHash, decodeCandidateDossierCursor, encodeCandidateDossierCursor,
-  isPaidInvestAnchorsReference, numberedCandidateSources, withoutPaidInvestAnchorsSourceLinks,
+  isPaidInvestAnchorsReference, numberedCandidateSources, sanitizeRevisionScopedDossierEvidence,
+  withoutPaidInvestAnchorsSourceLinks,
 } from '@/lib/candidate-dossier-contract';
 
 type Row = Record<string, unknown>;
@@ -57,14 +58,19 @@ async function handle(request: Request, body: Row) {
   const bundles = pageDetails.map((detail) => {
     const detailFactIds = new Set((Array.isArray(detail.fact_ids) ? detail.fact_ids : []).map(String));
     const facts = allFacts.filter((fact) => detailFactIds.has(String(fact.fact_id)) && !isPaidInvestAnchorsReference(fact.source_url));
-    const safeDetail: Row = { ...withoutPaidInvestAnchorsSourceLinks(detail), fact_ids: facts.map((fact) => String(fact.fact_id)) };
-    const inputHash = candidateDossierInputHash(safeDetail, facts);
+    const scoped = sanitizeRevisionScopedDossierEvidence(
+      { ...withoutPaidInvestAnchorsSourceLinks(detail), fact_ids: facts.map((fact) => String(fact.fact_id)) },
+      facts,
+    );
+    const safeDetail: Row = scoped.detail;
+    const safeFacts = scoped.facts;
+    const inputHash = candidateDossierInputHash(safeDetail, safeFacts);
     const bundleId = candidateDossierBundleId(inputHash);
     const revisionId = String(detail.id);
     return {
       bundleId, revisionId, publishedRevisionId: revisionId, inputHash,
       // v2 names remain during worker migration.
-      bundleHash: inputHash, detail: safeDetail, facts, sources: numberedCandidateSources(safeDetail, facts),
+      bundleHash: inputHash, detail: safeDetail, facts: safeFacts, sources: numberedCandidateSources(safeDetail, safeFacts),
       publishedAt: publishedAtByRevision.get(revisionId) || null,
     };
   });

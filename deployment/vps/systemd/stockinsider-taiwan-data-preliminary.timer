@@ -1,0 +1,11 @@
+[Unit]
+Description=Refresh Taiwan preliminary dataset at 19:00 Asia/Taipei
+
+[Timer]
+OnCalendar=*-*-* 19:00:00 Asia/Taipei
+Persistent=true
+AccuracySec=1min
+Unit=stockinsider-taiwan-data-preliminary.service
+
+[Install]
+WantedBy=timers.target

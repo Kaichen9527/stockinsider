@@ -41,3 +41,22 @@ test('official financial refresh completes durable MOPS and TPEx jobs atomically
   assert.match(source, /FINANCIAL_JOB_LEASE_MS = 45 \* 60_000/u);
   assert.doesNotMatch(source, /rpc\('append_financial_fact_v3'/u);
 });
+
+test('instant balance and outstanding-share facts retain null periodStart', () => {
+  const html = `
+    <xbrli:context id="instant"><xbrli:period><xbrli:instant>2026-06-30</xbrli:instant></xbrli:period></xbrli:context>
+    <ix:nonNumeric name="tifrs-notes:ReviewAuditDate">115/08/10</ix:nonNumeric>
+    <ix:nonFraction name="ifrs-full:EquityAttributableToOwnersOfParent" contextRef="instant" unitRef="TWD">1,000</ix:nonFraction>
+    <ix:nonFraction name="ifrs-full:CashAndCashEquivalents" contextRef="instant" unitRef="TWD">200</ix:nonFraction>
+    <ix:nonFraction name="ifrs-full:NumberOfSharesOutstanding" contextRef="instant" unitRef="Shares">100</ix:nonFraction>
+    ${' '.repeat(120)}
+  `;
+  const facts = parseCandidateMopsFacts(html, {
+    stockId: '10000000-0000-4000-8000-000000000001', symbol: '2330', exchange: 'TWSE',
+    sourceUrl: 'https://mopsov.twse.com.tw/server-java/t164sb01?step=1&CO_ID=2330&SYEAR=115&SSEASON=2&REPORT_ID=C',
+    collectedAt: '2026-08-11T00:00:00Z',
+  });
+  assert.deepEqual(facts.map((fact) => [fact.factKey, fact.periodStart, fact.durationKind]).sort(), [
+    ['cash_and_equivalents', null, 'quarter_end'], ['shares_outstanding', null, 'quarter_end'], ['total_equity', null, 'quarter_end'],
+  ]);
+});

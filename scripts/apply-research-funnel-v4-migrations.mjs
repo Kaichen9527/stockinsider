@@ -15,6 +15,7 @@ export const RESEARCH_FUNNEL_V4_MIGRATIONS = Object.freeze([
   'migrations/20260906_source_identity_v4.sql',
   'migrations/20260906_shadow_signal_v4.sql',
   'migrations/20260906_candidate_dossier_v4.sql',
+  'migrations/20260906_taiwan_data_provider_v5.sql',
 ]);
 
 function migrationPlan() {
@@ -80,7 +81,9 @@ async function apply(plan, sourceCommit) {
       to_regclass('public.candidate_financial_acquisition_jobs_v4') IS NOT NULL AS financial_jobs,
       to_regclass('public.source_search_documents_v3') IS NOT NULL AS source_view,
       to_regclass('public.candidate_dossier_bundles') IS NOT NULL AS dossier_bundles,
-      EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='candidate_shadow_manifests' AND column_name='cohort_key') AS shadow_cohort`);
+      EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='candidate_shadow_manifests' AND column_name='cohort_key') AS shadow_cohort,
+      to_regclass('public.taiwan_data_refresh_queue_v5') IS NOT NULL AS taiwan_data_queue,
+      EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='radar_public_snapshots' AND column_name='publication_phase') AS radar_publication_phase`);
     if (!Object.values(verification.rows[0] || {}).every(Boolean)) throw new Error('research_funnel_v4_verification_failed');
     return verification.rows[0];
   } finally {

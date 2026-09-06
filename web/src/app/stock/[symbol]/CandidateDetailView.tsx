@@ -1,7 +1,24 @@
 import Link from "next/link";
 import type { CandidateDetailPayload } from "@/lib/candidate-detail";
+import { sanitizePublicSourceUrl } from "@/lib/public-source-url.ts";
 
 type AnyRecord = Record<string, unknown>;
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu;
+
+function readableText(value: unknown, fallback = "尚待確認") {
+  const text = typeof value === "string" ? value.trim() : "";
+  return text && !UUID_RE.test(text) ? text : fallback;
+}
+
+function hideIdentifiers(value: unknown, fallback = "尚待確認") {
+  const text = typeof value === "string" ? value : "";
+  return text ? text.replace(/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/giu, fallback) : fallback;
+}
+
+function validHttpUrl(value: unknown) {
+  return sanitizePublicSourceUrl(value);
+}
 
 const sectionGroups: Record<string, string> = {
   viewpoint: "先看結論",
@@ -30,6 +47,10 @@ const conditionLabels: Record<string, string> = {
   requires_two_consecutive_closes: "需要兩個連續收盤日確認",
   technical_hard_gate_failed: "技術條件尚未通過",
   stale_or_fallback_data: "資料已過期或仍為備援資料",
+  price_history_uses_finmind_fallback: "價格歷史含 FinMind 備援資料，暫停升級",
+  price_history_provider_conflict: "交易所與備援價格不一致，暫停升級",
+  price_history_provenance_unverified: "價格來源尚未驗證，暫停升級",
+  price_history_stale: "價格歷史未到最新正式交易日，暫停升級",
   market_risk_off_blocks_new_actionable: "大盤風險狀態暫停新增行動",
   market_breakdown_forces_downgrade: "大盤轉弱會使階段降級",
   negative_overseas_peer_catchdown: "海外同業補跌風險尚未解除",
@@ -62,7 +83,7 @@ function dateLabel(date: string | null | undefined) {
   if (!date) return "日期待補";
   const parsed = new Date(date);
   return Number.isNaN(parsed.getTime())
-    ? date
+    ? "尚待確認"
     : parsed.toLocaleDateString("zh-TW", { timeZone: "Asia/Taipei" });
 }
 function readableFactKey(key: string) {
@@ -198,9 +219,21 @@ function ValuationSummary({ detail }: { detail: CandidateDetailPayload }) {
 }
 
 function EvidenceSources({ detail }: { detail: CandidateDetailPayload }) {
-  const sources = detail.sources.filter((source) =>
-    /^https?:\/\//u.test(source.url),
-  );
+  const sourceRecords = [
+    ...detail.sources,
+    ...detail.sourceLinks.map((source) => ({ ...source, referenceNumber: null })),
+  ];
+  const sources = sourceRecords.map((source) => {
+    const raw = source as AnyRecord;
+    return {
+      referenceNumber: typeof raw.referenceNumber === "number" ? raw.referenceNumber : null,
+      label: readableText(raw.label ?? raw.name, "來源名稱待確認"),
+      url: validHttpUrl(raw.url ?? raw.link),
+      publishedAt: typeof raw.publishedAt === "string" ? raw.publishedAt : null,
+      locator: readableText(raw.locator ?? raw.page ?? raw.pageNumber, ""),
+      status: readableText(raw.status ?? raw.verificationStatus, "尚待確認"),
+    };
+  });
   return (
     <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950 sm:p-6">
       <h2 className="text-lg font-semibold">可追溯來源</h2>
@@ -211,24 +244,31 @@ function EvidenceSources({ detail }: { detail: CandidateDetailPayload }) {
         <ol className="mt-4 space-y-3">
           {sources.map((source) => (
             <li
-              key={`${source.referenceNumber}-${source.url}`}
+              key={`${source.referenceNumber ?? "link"}-${source.label}`}
               className="flex gap-3 text-sm"
             >
               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-semibold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200">
-                {source.referenceNumber}
+                {source.referenceNumber ?? "—"}
               </span>
               <div className="min-w-0">
-                <a
-                  className="font-medium text-emerald-700 underline decoration-emerald-300 underline-offset-2 dark:text-emerald-300"
-                  href={source.url}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {source.label || "公開來源"}
-                </a>
+                {source.url ? (
+                  <a
+                    className="font-medium text-emerald-700 underline decoration-emerald-300 underline-offset-2 dark:text-emerald-300"
+                    href={source.url}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {source.label}
+                  </a>
+                ) : (
+                  <span className="font-medium text-amber-700 dark:text-amber-300">
+                    {source.label}（連結尚待確認）
+                  </span>
+                )}
                 <p className="mt-1 text-xs text-slate-500">
                   日期：{dateLabel(source.publishedAt)}
-                  {source.locator ? ` · 位置：${source.locator}` : ""}
+                  {source.locator ? ` · 頁碼／位置：${source.locator}` : " · 頁碼／位置：尚待確認"}
+                  {` · 狀態：${source.status}`}
                 </p>
               </div>
             </li>
@@ -265,10 +305,42 @@ export default function CandidateDetailView({
     (acc[group] ||= []).push(section);
     return acc;
   }, {});
+  const detailRecord = detail as unknown as AnyRecord;
+  const datasetMissingComponents = Array.isArray(detailRecord.datasetMissingComponents)
+    ? detailRecord.datasetMissingComponents.map(String).filter(Boolean)
+    : [];
   const gaps = [
     ...detail.unmetConditions,
     ...((valuation.missing as string[] | undefined) || []),
+    ...datasetMissingComponents,
   ].filter(Boolean);
+  const publicationStatus = detailRecord.publicationStatus ?? detailRecord.status;
+  const finalPublicationStatus = String(detailRecord.finalPublicationStatus || "preliminary");
+  const datasetCompletenessPct = getNumber(detailRecord, "datasetCompletenessPct");
+  const isFinalConfirmed = publicationStatus === "final"
+    && finalPublicationStatus === "confirmed"
+    && datasetCompletenessPct === 100
+    && datasetMissingComponents.length === 0;
+  const isStaleReadonly = finalPublicationStatus === "stale_readonly" || detailRecord.freshnessStatus === "stale_readonly";
+  const publicationLabel = isFinalConfirmed
+    ? "終版（已確認）"
+    : isStaleReadonly
+      ? "舊版唯讀（終版資料未完整）"
+      : "初步研究版（終版資料尚未完整）";
+  const asOf = dateLabel(detail.asOf);
+  const availableAt = dateLabel(detail.availableAt);
+  const factCount = detail.facts.length;
+  const expectedFactCount = detail.factIds.length;
+  const completeness = datasetCompletenessPct != null
+    ? `${Math.max(0, Math.min(100, datasetCompletenessPct)).toFixed(datasetCompletenessPct % 1 === 0 ? 0 : 2)}%`
+    : expectedFactCount > 0
+    ? `${Math.min(100, Math.round((factCount / expectedFactCount) * 100))}%`
+    : "尚待確認";
+  const hasUnresolvedSources = [...detail.sources, ...detail.sourceLinks].some((source) => {
+    const raw = source as AnyRecord;
+    return !validHttpUrl(raw.url ?? raw.link)
+      || !readableText(raw.label ?? raw.name, "");
+  });
   return (
     <main className="mx-auto min-h-screen max-w-5xl px-5 py-8 text-slate-900 dark:text-slate-100 sm:py-10">
       <Link href="/" className="text-sm text-emerald-700 dark:text-emerald-300">
@@ -284,19 +356,33 @@ export default function CandidateDetailView({
                 : "來源命中"}
           </span>
           <span>{dateLabel(detail.sessionDate)} 研究快照</span>
+          <span className="rounded-full border border-amber-300/70 bg-amber-50 px-2.5 py-1 font-semibold text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-200">
+            {publicationLabel}
+          </span>
         </div>
         <h1 className="mt-4 text-3xl font-semibold tracking-tight">
           {detail.chineseName}{" "}
           <span className="text-slate-400">{detail.symbol}</span>
         </h1>
         <p className="mt-4 max-w-3xl text-base leading-8 text-slate-700 dark:text-slate-300">
-          {detail.summary}
+          {hideIdentifiers(detail.summary)}
         </p>
         <p className="mt-3 text-xs text-slate-500">
           {detail.narrativeKind === "codex_enriched"
             ? "已通過來源驗證的敘事補充"
             : "官方事實版研究；缺資料處保留為待補"}
         </p>
+        <dl className="mt-4 grid gap-2 text-xs text-slate-500 sm:grid-cols-3">
+          <div><dt>資料截止時間</dt><dd className="mt-1 font-medium text-slate-700 dark:text-slate-300">{asOf}</dd></div>
+          <div><dt>資料可用時間</dt><dd className="mt-1 font-medium text-slate-700 dark:text-slate-300">{availableAt}</dd></div>
+          <div><dt>資料完整度</dt><dd className="mt-1 font-medium text-slate-700 dark:text-slate-300">{completeness}{datasetCompletenessPct == null ? "（終版完整度尚待確認）" : ""}</dd></div>
+        </dl>
+        {datasetMissingComponents.length > 0 ? (
+          <p className="mt-3 text-xs font-medium text-amber-700 dark:text-amber-300">
+            終版缺項：{datasetMissingComponents.join("、")}
+          </p>
+        ) : null}
+        {hasUnresolvedSources ? <p className="mt-3 text-xs font-medium text-amber-700 dark:text-amber-300">部分來源名稱、日期、頁碼或連結尚待確認；未確認內容不作為正式結論。</p> : null}
       </header>
       <ValuationSummary detail={detail} />
       <section
@@ -357,7 +443,7 @@ export default function CandidateDetailView({
           <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-amber-900/80 dark:text-amber-100/80">
             {gaps.map((gap) => (
               <li key={gap}>
-                {conditionLabels[gap] || gap.replaceAll("_", " ")}
+                {conditionLabels[gap] || hideIdentifiers(gap.replaceAll("_", " "))}
               </li>
             ))}
           </ul>
@@ -373,9 +459,9 @@ export default function CandidateDetailView({
                   key={section.key}
                   className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950 sm:p-6"
                 >
-                  <h3 className="text-base font-semibold">{section.title}</h3>
+                  <h3 className="text-base font-semibold">{hideIdentifiers(section.title)}</h3>
                   <p className="mt-3 whitespace-pre-wrap leading-7 text-slate-700 dark:text-slate-300">
-                    {section.body}
+                    {hideIdentifiers(section.body)}
                   </p>
                 </article>
               ))}

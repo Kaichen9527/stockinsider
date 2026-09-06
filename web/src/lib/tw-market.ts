@@ -24,8 +24,115 @@ const officialHostPace = new Map<string, Promise<void>>();
 const officialHostNextRequestAt = new Map<string, number>();
 const officialHostUnavailableUntil = new Map<string, number>();
 const officialHostConsecutiveFailures = new Map<string, number>();
-type DailyBar = { time: string; open: number; high: number; low: number; close: number; volume: number | null };
-const twseMarketDailyRows = new Map<string, Promise<Map<string, DailyBar>>>();
+export type TwMarketDailyBar = {
+  time: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number | null;
+  sourceUrl?: string;
+  provider: 'official_primary' | 'opportunity-v3-official-authority' | 'finmind_fallback' | 'unknown';
+  authorityTier: 'official_primary' | 'finmind_fallback' | 'unverified';
+  integrityStatus?: 'valid' | 'conflict';
+  conflictProviders?: string[];
+};
+const twseMarketDailyRows = new Map<string, Promise<Map<string, TwMarketDailyBar>>>();
+
+function sameDailyBar(left: TwMarketDailyBar, right: TwMarketDailyBar) {
+  return left.open === right.open && left.high === right.high && left.low === right.low
+    && left.close === right.close && left.volume === right.volume;
+}
+
+function dailyBarAuthorityRank(bar: TwMarketDailyBar) {
+  if (bar.authorityTier === 'official_primary') return 2;
+  if (bar.authorityTier === 'finmind_fallback') return 1;
+  return 0;
+}
+
+/** Prefer the owner authority, but retain an explicit conflict when a mirror disagrees. */
+export function mergeTwMarketDailyBars(bars: TwMarketDailyBar[]) {
+  const bySession = new Map<string, TwMarketDailyBar[]>();
+  for (const bar of bars) {
+    const values = bySession.get(bar.time) || [];
+    values.push(bar);
+    bySession.set(bar.time, values);
+  }
+  return [...bySession.entries()].sort(([left], [right]) => left.localeCompare(right)).map(([, values]) => {
+    const ranked = [...values].sort((left, right) => dailyBarAuthorityRank(right) - dailyBarAuthorityRank(left));
+    const selected = ranked[0];
+    const conflicts = ranked.filter((candidate) => !sameDailyBar(selected, candidate));
+    if (conflicts.length === 0) return { ...selected, integrityStatus: selected.integrityStatus || 'valid' as const };
+    return {
+      ...selected,
+      integrityStatus: 'conflict' as const,
+      conflictProviders: [...new Set([selected, ...conflicts].map((candidate) => candidate.provider))].sort(),
+    };
+  });
+}
+
+export function twMarketDailyEvidencePolicy(bars: TwMarketDailyBar[], expectedSession: string) {
+  const ordered = [...bars].sort((left, right) => left.time.localeCompare(right.time));
+  const latest = ordered.at(-1) || null;
+  const fallback = ordered.some((bar) => bar.authorityTier === 'finmind_fallback' || bar.provider === 'finmind_fallback');
+  const conflict = ordered.some((bar) => bar.integrityStatus === 'conflict');
+  const unverified = ordered.some((bar) => bar.authorityTier === 'unverified' || bar.provider === 'unknown');
+  const stale = !latest || latest.time !== expectedSession;
+  const blockers = [
+    fallback ? 'price_history_uses_finmind_fallback' : null,
+    conflict ? 'price_history_provider_conflict' : null,
+    unverified ? 'price_history_provenance_unverified' : null,
+    stale ? 'price_history_stale' : null,
+  ].filter((value): value is string => Boolean(value));
+  return {
+    provider: latest?.provider || 'unknown',
+    authorityTier: latest?.authorityTier || 'unverified',
+    integrityStatus: conflict ? 'conflict' as const : 'valid' as const,
+    freshnessStatus: stale ? 'stale' as const : 'fresh' as const,
+    promotionEligible: blockers.length === 0,
+    blockers,
+  };
+}
+
+// Only provider-v5 datasets transactionally projected into the exact tables
+// candidate research reads may attest provider completeness. Market regime,
+// institutional flow, master and calendar retain their own typed authority
+// planes and are validated by candidate research and immutable replay.
+const TAIWAN_FINAL_DATASETS = ['daily_price', 'daily_valuation', 'monthly_revenue'] as const;
+
+export function resolveTaiwanFinalPublicationSemantics(metadata: unknown) {
+  const row = metadata && typeof metadata === 'object' && !Array.isArray(metadata) ? metadata as Record<string, unknown> : {};
+  const completeness = row.datasetCompleteness && typeof row.datasetCompleteness === 'object' && !Array.isArray(row.datasetCompleteness)
+    ? row.datasetCompleteness as Record<string, unknown> : {};
+  const terminalByDataset = new Map(TAIWAN_FINAL_DATASETS.map((dataset) => {
+    const terminals = Object.entries(completeness).filter(([key]) => key === dataset || key.startsWith(`${dataset}:`)).map(([, entry]) => (
+      entry && typeof entry === 'object' && !Array.isArray(entry)
+        ? String((entry as Record<string, unknown>).terminal || 'missing') : 'missing'
+    ));
+    const terminal = terminals.length === 0 ? 'missing'
+      : terminals.every((value) => value === 'complete') ? 'complete'
+        : terminals.includes('conflict') ? 'conflict'
+          : terminals.includes('stale') ? 'stale'
+            : terminals.find((value) => value !== 'complete') || 'missing';
+    return [dataset, terminal] as const;
+  }));
+  const missingComponents = TAIWAN_FINAL_DATASETS.flatMap((dataset) => {
+    const terminal = terminalByDataset.get(dataset) || 'missing';
+    return terminal === 'complete' ? [] : [`${dataset}:${terminal}`];
+  });
+  const reportedPct = Number(row.datasetCompletenessPct);
+  const completenessPct = Number.isFinite(reportedPct) ? Math.max(0, Math.min(100, reportedPct)) : 0;
+  const confirmed = row.publicationPhase === 'final' && row.shadowEligible === true
+    && completenessPct === 100 && missingComponents.length === 0;
+  const staleReadonly = !confirmed && [...terminalByDataset.values()].some((terminal) => terminal === 'conflict' || terminal === 'stale');
+  return {
+    phase: confirmed ? 'final' as const : 'preliminary' as const,
+    status: confirmed ? 'confirmed' as const : staleReadonly ? 'stale_readonly' as const : 'preliminary' as const,
+    completenessPct,
+    missingComponents,
+    confirmed,
+  };
+}
 
 async function withOfficialMarketSlot<T>(work: () => Promise<T>): Promise<T> {
   if (officialMarketActive >= OFFICIAL_MARKET_MAX_CONCURRENCY) {
@@ -162,6 +269,108 @@ function toFiniteNumber(value: unknown): number | null {
   return Number.isFinite(num) ? num : null;
 }
 
+const FINMIND_DATA_URL = 'https://api.finmindtrade.com/api/v4/data';
+const FINMIND_MAX_RESPONSE_BYTES = 2_000_000;
+
+type FinMindRow = Record<string, unknown>;
+
+function finMindFallbackEnabled() {
+  return process.env.FINMIND_FALLBACK_ENABLED === 'true';
+}
+
+export async function readBoundedFinMindJson(response: Response): Promise<Record<string, unknown>> {
+  const contentLength = Number(response.headers.get('content-length'));
+  if (Number.isFinite(contentLength) && contentLength > FINMIND_MAX_RESPONSE_BYTES) throw new Error('finmind_response_too_large');
+  if (!response.body) {
+    const text = await response.text();
+    if (Buffer.byteLength(text, 'utf8') > FINMIND_MAX_RESPONSE_BYTES) throw new Error('finmind_response_too_large');
+    return JSON.parse(text) as Record<string, unknown>;
+  }
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let bytes = 0;
+  let text = '';
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    bytes += value.byteLength;
+    if (bytes > FINMIND_MAX_RESPONSE_BYTES) {
+      await reader.cancel('finmind_response_too_large');
+      throw new Error('finmind_response_too_large');
+    }
+    text += decoder.decode(value, { stream: true });
+  }
+  text += decoder.decode();
+  return JSON.parse(text) as Record<string, unknown>;
+}
+
+async function fetchFinMindRows(
+  dataset: string,
+  options: { symbol?: string; startDate?: string; endDate?: string } = {},
+): Promise<{ rows: FinMindRow[]; sourceUrl: string } | null> {
+  if (!finMindFallbackEnabled()) return null;
+  const token = String(process.env.FINMIND_API_TOKEN || '').trim();
+  if (!token) return null;
+  const url = new URL(FINMIND_DATA_URL);
+  url.searchParams.set('dataset', dataset);
+  if (options.symbol) url.searchParams.set('data_id', options.symbol);
+  if (options.startDate) url.searchParams.set('start_date', options.startDate);
+  if (options.endDate) url.searchParams.set('end_date', options.endDate);
+  try {
+    const response = await fetch(url, {
+      headers: {
+        accept: 'application/json',
+        'user-agent': 'StockInsider/2.2 finmind-validated-fallback',
+        authorization: `Bearer ${token}`,
+      },
+      signal: AbortSignal.timeout(12_000),
+    });
+    if (!response.ok) return null;
+    const payload = await readBoundedFinMindJson(response);
+    if (!Array.isArray(payload.data)) return null;
+    return { rows: payload.data.filter((row): row is FinMindRow => Boolean(row) && typeof row === 'object' && !Array.isArray(row)), sourceUrl: url.toString() };
+  } catch {
+    return null;
+  }
+}
+
+export function parseFinMindDailyPriceRows(rows: FinMindRow[], sourceUrl = FINMIND_DATA_URL) {
+  return rows.flatMap((row): TwMarketDailyBar[] => {
+    const time = String(row.date || '');
+    const open = toFiniteNumber(row.open);
+    const high = toFiniteNumber(row.max ?? row.high);
+    const low = toFiniteNumber(row.min ?? row.low);
+    const close = toFiniteNumber(row.close);
+    const volume = toFiniteNumber(row.Trading_Volume ?? row.volume);
+    return /^\d{4}-\d{2}-\d{2}$/u.test(time) && open != null && high != null && low != null && close != null
+      ? [{
+        time, open, high, low, close, volume, sourceUrl,
+        provider: 'finmind_fallback' as const,
+        authorityTier: 'finmind_fallback' as const,
+        integrityStatus: 'valid' as const,
+      }]
+      : [];
+  });
+}
+
+export function parseFinMindValuationRows(rows: FinMindRow[], sourceUrl: string): TwValuationHistoryPoint[] {
+  return rows.flatMap((row) => {
+    const date = String(row.date || '');
+    const peRatio = toFiniteNumber(row.PER ?? row.pe_ratio);
+    const pbRatio = toFiniteNumber(row.PBR ?? row.pb_ratio);
+    if (!/^\d{4}-\d{2}-\d{2}$/u.test(date) || (peRatio == null && pbRatio == null)) return [];
+    return [{
+      date, peRatio, pbRatio, sourceUrl, parserVersion: 'finmind-mirror-v1',
+      provider: 'finmind_fallback', authorityTier: 'finmind_fallback',
+    }];
+  });
+}
+
+export function isValidatedFinMindValuationSource(value: unknown, parserVersion?: unknown) {
+  return /^https:\/\/api\.finmindtrade\.com\/api\/v4\/data\?/u.test(String(value || ''))
+    && String(parserVersion || '') === 'finmind-mirror-v1';
+}
+
 function formatDate(date: Date) {
   return date.toISOString().slice(0, 10);
 }
@@ -263,7 +472,7 @@ function ohlcNumber(value: unknown) {
   return toFiniteNumber(value);
 }
 
-export function parseTpexTradingStockRows(payload: Record<string, unknown>) {
+export function parseTpexTradingStockRows(payload: Record<string, unknown>, sourceUrl = 'https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock') {
   const tables = Array.isArray(payload.tables) ? payload.tables as Array<Record<string, unknown>> : [];
   const data = tables.flatMap((table) => Array.isArray(table.data) ? table.data as unknown[][] : []);
   return data.flatMap((item) => {
@@ -281,6 +490,10 @@ export function parseTpexTradingStockRows(payload: Record<string, unknown>) {
       low,
       close,
       volume: lots == null ? null : Math.round(lots * 1000),
+      sourceUrl,
+      provider: 'official_primary' as const,
+      authorityTier: 'official_primary' as const,
+      integrityStatus: 'valid' as const,
     }];
   });
 }
@@ -344,6 +557,15 @@ export async function fetchTwStockValues(symbol: string) {
       || (tpexPayload ? parseTpexValuationPanel(tpexPayload, date, symbols).get(symbol) : null);
     if (point) return { ...point, dividendYield: null, dividendYear: null };
   }
+  const startDate = new Date(Date.now() - 14 * 86_400_000).toISOString().slice(0, 10);
+  const fallback = await fetchFinMindRows('TaiwanStockPER', { symbol, startDate });
+  const point = fallback
+    ? parseFinMindValuationRows(fallback.rows, fallback.sourceUrl).sort((left, right) => left.date.localeCompare(right.date)).at(-1)
+    : null;
+  if (point) {
+    const row = fallback!.rows.find((item) => String(item.date || '') === point.date);
+    return { ...point, dividendYield: toFiniteNumber(row?.dividend_yield), dividendYear: null };
+  }
   return null;
 }
 
@@ -353,6 +575,8 @@ export type TwValuationHistoryPoint = {
   pbRatio: number | null;
   sourceUrl: string;
   parserVersion?: string;
+  provider: 'official_primary' | 'finmind_fallback';
+  authorityTier: 'official_primary' | 'finmind_fallback';
 };
 
 export function isOfficialValuationSourceUrl(value: unknown) {
@@ -390,6 +614,8 @@ export function parseTwseValuationPanel(payload: Record<string, unknown>, date: 
       pbRatio,
       sourceUrl: `https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?date=${compactTwseDate(date)}&selectType=ALL&response=json`,
       parserVersion: 'twse-header-v1',
+      provider: 'official_primary',
+      authorityTier: 'official_primary',
     });
   }
   return result;
@@ -428,6 +654,8 @@ export function parseTpexValuationPanel(payload: Record<string, unknown>, date: 
         pbRatio,
         sourceUrl: `https://www.tpex.org.tw/www/zh-tw/afterTrading/peQryDate?date=${date.replace(/-/g, '/')}&cate=&response=json`,
         parserVersion: 'tpex-header-v2',
+        provider: 'official_primary',
+        authorityTier: 'official_primary',
       });
     }
   }
@@ -448,6 +676,8 @@ export function parseTwseStockValuationHistory(payload: Record<string, unknown>,
       pbRatio,
       sourceUrl,
       parserVersion: 'twse-stock-history-v1',
+      provider: 'official_primary',
+      authorityTier: 'official_primary',
     }];
   });
 }
@@ -510,11 +740,29 @@ export async function fetchTwMarketValuationHistory(
     for (const point of recovered) if (point) merged.set(point.date.slice(0, 7), point);
     if (merged.size > 0) histories.set(symbol, [...merged.values()].sort((left, right) => left.date.localeCompare(right.date)));
   }));
+  // FinMind mirrors exchange data and is therefore a fallback, not a second
+  // independent authority. Bound the daily recovery batch so current close
+  // processing retains quota and latency headroom.
+  const fallbackLimit = Math.max(0, Math.min(40, Number(process.env.FINMIND_VALUATION_FALLBACK_MAX_SYMBOLS || 20) || 20));
+  const missingSymbols = [...requestedSymbols]
+    .sort((left, right) => (histories.get(left)?.length || 0) - (histories.get(right)?.length || 0) || left.localeCompare(right))
+    .filter((symbol) => new Set((histories.get(symbol) || []).map((point) => point.date.slice(0, 7))).size < Math.min(48, monthsBack))
+    .slice(0, fallbackLimit);
+  await Promise.all(missingSymbols.map(async (symbol) => {
+    const startDate = sampleSessions[0] || new Date(Date.now() - monthsBack * 32 * 86_400_000).toISOString().slice(0, 10);
+    const fallback = await fetchFinMindRows('TaiwanStockPER', { symbol, startDate, endDate: latestSession });
+    if (!fallback) return;
+    const merged = new Map((histories.get(symbol) || []).map((point) => [point.date, point]));
+    for (const point of parseFinMindValuationRows(fallback.rows, fallback.sourceUrl)) {
+      if (!merged.has(point.date)) merged.set(point.date, point);
+    }
+    if (merged.size > 0) histories.set(symbol, [...merged.values()].sort((left, right) => left.date.localeCompare(right.date)));
+  }));
   for (const history of histories.values()) history.sort((left, right) => left.date.localeCompare(right.date));
   return histories;
 }
 
-function parseTwseMarketDailyRows(payload: Record<string, unknown>, session: string): Map<string, DailyBar> {
+function parseTwseMarketDailyRows(payload: Record<string, unknown>, session: string, sourceUrl: string): Map<string, TwMarketDailyBar> {
   const table = (Array.isArray(payload.tables) ? payload.tables : [])
     .find((value) => {
       const fields = value && typeof value === 'object' && Array.isArray((value as Record<string, unknown>).fields)
@@ -529,7 +777,7 @@ function parseTwseMarketDailyRows(payload: Record<string, unknown>, session: str
     position('證券代號'), position('成交股數'), position('開盤價'), position('最高價'), position('最低價'), position('收盤價'),
   ];
   if ([symbolIndex, volumeIndex, openIndex, highIndex, lowIndex, closeIndex].some((index) => index < 0)) return new Map();
-  const result = new Map<string, DailyBar>();
+  const result = new Map<string, TwMarketDailyBar>();
   for (const value of table.data) {
     if (!Array.isArray(value)) continue;
     const symbol = String(value[symbolIndex] || '').trim();
@@ -538,12 +786,15 @@ function parseTwseMarketDailyRows(payload: Record<string, unknown>, session: str
     const low = ohlcNumber(value[lowIndex]);
     const close = ohlcNumber(value[closeIndex]);
     if (!/^\d{4}$/u.test(symbol) || open == null || high == null || low == null || close == null) continue;
-    result.set(symbol, { time: session, open, high, low, close, volume: ohlcNumber(value[volumeIndex]) });
+    result.set(symbol, {
+      time: session, open, high, low, close, volume: ohlcNumber(value[volumeIndex]), sourceUrl,
+      provider: 'official_primary', authorityTier: 'official_primary', integrityStatus: 'valid',
+    });
   }
   return result;
 }
 
-export async function fetchTwseMarketDailyRows(session: string): Promise<Map<string, DailyBar>> {
+export async function fetchTwseMarketDailyRows(session: string): Promise<Map<string, TwMarketDailyBar>> {
   const cached = twseMarketDailyRows.get(session);
   if (cached) return cached;
   const request = (async () => {
@@ -557,10 +808,10 @@ export async function fetchTwseMarketDailyRows(session: string): Promise<Map<str
       endpoint.searchParams.set('type', 'ALLBUT0999');
       const payload = await fetchOfficialJson<Record<string, unknown>>(endpoint.toString(), 12_000);
       if (!payload) continue;
-      const rows = parseTwseMarketDailyRows(payload, session);
+      const rows = parseTwseMarketDailyRows(payload, session, endpoint.toString());
       if (rows.size > 0) return rows;
     }
-    return new Map<string, DailyBar>();
+    return new Map<string, TwMarketDailyBar>();
   })();
   twseMarketDailyRows.set(session, request);
   return request;
@@ -572,7 +823,7 @@ export async function fetchTwStockDailyBars(
   officialSessions: string[] | null = null,
   exchange: 'TWSE' | 'TPEx' | null = null,
 ) {
-  const rows: DailyBar[] = [];
+  const rows: TwMarketDailyBar[] = [];
   if (exchange !== 'TPEx' && officialSessions && officialSessions.length > 0) {
     // Fetch newest sessions first.  The all-market endpoint occasionally times
     // out on a much older archive date; if that opens the endpoint circuit, it
@@ -583,7 +834,7 @@ export async function fetchTwStockDailyBars(
     const sessions = [...new Set(officialSessions.filter((session) => /^\d{4}-\d{2}-\d{2}$/u.test(session)))].sort().slice(-daysBack).reverse();
     const bulkRows = (await Promise.all(sessions.map(fetchTwseMarketDailyRows)))
       .map((marketRows) => marketRows.get(symbol))
-      .filter((row): row is DailyBar => row != null)
+      .filter((row): row is TwMarketDailyBar => row != null)
       .sort((left, right) => left.time.localeCompare(right.time));
     rows.push(...bulkRows);
     if (rows.length >= Math.min(daysBack, 240)) return rows.slice(-daysBack);
@@ -625,6 +876,10 @@ export async function fetchTwStockDailyBars(
           time: `${Number(roc[1]) + 1911}-${roc[2]}-${roc[3]}`,
           open, high, low, close,
           volume: volume == null ? null : Math.round(volume),
+          sourceUrl: endpoint.toString(),
+          provider: 'official_primary' as const,
+          authorityTier: 'official_primary' as const,
+          integrityStatus: 'valid' as const,
         }];
       });
     } catch {
@@ -638,7 +893,7 @@ export async function fetchTwStockDailyBars(
       const month = `${date.slice(0, 4)}/${date.slice(4, 6)}/01`;
       try {
         const payload = await fetchOfficialJson<Record<string, unknown>>(`https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=${encodeURIComponent(symbol)}&date=${month}&response=json`, 8_000);
-        return payload ? parseTpexTradingStockRows(payload) : [];
+        return payload ? parseTpexTradingStockRows(payload, `https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=${encodeURIComponent(symbol)}&date=${month}&response=json`) : [];
       } catch {
         return [];
       }
@@ -664,17 +919,24 @@ export async function fetchTwStockDailyBars(
           time: `${Number(date[1]) + 1911}-${date[2]}-${date[3]}`,
           open, high, low, close,
           volume: ohlcNumber(item?.TradingShares),
+          sourceUrl: 'https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes',
+          provider: 'official_primary',
+          authorityTier: 'official_primary',
+          integrityStatus: 'valid',
         });
       }
     } catch {
       // TPEx historical series remains unknown until an authorized historical feed is configured.
     }
   }
+  if (rows.length < Math.min(daysBack, 240)) {
+    const sortedSessions = (officialSessions || []).filter((session) => /^\d{4}-\d{2}-\d{2}$/u.test(session)).sort();
+    const startDate = sortedSessions.at(-daysBack) || new Date(Date.now() - Math.max(daysBack * 2, 400) * 86_400_000).toISOString().slice(0, 10);
+    const fallback = await fetchFinMindRows('TaiwanStockPrice', { symbol, startDate, endDate: sortedSessions.at(-1) });
+    if (fallback) rows.push(...parseFinMindDailyPriceRows(fallback.rows, fallback.sourceUrl));
+  }
   if (rows.length === 0) return null;
-  return rows
-    .sort((a, b) => a.time.localeCompare(b.time))
-    .filter((row, index, values) => index === values.findIndex((item) => item.time === row.time))
-    .slice(-daysBack);
+  return mergeTwMarketDailyBars(rows).slice(-daysBack);
 }
 
 export type TwStockMasterRecord = {
@@ -771,9 +1033,8 @@ export function parseTpexMarketTradingSessions(payload: unknown): string[] {
 
 export async function fetchTwStockInstitutional(symbol: string) {
   const client = await getTwStockClient();
-  if (!client) return null;
   const dates = buildRecentDates(6);
-  for (const date of dates) {
+  if (client) for (const date of dates) {
     try {
       const data = await withTwStockTimeout(client.stocks.institutional({ symbol, date }));
       const rows = Array.isArray(data.institutional) ? (data.institutional as Array<Record<string, unknown>>) : [];
@@ -788,9 +1049,24 @@ export async function fetchTwStockInstitutional(symbol: string) {
         foreignNet: toFiniteNumber(foreign?.difference),
         investmentTrustNet: toFiniteNumber(trust?.difference),
         dealerNet: toFiniteNumber(dealer?.difference),
+        provider: 'official_primary' as const,
+        authorityTier: 'official_primary' as const,
       };
     } catch {
       continue;
+    }
+  }
+  const fallback = await fetchFinMindRows('TaiwanStockInstitutionalInvestorsBuySell', { symbol, startDate: dates.at(-1), endDate: dates[0] });
+  if (fallback) {
+    const latest = fallback.rows.map((row) => String(row.date || '')).filter((date) => /^\d{4}-\d{2}-\d{2}$/u.test(date)).sort().at(-1);
+    if (latest) {
+      const rows = fallback.rows.filter((row) => row.date === latest);
+      const net = (matcher: RegExp) => rows.filter((row) => matcher.test(String(row.name || row.investor || '')))
+        .reduce((sum, row) => sum + (toFiniteNumber(row.buy) || 0) - (toFiniteNumber(row.sell) || 0), 0);
+      return {
+        date: latest, foreignNet: net(/Foreign|外資/iu), investmentTrustNet: net(/Investment_Trust|投信/iu), dealerNet: net(/Dealer|自營商/iu),
+        provider: 'finmind_fallback' as const, authorityTier: 'finmind_fallback' as const, sourceUrl: fallback.sourceUrl,
+      };
     }
   }
   return null;
@@ -798,8 +1074,7 @@ export async function fetchTwStockInstitutional(symbol: string) {
 
 export async function fetchTwStockRevenue(symbol: string, monthsBack = 4) {
   const client = await getTwStockClient();
-  if (!client) return null;
-  for (let i = 0; i < monthsBack; i += 1) {
+  if (client) for (let i = 0; i < monthsBack; i += 1) {
     const { year, month } = startOfMonthShift(i + 1);
     try {
       const data = await withTwStockTimeout(client.stocks.revenue({ symbol, year, month }));
@@ -810,10 +1085,24 @@ export async function fetchTwStockRevenue(symbol: string, monthsBack = 4) {
         revenue,
         year,
         month,
+        provider: 'official_primary' as const,
+        authorityTier: 'official_primary' as const,
+        sourceUrl: 'https://mops.twse.com.tw/mops/web/t21sc04_ifrs',
       };
     } catch {
       continue;
     }
+  }
+  const startDate = new Date(Date.now() - Math.max(120, monthsBack * 35) * 86_400_000).toISOString().slice(0, 10);
+  const fallback = await fetchFinMindRows('TaiwanStockMonthRevenue', { symbol, startDate });
+  const row = fallback?.rows.sort((left, right) => String(left.date || '').localeCompare(String(right.date || ''))).at(-1);
+  const revenue = toFiniteNumber(row?.revenue);
+  const date = String(row?.date || '');
+  if (revenue != null && /^\d{4}-\d{2}-\d{2}$/u.test(date)) {
+    return {
+      asOfDate: date, revenue, year: Number(date.slice(0, 4)), month: Number(date.slice(5, 7)),
+      provider: 'finmind_fallback' as const, authorityTier: 'finmind_fallback' as const, sourceUrl: fallback?.sourceUrl || FINMIND_DATA_URL,
+    };
   }
   return null;
 }

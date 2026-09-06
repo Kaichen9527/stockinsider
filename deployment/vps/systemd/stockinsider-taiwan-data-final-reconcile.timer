@@ -1,0 +1,11 @@
+[Unit]
+Description=Reconcile final Taiwan institutional and margin data at 20:40 Asia/Taipei
+
+[Timer]
+OnCalendar=*-*-* 20:40:00 Asia/Taipei
+Persistent=true
+AccuracySec=1min
+Unit=stockinsider-taiwan-data-final-reconcile.service
+
+[Install]
+WantedBy=timers.target

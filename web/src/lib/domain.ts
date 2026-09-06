@@ -91,6 +91,7 @@ import {
   fetchTwStockShortSales,
   fetchTwStockValues,
   fetchTwseOfficialSblShortSales,
+  resolveTaiwanFinalPublicationSemantics,
 } from './tw-market';
 
 const RISK_DISCLOSURE = '本服務僅提供研究資訊，非投資建議，投資決策與風險由使用者自行承擔。';
@@ -21967,7 +21968,41 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
       const stages = await executeStep('candidate_stage_projection', async () => loadCandidateStageCards());
       const radarPayload = await executeStep('radar_payload_build', async () => getDailyRadarData());
       const activeSourceErrors = await executeStep('active_source_health', async () => loadActiveCandidateSourceErrors());
-      publication = await executeStep('radar_publication', async () => publishRadarPublicSnapshots({ payload: radarPayload, stages, pipelineRunId }));
+      const finalDatasetMetadata = await executeStep('final_dataset_metadata', async () => {
+        if (!candidateResearch.technicalSessionDate || !supabaseServer) return null;
+        const read = await supabaseServer.rpc('read_taiwan_data_publication_metadata_v5', {
+          p_session_date: candidateResearch.technicalSessionDate,
+          p_publication_phase: 'final',
+        });
+        if (read.error && !/does not exist|schema cache/iu.test(read.error.message)) throw new Error(read.error.message);
+        return read.data && typeof read.data === 'object' ? read.data as Record<string, unknown> : null;
+      });
+      const finalSemantics = resolveTaiwanFinalPublicationSemantics(finalDatasetMetadata);
+      const shadowSourceErrors = finalSemantics.confirmed
+        ? activeSourceErrors
+        : [...activeSourceErrors, `taiwan_data:final_dataset_${finalSemantics.status}_${finalSemantics.completenessPct}`];
+      const publicationStages = finalSemantics.confirmed ? stages : {
+        found: stages.found,
+        waiting: [...stages.waiting, ...stages.actionable.map((card) => ({
+          ...card,
+          lifecycleStage: 'waiting' as const,
+          unmetConditions: [...new Set([...card.unmetConditions, ...finalSemantics.missingComponents.map((component) => `final_dataset_${component}`)])],
+          promotionReasons: [],
+        }))],
+        actionable: [],
+      };
+      publication = await executeStep('radar_publication', async () => publishRadarPublicSnapshots({
+        payload: {
+          ...radarPayload,
+          finalPublicationStatus: finalSemantics.status,
+          datasetMissingComponents: finalSemantics.missingComponents,
+        },
+        stages: publicationStages,
+        pipelineRunId,
+        phase: finalSemantics.phase,
+        dataCutoffAt: finalDatasetMetadata?.dataCutoffAt ? String(finalDatasetMetadata.dataCutoffAt) : candidateResearch.technicalSessionDate,
+        datasetCompletenessPct: finalSemantics.completenessPct,
+      }));
       shadowObservation = await executeStep('shadow_observation', async () => recordCandidateShadowObservation({
         pipelineRunId,
         publicationId: typeof publication.homePublicationId === 'string' ? publication.homePublicationId : null,
@@ -21977,7 +22012,7 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
         researchItems: candidateResearch.items,
         stages,
         technicalSessionDate: candidateResearch.technicalSessionDate || null,
-        activeSourceErrors,
+        activeSourceErrors: shadowSourceErrors,
       }));
     }
 

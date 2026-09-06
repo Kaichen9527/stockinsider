@@ -1,4 +1,5 @@
 import { createHash } from 'crypto';
+import { sanitizeRevisionScopedDossierEvidence } from './candidate-dossier-contract.ts';
 
 type Row = Record<string, unknown>;
 
@@ -9,6 +10,9 @@ function stable(value: unknown): unknown {
 }
 
 export function candidateDossierBundleHash(detail: Row, facts: Row[]) {
+  const scoped = sanitizeRevisionScopedDossierEvidence(detail, facts);
+  detail = scoped.detail;
+  facts = scoped.facts;
   const allowed = new Set((Array.isArray(detail.fact_ids) ? detail.fact_ids : []).map(String));
   const exactFacts = facts.filter((fact) => allowed.has(String(fact.fact_id))).sort((left, right) => String(left.fact_id).localeCompare(String(right.fact_id)));
   const payload = {

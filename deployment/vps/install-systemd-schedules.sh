@@ -54,7 +54,7 @@ if [[ ${#supabase_service_role_key} -lt 32 ]]; then
 fi
 service_role_digest=$(printf '%s' "$supabase_service_role_key" | sha256sum | cut -d' ' -f1)
 unset supabase_service_role_key SUPABASE_SERVICE_ROLE_KEY
-for required in /opt/stockinsider/current/scripts/call_internal_api.mjs /usr/bin/node /etc/systemd/system/stockinsider-web.service; do
+for required in /opt/stockinsider/current/scripts/call_internal_api.mjs /opt/stockinsider/current/scripts/call_internal_api_sequence.mjs /usr/bin/node /etc/systemd/system/stockinsider-web.service; do
   if [[ ! -e "$required" ]]; then
     echo "required runtime dependency is missing: $required" >&2
     exit 1
@@ -68,5 +68,8 @@ printf '[Service]\nEnvironment=OPPORTUNITY_V3_RUNNER_PRINCIPAL_ID=%s\nEnvironmen
   > /etc/systemd/system/stockinsider-web.service.d/30-opportunity-runner-principal.conf
 chmod 0644 /etc/systemd/system/stockinsider-web.service.d/30-opportunity-runner-principal.conf
 systemctl daemon-reload
-systemctl enable --now stockinsider-source-refresh.timer stockinsider-research-cycle.timer stockinsider-health-check.timer
+systemctl enable --now stockinsider-source-refresh.timer stockinsider-research-cycle.timer stockinsider-health-check.timer \
+  stockinsider-taiwan-data-master-calendar.timer stockinsider-taiwan-data-close-preliminary.timer \
+  stockinsider-taiwan-data-preliminary.timer stockinsider-taiwan-data-final-freeze.timer \
+  stockinsider-taiwan-data-final-reconcile.timer stockinsider-taiwan-data-queue-drain.timer
 systemctl list-timers 'stockinsider-*' --no-pager

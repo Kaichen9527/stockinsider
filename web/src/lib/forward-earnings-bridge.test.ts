@@ -46,11 +46,22 @@ test('forward bridge is explicit, reproducible, and separates assumptions from r
   assert.ok(bridge.factIds.length >= 40);
 });
 
-test('rates and weighted-average shares are not de-cumulated, and restatement conflicts fail closed', () => {
+test('YTD EPS and weighted-average shares are never subtracted as additive flows', () => {
   const eps = discreteReportedQuarters([
-    fact('quarterly_diluted_eps', 2025, 1, 1, true), fact('quarterly_diluted_eps', 2025, 2, 2, true),
+    fact('quarterly_diluted_eps', 2025, 1, 1), fact('quarterly_diluted_eps', 2025, 2, 3),
   ], 'quarterly_diluted_eps');
-  assert.deepEqual(eps.map((row) => row.value), [1, 2]);
+  assert.deepEqual(eps.map((row) => row.value), [1]);
+  const basic = discreteReportedQuarters([
+    fact('quarterly_basic_eps', 2025, 1, 1.2), fact('quarterly_basic_eps', 2025, 2, 3.5),
+  ], 'quarterly_basic_eps');
+  assert.deepEqual(basic.map((row) => row.value), [1.2]);
+  const shares = discreteReportedQuarters([
+    fact('diluted_weighted_average_shares', 2025, 1, 100, true), fact('diluted_weighted_average_shares', 2025, 2, 105, true),
+  ], 'diluted_weighted_average_shares');
+  assert.deepEqual(shares.map((row) => row.value), [100, 105]);
+});
+
+test('restatement conflicts fail closed', () => {
   const conflicting: ReportedFinancialFact[] = [
     fact('quarterly_revenue', 2025, 1, 100),
     { ...fact('quarterly_revenue', 2025, 1, 101), factId: 'restated-q1', filingRestatementId: 'mops:changed' },

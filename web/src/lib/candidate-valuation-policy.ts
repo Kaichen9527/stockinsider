@@ -25,6 +25,10 @@ type NormalizedCycleInputs = {
   pbMultiple?: number | null;
   enterpriseValue?: number | null;
   ebitda?: number | null;
+  cashAndEquivalents?: number | null;
+  totalDebt?: number | null;
+  dilutedShares?: number | null;
+  evEbitdaMultiplesObserved?: number | null;
 };
 type FinancialInputs = {
   commonEquity?: number | null;
@@ -33,8 +37,21 @@ type FinancialInputs = {
   pbMultiple?: number | null;
   roePeriodsObserved?: number | null;
 };
+type TurnaroundInputs = {
+  officialCommercializationEvidence?: boolean;
+  revenueGrossProfitBridgeComplete?: boolean;
+  cashRunwayMonths?: number | null;
+  dilutionPct?: number | null;
+  ttmRevenue?: number | null;
+  ttmGrossProfit?: number | null;
+  cashAndEquivalents?: number | null;
+  totalDebt?: number | null;
+  dilutedShares?: number | null;
+  evSalesMultiplesObserved?: number | null;
+};
 
 function positive(value: number | null | undefined) { return typeof value === 'number' && Number.isFinite(value) && value > 0; }
+function nonNegative(value: number | null | undefined) { return typeof value === 'number' && Number.isFinite(value) && value >= 0; }
 
 export function candidateValuationPolicy(input: {
   symbol?: string;
@@ -45,13 +62,24 @@ export function candidateValuationPolicy(input: {
   lossMaking?: boolean;
   normalizedCycle?: NormalizedCycleInputs;
   financial?: FinancialInputs;
+  turnaround?: TurnaroundInputs;
 }) {
   const historyReady = input.multipleMonthsCovered >= 48;
   const lossMaking = input.lossMaking === true;
   const normalized = input.normalizedCycle;
   const financial = input.financial;
   if (lossMaking) {
-    return input.verifiedTurnaroundPath && input.next12mBridgeComplete
+    const turnaround = input.turnaround;
+    const complete = input.verifiedTurnaroundPath && turnaround != null
+      && turnaround.officialCommercializationEvidence === true
+      && turnaround.revenueGrossProfitBridgeComplete === true
+      && positive(turnaround.ttmRevenue) && positive(turnaround.ttmGrossProfit)
+      && nonNegative(turnaround.cashAndEquivalents) && nonNegative(turnaround.totalDebt)
+      && positive(turnaround.dilutedShares)
+      && typeof turnaround.cashRunwayMonths === 'number' && Number.isFinite(turnaround.cashRunwayMonths) && turnaround.cashRunwayMonths >= 12
+      && typeof turnaround.dilutionPct === 'number' && Number.isFinite(turnaround.dilutionPct) && turnaround.dilutionPct >= -1 && turnaround.dilutionPct <= 0.20
+      && (turnaround.evSalesMultiplesObserved || 0) >= 48;
+    return complete
       ? { basis: 'turnaround_conditional' as const, canPublishTarget: true, reason: null }
       : { basis: 'no_defensible_valuation_method' as const, canPublishTarget: false, reason: 'loss_making_investigation_required' };
   }
@@ -65,7 +93,9 @@ export function candidateValuationPolicy(input: {
   if (positive(normalized?.normalizedEps) && (normalized?.cycleYearsObserved || 0) >= 5 && historyReady) {
     return { basis: 'normalized_cycle' as const, canPublishTarget: true, reason: null };
   }
-  if (positive(normalized?.enterpriseValue) && positive(normalized?.ebitda) && historyReady) {
+  if (positive(normalized?.enterpriseValue) && positive(normalized?.ebitda)
+    && nonNegative(normalized?.cashAndEquivalents) && nonNegative(normalized?.totalDebt)
+    && positive(normalized?.dilutedShares) && (normalized?.evEbitdaMultiplesObserved || 0) >= 48 && historyReady) {
     return { basis: 'ev_ebitda' as const, canPublishTarget: true, reason: null };
   }
   if (positive(normalized?.bookValuePerShare) && positive(normalized?.pbMultiple) && historyReady) {
