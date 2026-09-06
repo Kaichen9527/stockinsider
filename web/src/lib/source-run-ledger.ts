@@ -110,7 +110,7 @@ export async function syncSourceConnectorRegistry(policy: SourceExecutionPolicy,
     license_basis: policy.licenseBasis,
     parser_version: parserVersion,
     retired_at: policy.disposition === 'retired' ? new Date().toISOString() : null,
-    retirement_reason: policy.disposition === 'retired' ? policy.terminalReason : null,
+    retirement_reason: policy.disposition === 'active' ? null : policy.terminalReason,
     updated_at: new Date().toISOString(),
   }, { onConflict: 'connector' });
   if (error) throw new Error(`source_connector_registry_write_failed:${error.message}`);

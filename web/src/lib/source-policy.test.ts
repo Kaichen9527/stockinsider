@@ -7,7 +7,7 @@ const ENV_KEYS = [
   'INTERNAL_API_KEY', 'CRON_SECRET', 'THREADS_OFFICIAL_API_ENABLED',
   'TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED', 'PTT_METADATA_AUTHORIZED',
   'BULLTALK_LICENSED', 'BULLTALK_AUTHORIZED_FEED_URL',
-  'PODCAST_RSS_ALLOWLIST',
+  'PODCAST_RSS_ALLOWLIST', 'TWSE_OFFICIAL_OPENAPI_ENABLED',
 ] as const;
 
 function withEnvironment(values: Partial<Record<(typeof ENV_KEYS)[number], string>>, run: () => void) {
@@ -65,6 +65,17 @@ test('GDELT is active metadata discovery and retired publishers stay retired', (
   assert.equal(sourceExecutionPolicy('gdelt').licenseBasis, 'gdelt_metadata_and_source_links');
 });
 
+test('TWSE insider is excluded from VPS schedules until official egress is confirmed', () => {
+  withEnvironment({}, () => {
+    const policy = sourceExecutionPolicy('twse_insider');
+    assert.equal(policy.disposition, 'manual_only');
+    assert.equal(policy.terminalReason, 'twse_official_openapi_vps_egress_waf_blocked');
+  });
+  withEnvironment({ TWSE_OFFICIAL_OPENAPI_ENABLED: 'true' }, () => {
+    assert.equal(sourceExecutionPolicy('twse_insider').disposition, 'active');
+  });
+});
+
 test('Podcast is manual-only until a creator-published HTTPS RSS feed is allowlisted', () => {
   withEnvironment({}, () => assert.equal(sourceExecutionPolicy('podcast').disposition, 'manual_only'));
   withEnvironment({ PODCAST_RSS_ALLOWLIST: 'https://creator.example/feed.xml' }, () => {
@@ -75,10 +86,10 @@ test('Podcast is manual-only until a creator-published HTTPS RSS feed is allowli
 
 test('connector=all includes only sources authorized in the current runtime', () => {
   withEnvironment({}, () => {
-    assert.deepEqual(activeSourceConnectorKeys(), ['gdelt', 'twse_insider']);
+    assert.deepEqual(activeSourceConnectorKeys(), ['gdelt']);
   });
   withEnvironment({ THREADS_OFFICIAL_API_ENABLED: 'true', TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED: 'true' }, () => {
-    assert.deepEqual(activeSourceConnectorKeys(), ['telegram', 'threads', 'gdelt', 'twse_insider']);
-    assert.deepEqual(scheduledSourceConnectorKeys(), ['telegram', 'threads', 'gdelt', 'twse_insider']);
+    assert.deepEqual(activeSourceConnectorKeys(), ['telegram', 'threads', 'gdelt']);
+    assert.deepEqual(scheduledSourceConnectorKeys(), ['telegram', 'threads', 'gdelt']);
   });
 });

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { requireInternalAuth } from '@/lib/internal-auth';
 import { runPodcastSync, runSourceSync } from '@/lib/research-v2';
-import { scheduledSourceConnectorKeys, sourceExecutionPolicy } from '@/lib/source-policy';
+import { scheduledSourceConnectorKeys, SOURCE_CONNECTOR_KEYS, sourceExecutionPolicy } from '@/lib/source-policy';
 import {
   nextExpectedAt,
   recordSourceRunLedger,
@@ -187,6 +187,10 @@ export async function POST(req: Request) {
     }
 
     if (connector === 'all') {
+      if (!dryRun) {
+        await Promise.all(SOURCE_CONNECTOR_KEYS.map((item) =>
+          syncSourceConnectorRegistry(sourceExecutionPolicy(item), PARSER_VERSION)));
+      }
       const results = await runIsolatedSourceBatch(
         scheduledSourceConnectorKeys(),
         (item) => executeConnector(item, dryRun, symbol),
