@@ -193,20 +193,20 @@ async function loadCachedFundamentalHistory(
   }, { batchSize: 20, maxRowsPerBatch: 5000 });
 }
 
-export async function runCandidateResearchCycle(options: {
+async function executeCandidateResearchCycle(options: {
   dryRun?: boolean;
   pipelineRunId?: string | null;
   seedSymbols?: Array<{ symbol: string; name: string; market: 'TW' | 'US'; sector: string | null }>;
-}) {
+}, lifecycle?: { runId: string; evaluatedAt: string }) {
   const dryRun = Boolean(options.dryRun);
-  const evaluatedAt = new Date().toISOString();
+  const evaluatedAt = lifecycle?.evaluatedAt || new Date().toISOString();
   if (dryRun) return {
     runId: randomUUID(), dryRun: true, candidateCount: 0, completedCount: 0, failedCount: 0,
     partialCount: 0, technicalSessionDate: null, blocked: false, terminalReason: null, marketEvidence: null,
     manifestId: null, manifestHash: null, items: [],
   };
   const supabase = getSupabaseServerClient();
-  const runId = randomUUID();
+  const runId = lifecycle?.runId || randomUUID();
   const [authorityRows, persistedSessionRows] = await Promise.all([
     loadStockAuthority(supabase, evaluatedAt),
     loadOfficialSessions(supabase, evaluatedAt),
@@ -382,8 +382,7 @@ export async function runCandidateResearchCycle(options: {
   const authorityCutoff = String(manifestRead.data.frozen_at || evaluatedAt);
   if (!isCandidateHistoricalPriceAccessEnabled()) {
     const terminalReason = 'official_historical_price_access_unavailable';
-    const blockedRun = await supabase.from('candidate_research_runs').insert({
-      id: runId,
+    const blockedRun = await supabase.from('candidate_research_runs').update({
       evaluation_at: evaluatedAt,
       status: 'failed',
       candidate_count: universe.length,
@@ -401,7 +400,7 @@ export async function runCandidateResearchCycle(options: {
         remediation: 'configure an authorized historical TWSE/TPEx price feed before enabling candidate research',
       },
       finished_at: new Date().toISOString(),
-    });
+    }).eq('id', runId);
     if (blockedRun.error) throw new Error(blockedRun.error.message);
     return {
       runId,
@@ -458,15 +457,14 @@ export async function runCandidateResearchCycle(options: {
     throw new Error(`official_market_evidence_failed:${error instanceof Error ? error.message : String(error)}`);
   }
   const marketRegime = marketEvidence.regime as MarketRiskRegime;
-  const runInsert = await supabase.from('candidate_research_runs').insert({
-    id: runId,
+  const runInsert = await supabase.from('candidate_research_runs').update({
     evaluation_at: evaluatedAt,
     status: 'running',
     candidate_count: universe.length,
     ruleset_version: STAGE_RULESET_VERSION,
     model_version: CANDIDATE_RESEARCH_MODEL_VERSION,
     pipeline_run_id: options.pipelineRunId || null,
-  });
+  }).eq('id', runId);
   if (runInsert.error) throw new Error(runInsert.error.message);
 
   const researchStock = async (stock: (typeof universe)[number], attempt = 0): Promise<Row> => {
@@ -1017,6 +1015,44 @@ export async function runCandidateResearchCycle(options: {
     manifestHash,
     items,
   };
+}
+
+export async function runCandidateResearchCycle(options: {
+  dryRun?: boolean;
+  pipelineRunId?: string | null;
+  seedSymbols?: Array<{ symbol: string; name: string; market: 'TW' | 'US'; sector: string | null }>;
+}) {
+  if (options.dryRun) return executeCandidateResearchCycle(options);
+  const supabase = getSupabaseServerClient();
+  const runId = randomUUID();
+  const evaluatedAt = new Date().toISOString();
+  const initialRun = await supabase.from('candidate_research_runs').insert({
+    id: runId,
+    evaluation_at: evaluatedAt,
+    status: 'running',
+    candidate_count: 0,
+    completed_count: 0,
+    failed_count: 0,
+    ruleset_version: STAGE_RULESET_VERSION,
+    model_version: CANDIDATE_RESEARCH_MODEL_VERSION,
+    pipeline_run_id: options.pipelineRunId || null,
+  });
+  if (initialRun.error) throw new Error(`candidate_research_run_start_failed:${initialRun.error.message}`);
+  try {
+    return await executeCandidateResearchCycle(options, { runId, evaluatedAt });
+  } catch (error) {
+    const terminalReason = error instanceof Error ? error.message : String(error);
+    const failedRun = await supabase.from('candidate_research_runs').update({
+      status: 'failed',
+      terminal_reason: terminalReason,
+      summary: { blocked: true, terminal_reason: terminalReason, prerequisite_failure: true },
+      finished_at: new Date().toISOString(),
+    }).eq('id', runId);
+    if (failedRun.error) {
+      throw new Error(`${terminalReason};candidate_research_run_failure_write_failed:${failedRun.error.message}`);
+    }
+    throw error;
+  }
 }
 
 export async function loadCandidateStageCards(): Promise<{ found: CandidateStageCard[]; waiting: CandidateStageCard[]; actionable: CandidateStageCard[] }> {

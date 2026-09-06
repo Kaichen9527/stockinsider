@@ -117,6 +117,16 @@ test('scheduled core pipeline is candidate-first, isolates unavailable official 
   assert.match(installer, /CANDIDATE_HISTORICAL_PRICE_ACCESS_ENABLED=true\|false/u);
 });
 
+test('candidate research records prerequisite failures on the canonical run before rethrowing', () => {
+  const research = readFileSync(new URL('../web/src/lib/candidate-research.ts', import.meta.url), 'utf8');
+  const startAt = research.indexOf("status: 'running'");
+  const executeAt = research.indexOf('return await executeCandidateResearchCycle(options, { runId, evaluatedAt })');
+  const failAt = research.indexOf("status: 'failed'", executeAt);
+  assert.ok(startAt >= 0 && executeAt > startAt && failAt > executeAt);
+  assert.match(research, /prerequisite_failure: true/u);
+  assert.match(research, /candidate_research_run_failure_write_failed/u);
+});
+
 test('Threads joins the VPS scheduler only after official policy activation and the 20:00 monitor owns missing-run/publication alerts', () => {
   assert.match(sourcePolicy, /return activeSourceConnectorKeys\(\)/u);
   assert.match(domain, /candidate_research_run_missing/u);
