@@ -8,12 +8,21 @@ export const SOURCE_CONNECTOR_KEYS = [
 ] as const;
 export const APPROVED_TELEGRAM_PUBLIC_CHANNELS = [
   'investanchors',
-  'twstockanalysis',
   'Gooaye',
   'johnstock888',
   'eaglewealth',
   'a178178',
   'musclestock',
+] as const;
+
+/**
+ * Channels retained in the source inventory but deliberately not fetched.
+ * Keeping this explicit prevents an unavailable contact page from being
+ * mistaken for a healthy empty channel or a parser regression.
+ */
+export const UNAVAILABLE_TELEGRAM_PUBLIC_CHANNELS = ['twstockanalysis'] as const;
+export const CREATOR_PUBLISHED_PODCAST_RSS_INDEX_ALLOWLIST = [
+  'https://feeds.soundon.fm/podcasts/954689a5-3096-43a4-a80b-7810b219cef3.xml',
 ] as const;
 
 export type SourcePolicyDisposition = 'active' | 'blocked_auth' | 'blocked_license' | 'manual_only' | 'retired';
@@ -30,8 +39,26 @@ function enabled(value: string | undefined): boolean {
   return value === 'true';
 }
 
-function hasAuthorizedPodcastRss(value: string | undefined): boolean {
-  return String(value || '').split(',').map((item) => item.trim()).some((item) => /^https:\/\//u.test(item));
+function httpsRssList(value: string | undefined): string[] {
+  return [...new Set(String(value || '').split(',').map((item) => item.trim()).filter((item) => {
+    try {
+      return new URL(item).protocol === 'https:';
+    } catch {
+      return false;
+    }
+  }))];
+}
+
+export function authorizedPodcastRssAllowlist(value = process.env.PODCAST_RSS_ALLOWLIST): string[] {
+  return [...new Set([...CREATOR_PUBLISHED_PODCAST_RSS_INDEX_ALLOWLIST, ...httpsRssList(value)])];
+}
+
+export function podcastContentAnalysisAllowlist(value = process.env.PODCAST_CONTENT_ANALYSIS_ALLOWLIST): string[] {
+  return httpsRssList(value);
+}
+
+export function podcastContentAnalyzable(rssUrl: string, value = process.env.PODCAST_CONTENT_ANALYSIS_ALLOWLIST): boolean {
+  return podcastContentAnalysisAllowlist(value).includes(rssUrl);
 }
 
 export function sourceExecutionPolicy(connector: string): SourceExecutionPolicy {
@@ -48,9 +75,9 @@ export function sourceExecutionPolicy(connector: string): SourceExecutionPolicy 
     };
   }
   if (connector === 'threads') {
-    return enabled(process.env.THREADS_OFFICIAL_API_ENABLED)
+    return enabled(process.env.THREADS_OFFICIAL_API_ENABLED) && enabled(process.env.THREADS_OFFICIAL_CANARY_ACTIVE)
       ? { connector, disposition: 'active', licenseBasis: 'threads_official_api', terminalReason: null, cadenceHours: 6 }
-      : { connector, disposition: 'blocked_auth', licenseBasis: 'threads_official_api', terminalReason: 'threads_app_review_or_vault_token_pending', cadenceHours: 6 };
+      : { connector, disposition: 'blocked_auth', licenseBasis: 'threads_official_api', terminalReason: enabled(process.env.THREADS_OFFICIAL_API_ENABLED) ? 'threads_official_canary_inactive' : 'threads_app_review_or_vault_token_pending', cadenceHours: 6 };
   }
   if (connector === 'telegram') {
     return enabled(process.env.TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED)
@@ -68,8 +95,8 @@ export function sourceExecutionPolicy(connector: string): SourceExecutionPolicy 
       : { connector, disposition: 'blocked_license', licenseBasis: 'cmoney_partner_license_required', terminalReason: 'bulltalk_authorized_feed_missing', cadenceHours: 6 };
   }
   if (connector === 'podcast') {
-    return hasAuthorizedPodcastRss(process.env.PODCAST_RSS_ALLOWLIST)
-      ? { connector, disposition: 'active', licenseBasis: 'creator_published_rss_allowlist', terminalReason: null, cadenceHours: 24 }
+    return authorizedPodcastRssAllowlist().length > 0
+      ? { connector, disposition: 'active', licenseBasis: 'creator_published_rss_index_allowlist', terminalReason: null, cadenceHours: 24 }
       : { connector, disposition: 'manual_only', licenseBasis: 'creator_published_rss_required', terminalReason: 'podcast_rss_allowlist_missing', cadenceHours: null };
   }
   if (connector === 'gdelt') {

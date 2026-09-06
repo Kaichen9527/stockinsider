@@ -7,6 +7,7 @@ import {
   scoreDataConfidence,
   scoreDiscovery,
   scoreResearch,
+  longMaBreakout,
   technicalActionGate,
   type CandidateStageInput,
 } from './stage-classifier.ts';
@@ -38,7 +39,15 @@ test('score weights match the approved four scorecards', () => {
 test('trend and breakout technical gates use explicit MA and overheat rules', () => {
   assert.equal(technicalActionGate(input().technical), true);
   assert.equal(technicalActionGate({ ...input().technical, close: 115, ma20: 100, atr14: 5 }), false, 'price above MA20 + 2 ATR must fail');
-  assert.equal(technicalActionGate({ ...input().technical, close: 112, ma20: 108, ma60: 109, ma60Slope: -0.1, ma240: 110, breakoutAboveLongMa: true, volumeRatio20Median: 1.3 }), true);
+  assert.equal(technicalActionGate({ ...input().technical, close: 112, ma20: 108, ma60: 109, ma60Slope: -0.1, ma240: 110, volumeRatio20Median: 1.3, priorClose: 109, priorMa240: 110 }), true);
+});
+
+test('long MA breakouts require their own crossover and may persist one confirmation session', () => {
+  const base = { ...input().technical, close: 112, ma20: 108, ma60: 109, ma60Slope: -0.1, volumeRatio20Median: 1.3 };
+  assert.deepEqual(longMaBreakout({ ...base, ma120: 111, ma240: 115, priorClose: 110, priorMa120: 111, priorMa240: 116 }), { ma120: true, ma240: false, persisted: false });
+  assert.equal(technicalActionGate({ ...base, ma120: 110, ma240: 115, priorClose: 111, priorMa120: 110, priorMa240: 116 }), false, 'being already above MA120 is not a crossover');
+  assert.equal(technicalActionGate({ ...base, ma120: 110, ma240: 115, priorClose: 111, priorMa120: 110, priorMa240: 116, priorBreakoutAboveMa120: true }), true, 'the following official session may confirm a recorded MA120 breakout');
+  assert.equal(technicalActionGate({ ...base, ma120: 110, ma240: 115, priorClose: 111, priorMa120: 110, priorMa240: 116, breakoutAboveLongMa: true }), false, 'deprecated combined boolean cannot bypass prior-MA evidence');
 });
 
 test('candidate reaches actionable only after two qualifying closes', () => {

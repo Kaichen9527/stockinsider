@@ -1,3 +1,5 @@
+import { createHash } from 'crypto';
+
 export type SourceContentSemantics =
   | 'editorial_discussion'
   | 'bulk_institutional_ranking'
@@ -5,6 +7,43 @@ export type SourceContentSemantics =
   | 'metadata_only';
 
 export const GDELT_TW_MATCHER_VERSION = 'gdelt-tw-context-v2';
+
+export type SourceStanceSemantics = 'endorsement' | 'negative' | 'neutral';
+
+const ENDORSEMENT_PATTERNS = [
+  /看好|看多|買進|加碼|推薦|bullish|positive|目標價.*(?:上調|調升)|利多|轉強|突破|上漲|營收.*(?:成長|創高)/iu,
+] as const;
+const NEGATIVE_PATTERNS = [
+  /看壞|看空|賣出|減碼|停損|bearish|negative|利空|下修|調降|轉弱|下跌|崩盤|風險/u,
+] as const;
+
+export function classifySourceStance(text: string, declared?: string | null): SourceStanceSemantics {
+  const value = `${declared || ''} ${text}`.replace(/\s+/gu, ' ').trim();
+  const endorsement = ENDORSEMENT_PATTERNS.reduce((count, pattern) => count + (value.match(pattern)?.length || 0), 0);
+  const negative = NEGATIVE_PATTERNS.reduce((count, pattern) => count + (value.match(pattern)?.length || 0), 0);
+  if (endorsement > negative) return 'endorsement';
+  if (negative > endorsement) return 'negative';
+  return 'neutral';
+}
+
+export function canonicalPublisherKey(input: {
+  platform: string;
+  author?: string | null;
+  sourceUrl?: string | null;
+  sourceName?: string | null;
+}) {
+  return publisherKeyFor(input).normalize('NFKC').toLocaleLowerCase('en-US');
+}
+
+export function canonicalContentHash(input: string): string {
+  const canonical = String(input || '')
+    .normalize('NFKC')
+    .replace(/https?:\/\/\S+/giu, '')
+    .replace(/\s+/gu, ' ')
+    .trim()
+    .toLocaleLowerCase('en-US');
+  return createHash('sha256').update(canonical).digest('hex');
+}
 
 export function candidateMentionDiscoveryEligible(provenance: unknown, platform = ''): boolean {
   const record = provenance && typeof provenance === 'object' && !Array.isArray(provenance)

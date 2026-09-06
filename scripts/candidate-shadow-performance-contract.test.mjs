@@ -151,13 +151,14 @@ test('shadow observations are canonical per official session and preserve confli
   assert.match(migration, /same_session_replay_conflict/u);
 });
 
-test('shadow v2 freezes a source manifest and records publication-bound attempts', () => {
+test('current shadow cohort freezes a source manifest and records publication-bound attempts', () => {
   const research = readFileSync(new URL('../web/src/lib/candidate-research.ts', import.meta.url), 'utf8');
   assert.match(v2Migration, /CREATE TABLE IF NOT EXISTS public\.candidate_shadow_manifests/u);
   assert.match(v2Migration, /CREATE TABLE IF NOT EXISTS public\.candidate_shadow_attempts/u);
   assert.match(v2Migration, /shadow_policy_version TEXT NOT NULL DEFAULT 'shadow-policy-v1'/u);
   assert.match(v2Migration, /ALTER COLUMN shadow_policy_version SET DEFAULT 'shadow-policy-v2'/u);
-  assert.match(research, /SHADOW_POLICY_VERSION = 'shadow-policy-v2'/u);
+  assert.match(research, /SHADOW_POLICY_VERSION = 'shadow-policy-v3'/u);
+  assert.match(research, /onConflict: 'session_date,policy_version,ruleset_version,model_version'/u);
   assert.match(research, /Operational completeness counts a correctly terminal partial\/fail-closed/u);
   assert.match(research, /manifestSymbols\.filter\(\(symbol\) => terminalBySymbol\.has\(symbol\) && stageBySymbol\.has\(symbol\)\)/u);
   assert.match(research, /publicationId/u);
@@ -170,6 +171,9 @@ test('production source writes require the active VPS release and production lea
   const serverClient = readFileSync(new URL('../web/src/lib/supabase-server.ts', import.meta.url), 'utf8');
   const activation = readFileSync(new URL('../web/src/app/api/internal/writer-release-activate/route.ts', import.meta.url), 'utf8');
   const deployActivation = readFileSync(new URL('../deployment/vps/activate-writer-release.sh', import.meta.url), 'utf8');
+  const researchRoute = readFileSync(new URL('../web/src/app/api/internal/pipeline-research-run/route.ts', import.meta.url), 'utf8');
+  const stockResearchRoute = readFileSync(new URL('../web/src/app/api/internal/stock-research-refresh/route.ts', import.meta.url), 'utf8');
+  const revaluationRoute = readFileSync(new URL('../web/src/app/api/internal/revaluation-run/route.ts', import.meta.url), 'utf8');
   assert.match(v2Migration, /x-stockinsider-writer-release/u);
   assert.match(v2Migration, /production_writer_release_rejected/u);
   assert.match(v2Migration, /production_writer_lease_required/u);
@@ -183,4 +187,11 @@ test('production source writes require the active VPS release and production lea
   assert.match(deployActivation, /for _attempt in \$\(seq 1 30\)/u);
   assert.match(deployActivation, /curl --fail --silent --show-error --max-time 2 http:\/\/127\.0\.0\.1:3100\//u);
   assert.ok(deployActivation.indexOf('curl --fail') < deployActivation.indexOf('/api/internal/writer-release-activate'), 'readiness must precede writer registration');
+  assert.match(researchRoute, /acquireProductionWriteLease/u);
+  assert.match(researchRoute, /releaseProductionWriteLease/u);
+  assert.match(stockResearchRoute, /acquireProductionWriteLease/u);
+  assert.match(stockResearchRoute, /releaseProductionWriteLease/u);
+  assert.match(revaluationRoute, /acquireProductionWriteLease/u);
+  assert.match(revaluationRoute, /releaseProductionWriteLease/u);
+  assert.doesNotMatch(domain, /void runStockResearchRefresh\(/u);
 });

@@ -5490,6 +5490,61 @@ function buildMarketIndexSignal(focus: DailyMarketFocus | null, topThemes: Theme
   };
 }
 
+function buildMarketIndexSignalFromOfficialEvidence(
+  evidence: RadarDailyPayload['underreactionMarket'],
+): MarketIndexSignal | null {
+  if (!evidence) return null;
+  const components = evidence.components || {};
+  const regime = String(components.regime || 'unknown');
+  const status: MarketIndexSignal['status'] = evidence.status === 'data_incomplete'
+    ? 'market_data_missing'
+    : regime === 'risk_on'
+      ? 'risk_on_can_attack'
+      : regime === 'selective'
+        ? 'selective_only'
+        : regime === 'breakdown'
+          ? 'market_breakdown_no_chase'
+          : 'risk_off_reduce';
+  const label = status === 'risk_on_can_attack'
+    ? '風險偏好擴張，可攻主線'
+    : status === 'selective_only'
+      ? '選股盤，只做強勢主線'
+      : status === 'risk_off_reduce'
+        ? '大盤轉保守，降低部位'
+        : status === 'market_breakdown_no_chase'
+          ? '大盤轉弱，不追價'
+          : '大盤資料待補';
+  const entryBias = status === 'risk_on_can_attack'
+    ? '符合個股研究與技術門檻時，可依訊號分批觀察。'
+    : status === 'selective_only'
+      ? '只考慮研究與相對強勢皆通過的標的。'
+      : status === 'market_data_missing'
+        ? '官方大盤證據補齊前，不新增可行動訊號。'
+        : '大盤風險偏高，不新增可行動訊號。';
+  const exitBias = status === 'market_breakdown_no_chase'
+    ? '檢查個股 MA20／MA60、初始 2ATR 失效價與重大反證。'
+    : '依個股凍結的進退場條件追蹤，不由大盤文字單獨決定。';
+  const taiexState = components.taiex ? compactText(components.taiex) : null;
+  const otcState = components.tpex ? compactText(components.tpex) : null;
+  const breadthState = components.breadth ? compactText(components.breadth) : null;
+  const foreignFlowState = components.foreignFlow ? compactText(components.foreignFlow) : null;
+  return {
+    status,
+    label,
+    summary: evidence.summary,
+    asOf: evidence.asOf || null,
+    trendScore: null,
+    taiexState,
+    otcState,
+    breadthState,
+    foreignFlowState,
+    riskBudget: evidence.riskBudget || '資料未完整，不提供部位預算。',
+    entryBias,
+    exitBias,
+    reasons: [taiexState, otcState, breadthState, foreignFlowState, ...evidence.missingComponents.map((item) => `缺少：${item}`)].filter((item): item is string => Boolean(item)).slice(0, 8),
+  };
+}
+
 function buildRelativeStrengthSignal(card: Pick<RecommendationCard, 'symbol' | 'timingScore' | 'globalThemeLeadLagSignal' | 'priceAsOf'>): NonNullable<RecommendationCard['relativeStrengthSignal']> {
   const leadLag = card.globalThemeLeadLagSignal || null;
   const stockReturnPct = leadLag?.twMovePct ?? null;
@@ -13912,7 +13967,8 @@ async function getRadarPayload(windowType: ThemeHeatCard['windowType']): Promise
           ? `資料最後成功更新於 ${new Date(lastUpdatedAt || nowIso()).toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' })}，目前屬於逾時狀態，請優先檢查來源同步與研究排程。`
           : buildFocusSummary(marketFocus, topThemes);
 
-	    const marketIndexSignal = buildMarketIndexSignal(marketFocus, topThemes);
+	    const marketIndexSignal = buildMarketIndexSignalFromOfficialEvidence(underreactionMarket)
+	      || buildMarketIndexSignal(marketFocus, topThemes);
 	    const withMarketDecision = (card: RecommendationCard) => {
 	      const stockId = stockIdBySymbol.get(card.symbol) || '';
 	      const job = stockId ? latestRevaluationJobsByStockId.get(stockId) || null : null;
@@ -13922,9 +13978,10 @@ async function getRadarPayload(windowType: ThemeHeatCard['windowType']): Promise
     const scenarioUpsideCandidatesWithMarket = scenarioUpsideCandidates.map(withMarketDecision);
     const finalEarlyWatchlistWithMarket = finalEarlyWatchlist.map(withMarketDecision);
     const finalRecentFormal7d: RecommendationCard[] = [];
-    const marketRegime =
-      topThemes[0]?.marketRegime ||
-      (toFiniteNumber((marketFocus?.indexState as Row | undefined)?.trend_score, 0.5) >= 0.65 ? 'risk-on-ai' : 'selective-risk-on');
+    const marketRegime = underreactionMarket?.components?.regime
+      ? String(underreactionMarket.components.regime)
+      : topThemes[0]?.marketRegime ||
+        (toFiniteNumber((marketFocus?.indexState as Row | undefined)?.trend_score, 0.5) >= 0.65 ? 'risk-on-ai' : 'selective-risk-on');
     const marketHighlightSummary = buildMarketHighlightSummary({
       focus: marketFocus,
       topThemes,
@@ -16644,12 +16701,11 @@ export async function runStockResearchRefresh(options: {
 }
 
 function queueStockResearchRefresh(symbol: string, reason: string, force = false) {
-  const normalizedSymbol = symbol.toUpperCase();
-  const existing = stockResearchRefreshLocks.get(normalizedSymbol);
-  if (existing && !force) return;
-  void runStockResearchRefresh({ symbol: normalizedSymbol, reason, force }).catch((error) => {
-    console.warn(`[stock-refresh] ${normalizedSymbol} failed`, (error as Error).message);
-  });
+  // Public/detail reads are snapshot-only. Research refreshes are owned by the
+  // VPS scheduler or an authenticated, writer-leased internal endpoint.
+  void symbol;
+  void reason;
+  void force;
 }
 
 function revaluationRequiredEvidenceForCard(card: RecommendationCard) {
@@ -21852,8 +21908,8 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
           pipelineRunId,
           seedSymbols: TW_STORY_RESEARCH_SEEDS.map((seed) => ({ symbol: seed.symbol, name: seed.name, market: seed.market, sector: seed.sector })),
         });
-        if (!dryRun && (result.blocked || result.failedCount > 0 || result.partialCount > 0)) {
-          throw new Error(`candidate_research_prerequisite_failed:${result.terminalReason || 'partial_or_failed_items'}`);
+        if (!dryRun && result.blocked) {
+          throw new Error(`candidate_research_prerequisite_failed:${result.terminalReason || 'blocked'}`);
         }
         return result;
       },
@@ -21923,6 +21979,15 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
         technicalSessionDate: candidateResearch.technicalSessionDate || null,
         activeSourceErrors,
       }));
+    }
+
+    // A per-stock infrastructure failure is isolated so successful candidates
+    // can still publish and the failed stock can publish its fail-closed found
+    // state. After publication, fail the orchestration request so systemd and
+    // health monitoring do not mistake a partial research cycle for success.
+    // Evidence gaps with a completed terminal are not operational failures.
+    if (!dryRun && candidateResearch.failedCount > 0) {
+      throw new Error(`candidate_research_partial_failure:${candidateResearch.failedCount}`);
     }
 
     const durationMs = Date.now() - startedAt;

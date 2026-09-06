@@ -5,10 +5,10 @@ import { execFile } from 'child_process';
 import { promisify } from 'util';
 import { getSupabaseServerClient } from './supabase-server';
 import { THREADS_CANONICAL_ORIGIN } from './source-auth';
-import { APPROVED_TELEGRAM_PUBLIC_CHANNELS, RETIRED_SOURCE_CONNECTORS } from './source-policy';
+import { APPROVED_TELEGRAM_PUBLIC_CHANNELS, RETIRED_SOURCE_CONNECTORS, UNAVAILABLE_TELEGRAM_PUBLIC_CHANNELS, authorizedPodcastRssAllowlist, podcastContentAnalyzable } from './source-policy';
 import { fetchTextWithRetry, sourceFetchFailureCode } from './source-fetch';
 import { getThreadsTokenForRun, threadsTokenRegistryMetadata } from './threads-token';
-import { classifyPttContentSemantics, GDELT_TW_MATCHER_VERSION, publisherKeyFor, type SourceContentSemantics } from './source-content-semantics';
+import { canonicalContentHash, canonicalPublisherKey, classifyPttContentSemantics, classifySourceStance, GDELT_TW_MATCHER_VERSION, publisherKeyFor, type SourceContentSemantics } from './source-content-semantics';
 import { collectPagedAuthorityRows } from './candidate-research-policy';
 import { decodeSingleFileZip, gdeltGkgUrlsAfter, gdeltSearchableText, gdeltTransportReason, isRetiredNewsHost, matchGdeltStockSymbols, parseGdeltSeenDate, selectLatestGdeltGkgUrl } from './gdelt-gkg';
 import { isExpectedPttArticleMissing } from './ptt-policy';
@@ -1362,6 +1362,17 @@ async function getSourceWatermark(platform: string) {
   return row?.collected_at ? String(row.collected_at) : null;
 }
 
+/** Source connectors must use the complete paginated TW authority, never the
+ * PostgREST default response window. */
+async function loadTwStockAuthority(fields: string) {
+  const supabase = getSupabaseServerClient();
+  return collectPagedAuthorityRows<Row>(async (from, to) => {
+    const page = await supabase.from('stocks').select(fields).eq('market', 'TW').order('symbol').range(from, to);
+    if (page.error) throw new Error(`tw_stock_authority_failed:${page.error.message}`);
+    return (page.data as unknown as Row[]) || [];
+  }, { pageSize: 500, maxRows: 10_000 });
+}
+
 function sha256Hex(value: string) {
   return createHash('sha256').update(value).digest('hex');
 }
@@ -2150,7 +2161,16 @@ async function upsertSourceRawDocuments(items: SourceRawDocInput[]) {
   const { error } = await supabase.from('source_raw_documents').upsert(
     newItems.map((item) => {
       const compacted = truncateSourceContent(item.contentText);
-      const contentHash = sha256Hex(item.contentText || `${item.title}\n${item.summary}\n${item.documentUrl}`);
+      const stanceSemantics = classifySourceStance(`${item.title}\n${item.summary}\n${item.contentText}`, item.sentimentLabel);
+      const contentHash = canonicalContentHash(item.contentText || `${item.title}\n${item.summary}`);
+      const publisherKey = item.publisherKey
+        ? compactText(item.publisherKey).normalize('NFKC').toLocaleLowerCase('en-US')
+        : canonicalPublisherKey({
+        platform: item.platform,
+        author: compactText(item.metadata?.author_name || item.metadata?.channel_identity || item.metadata?.source_account) || null,
+        sourceUrl: item.documentUrl,
+        sourceName: compactText(item.metadata?.source_name) || null,
+      });
       return {
       source_entity_id: item.sourceEntityId,
       platform: item.platform,
@@ -2163,13 +2183,10 @@ async function upsertSourceRawDocuments(items: SourceRawDocInput[]) {
       sentiment_label: item.sentimentLabel || null,
       confidence: item.confidence ?? null,
       content_semantics: item.contentSemantics || 'editorial_discussion',
-      publisher_key: item.publisherKey || publisherKeyFor({
-        platform: item.platform,
-        author: compactText(item.metadata?.author_name) || null,
-        sourceUrl: item.documentUrl,
-        sourceName: compactText(item.metadata?.source_name) || null,
-      }),
+      publisher_key: publisherKey,
       publisher_name: item.publisherName || compactText(item.metadata?.author_name || item.metadata?.source_name) || null,
+      canonical_content_hash: contentHash,
+      stance_semantics: stanceSemantics,
       metadata: {
         crawl_mode: 'market_scan',
         query_symbol: null,
@@ -2178,6 +2195,10 @@ async function upsertSourceRawDocuments(items: SourceRawDocInput[]) {
         ...(item.metadata || {}),
         lookback_hours: lookbackHours,
         content_hash: contentHash,
+        canonical_content_hash: contentHash,
+        canonical_publisher_key: publisherKey,
+        stance_semantics: stanceSemantics,
+        candidate_discovery_eligible: (item.contentSemantics || 'editorial_discussion') !== 'bulk_institutional_ranking',
         content_chars: compacted.originalChars,
         content_truncated: compacted.truncated,
         content_max_chars: SOURCE_RAW_CONTENT_MAX_CHARS,
@@ -2202,13 +2223,12 @@ async function upsertSourceRawDocuments(items: SourceRawDocInput[]) {
       .flatMap((item) => (item.symbols || []).flatMap((symbol) => {
       const stockId = stockIdBySymbol.get(symbol);
       if (!stockId || !item.documentUrl) return [];
-      const stance = item.sentimentLabel === 'bullish'
-        ? 'positive'
-        : item.sentimentLabel === 'bearish'
-          ? 'negative'
-          : item.sentimentLabel === 'mixed'
-            ? 'mixed'
-            : 'neutral';
+      const stanceSemantics = classifySourceStance(`${item.title}\n${item.summary}\n${item.contentText}`, item.sentimentLabel);
+      const stance = stanceSemantics === 'endorsement' ? 'positive' : stanceSemantics;
+      const canonicalHash = canonicalContentHash(item.contentText || `${item.title}\n${item.summary}`);
+      const publisherKey = item.publisherKey
+        ? compactText(item.publisherKey).normalize('NFKC').toLocaleLowerCase('en-US')
+        : canonicalPublisherKey({ platform: item.platform, author: compactText(item.metadata?.author_name || item.metadata?.channel_identity || item.metadata?.source_account) || null, sourceUrl: item.documentUrl, sourceName: compactText(item.metadata?.source_name) || null });
       return [{
         stock_id: stockId,
         source_document_id: null,
@@ -2217,13 +2237,13 @@ async function upsertSourceRawDocuments(items: SourceRawDocInput[]) {
         author_name: compactText(item.metadata?.author_name) || null,
         source_url: item.documentUrl,
         stance,
-        independent_content_hash: sha256Hex(compactText(`${item.title}\n${item.summary}`).toLowerCase()),
+        independent_content_hash: canonicalHash,
         mentioned_at: item.publishedAt || availableAt,
         as_of: item.publishedAt || availableAt,
         available_at: availableAt,
         confidence: Math.max(0, Math.min(100, Number(item.confidence ?? 0.5) * 100)),
         content_semantics: item.contentSemantics === 'metadata_only' ? 'metadata_only' : 'editorial_discussion',
-        publisher_key: item.publisherKey || publisherKeyFor({ platform: item.platform, author: compactText(item.metadata?.author_name) || null, sourceUrl: item.documentUrl, sourceName: compactText(item.metadata?.source_name) || null }),
+        publisher_key: publisherKey,
         publisher_name: item.publisherName || compactText(item.metadata?.author_name || item.metadata?.source_name) || null,
         provenance: {
           retention_mode: item.metadata?.retention_mode || 'source_document',
@@ -2232,6 +2252,9 @@ async function upsertSourceRawDocuments(items: SourceRawDocInput[]) {
             discovery_eligible: item.metadata?.discovery_eligible === true,
             matcher_version: item.metadata?.matcher_version || null,
           } : {}),
+          canonical_content_hash: canonicalHash,
+          canonical_publisher_key: publisherKey,
+          stance_semantics: stanceSemantics,
         },
         ruleset_version: 'source-ranking-v2.2.0',
       }];
@@ -2496,7 +2519,11 @@ async function rebuildBrokerConsensusSnapshots(supabase: ReturnType<typeof getSu
         source_document_ids: docs.map((row) => row.id).filter(Boolean),
         freshness_status: docs.length > 0 ? 'fresh' : 'missing',
         summary,
-        metadata: { rebuilt_at: nowIso() },
+        metadata: {
+          rebuilt_at: nowIso(),
+          permitted_source_modes: [...AUTHORIZED_BROKER_SOURCE_MODES],
+          authorization_basis: 'user_supplied_or_imported_document',
+        },
         updated_at: nowIso(),
       },
       { onConflict: 'stock_id,as_of_date' },
@@ -2633,11 +2660,8 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
   const headers = { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0', cookie: 'over18=1' };
 
   const allMatches: Array<{ href: string; title: string }> = [];
-  const stocksRows = (await collectPagedAuthorityRows<Row>(async (from, to) => {
-    const page = await supabase.from('stocks').select('id,symbol,name').eq('market', 'TW').order('symbol').range(from, to);
-    if (page.error) throw page.error;
-    return (page.data as Row[]) || [];
-  }, { maxRows: 5000 })).filter((row) => /^\d{4}$/.test(compactText(row.symbol)));
+  const stocksRows = (await loadTwStockAuthority('id,symbol,name'))
+    .filter((row) => /^\d{4}$/.test(compactText(row.symbol)));
   const validSymbols = new Set(stocksRows.map((row) => compactText(row.symbol).toUpperCase()));
   const stockBySymbol = new Map(stocksRows.map((row) => [compactText(row.symbol).toUpperCase(), row] as const));
   const stockNamesBySymbol = new Map(stocksRows.map((row) => [compactText(row.symbol).toUpperCase(), compactText(row.name)] as const));
@@ -2719,8 +2743,8 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
     for (const match of html.matchAll(/<div class="push">([\s\S]*?)<\/div>/g)) {
       const block = match[1] || '';
       const tag = compactText(block.match(/<span[^>]*class="[^"]*\bpush-tag\b[^"]*"[^>]*>([\s\S]*?)<\/span>/)?.[1] || '');
-      const author = compactText(block.match(/<span[^>]*class="[^"]*\bpush-userid\b[^"]*"[^>]*>([\s\S]*?)<\/span>/)?.[1] || '') || null;
-      const text = compactText(block.match(/<span[^>]*class="[^"]*\bpush-content\b[^"]*"[^>]*>([\s\S]*?)<\/span>/)?.[1] || '').replace(/^:\s*/, '');
+      const author = stripHtml(block.match(/<span[^>]*class="[^"]*\bpush-userid\b[^"]*"[^>]*>([\s\S]*?)<\/span>/)?.[1] || '') || null;
+      const text = stripHtml(block.match(/<span[^>]*class="[^"]*\bpush-content\b[^"]*"[^>]*>([\s\S]*?)<\/span>/)?.[1] || '').replace(/^:\s*/, '');
       if (tag || text) comments.push({ tag, author, text });
     }
     return comments;
@@ -2753,7 +2777,7 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
       });
       articlesFetched += 1;
       comments = parsePushComments(bodyHtml);
-      articleAuthor = compactText(bodyHtml.match(/article-meta-tag[^>]*>作者<\/span>\s*<span[^>]*class="article-meta-value"[^>]*>([^<]+)/u)?.[1] || '') || null;
+      articleAuthor = stripHtml(bodyHtml.match(/article-meta-tag[^>]*>作者<\/span>\s*<span[^>]*class="article-meta-value"[^>]*>([\s\S]*?)<\/span>/u)?.[1] || '') || null;
       pushCommentsParsed += comments.length;
       const mainBlock = bodyHtml.match(/<div id="main-content">([\s\S]*?)<\/div>\s*<div id="article-polling"/)?.[1] ||
         bodyHtml.match(/<div id="main-content">([\s\S]*?)<\/div>/)?.[1] ||
@@ -2834,6 +2858,8 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
     });
     comments.forEach((comment, commentIndex) => {
       if (!comment.text || !comment.author) return;
+      // A reply may inherit the article's topic, but it is a separate claim:
+      // only symbols present in the reply itself get reply-level provenance.
       const commentExtracted = extractTwSymbolsWithEvidence(comment.text, { validSymbols, stockNamesBySymbol, aliasesBySymbol });
       if (commentExtracted.symbols.length === 0) return;
       for (const symbol of commentExtracted.symbols) matchedSymbols.add(symbol);
@@ -2859,6 +2885,8 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
           connector: 'http', source_surface: 'ptt_stock_push', crawl_mode: symbolContext ? 'symbol_scoped' : 'board_scan',
           author_name: comment.author, parent_article_author: articleAuthor, parent_document_url: articleUrl,
           comment_index: commentIndex + 1, comment_tag: comment.tag, evidence_excerpt: comment.text.slice(0, 240),
+          matched_symbol_reason: 'comment_local_tw_symbol_or_name_proximity',
+          matched_symbols: commentExtracted.symbols,
           content_semantics: 'editorial_discussion', retention_mode: 'metadata_local_excerpt',
           excluded_false_positives: commentExtracted.excludedFalsePositives,
         },
@@ -3111,9 +3139,9 @@ async function scrapeThreadsOfficialApi(symbolContext?: SymbolScopedStockContext
   const watermarkBefore = await getSourceWatermark('threads');
   const [{ data: watchlistData, error: watchlistError }, { data: stockData, error: stockError }] = await Promise.all([
     supabase.from('source_watchlists').select('*').eq('platform', 'threads').eq('enabled', true).order('priority', { ascending: false }),
-    supabase.from('stocks').select('symbol,name').eq('market', 'TW'),
+    loadTwStockAuthority('symbol,name').then((data) => ({ data, error: null })),
   ]);
-  if (watchlistError || stockError) throw new Error(watchlistError?.message || stockError?.message || 'threads_context_unavailable');
+  if (watchlistError) throw new Error(watchlistError.message || 'threads_context_unavailable');
   const watchlists = (watchlistData as Row[]) || [];
   const stocksRows = (stockData as Row[]) || [];
   const validSymbols = new Set(stocksRows.map((row) => compactText(row.symbol).toUpperCase()).filter((item) => /^\d{4}$/u.test(item)));
@@ -3280,17 +3308,13 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
   const agentRunId = await startAgentRun('source_sync', { connector: 'telegram', symbol: symbolContext?.symbol || null });
 
   const [stocksRows, priorDocuments, persistedCursorsRes] = await Promise.all([
-    collectPagedAuthorityRows<Row>(async (from, to) => {
-      const page = await supabase.from('stocks').select('symbol,name').eq('market', 'TW').order('symbol').range(from, to);
-      if (page.error) throw page.error;
-      return (page.data as Row[]) || [];
-    }, { maxRows: 5000 }),
+    loadTwStockAuthority('symbol,name'),
     collectPagedAuthorityRows<Row>(async (from, to) => {
       const page = await supabase.from('source_raw_documents').select('document_url,metadata').eq('platform', 'telegram').order('collected_at', { ascending: false }).range(from, to);
       if (page.error) throw page.error;
       return (page.data as Row[]) || [];
     }, { maxRows: 20_000 }),
-    supabase.from('source_connector_cursors').select('scope_key,cursor_value').eq('connector', 'telegram'),
+    supabase.from('source_connector_cursors').select('scope_key,cursor_value,message_id,published_at,channel_identity,metadata').eq('connector', 'telegram'),
   ]);
   if (persistedCursorsRes.error) throw new Error(`telegram_cursor_read_failed:${persistedCursorsRes.error.message}`);
   const validSymbols = new Set(stocksRows.map((row) => compactText(row.symbol).toUpperCase()).filter((item) => /^\d{4}$/.test(item)));
@@ -3302,7 +3326,7 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
   const cursorBefore = new Map<string, number>();
   for (const row of (persistedCursorsRes.data as Row[]) || []) {
     const channel = compactText(row.scope_key).replace(/^@/u, '').toLowerCase();
-    const messageId = Number(row.cursor_value);
+    const messageId = Number(row.message_id || row.cursor_value);
     if (channel && Number.isInteger(messageId)) cursorBefore.set(channel, messageId);
   }
   for (const row of priorDocuments) {
@@ -3313,14 +3337,7 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
   }
   const cursorAfter = new Map(cursorBefore);
 
-  const entity = await upsertSourceEntity({
-    platform: 'telegram',
-    entityType: 'channel',
-    displayName: 'Telegram channels',
-    sourceKey: 'site.telegram.channels',
-  });
-
-  const records: Array<{ title: string; summary: string; contentText: string; publishedAt: string | null; documentUrl: string; symbols: string[]; metadata?: Record<string, unknown> }> = [];
+  const records: Array<{ sourceEntityId: string; title: string; summary: string; contentText: string; publishedAt: string | null; documentUrl: string; symbols: string[]; metadata?: Record<string, unknown> }> = [];
   const channelBreakdown: Array<{
     channel: string;
     searched: boolean;
@@ -3328,14 +3345,23 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
     matched_symbols: string[];
     records_written: number;
     last_success_at: string | null;
+    status: 'success' | 'duplicate_only' | 'no_symbol_matches' | 'unavailable' | 'contact_required' | 'expired' | 'failed';
     failure_reason: string | null;
     excluded_false_positives: number;
     excluded_examples: string[];
   }> = [];
   let fetchedPosts = 0;
   let cursorDuplicatesSkipped = 0;
+  const cursorDetails = new Map<string, { messageId: number; publishedAt: string | null }>();
 
   const channelNames = [...APPROVED_TELEGRAM_PUBLIC_CHANNELS];
+  for (const channelName of UNAVAILABLE_TELEGRAM_PUBLIC_CHANNELS) {
+    channelBreakdown.push({
+      channel: channelName, searched: false, fetched_posts: 0, matched_symbols: [], records_written: 0,
+      last_success_at: null, status: 'unavailable', failure_reason: 'telegram_channel_unavailable_by_policy',
+      excluded_false_positives: 0, excluded_examples: [],
+    });
+  }
 
   for (const channelNameRaw of channelNames) {
     const channelName = channelNameRaw.replace(/^@/, '');
@@ -3344,26 +3370,39 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
     const channelSymbols = new Set<string>();
     const channelExclusions: Array<{ token: string; reason: string }> = [];
     let channelFetchedPosts = 0;
+    let channelCursorDuplicates = 0;
+    let channelNewMessages = 0;
     let channelFailure: string | null = null;
+    let channelStatus: (typeof channelBreakdown)[number]['status'] = 'success';
+    let latestPublishedAt: string | null = null;
+    const channelEntity = await upsertSourceEntity({
+      platform: 'telegram', entityType: 'channel', displayName: `Telegram @${channelName}`,
+      sourceKey: `telegram.channel.${channelName.toLowerCase()}`, profileUrl: previewUrl,
+      metadata: { channel_identity: channelName, source_surface: 'telegram_public_channel' },
+    });
 
     try {
       const cursorKey = channelName.toLowerCase();
       const cursor = cursorBefore.get(cursorKey) || 0;
       const messageScopes = new Map<number, string>();
       let before: number | null = null;
-      for (let pageIndex = 0; pageIndex < 10; pageIndex += 1) {
+      // Telegram preview pages normally expose about twenty messages. Keep
+      // walking until the persisted message-ID watermark, not just page one.
+      for (let pageIndex = 0; pageIndex < 50; pageIndex += 1) {
         const pageUrl = before ? `${previewUrl}?before=${before}` : previewUrl;
         const response = await fetch(pageUrl, { headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/2.0' }, signal: AbortSignal.timeout(15_000) });
         if (!response.ok) throw new Error(`telegram_public_http_${response.status}`);
         const html = await response.text();
         const pageMessages = Array.from(html.matchAll(/data-post="[^/"]+\/(\d+)"([\s\S]*?)(?=data-post="|$)/gu));
         if (pageMessages.length === 0) {
-          if (/tgme_page_(?:title|extra)|tgme_action_button_new/u.test(html)) throw new Error('telegram_not_public_channel_contact_page');
+          if (/tgme_page_extra.*(?:contact|unavailable|private)|tgme_action_button_new/u.test(html)) throw new Error('telegram_channel_contact_required');
+          if (/tgme_page_(?:title|extra).*?(?:expired|deleted)|channel has expired/iu.test(html)) throw new Error('telegram_channel_expired');
+          if (/tgme_page_(?:title|extra)|not found|channel is unavailable/iu.test(html)) throw new Error('telegram_channel_unavailable');
           throw new Error('telegram_parser_zero_messages');
         }
         for (const match of pageMessages) messageScopes.set(Number(match[1]), match[2] || '');
         const oldest = Math.min(...pageMessages.map((match) => Number(match[1])).filter(Number.isFinite));
-        if (!Number.isFinite(oldest) || cursor === 0 || oldest <= cursor || pageMessages.length < 20) break;
+        if (!Number.isFinite(oldest) || oldest <= cursor || pageMessages.length < 20) break;
         before = oldest;
       }
       const messageMatches = [...messageScopes.entries()].sort((left, right) => left[0] - right[0]);
@@ -3377,11 +3416,14 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
         fetchedPosts += 1;
         channelFetchedPosts += 1;
         cursorAfter.set(cursorKey, Math.max(cursorAfter.get(cursorKey) || 0, messageId));
+        const publishedAt = safeDateString(/<time\b[^>]*\bdatetime=["']([^"']+)["']/u.exec(scope)?.[1] || null);
+        if (publishedAt && (!latestPublishedAt || publishedAt > latestPublishedAt)) latestPublishedAt = publishedAt;
         if (messageId <= (cursorBefore.get(cursorKey) || 0)) {
           cursorDuplicatesSkipped += 1;
+          channelCursorDuplicates += 1;
           continue;
         }
-        const publishedAt = safeDateString(/<time\b[^>]*\bdatetime=["']([^"']+)["']/u.exec(scope)?.[1] || null);
+        channelNewMessages += 1;
         const extracted = extractTwSymbolsWithEvidence(msgText, { validSymbols, stockNamesBySymbol, aliasesBySymbol });
         const symbols = extracted.symbols;
         channelExclusions.push(...extracted.excludedFalsePositives);
@@ -3389,6 +3431,7 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
         const docUrl = `https://t.me/${channelName}/${messageId}`;
         if (symbols.length === 0) continue;
         records.push({
+          sourceEntityId: String(channelEntity.id),
           title: `Telegram @${channelName}: ${msgText.slice(0, 60)}`,
           summary: msgText.slice(0, 160),
           contentText: `Telegram @${channelName}: ${msgText.slice(0, 60)}`,
@@ -3397,6 +3440,7 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
           symbols,
           metadata: {
             channel_name: channelName,
+            channel_identity: channelName,
             stable_message_id: messageId,
             source_mode: 'public_channel_html',
             source_surface: 'telegram_public_channel',
@@ -3411,14 +3455,24 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
       await createSourceAudit({
         connectorRunId,
         platform: 'telegram',
-        sourceEntityId: String(entity.id),
+        sourceEntityId: String(channelEntity.id),
         targetUrl: previewUrl,
         status: records.length > channelRecordsBefore ? 'success' : 'partial',
         notes: `${channelName}; fetched=${channelFetchedPosts}; matched=${channelSymbols.size}`,
       });
+      cursorDetails.set(cursorKey, { messageId: cursorAfter.get(cursorKey) || cursor, publishedAt: latestPublishedAt });
     } catch (err) {
       channelFailure = (err as Error).message;
-      await createSourceAudit({ connectorRunId, platform: 'telegram', targetUrl: previewUrl, status: 'failed', notes: channelFailure });
+      channelStatus = /contact_required/u.test(channelFailure) ? 'contact_required'
+        : /expired/u.test(channelFailure) ? 'expired'
+          : /unavailable/u.test(channelFailure) ? 'unavailable'
+            : 'failed';
+      await createSourceAudit({ connectorRunId, platform: 'telegram', sourceEntityId: String(channelEntity.id), targetUrl: previewUrl, status: 'failed', notes: channelFailure });
+    }
+    if (!channelFailure) {
+      channelStatus = channelFetchedPosts === 0 ? 'failed'
+        : records.length === channelRecordsBefore ? (channelNewMessages > 0 ? 'no_symbol_matches' : channelCursorDuplicates > 0 ? 'duplicate_only' : 'failed')
+          : 'success';
     }
     channelBreakdown.push({
       channel: channelName,
@@ -3427,7 +3481,8 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
       matched_symbols: [...channelSymbols],
       records_written: 0,
       last_success_at: channelFetchedPosts > 0 ? new Date().toISOString() : null,
-      failure_reason: channelFailure,
+      status: channelStatus,
+      failure_reason: channelStatus === 'failed' ? (channelFailure || 'telegram_parser_zero_messages') : channelFailure,
       excluded_false_positives: channelExclusions.length,
       excluded_examples: channelExclusions.slice(0, 8).map((item) => `${item.token}:${item.reason}`),
     });
@@ -3445,7 +3500,7 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
     const channelItems = records.filter((item) => compactText(item.metadata?.channel_name).toLowerCase() === channel.channel.toLowerCase());
     const written = await upsertSourceRawDocuments(
       filterSymbolScopedDocs(channelItems.map((item) => ({
-        sourceEntityId: String(entity.id),
+        sourceEntityId: item.sourceEntityId,
         platform: 'telegram',
         documentUrl: item.documentUrl,
         title: item.title,
@@ -3475,19 +3530,21 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
     const cursorWrite = await supabase.from('source_connector_cursors').upsert(
       [...cursorAfter.entries()].map(([scopeKey, cursorValue]) => ({
         connector: 'telegram', scope_key: scopeKey, cursor_value: String(cursorValue), observed_at: nowIso(),
-        metadata: { cursor_kind: 'telegram_message_id', source_surface: 'telegram_public_channel' },
+        channel_identity: scopeKey, message_id: cursorValue,
+        published_at: cursorDetails.get(scopeKey)?.publishedAt || null,
+        metadata: { cursor_kind: 'telegram_message_id', source_surface: 'telegram_public_channel', channel_identity: scopeKey },
       })),
       { onConflict: 'connector,scope_key' },
     );
     if (cursorWrite.error) throw new Error(`telegram_cursor_write_failed:${cursorWrite.error.message}`);
   }
 
-  const taskId = await writeAgentTask({ agentRunId, agentRole: 'Source Connector Agent', taskType: 'source-sync', status: parserFailure ? 'failed' : 'success', inputPayload: { connector: 'telegram' }, outputSummary: parserFailure ? 'Telegram parser returned zero messages across the approved roster' : `synced ${count} telegram records` });
+  const actionableFailures = channelBreakdown.filter((channel) => channel.status === 'failed');
+  const taskId = await writeAgentTask({ agentRunId, agentRole: 'Source Connector Agent', taskType: 'source-sync', status: parserFailure || actionableFailures.length > 0 ? 'failed' : 'success', inputPayload: { connector: 'telegram' }, outputSummary: parserFailure ? 'Telegram parser returned zero messages across available channels' : `synced ${count} telegram records` });
   await writeAgentFinding(taskId, `Telegram 同步 ${count} 筆訊息`, { confidence: 0.55 });
-  await finishAgentRun(agentRunId, parserFailure ? 'failed' : 'success', { connector: 'telegram', records_written: count, symbol: symbolContext?.symbol || null, terminal_reason: parserFailure ? 'telegram_parser_zero_messages' : null });
-  await finishConnectorRun(connectorRunId, parserFailure ? 'failed' : count > 0 ? 'success' : 'partial', count, {
+  await finishAgentRun(agentRunId, parserFailure || actionableFailures.length > 0 ? 'failed' : 'success', { connector: 'telegram', records_written: count, symbol: symbolContext?.symbol || null, terminal_reason: parserFailure ? 'telegram_parser_zero_messages' : actionableFailures.length > 0 ? 'telegram_channel_failures' : null });
+  await finishConnectorRun(connectorRunId, parserFailure || actionableFailures.length > 0 ? 'failed' : count > 0 ? 'success' : 'partial', count, {
     metadata: {
-      entity_id: entity.id,
       fetched_posts: fetchedPosts,
       channel_breakdown: channelBreakdown,
       crawl_mode: symbolContext ? 'symbol_scoped' : 'channel_scan',
@@ -3504,13 +3561,14 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
     matchedDirectHits: new Set(records.flatMap((record) => record.symbols)).size,
     matchedIndustryHits: 0,
     candidateDocuments: records.length,
-    entityId: String(entity.id),
+    entityId: null,
     watermarkBefore: JSON.stringify(Object.fromEntries([...cursorBefore.entries()].sort())),
     watermarkAfter: JSON.stringify(Object.fromEntries([...cursorAfter.entries()].sort())),
     errorCode: parserFailure ? 'telegram_parser_zero_messages' : null,
-    degradedReason: channelBreakdown.some((channel) => channel.failure_reason)
-      ? `telegram_channels_failed:${channelBreakdown.filter((channel) => channel.failure_reason).length}`
+    degradedReason: actionableFailures.length > 0
+      ? `telegram_channels_failed:${actionableFailures.length}`
       : null,
+    metadata: { index_updated: fetchedPosts > 0, content_analyzable: true, valid_matches: records.length, channel_breakdown: channelBreakdown },
     sessionMode: 'not_applicable' as const,
   };
 }
@@ -5155,6 +5213,7 @@ type PodcastEpisodeCandidate = {
   description?: string | null;
   platform: 'youtube' | 'rss' | 'apple_podcast' | 'spotify' | 'other';
   sourceMode?: string;
+  rssUrl?: string | null;
 };
 
 function decodeXmlText(value: unknown) {
@@ -5412,8 +5471,12 @@ async function transcribeWithWhisper(audioUrl: string): Promise<{ text: string; 
   }
 }
 
-function extractPodcastInsights(text: string) {
-  const symbols = unique((text.match(/\b\d{4}\b/g) || [])).slice(0, 20);
+function extractPodcastInsights(text: string, validSymbols: Set<string>) {
+  // Publication years and episode numbers are not tickers. Metadata must
+  // contain an explicit stock marker before it can create a weak signal.
+  const symbols = unique(Array.from(text.matchAll(/(?:台股|股票(?:代號)?|股號|標的|ticker|TWSE|TPEX)\s*[:：#]?\s*([1-9]\d{3})\b/giu))
+    .map((match) => match[1])
+    .filter((symbol) => validSymbols.has(symbol))).slice(0, 20);
   const thesisPhrases = text.match(/[^。！？]*(?:看好|看多|目標|進場|買進|上漲|突破)[^。！？]*/g) || [];
   const riskPhrases = text.match(/[^。！？]*(?:風險|看空|看壞|下跌|停損|謹慎|回檔)[^。！？]*/g) || [];
   return {
@@ -5425,10 +5488,13 @@ function extractPodcastInsights(text: string) {
 
 export async function runPodcastSync(options?: { dryRun?: boolean }) {
   const dryRun = Boolean(options?.dryRun);
-  if (dryRun) return { runId: randomUUID(), dryRun, recordsWritten: 0, episodesFound: 0, platforms: [] as string[] };
+  if (dryRun) return {
+    runId: randomUUID(), dryRun, recordsWritten: 0, episodesFound: 0, platforms: [] as string[],
+    indexUpdated: false, contentAnalyzable: false, validMatches: 0,
+  };
 
   const supabase = getSupabaseServerClient();
-  const rssAllowlist = new Set(String(process.env.PODCAST_RSS_ALLOWLIST || '').split(',').map((value) => value.trim()).filter((value) => /^https:\/\//u.test(value)));
+  const rssAllowlist = new Set(authorizedPodcastRssAllowlist());
   if (rssAllowlist.size === 0) throw new Error('podcast_rss_allowlist_missing');
   await ensureDefaultKolProfiles();
   const podcastRunId = await startConnectorRun('podcast-sync', 'podcast', { source: 'kol_profiles' });
@@ -5481,13 +5547,14 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
         const rssItems = await fetchExplicitRssItems(rssUrl);
         if (rssItems.length > 0) {
           platformsUsed.add('rss');
-          episodeItems.push(...rssItems);
+          episodeItems.push(...rssItems.map((item) => ({ ...item, rssUrl })));
         }
       }
 
       const uniqueEpisodes = Array.from(new Map(episodeItems.map((item) => [`${item.platform}::${item.link}`, item] as const)).values()).slice(0, 10);
       let kolWeakSignals = 0;
       for (const ep of uniqueEpisodes) {
+        const contentAnalyzable = Boolean(ep.rssUrl && podcastContentAnalyzable(ep.rssUrl));
         const { error } = await supabase.from('podcast_episodes').upsert(
           {
             source_entity_id: sourceEntityId,
@@ -5499,11 +5566,16 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
             audio_url: ep.audioUrl || null,
             external_id: extractYoutubeVideoId(ep.link) || null,
             published_at: ep.pubDate,
-            transcript_status: 'pending',
+            transcript_status: contentAnalyzable ? 'pending' : 'transcript_unavailable',
+            content_analyzable: contentAnalyzable,
+            index_updated_at: nowIso(),
             metadata: {
               synced_by: 'runPodcastSync',
               kol_name: kolName,
               source_mode: ep.sourceMode || null,
+              rss_url: ep.rssUrl || null,
+              index_updated: true,
+              content_analyzable: contentAnalyzable,
               description: ep.description || null,
             },
             updated_at: nowIso(),
@@ -5513,9 +5585,11 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
         if (error && !String(error.message).includes('duplicate')) throw new Error(error.message);
         totalEpisodes += 1;
 
+        // A public RSS item is an index. Claim extraction is separately
+        // permissioned per allowlisted RSS endpoint.
+        if (!contentAnalyzable) continue;
         const weakText = compactText(`${ep.title}。${ep.description || ''}`);
-        const extracted = extractPodcastInsights(weakText);
-        const weakInsights = { ...extracted, symbols: extracted.symbols.filter((symbol) => validSymbols.has(symbol)) };
+        const weakInsights = extractPodcastInsights(weakText, validSymbols);
         for (const symbol of weakInsights.symbols) matchedSymbols.add(symbol);
         if (weakInsights.symbols.length > 0) {
           const docsWritten = await upsertSourceRawDocuments([{
@@ -5535,7 +5609,10 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
               kol_name: kolName,
               weak_signal_only: true,
               source_mode: ep.sourceMode || null,
-              license_basis: 'creator_published_rss',
+              rss_url: ep.rssUrl || null,
+              index_updated: true,
+              content_analyzable: true,
+              license_basis: 'creator_published_rss_content_allowlist',
             },
           }]);
           weakSignalsWritten += docsWritten;
@@ -5575,6 +5652,9 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
         kol_breakdown: kolBreakdown,
         failure_reason_by_kol: failureReasonByKol,
         youtube_retired: true,
+        index_updated: totalEpisodes > 0,
+        content_analyzable: weakSignalsWritten > 0,
+        valid_matches: matchedSymbols.size,
       },
     });
 
@@ -5586,6 +5666,9 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
       weakSignalsWritten,
       platforms: Array.from(platformsUsed),
       kolBreakdown,
+      indexUpdated: totalEpisodes > 0,
+      contentAnalyzable: weakSignalsWritten > 0,
+      validMatches: matchedSymbols.size,
     };
   } catch (error) {
     const message = (error as Error).message;

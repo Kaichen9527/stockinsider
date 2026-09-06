@@ -28,6 +28,16 @@ export function rotatingShard<T>(items: T[], cursor: number, size: number) {
   return { items: selected, nextCursor: (start + selected.length) % items.length };
 }
 
+export function financialFactAvailableAt(
+  fact: { filing_published_at?: unknown; source_timestamp?: unknown; collected_at?: unknown; recorded_at?: unknown },
+  evaluationAt: string,
+) {
+  const cutoff = Date.parse(evaluationAt);
+  if (!Number.isFinite(cutoff)) return false;
+  return [fact.filing_published_at, fact.source_timestamp, fact.collected_at, fact.recorded_at]
+    .every((value) => typeof value === 'string' && Number.isFinite(Date.parse(value)) && Date.parse(value) <= cutoff);
+}
+
 export async function collectPagedAuthorityRows<T>(
   readPage: (from: number, to: number) => Promise<T[]>,
   options: { pageSize?: number; maxRows: number },

@@ -6,12 +6,14 @@
     "pg": "^8.18.0"
   },
   "scripts": {
-    "test:candidate-shadow-performance": "node scripts/run-node22.js --experimental-strip-types --test web/src/lib/candidate-dossier-validation.test.ts web/src/lib/candidate-factor-builder.test.ts web/src/lib/candidate-official-financials.test.ts web/src/lib/candidate-research.test.ts web/src/lib/candidate-risk-action.test.ts web/src/lib/candidate-valuation-policy.test.ts web/src/lib/forward-earnings-bridge.test.ts web/src/lib/market-evidence.test.ts web/src/lib/official-market-index-backfill.test.ts web/src/lib/shadow-policy-v2.test.ts web/src/lib/stage-classifier.test.ts web/src/lib/source-policy.test.ts web/src/lib/tw-market.test.ts && node --test scripts/candidate-shadow-performance-contract.test.mjs scripts/call-internal-api.test.mjs scripts/source-research-shadow-v2-migration.test.mjs scripts/truth-research-v3-migration.test.mjs",
+    "test:candidate-shadow-performance": "node scripts/run-node22.js --experimental-strip-types --test web/src/lib/candidate-dossier-contract.test.ts web/src/lib/candidate-dossier-validation.test.ts web/src/lib/candidate-factor-builder.test.ts web/src/lib/candidate-financial-acquisition.test.ts web/src/lib/candidate-official-financials.test.ts web/src/lib/candidate-research.test.ts web/src/lib/candidate-risk-action.test.ts web/src/lib/candidate-valuation-policy.test.ts web/src/lib/forward-earnings-bridge.test.ts web/src/lib/market-evidence.test.ts web/src/lib/official-market-index-backfill.test.ts web/src/lib/shadow-policy-v2.test.ts web/src/lib/source-content-semantics.test.ts web/src/lib/source-policy.test.ts web/src/lib/tw-market.test.ts && node --test scripts/candidate-shadow-performance-contract.test.mjs scripts/call-internal-api.test.mjs scripts/research-funnel-v4-migration.test.mjs scripts/source-research-shadow-v2-migration.test.mjs scripts/truth-research-v3-migration.test.mjs",
     "prevercel-build": "node scripts/assert_canonical_vercel_project.mjs",
     "vercel-build": "next build",
     "db:apply-schema": "node apply_schema.js",
     "db:migrate": "node apply_migrations.js",
     "db:verify": "node scripts/verify_db_release_readiness.js",
+    "db:research-funnel-v4:plan": "node scripts/apply-research-funnel-v4-migrations.mjs",
+    "db:research-funnel-v4:apply": "node scripts/apply-research-funnel-v4-migrations.mjs --apply",
     "audit:visible-deep-dives": "node scripts/audit_visible_deep_dives.js --concurrency 1 --delay-ms 250",
     "audit:visible-deep-dives:force": "node scripts/audit_visible_deep_dives.js --force --concurrency 1 --delay-ms 250",
     "audit:deep-dives:all": "node scripts/audit_visible_deep_dives.js --scope all-database --concurrency 1 --delay-ms 250",

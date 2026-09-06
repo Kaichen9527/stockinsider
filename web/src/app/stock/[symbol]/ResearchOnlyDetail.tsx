@@ -86,7 +86,7 @@ export default function ResearchOnlyDetail({ symbol, card, projectionBlockers = 
       <p className="mt-8 text-xs tracking-[0.2em] text-sky-700 dark:text-sky-300">研究模式 · 買進動作已停用</p>
       <h1 className="mt-2 text-3xl font-semibold">{name ? `${name} ` : ''}{symbol}</h1>
       <p className="mt-3 text-base leading-7">{sourceSummary}</p>
-      {revisionId ? <p data-testid="research-only-decision-revision" className="mt-2 break-all font-mono text-xs text-sky-800 dark:text-sky-200">決策版本：{revisionId}</p> : null}
+      {revisionId ? <p data-testid="research-only-decision-revision" className="mt-2 text-xs text-sky-800 dark:text-sky-200">研究版本已鎖定，可在後端稽核。</p> : null}
       <div role="status" className="mt-5 rounded-2xl border border-amber-400/40 bg-amber-50 p-4 text-sm leading-6 text-amber-900 dark:bg-amber-950/35 dark:text-amber-200">
         這是可追溯的研究快照，不是買進建議。正式決策資料尚未完整或目前版本不同步，因此所有買進型動作已停用。
       </div>

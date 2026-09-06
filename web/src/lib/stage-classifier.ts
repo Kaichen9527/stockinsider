@@ -1,6 +1,6 @@
 import type { RadarDailyPayload, SourceSignalCard } from './types';
 
-export const STAGE_RULESET_VERSION = 'source-ranking-v2.2.0';
+export const STAGE_RULESET_VERSION = 'source-ranking-v2.3.0';
 
 export type CandidateLifecycleStage = 'found' | 'waiting' | 'actionable';
 export type MarketRiskRegime = 'risk_on' | 'selective' | 'risk_off' | 'breakdown' | 'unknown';
@@ -29,7 +29,10 @@ type ActionabilityFactors = {
   institutionalFlows: number;
   marketRegime: number;
   industryRotation: number;
-  overseasPeers: number;
+  /** Overseas *price* confirmation. Fundamentals belong in Research only. */
+  overseasPrice?: number;
+  /** @deprecated compatibility alias for overseasPrice. */
+  overseasPeers?: number;
   overheatRisk: number;
 };
 
@@ -61,7 +64,17 @@ export type CandidateStageInput = {
     volumeRatio20Median: number | null;
     atr14: number | null;
     rsi14: number | null;
-    breakoutAboveLongMa: boolean;
+    /**
+     * The old aggregate flag is deliberately not used by the gate.  A long-MA
+     * breakout is only valid when its own prior close and prior MA are known.
+     */
+    breakoutAboveLongMa?: boolean;
+    priorClose?: number | null;
+    priorMa120?: number | null;
+    priorMa240?: number | null;
+    /** A qualifying breakout on the immediately prior official session. */
+    priorBreakoutAboveMa120?: boolean;
+    priorBreakoutAboveMa240?: boolean;
   };
   marketRegime: MarketRiskRegime;
   peerCatchdownBlock: boolean;
@@ -131,7 +144,7 @@ export function scoreActionability(factors: ActionabilityFactors): number {
     [factors.institutionalFlows, 0.15],
     [factors.marketRegime, 0.15],
     [factors.industryRotation, 0.10],
-    [factors.overseasPeers, 0.10],
+    [factors.overseasPrice ?? factors.overseasPeers ?? 0, 0.10],
     [factors.overheatRisk, 0.05],
   ]);
 }
@@ -163,13 +176,39 @@ export function advanceActionableCloseStreak(input: ActionableCloseStreakInput):
   return Math.min(2, previousStreak + 1);
 }
 
+export type LongMaBreakout = {
+  ma120: boolean;
+  ma240: boolean;
+  /** A day after a real crossover may confirm the same setup without a second crossover. */
+  persisted: boolean;
+};
+
+function crossesAbove(close: number, ma: number | null, priorClose: number | null, priorMa: number | null): boolean {
+  return hasNumber(ma) && hasNumber(priorClose) && hasNumber(priorMa)
+    && close > ma && priorClose <= priorMa;
+}
+
+/**
+ * Evaluate MA120 and MA240 independently.  In particular, MA240 availability
+ * must not silently substitute for MA120 (or vice versa), and an already
+ * above-MA close only persists a breakout that was recorded yesterday.
+ */
+export function longMaBreakout(input: CandidateStageInput['technical']): LongMaBreakout {
+  if (!hasNumber(input.close)) return { ma120: false, ma240: false, persisted: false };
+  const ma120 = crossesAbove(input.close, input.ma120, input.priorClose ?? null, input.priorMa120 ?? null);
+  const ma240 = crossesAbove(input.close, input.ma240, input.priorClose ?? null, input.priorMa240 ?? null);
+  const persisted120 = input.priorBreakoutAboveMa120 === true && hasNumber(input.ma120) && input.close > input.ma120;
+  const persisted240 = input.priorBreakoutAboveMa240 === true && hasNumber(input.ma240) && input.close > input.ma240;
+  return { ma120, ma240, persisted: persisted120 || persisted240 };
+}
+
 export function technicalActionGate(input: CandidateStageInput['technical']): boolean {
-  const { close, ma20, ma60, ma120, ma240, ma60Slope, volumeRatio20Median, atr14, rsi14 } = input;
+  const { close, ma20, ma60, ma60Slope, volumeRatio20Median, atr14, rsi14 } = input;
   if (!hasNumber(close) || !hasNumber(ma20) || !hasNumber(ma60) || !hasNumber(atr14) || !hasNumber(rsi14)) return false;
   const trendPass = close > ma20 && close > ma60 && hasNumber(ma60Slope) && ma60Slope >= 0 && ma20 > ma60;
-  const breakoutLevel = hasNumber(ma240) ? ma240 : ma120;
-  const breakoutPass = input.breakoutAboveLongMa && hasNumber(breakoutLevel)
-    && close > breakoutLevel && hasNumber(volumeRatio20Median) && volumeRatio20Median >= 1.3;
+  const breakout = longMaBreakout(input);
+  const breakoutPass = (breakout.ma120 || breakout.ma240 || breakout.persisted)
+    && hasNumber(volumeRatio20Median) && volumeRatio20Median >= 1.3;
   const notOverextended = close <= ma20 + 2 * atr14 && rsi14 < 75;
   return (trendPass || breakoutPass) && notOverextended;
 }

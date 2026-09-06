@@ -1641,10 +1641,15 @@ export interface CandidateStageCard {
   rawMentionCount: number;
   effectiveMentionCount: number;
   publisherCount: number;
+  positivePublisherCount: number;
+  negativePublisherCount: number;
+  generalPublisherCount: number;
   platformCount: number;
   dominantPlatformShare: number;
   sources: Array<{
     platform: string;
+    sourceName: string | null;
+    publisherName: string | null;
     author: string | null;
     sourceUrl: string;
     stance: 'positive' | 'negative' | 'neutral' | 'mixed' | null;

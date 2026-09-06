@@ -2,6 +2,9 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   candidateMentionDiscoveryEligible,
+  canonicalContentHash,
+  canonicalPublisherKey,
+  classifySourceStance,
   classifyPttContentSemantics,
   platformDiscoveryCap,
   relativeDiscussionBurst,
@@ -26,6 +29,14 @@ test('legacy GDELT metadata remains auditable but only the Taiwan-context matche
 test('PTT institutional ranking is chip evidence instead of discovery', () => {
   assert.equal(classifyPttContentSemantics('[情報] 外資買超前20名排行'), 'bulk_institutional_ranking');
   assert.equal(classifyPttContentSemantics('[心得] 2330 法說與需求觀察'), 'editorial_discussion');
+});
+
+test('publisher and content identities are canonical and stance is three-valued', () => {
+  assert.equal(canonicalPublisherKey({ platform: 'Telegram', author: '@Foo' }), 'telegram:author:foo');
+  assert.equal(canonicalContentHash('看好 2330\nhttps://example.test/a'), canonicalContentHash('  看好 2330  '));
+  assert.equal(classifySourceStance('法人看好並調升目標價'), 'endorsement');
+  assert.equal(classifySourceStance('公司面臨下修與風險'), 'negative');
+  assert.equal(classifySourceStance('僅列出公告時間'), 'neutral');
 });
 
 test('source concentration dedupes content and caps thin platform coverage', () => {

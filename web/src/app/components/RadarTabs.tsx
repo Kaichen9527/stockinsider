@@ -457,6 +457,7 @@ const candidateConditionLabel: Record<string, string> = {
 };
 
 function CandidateStageCardView({ card }: { card: CandidateStageCard }) {
+  const stanceLabel = { positive: '支持', negative: '保留／負向', neutral: '中性', mixed: '多空混合' } as const;
   return (
     <article className="rounded-[1.5rem] border border-line bg-surface-strong p-5" data-testid={`candidate-stage-${card.symbol}`}>
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -464,6 +465,7 @@ function CandidateStageCardView({ card }: { card: CandidateStageCard }) {
           <p className="text-xs tracking-[0.18em] text-slate-500 dark:text-emerald-100/50">{card.symbol} · {card.lifecycleStage.toUpperCase()}</p>
           <Link href={card.detailHref || `/stock/${card.symbol}`} className="mt-1 block text-xl font-semibold hover:text-accent">{card.chineseName}</Link>
           <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/55">來源 {card.effectiveMentionCount}/{card.rawMentionCount} 筆有效／原始 · {card.publisherCount} 個發布者 · {card.platformCount} 個平台</p>
+          <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/55">獨立推薦 {card.positivePublisherCount} · 負向 {card.negativePublisherCount} · 一般討論 {card.generalPublisherCount}</p>
           <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/55">單一平台占比 {Math.round(card.dominantPlatformShare * 100)}% · 最新 {formatTaipeiDateTime(card.latestMentionAt, 'compact')}</p>
         </div>
         <div className="rounded-2xl border border-line px-3 py-2 text-right text-xs">
@@ -482,7 +484,7 @@ function CandidateStageCardView({ card }: { card: CandidateStageCard }) {
       <div className="mt-4 flex flex-wrap gap-2 text-xs">
         {card.sources.slice(0, 5).map((source, index) => (
           <a key={`${source.sourceUrl}-${index}`} href={source.sourceUrl} target="_blank" rel="noreferrer" className="rounded-full border border-line px-3 py-1 hover:border-accent">
-            {source.platform}{source.author ? ` · ${source.author}` : ''}{source.stance ? ` · ${source.stance}` : ''}
+            {source.sourceName || source.platform}{source.publisherName || source.author ? ` · ${source.publisherName || source.author}` : ' · 未具名來源'}{source.stance ? ` · ${stanceLabel[source.stance]}` : ' · 立場待判'}
           </a>
         ))}
       </div>
@@ -516,7 +518,7 @@ function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyPayload;
       <div className="grid gap-4 xl:grid-cols-2">
         {displayed.map((card) => <CandidateStageCardView key={`${selected}-${card.symbol}`} card={card} />)}
       </div>
-      {displayed.length === 0 ? <p className="rounded-2xl border border-dashed border-line px-5 py-6 text-sm text-slate-500">{selected === 'found' ? '最近七日沒有有效股票來源命中。' : selected === 'waiting' ? '目前沒有完成最低研究與估值門檻的等待標的。' : '目前沒有通過全部硬門檻的可行動標的。'}</p> : null}
+      {displayed.length === 0 ? <div className="rounded-2xl border border-dashed border-line px-5 py-6 text-sm text-slate-500">{selected === 'found' ? '最近七日沒有有效股票來源命中。' : selected === 'waiting' ? <><p>目前沒有完成最低研究與估值門檻的等待標的。</p><p className="mt-2 text-xs leading-5">研究佇列會優先補齊：官方財務橋接、Bear／Base／Bull 估值、技術收盤確認、以及來源作者與發布日期。</p></> : '目前沒有通過全部硬門檻的可行動標的。'}</div> : null}
     </div>
   );
 }

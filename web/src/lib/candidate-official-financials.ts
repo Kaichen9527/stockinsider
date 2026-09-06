@@ -1,16 +1,38 @@
 import { createHash } from 'crypto';
 import { fixedRunnerPrincipal } from './opportunity-v3/internal.ts';
 import { getOpportunityV3ServerClient } from './opportunity-v3/service-client.ts';
+import { classifyFinancialResponse, issuerIrDocumentQueueKey, parseTpexFinancialEndpoint, TPEX_FINANCIAL_ENDPOINTS } from './candidate-financial-acquisition.ts';
 
 const MOPS_INLINE_URL = 'https://mopsov.twse.com.tw/server-java/t164sb01';
+// 60 MOPS jobs × three 12s attempts at concurrency two is ~18 minutes before
+// persistence. Keep a conservative lease envelope so slow official responses
+// cannot turn successful downloads into false write failures.
+const FINANCIAL_JOB_LEASE_MS = 45 * 60_000;
+const TPEX_JOB_KEYS = {
+  generalIncome: 'tpex_general_income', brokerIncome: 'tpex_broker_income',
+  generalBalance: 'tpex_general_balance', brokerBalance: 'tpex_broker_balance',
+} as const;
+const VERIFIED_ISSUER_IR_FALLBACKS: Record<string, { listingUrl: string; documentUrl: string; title: string }> = {
+  '2408': {
+    listingUrl: 'https://www.nanya.com/en/IR/39/Financial%20Reports?Year=2025',
+    documentUrl: 'https://www.nanya.com/en/Activity?Action=Get_IRFinancialReport_FileName&Id=125',
+    title: '2025 Q2 Consolidated Financial Report',
+  },
+};
 const FLOW_FACTS: Record<string, string> = {
   revenue: 'quarterly_revenue', revenuefromcontractswithcustomers: 'quarterly_revenue',
   grossprofit: 'quarterly_gross_profit', grossprofitlossfromoperations: 'quarterly_gross_profit',
   netoperatingincomeloss: 'quarterly_operating_income', profitlossfromoperatingactivities: 'quarterly_operating_income',
   profitloss: 'quarterly_net_income', profitlossattributabletoownersofparent: 'quarterly_net_income_attributable_to_common',
 };
-const EPS_CONCEPTS = new Set(['dilutedearningspershare', 'dilutedearningslosspershare']);
-const SHARE_CONCEPTS = new Set(['weightedaveragenumberofdilutedsharesoutstanding', 'dilutedweightedaveragenumberofsharesoutstanding']);
+const BALANCE_FACTS: Record<string, string> = {
+  assets: 'total_assets', totalassets: 'total_assets', equity: 'total_equity', equityattributabletoownersofparent: 'total_equity',
+  bookvaluepershare: 'book_value_per_share',
+};
+const DILUTED_EPS_CONCEPTS = new Set(['dilutedearningspershare', 'dilutedearningslosspershare']);
+const BASIC_EPS_CONCEPTS = new Set(['basicearningspershare', 'basicearningslosspershare']);
+const DILUTED_SHARE_CONCEPTS = new Set(['weightedaveragenumberofdilutedsharesoutstanding', 'dilutedweightedaveragenumberofsharesoutstanding']);
+const BASIC_SHARE_CONCEPTS = new Set(['weightedaveragenumberofsharesoutstanding', 'basicweightedaveragenumberofsharesoutstanding']);
 
 export type CandidateOfficialFinancial = {
   stockId: string;
@@ -18,22 +40,23 @@ export type CandidateOfficialFinancial = {
   exchange: 'TWSE' | 'TPEX';
 };
 
-type ParsedFact = {
+export type ParsedFact = {
   stockId: string;
+  symbol: string;
   factKey: string;
-  periodStart: string;
+  periodStart: string | null;
   periodEnd: string;
-  durationKind: 'quarterly';
+  durationKind: 'quarterly' | 'quarter_end';
   value: number;
   unit: 'TWD' | 'TWD_per_share' | 'share';
-  provider: 'mops';
+  provider: 'mops' | 'tpex';
   authorityTier: 'official_filing';
   estimateKind: 'reported';
   estimateHorizon: 'reported_period';
   filingPublishedAt: string;
   sourceTimestamp: string;
   collectedAt: string;
-  filingRestatementId: null;
+  filingRestatementId: string | null;
   sourceRef: string;
 };
 
@@ -63,15 +86,24 @@ function conceptSuffix(value: string | undefined) {
 }
 
 function parseContexts(html: string) {
-  const output = new Map<string, { start: string; end: string }>();
+  const output = new Map<string, { start: string | null; end: string; instant: boolean }>();
   for (const match of html.matchAll(/<xbrli:context\b([^>]*)>([\s\S]*?)<\/xbrli:context>/giu)) {
     const id = attributes(match[1]).id;
     if (!id || /<(?:[A-Za-z0-9_-]+:)?(?:segment|scenario|explicitMember|typedMember)\b/iu.test(match[2])) continue;
     const start = match[2].match(/<xbrli:startDate>(\d{4}-\d{2}-\d{2})<\/xbrli:startDate>/iu)?.[1];
     const end = match[2].match(/<xbrli:endDate>(\d{4}-\d{2}-\d{2})<\/xbrli:endDate>/iu)?.[1];
-    if (start && end && start === `${end.slice(0, 4)}-01-01`) output.set(id, { start, end });
+    const instant = match[2].match(/<xbrli:instant>(\d{4}-\d{2}-\d{2})<\/xbrli:instant>/iu)?.[1];
+    if (start && end) output.set(id, { start, end, instant: false });
+    else if (instant) output.set(id, { start: null, end: instant, instant: true });
   }
   return output;
+}
+
+function restatementId(html: string, auditDate: string) {
+  // A content hash is provenance, not a claim that every changed byte is a
+  // material restatement. The bridge compares fact values/periods before using
+  // a successor disclosure, so a changed filing can never silently mix series.
+  return `mops:${auditDate}:${sha256(html.replace(/\s+/gu, ' ').trim())}`;
 }
 
 function parseAuditDate(html: string) {
@@ -101,6 +133,7 @@ export function parseCandidateMopsFacts(html: string, input: CandidateOfficialFi
   // that date. Collection time is the first availability instant this adapter
   // can defend, which prevents point-in-time research from looking ahead.
   const filingPublishedAt = new Date(input.collectedAt).toISOString();
+  const filingRestatementId = restatementId(html, auditDate);
   const rows: ParsedFact[] = [];
   for (const match of html.matchAll(/<ix:nonFraction\b([^>]*)>([\s\S]*?)<\/ix:nonFraction>/giu)) {
     const attrs = attributes(match[1]);
@@ -108,23 +141,34 @@ export function parseCandidateMopsFacts(html: string, input: CandidateOfficialFi
     const value = finiteFact(match[2], attrs.scale, attrs.sign);
     if (!context || value == null) continue;
     const concept = conceptSuffix(attrs.name);
-    let factKey = FLOW_FACTS[concept] || null;
+    let factKey = FLOW_FACTS[concept] || BALANCE_FACTS[concept] || null;
     let unit: ParsedFact['unit'] = 'TWD';
-    if (EPS_CONCEPTS.has(concept)) {
+    if (DILUTED_EPS_CONCEPTS.has(concept)) {
       if (attrs.unitref !== 'EarningsPerShare') continue;
       factKey = 'quarterly_diluted_eps'; unit = 'TWD_per_share';
-    } else if (SHARE_CONCEPTS.has(concept)) {
+    } else if (BASIC_EPS_CONCEPTS.has(concept)) {
+      if (attrs.unitref !== 'EarningsPerShare') continue;
+      factKey = 'quarterly_basic_eps'; unit = 'TWD_per_share';
+    } else if (DILUTED_SHARE_CONCEPTS.has(concept)) {
       if (attrs.unitref !== 'Shares') continue;
       factKey = 'diluted_weighted_average_shares'; unit = 'share';
-    } else if (factKey && !/^TWD(?:\w+)?$/u.test(attrs.unitref || '')) continue;
+    } else if (BASIC_SHARE_CONCEPTS.has(concept)) {
+      if (attrs.unitref !== 'Shares') continue;
+      factKey = 'basic_weighted_average_shares'; unit = 'share';
+    } else if (factKey === 'book_value_per_share') {
+      if (attrs.unitref !== 'EarningsPerShare' && !/^TWD(?:\w+)?$/u.test(attrs.unitref || '')) continue;
+      unit = 'TWD_per_share';
+    } else if (factKey && !context.instant && !/^TWD(?:\w+)?$/u.test(attrs.unitref || '')) continue;
     if (!factKey) continue;
+    const isBalanceFact = Boolean(BALANCE_FACTS[concept]);
+    if (isBalanceFact !== context.instant) continue;
     rows.push({
-      stockId: input.stockId, factKey, periodStart: context.start, periodEnd: context.end,
-      durationKind: 'quarterly', value, unit, provider: 'mops',
+      stockId: input.stockId, symbol: input.symbol, factKey, periodStart: context.start, periodEnd: context.end,
+      durationKind: context.instant ? 'quarter_end' : 'quarterly', value, unit, provider: 'mops',
       authorityTier: 'official_filing', estimateKind: 'reported', estimateHorizon: 'reported_period',
-      filingPublishedAt, sourceTimestamp: filingPublishedAt, collectedAt: filingPublishedAt,
-      filingRestatementId: null,
-      sourceRef: `${input.exchange.toLowerCase()}-mops-inline:${context.end}:${input.symbol}:${sha256(`${input.sourceUrl}:${attrs.name}:${attrs.contextref}:${attrs.unitref}`)}`,
+      filingPublishedAt, sourceTimestamp: filingPublishedAt, collectedAt: input.collectedAt,
+      filingRestatementId,
+      sourceRef: `${input.exchange.toLowerCase()}-mops-inline:${context.end}:${input.symbol}:${sha256(`${input.sourceUrl}:${attrs.name}:${attrs.contextref}:${attrs.unitref}:${filingRestatementId}`)}`,
     });
   }
   const deduped = new Map(rows.map((row) => [`${row.factKey}:${row.periodStart}:${row.periodEnd}:${row.sourceRef}`, row]));
@@ -147,7 +191,10 @@ async function fetchFiling(candidate: CandidateOfficialFinancial, year: number, 
     try {
       const response = await fetch(sourceUrl, { headers: { Accept: 'text/html', 'user-agent': 'StockInsider/3.0' }, redirect: 'error', signal: AbortSignal.timeout(12_000) });
       if (!response.ok || response.redirected) throw new Error(`mops_http_${response.status}`);
-      return parseCandidateMopsFacts(await response.text(), { ...candidate, sourceUrl, collectedAt });
+      const body = await response.text();
+      const facts = parseCandidateMopsFacts(body, { ...candidate, sourceUrl, collectedAt });
+      if (facts.length === 0) throw new Error('mops_schema_unrecognized_or_empty');
+      return { facts, sourceSha256: sha256(body), responseBytes: Buffer.byteLength(body, 'utf8') };
     } catch (error) {
       lastError = error;
       if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, 300 * (attempt + 1)));
@@ -168,37 +215,274 @@ async function mapLimit<T, R>(items: T[], limit: number, work: (item: T) => Prom
   return output;
 }
 
+function toParsedTpexFact(fact: ReturnType<typeof parseTpexFinancialEndpoint>['facts'][number], candidate: CandidateOfficialFinancial, collectedAt: string): ParsedFact {
+  const perShare = fact.unit === 'TWD_per_share';
+  return {
+    stockId: candidate.stockId, symbol: candidate.symbol,
+    factKey: fact.factKey, periodStart: fact.periodStart, periodEnd: fact.periodEnd,
+    durationKind: fact.durationKind, value: perShare ? fact.value : fact.value * 1000,
+    unit: perShare ? 'TWD_per_share' : 'TWD', provider: 'tpex', authorityTier: 'official_filing',
+    estimateKind: 'reported', estimateHorizon: 'reported_period', filingPublishedAt: fact.sourceTimestamp,
+    sourceTimestamp: fact.sourceTimestamp, collectedAt, filingRestatementId: fact.filingRestatementId,
+    sourceRef: fact.sourceRef,
+  };
+}
+
+function financialFactInput(fact: ParsedFact) {
+  return {
+    stock_id: fact.stockId, fact_key: fact.factKey, period_start: fact.periodStart,
+    period_end: fact.periodEnd, duration_kind: fact.durationKind, value: fact.value, unit: fact.unit,
+    provider: fact.provider, authority_tier: fact.authorityTier, estimate_kind: fact.estimateKind,
+    estimate_horizon: fact.estimateHorizon, filing_published_at: fact.filingPublishedAt,
+    source_timestamp: fact.sourceTimestamp, collected_at: fact.collectedAt,
+    filing_restatement_id: fact.filingRestatementId, source_ref: fact.sourceRef,
+  };
+}
+
+async function completeAcquisitionJob(input: {
+  client: ReturnType<typeof getOpportunityV3ServerClient>;
+  runnerPrincipal: string;
+  owner: string;
+  jobId: string;
+  facts: ParsedFact[];
+  sourceSha256: string;
+  responseBytes: number;
+  collectedAt: string;
+}) {
+  const result = await input.client.rpc('complete_candidate_financial_acquisition_job_v4', {
+    p_job_id: input.jobId, p_owner: input.owner, p_caller_principal: input.runnerPrincipal,
+    p_facts: input.facts.map((fact) => ({
+      input: financialFactInput(fact),
+      locator: { source_ref: fact.sourceRef, period_end: fact.periodEnd, fact_key: fact.factKey },
+    })),
+    p_source_sha256: input.sourceSha256, p_response_bytes: input.responseBytes,
+    p_collected_at: input.collectedAt,
+  });
+  if (result.error) throw new Error(`candidate_financial_job_completion_failed:${result.error.message}`);
+  const row = Array.isArray(result.data) ? result.data[0] : result.data;
+  return Number((row as { written_facts?: number } | null)?.written_facts || 0);
+}
+
+async function failAcquisitionJob(input: {
+  client: ReturnType<typeof getOpportunityV3ServerClient>;
+  jobId: string;
+  owner: string;
+  attempts: number;
+  error: string;
+  collectedAt: string;
+}) {
+  const attempts = input.attempts + 1;
+  const retryable = attempts < 5;
+  const reason = acquisitionTerminalReason(input.error);
+  const update = retryable
+    ? {
+        status: 'queued', attempts, lease_owner: null, lease_expires_at: null, terminal_reason: null,
+        terminal_detail: input.error.slice(0, 500),
+        next_attempt_at: new Date(Date.now() + (2 ** (attempts - 1)) * 60 * 60_000).toISOString(),
+        updated_at: input.collectedAt,
+      }
+    : {
+        status: 'terminal', attempts, lease_owner: null, lease_expires_at: null,
+        terminal_reason: reason, terminal_detail: input.error.slice(0, 500),
+        collected_at: input.collectedAt, next_attempt_at: null, updated_at: input.collectedAt,
+      };
+  const result = await input.client.from('candidate_financial_acquisition_jobs_v4').update(update)
+    .eq('job_id', input.jobId).eq('status', 'running').eq('lease_owner', input.owner)
+    .select('job_id,stock_id,endpoint_key,period_end,cursor_key').maybeSingle();
+  if (result.error || !result.data) throw new Error(`candidate_financial_job_lease_lost:${result.error?.message || input.jobId}`);
+  const job = result.data as Record<string, unknown>;
+  const cursor = await input.client.from('candidate_financial_acquisition_cursors_v4').upsert({
+    stock_id: job.stock_id, endpoint_key: job.endpoint_key,
+    cursor_value: { cursor_key: job.cursor_key, job_id: input.jobId, retry_scheduled: retryable },
+    last_terminal_reason: reason,
+    last_collected_at: input.collectedAt, updated_at: input.collectedAt,
+  }, { onConflict: 'stock_id,endpoint_key' });
+  if (cursor.error) throw new Error(`candidate_financial_cursor_write_failed:${cursor.error.message}`);
+}
+
+function acquisitionTerminalReason(message: string) {
+  if (/write_failed|completion_failed/iu.test(message)) return 'write_failed';
+  if (/timeout/iu.test(message)) return 'timeout';
+  if (/security|captcha|forbidden|waf/iu.test(message)) return 'security_blocked';
+  if (/html/iu.test(message)) return 'html_rejected';
+  if (/schema|empty/iu.test(message)) return 'schema_unrecognized';
+  if (/404|not_found/iu.test(message)) return 'http_not_found';
+  if (/429|rate/iu.test(message)) return 'http_rate_limited';
+  if (/5\d\d|server/iu.test(message)) return 'http_server_error';
+  return 'network_error';
+}
+
 export async function refreshCandidateOfficialFinancials(candidates: CandidateOfficialFinancial[], cutoff: string) {
   const runnerPrincipal = fixedRunnerPrincipal();
   if (!runnerPrincipal) throw new Error('candidate_financial_runner_principal_missing');
   const collectedAt = new Date().toISOString();
-  const requests = completedQuarters(cutoff).flatMap(({ year, quarter }) => candidates.map((candidate) => ({ candidate, year, quarter })));
-  const outcomes = await mapLimit(requests, 2, async ({ candidate, year, quarter }) => {
+  const mopsCandidates = candidates.filter((candidate) => candidate.exchange === 'TWSE');
+  const tpexCandidates = candidates.filter((candidate) => candidate.exchange === 'TPEX');
+  const client = getOpportunityV3ServerClient();
+  const desiredMopsJobs = completedQuarters(cutoff).flatMap(({ year, quarter }) => mopsCandidates.map((candidate) => ({
+    stock_id: candidate.stockId,
+    exchange: candidate.exchange,
+    endpoint_key: 'mops_inline',
+    period_end: `${year}-${['03-31', '06-30', '09-30', '12-31'][quarter - 1]}`,
+    cursor_key: `${candidate.symbol}:${year}Q${quarter}`,
+    source_url: `${MOPS_INLINE_URL}?step=1&CO_ID=${candidate.symbol}&SYEAR=${year - 1911}&SSEASON=${quarter}&REPORT_ID=C`,
+  })));
+  if (desiredMopsJobs.length) {
+    const queued = await client.from('candidate_financial_acquisition_jobs_v4').upsert(desiredMopsJobs, {
+      onConflict: 'stock_id,endpoint_key,period_end,cursor_key',
+      ignoreDuplicates: true,
+    });
+    if (queued.error) throw new Error(`candidate_financial_job_enqueue_failed:${queued.error.message}`);
+  }
+  const latestQuarter = completedQuarters(cutoff, 1)[0];
+  const latestQuarterEnd = `${latestQuarter.year}-${['03-31', '06-30', '09-30', '12-31'][latestQuarter.quarter - 1]}`;
+  const desiredTpexJobs = Object.entries(TPEX_FINANCIAL_ENDPOINTS).flatMap(([endpoint, sourceUrl]) =>
+    tpexCandidates.map((candidate) => ({
+      stock_id: candidate.stockId, exchange: candidate.exchange,
+      endpoint_key: TPEX_JOB_KEYS[endpoint as keyof typeof TPEX_JOB_KEYS],
+      period_end: latestQuarterEnd, cursor_key: `${candidate.symbol}:${latestQuarter.year}Q${latestQuarter.quarter}`,
+      source_url: sourceUrl,
+    })),
+  );
+  if (desiredTpexJobs.length) {
+    const queued = await client.from('candidate_financial_acquisition_jobs_v4').upsert(desiredTpexJobs, {
+      onConflict: 'stock_id,endpoint_key,period_end,cursor_key', ignoreDuplicates: true,
+    });
+    if (queued.error) throw new Error(`candidate_tpex_financial_job_enqueue_failed:${queued.error.message}`);
+  }
+  const candidateById = new Map(mopsCandidates.map((candidate) => [candidate.stockId, candidate]));
+  const claimRead = mopsCandidates.length
+    ? await client.rpc('claim_candidate_financial_acquisition_jobs_v4', {
+      p_stock_ids: mopsCandidates.map((candidate) => candidate.stockId),
+      p_endpoint_key: 'mops_inline',
+      p_limit: 60,
+      p_owner: runnerPrincipal,
+      p_claimed_at: collectedAt,
+      p_lease_expires_at: new Date(Date.now() + FINANCIAL_JOB_LEASE_MS).toISOString(),
+    })
+    : { data: [], error: null };
+  if (claimRead.error) throw new Error(`candidate_financial_job_claim_read_failed:${claimRead.error.message}`);
+  const claimedRows = ((claimRead.data || []) as Array<Record<string, unknown>>).flatMap((job) => {
+    const candidate = candidateById.get(String(job.stock_id || ''));
+    const match = String(job.cursor_key || '').match(/:(\d{4})Q([1-4])$/u);
+    if (!candidate || !match) return [];
+    return [{ jobId: String(job.job_id), attempts: Number(job.attempts || 0), candidate, year: Number(match[1]), quarter: Number(match[2]) }];
+  });
+  const outcomes = await mapLimit(claimedRows, 2, async ({ jobId, attempts, candidate, year, quarter }) => {
     try {
-      const facts = await fetchFiling(candidate, year, quarter, collectedAt);
-      return { facts, error: null };
+      const fetched = await fetchFiling(candidate, year, quarter, collectedAt);
+      return { jobId, attempts, candidate, ...fetched, error: null };
     } catch (error) {
-      return { facts: [] as ParsedFact[], error: `${candidate.symbol}:${year}Q${quarter}:${error instanceof Error ? error.message : String(error)}` };
+      return { jobId, attempts, candidate, facts: [] as ParsedFact[], sourceSha256: '', responseBytes: 0, error: `${candidate.symbol}:${year}Q${quarter}:${error instanceof Error ? error.message : String(error)}` };
     }
   });
-  const facts = outcomes.flatMap((row) => row.facts);
-  const failures = outcomes.flatMap((row) => row.error ? [row.error] : []);
-  const client = getOpportunityV3ServerClient();
-  const writes = await mapLimit(facts, 8, async (fact) => {
-    const result = await client.rpc('append_financial_fact_v3', {
-      input: {
-        stock_id: fact.stockId, fact_key: fact.factKey, period_start: fact.periodStart,
-        period_end: fact.periodEnd, duration_kind: fact.durationKind, value: fact.value, unit: fact.unit,
-        provider: fact.provider, authority_tier: fact.authorityTier, estimate_kind: fact.estimateKind,
-        estimate_horizon: fact.estimateHorizon, filing_published_at: fact.filingPublishedAt,
-        source_timestamp: fact.sourceTimestamp, collected_at: fact.collectedAt,
-        filing_restatement_id: fact.filingRestatementId, source_ref: fact.sourceRef,
-      },
-      caller_principal: runnerPrincipal,
-    });
-    return result.error ? { ok: false, error: result.error.message } : { ok: true, error: null };
+  let writtenFacts = 0;
+  const persistedMopsFacts: ParsedFact[] = [];
+  const mopsFailures: string[] = [];
+  await mapLimit(outcomes, 4, async (outcome) => {
+    if (outcome.error) {
+      await failAcquisitionJob({ client, jobId: outcome.jobId, owner: runnerPrincipal, attempts: outcome.attempts, error: outcome.error, collectedAt });
+      mopsFailures.push(outcome.error);
+      return;
+    }
+    try {
+      writtenFacts += await completeAcquisitionJob({ client, runnerPrincipal, owner: runnerPrincipal, jobId: outcome.jobId, facts: outcome.facts, sourceSha256: outcome.sourceSha256, responseBytes: outcome.responseBytes, collectedAt });
+      persistedMopsFacts.push(...outcome.facts);
+    } catch (error) {
+      const message = `${outcome.candidate.symbol}:write_failed:${error instanceof Error ? error.message : String(error)}`;
+      await failAcquisitionJob({ client, jobId: outcome.jobId, owner: runnerPrincipal, attempts: outcome.attempts, error: message, collectedAt });
+      mopsFailures.push(message);
+    }
   });
-  const writeFailures = writes.filter((row) => !row.ok);
-  if (writeFailures.length > 0) throw new Error(`candidate_financial_fact_write_failed:${writeFailures[0].error}`);
-  return { candidateCount: candidates.length, fetchedFilings: requests.length - failures.length, parsedFacts: facts.length, writtenFacts: writes.length, failures };
+  const issuerFallbackRows = [...new Map(outcomes.filter((outcome) => outcome.error).flatMap((outcome) => {
+    const fallback = VERIFIED_ISSUER_IR_FALLBACKS[outcome.candidate.symbol];
+    if (!fallback) return [];
+    const item = {
+      issuerId: outcome.candidate.symbol,
+      sourceUrl: fallback.listingUrl,
+      documentUrl: fallback.documentUrl,
+      title: fallback.title,
+      publishedAt: null,
+      mimeType: 'application/pdf',
+      documentSha256: null,
+      metadata: { exchange: outcome.candidate.exchange, fallback_reason: outcome.error },
+    };
+    return [[outcome.candidate.stockId, {
+      stock_id: outcome.candidate.stockId,
+      queue_key: issuerIrDocumentQueueKey(item),
+      listing_source_url: fallback.listingUrl,
+      document_url: fallback.documentUrl,
+      title: fallback.title,
+      mime_type: 'application/pdf',
+      acquisition_status: 'queued',
+      metadata: item.metadata,
+    }] as const];
+  })).values()];
+  if (issuerFallbackRows.length) {
+    const queueWrite = await client.from('candidate_issuer_ir_document_queue_v4').upsert(issuerFallbackRows, {
+      onConflict: 'stock_id,queue_key',
+      ignoreDuplicates: true,
+    });
+    if (queueWrite.error) throw new Error(`candidate_issuer_ir_queue_write_failed:${queueWrite.error.message}`);
+  }
+  const tpexById = new Map(tpexCandidates.map((candidate) => [candidate.stockId, candidate]));
+  const tpexFacts: ParsedFact[] = [];
+  const tpexFailures: string[] = [];
+  let tpexFetchedEndpoints = 0;
+  for (const [endpoint, sourceUrl] of Object.entries(TPEX_FINANCIAL_ENDPOINTS)) {
+    const endpointKey = TPEX_JOB_KEYS[endpoint as keyof typeof TPEX_JOB_KEYS];
+    const claim = tpexCandidates.length ? await client.rpc('claim_candidate_financial_acquisition_jobs_v4', {
+      p_stock_ids: tpexCandidates.map((candidate) => candidate.stockId), p_endpoint_key: endpointKey,
+      p_limit: 60, p_owner: runnerPrincipal, p_claimed_at: collectedAt,
+      p_lease_expires_at: new Date(Date.now() + FINANCIAL_JOB_LEASE_MS).toISOString(),
+    }) : { data: [], error: null };
+    if (claim.error) throw new Error(`candidate_tpex_financial_job_claim_failed:${claim.error.message}`);
+    const jobs = ((claim.data || []) as Array<Record<string, unknown>>).flatMap((job) => {
+      const candidate = tpexById.get(String(job.stock_id || ''));
+      return candidate ? [{ jobId: String(job.job_id), attempts: Number(job.attempts || 0), candidate }] : [];
+    });
+    if (jobs.length === 0) continue;
+    try {
+      const response = await fetch(sourceUrl, { headers: { Accept: 'application/json', 'user-agent': 'StockInsider/4.0' }, redirect: 'error', signal: AbortSignal.timeout(20_000) });
+      const body = await response.text();
+      const rejected = classifyFinancialResponse(response.status, response.headers.get('content-type'), body);
+      if (rejected) throw new Error(`tpex_${endpoint}_${rejected}`);
+      const parsed = parseTpexFinancialEndpoint(endpoint as keyof typeof TPEX_FINANCIAL_ENDPOINTS, JSON.parse(body));
+      if (parsed.terminalReason !== 'complete') throw new Error(`tpex_${endpoint}_${parsed.terminalReason}`);
+      tpexFetchedEndpoints += 1;
+      const sourceSha256 = sha256(body); const responseBytes = Buffer.byteLength(body, 'utf8');
+      await mapLimit(jobs, 4, async (job) => {
+        const facts = parsed.facts.filter((fact) => fact.symbol === job.candidate.symbol).map((fact) => toParsedTpexFact(fact, job.candidate, collectedAt));
+        if (facts.length === 0) {
+          const message = `${job.candidate.symbol}:${endpoint}:empty_official_response`;
+          await failAcquisitionJob({ client, jobId: job.jobId, owner: runnerPrincipal, attempts: job.attempts, error: message, collectedAt });
+          tpexFailures.push(message);
+          return;
+        }
+        try {
+          writtenFacts += await completeAcquisitionJob({ client, runnerPrincipal, owner: runnerPrincipal, jobId: job.jobId, facts, sourceSha256, responseBytes, collectedAt });
+          tpexFacts.push(...facts);
+        } catch (error) {
+          const message = `${job.candidate.symbol}:${endpoint}:write_failed:${error instanceof Error ? error.message : String(error)}`;
+          await failAcquisitionJob({ client, jobId: job.jobId, owner: runnerPrincipal, attempts: job.attempts, error: message, collectedAt });
+          tpexFailures.push(message);
+        }
+      });
+    } catch (error) {
+      const message = `TPEX:${endpoint}:${error instanceof Error ? error.message : String(error)}`;
+      tpexFailures.push(message);
+      await mapLimit(jobs, 8, (job) => failAcquisitionJob({ client, jobId: job.jobId, owner: runnerPrincipal, attempts: job.attempts, error: `${job.candidate.symbol}:${message}`, collectedAt }));
+    }
+  }
+  const facts = [...persistedMopsFacts, ...tpexFacts];
+  const failures = [...mopsFailures, ...tpexFailures];
+  return {
+    candidateCount: candidates.length,
+    fetchedFilings: Math.max(0, claimedRows.length - outcomes.filter((row) => row.error).length) + tpexFetchedEndpoints,
+    parsedFacts: facts.length,
+    writtenFacts,
+    symbolsWithFacts: [...new Set(facts.map((fact) => fact.symbol))],
+    attemptedSymbols: [...new Set([...claimedRows.map((job) => job.candidate.symbol), ...tpexCandidates.map((candidate) => candidate.symbol)])],
+    failures,
+  };
 }

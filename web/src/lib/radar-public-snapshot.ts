@@ -109,6 +109,9 @@ function compactCandidateStageCard(card: CandidateStageCard): CandidateStageCard
     rawMentionCount: card.rawMentionCount,
     effectiveMentionCount: card.effectiveMentionCount,
     publisherCount: card.publisherCount,
+    positivePublisherCount: card.positivePublisherCount,
+    negativePublisherCount: card.negativePublisherCount,
+    generalPublisherCount: card.generalPublisherCount,
     platformCount: card.platformCount,
     dominantPlatformShare: card.dominantPlatformShare,
     // `latestMentionAt` already carries the ordering timestamp used by the
@@ -116,6 +119,8 @@ function compactCandidateStageCard(card: CandidateStageCard): CandidateStageCard
     // the same ISO string being repeated hundreds of times in the Radar JSON.
     sources: (card.sources || []).slice(0, foundOnly ? 2 : 5).map((source) => ({
       platform: source.platform,
+      ...(source.sourceName ? { sourceName: source.sourceName } : {}),
+      ...(source.publisherName ? { publisherName: source.publisherName } : {}),
       ...(source.author ? { author: source.author } : {}),
       sourceUrl: source.sourceUrl,
       ...(source.stance ? { stance: source.stance } : {}),
@@ -127,7 +132,6 @@ function compactCandidateStageCard(card: CandidateStageCard): CandidateStageCard
     unmetConditions: (card.unmetConditions || []).slice(0, foundOnly ? 4 : 8),
     ...(card.promotionReasons?.length ? { promotionReasons: card.promotionReasons.slice(0, 5) } : {}),
     ...(card.dataAsOf ? { dataAsOf: card.dataAsOf } : {}),
-    ...(card.detailRevisionId ? { detailRevisionId: card.detailRevisionId } : {}),
     ...(!foundOnly && card.riskAction ? { riskAction: card.riskAction } : {}),
   };
   return compact as CandidateStageCard;
@@ -308,9 +312,10 @@ export async function loadLatestRadarPublicSnapshot(window: PublicRadarWindow): 
     if ((error as Error).message === 'Missing SUPABASE URL/key for server client') return null;
     throw error;
   }
-  const [read, stateRead] = await Promise.all([
+  const [read, stateRead, currentShadowProgress] = await Promise.all([
     supabase.from('radar_public_snapshots').select('id,etag,content_as_of,published_at,payload_json').eq('window_key', window).eq('status', 'valid').order('published_at', { ascending: false }).limit(1).maybeSingle(),
     supabase.from('radar_publication_state').select('status,last_attempt_at,terminal_reason').eq('window_key', window).maybeSingle(),
+    loadCandidateShadowProgress().catch(() => null),
   ]);
   if (read.error || stateRead.error) {
     const message = read.error?.message || stateRead.error?.message || 'radar_snapshot_read_failed';
@@ -335,6 +340,10 @@ export async function loadLatestRadarPublicSnapshot(window: PublicRadarWindow): 
   const base = row.payload_json as RadarDailyPayload;
   let payload: RadarDailyPayload = {
     ...base,
+    // Shadow is written after the atomic Radar publication. Overlay only this
+    // lightweight progress view so the public counter reflects the just-finished
+    // observation without republishing research cards with a different hash.
+    ...(currentShadowProgress ? { shadowProgress: currentShadowProgress } : {}),
     snapshotPublishedAt: publishedAt || null,
     snapshotStale: stale,
     projectionHealth: stale
@@ -342,7 +351,9 @@ export async function loadLatestRadarPublicSnapshot(window: PublicRadarWindow): 
       : base.projectionHealth,
   };
   if (stale) payload = failClosedStalePayload(payload, failedAfterSnapshot ? String(state.terminal_reason || 'latest_publication_failed') : 'public_snapshot_stale');
-  const value = { id: String(row.id), etag: stale ? etagForPayload(payload) : String(row.etag || ''), publishedAt, contentAsOf, stale, payload };
+  const payloadChangedAfterPublication = Boolean(currentShadowProgress)
+    && JSON.stringify(base.shadowProgress || null) !== JSON.stringify(currentShadowProgress);
+  const value = { id: String(row.id), etag: stale || payloadChangedAfterPublication ? etagForPayload(payload) : String(row.etag || ''), publishedAt, contentAsOf, stale, payload };
   memory.set(window, { expiresAt: Date.now() + 60_000, value });
   return value;
 }

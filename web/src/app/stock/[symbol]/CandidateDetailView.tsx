@@ -1,46 +1,416 @@
-import Link from 'next/link';
-import type { CandidateDetailPayload } from '@/lib/candidate-detail';
+import Link from "next/link";
+import type { CandidateDetailPayload } from "@/lib/candidate-detail";
 
-export default function CandidateDetailView({ detail }: { detail: CandidateDetailPayload }) {
-  return <main className="mx-auto min-h-screen max-w-5xl px-5 py-10 text-slate-900 dark:text-slate-100">
-    <Link href="/" className="text-sm text-emerald-700 dark:text-emerald-300">← 回到三層選股</Link>
-    <header className="mt-6 rounded-3xl border border-slate-200 bg-white p-7 shadow-sm dark:border-slate-800 dark:bg-slate-950">
-      <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500">
-        <span>{detail.lifecycleStage}</span><span>研究 revision {detail.revisionId.slice(0, 8)}</span><span>{detail.sessionDate}</span>
+type AnyRecord = Record<string, unknown>;
+
+const sectionGroups: Record<string, string> = {
+  viewpoint: "先看結論",
+  mix: "基本面脈絡",
+  demand: "產業與需求",
+  customers: "基本面脈絡",
+  operations: "基本面脈絡",
+  bridge: "獲利橋接",
+  valuation: "估值與情境",
+  risk: "風險與執行",
+  technical: "風險與執行",
+  sources: "證據索引",
+  gaps: "尚待確認",
+};
+const conditionLabels: Record<string, string> = {
+  research_score_below_55: "研究證據仍不足",
+  data_confidence_below_55: "資料信心仍不足",
+  bear_base_bull_missing: "Bear／Base／Bull 情境尚未完整",
+  base_upside_below_8: "Base 上行空間不足 8%",
+  reward_risk_below_1: "報酬風險比不足 1",
+  research_score_below_70: "研究分數尚未達 70",
+  actionability_below_65: "行動分數尚未達 65",
+  data_confidence_below_75: "資料信心尚未達 75",
+  base_upside_below_12: "Base 上行空間不足 12%",
+  reward_risk_below_1_5: "報酬風險比不足 1.5",
+  requires_two_consecutive_closes: "需要兩個連續收盤日確認",
+  technical_hard_gate_failed: "技術條件尚未通過",
+  stale_or_fallback_data: "資料已過期或仍為備援資料",
+  market_risk_off_blocks_new_actionable: "大盤風險狀態暫停新增行動",
+  market_breakdown_forces_downgrade: "大盤轉弱會使階段降級",
+  negative_overseas_peer_catchdown: "海外同業補跌風險尚未解除",
+  market_regime_missing: "大盤狀態待補",
+};
+const riskLabels: Record<string, string> = {
+  initial_2atr_stop: "跌破訊號建立時凍結的 2ATR 失效價",
+  two_closes_below_ma60: "連續兩個相鄰交易日跌破季線",
+  material_official_counter_evidence: "出現重大官方反證",
+  market_breakdown_and_below_ma20: "大盤 breakdown 且個股跌破月線",
+  base_target_reached: "已達 Base 合理價，停止追價",
+  rsi_overheated: "RSI 過熱，停止追價",
+  price_above_ma20_plus_2atr: "價格高於月線加 2ATR，不追價",
+  trend_support_weakened: "月線／季線支撐轉弱",
+  valuation_margin_not_available: "估值安全邊際待補",
+  risk_action_inputs_incomplete: "進退場資料尚未完整",
+};
+
+function value(value: unknown, digits = 2) {
+  return typeof value === "number" && Number.isFinite(value)
+    ? value.toFixed(digits)
+    : "資料待補";
+}
+function percent(value: unknown) {
+  return typeof value === "number" && Number.isFinite(value)
+    ? `${value > 0 ? "+" : ""}${value.toFixed(1)}%`
+    : "資料待補";
+}
+function dateLabel(date: string | null | undefined) {
+  if (!date) return "日期待補";
+  const parsed = new Date(date);
+  return Number.isNaN(parsed.getTime())
+    ? date
+    : parsed.toLocaleDateString("zh-TW", { timeZone: "Asia/Taipei" });
+}
+function readableFactKey(key: string) {
+  return (
+    (
+      {
+        eps_ttm: "近四季 EPS",
+        forward_base_eps: "未來四季 Base EPS",
+        close: "收盤價",
+        pe_ratio: "本益比",
+        pb_ratio: "股價淨值比",
+        quarterly_revenue: "近四季營收",
+        quarterly_gross_profit: "近四季毛利",
+        quarterly_operating_income: "近四季營業利益",
+        quarterly_net_income_attributable_to_common: "近四季歸屬淨利",
+        quarterly_diluted_eps: "近季稀釋 EPS",
+      } as Record<string, string>
+    )[key] || "官方數據"
+  );
+}
+function getNumber(record: AnyRecord, ...keys: string[]) {
+  for (const key of keys) {
+    const current = record[key];
+    if (typeof current === "number" && Number.isFinite(current)) return current;
+  }
+  return null;
+}
+
+function ValuationSummary({ detail }: { detail: CandidateDetailPayload }) {
+  const valuation = detail.valuation as CandidateDetailPayload["valuation"] &
+    AnyRecord;
+  const factValue = (key: string) =>
+    detail.facts.find((fact) => fact.factKey === key)?.value ?? null;
+  const current = valuation.currentPrice ?? factValue("close");
+  const ttmEps =
+    getNumber(valuation, "epsTtm", "ttmEps") ?? factValue("eps_ttm");
+  const forwardEps =
+    getNumber(valuation, "forwardEps", "ntmEps") ??
+    factValue("forward_base_eps");
+  const ttmPe =
+    getNumber(valuation, "currentPe", "ttmPe") ??
+    (current != null && ttmEps ? current / ttmEps : null);
+  const forwardPe =
+    getNumber(valuation, "forwardPe", "currentForwardPe") ??
+    (current != null && forwardEps ? current / forwardEps : null);
+  const fairMultiple = getNumber(
+    valuation,
+    "fairMultiple",
+    "baseMultiple",
+    "targetMultiple",
+  );
+  const method = String(valuation.method || valuation.basis || "");
+  const usesPb = method.includes("pb");
+  const usesNormalizedEarnings = method.includes("normalized");
+  const bookValuePerShare = getNumber(valuation, "bookValuePerShare");
+  const currentPb =
+    getNumber(valuation, "currentPb") ??
+    (current != null && bookValuePerShare ? current / bookValuePerShare : null);
+  const normalizedEps = getNumber(valuation, "normalizedEps");
+  const metrics: Array<[string, string]> = [
+    ["現價", current == null ? "資料待補" : `NT$${value(current)}`],
+    ["TTM EPS", value(ttmEps)],
+    ["TTM PE", value(ttmPe, 1)],
+    [usesPb ? "每股淨值" : usesNormalizedEarnings ? "正常化 EPS" : "NTM EPS", value(usesPb ? bookValuePerShare : usesNormalizedEarnings ? normalizedEps : forwardEps)],
+    [usesPb ? "目前 PB" : usesNormalizedEarnings ? "正常化 PE" : "目前 forward PE", value(usesPb ? currentPb : usesNormalizedEarnings && current != null && normalizedEps ? current / normalizedEps : forwardPe, 1)],
+    [
+      usesPb ? "合理 PB／Base" : "合理倍數／Base",
+      fairMultiple == null ? "資料待補" : `${value(fairMultiple, 1)}x`,
+    ],
+    ["Base 空間", percent(valuation.baseUpsidePct)],
+    ["報酬風險比", value(valuation.rewardRiskRatio, 2)],
+  ];
+  return (
+    <section
+      aria-labelledby="valuation-summary-title"
+      className="mt-6 rounded-[1.75rem] border border-emerald-200/70 bg-emerald-50/60 p-5 dark:border-emerald-900/60 dark:bg-emerald-950/20 sm:p-7"
+    >
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-300">
+            先看估值
+          </p>
+          <h2
+            id="valuation-summary-title"
+            className="mt-1 text-xl font-semibold"
+          >
+            價格、獲利與情境
+          </h2>
+        </div>
+        <span className="rounded-full border border-amber-400/50 bg-amber-100/70 px-3 py-1 text-xs font-semibold text-amber-800 dark:bg-amber-950/40 dark:text-amber-200">
+          Shadow 研究階段
+        </span>
       </div>
-      <h1 className="mt-3 text-3xl font-bold">{detail.chineseName} {detail.symbol}</h1>
-      <p className="mt-4 leading-7 text-slate-700 dark:text-slate-300">{detail.summary}</p>
-      {detail.narrativeKind === 'codex_enriched' ? <p className="mt-3 text-xs text-emerald-700">已通過 fact ID 驗證的敘事補充</p> : <p className="mt-3 text-xs text-slate-500">確定性事實版；不依賴 AI 才能發布</p>}
-    </header>
-    <section className="mt-6 grid gap-4">
-      {detail.sections.map((section) => <article key={section.key} className="rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-950">
-        <h2 className="text-lg font-semibold">{section.title}</h2>
-        <p className="mt-3 whitespace-pre-wrap leading-7 text-slate-700 dark:text-slate-300">{section.body}</p>
-        {section.factIds.length > 0 ? <p className="mt-3 text-xs text-slate-500">Fact IDs：{section.factIds.slice(0, 8).join('、')}</p> : null}
-      </article>)}
-    </section>
-    <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-950">
-      <h2 className="text-lg font-semibold">五年價格與 PE／PB 歷史</h2>
-      <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-        估值基礎：{detail.valuation.basis || '資料待補'} · 覆蓋 {detail.valuation.monthsCovered ?? 0}/60 月
-        {detail.valuation.historicalPercentile != null ? ` · 目前倍數 percentile ${Math.round(detail.valuation.historicalPercentile * 100) / 100}` : ''}
+      <div className="mt-5 grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
+        {metrics.map(([label, shown]) => (
+          <div
+            key={label}
+            className="rounded-xl bg-white/75 p-3 dark:bg-slate-950/50"
+          >
+            <span className="text-xs text-slate-500 dark:text-emerald-100/55">
+              {label}
+            </span>
+            <strong className="mt-1 block text-base">{shown}</strong>
+          </div>
+        ))}
+      </div>
+      <div className="mt-4 overflow-hidden rounded-xl border border-emerald-200/70 bg-white/60 dark:border-emerald-900/60 dark:bg-slate-950/30">
+        <div className="grid grid-cols-3 divide-x divide-emerald-200/70 text-center dark:divide-emerald-900/60">
+          {[
+            ["Bear", valuation.bearTarget],
+            ["Base", valuation.baseTarget],
+            ["Bull", valuation.bullTarget],
+          ].map(([label, target]) => (
+            <div key={label} className="p-3">
+              <span className="text-xs text-slate-500">{label}</span>
+              <strong className="mt-1 block">
+                {target == null ? "待補" : `NT$${value(target)}`}
+              </strong>
+            </div>
+          ))}
+        </div>
+      </div>
+      <p className="mt-3 text-xs leading-5 text-slate-600 dark:text-emerald-100/65">
+        下行風險 {percent(valuation.bearDownsidePct)} · 估值方法{" "}
+        {valuation.method || "待補"} · 歷史倍數覆蓋{" "}
+        {valuation.monthsCovered == null
+          ? "資料待補"
+          : `${valuation.monthsCovered}/60 個月`}
+        。缺少必要橋接時，不建立正式目標價。
       </p>
-      {detail.valuation.historicalMultiples?.length ? <div className="mt-4 max-h-80 overflow-auto rounded-xl border border-slate-200 dark:border-slate-800">
-        <table className="w-full text-left text-xs"><thead className="sticky top-0 bg-slate-100 dark:bg-slate-900"><tr><th className="p-2">月份</th><th className="p-2">PE</th><th className="p-2">PB</th><th className="p-2">月末價</th></tr></thead><tbody>
-          {[...detail.valuation.historicalMultiples].reverse().map((item) => {
-            const price = detail.valuation.historicalPrices?.find((row) => row.month === item.date.slice(0, 7));
-            return <tr key={item.date} className="border-t border-slate-100 dark:border-slate-800"><td className="p-2">{item.date.slice(0, 7)}</td><td className="p-2">{item.peRatio ?? '—'}</td><td className="p-2">{item.pbRatio ?? '—'}</td><td className="p-2">{price?.close ?? '—'}</td></tr>;
-          })}
-        </tbody></table>
-      </div> : <p className="mt-3 text-sm text-amber-700 dark:text-amber-300">官方五年倍數仍在回填；未達 48/60 前不建立正式倍數目標。</p>}
     </section>
-    <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-950">
-      <h2 className="text-lg font-semibold">官方事實資料</h2>
-      {detail.facts.length ? <div className="mt-4 max-h-80 overflow-auto"><ul className="space-y-2 text-sm">{detail.facts.slice(0, 100).map((fact) => <li key={fact.factId} className="rounded-xl border border-slate-200 p-3 dark:border-slate-800"><span className="font-medium">{fact.factKey}</span> · {fact.periodEnd} · {fact.value ?? '—'} {fact.unit || ''}{fact.sourceUrl ? <> · <a href={fact.sourceUrl} target="_blank" rel="noreferrer" className="text-emerald-700 underline">官方來源</a></> : null}</li>)}</ul></div> : <p className="mt-3 text-sm text-amber-700 dark:text-amber-300">官方 fact bundle 尚待補齊；頁面保留研究進度，不會顯示虛構數字。</p>}
+  );
+}
+
+function EvidenceSources({ detail }: { detail: CandidateDetailPayload }) {
+  const sources = detail.sources.filter((source) =>
+    /^https?:\/\//u.test(source.url),
+  );
+  return (
+    <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950 sm:p-6">
+      <h2 className="text-lg font-semibold">可追溯來源</h2>
+      <p className="mt-1 text-sm text-slate-500 dark:text-emerald-100/60">
+        原文先於模型結論；點擊可開啟來源頁面。
+      </p>
+      {sources.length ? (
+        <ol className="mt-4 space-y-3">
+          {sources.map((source) => (
+            <li
+              key={`${source.referenceNumber}-${source.url}`}
+              className="flex gap-3 text-sm"
+            >
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-semibold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200">
+                {source.referenceNumber}
+              </span>
+              <div className="min-w-0">
+                <a
+                  className="font-medium text-emerald-700 underline decoration-emerald-300 underline-offset-2 dark:text-emerald-300"
+                  href={source.url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {source.label || "公開來源"}
+                </a>
+                <p className="mt-1 text-xs text-slate-500">
+                  日期：{dateLabel(source.publishedAt)}
+                  {source.locator ? ` · 位置：${source.locator}` : ""}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p className="mt-4 text-sm text-amber-700 dark:text-amber-300">
+          目前尚無可公開的原文連結。
+        </p>
+      )}
     </section>
-    <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-950">
-      <h2 className="text-lg font-semibold">來源連結</h2>
-      {detail.sourceLinks.length ? <ul className="mt-3 space-y-2">{detail.sourceLinks.map((source) => <li key={source.url}><a className="break-all text-emerald-700 underline" href={source.url} target="_blank" rel="noreferrer">{source.label}</a></li>)}</ul> : <p className="mt-3 text-slate-500">目前只有官方研究進度，尚無可公開的原文連結。</p>}
-    </section>
-  </main>;
+  );
+}
+
+export default function CandidateDetailView({
+  detail,
+}: {
+  detail: CandidateDetailPayload;
+}) {
+  const valuation = detail.valuation as CandidateDetailPayload["valuation"] &
+    AnyRecord;
+  const scores = detail.scores as unknown as AnyRecord;
+  const coveredWeight = getNumber(valuation, "coveredWeight", "coverageWeight");
+  const scoreMetrics: Array<[string, number | null]> = [
+    ["發現", getNumber(scores, "discovery")],
+    ["研究", getNumber(scores, "research")],
+    ["行動", getNumber(scores, "actionability")],
+    ["資料信心", getNumber(scores, "dataConfidence")],
+  ];
+  const grouped = detail.sections.reduce<
+    Record<string, CandidateDetailPayload["sections"]>
+  >((acc, section) => {
+    const group = sectionGroups[section.key] || "研究筆記";
+    (acc[group] ||= []).push(section);
+    return acc;
+  }, {});
+  const gaps = [
+    ...detail.unmetConditions,
+    ...((valuation.missing as string[] | undefined) || []),
+  ].filter(Boolean);
+  return (
+    <main className="mx-auto min-h-screen max-w-5xl px-5 py-8 text-slate-900 dark:text-slate-100 sm:py-10">
+      <Link href="/" className="text-sm text-emerald-700 dark:text-emerald-300">
+        ← 回到研究雷達
+      </Link>
+      <header className="mt-6 rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950 sm:p-8">
+        <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
+          <span className="rounded-full bg-slate-100 px-2.5 py-1 dark:bg-white/10">
+            {detail.lifecycleStage === "actionable"
+              ? "現在可行動"
+              : detail.lifecycleStage === "waiting"
+                ? "等待條件"
+                : "來源命中"}
+          </span>
+          <span>{dateLabel(detail.sessionDate)} 研究快照</span>
+        </div>
+        <h1 className="mt-4 text-3xl font-semibold tracking-tight">
+          {detail.chineseName}{" "}
+          <span className="text-slate-400">{detail.symbol}</span>
+        </h1>
+        <p className="mt-4 max-w-3xl text-base leading-8 text-slate-700 dark:text-slate-300">
+          {detail.summary}
+        </p>
+        <p className="mt-3 text-xs text-slate-500">
+          {detail.narrativeKind === "codex_enriched"
+            ? "已通過來源驗證的敘事補充"
+            : "官方事實版研究；缺資料處保留為待補"}
+        </p>
+      </header>
+      <ValuationSummary detail={detail} />
+      <section
+        className="mt-6 grid gap-4 sm:grid-cols-2"
+        aria-label="研究品質與執行條件"
+      >
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950">
+          <h2 className="text-lg font-semibold">研究分數與覆蓋</h2>
+          <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
+            {scoreMetrics.map(([label, score]) => (
+              <div key={label}>
+                <dt className="text-slate-500">{label}</dt>
+                <dd className="mt-1 text-xl font-semibold">
+                  {value(score, 1)}
+                </dd>
+              </div>
+            ))}
+          </dl>
+          <p className="mt-4 text-xs text-slate-500">
+            官方資料覆蓋{" "}
+            {detail.factIds.length
+              ? `${detail.facts.length}/${detail.factIds.length} 筆`
+              : "待補"}
+            {coveredWeight == null
+              ? ""
+              : ` · 權重 ${coveredWeight.toFixed(0)}%`}
+          </p>
+        </div>
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950">
+          <h2 className="text-lg font-semibold">進場與退出條件</h2>
+          <p className="mt-3 text-sm leading-6">
+            進場：
+            {detail.lifecycleStage === "actionable"
+              ? "階段條件已通過，仍須按現價與技術訊號執行。"
+              : "等待研究、估值或技術條件完成。"}
+          </p>
+          <p className="mt-2 text-sm leading-6">
+            退出：
+            {detail.riskAction?.reasons?.length
+              ? detail.riskAction.reasons
+                  .map(
+                    (reason) =>
+                      riskLabels[reason] || reason.replaceAll("_", " "),
+                  )
+                  .join("、")
+              : "重大官方反證、估值失效或技術硬門檻失效。"}
+          </p>
+          <span className="mt-4 inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800 dark:bg-amber-950/40 dark:text-amber-200">
+            Shadow：觀察中，不是自動買進
+          </span>
+        </div>
+      </section>
+      {gaps.length ? (
+        <section className="mt-6 rounded-2xl border border-amber-300/70 bg-amber-50/70 p-5 dark:border-amber-900/60 dark:bg-amber-950/20">
+          <h2 className="text-lg font-semibold text-amber-900 dark:text-amber-100">
+            目前證據缺口
+          </h2>
+          <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-amber-900/80 dark:text-amber-100/80">
+            {gaps.map((gap) => (
+              <li key={gap}>
+                {conditionLabels[gap] || gap.replaceAll("_", " ")}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+      <div className="mt-8 space-y-8">
+        {Object.entries(grouped).map(([group, sections]) => (
+          <section key={group}>
+            <h2 className="mb-3 text-xl font-semibold">{group}</h2>
+            <div className="space-y-3">
+              {sections.map((section) => (
+                <article
+                  key={section.key}
+                  className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950 sm:p-6"
+                >
+                  <h3 className="text-base font-semibold">{section.title}</h3>
+                  <p className="mt-3 whitespace-pre-wrap leading-7 text-slate-700 dark:text-slate-300">
+                    {section.body}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+      <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950">
+        <h2 className="text-lg font-semibold">官方資料明細</h2>
+        {detail.facts.length ? (
+          <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+            {detail.facts.slice(0, 100).map((fact) => (
+              <li
+                key={`${fact.factKey}-${fact.periodEnd}`}
+                className="rounded-xl border border-slate-200 p-3 text-sm dark:border-slate-800"
+              >
+                <span className="font-medium">
+                  {readableFactKey(fact.factKey)}
+                </span>
+                <span className="ml-2 text-slate-500">
+                  {dateLabel(fact.periodEnd)} ·{" "}
+                  {fact.value == null
+                    ? "資料待補"
+                    : `${fact.value}${fact.unit ? ` ${fact.unit}` : ""}`}
+                </span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="mt-3 text-sm text-amber-700 dark:text-amber-300">
+            官方資料仍在回填。
+          </p>
+        )}
+      </section>
+      <EvidenceSources detail={detail} />
+    </main>
+  );
 }
