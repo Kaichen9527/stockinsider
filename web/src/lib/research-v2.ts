@@ -2993,7 +2993,11 @@ async function scrapeGdeltMetadata(symbolContext?: SymbolScopedStockContext | nu
   const authorityCutoff = nowIso();
   const [stockData, { data: cursorData, error: cursorError }] = await Promise.all([
     collectPagedAuthorityRows<Row>(async (from, to) => {
-      const page = await supabase.rpc('candidate_research_stock_authority', { p_cutoff: authorityCutoff }).range(from, to);
+      const page = await supabase.rpc('candidate_research_stock_authority_page', {
+        p_cutoff: authorityCutoff,
+        p_page_offset: from,
+        p_page_limit: to - from + 1,
+      });
       if (page.error) throw new Error(`gdelt_stock_authority_failed:${page.error.message}`);
       return (page.data as Row[]) || [];
     }, { maxRows: 5000 }),

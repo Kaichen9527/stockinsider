@@ -238,7 +238,11 @@ async function ingestOfficialMarketEvidence(sessionDate: string, evaluatedAt: st
   const [sessions, rosterRows, existing] = await Promise.all([
     supplied.length >= 520 ? Promise.resolve(supplied) : loadCompletedTradingSessions(sessionDate),
     collectPagedAuthorityRows<Row>(async (from, to) => {
-      const page = await supabase.rpc('candidate_research_stock_authority', { p_cutoff: evaluatedAt }).range(from, to);
+      const page = await supabase.rpc('candidate_research_stock_authority_page', {
+        p_cutoff: evaluatedAt,
+        p_page_offset: from,
+        p_page_limit: to - from + 1,
+      });
       if (page.error) throw new Error(`official_market_prerequisite_failed:${page.error.message}`);
       return (page.data as Row[]) || [];
     }, { maxRows: 5000 }),
