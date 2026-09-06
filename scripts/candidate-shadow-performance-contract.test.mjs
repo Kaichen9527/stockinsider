@@ -14,6 +14,7 @@ const sourcePolicy = readFileSync(new URL('../web/src/lib/source-policy.ts', imp
 const domain = readFileSync(new URL('../web/src/lib/domain.ts', import.meta.url), 'utf8');
 const snapshotPublisher = readFileSync(new URL('../web/src/lib/radar-public-snapshot.ts', import.meta.url), 'utf8');
 const v2Migration = readFileSync(new URL('../migrations/20260901_source_research_shadow_v2.sql', import.meta.url), 'utf8');
+const paginationMigration = readFileSync(new URL('../migrations/20260906_authority_pagination_v2.sql', import.meta.url), 'utf8');
 
 test('migration is additive and installs research, shadow and last-good publication planes', () => {
   assert.match(migration, /CREATE TABLE IF NOT EXISTS public\.candidate_research_runs/u);
@@ -42,7 +43,9 @@ test('candidate research reads the durable official calendar and refreshes the l
   assert.match(calendarMigration, /resolved\.semantic_heads = 1/u);
   assert.match(calendarMigration, /GRANT EXECUTE[\s\S]*TO service_role/u);
   assert.doesNotMatch(calendarMigration, /DROP TABLE|TRUNCATE/u);
-  assert.match(research, /supabase\.rpc\('candidate_research_official_sessions'/u);
+  assert.match(paginationMigration, /CREATE OR REPLACE FUNCTION public\.candidate_research_official_sessions_page/u);
+  assert.match(paginationMigration, /candidate_research_official_sessions\(p_cutoff, 1320\)/u);
+  assert.match(research, /supabase\.rpc\('candidate_research_official_sessions_page'/u);
   assert.match(research, /fetchTwMarketTradingSessions\(marketSessions\.length < 1320 \? 1320 : 90\)/u);
   assert.match(research, /buildMarketEvidenceSnapshot\(latestMarketSession, evaluatedAt, marketSessions\)/u);
   assert.match(market, /OFFICIAL_HOST_CIRCUIT_BREAKER_MS = 5 \* 60 \* 1000/u);
@@ -70,7 +73,8 @@ test('official roster normalization happens before a missing price history can f
 test('candidate technical features and the core scheduler remain bound to official completed sessions', () => {
   const research = readFileSync(new URL('../web/src/lib/candidate-research.ts', import.meta.url), 'utf8');
   assert.match(research, /cachedBars,[\s\S]{0,180}fetchedBars[\s\S]{0,180}bar\.time <= latestMarketSession/u);
-  assert.match(research, /p_limit: 1320/u);
+  assert.match(research, /p_page_offset: from/u);
+  assert.match(research, /p_page_limit: to - from \+ 1/u);
   assert.doesNotMatch(research, /if \(priceCoverageTerminal\) throw/u);
   assert.match(research, /technical_status: priceCoverageTerminal \? 'insufficient_history' : 'success'/u);
   assert.match(research, /staleOrFallback: Boolean\(priceCoverageTerminal\)/u);

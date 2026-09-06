@@ -114,7 +114,11 @@ async function mapLimit<T, R>(items: T[], limit: number, work: (item: T) => Prom
 async function loadStockAuthority(supabase: ReturnType<typeof getSupabaseServerClient>, cutoff: string) {
   return collectPagedAuthorityRows<Row>(async (from, to) => {
     try {
-      const page = await supabase.rpc('candidate_research_stock_authority', { p_cutoff: cutoff }).range(from, to);
+      const page = await supabase.rpc('candidate_research_stock_authority_page', {
+        p_cutoff: cutoff,
+        p_page_offset: from,
+        p_page_limit: to - from + 1,
+      });
       if (page.error) throw page.error;
       return (page.data as Row[]) || [];
     } catch (error) {
@@ -126,7 +130,11 @@ async function loadStockAuthority(supabase: ReturnType<typeof getSupabaseServerC
 async function loadOfficialSessions(supabase: ReturnType<typeof getSupabaseServerClient>, cutoff: string) {
   return collectPagedAuthorityRows<{ session_date?: unknown }>(async (from, to) => {
     try {
-      const page = await supabase.rpc('candidate_research_official_sessions', { p_cutoff: cutoff, p_limit: 1320 }).range(from, to);
+      const page = await supabase.rpc('candidate_research_official_sessions_page', {
+        p_cutoff: cutoff,
+        p_page_offset: from,
+        p_page_limit: to - from + 1,
+      });
       if (page.error) throw page.error;
       return (page.data as Array<{ session_date?: unknown }>) || [];
     } catch (error) {
