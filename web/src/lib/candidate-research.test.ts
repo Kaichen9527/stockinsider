@@ -208,6 +208,15 @@ test('candidate research loads production mentions through evaluation time but h
   assert.match(source, /const universe = proposedUniverse/u);
 });
 
+test('missing official price history still publishes a source-specific fact detail without promotion inputs', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const source = await readFile(new URL('./candidate-research.ts', import.meta.url), 'utf8');
+  assert.match(source, /reason === 'official_price_history_missing'[\s\S]{0,9000}candidate_detail_snapshots/u);
+  assert.match(source, /valuation: \{ status: 'missing', currentPrice: null/u);
+  assert.match(source, /research_readiness: result\.detailRevisionId \? 'data_gap' : 'unavailable'/u);
+  assert.match(source, /failClosedWriteFailures = items\.filter\(\(item\) => item\.snapshotError \|\| item\.detailError\)/u);
+});
+
 test('shadow reruns bind financial availability to the frozen manifest cutoff', async () => {
   const { readFile } = await import('node:fs/promises');
   const source = await readFile(new URL('./candidate-research.ts', import.meta.url), 'utf8');
