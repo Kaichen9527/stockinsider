@@ -29,6 +29,8 @@ test('terminal outcome contract distinguishes API usage, timeout, schema and emp
   }
   assert.match(provider, /official\.terminal === 'complete' \|\| official\.terminal === 'empty'/u);
   assert.match(provider, /if \(response\.status === 429\)/u);
+  assert.match(migration, /NULLIF\(v_attempt->'apiUsage','null'::jsonb\)/u);
+  assert.match(migration, /NULLIF\(v_attempt->'normalizedPayload','null'::jsonb\)/u);
 });
 
 test('VPS-only authenticated routes queue and drain the durable provider plane', () => {

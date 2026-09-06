@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireExactInternalBearer } from '@/lib/internal-auth';
-import type { TaiwanDataset, TaiwanExchange } from '@/lib/taiwan-data-provider';
+import { needsCompletedTradingSession, type TaiwanDataset, type TaiwanExchange } from '@/lib/taiwan-data-provider';
 import { parseTaiwanQueueRequest, requireActiveVpsWriter, taiwanRefreshQueueKey } from '@/lib/taiwan-data-runtime';
 
 const BODY_LIMIT = 100_000;
@@ -18,6 +18,21 @@ export async function POST(request: Request) {
   if (!input) return NextResponse.json({ ok: false, error: 'invalid_taiwan_refresh_request' }, { status: 422 });
   const writer = await requireActiveVpsWriter();
   if (!writer.ok) return NextResponse.json({ ok: false, error: writer.error }, { status: 409 });
+  const hasExplicitSessionDate = Object.prototype.hasOwnProperty.call(requestBody, 'sessionDate');
+  let sessionDate = input.sessionDate;
+  if (!hasExplicitSessionDate && needsCompletedTradingSession(input.datasets)) {
+    const completed = await writer.supabase.from('tw_trading_sessions_v3')
+      .select('session_id')
+      .eq('status', 'completed')
+      .lte('session_id', input.sessionDate)
+      .lte('close_at', new Date().toISOString())
+      .order('session_id', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (completed.error) return NextResponse.json({ ok: false, error: `latest_completed_trading_session_read_failed:${completed.error.message}` }, { status: 500 });
+    if (!completed.data?.session_id) return NextResponse.json({ ok: false, error: 'latest_completed_trading_session_missing' }, { status: 503 });
+    sessionDate = String(completed.data.session_id);
+  }
   // Official valuation and revenue endpoints are exchange-wide batches. Only
   // price and statement requests are candidate-scoped; this prevents N
   // candidates from requesting the identical official response N times.
@@ -51,13 +66,13 @@ export async function POST(request: Request) {
   if (entries.length > 20_000) return NextResponse.json({ ok: false, error: 'queue_limit_exceeded' }, { status: 422 });
   const queuedAt = new Date().toISOString();
   const queue = await Promise.all(entries.map(async (entry) => {
-    const queueKey = taiwanRefreshQueueKey({ ...entry, phase: input.phase, sessionDate: input.sessionDate });
+    const queueKey = taiwanRefreshQueueKey({ ...entry, phase: input.phase, sessionDate });
     const result = await writer.supabase.rpc('enqueue_taiwan_data_refresh_v5', {
       p_queue_key: queueKey, p_dataset: entry.dataset, p_symbol: entry.symbol, p_exchange: entry.exchange,
-      p_refresh_phase: input.phase, p_requested_session_date: input.sessionDate, p_queued_at: queuedAt,
+      p_refresh_phase: input.phase, p_requested_session_date: sessionDate, p_queued_at: queuedAt,
     });
     if (result.error) throw new Error(`taiwan_data_enqueue_failed:${result.error.message}`);
     return String(result.data);
   }));
-  return NextResponse.json({ ok: true, result: { queued: queue.length, candidateUniverse: symbols.length, jobIds: queue, phase: input.phase, sessionDate: input.sessionDate, releaseId: writer.releaseId } });
+  return NextResponse.json({ ok: true, result: { queued: queue.length, candidateUniverse: symbols.length, jobIds: queue, phase: input.phase, sessionDate, releaseId: writer.releaseId } });
 }

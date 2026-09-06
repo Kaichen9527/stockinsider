@@ -1,9 +1,15 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { acquireTaiwanDataset, finMindTaiwanDataUrl, officialTaiwanDataUrl } from './taiwan-data-provider.ts';
+import { acquireTaiwanDataset, finMindTaiwanDataUrl, needsCompletedTradingSession, officialTaiwanDataUrl } from './taiwan-data-provider.ts';
 import { sanitizePublicSourceUrl } from './public-source-url.ts';
 
 const input = { dataset: 'daily_price' as const, symbol: '2330', exchange: 'TWSE' as const, phase: 'final' as const, sessionDate: '2026-09-04' };
+
+test('close datasets use a completed market session while calendar-only refreshes keep the requested date', () => {
+  assert.equal(needsCompletedTradingSession(['daily_price']), true);
+  assert.equal(needsCompletedTradingSession(['market_index', 'institutional_flow']), true);
+  assert.equal(needsCompletedTradingSession(['stock_master', 'trading_calendar']), false);
+});
 function jsonResponse(body: unknown, status = 200, headers?: HeadersInit) {
   return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json', ...headers } });
 }
