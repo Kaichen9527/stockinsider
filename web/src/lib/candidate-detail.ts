@@ -3,6 +3,8 @@ import type { CandidateStageCard } from './types';
 import { chunkCandidateFactIds } from './candidate-detail-fact-batches';
 import { candidateDossierInputHash, factReferenceNumbers, isPaidInvestAnchorsReference, numberedCandidateSources } from './candidate-dossier-contract';
 import type { CandidateDossierClaim } from './candidate-dossier-validation';
+import { sanitizePublicSourceUrl } from './public-source-url.ts';
+import { resolveTaiwanFinalPublicationSemantics } from './tw-market.ts';
 
 type Row = Record<string, unknown>;
 
@@ -43,20 +45,15 @@ export type CandidateDetailPayload = {
   riskAction?: { state: string; reasons: string[] } | null;
   asOf: string;
   availableAt: string;
+  publicationStatus?: 'preliminary' | 'final';
+  finalPublicationStatus?: 'confirmed' | 'preliminary' | 'stale_readonly';
+  datasetCompletenessPct?: number;
+  datasetMissingComponents?: string[];
   narrativeKind: 'deterministic_fact' | 'codex_enriched';
 };
 
 function n(value: number | null | undefined, suffix = '') {
   return value == null || !Number.isFinite(value) ? '資料待補' : `${Math.round(value * 100) / 100}${suffix}`;
-}
-
-function publicHttpUrl(value: unknown): string | null {
-  try {
-    const url = new URL(String(value || ''));
-    return url.protocol === 'https:' || url.protocol === 'http:' ? url.toString() : null;
-  } catch {
-    return null;
-  }
 }
 
 export function buildDeterministicCandidateSections(input: {
@@ -158,7 +155,10 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
   if (stockRead.error) throw new Error(`candidate_detail_stock_read_failed:${stockRead.error.message}`);
   if (!stockRead.data) return null;
   let query = supabase.from('candidate_detail_snapshots')
-    .select('id,session_date,lifecycle_stage,detail_kind,title,summary,sections,fact_ids,source_links,valuation,technical,as_of,available_at')
+    // `stock_id` is part of the immutable dossier input hash. Omitting it made
+    // every accepted Codex dossier look stale to the public reader even when
+    // the revision and fact set were identical.
+    .select('id,stock_id,session_date,lifecycle_stage,detail_kind,title,summary,sections,fact_ids,source_links,valuation,technical,as_of,available_at,publication_phase')
     .eq('stock_id', stockRead.data.id)
     .order('available_at', { ascending: false })
     .limit(1);
@@ -196,6 +196,13 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
     String(dossier.bundle_hash || dossier.input_hash || '') === expectedInputHash && Boolean(dossier.published_at)) || null;
   const sources = numberedCandidateSources(row, factRows);
   const references = factReferenceNumbers(factRows, sources);
+  const finalMetadataRead = await supabase.rpc('read_taiwan_data_publication_metadata_v5', {
+    p_session_date: String(row.session_date), p_publication_phase: 'final',
+  });
+  if (finalMetadataRead.error && !/does not exist|schema cache/iu.test(finalMetadataRead.error.message)) {
+    throw new Error(`candidate_detail_publication_metadata_failed:${finalMetadataRead.error.message}`);
+  }
+  const finalSemantics = resolveTaiwanFinalPublicationSemantics(finalMetadataRead.data);
   const publicSections = (sections: CandidateDetailSection[]) => sections.map((section) => {
     const sourceReferences = [...new Set((section.factIds || []).map((factId) => references.get(String(factId))).filter((reference): reference is number => reference != null))];
     return { ...section, factIds: sourceReferences.map((reference) => `[${reference}]`), sourceReferences };
@@ -207,7 +214,10 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
     detailKind: String(row.detail_kind) as CandidateDetailPayload['detailKind'], title: String(row.title), summary: String(row.summary),
     sections: publicSections((Array.isArray(row.sections) ? row.sections : []) as CandidateDetailSection[]), factIds: publicFactIds,
     sources, claims: [],
-    sourceLinks: ((Array.isArray(row.source_links) ? row.source_links : []) as CandidateDetailPayload['sourceLinks']).filter((source) => !isPaidInvestAnchorsReference(`${source.label} ${source.url}`)),
+    sourceLinks: ((Array.isArray(row.source_links) ? row.source_links : []) as CandidateDetailPayload['sourceLinks']).flatMap((source) => {
+      const url = sanitizePublicSourceUrl(source.url);
+      return url && !isPaidInvestAnchorsReference(`${source.label} ${source.url}`) ? [{ ...source, url }] : [];
+    }),
     valuation: (row.valuation || {}) as CandidateDetailPayload['valuation'], technical: (row.technical || {}) as CandidateStageCard['technical'],
     scores: {
       discovery: Number(stageRead.data?.discovery_score || 0),
@@ -215,10 +225,15 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
       actionability: Number(stageRead.data?.actionability_score || 0),
       dataConfidence: Number(stageRead.data?.data_confidence_score || 0),
     },
-    facts: factRows.map((fact, index) => ({ factId: `source-${references.get(String(fact.fact_id)) || index + 1}-${String(fact.fact_key)}`, referenceNumber: references.get(String(fact.fact_id)), factKey: String(fact.fact_key), periodEnd: String(fact.period_end), value: fact.value == null ? null : Number(fact.value), unit: fact.unit ? String(fact.unit) : null, sourceUrl: isPaidInvestAnchorsReference(fact.source_url) ? null : publicHttpUrl(fact.source_url), availableAt: String(fact.available_at) })),
+    facts: factRows.map((fact, index) => ({ factId: `source-${references.get(String(fact.fact_id)) || index + 1}-${String(fact.fact_key)}`, referenceNumber: references.get(String(fact.fact_id)), factKey: String(fact.fact_key), periodEnd: String(fact.period_end), value: fact.value == null ? null : Number(fact.value), unit: fact.unit ? String(fact.unit) : null, sourceUrl: isPaidInvestAnchorsReference(fact.source_url) ? null : sanitizePublicSourceUrl(fact.source_url), availableAt: String(fact.available_at) })),
     unmetConditions: Array.isArray((row.valuation as Row | null)?.unmetConditions) ? ((row.valuation as Row).unmetConditions as unknown[]).map(String) : [],
     riskAction: trackingRead.data ? { state: String(trackingRead.data.risk_action || 'data_incomplete'), reasons: Array.isArray(trackingRead.data.action_reasons) ? trackingRead.data.action_reasons.map(String) : [] } : null,
-    asOf: String(row.as_of), availableAt: String(row.available_at), narrativeKind: 'deterministic_fact' as const,
+    asOf: String(row.as_of), availableAt: String(row.available_at),
+    publicationStatus: row.publication_phase === 'preliminary' ? 'preliminary' as const : 'final' as const,
+    finalPublicationStatus: finalSemantics.status,
+    datasetCompletenessPct: finalSemantics.completenessPct,
+    datasetMissingComponents: finalSemantics.missingComponents,
+    narrativeKind: 'deterministic_fact' as const,
   };
   if (enriched?.content && typeof enriched.content === 'object' && !Array.isArray(enriched.content)) {
     const overlay = enriched.content as Row;

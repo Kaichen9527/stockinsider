@@ -23,16 +23,22 @@ const FLOW_FACTS: Record<string, string> = {
   revenue: 'quarterly_revenue', revenuefromcontractswithcustomers: 'quarterly_revenue',
   grossprofit: 'quarterly_gross_profit', grossprofitlossfromoperations: 'quarterly_gross_profit',
   netoperatingincomeloss: 'quarterly_operating_income', profitlossfromoperatingactivities: 'quarterly_operating_income',
+  operatingexpenses: 'quarterly_operating_expense', operatingexpense: 'quarterly_operating_expense',
+  nonoperatingincomeexpense: 'quarterly_non_operating_income', othernonoperatingincomeexpense: 'quarterly_non_operating_income',
+  profitlossbeforetax: 'quarterly_pretax_income', incometaxexpensebenefit: 'quarterly_income_tax_expense',
   profitloss: 'quarterly_net_income', profitlossattributabletoownersofparent: 'quarterly_net_income_attributable_to_common',
+  profitlossattributabletononcontrollinginterest: 'quarterly_noncontrolling_interest', profitlossattributabletononcontrollinginterests: 'quarterly_noncontrolling_interest',
 };
 const BALANCE_FACTS: Record<string, string> = {
   assets: 'total_assets', totalassets: 'total_assets', equity: 'total_equity', equityattributabletoownersofparent: 'total_equity',
+  cashandcashequivalents: 'cash_and_equivalents', cashandcashequivalentsatcarryingvalue: 'cash_and_equivalents',
   bookvaluepershare: 'book_value_per_share',
 };
 const DILUTED_EPS_CONCEPTS = new Set(['dilutedearningspershare', 'dilutedearningslosspershare']);
 const BASIC_EPS_CONCEPTS = new Set(['basicearningspershare', 'basicearningslosspershare']);
 const DILUTED_SHARE_CONCEPTS = new Set(['weightedaveragenumberofdilutedsharesoutstanding', 'dilutedweightedaveragenumberofsharesoutstanding']);
 const BASIC_SHARE_CONCEPTS = new Set(['weightedaveragenumberofsharesoutstanding', 'basicweightedaveragenumberofsharesoutstanding']);
+const SHARES_OUTSTANDING_CONCEPTS = new Set(['numberofsharesoutstanding']);
 
 export type CandidateOfficialFinancial = {
   stockId: string;
@@ -155,13 +161,16 @@ export function parseCandidateMopsFacts(html: string, input: CandidateOfficialFi
     } else if (BASIC_SHARE_CONCEPTS.has(concept)) {
       if (attrs.unitref !== 'Shares') continue;
       factKey = 'basic_weighted_average_shares'; unit = 'share';
+    } else if (SHARES_OUTSTANDING_CONCEPTS.has(concept)) {
+      if (attrs.unitref !== 'Shares') continue;
+      factKey = 'shares_outstanding'; unit = 'share';
     } else if (factKey === 'book_value_per_share') {
       if (attrs.unitref !== 'EarningsPerShare' && !/^TWD(?:\w+)?$/u.test(attrs.unitref || '')) continue;
       unit = 'TWD_per_share';
     } else if (factKey && !context.instant && !/^TWD(?:\w+)?$/u.test(attrs.unitref || '')) continue;
     if (!factKey) continue;
-    const isBalanceFact = Boolean(BALANCE_FACTS[concept]);
-    if (isBalanceFact !== context.instant) continue;
+    const isInstantFact = Boolean(BALANCE_FACTS[concept]) || SHARES_OUTSTANDING_CONCEPTS.has(concept);
+    if (isInstantFact !== context.instant) continue;
     rows.push({
       stockId: input.stockId, symbol: input.symbol, factKey, periodStart: context.start, periodEnd: context.end,
       durationKind: context.instant ? 'quarter_end' : 'quarterly', value, unit, provider: 'mops',

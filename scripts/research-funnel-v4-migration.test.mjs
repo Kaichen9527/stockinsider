@@ -14,6 +14,7 @@ test('research funnel v4 migration plan is exact, additive and dry by default', 
     'migrations/20260906_source_identity_v4.sql',
     'migrations/20260906_shadow_signal_v4.sql',
     'migrations/20260906_candidate_dossier_v4.sql',
+    'migrations/20260906_taiwan_data_provider_v5.sql',
   ]);
   for (const relativePath of RESEARCH_FUNNEL_V4_MIGRATIONS) {
     const sql = fs.readFileSync(path.join(root, relativePath), 'utf8');
@@ -23,7 +24,7 @@ test('research funnel v4 migration plan is exact, additive and dry by default', 
   }
   const output = JSON.parse(execFileSync(process.execPath, ['scripts/apply-research-funnel-v4-migrations.mjs'], { cwd: root, encoding: 'utf8' }));
   assert.equal(output.applied, false);
-  assert.equal(output.migrations.length, 4);
+  assert.equal(output.migrations.length, 5);
   assert.ok(output.migrations.every((entry) => /^[0-9a-f]{64}$/u.test(entry.sha256) && entry.bytes > 0));
 });
 
@@ -35,6 +36,7 @@ test('runtime tables, append-only revisions and source identity are covered by t
     'canonical_input_hashes', 'cohort_key', 'attempt_blockers',
     'revision_hash', 'candidate_dossier_bundles', 'candidate_dossier_submission_receipts',
     'record_candidate_dossier_submission_v4',
+    'taiwan_data_refresh_queue_v5', 'publication_phase',
   ]) assert.match(sql, new RegExp(token, 'u'));
   assert.match(sql, /GRANT ALL ON TABLE public[.]candidate_financial_acquisition_jobs_v4[\s\S]*TO service_role/u);
   assert.match(sql, /claim_candidate_financial_acquisition_jobs_v4/u);

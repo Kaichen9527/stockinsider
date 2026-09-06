@@ -1,0 +1,11 @@
+[Unit]
+Description=Freeze final Taiwan market index at 20:15 Asia/Taipei
+
+[Timer]
+OnCalendar=*-*-* 20:15:00 Asia/Taipei
+Persistent=true
+AccuracySec=1min
+Unit=stockinsider-taiwan-data-final-freeze.service
+
+[Install]
+WantedBy=timers.target

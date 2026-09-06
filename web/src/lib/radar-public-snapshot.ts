@@ -230,11 +230,15 @@ export async function publishRadarPublicSnapshots(input: {
   payload: RadarDailyPayload;
   stages: { found: CandidateStageCard[]; waiting: CandidateStageCard[]; actionable: CandidateStageCard[] };
   pipelineRunId?: string | null;
+  phase?: 'preliminary' | 'final';
+  dataCutoffAt?: string | null;
+  datasetCompletenessPct?: number | null;
 }) {
   const supabase = getSupabaseServerClient();
   const shadowProgress = await loadCandidateShadowProgress().catch(() => ({ observed: 0, qualifying: 0, required: 30 as const, remaining: 30, startedOn: null, latestSession: null, blockers: ['shadow_progress_unavailable'] }));
   const compact = buildCompactPublicRadarPayload(input.payload, input.stages, shadowProgress);
   const publishedAt = new Date().toISOString();
+  const phase = input.phase || 'final';
   const researchContentAsOf = [...input.stages.found, ...input.stages.waiting, ...input.stages.actionable]
     .map((card) => card.dataAsOf)
     .filter((value): value is string => typeof value === 'string' && Number.isFinite(Date.parse(value)))
@@ -242,7 +246,15 @@ export async function publishRadarPublicSnapshots(input: {
     .at(-1) || compact.asOf;
   const prepared: Array<{ window: 'home' | 'daily'; payload: RadarDailyPayload; hash: string; etag: string; bytes: number }> = [];
   for (const window of ['home', 'daily'] as const) {
-    const payload = { ...compact, snapshotPublishedAt: publishedAt, snapshotStale: false, sourceLedCorrectness: compact.sourceLedCorrectness ? { ...compact.sourceLedCorrectness, window } : compact.sourceLedCorrectness };
+    const payload = {
+      ...compact,
+      snapshotPublishedAt: publishedAt,
+      snapshotStale: false,
+      snapshotPhase: phase,
+      dataCutoffAt: input.dataCutoffAt || researchContentAsOf,
+      datasetCompletenessPct: input.datasetCompletenessPct ?? null,
+      sourceLedCorrectness: compact.sourceLedCorrectness ? { ...compact.sourceLedCorrectness, window } : compact.sourceLedCorrectness,
+    };
     const encoded = JSON.stringify(payload);
     const hash = createHash('sha256').update(encoded).digest('hex');
     const etag = `"${hash}"`;
@@ -283,7 +295,7 @@ export async function publishRadarPublicSnapshots(input: {
   }));
   memory.delete('home');
   memory.delete('daily');
-  return { publishedAt, results, homePublicationId: String(ids.homeId), homePayloadHash: home.hash };
+  return { publishedAt, phase, results, homePublicationId: String(ids.homeId), homePayloadHash: home.hash };
 }
 
 export async function markRadarPublicSnapshotsFailed(reason: string, attemptedAt = new Date().toISOString()) {

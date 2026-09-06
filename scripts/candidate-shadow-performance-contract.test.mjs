@@ -77,7 +77,7 @@ test('candidate technical features and the core scheduler remain bound to offici
   assert.match(research, /p_page_limit: to - from \+ 1/u);
   assert.doesNotMatch(research, /if \(priceCoverageTerminal\) throw/u);
   assert.match(research, /technical_status: priceCoverageTerminal \? 'insufficient_history' : 'success'/u);
-  assert.match(research, /staleOrFallback: Boolean\(priceCoverageTerminal\)/u);
+  assert.match(research, /staleOrFallback: usesFallbackEvidence \|\| Boolean\(priceCoverageTerminal\)/u);
   assert.match(domain, /executeNonCriticalStep\('recommendation',[\s\S]{0,320}mode !== 'full'/u);
 });
 
@@ -85,7 +85,9 @@ test('GitHub write workflows are manual-only and VPS timers own the approved cad
   assert.doesNotMatch(sourceWorkflow, /^\s*schedule:/mu);
   assert.doesNotMatch(researchWorkflow, /^\s*schedule:/mu);
   assert.match(sourceTimer, /06,12,18,23:30:00 Asia\/Taipei/u);
-  assert.match(researchTimer, /19:00:00 Asia\/Taipei/u);
+  assert.match(researchTimer, /21:00:00 Asia\/Taipei/u);
+  const preliminaryTimer = readFileSync(new URL('../deployment/vps/systemd/stockinsider-taiwan-data-preliminary.timer', import.meta.url), 'utf8');
+  assert.match(preliminaryTimer, /19:00:00 Asia\/Taipei/u);
   assert.match(researchService, /"recoverOrphanedLease":true/u);
   const sourceService = readFileSync(new URL('../deployment/vps/systemd/stockinsider-source-refresh.service', import.meta.url), 'utf8');
   assert.match(sourceService, /'\{"connector":"all","dryRun":false\}'/u);
@@ -162,6 +164,11 @@ test('current shadow cohort freezes a source manifest and records publication-bo
   assert.match(research, /Operational completeness counts a correctly terminal partial\/fail-closed/u);
   assert.match(research, /manifestSymbols\.filter\(\(symbol\) => terminalBySymbol\.has\(symbol\) && stageBySymbol\.has\(symbol\)\)/u);
   assert.match(research, /publicationId/u);
+  assert.match(research, /non_trading_day_or_late_session/u);
+  assert.match(research, /replayFrozenCandidateClassification/u);
+  assert.match(research, /classification_input/u);
+  assert.match(domain, /read_taiwan_data_publication_metadata_v5/u);
+  assert.match(domain, /final_dataset_\$\{finalSemantics\.status\}_\$\{finalSemantics\.completenessPct\}/u);
   const publishAt = domain.indexOf("executeStep('radar_publication'");
   const shadowAt = domain.indexOf("executeStep('shadow_observation'");
   assert.ok(publishAt >= 0 && shadowAt > publishAt, 'publication must precede the shadow observation');

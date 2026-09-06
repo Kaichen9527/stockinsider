@@ -104,6 +104,75 @@ export function buildForwardEarningsScenario(input: {
   };
 }
 
+/** EV/EBITDA is only publishable when the full capital structure is present.
+ * In particular, total liabilities must never be substituted for debt and a
+ * weighted-share denominator must be positive. */
+export function buildEvEbitdaScenario(input: {
+  price: number;
+  bearEbitda: number;
+  baseEbitda: number;
+  bullEbitda: number;
+  historicalEvEbitdaMultiples: number[];
+  cashAndEquivalents: number;
+  totalDebt: number;
+  dilutedShares: number;
+}) {
+  const sorted = input.historicalEvEbitdaMultiples.filter((value) => Number.isFinite(value) && value > 0).sort((left, right) => left - right);
+  if (sorted.length < 48 || input.price <= 0 || input.bearEbitda <= 0 || input.baseEbitda <= 0 || input.bullEbitda <= 0
+    || input.cashAndEquivalents < 0 || input.totalDebt < 0 || input.dilutedShares <= 0) return null;
+  const at = (percentile: number) => sorted[Math.min(sorted.length - 1, Math.max(0, Math.round((sorted.length - 1) * percentile)))];
+  const multiples = [at(0.25), at(0.5), at(0.75)] as const;
+  const equityValue = (ebitda: number, multiple: number) => (ebitda * multiple - input.totalDebt + input.cashAndEquivalents) / input.dilutedShares;
+  const bear = equityValue(input.bearEbitda, multiples[0]);
+  const base = equityValue(input.baseEbitda, multiples[1]);
+  const bull = equityValue(input.bullEbitda, multiples[2]);
+  if (![bear, base, bull].every((value) => Number.isFinite(value) && value > 0)) return null;
+  const metrics = scenarioValuationMetrics({ currentPrice: input.price, bear, base, bull });
+  return {
+    ...metrics,
+    primaryMethod: 'ev_ebitda' as const,
+    growthFactor: null,
+    operatingDriver: round(input.baseEbitda, 2),
+    operatingDriverSource: 'reported_ttm_ebitda' as const,
+    baseMultiple: round(multiples[1], 3),
+    historicalPercentile: null,
+    historicalSampleCount: sorted.length,
+  };
+}
+
+/** A loss-making issuer has no defensible PE.  This path deliberately holds
+ * the reported TTM revenue constant and varies only the independently
+ * observed EV/sales reference distribution; it does not invent earnings. */
+export function buildTurnaroundEvSalesScenario(input: {
+  price: number;
+  ttmRevenue: number;
+  historicalEvSalesMultiples: number[];
+  cashAndEquivalents: number;
+  totalDebt: number;
+  dilutedShares: number;
+}) {
+  const sorted = input.historicalEvSalesMultiples.filter((value) => Number.isFinite(value) && value > 0).sort((left, right) => left - right);
+  if (sorted.length < 48 || input.price <= 0 || input.ttmRevenue <= 0 || input.cashAndEquivalents < 0 || input.totalDebt < 0 || input.dilutedShares <= 0) return null;
+  const at = (percentile: number) => sorted[Math.min(sorted.length - 1, Math.max(0, Math.round((sorted.length - 1) * percentile)))];
+  const multiples = [at(0.25), at(0.5), at(0.75)] as const;
+  const equityValue = (multiple: number) => (input.ttmRevenue * multiple - input.totalDebt + input.cashAndEquivalents) / input.dilutedShares;
+  const bear = equityValue(multiples[0]);
+  const base = equityValue(multiples[1]);
+  const bull = equityValue(multiples[2]);
+  if (![bear, base, bull].every((value) => Number.isFinite(value) && value > 0)) return null;
+  const metrics = scenarioValuationMetrics({ currentPrice: input.price, bear, base, bull });
+  return {
+    ...metrics,
+    primaryMethod: 'ev_sales' as const,
+    growthFactor: null,
+    operatingDriver: round(input.ttmRevenue, 2),
+    operatingDriverSource: 'reported_ttm_revenue' as const,
+    baseMultiple: round(multiples[1], 3),
+    historicalPercentile: null,
+    historicalSampleCount: sorted.length,
+  };
+}
+
 export function buildDriverMultipleScenario(input: {
   price: number;
   bearDriver: number;

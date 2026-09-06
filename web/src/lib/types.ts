@@ -1726,6 +1726,11 @@ export interface RadarDailyPayload {
   schemaVersion?: 'radar-public-v2';
   snapshotPublishedAt?: string | null;
   snapshotStale?: boolean;
+  snapshotPhase?: 'preliminary' | 'final';
+  dataCutoffAt?: string | null;
+  datasetCompletenessPct?: number | null;
+  finalPublicationStatus?: 'confirmed' | 'preliminary' | 'stale_readonly';
+  datasetMissingComponents?: string[];
   shadowProgress?: CandidateShadowProgress;
   stages?: {
     found: CandidateStageCard[];

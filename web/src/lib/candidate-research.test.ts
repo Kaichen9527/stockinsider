@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { buildConservativeOfficialScenario, buildForwardEarningsScenario } from './candidate-valuation.ts';
+import { buildConservativeOfficialScenario, buildEvEbitdaScenario, buildForwardEarningsScenario, buildTurnaroundEvSalesScenario } from './candidate-valuation.ts';
+import { normalizedCycleYearsObserved } from './candidate-financial-normalization.ts';
 import { candidatePriceRefreshDepth, collectBatchedAuthorityRows, collectPagedAuthorityRows, financialFactAvailableAt, isCandidateHistoricalPriceAccessEnabled, isTransientResearchInfrastructureError, rotatingShard } from './candidate-research-policy.ts';
 
 test('candidate research retries transient infrastructure errors only', () => {
@@ -110,6 +111,44 @@ test('forward valuation requires a complete 48-month multiple distribution', () 
   assert.ok((result?.baseTarget || 0) < (result?.bullTarget || 0));
 });
 
+test('EV/EBITDA only publishes with explicit debt, cash, shares, and its own multiple history', () => {
+  const multiples = Array.from({ length: 48 }, (_, index) => 8 + index / 10);
+  const result = buildEvEbitdaScenario({
+    price: 100, bearEbitda: 80, baseEbitda: 100, bullEbitda: 120,
+    historicalEvEbitdaMultiples: multiples, cashAndEquivalents: 50, totalDebt: 150, dilutedShares: 10,
+  });
+  assert.equal(result?.primaryMethod, 'ev_ebitda');
+  assert.ok((result?.bearTarget || 0) < (result?.baseTarget || 0));
+  assert.equal(buildEvEbitdaScenario({
+    price: 100, bearEbitda: 80, baseEbitda: 100, bullEbitda: 120,
+    historicalEvEbitdaMultiples: multiples, cashAndEquivalents: 50, totalDebt: -1, dilutedShares: 10,
+  }), null);
+});
+
+test('turnaround EV/sales uses reported revenue and observed multiples without manufacturing earnings', () => {
+  const multiples = Array.from({ length: 48 }, (_, index) => 1.5 + index / 100);
+  const result = buildTurnaroundEvSalesScenario({
+    price: 10, ttmRevenue: 100, historicalEvSalesMultiples: multiples,
+    cashAndEquivalents: 40, totalDebt: 20, dilutedShares: 10,
+  });
+  assert.equal(result?.primaryMethod, 'ev_sales');
+  assert.equal(result?.operatingDriver, 100);
+  assert.ok((result?.bearTarget || 0) < (result?.baseTarget || 0));
+  assert.equal(buildTurnaroundEvSalesScenario({
+    price: 10, ttmRevenue: 0, historicalEvSalesMultiples: multiples,
+    cashAndEquivalents: 40, totalDebt: 20, dilutedShares: 10,
+  }), null);
+});
+
+test('twenty consecutive fiscal quarters satisfy a five-year normalized-cycle window', () => {
+  const points = Array.from({ length: 20 }, (_, index) => {
+    const quarter = index % 4;
+    return { periodEnd: `${2021 + Math.floor(index / 4)}-${['03-31', '06-30', '09-30', '12-31'][quarter]}` };
+  });
+  assert.equal(normalizedCycleYearsObserved(points), 5);
+  assert.equal(normalizedCycleYearsObserved(points.filter((_, index) => index !== 10)), 0);
+});
+
 test('candidate historical research is enabled unless production explicitly blocks unavailable official history', () => {
   assert.equal(isCandidateHistoricalPriceAccessEnabled(undefined), true);
   assert.equal(isCandidateHistoricalPriceAccessEnabled('true'), true);
@@ -149,4 +188,13 @@ test('shadow reruns bind financial availability to the frozen manifest cutoff', 
   const { readFile } = await import('node:fs/promises');
   const source = await readFile(new URL('./candidate-research.ts', import.meta.url), 'utf8');
   assert.match(source, /lte\('filing_published_at', authorityCutoff\)[\s\S]{0,180}lte\('recorded_at', authorityCutoff\)/u);
+});
+
+test('price provenance is retained on persisted bars and blocks stage promotion when ineligible', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const source = await readFile(new URL('./candidate-research.ts', import.meta.url), 'utf8');
+  assert.match(source, /provider: bar\.provider, authorityTier: bar\.authorityTier/u);
+  assert.match(source, /staleOrFallback: usesFallbackEvidence/u);
+  assert.match(source, /publication_phase: baseInput\.staleOrFallback \? 'preliminary'/u);
+  assert.doesNotMatch(source, /publication_phase: 'final' as const/u);
 });

@@ -28,18 +28,36 @@ export type CandidateDossierSubmission = {
 export type CandidateDossierFactMetadata = {
   factKey: string;
   factKind?: string;
+  stockId?: string | null;
+  symbol?: string | null;
   unit?: string | null;
   period?: string | null;
   locator?: string | null;
   values?: number[];
 };
 
-function hasNumericClaim(value: string) { return /\d/u.test(value); }
-function numericClaims(value: string) {
-  return [...value.matchAll(/(?<![\p{L}\d])[-+]?\d+(?:\.\d+)?/gu)].map((match) => Number(match[0])).filter(Number.isFinite);
+export type CandidateDossierCompanyIdentity = {
+  stockId?: string | null;
+  symbol?: string | null;
+  name?: string | null;
+};
+
+function numericClaims(value: string, excludedTokens: ReadonlySet<string> = new Set()) {
+  const withoutPeriodContext = value
+    .replace(/\b(?:19|20)\d{2}(?:[-/.]\d{1,2}){1,2}\b/gu, ' ')
+    .replace(/\b(?:19|20)\d{2}\s*年?\s*(?:Q[1-4]|第\s*[一二三四1-4]\s*季(?:度)?)/giu, ' ')
+    .replace(/(?<!\d)(?:19|20)\d{2}(?!\d)/gu, ' ')
+    .replace(/\[(?:\d+)\]/gu, ' ')
+    .replace(/第\s*[一二三四1-4]\s*季(?:度)?/gu, ' ');
+  return [...withoutPeriodContext.matchAll(/(?<![\p{L}\d])[-+]?\d+(?:\.\d+)?/gu)].flatMap((match) => {
+    const token = match[0].replace(/^\+/u, '');
+    if (excludedTokens.has(token)) return [];
+    const number = Number(token);
+    return Number.isFinite(number) ? [number] : [];
+  });
 }
-function numericClaimsMatchFacts(value: string, factIds: string[], factValues: ReadonlyMap<string, number[]>) {
-  const claims = numericClaims(value);
+function numericClaimsMatchFacts(value: string, factIds: string[], factValues: ReadonlyMap<string, number[]>, excludedTokens?: ReadonlySet<string>) {
+  const claims = numericClaims(value, excludedTokens);
   if (claims.length === 0) return true;
   const cited = factIds.flatMap((factId) => factValues.get(factId) || []);
   return claims.every((claim) => cited.some((fact) => Math.abs(claim - fact) <= Math.max(0.01, Math.abs(fact) * 0.001)));
@@ -56,6 +74,8 @@ const SECTION_FACT_PATTERNS: Record<string, RegExp> = {
   technical: /(?:close|ma20|ma60|ma120|ma240|rsi14|volume_ratio|institutional|market)/u,
 };
 const CLAIM_RELEVANCE_PATTERNS: Array<{ text: RegExp; facts: RegExp }> = [
+  { text: /(?:產品|業務|組合|product|business|mix)/iu, facts: /(?:product|business|mix|revenue)/iu },
+  { text: /(?:需求|產業|同業|市場|demand|industry|peer|market)/iu, facts: /(?:demand|industry|peer|market)/iu },
   { text: /(?:客戶|customer|認證|certification|出貨|shipment)/iu, facts: /(?:customer|certification|shipment)/iu },
   { text: /(?:產能|capacity|良率|yield|平均售價|\basp\b)/iu, facts: /(?:capacity|yield|asp)/iu },
   { text: /(?:營收|revenue)/iu, facts: /(?:revenue|sales)/iu },
@@ -100,6 +120,29 @@ function normalizeFormula(value: unknown): CandidateDossierFormula | undefined {
   return expression ? { expression, inputs: stringArray(raw.inputs) } : undefined;
 }
 
+function companyIdentityAppears(value: string, identity: CandidateDossierCompanyIdentity) {
+  const symbol = optionalString(identity.symbol ?? undefined);
+  const name = optionalString(identity.name ?? undefined);
+  const symbolPattern = symbol ? new RegExp(`(^|[^0-9A-Za-z])${symbol.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&')}([^0-9A-Za-z]|$)`, 'u') : null;
+  return Boolean((name && value.includes(name)) || (symbolPattern && symbolPattern.test(value)));
+}
+
+function claimFactsBelongToCompany(claim: CandidateDossierClaim, identity: CandidateDossierCompanyIdentity, facts: ReadonlyMap<string, CandidateDossierFactMetadata>) {
+  const stockId = optionalString(identity.stockId ?? undefined);
+  const symbol = optionalString(identity.symbol ?? undefined);
+  return claim.factIds.every((factId) => {
+    const fact = facts.get(factId);
+    if (!fact) return false;
+    if (stockId) return fact.stockId === stockId;
+    if (symbol) return fact.symbol === symbol;
+    return true;
+  });
+}
+
+function factIdsBelongToCompany(factIds: string[], identity: CandidateDossierCompanyIdentity, facts: ReadonlyMap<string, CandidateDossierFactMetadata>) {
+  return claimFactsBelongToCompany({ id: 'article', kind: 'fact', factIds, text: 'article' }, identity, facts);
+}
+
 function validateFormulaDag(claims: CandidateDossierClaim[], rejectionReasons: string[]) {
   const byId = new Map(claims.map((claim) => [claim.id, claim]));
   for (const claim of claims) {
@@ -142,6 +185,7 @@ export function validateCandidateDossierSubmission(input: {
   summary: unknown; summaryFactIds: unknown; sections: unknown; claims?: unknown; allowedFactIds: Iterable<string>;
   factValues?: ReadonlyMap<string, number[]>; factKeys?: ReadonlyMap<string, string>; factKinds?: ReadonlyMap<string, string>;
   factMetadata?: ReadonlyMap<string, CandidateDossierFactMetadata>;
+  companyIdentity?: CandidateDossierCompanyIdentity;
 }): CandidateDossierSubmission {
   const allowed = new Set(input.allowedFactIds);
   const summary = String(input.summary || '').trim();
@@ -149,12 +193,14 @@ export function validateCandidateDossierSubmission(input: {
   const rawSections = Array.isArray(input.sections) ? input.sections as RawSection[] : [];
   const rawClaims = Array.isArray(input.claims) ? input.claims as RawClaim[] : [];
   const rejectionReasons: string[] = [];
+  const excludedNumericTokens = new Set([optionalString(input.companyIdentity?.symbol ?? undefined)].filter((value): value is string => Boolean(value)));
   if (summary.length < 20 || rawSections.length === 0) rejectionReasons.push('invalid_submission_schema');
   if (summary.length >= 20 && summaryFactIds.length === 0) rejectionReasons.push('summary_missing_fact_id');
   if (summaryFactIds.some((factId) => !allowed.has(factId))) rejectionReasons.push('summary_unknown_fact_id');
   if (input.factKeys && summaryFactIds.length > 0 && !factKeysSupportClaim(summary, summaryFactIds, input.factKeys)) rejectionReasons.push('summary_fact_semantic_mismatch');
+  if (input.companyIdentity && input.factMetadata && summaryFactIds.length > 0 && !factIdsBelongToCompany(summaryFactIds, input.companyIdentity, input.factMetadata)) rejectionReasons.push('summary_company_identity_mismatch');
   if (input.factKinds && !dataGapFactsOnlySupportExplicitGapLanguage(summary, summaryFactIds, input.factKinds)) rejectionReasons.push('summary_data_gap_used_as_positive_evidence');
-  if (input.factValues && summaryFactIds.length > 0 && hasNumericClaim(summary) && !numericClaimsMatchFacts(summary, summaryFactIds, input.factValues)) rejectionReasons.push('summary_numeric_claim_mismatch');
+  if (input.factValues && summaryFactIds.length > 0 && numericClaims(summary, excludedNumericTokens).length > 0 && !numericClaimsMatchFacts(summary, summaryFactIds, input.factValues, excludedNumericTokens)) rejectionReasons.push('summary_numeric_claim_mismatch');
 
   const sections = rawSections.map((section, index) => {
     const title = String(section.title || '').trim(); const key = String(section.key || `section_${index + 1}`); const body = String(section.body || '').trim(); const factIds = stringArray(section.factIds);
@@ -163,9 +209,10 @@ export function validateCandidateDossierSubmission(input: {
     if (factIds.some((factId) => !allowed.has(factId))) rejectionReasons.push(`section_${index + 1}_unknown_fact_id`);
     if (input.factKeys && factIds.length > 0 && !factIdsSupportSection(key, factIds, input.factKeys)) rejectionReasons.push(`section_${index + 1}_fact_semantic_mismatch`);
     if (input.factKeys && factIds.length > 0 && !factKeysSupportClaim(body, factIds, input.factKeys)) rejectionReasons.push(`section_${index + 1}_fact_semantic_mismatch`);
+    if (input.companyIdentity && input.factMetadata && factIds.length > 0 && !factIdsBelongToCompany(factIds, input.companyIdentity, input.factMetadata)) rejectionReasons.push(`section_${index + 1}_company_identity_mismatch`);
     if (input.factKinds && !dataGapFactsOnlySupportExplicitGapLanguage(body, factIds, input.factKinds)) rejectionReasons.push(`section_${index + 1}_data_gap_used_as_positive_evidence`);
-    if (hasNumericClaim(body) && factIds.length === 0) rejectionReasons.push(`section_${index + 1}_numeric_claim_without_fact_id`);
-    if (input.factValues && factIds.length > 0 && hasNumericClaim(body) && !numericClaimsMatchFacts(body, factIds, input.factValues)) rejectionReasons.push(`section_${index + 1}_numeric_claim_mismatch`);
+    if (numericClaims(body, excludedNumericTokens).length > 0 && factIds.length === 0) rejectionReasons.push(`section_${index + 1}_numeric_claim_without_fact_id`);
+    if (input.factValues && factIds.length > 0 && numericClaims(body, excludedNumericTokens).length > 0 && !numericClaimsMatchFacts(body, factIds, input.factValues, excludedNumericTokens)) rejectionReasons.push(`section_${index + 1}_numeric_claim_mismatch`);
     return { key, title, body, factIds };
   });
 
@@ -193,19 +240,24 @@ export function validateCandidateDossierSubmission(input: {
     if ((kind === 'fact' || kind === 'guidance') && input.factMetadata && factIds.length > 0
       && !typedFactClaimHasVerifiableSemantics(text, factIds, input.factMetadata)) rejectionReasons.push(`claim_${id}_fact_semantic_mismatch`);
     if (input.factMetadata && factIds.length > 0 && !claimMatchesMetadata(claim, input.factMetadata)) rejectionReasons.push(`claim_${id}_fact_metadata_mismatch`);
+    if (input.companyIdentity && input.factMetadata && factIds.length > 0 && !claimFactsBelongToCompany(claim, input.companyIdentity, input.factMetadata)) rejectionReasons.push(`claim_${id}_company_identity_mismatch`);
     if ((kind === 'fact' || kind === 'guidance') && (!metric || !locator)) rejectionReasons.push(`claim_${id}_structured_context_required`);
-    if (kind === 'fact' && input.factKinds && factIds.some((factId) => input.factKinds?.get(factId) === 'official_numeric') && !hasNumericClaim(text)) {
+    if (kind === 'fact' && input.factKinds && factIds.some((factId) => input.factKinds?.get(factId) === 'official_numeric') && numericClaims(text, excludedNumericTokens).length === 0) {
       rejectionReasons.push(`claim_${id}_official_numeric_value_required`);
     }
-    if (hasNumericClaim(text) && kind !== 'assumption' && kind !== 'derived_calculation') {
+    if (numericClaims(text, excludedNumericTokens).length > 0 && kind !== 'assumption' && kind !== 'derived_calculation') {
       if (!metric || !unit || !period || !locator) rejectionReasons.push(`claim_${id}_numeric_context_required`);
-      if (input.factValues && !numericClaimsMatchFacts(text, factIds, input.factValues)) rejectionReasons.push(`claim_${id}_numeric_claim_mismatch`);
+      if (input.factValues && !numericClaimsMatchFacts(text, factIds, input.factValues, excludedNumericTokens)) rejectionReasons.push(`claim_${id}_numeric_claim_mismatch`);
     }
-    if (hasNumericClaim(text) && (kind === 'assumption' || kind === 'derived_calculation') && (!metric || !unit || !period)) rejectionReasons.push(`claim_${id}_numeric_context_required`);
+    if (numericClaims(text, excludedNumericTokens).length > 0 && (kind === 'assumption' || kind === 'derived_calculation') && (!metric || !unit || !period)) rejectionReasons.push(`claim_${id}_numeric_context_required`);
     return claim;
   });
   validateFormulaDag(claims, rejectionReasons);
   const combined = `${summary}\n${sections.map((section) => section.body).join('\n')}\n${claims.map((claim) => claim.text).join('\n')}`;
+  if (input.companyIdentity) {
+    if (claims.length === 0) rejectionReasons.push('article_claims_required');
+    if (!companyIdentityAppears(combined, input.companyIdentity)) rejectionReasons.push('article_company_identity_missing');
+  }
   if (/investanchors|定錨投資|定錨會員/iu.test(combined)) rejectionReasons.push('paid_reference_content_forbidden');
   return { summary, summaryFactIds, sections, claims, rejectionReasons: [...new Set(rejectionReasons)] };
 }

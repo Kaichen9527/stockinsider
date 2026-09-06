@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { fetchOfficialJson, fetchTwMarketTradingSessions, fetchTwStockDailyBars, isOfficialValuationSourceUrl, parseTpexMarketTradingSessions, parseTpexTradingStockRows, parseTpexValuationPanel, parseTwseStockValuationHistory, parseTwseValuationPanel, resetOfficialMarketRequestStateForTests, selectOfficialValuationBackfillMonths } from './tw-market.ts';
+import { fetchOfficialJson, fetchTwMarketTradingSessions, fetchTwStockDailyBars, isOfficialValuationSourceUrl, isValidatedFinMindValuationSource, mergeTwMarketDailyBars, parseFinMindDailyPriceRows, parseFinMindValuationRows, parseTpexMarketTradingSessions, parseTpexTradingStockRows, parseTpexValuationPanel, parseTwseStockValuationHistory, parseTwseValuationPanel, readBoundedFinMindJson, resetOfficialMarketRequestStateForTests, resolveTaiwanFinalPublicationSemantics, selectOfficialValuationBackfillMonths, twMarketDailyEvidencePolicy, type TwMarketDailyBar } from './tw-market.ts';
 
 test('a single transient official-host failure does not blackhole the next request', async (t) => {
   const originalFetch = globalThis.fetch;
@@ -253,6 +253,10 @@ test('TPEx official monthly rows normalize ROC dates and trading lots', () => {
     low: 27.6,
     close: 27.6,
     volume: 1_234_000,
+    sourceUrl: 'https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock',
+    provider: 'official_primary',
+    authorityTier: 'official_primary',
+    integrityStatus: 'valid',
   }]);
 });
 
@@ -271,6 +275,8 @@ test('TWSE valuation panel preserves official monthly PE/PB evidence for request
     pbRatio: 10.43,
     sourceUrl: 'https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?date=20260828&selectType=ALL&response=json',
     parserVersion: 'twse-header-v1',
+    provider: 'official_primary',
+    authorityTier: 'official_primary',
   });
   assert.equal(rows.get('2303')?.peRatio, null);
   assert.equal(rows.get('2303')?.pbRatio, 1.2);
@@ -305,5 +311,89 @@ test('TWSE per-stock monthly history normalizes ROC dates for the five-year back
     ['113年08月29日', '1.20', 112, '24.50', '7.10', '113/2'],
     ['113年08月30日', '1.18', 112, '24.80', '7.20', '113/2'],
   ] }, sourceUrl);
-  assert.deepEqual(rows.at(-1), { date: '2024-08-30', peRatio: 24.8, pbRatio: 7.2, sourceUrl, parserVersion: 'twse-stock-history-v1' });
+  assert.deepEqual(rows.at(-1), {
+    date: '2024-08-30', peRatio: 24.8, pbRatio: 7.2, sourceUrl, parserVersion: 'twse-stock-history-v1',
+    provider: 'official_primary', authorityTier: 'official_primary',
+  });
+});
+
+test('FinMind fallback preserves share volume and keeps dividend yield separate from PE', () => {
+  const sourceUrl = 'https://api.finmindtrade.com/api/v4/data?dataset=TaiwanStockPER&data_id=8299';
+  assert.deepEqual(parseFinMindDailyPriceRows([{
+    date: '2026-09-04', open: 480, max: 493, min: 475, close: 488,
+    Trading_Volume: 1234567,
+  }], sourceUrl.replace('TaiwanStockPER', 'TaiwanStockPrice')), [{
+    time: '2026-09-04', open: 480, high: 493, low: 475, close: 488,
+    volume: 1234567,
+    sourceUrl: sourceUrl.replace('TaiwanStockPER', 'TaiwanStockPrice'),
+    provider: 'finmind_fallback',
+    authorityTier: 'finmind_fallback',
+    integrityStatus: 'valid',
+  }]);
+  const valuation = parseFinMindValuationRows([{
+    date: '2026-09-04', stock_id: '8299', dividend_yield: 2.8, PER: 18.75, PBR: 3.2,
+  }], sourceUrl);
+  assert.equal(valuation[0]?.peRatio, 18.75);
+  assert.equal(valuation[0]?.pbRatio, 3.2);
+  assert.equal(valuation[0]?.parserVersion, 'finmind-mirror-v1');
+  assert.equal(valuation[0]?.provider, 'finmind_fallback');
+  assert.equal(valuation[0]?.authorityTier, 'finmind_fallback');
+  assert.equal(isValidatedFinMindValuationSource(sourceUrl, valuation[0]?.parserVersion), true);
+  assert.equal(isOfficialValuationSourceUrl(sourceUrl), false);
+});
+
+test('FinMind fallback rejects oversized bodies before JSON parsing', async () => {
+  const oversized = new Response('x'.repeat(2_000_001), { status: 200 });
+  await assert.rejects(() => readBoundedFinMindJson(oversized), /finmind_response_too_large/u);
+});
+
+test('official prices win a same-session mirror disagreement while conflict remains promotion-blocking', () => {
+  const official: TwMarketDailyBar = {
+    time: '2026-09-04', open: 100, high: 105, low: 99, close: 104, volume: 1_000,
+    sourceUrl: 'https://www.twse.com.tw/exchangeReport/STOCK_DAY',
+    provider: 'official_primary', authorityTier: 'official_primary', integrityStatus: 'valid',
+  };
+  const mirror: TwMarketDailyBar = {
+    ...official, close: 103, sourceUrl: 'https://api.finmindtrade.com/api/v4/data?dataset=TaiwanStockPrice',
+    provider: 'finmind_fallback', authorityTier: 'finmind_fallback',
+  };
+  const merged = mergeTwMarketDailyBars([mirror, official]);
+  assert.equal(merged[0]?.close, 104);
+  assert.equal(merged[0]?.provider, 'official_primary');
+  assert.equal(merged[0]?.integrityStatus, 'conflict');
+  const policy = twMarketDailyEvidencePolicy(merged, '2026-09-04');
+  assert.equal(policy.promotionEligible, false);
+  assert.ok(policy.blockers.includes('price_history_provider_conflict'));
+});
+
+test('FinMind-only or stale price history cannot become actionable', () => {
+  const fallback = parseFinMindDailyPriceRows([{ date: '2026-09-03', open: 100, max: 105, min: 99, close: 104, Trading_Volume: 1_000 }]);
+  const policy = twMarketDailyEvidencePolicy(fallback, '2026-09-04');
+  assert.equal(policy.provider, 'finmind_fallback');
+  assert.equal(policy.authorityTier, 'finmind_fallback');
+  assert.equal(policy.freshnessStatus, 'stale');
+  assert.equal(policy.promotionEligible, false);
+  assert.deepEqual(policy.blockers, ['price_history_uses_finmind_fallback', 'price_history_stale']);
+});
+
+test('final provider publication requires every typed research dataset and exposes missing components', () => {
+  const complete = Object.fromEntries(['daily_price', 'daily_valuation', 'monthly_revenue']
+    .map((dataset) => [`${dataset}:TWSE`, { terminal: 'complete' }]));
+  assert.deepEqual(resolveTaiwanFinalPublicationSemantics({
+    publicationPhase: 'final', datasetCompleteness: complete, datasetCompletenessPct: 100, shadowEligible: true,
+  }), { phase: 'final', status: 'confirmed', completenessPct: 100, missingComponents: [], confirmed: true });
+
+  const conflict = resolveTaiwanFinalPublicationSemantics({
+    publicationPhase: 'final', datasetCompleteness: { ...complete, 'daily_price:TWSE': { terminal: 'conflict' } },
+    datasetCompletenessPct: 83.33, shadowEligible: false,
+  });
+  assert.equal(conflict.phase, 'preliminary');
+  assert.equal(conflict.status, 'stale_readonly');
+  assert.equal(conflict.confirmed, false);
+  assert.deepEqual(conflict.missingComponents, ['daily_price:conflict']);
+
+  const missing = resolveTaiwanFinalPublicationSemantics(null);
+  assert.equal(missing.phase, 'preliminary');
+  assert.equal(missing.completenessPct, 0);
+  assert.equal(missing.missingComponents.length, 3);
 });

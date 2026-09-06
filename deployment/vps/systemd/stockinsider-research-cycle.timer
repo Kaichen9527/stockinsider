@@ -1,8 +1,8 @@
 [Unit]
-Description=Run StockInsider candidate research at 19:00 Asia/Taipei
+Description=Run StockInsider final candidate research and publication at 21:00 Asia/Taipei
 
 [Timer]
-OnCalendar=*-*-* 19:00:00 Asia/Taipei
+OnCalendar=*-*-* 21:00:00 Asia/Taipei
 Persistent=true
 AccuracySec=1min
 Unit=stockinsider-research-cycle.service

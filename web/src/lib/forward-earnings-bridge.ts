@@ -3,6 +3,7 @@ export type ReportedFinancialFact = {
   factKey: string;
   periodStart: string | null;
   periodEnd: string;
+  durationKind?: 'quarterly' | 'quarter_end' | null;
   value: number;
   unit: string | null;
   sourceRef: string;
@@ -72,6 +73,11 @@ function diagnoseDiscreteQuarters(facts: ReportedFinancialFact[], factKey: strin
 }
 
 export function discreteReportedQuarters(facts: ReportedFinancialFact[], factKey: string): QuarterlyPoint[] {
+  // EPS and weighted-average shares are ratios/averages, not additive flows.
+  // A YTD EPS must never be subtracted from the prior YTD EPS because the
+  // denominator can change between periods. Only an explicitly discrete
+  // quarter is accepted here; cumulative disclosures must be reconciled from
+  // attributable profit and diluted shares by a dedicated bridge.
   if (factKey === 'quarterly_basic_eps' || factKey === 'quarterly_diluted_eps' || factKey.includes('weighted_average_shares')) {
     return reportedQuarterValues(facts, factKey).points;
   }

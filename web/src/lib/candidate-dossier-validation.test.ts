@@ -136,3 +136,52 @@ test('a disclosed assumption and an acyclic calculation are accepted as distinct
   });
   assert.deepEqual(result.rejectionReasons, []);
 });
+
+test('company-specific article claims bind issuer identity without treating its ticker as a financial number', () => {
+  const result = validateCandidateDossierSubmission({
+    summary: '台積電（2330）本期營收 100 元，本文只採用該公司官方事實。', summaryFactIds: [factId],
+    sections: [{ key: 'operations', title: '營運', body: '台積電營收 100 元，來源與期間可追溯。', factIds: [factId] }],
+    claims: [{ id: 'issuer_revenue', kind: 'fact', text: '台積電營收 100 元。', factIds: [factId], metric: 'revenue', unit: 'TWD', period: '2026-06-30', locator: 'revenue:2026-06-30' }],
+    allowedFactIds: [factId], factValues: new Map([[factId, [100]]]), factKeys: new Map([[factId, 'revenue']]), factKinds: new Map([[factId, 'official_numeric']]),
+    factMetadata: new Map([[factId, { factKey: 'revenue', factKind: 'official_numeric', stockId: 'stock-a', symbol: '2330', unit: 'TWD', period: '2026-06-30', locator: 'revenue:2026-06-30', values: [100] }]]),
+    companyIdentity: { stockId: 'stock-a', symbol: '2330', name: '台積電' },
+  });
+  assert.deepEqual(result.rejectionReasons, []);
+});
+
+test('company-specific article rejects another issuer fact and generic prose-only output', () => {
+  const result = validateCandidateDossierSubmission({
+    summary: '這是一段沒有指出研究公司身分的通用營收摘要內容。', summaryFactIds: [factId],
+    sections: [{ key: 'operations', title: '營運', body: '本期營收資料有官方來源可以查核。', factIds: [factId] }],
+    claims: [{ id: 'issuer_revenue', kind: 'fact', text: '本期營收 100 元。', factIds: [factId], metric: 'revenue', unit: 'TWD', period: '2026-06-30', locator: 'revenue:2026-06-30' }],
+    allowedFactIds: [factId], factValues: new Map([[factId, [100]]]), factKeys: new Map([[factId, 'revenue']]), factKinds: new Map([[factId, 'official_numeric']]),
+    factMetadata: new Map([[factId, { factKey: 'revenue', stockId: 'stock-b', symbol: '2317', unit: 'TWD', period: '2026-06-30', locator: 'revenue:2026-06-30', values: [100] }]]),
+    companyIdentity: { stockId: 'stock-a', symbol: '2330', name: '台積電' },
+  });
+  assert.ok(result.rejectionReasons.includes('claim_issuer_revenue_company_identity_mismatch'));
+  assert.ok(result.rejectionReasons.includes('summary_company_identity_mismatch'));
+  assert.ok(result.rejectionReasons.includes('section_1_company_identity_mismatch'));
+  assert.ok(result.rejectionReasons.includes('article_company_identity_missing'));
+});
+
+test('a ticker alone cannot satisfy an official numeric value claim', () => {
+  const result = validateCandidateDossierSubmission({
+    summary: '台積電（2330）2026 年營收資料仍需由正式數值證據支持。', summaryFactIds: [factId],
+    sections: [{ key: 'operations', title: '營運', body: '台積電（2330）2026 年第 2 季營收資料需要核對。', factIds: [factId] }],
+    claims: [{ id: 'ticker_only', kind: 'fact', text: '台積電（2330）2026 Q2 營收。', factIds: [factId], metric: 'revenue', locator: 'revenue:2026-06-30' }],
+    allowedFactIds: [factId], factKeys: new Map([[factId, 'revenue']]), factKinds: new Map([[factId, 'official_numeric']]),
+    factMetadata: new Map([[factId, { factKey: 'revenue', stockId: 'stock-a', symbol: '2330', unit: 'TWD', period: '2026-06-30', locator: 'revenue:2026-06-30', values: [100] }]]),
+    companyIdentity: { stockId: 'stock-a', symbol: '2330', name: '台積電' },
+  });
+  assert.ok(result.rejectionReasons.includes('claim_ticker_only_official_numeric_value_required'));
+  assert.ok(!result.rejectionReasons.some((reason) => reason.includes('numeric_claim_mismatch')));
+});
+
+test('strict company article mode requires typed claims', () => {
+  const result = validateCandidateDossierSubmission({
+    summary: '台積電營收研究摘要已採用公司特定的官方證據。', summaryFactIds: [factId],
+    sections: [{ key: 'operations', title: '營運', body: '台積電營收資料有官方來源可以查核。', factIds: [factId] }],
+    allowedFactIds: [factId], factKeys: new Map([[factId, 'revenue']]), companyIdentity: { symbol: '2330', name: '台積電' },
+  });
+  assert.ok(result.rejectionReasons.includes('article_claims_required'));
+});

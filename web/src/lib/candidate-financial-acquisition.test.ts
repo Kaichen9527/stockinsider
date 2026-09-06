@@ -28,6 +28,20 @@ test('TPEx balance rows preserve endpoint-specific equity label and reject secur
     負債總計: '6504885.00', 權益總計: '12895909.00', '每股參考淨值': '28.37',
   }]);
   assert.equal(result.facts.find((fact) => fact.factKey === 'book_value_per_share')?.value, 28.37);
+  assert.equal(result.facts.some((fact) => fact.factKey === 'total_debt'), false, 'total liabilities are not interest-bearing debt');
   assert.equal(classifyFinancialResponse(200, 'text/html', '<html>captcha security check</html>'), 'security_blocked');
   assert.equal(classifyFinancialResponse(200, 'text/html', '<html>temporary page</html>'), 'html_rejected');
+});
+
+test('TPEx accepts the live alternate statement labels without emitting competing facts', () => {
+  const result = parseTpexFinancialEndpoint('generalIncome', [{
+    Date: '1150906', Year: '115', Season: '2', SecuritiesCompanyCode: '1240',
+    營業收入: '1440672.00', '營業毛利（毛損）': '219087.00', 營業費用: '131685.00',
+    '營業外收入及支出': '54301.00', '稅前淨利（淨損）': '141703.00', '所得稅費用（利益）': '15197.00',
+    '淨利（淨損）歸屬於母公司業主': '126188.00', '基本每股盈餘（元）': '2.85',
+  }]);
+  assert.equal(result.terminalReason, 'complete');
+  assert.equal(result.facts.filter((fact) => fact.factKey === 'quarterly_gross_profit').length, 1);
+  assert.equal(result.facts.find((fact) => fact.factKey === 'quarterly_net_income_attributable_to_common')?.value, 126188);
+  assert.equal(result.facts.find((fact) => fact.factKey === 'quarterly_basic_eps')?.periodStart, '2026-01-01');
 });

@@ -28,28 +28,40 @@ export type TpexFinancialFact = {
 
 type EndpointKind = keyof typeof TPEX_FINANCIAL_ENDPOINTS;
 type Row = Record<string, unknown>;
+type HeaderMapping = readonly [headers: readonly string[], factKey: string];
 
-const INCOME_HEADERS: Record<'generalIncome' | 'brokerIncome', Array<[string, string]>> = {
+// TPEx publishes cumulative (year-to-date) statement columns.  These are
+// header aliases, not positional fallbacks: the first populated documented
+// header wins, so alternate presentation labels cannot create two competing
+// facts for one immutable identity.
+const INCOME_HEADERS: Record<'generalIncome' | 'brokerIncome', readonly HeaderMapping[]> = {
   generalIncome: [
-    ['營業收入', 'quarterly_revenue'], ['營業毛利（毛損）淨額', 'quarterly_gross_profit'],
-    ['營業利益（損失）', 'quarterly_operating_income'], ['本期淨利（淨損）', 'quarterly_net_income'],
-    ['淨利（損）歸屬於母公司業主', 'quarterly_net_income_attributable_to_common'],
-    ['基本每股盈餘（元）', 'quarterly_basic_eps'], ['稀釋每股盈餘（元）', 'quarterly_diluted_eps'],
+    [['營業收入'], 'quarterly_revenue'], [['營業毛利（毛損）淨額', '營業毛利（毛損）'], 'quarterly_gross_profit'],
+    [['營業費用'], 'quarterly_operating_expense'], [['營業利益（損失）'], 'quarterly_operating_income'],
+    [['營業外收入及支出'], 'quarterly_non_operating_income'], [['稅前淨利（淨損）'], 'quarterly_pretax_income'],
+    [['所得稅費用（利益）'], 'quarterly_income_tax_expense'], [['本期淨利（淨損）'], 'quarterly_net_income'],
+    [['淨利（淨損）歸屬於母公司業主', '淨利（損）歸屬於母公司業主'], 'quarterly_net_income_attributable_to_common'],
+    [['基本每股盈餘（元）', '基本每股盈餘'], 'quarterly_basic_eps'], [['稀釋每股盈餘（元）', '稀釋每股盈餘'], 'quarterly_diluted_eps'],
   ],
   brokerIncome: [
     // Securities/futures issuers publish 收益 rather than a manufacturing sales
     // field. Keep the endpoint identity in provenance; do not reuse the general
     // industry mapping by positional column.
-    ['收益', 'quarterly_revenue'], ['營業利益', 'quarterly_operating_income'],
-    ['本期淨利（淨損）', 'quarterly_net_income'], ['淨利（損）歸屬於母公司業主', 'quarterly_net_income_attributable_to_common'],
-    ['基本每股盈餘（元）', 'quarterly_basic_eps'], ['稀釋每股盈餘（元）', 'quarterly_diluted_eps'],
+    [['收益'], 'quarterly_revenue'], [['支出及費用'], 'quarterly_operating_expense'], [['營業利益'], 'quarterly_operating_income'],
+    [['營業外損益'], 'quarterly_non_operating_income'], [['稅前淨利（淨損）'], 'quarterly_pretax_income'],
+    [['所得稅費用（利益）'], 'quarterly_income_tax_expense'], [['本期淨利（淨損）'], 'quarterly_net_income'],
+    [['淨利（淨損）歸屬於母公司業主', '淨利（損）歸屬於母公司業主'], 'quarterly_net_income_attributable_to_common'],
+    [['基本每股盈餘（元）', '基本每股盈餘'], 'quarterly_basic_eps'], [['稀釋每股盈餘（元）', '稀釋每股盈餘'], 'quarterly_diluted_eps'],
   ],
 };
 
-const BALANCE_HEADERS: Array<[string, string]> = [
-  ['資產總計', 'total_assets'], ['負債總計', 'total_debt'], ['權益總計', 'total_equity'],
-  ['歸屬於母公司業主之權益合計', 'total_equity'], ['歸屬於母公司業主權益合計', 'total_equity'],
-  ['每股參考淨值', 'book_value_per_share'],
+const BALANCE_HEADERS: readonly HeaderMapping[] = [
+  [['資產總計'], 'total_assets'],
+  // "負債總計" is total liabilities, not the interest-bearing debt required
+  // by EV.  Publishing it as total_debt would manufacture enterprise value.
+  [['歸屬於母公司業主之權益合計', '歸屬於母公司業主權益合計', '歸屬於母公司業主之權益', '歸屬於母公司業主權益'], 'total_equity'],
+  [['權益總計'], 'total_equity'],
+  [['每股參考淨值'], 'book_value_per_share'],
 ];
 
 function finite(value: unknown) {
@@ -72,12 +84,23 @@ function periodFor(row: Row) {
   if (!Number.isInteger(year) || !Number.isInteger(quarter) || quarter < 1 || quarter > 4) return null;
   const gregorian = year + 1911;
   const ends = ['03-31', '06-30', '09-30', '12-31'];
+  // The TPEx statement rows are cumulative from fiscal-year start.  Downstream
+  // flow/EPS logic explicitly de-cumulates this YTD context; treating it as a
+  // standalone quarter would overstate Q2--Q4 earnings.
   return { periodStart: `${gregorian}-01-01`, periodEnd: `${gregorian}-${ends[quarter - 1]}` };
 }
 
 function symbolFor(row: Row) {
   const symbol = String(row.SecuritiesCompanyCode ?? row['公司代號'] ?? '').trim();
   return /^\d{4,6}$/u.test(symbol) ? symbol : null;
+}
+
+function firstFiniteHeader(row: Row, headers: readonly string[]) {
+  for (const header of headers) {
+    const value = finite(row[header]);
+    if (value != null) return { header, value };
+  }
+  return null;
 }
 
 export function classifyFinancialResponse(status: number, contentType: string | null, body: string): FinancialAcquisitionTerminalReason | null {
@@ -115,14 +138,14 @@ export function parseTpexFinancialEndpoint(
     const mappings = isBalance ? BALANCE_HEADERS : INCOME_HEADERS[endpoint as 'generalIncome' | 'brokerIncome'];
     const sourceTimestamp = `${filed}T00:00:00Z`;
     const restatement = createHash('sha256').update(`${sourceUrl}:${symbol}:${period.periodEnd}:${filed}`).digest('hex');
-    for (const [header, factKey] of mappings) {
-      const value = finite(row[header]);
-      if (value == null) continue;
+    for (const [headers, factKey] of mappings) {
+      const selected = firstFiniteHeader(row, headers);
+      if (!selected) continue;
       facts.push({
         symbol, factKey, periodStart: isBalance ? null : period.periodStart, periodEnd: period.periodEnd,
-        durationKind: isBalance ? 'quarter_end' : 'quarterly', value,
+        durationKind: isBalance ? 'quarter_end' : 'quarterly', value: selected.value,
         unit: factKey === 'book_value_per_share' || factKey.endsWith('_eps') ? 'TWD_per_share' : 'TWD_thousand',
-        sourceRef: `tpex-openapi:${endpoint}:${symbol}:${period.periodEnd}:${header}`,
+        sourceRef: `tpex-openapi:${endpoint}:${symbol}:${period.periodEnd}:${selected.header}`,
         sourceTimestamp, filingRestatementId: `tpex:${restatement}`,
       });
     }

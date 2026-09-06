@@ -1,0 +1,23 @@
+[Unit]
+Description=StockInsider Taiwan stock master and official calendar refresh
+After=network-online.target stockinsider-web.service
+Wants=network-online.target
+Requires=stockinsider-web.service
+
+[Service]
+Type=oneshot
+User=root
+WorkingDirectory=/opt/stockinsider/current
+EnvironmentFile=/etc/stockinsider/stockinsider.env
+Environment=APP_URL=http://127.0.0.1:3100
+Environment=EXPECTED_APP_URL=http://127.0.0.1:3100
+ExecStart=/usr/bin/flock -w 900 /run/lock/stockinsider-production-write.lock /usr/bin/env APP_URL=http://127.0.0.1:3100 EXPECTED_APP_URL=http://127.0.0.1:3100 /usr/bin/node scripts/call_internal_api_sequence.mjs '[{"endpoint":"/api/internal/taiwan-data-refresh","payload":{"datasets":["stock_master","trading_calendar"],"phase":"preliminary","symbols":[]},"timeoutMs":120000},{"endpoint":"/api/internal/taiwan-data-queue-drain","payload":{"limit":20},"timeoutMs":600000}]'
+TimeoutStartSec=800
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/run/lock
+
+[Install]
+WantedBy=multi-user.target
