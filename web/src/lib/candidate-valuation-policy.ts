@@ -31,7 +31,7 @@ export function candidateValuationPolicy(input: {
     return { basis: 'ttm_multiple_reference' as const, canPublishTarget: false, reason: 'official_multiple_coverage_below_48_of_60' };
   }
   if (CYCLICAL_ASSET_SYMBOLS.has(input.symbol)) {
-    return { basis: 'normalized_cycle' as const, canPublishTarget: true, reason: null };
+    return { basis: 'normalized_cycle' as const, canPublishTarget: false, reason: 'normalized_cycle_earnings_and_asset_return_inputs_incomplete' };
   }
   if (FORWARD_BRIDGE_SYMBOLS.has(input.symbol)) {
     return input.next12mBridgeComplete
@@ -40,5 +40,5 @@ export function candidateValuationPolicy(input: {
   }
   return input.next12mBridgeComplete
     ? { basis: 'forward_12m' as const, canPublishTarget: true, reason: null }
-    : { basis: 'ttm_multiple_reference' as const, canPublishTarget: true, reason: null };
+    : { basis: 'ttm_multiple_reference' as const, canPublishTarget: false, reason: 'next_12m_earnings_bridge_incomplete' };
 }

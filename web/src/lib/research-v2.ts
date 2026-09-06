@@ -2633,11 +2633,11 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
   const headers = { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0', cookie: 'over18=1' };
 
   const allMatches: Array<{ href: string; title: string }> = [];
-  const [{ data: stocksData, error: stocksError }] = await Promise.all([
-    supabase.from('stocks').select('id,symbol,name').eq('market', 'TW'),
-  ]);
-  if (stocksError) throw new Error(stocksError.message);
-  const stocksRows = ((stocksData as Row[]) || []).filter((row) => /^\d{4}$/.test(compactText(row.symbol)));
+  const stocksRows = (await collectPagedAuthorityRows<Row>(async (from, to) => {
+    const page = await supabase.from('stocks').select('id,symbol,name').eq('market', 'TW').order('symbol').range(from, to);
+    if (page.error) throw page.error;
+    return (page.data as Row[]) || [];
+  }, { maxRows: 5000 })).filter((row) => /^\d{4}$/.test(compactText(row.symbol)));
   const validSymbols = new Set(stocksRows.map((row) => compactText(row.symbol).toUpperCase()));
   const stockBySymbol = new Map(stocksRows.map((row) => [compactText(row.symbol).toUpperCase(), row] as const));
   const stockNamesBySymbol = new Map(stocksRows.map((row) => [compactText(row.symbol).toUpperCase(), compactText(row.name)] as const));
@@ -2741,6 +2741,7 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
     seenArticles.add(match.href);
     const articleUrl = `https://www.ptt.cc${match.href}`;
     let contentText = title;
+    let articleBodyText = title;
     let comments: Array<{ tag: string; author: string | null; text: string }> = [];
     let articleAuthor: string | null = null;
 
@@ -2760,6 +2761,7 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
       const bodyWithoutPushes = mainBlock.replace(/<div class="push">[\s\S]*?<\/div>/g, ' ');
       const bodyText = stripHtml(bodyWithoutPushes).slice(0, 5000);
       const commentText = comments.map((item) => `${item.tag} ${item.text}`).join('\n').slice(0, 3000);
+      articleBodyText = bodyText || title;
       contentText = compactText([bodyText, commentText].filter(Boolean).join('\n\n推噓留言：\n')) || title;
     } catch (error) {
       const failureCode = sourceFetchFailureCode(error);
@@ -2775,7 +2777,7 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
       // Use title only on fetch failure.
     }
 
-    const extracted = extractTwSymbolsWithEvidence(`${title}\n${contentText}`, { validSymbols, stockNamesBySymbol, aliasesBySymbol });
+    const extracted = extractTwSymbolsWithEvidence(`${title}\n${articleBodyText}`, { validSymbols, stockNamesBySymbol, aliasesBySymbol });
     const symbols = extracted.symbols;
     for (const symbol of symbols) matchedSymbols.add(symbol);
     const pushCount = comments.filter((item) => item.tag.includes('推')).length;
@@ -2829,6 +2831,38 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
         query_mode: symbolContext ? 'search' : 'board_scan',
         retention_mode: 'metadata_link_only',
       },
+    });
+    comments.forEach((comment, commentIndex) => {
+      if (!comment.text || !comment.author) return;
+      const commentExtracted = extractTwSymbolsWithEvidence(comment.text, { validSymbols, stockNamesBySymbol, aliasesBySymbol });
+      if (commentExtracted.symbols.length === 0) return;
+      for (const symbol of commentExtracted.symbols) matchedSymbols.add(symbol);
+      const commentSentimentLabel: 'bullish' | 'neutral' | 'bearish' = comment.tag.includes('推')
+        ? 'bullish'
+        : comment.tag.includes('噓')
+          ? 'bearish'
+          : 'neutral';
+      docs.push({
+        sourceEntityId: String(entity.id),
+        platform: 'ptt',
+        documentUrl: `${articleUrl}#push-${commentIndex + 1}`,
+        title: `PTT 留言｜${title}`,
+        summary: comment.text.slice(0, 160),
+        contentText: comment.text.slice(0, 240),
+        symbols: commentExtracted.symbols,
+        sentimentLabel: commentSentimentLabel,
+        confidence: 0.52,
+        contentSemantics: 'editorial_discussion',
+        publisherKey: publisherKeyFor({ platform: 'ptt', author: comment.author, sourceUrl: articleUrl }),
+        publisherName: comment.author,
+        metadata: {
+          connector: 'http', source_surface: 'ptt_stock_push', crawl_mode: symbolContext ? 'symbol_scoped' : 'board_scan',
+          author_name: comment.author, parent_article_author: articleAuthor, parent_document_url: articleUrl,
+          comment_index: commentIndex + 1, comment_tag: comment.tag, evidence_excerpt: comment.text.slice(0, 240),
+          content_semantics: 'editorial_discussion', retention_mode: 'metadata_local_excerpt',
+          excluded_false_positives: commentExtracted.excludedFalsePositives,
+        },
+      });
     });
     for (const symbol of symbols) {
       pttSignalRows.push({
@@ -2963,7 +2997,7 @@ async function scrapeGdeltMetadata(symbolContext?: SymbolScopedStockContext | nu
       if (page.error) throw new Error(`gdelt_stock_authority_failed:${page.error.message}`);
       return (page.data as Row[]) || [];
     }, { maxRows: 5000 }),
-    supabase.from('source_connector_cursors').select('cursor_value').eq('connector', 'gdelt_gkg').maybeSingle(),
+    supabase.from('source_connector_cursors').select('cursor_value').eq('connector', 'gdelt_gkg').eq('scope_key', 'default').maybeSingle(),
   ]);
   if (cursorError) throw new Error(cursorError.message || 'gdelt_context_failed');
   const stocks = stockData.map((row) => ({
@@ -3039,10 +3073,10 @@ async function scrapeGdeltMetadata(symbolContext?: SymbolScopedStockContext | nu
     // Commit the cursor only after this archive's documents have been durably
     // upserted. A later archive failure resumes from this exact boundary.
     const cursorWrite = await supabase.from('source_connector_cursors').upsert({
-      connector: 'gdelt_gkg', cursor_value: gkgUrl,
-      cursor_metadata: { rows: rows.length, matched_documents: docs.length, archive_bytes: archive.length },
-      source_timestamp: parseGdeltSeenDate(gkgUrl.match(/(\d{14})/u)?.[1] || null), updated_at: nowIso(),
-    }, { onConflict: 'connector' });
+      connector: 'gdelt_gkg', scope_key: 'default', cursor_value: gkgUrl,
+      observed_at: parseGdeltSeenDate(gkgUrl.match(/(\d{14})/u)?.[1] || null) || nowIso(),
+      metadata: { rows: rows.length, matched_documents: docs.length, archive_bytes: archive.length },
+    }, { onConflict: 'connector,scope_key' });
     if (cursorWrite.error) throw new Error(`gdelt_cursor_write_failed:${cursorWrite.error.message}`);
   }
   return {
@@ -3241,12 +3275,20 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
   });
   const agentRunId = await startAgentRun('source_sync', { connector: 'telegram', symbol: symbolContext?.symbol || null });
 
-  const [stocksRes, priorDocumentsRes] = await Promise.all([
-    supabase.from('stocks').select('symbol,name').eq('market', 'TW'),
-    supabase.from('source_raw_documents').select('document_url,metadata').eq('platform', 'telegram').order('collected_at', { ascending: false }).limit(5000),
+  const [stocksRows, priorDocuments, persistedCursorsRes] = await Promise.all([
+    collectPagedAuthorityRows<Row>(async (from, to) => {
+      const page = await supabase.from('stocks').select('symbol,name').eq('market', 'TW').order('symbol').range(from, to);
+      if (page.error) throw page.error;
+      return (page.data as Row[]) || [];
+    }, { maxRows: 5000 }),
+    collectPagedAuthorityRows<Row>(async (from, to) => {
+      const page = await supabase.from('source_raw_documents').select('document_url,metadata').eq('platform', 'telegram').order('collected_at', { ascending: false }).range(from, to);
+      if (page.error) throw page.error;
+      return (page.data as Row[]) || [];
+    }, { maxRows: 20_000 }),
+    supabase.from('source_connector_cursors').select('scope_key,cursor_value').eq('connector', 'telegram'),
   ]);
-  if (stocksRes.error || priorDocumentsRes.error) throw new Error(stocksRes.error?.message || priorDocumentsRes.error?.message || 'failed loading telegram context');
-  const stocksRows = (stocksRes.data as Row[]) || [];
+  if (persistedCursorsRes.error) throw new Error(`telegram_cursor_read_failed:${persistedCursorsRes.error.message}`);
   const validSymbols = new Set(stocksRows.map((row) => compactText(row.symbol).toUpperCase()).filter((item) => /^\d{4}$/.test(item)));
   const stockNamesBySymbol = new Map(stocksRows.map((row) => [compactText(row.symbol).toUpperCase(), compactText(row.name)] as const));
   const aliasesBySymbol = new Map(stocksRows.map((row) => {
@@ -3254,11 +3296,16 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
     return [symbol, getSymbolAliases(symbol, compactText(row.name))] as const;
   }));
   const cursorBefore = new Map<string, number>();
-  for (const row of (priorDocumentsRes.data as Row[]) || []) {
+  for (const row of (persistedCursorsRes.data as Row[]) || []) {
+    const channel = compactText(row.scope_key).replace(/^@/u, '').toLowerCase();
+    const messageId = Number(row.cursor_value);
+    if (channel && Number.isInteger(messageId)) cursorBefore.set(channel, messageId);
+  }
+  for (const row of priorDocuments) {
     const metadata = row.metadata && typeof row.metadata === 'object' ? row.metadata as Row : {};
     const channel = compactText(metadata.channel_name).replace(/^@/u, '').toLowerCase();
     const messageId = Number(metadata.stable_message_id || /t\.me\/[^/]+\/(\d+)/u.exec(String(row.document_url || ''))?.[1]);
-    if (channel && Number.isInteger(messageId)) cursorBefore.set(channel, Math.max(cursorBefore.get(channel) || 0, messageId));
+    if (channel && Number.isInteger(messageId) && !cursorBefore.has(channel)) cursorBefore.set(channel, messageId);
   }
   const cursorAfter = new Map(cursorBefore);
 
@@ -3296,20 +3343,35 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
     let channelFailure: string | null = null;
 
     try {
-      const response = await fetch(previewUrl, { headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/2.0' }, signal: AbortSignal.timeout(15_000) });
-      if (!response.ok) throw new Error(`telegram_public_http_${response.status}`);
-      const html = await response.text();
-      const messageMatches = Array.from(html.matchAll(/data-post="[^/"]+\/(\d+)"([\s\S]*?)(?=data-post="|$)/gu)).slice(-20);
+      const cursorKey = channelName.toLowerCase();
+      const cursor = cursorBefore.get(cursorKey) || 0;
+      const messageScopes = new Map<number, string>();
+      let before: number | null = null;
+      for (let pageIndex = 0; pageIndex < 10; pageIndex += 1) {
+        const pageUrl = before ? `${previewUrl}?before=${before}` : previewUrl;
+        const response = await fetch(pageUrl, { headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/2.0' }, signal: AbortSignal.timeout(15_000) });
+        if (!response.ok) throw new Error(`telegram_public_http_${response.status}`);
+        const html = await response.text();
+        const pageMessages = Array.from(html.matchAll(/data-post="[^/"]+\/(\d+)"([\s\S]*?)(?=data-post="|$)/gu));
+        if (pageMessages.length === 0) {
+          if (/tgme_page_(?:title|extra)|tgme_action_button_new/u.test(html)) throw new Error('telegram_not_public_channel_contact_page');
+          throw new Error('telegram_parser_zero_messages');
+        }
+        for (const match of pageMessages) messageScopes.set(Number(match[1]), match[2] || '');
+        const oldest = Math.min(...pageMessages.map((match) => Number(match[1])).filter(Number.isFinite));
+        if (!Number.isFinite(oldest) || cursor === 0 || oldest <= cursor || pageMessages.length < 20) break;
+        before = oldest;
+      }
+      const messageMatches = [...messageScopes.entries()].sort((left, right) => left[0] - right[0]);
       for (const messageMatch of messageMatches) {
-        const messageId = Number(messageMatch[1]);
-        const scope = messageMatch[2] || '';
+        const messageId = messageMatch[0];
+        const scope = messageMatch[1];
         const textMatch = /tgme_widget_message_text[^>]*>([\s\S]*?)<\/div>/u.exec(scope);
         const rawMsg = (textMatch?.[1] || '').replace(/<[^>]+>/g, ' ');
         const msgText = compactText(rawMsg);
         if (!Number.isInteger(messageId) || msgText.length < 15) continue;
         fetchedPosts += 1;
         channelFetchedPosts += 1;
-        const cursorKey = channelName.toLowerCase();
         cursorAfter.set(cursorKey, Math.max(cursorAfter.get(cursorKey) || 0, messageId));
         if (messageId <= (cursorBefore.get(cursorKey) || 0)) {
           cursorDuplicatesSkipped += 1;
@@ -3359,7 +3421,7 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
       searched: true,
       fetched_posts: channelFetchedPosts,
       matched_symbols: [...channelSymbols],
-      records_written: Math.max(0, records.length - channelRecordsBefore),
+      records_written: 0,
       last_success_at: channelFetchedPosts > 0 ? new Date().toISOString() : null,
       failure_reason: channelFailure,
       excluded_false_positives: channelExclusions.length,
@@ -3374,31 +3436,47 @@ async function _scrapeTelegramInner(symbolContext?: SymbolScopedStockContext | n
     }
   }
   const telegramCredStatus: 'valid' | 'invalid' = fetchedPosts > 0 ? 'valid' : 'invalid';
+  let count = 0;
+  for (const channel of channelBreakdown) {
+    const channelItems = records.filter((item) => compactText(item.metadata?.channel_name).toLowerCase() === channel.channel.toLowerCase());
+    const written = await upsertSourceRawDocuments(
+      filterSymbolScopedDocs(channelItems.map((item) => ({
+        sourceEntityId: String(entity.id),
+        platform: 'telegram',
+        documentUrl: item.documentUrl,
+        title: item.title,
+        summary: item.summary,
+        contentText: item.contentText,
+        publishedAt: item.publishedAt,
+        symbols: item.symbols,
+        sentimentLabel: 'neutral',
+        confidence: 0.5,
+        metadata: { connector: 'public_channel_html', ...(item.metadata || {}) },
+      })), 'telegram', symbolContext),
+    );
+    channel.records_written = written;
+    count += written;
+  }
   await upsertCredentialRegistry('telegram', telegramCredStatus, {
     credential_ref: 'TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED',
     error_message: parserFailure ? 'telegram_parser_zero_messages' : null,
     metadata: {
       mode: 'public_channel_html',
-      records_written: records.length,
+      matched_documents: records.length,
+      records_written: count,
       channel_breakdown: channelBreakdown,
     },
   });
-
-  const count = await upsertSourceRawDocuments(
-    filterSymbolScopedDocs(records.map((item) => ({
-      sourceEntityId: String(entity.id),
-      platform: 'telegram',
-      documentUrl: item.documentUrl,
-      title: item.title,
-      summary: item.summary,
-      contentText: item.contentText,
-      publishedAt: item.publishedAt,
-      symbols: item.symbols,
-      sentimentLabel: 'neutral',
-      confidence: 0.5,
-      metadata: { connector: 'public_channel_html', ...(item.metadata || {}) },
-    })), 'telegram', symbolContext),
-  );
+  if (cursorAfter.size > 0) {
+    const cursorWrite = await supabase.from('source_connector_cursors').upsert(
+      [...cursorAfter.entries()].map(([scopeKey, cursorValue]) => ({
+        connector: 'telegram', scope_key: scopeKey, cursor_value: String(cursorValue), observed_at: nowIso(),
+        metadata: { cursor_kind: 'telegram_message_id', source_surface: 'telegram_public_channel' },
+      })),
+      { onConflict: 'connector,scope_key' },
+    );
+    if (cursorWrite.error) throw new Error(`telegram_cursor_write_failed:${cursorWrite.error.message}`);
+  }
 
   const taskId = await writeAgentTask({ agentRunId, agentRole: 'Source Connector Agent', taskType: 'source-sync', status: parserFailure ? 'failed' : 'success', inputPayload: { connector: 'telegram' }, outputSummary: parserFailure ? 'Telegram parser returned zero messages across the approved roster' : `synced ${count} telegram records` });
   await writeAgentFinding(taskId, `Telegram 同步 ${count} 筆訊息`, { confidence: 0.55 });
@@ -3508,6 +3586,7 @@ async function scrapeTwseInsider(symbolContext?: SymbolScopedStockContext | null
     confidence: number;
     metadata: Record<string, unknown>;
   }> = [];
+  const datasetOutcomes: Array<{ url: string; status: 'success' | 'failed'; rows: number; reason: string | null }> = [];
 
   for (const dataset of datasets) {
     try {
@@ -3515,14 +3594,16 @@ async function scrapeTwseInsider(symbolContext?: SymbolScopedStockContext | null
         headers: { 'user-agent': 'Mozilla/5.0 StockInsiderBot/1.0', accept: 'application/json' },
         signal: AbortSignal.timeout(20_000),
       }).then((res) => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`)))) as Row[];
-      const selected = Array.isArray(rows)
-        ? rows
+      if (!Array.isArray(rows)) throw new Error('twse_insider_schema_not_array');
+      if (rows.length > 0 && !rows.some((row) => row && typeof row === 'object' && '公司代號' in row)) {
+        throw new Error('twse_insider_schema_missing_company_symbol');
+      }
+      const selected = rows
             .filter((row) => {
               if (!symbolContext) return true;
               return compactText(row['公司代號']) === symbolContext.symbol;
             })
-            .slice(0, symbolContext ? 60 : 500)
-        : [];
+            .slice(0, symbolContext ? 60 : 500);
       for (const row of selected) {
         const symbol = compactText(row['公司代號']);
         if (!/^[1-9]\d{3}$/.test(symbol)) continue;
@@ -3583,7 +3664,9 @@ async function scrapeTwseInsider(symbolContext?: SymbolScopedStockContext | null
         status: selected.length > 0 ? 'success' : 'partial',
         notes: `${dataset.label} rows=${selected.length}`,
       });
+      datasetOutcomes.push({ url: dataset.url, status: 'success', rows: selected.length, reason: null });
     } catch (error) {
+      datasetOutcomes.push({ url: dataset.url, status: 'failed', rows: 0, reason: (error as Error).message.slice(0, 500) });
       await createSourceAudit({
         connectorRunId,
         platform: 'twse_insider',
@@ -3595,16 +3678,26 @@ async function scrapeTwseInsider(symbolContext?: SymbolScopedStockContext | null
     }
   }
 
+  const successfulDatasets = datasetOutcomes.filter((outcome) => outcome.status === 'success').length;
+  const failedDatasets = datasetOutcomes.length - successfulDatasets;
+  if (successfulDatasets === 0) {
+    const reason = `twse_insider_all_datasets_failed:${datasetOutcomes.map((outcome) => outcome.reason).filter(Boolean).join('|').slice(0, 400)}`;
+    await upsertCredentialRegistry('twse_insider', 'invalid', { credential_ref: 'public_openapi', error_message: reason, metadata: { dataset_outcomes: datasetOutcomes } });
+    await finishAgentRun(agentRunId, 'failed', { connector: 'twse_insider', records_written: 0, terminal_reason: reason });
+    await finishConnectorRun(connectorRunId, 'failed', 0, { error_summary: reason, metadata: { dataset_outcomes: datasetOutcomes } });
+    throw new Error(reason);
+  }
+
   const count = await upsertSourceRawDocuments(filterSymbolScopedDocs(records, 'twse_insider', symbolContext));
   await upsertCredentialRegistry('twse_insider', count > 0 ? 'valid' : 'invalid', {
     credential_ref: 'public_openapi',
-    metadata: { mode: 'openapi_twse', records_written: count },
+    metadata: { mode: 'openapi_twse', records_written: count, dataset_outcomes: datasetOutcomes },
   });
   const taskId = await writeAgentTask({
     agentRunId,
     agentRole: 'Source Connector Agent',
     taskType: 'source-sync',
-    status: 'success',
+    status: failedDatasets > 0 ? 'failed' : 'success',
     inputPayload: { connector: 'twse_insider' },
     outputSummary: `synced ${count} twse insider records`,
   });
@@ -3612,16 +3705,22 @@ async function scrapeTwseInsider(symbolContext?: SymbolScopedStockContext | null
     finding_type: 'source_signal',
     confidence: 0.63,
   });
-  await finishAgentRun(agentRunId, 'success', { connector: 'twse_insider', records_written: count, symbol: symbolContext?.symbol || null });
-  await finishConnectorRun(connectorRunId, count > 0 ? 'success' : 'partial', count, {
+  await finishAgentRun(agentRunId, failedDatasets > 0 ? 'failed' : 'success', { connector: 'twse_insider', records_written: count, symbol: symbolContext?.symbol || null, dataset_outcomes: datasetOutcomes });
+  await finishConnectorRun(connectorRunId, failedDatasets > 0 ? 'partial' : count > 0 ? 'success' : 'partial', count, {
     metadata: {
       entity_id: entity.id,
       crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
       query_symbol: symbolContext?.symbol || null,
       query_terms: symbolContext?.queryTerms || [],
+      dataset_outcomes: datasetOutcomes,
     },
   });
-  return { connector: 'twse_insider', recordsWritten: count, entityId: String(entity.id) };
+  return {
+    connector: 'twse_insider', recordsWritten: count, fetchedPosts: datasetOutcomes.reduce((sum, outcome) => sum + outcome.rows, 0), entityId: String(entity.id),
+    errorCode: failedDatasets > 0 ? `twse_insider_dataset_failures:${failedDatasets}` : null,
+    degradedReason: failedDatasets > 0 ? 'twse_insider_partial_schema_or_transport_failure' : null,
+    sessionMode: 'not_applicable' as const,
+  };
 }
 
 export async function runReportIngest(options?: { dryRun?: boolean }) {

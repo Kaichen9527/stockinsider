@@ -60,25 +60,38 @@ export function buildDeterministicCandidateSections(input: {
   sourceCount: number;
   publisherCount: number;
   platformCount: number;
+  sector?: string | null;
+  facts?: Array<{ factId: string; factKey: string; value: number | null; periodEnd?: string | null }>;
+  earningsBridge?: Record<string, unknown> | null;
+  factorEvidence?: Record<string, { status?: string; score?: number; reasons?: string[] }>;
 }): CandidateDetailSection[] {
   const { card } = input;
   const valuation = card.valuation;
   const technical = card.technical;
   const factIds = input.factIds;
+  const factIdsFor = (...keys: string[]) => (input.facts || []).filter((fact) => keys.includes(fact.factKey)).map((fact) => fact.factId);
+  const cited = (...keys: string[]) => factIdsFor(...keys).length ? factIdsFor(...keys) : factIds;
+  const bridge = input.earningsBridge || {};
+  const actual = bridge.actual && typeof bridge.actual === 'object' ? bridge.actual as Record<string, unknown> : null;
+  const scenarios = bridge.scenarios && typeof bridge.scenarios === 'object' ? bridge.scenarios as Record<string, Record<string, unknown>> : null;
   const valuationText = valuation.status === 'complete'
     ? `目前價格 ${n(valuation.currentPrice, ' 元')}；Bear/Base/Bull 為 ${n(valuation.bearTarget, ' 元')}／${n(valuation.baseTarget, ' 元')}／${n(valuation.bullTarget, ' 元')}，Base 潛在幅度 ${n(valuation.baseUpsidePct, '%')}、風險報酬比 ${n(valuation.rewardRiskRatio)}。估值依據為 ${input.valuationBasis}，五年倍數覆蓋 ${input.multipleMonthsCovered}/60 個月。`
     : `目前價格 ${n(valuation.currentPrice, ' 元')}；正式估值尚未成立，原因列在資料缺口。系統不會用缺少官方橋接的資料捏造目標價。`;
   const sourceText = `最近來源共 ${input.sourceCount} 次有效命中，來自 ${input.publisherCount} 個發布者、${input.platformCount} 個平台；來源熱度只用於發現，不直接等同買進判斷。`;
+  const bridgeText = actual && scenarios
+    ? `最近四季營收 ${n(Number(actual.latestRevenue), ' 元')}、毛利率 ${n(Number(actual.grossMargin) * 100, '%')}、營業利益率 ${n(Number(actual.operatingMargin) * 100, '%')}、稀釋 EPS ${n(Number(actual.latestEps), ' 元')}。模型以已公告八季資料推估未來四季 Bear/Base/Bull EPS ${n(Number(scenarios.bear?.dilutedEps), ' 元')}／${n(Number(scenarios.base?.dilutedEps), ' 元')}／${n(Number(scenarios.bull?.dilutedEps), ' 元')}；這些是可重算假設，不是公司指引。`
+    : '尚未集齊八個離散季度的營收、毛利、營業利益、歸屬普通股淨利與稀釋 EPS，因此不建立未來四季獲利橋接。';
+  const factorText = Object.entries(input.factorEvidence || {}).map(([key, value]) => `${key}:${value.status || 'missing'} ${n(value.score)}`).join('；') || '因子證據待補';
   return [
-    { key: 'viewpoint', title: '營運觀點摘要', body: `${card.chineseName}（${card.symbol}）目前位於「${card.lifecycleStage}」。${sourceText}`, factIds },
-    { key: 'mix', title: '產品與營收組合', body: '本版只呈現已進入官方 fact bundle 的產品與營收資料；若未列數字，表示 MOPS 結構化欄位尚待補齊。', factIds },
-    { key: 'demand', title: '需求、產業與海外同類', body: '產業需求與海外同業只在有可追溯官方或公司 IR 證據時加權；正向 lead-lag 不會單獨形成買點，負向 catch-down 可阻擋升級。', factIds },
-    { key: 'customers', title: '客戶、認證與出貨時程', body: '未經公司公告、法說或公開 IR 驗證的客戶名稱與出貨時程不列為事實。', factIds },
-    { key: 'operations', title: '產能、良率、ASP 與公司動作', body: '依 MOPS、重大訊息與公司 IR 持續更新；目前缺失項目會保留在下方門檻清單。', factIds },
-    { key: 'bridge', title: '營收 → 毛利 → EPS／FCF 橋接', body: input.valuationBasis === 'forward_12m' ? '已具備可驗證的未來十二個月橋接；各假設均需對應 fact ID。' : '目前僅有歷史或 TTM 參考，尚未具備完整未來十二個月橋接，不稱為 forward valuation。', factIds },
-    { key: 'valuation', title: '五年估值與目標情境', body: valuationText, factIds },
+    { key: 'viewpoint', title: '營運觀點摘要', body: `${card.chineseName}（${card.symbol}，${input.sector || '產業分類待補'}）目前位於「${card.lifecycleStage}」。${sourceText} Research ${n(card.scores.research)}、資料信心 ${n(card.scores.dataConfidence)}；未達門檻會留在第一層。`, factIds: cited('close','base_target','base_upside_pct') },
+    { key: 'mix', title: '產品與營收組合', body: actual ? `${card.chineseName}目前可核對的量化組合先以 MOPS 損益橋接呈現：最近四季營收 ${n(Number(actual.latestRevenue), ' 元')}、毛利 ${n(Number(actual.latestGross), ' 元')}；產品別營收尚無官方結構化 fact，不以模板補造。` : `${card.chineseName}尚未取得足以拆分產品／營收組合的官方 fact；目前只保留來源命中與缺口。`, factIds: cited('quarterly_revenue','quarterly_gross_profit','monthly_revenue') },
+    { key: 'demand', title: '需求、產業與海外同類', body: `${card.chineseName}的產業／海外關係因子目前為：${factorText}。正向 lead-lag 只能加權，負向 catch-down 可阻擋進場；缺合法行情會明示 unknown。`, factIds: cited('gap_industry_peer_evidence') },
+    { key: 'customers', title: '客戶、認證與出貨時程', body: `${card.chineseName}目前的 fact bundle 沒有可核對的客戶、認證或出貨時程文字證據；因此這一段不宣稱任何客戶或時程，等待公司 IR／法說／重大訊息補齊。`, factIds: cited('gap_customer_certification_shipment') },
+    { key: 'operations', title: '產能、良率、ASP 與公司動作', body: `${card.chineseName}目前沒有具原始位置的產能、良率或 ASP 官方文字 fact；模型只使用已公告損益結果，不反推未公告的營運動作。`, factIds: cited('gap_capacity_yield_asp_company_actions') },
+    { key: 'bridge', title: '營收 → 毛利 → EPS／FCF 橋接', body: bridgeText, factIds: cited('quarterly_revenue','quarterly_gross_profit','quarterly_operating_income','quarterly_net_income_attributable_to_common','quarterly_diluted_eps','forward_base_eps') },
+    { key: 'valuation', title: '五年估值與目標情境', body: valuationText, factIds: cited('close','pe_ratio','pb_ratio','bear_target','base_target','bull_target','base_upside_pct') },
     { key: 'risk', title: '催化劑、反證與失效條件', body: card.unmetConditions.length ? `目前未達條件：${card.unmetConditions.join('、')}。任何重大官方反證都會阻擋或降低階段。` : '目前沒有尚未達成的已知硬門檻；仍需持續監控官方反證。', factIds },
-    { key: 'technical', title: 'MA、量價、籌碼與大盤', body: `收盤 ${n(technical.close)}；MA20 ${n(technical.ma20)}、MA60 ${n(technical.ma60)}、MA120 ${n(technical.ma120)}、MA240 ${n(technical.ma240)}；RSI14 ${n(technical.rsi14)}、20 日量比 ${n(technical.volumeRatio20Median)}；大盤狀態 ${technical.marketRegime}。`, factIds },
+    { key: 'technical', title: 'MA、量價、籌碼與大盤', body: `收盤 ${n(technical.close)}；MA20 ${n(technical.ma20)}、MA60 ${n(technical.ma60)}、MA120 ${n(technical.ma120)}、MA240 ${n(technical.ma240)}；RSI14 ${n(technical.rsi14)}、20 日量比 ${n(technical.volumeRatio20Median)}；大盤狀態 ${technical.marketRegime}。`, factIds: cited('close','ma20','ma60','ma120','ma240','rsi14','volume_ratio_20_median') },
     { key: 'sources', title: '官方證據與原始連結', body: `本 revision 保存 ${factIds.length} 個 fact ID；社群原文只作發現線索，估值與營運結論必須由官方資料重新推導。`, factIds },
   ];
 }
@@ -106,7 +119,7 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
   const [dossiers, facts] = await Promise.all([
     supabase.from('candidate_research_dossiers')
       .select('narrative_kind,content,validation_status,created_at')
-      .eq('detail_snapshot_id', String(row.id)).eq('validation_status', 'valid')
+      .eq('detail_snapshot_id', String(row.id)).eq('narrative_kind', 'codex_enriched').eq('validation_status', 'valid')
       .order('created_at', { ascending: false }).limit(1),
     factIds.length ? supabase.from('candidate_official_facts')
       .select('fact_id,fact_key,period_end,value,unit,source_url,available_at')

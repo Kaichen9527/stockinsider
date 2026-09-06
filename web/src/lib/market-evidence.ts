@@ -1,6 +1,7 @@
 import { getSupabaseServerClient } from './supabase-server.ts';
 import type { MarketRiskRegime } from './stage-classifier.ts';
 import { fetchOfficialJson, fetchTwseMarketDailyRows } from './tw-market.ts';
+import { collectPagedAuthorityRows } from './candidate-research-policy.ts';
 
 type Row = Record<string, unknown>;
 export const MARKET_EVIDENCE_MODEL_VERSION = 'market-evidence-v2.0.0';
@@ -234,12 +235,15 @@ async function ingestOfficialMarketEvidence(sessionDate: string, evaluatedAt: st
     .filter((date) => /^\d{4}-\d{2}-\d{2}$/u.test(date) && date <= sessionDate))]
     .sort()
     .slice(-520);
-  const [sessions, rosterRes, existing] = await Promise.all([
+  const [sessions, rosterRows, existing] = await Promise.all([
     supplied.length >= 520 ? Promise.resolve(supplied) : loadCompletedTradingSessions(sessionDate),
-    supabase.from('stock_instruments_v3').select('symbol,exchange,instrument_type,listing_status,valid_from,valid_to,recorded_at').eq('instrument_type', 'common_stock').eq('listing_status', 'active').lte('valid_from', evaluatedAt).order('recorded_at', { ascending: false }).limit(10000),
+    collectPagedAuthorityRows<Row>(async (from, to) => {
+      const page = await supabase.rpc('candidate_research_stock_authority', { p_cutoff: evaluatedAt }).range(from, to);
+      if (page.error) throw new Error(`official_market_prerequisite_failed:${page.error.message}`);
+      return (page.data as Row[]) || [];
+    }, { maxRows: 5000 }),
     loadOfficialMarketHistory(sessionDate, evaluatedAt),
   ]);
-  if (rosterRes.error) throw new Error(`official_market_prerequisite_failed:${rosterRes.error.message}`);
   if (sessions.length < 520 || sessions.at(-1) !== sessionDate) throw new Error('official_market_session_history_below_520');
   const latestRows = existing.filter((row) => row.session_date === sessionDate);
   const complete = ['TWSE','TPEX'].every((market) => sessions.every((date) => existing.some((row) => row.market === market && row.session_date === date && numberOrNull(row.index_close) != null)))
@@ -248,9 +252,9 @@ async function ingestOfficialMarketEvidence(sessionDate: string, evaluatedAt: st
   if (complete) return;
 
   const latestInstrument = new Map<string, Row>();
-  for (const row of (rosterRes.data as Row[]) || []) {
+  for (const row of rosterRows) {
     const symbol = String(row.symbol || '');
-    if (!latestInstrument.has(symbol) && (!row.valid_to || String(row.valid_to) > evaluatedAt)) latestInstrument.set(symbol, row);
+    if (symbol && !latestInstrument.has(symbol)) latestInstrument.set(symbol, row);
   }
   const twseRoster = new Set([...latestInstrument.values()].filter((row) => row.exchange === 'TWSE').map((row) => String(row.symbol)));
   const tpexRoster = new Set([...latestInstrument.values()].filter((row) => row.exchange === 'TPEX').map((row) => String(row.symbol)));

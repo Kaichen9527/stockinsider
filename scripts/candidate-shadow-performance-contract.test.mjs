@@ -32,7 +32,7 @@ test('valuation writes use the same official-session composite idempotency key a
   assert.match(research, /new Map\(\s*\(officialValuationHistory\.get\(stock\.symbol\) \|\| \[\]\)\.map\(\(point\) => \[point\.date, point\]\)/u);
 });
 
-test('candidate research reads the durable official calendar and fails fast on an unavailable official host', () => {
+test('candidate research reads the durable official calendar and refreshes the latest official window every cycle', () => {
   const research = readFileSync(new URL('../web/src/lib/candidate-research.ts', import.meta.url), 'utf8');
   const market = readFileSync(new URL('../web/src/lib/tw-market.ts', import.meta.url), 'utf8');
   const marketEvidence = readFileSync(new URL('../web/src/lib/market-evidence.ts', import.meta.url), 'utf8');
@@ -43,7 +43,7 @@ test('candidate research reads the durable official calendar and fails fast on a
   assert.match(calendarMigration, /GRANT EXECUTE[\s\S]*TO service_role/u);
   assert.doesNotMatch(calendarMigration, /DROP TABLE|TRUNCATE/u);
   assert.match(research, /supabase\.rpc\('candidate_research_official_sessions'/u);
-  assert.match(research, /if \(marketSessions\.length < 1320\)[\s\S]*fetchTwMarketTradingSessions\(1320\)/u);
+  assert.match(research, /fetchTwMarketTradingSessions\(marketSessions\.length < 1320 \? 1320 : 90\)/u);
   assert.match(research, /buildMarketEvidenceSnapshot\(latestMarketSession, evaluatedAt, marketSessions\)/u);
   assert.match(market, /OFFICIAL_HOST_CIRCUIT_BREAKER_MS = 5 \* 60 \* 1000/u);
   assert.match(market, /officialHostUnavailableUntil\.set\(circuitKey/u);
@@ -117,8 +117,18 @@ test('scheduled core pipeline is candidate-first, isolates unavailable official 
   assert.match(installer, /CANDIDATE_HISTORICAL_PRICE_ACCESS_ENABLED=true\|false/u);
 });
 
-test('Threads stays outside the VPS scheduler and the 20:00 monitor owns missing-run/publication alerts', () => {
-  assert.match(sourcePolicy, /activeSourceConnectorKeys\(\)\.filter\(\(connector\) => connector !== 'threads'\)/u);
+test('candidate research records prerequisite failures on the canonical run before rethrowing', () => {
+  const research = readFileSync(new URL('../web/src/lib/candidate-research.ts', import.meta.url), 'utf8');
+  const startAt = research.indexOf("status: 'running'");
+  const executeAt = research.indexOf('return await executeCandidateResearchCycle(options, { runId, evaluatedAt })');
+  const failAt = research.indexOf("status: 'failed'", executeAt);
+  assert.ok(startAt >= 0 && executeAt > startAt && failAt > executeAt);
+  assert.match(research, /prerequisite_failure: true/u);
+  assert.match(research, /candidate_research_run_failure_write_failed/u);
+});
+
+test('Threads joins the VPS scheduler only after official policy activation and the 20:00 monitor owns missing-run/publication alerts', () => {
+  assert.match(sourcePolicy, /return activeSourceConnectorKeys\(\)/u);
   assert.match(domain, /candidate_research_run_missing/u);
   assert.match(domain, /radar_publication_failed/u);
   assert.match(domain, /shadow_session_missing/u);
@@ -145,7 +155,7 @@ test('shadow v2 freezes a source manifest and records publication-bound attempts
   assert.match(v2Migration, /ALTER COLUMN shadow_policy_version SET DEFAULT 'shadow-policy-v2'/u);
   assert.match(research, /SHADOW_POLICY_VERSION = 'shadow-policy-v2'/u);
   assert.match(research, /Operational completeness counts a correctly terminal partial\/fail-closed/u);
-  assert.match(research, /manifestSymbols\.filter\(\(symbol\) => terminalBySymbol\.has\(symbol\) && replayBySymbol\.has\(symbol\)\)/u);
+  assert.match(research, /manifestSymbols\.filter\(\(symbol\) => terminalBySymbol\.has\(symbol\) && stageBySymbol\.has\(symbol\)\)/u);
   assert.match(research, /publicationId/u);
   const publishAt = domain.indexOf("executeStep('radar_publication'");
   const shadowAt = domain.indexOf("executeStep('shadow_observation'");

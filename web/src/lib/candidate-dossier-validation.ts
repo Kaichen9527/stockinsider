@@ -22,12 +22,36 @@ function numericClaimsMatchFacts(value: string, factIds: string[], factValues: R
   return claims.every((claim) => cited.some((fact) => Math.abs(claim - fact) <= Math.max(0.01, Math.abs(fact) * 0.001)));
 }
 
+const SECTION_FACT_PATTERNS: Record<string, RegExp> = {
+  mix: /(?:revenue|gross_profit|monthly_revenue|product_mix)/u,
+  demand: /(?:industry|peer|demand|gap_industry)/u,
+  customers: /(?:customer|certification|shipment)/u,
+  operations: /(?:capacity|yield|asp|company_actions|operating_income|revenue)/u,
+  bridge: /(?:quarterly_|forward_|eps_ttm|monthly_revenue)/u,
+  valuation: /(?:close|pe_ratio|pb_ratio|target|upside|forward_.*eps)/u,
+  risk: /(?:target|upside|quarterly_|gap_|counter|invalidation)/u,
+  technical: /(?:close|ma20|ma60|ma120|ma240|rsi14|volume_ratio|institutional|market)/u,
+};
+
+function factIdsSupportSection(key: string, factIds: string[], factKeys: ReadonlyMap<string, string>) {
+  const pattern = SECTION_FACT_PATTERNS[key];
+  if (!pattern) return true;
+  return factIds.some((factId) => pattern.test(factKeys.get(factId) || ''));
+}
+
+function dataGapFactsOnlySupportExplicitGapLanguage(value: string, factIds: string[], factKinds: ReadonlyMap<string, string>) {
+  if (!factIds.length || !factIds.every((factId) => factKinds.get(factId) === 'data_gap')) return true;
+  return /(?:尚未|沒有|缺少|待補|未知|無法確認|insufficient|missing|unknown)/iu.test(value);
+}
+
 export function validateCandidateDossierSubmission(input: {
   summary: unknown;
   summaryFactIds: unknown;
   sections: unknown;
   allowedFactIds: Iterable<string>;
   factValues?: ReadonlyMap<string, number[]>;
+  factKeys?: ReadonlyMap<string, string>;
+  factKinds?: ReadonlyMap<string, string>;
 }): CandidateDossierSubmission {
   const allowed = new Set(input.allowedFactIds);
   const summary = String(input.summary || '').trim();
@@ -38,6 +62,7 @@ export function validateCandidateDossierSubmission(input: {
   if (summary.length < 20 || rawSections.length === 0) rejectionReasons.push('invalid_submission_schema');
   if (summary.length >= 20 && summaryFactIds.length === 0) rejectionReasons.push('summary_missing_fact_id');
   if (summaryFactIds.some((factId) => !allowed.has(factId))) rejectionReasons.push('summary_unknown_fact_id');
+  if (input.factKinds && !dataGapFactsOnlySupportExplicitGapLanguage(summary, summaryFactIds, input.factKinds)) rejectionReasons.push('summary_data_gap_used_as_positive_evidence');
   if (input.factValues && summaryFactIds.length > 0 && hasNumericClaim(summary) && !numericClaimsMatchFacts(summary, summaryFactIds, input.factValues)) rejectionReasons.push('summary_numeric_claim_mismatch');
 
   const sections = rawSections.map((section, index) => {
@@ -48,6 +73,8 @@ export function validateCandidateDossierSubmission(input: {
     if (!title || body.length < 10) rejectionReasons.push(`section_${index + 1}_invalid`);
     if (title && body.length >= 10 && factIds.length === 0) rejectionReasons.push(`section_${index + 1}_missing_fact_id`);
     if (factIds.some((factId) => !allowed.has(factId))) rejectionReasons.push(`section_${index + 1}_unknown_fact_id`);
+    if (input.factKeys && factIds.length > 0 && !factIdsSupportSection(key, factIds, input.factKeys)) rejectionReasons.push(`section_${index + 1}_fact_semantic_mismatch`);
+    if (input.factKinds && !dataGapFactsOnlySupportExplicitGapLanguage(body, factIds, input.factKinds)) rejectionReasons.push(`section_${index + 1}_data_gap_used_as_positive_evidence`);
     if (hasNumericClaim(body) && factIds.length === 0) rejectionReasons.push(`section_${index + 1}_numeric_claim_without_fact_id`);
     if (input.factValues && factIds.length > 0 && hasNumericClaim(body) && !numericClaimsMatchFacts(body, factIds, input.factValues)) rejectionReasons.push(`section_${index + 1}_numeric_claim_mismatch`);
     return { key, title, body, factIds };

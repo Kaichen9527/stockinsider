@@ -19,6 +19,15 @@ export function isTransientResearchInfrastructureError(reason: string) {
   return /(?:\b(?:429|500|502|503|504|520|522|524)\b|timeout|timed out|fetch failed|network|connection reset|econnreset|socket hang up|temporarily unavailable)/iu.test(reason);
 }
 
+export function rotatingShard<T>(items: T[], cursor: number, size: number) {
+  if (!Number.isInteger(size) || size <= 0) throw new Error('invalid_rotating_shard_size');
+  if (items.length === 0) return { items: [] as T[], nextCursor: 0 };
+  const start = Math.max(0, Math.floor(Number.isFinite(cursor) ? cursor : 0)) % items.length;
+  const rotated = [...items.slice(start), ...items.slice(0, start)];
+  const selected = rotated.slice(0, size);
+  return { items: selected, nextCursor: (start + selected.length) % items.length };
+}
+
 export async function collectPagedAuthorityRows<T>(
   readPage: (from: number, to: number) => Promise<T[]>,
   options: { pageSize?: number; maxRows: number },

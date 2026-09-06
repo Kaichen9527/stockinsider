@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { buildConservativeOfficialScenario } from './candidate-valuation.ts';
-import { candidatePriceRefreshDepth, collectBatchedAuthorityRows, collectPagedAuthorityRows, isCandidateHistoricalPriceAccessEnabled, isTransientResearchInfrastructureError } from './candidate-research-policy.ts';
+import { buildConservativeOfficialScenario, buildForwardEarningsScenario } from './candidate-valuation.ts';
+import { candidatePriceRefreshDepth, collectBatchedAuthorityRows, collectPagedAuthorityRows, isCandidateHistoricalPriceAccessEnabled, isTransientResearchInfrastructureError, rotatingShard } from './candidate-research-policy.ts';
 
 test('candidate research retries transient infrastructure errors only', () => {
   assert.equal(isTransientResearchInfrastructureError('supabase.co | 520: Web server is returning an unknown error'), true);
@@ -101,6 +101,15 @@ test('insufficient historical multiple evidence does not create a target', () =>
   assert.equal(buildConservativeOfficialScenario({ price: 100, epsTtm: 5, peRatio: 20, pbRatio: null, revenueYoyPct: 20, sector: 'technology', historicalPeRatios: [18, 20], historicalPbRatios: [] }), null);
 });
 
+test('forward valuation requires a complete 48-month multiple distribution', () => {
+  const tooShort = buildForwardEarningsScenario({ price: 100, bearEps: 4, baseEps: 5, bullEps: 6, historicalPeRatios: Array(47).fill(20) });
+  assert.equal(tooShort, null);
+  const result = buildForwardEarningsScenario({ price: 100, bearEps: 4, baseEps: 5, bullEps: 6, historicalPeRatios: Array.from({ length: 60 }, (_, index) => 12 + index / 10) });
+  assert.equal(result?.primaryMethod, 'forward_pe');
+  assert.ok((result?.bearTarget || 0) < (result?.baseTarget || 0));
+  assert.ok((result?.baseTarget || 0) < (result?.bullTarget || 0));
+});
+
 test('candidate historical research is enabled unless production explicitly blocks unavailable official history', () => {
   assert.equal(isCandidateHistoricalPriceAccessEnabled(undefined), true);
   assert.equal(isCandidateHistoricalPriceAccessEnabled('true'), true);
@@ -112,4 +121,15 @@ test('candidate price refresh reads durable coverage before selecting a bounded 
   assert.equal(candidatePriceRefreshDepth(sessions.slice(0, 239), '2025-12-20'), 1320);
   assert.equal(candidatePriceRefreshDepth(sessions.slice(0, 240), '2025-12-21'), 5);
   assert.equal(candidatePriceRefreshDepth(sessions.slice(0, 240), '2025-12-20'), 0);
+});
+
+test('financial refresh shards rotate past permanently incomplete issuers', () => {
+  const backlog = Array.from({ length: 65 }, (_, index) => `stock-${index + 1}`);
+  const first = rotatingShard(backlog, 0, 30);
+  const second = rotatingShard(backlog, first.nextCursor, 30);
+  const third = rotatingShard(backlog, second.nextCursor, 30);
+  assert.deepEqual(first.items, backlog.slice(0, 30));
+  assert.deepEqual(second.items, backlog.slice(30, 60));
+  assert.deepEqual(third.items, [...backlog.slice(60), ...backlog.slice(0, 25)]);
+  assert.equal(third.nextCursor, 25);
 });

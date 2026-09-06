@@ -258,6 +258,7 @@ test('TPEx official monthly rows normalize ROC dates and trading lots', () => {
 
 test('TWSE valuation panel preserves official monthly PE/PB evidence for requested symbols', () => {
   const rows = parseTwseValuationPanel({
+    fields: ['證券代號', '證券名稱', '收盤價', '殖利率(%)', '股利年度', '本益比', '股價淨值比', '財報年/季'],
     data: [
       ['2330', '台積電', '1,180.00', '0.93', 114, '31.86', '10.43', '115/1'],
       ['2303', '聯電', '45.00', '5.00', 114, '-', '1.20', '115/1'],
@@ -269,6 +270,7 @@ test('TWSE valuation panel preserves official monthly PE/PB evidence for request
     peRatio: 31.86,
     pbRatio: 10.43,
     sourceUrl: 'https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?date=20260828&selectType=ALL&response=json',
+    parserVersion: 'twse-header-v1',
   });
   assert.equal(rows.get('2303')?.peRatio, null);
   assert.equal(rows.get('2303')?.pbRatio, 1.2);
@@ -277,15 +279,24 @@ test('TWSE valuation panel preserves official monthly PE/PB evidence for request
 
 test('TPEx valuation panel maps the official all-stock table without scraping HTML', () => {
   const rows = parseTpexValuationPanel({
-    tables: [{ data: [
-      ['5347', '世界', '120.00', '3.5', 114, '18.50', '4.25', '115Q2'],
-      ['8358', '金居', '60.00', '2.0', 114, '-', '-', '115Q2'],
+    tables: [{
+      fields: ['股票代號', '公司名稱', '本益比', '每股股利', '股利年度', '殖利率(%)', '股價淨值比', '財報年/季'],
+      data: [
+      ['5347', '世界', '18.50', '3.5', 114, '2.92', '4.25', '115Q2'],
+      ['8358', '金居', '70.04', '2.0', 114, '0.43', '12.76', '115Q2'],
     ] }],
   }, '2026-08-28', new Set(['5347', '8358']));
   assert.equal(rows.get('5347')?.peRatio, 18.5);
   assert.equal(rows.get('5347')?.pbRatio, 4.25);
   assert.match(rows.get('5347')?.sourceUrl || '', /peQryDate\?date=2026\/08\/28/u);
-  assert.equal(rows.has('8358'), false);
+  assert.equal(rows.get('8358')?.peRatio, 70.04);
+  assert.equal(rows.get('8358')?.pbRatio, 12.76);
+});
+
+test('TPEx valuation parser fails closed when official headers are missing', () => {
+  assert.throws(() => parseTpexValuationPanel({
+    tables: [{ fields: ['股票代號', '公司名稱', '殖利率(%)'], data: [['8358', '金居', '0.43']] }],
+  }, '2026-08-28', new Set(['8358'])), /tpex_valuation_schema_invalid/u);
 });
 
 test('TWSE per-stock monthly history normalizes ROC dates for the five-year backfill', () => {
@@ -294,5 +305,5 @@ test('TWSE per-stock monthly history normalizes ROC dates for the five-year back
     ['113年08月29日', '1.20', 112, '24.50', '7.10', '113/2'],
     ['113年08月30日', '1.18', 112, '24.80', '7.20', '113/2'],
   ] }, sourceUrl);
-  assert.deepEqual(rows.at(-1), { date: '2024-08-30', peRatio: 24.8, pbRatio: 7.2, sourceUrl });
+  assert.deepEqual(rows.at(-1), { date: '2024-08-30', peRatio: 24.8, pbRatio: 7.2, sourceUrl, parserVersion: 'twse-stock-history-v1' });
 });
