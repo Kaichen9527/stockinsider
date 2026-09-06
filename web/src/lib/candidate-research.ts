@@ -23,7 +23,7 @@ import {
   type TwValuationHistoryPoint,
 } from './tw-market';
 import { buildConservativeOfficialScenario, buildDriverMultipleScenario, buildEvEbitdaScenario, buildForwardEarningsScenario, buildTurnaroundEvSalesScenario } from './candidate-valuation';
-import { candidatePriceRefreshDepth, collectBatchedAuthorityRows, collectPagedAuthorityRows, financialFactAvailableAt, isCandidateHistoricalPriceAccessEnabled, isTransientResearchInfrastructureError } from './candidate-research-policy';
+import { candidatePriceRefreshDepth, collectBatchedAuthorityRows, collectPagedAuthorityRows, financialFactAvailableAt, isCandidateHistoricalPriceAccessEnabled, isTransientResearchInfrastructureError, partitionCandidateMentionsByCutoff } from './candidate-research-policy';
 import { scheduledSourceConnectorKeys, sourceExecutionPolicy } from './source-policy';
 import { loadLatestSourceRunLedger } from './source-run-ledger';
 import type { CandidateShadowProgress, CandidateStageCard } from './types';
@@ -289,18 +289,25 @@ async function executeCandidateResearchCycle(options: {
   if (marketSessions.length < 2) throw new Error('official_trading_calendar_missing');
   const latestMarketSession = marketSessions.at(-1)!;
   const evaluationReferenceMs = Date.parse(`${latestMarketSession}T13:30:00+08:00`);
-  const sourceCutoff = `${latestMarketSession}T18:30:00+08:00`;
+  const productionSourceCutoff = evaluatedAt;
+  const shadowSourceCutoff = `${latestMarketSession}T18:30:00+08:00`;
   const cutoff = new Date(evaluationReferenceMs - 7 * 24 * 60 * 60 * 1000).toISOString();
   const historyCutoff = new Date(evaluationReferenceMs - 35 * 24 * 60 * 60 * 1000).toISOString();
   const [allMentions, priorStages] = await Promise.all([
-    loadCandidateMentions(supabase, historyCutoff, sourceCutoff),
+    loadCandidateMentions(supabase, historyCutoff, productionSourceCutoff),
     loadPriorCandidateStages(supabase),
   ]);
   const stockMaster = new Map(master.map((item) => [item.symbol, item]));
   const candidates = new Map<string, { id: string; symbol: string; name: string; storedName: string; market: 'TW' | 'US'; sector: string | null }>();
   const mentionsByStock = new Map<string, Row[]>();
-  const eligibleMentions = allMentions.filter((mention) => candidateMentionDiscoveryEligible(mention.provenance, String(mention.platform || '')));
+  const eligibleMentionsAtRun = allMentions.filter((mention) => candidateMentionDiscoveryEligible(mention.provenance, String(mention.platform || '')));
+  const mentionWindows = partitionCandidateMentionsByCutoff(eligibleMentionsAtRun, productionSourceCutoff, shadowSourceCutoff);
+  const eligibleMentions = mentionWindows.production;
+  const shadowEligibleMentions = mentionWindows.shadow;
   const recentMentions = eligibleMentions.filter((mention) => String(mention.available_at || '') >= cutoff && String(mention.content_semantics || 'editorial_discussion') !== 'bulk_institutional_ranking');
+  const recentShadowMentions = shadowEligibleMentions.filter((mention) => String(mention.available_at || '') >= cutoff && String(mention.content_semantics || 'editorial_discussion') !== 'bulk_institutional_ranking');
+  const recentShadowStockIds = new Set(recentShadowMentions.map((mention) => String(mention.stock_id || '')).filter(Boolean));
+  const persistentShadowCandidateIds = new Set<string>();
   const olderMentionsByStock = new Map<string, Row[]>();
   for (const mention of eligibleMentions.filter((mention) => String(mention.available_at || '') < cutoff)) {
     const stockId = String(mention.stock_id || '');
@@ -319,6 +326,7 @@ async function executeCandidateResearchCycle(options: {
     if (!official) continue;
     const storedName = String(stock.name || symbol);
     candidates.set(id, { id, symbol, name: official.name, storedName, market: 'TW', sector: official.sector || (stock.sector ? String(stock.sector) : null) });
+    if (recentShadowStockIds.has(id)) persistentShadowCandidateIds.add(id);
     const stockMentions = mentionsByStock.get(id);
     if (stockMentions) stockMentions.push(mention);
     else mentionsByStock.set(id, [mention]);
@@ -333,6 +341,7 @@ async function executeCandidateResearchCycle(options: {
     if (!official) continue;
     const storedName = String(stock.name || symbol);
     candidates.set(id, { id, symbol, name: official.name, storedName, market: 'TW', sector: official.sector || (stock.sector ? String(stock.sector) : null) });
+    persistentShadowCandidateIds.add(id);
   }
   const seedSymbols = (options.seedSymbols || []).filter((seed) => seed.market === 'TW');
   const seedBySymbol = new Map(seedSymbols.map((seed) => [seed.symbol, seed]));
@@ -351,10 +360,12 @@ async function executeCandidateResearchCycle(options: {
       if (id && seed && official) {
         const storedName = String(stock.name || seed.name);
         candidates.set(id, { id, symbol, name: official.name, storedName, market: 'TW', sector: official.sector || (stock.sector ? String(stock.sector) : seed.sector) });
+        persistentShadowCandidateIds.add(id);
       }
     }
   }
   const proposedUniverse = [...candidates.values()].sort((left, right) => left.symbol.localeCompare(right.symbol));
+  const proposedShadowUniverse = proposedUniverse.filter((stock) => persistentShadowCandidateIds.has(stock.id));
   const exchangeBySymbol = new Map(master.map((stock) => [stock.symbol, stock.exchange]));
   const existingCoreFinancialFacts = proposedUniverse.length === 0 ? [] : await collectBatchedAuthorityRows<string, Row>(
     proposedUniverse.map((stock) => stock.id),
@@ -413,22 +424,22 @@ async function executeCandidateResearchCycle(options: {
     researchModel: CANDIDATE_RESEARCH_MODEL_VERSION,
     valuationModel: CANDIDATE_VALUATION_MODEL_VERSION,
     marketModel: 'market-evidence-v2.0.0',
-    sourceMentionRevisionHash: stableHash(eligibleMentions.map((row) => [row.stock_id, row.independent_content_hash, row.available_at]).sort()),
+    sourceMentionRevisionHash: stableHash(shadowEligibleMentions.map((row) => [row.stock_id, row.independent_content_hash, row.available_at]).sort()),
     financialFactsRecordedThrough: latestFinancialRevision.data?.recorded_at || null,
     priceFactsRecordedThrough: latestPriceRevision.data?.recorded_at || null,
     officialFinancialRefreshBacklog: financialRefreshBacklog.length,
   };
   const shadowCohortKey = `${SHADOW_POLICY_VERSION}:${STAGE_RULESET_VERSION}:${CANDIDATE_RESEARCH_MODEL_VERSION}`;
   const canonicalInputHashes = {
-    candidateUniverse: stableHash(proposedUniverse.map((stock) => stock.symbol)),
+    candidateUniverse: stableHash(proposedShadowUniverse.map((stock) => stock.symbol)),
     sourceMentions: String(manifestInputVersions.sourceMentionRevisionHash),
     financialAuthority: stableHash(manifestInputVersions.financialFactsRecordedThrough),
     priceAuthority: stableHash(manifestInputVersions.priceFactsRecordedThrough),
   };
-  const proposedManifestHash = stableHash({ sessionDate: latestMarketSession, sourceCutoff, candidateSymbols: proposedUniverse.map((stock) => stock.symbol), inputVersions: manifestInputVersions });
+  const proposedManifestHash = stableHash({ sessionDate: latestMarketSession, sourceCutoff: shadowSourceCutoff, candidateSymbols: proposedShadowUniverse.map((stock) => stock.symbol), inputVersions: manifestInputVersions });
   const manifestInsert = await supabase.from('candidate_shadow_manifests').upsert({
-    session_date: latestMarketSession, policy_version: SHADOW_POLICY_VERSION, source_cutoff: sourceCutoff,
-    candidate_symbols: proposedUniverse.map((stock) => stock.symbol), input_versions: manifestInputVersions,
+    session_date: latestMarketSession, policy_version: SHADOW_POLICY_VERSION, source_cutoff: shadowSourceCutoff,
+    candidate_symbols: proposedShadowUniverse.map((stock) => stock.symbol), input_versions: manifestInputVersions,
     ruleset_version: STAGE_RULESET_VERSION, model_version: CANDIDATE_RESEARCH_MODEL_VERSION,
     cohort_key: shadowCohortKey, canonical_input_hashes: canonicalInputHashes,
     manifest_hash: proposedManifestHash, frozen_at: authorityFrozenAt,
