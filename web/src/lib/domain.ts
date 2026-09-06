@@ -3,6 +3,7 @@ import { normalizeRelatedStockSymbols, normalizeSourceDocumentSymbols } from './
 import { loadActiveCandidateSourceErrors, loadCandidateShadowProgress, loadCandidateStageCards, recordCandidateShadowObservation, runCandidateResearchCycle } from './candidate-research';
 import { markRadarPublicSnapshotsFailed, publishRadarPublicSnapshots } from './radar-public-snapshot';
 import { MARKET_EVIDENCE_MODEL_VERSION, marketEvidenceToPublicSummary } from './market-evidence';
+import { formatOfficialMarketEvidenceComponent } from './market-evidence-format';
 import { calculateTechnicalFeatures, normalizeInstitutionalFlows, type InstitutionalFlowDay } from './technical-features-v2';
 import { advanceActionableCloseStreak, classifyCandidateStage, sourceSignalLifecycleStage, STAGE_RULESET_VERSION, type MarketRiskRegime } from './stage-classifier';
 import { existsSync, readFileSync } from 'fs';
@@ -5525,10 +5526,10 @@ function buildMarketIndexSignalFromOfficialEvidence(
   const exitBias = status === 'market_breakdown_no_chase'
     ? '檢查個股 MA20／MA60、初始 2ATR 失效價與重大反證。'
     : '依個股凍結的進退場條件追蹤，不由大盤文字單獨決定。';
-  const taiexState = components.taiex ? compactText(components.taiex) : null;
-  const otcState = components.tpex ? compactText(components.tpex) : null;
-  const breadthState = components.breadth ? compactText(components.breadth) : null;
-  const foreignFlowState = components.foreignFlow ? compactText(components.foreignFlow) : null;
+  const taiexState = formatOfficialMarketEvidenceComponent('taiex', components.taiex);
+  const otcState = formatOfficialMarketEvidenceComponent('tpex', components.tpex);
+  const breadthState = formatOfficialMarketEvidenceComponent('breadth', components.breadth);
+  const foreignFlowState = formatOfficialMarketEvidenceComponent('foreignFlow', components.foreignFlow);
   return {
     status,
     label,
