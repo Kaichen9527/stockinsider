@@ -12,27 +12,34 @@ export async function GET(request: Request) {
   if (!/^\d{1,2}$/u.test(rawLimit) || Number(rawLimit) < 1 || Number(rawLimit) > 20) {
     return NextResponse.json({ ok: false, error: 'invalid_pending_document_limit' }, { status: 422 });
   }
-  const queue = await writer.supabase.from('candidate_issuer_ir_document_queue_v4')
-    .select('document_id,stock_id,listing_source_url,document_url,title,published_at,mime_type,metadata,recorded_at')
-    .eq('acquisition_status', 'queued').order('recorded_at', { ascending: true }).limit(Number(rawLimit));
-  if (queue.error) return NextResponse.json({ ok: false, error: `candidate_financial_pending_read_failed:${queue.error.message}` }, { status: 500 });
-  const stockIds = [...new Set((queue.data || []).map((row) => String(row.stock_id || '')).filter(Boolean))];
-  const [stocks, jobs] = await Promise.all([
+  // Issuer-document acquisition jobs are a separate, human/Browser-assisted
+  // lane. They must not occupy the deterministic MOPS/TPEx queue lookahead.
+  const acquisitionJobs = await writer.supabase.from('candidate_financial_acquisition_jobs_v4')
+    .select('job_id,stock_id,exchange,period_end,status,source_url,terminal_detail,created_at')
+    .eq('endpoint_key', 'issuer_ir_document').eq('status', 'queued')
+    .order('created_at', { ascending: true }).limit(Number(rawLimit));
+  if (acquisitionJobs.error) return NextResponse.json({ ok: false, error: `candidate_financial_pending_read_failed:${acquisitionJobs.error.message}` }, { status: 500 });
+  const stockIds = [...new Set((acquisitionJobs.data || []).map((row) => String(row.stock_id || '')).filter(Boolean))];
+  const [stocks, queueHints] = await Promise.all([
     stockIds.length ? writer.supabase.from('stocks').select('id,symbol,name').in('id', stockIds) : Promise.resolve({ data: [], error: null }),
-    stockIds.length ? writer.supabase.from('candidate_financial_acquisition_jobs_v4')
-      .select('job_id,stock_id,exchange,period_end,status,terminal_detail').in('stock_id', stockIds)
-      .eq('endpoint_key', 'issuer_ir_document').in('status', ['queued', 'running']).order('created_at', { ascending: true }) : Promise.resolve({ data: [], error: null }),
+    stockIds.length ? writer.supabase.from('candidate_issuer_ir_document_queue_v4')
+      .select('document_id,stock_id,listing_source_url,document_url,title,published_at,mime_type,metadata,recorded_at')
+      .in('stock_id', stockIds).eq('acquisition_status', 'queued').order('recorded_at', { ascending: true }) : Promise.resolve({ data: [], error: null }),
   ]);
-  if (stocks.error || jobs.error) return NextResponse.json({ ok: false, error: `candidate_financial_pending_join_failed:${stocks.error?.message || jobs.error?.message}` }, { status: 500 });
+  if (stocks.error || queueHints.error) return NextResponse.json({ ok: false, error: `candidate_financial_pending_join_failed:${stocks.error?.message || queueHints.error?.message}` }, { status: 500 });
   const stockById = new Map((stocks.data || []).map((row) => [String(row.id), row]));
-  const jobByStock = new Map((jobs.data || []).map((row) => [String(row.stock_id), row]));
+  const queueByStock = new Map((queueHints.data || []).map((row) => [String(row.stock_id), row]));
   return NextResponse.json({
     ok: true,
-    result: (queue.data || []).map((row) => ({
-      ...row,
+    result: (acquisitionJobs.data || []).map((row) => ({
+      acquisitionJobId: row.job_id,
+      stockId: row.stock_id,
+      exchange: row.exchange,
+      periodEnd: row.period_end,
+      officialFilingUrl: row.source_url,
       symbol: stockById.get(String(row.stock_id))?.symbol || null,
       companyName: stockById.get(String(row.stock_id))?.name || null,
-      acquisitionJob: jobByStock.get(String(row.stock_id)) || null,
+      issuerDocumentHint: queueByStock.get(String(row.stock_id)) || null,
     })),
     releaseId: writer.releaseId,
   });

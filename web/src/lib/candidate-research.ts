@@ -40,6 +40,7 @@ import { brokerEvidenceRowsFromSnapshots, brokerResearchFactor, buildPeerRelatio
 import { refreshCandidateOfficialFinancials } from './candidate-official-financials';
 import { hasConsecutiveFiscalQuarters } from './candidate-financial-normalization';
 import { buildCandidateValuationInputs } from './candidate-valuation-inputs.ts';
+import { fixedRunnerPrincipal } from './opportunity-v3/internal.ts';
 import { sanitizePublicSourceUrl } from './public-source-url.ts';
 import {
   candidateResearchItemStatus,
@@ -53,6 +54,7 @@ type Row = Record<string, unknown>;
 export const CANDIDATE_RESEARCH_MODEL_VERSION = 'candidate-research-v4.0.0';
 export const CANDIDATE_STAGE_MODEL_VERSION = 'candidate-stage-v4.0.0';
 export const CANDIDATE_VALUATION_MODEL_VERSION = 'valuation-v4.0.0';
+export const ENTERPRISE_MULTIPLE_MODEL_VERSION = 'enterprise-multiple-v1';
 export const SHADOW_POLICY_VERSION = 'shadow-policy-v3';
 export const SHADOW_REQUIRED_SESSIONS = 30 as const;
 
@@ -267,6 +269,8 @@ async function executeCandidateResearchCycle(options: {
     partialCount: 0, technicalSessionDate: null, blocked: false, terminalReason: null, marketEvidence: null,
     manifestId: null, manifestHash: null, items: [],
   };
+  const researchRunnerPrincipal = fixedRunnerPrincipal();
+  if (!researchRunnerPrincipal) throw new Error('candidate_research_runner_principal_missing');
   const supabase = getSupabaseServerClient();
   const runId = lifecycle?.runId || randomUUID();
   const [authorityRows, persistedSessionRows] = await Promise.all([
@@ -577,7 +581,7 @@ async function executeCandidateResearchCycle(options: {
         (officialValuationHistory.get(stock.symbol) || []).map((point) => [point.date, point]),
       ).values()].sort((left, right) => left.date.localeCompare(right.date));
       const values = officialMultiples.at(-1) || null;
-      const [institutional, eps, fetchedRevenue, priorRevenueRes, historicalFundamentalsRes, priorStageRes, priorFlowsRes, cachedBarsRes, authorityBarsRes, authorityFactsRes, peerRelationshipsRes, priorTechnicalRes, trackingRes, brokerConsensusRes, officialCompanyEventsRes] = await Promise.all([
+      const [institutional, eps, fetchedRevenue, priorRevenueRes, historicalFundamentalsRes, priorStageRes, priorFlowsRes, cachedBarsRes, authorityBarsRes, authorityFactsRes, peerRelationshipsRes, priorTechnicalRes, trackingRes, brokerConsensusRes, officialCompanyEventsRes, enterpriseMultiplesRes] = await Promise.all([
         fetchTwStockInstitutional(stock.symbol).catch(() => null),
         fetchTwStockEpsTtm(stock.symbol).catch(() => null),
         fetchTwStockRevenue(stock.symbol, 16).catch(() => null),
@@ -597,6 +601,10 @@ async function executeCandidateResearchCycle(options: {
         supabase.from('broker_consensus_snapshots').select('as_of_date,source_count,freshness_status,metadata').eq('stock_id', stock.id).lte('as_of_date', latestMarketSession).order('as_of_date', { ascending: false }).limit(1),
         supabase.from('company_events').select('id,event_type,source_url,event_timestamp,created_at,extracted_signals').eq('stock_id', stock.id)
           .lte('event_timestamp', authorityCutoff).lte('created_at', authorityCutoff).order('event_timestamp', { ascending: false }).limit(100),
+        supabase.from('candidate_enterprise_multiple_snapshots_v6')
+          .select('session_date,ev_ebitda_multiple,ev_sales_multiple,calculation_input_hash,available_at')
+          .eq('stock_id', stock.id).eq('model_version', ENTERPRISE_MULTIPLE_MODEL_VERSION)
+          .lte('available_at', authorityCutoff).order('session_date', { ascending: true }).order('recorded_at', { ascending: true }).limit(240),
       ]);
       // A price feed may expose a newer provisional date before that date is in
       // the official completed-session ledger. It is not eligible for technical
@@ -634,7 +642,7 @@ async function executeCandidateResearchCycle(options: {
         .filter((bar): bar is TwMarketDailyBar => bar.time <= latestMarketSession)).slice(-1320);
       if (!bars || bars.length === 0) throw new Error('official_price_history_missing');
       const priceCoverageTerminal = technicalHistoryCoverageTerminalReason(bars.length);
-      const queryError = priorRevenueRes.error || historicalFundamentalsRes.error || priorStageRes.error || priorFlowsRes.error || cachedBarsRes.error || authorityBarsRes.error || authorityFactsRes.error || peerRelationshipsRes.error || priorTechnicalRes.error || trackingRes.error || brokerConsensusRes.error || officialCompanyEventsRes.error;
+      const queryError = priorRevenueRes.error || historicalFundamentalsRes.error || priorStageRes.error || priorFlowsRes.error || cachedBarsRes.error || authorityBarsRes.error || authorityFactsRes.error || peerRelationshipsRes.error || priorTechnicalRes.error || trackingRes.error || brokerConsensusRes.error || officialCompanyEventsRes.error || enterpriseMultiplesRes.error;
       if (queryError) throw new Error(queryError.message);
       const peerRelationships = ((peerRelationshipsRes.data as Row[]) || []).filter((relationship) => {
         const relationshipType = String(relationship.relationship_type || '');
@@ -874,10 +882,15 @@ async function executeCandidateResearchCycle(options: {
       const ttmEbitda = hasConsecutiveFiscalQuarters(latestEbitdaQuarters, 4)
         ? latestEbitdaQuarters.reduce((sum, row) => sum + row.value, 0)
         : null;
-      const historicalEvEbitdaMultiples = reportedFacts.filter((fact) => fact.factKey === 'ev_ebitda_multiple'
-        && ['instant', 'quarter_end'].includes(fact.durationKind || '') && fact.periodStart === null && fact.value > 0).map((fact) => fact.value);
-      const historicalEvSalesMultiples = reportedFacts.filter((fact) => fact.factKey === 'ev_sales_multiple'
-        && ['instant', 'quarter_end'].includes(fact.durationKind || '') && fact.periodStart === null && fact.value > 0).map((fact) => fact.value);
+      const persistedEnterpriseMultiples = [...new Map(((enterpriseMultiplesRes.data as Row[]) || []).map((row) => [String(row.session_date), row])).values()];
+      const historicalEvEbitdaMultiples = [...persistedEnterpriseMultiples.flatMap((row) => {
+        const value = numberOrNull(row.ev_ebitda_multiple); return value != null && value > 0 ? [value] : [];
+      }), ...reportedFacts.filter((fact) => fact.factKey === 'ev_ebitda_multiple'
+        && ['instant', 'quarter_end'].includes(fact.durationKind || '') && fact.periodStart === null && fact.value > 0).map((fact) => fact.value)];
+      const historicalEvSalesMultiples = [...persistedEnterpriseMultiples.flatMap((row) => {
+        const value = numberOrNull(row.ev_sales_multiple); return value != null && value > 0 ? [value] : [];
+      }), ...reportedFacts.filter((fact) => fact.factKey === 'ev_sales_multiple'
+        && ['instant', 'quarter_end'].includes(fact.durationKind || '') && fact.periodStart === null && fact.value > 0).map((fact) => fact.value)];
       const latestRevenueQuarters = revenueQuarterHistory.slice(-4);
       const latestGrossProfitQuarters = grossProfitQuarterHistory.slice(-4);
       const turnaroundRevenueGrossProfitBridgeComplete = hasConsecutiveFiscalQuarters(latestRevenueQuarters, 4)
@@ -911,6 +924,31 @@ async function executeCandidateResearchCycle(options: {
       const enterpriseValue = currentDilutedShares != null && latestCashAndEquivalents != null && latestTotalDebt != null
         ? technical.close * currentDilutedShares + latestTotalDebt - latestCashAndEquivalents
         : null;
+      const enterpriseFactIds = [...new Set([
+        ...latestEbitdaQuarters.flatMap((row) => row.factIds),
+        ...latestRevenueQuarters.flatMap((row) => row.factIds),
+        ...turnaroundShareHistory.slice(-4).flatMap((row) => row.factIds),
+        ...(latestCashFact?.factIds || []), ...(latestDebtFact?.factIds || []),
+      ])].sort();
+      const currentEvEbitda = enterpriseValue != null && enterpriseValue > 0 && ttmEbitda != null && ttmEbitda > 0
+        ? enterpriseValue / ttmEbitda : null;
+      const currentEvSales = enterpriseValue != null && enterpriseValue > 0 && ttmRevenue != null && ttmRevenue > 0
+        ? enterpriseValue / ttmRevenue : null;
+      if ((currentEvEbitda != null && currentEvEbitda < 1000) || (currentEvSales != null && currentEvSales < 1000)) {
+        const enterpriseWrite = await supabase.rpc('append_candidate_enterprise_multiple_snapshot_v6', {
+          p_stock_id: stock.id, p_session_date: technical.sessionDate, p_model_version: ENTERPRISE_MULTIPLE_MODEL_VERSION,
+          p_payload: {
+            current_price: technical.close, diluted_shares: currentDilutedShares, total_debt: latestTotalDebt,
+            cash_and_equivalents: latestCashAndEquivalents, ttm_ebitda: ttmEbitda, ttm_revenue: ttmRevenue,
+          },
+          p_fact_ids: enterpriseFactIds, p_available_at: evaluatedAt, p_caller_principal: researchRunnerPrincipal,
+        });
+        if (enterpriseWrite.error) throw new Error(`enterprise_multiple_snapshot_write_failed:${enterpriseWrite.error.message}`);
+        if (!persistedEnterpriseMultiples.some((row) => String(row.session_date) === technical.sessionDate)) {
+          if (currentEvEbitda != null && currentEvEbitda < 1000) historicalEvEbitdaMultiples.push(currentEvEbitda);
+          if (currentEvSales != null && currentEvSales < 1000) historicalEvSalesMultiples.push(currentEvSales);
+        }
+      }
       const valuationPolicy = candidateValuationPolicy({
         symbol: stock.symbol,
         multipleMonthsCovered,

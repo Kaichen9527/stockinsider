@@ -24,6 +24,13 @@ CREATE TABLE IF NOT EXISTS public.candidate_issuer_document_domains_v6 (
   PRIMARY KEY(stock_id,host)
 );
 
+-- Curated issuer fallback already shipped by the runtime. This approval is
+-- narrow to Nanya's own IR host and does not create a general URL allowlist.
+INSERT INTO public.candidate_issuer_document_domains_v6(stock_id,host,note)
+SELECT id,'www.nanya.com','reviewed issuer IR fallback for 2408'
+FROM public.stocks WHERE symbol='2408'
+ON CONFLICT (stock_id,host) DO NOTHING;
+
 CREATE TABLE IF NOT EXISTS public.candidate_financial_document_receipts_v6 (
   receipt_id uuid PRIMARY KEY DEFAULT extensions.gen_random_uuid(),
   stock_id uuid NOT NULL REFERENCES public.stocks(id) ON DELETE RESTRICT,

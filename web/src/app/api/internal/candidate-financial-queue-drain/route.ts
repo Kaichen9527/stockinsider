@@ -29,6 +29,7 @@ export async function POST(request: Request) {
   const jobs = await writer.supabase.from('candidate_financial_acquisition_jobs_v4')
     .select('stock_id,exchange,created_at')
     .eq('status', 'queued')
+    .neq('endpoint_key', 'issuer_ir_document')
     .or(`next_attempt_at.is.null,next_attempt_at.lte.${now}`)
     .order('created_at', { ascending: true })
     .limit(limit * JOB_LOOKAHEAD_MULTIPLIER);

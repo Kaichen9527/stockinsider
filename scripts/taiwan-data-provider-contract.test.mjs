@@ -65,6 +65,15 @@ test('VPS-only authenticated routes queue and drain the durable provider plane',
   assert.match(financialDrainRoute, /requireActiveVpsWriter/u);
   assert.match(financialDrainRoute, /refreshCandidateOfficialFinancials/u);
   assert.match(financialDrainRoute, /MAX_DRAIN_LIMIT = 20/u);
+  assert.match(financialDrainRoute, /neq\('endpoint_key', 'issuer_ir_document'\)/u);
+});
+
+test('issuer IR acquisition jobs remain visible to the Browser-assisted receipt worker', () => {
+  const pendingRoute = readFileSync(new URL('../web/src/app/api/internal/candidate-financial-documents/pending/route.ts', import.meta.url), 'utf8');
+  assert.match(pendingRoute, /candidate_financial_acquisition_jobs_v4/u);
+  assert.match(pendingRoute, /eq\('endpoint_key', 'issuer_ir_document'\)[.]eq\('status', 'queued'\)/u);
+  assert.match(pendingRoute, /acquisitionJobId: row[.]job_id/u);
+  assert.match(pendingRoute, /officialFilingUrl: row[.]source_url/u);
 });
 
 test('candidate-universe schedules include typed valuation, revenue and financial datasets', () => {

@@ -20,6 +20,7 @@ test('research funnel v4 migration plan is exact, additive and dry by default', 
     'migrations/20260907_evidence_valuation_contract_v6.sql',
     'migrations/20260907_02_candidate_financial_documents_v6.sql',
     'migrations/20260907_03_candidate_financial_document_parser_v6.sql',
+    'migrations/20260907_04_enterprise_multiple_history_v6.sql',
     'migrations/20260907_candidate_dossier_outbox_v5.sql',
     'migrations/20260907_shadow_replay_payload_v5.sql',
   ]);
@@ -31,7 +32,7 @@ test('research funnel v4 migration plan is exact, additive and dry by default', 
   }
   const output = JSON.parse(execFileSync(process.execPath, ['scripts/apply-research-funnel-v4-migrations.mjs'], { cwd: root, encoding: 'utf8' }));
   assert.equal(output.applied, false);
-  assert.equal(output.migrations.length, 12);
+  assert.equal(output.migrations.length, 13);
   assert.ok(output.migrations.every((entry) => /^[0-9a-f]{64}$/u.test(entry.sha256) && entry.bytes > 0));
 });
 
