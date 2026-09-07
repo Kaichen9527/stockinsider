@@ -123,7 +123,7 @@ catalog and these current roots: `runtime-transaction-contract.md` v3.17,
 `acceptance-evidence-contract.md` v3.13.0,
 `factor-correctness-amendment.md` v3.11.6,
 `authority-supersession-contract.md` v3.2, `auth-principal-contract.md` v3.8,
-`trading-calendar-contract.md` v3.4, and `model-runner-contract.md` v3.6 with 885-byte identity SHA-256
+`trading-calendar-contract.md` v3.4, and `model-runner-contract.md` v3.6 with 875-byte identity SHA-256
 `f87259bc18fe03177f84c318cd2bff8fd016abb7b249368879c317a583897ed3`, host fixture
 SHA-256 `aaa70cc4dfc341224c5042c501e7392c2e63abce2164a66e87ba1fda5160fbca`,
 and acceptance `1.46.0/320`. Hash-preimage schema tags inside fenced canonical
