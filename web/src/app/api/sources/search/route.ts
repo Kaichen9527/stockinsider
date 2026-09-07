@@ -16,6 +16,7 @@ export async function GET(req: Request) {
       from: searchParams.get('from'),
       to: searchParams.get('to'),
       includeContentSearch: searchParams.get('includeContent') === '1',
+      includeDiagnostics: searchParams.get('diagnostics') === '1' || Boolean(searchParams.get('runId')),
       page: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
       pageSize: searchParams.get('pageSize') ? Number(searchParams.get('pageSize')) : 25,
     });

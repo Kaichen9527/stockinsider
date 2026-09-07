@@ -109,6 +109,16 @@ export async function POST(request: Request) {
   const receipt = Array.isArray(persistence.data) ? persistence.data[0] as Row | undefined : persistence.data as Row | null;
   if (persistence.error || !receipt) return NextResponse.json({ ok: false, error: persistence.error?.message || 'candidate_dossier_persistence_failed' }, { status: 500 });
   const accepted = receipt.status === 'accepted';
+  // Delivery state is deliberately updated only after the append-only receipt
+  // exists.  A failed update cannot make an article appear enriched because the
+  // public reader independently verifies the receipt.
+  const outboxUpdate = await supabase.from('candidate_dossier_outbox_v5').update({
+    status: accepted ? 'accepted' : 'rejected', lease_owner: null, lease_expires_at: null,
+    receipt_id: receipt.submission_id, last_error: accepted ? null : JSON.stringify(receipt.rejection_reasons || rejectionReasons), updated_at: new Date().toISOString(),
+  }).eq('revision_id', revisionId).eq('input_hash', inputHash);
+  if (outboxUpdate.error && !/does not exist|schema cache/iu.test(outboxUpdate.error.message)) {
+    return NextResponse.json({ ok: false, error: `candidate_dossier_outbox_update_failed:${outboxUpdate.error.message}` }, { status: 500 });
+  }
   return NextResponse.json({
     ok: accepted, submissionId: receipt.submission_id, status: receipt.status,
     revisionId, inputHash, dossierId: receipt.dossier_id, validationStatus: accepted ? 'valid' : 'rejected',

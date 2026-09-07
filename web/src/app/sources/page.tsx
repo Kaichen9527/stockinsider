@@ -75,6 +75,9 @@ export default async function SourcesPage({
     to: to || null,
     page,
     pageSize: 25,
+    // Full connector/audit ledgers are a deliberate per-run diagnostic view;
+    // they are not loaded by the normal source-document SSR request.
+    includeDiagnostics: Boolean(runId),
   })
     .then((result) => ({ result, error: null as string | null }))
     .catch((error) => ({
@@ -219,7 +222,7 @@ export default async function SourcesPage({
                   </div>
                 );
               })}
-              {result.sourceRunLedger.length === 0 ? <p className="text-sm text-slate-500 dark:text-emerald-100/65">Migration 套用後，第一筆正式執行會出現在這裡；沒有 ledger 不會顯示成功。</p> : null}
+              {result.sourceRunLedger.length === 0 ? <p className="text-sm text-slate-500 dark:text-emerald-100/65">一般瀏覽使用背景發布的來源摘要；輸入 run id 可查看該次完整稽核帳本。</p> : null}
             </div>
           </article>
 
@@ -271,7 +274,7 @@ export default async function SourcesPage({
                   </div>
                 ))}
                 {result.recentRuns.length === 0 ? (
-                  <p className="text-sm text-slate-500 dark:text-emerald-100/65">目前沒有 connector run 紀錄。</p>
+                  <p className="text-sm text-slate-500 dark:text-emerald-100/65">輸入 run id 後載入該次 connector 診斷。</p>
                 ) : null}
               </div>
             </article>
@@ -298,8 +301,8 @@ export default async function SourcesPage({
                   {audit.notes ? <p className="mt-1 text-slate-600 dark:text-emerald-100/70">{audit.notes}</p> : null}
                 </div>
               ))}
-              {result.recentAudits.length === 0 ? (
-                <p className="text-sm text-slate-500 dark:text-emerald-100/65">目前沒有 source audit 證據。</p>
+                {result.recentAudits.length === 0 ? (
+                  <p className="text-sm text-slate-500 dark:text-emerald-100/65">輸入 run id 後載入該次 source audit 證據。</p>
               ) : null}
             </div>
           </article>

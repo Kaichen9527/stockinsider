@@ -18561,6 +18561,7 @@ export async function searchSourceDocuments(params?: {
   from?: string | null;
   to?: string | null;
   includeContentSearch?: boolean;
+  includeDiagnostics?: boolean;
   page?: number;
   pageSize?: number;
 }): Promise<SourceSearchPayload> {
@@ -18574,6 +18575,9 @@ export async function searchSourceDocuments(params?: {
   const runId = compactText(params?.runId || '') || null;
   const evidenceLevel = (params?.evidenceLevel as '傳言層' | '佐證層' | '估值層' | undefined) || null;
   const includeContentSearch = Boolean(params?.includeContentSearch);
+  // The public source centre normally needs documents, not every operational
+  // audit row.  Diagnostics stay available for a specifically requested run.
+  const includeDiagnostics = Boolean(params?.includeDiagnostics || runId);
   const from = params?.from ? String(params.from) : null;
   const to = params?.to ? String(params.to) : null;
   const defaultRecentFromIso = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
@@ -18643,12 +18647,12 @@ export async function searchSourceDocuments(params?: {
   auditsQuery = runId ? auditsQuery.eq('connector_run_id', runId).limit(500) : auditsQuery.limit(20);
   const [docsRes, runsRes, auditsRes, coverageRes, sourceRunLedger] = await Promise.all([
     query.range(fetchStart, fetchEnd),
-    supabase
+    includeDiagnostics ? supabase
       .from('connector_runs')
       .select('id,connector_name,platform,status,records_written,error_summary,started_at,finished_at')
       .order('started_at', { ascending: false })
-      .limit(20),
-    auditsQuery,
+      .limit(20) : Promise.resolve({ data: [], error: null }),
+    includeDiagnostics ? auditsQuery : Promise.resolve({ data: [], error: null }),
     supabase.rpc('source_document_coverage', {
       p_from: fromIso,
       p_to: toIso,
@@ -18658,7 +18662,7 @@ export async function searchSourceDocuments(params?: {
       p_verification_status: effectiveVerificationStatus,
       p_theme_symbols: themeSymbols.length > 0 ? themeSymbols : null,
     }),
-    loadLatestSourceRunLedger(),
+    includeDiagnostics ? loadLatestSourceRunLedger() : Promise.resolve([]),
   ]);
   const { data, error, count } = docsRes;
   if (error) throw new Error(error.message);
@@ -18764,7 +18768,7 @@ export async function searchSourceDocuments(params?: {
     coverageScope: 'complete_filtered_result',
     items: pagedItems,
     sourceRunLedger,
-    connectorStatus: (await getConnectorStatusSummary()).map(compactSourceSearchConnectorStatus),
+    connectorStatus: includeDiagnostics ? (await getConnectorStatusSummary()).map(compactSourceSearchConnectorStatus) : [],
     recentRuns: ((runsRes.data as Row[]) || []).map((row) => ({
       id: String(row.id || ''),
       connector: String(row.platform || row.connector_name || ''),

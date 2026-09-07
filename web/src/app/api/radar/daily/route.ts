@@ -313,6 +313,31 @@ function compactRecommendationCard(card: Record<string, unknown>) {
   };
 }
 
+// Public Radar cards are an index, never an embedded research dossier.  Keeping
+// only a few source chips prevents one verbose source object from duplicating a
+// whole article across every landing-page response.
+function compactCandidateStageCard(card: Record<string, unknown>) {
+  const sources = Array.isArray(card.sources) ? card.sources.slice(0, 4).map((source) => {
+    const item = (source || {}) as Record<string, unknown>;
+    return {
+      platform: item.platform ?? null, sourceName: truncateText(item.sourceName, 48),
+      publisherName: truncateText(item.publisherName, 48), author: truncateText(item.author, 48),
+      sourceUrl: item.sourceUrl ?? null, stance: item.stance ?? null, mentionedAt: item.mentionedAt ?? null,
+    };
+  }) : [];
+  return {
+    symbol: card.symbol, chineseName: card.chineseName, market: card.market, lifecycleStage: card.lifecycleStage,
+    latestMentionAt: card.latestMentionAt, mentionCount: card.mentionCount, rawMentionCount: card.rawMentionCount,
+    effectiveMentionCount: card.effectiveMentionCount, publisherCount: card.publisherCount, positivePublisherCount: card.positivePublisherCount,
+    negativePublisherCount: card.negativePublisherCount, generalPublisherCount: card.generalPublisherCount, platformCount: card.platformCount,
+    dominantPlatformShare: card.dominantPlatformShare, sources, scores: card.scores ?? {}, valuation: card.valuation ?? {}, technical: card.technical ?? {},
+    consecutiveCloses: card.consecutiveCloses ?? null, classificationReplayHash: card.classificationReplayHash ?? null,
+    unmetConditions: Array.isArray(card.unmetConditions) ? card.unmetConditions.slice(0, 8) : [],
+    promotionReasons: Array.isArray(card.promotionReasons) ? card.promotionReasons.slice(0, 6) : [], dataAsOf: card.dataAsOf ?? null,
+    stale: card.stale ?? null, detailRevisionId: card.detailRevisionId ?? null, riskAction: card.riskAction ?? null, detailHref: card.detailHref ?? null,
+  };
+}
+
 function compactRadarPayload(data: Record<string, unknown>) {
   const compacted: Record<string, unknown> = { ...data };
   for (const bucket of CARD_BUCKETS) {
@@ -320,6 +345,12 @@ function compactRadarPayload(data: Record<string, unknown>) {
     if (Array.isArray(value)) {
       compacted[bucket] = value.map((item) => compactRecommendationCard((item || {}) as Record<string, unknown>));
     }
+  }
+  const stages = compacted.stages as Record<string, unknown> | undefined;
+  if (stages) {
+    compacted.stages = Object.fromEntries(['found', 'waiting', 'actionable'].map((stage) => [stage,
+      Array.isArray(stages[stage]) ? stages[stage].slice(0, 40).map((item) => compactCandidateStageCard((item || {}) as Record<string, unknown>)) : [],
+    ]));
   }
   return compacted;
 }
