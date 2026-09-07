@@ -245,6 +245,10 @@ ordinaryTest('operation and resource identities are deterministic and bound', ()
   assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'codexVersion'), ['codexVersion', '0.153.4']);
   assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'contractVersion'), ['contractVersion', 'model-runner-v3.6']);
   assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'hostPinVersion'), ['hostPinVersion', 'model-runner-host-pins-v3.15']);
+  for (const relativePath of ['execution.js', 'journalStore.js']) {
+    const implementation = fs.readFileSync(path.join(__dirname, relativePath), 'utf8');
+    assert.match(implementation, new RegExp(MODEL_RUNNER_IDENTITY_SHA256, 'u'));
+  }
 });
 
 ordinaryTest('task locks, contiguous reservations and resource hash chains fail closed', () => {
