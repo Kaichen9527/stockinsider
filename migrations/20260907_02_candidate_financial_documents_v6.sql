@@ -211,9 +211,31 @@ END $function$;
 -- operational action and intentionally not part of this migration or Git.
 CREATE OR REPLACE FUNCTION public.read_stockinsider_finmind_api_token_v6()
 RETURNS text LANGUAGE sql SECURITY DEFINER SET search_path=vault,public,pg_temp AS $function$
-  SELECT secret FROM vault.decrypted_secrets
+  SELECT decrypted_secret FROM vault.decrypted_secrets
   WHERE name='stockinsider_finmind_api_token' ORDER BY created_at DESC LIMIT 1
 $function$;
+
+-- Operational bootstrap boundary. The token is accepted only by an authenticated
+-- active VPS writer after an API canary; this function itself is callable only
+-- through the service-role client and never returns the secret.
+CREATE OR REPLACE FUNCTION public.bootstrap_stockinsider_finmind_api_token_v6(
+  p_secret text,p_token_hash text
+) RETURNS uuid LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $function$
+DECLARE v_secret_id uuid; v_name constant text:='stockinsider_finmind_api_token';
+BEGIN
+  IF p_secret IS NULL OR char_length(p_secret) NOT BETWEEN 16 AND 4096
+    OR p_secret ~ '[[:space:]]' OR COALESCE(p_token_hash,'') !~ '^[0-9a-f]{64}$'
+  THEN RAISE EXCEPTION 'invalid_finmind_token_bootstrap' USING ERRCODE='22023'; END IF;
+  PERFORM pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(v_name,0));
+  SELECT id INTO v_secret_id FROM vault.decrypted_secrets
+  WHERE name=v_name ORDER BY updated_at DESC LIMIT 1;
+  IF v_secret_id IS NULL THEN
+    SELECT vault.create_secret(p_secret,v_name,'StockInsider FinMind API fallback token') INTO v_secret_id;
+  ELSE
+    PERFORM vault.update_secret(v_secret_id,p_secret,v_name,'StockInsider FinMind API fallback token');
+  END IF;
+  RETURN v_secret_id;
+END $function$;
 
 CREATE OR REPLACE FUNCTION public.record_candidate_financial_fallback_v6(
   p_job_id uuid,p_owner text,p_caller_principal uuid,p_facts jsonb,p_source_sha256 text,
@@ -321,12 +343,14 @@ REVOKE ALL ON FUNCTION public.record_candidate_financial_document_receipt_v6(uui
 REVOKE ALL ON FUNCTION public.claim_candidate_financial_document_receipts_v6(integer,text,timestamptz,timestamptz) FROM PUBLIC,anon,authenticated;
 REVOKE ALL ON FUNCTION public.complete_candidate_financial_document_receipt_v6(uuid,text,uuid,jsonb,jsonb,jsonb,timestamptz) FROM PUBLIC,anon,authenticated;
 REVOKE ALL ON FUNCTION public.read_stockinsider_finmind_api_token_v6() FROM PUBLIC,anon,authenticated;
+REVOKE ALL ON FUNCTION public.bootstrap_stockinsider_finmind_api_token_v6(text,text) FROM PUBLIC,anon,authenticated;
 REVOKE ALL ON FUNCTION public.record_candidate_financial_fallback_v6(uuid,text,uuid,jsonb,text,integer,timestamptz,public.financial_acquisition_terminal_reason_v4,text) FROM PUBLIC,anon,authenticated;
 REVOKE ALL ON FUNCTION public.fail_candidate_financial_acquisition_job_v6(uuid,text,text,timestamptz,boolean,boolean) FROM PUBLIC,anon,authenticated;
 GRANT EXECUTE ON FUNCTION public.record_candidate_financial_document_receipt_v6(uuid,uuid,text,text,date,timestamptz,text,text,text,integer,jsonb) TO service_role;
 GRANT EXECUTE ON FUNCTION public.claim_candidate_financial_document_receipts_v6(integer,text,timestamptz,timestamptz) TO service_role;
 GRANT EXECUTE ON FUNCTION public.complete_candidate_financial_document_receipt_v6(uuid,text,uuid,jsonb,jsonb,jsonb,timestamptz) TO service_role;
 GRANT EXECUTE ON FUNCTION public.read_stockinsider_finmind_api_token_v6() TO service_role;
+GRANT EXECUTE ON FUNCTION public.bootstrap_stockinsider_finmind_api_token_v6(text,text) TO service_role;
 GRANT EXECUTE ON FUNCTION public.record_candidate_financial_fallback_v6(uuid,text,uuid,jsonb,text,integer,timestamptz,public.financial_acquisition_terminal_reason_v4,text) TO service_role;
 GRANT EXECUTE ON FUNCTION public.fail_candidate_financial_acquisition_job_v6(uuid,text,text,timestamptz,boolean,boolean) TO service_role;
 
