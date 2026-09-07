@@ -119,10 +119,15 @@ test('the protected root selects closed graph-bound Requirements/Architecture ev
     'architecture-review-v3.19.md',
     'requirements-review-v3.20.md',
     'architecture-review-v3.20.md',
+    'requirements-review-v3.21.md',
+    'architecture-review-v3.21.md',
+    'evidence/source-led-opportunity-v3-requirements-4b1e75f5',
+    'evidence/source-led-opportunity-v3-architecture-4b1e75f5',
     'evidence/source-led-opportunity-v3-requirements-gate-bootstrap-20260906',
     'evidence/source-led-opportunity-v3-architecture-gate-bootstrap-20260906',
   ]) assert.match(worker, new RegExp(reference.replace(/[.]/gu, '\\.'), 'u'));
   assert.match(worker, /13081345293dcb3306c68420270ca82ea090fa18a0ecb878ccd8da08d63e0587/u);
+  assert.match(worker, /4f08c1a3a126236039247c5d8542ddf7dbdab0d2384c6e953fe22bcc151808ab/u);
   assert.match(worker, /evidence\/source-led-opportunity-v3-exact-review-\$\{attestation[.]subjectCommitSha\}/u);
   assert.match(worker, /function reviewSource\(check, attestation = null, identity = null\)/u);
   assert.match(worker, /function reviewSourceValues\(attestation\)/u);
@@ -158,10 +163,12 @@ test('candidate model code receives no credential and is enclosed by a base-owne
   assert.match(worker, /model oracle artifact digest from GitHub/u);
   assert.match(worker, /model oracle trusted runner labels/u);
   assert.match(worker, /model oracle root conclusion/u);
-  assert.match(worker, /run\(baseRoot, nodeExecutable,/u);
   assert.match(worker, /OPPORTUNITY_V3_PROTECTED_LIVE_ONLY: '1'/u);
-  assert.match(worker, /assertSubjectModelOracleEqualsProtectedBase/u);
-  assert.match(worker, /credentialed model oracle must execute protected-base bytes identical to the exact subject/u);
+  assert.match(worker, /modelOracleSuccessorApprovals/u);
+  assert.match(worker, /model-runner-host-pin-amendment-v3[.]15/u);
+  assert.match(worker, /model oracle successor requires protected-base approval/u);
+  assert.match(worker, /model oracle successor listing must match the one reviewed digest/u);
+  assert.match(worker, /const oracleRoot = authority === 'protected_base' \? baseRoot : subjectRoot/u);
   const webDependencies = worker.indexOf("executeCandidate('npm', ['--prefix', 'web', 'ci'");
   const browserBoundary = worker.indexOf("if (track === 'product_runtime') {", webDependencies);
   const browserInstall = worker.indexOf("executeCandidate(path.join(subjectRoot, 'web/node_modules/.bin/playwright')", browserBoundary);

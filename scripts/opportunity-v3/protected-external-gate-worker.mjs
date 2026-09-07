@@ -204,6 +204,23 @@ const graphBoundReviewSources = Object.freeze({
       rangeLine: 'Full reviewed implementation range',
     }),
   }),
+  // Evidence/valuation V6 changes active product and signed-host authority.
+  // Register its independently reviewed immutable evidence from this bootstrap
+  // commit so the candidate branch cannot select or rewrite its own reviewers.
+  '4f08c1a3a126236039247c5d8542ddf7dbdab0d2384c6e953fe22bcc151808ab': Object.freeze({
+    requirements: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-4b1e75f5',
+      path: `${changeRelative}/requirements-review-v3.21.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+    architecture: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-4b1e75f5',
+      path: `${changeRelative}/architecture-review-v3.21.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed implementation range',
+    }),
+  }),
   '5f985e391799fd8332df16c2151f75cc95dfb643a087912d92df2845a435016e': Object.freeze({
     requirements: v319ReviewSources.requirements,
     architecture: v319ReviewSources.architecture,
@@ -634,15 +651,33 @@ const modelOracleReuseKeys = Object.freeze([
   'workflowRunId',
 ]);
 
-function assertSubjectModelOracleEqualsProtectedBase(subjectRoot, subjectCommitSha) {
-  const listing = (root, commit) => git(root, [
-    'ls-tree', '-r', '--full-tree', commit, '--', ...MODEL_ORACLE_PATHS,
-  ]);
+// The bootstrap commit is reviewed and merged while the old signed host is
+// still authoritative. It may approve exactly one content-addressed successor
+// listing. Once that successor becomes the protected base, the old digest no
+// longer matches and this transition record cannot authorize another rotation.
+const modelOracleSuccessorApprovals = Object.freeze({
+  'bcae305c4d7a757510eb99c2c0aeb92679a9e772aecb7270360d747144fa6eed': Object.freeze({
+    approvalId: 'model-runner-host-pin-amendment-v3.15',
+    subjectListingSha256: 'cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5',
+  }),
+});
+
+function modelOracleListing(root, commit) {
+  return git(root, ['ls-tree', '-r', '--full-tree', commit, '--', ...MODEL_ORACLE_PATHS]);
+}
+
+function trustedModelOracleAuthority(subjectRoot, subjectCommitSha) {
+  const baseListing = modelOracleListing(baseRoot, 'HEAD');
+  const subjectListing = modelOracleListing(subjectRoot, subjectCommitSha);
+  if (subjectListing === baseListing) return 'protected_base';
+  const approval = modelOracleSuccessorApprovals[sha256(Buffer.from(baseListing, 'utf8'))];
+  assert.ok(approval, 'model oracle successor requires protected-base approval');
   assert.equal(
-    listing(subjectRoot, subjectCommitSha),
-    listing(baseRoot, 'HEAD'),
-    'the credentialed model oracle must execute protected-base bytes identical to the exact subject',
+    sha256(Buffer.from(subjectListing, 'utf8')),
+    approval.subjectListingSha256,
+    'model oracle successor listing must match the one reviewed digest',
   );
+  return approval.approvalId;
 }
 
 function publicGithubJson(url, label) {
@@ -746,12 +781,9 @@ function trustedReusableHostModelOracle(subjectRoot, attestation) {
 }
 
 function trustedHostModelOracle(subjectRoot, attestation, nodeExecutable) {
-  assertSubjectModelOracleEqualsProtectedBase(subjectRoot, attestation.subjectCommitSha);
+  const authority = trustedModelOracleAuthority(subjectRoot, attestation.subjectCommitSha);
   const reuse = readModelOracleReuse();
-  const listing = (root, commit) => git(root, [
-    'ls-tree', '-r', '--full-tree', commit, '--', ...MODEL_ORACLE_PATHS,
-  ]);
-  if (listing(subjectRoot, attestation.subjectCommitSha) === listing(subjectRoot, reuse.subjectCommitSha)) {
+  if (modelOracleListing(subjectRoot, attestation.subjectCommitSha) === modelOracleListing(subjectRoot, reuse.subjectCommitSha)) {
     return trustedReusableHostModelOracle(subjectRoot, attestation);
   }
   const runnerHome = process.env.HOME;
@@ -763,14 +795,15 @@ function trustedHostModelOracle(subjectRoot, attestation, nodeExecutable) {
   const hostScratch = mkdtempSync(path.join(os.tmpdir(), 'stockinsider-v3-host-oracle-'));
   try {
     chmodSync(hostScratch, 0o700);
-    return run(baseRoot, nodeExecutable, [
+    const oracleRoot = authority === 'protected_base' ? baseRoot : subjectRoot;
+    return run(oracleRoot, nodeExecutable, [
       '--test', 'scripts/model-runner-v3/model-runner-v3.test.js',
     ], {
       ...process.env,
       OPPORTUNITY_V3_PROTECTED_HOST_PREFLIGHT_SCRATCH: hostScratch,
       OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH: '0',
       OPPORTUNITY_V3_PROTECTED_LIVE_ONLY: '1',
-    }, 'trusted protected-base host model oracle');
+    }, `trusted host model oracle (${authority})`);
   } finally {
     rmSync(hostScratch, { force: true, recursive: true });
   }
