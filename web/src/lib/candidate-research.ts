@@ -38,6 +38,11 @@ import { brokerResearchFactor, industryRotationActionabilityFactor, officialRese
 import { refreshCandidateOfficialFinancials } from './candidate-official-financials';
 import { hasConsecutiveFiscalQuarters, normalizedCycleYearsObserved } from './candidate-financial-normalization';
 import { sanitizePublicSourceUrl } from './public-source-url.ts';
+import {
+  candidateResearchItemStatus,
+  isPromotionEligibleEvidence,
+  type CandidateFactKind,
+} from './evidence-valuation-contract';
 
 type Row = Record<string, unknown>;
 
@@ -93,18 +98,18 @@ function officialAuthoritySourceUrl(value: unknown): string {
 
 function researchFactSourceProvenance(sourceUrl: string) {
   if (sourceUrl.includes('api.finmindtrade.com')) {
-    return { provider: 'finmind_fallback', authorityTier: 'finmind_fallback', official: false };
+    return { provider: 'finmind', upstreamProvider: 'finmind', authorityTier: 'finmind_mirror', official: false, validationStatus: 'pending' };
   }
   if (/https:\/\/(?:mops|mopsov)\.twse\.com\.tw\//u.test(sourceUrl)) {
-    return { provider: 'mops', authorityTier: 'official_primary', official: true };
+    return { provider: 'mops', upstreamProvider: 'mops', authorityTier: 'official_primary', official: true, validationStatus: 'validated' };
   }
   if (/https:\/\/(?:www\.|openapi\.)?twse\.com\.tw\//u.test(sourceUrl)) {
-    return { provider: 'twse', authorityTier: 'official_primary', official: true };
+    return { provider: 'twse', upstreamProvider: 'twse', authorityTier: 'official_primary', official: true, validationStatus: 'validated' };
   }
   if (/https:\/\/(?:www\.)?tpex\.org\.tw\//u.test(sourceUrl)) {
-    return { provider: 'tpex', authorityTier: 'official_primary', official: true };
+    return { provider: 'tpex', upstreamProvider: 'tpex', authorityTier: 'official_primary', official: true, validationStatus: 'validated' };
   }
-  return { provider: 'unknown', authorityTier: 'unverified', official: false };
+  return { provider: 'unknown', upstreamProvider: null, authorityTier: 'unverified', official: false, validationStatus: 'pending' };
 }
 
 function hasOfficialCommercializationEvidence(events: Row[], cutoff: string) {
@@ -578,7 +583,7 @@ async function executeCandidateResearchCycle(options: {
         supabase.from('stock_signals').select('as_of,volume,chip_metrics').eq('stock_id', stock.id).order('as_of', { ascending: false }).limit(30),
         supabase.from('official_price_history').select('session_date,open,high,low,close,volume,source_url,provenance,available_at').eq('stock_id', stock.id).lte('available_at', evaluatedAt).order('session_date', { ascending: true }).limit(1320),
         supabase.from('opportunity_price_observations_v3').select('session_id,raw_open,raw_high,raw_low,raw_close,volume,source_ref,source_timestamp,collected_at,recorded_at').eq('stock_id', stock.id).lte('recorded_at', authorityCutoff).order('session_id', { ascending: true }).order('recorded_at', { ascending: true }).limit(4000),
-        supabase.from('opportunity_financial_facts_v3').select('fact_id,fact_key,period_start,period_end,duration_kind,value,unit,provider,authority_tier,filing_published_at,source_timestamp,collected_at,recorded_at,source_ref,estimate_kind,estimate_horizon,filing_restatement_id').eq('stock_id', stock.id)
+        supabase.from('opportunity_financial_facts_v3').select('fact_id,fact_key,period_start,period_end,duration_kind,value,unit,provider,authority_tier,validation_status,schema_valid,unit_valid,point_in_time_valid,consistency_valid,upstream_provider,filing_published_at,source_timestamp,collected_at,recorded_at,source_ref,estimate_kind,estimate_horizon,filing_restatement_id').eq('stock_id', stock.id)
           .lte('filing_published_at', authorityCutoff).lte('source_timestamp', authorityCutoff)
           .lte('collected_at', authorityCutoff).lte('recorded_at', authorityCutoff)
           .order('period_end', { ascending: false }).order('recorded_at', { ascending: false }).limit(2000),
@@ -806,7 +811,16 @@ async function executeCandidateResearchCycle(options: {
         const validFlow = durationKind === 'quarterly' && typeof periodStart === 'string' && /^\d{4}-\d{2}-\d{2}$/u.test(periodStart);
         const validInstant = ['instant', 'quarter_end'].includes(durationKind) && periodStart === null;
         if (String(fact.estimate_kind || '') !== 'reported' || value == null || !factId || !factKey || !/^\d{4}-\d{2}-\d{2}$/u.test(periodEnd) || (!validFlow && !validInstant)) return [];
-        return [{ factId, factKey, periodStart, periodEnd, durationKind: durationKind as 'quarterly' | 'instant' | 'quarter_end', value, unit: fact.unit ? String(fact.unit) : null, sourceRef: String(fact.source_ref || ''), filingRestatementId: fact.filing_restatement_id ? String(fact.filing_restatement_id) : null, filingPublishedAt: fact.filing_published_at ? String(fact.filing_published_at) : null, provider: fact.provider ? String(fact.provider) : null, authorityTier: fact.authority_tier ? String(fact.authority_tier) : null }];
+        if (!isPromotionEligibleEvidence({
+          provider: fact.provider ? String(fact.provider) : null,
+          authorityTier: fact.authority_tier ? String(fact.authority_tier) : null,
+          validationStatus: fact.validation_status ? String(fact.validation_status) : null,
+          schemaValid: fact.schema_valid === true,
+          unitValid: fact.unit_valid === true,
+          pointInTimeValid: fact.point_in_time_valid === true,
+          consistencyValid: fact.consistency_valid === true,
+        })) return [];
+        return [{ factId, factKey, periodStart, periodEnd, durationKind: durationKind as 'quarterly' | 'instant' | 'quarter_end', value, unit: fact.unit ? String(fact.unit) : null, sourceRef: String(fact.source_ref || ''), filingRestatementId: fact.filing_restatement_id ? String(fact.filing_restatement_id) : null, filingPublishedAt: fact.filing_published_at ? String(fact.filing_published_at) : null, provider: fact.provider ? String(fact.provider) : null, authorityTier: fact.authority_tier ? String(fact.authority_tier) : null, validationStatus: fact.validation_status ? String(fact.validation_status) : null }];
       });
       const reportedFacts = preferOfficialReportedFinancialFacts(reportedFactRows);
       const officialReportedFacts = reportedFacts.filter((fact) => fact.authorityTier === 'official_filing');
@@ -1016,17 +1030,15 @@ async function executeCandidateResearchCycle(options: {
       const usesFinMindFinancialEvidence = [...valuationFinancialFactIds].some((factId) => finMindFinancialFactIds.has(factId));
       const usesFinMindEarningsBridgeEvidence = earningsBridge.status === 'complete'
         && earningsBridge.factIds.some((factId) => finMindFinancialFactIds.has(factId));
-      const researchFinancialFactIds = new Set<string>(earningsBridge.status === 'complete' ? earningsBridge.factIds : []);
-      [cycleEpsHistory, latestEbitdaQuarters, turnaroundShareHistory, latestRevenueQuarters, latestGrossProfitQuarters, latestFourCommonIncome]
-        .forEach((points) => points.forEach((point) => point.factIds.forEach((factId) => researchFinancialFactIds.add(factId))));
-      [latestBookValueFact, latestCommonEquityFact, latestCashFact, latestDebtFact]
-        .forEach((point) => point?.factIds.forEach((factId) => researchFinancialFactIds.add(factId)));
-      const usesFinMindFinancialDecisionInput = [...researchFinancialFactIds].some((factId) => finMindFinancialFactIds.has(factId));
       const publishedPrimaryMethod = valuation
         ? valuationPolicy.basis === 'ttm_multiple_reference'
           ? valuation.primaryMethod === 'forward_pb' ? 'ttm_pb_reference' : 'ttm_pe_reference'
           : valuationPolicy.basis === 'normalized_cycle' && valuation.primaryMethod === 'forward_pe'
             ? 'normalized_pe'
+          : valuationPolicy.basis === 'financial_pb_roe'
+            ? 'financial_pb_roe'
+          : valuationPolicy.basis === 'pb_reference'
+            ? 'pb_reference'
           : valuation.primaryMethod
         : null;
       if (valuation) {
@@ -1060,11 +1072,12 @@ async function executeCandidateResearchCycle(options: {
       const priorHardGates = rowRelation(previous?.hard_gate_results) || {};
       const baseUpsidePct = valuation?.baseUpsidePct ?? null;
       const financialCompleteness = [eps?.epsTtm, values?.peRatio, values?.pbRatio, priorRevenue?.monthly_revenue, revenueYoy].filter((item) => item != null).length / 5 * 100;
+      const valuesUseUnvalidatedMirror = values?.authorityTier === 'finmind_fallback'
+        && !isValidatedFinMindValuationSource(values.sourceUrl, values.parserVersion);
       const usesFallbackEvidence = !priceEvidence.promotionEligible
         || institutional?.authorityTier === 'finmind_fallback'
-        || values?.authorityTier === 'finmind_fallback'
+        || valuesUseUnvalidatedMirror
         || fetchedRevenue?.authorityTier === 'finmind_fallback'
-        || usesFinMindFinancialDecisionInput
         || String(priorRevenue?.source_url || '').includes('api.finmindtrade.com');
       const fallbackEvidenceBlockers = usesFallbackEvidence ? ['candidate_evidence_uses_finmind_fallback'] : [];
       const officialEvidenceCount = [
@@ -1179,8 +1192,10 @@ async function executeCandidateResearchCycle(options: {
         || 'https://mops.twse.com.tw/mops/web/t21sc04_ifrs';
       const priceFactProvenance = {
         provider: priceEvidence.provider,
+        upstreamProvider: priceEvidence.provider,
         authorityTier: priceEvidence.authorityTier,
         official: priceEvidence.authorityTier === 'official_primary',
+        validationStatus: priceEvidence.promotionEligible ? 'validated' : 'pending',
         integrityStatus: priceEvidence.integrityStatus,
         freshnessStatus: priceEvidence.freshnessStatus,
         promotionEligible: priceEvidence.promotionEligible,
@@ -1188,11 +1203,11 @@ async function executeCandidateResearchCycle(options: {
       };
       const priceDerivedFactKeys = new Set(['close', 'ma20', 'ma60', 'ma120', 'ma240', 'rsi14', 'volume_ratio_20_median']);
       const officialFacts = [
-        { fact_key: 'close', value: technical.close, unit: 'TWD', source_url: priceSourceUrl, fact_kind: priceEvidence.authorityTier === 'official_primary' ? 'official_numeric' : 'fallback_numeric', derivation: {} },
-        { fact_key: 'eps_ttm', value: eps?.epsTtm ?? null, unit: 'TWD/share', source_url: 'https://mops.twse.com.tw/', fact_kind: 'official_numeric', derivation: {} },
-        { fact_key: 'pe_ratio', value: values?.peRatio ?? null, unit: 'multiple', source_url: valuationSourceUrl, fact_kind: values?.authorityTier === 'finmind_fallback' ? 'fallback_numeric' : 'official_numeric', derivation: {} },
-        { fact_key: 'pb_ratio', value: values?.pbRatio ?? null, unit: 'multiple', source_url: valuationSourceUrl, fact_kind: values?.authorityTier === 'finmind_fallback' ? 'fallback_numeric' : 'official_numeric', derivation: {} },
-        { fact_key: 'monthly_revenue', value: numberOrNull(priorRevenue?.monthly_revenue), unit: 'TWD', source_url: monthlyRevenueSourceUrl, fact_kind: monthlyRevenueSourceUrl.includes('api.finmindtrade.com') ? 'fallback_numeric' : 'official_numeric', derivation: {} },
+        { fact_key: 'close', value: priceEvidence.promotionEligible ? technical.close : null, unit: 'TWD', source_url: priceSourceUrl, fact_kind: 'reported_numeric' as CandidateFactKind, derivation: {} },
+        { fact_key: 'eps_ttm', value: eps?.epsTtm ?? null, unit: 'TWD/share', source_url: 'https://mops.twse.com.tw/', fact_kind: 'reported_numeric' as CandidateFactKind, derivation: {} },
+        { fact_key: 'pe_ratio', value: values && !valuesUseUnvalidatedMirror ? values.peRatio : null, unit: 'multiple', source_url: valuationSourceUrl, fact_kind: 'reported_numeric' as CandidateFactKind, derivation: {} },
+        { fact_key: 'pb_ratio', value: values && !valuesUseUnvalidatedMirror ? values.pbRatio : null, unit: 'multiple', source_url: valuationSourceUrl, fact_kind: 'reported_numeric' as CandidateFactKind, derivation: {} },
+        { fact_key: 'monthly_revenue', value: monthlyRevenueSourceUrl.includes('api.finmindtrade.com') ? null : numberOrNull(priorRevenue?.monthly_revenue), unit: 'TWD', source_url: monthlyRevenueSourceUrl, fact_kind: 'reported_numeric' as CandidateFactKind, derivation: {} },
         { fact_key: 'forward_base_eps', value: earningsBridge.status === 'complete' ? earningsBridge.scenarios.base.dilutedEps : null, unit: 'TWD/share', source_url: usesFinMindEarningsBridgeEvidence ? 'https://api.finmindtrade.com/api/v4/data' : 'https://mops.twse.com.tw/', fact_kind: 'derived_calculation', derivation: { model_version: CANDIDATE_VALUATION_MODEL_VERSION, reported_fact_ids: earningsBridge.status === 'complete' ? earningsBridge.factIds : [], includes_finmind_mirror: usesFinMindEarningsBridgeEvidence } },
         { fact_key: 'bear_target', value: valuation?.bearTarget ?? null, unit: 'TWD', source_url: values?.sourceUrl || 'https://www.twse.com.tw/', fact_kind: 'derived_calculation', derivation: { model_version: CANDIDATE_VALUATION_MODEL_VERSION, formula: 'scenario_eps_x_historical_pe_p25' } },
         { fact_key: 'base_target', value: valuation?.baseTarget ?? null, unit: 'TWD', source_url: values?.sourceUrl || 'https://www.twse.com.tw/', fact_kind: 'derived_calculation', derivation: { model_version: CANDIDATE_VALUATION_MODEL_VERSION, formula: 'scenario_eps_x_historical_pe_p50' } },
@@ -1207,14 +1222,40 @@ async function executeCandidateResearchCycle(options: {
         { fact_key: 'gap_customer_certification_shipment', value: null, unit: null, source_url: 'https://mops.twse.com.tw/', fact_kind: 'data_gap', derivation: { checked_sources: ['MOPS_structured_facts'], missing: true } },
         { fact_key: 'gap_capacity_yield_asp_company_actions', value: null, unit: null, source_url: 'https://mops.twse.com.tw/', fact_kind: 'data_gap', derivation: { checked_sources: ['MOPS_structured_facts'], missing: true } },
         { fact_key: 'gap_industry_peer_evidence', value: null, unit: null, source_url: 'https://mops.twse.com.tw/', fact_kind: 'data_gap', derivation: { industry_factor: industryRotationFactor.status, overseas_factor: overseasPeerFactor.status, missing: industryRotationFactor.status === 'missing' && overseasPeerFactor.status === 'missing' } },
-      ].filter((fact) => fact.value != null || fact.fact_kind === 'data_gap').map((fact) => ({
-        ...fact,
-        provenance: priceDerivedFactKeys.has(fact.fact_key) ? priceFactProvenance : researchFactSourceProvenance(fact.source_url),
-      }));
-      const authorityFacts = ((authorityFactsRes.data as Row[]) || []).filter((fact) => String(fact.estimate_kind || '') === 'reported').map((fact) => ({
-        ...(String(fact.authority_tier || '') === 'finmind_mirror'
-          ? { fact_kind: 'fallback_numeric', provenance: { upstream_fact_id: String(fact.fact_id || ''), upstream_source_ref: String(fact.source_ref || ''), provider: 'finmind_fallback', authorityTier: 'finmind_fallback', official: false } }
-          : { fact_kind: 'official_numeric', provenance: { upstream_fact_id: String(fact.fact_id || ''), upstream_source_ref: String(fact.source_ref || ''), provider: 'opportunity-v3-official-authority', authorityTier: 'official_primary', official: true } }),
+      ].filter((fact) => fact.value != null || fact.fact_kind === 'data_gap').map((fact) => {
+        const provenance = priceDerivedFactKeys.has(fact.fact_key) ? priceFactProvenance : researchFactSourceProvenance(fact.source_url);
+        return {
+          ...fact,
+          provider: provenance.provider,
+          upstream_provider: provenance.upstreamProvider || provenance.provider,
+          validation_status: provenance.validationStatus,
+          schema_valid: provenance.validationStatus === 'validated',
+          unit_valid: provenance.validationStatus === 'validated',
+          point_in_time_valid: provenance.validationStatus === 'validated',
+          consistency_valid: provenance.validationStatus === 'validated',
+          provenance,
+        };
+      });
+      const authorityFacts = ((authorityFactsRes.data as Row[])
+        || []).filter((fact) => String(fact.estimate_kind || '') === 'reported'
+          && isPromotionEligibleEvidence({
+            provider: fact.provider ? String(fact.provider) : null,
+            authorityTier: fact.authority_tier ? String(fact.authority_tier) : null,
+            validationStatus: fact.validation_status ? String(fact.validation_status) : null,
+            schemaValid: fact.schema_valid === true,
+            unitValid: fact.unit_valid === true,
+            pointInTimeValid: fact.point_in_time_valid === true,
+            consistencyValid: fact.consistency_valid === true,
+          })).map((fact) => ({
+        fact_kind: 'reported_numeric' as CandidateFactKind,
+        provider: fact.provider ? String(fact.provider) : 'unknown',
+        upstream_provider: fact.upstream_provider ? String(fact.upstream_provider) : (fact.provider ? String(fact.provider) : null),
+        validation_status: fact.validation_status ? String(fact.validation_status) : 'validated',
+        schema_valid: fact.authority_tier === 'finmind_mirror' ? fact.schema_valid === true : true,
+        unit_valid: fact.authority_tier === 'finmind_mirror' ? fact.unit_valid === true : true,
+        point_in_time_valid: fact.authority_tier === 'finmind_mirror' ? fact.point_in_time_valid === true : true,
+        consistency_valid: fact.authority_tier === 'finmind_mirror' ? fact.consistency_valid === true : true,
+        provenance: { upstream_fact_id: String(fact.fact_id || ''), upstream_source_ref: String(fact.source_ref || ''), provider: fact.provider ? String(fact.provider) : 'unknown', upstreamProvider: fact.upstream_provider ? String(fact.upstream_provider) : null, authorityTier: String(fact.authority_tier || ''), validationStatus: fact.validation_status ? String(fact.validation_status) : 'validated' },
         stock_id: stock.id,
         fact_key: String(fact.fact_key || ''),
         period_end: String(fact.period_end || ''),
@@ -1379,12 +1420,17 @@ async function executeCandidateResearchCycle(options: {
       const valuationTerminalReason = valuation ? null : valuationPolicy.reason || 'no_defensible_valuation_method_from_official_inputs';
       const researchTerminalReason = [priceCoverageTerminal, valuationTerminalReason].filter(Boolean).join(';') || null;
       const valuationStatus = valuation ? 'complete' : valuationPolicy.basis === 'no_defensible_valuation_method' ? 'no_defensible_method' : 'insufficient_official_evidence';
+      const itemStatus = candidateResearchItemStatus({
+        executionFailed: false,
+        valuationComplete: valuation != null,
+        noDefensibleMethod: valuationPolicy.basis === 'no_defensible_valuation_method',
+      });
       // An explicit, evidence-backed inability to value is a completed research
-      // terminal, not a partial run. It remains found and cannot pass valuation
-      // gates, while operational completeness and Shadow can still be measured.
+      // terminal. A missing valuation evidence set is partial, so aggregate run
+      // health cannot claim success merely because the code path executed.
       const researchReadiness = valuation ? 'valuation_ready' : 'evidence_gap';
-      Object.assign(result, { status: 'success', executionStatus: 'success', researchReadiness, stage: stage.stage, technicalSessionDate: technical.sessionDate, technicalCoverageStatus: priceCoverageTerminal ? 'insufficient_history' : 'complete', valuationStatus, valuationBasis: valuationPolicy.basis, detailRevisionId, scores: stage.scores, unmetConditions: detailCard.unmetConditions, classificationReplayHash, riskAction: risk });
-      const itemWrite = await supabase.from('candidate_research_run_items').upsert({ run_id: runId, stock_id: stock.id, symbol: stock.symbol, status: 'success', execution_status: 'success', research_readiness: researchReadiness, valuation_method: valuationPolicy.basis, narrative_kind: 'deterministic_fact', price_status: 'success', technical_status: priceCoverageTerminal ? 'insufficient_history' : 'success', fundamental_status: eps || values || priorRevenue || authorityFacts.length ? 'success' : 'missing', valuation_status: valuationStatus, classification_status: 'success', lifecycle_stage: stage.stage, terminal_reason: researchTerminalReason, technical_session_date: technical.sessionDate, metrics: result, started_at: startedAt, finished_at: new Date().toISOString() }, { onConflict: 'run_id,stock_id' });
+      Object.assign(result, { status: itemStatus, executionStatus: 'success', researchReadiness, stage: stage.stage, technicalSessionDate: technical.sessionDate, technicalCoverageStatus: priceCoverageTerminal ? 'insufficient_history' : 'complete', valuationStatus, valuationBasis: valuationPolicy.basis, detailRevisionId, scores: stage.scores, unmetConditions: detailCard.unmetConditions, classificationReplayHash, riskAction: risk });
+      const itemWrite = await supabase.from('candidate_research_run_items').upsert({ run_id: runId, stock_id: stock.id, symbol: stock.symbol, status: itemStatus, execution_status: 'success', research_readiness: researchReadiness, valuation_method: valuationPolicy.basis, narrative_kind: 'deterministic_fact', price_status: 'success', technical_status: priceCoverageTerminal ? 'insufficient_history' : 'success', fundamental_status: eps || values || priorRevenue || authorityFacts.length ? 'success' : 'missing', valuation_status: valuationStatus, classification_status: 'success', lifecycle_stage: stage.stage, terminal_reason: researchTerminalReason, technical_session_date: technical.sessionDate, metrics: result, started_at: startedAt, finished_at: new Date().toISOString() }, { onConflict: 'run_id,stock_id' });
       if (itemWrite.error) throw new Error(itemWrite.error.message);
       return result;
     } catch (error) {
@@ -1571,11 +1617,11 @@ async function executeCandidateResearchCycle(options: {
   const failedCount = items.filter((item) => item.status === 'failed').length;
   const partialCount = items.filter((item) => item.status === 'partial').length;
   const failClosedWriteFailures = items.filter((item) => item.snapshotError || item.detailError).length;
-  const completedCount = items.length - failedCount;
+  const completedCount = items.filter((item) => item.status === 'success').length;
   const technicalSessionDate = items.map((item) => String(item.technicalSessionDate || '')).filter(Boolean).sort().at(-1) || null;
   const runStatus = failedCount === items.length && items.length > 0 ? 'failed' : failedCount > 0 || partialCount > 0 ? 'partial' : 'success';
   const terminalReason = failedCount > 0 ? 'per_stock_failures' : partialCount > 0 ? 'per_stock_partial_research' : null;
-  const runUpdate = await supabase.from('candidate_research_runs').update({ status: runStatus, completed_count: completedCount, failed_count: failedCount, technical_session_date: technicalSessionDate, terminal_reason: terminalReason, summary: { items, partialCount, marketEvidence, officialFinancialRefresh, officialFinancialRefreshTargets: financialRefreshTargets.map((target) => target.symbol), officialFinancialRefreshBacklog: financialRefreshBacklog.length, officialFinancialRefreshState: 'persistent_cursor_v4' }, finished_at: new Date().toISOString() }).eq('id', runId);
+  const runUpdate = await supabase.from('candidate_research_runs').update({ status: runStatus, completed_count: completedCount, failed_count: failedCount, partial_count: partialCount, technical_session_date: technicalSessionDate, terminal_reason: terminalReason, summary: { items, partialCount, marketEvidence, officialFinancialRefresh, officialFinancialRefreshTargets: financialRefreshTargets.map((target) => target.symbol), officialFinancialRefreshBacklog: financialRefreshBacklog.length, officialFinancialRefreshState: 'persistent_cursor_v4' }, finished_at: new Date().toISOString() }).eq('id', runId);
   if (runUpdate.error) throw new Error(runUpdate.error.message);
   if (failClosedWriteFailures > 0) throw new Error(`candidate_fail_closed_snapshot_failed:${failClosedWriteFailures}`);
   return {
