@@ -36,7 +36,7 @@ CREATE OR REPLACE FUNCTION public.append_candidate_enterprise_multiple_snapshot_
   p_available_at timestamptz,p_caller_principal uuid
 ) RETURNS TABLE(idempotent_replay boolean,calculation_input_hash text)
 LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,extensions,pg_temp AS $function$
-DECLARE v_hash text; v_existing text; v_inserted boolean:=false; v_enterprise numeric; v_ev_ebitda numeric; v_ev_sales numeric;
+DECLARE v_hash text; v_existing text; v_inserted boolean:=false; v_enterprise numeric; v_ev_ebitda numeric; v_ev_sales numeric; v_fact_ids uuid[];
 BEGIN
   IF p_stock_id IS NULL OR p_available_at IS NULL
     OR NOT public.internal_principal_role_is_exact_v3_internal(p_caller_principal,'opportunity_runner',clock_timestamp())
@@ -47,6 +47,7 @@ BEGIN
        IS DISTINCT FROM ARRAY['cash_and_equivalents','current_price','diluted_shares','total_debt','ttm_ebitda','ttm_revenue']::text[]
     OR p_fact_ids IS NULL OR cardinality(p_fact_ids) NOT BETWEEN 1 AND 128
   THEN RAISE EXCEPTION 'invalid_enterprise_multiple_snapshot'; END IF;
+  SELECT array_agg(DISTINCT fact_id ORDER BY fact_id) INTO v_fact_ids FROM unnest(p_fact_ids) fact_id;
   v_enterprise:=(p_payload->>'current_price')::numeric*(p_payload->>'diluted_shares')::numeric
     +(p_payload->>'total_debt')::numeric-(p_payload->>'cash_and_equivalents')::numeric;
   IF v_enterprise<=0 OR (p_payload->>'current_price')::numeric<=0 OR (p_payload->>'diluted_shares')::numeric<=0
@@ -58,7 +59,7 @@ BEGIN
     THEN v_enterprise/(p_payload->>'ttm_revenue')::numeric END;
   IF (v_ev_ebitda IS NULL OR v_ev_ebitda>=1000) AND (v_ev_sales IS NULL OR v_ev_sales>=1000)
   THEN RAISE EXCEPTION 'enterprise_multiple_not_defensible'; END IF;
-  v_hash:=encode(digest(convert_to(p_payload::text||'|'||array_to_string(p_fact_ids,','),'utf8'),'sha256'),'hex');
+  v_hash:=encode(digest(convert_to(p_payload::text||'|'||array_to_string(v_fact_ids,','),'utf8'),'sha256'),'hex');
   INSERT INTO public.candidate_enterprise_multiple_snapshots_v6(
     stock_id,session_date,model_version,current_price,diluted_shares,total_debt,cash_and_equivalents,
     enterprise_value,ttm_ebitda,ttm_revenue,ev_ebitda_multiple,ev_sales_multiple,fact_ids,calculation_input_hash,available_at
@@ -67,7 +68,7 @@ BEGIN
     (p_payload->>'total_debt')::numeric,(p_payload->>'cash_and_equivalents')::numeric,v_enterprise,
     NULLIF(p_payload->>'ttm_ebitda','')::numeric,NULLIF(p_payload->>'ttm_revenue','')::numeric,
     CASE WHEN v_ev_ebitda>0 AND v_ev_ebitda<1000 THEN v_ev_ebitda END,
-    CASE WHEN v_ev_sales>0 AND v_ev_sales<1000 THEN v_ev_sales END,p_fact_ids,v_hash,p_available_at
+    CASE WHEN v_ev_sales>0 AND v_ev_sales<1000 THEN v_ev_sales END,v_fact_ids,v_hash,p_available_at
   ) ON CONFLICT DO NOTHING RETURNING candidate_enterprise_multiple_snapshots_v6.calculation_input_hash INTO v_existing;
   v_inserted:=FOUND;
   IF NOT v_inserted THEN

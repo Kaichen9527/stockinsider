@@ -14,7 +14,7 @@ Base: `01eeff93`
 - Kept the three lifecycle stages distinct: source discovery, research/valuation waiting, and technically actionable signals.
 - Added immutable Shadow inputs and independent replay evidence without using Shadow to suppress research publication.
 - Reduced Radar payloads to compact cards and moved source summary work to published snapshots.
-- Added VPS-only timers for market refresh, preliminary/final research, queue drains, article enrichment, and health checks.
+- Added VPS-only timers for market refresh, preliminary/final research, queue drains, and health checks; article enrichment is owned by the separately configured Codex scheduled task.
 - Added protected-gate coverage for candidate research, document ingestion, valuation, Shadow, public payload, and UI contract tests.
 
 ## Verification completed locally

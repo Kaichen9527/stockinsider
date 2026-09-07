@@ -113,11 +113,20 @@ test('enterprise multiple migration reapplies and the RPC preserves idempotent a
     '${stock}','2026-09-07','enterprise-multiple-v1','${payload}'::jsonb,ARRAY['22222222-2222-4222-8222-222222222222'::uuid],
     '2026-09-07T13:00:00Z','${principal}'); RESET ROLE;`, ['-At']).trim().split('\n').find((line) => line === 'f' || line === 't');
   assert.equal(replay, 't');
+  const secondFact = '33333333-3333-4333-8333-333333333333';
+  psql(`SET ROLE service_role; SELECT idempotent_replay FROM public.append_candidate_enterprise_multiple_snapshot_v6(
+    '${stock}','2026-09-06','enterprise-multiple-v1','${payload}'::jsonb,ARRAY['${secondFact}'::uuid,'22222222-2222-4222-8222-222222222222'::uuid],
+    '2026-09-07T13:00:00Z','${principal}'); RESET ROLE;`);
+  const reorderedReplay = psql(`SET ROLE service_role; SELECT idempotent_replay FROM public.append_candidate_enterprise_multiple_snapshot_v6(
+    '${stock}','2026-09-06','enterprise-multiple-v1','${payload}'::jsonb,ARRAY['22222222-2222-4222-8222-222222222222'::uuid,'${secondFact}'::uuid,'${secondFact}'::uuid],
+    '2026-09-07T13:00:00Z','${principal}'); RESET ROLE;`, ['-At']).trim().split('\n').find((line) => line === 'f' || line === 't');
+  assert.equal(reorderedReplay, 't');
+  assert.equal(psql(`SELECT cardinality(fact_ids) FROM public.candidate_enterprise_multiple_snapshots_v6 WHERE stock_id='${stock}' AND session_date='2026-09-06'`, ['-At']).trim(), '2');
   const revisedPayload = payload.replace('"current_price":100', '"current_price":90');
   psql(`SET ROLE service_role; SELECT idempotent_replay FROM public.append_candidate_enterprise_multiple_snapshot_v6(
     '${stock}','2026-09-07','enterprise-multiple-v1','${revisedPayload}'::jsonb,ARRAY['22222222-2222-4222-8222-222222222222'::uuid],
     '2026-09-07T13:01:00Z','${principal}'); RESET ROLE;`);
-  assert.equal(psql(`SELECT count(*) FROM public.candidate_enterprise_multiple_snapshots_v6 WHERE stock_id='${stock}'`, ['-At']).trim(), '2');
+  assert.equal(psql(`SELECT count(*) FROM public.candidate_enterprise_multiple_snapshots_v6 WHERE stock_id='${stock}'`, ['-At']).trim(), '3');
   const privileges = JSON.parse(psql(`SELECT json_build_object(
     'tableInsert',has_table_privilege('authenticated','public.candidate_enterprise_multiple_snapshots_v6','INSERT'),
     'rpcExecute',has_function_privilege('authenticated','public.append_candidate_enterprise_multiple_snapshot_v6(uuid,date,text,jsonb,uuid[],timestamptz,uuid)','EXECUTE'))`, ['-At']).trim());

@@ -892,6 +892,14 @@ function executeTrack(subjectRoot, track, identity, attestation) {
     if (track === 'product_runtime') {
       executeCandidate(path.join(subjectRoot, 'web/node_modules/.bin/playwright'), ['install', '--with-deps', 'chromium'],
         'project-local Chromium preparation', { writableSource: true, network: true });
+      const parserEnvironment = path.join(scratch, 'candidate-financial-parser');
+      executeCandidate('python3', ['-m', 'venv', parserEnvironment],
+        'candidate financial parser environment preparation', { writableSource: false, network: false });
+      executeCandidate(path.join(parserEnvironment, 'bin', 'pip'), ['install', '--disable-pip-version-check',
+        '--requirement', path.join(subjectRoot, 'scripts/requirements-candidate-financial-document-parser.txt')],
+      'candidate financial parser dependency preparation', { writableSource: false, network: true });
+      environment.STOCKINSIDER_DOCUMENT_PARSER_PYTHON = path.join(parserEnvironment, 'bin', 'python');
+      environment.STOCKINSIDER_DOCUMENT_PARSER_SCRIPT = path.join(subjectRoot, 'scripts/candidate_financial_document_parser.py');
     }
     cleanTree(subjectRoot, attestation.subjectCommitSha, attestation.subjectTreeSha);
     const candidateEnvironment = track === 'model_runner'
@@ -936,12 +944,11 @@ function executeTrack(subjectRoot, track, identity, attestation) {
     const totals = measured.reduce((result, row) => ({
       passed: result.passed + (row.ownsPartitionCount ? row.passed : 0),
       failed: result.failed + row.failed,
-      // Supplementary suites may carry an explicit environment-only skip
-      // (the live Arelle adapter runs in the reviewed VPS parser service).
-      // Their failures remain fatal; only the registered acceptance owner
-      // contributes partition accounting to the immutable envelope.
-      skipped: result.skipped + (row.ownsPartitionCount ? row.skipped : 0),
-      todo: result.todo + (row.ownsPartitionCount ? row.todo : 0),
+      // Every skip/todo is fatal, including supplementary suites. The protected
+      // worker provisions the reviewed Arelle environment above, so the parser
+      // integration must execute instead of disappearing from the envelope.
+      skipped: result.skipped + row.skipped,
+      todo: result.todo + row.todo,
     }), { passed: 0, failed: 0, skipped: 0, todo: 0 });
     assert.equal(measured.filter((row) => row.ownsPartitionCount).length, 1,
       `${track} has exactly one registered acceptance owner`);

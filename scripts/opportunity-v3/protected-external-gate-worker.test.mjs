@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const workflow = readFileSync(path.join(root, '.github/workflows/source-led-opportunity-external-gate.yml'), 'utf8');
+const diagnosticWorkflow = readFileSync(path.join(root, '.github/workflows/source-led-opportunity-v3.yml'), 'utf8');
 const action = readFileSync(path.join(root, '.github/actions/prepare-source-led-external-subject/action.yml'), 'utf8');
 const worker = readFileSync(path.join(root, 'scripts/opportunity-v3/protected-external-gate-worker.mjs'), 'utf8');
 
@@ -66,7 +67,20 @@ test('candidate execution waits for exact review and model-runner failure cannot
   assert.match(worker, /PATH: `\$\{postgresBin\}\$\{path[.]delimiter\}/u);
   assert.match(worker, /'test:candidate-shadow-performance'/u);
   assert.match(worker, /failed: result[.]failed \+ row[.]failed/u);
-  assert.match(worker, /skipped: result[.]skipped \+ \(row[.]ownsPartitionCount \? row[.]skipped : 0\)/u);
+  assert.match(worker, /skipped: result[.]skipped \+ row[.]skipped/u);
+  assert.match(worker, /todo: result[.]todo \+ row[.]todo/u);
+  assert.match(worker, /candidate financial parser dependency preparation/u);
+  assert.match(worker, /STOCKINSIDER_DOCUMENT_PARSER_PYTHON/u);
+  assert.match(worker, /STOCKINSIDER_DOCUMENT_PARSER_SCRIPT/u);
+});
+
+test('public candidate detail changes trigger the protected product workflow', () => {
+  for (const pathFilter of [
+    "'web/src/app/api/stocks/**'",
+    "'web/src/app/stock/**'",
+    "'web/src/app/sources/**'",
+    "'web/src/app/page.tsx'",
+  ]) assert.match(diagnosticWorkflow, new RegExp(pathFilter.replaceAll('*', '[*]'), 'u'));
 });
 
 test('every third-party action is pinned to an immutable commit', () => {
