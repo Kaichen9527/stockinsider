@@ -185,3 +185,17 @@ test('strict company article mode requires typed claims', () => {
   });
   assert.ok(result.rejectionReasons.includes('article_claims_required'));
 });
+
+test('canonical reported_numeric facts can support a v6 article claim', () => {
+  const reportedId = '00000000-0000-4000-8000-000000000003';
+  const result = validateCandidateDossierSubmission({
+    summary: '台積電（2330）本期收盤價為 100 元。', summaryFactIds: [reportedId],
+    sections: [{ key: 'valuation', title: '估值摘要', body: '台積電（2330）本期收盤價為 100 元。', factIds: [reportedId] }],
+    claims: [{ id: 'reported_close', kind: 'fact', text: '台積電（2330）本期收盤價為 100 元。', factIds: [reportedId], metric: 'close', unit: 'TWD', period: '2026-06-30', locator: 'close:2026-06-30' }],
+    allowedFactIds: [reportedId], factValues: new Map([[reportedId, [100]]]), factKeys: new Map([[reportedId, 'close']]),
+    factKinds: new Map([[reportedId, 'reported_numeric']]),
+    factMetadata: new Map([[reportedId, { factKey: 'close', factKind: 'reported_numeric', stockId: 'stock-a', symbol: '2330', unit: 'TWD', period: '2026-06-30', locator: 'close:2026-06-30', values: [100] }]]),
+    companyIdentity: { stockId: 'stock-a', symbol: '2330', name: '台積電' },
+  });
+  assert.deepEqual(result.rejectionReasons, []);
+});

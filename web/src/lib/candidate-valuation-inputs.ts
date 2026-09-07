@@ -36,10 +36,16 @@ export function buildCandidateValuationInputs(facts: ReportedFinancialFact[]) {
   const commonIncome = discreteReportedQuarters(facts, 'quarterly_net_income_attributable_to_common').slice(-8);
   const equityByPeriod = new Map(instantSeries(facts, 'common_equity_attributable_to_owners').map((point) => [point.periodEnd, point]));
   const sharesByPeriod = new Map(instantSeries(facts, 'common_shares_outstanding').map((point) => [point.periodEnd, point]));
+  const bookValueByPeriod = new Map(instantSeries(facts, 'book_value_per_share').map((point) => [point.periodEnd, point]));
   const financialRows = commonIncome.flatMap((income) => {
     const ending = equityByPeriod.get(income.periodEnd);
     const beginning = equityByPeriod.get(priorQuarterEnd(income.periodEnd) || '');
-    const shares = sharesByPeriod.get(income.periodEnd);
+    const reportedShares = sharesByPeriod.get(income.periodEnd);
+    const bookValue = bookValueByPeriod.get(income.periodEnd);
+    const derivedShares = !reportedShares && ending && bookValue && bookValue.value > 0
+      ? { periodEnd: income.periodEnd, value: ending.value / bookValue.value, factIds: [...ending.factIds, ...bookValue.factIds] }
+      : null;
+    const shares = reportedShares || derivedShares;
     return ending && beginning && shares ? [{
       periodEnd: income.periodEnd,
       commonNetIncome: income.value,

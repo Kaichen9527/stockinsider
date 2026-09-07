@@ -59,7 +59,7 @@ const BALANCE_HEADERS: readonly HeaderMapping[] = [
   [['資產總計'], 'total_assets'],
   // "負債總計" is total liabilities, not the interest-bearing debt required
   // by EV.  Publishing it as total_debt would manufacture enterprise value.
-  [['歸屬於母公司業主之權益合計', '歸屬於母公司業主權益合計', '歸屬於母公司業主之權益', '歸屬於母公司業主權益'], 'total_equity'],
+  [['歸屬於母公司業主之權益合計', '歸屬於母公司業主權益合計', '歸屬於母公司業主之權益', '歸屬於母公司業主權益'], 'common_equity_attributable_to_owners'],
   [['權益總計'], 'total_equity'],
   [['每股參考淨值'], 'book_value_per_share'],
 ];

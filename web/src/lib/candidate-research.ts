@@ -1885,11 +1885,13 @@ export async function recordCandidateShadowObservation(input: {
   researchItems: Row[];
   stages: { found: CandidateStageCard[]; waiting: CandidateStageCard[]; actionable: CandidateStageCard[] };
   technicalSessionDate: string | null;
+  publicationPhase: 'preliminary' | 'final';
   activeSourceErrors?: string[];
 }) {
   const candidateMap = new Map<string, CandidateStageCard>();
   for (const card of [...input.stages.found, ...input.stages.waiting, ...input.stages.actionable]) candidateMap.set(card.symbol, card);
   const candidates = [...candidateMap.values()];
+  if (input.publicationPhase !== 'final') return { skipped: true, reason: 'shadow_requires_final_publication' };
   if (!input.technicalSessionDate || candidates.length === 0 || !input.manifestId || !input.manifestHash) return null;
   const taipeiToday = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' })
     .formatToParts(new Date()).reduce<Record<string, string>>((result, part) => ({ ...result, [part.type]: part.value }), {});

@@ -42,6 +42,8 @@ test('official financial refresh completes durable MOPS and TPEx jobs atomically
   assert.match(source, /TPEX_JOB_KEYS/u);
   assert.match(source, /claim_candidate_financial_acquisition_jobs_v4/u);
   assert.match(source, /FINANCIAL_JOB_LEASE_MS = 45 \* 60_000/u);
+  assert.match(source, /financialBridgeAcquisitionQuarters\(cutoff, 20\)/u);
+  assert.match(source, /requestedTpexQuarters = financialBridgeAcquisitionQuarters\(cutoff, 20\)/u);
   assert.match(source, /remainingJobs/u);
   assert.match(source, /claimedJobs: claimedJobCount/u);
   assert.match(source, /enqueueMissing !== false/u);
@@ -112,9 +114,25 @@ test('FinMind fallback keeps quarterly income and instant balance facts distinct
     ['quarterly_basic_eps', '2025-04-01', 'quarterly', 'finmind_mirror'],
   ]);
   assert.deepEqual(balance.map((fact) => [fact.factKey, fact.value, fact.periodStart, fact.durationKind]), [
-    ['total_equity', 700, null, 'instant'], ['cash_and_equivalents', 90, null, 'instant'],
+    ['total_equity', 800, null, 'instant'], ['common_equity_attributable_to_owners', 700, null, 'instant'],
+    ['cash_and_equivalents', 90, null, 'instant'],
   ]);
   assert.equal([...income, ...balance].every((fact) => fact.filingPublishedAt === collectedAt && fact.provider === 'finmind'), true);
+  assert.equal([...income, ...balance].every((fact) => fact.validation.schemaValid && fact.validation.unitValid
+    && fact.validation.pointInTimeValid && fact.validation.consistencyValid), true);
+});
+
+test('FinMind mirror drops same-priority conflicting rows instead of blessing one arbitrarily', () => {
+  const facts = parseFinMindFinancialFacts({
+    dataset: 'TaiwanStockFinancialStatements',
+    candidate: { stockId: '10000000-0000-4000-8000-000000000001', symbol: '2330' },
+    periodEnd: '2025-06-30', collectedAt: '2026-09-06T12:00:00.000Z',
+    rows: [
+      { date: '2025-06-30', stock_id: '2330', type: 'Revenue', value: 1000, origin_name: '營業收入' },
+      { date: '2025-06-30', stock_id: '2330', type: 'Revenue', value: 1001, origin_name: '營業收入' },
+    ],
+  });
+  assert.equal(facts.some((fact) => fact.factKey === 'quarterly_revenue'), false);
 });
 
 test('FinMind financial fallback is period-bounded and works anonymously without leaking a credential', async () => {

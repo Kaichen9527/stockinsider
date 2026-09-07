@@ -15,6 +15,7 @@ import { canonicalContentHash, canonicalPublisherKey, classifyPttContentSemantic
 import { collectPagedAuthorityRows } from './candidate-research-policy';
 import { decodeSingleFileZip, gdeltGkgUrlsAfter, gdeltSearchableText, gdeltTransportReason, isRetiredNewsHost, matchGdeltStockSymbols, parseGdeltSeenDate, selectLatestGdeltGkgUrl } from './gdelt-gkg';
 import { isExpectedPttArticleMissing } from './ptt-policy';
+import { fetchPinnedHttpsText, isPublicNetworkAddress } from './pinned-https-fetch';
 
 type Row = Record<string, unknown>;
 const AUTHORIZED_BROKER_SOURCE_MODES = ['manual_pdf', 'manual_csv', 'imported_pdf'] as const;
@@ -5438,8 +5439,7 @@ function approvedPodcastArtifactUrl(value: string, rssUrl: string | null | undef
   if (parsed.protocol !== 'https:' || parsed.username || parsed.password) throw new Error('podcast_artifact_url_not_approved');
   const hostname = parsed.hostname.toLowerCase();
   if (hostname === 'localhost' || hostname.endsWith('.local') || hostname.endsWith('.internal')
-    || /^(?:127|10|0)[.]|^169[.]254[.]|^192[.]168[.]|^172[.](?:1[6-9]|2\d|3[01])[.]/u.test(hostname)
-    || hostname === '::1' || hostname.startsWith('fe80:')) {
+    || (/^[\[\]0-9a-f:.]+$/iu.test(hostname) && !isPublicNetworkAddress(hostname))) {
     throw new Error('podcast_artifact_private_host_rejected');
   }
   const allowedOrigins = new Set<string>();
@@ -5460,15 +5460,11 @@ async function fetchPublisherPodcastArtifact(
   parser: (type: string, body: string) => TimedPodcastSegment[],
 ): Promise<TimedPodcastSegment[]> {
   const endpoint = approvedPodcastArtifactUrl(reference.url, rssUrl);
-  const response = await fetch(endpoint, {
+  const allowedOrigins = new Set<string>([endpoint.origin]);
+  const response = await fetchPinnedHttpsText({ url: endpoint, allowedOrigins, maxBytes: 2_000_000, timeoutMs: 12_000,
     headers: { accept: reference.type, 'user-agent': 'StockInsider/2.3 Publisher-Podcast-Metadata' },
-    redirect: 'manual',
-    signal: AbortSignal.timeout(12_000),
   });
-  if (response.status >= 300 && response.status < 400) throw new Error('podcast_artifact_redirect_rejected');
-  if (!response.ok) throw new Error(`podcast_artifact_http_${response.status}`);
-  const body = await response.text();
-  return parser(reference.type, body);
+  return parser(reference.type, response.body);
 }
 
 async function loadPublisherPodcastSegments(episode: PodcastEpisodeCandidate): Promise<{

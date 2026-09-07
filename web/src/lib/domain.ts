@@ -22017,6 +22017,7 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
         researchItems: candidateResearch.items,
         stages,
         technicalSessionDate: candidateResearch.technicalSessionDate || null,
+        publicationPhase: finalSemantics.phase,
         activeSourceErrors: shadowSourceErrors,
       }));
     }

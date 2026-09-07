@@ -38,3 +38,15 @@ test('financial PB/ROE requires common equity, opening balances and common share
   );
   assert.deepEqual(buildCandidateValuationInputs(totalEquityOnly).financialPbRoe, { status: 'insufficient', reason: 'common_equity_opening_balance_or_shares_missing' });
 });
+
+test('financial PB/ROE may derive common shares only from matching common equity and reported BVPS', () => {
+  const facts: ReportedFinancialFact[] = [];
+  for (let index = 0; index < 9; index += 1) {
+    facts.push(instantFact('common_equity_attributable_to_owners', index, 100 + index * 10));
+    facts.push(instantFact('book_value_per_share', index, (100 + index * 10) / 10));
+  }
+  for (let index = 1; index < 9; index += 1) facts.push(quarterFact('quarterly_net_income_attributable_to_common', index, 10));
+  const result = buildCandidateValuationInputs(facts).financialPbRoe;
+  assert.equal(result.status, 'complete');
+  if (result.status === 'complete') assert.equal(result.bookValuePerShare, 18);
+});

@@ -231,7 +231,9 @@ export function validateCandidateDossierSubmission(input: {
     if (input.factKinds && !dataGapFactsOnlySupportExplicitGapLanguage(text, factIds, input.factKinds)) rejectionReasons.push(`claim_${id}_data_gap_used_as_positive_evidence`);
     if (input.factKinds && factIds.length > 0) {
       const permittedKinds: Record<CandidateDossierClaimKind, Set<string>> = {
-        fact: new Set(['official_numeric', 'official_text']), guidance: new Set(['official_text']),
+        // reported_numeric is the canonical v6 writer value. Keep
+        // official_numeric only for immutable legacy revisions.
+        fact: new Set(['reported_numeric', 'official_numeric', 'official_text']), guidance: new Set(['official_text']),
         assumption: new Set(['model_assumption']), derived_calculation: new Set(['derived_calculation']),
       };
       if (factIds.some((factId) => !permittedKinds[kind].has(input.factKinds?.get(factId) || ''))) rejectionReasons.push(`claim_${id}_fact_kind_mismatch`);
@@ -242,7 +244,7 @@ export function validateCandidateDossierSubmission(input: {
     if (input.factMetadata && factIds.length > 0 && !claimMatchesMetadata(claim, input.factMetadata)) rejectionReasons.push(`claim_${id}_fact_metadata_mismatch`);
     if (input.companyIdentity && input.factMetadata && factIds.length > 0 && !claimFactsBelongToCompany(claim, input.companyIdentity, input.factMetadata)) rejectionReasons.push(`claim_${id}_company_identity_mismatch`);
     if ((kind === 'fact' || kind === 'guidance') && (!metric || !locator)) rejectionReasons.push(`claim_${id}_structured_context_required`);
-    if (kind === 'fact' && input.factKinds && factIds.some((factId) => input.factKinds?.get(factId) === 'official_numeric') && numericClaims(text, excludedNumericTokens).length === 0) {
+    if (kind === 'fact' && input.factKinds && factIds.some((factId) => ['reported_numeric', 'official_numeric'].includes(input.factKinds?.get(factId) || '')) && numericClaims(text, excludedNumericTokens).length === 0) {
       rejectionReasons.push(`claim_${id}_official_numeric_value_required`);
     }
     if (numericClaims(text, excludedNumericTokens).length > 0 && kind !== 'assumption' && kind !== 'derived_calculation') {

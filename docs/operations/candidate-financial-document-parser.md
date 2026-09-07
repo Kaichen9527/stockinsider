@@ -29,16 +29,15 @@ python3.11 -m venv /opt/stockinsider/runtime/candidate-financial-parser
   'from arelle import Cntlr; import pdfplumber; print("candidate-parser-ready")'
 ```
 
-Configure the protected VPS worker service with the reviewed absolute path:
-
-```text
-STOCKINSIDER_DOCUMENT_PARSER_PYTHON=/opt/stockinsider/runtime/candidate-financial-parser/bin/python
-STOCKINSIDER_DOCUMENT_PARSER_SCRIPT=/srv/stockinsider/scripts/candidate_financial_document_parser.py
-```
+Install and enable `stockinsider-financial-parser.socket`. The application
+talks only to `/run/stockinsider/candidate-financial-parser.sock`; it cannot
+spawn the parser under the web identity. The socket-activated service uses a
+DynamicUser, has no EnvironmentFile or credentials, has no network namespace,
+and receives only hash-bound bytes over the Unix socket.
 
 Record the interpreter package hashes, OS package inventory, and reviewer in
-the deployment evidence.  The Node process starts it without a shell, with a
-scrubbed environment, a 25-second wall timeout, and bounded stdout/stderr.
+the deployment evidence.  The isolated service starts its parser without a
+shell, with a scrubbed environment, a 25-second wall timeout, and bounded stdout/stderr.
 The Python process also applies CPU, address-space, file-size, page-count, and
 input-size limits.  A missing runtime marks a receipt `partial`; it must never
 fall through to an unvalidated regex extraction.

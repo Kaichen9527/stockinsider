@@ -29,6 +29,7 @@ const FLOW_FACTS: Record<string, string> = {
   profitlossbeforetax: 'quarterly_pretax_income', incometaxexpensebenefit: 'quarterly_income_tax_expense',
   profitloss: 'quarterly_net_income', profitlossattributabletoownersofparent: 'quarterly_net_income_attributable_to_common',
   profitlossattributabletononcontrollinginterest: 'quarterly_noncontrolling_interest', profitlossattributabletononcontrollinginterests: 'quarterly_noncontrolling_interest',
+  earningsbeforeinteresttaxesdepreciationandamortization: 'quarterly_ebitda', ebitda: 'quarterly_ebitda',
 };
 const BALANCE_FACTS: Record<string, string> = {
   assets: 'total_assets', totalassets: 'total_assets', equity: 'total_equity',
@@ -36,6 +37,7 @@ const BALANCE_FACTS: Record<string, string> = {
   // PB/ROE needs the attributable-to-owners denominator explicitly.
   equityattributabletoownersofparent: 'common_equity_attributable_to_owners',
   cashandcashequivalents: 'cash_and_equivalents', cashandcashequivalentsatcarryingvalue: 'cash_and_equivalents',
+  totalinterestbearingdebt: 'total_debt', interestbearingdebt: 'total_debt', totalborrowings: 'total_debt',
   bookvaluepershare: 'book_value_per_share',
 };
 const DILUTED_EPS_CONCEPTS = new Set(['dilutedearningspershare', 'dilutedearningslosspershare']);
@@ -72,6 +74,13 @@ export type ParsedFact = {
   // subsequently rendered as a human-facing PDF citation. This is not exposed
   // directly, but becomes immutable provenance in the completion RPC.
   locator?: Record<string, string>;
+  validation?: {
+    schemaValid: boolean;
+    unitValid: boolean;
+    pointInTimeValid: boolean;
+    consistencyValid: boolean;
+    upstreamProvider: string;
+  };
 };
 
 function sha256(value: string) {
@@ -318,6 +327,11 @@ async function completeAcquisitionJob(input: {
     p_facts: input.facts.map((fact) => ({
       input: financialFactInput(fact),
       locator: { source_ref: fact.sourceRef, period_end: fact.periodEnd, fact_key: fact.factKey, ...(fact.locator || {}) },
+      validation: fact.validation ? {
+        schema_valid: fact.validation.schemaValid, unit_valid: fact.validation.unitValid,
+        point_in_time_valid: fact.validation.pointInTimeValid, consistency_valid: fact.validation.consistencyValid,
+        upstream_provider: fact.validation.upstreamProvider,
+      } : null,
     })),
     p_source_sha256: input.sourceSha256, p_response_bytes: input.responseBytes,
     p_collected_at: input.collectedAt,
@@ -344,6 +358,11 @@ async function recordFallbackAcquisitionJob(input: {
     p_facts: input.facts.map((fact) => ({
       input: financialFactInput(fact),
       locator: { source_ref: fact.sourceRef, period_end: fact.periodEnd, fact_key: fact.factKey, ...(fact.locator || {}) },
+      validation: fact.validation ? {
+        schema_valid: fact.validation.schemaValid, unit_valid: fact.validation.unitValid,
+        point_in_time_valid: fact.validation.pointInTimeValid, consistency_valid: fact.validation.consistencyValid,
+        upstream_provider: fact.validation.upstreamProvider,
+      } : null,
     })),
     p_source_sha256: input.sourceSha256, p_response_bytes: input.responseBytes,
     p_collected_at: input.collectedAt,
@@ -429,7 +448,7 @@ export async function refreshCandidateOfficialFinancials(
   const mopsCandidates = candidates.filter((candidate) => candidate.exchange === 'TWSE');
   const tpexCandidates = candidates.filter((candidate) => candidate.exchange === 'TPEX');
   const client = getOpportunityV3ServerClient();
-  const desiredMopsJobs = financialBridgeAcquisitionQuarters(cutoff).flatMap(({ year, quarter }) => mopsCandidates.map((candidate) => ({
+  const desiredMopsJobs = financialBridgeAcquisitionQuarters(cutoff, 20).flatMap(({ year, quarter }) => mopsCandidates.map((candidate) => ({
     stock_id: candidate.stockId,
     exchange: candidate.exchange,
     endpoint_key: 'mops_inline',
@@ -444,15 +463,15 @@ export async function refreshCandidateOfficialFinancials(
     });
     if (queued.error) throw new Error(`candidate_financial_job_enqueue_failed:${queued.error.message}`);
   }
-  const latestQuarter = completedQuarters(cutoff, 1)[0];
-  const latestQuarterEnd = `${latestQuarter.year}-${['03-31', '06-30', '09-30', '12-31'][latestQuarter.quarter - 1]}`;
+  const requestedTpexQuarters = financialBridgeAcquisitionQuarters(cutoff, 20);
   const desiredTpexJobs = Object.entries(TPEX_FINANCIAL_ENDPOINTS).flatMap(([endpoint, sourceUrl]) =>
-    tpexCandidates.map((candidate) => ({
+    requestedTpexQuarters.flatMap(({ year, quarter }) => tpexCandidates.map((candidate) => ({
       stock_id: candidate.stockId, exchange: candidate.exchange,
       endpoint_key: TPEX_JOB_KEYS[endpoint as keyof typeof TPEX_JOB_KEYS],
-      period_end: latestQuarterEnd, cursor_key: `${candidate.symbol}:${latestQuarter.year}Q${latestQuarter.quarter}`,
+      period_end: `${year}-${['03-31', '06-30', '09-30', '12-31'][quarter - 1]}`,
+      cursor_key: `${candidate.symbol}:${year}Q${quarter}`,
       source_url: sourceUrl,
-    })),
+    }))),
   );
   if (enqueueMissing && desiredTpexJobs.length) {
     const queued = await client.from('candidate_financial_acquisition_jobs_v4').upsert(desiredTpexJobs, {
@@ -631,9 +650,10 @@ export async function refreshCandidateOfficialFinancials(
           } else if (newestReturnedPeriod && newestReturnedPeriod > job.periodEnd) {
             try {
               const fallback = await fetchFinMindFinancialFallback({ candidate: job.candidate, periodEnd: job.periodEnd, collectedAt });
-              writtenFacts += await completeAcquisitionJob({
-                client, runnerPrincipal, owner: runnerPrincipal, jobId: job.jobId, facts: fallback.facts,
-                sourceSha256: fallback.sourceSha256, responseBytes: fallback.responseBytes, collectedAt,
+              writtenFacts += await recordFallbackAcquisitionJob({
+                client, runnerPrincipal, owner: runnerPrincipal, jobId: job.jobId, attempts: job.attempts,
+                facts: fallback.facts, sourceSha256: fallback.sourceSha256, responseBytes: fallback.responseBytes,
+                collectedAt, primaryError: message,
               });
               tpexFacts.push(...fallback.facts);
               tpexFinMindFallbackFilings += 1;

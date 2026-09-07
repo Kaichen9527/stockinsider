@@ -98,6 +98,10 @@ def parse_arelle(path, sha256):
         model = controller.modelManager.load(str(path))
         if model is None:
             return result("partial", "arelle", sha256, [], ["arelle_model_load_failed"])
+        # Loading only builds the DTS. Run Arelle's supported validation
+        # boundary and never call a filing complete when it logged errors.
+        controller.modelManager.validate()
+        validation_errors = list(getattr(model, "errors", [])) + list(getattr(controller, "errors", []))
         locators = []
         for fact in list(getattr(model, "facts", [])):
             context = getattr(fact, "context", None)
@@ -126,6 +130,8 @@ def parse_arelle(path, sha256):
                     if len(locators) >= MAX_LOCATORS:
                         break
             return result("partial", "arelle", sha256, locators, ["arelle_found_no_fact_context"])
+        if validation_errors:
+            return result("partial", "arelle", sha256, locators, ["arelle_validation_errors"])
         return result("complete", "arelle", sha256, locators, [])
     finally:
         try:

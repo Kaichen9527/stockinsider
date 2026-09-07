@@ -30,6 +30,13 @@ export type FinMindFinancialFact = {
   collectedAt: string;
   filingRestatementId: string;
   sourceRef: string;
+  validation: {
+    schemaValid: true;
+    unitValid: true;
+    pointInTimeValid: true;
+    consistencyValid: true;
+    upstreamProvider: string;
+  };
 };
 
 type Row = {
@@ -61,7 +68,7 @@ const INCOME_FACTS: Record<string, { factKey: string; unit: FinMindFinancialFact
 
 const BALANCE_FACTS: Record<string, { factKey: string; unit: FinMindFinancialFact['unit']; priority: number }> = {
   TotalAssets: { factKey: 'total_assets', unit: 'TWD', priority: 1 },
-  EquityAttributableToOwnersOfParent: { factKey: 'total_equity', unit: 'TWD', priority: 1 },
+  EquityAttributableToOwnersOfParent: { factKey: 'common_equity_attributable_to_owners', unit: 'TWD', priority: 1 },
   Equity: { factKey: 'total_equity', unit: 'TWD', priority: 2 },
   CashAndCashEquivalents: { factKey: 'cash_and_equivalents', unit: 'TWD', priority: 1 },
 };
@@ -94,11 +101,12 @@ export function parseFinMindFinancialFacts(input: {
 }): FinMindFinancialFact[] {
   if (!Array.isArray(input.rows) || !/^\d{4}-(?:03-31|06-30|09-30|12-31)$/u.test(input.periodEnd)
     || !Number.isFinite(Date.parse(input.collectedAt))) return [];
+  const rows = input.rows;
   const periodStart = quarterStart(input.periodEnd);
   if (input.dataset === 'TaiwanStockFinancialStatements' && !periodStart) return [];
   const mapping = input.dataset === 'TaiwanStockFinancialStatements' ? INCOME_FACTS : BALANCE_FACTS;
   const selected = new Map<string, { row: Row; value: number; type: string; priority: number; factKey: string; unit: FinMindFinancialFact['unit'] }>();
-  for (const raw of input.rows) {
+  for (const raw of rows) {
     if (!raw || typeof raw !== 'object' || Array.isArray(raw)) continue;
     const row = raw as Row;
     const type = String(row.type || '');
@@ -113,9 +121,19 @@ export function parseFinMindFinancialFacts(input: {
     const current = selected.get(rule.factKey);
     if (!current || rule.priority < current.priority) selected.set(rule.factKey, { row, value, type, ...rule });
   }
-  return [...selected.values()].map(({ row, value, type, factKey, unit }) => {
+  return [...selected.values()].flatMap(({ row, value, type, factKey, unit }) => {
+    const sameMetricValues = rows.flatMap((candidate): number[] => {
+      if (!candidate || typeof candidate !== 'object' || Array.isArray(candidate)) return [];
+      const candidateRow = candidate as Row;
+      const candidateRule = mapping[String(candidateRow.type || '')];
+      const candidateValue = finite(candidateRow.value);
+      return candidateRule?.factKey === factKey && candidateRule.priority === mapping[type]?.priority
+        && String(candidateRow.stock_id || '') === input.candidate.symbol && String(candidateRow.date || '') === input.periodEnd
+        && candidateValue != null ? [candidateValue] : [];
+    });
+    if (new Set(sameMetricValues).size !== 1) return [];
     const rowHash = sha256(JSON.stringify([input.dataset, input.candidate.symbol, input.periodEnd, type, value, String(row.origin_name || '')]));
-    return {
+    return [{
       stockId: input.candidate.stockId,
       symbol: input.candidate.symbol,
       factKey,
@@ -136,7 +154,11 @@ export function parseFinMindFinancialFacts(input: {
       collectedAt: input.collectedAt,
       filingRestatementId: `finmind:${input.periodEnd}:${rowHash}`,
       sourceRef: `finmind:${input.dataset}:${input.candidate.symbol}:${input.periodEnd}:${type}`,
-    };
+      validation: {
+        schemaValid: true, unitValid: true, pointInTimeValid: true, consistencyValid: true,
+        upstreamProvider: `FinMind:${input.dataset}`,
+      },
+    }];
   });
 }
 

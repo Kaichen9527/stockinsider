@@ -12,4 +12,6 @@ test('candidate financial parser migration persists only bounded, hash-bound rec
   assert.match(migration, /candidate_financial_document_locator_invalid/u);
   assert.match(migration, /source_sha256,locator,extracted_at/u);
   assert.match(migration, /complete_candidate_financial_document_receipt_parser_v7/u);
+  assert.match(migration, /NOT EXISTS \([\s\S]*jsonb_array_elements\(p_parser_locators\)/u);
+  assert.match(migration, /REVOKE EXECUTE ON FUNCTION public[.]complete_candidate_financial_document_receipt_v6[\s\S]*FROM service_role/u);
 });

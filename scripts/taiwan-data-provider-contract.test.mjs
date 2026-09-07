@@ -107,8 +107,10 @@ test('VPS timers separate the approved preliminary, final, pipeline and hourly d
   assert.match(installer, /stockinsider-taiwan-data-master-calendar\.timer/u);
   assert.match(installer, /call_internal_api_sequence\.mjs/u);
   const preliminaryService = readFileSync(new URL('../deployment/vps/systemd/stockinsider-taiwan-data-preliminary.service', import.meta.url), 'utf8');
-  assert.match(preliminaryService, /\/api\/internal\/radar-preliminary-publish/u);
+  assert.match(preliminaryService, /\/api\/internal\/pipeline-run/u);
   assert.match(preliminaryService, /"limit":100/u);
+  const domain = readFileSync(new URL('../web/src/lib/domain.ts', import.meta.url), 'utf8');
+  assert.match(domain, /publicationPhase: finalSemantics[.]phase/u);
   assert.match(preliminaryRoute, /phase: 'preliminary'/u);
   assert.match(preliminaryRoute, /shadowObservationWritten: false/u);
   assert.match(preliminaryRoute, /resolveLatestCompletedTaiwanSession/u);

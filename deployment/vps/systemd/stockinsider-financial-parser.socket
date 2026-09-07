@@ -1,0 +1,13 @@
+[Unit]
+Description=StockInsider isolated financial parser socket
+
+[Socket]
+ListenStream=/run/stockinsider/candidate-financial-parser.sock
+DirectoryMode=0750
+SocketMode=0660
+SocketUser=root
+SocketGroup=stockinsider
+RemoveOnStop=true
+
+[Install]
+WantedBy=sockets.target

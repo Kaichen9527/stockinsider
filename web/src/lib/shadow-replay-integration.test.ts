@@ -14,6 +14,7 @@ test('Shadow observation persists and reloads a frozen final-publication payload
   const body = research.slice(start, end);
   assert.match(body, /buildFrozenShadowReplayPayload\(/u);
   assert.match(body, /persistFrozenShadowReplayPayload\(/u);
+  assert.match(body, /input[.]publicationPhase !== 'final'/u);
   assert.match(body, /loadFrozenShadowReplayPayload\(/u);
   assert.match(body, /loadedReplay[.]payload[.]cards/u);
   assert.doesNotMatch(body, /from\('candidate_daily_stage_snapshots'\)/u);

@@ -45,6 +45,16 @@ BEGIN
       OR COALESCE(v_fact #>> '{input,source_ref}','') !~ ('^issuer-document:'||v_receipt.document_sha256||':')
       OR jsonb_typeof(COALESCE(v_fact->'locator','null'::jsonb))<>'object'
       OR NOT (v_fact->'locator' ? 'xbrl_context' OR v_fact->'locator' ? 'page' OR v_fact->'locator' ? 'table')
+      OR NOT EXISTS (
+        SELECT 1 FROM jsonb_array_elements(p_parser_locators) parsed(locator)
+        WHERE
+          (v_fact->'locator' ? 'xbrl_context'
+            AND parsed.locator->>'xbrl_context'=v_fact #>> '{locator,xbrl_context}'
+            AND parsed.locator->>'xbrl_concept'=v_fact #>> '{locator,xbrl_concept}')
+          OR (v_fact->'locator' ? 'page'
+            AND parsed.locator->>'page'=v_fact #>> '{locator,page}'
+            AND (NOT (v_fact->'locator' ? 'table') OR parsed.locator->>'table'=v_fact #>> '{locator,table}'))
+      )
     THEN RAISE EXCEPTION 'candidate_financial_document_fact_invalid'; END IF;
     SELECT fact.fact_id INTO v_fact_id FROM public.opportunity_financial_facts_v3 fact
     WHERE fact.stock_id=v_receipt.stock_id AND fact.source_ref=v_fact #>> '{input,source_ref}'
@@ -77,5 +87,10 @@ END $function$;
 
 REVOKE ALL ON FUNCTION public.complete_candidate_financial_document_receipt_parser_v7(uuid,text,uuid,jsonb,jsonb,jsonb,jsonb,timestamptz) FROM PUBLIC,anon,authenticated;
 GRANT EXECUTE ON FUNCTION public.complete_candidate_financial_document_receipt_parser_v7(uuid,text,uuid,jsonb,jsonb,jsonb,jsonb,timestamptz) TO service_role;
+
+-- Migration 02 temporarily exposed a completion function that did not require
+-- evidence from the mandatory local parser. The v7 parser-bound function is
+-- now the only service-role completion path.
+REVOKE EXECUTE ON FUNCTION public.complete_candidate_financial_document_receipt_v6(uuid,text,uuid,jsonb,jsonb,jsonb,timestamptz) FROM service_role;
 
 COMMIT;

@@ -252,7 +252,8 @@ BEGIN
     OR p_primary_reason IN ('complete','empty_official_response') OR char_length(COALESCE(p_primary_error,'')) NOT BETWEEN 1 AND 500
   THEN RAISE EXCEPTION 'invalid_candidate_financial_fallback'; END IF;
   SELECT * INTO v_job FROM public.candidate_financial_acquisition_jobs_v4
-  WHERE job_id=p_job_id AND endpoint_key='mops_inline' AND status='running' AND lease_owner=p_owner FOR UPDATE;
+  WHERE job_id=p_job_id AND endpoint_key IN ('mops_inline','tpex_general_income','tpex_broker_income','tpex_general_balance','tpex_broker_balance')
+    AND status='running' AND lease_owner=p_owner FOR UPDATE;
   IF NOT FOUND OR v_job.lease_expires_at<clock_timestamp() THEN RAISE EXCEPTION 'candidate_financial_job_lease_lost'; END IF;
   FOR v_fact IN SELECT value FROM jsonb_array_elements(p_facts) LOOP
     IF (v_fact #>> '{input,provider}')<>'finmind' OR (v_fact #>> '{input,authority_tier}')<>'finmind_mirror'
@@ -271,6 +272,15 @@ BEGIN
       ) appended LIMIT 1;
     END IF;
     IF v_fact_id IS NULL THEN RAISE EXCEPTION 'candidate_financial_fact_append_empty'; END IF;
+    IF COALESCE((v_fact #>> '{validation,schema_valid}')::boolean,FALSE) IS NOT TRUE
+      OR COALESCE((v_fact #>> '{validation,unit_valid}')::boolean,FALSE) IS NOT TRUE
+      OR COALESCE((v_fact #>> '{validation,point_in_time_valid}')::boolean,FALSE) IS NOT TRUE
+      OR COALESCE((v_fact #>> '{validation,consistency_valid}')::boolean,FALSE) IS NOT TRUE
+      OR COALESCE(v_fact #>> '{validation,upstream_provider}','') !~ '^[A-Za-z0-9_.:-]{1,120}$'
+    THEN RAISE EXCEPTION 'candidate_financial_fallback_validation_missing'; END IF;
+    IF NOT public.validate_finmind_financial_fact_v6(
+      v_fact_id,TRUE,TRUE,TRUE,TRUE,v_fact #>> '{validation,upstream_provider}'
+    ) THEN RAISE EXCEPTION 'candidate_financial_fallback_validation_failed'; END IF;
     INSERT INTO public.candidate_financial_fact_provenance_v4(
       fact_id,acquisition_job_id,source_url,source_sha256,locator,extracted_at
     ) VALUES(v_fact_id,p_job_id,'https://api.finmindtrade.com/api/v4/data',p_source_sha256,
@@ -284,7 +294,7 @@ BEGIN
     status='terminal',attempts=LEAST(attempts+1,20),consecutive_failures=LEAST(mops_consecutive_failures+1,5),
     mops_attempts=LEAST(mops_attempts+1,20),mops_consecutive_failures=LEAST(mops_consecutive_failures+1,5),
     finmind_attempts=LEAST(finmind_attempts+1,20),finmind_consecutive_failures=0,
-    lease_owner=NULL,lease_expires_at=NULL,terminal_reason='complete',terminal_detail='mops:'||p_primary_error,
+    lease_owner=NULL,lease_expires_at=NULL,terminal_reason='complete',terminal_detail='primary:'||p_primary_error,
     response_sha256=p_source_sha256,response_bytes=p_response_bytes,collected_at=p_collected_at,next_attempt_at=NULL,updated_at=p_collected_at
   WHERE job_id=p_job_id;
   INSERT INTO public.candidate_financial_acquisition_cursors_v4(

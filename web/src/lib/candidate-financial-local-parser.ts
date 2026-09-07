@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
 import { spawn as spawnChild } from 'node:child_process';
+import net from 'node:net';
 import type { ChildProcessWithoutNullStreams } from 'node:child_process';
 import { MAX_CANDIDATE_FINANCIAL_DOCUMENT_BYTES, type CandidateFinancialDocumentFormat } from './candidate-financial-documents.ts';
 
@@ -7,6 +8,7 @@ const MAX_PARSER_STDOUT_BYTES = 2 * 1024 * 1024;
 const MAX_PARSER_STDERR_BYTES = 16 * 1024;
 const PARSER_TIMEOUT_MS = 25_000;
 const APPROVED_PYTHON_PATH = /^\/(?:[A-Za-z0-9._-]+\/)*[A-Za-z0-9._-]+$/u;
+const PARSER_SOCKET_PATH = '/run/stockinsider/candidate-financial-parser.sock';
 
 export type CandidateFinancialDocumentLocator = {
   page?: number;
@@ -59,6 +61,37 @@ function parseResult(raw: string, inputSha256: string): CandidateFinancialLocalP
   };
 }
 
+async function runIsolatedSocketParser(input: { bytes: Uint8Array; documentSha256: string; format: CandidateFinancialDocumentFormat }) {
+  return await new Promise<CandidateFinancialLocalParserResult>((resolveResult, reject) => {
+    const socket = net.createConnection({ path: PARSER_SOCKET_PATH });
+    let output = ''; let settled = false;
+    const finish = (error?: Error, result?: CandidateFinancialLocalParserResult) => {
+      if (settled) return;
+      settled = true; clearTimeout(timeout); socket.destroy();
+      if (error) reject(error); else resolveResult(result!);
+    };
+    const timeout = setTimeout(() => finish(new Error('candidate_financial_local_parser_timeout')), PARSER_TIMEOUT_MS);
+    socket.setEncoding('utf8');
+    socket.on('connect', () => {
+      socket.write(`${JSON.stringify({ format: input.format, sha256: input.documentSha256, byteLength: input.bytes.byteLength })}\n`);
+      socket.write(input.bytes); socket.end();
+    });
+    socket.on('data', (chunk: string) => {
+      output += chunk;
+      if (Buffer.byteLength(output, 'utf8') > MAX_PARSER_STDOUT_BYTES) finish(new Error('candidate_financial_local_parser_output_too_large'));
+    });
+    socket.on('error', () => finish(new Error('candidate_financial_local_parser_socket_unavailable')));
+    socket.on('end', () => {
+      try {
+        const serviceError = JSON.parse(output) as { error?: unknown };
+        if (serviceError?.error) { finish(new Error('candidate_financial_local_parser_failed')); return; }
+      } catch { /* normal parser response is validated below */ }
+      try { finish(undefined, parseResult(output.trim(), input.documentSha256)); }
+      catch (error) { finish(error instanceof Error ? error : new Error('candidate_financial_local_parser_invalid_result')); }
+    });
+  });
+}
+
 /**
  * Executes only a reviewed, absolute-path Python runtime without a shell. The
  * parser receives document bytes over stdin, never a URL or a filesystem path.
@@ -77,14 +110,20 @@ export async function runCandidateFinancialLocalParser(input: {
   if (input.bytes.byteLength < 1 || input.bytes.byteLength > MAX_CANDIDATE_FINANCIAL_DOCUMENT_BYTES
     || !/^[0-9a-f]{64}$/u.test(input.documentSha256)
     || createHash('sha256').update(input.bytes).digest('hex') !== input.documentSha256) throw new Error('candidate_financial_local_parser_input_invalid');
-  const pythonPath = input.pythonPath ?? process.env.STOCKINSIDER_DOCUMENT_PARSER_PYTHON ?? '';
-  const script = input.parserScriptPath ?? process.env.STOCKINSIDER_DOCUMENT_PARSER_SCRIPT ?? '';
+  // Production uses only the credential-free systemd socket service. Direct
+  // process execution is retained solely as an injected test seam.
+  if (!input.spawn) {
+    if (input.pythonPath || input.parserScriptPath) throw new Error('candidate_financial_local_parser_not_configured');
+    return runIsolatedSocketParser(input);
+  }
+  const pythonPath = input.pythonPath ?? '';
+  const script = input.parserScriptPath ?? '';
   // Paths are supplied only by the protected VPS service configuration. Their
   // existence is intentionally resolved by spawn below so Next does not trace
   // arbitrary host paths into its server bundle; a missing executable/script
   // still fails closed as a parser spawn/result failure.
   if (!APPROVED_PYTHON_PATH.test(pythonPath) || !APPROVED_PYTHON_PATH.test(script)) throw new Error('candidate_financial_local_parser_not_configured');
-  const spawn = input.spawn || spawnChild;
+  const spawn = input.spawn;
   const args = [script, '--format', input.format, '--sha256', input.documentSha256, '--max-bytes', String(MAX_CANDIDATE_FINANCIAL_DOCUMENT_BYTES)];
   const doclingModelsPath = process.env.STOCKINSIDER_DOCUMENT_PARSER_DOCLING_MODELS ?? '';
   if (input.allowDocling === true && process.env.STOCKINSIDER_DOCUMENT_PARSER_ALLOW_DOCLING === 'true'
