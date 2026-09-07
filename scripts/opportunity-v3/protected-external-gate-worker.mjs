@@ -45,7 +45,7 @@ const reviewKeys = [
   'reviewedTreeSha', 'verdict',
 ];
 const requiredChecks = [
-  'requirements', 'architecture', 'product-runtime-code-gate', 'exact-review',
+  'requirements', 'architecture', 'product-runtime-code-gate', 'model-runner-code-gate', 'exact-review',
 ];
 const gatePolicies = Object.freeze({
   requirements: { commands: [], count: 0, partition: null, review: true },
@@ -824,8 +824,19 @@ function measuredResult(output, label) {
       todo: Number([...text.matchAll(/^# todo (\d+)$/gmu)].at(-1)?.[1] ?? 0),
     };
   }
-  const playwright = [...text.matchAll(/(?:^|\s)(\d+) passed(?:\s|$)/gmu)].at(-1);
-  return { label, passed: playwright ? Number(playwright[1]) : 1, failed: 0, skipped: 0, todo: 0 };
+  if (label === 'test:e2e:v3-correctness') {
+    const playwrightPassed = [...text.matchAll(/(?:^|\s)(\d+) passed(?:\s|$)/gmu)].at(-1);
+    const playwrightSkipped = [...text.matchAll(/(?:^|\s)(\d+) skipped(?:\s|$)/gmu)].at(-1);
+    assert.ok(playwrightPassed || playwrightSkipped, 'Playwright output must contain a recognized final result');
+    return {
+      label,
+      passed: Number(playwrightPassed?.[1] ?? 0),
+      failed: 0,
+      skipped: Number(playwrightSkipped?.[1] ?? 0),
+      todo: 0,
+    };
+  }
+  return { label, passed: 1, failed: 0, skipped: 0, todo: 0 };
 }
 
 function run(subjectRoot, executable, args, environment, label) {
@@ -892,6 +903,18 @@ function executeTrack(subjectRoot, track, identity, attestation) {
     if (track === 'product_runtime') {
       executeCandidate(path.join(subjectRoot, 'web/node_modules/.bin/playwright'), ['install', '--with-deps', 'chromium'],
         'project-local Chromium preparation', { writableSource: true, network: true });
+      const parserEnvironment = path.join(scratch, 'candidate-financial-parser');
+      const parserRequirements = path.join(subjectRoot, 'scripts/requirements-candidate-financial-document-parser.txt');
+      assert.equal(sha256(readFileSync(parserRequirements)),
+        '3793b8b7228a8b08e273b1deb0977d681c7f4fdc8e3cb4d38a101b7c36579640',
+      'candidate financial parser requirements match the protected-base review');
+      executeCandidate('python3', ['-m', 'venv', parserEnvironment],
+        'candidate financial parser environment preparation', { writableSource: false, network: false });
+      executeCandidate(path.join(parserEnvironment, 'bin', 'pip'), ['install', '--disable-pip-version-check',
+        'arelle-release==2.44.7', 'pdfplumber==0.11.8'],
+      'candidate financial parser dependency preparation', { writableSource: false, network: true });
+      environment.STOCKINSIDER_DOCUMENT_PARSER_PYTHON = path.join(parserEnvironment, 'bin', 'python');
+      environment.STOCKINSIDER_DOCUMENT_PARSER_SCRIPT = path.join(subjectRoot, 'scripts/candidate_financial_document_parser.py');
     }
     cleanTree(subjectRoot, attestation.subjectCommitSha, attestation.subjectTreeSha);
     const candidateEnvironment = track === 'model_runner'
@@ -909,6 +932,8 @@ function executeTrack(subjectRoot, track, identity, attestation) {
     verify(executeClosedCandidate, modelNodeExecutable, ['--experimental-strip-types', 'scripts/opportunity-v3/acceptance-gate-runner.mjs', '--track', track], `${track} traceability`, true);
     if (track === 'product_runtime') {
       for (const script of [
+        'test:candidate-shadow-performance:runtime',
+        'test:candidate-shadow-performance:contracts',
         'test:source-led-opportunity-v3',
         'test:source-led-opportunity-v3:product-correctness',
         'test:source-led-opportunity-v3:migration',
@@ -924,7 +949,7 @@ function executeTrack(subjectRoot, track, identity, attestation) {
         'scripts/model-runner-v3/model-runner-v3.test.js'], 'test:model-runner-v3');
       verify(executeClosedCandidate, modelNodeExecutable, ['scripts/run-node22.js', '--experimental-strip-types',
         'scripts/opportunity-v3/doctor.mjs', '--expect-mode', 'disabled', '--require-host-pin',
-        'model-runner-host-pins-v3.14'], 'disabled model runner doctor');
+        'model-runner-host-pins-v3.15'], 'disabled model runner doctor');
       const oracle = trustedHostModelOracle(subjectRoot, attestation, modelNodeExecutable);
       outputs.push(oracle);
       measured.push({ ...measuredResult(oracle, 'trusted protected-base exact-subject model oracle'), ownsPartitionCount: false });
@@ -1082,7 +1107,7 @@ function parseArguments(argv) {
   if (verb !== 'prepare') assert.equal(typeof values['--output'], 'string', '--output required');
   if (verb === 'review') assert.ok(['requirements', 'architecture', 'exact-review'].includes(values['--check']), 'closed review check');
   if (verb === 'track') assert.ok(['product_runtime', 'model_runner'].includes(values['--track']), 'closed executable track');
-  if (verb === 'aggregate') assert.equal(values.inputs.length, requiredChecks.length, 'four aggregate inputs');
+  if (verb === 'aggregate') assert.equal(values.inputs.length, requiredChecks.length, 'five aggregate inputs');
   return values;
 }
 
