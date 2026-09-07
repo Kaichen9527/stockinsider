@@ -65,13 +65,18 @@ test('candidate execution waits for exact review and model-runner failure cannot
   assert.match(worker, /for \(const name of \['initdb', 'pg_ctl', 'psql'\]\)/u);
   assert.match(worker, /OPPORTUNITY_V3_POSTGRES_BIN: postgresBin/u);
   assert.match(worker, /PATH: `\$\{postgresBin\}\$\{path[.]delimiter\}/u);
-  assert.match(worker, /'test:candidate-shadow-performance'/u);
+  assert.match(worker, /'test:candidate-shadow-performance:runtime'/u);
+  assert.match(worker, /'test:candidate-shadow-performance:contracts'/u);
   assert.match(worker, /failed: result[.]failed \+ row[.]failed/u);
   assert.match(worker, /skipped: result[.]skipped \+ row[.]skipped/u);
   assert.match(worker, /todo: result[.]todo \+ row[.]todo/u);
   assert.match(worker, /candidate financial parser dependency preparation/u);
+  assert.match(worker, /3793b8b7228a8b08e273b1deb0977d681c7f4fdc8e3cb4d38a101b7c36579640/u);
+  assert.doesNotMatch(worker, /'--requirement', path[.]join\(subjectRoot/u);
   assert.match(worker, /STOCKINSIDER_DOCUMENT_PARSER_PYTHON/u);
   assert.match(worker, /STOCKINSIDER_DOCUMENT_PARSER_SCRIPT/u);
+  assert.match(worker, /Playwright output must contain a recognized final result/u);
+  assert.match(worker, /playwrightSkipped/u);
 });
 
 test('public candidate detail changes trigger the protected product workflow', () => {
