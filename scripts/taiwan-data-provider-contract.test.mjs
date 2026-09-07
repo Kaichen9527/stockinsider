@@ -97,6 +97,7 @@ test('VPS timers separate the approved preliminary, final, pipeline and hourly d
   const drainService = readFileSync(new URL('../deployment/vps/systemd/stockinsider-taiwan-data-queue-drain.service', import.meta.url), 'utf8');
   assert.match(drainService, /\/api\/internal\/taiwan-data-queue-drain/u);
   assert.match(drainService, /\/api\/internal\/candidate-financial-queue-drain/u);
+  assert.match(drainService, /\/api\/internal\/candidate-financial-documents\/worker/u);
   assert.match(drainService, /"limit":20/u);
   assert.doesNotMatch(installer, /FINMIND_API_TOKEN/u);
   assert.match(installer, /stockinsider-taiwan-data-master-calendar\.timer/u);
