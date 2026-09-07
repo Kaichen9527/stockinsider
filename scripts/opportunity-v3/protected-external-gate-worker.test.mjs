@@ -17,7 +17,7 @@ function jobBlock(jobId, nextJobId = null) {
   return workflow.slice(start, end);
 }
 
-test('the configured protected check belongs only to the four product-critical envelope aggregate', () => {
+test('the configured protected check includes the independent model-runner envelope aggregate', () => {
   assert.equal((workflow.match(/^    name: stockinsider-v3-gate-root$/gmu) ?? []).length, 1);
   const bootstrap = jobBlock('stockinsider-v3-gate-bootstrap', 'requirements');
   assert.match(bootstrap, /^    name: stockinsider-v3-gate-bootstrap$/mu);
@@ -26,30 +26,30 @@ test('the configured protected check belongs only to the four product-critical e
   assert.match(aggregate, /^    name: stockinsider-v3-gate-root$/mu);
   assert.match(
     aggregate,
-    /^    needs: \[requirements, architecture, product-runtime-code-gate, exact-review\]$/mu,
+    /^    needs: \[requirements, architecture, product-runtime-code-gate, model-runner-code-gate, exact-review\]$/mu,
   );
   assert.match(aggregate, /^    if: \$\{\{ always\(\) \}\}$/mu);
   for (const prerequisite of [
     'REQUIREMENTS_RESULT', 'ARCHITECTURE_RESULT', 'PRODUCT_RUNTIME_RESULT',
-    'EXACT_REVIEW_RESULT',
+    'EXACT_REVIEW_RESULT', 'MODEL_RUNNER_RESULT',
   ]) {
     assert.match(aggregate, new RegExp(`test "\\$${prerequisite}" = success`, 'u'));
   }
   assert.match(aggregate, /protected-external-gate-worker\.mjs aggregate/u);
 });
 
-test('candidate execution waits for exact review and persistent execution is owner-triggered', () => {
+test('candidate execution waits for exact review and model-runner failure cannot be bypassed', () => {
   const product = jobBlock('product-runtime-code-gate', 'model-runner-code-gate');
   const model = jobBlock('model-runner-code-gate', 'exact-review');
   for (const block of [product, model]) {
     assert.match(block, /^    needs: \[stockinsider-v3-gate-bootstrap, exact-review\]$/mu);
   }
+  assert.doesNotMatch(model, /continue-on-error:\s*true/u);
   assert.match(model, /github\.event\.pull_request\.head\.repo\.full_name == github\.repository/u);
   assert.match(model, /github\.event\.pull_request\.user\.login == github\.repository_owner/u);
   assert.match(model, /github\.actor == github\.repository_owner/u);
   assert.match(model, /github\.triggering_actor == github\.repository_owner/u);
   assert.match(model, /^    runs-on: \[self-hosted, macOS, ARM64\]$/mu);
-  assert.match(model, /^    continue-on-error: true$/mu);
   for (const token of [
     'sudo apt-get install --yes postgresql',
     'postgres_bin="$(pg_config --bindir)"',
@@ -67,6 +67,18 @@ test('candidate execution waits for exact review and persistent execution is own
   assert.match(worker, /for \(const name of \['initdb', 'pg_ctl', 'psql'\]\)/u);
   assert.match(worker, /OPPORTUNITY_V3_POSTGRES_BIN: postgresBin/u);
   assert.match(worker, /PATH: `\$\{postgresBin\}\$\{path[.]delimiter\}/u);
+  assert.match(worker, /'test:candidate-shadow-performance:runtime'/u);
+  assert.match(worker, /'test:candidate-shadow-performance:contracts'/u);
+  assert.match(worker, /candidate financial parser dependency preparation/u);
+  assert.match(worker, /3793b8b7228a8b08e273b1deb0977d681c7f4fdc8e3cb4d38a101b7c36579640/u);
+  assert.match(worker, /STOCKINSIDER_DOCUMENT_PARSER_PYTHON/u);
+  assert.match(worker, /STOCKINSIDER_DOCUMENT_PARSER_SCRIPT/u);
+  assert.match(worker, /Playwright output must contain a recognized final result/u);
+  assert.match(worker, /playwrightSkipped/u);
+  assert.match(worker, /modelOracleHostPinByListingSha256/u);
+  assert.match(worker, /bcae305c4d7a757510eb99c2c0aeb92679a9e772aecb7270360d747144fa6eed: 'model-runner-host-pins-v3\.14'/u);
+  assert.match(worker, /cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5: 'model-runner-host-pins-v3\.15'/u);
+  assert.match(worker, /model runner host pin requires an exact protected listing/u);
 });
 
 test('every third-party action is pinned to an immutable commit', () => {
