@@ -113,7 +113,7 @@ export type PeerRelationship = {
   productSubcategory: string | null;
   /** positive/inverse applies to the issuer's exposure; negative_catchdown
    * permits a material negative peer move to block a new entry. */
-  directionality: 'positive' | 'inverse' | 'negative_catchdown' | null;
+  directionality: 'positive' | 'positive_lead' | 'inverse' | 'negative_catchdown' | 'mixed' | 'context_only' | null;
   weight: number | null;
 };
 
@@ -121,7 +121,7 @@ export type PeerMarketSnapshot = {
   peerRelationshipId: string;
   asOf: string | null;
   availableAt: string | null;
-  availabilityStatus: 'available' | 'unknown' | 'blocked' | 'missing';
+  availabilityStatus: 'available' | 'stale' | 'unknown' | 'blocked' | 'blocked_license' | 'missing';
   fundamentalSignal: number | null;
   priceReturn20d: number | null;
   catchdownBlock: boolean;
