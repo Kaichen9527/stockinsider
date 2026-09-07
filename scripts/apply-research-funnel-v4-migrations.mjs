@@ -23,6 +23,7 @@ export const RESEARCH_FUNNEL_V4_MIGRATIONS = Object.freeze([
   'migrations/20260906_truth_research_v3.sql',
   'migrations/20260907_evidence_valuation_contract_v6.sql',
   'migrations/20260907_02_candidate_financial_documents_v6.sql',
+  'migrations/20260907_03_candidate_financial_document_parser_v6.sql',
   'migrations/20260907_candidate_dossier_outbox_v5.sql',
   'migrations/20260907_shadow_replay_payload_v5.sql',
 ]);
@@ -95,6 +96,8 @@ async function apply(plan, sourceCommit) {
       EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='radar_public_snapshots' AND column_name='publication_phase') AS radar_publication_phase,
       EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='candidate_official_facts' AND column_name='validation_status') AS validated_fact_contract,
       to_regclass('public.candidate_financial_document_receipts_v6') IS NOT NULL AS document_receipts,
+      EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='candidate_financial_document_receipts_v6' AND column_name='parser_locators') AS document_parser_locators,
+      to_regprocedure('public.complete_candidate_financial_document_receipt_parser_v7(uuid,text,uuid,jsonb,jsonb,jsonb,jsonb,timestamptz)') IS NOT NULL AS document_parser_completion,
       to_regclass('public.candidate_dossier_outbox_v5') IS NOT NULL AS dossier_outbox,
       to_regclass('public.candidate_shadow_replay_payloads') IS NOT NULL AS shadow_replay_payloads`);
     if (!Object.values(verification.rows[0] || {}).every(Boolean)) throw new Error('research_funnel_v4_verification_failed');

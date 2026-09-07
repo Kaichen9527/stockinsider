@@ -19,6 +19,7 @@ test('research funnel v4 migration plan is exact, additive and dry by default', 
     'migrations/20260906_truth_research_v3.sql',
     'migrations/20260907_evidence_valuation_contract_v6.sql',
     'migrations/20260907_02_candidate_financial_documents_v6.sql',
+    'migrations/20260907_03_candidate_financial_document_parser_v6.sql',
     'migrations/20260907_candidate_dossier_outbox_v5.sql',
     'migrations/20260907_shadow_replay_payload_v5.sql',
   ]);
@@ -30,7 +31,7 @@ test('research funnel v4 migration plan is exact, additive and dry by default', 
   }
   const output = JSON.parse(execFileSync(process.execPath, ['scripts/apply-research-funnel-v4-migrations.mjs'], { cwd: root, encoding: 'utf8' }));
   assert.equal(output.applied, false);
-  assert.equal(output.migrations.length, 11);
+  assert.equal(output.migrations.length, 12);
   assert.ok(output.migrations.every((entry) => /^[0-9a-f]{64}$/u.test(entry.sha256) && entry.bytes > 0));
 });
 
@@ -45,6 +46,7 @@ test('runtime tables, append-only revisions and source identity are covered by t
     'taiwan_data_refresh_queue_v5', 'publication_phase',
     'truth_research_v3_dependency_missing', 'reported_numeric',
     'candidate_financial_document_receipts_v6',
+    'parser_locators', 'complete_candidate_financial_document_receipt_parser_v7',
     'candidate_dossier_outbox_v5', 'claim_candidate_dossier_outbox_v5',
     'candidate_shadow_replay_payloads',
   ]) assert.match(sql, new RegExp(token, 'u'));

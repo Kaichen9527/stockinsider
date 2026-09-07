@@ -28,6 +28,10 @@ test('candidate documents reject MIME confusion and XML external entities', () =
     bytes: new TextEncoder().encode('<?xml version="1.0"?><!DOCTYPE x [ <!ENTITY x SYSTEM "https://bad.invalid"> ]><xbrl/>'),
     contentType: 'application/xml',
   }), { error: 'document_external_entity_rejected' });
+  const lateDtd = `<?xml version="1.0"?><xbrl>${' '.repeat(16_385)}<!DOCTYPE x [ <!ENTITY x SYSTEM "https://bad.invalid"> ]></xbrl>`;
+  assert.deepEqual(validateCandidateFinancialDocument({
+    bytes: new TextEncoder().encode(lateDtd), contentType: 'application/xml',
+  }), { error: 'document_external_entity_rejected' });
 });
 
 test('candidate document ingress hashes a bounded stream', async () => {

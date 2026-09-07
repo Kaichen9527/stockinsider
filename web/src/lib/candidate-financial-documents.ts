@@ -132,7 +132,7 @@ export function validateCandidateFinancialDocument(input: { bytes: Uint8Array; c
   const head = text.slice(0, 16_384).toLowerCase();
   // HTML's `<!doctype html>` is not an XML DTD. Any other declaration or
   // external-entity syntax is rejected before the local extractor sees it.
-  if (/<!entity|\b(?:system|public)\s+["']/iu.test(head)
+  if (/<!entity|\b(?:system|public)\s+["']/iu.test(text)
     || (/<!doctype/iu.test(head) && !/^\s*<!doctype\s+html\s*>/iu.test(text))) return { error: 'document_external_entity_rejected' };
   const isXbrl = /<(?:[\w-]+:)?xbrl\b/iu.test(head) || /<ix:(?:header|nonfraction|nonnumeric)\b/iu.test(head);
   const isHtml = /^\s*(?:<!doctype\s+html|<html\b|<\?xml[^>]*>\s*<html\b)/iu.test(text);
@@ -165,7 +165,7 @@ export function parseCandidateFinancialDocumentFacts(input: {
 }): ParsedFact[] {
   if (input.format === 'pdf') return [];
   const text = decodedText(input.bytes);
-  if (!text || /<!entity|\b(?:system|public)\s+["']/iu.test(text.slice(0, 16_384))) return [];
+  if (!text || /<!entity|\b(?:system|public)\s+["']/iu.test(text)) return [];
   const parsed = parseCandidateMopsFacts(text, {
     ...input.candidate,
     sourceUrl: input.sourceUrl,
