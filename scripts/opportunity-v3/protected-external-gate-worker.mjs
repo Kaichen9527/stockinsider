@@ -663,8 +663,20 @@ const modelOracleSuccessorApprovals = Object.freeze({
   }),
 });
 
+const modelOracleHostPinByListingSha256 = Object.freeze({
+  bcae305c4d7a757510eb99c2c0aeb92679a9e772aecb7270360d747144fa6eed: 'model-runner-host-pins-v3.14',
+  cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5: 'model-runner-host-pins-v3.15',
+});
+
 function modelOracleListing(root, commit) {
   return git(root, ['ls-tree', '-r', '--full-tree', commit, '--', ...MODEL_ORACLE_PATHS]);
+}
+
+function requiredModelRunnerHostPin(subjectRoot, subjectCommitSha) {
+  const listingSha256 = sha256(Buffer.from(modelOracleListing(subjectRoot, subjectCommitSha), 'utf8'));
+  const hostPin = modelOracleHostPinByListingSha256[listingSha256];
+  assert.ok(hostPin, 'model runner host pin requires an exact protected listing');
+  return hostPin;
 }
 
 function trustedModelOracleAuthority(subjectRoot, subjectCommitSha) {
@@ -949,7 +961,7 @@ function executeTrack(subjectRoot, track, identity, attestation) {
         'scripts/model-runner-v3/model-runner-v3.test.js'], 'test:model-runner-v3');
       verify(executeClosedCandidate, modelNodeExecutable, ['scripts/run-node22.js', '--experimental-strip-types',
         'scripts/opportunity-v3/doctor.mjs', '--expect-mode', 'disabled', '--require-host-pin',
-        'model-runner-host-pins-v3.15'], 'disabled model runner doctor');
+        requiredModelRunnerHostPin(subjectRoot, attestation.subjectCommitSha)], 'disabled model runner doctor');
       const oracle = trustedHostModelOracle(subjectRoot, attestation, modelNodeExecutable);
       outputs.push(oracle);
       measured.push({ ...measuredResult(oracle, 'trusted protected-base exact-subject model oracle'), ownsPartitionCount: false });

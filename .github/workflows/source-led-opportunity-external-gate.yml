@@ -159,6 +159,11 @@ jobs:
   model-runner-code-gate:
     name: model-runner-code-gate
     needs: [stockinsider-v3-gate-bootstrap, exact-review]
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.user.login == github.repository_owner &&
+      github.actor == github.repository_owner &&
+      github.triggering_actor == github.repository_owner
     runs-on: [self-hosted, macOS, ARM64]
     timeout-minutes: 45
     permissions:

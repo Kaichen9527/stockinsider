@@ -46,7 +46,10 @@ test('candidate execution waits for exact review and model-runner failure cannot
     assert.match(block, /^    needs: \[stockinsider-v3-gate-bootstrap, exact-review\]$/mu);
   }
   assert.doesNotMatch(model, /continue-on-error:\s*true/u);
-  assert.doesNotMatch(model, /^    if:/mu);
+  assert.match(model, /github\.event\.pull_request\.head\.repo\.full_name == github\.repository/u);
+  assert.match(model, /github\.event\.pull_request\.user\.login == github\.repository_owner/u);
+  assert.match(model, /github\.actor == github\.repository_owner/u);
+  assert.match(model, /github\.triggering_actor == github\.repository_owner/u);
   assert.match(model, /^    runs-on: \[self-hosted, macOS, ARM64\]$/mu);
   for (const token of [
     'sudo apt-get install --yes postgresql',
@@ -77,6 +80,10 @@ test('candidate execution waits for exact review and model-runner failure cannot
   assert.match(worker, /STOCKINSIDER_DOCUMENT_PARSER_SCRIPT/u);
   assert.match(worker, /Playwright output must contain a recognized final result/u);
   assert.match(worker, /playwrightSkipped/u);
+  assert.match(worker, /modelOracleHostPinByListingSha256/u);
+  assert.match(worker, /bcae305c4d7a757510eb99c2c0aeb92679a9e772aecb7270360d747144fa6eed: 'model-runner-host-pins-v3\.14'/u);
+  assert.match(worker, /cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5: 'model-runner-host-pins-v3\.15'/u);
+  assert.match(worker, /model runner host pin requires an exact protected listing/u);
 });
 
 test('public candidate detail changes trigger the protected product workflow', () => {
