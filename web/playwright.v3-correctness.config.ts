@@ -18,7 +18,10 @@ export default defineConfig({
   webServer: skipWebServer ? undefined : {
     command: `bash -lc 'npm run build; set -a; source ../.env 2>/dev/null || true; set +a; DATA_MODE=demo SOURCE_LED_OPPORTUNITY_V3=disabled OPPORTUNITY_V3_UI_FIXTURE=enabled npm run start -- --port ${port}'`,
     env: { ...process.env, INTERNAL_API_KEY: internalKey, DATA_MODE: 'demo', SOURCE_LED_OPPORTUNITY_V3: 'disabled', OPPORTUNITY_V3_UI_FIXTURE: 'enabled', RADAR_PUBLIC_SNAPSHOTS_ENABLED: 'disabled' },
-    url: baseURL,
+    // Readiness must not hit the dynamic homepage: that route intentionally
+    // reads live data and can stay pending while the fixture server is healthy.
+    // A static policy page proves the Next server is accepting requests.
+    url: new URL('/privacy', baseURL).toString(),
     reuseExistingServer: false,
     timeout: 120_000,
   },

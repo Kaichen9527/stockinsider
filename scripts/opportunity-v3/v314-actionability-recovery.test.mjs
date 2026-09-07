@@ -150,6 +150,8 @@ test('V314-004 discovery and report visibility are backed by payload data', () =
   assert.match(tabs, /radar\.sourceSignals/u);
   assert.match(home, /\.\.\.\(radar\.sourceSignals \|\| \[\]\)/u);
   const browser=readFileSync(path.join(root,'web/e2e/v314-readonly-visibility.spec.ts'),'utf8');
+  const browserConfig=readFileSync(path.join(root,'web/playwright.v3-correctness.config.ts'),'utf8');
+  assert.match(browserConfig,/url: new URL\('\/privacy', baseURL\)[.]toString\(\)/u);
   assert.match(browser,/股票研究 46/u);assert.match(browser,/社群發現 30/u);
   assert.match(browser,/getByRole\('article'\)[\s\S]*?toHaveCount\(30\)/u);
   assert.match(browser,/readonly-report-link/u);

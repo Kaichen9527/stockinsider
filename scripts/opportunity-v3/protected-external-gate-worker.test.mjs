@@ -64,6 +64,9 @@ test('candidate execution waits for exact review and model-runner failure cannot
   assert.match(worker, /for \(const name of \['initdb', 'pg_ctl', 'psql'\]\)/u);
   assert.match(worker, /OPPORTUNITY_V3_POSTGRES_BIN: postgresBin/u);
   assert.match(worker, /PATH: `\$\{postgresBin\}\$\{path[.]delimiter\}/u);
+  assert.match(worker, /'test:candidate-shadow-performance'/u);
+  assert.match(worker, /failed: result[.]failed \+ row[.]failed/u);
+  assert.match(worker, /skipped: result[.]skipped \+ \(row[.]ownsPartitionCount \? row[.]skipped : 0\)/u);
 });
 
 test('every third-party action is pinned to an immutable commit', () => {

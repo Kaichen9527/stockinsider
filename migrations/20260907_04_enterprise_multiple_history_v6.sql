@@ -76,7 +76,7 @@ BEGIN
     WHERE snapshot.stock_id=p_stock_id AND snapshot.session_date=p_session_date AND snapshot.model_version=p_model_version
       AND snapshot.calculation_input_hash=v_hash;
   END IF;
-  IF v_existing IS DISTINCT FROM v_hash THEN RAISE EXCEPTION 'enterprise_multiple_snapshot_conflict'; END IF;
+  IF v_existing IS DISTINCT FROM v_hash THEN RAISE EXCEPTION 'enterprise_multiple_snapshot_replay_missing'; END IF;
   idempotent_replay:=NOT v_inserted;calculation_input_hash:=v_hash;RETURN NEXT;
 END $function$;
 

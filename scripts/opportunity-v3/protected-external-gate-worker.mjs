@@ -909,6 +909,7 @@ function executeTrack(subjectRoot, track, identity, attestation) {
     verify(executeClosedCandidate, modelNodeExecutable, ['--experimental-strip-types', 'scripts/opportunity-v3/acceptance-gate-runner.mjs', '--track', track], `${track} traceability`, true);
     if (track === 'product_runtime') {
       for (const script of [
+        'test:candidate-shadow-performance',
         'test:source-led-opportunity-v3',
         'test:source-led-opportunity-v3:product-correctness',
         'test:source-led-opportunity-v3:migration',
@@ -935,8 +936,12 @@ function executeTrack(subjectRoot, track, identity, attestation) {
     const totals = measured.reduce((result, row) => ({
       passed: result.passed + (row.ownsPartitionCount ? row.passed : 0),
       failed: result.failed + row.failed,
-      skipped: result.skipped + row.skipped,
-      todo: result.todo + row.todo,
+      // Supplementary suites may carry an explicit environment-only skip
+      // (the live Arelle adapter runs in the reviewed VPS parser service).
+      // Their failures remain fatal; only the registered acceptance owner
+      // contributes partition accounting to the immutable envelope.
+      skipped: result.skipped + (row.ownsPartitionCount ? row.skipped : 0),
+      todo: result.todo + (row.ownsPartitionCount ? row.todo : 0),
     }), { passed: 0, failed: 0, skipped: 0, todo: 0 });
     assert.equal(measured.filter((row) => row.ownsPartitionCount).length, 1,
       `${track} has exactly one registered acceptance owner`);

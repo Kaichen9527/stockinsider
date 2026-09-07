@@ -1383,6 +1383,7 @@ const structuralExecutors = {
   },
   'HYB-006': () => {
     assert.match(workflow, /diagnostic:source-led-opportunity-v3:product-runtime/u);
+    assert.match(JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts['test:source-led-opportunity-v3'], /candidate-detail-view-contract[.]test[.]ts/u);
     assert.match(workflow, /verify:source-led-opportunity-v3:model-runner/u);
     assert.match(workflow, /run: npm run verify:source-led-opportunity-v3:model-runner/u);
     assert.match(workflow, /OPPORTUNITY_V3_RUNNER_TRACK.*true/u);
