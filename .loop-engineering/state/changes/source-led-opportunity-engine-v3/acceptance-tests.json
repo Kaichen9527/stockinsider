@@ -2337,7 +2337,7 @@
       "protected://stockinsider-v3-gate-root/execute-track --track product_runtime"
     ]
   ],
-  "scriptValueRowsSha256": "9f33a5aea432440348a83c089065a23fa7cdcbf24d5df78dc70b7537aaec520d",
+  "scriptValueRowsSha256": "c15df6eb7cba7b03c188cbadf3c37019cded63ccb17cd171f462c6bbe6f986b1",
   "scriptValueRows": [
     [
       "build:source-led-opportunity-v3",
@@ -2357,7 +2357,7 @@
     ],
     [
       "test:source-led-opportunity-v3",
-      "node scripts/run-node22.js --experimental-strip-types --test scripts/opportunity-v3/gate-evidence.test.mjs web/src/lib/opportunity-v3/opportunity-v3.test.ts web/src/lib/opportunity-v3/public-schema.test.ts"
+      "node scripts/run-node22.js --experimental-strip-types --test scripts/opportunity-v3/gate-evidence.test.mjs web/src/lib/candidate-detail-view-contract.test.ts web/src/lib/opportunity-v3/opportunity-v3.test.ts web/src/lib/opportunity-v3/public-schema.test.ts"
     ],
     [
       "test:source-led-opportunity-v3:migration",
