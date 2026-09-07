@@ -45,6 +45,16 @@ Production REST adapter 使用 `FINMIND_API_TOKEN`。FinMind 官方 MCP 慣例�
 - 每個 bundle 由 canonical revision evidence hash 導出 deterministic `bundleId`。未採用 fact 不得影響 hash；任何已採用 detail/fact 變更必須產生新 hash/bundle。
 - submission receipt 必須同時綁定 exact `revisionId`、`inputHash`、有效 `submissionId` 與 `dossierId`。`accepted/valid/ok=true` 必須沒有 rejection reasons；`rejected/rejected/ok=false` 必須有 reasons。retry 只接受同一 submission hash 的 `idempotentReplay=true`，不得把另一 revision 的成功回執當成完成。
 
+### Sol article worker（受控內部 API）
+
+此流程只在已部署、已套用 reviewed migration 的 VPS／本機安全 tunnel 上執行；每個呼叫都使用既有 internal bearer，絕不把 bearer、bundle 內容或 receipt 貼到聊天、Git 或公開 HTTP。
+
+1. 以 `POST /api/internal/candidate-dossier-bundle`（每頁最多 40）讀取已發布 revision。依回應的 `nextCursor` 逐頁處理直到 `null`；cursor 不可重設或略過，避免只產生第一頁文章。
+2. bundle route 會以 `revisionId + inputHash` 冪等建立 outbox。article worker 以 `POST /api/internal/candidate-dossier-outbox`、穩定的 worker owner 與最多 5 件 claim 一次取得 lease；只可使用回傳的 immutable bundle 生成文章，不能修改分數、估值、stage 或 facts。
+3. 將同一 bundle 的文章送至 `POST /api/internal/candidate-dossier-submission`。成功定義是 response 同時有 `ok=true`、`status=accepted`、`validationStatus=valid`、相同 `revisionId/inputHash`、無 rejection reasons，並保存 `submissionId/dossierId` receipt。
+4. 中斷後以同一 cursor／owner 續跑；expired lease 可被下一次 claim 回收。rejected receipt 要保留原因並停止把該 revision 標為 `codex_enriched`。只有 accepted receipt 與 dossier 的 bundle/revision/hash 都相符，公開 reader 才顯示 enriched 文章；否則維持公司特定 deterministic fact article。
+5. 每批最多五家公司、每 30 分鐘一次（21:20–23:50）是工作量上限，不是完成宣告。所有頁面 cursor 處理完、沒有 lease 中 job，且每個新 revision 都有 accepted 或明確 rejected receipt後，才可回報該批完成。
+
 ## 公司特定研究文章 claim 契約
 
 - 嚴格模式必須提供公司 `stockId` 及／或 `symbol/name`，文章全文至少出現正確公司名稱或具數字邊界的股票代號；不得用通用文章套到多家公司。
