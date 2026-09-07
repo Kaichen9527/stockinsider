@@ -1,4 +1,5 @@
 import type { RadarDailyPayload, SourceSignalCard } from './types';
+import { holdsLongMaConfirmation, trueLongMaCrossover } from './technical-indicator-adapter.ts';
 
 export const STAGE_RULESET_VERSION = 'source-ranking-v2.3.0';
 
@@ -183,11 +184,6 @@ export type LongMaBreakout = {
   persisted: boolean;
 };
 
-function crossesAbove(close: number, ma: number | null, priorClose: number | null, priorMa: number | null): boolean {
-  return hasNumber(ma) && hasNumber(priorClose) && hasNumber(priorMa)
-    && close > ma && priorClose <= priorMa;
-}
-
 /**
  * Evaluate MA120 and MA240 independently.  In particular, MA240 availability
  * must not silently substitute for MA120 (or vice versa), and an already
@@ -195,10 +191,10 @@ function crossesAbove(close: number, ma: number | null, priorClose: number | nul
  */
 export function longMaBreakout(input: CandidateStageInput['technical']): LongMaBreakout {
   if (!hasNumber(input.close)) return { ma120: false, ma240: false, persisted: false };
-  const ma120 = crossesAbove(input.close, input.ma120, input.priorClose ?? null, input.priorMa120 ?? null);
-  const ma240 = crossesAbove(input.close, input.ma240, input.priorClose ?? null, input.priorMa240 ?? null);
-  const persisted120 = input.priorBreakoutAboveMa120 === true && hasNumber(input.ma120) && input.close > input.ma120;
-  const persisted240 = input.priorBreakoutAboveMa240 === true && hasNumber(input.ma240) && input.close > input.ma240;
+  const ma120 = trueLongMaCrossover({ close: input.close, movingAverage: input.ma120, priorClose: input.priorClose ?? null, priorMovingAverage: input.priorMa120 ?? null });
+  const ma240 = trueLongMaCrossover({ close: input.close, movingAverage: input.ma240, priorClose: input.priorClose ?? null, priorMovingAverage: input.priorMa240 ?? null });
+  const persisted120 = holdsLongMaConfirmation({ priorBreakoutRecorded: input.priorBreakoutAboveMa120 === true, close: input.close, movingAverage: input.ma120 });
+  const persisted240 = holdsLongMaConfirmation({ priorBreakoutRecorded: input.priorBreakoutAboveMa240 === true, close: input.close, movingAverage: input.ma240 });
   return { ma120, ma240, persisted: persisted120 || persisted240 };
 }
 

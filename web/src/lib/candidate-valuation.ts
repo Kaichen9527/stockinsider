@@ -203,3 +203,32 @@ export function buildDriverMultipleScenario(input: {
     historicalSampleCount: sorted.length,
   };
 }
+
+/**
+ * A financial issuer's PB scenario is only meaningful alongside a reconciled
+ * average-common-equity ROE.  The ROE is retained in the output so the public
+ * explanation cannot present a PB target as though it were a forward PE.
+ */
+export function buildFinancialPbRoeScenario(input: {
+  price: number;
+  bookValuePerShare: number;
+  roe: number;
+  historicalPbRatios: number[];
+}) {
+  if (!Number.isFinite(input.roe) || input.roe <= 0) return null;
+  const scenario = buildDriverMultipleScenario({
+    price: input.price,
+    bearDriver: input.bookValuePerShare * 0.9,
+    baseDriver: input.bookValuePerShare,
+    bullDriver: input.bookValuePerShare * 1.1,
+    historicalMultiples: input.historicalPbRatios,
+    primaryMethod: 'forward_pb',
+    driverSource: 'reported_book_value_per_share',
+  });
+  return scenario == null ? null : {
+    ...scenario,
+    primaryMethod: 'financial_pb_roe' as const,
+    operatingDriverSource: 'average_common_equity_roe_and_bvps' as const,
+    roe: round(input.roe, 6),
+  };
+}

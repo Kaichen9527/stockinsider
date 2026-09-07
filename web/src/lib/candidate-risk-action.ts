@@ -1,3 +1,5 @@
+import { wilderAtr } from './technical-indicator-adapter.ts';
+
 export type CandidateRiskAction = 'hold' | 'trim_no_chase' | 'hard_exit' | 'data_incomplete';
 
 export type AtrBar = { high: number; low: number; close: number };
@@ -8,15 +10,7 @@ export type AtrBar = { high: number; low: number; close: number };
  * indicator-library ATR implementations can use different SMA/seed semantics.
  */
 export function wilderAtr14(bars: AtrBar[]): number | null {
-  if (bars.length < 14 || bars.some((bar) => !Number.isFinite(bar.high) || !Number.isFinite(bar.low)
-    || !Number.isFinite(bar.close) || bar.high < bar.low || bar.close <= 0)) return null;
-  const trueRanges = bars.map((bar, index) => {
-    const priorClose = index === 0 ? null : bars[index - 1].close;
-    return priorClose == null ? bar.high - bar.low : Math.max(bar.high - bar.low, Math.abs(bar.high - priorClose), Math.abs(bar.low - priorClose));
-  });
-  let atr = trueRanges.slice(0, 14).reduce((sum, value) => sum + value, 0) / 14;
-  for (const trueRange of trueRanges.slice(14)) atr = (atr * 13 + trueRange) / 14;
-  return Number.isFinite(atr) && atr > 0 ? atr : null;
+  return wilderAtr(bars, 14);
 }
 
 export function validAtr14(value: number | null): value is number {
