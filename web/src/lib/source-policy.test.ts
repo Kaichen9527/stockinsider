@@ -5,8 +5,9 @@ import { activeSourceConnectorKeys, APPROVED_TELEGRAM_PUBLIC_CHANNELS, RETIRED_S
 
 const ENV_KEYS = [
   'INTERNAL_API_KEY', 'CRON_SECRET', 'THREADS_OFFICIAL_API_ENABLED', 'THREADS_OFFICIAL_CANARY_ACTIVE',
+  'THREADS_DEDICATED_APP_CONFIRMED',
   'TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED', 'PTT_METADATA_AUTHORIZED',
-  'BULLTALK_LICENSED', 'BULLTALK_AUTHORIZED_FEED_URL',
+  'BULLTALK_LICENSED', 'BULLTALK_AUTHORIZED_FEED_URL', 'BULLTALK_LICENSE_SCOPE_REF', 'BULLTALK_REAL_SAMPLE_SHA256',
   'PODCAST_RSS_ALLOWLIST', 'PODCAST_CONTENT_ANALYSIS_ALLOWLIST', 'TWSE_OFFICIAL_OPENAPI_ENABLED',
 ] as const;
 
@@ -41,13 +42,26 @@ test('Threads and licensed sources report explicit blocks instead of false succe
     assert.equal(sourceExecutionPolicy('telegram').disposition, 'blocked_license');
     assert.equal(sourceExecutionPolicy('bulltalk').disposition, 'blocked_license');
   });
-  withEnvironment({ THREADS_OFFICIAL_API_ENABLED: 'true' }, () => {
+  withEnvironment({ THREADS_DEDICATED_APP_CONFIRMED: 'true', THREADS_OFFICIAL_API_ENABLED: 'true' }, () => {
     assert.equal(sourceExecutionPolicy('threads').disposition, 'blocked_auth');
     assert.equal(sourceExecutionPolicy('threads').terminalReason, 'threads_official_canary_inactive');
   });
-  withEnvironment({ THREADS_OFFICIAL_API_ENABLED: 'true', THREADS_OFFICIAL_CANARY_ACTIVE: 'true' }, () => {
+  withEnvironment({ THREADS_DEDICATED_APP_CONFIRMED: 'true', THREADS_OFFICIAL_API_ENABLED: 'true', THREADS_OFFICIAL_CANARY_ACTIVE: 'true' }, () => {
     assert.equal(sourceExecutionPolicy('threads').disposition, 'active');
   });
+});
+
+test('BullTalk requires a signed scope and real-sample digest before a licensed feed can activate', () => {
+  withEnvironment({ BULLTALK_LICENSED: 'true', BULLTALK_AUTHORIZED_FEED_URL: 'https://licensed.example/feed.csv' }, () => {
+    assert.equal(sourceExecutionPolicy('bulltalk').disposition, 'blocked_license');
+    assert.equal(sourceExecutionPolicy('bulltalk').terminalReason, 'bulltalk_license_scope_ref_missing');
+  });
+  withEnvironment({
+    BULLTALK_LICENSED: 'true',
+    BULLTALK_AUTHORIZED_FEED_URL: 'https://licensed.example/feed.csv',
+    BULLTALK_LICENSE_SCOPE_REF: 'contract:cmoney:2026-09',
+    BULLTALK_REAL_SAMPLE_SHA256: 'a'.repeat(64),
+  }, () => assert.equal(sourceExecutionPolicy('bulltalk').disposition, 'active'));
 });
 
 test('retired connectors remain explicitly queryable as historical-only policy', () => {
@@ -107,7 +121,7 @@ test('connector=all includes only sources authorized in the current runtime', ()
   withEnvironment({}, () => {
     assert.deepEqual(activeSourceConnectorKeys(), ['podcast', 'gdelt']);
   });
-  withEnvironment({ THREADS_OFFICIAL_API_ENABLED: 'true', THREADS_OFFICIAL_CANARY_ACTIVE: 'true', TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED: 'true' }, () => {
+  withEnvironment({ THREADS_DEDICATED_APP_CONFIRMED: 'true', THREADS_OFFICIAL_API_ENABLED: 'true', THREADS_OFFICIAL_CANARY_ACTIVE: 'true', TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED: 'true' }, () => {
     assert.deepEqual(activeSourceConnectorKeys(), ['telegram', 'threads', 'podcast', 'gdelt']);
     assert.deepEqual(scheduledSourceConnectorKeys(), ['telegram', 'threads', 'podcast', 'gdelt']);
   });

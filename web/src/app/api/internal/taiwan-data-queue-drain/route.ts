@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { requireExactInternalBearer } from '@/lib/internal-auth';
 import { acquireTaiwanDataset, type TaiwanDataset, type TaiwanExchange, type TaiwanRefreshPhase } from '@/lib/taiwan-data-provider';
 import { requireActiveVpsWriter } from '@/lib/taiwan-data-runtime';
+import { readFinMindVaultToken } from '@/lib/finmind-vault';
 
 const BODY_LIMIT = 10_000;
 const MAX_DRAIN_LIMIT = 100;
@@ -32,11 +33,15 @@ export async function POST(request: Request) {
   if (claim.error) return NextResponse.json({ ok: false, error: `taiwan_data_claim_failed:${claim.error.message}` }, { status: 500 });
   const jobs = (claim.data || []) as Array<{ job_id: string; dataset: TaiwanDataset; symbol: string | null; exchange: TaiwanExchange; refresh_phase: TaiwanRefreshPhase; requested_session_date: string }>;
   const terminalCounts: Record<string, number> = {};
+  const finMindToken = await readFinMindVaultToken().catch(() => '');
   const completenessByPublication = new Map<string, { sessionDate: string; phase: TaiwanRefreshPhase; datasets: Record<string, unknown> }>();
   const processed: Array<{ job: typeof jobs[number]; result: Awaited<ReturnType<typeof acquireTaiwanDataset>>; persistence: string; disposition: string; error: string | null }> = [];
   for (let offset = 0; offset < jobs.length; offset += DRAIN_CONCURRENCY) {
     const batch = await Promise.all(jobs.slice(offset, offset + DRAIN_CONCURRENCY).map(async (job) => {
-      let result = await acquireTaiwanDataset({ dataset: job.dataset, symbol: job.symbol, exchange: job.exchange, phase: job.refresh_phase, sessionDate: job.requested_session_date });
+      let result = await acquireTaiwanDataset(
+        { dataset: job.dataset, symbol: job.symbol, exchange: job.exchange, phase: job.refresh_phase, sessionDate: job.requested_session_date },
+        { finMindToken },
+      );
       let persistence = 'not_persisted';
       if (result.terminal === 'complete' && job.dataset === 'financial_statement') {
         // Financial statements are persisted by the period-aware acquisition

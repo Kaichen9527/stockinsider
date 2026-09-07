@@ -18,10 +18,12 @@ hostname; the production build guard verifies the system environment variables.
    secret into the repository:
    - `APP_URL=http://5.104.83.211`
    - `INTERNAL_API_KEY` and `CRON_SECRET`
-   - `THREADS_OFFICIAL_API_ENABLED=false` until Meta App Review passes
+   - `THREADS_DEDICATED_APP_CONFIRMED=false`, `THREADS_OFFICIAL_API_ENABLED=false`, and
+     `THREADS_OFFICIAL_CANARY_ACTIVE=false` until the dedicated App, review, Vault token,
+     and non-self public-post canary all pass
    - `TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED=true` only after the channel-use basis is recorded
    - `PTT_METADATA_AUTHORIZED=true` only after metadata-use review
-   - BullTalk variables only after a CMoney partner/API agreement
+   - BullTalk variables only after a signed CMoney scope and reviewed real JSON/CSV sample
 3. Deploy the canonical project and verify `/api/internal/health-check`, the 20:00
    monitoring cron, and one dry source run.
 4. Enable GitHub `source-refresh.yml` and `night-shift.yml`. Require their JSON

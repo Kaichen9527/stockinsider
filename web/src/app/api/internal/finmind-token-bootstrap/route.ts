@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { normalizeFinMindToken, verifyFinMindToken } from '@/lib/finmind-token-bootstrap.ts';
 import { requireExactInternalBearer } from '@/lib/internal-auth';
 import { requireActiveVpsWriter } from '@/lib/taiwan-data-runtime';
+import { clearFinMindVaultTokenCache } from '@/lib/finmind-vault';
 
 export const runtime = 'nodejs';
 
@@ -23,6 +24,7 @@ export async function POST(request: Request) {
       p_token_hash: canary.tokenHash,
     });
     if (stored.error || !stored.data) throw new Error(`finmind_vault_write_failed:${stored.error?.message || 'missing'}`);
+    clearFinMindVaultTokenCache();
     return NextResponse.json({ ok: true, verified: true, canaryRows: canary.rowCount });
   } catch (cause) {
     return NextResponse.json({ ok: false, error: cause instanceof Error ? cause.message : 'finmind_bootstrap_failed' }, { status: 422 });

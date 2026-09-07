@@ -136,7 +136,7 @@ test('V3.18 uses reviewed topic scopes for Threads and still requires the approv
   const result=await acquisition.acquireApprovedSources({roster,credentials:{threadsAccessToken:'test-token'},
     now:new Date('2026-08-20T10:20:00Z'),fetchImpl:async(url)=>{
       const parsed=new URL(String(url));
-      if(parsed.origin==='https://graph.threads.net'){
+      if(parsed.origin==='https://graph.threads.com'){
         const query=parsed.searchParams.get('q');queries.push(query);
         const rows=query==='台股'?[{id:'gooaye-topic-1',username:'stockcancer',text:'2330 先進製程需求更新',
           permalink:'https://www.threads.net/@stockcancer/post/gooaye-topic-1',timestamp:'2026-08-20T09:00:00Z'},

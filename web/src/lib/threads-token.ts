@@ -1,6 +1,13 @@
 import { createHash } from 'crypto';
 import { getSupabaseServerClient } from './supabase-server';
-import { assertUsableThreadsToken, shouldRefreshThreadsToken } from './threads-token-policy';
+import { assertUsableThreadsToken, shouldRefreshThreadsToken, threadsTokenExpiryWarning } from './threads-token-policy';
+import {
+  THREADS_GRAPH_VERSION,
+  THREADS_LONG_TOKEN_URL,
+  THREADS_OAUTH_TOKEN_URL,
+  THREADS_REFRESH_TOKEN_URL,
+  threadsRedirectUri,
+} from './threads-api';
 
 const DEFAULT_TOKEN_TTL_MS = 60 * 24 * 60 * 60 * 1000;
 
@@ -71,7 +78,7 @@ async function persistRefreshedToken(token: string, refreshedAt: string, expires
 }
 
 async function refreshToken(currentToken: string): Promise<{ token: string; refreshedAt: string; expiresAt: string }> {
-  const endpoint = new URL('https://graph.threads.net/refresh_access_token');
+  const endpoint = new URL(THREADS_REFRESH_TOKEN_URL);
   endpoint.searchParams.set('grant_type', 'th_refresh_token');
   endpoint.searchParams.set('access_token', currentToken);
   const response = await fetch(endpoint, { headers: { accept: 'application/json' }, signal: AbortSignal.timeout(15_000) });
@@ -87,6 +94,70 @@ async function refreshToken(currentToken: string): Promise<{ token: string; refr
     refreshedAt,
     expiresAt: new Date(Date.now() + ttlMs).toISOString(),
   };
+}
+
+async function parseTokenResponse(response: Response, errorPrefix: string): Promise<{ accessToken: string; expiresIn: number }> {
+  if (!response.ok) throw new Error(`${errorPrefix}_http_${response.status}`);
+  const payload = await response.json() as { access_token?: unknown; expires_in?: unknown };
+  const accessToken = typeof payload.access_token === 'string' ? payload.access_token : '';
+  if (!accessToken) throw new Error(`${errorPrefix}_missing_token`);
+  const expiresIn = Number(payload.expires_in);
+  return { accessToken, expiresIn: Number.isFinite(expiresIn) && expiresIn > 0 ? expiresIn : 60 * 24 * 60 * 60 };
+}
+
+export async function exchangeThreadsAuthorizationCodeAndPersist(code: string): Promise<{ expiresAt: string }> {
+  if (!code.trim()) throw new Error('threads_oauth_code_missing');
+  const appId = String(process.env.THREADS_APP_ID || '').trim();
+  const appSecret = String(process.env.THREADS_APP_SECRET || '').trim();
+  if (!appId || !appSecret) throw new Error('threads_app_credentials_missing');
+  const shortResponse = await fetch(THREADS_OAUTH_TOKEN_URL, {
+    method: 'POST',
+    headers: { 'content-type': 'application/x-www-form-urlencoded', accept: 'application/json' },
+    body: new URLSearchParams({
+      client_id: appId,
+      client_secret: appSecret,
+      grant_type: 'authorization_code',
+      redirect_uri: threadsRedirectUri(),
+      code,
+    }),
+    signal: AbortSignal.timeout(15_000),
+  });
+  const shortToken = await parseTokenResponse(shortResponse, 'threads_oauth_exchange');
+  const longEndpoint = new URL(THREADS_LONG_TOKEN_URL);
+  longEndpoint.searchParams.set('grant_type', 'th_exchange_token');
+  longEndpoint.searchParams.set('client_secret', appSecret);
+  longEndpoint.searchParams.set('access_token', shortToken.accessToken);
+  const longResponse = await fetch(longEndpoint, { headers: { accept: 'application/json' }, signal: AbortSignal.timeout(15_000) });
+  const longToken = await parseTokenResponse(longResponse, 'threads_long_token_exchange');
+  const refreshedAt = new Date().toISOString();
+  const expiresAt = new Date(Date.now() + longToken.expiresIn * 1000).toISOString();
+  await persistRefreshedToken(longToken.accessToken, refreshedAt, expiresAt);
+  return { expiresAt };
+}
+
+export async function recordThreadsPublicSearchCanary(receipt: {
+  observedAt: string;
+  selfUsernameHash: string;
+  publicPostIdHash: string;
+  queryHash: string;
+}): Promise<void> {
+  const supabase = getSupabaseServerClient();
+  const metadata = await readCredentialMetadata();
+  const { error } = await supabase.from('source_credentials_registry').upsert({
+    platform: 'threads',
+    credential_ref: 'SUPABASE_VAULT:threads_access_token',
+    status: 'valid',
+    last_validated_at: receipt.observedAt,
+    error_message: null,
+    metadata: {
+      ...metadata,
+      graph_version: THREADS_GRAPH_VERSION,
+      required_scopes: ['threads_basic', 'threads_keyword_search'],
+      non_self_public_search_canary: receipt,
+    },
+    updated_at: receipt.observedAt,
+  }, { onConflict: 'platform' });
+  if (error) throw new Error(`threads_canary_receipt_write_failed:${error.message}`);
 }
 
 export async function getThreadsTokenForRun(): Promise<ThreadsTokenState> {
@@ -118,5 +189,6 @@ export function threadsTokenRegistryMetadata(state: ThreadsTokenState) {
     expires_at: state.expiresAt,
     token_hash: state.tokenHash,
     token_refreshed_this_run: state.refreshed,
+    expiry_warning: threadsTokenExpiryWarning({ expiresAt: state.expiresAt }),
   };
 }

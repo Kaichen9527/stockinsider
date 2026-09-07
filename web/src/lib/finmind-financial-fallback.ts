@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { getOpportunityV3ServerClient } from './opportunity-v3/service-client.ts';
+import { readFinMindVaultToken } from './finmind-vault.ts';
 
 const FINMIND_DATA_URL = 'https://api.finmindtrade.com/api/v4/data';
 const MAX_RESPONSE_BYTES = 4_000_000;
@@ -159,10 +159,7 @@ async function boundedText(response: Response) {
 
 async function readVaultToken(readToken?: () => Promise<string | null | undefined>) {
   if (readToken) return String(await readToken() || '').trim();
-  const response = await getOpportunityV3ServerClient().rpc('read_stockinsider_finmind_api_token_v6');
-  if (response.error) throw new Error('finmind_vault_read_failed');
-  const data = Array.isArray(response.data) ? response.data[0] : response.data;
-  return String(data || '').trim();
+  return readFinMindVaultToken();
 }
 
 function errorDetail(error: unknown) {

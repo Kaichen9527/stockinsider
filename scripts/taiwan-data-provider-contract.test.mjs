@@ -6,6 +6,7 @@ const migration = readFileSync(new URL('../migrations/20260906_taiwan_data_provi
 const provider = readFileSync(new URL('../web/src/lib/taiwan-data-provider.ts', import.meta.url), 'utf8');
 const refreshRoute = readFileSync(new URL('../web/src/app/api/internal/taiwan-data-refresh/route.ts', import.meta.url), 'utf8');
 const drainRoute = readFileSync(new URL('../web/src/app/api/internal/taiwan-data-queue-drain/route.ts', import.meta.url), 'utf8');
+const finmindVault = readFileSync(new URL('../web/src/lib/finmind-vault.ts', import.meta.url), 'utf8');
 const financialDrainRoute = readFileSync(new URL('../web/src/app/api/internal/candidate-financial-queue-drain/route.ts', import.meta.url), 'utf8');
 const preliminaryRoute = readFileSync(new URL('../web/src/app/api/internal/radar-preliminary-publish/route.ts', import.meta.url), 'utf8');
 const runtime = readFileSync(new URL('../web/src/lib/taiwan-data-runtime.ts', import.meta.url), 'utf8');
@@ -22,6 +23,9 @@ test('FinMind is persistently labelled as a fallback mirror, never an official s
   assert.match(migration, /provider = 'finmind' AND authority_tier = 'finmind_fallback'/u);
   assert.match(migration, /provider IN \('twse','tpex'\) AND authority_tier = 'official_primary'/u);
   assert.doesNotMatch(migration, /provider = 'finmind' AND authority_tier = 'official_primary'/u);
+  assert.doesNotMatch(provider, /process\.env\.FINMIND_API_TOKEN/u);
+  assert.match(drainRoute, /readFinMindVaultToken/u);
+  assert.match(finmindVault, /read_stockinsider_finmind_api_token_v6/u);
 });
 
 test('terminal outcome contract distinguishes API usage, timeout, schema and empty results', () => {
