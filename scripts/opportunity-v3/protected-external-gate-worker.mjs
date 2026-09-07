@@ -246,11 +246,12 @@ function reviewSource(check, attestation = null, identity = null) {
   };
 }
 
-function reviewSourceValues(attestation) {
-  const values = [reviewSource('exact-review', attestation)];
-  for (const graphSources of Object.values(graphBoundReviewSources)) {
-    values.push(graphSources.requirements, graphSources.architecture);
-  }
+function reviewSourceValues(attestation, identity) {
+  const values = [
+    reviewSource('exact-review', attestation),
+    reviewSource('requirements', attestation, identity),
+    reviewSource('architecture', attestation, identity),
+  ];
   return [...new Map(values.map((source) => [source.ref, source])).values()];
 }
 
@@ -1088,13 +1089,16 @@ function parseArguments(argv) {
 function prepare(attestation, subjectRoot) {
   assert.equal(git(baseRoot, ['rev-parse', 'HEAD']), attestation.baseCommitSha, 'prepare from protected base');
   assert.equal(git(baseRoot, ['status', '--porcelain=v1', '--untracked-files=all']), '', 'prepare base clean');
-  const remoteTargets = [
-    attestation.subjectCommitSha,
-    ...reviewSourceValues(attestation).map(({ ref }) => {
+  // Fetch the immutable subject first so review selection can be bound to its
+  // active graph. Unrelated future graph refs are deliberately not fetched.
+  execFileSync('/usr/bin/git', ['fetch', '--no-tags', 'origin', attestation.subjectCommitSha],
+    { cwd: baseRoot, stdio: 'inherit' });
+  const identity = treeIdentity(baseRoot, attestation.subjectTreeSha);
+  const selectedReviewSources = reviewSourceValues(attestation, identity);
+  const remoteTargets = selectedReviewSources.map(({ ref }) => {
       const remoteBranch = ref.replace('refs/remotes/origin/', 'refs/heads/');
       return `${remoteBranch}:${ref}`;
-    }),
-  ];
+    });
   execFileSync('/usr/bin/git', ['fetch', '--no-tags', 'origin', ...remoteTargets], { cwd: baseRoot, stdio: 'inherit' });
   const target = absolute(subjectRoot, 'subject root');
   execFileSync('/usr/bin/git', ['init', target], { cwd: baseRoot, stdio: 'inherit' });
@@ -1102,7 +1106,7 @@ function prepare(attestation, subjectRoot) {
     attestation.subjectCommitSha,
     attestation.baseCommitSha,
     attestation.registryCommitSha,
-    ...reviewSourceValues(attestation).map(({ ref }) => `${ref}:${ref}`),
+    ...selectedReviewSources.map(({ ref }) => `${ref}:${ref}`),
   ];
   execFileSync('/usr/bin/git', ['fetch', '--no-tags', baseRoot, ...localTargets], { cwd: target, stdio: 'inherit' });
   execFileSync('/usr/bin/git', ['checkout', '--detach', attestation.subjectCommitSha], { cwd: target, stdio: 'inherit' });

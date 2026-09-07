@@ -130,7 +130,9 @@ test('the protected root selects closed graph-bound Requirements/Architecture ev
   assert.match(worker, /4f08c1a3a126236039247c5d8542ddf7dbdab0d2384c6e953fe22bcc151808ab/u);
   assert.match(worker, /evidence\/source-led-opportunity-v3-exact-review-\$\{attestation[.]subjectCommitSha\}/u);
   assert.match(worker, /function reviewSource\(check, attestation = null, identity = null\)/u);
-  assert.match(worker, /function reviewSourceValues\(attestation\)/u);
+  assert.match(worker, /function reviewSourceValues\(attestation, identity\)/u);
+  assert.match(worker, /Unrelated future graph refs are deliberately not fetched/u);
+  assert.doesNotMatch(worker, /Object[.]values\(graphBoundReviewSources\)/u);
   assert.match(worker, /active graph evidence source/u);
 });
 
