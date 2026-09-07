@@ -45,7 +45,7 @@ const reviewKeys = [
   'reviewedTreeSha', 'verdict',
 ];
 const requiredChecks = [
-  'requirements', 'architecture', 'product-runtime-code-gate', 'exact-review',
+  'requirements', 'architecture', 'product-runtime-code-gate', 'model-runner-code-gate', 'exact-review',
 ];
 const gatePolicies = Object.freeze({
   requirements: { commands: [], count: 0, partition: null, review: true },
@@ -924,7 +924,7 @@ function executeTrack(subjectRoot, track, identity, attestation) {
         'scripts/model-runner-v3/model-runner-v3.test.js'], 'test:model-runner-v3');
       verify(executeClosedCandidate, modelNodeExecutable, ['scripts/run-node22.js', '--experimental-strip-types',
         'scripts/opportunity-v3/doctor.mjs', '--expect-mode', 'disabled', '--require-host-pin',
-        'model-runner-host-pins-v3.14'], 'disabled model runner doctor');
+        'model-runner-host-pins-v3.15'], 'disabled model runner doctor');
       const oracle = trustedHostModelOracle(subjectRoot, attestation, modelNodeExecutable);
       outputs.push(oracle);
       measured.push({ ...measuredResult(oracle, 'trusted protected-base exact-subject model oracle'), ownsPartitionCount: false });
@@ -1082,7 +1082,7 @@ function parseArguments(argv) {
   if (verb !== 'prepare') assert.equal(typeof values['--output'], 'string', '--output required');
   if (verb === 'review') assert.ok(['requirements', 'architecture', 'exact-review'].includes(values['--check']), 'closed review check');
   if (verb === 'track') assert.ok(['product_runtime', 'model_runner'].includes(values['--track']), 'closed executable track');
-  if (verb === 'aggregate') assert.equal(values.inputs.length, requiredChecks.length, 'four aggregate inputs');
+  if (verb === 'aggregate') assert.equal(values.inputs.length, requiredChecks.length, 'five aggregate inputs');
   return values;
 }
 

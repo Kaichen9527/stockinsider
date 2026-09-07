@@ -17,7 +17,7 @@ function jobBlock(jobId, nextJobId = null) {
   return workflow.slice(start, end);
 }
 
-test('the configured protected check belongs only to the four product-critical envelope aggregate', () => {
+test('the configured protected check includes the independent model-runner envelope aggregate', () => {
   assert.equal((workflow.match(/^    name: stockinsider-v3-gate-root$/gmu) ?? []).length, 1);
   const bootstrap = jobBlock('stockinsider-v3-gate-bootstrap', 'requirements');
   assert.match(bootstrap, /^    name: stockinsider-v3-gate-bootstrap$/mu);
@@ -26,30 +26,27 @@ test('the configured protected check belongs only to the four product-critical e
   assert.match(aggregate, /^    name: stockinsider-v3-gate-root$/mu);
   assert.match(
     aggregate,
-    /^    needs: \[requirements, architecture, product-runtime-code-gate, exact-review\]$/mu,
+    /^    needs: \[requirements, architecture, product-runtime-code-gate, model-runner-code-gate, exact-review\]$/mu,
   );
   assert.match(aggregate, /^    if: \$\{\{ always\(\) \}\}$/mu);
   for (const prerequisite of [
     'REQUIREMENTS_RESULT', 'ARCHITECTURE_RESULT', 'PRODUCT_RUNTIME_RESULT',
-    'EXACT_REVIEW_RESULT',
+    'EXACT_REVIEW_RESULT', 'MODEL_RUNNER_RESULT',
   ]) {
     assert.match(aggregate, new RegExp(`test "\\$${prerequisite}" = success`, 'u'));
   }
   assert.match(aggregate, /protected-external-gate-worker\.mjs aggregate/u);
 });
 
-test('candidate execution waits for exact review and persistent execution is owner-triggered', () => {
+test('candidate execution waits for exact review and model-runner failure cannot be bypassed', () => {
   const product = jobBlock('product-runtime-code-gate', 'model-runner-code-gate');
   const model = jobBlock('model-runner-code-gate', 'exact-review');
   for (const block of [product, model]) {
     assert.match(block, /^    needs: \[stockinsider-v3-gate-bootstrap, exact-review\]$/mu);
   }
-  assert.match(model, /github\.event\.pull_request\.head\.repo\.full_name == github\.repository/u);
-  assert.match(model, /github\.event\.pull_request\.user\.login == github\.repository_owner/u);
-  assert.match(model, /github\.actor == github\.repository_owner/u);
-  assert.match(model, /github\.triggering_actor == github\.repository_owner/u);
+  assert.doesNotMatch(model, /continue-on-error:\s*true/u);
+  assert.doesNotMatch(model, /^    if:/mu);
   assert.match(model, /^    runs-on: \[self-hosted, macOS, ARM64\]$/mu);
-  assert.match(model, /^    continue-on-error: true$/mu);
   for (const token of [
     'sudo apt-get install --yes postgresql',
     'postgres_bin="$(pg_config --bindir)"',
