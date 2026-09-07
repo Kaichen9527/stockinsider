@@ -162,7 +162,7 @@ test('current shadow cohort freezes a source manifest and records publication-bo
   assert.match(research, /SHADOW_POLICY_VERSION = 'shadow-policy-v3'/u);
   assert.match(research, /onConflict: 'session_date,policy_version,ruleset_version,model_version'/u);
   assert.match(research, /Operational completeness counts a correctly terminal partial\/fail-closed/u);
-  assert.match(research, /manifestSymbols\.filter\(\(symbol\) => terminalBySymbol\.has\(symbol\) && stageBySymbol\.has\(symbol\)\)/u);
+  assert.match(research, /manifestSymbols\.filter\(\(symbol\) => terminalBySymbol\.has\(symbol\) && replayBySymbol\.has\(symbol\)\)/u);
   assert.match(research, /publicationId/u);
   assert.match(research, /non_trading_day_or_late_session/u);
   assert.match(research, /replayFrozenCandidateClassification/u);
