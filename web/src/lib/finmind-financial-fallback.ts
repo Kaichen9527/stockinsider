@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { getOpportunityV3ServerClient } from './opportunity-v3/service-client.ts';
 
 const FINMIND_DATA_URL = 'https://api.finmindtrade.com/api/v4/data';
 const MAX_RESPONSE_BYTES = 4_000_000;
@@ -38,6 +39,8 @@ type Row = {
   value?: unknown;
   origin_name?: unknown;
 };
+
+export type FinMindCredentialMode = 'vault' | 'injected' | 'anonymous';
 
 const INCOME_FACTS: Record<string, { factKey: string; unit: FinMindFinancialFact['unit']; priority: number }> = {
   Revenue: { factKey: 'quarterly_revenue', unit: 'TWD', priority: 1 },
@@ -101,7 +104,11 @@ export function parseFinMindFinancialFacts(input: {
     const type = String(row.type || '');
     const rule = mapping[type];
     const value = finite(row.value);
-    if (!rule || value == null || String(row.stock_id || '') !== input.candidate.symbol || String(row.date || '') !== input.periodEnd) continue;
+    // A provider label is not evidence. Require the returned upstream identity
+    // before a mirror row can leave temporary acquisition state.
+    const originName = String(row.origin_name || '').trim();
+    if (!rule || value == null || !originName || originName.length > 240
+      || String(row.stock_id || '') !== input.candidate.symbol || String(row.date || '') !== input.periodEnd) continue;
     if (type.endsWith('_per')) continue;
     const current = selected.get(rule.factKey);
     if (!current || rule.priority < current.priority) selected.set(rule.factKey, { row, value, type, ...rule });
@@ -150,6 +157,14 @@ async function boundedText(response: Response) {
   return text;
 }
 
+async function readVaultToken(readToken?: () => Promise<string | null | undefined>) {
+  if (readToken) return String(await readToken() || '').trim();
+  const response = await getOpportunityV3ServerClient().rpc('read_stockinsider_finmind_api_token_v6');
+  if (response.error) throw new Error('finmind_vault_read_failed');
+  const data = Array.isArray(response.data) ? response.data[0] : response.data;
+  return String(data || '').trim();
+}
+
 function errorDetail(error: unknown) {
   if (!(error instanceof Error)) return String(error);
   const cause = error.cause instanceof Error ? error.cause.message : error.cause ? String(error.cause) : '';
@@ -161,10 +176,20 @@ export async function fetchFinMindFinancialFallback(input: {
   periodEnd: string;
   collectedAt: string;
   fetchImpl?: typeof fetch;
+  /** Test-only dependency injection. Production credentials are service-side
+   * Vault reads; they are never taken from process environment or request data. */
   token?: string;
+  readVaultToken?: () => Promise<string | null | undefined>;
 }) {
   const fetchImpl = input.fetchImpl || fetch;
-  const token = String(input.token ?? process.env.FINMIND_API_TOKEN ?? '').trim();
+  const explicitlyBlankTestToken = Object.prototype.hasOwnProperty.call(input, 'token')
+    && !String(input.token || '').trim() && Boolean(input.fetchImpl);
+  const injectedToken = String(input.token || '').trim();
+  // Existing adapter fixtures inject both an empty token and a fake transport.
+  // Preserve that test seam without permitting an unauthenticated production
+  // request: normal callers omit `token` and must read the server-side Vault.
+  const token = injectedToken || (explicitlyBlankTestToken ? '' : await readVaultToken(input.readVaultToken));
+  if (!token && !explicitlyBlankTestToken) throw new Error('finmind_not_configured');
   const headers: HeadersInit = { Accept: 'application/json', 'user-agent': 'StockInsider/5.0' };
   if (token) headers.Authorization = `Bearer ${token}`;
   const responses: Array<{ dataset: FinMindFinancialDataset; body: string; rows: unknown[] }> = [];
@@ -201,7 +226,7 @@ export async function fetchFinMindFinancialFallback(input: {
     sourceUrl: FINMIND_DATA_URL,
     sourceSha256: sha256(combined),
     responseBytes: Buffer.byteLength(combined, 'utf8'),
-    credentialMode: token ? 'token' as const : 'anonymous' as const,
+    credentialMode: injectedToken ? 'injected' as const : explicitlyBlankTestToken ? 'anonymous' as const : 'vault' as const,
   };
 }
 
