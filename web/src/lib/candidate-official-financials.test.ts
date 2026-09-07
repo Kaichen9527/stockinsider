@@ -191,3 +191,16 @@ test('FinMind production adapter fails closed without a Vault token and uses Vau
   });
   assert.equal(result.credentialMode, 'vault');
 });
+
+test('FinMind financial fallback cancels a chunked response before buffering past its cap', async () => {
+  let cancelled = false;
+  const candidate = { stockId: '10000000-0000-4000-8000-000000000001', symbol: '2330' };
+  await assert.rejects(fetchFinMindFinancialFallback({
+    candidate, periodEnd: '2025-12-31', collectedAt: '2026-09-06T12:00:00.000Z', token: '',
+    fetchImpl: async () => new Response(new ReadableStream<Uint8Array>({
+      pull(controller) { controller.enqueue(new Uint8Array(2_100_000)); },
+      cancel() { cancelled = true; },
+    }), { status: 200 }),
+  }), /finmind_response_too_large/u);
+  assert.equal(cancelled, true);
+});

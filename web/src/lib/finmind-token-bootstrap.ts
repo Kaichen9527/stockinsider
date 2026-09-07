@@ -3,6 +3,32 @@ import { createHash } from 'node:crypto';
 const FINMIND_CANARY_URL = 'https://api.finmindtrade.com/api/v4/data?dataset=TaiwanStockInfo&data_id=2330';
 const MAX_RESPONSE_BYTES = 512 * 1024;
 
+async function readBoundedCanaryText(response: Response) {
+  const announcedLength = Number(response.headers.get('content-length'));
+  if (Number.isFinite(announcedLength) && announcedLength > MAX_RESPONSE_BYTES) throw new Error('finmind_canary_response_too_large');
+  if (!response.body) {
+    const body = await response.text();
+    if (Buffer.byteLength(body, 'utf8') > MAX_RESPONSE_BYTES) throw new Error('finmind_canary_response_too_large');
+    return body;
+  }
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let bytes = 0;
+  let body = '';
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    bytes += value.byteLength;
+    if (bytes > MAX_RESPONSE_BYTES) {
+      await reader.cancel('finmind_canary_response_too_large');
+      throw new Error('finmind_canary_response_too_large');
+    }
+    body += decoder.decode(value, { stream: true });
+  }
+  body += decoder.decode();
+  return body;
+}
+
 export function normalizeFinMindToken(value: unknown) {
   if (typeof value !== 'string') return null;
   const token = value.trim();
@@ -15,10 +41,7 @@ export async function verifyFinMindToken(token: string, fetchImpl: typeof fetch 
     redirect: 'error',
     signal: AbortSignal.timeout(20_000),
   });
-  const announcedLength = Number(response.headers.get('content-length'));
-  if (Number.isFinite(announcedLength) && announcedLength > MAX_RESPONSE_BYTES) throw new Error('finmind_canary_response_too_large');
-  const body = await response.text();
-  if (Buffer.byteLength(body, 'utf8') > MAX_RESPONSE_BYTES) throw new Error('finmind_canary_response_too_large');
+  const body = await readBoundedCanaryText(response);
   if (response.status === 401 || response.status === 403) throw new Error(`finmind_canary_auth_failed_${response.status}`);
   if (!response.ok) throw new Error(`finmind_canary_http_${response.status}`);
   let payload: unknown;

@@ -174,8 +174,26 @@ function finMindUrl(dataset: FinMindFinancialDataset, symbol: string, periodEnd:
 async function boundedText(response: Response) {
   const contentLength = Number(response.headers.get('content-length'));
   if (Number.isFinite(contentLength) && contentLength > MAX_RESPONSE_BYTES) throw new Error('finmind_response_too_large');
-  const text = await response.text();
-  if (Buffer.byteLength(text, 'utf8') > MAX_RESPONSE_BYTES) throw new Error('finmind_response_too_large');
+  if (!response.body) {
+    const text = await response.text();
+    if (Buffer.byteLength(text, 'utf8') > MAX_RESPONSE_BYTES) throw new Error('finmind_response_too_large');
+    return text;
+  }
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let bytes = 0;
+  let text = '';
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    bytes += value.byteLength;
+    if (bytes > MAX_RESPONSE_BYTES) {
+      await reader.cancel('finmind_response_too_large');
+      throw new Error('finmind_response_too_large');
+    }
+    text += decoder.decode(value, { stream: true });
+  }
+  text += decoder.decode();
   return text;
 }
 

@@ -20,3 +20,16 @@ test('FinMind token bootstrap requires a real successful 2330 canary payload', a
   assert.equal(calls[0]?.redirect, 'error');
   await assert.rejects(verifyFinMindToken('valid-token-1234567890', async () => new Response(JSON.stringify({ status: 401, data: [] }), { status: 200 })), /invalid_payload_401/u);
 });
+
+test('FinMind token canary cancels a chunked response before buffering past its cap', async () => {
+  let cancelled = false;
+  const body = new ReadableStream<Uint8Array>({
+    pull(controller) { controller.enqueue(new Uint8Array(300_000)); },
+    cancel() { cancelled = true; },
+  });
+  await assert.rejects(
+    verifyFinMindToken('valid-token-1234567890', async () => new Response(body, { status: 200 })),
+    /finmind_canary_response_too_large/u,
+  );
+  assert.equal(cancelled, true);
+});
