@@ -169,6 +169,9 @@ test('current shadow cohort freezes a source manifest and records publication-bo
   assert.match(research, /non_trading_day_or_late_session/u);
   assert.match(research, /replayFrozenCandidateClassification/u);
   assert.match(research, /classification_input/u);
+  assert.match(research, /A conflicting replay permanently disqualifies this canonical session/u);
+  assert.match(research, /qualifying: false,[\s\S]{0,180}reproducibility_status: 'conflict'/u);
+  assert.match(research, /shadow_observation_conflict_write_failed/u);
   assert.match(domain, /read_taiwan_data_publication_metadata_v5/u);
   assert.match(domain, /final_dataset_\$\{finalSemantics\.status\}_\$\{finalSemantics\.completenessPct\}/u);
   const publishAt = domain.indexOf("executeStep('radar_publication'");

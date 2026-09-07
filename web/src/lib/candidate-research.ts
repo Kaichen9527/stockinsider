@@ -2032,6 +2032,20 @@ export async function recordCandidateShadowObservation(input: {
   if (!existing.data) {
     const observation = await supabase.from('candidate_shadow_session_observations').insert(row);
     if (observation.error) throw new Error(`shadow_observation_write_failed:${observation.error.message}`);
+  } else if (conflict) {
+    // A conflicting replay permanently disqualifies this canonical session.
+    // Keep the original frozen identity for audit, but fail the mutable daily
+    // qualification state closed so progress cannot continue counting an
+    // earlier `qualifying=true` observation after conflict evidence exists.
+    const observation = await supabase.from('candidate_shadow_session_observations').update({
+      qualifying: false,
+      reproducibility_status: 'conflict',
+      blockers: finalBlockers,
+      current_blockers: finalBlockers,
+      attempt_id: attempt.data.id,
+      updated_at: observedAt,
+    }).eq('id', existing.data.id);
+    if (observation.error) throw new Error(`shadow_observation_conflict_write_failed:${observation.error.message}`);
   } else if (!conflict) {
     // Attempts are immutable evidence. The canonical daily row is the latest
     // non-conflicting evaluation of the same frozen manifest, so a repaired
