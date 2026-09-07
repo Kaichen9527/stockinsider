@@ -1,5 +1,36 @@
 BEGIN;
 
+-- MIGRATION_ORDER: 20260906_truth_research_v3.sql ->
+-- 20260907_evidence_valuation_contract_v6.sql ->
+-- 20260907_02_candidate_financial_documents_v6.sql
+-- The documents worker emits these financial-PB/ROE inputs.  Fail before any
+-- contract alteration when the truth migration has not established its
+-- candidate evidence boundary; the document migration deliberately follows
+-- this one and can therefore append these enum values safely.
+DO $dependency$
+BEGIN
+  IF to_regclass('public.candidate_official_facts') IS NULL
+     OR to_regclass('public.opportunity_financial_facts_v3') IS NULL
+     OR NOT EXISTS (
+       SELECT 1
+       FROM pg_attribute attribute
+       WHERE attribute.attrelid = 'public.candidate_official_facts'::regclass
+         AND attribute.attname = 'fact_kind'
+         AND NOT attribute.attisdropped
+     ) THEN
+    RAISE EXCEPTION 'truth_research_v3_dependency_missing';
+  END IF;
+END;
+$dependency$;
+
+-- These are instant facts rather than duration values.  Distinguishing common
+-- equity from total equity keeps financial-PB/ROE from treating non-controlling
+-- interests as common shareholders' book value.
+ALTER TYPE public.financial_fact_key_v3
+  ADD VALUE IF NOT EXISTS 'common_equity_attributable_to_owners';
+ALTER TYPE public.financial_fact_key_v3
+  ADD VALUE IF NOT EXISTS 'common_shares_outstanding';
+
 -- New writers use reported_numeric. official_numeric remains readable because
 -- historical evidence is immutable audit material, not a rewrite target.
 ALTER TABLE public.candidate_official_facts

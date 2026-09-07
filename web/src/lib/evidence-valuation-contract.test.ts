@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  CANDIDATE_FINANCIAL_FACT_KEYS,
   candidateResearchItemStatus,
+  isCandidateFinancialFactKey,
   isPromotionEligibleEvidence,
   normalizeCandidateFactKind,
 } from './evidence-valuation-contract.ts';
@@ -23,6 +25,14 @@ test('validated FinMind mirrors are admissible only when every required validati
   }
   assert.equal(isPromotionEligibleEvidence({ ...validMirror, validationStatus: 'stale' }), false);
   assert.equal(isPromotionEligibleEvidence({ ...validMirror, synthetic: true }), false);
+});
+
+test('financial PB/ROE instant fact keys are explicit, finite contract members', () => {
+  for (const key of ['common_equity_attributable_to_owners', 'common_shares_outstanding']) {
+    assert.equal(isCandidateFinancialFactKey(key), true);
+    assert.ok(CANDIDATE_FINANCIAL_FACT_KEYS.includes(key as typeof CANDIDATE_FINANCIAL_FACT_KEYS[number]));
+  }
+  assert.equal(isCandidateFinancialFactKey('unreviewed_document_fact'), false);
 });
 
 test('missing valuation evidence is partial while an investigated no-method conclusion is terminal', () => {

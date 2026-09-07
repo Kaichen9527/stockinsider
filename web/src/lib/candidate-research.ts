@@ -40,6 +40,7 @@ import { hasConsecutiveFiscalQuarters, normalizedCycleYearsObserved } from './ca
 import { sanitizePublicSourceUrl } from './public-source-url.ts';
 import {
   candidateResearchItemStatus,
+  isCandidateFinancialFactKey,
   isPromotionEligibleEvidence,
   type CandidateFactKind,
 } from './evidence-valuation-contract';
@@ -810,7 +811,7 @@ async function executeCandidateResearchCycle(options: {
         const durationKind = String(fact.duration_kind || '');
         const validFlow = durationKind === 'quarterly' && typeof periodStart === 'string' && /^\d{4}-\d{2}-\d{2}$/u.test(periodStart);
         const validInstant = ['instant', 'quarter_end'].includes(durationKind) && periodStart === null;
-        if (String(fact.estimate_kind || '') !== 'reported' || value == null || !factId || !factKey || !/^\d{4}-\d{2}-\d{2}$/u.test(periodEnd) || (!validFlow && !validInstant)) return [];
+        if (String(fact.estimate_kind || '') !== 'reported' || value == null || !factId || !isCandidateFinancialFactKey(factKey) || !/^\d{4}-\d{2}-\d{2}$/u.test(periodEnd) || (!validFlow && !validInstant)) return [];
         if (!isPromotionEligibleEvidence({
           provider: fact.provider ? String(fact.provider) : null,
           authorityTier: fact.authority_tier ? String(fact.authority_tier) : null,
@@ -834,7 +835,10 @@ async function executeCandidateResearchCycle(options: {
       const dilutedShareQuarterHistory = discreteReportedQuarters(reportedFacts, 'diluted_weighted_average_shares');
       const basicEpsQuarterHistory = discreteReportedQuarters(reportedFacts, 'quarterly_basic_eps');
       const latestBookValueFact = latestReportedInstant(reportedFacts, 'book_value_per_share');
-      const latestCommonEquityFact = latestReportedInstant(reportedFacts, 'total_equity');
+      // Financial PB/ROE must use owners' common equity when filings supply it;
+      // total equity remains an explicit compatibility fallback for older facts.
+      const latestCommonEquityFact = latestReportedInstant(reportedFacts, 'common_equity_attributable_to_owners')
+        || latestReportedInstant(reportedFacts, 'total_equity');
       const latestCashFact = latestReportedInstant(reportedFacts, 'cash_and_equivalents');
       const latestDebtFact = latestReportedInstant(reportedFacts, 'total_debt');
       const latestBookValuePerShare = latestBookValueFact?.value ?? null;

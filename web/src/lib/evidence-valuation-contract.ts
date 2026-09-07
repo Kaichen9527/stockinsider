@@ -26,6 +26,57 @@ export const EVIDENCE_VALIDATION_STATUSES = [
 
 export type EvidenceValidationStatus = (typeof EVIDENCE_VALIDATION_STATUSES)[number];
 
+/**
+ * Mirrors public.financial_fact_key_v3. Keep this runtime boundary explicit:
+ * document manifests are parsed data, never an open-ended source of fact keys.
+ */
+export const CANDIDATE_FINANCIAL_FACT_KEYS = [
+  'monthly_revenue',
+  'quarterly_revenue',
+  'quarterly_gross_profit',
+  'quarterly_operating_expense',
+  'quarterly_operating_income',
+  'quarterly_non_operating_income',
+  'quarterly_pretax_income',
+  'quarterly_income_tax_expense',
+  'quarterly_noncontrolling_interest',
+  'quarterly_net_income',
+  'quarterly_net_income_attributable_to_common',
+  'quarterly_diluted_eps',
+  'quarterly_basic_eps',
+  'quarterly_ebitda',
+  'depreciation_amortization',
+  'diluted_shares',
+  'diluted_weighted_average_shares',
+  'basic_weighted_average_shares',
+  'book_value_per_share',
+  'roe',
+  'cash_and_equivalents',
+  'total_debt',
+  'net_debt',
+  'total_equity',
+  'common_equity_attributable_to_owners',
+  'total_assets',
+  'invested_capital',
+  'net_asset_value',
+  'operating_cash_flow',
+  'capital_expenditure',
+  'interest_expense',
+  'shares_outstanding',
+  'common_shares_outstanding',
+  'pe_multiple',
+  'pb_multiple',
+  'ev_ebitda_multiple',
+  'ev_sales_multiple',
+  'broker_target_price',
+] as const;
+
+export type CandidateFinancialFactKey = (typeof CANDIDATE_FINANCIAL_FACT_KEYS)[number];
+
+export function isCandidateFinancialFactKey(value: unknown): value is CandidateFinancialFactKey {
+  return CANDIDATE_FINANCIAL_FACT_KEYS.includes(value as CandidateFinancialFactKey);
+}
+
 export const CANDIDATE_VALUATION_METHODS = [
   'forward_pe',
   'normalized_pe',

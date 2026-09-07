@@ -16,6 +16,14 @@ test('evidence and valuation migration is additive and accepts every runtime con
   assert.match(migration, /validate_finmind_financial_fact_v6/u);
   assert.match(migration, /p_schema_valid AND p_unit_valid AND p_point_in_time_valid AND p_consistency_valid/u);
   assert.match(migration, /partial_count INTEGER NOT NULL DEFAULT 0/u);
+  for (const factKey of ['common_equity_attributable_to_owners', 'common_shares_outstanding']) {
+    assert.match(migration, new RegExp(`ADD VALUE IF NOT EXISTS '${factKey}'`, 'u'));
+  }
+});
+
+test('financial documents follow the truth and evidence contract migrations', () => {
+  assert.match(migration, /MIGRATION_ORDER: 20260906_truth_research_v3\.sql ->\s*-- 20260907_evidence_valuation_contract_v6\.sql ->\s*-- 20260907_02_candidate_financial_documents_v6\.sql/u);
+  assert.match(migration, /truth_research_v3_dependency_missing/u);
 });
 
 test('migration keeps the old fact kind for read compatibility while new writers use reported numeric', () => {
