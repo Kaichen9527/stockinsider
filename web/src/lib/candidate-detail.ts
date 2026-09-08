@@ -36,7 +36,7 @@ export type CandidateDetailPayload = {
     next12mBridgeComplete?: boolean;
     historicalPercentile?: number | null;
     historicalMultiples?: Array<{ date: string; peRatio: number | null; pbRatio: number | null }>;
-    historicalPrices?: Array<{ month: string; close: number }>;
+    historicalPrices?: Array<{ month?: string; date?: string; close: number; ma5?: number | null; ma20?: number | null; ma60?: number | null; ma120?: number | null; ma240?: number | null }>;
   };
   technical: CandidateStageCard['technical'];
   scores: CandidateStageCard['scores'];
@@ -172,11 +172,18 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
   const row = data as Row;
   const stock = stockRead.data as Row;
   const factIds = (Array.isArray(row.fact_ids) ? row.fact_ids : []).map(String);
-  const [dossiers, factBatchResults, stageRead, trackingRead] = await Promise.all([
+  const [dossiers, receiptsRead, factBatchResults, stageRead, trackingRead] = await Promise.all([
     supabase.from('candidate_research_dossiers')
-      .select('narrative_kind,content,validation_status,bundle_hash,input_hash,published_at,created_at')
+      .select('id,narrative_kind,content,validation_status,bundle_id,bundle_hash,input_hash,published_at,created_at')
       .eq('detail_snapshot_id', String(row.id)).eq('narrative_kind', 'codex_enriched').eq('validation_status', 'valid')
       .order('created_at', { ascending: false }).limit(1),
+    // A valid-looking dossier is not publishable evidence by itself.  The
+    // append-only receipt proves that the exact same revision and input hash
+    // passed the submission boundary.
+    supabase.from('candidate_dossier_submission_receipts')
+      .select('dossier_id,bundle_id,revision_id,input_hash,status,received_at')
+      .eq('revision_id', String(row.id)).eq('status', 'accepted')
+      .order('received_at', { ascending: false }).limit(20),
     Promise.all(chunkCandidateFactIds(factIds).map((batch) => supabase.from('candidate_official_facts')
       .select('fact_id,stock_id,fact_key,fact_kind,period_end,value,unit,as_of,available_at,source_url,provenance,derivation')
       .in('fact_id', batch).order('period_end', { ascending: false }).limit(batch.length))),
@@ -189,11 +196,18 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
       .order('available_at', { ascending: false }).limit(1).maybeSingle(),
   ]);
   const factsError = factBatchResults.find((result) => result.error)?.error;
-  if (dossiers.error || factsError || stageRead.error || trackingRead.error) throw new Error(`candidate_detail_evidence_read_failed:${dossiers.error?.message || factsError?.message || stageRead.error?.message || trackingRead.error?.message}`);
+  if (dossiers.error || receiptsRead.error || factsError || stageRead.error || trackingRead.error) throw new Error(`candidate_detail_evidence_read_failed:${dossiers.error?.message || receiptsRead.error?.message || factsError?.message || stageRead.error?.message || trackingRead.error?.message}`);
   const factRows = factBatchResults.flatMap((result) => (result.data as Row[]) || []).filter((fact) => !isPaidInvestAnchorsReference(fact.source_url));
   const expectedInputHash = candidateDossierInputHash({ ...row, fact_ids: factRows.map((fact) => String(fact.fact_id)), stocks: { symbol: stock.symbol, name: stock.name } }, factRows);
+  const acceptedReceiptKeys = new Set(((receiptsRead.data || []) as Row[])
+    .filter((receipt) => String(receipt.revision_id || '') === String(row.id)
+      && String(receipt.input_hash || '') === expectedInputHash
+      && String(receipt.status || '') === 'accepted')
+    .map((receipt) => `${String(receipt.dossier_id || '')}:${String(receipt.bundle_id || '')}`));
   const enriched = ((dossiers.data || []) as Row[]).find((dossier) =>
-    String(dossier.bundle_hash || dossier.input_hash || '') === expectedInputHash && Boolean(dossier.published_at)) || null;
+    String(dossier.bundle_hash || dossier.input_hash || '') === expectedInputHash
+      && Boolean(dossier.published_at)
+      && acceptedReceiptKeys.has(`${String(dossier.id || '')}:${String(dossier.bundle_id || '')}`)) || null;
   const sources = numberedCandidateSources(row, factRows);
   const references = factReferenceNumbers(factRows, sources);
   const finalMetadataRead = await supabase.rpc('read_taiwan_data_publication_metadata_v5', {

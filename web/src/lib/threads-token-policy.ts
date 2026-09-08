@@ -1,4 +1,5 @@
 const REFRESH_AFTER_MS = 30 * 24 * 60 * 60 * 1000;
+const EXPIRY_WARNING_MS = 14 * 24 * 60 * 60 * 1000;
 
 export function assertUsableThreadsToken(input: {
   token: string;
@@ -23,5 +24,14 @@ export function shouldRefreshThreadsToken(input: {
   const expiresMs = input.expiresAt ? new Date(input.expiresAt).getTime() : null;
   if (lastRefreshMs === null && expiresMs === null) return true;
   return (lastRefreshMs !== null && Number.isFinite(lastRefreshMs) && nowMs - lastRefreshMs >= REFRESH_AFTER_MS)
-    || (expiresMs !== null && Number.isFinite(expiresMs) && expiresMs - nowMs <= REFRESH_AFTER_MS);
+    || (expiresMs !== null && Number.isFinite(expiresMs) && expiresMs - nowMs <= EXPIRY_WARNING_MS);
+}
+
+export function threadsTokenExpiryWarning(input: { expiresAt: string | null; nowMs?: number }): 'expired' | 'expires_within_14_days' | null {
+  if (!input.expiresAt) return null;
+  const expiresMs = new Date(input.expiresAt).getTime();
+  if (!Number.isFinite(expiresMs)) return 'expired';
+  const remainingMs = expiresMs - (input.nowMs ?? Date.now());
+  if (remainingMs <= 0) return 'expired';
+  return remainingMs <= EXPIRY_WARNING_MS ? 'expires_within_14_days' : null;
 }

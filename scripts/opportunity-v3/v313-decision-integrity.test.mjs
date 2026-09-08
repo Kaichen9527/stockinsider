@@ -1078,7 +1078,7 @@ test('V3.13 operator docs and positive consumers use tracked authority and exact
 
 acceptanceTest('DI-006','V3.20 approved source acquisition conserves the five-connector terminal matrix and only ingests analyzable source material',async()=>{
   const roster=structuredClone(JSON.parse(readFileSync(path.join(root,'config/runtime/approved-source-roster-v3.13.json'),'utf8')));
-  assert.equal(roster.threadsSearchEndpoint,'https://graph.threads.net/keyword_search');
+  assert.equal(roster.threadsSearchEndpoint,'https://graph.threads.com/v1.0/keyword_search');
   roster.profiles[0].podcastFeed='https://creator.example/feed.xml';
   const rss='<rss><channel><item><guid>episode-1</guid><title>產業更新</title><pubDate>Fri, 07 Aug 2026 08:00:00 GMT</pubDate><link>https://creator.example/e/1</link><podcast:transcript url="https://creator.example/e/1.txt" type="text/plain" /></item></channel></rss>';
   const fetchImpl=async(url)=>url.endsWith('feed.xml')?new Response(rss,{status:200,headers:{'content-type':'application/rss+xml'}})
@@ -1147,7 +1147,7 @@ acceptanceTest('DI-006','V3.20 approved source acquisition conserves the five-co
       :new Response(rss,{status:200,headers:{'content-type':'application/rss+xml'}}),
     now:new Date('2026-08-09T10:20:00Z')});
   assert.equal(redirected.connectorAttempts.find((row)=>row.profileId==='gooaye'&&row.sourceKey==='podcast').status,'provider_failed');
-  const emptyRoster=structuredClone(roster);emptyRoster.threadsSearchEndpoint='https://graph.threads.net/keyword_search';
+  const emptyRoster=structuredClone(roster);emptyRoster.threadsSearchEndpoint='https://graph.threads.com/v1.0/keyword_search';
   emptyRoster.profiles=emptyRoster.profiles.map((profile,index)=>({...profile,threads:index===0?'stockcancer':null,
     podcastFeed:null,youtubeHandle:null,youtubeChannelId:null}));
   const successfulEmpty=await runtime('official-source-acquisition.js').acquireApprovedSources({roster:emptyRoster,
@@ -1238,9 +1238,9 @@ acceptanceTest('DI-006','V3.20 approved source acquisition conserves the five-co
   assert.deepEqual([youtubeEmptyAttempt.status,youtubeEmptyAttempt.reasonCode,youtubeEmptyAttempt.responseEvidence.statusCode],
     ['successful_empty','youtube_channel_successful_empty',200]);
 
-  const threadsRoster=structuredClone(roster);threadsRoster.threadsSearchEndpoint='https://graph.threads.net/keyword_search';
+  const threadsRoster=structuredClone(roster);threadsRoster.threadsSearchEndpoint='https://graph.threads.com/v1.0/keyword_search';
   const threadsResult=await runtime('official-source-acquisition.js').acquireApprovedSources({roster:threadsRoster,
-    credentials:{threadsAccessToken:'test-token'},fetchImpl:async(url)=>String(url).startsWith('https://graph.threads.net/')
+    credentials:{threadsAccessToken:'test-token'},fetchImpl:async(url)=>String(url).startsWith('https://graph.threads.com/')
       ?new Response(JSON.stringify({data:[{id:'thread-1',username:'stockcancer',text:'台積電 2330 先進製程更新',permalink:'https://www.threads.net/@stockcancer/post/1',timestamp:'2026-08-07T08:00:00Z'}]}),{status:200,headers:{'content-type':'application/json'}})
       :new Response('{}',{status:404}),now:new Date('2026-08-09T10:20:00Z')});
   assert.ok(threadsResult.documents.filter((row)=>row.sourceKey==='threads').length>=1);
@@ -1273,7 +1273,7 @@ acceptanceTest('DI-006','V3.20 approved source acquisition conserves the five-co
   assert.deepEqual(new Set(merged.candidateLedger[0].evidence.map((row)=>row.claimId)),
     new Set(['official-claim','threads-claim']));
   const overflowText='字'.repeat(100001);
-  const overflowRoster=structuredClone(roster);overflowRoster.threadsSearchEndpoint='https://graph.threads.net/keyword_search';
+  const overflowRoster=structuredClone(roster);overflowRoster.threadsSearchEndpoint='https://graph.threads.com/v1.0/keyword_search';
   overflowRoster.profiles=overflowRoster.profiles.map((profile,index)=>({...profile,
     threads:index===0?'stockcancer':null,podcastFeed:index===0?'https://creator.example/overflow-feed.xml':null,
     youtubeHandle:null,youtubeChannelId:index===0?'UC-overflow':null}));
@@ -1284,7 +1284,7 @@ acceptanceTest('DI-006','V3.20 approved source acquisition conserves the five-co
     credentials:{threadsAccessToken:'test-token',youtubeApiKey:'test-key',youtubeOauthToken:'test-oauth'},
     fetchImpl:async(url)=>{
       const value=String(url);
-      if(value.startsWith('https://graph.threads.net/'))return new Response(JSON.stringify({data:[{id:'overflow-thread',username:'stockcancer',
+      if(value.startsWith('https://graph.threads.com/'))return new Response(JSON.stringify({data:[{id:'overflow-thread',username:'stockcancer',
         text:overflowText,permalink:'https://www.threads.net/@stockcancer/post/overflow',timestamp:'2026-08-07T08:00:00Z'}]}),
       {status:200,headers:{'content-type':'application/json'}});
       if(value.endsWith('overflow-feed.xml'))return new Response(overflowRss,{status:200,headers:{'content-type':'application/rss+xml'}});

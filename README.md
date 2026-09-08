@@ -58,7 +58,7 @@ cp .env.example .env
 - `OPENROUTER_API_KEY`
 - `PREFECT_API_URL`
 - `OPSX_MUTATING_SMOKE`
-- `THREADS_OFFICIAL_API_ENABLED=false`（Meta App Review 與 Vault token 未完成前固定關閉）
+- `THREADS_DEDICATED_APP_CONFIRMED=false`、`THREADS_OFFICIAL_API_ENABLED=false`、`THREADS_OFFICIAL_CANARY_ACTIVE=false`（專用 Meta App、App Review、Vault token 與非本人公開貼文 canary 未完成前固定關閉）
 
 ### Legacy 變數用途
 
@@ -68,9 +68,10 @@ cp .env.example .env
 
 ### Meta / Threads 注意事項
 
-- 正式 runtime 只呼叫 `graph.threads.net/keyword_search`，不讀 cookie、帳密或 Instagram bridge。
+- 正式 runtime 只呼叫 `graph.threads.com/v1.0/keyword_search`，不讀 cookie、帳密或 Instagram bridge。
 - Long-lived token 只放 Supabase Vault；registry 僅保存 hash、刷新與到期時間。
 - Instagram 已退役；InvestAnchors 僅作私人研究線索，正式內容必須由官方資料重新推導。
+- Threads、BullTalk 與 Podcast 的逐步人工檢查點見 [external source readiness](docs/operations/external-source-readiness.md)。
 
 V3.14 tracked runtime 不讀取上述 raw login/cookie 設定。它要求
 `STOCKINSIDER_SUPABASE_URL_REF=keychain:stockinsider-runtime:supabase-url`、

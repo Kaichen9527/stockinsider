@@ -74,7 +74,7 @@ identity, transaction, physical and type closure.
 proposal-visible sanitized views, the lexical exclusion oracle, profile/scratch/FD
 authority, sealed result handoff, deterministic trusted Git, identity-bound durable
 pre-`prepared` resource-attempt reservation, total dual-journal recovery/cleanup
-precedence and byte-exact diagnostic/replay output; the 2,143-byte host fixture is its
+precedence and byte-exact diagnostic/replay output; the 2,133-byte host fixture is its
 immutable executable/codesign oracle. It is not a production worker or domain
 scoring/model-influence path. This design explains component ownership; it cannot
 weaken those contracts. A conflict between normative files is a Gate failure and must
@@ -87,7 +87,7 @@ canonical authority tags immediately below are the only design-side declarations
 catalog identity, active-file topology and the shortened product-correctness owner.
 Their JSON payloads use RFC 8785 key order and are permitted exactly once only.
 
-<!-- GOV-004-AUTHORITY {"catalogBytes":6337,"catalogSha256":"945afadaded8c7b8b56387a9924338e597e6b2a7a5c0b6b1f3c7ab2bc21855db","kind":"design-catalog-identity"} -->
+<!-- GOV-004-AUTHORITY {"catalogBytes":6337,"catalogSha256":"6f8579883a04bd59d40adc3848065f43864d3237047b77235582d577b1365995","kind":"design-catalog-identity"} -->
 <!-- GOV-004-AUTHORITY {"activeFiles":55,"kind":"design-active-file-topology"} -->
 <!-- GOV-004-AUTHORITY {"kind":"design-product-correctness-owner","owner":"product-correctness-runtime-v3.11.11"} -->
 
@@ -123,9 +123,9 @@ catalog and these current roots: `runtime-transaction-contract.md` v3.17,
 `acceptance-evidence-contract.md` v3.13.0,
 `factor-correctness-amendment.md` v3.11.6,
 `authority-supersession-contract.md` v3.2, `auth-principal-contract.md` v3.8,
-`trading-calendar-contract.md` v3.4, and `model-runner-contract.md` v3.6 with 885-byte identity SHA-256
-`89c5fd414840e577729d55933fd0eef4a4cf8fdaa494feb6895d67ce895331e7`, host fixture
-SHA-256 `bfa364974e14fb4b326d171be8db9d0ad09b7f9a9d698119d81ac5d553afbe9d`,
+`trading-calendar-contract.md` v3.4, and `model-runner-contract.md` v3.6 with 875-byte identity SHA-256
+`f87259bc18fe03177f84c318cd2bff8fd016abb7b249368879c317a583897ed3`, host fixture
+SHA-256 `aaa70cc4dfc341224c5042c501e7392c2e63abce2164a66e87ba1fda5160fbca`,
 and acceptance `1.46.0/320`. Hash-preimage schema tags inside fenced canonical
 preimages are data, not active contract references. Model-runner identity remains
 independent of the opportunity runtime tuple.

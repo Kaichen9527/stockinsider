@@ -13,7 +13,7 @@ if (!suppliedLongToken && (!shortToken || !appSecret)) {
 
 async function exchangeToken() {
   if (suppliedLongToken) return { accessToken: suppliedLongToken, expiresIn: 60 * 24 * 60 * 60 };
-  const endpoint = new URL('https://graph.threads.net/access_token');
+  const endpoint = new URL('https://graph.threads.com/access_token');
   endpoint.searchParams.set('grant_type', 'th_exchange_token');
   endpoint.searchParams.set('client_secret', appSecret);
   endpoint.searchParams.set('access_token', shortToken);

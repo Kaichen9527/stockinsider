@@ -10,3 +10,11 @@ test('candidate detail confirms a final only with explicit complete publication 
   assert.match(source, /終版缺項：\{datasetMissingComponents\.join/u);
   assert.doesNotMatch(source, /publicationStatus === "final" \|\| detailRecord\.isFinal/u);
 });
+
+test('enriched public prose requires an accepted receipt for the same dossier, revision and input hash', async () => {
+  const source = await readFile(new URL('./candidate-detail.ts', import.meta.url), 'utf8');
+  assert.match(source, /from\('candidate_dossier_submission_receipts'\)/u);
+  assert.match(source, /\.eq\('revision_id', String\(row\.id\)\)\.eq\('status', 'accepted'\)/u);
+  assert.match(source, /acceptedReceiptKeys\.has\(`\$\{String\(dossier\.id/u);
+  assert.match(source, /String\(receipt\.input_hash[^\n]+expectedInputHash/u);
+});

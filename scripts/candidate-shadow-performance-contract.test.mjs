@@ -93,6 +93,8 @@ test('GitHub write workflows are manual-only and VPS timers own the approved cad
   assert.match(sourceService, /'\{"connector":"all","dryRun":false\}'/u);
   assert.match(installer, /TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED=true/u);
   assert.match(installer, /root-owned with mode 600 or 640/u);
+  assert.match(installer, /groupadd --system stockinsider/u);
+  assert.match(installer, /SupplementaryGroups=stockinsider/u);
   const workflowDir = new URL('../.github/workflows/', import.meta.url);
   for (const name of readdirSync(workflowDir).filter((item) => /\.ya?ml$/u.test(item))) {
     assert.doesNotMatch(readFileSync(new URL(name, workflowDir), 'utf8'), /^\s*schedule:/mu, `${name} must remain manual-only`);
@@ -162,11 +164,14 @@ test('current shadow cohort freezes a source manifest and records publication-bo
   assert.match(research, /SHADOW_POLICY_VERSION = 'shadow-policy-v3'/u);
   assert.match(research, /onConflict: 'session_date,policy_version,ruleset_version,model_version'/u);
   assert.match(research, /Operational completeness counts a correctly terminal partial\/fail-closed/u);
-  assert.match(research, /manifestSymbols\.filter\(\(symbol\) => terminalBySymbol\.has\(symbol\) && stageBySymbol\.has\(symbol\)\)/u);
+  assert.match(research, /manifestSymbols\.filter\(\(symbol\) => terminalBySymbol\.has\(symbol\) && replayBySymbol\.has\(symbol\)\)/u);
   assert.match(research, /publicationId/u);
   assert.match(research, /non_trading_day_or_late_session/u);
   assert.match(research, /replayFrozenCandidateClassification/u);
   assert.match(research, /classification_input/u);
+  assert.match(research, /A conflicting replay permanently disqualifies this canonical session/u);
+  assert.match(research, /qualifying: false,[\s\S]{0,180}reproducibility_status: 'conflict'/u);
+  assert.match(research, /shadow_observation_conflict_write_failed/u);
   assert.match(domain, /read_taiwan_data_publication_metadata_v5/u);
   assert.match(domain, /final_dataset_\$\{finalSemantics\.status\}_\$\{finalSemantics\.completenessPct\}/u);
   const publishAt = domain.indexOf("executeStep('radar_publication'");

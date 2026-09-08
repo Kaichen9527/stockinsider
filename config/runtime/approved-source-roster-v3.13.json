@@ -19,5 +19,5 @@
     {"id":"johnstock888","name":"John 林睿閔","threads":null,"youtubeHandle":null,"podcastFeed":null,"telegramPublicChannel":"johnstock888"},
     {"id":"s178178","name":"郭哲榮分析師","threads":"s178178","threadsKeywords":["台股","法人"],"youtubeHandle":null,"podcastFeed":null}
   ],
-  "threadsSearchEndpoint": "https://graph.threads.net/keyword_search"
+  "threadsSearchEndpoint": "https://graph.threads.com/v1.0/keyword_search"
 }

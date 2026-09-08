@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const workflow = readFileSync(path.join(root, '.github/workflows/source-led-opportunity-external-gate.yml'), 'utf8');
+const diagnosticWorkflow = readFileSync(path.join(root, '.github/workflows/source-led-opportunity-v3.yml'), 'utf8');
 const action = readFileSync(path.join(root, '.github/actions/prepare-source-led-external-subject/action.yml'), 'utf8');
 const worker = readFileSync(path.join(root, 'scripts/opportunity-v3/protected-external-gate-worker.mjs'), 'utf8');
 
@@ -69,8 +70,12 @@ test('candidate execution waits for exact review and model-runner failure cannot
   assert.match(worker, /PATH: `\$\{postgresBin\}\$\{path[.]delimiter\}/u);
   assert.match(worker, /'test:candidate-shadow-performance:runtime'/u);
   assert.match(worker, /'test:candidate-shadow-performance:contracts'/u);
+  assert.match(worker, /failed: result[.]failed \+ row[.]failed/u);
+  assert.match(worker, /skipped: result[.]skipped \+ row[.]skipped/u);
+  assert.match(worker, /todo: result[.]todo \+ row[.]todo/u);
   assert.match(worker, /candidate financial parser dependency preparation/u);
   assert.match(worker, /3793b8b7228a8b08e273b1deb0977d681c7f4fdc8e3cb4d38a101b7c36579640/u);
+  assert.doesNotMatch(worker, /'--requirement', path[.]join\(subjectRoot/u);
   assert.match(worker, /STOCKINSIDER_DOCUMENT_PARSER_PYTHON/u);
   assert.match(worker, /STOCKINSIDER_DOCUMENT_PARSER_SCRIPT/u);
   assert.match(worker, /Playwright output must contain a recognized final result/u);
@@ -79,6 +84,15 @@ test('candidate execution waits for exact review and model-runner failure cannot
   assert.match(worker, /bcae305c4d7a757510eb99c2c0aeb92679a9e772aecb7270360d747144fa6eed: 'model-runner-host-pins-v3\.14'/u);
   assert.match(worker, /cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5: 'model-runner-host-pins-v3\.15'/u);
   assert.match(worker, /model runner host pin requires an exact protected listing/u);
+});
+
+test('public candidate detail changes trigger the protected product workflow', () => {
+  for (const pathFilter of [
+    "'web/src/app/api/stocks/**'",
+    "'web/src/app/stock/**'",
+    "'web/src/app/sources/**'",
+    "'web/src/app/page.tsx'",
+  ]) assert.match(diagnosticWorkflow, new RegExp(pathFilter.replaceAll('*', '[*]'), 'u'));
 });
 
 test('every third-party action is pinned to an immutable commit', () => {

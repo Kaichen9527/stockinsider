@@ -14,7 +14,7 @@ import { classifySourceSyncTerminal } from '@/lib/source-health';
 import { assertThreadsTokenAvailable } from '@/lib/threads-token';
 import { acquireProductionWriteLease, releaseProductionWriteLease } from '@/lib/production-write-lease';
 
-const PARSER_VERSION = 'source-ranking-v2.2.0';
+const PARSER_VERSION = 'source-ranking-v2.3.0';
 
 type SourceResult = SourceSyncResult & {
   fetched: number;

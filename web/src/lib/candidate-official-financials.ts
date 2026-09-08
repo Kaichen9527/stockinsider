@@ -29,10 +29,15 @@ const FLOW_FACTS: Record<string, string> = {
   profitlossbeforetax: 'quarterly_pretax_income', incometaxexpensebenefit: 'quarterly_income_tax_expense',
   profitloss: 'quarterly_net_income', profitlossattributabletoownersofparent: 'quarterly_net_income_attributable_to_common',
   profitlossattributabletononcontrollinginterest: 'quarterly_noncontrolling_interest', profitlossattributabletononcontrollinginterests: 'quarterly_noncontrolling_interest',
+  earningsbeforeinteresttaxesdepreciationandamortization: 'quarterly_ebitda', ebitda: 'quarterly_ebitda',
 };
 const BALANCE_FACTS: Record<string, string> = {
-  assets: 'total_assets', totalassets: 'total_assets', equity: 'total_equity', equityattributabletoownersofparent: 'total_equity',
+  assets: 'total_assets', totalassets: 'total_assets', equity: 'total_equity',
+  // Do not collapse common equity into consolidated total equity. Financial
+  // PB/ROE needs the attributable-to-owners denominator explicitly.
+  equityattributabletoownersofparent: 'common_equity_attributable_to_owners',
   cashandcashequivalents: 'cash_and_equivalents', cashandcashequivalentsatcarryingvalue: 'cash_and_equivalents',
+  totalinterestbearingdebt: 'total_debt', interestbearingdebt: 'total_debt', totalborrowings: 'total_debt',
   bookvaluepershare: 'book_value_per_share',
 };
 const DILUTED_EPS_CONCEPTS = new Set(['dilutedearningspershare', 'dilutedearningslosspershare']);
@@ -65,6 +70,17 @@ export type ParsedFact = {
   collectedAt: string;
   filingRestatementId: string | null;
   sourceRef: string;
+  // Retain the machine-readable location even when an issuer document is
+  // subsequently rendered as a human-facing PDF citation. This is not exposed
+  // directly, but becomes immutable provenance in the completion RPC.
+  locator?: Record<string, string>;
+  validation?: {
+    schemaValid: boolean;
+    unitValid: boolean;
+    pointInTimeValid: boolean;
+    consistencyValid: boolean;
+    upstreamProvider: string;
+  };
 };
 
 function sha256(value: string) {
@@ -129,8 +145,15 @@ function parseAuditDate(html: string) {
   return null;
 }
 
-export function parseCandidateMopsFacts(html: string, input: CandidateOfficialFinancial & { sourceUrl: string; collectedAt: string }): ParsedFact[] {
-  if (html.length < 100 || html.length > 12_000_000 || !input.sourceUrl.startsWith(MOPS_INLINE_URL)) return [];
+export function parseCandidateMopsFacts(html: string, input: CandidateOfficialFinancial & {
+  sourceUrl: string;
+  collectedAt: string;
+  /** A verified uploaded issuer document may reuse the bounded iXBRL parser.
+   * The caller supplies a document-hash namespace, never a user supplied URL. */
+  sourceRefPrefix?: string;
+}): ParsedFact[] {
+  if (html.length < 100 || html.length > 12_000_000
+    || (!input.sourceUrl.startsWith(MOPS_INLINE_URL) && !/^issuer-document:[0-9a-f]{64}$/u.test(input.sourceRefPrefix || ''))) return [];
   const contexts = parseContexts(html);
   const auditDate = parseAuditDate(html);
   if (!auditDate) return [];
@@ -164,7 +187,7 @@ export function parseCandidateMopsFacts(html: string, input: CandidateOfficialFi
       factKey = 'basic_weighted_average_shares'; unit = 'share';
     } else if (SHARES_OUTSTANDING_CONCEPTS.has(concept)) {
       if (attrs.unitref !== 'Shares') continue;
-      factKey = 'shares_outstanding'; unit = 'share';
+      factKey = 'common_shares_outstanding'; unit = 'share';
     } else if (factKey === 'book_value_per_share') {
       if (attrs.unitref !== 'EarningsPerShare' && !/^TWD(?:\w+)?$/u.test(attrs.unitref || '')) continue;
       unit = 'TWD_per_share';
@@ -178,7 +201,14 @@ export function parseCandidateMopsFacts(html: string, input: CandidateOfficialFi
       authorityTier: 'official_filing', estimateKind: 'reported', estimateHorizon: 'reported_period',
       filingPublishedAt, sourceTimestamp: filingPublishedAt, collectedAt: input.collectedAt,
       filingRestatementId,
-      sourceRef: `${input.exchange.toLowerCase()}-mops-inline:${context.end}:${input.symbol}:${sha256(`${input.sourceUrl}:${attrs.name}:${attrs.contextref}:${attrs.unitref}:${filingRestatementId}`)}`,
+      sourceRef: input.sourceRefPrefix
+        ? `${input.sourceRefPrefix}:${sha256(`${attrs.name}:${attrs.contextref}:${attrs.unitref}:${factKey}:${context.end}`).slice(0, 24)}`
+        : `${input.exchange.toLowerCase()}-mops-inline:${context.end}:${input.symbol}:${sha256(`${input.sourceUrl}:${attrs.name}:${attrs.contextref}:${attrs.unitref}:${filingRestatementId}`)}`,
+      locator: {
+        xbrl_context: attrs.contextref || '',
+        xbrl_concept: attrs.name || '',
+        unit_ref: attrs.unitref || '',
+      },
     });
   }
   const deduped = new Map(rows.map((row) => [`${row.factKey}:${row.periodStart}:${row.periodEnd}:${row.sourceRef}`, row]));
@@ -296,7 +326,12 @@ async function completeAcquisitionJob(input: {
     p_job_id: input.jobId, p_owner: input.owner, p_caller_principal: input.runnerPrincipal,
     p_facts: input.facts.map((fact) => ({
       input: financialFactInput(fact),
-      locator: { source_ref: fact.sourceRef, period_end: fact.periodEnd, fact_key: fact.factKey },
+      locator: { source_ref: fact.sourceRef, period_end: fact.periodEnd, fact_key: fact.factKey, ...(fact.locator || {}) },
+      validation: fact.validation ? {
+        schema_valid: fact.validation.schemaValid, unit_valid: fact.validation.unitValid,
+        point_in_time_valid: fact.validation.pointInTimeValid, consistency_valid: fact.validation.consistencyValid,
+        upstream_provider: fact.validation.upstreamProvider,
+      } : null,
     })),
     p_source_sha256: input.sourceSha256, p_response_bytes: input.responseBytes,
     p_collected_at: input.collectedAt,
@@ -318,18 +353,21 @@ async function recordFallbackAcquisitionJob(input: {
   collectedAt: string;
   primaryError: string;
 }) {
-  const retryHours = Math.min(24, 2 ** Math.min(4, input.attempts));
-  const result = await input.client.rpc('record_candidate_financial_fallback_v5', {
+  const result = await input.client.rpc('record_candidate_financial_fallback_v6', {
     p_job_id: input.jobId, p_owner: input.owner, p_caller_principal: input.runnerPrincipal,
     p_facts: input.facts.map((fact) => ({
       input: financialFactInput(fact),
-      locator: { source_ref: fact.sourceRef, period_end: fact.periodEnd, fact_key: fact.factKey },
+      locator: { source_ref: fact.sourceRef, period_end: fact.periodEnd, fact_key: fact.factKey, ...(fact.locator || {}) },
+      validation: fact.validation ? {
+        schema_valid: fact.validation.schemaValid, unit_valid: fact.validation.unitValid,
+        point_in_time_valid: fact.validation.pointInTimeValid, consistency_valid: fact.validation.consistencyValid,
+        upstream_provider: fact.validation.upstreamProvider,
+      } : null,
     })),
     p_source_sha256: input.sourceSha256, p_response_bytes: input.responseBytes,
     p_collected_at: input.collectedAt,
     p_primary_reason: acquisitionTerminalReason(input.primaryError),
     p_primary_error: input.primaryError.slice(0, 500),
-    p_next_attempt_at: new Date(Date.parse(input.collectedAt) + retryHours * 60 * 60_000).toISOString(),
   });
   if (result.error) throw new Error(`candidate_financial_fallback_record_failed:${result.error.message}`);
   const row = Array.isArray(result.data) ? result.data[0] : result.data;
@@ -344,35 +382,15 @@ async function failAcquisitionJob(input: {
   consecutiveFailures: number;
   error: string;
   collectedAt: string;
+  primaryFailed?: boolean;
+  finMindFailed?: boolean;
 }) {
-  const attempts = Math.min(input.attempts + 1, 20);
-  const consecutiveFailures = Math.min(input.consecutiveFailures + 1, 5);
-  const retryable = consecutiveFailures < 5;
-  const reason = acquisitionTerminalReason(input.error);
-  const update = retryable
-    ? {
-        status: 'queued', attempts, consecutive_failures: consecutiveFailures, lease_owner: null, lease_expires_at: null, terminal_reason: null,
-        terminal_detail: input.error.slice(0, 500),
-        next_attempt_at: new Date(Date.now() + (2 ** (consecutiveFailures - 1)) * 60 * 60_000).toISOString(),
-        updated_at: input.collectedAt,
-      }
-    : {
-        status: 'terminal', attempts, consecutive_failures: consecutiveFailures, lease_owner: null, lease_expires_at: null,
-        terminal_reason: reason, terminal_detail: input.error.slice(0, 500),
-        collected_at: input.collectedAt, next_attempt_at: null, updated_at: input.collectedAt,
-      };
-  const result = await input.client.from('candidate_financial_acquisition_jobs_v4').update(update)
-    .eq('job_id', input.jobId).eq('status', 'running').eq('lease_owner', input.owner)
-    .select('job_id,stock_id,endpoint_key,period_end,cursor_key').maybeSingle();
-  if (result.error || !result.data) throw new Error(`candidate_financial_job_lease_lost:${result.error?.message || input.jobId}`);
-  const job = result.data as Record<string, unknown>;
-  const cursor = await input.client.from('candidate_financial_acquisition_cursors_v4').upsert({
-    stock_id: job.stock_id, endpoint_key: job.endpoint_key,
-    cursor_value: { cursor_key: job.cursor_key, job_id: input.jobId, retry_scheduled: retryable },
-    last_terminal_reason: reason,
-    last_collected_at: input.collectedAt, updated_at: input.collectedAt,
-  }, { onConflict: 'stock_id,endpoint_key' });
-  if (cursor.error) throw new Error(`candidate_financial_cursor_write_failed:${cursor.error.message}`);
+  const result = await input.client.rpc('fail_candidate_financial_acquisition_job_v6', {
+    p_job_id: input.jobId, p_owner: input.owner, p_error: input.error.slice(0, 500),
+    p_collected_at: input.collectedAt, p_mops_failed: input.primaryFailed !== false,
+    p_finmind_failed: input.finMindFailed === true,
+  });
+  if (result.error) throw new Error(`candidate_financial_job_failure_record_failed:${result.error.message}`);
 }
 
 async function deferUnpublishedAcquisitionJob(input: {
@@ -404,6 +422,12 @@ function acquisitionTerminalReason(message: string) {
   return 'network_error';
 }
 
+function issuerDocumentPeriodEnd(error: string) {
+  const match = error.match(/:(\d{4})Q([1-4]):/u);
+  if (!match) return null;
+  return `${match[1]}-${['03-31', '06-30', '09-30', '12-31'][Number(match[2]) - 1]}`;
+}
+
 export type CandidateOfficialFinancialRefreshOptions = {
   enqueueMissing?: boolean;
   maxJobs?: number;
@@ -424,7 +448,7 @@ export async function refreshCandidateOfficialFinancials(
   const mopsCandidates = candidates.filter((candidate) => candidate.exchange === 'TWSE');
   const tpexCandidates = candidates.filter((candidate) => candidate.exchange === 'TPEX');
   const client = getOpportunityV3ServerClient();
-  const desiredMopsJobs = financialBridgeAcquisitionQuarters(cutoff).flatMap(({ year, quarter }) => mopsCandidates.map((candidate) => ({
+  const desiredMopsJobs = financialBridgeAcquisitionQuarters(cutoff, 20).flatMap(({ year, quarter }) => mopsCandidates.map((candidate) => ({
     stock_id: candidate.stockId,
     exchange: candidate.exchange,
     endpoint_key: 'mops_inline',
@@ -439,15 +463,15 @@ export async function refreshCandidateOfficialFinancials(
     });
     if (queued.error) throw new Error(`candidate_financial_job_enqueue_failed:${queued.error.message}`);
   }
-  const latestQuarter = completedQuarters(cutoff, 1)[0];
-  const latestQuarterEnd = `${latestQuarter.year}-${['03-31', '06-30', '09-30', '12-31'][latestQuarter.quarter - 1]}`;
+  const requestedTpexQuarters = financialBridgeAcquisitionQuarters(cutoff, 20);
   const desiredTpexJobs = Object.entries(TPEX_FINANCIAL_ENDPOINTS).flatMap(([endpoint, sourceUrl]) =>
-    tpexCandidates.map((candidate) => ({
+    requestedTpexQuarters.flatMap(({ year, quarter }) => tpexCandidates.map((candidate) => ({
       stock_id: candidate.stockId, exchange: candidate.exchange,
       endpoint_key: TPEX_JOB_KEYS[endpoint as keyof typeof TPEX_JOB_KEYS],
-      period_end: latestQuarterEnd, cursor_key: `${candidate.symbol}:${latestQuarter.year}Q${latestQuarter.quarter}`,
+      period_end: `${year}-${['03-31', '06-30', '09-30', '12-31'][quarter - 1]}`,
+      cursor_key: `${candidate.symbol}:${year}Q${quarter}`,
       source_url: sourceUrl,
-    })),
+    }))),
   );
   if (enqueueMissing && desiredTpexJobs.length) {
     const queued = await client.from('candidate_financial_acquisition_jobs_v4').upsert(desiredTpexJobs, {
@@ -503,7 +527,7 @@ export async function refreshCandidateOfficialFinancials(
   const mopsFailures: string[] = [];
   await mapLimit(outcomes, 4, async (outcome) => {
     if (outcome.error) {
-      await failAcquisitionJob({ client, jobId: outcome.jobId, owner: runnerPrincipal, attempts: outcome.attempts, consecutiveFailures: outcome.consecutiveFailures, error: outcome.error, collectedAt });
+      await failAcquisitionJob({ client, jobId: outcome.jobId, owner: runnerPrincipal, attempts: outcome.attempts, consecutiveFailures: outcome.consecutiveFailures, error: outcome.error, collectedAt, primaryFailed: true, finMindFailed: true });
       mopsFailures.push(outcome.error);
       return;
     }
@@ -518,7 +542,7 @@ export async function refreshCandidateOfficialFinancials(
       persistedMopsFacts.push(...outcome.facts);
     } catch (error) {
       const message = `${outcome.candidate.symbol}:write_failed:${error instanceof Error ? error.message : String(error)}`;
-      await failAcquisitionJob({ client, jobId: outcome.jobId, owner: runnerPrincipal, attempts: outcome.attempts, consecutiveFailures: outcome.consecutiveFailures, error: message, collectedAt });
+      await failAcquisitionJob({ client, jobId: outcome.jobId, owner: runnerPrincipal, attempts: outcome.attempts, consecutiveFailures: outcome.consecutiveFailures, error: message, collectedAt, primaryFailed: false });
       mopsFailures.push(message);
     }
   });
@@ -552,6 +576,26 @@ export async function refreshCandidateOfficialFinancials(
       ignoreDuplicates: true,
     });
     if (queueWrite.error) throw new Error(`candidate_issuer_ir_queue_write_failed:${queueWrite.error.message}`);
+  }
+  // Every unresolved issuer/period gets a durable document sub-work item. A
+  // curated IR URL may accelerate retrieval, but absence of one no longer
+  // means that only a single issuer (previously 2408) can receive document
+  // evidence. The source is the original official filing request, not an
+  // invented issuer URL; an approved IR document is later attached by receipt.
+  const issuerDocumentJobs = outcomes.filter((outcome) => outcome.error).flatMap((outcome) => {
+    const periodEnd = issuerDocumentPeriodEnd(outcome.error || '');
+    return periodEnd ? [{
+      stock_id: outcome.candidate.stockId, exchange: outcome.candidate.exchange,
+      endpoint_key: 'issuer_ir_document', period_end: periodEnd,
+      cursor_key: `${outcome.candidate.symbol}:issuer_ir_document:${sha256(outcome.error || '').slice(0, 24)}`,
+      source_url: `${MOPS_INLINE_URL}?step=1&CO_ID=${outcome.candidate.symbol}&REPORT_ID=C`,
+    }] : [];
+  });
+  if (issuerDocumentJobs.length) {
+    const queued = await client.from('candidate_financial_acquisition_jobs_v4').upsert(issuerDocumentJobs, {
+      onConflict: 'stock_id,endpoint_key,period_end,cursor_key', ignoreDuplicates: true,
+    });
+    if (queued.error) throw new Error(`candidate_issuer_ir_document_job_enqueue_failed:${queued.error.message}`);
   }
   const tpexById = new Map(tpexCandidates.map((candidate) => [candidate.stockId, candidate]));
   const tpexFacts: ParsedFact[] = [];
@@ -606,16 +650,17 @@ export async function refreshCandidateOfficialFinancials(
           } else if (newestReturnedPeriod && newestReturnedPeriod > job.periodEnd) {
             try {
               const fallback = await fetchFinMindFinancialFallback({ candidate: job.candidate, periodEnd: job.periodEnd, collectedAt });
-              writtenFacts += await completeAcquisitionJob({
-                client, runnerPrincipal, owner: runnerPrincipal, jobId: job.jobId, facts: fallback.facts,
-                sourceSha256: fallback.sourceSha256, responseBytes: fallback.responseBytes, collectedAt,
+              writtenFacts += await recordFallbackAcquisitionJob({
+                client, runnerPrincipal, owner: runnerPrincipal, jobId: job.jobId, attempts: job.attempts,
+                facts: fallback.facts, sourceSha256: fallback.sourceSha256, responseBytes: fallback.responseBytes,
+                collectedAt, primaryError: message,
               });
               tpexFacts.push(...fallback.facts);
               tpexFinMindFallbackFilings += 1;
               if (fallback.credentialMode === 'anonymous') anonymousTpexFinMindFallbackFilings += 1;
             } catch (fallbackError) {
               const fallbackMessage = `${message}:finmind_fallback_failed:${finMindFinancialErrorDetail(fallbackError)}`;
-              await failAcquisitionJob({ client, jobId: job.jobId, owner: runnerPrincipal, attempts: job.attempts, consecutiveFailures: job.consecutiveFailures, error: fallbackMessage, collectedAt });
+              await failAcquisitionJob({ client, jobId: job.jobId, owner: runnerPrincipal, attempts: job.attempts, consecutiveFailures: job.consecutiveFailures, error: fallbackMessage, collectedAt, primaryFailed: true, finMindFailed: true });
               tpexFailures.push(fallbackMessage);
             }
           } else {

@@ -37,11 +37,13 @@ test('official financial refresh completes durable MOPS and TPEx jobs atomically
   const { readFile } = await import('node:fs/promises');
   const source = await readFile(new URL('./candidate-official-financials.ts', import.meta.url), 'utf8');
   assert.match(source, /complete_candidate_financial_acquisition_job_v4/u);
-  assert.match(source, /record_candidate_financial_fallback_v5/u);
+  assert.match(source, /record_candidate_financial_fallback_v6/u);
   assert.match(source, /fetchFinMindFinancialFallback/u);
   assert.match(source, /TPEX_JOB_KEYS/u);
   assert.match(source, /claim_candidate_financial_acquisition_jobs_v4/u);
   assert.match(source, /FINANCIAL_JOB_LEASE_MS = 45 \* 60_000/u);
+  assert.match(source, /financialBridgeAcquisitionQuarters\(cutoff, 20\)/u);
+  assert.match(source, /requestedTpexQuarters = financialBridgeAcquisitionQuarters\(cutoff, 20\)/u);
   assert.match(source, /remainingJobs/u);
   assert.match(source, /claimedJobs: claimedJobCount/u);
   assert.match(source, /enqueueMissing !== false/u);
@@ -82,7 +84,7 @@ test('instant balance and outstanding-share facts retain null periodStart', () =
     collectedAt: '2026-08-11T00:00:00Z',
   });
   assert.deepEqual(facts.map((fact) => [fact.factKey, fact.periodStart, fact.durationKind]).sort(), [
-    ['cash_and_equivalents', null, 'instant'], ['shares_outstanding', null, 'instant'], ['total_equity', null, 'instant'],
+    ['cash_and_equivalents', null, 'instant'], ['common_equity_attributable_to_owners', null, 'instant'], ['common_shares_outstanding', null, 'instant'],
   ]);
 });
 
@@ -112,9 +114,25 @@ test('FinMind fallback keeps quarterly income and instant balance facts distinct
     ['quarterly_basic_eps', '2025-04-01', 'quarterly', 'finmind_mirror'],
   ]);
   assert.deepEqual(balance.map((fact) => [fact.factKey, fact.value, fact.periodStart, fact.durationKind]), [
-    ['total_equity', 700, null, 'instant'], ['cash_and_equivalents', 90, null, 'instant'],
+    ['total_equity', 800, null, 'instant'], ['common_equity_attributable_to_owners', 700, null, 'instant'],
+    ['cash_and_equivalents', 90, null, 'instant'],
   ]);
   assert.equal([...income, ...balance].every((fact) => fact.filingPublishedAt === collectedAt && fact.provider === 'finmind'), true);
+  assert.equal([...income, ...balance].every((fact) => fact.validation.schemaValid && fact.validation.unitValid
+    && fact.validation.pointInTimeValid && fact.validation.consistencyValid), true);
+});
+
+test('FinMind mirror drops same-priority conflicting rows instead of blessing one arbitrarily', () => {
+  const facts = parseFinMindFinancialFacts({
+    dataset: 'TaiwanStockFinancialStatements',
+    candidate: { stockId: '10000000-0000-4000-8000-000000000001', symbol: '2330' },
+    periodEnd: '2025-06-30', collectedAt: '2026-09-06T12:00:00.000Z',
+    rows: [
+      { date: '2025-06-30', stock_id: '2330', type: 'Revenue', value: 1000, origin_name: '營業收入' },
+      { date: '2025-06-30', stock_id: '2330', type: 'Revenue', value: 1001, origin_name: '營業收入' },
+    ],
+  });
+  assert.equal(facts.some((fact) => fact.factKey === 'quarterly_revenue'), false);
 });
 
 test('FinMind financial fallback is period-bounded and works anonymously without leaking a credential', async () => {
@@ -150,4 +168,39 @@ test('FinMind fallback refuses to terminally complete when one required statemen
         : [{ date: '2025-12-31', stock_id: '2330', type: 'Unknown', value: 456, origin_name: '未知欄位' }] }), { status: 200, headers: { 'content-type': 'application/json' } });
     },
   }), /finmind_incomplete_period_response/u);
+});
+
+test('FinMind production adapter fails closed without a Vault token and uses Vault credentials only server-side', async () => {
+  const candidate = { stockId: '10000000-0000-4000-8000-000000000001', symbol: '2330' };
+  let requested = false;
+  await assert.rejects(fetchFinMindFinancialFallback({
+    candidate, periodEnd: '2025-12-31', collectedAt: '2026-09-06T12:00:00.000Z',
+    readVaultToken: async () => null,
+    fetchImpl: async () => { requested = true; return new Response('{}'); },
+  }), /finmind_not_configured/u);
+  assert.equal(requested, false);
+  const result = await fetchFinMindFinancialFallback({
+    candidate, periodEnd: '2025-12-31', collectedAt: '2026-09-06T12:00:00.000Z', readVaultToken: async () => 'vault-token',
+    fetchImpl: async (url, init) => {
+      assert.equal(new Headers(init?.headers).get('authorization'), 'Bearer vault-token');
+      const dataset = new URL(String(url)).searchParams.get('dataset');
+      return new Response(JSON.stringify({ status: 200, data: dataset === 'TaiwanStockFinancialStatements'
+        ? [{ date: '2025-12-31', stock_id: '2330', type: 'Revenue', value: 123, origin_name: '營業收入' }]
+        : [{ date: '2025-12-31', stock_id: '2330', type: 'TotalAssets', value: 456, origin_name: '資產總計' }] }), { status: 200, headers: { 'content-type': 'application/json' } });
+    },
+  });
+  assert.equal(result.credentialMode, 'vault');
+});
+
+test('FinMind financial fallback cancels a chunked response before buffering past its cap', async () => {
+  let cancelled = false;
+  const candidate = { stockId: '10000000-0000-4000-8000-000000000001', symbol: '2330' };
+  await assert.rejects(fetchFinMindFinancialFallback({
+    candidate, periodEnd: '2025-12-31', collectedAt: '2026-09-06T12:00:00.000Z', token: '',
+    fetchImpl: async () => new Response(new ReadableStream<Uint8Array>({
+      pull(controller) { controller.enqueue(new Uint8Array(2_100_000)); },
+      cancel() { cancelled = true; },
+    }), { status: 200 }),
+  }), /finmind_response_too_large/u);
+  assert.equal(cancelled, true);
 });

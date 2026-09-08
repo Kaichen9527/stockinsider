@@ -58,7 +58,31 @@ export function officialResearchEvidenceFactor(input: {
   });
 }
 
-type BrokerEvidenceRow = { sourceCount: number; freshness: string; asOf: string | null; lawful?: boolean; licenseStatus?: 'licensed' | 'permitted' | 'unknown' | 'blocked' };
+export type BrokerEvidenceRow = { sourceCount: number; freshness: string; asOf: string | null; lawful?: boolean; licenseStatus?: 'licensed' | 'permitted' | 'unknown' | 'blocked' };
+
+/** Maps an imported broker snapshot to the factor contract. A report can only
+ * earn evidence when its actual ingestion mode is within an explicit license;
+ * a software package license is not evidence of redistribution rights. */
+export function brokerEvidenceRowsFromSnapshots(rows: Array<{
+  sourceCount: number | null | undefined;
+  freshnessStatus: string | null | undefined;
+  asOfDate: string | null | undefined;
+  permittedSourceModes?: string[] | null;
+  licenseStatus?: BrokerEvidenceRow['licenseStatus'];
+}>): BrokerEvidenceRow[] {
+  const allowedModes = new Set(['manual_pdf', 'manual_csv', 'imported_pdf']);
+  return rows.map((row) => {
+    const modes = (row.permittedSourceModes || []).filter((mode): mode is string => typeof mode === 'string');
+    const explicitlyLicensed = row.licenseStatus === 'licensed' || row.licenseStatus === 'permitted';
+    return {
+      sourceCount: Math.max(0, Number(row.sourceCount) || 0),
+      freshness: String(row.freshnessStatus || 'missing'),
+      asOf: row.asOfDate || null,
+      licenseStatus: row.licenseStatus,
+      lawful: explicitlyLicensed || (modes.length > 0 && modes.every((mode) => allowedModes.has(mode))),
+    };
+  });
+}
 
 function brokerIsLawful(row: BrokerEvidenceRow): boolean {
   // `freshness_status=licensed` is the legacy storage representation of an
@@ -80,7 +104,88 @@ export function brokerResearchFactor(rows: BrokerEvidenceRow[]): FactorEvidence 
   });
 }
 
-type RelationshipEvidenceRow = { market: string; score: number; weight: number; asOf: string | null; evidenceKind?: 'fundamental' | 'price' };
+export type RelationshipEvidenceRow = { market: string; score: number; weight: number; asOf: string | null; evidenceKind?: 'fundamental' | 'price' };
+
+export type PeerRelationship = {
+  id: string;
+  peerMarket: string;
+  relationshipType: 'product' | 'product_peer' | 'customer' | 'supplier' | 'competitor';
+  productSubcategory: string | null;
+  /** positive/inverse applies to the issuer's exposure; negative_catchdown
+   * permits a material negative peer move to block a new entry. */
+  directionality: 'positive' | 'positive_lead' | 'inverse' | 'negative_catchdown' | 'mixed' | 'context_only' | null;
+  weight: number | null;
+};
+
+export type PeerMarketSnapshot = {
+  peerRelationshipId: string;
+  asOf: string | null;
+  availableAt: string | null;
+  availabilityStatus: 'available' | 'stale' | 'unknown' | 'blocked' | 'blocked_license' | 'missing';
+  fundamentalSignal: number | null;
+  priceReturn20d: number | null;
+  catchdownBlock: boolean;
+  /** External price data must have its own lawful use scope. Unknown is not
+   * assumed legal, current or positive. */
+  priceLicenseStatus: 'licensed' | 'permitted' | 'unknown' | 'blocked' | null;
+};
+
+export type PeerEvidenceBuild = {
+  fundamentalRows: RelationshipEvidenceRow[];
+  priceRows: RelationshipEvidenceRow[];
+  peerCatchdownBlock: boolean;
+  missing: string[];
+};
+
+function directedScore(value: number, directionality: PeerRelationship['directionality']) {
+  const normalized = value >= -1 && value <= 1 ? value : (clamp(value) - 50) / 50;
+  return directionality === 'inverse' ? -normalized : normalized;
+}
+
+/**
+ * Converts relationship records and snapshots into factor rows. It keeps
+ * product classes separate (for example DRAM/NAND/NOR) by requiring the
+ * stored product subcategory, and does not invent a price signal when a
+ * licensed overseas close is unavailable.
+ */
+export function buildPeerRelationshipEvidence(relationships: PeerRelationship[], snapshots: PeerMarketSnapshot[]): PeerEvidenceBuild {
+  const latest = new Map<string, PeerMarketSnapshot>();
+  for (const snapshot of [...snapshots].sort((left, right) => String(right.availableAt || '').localeCompare(String(left.availableAt || '')))) {
+    if (!latest.has(snapshot.peerRelationshipId)) latest.set(snapshot.peerRelationshipId, snapshot);
+  }
+  const fundamentalRows: RelationshipEvidenceRow[] = [];
+  const priceRows: RelationshipEvidenceRow[] = [];
+  const missing: string[] = [];
+  let peerCatchdownBlock = false;
+  for (const relationship of relationships) {
+    if (!relationship.id || !relationship.productSubcategory?.trim()) {
+      missing.push(`missing:peer_product_subcategory:${relationship.id || 'unknown'}`);
+      continue;
+    }
+    const snapshot = latest.get(relationship.id);
+    if (!snapshot || snapshot.availabilityStatus !== 'available') {
+      missing.push(`missing:peer_snapshot:${relationship.id}`);
+      continue;
+    }
+    const weight = relationship.weight != null && Number.isFinite(relationship.weight) && relationship.weight > 0 ? relationship.weight : 0;
+    if (weight === 0) {
+      missing.push(`missing:peer_weight:${relationship.id}`);
+      continue;
+    }
+    if (snapshot.fundamentalSignal != null && Number.isFinite(snapshot.fundamentalSignal)) {
+      fundamentalRows.push({ market: relationship.peerMarket, score: directedScore(snapshot.fundamentalSignal, relationship.directionality), weight, asOf: snapshot.asOf, evidenceKind: 'fundamental' });
+    }
+    const licensedPrice = snapshot.priceLicenseStatus === 'licensed' || snapshot.priceLicenseStatus === 'permitted';
+    if (licensedPrice && snapshot.priceReturn20d != null && Number.isFinite(snapshot.priceReturn20d)) {
+      const priceScore = directedScore(Math.max(-1, Math.min(1, snapshot.priceReturn20d / 20)), relationship.directionality);
+      priceRows.push({ market: relationship.peerMarket, score: priceScore, weight, asOf: snapshot.asOf, evidenceKind: 'price' });
+      if (relationship.directionality === 'negative_catchdown' && snapshot.catchdownBlock && snapshot.priceReturn20d < 0) peerCatchdownBlock = true;
+    } else if (snapshot.priceReturn20d != null || snapshot.priceLicenseStatus !== 'licensed') {
+      missing.push(`missing:licensed_peer_price:${relationship.id}`);
+    }
+  }
+  return { fundamentalRows, priceRows, peerCatchdownBlock, missing: [...new Set(missing)].sort() };
+}
 
 function relationshipScore(value: number): number {
   // Relationship snapshots historically store a signed -1..1 signal. New

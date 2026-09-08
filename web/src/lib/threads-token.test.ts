@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { assertUsableThreadsToken, shouldRefreshThreadsToken } from './threads-token-policy.ts';
+import { assertUsableThreadsToken, shouldRefreshThreadsToken, threadsTokenExpiryWarning } from './threads-token-policy.ts';
 
 const nowMs = Date.parse('2026-08-30T00:00:00.000Z');
 
@@ -20,10 +20,16 @@ test('Threads token refresh activates at 30 days and before expiry', () => {
   }), true);
   assert.equal(shouldRefreshThreadsToken({
     lastRefreshedAt: null,
-    expiresAt: '2026-09-15T00:00:00.000Z',
+    expiresAt: '2026-09-13T00:00:00.000Z',
     nowMs,
   }), true);
   assert.equal(shouldRefreshThreadsToken({ lastRefreshedAt: null, expiresAt: null, nowMs }), true);
+});
+
+test('Threads token warning starts fourteen days before expiry', () => {
+  assert.equal(threadsTokenExpiryWarning({ expiresAt: '2026-09-13T00:00:00.000Z', nowMs }), 'expires_within_14_days');
+  assert.equal(threadsTokenExpiryWarning({ expiresAt: '2026-09-20T00:00:00.000Z', nowMs }), null);
+  assert.equal(threadsTokenExpiryWarning({ expiresAt: '2026-08-29T00:00:00.000Z', nowMs }), 'expired');
 });
 
 test('Threads token validation rejects a missing or expired Vault token', () => {

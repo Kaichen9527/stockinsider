@@ -1,3 +1,5 @@
+import { readFinMindVaultToken } from './finmind-vault.ts';
+
 type TwStockModule = {
   TwStock: new (options?: { ttl?: number; limit?: number }) => {
     stocks: {
@@ -309,7 +311,7 @@ async function fetchFinMindRows(
   options: { symbol?: string; startDate?: string; endDate?: string } = {},
 ): Promise<{ rows: FinMindRow[]; sourceUrl: string } | null> {
   if (!finMindFallbackEnabled()) return null;
-  const token = String(process.env.FINMIND_API_TOKEN || '').trim();
+  const token = await readFinMindVaultToken().catch(() => '');
   if (!token) return null;
   const url = new URL(FINMIND_DATA_URL);
   url.searchParams.set('dataset', dataset);

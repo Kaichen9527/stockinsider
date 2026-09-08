@@ -798,7 +798,7 @@ function activeGraphOracle() {
   assert.equal(catalogBlob.bytes.length, 6337, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    '945afadaded8c7b8b56387a9924338e597e6b2a7a5c0b6b1f3c7ab2bc21855db',
+    '6f8579883a04bd59d40adc3848065f43864d3237047b77235582d577b1365995',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);
@@ -1147,19 +1147,19 @@ function activeGraphOracle() {
     /Amendment version: `hybrid-product-v3[.]2`/u,
   );
   const hostAmendment = readFileSync(path.join(change, 'host-pin-compatibility-amendment.md'), 'utf8');
-  assert.match(hostAmendment, /Amendment version: `model-runner-host-pin-amendment-v3[.]14`/u);
-  assert.match(hostAmendment, /codex-cli 0[.]151[.]0-alpha[.]7[.]2/u);
+  assert.match(hostAmendment, /Amendment version: `model-runner-host-pin-amendment-v3[.]15`/u);
+  assert.match(hostAmendment, /codex-cli 0[.]153[.]4/u);
   assert.match(hostAmendment, /exact pin/u);
   const hostPinBytes = readFileSync(path.join(change, 'model-runner-host-pins-v3.json'), 'utf8');
   const hostPins = JSON.parse(hostPinBytes);
   const hostPinCanonical = canonicalJson(hostPins);
-  assert.equal(Buffer.byteLength(hostPinBytes), 2143);
-  assert.equal(Buffer.byteLength(hostPinCanonical), 2142);
-  assert.equal(sha256(hostPinCanonical), 'bfa364974e14fb4b326d171be8db9d0ad09b7f9a9d698119d81ac5d553afbe9d');
-  assert.equal(hostPins.fixtureVersion, 'model-runner-host-pins-v3.14');
-  assert.equal(hostPins.executables.find(({ name }) => name === 'codex')?.version, 'codex-cli 0.151.0-alpha.7.2');
-  assert.equal(runner.MODEL_RUNNER_IDENTITY_SHA256, '89c5fd414840e577729d55933fd0eef4a4cf8fdaa494feb6895d67ce895331e7');
-  assert.equal(Buffer.byteLength(canonicalJson(runner.MODEL_RUNNER_IDENTITY)), 885);
+  assert.equal(Buffer.byteLength(hostPinBytes), 2133);
+  assert.equal(Buffer.byteLength(hostPinCanonical), 2132);
+  assert.equal(sha256(hostPinCanonical), 'aaa70cc4dfc341224c5042c501e7392c2e63abce2164a66e87ba1fda5160fbca');
+  assert.equal(hostPins.fixtureVersion, 'model-runner-host-pins-v3.15');
+  assert.equal(hostPins.executables.find(({ name }) => name === 'codex')?.version, 'codex-cli 0.153.4');
+  assert.equal(runner.MODEL_RUNNER_IDENTITY_SHA256, 'f87259bc18fe03177f84c318cd2bff8fd016abb7b249368879c317a583897ed3');
+  assert.equal(Buffer.byteLength(canonicalJson(runner.MODEL_RUNNER_IDENTITY)), 875);
   const runtimeContract = readFileSync(path.join(change, 'runtime-transaction-contract.md'), 'utf8');
   assert.match(runtimeContract, /staticIdentityMembers` is the following exact 41-member/u);
   assert.match(runtimeContract, /\["acceptanceVersion","1[.]46[.]0"\]/u);
@@ -1305,7 +1305,7 @@ const structuralExecutors = {
     }
     assert.equal(inventory.scriptValueRows.length, 14);
     assert.equal(sha256(canonicalJson(inventory.scriptValueRows)), inventory.scriptValueRowsSha256);
-    assert.equal(inventory.scriptValueRowsSha256, '9f33a5aea432440348a83c089065a23fa7cdcbf24d5df78dc70b7537aaec520d');
+    assert.equal(inventory.scriptValueRowsSha256, 'c15df6eb7cba7b03c188cbadf3c37019cded63ccb17cd171f462c6bbe6f986b1');
     const rootPackageScripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts;
     const webPackageScripts = JSON.parse(readFileSync(path.join(root, 'web/package.json'), 'utf8')).scripts;
     assert.deepEqual(inventory.scriptValueRows.map(([scriptKey]) => scriptKey), [
@@ -1383,6 +1383,7 @@ const structuralExecutors = {
   },
   'HYB-006': () => {
     assert.match(workflow, /diagnostic:source-led-opportunity-v3:product-runtime/u);
+    assert.match(JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts['test:source-led-opportunity-v3'], /candidate-detail-view-contract[.]test[.]ts/u);
     assert.match(workflow, /verify:source-led-opportunity-v3:model-runner/u);
     assert.match(workflow, /run: npm run verify:source-led-opportunity-v3:model-runner/u);
     assert.match(workflow, /OPPORTUNITY_V3_RUNNER_TRACK.*true/u);
@@ -1396,7 +1397,7 @@ const structuralExecutors = {
       key === 'verify:source-led-opportunity-v3:model-runner')?.[1];
     assert.equal(
       modelAggregate,
-      'node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track model_runner && npm run test:model-runner-v3 && npm run v3:doctor -- --expect-mode disabled --require-host-pin model-runner-host-pins-v3.14',
+      'node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track model_runner && npm run test:model-runner-v3 && npm run v3:doctor -- --expect-mode disabled --require-host-pin model-runner-host-pins-v3.15',
       'model aggregate is the frozen fourteenth script authority',
     );
     const packageModelAggregate = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts[

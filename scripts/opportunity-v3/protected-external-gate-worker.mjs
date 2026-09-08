@@ -989,6 +989,9 @@ function executeTrack(subjectRoot, track, identity, attestation) {
     const totals = measured.reduce((result, row) => ({
       passed: result.passed + (row.ownsPartitionCount ? row.passed : 0),
       failed: result.failed + row.failed,
+      // Every skip/todo is fatal, including supplementary suites. The protected
+      // worker provisions the reviewed Arelle environment above, so the parser
+      // integration must execute instead of disappearing from the envelope.
       skipped: result.skipped + row.skipped,
       todo: result.todo + row.todo,
     }), { passed: 0, failed: 0, skipped: 0, todo: 0 });

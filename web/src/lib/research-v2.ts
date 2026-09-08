@@ -6,12 +6,16 @@ import { promisify } from 'util';
 import { getSupabaseServerClient } from './supabase-server';
 import { THREADS_CANONICAL_ORIGIN } from './source-auth';
 import { APPROVED_TELEGRAM_PUBLIC_CHANNELS, RETIRED_SOURCE_CONNECTORS, UNAVAILABLE_TELEGRAM_PUBLIC_CHANNELS, authorizedPodcastRssAllowlist, podcastContentAnalyzable } from './source-policy';
+import { bullTalkLicenseReadiness, parseLicensedBullTalkFeed } from './bulltalk-feed';
+import { THREADS_KEYWORD_SEARCH_URL, assertThreadsKeywordSearchEndpoint } from './threads-api';
+import { derivePodcastLedgerSemantics, parsePodcastNamespaceFeed, parsePublisherChapters, parsePublisherTranscript, type TimedPodcastSegment } from './podcast-rss';
 import { fetchTextWithRetry, sourceFetchFailureCode } from './source-fetch';
 import { getThreadsTokenForRun, threadsTokenRegistryMetadata } from './threads-token';
 import { canonicalContentHash, canonicalPublisherKey, classifyPttContentSemantics, classifySourceStance, GDELT_TW_MATCHER_VERSION, publisherKeyFor, type SourceContentSemantics } from './source-content-semantics';
 import { collectPagedAuthorityRows } from './candidate-research-policy';
 import { decodeSingleFileZip, gdeltGkgUrlsAfter, gdeltSearchableText, gdeltTransportReason, isRetiredNewsHost, matchGdeltStockSymbols, parseGdeltSeenDate, selectLatestGdeltGkgUrl } from './gdelt-gkg';
 import { isExpectedPttArticleMissing } from './ptt-policy';
+import { fetchPinnedHttpsText, isPublicNetworkAddress } from './pinned-https-fetch';
 
 type Row = Record<string, unknown>;
 const AUTHORIZED_BROKER_SOURCE_MODES = ['manual_pdf', 'manual_csv', 'imported_pdf'] as const;
@@ -2958,11 +2962,12 @@ async function scrapePttStock(symbolContext?: SymbolScopedStockContext | null) {
 }
 
 async function scrapeBullTalk(symbolContext?: SymbolScopedStockContext | null) {
-  const feedUrl = compactText(process.env.BULLTALK_AUTHORIZED_FEED_URL);
-  if (process.env.BULLTALK_LICENSED !== 'true' || !feedUrl) {
+  const license = bullTalkLicenseReadiness();
+  if (!license.ready || !license.feedUrl) {
     return { connector: 'bulltalk', recordsWritten: 0, fetchedPosts: 0, entityId: null,
-      errorCode: 'license_missing', degradedReason: 'bulltalk_authorized_feed_missing', sessionMode: 'not_applicable' as const };
+      errorCode: 'license_missing', degradedReason: license.reason || 'bulltalk_authorized_feed_missing', sessionMode: 'not_applicable' as const };
   }
+  const feedUrl = license.feedUrl;
   const parsedFeedUrl = new URL(feedUrl);
   if (parsedFeedUrl.protocol !== 'https:') throw new Error('bulltalk_authorized_feed_requires_https');
   const entity = await upsertSourceEntity({
@@ -2979,41 +2984,30 @@ async function scrapeBullTalk(symbolContext?: SymbolScopedStockContext | null) {
   });
   if (!response.ok) throw new Error(`bulltalk_authorized_feed_http_${response.status}`);
   const contentType = response.headers.get('content-type') || '';
-  let rows: Row[] = [];
-  if (contentType.includes('json')) {
-    const payload = await response.json() as unknown;
-    rows = (Array.isArray(payload) ? payload : (payload && typeof payload === 'object' && Array.isArray((payload as Row).data) ? (payload as Row).data : [])) as Row[];
-  } else {
-    const lines = (await response.text()).split(/\r?\n/u).filter(Boolean);
-    const headers = (lines.shift() || '').split(',').map((item) => compactText(item).toLowerCase());
-    rows = lines.map((line) => Object.fromEntries(line.split(',').map((value, index) => [headers[index], compactText(value)])));
-  }
+  const rows = parseLicensedBullTalkFeed(contentType, await response.text());
   const docs: SourceRawDocInput[] = rows.slice(0, 500).flatMap((row) => {
-    const title = compactText(row.title || row.name || row.summary);
-    const documentUrl = compactText(row.url || row.document_url || row.source_url);
-    const rawSymbols = Array.isArray(row.symbols) ? row.symbols.map(String) : compactText(row.symbols || row.symbol).split(/[|;\s]+/u);
-    const symbols = unique(rawSymbols.map((item) => item.toUpperCase()).filter((item) => /^\d{4}$/u.test(item)));
-    if (!title || !documentUrl || !/^https:\/\//u.test(documentUrl) || symbols.length === 0) return [];
-    if (symbolContext && !symbols.includes(symbolContext.symbol)) return [];
-    const stance = compactText(row.stance || row.sentiment).toLowerCase();
-    const sentimentLabel = ['bullish', 'positive'].includes(stance) ? 'bullish' : ['bearish', 'negative'].includes(stance) ? 'bearish' : 'neutral';
+    if (symbolContext && !row.symbols.includes(symbolContext.symbol)) return [];
     return [{
-      sourceEntityId: String(entity.id), platform: 'bulltalk', documentUrl, title,
-      summary: title, contentText: title, symbols, sentimentLabel, confidence: 0.7,
-      publishedAt: safeDateString(row.published_at || row.publishedAt || null),
+      sourceEntityId: String(entity.id), platform: 'bulltalk', documentUrl: row.sourceUrl, title: row.title,
+      summary: row.title, contentText: row.title, symbols: row.symbols, sentimentLabel: row.stance, confidence: 0.7,
+      publishedAt: safeDateString(row.publishedAt),
       metadata: {
         connector: 'authorized_feed', retention_mode: 'metadata_link_only',
-        mention_count: Number(row.mention_count || row.mentions || 0),
-        comment_count: Number(row.comment_count || row.comments || 0),
-        engagement_count: Number(row.engagement_count || row.engagement || 0),
-        rank: Number(row.rank || 0), license_basis: 'cmoney_partner_or_api_license',
+        mention_count: row.mentionCount,
+        comment_count: row.commentCount,
+        engagement_count: row.engagementCount,
+        rank: row.rank,
+        license_basis: 'cmoney_partner_or_api_license',
+        license_scope_ref: license.licenseScopeRef,
+        real_sample_sha256: license.sampleSha256,
       },
     }];
   });
   const count = await upsertSourceRawDocuments(filterSymbolScopedDocs(docs, 'bulltalk', symbolContext));
   return { connector: 'bulltalk', recordsWritten: count, fetchedPosts: rows.length,
     duplicatesSkipped: Math.max(0, docs.length - count), matchedDirectHits: new Set(docs.flatMap((doc) => doc.symbols)).size,
-    matchedIndustryHits: 0, entityId: String(entity.id), errorCode: null, sessionMode: 'not_applicable' as const };
+    matchedIndustryHits: 0, entityId: String(entity.id), errorCode: null, sessionMode: 'not_applicable' as const,
+    metadata: { adapter: 'licensed_json_or_csv_v1', license_scope_ref: license.licenseScopeRef, real_sample_sha256: license.sampleSha256 } };
 }
 
 async function scrapeGdeltMetadata(symbolContext?: SymbolScopedStockContext | null): Promise<SourceSyncRunShape> {
@@ -3171,51 +3165,68 @@ async function scrapeThreadsOfficialApi(symbolContext?: SymbolScopedStockContext
   let failedQueries = 0;
   let firstFailure: string | null = null;
   let authRejected = false;
+  let pagesFetched = 0;
   const seenIds = new Set<string>();
   for (const query of queries) {
     try {
-      const endpoint = new URL('https://graph.threads.net/keyword_search');
-      endpoint.searchParams.set('q', query);
-      endpoint.searchParams.set('search_type', 'RECENT');
-      endpoint.searchParams.set('fields', 'id,username,text,permalink,timestamp');
-      endpoint.searchParams.set('access_token', tokenState.token);
-      const response = await fetch(endpoint, { headers: { accept: 'application/json' }, signal: AbortSignal.timeout(15_000) });
-      if (!response.ok) {
-        if (response.status === 401 || response.status === 403) authRejected = true;
-        throw new Error(`threads_api_http_${response.status}`);
-      }
-      const payload = await response.json() as { data?: Array<{ id?: string; username?: string; text?: string; permalink?: string; timestamp?: string }> };
-      for (const row of payload.data || []) {
-        if (!row.id || seenIds.has(row.id)) continue;
-        seenIds.add(row.id);
-        fetchedPosts += 1;
-        const username = compactText(row.username).replace(/^@/u, '').toLocaleLowerCase('en-US');
-        if (approvedAuthors.size > 0 && !approvedAuthors.has(username)) continue;
-        const text = compactText(row.text).slice(0, 1200);
-        if (!text || !row.permalink) continue;
-        const extracted = extractTwSymbolsWithEvidence(text, { validSymbols, stockNamesBySymbol, aliasesBySymbol });
-        if (extracted.symbols.length === 0) continue;
-        records.push({
-          sourceEntityId: String(entity.id),
-          platform: 'threads',
-          documentUrl: row.permalink,
-          title: `Threads @${username}: ${text.slice(0, 72)}`,
-          summary: text.slice(0, 300),
-          contentText: text,
-          publishedAt: safeDateString(row.timestamp || null),
-          symbols: extracted.symbols,
-          sentimentLabel: 'neutral',
-          confidence: 0.55,
-          metadata: {
-            connector: 'threads_official_keyword_api',
-            stable_id: row.id,
-            source_account: username,
-            query_keyword: query,
-            crawl_mode: symbolContext ? 'symbol_scoped' : 'public_search',
-            source_surface: 'threads_official_api',
-            excluded_false_positives: extracted.excludedFalsePositives,
-          },
-        });
+      let after: string | null = null;
+      for (let page = 0; page < 3; page += 1) {
+        const endpoint = assertThreadsKeywordSearchEndpoint(THREADS_KEYWORD_SEARCH_URL);
+        endpoint.searchParams.set('q', query);
+        endpoint.searchParams.set('search_type', 'RECENT');
+        endpoint.searchParams.set('fields', 'id,username,text,permalink,timestamp');
+        endpoint.searchParams.set('since', String(Math.floor((Date.now() - 7 * 24 * 60 * 60 * 1000) / 1000)));
+        endpoint.searchParams.set('limit', '25');
+        if (after) endpoint.searchParams.set('after', after);
+        endpoint.searchParams.set('access_token', tokenState.token);
+        const response = await fetch(endpoint, { headers: { accept: 'application/json' }, signal: AbortSignal.timeout(15_000) });
+        if (!response.ok) {
+          if (response.status === 401 || response.status === 403) authRejected = true;
+          throw new Error(`threads_api_http_${response.status}`);
+        }
+        pagesFetched += 1;
+        const payload = await response.json() as {
+          data?: Array<{ id?: string; username?: string; text?: string; permalink?: string; timestamp?: string }>;
+          paging?: { cursors?: { after?: string } };
+        };
+        for (const row of payload.data || []) {
+          if (!row.id || seenIds.has(row.id)) continue;
+          seenIds.add(row.id);
+          fetchedPosts += 1;
+          const username = compactText(row.username).replace(/^@/u, '').toLocaleLowerCase('en-US');
+          if (approvedAuthors.size > 0 && !approvedAuthors.has(username)) continue;
+          const text = compactText(row.text).slice(0, 1200);
+          if (!text || !row.permalink) continue;
+          const extracted = extractTwSymbolsWithEvidence(text, { validSymbols, stockNamesBySymbol, aliasesBySymbol });
+          if (extracted.symbols.length === 0) continue;
+          records.push({
+            sourceEntityId: String(entity.id),
+            platform: 'threads',
+            documentUrl: row.permalink,
+            title: `Threads @${username}: ${text.slice(0, 72)}`,
+            summary: text.slice(0, 300),
+            contentText: text,
+            publishedAt: safeDateString(row.timestamp || null),
+            symbols: extracted.symbols,
+            sentimentLabel: 'neutral',
+            confidence: 0.55,
+            metadata: {
+              connector: 'threads_official_keyword_api',
+              stable_id: row.id,
+              source_account: username,
+              query_keyword: query,
+              crawl_mode: symbolContext ? 'symbol_scoped' : 'public_search',
+              source_surface: 'threads_official_api',
+              graph_version: 'v1.0',
+              search_type: 'RECENT',
+              lookback_days: 7,
+              excluded_false_positives: extracted.excludedFalsePositives,
+            },
+          });
+        }
+        const nextAfter = compactText(payload.paging?.cursors?.after);
+        if (!nextAfter || nextAfter === after || (payload.data || []).length === 0) break;
+        after = nextAfter;
       }
     } catch (error) {
       failedQueries += 1;
@@ -3245,6 +3256,8 @@ async function scrapeThreadsOfficialApi(symbolContext?: SymbolScopedStockContext
       records_written: count,
       duplicates_skipped: duplicatesSkipped,
       searched_keywords: queries,
+      pages_fetched: pagesFetched,
+      lookback_days: 7,
       approved_author_count: approvedAuthors.size,
     },
   });
@@ -5214,6 +5227,8 @@ type PodcastEpisodeCandidate = {
   platform: 'youtube' | 'rss' | 'apple_podcast' | 'spotify' | 'other';
   sourceMode?: string;
   rssUrl?: string | null;
+  transcript?: { url: string; type: string; language: string | null } | null;
+  chapters?: { url: string; type: string; language: string | null } | null;
 };
 
 function decodeXmlText(value: unknown) {
@@ -5236,6 +5251,20 @@ function firstXmlValue(body: string, tags: string[]) {
 }
 
 function parseRssItems(xmlText: string) {
+  const namespaceEpisodes = parsePodcastNamespaceFeed(xmlText);
+  if (namespaceEpisodes.length > 0) {
+    return namespaceEpisodes.map((episode): PodcastEpisodeCandidate => ({
+      title: episode.title,
+      link: episode.link,
+      pubDate: safeDateString(episode.publishedAt),
+      audioUrl: episode.audioUrl,
+      description: episode.description,
+      platform: 'rss',
+      sourceMode: 'publisher_rss',
+      transcript: episode.transcript,
+      chapters: episode.chapters,
+    }));
+  }
   const items: PodcastEpisodeCandidate[] = [];
   const itemMatches = [
     ...Array.from(xmlText.matchAll(/<item[\s>]([\s\S]*?)<\/item>/g)).map((match) => ({ body: match[1], kind: 'rss' as const })),
@@ -5405,6 +5434,59 @@ async function fetchExplicitRssItems(rssUrl: string) {
   }
 }
 
+function approvedPodcastArtifactUrl(value: string, rssUrl: string | null | undefined): URL {
+  const parsed = new URL(value);
+  if (parsed.protocol !== 'https:' || parsed.username || parsed.password) throw new Error('podcast_artifact_url_not_approved');
+  const hostname = parsed.hostname.toLowerCase();
+  if (hostname === 'localhost' || hostname.endsWith('.local') || hostname.endsWith('.internal')
+    || (/^[\[\]0-9a-f:.]+$/iu.test(hostname) && !isPublicNetworkAddress(hostname))) {
+    throw new Error('podcast_artifact_private_host_rejected');
+  }
+  const allowedOrigins = new Set<string>();
+  if (rssUrl) allowedOrigins.add(new URL(rssUrl).origin);
+  for (const configured of String(process.env.PODCAST_ARTIFACT_ORIGIN_ALLOWLIST || '').split(',')) {
+    try {
+      const origin = new URL(configured.trim()).origin;
+      if (origin.startsWith('https://')) allowedOrigins.add(origin);
+    } catch { /* invalid configured origins are ignored and never fetched */ }
+  }
+  if (!allowedOrigins.has(parsed.origin)) throw new Error('podcast_artifact_origin_not_allowlisted');
+  return parsed;
+}
+
+async function fetchPublisherPodcastArtifact(
+  reference: NonNullable<PodcastEpisodeCandidate['transcript']>,
+  rssUrl: string | null | undefined,
+  parser: (type: string, body: string) => TimedPodcastSegment[],
+): Promise<TimedPodcastSegment[]> {
+  const endpoint = approvedPodcastArtifactUrl(reference.url, rssUrl);
+  const allowedOrigins = new Set<string>([endpoint.origin]);
+  const response = await fetchPinnedHttpsText({ url: endpoint, allowedOrigins, maxBytes: 2_000_000, timeoutMs: 12_000,
+    headers: { accept: reference.type, 'user-agent': 'StockInsider/2.3 Publisher-Podcast-Metadata' },
+  });
+  return parser(reference.type, response.body);
+}
+
+async function loadPublisherPodcastSegments(episode: PodcastEpisodeCandidate): Promise<{
+  segments: TimedPodcastSegment[];
+  source: 'publisher_transcript' | 'publisher_chapters' | null;
+  failure: string | null;
+}> {
+  try {
+    if (episode.transcript) {
+      const segments = await fetchPublisherPodcastArtifact(episode.transcript, episode.rssUrl, parsePublisherTranscript);
+      if (segments.length > 0) return { segments, source: 'publisher_transcript', failure: null };
+    }
+    if (episode.chapters) {
+      const segments = await fetchPublisherPodcastArtifact(episode.chapters, episode.rssUrl, parsePublisherChapters);
+      if (segments.length > 0) return { segments, source: 'publisher_chapters', failure: null };
+    }
+    return { segments: [], source: null, failure: null };
+  } catch (error) {
+    return { segments: [], source: null, failure: compactText((error as Error).message).slice(0, 200) };
+  }
+}
+
 async function fetchYoutubeTranscript(videoId: string) {
   const langs = ['zh-TW', 'zh-Hant', 'zh', 'en'];
   for (const lang of langs) {
@@ -5490,6 +5572,7 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
   const dryRun = Boolean(options?.dryRun);
   if (dryRun) return {
     runId: randomUUID(), dryRun, recordsWritten: 0, episodesFound: 0, platforms: [] as string[],
+    weakSignalsWritten: 0, transcriptsReady: 0,
     indexUpdated: false, contentAnalyzable: false, validMatches: 0,
   };
 
@@ -5509,6 +5592,8 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
 
     let totalEpisodes = 0;
     let weakSignalsWritten = 0;
+    let transcriptsReady = 0;
+    let analyzableEpisodes = 0;
     const platformsUsed = new Set<string>();
     const searchedKeywords = unique([
       ...KOL_SEEDS.map((seed) => seed.displayName),
@@ -5553,9 +5638,13 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
 
       const uniqueEpisodes = Array.from(new Map(episodeItems.map((item) => [`${item.platform}::${item.link}`, item] as const)).values()).slice(0, 10);
       let kolWeakSignals = 0;
+      let kolTranscriptsReady = 0;
       for (const ep of uniqueEpisodes) {
-        const contentAnalyzable = Boolean(ep.rssUrl && podcastContentAnalyzable(ep.rssUrl));
-        const { error } = await supabase.from('podcast_episodes').upsert(
+        const recordedContentRights = Boolean(ep.rssUrl && podcastContentAnalyzable(ep.rssUrl));
+        const publisherContent = await loadPublisherPodcastSegments(ep);
+        const contentAnalyzable = recordedContentRights || publisherContent.segments.length > 0;
+        const timedSegments = publisherContent.segments.slice(0, 1000);
+        const { data: storedEpisode, error } = await supabase.from('podcast_episodes').upsert(
           {
             source_entity_id: sourceEntityId,
             kol_profile_id: kolId,
@@ -5563,10 +5652,12 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
             podcast_name: podcastName,
             episode_title: ep.title,
             episode_url: ep.link,
-            audio_url: ep.audioUrl || null,
+            // The RSS enclosure remains a reference only. This connector never
+            // downloads or copies publisher audio.
+            audio_url: null,
             external_id: extractYoutubeVideoId(ep.link) || null,
             published_at: ep.pubDate,
-            transcript_status: contentAnalyzable ? 'pending' : 'transcript_unavailable',
+            transcript_status: publisherContent.source === 'publisher_transcript' ? 'ready' : 'transcript_unavailable',
             content_analyzable: contentAnalyzable,
             index_updated_at: nowIso(),
             metadata: {
@@ -5576,19 +5667,49 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
               rss_url: ep.rssUrl || null,
               index_updated: true,
               content_analyzable: contentAnalyzable,
+              content_rights_basis: publisherContent.segments.length > 0 ? 'publisher_provided_namespace_artifact'
+                : recordedContentRights ? 'recorded_creator_rights' : 'rss_index_only',
               description: ep.description || null,
+              audio_reference_url: ep.audioUrl || null,
+              audio_copied: false,
+              transcript_reference: ep.transcript || null,
+              chapters_reference: ep.chapters || null,
+              timed_segments: timedSegments,
+              publisher_artifact_failure: publisherContent.failure,
             },
             updated_at: nowIso(),
           },
           { onConflict: 'platform,episode_url' },
-        );
+        ).select('id').single();
         if (error && !String(error.message).includes('duplicate')) throw new Error(error.message);
         totalEpisodes += 1;
 
+        if (contentAnalyzable) analyzableEpisodes += 1;
+        const contentText = publisherContent.segments.length > 0
+          ? publisherContent.segments.map((segment) => `[${segment.startSeconds}s] ${segment.text}`).join('\n')
+          : recordedContentRights ? compactText(`${ep.title}。${ep.description || ''}`) : '';
+        if (publisherContent.source === 'publisher_transcript' && storedEpisode?.id && contentText) {
+          const transcriptInsights = extractPodcastInsights(contentText, validSymbols);
+          const { error: transcriptError } = await supabase.from('podcast_transcripts').upsert({
+            podcast_episode_id: storedEpisode.id,
+            transcript_text: contentText.slice(0, 50_000),
+            language: ep.transcript?.language || null,
+            transcript_source: 'rss',
+            extracted_mentions: transcriptInsights.symbols,
+            extracted_thesis: transcriptInsights.thesis,
+            extracted_risks: transcriptInsights.risks,
+            confidence: 0.66,
+            updated_at: nowIso(),
+          }, { onConflict: 'podcast_episode_id' });
+          if (transcriptError) throw new Error(transcriptError.message);
+          transcriptsReady += 1;
+          kolTranscriptsReady += 1;
+        }
+
         // A public RSS item is an index. Claim extraction is separately
-        // permissioned per allowlisted RSS endpoint.
+        // permissioned by a publisher namespace artifact or recorded rights.
         if (!contentAnalyzable) continue;
-        const weakText = compactText(`${ep.title}。${ep.description || ''}`);
+        const weakText = compactText(contentText);
         const weakInsights = extractPodcastInsights(weakText, validSymbols);
         for (const symbol of weakInsights.symbols) matchedSymbols.add(symbol);
         if (weakInsights.symbols.length > 0) {
@@ -5596,23 +5717,28 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
             sourceEntityId,
             platform: 'podcast',
             documentUrl: ep.link,
-            title: `[KOL影音弱訊號] ${kolName}: ${ep.title}`,
+            title: `[Podcast內容] ${kolName}: ${ep.title}`,
             summary: weakText.slice(0, 600),
             contentText: weakText.slice(0, 3000),
             publishedAt: ep.pubDate,
             symbols: weakInsights.symbols,
             sentimentLabel: weakInsights.thesis.length > 0 ? 'bullish' : weakInsights.risks.length > 0 ? 'bearish' : 'neutral',
-            confidence: 0.34,
+            confidence: publisherContent.source === 'publisher_transcript' ? 0.6
+              : publisherContent.source === 'publisher_chapters' ? 0.45 : 0.34,
             metadata: {
               connector: 'podcast_sync',
-              evidence_class: 'kol_av_weak_signal',
+              evidence_class: publisherContent.source === 'publisher_transcript'
+                ? 'kol_av_transcript_signal' : 'kol_av_weak_signal',
               kol_name: kolName,
-              weak_signal_only: true,
+              weak_signal_only: publisherContent.source !== 'publisher_transcript',
               source_mode: ep.sourceMode || null,
               rss_url: ep.rssUrl || null,
               index_updated: true,
               content_analyzable: true,
-              license_basis: 'creator_published_rss_content_allowlist',
+              timed_segments: timedSegments,
+              content_source: publisherContent.source || 'recorded_rights_metadata',
+              license_basis: publisherContent.segments.length > 0
+                ? 'creator_published_podcast_namespace_artifact' : 'recorded_creator_content_rights',
             },
           }]);
           weakSignalsWritten += docsWritten;
@@ -5633,12 +5759,17 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
         episodesFound: uniqueEpisodes.length,
         youtubeEpisodes: 0,
         weakSignalsWritten: kolWeakSignals,
-        transcriptsReady: 0,
+        transcriptsReady: kolTranscriptsReady,
         failureReason,
       });
     }
 
     const recordsWritten = totalEpisodes + weakSignalsWritten;
+    const ledgerSemantics = derivePodcastLedgerSemantics({
+      episodesIndexed: totalEpisodes,
+      analyzableEpisodes,
+      validMatches: matchedSymbols.size,
+    });
     await finishConnectorRun(podcastRunId, recordsWritten > 0 ? 'success' : 'partial', recordsWritten, {
       error_summary: recordsWritten > 0 ? null : 'no_creator_authorized_rss_episodes_found',
       metadata: {
@@ -5648,13 +5779,14 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
         episodes_found: totalEpisodes,
         youtube_episodes: 0,
         weak_signals_written: weakSignalsWritten,
+        transcripts_ready: transcriptsReady,
         matched_symbols: Array.from(matchedSymbols),
         kol_breakdown: kolBreakdown,
         failure_reason_by_kol: failureReasonByKol,
         youtube_retired: true,
-        index_updated: totalEpisodes > 0,
-        content_analyzable: weakSignalsWritten > 0,
-        valid_matches: matchedSymbols.size,
+        index_updated: ledgerSemantics.indexUpdated,
+        content_analyzable: ledgerSemantics.contentAnalyzable,
+        valid_matches: ledgerSemantics.validMatches,
       },
     });
 
@@ -5664,11 +5796,10 @@ export async function runPodcastSync(options?: { dryRun?: boolean }) {
       recordsWritten,
       episodesFound: totalEpisodes,
       weakSignalsWritten,
+      transcriptsReady,
       platforms: Array.from(platformsUsed),
       kolBreakdown,
-      indexUpdated: totalEpisodes > 0,
-      contentAnalyzable: weakSignalsWritten > 0,
-      validMatches: matchedSymbols.size,
+      ...ledgerSemantics,
     };
   } catch (error) {
     const message = (error as Error).message;

@@ -5,6 +5,7 @@ import {
   advanceActionableCloseStreak,
   classifyCandidateStage,
   STAGE_RULESET_VERSION,
+  type CandidateStageInput,
   type CandidateLifecycleStage,
   type MarketRiskRegime,
 } from './stage-classifier';
@@ -22,7 +23,7 @@ import {
   type TwMarketDailyBar,
   type TwValuationHistoryPoint,
 } from './tw-market';
-import { buildConservativeOfficialScenario, buildDriverMultipleScenario, buildEvEbitdaScenario, buildForwardEarningsScenario, buildTurnaroundEvSalesScenario } from './candidate-valuation';
+import { buildConservativeOfficialScenario, buildDriverMultipleScenario, buildEvEbitdaScenario, buildFinancialPbRoeScenario, buildForwardEarningsScenario, buildTurnaroundEvSalesScenario } from './candidate-valuation';
 import { candidatePriceRefreshDepth, collectBatchedAuthorityRows, collectPagedAuthorityRows, financialFactAvailableAt, isCandidateHistoricalPriceAccessEnabled, isTransientResearchInfrastructureError, partitionCandidateMentionsByCutoff } from './candidate-research-policy';
 import { scheduledSourceConnectorKeys, sourceExecutionPolicy } from './source-policy';
 import { loadLatestSourceRunLedger } from './source-run-ledger';
@@ -32,18 +33,28 @@ import { buildDeterministicCandidateSections } from './candidate-detail';
 import { advanceRiskEpisode, candidateRiskAction } from './candidate-risk-action';
 import { buildMarketEvidenceSnapshot } from './market-evidence';
 import { candidateMentionDiscoveryEligible, publisherKeyFor, relativeDiscussionBurst, roundRobinSourceLinks, sourceConcentration } from './source-content-semantics';
-import { buildShadowReplayInputs, replayFrozenCandidateClassification, shadowReplayConflicts } from './shadow-policy-v2';
+import { buildFrozenShadowReplayPayload, replayFrozenCandidateClassification, shadowReplayConflicts } from './shadow-policy-v2';
+import { loadFrozenShadowReplayPayload, persistFrozenShadowReplayPayload } from './shadow-replay-store.ts';
 import { buildForwardEarningsBridge, discreteReportedQuarters, preferOfficialReportedFinancialFacts, type ReportedFinancialFact } from './forward-earnings-bridge';
-import { brokerResearchFactor, industryRotationActionabilityFactor, officialResearchEvidenceFactor, overseasPriceActionabilityFactor, relationshipFactor } from './candidate-factor-builder';
+import { brokerEvidenceRowsFromSnapshots, brokerResearchFactor, buildPeerRelationshipEvidence, industryRotationActionabilityFactor, officialResearchEvidenceFactor, overseasPriceActionabilityFactor, relationshipFactor } from './candidate-factor-builder';
 import { refreshCandidateOfficialFinancials } from './candidate-official-financials';
-import { hasConsecutiveFiscalQuarters, normalizedCycleYearsObserved } from './candidate-financial-normalization';
+import { hasConsecutiveFiscalQuarters } from './candidate-financial-normalization';
+import { buildCandidateValuationInputs } from './candidate-valuation-inputs.ts';
+import { fixedRunnerPrincipal } from './opportunity-v3/internal.ts';
 import { sanitizePublicSourceUrl } from './public-source-url.ts';
+import {
+  candidateResearchItemStatus,
+  isCandidateFinancialFactKey,
+  isPromotionEligibleEvidence,
+  type CandidateFactKind,
+} from './evidence-valuation-contract';
 
 type Row = Record<string, unknown>;
 
 export const CANDIDATE_RESEARCH_MODEL_VERSION = 'candidate-research-v4.0.0';
 export const CANDIDATE_STAGE_MODEL_VERSION = 'candidate-stage-v4.0.0';
 export const CANDIDATE_VALUATION_MODEL_VERSION = 'valuation-v4.0.0';
+export const ENTERPRISE_MULTIPLE_MODEL_VERSION = 'enterprise-multiple-v1';
 export const SHADOW_POLICY_VERSION = 'shadow-policy-v3';
 export const SHADOW_REQUIRED_SESSIONS = 30 as const;
 
@@ -93,18 +104,18 @@ function officialAuthoritySourceUrl(value: unknown): string {
 
 function researchFactSourceProvenance(sourceUrl: string) {
   if (sourceUrl.includes('api.finmindtrade.com')) {
-    return { provider: 'finmind_fallback', authorityTier: 'finmind_fallback', official: false };
+    return { provider: 'finmind', upstreamProvider: 'finmind', authorityTier: 'finmind_mirror', official: false, validationStatus: 'pending' };
   }
   if (/https:\/\/(?:mops|mopsov)\.twse\.com\.tw\//u.test(sourceUrl)) {
-    return { provider: 'mops', authorityTier: 'official_primary', official: true };
+    return { provider: 'mops', upstreamProvider: 'mops', authorityTier: 'official_primary', official: true, validationStatus: 'validated' };
   }
   if (/https:\/\/(?:www\.|openapi\.)?twse\.com\.tw\//u.test(sourceUrl)) {
-    return { provider: 'twse', authorityTier: 'official_primary', official: true };
+    return { provider: 'twse', upstreamProvider: 'twse', authorityTier: 'official_primary', official: true, validationStatus: 'validated' };
   }
   if (/https:\/\/(?:www\.)?tpex\.org\.tw\//u.test(sourceUrl)) {
-    return { provider: 'tpex', authorityTier: 'official_primary', official: true };
+    return { provider: 'tpex', upstreamProvider: 'tpex', authorityTier: 'official_primary', official: true, validationStatus: 'validated' };
   }
-  return { provider: 'unknown', authorityTier: 'unverified', official: false };
+  return { provider: 'unknown', upstreamProvider: null, authorityTier: 'unverified', official: false, validationStatus: 'pending' };
 }
 
 function hasOfficialCommercializationEvidence(events: Row[], cutoff: string) {
@@ -258,6 +269,8 @@ async function executeCandidateResearchCycle(options: {
     partialCount: 0, technicalSessionDate: null, blocked: false, terminalReason: null, marketEvidence: null,
     manifestId: null, manifestHash: null, items: [],
   };
+  const researchRunnerPrincipal = fixedRunnerPrincipal();
+  if (!researchRunnerPrincipal) throw new Error('candidate_research_runner_principal_missing');
   const supabase = getSupabaseServerClient();
   const runId = lifecycle?.runId || randomUUID();
   const [authorityRows, persistedSessionRows] = await Promise.all([
@@ -568,7 +581,7 @@ async function executeCandidateResearchCycle(options: {
         (officialValuationHistory.get(stock.symbol) || []).map((point) => [point.date, point]),
       ).values()].sort((left, right) => left.date.localeCompare(right.date));
       const values = officialMultiples.at(-1) || null;
-      const [institutional, eps, fetchedRevenue, priorRevenueRes, historicalFundamentalsRes, priorStageRes, priorFlowsRes, cachedBarsRes, authorityBarsRes, authorityFactsRes, peerRelationshipsRes, priorTechnicalRes, trackingRes, brokerConsensusRes, officialCompanyEventsRes] = await Promise.all([
+      const [institutional, eps, fetchedRevenue, priorRevenueRes, historicalFundamentalsRes, priorStageRes, priorFlowsRes, cachedBarsRes, authorityBarsRes, authorityFactsRes, peerRelationshipsRes, priorTechnicalRes, trackingRes, brokerConsensusRes, officialCompanyEventsRes, enterpriseMultiplesRes] = await Promise.all([
         fetchTwStockInstitutional(stock.symbol).catch(() => null),
         fetchTwStockEpsTtm(stock.symbol).catch(() => null),
         fetchTwStockRevenue(stock.symbol, 16).catch(() => null),
@@ -578,7 +591,7 @@ async function executeCandidateResearchCycle(options: {
         supabase.from('stock_signals').select('as_of,volume,chip_metrics').eq('stock_id', stock.id).order('as_of', { ascending: false }).limit(30),
         supabase.from('official_price_history').select('session_date,open,high,low,close,volume,source_url,provenance,available_at').eq('stock_id', stock.id).lte('available_at', evaluatedAt).order('session_date', { ascending: true }).limit(1320),
         supabase.from('opportunity_price_observations_v3').select('session_id,raw_open,raw_high,raw_low,raw_close,volume,source_ref,source_timestamp,collected_at,recorded_at').eq('stock_id', stock.id).lte('recorded_at', authorityCutoff).order('session_id', { ascending: true }).order('recorded_at', { ascending: true }).limit(4000),
-        supabase.from('opportunity_financial_facts_v3').select('fact_id,fact_key,period_start,period_end,duration_kind,value,unit,provider,authority_tier,filing_published_at,source_timestamp,collected_at,recorded_at,source_ref,estimate_kind,estimate_horizon,filing_restatement_id').eq('stock_id', stock.id)
+        supabase.from('opportunity_financial_facts_v3').select('fact_id,fact_key,period_start,period_end,duration_kind,value,unit,provider,authority_tier,validation_status,schema_valid,unit_valid,point_in_time_valid,consistency_valid,upstream_provider,filing_published_at,source_timestamp,collected_at,recorded_at,source_ref,estimate_kind,estimate_horizon,filing_restatement_id').eq('stock_id', stock.id)
           .lte('filing_published_at', authorityCutoff).lte('source_timestamp', authorityCutoff)
           .lte('collected_at', authorityCutoff).lte('recorded_at', authorityCutoff)
           .order('period_end', { ascending: false }).order('recorded_at', { ascending: false }).limit(2000),
@@ -588,6 +601,10 @@ async function executeCandidateResearchCycle(options: {
         supabase.from('broker_consensus_snapshots').select('as_of_date,source_count,freshness_status,metadata').eq('stock_id', stock.id).lte('as_of_date', latestMarketSession).order('as_of_date', { ascending: false }).limit(1),
         supabase.from('company_events').select('id,event_type,source_url,event_timestamp,created_at,extracted_signals').eq('stock_id', stock.id)
           .lte('event_timestamp', authorityCutoff).lte('created_at', authorityCutoff).order('event_timestamp', { ascending: false }).limit(100),
+        supabase.from('candidate_enterprise_multiple_snapshots_v6')
+          .select('session_date,ev_ebitda_multiple,ev_sales_multiple,calculation_input_hash,available_at')
+          .eq('stock_id', stock.id).eq('model_version', ENTERPRISE_MULTIPLE_MODEL_VERSION)
+          .lte('available_at', authorityCutoff).order('session_date', { ascending: true }).order('recorded_at', { ascending: true }).limit(240),
       ]);
       // A price feed may expose a newer provisional date before that date is in
       // the official completed-session ledger. It is not eligible for technical
@@ -625,7 +642,7 @@ async function executeCandidateResearchCycle(options: {
         .filter((bar): bar is TwMarketDailyBar => bar.time <= latestMarketSession)).slice(-1320);
       if (!bars || bars.length === 0) throw new Error('official_price_history_missing');
       const priceCoverageTerminal = technicalHistoryCoverageTerminalReason(bars.length);
-      const queryError = priorRevenueRes.error || historicalFundamentalsRes.error || priorStageRes.error || priorFlowsRes.error || cachedBarsRes.error || authorityBarsRes.error || authorityFactsRes.error || peerRelationshipsRes.error || priorTechnicalRes.error || trackingRes.error || brokerConsensusRes.error || officialCompanyEventsRes.error;
+      const queryError = priorRevenueRes.error || historicalFundamentalsRes.error || priorStageRes.error || priorFlowsRes.error || cachedBarsRes.error || authorityBarsRes.error || authorityFactsRes.error || peerRelationshipsRes.error || priorTechnicalRes.error || trackingRes.error || brokerConsensusRes.error || officialCompanyEventsRes.error || enterpriseMultiplesRes.error;
       if (queryError) throw new Error(queryError.message);
       const peerRelationships = ((peerRelationshipsRes.data as Row[]) || []).filter((relationship) => {
         const relationshipType = String(relationship.relationship_type || '');
@@ -634,46 +651,49 @@ async function executeCandidateResearchCycle(options: {
           && productSubcategory.length > 0;
       });
       const peerSnapshotsRes = peerRelationships.length ? await supabase.from('peer_market_snapshots')
-        .select('peer_relationship_id,price_return_5d,price_return_20d,fundamental_signal,availability_status,catchdown_block,as_of,available_at')
+        .select('peer_relationship_id,price_return_5d,price_return_20d,fundamental_signal,availability_status,catchdown_block,as_of,available_at,provenance')
         .in('peer_relationship_id', peerRelationships.map((row) => String(row.id))).lte('available_at', evaluatedAt)
         .order('available_at', { ascending: false }).limit(1000) : { data: [], error: null };
       if (peerSnapshotsRes.error) throw new Error(peerSnapshotsRes.error.message);
-      const latestPeerSnapshot = new Map<string, Row>();
-      for (const row of (peerSnapshotsRes.data as Row[]) || []) {
-        const relationshipId = String(row.peer_relationship_id || '');
-        if (relationshipId && !latestPeerSnapshot.has(relationshipId)) latestPeerSnapshot.set(relationshipId, row);
-      }
-      const availablePeerSignals = peerRelationships.flatMap((relationship) => {
-        const snapshot = latestPeerSnapshot.get(String(relationship.id || ''));
-        if (!snapshot || snapshot.availability_status !== 'available') return [];
-        const fundamental = numberOrNull(snapshot.fundamental_signal);
-        const return20d = numberOrNull(snapshot.price_return_20d);
-        const raw = fundamental ?? (return20d == null ? null : Math.max(-1, Math.min(1, return20d / 20)));
-        return raw == null ? [] : [{ relationship, snapshot, score: raw }];
-      });
-      const fundamentalRelationshipSignals = availablePeerSignals.flatMap(({ relationship, snapshot }) => {
-        const score = numberOrNull(snapshot.fundamental_signal);
-        return score == null ? [] : [{
-        market: String(relationship.peer_market || ''), score,
-        weight: numberOrNull(relationship.relationship_weight) ?? 0.5,
-        asOf: snapshot.as_of ? String(snapshot.as_of) : null,
-        evidenceKind: 'fundamental' as const,
-      }];
-      });
-      const priceRelationshipSignals = availablePeerSignals.flatMap(({ relationship, snapshot }) => {
-        const return20d = numberOrNull(snapshot.price_return_20d);
-        return return20d == null ? [] : [{
-          market: String(relationship.peer_market || ''), score: Math.max(-1, Math.min(1, return20d / 20)),
-          weight: numberOrNull(relationship.relationship_weight) ?? 0.5,
-          asOf: snapshot.as_of ? String(snapshot.as_of) : null,
-          evidenceKind: 'price' as const,
-        }];
-      });
-      const industryRotationFactor = relationshipFactor(fundamentalRelationshipSignals, 'domestic_rotation');
-      const overseasPeerFactor = relationshipFactor(fundamentalRelationshipSignals, 'overseas_peer');
-      const industryRotationPriceFactor = industryRotationActionabilityFactor(priceRelationshipSignals);
-      const overseasPriceFactor = overseasPriceActionabilityFactor(priceRelationshipSignals);
-      const peerCatchdownBlock = availablePeerSignals.some(({ relationship, snapshot }) => relationship.directionality === 'negative_catchdown' && snapshot.catchdown_block === true);
+      const peerEvidence = buildPeerRelationshipEvidence(
+        peerRelationships.flatMap((relationship) => {
+          const relationshipType = String(relationship.relationship_type || '');
+          const directionality = String(relationship.directionality || '');
+          if (!['customer', 'supplier', 'competitor', 'product_peer'].includes(relationshipType)
+            || !['positive_lead', 'negative_catchdown', 'mixed', 'context_only'].includes(directionality)) return [];
+          return [{
+            id: String(relationship.id || ''), peerMarket: String(relationship.peer_market || ''),
+            relationshipType: relationshipType as 'customer' | 'supplier' | 'competitor' | 'product_peer',
+            productSubcategory: relationship.product_subcategory == null ? null : String(relationship.product_subcategory),
+            directionality: directionality as 'positive_lead' | 'negative_catchdown' | 'mixed' | 'context_only',
+            weight: numberOrNull(relationship.relationship_weight),
+          }];
+        }),
+        ((peerSnapshotsRes.data as Row[]) || []).flatMap((snapshot) => {
+          const asOf = snapshot.as_of ? String(snapshot.as_of) : null;
+          const availableAt = snapshot.available_at ? String(snapshot.available_at) : null;
+          const provenance = rowRelation(snapshot.provenance) || {};
+          const priceLicenseStatus = String(provenance.price_license_status || provenance.priceLicenseStatus || 'unknown');
+          const availabilityStatus = String(snapshot.availability_status || 'unknown');
+          const asOfMs = asOf == null ? Number.NaN : Date.parse(asOf);
+          const evaluationMs = Date.parse(evaluatedAt);
+          if (!asOf || !availableAt || !Number.isFinite(asOfMs) || !Number.isFinite(evaluationMs) || asOfMs > evaluationMs
+            || !['available', 'stale', 'unknown', 'blocked_license'].includes(availabilityStatus)
+            || !['licensed', 'permitted', 'unknown', 'blocked'].includes(priceLicenseStatus)) return [];
+          return [{
+            peerRelationshipId: String(snapshot.peer_relationship_id || ''), asOf, availableAt,
+            availabilityStatus: availabilityStatus as 'available' | 'stale' | 'unknown' | 'blocked_license',
+            fundamentalSignal: numberOrNull(snapshot.fundamental_signal), priceReturn20d: numberOrNull(snapshot.price_return_20d),
+            catchdownBlock: snapshot.catchdown_block === true,
+            priceLicenseStatus: priceLicenseStatus as 'licensed' | 'permitted' | 'unknown' | 'blocked',
+          }];
+        }),
+      );
+      const industryRotationFactor = relationshipFactor(peerEvidence.fundamentalRows, 'domestic_rotation');
+      const overseasPeerFactor = relationshipFactor(peerEvidence.fundamentalRows, 'overseas_peer');
+      const industryRotationPriceFactor = industryRotationActionabilityFactor(peerEvidence.priceRows);
+      const overseasPriceFactor = overseasPriceActionabilityFactor(peerEvidence.priceRows);
+      const peerCatchdownBlock = peerEvidence.peerCatchdownBlock;
       const latestBar = bars.at(-1)!;
       const priceEvidence = twMarketDailyEvidencePolicy(bars, latestMarketSession);
       const latestPriceProvider = priceEvidence.provider;
@@ -805,8 +825,17 @@ async function executeCandidateResearchCycle(options: {
         const durationKind = String(fact.duration_kind || '');
         const validFlow = durationKind === 'quarterly' && typeof periodStart === 'string' && /^\d{4}-\d{2}-\d{2}$/u.test(periodStart);
         const validInstant = ['instant', 'quarter_end'].includes(durationKind) && periodStart === null;
-        if (String(fact.estimate_kind || '') !== 'reported' || value == null || !factId || !factKey || !/^\d{4}-\d{2}-\d{2}$/u.test(periodEnd) || (!validFlow && !validInstant)) return [];
-        return [{ factId, factKey, periodStart, periodEnd, durationKind: durationKind as 'quarterly' | 'instant' | 'quarter_end', value, unit: fact.unit ? String(fact.unit) : null, sourceRef: String(fact.source_ref || ''), filingRestatementId: fact.filing_restatement_id ? String(fact.filing_restatement_id) : null, filingPublishedAt: fact.filing_published_at ? String(fact.filing_published_at) : null, provider: fact.provider ? String(fact.provider) : null, authorityTier: fact.authority_tier ? String(fact.authority_tier) : null }];
+        if (String(fact.estimate_kind || '') !== 'reported' || value == null || !factId || !isCandidateFinancialFactKey(factKey) || !/^\d{4}-\d{2}-\d{2}$/u.test(periodEnd) || (!validFlow && !validInstant)) return [];
+        if (!isPromotionEligibleEvidence({
+          provider: fact.provider ? String(fact.provider) : null,
+          authorityTier: fact.authority_tier ? String(fact.authority_tier) : null,
+          validationStatus: fact.validation_status ? String(fact.validation_status) : null,
+          schemaValid: fact.schema_valid === true,
+          unitValid: fact.unit_valid === true,
+          pointInTimeValid: fact.point_in_time_valid === true,
+          consistencyValid: fact.consistency_valid === true,
+        })) return [];
+        return [{ factId, factKey, periodStart, periodEnd, durationKind: durationKind as 'quarterly' | 'instant' | 'quarter_end', value, unit: fact.unit ? String(fact.unit) : null, sourceRef: String(fact.source_ref || ''), filingRestatementId: fact.filing_restatement_id ? String(fact.filing_restatement_id) : null, filingPublishedAt: fact.filing_published_at ? String(fact.filing_published_at) : null, provider: fact.provider ? String(fact.provider) : null, authorityTier: fact.authority_tier ? String(fact.authority_tier) : null, validationStatus: fact.validation_status ? String(fact.validation_status) : null }];
       });
       const reportedFacts = preferOfficialReportedFinancialFacts(reportedFactRows);
       const officialReportedFacts = reportedFacts.filter((fact) => fact.authorityTier === 'official_filing');
@@ -816,15 +845,11 @@ async function executeCandidateResearchCycle(options: {
       const commonIncomeQuarterHistory = discreteReportedQuarters(reportedFacts, 'quarterly_net_income_attributable_to_common');
       const revenueQuarterHistory = discreteReportedQuarters(reportedFacts, 'quarterly_revenue');
       const grossProfitQuarterHistory = discreteReportedQuarters(reportedFacts, 'quarterly_gross_profit');
-      const dilutedEpsQuarterHistory = discreteReportedQuarters(reportedFacts, 'quarterly_diluted_eps');
       const dilutedShareQuarterHistory = discreteReportedQuarters(reportedFacts, 'diluted_weighted_average_shares');
-      const basicEpsQuarterHistory = discreteReportedQuarters(reportedFacts, 'quarterly_basic_eps');
       const latestBookValueFact = latestReportedInstant(reportedFacts, 'book_value_per_share');
-      const latestCommonEquityFact = latestReportedInstant(reportedFacts, 'total_equity');
       const latestCashFact = latestReportedInstant(reportedFacts, 'cash_and_equivalents');
       const latestDebtFact = latestReportedInstant(reportedFacts, 'total_debt');
       const latestBookValuePerShare = latestBookValueFact?.value ?? null;
-      const latestCommonEquity = latestCommonEquityFact?.value ?? null;
       const latestCashAndEquivalents = latestCashFact?.value ?? null;
       const latestTotalDebt = latestDebtFact?.value ?? null;
       const hasMaterialOfficialCounterEvidence = officialOperatingQuarterHistory.slice(-2).length === 2
@@ -839,25 +864,33 @@ async function executeCandidateResearchCycle(options: {
       const sectorText = String(stock.sector || '').toLowerCase();
       const financialBusiness = /(?:金融|銀行|保險|證券|金控|bank|financial|insurance|securities)/iu.test(sectorText);
       const cyclicalBusiness = /(?:水泥|塑化|化工|鋼鐵|航運|記憶體|面板|造紙|原物料|cement|steel|shipping|chemical|memory|panel)/iu.test(sectorText);
-      // Prefer diluted EPS when it supplies the complete window, but do not
-      // discard a full basic-EPS history merely because a newer filing exposes
-      // one isolated diluted observation.
-      const cycleEpsHistory = (dilutedEpsQuarterHistory.length >= 20 || dilutedEpsQuarterHistory.length >= basicEpsQuarterHistory.length
-        ? dilutedEpsQuarterHistory
-        : basicEpsQuarterHistory).slice(-20);
-      const cycleYearsObserved = normalizedCycleYearsObserved(cycleEpsHistory);
-      const normalizedEps = cycleEpsHistory.length >= 20
-        ? cycleEpsHistory.reduce((sum, row) => sum + row.value, 0) / (cycleEpsHistory.length / 4)
+      const valuationInputs = buildCandidateValuationInputs(reportedFacts);
+      // Basic EPS is never relabelled as diluted EPS. The normalized route is
+      // available only after twenty consecutive reconciled diluted quarters.
+      const normalizedEps = valuationInputs.normalizedCycle.status === 'complete'
+        ? valuationInputs.normalizedCycle.normalizedAnnualEps
         : null;
+      const cycleYearsObserved = valuationInputs.normalizedCycle.status === 'complete'
+        ? valuationInputs.normalizedCycle.cycleYearsObserved
+        : 0;
+      const financialPbRoe = valuationInputs.financialPbRoe;
+      const displayBookValuePerShare = financialBusiness && financialPbRoe.status === 'complete'
+        ? financialPbRoe.bookValuePerShare
+        : latestBookValuePerShare;
       const ebitdaHistory = discreteReportedQuarters(reportedFacts, 'quarterly_ebitda');
       const latestEbitdaQuarters = ebitdaHistory.slice(-4);
       const ttmEbitda = hasConsecutiveFiscalQuarters(latestEbitdaQuarters, 4)
         ? latestEbitdaQuarters.reduce((sum, row) => sum + row.value, 0)
         : null;
-      const historicalEvEbitdaMultiples = reportedFacts.filter((fact) => fact.factKey === 'ev_ebitda_multiple'
-        && ['instant', 'quarter_end'].includes(fact.durationKind || '') && fact.periodStart === null && fact.value > 0).map((fact) => fact.value);
-      const historicalEvSalesMultiples = reportedFacts.filter((fact) => fact.factKey === 'ev_sales_multiple'
-        && ['instant', 'quarter_end'].includes(fact.durationKind || '') && fact.periodStart === null && fact.value > 0).map((fact) => fact.value);
+      const persistedEnterpriseMultiples = [...new Map(((enterpriseMultiplesRes.data as Row[]) || []).map((row) => [String(row.session_date), row])).values()];
+      const historicalEvEbitdaMultiples = [...persistedEnterpriseMultiples.flatMap((row) => {
+        const value = numberOrNull(row.ev_ebitda_multiple); return value != null && value > 0 ? [value] : [];
+      }), ...reportedFacts.filter((fact) => fact.factKey === 'ev_ebitda_multiple'
+        && ['instant', 'quarter_end'].includes(fact.durationKind || '') && fact.periodStart === null && fact.value > 0).map((fact) => fact.value)];
+      const historicalEvSalesMultiples = [...persistedEnterpriseMultiples.flatMap((row) => {
+        const value = numberOrNull(row.ev_sales_multiple); return value != null && value > 0 ? [value] : [];
+      }), ...reportedFacts.filter((fact) => fact.factKey === 'ev_sales_multiple'
+        && ['instant', 'quarter_end'].includes(fact.durationKind || '') && fact.periodStart === null && fact.value > 0).map((fact) => fact.value)];
       const latestRevenueQuarters = revenueQuarterHistory.slice(-4);
       const latestGrossProfitQuarters = grossProfitQuarterHistory.slice(-4);
       const turnaroundRevenueGrossProfitBridgeComplete = hasConsecutiveFiscalQuarters(latestRevenueQuarters, 4)
@@ -891,7 +924,31 @@ async function executeCandidateResearchCycle(options: {
       const enterpriseValue = currentDilutedShares != null && latestCashAndEquivalents != null && latestTotalDebt != null
         ? technical.close * currentDilutedShares + latestTotalDebt - latestCashAndEquivalents
         : null;
-      const annualizedCommonIncome = latestFourCommonIncome.length === 4 ? latestFourCommonIncome.reduce((sum, row) => sum + row.value, 0) : null;
+      const enterpriseFactIds = [...new Set([
+        ...latestEbitdaQuarters.flatMap((row) => row.factIds),
+        ...latestRevenueQuarters.flatMap((row) => row.factIds),
+        ...turnaroundShareHistory.slice(-4).flatMap((row) => row.factIds),
+        ...(latestCashFact?.factIds || []), ...(latestDebtFact?.factIds || []),
+      ])].sort();
+      const currentEvEbitda = enterpriseValue != null && enterpriseValue > 0 && ttmEbitda != null && ttmEbitda > 0
+        ? enterpriseValue / ttmEbitda : null;
+      const currentEvSales = enterpriseValue != null && enterpriseValue > 0 && ttmRevenue != null && ttmRevenue > 0
+        ? enterpriseValue / ttmRevenue : null;
+      if ((currentEvEbitda != null && currentEvEbitda < 1000) || (currentEvSales != null && currentEvSales < 1000)) {
+        const enterpriseWrite = await supabase.rpc('append_candidate_enterprise_multiple_snapshot_v6', {
+          p_stock_id: stock.id, p_session_date: technical.sessionDate, p_model_version: ENTERPRISE_MULTIPLE_MODEL_VERSION,
+          p_payload: {
+            current_price: technical.close, diluted_shares: currentDilutedShares, total_debt: latestTotalDebt,
+            cash_and_equivalents: latestCashAndEquivalents, ttm_ebitda: ttmEbitda, ttm_revenue: ttmRevenue,
+          },
+          p_fact_ids: enterpriseFactIds, p_available_at: evaluatedAt, p_caller_principal: researchRunnerPrincipal,
+        });
+        if (enterpriseWrite.error) throw new Error(`enterprise_multiple_snapshot_write_failed:${enterpriseWrite.error.message}`);
+        if (!persistedEnterpriseMultiples.some((row) => String(row.session_date) === technical.sessionDate)) {
+          if (currentEvEbitda != null && currentEvEbitda < 1000) historicalEvEbitdaMultiples.push(currentEvEbitda);
+          if (currentEvSales != null && currentEvSales < 1000) historicalEvSalesMultiples.push(currentEvSales);
+        }
+      }
       const valuationPolicy = candidateValuationPolicy({
         symbol: stock.symbol,
         multipleMonthsCovered,
@@ -924,11 +981,11 @@ async function executeCandidateResearchCycle(options: {
           evEbitdaMultiplesObserved: historicalEvEbitdaMultiples.length,
         },
         financial: financialBusiness ? {
-          commonEquity: latestCommonEquity,
-          bookValuePerShare: latestBookValuePerShare,
-          roe: annualizedCommonIncome != null && latestCommonEquity ? annualizedCommonIncome / latestCommonEquity : null,
+          commonEquity: financialPbRoe.status === 'complete' ? financialPbRoe.averageCommonEquity : null,
+          bookValuePerShare: financialPbRoe.status === 'complete' ? financialPbRoe.bookValuePerShare : null,
+          roe: financialPbRoe.status === 'complete' ? financialPbRoe.roe : null,
           pbMultiple: historicalPbRatios.length ? [...historicalPbRatios].sort((a, b) => a - b)[Math.floor(historicalPbRatios.length / 2)] : null,
-          roePeriodsObserved: commonIncomeQuarterHistory.length,
+          roePeriodsObserved: financialPbRoe.status === 'complete' ? financialPbRoe.roePeriodsObserved : 0,
         } : undefined,
       });
       const rawValuation = valuationPolicy.basis === 'turnaround_conditional' && ttmRevenue != null && latestCashAndEquivalents != null && latestTotalDebt != null && currentDilutedShares != null
@@ -971,7 +1028,14 @@ async function executeCandidateResearchCycle(options: {
                 totalDebt: latestTotalDebt,
                 dilutedShares: currentDilutedShares,
               })
-          : ['pb_reference', 'financial_pb_roe'].includes(valuationPolicy.basis) && latestBookValuePerShare != null
+          : valuationPolicy.basis === 'financial_pb_roe' && financialPbRoe.status === 'complete'
+            ? buildFinancialPbRoeScenario({
+                price: technical.close,
+                bookValuePerShare: financialPbRoe.bookValuePerShare,
+                roe: financialPbRoe.roe,
+                historicalPbRatios,
+              })
+          : valuationPolicy.basis === 'pb_reference' && latestBookValuePerShare != null
             ? buildDriverMultipleScenario({
                 price: technical.close,
                 bearDriver: latestBookValuePerShare * 0.9,
@@ -988,7 +1052,9 @@ async function executeCandidateResearchCycle(options: {
       const includeInstant = (point: { factIds: string[] } | null) => point?.factIds.forEach((factId) => valuationFinancialFactIds.add(factId));
       if (valuation) {
         if (valuationPolicy.basis === 'forward_12m' && earningsBridge.status === 'complete') earningsBridge.factIds.forEach((factId) => valuationFinancialFactIds.add(factId));
-        if (valuationPolicy.basis === 'normalized_cycle') includePoints(cycleEpsHistory);
+        if (valuationPolicy.basis === 'normalized_cycle' && valuationInputs.normalizedCycle.status === 'complete') {
+          valuationInputs.normalizedCycle.factIds.forEach((factId) => valuationFinancialFactIds.add(factId));
+        }
         if (valuationPolicy.basis === 'ev_ebitda') {
           includePoints(latestEbitdaQuarters);
           includePoints(turnaroundShareHistory.slice(-4));
@@ -1005,9 +1071,7 @@ async function executeCandidateResearchCycle(options: {
         }
         if (valuationPolicy.basis === 'pb_reference') includeInstant(latestBookValueFact);
         if (valuationPolicy.basis === 'financial_pb_roe') {
-          includeInstant(latestBookValueFact);
-          includeInstant(latestCommonEquityFact);
-          includePoints(latestFourCommonIncome);
+          if (financialPbRoe.status === 'complete') financialPbRoe.factIds.forEach((factId) => valuationFinancialFactIds.add(factId));
         }
       }
       const finMindFinancialFactIds = new Set(reportedFacts
@@ -1016,17 +1080,15 @@ async function executeCandidateResearchCycle(options: {
       const usesFinMindFinancialEvidence = [...valuationFinancialFactIds].some((factId) => finMindFinancialFactIds.has(factId));
       const usesFinMindEarningsBridgeEvidence = earningsBridge.status === 'complete'
         && earningsBridge.factIds.some((factId) => finMindFinancialFactIds.has(factId));
-      const researchFinancialFactIds = new Set<string>(earningsBridge.status === 'complete' ? earningsBridge.factIds : []);
-      [cycleEpsHistory, latestEbitdaQuarters, turnaroundShareHistory, latestRevenueQuarters, latestGrossProfitQuarters, latestFourCommonIncome]
-        .forEach((points) => points.forEach((point) => point.factIds.forEach((factId) => researchFinancialFactIds.add(factId))));
-      [latestBookValueFact, latestCommonEquityFact, latestCashFact, latestDebtFact]
-        .forEach((point) => point?.factIds.forEach((factId) => researchFinancialFactIds.add(factId)));
-      const usesFinMindFinancialDecisionInput = [...researchFinancialFactIds].some((factId) => finMindFinancialFactIds.has(factId));
       const publishedPrimaryMethod = valuation
         ? valuationPolicy.basis === 'ttm_multiple_reference'
           ? valuation.primaryMethod === 'forward_pb' ? 'ttm_pb_reference' : 'ttm_pe_reference'
           : valuationPolicy.basis === 'normalized_cycle' && valuation.primaryMethod === 'forward_pe'
             ? 'normalized_pe'
+          : valuationPolicy.basis === 'financial_pb_roe'
+            ? 'financial_pb_roe'
+          : valuationPolicy.basis === 'pb_reference'
+            ? 'pb_reference'
           : valuation.primaryMethod
         : null;
       if (valuation) {
@@ -1060,11 +1122,12 @@ async function executeCandidateResearchCycle(options: {
       const priorHardGates = rowRelation(previous?.hard_gate_results) || {};
       const baseUpsidePct = valuation?.baseUpsidePct ?? null;
       const financialCompleteness = [eps?.epsTtm, values?.peRatio, values?.pbRatio, priorRevenue?.monthly_revenue, revenueYoy].filter((item) => item != null).length / 5 * 100;
+      const valuesUseUnvalidatedMirror = values?.authorityTier === 'finmind_fallback'
+        && !isValidatedFinMindValuationSource(values.sourceUrl, values.parserVersion);
       const usesFallbackEvidence = !priceEvidence.promotionEligible
         || institutional?.authorityTier === 'finmind_fallback'
-        || values?.authorityTier === 'finmind_fallback'
+        || valuesUseUnvalidatedMirror
         || fetchedRevenue?.authorityTier === 'finmind_fallback'
-        || usesFinMindFinancialDecisionInput
         || String(priorRevenue?.source_url || '').includes('api.finmindtrade.com');
       const fallbackEvidenceBlockers = usesFallbackEvidence ? ['candidate_evidence_uses_finmind_fallback'] : [];
       const officialEvidenceCount = [
@@ -1083,17 +1146,18 @@ async function executeCandidateResearchCycle(options: {
         hasCounterEvidenceReview: officialReportedFacts.length > 0,
         asOf: latestMarketSession,
       });
-      const brokerFactor = brokerResearchFactor(((brokerConsensusRes.data as Row[]) || []).map((row) => {
+      const brokerFactor = brokerResearchFactor(brokerEvidenceRowsFromSnapshots(((brokerConsensusRes.data as Row[]) || []).map((row) => {
         const metadata = rowRelation(row.metadata) || {};
-        const permittedModes = stringArray(metadata.permitted_source_modes);
         return {
-          sourceCount: Number(row.source_count || 0),
-          freshness: String(row.freshness_status || 'missing'),
-          asOf: row.as_of_date ? String(row.as_of_date) : null,
-          lawful: permittedModes.length > 0
-            && permittedModes.every((mode) => ['manual_pdf', 'manual_csv', 'imported_pdf'].includes(mode)),
+          sourceCount: numberOrNull(row.source_count),
+          freshnessStatus: row.freshness_status ? String(row.freshness_status) : null,
+          asOfDate: row.as_of_date ? String(row.as_of_date) : null,
+          permittedSourceModes: stringArray(metadata.permitted_source_modes),
+          licenseStatus: ['licensed', 'permitted', 'unknown', 'blocked'].includes(String(metadata.license_status || ''))
+            ? String(metadata.license_status) as 'licensed' | 'permitted' | 'unknown' | 'blocked'
+            : 'unknown' as const,
         };
-      }));
+      })));
       const baseInput = {
         discovery: {
           independentSources: Math.min(100, concentration.publisherCount / 3 * 100), platformDiversity: Math.min(100, concentration.platformCount / 3 * 100),
@@ -1179,8 +1243,10 @@ async function executeCandidateResearchCycle(options: {
         || 'https://mops.twse.com.tw/mops/web/t21sc04_ifrs';
       const priceFactProvenance = {
         provider: priceEvidence.provider,
+        upstreamProvider: priceEvidence.provider,
         authorityTier: priceEvidence.authorityTier,
         official: priceEvidence.authorityTier === 'official_primary',
+        validationStatus: priceEvidence.promotionEligible ? 'validated' : 'pending',
         integrityStatus: priceEvidence.integrityStatus,
         freshnessStatus: priceEvidence.freshnessStatus,
         promotionEligible: priceEvidence.promotionEligible,
@@ -1188,11 +1254,11 @@ async function executeCandidateResearchCycle(options: {
       };
       const priceDerivedFactKeys = new Set(['close', 'ma20', 'ma60', 'ma120', 'ma240', 'rsi14', 'volume_ratio_20_median']);
       const officialFacts = [
-        { fact_key: 'close', value: technical.close, unit: 'TWD', source_url: priceSourceUrl, fact_kind: priceEvidence.authorityTier === 'official_primary' ? 'official_numeric' : 'fallback_numeric', derivation: {} },
-        { fact_key: 'eps_ttm', value: eps?.epsTtm ?? null, unit: 'TWD/share', source_url: 'https://mops.twse.com.tw/', fact_kind: 'official_numeric', derivation: {} },
-        { fact_key: 'pe_ratio', value: values?.peRatio ?? null, unit: 'multiple', source_url: valuationSourceUrl, fact_kind: values?.authorityTier === 'finmind_fallback' ? 'fallback_numeric' : 'official_numeric', derivation: {} },
-        { fact_key: 'pb_ratio', value: values?.pbRatio ?? null, unit: 'multiple', source_url: valuationSourceUrl, fact_kind: values?.authorityTier === 'finmind_fallback' ? 'fallback_numeric' : 'official_numeric', derivation: {} },
-        { fact_key: 'monthly_revenue', value: numberOrNull(priorRevenue?.monthly_revenue), unit: 'TWD', source_url: monthlyRevenueSourceUrl, fact_kind: monthlyRevenueSourceUrl.includes('api.finmindtrade.com') ? 'fallback_numeric' : 'official_numeric', derivation: {} },
+        { fact_key: 'close', value: priceEvidence.promotionEligible ? technical.close : null, unit: 'TWD', source_url: priceSourceUrl, fact_kind: 'reported_numeric' as CandidateFactKind, derivation: {} },
+        { fact_key: 'eps_ttm', value: eps?.epsTtm ?? null, unit: 'TWD/share', source_url: 'https://mops.twse.com.tw/', fact_kind: 'reported_numeric' as CandidateFactKind, derivation: {} },
+        { fact_key: 'pe_ratio', value: values && !valuesUseUnvalidatedMirror ? values.peRatio : null, unit: 'multiple', source_url: valuationSourceUrl, fact_kind: 'reported_numeric' as CandidateFactKind, derivation: {} },
+        { fact_key: 'pb_ratio', value: values && !valuesUseUnvalidatedMirror ? values.pbRatio : null, unit: 'multiple', source_url: valuationSourceUrl, fact_kind: 'reported_numeric' as CandidateFactKind, derivation: {} },
+        { fact_key: 'monthly_revenue', value: monthlyRevenueSourceUrl.includes('api.finmindtrade.com') ? null : numberOrNull(priorRevenue?.monthly_revenue), unit: 'TWD', source_url: monthlyRevenueSourceUrl, fact_kind: 'reported_numeric' as CandidateFactKind, derivation: {} },
         { fact_key: 'forward_base_eps', value: earningsBridge.status === 'complete' ? earningsBridge.scenarios.base.dilutedEps : null, unit: 'TWD/share', source_url: usesFinMindEarningsBridgeEvidence ? 'https://api.finmindtrade.com/api/v4/data' : 'https://mops.twse.com.tw/', fact_kind: 'derived_calculation', derivation: { model_version: CANDIDATE_VALUATION_MODEL_VERSION, reported_fact_ids: earningsBridge.status === 'complete' ? earningsBridge.factIds : [], includes_finmind_mirror: usesFinMindEarningsBridgeEvidence } },
         { fact_key: 'bear_target', value: valuation?.bearTarget ?? null, unit: 'TWD', source_url: values?.sourceUrl || 'https://www.twse.com.tw/', fact_kind: 'derived_calculation', derivation: { model_version: CANDIDATE_VALUATION_MODEL_VERSION, formula: 'scenario_eps_x_historical_pe_p25' } },
         { fact_key: 'base_target', value: valuation?.baseTarget ?? null, unit: 'TWD', source_url: values?.sourceUrl || 'https://www.twse.com.tw/', fact_kind: 'derived_calculation', derivation: { model_version: CANDIDATE_VALUATION_MODEL_VERSION, formula: 'scenario_eps_x_historical_pe_p50' } },
@@ -1207,14 +1273,40 @@ async function executeCandidateResearchCycle(options: {
         { fact_key: 'gap_customer_certification_shipment', value: null, unit: null, source_url: 'https://mops.twse.com.tw/', fact_kind: 'data_gap', derivation: { checked_sources: ['MOPS_structured_facts'], missing: true } },
         { fact_key: 'gap_capacity_yield_asp_company_actions', value: null, unit: null, source_url: 'https://mops.twse.com.tw/', fact_kind: 'data_gap', derivation: { checked_sources: ['MOPS_structured_facts'], missing: true } },
         { fact_key: 'gap_industry_peer_evidence', value: null, unit: null, source_url: 'https://mops.twse.com.tw/', fact_kind: 'data_gap', derivation: { industry_factor: industryRotationFactor.status, overseas_factor: overseasPeerFactor.status, missing: industryRotationFactor.status === 'missing' && overseasPeerFactor.status === 'missing' } },
-      ].filter((fact) => fact.value != null || fact.fact_kind === 'data_gap').map((fact) => ({
-        ...fact,
-        provenance: priceDerivedFactKeys.has(fact.fact_key) ? priceFactProvenance : researchFactSourceProvenance(fact.source_url),
-      }));
-      const authorityFacts = ((authorityFactsRes.data as Row[]) || []).filter((fact) => String(fact.estimate_kind || '') === 'reported').map((fact) => ({
-        ...(String(fact.authority_tier || '') === 'finmind_mirror'
-          ? { fact_kind: 'fallback_numeric', provenance: { upstream_fact_id: String(fact.fact_id || ''), upstream_source_ref: String(fact.source_ref || ''), provider: 'finmind_fallback', authorityTier: 'finmind_fallback', official: false } }
-          : { fact_kind: 'official_numeric', provenance: { upstream_fact_id: String(fact.fact_id || ''), upstream_source_ref: String(fact.source_ref || ''), provider: 'opportunity-v3-official-authority', authorityTier: 'official_primary', official: true } }),
+      ].filter((fact) => fact.value != null || fact.fact_kind === 'data_gap').map((fact) => {
+        const provenance = priceDerivedFactKeys.has(fact.fact_key) ? priceFactProvenance : researchFactSourceProvenance(fact.source_url);
+        return {
+          ...fact,
+          provider: provenance.provider,
+          upstream_provider: provenance.upstreamProvider || provenance.provider,
+          validation_status: provenance.validationStatus,
+          schema_valid: provenance.validationStatus === 'validated',
+          unit_valid: provenance.validationStatus === 'validated',
+          point_in_time_valid: provenance.validationStatus === 'validated',
+          consistency_valid: provenance.validationStatus === 'validated',
+          provenance,
+        };
+      });
+      const authorityFacts = ((authorityFactsRes.data as Row[])
+        || []).filter((fact) => String(fact.estimate_kind || '') === 'reported'
+          && isPromotionEligibleEvidence({
+            provider: fact.provider ? String(fact.provider) : null,
+            authorityTier: fact.authority_tier ? String(fact.authority_tier) : null,
+            validationStatus: fact.validation_status ? String(fact.validation_status) : null,
+            schemaValid: fact.schema_valid === true,
+            unitValid: fact.unit_valid === true,
+            pointInTimeValid: fact.point_in_time_valid === true,
+            consistencyValid: fact.consistency_valid === true,
+          })).map((fact) => ({
+        fact_kind: 'reported_numeric' as CandidateFactKind,
+        provider: fact.provider ? String(fact.provider) : 'unknown',
+        upstream_provider: fact.upstream_provider ? String(fact.upstream_provider) : (fact.provider ? String(fact.provider) : null),
+        validation_status: fact.validation_status ? String(fact.validation_status) : 'validated',
+        schema_valid: fact.authority_tier === 'finmind_mirror' ? fact.schema_valid === true : true,
+        unit_valid: fact.authority_tier === 'finmind_mirror' ? fact.unit_valid === true : true,
+        point_in_time_valid: fact.authority_tier === 'finmind_mirror' ? fact.point_in_time_valid === true : true,
+        consistency_valid: fact.authority_tier === 'finmind_mirror' ? fact.consistency_valid === true : true,
+        provenance: { upstream_fact_id: String(fact.fact_id || ''), upstream_source_ref: String(fact.source_ref || ''), provider: fact.provider ? String(fact.provider) : 'unknown', upstreamProvider: fact.upstream_provider ? String(fact.upstream_provider) : null, authorityTier: String(fact.authority_tier || ''), validationStatus: fact.validation_status ? String(fact.validation_status) : 'validated' },
         stock_id: stock.id,
         fact_key: String(fact.fact_key || ''),
         period_end: String(fact.period_end || ''),
@@ -1282,7 +1374,7 @@ async function executeCandidateResearchCycle(options: {
           epsTtm: eps?.epsTtm ?? (earningsBridge.status === 'complete' ? earningsBridge.actual.latestEps : null),
           forwardEps: earningsBridge.status === 'complete' ? earningsBridge.scenarios.base.dilutedEps : null,
           normalizedEps,
-          bookValuePerShare: latestBookValuePerShare,
+          bookValuePerShare: displayBookValuePerShare,
           currentPe: values?.peRatio ?? null,
           currentPb: values?.pbRatio ?? null,
           fairMultiple: valuation?.baseMultiple ?? null,
@@ -1379,12 +1471,17 @@ async function executeCandidateResearchCycle(options: {
       const valuationTerminalReason = valuation ? null : valuationPolicy.reason || 'no_defensible_valuation_method_from_official_inputs';
       const researchTerminalReason = [priceCoverageTerminal, valuationTerminalReason].filter(Boolean).join(';') || null;
       const valuationStatus = valuation ? 'complete' : valuationPolicy.basis === 'no_defensible_valuation_method' ? 'no_defensible_method' : 'insufficient_official_evidence';
+      const itemStatus = candidateResearchItemStatus({
+        executionFailed: false,
+        valuationComplete: valuation != null,
+        noDefensibleMethod: valuationPolicy.basis === 'no_defensible_valuation_method',
+      });
       // An explicit, evidence-backed inability to value is a completed research
-      // terminal, not a partial run. It remains found and cannot pass valuation
-      // gates, while operational completeness and Shadow can still be measured.
+      // terminal. A missing valuation evidence set is partial, so aggregate run
+      // health cannot claim success merely because the code path executed.
       const researchReadiness = valuation ? 'valuation_ready' : 'evidence_gap';
-      Object.assign(result, { status: 'success', executionStatus: 'success', researchReadiness, stage: stage.stage, technicalSessionDate: technical.sessionDate, technicalCoverageStatus: priceCoverageTerminal ? 'insufficient_history' : 'complete', valuationStatus, valuationBasis: valuationPolicy.basis, detailRevisionId, scores: stage.scores, unmetConditions: detailCard.unmetConditions, classificationReplayHash, riskAction: risk });
-      const itemWrite = await supabase.from('candidate_research_run_items').upsert({ run_id: runId, stock_id: stock.id, symbol: stock.symbol, status: 'success', execution_status: 'success', research_readiness: researchReadiness, valuation_method: valuationPolicy.basis, narrative_kind: 'deterministic_fact', price_status: 'success', technical_status: priceCoverageTerminal ? 'insufficient_history' : 'success', fundamental_status: eps || values || priorRevenue || authorityFacts.length ? 'success' : 'missing', valuation_status: valuationStatus, classification_status: 'success', lifecycle_stage: stage.stage, terminal_reason: researchTerminalReason, technical_session_date: technical.sessionDate, metrics: result, started_at: startedAt, finished_at: new Date().toISOString() }, { onConflict: 'run_id,stock_id' });
+      Object.assign(result, { status: itemStatus, executionStatus: 'success', researchReadiness, stage: stage.stage, technicalSessionDate: technical.sessionDate, technicalCoverageStatus: priceCoverageTerminal ? 'insufficient_history' : 'complete', valuationStatus, valuationBasis: valuationPolicy.basis, detailRevisionId, scores: stage.scores, unmetConditions: detailCard.unmetConditions, classificationInput, classificationReplayHash, riskAction: risk });
+      const itemWrite = await supabase.from('candidate_research_run_items').upsert({ run_id: runId, stock_id: stock.id, symbol: stock.symbol, status: itemStatus, execution_status: 'success', research_readiness: researchReadiness, valuation_method: valuationPolicy.basis, narrative_kind: 'deterministic_fact', price_status: 'success', technical_status: priceCoverageTerminal ? 'insufficient_history' : 'success', fundamental_status: eps || values || priorRevenue || authorityFacts.length ? 'success' : 'missing', valuation_status: valuationStatus, classification_status: 'success', lifecycle_stage: stage.stage, terminal_reason: researchTerminalReason, technical_session_date: technical.sessionDate, metrics: result, started_at: startedAt, finished_at: new Date().toISOString() }, { onConflict: 'run_id,stock_id' });
       if (itemWrite.error) throw new Error(itemWrite.error.message);
       return result;
     } catch (error) {
@@ -1397,7 +1494,22 @@ async function executeCandidateResearchCycle(options: {
         await waitForResearchRetry(attempt);
         return researchStock(stock, attempt + 1);
       }
-      Object.assign(result, { status: 'failed', terminalReason: reason, technicalSessionDate: latestMarketSession, classificationReplayHash: stableHash({ stage: 'found', terminalReason: reason, failClosed: true }) });
+      const failClosedClassificationInput: CandidateStageInput = {
+        discovery: { independentSources: 0, platformDiversity: 0, discussionBurst: 0, recency: 0, sourceReliability: 0, platformCount: 0 },
+        research: { valuationMarginOfSafety: 0, financialBridge: 0, officialEvidenceAndCounterEvidence: 0, brokerEvidence: 0, industryRotation: 0, overseasPeers: 0 },
+        actionability: { movingAveragesAndRelativeStrength: 0, priceVolume: 0, institutionalFlows: 0, marketRegime: 0, industryRotation: 0, overseasPrice: 0, overheatRisk: 0 },
+        confidence: { completeness: 0, freshness: 0, traceability: 0, crossSourceConsistency: 0 },
+        valuation: { hasBearBaseBull: false, baseUpsidePct: null, rewardRiskRatio: null, hasMaterialOfficialCounterEvidence: false },
+        technical: { close: null, ma20: null, ma60: null, ma120: null, ma240: null, ma60Slope: null, volumeRatio20Median: null, atr14: null, rsi14: null },
+        marketRegime: 'unknown', peerCatchdownBlock: false, staleOrFallback: true,
+        consecutiveActionableCloses: 0, previousStage: null,
+      };
+      const failClosedStage = replayFrozenCandidateClassification(failClosedClassificationInput);
+      Object.assign(result, {
+        status: 'failed', stage: 'found', terminalReason: reason, technicalSessionDate: latestMarketSession,
+        classificationInput: failClosedClassificationInput,
+        classificationReplayHash: stableHash(failClosedStage),
+      });
       // A failed refresh must revoke any older waiting/actionable authority immediately.
       // Persist a fail-closed found snapshot for the current official session so the
       // publisher cannot accidentally reuse an older successful classification.
@@ -1571,11 +1683,11 @@ async function executeCandidateResearchCycle(options: {
   const failedCount = items.filter((item) => item.status === 'failed').length;
   const partialCount = items.filter((item) => item.status === 'partial').length;
   const failClosedWriteFailures = items.filter((item) => item.snapshotError || item.detailError).length;
-  const completedCount = items.length - failedCount;
+  const completedCount = items.filter((item) => item.status === 'success').length;
   const technicalSessionDate = items.map((item) => String(item.technicalSessionDate || '')).filter(Boolean).sort().at(-1) || null;
   const runStatus = failedCount === items.length && items.length > 0 ? 'failed' : failedCount > 0 || partialCount > 0 ? 'partial' : 'success';
   const terminalReason = failedCount > 0 ? 'per_stock_failures' : partialCount > 0 ? 'per_stock_partial_research' : null;
-  const runUpdate = await supabase.from('candidate_research_runs').update({ status: runStatus, completed_count: completedCount, failed_count: failedCount, technical_session_date: technicalSessionDate, terminal_reason: terminalReason, summary: { items, partialCount, marketEvidence, officialFinancialRefresh, officialFinancialRefreshTargets: financialRefreshTargets.map((target) => target.symbol), officialFinancialRefreshBacklog: financialRefreshBacklog.length, officialFinancialRefreshState: 'persistent_cursor_v4' }, finished_at: new Date().toISOString() }).eq('id', runId);
+  const runUpdate = await supabase.from('candidate_research_runs').update({ status: runStatus, completed_count: completedCount, failed_count: failedCount, partial_count: partialCount, technical_session_date: technicalSessionDate, terminal_reason: terminalReason, summary: { items, partialCount, marketEvidence, officialFinancialRefresh, officialFinancialRefreshTargets: financialRefreshTargets.map((target) => target.symbol), officialFinancialRefreshBacklog: financialRefreshBacklog.length, officialFinancialRefreshState: 'persistent_cursor_v4' }, finished_at: new Date().toISOString() }).eq('id', runId);
   if (runUpdate.error) throw new Error(runUpdate.error.message);
   if (failClosedWriteFailures > 0) throw new Error(`candidate_fail_closed_snapshot_failed:${failClosedWriteFailures}`);
   return {
@@ -1811,11 +1923,13 @@ export async function recordCandidateShadowObservation(input: {
   researchItems: Row[];
   stages: { found: CandidateStageCard[]; waiting: CandidateStageCard[]; actionable: CandidateStageCard[] };
   technicalSessionDate: string | null;
+  publicationPhase: 'preliminary' | 'final';
   activeSourceErrors?: string[];
 }) {
   const candidateMap = new Map<string, CandidateStageCard>();
   for (const card of [...input.stages.found, ...input.stages.waiting, ...input.stages.actionable]) candidateMap.set(card.symbol, card);
   const candidates = [...candidateMap.values()];
+  if (input.publicationPhase !== 'final') return { skipped: true, reason: 'shadow_requires_final_publication' };
   if (!input.technicalSessionDate || candidates.length === 0 || !input.manifestId || !input.manifestHash) return null;
   const taipeiToday = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' })
     .formatToParts(new Date()).reduce<Record<string, string>>((result, part) => ({ ...result, [part.type]: part.value }), {});
@@ -1829,42 +1943,53 @@ export async function recordCandidateShadowObservation(input: {
   const manifestSymbols = (Array.isArray(manifestRead.data.candidate_symbols) ? manifestRead.data.candidate_symbols : []).map(String).sort();
   const cohortKey = String(manifestRead.data.cohort_key || `${SHADOW_POLICY_VERSION}:${STAGE_RULESET_VERSION}:${CANDIDATE_RESEARCH_MODEL_VERSION}`);
   const canonicalInputHashes = rowRelation(manifestRead.data.canonical_input_hashes) || {};
-  const stageRead = await supabase.from('candidate_daily_stage_snapshots')
-    .select('lifecycle_stage,hard_gate_results,available_at,stocks(symbol)')
-    .eq('session_date', input.technicalSessionDate).eq('ruleset_version', STAGE_RULESET_VERSION).eq('model_version', CANDIDATE_STAGE_MODEL_VERSION);
-  if (stageRead.error) throw new Error(`shadow_stage_authority_read_failed:${stageRead.error.message}`);
   const terminalBySymbol = new Map(input.researchItems.filter((item) => ['success','partial','failed'].includes(String(item.status))).map((item) => [String(item.symbol), item]));
-  const authoritativeStages = ((stageRead.data as Row[]) || []).flatMap((row) => {
-    const stock = rowRelation(row.stocks);
-    const hard = rowRelation(row.hard_gate_results) || {};
-    const symbol = String(stock?.symbol || '');
-    const replayed = replayFrozenCandidateClassification(hard.classification_input);
-    const replayHash = replayed ? stableHash(replayed) : null;
-    return symbol ? [{
-      symbol,
-      stage: String(row.lifecycle_stage || 'found'),
-      replayHash,
-      replayConsistent: Boolean(replayed)
-        && replayed?.stage === String(row.lifecycle_stage || 'found')
-        && replayHash === String(hard.classification_replay_hash || ''),
-      stale: hard.stale_or_fallback === true,
-    }] : [];
+  if (!input.publicationId || !input.publicationPayloadHash) throw new Error('shadow_final_publication_receipt_missing');
+  const frozenCards = manifestSymbols.flatMap((symbol) => {
+    const terminal = terminalBySymbol.get(symbol);
+    const classificationInput = terminal?.classificationInput;
+    const expectedStage = String(terminal?.stage || '');
+    return classificationInput && expectedStage
+      ? [{ symbol, expectedStage, classificationInput: classificationInput as CandidateStageInput }]
+      : [];
   });
-  const replayInputs = buildShadowReplayInputs(manifestSymbols, authoritativeStages
-    .map((stage) => ({ symbol: stage.symbol, stage: stage.stage, replayHash: stage.replayHash })));
-  const replayBySymbol = new Map(replayInputs.map((item) => [item.symbol, item]));
-  const stageBySymbol = new Map(authoritativeStages.map((stage) => [stage.symbol, stage]));
-  const replayMissing = manifestSymbols.some((symbol) => !stageBySymbol.get(symbol)?.replayConsistent || !String(terminalBySymbol.get(symbol)?.classificationReplayHash || replayBySymbol.get(symbol)?.replayHash || ''));
-  const replayHash = createHash('sha256').update(JSON.stringify(replayInputs)).digest('hex');
+  const frozenPayload = buildFrozenShadowReplayPayload({
+    manifestId: input.manifestId,
+    manifestHash: input.manifestHash,
+    finalPublicationId: input.publicationId,
+    finalPublicationHash: input.publicationPayloadHash,
+    sessionDate: input.technicalSessionDate,
+    rulesetVersion: STAGE_RULESET_VERSION,
+    modelVersion: CANDIDATE_RESEARCH_MODEL_VERSION,
+    cards: frozenCards,
+  });
+  const persistedReplay = await persistFrozenShadowReplayPayload({
+    payload: frozenPayload,
+    manifestId: input.manifestId,
+    finalPublicationId: input.publicationId,
+  }, supabase);
+  const loadedReplay = await loadFrozenShadowReplayPayload(persistedReplay.id, supabase);
+  if (!loadedReplay) throw new Error('shadow_replay_payload_unreadable');
+  const replayedStages = loadedReplay.payload.cards.map((card) => ({
+    symbol: card.symbol,
+    expectedStage: card.expectedStage,
+    classification: replayFrozenCandidateClassification(card.classificationInput),
+    stale: card.classificationInput.staleOrFallback,
+  }));
+  const replayBySymbol = new Map(replayedStages.map((item) => [item.symbol, item]));
+  const replayMissing = manifestSymbols.some((symbol) => {
+    const replay = replayBySymbol.get(symbol);
+    return !replay?.classification || replay.classification.stage !== replay.expectedStage;
+  });
+  const replayHash = loadedReplay.payloadHash;
   // Operational completeness counts a correctly terminal partial/fail-closed
   // result as researched. It does not average investment confidence scores.
-  const completeness = round(manifestSymbols.length ? manifestSymbols.filter((symbol) => terminalBySymbol.has(symbol) && stageBySymbol.has(symbol)).length / manifestSymbols.length * 100 : 0, 2);
-  const freshness = round(manifestSymbols.length ? manifestSymbols.filter((symbol) => stageBySymbol.has(symbol) && !stageBySymbol.get(symbol)?.stale).length / manifestSymbols.length * 100 : 0, 2);
+  const completeness = round(manifestSymbols.length ? manifestSymbols.filter((symbol) => terminalBySymbol.has(symbol) && replayBySymbol.has(symbol)).length / manifestSymbols.length * 100 : 0, 2);
+  const freshness = round(manifestSymbols.length ? manifestSymbols.filter((symbol) => replayBySymbol.has(symbol) && !replayBySymbol.get(symbol)?.stale).length / manifestSymbols.length * 100 : 0, 2);
   const blockers = [
     completeness < 95 ? 'manifest_terminal_coverage_below_95' : null,
     freshness < 95 ? 'official_session_freshness_below_95' : null,
     replayMissing ? 'classification_replay_missing' : null,
-    !input.publicationId || !input.publicationPayloadHash ? 'atomic_publication_missing' : null,
     ...(input.activeSourceErrors || []).map((item) => `active_source:${item}`),
   ].filter((item): item is string => Boolean(item));
   const qualifying = blockers.length === 0;
@@ -1884,7 +2009,7 @@ export async function recordCandidateShadowObservation(input: {
   const attempt = await supabase.from('candidate_shadow_attempts').insert({
     manifest_id: input.manifestId, pipeline_run_id: input.pipelineRunId, publication_id: input.publicationId,
     cohort_key: cohortKey, canonical_input_hashes: canonicalInputHashes,
-    payload_hash: input.publicationPayloadHash, terminal_count: terminalBySymbol.size, candidate_count: manifestSymbols.length,
+    payload_hash: replayHash, terminal_count: terminalBySymbol.size, candidate_count: manifestSymbols.length,
     completeness_pct: completeness, freshness_pct: freshness, replay_hash: replayHash,
     status: conflict ? 'conflict' : qualifying ? 'qualified' : 'failed', blockers: finalBlockers,
     blocker_schema_version: 'shadow-blockers-v2', attempt_blockers: finalBlockers,
@@ -1899,7 +2024,7 @@ export async function recordCandidateShadowObservation(input: {
     active_source_errors: input.activeSourceErrors || [], canonical_input_hash: input.manifestHash, replay_hash: replayHash,
     reproducibility_status: conflict ? 'conflict' : 'matched', qualifying: qualifying && !conflict, blockers: finalBlockers,
     observed_at: observedAt, published_at: observedAt, shadow_policy_version: SHADOW_POLICY_VERSION,
-    manifest_id: input.manifestId, attempt_id: attempt.data.id, payload_hash: input.publicationPayloadHash,
+    manifest_id: input.manifestId, attempt_id: attempt.data.id, payload_hash: replayHash,
     cohort_key: cohortKey, canonical_input_hashes: canonicalInputHashes,
     blocker_schema_version: 'shadow-blockers-v2', attempt_blockers: finalBlockers, current_blockers: finalBlockers,
     updated_at: observedAt,
@@ -1907,6 +2032,20 @@ export async function recordCandidateShadowObservation(input: {
   if (!existing.data) {
     const observation = await supabase.from('candidate_shadow_session_observations').insert(row);
     if (observation.error) throw new Error(`shadow_observation_write_failed:${observation.error.message}`);
+  } else if (conflict) {
+    // A conflicting replay permanently disqualifies this canonical session.
+    // Keep the original frozen identity for audit, but fail the mutable daily
+    // qualification state closed so progress cannot continue counting an
+    // earlier `qualifying=true` observation after conflict evidence exists.
+    const observation = await supabase.from('candidate_shadow_session_observations').update({
+      qualifying: false,
+      reproducibility_status: 'conflict',
+      blockers: finalBlockers,
+      current_blockers: finalBlockers,
+      attempt_id: attempt.data.id,
+      updated_at: observedAt,
+    }).eq('id', existing.data.id);
+    if (observation.error) throw new Error(`shadow_observation_conflict_write_failed:${observation.error.message}`);
   } else if (!conflict) {
     // Attempts are immutable evidence. The canonical daily row is the latest
     // non-conflicting evaluation of the same frozen manifest, so a repaired

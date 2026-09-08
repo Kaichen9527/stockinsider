@@ -1397,6 +1397,8 @@ export function RadarTabs({ radar, hydrateFromDaily = false, initialStageCounts 
     if (!hydrateFromDaily) return;
     const controller = new AbortController();
     let mounted = true;
+    // The initial RSC index has at most 40 cards.  The JSON endpoint follows
+    // the same compact contract; it never carries detail dossiers.
     void fetch('/api/radar/daily', { signal: controller.signal, headers: { accept: 'application/json' } })
       .then(async (response) => {
         if (!response.ok) throw new Error(`radar_daily_${response.status}`);

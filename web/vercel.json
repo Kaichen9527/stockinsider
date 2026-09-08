@@ -1,11 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "crons": [],
-  "redirects": [
-    {
-      "source": "/(.*)",
-      "destination": "http://5.104.83.211/$1",
-      "permanent": true
-    }
-  ]
+  "redirects": []
 }

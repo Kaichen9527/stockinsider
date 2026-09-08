@@ -64,8 +64,9 @@ limited to public `t.me/s/...` channels; InvestAnchors accepts only an authorize
 bounded structured claim and never stores member article text.
 Allowed terminal statuses are `items_found`, `successful_empty`,
 `metadata_only`, `missing_endpoint`, `auth_failed`, and `provider_failed`.
-Threads uses the Meta OAuth keyword-search endpoint; Podcast uses an approved
-RSS origin and creator-provided `podcast:transcript`; YouTube uses the official
+Threads uses the versioned `graph.threads.com/v1.0/keyword_search` OAuth endpoint;
+Podcast uses an approved RSS origin and creator-provided transcript/chapters;
+YouTube uses the official
 Data/Captions APIs. Metadata alone is never transcript evidence.
 
 Prepare and install the tracked runtime from the same reviewed commit. Before the
@@ -167,11 +168,11 @@ POST /api/internal/report-build
 
 **Connector 狀態確認**：
 
-- Threads：只使用官方 keyword-search API 與 Supabase Vault long-lived token；App Review 前保持 `blocked_auth`，沒有 cookie fallback。
+- Threads：只使用 `graph.threads.com/v1.0/keyword_search` 與 Supabase Vault long-lived token；專用 App、App Review、非本人公開貼文 canary 任一未完成時保持 `blocked_auth`，沒有 cookie fallback。完整操作見 [external-source-readiness](operations/external-source-readiness.md)。
 - Instagram 已退役，InvestAnchors 僅作人工參考；兩者都不進正式 ingestion。
 - Telegram：只抓七個核准公開頻道的 `t.me/s/{channel}` metadata、股票命中與原文連結，不讀 Bot 私人群組。
-- Podcast sync：從 `kol_profiles` (approved) 的 `metadata.youtubeUrl` 抓播放清單，或試 RSS。
-- Podcast transcribe：對 `transcript_status='pending'` 的 episode 嘗試取 YouTube 字幕；若取不到標記 `transcript_unavailable`。
+- Podcast sync：只索引核准的 creator RSS；Publisher 提供的 Podcast Namespace transcript／chapters 或另有紀錄的權利，才可令 `content_analyzable=true`。
+- Podcast transcribe：音訊下載與自動轉錄已停用；RSS enclosure 只保留參照，不複製音訊。
 
 **失敗檢查**：
 

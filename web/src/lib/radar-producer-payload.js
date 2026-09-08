@@ -112,6 +112,27 @@ function compactThemeHypotheses(value) {
   ]));
 }
 
+function compactStageCard(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return value;
+  const card = value;
+  const sources = Array.isArray(card.sources) ? card.sources.slice(0, 4).map((source) => selectFields(source, [
+    'platform', 'sourceName', 'publisherName', 'author', 'sourceUrl', 'stance', 'mentionedAt',
+  ])) : [];
+  return {
+    symbol: card.symbol, chineseName: compactText(card.chineseName, 48), market: card.market,
+    lifecycleStage: card.lifecycleStage, latestMentionAt: card.latestMentionAt, mentionCount: card.mentionCount,
+    rawMentionCount: card.rawMentionCount, effectiveMentionCount: card.effectiveMentionCount,
+    publisherCount: card.publisherCount, positivePublisherCount: card.positivePublisherCount,
+    negativePublisherCount: card.negativePublisherCount, generalPublisherCount: card.generalPublisherCount,
+    platformCount: card.platformCount, dominantPlatformShare: card.dominantPlatformShare, sources,
+    scores: card.scores, valuation: card.valuation, technical: card.technical,
+    consecutiveCloses: card.consecutiveCloses, classificationReplayHash: card.classificationReplayHash,
+    unmetConditions: compactScalarArray(card.unmetConditions, 8), promotionReasons: compactScalarArray(card.promotionReasons, 6),
+    dataAsOf: card.dataAsOf, stale: card.stale, detailRevisionId: card.detailRevisionId,
+    riskAction: card.riskAction, detailHref: card.detailHref,
+  };
+}
+
 function compactProducerRadarPayload(payload) {
   const compacted = { ...payload };
   for (const bucket of PRODUCER_CARD_BUCKETS) {
@@ -124,6 +145,11 @@ function compactProducerRadarPayload(payload) {
     compacted.sourceHealthSummary = Object.fromEntries(Object.entries(summary).map(([key, value]) => [key, compactText(value, 112)]));
   }
   if (Array.isArray(compacted.hotThemes)) compacted.hotThemes = compacted.hotThemes.map(compactTheme);
+  if (compacted.stages && typeof compacted.stages === 'object' && !Array.isArray(compacted.stages)) {
+    compacted.stages = Object.fromEntries(['found', 'waiting', 'actionable'].map((stage) => [stage,
+      Array.isArray(compacted.stages[stage]) ? compacted.stages[stage].slice(0, 40).map(compactStageCard) : [],
+    ]));
+  }
   compacted.reports = compactReports(compacted.reports);
   compacted.themeHypotheses = compactThemeHypotheses(compacted.themeHypotheses);
   if (producerRadarPayloadBytes(compacted) > RADAR_PRODUCER_MAX_BYTES) {

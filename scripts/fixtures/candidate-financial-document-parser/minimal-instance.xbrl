@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xbrli:xbrl xmlns:xbrli="http://www.xbrl.org/2003/instance" xmlns:tw="urn:stockinsider:test">
+  <xbrli:context id="instant-2026q2">
+    <xbrli:entity><xbrli:identifier scheme="https://stockinsider.local">2330</xbrli:identifier></xbrli:entity>
+    <xbrli:period><xbrli:instant>2026-06-30</xbrli:instant></xbrli:period>
+  </xbrli:context>
+  <xbrli:unit id="shares"><xbrli:measure>xbrli:shares</xbrli:measure></xbrli:unit>
+  <tw:NumberOfSharesOutstanding contextRef="instant-2026q2" unitRef="shares" decimals="0">100</tw:NumberOfSharesOutstanding>
+</xbrli:xbrl>

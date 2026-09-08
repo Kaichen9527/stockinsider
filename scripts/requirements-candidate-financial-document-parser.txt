@@ -1,0 +1,7 @@
+# Reviewed, pinned local runtime. Install into a dedicated VPS virtualenv only.
+# Arelle has an Apache-2.0 license. pdfplumber is BSD-3-Clause. Docling is
+# optional, offline-only, and must be reviewed with its model licenses before use.
+arelle-release==2.44.7
+pdfplumber==0.11.8
+# Docling is deliberately absent. A reviewer must pin an exact version only
+# after the offline advisory gate in the deployment runbook is satisfied.

@@ -98,9 +98,20 @@ test('missing eight-quarter bridge inputs fail closed', () => {
   assert.deepEqual(buildForwardEarningsBridge([fact('quarterly_revenue', 2025, 1, 100)]), {
     status: 'insufficient',
     missing: [
-      'diluted_weighted_average_shares_8_actual_quarters', 'quarterly_diluted_eps_8_actual_quarters',
+      'diluted_weighted_average_shares_8_actual_quarters', 'eight_consecutive_fiscal_quarters_required', 'quarterly_diluted_eps_8_actual_quarters',
       'quarterly_gross_profit_8_discrete_quarters', 'quarterly_net_income_attributable_to_common_8_discrete_quarters',
       'quarterly_operating_income_8_discrete_quarters', 'quarterly_revenue_8_discrete_quarters',
     ],
   });
+});
+
+test('eight non-adjacent reporting rows cannot manufacture a forward bridge', () => {
+  const facts: ReportedFinancialFact[] = [];
+  const keys = ['quarterly_revenue', 'quarterly_gross_profit', 'quarterly_operating_income', 'quarterly_net_income_attributable_to_common', 'quarterly_diluted_eps', 'diluted_weighted_average_shares'];
+  // Omit 2025 Q2 while retaining eight otherwise-valid observations.
+  const periods: Array<[number, number]> = [[2024, 1], [2024, 2], [2024, 3], [2024, 4], [2025, 1], [2025, 3], [2025, 4], [2026, 1]];
+  for (const key of keys) periods.forEach(([year, quarter], index) => facts.push(fact(key, year, quarter, key.includes('eps') ? 2 : key.includes('shares') ? 10 : (index + 1) * 100, key.includes('eps') || key.includes('shares'))));
+  const bridge = buildForwardEarningsBridge(facts);
+  assert.equal(bridge.status, 'insufficient');
+  if (bridge.status === 'insufficient') assert(bridge.missing.includes('eight_consecutive_fiscal_quarters_required'));
 });

@@ -106,8 +106,8 @@ function element(xml, name) {
   return match ? decodeXml(match[1]) : null;
 }
 
-function transcriptAttribute(xml, attribute) {
-  const match = /<podcast:transcript\b([^>]*)\/?\s*>/iu.exec(xml);
+function podcastAttribute(xml, tag, attribute) {
+  const match = new RegExp(`<podcast:${tag}\\b([^>]*)\\/?\\s*>`,'iu').exec(xml);
   if (!match) return null;
   const value = new RegExp(`${attribute}=["']([^"']+)["']`,'iu').exec(match[1]);
   return value ? decodeXml(value[1]) : null;
@@ -118,8 +118,9 @@ function parsePodcastFeed(xml, profile) {
   const items = [...xml.matchAll(/<item(?:\s[^>]*)?>([\s\S]*?)<\/item>/giu)].slice(0,20);
   return items.map((match)=>({ profileId:profile.id,title:element(match[1],'title') ?? 'Untitled episode',
     stableId:element(match[1],'guid') ?? element(match[1],'link'),publishedAt:element(match[1],'pubDate'),
-    sourceUrl:element(match[1],'link'),transcriptUrl:transcriptAttribute(match[1],'url'),
-    transcriptType:transcriptAttribute(match[1],'type') })).filter((row)=>row.stableId);
+    sourceUrl:element(match[1],'link'),transcriptUrl:podcastAttribute(match[1],'transcript','url'),
+    transcriptType:podcastAttribute(match[1],'transcript','type'),chaptersUrl:podcastAttribute(match[1],'chapters','url'),
+    chaptersType:podcastAttribute(match[1],'chapters','type') })).filter((row)=>row.stableId);
 }
 
 function documentRevision({ sourceKey, profile, stableId, title, sourceUrl, publishedAt, transcript, collectedAt,
@@ -258,12 +259,15 @@ async function podcast(profile,fetchImpl,collectedAt,resolveHost) {
     {allowedOrigins:new Set([feedOrigin]),resolveHost});
   const episodes=parsePodcastFeed(feed.bytes.toString('utf8'),profile); const documents=[];
   for(const episode of episodes.slice(0,MAX_DOCUMENTS_PER_CONNECTOR.podcast)) {
-    if(!episode.transcriptUrl) continue;
+    const artifactUrl=episode.transcriptUrl??episode.chaptersUrl;
+    const artifactType=episode.transcriptType??episode.chaptersType;
+    if(!artifactUrl) continue;
     try {
-      const transcriptUrl=allowedUrl(episode.transcriptUrl,transcriptOrigins);
+      const transcriptUrl=allowedUrl(artifactUrl,transcriptOrigins);
       const transcript=await boundedFetch(transcriptUrl,{headers:{Accept:'text/plain,text/vtt,application/x-subrip,text/html,application/json'}},fetchImpl,
         4_000_000,{allowedOrigins:transcriptOrigins,resolveHost});
-      const accepted=/^(?:text\/(?:plain|vtt|html)|application\/(?:x-subrip|json))/iu.test(transcript.contentType);
+      const accepted=/^(?:text\/(?:plain|vtt|html)|application\/(?:x-subrip|json))/iu.test(transcript.contentType)
+        &&(!artifactType||String(transcript.contentType).toLowerCase().startsWith(String(artifactType).toLowerCase()));
       documents.push(documentRevision({sourceKey:'podcast',profile,...episode,sourceUrl:approvedHttpsUrl(episode.sourceUrl),
         transcript:accepted?transcript.bytes.toString('utf8'):'transcript_content_type_rejected',collectedAt,
         terminalDisposition:accepted?'accepted':'rejected'}));
@@ -350,8 +354,8 @@ async function threads(profile,roster,credentials,fetchImpl,collectedAt) {
   // author acquisition unless a returned row also matches that author.
   if(queries.length===0)queries.push(String(profile.threads).replace(/^@/u,''));
   const responses=await Promise.all(queries.map(async(query)=>{
-    const endpoint=new URL(roster.threadsSearchEndpoint); invariant(endpoint.origin==='https://graph.threads.net','threads endpoint authority');
-    invariant(endpoint.pathname==='/keyword_search','threads keyword-search endpoint authority');
+    const endpoint=new URL(roster.threadsSearchEndpoint); invariant(endpoint.origin==='https://graph.threads.com','threads endpoint authority');
+    invariant(endpoint.pathname==='/v1.0/keyword_search','threads keyword-search endpoint authority');
     endpoint.searchParams.set('q',query);endpoint.searchParams.set('search_type','RECENT');
     endpoint.searchParams.set('fields','id,username,text,permalink,timestamp');
     endpoint.searchParams.set('access_token',credentials.threadsAccessToken);

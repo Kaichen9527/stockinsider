@@ -52,6 +52,9 @@ if [[ ${#supabase_service_role_key} -lt 32 ]]; then
   echo "SUPABASE_SERVICE_ROLE_KEY is unavailable" >&2
   exit 1
 fi
+if ! getent group stockinsider >/dev/null; then
+  groupadd --system stockinsider
+fi
 service_role_digest=$(printf '%s' "$supabase_service_role_key" | sha256sum | cut -d' ' -f1)
 unset supabase_service_role_key SUPABASE_SERVICE_ROLE_KEY
 for required in /opt/stockinsider/current/scripts/call_internal_api.mjs /opt/stockinsider/current/scripts/call_internal_api_sequence.mjs /usr/bin/node /etc/systemd/system/stockinsider-web.service; do
@@ -61,13 +64,14 @@ for required in /opt/stockinsider/current/scripts/call_internal_api.mjs /opt/sto
   fi
 done
 
-install -m 0644 "$unit_source"/*.service "$unit_source"/*.timer "$unit_target"/
+install -m 0644 "$unit_source"/*.service "$unit_source"/*.timer "$unit_source"/*.socket "$unit_target"/
 install -d -m 0755 /etc/systemd/system/stockinsider-web.service.d
-printf '[Service]\nEnvironment=OPPORTUNITY_V3_RUNNER_PRINCIPAL_ID=%s\nEnvironment=OPPORTUNITY_V3_SUPABASE_PROJECT_REF=%s\nEnvironment=OPPORTUNITY_V3_SERVICE_ROLE_KEY_SHA256=%s\n' \
+printf '[Service]\nSupplementaryGroups=stockinsider\nEnvironment=OPPORTUNITY_V3_RUNNER_PRINCIPAL_ID=%s\nEnvironment=OPPORTUNITY_V3_SUPABASE_PROJECT_REF=%s\nEnvironment=OPPORTUNITY_V3_SERVICE_ROLE_KEY_SHA256=%s\n' \
   "$runner_principal_id" "$supabase_project_ref" "$service_role_digest" \
   > /etc/systemd/system/stockinsider-web.service.d/30-opportunity-runner-principal.conf
 chmod 0644 /etc/systemd/system/stockinsider-web.service.d/30-opportunity-runner-principal.conf
 systemctl daemon-reload
+systemctl enable --now stockinsider-financial-parser.socket
 systemctl enable --now stockinsider-source-refresh.timer stockinsider-research-cycle.timer stockinsider-health-check.timer \
   stockinsider-taiwan-data-master-calendar.timer stockinsider-taiwan-data-close-preliminary.timer \
   stockinsider-taiwan-data-preliminary.timer stockinsider-taiwan-data-final-freeze.timer \

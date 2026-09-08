@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { CandidateDetailPayload } from "@/lib/candidate-detail";
 import { sanitizePublicSourceUrl } from "@/lib/public-source-url.ts";
+import CandidateHistoryChart from "@/lib/candidate-history-chart";
 
 type AnyRecord = Record<string, unknown>;
 
@@ -469,6 +470,7 @@ export default function CandidateDetailView({
           </section>
         ))}
       </div>
+      <CandidateHistoryChart detail={detail} />
       <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950">
         <h2 className="text-lg font-semibold">官方資料明細</h2>
         {detail.facts.length ? (

@@ -35,6 +35,20 @@ function quarterStart(periodEnd: string) {
 function quarterNumber(periodEnd: string) { return Math.floor((Number(periodEnd.slice(5, 7)) - 1) / 3) + 1; }
 function closeEnough(left: number, right: number) { return Math.abs(left - right) <= Math.max(0.0001, Math.abs(left) * 0.01, Math.abs(right) * 0.01); }
 
+/** A bridge needs eight *adjacent* fiscal quarters.  Counting eight rows is
+ * insufficient: a missing Q2 otherwise turns two annual periods into a
+ * deceptively plausible TTM. */
+export function hasConsecutiveQuarterEnds(points: Array<{ periodEnd: string }>, count: number): boolean {
+  if (points.length !== count) return false;
+  const ordinal = (periodEnd: string) => {
+    const match = periodEnd.match(/^(\d{4})-(03|06|09|12)-\d{2}$/u);
+    return match ? Number(match[1]) * 4 + ['03', '06', '09', '12'].indexOf(match[2]) : null;
+  };
+  const values = points.map((point) => ordinal(point.periodEnd));
+  return !values.some((value) => value == null)
+    && values.every((value, index) => index === 0 || value === values[index - 1]! + 1);
+}
+
 /** Decumulates only annual-to-date flows. Quarter-context facts are already
  * discrete; periodStart decides this, never an upstream duration label. */
 function diagnoseDiscreteQuarters(facts: ReportedFinancialFact[], factKey: string): SeriesDiagnosis {
@@ -134,7 +148,9 @@ export function buildForwardEarningsBridge(facts: ReportedFinancialFact[]) {
   const shares = reportedQuarterValues(facts, 'diluted_weighted_average_shares');
   const disclosedEps = reportedQuarterValues(facts, 'quarterly_diluted_eps');
   const requiredPeriods = series.quarterly_revenue.points.slice(-8).map((row) => row.periodEnd);
+  const contiguousWindow = hasConsecutiveQuarterEnds(series.quarterly_revenue.points.slice(-8), 8);
   const missing = [
+    ...(contiguousWindow ? [] : ['eight_consecutive_fiscal_quarters_required']),
     ...flowKeys.filter((key) => requiredPeriods.length < 8 || requiredPeriods.some((period) => !series[key].points.some((row) => row.periodEnd === period))).map((key) => `${key}_8_discrete_quarters`),
     ...(requiredPeriods.length < 8 || requiredPeriods.some((period) => !shares.points.some((row) => row.periodEnd === period)) ? ['diluted_weighted_average_shares_8_actual_quarters'] : []),
     ...(requiredPeriods.length < 8 || requiredPeriods.some((period) => !disclosedEps.points.some((row) => row.periodEnd === period)) ? ['quarterly_diluted_eps_8_actual_quarters'] : []),

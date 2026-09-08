@@ -141,11 +141,11 @@ export default async function Home() {
     waiting: radar.stages.waiting.length,
     actionable: radar.stages.actionable.length,
   } : undefined;
-  // Keep the SSR/RSC response small. The browser replaces this preview with
-  // the complete immutable daily snapshot immediately after hydration.
+  // Radar is an index.  Keep the first response bounded; detail pages load the
+  // article and evidence independently rather than shipping them with cards.
   const homeRadar = radar.stages ? {
     ...radar,
-    stages: { ...radar.stages, found: radar.stages.found.slice(0, 12) },
+    stages: { ...radar.stages, found: radar.stages.found.slice(0, 40), waiting: radar.stages.waiting.slice(0, 40), actionable: radar.stages.actionable.slice(0, 40) },
   } : radar;
   const symbolNameMap = new Map<string, string>();
   const revisionBoundSourceLed = ['legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0','legacy-radar-v3.20.0'].includes(radar.sourceLedCorrectness?.schema ?? '');

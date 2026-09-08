@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { brokerResearchFactor, evidenceGrade, industryRotationActionabilityFactor, officialResearchEvidenceFactor, overseasPriceActionabilityFactor, relationshipFactor } from './candidate-factor-builder.ts';
+import { brokerEvidenceRowsFromSnapshots, brokerResearchFactor, buildPeerRelationshipEvidence, evidenceGrade, industryRotationActionabilityFactor, officialResearchEvidenceFactor, overseasPriceActionabilityFactor, relationshipFactor } from './candidate-factor-builder.ts';
 import { classifyCandidateStage } from './stage-classifier.ts';
 
 test('official evidence is not capped at fifty and becomes complete only with all named evidence', () => {
@@ -59,4 +59,26 @@ test('builder evidence reaches the classifier without a hand-authored score fixt
   });
   assert.equal(result.stage, 'actionable');
   assert.equal(result.scores.research, 90, 'one relationship per fundamental factor is explicitly 50% evidence coverage');
+});
+
+test('licensed broker imports connect to the factor while unknown licenses stay out', () => {
+  const rows = brokerEvidenceRowsFromSnapshots([
+    { sourceCount: 2, freshnessStatus: 'fresh', asOfDate: '2026-09-05', permittedSourceModes: ['manual_pdf'] },
+    { sourceCount: 3, freshnessStatus: 'fresh', asOfDate: '2026-09-06', licenseStatus: 'unknown' },
+  ]);
+  assert.equal(brokerResearchFactor(rows).score, 75);
+  assert.equal(rows[1].lawful, false);
+});
+
+test('peer builder respects product type and relationship direction, while unknown price rights cannot score or block', () => {
+  const relationship = { id: 'dram-mu', peerMarket: 'US', relationshipType: 'product_peer' as const, productSubcategory: 'DRAM', directionality: 'inverse' as const, weight: 1 };
+  const unknown = buildPeerRelationshipEvidence([relationship], [{ peerRelationshipId: 'dram-mu', asOf: '2026-09-06', availableAt: '2026-09-06T13:30:00Z', availabilityStatus: 'available', fundamentalSignal: 0.6, priceReturn20d: -12, catchdownBlock: true, priceLicenseStatus: 'unknown' }]);
+  assert.equal(unknown.fundamentalRows[0].score, -0.6);
+  assert.equal(unknown.priceRows.length, 0);
+  assert.equal(unknown.peerCatchdownBlock, false);
+  assert(unknown.missing.includes('missing:licensed_peer_price:dram-mu'));
+
+  const catchdown = buildPeerRelationshipEvidence([{ ...relationship, directionality: 'negative_catchdown' }], [{ peerRelationshipId: 'dram-mu', asOf: '2026-09-06', availableAt: '2026-09-06T13:30:00Z', availabilityStatus: 'available', fundamentalSignal: 0.2, priceReturn20d: -12, catchdownBlock: true, priceLicenseStatus: 'licensed' }]);
+  assert.equal(catchdown.priceRows.length, 1);
+  assert.equal(catchdown.peerCatchdownBlock, true);
 });

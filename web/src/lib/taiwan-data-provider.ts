@@ -360,7 +360,9 @@ export async function acquireTaiwanDataset(input: TaiwanProviderInput, options: 
       return { schema: 'taiwan-data-provider-result-v1', dataset: input.dataset, symbol: input.symbol || null, exchange: input.exchange, phase: input.phase, terminal: official.terminal, actionEligible: false, selectedProvider: officialProvider, selectedAuthorityTier: 'official_primary', canonical: official.terminal === 'complete' ? { schema: 'taiwan-data-canonical-v1', expectedSessionDate: input.sessionDate || new Date().toISOString().slice(0, 10), records: canonicalized.records } : null, attempts };
     }
   }
-  const token = options.finMindToken ?? process.env.FINMIND_API_TOKEN ?? '';
+  // The pure provider boundary never reads process env. Production callers
+  // pass a service-only Vault token; tests may inject a fixture token.
+  const token = options.finMindToken ?? '';
   const fallbackUrl = finMindTaiwanDataUrl(input);
   if (!token) {
     attempts.push(terminalAttempt({ provider: 'finmind', authorityTier: 'finmind_fallback', terminal: 'not_configured', sourceUrl: fallbackUrl, httpStatus: null, responseSha256: null, responseBytes: 0, apiUsage: null, normalizedPayload: null, detail: 'finmind_api_token_missing' }, now));
