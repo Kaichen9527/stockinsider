@@ -28,6 +28,7 @@ export const RESEARCH_FUNNEL_V4_MIGRATIONS = Object.freeze([
   'migrations/20260907_candidate_dossier_outbox_v5.sql',
   'migrations/20260907_shadow_replay_payload_v5.sql',
   'migrations/20260908_01_financial_failure_rpc_hotfix_v6.sql',
+  'migrations/20260908_threads_oauth_lifecycle_v7.sql',
 ]);
 
 function migrationPlan() {
@@ -102,7 +103,10 @@ async function apply(plan, sourceCommit) {
       to_regprocedure('public.complete_candidate_financial_document_receipt_parser_v7(uuid,text,uuid,jsonb,jsonb,jsonb,jsonb,timestamptz)') IS NOT NULL AS document_parser_completion,
       to_regclass('public.candidate_enterprise_multiple_snapshots_v6') IS NOT NULL AS enterprise_multiple_history,
       to_regclass('public.candidate_dossier_outbox_v5') IS NOT NULL AS dossier_outbox,
-      to_regclass('public.candidate_shadow_replay_payloads') IS NOT NULL AS shadow_replay_payloads`);
+      to_regclass('public.candidate_shadow_replay_payloads') IS NOT NULL AS shadow_replay_payloads,
+      to_regclass('public.threads_data_deletion_requests') IS NOT NULL AS threads_deletion_requests,
+      to_regprocedure('public.refresh_threads_source_secret_v7(text,text,text,timestamptz,timestamptz)') IS NOT NULL AS threads_refresh_v7,
+      to_regprocedure('public.revoke_threads_source_credential_v7(text,text,text,text)') IS NOT NULL AS threads_revocation_v7`);
     if (!Object.values(verification.rows[0] || {}).every(Boolean)) throw new Error('research_funnel_v4_verification_failed');
     return verification.rows[0];
   } finally {

@@ -11,7 +11,14 @@ test('Vercel stays zero-cron while retaining only the HTTPS Threads and policy s
   assert.deepEqual(vercel.crons, []);
   assert.deepEqual(vercel.redirects, []);
   assert.match(proxy, /return NextResponse\.redirect\(destination, 308\)/u);
-  for (const path of ['/api/auth/threads/callback', '/api/internal/threads-oauth-start', '/privacy', '/data-deletion']) {
+  for (const path of [
+    '/api/auth/threads/callback',
+    '/api/auth/threads/data-deletion',
+    '/api/auth/threads/deauthorize',
+    '/api/internal/threads-oauth-start',
+    '/privacy',
+    '/data-deletion',
+  ]) {
     assert.ok(proxy.includes(`'${path}'`));
   }
 });

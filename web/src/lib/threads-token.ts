@@ -1,13 +1,15 @@
 import { createHash } from 'crypto';
 import { getSupabaseServerClient } from './supabase-server';
-import { assertUsableThreadsToken, shouldRefreshThreadsToken, threadsTokenExpiryWarning } from './threads-token-policy';
+import { assertUsableThreadsToken, buildThreadsTokenRegistryMetadata, shouldRefreshThreadsToken } from './threads-token-policy';
 import {
   THREADS_GRAPH_VERSION,
   THREADS_LONG_TOKEN_URL,
+  THREADS_ME_URL,
   THREADS_OAUTH_TOKEN_URL,
   THREADS_REFRESH_TOKEN_URL,
   threadsRedirectUri,
 } from './threads-api';
+import { hashThreadsUserId } from './threads-signed-request';
 
 const DEFAULT_TOKEN_TTL_MS = 60 * 24 * 60 * 60 * 1000;
 
@@ -16,6 +18,7 @@ type CredentialMetadata = {
   expires_at?: string;
   token_hash?: string;
   mode?: string;
+  owner_user_id_hash?: string;
 };
 
 export type ThreadsTokenState = {
@@ -23,6 +26,7 @@ export type ThreadsTokenState = {
   lastRefreshedAt: string | null;
   expiresAt: string | null;
   tokenHash: string;
+  ownerUserIdHash: string;
   refreshed: boolean;
 };
 
@@ -63,18 +67,38 @@ async function readCredentialMetadata(): Promise<CredentialMetadata> {
 export async function assertThreadsTokenAvailable(): Promise<void> {
   const [token, metadata] = await Promise.all([readVaultToken(), readCredentialMetadata()]);
   const expiresAt = validIso(metadata.expires_at);
+  if (!/^[0-9a-f]{64}$/u.test(String(metadata.owner_user_id_hash || ''))) {
+    throw new Error('threads_token_owner_missing');
+  }
   assertUsableThreadsToken({ token, expiresAt });
 }
 
-async function persistRefreshedToken(token: string, refreshedAt: string, expiresAt: string) {
+async function persistRefreshedToken(token: string, refreshedAt: string, expiresAt: string, ownerUserIdHash: string) {
+  if (!/^[0-9a-f]{64}$/u.test(ownerUserIdHash)) throw new Error('threads_token_owner_missing');
   const supabase = getSupabaseServerClient();
-  const { error } = await supabase.rpc('refresh_threads_source_secret', {
+  const { error } = await supabase.rpc('refresh_threads_source_secret_v7', {
+    p_owner_user_id_hash: ownerUserIdHash,
     p_secret: token,
     p_token_hash: tokenHash(token),
     p_refreshed_at: refreshedAt,
     p_expires_at: expiresAt,
   });
   if (error) throw new Error(`threads_vault_refresh_failed:${error.message}`);
+}
+
+async function readTokenOwnerHash(token: string): Promise<string> {
+  const endpoint = new URL(THREADS_ME_URL);
+  endpoint.searchParams.set('fields', 'id');
+  endpoint.searchParams.set('access_token', token);
+  const response = await fetch(endpoint, {
+    headers: { accept: 'application/json' },
+    signal: AbortSignal.timeout(15_000),
+  });
+  if (!response.ok) throw new Error(`threads_token_owner_http_${response.status}`);
+  const payload = await response.json() as { id?: unknown };
+  const userId = typeof payload.id === 'string' ? payload.id : '';
+  if (!/^[0-9]{1,32}$/u.test(userId)) throw new Error('threads_token_owner_missing');
+  return hashThreadsUserId(userId);
 }
 
 async function refreshToken(currentToken: string): Promise<{ token: string; refreshedAt: string; expiresAt: string }> {
@@ -129,9 +153,10 @@ export async function exchangeThreadsAuthorizationCodeAndPersist(code: string): 
   longEndpoint.searchParams.set('access_token', shortToken.accessToken);
   const longResponse = await fetch(longEndpoint, { headers: { accept: 'application/json' }, signal: AbortSignal.timeout(15_000) });
   const longToken = await parseTokenResponse(longResponse, 'threads_long_token_exchange');
+  const ownerUserIdHash = await readTokenOwnerHash(longToken.accessToken);
   const refreshedAt = new Date().toISOString();
   const expiresAt = new Date(Date.now() + longToken.expiresIn * 1000).toISOString();
-  await persistRefreshedToken(longToken.accessToken, refreshedAt, expiresAt);
+  await persistRefreshedToken(longToken.accessToken, refreshedAt, expiresAt, ownerUserIdHash);
   return { expiresAt };
 }
 
@@ -164,31 +189,27 @@ export async function getThreadsTokenForRun(): Promise<ThreadsTokenState> {
   const [token, metadata] = await Promise.all([readVaultToken(), readCredentialMetadata()]);
   const lastRefreshedAt = validIso(metadata.last_refreshed_at);
   const expiresAt = validIso(metadata.expires_at);
+  const ownerUserIdHash = typeof metadata.owner_user_id_hash === 'string' ? metadata.owner_user_id_hash : '';
+  if (!/^[0-9a-f]{64}$/u.test(ownerUserIdHash)) throw new Error('threads_token_owner_missing');
   assertUsableThreadsToken({ token, expiresAt });
   const refreshDue = shouldRefreshThreadsToken({ lastRefreshedAt, expiresAt });
 
   if (!refreshDue) {
-    return { token, lastRefreshedAt, expiresAt, tokenHash: tokenHash(token), refreshed: false };
+    return { token, lastRefreshedAt, expiresAt, tokenHash: tokenHash(token), ownerUserIdHash, refreshed: false };
   }
 
   const refreshed = await refreshToken(token);
-  await persistRefreshedToken(refreshed.token, refreshed.refreshedAt, refreshed.expiresAt);
+  await persistRefreshedToken(refreshed.token, refreshed.refreshedAt, refreshed.expiresAt, ownerUserIdHash);
   return {
     token: refreshed.token,
     lastRefreshedAt: refreshed.refreshedAt,
     expiresAt: refreshed.expiresAt,
     tokenHash: tokenHash(refreshed.token),
+    ownerUserIdHash,
     refreshed: true,
   };
 }
 
 export function threadsTokenRegistryMetadata(state: ThreadsTokenState) {
-  return {
-    mode: 'threads_official_keyword_api',
-    last_refreshed_at: state.lastRefreshedAt,
-    expires_at: state.expiresAt,
-    token_hash: state.tokenHash,
-    token_refreshed_this_run: state.refreshed,
-    expiry_warning: threadsTokenExpiryWarning({ expiresAt: state.expiresAt }),
-  };
+  return buildThreadsTokenRegistryMetadata(state);
 }

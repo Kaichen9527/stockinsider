@@ -35,3 +35,21 @@ export function threadsTokenExpiryWarning(input: { expiresAt: string | null; now
   if (remainingMs <= 0) return 'expired';
   return remainingMs <= EXPIRY_WARNING_MS ? 'expires_within_14_days' : null;
 }
+
+export function buildThreadsTokenRegistryMetadata(state: {
+  lastRefreshedAt: string | null;
+  expiresAt: string | null;
+  tokenHash: string;
+  ownerUserIdHash: string;
+  refreshed: boolean;
+}) {
+  return {
+    mode: 'threads_official_keyword_api',
+    last_refreshed_at: state.lastRefreshedAt,
+    expires_at: state.expiresAt,
+    token_hash: state.tokenHash,
+    owner_user_id_hash: state.ownerUserIdHash,
+    token_refreshed_this_run: state.refreshed,
+    expiry_warning: threadsTokenExpiryWarning({ expiresAt: state.expiresAt }),
+  };
+}

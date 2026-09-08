@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { assertUsableThreadsToken, shouldRefreshThreadsToken, threadsTokenExpiryWarning } from './threads-token-policy.ts';
+import {
+  assertUsableThreadsToken,
+  buildThreadsTokenRegistryMetadata,
+  shouldRefreshThreadsToken,
+  threadsTokenExpiryWarning,
+} from './threads-token-policy.ts';
 
 const nowMs = Date.parse('2026-08-30T00:00:00.000Z');
 
@@ -44,4 +49,23 @@ test('Threads token validation rejects a missing or expired Vault token', () => 
   assert.doesNotThrow(
     () => assertUsableThreadsToken({ token: 'vault-token', expiresAt: '2026-09-30T00:00:00.000Z', nowMs }),
   );
+});
+
+test('Threads registry metadata preserves the token owner binding across worker runs', () => {
+  const ownerUserIdHash = 'a'.repeat(64);
+  assert.deepEqual(buildThreadsTokenRegistryMetadata({
+    lastRefreshedAt: '2026-08-01T00:00:00.000Z',
+    expiresAt: '2026-09-30T00:00:00.000Z',
+    tokenHash: 'b'.repeat(64),
+    ownerUserIdHash,
+    refreshed: false,
+  }), {
+    mode: 'threads_official_keyword_api',
+    last_refreshed_at: '2026-08-01T00:00:00.000Z',
+    expires_at: '2026-09-30T00:00:00.000Z',
+    token_hash: 'b'.repeat(64),
+    owner_user_id_hash: ownerUserIdHash,
+    token_refreshed_this_run: false,
+    expiry_warning: null,
+  });
 });
