@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { NextRequest, NextResponse } from 'next/server';
 import { getDailyRadarData, getPersistedRadarStages } from '@/lib/domain';
 import { legacyCorrectnessProjectionEnabled, loadPublishedRadarProjection,
@@ -5,9 +6,10 @@ import { legacyCorrectnessProjectionEnabled, loadPublishedRadarProjection,
 import { requireExactInternalBearer } from '@/lib/internal-auth';
 import { compactProducerRadarPayload } from '@/lib/radar-producer-payload';
 import { radarResponseHeaders } from '@/lib/radar-response-policy';
-import type { RadarDailyPayload } from '@/lib/types';
+import type { CandidateStageCard, RadarDailyPayload } from '@/lib/types';
 import { loadLatestRadarPublicSnapshot, radarPublicSnapshotsEnabled } from '@/lib/radar-public-snapshot';
 import { hasCandidateStageCards } from '@/lib/candidate-stage-contract';
+import { candidateStageCounts, isCandidateStageKey, paginateCandidateStage } from '@/lib/radar-stage-pagination';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -355,6 +357,10 @@ function compactRadarPayload(data: Record<string, unknown>) {
   return compacted;
 }
 
+function etagForResponse(payload: unknown) {
+  return `"${createHash('sha256').update(JSON.stringify(payload)).digest('hex')}"`;
+}
+
 async function withRadarStages(data: Record<string, unknown>) {
   const payload = data as unknown as RadarDailyPayload;
   if (hasCandidateStageCards(payload)) return data;
@@ -376,14 +382,35 @@ export async function GET(request: NextRequest) {
         const cacheControl = published.stale || remainingFreshMs <= 10 * 60 * 1000
           ? 'no-store, max-age=0'
           : 'public, max-age=60, stale-while-revalidate=300';
+        const requestedStage = request.nextUrl.searchParams.get('stage');
+        const requestedSnapshot = request.nextUrl.searchParams.get('snapshotPublishedAt');
+        if (requestedSnapshot && requestedSnapshot !== published.publishedAt) {
+          return NextResponse.json({
+            error: 'radar_snapshot_changed',
+            snapshotPublishedAt: published.publishedAt,
+          }, { status: 409, headers: NO_STORE });
+        }
+        const responsePayload = isCandidateStageKey(requestedStage)
+          ? paginateCandidateStage(
+              published.payload,
+              requestedStage,
+              Number(request.nextUrl.searchParams.get('offset') || 0),
+              Number(request.nextUrl.searchParams.get('limit') || 40),
+              (card) => compactCandidateStageCard(card as unknown as Record<string, unknown>) as unknown as CandidateStageCard,
+            )
+          : (() => {
+              const compact = compactRadarPayload(published.payload as unknown as Record<string, unknown>) as unknown as RadarDailyPayload;
+              return { ...compact, stageCounts: candidateStageCounts(published.payload) };
+            })();
+        const responseEtag = etagForResponse(responsePayload);
         const headers = {
           'cache-control': cacheControl,
-          etag: published.etag,
+          etag: responseEtag,
           'x-stockinsider-snapshot-published-at': published.publishedAt,
           'x-stockinsider-snapshot-stale': String(published.stale),
         };
-        if (request.headers.get('if-none-match') === published.etag) return new NextResponse(null, { status: 304, headers });
-        return NextResponse.json(published.payload, { headers });
+        if (request.headers.get('if-none-match') === responseEtag) return new NextResponse(null, { status: 304, headers });
+        return NextResponse.json(responsePayload, { headers });
       }
     }
     const compact = producerRead ? null : await loadPublishedRadarProjection('daily');

@@ -7,6 +7,7 @@ import { validatePublishedDecisionCard } from '@/lib/opportunity-v3/decision-pub
 import { displayResearchDiagnostic } from '@/lib/opportunity-v3/research-display';
 import { sourceSignalLifecycleStage, type CandidateLifecycleStage } from '@/lib/stage-classifier';
 import { hasCandidateStageCards } from '@/lib/candidate-stage-contract';
+import type { CandidateStageKey, CandidateStagePage } from '@/lib/radar-stage-pagination';
 
 type Props = {
   radar: RadarDailyPayload;
@@ -499,8 +500,50 @@ function CandidateStageCardView({ card }: { card: CandidateStageCard }) {
 }
 
 function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyPayload; stageCounts?: Props['initialStageCounts'] }) {
-  const [selected, setSelected] = useState<'found' | 'waiting' | 'actionable'>('found');
-  const stages = radar.stages!;
+  const [selected, setSelected] = useState<CandidateStageKey>('found');
+  const [stages, setStages] = useState(radar.stages!);
+  const [loadingStage, setLoadingStage] = useState<CandidateStageKey | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const totals = radar.stageCounts ?? stageCounts ?? {
+    found: stages.found.length,
+    waiting: stages.waiting.length,
+    actionable: stages.actionable.length,
+  };
+
+  useEffect(() => {
+    setStages(radar.stages!);
+    setLoadError(null);
+  }, [radar.snapshotPublishedAt]);
+
+  const loadMore = async (stage: CandidateStageKey) => {
+    if (loadingStage) return;
+    setLoadingStage(stage);
+    setLoadError(null);
+    try {
+      const parameters = new URLSearchParams({
+        stage,
+        offset: String(stages[stage].length),
+        limit: '40',
+        ...(radar.snapshotPublishedAt ? { snapshotPublishedAt: radar.snapshotPublishedAt } : {}),
+      });
+      const response = await fetch(`/api/radar/daily?${parameters.toString()}`, { headers: { accept: 'application/json' } });
+      if (response.status === 409) throw new Error('來源快照已更新，請重新整理頁面後繼續。');
+      if (!response.ok) throw new Error(`無法載入更多來源命中（${response.status}）。`);
+      const page = await response.json() as CandidateStagePage;
+      if (page.stage !== stage || page.snapshotPublishedAt !== (radar.snapshotPublishedAt ?? null)) {
+        throw new Error('來源快照版本不一致，請重新整理頁面。');
+      }
+      setStages((current) => {
+        const bySymbol = new Map(current[stage].map((card) => [card.symbol, card]));
+        for (const card of page.items) bySymbol.set(card.symbol, card);
+        return { ...current, [stage]: [...bySymbol.values()] };
+      });
+    } catch (error) {
+      setLoadError((error as Error).message);
+    } finally {
+      setLoadingStage(null);
+    }
+  };
   const closest = [...stages.waiting].sort((a, b) => b.scores.actionability - a.scores.actionability || b.scores.dataConfidence - a.scores.dataConfidence).slice(0, 5);
   const actual = stages[selected];
   const displayed = selected === 'actionable' && actual.length === 0 ? closest : actual;
@@ -510,7 +553,7 @@ function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyPayload;
       <div role="tablist" aria-label="股票三層漏斗" className="mb-6 grid gap-2 rounded-2xl border border-line bg-surface-strong p-2 sm:grid-cols-3">
         {(['found','waiting','actionable'] as const).map((stage) => (
           <button key={stage} role="tab" aria-selected={selected === stage} onClick={() => setSelected(stage)} className={`rounded-xl px-4 py-3 text-left text-sm font-semibold ${selected === stage ? 'bg-slate-950 text-white dark:bg-emerald-100 dark:text-slate-950' : 'text-slate-600 dark:text-emerald-100/65'}`}>
-            {stage === 'found' ? '全部來源命中' : stage === 'waiting' ? '等待條件' : '現在可行動'} <span className="ml-2 text-xs">{stageCounts?.[stage] ?? stages[stage].length}</span>
+            {stage === 'found' ? '全部來源命中' : stage === 'waiting' ? '等待條件' : '現在可行動'} <span className="ml-2 text-xs">{totals[stage]}</span>
           </button>
         ))}
       </div>
@@ -518,6 +561,19 @@ function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyPayload;
       <div className="grid gap-4 xl:grid-cols-2">
         {displayed.map((card) => <CandidateStageCardView key={`${selected}-${card.symbol}`} card={card} />)}
       </div>
+      {actual.length > 0 && actual.length < totals[selected] ? (
+        <div className="mt-6 flex flex-col items-center gap-2">
+          <button
+            type="button"
+            disabled={loadingStage !== null}
+            onClick={() => void loadMore(selected)}
+            className="min-h-11 rounded-full border border-line px-5 py-2 text-sm font-semibold transition hover:border-accent hover:text-accent disabled:cursor-wait disabled:opacity-60"
+          >
+            {loadingStage === selected ? '載入中…' : `載入更多（已顯示 ${actual.length}/${totals[selected]}）`}
+          </button>
+          {loadError ? <p role="alert" className="text-xs text-rose-600 dark:text-rose-300">{loadError}</p> : null}
+        </div>
+      ) : loadError ? <p role="alert" className="mt-4 text-center text-xs text-rose-600 dark:text-rose-300">{loadError}</p> : null}
       {displayed.length === 0 ? <div className="rounded-2xl border border-dashed border-line px-5 py-6 text-sm text-slate-500">{selected === 'found' ? '最近七日沒有有效股票來源命中。' : selected === 'waiting' ? <><p>目前沒有完成最低研究與估值門檻的等待標的。</p><p className="mt-2 text-xs leading-5">研究佇列會優先補齊：官方財務橋接、Bear／Base／Bull 估值、技術收盤確認、以及來源作者與發布日期。</p></> : '目前沒有通過全部硬門檻的可行動標的。'}</div> : null}
     </div>
   );

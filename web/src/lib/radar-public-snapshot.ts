@@ -3,6 +3,7 @@ import { getSupabaseServerClient } from './supabase-server';
 import { STAGE_RULESET_VERSION } from './stage-classifier';
 import { CANDIDATE_RESEARCH_MODEL_VERSION, loadCandidateShadowProgress } from './candidate-research';
 import type { CandidateShadowProgress, CandidateStageCard, RadarDailyPayload } from './types';
+import { buildCanonicalStagePlane } from './radar-stage-pagination';
 
 type Row = Record<string, unknown>;
 export type PublicRadarWindow = 'home' | 'daily' | 'hot' | 'weekly';
@@ -94,49 +95,6 @@ function compactSourceHealth(value: RadarDailyPayload['sourceHealthSummary']) {
   };
 }
 
-function compactCandidateStageCard(card: CandidateStageCard): CandidateStageCard {
-  const foundOnly = card.lifecycleStage === 'found';
-  const valuation = Object.fromEntries(Object.entries(card.valuation).filter(([key, value]) => key === 'status' || value != null)) as CandidateStageCard['valuation'];
-  const technical = Object.fromEntries(Object.entries(card.technical).filter(([key, value]) => {
-    if (value == null && !['sessionDate', 'marketRegime', 'hardGatePassed'].includes(key)) return false;
-    return !foundOnly || ['sessionDate', 'close', 'ma20', 'ma60', 'marketRegime', 'hardGatePassed'].includes(key);
-  })) as CandidateStageCard['technical'];
-  const compact = {
-    symbol: card.symbol,
-    chineseName: card.chineseName,
-    lifecycleStage: card.lifecycleStage,
-    latestMentionAt: card.latestMentionAt,
-    rawMentionCount: card.rawMentionCount,
-    effectiveMentionCount: card.effectiveMentionCount,
-    publisherCount: card.publisherCount,
-    positivePublisherCount: card.positivePublisherCount,
-    negativePublisherCount: card.negativePublisherCount,
-    generalPublisherCount: card.generalPublisherCount,
-    platformCount: card.platformCount,
-    dominantPlatformShare: card.dominantPlatformShare,
-    // `latestMentionAt` already carries the ordering timestamp used by the
-    // public card. Per-link timestamps remain in the detail revision, avoiding
-    // the same ISO string being repeated hundreds of times in the Radar JSON.
-    sources: (card.sources || []).slice(0, foundOnly ? 2 : 5).map((source) => ({
-      platform: source.platform,
-      ...(source.sourceName ? { sourceName: source.sourceName } : {}),
-      ...(source.publisherName ? { publisherName: source.publisherName } : {}),
-      ...(source.author ? { author: source.author } : {}),
-      sourceUrl: source.sourceUrl,
-      ...(source.stance ? { stance: source.stance } : {}),
-    })),
-    scores: card.scores,
-    valuation,
-    technical,
-    ...(!foundOnly ? { consecutiveCloses: { passed: card.consecutiveCloses.passed, required: 2 } } : {}),
-    unmetConditions: (card.unmetConditions || []).slice(0, foundOnly ? 4 : 8),
-    ...(card.promotionReasons?.length ? { promotionReasons: card.promotionReasons.slice(0, 5) } : {}),
-    ...(card.dataAsOf ? { dataAsOf: card.dataAsOf } : {}),
-    ...(!foundOnly && card.riskAction ? { riskAction: card.riskAction } : {}),
-  };
-  return compact as CandidateStageCard;
-}
-
 function compactTheme(theme: RadarDailyPayload['hotThemes'][number]): RadarDailyPayload['hotThemes'][number] {
   return {
     themeKey: theme.themeKey,
@@ -174,16 +132,7 @@ export function buildCompactPublicRadarPayload(
   shadowProgress: CandidateShadowProgress,
 ): RadarDailyPayload {
   const compactBucket = (items: unknown[] | undefined, limit: number) => (items || []).slice(0, limit).map(compactLegacyCard);
-  const stageCounts = {
-    found: stages.found.length,
-    waiting: stages.waiting.length,
-    actionable: stages.actionable.length,
-  };
-  const compactStages = {
-    found: stages.found.slice(0, 40).map(compactCandidateStageCard),
-    waiting: stages.waiting.slice(0, 40).map(compactCandidateStageCard),
-    actionable: stages.actionable.slice(0, 40).map(compactCandidateStageCard),
-  };
+  const { stageCounts, stages: compactStages } = buildCanonicalStagePlane(stages);
   const hasCandidateStages = compactStages.found.length + compactStages.waiting.length + compactStages.actionable.length > 0;
   return {
     ...payload,
