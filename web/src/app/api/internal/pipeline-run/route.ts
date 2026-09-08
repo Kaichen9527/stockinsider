@@ -9,8 +9,11 @@ import {
   recoverStaleProductionWriteLease,
   releaseProductionWriteLease,
 } from '@/lib/production-write-lease';
+import { requireActiveVpsWriter } from '@/lib/taiwan-data-runtime';
 
-export const maxDuration = 800;
+// Vercel only hosts the HTTPS OAuth/policy surface. Production pipeline writes
+// run on the VPS systemd scheduler, while Hobby deployments reject values >300.
+export const maxDuration = 300;
 
 // Vercel cron triggers via GET
 export async function GET(req: Request) {
@@ -21,6 +24,14 @@ export async function POST(req: Request) {
   const auth = requireInternalAuth(req);
   if (!auth.ok) {
     return NextResponse.json({ ok: false, error: auth.error }, { status: auth.status });
+  }
+  if (process.env.VERCEL === '1') {
+    return NextResponse.json({ ok: false, error: 'production_writer_runtime_forbidden' }, { status: 409 });
+  }
+
+  const writer = await requireActiveVpsWriter();
+  if (!writer.ok) {
+    return NextResponse.json({ ok: false, error: writer.error }, { status: 409 });
   }
 
   const url = new URL(req.url);
