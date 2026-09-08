@@ -23,6 +23,7 @@ test('research funnel v4 migration plan is exact, additive and dry by default', 
     'migrations/20260907_04_enterprise_multiple_history_v6.sql',
     'migrations/20260907_candidate_dossier_outbox_v5.sql',
     'migrations/20260907_shadow_replay_payload_v5.sql',
+    'migrations/20260908_01_financial_failure_rpc_hotfix_v6.sql',
   ]);
   for (const relativePath of RESEARCH_FUNNEL_V4_MIGRATIONS) {
     const sql = fs.readFileSync(path.join(root, relativePath), 'utf8');
@@ -32,7 +33,7 @@ test('research funnel v4 migration plan is exact, additive and dry by default', 
   }
   const output = JSON.parse(execFileSync(process.execPath, ['scripts/apply-research-funnel-v4-migrations.mjs'], { cwd: root, encoding: 'utf8' }));
   assert.equal(output.applied, false);
-  assert.equal(output.migrations.length, 13);
+  assert.equal(output.migrations.length, 14);
   assert.ok(output.migrations.every((entry) => /^[0-9a-f]{64}$/u.test(entry.sha256) && entry.bytes > 0));
 });
 
@@ -50,7 +51,9 @@ test('runtime tables, append-only revisions and source identity are covered by t
     'parser_locators', 'complete_candidate_financial_document_receipt_parser_v7',
     'candidate_dossier_outbox_v5', 'claim_candidate_dossier_outbox_v5',
     'candidate_shadow_replay_payloads',
+    '#variable_conflict use_column',
   ]) assert.match(sql, new RegExp(token, 'u'));
+  assert.match(sql, /FROM public[.]candidate_financial_acquisition_jobs_v4 AS job[\s\S]*job[.]status='running'/u);
   assert.match(sql, /GRANT ALL ON TABLE public[.]candidate_financial_acquisition_jobs_v4[\s\S]*TO service_role/u);
   assert.match(sql, /claim_candidate_financial_acquisition_jobs_v4/u);
   assert.match(sql, /complete_candidate_financial_acquisition_job_v4/u);

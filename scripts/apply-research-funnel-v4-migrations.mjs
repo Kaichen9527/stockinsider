@@ -27,6 +27,7 @@ export const RESEARCH_FUNNEL_V4_MIGRATIONS = Object.freeze([
   'migrations/20260907_04_enterprise_multiple_history_v6.sql',
   'migrations/20260907_candidate_dossier_outbox_v5.sql',
   'migrations/20260907_shadow_replay_payload_v5.sql',
+  'migrations/20260908_01_financial_failure_rpc_hotfix_v6.sql',
 ]);
 
 function migrationPlan() {
