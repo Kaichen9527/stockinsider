@@ -5,11 +5,13 @@ const serviceKey = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERV
 const suppliedLongToken = process.env.THREADS_LONG_LIVED_ACCESS_TOKEN || process.env.THREADS_ACCESS_TOKEN || '';
 const shortToken = process.env.THREADS_SHORT_LIVED_ACCESS_TOKEN || '';
 const appSecret = process.env.THREADS_APP_SECRET || '';
+const appId = process.env.THREADS_APP_ID || '';
 
 if (!supabaseUrl || !serviceKey) throw new Error('SUPABASE_URL and service-role key are required');
 if (!suppliedLongToken && (!shortToken || !appSecret)) {
   throw new Error('provide THREADS_LONG_LIVED_ACCESS_TOKEN or both THREADS_SHORT_LIVED_ACCESS_TOKEN and THREADS_APP_SECRET');
 }
+if (!appId) throw new Error('THREADS_APP_ID is required to bind the token owner');
 
 async function exchangeToken() {
   if (suppliedLongToken) return { accessToken: suppliedLongToken, expiresIn: 60 * 24 * 60 * 60 };
@@ -39,15 +41,25 @@ async function supabaseRequest(path, init) {
 }
 
 const { accessToken, expiresIn } = await exchangeToken();
+const ownerEndpoint = new URL('https://graph.threads.com/v1.0/me');
+ownerEndpoint.searchParams.set('fields', 'id');
+ownerEndpoint.searchParams.set('access_token', accessToken);
+const ownerResponse = await fetch(ownerEndpoint, { headers: { accept: 'application/json' } });
+if (!ownerResponse.ok) throw new Error(`Threads token owner lookup failed with HTTP ${ownerResponse.status}`);
+const ownerPayload = await ownerResponse.json();
+const ownerId = typeof ownerPayload.id === 'string' ? ownerPayload.id : '';
+if (!/^[0-9]{1,32}$/u.test(ownerId)) throw new Error('Threads token owner lookup returned no valid app-scoped ID');
 const refreshedAt = new Date().toISOString();
 const expiresAt = new Date(Date.now() + Math.max(24 * 60 * 60, expiresIn) * 1000).toISOString();
 const hash = createHash('sha256').update(accessToken).digest('hex');
+const ownerHash = createHash('sha256').update(`${appId}:${ownerId}`).digest('hex');
 
-await supabaseRequest('/rest/v1/rpc/refresh_threads_source_secret', {
+await supabaseRequest('/rest/v1/rpc/refresh_threads_source_secret_v7', {
   method: 'POST',
   body: JSON.stringify({
     p_secret: accessToken,
     p_token_hash: hash,
+    p_owner_user_id_hash: ownerHash,
     p_refreshed_at: refreshedAt,
     p_expires_at: expiresAt,
   }),

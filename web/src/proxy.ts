@@ -4,6 +4,8 @@ const REDIRECT_HOSTS = new Set(['stockinsider-three.vercel.app', 'stockinsider-t
 const CANONICAL_ORIGIN = 'http://5.104.83.211';
 const HTTPS_OPERATIONAL_PATHS = new Set([
   '/api/auth/threads/callback',
+  '/api/auth/threads/data-deletion',
+  '/api/auth/threads/deauthorize',
   '/api/internal/threads-oauth-start',
   '/privacy',
   '/data-deletion',

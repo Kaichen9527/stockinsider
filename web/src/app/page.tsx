@@ -12,6 +12,8 @@ import { isHealthySourceTerminal } from '@/lib/source-terminal-policy';
 
 export const dynamic = 'force-dynamic';
 
+const HOME_STAGE_PAGE_SIZE = 24;
+
 const connectorLabel: Record<string, string> = {
   investanchors: '定錨投筆',
   threads: 'Threads',
@@ -145,7 +147,12 @@ export default async function Home() {
   // article and evidence independently rather than shipping them with cards.
   const homeRadar = radar.stages ? {
     ...radar,
-    stages: { ...radar.stages, found: radar.stages.found.slice(0, 40), waiting: radar.stages.waiting.slice(0, 40), actionable: radar.stages.actionable.slice(0, 40) },
+    stages: {
+      ...radar.stages,
+      found: radar.stages.found.slice(0, HOME_STAGE_PAGE_SIZE),
+      waiting: radar.stages.waiting.slice(0, HOME_STAGE_PAGE_SIZE),
+      actionable: radar.stages.actionable.slice(0, HOME_STAGE_PAGE_SIZE),
+    },
   } : radar;
   const symbolNameMap = new Map<string, string>();
   const revisionBoundSourceLed = ['legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0','legacy-radar-v3.20.0'].includes(radar.sourceLedCorrectness?.schema ?? '');
