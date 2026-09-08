@@ -68,6 +68,7 @@ export function buildDeterministicCandidateSections(input: {
   facts?: Array<{ factId: string; factKey: string; value: number | null; periodEnd?: string | null }>;
   earningsBridge?: Record<string, unknown> | null;
   factorEvidence?: Record<string, { status?: string; score?: number; reasons?: string[] }>;
+  financialGaps?: Array<{factKey:string;periodEnd:string}>;
 }): CandidateDetailSection[] {
   const { card } = input;
   const valuation = card.valuation;
@@ -87,6 +88,12 @@ export function buildDeterministicCandidateSections(input: {
     : '尚未集齊八個離散季度的營收、毛利、營業利益、歸屬普通股淨利與稀釋 EPS，因此不建立未來四季獲利橋接。';
   const factorEntries = Object.entries(input.factorEvidence || {}).filter(([, value]) => value.status && value.status !== 'missing');
   const factorText = factorEntries.map(([key, value]) => `${key}:${value.status} ${n(value.score)}`).join('；');
+  const gapNames:Record<string,string>={quarterly_revenue:'營收',quarterly_gross_profit:'毛利',quarterly_operating_income:'營業利益',
+    quarterly_net_income_attributable_to_common:'歸屬普通股淨利',quarterly_diluted_eps:'稀釋 EPS',diluted_weighted_average_shares:'稀釋加權平均股數',
+    common_equity_attributable_to_owners:'歸屬母公司權益',common_shares_outstanding:'流通普通股股數'};
+  const gapsByField=new Map<string,string[]>();
+  for(const gap of input.financialGaps || [])gapsByField.set(gap.factKey,[...(gapsByField.get(gap.factKey)||[]),gap.periodEnd]);
+  const concreteGaps=[...gapsByField].map(([key,periods])=>`${gapNames[key]||key}：${[...new Set(periods)].sort().join('、')}`).join('；');
   const sections: CandidateDetailSection[] = [{
     key: 'viewpoint',
     title: '研究結論',
@@ -128,6 +135,7 @@ export function buildDeterministicCandidateSections(input: {
     factIds: cited('major_counter_evidence', 'close', 'ma60'),
   });
   const gapLabels = [
+    concreteGaps ? `尚缺已驗證欄位／期別（包含尚未取得及尚未驗證）：${concreteGaps}` : null,
     actual ? null : '八個可勾稽的離散季度與未來四季獲利橋接',
     input.sector ? null : '官方產業分類',
     factIdsFor('customer_certification_shipment').length ? null : '客戶／認證／出貨時程的官方文件位置',
@@ -138,7 +146,7 @@ export function buildDeterministicCandidateSections(input: {
     sections.push({
       key: 'gaps', title: '尚待確認',
       body: `下一輪研究集中補齊：${gapLabels.join('、')}。缺口在此一次列清楚，不以空白段落冒充完整文章。`,
-      factIds: [],
+      factIds: cited('gap_financial_coverage','gap_customer_certification_shipment','gap_capacity_yield_asp_company_actions'),
     });
   }
   sections.push({

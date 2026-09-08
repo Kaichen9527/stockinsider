@@ -1,7 +1,49 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { financialBridgeAcquisitionQuarters, parseCandidateMopsFacts, selectCandidateFilingPeriodFacts } from './candidate-official-financials.ts';
+import { candidateMopsDownloadUrl, fetchCandidateMopsFiling, financialBridgeAcquisitionQuarters, parseCandidateMopsFacts, selectCandidateFilingPeriodFacts } from './candidate-official-financials.ts';
 import { fetchFinMindFinancialFallback, parseFinMindFinancialFacts } from './finmind-financial-fallback.ts';
+
+test('MOPS acquisition downloads the official filing rather than attempting to parse the preview form', async () => {
+  const original=globalThis.fetch;
+  let calls=0;
+  globalThis.fetch=async (url,options)=>{
+    calls++;
+    assert.equal(String(url),'https://mopsov.twse.com.tw/server-java/FileDownLoad');
+    assert.equal(options?.method,'POST');
+    const body=new URLSearchParams(String(options?.body));
+    assert.equal(body.get('co_id'),'2330');assert.equal(body.get('report_id'),'C');assert.equal(body.get('year'),'2025');
+    return new Response(`<html><xbrli:context id="q"><xbrli:period><xbrli:startDate>2025-01-01</xbrli:startDate><xbrli:endDate>2025-06-30</xbrli:endDate></xbrli:period></xbrli:context><ix:nonNumeric name="tifrs-notes:ReviewAuditDate">114/08/10</ix:nonNumeric><ix:nonFraction name="ifrs-full:Revenue" contextRef="q" unitRef="TWD">1200</ix:nonFraction></html>`,{headers:{'content-type':'text/html'}});
+  };
+  try {
+    const result=await fetchCandidateMopsFiling({stockId:'10000000-0000-4000-8000-000000000001',symbol:'2330',exchange:'TWSE'},2025,2);
+    assert.equal(calls,1);assert.equal(result.facts.length,1);
+    assert.equal(result.sourceUrl,candidateMopsDownloadUrl('2330',2025,2));
+    assert.equal(result.facts[0].locator?.response_url,result.sourceUrl);
+  } finally {globalThis.fetch=original;}
+});
+
+test('XBRL arbitrary unit IDs resolve measures; balance values cannot silently accept USD', () => {
+  const html = `
+    <xbrli:context id="q"><xbrli:period><xbrli:startDate>2026-01-01</xbrli:startDate><xbrli:endDate>2026-06-30</xbrli:endDate></xbrli:period></xbrli:context>
+    <xbrli:context id="i"><xbrli:period><xbrli:instant>2026-06-30</xbrli:instant></xbrli:period></xbrli:context>
+    <xbrli:unit id="u1"><xbrli:measure>iso4217:TWD</xbrli:measure></xbrli:unit>
+    <xbrli:unit id="u2"><xbrli:measure>xbrli:shares</xbrli:measure></xbrli:unit>
+    <xbrli:unit id="u3"><xbrli:divide><xbrli:unitNumerator><xbrli:measure>iso4217:TWD</xbrli:measure></xbrli:unitNumerator><xbrli:unitDenominator><xbrli:measure>xbrli:shares</xbrli:measure></xbrli:unitDenominator></xbrli:divide></xbrli:unit>
+    <xbrli:unit id="TWD"><xbrli:measure>iso4217:USD</xbrli:measure></xbrli:unit>
+    <ix:nonNumeric name="tifrs-notes:ReviewAuditDate">115/08/10</ix:nonNumeric>
+    <ix:nonFraction name="ifrs-full:Revenue" contextRef="q" unitRef="u1" scale="3">1200</ix:nonFraction>
+    <ix:nonFraction name="ifrs-full:NumberOfSharesOutstanding" contextRef="i" unitRef="u2">100</ix:nonFraction>
+    <ix:nonFraction name="tifrs-notes:DilutedEarningsPerShare" contextRef="q" unitRef="u3">1.8</ix:nonFraction>
+    <ix:nonFraction name="ifrs-full:Assets" contextRef="i" unitRef="TWD">9000</ix:nonFraction>
+    <ix:nonFraction name="ifrs-full:CashAndCashEquivalents" contextRef="i" unitRef="missing">300</ix:nonFraction>`;
+  const facts = parseCandidateMopsFacts(html, {
+    stockId: '10000000-0000-4000-8000-000000000001', symbol: '2330', exchange: 'TWSE',
+    sourceUrl: 'https://mopsov.twse.com.tw/server-java/t164sb01?CO_ID=2330', collectedAt: '2026-08-11T00:00:00Z',
+  });
+  assert.deepEqual(facts.map((fact) => [fact.factKey, fact.unit, fact.value]), [
+    ['quarterly_revenue', 'TWD', 1200000], ['common_shares_outstanding', 'share', 100], ['quarterly_diluted_eps', 'TWD_per_share', 1.8],
+  ]);
+});
 
 test('candidate official MOPS history accepts only consolidated year-to-date facts with an auditable filing date', () => {
     const html = `

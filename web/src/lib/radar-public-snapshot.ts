@@ -1,7 +1,7 @@
 import { createHash } from 'crypto';
 import { getSupabaseServerClient } from './supabase-server';
 import { STAGE_RULESET_VERSION } from './stage-classifier';
-import { CANDIDATE_RESEARCH_MODEL_VERSION, loadCandidateShadowProgress } from './candidate-research';
+import { CANDIDATE_RESEARCH_MODEL_VERSION } from './candidate-research';
 import type { CandidateShadowProgress, CandidateStageCard, RadarDailyPayload } from './types';
 import { buildCanonicalStagePlane } from './radar-stage-pagination';
 
@@ -129,15 +129,17 @@ function compactTheme(theme: RadarDailyPayload['hotThemes'][number]): RadarDaily
 export function buildCompactPublicRadarPayload(
   payload: RadarDailyPayload,
   stages: { found: CandidateStageCard[]; waiting: CandidateStageCard[]; actionable: CandidateStageCard[] },
-  shadowProgress: CandidateShadowProgress,
+  shadowProgress?: CandidateShadowProgress,
 ): RadarDailyPayload {
+  // Accept the legacy argument for one release, but never publish retired counts.
+  void shadowProgress;
   const compactBucket = (items: unknown[] | undefined, limit: number) => (items || []).slice(0, limit).map(compactLegacyCard);
   const { stageCounts, stages: compactStages } = buildCanonicalStagePlane(stages);
   const hasCandidateStages = compactStages.found.length + compactStages.waiting.length + compactStages.actionable.length > 0;
   return {
     ...payload,
     schemaVersion: RADAR_PUBLIC_SCHEMA_VERSION,
-    shadowProgress,
+    shadowProgress: undefined,
     stages: compactStages,
     stageCounts,
     // Candidate stages are the canonical stock plane. Keeping the same stocks
@@ -190,8 +192,7 @@ export async function publishRadarPublicSnapshots(input: {
   datasetCompletenessPct?: number | null;
 }) {
   const supabase = getSupabaseServerClient();
-  const shadowProgress = await loadCandidateShadowProgress().catch(() => ({ observed: 0, qualifying: 0, required: 30 as const, remaining: 30, startedOn: null, latestSession: null, blockers: ['shadow_progress_unavailable'] }));
-  const compact = buildCompactPublicRadarPayload(input.payload, input.stages, shadowProgress);
+  const compact = buildCompactPublicRadarPayload(input.payload, input.stages);
   const publishedAt = new Date().toISOString();
   const phase = input.phase || 'final';
   const researchContentAsOf = [...input.stages.found, ...input.stages.waiting, ...input.stages.actionable]
@@ -279,10 +280,9 @@ export async function loadLatestRadarPublicSnapshot(window: PublicRadarWindow): 
     if ((error as Error).message === 'Missing SUPABASE URL/key for server client') return null;
     throw error;
   }
-  const [read, stateRead, currentShadowProgress] = await Promise.all([
+  const [read, stateRead] = await Promise.all([
     supabase.from('radar_public_snapshots').select('id,etag,content_as_of,published_at,payload_json').eq('window_key', window).eq('status', 'valid').order('published_at', { ascending: false }).limit(1).maybeSingle(),
     supabase.from('radar_publication_state').select('status,last_attempt_at,terminal_reason').eq('window_key', window).maybeSingle(),
-    loadCandidateShadowProgress().catch(() => null),
   ]);
   if (read.error || stateRead.error) {
     const message = read.error?.message || stateRead.error?.message || 'radar_snapshot_read_failed';
@@ -307,10 +307,7 @@ export async function loadLatestRadarPublicSnapshot(window: PublicRadarWindow): 
   const base = row.payload_json as RadarDailyPayload;
   let payload: RadarDailyPayload = {
     ...base,
-    // Shadow is written after the atomic Radar publication. Overlay only this
-    // lightweight progress view so the public counter reflects the just-finished
-    // observation without republishing research cards with a different hash.
-    ...(currentShadowProgress ? { shadowProgress: currentShadowProgress } : {}),
+    shadowProgress: undefined,
     snapshotPublishedAt: publishedAt || null,
     snapshotStale: stale,
     projectionHealth: stale
@@ -318,8 +315,7 @@ export async function loadLatestRadarPublicSnapshot(window: PublicRadarWindow): 
       : base.projectionHealth,
   };
   if (stale) payload = failClosedStalePayload(payload, failedAfterSnapshot ? String(state.terminal_reason || 'latest_publication_failed') : 'public_snapshot_stale');
-  const payloadChangedAfterPublication = Boolean(currentShadowProgress)
-    && JSON.stringify(base.shadowProgress || null) !== JSON.stringify(currentShadowProgress);
+  const payloadChangedAfterPublication = base.shadowProgress !== undefined;
   const value = { id: String(row.id), etag: stale || payloadChangedAfterPublication ? etagForPayload(payload) : String(row.etag || ''), publishedAt, contentAsOf, stale, payload };
   memory.set(window, { expiresAt: Date.now() + 60_000, value });
   return value;

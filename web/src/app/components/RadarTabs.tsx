@@ -547,7 +547,6 @@ function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyPayload;
   const closest = [...stages.waiting].sort((a, b) => b.scores.actionability - a.scores.actionability || b.scores.dataConfidence - a.scores.dataConfidence).slice(0, 5);
   const actual = stages[selected];
   const displayed = selected === 'actionable' && actual.length === 0 ? closest : actual;
-  const shadow = radar.shadowProgress;
   return (
     <div>
       <div role="tablist" aria-label="股票三層漏斗" className="mb-6 grid gap-2 rounded-2xl border border-line bg-surface-strong p-2 sm:grid-cols-3">
@@ -557,7 +556,7 @@ function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyPayload;
           </button>
         ))}
       </div>
-      {selected === 'actionable' ? <p className="mb-4 rounded-2xl border border-amber-500/25 bg-amber-500/8 px-5 py-4 text-sm text-amber-800 dark:text-amber-200">實驗訊號 · live {shadow?.qualifying ?? 0}/{shadow?.required ?? 30}（已觀察 {shadow?.observed ?? 0} 個真實交易日）。{actual.length === 0 && closest.length ? `目前未達完整硬門檻，以下顯示最接近的 ${closest.length} 檔等待標的。` : ''}</p> : null}
+      {selected === 'actionable' ? <p className="mb-4 rounded-2xl border border-amber-500/25 bg-amber-500/8 px-5 py-4 text-sm text-amber-800 dark:text-amber-200">逐檔驗證估值、資料與進場條件，並確認兩個相鄰交易日收盤。{actual.length === 0 && closest.length ? `目前未達完整硬門檻，以下顯示最接近的 ${closest.length} 檔等待標的。` : ''}</p> : null}
       <div className="grid gap-4 xl:grid-cols-2">
         {displayed.map((card) => <CandidateStageCardView key={`${selected}-${card.symbol}`} card={card} />)}
       </div>
@@ -619,7 +618,7 @@ function StocksTab({ radar, stageCounts }: { radar: RadarDailyPayload; stageCoun
   const stageSections = [
     { key: 'found' as const, eyebrow: 'ALL SOURCE HITS', title: '全部來源命中', description: '最近來源命中的股票全部保留，包含正面、負面與新來源待研究的提及；重複獨立來源會提高排序，並保留作者、原文與立場。', items: rankedResearch },
     { key: 'waiting' as const, eyebrow: 'CONDITION WATCH', title: '等待條件', description: '研究與估值已達最低門檻，但價格、技術、籌碼、大盤、資料信心或海外同業條件尚未全部通過。', items: waitingItems },
-    { key: 'actionable' as const, eyebrow: 'ACTIONABLE NOW · SHADOW', title: '現在可行動', description: '嚴格通過估值、資料、技術、籌碼、市場與同業硬門檻，且連續兩個收盤日成立；30 個交易日內仍標示為實驗訊號。', items: actionableItems },
+    { key: 'actionable' as const, eyebrow: 'ACTIONABLE NOW', title: '現在可行動', description: '嚴格通過估值、資料、技術、籌碼、市場與同業硬門檻，且連續兩個收盤日成立。', items: actionableItems },
   ];
   const selectedSection = stageSections.find((section) => section.key === selectedStage) ?? stageSections[0];
   const closestWaiting = [...waitingItems].sort((left, right) => {

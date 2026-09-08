@@ -165,6 +165,7 @@ export async function recordThreadsPublicSearchCanary(receipt: {
   selfUsernameHash: string;
   publicPostIdHash: string;
   queryHash: string;
+  tokenHash: string;
 }): Promise<void> {
   const supabase = getSupabaseServerClient();
   const metadata = await readCredentialMetadata();

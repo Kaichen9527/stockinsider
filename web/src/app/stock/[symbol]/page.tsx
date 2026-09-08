@@ -54,8 +54,13 @@ export default async function StockDetail({
   // Candidate research is an independent append-only publication plane. It is
   // readable even when no legacy decision envelope exists, so a valid found
   // stock never collapses into an empty "decision unavailable" page.
-  if (!validRequestedRevision) {
-    const candidateDetail = await loadCandidateDetail(normalizedSymbol).catch(() => null);
+  if (!validRequestedRevision && process.env.OPPORTUNITY_V3_UI_FIXTURE !== 'enabled') {
+    let candidateDetail;
+    try { candidateDetail = await loadCandidateDetail(normalizedSymbol); }
+    catch {
+      return <RevisionBoundDecisionUnavailable symbol={normalizedSymbol} revisionId="candidate"
+        reason="candidate_detail_temporarily_unavailable"/>;
+    }
     if (candidateDetail) return <CandidateDetailView detail={candidateDetail}/>;
   }
 

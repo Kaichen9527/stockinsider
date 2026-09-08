@@ -88,7 +88,7 @@ export function candidateValuationPolicy(input: {
       && positive(financial?.roe) && positive(financial?.pbMultiple) && (financial?.roePeriodsObserved || 0) >= 8 && historyReady;
     return complete
       ? { basis: 'financial_pb_roe' as const, canPublishTarget: true, reason: null }
-      : { basis: 'no_defensible_valuation_method' as const, canPublishTarget: false, reason: 'financial_equity_pb_roe_inputs_incomplete' };
+      : { basis: 'financial_pb_roe' as const, canPublishTarget: false, reason: 'financial_equity_pb_roe_inputs_incomplete' };
   }
   if (positive(normalized?.normalizedEps) && (normalized?.cycleYearsObserved || 0) >= 5 && historyReady) {
     return { basis: 'normalized_cycle' as const, canPublishTarget: true, reason: null };
@@ -98,10 +98,10 @@ export function candidateValuationPolicy(input: {
     && positive(normalized?.dilutedShares) && (normalized?.evEbitdaMultiplesObserved || 0) >= 48 && historyReady) {
     return { basis: 'ev_ebitda' as const, canPublishTarget: true, reason: null };
   }
+  if (input.next12mBridgeComplete && historyReady) return { basis: 'forward_12m' as const, canPublishTarget: true, reason: null };
   if (positive(normalized?.bookValuePerShare) && positive(normalized?.pbMultiple) && historyReady) {
     return { basis: 'pb_reference' as const, canPublishTarget: true, reason: null };
   }
-  if (input.next12mBridgeComplete && historyReady) return { basis: 'forward_12m' as const, canPublishTarget: true, reason: null };
   return {
     basis: 'ttm_multiple_reference' as const,
     canPublishTarget: false,

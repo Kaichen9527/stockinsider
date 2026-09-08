@@ -73,7 +73,7 @@ function socialSourceState(item: SocialSourceDetail) {
 
 function socialSourceSummary(item: SocialSourceDetail) {
   if (['manual_only', 'blocked_auth', 'blocked_license', 'retired'].includes(item.status)) {
-    return `${item.status} · 不納入自動排程、健康 SLA 或 Shadow`;
+    return `${item.status} · 不納入自動排程或健康 SLA`;
   }
   if (item.connector === 'ptt') {
     const articles = item.articlesFetched ?? Number(item.metadata?.articles_fetched || item.metadata?.articlesFetched || 0);

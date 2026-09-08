@@ -52,4 +52,11 @@ test('production adapter uses an isolated Unix socket instead of spawning under 
   assert.doesNotMatch(unit, /EnvironmentFile=/u);
   assert.match(socket, /SocketMode=0660/u);
   assert.match(socket, /SocketGroup=stockinsider/u);
+  assert.match(socket, /install -d -m 0750 -o root -g stockinsider \/run\/stockinsider/u);
+  assert.match(unit, /runtime\/candidate-financial-parser\/app\/candidate_financial_parser_socket[.]py/u);
+  assert.doesNotMatch(unit, /current\/scripts\//u);
+  const install = await readFile(new URL('../../../deployment/vps/prepare-financial-parser-code.sh', import.meta.url), 'utf8');
+  assert.match(install, /candidate_financial_parser_socket[.]py candidate_financial_document_parser[.]py/u);
+  assert.match(install, /install -m 0644 -o root -g root/u);
+  assert.doesNotMatch(install, /cp -r|chmod -R|usermod/u);
 });

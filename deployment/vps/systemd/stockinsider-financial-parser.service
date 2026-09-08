@@ -6,7 +6,7 @@ After=stockinsider-financial-parser.socket
 [Service]
 Type=simple
 DynamicUser=true
-ExecStart=/opt/stockinsider/runtime/candidate-financial-parser/bin/python /opt/stockinsider/current/scripts/candidate_financial_parser_socket.py
+ExecStart=/opt/stockinsider/runtime/candidate-financial-parser/bin/python /opt/stockinsider/runtime/candidate-financial-parser/app/candidate_financial_parser_socket.py
 NoNewPrivileges=true
 PrivateNetwork=true
 PrivateTmp=true

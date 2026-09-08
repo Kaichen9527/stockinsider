@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     searchEndpoint.searchParams.set('access_token', token.token);
     const result = await graphJson<{ data?: Array<{ id?: string; username?: string; permalink?: string; timestamp?: string }> }>(searchEndpoint);
     const self = me.username.replace(/^@/u, '').toLocaleLowerCase('en-US');
-    const publicPost = (result.data || []).find((row) => row.id && row.permalink
+    const publicPost = (result.data || []).find((row) => row.id && row.permalink && String(row.username || '').trim()
       && String(row.username || '').replace(/^@/u, '').toLocaleLowerCase('en-US') !== self);
     if (!publicPost?.id) throw new Error('threads_non_self_public_post_canary_failed');
     const observedAt = new Date().toISOString();
@@ -46,6 +46,7 @@ export async function POST(request: Request) {
       selfUsernameHash: hash(self),
       publicPostIdHash: hash(publicPost.id),
       queryHash: hash(query),
+      tokenHash: token.tokenHash,
     };
     await recordThreadsPublicSearchCanary(receipt);
     return NextResponse.json({

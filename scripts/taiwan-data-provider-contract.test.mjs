@@ -119,7 +119,8 @@ test('VPS timers separate the approved preliminary, final, pipeline and hourly d
   assert.match(preliminaryService, /\/api\/internal\/pipeline-run/u);
   assert.match(preliminaryService, /"limit":100/u);
   const domain = readFileSync(new URL('../web/src/lib/domain.ts', import.meta.url), 'utf8');
-  assert.match(domain, /publicationPhase: finalSemantics[.]phase/u);
+  assert.match(domain, /phase: finalSemantics[.]phase/u);
+  assert.doesNotMatch(domain, /executeStep\('shadow_observation'/u);
   assert.match(preliminaryRoute, /phase: 'preliminary'/u);
   assert.match(preliminaryRoute, /shadowObservationWritten: false/u);
   assert.match(preliminaryRoute, /resolveLatestCompletedTaiwanSession/u);
