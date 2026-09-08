@@ -1,6 +1,6 @@
 import { createHash } from 'crypto';
 import { getSupabaseServerClient } from './supabase-server';
-import { assertUsableThreadsToken, shouldRefreshThreadsToken, threadsTokenExpiryWarning } from './threads-token-policy';
+import { assertUsableThreadsToken, buildThreadsTokenRegistryMetadata, shouldRefreshThreadsToken } from './threads-token-policy';
 import {
   THREADS_GRAPH_VERSION,
   THREADS_LONG_TOKEN_URL,
@@ -26,6 +26,7 @@ export type ThreadsTokenState = {
   lastRefreshedAt: string | null;
   expiresAt: string | null;
   tokenHash: string;
+  ownerUserIdHash: string;
   refreshed: boolean;
 };
 
@@ -194,7 +195,7 @@ export async function getThreadsTokenForRun(): Promise<ThreadsTokenState> {
   const refreshDue = shouldRefreshThreadsToken({ lastRefreshedAt, expiresAt });
 
   if (!refreshDue) {
-    return { token, lastRefreshedAt, expiresAt, tokenHash: tokenHash(token), refreshed: false };
+    return { token, lastRefreshedAt, expiresAt, tokenHash: tokenHash(token), ownerUserIdHash, refreshed: false };
   }
 
   const refreshed = await refreshToken(token);
@@ -204,17 +205,11 @@ export async function getThreadsTokenForRun(): Promise<ThreadsTokenState> {
     lastRefreshedAt: refreshed.refreshedAt,
     expiresAt: refreshed.expiresAt,
     tokenHash: tokenHash(refreshed.token),
+    ownerUserIdHash,
     refreshed: true,
   };
 }
 
 export function threadsTokenRegistryMetadata(state: ThreadsTokenState) {
-  return {
-    mode: 'threads_official_keyword_api',
-    last_refreshed_at: state.lastRefreshedAt,
-    expires_at: state.expiresAt,
-    token_hash: state.tokenHash,
-    token_refreshed_this_run: state.refreshed,
-    expiry_warning: threadsTokenExpiryWarning({ expiresAt: state.expiresAt }),
-  };
+  return buildThreadsTokenRegistryMetadata(state);
 }

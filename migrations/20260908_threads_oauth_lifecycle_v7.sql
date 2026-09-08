@@ -131,8 +131,12 @@ BEGIN
     status, requested_at, completed_at, metadata
   ) VALUES (
     p_confirmation_code_hash, p_threads_user_id_hash, p_request_digest, p_request_kind,
-    'completed', v_now, v_now,
-    jsonb_build_object('credential_deleted', v_owner_matches AND v_secret_id IS NOT NULL, 'credential_owner_matched', v_owner_matches)
+    CASE WHEN v_owner_matches THEN 'completed' ELSE 'rejected' END, v_now, v_now,
+    jsonb_build_object(
+      'credential_deleted', v_owner_matches AND v_secret_id IS NOT NULL,
+      'credential_owner_matched', v_owner_matches,
+      'terminal_reason', CASE WHEN v_owner_matches THEN 'authorization_revoked' ELSE 'credential_owner_mismatch' END
+    )
   );
 
   IF v_owner_matches THEN
@@ -161,7 +165,7 @@ BEGIN
   END IF;
 
   RETURN jsonb_build_object(
-    'status','completed',
+    'status',CASE WHEN v_owner_matches THEN 'completed' ELSE 'rejected' END,
     'credential_deleted',v_owner_matches AND v_secret_id IS NOT NULL,
     'credential_owner_matched',v_owner_matches,
     'completed_at',v_now
