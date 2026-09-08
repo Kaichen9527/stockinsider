@@ -136,11 +136,11 @@ export default async function Home() {
   const radar = hasCandidateStageCards(layered.radar)
     ? layered.radar
     : { ...layered.radar, stages: radarPublicSnapshotsEnabled() ? await getPersistedRadarStages() : { found: [], waiting: [], actionable: [] } };
-  const initialStageCounts = radar.stages ? {
+  const initialStageCounts = radar.stageCounts ?? (radar.stages ? {
     found: radar.stages.found.length,
     waiting: radar.stages.waiting.length,
     actionable: radar.stages.actionable.length,
-  } : undefined;
+  } : undefined);
   // Radar is an index.  Keep the first response bounded; detail pages load the
   // article and evidence independently rather than shipping them with cards.
   const homeRadar = radar.stages ? {

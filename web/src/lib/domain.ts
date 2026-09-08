@@ -18550,6 +18550,9 @@ function compactSourceSearchConnectorStatus(row: ConnectorStatusView) {
   };
 }
 
+const sourceSearchMemoryCache = new Map<string, { expiresAt: number; value: SourceSearchPayload }>();
+const SOURCE_SEARCH_CACHE_TTL_MS = 60_000;
+
 export async function searchSourceDocuments(params?: {
   q?: string | null;
   symbol?: string | null;
@@ -18583,6 +18586,13 @@ export async function searchSourceDocuments(params?: {
   const defaultRecentFromIso = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
   const fromIso = parseDateBoundary(from, false) || defaultRecentFromIso;
   const toIso = parseDateBoundary(to, true);
+  const cacheKey = includeDiagnostics ? null : JSON.stringify({
+    q, symbol, platform, verificationStatus, themeKey, evidenceLevel, from: from || 'default-30d', to,
+    includeContentSearch, page, pageSize,
+  });
+  const cached = cacheKey ? sourceSearchMemoryCache.get(cacheKey) : null;
+  if (cached && cached.expiresAt > Date.now()) return cached.value;
+  if (cached) sourceSearchMemoryCache.delete(cacheKey as string);
 
   const supabase = getSupabaseServerClient();
   const themeRes = themeKey
@@ -18745,7 +18755,7 @@ export async function searchSourceDocuments(params?: {
   const filteredTotal = mapped.length;
   const pagedItems = needsClientSideFiltering ? mapped.slice(start, start + pageSize) : mapped;
 
-  return {
+  const result: SourceSearchPayload = {
     page,
     pageSize,
     total: needsClientSideFiltering ? filteredTotal : Number(count || 0),
@@ -18790,6 +18800,14 @@ export async function searchSourceDocuments(params?: {
       screenshotPath: row.screenshot_path ? String(row.screenshot_path) : null,
     })),
   };
+  if (cacheKey) {
+    if (sourceSearchMemoryCache.size >= 100) {
+      const oldestKey = sourceSearchMemoryCache.keys().next().value;
+      if (oldestKey) sourceSearchMemoryCache.delete(oldestKey);
+    }
+    sourceSearchMemoryCache.set(cacheKey, { expiresAt: Date.now() + SOURCE_SEARCH_CACHE_TTL_MS, value: result });
+  }
+  return result;
 }
 
 export async function getDailyDashboardData() {

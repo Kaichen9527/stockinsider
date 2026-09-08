@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { buildCompactPublicRadarPayload } from './radar-public-snapshot.ts';
-import type { CandidateStageCard, RadarDailyPayload } from './types.ts';
+import { buildCanonicalStagePlane } from './radar-stage-pagination.ts';
+import type { CandidateStageCard } from './types.ts';
 
 function stageCard(index: number): CandidateStageCard {
   return {
@@ -31,37 +31,27 @@ function stageCard(index: number): CandidateStageCard {
   };
 }
 
-test('public Radar snapshot uses stages as the canonical stock plane and stays within the response budget', () => {
+test('public Radar snapshot persists the complete canonical stock plane for paged delivery', () => {
   const cards = Array.from({ length: 131 }, (_, index) => stageCard(index));
-  const payload = {
-    asOf: '2026-09-01',
-    hotThemes: [], sourceSignals: [{ symbol: '2330' }], connectorStatus: [], reports: [], themeHypotheses: [],
-    opportunities: [{ symbol: '2330' }], scenarioUpsideCandidates: [{ symbol: '2330' }],
-    earlyWatchlist: [{ symbol: '2330' }], recentFormal7d: [{ symbol: '2330' }],
-    fallbackOpportunities90d: [{ symbol: '2330' }], hotTracking: [{ symbol: '2330' }],
-    discoveredStocks: [{ symbol: '2330' }],
-  } as unknown as RadarDailyPayload;
-  const compact = buildCompactPublicRadarPayload(payload, { found: cards, waiting: [], actionable: [] }, {
-    observed: 0, qualifying: 0, required: 30, remaining: 30, startedOn: null, latestSession: null, blockers: [],
-  });
+  const compact = buildCanonicalStagePlane({ found: cards, waiting: [], actionable: [] });
 
-  assert.equal(compact.stages?.found.length, 131);
-  assert.equal(compact.discoveredStocks.length, 0);
-  assert.equal(compact.opportunities.length, 0);
-  assert.equal(compact.sourceSignals?.length, 1, 'one-release sourceSignals compatibility remains available');
-  assert.equal('classificationReplayHash' in (compact.stages?.found[0] || {}), false);
-  assert.equal('market' in (compact.stages?.found[0] || {}), false);
-  assert.equal('mentionCount' in (compact.stages?.found[0] || {}), false);
-  assert.equal('promotionReasons' in (compact.stages?.found[0] || {}), false);
-  assert.equal('detailHref' in (compact.stages?.found[0] || {}), false);
-  assert.equal('detailRevisionId' in (compact.stages?.found[0] || {}), false);
-  assert.equal('stale' in (compact.stages?.found[0] || {}), false);
-  assert.equal('currentPrice' in (compact.stages?.found[0]?.valuation || {}), false);
-  assert.equal(compact.stages?.found[0]?.sources.length, 2);
-  assert.equal('mentionedAt' in (compact.stages?.found[0]?.sources[0] || {}), false);
-  assert.equal('ma120' in (compact.stages?.found[0]?.technical || {}), false);
-  assert.equal('riskAction' in (compact.stages?.found[0] || {}), false);
-  assert.equal('consecutiveCloses' in (compact.stages?.found[0] || {}), false);
-  assert.equal(compact.stages?.found[0]?.unmetConditions.length, 4);
-  assert.ok(Buffer.byteLength(JSON.stringify(compact)) <= 150_000);
+  assert.equal(compact.stages.found.length, 131);
+  assert.deepEqual(compact.stageCounts, { found: 131, waiting: 0, actionable: 0 });
+  assert.equal('classificationReplayHash' in (compact.stages.found[0] || {}), false);
+  assert.equal('market' in (compact.stages.found[0] || {}), false);
+  assert.equal('mentionCount' in (compact.stages.found[0] || {}), false);
+  assert.equal('promotionReasons' in (compact.stages.found[0] || {}), false);
+  assert.equal('detailHref' in (compact.stages.found[0] || {}), false);
+  assert.equal('detailRevisionId' in (compact.stages.found[0] || {}), false);
+  assert.equal('stale' in (compact.stages.found[0] || {}), false);
+  assert.equal('currentPrice' in (compact.stages.found[0]?.valuation || {}), false);
+  assert.equal(compact.stages.found[0]?.sources.length, 2);
+  assert.equal('mentionedAt' in (compact.stages.found[0]?.sources[0] || {}), false);
+  assert.equal('ma120' in (compact.stages.found[0]?.technical || {}), false);
+  assert.equal('riskAction' in (compact.stages.found[0] || {}), false);
+  assert.equal('consecutiveCloses' in (compact.stages.found[0] || {}), false);
+  assert.equal(compact.stages.found[0]?.unmetConditions.length, 4);
+  // The public HTTP route applies the 40-card transport budget. The immutable
+  // snapshot must retain every card so subsequent pages cannot lose matches.
+  assert.ok(Buffer.byteLength(JSON.stringify(compact.stages.found.slice(0, 40))) <= 150_000);
 });
