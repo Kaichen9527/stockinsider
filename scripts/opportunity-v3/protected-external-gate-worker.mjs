@@ -221,6 +221,23 @@ const graphBoundReviewSources = Object.freeze({
       rangeLine: 'Full reviewed implementation range',
     }),
   }),
+  // V6's gate-integrity closure updates the canonical command inventory and
+  // catalog authority tags. Register its independently reviewed graph from the
+  // protected base so the candidate cannot select or rewrite its own reviews.
+  'c74be1cd14439580505e05f2ec5904ea7dc9732ee7a4164c9ec1573691ebe352': Object.freeze({
+    requirements: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-f0a7b874',
+      path: `${changeRelative}/requirements-review-v3.22.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+    architecture: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-f0a7b874',
+      path: `${changeRelative}/architecture-review-v3.22.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed implementation range',
+    }),
+  }),
   '5f985e391799fd8332df16c2151f75cc95dfb643a087912d92df2845a435016e': Object.freeze({
     requirements: v319ReviewSources.requirements,
     architecture: v319ReviewSources.architecture,
