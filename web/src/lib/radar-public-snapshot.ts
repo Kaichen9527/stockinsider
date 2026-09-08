@@ -174,10 +174,15 @@ export function buildCompactPublicRadarPayload(
   shadowProgress: CandidateShadowProgress,
 ): RadarDailyPayload {
   const compactBucket = (items: unknown[] | undefined, limit: number) => (items || []).slice(0, limit).map(compactLegacyCard);
+  const stageCounts = {
+    found: stages.found.length,
+    waiting: stages.waiting.length,
+    actionable: stages.actionable.length,
+  };
   const compactStages = {
-    found: stages.found.map(compactCandidateStageCard),
-    waiting: stages.waiting.map(compactCandidateStageCard),
-    actionable: stages.actionable.map(compactCandidateStageCard),
+    found: stages.found.slice(0, 40).map(compactCandidateStageCard),
+    waiting: stages.waiting.slice(0, 40).map(compactCandidateStageCard),
+    actionable: stages.actionable.slice(0, 40).map(compactCandidateStageCard),
   };
   const hasCandidateStages = compactStages.found.length + compactStages.waiting.length + compactStages.actionable.length > 0;
   return {
@@ -185,6 +190,7 @@ export function buildCompactPublicRadarPayload(
     schemaVersion: RADAR_PUBLIC_SCHEMA_VERSION,
     shadowProgress,
     stages: compactStages,
+    stageCounts,
     // Candidate stages are the canonical stock plane. Keeping the same stocks
     // in every legacy bucket doubled the public response and the server-rendered
     // homepage. The compatibility keys remain for one release, but are empty
@@ -200,7 +206,7 @@ export function buildCompactPublicRadarPayload(
     // research remains available on theme/detail routes, while the daily API
     // stays comfortably below its 150 KB transport budget.
     hotThemes: payload.hotThemes.slice(0, 5).map(compactTheme),
-    sourceSignals: (payload.sourceSignals || []).slice(0, 12),
+    sourceSignals: hasCandidateStages ? [] : (payload.sourceSignals || []).slice(0, 12),
     sourceHealthSummary: compactSourceHealth(payload.sourceHealthSummary),
     connectorStatus: (payload.connectorStatus || []).slice(0, 20).map((item) => ({
       connector: item.connector,

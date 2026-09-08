@@ -1737,6 +1737,11 @@ export interface RadarDailyPayload {
     waiting: CandidateStageCard[];
     actionable: CandidateStageCard[];
   };
+  stageCounts?: {
+    found: number;
+    waiting: number;
+    actionable: number;
+  };
   projectionHealth?: {
     status: 'fresh' | 'stale_readonly' | 'unavailable';
     integrityStatus?: 'valid' | 'conflict' | 'missing';

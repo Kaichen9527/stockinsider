@@ -45,10 +45,11 @@ test('public Radar snapshot uses stages as the canonical stock plane and stays w
     observed: 0, qualifying: 0, required: 30, remaining: 30, startedOn: null, latestSession: null, blockers: [],
   });
 
-  assert.equal(compact.stages?.found.length, 131);
+  assert.equal(compact.stages?.found.length, 40);
+  assert.deepEqual(compact.stageCounts, { found: 131, waiting: 0, actionable: 0 });
   assert.equal(compact.discoveredStocks.length, 0);
   assert.equal(compact.opportunities.length, 0);
-  assert.equal(compact.sourceSignals?.length, 1, 'one-release sourceSignals compatibility remains available');
+  assert.equal(compact.sourceSignals?.length, 0, 'canonical stages do not duplicate legacy sourceSignals');
   assert.equal('classificationReplayHash' in (compact.stages?.found[0] || {}), false);
   assert.equal('market' in (compact.stages?.found[0] || {}), false);
   assert.equal('mentionCount' in (compact.stages?.found[0] || {}), false);
