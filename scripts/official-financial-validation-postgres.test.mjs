@@ -32,7 +32,13 @@ test('validation receipt RPC enforces permissions, exact provenance, and idempot
       CREATE TABLE public.opportunity_financial_facts_v3(fact_id uuid PRIMARY KEY,recorded_at timestamptz,
         authority_tier text,provider text,validation_status text,schema_valid boolean,unit_valid boolean,
         point_in_time_valid boolean,consistency_valid boolean);
-      CREATE TABLE public.candidate_financial_fact_provenance_v4(fact_id uuid,source_url text,source_sha256 text);`);
+      CREATE TABLE public.candidate_financial_fact_provenance_v4(fact_id uuid,source_url text,source_sha256 text);
+      CREATE TABLE public.candidate_financial_document_receipts_v6(receipt_id uuid PRIMARY KEY,
+        parser_status text,receipt_status text,added_fact_count integer,duplicate_fact_count integer,
+        missing_requirements jsonb,rejection_reasons jsonb,parser_owner text,parser_lease_expires_at timestamptz,completed_at timestamptz);
+      CREATE TYPE public.internal_principal_role_v3 AS ENUM('opportunity_runner');
+      CREATE FUNCTION public.internal_principal_role_is_exact_v3_internal(uuid,public.internal_principal_role_v3,timestamptz) RETURNS boolean LANGUAGE sql
+        AS 'SELECT $1=''55555555-5555-4555-8555-555555555555''::uuid AND $2=''opportunity_runner''';`);
     const migration=fs.readFileSync(new URL('../migrations/20260909_official_financial_validation_receipts.sql',import.meta.url),'utf8');
     sql(migration);sql(migration);
     const fact='11111111-1111-4111-8111-111111111111',hash='a'.repeat(64),inputHash='b'.repeat(64);
@@ -55,6 +61,22 @@ test('validation receipt RPC enforces permissions, exact provenance, and idempot
       RAISE EXCEPTION 'mismatched provenance accepted';
       EXCEPTION WHEN OTHERS THEN IF SQLERRM <> 'official_validation_provenance_missing' THEN RAISE; END IF;
     END $$;`);
+    const receiptId='22222222-2222-4222-8222-222222222222',requestId='33333333-3333-4333-8333-333333333333';
+    sql(`INSERT INTO public.candidate_financial_document_receipts_v6 VALUES('${receiptId}','complete','rejected',0,0,
+      '[]','["candidate_financial_local_parser_socket_unavailable"]',NULL,NULL,clock_timestamp())`);
+    const retry=`SELECT public.retry_candidate_financial_document_runtime('${receiptId}','${requestId}','55555555-5555-4555-8555-555555555555')`;
+    assert.equal(sql(`SET ROLE service_role; ${retry}`).split('\n').at(-1),'t');
+    assert.equal(sql(`SET ROLE service_role; ${retry}`).split('\n').at(-1),'f');
+    assert.equal(sql(`SELECT parser_status FROM public.candidate_financial_document_receipts_v6 WHERE receipt_id='${receiptId}'`),'queued');
+    assert.equal(sql(`SELECT prior_receipt->>'receipt_status' FROM public.candidate_financial_document_retry_audit WHERE request_id='${requestId}'`),'rejected');
+    assert.equal(sql("SELECT has_table_privilege('service_role','public.candidate_financial_document_retry_audit','UPDATE')"),'f');
+    sql(`UPDATE public.candidate_financial_document_receipts_v6 SET parser_status='complete',receipt_status='rejected',
+      rejection_reasons='["stored_document_hash_mismatch"]',completed_at=clock_timestamp() WHERE receipt_id='${receiptId}';
+      DO $$ BEGIN
+        PERFORM public.retry_candidate_financial_document_runtime('${receiptId}','44444444-4444-4444-8444-444444444444','55555555-5555-4555-8555-555555555555');
+        RAISE EXCEPTION 'integrity failure retried';
+        EXCEPTION WHEN OTHERS THEN IF SQLERRM <> 'receipt_not_runtime_retryable' THEN RAISE; END IF;
+      END $$;`);
   } finally {
     if(started)command('pg_ctl',['-D',data,'-m','fast','-w','stop']);
     // Only the explicitly-created, isolated test cluster is removed.

@@ -6,6 +6,7 @@ import os
 import socket
 import subprocess
 import sys
+import tempfile
 
 MAX_HEADER = 1024
 MAX_BYTES = 50 * 1024 * 1024
@@ -42,12 +43,17 @@ def receive_request(connection):
 def serve(connection):
     request, payload = receive_request(connection)
     parser_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "candidate_financial_document_parser.py")
-    completed = subprocess.run(
-        [sys.executable, parser_script, "--format", request["format"], "--sha256", request["sha256"], "--max-bytes", str(MAX_BYTES)],
-        input=payload, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=25, check=False,
-        env={"LANG": "C.UTF-8", "LC_ALL": "C.UTF-8", "PYTHONNOUSERSITE": "1", "PYTHONHASHSEED": "0",
-             "NO_PROXY": "*", "no_proxy": "*", "HF_HUB_OFFLINE": "1", "TRANSFORMERS_OFFLINE": "1"},
-    )
+    # DynamicUser has no writable home. Arelle must not fall back to /.config;
+    # give each request an isolated, automatically removed config directory.
+    # This remains inside systemd's PrivateTmp and does not expose credentials.
+    with tempfile.TemporaryDirectory(prefix="stockinsider-arelle-") as config_home:
+        completed = subprocess.run(
+            [sys.executable, parser_script, "--format", request["format"], "--sha256", request["sha256"], "--max-bytes", str(MAX_BYTES)],
+            input=payload, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=25, check=False,
+            env={"LANG": "C.UTF-8", "LC_ALL": "C.UTF-8", "PYTHONNOUSERSITE": "1", "PYTHONHASHSEED": "0",
+                 "XDG_CONFIG_HOME": config_home,
+                 "NO_PROXY": "*", "no_proxy": "*", "HF_HUB_OFFLINE": "1", "TRANSFORMERS_OFFLINE": "1"},
+        )
     if completed.returncode != 0 or not completed.stdout or len(completed.stdout) > MAX_OUTPUT:
         raise ValueError("parser_subprocess_failed")
     connection.sendall(completed.stdout.rstrip(b"\n") + b"\n")

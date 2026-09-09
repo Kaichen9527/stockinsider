@@ -58,6 +58,8 @@ jobs:
     timeout-minutes: 30
     env:
       PLAYWRIGHT_BROWSERS_PATH: "0"
+      STOCKINSIDER_DOCUMENT_PARSER_PYTHON: ${{ github.workspace }}/.parser-env/bin/python
+      STOCKINSIDER_DOCUMENT_PARSER_SCRIPT: ${{ github.workspace }}/scripts/candidate_financial_document_parser.py
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -77,6 +79,14 @@ jobs:
           echo "$postgres_bin" >> "$GITHUB_PATH"
       - name: Install root dependencies
         run: npm ci
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install isolated offline parser test dependencies
+        run: |
+          python -m venv .parser-env
+          .parser-env/bin/pip install -r scripts/requirements-candidate-financial-document-parser.txt
+          .parser-env/bin/python scripts/test_candidate_financial_parser_socket.py
       - name: Install web dependencies
         working-directory: web
         run: npm ci

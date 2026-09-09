@@ -11,6 +11,7 @@ import { THREADS_KEYWORD_SEARCH_URL, assertThreadsKeywordSearchEndpoint } from '
 import { derivePodcastLedgerSemantics, parsePodcastNamespaceFeed, parsePublisherChapters, parsePublisherTranscript, type TimedPodcastSegment } from './podcast-rss';
 import { fetchTextWithRetry, sourceFetchFailureCode } from './source-fetch';
 import { getThreadsTokenForRun, threadsTokenRegistryMetadata } from './threads-token';
+import { mergeThreadsRunMetadata, normalizeThreadsAuthor, summarizeThreadsAuthors, threadsMarketQueries } from './threads-discovery';
 import { canonicalContentHash, canonicalPublisherKey, classifyPttContentSemantics, classifySourceStance, GDELT_TW_MATCHER_VERSION, publisherKeyFor, type SourceContentSemantics } from './source-content-semantics';
 import { collectPagedAuthorityRows } from './candidate-research-policy';
 import { decodeSingleFileZip, gdeltGkgUrlsAfter, gdeltSearchableText, gdeltTransportReason, isRetiredNewsHost, matchGdeltStockSymbols, parseGdeltSeenDate, selectLatestGdeltGkgUrl } from './gdelt-gkg';
@@ -1930,6 +1931,12 @@ async function upsertKolProfile(params: {
 
 async function upsertCredentialRegistry(platform: string, status: 'missing' | 'configured' | 'valid' | 'invalid', extra?: Partial<Row>) {
   const supabase = getSupabaseServerClient();
+  let metadata = (extra?.metadata || {}) as Record<string, unknown>;
+  if (platform === 'threads') {
+    const existing = await supabase.from('source_credentials_registry').select('metadata').eq('platform', platform).maybeSingle();
+    if (existing.error) throw new Error('threads_credential_metadata_read_failed');
+    metadata = mergeThreadsRunMetadata((existing.data?.metadata || {}) as Record<string, unknown>, metadata);
+  }
   const { error } = await supabase.from('source_credentials_registry').upsert(
     {
       platform,
@@ -1938,7 +1945,7 @@ async function upsertCredentialRegistry(platform: string, status: 'missing' | 'c
       error_message: extra?.error_message || null,
       credential_ref: extra?.credential_ref || null,
       session_ref: extra?.session_ref || null,
-      metadata: extra?.metadata || {},
+      metadata,
       updated_at: nowIso(),
     },
     { onConflict: 'platform' },
@@ -3150,10 +3157,8 @@ async function scrapeThreadsOfficialApi(symbolContext?: SymbolScopedStockContext
   ].map((value) => value.replace(/^@/u, '').toLocaleLowerCase('en-US')));
   const queries = unique(symbolContext
     ? [symbolContext.symbol, symbolContext.name, ...symbolContext.aliases, ...symbolContext.industryQueryTerms]
-    : [
-        '台股', '財報', '籌碼', '產業輪動', '法說會', '目標價',
-        ...watchlists.filter((row) => ['keyword', 'hashtag'].includes(String(row.watch_type || ''))).map((row) => compactText(row.watch_value)),
-      ]).filter((value) => value.length >= 2).slice(0, 12);
+    : threadsMarketQueries(watchlists.filter((row) => ['keyword', 'hashtag'].includes(String(row.watch_type || ''))).map((row) => compactText(row.watch_value))))
+    .filter((value) => value.length >= 2).slice(0, 12);
   const entity = await upsertSourceEntity({
     platform: 'threads',
     entityType: 'site',
@@ -3193,8 +3198,8 @@ async function scrapeThreadsOfficialApi(symbolContext?: SymbolScopedStockContext
           if (!row.id || seenIds.has(row.id)) continue;
           seenIds.add(row.id);
           fetchedPosts += 1;
-          const username = compactText(row.username).replace(/^@/u, '').toLocaleLowerCase('en-US');
-          if (approvedAuthors.size > 0 && !approvedAuthors.has(username)) continue;
+          const username = normalizeThreadsAuthor(compactText(row.username));
+          if (!username) continue;
           const text = compactText(row.text).slice(0, 1200);
           if (!text || !row.permalink) continue;
           const extracted = extractTwSymbolsWithEvidence(text, { validSymbols, stockNamesBySymbol, aliasesBySymbol });
@@ -3214,6 +3219,8 @@ async function scrapeThreadsOfficialApi(symbolContext?: SymbolScopedStockContext
               connector: 'threads_official_keyword_api',
               stable_id: row.id,
               source_account: username,
+              tracked_author: approvedAuthors.has(username),
+              author_assessment: 'discovery_only_unverified',
               query_keyword: query,
               crawl_mode: symbolContext ? 'symbol_scoped' : 'public_search',
               source_surface: 'threads_official_api',
@@ -3243,6 +3250,24 @@ async function scrapeThreadsOfficialApi(symbolContext?: SymbolScopedStockContext
     await finishAgentRun(agentRunId, 'failed', { connector: 'threads', error: firstFailure || 'threads_api_auth_rejected' });
     throw new Error(`threads_api_auth_rejected:${firstFailure || 'unknown'}`);
   }
+  const authorDiscovery = summarizeThreadsAuthors(records.map(record => ({
+    id: String(record.metadata?.stable_id || ''), username: String(record.metadata?.source_account || ''),
+    text: record.contentText || '', symbols: record.symbols || [], publishedAt: record.publishedAt || null,
+  })), approvedAuthors);
+  // Track promising authors inside StockInsider only. This does not follow
+  // accounts on the user's Threads account or confer investment reliability.
+  const discoveryProfiles = authorDiscovery.slice(0, 50).map(author => ({
+    primary_platform: 'threads', display_name: `@${author.username}`,
+    profile_url: `https://www.threads.com/@${author.username}`,
+    content_focus: 'tw_stocks', discovery_state: 'monitor_only',
+    metadata: { discovery_basis: 'official_keyword_search', ...author }, updated_at: nowIso(),
+  }));
+  if (discoveryProfiles.length) {
+    const profiles = await supabase.from('kol_profiles').upsert(discoveryProfiles, {
+      onConflict: 'primary_platform,display_name', ignoreDuplicates: true,
+    });
+    if (profiles.error) throw new Error('threads_author_discovery_write_failed');
+  }
   const count = await upsertSourceRawDocuments(filterSymbolScopedDocs(records, 'threads', symbolContext));
   const duplicatesSkipped = Math.max(0, records.length - count);
   const watermarkAfter = await getSourceWatermark('threads');
@@ -3259,6 +3284,8 @@ async function scrapeThreadsOfficialApi(symbolContext?: SymbolScopedStockContext
       pages_fetched: pagesFetched,
       lookback_days: 7,
       approved_author_count: approvedAuthors.size,
+      author_discovery: authorDiscovery.slice(0, 50),
+      discovered_author_count: authorDiscovery.length,
     },
   });
   await upsertCredentialRegistry('threads', 'valid', {

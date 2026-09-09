@@ -61,4 +61,48 @@ BEGIN
 END; $function$;
 REVOKE ALL ON FUNCTION public.record_official_financial_validation(uuid,timestamptz,text,text,jsonb) FROM PUBLIC,anon,authenticated;
 GRANT EXECUTE ON FUNCTION public.record_official_financial_validation(uuid,timestamptz,text,text,jsonb) TO service_role;
+
+-- A runtime outage can be retried without erasing its completed evidence.
+CREATE TABLE IF NOT EXISTS public.candidate_financial_document_retry_audit (
+  request_id uuid PRIMARY KEY,
+  receipt_id uuid NOT NULL REFERENCES public.candidate_financial_document_receipts_v6(receipt_id),
+  prior_receipt jsonb NOT NULL,
+  caller_principal uuid NOT NULL,
+  requested_at timestamptz NOT NULL DEFAULT clock_timestamp()
+);
+ALTER TABLE public.candidate_financial_document_retry_audit ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON public.candidate_financial_document_retry_audit FROM PUBLIC,anon,authenticated,service_role;
+GRANT SELECT ON public.candidate_financial_document_retry_audit TO service_role;
+CREATE OR REPLACE FUNCTION public.retry_candidate_financial_document_runtime(
+  p_receipt_id uuid,p_request_id uuid,p_caller_principal uuid
+) RETURNS boolean LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $retry$
+DECLARE v_receipt public.candidate_financial_document_receipts_v6%ROWTYPE; v_reasons jsonb;
+BEGIN
+  IF NOT public.internal_principal_role_is_exact_v3_internal(p_caller_principal,'opportunity_runner',clock_timestamp())
+    THEN RAISE EXCEPTION 'principal_role_unavailable'; END IF;
+  IF p_request_id IS NULL THEN RAISE EXCEPTION 'retry_request_id_required'; END IF;
+  SELECT * INTO v_receipt FROM public.candidate_financial_document_receipts_v6 WHERE receipt_id=p_receipt_id FOR UPDATE;
+  IF NOT FOUND THEN RAISE EXCEPTION 'retry_receipt_missing'; END IF;
+  IF EXISTS(SELECT 1 FROM public.candidate_financial_document_retry_audit WHERE request_id=p_request_id AND receipt_id=p_receipt_id)
+    THEN RETURN FALSE; END IF;
+  v_reasons := v_receipt.missing_requirements || v_receipt.rejection_reasons;
+  IF v_receipt.parser_status<>'complete' OR v_receipt.added_fact_count<>0 OR v_receipt.duplicate_fact_count<>0
+    OR jsonb_array_length(v_reasons)=0
+    OR NOT EXISTS(SELECT 1 FROM jsonb_array_elements_text(v_reasons) reason
+      WHERE reason ~ '^candidate_financial_local_parser_(socket_unavailable|not_configured|timeout|spawn_failed|failed)(:|$)')
+    OR EXISTS(SELECT 1 FROM jsonb_array_elements_text(v_reasons) reason
+      WHERE reason !~ '^candidate_financial_local_parser_(socket_unavailable|not_configured|timeout|spawn_failed|failed)(:|$)'
+        AND reason<>'no_verified_financial_facts_extracted')
+    THEN RAISE EXCEPTION 'receipt_not_runtime_retryable'; END IF;
+  IF (SELECT count(*) FROM public.candidate_financial_document_retry_audit WHERE receipt_id=p_receipt_id)>=3
+    THEN RAISE EXCEPTION 'receipt_runtime_retry_limit'; END IF;
+  INSERT INTO public.candidate_financial_document_retry_audit(request_id,receipt_id,prior_receipt,caller_principal)
+    VALUES(p_request_id,p_receipt_id,to_jsonb(v_receipt),p_caller_principal);
+  UPDATE public.candidate_financial_document_receipts_v6 SET receipt_status='accepted',parser_status='queued',
+    parser_owner=NULL,parser_lease_expires_at=NULL,completed_at=NULL,missing_requirements='[]'::jsonb,rejection_reasons='[]'::jsonb
+    WHERE receipt_id=p_receipt_id;
+  RETURN TRUE;
+END; $retry$;
+REVOKE ALL ON FUNCTION public.retry_candidate_financial_document_runtime(uuid,uuid,uuid) FROM PUBLIC,anon,authenticated;
+GRANT EXECUTE ON FUNCTION public.retry_candidate_financial_document_runtime(uuid,uuid,uuid) TO service_role;
 COMMIT;
