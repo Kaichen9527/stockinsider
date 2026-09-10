@@ -3,6 +3,7 @@
 !.env.example
 
 # Local agent/runtime artifacts
+/backup/
 .agent/
 .codex/
 test-results/
