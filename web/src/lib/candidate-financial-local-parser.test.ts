@@ -31,11 +31,12 @@ test('offline parser implementation retains its local-only boundaries', async ()
   const repositoryRoot = process.cwd().endsWith('/web') ? resolve(process.cwd(), '..') : process.cwd();
   const source = await readFile(resolve(repositoryRoot, 'scripts/candidate_financial_document_parser.py'), 'utf8');
   const requirements = await readFile(resolve(repositoryRoot, 'scripts/requirements-candidate-financial-document-parser.txt'), 'utf8');
-  assert.match(source, /controller\.webCache\.workOffline\s*=\s*True/u);
+  assert.match(source, /internetConnectivity="offline"/u);
   assert.match(source, /socket\.create_connection\s*=\s*blocked/u);
   assert.match(source, /import pdfplumber/u);
-  assert.match(source, /from arelle import Cntlr/u);
-  assert.match(source, /controller[.]modelManager[.]validate\(\)/u);
+  assert.match(source, /from arelle.api.Session import Session/u);
+  assert.match(source, /validate=True/u);
+  assert.match(source, /validation_errors = not ran or log.failed/u);
   assert.match(requirements, /^arelle-release==2\.44\.7$/mu);
   assert.match(requirements, /^pdfplumber==0\.11\.8$/mu);
   assert.doesNotMatch(requirements, /^docling==/mu);

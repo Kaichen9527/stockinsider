@@ -1,4 +1,6 @@
 import { createHash, randomUUID } from 'crypto';
+import { monthlyCandidatePrices } from './candidate-price-history';
+import { candidateRevisionHref } from './candidate-revision-query';
 import { getSupabaseServerClient } from './supabase-server';
 import { calculateTechnicalFeatures, normalizeInstitutionalFlows, technicalHistoryCoverageTerminalReason, TECHNICAL_FEATURE_RULESET_VERSION, type InstitutionalFlowDay } from './technical-features-v2';
 import {
@@ -1364,7 +1366,7 @@ async function executeCandidateResearchCycle(options: {
         earningsBridge: earningsBridge.status === 'complete' ? earningsBridge as unknown as Record<string, unknown> : null,
         factorEvidence,
       });
-      const historicalPrices = [...new Map(bars.map((bar) => [bar.time.slice(0, 7), { month: bar.time.slice(0, 7), close: bar.close }])).values()].slice(-60);
+      const historicalPrices = monthlyCandidatePrices(bars);
       const historicalMultiples = officialMultiples.slice(-60).map((point) => ({ date: point.date, peRatio: point.peRatio, pbRatio: point.pbRatio }));
       const detailPayload = {
         stock_id: stock.id, session_date: technical.sessionDate, lifecycle_stage: stage.stage,
@@ -1892,7 +1894,7 @@ export async function loadCandidateStageCards(): Promise<{ found: CandidateStage
         state: String(trackingByStock.get(stockId)?.risk_action || 'data_incomplete') as 'hold' | 'trim_no_chase' | 'hard_exit' | 'data_incomplete',
         reasons: stringArray(trackingByStock.get(stockId)?.action_reasons),
       } : null,
-      detailHref: `/stock/${String(stock.symbol || '')}`,
+      detailHref: candidateRevisionHref(String(stock.symbol || ''), stage?.detail_revision_id ? String(stage.detail_revision_id) : null),
     });
   }
   const sortFound = (cards: CandidateStageCard[]) => cards.sort((a, b) => {

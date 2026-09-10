@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+ xmlns:xbrli="http://www.xbrl.org/2003/instance"
+ targetNamespace="urn:stockinsider:parser-test" elementFormDefault="qualified">
+ <xs:import namespace="http://www.xbrl.org/2003/instance"
+  schemaLocation="http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd"/>
+ <xs:element name="Shares" id="Shares" type="xbrli:sharesItemType"
+  substitutionGroup="xbrli:item" xbrli:periodType="instant" nillable="true"/>
+</xs:schema>

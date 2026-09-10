@@ -36,7 +36,7 @@ export type CandidateDetailPayload = {
     next12mBridgeComplete?: boolean;
     historicalPercentile?: number | null;
     historicalMultiples?: Array<{ date: string; peRatio: number | null; pbRatio: number | null }>;
-    historicalPrices?: Array<{ month?: string; date?: string; close: number; ma5?: number | null; ma20?: number | null; ma60?: number | null; ma120?: number | null; ma240?: number | null }>;
+    historicalPrices?: Array<{ month?: string; date?: string; frequency?: 'monthly' | 'daily'; close: number; ma5?: number | null; ma20?: number | null; ma60?: number | null; ma120?: number | null; ma240?: number | null }>;
   };
   technical: CandidateStageCard['technical'];
   scores: CandidateStageCard['scores'];

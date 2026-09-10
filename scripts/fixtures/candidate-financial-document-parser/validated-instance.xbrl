@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xbrli:xbrl xmlns:xbrli="http://www.xbrl.org/2003/instance"
+ xmlns:link="http://www.xbrl.org/2003/linkbase"
+ xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:test="urn:stockinsider:parser-test">
+ <link:schemaRef xlink:type="simple" xlink:href="validated-taxonomy.xsd"/>
+ <xbrli:context id="FY2025">
+  <xbrli:entity><xbrli:identifier scheme="https://example.invalid/entity">TEST</xbrli:identifier></xbrli:entity>
+  <xbrli:period><xbrli:instant>2025-12-31</xbrli:instant></xbrli:period>
+ </xbrli:context>
+ <xbrli:unit id="shares"><xbrli:measure>xbrli:shares</xbrli:measure></xbrli:unit>
+ <test:Shares contextRef="FY2025" unitRef="shares" decimals="0">100</test:Shares>
+</xbrli:xbrl>

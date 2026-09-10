@@ -10,6 +10,7 @@ to the original document hash and the server-side accounting checks.
 import argparse
 import hashlib
 import json
+import logging
 import os
 import resource
 import socket
@@ -89,33 +90,45 @@ def parse_pdf(path, sha256):
 def parse_arelle(path, sha256):
     # Arelle is used as a local XBRL/iXBRL structural validator. It is offline:
     # unresolved remote taxonomies fail rather than being downloaded.
-    from arelle import Cntlr
-    controller = Cntlr.Cntlr(logFileName="logToBuffer")
-    try:
-        if getattr(controller, "webCache", None) is not None:
-            controller.webCache.workOffline = True
-            controller.webCache.offline = True
-        model = controller.modelManager.load(str(path))
-        if model is None:
+    from arelle.api.Session import Session
+    from arelle.RuntimeOptions import RuntimeOptions
+
+    class ValidationLog(logging.Handler):
+        # Keep only a failure bit: no unbounded filing content or paths in output.
+        failed = False
+
+        def emit(self, record):
+            if record.levelno >= logging.ERROR:
+                self.failed = True
+
+    log = ValidationLog()
+    # Session initializes the command-line validation options (including formula
+    # options). A bare Cntlr loads the DTS but does not initialize this contract.
+    # The socket worker runs one isolated process per document; never parallel
+    # Sessions in threads because Arelle owns process-global plugin state.
+    with Session() as session:
+        ran = session.run(RuntimeOptions(
+            entrypointFile=str(path), internetConnectivity="offline",
+            disablePersistentConfig=True, keepOpen=True, validate=True,
+        ), logHandler=log)
+        models = session.get_models()
+        if len(models) != 1:
             return result("partial", "arelle", sha256, [], ["arelle_model_load_failed"])
-        # Loading only builds the DTS. Run Arelle's supported validation
-        # boundary and never call a filing complete when it logged errors.
-        controller.modelManager.validate()
-        validation_errors = list(getattr(model, "errors", [])) + list(getattr(controller, "errors", []))
+        model = models[0]
+        validation_errors = not ran or log.failed or bool(getattr(model, "errors", []))
         locators = []
         for fact in list(getattr(model, "facts", [])):
             context = getattr(fact, "context", None)
             qname = getattr(fact, "qname", None)
             context_id = str(getattr(context, "id", ""))
-            concept = str(getattr(qname, "localName", ""))
+            # The receipt RPC joins the exact document QName emitted by the
+            # fact extractor. Dropping its prefix rejects every valid join and
+            # also collapses different taxonomies with the same local name.
+            concept = str(qname) if qname is not None else ""
             if context_id and concept:
                 locators.append({"xbrl_context": context_id, "xbrl_concept": concept})
             if len(locators) >= MAX_LOCATORS:
                 break
-        try:
-            model.close()
-        except Exception:
-            pass
         if not locators:
             # Keep a bounded locator-only partial result for documents whose
             # local taxonomy is unavailable offline. This never becomes a fact.
@@ -133,11 +146,6 @@ def parse_arelle(path, sha256):
         if validation_errors:
             return result("partial", "arelle", sha256, locators, ["arelle_validation_errors"])
         return result("complete", "arelle", sha256, locators, [])
-    finally:
-        try:
-            controller.close()
-        except Exception:
-            pass
 
 
 def parse_docling(path, sha256):

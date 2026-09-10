@@ -87,9 +87,12 @@ jobs:
           python -m venv .parser-env
           .parser-env/bin/pip install -r scripts/requirements-candidate-financial-document-parser.txt
           .parser-env/bin/python scripts/test_candidate_financial_parser_socket.py
+          .parser-env/bin/python scripts/test_candidate_financial_document_parser.py
       - name: Install web dependencies
         working-directory: web
         run: npm ci
+      - name: Verify candidate revision and historical date contracts
+        run: npm run test:candidate-revision-history
       - name: Install project-local Playwright Chromium
         working-directory: web
         run: ./node_modules/.bin/playwright install --with-deps chromium
