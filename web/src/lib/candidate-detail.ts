@@ -5,6 +5,7 @@ import { candidateDossierInputHash, factReferenceNumbers, isPaidInvestAnchorsRef
 import type { CandidateDossierClaim } from './candidate-dossier-validation';
 import { sanitizePublicSourceUrl } from './public-source-url.ts';
 import { resolveTaiwanFinalPublicationSemantics } from './tw-market.ts';
+import { readCandidateRevisionContext, type CandidateRevisionScores } from './candidate-revision-context.ts';
 
 type Row = Record<string, unknown>;
 
@@ -39,7 +40,8 @@ export type CandidateDetailPayload = {
     historicalPrices?: Array<{ month?: string; date?: string; frequency?: 'monthly' | 'daily'; close: number; ma5?: number | null; ma20?: number | null; ma60?: number | null; ma120?: number | null; ma240?: number | null }>;
   };
   technical: CandidateStageCard['technical'];
-  scores: CandidateStageCard['scores'];
+  scores: CandidateRevisionScores;
+  revisionContextStatus?: 'available' | 'unavailable';
   facts: Array<{ factId: string; referenceNumber?: number; factKey: string; periodEnd: string; value: number | null; unit: string | null; sourceUrl: string | null; availableAt: string }>;
   unmetConditions: string[];
   riskAction?: { state: string; reasons: string[] } | null;
@@ -166,7 +168,7 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
     // `stock_id` is part of the immutable dossier input hash. Omitting it made
     // every accepted Codex dossier look stale to the public reader even when
     // the revision and fact set were identical.
-    .select('id,stock_id,session_date,lifecycle_stage,detail_kind,title,summary,sections,fact_ids,source_links,valuation,technical,as_of,available_at,publication_phase')
+    .select('id,stock_id,session_date,lifecycle_stage,detail_kind,title,summary,sections,fact_ids,source_links,valuation,technical,as_of,available_at,publication_phase,provenance')
     .eq('stock_id', stockRead.data.id)
     .order('available_at', { ascending: false })
     .limit(1);
@@ -180,7 +182,8 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
   const row = data as Row;
   const stock = stockRead.data as Row;
   const factIds = (Array.isArray(row.fact_ids) ? row.fact_ids : []).map(String);
-  const [dossiers, receiptsRead, factBatchResults, stageRead, trackingRead] = await Promise.all([
+  const revisionContext = readCandidateRevisionContext(row.provenance);
+  const [dossiers, receiptsRead, factBatchResults] = await Promise.all([
     supabase.from('candidate_research_dossiers')
       .select('id,narrative_kind,content,validation_status,bundle_id,bundle_hash,input_hash,published_at,created_at')
       .eq('detail_snapshot_id', String(row.id)).eq('narrative_kind', 'codex_enriched').eq('validation_status', 'valid')
@@ -195,16 +198,9 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
     Promise.all(chunkCandidateFactIds(factIds).map((batch) => supabase.from('candidate_official_facts')
       .select('fact_id,stock_id,fact_key,fact_kind,period_end,value,unit,as_of,available_at,source_url,provenance,derivation')
       .in('fact_id', batch).order('period_end', { ascending: false }).limit(batch.length))),
-    supabase.from('candidate_daily_stage_snapshots')
-      .select('discovery_score,research_score,actionability_score,data_confidence_score')
-      .eq('detail_revision_id', String(row.id)).limit(1).maybeSingle(),
-    supabase.from('candidate_signal_tracking')
-      .select('risk_action,action_reasons')
-      .eq('stock_id', stockRead.data.id).eq('session_date', String(row.session_date))
-      .order('available_at', { ascending: false }).limit(1).maybeSingle(),
   ]);
   const factsError = factBatchResults.find((result) => result.error)?.error;
-  if (dossiers.error || receiptsRead.error || factsError || stageRead.error || trackingRead.error) throw new Error(`candidate_detail_evidence_read_failed:${dossiers.error?.message || receiptsRead.error?.message || factsError?.message || stageRead.error?.message || trackingRead.error?.message}`);
+  if (dossiers.error || receiptsRead.error || factsError) throw new Error(`candidate_detail_evidence_read_failed:${dossiers.error?.message || receiptsRead.error?.message || factsError?.message}`);
   const factRows = factBatchResults.flatMap((result) => (result.data as Row[]) || []).filter((fact) => !isPaidInvestAnchorsReference(fact.source_url));
   const expectedInputHash = candidateDossierInputHash({ ...row, fact_ids: factRows.map((fact) => String(fact.fact_id)), stocks: { symbol: stock.symbol, name: stock.name } }, factRows);
   const acceptedReceiptKeys = new Set(((receiptsRead.data || []) as Row[])
@@ -241,15 +237,14 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
       return url && !isPaidInvestAnchorsReference(`${source.label} ${source.url}`) ? [{ ...source, url }] : [];
     }),
     valuation: (row.valuation || {}) as CandidateDetailPayload['valuation'], technical: (row.technical || {}) as CandidateStageCard['technical'],
-    scores: {
-      discovery: Number(stageRead.data?.discovery_score || 0),
-      research: Number(stageRead.data?.research_score || 0),
-      actionability: Number(stageRead.data?.actionability_score || 0),
-      dataConfidence: Number(stageRead.data?.data_confidence_score || 0),
-    },
+    scores: revisionContext.scores,
+    revisionContextStatus: revisionContext.status,
     facts: factRows.map((fact, index) => ({ factId: `source-${references.get(String(fact.fact_id)) || index + 1}-${String(fact.fact_key)}`, referenceNumber: references.get(String(fact.fact_id)), factKey: String(fact.fact_key), periodEnd: String(fact.period_end), value: fact.value == null ? null : Number(fact.value), unit: fact.unit ? String(fact.unit) : null, sourceUrl: isPaidInvestAnchorsReference(fact.source_url) ? null : sanitizePublicSourceUrl(fact.source_url), availableAt: String(fact.available_at) })),
-    unmetConditions: Array.isArray((row.valuation as Row | null)?.unmetConditions) ? ((row.valuation as Row).unmetConditions as unknown[]).map(String) : [],
-    riskAction: trackingRead.data ? { state: String(trackingRead.data.risk_action || 'data_incomplete'), reasons: Array.isArray(trackingRead.data.action_reasons) ? trackingRead.data.action_reasons.map(String) : [] } : null,
+    unmetConditions: [
+      ...(Array.isArray((row.valuation as Row | null)?.unmetConditions) ? ((row.valuation as Row).unmetConditions as unknown[]).map(String) : []),
+      ...(revisionContext.status === 'unavailable' ? ['此研究版本未保存評分與風險狀態，無法重現。'] : []),
+    ],
+    riskAction: revisionContext.riskAction,
     asOf: String(row.as_of), availableAt: String(row.available_at),
     publicationStatus: row.publication_phase === 'preliminary' ? 'preliminary' as const : 'final' as const,
     finalPublicationStatus: finalSemantics.status,

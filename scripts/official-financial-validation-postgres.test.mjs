@@ -51,6 +51,22 @@ test('validation receipt RPC enforces permissions, exact provenance, and idempot
     assert.equal(sql(`SET ROLE service_role; ${call}`).split('\n').at(-1),'t');
     assert.equal(sql(`SELECT validation_recorded_at FROM public.opportunity_financial_facts_v3 WHERE fact_id='${fact}'`),first);
     assert.equal(sql('SELECT count(*) FROM public.official_financial_validation_receipts'),'1');
+    const rejected=JSON.stringify({version:'official-financial-v1',reasons:['accounting_or_duplicate_conflict'],checks:['duplicate_consistency'],schemaValid:true,unitValid:true,pointInTimeValid:true,consistencyValid:false});
+    const rejectCall=`SELECT public.record_official_financial_validation('${fact}','2026-08-01','${hash}','${'d'.repeat(64)}','${rejected}'::jsonb);`;
+    assert.equal(sql(`SET ROLE service_role; ${rejectCall}`).split('\n').at(-1),'f');
+    assert.equal(sql(`SELECT validation_status FROM public.opportunity_financial_facts_v3 WHERE fact_id='${fact}'`),'rejected');
+    assert.equal(sql(`SELECT validation_status FROM public.read_financial_facts_as_of('${first}'::timestamptz-interval '1 microsecond') WHERE fact_id='${fact}'`),'pending');
+    assert.equal(sql(`SELECT validation_status FROM public.read_financial_facts_as_of('${first}') WHERE fact_id='${fact}'`),'validated');
+    assert.equal(sql(`SELECT validation_status FROM public.read_financial_facts_as_of(clock_timestamp()) WHERE fact_id='${fact}'`),'rejected');
+    assert.equal(sql('SELECT count(*) FROM public.official_financial_validation_receipts'),'2');
+    assert.equal(sql(`SELECT validation->>'consistencyValid' FROM public.official_financial_validation_receipts WHERE input_hash='${inputHash}'`),'true');
+    assert.equal(sql(`SET ROLE service_role; ${call}`).split('\n').at(-1),'f');
+    assert.equal(sql(`SELECT validation_status FROM public.opportunity_financial_facts_v3 WHERE fact_id='${fact}'`),'rejected');
+    const newPassingCall=call.replace(inputHash,'e'.repeat(64));
+    assert.equal(sql(`SET ROLE service_role; ${newPassingCall}`).split('\n').at(-1),'f');
+    assert.equal(sql(`SET ROLE service_role; SELECT validation_status FROM public.read_financial_facts_as_of(clock_timestamp()) WHERE fact_id='${fact}'`).split('\n').at(-1),'rejected');
+    assert.equal(sql(`SELECT validation_status FROM public.read_financial_facts_as_of('${first}') WHERE fact_id='${fact}'`),'validated');
+    assert.equal(sql("SELECT has_function_privilege('authenticated','public.read_financial_facts_as_of(timestamptz)','EXECUTE')"),'f');
     assert.equal(sql("SELECT has_function_privilege('authenticated','public.record_official_financial_validation(uuid,timestamptz,text,text,jsonb)','EXECUTE')"),'f');
     assert.equal(sql("SELECT has_table_privilege('anon','public.official_financial_validation_receipts','SELECT')"),'f');
     for(const permission of ['UPDATE','DELETE','TRUNCATE']) {

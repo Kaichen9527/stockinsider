@@ -1,6 +1,6 @@
 import { getOpportunityV3ServerClient } from './opportunity-v3/service-client.ts';
 import { collectPagedAuthorityRows } from './candidate-research-policy.ts';
-import { validateOfficialFinancialFact, type OfficialValidationRow } from './official-financial-validation.ts';
+import { validateOfficialFinancialFact, officialFinancialValidationSubjects, type OfficialValidationRow } from './official-financial-validation.ts';
 
 /** Called only from an authenticated VPS writer, never from a public reader. */
 export async function validatePendingOfficialFinancials(stockIds: string[]) {
@@ -17,9 +17,9 @@ export async function validatePendingOfficialFinancials(stockIds: string[]) {
     }, { pageSize: 500, maxRows: 10000 });
     // A truncated evidence set cannot support a consistency judgment.
     if (facts.length === 10000) throw new Error('official_validation_subject_overflow');
-    const pending = facts.filter((fact) => fact.validation_status === 'pending');
-    for (let offset = 0; offset < pending.length; offset += 100) {
-      const batch = pending.slice(offset,offset + 100);
+    const subjects = officialFinancialValidationSubjects(facts);
+    for (let offset = 0; offset < subjects.length; offset += 100) {
+      const batch = subjects.slice(offset,offset + 100);
       const provenance = await collectPagedAuthorityRows<OfficialValidationRow>(async (from,to) => {
         const r = await db.from('candidate_financial_fact_provenance_v4')
           .select('fact_id,source_url,source_sha256,locator').in('fact_id',batch.map((f) => String(f.fact_id)))

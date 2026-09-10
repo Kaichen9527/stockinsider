@@ -1,6 +1,7 @@
 import { createHash, randomUUID } from 'crypto';
 import { monthlyCandidatePrices } from './candidate-price-history';
 import { candidateRevisionHref } from './candidate-revision-query';
+import { freezeCandidateRevisionContext } from './candidate-revision-context.ts';
 import { getSupabaseServerClient } from './supabase-server';
 import { calculateTechnicalFeatures, normalizeInstitutionalFlows, technicalHistoryCoverageTerminalReason, TECHNICAL_FEATURE_RULESET_VERSION, type InstitutionalFlowDay } from './technical-features-v2';
 import {
@@ -387,8 +388,8 @@ async function executeCandidateResearchCycle(options: {
   const existingCoreFinancialFacts = proposedUniverse.length === 0 ? [] : await collectBatchedAuthorityRows<string, Row>(
     proposedUniverse.map((stock) => stock.id),
     async (batch, from, to) => {
-      const page = await supabase.from('opportunity_financial_facts_v3')
-        .select('stock_id,fact_key,period_start,period_end,duration_kind,provider,authority_tier,validation_status,validation_recorded_at,schema_valid,unit_valid,point_in_time_valid,consistency_valid,filing_published_at,source_timestamp,collected_at,recorded_at')
+      const page = await supabase.rpc('read_financial_facts_as_of', { p_cutoff: evaluatedAt })
+        .select('fact_id,stock_id,fact_key,period_start,period_end,duration_kind,value,unit,estimate_kind,source_ref,filing_restatement_id,provider,authority_tier,validation_status,validation_recorded_at,schema_valid,unit_valid,point_in_time_valid,consistency_valid,filing_published_at,source_timestamp,collected_at,recorded_at')
         .in('stock_id', batch)
         .lte('recorded_at', evaluatedAt)
         .order('stock_id').order('fact_id')
@@ -588,10 +589,15 @@ async function executeCandidateResearchCycle(options: {
         supabase.from('stock_signals').select('as_of,volume,chip_metrics').eq('stock_id', stock.id).order('as_of', { ascending: false }).limit(30),
         pagedResearchResult((from,to) => supabase.from('official_price_history').select('session_date,open,high,low,close,volume,source_url,provenance,available_at').eq('stock_id', stock.id).lte('available_at', evaluatedAt).order('session_date', { ascending: false }).range(from,to),1320),
         pagedResearchResult((from,to) => supabase.from('opportunity_price_observations_v3').select('session_id,raw_open,raw_high,raw_low,raw_close,volume,source_ref,source_timestamp,collected_at,recorded_at').eq('stock_id', stock.id).lte('recorded_at', authorityCutoff).order('session_id', { ascending: false }).order('recorded_at', { ascending: true }).order('observation_id').range(from,to),10000),
-        pagedResearchResult((from,to) => supabase.from('opportunity_financial_facts_v3').select('fact_id,fact_key,period_start,period_end,duration_kind,value,unit,provider,authority_tier,validation_status,validation_recorded_at,schema_valid,unit_valid,point_in_time_valid,consistency_valid,upstream_provider,filing_published_at,source_timestamp,collected_at,recorded_at,source_ref,estimate_kind,estimate_horizon,filing_restatement_id').eq('stock_id', stock.id)
+        pagedResearchResult(async (from,to) => {
+          const page = await supabase.rpc('read_financial_facts_as_of', { p_cutoff: authorityCutoff }).select('fact_id,fact_key,period_start,period_end,duration_kind,value,unit,provider,authority_tier,validation_status,validation_recorded_at,schema_valid,unit_valid,point_in_time_valid,consistency_valid,upstream_provider,filing_published_at,source_timestamp,collected_at,recorded_at,source_ref,estimate_kind,estimate_horizon,filing_restatement_id').eq('stock_id', stock.id)
           .lte('filing_published_at', authorityCutoff).lte('source_timestamp', authorityCutoff)
           .lte('collected_at', authorityCutoff).lte('recorded_at', authorityCutoff)
-          .order('period_end', { ascending: false }).order('recorded_at', { ascending: false }).order('fact_id').range(from,to),10000),
+          .order('period_end', { ascending: false }).order('recorded_at', { ascending: false }).order('fact_id').range(from,to);
+          if (page.error) return { data: null, error: page.error };
+          if (!Array.isArray(page.data)) throw new Error('financial_asof_rows_invalid');
+          return { data: page.data as Row[], error: null };
+        },10000),
         supabase.from('peer_relationships').select('id,peer_ticker,peer_market,relationship_type,product_subcategory,directionality,relationship_weight,version').eq('stock_id', stock.id).lte('effective_from', latestMarketSession).or(`effective_to.is.null,effective_to.gte.${latestMarketSession}`).limit(100),
         supabase.from('technical_feature_snapshots').select('session_date,close,ma60,ma120,ma240').eq('stock_id', stock.id).eq('ruleset_version', TECHNICAL_FEATURE_RULESET_VERSION).lt('session_date', latestMarketSession).order('session_date', { ascending: false }).limit(1),
         supabase.from('candidate_signal_tracking').select('session_date,reference_session_date,reference_price,max_drawdown_pct,close,signal_episode_id,initial_atr14,initial_stop_price,peak_close').eq('stock_id', stock.id).eq('model_version', CANDIDATE_STAGE_MODEL_VERSION).order('session_date', { ascending: false }).limit(1),
@@ -1368,6 +1374,31 @@ async function executeCandidateResearchCycle(options: {
       });
       const historicalPrices = monthlyCandidatePrices(bars);
       const historicalMultiples = officialMultiples.slice(-60).map((point) => ({ date: point.date, peRatio: point.peRatio, pbRatio: point.pbRatio }));
+      const priorTracking = ((trackingRes.data as Row[]) || [])[0] || null;
+      const priorTechnical = ((priorTechnicalRes.data as Row[]) || [])[0] || null;
+      const expectedPreviousSessionDate = marketSessions[marketSessions.indexOf(technical.sessionDate) - 1] || null;
+      const episode = advanceRiskEpisode({
+        stage: stage.stage,
+        previousStage: previousStage as CandidateLifecycleStage | null,
+        sessionDate: technical.sessionDate,
+        priorSessionDate: priorTracking?.session_date ? String(priorTracking.session_date) : null,
+        expectedPreviousSessionDate,
+        close: technical.close,
+        atr14: technical.atr14,
+        episodeId: stableHash({ stockId: stock.id, sessionDate: technical.sessionDate, modelVersion: CANDIDATE_STAGE_MODEL_VERSION }).slice(0, 32),
+        prior: priorTracking ? {
+          signalEpisodeId: priorTracking.signal_episode_id ? String(priorTracking.signal_episode_id) : null,
+          referenceSessionDate: priorTracking.reference_session_date ? String(priorTracking.reference_session_date) : null,
+          referencePrice: numberOrNull(priorTracking.reference_price),
+          initialAtr14: numberOrNull(priorTracking.initial_atr14),
+          initialStopPrice: numberOrNull(priorTracking.initial_stop_price),
+          peakClose: numberOrNull(priorTracking.peak_close),
+          maxDrawdownPct: numberOrNull(priorTracking.max_drawdown_pct),
+        } : null,
+      });
+      const priorTechnicalClose = numberOrNull(priorTechnical?.close);
+      const priorTechnicalMa60 = numberOrNull(priorTechnical?.ma60);
+      const risk = candidateRiskAction({ close: technical.close, referencePrice: episode.referencePrice, atr14: episode.initialAtr14, initialStopPrice: episode.initialStopPrice, ma20: technical.ma20, ma60: technical.ma60, priorCloseBelowMa60: false, currentSessionDate: technical.sessionDate, expectedPreviousSessionDate, priorSessionDate: priorTechnical?.session_date ? String(priorTechnical.session_date) : null, priorClose: priorTechnicalClose, priorMa60: priorTechnicalMa60, rsi14: technical.rsi14, baseTarget: valuation?.baseTarget ?? null, marketBreakdown: marketRegime === 'breakdown', materialOfficialCounterEvidence: hasMaterialOfficialCounterEvidence });
       const detailPayload = {
         stock_id: stock.id, session_date: technical.sessionDate, lifecycle_stage: stage.stage,
         detail_kind: stage.stage === 'found' ? 'fact' : 'full', publication_phase: baseInput.staleOrFallback ? 'preliminary' as const : 'final' as const, title: `${stock.name}（${stock.symbol}）營運與估值研究`,
@@ -1396,6 +1427,7 @@ async function executeCandidateResearchCycle(options: {
         as_of: `${technical.sessionDate}T13:30:00+08:00`, available_at: evaluatedAt,
         provenance: {
           fact_ids: factIds, source: 'deterministic_candidate_research',
+          revision_context: freezeCandidateRevisionContext(detailCard.scores, risk),
           priceProvider: priceEvidence.provider, priceAuthorityTier: priceEvidence.authorityTier,
           priceIntegrityStatus: priceEvidence.integrityStatus, priceFreshnessStatus: priceEvidence.freshnessStatus,
           pricePromotionEligible: priceEvidence.promotionEligible, priceBlockers: priceEvidence.blockers,
@@ -1433,31 +1465,6 @@ async function executeCandidateResearchCycle(options: {
       }
       const snapshotDetail = await supabase.from('candidate_daily_stage_snapshots').update({ detail_revision_id: detailRevisionId }).eq('id', snapshot.data.id);
       if (snapshotDetail.error) throw new Error(snapshotDetail.error.message);
-      const priorTracking = ((trackingRes.data as Row[]) || [])[0] || null;
-      const priorTechnical = ((priorTechnicalRes.data as Row[]) || [])[0] || null;
-      const expectedPreviousSessionDate = marketSessions[marketSessions.indexOf(technical.sessionDate) - 1] || null;
-      const episode = advanceRiskEpisode({
-        stage: stage.stage,
-        previousStage: previousStage as CandidateLifecycleStage | null,
-        sessionDate: technical.sessionDate,
-        priorSessionDate: priorTracking?.session_date ? String(priorTracking.session_date) : null,
-        expectedPreviousSessionDate,
-        close: technical.close,
-        atr14: technical.atr14,
-        episodeId: stableHash({ stockId: stock.id, sessionDate: technical.sessionDate, modelVersion: CANDIDATE_STAGE_MODEL_VERSION }).slice(0, 32),
-        prior: priorTracking ? {
-          signalEpisodeId: priorTracking.signal_episode_id ? String(priorTracking.signal_episode_id) : null,
-          referenceSessionDate: priorTracking.reference_session_date ? String(priorTracking.reference_session_date) : null,
-          referencePrice: numberOrNull(priorTracking.reference_price),
-          initialAtr14: numberOrNull(priorTracking.initial_atr14),
-          initialStopPrice: numberOrNull(priorTracking.initial_stop_price),
-          peakClose: numberOrNull(priorTracking.peak_close),
-          maxDrawdownPct: numberOrNull(priorTracking.max_drawdown_pct),
-        } : null,
-      });
-      const priorTechnicalClose = numberOrNull(priorTechnical?.close);
-      const priorTechnicalMa60 = numberOrNull(priorTechnical?.ma60);
-      const risk = candidateRiskAction({ close: technical.close, referencePrice: episode.referencePrice, atr14: episode.initialAtr14, initialStopPrice: episode.initialStopPrice, ma20: technical.ma20, ma60: technical.ma60, priorCloseBelowMa60: false, currentSessionDate: technical.sessionDate, expectedPreviousSessionDate, priorSessionDate: priorTechnical?.session_date ? String(priorTechnical.session_date) : null, priorClose: priorTechnicalClose, priorMa60: priorTechnicalMa60, rsi14: technical.rsi14, baseTarget: valuation?.baseTarget ?? null, marketBreakdown: marketRegime === 'breakdown', materialOfficialCounterEvidence: hasMaterialOfficialCounterEvidence });
       const returnPct = episode.referencePrice && episode.referencePrice > 0 ? (technical.close - episode.referencePrice) / episode.referencePrice * 100 : null;
       const taiexReference = episode.referenceSessionDate ? numberOrNull(marketEvidence.taiexCloseByDate[episode.referenceSessionDate]) : null;
       const taiexCurrent = numberOrNull(marketEvidence.taiexCloseByDate[technical.sessionDate]);
