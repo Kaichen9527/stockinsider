@@ -9,6 +9,8 @@ const IV_BYTES = 12;
 const CONTEXT_BYTES = 32;
 const TAG_BYTES = 16;
 const HEADER_BYTES = MAGIC.length + IV_BYTES + CONTEXT_BYTES;
+export const BACKUP_ENVELOPE_LAYOUT = Object.freeze({ headerBytes: HEADER_BYTES,
+  ivStart: MAGIC.length, ivEnd: MAGIC.length + IV_BYTES, tagBytes: TAG_BYTES });
 export const BACKUP_ENVELOPE_OVERHEAD_BYTES = HEADER_BYTES + TAG_BYTES;
 export const MAX_BACKUP_PLAINTEXT_BYTES = 25 * 1024 ** 3;
 

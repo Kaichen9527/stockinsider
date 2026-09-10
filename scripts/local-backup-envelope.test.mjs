@@ -1,10 +1,21 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { createHash, randomBytes } from 'node:crypto';
-import { encryptBackupChunks, verifyBackupChunks, BACKUP_ENVELOPE_OVERHEAD_BYTES } from './local-backup-envelope.mjs';
+import { createHash, createDecipheriv, randomBytes } from 'node:crypto';
+import { encryptBackupChunks, verifyBackupChunks, BACKUP_ENVELOPE_OVERHEAD_BYTES, BACKUP_ENVELOPE_LAYOUT as layout } from './local-backup-envelope.mjs';
 
 const source = Buffer.from('fixture: financial records and immutable document manifest');
 const options = () => ({ key: randomBytes(32), contextSha256: 'a'.repeat(64), maxPlaintextBytes: 1024 });
+test('archive reader layout decrypts the entire payload without hardcoded header offsets', async () => {
+  const config = options();
+  const artifact = await encrypted([source], config);
+  const header = artifact.subarray(0, layout.headerBytes);
+  const decipher = createDecipheriv('aes-256-gcm', config.key, header.subarray(layout.ivStart, layout.ivEnd));
+  decipher.setAAD(header);
+  decipher.setAuthTag(artifact.subarray(-layout.tagBytes));
+  const plaintext = Buffer.concat([decipher.update(artifact.subarray(layout.headerBytes, -layout.tagBytes)), decipher.final()]);
+  assert.deepEqual(plaintext, source);
+  assert.equal(layout.headerBytes + layout.tagBytes, BACKUP_ENVELOPE_OVERHEAD_BYTES);
+});
 async function encrypted(input, config) {
   const chunks = [];
   for await (const chunk of encryptBackupChunks(input, config)) chunks.push(chunk);
