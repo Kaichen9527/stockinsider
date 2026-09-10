@@ -5,8 +5,8 @@ import { validateOfficialFinancialFact, officialFinancialValidationSubjects, typ
 /** Called only from an authenticated VPS writer, never from a public reader. */
 export async function validatePendingOfficialFinancials(stockIds: string[]) {
   const db = getOpportunityV3ServerClient();
-  const counts = { checked: 0, validated: 0, rejected: 0, missingProvenance: 0 };
-  for (const stockId of [...new Set(stockIds)].slice(0, 30)) {
+  const counts = { checked: 0, validated: 0, rejected: 0, missingProvenance: 0, unchanged: 0 };
+  for (const stockId of [...new Set(stockIds)]) {
     const evaluatedAt = new Date().toISOString();
     const facts = await collectPagedAuthorityRows<OfficialValidationRow>(async (from, to) => {
       const r = await db.from('opportunity_financial_facts_v3').select('*').eq('stock_id', stockId)
@@ -28,11 +28,27 @@ export async function validatePendingOfficialFinancials(stockIds: string[]) {
         return r.data || [];
       }, { pageSize: 500, maxRows: 5000 });
       if (provenance.length === 5000) throw new Error('official_validation_provenance_overflow');
+      const priorReceipts = await collectPagedAuthorityRows<OfficialValidationRow>(async (from,to) => {
+        const r = await db.from('official_financial_validation_receipts')
+          .select('fact_id,input_hash,effective_validation').in('fact_id',batch.map((f) => String(f.fact_id)))
+          .order('fact_id').order('receipt_sequence').range(from,to);
+        if (r.error) throw new Error(`official_validation_receipt_read_failed:${r.error.message}`);
+        return r.data || [];
+      }, { pageSize: 500, maxRows: 10000 });
+      if (priorReceipts.length === 10000) throw new Error('official_validation_receipt_overflow');
+      const acceptedHashes = new Set(priorReceipts.filter((r) =>
+        (r.effective_validation as OfficialValidationRow | null)?.validation_status === 'validated')
+        .map((r) => `${r.fact_id}:${r.input_hash}`));
       for (const fact of batch) {
         const source = provenance.find((p) => p.fact_id === fact.fact_id) || null;
         const receipt = validateOfficialFinancialFact(fact, facts, source, evaluatedAt);
         counts.checked++;
         if (receipt.reasons.includes('official_provenance_missing')) { counts.missingProvenance++; continue; }
+        if (fact.validation_status === 'validated' && receipt.status === 'validated'
+          && fact.schema_valid === true && fact.unit_valid === true && fact.point_in_time_valid === true
+          && fact.consistency_valid === true && acceptedHashes.has(`${fact.fact_id}:${receipt.inputHash}`)) {
+          counts.unchanged++; continue;
+        }
         const result = await db.rpc('record_official_financial_validation', {
           p_fact_id: fact.fact_id, p_recorded_at: fact.recorded_at,
           p_source_sha256: source!.source_sha256, p_input_hash: receipt.inputHash, p_validation: receipt,

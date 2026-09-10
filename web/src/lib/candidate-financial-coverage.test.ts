@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {candidateFinancialRequirements,financialCoverageGaps} from './candidate-financial-coverage.ts';
 import {discreteReportedQuarters} from './forward-earnings-bridge.ts';
+import {officialFinancialValidationSubjects,validateOfficialFinancialFact} from './official-financial-validation.ts';
 test('method requirements include actual denominators and cycle periods',()=>{
   assert.equal(candidateFinancialRequirements('半導體記憶體').quarters,20);
   assert.ok(candidateFinancialRequirements('general').keys.includes('diluted_weighted_average_shares'));
@@ -29,6 +30,17 @@ test('conflicting restatements remain gaps just as the valuation consumer reject
     periodEnd:r.period_end,periodStart:r.period_start,value:r.value,unit:r.unit,sourceRef:'official'})), 'quarterly_revenue');
   assert.equal(points.length, 7);
   assert.deepEqual(financialCoverageGaps(rows, 'general', cutoff), [{factKey:'quarterly_revenue',periodEnd:'2026-06-30'}]);
+});
+test('a fully covered issuer still has validation work after a pending conflict arrives',()=>{
+  const stockId='11111111-1111-4111-8111-111111111111';
+  const rows=coveredRows().map(r=>({...r,stock_id:stockId,source_ref:'twse-openapi:fixture',
+    schema_valid:true,unit_valid:true,point_in_time_valid:true,consistency_valid:true}));
+  const all=[...rows,{...rows[0],fact_id:'late-conflict',value:200,validation_status:'pending'}];
+  assert.deepEqual(financialCoverageGaps(all,'general',cutoff),[]);
+  const selected=officialFinancialValidationSubjects(all);
+  assert.equal(selected.length,49);
+  const result=validateOfficialFinancialFact(selected[0],all,{source_url:'https://www.twse.com.tw/openapi/test',source_sha256:'a'.repeat(64),locator:{table:'income'}},cutoff);
+  assert.equal(result.status,'rejected');assert.equal(result.consistencyValid,false);
 });
 test('nonfinite values, units and estimates never close reported coverage', () => {
   for (const change of [{value:NaN},{unit:'USD'},{estimate_kind:'forecast'}]) {

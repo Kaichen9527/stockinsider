@@ -48,7 +48,11 @@ export function validateOfficialFinancialFact(
     && fact.authority_tier === 'official_filing' && ['mops','twse','tpex'].includes(String(fact.provider))
     && ((['instant','quarter_end'].includes(String(fact.duration_kind)) && fact.period_start == null)
       || (fact.duration_kind === 'quarterly' && isoDate(fact.period_start) && String(fact.period_start) <= String(fact.period_end)))
-    && typeof fact.source_ref === 'string' && /^(?:(?:twse|tpex)-mops-inline:|(?:twse|tpex)-openapi:|issuer-document:[0-9a-f]{64}:)/u.test(fact.source_ref);
+    && typeof fact.source_ref === 'string' && /^(?:(?:twse|tpex)-openapi:|issuer-document:[0-9a-f]{64}:)/u.test(fact.source_ref);
+  // Regex-extracted inline values have not passed document/taxonomy validation.
+  // They must re-enter through the actual document parser receipt path; row
+  // shape, arithmetic and an official hostname cannot substitute for that gate.
+  if (/^(?:twse|tpex)-mops-inline:/u.test(String(fact.source_ref))) reasons.push('ixbrl_requires_structural_receipt');
   // Issuer-document URLs require the separate document receipt/allowlist checks;
   // this validator only admits exchange-hosted acquisition provenance.
   const provenanceValid = provenance != null && officialUrl(provenance.source_url)

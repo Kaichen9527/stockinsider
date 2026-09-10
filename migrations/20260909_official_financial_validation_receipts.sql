@@ -48,7 +48,8 @@ BEGIN
   THEN RAISE EXCEPTION 'official_validation_provenance_missing'; END IF;
   v_valid := (p_validation->>'schemaValid')::boolean AND (p_validation->>'unitValid')::boolean
     AND (p_validation->>'pointInTimeValid')::boolean AND (p_validation->>'consistencyValid')::boolean
-    AND jsonb_array_length(p_validation->'reasons')=0;
+    AND jsonb_array_length(p_validation->'reasons')=0
+    AND COALESCE(to_jsonb(v_fact)->>'source_ref','') !~ '^(twse|tpex)-mops-inline:';
   v_at := clock_timestamp();
   v_prior := jsonb_build_object('validation_status',v_fact.validation_status,'schema_valid',v_fact.schema_valid,
     'unit_valid',v_fact.unit_valid,'point_in_time_valid',v_fact.point_in_time_valid,

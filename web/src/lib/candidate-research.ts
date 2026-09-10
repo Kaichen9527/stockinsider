@@ -427,7 +427,9 @@ async function executeCandidateResearchCycle(options: {
   const officialFinancialRefresh = financialRefreshTargets.length > 0
     ? await refreshCandidateOfficialFinancials(financialRefreshTargets, evaluatedAt)
     : { candidateCount: 0, fetchedFilings: 0, parsedFacts: 0, writtenFacts: 0, symbolsWithFacts: [] as string[], attemptedSymbols: [] as string[], failures: [] as string[] };
-  const officialFinancialValidation = await validatePendingOfficialFinancials(financialRefreshTargets.map((target) => target.stockId));
+  // Validation is not acquisition: a covered company can gain contradictory
+  // evidence without entering the missing-fields refresh backlog.
+  const officialFinancialValidation = await validatePendingOfficialFinancials(proposedUniverse.map((stock) => stock.id));
   // Source membership is fixed at run start. Financial authority is frozen only
   // after acquisition, so this run can consume its validated new filings. A new
   // run can consume corrections without borrowing an older global Shadow cutoff.

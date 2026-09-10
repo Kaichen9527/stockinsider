@@ -17,3 +17,10 @@ test('official validation migration is additive, guarded, receipt-backed and PIT
   assert.match(sql,/FUNCTION public.read_financial_facts_as_of\(p_cutoff timestamptz\)/u);
   assert.match(sql,/v_fact.validation_status IN \('rejected','conflict','stale'\)/u);
 });
+test('validation covers the full candidate universe independently of acquisition backlog',()=>{
+  const research=readFileSync(new URL('../web/src/lib/candidate-research.ts',import.meta.url),'utf8');
+  const worker=readFileSync(new URL('../web/src/lib/official-financial-validation-worker.ts',import.meta.url),'utf8');
+  assert.match(research,/validatePendingOfficialFinancials\(proposedUniverse\.map/u);
+  assert.doesNotMatch(worker,/Set\(stockIds\)\]\)\.slice|Set\(stockIds\)\]\.slice/u);
+  assert.match(worker,/acceptedHashes\.has/u);
+});

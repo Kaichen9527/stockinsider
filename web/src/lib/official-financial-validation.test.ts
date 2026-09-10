@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {validateOfficialFinancialFact, officialFinancialValidationSubjects} from './official-financial-validation.ts';
+import {parseCandidateMopsFacts} from './candidate-official-financials.ts';
 const fact={fact_id:'a',stock_id:'11111111-1111-1111-1111-111111111111',fact_key:'quarterly_revenue',period_start:'2026-01-01',period_end:'2026-03-31',duration_kind:'quarterly',value:1000000,unit:'TWD',estimate_kind:'reported',provider:'tpex',authority_tier:'official_filing',source_ref:'tpex-openapi:test',filing_restatement_id:'v1',filing_published_at:'2026-05-15T00:00:00Z',source_timestamp:'2026-05-15T00:00:00Z',collected_at:'2026-09-08T00:00:00Z',recorded_at:'2026-09-08T00:00:01Z'};
 const source={source_url:'https://www.tpex.org.tw/openapi/v1/test',source_sha256:'a'.repeat(64),locator:{table:'generalIncome'}};
 const cutoff='2026-09-08T01:00:00Z';
@@ -14,6 +15,16 @@ test('unit errors, invalid dates and future availability cannot be promoted',()=
   assert.equal(validateOfficialFinancialFact({...fact,unit:'TWD_thousand'},[fact],source,cutoff).unitValid,false);
   assert.equal(validateOfficialFinancialFact({...fact,period_end:'2026-02-30'},[fact],source,cutoff).schemaValid,false);
   assert.equal(validateOfficialFinancialFact({...fact,recorded_at:'2026-09-09T00:00:00Z'},[fact],source,cutoff).pointInTimeValid,false);
+});
+test('regex iXBRL facts cannot bypass the structural document parser gate',()=>{
+  const malformed='<html><xbrli:context id="q"><xbrli:period><xbrli:startDate>2026-01-01</xbrli:startDate><xbrli:endDate>2026-03-31</xbrli:endDate></xbrli:period></xbrli:context><ix:nonNumeric name="tifrs-notes:ReviewAuditDate">115/05/15</ix:nonNumeric><ix:nonFraction name="ifrs-full:Revenue" contextRef="q" unitRef="TWD">1000000</ix:nonFraction></html>';
+  const parsed=parseCandidateMopsFacts(malformed,{stockId:fact.stock_id,symbol:'2330',exchange:'TWSE',
+    sourceUrl:'https://mopsov.twse.com.tw/server-java/FileDownLoad',collectedAt:fact.collected_at});
+  assert.equal(parsed.length,1);
+  const inline={...fact,source_ref:parsed[0].sourceRef,value:parsed[0].value,unit:parsed[0].unit};
+  const result=validateOfficialFinancialFact(inline,[inline],source,cutoff);
+  assert.equal(result.status,'rejected');assert.equal(result.schemaValid,false);
+  assert.ok(result.reasons.includes('ixbrl_requires_structural_receipt'));
 });
 test('duplicate conflicts and available accounting identities are checked',()=>{
   assert.equal(validateOfficialFinancialFact(fact,[fact,{...fact,value:2}],source,cutoff).consistencyValid,false);
