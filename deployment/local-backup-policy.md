@@ -44,7 +44,37 @@ encrypt sensitive exports before writing, even though the requested destination 
 ## Still required
 
 Destination confirmation/creation and an empty-directory capacity preflight are
-complete. Secure export access, pg_dump integration with the encrypted writer, actual document inventory,
+complete. TLS-verified read-only database access using the existing environment
+password has succeeded; no password reset is needed. The read-only pg_dump
+orchestrator and Keychain helper are implemented but have not completed a live
+export. The local Keychain returned OSStatus -25293 during key provisioning;
+this is not a database authentication error. Do not replace this with an
+unencrypted export or put the recovery key alongside the backup.
+
+Actual encrypted export, document inventory,
 consistent snapshot transfer, independent recovery-key
 storage, automated scheduling and a real restore rehearsal are not completed by
 these preflight checks. Do not claim a backup exists from this document or its tests.
+
+## Private local key alternative — 2026-09-10
+
+After repeated Keychain failures, the user authorized continuing with a workable
+direction. This backup run uses a separately generated random AES-256 key under
+`/Users/kaerchen/Library/Application Support/StockInsider/backup-keys`, outside
+Desktop, the repository, and the backup directory. FileVault was verified On.
+The key directory is owner-only 0700; the key is an exclusive-created 0600 file.
+Existing keys are never replaced, and symlink paths and malformed keys are rejected.
+This protects the encrypted backup from accidental Desktop sync exposure; it does
+not protect the key from a compromised logged-in user or replace independent
+recovery-key escrow. Losing this Mac and key can make the backup unrecoverable.
+
+`STOCKINSIDER_BACKUP_KEY_MODE=private-file` selects this explicit mode in the export
+runner; the manifest records the changed key backend and incomplete escrow.
+The archive verifier decrypts a previously authenticated file into `pg_restore
+--file=/dev/null`. This validates decoding without executing SQL or writing a
+plaintext archive. It is NOT a complete database restore rehearsal.
+
+Current checks: 18 primitive/key tests passed. A real fixed-snapshot encrypted
+export was started, but completion must be taken from the runtime manifest, not
+this document. Supabase Storage inventory contains seven objects in one bucket;
+their bytes require separate backup. No production migration or cutover occurred.
