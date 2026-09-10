@@ -49,9 +49,13 @@ This record does not assert a protected gate PASS or authorize bypassing one.
 - Rehearse schema/roles/extensions/RPC/RLS/documents/credentials, capacity and restore.
   Reserve at least 15 GiB throughout; warn below 20 GiB and pause resumable backfills
   near 15 GiB. Do not delete other sites' files or upgrade the VPS without cost review.
-- B2 encrypted offsite backups target US$3/month, 14 daily/four weekly, RPO <=24h,
-  RTO <=4h and monthly tested restoration. Account/payment/key provisioning remains
-  a real prerequisite, not a fabricated successful backup.
+- Superseding user decision: do not purchase B2. Store encrypted backups in the
+  existing local StockInsider project root's `backup/` directory (not filesystem
+  `/backup`). Keep it private and excluded from Git/deploy tracing. Initial local
+  budget is 25 GiB; retention must be measured rather than assumed to fit.
+  RPO <=24h, RTO <=4h and tested restoration remain goals. Local backup is not
+  geographically independent protection; separately recoverable keys and a full
+  system restore remain unverified until actually tested.
 - After rehearsal, use a 60-minute maintenance window, frozen old writers and last-good
   read-only pages. Verify the final consistent transfer before enabling the one new
   writer and resuming schedules. Validate short-lived IP HTTPS auto-renewal/alerts.
