@@ -70,9 +70,13 @@ created and reviewed.
 The successor values above were measured independently with `stat`, SHA-256,
 `codesign --verify --deep --strict`, designated requirement, Team ID and
 `spctl -a -vv`. They are not learned by the candidate test. Before this fixture
-may be accepted in a PR, a protected-base owner must add this exact fixture
-digest and metadata digest to the base-owned successor approval record, then
-run the protected model-runner gate. The candidate supplies only a byte-exact
-fixture that the already-reviewed protected base compares against that record;
-it cannot add or alter its own approval. The approval is single-use for the
-old-to-new digest pair and any subsequent binary drift fails closed.
+may be accepted in a PR, a protected-base owner must approve the exact trimmed
+Git model-oracle listing transition from predecessor SHA-256
+`cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5` to successor
+SHA-256 `70dbbd6ed3846ada9804c029321dcc5e97de60ddf4e63a75142d10f2efdde115`
+and bind that successor listing to `model-runner-host-pins-v3.16`. The candidate
+supplies only byte-exact model-oracle files that the already-reviewed protected
+base compares against that record; it cannot add or alter its own approval. The
+approval is single-use for this old-to-new listing pair. The protected listing
+map remains closed, so any later, unapproved listing or binary drift fails
+closed.
