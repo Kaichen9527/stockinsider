@@ -17,6 +17,11 @@ ALTER TABLE public.candidate_financial_parser_evidence_v8
       AND jsonb_typeof(fact_acceptance)='object' AND error_manifest_sha256 ~ '^[0-9a-f]{64}$')
   );
 
+-- The original primary key is receipt-first; PIT reads enter through fact ID.
+CREATE INDEX IF NOT EXISTS candidate_financial_document_fact_links_v10_fact_recorded_idx
+  ON public.candidate_financial_document_fact_links_v8(fact_id,fact_recorded_at)
+  INCLUDE(receipt_id,evidence_id,created_at);
+
 -- The digest contract is recursively key-sorted compact JSON, not jsonb::text
 -- (which contains whitespace). Contract object keys are ASCII.
 CREATE OR REPLACE FUNCTION public.candidate_financial_canonical_json_v10(p_value jsonb)
@@ -293,6 +298,61 @@ CREATE OR REPLACE FUNCTION public.candidate_financial_fact_has_structural_proof_
   );
 $function$;
 
+-- An unchanged accounting hash must not grandfather an unproven issuer row.
+-- Keep every structural join at the evaluation cutoff: an unrelated old link
+-- must never borrow a newly available proof for the same fact/document hash.
+CREATE OR REPLACE FUNCTION public.candidate_financial_fact_has_structural_proof_as_of_v10(
+  p_fact_id uuid,p_recorded_at timestamptz,p_source_sha256 text,p_cutoff timestamptz
+) RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path=public,pg_temp AS $function$
+  SELECT EXISTS (
+    SELECT 1 FROM public.opportunity_financial_facts_v3 fact
+    JOIN public.stocks stock ON stock.id=fact.stock_id
+    JOIN public.candidate_financial_document_fact_links_v8 link ON link.fact_id=fact.fact_id AND link.fact_recorded_at=fact.recorded_at
+    JOIN public.candidate_financial_document_receipts_v6 receipt ON receipt.receipt_id=link.receipt_id
+      AND receipt.stock_id=fact.stock_id AND receipt.period_end=fact.period_end AND receipt.document_sha256=p_source_sha256
+    JOIN public.candidate_financial_parser_evidence_v8 evidence ON evidence.evidence_id=link.evidence_id
+      AND evidence.receipt_id=receipt.receipt_id AND evidence.document_sha256=p_source_sha256
+    JOIN public.candidate_financial_fact_provenance_v4 provenance ON provenance.fact_id=fact.fact_id
+      AND provenance.source_sha256=p_source_sha256
+      AND provenance.locator->>'parser_evidence_id'=evidence.evidence_id::text
+      AND provenance.locator->>'manifest_sha256'=evidence.manifest_sha256
+    CROSS JOIN LATERAL jsonb_array_elements(evidence.validated_fact_manifest) manifest(row)
+    WHERE fact.fact_id=p_fact_id AND fact.recorded_at=p_recorded_at
+      AND fact.filing_published_at<=p_cutoff AND fact.source_timestamp<=p_cutoff
+      AND fact.collected_at<=p_cutoff AND fact.recorded_at<=p_cutoff
+      AND evidence.recorded_at<=p_cutoff AND link.created_at<=p_cutoff
+      AND provenance.extracted_at<=p_cutoff AND provenance.recorded_at<=p_cutoff
+      AND receipt.accepted_at<=p_cutoff AND receipt.completed_at<=p_cutoff
+      AND (receipt.published_at IS NULL OR receipt.published_at<=p_cutoff)
+      AND fact.provider='mops' AND fact.authority_tier='official_filing'
+      AND fact.source_ref LIKE 'issuer-document:'||p_source_sha256||':%'
+      AND evidence.parser='arelle' AND evidence.parser_version='2.44.7'
+      AND evidence.taxonomy_sha256='4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869'
+      AND manifest.row->>'xbrl_context'=provenance.locator->>'xbrl_context'
+      AND manifest.row->>'xbrl_concept'=provenance.locator->>'xbrl_concept'
+      AND manifest.row->>'unit'=fact.unit::text AND (manifest.row->>'value')::numeric=fact.value
+      AND manifest.row->>'entity_identifier'=stock.symbol
+      AND (manifest.row->>'period_start')::date IS NOT DISTINCT FROM fact.period_start
+      AND (manifest.row->>'period_end')::date=fact.period_end
+      AND manifest.row->>'duration_kind'=fact.duration_kind::text
+      AND manifest.row->'dimension_count'='0'::jsonb
+      AND ((evidence.evidence_schema_version IS NULL
+        AND public.candidate_financial_parser_document_ready_v10(evidence.evidence_id,receipt.receipt_id,p_source_sha256))
+        OR (evidence.evidence_schema_version=10
+          AND evidence.fact_acceptance->'sourceValidationCompleted'='true'::jsonb
+          AND CASE WHEN evidence.fact_acceptance->'extractedInstanceSha256'='null'::jsonb
+            THEN evidence.fact_acceptance->'extractedValidationCompleted'='false'::jsonb
+            ELSE evidence.fact_acceptance->'extractedValidationCompleted'='true'::jsonb END
+          AND evidence.fact_acceptance->'manifestComplete'='true'::jsonb
+          AND evidence.fact_acceptance->'documentFatal'='false'::jsonb
+          AND manifest.row->>'xValid'='VALID' AND manifest.row->>'structuralStatus'='structurally_validated'
+          AND manifest.row->>'factKey'=provenance.locator->>'structural_fact_key'
+          AND manifest.row->>'concept_namespace'=provenance.locator->>'concept_namespace'
+          AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(evidence.fact_acceptance->'rejections') rejected(row)
+            WHERE rejected.row->>'factKey'=manifest.row->>'factKey')))
+  );
+$function$;
+
 CREATE OR REPLACE FUNCTION public.complete_candidate_financial_document_receipt_parser_v10(
   p_receipt_id uuid,p_owner text,p_caller_principal uuid,p_facts jsonb,p_parser_locators jsonb,
   p_parser_evidence jsonb,p_missing_requirements jsonb,p_rejection_reasons jsonb,p_completed_at timestamptz
@@ -536,6 +596,33 @@ BEGIN
     validation_recorded_at=v_at WHERE fact_id=p_fact_id;
   RETURN v_valid;
 END $function$;
+
+CREATE OR REPLACE FUNCTION public.read_financial_facts_as_of(p_cutoff timestamptz)
+RETURNS SETOF public.opportunity_financial_facts_v3 LANGUAGE sql STABLE SECURITY INVOKER
+SET search_path=public,pg_temp AS $asof$
+  SELECT (jsonb_populate_record(NULL::public.opportunity_financial_facts_v3,
+    to_jsonb(f) || CASE
+      WHEN latest.id IS NOT NULL THEN COALESCE(latest.effective_validation,
+        '{"validation_status":"pending","schema_valid":false,"unit_valid":false,"point_in_time_valid":false,"consistency_valid":false}'::jsonb)
+      WHEN first_receipt.id IS NOT NULL THEN COALESCE(first_receipt.prior_validation,
+        '{"validation_status":"pending","schema_valid":false,"unit_valid":false,"point_in_time_valid":false,"consistency_valid":false}'::jsonb)
+      ELSE '{}'::jsonb END)).*
+  FROM public.opportunity_financial_facts_v3 f
+  LEFT JOIN LATERAL (SELECT r.id,r.effective_validation FROM public.official_financial_validation_receipts r
+    WHERE r.fact_id=f.fact_id AND r.validated_at<=p_cutoff
+    ORDER BY r.validated_at DESC,r.receipt_sequence DESC LIMIT 1) latest ON true
+  LEFT JOIN LATERAL (SELECT r.id,r.prior_validation FROM public.official_financial_validation_receipts r
+    WHERE r.fact_id=f.fact_id ORDER BY r.validated_at,r.receipt_sequence LIMIT 1) first_receipt ON true
+  WHERE f.recorded_at<=p_cutoff
+    AND (COALESCE(f.source_ref,'') NOT LIKE 'issuer-document:%'
+      OR public.candidate_financial_fact_has_structural_proof_as_of_v10(f.fact_id,f.recorded_at,
+        substring(f.source_ref from '^issuer-document:([0-9a-f]{64}):'),p_cutoff))
+$asof$;
+
+REVOKE ALL ON FUNCTION public.candidate_financial_fact_has_structural_proof_as_of_v10(uuid,timestamptz,text,timestamptz),
+  public.read_financial_facts_as_of(timestamptz) FROM PUBLIC,anon,authenticated;
+GRANT EXECUTE ON FUNCTION public.candidate_financial_fact_has_structural_proof_as_of_v10(uuid,timestamptz,text,timestamptz),
+  public.read_financial_facts_as_of(timestamptz) TO service_role;
 
 REVOKE ALL ON FUNCTION public.candidate_financial_canonical_json_v10(jsonb),
   public.reject_financial_parser_evidence_mutation_v10(),
