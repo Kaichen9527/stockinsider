@@ -20,8 +20,9 @@ const SOURCE_KEY_AUTHORITIES = Object.freeze({
   research_inbox: 'research_inbox_rights_attested',
 });
 
-function nominationAuthorityForSource({ sourceKey, structuredClaim = false, rightsAttested = false } = {}) {
+function nominationAuthorityForSource({ sourceKey, structuredClaim = false, rightsAttested = false, sourceAssessment = null } = {}) {
   const key = String(sourceKey ?? '');
+  if (key === 'threads' && sourceAssessment === 'discovery_only_unverified') return null;
   const authority = SOURCE_KEY_AUTHORITIES[key] ?? null;
   if (!authority) return null;
   // Public Telegram channels are a first-class public source.  Only paid or
@@ -38,7 +39,9 @@ function hasCandidateNominationAuthority(outcome) {
     sourceKey: outcome?.sourceKey,
     structuredClaim: outcome?.structuredClaim === true,
     rightsAttested: outcome?.rightsAttested === true,
-  }) || (['approved_kol_transcript', 'approved_kol_threads_api'].includes(declared)
+    sourceAssessment: outcome?.sourceAssessment ?? null,
+  }) || (outcome?.sourceAssessment !== 'discovery_only_unverified'
+    && ['approved_kol_transcript', 'approved_kol_threads_api'].includes(declared)
     && declared === SOURCE_KEY_AUTHORITIES[String(outcome?.sourceKey ?? '')]);
 }
 

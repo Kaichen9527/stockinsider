@@ -10,6 +10,7 @@ import {
   threadsRedirectUri,
 } from './threads-api';
 import { hashThreadsUserId } from './threads-signed-request';
+import { evaluateThreadsReadiness } from './threads-discovery';
 
 const DEFAULT_TOKEN_TTL_MS = 60 * 24 * 60 * 60 * 1000;
 
@@ -169,6 +170,9 @@ export async function recordThreadsPublicSearchCanary(receipt: {
 }): Promise<void> {
   const supabase = getSupabaseServerClient();
   const metadata = await readCredentialMetadata();
+  if (!/^[0-9a-f]{64}$/u.test(String(metadata.token_hash || '')) || receipt.tokenHash !== metadata.token_hash) {
+    throw new Error('threads_canary_token_hash_mismatch');
+  }
   const { error } = await supabase.from('source_credentials_registry').upsert({
     platform: 'threads',
     credential_ref: 'SUPABASE_VAULT:threads_access_token',
@@ -180,6 +184,8 @@ export async function recordThreadsPublicSearchCanary(receipt: {
       graph_version: THREADS_GRAPH_VERSION,
       required_scopes: ['threads_basic', 'threads_keyword_search'],
       non_self_public_search_canary: receipt,
+      public_search_verified: true,
+      public_search_readiness_reason: null,
     },
     updated_at: receipt.observedAt,
   }, { onConflict: 'platform' });
@@ -209,6 +215,20 @@ export async function getThreadsTokenForRun(): Promise<ThreadsTokenState> {
     ownerUserIdHash,
     refreshed: true,
   };
+}
+
+/**
+ * Provider ingestion is permitted only after a recent non-self public post was
+ * observed with the exact token currently held by the worker. The token itself
+ * never leaves this module.
+ */
+export async function assertThreadsPublicSearchReady(): Promise<ThreadsTokenState> {
+  const state = await getThreadsTokenForRun();
+  const metadata = await readCredentialMetadata();
+  if (metadata.token_hash !== state.tokenHash) throw new Error('threads_runtime_token_hash_mismatch');
+  const readiness = evaluateThreadsReadiness(metadata as Record<string, unknown>, 'valid');
+  if (!readiness.publicSearchVerified) throw new Error(readiness.reason || 'threads_public_search_unverified');
+  return state;
 }
 
 export function threadsTokenRegistryMetadata(state: ThreadsTokenState) {

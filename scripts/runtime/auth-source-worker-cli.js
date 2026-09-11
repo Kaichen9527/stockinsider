@@ -322,7 +322,8 @@ function extractRevisionCandidates(bundle) {
   const structuredAuthorized=frozen.contentAuthorization==='structured_claim_authorized'
     && frozen.structuredClaim===true;
   const nominationAuthority=nominationAuthorityForSource({sourceKey:frozen.sourceKey,
-    structuredClaim:structuredAuthorized,rightsAttested:frozen.rightsAttested===true});
+    structuredClaim:structuredAuthorized,rightsAttested:frozen.rightsAttested===true,
+    sourceAssessment:frozen.sourceAssessment??null});
   if(requiresStructuredAuthorization&&!structuredAuthorized) {
     const sourceKey=String(frozen.sourceKey);
     return Object.freeze({ schema: 'legacy-mention-claim-result-v3.11', revisionId:frozen.revisionId,
@@ -383,6 +384,7 @@ function extractRevisionCandidates(bundle) {
       mentionId: uuidFromHash(`mention:${frozen.revisionId}:${stockId}:${raw}`), claimEligible: true,
       link,
       sourceClass: SOURCE_CLASS_BY_KEY[frozen.sourceKey] ?? 'community', nominationAuthority,
+      sourceAssessment:typeof frozen.sourceAssessment==='string'?frozen.sourceAssessment:null,
       structuredClaim:structuredAuthorized,rightsAttested:frozen.rightsAttested===true,
       sourceProfileId: typeof frozen.profileId==='string'?frozen.profileId:null }];
   });

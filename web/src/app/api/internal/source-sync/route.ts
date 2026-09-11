@@ -33,8 +33,13 @@ type SourceResult = SourceSyncResult & {
 
 function authStatus(result: SourceSyncResult) {
   const reason = `${result.errorCode || ''} ${result.degradedReason || ''}`;
+  if (/mismatch|expired|rejected|http_(?:401|403)|\bauth_failed\b/iu.test(reason)) return 'rejected' as const;
   if (/missing|oauth|credential|vault|token/iu.test(reason)) return 'missing' as const;
-  if (/auth|login|rejected/iu.test(reason)) return 'rejected' as const;
+  if (/auth|login/iu.test(reason)) return 'rejected' as const;
+  // Threads always authenticates its official API request. Its session mode is
+  // intentionally `not_applicable`; treating that as unauthenticated made
+  // successful official runs appear credentialless in the ledger.
+  if (result.connector === 'threads') return 'authorized' as const;
   return result.sessionMode === 'not_applicable' ? 'not_applicable' as const : 'authorized' as const;
 }
 

@@ -10,8 +10,8 @@ import { bullTalkLicenseReadiness, parseLicensedBullTalkFeed } from './bulltalk-
 import { THREADS_KEYWORD_SEARCH_URL, assertThreadsKeywordSearchEndpoint } from './threads-api';
 import { derivePodcastLedgerSemantics, parsePodcastNamespaceFeed, parsePublisherChapters, parsePublisherTranscript, type TimedPodcastSegment } from './podcast-rss';
 import { fetchTextWithRetry, sourceFetchFailureCode } from './source-fetch';
-import { getThreadsTokenForRun, threadsTokenRegistryMetadata } from './threads-token';
-import { mergeThreadsRunMetadata, normalizeThreadsAuthor, summarizeThreadsAuthors, threadsMarketQueries } from './threads-discovery';
+import { assertThreadsPublicSearchReady, threadsTokenRegistryMetadata } from './threads-token';
+import { mergeThreadsRunMetadata, normalizeThreadsAuthor, normalizeThreadsCursor, normalizeThreadsPermalink, summarizeThreadsAuthors, threadsMarketQueries } from './threads-discovery';
 import { canonicalContentHash, canonicalPublisherKey, classifyPttContentSemantics, classifySourceStance, GDELT_TW_MATCHER_VERSION, publisherKeyFor, type SourceContentSemantics } from './source-content-semantics';
 import { collectPagedAuthorityRows } from './candidate-research-policy';
 import { decodeSingleFileZip, gdeltGkgUrlsAfter, gdeltSearchableText, gdeltTransportReason, isRetiredNewsHost, matchGdeltStockSymbols, parseGdeltSeenDate, selectLatestGdeltGkgUrl } from './gdelt-gkg';
@@ -1951,6 +1951,7 @@ async function upsertCredentialRegistry(platform: string, status: 'missing' | 'c
     { onConflict: 'platform' },
   );
   if (error) throw new Error(error.message);
+  return metadata;
 }
 
 async function ensureDefaultWatchlists() {
@@ -3130,7 +3131,7 @@ async function scrapeGdeltMetadata(symbolContext?: SymbolScopedStockContext | nu
 
 async function scrapeThreadsOfficialApi(symbolContext?: SymbolScopedStockContext | null): Promise<SourceSyncRunShape> {
   const supabase = getSupabaseServerClient();
-  const tokenState = await getThreadsTokenForRun();
+  const tokenState = await assertThreadsPublicSearchReady();
   const connectorRunId = await startConnectorRun('source-sync', 'threads', {
     mode: 'threads_official_keyword_api',
     crawl_mode: symbolContext ? 'symbol_scoped' : 'market_scan',
@@ -3151,7 +3152,7 @@ async function scrapeThreadsOfficialApi(symbolContext?: SymbolScopedStockContext
     const symbol = compactText(row.symbol).toUpperCase();
     return [symbol, getSymbolAliases(symbol, compactText(row.name))] as const;
   }));
-  const approvedAuthors = new Set([
+  const trackedAuthors = new Set([
     ...KOL_SEEDS.map((seed) => compactText(seed.metadata?.threadsUsername)).filter(Boolean),
     ...watchlists.filter((row) => String(row.watch_type || '') === 'author').map((row) => compactText(row.watch_value)),
   ].map((value) => value.replace(/^@/u, '').toLocaleLowerCase('en-US')));
@@ -3166,12 +3167,16 @@ async function scrapeThreadsOfficialApi(symbolContext?: SymbolScopedStockContext
     sourceKey: 'api.threads.keyword_search',
   });
   const records: SourceRawDocInput[] = [];
+  const filteredPosts: Array<{ id: string; username: string; text: string; permalink: string; timestamp: string | null; query: string }> = [];
   let fetchedPosts = 0;
+  let providerRows = 0;
   let failedQueries = 0;
   let firstFailure: string | null = null;
   let authRejected = false;
   let pagesFetched = 0;
   const seenIds = new Set<string>();
+  const sinceEpochSeconds = Math.floor((Date.now() - 7 * 24 * 60 * 60 * 1000) / 1000);
+  const maximumFilteredPosts = 300;
   for (const query of queries) {
     try {
       let after: string | null = null;
@@ -3180,7 +3185,7 @@ async function scrapeThreadsOfficialApi(symbolContext?: SymbolScopedStockContext
         endpoint.searchParams.set('q', query);
         endpoint.searchParams.set('search_type', 'RECENT');
         endpoint.searchParams.set('fields', 'id,username,text,permalink,timestamp');
-        endpoint.searchParams.set('since', String(Math.floor((Date.now() - 7 * 24 * 60 * 60 * 1000) / 1000)));
+        endpoint.searchParams.set('since', String(sinceEpochSeconds));
         endpoint.searchParams.set('limit', '25');
         if (after) endpoint.searchParams.set('after', after);
         endpoint.searchParams.set('access_token', tokenState.token);
@@ -3194,34 +3199,54 @@ async function scrapeThreadsOfficialApi(symbolContext?: SymbolScopedStockContext
           data?: Array<{ id?: string; username?: string; text?: string; permalink?: string; timestamp?: string }>;
           paging?: { cursors?: { after?: string } };
         };
+        providerRows += (payload.data || []).length;
         for (const row of payload.data || []) {
           if (!row.id || seenIds.has(row.id)) continue;
-          seenIds.add(row.id);
-          fetchedPosts += 1;
           const username = normalizeThreadsAuthor(compactText(row.username));
           if (!username) continue;
           const text = compactText(row.text).slice(0, 1200);
-          if (!text || !row.permalink) continue;
-          const extracted = extractTwSymbolsWithEvidence(text, { validSymbols, stockNamesBySymbol, aliasesBySymbol });
-          if (extracted.symbols.length === 0) continue;
-          records.push({
+          const permalink = normalizeThreadsPermalink(compactText(row.permalink));
+          const timestamp = safeDateString(row.timestamp || null);
+          if (!text || !permalink || !timestamp) continue;
+          seenIds.add(row.id);
+          filteredPosts.push({ id: row.id, username, text, permalink, timestamp, query });
+        }
+        const nextAfter = normalizeThreadsCursor(payload.paging?.cursors?.after);
+        if (!nextAfter || nextAfter === after || (payload.data || []).length === 0) break;
+        after = nextAfter;
+      }
+    } catch (error) {
+      failedQueries += 1;
+      firstFailure ||= compactText((error as Error).message) || 'threads_api_query_failed';
+    }
+  }
+  // Invalid authors, URLs and stale rows are removed before applying the
+  // product bound. This prevents a provider page full of invalid leading rows
+  // from starving valid public discovery evidence.
+  for (const row of filteredPosts.slice(0, maximumFilteredPosts)) {
+    fetchedPosts += 1;
+    const extracted = extractTwSymbolsWithEvidence(row.text, { validSymbols, stockNamesBySymbol, aliasesBySymbol });
+    if (extracted.symbols.length === 0) continue;
+    records.push({
             sourceEntityId: String(entity.id),
             platform: 'threads',
             documentUrl: row.permalink,
-            title: `Threads @${username}: ${text.slice(0, 72)}`,
-            summary: text.slice(0, 300),
-            contentText: text,
-            publishedAt: safeDateString(row.timestamp || null),
+            title: `Threads @${row.username}: ${row.text.slice(0, 72)}`,
+            summary: row.text.slice(0, 300),
+            contentText: row.text,
+            publishedAt: row.timestamp,
             symbols: extracted.symbols,
             sentimentLabel: 'neutral',
             confidence: 0.55,
             metadata: {
               connector: 'threads_official_keyword_api',
               stable_id: row.id,
-              source_account: username,
-              tracked_author: approvedAuthors.has(username),
+              source_account: row.username,
+              tracked_author: trackedAuthors.has(row.username),
               author_assessment: 'discovery_only_unverified',
-              query_keyword: query,
+              profile_monitoring_status: 'blocked_permission',
+              profile_monitoring_reason: 'threads_profile_discovery_missing',
+              query_keyword: row.query,
               crawl_mode: symbolContext ? 'symbol_scoped' : 'public_search',
               source_surface: 'threads_official_api',
               graph_version: 'v1.0',
@@ -3230,15 +3255,6 @@ async function scrapeThreadsOfficialApi(symbolContext?: SymbolScopedStockContext
               excluded_false_positives: extracted.excludedFalsePositives,
             },
           });
-        }
-        const nextAfter = compactText(payload.paging?.cursors?.after);
-        if (!nextAfter || nextAfter === after || (payload.data || []).length === 0) break;
-        after = nextAfter;
-      }
-    } catch (error) {
-      failedQueries += 1;
-      firstFailure ||= compactText((error as Error).message) || 'threads_api_query_failed';
-    }
   }
   if (authRejected) {
     await upsertCredentialRegistry('threads', 'invalid', {
@@ -3253,14 +3269,17 @@ async function scrapeThreadsOfficialApi(symbolContext?: SymbolScopedStockContext
   const authorDiscovery = summarizeThreadsAuthors(records.map(record => ({
     id: String(record.metadata?.stable_id || ''), username: String(record.metadata?.source_account || ''),
     text: record.contentText || '', symbols: record.symbols || [], publishedAt: record.publishedAt || null,
-  })), approvedAuthors);
+  })), trackedAuthors);
   // Track promising authors inside StockInsider only. This does not follow
   // accounts on the user's Threads account or confer investment reliability.
   const discoveryProfiles = authorDiscovery.slice(0, 50).map(author => ({
     primary_platform: 'threads', display_name: `@${author.username}`,
     profile_url: `https://www.threads.com/@${author.username}`,
     content_focus: 'tw_stocks', discovery_state: 'monitor_only',
-    metadata: { discovery_basis: 'official_keyword_search', ...author }, updated_at: nowIso(),
+    metadata: {
+      ...author, discovery_basis: 'official_keyword_search', assessment: 'discovery_only_unverified',
+      profile_monitoring_status: 'blocked_permission', profile_monitoring_reason: 'threads_profile_discovery_missing',
+    }, updated_at: nowIso(),
   }));
   if (discoveryProfiles.length) {
     const profiles = await supabase.from('kol_profiles').upsert(discoveryProfiles, {
@@ -3271,7 +3290,18 @@ async function scrapeThreadsOfficialApi(symbolContext?: SymbolScopedStockContext
   const count = await upsertSourceRawDocuments(filterSymbolScopedDocs(records, 'threads', symbolContext));
   const duplicatesSkipped = Math.max(0, records.length - count);
   const watermarkAfter = await getSourceWatermark('threads');
-  const degradedReason = failedQueries > 0 ? `threads_api_failed_queries:${failedQueries}:${firstFailure || 'unknown'}` : null;
+  const credentialMetadata = await upsertCredentialRegistry('threads', 'valid', {
+    credential_ref: 'SUPABASE_VAULT:threads_access_token',
+    metadata: {
+      ...threadsTokenRegistryMetadata(tokenState), records_written: count, fetched_posts: fetchedPosts,
+      provider_rows: providerRows, public_search_result_count: fetchedPosts, public_search_attempted_at: nowIso(),
+      profile_monitoring_status: 'blocked_permission', profile_monitoring_reason: 'threads_profile_discovery_missing',
+    },
+  });
+  const zeroRowStreak = Number(credentialMetadata.public_search_zero_row_streak || 0);
+  const degradedReason = failedQueries > 0
+    ? `threads_api_failed_queries:${failedQueries}:${firstFailure || 'unknown'}`
+    : zeroRowStreak >= 3 ? `threads_public_search_zero_row_streak:${zeroRowStreak}` : null;
   await finishConnectorRun(connectorRunId, degradedReason ? 'partial' : 'success', count, {
     error_summary: degradedReason,
     metadata: {
@@ -3283,14 +3313,14 @@ async function scrapeThreadsOfficialApi(symbolContext?: SymbolScopedStockContext
       searched_keywords: queries,
       pages_fetched: pagesFetched,
       lookback_days: 7,
-      approved_author_count: approvedAuthors.size,
+      tracked_author_count: trackedAuthors.size,
       author_discovery: authorDiscovery.slice(0, 50),
       discovered_author_count: authorDiscovery.length,
+      public_search_zero_row_streak: zeroRowStreak,
+      public_search_verified: credentialMetadata.public_search_verified === true,
+      profile_monitoring_status: 'blocked_permission',
+      profile_monitoring_reason: 'threads_profile_discovery_missing',
     },
-  });
-  await upsertCredentialRegistry('threads', 'valid', {
-    credential_ref: 'SUPABASE_VAULT:threads_access_token',
-    metadata: { ...threadsTokenRegistryMetadata(tokenState), records_written: count, fetched_posts: fetchedPosts },
   });
   await finishAgentRun(agentRunId, degradedReason ? 'failed' : 'success', { connector: 'threads', records_written: count, fetched_posts: fetchedPosts });
   return {
@@ -3916,12 +3946,13 @@ export async function runSourceSync(options?: SourceSyncOptions): Promise<Source
       watermarkAfter: null,
       duplicatesSkipped: 0,
       sessionRefreshed: false,
-      errorCode: null,
+      errorCode: connector === 'threads' ? 'threads_dry_run_provider_canary_not_executed' : null,
       matchedDirectHits: 0,
       matchedIndustryHits: 0,
       degradedReason: null,
       timedOut: false,
       sessionMode: defaultSessionMode,
+      metadata: connector === 'threads' ? { provider_canary_ran: false, dry_run_credentials_only: true } : undefined,
     };
   }
 
