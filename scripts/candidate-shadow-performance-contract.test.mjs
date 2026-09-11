@@ -139,7 +139,7 @@ test('Threads joins the VPS scheduler only after official policy activation and 
   assert.match(sourcePolicy, /return activeSourceConnectorKeys\(\)/u);
   assert.match(domain, /candidate_research_run_missing/u);
   assert.match(domain, /radar_publication_failed/u);
-  assert.match(domain, /shadow_session_missing/u);
+  assert.doesNotMatch(domain, /shadow_session_missing|shadow_session_not_qualifying/u);
 });
 
 test('public snapshot publication is atomic and failed refreshes retain last-good fail-closed state', () => {
@@ -155,14 +155,14 @@ test('shadow observations are canonical per official session and preserve confli
   assert.match(migration, /same_session_replay_conflict/u);
 });
 
-test('current shadow cohort freezes a source manifest and records publication-bound attempts', () => {
+test('retired shadow evidence remains auditable without coupling production to a cohort', () => {
   const research = readFileSync(new URL('../web/src/lib/candidate-research.ts', import.meta.url), 'utf8');
   assert.match(v2Migration, /CREATE TABLE IF NOT EXISTS public\.candidate_shadow_manifests/u);
   assert.match(v2Migration, /CREATE TABLE IF NOT EXISTS public\.candidate_shadow_attempts/u);
   assert.match(v2Migration, /shadow_policy_version TEXT NOT NULL DEFAULT 'shadow-policy-v1'/u);
   assert.match(v2Migration, /ALTER COLUMN shadow_policy_version SET DEFAULT 'shadow-policy-v2'/u);
   assert.match(research, /SHADOW_POLICY_VERSION = 'shadow-policy-v3'/u);
-  assert.match(research, /onConflict: 'session_date,policy_version,ruleset_version,model_version'/u);
+  assert.doesNotMatch(research.slice(0,research.indexOf('export async function recordCandidateShadowObservation')), /from\('candidate_shadow_manifests'\)/u);
   assert.match(research, /Operational completeness counts a correctly terminal partial\/fail-closed/u);
   assert.match(research, /manifestSymbols\.filter\(\(symbol\) => terminalBySymbol\.has\(symbol\) && replayBySymbol\.has\(symbol\)\)/u);
   assert.match(research, /publicationId/u);
@@ -173,10 +173,11 @@ test('current shadow cohort freezes a source manifest and records publication-bo
   assert.match(research, /qualifying: false,[\s\S]{0,180}reproducibility_status: 'conflict'/u);
   assert.match(research, /shadow_observation_conflict_write_failed/u);
   assert.match(domain, /read_taiwan_data_publication_metadata_v5/u);
-  assert.match(domain, /final_dataset_\$\{finalSemantics\.status\}_\$\{finalSemantics\.completenessPct\}/u);
+  assert.match(domain, /const publicationStages = finalSemantics\.confirmed \? stages/u);
   const publishAt = domain.indexOf("executeStep('radar_publication'");
   const shadowAt = domain.indexOf("executeStep('shadow_observation'");
-  assert.ok(publishAt >= 0 && shadowAt > publishAt, 'publication must precede the shadow observation');
+  assert.ok(publishAt >= 0 && shadowAt === -1, 'publication must not invoke retired global Shadow');
+  assert.doesNotMatch(snapshotPublisher,/loadCandidateShadowProgress/u);
 });
 
 test('production source writes require the active VPS release and production lease', () => {

@@ -36,13 +36,16 @@ CREATE OR REPLACE FUNCTION public.read_v320_revalidated_kol_retention_internal(
 LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path='' AS $retained$
 DECLARE
   v_prior_run uuid;
+  v_prior_config_sha256 text;
+  v_prior_seed_set_hash text;
   v_prior_ledger jsonb;
 BEGIN
   IF p_source_cutoff IS NULL THEN
     RAISE EXCEPTION USING ERRCODE='PT403',MESSAGE='candidate_retention_cutoff_missing';
   END IF;
 
-  SELECT prior.run_id INTO v_prior_run
+  SELECT prior.run_id,prior.scheduler_config_sha256,prior.legacy_seed_set_hash
+    INTO v_prior_run,v_prior_config_sha256,v_prior_seed_set_hash
   FROM public.legacy_producer_runs_v3_11 prior
   WHERE prior.status='success' AND prior.source_cutoff<p_source_cutoff
     AND EXISTS(
@@ -74,7 +77,10 @@ BEGIN
       'structuredClaim',true,
       'rightsAttested',true,
       'kolRetentionAuthority','revalidated_investanchors_structured_claim_v3_20_1',
-      'retentionBridgeSourceRunId',v_prior_run::text
+      'retentionBridgeSourceRunId',v_prior_run::text,
+      'producerRunId',v_prior_run::text,
+      'schedulerConfigSha256',v_prior_config_sha256,
+      'legacySeedSetHash',v_prior_seed_set_hash
     ) ORDER BY candidate.ordinality
   ),'[]'::jsonb) INTO v_prior_ledger
   FROM public.legacy_producer_jobs_v3_11 job

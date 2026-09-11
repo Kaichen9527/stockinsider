@@ -412,6 +412,9 @@ export async function GET(request: NextRequest) {
         if (request.headers.get('if-none-match') === responseEtag) return new NextResponse(null, { status: 304, headers });
         return NextResponse.json(responsePayload, { headers });
       }
+      // Snapshot mode never delegates a public cache miss to research. Only an
+      // authenticated tracked producer may run the expensive assembly below.
+      return NextResponse.json({ error: 'radar_projection_unavailable', retryable: true }, { status: 503, headers: NO_STORE });
     }
     const compact = producerRead ? null : await loadPublishedRadarProjection('daily');
     if (compact) {

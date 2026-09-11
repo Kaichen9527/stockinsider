@@ -38,7 +38,7 @@ authority boundary. `runtime-installation-contract.md`,
 `sector-cycle-contract.md`, `sector-benchmark-contract.md`, `valuation-contract.md`,
 `decision-contract.md`, `portfolio-context-contract.md`, `data-contract.md`,
 `v3-detail-contract.md`, `legacy-compatibility-contract.md`,
-`shadow-evaluation-contract.md`, `auth-principal-contract.md`,
+historical audit-only `shadow-evaluation-contract.md` (not an active root), `auth-principal-contract.md`,
 `control-plane-contract.md`, `postgres-type-contract.md`,
 `manifest-storage-contract.md`, `job-graph-contract.md`,
 `runtime-transaction-contract.md`, `storage-schema-contract.md`,
@@ -87,7 +87,7 @@ canonical authority tags immediately below are the only design-side declarations
 catalog identity, active-file topology and the shortened product-correctness owner.
 Their JSON payloads use RFC 8785 key order and are permitted exactly once only.
 
-<!-- GOV-004-AUTHORITY {"catalogBytes":6337,"catalogSha256":"f6842952ff768be01fe0b9e91bf1f2aa089168bfcb7964d6113c44a71deb21e5","kind":"design-catalog-identity"} -->
+<!-- GOV-004-AUTHORITY {"catalogBytes":6758,"catalogSha256":"6b3f8dfadc3c9101e853b9748ca5579934bca1501a437138853d3651f7954cce","kind":"design-catalog-identity"} -->
 <!-- GOV-004-AUTHORITY {"activeFiles":55,"kind":"design-active-file-topology"} -->
 <!-- GOV-004-AUTHORITY {"kind":"design-product-correctness-owner","owner":"product-correctness-runtime-v3.11.12"} -->
 
@@ -111,7 +111,7 @@ and every active prose contract-version edge. Extracted owners must byte-equal t
 catalog and these current roots: `runtime-transaction-contract.md` v3.17,
 `storage-schema-contract.md` v3.25, `postgres-type-contract.md` v3.22,
 `manifest-storage-contract.md` v3.10, `job-graph-contract.md` v3.15,
-`shadow-evaluation-contract.md` v3.7, `market-contract.md` v3.6,
+historical audit-only `shadow-evaluation-contract.md` v3.7 (never a publication or promotion root), `market-contract.md` v3.6,
 `source-adapter-contract.md` v3.3, `financial-data-contract.md` v3.3,
 `valuation-contract.md` v3.4, `decision-contract.md` v3.3,
 `data-contract.md` v3.6, `v3-detail-contract.md` v3.3,
@@ -403,7 +403,7 @@ The compact endpoint normalizes a server-owned `requestProjectionCutoff` C and s
 1. Characterization, legacy baseline population and RED fixtures.
 2. Transactional additive schema, then application deployment in `SOURCE_LED_OPPORTUNITY_V3=disabled`; advance through `drain` to `shadow` only under `legacy-compatibility-contract.md` v3.2.
 3. Build a reproducible point-in-time backtest over at least 120 qualifying dates and accumulate at least 20 live cohorts whose 20-session outcomes have matured.
-4. Verification applies every conjunctive promotion rule in `shadow-evaluation-contract.md`; mere runtime duration cannot promote V3.
+4. Historical evaluation may replay the audit-only formulas in `shadow-evaluation-contract.md`, but neither those results nor runtime duration can promote, suppress or publish a current V6 card.
 5. Replacing homepage order, applying production migration and enabling model influence each require separate checkpoints.
 
 Rollback is never a down migration. Schedules/producers stop first, `drain` permits only existing-run status/worker plus the already granted reaper, `disabled` removes every V3 route/projection and application secret mapping, and committed additive objects remain immutable. A 30-minute drain deadline may leave nonterminal rows, but they remain non-public and are recovered through the same cataloged RPCs before any later shadow re-enable. The frozen legacy lock must pass before rollback completion; future authoritative promotion remains invalid until a later contract supplies its own inverse DAG.

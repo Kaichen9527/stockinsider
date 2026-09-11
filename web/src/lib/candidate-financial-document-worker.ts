@@ -38,7 +38,7 @@ export async function processCandidateFinancialDocumentReceipts(limit = 5) {
   });
   if (claim.error) throw new Error(`candidate_financial_document_claim_failed:${claim.error.message}`);
   const claimed = (claim.data || []) as Row[];
-  const results: Array<{ receiptId: string; status: string; parser: string | null; locatorCount: number; error: string | null }> = [];
+  const results: Array<{ receiptId: string; status: string; parser: string | null; locatorCount: number; error: string | null; missingRequirements?: string[]; rejectionReasons?: string[] }> = [];
   for (const receipt of claimed) {
     const receiptId = String(receipt.receipt_id || '');
     const completedAt = new Date().toISOString();
@@ -86,7 +86,7 @@ export async function processCandidateFinancialDocumentReceipts(limit = 5) {
       const message = error instanceof Error ? error.message.slice(0, 240) : 'document_parser_failed';
       // A local-runtime outage is an acquisition gap, not proof that a valid
       // issuer file is malicious. Integrity/magic failures above remain reject.
-      if (/^candidate_financial_local_parser_(?:not_configured|timeout|failed|spawn_failed|output_too_large|stdin_failed)/u.test(message)) {
+      if (/^candidate_financial_local_parser_(?:not_configured|timeout|failed|spawn_failed|output_too_large|stdin_failed|socket_unavailable|invalid_json|invalid_shape|invalid_result)/u.test(message)) {
         missing.push(message);
       } else {
         rejected = [message];
@@ -104,7 +104,8 @@ export async function processCandidateFinancialDocumentReceipts(limit = 5) {
       results.push({ receiptId, status: 'error', parser: localParse?.parser || null, locatorCount: localParse?.locators.length || 0, error: result.error?.message || 'document_receipt_completion_failed' });
       continue;
     }
-    results.push({ receiptId, status: String(row.receipt_status || 'unknown'), parser: localParse?.parser || null, locatorCount: localParse?.locators.length || 0, error: null });
+    results.push({ receiptId, status: String(row.receipt_status || 'unknown'), parser: localParse?.parser || null,
+      locatorCount: localParse?.locators.length || 0, missingRequirements: missing, rejectionReasons: rejected, error: null });
   }
   return { claimed: claimed.length, results };
 }

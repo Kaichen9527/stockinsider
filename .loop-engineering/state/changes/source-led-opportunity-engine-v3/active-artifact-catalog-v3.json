@@ -40,7 +40,6 @@
     "sector-reference-contract.md",
     "sector-taxonomy-contract.md",
     "sector-taxonomy-map-v3.json",
-    "shadow-evaluation-contract.md",
     "source-adapter-contract.md",
     "source-led-opportunity-engine-v3.13-decision-integrity-amendment.md",
     "source-led-opportunity-engine-v3.14-actionability-recovery-amendment.md",
@@ -54,7 +53,16 @@
     "v3.18-source-led-research-dossier-amendment.md",
     "v3.19-release-reconciliation-amendment.md",
     "v3.20-kol-first-runtime-recovery-amendment.md",
+    "v6-no-global-shadow-authority-amendment.md",
     "valuation-contract.md"
+  ],
+  "historicalAuditFiles": [
+    ".loop-engineering/state/changes/source-led-opportunity-engine-v3/shadow-evaluation-contract.md"
+  ],
+  "incorporatedFiles": [
+    "openspec/changes/evidence-valuation-research-v6/approved-contabo-ui-amendment.md",
+    "openspec/changes/evidence-valuation-research-v6/design.md",
+    "openspec/changes/evidence-valuation-research-v6/proposal.md"
   ],
   "owners": [
     [
@@ -182,10 +190,6 @@
       "tw-sector-taxonomy-v3.0"
     ],
     [
-      "shadow-evaluation-contract.md",
-      "source-led-eval-v3.7"
-    ],
-    [
       "source-adapter-contract.md",
       "source-adapter-v3.3"
     ],
@@ -234,9 +238,13 @@
       "source-led-opportunity-release-v3.20.0"
     ],
     [
+      "v6-no-global-shadow-authority-amendment.md",
+      "evidence-valuation-research-v6.1"
+    ],
+    [
       "valuation-contract.md",
       "opportunity-valuation-v3.4"
     ]
   ],
-  "schema": "opportunity-active-artifact-catalog-v1"
+  "schema": "opportunity-active-artifact-catalog-v2"
 }

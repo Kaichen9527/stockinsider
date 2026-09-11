@@ -7,7 +7,8 @@ const path = require('path');
 const { canonicalJson, immutableBundle, sha256, invariant, percentile } = require('./codec');
 const { runDurableAuthSourceWorker } = require('./auth-source-worker');
 const { validateAuthSourceDagConfig } = require('./source-run-config');
-const { buildCandidateFunnel } = require('./candidate-funnel');
+const { buildCandidateFunnel, validatePublishedEntrantAuthority } = require('./candidate-funnel');
+const { deriveSourceTerminalState } = require('./source-terminal-state');
 const { calculateAdjustedTechnicalPlane } = require('./technical-plane');
 const { calculateFundamentalQualityAxes } = require('./fundamental-quality');
 const { evaluateCandidateValuation } = require('./candidate-valuation');
@@ -32,6 +33,7 @@ const { buildMarketAnalysis } = require('./market-analysis');
 const { runtimeBundleBytes } = require('./tracked-runtime-bundle');
 const { acquireApprovedSources, MAX_DOCUMENTS_PER_CONNECTOR } = require('./official-source-acquisition');
 const { nominationAuthorityForSource } = require('./candidate-nomination-authority');
+const { resolveInstrumentAuthorityJoin } = require('./instrument-authority-join');
 const { acquireFrozenProviderEnvelope } = require('./provider-acquisition-v31621');
 const approvedSourceRoster = require('../../config/runtime/approved-source-roster-v3.13.json');
 const { assertExactRuntimeEnvironment, hydrateRuntimeCredentials, resolveCredentialReference } = require('./credential-resolver');
@@ -349,6 +351,11 @@ function extractRevisionCandidates(bundle) {
     aliasByStock.set(row[0], selected);
   }
   const sectorByStock = new Map(rowsByKind('taxonomy').filter(Array.isArray).map((row) => [row[0], row[3]]));
+  const authorityRoster = roster.map((row) => ({ stockId: row[0], symbol: row[1], status: row[4],
+    officialName: typeof row[6] === 'string' ? row[6] : row[5] }));
+  const authorityAliases = [...aliasByStock.entries()].flatMap(([stockId, values]) => values.map((alias) => ({
+    stockId, alias, status: 'active',
+  })));
   const text = sourceText(frozen.rawFieldPayload);
   const collectedAt = typeof frozen.sourceCollectedAt === 'string'
     ? canonicalUtc(frozen.sourceCollectedAt, 'frozen source collected-at') : null;
@@ -362,6 +369,8 @@ function extractRevisionCandidates(bundle) {
     const nameMatch = [shortName, legalName, ...aliases].some((name) => nameHasStockContext(text, name, symbol));
     const tickerMatch = typeof symbol === 'string' && (nameMatch || tickerHasStockContext(text, symbol));
     if (!tickerMatch && !nameMatch) return [];
+    const link = resolveInstrumentAuthorityJoin({ symbol, roster: authorityRoster, aliases: authorityAliases });
+    if (link.disposition !== 'linked' || link.stockId !== stockId || link.symbol !== symbol) return [];
     const matched = extractMatchedEvidenceSnippet(text, { symbol: String(symbol), names: [shortName, legalName, ...aliases] });
     const raw = tickerMatch ? String(symbol) : String([shortName, ...aliases, legalName].find((name) => typeof name === 'string' && text.includes(name)));
     const claimId = uuidFromHash(`claim:${frozen.revisionId}:${stockId}:${raw}`);
@@ -372,7 +381,7 @@ function extractRevisionCandidates(bundle) {
       canonicalSector: sectorByStock.get(stockId) ?? 'unknown', raw, claimId,
       claimAsOf: sourceEffectiveAt,
       mentionId: uuidFromHash(`mention:${frozen.revisionId}:${stockId}:${raw}`), claimEligible: true,
-      link: { disposition: 'linked', stockId, symbol },
+      link,
       sourceClass: SOURCE_CLASS_BY_KEY[frozen.sourceKey] ?? 'community', nominationAuthority,
       structuredClaim:structuredAuthorized,rightsAttested:frozen.rightsAttested===true,
       sourceProfileId: typeof frozen.profileId==='string'?frozen.profileId:null }];
@@ -395,11 +404,15 @@ function extractRevisionCandidates(bundle) {
   const allRejectedTokens=[...new Set([...text.matchAll(/(^|[^0-9])([0-9]{4})(?=[^0-9]|$)/gu)].map((match)=>match[2]))]
     .filter((symbol)=>!linkedSymbols.has(symbol));
   const rejectedTokens=allRejectedTokens.slice(0,200);
-  const rejected=rejectedTokens.map((symbol)=>({
-    claimId:uuidFromHash(`claim:${frozen.revisionId}:rejected:${symbol}`),
-    mentionId:uuidFromHash(`mention:${frozen.revisionId}:rejected:${symbol}`),symbol,
-    outcome:'rejected',reason:'stock_context_or_master_authority_unavailable',stockId:null,
-  }));
+  const rejected=rejectedTokens.map((symbol)=>{
+    const authorityLink=resolveInstrumentAuthorityJoin({symbol,roster:authorityRoster,aliases:authorityAliases});
+    return {
+      claimId:uuidFromHash(`claim:${frozen.revisionId}:rejected:${symbol}`),
+      mentionId:uuidFromHash(`mention:${frozen.revisionId}:rejected:${symbol}`),symbol,
+      outcome:'rejected',reason:authorityLink.reason==='missing_instrument_authority'
+        ?'missing_instrument_authority':'stock_context_unverified',stockId:null,link:authorityLink,
+    };
+  });
   const overflowCount=Math.max(0,uniqueMatches.length-matches.length)+Math.max(0,allRejectedTokens.length-rejectedTokens.length);
   const overflow=overflowCount?[{claimId:uuidFromHash(`claim:${frozen.revisionId}:bounded-overflow`),
     mentionId:uuidFromHash(`mention:${frozen.revisionId}:bounded-overflow`),symbol:null,stockId:null,
@@ -1514,6 +1527,7 @@ function buildLegacyCandidateDecision({ candidate, facts, history, benchmark, so
     ?{thesis,risks,evidence:briefEvidence}:null;
   return { ...candidate, researchMaturity: valuation.status === 'normal' && quality.qualityActionEligible ? 'decision_ready'
     : quality.availability === 'available' ? 'fundamental_review' : 'source_signal',
+    candidateDisposition:candidate.disposition,candidateReason:candidate.reason,
     action: actionDecision.action, fundamental, technical, geometry: actionDecision.geometry,
     decisionEnvelope: actionDecision.decisionEnvelope,
     valuation, factorAxes, researchScore,researchRanking,decisionBrief,citations, reason: actionDecision.reason, lastEvaluatedAt: sourceCutoff,
@@ -1825,7 +1839,9 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         // preserves its last-good cards for the bounded 20-session window.
         currentSession:typeof bundle.sourceCutoff==='string'?bundle.sourceCutoff.slice(0,10):null,
         completedSessions:bundle.completedTradingSessions ?? bundle.calendarSessions ?? [],
-        sourceAvailable:bundle.sourceAvailable!==false });
+        sourceAvailable:bundle.sourceAvailable!==false,
+        producerRunId:claim.runId??null,schedulerConfigSha256:validated.sha256,
+        legacySeedSetHash:validated.seedSetHash });
       return immutableBundle('legacy_candidate_funnel_result_v3_11', { schema: 'legacy-candidate-funnel-result-v3.11',
         candidates: funnel.candidateLedger, discoverySummary: funnel.discoverySummary,
         discoveryDelta: funnel.discoveryDelta,factorDiscovery,
@@ -2040,6 +2056,11 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
       // reinterpreted and its valid historical revision cards would disappear.
       const projectionSchemaVersion=bundle.legacyRadarCompatibility==='intentionally_not_acquired_kol_first'
         ?'legacy-radar-v3.20.0':'legacy-radar-v3.19.0';
+      const sourceTerminalState=deriveSourceTerminalState(bundle.sourceTerminalStateInput);
+      if(projectionSchemaVersion==='legacy-radar-v3.20.0'&&sourceTerminalState?.terminalStatus!=='total_outage')validatePublishedEntrantAuthority({
+        candidates:[...decisions,...projectionSignals],producerRunId:claim.runId,schedulerConfigSha256:validated.sha256,
+        legacySeedSetHash:validated.seedSetHash,seedSymbols:validated.config.legacySeedSymbols,
+        discoveryDelta:bundle.analysisResult?.discoveryDelta});
       const acquisitionLineageHealth=providerAcquisitionLineageHealth(bundle.providerAcquisitions,
         evaluationTimestamp);
       const projections = ['daily', 'hot', 'weekly', 'home'].map((window) => publishCompactRadarProjection({ decisions,
@@ -2051,12 +2072,16 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
           completedSessions:bundle.analysisResult.officialAuthority.coverage?.completedSessions??0,
           officialCoverageReady:bundle.analysisResult.officialAuthority.coverage?.ready===true,
           acquisitionAuthority:acquisitionLineageHealth.authoritative?'authoritative':'unavailable',
-          acquisitionEvidenceRoot:acquisitionLineageHealth.evidenceRoot,
+          acquisitionEvidenceRoot:sourceTerminalState?.acquisitionEvidenceRoot??acquisitionLineageHealth.evidenceRoot,
           fetchedAt:acquisitionLineageHealth.fetchedAt,
-          terminalStatus:acquisitionLineageHealth.terminalStatus,
+          terminalStatus:sourceTerminalState?.terminalStatus??acquisitionLineageHealth.terminalStatus,
+          sourceTerminalState,
           blockers:[...(bundle.analysisResult.officialAuthority.coverage?.blockers??[]),
-            ...acquisitionLineageHealth.blockers].slice(0,12),
-        }:null,
+            ...acquisitionLineageHealth.blockers,...(sourceTerminalState?.blockers??[])].slice(0,12),
+        }:(sourceTerminalState?{schema:'source-acquisition-health-v3.20',acquisitionAuthority:'unavailable',
+          acquisitionEvidenceRoot:sourceTerminalState.acquisitionEvidenceRoot,fetchedAt:null,
+          terminalStatus:sourceTerminalState.terminalStatus,sourceTerminalState,
+          blockers:sourceTerminalState.blockers}:null),
         discoveryDelta: bundle.analysisResult?.discoveryDelta ?? { added: [], exited: [], continued: [], unchangedReasons: [] },
         freshnessSchedule:bundle.analysisResult?.projectionFreshnessSchedule??[],
         schemaVersion:projectionSchemaVersion,

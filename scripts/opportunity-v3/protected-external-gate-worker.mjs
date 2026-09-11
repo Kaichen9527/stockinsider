@@ -14,6 +14,7 @@ import {
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { validateProtectedCodeGateAggregateInputs } from './protected-code-gate-aggregate.mjs';
 
 // This program is deliberately base-owned: it is checked out from the protected
 // pull-request base, consumes only the preceding base-owned bootstrap artifact,
@@ -1308,13 +1309,14 @@ function main() {
     result = executeTrack(subjectRoot, args['--track'], identity, attestation);
   } else {
     const values = args.inputs.map((filename) => JSON.parse(readFileSync(absolute(filename, 'aggregate input'), 'utf8')));
-    for (const [index, check] of requiredChecks.entries()) {
-      validateEnvelope(values[index], identity, attestation, check);
-      if (reviewSources[check]) assert.deepEqual(values[index].result.review,
-        captureReview(subjectRoot, check, identity, attestation), `${check} aggregate Git/evidence binding`);
-    }
+    const aggregateInputs = validateProtectedCodeGateAggregateInputs({ values, requiredChecks,
+      validateEnvelope: (value, check) => validateEnvelope(value, identity, attestation, check),
+      validateReviewBinding: (value, check) => {
+        if (reviewSources[check]) assert.deepEqual(value.result.review,
+          captureReview(subjectRoot, check, identity, attestation), `${check} aggregate Git/evidence binding`);
+      } });
     result = baseResult('code-gate-aggregate', identity, attestation);
-    result.inputs = values.map(({ result: input }) => ({ check: input.check, evidenceSha256: input.evidenceSha256 }));
+    result.inputs = aggregateInputs;
     result.evidenceSha256 = sha256(canonicalJson(result));
   }
   const output = absolute(args['--output'], 'output');

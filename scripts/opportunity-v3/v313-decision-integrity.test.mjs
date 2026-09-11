@@ -789,6 +789,18 @@ acceptanceTest('DI-003','V3.13 official facts and 252-session peer authority rea
   assert.equal(ebitda.status,'normal',JSON.stringify(ebitda));assert.equal(ebitda.method.method,'ev_ebitda');
   assert.deepEqual(ebitda.valuationRange,
     {bear:15.987365113924053,base:18.514835443037974,bull:21.51763211139241});
+  const evTechnical={technicalState:'at_support',plane:{current:15,bias:{availability:'available',bias20Pct:0}}};
+  const evGeometry={availability:'available',entryZone:[14.5,15.5],invalidation:13.5,trigger:null};
+  const evEnvelope=runtime('decision-envelope.js').deriveDecisionEnvelope({valuation:ebitda,currentPrice:15,
+    qualityActionEligible:true,marketAllowsAction:true,technical:evTechnical,geometry:evGeometry,
+    lastEvaluatedAt:'2026-08-07T10:20:00Z'});
+  const evPublished=runtime('published-research-decision.js').serializePublishedResearchDecision({symbol:'9997',
+    fundamental:{thesis:'9997 依官方財報與 EV/EBITDA 完成循環估值。',latestChange:'本次重算三情境目標。',
+      risks:['正常化 EBITDA 與倍數仍可隨景氣變動。'],evidenceRefs:['official-filing-9997'],asOf:'2026-08-07T10:20:00Z'},
+    technical:evTechnical,geometry:evGeometry,decisionEnvelope:evEnvelope,valuation:ebitda,
+    lastEvaluatedAt:'2026-08-07T10:20:00Z'});
+  assert.equal(evPublished.valuation.targetPrice,18.51);
+  assert.deepEqual(evPublished.valuation.valuationRange,[15.99,21.52]);
 
   const lossCandidate={...candidate,symbol:'9998',canonicalSector:'information_service'};
   const lossFacts=reconciledLossFacts('9998',true);
@@ -1044,6 +1056,8 @@ test('generic migration discovery is a closed legacy allowlist and the V3.13 pla
     'migrations/20260830_v320_expired_unclaimed_run_reaper.sql',
     'migrations/20260830_v320_kol_claim_payload_compaction.sql',
     'migrations/20260830_v320_kol_retention_owner_boundary.sql',
+    'migrations/20260909_official_financial_validation_receipts.sql',
+    'migrations/20260911_v320_source_terminal_projection_authority.sql',
   ]);
   assert.ok(plan.migrations.every((row)=>/^[0-9a-f]{64}$/u.test(row.sha256)&&row.additiveOnly));
   assert.match(plan.orderedChainSha256,/^[0-9a-f]{64}$/u);

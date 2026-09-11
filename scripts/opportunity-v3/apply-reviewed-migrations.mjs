@@ -55,6 +55,10 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260830_v320_expired_unclaimed_run_reaper.sql',
   'migrations/20260830_v320_kol_claim_payload_compaction.sql',
   'migrations/20260830_v320_kol_retention_owner_boundary.sql',
+  // Requires the financial-acquisition and evidence-contract planes already
+  // present on the reviewed production database; fails closed if absent.
+  'migrations/20260909_official_financial_validation_receipts.sql',
+  'migrations/20260911_v320_source_terminal_projection_authority.sql',
 ]);
 const V3192_PROJECTION_DOSSIER_MIGRATION =
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql';

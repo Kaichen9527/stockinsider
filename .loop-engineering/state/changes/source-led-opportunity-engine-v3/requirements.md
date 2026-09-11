@@ -225,7 +225,7 @@ The Loop runner cannot register a domain artifact or write Supabase. Any separat
 
 Registration authority is the single additive `opportunity_assistive_artifact_registrations_v3` catalog in `storage-schema-contract.md`, written only by the signed `model_reviewer` RPC in `auth-principal-contract.md`. Every row binds artifact kind/hash/ref, allowlisted license plus evidence ref, training cutoff, complete 120-date evaluation-input manifest, comparison baseline and finite OOS Precision@20/NDCG@20/worst-decile MAE. Cutoff selection collapses exact duplicates, rejects conflicting ties/revocations/baseline mismatch, orders by evaluation completion descending then hash/UUID and exposes at most three. The public summary includes those registered fields and always `influence:'none'`; artifact selection/output has zero input to candidate, formal, valuation, score, rank, decision, allocation or promotion math in this checkpoint.
 
-Metric formulas, relevance labels, cohorts, maturity gates and the fail-closed legacy baseline lock are normative in `shadow-evaluation-contract.md`; canonical sector-relative outcomes use `sector-benchmark-contract.md`. Homepage-order promotion requires at least 20 matured live 20-session cohorts plus a reproducible point-in-time backtest; 20 days of mere runtime is not sufficient.
+The predecessor metric formulas, labels, cohorts and baseline lock remain historical audit-only bytes in `shadow-evaluation-contract.md`; they MUST NOT gate current publication, classification, homepage ordering, health or promotion. Canonical sector-relative research evidence uses `sector-benchmark-contract.md`, while current three-stage classification remains individual-stock authority.
 
 ## Safety and Operational Requirements
 

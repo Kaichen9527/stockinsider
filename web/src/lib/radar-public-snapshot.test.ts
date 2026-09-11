@@ -41,9 +41,11 @@ test('public Radar snapshot persists the complete canonical stock plane for page
   assert.equal('market' in (compact.stages.found[0] || {}), false);
   assert.equal('mentionCount' in (compact.stages.found[0] || {}), false);
   assert.equal('promotionReasons' in (compact.stages.found[0] || {}), false);
-  assert.equal('detailHref' in (compact.stages.found[0] || {}), false);
-  assert.equal('detailRevisionId' in (compact.stages.found[0] || {}), false);
-  assert.equal('stale' in (compact.stages.found[0] || {}), false);
+  // Revision identity and stale authority are transport-critical, not optional
+  // diagnostics. Removing them silently changes the research behind a click.
+  assert.equal(compact.stages.found[0]?.detailHref, '/stock/1000');
+  assert.equal(compact.stages.found[0]?.detailRevisionId, null);
+  assert.equal(compact.stages.found[0]?.stale, true);
   assert.equal('currentPrice' in (compact.stages.found[0]?.valuation || {}), false);
   assert.equal(compact.stages.found[0]?.sources.length, 2);
   assert.equal('mentionedAt' in (compact.stages.found[0]?.sources[0] || {}), false);

@@ -839,14 +839,17 @@ export async function fetchTwStockDailyBars(
       .filter((row): row is TwMarketDailyBar => row != null)
       .sort((left, right) => left.time.localeCompare(right.time));
     rows.push(...bulkRows);
-    if (rows.length >= Math.min(daysBack, 240)) return rows.slice(-daysBack);
+    if (rows.length >= daysBack) return rows.slice(-daysBack);
   }
   // A full-market archive may be temporarily challenged for a bounded range of
   // dates while newer and older sessions remain available.  A non-empty fragment
   // is not sufficient evidence for MA240.  Fill the remaining coverage from the
   // official per-stock monthly endpoint and merge both sources below.
-  const requiredCoverage = Math.min(daysBack, rows.length > 0 ? 260 : 1_320);
-  const monthCount = Math.min(60, Math.max(2, Math.ceil(Math.max(0, requiredCoverage - rows.length) / 18) + 2));
+  const requiredCoverage = Math.min(daysBack, 1_320);
+  // Cover the requested horizon, not just the number of missing rows: gaps can
+  // be at the beginning, middle or end of the series. Taiwan has fewer than
+  // 1,320 sessions in some five-year windows, so permit up to 76 months.
+  const monthCount = Math.min(76, Math.max(2, Math.ceil(requiredCoverage / 18) + 2));
   const monthStarts = Array.from({ length: monthCount }, (_, offset) => {
     const value = new Date();
     value.setUTCDate(1);

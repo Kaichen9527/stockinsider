@@ -1,5 +1,5 @@
 /**
- * Candidate technical research needs a point-in-time, 520-session official
+ * Candidate research needs point-in-time technical and five-year official
  * price history. A deployment can explicitly disable that work when its
  * network cannot obtain the historical official response. This is a
  * fail-closed operational switch: source-hit cards continue to publish, but
@@ -10,8 +10,8 @@ export function isCandidateHistoricalPriceAccessEnabled(value = process.env.CAND
 }
 
 export function candidatePriceRefreshDepth(knownSessions: string[], latestMarketSession: string) {
-  const unique = [...new Set(knownSessions.filter((session) => /^\d{4}-\d{2}-\d{2}$/u.test(session)))].sort();
-  if (unique.length < 240) return 1320;
+  const unique = [...new Set(knownSessions.filter((session) => /^\d{4}-\d{2}-\d{2}$/u.test(session) && session <= latestMarketSession))].sort();
+  if (unique.length < 1320) return 1320;
   return unique.at(-1) === latestMarketSession ? 0 : 5;
 }
 
@@ -29,11 +29,13 @@ export function rotatingShard<T>(items: T[], cursor: number, size: number) {
 }
 
 export function financialFactAvailableAt(
-  fact: { filing_published_at?: unknown; source_timestamp?: unknown; collected_at?: unknown; recorded_at?: unknown },
+  fact: { filing_published_at?: unknown; source_timestamp?: unknown; collected_at?: unknown; recorded_at?: unknown; validation_recorded_at?: unknown },
   evaluationAt: string,
 ) {
   const cutoff = Date.parse(evaluationAt);
   if (!Number.isFinite(cutoff)) return false;
+  if (fact.validation_recorded_at != null && (typeof fact.validation_recorded_at !== 'string'
+    || !Number.isFinite(Date.parse(fact.validation_recorded_at)) || Date.parse(fact.validation_recorded_at) > cutoff)) return false;
   return [fact.filing_published_at, fact.source_timestamp, fact.collected_at, fact.recorded_at]
     .every((value) => typeof value === 'string' && Number.isFinite(Date.parse(value)) && Date.parse(value) <= cutoff);
 }
@@ -65,7 +67,7 @@ export function partitionCandidateMentionsByCutoff<T extends { available_at?: un
 
 export async function collectPagedAuthorityRows<T>(
   readPage: (from: number, to: number) => Promise<T[]>,
-  options: { pageSize?: number; maxRows: number },
+  options: { pageSize?: number; maxRows: number; requireComplete?: boolean },
 ): Promise<T[]> {
   const pageSize = options.pageSize || 1000;
   if (!Number.isInteger(pageSize) || pageSize <= 0 || !Number.isInteger(options.maxRows) || options.maxRows <= 0) {
@@ -78,13 +80,17 @@ export async function collectPagedAuthorityRows<T>(
     rows.push(...page);
     if (page.length < requestSize) break;
   }
+  if (options.requireComplete && rows.length === options.maxRows
+    && (await readPage(rows.length, rows.length)).length > 0) {
+    throw new Error('authority_pagination_overflow');
+  }
   return rows;
 }
 
 export async function collectBatchedAuthorityRows<TInput, TRow>(
   inputs: TInput[],
   readPage: (batch: TInput[], from: number, to: number) => Promise<TRow[]>,
-  options: { batchSize?: number; pageSize?: number; maxRowsPerBatch: number },
+  options: { batchSize?: number; pageSize?: number; maxRowsPerBatch: number; requireComplete?: boolean },
 ): Promise<TRow[]> {
   const batchSize = options.batchSize || 20;
   if (!Number.isInteger(batchSize) || batchSize <= 0) throw new Error('invalid_authority_batch_size');
@@ -93,7 +99,7 @@ export async function collectBatchedAuthorityRows<TInput, TRow>(
     const batch = inputs.slice(offset, offset + batchSize);
     rows.push(...await collectPagedAuthorityRows(
       (from, to) => readPage(batch, from, to),
-      { pageSize: options.pageSize, maxRows: options.maxRowsPerBatch },
+      { pageSize: options.pageSize, maxRows: options.maxRowsPerBatch, requireComplete: options.requireComplete },
     ));
   }
   return rows;

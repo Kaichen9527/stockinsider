@@ -84,7 +84,7 @@ No object/extra member is allowed. `body` is exactly one tuple below:
 
 `headerPairs` and manifest/page identities are exact values from `manifest-storage-contract.md`. A source `revisionRows` value is exactly one `[revisionId,selectionOrdinal,rawCodePointCount]` row; therefore `lastSelectionOrdinalExclusive=firstSelectionOrdinal+1`. Candidate/sector batches contain 1..5 values, an outcome batch contains 1..200 input rows, and every other ordered list uses the bound in its domain contract. A payload containing a live-row value instead of an immutable ID/hash/ref is invalid.
 
-Projection completion derives the sizing-omitted public cards, exact verified-change workspace and homepage summary in one transaction from the same run-owned native candidate/score/evidence rows. The stored detail for each symbol includes the byte-equal public card and its workspace brief or null. Evaluation completion stores the three fixed strategy rows from `shadow-evaluation-contract.md`; no successor, table or promotion rule depends on their metric values.
+Projection completion derives the sizing-omitted public cards, exact verified-change workspace and homepage summary in one transaction from the same run-owned native candidate/score/evidence rows. The stored detail for each symbol includes the byte-equal public card and its workspace brief or null. Historical audit evaluation may store the three predecessor strategy rows from `shadow-evaluation-contract.md`; no successor, table, classification, publication, health or promotion rule depends on their metric values.
 
 `claim_opportunity_job_v3` returns these stored payload bytes/hash directly with the
 lease. For a payload kind with a database read unit, the same security-definer claim

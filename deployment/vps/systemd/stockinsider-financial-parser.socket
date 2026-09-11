@@ -2,6 +2,8 @@
 Description=StockInsider isolated financial parser socket
 
 [Socket]
+# SocketGroup does not set ownership of automatically created parent folders.
+ExecStartPre=/usr/bin/install -d -m 0750 -o root -g stockinsider /run/stockinsider
 ListenStream=/run/stockinsider/candidate-financial-parser.sock
 DirectoryMode=0750
 SocketMode=0660

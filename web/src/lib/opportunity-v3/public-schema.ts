@@ -814,6 +814,7 @@ function validMissedAudit(value: unknown): value is MissedSourceAuditV3 {
 const ENTRANT_REASONS = [
   'new_in_seed_symbol','new_out_of_seed_symbol','new_source_evidence','material_source_change',
 ] as const;
+const SOURCE_SIGNAL_CHANGE_REASONS = [...ENTRANT_REASONS, 'same_material_evidence'] as const;
 
 function validDiscoveryDelta(value: unknown, asOf: string, activeCount: number): boolean {
   if (!exact(value, ['asOf','entrants','exits','continuations','unchangedReasonCounts']) ||
@@ -851,7 +852,7 @@ function validSourceSignal(value: unknown): boolean {
     member(value.technicalState, [
       'below_support','reclaim_required','at_support','breakout_pending','breakout_confirmed',
       'extended','invalidated','unavailable',
-    ]) && member(value.changedBecause, ENTRANT_REASONS);
+    ]) && member(value.changedBecause, SOURCE_SIGNAL_CHANGE_REASONS);
 }
 
 export function validAvailableProjectionPayload(value: unknown): value is OpportunityEngineAvailableV3 {

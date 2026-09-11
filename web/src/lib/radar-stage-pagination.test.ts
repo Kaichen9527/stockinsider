@@ -1,11 +1,25 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { candidateStageCounts, paginateCandidateStage } from './radar-stage-pagination.ts';
+import { candidateStageCounts, compactCandidateStageForSnapshot, paginateCandidateStage } from './radar-stage-pagination.ts';
 import type { CandidateStageCard, RadarDailyPayload } from './types.ts';
 
 function card(index: number): CandidateStageCard {
   return { symbol: String(1000 + index) } as CandidateStageCard;
 }
+
+test('compaction preserves candidate revision and stale authority for found and actionable', () => {
+  for (const lifecycleStage of ['found', 'actionable'] as const) {
+    const original = { ...card(1), lifecycleStage, valuation: { status: 'missing' }, technical: {},
+      consecutiveCloses: { passed: 1, required: 2 }, stale: true,
+      detailRevisionId: '11111111-2222-4333-8444-555555555555',
+      detailHref: '/stock/1001?candidateRevision=11111111-2222-4333-8444-555555555555',
+    } as CandidateStageCard;
+    const compact = compactCandidateStageForSnapshot(original);
+    assert.equal(compact.detailRevisionId, original.detailRevisionId);
+    assert.equal(compact.detailHref, original.detailHref);
+    assert.equal(compact.stale, true);
+  }
+});
 
 test('stage pagination exposes every card from one immutable snapshot without exceeding page size', () => {
   const found = Array.from({ length: 119 }, (_, index) => card(index));

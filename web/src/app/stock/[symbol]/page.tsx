@@ -9,6 +9,7 @@ import RevisionBoundDecisionBrief, {
 import ResearchOnlyDetail from './ResearchOnlyDetail';
 import CandidateDetailView from './CandidateDetailView';
 import { loadCandidateDetail } from '@/lib/candidate-detail';
+import { parseCandidateRevision } from '@/lib/candidate-revision-query';
 
 export const dynamic = 'force-dynamic';
 
@@ -42,6 +43,22 @@ export default async function StockDetail({
   const revisionQuery=parseDecisionRevisionQuery(query);
   const revisionParameterPresent=revisionQuery.status!=='absent';
   const validRequestedRevision=revisionQuery.status==='valid'?revisionQuery.revisionId:null;
+  const candidateRevision = parseCandidateRevision(query.candidateRevision);
+  if (candidateRevision.status !== 'absent') {
+    if (candidateRevision.status === 'invalid' || revisionParameterPresent) {
+      return <RevisionBoundDecisionUnavailable symbol={normalizedSymbol} revisionId="invalid"
+        reason="candidate_revision_parameter_invalid_or_ambiguous"/>;
+    }
+    try {
+      const detail = await loadCandidateDetail(normalizedSymbol, candidateRevision.revisionId);
+      if (detail) return <CandidateDetailView detail={detail}/>;
+    } catch {
+      return <RevisionBoundDecisionUnavailable symbol={normalizedSymbol} revisionId={candidateRevision.revisionId}
+        reason="candidate_detail_temporarily_unavailable"/>;
+    }
+    return <RevisionBoundDecisionUnavailable symbol={normalizedSymbol} revisionId={candidateRevision.revisionId}
+      reason="candidate_detail_revision_unavailable"/>;
+  }
 
   // Every public detail route is a closed read-only decision-revision read. It never
   // runs a refresh and never falls back to a legacy recommendation, technical entry
@@ -54,8 +71,13 @@ export default async function StockDetail({
   // Candidate research is an independent append-only publication plane. It is
   // readable even when no legacy decision envelope exists, so a valid found
   // stock never collapses into an empty "decision unavailable" page.
-  if (!validRequestedRevision) {
-    const candidateDetail = await loadCandidateDetail(normalizedSymbol).catch(() => null);
+  if (!validRequestedRevision && process.env.OPPORTUNITY_V3_UI_FIXTURE !== 'enabled') {
+    let candidateDetail;
+    try { candidateDetail = await loadCandidateDetail(normalizedSymbol); }
+    catch {
+      return <RevisionBoundDecisionUnavailable symbol={normalizedSymbol} revisionId="candidate"
+        reason="candidate_detail_temporarily_unavailable"/>;
+    }
     if (candidateDetail) return <CandidateDetailView detail={candidateDetail}/>;
   }
 

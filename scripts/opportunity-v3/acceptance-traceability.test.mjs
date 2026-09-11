@@ -795,10 +795,10 @@ function activeGraphOracle() {
   assertCleanReviewedExecutionRoot(subjectTree);
   const catalogBlob = subjectTreeBlob(subjectTree, activeCatalogRepositoryPath);
   assert.deepEqual(catalogBlob.bytes, activeCatalogBytes, 'catalog working bytes equal reviewed subject tree');
-  assert.equal(catalogBlob.bytes.length, 6337, 'catalog exact tracked byte length including LF');
+  assert.equal(catalogBlob.bytes.length, 6758, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    'f6842952ff768be01fe0b9e91bf1f2aa089168bfcb7964d6113c44a71deb21e5',
+    '6b3f8dfadc3c9101e853b9748ca5579934bca1501a437138853d3651f7954cce',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);
@@ -806,10 +806,14 @@ function activeGraphOracle() {
     .filter((file) => file.endsWith('-contract.md') && file !== 'data-contract.md')
     .sort();
   const activeContractFiles = readdirSync(change)
-    .filter((file) => file.endsWith('-contract.md') && file !== 'data-contract.md')
+    .filter((file) => file.endsWith('-contract.md') && !['data-contract.md','shadow-evaluation-contract.md'].includes(file))
     .sort();
   assert.deepEqual(activeContractFiles, expectedContractFiles);
   const activeArtifactFiles = activeCatalog.activeFiles;
+  assert.ok(!activeArtifactFiles.includes('shadow-evaluation-contract.md'),
+    'global Shadow predecessor is not active V6 authority');
+  assert.ok(activeArtifactFiles.includes('v6-no-global-shadow-authority-amendment.md'),
+    'approved V6 no-global-Shadow successor is active authority');
   assert.equal(activeArtifactFiles.length, 55);
   assert.equal(new Set(activeArtifactFiles).size, activeArtifactFiles.length);
   assert.deepEqual(activeArtifactFiles, [...activeArtifactFiles].toSorted(), 'catalog active-file ASCII order');
@@ -846,10 +850,19 @@ function activeGraphOracle() {
     '.loop-engineering/state/changes/source-led-opportunity-engine-v3/source-led-opportunity-engine-v3.14-actionability-recovery-amendment.md').bytes.toString('utf8');
   assert.match(recoveryText,/320 IDs, partitioned as\s*272 product\/runtime/u,
     'active V3.14 contract declares the canonical total and product/runtime partition');
+  const externalRows=(paths,label)=>(paths??[]).map((repositoryPath)=>{
+    const indexed=subjectTreeBlob(subjectTree,repositoryPath);
+    assert.ok(indexed.bytes.length>0,`${label} ${repositoryPath} nonempty`);
+    return [repositoryPath,indexed.oid,indexed.bytes.length,sha256(indexed.bytes)];
+  });
+  const incorporatedRows=externalRows(activeCatalog.incorporatedFiles,'incorporated');
+  const historicalRows=externalRows(activeCatalog.historicalAuditFiles,'historical audit');
   const activeGraphSha256 = sha256(canonicalJson([
-    'opportunity-active-graph-v1',
+    'opportunity-active-graph-v2',
     sha256(catalogBlob.bytes),
     orderedBlobRows,
+    incorporatedRows,
+    historicalRows,
   ]));
   // The immutable subject tree is the authority.  A literal copied from a
   // predecessor release turns every authorized active-artifact amendment into
@@ -857,7 +870,7 @@ function activeGraphOracle() {
   // graph hash to the exact reviewed tree instead.
   assert.match(activeGraphSha256,/^[0-9a-f]{64}$/u,'active graph is a canonical SHA-256');
   assert.equal(pcrBoundaries.schema, 'source-led-opportunity-pcr-implementation-boundaries-v1');
-  assert.equal(pcrBoundaries.version, 'source-led-opportunity-pcr-boundaries-v3.11.4');
+  assert.equal(pcrBoundaries.version, 'source-led-opportunity-pcr-boundaries-v3.20.2');
   assert.equal(pcrBoundaries.boundaries.length, 31, 'one immutable implemented boundary per PCR');
   assert.deepEqual(pcrBoundaries.boundaries.map(({ id }) => id),
     Array.from({ length: 31 }, (_, index) => `PCR-${String(index + 1).padStart(3, '0')}`));
@@ -876,7 +889,7 @@ function activeGraphOracle() {
   }
   assert.notEqual(
     activeGraphSha256,
-    sha256(canonicalJson(['opportunity-active-graph-v1', sha256(Buffer.concat([catalogBlob.bytes, Buffer.from('\n')])), orderedBlobRows])),
+    sha256(canonicalJson(['opportunity-active-graph-v2', sha256(Buffer.concat([catalogBlob.bytes, Buffer.from('\n')])), orderedBlobRows,incorporatedRows,historicalRows])),
     'active graph binds catalog bytes',
   );
   for (let rowIndex = 0; rowIndex < orderedBlobRows.length; rowIndex += 1) {
@@ -888,7 +901,7 @@ function activeGraphOracle() {
         : `${String(prior)[0] === '0' ? '1' : '0'}${String(prior).slice(1)}`;
       assert.notEqual(
         activeGraphSha256,
-        sha256(canonicalJson(['opportunity-active-graph-v1', sha256(catalogBlob.bytes), mutatedRows])),
+        sha256(canonicalJson(['opportunity-active-graph-v2', sha256(catalogBlob.bytes), mutatedRows,incorporatedRows,historicalRows])),
         `active graph binds row ${rowIndex} member ${memberIndex}`,
       );
     }
@@ -1271,7 +1284,9 @@ function activeGraphOracle() {
     /([a-z0-9-]+-(?:contract|amendment)[.]md)(?:`)?(?:\s+version)?\s+`?v([0-9]+[.][0-9]+(?:[.][0-9]+)?)\b/giu,
   )];
   assert.ok(activeReferenceEdges.length > 0);
+  const historicalOwnerNames=new Set((activeCatalog.historicalAuditFiles??[]).map((file)=>path.basename(file)));
   for (const [, ownerFile, referencedVersion] of activeReferenceEdges) {
+    if(historicalOwnerNames.has(ownerFile))continue;
     const ownerVersion = expectedVersions.get(ownerFile);
     assert.ok(ownerVersion, `unknown active contract owner ${ownerFile}`);
     const ownerSuffix = ownerVersion.match(/-v([0-9]+[.][0-9]+(?:[.][0-9]+)?)$/u)?.[1];
@@ -2937,21 +2952,18 @@ const semanticExecutors = {
         break;
       }
       case 'EVAL-003': {
-        assert.equal(evaluatePromotion({
-          ...promotionInput,
-          v3Metrics: null,
-          legacyMetrics: null,
-        }).mode, 'shadow');
+        const currentPipeline = readFileSync(path.join(root, 'web/src/lib/domain.ts'), 'utf8');
+        const currentProjection = readFileSync(path.join(root, 'web/src/lib/radar-public-snapshot.ts'), 'utf8');
+        assert.match(currentPipeline, /const shadowObservation = null; \/\/ Legacy response field; global Shadow is retired[.]/u);
+        assert.match(currentProjection, /shadowProgress: undefined/u);
+        assert.doesNotMatch(currentPipeline, /recordCandidateShadowObservation\s*\(/u);
         break;
       }
       case 'EVAL-004': {
-        assert.equal(evaluatePromotion({
-          ...promotionInput,
-          backtestCount: 119,
-          liveCount: 19,
-          v3Metrics: null,
-          legacyMetrics: null,
-        }).pass, false);
+        const currentContract = readFileSync(path.join(change, 'v6-no-global-shadow-authority-amendment.md'), 'utf8');
+        const currentJobGraph = readFileSync(path.join(change, 'job-graph-contract.md'), 'utf8');
+        assert.match(currentContract, /cannot gate, promote, suppress or label a V6/u);
+        assert.match(currentJobGraph, /no successor, table, classification, publication, health or promotion rule depends on their metric values/u);
         break;
       }
       case 'EVAL-005': {

@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 import { normalizeRelatedStockSymbols, normalizeSourceDocumentSymbols } from './stock-symbol';
-import { loadActiveCandidateSourceErrors, loadCandidateShadowProgress, loadCandidateStageCards, recordCandidateShadowObservation, runCandidateResearchCycle } from './candidate-research';
+import { loadActiveCandidateSourceErrors, loadCandidateStageCards, runCandidateResearchCycle } from './candidate-research';
 import { markRadarPublicSnapshotsFailed, publishRadarPublicSnapshots } from './radar-public-snapshot';
 import { MARKET_EVIDENCE_MODEL_VERSION, marketEvidenceToPublicSummary } from './market-evidence';
 import { formatOfficialMarketEvidenceComponent } from './market-evidence-format';
@@ -21986,11 +21986,11 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
     );
 
     let publication: Record<string, unknown> = { publishedAt: null, results: [] };
-    let shadowObservation: Record<string, unknown> | null = null;
+    const shadowObservation = null; // Legacy response field; global Shadow is retired.
     if (!dryRun) {
       const stages = await executeStep('candidate_stage_projection', async () => loadCandidateStageCards());
       const radarPayload = await executeStep('radar_payload_build', async () => getDailyRadarData());
-      const activeSourceErrors = await executeStep('active_source_health', async () => loadActiveCandidateSourceErrors());
+      await executeStep('active_source_health', async () => loadActiveCandidateSourceErrors());
       const finalDatasetMetadata = await executeStep('final_dataset_metadata', async () => {
         if (!candidateResearch.technicalSessionDate || !supabaseServer) return null;
         const read = await supabaseServer.rpc('read_taiwan_data_publication_metadata_v5', {
@@ -22001,9 +22001,6 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
         return read.data && typeof read.data === 'object' ? read.data as Record<string, unknown> : null;
       });
       const finalSemantics = resolveTaiwanFinalPublicationSemantics(finalDatasetMetadata);
-      const shadowSourceErrors = finalSemantics.confirmed
-        ? activeSourceErrors
-        : [...activeSourceErrors, `taiwan_data:final_dataset_${finalSemantics.status}_${finalSemantics.completenessPct}`];
       const publicationStages = finalSemantics.confirmed ? stages : {
         found: stages.found,
         waiting: [...stages.waiting, ...stages.actionable.map((card) => ({
@@ -22025,18 +22022,6 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
         phase: finalSemantics.phase,
         dataCutoffAt: finalDatasetMetadata?.dataCutoffAt ? String(finalDatasetMetadata.dataCutoffAt) : candidateResearch.technicalSessionDate,
         datasetCompletenessPct: finalSemantics.completenessPct,
-      }));
-      shadowObservation = await executeStep('shadow_observation', async () => recordCandidateShadowObservation({
-        pipelineRunId,
-        publicationId: typeof publication.homePublicationId === 'string' ? publication.homePublicationId : null,
-        publicationPayloadHash: typeof publication.homePayloadHash === 'string' ? publication.homePayloadHash : null,
-        manifestId: candidateResearch.manifestId,
-        manifestHash: candidateResearch.manifestHash,
-        researchItems: candidateResearch.items,
-        stages,
-        technicalSessionDate: candidateResearch.technicalSessionDate || null,
-        publicationPhase: finalSemantics.phase,
-        activeSourceErrors: shadowSourceErrors,
       }));
     }
 
@@ -22433,24 +22418,6 @@ export async function runMonitoringChecks() {
         message: `No fully successful candidate research run for trading session ${taipeiDate}`,
         context: { latestCandidateRun: latestCandidateRun || null },
       });
-    }
-    if (officialLatestSession === taipeiDate && latestTechnicalSession === taipeiDate && Number(taipeiValue.hour || 0) >= 20) {
-      const progress = await loadCandidateShadowProgress();
-      if (progress.latestSession !== latestTechnicalSession) {
-        alerts.push({
-          type: 'shadow_session_missing',
-          level: 'critical',
-          message: `No canonical shadow observation for trading session ${latestTechnicalSession}`,
-          context: { latestTechnicalSession, shadowProgress: progress },
-        });
-      } else if (progress.blockers.length > 0) {
-        alerts.push({
-          type: 'shadow_session_not_qualifying',
-          level: 'warning',
-          message: `Shadow observation ${latestTechnicalSession} is not qualifying`,
-          context: { blockers: progress.blockers, shadowProgress: progress },
-        });
-      }
     }
 
     return {

@@ -175,7 +175,7 @@ function ValuationSummary({ detail }: { detail: CandidateDetailPayload }) {
           </h2>
         </div>
         <span className="rounded-full border border-amber-400/50 bg-amber-100/70 px-3 py-1 text-xs font-semibold text-amber-800 dark:bg-amber-950/40 dark:text-amber-200">
-          Shadow 研究階段
+          個股研究階段
         </span>
       </div>
       <div className="mt-5 grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
@@ -432,7 +432,7 @@ export default function CandidateDetailView({
               : "重大官方反證、估值失效或技術硬門檻失效。"}
           </p>
           <span className="mt-4 inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800 dark:bg-amber-950/40 dark:text-amber-200">
-            Shadow：觀察中，不是自動買進
+            個股條件驗證：供研究參考，不是自動買進
           </span>
         </div>
       </section>

@@ -35,6 +35,16 @@ spawn the parser under the web identity. The socket-activated service uses a
 DynamicUser, has no EnvironmentFile or credentials, has no network namespace,
 and receives only hash-bound bytes over the Unix socket.
 
+For the existing credential-scrubbing socket launcher, Arelle also supports the
+root-owned `config/XDG_CONFIG_HOME` pointer in its installed package. Install
+`deployment/vps/arelle-config-root` there only when `PrivateTmp=true` and
+`UMask=0077` are enabled. Its target is inside the service's private temporary
+namespace, not the web release or an account home. This restores operation for a
+DynamicUser with no writable home without changing the reviewed parser code or
+granting access to secrets. The newer launcher uses a per-request temporary XDG
+directory instead and takes precedence over this pointer. Never disable sandbox
+protection to work around `PermissionError: /.config`.
+
 Record the interpreter package hashes, OS package inventory, and reviewer in
 the deployment evidence.  The isolated service starts its parser without a
 shell, with a scrubbed environment, a 25-second wall timeout, and bounded stdout/stderr.

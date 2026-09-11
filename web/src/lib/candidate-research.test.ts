@@ -32,6 +32,22 @@ test('bounded pagination also retains source rows after the first response page'
   assert.equal(rows.at(-1), 'mention-1978');
 });
 
+test('complete authority reads reject truncation rather than reporting false coverage', async () => {
+  const rows = Array.from({length:1001},(_,i)=>i);
+  await assert.rejects(collectPagedAuthorityRows(async (from,to)=>rows.slice(from,to+1),
+    {pageSize:500,maxRows:1000,requireComplete:true}),/authority_pagination_overflow/);
+  assert.equal((await collectPagedAuthorityRows(async (from,to)=>rows.slice(0,1000).slice(from,to+1),
+    {pageSize:500,maxRows:1000,requireComplete:true})).length,1000);
+});
+
+test('run freezes its authority cutoff after live acquisition, not the old global Shadow time', async () => {
+  const {readFile} = await import('node:fs/promises');
+  const source=await readFile(new URL('./candidate-research.ts',import.meta.url),'utf8');
+  assert.ok(source.indexOf('const acquiredRows = await mapLimit') < source.indexOf('const authorityCutoff = evaluatedAt'));
+  const classifier=source.slice(source.indexOf('const researchStock = async'));
+  assert.doesNotMatch(classifier,/await fetchTwStockDailyBars\(/);
+});
+
 test('large UUID filters are split into bounded URL batches and each response is paginated', async () => {
   const ids = Array.from({ length: 45 }, (_, index) => `stock-${index}`);
   const calls: Array<{ batch: string[]; from: number; to: number }> = [];
@@ -158,8 +174,17 @@ test('candidate historical research is enabled unless production explicitly bloc
 test('candidate price refresh reads durable coverage before selecting a bounded fetch depth', () => {
   const sessions = Array.from({ length: 240 }, (_, index) => `2025-${String(Math.floor(index / 20) + 1).padStart(2, '0')}-${String(index % 20 + 1).padStart(2, '0')}`);
   assert.equal(candidatePriceRefreshDepth(sessions.slice(0, 239), '2025-12-20'), 1320);
-  assert.equal(candidatePriceRefreshDepth(sessions.slice(0, 240), '2025-12-21'), 5);
-  assert.equal(candidatePriceRefreshDepth(sessions.slice(0, 240), '2025-12-20'), 0);
+  assert.equal(candidatePriceRefreshDepth(sessions.slice(0, 240), '2025-12-21'), 1320);
+  assert.equal(candidatePriceRefreshDepth(sessions.slice(0, 240), '2025-12-20'), 1320);
+  const complete = Array.from({length:1320},(_,i) => new Date(Date.UTC(2020,0,1+i)).toISOString().slice(0,10));
+  assert.equal(candidatePriceRefreshDepth(complete,complete.at(-1)!),0);
+  assert.equal(candidatePriceRefreshDepth(complete,'2026-09-08'),5);
+});
+
+test('new validation does not backdate a historical research cutoff', () => {
+  const fact = { filing_published_at:'2026-09-01T00:00:00Z',source_timestamp:'2026-09-01T00:00:00Z',collected_at:'2026-09-01T00:00:00Z',recorded_at:'2026-09-01T00:00:00Z',validation_recorded_at:'2026-09-08T10:00:00Z' };
+  assert.equal(financialFactAvailableAt(fact,'2026-09-07T10:00:00Z'),false);
+  assert.equal(financialFactAvailableAt(fact,'2026-09-08T11:00:00Z'),true);
 });
 
 test('financial refresh shards rotate past permanently incomplete issuers', () => {
@@ -199,12 +224,14 @@ test('weekend and post-close mentions enter production without mutating the froz
   assert.deepEqual(windows.shadow.map((row) => row.stock_id), ['before-close']);
 });
 
-test('candidate research loads production mentions through evaluation time but hashes only shadow-cutoff mentions', async () => {
+test('candidate research uses its own source and financial cutoffs without global Shadow', async () => {
   const { readFile } = await import('node:fs/promises');
   const source = await readFile(new URL('./candidate-research.ts', import.meta.url), 'utf8');
   assert.match(source, /loadCandidateMentions\(supabase, historyCutoff, productionSourceCutoff\)/u);
-  assert.match(source, /sourceMentionRevisionHash: stableHash\(shadowEligibleMentions/u);
-  assert.match(source, /candidate_symbols: proposedShadowUniverse\.map/u);
+  const production = source.slice(0,source.indexOf('export async function recordCandidateShadowObservation'));
+  assert.doesNotMatch(production, /from\('candidate_shadow_manifests'\)/u);
+  assert.match(production, /const authorityCutoff = evaluatedAt/u);
+  assert.ok(production.indexOf('evaluatedAt = new Date().toISOString()') > production.indexOf('await refreshCandidateOfficialFinancials'));
   assert.match(source, /const universe = proposedUniverse/u);
 });
 
@@ -217,7 +244,7 @@ test('missing official price history still publishes a source-specific fact deta
   assert.match(source, /failClosedWriteFailures = items\.filter\(\(item\) => item\.snapshotError \|\| item\.detailError\)/u);
 });
 
-test('shadow reruns bind financial availability to the frozen manifest cutoff', async () => {
+test('production reruns retain a fixed financial availability cutoff', async () => {
   const { readFile } = await import('node:fs/promises');
   const source = await readFile(new URL('./candidate-research.ts', import.meta.url), 'utf8');
   assert.match(source, /lte\('filing_published_at', authorityCutoff\)[\s\S]{0,180}lte\('recorded_at', authorityCutoff\)/u);

@@ -53,6 +53,29 @@ test('V3.20.1 retains only a DB-revalidated historical InvestAnchors structured 
   assert.equal(retained.candidateLedger[0].retentionReason,'source_evidence_retained_within_20_sessions');
 });
 
+test('V3.20 retained legacy candidate uses database-derived historical lineage without minting the current run',()=>{
+  const {buildCandidateFunnel,validatePublishedEntrantAuthority}=runtime('candidate-funnel.js');
+  const historicalRun='72000000-0000-4000-8000-000000000001';
+  const currentRun='72000000-0000-4000-8000-000000000002';
+  const configHash='a'.repeat(64);const seedHash='b'.repeat(64);
+  const prior={...kolOutcome({symbol:'1723',sourceKey:'investanchors',authority:'investanchors_structured_claim'}),
+    structuredClaim:true,rightsAttested:true,seedMembership:'out_of_seed',disposition:'promoted',reason:'new_out_of_seed_symbol',
+    producerRunId:historicalRun,schedulerConfigSha256:configHash,legacySeedSetHash:seedHash,
+    kolRetentionAuthority:'revalidated_investanchors_structured_claim_v3_20_1',retentionBridgeSourceRunId:historicalRun,
+    firstObservedSession:'2026-08-27',lastObservedSession:'2026-08-27',retentionCountedThroughSession:'2026-08-27'};
+  const retained=buildCandidateFunnel({outcomes:[],priorLedger:[prior],seedSymbols:[],currentSession:'2026-08-28',
+    completedSessions:['2026-08-27','2026-08-28'],producerRunId:currentRun,
+    schedulerConfigSha256:configHash,legacySeedSetHash:seedHash}).candidateLedger[0];
+  assert.equal(retained.producerRunId,historicalRun);
+  assert.equal(retained.observedInCurrentRun,false);
+  assert.equal(retained.discoveryProducerRunId,historicalRun);
+  assert.deepEqual([retained.discoveryDisposition,retained.discoveryReason],['unchanged','same_material_evidence']);
+  assert.equal(validatePublishedEntrantAuthority({candidates:[retained],producerRunId:currentRun,
+    schedulerConfigSha256:configHash,legacySeedSetHash:seedHash,seedSymbols:[],
+    discoveryDelta:{added:[],exited:[],continued:['1723'],
+      unchangedReasons:[{symbol:'1723',reason:'same_material_evidence'}]}}),true);
+});
+
 test('V3.20 rejects the 2605 new-emerging-market ETF false positive but accepts a public Telegram nomination',()=>{
   const {extractRevisionCandidates}=runtime('auth-source-worker-cli.js');
   const authorityPages=[['roster',null,null,[
@@ -103,11 +126,14 @@ test('V3.20 records Telegram publication time only when the public message provi
 });
 
 test('V3.20 projection is a second KOL-first boundary: it strips legacy cards and rejects official-only source signals',()=>{
+  const candidate=runtime('candidate-funnel.js').buildCandidateFunnel({outcomes:[kolOutcome()],priorLedger:[],seedSymbols:['2330'],
+    currentSession:'2026-08-28',completedSessions:['2026-08-28'],producerRunId:'72000000-0000-4000-8000-000000000020',
+    schedulerConfigSha256:'a'.repeat(64),legacySeedSetHash:'b'.repeat(64)}).candidateLedger[0];
   const projection=runtime('compact-radar-projection.js').publishCompactRadarProjection({
     decisions:[],sourceCandidates:[
       {...kolOutcome({symbol:'6419',sourceKey:'official_market_factor',authority:'official_market_factor'}),
         sourceName:'Official market factor',sourceUrl:'https://example.test/official'},
-      kolOutcome({symbol:'2330'}),
+      candidate,
     ],discoveryDelta:{added:['6419','2330'],exited:[],continued:[],unchangedReasons:[]},
     legacyPayload:{opportunities:[{symbol:'6419',sourceType:'official_market_factor'}],earlyWatchlist:[{symbol:'2605'}]},
     freshnessSchedule:[{session_id:'2026-08-28',status:'completed'}],window:'daily',asOf:'2026-08-28T10:20:00Z',

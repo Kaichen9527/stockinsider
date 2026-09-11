@@ -73,7 +73,7 @@ export default async function OpportunityDetailPage({
     <main className="min-h-screen px-4 py-6 text-slate-950 sm:px-5 sm:py-8 dark:text-emerald-50">
       <article className="mx-auto max-w-5xl space-y-6 rounded-[1.5rem] border border-line bg-surface p-5 shadow-xl sm:rounded-[2rem] md:p-10">
         <div className="rounded-2xl border border-amber-500/35 bg-amber-500/10 p-4 text-sm text-amber-800 dark:text-amber-200">
-          V3 影子研究 — 僅供研究，不是正式推薦或投資建議
+          V3 歷史研究 — 僅供研究，不是正式推薦或投資建議
         </div>
 
         <header>
