@@ -44,3 +44,6 @@ node_modules
 node_modules
 node_modules
 .gstack/
+
+# Encrypted local database/archive backups are never committed or deployed.
+/backup/
