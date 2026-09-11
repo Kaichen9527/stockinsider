@@ -55,3 +55,22 @@ test('preserves the exact Supabase project-host and service-key digest guard', (
     OPPORTUNITY_V3_SERVICE_ROLE_KEY_SHA256: createHash('sha256').update(key).digest('hex'),
   }, () => { throw new Error('not used'); }), /supabase_data_plane_invalid/u);
 });
+
+test('permits only the node test runner controlled loopback projection fixture', () => {
+  const fixture = {
+    SUPABASE_URL: 'http://127.0.0.1:3301/',
+    SUPABASE_SERVICE_ROLE_KEY: 'controlled-projection-' + 'x'.repeat(32),
+    LEGACY_RADAR_CORRECTNESS_PROJECTION: 'enabled',
+  };
+  assert.throws(() => resolveStockInsiderDataPlaneConfiguration(fixture), /supabase_data_plane_invalid/u);
+  const result = resolveStockInsiderDataPlaneConfiguration({ ...fixture, NODE_TEST_CONTEXT: 'child-v8' });
+  assert.equal(result.url, fixture.SUPABASE_URL);
+  for (const patch of [
+    { SUPABASE_URL: 'http://localhost:3301/' },
+    { SUPABASE_URL: 'https://127.0.0.1:3301/' },
+    { LEGACY_RADAR_CORRECTNESS_PROJECTION: 'disabled' },
+    { NODE_TEST_CONTEXT: 'child' },
+  ]) assert.throws(() => resolveStockInsiderDataPlaneConfiguration({
+    ...fixture, NODE_TEST_CONTEXT: 'child-v8', ...patch,
+  }), /supabase_data_plane_invalid/u);
+});
