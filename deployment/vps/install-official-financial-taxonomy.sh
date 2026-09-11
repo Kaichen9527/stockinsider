@@ -48,6 +48,7 @@ PY
 
 test "$(find "$payload" -type f -name 'tifrs-ci-cr-2026-03-31.xsd' | wc -l | tr -d ' ')" = 1
 test "$(find "$payload" -type f -name 'tifrs-ci-basi-2026-03-31.xsd' | wc -l | tr -d ' ')" = 1
+printf '%s\n' "$actual_sha256" > "$payload/.archive-sha256"
 find "$payload" -type d -exec chmod 0755 {} +
 find "$payload" -type f -exec chmod 0644 {} +
 chown -R root:root "$payload"

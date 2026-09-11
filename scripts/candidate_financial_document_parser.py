@@ -87,7 +87,8 @@ def apply_limits():
         pass
 
 
-def result(status, parser, sha256, locators, missing, validation=None, validated_facts=None):
+def result(status, parser, sha256, locators, missing, validation=None, validated_facts=None,
+           runtime_version=None, taxonomy_sha256=None):
     output = {
         "schema": "candidate-financial-document-parser-v1",
         "status": status,
@@ -100,6 +101,10 @@ def result(status, parser, sha256, locators, missing, validation=None, validated
         output["validation"] = validation
     if validated_facts is not None:
         output["validatedFacts"] = validated_facts[:MAX_LOCATORS]
+    if runtime_version is not None:
+        output["runtimeVersion"] = runtime_version
+    if taxonomy_sha256 is not None:
+        output["taxonomySha256"] = taxonomy_sha256
     return output
 
 
@@ -249,11 +254,17 @@ def parse_pdf(path, sha256):
     return result("partial", "pdfplumber", sha256, locators, ["validated_pdf_manifest_required"])
 
 
-def parse_arelle(path, sha256, taxonomy_path=None):
+def parse_arelle(path, sha256, taxonomy_path=None, taxonomy_sha256=None):
     # Arelle is used as a local XBRL/iXBRL structural validator. It is offline:
     # unresolved remote taxonomies fail rather than being downloaded.
-    from arelle import Cntlr, FileSource, XmlValidateConst
+    from arelle import Cntlr, FileSource, Version, XmlValidateConst
     from arelle.ModelFormulaObject import FormulaOptions
+    runtime_version = str(Version.version)
+    if taxonomy_path is not None and (not taxonomy_sha256 or len(taxonomy_sha256) != 64):
+        raise ValueError("official_taxonomy_identity_missing")
+    def arelle_result(status, locators, missing, validation=None, validated_facts=None):
+        return result(status, "arelle", sha256, locators, missing, validation, validated_facts,
+                      runtime_version, taxonomy_sha256)
 
     # Cntlr is the lower-level validated runtime. It avoids Session's formula
     # setup cost for large official taxonomies while still running the model
@@ -265,7 +276,7 @@ def parse_arelle(path, sha256, taxonomy_path=None):
         model = controller.modelManager.load(FileSource.FileSource(str(entrypoint), controller))
         if model is None:
             controller.close()
-            return result("partial", "arelle", sha256, [], ["arelle_model_load_failed"], None, [])
+            return arelle_result("partial", [], ["arelle_model_load_failed"], None, [])
         controller.modelManager.validate()
         errors = list(getattr(model, "errors", []))
         locators = []
@@ -316,7 +327,7 @@ def parse_arelle(path, sha256, taxonomy_path=None):
             missing = ["arelle_found_no_valid_valuation_fact"]
             if errors:
                 missing.insert(0, "arelle_validation_errors")
-            return result("partial", "arelle", sha256, locators, missing, summary, [])
+            return arelle_result("partial", locators, missing, summary, [])
         # A value becoming typed during model loading is not proof that instance
         # validation completed. Any document validation error blocks the entire
         # manifest; callers may retain locators for diagnosis but no fact may
@@ -327,7 +338,7 @@ def parse_arelle(path, sha256, taxonomy_path=None):
             validated_facts = []
         model.close()
         controller.close()
-        return result(status, "arelle", sha256, locators, missing, summary, validated_facts)
+        return arelle_result(status, locators, missing, summary, validated_facts)
 
 
 def parse_docling(path, sha256):
@@ -349,6 +360,7 @@ def main():
     parser.add_argument("--allow-docling", action="store_true")
     parser.add_argument("--docling-models-path")
     parser.add_argument("--taxonomy-path")
+    parser.add_argument("--taxonomy-sha256")
     args = parser.parse_args()
     if len(args.sha256) != 64 or any(char not in "0123456789abcdef" for char in args.sha256):
         raise ValueError("invalid_sha256")
@@ -363,7 +375,7 @@ def main():
         path = Path(stream.name)
     try:
         if args.format in ("html", "xbrl"):
-            output = parse_arelle(path, args.sha256, args.taxonomy_path)
+            output = parse_arelle(path, args.sha256, args.taxonomy_path, args.taxonomy_sha256)
         else:
             try:
                 output = parse_pdf(path, args.sha256)

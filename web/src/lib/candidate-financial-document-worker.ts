@@ -11,8 +11,6 @@ import { fixedRunnerPrincipal } from './opportunity-v3/internal.ts';
 import { getOpportunityV3ServerClient } from './opportunity-v3/service-client.ts';
 
 type Row = Record<string, unknown>;
-const ARELLE_RUNTIME = 'arelle-2.44.7';
-const OFFICIAL_TAXONOMY_SHA256 = '4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869';
 
 function sha256(bytes: Uint8Array) {
   return createHash('sha256').update(bytes).digest('hex');
@@ -64,16 +62,19 @@ function parserEvidence(parse: CandidateFinancialLocalParserResult, documentSha2
     schema: 'candidate-financial-parser-evidence-v8',
     documentSha256,
     parser: parse.parser,
-    parserVersion: parse.parser === 'arelle' ? ARELLE_RUNTIME : `${parse.parser}-bounded-v1`,
-    taxonomySha256: parse.parser === 'arelle' ? OFFICIAL_TAXONOMY_SHA256 : null,
+    parserVersion: parse.parser === 'arelle' ? parse.runtimeVersion : `${parse.parser}-bounded-v1`,
+    taxonomySha256: parse.parser === 'arelle' ? parse.taxonomySha256 : null,
     validation: parse.validation || null,
     validatedFacts: parse.validatedFacts || [],
   };
 }
 
 async function reconcilePendingDocumentValidations(client: ReturnType<typeof getOpportunityV3ServerClient>, owner: string) {
+  const now = new Date().toISOString();
   const pending = await client.from('candidate_financial_document_receipts_v6')
     .select('receipt_id,stock_id').eq('financial_validation_status', 'pending')
+    .or(`financial_validation_next_attempt_at.is.null,financial_validation_next_attempt_at.lte.${now}`)
+    .order('financial_validation_next_attempt_at', { ascending: true, nullsFirst: true })
     .order('accepted_at').limit(20);
   if (pending.error) return [{ receiptId: null, error: `candidate_financial_validation_pending_read_failed:${pending.error.message}` }];
   const rows = (pending.data || []) as Row[];
@@ -89,6 +90,9 @@ async function reconcilePendingDocumentValidations(client: ReturnType<typeof get
         p_receipt_id: receiptId, p_caller_principal: owner, p_completed_at: new Date().toISOString(),
       });
       if (finalized.error) throw new Error(`candidate_financial_validation_finalize_failed:${finalized.error.message}`);
+      const finalizedRow = Array.isArray(finalized.data) ? finalized.data[0] as Row | undefined : finalized.data as Row | null;
+      const status = String(finalizedRow?.validation_status || 'pending');
+      if (status !== 'validated') throw new Error(`candidate_financial_validation_${status}`);
     } catch (error) {
       errors.push({ receiptId, error: error instanceof Error ? error.message : 'candidate_financial_validation_finalize_failed' });
     }
@@ -188,8 +192,26 @@ export async function processCandidateFinancialDocumentReceipts(limit = 5) {
           p_receipt_id: receiptId, p_caller_principal: owner, p_completed_at: new Date().toISOString(),
         });
         if (finalized.error) throw new Error(`candidate_financial_validation_finalize_failed:${finalized.error.message}`);
+        const finalizedRow = Array.isArray(finalized.data) ? finalized.data[0] as Row | undefined : finalized.data as Row | null;
+        const finalValidationStatus = String(finalizedRow?.validation_status || 'pending');
+        if (finalValidationStatus === 'pending') {
+          results.push({ receiptId, status: 'validation_pending', parser: localParse?.parser || null,
+            locatorCount: localParse?.locators.length || 0,
+            missingRequirements: [...missing, 'official_fact_validation_pending'], rejectionReasons: rejected,
+            validation, error: 'official_fact_validation_pending' });
+          continue;
+        }
+        if (finalValidationStatus !== 'validated') {
+          results.push({ receiptId, status: 'partial', parser: localParse?.parser || null,
+            locatorCount: localParse?.locators.length || 0,
+            missingRequirements: [...missing, 'official_fact_validation_rejected'], rejectionReasons: rejected,
+            validation, error: `official_fact_validation_${finalValidationStatus}` });
+          continue;
+        }
       }
-      results.push({ receiptId, status: String(row.receipt_status || 'unknown'), parser: localParse?.parser || null,
+      const finalStatus = facts.length > 0 && missing.length === 0 && rejected.length === 0
+        ? 'accepted' : String(row.receipt_status || 'unknown');
+      results.push({ receiptId, status: finalStatus, parser: localParse?.parser || null,
         locatorCount: localParse?.locators.length || 0, missingRequirements: missing, rejectionReasons: rejected,
         validation, error: null });
     } catch (error) {

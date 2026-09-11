@@ -24,6 +24,8 @@ export type CandidateFinancialLocalParserResult = {
   inputSha256: string;
   locators: CandidateFinancialDocumentLocator[];
   missingRequirements: string[];
+  runtimeVersion?: string;
+  taxonomySha256?: string;
   validation?: {
     errorCount: number;
     errorCodes: string[];
@@ -97,11 +99,16 @@ function parseResult(raw: string, inputSha256: string): CandidateFinancialLocalP
         && typeof fact.period_end === 'string' && /^\d{4}-\d{2}-\d{2}$/u.test(fact.period_end)
         && ['quarterly', 'instant'].includes(String(fact.duration_kind))
         && fact.dimension_count === 0;
-    }))) throw new Error('candidate_financial_local_parser_invalid_fact_manifest');
+    })
+    || typeof result.runtimeVersion !== 'string' || !/^\d+\.\d+\.\d+$/u.test(result.runtimeVersion)
+    || typeof result.taxonomySha256 !== 'string' || !/^[0-9a-f]{64}$/u.test(result.taxonomySha256)
+    )) throw new Error('candidate_financial_local_parser_invalid_fact_manifest');
   return {
     schema: 'candidate-financial-document-parser-v1', status: result.status as 'complete' | 'partial',
     parser: result.parser as 'arelle' | 'pdfplumber' | 'docling', inputSha256,
     locators: result.locators as CandidateFinancialDocumentLocator[], missingRequirements: result.missingRequirements as string[],
+    runtimeVersion: typeof result.runtimeVersion === 'string' ? result.runtimeVersion : undefined,
+    taxonomySha256: typeof result.taxonomySha256 === 'string' ? result.taxonomySha256 : undefined,
     validation: validation as CandidateFinancialLocalParserResult['validation'],
     validatedFacts: validatedFacts as CandidateFinancialLocalParserResult['validatedFacts'],
   };

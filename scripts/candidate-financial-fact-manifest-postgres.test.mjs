@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { randomUUID } from 'node:crypto';
 
 test('v8 parser evidence and exact fact validation survive a real PostgreSQL boundary', () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'candidate-fact-v8-pg-'));
@@ -20,6 +21,13 @@ test('v8 parser evidence and exact fact validation survive a real PostgreSQL bou
   };
   const sql = (value) => command('psql', ['-X', '-v', 'ON_ERROR_STOP=1', '-h', socket,
     '-p', String(port), '-U', user, '-d', 'postgres', '-At'], value);
+  const sqlFails = (value) => {
+    const result = spawnSync(binary('psql'), ['-X', '-v', 'ON_ERROR_STOP=1', '-h', socket,
+      '-p', String(port), '-U', user, '-d', 'postgres', '-At'],
+    { input: value, encoding: 'utf8', env: { ...process.env, LC_ALL: 'C' } });
+    assert.notEqual(result.status, 0, result.stdout);
+    return result.stderr;
+  };
   let started = false;
   try {
     command('initdb', ['-D', data, '--auth=trust', '--no-locale', '--encoding=UTF8', '-U', user]);
@@ -29,6 +37,7 @@ test('v8 parser evidence and exact fact validation survive a real PostgreSQL bou
     sql(`CREATE SCHEMA extensions; CREATE EXTENSION pgcrypto WITH SCHEMA extensions;
       CREATE ROLE anon NOLOGIN; CREATE ROLE authenticated NOLOGIN; CREATE ROLE service_role NOLOGIN BYPASSRLS;
       CREATE TABLE public.stocks(id uuid PRIMARY KEY,symbol text NOT NULL);
+      CREATE TABLE public.candidate_issuer_document_domains_v6(stock_id uuid,host text,PRIMARY KEY(stock_id,host));
       CREATE TABLE public.candidate_financial_acquisition_jobs_v4(job_id uuid PRIMARY KEY,stock_id uuid,
         status text,terminal_reason text,terminal_detail text,lease_owner text,lease_expires_at timestamptz,
         collected_at timestamptz,next_attempt_at timestamptz,updated_at timestamptz);
@@ -51,15 +60,21 @@ test('v8 parser evidence and exact fact validation survive a real PostgreSQL bou
         filing_restatement_id text,source_ref text);
       CREATE TABLE public.opportunity_financial_facts_v3(fact_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
         stock_id uuid,source_ref text,collected_at timestamptz,recorded_at timestamptz DEFAULT clock_timestamp(),
-        validation_status text DEFAULT 'pending');
+        provider text,authority_tier text,validation_status text DEFAULT 'pending',schema_valid boolean,
+        unit_valid boolean,point_in_time_valid boolean,consistency_valid boolean,validation_recorded_at timestamptz);
       CREATE TABLE public.candidate_financial_fact_provenance_v4(fact_id uuid,issuer_document_id uuid,
         source_url text,source_sha256 text,locator jsonb,extracted_at timestamptz);
+      CREATE TABLE public.official_financial_validation_receipts(
+        id uuid PRIMARY KEY DEFAULT gen_random_uuid(),fact_id uuid,validator_version text,input_hash text,
+        source_sha256 text,validation jsonb,validated_at timestamptz DEFAULT clock_timestamp(),
+        receipt_sequence bigint GENERATED ALWAYS AS IDENTITY,prior_validation jsonb,effective_validation jsonb,
+        UNIQUE(fact_id,validator_version,input_hash));
       CREATE FUNCTION public.internal_principal_role_is_exact_v3_internal(uuid,text,timestamptz) RETURNS boolean
         LANGUAGE sql AS 'SELECT $1=''55555555-5555-4555-8555-555555555555''::uuid AND $2=''opportunity_runner''';
       CREATE FUNCTION public.append_financial_fact_v3(public.financial_fact_input_v3,uuid)
         RETURNS TABLE(fact_id uuid,recorded_at timestamptz) LANGUAGE plpgsql AS $$
-        BEGIN RETURN QUERY INSERT INTO public.opportunity_financial_facts_v3(stock_id,source_ref,collected_at)
-          VALUES(($1).stock_id,($1).source_ref,($1).collected_at) RETURNING opportunity_financial_facts_v3.fact_id,
+        BEGIN RETURN QUERY INSERT INTO public.opportunity_financial_facts_v3(stock_id,source_ref,collected_at,provider,authority_tier)
+          VALUES(($1).stock_id,($1).source_ref,($1).collected_at,($1).provider,($1).authority_tier) RETURNING opportunity_financial_facts_v3.fact_id,
           opportunity_financial_facts_v3.recorded_at; END $$;
       CREATE FUNCTION public.complete_candidate_financial_document_receipt_parser_v7(
         uuid,text,uuid,jsonb,jsonb,jsonb,jsonb,timestamptz) RETURNS TABLE(receipt_status text,added_fact_count integer,duplicate_fact_count integer)
@@ -99,7 +114,18 @@ test('v8 parser evidence and exact fact validation survive a real PostgreSQL bou
     assert.equal(sql(`SELECT count(*) FROM public.candidate_financial_parser_evidence_v8 WHERE receipt_id='${receipt}'`), '1');
     assert.equal(sql(`SELECT count(*) FROM public.candidate_financial_document_fact_links_v8 WHERE receipt_id='${receipt}'`), '1');
     assert.equal(sql(`SELECT status FROM public.candidate_financial_acquisition_jobs_v4 WHERE job_id='${job}'`), 'running');
-    sql(`UPDATE public.opportunity_financial_facts_v3 SET validation_status='validated';`);
+    const pendingFinalize = `SET ROLE service_role; SELECT * FROM public.finalize_candidate_financial_document_validation_v8('${receipt}','${principal}',clock_timestamp())`;
+    assert.match(sql(pendingFinalize).split('\n').at(-1), /^pending\|0\|0\|1$/u);
+    sql(`UPDATE public.opportunity_financial_facts_v3 SET validation_status='validated',schema_valid=true,
+      unit_valid=true,point_in_time_valid=true,consistency_valid=true;`);
+    // Mutable flags without an immutable validation receipt still fail closed.
+    assert.match(sql(pendingFinalize).split('\n').at(-1), /^pending\|0\|0\|1$/u);
+    const validation = { version:'official-financial-v1',schemaValid:true,unitValid:true,
+      pointInTimeValid:true,consistencyValid:true,reasons:[],checks:['source_identity'] };
+    assert.equal(sql(`SET ROLE service_role; SELECT public.record_official_financial_validation(
+      (SELECT fact_id FROM public.opportunity_financial_facts_v3 LIMIT 1),
+      (SELECT recorded_at FROM public.opportunity_financial_facts_v3 LIMIT 1),'${hash}','${'c'.repeat(64)}',
+      '${JSON.stringify(validation)}'::jsonb)`).split('\n').at(-1), 't');
     assert.match(sql(`SET ROLE service_role; SELECT * FROM public.finalize_candidate_financial_document_validation_v8('${receipt}','${principal}',clock_timestamp())`).split('\n').at(-1), /^validated\|1\|0\|0$/u);
     assert.equal(sql(`SELECT receipt_status||'|'||financial_validation_status FROM public.candidate_financial_document_receipts_v6 WHERE receipt_id='${receipt}'`), 'accepted|validated');
     assert.equal(sql(`SELECT status||'|'||terminal_reason FROM public.candidate_financial_acquisition_jobs_v4 WHERE job_id='${job}'`), 'terminal|complete');
@@ -118,6 +144,21 @@ test('v8 parser evidence and exact fact validation survive a real PostgreSQL bou
       '["validated_pdf_manifest_required"]','[]',clock_timestamp())`).split('\n').at(-1), /^partial\|0\|0$/u);
     assert.equal(sql(`SELECT parser_status FROM public.candidate_financial_document_receipts_v6 WHERE receipt_id='${pdfReceipt}'`), 'complete');
     assert.equal(sql("SELECT has_function_privilege('authenticated','public.finalize_candidate_financial_document_validation_v8(uuid,uuid,timestamptz)','EXECUTE')"), 'f');
+    for (const key of ['schema','documentSha256','parserVersion','taxonomySha256']) {
+      const badReceipt = randomUUID();
+      const badDoc = randomUUID();
+      sql(`INSERT INTO public.candidate_issuer_ir_document_queue_v4 VALUES('${badDoc}');
+        INSERT INTO public.candidate_financial_document_receipts_v6(receipt_id,stock_id,issuer_document_id,source_url,exchange,
+          period_end,document_sha256,receipt_status,parser_status,parser_owner,parser_lease_expires_at)
+        VALUES('${badReceipt}','${stock}','${badDoc}','https://mops.twse.com.tw/bad','TWSE','2026-06-30','${hash}',
+          'accepted','running','runner',clock_timestamp()+interval '5 minutes');`);
+      const invalidEvidence = { ...evidence };
+      delete invalidEvidence[key];
+      assert.match(sqlFails(`SET ROLE service_role; SELECT * FROM public.complete_candidate_financial_document_receipt_parser_v8(
+        '${badReceipt}','runner','${principal}','[]','[]','${JSON.stringify(invalidEvidence)}','[]','[]',clock_timestamp())`),
+      /candidate_financial/u);
+      assert.equal(sql(`SELECT parser_status FROM public.candidate_financial_document_receipts_v6 WHERE receipt_id='${badReceipt}'`), 'running');
+    }
   } finally {
     if (started) command('pg_ctl', ['-D', data, '-m', 'fast', '-w', 'stop']);
     fs.rmSync(root, { recursive:true, force:true });

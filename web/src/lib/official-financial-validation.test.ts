@@ -10,6 +10,9 @@ test('valid official observations require provenance and explicit dimensional ch
   assert.equal(r.status,'validated');assert.equal(r.schemaValid,true);assert.equal(r.unitValid,true);assert.equal(r.pointInTimeValid,true);assert.equal(r.consistencyValid,true);
   assert.equal(validateOfficialFinancialFact(fact,[fact],null,cutoff).status,'rejected');
   assert.equal(validateOfficialFinancialFact(fact,[fact],{...source,source_url:'https://tpex.org.tw.evil.test/x'},cutoff).status,'rejected');
+  assert.equal(validateOfficialFinancialFact({...fact,source_ref:`issuer-document:${'b'.repeat(64)}:one`},
+    [{...fact,source_ref:`issuer-document:${'b'.repeat(64)}:one`}],
+    {...source,source_url:'https://www.nanya.com/ir/report.xhtml',issuer_host_approved:true},cutoff).status,'validated');
 });
 test('unit errors, invalid dates and future availability cannot be promoted',()=>{
   assert.equal(validateOfficialFinancialFact({...fact,unit:'TWD_thousand'},[fact],source,cutoff).unitValid,false);
