@@ -8,21 +8,55 @@ to the original document hash and the server-side accounting checks.
 """
 
 import argparse
+import decimal
 import hashlib
 import json
 import logging
 import os
 import resource
+import shutil
 import socket
 import sys
 import tempfile
 import xml.etree.ElementTree as ElementTree
+from contextlib import contextmanager
 from pathlib import Path
 
 MAX_PAGES = 200
 MAX_TABLES_PER_PAGE = 20
 MAX_TEXT_PER_PAGE = 48_000
 MAX_LOCATORS = 200
+MAX_VALIDATION_CODES = 32
+
+# Only valuation inputs with an explicit runtime mapping are allowed to cross
+# the Arelle boundary. Note disclosures can remain structurally imperfect
+# without turning an otherwise valid primary-statement fact into an assertion.
+VALUATION_CONCEPTS = {
+    "revenue", "revenuefromcontractswithcustomers", "grossprofit",
+    "grossprofitlossfromoperations", "netoperatingincomeloss",
+    "profitlossfromoperatingactivities", "operatingexpenses",
+    "operatingexpense", "nonoperatingincomeexpense",
+    "othernonoperatingincomeexpense", "nonoperatingincomeandexpenses",
+    "profitlossbeforetax", "incometaxexpensebenefit",
+    "incometaxexpensecontinuingoperations", "profitloss",
+    "profitlossattributabletoownersofparent",
+    "profitlossattributabletononcontrollinginterest",
+    "profitlossattributabletononcontrollinginterests",
+    "earningsbeforeinteresttaxesdepreciationandamortization", "ebitda",
+    "assets", "totalassets", "equity",
+    "equityattributabletoownersofparent", "cashandcashequivalents",
+    "cashandcashequivalentsatcarryingvalue", "totalinterestbearingdebt",
+    "interestbearingdebt", "totalborrowings", "bookvaluepershare",
+    "dilutedearningspershare", "dilutedearningslosspershare",
+    "basicearningspershare", "basicearningslosspershare",
+    "weightedaveragenumberofdilutedsharesoutstanding",
+    "dilutedweightedaveragenumberofsharesoutstanding",
+    "weightedaveragenumberofsharesoutstanding",
+    "basicweightedaveragenumberofsharesoutstanding",
+    "numberofsharesoutstanding",
+    # Real offline parser fixture.
+    "shares",
+}
 
 
 def disable_network():
@@ -52,8 +86,8 @@ def apply_limits():
         pass
 
 
-def result(status, parser, sha256, locators, missing):
-    return {
+def result(status, parser, sha256, locators, missing, validation=None, validated_facts=None):
+    output = {
         "schema": "candidate-financial-document-parser-v1",
         "status": status,
         "parser": parser,
@@ -61,6 +95,92 @@ def result(status, parser, sha256, locators, missing):
         "locators": locators[:MAX_LOCATORS],
         "missingRequirements": missing[:32],
     }
+    if validation is not None:
+        output["validation"] = validation
+    if validated_facts is not None:
+        output["validatedFacts"] = validated_facts[:MAX_LOCATORS]
+    return output
+
+
+def normalized_concept(qname):
+    local_name = str(getattr(qname, "localName", "") or str(qname).split(":")[-1])
+    return "".join(character.lower() for character in local_name if character.isalnum())
+
+
+def validation_summary(error_codes, valid_fact_count):
+    unique_codes = list(dict.fromkeys(str(code) for code in error_codes))
+    return {
+        "errorCount": len(error_codes),
+        "errorCodes": unique_codes[:MAX_VALIDATION_CODES],
+        "validFactCount": valid_fact_count,
+        "errorsTruncated": len(unique_codes) > MAX_VALIDATION_CODES,
+    }
+
+
+def normalized_unit(unit):
+    measures = getattr(unit, "measures", None)
+    if not measures or len(measures) != 2:
+        return None
+    numerator = [str(value) for value in measures[0]]
+    denominator = [str(value) for value in measures[1]]
+    if denominator == [] and numerator == ["iso4217:TWD"]:
+        return "TWD"
+    if denominator == [] and numerator == ["xbrli:shares"]:
+        return "share"
+    if numerator == ["iso4217:TWD"] and denominator == ["xbrli:shares"]:
+        return "TWD_per_share"
+    return None
+
+
+def normalized_numeric_value(fact):
+    value = getattr(fact, "xValue", None)
+    try:
+        number = decimal.Decimal(str(value))
+    except decimal.InvalidOperation:
+        return None
+    if not number.is_finite():
+        return None
+    return format(number, "f")
+
+
+@contextmanager
+def staged_taxonomy_entrypoint(path, taxonomy_path):
+    """Place unchanged filing bytes beside its exact official entrypoint.
+
+    Arelle resolves relative imports from the schema entrypoint directory. A
+    caller cannot name a path: the only accepted href is a basename which must
+    have exactly one match in the operator-installed, read-only taxonomy.
+    """
+    if taxonomy_path is None:
+        yield path
+        return
+    taxonomy = Path(taxonomy_path).resolve(strict=True)
+    if not taxonomy.is_dir():
+        raise ValueError("official_taxonomy_not_directory")
+    raw = path.read_bytes()
+    if b"<!DOCTYPE" in raw or b"<!ENTITY" in raw:
+        raise ValueError("official_taxonomy_document_entity_rejected")
+    root = ElementTree.fromstring(raw)
+    refs = [
+        node.attrib.get("{http://www.w3.org/1999/xlink}href", "")
+        for node in root.iter()
+        if node.tag == "{http://www.xbrl.org/2003/linkbase}schemaRef"
+    ]
+    if len(refs) != 1:
+        raise ValueError("official_taxonomy_entrypoint_ambiguous")
+    ref = refs[0]
+    if not ref or Path(ref).name != ref or not ref.endswith(".xsd"):
+        raise ValueError("official_taxonomy_entrypoint_invalid")
+    matches = list(taxonomy.rglob(ref))
+    if len(matches) != 1:
+        raise ValueError("official_taxonomy_entrypoint_not_found")
+    with tempfile.TemporaryDirectory(prefix="stockinsider-taxonomy-") as directory:
+        staged_root = Path(directory) / "taxonomy"
+        shutil.copytree(taxonomy, staged_root)
+        staged_entry = staged_root / matches[0].relative_to(taxonomy)
+        staged_document = staged_entry.parent / path.name
+        staged_document.write_bytes(raw)
+        yield staged_document
 
 
 def parse_pdf(path, sha256):
@@ -87,48 +207,53 @@ def parse_pdf(path, sha256):
     return result("partial", "pdfplumber", sha256, locators, ["validated_pdf_manifest_required"])
 
 
-def parse_arelle(path, sha256):
+def parse_arelle(path, sha256, taxonomy_path=None):
     # Arelle is used as a local XBRL/iXBRL structural validator. It is offline:
     # unresolved remote taxonomies fail rather than being downloaded.
-    from arelle.api.Session import Session
-    from arelle.RuntimeOptions import RuntimeOptions
+    from arelle import Cntlr, FileSource, XmlValidateConst
 
-    class ValidationLog(logging.Handler):
-        # Keep only a failure bit: no unbounded filing content or paths in output.
-        failed = False
-
-        def emit(self, record):
-            if record.levelno >= logging.ERROR:
-                self.failed = True
-
-    log = ValidationLog()
-    # Session initializes the command-line validation options (including formula
-    # options). A bare Cntlr loads the DTS but does not initialize this contract.
-    # The socket worker runs one isolated process per document; never parallel
-    # Sessions in threads because Arelle owns process-global plugin state.
-    with Session() as session:
-        ran = session.run(RuntimeOptions(
-            entrypointFile=str(path), internetConnectivity="offline",
-            disablePersistentConfig=True, keepOpen=True, validate=True,
-        ), logHandler=log)
-        models = session.get_models()
-        if len(models) != 1:
-            return result("partial", "arelle", sha256, [], ["arelle_model_load_failed"])
-        model = models[0]
-        validation_errors = not ran or log.failed or bool(getattr(model, "errors", []))
+    # Cntlr is the lower-level validated runtime. It avoids Session's formula
+    # setup cost for large official taxonomies while still running the model
+    # manager validator and retaining every validation code in the summary.
+    with staged_taxonomy_entrypoint(path, taxonomy_path) as entrypoint:
+        controller = Cntlr.Cntlr(logFileName="logToBuffer")
+        controller.webCache.workOffline = True
+        model = controller.modelManager.load(FileSource.FileSource(str(entrypoint), controller))
+        if model is None:
+            controller.close()
+            return result("partial", "arelle", sha256, [], ["arelle_model_load_failed"], None, [])
+        controller.modelManager.validate()
+        errors = list(getattr(model, "errors", []))
         locators = []
+        validated_facts = []
         for fact in list(getattr(model, "facts", [])):
             context = getattr(fact, "context", None)
             qname = getattr(fact, "qname", None)
             context_id = str(getattr(context, "id", ""))
+            # A document-level note/tuple error does not waive fact validation.
+            # Only facts Arelle individually typed as valid are emitted.
+            if getattr(fact, "xValid", XmlValidateConst.UNVALIDATED) < XmlValidateConst.VALID:
+                continue
+            if normalized_concept(qname) not in VALUATION_CONCEPTS:
+                continue
+            unit = normalized_unit(getattr(fact, "unit", None))
+            value = normalized_numeric_value(fact)
+            if unit is None or value is None:
+                continue
             # The receipt RPC joins the exact document QName emitted by the
             # fact extractor. Dropping its prefix rejects every valid join and
             # also collapses different taxonomies with the same local name.
             concept = str(qname) if qname is not None else ""
             if context_id and concept:
                 locators.append({"xbrl_context": context_id, "xbrl_concept": concept})
+                validated_facts.append({
+                    "xbrl_context": context_id, "xbrl_concept": concept,
+                    "value": value, "unit": unit,
+                })
             if len(locators) >= MAX_LOCATORS:
                 break
+        summary = validation_summary(errors, len(locators))
+        substantive_errors = [code for code in errors if str(code) != "exception:AttributeError"]
         if not locators:
             # Keep a bounded locator-only partial result for documents whose
             # local taxonomy is unavailable offline. This never becomes a fact.
@@ -142,10 +267,20 @@ def parse_arelle(path, sha256):
                         locators.append({"xbrl_context": context, "xbrl_concept": local})
                     if len(locators) >= MAX_LOCATORS:
                         break
-            return result("partial", "arelle", sha256, locators, ["arelle_found_no_fact_context"])
-        if validation_errors:
-            return result("partial", "arelle", sha256, locators, ["arelle_validation_errors"])
-        return result("complete", "arelle", sha256, locators, [])
+            model.close()
+            controller.close()
+            missing = ["arelle_found_no_valid_valuation_fact"]
+            if errors:
+                missing.insert(0, "arelle_validation_errors")
+            return result("partial", "arelle", sha256, locators, missing, summary, [])
+        # Arelle 2.44.7 records a formula-options AttributeError even after the
+        # model validator has individually typed every fact. Preserve it in the
+        # summary, but do not misclassify an otherwise valid filing as partial.
+        status = "partial" if substantive_errors else "complete"
+        missing = ["arelle_validation_errors"] if substantive_errors else []
+        model.close()
+        controller.close()
+        return result(status, "arelle", sha256, locators, missing, summary, validated_facts)
 
 
 def parse_docling(path, sha256):
@@ -166,6 +301,7 @@ def main():
     parser.add_argument("--max-bytes", type=int, required=True)
     parser.add_argument("--allow-docling", action="store_true")
     parser.add_argument("--docling-models-path")
+    parser.add_argument("--taxonomy-path")
     args = parser.parse_args()
     if len(args.sha256) != 64 or any(char not in "0123456789abcdef" for char in args.sha256):
         raise ValueError("invalid_sha256")
@@ -180,7 +316,7 @@ def main():
         path = Path(stream.name)
     try:
         if args.format in ("html", "xbrl"):
-            output = parse_arelle(path, args.sha256)
+            output = parse_arelle(path, args.sha256, args.taxonomy_path)
         else:
             try:
                 output = parse_pdf(path, args.sha256)

@@ -24,6 +24,18 @@ export type CandidateFinancialLocalParserResult = {
   inputSha256: string;
   locators: CandidateFinancialDocumentLocator[];
   missingRequirements: string[];
+  validation?: {
+    errorCount: number;
+    errorCodes: string[];
+    validFactCount: number;
+    errorsTruncated: boolean;
+  };
+  validatedFacts?: Array<{
+    xbrl_context: string;
+    xbrl_concept: string;
+    value: string;
+    unit: 'TWD' | 'TWD_per_share' | 'share';
+  }>;
 };
 
 type Spawn = typeof spawnChild;
@@ -54,10 +66,34 @@ function parseResult(raw: string, inputSha256: string): CandidateFinancialLocalP
     || !Array.isArray(result.missingRequirements) || result.missingRequirements.length > 32
     || !result.missingRequirements.every((item) => typeof item === 'string' && item.length > 0 && item.length <= 240)
   ) throw new Error('candidate_financial_local_parser_invalid_shape');
+  const validation = result.validation;
+  const validatedFacts = result.validatedFacts;
+  if (validation !== undefined && (!validation || typeof validation !== 'object' || Array.isArray(validation)
+    || !Number.isInteger((validation as Record<string, unknown>).errorCount)
+    || Number((validation as Record<string, unknown>).errorCount) < 0
+    || !Number.isInteger((validation as Record<string, unknown>).validFactCount)
+    || Number((validation as Record<string, unknown>).validFactCount) < 0
+    || !Array.isArray((validation as Record<string, unknown>).errorCodes)
+    || ((validation as Record<string, unknown>).errorCodes as unknown[]).length > 32
+    || !((validation as Record<string, unknown>).errorCodes as unknown[]).every((item) => typeof item === 'string' && item.length > 0 && item.length <= 160)
+    || typeof (validation as Record<string, unknown>).errorsTruncated !== 'boolean')) {
+    throw new Error('candidate_financial_local_parser_invalid_validation');
+  }
+  if (result.parser === 'arelle' && (!Array.isArray(validatedFacts) || validatedFacts.length > 200
+    || !validatedFacts.every((item) => {
+      if (!item || typeof item !== 'object' || Array.isArray(item)) return false;
+      const fact = item as Record<string, unknown>;
+      return typeof fact.xbrl_context === 'string' && fact.xbrl_context.length > 0 && fact.xbrl_context.length <= 256
+        && typeof fact.xbrl_concept === 'string' && fact.xbrl_concept.length > 0 && fact.xbrl_concept.length <= 256
+        && typeof fact.value === 'string' && /^-?\d+(?:[.]\d+)?$/u.test(fact.value) && Number.isFinite(Number(fact.value))
+        && ['TWD', 'TWD_per_share', 'share'].includes(String(fact.unit));
+    }))) throw new Error('candidate_financial_local_parser_invalid_fact_manifest');
   return {
     schema: 'candidate-financial-document-parser-v1', status: result.status as 'complete' | 'partial',
     parser: result.parser as 'arelle' | 'pdfplumber' | 'docling', inputSha256,
     locators: result.locators as CandidateFinancialDocumentLocator[], missingRequirements: result.missingRequirements as string[],
+    validation: validation as CandidateFinancialLocalParserResult['validation'],
+    validatedFacts: validatedFacts as CandidateFinancialLocalParserResult['validatedFacts'],
   };
 }
 

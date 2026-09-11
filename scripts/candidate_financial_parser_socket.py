@@ -47,8 +47,12 @@ def serve(connection):
     # give each request an isolated, automatically removed config directory.
     # This remains inside systemd's PrivateTmp and does not expose credentials.
     with tempfile.TemporaryDirectory(prefix="stockinsider-arelle-") as config_home:
+        command = [sys.executable, parser_script, "--format", request["format"], "--sha256", request["sha256"], "--max-bytes", str(MAX_BYTES)]
+        taxonomy_path = "/opt/stockinsider/runtime/candidate-financial-parser/taxonomy/current"
+        if request["format"] in ("html", "xbrl") and os.path.isdir(taxonomy_path):
+            command.extend(["--taxonomy-path", taxonomy_path])
         completed = subprocess.run(
-            [sys.executable, parser_script, "--format", request["format"], "--sha256", request["sha256"], "--max-bytes", str(MAX_BYTES)],
+            command,
             input=payload, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=25, check=False,
             env={"LANG": "C.UTF-8", "LC_ALL": "C.UTF-8", "PYTHONNOUSERSITE": "1", "PYTHONHASHSEED": "0",
                  "XDG_CONFIG_HOME": config_home,

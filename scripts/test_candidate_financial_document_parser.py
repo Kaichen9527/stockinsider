@@ -29,11 +29,14 @@ class ArelleValidationTest(unittest.TestCase):
         self.assertEqual(output["status"], "complete", output)
         self.assertEqual(output["missingRequirements"], [])
         self.assertEqual(output["locators"], [{"xbrl_context": "FY2025", "xbrl_concept": "test:Shares"}])
+        self.assertEqual(output["validation"]["validFactCount"], 1)
+        self.assertIn("exception:AttributeError", output["validation"]["errorCodes"])
 
     def test_invalid_numeric_fact_is_not_admitted(self):
         output = self.parse(value="not-a-number")
         self.assertEqual(output["status"], "partial", output)
         self.assertIn("arelle_validation_errors", output["missingRequirements"])
+        self.assertEqual(output["validation"]["validFactCount"], 0)
 
     def test_missing_context_is_not_admitted(self):
         self.assertEqual(self.parse(context="missing")["status"], "partial")
