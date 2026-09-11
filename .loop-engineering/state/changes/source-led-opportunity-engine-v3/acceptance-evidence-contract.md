@@ -198,7 +198,7 @@ graph; static fixtures and planned PCR boundaries are the immutable requirement 
 The active graph oracle validates the two canonical authority tags below, ASCII order,
 duplicate and active-graph closure,
 
-<!-- GOV-004-AUTHORITY {"catalogBytes":6337,"catalogSha256":"1855d103425f4d9086891e2f6bc7eebbb13ae865c1cc96dfef3ea32c4ecd61ca","kind":"evidence-catalog-identity"} -->
+<!-- GOV-004-AUTHORITY {"catalogBytes":6337,"catalogSha256":"e4282862266505320a711e9ce2de942e173f82fffce7e7fc2ba1b6209a27a380","kind":"evidence-catalog-identity"} -->
 <!-- GOV-004-AUTHORITY {"activeFiles":55,"kind":"evidence-file-owner-topology","owners":45} -->
 
 then recomputes every `[path,blobOid,byteLength,sha256]` row and compares the result to
@@ -225,7 +225,7 @@ remains permitted.
 `product-runtime-code-gate` runs all of the following in a clean checkout of the exact
 candidate commit and fails on the first nonzero/skip/todo/incomplete result:
 
-1. product-track traceability command above, reconciling exactly 260 registered IDs;
+1. product-track traceability command above, reconciling exactly 272 registered IDs;
 2. `npm run test:source-led-opportunity-v3`;
 3. `npm run test:source-led-opportunity-v3:product-correctness`;
 4. `npm run test:source-led-opportunity-v3:migration`;
@@ -414,7 +414,7 @@ sets both non-null and proves the closed 31-entry record above. Non-review leave
 For `status='pass'`, the compatibility validator requires the exact gate policy rather
 than merely equal nonzero counts: Requirements/Architecture/exact-review and aggregate
 checks are `partition=null, registeredCount=0, executedCount=0, commands=[]`;
-product/runtime is exactly `product_runtime,260,260` with sole command
+product/runtime is exactly `product_runtime,272,272` with sole command
 `product-runtime-track` / `protected://stockinsider-v3-gate-root/execute-track --track product_runtime`;
 model runner is exactly `model_runner,28,28` with `model-runner-track`; and evaluation
 is exactly `evaluation_governance,20,20` with `evaluation-governance-track`. Each sole

@@ -798,7 +798,7 @@ function activeGraphOracle() {
   assert.equal(catalogBlob.bytes.length, 6337, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    '1855d103425f4d9086891e2f6bc7eebbb13ae865c1cc96dfef3ea32c4ecd61ca',
+    'e4282862266505320a711e9ce2de942e173f82fffce7e7fc2ba1b6209a27a380',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);
@@ -898,8 +898,25 @@ function activeGraphOracle() {
   }
   const design = readFileSync(path.join(change, 'design.md'), 'utf8');
   const evidenceContract = readFileSync(path.join(change, 'acceptance-evidence-contract.md'), 'utf8');
+  const externalHarnessContract = readFileSync(path.join(change, 'external-gate-harness-contract.md'), 'utf8');
   assert.equal(inventory.evidenceContractVersion, 'opportunity-acceptance-evidence-v3.13.0');
   assert.match(evidenceContract, /^Version: `opportunity-acceptance-evidence-v3\.13\.0`$/mu);
+  assert.match(evidenceContract, /reconciling exactly 272 registered IDs/u,
+    'product runtime prose count matches the canonical verification partition');
+  assert.match(evidenceContract, /product\/runtime is exactly `product_runtime,272,272`/u,
+    'product runtime envelope prose count matches the protected gate policy');
+  assert.doesNotMatch(evidenceContract, /product_runtime,260,260|exactly 260 registered IDs/u,
+    'stale product runtime counts are absent from the active evidence contract');
+  assert.match(externalHarnessContract, /candidate suite registers nineteen non-live tests/u,
+    'external harness prose count matches the executable candidate model suite');
+  assert.doesNotMatch(externalHarnessContract, /candidate suite registers thirteen non-live tests/u,
+    'stale candidate model-suite count is absent from the active harness contract');
+  assert.match(externalHarnessContract,
+    /subject listing must either equal the protected-base listing or\s+match the exact content-addressed predecessor-to-successor transition approved by the\s+protected base/u,
+    'external harness documents the closed protected successor transition');
+  assert.doesNotMatch(externalHarnessContract,
+    /subject model-runner directory, wrapper and host-pin blob IDs byte-identical to\s+the protected base/u,
+    'external harness does not require unconditional equality with the predecessor listing');
   const productCorrectnessOwner = expectedVersions.get('product-correctness-runtime-amendment.md');
   assert.match(productCorrectnessOwner ?? '', /^product-correctness-runtime-v\d+[.]\d+[.]\d+$/u,
     'catalog product-correctness owner version');
