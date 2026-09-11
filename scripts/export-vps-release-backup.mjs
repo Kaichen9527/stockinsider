@@ -74,7 +74,7 @@ export async function exportVpsReleaseBackup({ directory, keyDirectory, releaseP
     verifyReleaseTreeManifest(tree, tree);
     const manifest = { schema: 'stockinsider-vps-release-export-v1', host, releasePath,
       createdAt: new Date().toISOString(), tree, plaintextStoredOnMac: false,
-      remoteDeletePerformed: false, restoreVerified: false,
+      externalSecretsArchived: false, remoteDeletePerformed: false, restoreVerified: false,
       keyReference: 'private-local-file:aes256-v1' };
     const contextSha256 = createHash('sha256').update(JSON.stringify(manifest)).digest('hex');
     key = await loadLocalBackupKey(keyDirectory);
@@ -93,7 +93,9 @@ export async function exportVpsReleaseBackup({ directory, keyDirectory, releaseP
     const receiptPath = path.join(directory, `${id}.manifest.json`);
     await writeFile(receiptPath, JSON.stringify(receipt, null, 2) + '\n', { flag: 'wx', mode: 0o600 });
     return { receiptPath, artifact: result.filename, treeSha256: tree.treeSha256,
-      files: tree.fileCount, bytes: tree.totalBytes, restoreVerified: false };
+      files: tree.fileCount, symlinks: tree.symlinkCount ?? 0,
+      externalSecretSymlinks: tree.externalSecretSymlinkCount ?? 0,
+      bytes: tree.totalBytes, restoreVerified: false };
   } finally {
     if (timeout) clearTimeout(timeout);
     if (child && child.exitCode === null && !child.killed) child.kill('SIGTERM');

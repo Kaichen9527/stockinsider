@@ -4,6 +4,7 @@ import hashlib
 import io
 import json
 import os
+import posixpath
 import re
 import stat
 import sys
@@ -13,6 +14,11 @@ PATH_RE = re.compile(r"^/opt/[a-z0-9._-]+/releases/[A-Za-z0-9._-]+$")
 MAX_FILES = 100_000
 MAX_BYTES = 8 * 1024**3
 META_PREFIX = "STOCKINSIDER_META\t"
+SECRET_NAME_RE = re.compile(r"(^|/)\.env(?:\..*)?$")
+TASKBUDDY_APP_RE = re.compile(r"^taskbuddy(?:-v539|-v536)?$")
+TASKBUDDY_SECRET_LINK_PATH = ".env.production"
+TASKBUDDY_SECRET_TARGET = "/opt/taskbuddy/shared/.env.production"
+TASKBUDDY_SECRET_POLICY = "taskbuddy-shared-env-production-v1"
 
 
 def canonical(value):
@@ -42,38 +48,85 @@ def read_file(path, expected):
         raise
 
 
+def classify_link(root, relative, target):
+    application = root.split("/")[2]
+    if os.path.isabs(target):
+        if (TASKBUDDY_APP_RE.fullmatch(application)
+                and relative == TASKBUDDY_SECRET_LINK_PATH
+                and target == TASKBUDDY_SECRET_TARGET):
+            return "external", {"path": relative, "policyId": TASKBUDDY_SECRET_POLICY,
+                                "redacted": True, "archived": False}
+        raise RuntimeError("unapproved_absolute_symlink_rejected")
+    if "\\" in relative or "\\" in target:
+        raise RuntimeError("release_symlink_path_invalid")
+    if SECRET_NAME_RE.search(relative):
+        raise RuntimeError("unapproved_secret_symlink_rejected")
+    normalized = posixpath.normpath(posixpath.join(posixpath.dirname(relative), target))
+    if (not target or target.startswith("/") or normalized in ("", ".", "..")
+            or normalized.startswith("../")):
+        raise RuntimeError("release_symlink_traversal_rejected")
+    return "internal", {"path": relative, "target": target, "resolvedPath": normalized}
+
+
 def scan(root):
     records = []
+    links = []
+    external_links = []
     total = 0
+    def append_link(kind, record):
+        if len(records) + len(links) + len(external_links) >= MAX_FILES:
+            raise RuntimeError("release_tree_limit_exceeded")
+        (links if kind == "internal" else external_links).append(record)
+
     for directory, names, filenames in os.walk(root, topdown=True, followlinks=False):
         names.sort()
         filenames.sort()
         for name in list(names):
             target = os.path.join(directory, name)
             metadata = os.lstat(target)
-            if not stat.S_ISDIR(metadata.st_mode) or stat.S_ISLNK(metadata.st_mode):
+            relative = os.path.relpath(target, root).replace(os.sep, "/")
+            if "\\" in relative:
+                raise RuntimeError("release_path_invalid")
+            if stat.S_ISLNK(metadata.st_mode):
+                names.remove(name)
+                kind, record = classify_link(root, relative, os.readlink(target))
+                append_link(kind, record)
+            elif not stat.S_ISDIR(metadata.st_mode):
                 raise RuntimeError("release_special_file_rejected")
         for name in filenames:
             target = os.path.join(directory, name)
             metadata = os.lstat(target)
-            if not stat.S_ISREG(metadata.st_mode) or stat.S_ISLNK(metadata.st_mode):
-                raise RuntimeError("release_special_file_rejected")
             relative = os.path.relpath(target, root).replace(os.sep, "/")
             if relative.startswith("../") or relative.startswith("/") or any(part in ("", ".", "..") for part in relative.split("/")):
                 raise RuntimeError("release_path_invalid")
+            if "\\" in relative:
+                raise RuntimeError("release_path_invalid")
+            if stat.S_ISLNK(metadata.st_mode):
+                kind, record = classify_link(root, relative, os.readlink(target))
+                append_link(kind, record)
+                continue
+            if not stat.S_ISREG(metadata.st_mode):
+                raise RuntimeError("release_special_file_rejected")
+            if SECRET_NAME_RE.search(relative):
+                raise RuntimeError("release_secret_file_rejected")
             identity = (metadata.st_dev, metadata.st_ino, metadata.st_size,
                         stat.S_IMODE(metadata.st_mode), metadata.st_mtime_ns)
             descriptor, digest = read_file(target, identity)
             os.close(descriptor)
             total += metadata.st_size
-            if total > MAX_BYTES or len(records) >= MAX_FILES:
+            if total > MAX_BYTES or len(records) + len(links) + len(external_links) >= MAX_FILES:
                 raise RuntimeError("release_tree_limit_exceeded")
             records.append({"path": relative, "bytes": metadata.st_size,
                             "mode": stat.S_IMODE(metadata.st_mode), "mtimeMs": metadata.st_mtime_ns // 1_000_000,
                             "sha256": digest})
     records.sort(key=lambda item: item["path"])
+    links.sort(key=lambda item: item["path"])
+    external_links.sort(key=lambda item: item["path"])
     tree = {"schema": "stockinsider-vps-release-tree-v1", "releasePath": root,
-            "fileCount": len(records), "totalBytes": total, "files": records}
+            "fileCount": len(records), "totalBytes": total, "files": records,
+            "symlinkCount": len(links), "links": links,
+            "externalSecretSymlinkCount": len(external_links),
+            "externalSecretLinks": external_links}
     tree["treeSha256"] = hashlib.sha256(canonical(tree)).hexdigest()
     return tree
 

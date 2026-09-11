@@ -1,10 +1,13 @@
 import { createHash } from 'node:crypto';
-import { chmod, lstat, mkdir, mkdtemp, open, realpath, rm, utimes } from 'node:fs/promises';
+import { chmod, lstat, mkdir, mkdtemp, open, readlink, realpath, rm, symlink, utimes } from 'node:fs/promises';
 import path from 'node:path';
 
 const BLOCK = 512;
 const MANIFEST = '.stockinsider-release-manifest.json';
 export const MAX_RELEASE_MANIFEST_BYTES = 16 * 1024 ** 2;
+const SECRET_PATH = /(^|\/)\.env(?:\..*)?$/;
+const TASKBUDDY_APP = /^taskbuddy(?:-v539|-v536)?$/;
+const EXTERNAL_SECRET_POLICY = 'taskbuddy-shared-env-production-v1';
 const canonical = value => value && typeof value === 'object'
   ? Array.isArray(value) ? `[${value.map(canonical).join(',')}]`
     : `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${canonical(value[key])}`).join(',')}}`
@@ -54,16 +57,60 @@ export function verifyReleaseTreeManifest(tree, expected) {
   if (tree?.schema !== 'stockinsider-vps-release-tree-v1' || tree.releasePath !== expected.releasePath
     || tree.fileCount !== tree.files?.length || !Number.isSafeInteger(tree.totalBytes)
     || !/^[0-9a-f]{64}$/.test(tree.treeSha256 || '')) throw new Error('release_tree_manifest_invalid');
+  const links = tree.links ?? [], externalLinks = tree.externalSecretLinks ?? [];
+  if (!Array.isArray(links) || !Array.isArray(externalLinks)
+    || (tree.symlinkCount ?? links.length) !== links.length
+    || (tree.externalSecretSymlinkCount ?? externalLinks.length) !== externalLinks.length) {
+    throw new Error('release_tree_link_inventory_invalid');
+  }
+  const validRelative = value => typeof value === 'string' && value !== MANIFEST
+    && !value.startsWith('/') && !value.includes('\\')
+    && !value.split('/').some(segment => !segment || segment === '.' || segment === '..');
   const paths = new Set(); let total = 0;
   for (const file of tree.files) {
-    if (typeof file.path !== 'string' || file.path.startsWith('/') || file.path.includes('\\')
-      || file.path.split('/').some(segment => !segment || segment === '.' || segment === '..')
+    if (!validRelative(file.path) || SECRET_PATH.test(file.path)
       || paths.has(file.path) || !Number.isSafeInteger(file.bytes) || file.bytes < 0
       || !Number.isSafeInteger(file.mode) || file.mode < 0 || file.mode > 0o777
       || !Number.isSafeInteger(file.mtimeMs) || file.mtimeMs < 0
       || !/^[0-9a-f]{64}$/.test(file.sha256 || '')) throw new Error('release_tree_file_invalid');
     paths.add(file.path); total += file.bytes;
     if (!Number.isSafeInteger(total)) throw new Error('release_tree_size_invalid');
+  }
+  for (const link of links) {
+    const keys = Object.keys(link || {}).sort().join(',');
+    const target = typeof link?.target === 'string' ? link.target : '';
+    const resolved = target && !target.startsWith('/') && !target.includes('\\')
+      ? path.posix.normalize(path.posix.join(path.posix.dirname(link.path || ''), target)) : '';
+    if (keys !== 'path,resolvedPath,target' || !validRelative(link.path) || SECRET_PATH.test(link.path)
+      || !target || target.includes('\0') || target.startsWith('/') || target.includes('\\')
+      || resolved === '.' || resolved === '..' || resolved.startsWith('../')
+      || resolved !== link.resolvedPath || paths.has(link.path)) throw new Error('release_tree_symlink_invalid');
+    paths.add(link.path);
+  }
+  const application = /^\/opt\/([^/]+)\/releases\/[^/]+$/.exec(tree.releasePath)?.[1];
+  for (const link of externalLinks) {
+    const keys = Object.keys(link || {}).sort().join(',');
+    if (keys !== 'archived,path,policyId,redacted' || !validRelative(link.path) || paths.has(link.path)
+      || !TASKBUDDY_APP.test(application || '') || link.path !== '.env.production'
+      || link.policyId !== EXTERNAL_SECRET_POLICY || link.redacted !== true || link.archived !== false) {
+      throw new Error('release_tree_external_secret_link_invalid');
+    }
+    paths.add(link.path);
+  }
+  const reconstructablePaths = new Set([
+    ...tree.files.map(item => item.path), ...links.map(item => item.path),
+  ]);
+  for (const link of links) {
+    if (SECRET_PATH.test(link.resolvedPath)
+      || (!reconstructablePaths.has(link.resolvedPath)
+        && ![...reconstructablePaths].some(item => item.startsWith(`${link.resolvedPath}/`)))) {
+      throw new Error('release_tree_symlink_target_missing');
+    }
+  }
+  for (const linkPath of [...links, ...externalLinks].map(item => item.path)) {
+    if ([...paths].some(item => item !== linkPath && item.startsWith(`${linkPath}/`))) {
+      throw new Error('release_tree_symlink_parent_conflict');
+    }
   }
   if (total !== tree.totalBytes) throw new Error('release_tree_size_mismatch');
   const withoutDigest = { ...tree }; delete withoutDigest.treeSha256;
@@ -173,8 +220,24 @@ export async function extractAndVerifyReleaseTar({ chunks, expectedTree, tempora
       || extracted.reduce((sum, item) => sum + item.bytes, 0) !== embedded.totalBytes) {
       throw new Error('restored_release_tree_mismatch');
     }
+    for (const link of embedded.links ?? []) {
+      const absolute = path.resolve(temporary, ...link.path.split('/'));
+      if (!absolute.startsWith(temporary + path.sep)) throw new Error('tar_path_traversal_rejected');
+      await ensureParent(temporary, link.path);
+      await symlink(link.target, absolute);
+      const metadata = await lstat(absolute);
+      if (!metadata.isSymbolicLink() || await readlink(absolute) !== link.target) {
+        throw new Error('restored_symlink_mismatch');
+      }
+    }
     return { releasePath: embedded.releasePath, treeSha256: embedded.treeSha256,
-      fileCount: extracted.length, totalBytes: embedded.totalBytes, restoreVerified: true };
+      fileCount: extracted.length, totalBytes: embedded.totalBytes,
+      symlinkCount: embedded.links?.length ?? 0,
+      externalSecretSymlinkCount: embedded.externalSecretLinks?.length ?? 0,
+      externalSecretRebindPolicies: (embedded.externalSecretLinks ?? []).map(item => item.policyId),
+      externalSecretRebindRequired: (embedded.externalSecretLinks?.length ?? 0) > 0,
+      externalSecretBytesArchived: 0, deploymentReconstructionPlanVerified: true,
+      restoreVerified: true };
   } finally {
     await activeHandle?.close().catch(() => {});
     if (!temporary.startsWith(actualTemporaryParent + path.sep)

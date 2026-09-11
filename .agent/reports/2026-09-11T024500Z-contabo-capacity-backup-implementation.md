@@ -12,6 +12,9 @@
   unique temporary restore verification and private receipts.
 - Cleanup eligibility now verifies the receipt files, receipt hashes, release
   identity and restored tree instead of accepting digest-shaped placeholders.
+- Exact-release backup now preserves safe internal relative package symlinks.
+  TaskBuddy's single reviewed external environment link is represented only by a
+  redacted rebind policy; its target and secret bytes are never archived.
 - Added hourly VPS capacity-watch and daily/hourly macOS LaunchAgent templates.
 - No VPS service was stopped, no file/image/volume was deleted, no expansion was purchased, and no production migration or deploy was performed by this change.
 
@@ -38,8 +41,9 @@ test release contains no production credentials and is not a deployable commit.
 
 ## Verification
 
-- `npm run test:contabo-capacity-backup`: 36/36 passed, including traversal,
-  symlink, changed-content, fixed-host/path and no-persistent-plaintext cases.
+- `npm run test:contabo-capacity-backup`: 39/39 passed, including traversal,
+  internal-link reconstruction, absolute/unapproved link rejection, secret
+  redaction, changed-content, fixed-host/path and no-persistent-plaintext cases.
 - `npm --prefix web run lint -- --quiet`: passed.
 - `npm --prefix web run build`: passed, including TypeScript and 84-page generation.
 - `bash -n` for the operations wrapper and schedule installer: passed.

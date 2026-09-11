@@ -61,7 +61,8 @@ test('cleanup evidence hashes and semantically binds the exact remote release to
     fileCount: 1, totalBytes: 1, files: [file] };
   tree.treeSha256 = createHash('sha256').update(canonical(tree)).digest('hex');
   const manifest = { schema: 'stockinsider-vps-release-export-v1', host: '5.104.83.211',
-    releasePath: '/opt/app/releases/a', tree, plaintextStoredOnMac: false, remoteDeletePerformed: false };
+    releasePath: '/opt/app/releases/a', tree, plaintextStoredOnMac: false,
+    externalSecretsArchived: false, remoteDeletePerformed: false };
   const contextSha256 = createHash('sha256').update(JSON.stringify(manifest)).digest('hex');
   const plaintextSha256 = createHash('sha256').update('tar').digest('hex');
   const archive = { manifest, contextSha256, postTreeSha256: tree.treeSha256, treeStable: true,
@@ -69,7 +70,11 @@ test('cleanup evidence hashes and semantically binds the exact remote release to
   const restore = { schema: 'stockinsider-vps-release-restore-v1', host: '5.104.83.211',
     releasePath: '/opt/app/releases/a', sourceContextSha256: contextSha256,
     sourcePlaintextSha256: plaintextSha256, treeSha256: tree.treeSha256,
-    fileCount: 1, totalBytes: 1, restoreVerified: true, plaintextPersistedAfterVerification: false,
+    fileCount: 1, totalBytes: 1, symlinkCount: 0, externalSecretSymlinkCount: 0,
+    externalSecretRebindRequired: false, externalSecretRebindPolicies: [],
+    externalSecretBytesArchived: 0, externalSecretsArchived: false,
+    deploymentReconstructionPlanVerified: true,
+    restoreVerified: true, plaintextPersistedAfterVerification: false,
     temporaryRestoreRemoved: true, remoteDeletePerformed: false };
   const archiveBytes = Buffer.from(JSON.stringify(archive)), restoreBytes = Buffer.from(JSON.stringify(restore));
   const candidate = { path: '/opt/app/releases/a',

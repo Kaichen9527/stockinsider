@@ -26,7 +26,8 @@ export async function verifyVpsReleaseBackup({ manifestPath, keyDirectory,
     const receipt = JSON.parse(await manifestFile.readFile('utf8'));
     validateReleaseExportInput({ host: receipt.manifest?.host, releasePath: receipt.manifest?.releasePath });
     if (receipt.manifest.host !== VPS_HOST || receipt.manifest.schema !== 'stockinsider-vps-release-export-v1'
-      || receipt.manifest.plaintextStoredOnMac !== false || receipt.manifest.remoteDeletePerformed !== false) {
+      || receipt.manifest.plaintextStoredOnMac !== false || receipt.manifest.externalSecretsArchived !== false
+      || receipt.manifest.remoteDeletePerformed !== false) {
       throw new Error('release_backup_manifest_invalid');
     }
     const contextSha256 = createHash('sha256').update(JSON.stringify(receipt.manifest)).digest('hex');
@@ -59,6 +60,7 @@ export async function verifyVpsReleaseBackup({ manifestPath, keyDirectory,
       sourcePlaintextSha256: envelope.plaintextSha256, host: VPS_HOST,
       releasePath: receipt.manifest.releasePath, ...restored,
       plaintextPersistedAfterVerification: false, temporaryRestoreRemoved: true,
+      externalSecretsArchived: false,
       remoteDeletePerformed: false };
     const filename = `vps-release-restore-${randomUUID()}.json`;
     await writeFile(path.join(path.dirname(manifestPath), filename), JSON.stringify(verification, null, 2) + '\n',

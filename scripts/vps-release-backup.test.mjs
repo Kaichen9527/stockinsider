@@ -1,10 +1,12 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createHash } from 'node:crypto';
+import { spawnSync } from 'node:child_process';
 import { createReadStream } from 'node:fs';
 import { chmod, mkdir, mkdtemp, readdir, realpath, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { extractAndVerifyReleaseTar } from './vps-release-tar.mjs';
 import { validateReleaseExportInput, VPS_HOST } from './export-vps-release-backup.mjs';
 import { writeEncryptedBackupArtifact } from './local-backup-artifact.mjs';
@@ -57,9 +59,32 @@ function tree(fileContent = 'hello') {
   return value;
 }
 
+function linkedTree({ internalTarget = '../pkg/bin.js', external = false } = {}) {
+  const content = { 'app/server.js': 'hello', 'node_modules/pkg/bin.js': 'tool' };
+  const files = Object.entries(content).map(([filePath, bytes]) => ({ path: filePath,
+    bytes: Buffer.byteLength(bytes), mode: 0o755, mtimeMs: 0,
+    sha256: createHash('sha256').update(bytes).digest('hex') }));
+  const value = { schema: 'stockinsider-vps-release-tree-v1',
+    releasePath: '/opt/taskbuddy/releases/v5.39', fileCount: files.length,
+    totalBytes: files.reduce((sum, item) => sum + item.bytes, 0), files,
+    symlinkCount: 1, links: [{ path: 'node_modules/.bin/tool', target: internalTarget,
+      resolvedPath: path.posix.normalize(path.posix.join('node_modules/.bin', internalTarget)) }],
+    externalSecretSymlinkCount: external ? 1 : 0,
+    externalSecretLinks: external ? [{ path: '.env.production',
+      policyId: 'taskbuddy-shared-env-production-v1', redacted: true, archived: false }] : [] };
+  value.treeSha256 = createHash('sha256').update(canonical(value)).digest('hex');
+  return { tree: value, content };
+}
+
 function archive(value, fileContent = 'hello') {
   return tar([{ name: '.stockinsider-release-manifest.json', bytes: canonical(value), mode: 0o600 },
     { name: 'app/server.js', bytes: fileContent, mode: 0o755 }]);
+}
+
+
+function linkedArchive(value, content) {
+  return tar([{ name: '.stockinsider-release-manifest.json', bytes: canonical(value), mode: 0o600 },
+    ...value.files.map(file => ({ name: file.path, bytes: content[file.path], mode: file.mode }))]);
 }
 
 async function fixture(t) {
@@ -81,6 +106,32 @@ test('host and release path are fixed and shell metacharacters are rejected', ()
     { host: VPS_HOST, releasePath: '/opt/app/releases/a;rm' },
     { host: VPS_HOST, releasePath: '/' },
   ]) assert.throws(() => validateReleaseExportInput(input));
+});
+
+test('remote helper redacts only the exact approved TaskBuddy external secret link', () => {
+  const helper = fileURLToPath(new URL('./remote-vps-release-stream.py', import.meta.url));
+  const program = `
+import importlib.util, json, sys
+spec = importlib.util.spec_from_file_location("release_stream", sys.argv[1])
+module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(module)
+result = {"approved": module.classify_link("/opt/taskbuddy/releases/v5.39", ".env.production", "/opt/taskbuddy/shared/.env.production")}
+for name, target in (("absolute", "/etc/passwd"), ("traversal", "../../../escape")):
+    try:
+        module.classify_link("/opt/taskbuddy/releases/v5.39", "node_modules/.bin/tool", target)
+        result[name] = "accepted"
+    except RuntimeError as error:
+        result[name] = str(error)
+print(json.dumps(result, sort_keys=True))
+`;
+  const run = spawnSync('python3', ['-c', program, helper], { encoding: 'utf8' });
+  assert.equal(run.status, 0, run.stderr);
+  const result = JSON.parse(run.stdout);
+  assert.deepEqual(result.approved, ['external', { archived: false, path: '.env.production',
+    policyId: 'taskbuddy-shared-env-production-v1', redacted: true }]);
+  assert.equal(result.absolute, 'unapproved_absolute_symlink_rejected');
+  assert.equal(result.traversal, 'release_symlink_traversal_rejected');
+  assert.equal(run.stdout.includes('/opt/taskbuddy/shared/.env.production'), false);
 });
 
 test('stream restore verifies the embedded tree and removes only its unique temporary directory', async (t) => {
@@ -105,11 +156,48 @@ test('path traversal, symlink entries and changed file content fail closed and l
   }
 });
 
+test('approved internal relative links reconstruct but traversal and absolute targets fail closed', async (t) => {
+  const dirs = await fixture(t), approved = linkedTree();
+  const result = await extractAndVerifyReleaseTar({ chunks: [linkedArchive(approved.tree, approved.content)],
+    expectedTree: approved.tree, temporaryParent: dirs.restore });
+  assert.equal(result.symlinkCount, 1);
+  assert.deepEqual(await readdir(dirs.restore), []);
+  for (const internalTarget of ['../../../escape', '/etc/passwd']) {
+    const attack = linkedTree({ internalTarget });
+    await assert.rejects(extractAndVerifyReleaseTar({ chunks: [linkedArchive(attack.tree, attack.content)],
+      expectedTree: attack.tree, temporaryParent: dirs.restore }));
+    assert.deepEqual(await readdir(dirs.restore), []);
+  }
+});
+
+test('approved external secret link is redacted metadata and no secret target or bytes enter archive', async (t) => {
+  const dirs = await fixture(t), approved = linkedTree({ external: true });
+  const bytes = linkedArchive(approved.tree, approved.content);
+  assert.equal(bytes.includes(Buffer.from('/opt/taskbuddy/shared/.env.production')), false);
+  assert.equal(bytes.includes(Buffer.from('SUPERSECRET')), false);
+  const result = await extractAndVerifyReleaseTar({ chunks: [bytes], expectedTree: approved.tree,
+    temporaryParent: dirs.restore });
+  assert.equal(result.externalSecretSymlinkCount, 1);
+  assert.equal(result.externalSecretBytesArchived, 0);
+  assert.equal(result.externalSecretRebindRequired, true);
+  assert.equal(result.deploymentReconstructionPlanVerified, true);
+  assert.deepEqual(result.externalSecretRebindPolicies, ['taskbuddy-shared-env-production-v1']);
+  assert.deepEqual(await readdir(dirs.restore), []);
+
+  const unapproved = linkedTree({ external: true });
+  unapproved.tree.externalSecretLinks[0].policyId = 'copy-any-absolute-link';
+  delete unapproved.tree.treeSha256;
+  unapproved.tree.treeSha256 = createHash('sha256').update(canonical(unapproved.tree)).digest('hex');
+  await assert.rejects(extractAndVerifyReleaseTar({ chunks: [linkedArchive(unapproved.tree, unapproved.content)],
+    expectedTree: unapproved.tree, temporaryParent: dirs.restore }));
+});
+
 test('release tar streams through the authenticated envelope without a plaintext file', async (t) => {
   const dirs = await fixture(t), expected = tree(), bytes = archive(expected);
   const manifest = { schema: 'stockinsider-vps-release-export-v1', host: VPS_HOST,
     releasePath: expected.releasePath, createdAt: '2026-09-11T00:00:00.000Z', tree: expected,
-    plaintextStoredOnMac: false, remoteDeletePerformed: false, restoreVerified: false,
+    plaintextStoredOnMac: false, externalSecretsArchived: false,
+    remoteDeletePerformed: false, restoreVerified: false,
     keyReference: 'private-local-file:aes256-v1' };
   const contextSha256 = createHash('sha256').update(JSON.stringify(manifest)).digest('hex');
   const key = await loadLocalBackupKey(dirs.key);

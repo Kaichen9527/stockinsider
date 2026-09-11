@@ -41,6 +41,7 @@ export function verifyCleanupEvidence(candidate, archiveBytes, restoreBytes) {
       && archive.manifest.tree.releasePath === candidate.path
       && archive.contextSha256 === contextSha256 && archive.postTreeSha256 === archive.manifest.tree.treeSha256
       && archive.treeStable === true && archive.manifest.plaintextStoredOnMac === false
+      && archive.manifest.externalSecretsArchived === false
       && archive.manifest.remoteDeletePerformed === false
       && /^[0-9a-f]{64}$/.test(archive.result?.plaintextSha256 || '')
       && Number.isSafeInteger(archive.result?.plaintextBytes) && archive.result.plaintextBytes > 0
@@ -49,9 +50,16 @@ export function verifyCleanupEvidence(candidate, archiveBytes, restoreBytes) {
       && restore.sourceContextSha256 === archive.contextSha256
       && restore.sourcePlaintextSha256 === archive.result.plaintextSha256
       && restore.restoreVerified === true && restore.plaintextPersistedAfterVerification === false
+      && restore.externalSecretsArchived === false && restore.externalSecretBytesArchived === 0
+      && restore.deploymentReconstructionPlanVerified === true
       && restore.treeSha256 === archive.manifest.tree.treeSha256
       && restore.fileCount === archive.manifest.tree.fileCount
       && restore.totalBytes === archive.manifest.tree.totalBytes
+      && restore.symlinkCount === (archive.manifest.tree.links?.length ?? 0)
+      && restore.externalSecretSymlinkCount === (archive.manifest.tree.externalSecretLinks?.length ?? 0)
+      && restore.externalSecretRebindRequired === ((archive.manifest.tree.externalSecretLinks?.length ?? 0) > 0)
+      && JSON.stringify(restore.externalSecretRebindPolicies)
+        === JSON.stringify((archive.manifest.tree.externalSecretLinks ?? []).map(item => item.policyId))
       && restore.temporaryRestoreRemoved === true && restore.remoteDeletePerformed === false;
   } catch { return false; }
 }
