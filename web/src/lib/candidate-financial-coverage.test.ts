@@ -1,12 +1,56 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {candidateFinancialRequirements,financialCoverageGaps} from './candidate-financial-coverage.ts';
+import {candidateFinancialRequirements,financialCoverageGaps,financialCoverageSummary} from './candidate-financial-coverage.ts';
+import {classifyCandidateBusiness,latestDueFinancialQuarter,latestDueFinancialQuarters} from './candidate-financial-policy.ts';
 import {discreteReportedQuarters} from './forward-earnings-bridge.ts';
 import {officialFinancialValidationSubjects,validateOfficialFinancialFact} from './official-financial-validation.ts';
 test('method requirements include actual denominators and cycle periods',()=>{
   assert.equal(candidateFinancialRequirements('半導體記憶體').quarters,20);
   assert.ok(candidateFinancialRequirements('general').keys.includes('diluted_weighted_average_shares'));
   assert.ok(candidateFinancialRequirements('金融').keys.includes('common_shares_outstanding'));
+});
+
+test('shared business classification gives all cyclical authority labels twenty financial quarters', () => {
+  for (const sector of ['化工', '造紙', '原物料', '塑膠工業', '塑化', '鋼鐵', '水泥', '航運', '記憶體', '面板',
+    'Chemical industry', 'Paper', 'Raw materials', 'Plastics']) {
+    assert.equal(classifyCandidateBusiness(sector), 'cyclical', sector);
+    assert.equal(candidateFinancialRequirements(sector).quarters, 20, sector);
+    assert.equal(financialCoverageGaps([], sector, '2026-10-10T12:00:00+08:00').length, 120, sector);
+  }
+});
+
+test('financial labels including holding companies and securities use the same eight-quarter route', () => {
+  for (const sector of ['金控', '證券', '金融', '銀行', '保險', '期貨', 'Financial holding', 'Securities', 'Banking']) {
+    assert.equal(classifyCandidateBusiness(sector), 'financial', sector);
+    const requirement = candidateFinancialRequirements(sector);
+    assert.equal(requirement.quarters, 8, sector);
+    assert(requirement.keys.includes('common_equity_attributable_to_owners'), sector);
+    assert(!requirement.keys.includes('quarterly_revenue'), sector);
+  }
+  assert.equal(classifyCandidateBusiness('電子零組件'), 'general');
+  assert.equal(candidateFinancialRequirements('電子零組件').quarters, 8);
+});
+
+test('October acquisition and coverage select due Q2, not the recently closed but not-yet-due Q3', () => {
+  const cutoff = '2026-10-10T12:00:00+08:00';
+  assert.deepEqual(latestDueFinancialQuarter(cutoff), {
+    year: 2026, quarter: 2, periodEnd: '2026-06-30', normalDeadlineAt: '2026-08-14T15:59:59.000Z',
+  });
+  const periods = latestDueFinancialQuarters(cutoff, 8);
+  assert.equal(periods.length, 8);
+  assert.equal(periods.at(-1)?.periodEnd, '2024-09-30');
+  assert(financialCoverageGaps([], 'general', cutoff).every((gap) => gap.periodEnd <= '2026-06-30'));
+  assert.equal(latestDueFinancialQuarter('2026-11-14T23:59:58+08:00').quarter, 2);
+  assert.equal(latestDueFinancialQuarter('2026-11-15T00:00:00+08:00').quarter, 3);
+});
+
+test('due-quarter rollover is Taipei-aware and annual filings do not become due at year-end', () => {
+  assert.equal(latestDueFinancialQuarter('2027-01-01T00:00:00+08:00').periodEnd, '2026-09-30');
+  assert.equal(latestDueFinancialQuarter('2027-03-31T23:59:58+08:00').periodEnd, '2026-09-30');
+  assert.equal(latestDueFinancialQuarter('2027-04-01T00:00:00+08:00').periodEnd, '2026-12-31');
+  assert.equal(latestDueFinancialQuarter('2027-05-16T00:00:00+08:00').periodEnd, '2027-03-31');
+  assert.throws(() => latestDueFinancialQuarter('not-a-date'), /invalid_financial_coverage_cutoff/u);
+  for (const count of [0, -1, 1.5, Infinity, 121]) assert.throws(() => latestDueFinancialQuarters(cutoff, count), /invalid_financial_quarter_count/u);
 });
 
 const cutoff = '2026-09-08T00:00:00Z';
@@ -23,6 +67,17 @@ function coveredRows(sector = 'general') {
       collected_at: '2026-08-20T00:00:00Z', recorded_at: '2026-08-20T00:00:00Z' };
   });
 }
+test('coverage summary preserves method-specific denominator and opening common-equity balance', () => {
+  const empty = financialCoverageSummary([], '造紙', cutoff);
+  assert.equal(empty.requiredFieldPeriods, 120);
+  assert.equal(empty.verifiedFieldPeriods, 0);
+  assert.equal(empty.completenessPct, 0);
+  const financial = financialCoverageSummary(coveredRows('金控'), '金控', cutoff);
+  assert.equal(financial.requiredFieldPeriods, 25);
+  assert.equal(financial.verifiedFieldPeriods, 25);
+  assert.equal(financial.completenessPct, 100);
+  assert.equal(financial.status, 'complete');
+});
 test('conflicting restatements remain gaps just as the valuation consumer rejects the quarter', () => {
   const rows = coveredRows();
   rows.push({...rows[0], fact_id: 'restated', value: 200});
