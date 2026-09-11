@@ -131,7 +131,7 @@
         "function": "publishCompactRadarProjection",
         "path": "scripts/runtime/compact-radar-projection.js"
       },
-      "effect": "excludes seed-only live cards and publishes only typed health on an authorised total-outage fallback",
+      "effect": "excludes seed-only live cards and publishes health-only output only when the complete persisted connector terminal plane proves total outage",
       "id": "PCR-010",
       "implementationState": "implemented",
       "operation": "selectLiveDiscoveryCards",
@@ -285,7 +285,7 @@
         "function": "availableResearchDecision",
         "path": "scripts/runtime/compact-radar-projection.js"
       },
-      "effect": "serializes only declared additive V3 fields and preserves disabled/drain legacy byte identity with zero V3 query",
+      "effect": "serializes only declared additive fields, rejects cross-run or cross-config first entrants, preserves conditional wait geometry with null action stops, and enforces real disabled/drain 404 and zero-query behavior",
       "id": "PCR-021",
       "implementationState": "implemented",
       "operation": "serializePublishedResearchDecision",
@@ -313,7 +313,7 @@
         "function": "main",
         "path": "scripts/opportunity-v3/protected-external-gate-worker.mjs"
       },
-      "effect": "validates canonical leaf and aggregate evidence against one externally checked clean subject, preserving Code, Shadow and Promotion gate separation",
+      "effect": "validates canonical leaf and aggregate evidence against one externally checked clean subject while the V6 successor retires global research Shadow authority",
       "id": "PCR-023",
       "implementationState": "implemented",
       "operation": "validateProtectedCodeGateAggregateInputs",
@@ -411,7 +411,7 @@
         "function": "serializePublishedResearchDecision",
         "path": "scripts/runtime/published-research-decision.js"
       },
-      "effect": "serializes the closed reported-PE, valuation-review and timing-risk unions for the web projection response without inventing a material change",
+      "effect": "serializes every closed BIAS, factor, reported-PE and timing-risk union and preserves no-change versus factor-mutation revision identity",
       "id": "PCR-030",
       "implementationState": "implemented",
       "operation": "serializeCorrectnessPublicUnion",
@@ -436,5 +436,5 @@
     }
   ],
   "schema": "source-led-opportunity-pcr-implementation-boundaries-v1",
-  "version": "source-led-opportunity-pcr-boundaries-v3.20.1"
+  "version": "source-led-opportunity-pcr-boundaries-v3.20.2"
 }

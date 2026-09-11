@@ -795,10 +795,10 @@ function activeGraphOracle() {
   assertCleanReviewedExecutionRoot(subjectTree);
   const catalogBlob = subjectTreeBlob(subjectTree, activeCatalogRepositoryPath);
   assert.deepEqual(catalogBlob.bytes, activeCatalogBytes, 'catalog working bytes equal reviewed subject tree');
-  assert.equal(catalogBlob.bytes.length, 6337, 'catalog exact tracked byte length including LF');
+  assert.equal(catalogBlob.bytes.length, 6375, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    '6f8579883a04bd59d40adc3848065f43864d3237047b77235582d577b1365995',
+    'aefd480ba233483d952ce924b752325f3b105da083e386d209793ab020a0d234',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);
@@ -806,9 +806,13 @@ function activeGraphOracle() {
     .filter((file) => file.endsWith('-contract.md') && file !== 'data-contract.md')
     .sort();
   const activeContractFiles = readdirSync(change)
-    .filter((file) => file.endsWith('-contract.md') && file !== 'data-contract.md')
+    .filter((file) => file.endsWith('-contract.md') && !['data-contract.md','shadow-evaluation-contract.md'].includes(file))
     .sort();
   assert.deepEqual(activeContractFiles, expectedContractFiles);
+  assert.ok(!activeArtifactFiles.includes('shadow-evaluation-contract.md'),
+    'global Shadow predecessor is not active V6 authority');
+  assert.ok(activeArtifactFiles.includes('v6-no-global-shadow-authority-amendment.md'),
+    'approved V6 no-global-Shadow successor is active authority');
   const activeArtifactFiles = activeCatalog.activeFiles;
   assert.equal(activeArtifactFiles.length, 55);
   assert.equal(new Set(activeArtifactFiles).size, activeArtifactFiles.length);
@@ -857,7 +861,7 @@ function activeGraphOracle() {
   // graph hash to the exact reviewed tree instead.
   assert.match(activeGraphSha256,/^[0-9a-f]{64}$/u,'active graph is a canonical SHA-256');
   assert.equal(pcrBoundaries.schema, 'source-led-opportunity-pcr-implementation-boundaries-v1');
-  assert.equal(pcrBoundaries.version, 'source-led-opportunity-pcr-boundaries-v3.20.1');
+  assert.equal(pcrBoundaries.version, 'source-led-opportunity-pcr-boundaries-v3.20.2');
   assert.equal(pcrBoundaries.boundaries.length, 31, 'one immutable implemented boundary per PCR');
   assert.deepEqual(pcrBoundaries.boundaries.map(({ id }) => id),
     Array.from({ length: 31 }, (_, index) => `PCR-${String(index + 1).padStart(3, '0')}`));

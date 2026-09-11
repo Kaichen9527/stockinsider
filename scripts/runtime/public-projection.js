@@ -7,11 +7,8 @@ const { validateDecisionEnvelopeV314 } = require('./decision-envelope-v314');
 const TECHNICAL_STATES = new Set(['below_support', 'reclaim_required', 'at_support', 'breakout_pending', 'breakout_confirmed', 'extended', 'invalidated']);
 const ACTIONS = new Set(['avoid', 'valuation_review', 'wait_trigger', 'event_starter', 'starter_now']);
 const MATURITY = new Set(['source_signal', 'fundamental_review', 'decision_ready']);
-
-function closedUnavailable(value, fallbackReason) {
-  if (value?.availability === 'available') return value;
-  return { availability: 'unavailable', reason: value?.reason || fallbackReason };
-}
+const BIAS_UNAVAILABLE_REASONS = new Set(['technical_unavailable','insufficient_own_history',
+  'sector_reference_insufficient','manifest_missing','manifest_hash_mismatch']);
 
 function unavailableReportedComparison(reason) {
   const current={ status:'unavailable',reason,value:null,asOf:null,sourceRef:null,manifestRef:null };
@@ -72,11 +69,18 @@ function serializeFundamental(value, lastEvaluatedAt) {
 }
 
 function serializeFactorAxes(value) {
-  if (value?.availability !== 'available') return closedUnavailable(value, 'factor_unavailable');
+  if (value?.availability !== 'available') return { availability:'unavailable',
+    reason:['factor_unavailable','factor_axis_unavailable'].includes(value?.reason)?value.reason:'factor_unavailable' };
   const axes = Object.fromEntries(Object.entries(value.axes || {}).map(([key, axis]) => [key,
     Number.isFinite(axis) ? axis : axis?.availability === 'available' && Number.isFinite(axis.score) ? axis.score : null]));
   if (Object.values(axes).some((score) => score === null)) return { availability: 'unavailable', reason: 'factor_axis_unavailable' };
   return { availability: 'available', axes };
+}
+
+function serializeBias(value) {
+  if(value?.availability==='available')return value;
+  return {availability:'unavailable',reason:BIAS_UNAVAILABLE_REASONS.has(value?.reason)
+    ?value.reason:'technical_unavailable'};
 }
 
 function serializeCorrectnessPublicUnion(decision) {
@@ -107,7 +111,7 @@ function serializeCorrectnessPublicUnion(decision) {
       availability: state ? 'available' : 'unavailable',
       state,
       maDeviation: Number.isFinite(decision?.technical?.plane?.maDeviation) ? decision.technical.plane.maDeviation : null,
-      bias: decision?.technical?.plane?.bias?.availability === 'available' ? decision.technical.plane.bias : closedUnavailable(null, 'bias_unavailable'),
+      bias: serializeBias(decision?.technical?.plane?.bias),
       trigger: trigger && typeof trigger === 'object' ? trigger : state === 'reclaim_required' || state === 'below_support'
         ? { kind: 'reclaim', threshold: Number(trigger), volumeRatioMinimum: 1 } : null,
       entryZone: buyLike ? entryZone : null,
@@ -122,9 +126,10 @@ function serializeCorrectnessPublicUnion(decision) {
       relativeMultiple: comparison,
       exchangeReportedPe: comparison.exchangeReportedPe, modelComparablePe: null },
     factorAxes: serializeFactorAxes(decision?.factorAxes),
-    timingRisk: ['below_support', 'reclaim_required', 'invalidated'].includes(state) ? { status: 'blocked', reason: state }
-      : decision?.reason === 'bias_observe_only' ? { status: 'observe_only', reason: 'bias_observe_only' }
-        : state ? { status: 'eligible', reason: null } : { status: 'unavailable', reason: 'technical_unavailable' },
+    timingRisk: !state ? { status: 'unavailable', reason: 'technical_unavailable' }
+      : ['below_support', 'reclaim_required', 'invalidated'].includes(state) ? { status: 'blocked', reason: state }
+        : decision?.reason === 'bias_observe_only' ? { status: 'observe_only', reason: 'bias_observe_only' }
+          : { status: 'eligible', reason: null },
     lastEvaluatedAt: decision?.lastEvaluatedAt ?? null,
     analysisGeneratedAt: decision?.analysisGeneratedAt ?? null,
     materialChangeHash: decision?.materialChangeHash ?? null,

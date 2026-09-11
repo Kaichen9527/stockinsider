@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { canonicalJson } from '../../web/src/lib/opportunity-v3/canonical.ts';
 import { compactRadarEtag, selectCompactRadarProjectionRows, validateCompactRadarProjectionRow } from '../../web/src/lib/opportunity-v3/compact-radar-validation.ts';
-import { layerHomepageOpportunityV3 } from '../../web/src/lib/opportunity-v3/deployment.ts';
+import { layerHomepageOpportunityV3, requireV3Deployment, v3PublicEnabled } from '../../web/src/lib/opportunity-v3/deployment.ts';
 import { validateIngestionValuesV3 } from '../../web/src/lib/opportunity-v3/request-values.ts';
 import { runControlledProjectionPerformanceOracle } from './performance-harness.mjs';
 import { executeHealthRouteFailureBoundary } from './internal-health-route-harness.mjs';
@@ -76,7 +76,7 @@ for (const fixture of fixtures) {
 
 const boundaryContract = JSON.parse(readFileSync(path.join(change, 'pcr-implementation-boundaries-v3.json'), 'utf8'));
 assert.equal(boundaryContract.schema, 'source-led-opportunity-pcr-implementation-boundaries-v1');
-assert.equal(boundaryContract.version, 'source-led-opportunity-pcr-boundaries-v3.20.1');
+assert.equal(boundaryContract.version, 'source-led-opportunity-pcr-boundaries-v3.20.2');
 const plannedBoundaries = Object.freeze(Object.fromEntries(
   boundaryContract.boundaries.map((boundary) => [boundary.id, boundary]),
 ));
@@ -161,6 +161,18 @@ function peRows(count, stockId = 'subject') {
     asOf: new Date(Date.UTC(2020, 0, index + 1)).toISOString(), tradingSessionAuthorityHash: 'a'.repeat(64) }));
 }
 
+function sourceTerminalStateInput(status = 'missing_endpoint') {
+  const roster = JSON.parse(readFileSync(path.join(root,
+    'config/runtime/approved-source-roster-v3.13.json'), 'utf8'));
+  const sourceKeys = runtime('official-source-acquisition.js').SOURCE_CONNECTORS;
+  return { schema: 'source-terminal-state-input-v3.20',
+    sourceAcquisitionSchema: 'official-source-acquisition-v3.20',
+    connectorAttempts: roster.profiles.flatMap((profile) => sourceKeys.map((sourceKey) => ({
+      profileId: profile.id, sourceKey, status,
+      reasonCode: status === 'missing_endpoint' ? `${sourceKey}_endpoint_missing` : `${sourceKey}_items_observed`,
+    }))) };
+}
+
 const checks = {
   'PCR-001': async () => {
     const { manifest, reviewedRelease } = runtimeRelease(); const calls = [];
@@ -171,7 +183,7 @@ const checks = {
     assert.ok(!readFileSync(path.join(root, 'scripts/runtime/auth-source-worker-cli.js'), 'utf8').includes('.agent/'));
     const bundle = runtime('tracked-runtime-bundle.js');
     assert.deepEqual([...bundle.TRACKED_RUNTIME_PATHS].sort(), bundle.TRACKED_RUNTIME_PATHS);
-    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 60);
+    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 61);
     assert.equal(bundle.runtimeBundleSha256(root), sha256(bundle.runtimeBundleBytes(root)));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/auth-source-worker-cli.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/provider-acquisition-v31621.js'));
@@ -847,17 +859,18 @@ const checks = {
     const candidateInput = { mentionResult: { candidates: [{ stockId: '00000000-0000-4000-8000-000000009999', symbol: '9999',
       raw: '新公司', claimId: 'claim-9999', mentionId: 'mention-9999', sourceKey: 'threads',
       nominationAuthority: 'approved_kol_threads_api', revisionId: null }] }, seedSymbols: seeds() };
+    const productRunId='72000000-0000-4000-8000-000000000005';
     const firstCandidateRead = runtime('codec.js').immutableBundle('candidate_funnel_input', candidateInput);
-    const firstCandidate = await handlers.candidate_funnel({ readKind: 'candidate_funnel_input', readCanonical: firstCandidateRead.canonical,
+    const firstCandidate = await handlers.candidate_funnel({ runId:productRunId,readKind: 'candidate_funnel_input', readCanonical: firstCandidateRead.canonical,
       readJson: firstCandidateRead.json, readHash: firstCandidateRead.hash });
-    const firstCandidateAgain = await handlers.candidate_funnel({ readKind: 'candidate_funnel_input',
+    const firstCandidateAgain = await handlers.candidate_funnel({ runId:productRunId,readKind: 'candidate_funnel_input',
       readCanonical: firstCandidateRead.canonical, readJson: firstCandidateRead.json, readHash: firstCandidateRead.hash });
     assert.equal(firstCandidateAgain.hash, firstCandidate.hash,
       'the same frozen candidate input must produce the same immutable result hash');
     assert.equal(firstCandidate.json.candidates[0].disposition, 'promoted');
     const repeatCandidateRead = runtime('codec.js').immutableBundle('candidate_funnel_input', { ...candidateInput,
       priorLedger: [firstCandidate.json.candidates[0]] });
-    const repeatCandidate = await handlers.candidate_funnel({ readKind: 'candidate_funnel_input', readCanonical: repeatCandidateRead.canonical,
+    const repeatCandidate = await handlers.candidate_funnel({ runId:productRunId,readKind: 'candidate_funnel_input', readCanonical: repeatCandidateRead.canonical,
       readJson: repeatCandidateRead.json, readHash: repeatCandidateRead.hash });
     assert.equal(repeatCandidate.json.candidates[0].disposition, 'unchanged');
     const provenanceInput = runtime('codec.js').immutableBundle('candidate_funnel_input', { mentionResult: { candidates: [
@@ -867,7 +880,7 @@ const checks = {
       { stockId: '00000000-0000-4000-8000-000000007777', symbol: '7777', raw: 'newer equal priority', claimId: 'claim-newer-equal', claimAsOf: '2026-08-01T10:00:00Z', mentionId: 'mention-newer-equal', sourceKey: 'threads', nominationAuthority: 'approved_kol_threads_api', revisionId: 'aaaa-newer', sourceClass: 'kol', sourcePriority: 50 },
       { stockId: '00000000-0000-4000-8000-000000001111', symbol: '1111', raw: 'low', claimId: 'claim-low', mentionId: 'mention-low', sourceKey: 'threads', nominationAuthority: 'approved_kol_threads_api', revisionId: 'rev-low', sourceClass: 'kol', sourcePriority: 10 },
     ] }, seedSymbols: seeds() });
-    const provenance = await handlers.candidate_funnel({ readKind: 'candidate_funnel_input', readCanonical: provenanceInput.canonical,
+    const provenance = await handlers.candidate_funnel({ runId:productRunId,readKind: 'candidate_funnel_input', readCanonical: provenanceInput.canonical,
       readJson: provenanceInput.json, readHash: provenanceInput.hash });
     assert.deepEqual([provenance.json.candidates[0].symbol, provenance.json.candidates[0].claimId,
       provenance.json.candidates[0].revisionId], ['8888', 'claim-last', 'rev-last']);
@@ -946,9 +959,9 @@ const checks = {
       legacyPayloads: captured.json.legacyPayloads, legacyPayloadHashes: captured.json.legacyPayloadHashes,
       legacySourceResultHash: captured.hash,
     });
-    const mixedProjection = await handlers.compact_radar_projection({ readKind: 'compact_projection_input',
+    const mixedProjection = await handlers.compact_radar_projection({ runId:productRunId,readKind: 'compact_projection_input',
       readCanonical: mixedProjectionRead.canonical, readJson: mixedProjectionRead.json, readHash: mixedProjectionRead.hash });
-    const mixedProjectionAgain = await handlers.compact_radar_projection({ readKind: 'compact_projection_input',
+    const mixedProjectionAgain = await handlers.compact_radar_projection({ runId:productRunId,readKind: 'compact_projection_input',
       readCanonical: mixedProjectionRead.canonical, readJson: mixedProjectionRead.json, readHash: mixedProjectionRead.hash });
     assert.equal(mixedProjectionAgain.hash, mixedProjection.hash,
       'the same frozen acquisition and decision plane must produce the same projection hash');
@@ -1361,19 +1374,28 @@ const checks = {
     assert.deepEqual(select({ candidateLedger: [], totalOutage: true }), { cards: [], fallback: 'total_outage_zero_cards' });
     assert.equal(select({ candidateLedger: [{ symbol: '2337', disposition: 'rejected' }] }).cards.length, 0);
     assert.equal(select({candidateLedger:[{symbol:'2330',disposition:'promoted',sourceKey:'seed',seedOnly:true}]}).cards.length,0);
-    const published=runtime('compact-radar-projection.js').publishCompactRadarProjection({
-      decisions:[{symbol:'2330',disposition:'promoted'}],sourceCandidates:[{symbol:'2337',disposition:'promoted'}],
-      discoveryDelta:{added:['2330','2337'],exited:[],continued:[],unchangedReasons:[]},window:'daily',
-      asOf:'2026-08-01T00:00:00Z',producerIdentity:{commitSha:'a'.repeat(40)},
-      legacyPayload:{opportunities:[{symbol:'2454'}],scenarioUpsideCandidates:[{symbol:'2317'}],earlyWatchlist:[],
-        recentFormal7d:[],fallbackOpportunities90d:[],hotTracking:[],notifications:[{symbol:'2303'}]},
-      sourceAcquisitionHealth:{acquisitionAuthority:'authoritative',terminalStatus:'total_outage',
-        totalOutageAuthorized:true,acquisitionEvidenceRoot:'b'.repeat(64)},
-    });
+    const selected=runtime('source-run-config.js').validateAuthSourceDagConfig(
+      readFileSync(path.join(root,'config/runtime/auth-source-dag.json')));
+    const handlers=runtime('auth-source-worker-cli.js').buildStageHandlers(selected,'a'.repeat(40),'b'.repeat(64));
+    const legacy={opportunities:[{symbol:'2454'}],scenarioUpsideCandidates:[{symbol:'2317'}],earlyWatchlist:[],
+      recentFormal7d:[],fallbackOpportunities90d:[],hotTracking:[],notifications:[{symbol:'2303'}]};
+    const read=runtime('codec.js').immutableBundle('compact_projection_input',{
+      analysisResult:{decisions:[{symbol:'2330',disposition:'promoted'}],
+        sourceCandidates:[{symbol:'2337',disposition:'promoted'}],
+        discoveryDelta:{added:['2330','2337'],exited:[],continued:[],unchangedReasons:[]}},
+      sourceCutoff:'2026-08-01T00:00:00Z',legacyPayloads:{daily:legacy,hot:legacy,weekly:legacy,home:legacy},
+      legacyRadarCompatibility:'intentionally_not_acquired_kol_first',
+      sourceTerminalStateInput:sourceTerminalStateInput()});
+    return handlers.compact_radar_projection({runId:'72000000-0000-4000-8000-000000000010',
+      readKind:'compact_projection_input',readCanonical:read.canonical,readJson:read.json,readHash:read.hash}).then((result)=>{
+      const published=result.json.projections.find((projection)=>projection.storageWindow==='daily');
     for(const key of ['opportunities','scenarioUpsideCandidates','sourceSignals','notifications'])
       assert.deepEqual(published.payload[key],[],`total outage health-only ${key}`);
     assert.deepEqual(published.payload.discoveryDelta.added,[]);
     assert.equal(published.payload.sourceAcquisitionHealth.terminalStatus,'total_outage');
+      assert.equal(published.payload.sourceAcquisitionHealth.sourceTerminalState.terminalAttemptCount,85);
+      assert.match(published.payload.sourceAcquisitionHealth.acquisitionEvidenceRoot,/^[0-9a-f]{64}$/u);
+    });
   },
   'PCR-011': () => {
     const mentions = Array.from({ length: 1000 }, (_, index) => ({ raw: String(1000 + index) }));
@@ -1494,10 +1516,50 @@ const checks = {
   'PCR-021': async () => {
     const legacy={opportunities:[{symbol:'9999'}],scenarioUpsideCandidates:[],earlyWatchlist:[],recentFormal7d:[],
       fallbackOpportunities90d:[],hotTracking:[]};
-    for(const mode of ['disabled','drain']){
-      let reads=0;const layered=await layerHomepageOpportunityV3({legacyRadar:legacy,shadowEnabled:false,
-        loadShadowEngine:async()=>{reads+=1;return {mode};}});
-      assert.equal(layered.radar,legacy,`${mode} preserves legacy object identity`);assert.equal(reads,0,`${mode} has zero V3 query`);
+    const priorMode=process.env.SOURCE_LED_OPPORTUNITY_V3;
+    try{
+      for(const mode of ['disabled','drain']){
+        process.env.SOURCE_LED_OPPORTUNITY_V3=mode;
+        let reads=0;const layered=await layerHomepageOpportunityV3({legacyRadar:legacy,
+          shadowEnabled:v3PublicEnabled(),loadShadowEngine:async()=>{reads+=1;return {mode};}});
+        assert.equal(layered.radar,legacy,`${mode} preserves legacy object identity`);
+        assert.equal(reads,0,`${mode} has zero V3 query`);
+        const rejected=requireV3Deployment('/api/opportunity-v3','GET');
+        assert.equal(rejected?.status,404,`${mode} public path is canonical 404`);
+        assert.deepEqual(await rejected?.json(),{code:'v3_disabled',error:'v3_request_rejected'});
+        if(mode==='drain')assert.equal(requireV3Deployment('/api/internal/opportunity-worker-v3','POST'),null,
+          'drain admits only the existing worker drain route');
+      }
+    }finally{
+      if(priorMode===undefined)delete process.env.SOURCE_LED_OPPORTUNITY_V3;
+      else process.env.SOURCE_LED_OPPORTUNITY_V3=priorMode;
+    }
+    const selected=runtime('source-run-config.js').validateAuthSourceDagConfig(
+      readFileSync(path.join(root,'config/runtime/auth-source-dag.json')));
+    const handlers=runtime('auth-source-worker-cli.js').buildStageHandlers(selected,'a'.repeat(40),'b'.repeat(64));
+    const runId='72000000-0000-4000-8000-000000000021';
+    const candidateInput=runtime('codec.js').immutableBundle('candidate_funnel_input',{
+      mentionResult:{candidates:[{stockId:'72000000-0000-4000-8000-000000002330',symbol:'2330',raw:'2330 股票',
+        claimId:'claim-2330',mentionId:'mention-2330',sourceKey:'threads',nominationAuthority:'approved_kol_threads_api'}]},
+      seedSymbols:selected.config.legacySeedSymbols,sourceCutoff:'2026-08-01T00:00:00Z'});
+    const candidateResult=await handlers.candidate_funnel({runId,readKind:'candidate_funnel_input',
+      readCanonical:candidateInput.canonical,readJson:candidateInput.json,readHash:candidateInput.hash});
+    const entrant=candidateResult.json.candidates[0];
+    assert.deepEqual([entrant.reason,entrant.seedMembership,entrant.producerRunId,
+      entrant.schedulerConfigSha256,entrant.legacySeedSetHash],['new_in_seed_symbol','in_seed',runId,
+      selected.sha256,selected.seedSetHash]);
+    const compactInput=(candidate)=>runtime('codec.js').immutableBundle('compact_projection_input',{
+      analysisResult:{decisions:[],sourceCandidates:[candidate],discoveryDelta:{added:['2330'],exited:[],continued:[],unchangedReasons:[]}},
+      sourceCutoff:'2026-08-01T00:00:00Z',legacyPayloads:{daily:legacy,hot:legacy,weekly:legacy,home:legacy},
+      legacyRadarCompatibility:'intentionally_not_acquired_kol_first'});
+    const accepted=compactInput(entrant);
+    await handlers.compact_radar_projection({runId,readKind:'compact_projection_input',readCanonical:accepted.canonical,
+      readJson:accepted.json,readHash:accepted.hash});
+    for(const mutation of [{producerRunId:'72000000-0000-4000-8000-000000000099'},
+      {schedulerConfigSha256:'f'.repeat(64)},{legacySeedSetHash:'e'.repeat(64)},{seedMembership:'out_of_seed'}]){
+      const rejected=compactInput({...entrant,...mutation});
+      await assert.rejects(()=>handlers.compact_radar_projection({runId,readKind:'compact_projection_input',
+        readCanonical:rejected.canonical,readJson:rejected.json,readHash:rejected.hash}),/published entrant authority conflict/u);
     }
     const fundamental = { thesis: '9999 已有可追溯基本面證據。', latestChange: '本次重新檢查基本面品質。',
       risks: ['仍須持續追蹤財務風險。'], evidenceRefs: ['official-9999'], asOf: '2026-08-01T00:00:00Z' };
@@ -1507,6 +1569,23 @@ const checks = {
       asOf:'2026-08-01T00:00:00Z',producerIdentity:{commitSha:'a'.repeat(40)},legacyPayload:legacy});
     assert.equal(published.payload.opportunities[0].researchDecision.symbol,'9999');
     assert.equal(published.payload.opportunities[0].researchDecision.fundamental.thesis,fundamental.thesis);
+    const evidence={algorithm:'official-relative-pe-evidence-v1',currentObservationRoot:'1'.repeat(64),
+      historyMembershipRoot:'2'.repeat(64),sectorMembershipRoot:'3'.repeat(64),evidenceRoot:'4'.repeat(64),
+      historySessions:252,sectorPeers:8};
+    const geometry={availability:'available',entryZone:[101,103],invalidation:96,
+      trigger:{kind:'breakout',threshold:102}};
+    const technical={technicalState:'breakout_pending',trigger:geometry.trigger,plane:{current:100,bias:{availability:'available',bias20Pct:0}}};
+    const decisionEnvelope=runtime('decision-envelope.js').deriveDecisionEnvelope({valuation:{status:'valuation_review'},
+      currentPrice:100,researchScore:{axes:{valuation:{trustworthy:true,currentPe:10,historyPeP25:10,
+        historyPeMedian:15,historyPeP75:20,sectorPe:16,historySampleCount:252,sectorCount:8,
+        valuationEvidence:evidence,asOf:'2026-08-01',sourceRefs:['twse']}}},qualityActionEligible:true,
+      marketAllowsAction:true,technical,geometry,lastEvaluatedAt:'2026-08-01T00:00:00Z'});
+    const wait=runtime('published-research-decision.js').serializePublishedResearchDecision({symbol:'2330',fundamental,
+      technical,geometry,decisionEnvelope,lastEvaluatedAt:'2026-08-01T00:00:00Z'});
+    assert.equal(wait.decisionEnvelope.userAction,'wait_breakout');
+    assert.deepEqual(wait.decisionEnvelope.entryPlan.entryZone,[101,103]);
+    assert.equal(wait.decisionEnvelope.entryPlan.invalidation,96);
+    assert.equal(wait.technical.invalidation,null,'non-buy action never publishes an executable stop');
   },
   'PCR-022': async () => {
     const payload = { sourceLedCorrectness: { schema: 'legacy-radar-v3.11.3', window: 'daily', asOf: '2026-08-01T00:00:00Z' }, opportunities: [] };
@@ -1620,6 +1699,52 @@ const checks = {
     assert.equal(value.valuation.relativeMultiple.ownHistory.reason,'authority_conflict');
     assert.equal(value.valuation.relativeMultiple.sector.reason,'authority_conflict');
     assert.equal(value.timingRisk.reason, 'reclaim_required'); assert.match(value.noChangeMessage, /無重大變化/u); assert.deepEqual(value.materialChangedBecause, []);
+    const officialPe={current:{status:'available',reason:null,value:18.5,asOf:'2026-08-01',sourceRef:'twse-pe-2337',manifestRef:'manifest-2337'},
+      ownHistory:{status:'available',reason:null,count:252,p10:10,p25:12,p50:16,p75:20,p90:24,
+        currentPercentile:0.65,asOf:'2026-08-01',manifestRef:'manifest-2337'},
+      sector:{status:'available',reason:null,count:8,p25:14,p50:17,p75:21,capWeightedAggregate:18,
+        asOf:'2026-08-01',manifestRef:'manifest-sector'}};
+    const reportedAvailable=serialize({symbol:'2337',fundamental,technical:{technicalState:'at_support',
+      plane:{bias:{availability:'available',bias20Pct:1.2}}},valuation:{status:'normal',targetPrice:120,
+      valuationRange:[100,130],reportedPe:officialPe},lastEvaluatedAt:'2026-08-01T00:00:00Z'});
+    assert.deepEqual(reportedAvailable.valuation.exchangeReportedPe,officialPe.current);
+    assert.deepEqual(reportedAvailable.valuation.relativeMultiple.ownHistory,officialPe.ownHistory);
+    assert.deepEqual(reportedAvailable.valuation.relativeMultiple.sector,officialPe.sector);
+    const states=[null,'below_support','reclaim_required','at_support','breakout_pending','breakout_confirmed','extended','invalidated'];
+    for(const state of states)for(const reason of [null,'bias_observe_only']){
+      const projected=serialize({symbol:'2337',fundamental,technical:{technicalState:state,
+        plane:{bias:{availability:'available',bias20Pct:0}}},reason,lastEvaluatedAt:'2026-08-01T00:00:00Z'});
+      const expected=!state?['unavailable','technical_unavailable']
+        :['below_support','reclaim_required','invalidated'].includes(state)?['blocked',state]
+          :reason==='bias_observe_only'?['observe_only','bias_observe_only']:['eligible',null];
+      assert.deepEqual([projected.timingRisk.status,projected.timingRisk.reason],expected,`${state}:${reason}`);
+    }
+    const biasUnavailable=serialize({symbol:'2337',fundamental,technical:{technicalState:'at_support',
+      plane:{bias:{availability:'unavailable',reason:'insufficient_own_history'}}},
+      lastEvaluatedAt:'2026-08-01T00:00:00Z'});
+    assert.deepEqual(biasUnavailable.technical.bias,{availability:'unavailable',reason:'insufficient_own_history'});
+    assert.deepEqual(biasUnavailable.factorAxes,{availability:'unavailable',reason:'factor_unavailable'});
+    const closedUnavailable=serialize({symbol:'2337',fundamental,technical:{technicalState:'at_support',
+      plane:{bias:{availability:'unavailable',reason:'provider said no'}}},
+      factorAxes:{availability:'unavailable',reason:'provider said no'},lastEvaluatedAt:'2026-08-01T00:00:00Z'});
+    assert.deepEqual(closedUnavailable.technical.bias,{availability:'unavailable',reason:'technical_unavailable'});
+    assert.deepEqual(closedUnavailable.factorAxes,{availability:'unavailable',reason:'factor_unavailable'});
+    const factors=serialize({symbol:'2337',fundamental,technical:{technicalState:'at_support',
+      plane:{bias:{availability:'available',bias20Pct:2}}},factorAxes:{availability:'available',
+      axes:{discovery:70,quality:{availability:'available',score:60},valuation:55,timingRisk:50}},
+      lastEvaluatedAt:'2026-08-01T00:00:00Z'});
+    assert.deepEqual(factors.technical.bias,{availability:'available',bias20Pct:2});
+    assert.deepEqual(factors.factorAxes,{availability:'available',axes:{discovery:70,quality:60,valuation:55,timingRisk:50}});
+    const append=runtime('analysis-revision.js').appendAnalysisRevision;
+    const first=append({input:{facts:{x:1},factor:{version:'factor-v1'}},
+      changedBecause:['financial_fact_changed'],now:'2026-08-01T00:00:00Z'});
+    const recheck=append({priorRevision:first.revision,input:{facts:{x:1},factor:{version:'factor-v1'}},
+      changedBecause:[],now:'2026-08-02T00:00:00Z'});
+    assert.equal(recheck.disposition,'unchanged');assert.equal(recheck.revision.revisionId,first.revision.revisionId);
+    const mutation=append({priorRevision:first.revision,input:{facts:{x:1},factor:{version:'factor-v2'}},
+      changedBecause:['factor_correctness_changed'],now:'2026-08-02T00:00:00Z'});
+    assert.equal(mutation.disposition,'appended');assert.notEqual(mutation.revision.revisionId,first.revision.revisionId);
+    assert.deepEqual(mutation.revision.materialChangedBecause,['factor_correctness_changed']);
   },
   'PCR-031': () => {
     const identity = runtime('comparison-identity.js'); const base = identity.buildComparableRunIdentity({ asOf: '2026-08-01', universeManifestHash: 'a'.repeat(64) });

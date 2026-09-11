@@ -35,7 +35,7 @@ Passing the 150 runtime tests does not resolve those missing dependencies.
 
 ## Current implementation delta
 
-The successor boundary catalog is now `source-led-opportunity-pcr-boundaries-v3.20.1`.
+The successor boundary catalog is now `source-led-opportunity-pcr-boundaries-v3.20.2`.
 It maps PCR-004 to the TypeScript health owner used by the real health route; PCR-008
 to the production KOL extraction caller; PCR-010 to the compact publisher; PCR-021
 and PCR-030 to the two-module publisher serializer chain; PCR-022 to the neutral
@@ -44,9 +44,21 @@ protected worker.
 
 Executable diagnostics now invoke the real health route with a failed database,
 exercise UUID/missing-authority outcomes through `extractRevisionCandidates`, prove
-seed-only and authorised total-outage suppression at `publishCompactRadarProjection`,
-exercise disabled/drain zero-query identity through the homepage layering boundary,
+seed-only exclusion and derive total-outage suppression from the complete persisted
+17-by-5 connector attempt plane through `buildStageHandlers.compact_radar_projection`,
+exercise actual disabled/drain zero-query identity and canonical 404s through
+`v3PublicEnabled`, `layerHomepageOpportunityV3` and `requireV3Deployment`, reject
+cross-run/config/seed-membership first entrants, preserve breakout wait geometry while
+publishing a null non-buy action stop, serialize the complete timing-risk cross-product,
+and prove no-change versus factor-correctness mutation revision identity,
 run the indexed projection performance oracle, and reject missing/reordered/failed/
 unreviewed protected aggregate inputs. Existing mutation, browser and PostgreSQL
 oracles remain required. These diagnostics do not constitute independent review,
 protected registration, PCR fulfillment evidence or gate PASS.
+
+The successor active graph now includes
+`v6-no-global-shadow-authority-amendment.md` (`evidence-valuation-research-v6.1`) and
+removes `shadow-evaluation-contract.md` from active authority. Historical Shadow data
+and code remain audit-only. This graph change deliberately invalidates predecessor
+bootstrap evidence and requires the normal independent review and protected-base
+registration sequence above.

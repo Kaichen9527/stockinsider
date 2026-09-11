@@ -119,6 +119,10 @@ const v320KolRetentionOwnerBoundaryMigrationPath = path.join(root,
   'migrations/20260830_v320_kol_retention_owner_boundary.sql');
 const v320KolRetentionOwnerBoundarySql = fs.readFileSync(
   v320KolRetentionOwnerBoundaryMigrationPath, 'utf8');
+const sourceTerminalProjectionAuthorityMigrationPath = path.join(root,
+  'migrations/20260911_v320_source_terminal_projection_authority.sql');
+const sourceTerminalProjectionAuthoritySql = fs.readFileSync(
+  sourceTerminalProjectionAuthorityMigrationPath, 'utf8');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -525,6 +529,25 @@ test('V3.19.11 restores complete retained objects before exact-ledger authority 
   const apply=fs.readFileSync(path.join(root,'scripts/opportunity-v3/apply-reviewed-migrations.mjs'),'utf8');
   assert.match(apply,/20260828_full_candidate_retention_authority_v3_19_11[.]sql/u);
   assert.match(apply,/'candidateRetentionAuthority'[\s\S]*enrich_legacy_retained_candidate_authority_v3_19_11_internal/u);
+});
+
+test('V3.20.2 compact claims carry the exact persisted source terminal plane',()=>{
+  assert.doesNotMatch(sourceTerminalProjectionAuthoritySql,
+    /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+  assert.match(sourceTerminalProjectionAuthoritySql,
+    /claim_legacy_producer_job_pre_source_terminal_projection_v3_20_2/u);
+  assert.match(sourceTerminalProjectionAuthoritySql,
+    /job[.]run_id=v_claim[.]run_id AND job[.]stage='source_sync'/u);
+  assert.match(sourceTerminalProjectionAuthoritySql,
+    /job[.]job_kind='stage_barrier' AND job[.]status='succeeded'/u);
+  assert.match(sourceTerminalProjectionAuthoritySql,
+    /v_source_result_count<>1[\s\S]*official-source-acquisition-v3[.]20[\s\S]*jsonb_array_length\(v_source_acquisition->'connectorAttempts'\)<>85/u);
+  assert.match(sourceTerminalProjectionAuthoritySql,/'sourceTerminalStateInput'/u);
+  assert.match(sourceTerminalProjectionAuthoritySql,/octet_length\(v_claim[.]read_canonical\)>3145728/u);
+  assert.match(sourceTerminalProjectionAuthoritySql,
+    /REVOKE ALL ON FUNCTION public[.]claim_legacy_producer_job_pre_source_terminal_projection_v3_20_2[\s\S]*service_role/u);
+  const apply=fs.readFileSync(path.join(root,'scripts/opportunity-v3/apply-reviewed-migrations.mjs'),'utf8');
+  assert.match(apply,/20260911_v320_source_terminal_projection_authority[.]sql/u);
 });
 
 test('V3.19.12 selects the sole retained JSONB candidate result without an unsupported aggregate',()=>{

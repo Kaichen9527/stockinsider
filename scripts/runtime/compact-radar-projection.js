@@ -568,7 +568,8 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
   invariant(legacyPayload && typeof legacyPayload === 'object' && !Array.isArray(legacyPayload), 'legacy radar payload required');
   invariant(decisions.length + sourceCandidates.length <= 60, 'radar discovery bound');
   const totalOutage = sourceAcquisitionHealth?.terminalStatus === 'total_outage'
-    && sourceAcquisitionHealth?.totalOutageAuthorized === true;
+    && sourceAcquisitionHealth?.sourceTerminalState?.schema === 'source-terminal-state-v3.20'
+    && sourceAcquisitionHealth.sourceTerminalState.terminalStatus === 'total_outage';
   const liveRows = selectLiveDiscoveryCards({
     candidateLedger: [...decisions, ...sourceCandidates], totalOutage, preserveRows: true,
   }).cards;

@@ -73,7 +73,8 @@ function retainedCandidate(prior,{currentSession,completedSessions,retentionSess
 }
 
 function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvailable = true,
-  currentSession = null, completedSessions = [], retentionSessions = 20 }) {
+  currentSession = null, completedSessions = [], retentionSessions = 20,
+  producerRunId = null, schedulerConfigSha256 = null, legacySeedSetHash = null }) {
   invariant(Number.isInteger(retentionSessions)&&retentionSessions>0&&retentionSessions<=60,'candidate retention bound');
   const observations = [];
   const authorityRejected = [];
@@ -154,6 +155,9 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
       evidenceCount: evidence.length, ...disposition };
   });
   const currentByStock=new Map(candidates.map((candidate)=>[candidate.stockId,Object.freeze({ ...candidate,
+    ...(producerRunId ? { producerRunId } : {}),
+    ...(schedulerConfigSha256 ? { schedulerConfigSha256 } : {}),
+    ...(legacySeedSetHash ? { legacySeedSetHash } : {}),
     firstObservedSession:sessionId((priorLedger??[]).find((prior)=>prior?.stockId===candidate.stockId)?.firstObservedSession)
       ??sessionId((priorLedger??[]).find((prior)=>prior?.stockId===candidate.stockId)?.lastObservedSession)
       ??sessionId(currentSession),
@@ -220,6 +224,28 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
   });
 }
 
+function validatePublishedEntrantAuthority({ candidates, producerRunId, schedulerConfigSha256,
+  legacySeedSetHash, seedSymbols }) {
+  const entrants=(candidates??[]).filter((candidate)=>
+    ['new_in_seed_symbol','new_out_of_seed_symbol'].includes(candidate?.reason));
+  if(entrants.length===0)return true;
+  invariant(typeof producerRunId === 'string' && /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/u.test(producerRunId),
+    'published entrant run authority');
+  invariant(typeof schedulerConfigSha256 === 'string' && /^[0-9a-f]{64}$/u.test(schedulerConfigSha256)
+    && typeof legacySeedSetHash === 'string' && /^[0-9a-f]{64}$/u.test(legacySeedSetHash)
+    && Array.isArray(seedSymbols), 'published entrant config authority');
+  for (const candidate of entrants) {
+    const expectedMembership=seedSymbols.includes(candidate.symbol)?'in_seed':'out_of_seed';
+    invariant(candidate.producerRunId === producerRunId
+      && candidate.schedulerConfigSha256 === schedulerConfigSha256
+      && candidate.legacySeedSetHash === legacySeedSetHash
+      && candidate.seedMembership === expectedMembership
+      && candidate.reason === (expectedMembership === 'in_seed' ? 'new_in_seed_symbol' : 'new_out_of_seed_symbol'),
+    'published entrant authority conflict');
+  }
+  return true;
+}
+
 function selectLiveDiscoveryCards({ candidateLedger, totalOutage = false, preserveRows = false }) {
   if (totalOutage) return { cards: [], fallback: 'total_outage_zero_cards' };
   invariant(candidateLedger.length <= 60, 'candidate projection bound');
@@ -239,4 +265,5 @@ function selectLiveDiscoveryCards({ candidateLedger, totalOutage = false, preser
   };
 }
 
-module.exports = { buildCandidateFunnel, discoveryPriority, retainedSessionCount, selectLiveDiscoveryCards };
+module.exports = { buildCandidateFunnel, discoveryPriority, retainedSessionCount, selectLiveDiscoveryCards,
+  validatePublishedEntrantAuthority };

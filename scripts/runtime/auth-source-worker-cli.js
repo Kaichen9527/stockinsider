@@ -7,7 +7,8 @@ const path = require('path');
 const { canonicalJson, immutableBundle, sha256, invariant, percentile } = require('./codec');
 const { runDurableAuthSourceWorker } = require('./auth-source-worker');
 const { validateAuthSourceDagConfig } = require('./source-run-config');
-const { buildCandidateFunnel } = require('./candidate-funnel');
+const { buildCandidateFunnel, validatePublishedEntrantAuthority } = require('./candidate-funnel');
+const { deriveSourceTerminalState } = require('./source-terminal-state');
 const { calculateAdjustedTechnicalPlane } = require('./technical-plane');
 const { calculateFundamentalQualityAxes } = require('./fundamental-quality');
 const { evaluateCandidateValuation } = require('./candidate-valuation');
@@ -1837,7 +1838,9 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
         // preserves its last-good cards for the bounded 20-session window.
         currentSession:typeof bundle.sourceCutoff==='string'?bundle.sourceCutoff.slice(0,10):null,
         completedSessions:bundle.completedTradingSessions ?? bundle.calendarSessions ?? [],
-        sourceAvailable:bundle.sourceAvailable!==false });
+        sourceAvailable:bundle.sourceAvailable!==false,
+        producerRunId:claim.runId??null,schedulerConfigSha256:validated.sha256,
+        legacySeedSetHash:validated.seedSetHash });
       return immutableBundle('legacy_candidate_funnel_result_v3_11', { schema: 'legacy-candidate-funnel-result-v3.11',
         candidates: funnel.candidateLedger, discoverySummary: funnel.discoverySummary,
         discoveryDelta: funnel.discoveryDelta,factorDiscovery,
@@ -2052,8 +2055,12 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
       // reinterpreted and its valid historical revision cards would disappear.
       const projectionSchemaVersion=bundle.legacyRadarCompatibility==='intentionally_not_acquired_kol_first'
         ?'legacy-radar-v3.20.0':'legacy-radar-v3.19.0';
+      if(projectionSchemaVersion==='legacy-radar-v3.20.0')validatePublishedEntrantAuthority({
+        candidates:projectionSignals,producerRunId:claim.runId,schedulerConfigSha256:validated.sha256,
+        legacySeedSetHash:validated.seedSetHash,seedSymbols:validated.config.legacySeedSymbols});
       const acquisitionLineageHealth=providerAcquisitionLineageHealth(bundle.providerAcquisitions,
         evaluationTimestamp);
+      const sourceTerminalState=deriveSourceTerminalState(bundle.sourceTerminalStateInput);
       const projections = ['daily', 'hot', 'weekly', 'home'].map((window) => publishCompactRadarProjection({ decisions,
         sourceCandidates: projectionSignals,
         marketAnalysis: bundle.analysisResult?.marketAnalysis ?? null,
@@ -2063,12 +2070,16 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
           completedSessions:bundle.analysisResult.officialAuthority.coverage?.completedSessions??0,
           officialCoverageReady:bundle.analysisResult.officialAuthority.coverage?.ready===true,
           acquisitionAuthority:acquisitionLineageHealth.authoritative?'authoritative':'unavailable',
-          acquisitionEvidenceRoot:acquisitionLineageHealth.evidenceRoot,
+          acquisitionEvidenceRoot:sourceTerminalState?.acquisitionEvidenceRoot??acquisitionLineageHealth.evidenceRoot,
           fetchedAt:acquisitionLineageHealth.fetchedAt,
-          terminalStatus:acquisitionLineageHealth.terminalStatus,
+          terminalStatus:sourceTerminalState?.terminalStatus??acquisitionLineageHealth.terminalStatus,
+          sourceTerminalState,
           blockers:[...(bundle.analysisResult.officialAuthority.coverage?.blockers??[]),
-            ...acquisitionLineageHealth.blockers].slice(0,12),
-        }:null,
+            ...acquisitionLineageHealth.blockers,...(sourceTerminalState?.blockers??[])].slice(0,12),
+        }:(sourceTerminalState?{schema:'source-acquisition-health-v3.20',acquisitionAuthority:'unavailable',
+          acquisitionEvidenceRoot:sourceTerminalState.acquisitionEvidenceRoot,fetchedAt:null,
+          terminalStatus:sourceTerminalState.terminalStatus,sourceTerminalState,
+          blockers:sourceTerminalState.blockers}:null),
         discoveryDelta: bundle.analysisResult?.discoveryDelta ?? { added: [], exited: [], continued: [], unchangedReasons: [] },
         freshnessSchedule:bundle.analysisResult?.projectionFreshnessSchedule??[],
         schemaVersion:projectionSchemaVersion,

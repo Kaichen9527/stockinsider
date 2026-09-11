@@ -1,6 +1,6 @@
 # Source-led Opportunity Engine V3.11 — Product Correctness and Runtime Amendment
 
-Amendment version: `product-correctness-runtime-v3.11.11`
+Amendment version: `product-correctness-runtime-v3.11.12`
 
 ## Classification
 
@@ -73,6 +73,14 @@ dispositions as four distinct layers with explicit mapping/conservation.
 `source_signal` is the bounded non-buy public observation in
 `legacy-radar-correctness-contract.md` and `data-contract.md`. Total-outage fixture
 fallback publishes zero cards; there is no production `fixture_fallback` card origin.
+
+Version `product-correctness-runtime-v3.11.12` closes two remaining publication
+authority gaps. Production total-outage suppression is derived from the complete
+persisted 17-profile by 5-connector terminal plane; a request or stage caller cannot
+authorize it with a Boolean. Every fresh candidate entrant also retains the exact
+producer run, scheduler configuration, legacy seed-set hash and database-derived seed
+membership used by the candidate funnel. The compact publisher rejects a cross-run,
+cross-config or substituted seed-membership entrant before publication.
 
 ## Point-in-time financial and valuation integrity
 

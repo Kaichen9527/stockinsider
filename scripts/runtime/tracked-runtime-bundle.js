@@ -55,6 +55,7 @@ const TRACKED_RUNTIME_PATHS = Object.freeze([
   'scripts/runtime/runtime-health.js',
   'scripts/runtime/safe-diagnostics.js',
   'scripts/runtime/source-run-config.js',
+  'scripts/runtime/source-terminal-state.js',
   'scripts/runtime/supabase-rest-legacy-producer-adapter.js',
   'scripts/runtime/technical-entry-geometry.js',
   'scripts/runtime/technical-plane.js',
