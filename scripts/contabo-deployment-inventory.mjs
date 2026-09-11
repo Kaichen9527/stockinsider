@@ -74,12 +74,16 @@ async function collectContainers() {
   const containers = [];
   for (const id of ids) {
     const raw = await safeExec('/usr/bin/docker', ['inspect', '--format',
-      '{{.Name}}\t{{.Image}}\t{{json .Mounts}}\t{{index .Config.Labels "com.docker.compose.project"}}\t{{index .Config.Labels "com.docker.compose.service"}}', id]);
-    const [name, imageId, mountsJson, composeProject, composeService] = raw.trim().split('\t');
+      '{{.Name}}\t{{.Image}}\t{{json .Mounts}}\t{{index .Config.Labels "com.docker.compose.project"}}\t{{index .Config.Labels "com.docker.compose.service"}}\t{{index .Config.Labels "com.docker.compose.project.working_dir"}}\t{{index .Config.Labels "com.docker.compose.project.config_files"}}', id]);
+    const [name, imageId, mountsJson, composeProject, composeService,
+      composeWorkingDirectory, composeConfigFiles] = raw.trim().split('\t');
     const mounts = JSON.parse(mountsJson || '[]').map(item => ({ type: item.Type, name: item.Name || null,
       source: item.Source || null, destination: item.Destination || null, readOnly: item.RW === false }));
-    containers.push({ id, name: name.replace(/^\//, ''), imageId, composeProject: composeProject || null,
-      composeService: composeService || null, mounts });
+    containers.push({ id, name: name.replace(/^\//, ''), imageId,
+      composeProject: composeProject && composeProject !== '<no value>' ? composeProject : null,
+      composeService: composeService && composeService !== '<no value>' ? composeService : null,
+      composeWorkingDirectory: path.isAbsolute(composeWorkingDirectory || '') ? composeWorkingDirectory : null,
+      composeConfigFiles: (composeConfigFiles || '').split(',').filter(item => path.isAbsolute(item)), mounts });
   }
   return containers.sort((a, b) => a.name.localeCompare(b.name));
 }

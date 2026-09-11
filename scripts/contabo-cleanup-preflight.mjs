@@ -18,6 +18,8 @@ export function assessCleanupCandidates(inventory, policy, prerequisites = {}, n
       .filter(Boolean).map(value => ({ kind: 'service', owner: item.unit, path: value }))),
     ...inventory.containers.flatMap(item => item.mounts.filter(mount => mount.source)
       .map(mount => ({ kind: 'container_mount', owner: item.name, path: mount.source }))),
+    ...inventory.containers.flatMap(item => [item.composeWorkingDirectory, ...(item.composeConfigFiles || [])]
+      .filter(Boolean).map(value => ({ kind: 'container_compose', owner: item.name, path: value }))),
     ...inventory.nginx.flatMap(item => item.references.filesystem
       .map(value => ({ kind: 'nginx', owner: item.source, path: value }))),
   ];
