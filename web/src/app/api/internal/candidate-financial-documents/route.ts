@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import {
-  CANDIDATE_FINANCIAL_DOCUMENT_BUCKET,
   candidateFinancialDocumentObjectKey,
   isOfficialDocumentHost,
   MAX_CANDIDATE_FINANCIAL_DOCUMENT_BYTES,
@@ -8,6 +7,7 @@ import {
   readBoundedCandidateFinancialDocument,
   validateCandidateFinancialDocument,
 } from '@/lib/candidate-financial-documents';
+import { putCandidateFinancialArtifact } from '@/lib/candidate-financial-artifact';
 import { requireExactInternalBearer } from '@/lib/internal-auth';
 import { requireActiveVpsWriter } from '@/lib/taiwan-data-runtime';
 import { fixedRunnerPrincipal } from '@/lib/opportunity-v3/internal';
@@ -56,18 +56,11 @@ export async function POST(request: Request) {
   const verified = validateCandidateFinancialDocument({ bytes: stored.bytes, contentType: request.headers.get('content-type') });
   if ('error' in verified) return error(422, verified.error);
   const objectKey = candidateFinancialDocumentObjectKey({ stockId: metadata.stockId, periodEnd: metadata.periodEnd, sha256: stored.sha256 });
-  // Copy into an ArrayBuffer-backed view: Node's Uint8Array type may also
-  // describe SharedArrayBuffer, which Storage's Blob body intentionally rejects.
-  const uploadBytes = new Uint8Array(stored.byteLength);
-  uploadBytes.set(stored.bytes);
-  const upload = await identity.writer.supabase.storage.from(CANDIDATE_FINANCIAL_DOCUMENT_BUCKET).upload(
-    objectKey, new Blob([uploadBytes.buffer], { type: verified.normalizedContentType }),
-    { contentType: verified.normalizedContentType, upsert: false },
-  );
-  // A content-addressed replay has the same receipt identity. Do not overwrite
-  // immutable private evidence just because the worker retried the request.
-  if (upload.error && !/already exists|duplicate/iu.test(upload.error.message)) {
-    return error(500, `candidate_financial_document_storage_failed:${upload.error.message}`);
+  try {
+    await putCandidateFinancialArtifact({ client: identity.writer.supabase, objectKey,
+      sha256: stored.sha256, bytes: stored.bytes, contentType: verified.normalizedContentType });
+  } catch (cause) {
+    return error(500, cause instanceof Error ? cause.message : 'candidate_financial_document_storage_failed');
   }
   const receipt = await identity.writer.supabase.rpc('record_candidate_financial_document_receipt_v6', {
     p_stock_id: metadata.stockId, p_acquisition_job_id: metadata.acquisitionJobId,

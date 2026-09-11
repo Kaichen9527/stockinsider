@@ -64,3 +64,17 @@ test('deauthorize callback is minimal and invalid requests never reach revocatio
   }), /signature|payload|signed_request/u);
   assert.equal(calls, 1);
 });
+
+test('callback refuses a valid signed body delivered over a different or insecure origin', async () => {
+  for (const url of [
+    'https://attacker.example/api/auth/threads/data-deletion',
+    'http://stockinsider-three.vercel.app/api/auth/threads/data-deletion',
+  ]) {
+    const forged = new Request(url, { method: 'POST', headers: {
+      'content-type': 'application/x-www-form-urlencoded',
+    }, body: new URLSearchParams({ signed_request: signedRequest() }) });
+    await assert.rejects(() => processThreadsLifecycleCallback({ appId, appSecret,
+      kind: 'data_deletion', redirectUri: 'https://stockinsider-three.vercel.app/api/auth/threads/callback',
+      request: forged, revoke: async () => {} }), /callback_origin_invalid/u);
+  }
+});

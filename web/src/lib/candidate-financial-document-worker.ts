@@ -1,11 +1,11 @@
 import { createHash } from 'node:crypto';
 import {
-  CANDIDATE_FINANCIAL_DOCUMENT_BUCKET,
   candidateFinancialFactsFromValidatedManifest,
   MAX_CANDIDATE_FINANCIAL_DOCUMENT_BYTES,
   parseCandidateFinancialDocumentFacts,
   validateCandidateFinancialDocument,
 } from './candidate-financial-documents.ts';
+import { readCandidateFinancialArtifact } from './candidate-financial-artifact.ts';
 import { runCandidateFinancialLocalParser, type CandidateFinancialLocalParserResult } from './candidate-financial-local-parser.ts';
 import { candidateFinancialStructuralAdmission } from './candidate-financial-fact-acceptance.ts';
 import { validatePendingOfficialFinancials } from './official-financial-validation-worker.ts';
@@ -148,9 +148,8 @@ export async function processCandidateFinancialDocumentReceipts(limit = 5) {
       if (!receiptId || !Number.isInteger(byteLength) || byteLength < 1 || byteLength > MAX_CANDIDATE_FINANCIAL_DOCUMENT_BYTES) {
         throw new Error('stored_document_metadata_invalid');
       }
-      const object = await client.storage.from(CANDIDATE_FINANCIAL_DOCUMENT_BUCKET).download(String(receipt.object_key || ''));
-      if (object.error || !object.data) throw new Error(`stored_document_download_failed:${object.error?.message || 'missing'}`);
-      const bytes = new Uint8Array(await object.data.arrayBuffer());
+      const bytes = new Uint8Array(await readCandidateFinancialArtifact({ client,
+        objectKey: String(receipt.object_key || ''), sha256: String(receipt.document_sha256 || '') }));
       if (bytes.byteLength !== byteLength || sha256(bytes) !== String(receipt.document_sha256 || '')) {
         throw new Error('stored_document_hash_mismatch');
       }
