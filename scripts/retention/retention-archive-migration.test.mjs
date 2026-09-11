@@ -62,9 +62,16 @@ test('migration runner is exact-commit guarded and dry by default', () => {
   assert.equal(output.applied, false);
   assert.equal(output.migration.relativePath, 'migrations/20260911_retention_archive_v1.sql');
   assert.match(output.migration.sha256, /^[0-9a-f]{64}$/u);
+  assert.deepEqual(output.migrations.map(({ relativePath }) => relativePath), [
+    'migrations/20260911_retention_archive_v1.sql',
+    'migrations/20260911_retention_archive_v2.sql',
+  ]);
+  for (const planned of output.migrations) assert.match(planned.sha256, /^[0-9a-f]{64}$/u);
   const runner = fs.readFileSync(path.join(root, 'scripts/apply-retention-archive-v1-migration.mjs'), 'utf8');
   assert.match(runner, /retention_migration_tree_not_exact_reviewed_commit/u);
   assert.match(runner, /STOCKINSIDER_RETENTION_MIGRATION_DATABASE_URL/u);
+  assert.match(runner, /retention_archive_manifests_v2/u);
+  assert.match(runner, /retention_legacy_run_plan_v2/u);
   assert.doesNotMatch(runner, /dotenv|readFileSync\([^\n]*[.]env(?:[.]local)?/u);
 });
 

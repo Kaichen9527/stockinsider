@@ -37,7 +37,8 @@ requires an absolute, non-symlink 32-byte key file whose mode is `0600`.
 
 ```bash
 npm run db:retention-archive:plan
-# Apply only from a clean, independently reviewed commit:
+# The plan lists v1 and v2 in their enforced order. Apply both only from a
+# clean, independently reviewed commit:
 npm run db:retention-archive:apply -- --source-commit <40-hex-commit>
 npm run retention:archive:preview -- --root-kind worker_job_run --root-id UUID
 npm run retention:archive:export -- --root-kind worker_job_run --root-id UUID
