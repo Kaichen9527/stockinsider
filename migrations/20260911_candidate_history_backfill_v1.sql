@@ -46,6 +46,7 @@ DECLARE
   v_row JSONB; v_session DATE; v_sessions JSONB:='[]'::jsonb; v_conflict BOOLEAN:=false;
   v_status TEXT:=p_status; v_reason TEXT:=p_terminal_reason; v_attempt public.candidate_history_backfill_attempts_v1;
   v_available_at TIMESTAMPTZ:=clock_timestamp();
+  v_price public.official_price_history; v_multiple public.official_multiple_history; v_fundamental public.fundamental_snapshots;
 BEGIN
   IF p_stock_id IS NULL OR p_dataset IS NULL OR p_dataset NOT IN ('price','multiple') OR p_month IS NULL OR extract(day FROM p_month)<>1
     OR p_attempted_at IS NULL OR p_latest_session IS NULL OR p_status IS NULL OR p_status NOT IN ('complete','retry')
@@ -99,6 +100,17 @@ BEGIN
           (v_session::text||'T13:30:00+08:00')::timestamptz,v_available_at,
           jsonb_build_object('provider','official_primary','authorityTier','official_primary','integrityStatus','valid','history_policy',p_parser_version))
         ON CONFLICT(stock_id,session_date) DO NOTHING;
+      -- The ordinary research writer does not share our advisory lock. Its
+      -- uncommitted INSERT can win the unique key after the preflight SELECT.
+      -- Re-read the resolved row and hold its lock through checkpoint commit.
+      SELECT * INTO v_price FROM public.official_price_history
+        WHERE stock_id=p_stock_id AND session_date=v_session FOR UPDATE;
+      IF NOT FOUND OR v_price.open IS DISTINCT FROM (v_row->>'open')::numeric
+        OR v_price.high IS DISTINCT FROM (v_row->>'high')::numeric
+        OR v_price.low IS DISTINCT FROM (v_row->>'low')::numeric
+        OR v_price.close IS DISTINCT FROM (v_row->>'close')::numeric
+        OR v_price.volume IS DISTINCT FROM (v_row->>'volume')::numeric
+      THEN v_conflict:=true; END IF;
     END LOOP;
     FOR v_row IN SELECT value FROM jsonb_array_elements(p_multiples) LOOP
       v_session:=(v_row->>'date')::date;
@@ -107,11 +119,22 @@ BEGIN
           (v_session::text||'T13:30:00+08:00')::timestamptz,v_available_at,
           jsonb_build_object('provider','official_primary','official',true,'valuation_parser_version',v_row->>'parserVersion','history_policy',p_parser_version),
           v_row->>'parserVersion','valid') ON CONFLICT(stock_id,month_end) DO NOTHING;
+      SELECT * INTO v_multiple FROM public.official_multiple_history
+        WHERE stock_id=p_stock_id AND month_end=v_session FOR UPDATE;
+      IF NOT FOUND OR v_multiple.pe_ratio IS DISTINCT FROM (v_row->>'peRatio')::numeric
+        OR v_multiple.pb_ratio IS DISTINCT FROM (v_row->>'pbRatio')::numeric
+      THEN v_conflict:=true; CONTINUE; END IF;
       INSERT INTO public.fundamental_snapshots(stock_id,as_of_date,pe_ratio,pb_ratio,source_url,valuation_parser_version,quality_status)
         VALUES(p_stock_id,v_session,(v_row->>'peRatio')::numeric,(v_row->>'pbRatio')::numeric,p_source_url,v_row->>'parserVersion','valid')
         ON CONFLICT(stock_id,as_of_date) DO NOTHING;
+      SELECT * INTO v_fundamental FROM public.fundamental_snapshots
+        WHERE stock_id=p_stock_id AND as_of_date=v_session FOR UPDATE;
+      IF NOT FOUND OR v_fundamental.pe_ratio IS DISTINCT FROM (v_row->>'peRatio')::numeric
+        OR v_fundamental.pb_ratio IS DISTINCT FROM (v_row->>'pbRatio')::numeric
+      THEN v_conflict:=true; END IF;
     END LOOP;
   END IF;
+  IF v_conflict THEN v_status:='conflict'; v_reason:='official_history_existing_row_conflict'; END IF;
   INSERT INTO public.candidate_history_backfill_attempts_v1(stock_id,dataset,month,attempted_at,status,terminal_reason,acquired_rows,source_url,parser_version)
     VALUES(p_stock_id,p_dataset,p_month,p_attempted_at,v_status,v_reason,jsonb_array_length(v_sessions),p_source_url,p_parser_version);
   INSERT INTO public.candidate_history_backfill_months_v1(stock_id,dataset,month,status,attempted_at,next_attempt_at,attempts,observed_through,observed_sessions,terminal_reason,source_url,parser_version)

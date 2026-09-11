@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
-import {spawnSync} from 'node:child_process';
+import {spawn,spawnSync} from 'node:child_process';
 
 // Private, temporary local cluster only. No production URL or credentials.
-test('history completion is atomic, private, idempotent and preserves conflicting official evidence',()=>{
+test('history completion is atomic, private, idempotent and preserves conflicting official evidence',async()=>{
   const directory=fs.mkdtempSync(path.join(os.tmpdir(),'candidate-history-pg-'));
   const data=path.join(directory,'data'),socket=path.join(directory,'socket');
   fs.mkdirSync(socket);
@@ -66,6 +66,52 @@ test('history completion is atomic, private, idempotent and preserves conflictin
     const signature='public.complete_candidate_history_month_v1(uuid,text,date,timestamptz,date,date,text,text,timestamptz,text,text,jsonb,jsonb)';
     assert.equal(sql(`SELECT has_function_privilege('authenticated','${signature}','EXECUTE')`),'f');
     assert.equal(sql(`SELECT has_function_privilege('service_role','${signature}','EXECUTE')`),'t');
+
+    // Genuine two-connection race: the normal writer's conflicting INSERT is
+    // uncommitted (invisible to preflight), then the RPC waits on its unique key.
+    // Release that writer only after PostgreSQL proves the RPC is lock-blocked.
+    const race=async({raceStock,insert,invoke,table,valueColumn,expected})=>{
+      sql(`INSERT INTO stocks VALUES('${raceStock}')`);
+      const app=`history-race-${raceStock.slice(-2)}`;
+      const writer=spawn(binary('psql'),args,{env:{...process.env,LC_ALL:'C',PGAPPNAME:`${app}-writer`}});
+      const reader=spawn(binary('psql'),args,{env:{...process.env,LC_ALL:'C',PGAPPNAME:app}});
+      let writerOutput='',readerOutput='',writerError='',readerError='';
+      writer.stdout.on('data',(chunk)=>{writerOutput+=chunk;});
+      writer.stderr.on('data',(chunk)=>{writerError+=chunk;});
+      reader.stdout.on('data',(chunk)=>{readerOutput+=chunk;});
+      reader.stderr.on('data',(chunk)=>{readerError+=chunk;});
+      const writerDone=new Promise((resolve)=>writer.on('exit',(code)=>resolve(code)));
+      const readerDone=new Promise((resolve)=>reader.on('exit',(code)=>resolve(code)));
+      const until=async(predicate)=>{
+        const deadline=Date.now()+5000;
+        while(!predicate()){
+          assert.ok(Date.now()<deadline,`race synchronization timeout: ${writerError} ${readerError}`);
+          await new Promise((resolve)=>setTimeout(resolve,10));
+        }
+      };
+      try {
+        writer.stdin.write(`SET statement_timeout='10s'; BEGIN; ${insert} SELECT 'writer_ready';\n`);
+        await until(()=>writerOutput.includes('writer_ready'));
+        reader.stdin.end(`SET statement_timeout='10s'; ${invoke}`);
+        await until(()=>sql(`SELECT count(*) FROM pg_stat_activity WHERE application_name='${app}' AND cardinality(pg_blocking_pids(pid))>0`)==='1');
+        writer.stdin.end('COMMIT;\n');
+        assert.equal(await writerDone,0,writerError);
+        assert.equal(await readerDone,0,readerError);
+        assert.equal(parsed(readerOutput.trim()).status,'conflict');
+        assert.equal(sql(`SELECT ${valueColumn} FROM ${table} WHERE stock_id='${raceStock}'`),expected);
+        assert.equal(sql(`SELECT status FROM candidate_history_backfill_months_v1 WHERE stock_id='${raceStock}'`),'conflict');
+      } finally { writer.kill();reader.kill(); }
+    };
+    const priceRaceStock='22222222-2222-4222-8222-222222222222';
+    await race({raceStock:priceRaceStock,table:'official_price_history',valueColumn:'close',expected:'103',
+      insert:`INSERT INTO official_price_history(stock_id,session_date,open,high,low,close,volume,provenance) VALUES('${priceRaceStock}','2025-08-29',100,105,98,103,1000,'{"authorityTier":"official_primary"}');`,
+      invoke:call([bar]).replaceAll(stock,priceRaceStock)});
+    for(const [table,raceStock] of [['official_multiple_history','33333333-3333-4333-8333-333333333333'],['fundamental_snapshots','44444444-4444-4444-8444-444444444444']]) {
+      const dateColumn=table==='official_multiple_history'?'month_end':'as_of_date';
+      await race({raceStock,table,valueColumn:'pe_ratio',expected:'21',
+        insert:`INSERT INTO ${table}(stock_id,${dateColumn},pe_ratio,pb_ratio) VALUES('${raceStock}','2025-08-29',21,5);`,
+        invoke:`SET ROLE service_role;SELECT public.complete_candidate_history_month_v1('${raceStock}','multiple','2025-08-01','2026-01-03','2025-08-29','2025-08-29','complete','complete',NULL,'${multipleUrl}','candidate-history-month-v1','[]','${JSON.stringify([point])}');`});
+    }
   } finally {
     if(started) command('pg_ctl',['-D',data,'-m','fast','-w','stop']);
     fs.rmSync(directory,{recursive:true,force:true});
