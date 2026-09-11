@@ -288,6 +288,7 @@ BEGIN
       terminal_detail=CASE WHEN v_receipt_status='accepted' THEN NULL
         WHEN v_status='validated' THEN 'document_requirements_incomplete'
         ELSE 'official_fact_validation_rejected' END,
+      lease_owner=NULL,lease_expires_at=NULL,collected_at=p_completed_at,
       next_attempt_at=NULL,updated_at=p_completed_at
     WHERE job_id=v_receipt.acquisition_job_id AND status IN ('queued','running');
   END IF;

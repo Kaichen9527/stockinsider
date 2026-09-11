@@ -44,7 +44,11 @@ test('v8 parser evidence and exact fact validation survive a real PostgreSQL bou
       CREATE TABLE public.candidate_issuer_document_domains_v6(stock_id uuid,host text,PRIMARY KEY(stock_id,host));
       CREATE TABLE public.candidate_financial_acquisition_jobs_v4(job_id uuid PRIMARY KEY,stock_id uuid,
         status text,terminal_reason public.financial_acquisition_terminal_reason_v4,terminal_detail text,lease_owner text,lease_expires_at timestamptz,
-        collected_at timestamptz,next_attempt_at timestamptz,updated_at timestamptz);
+        collected_at timestamptz,next_attempt_at timestamptz,updated_at timestamptz,
+        CHECK((status='terminal')=(terminal_reason IS NOT NULL)),
+        CHECK(status<>'terminal' OR (collected_at IS NOT NULL AND lease_expires_at IS NULL)),
+        CHECK(status='running' OR (lease_owner IS NULL AND lease_expires_at IS NULL)),
+        CHECK(status<>'running' OR (lease_owner IS NOT NULL AND lease_expires_at IS NOT NULL)));
       CREATE TABLE public.candidate_issuer_ir_document_queue_v4(document_id uuid PRIMARY KEY);
       CREATE TABLE public.candidate_financial_document_receipts_v6(
         receipt_id uuid PRIMARY KEY,stock_id uuid NOT NULL REFERENCES public.stocks(id),
@@ -94,7 +98,8 @@ test('v8 parser evidence and exact fact validation survive a real PostgreSQL bou
     const principal = '55555555-5555-4555-8555-555555555555';
     const hash = 'a'.repeat(64);
     sql(`INSERT INTO public.stocks VALUES('${stock}','2330');
-      INSERT INTO public.candidate_financial_acquisition_jobs_v4(job_id,stock_id,status) VALUES('${job}','${stock}','running');
+      INSERT INTO public.candidate_financial_acquisition_jobs_v4(job_id,stock_id,status,lease_owner,lease_expires_at)
+        VALUES('${job}','${stock}','running','runner',clock_timestamp()+interval '5 minutes');
       INSERT INTO public.candidate_issuer_ir_document_queue_v4 VALUES('${doc}');
       INSERT INTO public.candidate_financial_document_receipts_v6(receipt_id,stock_id,acquisition_job_id,issuer_document_id,
         source_url,exchange,period_end,document_sha256,receipt_status,parser_status,parser_owner,parser_lease_expires_at)
@@ -141,7 +146,8 @@ test('v8 parser evidence and exact fact validation survive a real PostgreSQL bou
     const partialDoc = '99999999-9999-4999-8999-999999999999';
     const partialReceipt = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
     const partialHash = 'd'.repeat(64);
-    sql(`INSERT INTO public.candidate_financial_acquisition_jobs_v4(job_id,stock_id,status) VALUES('${partialJob}','${stock}','running');
+    sql(`INSERT INTO public.candidate_financial_acquisition_jobs_v4(job_id,stock_id,status,lease_owner,lease_expires_at)
+        VALUES('${partialJob}','${stock}','running','runner',clock_timestamp()+interval '5 minutes');
       INSERT INTO public.candidate_issuer_ir_document_queue_v4 VALUES('${partialDoc}');
       INSERT INTO public.candidate_financial_document_receipts_v6(receipt_id,stock_id,acquisition_job_id,issuer_document_id,
         source_url,exchange,period_end,document_sha256,receipt_status,parser_status,parser_owner,parser_lease_expires_at)
