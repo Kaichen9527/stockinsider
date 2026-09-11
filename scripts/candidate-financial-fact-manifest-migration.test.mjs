@@ -15,7 +15,9 @@ test('v8 document completion persists structural evidence and awaits exact fact 
   assert.match(sql, /manifest[.]row->>'period_end'/u);
   assert.match(sql, /financial_validation_status/u);
   assert.match(sql, /finalize_candidate_financial_document_validation_v8/u);
-  assert.match(sql, /receipt_status=CASE WHEN v_status='validated'/u);
+  assert.match(sql, /v_receipt_status:=CASE WHEN v_status='validated'/u);
+  assert.match(sql, /receipt_status=v_receipt_status/u);
+  assert.match(sql, /official_financial_validation_receipts/u);
   assert.match(sql, /v_locator \? 'page'/u, 'PDF diagnostics remain persistable without creating facts');
   assert.match(sql, /REVOKE EXECUTE ON FUNCTION public[.]complete_candidate_financial_document_receipt_parser_v7[\s\S]*FROM service_role/u);
   assert.match(sql, /WHEN jsonb_array_length\(p_facts\)>0 THEN 'validation_pending'/u);
