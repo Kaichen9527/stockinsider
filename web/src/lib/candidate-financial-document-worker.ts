@@ -6,6 +6,7 @@ import {
   validateCandidateFinancialDocument,
 } from './candidate-financial-documents.ts';
 import { runCandidateFinancialLocalParser, type CandidateFinancialLocalParserResult } from './candidate-financial-local-parser.ts';
+import { validatePendingOfficialFinancials } from './official-financial-validation-worker.ts';
 import { fixedRunnerPrincipal } from './opportunity-v3/internal.ts';
 import { getOpportunityV3ServerClient } from './opportunity-v3/service-client.ts';
 
@@ -27,6 +28,26 @@ function factInput(fact: ReturnType<typeof parseCandidateFinancialDocumentFacts>
   };
 }
 
+export function filterArelleValidatedFacts(
+  facts: ReturnType<typeof parseCandidateFinancialDocumentFacts>,
+  parse: CandidateFinancialLocalParserResult,
+) {
+  const validated = new Map<string, Array<{ value: number; unit: string }>>();
+  for (const row of parse.validatedFacts || []) {
+    const key = `${row.xbrl_context}\u0000${row.xbrl_concept}`;
+    const values = validated.get(key) || [];
+    values.push({ value: Number(row.value), unit: row.unit });
+    validated.set(key, values);
+  }
+  return facts.filter((fact) => {
+    const context = String(fact.locator?.xbrl_context || '');
+    const concept = String(fact.locator?.xbrl_concept || '');
+    const matches = validated.get(`${context}\u0000${concept}`) || [];
+    return matches.some((match) => match.unit === fact.unit
+      && Math.abs(match.value - fact.value) <= Math.max(1e-6, Math.abs(match.value) * 1e-12));
+  });
+}
+
 export async function processCandidateFinancialDocumentReceipts(limit = 5) {
   const owner = fixedRunnerPrincipal();
   if (!owner) throw new Error('candidate_financial_document_runner_principal_missing');
@@ -38,7 +59,7 @@ export async function processCandidateFinancialDocumentReceipts(limit = 5) {
   });
   if (claim.error) throw new Error(`candidate_financial_document_claim_failed:${claim.error.message}`);
   const claimed = (claim.data || []) as Row[];
-  const results: Array<{ receiptId: string; status: string; parser: string | null; locatorCount: number; error: string | null; missingRequirements?: string[]; rejectionReasons?: string[] }> = [];
+  const results: Array<{ receiptId: string; status: string; parser: string | null; locatorCount: number; error: string | null; missingRequirements?: string[]; rejectionReasons?: string[]; validation?: Awaited<ReturnType<typeof validatePendingOfficialFinancials>> }> = [];
   for (const receipt of claimed) {
     const receiptId = String(receipt.receipt_id || '');
     const completedAt = new Date().toISOString();
@@ -70,15 +91,15 @@ export async function processCandidateFinancialDocumentReceipts(limit = 5) {
       missing.push(...localParse.missingRequirements);
       const stock = await client.from('stocks').select('id,symbol').eq('id', String(receipt.stock_id || '')).maybeSingle();
       if (stock.error || !stock.data || !/^\d{4,6}$/u.test(String(stock.data.symbol || ''))) throw new Error('document_stock_identity_missing');
-      if (verified.format === 'xbrl' && localParse.status === 'complete') {
-        facts = parseCandidateFinancialDocumentFacts({
+      if (verified.format === 'xbrl' && localParse.locators.length > 0) {
+        facts = filterArelleValidatedFacts(parseCandidateFinancialDocumentFacts({
           bytes, format: verified.format, documentSha256: String(receipt.document_sha256),
           candidate: {
             stockId: String(stock.data.id), symbol: String(stock.data.symbol),
             exchange: String(receipt.exchange) === 'TPEX' ? 'TPEX' : 'TWSE',
           },
           periodEnd: String(receipt.period_end), sourceUrl: String(receipt.source_url), collectedAt: completedAt,
-        });
+        }), localParse);
       }
       if (verified.format !== 'xbrl') missing.push('structured_xbrl_or_validated_pdf_manifest_required');
       if (facts.length === 0) missing.push('no_verified_financial_facts_extracted');
@@ -93,7 +114,7 @@ export async function processCandidateFinancialDocumentReceipts(limit = 5) {
       }
       facts = [];
     }
-    const result = await client.rpc('complete_candidate_financial_document_receipt_parser_v7', {
+    const result = await client.rpc('complete_candidate_financial_document_receipt_parser_v8', {
       p_receipt_id: receiptId, p_owner: owner, p_caller_principal: owner,
       p_facts: facts.map((fact) => ({ input: factInput(fact), locator: fact.locator || {} })),
       p_parser_locators: localParse?.locators || [],
@@ -104,8 +125,18 @@ export async function processCandidateFinancialDocumentReceipts(limit = 5) {
       results.push({ receiptId, status: 'error', parser: localParse?.parser || null, locatorCount: localParse?.locators.length || 0, error: result.error?.message || 'document_receipt_completion_failed' });
       continue;
     }
-    results.push({ receiptId, status: String(row.receipt_status || 'unknown'), parser: localParse?.parser || null,
-      locatorCount: localParse?.locators.length || 0, missingRequirements: missing, rejectionReasons: rejected, error: null });
+    try {
+      const validation = facts.length > 0
+        ? await validatePendingOfficialFinancials([String(receipt.stock_id || '')])
+        : undefined;
+      results.push({ receiptId, status: String(row.receipt_status || 'unknown'), parser: localParse?.parser || null,
+        locatorCount: localParse?.locators.length || 0, missingRequirements: missing, rejectionReasons: rejected,
+        validation, error: null });
+    } catch (error) {
+      results.push({ receiptId, status: 'partial', parser: localParse?.parser || null,
+        locatorCount: localParse?.locators.length || 0, missingRequirements: [...missing, 'official_fact_validation_failed'],
+        rejectionReasons: rejected, error: error instanceof Error ? error.message.slice(0, 240) : 'official_fact_validation_failed' });
+    }
   }
   return { claimed: claimed.length, results };
 }
