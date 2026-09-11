@@ -129,7 +129,7 @@ test('V3.18 uses an explicit contrasting CTA rather than inherited foreground co
   assert.match(formalDetail,/估值[\s\S]*技術狀態[\s\S]*基本面/u);
 });
 
-test('V3.18 uses reviewed topic scopes for Threads and still requires the approved author',async()=>{
+test('V3.18 Threads topic discovery accepts non-tracked public authors without impersonating profile monitoring',async()=>{
   const acquisition=runtime('official-source-acquisition.js');
   const roster=JSON.parse(readFileSync(path.join(root,'config/runtime/approved-source-roster-v3.13.json'),'utf8'));
   const queries=[];
@@ -138,6 +138,8 @@ test('V3.18 uses reviewed topic scopes for Threads and still requires the approv
       const parsed=new URL(String(url));
       if(parsed.origin==='https://graph.threads.com'){
         const query=parsed.searchParams.get('q');queries.push(query);
+        assert.equal(parsed.searchParams.get('limit'),'25');
+        assert.match(parsed.searchParams.get('since')||'',/^\d{10}$/u);
         const rows=query==='台股'?[{id:'gooaye-topic-1',username:'stockcancer',text:'2330 先進製程需求更新',
           permalink:'https://www.threads.net/@stockcancer/post/gooaye-topic-1',timestamp:'2026-08-20T09:00:00Z'},
           {id:'unapproved-1',username:'unapproved',text:'2330',permalink:'https://www.threads.net/@unapproved/post/1',
@@ -148,9 +150,47 @@ test('V3.18 uses reviewed topic scopes for Threads and still requires the approv
     }});
   assert.ok(queries.includes('台股'));
   assert.ok(queries.includes('產業'));
-  const threadDocuments=result.documents.filter((row)=>row.sourceKey==='threads');
-  assert.deepEqual(threadDocuments.map((row)=>[row.profileId,row.stableConnectorDocumentId]),[['gooaye','gooaye-topic-1']]);
+  const threadDocuments=result.documents.filter((row)=>row.sourceKey==='threads'&&row.profileId==='gooaye');
+  assert.deepEqual(threadDocuments.map((row)=>[row.stableConnectorDocumentId,row.sourceAuthor,row.trackedAuthor]),[
+    ['gooaye-topic-1','stockcancer',true],['unapproved-1','unapproved',false],
+  ]);
+  assert.ok(threadDocuments.every((row)=>row.sourceAssessment==='discovery_only_unverified'
+    &&row.profileMonitoringDisposition==='blocked_permission'
+    &&row.profileMonitoringReason==='threads_profile_discovery_missing'));
   assert.equal(result.connectorAttempts.length,85);
+});
+
+test('V3.18 Threads filters invalid rows before its document bound and rejects unsafe cursors',async()=>{
+  const acquisition=runtime('official-source-acquisition.js');
+  const roster=JSON.parse(readFileSync(path.join(root,'config/runtime/approved-source-roster-v3.13.json'),'utf8'));
+  const invalid=Array.from({length:6},(_,index)=>({id:`invalid-${index}`,username:'new_author',text:'2330',
+    permalink:`https://example.com/post/${index}`,timestamp:'2026-08-20T09:00:00Z'}));
+  const valid={id:'valid-after-invalid',username:'new_author',text:'2330 台積電',
+    permalink:'https://www.threads.com/@new_author/post/valid',timestamp:'2026-08-20T09:00:00Z'};
+  const result=await acquisition.acquireApprovedSources({roster,credentials:{threadsAccessToken:'test-token'},
+    now:new Date('2026-08-20T10:20:00Z'),fetchImpl:async(url)=>{
+      const parsed=new URL(String(url));
+      if(parsed.origin!=='https://graph.threads.com')return new Response('{}',{status:404});
+      assert.equal(parsed.searchParams.get('after'),null);
+      return new Response(JSON.stringify({data:parsed.searchParams.get('q')==='台股'?[...invalid,valid]:[],paging:{cursors:{after:'../unsafe'}}}),
+        {status:200,headers:{'content-type':'application/json'}});
+    }});
+  assert.ok(result.documents.some((row)=>row.sourceKey==='threads'&&row.profileId==='gooaye'
+    &&row.stableConnectorDocumentId==='valid-after-invalid'));
+  assert.equal(acquisition.boundedThreadsCursor('../unsafe'),null);
+});
+
+test('source refresh preserves API failure through tee',()=>{
+  const workflow=readFileSync(path.join(root,'.github/workflows/source-refresh.yml'),'utf8');
+  assert.match(workflow,/set -euo pipefail[\s\S]*call_internal_api[.]mjs[\s\S]*[|] tee/u);
+});
+
+test('unverified Threads author discovery cannot impersonate approved KOL nomination authority',()=>{
+  const authority=runtime('candidate-nomination-authority.js');
+  assert.equal(authority.nominationAuthorityForSource({sourceKey:'threads',sourceAssessment:'discovery_only_unverified'}),null);
+  assert.equal(authority.hasCandidateNominationAuthority({sourceKey:'threads',sourceAssessment:'discovery_only_unverified',
+    nominationAuthority:'approved_kol_threads_api'}),false);
+  assert.equal(authority.nominationAuthorityForSource({sourceKey:'threads'}),'approved_kol_threads_api');
 });
 
 test('V3.20 preserves unauthorized paid-source and metadata-only terminals while accepting public Telegram claims',()=>{
