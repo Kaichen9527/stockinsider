@@ -270,7 +270,7 @@ const graphBoundReviewSources = Object.freeze({
       ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-host-pin-v316-architecture-aa0c08b',
       path: `${changeRelative}/architecture-review-host-pin-v3.16.md`,
       finalLine: 'Final reviewed implementation commit/tree',
-      rangeLine: 'Full reviewed implementation range',
+      rangeLine: 'Full reviewed range',
     }),
   }),
   '5f985e391799fd8332df16c2151f75cc95dfb643a087912d92df2845a435016e': Object.freeze({
