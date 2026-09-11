@@ -99,6 +99,12 @@ test('v10 worker evidence retains errors and semantic mapper emits only a hash-b
   assert.equal(facts[0].locator?.concept_namespace, parse.validatedFacts![0].concept_namespace);
   assert.deepEqual(filterArelleValidatedFacts([{ ...facts[0], value: facts[0].value + 0.0000001 }], parse), [],
     'a close numeric value is not the exact validated fact');
+  const pdfBytes = new TextEncoder().encode('%PDF-1.7\n% unsupported financial extraction');
+  const pdfHash = createHash('sha256').update(pdfBytes).digest('hex');
+  const pdfParse = structuredClone(parse);
+  pdfParse.inputSha256 = pdfHash; pdfParse.factAcceptance!.documentSha256 = pdfHash; reseal(pdfParse);
+  assert.deepEqual(candidateFinancialFactsFromValidatedManifest({ ...input, bytes: pdfBytes,
+    documentSha256: pdfHash, parse: pdfParse }), [], 'PDF bytes cannot be relabelled as an Arelle fact manifest');
   parse.factAcceptance!.extractedInstanceSha256 = null;
   parse.factAcceptance!.extractedValidationCompleted = false;
   parse.validatedFacts![0].extractedFactId = parse.validatedFacts![0].sourceFactId;

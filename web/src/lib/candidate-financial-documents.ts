@@ -223,6 +223,7 @@ export function candidateFinancialFactsFromValidatedManifest(input: {
   collectedAt: string;
 }): ParsedFact[] {
   const { parse } = input;
+  if (Buffer.from(input.bytes.subarray(0, 5)).toString('ascii') === '%PDF-') return [];
   if (!candidateFinancialStructuralAdmission(parse)
     || !/^[0-9a-f]{64}$/u.test(parse.taxonomySha256 || '') || parse.runtimeVersion !== '2.44.7'
     || parse.inputSha256 !== input.documentSha256
