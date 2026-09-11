@@ -244,7 +244,7 @@ ordinaryTest('operation and resource identities are deterministic and bound', ()
   assert.equal(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)), 875);
   assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'codexVersion'), ['codexVersion', '0.153.4']);
   assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'contractVersion'), ['contractVersion', 'model-runner-v3.6']);
-  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'hostPinVersion'), ['hostPinVersion', 'model-runner-host-pins-v3.15']);
+  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'hostPinVersion'), ['hostPinVersion', 'model-runner-host-pins-v3.16']);
   for (const relativePath of ['execution.js', 'journalStore.js']) {
     const implementation = fs.readFileSync(path.join(__dirname, relativePath), 'utf8');
     assert.match(implementation, new RegExp(MODEL_RUNNER_IDENTITY_SHA256, 'u'));
@@ -316,7 +316,7 @@ ordinaryTest('host pin fixture has an exact hash-bound format', async () => {
   const fixture = path.resolve(__dirname, '../../.loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json');
   assert.equal(fs.statSync(fixture).size, PIN_FIXTURE_BYTES);
   const pins = loadHostPins(fixture);
-  assert.equal(pins.fixtureVersion, 'model-runner-host-pins-v3.15');
+  assert.equal(pins.fixtureVersion, 'model-runner-host-pins-v3.16');
   assert.equal(pins.executables.find((entry) => entry.name === 'codex').version, 'codex-cli 0.153.4');
   assert.equal(verifyCurrentNode(pins), true);
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-pins-'));
@@ -491,7 +491,7 @@ ordinaryTest('trusted live host probes admit only an explicit private cache scra
   }
 });
 
-ordinaryTest('disabled doctor accepts only the protected v3.9 compatibility selector for the exact v3.15 fixture', () => {
+ordinaryTest('disabled doctor accepts only the protected v3.9 compatibility selector for the exact v3.16 fixture', () => {
   const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-doctor-scratch-'));
   const policy = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-doctor-policy-'));
   const original = {
