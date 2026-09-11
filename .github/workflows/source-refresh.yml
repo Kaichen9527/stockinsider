@@ -32,7 +32,10 @@ jobs:
         with:
           node-version-file: '.nvmrc'
       - name: Refresh every server-authorized source
-        run: node scripts/call_internal_api.mjs /api/internal/source-sync "{\"connector\":\"all\",\"dryRun\":$DRY_RUN}" | tee /tmp/source-refresh.json
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/call_internal_api.mjs /api/internal/source-sync "{\"connector\":\"all\",\"dryRun\":$DRY_RUN}" | tee /tmp/source-refresh.json
       - name: Upload source terminal results
         if: always()
         uses: actions/upload-artifact@v4

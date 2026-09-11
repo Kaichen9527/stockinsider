@@ -27,6 +27,17 @@ function approvedHttpsUrl(value, expectedHost) {
   return parsed.toString();
 }
 
+function approvedThreadsUrl(value) {
+  const parsed=new URL(approvedHttpsUrl(value));
+  invariant(['threads.net','www.threads.net','threads.com','www.threads.com'].includes(parsed.hostname),'threads permalink authority');
+  return parsed.toString();
+}
+
+function boundedThreadsCursor(value) {
+  const cursor=String(value??'').trim();
+  return /^[A-Za-z0-9_-]{1,512}$/u.test(cursor)?cursor:null;
+}
+
 function isPublicAddress(value) {
   const address=String(value??'').toLowerCase().split('%')[0];
   const version=net.isIP(address);if(!version)return false;
@@ -353,25 +364,40 @@ async function threads(profile,roster,credentials,fetchImpl,collectedAt) {
   // without a reviewed topic scope; it must never be reported as a successful
   // author acquisition unless a returned row also matches that author.
   if(queries.length===0)queries.push(String(profile.threads).replace(/^@/u,''));
-  const responses=await Promise.all(queries.map(async(query)=>{
-    const endpoint=new URL(roster.threadsSearchEndpoint); invariant(endpoint.origin==='https://graph.threads.com','threads endpoint authority');
-    invariant(endpoint.pathname==='/v1.0/keyword_search','threads keyword-search endpoint authority');
-    endpoint.searchParams.set('q',query);endpoint.searchParams.set('search_type','RECENT');
-    endpoint.searchParams.set('fields','id,username,text,permalink,timestamp');
-    endpoint.searchParams.set('access_token',credentials.threadsAccessToken);
-    return boundedFetch(endpoint.toString(),{headers:{Accept:'application/json'}},fetchImpl,1_000_000);
-  }));
-  const rows=[...new Map(responses.flatMap((response)=>{
-    const data=JSON.parse(response.bytes.toString('utf8')).data;
-    return Array.isArray(data)?data:[];
-  }).filter((row)=>row?.id).map((row)=>[String(row.id),row])).values()];
+  const responses=[];const observedRows=[];const since=String(Math.floor((Date.parse(collectedAt)-7*86400000)/1000));
+  for(const query of queries){let after=null;
+    for(let page=0;page<2;page+=1){
+      const endpoint=new URL(roster.threadsSearchEndpoint); invariant(endpoint.origin==='https://graph.threads.com','threads endpoint authority');
+      invariant(endpoint.pathname==='/v1.0/keyword_search','threads keyword-search endpoint authority');
+      endpoint.searchParams.set('q',query);endpoint.searchParams.set('search_type','RECENT');
+      endpoint.searchParams.set('fields','id,username,text,permalink,timestamp');endpoint.searchParams.set('since',since);
+      endpoint.searchParams.set('limit','25');if(after)endpoint.searchParams.set('after',after);
+      endpoint.searchParams.set('access_token',credentials.threadsAccessToken);
+      const response=await boundedFetch(endpoint.toString(),{headers:{Accept:'application/json'}},fetchImpl,1_000_000);
+      responses.push(response);const payload=JSON.parse(response.bytes.toString('utf8'));
+      if(Array.isArray(payload.data))observedRows.push(...payload.data);
+      const next=boundedThreadsCursor(payload?.paging?.cursors?.after);
+      if(!next||next===after||!Array.isArray(payload.data)||payload.data.length===0)break;after=next;
+    }
+  }
+  const rows=[...new Map(observedRows.filter((row)=>{
+    if(!row?.id||!row?.text||!row?.username||!row?.timestamp)return false;
+    try{return Boolean(approvedThreadsUrl(row.permalink));}catch{return false;}
+  }).map((row)=>[String(row.id),row])).values()];
   const approvedUsername=String(profile.threads).replace(/^@/u,'').toLowerCase();
-  const documents=rows.slice(0,MAX_DOCUMENTS_PER_CONNECTOR.threads).filter((row)=>row?.id&&row?.text&&row?.permalink
-    &&String(row.username??'').replace(/^@/u,'').toLowerCase()===approvedUsername).map((row)=>documentRevision({
-    sourceKey:'threads',profile,stableId:row.id,title:`Threads · ${profile.name}`,sourceUrl:approvedHttpsUrl(row.permalink,'threads.net'),
-    publishedAt:row.timestamp,transcript:row.text,collectedAt}));
+  // Keyword Search discovers public posts; it is not an author timeline. Keep
+  // non-tracked authors as discovery-only evidence and apply the result bound
+  // only after malformed rows have been removed.
+  const documents=rows.slice(0,MAX_DOCUMENTS_PER_CONNECTOR.threads).map((row)=>Object.freeze({...documentRevision({
+    sourceKey:'threads',profile,stableId:row.id,title:`Threads · @${String(row.username).replace(/^@/u,'')}`,
+    sourceUrl:approvedThreadsUrl(row.permalink),publishedAt:row.timestamp,transcript:row.text,collectedAt}),
+    sourceAuthor:String(row.username).replace(/^@/u,'').toLowerCase(),sourceAssessment:'discovery_only_unverified',
+    trackedAuthor:String(row.username).replace(/^@/u,'').toLowerCase()===approvedUsername,
+    profileMonitoringDisposition:'blocked_permission',profileMonitoringReason:'threads_profile_discovery_missing'}));
   const items=documents.map((document)=>({sourceKey:'threads',profileId:profile.id,
     stableId:document.stableConnectorDocumentId,sourceUrl:document.canonicalUrlCandidate,publishedAt:document.publishedAt,
+    sourceAuthor:document.sourceAuthor,sourceAssessment:document.sourceAssessment,trackedAuthor:document.trackedAuthor,
+    profileMonitoringDisposition:document.profileMonitoringDisposition,profileMonitoringReason:document.profileMonitoringReason,
     ...itemDisposition(document)}));
   return {documents,items,attempt:attempt('threads',documents.length?'items_found':'successful_empty',
     documents.length?'threads_items_observed':'threads_successful_empty',
@@ -461,6 +487,6 @@ async function acquireApprovedSources({roster,credentials={},fetchImpl=globalThi
   return Object.freeze({schema:'official-source-acquisition-v3.20',collectedAt,documents,itemOutcomes,connectorAttempts,outcomes});
 }
 
-module.exports={ acquireApprovedSources,approvedHttpsUrl,documentRevision,normalizedSourceInstant,
+module.exports={ acquireApprovedSources,approvedHttpsUrl,approvedThreadsUrl,boundedThreadsCursor,documentRevision,normalizedSourceInstant,
   parsePodcastFeed,isPublicAddress,resolvePublicAddresses,CONNECTOR_ATTEMPT,TERMINAL,SOURCE_CONNECTORS,
   MAX_DOCUMENTS_PER_CONNECTOR,boundedStructuredClaim,htmlText,parseTelegramPublicPosts };

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { requireExactInternalBearer, requireInternalAuth } from './internal-auth.ts';
-import { activeSourceConnectorKeys, APPROVED_TELEGRAM_PUBLIC_CHANNELS, RETIRED_SOURCE_CONNECTORS, UNAVAILABLE_TELEGRAM_PUBLIC_CHANNELS, authorizedPodcastRssAllowlist, podcastContentAnalyzable, scheduledSourceConnectorKeys, sourceExecutionPolicy } from './source-policy.ts';
+import { activeSourceConnectorKeys, APPROVED_TELEGRAM_PUBLIC_CHANNELS, RETIRED_SOURCE_CONNECTORS, UNAVAILABLE_TELEGRAM_PUBLIC_CHANNELS, authorizedPodcastRssAllowlist, podcastContentAnalyzable, scheduledSourceConnectorKeys, sourceExecutionPolicy, threadsProfileMonitoringPolicy } from './source-policy.ts';
 
 const ENV_KEYS = [
   'INTERNAL_API_KEY', 'CRON_SECRET', 'THREADS_OFFICIAL_API_ENABLED', 'THREADS_OFFICIAL_CANARY_ACTIVE',
@@ -49,6 +49,12 @@ test('Threads and licensed sources report explicit blocks instead of false succe
   withEnvironment({ THREADS_DEDICATED_APP_CONFIRMED: 'true', THREADS_OFFICIAL_API_ENABLED: 'true', THREADS_OFFICIAL_CANARY_ACTIVE: 'true' }, () => {
     assert.equal(sourceExecutionPolicy('threads').disposition, 'active');
   });
+});
+
+test('Threads keyword discovery never impersonates KOL profile monitoring', () => {
+  assert.equal(threadsProfileMonitoringPolicy([]).terminalReason, 'threads_profile_discovery_missing');
+  assert.equal(threadsProfileMonitoringPolicy(['threads_profile_discovery']).disposition, 'blocked_auth');
+  assert.equal(threadsProfileMonitoringPolicy(['threads_profile_discovery']).terminalReason, 'threads_profile_monitoring_canary_missing');
 });
 
 test('BullTalk requires a signed scope and real-sample digest before a licensed feed can activate', () => {

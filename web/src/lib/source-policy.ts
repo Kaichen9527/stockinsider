@@ -63,6 +63,23 @@ export function podcastContentAnalyzable(rssUrl: string, value = process.env.POD
   return podcastContentAnalysisAllowlist(value).includes(rssUrl);
 }
 
+/** Keyword discovery and per-profile monitoring are separate provider grants. */
+export function threadsProfileMonitoringPolicy(grantedScopes: unknown): SourceExecutionPolicy {
+  const scopes = Array.isArray(grantedScopes) ? grantedScopes.map(String) : [];
+  if (!scopes.includes('threads_profile_discovery')) {
+    return {
+      connector: 'threads_profile_monitoring', disposition: 'blocked_auth', licenseBasis: 'threads_official_api',
+      terminalReason: 'threads_profile_discovery_missing', cadenceHours: null,
+    };
+  }
+  // No profile connector or provider canary exists yet. A grant alone must not
+  // silently turn keyword hits into an authenticated KOL timeline.
+  return {
+    connector: 'threads_profile_monitoring', disposition: 'blocked_auth', licenseBasis: 'threads_official_api',
+    terminalReason: 'threads_profile_monitoring_canary_missing', cadenceHours: null,
+  };
+}
+
 export function sourceExecutionPolicy(connector: string): SourceExecutionPolicy {
   if ((RETIRED_SOURCE_CONNECTORS as readonly string[]).includes(connector)) {
     return { connector, disposition: 'retired', licenseBasis: 'historical_audit_only', terminalReason: 'connector_retired', cadenceHours: null };

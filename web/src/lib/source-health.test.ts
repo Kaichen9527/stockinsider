@@ -85,3 +85,17 @@ test('approved Telegram roster returning zero parsed messages is a parser failur
     timedOut: false,
   }), 'parser_failed');
 });
+
+test('a Threads dry run cannot be reported as a successful provider canary', () => {
+  assert.equal(classifySourceSyncTerminal({
+    fetchedPosts: 0,
+    recordsWritten: 0,
+    duplicatesSkipped: 0,
+    matchedDirectHits: 0,
+    matchedIndustryHits: 0,
+    candidateDocuments: 0,
+    errorCode: 'threads_dry_run_provider_canary_not_executed',
+    degradedReason: null,
+    timedOut: false,
+  }), 'failed');
+});
