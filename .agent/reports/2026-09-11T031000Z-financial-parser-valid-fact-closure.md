@@ -4,10 +4,11 @@
 
 - Added operator-installed, SHA-256-pinned Taiwan IFRS taxonomy support to the
   credential-free, network-isolated parser service.
-- Preserved all document-level Arelle findings while allowing only individually
-  valid, valuation-allowlisted facts to cross the parser boundary.
-- Added a second-parser equality check for QName, context, unit and normalized
-  numeric value before a fact can be submitted.
+- Preserved all document-level Arelle findings and now fails the fact manifest
+  closed whenever complete instance validation reports any structural error.
+- Added a second-parser equality check for QName, context, issuer entity,
+  period, dimensions, unit and normalized numeric value before a fact can be
+  submitted.
 - Added an additive v8 completion RPC which binds each structurally admitted
   fact to its immutable document locator. The worker then runs the existing
   peer-aware unit, PIT and accounting-consistency validator; Arelle `xValid`
@@ -22,23 +23,24 @@ the official `tifrs-20260331` taxonomy archive whose reviewed SHA-256 is pinned
 by the installer.
 
 - Arelle model facts: 1,228 (prior diagnostic)
-- Document validation findings: 801, retained as a partial receipt
-- Individually valid, valuation-allowlisted Arelle manifest entries: 157
-- Bounded MOPS parser period facts: 31
-- Exact QName/context/unit/value matches accepted for submission: 31
-- Accepted keys include revenue, gross profit, operating income, pretax income,
-  net income, attributable income, basic/diluted EPS, cash, assets and equity.
+- Complete instance validation findings: 893, retained as a partial receipt
+- Typed valuation candidates observed before the document gate: 70
+- Facts emitted for submission: **0**, because this filing is not structurally
+  clean under the pinned taxonomy/runtime.
 
-This proves parser extraction and cross-validation, not production database
-ingestion. A reviewed migration and controlled receipt retry are still required
-before the production fact count can change.
+This proves the corrected validator no longer turns a partially validated
+document into accepted financial evidence. It does not prove production
+database ingestion. A structurally clean official instance (or a separately
+validated official structured/PDF path), reviewed migration and controlled
+receipt retry are still required before the production fact count can change.
 
 ## Verification
 
-- Python Arelle tests: 4/4
+- Python Arelle tests: 5/5, including wrong period type and conflicting
+  accuracy attributes.
 - Focused TypeScript parser/manifest/document tests: 8/8 (one environment-only
   socket test skipped because the local VPS interpreter was not configured)
-- Migration contract tests: passed
+- Migration contract and real local PostgreSQL state-machine tests: passed.
 - V3 reviewed migration plan parity: 10/10
 - TypeScript: passed
 - Candidate runtime/contracts: 29 evidence tests, 199 runtime tests (one
