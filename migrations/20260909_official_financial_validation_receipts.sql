@@ -108,22 +108,16 @@ SET search_path='' AS $asof$
     to_jsonb(f) || CASE
       WHEN latest.id IS NOT NULL THEN COALESCE(latest.effective_validation,
         '{"validation_status":"pending","schema_valid":false,"unit_valid":false,"point_in_time_valid":false,"consistency_valid":false}'::jsonb)
-      -- Predecessor service_role could write both receipt JSON images directly,
-      -- so neither image is authority. Quarantine the mutable row until a
-      -- principal-bound V2 receipt is visible at this cutoff.
-      WHEN first_receipt.id IS NOT NULL THEN
+      -- Predecessor mutable columns and receipt JSON images are not authority.
+      -- No principal-bound V2 transition at this cutoff always means pending.
+      ELSE
         '{"validation_status":"pending","schema_valid":false,"unit_valid":false,"point_in_time_valid":false,"consistency_valid":false,"validation_recorded_at":null}'::jsonb
-      ELSE '{}'::jsonb END)).*
+      END)).*
   FROM public.opportunity_financial_facts_v3 f
   LEFT JOIN LATERAL (SELECT r.id,r.effective_validation FROM public.official_financial_validation_receipts r
     WHERE r.fact_id=f.fact_id AND r.validated_at<=p_cutoff
       AND r.validator_version='official-financial-v2' AND r.validator_principal IS NOT NULL
     ORDER BY r.validated_at DESC,r.receipt_sequence DESC LIMIT 1) latest ON true
-  -- Receipt existence is intentionally not filtered by principal or cutoff:
-  -- any predecessor write means the shared validation columns are untrusted.
-  LEFT JOIN LATERAL (SELECT r.id FROM public.official_financial_validation_receipts r
-    WHERE r.fact_id=f.fact_id
-    ORDER BY r.validated_at,r.receipt_sequence LIMIT 1) first_receipt ON true
   WHERE f.recorded_at<=p_cutoff
 $asof$;
 REVOKE ALL ON FUNCTION public.read_financial_facts_as_of(timestamptz) FROM PUBLIC,anon,authenticated;

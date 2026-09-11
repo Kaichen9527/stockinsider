@@ -17,8 +17,8 @@ test('official validation migration is additive, guarded, receipt-backed and PIT
   assert.match(sql,/official_validation_rpc_owner_receipt_select/u);
   assert.match(sql,/official_validation_rpc_owner_receipt_update/u);
   assert.match(sql,/validator_version='official-financial-v2' AND r[.]validator_principal IS NOT NULL/u);
-  assert.match(sql,/WHEN first_receipt[.]id IS NOT NULL THEN\s+'[{]"validation_status":"pending"/u);
-  assert.doesNotMatch(sql,/first_receipt[.]prior_validation/u);
+  assert.match(sql,/ELSE\s+'[{]"validation_status":"pending"/u);
+  assert.doesNotMatch(sql,/first_receipt/u);
   assert.match(sql,/INSERT INTO public.official_financial_validation_receipts/u);
   assert.match(sql,/v_at := clock_timestamp\(\)/u);
   assert.match(sql,/validation_recorded_at=\(v_effective->>'validation_recorded_at'\)::timestamptz/u);

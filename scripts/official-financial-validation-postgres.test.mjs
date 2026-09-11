@@ -58,7 +58,13 @@ test('validation receipt RPC enforces permissions, exact provenance, and idempot
     const counterfeit=spawnSync(binary('psql'),['-X','-v','ON_ERROR_STOP=1','-h',socket,'-p',String(port),'-U',user,'-d','postgres','-At'],{
       input:`SET ROLE service_role; INSERT INTO public.official_financial_validation_receipts(fact_id,validator_version,input_hash,source_sha256,validation,effective_validation) VALUES('${fact}','official-financial-v2','${'c'.repeat(64)}','${hash}','${receipt}'::jsonb,'{"validation_status":"validated"}'::jsonb);`,encoding:'utf8',env:{...process.env,LC_ALL:'C'}});
     assert.notEqual(counterfeit.status,0,'service_role direct counterfeit receipt must be denied');
-    assert.equal(sql(`SELECT validation_status FROM public.read_financial_facts_as_of(clock_timestamp()) WHERE fact_id='${fact}'`),'pending');
+    // Mutable predecessor columns are untrusted even when no receipt exists.
+    for (const predecessorState of ['validated','rejected','conflict','stale']) {
+      sql(`UPDATE public.opportunity_financial_facts_v3 SET validation_status='${predecessorState}',schema_valid=true,
+        unit_valid=true,point_in_time_valid=true,consistency_valid=true,validation_recorded_at=clock_timestamp()
+        WHERE fact_id='${fact}'`);
+      assert.equal(sql(`SELECT validation_status||':'||schema_valid::text FROM public.read_financial_facts_as_of(clock_timestamp()) WHERE fact_id='${fact}'`),'pending:false');
+    }
     // Reproduce an upgrade from the predecessor five-argument writer: it left
     // an unbound V1 receipt and mutated the shared fact row.  The successor
     // reader must reconstruct the prior image on both sides of that event.
