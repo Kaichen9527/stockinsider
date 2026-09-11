@@ -35,6 +35,11 @@ export type CandidateFinancialLocalParserResult = {
     xbrl_concept: string;
     value: string;
     unit: 'TWD' | 'TWD_per_share' | 'share';
+    entity_identifier: string;
+    period_start: string | null;
+    period_end: string;
+    duration_kind: 'quarterly' | 'instant';
+    dimension_count: 0;
   }>;
 };
 
@@ -86,7 +91,12 @@ function parseResult(raw: string, inputSha256: string): CandidateFinancialLocalP
       return typeof fact.xbrl_context === 'string' && fact.xbrl_context.length > 0 && fact.xbrl_context.length <= 256
         && typeof fact.xbrl_concept === 'string' && fact.xbrl_concept.length > 0 && fact.xbrl_concept.length <= 256
         && typeof fact.value === 'string' && /^-?\d+(?:[.]\d+)?$/u.test(fact.value) && Number.isFinite(Number(fact.value))
-        && ['TWD', 'TWD_per_share', 'share'].includes(String(fact.unit));
+        && ['TWD', 'TWD_per_share', 'share'].includes(String(fact.unit))
+        && typeof fact.entity_identifier === 'string' && /^\d{4,6}$/u.test(fact.entity_identifier)
+        && (fact.period_start === null || (typeof fact.period_start === 'string' && /^\d{4}-\d{2}-\d{2}$/u.test(fact.period_start)))
+        && typeof fact.period_end === 'string' && /^\d{4}-\d{2}-\d{2}$/u.test(fact.period_end)
+        && ['quarterly', 'instant'].includes(String(fact.duration_kind))
+        && fact.dimension_count === 0;
     }))) throw new Error('candidate_financial_local_parser_invalid_fact_manifest');
   return {
     schema: 'candidate-financial-document-parser-v1', status: result.status as 'complete' | 'partial',

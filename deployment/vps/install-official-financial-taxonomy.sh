@@ -13,15 +13,18 @@ target="$root/$version"
 
 test -f "$archive"
 test ! -L "$archive"
-actual_sha256="$(sha256sum "$archive" | cut -d ' ' -f 1)"
-test "$actual_sha256" = "$expected_sha256"
-
 install -d -m 0755 -o root -g root "$root"
 staging="$(mktemp -d "$root/.taxonomy-stage.XXXXXX")"
 cleanup() { rm -rf -- "${staging:?}"; }
 trap cleanup EXIT
+private_archive="$staging/taxonomy.zip"
+payload="$staging/payload"
+install -m 0600 -o root -g root -- "$archive" "$private_archive"
+actual_sha256="$(sha256sum "$private_archive" | cut -d ' ' -f 1)"
+test "$actual_sha256" = "$expected_sha256"
+install -d -m 0755 -o root -g root "$payload"
 
-python3 - "$archive" "$staging" <<'PY'
+python3 - "$private_archive" "$payload" <<'PY'
 import pathlib, sys, zipfile
 archive = pathlib.Path(sys.argv[1]).resolve(strict=True)
 destination = pathlib.Path(sys.argv[2]).resolve(strict=True)
@@ -43,16 +46,16 @@ with zipfile.ZipFile(archive) as source:
     source.extractall(destination)
 PY
 
-test "$(find "$staging" -type f -name 'tifrs-ci-cr-2026-03-31.xsd' | wc -l | tr -d ' ')" = 1
-test "$(find "$staging" -type f -name 'tifrs-ci-basi-2026-03-31.xsd' | wc -l | tr -d ' ')" = 1
-find "$staging" -type d -exec chmod 0755 {} +
-find "$staging" -type f -exec chmod 0644 {} +
-chown -R root:root "$staging"
+test "$(find "$payload" -type f -name 'tifrs-ci-cr-2026-03-31.xsd' | wc -l | tr -d ' ')" = 1
+test "$(find "$payload" -type f -name 'tifrs-ci-basi-2026-03-31.xsd' | wc -l | tr -d ' ')" = 1
+find "$payload" -type d -exec chmod 0755 {} +
+find "$payload" -type f -exec chmod 0644 {} +
+chown -R root:root "$payload"
 
 if [ -e "$target" ]; then
   test -d "$target"
 else
-  mv -- "$staging" "$target"
+  mv -- "$payload" "$target"
 fi
 ln -sfn -- "$version" "$root/.current-next"
 mv -Tf -- "$root/.current-next" "$root/current"
