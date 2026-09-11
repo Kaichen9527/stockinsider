@@ -9,11 +9,13 @@ test('SOHO retention manifest is exact, disjoint and protects every retained ide
   const { policy, candidateRefs, protectedRefs, policySha256 } = await loadSohoImagePolicy();
   assert.equal(policy.host, SOHO_VPS_HOST);
   assert.equal(candidateRefs.length, 8);
-  assert.equal(protectedRefs.length, 34);
+  assert.equal(protectedRefs.length, 41);
   assert.equal(Object.keys(policy.externallyAbsentBeforeVerifiedArchive).length, 3);
+  assert.equal(Object.keys(policy.externallyRemovedProtectedAliases).length, 3);
   assert.match(policySha256, /^[0-9a-f]{64}$/u);
   assert.equal(new Set([...candidateRefs, ...protectedRefs,
-    ...Object.keys(policy.externallyAbsentBeforeVerifiedArchive)]).size, 45);
+    ...Object.keys(policy.externallyAbsentBeforeVerifiedArchive),
+    ...Object.keys(policy.externallyRemovedProtectedAliases)]).size, 55);
   assert.throws(() => validateSohoImagePolicy({ ...policy,
     obsoleteCandidates: { ...policy.obsoleteCandidates,
       [candidateRefs[0]]: Object.values(policy.current)[0] } }), /soho_candidate_image_is_protected/u);

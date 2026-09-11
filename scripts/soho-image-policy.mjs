@@ -28,19 +28,26 @@ export function validateSohoImagePolicy(policy) {
     throw new Error('soho_image_policy_invalid');
   }
   exactMap(policy.current, 13, 'soho_current');
-  exactMap(policy.retainedRollbacks, 21, 'soho_retained_rollbacks');
+  exactMap(policy.retainedRollbacks, 28, 'soho_retained_rollbacks');
   exactMap(policy.obsoleteCandidates, 8, 'soho_obsolete_candidates');
   exactMap(policy.externallyAbsentBeforeVerifiedArchive, 3, 'soho_externally_absent');
+  exactMap(policy.externallyRemovedProtectedAliases, 3, 'soho_externally_removed_protected_aliases');
   if (policy.externallyAbsentDisposition !== 'externally_absent_before_verified_archive'
     || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/u.test(policy.externallyAbsentDetectedAt || '')) {
     throw new Error('soho_externally_absent_receipt_invalid');
   }
+  if (policy.externallyRemovedProtectedAliasesDisposition !== 'externally_removed_protected_alias'
+    || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/u.test(
+      policy.externallyRemovedProtectedAliasesDetectedAt || '')) {
+    throw new Error('soho_externally_removed_protected_alias_receipt_invalid');
+  }
   const groups = [policy.current, policy.retainedRollbacks, policy.obsoleteCandidates,
-    policy.externallyAbsentBeforeVerifiedArchive];
+    policy.externallyAbsentBeforeVerifiedArchive, policy.externallyRemovedProtectedAliases];
   const refs = groups.flatMap(group => Object.keys(group));
   if (new Set(refs).size !== refs.length) throw new Error('soho_policy_ref_overlap');
   const protectedIds = new Set([...Object.values(policy.current), ...Object.values(policy.retainedRollbacks),
-    ...Object.values(policy.externallyAbsentBeforeVerifiedArchive)]);
+    ...Object.values(policy.externallyAbsentBeforeVerifiedArchive),
+    ...Object.values(policy.externallyRemovedProtectedAliases)]);
   if (Object.values(policy.obsoleteCandidates).some(id => protectedIds.has(id))) {
     throw new Error('soho_candidate_image_is_protected');
   }
