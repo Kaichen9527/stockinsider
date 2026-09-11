@@ -1,13 +1,14 @@
 # Model Runner Host-Pin Compatibility Amendment
 
-Amendment version: `model-runner-host-pin-amendment-v3.15`
+Amendment version: `model-runner-host-pin-amendment-v3.16`
 
 Status: active
 
-V3.15 records the exact signed ChatGPT/Codex update observed on 2026-09-07. Node
-and Apple Git remain unchanged; the Codex executable and bundle inode, hash and
-CodeDirectory identities are re-observed rather than inferred. No broader version
-or path is admitted.
+V3.16 records the root-volume device identity observed on 2026-09-11 after the
+approved runner host changed from device `16777233` to `16777232`. Every pinned
+inode, size, owner, mode, executable hash, version and CodeDirectory identity is
+unchanged and re-observed rather than inferred. No broader device, version or path
+is admitted.
 
 ## Decision
 
@@ -20,9 +21,9 @@ reviewed.
 
 The active immutable fixture remains
 `model-runner-host-pins-v3.json`, version
-`model-runner-host-pins-v3.15`. Its canonical pre-LF payload is exactly 2,132
+`model-runner-host-pins-v3.16`. Its canonical pre-LF payload is exactly 2,132
 UTF-8 bytes with SHA-256
-`aaa70cc4dfc341224c5042c501e7392c2e63abce2164a66e87ba1fda5160fbca`;
+`25e485f32668470f002dedc89425ddb5370dacf1a8a22a8ed0ac3fd3602c7f02`;
 the tracked LF-terminated file is exactly 2,133 bytes.
 
 ## Verified host identity
@@ -34,7 +35,7 @@ The compatibility evidence observed on the approved macOS arm64 host is:
 - version: `codex-cli 0.153.4`
 - executable SHA-256:
   `a30ec314bbd0e3721632234d07db7c99855db3b9f1e32dbe8c791947f07e7629`
-- stat identity: device `16777233`, inode `152896624`, size `220585024`,
+- stat identity: device `16777232`, inode `152896624`, size `220585024`,
   uid `501`, gid `20`, mode `100755`
 - signing identifier: `codex`
 - signing Team ID: `2DC432GLL2`
@@ -43,8 +44,8 @@ The compatibility evidence observed on the approved macOS arm64 host is:
 - bundle assessment: `Notarized Developer ID`
 
 The refreshed ChatGPT bundle, Node and Git stat identities are also exact fixture
-members: bundle device/inode `16777233/152895446`, Node `16777233/1802834`, Git
-`16777233/1152921500312571585`; the bundle CodeDirectory SHA-256 is
+members: bundle device/inode `16777232/152895446`, Node `16777232/1802834`, Git
+`16777232/1152921500312571585`; the bundle CodeDirectory SHA-256 is
 `e2f41d8f6362b87345d4e5a9336d0dc36ec199fe6a276edcab4209e1c0db944d`.
 The runner and doctor must call the same host preflight and verify every fixture member
 and the static runner identity before granting model authority. They may not learn a

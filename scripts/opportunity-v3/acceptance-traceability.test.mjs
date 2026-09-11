@@ -1155,10 +1155,10 @@ function activeGraphOracle() {
   const hostPinCanonical = canonicalJson(hostPins);
   assert.equal(Buffer.byteLength(hostPinBytes), 2133);
   assert.equal(Buffer.byteLength(hostPinCanonical), 2132);
-  assert.equal(sha256(hostPinCanonical), 'aaa70cc4dfc341224c5042c501e7392c2e63abce2164a66e87ba1fda5160fbca');
-  assert.equal(hostPins.fixtureVersion, 'model-runner-host-pins-v3.15');
+  assert.equal(sha256(hostPinCanonical), '25e485f32668470f002dedc89425ddb5370dacf1a8a22a8ed0ac3fd3602c7f02');
+  assert.equal(hostPins.fixtureVersion, 'model-runner-host-pins-v3.16');
   assert.equal(hostPins.executables.find(({ name }) => name === 'codex')?.version, 'codex-cli 0.153.4');
-  assert.equal(runner.MODEL_RUNNER_IDENTITY_SHA256, 'f87259bc18fe03177f84c318cd2bff8fd016abb7b249368879c317a583897ed3');
+  assert.equal(runner.MODEL_RUNNER_IDENTITY_SHA256, 'f875e175cd7d84cb0010bddaf16de4badd4968ba81bdb033aecd611b1be00baa');
   assert.equal(Buffer.byteLength(canonicalJson(runner.MODEL_RUNNER_IDENTITY)), 875);
   const runtimeContract = readFileSync(path.join(change, 'runtime-transaction-contract.md'), 'utf8');
   assert.match(runtimeContract, /staticIdentityMembers` is the following exact 41-member/u);
@@ -1397,7 +1397,7 @@ const structuralExecutors = {
       key === 'verify:source-led-opportunity-v3:model-runner')?.[1];
     assert.equal(
       modelAggregate,
-      'node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track model_runner && npm run test:model-runner-v3 && npm run v3:doctor -- --expect-mode disabled --require-host-pin model-runner-host-pins-v3.15',
+      'node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track model_runner && npm run test:model-runner-v3 && npm run v3:doctor -- --expect-mode disabled --require-host-pin model-runner-host-pins-v3.16',
       'model aggregate is the frozen fourteenth script authority',
     );
     const packageModelAggregate = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts[
