@@ -92,3 +92,51 @@ test('basic and diluted figures never share a semantic fact key', () => {
   assert.deepEqual(rows.map((row) => row.factKey), ['quarterly_basic_eps', 'quarterly_diluted_eps',
     'basic_weighted_average_shares', 'diluted_weighted_average_shares']);
 });
+
+test('quarterly document facts preserve exact single-quarter and year-to-date periods without converting their values', () => {
+  for (const [start, end, semantics] of [
+    ['2026-01-01', '2026-03-31', 'discrete_quarter'],
+    ['2026-04-01', '2026-06-30', 'discrete_quarter'],
+    ['2026-07-01', '2026-09-30', 'discrete_quarter'],
+    ['2026-10-01', '2026-12-31', 'discrete_quarter'],
+    ['2026-01-01', '2026-06-30', 'year_to_date'],
+    ['2026-01-01', '2026-09-30', 'year_to_date'],
+    ['2026-01-01', '2026-12-31', 'year_to_date'],
+  ]) {
+    for (const [concept, unit] of [['Revenue', 'TWD'], ['BasicEarningsPerShare', 'TWD_per_share']] as const) {
+      const rows = candidateFinancialFactsFromValidatedManifest({
+        ...input(report([fact(concept, { period_start: start, period_end: end, value: '12.25', unit })])),
+        periodEnd: end, collectedAt: '2027-03-31T12:00:00Z',
+      });
+      assert.equal(rows.length, 1, `${concept} ${start}/${end}`);
+      assert.equal(rows[0].locator?.period_semantics, semantics);
+      assert.equal(rows[0].periodStart, start);
+      assert.equal(rows[0].periodEnd, end);
+      assert.equal(rows[0].durationKind, 'quarterly', 'preserve the compatible duration enum');
+      assert.equal(rows[0].value, 12.25, 'mapper must never decumulate or annualize EPS or revenue');
+    }
+  }
+});
+
+test('document mapper rejects unsupported fiscal intervals and labels quarter-end instant facts', () => {
+  for (const [start, end] of [
+    ['2026-02-01', '2026-06-30'], ['2026-04-01', '2026-09-30'],
+    ['2025-01-01', '2026-06-30'], ['2026-01-02', '2026-06-30'],
+    ['2026-01-01', '2026-06-29'], ['2026-01-01', '2026-05-31'],
+  ]) {
+    assert.deepEqual(candidateFinancialFactsFromValidatedManifest({
+      ...input(report([fact('Revenue', { period_start: start, period_end: end })])),
+      periodEnd: end,
+    }), [], `${start}/${end}`);
+  }
+  const rows = candidateFinancialFactsFromValidatedManifest(input(report([
+    fact('Assets', { period_start: null, duration_kind: 'instant' }),
+  ])));
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].locator?.period_semantics, 'instant');
+  assert.equal(rows[0].periodStart, null);
+  assert.deepEqual(candidateFinancialFactsFromValidatedManifest({
+    ...input(report([fact('Assets', { period_start: null, duration_kind: 'instant', period_end: '2026-06-29' })])),
+    periodEnd: '2026-06-29',
+  }), []);
+});
