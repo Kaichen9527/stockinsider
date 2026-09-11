@@ -397,5 +397,5 @@ function validateDecisionEnvelopeV313(value,outerRevisionId){
   return value;
 }
 
-module.exports = { ACTIONS, compatibilityAction, deriveDecisionEnvelope, overrideDecisionEnvelopeAction,
+module.exports = { ACTIONS, canonicalDecisionNumber:round, compatibilityAction, deriveDecisionEnvelope, overrideDecisionEnvelopeAction,
   unavailableDecisionEnvelope, relativeValuation, validateDecisionEnvelopeV313 };

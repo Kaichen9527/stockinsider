@@ -1,6 +1,7 @@
 import { getOpportunityV3ServerClient } from './opportunity-v3/service-client.ts';
 import { collectPagedAuthorityRows } from './candidate-research-policy.ts';
 import { validateOfficialFinancialFact, officialFinancialValidationSubjects, type OfficialValidationRow } from './official-financial-validation.ts';
+import { fixedRunnerPrincipal } from './opportunity-v3/internal.ts';
 
 export type OfficialFinancialValidationFailure = {
   stockId: string;
@@ -16,6 +17,8 @@ export async function validatePendingOfficialFinancials(stockIds: string[], depe
   now?: () => Date;
 } = {}) {
   const db = dependencies.client ?? getOpportunityV3ServerClient();
+  const validatorPrincipal = fixedRunnerPrincipal();
+  if (!validatorPrincipal) throw new Error('official_validation_runner_principal_unavailable');
   const counts = { checked: 0, validated: 0, rejected: 0, missingProvenance: 0, unchanged: 0, failed: 0 };
   const failedItems: OfficialFinancialValidationFailure[] = [];
   for (const stockId of [...new Set(stockIds)]) {
@@ -45,14 +48,16 @@ export async function validatePendingOfficialFinancials(stockIds: string[], depe
       if (provenance.length === 5000) throw new Error('official_validation_provenance_overflow');
       const priorReceipts = await collectPagedAuthorityRows<OfficialValidationRow>(async (from,to) => {
         const r = await db.from('official_financial_validation_receipts')
-          .select('fact_id,input_hash,effective_validation').in('fact_id',batch.map((f) => String(f.fact_id)))
+          .select('fact_id,input_hash,validator_version,validator_principal,effective_validation')
+          .in('fact_id',batch.map((f) => String(f.fact_id)))
           .order('fact_id').order('receipt_sequence').range(from,to);
         if (r.error) throw new Error(`official_validation_receipt_read_failed:${r.error.message}`);
         return r.data || [];
       }, { pageSize: 500, maxRows: 10000 });
       if (priorReceipts.length === 10000) throw new Error('official_validation_receipt_overflow');
       const acceptedHashes = new Set(priorReceipts.filter((r) =>
-        (r.effective_validation as OfficialValidationRow | null)?.validation_status === 'validated')
+        r.validator_version === 'official-financial-v2' && typeof r.validator_principal === 'string'
+        && (r.effective_validation as OfficialValidationRow | null)?.validation_status === 'validated')
         .map((r) => `${r.fact_id}:${r.input_hash}`));
       for (const fact of batch) {
         const rawSource = provenance.find((p) => p.fact_id === fact.fact_id) || null;
@@ -73,6 +78,7 @@ export async function validatePendingOfficialFinancials(stockIds: string[], depe
         const result = await db.rpc('record_official_financial_validation', {
           p_fact_id: fact.fact_id, p_recorded_at: fact.recorded_at,
           p_source_sha256: source!.source_sha256, p_input_hash: receipt.inputHash, p_validation: receipt,
+          p_validator_principal: validatorPrincipal,
         });
         if (result.error) {
           // Old issuer-document rows may predate the fact-level parser link.

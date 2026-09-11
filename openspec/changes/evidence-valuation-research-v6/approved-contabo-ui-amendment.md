@@ -41,6 +41,12 @@ This record does not assert a protected gate PASS or authorize bypassing one.
 
 - Review the new backend identity/migration/principal contracts; do not loosen the
   Supabase hostname guard in place. Internal services/API remain loopback-only.
+- Financial validation receipts are RPC-only. The fixed VPS runner principal must be
+  checked and recorded by the sole validation writer; `service_role` has no direct
+  receipt mutation privilege. Narrow RLS policies expose only the provenance SELECT and
+  document-retry SELECT/UPDATE required by the NOLOGIN function owner. As-of research
+  treats predecessor receipt images and mutable status as untrusted and returns a closed
+  pending state until a bound V2 receipt exists at the cutoff.
 - AES-256-GCM token envelopes bind identity/key version; systemd encrypted credentials
   hold root keys, with offsite recovery escrow. Refresh/revoke use atomic generation
   checks. Transfer secrets only in a restricted process's memory, never logs or env files.

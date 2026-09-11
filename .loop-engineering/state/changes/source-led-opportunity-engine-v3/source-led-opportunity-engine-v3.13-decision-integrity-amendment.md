@@ -295,7 +295,7 @@ Evaluation governance remains honestly blocked until 120 point-in-time backtest 
 
 ## Executable protected acceptance
 
-The canonical `1.45.1` inventory contains 308 IDs: the 297 predecessor cases plus
+The historical V3.13 canonical `1.45.1` inventory contained 308 IDs: the 297 predecessor cases plus
 first-class protected `DI-001..DI-011` owners. The V3.13 owners execute from
 `scripts/opportunity-v3/v313-decision-integrity.test.mjs`, plus the
 existing applied migration, product/runtime, legacy regression, Playwright and
@@ -304,5 +304,6 @@ four-quarter/2337 bridge; formal 252/eight-peer valuation; FULL/LIGHT authority;
 calendar freshness; 17-profile transcript truth; official EPS/share derivation;
 official close/raw OHLC geometry; naked-year rejection; corporate-action complete-empty
 versus failure; and stale immutable decision identity. They belong to the counted
-260-ID product/runtime partition. Any missing/skipped owner or
+historical 260-ID product/runtime partition. V3.14 supersedes those totals with the
+current `1.46.0` inventory and 272-ID product/runtime partition. Any missing/skipped owner or
 failed mandatory suite blocks Code Gate.

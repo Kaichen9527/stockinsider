@@ -840,7 +840,9 @@ const checks = {
       sourceCandidates: [{ symbol: '2330', name: '台積電', disposition: 'promoted', reason: 'new_in_seed_symbol',
         discoveryDisposition:'promoted',discoveryReason:'new_in_seed_symbol',seedMembership:'in_seed',
         producerRunId:'72200000-0000-4000-8000-000000000001',schedulerConfigSha256:selected.sha256,
-        legacySeedSetHash:selected.seedSetHash,
+        legacySeedSetHash:selected.seedSetHash,observedInCurrentRun:true,
+        discoveryProducerRunId:'72200000-0000-4000-8000-000000000001',
+        discoverySchedulerConfigSha256:selected.sha256,discoveryLegacySeedSetHash:selected.seedSetHash,
         raw: '2330', sourceSummary: '核准 KOL 的台積電研究更新', lastEvaluatedAt: '2026-08-01T10:20:00Z',
         ...citedPublicationEvidence('claim-2330'), sourceClass: 'kol', sourceKey:'telegram',
         sourceName:'核准 KOL',sourceUrl:'https://t.me/example/2330',nominationAuthority:'public_telegram_channel' }],
@@ -1552,6 +1554,7 @@ const checks = {
     assert.deepEqual([entrant.reason,entrant.seedMembership,entrant.producerRunId,
       entrant.schedulerConfigSha256,entrant.legacySeedSetHash],['new_in_seed_symbol','in_seed',runId,
       selected.sha256,selected.seedSetHash]);
+    assert.deepEqual([entrant.observedInCurrentRun,entrant.discoveryProducerRunId],[true,runId]);
     const compactInput=(candidate)=>runtime('codec.js').immutableBundle('compact_projection_input',{
       analysisResult:{decisions:[],sourceCandidates:[candidate],discoveryDelta:{added:['2330'],exited:[],continued:[],unchangedReasons:[]}},
       sourceCutoff:'2026-08-01T00:00:00Z',legacyPayloads:{daily:legacy,hot:legacy,weekly:legacy,home:legacy},
@@ -1559,6 +1562,43 @@ const checks = {
     const accepted=compactInput(entrant);
     await handlers.compact_radar_projection({runId,readKind:'compact_projection_input',readCanonical:accepted.canonical,
       readJson:accepted.json,readHash:accepted.hash});
+    const secondRunId='72000000-0000-4000-8000-000000000022';
+    const repeatedCandidateInput=runtime('codec.js').immutableBundle('candidate_funnel_input',{
+      ...candidateInput.json,priorLedger:[entrant],sourceCutoff:'2026-08-02T00:00:00Z'});
+    const repeatedResult=await handlers.candidate_funnel({runId:secondRunId,readKind:'candidate_funnel_input',
+      readCanonical:repeatedCandidateInput.canonical,readJson:repeatedCandidateInput.json,readHash:repeatedCandidateInput.hash});
+    const repeated=repeatedResult.json.candidates[0];
+    assert.deepEqual([repeated.disposition,repeated.observedInCurrentRun,repeated.producerRunId,
+      repeated.discoveryProducerRunId],['unchanged',true,secondRunId,runId]);
+    const repeatedCompact=runtime('codec.js').immutableBundle('compact_projection_input',{
+      analysisResult:{decisions:[],sourceCandidates:[repeated],discoveryDelta:repeatedResult.json.discoveryDelta},
+      sourceCutoff:'2026-08-02T00:00:00Z',legacyPayloads:{daily:legacy,hot:legacy,weekly:legacy,home:legacy},
+      legacyRadarCompatibility:'intentionally_not_acquired_kol_first'});
+    await handlers.compact_radar_projection({runId:secondRunId,readKind:'compact_projection_input',
+      readCanonical:repeatedCompact.canonical,readJson:repeatedCompact.json,readHash:repeatedCompact.hash});
+    const remintedDiscovery=runtime('codec.js').immutableBundle('compact_projection_input',{
+      analysisResult:{decisions:[],sourceCandidates:[{...repeated,discoveryProducerRunId:secondRunId}],
+        discoveryDelta:repeatedResult.json.discoveryDelta},sourceCutoff:'2026-08-02T00:00:00Z',
+      legacyPayloads:{daily:legacy,hot:legacy,weekly:legacy,home:legacy},
+      legacyRadarCompatibility:'intentionally_not_acquired_kol_first'});
+    await assert.rejects(()=>handlers.compact_radar_projection({runId:secondRunId,readKind:'compact_projection_input',
+      readCanonical:remintedDiscovery.canonical,readJson:remintedDiscovery.json,readHash:remintedDiscovery.hash}),
+    /published entrant authority conflict/u);
+    const retainedRunId='72000000-0000-4000-8000-000000000023';
+    const retainedCandidateInput=runtime('codec.js').immutableBundle('candidate_funnel_input',{
+      mentionResult:{candidates:[]},seedSymbols:selected.config.legacySeedSymbols,priorLedger:[repeated],
+      sourceCutoff:'2026-08-03T00:00:00Z'});
+    const retainedResult=await handlers.candidate_funnel({runId:retainedRunId,readKind:'candidate_funnel_input',
+      readCanonical:retainedCandidateInput.canonical,readJson:retainedCandidateInput.json,readHash:retainedCandidateInput.hash});
+    const retained=retainedResult.json.candidates[0];
+    assert.deepEqual([retained.disposition,retained.observedInCurrentRun,retained.producerRunId,
+      retained.discoveryProducerRunId],['unchanged',false,secondRunId,runId]);
+    const retainedCompact=runtime('codec.js').immutableBundle('compact_projection_input',{
+      analysisResult:{decisions:[],sourceCandidates:[retained],discoveryDelta:retainedResult.json.discoveryDelta},
+      sourceCutoff:'2026-08-03T00:00:00Z',legacyPayloads:{daily:legacy,hot:legacy,weekly:legacy,home:legacy},
+      legacyRadarCompatibility:'intentionally_not_acquired_kol_first'});
+    await handlers.compact_radar_projection({runId:retainedRunId,readKind:'compact_projection_input',
+      readCanonical:retainedCompact.canonical,readJson:retainedCompact.json,readHash:retainedCompact.hash});
     for(const mutation of [{producerRunId:'72000000-0000-4000-8000-000000000099'},
       {schedulerConfigSha256:'f'.repeat(64)},{legacySeedSetHash:'e'.repeat(64)},{seedMembership:'out_of_seed'}]){
       const rejected=compactInput({...entrant,...mutation});
@@ -1639,16 +1679,19 @@ const checks = {
     const formalDecision={symbol:'2330',fundamental,decisionEnvelope:formalEnvelope,
       technical:{technicalState:'breakout_confirmed',plane:{current:100,bias:{availability:'available',bias20Pct:0}}},
       geometry:{availability:'available',entryZone:[99,101],invalidation:90,trigger:null},
+      valuation:{status:'normal',targetPrice:132.004,valuationRange:{bear:89.999,base:132.004,bull:165.004}},
       lastEvaluatedAt:'2026-08-01T00:00:00Z'};
     const formalPublished=runtime('published-research-decision.js').serializePublishedResearchDecision(formalDecision);
     assert.deepEqual(formalPublished.valuation.valuationRange,[90,165]);
     assert.equal(formalPublished.valuation.targetPrice,132);
     assert.throws(()=>runtime('published-research-decision.js').serializePublishedResearchDecision({...formalDecision,
-      valuation:{status:'normal',targetPrice:-1,valuationRange:[90,165]}}),/valuation target conflicts/u);
+      valuation:{status:'normal',targetPrice:-1,valuationRange:{bear:90,base:132,bull:165}}}),/valuation target conflicts/u);
     assert.throws(()=>runtime('published-research-decision.js').serializePublishedResearchDecision({...formalDecision,
-      valuation:{status:'normal',targetPrice:132,valuationRange:[400,200]}}),/valuation range conflicts/u);
+      valuation:{status:'normal',targetPrice:132,valuationRange:{bear:400,base:300,bull:200}}}),/valuation range conflicts/u);
     assert.throws(()=>runtime('published-research-decision.js').serializePublishedResearchDecision({...formalDecision,
-      valuation:{status:'promised',targetPrice:132,valuationRange:[90,165]}}),/valuation status evidence/u);
+      valuation:{status:'normal',targetPrice:132,valuationRange:[90,165]}}),/valuation range conflicts/u);
+    assert.throws(()=>runtime('published-research-decision.js').serializePublishedResearchDecision({...formalDecision,
+      valuation:{status:'promised',targetPrice:132,valuationRange:{bear:90,base:132,bull:165}}}),/valuation status evidence/u);
   },
   'PCR-022': async () => {
     const payload = { sourceLedCorrectness: { schema: 'legacy-radar-v3.11.3', window: 'daily', asOf: '2026-08-01T00:00:00Z' }, opportunities: [] };
@@ -1682,11 +1725,19 @@ const checks = {
     assert.match(bootstrap, /requiredKeys\(event, \['action', 'number', 'pull_request', 'repository'\]/u);
     assert.doesNotMatch(bootstrap, /exactKeys\(event, \['action', 'number', 'pull_request', 'repository'\]/u);
     assert.match(readFileSync(path.join(root, 'scripts/opportunity-v3/gate-evidence.mjs'), 'utf8'), /validateOpportunityGateEvidence/u);
-    const protectedWorker=readFileSync(path.join(root,'scripts/opportunity-v3/protected-external-gate-worker.mjs'),'utf8');
-    for(const token of ["catalog.schema==='opportunity-active-artifact-catalog-v1'",
-      "['opportunity-active-graph-v1',sha256(catalogBytes),rows]",
-      "['opportunity-active-graph-v2',sha256(catalogBytes),rows",
-      'unknown active artifact catalog schema'])assert.ok(protectedWorker.includes(token),`graph schema dispatch: ${token}`);
+    const protectedWorker = readFileSync(
+      path.join(root, 'scripts/opportunity-v3/protected-external-gate-worker.mjs'),
+      'utf8',
+    );
+    const graphDispatchContracts = [
+      [/catalog[.]schema\s*===\s*'opportunity-active-artifact-catalog-v1'/u, 'v1 catalog dispatch'],
+      [/\[\s*'opportunity-active-graph-v1',\s*sha256\(catalogBytes\),\s*rows\s*\]/u, 'v1 graph preimage'],
+      [/\[\s*'opportunity-active-graph-v2',\s*sha256\(catalogBytes\),\s*rows\s*,/u, 'v2 graph preimage'],
+      [/unknown active artifact catalog schema/u, 'closed unknown-schema rejection'],
+    ];
+    for (const [pattern, label] of graphDispatchContracts) {
+      assert.match(protectedWorker, pattern, `graph schema dispatch: ${label}`);
+    }
   },
   'PCR-024': () => {
     const component = readFileSync(path.join(root, 'web/src/app/components/RadarTabs.tsx'), 'utf8');

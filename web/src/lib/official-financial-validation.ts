@@ -2,7 +2,11 @@ import { createHash } from 'node:crypto';
 import { isCandidateFinancialFactKey } from './evidence-valuation-contract.ts';
 import { DILUTED_EPS_RECONCILIATION_VERSION, reconcileDilutedEpsToCommonIncome } from './financial-eps-reconciliation.ts';
 
-export const OFFICIAL_FINANCIAL_VALIDATOR_VERSION = 'official-financial-v1';
+// V2 is the first validator whose immutable receipt is bound to the fixed
+// opportunity-runner principal.  Keeping a distinct version prevents an
+// unbound predecessor receipt with the same input hash from blocking the
+// trusted successor receipt through the immutable uniqueness constraint.
+export const OFFICIAL_FINANCIAL_VALIDATOR_VERSION = 'official-financial-v2';
 export type OfficialValidationRow = Record<string, unknown>;
 export type OfficialFactProvenance = {
   source_url?: unknown; source_sha256?: unknown; locator?: unknown; issuer_host_approved?: unknown;
@@ -14,10 +18,12 @@ const VALIDATION_METADATA = new Set(['validation_status', 'schema_valid', 'unit_
   'point_in_time_valid', 'consistency_valid', 'validation_recorded_at']);
 
 /** Eligibility is peer-dependent, so accepted subjects must also be reconsidered.
- * Terminal rejected/conflicting records remain evidence but cannot auto-resurrect.
+ * All closed states are presented to the principal-bound writer: only a trusted
+ * V2 terminal receipt may keep one terminal. Mutable predecessor state cannot
+ * starve a subject before the writer can establish that authority.
  */
 export function officialFinancialValidationSubjects(facts: OfficialValidationRow[]) {
-  return facts.filter((fact) => fact.validation_status === 'pending' || fact.validation_status === 'validated');
+  return facts.filter((fact) => ['pending','validated','rejected','conflict','stale'].includes(String(fact.validation_status)));
 }
 
 function evidenceIdentity(fact: OfficialValidationRow) {

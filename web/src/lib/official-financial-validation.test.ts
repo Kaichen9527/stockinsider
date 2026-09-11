@@ -40,7 +40,9 @@ test('a later conflicting peer revalidates and rejects the previously accepted s
   const accepted = {...fact, validation_status:'validated', consistency_valid:true};
   const arrived = {...fact, fact_id:'b', value:2, validation_status:'pending'};
   const subjects = officialFinancialValidationSubjects([accepted, arrived, {...fact, fact_id:'c', validation_status:'rejected'}]);
-  assert.deepEqual(subjects.map(row=>row.fact_id), ['a','b']);
+  // A mutable predecessor rejection cannot starve the subject. The SQL writer
+  // preserves only a principal-bound V2 terminal receipt.
+  assert.deepEqual(subjects.map(row=>row.fact_id), ['a','b','c']);
   const original = validateOfficialFinancialFact(accepted,[accepted],source,cutoff);
   const rechecked = validateOfficialFinancialFact(accepted,[accepted,arrived],source,cutoff);
   assert.equal(original.status,'validated');

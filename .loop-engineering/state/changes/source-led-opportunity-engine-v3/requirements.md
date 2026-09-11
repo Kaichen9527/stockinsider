@@ -381,8 +381,10 @@ understanding. FULL detail is authoritative and LIGHT may fill only missing leav
 Landing and detail SHALL bind the same immutable decision revision.
 
 Fresh Requirements and a distinct evidence-carrying Architecture review SHALL bind a
-new immutable V3.13 subject tree. The 297 predecessor cases and 11 executable V3.13
-decision-integrity cases form one canonical 308-case protected inventory. Exact review and the authoritative Code Gate
+new immutable V3.13 subject tree. At that historical V3.13 checkpoint, the 297
+predecessor cases and 11 executable decision-integrity cases formed a 308-case
+protected inventory; R16 below supersedes those counts with the current V3.14 inventory.
+Exact review and the authoritative Code Gate
 must bind the final release-candidate range before any coordinated publication.
 
 ## R16 — V3.14 actionability recovery

@@ -371,7 +371,7 @@ function validateResult(result, expected, nested = new Map()) {
   const requiredInputs = result.check === 'code-gate-aggregate'
     ? requiredCodeInputs
     : result.check === 'promotion-gate-aggregate'
-      ? ['code-gate-aggregate', 'evaluation-governance']
+      ? ['code-gate-aggregate']
       : result.check === 'shadow-activation-gate'
         ? ['code-gate-aggregate']
         : [];

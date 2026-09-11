@@ -67,6 +67,8 @@ test('V3.20 retained legacy candidate uses database-derived historical lineage w
     completedSessions:['2026-08-27','2026-08-28'],producerRunId:currentRun,
     schedulerConfigSha256:configHash,legacySeedSetHash:seedHash}).candidateLedger[0];
   assert.equal(retained.producerRunId,historicalRun);
+  assert.equal(retained.observedInCurrentRun,false);
+  assert.equal(retained.discoveryProducerRunId,historicalRun);
   assert.deepEqual([retained.discoveryDisposition,retained.discoveryReason],['unchanged','same_material_evidence']);
   assert.equal(validatePublishedEntrantAuthority({candidates:[retained],producerRunId:currentRun,
     schedulerConfigSha256:configHash,legacySeedSetHash:seedHash,seedSymbols:[],

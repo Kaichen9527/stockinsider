@@ -126,8 +126,8 @@ unknown fields.
 
 ## Health, CI and release partitions
 
-`acceptance-evidence-contract.md` v3.13.0 is the sole owner of the exact 308-ID
-`143/159/6` classification, `20/28/260` track partition, executable owner/command,
+`acceptance-evidence-contract.md` v3.13.0 is the sole owner of the exact 320-ID
+`143/171/6` classification, `20/28/272` track partition, executable owner/command,
 no-skip binding, active-graph/code/evidence identity, canonical CI evidence and
 Code-vs-Promotion aggregate semantics.
 Runtime health is the exact payload in `runtime-installation-contract.md`.
