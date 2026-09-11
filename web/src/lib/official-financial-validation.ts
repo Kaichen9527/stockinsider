@@ -1,7 +1,11 @@
 import { createHash } from 'node:crypto';
 import { isCandidateFinancialFactKey } from './evidence-valuation-contract.ts';
 
-export const OFFICIAL_FINANCIAL_VALIDATOR_VERSION = 'official-financial-v1';
+// V2 is the first validator whose immutable receipt is bound to the fixed
+// opportunity-runner principal.  Keeping a distinct version prevents an
+// unbound predecessor receipt with the same input hash from blocking the
+// trusted successor receipt through the immutable uniqueness constraint.
+export const OFFICIAL_FINANCIAL_VALIDATOR_VERSION = 'official-financial-v2';
 export type OfficialValidationRow = Record<string, unknown>;
 export type OfficialFactProvenance = { source_url?: unknown; source_sha256?: unknown; locator?: unknown };
 const SHARE_KEYS = new Set(['diluted_shares', 'diluted_weighted_average_shares', 'basic_weighted_average_shares', 'shares_outstanding', 'common_shares_outstanding']);

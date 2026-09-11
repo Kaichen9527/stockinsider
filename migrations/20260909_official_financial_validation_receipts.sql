@@ -36,7 +36,7 @@ BEGIN
   IF NOT public.internal_principal_role_is_exact_v3_internal(
       p_validator_principal,'opportunity_runner'::public.internal_principal_role_v3,clock_timestamp())
     THEN RAISE EXCEPTION 'principal_role_unavailable'; END IF;
-  IF p_validation->>'version' IS DISTINCT FROM 'official-financial-v1'
+  IF p_validation->>'version' IS DISTINCT FROM 'official-financial-v2'
     OR COALESCE(p_input_hash,'') !~ '^[0-9a-f]{64}$'
     OR COALESCE(p_source_sha256,'') !~ '^[0-9a-f]{64}$'
     OR jsonb_typeof(p_validation->'reasons') IS DISTINCT FROM 'array'
@@ -68,7 +68,7 @@ BEGIN
       'point_in_time_valid',(p_validation->>'pointInTimeValid')::boolean,
       'consistency_valid',(p_validation->>'consistencyValid')::boolean,'validation_recorded_at',v_at) END;
   INSERT INTO public.official_financial_validation_receipts(fact_id,validator_version,input_hash,source_sha256,validation,validated_at,prior_validation,effective_validation,validator_principal)
-    VALUES(p_fact_id,'official-financial-v1',p_input_hash,p_source_sha256,p_validation,v_at,v_prior,v_effective,p_validator_principal) ON CONFLICT DO NOTHING;
+    VALUES(p_fact_id,'official-financial-v2',p_input_hash,p_source_sha256,p_validation,v_at,v_prior,v_effective,p_validator_principal) ON CONFLICT DO NOTHING;
   GET DIAGNOSTICS v_inserted = ROW_COUNT;
   IF v_inserted=0 THEN RETURN v_valid AND v_fact.validation_status='validated'; END IF;
   -- A recorded conflict/rejection is not erased by an automatic retry.
@@ -103,8 +103,12 @@ SET search_path='' AS $asof$
   LEFT JOIN LATERAL (SELECT r.id,r.effective_validation FROM public.official_financial_validation_receipts r
     WHERE r.fact_id=f.fact_id AND r.validated_at<=p_cutoff AND r.validator_principal IS NOT NULL
     ORDER BY r.validated_at DESC,r.receipt_sequence DESC LIMIT 1) latest ON true
+  -- The earliest receipt is intentionally not filtered by principal or cutoff.
+  -- Its prior image reconstructs the fact before any predecessor writer
+  -- mutated the shared row.  Until a trusted bound receipt exists at the
+  -- requested cutoff, that pre-receipt image is the only safe authority.
   LEFT JOIN LATERAL (SELECT r.id,r.prior_validation FROM public.official_financial_validation_receipts r
-    WHERE r.fact_id=f.fact_id AND r.validator_principal IS NOT NULL
+    WHERE r.fact_id=f.fact_id
     ORDER BY r.validated_at,r.receipt_sequence LIMIT 1) first_receipt ON true
   WHERE f.recorded_at<=p_cutoff
 $asof$;
@@ -161,6 +165,27 @@ ALTER TABLE public.official_financial_validation_receipts OWNER TO opportunity_v
 ALTER TABLE public.candidate_financial_document_retry_audit OWNER TO opportunity_v3_rpc_owner;
 GRANT SELECT ON public.candidate_financial_fact_provenance_v4 TO opportunity_v3_rpc_owner;
 GRANT SELECT,UPDATE ON public.candidate_financial_document_receipts_v6 TO opportunity_v3_rpc_owner;
+DO $policies$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policy WHERE polrelid='public.candidate_financial_fact_provenance_v4'::regclass
+      AND polname='official_validation_rpc_owner_provenance_select') THEN
+    CREATE POLICY official_validation_rpc_owner_provenance_select
+      ON public.candidate_financial_fact_provenance_v4 FOR SELECT
+      TO opportunity_v3_rpc_owner USING (true);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policy WHERE polrelid='public.candidate_financial_document_receipts_v6'::regclass
+      AND polname='official_validation_rpc_owner_receipt_select') THEN
+    CREATE POLICY official_validation_rpc_owner_receipt_select
+      ON public.candidate_financial_document_receipts_v6 FOR SELECT
+      TO opportunity_v3_rpc_owner USING (true);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policy WHERE polrelid='public.candidate_financial_document_receipts_v6'::regclass
+      AND polname='official_validation_rpc_owner_receipt_update') THEN
+    CREATE POLICY official_validation_rpc_owner_receipt_update
+      ON public.candidate_financial_document_receipts_v6 FOR UPDATE
+      TO opportunity_v3_rpc_owner USING (true) WITH CHECK (true);
+  END IF;
+END $policies$;
 ALTER FUNCTION public.record_official_financial_validation(uuid,timestamptz,text,text,jsonb,uuid)
   OWNER TO opportunity_v3_rpc_owner;
 ALTER FUNCTION public.read_financial_facts_as_of(timestamptz) OWNER TO opportunity_v3_rpc_owner;

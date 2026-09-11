@@ -13,6 +13,10 @@ test('official validation migration is additive, guarded, receipt-backed and PIT
   assert.match(sql,/source_sha256=p_source_sha256/u);
   assert.match(sql,/p_validator_principal,'opportunity_runner'::public[.]internal_principal_role_v3/u);
   assert.match(sql,/SET search_path=''/u);
+  assert.match(sql,/official_validation_rpc_owner_provenance_select/u);
+  assert.match(sql,/official_validation_rpc_owner_receipt_select/u);
+  assert.match(sql,/official_validation_rpc_owner_receipt_update/u);
+  assert.match(sql,/WHERE r[.]fact_id=f[.]fact_id\s+ORDER BY r[.]validated_at/u);
   assert.match(sql,/INSERT INTO public.official_financial_validation_receipts/u);
   assert.match(sql,/v_at := clock_timestamp\(\)/u);
   assert.match(sql,/validation_recorded_at=v_at/u);
