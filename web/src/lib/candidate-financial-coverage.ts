@@ -1,35 +1,37 @@
 import { isPromotionEligibleEvidence } from './evidence-valuation-contract.ts';
 import { financialFactAvailableAt } from './candidate-research-policy.ts';
 import { discreteReportedQuarters, preferOfficialReportedFinancialFacts, type ReportedFinancialFact } from './forward-earnings-bridge.ts';
+import { classifyCandidateBusiness, latestDueFinancialQuarters } from './candidate-financial-policy.ts';
 
 type Fact = Record<string, unknown>;
 const FLOW_KEYS = ['quarterly_revenue', 'quarterly_gross_profit', 'quarterly_operating_income', 'quarterly_net_income_attributable_to_common', 'quarterly_diluted_eps', 'diluted_weighted_average_shares'];
 
 /** Requirements match the valuation readers, not the number of rows fetched. */
 export function candidateFinancialRequirements(sector: string) {
-  if (/金融|保險|銀行|證券|financial|insurance|bank/iu.test(sector)) {
+  const business = classifyCandidateBusiness(sector);
+  if (business === 'financial') {
     return { quarters: 8, keys: ['quarterly_net_income_attributable_to_common', 'common_equity_attributable_to_owners', 'common_shares_outstanding'] };
   }
-  if (/塑化|鋼鐵|水泥|航運|記憶體|面板|cement|steel|shipping|chemical|memory|panel/iu.test(sector)) {
+  if (business === 'cyclical') {
     return { quarters: 20, keys: FLOW_KEYS };
   }
   return { quarters: 8, keys: FLOW_KEYS };
 }
 
+export function financialCoverageSummary(facts: Fact[], sector: string, cutoff: string) {
+  const requirements = candidateFinancialRequirements(sector);
+  const missing = financialCoverageGaps(facts, sector, cutoff);
+  const requiredFieldPeriods = requirements.keys.reduce((count, key) => count + requirements.quarters
+    + (key === 'common_equity_attributable_to_owners' ? 1 : 0), 0);
+  return { status: missing.length === 0 ? 'complete' as const : 'incomplete' as const,
+    requiredFieldPeriods, verifiedFieldPeriods: requiredFieldPeriods - missing.length,
+    completenessPct: Math.round((requiredFieldPeriods - missing.length) / requiredFieldPeriods * 10000) / 100,
+    missing, evaluationAt: cutoff };
+}
+
 export function financialCoverageGaps(facts: Fact[], sector: string, cutoff: string) {
   const required = candidateFinancialRequirements(sector);
-  // Allow only quarters whose normal reporting window has ended. More recent
-  // early reports are admitted by the reader but must not starve normal issuers.
-  const asOf = new Date(cutoff);
-  if (!Number.isFinite(asOf.getTime())) throw new Error('invalid_financial_coverage_cutoff');
-  const quarterEnds: string[] = [];
-  const current = asOf.getUTCFullYear() * 4 + Math.floor(asOf.getUTCMonth() / 3);
-  for (let ordinal = current - 1; quarterEnds.length < required.quarters + 1; ordinal--) {
-    const year = Math.floor(ordinal / 4), quarter = ordinal % 4;
-    const end = `${year}-${['03-31','06-30','09-30','12-31'][quarter]}`;
-    const normalDeadline = Date.parse(`${year + (quarter === 3 ? 1 : 0)}-${['05-15','08-14','11-14','03-31'][quarter]}T23:59:59+08:00`);
-    if (normalDeadline <= asOf.getTime()) quarterEnds.push(end);
-  }
+  const quarterEnds = latestDueFinancialQuarters(cutoff, required.quarters + 1).map((quarter) => quarter.periodEnd);
   const eligible = preferOfficialReportedFinancialFacts(facts.filter((fact) => fact.estimate_kind === 'reported'
     && typeof fact.value === 'number' && Number.isFinite(fact.value)
     && fact.unit === (['quarterly_diluted_eps', 'book_value_per_share'].includes(String(fact.fact_key)) ? 'TWD_per_share'

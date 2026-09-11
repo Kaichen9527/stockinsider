@@ -58,8 +58,10 @@ export async function POST(request: Request) {
     maxJobs: limit,
   });
   const validation = await validatePendingOfficialFinancials(candidates.map((stock) => stock.stockId));
+  const ok = result.failures.length === 0 && validation.status === 'success';
   return NextResponse.json({
-    ok: result.failures.length === 0,
+    ok,
+    ...(!ok ? { error: validation.status !== 'success' ? 'official_validation_incomplete' : 'candidate_financial_acquisition_failures' } : {}),
     result: { ...result, validation, sessionDate, claimed: result.claimedJobs, releaseId: writer.releaseId },
-  }, { status: result.failures.length === 0 ? 200 : 500 });
+  }, { status: ok ? 200 : 500 });
 }

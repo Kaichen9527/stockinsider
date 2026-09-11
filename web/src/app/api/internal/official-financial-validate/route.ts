@@ -18,7 +18,10 @@ export async function POST(request: Request) {
   if (!writer.ok) return NextResponse.json({ ok:false,error:writer.error }, { status:409 });
   try {
     const result = await validatePendingOfficialFinancials(ids);
-    return NextResponse.json({ ok:true,result,releaseId:writer.releaseId });
+    const ok = result.status === 'success';
+    return NextResponse.json({ ok, result, releaseId:writer.releaseId,
+      ...(!ok ? { error:'official_validation_incomplete' } : {}),
+    }, { status:ok ? 200 : 500 });
   } catch (error) {
     return NextResponse.json({ ok:false,error:error instanceof Error ? error.message : 'official_validation_failed' }, { status:500 });
   }

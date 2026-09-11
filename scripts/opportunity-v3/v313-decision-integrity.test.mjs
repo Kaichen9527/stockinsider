@@ -1058,6 +1058,15 @@ test('generic migration discovery is a closed legacy allowlist and the V3.13 pla
     'migrations/20260830_v320_kol_retention_owner_boundary.sql',
     'migrations/20260909_official_financial_validation_receipts.sql',
     'migrations/20260911_v320_source_terminal_projection_authority.sql',
+    'migrations/20260911_candidate_financial_fact_manifest_v8.sql',
+    // Approved v6 evidence-repair acceptance: durable field/period work,
+    // immutable document-job lineage, candidate-wide refresh, and deep history.
+    // Keep this an exact closed inventory; existing authority checks still apply.
+    'migrations/20260911_02_financial_field_work_fairness.sql',
+    'migrations/20260911_03_financial_document_job_links.sql',
+    'migrations/20260911_04_taiwan_candidate_refresh_queue.sql',
+    'migrations/20260911_candidate_history_backfill_v1.sql',
+    'migrations/20260911_05_financial_fact_isolation_v10.sql',
   ]);
   assert.ok(plan.migrations.every((row)=>/^[0-9a-f]{64}$/u.test(row.sha256)&&row.additiveOnly));
   assert.match(plan.orderedChainSha256,/^[0-9a-f]{64}$/u);

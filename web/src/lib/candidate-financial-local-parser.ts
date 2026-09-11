@@ -3,6 +3,8 @@ import { spawn as spawnChild } from 'node:child_process';
 import net from 'node:net';
 import type { ChildProcessWithoutNullStreams } from 'node:child_process';
 import { MAX_CANDIDATE_FINANCIAL_DOCUMENT_BYTES, type CandidateFinancialDocumentFormat } from './candidate-financial-documents.ts';
+import { candidateFinancialStructuralAdmission, financialFactAcceptanceHash, isFinancialFactAcceptanceShape,
+  MAX_FINANCIAL_PARSER_EVIDENCE_BYTES, type CandidateFinancialFactAcceptance } from './candidate-financial-fact-acceptance.ts';
 
 const MAX_PARSER_STDOUT_BYTES = 2 * 1024 * 1024;
 const MAX_PARSER_STDERR_BYTES = 16 * 1024;
@@ -18,12 +20,39 @@ export type CandidateFinancialDocumentLocator = {
 };
 
 export type CandidateFinancialLocalParserResult = {
-  schema: 'candidate-financial-document-parser-v1';
+  schema: 'candidate-financial-document-parser-v1' | 'candidate-financial-document-parser-v2';
   status: 'complete' | 'partial';
   parser: 'arelle' | 'pdfplumber' | 'docling';
   inputSha256: string;
   locators: CandidateFinancialDocumentLocator[];
   missingRequirements: string[];
+  runtimeVersion?: string;
+  taxonomySha256?: string;
+  factAcceptance?: CandidateFinancialFactAcceptance;
+  errorManifestSha256?: string;
+  validation?: {
+    errorCount: number;
+    errorCodes: string[];
+    validFactCount: number;
+    errorsTruncated: boolean;
+  };
+  validatedFacts?: Array<{
+    xbrl_context: string;
+    xbrl_concept: string;
+    value: string;
+    unit: 'TWD' | 'TWD_per_share' | 'share';
+    entity_identifier: string;
+    period_start: string | null;
+    period_end: string;
+    duration_kind: 'quarterly' | 'instant';
+    dimension_count: 0;
+    factKey?: string;
+    xValid?: 'VALID';
+    structuralStatus?: 'structurally_validated';
+    sourceFactId?: string;
+    extractedFactId?: string;
+    concept_namespace?: string;
+  }>;
 };
 
 type Spawn = typeof spawnChild;
@@ -37,31 +66,92 @@ function validLocator(value: unknown): value is CandidateFinancialDocumentLocato
   const concept = row.xbrl_concept;
   return (page === undefined || (Number.isInteger(page) && Number(page) >= 1 && Number(page) <= 200))
     && (table === undefined || (Number.isInteger(table) && Number(table) >= 1 && Number(table) <= 20))
-    && (context === undefined || (typeof context === 'string' && context.length <= 256))
-    && (concept === undefined || (typeof concept === 'string' && concept.length <= 256))
-    && Boolean(page || context || concept);
+    && (context === undefined || (typeof context === 'string' && context.length > 0 && context.length <= 256))
+    && (concept === undefined || (typeof concept === 'string' && concept.length > 0 && concept.length <= 256))
+    && ((page !== undefined && context === undefined && concept === undefined)
+      || (context !== undefined && concept !== undefined && page === undefined && table === undefined));
 }
 
-function parseResult(raw: string, inputSha256: string): CandidateFinancialLocalParserResult {
+export function parseCandidateFinancialLocalParserResult(raw: string, inputSha256: string): CandidateFinancialLocalParserResult {
+  if (Buffer.byteLength(raw, 'utf8') > MAX_FINANCIAL_PARSER_EVIDENCE_BYTES) throw new Error('candidate_financial_local_parser_output_too_large');
   let parsed: unknown;
   try { parsed = JSON.parse(raw); } catch { throw new Error('candidate_financial_local_parser_invalid_json'); }
   if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('candidate_financial_local_parser_invalid_shape');
   const result = parsed as Record<string, unknown>;
-  if (result.schema !== 'candidate-financial-document-parser-v1' || result.inputSha256 !== inputSha256
+  if (!['candidate-financial-document-parser-v1', 'candidate-financial-document-parser-v2'].includes(String(result.schema)) || result.inputSha256 !== inputSha256
     || !['complete', 'partial'].includes(String(result.status))
     || !['arelle', 'pdfplumber', 'docling'].includes(String(result.parser))
     || !Array.isArray(result.locators) || result.locators.length > 200 || !result.locators.every(validLocator)
     || !Array.isArray(result.missingRequirements) || result.missingRequirements.length > 32
     || !result.missingRequirements.every((item) => typeof item === 'string' && item.length > 0 && item.length <= 240)
   ) throw new Error('candidate_financial_local_parser_invalid_shape');
+  const validation = result.validation;
+  const validatedFacts = result.validatedFacts;
+  if (validation !== undefined && (!validation || typeof validation !== 'object' || Array.isArray(validation)
+    || !Number.isInteger((validation as Record<string, unknown>).errorCount)
+    || Number((validation as Record<string, unknown>).errorCount) < 0
+    || !Number.isInteger((validation as Record<string, unknown>).validFactCount)
+    || Number((validation as Record<string, unknown>).validFactCount) < 0
+    || !Array.isArray((validation as Record<string, unknown>).errorCodes)
+    || ((validation as Record<string, unknown>).errorCodes as unknown[]).length > 32
+    || !((validation as Record<string, unknown>).errorCodes as unknown[]).every((item) => typeof item === 'string' && item.length > 0 && item.length <= 160)
+    || typeof (validation as Record<string, unknown>).errorsTruncated !== 'boolean')) {
+    throw new Error('candidate_financial_local_parser_invalid_validation');
+  }
+  if (result.parser === 'arelle' && (!Array.isArray(validatedFacts) || validatedFacts.length > 200
+    || !validatedFacts.every((item) => {
+      if (!item || typeof item !== 'object' || Array.isArray(item)) return false;
+      const fact = item as Record<string, unknown>;
+      return typeof fact.xbrl_context === 'string' && fact.xbrl_context.length > 0 && fact.xbrl_context.length <= 256
+        && typeof fact.xbrl_concept === 'string' && fact.xbrl_concept.length > 0 && fact.xbrl_concept.length <= 256
+        && typeof fact.value === 'string' && /^-?\d+(?:[.]\d+)?$/u.test(fact.value) && Number.isFinite(Number(fact.value))
+        && ['TWD', 'TWD_per_share', 'share'].includes(String(fact.unit))
+        && typeof fact.entity_identifier === 'string' && /^\d{4,6}$/u.test(fact.entity_identifier)
+        && (fact.period_start === null || (typeof fact.period_start === 'string' && /^\d{4}-\d{2}-\d{2}$/u.test(fact.period_start)))
+        && typeof fact.period_end === 'string' && /^\d{4}-\d{2}-\d{2}$/u.test(fact.period_end)
+        && ['quarterly', 'instant'].includes(String(fact.duration_kind))
+        && fact.dimension_count === 0;
+    })
+    || typeof result.runtimeVersion !== 'string' || !/^\d+\.\d+\.\d+$/u.test(result.runtimeVersion)
+    // A locator-only partial diagnostic may intentionally run without a local
+    // official taxonomy.  Any fact that crosses the ingestion boundary must
+    // remain bound to the reviewed taxonomy bytes.
+    || (validatedFacts.length > 0
+      && (typeof result.taxonomySha256 !== 'string' || !/^[0-9a-f]{64}$/u.test(result.taxonomySha256)))
+    )) throw new Error('candidate_financial_local_parser_invalid_fact_manifest');
+  if (result.schema === 'candidate-financial-document-parser-v2'
+    && (!isFinancialFactAcceptanceShape(result.factAcceptance) || typeof result.errorManifestSha256 !== 'string'
+      || financialFactAcceptanceHash(result.factAcceptance) !== result.errorManifestSha256
+      || result.factAcceptance.documentSha256 !== inputSha256
+      || result.factAcceptance.taxonomySha256 !== result.taxonomySha256
+      || (Number((validation as Record<string, unknown> | undefined)?.errorCount) > 0 && result.status !== 'partial'))) {
+    throw new Error('candidate_financial_local_parser_invalid_fact_manifest');
+  }
+  if (Array.isArray(validatedFacts) && validatedFacts.length > 0) {
+    if (!candidateFinancialStructuralAdmission(result as CandidateFinancialLocalParserResult)) {
+      throw new Error('candidate_financial_local_parser_invalid_fact_manifest');
+    }
+  }
+  if (result.parser !== 'arelle' && result.status !== 'partial') {
+    throw new Error('candidate_financial_local_parser_invalid_fact_manifest');
+  }
   return {
-    schema: 'candidate-financial-document-parser-v1', status: result.status as 'complete' | 'partial',
+    schema: result.schema as CandidateFinancialLocalParserResult['schema'], status: result.status as 'complete' | 'partial',
     parser: result.parser as 'arelle' | 'pdfplumber' | 'docling', inputSha256,
     locators: result.locators as CandidateFinancialDocumentLocator[], missingRequirements: result.missingRequirements as string[],
+    runtimeVersion: typeof result.runtimeVersion === 'string' ? result.runtimeVersion : undefined,
+    taxonomySha256: typeof result.taxonomySha256 === 'string' ? result.taxonomySha256 : undefined,
+    validation: validation as CandidateFinancialLocalParserResult['validation'],
+    validatedFacts: validatedFacts as CandidateFinancialLocalParserResult['validatedFacts'],
+    factAcceptance: result.factAcceptance as CandidateFinancialFactAcceptance | undefined,
+    errorManifestSha256: typeof result.errorManifestSha256 === 'string' ? result.errorManifestSha256 : undefined,
   };
 }
 
-async function runIsolatedSocketParser(input: { bytes: Uint8Array; documentSha256: string; format: CandidateFinancialDocumentFormat }) {
+async function runIsolatedSocketParser(input: {
+  bytes: Uint8Array; documentSha256: string; format: CandidateFinancialDocumentFormat;
+  expectedEntity?: string; expectedPeriodEnd?: string;
+}) {
   return await new Promise<CandidateFinancialLocalParserResult>((resolveResult, reject) => {
     const socket = net.createConnection({ path: PARSER_SOCKET_PATH });
     let output = ''; let settled = false;
@@ -73,7 +163,8 @@ async function runIsolatedSocketParser(input: { bytes: Uint8Array; documentSha25
     const timeout = setTimeout(() => finish(new Error('candidate_financial_local_parser_timeout')), PARSER_TIMEOUT_MS);
     socket.setEncoding('utf8');
     socket.on('connect', () => {
-      socket.write(`${JSON.stringify({ format: input.format, sha256: input.documentSha256, byteLength: input.bytes.byteLength })}\n`);
+      socket.write(`${JSON.stringify({ format: input.format, sha256: input.documentSha256, byteLength: input.bytes.byteLength,
+        expectedEntity: input.expectedEntity, expectedPeriodEnd: input.expectedPeriodEnd })}\n`);
       socket.write(input.bytes); socket.end();
     });
     socket.on('data', (chunk: string) => {
@@ -84,9 +175,13 @@ async function runIsolatedSocketParser(input: { bytes: Uint8Array; documentSha25
     socket.on('end', () => {
       try {
         const serviceError = JSON.parse(output) as { error?: unknown };
-        if (serviceError?.error) { finish(new Error('candidate_financial_local_parser_failed')); return; }
+        if (serviceError?.error) {
+          const code = String(serviceError.error);
+          const known = /^(?:official_taxonomy_unavailable|official_taxonomy_identity_mismatch|parser_runtime_identity_mismatch|parser_subprocess_failed)$/u.test(code);
+          finish(new Error(`candidate_financial_local_parser_failed${known ? `:${code}` : ''}`)); return;
+        }
       } catch { /* normal parser response is validated below */ }
-      try { finish(undefined, parseResult(output.trim(), input.documentSha256)); }
+      try { finish(undefined, parseCandidateFinancialLocalParserResult(output.trim(), input.documentSha256)); }
       catch (error) { finish(error instanceof Error ? error : new Error('candidate_financial_local_parser_invalid_result')); }
     });
   });
@@ -106,10 +201,19 @@ export async function runCandidateFinancialLocalParser(input: {
   pythonPath?: string;
   parserScriptPath?: string;
   allowDocling?: boolean;
+  expectedEntity?: string;
+  expectedPeriodEnd?: string;
 }): Promise<CandidateFinancialLocalParserResult> {
   if (input.bytes.byteLength < 1 || input.bytes.byteLength > MAX_CANDIDATE_FINANCIAL_DOCUMENT_BYTES
     || !/^[0-9a-f]{64}$/u.test(input.documentSha256)
     || createHash('sha256').update(input.bytes).digest('hex') !== input.documentSha256) throw new Error('candidate_financial_local_parser_input_invalid');
+  if (input.expectedEntity !== undefined || input.expectedPeriodEnd !== undefined) {
+    const period = input.expectedPeriodEnd || '';
+    if (!/^\d{4,6}$/u.test(input.expectedEntity || '') || !/^\d{4}-\d{2}-\d{2}$/u.test(period)
+      || !Number.isFinite(Date.parse(period)) || new Date(period).toISOString().slice(0, 10) !== period) {
+      throw new Error('candidate_financial_local_parser_input_invalid');
+    }
+  }
   // Production uses only the credential-free systemd socket service. Direct
   // process execution is retained solely as an injected test seam.
   if (!input.spawn) {
@@ -125,6 +229,7 @@ export async function runCandidateFinancialLocalParser(input: {
   if (!APPROVED_PYTHON_PATH.test(pythonPath) || !APPROVED_PYTHON_PATH.test(script)) throw new Error('candidate_financial_local_parser_not_configured');
   const spawn = input.spawn;
   const args = [script, '--format', input.format, '--sha256', input.documentSha256, '--max-bytes', String(MAX_CANDIDATE_FINANCIAL_DOCUMENT_BYTES)];
+  if (input.expectedEntity && input.expectedPeriodEnd) args.push('--expected-entity', input.expectedEntity, '--expected-period-end', input.expectedPeriodEnd);
   const doclingModelsPath = process.env.STOCKINSIDER_DOCUMENT_PARSER_DOCLING_MODELS ?? '';
   if (input.allowDocling === true && process.env.STOCKINSIDER_DOCUMENT_PARSER_ALLOW_DOCLING === 'true'
     && APPROVED_PYTHON_PATH.test(doclingModelsPath)) {
@@ -156,7 +261,7 @@ export async function runCandidateFinancialLocalParser(input: {
     child.on('error', () => finish(new Error('candidate_financial_local_parser_spawn_failed')));
     child.on('close', (code) => {
       if (code !== 0) return finish(new Error(`candidate_financial_local_parser_failed:${String(code)}`));
-      try { finish(undefined, parseResult(stdout, input.documentSha256)); } catch (error) { finish(error instanceof Error ? error : new Error('candidate_financial_local_parser_invalid_result')); }
+      try { finish(undefined, parseCandidateFinancialLocalParserResult(stdout, input.documentSha256)); } catch (error) { finish(error instanceof Error ? error : new Error('candidate_financial_local_parser_invalid_result')); }
     });
     child.stdin.on('error', () => finish(new Error('candidate_financial_local_parser_stdin_failed')));
     child.stdin.end(input.bytes);

@@ -1,6 +1,48 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { fetchOfficialJson, fetchTwMarketTradingSessions, fetchTwStockDailyBars, isOfficialValuationSourceUrl, isValidatedFinMindValuationSource, mergeTwMarketDailyBars, parseFinMindDailyPriceRows, parseFinMindValuationRows, parseTpexMarketTradingSessions, parseTpexTradingStockRows, parseTpexValuationPanel, parseTwseStockValuationHistory, parseTwseValuationPanel, readBoundedFinMindJson, resetOfficialMarketRequestStateForTests, resolveTaiwanFinalPublicationSemantics, selectOfficialValuationBackfillMonths, twMarketDailyEvidencePolicy, type TwMarketDailyBar } from './tw-market.ts';
+import { fetchOfficialJson, fetchOfficialJsonOutcome, fetchTwStockHistoryMonth, fetchTwMarketTradingSessions, fetchTwStockDailyBars, isOfficialValuationSourceUrl, isValidatedFinMindValuationSource, mergeTwMarketDailyBars, parseFinMindDailyPriceRows, parseFinMindValuationRows, parseTpexMarketTradingSessions, parseTpexTradingStockRows, parseTpexValuationPanel, parseTwseStockValuationHistory, parseTwseValuationPanel, readBoundedFinMindJson, resetOfficialMarketRequestStateForTests, resolveTaiwanFinalPublicationSemantics, selectOfficialValuationBackfillMonths, twMarketDailyEvidencePolicy, type TwMarketDailyBar } from './tw-market.ts';
+
+test('bounded official history fetch requests one issuer-month and reports blocked versus empty precisely', async (t) => {
+  const originalFetch = globalThis.fetch;
+  t.after(() => { globalThis.fetch=originalFetch; resetOfficialMarketRequestStateForTests(); });
+  let calls=0;
+  resetOfficialMarketRequestStateForTests();
+  globalThis.fetch=(async () => { calls++; return new Response('<html>denied</html>', {status:403}); }) as typeof fetch;
+  const job={symbol:'2330',exchange:'TWSE' as const,dataset:'price' as const,month:'2026-08-01',lastSession:'2026-08-31'};
+  assert.equal((await fetchTwStockHistoryMonth(job)).terminalReason,'official_security_block');
+  assert.equal(calls,1);
+  resetOfficialMarketRequestStateForTests();
+  globalThis.fetch=(async () => new Response(JSON.stringify({stat:'很抱歉，沒有符合條件的資料!'}),{headers:{'content-type':'application/json'}})) as typeof fetch;
+  assert.equal((await fetchTwStockHistoryMonth(job)).terminalReason,'official_no_rows');
+  resetOfficialMarketRequestStateForTests();
+  globalThis.fetch=(async () => new Response(JSON.stringify({unexpected:true}),{headers:{'content-type':'application/json'}})) as typeof fetch;
+  assert.equal((await fetchTwStockHistoryMonth(job)).terminalReason,'official_schema_error');
+});
+
+test('bounded TPEx history never makes a TWSE request and preserves real month-end valuation date', async (t) => {
+  const originalFetch=globalThis.fetch; const requested:string[]=[];
+  t.after(() => { globalThis.fetch=originalFetch; resetOfficialMarketRequestStateForTests(); });
+  resetOfficialMarketRequestStateForTests();
+  globalThis.fetch=(async (input) => {
+    requested.push(String(input));
+    return new Response(JSON.stringify({tables:[{fields:['股票代號','本益比','股價淨值比'],data:[['6488','18.5','4.2']]}]}),{headers:{'content-type':'application/json'}});
+  }) as typeof fetch;
+  const result=await fetchTwStockHistoryMonth({symbol:'6488',exchange:'TPEx',dataset:'multiple',month:'2026-08-01',lastSession:'2026-08-28'});
+  assert.equal(result.terminalReason,'complete');
+  assert.equal(result.multiples[0].date,'2026-08-28');
+  assert.equal(requested.length,1);
+  assert.equal(new URL(requested[0]).hostname,'www.tpex.org.tw');
+});
+
+test('official JSON outcome distinguishes rate-limit, invalid JSON and successful empty payload', async (t) => {
+  const originalFetch=globalThis.fetch;
+  t.after(() => { globalThis.fetch=originalFetch; resetOfficialMarketRequestStateForTests(); });
+  for (const [response, expected] of [[new Response('',{status:429}),'official_rate_limit'],[new Response('not-json'),'official_schema_error'],[new Response('{}'),null]] as const) {
+    resetOfficialMarketRequestStateForTests();
+    globalThis.fetch=(async () => response) as typeof fetch;
+    assert.equal((await fetchOfficialJsonOutcome('https://www.twse.com.tw/test-history',1000)).terminalReason,expected);
+  }
+});
 
 test('a single transient official-host failure does not blackhole the next request', async (t) => {
   const originalFetch = globalThis.fetch;
