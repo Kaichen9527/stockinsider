@@ -11,6 +11,7 @@ import {
   hostPinForModelOracleListing,
   modelOracleListing,
   modelOracleListingSha256,
+  parseReviewActiveGraph,
   requiredModelRunnerHostPin,
   treeIdentity,
   trustedModelOracleAuthorityForListings,
@@ -285,6 +286,10 @@ test('the protected root selects closed graph-bound Requirements/Architecture ev
     'evidence/source-led-opportunity-v3-architecture-6ed9d39a',
     'requirements-review-v3.23.md',
     'architecture-review-v3.23.md',
+    'evidence/source-led-opportunity-v3-requirements-c7b4776-final',
+    'evidence/source-led-opportunity-v3-architecture-c7b4776-final2',
+    'requirements-review-v3.24.md',
+    'architecture-review-v3.24-final.md',
     'evidence/source-led-opportunity-v3-host-pin-v316-requirements-ba3124f',
     'evidence/source-led-opportunity-v3-host-pin-v316-architecture-ba3124f',
     'requirements-review-host-pin-v3.16-final.md',
@@ -301,6 +306,7 @@ test('the protected root selects closed graph-bound Requirements/Architecture ev
     'c74be1cd14439580505e05f2ec5904ea7dc9732ee7a4164c9ec1573691ebe352',
     '5f985e391799fd8332df16c2151f75cc95dfb643a087912d92df2845a435016e',
     'a4cf40d99dbfe7d23e0bdd39130f73cf6943a5535394d8313f2055de9a7d3058',
+    '10ddc6020b010a557f2ad000e11df7ebb2413432bb63351d3a4a5bdba26c46bf',
     '6193ebf24dfd5dd6c6d1f52d03e7efda09e3335003ab36cf4a59d62d9598faf4',
   ]) assert.match(worker, new RegExp(graph, 'u'), `${graph} graph mapping retained`);
   assert.match(worker, /evidence\/source-led-opportunity-v3-exact-review-\$\{attestation[.]subjectCommitSha\}/u);
@@ -309,6 +315,17 @@ test('the protected root selects closed graph-bound Requirements/Architecture ev
   assert.match(worker, /Unrelated future graph refs are deliberately not fetched/u);
   assert.doesNotMatch(worker, /Object[.]values\(graphBoundReviewSources\)/u);
   assert.match(worker, /active graph evidence source/u);
+});
+
+test('the production parser accepts the actual immutable PR210 architecture evidence bytes', () => {
+  const evidence = readFileSync(path.join(root,
+    '.loop-engineering/state/changes/source-led-opportunity-engine-v3/architecture-review-v3.24-final.md'),'utf8');
+  const graph = '10ddc6020b010a557f2ad000e11df7ebb2413432bb63351d3a4a5bdba26c46bf';
+  assert.equal(createHash('sha256').update(evidence).digest('hex'),
+    '3e2631c86be97f6ec65a38058370fc9f9b0bff086484bbc75facc2d3fea813bf');
+  assert.equal(parseReviewActiveGraph(evidence,'architecture'),graph);
+  assert.throws(() => parseReviewActiveGraph(
+    evidence.replace('- Active graph:', '- Active graph SHA-256:'),'architecture'), /architecture active graph/u);
 });
 
 test('the protected root executes the closed v1 and v2 graph algorithms and rejects unknown catalogs', () => {
