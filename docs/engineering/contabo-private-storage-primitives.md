@@ -43,6 +43,15 @@ or plaintext Vault compatibility objects. Legacy Vault-backed function
 definitions must be explicitly excluded from restore; the encrypted credential
 RPCs in `20260911_contabo_data_plane_v1.sql` supersede them.
 
+The bootstrap also creates one passwordless, non-privileged PostgreSQL login
+named `stockinsider`.  It is only for the same-named isolated OS account running
+PostgREST over PostgreSQL's Unix socket with `peer` authentication.  The
+deployment must keep PostgreSQL TCP closed to this role and set the encrypted
+`database-uri` credential to a socket URI such as
+`postgresql:///stockinsider?host=/run/postgresql`.  The role has no superuser,
+database creation, role creation, replication or RLS-bypass attribute; it can
+only switch to the JWT roles granted by the bootstrap.
+
 Generate a TOC with `pg_restore --list`, then run
 `node scripts/build-contabo-restore-list.mjs <input-list> <new-output-list>`.
 The 0600 output excludes Vault namespace objects, the named legacy

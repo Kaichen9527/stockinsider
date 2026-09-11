@@ -11,8 +11,13 @@ const activation=readFileSync(new URL('../deployment/vps/activate-contabo-data-p
 test('portable bootstrap recreates required role names without a plaintext Vault shim',()=>{
   for(const role of ['anon','authenticated','service_role','authenticator','opportunity_v3_rpc_owner','legacy_correctness_rpc_owner','dashboard_user','stockinsider_runtime_v319'])
     assert.match(bootstrap,new RegExp(`'${role}'`,'u'));
-  assert.doesNotMatch(bootstrap,/vault[.]decrypted_secrets|CREATE SCHEMA vault|PASSWORD\s+/iu);
+  assert.doesNotMatch(bootstrap,/vault[.]decrypted_secrets|CREATE SCHEMA vault/iu);
+  assert.doesNotMatch(bootstrap,/PASSWORD\s+(?!NULL\b)/u);
   assert.match(bootstrap,/ALTER ROLE service_role BYPASSRLS/u);
+  assert.match(bootstrap,/CREATE ROLE stockinsider LOGIN NOINHERIT NOSUPERUSER/u);
+  assert.match(bootstrap,/ALTER ROLE stockinsider LOGIN NOINHERIT NOSUPERUSER/u);
+  assert.match(bootstrap,/PASSWORD NULL CONNECTION LIMIT 20/u);
+  assert.match(bootstrap,/GRANT anon, authenticated, service_role TO stockinsider/u);
   assert.match(bootstrap,/CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA extensions/u);
 });
 
@@ -33,6 +38,7 @@ test('Contabo migration is additive, RLS guarded and generation-CAS protected',(
 test('PostgREST is loopback-only and receives secrets through encrypted credentials',()=>{
   assert.match(config,/server-host = "127[.]0[.]0[.]1"/u);
   assert.match(config,/db-uri = "@\/run\/credentials/u);
+  assert.match(config,/db-pool = 10/u);
   assert.match(service,/LoadCredentialEncrypted=database-uri:/u);
   assert.match(service,/LoadCredentialEncrypted=jwt-secret:/u);
   assert.match(service,/IPAddressDeny=any/u);

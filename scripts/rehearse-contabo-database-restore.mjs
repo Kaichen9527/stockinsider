@@ -247,6 +247,8 @@ async function main(){
       'policies',(SELECT count(*) FROM pg_policy p JOIN pg_class c ON c.oid=p.polrelid JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='public'),
       'portableRoles',(SELECT count(*) FROM pg_roles WHERE rolname=ANY(ARRAY['anon','authenticated','service_role','authenticator','opportunity_v3_rpc_owner','legacy_correctness_rpc_owner','postgres','supabase_admin','supabase_auth_admin','supabase_realtime_admin','supabase_storage_admin','pgbouncer','dashboard_user','stockinsider_runtime_v319'])),
       'loginCompatibilityRoles',(SELECT count(*) FROM pg_roles WHERE rolcanlogin AND rolname=ANY(ARRAY['anon','authenticated','service_role','authenticator','opportunity_v3_rpc_owner','legacy_correctness_rpc_owner','postgres','supabase_admin','supabase_auth_admin','supabase_realtime_admin','supabase_storage_admin','pgbouncer','dashboard_user','stockinsider_runtime_v319'])),
+      'postgrestRuntimeLogin',(SELECT count(*) FROM pg_roles WHERE rolname='stockinsider' AND rolcanlogin
+        AND NOT rolsuper AND NOT rolcreatedb AND NOT rolcreaterole AND NOT rolreplication AND NOT rolbypassrls),
       'serviceRoleBypassesRls',(SELECT rolbypassrls FROM pg_roles WHERE rolname='service_role'),
       'serviceRoleTableGrants',(SELECT count(*) FROM information_schema.role_table_grants WHERE grantee='service_role' AND table_schema='public'),
       'authenticatedTableGrants',(SELECT count(*) FROM information_schema.role_table_grants WHERE grantee='authenticated' AND table_schema='public'),
@@ -264,7 +266,7 @@ async function main(){
     const verify=await run('psql',[...connection,'--no-psqlrc','--tuples-only','--no-align','--set=ON_ERROR_STOP=1','--command',verificationSql],{captureStdout:true});
     if(verify.exitCode!==0)throw new Error('restore_verification_query_failed');
     const checks=JSON.parse(verify.stdout.toString('utf8').trim());
-    const restoreVerified=checks.portableRoles===14&&checks.loginCompatibilityRoles===0
+    const restoreVerified=checks.portableRoles===14&&checks.loginCompatibilityRoles===0&&checks.postgrestRuntimeLogin===1
       &&checks.serviceRoleBypassesRls===true&&checks.dataPlaneTables===4&&checks.dataPlaneFunctions===6
       &&checks.writerFenceFunctions===1&&checks.identityFenceEnabled===false
       &&checks.vaultSchemaPresent===false&&checks.vaultExtensionPresent===false

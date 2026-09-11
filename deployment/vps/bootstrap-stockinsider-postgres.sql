@@ -24,5 +24,23 @@ $bootstrap$;
 
 GRANT anon, authenticated, service_role TO authenticator;
 ALTER ROLE service_role BYPASSRLS;
+
+-- PostgREST runs as the isolated `stockinsider` OS account and connects through
+-- the private Unix socket using peer authentication.  This login has no
+-- password and no elevated database attributes; it can only switch to the JWT
+-- roles granted below.  TCP access remains a deployment-level deny.
+DO $runtime$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname='stockinsider') THEN
+    CREATE ROLE stockinsider LOGIN NOINHERIT NOSUPERUSER NOCREATEDB NOCREATEROLE
+      NOREPLICATION NOBYPASSRLS PASSWORD NULL CONNECTION LIMIT 20;
+  ELSE
+    ALTER ROLE stockinsider LOGIN NOINHERIT NOSUPERUSER NOCREATEDB NOCREATEROLE
+      NOREPLICATION NOBYPASSRLS PASSWORD NULL CONNECTION LIMIT 20;
+  END IF;
+END
+$runtime$;
+GRANT anon, authenticated, service_role TO stockinsider;
+
 CREATE SCHEMA IF NOT EXISTS extensions AUTHORIZATION postgres;
 CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA extensions;
