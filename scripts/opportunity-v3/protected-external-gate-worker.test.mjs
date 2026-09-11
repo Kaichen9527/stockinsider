@@ -42,6 +42,7 @@ const workflow = readFileSync(path.join(root, '.github/workflows/source-led-oppo
 const diagnosticWorkflow = readFileSync(path.join(root, '.github/workflows/source-led-opportunity-v3.yml'), 'utf8');
 const action = readFileSync(path.join(root, '.github/actions/prepare-source-led-external-subject/action.yml'), 'utf8');
 const worker = readFileSync(path.join(root, 'scripts/opportunity-v3/protected-external-gate-worker.mjs'), 'utf8');
+const protectedV315Commit = '0b132a3898a2eb256084f587de1bf039aa95818e';
 
 const sha256 = (value) => createHash('sha256').update(value).digest('hex');
 
@@ -294,7 +295,7 @@ test('the protected root executes the closed v1 and v2 graph algorithms and reje
     rmSync(directory, { force: true, recursive: true });
   }
 
-  const protectedTree = git(root, ['rev-parse', 'HEAD^{tree}']);
+  const protectedTree = git(root, ['rev-parse', `${protectedV315Commit}^{tree}`]);
   assert.equal(
     treeIdentity(root, protectedTree).activeGraphSha256,
     'c74be1cd14439580505e05f2ec5904ea7dc9732ee7a4164c9ec1573691ebe352',
@@ -303,25 +304,33 @@ test('the protected root executes the closed v1 and v2 graph algorithms and reje
 });
 
 test('the protected model-oracle rotation executes the exact v3.15 to v3.16 listing transition', () => {
-  const baseListing = modelOracleListing(root, 'HEAD');
+  const baseListing = modelOracleListing(root, protectedV315Commit);
   assert.equal(
     modelOracleListingSha256(baseListing),
     'cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5',
     'production Git listing binds the protected v3.15 base',
   );
-  assert.equal(requiredModelRunnerHostPin(root, 'HEAD'), 'model-runner-host-pins-v3.15');
+  assert.equal(requiredModelRunnerHostPin(root, protectedV315Commit), 'model-runner-host-pins-v3.15');
   assert.equal(trustedModelOracleAuthorityForListings(baseListing, baseListing), 'protected_base');
 
+  const successorListing = modelOracleListing(root, 'HEAD');
   assert.equal(
-    modelOracleListingSha256(v316ModelOracleListing),
+    successorListing,
+    v316ModelOracleListing,
+    'production Git emits the exact reviewed v3.16 listing bytes',
+  );
+  assert.equal(
+    modelOracleListingSha256(successorListing),
     '70dbbd6ed3846ada9804c029321dcc5e97de60ddf4e63a75142d10f2efdde115',
     'the reviewed successor listing uses the same trimmed bytes as production Git',
   );
-  assert.equal(hostPinForModelOracleListing(v316ModelOracleListing), 'model-runner-host-pins-v3.16');
+  assert.equal(requiredModelRunnerHostPin(root, 'HEAD'), 'model-runner-host-pins-v3.16');
+  assert.equal(hostPinForModelOracleListing(successorListing), 'model-runner-host-pins-v3.16');
   assert.equal(
-    trustedModelOracleAuthorityForListings(baseListing, v316ModelOracleListing),
+    trustedModelOracleAuthorityForListings(baseListing, successorListing),
     'model-runner-host-pin-amendment-v3.16',
   );
+  assert.equal(trustedModelOracleAuthorityForListings(successorListing, successorListing), 'protected_base');
 
   const unapprovedSuccessor = v316ModelOracleListing.replace(
     'ddac241c504d7608b65ace59a9f8b47f5f4bc52b',
@@ -332,7 +341,7 @@ test('the protected model-oracle rotation executes the exact v3.15 to v3.16 list
     /model oracle successor listing must match the one reviewed digest/u,
   );
   assert.throws(
-    () => trustedModelOracleAuthorityForListings(v316ModelOracleListing, unapprovedSuccessor),
+    () => trustedModelOracleAuthorityForListings(successorListing, unapprovedSuccessor),
     /model oracle successor requires protected-base approval/u,
   );
   assert.throws(
