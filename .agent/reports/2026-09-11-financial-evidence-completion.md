@@ -6,6 +6,7 @@
 - Base: PR #210, exact `a00ab5aa6551c47621148373c8fc1b695e39d2c2`.
 - Branch: `codex/financial-evidence-completion`; integration commit `a8c43b2`.
 - Incorporated the reviewed parser work from PR #215. The frozen PR #210 checkout was not modified.
+- PR #210 now points to `8b79c30f2369a8268afd0ccc4207a691a235276a`; this branch and its test evidence still start from the explicitly assigned `a00ab5aa6551c47621148373c8fc1b695e39d2c2`. This stacked draft is not merge-ready. After PR #210 lands, rebase or cherry-pick onto the new main and repeat exact-commit tests and review; the results below do not certify that future integrated graph.
 - No production ingestion, database migration, deployment, scheduler activation, secret modification or main-branch push was performed.
 
 ## Implemented
