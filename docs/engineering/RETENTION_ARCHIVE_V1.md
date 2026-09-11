@@ -75,3 +75,28 @@ Deletion is not ready unless every condition remains true:
 
 The archive locator is relative and restricted to `backup/retention/*.sira`.
 Archives are private local files and are excluded from Git and deployment.
+
+## Retention v2 capacity extension
+
+`20260911_retention_archive_v2.sql` adds a conservative plan for the six large
+legacy producer detail relations. It does not replace the v1 receipts and does
+not add a deletion executor.
+
+- Successful run details remain online for at least 30 days and source-related
+  details remain through the complete 7+28 day discovery window (35 days).
+- Run summaries remain online for at least 90 days.
+- Failed/cancelled runs, unresolved/security diagnostics, direct relational
+  references, explicit pins, public revisions/facts and UUID references found
+  in other public JSONB columns block eligibility.
+- The v2 content-addressed representation stores canonical JSON bytes once and
+  records per-row identity references. Compatibility RPCs read live legacy rows
+  first and only fall back to the normalized representation.
+- `materialize-legacy-content-v2.sql` is a non-destructive rehearsal helper. It
+  refuses every network-backed PostgreSQL server and every data directory/user
+  except the disposable local restore identity. It never deletes source rows.
+- Connector candidate planning is set-based in v2; it materializes the pin and
+  audit sets once instead of rebuilding the full graph for every candidate.
+
+The capacity rehearsal result is recorded in
+`.agent/reports/2026-09-11-retention-v2-capacity-rehearsal.md`. A production
+normalization/cutover and any source-row deletion still require separate review.
