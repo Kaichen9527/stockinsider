@@ -74,7 +74,7 @@ dispositions as four distinct layers with explicit mapping/conservation.
 `legacy-radar-correctness-contract.md` and `data-contract.md`. Total-outage fixture
 fallback publishes zero cards; there is no production `fixture_fallback` card origin.
 
-Version `product-correctness-runtime-v3.11.12` closes two remaining publication
+This amendment closes two remaining publication
 authority gaps. Production total-outage suppression is derived from the complete
 persisted 17-profile by 5-connector terminal plane; a request or stage caller cannot
 authorize it with a Boolean. Every fresh candidate entrant also retains the exact

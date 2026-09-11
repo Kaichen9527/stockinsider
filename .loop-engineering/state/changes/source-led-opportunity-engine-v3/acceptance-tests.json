@@ -3087,8 +3087,8 @@
       "id": "EVAL-002",
       "requirement": "R11",
       "layer": "unit",
-      "setup": "Golden relevance and adverse-excursion fixtures span several run dates.",
-      "expected": "Macro Precision@20, NDCG@20, worstDecileMae and relative improvements exactly match shadow-evaluation-contract.md."
+      "setup": "Historical audit-only golden relevance and adverse-excursion fixtures span several run dates.",
+      "expected": "Audit metrics reproduce the retained shadow-evaluation-contract.md bytes and do not gate current publication, classification, health or promotion."
     },
     {
       "id": "EVAL-003",

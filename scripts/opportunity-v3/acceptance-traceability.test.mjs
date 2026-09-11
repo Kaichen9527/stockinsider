@@ -795,10 +795,10 @@ function activeGraphOracle() {
   assertCleanReviewedExecutionRoot(subjectTree);
   const catalogBlob = subjectTreeBlob(subjectTree, activeCatalogRepositoryPath);
   assert.deepEqual(catalogBlob.bytes, activeCatalogBytes, 'catalog working bytes equal reviewed subject tree');
-  assert.equal(catalogBlob.bytes.length, 6375, 'catalog exact tracked byte length including LF');
+  assert.equal(catalogBlob.bytes.length, 6758, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    'aefd480ba233483d952ce924b752325f3b105da083e386d209793ab020a0d234',
+    'dcb1747605fb37123f77bd4fe7f085a594eb0fa4f63dc4bec8fdbd40646c0aea',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);
@@ -809,11 +809,11 @@ function activeGraphOracle() {
     .filter((file) => file.endsWith('-contract.md') && !['data-contract.md','shadow-evaluation-contract.md'].includes(file))
     .sort();
   assert.deepEqual(activeContractFiles, expectedContractFiles);
+  const activeArtifactFiles = activeCatalog.activeFiles;
   assert.ok(!activeArtifactFiles.includes('shadow-evaluation-contract.md'),
     'global Shadow predecessor is not active V6 authority');
   assert.ok(activeArtifactFiles.includes('v6-no-global-shadow-authority-amendment.md'),
     'approved V6 no-global-Shadow successor is active authority');
-  const activeArtifactFiles = activeCatalog.activeFiles;
   assert.equal(activeArtifactFiles.length, 55);
   assert.equal(new Set(activeArtifactFiles).size, activeArtifactFiles.length);
   assert.deepEqual(activeArtifactFiles, [...activeArtifactFiles].toSorted(), 'catalog active-file ASCII order');
@@ -850,10 +850,19 @@ function activeGraphOracle() {
     '.loop-engineering/state/changes/source-led-opportunity-engine-v3/source-led-opportunity-engine-v3.14-actionability-recovery-amendment.md').bytes.toString('utf8');
   assert.match(recoveryText,/320 IDs, partitioned as\s*272 product\/runtime/u,
     'active V3.14 contract declares the canonical total and product/runtime partition');
+  const externalRows=(paths,label)=>(paths??[]).map((repositoryPath)=>{
+    const indexed=subjectTreeBlob(subjectTree,repositoryPath);
+    assert.ok(indexed.bytes.length>0,`${label} ${repositoryPath} nonempty`);
+    return [repositoryPath,indexed.oid,indexed.bytes.length,sha256(indexed.bytes)];
+  });
+  const incorporatedRows=externalRows(activeCatalog.incorporatedFiles,'incorporated');
+  const historicalRows=externalRows(activeCatalog.historicalAuditFiles,'historical audit');
   const activeGraphSha256 = sha256(canonicalJson([
-    'opportunity-active-graph-v1',
+    'opportunity-active-graph-v2',
     sha256(catalogBlob.bytes),
     orderedBlobRows,
+    incorporatedRows,
+    historicalRows,
   ]));
   // The immutable subject tree is the authority.  A literal copied from a
   // predecessor release turns every authorized active-artifact amendment into
@@ -880,7 +889,7 @@ function activeGraphOracle() {
   }
   assert.notEqual(
     activeGraphSha256,
-    sha256(canonicalJson(['opportunity-active-graph-v1', sha256(Buffer.concat([catalogBlob.bytes, Buffer.from('\n')])), orderedBlobRows])),
+    sha256(canonicalJson(['opportunity-active-graph-v2', sha256(Buffer.concat([catalogBlob.bytes, Buffer.from('\n')])), orderedBlobRows,incorporatedRows,historicalRows])),
     'active graph binds catalog bytes',
   );
   for (let rowIndex = 0; rowIndex < orderedBlobRows.length; rowIndex += 1) {
@@ -892,7 +901,7 @@ function activeGraphOracle() {
         : `${String(prior)[0] === '0' ? '1' : '0'}${String(prior).slice(1)}`;
       assert.notEqual(
         activeGraphSha256,
-        sha256(canonicalJson(['opportunity-active-graph-v1', sha256(catalogBlob.bytes), mutatedRows])),
+        sha256(canonicalJson(['opportunity-active-graph-v2', sha256(catalogBlob.bytes), mutatedRows,incorporatedRows,historicalRows])),
         `active graph binds row ${rowIndex} member ${memberIndex}`,
       );
     }
@@ -1251,7 +1260,9 @@ function activeGraphOracle() {
     /([a-z0-9-]+-(?:contract|amendment)[.]md)(?:`)?(?:\s+version)?\s+`?v([0-9]+[.][0-9]+(?:[.][0-9]+)?)\b/giu,
   )];
   assert.ok(activeReferenceEdges.length > 0);
+  const historicalOwnerNames=new Set((activeCatalog.historicalAuditFiles??[]).map((file)=>path.basename(file)));
   for (const [, ownerFile, referencedVersion] of activeReferenceEdges) {
+    if(historicalOwnerNames.has(ownerFile))continue;
     const ownerVersion = expectedVersions.get(ownerFile);
     assert.ok(ownerVersion, `unknown active contract owner ${ownerFile}`);
     const ownerSuffix = ownerVersion.match(/-v([0-9]+[.][0-9]+(?:[.][0-9]+)?)$/u)?.[1];

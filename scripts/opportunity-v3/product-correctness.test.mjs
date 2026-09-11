@@ -837,14 +837,17 @@ const checks = {
       readKind: 'frozen_revision_authority', readCanonical: uncachedRead.canonical,
       readJson: uncachedRead.json, readHash: uncachedRead.hash }), /frozen authority cache unavailable/u);
     const retryRead = runtime('codec.js').immutableBundle('compact_projection_input', { analysisResult: { decisions: [],
-      sourceCandidates: [{ symbol: '2330', name: '台積電', disposition: 'promoted', reason: 'new_source_evidence',
+      sourceCandidates: [{ symbol: '2330', name: '台積電', disposition: 'promoted', reason: 'new_in_seed_symbol',
+        discoveryDisposition:'promoted',discoveryReason:'new_in_seed_symbol',seedMembership:'in_seed',
+        producerRunId:'72200000-0000-4000-8000-000000000001',schedulerConfigSha256:selected.sha256,
+        legacySeedSetHash:selected.seedSetHash,
         raw: '2330', sourceSummary: '核准 KOL 的台積電研究更新', lastEvaluatedAt: '2026-08-01T10:20:00Z',
         ...citedPublicationEvidence('claim-2330'), sourceClass: 'kol', sourceKey:'telegram',
         sourceName:'核准 KOL',sourceUrl:'https://t.me/example/2330',nominationAuthority:'public_telegram_channel' }] },
       sourceCutoff: '2026-08-01T10:20:00Z', legacyPayloads: captured.json.legacyPayloads,
       legacyPayloadHashes: captured.json.legacyPayloadHashes, legacySourceResultHash: captured.hash,
       legacyRadarCompatibility:captured.json.legacyRadarCompatibility });
-    const projected = await handlers.compact_radar_projection({ readKind: 'compact_projection_input',
+    const projected = await handlers.compact_radar_projection({runId:'72200000-0000-4000-8000-000000000001', readKind: 'compact_projection_input',
       readCanonical: retryRead.canonical, readJson: retryRead.json, readHash: retryRead.hash });
     assert.equal(projected.json.projections.length, 4); assert.ok(fetchedUrls.length > 0,
       'a compact retry reuses the persisted source result and never refetches approved-source inputs');
@@ -1561,6 +1564,17 @@ const checks = {
       await assert.rejects(()=>handlers.compact_radar_projection({runId,readKind:'compact_projection_input',
         readCanonical:rejected.canonical,readJson:rejected.json,readHash:rejected.hash}),/published entrant authority conflict/u);
     }
+    const unknown=compactInput({...entrant,discoveryReason:'provider_specific_reason'});
+    await assert.rejects(()=>handlers.compact_radar_projection({runId,readKind:'compact_projection_input',
+      readCanonical:unknown.canonical,readJson:unknown.json,readHash:unknown.hash}),/published discovery authority enum/u);
+    const deepUnknown=runtime('codec.js').immutableBundle('compact_projection_input',{
+      analysisResult:{decisions:[{...entrant,deepSelected:true,discoveryReason:'provider_specific_reason'}],sourceCandidates:[],
+        discoveryDelta:{added:['2330'],exited:[],continued:[],unchangedReasons:[]}},
+      sourceCutoff:'2026-08-01T00:00:00Z',legacyPayloads:{daily:legacy,hot:legacy,weekly:legacy,home:legacy},
+      legacyRadarCompatibility:'intentionally_not_acquired_kol_first'});
+    await assert.rejects(()=>handlers.compact_radar_projection({runId,readKind:'compact_projection_input',
+      readCanonical:deepUnknown.canonical,readJson:deepUnknown.json,readHash:deepUnknown.hash}),
+    /published discovery authority enum/u);
     const fundamental = { thesis: '9999 已有可追溯基本面證據。', latestChange: '本次重新檢查基本面品質。',
       risks: ['仍須持續追蹤財務風險。'], evidenceRefs: ['official-9999'], asOf: '2026-08-01T00:00:00Z' };
     const published=runtime('compact-radar-projection.js').publishCompactRadarProjection({decisions:[{symbol:'9999',
@@ -1586,6 +1600,12 @@ const checks = {
     assert.deepEqual(wait.decisionEnvelope.entryPlan.entryZone,[101,103]);
     assert.equal(wait.decisionEnvelope.entryPlan.invalidation,96);
     assert.equal(wait.technical.invalidation,null,'non-buy action never publishes an executable stop');
+    assert.throws(()=>runtime('published-research-decision.js').serializePublishedResearchDecision({symbol:'2330',fundamental,
+      technical,geometry:{...geometry,invalidation:95},decisionEnvelope,lastEvaluatedAt:'2026-08-01T00:00:00Z'}),
+    /geometry conflicts/u);
+    assert.throws(()=>runtime('published-research-decision.js').serializePublishedResearchDecision({symbol:'2330',fundamental,
+      technical:{...technical,technicalState:'at_support'},decisionEnvelope,lastEvaluatedAt:'2026-08-01T00:00:00Z'}),
+    /technical state conflicts/u);
   },
   'PCR-022': async () => {
     const payload = { sourceLedCorrectness: { schema: 'legacy-radar-v3.11.3', window: 'daily', asOf: '2026-08-01T00:00:00Z' }, opportunities: [] };
@@ -1724,17 +1744,29 @@ const checks = {
       lastEvaluatedAt:'2026-08-01T00:00:00Z'});
     assert.deepEqual(biasUnavailable.technical.bias,{availability:'unavailable',reason:'insufficient_own_history'});
     assert.deepEqual(biasUnavailable.factorAxes,{availability:'unavailable',reason:'factor_unavailable'});
-    const closedUnavailable=serialize({symbol:'2337',fundamental,technical:{technicalState:'at_support',
+    assert.throws(()=>serialize({symbol:'2337',fundamental,technical:{technicalState:'at_support',
       plane:{bias:{availability:'unavailable',reason:'provider said no'}}},
-      factorAxes:{availability:'unavailable',reason:'provider said no'},lastEvaluatedAt:'2026-08-01T00:00:00Z'});
-    assert.deepEqual(closedUnavailable.technical.bias,{availability:'unavailable',reason:'technical_unavailable'});
-    assert.deepEqual(closedUnavailable.factorAxes,{availability:'unavailable',reason:'factor_unavailable'});
-    const factors=serialize({symbol:'2337',fundamental,technical:{technicalState:'at_support',
+      factorAxes:{availability:'unavailable',reason:'provider said no'},lastEvaluatedAt:'2026-08-01T00:00:00Z'}),
+    /BIAS unavailable evidence/u);
+    assert.throws(()=>serialize({symbol:'2337',fundamental,technical:{technicalState:'at_support',
       plane:{bias:{availability:'available',bias20Pct:2}}},factorAxes:{availability:'available',
       axes:{discovery:70,quality:{availability:'available',score:60},valuation:55,timingRisk:50}},
+      lastEvaluatedAt:'2026-08-01T00:00:00Z'}),/factor axes available evidence/u);
+    const factors=serialize({symbol:'2337',fundamental,technical:{technicalState:'at_support',
+      plane:{bias:{availability:'available',bias20Pct:2}}},factorAxes:{availability:'available',
+      axes:{discovery:70,quality:60,valuation:55,timingRisk:50}},
       lastEvaluatedAt:'2026-08-01T00:00:00Z'});
     assert.deepEqual(factors.technical.bias,{availability:'available',bias20Pct:2});
     assert.deepEqual(factors.factorAxes,{availability:'available',axes:{discovery:70,quality:60,valuation:55,timingRisk:50}});
+    assert.throws(()=>serialize({symbol:'2337',fundamental,technical:{technicalState:'at_support',
+      plane:{bias:{availability:'available',bias20Pct:2,providerPayload:true}}},
+      lastEvaluatedAt:'2026-08-01T00:00:00Z'}),/BIAS available evidence/u);
+    assert.throws(()=>serialize({symbol:'2337',fundamental,technical:{technicalState:'at_support',
+      plane:{bias:{availability:'available',bias20Pct:2}}},materialChangedBecause:['unknown_change'],
+      lastEvaluatedAt:'2026-08-01T00:00:00Z'}),/materialChangedBecause evidence/u);
+    assert.throws(()=>serialize({symbol:'2337',fundamental,technical:{technicalState:'at_support',
+      plane:{bias:{availability:'available',bias20Pct:2}}},changedBecause:[{code:'unknown'}],
+      lastEvaluatedAt:'2026-08-01T00:00:00Z'}),/changedBecause variant/u);
     const append=runtime('analysis-revision.js').appendAnalysisRevision;
     const first=append({input:{facts:{x:1},factor:{version:'factor-v1'}},
       changedBecause:['financial_fact_changed'],now:'2026-08-01T00:00:00Z'});

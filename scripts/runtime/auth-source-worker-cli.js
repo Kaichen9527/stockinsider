@@ -2055,12 +2055,12 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
       // reinterpreted and its valid historical revision cards would disappear.
       const projectionSchemaVersion=bundle.legacyRadarCompatibility==='intentionally_not_acquired_kol_first'
         ?'legacy-radar-v3.20.0':'legacy-radar-v3.19.0';
-      if(projectionSchemaVersion==='legacy-radar-v3.20.0')validatePublishedEntrantAuthority({
-        candidates:projectionSignals,producerRunId:claim.runId,schedulerConfigSha256:validated.sha256,
+      const sourceTerminalState=deriveSourceTerminalState(bundle.sourceTerminalStateInput);
+      if(projectionSchemaVersion==='legacy-radar-v3.20.0'&&sourceTerminalState?.terminalStatus!=='total_outage')validatePublishedEntrantAuthority({
+        candidates:[...decisions,...projectionSignals],producerRunId:claim.runId,schedulerConfigSha256:validated.sha256,
         legacySeedSetHash:validated.seedSetHash,seedSymbols:validated.config.legacySeedSymbols});
       const acquisitionLineageHealth=providerAcquisitionLineageHealth(bundle.providerAcquisitions,
         evaluationTimestamp);
-      const sourceTerminalState=deriveSourceTerminalState(bundle.sourceTerminalStateInput);
       const projections = ['daily', 'hot', 'weekly', 'home'].map((window) => publishCompactRadarProjection({ decisions,
         sourceCandidates: projectionSignals,
         marketAnalysis: bundle.analysisResult?.marketAnalysis ?? null,

@@ -463,7 +463,10 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
       evidenceRefs: publicCitations.map((row) => row.ref),
       valuationStatus: publicView.decisionEnvelope.valuationReadiness, technicalState: decision.technical?.technicalState
         ?? decision.researchScore?.priceContext?.technicalState ?? 'unavailable',
-      changedBecause: signalReasons.has(decision.reason) ? decision.reason : 'new_source_evidence',
+      changedBecause: kolFirst
+        ? (signalReasons.has(decision.discoveryReason)||decision.discoveryReason==='same_material_evidence'
+          ?decision.discoveryReason:(()=>{throw new Error('published discovery authority enum');})())
+        : signalReasons.has(decision.reason) ? decision.reason : 'new_source_evidence',
       sourceProvenance, citations:publicCitations,
       decisionBrief,
       ...(researchNextStep?{researchNextStep}:{}),

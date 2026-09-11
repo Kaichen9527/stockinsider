@@ -374,9 +374,14 @@ function treeIdentity(subjectRoot, treeSha) {
     const bytes = treeBlob(subjectRoot, treeSha, repositoryPath, `active artifact ${file}`);
     return [file, git(subjectRoot, ['rev-parse', `${treeSha}:${repositoryPath}`]), bytes.length, sha256(bytes)];
   });
+  const external=(paths,label)=>(paths??[]).map((repositoryPath)=>{
+    const bytes=treeBlob(subjectRoot,treeSha,repositoryPath,`${label} ${repositoryPath}`);
+    return [repositoryPath,git(subjectRoot,['rev-parse',`${treeSha}:${repositoryPath}`]),bytes.length,sha256(bytes)];
+  });
   const inventory = JSON.parse(treeBlob(subjectRoot, treeSha, `${changeRelative}/acceptance-tests.json`, 'acceptance inventory'));
   return {
-    activeGraphSha256: sha256(canonicalJson(['opportunity-active-graph-v1', sha256(catalogBytes), rows])),
+    activeGraphSha256: sha256(canonicalJson(['opportunity-active-graph-v2',sha256(catalogBytes),rows,
+      external(catalog.incorporatedFiles,'incorporated artifact'),external(catalog.historicalAuditFiles,'historical audit artifact')])),
     inventory,
   };
 }

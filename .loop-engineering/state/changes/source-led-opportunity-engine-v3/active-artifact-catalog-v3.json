@@ -56,6 +56,14 @@
     "v6-no-global-shadow-authority-amendment.md",
     "valuation-contract.md"
   ],
+  "historicalAuditFiles": [
+    ".loop-engineering/state/changes/source-led-opportunity-engine-v3/shadow-evaluation-contract.md"
+  ],
+  "incorporatedFiles": [
+    "openspec/changes/evidence-valuation-research-v6/approved-contabo-ui-amendment.md",
+    "openspec/changes/evidence-valuation-research-v6/design.md",
+    "openspec/changes/evidence-valuation-research-v6/proposal.md"
+  ],
   "owners": [
     [
       "acceptance-evidence-contract.md",
@@ -238,5 +246,5 @@
       "opportunity-valuation-v3.4"
     ]
   ],
-  "schema": "opportunity-active-artifact-catalog-v1"
+  "schema": "opportunity-active-artifact-catalog-v2"
 }

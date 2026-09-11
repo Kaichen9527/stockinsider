@@ -198,7 +198,7 @@ graph; static fixtures and planned PCR boundaries are the immutable requirement 
 The active graph oracle validates the two canonical authority tags below, ASCII order,
 duplicate and active-graph closure,
 
-<!-- GOV-004-AUTHORITY {"catalogBytes":6375,"catalogSha256":"aefd480ba233483d952ce924b752325f3b105da083e386d209793ab020a0d234","kind":"evidence-catalog-identity"} -->
+<!-- GOV-004-AUTHORITY {"catalogBytes":6758,"catalogSha256":"dcb1747605fb37123f77bd4fe7f085a594eb0fa4f63dc4bec8fdbd40646c0aea","kind":"evidence-catalog-identity"} -->
 <!-- GOV-004-AUTHORITY {"activeFiles":55,"kind":"evidence-file-owner-topology","owners":45} -->
 
 then recomputes every `[path,blobOid,byteLength,sha256]` row and compares the result to
@@ -292,11 +292,15 @@ input fails that aggregate.
 For a Git tree `T`, parse the exact tracked `active-artifact-catalog-v3.json` from
 `T`. For each catalog `activeFiles` path, resolve the regular blob in `T` and create
 one row `[path,gitBlobOid,byteLength,sha256]`, preserving the catalog's strict ASCII
-path order. `sha256` hashes the exact blob bytes. The canonical active-graph preimage
+path order. Resolve `incorporatedFiles` and `historicalAuditFiles` from the repository
+root and build `incorporatedRows` and `historicalAuditRows` with the same four-member
+row shape and catalog order. Historical audit rows bind retained evidence bytes but do
+not restore them as publication, classification, health, or promotion authority.
+`sha256` hashes the exact blob bytes. The canonical active-graph preimage
 is:
 
 ```text
-["opportunity-active-graph-v1",catalogTrackedSha256,orderedBlobRows]
+["opportunity-active-graph-v2",catalogTrackedSha256,orderedBlobRows,incorporatedRows,historicalAuditRows]
 ```
 
 `activeGraphSha256` is lowercase SHA-256 of its RFC 8785 UTF-8 bytes. A missing,

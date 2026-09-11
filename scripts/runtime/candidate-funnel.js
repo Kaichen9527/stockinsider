@@ -65,6 +65,7 @@ function retainedCandidate(prior,{currentSession,completedSessions,retentionSess
     // is semantically unchanged material evidence, while the V3.18-specific
     // explanation belongs in additive metadata rather than a new enum value.
     reason:'same_material_evidence',
+    discoveryDisposition:'unchanged',discoveryReason:'same_material_evidence',
     retentionReason,
     sourcePriority:Number.isFinite(prior.sourcePriority)?Math.max(0,prior.sourcePriority-0.01):0,
     evidence:Object.freeze(evidence),
@@ -152,7 +153,8 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
         kolIdentity: row.kolIdentity, sourcePublishedAt: row.sourcePublishedAt,
         sourceCollectedAt: row.sourceCollectedAt, nominationAuthority: row.nominationAuthority,
         structuredClaim: row.structuredClaim, rightsAttested: row.rightsAttested, evidenceHash: row.evidenceHash })),
-      evidenceCount: evidence.length, ...disposition };
+      evidenceCount: evidence.length, ...disposition,
+      discoveryDisposition:disposition.disposition,discoveryReason:disposition.reason };
   });
   const currentByStock=new Map(candidates.map((candidate)=>[candidate.stockId,Object.freeze({ ...candidate,
     ...(producerRunId ? { producerRunId } : {}),
@@ -226,21 +228,26 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
 
 function validatePublishedEntrantAuthority({ candidates, producerRunId, schedulerConfigSha256,
   legacySeedSetHash, seedSymbols }) {
-  const entrants=(candidates??[]).filter((candidate)=>
-    ['new_in_seed_symbol','new_out_of_seed_symbol'].includes(candidate?.reason));
-  if(entrants.length===0)return true;
+  const rows=candidates??[];
+  if(rows.length===0)return true;
   invariant(typeof producerRunId === 'string' && /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/u.test(producerRunId),
     'published entrant run authority');
   invariant(typeof schedulerConfigSha256 === 'string' && /^[0-9a-f]{64}$/u.test(schedulerConfigSha256)
     && typeof legacySeedSetHash === 'string' && /^[0-9a-f]{64}$/u.test(legacySeedSetHash)
     && Array.isArray(seedSymbols), 'published entrant config authority');
-  for (const candidate of entrants) {
+  const allowed=new Map([['new_in_seed_symbol','promoted'],['new_out_of_seed_symbol','promoted'],
+    ['material_source_change','refreshed'],['same_material_evidence','unchanged']]);
+  for (const candidate of rows) {
+    invariant(allowed.has(candidate.discoveryReason)
+      &&candidate.discoveryDisposition===allowed.get(candidate.discoveryReason),'published discovery authority enum');
     const expectedMembership=seedSymbols.includes(candidate.symbol)?'in_seed':'out_of_seed';
-    invariant(candidate.producerRunId === producerRunId
-      && candidate.schedulerConfigSha256 === schedulerConfigSha256
+    invariant(typeof candidate.producerRunId==='string'&&/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/u.test(candidate.producerRunId)
+      &&candidate.schedulerConfigSha256 === schedulerConfigSha256
       && candidate.legacySeedSetHash === legacySeedSetHash
       && candidate.seedMembership === expectedMembership
-      && candidate.reason === (expectedMembership === 'in_seed' ? 'new_in_seed_symbol' : 'new_out_of_seed_symbol'),
+      &&(!candidate.discoveryReason.startsWith('new_')
+        ||candidate.discoveryReason === (expectedMembership === 'in_seed' ? 'new_in_seed_symbol' : 'new_out_of_seed_symbol'))
+      &&(candidate.discoveryDisposition==='unchanged'||candidate.producerRunId===producerRunId),
     'published entrant authority conflict');
   }
   return true;

@@ -35,7 +35,13 @@ function graph() {
     const bytes = execFileSync('/usr/bin/git', ['cat-file', 'blob', oid], { cwd: root });
     return [file, oid, bytes.length, sha256(bytes)];
   });
-  return sha256(canonicalJson(['opportunity-active-graph-v1', sha256(catalogBytes), rows]));
+  const external=(paths)=>(paths??[]).map((filePath)=>{
+    const oid=git(['rev-parse',`${tree}:${filePath}`]);
+    const bytes=execFileSync('/usr/bin/git',['cat-file','blob',oid],{cwd:root});
+    return [filePath,oid,bytes.length,sha256(bytes)];
+  });
+  return sha256(canonicalJson(['opportunity-active-graph-v2',sha256(catalogBytes),rows,
+    external(catalog.incorporatedFiles),external(catalog.historicalAuditFiles)]));
 }
 
 function subject() {

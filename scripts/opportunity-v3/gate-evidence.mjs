@@ -118,10 +118,18 @@ function activeGraphSha256(treeSha) {
     const bytes = treeBlob(treeSha, repositoryPath, `active artifact ${file}`);
     return [file, oid, bytes.length, sha256(bytes)];
   });
+  const incorporatedRows=(catalog.incorporatedFiles??[]).map((repositoryPath)=>{
+    const bytes=treeBlob(treeSha,repositoryPath,`incorporated artifact ${repositoryPath}`);
+    return [repositoryPath,git(['rev-parse',`${treeSha}:${repositoryPath}`]),bytes.length,sha256(bytes)];
+  });
+  const historicalRows=(catalog.historicalAuditFiles??[]).map((repositoryPath)=>{
+    const bytes=treeBlob(treeSha,repositoryPath,`historical audit artifact ${repositoryPath}`);
+    return [repositoryPath,git(['rev-parse',`${treeSha}:${repositoryPath}`]),bytes.length,sha256(bytes)];
+  });
   const inventory = JSON.parse(treeBlob(treeSha, acceptanceRelative, 'acceptance inventory'));
   return {
     inventory,
-    value: sha256(canonicalJson(['opportunity-active-graph-v1', sha256(catalogBytes), rows])),
+    value: sha256(canonicalJson(['opportunity-active-graph-v2', sha256(catalogBytes), rows,incorporatedRows,historicalRows])),
   };
 }
 
