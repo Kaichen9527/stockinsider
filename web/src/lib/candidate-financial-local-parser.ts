@@ -101,7 +101,11 @@ function parseResult(raw: string, inputSha256: string): CandidateFinancialLocalP
         && fact.dimension_count === 0;
     })
     || typeof result.runtimeVersion !== 'string' || !/^\d+\.\d+\.\d+$/u.test(result.runtimeVersion)
-    || typeof result.taxonomySha256 !== 'string' || !/^[0-9a-f]{64}$/u.test(result.taxonomySha256)
+    // A locator-only partial diagnostic may intentionally run without a local
+    // official taxonomy.  Any fact that crosses the ingestion boundary must
+    // remain bound to the reviewed taxonomy bytes.
+    || (validatedFacts.length > 0
+      && (typeof result.taxonomySha256 !== 'string' || !/^[0-9a-f]{64}$/u.test(result.taxonomySha256)))
     )) throw new Error('candidate_financial_local_parser_invalid_fact_manifest');
   return {
     schema: 'candidate-financial-document-parser-v1', status: result.status as 'complete' | 'partial',
