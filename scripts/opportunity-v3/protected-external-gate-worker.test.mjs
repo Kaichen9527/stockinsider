@@ -151,15 +151,40 @@ test('the protected root selects closed graph-bound Requirements/Architecture ev
     'evidence/source-led-opportunity-v3-architecture-4b1e75f5',
     'evidence/source-led-opportunity-v3-requirements-gate-bootstrap-20260906',
     'evidence/source-led-opportunity-v3-architecture-gate-bootstrap-20260906',
+    'evidence/source-led-opportunity-v3-requirements-6ed9d39a',
+    'evidence/source-led-opportunity-v3-architecture-6ed9d39a',
+    'requirements-review-v3.23.md',
+    'architecture-review-v3.23.md',
   ]) assert.match(worker, new RegExp(reference.replace(/[.]/gu, '\\.'), 'u'));
-  assert.match(worker, /13081345293dcb3306c68420270ca82ea090fa18a0ecb878ccd8da08d63e0587/u);
-  assert.match(worker, /4f08c1a3a126236039247c5d8542ddf7dbdab0d2384c6e953fe22bcc151808ab/u);
+  for (const graph of [
+    '1c32b707a2e3d36e0ca01b4e78b9c20fa5bcef5eb34dce486063d9f694a2c9fc',
+    '8c4d36c50c2e4d2437429a4bf2dbc3911cfe69a59f9ae6a231dd7105a69b1c2c',
+    '81dceab0d17b6c0f0c104ee3376f6d1dc5065a283040a4c1ee0ac40f574580d4',
+    '4baf35c1a17cc7c7cd451e71b29e34e9b83c90ee03ca18822fcf4f7f47b19a7b',
+    '13081345293dcb3306c68420270ca82ea090fa18a0ecb878ccd8da08d63e0587',
+    '329de76e514164f7ebd1905708491aa15e80c9ce34eb0fb7be3eb03786cdcf64',
+    '4f08c1a3a126236039247c5d8542ddf7dbdab0d2384c6e953fe22bcc151808ab',
+    'c74be1cd14439580505e05f2ec5904ea7dc9732ee7a4164c9ec1573691ebe352',
+    '5f985e391799fd8332df16c2151f75cc95dfb643a087912d92df2845a435016e',
+    'a4cf40d99dbfe7d23e0bdd39130f73cf6943a5535394d8313f2055de9a7d3058',
+  ]) assert.match(worker, new RegExp(graph, 'u'), `${graph} graph mapping retained`);
   assert.match(worker, /evidence\/source-led-opportunity-v3-exact-review-\$\{attestation[.]subjectCommitSha\}/u);
   assert.match(worker, /function reviewSource\(check, attestation = null, identity = null\)/u);
   assert.match(worker, /function reviewSourceValues\(attestation, identity\)/u);
   assert.match(worker, /Unrelated future graph refs are deliberately not fetched/u);
   assert.doesNotMatch(worker, /Object[.]values\(graphBoundReviewSources\)/u);
   assert.match(worker, /active graph evidence source/u);
+});
+
+test('the protected root dispatches the closed v1 and v2 graph algorithms and rejects unknown catalogs', () => {
+  assert.match(worker, /opportunity-active-artifact-catalog-v1/u);
+  assert.match(worker, /opportunity-active-artifact-catalog-v2/u);
+  assert.match(worker, /unknown active artifact catalog schema/u);
+  assert.match(worker, /catalog[.]schema === 'opportunity-active-artifact-catalog-v1'/u);
+  assert.match(worker, /'opportunity-active-graph-v1', sha256\(catalogBytes\), rows/u);
+  assert.match(worker, /'opportunity-active-graph-v2'/u);
+  assert.match(worker, /external\(catalog[.]incorporatedFiles, 'incorporated artifact'\)/u);
+  assert.match(worker, /external\(catalog[.]historicalAuditFiles, 'historical audit artifact'\)/u);
 });
 
 test('each candidate command is isolated in a process group that is cleared on return', () => {
