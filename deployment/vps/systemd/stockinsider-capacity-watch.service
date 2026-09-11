@@ -1,0 +1,19 @@
+[Unit]
+Description=StockInsider fail-closed host capacity watch
+
+[Service]
+Type=oneshot
+User=root
+WorkingDirectory=/opt/stockinsider/current
+ExecStart=/usr/bin/node scripts/contabo-host-resource-check.mjs /opt/stockinsider/current/deployment/vps/capacity-watch-budget.json
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ProtectControlGroups=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectKernelLogs=true
+LockPersonality=true
+RestrictSUIDSGID=true
+UMask=0077

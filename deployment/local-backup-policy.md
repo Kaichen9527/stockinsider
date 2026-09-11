@@ -1,8 +1,10 @@
 # Local backup amendment — 2026-09-10
 
 The user selected the local Mac instead of Backblaze B2. No B2 account, payment
-or login is required for this delivery. This replaces the B2/14-daily/4-weekly
-proposal with a provisional 25 GiB capacity budget and latest/previous copies.
+or login is required for this delivery. The local store has a provisional 25 GiB
+capacity budget. A verified set is retained for 14 days plus one verified copy
+from each of the prior four weeks; the latest two and every `cold-unique` set are
+always retained. Rotation only produces a quarantine plan. It never deletes files.
 
 The user clarified that `/backup` means the current StockInsider project root's
 `backup/`, not the macOS filesystem root or the user's home directory. The confirmed
@@ -41,20 +43,21 @@ encrypt sensitive exports before writing, even though the requested destination 
   are verified. The seven-day database rollback observation remains separate from
   the removed stock Shadow policy.
 
-## Still required
+## Current recovery evidence and remaining gate
 
-Destination confirmation/creation and an empty-directory capacity preflight are
-complete. TLS-verified read-only database access using the existing environment
-password has succeeded; no password reset is needed. The read-only pg_dump
-orchestrator and Keychain helper are implemented but have not completed a live
-export. The local Keychain returned OSStatus -25293 during key provisioning;
-this is not a database authentication error. Do not replace this with an
-unencrypted export or put the recovery key alongside the backup.
+Destination confirmation and a live encrypted database export are complete.
+The project-root backup currently also contains an encrypted provider-recovery
+artifact and seven individually encrypted Storage objects. Envelope and archive
+decoding checks passed. The local Keychain returned OSStatus -25293 during key
+provisioning; this was not a database authentication error. The separately stored
+private file key described below was used instead.
 
-Actual encrypted export, document inventory,
-consistent snapshot transfer, independent recovery-key
-storage, automated scheduling and a real restore rehearsal are not completed by
-these preflight checks. Do not claim a backup exists from this document or its tests.
+These artifacts are not yet a complete recovery set: the Storage export was not
+frozen atomically with the database, independent recovery-key escrow is not proven,
+and the clean PostgreSQL rehearsal found target-platform compatibility errors.
+`run-local-backup.mjs` now serializes all phases and `local-backup-set.mjs` refuses
+to publish a complete set until a strict restore and application validation pass.
+Do not treat individual encrypted artifacts as a restorable system backup.
 
 ## Private local key alternative — 2026-09-10
 
@@ -74,7 +77,6 @@ The archive verifier decrypts a previously authenticated file into `pg_restore
 --file=/dev/null`. This validates decoding without executing SQL or writing a
 plaintext archive. It is NOT a complete database restore rehearsal.
 
-Current checks: 18 primitive/key tests passed. A real fixed-snapshot encrypted
-export was started, but completion must be taken from the runtime manifest, not
-this document. Supabase Storage inventory contains seven objects in one bucket;
-their bytes require separate backup. No production migration or cutover occurred.
+Supabase Storage inventory contains seven objects in one bucket. No production
+migration or cutover occurred. Mac sleep/offline time is measured as backup
+staleness; it is never reported as a successful recovery point.

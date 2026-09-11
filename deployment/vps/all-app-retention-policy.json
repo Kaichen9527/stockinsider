@@ -1,0 +1,19 @@
+{
+  "schema": "stockinsider-all-app-retention-policy-v1",
+  "host": "vmi3152467",
+  "policy": "Only explicitly listed, freshly inventoried candidates with verified archive and restore receipts may become eligible. This file cannot delete anything.",
+  "retainedPaths": [
+    "/opt/stockinsider/current",
+    "/opt/stockinsider/previous",
+    "/opt/stockinsider/runtime",
+    "/opt/taskbuddy-v539/current",
+    "/opt/taskbuddy-v536/current",
+    "/opt/babycalendar",
+    "/var/lib/docker",
+    "/var/lib/containerd"
+  ],
+  "externalPrerequisites": {
+    "taskbuddy_api_migration_verified": "TaskBuddy must prove that v5.39 and v5.36 contain every still-required API and route before older versions are eligible. This repository does not perform that migration."
+  },
+  "candidates": []
+}

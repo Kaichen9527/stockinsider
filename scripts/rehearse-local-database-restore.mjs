@@ -73,11 +73,13 @@ try {
   await file.read(header, 0, header.length, 0); await file.read(tag, 0, tag.length, info.size - tag.length);
   const decipher = createDecipheriv('aes-256-gcm', key, header.subarray(layout.ivStart, layout.ivEnd));
   decipher.setAAD(header); decipher.setAuthTag(tag);
-  const result = await run('pg_restore', ['--host', socket, '--username=stockinsider_rehearsal', '--dbname=postgres', '--no-owner', '--no-acl'],
+  const result = await run('pg_restore', ['--host', socket, '--username=stockinsider_rehearsal', '--dbname=postgres',
+    '--no-owner', '--no-acl', '--exit-on-error'],
     stdin => pipeline(file.createReadStream({ start: layout.headerBytes, end: info.size - layout.tagBytes - 1, autoClose: false }), decipher, stdin));
   const outcome = { schema: 'stockinsider-restore-rehearsal-v1', createdAt: new Date().toISOString(),
     contextSha256, sourcePlaintextSha256: verification.plaintextSha256, directory,
     archiveSqlExecuted: true, archiveRestoreSucceeded: result.exitCode === 0,
+    strictRestoreMode: true,
     rolesAndAclRestored: false, applicationValidationPassed: false, restoreVerified: false,
     ...result };
   await writeFile(path.join(directory, 'receipt.json'), JSON.stringify(outcome, null, 2), { flag: 'wx', mode: 0o600 });
