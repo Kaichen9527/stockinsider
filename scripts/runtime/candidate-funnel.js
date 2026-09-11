@@ -55,6 +55,10 @@ function retainedCandidate(prior,{currentSession,completedSessions,retentionSess
     ?'source_evidence_retained_within_20_sessions'
     :'source_unavailable_retained_last_good';
   return Object.freeze({ ...prior,
+    observedInCurrentRun:false,
+    discoveryProducerRunId:prior.discoveryProducerRunId??prior.producerRunId??null,
+    discoverySchedulerConfigSha256:prior.discoverySchedulerConfigSha256??prior.schedulerConfigSha256??null,
+    discoveryLegacySeedSetHash:prior.discoveryLegacySeedSetHash??prior.legacySeedSetHash??null,
     firstObservedSession:sessionId(prior.firstObservedSession)??sessionId(prior.lastObservedSession)??sessionId(currentSession),
     lastObservedSession:sessionId(prior.lastObservedSession)??sessionId(currentSession),
     retentionCountedThroughSession:sessionId(currentSession)
@@ -156,17 +160,25 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
       evidenceCount: evidence.length, ...disposition,
       discoveryDisposition:disposition.disposition,discoveryReason:disposition.reason };
   });
-  const currentByStock=new Map(candidates.map((candidate)=>[candidate.stockId,Object.freeze({ ...candidate,
+  const prior = (priorLedger ?? []).filter((row) => row && typeof row === 'object');
+  const currentByStock=new Map(candidates.map((candidate)=>{
+    const priorCandidate=prior.find((row)=>row.stockId===candidate.stockId);
+    return [candidate.stockId,Object.freeze({ ...candidate,
     ...(producerRunId ? { producerRunId } : {}),
     ...(schedulerConfigSha256 ? { schedulerConfigSha256 } : {}),
     ...(legacySeedSetHash ? { legacySeedSetHash } : {}),
-    firstObservedSession:sessionId((priorLedger??[]).find((prior)=>prior?.stockId===candidate.stockId)?.firstObservedSession)
-      ??sessionId((priorLedger??[]).find((prior)=>prior?.stockId===candidate.stockId)?.lastObservedSession)
+    observedInCurrentRun:true,
+    discoveryProducerRunId:priorCandidate?.discoveryProducerRunId??priorCandidate?.producerRunId??producerRunId,
+    discoverySchedulerConfigSha256:priorCandidate?.discoverySchedulerConfigSha256
+      ??priorCandidate?.schedulerConfigSha256??schedulerConfigSha256,
+    discoveryLegacySeedSetHash:priorCandidate?.discoveryLegacySeedSetHash
+      ??priorCandidate?.legacySeedSetHash??legacySeedSetHash,
+    firstObservedSession:sessionId(priorCandidate?.firstObservedSession)
+      ??sessionId(priorCandidate?.lastObservedSession)
       ??sessionId(currentSession),
     lastObservedSession:sessionId(currentSession),
     retentionCountedThroughSession:sessionId(currentSession),retainedSessionCount:0,
-  })]));
-  const prior = (priorLedger ?? []).filter((row) => row && typeof row === 'object');
+  })];}));
   // A completed ledger is already bounded to the coarse-universe cap.  Keep
   // that invariant explicit: if it is ever violated, silently choosing a
   // subset would turn a persistence defect into an unexplained disappearance.
@@ -252,14 +264,26 @@ function validatePublishedEntrantAuthority({ candidates, producerRunId, schedule
       &&canonicalDisposition===candidate.discoveryDisposition&&canonicalReason===candidate.discoveryReason,
     'published discovery authority enum');
     const expectedMembership=seedSymbols.includes(candidate.symbol)?'in_seed':'out_of_seed';
-    invariant(typeof candidate.producerRunId==='string'&&/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/u.test(candidate.producerRunId)
-      &&candidate.schedulerConfigSha256 === schedulerConfigSha256
-      && candidate.legacySeedSetHash === legacySeedSetHash
+    const uuid=(value)=>typeof value==='string'&&/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/u.test(value);
+    const sha=(value)=>typeof value==='string'&&/^[0-9a-f]{64}$/u.test(value);
+    const currentObservation=candidate.observedInCurrentRun===true;
+    invariant(typeof candidate.observedInCurrentRun==='boolean'
+      &&uuid(candidate.producerRunId)&&sha(candidate.schedulerConfigSha256)&&sha(candidate.legacySeedSetHash)
+      &&uuid(candidate.discoveryProducerRunId)&&sha(candidate.discoverySchedulerConfigSha256)
+      &&sha(candidate.discoveryLegacySeedSetHash)
+      &&(currentObservation
+        ?candidate.producerRunId===producerRunId&&candidate.schedulerConfigSha256===schedulerConfigSha256
+          &&candidate.legacySeedSetHash===legacySeedSetHash
+        :candidate.discoveryDisposition==='unchanged'&&candidate.producerRunId!==producerRunId)
+      &&(candidate.discoveryDisposition==='promoted'
+        ?currentObservation&&candidate.discoveryProducerRunId===producerRunId
+          &&candidate.discoverySchedulerConfigSha256===schedulerConfigSha256
+          &&candidate.discoveryLegacySeedSetHash===legacySeedSetHash
+        :candidate.discoveryProducerRunId!==producerRunId)
       && candidate.seedMembership === expectedMembership
       &&(!candidate.discoveryReason.startsWith('new_')
         ||candidate.discoveryReason === (expectedMembership === 'in_seed' ? 'new_in_seed_symbol' : 'new_out_of_seed_symbol'))
-      &&(candidate.discoveryDisposition==='unchanged'
-        ?candidate.producerRunId!==producerRunId:candidate.producerRunId===producerRunId),
+      &&(candidate.discoveryDisposition!=='refreshed'||currentObservation),
     'published entrant authority conflict');
     if(candidate.discoveryDisposition==='promoted')expectedAdded.push(candidate.symbol);
     else expectedContinued.push(candidate.symbol);

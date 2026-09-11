@@ -1,7 +1,8 @@
 'use strict';
 
 const { bounded, canonicalJson, invariant } = require('./codec');
-const { compatibilityAction, unavailableDecisionEnvelope, validateDecisionEnvelopeV313 } = require('./decision-envelope');
+const { canonicalDecisionNumber, compatibilityAction, unavailableDecisionEnvelope,
+  validateDecisionEnvelopeV313 } = require('./decision-envelope');
 const { validateDecisionEnvelopeV314 } = require('./decision-envelope-v314');
 
 const TECHNICAL_STATES = new Set(['below_support', 'reclaim_required', 'at_support', 'breakout_pending', 'breakout_confirmed', 'extended', 'invalidated']);
@@ -221,11 +222,14 @@ function serializeCorrectnessPublicUnion(decision) {
   const formalRange=validatedEnvelope&&envelope.recommendationAuthority==='formal'
     ?envelope.valuationSummary?.formalRange:null;
   if(formalRange&&decision?.valuation?.status==='normal'){
-    invariant(decision.valuation.targetPrice===undefined||decision.valuation.targetPrice===formalRange.base,
+    const producerRange=decision.valuation.valuationRange;
+    invariant(decision.valuation.targetPrice===undefined
+      ||canonicalDecisionNumber(decision.valuation.targetPrice)===formalRange.base,
       'published valuation target conflicts with immutable envelope');
-    invariant(decision.valuation.valuationRange===undefined
-      ||(Array.isArray(decision.valuation.valuationRange)&&decision.valuation.valuationRange.length===2
-        &&decision.valuation.valuationRange[0]===formalRange.bear&&decision.valuation.valuationRange[1]===formalRange.bull),
+    invariant(producerRange===undefined||(exactKeys(producerRange,['bear','base','bull'])
+      &&canonicalDecisionNumber(producerRange.bear)===formalRange.bear
+      &&canonicalDecisionNumber(producerRange.base)===formalRange.base
+      &&canonicalDecisionNumber(producerRange.bull)===formalRange.bull),
     'published valuation range conflicts with immutable envelope');
   }
   const payload = {
