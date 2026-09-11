@@ -41,6 +41,8 @@ test('remote exporter is read-only and exact while verifier cannot reach product
   assert.match(remote, /"image", "save"/u);
   assert.doesNotMatch(remote, /\b(?:rmi|rm|prune|tag)\b/u);
   assert.match(exporter, /SOHO_VPS_HOST/u);
+  assert.match(exporter, /ServerAliveInterval=15/u);
+  assert.match(exporter, /ServerAliveCountMax=3/u);
   assert.match(exporter, /plaintextStoredOnMac: false/u);
   assert.match(exporter, /productionMutationPerformed: false/u);
   assert.doesNotMatch(verifier, /root@|\/usr\/bin\/ssh/u);

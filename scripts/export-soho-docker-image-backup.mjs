@@ -47,7 +47,8 @@ export async function exportSohoDockerImageBackup({ directory, keyDirectory, hos
   try {
     const program = await readFile(remoteProgram, 'utf8');
     child = spawn('/usr/bin/ssh', ['-o', 'BatchMode=yes', '-o', 'StrictHostKeyChecking=yes',
-      '-o', 'ConnectTimeout=15', `root@${host}`, 'python3', '-', ...candidateRefs],
+      '-o', 'ConnectTimeout=15', '-o', 'ServerAliveInterval=15', '-o', 'ServerAliveCountMax=3',
+      `root@${host}`, 'python3', '-', ...candidateRefs],
     { stdio: ['pipe', 'pipe', 'pipe'] });
     child.stdin.on('error', () => {});
     child.stdin.end(program);
