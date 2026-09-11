@@ -1,10 +1,13 @@
 import { getOpportunityV3ServerClient } from './opportunity-v3/service-client.ts';
 import { collectPagedAuthorityRows } from './candidate-research-policy.ts';
 import { validateOfficialFinancialFact, officialFinancialValidationSubjects, type OfficialValidationRow } from './official-financial-validation.ts';
+import { fixedRunnerPrincipal } from './opportunity-v3/internal.ts';
 
 /** Called only from an authenticated VPS writer, never from a public reader. */
 export async function validatePendingOfficialFinancials(stockIds: string[]) {
   const db = getOpportunityV3ServerClient();
+  const validatorPrincipal = fixedRunnerPrincipal();
+  if (!validatorPrincipal) throw new Error('official_validation_runner_principal_unavailable');
   const counts = { checked: 0, validated: 0, rejected: 0, missingProvenance: 0, unchanged: 0 };
   for (const stockId of [...new Set(stockIds)]) {
     const evaluatedAt = new Date().toISOString();
@@ -52,6 +55,7 @@ export async function validatePendingOfficialFinancials(stockIds: string[]) {
         const result = await db.rpc('record_official_financial_validation', {
           p_fact_id: fact.fact_id, p_recorded_at: fact.recorded_at,
           p_source_sha256: source!.source_sha256, p_input_hash: receipt.inputHash, p_validation: receipt,
+          p_validator_principal: validatorPrincipal,
         });
         if (result.error) throw new Error(`official_validation_write_failed:${result.error.message}`);
         if (result.data === true) counts.validated++; else counts.rejected++;

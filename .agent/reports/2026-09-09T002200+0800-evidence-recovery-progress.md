@@ -1,7 +1,7 @@
 # Evidence recovery and retirement of global Shadow
 
-Branch: `codex/evidence-research-no-global-shadow`  
-Verified base and current VPS release: `408c15c465715227690e1e429c8e9ab4b385f20b`  
+Branch: `codex/evidence-research-no-global-shadow`
+Verified base and current VPS release: `408c15c465715227690e1e429c8e9ab4b385f20b`
 Status: implementation in progress; **not a completed rollout**.
 
 ## Implemented in this branch

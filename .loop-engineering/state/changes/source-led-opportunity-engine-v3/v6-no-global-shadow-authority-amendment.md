@@ -39,6 +39,25 @@ validated immutable decision envelope while all non-buy public action stops are 
 
 ## Evidence and release
 
+## V6 financial-validation authority
+
+The financial-validation receipt and runtime-retry tables are append-only V6 research
+adjuncts owned by the existing `opportunity_v3_rpc_owner`; they are not additions to
+the predecessor 33-function orchestration catalog. `service_role` receives SELECT on
+the two audit relations and EXECUTE only on the exact successor functions
+`record_official_financial_validation(uuid,timestamptz,text,text,jsonb,uuid)`,
+`read_financial_facts_as_of(timestamptz)` and
+`retry_candidate_financial_document_runtime(uuid,uuid,uuid)`. It receives no direct
+INSERT, UPDATE, DELETE or TRUNCATE on either audit relation.
+
+The two mutating functions are `SECURITY DEFINER`, use an empty `search_path`, bind the
+fixed `opportunity_runner` principal, and preserve exact subject/provenance or retry
+state before writing. Every validation receipt records that principal. The as-of reader
+ignores predecessor receipts without a bound principal, so historical or counterfeit
+rows cannot promote a fact. These three functions are the complete V6 research adjunct
+surface; overloads, default arguments and any additional client execute grant are
+forbidden.
+
 The active successor graph must receive new independent requirements and architecture
 reviews, protected-base registration and an exact-commit review. Historical evidence
 for a predecessor graph cannot certify this amendment, and the implementation author

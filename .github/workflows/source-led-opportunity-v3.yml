@@ -9,6 +9,7 @@ on:
       - 'migrations/20260724_source_led_opportunity_engine_v3.sql'
       - 'migrations/20260907*.sql'
       - 'migrations/20260909*.sql'
+      - 'migrations/20260911*.sql'
       - 'deployment/vps/**'
       - 'scripts/model-runner-v3/**'
       - 'scripts/opportunity-v3/**'

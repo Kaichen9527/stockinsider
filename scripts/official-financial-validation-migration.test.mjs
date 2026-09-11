@@ -6,9 +6,13 @@ test('official validation migration is additive, guarded, receipt-backed and PIT
   assert.doesNotMatch(sql,/DROP TABLE|TRUNCATE|DELETE FROM/u);
   assert.match(sql,/ENABLE ROW LEVEL SECURITY/u);
   assert.match(sql,/FROM PUBLIC,anon,authenticated/u);
+  assert.match(sql,/GRANT SELECT ON public[.]official_financial_validation_receipts TO service_role/u);
+  assert.doesNotMatch(sql,/GRANT SELECT,INSERT ON public[.]official_financial_validation_receipts TO service_role/u);
   assert.match(sql,/GRANT EXECUTE[\s\S]*TO service_role/u);
   assert.match(sql,/WHERE fact_id=p_fact_id AND recorded_at=p_recorded_at/u);
   assert.match(sql,/source_sha256=p_source_sha256/u);
+  assert.match(sql,/p_validator_principal,'opportunity_runner'::public[.]internal_principal_role_v3/u);
+  assert.match(sql,/SET search_path=''/u);
   assert.match(sql,/INSERT INTO public.official_financial_validation_receipts/u);
   assert.match(sql,/v_at := clock_timestamp\(\)/u);
   assert.match(sql,/validation_recorded_at=v_at/u);
@@ -23,4 +27,5 @@ test('validation covers the full candidate universe independently of acquisition
   assert.match(research,/validatePendingOfficialFinancials\(proposedUniverse\.map/u);
   assert.doesNotMatch(worker,/Set\(stockIds\)\]\)\.slice|Set\(stockIds\)\]\.slice/u);
   assert.match(worker,/acceptedHashes\.has/u);
+  assert.match(worker,/p_validator_principal: validatorPrincipal/u);
 });
