@@ -40,8 +40,13 @@ it does not make space or expand the VPS.
 ## Standalone release and local backup
 
 Set `output: "standalone"`, run the reviewed production build, then use
-`package-standalone-release.mjs` with a full 40-character commit. The packager
-copies the traced server, static assets, public assets and bounded operations
+`package-standalone-release.mjs` with both the full 40-character source commit
+and the full reviewed packager commit. The application runtime is copied only
+from the exact source checkout; reviewed verification scripts and deployment
+files are copied only from the exact packager checkout. Both tracked trees must
+be clean and both identities are bound into the v2 manifest. The destination is
+the separate `/opt/stockinsider-standalone/releases/<sourceCommit>` namespace.
+The packager copies the traced server, static assets, public assets and bounded operations
 scripts; it rejects backup, env, symlink and special-file leakage and writes a
 hash manifest. A failed destination is quarantined for inspection and never
 replaces a release.

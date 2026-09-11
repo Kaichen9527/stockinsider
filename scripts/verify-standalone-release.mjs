@@ -7,12 +7,14 @@ export async function verifyStandaloneRelease(releaseDirectory) {
   if (!path.isAbsolute(releaseDirectory || '')) throw new Error('absolute_release_path_required');
   const root = await realpath(releaseDirectory);
   const receipt = JSON.parse(await readFile(path.join(root, 'release-manifest.json'), 'utf8'));
-  if (receipt.manifest?.schema !== 'stockinsider-standalone-release-v1'
-    || !/^[0-9a-f]{40}$/.test(receipt.manifest.releaseId || '')
+  if (receipt.manifest?.schema !== 'stockinsider-standalone-release-v2'
+    || !/^[0-9a-f]{40}$/.test(receipt.manifest.sourceCommit || '')
+    || !/^[0-9a-f]{40}$/.test(receipt.manifest.packagerCommit || '')
+    || receipt.manifest.releaseId !== receipt.manifest.sourceCommit
     || createHash('sha256').update(JSON.stringify(receipt.manifest)).digest('hex') !== receipt.manifestSha256) {
     throw new Error('release_manifest_invalid');
   }
-  if (path.basename(root) !== receipt.manifest.releaseId) throw new Error('release_directory_identity_mismatch');
+  if (path.basename(root) !== receipt.manifest.sourceCommit) throw new Error('release_directory_identity_mismatch');
   const actualPaths = [];
   const pending = [''];
   while (pending.length) {
@@ -50,6 +52,7 @@ export async function verifyStandaloneRelease(releaseDirectory) {
   const entrypoint = path.join(root, ...receipt.manifest.entrypoint.split('/'));
   if (!(await lstat(entrypoint)).isFile()) throw new Error('release_entrypoint_missing');
   return { releaseVerified: true, releaseId: receipt.manifest.releaseId,
+    sourceCommit: receipt.manifest.sourceCommit, packagerCommit: receipt.manifest.packagerCommit,
     manifestSha256: receipt.manifestSha256, bytes: total, entrypoint: receipt.manifest.entrypoint };
 }
 

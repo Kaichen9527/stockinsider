@@ -1,11 +1,24 @@
 import { constants } from 'node:fs';
 import { cp, lstat, mkdir, open, readdir, readFile, realpath, stat, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const FORBIDDEN_COMPONENT = /^(?:backup|\.env(?:\..*)?)$/i;
 const RELEASE_ID = /^[0-9a-f]{40}$/;
+
+function verifiedCommit(repository, expected, label) {
+  if (!RELEASE_ID.test(expected || '')) throw new Error(`full_${label}_git_commit_required`);
+  const head = execFileSync('/usr/bin/git', ['-C', repository, 'rev-parse', 'HEAD'], {
+    encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'],
+  }).trim();
+  if (head !== expected) throw new Error(`${label}_commit_mismatch`);
+  const status = execFileSync('/usr/bin/git', ['-C', repository, 'status', '--porcelain', '--untracked-files=no'], {
+    encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  if (status !== '') throw new Error(`${label}_tracked_tree_dirty`);
+}
 
 async function inspectTree(root) {
   const files = [];
@@ -49,22 +62,30 @@ async function findEntrypoint(root) {
   return matches[0];
 }
 
-export async function packageStandaloneRelease({ repository, destinationRoot, releaseId,
+export async function packageStandaloneRelease({ sourceRepository, packagerRepository, destinationRoot,
+  sourceCommit, packagerCommit,
   createdAt = new Date().toISOString() }) {
-  if (!RELEASE_ID.test(releaseId || '')) throw new Error('full_git_release_id_required');
-  if (![repository, destinationRoot].every(value => typeof value === 'string' && path.isAbsolute(value))) {
+  if (![sourceRepository, packagerRepository, destinationRoot]
+    .every(value => typeof value === 'string' && path.isAbsolute(value))) {
     throw new Error('absolute_paths_required');
   }
-  const source = await realpath(repository);
+  const source = await realpath(sourceRepository);
+  const packager = await realpath(packagerRepository);
   const destinationParent = await realpath(destinationRoot);
-  if (source === destinationParent || source.startsWith(destinationParent + path.sep)
-    || destinationParent.startsWith(source + path.sep)) throw new Error('release_destination_must_be_external');
+  for (const repository of new Set([source, packager])) {
+    if (repository === destinationParent || repository.startsWith(destinationParent + path.sep)
+      || destinationParent.startsWith(repository + path.sep)) {
+      throw new Error('release_destination_must_be_external');
+    }
+  }
+  verifiedCommit(source, sourceCommit, 'source');
+  verifiedCommit(packager, packagerCommit, 'packager');
   const standalone = path.join(source, 'web', '.next', 'standalone');
   const staticDirectory = path.join(source, 'web', '.next', 'static');
   for (const required of [standalone, staticDirectory]) {
     if (!(await stat(required)).isDirectory()) throw new Error('standalone_build_missing');
   }
-  const releaseDirectory = path.join(destinationParent, releaseId);
+  const releaseDirectory = path.join(destinationParent, sourceCommit);
   await mkdir(releaseDirectory, { mode: 0o755 });
   try {
     const app = path.join(releaseDirectory, 'app');
@@ -85,14 +106,15 @@ export async function packageStandaloneRelease({ repository, destinationRoot, re
       'contabo-capacity-guard.mjs', 'contabo-host-resource-check.mjs',
       'contabo-deployment-inventory.mjs', 'contabo-cleanup-preflight.mjs',
       'verify-standalone-release.mjs']) {
-      await cp(path.join(source, 'scripts', name), path.join(runtimeScripts, name),
+      await cp(path.join(packager, 'scripts', name), path.join(runtimeScripts, name),
         { dereference: true, errorOnExist: true, force: false });
     }
-    await cp(path.join(source, 'deployment', 'vps'), path.join(releaseDirectory, 'deployment', 'vps'),
+    await cp(path.join(packager, 'deployment', 'vps'), path.join(releaseDirectory, 'deployment', 'vps'),
       { recursive: true, dereference: true, errorOnExist: true, force: false });
     const files = await inspectTree(releaseDirectory);
     const manifest = {
-      schema: 'stockinsider-standalone-release-v1', releaseId, createdAt,
+      schema: 'stockinsider-standalone-release-v2', releaseId: sourceCommit,
+      sourceCommit, packagerCommit, createdAt,
       entrypoint: path.relative(releaseDirectory, path.join(app, entrypoint)).split(path.sep).join('/'),
       fileCount: files.length, bytes: files.reduce((sum, item) => sum + item.bytes, 0), files,
     };
@@ -112,9 +134,11 @@ export async function packageStandaloneRelease({ repository, destinationRoot, re
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
-    const [repository, destinationRoot, releaseId, ...extra] = process.argv.slice(2);
+    const [sourceRepository, packagerRepository, destinationRoot, sourceCommit, packagerCommit, ...extra]
+      = process.argv.slice(2);
     if (extra.length) throw new Error('usage');
-    console.log(JSON.stringify(await packageStandaloneRelease({ repository, destinationRoot, releaseId })));
+    console.log(JSON.stringify(await packageStandaloneRelease({ sourceRepository, packagerRepository,
+      destinationRoot, sourceCommit, packagerCommit })));
   } catch (error) {
     console.error(JSON.stringify({ error: 'standalone_packaging_failed', reason: error.message }));
     process.exitCode = 1;
