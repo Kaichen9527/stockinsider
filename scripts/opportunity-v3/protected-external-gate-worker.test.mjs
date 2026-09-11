@@ -6,7 +6,36 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { treeIdentity } from './protected-external-gate-worker.mjs';
+import {
+  hostPinForModelOracleListing,
+  modelOracleListing,
+  modelOracleListingSha256,
+  requiredModelRunnerHostPin,
+  treeIdentity,
+  trustedModelOracleAuthorityForListings,
+} from './protected-external-gate-worker.mjs';
+
+const v316ModelOracleListing = `100644 blob ddac241c504d7608b65ace59a9f8b47f5f4bc52b\t.loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json
+100644 blob 5405325e4adab71df87290c1691c1cb4cf2fa707\tscripts/loop-model-runner-v3.js
+100644 blob 4d7d843c7b40b12706bb5bd34d4e3bd79ca99955\tscripts/model-runner-v3/artifacts.js
+100644 blob c50e3e99a6e7567c28651ae11326310b12a4ff3a\tscripts/model-runner-v3/canonicalJson.js
+100644 blob 4f941cb277d7bc5e27e9728f9063440fd3bbc9ac\tscripts/model-runner-v3/codexAdapter.js
+100644 blob bdb492482782df71afe0cc796be7920e04caa690\tscripts/model-runner-v3/execution.js
+100644 blob 2769ad84d1ee2b98a66c1b3b57040ffe29064637\tscripts/model-runner-v3/hostPreflight.js
+100644 blob 010d84f70a4307e0374cd340b09ce7b808025656\tscripts/model-runner-v3/journalStore.js
+100644 blob 9840ca2ef32e3ea6336ccd1e754ff7738214ab43\tscripts/model-runner-v3/manifest.js
+100644 blob 9d7ab11dbbe0c63e590156f6e3cb49e6fc80b1a1\tscripts/model-runner-v3/model-runner-v3.test.js
+100644 blob 57a6225c3f1cc1a78e84ec64ce4abe6429a4764d\tscripts/model-runner-v3/patchParser.js
+100644 blob 4f7e83eb28b8c08653ddc7c7dc2c9cf865902b99\tscripts/model-runner-v3/real-model-attempt-worker.js
+100644 blob fcfb8c60c66619bc7382a9f6afea307763262fdd\tscripts/model-runner-v3/real-model-attempt.js
+100644 blob 5b9e800dcb7331e8cd23040c3347f621fed966ed\tscripts/model-runner-v3/resourceJournal.js
+100644 blob 43e6fdbef0743e462fe84c92a6b32f8c9d127d52\tscripts/model-runner-v3/routing.js
+100644 blob 688cba9048603d6d40a7022970eec67cce7e75b9\tscripts/model-runner-v3/runner.js
+100644 blob 2c07bc1d3f82c2407c84c3780c4421f635d34e3e\tscripts/model-runner-v3/seal.js
+100644 blob 4bbffde1044258153b038e2ca9a53a2b36c6c133\tscripts/model-runner-v3/source.js
+100644 blob 3987b4452bb2da4f109e470c8150c40cf3ed4523\tscripts/model-runner-v3/sourceView.js
+100644 blob 8d09a3ab8aa80c9e3b006f6fb254b9d80d8e5de4\tscripts/model-runner-v3/transactionJournal.js
+100644 blob f35565fec192d2325dfb556522560ba26beb93f7\tscripts/model-runner-v3/trustedGit.js`;
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const workflow = readFileSync(path.join(root, '.github/workflows/source-led-opportunity-external-gate.yml'), 'utf8');
@@ -148,7 +177,7 @@ test('candidate execution waits for exact review and model-runner failure cannot
   assert.match(worker, /modelOracleHostPinByListingSha256/u);
   assert.match(worker, /bcae305c4d7a757510eb99c2c0aeb92679a9e772aecb7270360d747144fa6eed: 'model-runner-host-pins-v3\.14'/u);
   assert.match(worker, /cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5: 'model-runner-host-pins-v3\.15'/u);
-  assert.match(worker, /'46d5d7507a871942932561870b665cccabb91d28e706272710c341f5f84f0598': 'model-runner-host-pins-v3\.16'/u);
+  assert.match(worker, /'70dbbd6ed3846ada9804c029321dcc5e97de60ddf4e63a75142d10f2efdde115': 'model-runner-host-pins-v3\.16'/u);
   assert.match(worker, /model runner host pin requires an exact protected listing/u);
 });
 
@@ -273,6 +302,45 @@ test('the protected root executes the closed v1 and v2 graph algorithms and reje
   );
 });
 
+test('the protected model-oracle rotation executes the exact v3.15 to v3.16 listing transition', () => {
+  const baseListing = modelOracleListing(root, 'HEAD');
+  assert.equal(
+    modelOracleListingSha256(baseListing),
+    'cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5',
+    'production Git listing binds the protected v3.15 base',
+  );
+  assert.equal(requiredModelRunnerHostPin(root, 'HEAD'), 'model-runner-host-pins-v3.15');
+  assert.equal(trustedModelOracleAuthorityForListings(baseListing, baseListing), 'protected_base');
+
+  assert.equal(
+    modelOracleListingSha256(v316ModelOracleListing),
+    '70dbbd6ed3846ada9804c029321dcc5e97de60ddf4e63a75142d10f2efdde115',
+    'the reviewed successor listing uses the same trimmed bytes as production Git',
+  );
+  assert.equal(hostPinForModelOracleListing(v316ModelOracleListing), 'model-runner-host-pins-v3.16');
+  assert.equal(
+    trustedModelOracleAuthorityForListings(baseListing, v316ModelOracleListing),
+    'model-runner-host-pin-amendment-v3.16',
+  );
+
+  const unapprovedSuccessor = v316ModelOracleListing.replace(
+    'ddac241c504d7608b65ace59a9f8b47f5f4bc52b',
+    'edac241c504d7608b65ace59a9f8b47f5f4bc52b',
+  );
+  assert.throws(
+    () => trustedModelOracleAuthorityForListings(baseListing, unapprovedSuccessor),
+    /model oracle successor listing must match the one reviewed digest/u,
+  );
+  assert.throws(
+    () => trustedModelOracleAuthorityForListings(v316ModelOracleListing, unapprovedSuccessor),
+    /model oracle successor requires protected-base approval/u,
+  );
+  assert.throws(
+    () => hostPinForModelOracleListing(unapprovedSuccessor),
+    /model runner host pin requires an exact protected listing/u,
+  );
+});
+
 test('each candidate command is isolated in a process group that is cleared on return', () => {
   assert.match(worker, /const detached = process\.platform !== 'win32';/u);
   assert.match(worker, /process\.kill\(-result\.pid, 'SIGKILL'\);/u);
@@ -306,9 +374,9 @@ test('candidate model code receives no credential and is enclosed by a base-owne
   assert.match(worker, /modelOracleSuccessorApprovals/u);
   assert.match(worker, /model-runner-host-pin-amendment-v3[.]15/u);
   assert.match(worker, /model-runner-host-pin-amendment-v3[.]16/u);
-  assert.match(worker, /e933c87b33c15e55391b7de498b8e6e2cc8f9b4e9ff5cb9f7b2b0ea0bb6d0db5/u);
-  assert.match(worker, /evidence\/source-led-opportunity-v3-host-pin-v316-requirements-88cc143/u);
-  assert.match(worker, /evidence\/source-led-opportunity-v3-host-pin-v316-architecture-88cc143/u);
+  assert.match(worker, /7700f1c0940dae14034c852e5ffe9e8a9f18439834bcc1c744876dc478470159/u);
+  assert.match(worker, /evidence\/source-led-opportunity-v3-host-pin-v316-requirements-aa0c08b/u);
+  assert.match(worker, /evidence\/source-led-opportunity-v3-host-pin-v316-architecture-aa0c08b/u);
   assert.match(worker, /model oracle successor requires protected-base approval/u);
   assert.match(worker, /model oracle successor listing must match the one reviewed digest/u);
   assert.match(worker, /const oracleRoot = authority === 'protected_base' \? baseRoot : subjectRoot/u);

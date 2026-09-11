@@ -259,15 +259,15 @@ const graphBoundReviewSources = Object.freeze({
   // A root-volume remount changed only the exact device identity of the pinned
   // runner paths. Register the independently reviewed V3.16 graph before the
   // one-time successor is proposed, so candidate bytes cannot select reviews.
-  'e933c87b33c15e55391b7de498b8e6e2cc8f9b4e9ff5cb9f7b2b0ea0bb6d0db5': Object.freeze({
+  '7700f1c0940dae14034c852e5ffe9e8a9f18439834bcc1c744876dc478470159': Object.freeze({
     requirements: Object.freeze({
-      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-host-pin-v316-requirements-88cc143',
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-host-pin-v316-requirements-aa0c08b',
       path: `${changeRelative}/requirements-review-host-pin-v3.16.md`,
       finalLine: 'Final reviewed implementation commit/tree',
       rangeLine: 'Full reviewed range',
     }),
     architecture: Object.freeze({
-      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-host-pin-v316-architecture-88cc143',
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-host-pin-v316-architecture-aa0c08b',
       path: `${changeRelative}/architecture-review-host-pin-v3.16.md`,
       finalLine: 'Final reviewed implementation commit/tree',
       rangeLine: 'Full reviewed implementation range',
@@ -732,39 +732,52 @@ const modelOracleSuccessorApprovals = Object.freeze({
   }),
   'cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5': Object.freeze({
     approvalId: 'model-runner-host-pin-amendment-v3.16',
-    subjectListingSha256: '46d5d7507a871942932561870b665cccabb91d28e706272710c341f5f84f0598',
+    subjectListingSha256: '70dbbd6ed3846ada9804c029321dcc5e97de60ddf4e63a75142d10f2efdde115',
   }),
 });
 
 const modelOracleHostPinByListingSha256 = Object.freeze({
   bcae305c4d7a757510eb99c2c0aeb92679a9e772aecb7270360d747144fa6eed: 'model-runner-host-pins-v3.14',
   cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5: 'model-runner-host-pins-v3.15',
-  '46d5d7507a871942932561870b665cccabb91d28e706272710c341f5f84f0598': 'model-runner-host-pins-v3.16',
+  '70dbbd6ed3846ada9804c029321dcc5e97de60ddf4e63a75142d10f2efdde115': 'model-runner-host-pins-v3.16',
 });
 
-function modelOracleListing(root, commit) {
+export function modelOracleListing(root, commit) {
   return git(root, ['ls-tree', '-r', '--full-tree', commit, '--', ...MODEL_ORACLE_PATHS]);
 }
 
-function requiredModelRunnerHostPin(subjectRoot, subjectCommitSha) {
-  const listingSha256 = sha256(Buffer.from(modelOracleListing(subjectRoot, subjectCommitSha), 'utf8'));
+export function modelOracleListingSha256(listing) {
+  return sha256(Buffer.from(listing, 'utf8'));
+}
+
+export function hostPinForModelOracleListing(listing) {
+  const listingSha256 = modelOracleListingSha256(listing);
   const hostPin = modelOracleHostPinByListingSha256[listingSha256];
   assert.ok(hostPin, 'model runner host pin requires an exact protected listing');
   return hostPin;
 }
 
-function trustedModelOracleAuthority(subjectRoot, subjectCommitSha) {
-  const baseListing = modelOracleListing(baseRoot, 'HEAD');
-  const subjectListing = modelOracleListing(subjectRoot, subjectCommitSha);
+export function requiredModelRunnerHostPin(subjectRoot, subjectCommitSha) {
+  return hostPinForModelOracleListing(modelOracleListing(subjectRoot, subjectCommitSha));
+}
+
+export function trustedModelOracleAuthorityForListings(baseListing, subjectListing) {
   if (subjectListing === baseListing) return 'protected_base';
-  const approval = modelOracleSuccessorApprovals[sha256(Buffer.from(baseListing, 'utf8'))];
+  const approval = modelOracleSuccessorApprovals[modelOracleListingSha256(baseListing)];
   assert.ok(approval, 'model oracle successor requires protected-base approval');
   assert.equal(
-    sha256(Buffer.from(subjectListing, 'utf8')),
+    modelOracleListingSha256(subjectListing),
     approval.subjectListingSha256,
     'model oracle successor listing must match the one reviewed digest',
   );
   return approval.approvalId;
+}
+
+function trustedModelOracleAuthority(subjectRoot, subjectCommitSha) {
+  return trustedModelOracleAuthorityForListings(
+    modelOracleListing(baseRoot, 'HEAD'),
+    modelOracleListing(subjectRoot, subjectCommitSha),
+  );
 }
 
 function publicGithubJson(url, label) {
