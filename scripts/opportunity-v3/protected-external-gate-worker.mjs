@@ -256,6 +256,23 @@ const graphBoundReviewSources = Object.freeze({
       rangeLine: 'Full reviewed implementation range',
     }),
   }),
+  // A root-volume remount changed only the exact device identity of the pinned
+  // runner paths. Register the independently reviewed V3.16 graph before the
+  // one-time successor is proposed, so candidate bytes cannot select reviews.
+  'e933c87b33c15e55391b7de498b8e6e2cc8f9b4e9ff5cb9f7b2b0ea0bb6d0db5': Object.freeze({
+    requirements: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-host-pin-v316-requirements-88cc143',
+      path: `${changeRelative}/requirements-review-host-pin-v3.16.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+    architecture: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-host-pin-v316-architecture-88cc143',
+      path: `${changeRelative}/architecture-review-host-pin-v3.16.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed implementation range',
+    }),
+  }),
   '5f985e391799fd8332df16c2151f75cc95dfb643a087912d92df2845a435016e': Object.freeze({
     requirements: v319ReviewSources.requirements,
     architecture: v319ReviewSources.architecture,
@@ -713,11 +730,16 @@ const modelOracleSuccessorApprovals = Object.freeze({
     approvalId: 'model-runner-host-pin-amendment-v3.15',
     subjectListingSha256: 'cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5',
   }),
+  'cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5': Object.freeze({
+    approvalId: 'model-runner-host-pin-amendment-v3.16',
+    subjectListingSha256: '46d5d7507a871942932561870b665cccabb91d28e706272710c341f5f84f0598',
+  }),
 });
 
 const modelOracleHostPinByListingSha256 = Object.freeze({
   bcae305c4d7a757510eb99c2c0aeb92679a9e772aecb7270360d747144fa6eed: 'model-runner-host-pins-v3.14',
   cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5: 'model-runner-host-pins-v3.15',
+  '46d5d7507a871942932561870b665cccabb91d28e706272710c341f5f84f0598': 'model-runner-host-pins-v3.16',
 });
 
 function modelOracleListing(root, commit) {

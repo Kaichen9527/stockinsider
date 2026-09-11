@@ -148,6 +148,7 @@ test('candidate execution waits for exact review and model-runner failure cannot
   assert.match(worker, /modelOracleHostPinByListingSha256/u);
   assert.match(worker, /bcae305c4d7a757510eb99c2c0aeb92679a9e772aecb7270360d747144fa6eed: 'model-runner-host-pins-v3\.14'/u);
   assert.match(worker, /cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5: 'model-runner-host-pins-v3\.15'/u);
+  assert.match(worker, /'46d5d7507a871942932561870b665cccabb91d28e706272710c341f5f84f0598': 'model-runner-host-pins-v3\.16'/u);
   assert.match(worker, /model runner host pin requires an exact protected listing/u);
 });
 
@@ -304,6 +305,10 @@ test('candidate model code receives no credential and is enclosed by a base-owne
   assert.match(worker, /OPPORTUNITY_V3_PROTECTED_LIVE_ONLY: '1'/u);
   assert.match(worker, /modelOracleSuccessorApprovals/u);
   assert.match(worker, /model-runner-host-pin-amendment-v3[.]15/u);
+  assert.match(worker, /model-runner-host-pin-amendment-v3[.]16/u);
+  assert.match(worker, /e933c87b33c15e55391b7de498b8e6e2cc8f9b4e9ff5cb9f7b2b0ea0bb6d0db5/u);
+  assert.match(worker, /evidence\/source-led-opportunity-v3-host-pin-v316-requirements-88cc143/u);
+  assert.match(worker, /evidence\/source-led-opportunity-v3-host-pin-v316-architecture-88cc143/u);
   assert.match(worker, /model oracle successor requires protected-base approval/u);
   assert.match(worker, /model oracle successor listing must match the one reviewed digest/u);
   assert.match(worker, /const oracleRoot = authority === 'protected_base' \? baseRoot : subjectRoot/u);
