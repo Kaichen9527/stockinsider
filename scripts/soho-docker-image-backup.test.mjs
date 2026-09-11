@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import test from 'node:test';
 import { readFile } from 'node:fs/promises';
-import { loadSohoImagePolicy, validateSohoImagePolicy, SOHO_VPS_HOST } from './soho-image-policy.mjs';
+import { canonical, loadSohoImagePolicy, validateSohoImagePolicy, SOHO_VPS_HOST } from './soho-image-policy.mjs';
 import { verifyLoadedSohoImages } from './verify-soho-docker-image-backup.mjs';
 
 test('SOHO retention manifest is exact, disjoint and protects every retained identity', async () => {
@@ -21,10 +22,17 @@ test('SOHO retention manifest is exact, disjoint and protects every retained ide
 test('isolated docker load verification binds refs, config digests, platform and layers', () => {
   const expected = [{ ref: 'soho-rollback/soho-web:20260910T231911Z',
     imageId: `sha256:${'a'.repeat(64)}`, configDigest: `sha256:${'a'.repeat(64)}`,
-    architecture: 'amd64', os: 'linux', rootFsLayers: [`sha256:${'b'.repeat(64)}`] }];
-  const inspected = [{ Id: expected[0].imageId, RepoTags: [expected[0].ref],
+    configJsonSha256: '', architecture: 'amd64', os: 'linux',
+    rootFsLayers: [`sha256:${'b'.repeat(64)}`] }];
+  const inspected = [{ Id: `sha256:${'c'.repeat(64)}`, RepoTags: [expected[0].ref],
+    RepoDigests: [`soho-rollback/soho-web@${expected[0].imageId}`],
     Architecture: 'amd64', Os: 'linux', RootFS: { Layers: expected[0].rootFsLayers } }];
+  expected[0].configJsonSha256 = 'unused-because-repo-digest-is-preserved';
   assert.equal(verifyLoadedSohoImages(expected, inspected), true);
+  const config = { Env: ['NODE_ENV=production'], Labels: { service: 'api' } };
+  expected[0].configJsonSha256 = createHash('sha256').update(canonical(config)).digest('hex');
+  assert.equal(verifyLoadedSohoImages(expected,
+    [{ ...inspected[0], RepoDigests: [], Config: config }]), true);
   assert.throws(() => verifyLoadedSohoImages(expected,
     [{ ...inspected[0], RepoTags: ['soho-rollback/soho-web:other'] }]),
   /loaded_soho_image_identity_mismatch/u);

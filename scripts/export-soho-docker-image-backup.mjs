@@ -19,9 +19,10 @@ function verifyObserved(images, policy) {
   const refs = new Set();
   for (const image of images) {
     if (!image || Object.keys(image).sort().join(',')
-      !== 'architecture,configDigest,imageId,os,ref,rootFsLayers,size') throw new Error('soho_image_manifest_shape_invalid');
-    if (policy.obsoleteCandidates[image.ref] !== image.imageId || image.configDigest !== image.imageId
+      !== 'architecture,configJsonSha256,imageId,os,ref,rootFsLayers,size') throw new Error('soho_image_manifest_shape_invalid');
+    if (policy.obsoleteCandidates[image.ref] !== image.imageId
       || refs.has(image.ref) || !Number.isSafeInteger(image.size) || image.size <= 0
+      || !/^[0-9a-f]{64}$/u.test(image.configJsonSha256 || '')
       || !['amd64'].includes(image.architecture) || image.os !== 'linux'
       || !Array.isArray(image.rootFsLayers) || image.rootFsLayers.length < 1
       || image.rootFsLayers.some(layer => !/^sha256:[0-9a-f]{64}$/u.test(layer))) {
@@ -80,7 +81,7 @@ export async function exportSohoDockerImageBackup({ directory, keyDirectory, hos
     const images = await Promise.race([beforeReady,
       terminal.then(() => { throw new Error('remote_image_manifest_missing'); })]);
     verifyObserved(images, policy);
-    const manifest = { schema: 'stockinsider-soho-image-export-v2', host,
+    const manifest = { schema: 'stockinsider-soho-image-export-v3', host,
       createdAt: new Date().toISOString(), policySha256, images,
       candidateRefs, plaintextStoredOnMac: false, productionMutationPerformed: false,
       broadPrunePerformed: false, restoreVerified: false,

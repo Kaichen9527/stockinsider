@@ -2,6 +2,7 @@
 """Read-only, exact SOHO candidate export. It never removes or retags an image."""
 
 import json
+import hashlib
 import subprocess
 import sys
 
@@ -45,7 +46,9 @@ def inspect_images(refs):
         result.append({
             "ref": ref,
             "imageId": image["Id"],
-            "configDigest": image["Id"],
+            "configJsonSha256": hashlib.sha256(json.dumps(
+                image.get("Config") or {}, sort_keys=True, separators=(",", ":")
+            ).encode("utf-8")).hexdigest(),
             "architecture": image.get("Architecture"),
             "os": image.get("Os"),
             "size": image.get("Size"),
