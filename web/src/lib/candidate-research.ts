@@ -1350,7 +1350,7 @@ async function executeCandidateResearchCycle(options: {
         return url ? [{ platform: String(row.platform || 'unknown'), label: String(row.source_name || row.author_name || row.platform || '來源'), url, publishedAt: String(row.mentioned_at || row.available_at || '') }] : [];
       }));
       const detailCard: CandidateStageCard = {
-        symbol: stock.symbol, chineseName: stock.name, market: 'TW', lifecycleStage: stage.stage,
+        symbol: stock.symbol, chineseName: stock.name, sector: stock.sector, market: 'TW', lifecycleStage: stage.stage,
         latestMentionAt: latestMentionMs ? new Date(latestMentionMs).toISOString() : evaluatedAt,
         mentionCount: recentMentions.length, rawMentionCount: concentration.rawMentions, effectiveMentionCount: concentration.effectiveMentions,
         publisherCount: concentration.publisherCount,
@@ -1361,7 +1361,7 @@ async function executeCandidateResearchCycle(options: {
         sources: sourceLinks.map((source) => ({ platform: source.platform, sourceName: source.label, publisherName: source.label, author: null, sourceUrl: source.url, stance: null, mentionedAt: source.publishedAt })),
         scores: stage.scores,
         valuation: { status: valuation ? 'complete' : 'missing', currentPrice: technical.close, bearTarget: valuation?.bearTarget ?? null, baseTarget: valuation?.baseTarget ?? null, bullTarget: valuation?.bullTarget ?? null, probabilityWeightedTarget: valuation?.probabilityWeightedTarget ?? null, baseUpsidePct: valuation?.baseUpsidePct ?? null, bearDownsidePct: valuation?.bearDownsidePct ?? null, rewardRiskRatio: valuation?.rewardRiskRatio ?? null, method: publishedPrimaryMethod ?? valuationPolicy.basis },
-        technical: { sessionDate: technical.sessionDate, close: technical.close, ma20: technical.ma20, ma60: technical.ma60, ma120: technical.ma120, ma240: technical.ma240, rsi14: technical.rsi14, volumeRatio20Median: technical.volumeRatio20Median, marketRegime, hardGatePassed: stage.technicalHardGatePassed },
+        technical: { sessionDate: technical.sessionDate, close: technical.close, ma20: technical.ma20, ma60: technical.ma60, ma120: technical.ma120, ma240: technical.ma240, rsi14: technical.rsi14, atr14: technical.atr14, volumeRatio20Median: technical.volumeRatio20Median, marketRegime, hardGatePassed: stage.technicalHardGatePassed },
         consecutiveCloses: { passed: streak, required: 2, technicalSessionDate: technical.sessionDate }, classificationReplayHash,
         unmetConditions: [...new Set([...stage.unmetConditions, ...priceEvidence.blockers, ...fallbackEvidenceBlockers, ...(priceCoverageTerminal ? [priceCoverageTerminal] : []), ...(valuationPolicy.reason ? [valuationPolicy.reason] : [])])], promotionReasons: stage.promotionReasons,
         dataAsOf: evaluatedAt, stale: baseInput.staleOrFallback, detailRevisionId: null, riskAction: null, detailHref: `/stock/${stock.symbol}`,
@@ -1591,6 +1591,7 @@ async function executeCandidateResearchCycle(options: {
           const gapCard: CandidateStageCard = {
             symbol: stock.symbol,
             chineseName: stock.name,
+            sector: stock.sector,
             market: 'TW',
             lifecycleStage: 'found',
             latestMentionAt: latestMentionMs ? new Date(latestMentionMs).toISOString() : evaluatedAt,
@@ -1763,7 +1764,7 @@ export async function runCandidateResearchCycle(options: {
 export async function loadCandidateStageCards(): Promise<{ found: CandidateStageCard[]; waiting: CandidateStageCard[]; actionable: CandidateStageCard[] }> {
   const supabase = getSupabaseServerClient();
   const cutoff = new Date(Date.now() - 7 * 86_400_000).toISOString();
-  const mentionSelect = 'stock_id,platform,source_name,author_name,source_url,stance,independent_content_hash,mentioned_at,available_at,publisher_key,publisher_name,provenance,stocks(id,symbol,name,market)';
+  const mentionSelect = 'stock_id,platform,source_name,author_name,source_url,stance,independent_content_hash,mentioned_at,available_at,publisher_key,publisher_name,provenance,stocks(id,symbol,name,market,sector)';
   const latest = (rows: Row[]) => {
     const selected = new Map<string, Row>();
     for (const row of rows) {
@@ -1777,7 +1778,7 @@ export async function loadCandidateStageCards(): Promise<{ found: CandidateStage
   // complete seven-day plane so publication remains complete without one
   // oversized fetch.
   const stagePromise = supabase.from('candidate_daily_stage_snapshots')
-    .select('*,stocks(id,symbol,name,market)').eq('ruleset_version', STAGE_RULESET_VERSION).eq('model_version', CANDIDATE_STAGE_MODEL_VERSION)
+    .select('*,stocks(id,symbol,name,market,sector)').eq('ruleset_version', STAGE_RULESET_VERSION).eq('model_version', CANDIDATE_STAGE_MODEL_VERSION)
     .order('session_date', { ascending: false }).order('available_at', { ascending: false }).limit(5000);
   const recentMentions: Row[] = [];
   const mentionPageSize = 750;
@@ -1800,7 +1801,7 @@ export async function loadCandidateStageCards(): Promise<{ found: CandidateStage
   const historicalOnlyIds = persistedStockIds.filter((stockId) => !recentStockIds.includes(stockId));
   const [historicalMentionsRes, technicalRes, valuationRes, trackingRes] = await Promise.all([
     historicalOnlyIds.length > 0
-      ? supabase.from('candidate_source_mentions').select('stock_id,platform,source_name,author_name,source_url,stance,independent_content_hash,mentioned_at,available_at,publisher_key,publisher_name,provenance,stocks(id,symbol,name,market)').in('stock_id', historicalOnlyIds).order('available_at', { ascending: false }).limit(5000)
+      ? supabase.from('candidate_source_mentions').select('stock_id,platform,source_name,author_name,source_url,stance,independent_content_hash,mentioned_at,available_at,publisher_key,publisher_name,provenance,stocks(id,symbol,name,market,sector)').in('stock_id', historicalOnlyIds).order('available_at', { ascending: false }).limit(5000)
       : Promise.resolve({ data: [], error: null }),
     supabase.from('technical_feature_snapshots').select('*').in('stock_id', stockIds).order('session_date', { ascending: false }).limit(5000),
     supabase.from('valuation_snapshots').select('*').in('stock_id', stockIds).eq('model_version', CANDIDATE_VALUATION_MODEL_VERSION).order('session_date', { ascending: false }).limit(5000),
@@ -1885,7 +1886,7 @@ export async function loadCandidateStageCards(): Promise<{ found: CandidateStage
     if (stale && !unmetConditions.includes('stale_or_fallback_data')) unmetConditions.push('stale_or_fallback_data');
     const valuationStale = !valuation?.available_at || Date.now() - Date.parse(String(valuation.available_at)) > 7 * 86_400_000;
     cardsByStock.set(stockId, {
-      symbol: String(stock.symbol || ''), chineseName: String(stock.name || stock.symbol || ''), market: String(stock.market || 'TW') === 'US' ? 'US' : 'TW', lifecycleStage,
+      symbol: String(stock.symbol || ''), chineseName: String(stock.name || stock.symbol || ''), sector: stock.sector ? String(stock.sector) : null, market: String(stock.market || 'TW') === 'US' ? 'US' : 'TW', lifecycleStage,
       latestMentionAt, mentionCount: stockMentions.length, rawMentionCount: concentration.rawMentions,
       effectiveMentionCount: concentration.effectiveMentions, publisherCount: concentration.publisherCount,
       positivePublisherCount: stancePublishers.get('positive')?.size || 0,
@@ -1894,7 +1895,7 @@ export async function loadCandidateStageCards(): Promise<{ found: CandidateStage
       platformCount: concentration.platformCount, dominantPlatformShare: concentration.dominantPlatformShare, sources,
       scores: { discovery: numberOrNull(stage?.discovery_score) || 0, research: numberOrNull(stage?.research_score) || 0, actionability: numberOrNull(stage?.actionability_score) || 0, dataConfidence: numberOrNull(stage?.data_confidence_score) || 0 },
       valuation: { status: valuation ? valuationStale ? 'stale' : 'complete' : 'missing', currentPrice: numberOrNull(valuation?.current_price) ?? numberOrNull(technical?.close), bearTarget: numberOrNull(valuation?.bear_target), baseTarget: numberOrNull(valuation?.base_target), bullTarget: numberOrNull(valuation?.bull_target), probabilityWeightedTarget: numberOrNull(valuation?.probability_weighted_target), baseUpsidePct: valuation ? numberOrNull(stage?.base_upside_pct) : null, bearDownsidePct: valuation ? numberOrNull(stage?.bear_downside_pct) : null, rewardRiskRatio: valuation ? numberOrNull(stage?.reward_risk_ratio) : null, method: valuation?.primary_method ? String(valuation.primary_method) : null },
-      technical: { sessionDate: technical?.session_date ? String(technical.session_date) : null, close: numberOrNull(technical?.close), ma20: numberOrNull(technical?.ma20), ma60: numberOrNull(technical?.ma60), ma120: numberOrNull(technical?.ma120), ma240: numberOrNull(technical?.ma240), rsi14: numberOrNull(technical?.rsi14), volumeRatio20Median: numberOrNull(technical?.volume_ratio_20_median), marketRegime: String(stage?.market_regime || technical?.market_regime || 'unknown'), hardGatePassed: hard.technical_passed === true },
+      technical: { sessionDate: technical?.session_date ? String(technical.session_date) : null, close: numberOrNull(technical?.close), ma20: numberOrNull(technical?.ma20), ma60: numberOrNull(technical?.ma60), ma120: numberOrNull(technical?.ma120), ma240: numberOrNull(technical?.ma240), rsi14: numberOrNull(technical?.rsi14), atr14: numberOrNull(technical?.atr14), volumeRatio20Median: numberOrNull(technical?.volume_ratio_20_median), marketRegime: String(stage?.market_regime || technical?.market_regime || 'unknown'), hardGatePassed: hard.technical_passed === true },
       consecutiveCloses: { passed: Math.max(0, Math.min(2, Math.floor(numberOrNull(hard.consecutive_actionable_closes) || 0))), required: 2, technicalSessionDate: hard.technical_session_date ? String(hard.technical_session_date) : null },
       classificationReplayHash: hard.classification_replay_consistent === true && hard.classification_replay_hash ? String(hard.classification_replay_hash) : null,
       unmetConditions, promotionReasons: stringArray(stage?.promotion_reasons), dataAsOf, stale,
