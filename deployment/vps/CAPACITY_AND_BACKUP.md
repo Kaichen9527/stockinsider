@@ -58,7 +58,9 @@ gates pass and the current host has enough space. No automatic expansion exists.
 `export-vps-release-backup.mjs` accepts only the fixed production host
 `5.104.83.211` and one explicit absolute path shaped like
 `/opt/<app>/releases/<release>`. It rejects `current`, globs, shell syntax, broad
-directories, symlinks and special files. The remote helper is read-only: it hashes
+directories, symlinks and special files. The one reviewed legacy layout
+`/opt/minday-admin-console-releases/<release>` is also accepted explicitly; other
+flattened `*-releases` paths remain rejected. The remote helper is read-only: it hashes
 the release before streaming, emits an embedded tree manifest, hashes it again
 afterward and fails if any path, byte count or digest changed. It has no deletion
 operation.

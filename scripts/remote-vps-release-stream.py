@@ -10,7 +10,7 @@ import stat
 import sys
 import tarfile
 
-PATH_RE = re.compile(r"^/opt/[a-z0-9._-]+/releases/[A-Za-z0-9._-]+$")
+PATH_RE = re.compile(r"^/opt/(?:[a-z0-9._-]+/releases/[A-Za-z0-9._-]+|minday-admin-console-releases/[A-Za-z0-9._-]+)$")
 MAX_FILES = 100_000
 MAX_BYTES = 8 * 1024**3
 META_PREFIX = "STOCKINSIDER_META\t"

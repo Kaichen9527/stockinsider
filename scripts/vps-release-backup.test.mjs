@@ -100,10 +100,14 @@ test('host and release path are fixed and shell metacharacters are rejected', ()
   assert.deepEqual(validateReleaseExportInput({ host: VPS_HOST,
     releasePath: '/opt/stockinsider/releases/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' }),
   { application: 'stockinsider', release: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' });
+  assert.deepEqual(validateReleaseExportInput({ host: VPS_HOST,
+    releasePath: '/opt/minday-admin-console-releases/20260803T153606Z' }),
+  { application: 'minday-admin-console', release: '20260803T153606Z' });
   for (const input of [
     { host: 'example.com', releasePath: '/opt/stockinsider/releases/a' },
     { host: VPS_HOST, releasePath: '/opt/stockinsider/current' },
     { host: VPS_HOST, releasePath: '/opt/app/releases/a;rm' },
+    { host: VPS_HOST, releasePath: '/opt/other-admin-console-releases/20260803T153606Z' },
     { host: VPS_HOST, releasePath: '/' },
   ]) assert.throws(() => validateReleaseExportInput(input));
 });
