@@ -212,7 +212,7 @@ END; $function$;
 
 CREATE OR REPLACE FUNCTION public.candidate_financial_parser_document_ready_v10(
   p_evidence_id uuid,p_receipt_id uuid,p_document_sha256 text
-) RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path=public,pg_temp AS $function$
+) RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path='' AS $function$
   SELECT COALESCE((SELECT evidence.parser='arelle' AND evidence.parser_version='2.44.7'
     AND evidence.taxonomy_sha256='4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869'
     AND evidence.validation_summary->'errorCount'='0'::jsonb
@@ -254,7 +254,7 @@ CREATE TRIGGER guard_financial_document_full_readiness_v10 BEFORE INSERT OR UPDA
 
 CREATE OR REPLACE FUNCTION public.candidate_financial_fact_has_structural_proof_v10(
   p_fact_id uuid,p_recorded_at timestamptz,p_source_sha256 text
-) RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path=public,pg_temp AS $function$
+) RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path='' AS $function$
   SELECT EXISTS (
     SELECT 1 FROM public.opportunity_financial_facts_v3 fact
     JOIN public.stocks stock ON stock.id=fact.stock_id
@@ -303,7 +303,7 @@ $function$;
 -- must never borrow a newly available proof for the same fact/document hash.
 CREATE OR REPLACE FUNCTION public.candidate_financial_fact_has_structural_proof_as_of_v10(
   p_fact_id uuid,p_recorded_at timestamptz,p_source_sha256 text,p_cutoff timestamptz
-) RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path=public,pg_temp AS $function$
+) RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path='' AS $function$
   SELECT EXISTS (
     SELECT 1 FROM public.opportunity_financial_facts_v3 fact
     JOIN public.stocks stock ON stock.id=fact.stock_id
@@ -532,13 +532,18 @@ BEGIN
   RETURN NEXT;
 END; $function$;
 
+DROP FUNCTION IF EXISTS public.record_official_financial_validation(uuid,timestamptz,text,text,jsonb);
 CREATE OR REPLACE FUNCTION public.record_official_financial_validation(
-  p_fact_id uuid,p_recorded_at timestamptz,p_source_sha256 text,p_input_hash text,p_validation jsonb
-) RETURNS boolean LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $function$
+  p_fact_id uuid,p_recorded_at timestamptz,p_source_sha256 text,p_input_hash text,p_validation jsonb,
+  p_validator_principal uuid
+) RETURNS boolean LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $function$
 DECLARE v_fact public.opportunity_financial_facts_v3%ROWTYPE; v_valid boolean; v_inserted integer;
-  v_prior jsonb; v_effective jsonb; v_at timestamptz;
+  v_prior jsonb; v_effective jsonb; v_at timestamptz; v_existing_effective jsonb;
 BEGIN
-  IF p_validation->>'version' IS DISTINCT FROM 'official-financial-v1'
+  IF NOT public.internal_principal_role_is_exact_v3_internal(
+      p_validator_principal,'opportunity_runner'::public.internal_principal_role_v3,clock_timestamp())
+  THEN RAISE EXCEPTION 'principal_role_unavailable'; END IF;
+  IF p_validation->>'version' IS DISTINCT FROM 'official-financial-v2'
     OR COALESCE(p_input_hash,'') !~ '^[0-9a-f]{64}$'
     OR COALESCE(p_source_sha256,'') !~ '^[0-9a-f]{64}$'
     OR jsonb_typeof(p_validation->'reasons') IS DISTINCT FROM 'array'
@@ -572,47 +577,58 @@ BEGIN
     AND jsonb_array_length(p_validation->'reasons')=0
     AND COALESCE(to_jsonb(v_fact)->>'source_ref','') !~ '^(twse|tpex)-mops-inline:';
   v_at:=clock_timestamp();
-  v_prior:=jsonb_build_object('validation_status',v_fact.validation_status,'schema_valid',v_fact.schema_valid,
-    'unit_valid',v_fact.unit_valid,'point_in_time_valid',v_fact.point_in_time_valid,
-    'consistency_valid',v_fact.consistency_valid,'validation_recorded_at',v_fact.validation_recorded_at);
-  v_effective:=CASE WHEN v_fact.validation_status IN ('rejected','conflict','stale') THEN v_prior ELSE
+  SELECT receipt.effective_validation INTO v_existing_effective
+    FROM public.official_financial_validation_receipts receipt
+    WHERE receipt.fact_id=p_fact_id AND receipt.validator_version='official-financial-v2'
+      AND receipt.validator_principal IS NOT NULL
+    ORDER BY receipt.validated_at DESC,receipt.receipt_sequence DESC LIMIT 1;
+  v_prior:=COALESCE(v_existing_effective,
+    '{"validation_status":"pending","schema_valid":false,"unit_valid":false,"point_in_time_valid":false,"consistency_valid":false,"validation_recorded_at":null}'::jsonb);
+  v_effective:=CASE WHEN v_prior->>'validation_status' IN ('rejected','conflict','stale') THEN v_prior ELSE
     jsonb_build_object('validation_status',CASE WHEN v_valid THEN 'validated' ELSE 'rejected' END,
       'schema_valid',(p_validation->>'schemaValid')::boolean,'unit_valid',(p_validation->>'unitValid')::boolean,
       'point_in_time_valid',(p_validation->>'pointInTimeValid')::boolean,
       'consistency_valid',(p_validation->>'consistencyValid')::boolean,'validation_recorded_at',v_at) END;
   INSERT INTO public.official_financial_validation_receipts(
-    fact_id,validator_version,input_hash,source_sha256,validation,validated_at,prior_validation,effective_validation
-  ) VALUES(p_fact_id,'official-financial-v1',p_input_hash,p_source_sha256,p_validation,v_at,v_prior,v_effective)
+    fact_id,validator_version,input_hash,source_sha256,validation,validated_at,prior_validation,effective_validation,
+    validator_principal
+  ) VALUES(p_fact_id,'official-financial-v2',p_input_hash,p_source_sha256,p_validation,v_at,v_prior,v_effective,
+    p_validator_principal)
   ON CONFLICT DO NOTHING;
   GET DIAGNOSTICS v_inserted=ROW_COUNT;
-  IF v_inserted=0 THEN RETURN v_valid AND v_fact.validation_status='validated'; END IF;
-  IF v_fact.validation_status IN ('rejected','conflict','stale') THEN RETURN FALSE; END IF;
+  IF v_inserted=0 THEN
+    SELECT receipt.effective_validation INTO v_existing_effective
+      FROM public.official_financial_validation_receipts receipt
+      WHERE receipt.fact_id=p_fact_id AND receipt.validator_version='official-financial-v2'
+        AND receipt.validator_principal IS NOT NULL
+      ORDER BY receipt.validated_at DESC,receipt.receipt_sequence DESC LIMIT 1;
+    RETURN v_valid AND v_existing_effective->>'validation_status'='validated';
+  END IF;
   UPDATE public.opportunity_financial_facts_v3 SET
-    validation_status=CASE WHEN v_valid THEN 'validated' ELSE 'rejected' END,
-    schema_valid=(p_validation->>'schemaValid')::boolean,
-    unit_valid=(p_validation->>'unitValid')::boolean,
-    point_in_time_valid=(p_validation->>'pointInTimeValid')::boolean,
-    consistency_valid=(p_validation->>'consistencyValid')::boolean,
-    validation_recorded_at=v_at WHERE fact_id=p_fact_id;
-  RETURN v_valid;
+    validation_status=(v_effective->>'validation_status')::public.financial_validation_status_v3,
+    schema_valid=(v_effective->>'schema_valid')::boolean,
+    unit_valid=(v_effective->>'unit_valid')::boolean,
+    point_in_time_valid=(v_effective->>'point_in_time_valid')::boolean,
+    consistency_valid=(v_effective->>'consistency_valid')::boolean,
+    validation_recorded_at=(v_effective->>'validation_recorded_at')::timestamptz WHERE fact_id=p_fact_id;
+  RETURN v_valid AND v_effective->>'validation_status'='validated';
 END $function$;
 
 CREATE OR REPLACE FUNCTION public.read_financial_facts_as_of(p_cutoff timestamptz)
 RETURNS SETOF public.opportunity_financial_facts_v3 LANGUAGE sql STABLE SECURITY INVOKER
-SET search_path=public,pg_temp AS $asof$
+SET search_path='' AS $asof$
   SELECT (jsonb_populate_record(NULL::public.opportunity_financial_facts_v3,
     to_jsonb(f) || CASE
       WHEN latest.id IS NOT NULL THEN COALESCE(latest.effective_validation,
         '{"validation_status":"pending","schema_valid":false,"unit_valid":false,"point_in_time_valid":false,"consistency_valid":false}'::jsonb)
-      WHEN first_receipt.id IS NOT NULL THEN COALESCE(first_receipt.prior_validation,
-        '{"validation_status":"pending","schema_valid":false,"unit_valid":false,"point_in_time_valid":false,"consistency_valid":false}'::jsonb)
-      ELSE '{}'::jsonb END)).*
+      ELSE
+        '{"validation_status":"pending","schema_valid":false,"unit_valid":false,"point_in_time_valid":false,"consistency_valid":false,"validation_recorded_at":null}'::jsonb
+      END)).*
   FROM public.opportunity_financial_facts_v3 f
   LEFT JOIN LATERAL (SELECT r.id,r.effective_validation FROM public.official_financial_validation_receipts r
     WHERE r.fact_id=f.fact_id AND r.validated_at<=p_cutoff
+      AND r.validator_version='official-financial-v2' AND r.validator_principal IS NOT NULL
     ORDER BY r.validated_at DESC,r.receipt_sequence DESC LIMIT 1) latest ON true
-  LEFT JOIN LATERAL (SELECT r.id,r.prior_validation FROM public.official_financial_validation_receipts r
-    WHERE r.fact_id=f.fact_id ORDER BY r.validated_at,r.receipt_sequence LIMIT 1) first_receipt ON true
   WHERE f.recorded_at<=p_cutoff
     AND (COALESCE(f.source_ref,'') NOT LIKE 'issuer-document:%'
       OR public.candidate_financial_fact_has_structural_proof_as_of_v10(f.fact_id,f.recorded_at,
@@ -634,8 +650,30 @@ REVOKE ALL ON FUNCTION public.candidate_financial_canonical_json_v10(jsonb),
   FROM PUBLIC,anon,authenticated,service_role;
 REVOKE ALL ON FUNCTION public.complete_candidate_financial_document_receipt_parser_v10(
   uuid,text,uuid,jsonb,jsonb,jsonb,jsonb,jsonb,timestamptz),
-  public.record_official_financial_validation(uuid,timestamptz,text,text,jsonb) FROM PUBLIC,anon,authenticated;
+  public.record_official_financial_validation(uuid,timestamptz,text,text,jsonb,uuid) FROM PUBLIC,anon,authenticated;
 GRANT EXECUTE ON FUNCTION public.complete_candidate_financial_document_receipt_parser_v10(
   uuid,text,uuid,jsonb,jsonb,jsonb,jsonb,jsonb,timestamptz),
-  public.record_official_financial_validation(uuid,timestamptz,text,text,jsonb) TO service_role;
+  public.record_official_financial_validation(uuid,timestamptz,text,text,jsonb,uuid) TO service_role;
+GRANT EXECUTE ON FUNCTION public.candidate_financial_fact_has_structural_proof_v10(uuid,timestamptz,text)
+  TO opportunity_v3_rpc_owner;
+ALTER FUNCTION public.record_official_financial_validation(uuid,timestamptz,text,text,jsonb,uuid)
+  OWNER TO opportunity_v3_rpc_owner;
+ALTER FUNCTION public.read_financial_facts_as_of(timestamptz) OWNER TO opportunity_v3_rpc_owner;
+-- The principal-bound validator is deliberately owned by a NOLOGIN,
+-- NOBYPASSRLS role. Give it only the issuer-domain lookup needed to verify an
+-- already-recorded provenance URL; service_role remains unable to mutate the
+-- allowlist through this surface.
+GRANT SELECT ON TABLE public.candidate_issuer_document_domains_v6 TO opportunity_v3_rpc_owner;
+DO $policies$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policy
+    WHERE polrelid='public.candidate_issuer_document_domains_v6'::regclass
+      AND polname='official_validation_rpc_owner_issuer_domain_select'
+  ) THEN
+    CREATE POLICY official_validation_rpc_owner_issuer_domain_select
+      ON public.candidate_issuer_document_domains_v6 FOR SELECT
+      TO opportunity_v3_rpc_owner USING (true);
+  END IF;
+END $policies$;
 COMMIT;

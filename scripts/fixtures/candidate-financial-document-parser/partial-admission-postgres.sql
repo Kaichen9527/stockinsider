@@ -4,12 +4,17 @@ CREATE EXTENSION pgcrypto WITH SCHEMA extensions;
 CREATE ROLE anon NOLOGIN;
 CREATE ROLE authenticated NOLOGIN;
 CREATE ROLE service_role NOLOGIN BYPASSRLS;
+CREATE ROLE opportunity_v3_rpc_owner NOLOGIN NOBYPASSRLS;
+GRANT opportunity_v3_rpc_owner TO CURRENT_USER;
+CREATE TYPE public.internal_principal_role_v3 AS ENUM ('opportunity_runner');
+CREATE TYPE public.financial_validation_status_v3 AS ENUM ('pending','validated','rejected','conflict','stale');
 CREATE TYPE public.financial_acquisition_terminal_reason_v4 AS ENUM (
   'complete','empty_official_response','http_not_found','http_rate_limited','http_server_error',
   'network_error','timeout','html_rejected','security_blocked','schema_unrecognized',
   'unsupported_issuer','invalid_cursor','write_failed');
 CREATE TABLE public.stocks(id uuid PRIMARY KEY,symbol text NOT NULL);
 CREATE TABLE public.candidate_issuer_document_domains_v6(stock_id uuid,host text,PRIMARY KEY(stock_id,host));
+ALTER TABLE public.candidate_issuer_document_domains_v6 ENABLE ROW LEVEL SECURITY;
 CREATE TABLE public.candidate_financial_acquisition_jobs_v4(
   job_id uuid PRIMARY KEY,stock_id uuid,period_end date DEFAULT '2026-06-30',
   endpoint_key text DEFAULT 'mops_inline',cursor_key text DEFAULT 'acceptance',
@@ -45,7 +50,7 @@ CREATE TABLE public.opportunity_financial_facts_v3(
   fact_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),stock_id uuid,fact_key text,period_start date,period_end date,
   duration_kind text,value numeric,unit text,provider text,authority_tier text,estimate_kind text,estimate_horizon text,
   filing_published_at timestamptz,source_timestamp timestamptz,collected_at timestamptz,filing_restatement_id text,source_ref text,
-  recorded_at timestamptz DEFAULT clock_timestamp(),validation_status text DEFAULT 'pending',schema_valid boolean,
+  recorded_at timestamptz DEFAULT clock_timestamp(),validation_status public.financial_validation_status_v3 DEFAULT 'pending',schema_valid boolean,
   unit_valid boolean,point_in_time_valid boolean,consistency_valid boolean,validation_recorded_at timestamptz);
 CREATE TABLE public.candidate_financial_fact_provenance_v4(fact_id uuid,issuer_document_id uuid,
   source_url text,source_sha256 text,locator jsonb,extracted_at timestamptz,recorded_at timestamptz DEFAULT clock_timestamp());
@@ -53,8 +58,9 @@ CREATE TABLE public.official_financial_validation_receipts(
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),fact_id uuid,validator_version text,input_hash text,
   source_sha256 text,validation jsonb,validated_at timestamptz DEFAULT clock_timestamp(),
   receipt_sequence bigint GENERATED ALWAYS AS IDENTITY,prior_validation jsonb,effective_validation jsonb,
+  validator_principal uuid,
   UNIQUE(fact_id,validator_version,input_hash));
-CREATE FUNCTION public.internal_principal_role_is_exact_v3_internal(uuid,text,timestamptz) RETURNS boolean
+CREATE FUNCTION public.internal_principal_role_is_exact_v3_internal(uuid,public.internal_principal_role_v3,timestamptz) RETURNS boolean
   LANGUAGE sql AS 'SELECT $1=''55555555-5555-4555-8555-555555555555''::uuid AND $2=''opportunity_runner''';
 CREATE FUNCTION public.append_financial_fact_v3(public.financial_fact_input_v3,uuid)
   RETURNS TABLE(fact_id uuid,recorded_at timestamptz) LANGUAGE plpgsql AS $$
@@ -70,5 +76,8 @@ CREATE FUNCTION public.complete_candidate_financial_document_receipt_parser_v7(
   uuid,text,uuid,jsonb,jsonb,jsonb,jsonb,timestamptz)
   RETURNS TABLE(receipt_status text,added_fact_count integer,duplicate_fact_count integer)
   LANGUAGE sql AS 'SELECT ''partial''::text,0,0';
+ALTER TABLE public.official_financial_validation_receipts OWNER TO opportunity_v3_rpc_owner;
+GRANT SELECT,UPDATE ON public.opportunity_financial_facts_v3 TO opportunity_v3_rpc_owner;
+GRANT SELECT ON public.candidate_financial_fact_provenance_v4 TO opportunity_v3_rpc_owner;
 GRANT SELECT,INSERT,UPDATE ON ALL TABLES IN SCHEMA public TO service_role;
 GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO service_role;

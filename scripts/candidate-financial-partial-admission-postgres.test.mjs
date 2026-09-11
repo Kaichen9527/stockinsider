@@ -79,12 +79,12 @@ test('v10 admits only isolated facts and never upgrades a partial document or it
         ${json(facts)},${json(subject.report.locators)},${json(parserEvidence)},
         ${json(subject.report.missingRequirements)},'[]',clock_timestamp())`;
     const validate = (subject) => {
-      const validation = { version: 'official-financial-v1', schemaValid: true, unitValid: true,
+      const validation = { version: 'official-financial-v2', schemaValid: true, unitValid: true,
         pointInTimeValid: true, consistencyValid: true, reasons: [], checks: ['fixture-accounting-receipt'] };
       return sql(`SET ROLE service_role; SELECT record_official_financial_validation(
         (SELECT fact_id FROM candidate_financial_document_fact_links_v8 WHERE receipt_id='${subject.receipt}'),
         (SELECT fact_recorded_at FROM candidate_financial_document_fact_links_v8 WHERE receipt_id='${subject.receipt}'),
-        '${subject.hash}','${'f'.repeat(64)}',${json(validation)})`);
+        '${subject.hash}','${'f'.repeat(64)}',${json(validation)},'${principal}')`);
     };
     const finalize = (subject) => sql(`SET ROLE service_role; SELECT * FROM finalize_candidate_financial_document_validation_v8(
       '${subject.receipt}','${principal}',clock_timestamp())`);
@@ -214,7 +214,7 @@ test('v10 admits only isolated facts and never upgrades a partial document or it
     const cutoff = new Date(Date.now() + 300000).toISOString();
     const later = new Date(Date.now() + 600000).toISOString();
     const after = new Date(Date.now() + 900000).toISOString();
-    const reader = (factId, at) => `SELECT COALESCE((SELECT validation_status FROM public.read_financial_facts_as_of(${quote(at)})
+    const reader = (factId, at) => `SELECT COALESCE((SELECT validation_status::text FROM public.read_financial_facts_as_of(${quote(at)})
       WHERE fact_id='${factId}'),'absent')`;
     for (const subject of [legacy, partial]) {
       const rows = JSON.parse(sql(`SELECT jsonb_build_object('fact',to_jsonb(f),'receipt',to_jsonb(r),
@@ -273,6 +273,9 @@ test('v10 admits only isolated facts and never upgrades a partial document or it
     for (const role of ['anon', 'authenticated', 'service_role']) {
       assert.equal(sql(`SELECT has_table_privilege('${role}','candidate_financial_parser_evidence_v8','INSERT,UPDATE,DELETE')`), 'f');
     }
+    assert.equal(sql("SELECT count(*) FROM pg_proc WHERE pronamespace='public'::regnamespace AND proname='record_official_financial_validation'"), '1');
+    assert.equal(sql("SELECT pg_get_userbyid(proowner)||'|'||position('search_path=\"\"' IN array_to_string(proconfig,',')) FROM pg_proc WHERE oid='record_official_financial_validation(uuid,timestamptz,text,text,jsonb,uuid)'::regprocedure"), 'opportunity_v3_rpc_owner|1');
+    assert.equal(sql("SELECT has_function_privilege('service_role','record_official_financial_validation(uuid,timestamptz,text,text,jsonb,uuid)','EXECUTE')"), 't');
     const changedProof = command('psql', args, `UPDATE candidate_financial_parser_evidence_v8 SET fact_acceptance='{}'
       WHERE receipt_id='${partial.receipt}'`);
     assert.notEqual(changedProof.status, 0, 'even table owner cannot rewrite the retained parser/error proof');
