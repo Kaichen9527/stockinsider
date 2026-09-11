@@ -124,7 +124,7 @@ function serializeFactorAxes(value) {
   if(value===undefined||value===null)return {availability:'unavailable',reason:'factor_unavailable'};
   invariant(value&&typeof value==='object'&&!Array.isArray(value),'factor axes evidence shape');
   if(value.availability!=='available'){
-    invariant(['factor_unavailable','factor_axis_unavailable'].includes(value.reason)
+    invariant(value.availability==='unavailable'&&['factor_unavailable','factor_axis_unavailable'].includes(value.reason)
       &&(exactKeys(value,['availability','reason'])||exactKeys(value,['availability','reason','axes'])),
     'factor axes unavailable evidence');
     if(value.axes!==undefined)invariant(exactKeys(value.axes,FACTOR_KEYS)
@@ -213,7 +213,21 @@ function serializeCorrectnessPublicUnion(decision) {
   const entryZone = geometry?.entryZone ? { kind: state === 'breakout_confirmed' ? 'trigger_zone' : 'market_zone', lower: geometry.entryZone[0], upper: geometry.entryZone[1] } : null;
   const invalidation = buyLike && Number.isFinite(geometry?.invalidation) ? { stop: geometry.invalidation, thesisLevel: geometry.invalidation } : null;
   const materialChangedBecause = validateChangeReasons(decision);
+  if(decision?.valuation!==undefined&&decision?.valuation!==null)invariant(
+    decision.valuation&&typeof decision.valuation==='object'&&!Array.isArray(decision.valuation)
+      &&['normal','valuation_review'].includes(decision.valuation.status),
+  'published valuation status evidence');
   const comparison=reportedComparison(decision?.valuation);
+  const formalRange=validatedEnvelope&&envelope.recommendationAuthority==='formal'
+    ?envelope.valuationSummary?.formalRange:null;
+  if(formalRange&&decision?.valuation?.status==='normal'){
+    invariant(decision.valuation.targetPrice===undefined||decision.valuation.targetPrice===formalRange.base,
+      'published valuation target conflicts with immutable envelope');
+    invariant(decision.valuation.valuationRange===undefined
+      ||(Array.isArray(decision.valuation.valuationRange)&&decision.valuation.valuationRange.length===2
+        &&decision.valuation.valuationRange[0]===formalRange.bear&&decision.valuation.valuationRange[1]===formalRange.bull),
+    'published valuation range conflicts with immutable envelope');
+  }
   const payload = {
     ...(decision?.symbol ? { symbol: decision.symbol } : {}),
     ...(decision?.name ? { name: decision.name } : {}),
@@ -232,8 +246,8 @@ function serializeCorrectnessPublicUnion(decision) {
       entryZone: buyLike ? entryZone : null,
       invalidation,
     },
-    valuation: decision?.valuation?.status === 'normal' ? {
-      status: 'normal', targetPrice: decision.valuation.targetPrice ?? null, valuationRange: decision.valuation.valuationRange ?? null,
+    valuation: formalRange ? {
+      status: 'normal', targetPrice: formalRange.base, valuationRange: [formalRange.bear,formalRange.bull],
       relativeMultiple: comparison,
       exchangeReportedPe: comparison.exchangeReportedPe,
       modelComparablePe: comparison.modelComparablePe,

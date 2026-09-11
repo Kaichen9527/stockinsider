@@ -69,7 +69,9 @@ test('V3.20 retained legacy candidate uses database-derived historical lineage w
   assert.equal(retained.producerRunId,historicalRun);
   assert.deepEqual([retained.discoveryDisposition,retained.discoveryReason],['unchanged','same_material_evidence']);
   assert.equal(validatePublishedEntrantAuthority({candidates:[retained],producerRunId:currentRun,
-    schedulerConfigSha256:configHash,legacySeedSetHash:seedHash,seedSymbols:[]}),true);
+    schedulerConfigSha256:configHash,legacySeedSetHash:seedHash,seedSymbols:[],
+    discoveryDelta:{added:[],exited:[],continued:['1723'],
+      unchangedReasons:[{symbol:'1723',reason:'same_material_evidence'}]}}),true);
 });
 
 test('V3.20 rejects the 2605 new-emerging-market ETF false positive but accepts a public Telegram nomination',()=>{

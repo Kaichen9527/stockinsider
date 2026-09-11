@@ -379,9 +379,14 @@ function treeIdentity(subjectRoot, treeSha) {
     return [repositoryPath,git(subjectRoot,['rev-parse',`${treeSha}:${repositoryPath}`]),bytes.length,sha256(bytes)];
   });
   const inventory = JSON.parse(treeBlob(subjectRoot, treeSha, `${changeRelative}/acceptance-tests.json`, 'acceptance inventory'));
+  assert.ok(['opportunity-active-artifact-catalog-v1','opportunity-active-artifact-catalog-v2'].includes(catalog.schema),
+    'unknown active artifact catalog schema');
+  const graphPreimage=catalog.schema==='opportunity-active-artifact-catalog-v1'
+    ?['opportunity-active-graph-v1',sha256(catalogBytes),rows]
+    :['opportunity-active-graph-v2',sha256(catalogBytes),rows,
+      external(catalog.incorporatedFiles,'incorporated artifact'),external(catalog.historicalAuditFiles,'historical audit artifact')];
   return {
-    activeGraphSha256: sha256(canonicalJson(['opportunity-active-graph-v2',sha256(catalogBytes),rows,
-      external(catalog.incorporatedFiles,'incorporated artifact'),external(catalog.historicalAuditFiles,'historical audit artifact')])),
+    activeGraphSha256: sha256(canonicalJson(graphPreimage)),
     inventory,
   };
 }

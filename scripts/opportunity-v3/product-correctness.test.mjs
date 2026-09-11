@@ -843,7 +843,8 @@ const checks = {
         legacySeedSetHash:selected.seedSetHash,
         raw: '2330', sourceSummary: '核准 KOL 的台積電研究更新', lastEvaluatedAt: '2026-08-01T10:20:00Z',
         ...citedPublicationEvidence('claim-2330'), sourceClass: 'kol', sourceKey:'telegram',
-        sourceName:'核准 KOL',sourceUrl:'https://t.me/example/2330',nominationAuthority:'public_telegram_channel' }] },
+        sourceName:'核准 KOL',sourceUrl:'https://t.me/example/2330',nominationAuthority:'public_telegram_channel' }],
+      discoveryDelta:{added:['2330'],exited:[],continued:[],unchangedReasons:[]} },
       sourceCutoff: '2026-08-01T10:20:00Z', legacyPayloads: captured.json.legacyPayloads,
       legacyPayloadHashes: captured.json.legacyPayloadHashes, legacySourceResultHash: captured.hash,
       legacyRadarCompatibility:captured.json.legacyRadarCompatibility });
@@ -854,7 +855,7 @@ const checks = {
     assert.equal(projected.json.projections[0].payload.releaseIdentity.schema, 'legacy-radar-v3.20.0',
       'only the persisted KOL-first marker selects the V3.20 public contract');
     assert.deepEqual(projected.json.projections[0].payload.discoveryDelta,
-      { added: [], exited: [], continued: [], unchangedReasons: [] });
+      { added: ['2330'], exited: [], continued: [], unchangedReasons: [] });
     assert.equal(projected.json.projections[0].payload.sourceSignals[0].chineseName, '台積電',
       'compact public projection carries the official source-signal name');
     assert.equal(projected.json.projections[0].payload.sourceSignals[0].sourceSummary, '核准 KOL 的台積電研究更新',
@@ -1564,6 +1565,29 @@ const checks = {
       await assert.rejects(()=>handlers.compact_radar_projection({runId,readKind:'compact_projection_input',
         readCanonical:rejected.canonical,readJson:rejected.json,readHash:rejected.hash}),/published entrant authority conflict/u);
     }
+    const contradictory=compactInput({...entrant,producerRunId:'72000000-0000-4000-8000-000000000099',
+      discoveryDisposition:'unchanged',discoveryReason:'same_material_evidence'});
+    await assert.rejects(()=>handlers.compact_radar_projection({runId,readKind:'compact_projection_input',
+      readCanonical:contradictory.canonical,readJson:contradictory.json,readHash:contradictory.hash}),
+    /published discovery authority enum/u);
+    const wrongDelta=runtime('codec.js').immutableBundle('compact_projection_input',{
+      analysisResult:{decisions:[],sourceCandidates:[entrant],discoveryDelta:{added:[],exited:[],continued:['2330'],
+        unchangedReasons:[{symbol:'2330',reason:'same_material_evidence'}]}},
+      sourceCutoff:'2026-08-01T00:00:00Z',legacyPayloads:{daily:legacy,hot:legacy,weekly:legacy,home:legacy},
+      legacyRadarCompatibility:'intentionally_not_acquired_kol_first'});
+    await assert.rejects(()=>handlers.compact_radar_projection({runId,readKind:'compact_projection_input',
+      readCanonical:wrongDelta.canonical,readJson:wrongDelta.json,readHash:wrongDelta.hash}),
+    /published discovery delta conflict/u);
+    const selfMintedUnchanged={...entrant,disposition:'unchanged',reason:'same_material_evidence',
+      discoveryDisposition:'unchanged',discoveryReason:'same_material_evidence'};
+    const selfMintedInput=runtime('codec.js').immutableBundle('compact_projection_input',{
+      analysisResult:{decisions:[],sourceCandidates:[selfMintedUnchanged],discoveryDelta:{added:[],exited:[],
+        continued:['2330'],unchangedReasons:[{symbol:'2330',reason:'same_material_evidence'}]}},
+      sourceCutoff:'2026-08-01T00:00:00Z',legacyPayloads:{daily:legacy,hot:legacy,weekly:legacy,home:legacy},
+      legacyRadarCompatibility:'intentionally_not_acquired_kol_first'});
+    await assert.rejects(()=>handlers.compact_radar_projection({runId,readKind:'compact_projection_input',
+      readCanonical:selfMintedInput.canonical,readJson:selfMintedInput.json,readHash:selfMintedInput.hash}),
+    /published entrant authority conflict/u);
     const unknown=compactInput({...entrant,discoveryReason:'provider_specific_reason'});
     await assert.rejects(()=>handlers.compact_radar_projection({runId,readKind:'compact_projection_input',
       readCanonical:unknown.canonical,readJson:unknown.json,readHash:unknown.hash}),/published discovery authority enum/u);
@@ -1606,6 +1630,25 @@ const checks = {
     assert.throws(()=>runtime('published-research-decision.js').serializePublishedResearchDecision({symbol:'2330',fundamental,
       technical:{...technical,technicalState:'at_support'},decisionEnvelope,lastEvaluatedAt:'2026-08-01T00:00:00Z'}),
     /technical state conflicts/u);
+    const formalEnvelope=runtime('decision-envelope.js').deriveDecisionEnvelope({valuation:{status:'normal',
+      valuationRange:{bear:90,base:132,bull:165},method:{method:'pe'},asOf:'2026-08-01',
+      evidence:{sourceRefs:['official-filing-2330']}},currentPrice:100,qualityActionEligible:true,marketAllowsAction:true,
+      technical:{technicalState:'breakout_confirmed',plane:{current:100,bias:{availability:'available',bias20Pct:0}}},
+      geometry:{availability:'available',entryZone:[99,101],invalidation:90,trigger:null},
+      lastEvaluatedAt:'2026-08-01T00:00:00Z'});
+    const formalDecision={symbol:'2330',fundamental,decisionEnvelope:formalEnvelope,
+      technical:{technicalState:'breakout_confirmed',plane:{current:100,bias:{availability:'available',bias20Pct:0}}},
+      geometry:{availability:'available',entryZone:[99,101],invalidation:90,trigger:null},
+      lastEvaluatedAt:'2026-08-01T00:00:00Z'};
+    const formalPublished=runtime('published-research-decision.js').serializePublishedResearchDecision(formalDecision);
+    assert.deepEqual(formalPublished.valuation.valuationRange,[90,165]);
+    assert.equal(formalPublished.valuation.targetPrice,132);
+    assert.throws(()=>runtime('published-research-decision.js').serializePublishedResearchDecision({...formalDecision,
+      valuation:{status:'normal',targetPrice:-1,valuationRange:[90,165]}}),/valuation target conflicts/u);
+    assert.throws(()=>runtime('published-research-decision.js').serializePublishedResearchDecision({...formalDecision,
+      valuation:{status:'normal',targetPrice:132,valuationRange:[400,200]}}),/valuation range conflicts/u);
+    assert.throws(()=>runtime('published-research-decision.js').serializePublishedResearchDecision({...formalDecision,
+      valuation:{status:'promised',targetPrice:132,valuationRange:[90,165]}}),/valuation status evidence/u);
   },
   'PCR-022': async () => {
     const payload = { sourceLedCorrectness: { schema: 'legacy-radar-v3.11.3', window: 'daily', asOf: '2026-08-01T00:00:00Z' }, opportunities: [] };
@@ -1639,6 +1682,11 @@ const checks = {
     assert.match(bootstrap, /requiredKeys\(event, \['action', 'number', 'pull_request', 'repository'\]/u);
     assert.doesNotMatch(bootstrap, /exactKeys\(event, \['action', 'number', 'pull_request', 'repository'\]/u);
     assert.match(readFileSync(path.join(root, 'scripts/opportunity-v3/gate-evidence.mjs'), 'utf8'), /validateOpportunityGateEvidence/u);
+    const protectedWorker=readFileSync(path.join(root,'scripts/opportunity-v3/protected-external-gate-worker.mjs'),'utf8');
+    for(const token of ["catalog.schema==='opportunity-active-artifact-catalog-v1'",
+      "['opportunity-active-graph-v1',sha256(catalogBytes),rows]",
+      "['opportunity-active-graph-v2',sha256(catalogBytes),rows",
+      'unknown active artifact catalog schema'])assert.ok(protectedWorker.includes(token),`graph schema dispatch: ${token}`);
   },
   'PCR-024': () => {
     const component = readFileSync(path.join(root, 'web/src/app/components/RadarTabs.tsx'), 'utf8');
@@ -1752,6 +1800,9 @@ const checks = {
       plane:{bias:{availability:'available',bias20Pct:2}}},factorAxes:{availability:'available',
       axes:{discovery:70,quality:{availability:'available',score:60},valuation:55,timingRisk:50}},
       lastEvaluatedAt:'2026-08-01T00:00:00Z'}),/factor axes available evidence/u);
+    assert.throws(()=>serialize({symbol:'2337',fundamental,technical:{technicalState:'at_support',
+      plane:{bias:{availability:'available',bias20Pct:2}}},factorAxes:{availability:'operator-prose',
+      reason:'factor_unavailable'},lastEvaluatedAt:'2026-08-01T00:00:00Z'}),/factor axes unavailable evidence/u);
     const factors=serialize({symbol:'2337',fundamental,technical:{technicalState:'at_support',
       plane:{bias:{availability:'available',bias20Pct:2}}},factorAxes:{availability:'available',
       axes:{discovery:70,quality:60,valuation:55,timingRisk:50}},

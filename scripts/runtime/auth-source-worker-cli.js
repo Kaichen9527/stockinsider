@@ -1527,6 +1527,7 @@ function buildLegacyCandidateDecision({ candidate, facts, history, benchmark, so
     ?{thesis,risks,evidence:briefEvidence}:null;
   return { ...candidate, researchMaturity: valuation.status === 'normal' && quality.qualityActionEligible ? 'decision_ready'
     : quality.availability === 'available' ? 'fundamental_review' : 'source_signal',
+    candidateDisposition:candidate.disposition,candidateReason:candidate.reason,
     action: actionDecision.action, fundamental, technical, geometry: actionDecision.geometry,
     decisionEnvelope: actionDecision.decisionEnvelope,
     valuation, factorAxes, researchScore,researchRanking,decisionBrief,citations, reason: actionDecision.reason, lastEvaluatedAt: sourceCutoff,
@@ -2058,7 +2059,8 @@ function buildStageHandlers(validated, sourceCommitSha, workerSha256, {
       const sourceTerminalState=deriveSourceTerminalState(bundle.sourceTerminalStateInput);
       if(projectionSchemaVersion==='legacy-radar-v3.20.0'&&sourceTerminalState?.terminalStatus!=='total_outage')validatePublishedEntrantAuthority({
         candidates:[...decisions,...projectionSignals],producerRunId:claim.runId,schedulerConfigSha256:validated.sha256,
-        legacySeedSetHash:validated.seedSetHash,seedSymbols:validated.config.legacySeedSymbols});
+        legacySeedSetHash:validated.seedSetHash,seedSymbols:validated.config.legacySeedSymbols,
+        discoveryDelta:bundle.analysisResult?.discoveryDelta});
       const acquisitionLineageHealth=providerAcquisitionLineageHealth(bundle.providerAcquisitions,
         evaluationTimestamp);
       const projections = ['daily', 'hot', 'weekly', 'home'].map((window) => publishCompactRadarProjection({ decisions,

@@ -227,7 +227,7 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
 }
 
 function validatePublishedEntrantAuthority({ candidates, producerRunId, schedulerConfigSha256,
-  legacySeedSetHash, seedSymbols }) {
+  legacySeedSetHash, seedSymbols, discoveryDelta }) {
   const rows=candidates??[];
   if(rows.length===0)return true;
   invariant(typeof producerRunId === 'string' && /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/u.test(producerRunId),
@@ -237,9 +237,20 @@ function validatePublishedEntrantAuthority({ candidates, producerRunId, schedule
     && Array.isArray(seedSymbols), 'published entrant config authority');
   const allowed=new Map([['new_in_seed_symbol','promoted'],['new_out_of_seed_symbol','promoted'],
     ['material_source_change','refreshed'],['same_material_evidence','unchanged']]);
+  const symbols=new Set();const expectedAdded=[];const expectedContinued=[];const expectedUnchanged=[];
   for (const candidate of rows) {
+    invariant(typeof candidate.symbol==='string'&&!symbols.has(candidate.symbol),'published discovery symbol authority');
+    symbols.add(candidate.symbol);
+    const hasPreservedAuthority=Object.prototype.hasOwnProperty.call(candidate,'candidateDisposition')
+      ||Object.prototype.hasOwnProperty.call(candidate,'candidateReason');
+    invariant(!hasPreservedAuthority||(Object.prototype.hasOwnProperty.call(candidate,'candidateDisposition')
+      &&Object.prototype.hasOwnProperty.call(candidate,'candidateReason')),'published discovery authority shape');
+    const canonicalDisposition=hasPreservedAuthority?candidate.candidateDisposition:candidate.disposition;
+    const canonicalReason=hasPreservedAuthority?candidate.candidateReason:candidate.reason;
     invariant(allowed.has(candidate.discoveryReason)
-      &&candidate.discoveryDisposition===allowed.get(candidate.discoveryReason),'published discovery authority enum');
+      &&candidate.discoveryDisposition===allowed.get(candidate.discoveryReason)
+      &&canonicalDisposition===candidate.discoveryDisposition&&canonicalReason===candidate.discoveryReason,
+    'published discovery authority enum');
     const expectedMembership=seedSymbols.includes(candidate.symbol)?'in_seed':'out_of_seed';
     invariant(typeof candidate.producerRunId==='string'&&/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/u.test(candidate.producerRunId)
       &&candidate.schedulerConfigSha256 === schedulerConfigSha256
@@ -247,9 +258,20 @@ function validatePublishedEntrantAuthority({ candidates, producerRunId, schedule
       && candidate.seedMembership === expectedMembership
       &&(!candidate.discoveryReason.startsWith('new_')
         ||candidate.discoveryReason === (expectedMembership === 'in_seed' ? 'new_in_seed_symbol' : 'new_out_of_seed_symbol'))
-      &&(candidate.discoveryDisposition==='unchanged'||candidate.producerRunId===producerRunId),
+      &&(candidate.discoveryDisposition==='unchanged'
+        ?candidate.producerRunId!==producerRunId:candidate.producerRunId===producerRunId),
     'published entrant authority conflict');
+    if(candidate.discoveryDisposition==='promoted')expectedAdded.push(candidate.symbol);
+    else expectedContinued.push(candidate.symbol);
+    if(candidate.discoveryDisposition==='unchanged')expectedUnchanged.push(candidate.symbol);
   }
+  invariant(discoveryDelta&&Array.isArray(discoveryDelta.added)&&Array.isArray(discoveryDelta.continued)
+    &&Array.isArray(discoveryDelta.unchangedReasons),'published discovery delta authority');
+  const same=(left,right)=>left.length===right.length&&[...left].sort().every((value,index)=>value===[...right].sort()[index]);
+  invariant(same(discoveryDelta.added,expectedAdded)&&same(discoveryDelta.continued,expectedContinued)
+    &&discoveryDelta.unchangedReasons.every((row)=>row?.reason==='same_material_evidence')
+    &&same(discoveryDelta.unchangedReasons.map((row)=>row?.symbol),expectedUnchanged),
+  'published discovery delta conflict');
   return true;
 }
 
