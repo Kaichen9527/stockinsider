@@ -3,7 +3,9 @@ import { isCandidateFinancialFactKey } from './evidence-valuation-contract.ts';
 
 export const OFFICIAL_FINANCIAL_VALIDATOR_VERSION = 'official-financial-v1';
 export type OfficialValidationRow = Record<string, unknown>;
-export type OfficialFactProvenance = { source_url?: unknown; source_sha256?: unknown; locator?: unknown };
+export type OfficialFactProvenance = {
+  source_url?: unknown; source_sha256?: unknown; locator?: unknown; issuer_host_approved?: unknown;
+};
 const SHARE_KEYS = new Set(['diluted_shares', 'diluted_weighted_average_shares', 'basic_weighted_average_shares', 'shares_outstanding', 'common_shares_outstanding']);
 const PER_SHARE_KEYS = new Set(['quarterly_basic_eps', 'quarterly_diluted_eps', 'book_value_per_share', 'broker_target_price']);
 const RATIO_KEYS = new Set(['roe', 'pe_multiple', 'pb_multiple', 'ev_ebitda_multiple', 'ev_sales_multiple']);
@@ -55,7 +57,8 @@ export function validateOfficialFinancialFact(
   if (/^(?:twse|tpex)-mops-inline:/u.test(String(fact.source_ref))) reasons.push('ixbrl_requires_structural_receipt');
   // Issuer-document URLs require the separate document receipt/allowlist checks;
   // this validator only admits exchange-hosted acquisition provenance.
-  const provenanceValid = provenance != null && officialUrl(provenance.source_url)
+  const provenanceValid = provenance != null
+    && (officialUrl(provenance.source_url) || provenance.issuer_host_approved === true)
     && /^[0-9a-f]{64}$/u.test(String(provenance.source_sha256))
     && provenance.locator != null && typeof provenance.locator === 'object' && !Array.isArray(provenance.locator)
     && Object.keys(provenance.locator).length > 0;

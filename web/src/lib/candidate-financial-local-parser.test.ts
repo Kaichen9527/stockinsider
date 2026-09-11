@@ -31,12 +31,13 @@ test('offline parser implementation retains its local-only boundaries', async ()
   const repositoryRoot = process.cwd().endsWith('/web') ? resolve(process.cwd(), '..') : process.cwd();
   const source = await readFile(resolve(repositoryRoot, 'scripts/candidate_financial_document_parser.py'), 'utf8');
   const requirements = await readFile(resolve(repositoryRoot, 'scripts/requirements-candidate-financial-document-parser.txt'), 'utf8');
-  assert.match(source, /internetConnectivity="offline"/u);
+  assert.match(source, /controller[.]webCache[.]workOffline = True/u);
   assert.match(source, /socket\.create_connection\s*=\s*blocked/u);
   assert.match(source, /import pdfplumber/u);
-  assert.match(source, /from arelle.api.Session import Session/u);
-  assert.match(source, /validate=True/u);
-  assert.match(source, /validation_errors = not ran or log.failed/u);
+  assert.match(source, /from arelle import Cntlr, FileSource, Version, XmlValidateConst/u);
+  assert.match(source, /controller[.]modelManager[.]validate[(][)]/u);
+  assert.match(source, /xValid/u);
+  assert.match(source, /staged_taxonomy_entrypoint/u);
   assert.match(requirements, /^arelle-release==2\.44\.7$/mu);
   assert.match(requirements, /^pdfplumber==0\.11\.8$/mu);
   assert.doesNotMatch(requirements, /^docling==/mu);
@@ -60,4 +61,8 @@ test('production adapter uses an isolated Unix socket instead of spawning under 
   assert.match(install, /candidate_financial_parser_socket[.]py candidate_financial_document_parser[.]py/u);
   assert.match(install, /install -m 0644 -o root -g root/u);
   assert.doesNotMatch(install, /cp -r|chmod -R|usermod/u);
+  assert.match(install, /taxonomy\/current/u);
+  const taxonomyInstall = await readFile(new URL('../../../deployment/vps/install-official-financial-taxonomy.sh', import.meta.url), 'utf8');
+  assert.match(taxonomyInstall, /4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869/u);
+  assert.match(taxonomyInstall, /taxonomy_archive_symlink_rejected/u);
 });

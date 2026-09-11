@@ -50,6 +50,7 @@ const migrationPaths = [
   'migrations/20260830_v320_kol_retention_owner_boundary.sql',
   'migrations/20260909_official_financial_validation_receipts.sql',
   'migrations/20260911_v320_source_terminal_projection_authority.sql',
+  'migrations/20260911_candidate_financial_fact_manifest_v8.sql',
 ];
 const migrations = migrationPaths.map((relativePath) => {
   const bytes = fs.readFileSync(path.join(root, relativePath));

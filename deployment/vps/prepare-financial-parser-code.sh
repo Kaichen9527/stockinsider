@@ -5,6 +5,8 @@ set -euo pipefail
 # secrets, release contents, or node_modules. Existing virtualenv is preserved.
 test "$(id -u)" = 0
 test -x /opt/stockinsider/runtime/candidate-financial-parser/bin/python
+test -d /opt/stockinsider/runtime/candidate-financial-parser/taxonomy/current
+test ! -L /opt/stockinsider/runtime/candidate-financial-parser/taxonomy/current || test -d "$(readlink -f /opt/stockinsider/runtime/candidate-financial-parser/taxonomy/current)"
 if systemctl is-active --quiet stockinsider-financial-parser.service; then
   echo 'Stop the parser service before replacing parser code; leave the web service running.' >&2
   exit 1

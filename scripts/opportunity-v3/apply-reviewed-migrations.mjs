@@ -59,6 +59,7 @@ const MIGRATIONS = Object.freeze([
   // present on the reviewed production database; fails closed if absent.
   'migrations/20260909_official_financial_validation_receipts.sql',
   'migrations/20260911_v320_source_terminal_projection_authority.sql',
+  'migrations/20260911_candidate_financial_fact_manifest_v8.sql',
 ]);
 const V3192_PROJECTION_DOSSIER_MIGRATION =
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql';
