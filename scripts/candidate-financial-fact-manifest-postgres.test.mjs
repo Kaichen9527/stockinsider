@@ -36,10 +36,14 @@ test('v8 parser evidence and exact fact validation survive a real PostgreSQL bou
     started = true;
     sql(`CREATE SCHEMA extensions; CREATE EXTENSION pgcrypto WITH SCHEMA extensions;
       CREATE ROLE anon NOLOGIN; CREATE ROLE authenticated NOLOGIN; CREATE ROLE service_role NOLOGIN BYPASSRLS;
+      CREATE TYPE public.financial_acquisition_terminal_reason_v4 AS ENUM (
+        'complete','empty_official_response','http_not_found','http_rate_limited','http_server_error',
+        'network_error','timeout','html_rejected','security_blocked','schema_unrecognized',
+        'unsupported_issuer','invalid_cursor','write_failed');
       CREATE TABLE public.stocks(id uuid PRIMARY KEY,symbol text NOT NULL);
       CREATE TABLE public.candidate_issuer_document_domains_v6(stock_id uuid,host text,PRIMARY KEY(stock_id,host));
       CREATE TABLE public.candidate_financial_acquisition_jobs_v4(job_id uuid PRIMARY KEY,stock_id uuid,
-        status text,terminal_reason text,terminal_detail text,lease_owner text,lease_expires_at timestamptz,
+        status text,terminal_reason public.financial_acquisition_terminal_reason_v4,terminal_detail text,lease_owner text,lease_expires_at timestamptz,
         collected_at timestamptz,next_attempt_at timestamptz,updated_at timestamptz);
       CREATE TABLE public.candidate_issuer_ir_document_queue_v4(document_id uuid PRIMARY KEY);
       CREATE TABLE public.candidate_financial_document_receipts_v6(

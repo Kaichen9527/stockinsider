@@ -241,7 +241,8 @@ BEGIN
         THEN missing_requirements ELSE missing_requirements||jsonb_build_array('official_fact_validation_retry_exhausted') END
     WHERE receipt_id=p_receipt_id;
     IF v_receipt.acquisition_job_id IS NOT NULL THEN
-      UPDATE public.candidate_financial_acquisition_jobs_v4 SET status='terminal',terminal_reason='document_partial',
+      UPDATE public.candidate_financial_acquisition_jobs_v4 SET status='terminal',
+        terminal_reason='schema_unrecognized'::public.financial_acquisition_terminal_reason_v4,
         terminal_detail='official_fact_validation_retry_exhausted',lease_owner=NULL,lease_expires_at=NULL,
         collected_at=p_completed_at,next_attempt_at=NULL,updated_at=p_completed_at
       WHERE job_id=v_receipt.acquisition_job_id AND status IN ('queued','running');
@@ -270,8 +271,10 @@ BEGIN
   WHERE receipt_id=p_receipt_id;
   IF v_receipt.acquisition_job_id IS NOT NULL THEN
     UPDATE public.candidate_financial_acquisition_jobs_v4 SET status='terminal',
-      terminal_reason=CASE WHEN v_status='validated' THEN 'complete' ELSE 'document_partial' END,
-      terminal_detail=NULL,lease_owner=NULL,lease_expires_at=NULL,collected_at=p_completed_at,
+      terminal_reason=CASE WHEN v_status='validated'
+        THEN 'complete'::public.financial_acquisition_terminal_reason_v4
+        ELSE 'schema_unrecognized'::public.financial_acquisition_terminal_reason_v4 END,
+      terminal_detail=CASE WHEN v_status='validated' THEN NULL ELSE 'official_fact_validation_rejected' END,
       next_attempt_at=NULL,updated_at=p_completed_at
     WHERE job_id=v_receipt.acquisition_job_id AND status IN ('queued','running');
   END IF;
