@@ -1,5 +1,30 @@
 # Financial evidence completion — implementation and release hold
 
+## Latest fact-scoped follow-up (code commit `5000964`)
+
+The initial all-or-nothing canary below is retained as audit history. The follow-up does **not** certify any invalid document: it retains every source/extracted error and admits only exact `VALID`, non-dimensional occurrences unaffected by fact/context/unit/concept/tuple/continuation/calculation rejection closure. Unknown, ambiguous, duplicate-ID and damaged-DTS errors remain document-fatal. Exact source IDs and logical tuple paths prevent equal-valued occurrences from being swapped during extraction.
+
+Four unchanged actual official 2026Q2 filings were rerun through the pinned offline CLI, Node admission, semantic mapping and local accounting functions on code commit `5000964`:
+
+| Issuer | Structural eligible / rejected | Semantic mapped | Local accounting pass / reject | Error records retained | Document status |
+| --- | ---: | ---: | ---: | ---: | --- |
+| 2330 | 11 / 22 | 11 | 11 / 0 | 1,030 | partial |
+| 2892 | 0 / 21 | 0 | not run | 1,239 | partial, fatal duplicate-ID / tuple ambiguity |
+| 2002 | 11 / 22 | 11 | 11 / 0 | 6,615 | partial |
+| 2332 | 11 / 22 | 11 | 11 / 0 | 2,527 | partial |
+
+These are fact occurrences, not counts of unique metrics. The additional error records include the second instance validation, calculation inconsistencies and explicit duplicate-fact checks. Equity and ProfitLoss remain rejected. All formal database-accepted counts are **0**: no production write or structural/accounting receipt was created. The 11 eligible occurrences in each nonfatal file still await database receipts; none of the four files supplies a complete valuation. Local checker success does not substitute for a database receipt or complete financial model.
+
+Exact CLI elapsed times were 14.06 / 11.48 / 14.21 / 14.04 seconds respectively, retaining the original 20-second CPU, 25-second subprocess and 2 MiB response limits. The socket parent now owns child `TMPDIR`, so a killed/timed-out child cannot leave a 49 MiB taxonomy copy behind. Raw dateTime periods are rejected rather than incorrectly moved to the previous calendar day.
+
+The follow-up also closes PDF-as-Arelle forgery, requires cutoff-aware structural proof for legacy issuer-document reads, preserves full partial-document status after accounting checks, and labels raw YTD/discrete-quarter/instant contexts without converting their values. EPS × diluted weighted shares must reconcile with common income under frozen `diluted-eps-common-income-v1`; the normalized route requires 20 actual reconciled discrete-quarter triads. Missing operands may remain reported facts, but cannot become model-complete inputs.
+
+Final verification: aggregate **377/377** (39 + 207 + 42 + 86 + 3), Python **20/20**, product **151/151**, migration **79/79**, legacy **2/2**; zero skips. ESLint, TypeScript and production build pass. Same-code full output: `/tmp/stockinsider-fact-scope-exact-full.log`; canary summary: `/tmp/stockinsider-fact-scope-final-summary.json`; build: `/tmp/stockinsider-fact-scope-exact-build.log`. Independent PostgreSQL acceptance includes 22 rejection vectors and 12 availability-cutoff fields each for v8/v10 evidence.
+
+One conservative operational gap remains: the validation worker's raw peer set can still include unproved historical issuer rows, potentially rejecting an otherwise proved new value. The published PIT reader excludes unproved rows, so this is a false-negative/backlog risk, not permission to use unproved values. It is not represented as solved by this draft.
+
+Append `20260911_05_financial_fact_isolation_v10.sql` **after** the previously reviewed history-v1 migration; preserve all prior ordering. The PR remains draft pending integration onto the post-PR210 main graph and exact review. Provisioning, backlog draining, 2892's authoritative document alternative, PDF semantic extraction and automatic issuer guidance remain unfinished; do not claim full source or valuation completion.
+
 ## Scope and identity
 
 - Clean independent checkout: `/tmp/stockinsider-financial-completion-20260911`.
@@ -22,7 +47,7 @@
 9. Taiwan data refresh no longer hard-fails above 280 stocks or selects every historical stage. A PIT, paginated active/recent universe registers its entire expected scope before bounded enqueue. Missing/in-flight work and market-wide failures block research; terminal individual-price gaps remain visible without vetoing other stocks. Strict `dataComplete` remains separate from `researchReady`.
 10. A guarded operator-only `POST /api/internal/candidate-history-backfill` drains one bounded batch independently of research/publication. Defaults are 80 requests / 4 per stock; permitted caps are 400 / 12. Its `batchComplete` does not mean `universeCoverageComplete`.
 
-## Verified real-document blocker — not a completed ingestion
+## Initial global-document canary — historical audit, superseded by the scoped follow-up above
 
 Four actual 2026Q2 official FileDownLoad attachments were tested locally with pinned Arelle 2.44.7 and the exact SHA-verified official 2026 taxonomy, without parser network access.
 
@@ -58,10 +83,10 @@ Two separate deployment prerequisites were also confirmed:
 
 ## Required before production completion
 
-1. Resolve the real official-document/schema incompatibility through a reviewed authoritative extraction/validation path. Do not accept the typed-but-unvalidated candidates or suppress structural errors to manufacture success.
+1. Review the scoped admission path above; it still rejects 2892 and all affected Equity/ProfitLoss facts. Resolve missing financial inputs through authoritative evidence, not suppressed structural errors.
 2. Review and apply migrations in explicit order: manifest v8 → fairness 02 → document links 03 → Taiwan refresh queue 04 → history v1. Lexical filename order is not valid.
 3. Provision the exact reviewed public taxonomy and compatible parser/socket code together. Historical taxonomy versions needed for earlier filings remain a verification prerequisite.
 4. Establish 1,320 actual database-authoritative completed trading sessions, then drain bounded history batches and verify remaining field/period/month coverage. A single nightly batch cannot establish deep-history completion.
 5. PDF financial semantic extraction remains explicitly unsupported by the v8 authority contract. A locator is not a financial fact.
 6. Automatic issuer-guidance acquisition is not implemented. The deterministic company-fact projection and typed guidance boundary do not supply missing customer, shipment, capacity, yield or ASP evidence.
-7. Complete exact-commit review and protected checks before any merge or deployment. The draft must remain on hold while the genuine financial canaries are failing.
+7. Complete exact-commit review and protected checks before any merge or deployment. The draft is not a claim of completed financial coverage, and the fatal 2892 result cannot be relabelled successful.
