@@ -33,14 +33,16 @@ export async function validatePendingOfficialFinancials(stockIds: string[]) {
       if (provenance.length === 5000) throw new Error('official_validation_provenance_overflow');
       const priorReceipts = await collectPagedAuthorityRows<OfficialValidationRow>(async (from,to) => {
         const r = await db.from('official_financial_validation_receipts')
-          .select('fact_id,input_hash,effective_validation').in('fact_id',batch.map((f) => String(f.fact_id)))
+          .select('fact_id,input_hash,validator_version,validator_principal,effective_validation')
+          .in('fact_id',batch.map((f) => String(f.fact_id)))
           .order('fact_id').order('receipt_sequence').range(from,to);
         if (r.error) throw new Error(`official_validation_receipt_read_failed:${r.error.message}`);
         return r.data || [];
       }, { pageSize: 500, maxRows: 10000 });
       if (priorReceipts.length === 10000) throw new Error('official_validation_receipt_overflow');
       const acceptedHashes = new Set(priorReceipts.filter((r) =>
-        (r.effective_validation as OfficialValidationRow | null)?.validation_status === 'validated')
+        r.validator_version === 'official-financial-v2' && typeof r.validator_principal === 'string'
+        && (r.effective_validation as OfficialValidationRow | null)?.validation_status === 'validated')
         .map((r) => `${r.fact_id}:${r.input_hash}`));
       for (const fact of batch) {
         const source = provenance.find((p) => p.fact_id === fact.fact_id) || null;

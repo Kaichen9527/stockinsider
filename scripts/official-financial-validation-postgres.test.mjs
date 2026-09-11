@@ -30,8 +30,9 @@ test('validation receipt RPC enforces permissions, exact provenance, and idempot
     sql(`CREATE ROLE anon NOLOGIN; CREATE ROLE authenticated NOLOGIN; CREATE ROLE service_role NOLOGIN BYPASSRLS;
       CREATE ROLE opportunity_v3_rpc_owner NOLOGIN NOBYPASSRLS;
       ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO service_role;
+      CREATE TYPE public.financial_validation_status_v3 AS ENUM('pending','validated','rejected','conflict','stale');
       CREATE TABLE public.opportunity_financial_facts_v3(fact_id uuid PRIMARY KEY,recorded_at timestamptz,
-        authority_tier text,provider text,validation_status text,schema_valid boolean,unit_valid boolean,
+        authority_tier text,provider text,validation_status public.financial_validation_status_v3,schema_valid boolean,unit_valid boolean,
         point_in_time_valid boolean,consistency_valid boolean);
       ALTER TABLE public.opportunity_financial_facts_v3 OWNER TO opportunity_v3_rpc_owner;
       CREATE TABLE public.candidate_financial_fact_provenance_v4(fact_id uuid,source_url text,source_sha256 text);
@@ -66,7 +67,7 @@ test('validation receipt RPC enforces permissions, exact provenance, and idempot
         fact_id,validator_version,input_hash,source_sha256,validation,validated_at,prior_validation,effective_validation
       ) VALUES('${fact}','official-financial-v1','${'9'.repeat(64)}','${hash}',
         '{"version":"official-financial-v1"}'::jsonb,'${legacyAt}',
-        '{"validation_status":"pending","schema_valid":false,"unit_valid":false,"point_in_time_valid":false,"consistency_valid":false,"validation_recorded_at":null}'::jsonb,
+        '{"validation_status":"validated","schema_valid":true,"unit_valid":true,"point_in_time_valid":true,"consistency_valid":true,"validation_recorded_at":"${legacyAt}"}'::jsonb,
         '{"validation_status":"validated","schema_valid":true,"unit_valid":true,"point_in_time_valid":true,"consistency_valid":true,"validation_recorded_at":"${legacyAt}"}'::jsonb);
       UPDATE public.opportunity_financial_facts_v3 SET validation_status='validated',schema_valid=true,
         unit_valid=true,point_in_time_valid=true,consistency_valid=true,validation_recorded_at='${legacyAt}' WHERE fact_id='${fact}';`);

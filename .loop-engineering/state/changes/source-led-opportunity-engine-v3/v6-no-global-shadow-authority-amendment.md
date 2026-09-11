@@ -52,10 +52,11 @@ INSERT, UPDATE, DELETE or TRUNCATE on either audit relation.
 
 The two mutating functions are `SECURITY DEFINER`, use an empty `search_path`, bind the
 fixed `opportunity_runner` principal, and preserve exact subject/provenance or retry
-state before writing. Every validation receipt records that principal. The as-of reader
-uses the earliest receipt's prior image to quarantine predecessor row mutations until
-a principal-bound V2 receipt exists at the requested cutoff, so historical or counterfeit
-rows cannot promote a fact. The NOLOGIN/NOBYPASSRLS function owner receives only SELECT
+state before writing. Every V2 validation receipt records that principal. Because the
+predecessor client could directly write both receipt JSON images, the as-of reader trusts
+neither: any unbound history forces a closed pending/false state until a principal-bound
+V2 receipt exists at the requested cutoff. Historical or counterfeit rows therefore
+cannot promote a fact. The NOLOGIN/NOBYPASSRLS function owner receives only SELECT
 RLS access to provenance and SELECT/UPDATE RLS access to document receipts; no client
 role inherits that bridge. These three functions are the complete V6 research adjunct
 surface; overloads, default arguments and any additional client execute grant are

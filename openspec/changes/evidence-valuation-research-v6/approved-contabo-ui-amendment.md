@@ -45,7 +45,8 @@ This record does not assert a protected gate PASS or authorize bypassing one.
   checked and recorded by the sole validation writer; `service_role` has no direct
   receipt mutation privilege. Narrow RLS policies expose only the provenance SELECT and
   document-retry SELECT/UPDATE required by the NOLOGIN function owner. As-of research
-  reconstructs the pre-receipt state until a bound V2 receipt exists at the cutoff.
+  treats predecessor receipt images and mutable status as untrusted and returns a closed
+  pending state until a bound V2 receipt exists at the cutoff.
 - AES-256-GCM token envelopes bind identity/key version; systemd encrypted credentials
   hold root keys, with offsite recovery escrow. Refresh/revoke use atomic generation
   checks. Transfer secrets only in a restricted process's memory, never logs or env files.

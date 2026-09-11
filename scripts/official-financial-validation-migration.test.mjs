@@ -16,14 +16,17 @@ test('official validation migration is additive, guarded, receipt-backed and PIT
   assert.match(sql,/official_validation_rpc_owner_provenance_select/u);
   assert.match(sql,/official_validation_rpc_owner_receipt_select/u);
   assert.match(sql,/official_validation_rpc_owner_receipt_update/u);
-  assert.match(sql,/WHERE r[.]fact_id=f[.]fact_id\s+ORDER BY r[.]validated_at/u);
+  assert.match(sql,/validator_version='official-financial-v2' AND r[.]validator_principal IS NOT NULL/u);
+  assert.match(sql,/WHEN first_receipt[.]id IS NOT NULL THEN\s+'[{]"validation_status":"pending"/u);
+  assert.doesNotMatch(sql,/first_receipt[.]prior_validation/u);
   assert.match(sql,/INSERT INTO public.official_financial_validation_receipts/u);
   assert.match(sql,/v_at := clock_timestamp\(\)/u);
-  assert.match(sql,/validation_recorded_at=v_at/u);
+  assert.match(sql,/validation_recorded_at=\(v_effective->>'validation_recorded_at'\)::timestamptz/u);
   assert.match(sql,/prior_validation,effective_validation/u);
   assert.match(sql,/r.validated_at<=p_cutoff/u);
   assert.match(sql,/FUNCTION public.read_financial_facts_as_of\(p_cutoff timestamptz\)/u);
-  assert.match(sql,/v_fact.validation_status IN \('rejected','conflict','stale'\)/u);
+  assert.match(sql,/v_prior->>'validation_status' IN \('rejected','conflict','stale'\)/u);
+  assert.doesNotMatch(sql,/v_fact[.]validation_status IN \('rejected','conflict','stale'\)/u);
 });
 test('validation covers the full candidate universe independently of acquisition backlog',()=>{
   const research=readFileSync(new URL('../web/src/lib/candidate-research.ts',import.meta.url),'utf8');
@@ -31,5 +34,7 @@ test('validation covers the full candidate universe independently of acquisition
   assert.match(research,/validatePendingOfficialFinancials\(proposedUniverse\.map/u);
   assert.doesNotMatch(worker,/Set\(stockIds\)\]\)\.slice|Set\(stockIds\)\]\.slice/u);
   assert.match(worker,/acceptedHashes\.has/u);
+  assert.match(worker,/r[.]validator_version === 'official-financial-v2'/u);
+  assert.match(worker,/typeof r[.]validator_principal === 'string'/u);
   assert.match(worker,/p_validator_principal: validatorPrincipal/u);
 });

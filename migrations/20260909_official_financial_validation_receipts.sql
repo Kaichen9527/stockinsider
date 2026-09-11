@@ -31,7 +31,7 @@ CREATE OR REPLACE FUNCTION public.record_official_financial_validation(
   p_input_hash text, p_validation jsonb, p_validator_principal uuid
 ) RETURNS boolean LANGUAGE plpgsql SECURITY DEFINER SET search_path='' AS $function$
 DECLARE v_fact public.opportunity_financial_facts_v3%ROWTYPE; v_valid boolean; v_inserted integer;
-  v_prior jsonb; v_effective jsonb; v_at timestamptz;
+  v_prior jsonb; v_effective jsonb; v_at timestamptz; v_existing_effective jsonb;
 BEGIN
   IF NOT public.internal_principal_role_is_exact_v3_internal(
       p_validator_principal,'opportunity_runner'::public.internal_principal_role_v3,clock_timestamp())
@@ -59,10 +59,16 @@ BEGIN
     AND jsonb_array_length(p_validation->'reasons')=0
     AND COALESCE(to_jsonb(v_fact)->>'source_ref','') !~ '^(twse|tpex)-mops-inline:';
   v_at := clock_timestamp();
-  v_prior := jsonb_build_object('validation_status',v_fact.validation_status,'schema_valid',v_fact.schema_valid,
-    'unit_valid',v_fact.unit_valid,'point_in_time_valid',v_fact.point_in_time_valid,
-    'consistency_valid',v_fact.consistency_valid,'validation_recorded_at',v_fact.validation_recorded_at);
-  v_effective := CASE WHEN v_fact.validation_status IN ('rejected','conflict','stale') THEN v_prior ELSE
+  SELECT r.effective_validation INTO v_existing_effective
+    FROM public.official_financial_validation_receipts r
+    WHERE r.fact_id=p_fact_id AND r.validator_version='official-financial-v2'
+      AND r.validator_principal IS NOT NULL
+    ORDER BY r.validated_at DESC,r.receipt_sequence DESC LIMIT 1;
+  -- Mutable fact validation columns and every V1 receipt are predecessor state,
+  -- not successor authority. With no trusted V2 transition, start closed.
+  v_prior := COALESCE(v_existing_effective,
+    '{"validation_status":"pending","schema_valid":false,"unit_valid":false,"point_in_time_valid":false,"consistency_valid":false,"validation_recorded_at":null}'::jsonb);
+  v_effective := CASE WHEN v_prior->>'validation_status' IN ('rejected','conflict','stale') THEN v_prior ELSE
     jsonb_build_object('validation_status',CASE WHEN v_valid THEN 'validated' ELSE 'rejected' END,
       'schema_valid',(p_validation->>'schemaValid')::boolean,'unit_valid',(p_validation->>'unitValid')::boolean,
       'point_in_time_valid',(p_validation->>'pointInTimeValid')::boolean,
@@ -70,18 +76,24 @@ BEGIN
   INSERT INTO public.official_financial_validation_receipts(fact_id,validator_version,input_hash,source_sha256,validation,validated_at,prior_validation,effective_validation,validator_principal)
     VALUES(p_fact_id,'official-financial-v2',p_input_hash,p_source_sha256,p_validation,v_at,v_prior,v_effective,p_validator_principal) ON CONFLICT DO NOTHING;
   GET DIAGNOSTICS v_inserted = ROW_COUNT;
-  IF v_inserted=0 THEN RETURN v_valid AND v_fact.validation_status='validated'; END IF;
+  IF v_inserted=0 THEN
+    SELECT r.effective_validation INTO v_existing_effective
+      FROM public.official_financial_validation_receipts r
+      WHERE r.fact_id=p_fact_id AND r.validator_version='official-financial-v2'
+        AND r.validator_principal IS NOT NULL
+      ORDER BY r.validated_at DESC,r.receipt_sequence DESC LIMIT 1;
+    RETURN v_valid AND v_existing_effective->>'validation_status'='validated';
+  END IF;
   -- A recorded conflict/rejection is not erased by an automatic retry.
-  IF v_fact.validation_status IN ('rejected','conflict','stale') THEN RETURN FALSE; END IF;
   UPDATE public.opportunity_financial_facts_v3 SET
-    validation_status=CASE WHEN v_valid THEN 'validated' ELSE 'rejected' END,
-    schema_valid=(p_validation->>'schemaValid')::boolean,
-    unit_valid=(p_validation->>'unitValid')::boolean,
-    point_in_time_valid=(p_validation->>'pointInTimeValid')::boolean,
-    consistency_valid=(p_validation->>'consistencyValid')::boolean,
-    validation_recorded_at=v_at
+    validation_status=(v_effective->>'validation_status')::public.financial_validation_status_v3,
+    schema_valid=(v_effective->>'schema_valid')::boolean,
+    unit_valid=(v_effective->>'unit_valid')::boolean,
+    point_in_time_valid=(v_effective->>'point_in_time_valid')::boolean,
+    consistency_valid=(v_effective->>'consistency_valid')::boolean,
+    validation_recorded_at=(v_effective->>'validation_recorded_at')::timestamptz
     WHERE fact_id=p_fact_id;
-  RETURN v_valid;
+  RETURN v_valid AND v_effective->>'validation_status'='validated';
 END; $function$;
 REVOKE ALL ON FUNCTION public.record_official_financial_validation(uuid,timestamptz,text,text,jsonb,uuid) FROM PUBLIC,anon,authenticated;
 GRANT EXECUTE ON FUNCTION public.record_official_financial_validation(uuid,timestamptz,text,text,jsonb,uuid) TO service_role;
@@ -96,18 +108,20 @@ SET search_path='' AS $asof$
     to_jsonb(f) || CASE
       WHEN latest.id IS NOT NULL THEN COALESCE(latest.effective_validation,
         '{"validation_status":"pending","schema_valid":false,"unit_valid":false,"point_in_time_valid":false,"consistency_valid":false}'::jsonb)
-      WHEN first_receipt.id IS NOT NULL THEN COALESCE(first_receipt.prior_validation,
-        '{"validation_status":"pending","schema_valid":false,"unit_valid":false,"point_in_time_valid":false,"consistency_valid":false}'::jsonb)
+      -- Predecessor service_role could write both receipt JSON images directly,
+      -- so neither image is authority. Quarantine the mutable row until a
+      -- principal-bound V2 receipt is visible at this cutoff.
+      WHEN first_receipt.id IS NOT NULL THEN
+        '{"validation_status":"pending","schema_valid":false,"unit_valid":false,"point_in_time_valid":false,"consistency_valid":false,"validation_recorded_at":null}'::jsonb
       ELSE '{}'::jsonb END)).*
   FROM public.opportunity_financial_facts_v3 f
   LEFT JOIN LATERAL (SELECT r.id,r.effective_validation FROM public.official_financial_validation_receipts r
-    WHERE r.fact_id=f.fact_id AND r.validated_at<=p_cutoff AND r.validator_principal IS NOT NULL
+    WHERE r.fact_id=f.fact_id AND r.validated_at<=p_cutoff
+      AND r.validator_version='official-financial-v2' AND r.validator_principal IS NOT NULL
     ORDER BY r.validated_at DESC,r.receipt_sequence DESC LIMIT 1) latest ON true
-  -- The earliest receipt is intentionally not filtered by principal or cutoff.
-  -- Its prior image reconstructs the fact before any predecessor writer
-  -- mutated the shared row.  Until a trusted bound receipt exists at the
-  -- requested cutoff, that pre-receipt image is the only safe authority.
-  LEFT JOIN LATERAL (SELECT r.id,r.prior_validation FROM public.official_financial_validation_receipts r
+  -- Receipt existence is intentionally not filtered by principal or cutoff:
+  -- any predecessor write means the shared validation columns are untrusted.
+  LEFT JOIN LATERAL (SELECT r.id FROM public.official_financial_validation_receipts r
     WHERE r.fact_id=f.fact_id
     ORDER BY r.validated_at,r.receipt_sequence LIMIT 1) first_receipt ON true
   WHERE f.recorded_at<=p_cutoff
