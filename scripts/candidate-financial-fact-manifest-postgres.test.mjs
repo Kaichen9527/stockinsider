@@ -99,7 +99,7 @@ test('v8 parser evidence and exact fact validation survive a real PostgreSQL bou
     const manifest = [{ xbrl_context:'D', xbrl_concept:'tifrs-full:Revenue', value:'100', unit:'TWD',
       entity_identifier:'2330', period_start:'2026-04-01', period_end:'2026-06-30', duration_kind:'quarterly', dimension_count:0 }];
     const evidence = { schema:'candidate-financial-parser-evidence-v8', documentSha256:hash, parser:'arelle',
-      parserVersion:'arelle-2.44.7', taxonomySha256:'4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869',
+      parserVersion:'2.44.7', taxonomySha256:'4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869',
       validation:{ errorCount:0,errorCodes:[],validFactCount:1,errorsTruncated:false }, validatedFacts:manifest };
     const fact = { input:{ stock_id:stock,fact_key:'quarterly_revenue',period_start:'2026-04-01',period_end:'2026-06-30',
       duration_kind:'quarterly',value:100,unit:'TWD',provider:'mops',authority_tier:'official_filing',estimate_kind:'reported',

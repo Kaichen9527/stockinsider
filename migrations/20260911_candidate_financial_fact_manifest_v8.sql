@@ -91,7 +91,7 @@ BEGIN
   v_manifest:=p_parser_evidence->'validatedFacts';
   IF v_parser IS NOT NULL AND v_parser NOT IN ('arelle','pdfplumber','docling')
     OR (v_parser='arelle' AND (
-      p_parser_evidence->>'parserVersion' IS DISTINCT FROM 'arelle-2.44.7'
+      p_parser_evidence->>'parserVersion' IS DISTINCT FROM '2.44.7'
       OR p_parser_evidence->>'taxonomySha256' IS DISTINCT FROM '4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869'
       OR jsonb_typeof(COALESCE(v_validation,'null'::jsonb))<>'object'
     ))
