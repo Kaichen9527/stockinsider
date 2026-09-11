@@ -256,6 +256,24 @@ const graphBoundReviewSources = Object.freeze({
       rangeLine: 'Full reviewed implementation range',
     }),
   }),
+  // PR #210's final no-global-Shadow and principal-bound financial validation
+  // graph was independently reviewed at c7b4776. Register only its immutable
+  // direct-child evidence refs from the protected base before the candidate
+  // can consume them.
+  '10ddc6020b010a557f2ad000e11df7ebb2413432bb63351d3a4a5bdba26c46bf': Object.freeze({
+    requirements: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-c7b4776-final',
+      path: `${changeRelative}/requirements-review-v3.24.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+    architecture: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-c7b4776-final',
+      path: `${changeRelative}/architecture-review-v3.24.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+  }),
   // A root-volume remount changed only the exact device identity of the pinned
   // runner paths. Register the independently reviewed V3.16 graph before the
   // one-time successor is proposed, so candidate bytes cannot select reviews.
