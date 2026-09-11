@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import {validateOfficialFinancialFact, officialFinancialValidationSubjects} from './official-financial-validation.ts';
 import {parseCandidateMopsFacts} from './candidate-official-financials.ts';
 const fact={fact_id:'a',stock_id:'11111111-1111-1111-1111-111111111111',fact_key:'quarterly_revenue',period_start:'2026-01-01',period_end:'2026-03-31',duration_kind:'quarterly',value:1000000,unit:'TWD',estimate_kind:'reported',provider:'tpex',authority_tier:'official_filing',source_ref:'tpex-openapi:test',filing_restatement_id:'v1',filing_published_at:'2026-05-15T00:00:00Z',source_timestamp:'2026-05-15T00:00:00Z',collected_at:'2026-09-08T00:00:00Z',recorded_at:'2026-09-08T00:00:01Z'};
@@ -63,4 +64,55 @@ test('conflicting accounting operands yield identical rejection and hash in eith
   const b=validateOfficialFinancialFact(peers[3],[...peers].reverse(),source,cutoff);
   assert.equal(a.status,'rejected');assert.equal(b.status,'rejected');
   assert.deepEqual(a,b);
+});
+
+function dilutedTriad() {
+  return [
+    { ...fact, fact_id: 'eps', fact_key: 'quarterly_diluted_eps', unit: 'TWD_per_share', value: 100 },
+    { ...fact, fact_id: 'shares', fact_key: 'diluted_weighted_average_shares', unit: 'share', value: 100_000_000 },
+    { ...fact, fact_id: 'income', fact_key: 'quarterly_net_income_attributable_to_common', value: 100_000_000 },
+  ];
+}
+
+test('same-context diluted EPS/share/common income contradictions reject all identity participants', () => {
+  const triad = dilutedTriad();
+  for (const participant of triad) {
+    const result = validateOfficialFinancialFact(participant, triad, source, cutoff);
+    assert.equal(result.status, 'rejected');
+    assert(result.checks.some((check) => check.startsWith('quarterly_diluted_eps*')));
+  }
+  // Cash remains a safe reported fact, not a surrogate earnings bridge.
+  const cash = { ...fact, fact_id: 'cash', fact_key: 'cash_and_equivalents', value: 10_000 };
+  assert.equal(validateOfficialFinancialFact(cash, [...triad, cash], source, cutoff).status, 'validated');
+});
+
+test('missing or different-context identity operands do not condemn standalone safe reported facts', () => {
+  const [eps, shares, income] = dilutedTriad();
+  const identity = 'quarterly_diluted_eps*diluted_weighted_average_shares=quarterly_net_income_attributable_to_common';
+  assert.equal(validateOfficialFinancialFact(eps, [eps], source, cutoff).status, 'validated');
+  for (const patch of [
+    { stock_id: '22222222-2222-2222-2222-222222222222' },
+    { provider: 'mops' }, { filing_restatement_id: 'another-filing' },
+    { period_start: '2025-01-01' }, { period_end: '2025-12-31' }, { duration_kind: 'instant' },
+  ]) {
+    const result = validateOfficialFinancialFact(eps, [eps, shares, { ...income, ...patch }], source, cutoff);
+    assert.equal(result.status, 'validated'); assert.equal(result.checks.includes(identity), false);
+  }
+});
+
+test('reconciled and rounded diluted earnings are accepted without changing the reported values', () => {
+  const triad = dilutedTriad().map((row) => row.fact_id === 'eps' ? { ...row, value: 1 } : row);
+  assert(triad.every((row) => validateOfficialFinancialFact(row, triad, source, cutoff).status === 'validated'));
+  const rounded = triad.map((row) => row.fact_id === 'income' ? { ...row, value: 99_500_000 } : row);
+  assert(rounded.every((row) => validateOfficialFinancialFact(row, rounded, source, cutoff).status === 'validated'));
+  assert.equal(rounded[2].value, 99_500_000);
+});
+
+test('the frozen EPS policy changes the receipt hash so legacy validation cannot suppress rechecking', () => {
+  const identity = Object.fromEntries(Object.entries(fact).sort(([left], [right]) => left.localeCompare(right)));
+  const legacyHash = createHash('sha256').update(JSON.stringify({ fact: identity, peers: [identity],
+    provenance: source, version: 'official-financial-v1' })).digest('hex');
+  const result = validateOfficialFinancialFact(fact, [fact], source, cutoff);
+  assert.notEqual(result.inputHash, legacyHash);
+  assert.deepEqual(result.accountingPolicyVersions, ['diluted-eps-common-income-v1']);
 });

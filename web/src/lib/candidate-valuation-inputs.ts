@@ -1,5 +1,6 @@
 import { buildFinancialPbRoeInputs, buildNormalizedCycleEarnings } from './candidate-financial-normalization.ts';
 import { discreteReportedQuarters, type ReportedFinancialFact } from './forward-earnings-bridge.ts';
+import { DILUTED_EPS_RECONCILIATION_VERSION, reconcileDilutedEpsToCommonIncome } from './financial-eps-reconciliation.ts';
 
 type InstantPoint = { periodEnd: string; value: number; factIds: string[] };
 
@@ -26,12 +27,39 @@ function priorQuarterEnd(periodEnd: string) {
 }
 
 export function buildCandidateValuationInputs(facts: ReportedFinancialFact[]) {
-  const dilutedEps = discreteReportedQuarters(facts, 'quarterly_diluted_eps');
-  const normalizedCycle = buildNormalizedCycleEarnings(dilutedEps.slice(-20).map((point) => ({
-    periodEnd: point.periodEnd,
-    dilutedEps: point.value,
-    factIds: point.factIds,
-  })));
+  const triadKeys = ['quarterly_diluted_eps', 'diluted_weighted_average_shares', 'quarterly_net_income_attributable_to_common'];
+  const expectedUnits = ['TWD_per_share', 'share', 'TWD'];
+  const reportedTriad = facts.filter((fact) => fact.durationKind === 'quarterly'
+    && triadKeys.includes(fact.factKey) && fact.unit === expectedUnits[triadKeys.indexOf(fact.factKey)]);
+  const dilutedEps = discreteReportedQuarters(reportedTriad, triadKeys[0]).slice(-20);
+  const dilutedShares = new Map(discreteReportedQuarters(reportedTriad, triadKeys[1]).map((point) => [point.periodEnd, point]));
+  const commonQuarterIncome = new Map(discreteReportedQuarters(reportedTriad, triadKeys[2]).map((point) => [point.periodEnd, point]));
+  const reconciledQuarters = dilutedEps.flatMap((point) => {
+    const shares = dilutedShares.get(point.periodEnd);
+    const income = commonQuarterIncome.get(point.periodEnd);
+    if (!shares || !income || !reconcileDilutedEpsToCommonIncome({ dilutedEps: point.value,
+      dilutedShares: shares.value, commonNetIncome: income.value }).reconciled) return [];
+    // A prior `validated` label is not evidence of this identity. Require the
+    // actual reported triad in one exact discrete context; neither YTD values
+    // nor another provider/restatement may fill a missing operand.
+    const quarterStart = `${point.periodEnd.slice(0, 4)}-${['01', '04', '07', '10'][Math.floor((Number(point.periodEnd.slice(5, 7)) - 1) / 3)]}-01`;
+    const contexts = new Map<string, ReportedFinancialFact[]>();
+    for (const row of reportedTriad.filter((row) => row.periodEnd === point.periodEnd && row.periodStart === quarterStart)) {
+      const identity = JSON.stringify([row.provider ?? null, row.authorityTier ?? null, row.filingRestatementId ?? null]);
+      contexts.set(identity, [...(contexts.get(identity) ?? []), row]);
+    }
+    const expected = [point.value, shares.value, income.value];
+    const complete = [...contexts.values()].filter((rows) => triadKeys.every((key, index) => {
+      const values = [...new Set(rows.filter((row) => row.factKey === key).map((row) => row.value))];
+      return values.length === 1 && values[0] === expected[index];
+    }));
+    return complete.length === 0 ? [] : [{ periodEnd: point.periodEnd, dilutedEps: point.value,
+      factIds: [...new Set(complete.flat().map((row) => row.factId))] }];
+  });
+  const normalizedCycle = { ...(reconciledQuarters.length !== dilutedEps.length
+    ? { status: 'insufficient' as const, reason: 'twenty_reconciled_discrete_quarters_required' as const }
+    : buildNormalizedCycleEarnings(reconciledQuarters)),
+  reconciliationVersion: DILUTED_EPS_RECONCILIATION_VERSION };
 
   const commonIncome = discreteReportedQuarters(facts, 'quarterly_net_income_attributable_to_common').slice(-8);
   const equityByPeriod = new Map(instantSeries(facts, 'common_equity_attributable_to_owners').map((point) => [point.periodEnd, point]));

@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
 import { isCandidateFinancialFactKey } from './evidence-valuation-contract.ts';
+import { DILUTED_EPS_RECONCILIATION_VERSION, reconcileDilutedEpsToCommonIncome } from './financial-eps-reconciliation.ts';
 
 export const OFFICIAL_FINANCIAL_VALIDATOR_VERSION = 'official-financial-v1';
 export type OfficialValidationRow = Record<string, unknown>;
@@ -94,6 +95,14 @@ export function validateOfficialFinancialFact(
     const expected = values.get(a)! + sign * values.get(b)!;
     if (Math.abs(expected - values.get(c)!) > Math.max(2000, Math.abs(values.get(c)!) * 0.005)) consistencyValid = false;
   }
+  const dilutedIdentity = ['quarterly_diluted_eps', 'diluted_weighted_average_shares', 'quarterly_net_income_attributable_to_common'];
+  if (dilutedIdentity.includes(key) && dilutedIdentity.every((operand) => values.has(operand))) {
+    checks.push('quarterly_diluted_eps*diluted_weighted_average_shares=quarterly_net_income_attributable_to_common');
+    if (!reconcileDilutedEpsToCommonIncome({ dilutedEps: values.get(dilutedIdentity[0])!,
+      dilutedShares: values.get(dilutedIdentity[1])!, commonNetIncome: values.get(dilutedIdentity[2])! }).reconciled) {
+      consistencyValid = false;
+    }
+  }
   if (SHARE_KEYS.has(key) && (!finite(fact.value) || fact.value <= 0)) consistencyValid = false;
   if (['total_assets','cash_and_equivalents','total_debt'].includes(key) && (!finite(fact.value) || fact.value < 0)) consistencyValid = false;
   if (values.has('cash_and_equivalents') && values.has('total_assets')) {
@@ -110,8 +119,9 @@ export function validateOfficialFinancialFact(
   // change the hash and produce a new append-only validation receipt.
   const inputHash = createHash('sha256').update(JSON.stringify({ fact: evidenceIdentity(fact),
     peers: periodPeers.map(evidenceIdentity).sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b))),
-    provenance, version: OFFICIAL_FINANCIAL_VALIDATOR_VERSION })).digest('hex');
+    provenance, version: OFFICIAL_FINANCIAL_VALIDATOR_VERSION,
+    accountingPolicyVersions: [DILUTED_EPS_RECONCILIATION_VERSION] })).digest('hex');
   return { schemaValid: schemaValid && provenanceValid, unitValid, pointInTimeValid, consistencyValid,
-    status: reasons.length === 0 ? 'validated' as const : 'rejected' as const,
+    status: reasons.length === 0 ? 'validated' as const : 'rejected' as const, accountingPolicyVersions: [DILUTED_EPS_RECONCILIATION_VERSION],
     reasons, checks, inputHash, version: OFFICIAL_FINANCIAL_VALIDATOR_VERSION };
 }
