@@ -187,7 +187,13 @@ export function buildForwardEarningsBridge(facts: ReportedFinancialFact[], optio
   const optionalKeys = ['quarterly_operating_expense', 'quarterly_non_operating_income', 'quarterly_pretax_income', 'quarterly_income_tax_expense', 'quarterly_net_income', 'quarterly_noncontrolling_interest'];
   const optionalSeries = Object.fromEntries(optionalKeys.map((key) => [key, diagnoseDiscreteQuarters(facts, key)]));
   const optionalIssues = optionalKeys.flatMap((key) => optionalSeries[key].issues.filter((issue) => latestPeriods.some((period) => issue.includes(period))));
-  if (optionalIssues.length) return { status: 'insufficient' as const, missing: optionalIssues.sort() };
+  // Additional disclosures may be annual-only or use a period that cannot be
+  // reconstructed into quarters. Their absence of usable context does not
+  // invalidate the complete required bridge. Keep these gaps visible and use
+  // the explicit below-operating residual; actual conflicts still fail closed.
+  const optionalComponentGaps = optionalIssues.filter((issue) => /:(?:missing_prior_period_for_ytd|unsupported_period_context)$/u.test(issue)).sort();
+  const optionalConflicts = optionalIssues.filter((issue) => !optionalComponentGaps.includes(issue)).sort();
+  if (optionalConflicts.length) return { status: 'insufficient' as const, missing: optionalConflicts };
   const optionalTtm = (key: string) => latestPeriods.every((period) => optionalSeries[key].points.some((row) => row.periodEnd === period))
     ? sum(latestPeriods.map((period) => optionalSeries[key].points.find((row) => row.periodEnd === period)!.value)) : null;
   const pretax = optionalTtm('quarterly_pretax_income');
@@ -239,6 +245,7 @@ export function buildForwardEarningsBridge(facts: ReportedFinancialFact[], optio
     status: 'complete' as const,
     actual: { latestRevenue, latestGross, latestOperating, latestNet, latestEps, latestDilutedShares: round(latestDilutedShares, 2), historicalGrowth: round(historicalGrowth), grossMargin: round(grossMargin), operatingMargin: round(operatingMargin), netMargin: round(netMargin), impliedShares: round(latestDilutedShares, 2) },
     ...projection,
+    optionalComponentGaps,
     researchDepth: 'financial_statement_projection' as const,
     verifiedTurnaroundPath: latestNet > 0 && sum(netIncome.slice(0, 4)) <= 0 && netIncome.slice(-2).every((value) => value > 0),
   };

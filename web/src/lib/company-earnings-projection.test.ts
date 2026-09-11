@@ -133,3 +133,30 @@ test('zero or negative diluted shares cannot be hidden inside a positive annual 
     ? { ...row, value: -10 } : row));
   assert.deepEqual(bridge, { status: 'insufficient', missing: ['positive_reported_diluted_shares_required'] });
 });
+
+test('an annual-only optional pretax disclosure cannot veto a complete required earnings bridge', () => {
+  const requiredKeys = new Set(['quarterly_revenue', 'quarterly_gross_profit', 'quarterly_operating_income',
+    'quarterly_net_income_attributable_to_common', 'quarterly_diluted_eps', 'diluted_weighted_average_shares']);
+  const facts = reportedFacts().filter((row) => requiredKeys.has(row.factKey));
+  const before = buildForwardEarningsBridge(facts);
+  const after = buildForwardEarningsBridge([...facts, { factId: 'annual-pretax', factKey: 'quarterly_pretax_income',
+    periodStart: '2025-01-01', periodEnd: '2025-12-31', value: 88, unit: 'TWD', sourceRef: 'mops:annual-2025' }]);
+  assert.equal(before.status, 'complete');
+  assert.equal(after.status, 'complete');
+  if (before.status !== 'complete' || after.status !== 'complete') return;
+  assert.equal(after.decompositionStatus, 'below_operating_residual');
+  assert.deepEqual(after.scenarios, before.scenarios);
+  assert(after.optionalComponentGaps.includes('quarterly_pretax_income:2025-12-31:missing_prior_period_for_ytd'));
+  assert.equal(after.scenarios.base.incomeTaxExpense, null);
+});
+
+test('conflicting annual-only optional disclosures still fail closed', () => {
+  const requiredKeys = new Set(['quarterly_revenue', 'quarterly_gross_profit', 'quarterly_operating_income',
+    'quarterly_net_income_attributable_to_common', 'quarterly_diluted_eps', 'diluted_weighted_average_shares']);
+  const annual = { factId: 'annual-pretax', factKey: 'quarterly_pretax_income', periodStart: '2025-01-01',
+    periodEnd: '2025-12-31', value: 88, unit: 'TWD', sourceRef: 'mops:annual-2025' };
+  const bridge = buildForwardEarningsBridge([...reportedFacts().filter((row) => requiredKeys.has(row.factKey)),
+    annual, { ...annual, factId: 'conflicting-annual-pretax', value: 99 }]);
+  assert.equal(bridge.status, 'insufficient');
+  if (bridge.status === 'insufficient') assert(bridge.missing.includes('quarterly_pretax_income:2025-12-31:conflicting_restatement'));
+});
