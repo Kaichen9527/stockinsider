@@ -34,7 +34,7 @@ test('offline parser implementation retains its local-only boundaries', async ()
   assert.match(source, /controller[.]webCache[.]workOffline = True/u);
   assert.match(source, /socket\.create_connection\s*=\s*blocked/u);
   assert.match(source, /import pdfplumber/u);
-  assert.match(source, /from arelle import Cntlr, FileSource, XmlValidateConst/u);
+  assert.match(source, /from arelle import Cntlr, FileSource, Version, XmlValidateConst/u);
   assert.match(source, /controller[.]modelManager[.]validate[(][)]/u);
   assert.match(source, /xValid/u);
   assert.match(source, /staged_taxonomy_entrypoint/u);

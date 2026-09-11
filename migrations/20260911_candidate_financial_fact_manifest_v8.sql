@@ -11,7 +11,15 @@ ALTER TABLE public.candidate_financial_document_receipts_v6
 ALTER TABLE public.candidate_financial_document_receipts_v6
   ADD COLUMN IF NOT EXISTS financial_validation_status text NOT NULL DEFAULT 'not_applicable'
     CHECK(financial_validation_status IN ('not_applicable','pending','validated','rejected')),
-  ADD COLUMN IF NOT EXISTS parser_evidence_id uuid;
+  ADD COLUMN IF NOT EXISTS parser_evidence_id uuid,
+  ADD COLUMN IF NOT EXISTS financial_validation_attempts integer NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS financial_validation_next_attempt_at timestamptz,
+  ADD COLUMN IF NOT EXISTS financial_validation_terminal_reason text;
+ALTER TABLE public.candidate_financial_document_receipts_v6
+  DROP CONSTRAINT IF EXISTS candidate_financial_document_receipts_v6_financial_validation_attempts_check;
+ALTER TABLE public.candidate_financial_document_receipts_v6
+  ADD CONSTRAINT candidate_financial_document_receipts_v6_financial_validation_attempts_check
+  CHECK(financial_validation_attempts BETWEEN 0 AND 20);
 
 CREATE TABLE IF NOT EXISTS public.candidate_financial_parser_evidence_v8 (
   evidence_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -63,7 +71,7 @@ BEGIN
   IF jsonb_typeof(COALESCE(p_facts,'[]'::jsonb))<>'array' OR jsonb_array_length(COALESCE(p_facts,'[]'::jsonb))>128
     OR jsonb_typeof(COALESCE(p_parser_locators,'[]'::jsonb))<>'array' OR jsonb_array_length(COALESCE(p_parser_locators,'[]'::jsonb))>200
     OR jsonb_typeof(COALESCE(p_parser_evidence,'null'::jsonb))<>'object'
-    OR p_parser_evidence->>'schema'<>'candidate-financial-parser-evidence-v8'
+    OR p_parser_evidence->>'schema' IS DISTINCT FROM 'candidate-financial-parser-evidence-v8'
     OR jsonb_typeof(COALESCE(p_parser_evidence->'validatedFacts','null'::jsonb))<>'array'
     OR jsonb_array_length(p_parser_evidence->'validatedFacts')>200
     OR jsonb_typeof(COALESCE(p_missing_requirements,'[]'::jsonb))<>'array'
@@ -75,7 +83,7 @@ BEGIN
   WHERE receipt.receipt_id=p_receipt_id AND receipt.parser_status='running' AND receipt.parser_owner=p_owner FOR UPDATE;
   IF NOT FOUND OR v_receipt.parser_lease_expires_at<clock_timestamp()
   THEN RAISE EXCEPTION 'candidate_financial_document_lease_lost'; END IF;
-  IF p_parser_evidence->>'documentSha256'<>v_receipt.document_sha256
+  IF p_parser_evidence->>'documentSha256' IS DISTINCT FROM v_receipt.document_sha256
   THEN RAISE EXCEPTION 'candidate_financial_parser_evidence_document_mismatch'; END IF;
 
   v_parser:=NULLIF(p_parser_evidence->>'parser','');
@@ -83,8 +91,8 @@ BEGIN
   v_manifest:=p_parser_evidence->'validatedFacts';
   IF v_parser IS NOT NULL AND v_parser NOT IN ('arelle','pdfplumber','docling')
     OR (v_parser='arelle' AND (
-      p_parser_evidence->>'parserVersion'<>'arelle-2.44.7'
-      OR p_parser_evidence->>'taxonomySha256'<>'4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869'
+      p_parser_evidence->>'parserVersion' IS DISTINCT FROM 'arelle-2.44.7'
+      OR p_parser_evidence->>'taxonomySha256' IS DISTINCT FROM '4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869'
       OR jsonb_typeof(COALESCE(v_validation,'null'::jsonb))<>'object'
     ))
     OR (jsonb_array_length(p_facts)>0 AND (
@@ -108,7 +116,10 @@ BEGIN
     ) THEN RAISE EXCEPTION 'candidate_financial_document_locator_invalid'; END IF;
   END LOOP;
 
-  v_manifest_sha:=encode(digest(convert_to(v_manifest::text,'utf8'),'sha256'),'hex');
+  -- Hash the complete canonical evidence, not only its fact manifest. Two
+  -- empty-manifest attempts with different runtime diagnostics must remain
+  -- independently auditable.
+  v_manifest_sha:=encode(digest(convert_to(p_parser_evidence::text,'utf8'),'sha256'),'hex');
   INSERT INTO public.candidate_financial_parser_evidence_v8(
     receipt_id,document_sha256,parser,parser_version,taxonomy_sha256,validation_summary,
     validated_fact_manifest,manifest_sha256,recorded_at
@@ -169,6 +180,9 @@ BEGIN
     added_fact_count=v_added,duplicate_fact_count=v_duplicate,parser_locators=p_parser_locators,
     parser_evidence_id=v_evidence_id,
     financial_validation_status=CASE WHEN jsonb_array_length(p_facts)>0 THEN 'pending' ELSE 'not_applicable' END,
+    financial_validation_attempts=0,
+    financial_validation_next_attempt_at=CASE WHEN jsonb_array_length(p_facts)>0 THEN p_completed_at ELSE NULL END,
+    financial_validation_terminal_reason=NULL,
     missing_requirements=p_missing_requirements,rejection_reasons=p_rejection_reasons,completed_at=p_completed_at
   WHERE receipt_id=p_receipt_id;
   receipt_status:=v_status; added_fact_count:=v_added; duplicate_fact_count:=v_duplicate; RETURN NEXT;
@@ -189,22 +203,65 @@ BEGIN
     WHERE receipt_id=p_receipt_id FOR UPDATE;
   IF NOT FOUND OR v_receipt.parser_status<>'complete'
   THEN RAISE EXCEPTION 'candidate_financial_validation_receipt_unavailable'; END IF;
-  SELECT count(*),count(*) FILTER(WHERE fact.validation_status='validated'),
-    count(*) FILTER(WHERE fact.validation_status IN ('rejected','conflict','stale')),
-    count(*) FILTER(WHERE fact.validation_status NOT IN ('validated','rejected','conflict','stale'))
-  INTO v_total,v_validated,v_rejected,v_pending
+  SELECT count(*),count(*) FILTER(WHERE fact.validation_status='validated'
+      AND fact.schema_valid IS TRUE AND fact.unit_valid IS TRUE
+      AND fact.point_in_time_valid IS TRUE AND fact.consistency_valid IS TRUE
+      AND EXISTS (
+        SELECT 1 FROM public.official_financial_validation_receipts validation_receipt
+        WHERE validation_receipt.fact_id=fact.fact_id
+          AND validation_receipt.validated_at<=p_completed_at
+          AND validation_receipt.source_sha256=(
+            SELECT provenance.source_sha256
+            FROM public.candidate_financial_fact_provenance_v4 provenance
+            WHERE provenance.fact_id=fact.fact_id
+              AND provenance.source_sha256=v_receipt.document_sha256
+            ORDER BY provenance.extracted_at DESC LIMIT 1
+          )
+          AND validation_receipt.effective_validation->>'validation_status'='validated'
+          AND (validation_receipt.effective_validation->>'schema_valid')::boolean IS TRUE
+          AND (validation_receipt.effective_validation->>'unit_valid')::boolean IS TRUE
+          AND (validation_receipt.effective_validation->>'point_in_time_valid')::boolean IS TRUE
+          AND (validation_receipt.effective_validation->>'consistency_valid')::boolean IS TRUE
+      )),
+    count(*) FILTER(WHERE fact.validation_status IN ('rejected','conflict','stale'))
+  INTO v_total,v_validated,v_rejected
   FROM public.candidate_financial_document_fact_links_v8 link
   JOIN public.opportunity_financial_facts_v3 fact
     ON fact.fact_id=link.fact_id AND fact.recorded_at=link.fact_recorded_at
   WHERE link.receipt_id=p_receipt_id;
+  v_pending:=v_total-v_validated-v_rejected;
   IF v_total=0 THEN RAISE EXCEPTION 'candidate_financial_validation_fact_set_empty'; END IF;
-  IF v_pending>0 THEN
+  IF v_pending>0 AND v_receipt.financial_validation_attempts>=19 THEN
+    UPDATE public.candidate_financial_document_receipts_v6 SET
+      financial_validation_status='rejected',receipt_status='partial',
+      financial_validation_attempts=financial_validation_attempts+1,
+      financial_validation_next_attempt_at=NULL,
+      financial_validation_terminal_reason='validation_retry_exhausted',
+      missing_requirements=CASE WHEN missing_requirements ? 'official_fact_validation_retry_exhausted'
+        THEN missing_requirements ELSE missing_requirements||jsonb_build_array('official_fact_validation_retry_exhausted') END
+    WHERE receipt_id=p_receipt_id;
+    IF v_receipt.acquisition_job_id IS NOT NULL THEN
+      UPDATE public.candidate_financial_acquisition_jobs_v4 SET status='terminal',terminal_reason='document_partial',
+        terminal_detail='official_fact_validation_retry_exhausted',lease_owner=NULL,lease_expires_at=NULL,
+        collected_at=p_completed_at,next_attempt_at=NULL,updated_at=p_completed_at
+      WHERE job_id=v_receipt.acquisition_job_id AND status IN ('queued','running');
+    END IF;
+    validation_status:='rejected'; validated_fact_count:=v_validated;
+    rejected_fact_count:=v_rejected+v_pending; pending_fact_count:=0; RETURN NEXT; RETURN;
+  ELSIF v_pending>0 THEN
+    UPDATE public.candidate_financial_document_receipts_v6 SET
+      financial_validation_attempts=financial_validation_attempts+1,
+      financial_validation_next_attempt_at=p_completed_at+LEAST(interval '6 hours',
+        interval '5 minutes' * power(2,LEAST(financial_validation_attempts,6)))
+    WHERE receipt_id=p_receipt_id;
     validation_status:='pending'; validated_fact_count:=v_validated;
     rejected_fact_count:=v_rejected; pending_fact_count:=v_pending; RETURN NEXT; RETURN;
   END IF;
   v_status:=CASE WHEN v_rejected=0 THEN 'validated' ELSE 'rejected' END;
   UPDATE public.candidate_financial_document_receipts_v6 SET
     financial_validation_status=v_status,
+    financial_validation_next_attempt_at=NULL,
+    financial_validation_terminal_reason=CASE WHEN v_status='validated' THEN NULL ELSE 'official_fact_validation_rejected' END,
     receipt_status=CASE WHEN v_status='validated'
       AND jsonb_array_length(missing_requirements)=0 AND jsonb_array_length(rejection_reasons)=0
       THEN 'accepted' ELSE 'partial' END,
@@ -222,10 +279,77 @@ BEGIN
   rejected_fact_count:=v_rejected; pending_fact_count:=v_pending; RETURN NEXT;
 END $function$;
 
+-- Supersede the v1 writer with the same append-only validation semantics while
+-- admitting an issuer URL only when its exact host was already approved for
+-- this stock by the document-ingress allowlist.
+CREATE OR REPLACE FUNCTION public.record_official_financial_validation(
+  p_fact_id uuid,p_recorded_at timestamptz,p_source_sha256 text,p_input_hash text,p_validation jsonb
+) RETURNS boolean LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $function$
+DECLARE v_fact public.opportunity_financial_facts_v3%ROWTYPE; v_valid boolean; v_inserted integer;
+  v_prior jsonb; v_effective jsonb; v_at timestamptz;
+BEGIN
+  IF p_validation->>'version' IS DISTINCT FROM 'official-financial-v1'
+    OR COALESCE(p_input_hash,'') !~ '^[0-9a-f]{64}$'
+    OR COALESCE(p_source_sha256,'') !~ '^[0-9a-f]{64}$'
+    OR jsonb_typeof(p_validation->'reasons') IS DISTINCT FROM 'array'
+    OR jsonb_typeof(p_validation->'checks') IS DISTINCT FROM 'array'
+    OR jsonb_typeof(p_validation->'schemaValid') IS DISTINCT FROM 'boolean'
+    OR jsonb_typeof(p_validation->'unitValid') IS DISTINCT FROM 'boolean'
+    OR jsonb_typeof(p_validation->'pointInTimeValid') IS DISTINCT FROM 'boolean'
+    OR jsonb_typeof(p_validation->'consistencyValid') IS DISTINCT FROM 'boolean'
+  THEN RAISE EXCEPTION 'invalid_official_validation_receipt'; END IF;
+  SELECT * INTO v_fact FROM public.opportunity_financial_facts_v3
+    WHERE fact_id=p_fact_id AND recorded_at=p_recorded_at AND authority_tier::text='official_filing'
+      AND provider::text IN ('mops','twse','tpex') FOR UPDATE;
+  IF NOT FOUND THEN RAISE EXCEPTION 'official_validation_subject_mismatch'; END IF;
+  IF NOT EXISTS (
+    SELECT 1 FROM public.candidate_financial_fact_provenance_v4 provenance
+    WHERE provenance.fact_id=p_fact_id AND provenance.source_sha256=p_source_sha256
+      AND (
+        provenance.source_url ~ '^https://([A-Za-z0-9-]+\.)*(twse\.com\.tw|tpex\.org\.tw)/'
+        OR EXISTS (
+          SELECT 1 FROM public.candidate_issuer_document_domains_v6 domain
+          WHERE domain.stock_id=v_fact.stock_id
+            AND domain.host=lower(substring(provenance.source_url from '^https://([^/]+)'))
+        )
+      )
+  ) THEN RAISE EXCEPTION 'official_validation_provenance_missing'; END IF;
+  v_valid := (p_validation->>'schemaValid')::boolean AND (p_validation->>'unitValid')::boolean
+    AND (p_validation->>'pointInTimeValid')::boolean AND (p_validation->>'consistencyValid')::boolean
+    AND jsonb_array_length(p_validation->'reasons')=0
+    AND COALESCE(to_jsonb(v_fact)->>'source_ref','') !~ '^(twse|tpex)-mops-inline:';
+  v_at:=clock_timestamp();
+  v_prior:=jsonb_build_object('validation_status',v_fact.validation_status,'schema_valid',v_fact.schema_valid,
+    'unit_valid',v_fact.unit_valid,'point_in_time_valid',v_fact.point_in_time_valid,
+    'consistency_valid',v_fact.consistency_valid,'validation_recorded_at',v_fact.validation_recorded_at);
+  v_effective:=CASE WHEN v_fact.validation_status IN ('rejected','conflict','stale') THEN v_prior ELSE
+    jsonb_build_object('validation_status',CASE WHEN v_valid THEN 'validated' ELSE 'rejected' END,
+      'schema_valid',(p_validation->>'schemaValid')::boolean,'unit_valid',(p_validation->>'unitValid')::boolean,
+      'point_in_time_valid',(p_validation->>'pointInTimeValid')::boolean,
+      'consistency_valid',(p_validation->>'consistencyValid')::boolean,'validation_recorded_at',v_at) END;
+  INSERT INTO public.official_financial_validation_receipts(
+    fact_id,validator_version,input_hash,source_sha256,validation,validated_at,prior_validation,effective_validation
+  ) VALUES(p_fact_id,'official-financial-v1',p_input_hash,p_source_sha256,p_validation,v_at,v_prior,v_effective)
+  ON CONFLICT DO NOTHING;
+  GET DIAGNOSTICS v_inserted=ROW_COUNT;
+  IF v_inserted=0 THEN RETURN v_valid AND v_fact.validation_status='validated'; END IF;
+  IF v_fact.validation_status IN ('rejected','conflict','stale') THEN RETURN FALSE; END IF;
+  UPDATE public.opportunity_financial_facts_v3 SET
+    validation_status=CASE WHEN v_valid THEN 'validated' ELSE 'rejected' END,
+    schema_valid=(p_validation->>'schemaValid')::boolean,
+    unit_valid=(p_validation->>'unitValid')::boolean,
+    point_in_time_valid=(p_validation->>'pointInTimeValid')::boolean,
+    consistency_valid=(p_validation->>'consistencyValid')::boolean,
+    validation_recorded_at=v_at WHERE fact_id=p_fact_id;
+  RETURN v_valid;
+END $function$;
+
 REVOKE ALL ON FUNCTION public.complete_candidate_financial_document_receipt_parser_v8(uuid,text,uuid,jsonb,jsonb,jsonb,jsonb,jsonb,timestamptz) FROM PUBLIC,anon,authenticated;
 GRANT EXECUTE ON FUNCTION public.complete_candidate_financial_document_receipt_parser_v8(uuid,text,uuid,jsonb,jsonb,jsonb,jsonb,jsonb,timestamptz) TO service_role;
 REVOKE ALL ON FUNCTION public.finalize_candidate_financial_document_validation_v8(uuid,uuid,timestamptz) FROM PUBLIC,anon,authenticated;
 GRANT EXECUTE ON FUNCTION public.finalize_candidate_financial_document_validation_v8(uuid,uuid,timestamptz) TO service_role;
+REVOKE ALL ON FUNCTION public.record_official_financial_validation(uuid,timestamptz,text,text,jsonb) FROM PUBLIC,anon,authenticated;
+GRANT EXECUTE ON FUNCTION public.record_official_financial_validation(uuid,timestamptz,text,text,jsonb) TO service_role;
 REVOKE EXECUTE ON FUNCTION public.complete_candidate_financial_document_receipt_parser_v7(uuid,text,uuid,jsonb,jsonb,jsonb,jsonb,timestamptz) FROM service_role;
 
 COMMIT;

@@ -11,6 +11,8 @@ import tempfile
 MAX_HEADER = 1024
 MAX_BYTES = 50 * 1024 * 1024
 MAX_OUTPUT = 2 * 1024 * 1024
+EXPECTED_ARELLE_VERSION = "2.44.7"
+EXPECTED_TAXONOMY_SHA256 = "4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869"
 
 
 def receive_request(connection):
@@ -49,8 +51,15 @@ def serve(connection):
     with tempfile.TemporaryDirectory(prefix="stockinsider-arelle-") as config_home:
         command = [sys.executable, parser_script, "--format", request["format"], "--sha256", request["sha256"], "--max-bytes", str(MAX_BYTES)]
         taxonomy_path = "/opt/stockinsider/runtime/candidate-financial-parser/taxonomy/current"
-        if request["format"] in ("html", "xbrl") and os.path.isdir(taxonomy_path):
-            command.extend(["--taxonomy-path", taxonomy_path])
+        if request["format"] in ("html", "xbrl"):
+            identity_path = os.path.join(taxonomy_path, ".archive-sha256")
+            if not os.path.isdir(taxonomy_path) or not os.path.isfile(identity_path):
+                raise ValueError("official_taxonomy_unavailable")
+            with open(identity_path, "r", encoding="ascii") as stream:
+                taxonomy_sha256 = stream.read(65).strip()
+            if taxonomy_sha256 != EXPECTED_TAXONOMY_SHA256:
+                raise ValueError("official_taxonomy_identity_mismatch")
+            command.extend(["--taxonomy-path", taxonomy_path, "--taxonomy-sha256", taxonomy_sha256])
         completed = subprocess.run(
             command,
             input=payload, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=25, check=False,
@@ -60,6 +69,12 @@ def serve(connection):
         )
     if completed.returncode != 0 or not completed.stdout or len(completed.stdout) > MAX_OUTPUT:
         raise ValueError("parser_subprocess_failed")
+    parsed = json.loads(completed.stdout)
+    if request["format"] in ("html", "xbrl") and (
+        parsed.get("runtimeVersion") != EXPECTED_ARELLE_VERSION
+        or parsed.get("taxonomySha256") != EXPECTED_TAXONOMY_SHA256
+    ):
+        raise ValueError("parser_runtime_identity_mismatch")
     connection.sendall(completed.stdout.rstrip(b"\n") + b"\n")
 
 

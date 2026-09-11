@@ -8,6 +8,9 @@ export async function validatePendingOfficialFinancials(stockIds: string[]) {
   const counts = { checked: 0, validated: 0, rejected: 0, missingProvenance: 0, unchanged: 0 };
   for (const stockId of [...new Set(stockIds)]) {
     const evaluatedAt = new Date().toISOString();
+    const domainRows = await db.from('candidate_issuer_document_domains_v6').select('host').eq('stock_id', stockId);
+    if (domainRows.error) throw new Error(`official_validation_issuer_domains_read_failed:${domainRows.error.message}`);
+    const approvedHosts = new Set((domainRows.data || []).map((row) => String(row.host || '').toLowerCase()));
     const facts = await collectPagedAuthorityRows<OfficialValidationRow>(async (from, to) => {
       const r = await db.from('opportunity_financial_facts_v3').select('*').eq('stock_id', stockId)
         .eq('authority_tier','official_filing').lte('recorded_at',evaluatedAt)
@@ -40,7 +43,13 @@ export async function validatePendingOfficialFinancials(stockIds: string[]) {
         (r.effective_validation as OfficialValidationRow | null)?.validation_status === 'validated')
         .map((r) => `${r.fact_id}:${r.input_hash}`));
       for (const fact of batch) {
-        const source = provenance.find((p) => p.fact_id === fact.fact_id) || null;
+        const rawSource = provenance.find((p) => p.fact_id === fact.fact_id) || null;
+        let source = rawSource;
+        if (rawSource) {
+          let host = '';
+          try { host = new URL(String(rawSource.source_url || '')).hostname.toLowerCase(); } catch { host = ''; }
+          source = { ...rawSource, issuer_host_approved: approvedHosts.has(host) };
+        }
         const receipt = validateOfficialFinancialFact(fact, facts, source, evaluatedAt);
         counts.checked++;
         if (receipt.reasons.includes('official_provenance_missing')) { counts.missingProvenance++; continue; }
