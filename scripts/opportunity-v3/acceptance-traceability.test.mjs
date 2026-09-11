@@ -798,7 +798,7 @@ function activeGraphOracle() {
   assert.equal(catalogBlob.bytes.length, 6337, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    'e4282862266505320a711e9ce2de942e173f82fffce7e7fc2ba1b6209a27a380',
+    'f6842952ff768be01fe0b9e91bf1f2aa089168bfcb7964d6113c44a71deb21e5',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);
@@ -899,6 +899,7 @@ function activeGraphOracle() {
   const design = readFileSync(path.join(change, 'design.md'), 'utf8');
   const evidenceContract = readFileSync(path.join(change, 'acceptance-evidence-contract.md'), 'utf8');
   const externalHarnessContract = readFileSync(path.join(change, 'external-gate-harness-contract.md'), 'utf8');
+  const productCorrectnessAmendment = readFileSync(path.join(change, 'product-correctness-runtime-amendment.md'), 'utf8');
   assert.equal(inventory.evidenceContractVersion, 'opportunity-acceptance-evidence-v3.13.0');
   assert.match(evidenceContract, /^Version: `opportunity-acceptance-evidence-v3\.13\.0`$/mu);
   assert.match(evidenceContract, /reconciling exactly 272 registered IDs/u,
@@ -917,6 +918,12 @@ function activeGraphOracle() {
   assert.doesNotMatch(externalHarnessContract,
     /subject model-runner directory, wrapper and host-pin blob IDs byte-identical to\s+the protected base/u,
     'external harness does not require unconditional equality with the predecessor listing');
+  assert.match(productCorrectnessAmendment,
+    /exact 320-ID\s+`143\/171\/6` classification, `20\/28\/272` track partition/u,
+    'product correctness amendment matches the current canonical inventory and partitions');
+  assert.doesNotMatch(productCorrectnessAmendment,
+    /exact 308-ID\s+`143\/159\/6` classification, `20\/28\/260` track partition/u,
+    'stale canonical inventory counts are absent from the active product correctness owner');
   const productCorrectnessOwner = expectedVersions.get('product-correctness-runtime-amendment.md');
   assert.match(productCorrectnessOwner ?? '', /^product-correctness-runtime-v\d+[.]\d+[.]\d+$/u,
     'catalog product-correctness owner version');
