@@ -60,11 +60,11 @@ export function verifyCleanupEvidence(candidate, archiveBytes, restoreBytes) {
       && restore.externalSecretRebindRequired === ((archive.manifest.tree.externalSecretLinks?.length ?? 0) > 0)
       && JSON.stringify(restore.externalSecretRebindPolicies)
         === JSON.stringify((archive.manifest.tree.externalSecretLinks ?? []).map(item => item.policyId))
-      && restore.redactedSecretFileCount === (archive.manifest.tree.redactedSecretFiles?.length ?? 0)
-      && restore.redactedSecretRebindRequired === ((archive.manifest.tree.redactedSecretFiles?.length ?? 0) > 0)
-      && JSON.stringify(restore.redactedSecretRebindPolicies)
+      && (restore.redactedSecretFileCount ?? 0) === (archive.manifest.tree.redactedSecretFiles?.length ?? 0)
+      && (restore.redactedSecretRebindRequired ?? false) === ((archive.manifest.tree.redactedSecretFiles?.length ?? 0) > 0)
+      && JSON.stringify(restore.redactedSecretRebindPolicies ?? [])
         === JSON.stringify((archive.manifest.tree.redactedSecretFiles ?? []).map(item => item.policyId))
-      && restore.redactedSecretBytesArchived === 0
+      && (restore.redactedSecretBytesArchived ?? 0) === 0
       && restore.temporaryRestoreRemoved === true && restore.remoteDeletePerformed === false;
   } catch { return false; }
 }

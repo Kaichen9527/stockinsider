@@ -72,8 +72,6 @@ test('cleanup evidence hashes and semantically binds the exact remote release to
     sourcePlaintextSha256: plaintextSha256, treeSha256: tree.treeSha256,
     fileCount: 1, totalBytes: 1, symlinkCount: 0, externalSecretSymlinkCount: 0,
     externalSecretRebindRequired: false, externalSecretRebindPolicies: [],
-    redactedSecretFileCount: 0, redactedSecretRebindRequired: false,
-    redactedSecretRebindPolicies: [], redactedSecretBytesArchived: 0,
     externalSecretBytesArchived: 0, externalSecretsArchived: false,
     deploymentReconstructionPlanVerified: true,
     restoreVerified: true, plaintextPersistedAfterVerification: false,
