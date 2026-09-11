@@ -256,6 +256,24 @@ const graphBoundReviewSources = Object.freeze({
       rangeLine: 'Full reviewed implementation range',
     }),
   }),
+  // PR #210's final no-global-Shadow and principal-bound financial validation
+  // graph was independently reviewed at c7b4776. Register only its immutable
+  // direct-child evidence refs from the protected base before the candidate
+  // can consume them.
+  '10ddc6020b010a557f2ad000e11df7ebb2413432bb63351d3a4a5bdba26c46bf': Object.freeze({
+    requirements: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-c7b4776-final',
+      path: `${changeRelative}/requirements-review-v3.24.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+    architecture: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-c7b4776-final2',
+      path: `${changeRelative}/architecture-review-v3.24-final.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+  }),
   // A root-volume remount changed only the exact device identity of the pinned
   // runner paths. Register the independently reviewed V3.16 graph before the
   // one-time successor is proposed, so candidate bytes cannot select reviews.
@@ -512,9 +530,8 @@ function captureReview(subjectRoot, check, identity, attestation) {
   assert.ok(finalMatch, `${check} reviewed commit/tree`);
   const rangeMatch = markdown.match(new RegExp('^- ' + source.rangeLine + ': `([0-9a-f]{40}\\.\\.[0-9a-f]{40})`$', 'mu'));
   assert.ok(rangeMatch, `${check} reviewed range`);
-  const graphMatch = markdown.match(/^- Active graph: `([0-9a-f]{64})`$/mu);
-  assert.ok(graphMatch, `${check} active graph`);
-  assert.equal(graphMatch[1], identity.activeGraphSha256, `${check} active graph matches subject`);
+  const reviewedGraph = parseReviewActiveGraph(markdown, check);
+  assert.equal(reviewedGraph, identity.activeGraphSha256, `${check} active graph matches subject`);
   const reviewedBaseSha = rangeMatch[1].slice(0, 40);
   const reviewedHeadOrTreeSha = rangeMatch[1].slice(42);
   assert.equal(reviewedHeadOrTreeSha, finalMatch[1], `${check} reviewed range head`);
@@ -589,6 +606,13 @@ function captureReview(subjectRoot, check, identity, attestation) {
     review.pcrFulfillmentSha256 = sha256(fulfillment);
   }
   return review;
+}
+
+/** The immutable review grammar is intentionally shared with its fixture test. */
+export function parseReviewActiveGraph(markdown, check = 'review') {
+  const graphMatch = markdown.match(/^- Active graph: `([0-9a-f]{64})`$/mu);
+  assert.ok(graphMatch, `${check} active graph`);
+  return graphMatch[1];
 }
 
 function sanitizedEnvironment(attestation, track, extra = {}) {
