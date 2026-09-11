@@ -355,6 +355,8 @@ test('V3.20.1 bridges only a revalidated InvestAnchors structured claim across e
   assert.match(v320KolRetentionBridgeSql,/investanchors_structured_claim/u);
   assert.match(v320KolRetentionBridgeSql,/structuredClaim',true/u);
   assert.match(v320KolRetentionBridgeSql,/rightsAttested',true/u);
+  for(const token of ["'producerRunId',v_prior_run::text","'schedulerConfigSha256',v_prior_config_sha256",
+    "'legacySeedSetHash',v_prior_seed_set_hash"] )assert.ok(v320KolRetentionBridgeSql.includes(token),token);
   assert.match(v320KolRetentionBridgeSql,/claim_legacy_producer_job_pre_kol_retention_bridge_v3_20_1/u);
   assert.match(v320KolRetentionBridgeSql,/candidate-ledger-v3\.20\.1/u);
   assert.match(v320KolRetentionBridgeSql,/candidate-authority-v3\.20\.1/u);
@@ -399,6 +401,8 @@ test('V3.20.3 keeps KOL retention source authority behind its owning RPC boundar
   const legacyReader=v320KolRetentionOwnerBoundarySql.match(
     /CREATE OR REPLACE FUNCTION public\.read_v320_revalidated_kol_retention_internal[\s\S]*?END \$retained\$;/u)?.[0]??'';
   assert.match(legacyReader,/read_v320_authorized_investanchors_revision_ids_internal/u);
+  for(const token of ["'producerRunId',v_prior_run::text","'schedulerConfigSha256',v_prior_config_sha256",
+    "'legacySeedSetHash',v_prior_seed_set_hash"] )assert.ok(legacyReader.includes(token),token);
   assert.doesNotMatch(legacyReader,/source_document_revisions_v3|source_identity_authorities_v3/u,
     'the legacy helper must not directly read opportunity-owned source relations');
   assert.match(v320KolRetentionOwnerBoundarySql,

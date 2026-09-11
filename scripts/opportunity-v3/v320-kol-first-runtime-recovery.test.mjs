@@ -53,6 +53,25 @@ test('V3.20.1 retains only a DB-revalidated historical InvestAnchors structured 
   assert.equal(retained.candidateLedger[0].retentionReason,'source_evidence_retained_within_20_sessions');
 });
 
+test('V3.20 retained legacy candidate uses database-derived historical lineage without minting the current run',()=>{
+  const {buildCandidateFunnel,validatePublishedEntrantAuthority}=runtime('candidate-funnel.js');
+  const historicalRun='72000000-0000-4000-8000-000000000001';
+  const currentRun='72000000-0000-4000-8000-000000000002';
+  const configHash='a'.repeat(64);const seedHash='b'.repeat(64);
+  const prior={...kolOutcome({symbol:'1723',sourceKey:'investanchors',authority:'investanchors_structured_claim'}),
+    structuredClaim:true,rightsAttested:true,seedMembership:'out_of_seed',disposition:'promoted',reason:'new_out_of_seed_symbol',
+    producerRunId:historicalRun,schedulerConfigSha256:configHash,legacySeedSetHash:seedHash,
+    kolRetentionAuthority:'revalidated_investanchors_structured_claim_v3_20_1',retentionBridgeSourceRunId:historicalRun,
+    firstObservedSession:'2026-08-27',lastObservedSession:'2026-08-27',retentionCountedThroughSession:'2026-08-27'};
+  const retained=buildCandidateFunnel({outcomes:[],priorLedger:[prior],seedSymbols:[],currentSession:'2026-08-28',
+    completedSessions:['2026-08-27','2026-08-28'],producerRunId:currentRun,
+    schedulerConfigSha256:configHash,legacySeedSetHash:seedHash}).candidateLedger[0];
+  assert.equal(retained.producerRunId,historicalRun);
+  assert.deepEqual([retained.discoveryDisposition,retained.discoveryReason],['unchanged','same_material_evidence']);
+  assert.equal(validatePublishedEntrantAuthority({candidates:[retained],producerRunId:currentRun,
+    schedulerConfigSha256:configHash,legacySeedSetHash:seedHash,seedSymbols:[]}),true);
+});
+
 test('V3.20 rejects the 2605 new-emerging-market ETF false positive but accepts a public Telegram nomination',()=>{
   const {extractRevisionCandidates}=runtime('auth-source-worker-cli.js');
   const authorityPages=[['roster',null,null,[
