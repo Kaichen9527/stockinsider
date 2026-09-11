@@ -9,11 +9,11 @@ const config=readFileSync(new URL('../deployment/vps/postgrest-stockinsider.conf
 const activation=readFileSync(new URL('../deployment/vps/activate-contabo-data-plane.sql',import.meta.url),'utf8');
 
 test('portable bootstrap recreates required role names without a plaintext Vault shim',()=>{
-  for(const role of ['anon','authenticated','service_role','authenticator','opportunity_v3_rpc_owner','legacy_correctness_rpc_owner'])
+  for(const role of ['anon','authenticated','service_role','authenticator','opportunity_v3_rpc_owner','legacy_correctness_rpc_owner','dashboard_user','stockinsider_runtime_v319'])
     assert.match(bootstrap,new RegExp(`'${role}'`,'u'));
   assert.doesNotMatch(bootstrap,/vault[.]decrypted_secrets|CREATE SCHEMA vault|PASSWORD\s+/iu);
   assert.match(bootstrap,/ALTER ROLE service_role BYPASSRLS/u);
-  assert.match(bootstrap,/CREATE EXTENSION IF NOT EXISTS pgcrypto/u);
+  assert.match(bootstrap,/CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA extensions/u);
 });
 
 test('Contabo migration is additive, RLS guarded and generation-CAS protected',()=>{

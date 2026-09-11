@@ -45,9 +45,22 @@ RPCs in `20260911_contabo_data_plane_v1.sql` supersede them.
 
 Generate a TOC with `pg_restore --list`, then run
 `node scripts/build-contabo-restore-list.mjs <input-list> <new-output-list>`.
-The 0600 output excludes only Vault namespace objects and the named legacy
-Threads/FinMind Vault functions. Review its exclusion count before using the
-list for rehearsal; the source archive is never rewritten.
+The 0600 output excludes Vault namespace objects, the named legacy
+Threads/FinMind Vault functions, and the exact `extensions` schema creation
+owned by the bootstrap. The bootstrap installs pgcrypto in that original schema
+before dependent functions are replayed. The six provider-managed extension and
+PostgREST DDL event triggers are also excluded rather than granting SUPERUSER to
+their compatibility owner; standalone PostgREST schema reload is an operator
+action. Review the exclusion count before using the list for rehearsal; the
+source archive is never rewritten.
+
+`scripts/rehearse-contabo-database-restore.mjs` performs the clean local
+rehearsal. It authenticates the complete AES-GCM archive before SQL execution,
+restores owners and ACLs into a new Unix-socket-only cluster, applies the
+additive Contabo migration, and checks schema, RPC, trigger, RLS, grants and
+owner mappings. It writes a mode-0600 receipt without row data or secrets and
+then removes the disposable cluster. A passing receipt is recovery evidence,
+not production cutover approval.
 
 The identity fence is dormant after migration. During reviewed cutover, an
 operator registers exactly one backend UUID, runner principal and 40-character
