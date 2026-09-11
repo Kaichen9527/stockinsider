@@ -269,15 +269,16 @@ the exact subject. The 28 reported passes are parsed from the acceptance trace o
 mandatory suite/oracle pass counts are checked independently and are not substituted for
 or added to the registered acceptance partition.
 
-`evaluation-governance` runs exactly the full
+`evaluation-governance` remains an audit-only diagnostic and runs exactly the full
 `verify:source-led-opportunity-v3:evaluation-governance` value frozen above: the
 20-ID traceability command, the two named point-in-time product/evaluation tests, then
 `evaluation-governance-gate.mjs --require-backtest-dates 120
 --require-live-dates 20 --require-attempt-roster 252`. It
 emits `blocked/non_fabricated_elapsed_cohorts_unavailable` when the immutable real
 120-date/20-live-date cohorts are not yet available; it cannot synthesize or backfill
-elapsed observations. That honest blocker is neutral for the Code Gate and blocking
-for Promotion Gate.
+elapsed observations. A pass, failure or honest blocker is neutral for the Code Gate
+and for current V6 publication, classification, homepage ordering, health and
+promotion. It is retained solely to reproduce historical evaluation evidence.
 
 The pull-request workflow has one diagnostic product/runtime check. It does not aggregate
 an unscheduled self-hosted model runner, and records evaluation governance as non-blocking
@@ -435,14 +436,13 @@ same subject commit/tree/active-graph/script-row identities. Aggregate validatio
 recomputes every nested review binding, including evidence-only diffs and exact-review
 range/child identity plus every PCR fulfillment fixture/owner/caller/execution; comparing
 outer fields alone is invalid. Commands are empty.
-`promotion-gate-aggregate.inputs` are exactly
-`code-gate-aggregate,evaluation-governance` under the same rules. Any omitted,
-additional, reordered, digest-mismatched or cross-tree input fails. The Code aggregate
-does not consume
-`evaluation-governance`, so honest blocked maturity cannot create an impossible PR
-aggregate. `promotion-gate-aggregate` is not a required PR check and passes only when
-the same Code Gate passes plus evaluation governance passes with real cohorts. A
-blocked evaluation can never be serialized as pass or full product verification.
+`promotion-gate-aggregate.inputs` are exactly `code-gate-aggregate` under the same
+rules. Any omitted, additional, digest-mismatched or cross-tree input fails. Neither
+the Code aggregate nor the Promotion aggregate consumes `evaluation-governance`, so
+historical cohort availability cannot block, reorder, label, suppress or promote a
+current V6 result. `promotion-gate-aggregate` is not a required PR check; it only
+preserves the pre-existing name as a code-evidence alias during compatibility cleanup.
+It never represents elapsed-cohort maturity or full product verification.
 
 `shadow-activation-gate` is a separate operational gate and is never a required PR
 Code check or a Promotion input. Its `inputs` contain exactly the passing

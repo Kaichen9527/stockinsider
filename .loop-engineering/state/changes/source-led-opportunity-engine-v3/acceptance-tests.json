@@ -3094,15 +3094,15 @@
       "id": "EVAL-003",
       "requirement": "R11",
       "layer": "governance",
-      "setup": "Legacy baseline lock has null metrics or dataset manifest cannot reproduce them.",
-      "expected": "Promotion remains fail-closed and mode remains shadow regardless of favorable V3 output."
+      "setup": "Historical baseline lock has null metrics or its audit dataset manifest cannot reproduce them.",
+      "expected": "Historical evaluation remains blocked and audit-only; current V6 publication, classification, homepage ordering, health and promotion remain unchanged."
     },
     {
       "id": "EVAL-004",
       "requirement": "R11",
       "layer": "governance",
-      "setup": "V3 has run 20 days but has fewer than 120 qualifying backtest dates or fewer than 20 matured live 20-session cohorts.",
-      "expected": "Homepage-order promotion is forbidden; runtime duration is not maturity evidence."
+      "setup": "Historical evaluation has fewer than 120 qualifying backtest dates or fewer than 20 matured live 20-session cohorts.",
+      "expected": "The historical audit remains incomplete, but its elapsed cohorts cannot block, reorder, suppress, promote or label current V6 research."
     },
     {
       "id": "OPS-007",

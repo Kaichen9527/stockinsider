@@ -254,6 +254,31 @@ test('shadow activation evidence requires the exact five-command catalog and ver
   }
 });
 
+test('retired global Shadow evidence cannot enter the current promotion aggregate', () => {
+  const inventory = JSON.parse(readFileSync(path.join(change, 'acceptance-tests.json'), 'utf8'));
+  const currentSubject = subject();
+  const canonical = result('promotion-gate-aggregate', inventory, currentSubject);
+  const codeGate = { check: 'code-gate-aggregate', evidenceSha256: 'd'.repeat(64), status: 'pass' };
+  const evaluation = { check: 'evaluation-governance', evidenceSha256: 'e'.repeat(64), status: 'blocked' };
+  canonical.inputs = [{ check: codeGate.check, evidenceSha256: codeGate.evidenceSha256 }];
+  rewriteEvidence(canonical);
+  const expected = {
+    commitSha: currentSubject.commit,
+    treeSha: currentSubject.tree,
+    activeGraphSha256: currentSubject.graph,
+    inventory,
+  };
+  assert.doesNotThrow(() => validateOpportunityGateResult(canonical, expected, new Map([[codeGate.check, codeGate]])));
+
+  const invalid = structuredClone(canonical);
+  invalid.inputs.push({ check: evaluation.check, evidenceSha256: evaluation.evidenceSha256 });
+  rewriteEvidence(invalid);
+  assert.throws(() => validateOpportunityGateResult(invalid, expected, new Map([
+    [codeGate.check, codeGate],
+    [evaluation.check, evaluation],
+  ])), /promotion-gate-aggregate ordered inputs/u);
+});
+
 test('PCR-023 protected bootstrap workflow is base-owned and its registered release is byte-bound', () => {
   const workflow = readFileSync(path.join(root, '.github/workflows/source-led-opportunity-external-gate.yml'), 'utf8');
   const registry = JSON.parse(readFileSync(path.join(change, 'external-gate-release-registry-v1.json'), 'utf8'));

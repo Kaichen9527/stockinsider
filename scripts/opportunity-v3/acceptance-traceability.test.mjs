@@ -2952,21 +2952,18 @@ const semanticExecutors = {
         break;
       }
       case 'EVAL-003': {
-        assert.equal(evaluatePromotion({
-          ...promotionInput,
-          v3Metrics: null,
-          legacyMetrics: null,
-        }).mode, 'shadow');
+        const currentPipeline = readFileSync(path.join(root, 'web/src/lib/domain.ts'), 'utf8');
+        const currentProjection = readFileSync(path.join(root, 'web/src/lib/radar-public-snapshot.ts'), 'utf8');
+        assert.match(currentPipeline, /const shadowObservation = null; \/\/ Legacy response field; global Shadow is retired[.]/u);
+        assert.match(currentProjection, /shadowProgress: undefined/u);
+        assert.doesNotMatch(currentPipeline, /recordCandidateShadowObservation\s*\(/u);
         break;
       }
       case 'EVAL-004': {
-        assert.equal(evaluatePromotion({
-          ...promotionInput,
-          backtestCount: 119,
-          liveCount: 19,
-          v3Metrics: null,
-          legacyMetrics: null,
-        }).pass, false);
+        const currentContract = readFileSync(path.join(change, 'v6-no-global-shadow-authority-amendment.md'), 'utf8');
+        const currentJobGraph = readFileSync(path.join(change, 'job-graph-contract.md'), 'utf8');
+        assert.match(currentContract, /cannot gate, promote, suppress or label a V6/u);
+        assert.match(currentJobGraph, /no successor, table, classification, publication, health or promotion rule depends on their metric values/u);
         break;
       }
       case 'EVAL-005': {
