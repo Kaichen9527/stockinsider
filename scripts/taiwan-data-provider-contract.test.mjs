@@ -138,9 +138,27 @@ test('candidate queue completeness retains missing work and cannot certify a sin
   assert.match(refreshRoute, /result\.enqueueComplete \? 200 : 503/u);
   assert.match(drainRoute, /read_taiwan_data_refresh_progress_v6/u);
   assert.match(drainRoute, /isTaiwanRefreshComplete\(progressRead\.data\)/u);
-  assert.match(drainRoute, /!input\.requireComplete \|\| scopeComplete/u);
+  assert.match(drainRoute, /dataComplete: scopeComplete/u);
   assert.match(drainRoute, /status: ok \? 200 : errors\.length \? 500 : 503/u);
   assert.match(candidateRefresh, /\['failed', 'queued', 'running', 'missing', 'retrying'\]\.every\(\(key\) => row\[key\] === 0\)/u);
+});
+
+test('terminal individual-price gaps permit isolated research but never claim complete data', () => {
+  // Approved candidate research acceptance: failures are isolated per stock.
+  // Only a settled per-stock price failure is noncritical; pending/missing work
+  // or any aggregate failure still blocks the next research step.
+  assert.match(candidateQueueMigration, /dataset='daily_price' AND symbol IS NOT NULL\) AS "failedCandidate"/u);
+  assert.match(candidateQueueMigration, /\(dataset<>'daily_price' OR symbol IS NULL\)\) AS "failedCritical"/u);
+  assert.match(candidateQueueMigration, /'settled',expected>0 AND completed\+failed=expected/u);
+  assert.match(candidateQueueMigration, /'researchReady',expected>0 AND completed\+failed=expected AND "failedCritical"=0/u);
+  assert.match(candidateRefresh, /row\.expected === Number\(row\.completed\) \+ Number\(row\.failed\)/u);
+  assert.match(candidateRefresh, /row\.failed === row\.failedCandidate && row\.failedCritical === 0/u);
+  assert.match(candidateRefresh, /row\.settled === true && row\.researchReady === true/u);
+  assert.match(candidateRefresh, /\['queued', 'running', 'missing', 'retrying'\]\.every\(\(key\) => row\[key\] === 0\)/u);
+  assert.match(drainRoute, /isTaiwanRefreshResearchReady\(progressRead\.data\)/u);
+  assert.match(drainRoute, /errors\.length === 0 && \(!input\.requireComplete \|\| researchReady\)/u);
+  assert.match(drainRoute, /status: scopeComplete \? 'complete' : researchReady \? 'partial_candidate_data' : 'incomplete'/u);
+  assert.match(drainRoute, /scopeComplete, dataComplete: scopeComplete, researchReady/u);
 });
 
 test('VPS timers separate the approved preliminary, final, pipeline and hourly drain cadences', () => {
