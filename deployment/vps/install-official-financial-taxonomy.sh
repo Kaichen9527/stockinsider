@@ -47,7 +47,8 @@ with zipfile.ZipFile(archive) as source:
 PY
 
 test "$(find "$payload" -type f -name 'tifrs-ci-cr-2026-03-31.xsd' | wc -l | tr -d ' ')" = 1
-test "$(find "$payload" -type f -name 'tifrs-ci-basi-2026-03-31.xsd' | wc -l | tr -d ' ')" = 1
+test "$(find "$payload" -type f -name 'tifrs-basi-cr-2026-03-31.xsd' | wc -l | tr -d ' ')" = 1
+test "$(find "$payload" -type f -name 'tifrs-basi-ir-2026-03-31.xsd' | wc -l | tr -d ' ')" = 1
 printf '%s\n' "$actual_sha256" > "$payload/.archive-sha256"
 find "$payload" -type d -exec chmod 0755 {} +
 find "$payload" -type f -exec chmod 0644 {} +
@@ -55,6 +56,8 @@ chown -R root:root "$payload"
 
 if [ -e "$target" ]; then
   test -d "$target"
+  test ! -L "$target"
+  test "$(head -n 1 "$target/.archive-sha256")" = "$expected_sha256"
 else
   mv -- "$payload" "$target"
 fi

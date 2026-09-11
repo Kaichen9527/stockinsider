@@ -65,4 +65,7 @@ test('production adapter uses an isolated Unix socket instead of spawning under 
   const taxonomyInstall = await readFile(new URL('../../../deployment/vps/install-official-financial-taxonomy.sh', import.meta.url), 'utf8');
   assert.match(taxonomyInstall, /4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869/u);
   assert.match(taxonomyInstall, /taxonomy_archive_symlink_rejected/u);
+  assert.match(taxonomyInstall, /tifrs-basi-cr-2026-03-31[.]xsd/u);
+  assert.match(taxonomyInstall, /tifrs-basi-ir-2026-03-31[.]xsd/u);
+  assert.doesNotMatch(taxonomyInstall, /tifrs-ci-basi-2026-03-31[.]xsd/u);
 });

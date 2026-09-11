@@ -2,6 +2,26 @@ export type MonthlyCandidatePrice = {
   date: string; month: string; frequency: 'monthly'; close: number;
 };
 
+/** Price provenance is not a PE/PB endpoint. Parse the URL rather than
+ * searching for an official hostname inside an untrusted URL string. */
+export function isOfficialCandidatePriceSource(value: unknown) {
+  try {
+    const url = new URL(String(value || ''));
+    if (url.protocol !== 'https:' || url.username || url.password || url.port) return false;
+    if (['www.twse.com.tw','twse.com.tw','openapi.twse.com.tw'].includes(url.hostname)) {
+      return /^(?:\/v1)?\/(?:exchangeReport|rwd\/zh\/afterTrading)\/(?:STOCK_DAY(?:_ALL)?|MI_INDEX)$/u.test(url.pathname);
+    }
+    if (['www.tpex.org.tw','tpex.org.tw','openapi.tpex.org.tw'].includes(url.hostname)) {
+      return ['/www/zh-tw/afterTrading/tradingStock','/web/stock/aftertrading/daily_trading_info/st43_result.php'].includes(url.pathname);
+    }
+    return false;
+  } catch { return false; }
+}
+
+export function isOfficialCandidatePriceProvider(value: unknown) {
+  return value === 'twse' || value === 'tpex';
+}
+
 export function isHistoryDate(value: unknown): value is string {
   return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/u.test(value)
     && Number.isFinite(Date.parse(`${value}T00:00:00Z`))

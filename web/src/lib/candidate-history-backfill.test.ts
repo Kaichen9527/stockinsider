@@ -58,3 +58,16 @@ test('a thrown source request becomes a per-month retry and does not cancel the 
   assert.equal(result.items.find((item)=>item.stockId==='stock-0')?.terminalReason,'official_network_error');
   assert.equal(result.items.find((item)=>item.stockId==='stock-1')?.terminalReason,'official_no_rows');
 });
+
+test('stored conflicts survive subsequent runs even when no contradictory row is downloaded again', async () => {
+  const checkpoint = { stock_id:'stock-a',dataset:'price',month:'2026-09-01',status:'conflict',terminal_reason:'official_history_value_conflict',
+    attempted_at:'2026-09-10T13:00:00Z',next_attempt_at:null,attempts:1,observed_through:'2026-09-10',observed_sessions:['2026-09-10'] };
+  const query={select(){return this;},in(){return this;},order(){return this;},range(){return Promise.resolve({data:[checkpoint],error:null});}};
+  const client={from(){return query;},async rpc(_name:string,args:Record<string,unknown>){return {data:{status:args.p_status,terminal_reason:args.p_terminal_reason},error:null};}} as unknown as SupabaseClient;
+  const result=await runCandidateHistoryBackfill({client,candidates:[{stockId:'stock-a',symbol:'2330',exchange:'TWSE',
+    knownPriceSessions:['2026-09-10'],knownMultipleSessions:['2026-09-10']}],officialSessions:['2026-09-10'],
+    latestSession:'2026-09-10',evaluationAt:'2026-09-11T00:00:00Z',requestBudget:1},
+  {fetchMonth:async()=>({bars:[],multiples:[],sourceUrl:'https://www.twse.com.tw/',httpStatus:null,terminalReason:'official_no_rows'})});
+  assert.deepEqual(result.conflicts,[{stockId:'stock-a',dataset:'price',month:'2026-09-01',terminalReason:'official_history_value_conflict'}]);
+  assert.equal(result.prices.has('stock-a'),false);
+});

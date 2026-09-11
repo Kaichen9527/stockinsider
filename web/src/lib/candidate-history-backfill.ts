@@ -3,7 +3,7 @@ import { collectBatchedAuthorityRows } from './candidate-research-policy.ts';
 import { isHistoryDate } from './candidate-price-history.ts';
 import { fetchTwStockHistoryMonth, twStockHistoryMonthUrl, type TwMarketDailyBar, type TwValuationHistoryPoint } from './tw-market.ts';
 import {
-  CANDIDATE_HISTORY_POLICY_VERSION, historyRetryAt, planCandidateHistoryBackfill,
+  CANDIDATE_HISTORY_POLICY_VERSION, candidateHistoryMonths, historyRetryAt, planCandidateHistoryBackfill,
   type CandidateHistoryInput, type HistoryMonthCheckpoint,
 } from './candidate-history-backfill-policy.ts';
 
@@ -25,6 +25,12 @@ export async function runCandidateHistoryBackfill(options: {
   latestSession: string; evaluationAt: string; requestBudget?: number; perStockBudget?: number;
 }, dependencies = { fetchMonth: fetchTwStockHistoryMonth }) {
   const checkpoints = await readCandidateHistoryCheckpoints(options.client, options.candidates.map((item) => item.stockId));
+  const oldestPriceMonth = options.officialSessions.filter((session) => session <= options.latestSession).sort().slice(-1320)[0]?.slice(0,7);
+  const oldestMultipleMonth = candidateHistoryMonths(options.latestSession,60).at(-1)!.slice(0,7);
+  const conflicts = new Map(checkpoints.filter((row) => row.status === 'conflict'
+    && row.month.slice(0,7) <= options.latestSession.slice(0,7)
+    && row.month.slice(0,7) >= (row.dataset === 'price' ? oldestPriceMonth || oldestMultipleMonth : oldestMultipleMonth))
+    .map((row) => [`${row.stock_id}:${row.dataset}:${row.month}`, { stockId:row.stock_id,dataset:row.dataset,month:row.month,terminalReason:row.terminal_reason }]));
   const jobs = planCandidateHistoryBackfill({ ...options, checkpoints });
   const prices = new Map<string, TwMarketDailyBar[]>();
   const multiples = new Map<string, TwValuationHistoryPoint[]>();
@@ -71,15 +77,18 @@ export async function runCandidateHistoryBackfill(options: {
       });
       if (result.error) throw new Error(`candidate_history_month_write_failed:${result.error.message}`);
       const completion = result.data as { status: string; terminal_reason: string };
+      if (completion.status === 'conflict') conflicts.set(`${job.stockId}:${job.dataset}:${job.month}`,
+        { stockId:job.stockId,dataset:job.dataset,month:job.month,terminalReason:completion.terminal_reason });
       if (completion.status !== 'conflict') {
-        prices.set(job.stockId, [...(prices.get(job.stockId) || []), ...bars]);
-        multiples.set(job.stockId, [...(multiples.get(job.stockId) || []), ...points]);
+        if (bars.length) prices.set(job.stockId, [...(prices.get(job.stockId) || []), ...bars]);
+        if (points.length) multiples.set(job.stockId, [...(multiples.get(job.stockId) || []), ...points]);
       }
       items.push({ stockId: job.stockId, dataset: job.dataset, month: job.month,
         status: completion.status, terminalReason: completion.terminal_reason, rows: sessions.length });
     }
   }));
   return { policyVersion: CANDIDATE_HISTORY_POLICY_VERSION, attempted: jobs.length, prices, multiples,
+    conflicts: [...conflicts.values()],
     items: items.sort((a, b) => a.stockId.localeCompare(b.stockId) || a.dataset.localeCompare(b.dataset) || a.month.localeCompare(b.month)) };
 }
 

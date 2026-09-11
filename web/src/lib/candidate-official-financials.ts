@@ -3,6 +3,8 @@ import { fixedRunnerPrincipal } from './opportunity-v3/internal.ts';
 import { getOpportunityV3ServerClient } from './opportunity-v3/service-client.ts';
 import { classifyFinancialResponse, issuerIrDocumentQueueKey, parseTpexFinancialEndpoint, TPEX_FINANCIAL_ENDPOINTS } from './candidate-financial-acquisition.ts';
 import { fetchFinMindFinancialFallback, finMindFinancialErrorDetail } from './finmind-financial-fallback.ts';
+import { requiredAcquisitionPeriods, type FinancialFieldGap } from './candidate-financial-work-plan.ts';
+import { latestDueFinancialQuarter } from './candidate-financial-policy.ts';
 
 const MOPS_INLINE_URL = 'https://mopsov.twse.com.tw/server-java/t164sb01';
 const MOPS_DOWNLOAD_URL = 'https://mopsov.twse.com.tw/server-java/FileDownLoad';
@@ -13,6 +15,31 @@ export function candidateMopsDownloadUrl(symbol: string, year: number, quarter: 
   const url = new URL(MOPS_DOWNLOAD_URL);
   url.search = new URLSearchParams({step:'9',functionName:'t164sb01',report_id:'C',co_id:symbol,year:String(year),season:String(quarter)}).toString();
   return url.toString();
+}
+
+/** The official attachment endpoint currently sends an empty media type
+ * (`; charset=iso-8859-1`) for UTF-8 iXBRL. Repair only that transport omission,
+ * after an exact issuer attachment and standalone XHTML signature. These bytes
+ * still require the independent offline XML/taxonomy/accounting validator. */
+export function normalizeMopsDownloadedContentType(input: {
+  contentType: string | null; contentDisposition: string | null; bytes: Uint8Array;
+  symbol: string; year: number; quarter: number;
+}) {
+  if (String(input.contentType || '').split(';',1)[0].trim()) return String(input.contentType);
+  const disposition = String(input.contentDisposition || '');
+  const filename = /\bfilename\s*=\s*"?([^";]+)"?/iu.exec(disposition)?.[1]?.trim();
+  const expected = new RegExp(`^tifrs-[a-z0-9-]+-${input.symbol}-${input.year}Q${input.quarter}\\.html$`,'u');
+  let text: string;
+  try { text = new TextDecoder('utf-8',{fatal:true}).decode(input.bytes); } catch { throw new Error('mops_document_encoding_unrecognized'); }
+  const head = text.slice(0,16_384);
+  if (!/^attachment\s*;/iu.test(disposition) || !filename || !expected.test(filename)
+    || !/^\s*<\?xml\b[^>]*encoding=["']UTF-8["'][^>]*>\s*<html\b/iu.test(head)
+    || !/<html\b[^>]*xmlns=["']http:\/\/www\.w3\.org\/1999\/xhtml["']/iu.test(head)
+    || !/xmlns:ix=["']http:\/\/www\.xbrl\.org\/(?:2013|2008)\/inlineXBRL["']/u.test(head)
+    || (text.match(/<html\b/giu) || []).length !== 1 || (text.match(/<\/html\s*>/giu) || []).length !== 1) {
+    throw new Error('mops_document_missing_mime_unverified');
+  }
+  return 'application/xhtml+xml';
 }
 // 60 MOPS jobs × three 12s attempts at concurrency two is ~18 minutes before
 // persistence. Keep a conservative lease envelope so slow official responses
@@ -61,7 +88,8 @@ export type CandidateOfficialFinancial = {
   stockId: string;
   symbol: string;
   exchange: 'TWSE' | 'TPEX';
-  statementKind?: 'general' | 'broker';
+  statementKind?: 'general' | 'broker' | 'financial';
+  gaps?: FinancialFieldGap[];
 };
 
 export type ParsedFact = {
@@ -303,9 +331,18 @@ export async function fetchCandidateMopsFiling(candidate: CandidateOfficialFinan
       const rejected = classifyFinancialResponse(response.status, response.headers.get('content-type'), body, 'html');
       if (rejected) throw new Error(`mops_${rejected}_http_${response.status}`);
       const collectedAt=new Date().toISOString();
+      const { validateCandidateFinancialDocument } = await import('./candidate-financial-documents.ts');
+      const originalContentType = response.headers.get('content-type');
+      const contentType = normalizeMopsDownloadedContentType({ contentType:originalContentType,
+        contentDisposition:response.headers.get('content-disposition'),bytes,symbol:candidate.symbol,year,quarter });
+      const verified = validateCandidateFinancialDocument({ bytes, contentType });
+      if ('error' in verified || verified.format !== 'xbrl') throw new Error('mops_structured_document_required');
+      // Regex values are diagnostics only. Only the independent structural
+      // document parser may persist facts from this response.
       const facts = selectCandidateFilingPeriodFacts(parseCandidateMopsFacts(body, { ...candidate, sourceUrl, collectedAt }), periodEnd);
-      if (facts.length === 0) throw new Error('mops_schema_unrecognized_or_empty');
-      return { facts, sourceUrl, sourceSha256: createHash('sha256').update(bytes).digest('hex'), responseBytes, fallbackUsed: false as const, credentialMode: null };
+      return { facts, sourceUrl, sourceSha256: createHash('sha256').update(bytes).digest('hex'), responseBytes,
+        document: { bytes, contentType: verified.normalizedContentType, originalContentType, collectedAt, periodEnd },
+        fallbackUsed: false as const, credentialMode: null };
     } catch (error) {
       lastError = error;
       if (/security_blocked/iu.test(finMindFinancialErrorDetail(error))) break;
@@ -495,18 +532,23 @@ export async function refreshCandidateOfficialFinancials(
   const enqueueMissing = options.enqueueMissing !== false;
   let remainingJobs = Number.isInteger(options.maxJobs)
     ? Math.max(1, Math.min(240, Number(options.maxJobs)))
-    : Number.POSITIVE_INFINITY;
+    : 60;
   const mopsCandidates = candidates;
   const tpexCandidates = candidates.filter((candidate) => candidate.exchange === 'TPEX');
   const client = getOpportunityV3ServerClient();
-  const desiredMopsJobs = financialBridgeAcquisitionQuarters(cutoff, 20).flatMap(({ year, quarter }) => mopsCandidates.map((candidate) => ({
+  const fallbackPeriods = financialBridgeAcquisitionQuarters(cutoff, 20)
+    .map(({ year, quarter }) => `${year}-${['03-31', '06-30', '09-30', '12-31'][quarter - 1]}`);
+  const desiredMopsJobs = mopsCandidates.flatMap((candidate) => requiredAcquisitionPeriods(candidate, fallbackPeriods).map((periodEnd) => {
+    const year = Number(periodEnd.slice(0, 4)), quarter = ['03-31','06-30','09-30','12-31'].indexOf(periodEnd.slice(5)) + 1;
+    return {
     stock_id: candidate.stockId,
     exchange: candidate.exchange,
     endpoint_key: 'mops_inline',
-    period_end: `${year}-${['03-31', '06-30', '09-30', '12-31'][quarter - 1]}`,
+    period_end: periodEnd,
     cursor_key: `${candidate.symbol}:download-v1:${year}Q${quarter}`,
     source_url: candidateMopsDownloadUrl(candidate.symbol,year,quarter),
-  })));
+    required_fact_keys: [...new Set((candidate.gaps || []).filter((gap) => gap.periodEnd === periodEnd).map((gap) => gap.factKey))].sort(),
+  }; }));
   if (enqueueMissing && desiredMopsJobs.length) {
     const queued = await client.from('candidate_financial_acquisition_jobs_v4').upsert(desiredMopsJobs, {
       onConflict: 'stock_id,endpoint_key,period_end,cursor_key',
@@ -514,7 +556,9 @@ export async function refreshCandidateOfficialFinancials(
     });
     if (queued.error) throw new Error(`candidate_financial_job_enqueue_failed:${queued.error.message}`);
   }
-  const requestedTpexQuarters = financialBridgeAcquisitionQuarters(cutoff, 20);
+  // OpenAPI financial summaries contain the latest published period, not a
+  // historical archive. Historical missing fields are owned by filing jobs.
+  const requestedTpexQuarters = [latestDueFinancialQuarter(cutoff)];
   const desiredTpexJobs = Object.entries(TPEX_FINANCIAL_ENDPOINTS).flatMap(([endpoint, sourceUrl]) =>
     requestedTpexQuarters.flatMap(({ year, quarter }) => tpexCandidates
       .filter((candidate) => endpoint.startsWith(candidate.statementKind || 'general')).map((candidate) => ({
@@ -536,7 +580,8 @@ export async function refreshCandidateOfficialFinancials(
     ? await client.rpc('claim_candidate_financial_acquisition_jobs_v4', {
       p_stock_ids: mopsCandidates.map((candidate) => candidate.stockId),
       p_endpoint_key: 'mops_inline',
-      p_limit: Math.min(60, remainingJobs),
+      p_limit: Math.min(60, tpexCandidates.some((candidate) => candidate.statementKind !== 'financial')
+        ? Math.max(1, Math.ceil(remainingJobs * 2 / 3)) : remainingJobs),
       p_owner: runnerPrincipal,
       p_claimed_at: collectedAt,
       p_lease_expires_at: new Date(Date.now() + FINANCIAL_JOB_LEASE_MS).toISOString(),
@@ -575,6 +620,7 @@ export async function refreshCandidateOfficialFinancials(
     }
   });
   let writtenFacts = 0;
+  const documentReceipts: Array<{ symbol: string; receiptId: string; status: string }> = [];
   const persistedMopsFacts: ParsedFact[] = [];
   const mopsFailures: string[] = [];
   await mapLimit(outcomes, 4, async (outcome) => {
@@ -584,14 +630,25 @@ export async function refreshCandidateOfficialFinancials(
       return;
     }
     try {
-      writtenFacts += outcome.fallbackUsed
-        ? await recordFallbackAcquisitionJob({
+      if (outcome.fallbackUsed) {
+        writtenFacts += await recordFallbackAcquisitionJob({
           client, runnerPrincipal, owner: runnerPrincipal, jobId: outcome.jobId, attempts: outcome.attempts,
           facts: outcome.facts, sourceSha256: outcome.sourceSha256, responseBytes: outcome.responseBytes,
           collectedAt, primaryError: outcome.primaryError || 'mops_unavailable',
-        })
-        : await completeAcquisitionJob({ client, runnerPrincipal, owner: runnerPrincipal, jobId: outcome.jobId, facts: outcome.facts, sourceSha256: outcome.sourceSha256, responseBytes: outcome.responseBytes, collectedAt: outcome.facts[0]?.collectedAt || collectedAt });
-      persistedMopsFacts.push(...outcome.facts);
+        });
+        persistedMopsFacts.push(...outcome.facts);
+      } else if ('document' in outcome && outcome.document) {
+        const { persistDownloadedFinancialDocument } = await import('./candidate-financial-document-acquisition.ts');
+        const receipt = await persistDownloadedFinancialDocument(client, {
+          metadata: { stockId: outcome.candidate.stockId, symbol: outcome.candidate.symbol,
+            exchange: outcome.candidate.exchange, periodEnd: outcome.document.periodEnd,
+            sourceUrl: outcome.sourceUrl, publishedAt: null, acquisitionJobId: outcome.jobId },
+          bytes: outcome.document.bytes, contentType: outcome.document.contentType,
+          originalContentType: outcome.document.originalContentType,
+          writerReleaseId: process.env.STOCKINSIDER_WRITER_RELEASE_ID || '',
+        });
+        documentReceipts.push({ symbol: outcome.candidate.symbol, receiptId: receipt.receiptId, status: receipt.status });
+      } else throw new Error('mops_document_receipt_required');
     } catch (error) {
       const message = `${outcome.candidate.symbol}:write_failed:${error instanceof Error ? error.message : String(error)}`;
       await failAcquisitionJob({ client, jobId: outcome.jobId, owner: runnerPrincipal, attempts: outcome.attempts, consecutiveFailures: outcome.consecutiveFailures, error: message, collectedAt, primaryFailed: false });
@@ -656,13 +713,15 @@ export async function refreshCandidateOfficialFinancials(
   let tpexFetchedEndpoints = 0;
   let tpexFinMindFallbackFilings = 0;
   let anonymousTpexFinMindFallbackFilings = 0;
-  for (const [endpoint, sourceUrl] of Object.entries(TPEX_FINANCIAL_ENDPOINTS)) {
+  const applicableTpexEndpoints = Object.entries(TPEX_FINANCIAL_ENDPOINTS).filter(([endpoint]) =>
+    tpexCandidates.some((candidate) => endpoint.startsWith(candidate.statementKind || 'general')));
+  for (const [endpointIndex, [endpoint, sourceUrl]] of applicableTpexEndpoints.entries()) {
     if (remainingJobs <= 0) break;
     const endpointKey = TPEX_JOB_KEYS[endpoint as keyof typeof TPEX_JOB_KEYS];
     const endpointCandidates = tpexCandidates.filter((candidate) => endpoint.startsWith(candidate.statementKind || 'general'));
     const claim = endpointCandidates.length ? await client.rpc('claim_candidate_financial_acquisition_jobs_v4', {
       p_stock_ids: endpointCandidates.map((candidate) => candidate.stockId), p_endpoint_key: endpointKey,
-      p_limit: Math.min(60, remainingJobs), p_owner: runnerPrincipal, p_claimed_at: collectedAt,
+      p_limit: Math.min(60, Math.max(1, Math.floor(remainingJobs / (applicableTpexEndpoints.length - endpointIndex)))), p_owner: runnerPrincipal, p_claimed_at: collectedAt,
       p_lease_expires_at: new Date(Date.now() + FINANCIAL_JOB_LEASE_MS).toISOString(),
     }) : { data: [], error: null };
     if (claim.error) throw new Error(`candidate_tpex_financial_job_claim_failed:${claim.error.message}`);
@@ -745,6 +804,7 @@ export async function refreshCandidateOfficialFinancials(
     fetchedFilings: Math.max(0, claimedRows.length - outcomes.filter((row) => row.error).length) + tpexFetchedEndpoints,
     parsedFacts: facts.length,
     writtenFacts,
+    documentReceipts,
     symbolsWithFacts: [...new Set(facts.map((fact) => fact.symbol))],
     attemptedSymbols: [...new Set([...claimedRows.map((job) => job.candidate.symbol), ...attemptedTpexSymbols])],
     finMindFallbackFilings: outcomes.filter((outcome) => outcome.fallbackUsed).length + tpexFinMindFallbackFilings,

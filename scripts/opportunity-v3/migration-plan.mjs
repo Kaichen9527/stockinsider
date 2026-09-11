@@ -51,6 +51,10 @@ const migrationPaths = [
   'migrations/20260909_official_financial_validation_receipts.sql',
   'migrations/20260911_v320_source_terminal_projection_authority.sql',
   'migrations/20260911_candidate_financial_fact_manifest_v8.sql',
+  'migrations/20260911_02_financial_field_work_fairness.sql',
+  'migrations/20260911_03_financial_document_job_links.sql',
+  'migrations/20260911_04_taiwan_candidate_refresh_queue.sql',
+  'migrations/20260911_candidate_history_backfill_v1.sql',
 ];
 const migrations = migrationPaths.map((relativePath) => {
   const bytes = fs.readFileSync(path.join(root, relativePath));
