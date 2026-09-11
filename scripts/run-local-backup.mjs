@@ -5,10 +5,11 @@ import { mkdir, readdir, readFile, rmdir, writeFile } from 'node:fs/promises';
 import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { inspectLocalBackupDirectory, assessLocalBackupCapacity } from './local-backup-preflight.mjs';
+import { inspectLocalBackupDirectory, assessLocalBackupCapacity,
+  CONFIRMED_BACKUP_DIRECTORY } from './local-backup-preflight.mjs';
 import { assembleLocalBackupSet } from './local-backup-set.mjs';
 
-export const CONFIRMED_BACKUP_DIRECTORY = '/Users/kaerchen/Desktop/Desktop - KC9527/20_stock/StockInsider/backup';
+export { CONFIRMED_BACKUP_DIRECTORY };
 
 export function validateBackupRunConfig(config) {
   const paths = ['directory', 'environmentFile', 'caFile', 'keyDirectory', 'pgDump', 'pgRestore', 'pgModule'];

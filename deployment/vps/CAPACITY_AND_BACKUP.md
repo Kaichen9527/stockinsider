@@ -52,3 +52,37 @@ The current encrypted export is useful evidence but is not a complete recovery
 set because the strict clean restore and application validation have not passed.
 Do not retire Supabase, run database cleanup or start a Contabo restore until those
 gates pass and the current host has enough space. No automatic expansion exists.
+
+## Exact VPS release archive evidence
+
+`export-vps-release-backup.mjs` accepts only the fixed production host
+`5.104.83.211` and one explicit absolute path shaped like
+`/opt/<app>/releases/<release>`. It rejects `current`, globs, shell syntax, broad
+directories, symlinks and special files. The remote helper is read-only: it hashes
+the release before streaming, emits an embedded tree manifest, hashes it again
+afterward and fails if any path, byte count or digest changed. It has no deletion
+operation.
+
+The SSH tar stream is fed directly to the existing AES-256-GCM backup envelope.
+No plaintext tar is written to the Mac. The encrypted artifact and its private
+receipt are placed under the project-root `backup/` directory and remain subject
+to the 25 GiB budget and exclusive export lock. Run the verifier against that
+receipt before considering the archive usable:
+
+```bash
+npm run backup:vps-release:export -- \
+  "/Users/kaerchen/Desktop/Desktop - KC9527/20_stock/StockInsider/backup" \
+  "/absolute/private/key-directory" \
+  "/opt/example/releases/exact-release"
+
+npm run backup:vps-release:verify -- \
+  "/Users/kaerchen/Desktop/Desktop - KC9527/20_stock/StockInsider/backup/<receipt>.manifest.json" \
+  "/absolute/private/key-directory"
+```
+
+Verification authenticates the envelope, extracts into one unique `mkdtemp`
+directory, rejects traversal, links, special files and manifest drift, then removes
+only that temporary directory. It emits a second private receipt. Cleanup preflight
+requires both receipts, their exact SHA-256 digests and matching host/release
+identity; even a successful preflight only reports eligibility and never removes
+the VPS release.

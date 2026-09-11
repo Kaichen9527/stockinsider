@@ -1,12 +1,62 @@
 /** Pure cleanup eligibility analysis. This module cannot remove, stop or prune. */
-import { readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { constants } from 'node:fs';
+import { open, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { VPS_HOST, validateReleaseExportInput } from './vps-release-identity.mjs';
+import { verifyReleaseTreeManifest } from './vps-release-tar.mjs';
+import { CONFIRMED_BACKUP_DIRECTORY } from './local-backup-preflight.mjs';
 
 const under = (child, parent) => child === parent || child.startsWith(parent + path.sep);
 const digest = value => typeof value === 'string' && /^[0-9a-f]{64}$/.test(value);
 
-export function assessCleanupCandidates(inventory, policy, prerequisites = {}, now = Date.now()) {
+async function readPrivateReceipt(filePath) {
+  const handle = await open(filePath, constants.O_RDONLY | constants.O_NOFOLLOW);
+  try {
+    const metadata = await handle.stat();
+    if (!metadata.isFile() || (metadata.mode & 0o777) !== 0o600
+      || (typeof process.getuid === 'function' && metadata.uid !== process.getuid())) {
+      throw new Error('cleanup_receipt_file_invalid');
+    }
+    return await handle.readFile();
+  } finally { await handle.close(); }
+}
+
+export function verifyCleanupEvidence(candidate, archiveBytes, restoreBytes) {
+  if (!path.isAbsolute(candidate.archiveReceiptPath || '') || !path.isAbsolute(candidate.restoreReceiptPath || '')
+    || path.dirname(candidate.archiveReceiptPath) !== CONFIRMED_BACKUP_DIRECTORY
+    || path.dirname(candidate.restoreReceiptPath) !== CONFIRMED_BACKUP_DIRECTORY
+    || !digest(candidate.archiveReceiptSha256) || !digest(candidate.restoreReceiptSha256)
+    || createHash('sha256').update(archiveBytes).digest('hex') !== candidate.archiveReceiptSha256
+    || createHash('sha256').update(restoreBytes).digest('hex') !== candidate.restoreReceiptSha256) return false;
+  try {
+    const archive = JSON.parse(archiveBytes.toString('utf8'));
+    const restore = JSON.parse(restoreBytes.toString('utf8'));
+    validateReleaseExportInput({ host: archive.manifest?.host, releasePath: candidate.path });
+    verifyReleaseTreeManifest(archive.manifest?.tree, archive.manifest?.tree);
+    const contextSha256 = createHash('sha256').update(JSON.stringify(archive.manifest)).digest('hex');
+    return archive.manifest?.schema === 'stockinsider-vps-release-export-v1'
+      && archive.manifest.host === '5.104.83.211' && archive.manifest.releasePath === candidate.path
+      && archive.manifest.tree.releasePath === candidate.path
+      && archive.contextSha256 === contextSha256 && archive.postTreeSha256 === archive.manifest.tree.treeSha256
+      && archive.treeStable === true && archive.manifest.plaintextStoredOnMac === false
+      && archive.manifest.remoteDeletePerformed === false
+      && /^[0-9a-f]{64}$/.test(archive.result?.plaintextSha256 || '')
+      && Number.isSafeInteger(archive.result?.plaintextBytes) && archive.result.plaintextBytes > 0
+      && restore.schema === 'stockinsider-vps-release-restore-v1'
+      && restore.host === archive.manifest.host && restore.releasePath === candidate.path
+      && restore.sourceContextSha256 === archive.contextSha256
+      && restore.sourcePlaintextSha256 === archive.result.plaintextSha256
+      && restore.restoreVerified === true && restore.plaintextPersistedAfterVerification === false
+      && restore.treeSha256 === archive.manifest.tree.treeSha256
+      && restore.fileCount === archive.manifest.tree.fileCount
+      && restore.totalBytes === archive.manifest.tree.totalBytes
+      && restore.temporaryRestoreRemoved === true && restore.remoteDeletePerformed === false;
+  } catch { return false; }
+}
+
+export function assessCleanupCandidates(inventory, policy, prerequisites = {}, evidence = {}, now = Date.now()) {
   if (inventory?.schema !== 'stockinsider-contabo-deployment-inventory-v1'
     || policy?.schema !== 'stockinsider-all-app-retention-policy-v1') throw new Error('inventory_or_policy_invalid');
   const observedAt = Date.parse(inventory.observedAt);
@@ -25,10 +75,10 @@ export function assessCleanupCandidates(inventory, policy, prerequisites = {}, n
   ];
   return policy.candidates.map(candidate => {
     const reasons = [];
-    if (!path.isAbsolute(candidate.path) || !under(candidate.path, '/opt') || candidate.path === '/opt') {
+    try { validateReleaseExportInput({ host: VPS_HOST, releasePath: candidate.path }); } catch {
       reasons.push('candidate_path_invalid');
     }
-    if (!digest(candidate.archiveReceiptSha256) || !digest(candidate.restoreReceiptSha256)) {
+    if (evidence[candidate.path] !== true) {
       reasons.push('verified_archive_and_restore_receipts_required');
     }
     for (const prerequisite of candidate.requires || []) {
@@ -58,7 +108,16 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     const inventory = JSON.parse(await readFile(inventoryPath, 'utf8'));
     const policy = JSON.parse(await readFile(policyPath, 'utf8'));
     const prerequisites = prerequisitePath ? JSON.parse(await readFile(prerequisitePath, 'utf8')) : {};
-    const candidates = assessCleanupCandidates(inventory, policy, prerequisites);
+    const evidence = {};
+    for (const candidate of policy.candidates) {
+      if (!path.isAbsolute(candidate.archiveReceiptPath || '') || !path.isAbsolute(candidate.restoreReceiptPath || '')) continue;
+      const [archive, restore] = await Promise.all([
+        readPrivateReceipt(candidate.archiveReceiptPath).catch(() => null),
+        readPrivateReceipt(candidate.restoreReceiptPath).catch(() => null),
+      ]);
+      evidence[candidate.path] = Boolean(archive && restore && verifyCleanupEvidence(candidate, archive, restore));
+    }
+    const candidates = assessCleanupCandidates(inventory, policy, prerequisites, evidence);
     console.log(JSON.stringify({ schema: 'stockinsider-cleanup-preflight-v1', candidates,
       eligibleCount: candidates.filter(item => item.eligible).length, destructiveActionPerformed: false }));
     process.exitCode = candidates.some(item => item.eligible) ? 0 : 2;

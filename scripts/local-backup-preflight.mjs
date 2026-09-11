@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const LOCAL_BACKUP_BUDGET_BYTES = 25 * 1024 ** 3;
+export const CONFIRMED_BACKUP_DIRECTORY = '/Users/kaerchen/Desktop/Desktop - KC9527/20_stock/StockInsider/backup';
 
 export function assessLocalBackupCapacity({ availableBytes, existingBytes, incomingBytes,
   temporaryBytes, budgetBytes = LOCAL_BACKUP_BUDGET_BYTES }) {

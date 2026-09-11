@@ -7,6 +7,11 @@
 - Implemented host-wide and operation-specific locks for build, restore and backfill.
 - Enabled Next.js standalone output, release packaging, content manifesting and startup verification.
 - Implemented serialized local backup orchestration, complete-set admission, 24-hour freshness and guarded retention planning.
+- Implemented fixed-host, exact-release archival from the VPS to the confirmed
+  project-root backup: read-only before/after tree hashes, direct AES-GCM streaming,
+  unique temporary restore verification and private receipts.
+- Cleanup eligibility now verifies the receipt files, receipt hashes, release
+  identity and restored tree instead of accepting digest-shaped placeholders.
 - Added hourly VPS capacity-watch and daily/hourly macOS LaunchAgent templates.
 - No VPS service was stopped, no file/image/volume was deleted, no expansion was purchased, and no production migration or deploy was performed by this change.
 
@@ -33,7 +38,8 @@ test release contains no production credentials and is not a deployable commit.
 
 ## Verification
 
-- `npm run test:contabo-capacity-backup`: 31/31 passed.
+- `npm run test:contabo-capacity-backup`: 36/36 passed, including traversal,
+  symlink, changed-content, fixed-host/path and no-persistent-plaintext cases.
 - `npm --prefix web run lint -- --quiet`: passed.
 - `npm --prefix web run build`: passed, including TypeScript and 84-page generation.
 - `bash -n` for the operations wrapper and schedule installer: passed.
@@ -43,6 +49,10 @@ test release contains no production credentials and is not a deployable commit.
 ## Production gates still open
 
 - Cleanup candidates are intentionally empty until exact archive/restore receipt hashes and TaskBuddy's external `taskbuddy_api_migration_verified` attestation exist. Eligibility is not deletion authority.
+- The exact release archiver and verifier are implemented, but no production VPS
+  release was archived or deleted in this change. Each candidate still needs a
+  real encrypted artifact plus a successful restore receipt under the confirmed
+  Mac project-root `backup/` path.
 - Existing encrypted database, Storage and provider artifacts are not a complete system backup. The strict clean restore and application-level validation still must pass after the Contabo data-plane compatibility work lands.
 - The macOS LaunchAgents and hourly capacity timer are templates only; installation is a separate reviewed production action.
 - The standalone unit is a reviewed template and has not replaced the active service.
