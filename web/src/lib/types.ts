@@ -1634,6 +1634,7 @@ export interface SourceSignalCard {
 export interface CandidateStageCard {
   symbol: string;
   chineseName: string;
+  sector?: string | null;
   market: 'TW' | 'US';
   lifecycleStage: 'found' | 'waiting' | 'actionable';
   latestMentionAt: string;
@@ -1681,6 +1682,7 @@ export interface CandidateStageCard {
     ma120: number | null;
     ma240: number | null;
     rsi14: number | null;
+    atr14?: number | null;
     volumeRatio20Median: number | null;
     marketRegime: string;
     hardGatePassed: boolean;

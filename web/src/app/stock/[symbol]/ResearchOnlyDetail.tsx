@@ -8,6 +8,7 @@ import {
   displayValuationMethod,
   displayValuationStatus,
 } from '@/lib/opportunity-v3/research-display';
+import LocalResearchWorkspace from './LocalResearchWorkspace';
 
 function finiteNumber(value: unknown): number | null {
   return typeof value === 'number' && Number.isFinite(value) ? value : null;
@@ -79,21 +80,23 @@ export default function ResearchOnlyDetail({ symbol, card, projectionBlockers = 
     ?valuation.formalRange as Record<string,unknown>:null;
   const relative=valuation?.relative&&typeof valuation.relative==='object'&&!Array.isArray(valuation.relative)
     ?valuation.relative as Record<string,unknown>:null;
+  const localRevisionId = text(card.detailRevisionId) ?? text(card.candidateDetailRevisionId) ?? revisionId
+    ?? text(card.snapshotPublishedAt) ?? 'research-readonly';
 
-  return <main data-testid="research-only-detail" className="min-h-screen px-5 py-8 text-slate-950 dark:text-emerald-50 md:px-10">
-    <section className="mx-auto max-w-[900px] rounded-[2rem] border border-sky-300/40 bg-sky-50 p-6 dark:bg-sky-950/30 md:p-8">
+  return <main data-testid="research-only-detail" className="min-h-screen px-4 py-6 text-[var(--foreground)] sm:px-5 md:px-10 md:py-8">
+    <section className="decision-panel mx-auto max-w-[980px] overflow-hidden p-5 sm:p-6 md:p-8">
       <Link href="/" className="inline-flex min-h-11 items-center rounded-full border border-current px-4 text-sm">回到雷達首頁</Link>
-      <p className="mt-8 text-xs tracking-[0.2em] text-sky-700 dark:text-sky-300">研究模式 · 買進動作已停用</p>
+      <p className="research-kicker mt-8">RESEARCH MODE · ACTION DISABLED</p>
       <h1 className="mt-2 text-3xl font-semibold">{name ? `${name} ` : ''}{symbol}</h1>
       <p className="mt-3 text-base leading-7">{sourceSummary}</p>
-      {revisionId ? <p data-testid="research-only-decision-revision" className="mt-2 text-xs text-sky-800 dark:text-sky-200">研究版本已鎖定，可在後端稽核。</p> : null}
-      <div role="status" className="mt-5 rounded-2xl border border-amber-400/40 bg-amber-50 p-4 text-sm leading-6 text-amber-900 dark:bg-amber-950/35 dark:text-amber-200">
+      {revisionId ? <p data-testid="research-only-decision-revision" className="mt-2 text-xs text-stone-500">研究版本已鎖定，可在後端稽核。</p> : null}
+      <div role="status" className="mt-5 rounded-xl border border-orange-300/60 bg-orange-50/70 p-4 text-sm leading-6 text-stone-800 dark:bg-orange-950/20 dark:text-stone-200">
         這是可追溯的研究快照，不是買進建議。正式決策資料尚未完整或目前版本不同步，因此所有買進型動作已停用。
       </div>
-      <dl className="mt-6 grid gap-px overflow-hidden rounded-2xl bg-sky-900/10 sm:grid-cols-3">
-        <div className="bg-white/75 p-4 dark:bg-slate-950/50"><dt className="text-xs text-slate-500">最後已知價格</dt><dd className="mt-1 text-lg font-semibold">{price == null ? '待補' : `NT$${price.toFixed(2)}`}</dd></div>
-        <div className="bg-white/75 p-4 dark:bg-slate-950/50"><dt className="text-xs text-slate-500">研究排序</dt><dd className="mt-1 text-lg font-semibold">{score == null ? '待補' : score.toFixed(1)}</dd></div>
-        <div className="bg-white/75 p-4 dark:bg-slate-950/50"><dt className="text-xs text-slate-500">資料覆蓋</dt><dd className="mt-1 text-lg font-semibold">{coverage == null ? '待補' : `${Math.round(coverage <= 1 ? coverage * 100 : coverage)}%`}</dd></div>
+      <dl className="mt-6 grid gap-px overflow-hidden rounded-xl bg-line sm:grid-cols-3">
+        <div className="bg-[var(--surface)] p-4"><dt className="text-xs text-stone-500">最後已知價格</dt><dd className="mt-1 text-lg font-semibold">{price == null ? '待補' : `NT$${price.toFixed(2)}`}</dd></div>
+        <div className="bg-[var(--surface)] p-4"><dt className="text-xs text-stone-500">研究排序</dt><dd className="mt-1 text-lg font-semibold">{score == null ? '待補' : score.toFixed(1)}</dd></div>
+        <div className="bg-[var(--surface)] p-4"><dt className="text-xs text-stone-500">資料覆蓋</dt><dd className="mt-1 text-lg font-semibold">{coverage == null ? '待補' : `${Math.round(coverage <= 1 ? coverage * 100 : coverage)}%`}</dd></div>
       </dl>
       <h2 className="mt-7 text-sm font-semibold tracking-[0.12em]">尚待解除</h2>
       <ul data-testid="research-only-blockers" className="mt-3 space-y-2 text-sm leading-6">
@@ -131,6 +134,8 @@ export default function ResearchOnlyDetail({ symbol, card, projectionBlockers = 
           {waterfall.map((gate,index)=>{const status=text(gate.status,24) ?? 'missing';const reason=text(gate.reason,120) ?? 'data_required';return <li key={`${text(gate.gate,24) ?? index}-${reason}`} className="rounded-xl border border-line px-3 py-2 text-sm"><span className={status==='pass'?'font-semibold text-emerald-700 dark:text-emerald-300':'font-semibold text-amber-800 dark:text-amber-300'}>{displayResearchGate(gate.gate)} · {displayResearchGateStatus(status)}</span><span className="mt-1 block text-xs text-slate-500 dark:text-emerald-100/60">{displayResearchDiagnostic(reason)}</span></li>;})}
         </ol>
       </section>:null}
+      <LocalResearchWorkspace symbol={symbol} revisionId={localRevisionId} currentPrice={price}
+        atr14={finiteNumber(technical?.atr14 ?? technical?.atr)} baseTarget={finiteNumber(formalRange?.base)} />
       {sourceUrl ? <a className="mt-6 inline-flex min-h-11 items-center underline underline-offset-4" href={sourceUrl} target="_blank" rel="noreferrer">查看原始來源</a> : null}
     </section>
   </main>;

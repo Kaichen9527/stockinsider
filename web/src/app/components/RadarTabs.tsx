@@ -1,13 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { CandidateStageCard, DiscoveredStockCard, RadarDailyPayload, RecommendationCard, SourceSignalCard, ThemeHeatCard } from '@/lib/types';
 import { validatePublishedDecisionCard } from '@/lib/opportunity-v3/decision-publication';
 import { displayResearchDiagnostic } from '@/lib/opportunity-v3/research-display';
 import { sourceSignalLifecycleStage, type CandidateLifecycleStage } from '@/lib/stage-classifier';
 import { hasCandidateStageCards } from '@/lib/candidate-stage-contract';
 import type { CandidateStageKey, CandidateStagePage } from '@/lib/radar-stage-pagination';
+import { DEFAULT_CANDIDATE_STAGE_FILTERS, candidateStageFilterOptions, filterAndSortCandidateStages, type CandidateStageFilters } from '@/lib/radar-stage-view';
+import { LOCAL_RESEARCH_STORAGE_KEY, decodeLocalResearchState } from '@/lib/local-research-state';
 
 type Props = {
   radar: RadarDailyPayload;
@@ -460,11 +462,12 @@ const candidateConditionLabel: Record<string, string> = {
 function CandidateStageCardView({ card }: { card: CandidateStageCard }) {
   const stanceLabel = { positive: '支持', negative: '保留／負向', neutral: '中性', mixed: '多空混合' } as const;
   return (
-    <article className="rounded-[1.5rem] border border-line bg-surface-strong p-5" data-testid={`candidate-stage-${card.symbol}`}>
+    <article className="decision-panel min-w-0 overflow-hidden p-4 sm:p-5" data-testid={`candidate-stage-${card.symbol}`}>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-xs tracking-[0.18em] text-slate-500 dark:text-emerald-100/50">{card.symbol} · {card.lifecycleStage.toUpperCase()}</p>
-          <Link href={card.detailHref || `/stock/${card.symbol}`} className="mt-1 block text-xl font-semibold hover:text-accent">{card.chineseName}</Link>
+          <p className="research-kicker">{card.symbol} · {card.lifecycleStage.toUpperCase()}</p>
+          <Link href={card.detailHref || `/stock/${card.symbol}`} className="mt-1 block text-xl font-semibold tracking-[-0.02em] hover:text-accent">{card.chineseName}</Link>
+          <p className="mt-1 text-xs text-stone-500">{card.sector || '產業待補'} · 官方收盤後更新</p>
           <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/55">來源 {card.effectiveMentionCount}/{card.rawMentionCount} 筆有效／原始 · {card.publisherCount} 個發布者 · {card.platformCount} 個平台</p>
           <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/55">獨立推薦 {card.positivePublisherCount} · 負向 {card.negativePublisherCount} · 一般討論 {card.generalPublisherCount}</p>
           <p className="mt-1 text-xs text-slate-500 dark:text-emerald-100/55">單一平台占比 {Math.round(card.dominantPlatformShare * 100)}% · 最新 {formatTaipeiDateTime(card.latestMentionAt, 'compact')}</p>
@@ -477,7 +480,7 @@ function CandidateStageCardView({ card }: { card: CandidateStageCard }) {
           </p>
         </div>
       </div>
-      <div className="mt-4 grid gap-2 text-xs sm:grid-cols-3">
+      <div className="mt-4 grid grid-cols-3 gap-px overflow-hidden rounded-xl border border-line bg-line text-xs">
         <div className="rounded-xl bg-slate-950/5 p-3 dark:bg-white/5"><span className="text-slate-500">現價</span><strong className="mt-1 block">{card.valuation.currentPrice?.toFixed(2) ?? '待補'}</strong></div>
         <div className="rounded-xl bg-slate-950/5 p-3 dark:bg-white/5"><span className="text-slate-500">Base 目標</span><strong className="mt-1 block">{card.valuation.baseTarget?.toFixed(2) ?? '待補'}</strong></div>
         <div className="rounded-xl bg-slate-950/5 p-3 dark:bg-white/5"><span className="text-slate-500">Base 空間</span><strong className="mt-1 block">{card.valuation.baseUpsidePct == null ? '待補' : `${card.valuation.baseUpsidePct.toFixed(1)}%`}</strong></div>
@@ -489,7 +492,7 @@ function CandidateStageCardView({ card }: { card: CandidateStageCard }) {
           </a>
         ))}
       </div>
-      <div className="mt-4 rounded-xl border border-line p-3 text-xs leading-5 text-slate-600 dark:text-emerald-100/65">
+      <div className={`mt-4 rounded-xl border p-3 text-xs leading-5 ${card.unmetConditions.length ? 'border-orange-300/60 bg-orange-50/60 text-stone-700 dark:bg-orange-950/15 dark:text-stone-300' : 'border-emerald-300/60 bg-emerald-50/60 text-stone-700 dark:bg-emerald-950/15 dark:text-stone-300'}`}>
         <p className="font-semibold text-slate-800 dark:text-emerald-50">尚未達成</p>
         <p className="mt-1">{card.unmetConditions.length ? card.unmetConditions.slice(0, 5).map((item) => candidateConditionLabel[item] || item).join('、') : '目前條件已通過'}</p>
         <p className="mt-2 text-slate-500">技術日 {card.technical.sessionDate || '待補'} · MA20 {card.technical.ma20?.toFixed(2) ?? '-'} · MA60 {card.technical.ma60?.toFixed(2) ?? '-'} · RSI {card.technical.rsi14?.toFixed(1) ?? '-'}</p>
@@ -504,16 +507,54 @@ function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyPayload;
   const [stages, setStages] = useState(radar.stages!);
   const [loadingStage, setLoadingStage] = useState<CandidateStageKey | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const totals = radar.stageCounts ?? stageCounts ?? {
-    found: stages.found.length,
-    waiting: stages.waiting.length,
-    actionable: stages.actionable.length,
-  };
+  const [filters, setFilters] = useState<CandidateStageFilters>(DEFAULT_CANDIDATE_STAGE_FILTERS);
+  const [watchedSymbols, setWatchedSymbols] = useState<Set<string>>(new Set());
+  const totals = useMemo(() => radar.stageCounts ?? stageCounts ?? {
+    found: radar.stages!.found.length,
+    waiting: radar.stages!.waiting.length,
+    actionable: radar.stages!.actionable.length,
+  }, [radar.stageCounts, radar.stages, stageCounts]);
+  const fullSnapshotReady = (['found', 'waiting', 'actionable'] as const).every((stage) => stages[stage].length >= totals[stage]);
 
   useEffect(() => {
     setStages(radar.stages!);
     setLoadError(null);
-  }, [radar.snapshotPublishedAt]);
+  }, [radar.snapshotPublishedAt, radar.stages]);
+
+  useEffect(() => {
+    const refresh = () => setWatchedSymbols(new Set(decodeLocalResearchState(window.localStorage.getItem(LOCAL_RESEARCH_STORAGE_KEY) || '').watchlist));
+    refresh();
+    window.addEventListener('storage', refresh);
+    return () => window.removeEventListener('storage', refresh);
+  }, []);
+
+  useEffect(() => {
+    if (fullSnapshotReady) return;
+    const controller = new AbortController();
+    let mounted = true;
+    const hydrate = async () => {
+      try {
+        const hydrated = { found: [...stages.found], waiting: [...stages.waiting], actionable: [...stages.actionable] };
+        for (const stage of ['found', 'waiting', 'actionable'] as const) {
+          while (hydrated[stage].length < totals[stage]) {
+            const parameters = new URLSearchParams({ stage, offset: String(hydrated[stage].length), limit: '40', ...(radar.snapshotPublishedAt ? { snapshotPublishedAt: radar.snapshotPublishedAt } : {}) });
+            const response = await fetch(`/api/radar/daily?${parameters.toString()}`, { signal: controller.signal, headers: { accept: 'application/json' } });
+            if (!response.ok) throw new Error(response.status === 409 ? '來源快照已更新，請重新整理頁面。' : `完整名單載入失敗（${response.status}）。`);
+            const page = await response.json() as CandidateStagePage;
+            if (page.stage !== stage || page.snapshotPublishedAt !== (radar.snapshotPublishedAt ?? null) || page.items.length === 0) throw new Error('完整名單的快照版本不一致。');
+            const bySymbol = new Map(hydrated[stage].map((card) => [card.symbol, card]));
+            for (const card of page.items) bySymbol.set(card.symbol, card);
+            hydrated[stage] = [...bySymbol.values()];
+          }
+        }
+        if (mounted) setStages(hydrated);
+      } catch (error) {
+        if (mounted && !controller.signal.aborted) setLoadError((error as Error).message);
+      }
+    };
+    void hydrate();
+    return () => { mounted = false; controller.abort(); };
+  }, [fullSnapshotReady, radar.snapshotPublishedAt, stages, totals]);
 
   const loadMore = async (stage: CandidateStageKey) => {
     if (loadingStage) return;
@@ -544,20 +585,40 @@ function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyPayload;
       setLoadingStage(null);
     }
   };
-  const closest = [...stages.waiting].sort((a, b) => b.scores.actionability - a.scores.actionability || b.scores.dataConfidence - a.scores.dataConfidence).slice(0, 5);
-  const actual = stages[selected];
+  const allCards = useMemo(() => [...stages.found, ...stages.waiting, ...stages.actionable], [stages]);
+  const filterOptions = useMemo(() => candidateStageFilterOptions(allCards), [allCards]);
+  const closest = filterAndSortCandidateStages(stages.waiting, { ...filters, sort: 'stage_rank' }, watchedSymbols).slice(0, 5);
+  const actual = filterAndSortCandidateStages(stages[selected], filters, watchedSymbols);
   const displayed = selected === 'actionable' && actual.length === 0 ? closest : actual;
   return (
-    <div>
-      <div role="tablist" aria-label="股票三層漏斗" className="mb-6 grid gap-2 rounded-2xl border border-line bg-surface-strong p-2 sm:grid-cols-3">
+    <div className="min-w-0">
+      <header className="mb-5 border-b border-line pb-5">
+        <p className="research-kicker">MARKET RESEARCH FUNNEL</p>
+        <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em] sm:text-3xl">從來源線索走到可驗證的行動條件</h2>
+        <p className="mt-2 max-w-3xl text-sm leading-6 text-stone-600 dark:text-stone-300">完整名單依同一份快照搜尋與排序；社群熱度只決定發現順位，不會直接產生買進結論。</p>
+      </header>
+      <div role="tablist" aria-label="股票三層漏斗" className="mb-5 grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-3">
         {(['found','waiting','actionable'] as const).map((stage) => (
-          <button key={stage} role="tab" aria-selected={selected === stage} onClick={() => setSelected(stage)} className={`rounded-xl px-4 py-3 text-left text-sm font-semibold ${selected === stage ? 'bg-slate-950 text-white dark:bg-emerald-100 dark:text-slate-950' : 'text-slate-600 dark:text-emerald-100/65'}`}>
-            {stage === 'found' ? '全部來源命中' : stage === 'waiting' ? '等待條件' : '現在可行動'} <span className="ml-2 text-xs">{totals[stage]}</span>
+          <button key={stage} role="tab" aria-selected={selected === stage} onClick={() => setSelected(stage)} className={`min-h-14 px-4 py-3 text-left text-sm font-semibold ${selected === stage ? 'bg-stone-950 text-white dark:bg-orange-400 dark:text-stone-950' : 'bg-[var(--surface)] text-stone-600 hover:bg-orange-500/5 dark:text-stone-300'}`}>
+            <span className="block">{stage === 'found' ? '全部來源命中' : stage === 'waiting' ? '等待條件' : '現在可行動'}</span><span className="mt-1 block text-xs opacity-65">{totals[stage]} 檔</span>
           </button>
         ))}
       </div>
+      <section aria-label="完整名單篩選" aria-busy={!fullSnapshotReady} className="mb-5 rounded-xl border border-line bg-[var(--surface)] p-3">
+        <div className="grid min-w-0 gap-2 sm:grid-cols-2 lg:grid-cols-6">
+          <label className="min-w-0 lg:col-span-2"><span className="sr-only">搜尋股票</span><input disabled={!fullSnapshotReady} type="search" value={filters.query} onChange={(event) => setFilters((current) => ({ ...current, query: event.target.value }))} placeholder={fullSnapshotReady ? '搜尋代碼、公司或產業' : '正在載入完整名單…'} className="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm outline-none focus:border-orange-500 disabled:cursor-wait disabled:opacity-60" /></label>
+          <label className="min-w-0"><span className="sr-only">產業</span><select value={filters.sector} onChange={(event) => setFilters((current) => ({ ...current, sector: event.target.value }))} className="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm"><option value="all">全部產業</option>{filterOptions.sectors.map((sector) => <option key={sector} value={sector}>{sector}</option>)}</select></label>
+          <label className="min-w-0"><span className="sr-only">來源</span><select value={filters.source} onChange={(event) => setFilters((current) => ({ ...current, source: event.target.value }))} className="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm"><option value="all">全部來源</option>{filterOptions.sources.map((source) => <option key={source} value={source}>{sourceTypeLabel[source] || source}</option>)}</select></label>
+          <label className="min-w-0"><span className="sr-only">訊號</span><select value={filters.signal} onChange={(event) => setFilters((current) => ({ ...current, signal: event.target.value as CandidateStageFilters['signal'] }))} className="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm"><option value="all">全部訊號</option><option value="positive">正向提及</option><option value="negative">負向提及</option><option value="valuation_ready">估值完整</option><option value="data_gap">資料待補</option></select></label>
+          <label className="min-w-0"><span className="sr-only">排序</span><select value={filters.sort} onChange={(event) => setFilters((current) => ({ ...current, sort: event.target.value as CandidateStageFilters['sort'] }))} className="min-h-11 w-full min-w-0 rounded-lg border border-line bg-[var(--surface-strong)] px-3 text-sm"><option value="stage_rank">接近條件</option><option value="latest">最新提及</option><option value="upside">估值空間</option><option value="research">研究完整度</option><option value="source_diversity">來源多樣性</option></select></label>
+        </div>
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-stone-500">
+          <label className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-full border border-line px-3"><input type="checkbox" checked={filters.watchedOnly} onChange={(event) => setFilters((current) => ({ ...current, watchedOnly: event.target.checked }))} />只看本機自選</label>
+          <span>{fullSnapshotReady ? `符合 ${actual.length} / ${stages[selected].length} 檔` : `正在載入完整快照 ${stages[selected].length} / ${totals[selected]} 檔`} · 快照 {radar.snapshotPublishedAt ? formatTaipeiDateTime(radar.snapshotPublishedAt, 'compact') : '待確認'}</span>
+        </div>
+      </section>
       {selected === 'actionable' ? <p className="mb-4 rounded-2xl border border-amber-500/25 bg-amber-500/8 px-5 py-4 text-sm text-amber-800 dark:text-amber-200">逐檔驗證估值、資料與進場條件，並確認兩個相鄰交易日收盤。{actual.length === 0 && closest.length ? `目前未達完整硬門檻，以下顯示最接近的 ${closest.length} 檔等待標的。` : ''}</p> : null}
-      <div className="grid gap-4 xl:grid-cols-2">
+      <div className="grid min-w-0 gap-3 xl:grid-cols-2">
         {displayed.map((card) => <CandidateStageCardView key={`${selected}-${card.symbol}`} card={card} />)}
       </div>
       {actual.length > 0 && actual.length < totals[selected] ? (

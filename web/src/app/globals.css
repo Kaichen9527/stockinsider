@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f3efe3;
-  --foreground: #111827;
-  --surface: rgba(255, 250, 240, 0.74);
-  --surface-strong: rgba(255, 247, 230, 0.92);
-  --line: rgba(17, 24, 39, 0.1);
-  --accent: #0f766e;
-  --accent-strong: #b45309;
-  --cta-background: #0f766e;
+  --background: #f1eadc;
+  --foreground: #1c1917;
+  --surface: rgba(250, 246, 237, 0.9);
+  --surface-strong: rgba(255, 252, 245, 0.97);
+  --line: rgba(41, 37, 36, 0.16);
+  --accent: #c4531b;
+  --accent-strong: #9a3412;
+  --cta-background: #1c1917;
   --cta-foreground: #ffffff;
   --danger: #be123c;
 }
@@ -25,15 +25,15 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #122232;
-    --foreground: #f0fdfa;
-    --surface: rgba(38, 66, 84, 0.92);
-    --surface-strong: rgba(52, 84, 104, 0.96);
-    --line: rgba(236, 253, 245, 0.24);
-    --accent: #5eead4;
-    --accent-strong: #f59e0b;
-    --cta-background: #fbbf24;
-    --cta-foreground: #0f172a;
+    --background: #191714;
+    --foreground: #faf7f2;
+    --surface: rgba(35, 32, 28, 0.94);
+    --surface-strong: rgba(44, 40, 34, 0.98);
+    --line: rgba(254, 215, 170, 0.2);
+    --accent: #fb923c;
+    --accent-strong: #fdba74;
+    --cta-background: #fb923c;
+    --cta-foreground: #1c1917;
     --danger: #fb7185;
   }
 }
@@ -43,9 +43,10 @@ body {
   color: var(--foreground);
   font-family: "Avenir Next", "PingFang TC", "Noto Sans TC", sans-serif;
   background-image:
-    radial-gradient(circle at 20% 20%, rgba(15, 118, 110, 0.15), transparent 35%),
-    radial-gradient(circle at 80% 10%, rgba(180, 83, 9, 0.16), transparent 25%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 40%);
+    linear-gradient(rgba(120, 88, 56, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120, 88, 56, 0.055) 1px, transparent 1px),
+    radial-gradient(circle at 84% 8%, rgba(196, 83, 27, 0.13), transparent 28%);
+  background-size: 28px 28px, 28px 28px, auto;
   min-height: 100vh;
 }
 
@@ -103,5 +104,28 @@ body {
 }
 
 ::selection {
-  background: rgba(15, 118, 110, 0.24);
+  background: rgba(196, 83, 27, 0.28);
+}
+
+.decision-panel {
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: var(--surface-strong);
+  box-shadow: 0 18px 48px rgba(28, 25, 23, 0.08);
+}
+
+.research-kicker {
+  color: var(--accent);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .decision-panel { animation: research-panel-in 420ms ease-out both; }
+}
+
+@keyframes research-panel-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
