@@ -70,6 +70,8 @@ BEGIN
   v_acceptance:=p_evidence->'factAcceptance'; v_manifest:=p_evidence->'validatedFacts'; v_validation:=p_evidence->'validation';
   IF jsonb_typeof(v_acceptance) IS DISTINCT FROM 'object' OR jsonb_typeof(v_manifest) IS DISTINCT FROM 'array'
     OR jsonb_array_length(v_manifest)>200 OR jsonb_typeof(v_validation) IS DISTINCT FROM 'object'
+    OR ((p_has_facts OR jsonb_array_length(v_manifest)>0 OR p_evidence->>'documentStatus'='complete')
+      AND (p_content_type IS NULL OR p_content_type NOT IN ('application/xml','text/xml','text/html','application/xhtml+xml')))
     OR v_acceptance->>'policyVersion' IS DISTINCT FROM 'arelle-fact-scope-v1'
     OR v_acceptance->>'documentSha256' IS DISTINCT FROM p_evidence->>'documentSha256'
     OR v_acceptance->>'taxonomySha256' IS DISTINCT FROM p_evidence->>'taxonomySha256'
