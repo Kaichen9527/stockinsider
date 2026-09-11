@@ -103,7 +103,7 @@
     ],
     [
       "external-gate-harness-contract.md",
-      "source-led-external-gate-harness-v1.4"
+      "source-led-external-gate-harness-v1.5"
     ],
     [
       "factor-correctness-amendment.md",
@@ -115,7 +115,7 @@
     ],
     [
       "host-pin-compatibility-amendment.md",
-      "model-runner-host-pin-amendment-v3.15"
+      "model-runner-host-pin-amendment-v3.16"
     ],
     [
       "hybrid-product-amendment.md",

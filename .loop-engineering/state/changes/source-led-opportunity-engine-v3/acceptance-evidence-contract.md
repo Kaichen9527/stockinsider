@@ -198,7 +198,7 @@ graph; static fixtures and planned PCR boundaries are the immutable requirement 
 The active graph oracle validates the two canonical authority tags below, ASCII order,
 duplicate and active-graph closure,
 
-<!-- GOV-004-AUTHORITY {"catalogBytes":6758,"catalogSha256":"dcb1747605fb37123f77bd4fe7f085a594eb0fa4f63dc4bec8fdbd40646c0aea","kind":"evidence-catalog-identity"} -->
+<!-- GOV-004-AUTHORITY {"catalogBytes":6758,"catalogSha256":"6b3f8dfadc3c9101e853b9748ca5579934bca1501a437138853d3651f7954cce","kind":"evidence-catalog-identity"} -->
 <!-- GOV-004-AUTHORITY {"activeFiles":55,"kind":"evidence-file-owner-topology","owners":45} -->
 
 then recomputes every `[path,blobOid,byteLength,sha256]` row and compares the result to
@@ -225,7 +225,7 @@ remains permitted.
 `product-runtime-code-gate` runs all of the following in a clean checkout of the exact
 candidate commit and fails on the first nonzero/skip/todo/incomplete result:
 
-1. product-track traceability command above, reconciling exactly 260 registered IDs;
+1. product-track traceability command above, reconciling exactly 272 registered IDs;
 2. `npm run test:source-led-opportunity-v3`;
 3. `npm run test:source-led-opportunity-v3:product-correctness`;
 4. `npm run test:source-led-opportunity-v3:migration`;
@@ -255,14 +255,14 @@ registry-pinned command catalog; it does not trust an npm script as bootstrap au
 then runs the model track traceability reconciliation for exactly 28 IDs,
 `npm run test:model-runner-v3`, then
 `npm run v3:doctor -- --expect-mode disabled --require-host-pin
-model-runner-host-pins-v3.10`; doctor must reproduce the fixture's exact
-`codex-cli 0.148.0-alpha.21` bytes and report deployment mode disabled. It is a
+model-runner-host-pins-v3.16`; doctor must reproduce the fixture's exact
+`codex-cli 0.153.4` bytes and report deployment mode disabled. It is a
 required Code Gate input when a Code Gate is assembled; it is deliberately collected
 on the pinned self-hosted runner rather than represented as a skipped pull-request
 aggregate job.
 
 Candidate-side model execution receives no host credential and conditionally registers
-only the thirteen non-live tests, so its TAP has zero skipped/todo. A credentialed
+only the nineteen non-live tests, so its TAP has zero skipped/todo. A credentialed
 protected-base oracle executes the remaining two live tests only after proving the
 complete model-runner implementation/test/host-pin blob listing is byte-identical to
 the exact subject. The 28 reported passes are parsed from the acceptance trace owner;
@@ -418,7 +418,7 @@ sets both non-null and proves the closed 31-entry record above. Non-review leave
 For `status='pass'`, the compatibility validator requires the exact gate policy rather
 than merely equal nonzero counts: Requirements/Architecture/exact-review and aggregate
 checks are `partition=null, registeredCount=0, executedCount=0, commands=[]`;
-product/runtime is exactly `product_runtime,260,260` with sole command
+product/runtime is exactly `product_runtime,272,272` with sole command
 `product-runtime-track` / `protected://stockinsider-v3-gate-root/execute-track --track product_runtime`;
 model runner is exactly `model_runner,28,28` with `model-runner-track`; and evaluation
 is exactly `evaluation_governance,20,20` with `evaluation-governance-track`. Each sole
