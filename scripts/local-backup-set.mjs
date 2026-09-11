@@ -1,4 +1,4 @@
-import { constants } from 'node:fs';
+import { constants, createReadStream } from 'node:fs';
 import { createHash, randomUUID } from 'node:crypto';
 import { lstat, open, readFile, realpath, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -14,13 +14,17 @@ async function readPrivateFile(directory, filename) {
   const metadata = await lstat(absolute);
   if (!metadata.isFile() || metadata.isSymbolicLink() || metadata.uid !== process.getuid()
     || (metadata.mode & 0o077) !== 0) throw new Error('backup_member_not_private');
-  const bytes = await readFile(absolute);
-  return { filename, bytes, sha256: sha256(bytes) };
+  const hash = createHash('sha256');
+  for await (const chunk of createReadStream(absolute, { flags: constants.O_RDONLY | constants.O_NOFOLLOW })) {
+    hash.update(chunk);
+  }
+  return { filename, bytes: metadata.size, sha256: hash.digest('hex') };
 }
 
 async function readMember(directory, filename) {
   const member = await readPrivateFile(directory, filename);
-  return { ...member, json: JSON.parse(member.bytes.toString('utf8')) };
+  if (member.bytes > 16 * 1024 ** 2) throw new Error('backup_json_member_too_large');
+  return { ...member, json: JSON.parse(await readFile(path.join(directory, filename), 'utf8')) };
 }
 
 export function assessBackupSet({ database, storageInventory, storageManifests, provider, restore }) {
