@@ -66,12 +66,14 @@ operation.
 Internal relative package links, including `node_modules/.bin`, are recorded as
 link metadata and reconstructed without dereferencing them during export. Their
 lexically resolved targets must remain inside the archived release and refer to a
-declared archived path; absolute and escaping links fail closed. The sole external
+declared archived path; absolute and escaping links fail closed. Versioned
+`.env.*.example` templates remain ordinary release files, while live `.env` files
+are rejected. The sole external
 exception is TaskBuddy's `.env.production` link under the reviewed
 `taskbuddy-shared-env-production-v1` policy. Its target and contents are never put
 in the manifest or tar stream. The restore receipt proves the rebind policy is
 known and required; the shared secret remains a separately protected deployment
-dependency. Any other `.env` file or link is rejected.
+dependency. Any other live `.env` file or link is rejected.
 
 The SSH tar stream is fed directly to the existing AES-256-GCM backup envelope.
 No plaintext tar is written to the Mac. The encrypted artifact and its private

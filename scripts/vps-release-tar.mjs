@@ -12,6 +12,7 @@ const canonical = value => value && typeof value === 'object'
   ? Array.isArray(value) ? `[${value.map(canonical).join(',')}]`
     : `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${canonical(value[key])}`).join(',')}}`
   : JSON.stringify(value);
+const secretFilePath = value => SECRET_PATH.test(value) && !value.endsWith('.example');
 
 function octal(buffer, field) {
   const value = buffer.toString('ascii').replace(/\0.*$/, '').trim();
@@ -68,7 +69,7 @@ export function verifyReleaseTreeManifest(tree, expected) {
     && !value.split('/').some(segment => !segment || segment === '.' || segment === '..');
   const paths = new Set(); let total = 0;
   for (const file of tree.files) {
-    if (!validRelative(file.path) || SECRET_PATH.test(file.path)
+    if (!validRelative(file.path) || secretFilePath(file.path)
       || paths.has(file.path) || !Number.isSafeInteger(file.bytes) || file.bytes < 0
       || !Number.isSafeInteger(file.mode) || file.mode < 0 || file.mode > 0o777
       || !Number.isSafeInteger(file.mtimeMs) || file.mtimeMs < 0
@@ -81,7 +82,7 @@ export function verifyReleaseTreeManifest(tree, expected) {
     const target = typeof link?.target === 'string' ? link.target : '';
     const resolved = target && !target.startsWith('/') && !target.includes('\\')
       ? path.posix.normalize(path.posix.join(path.posix.dirname(link.path || ''), target)) : '';
-    if (keys !== 'path,resolvedPath,target' || !validRelative(link.path) || SECRET_PATH.test(link.path)
+    if (keys !== 'path,resolvedPath,target' || !validRelative(link.path) || secretFilePath(link.path)
       || !target || target.includes('\0') || target.startsWith('/') || target.includes('\\')
       || resolved === '.' || resolved === '..' || resolved.startsWith('../')
       || resolved !== link.resolvedPath || paths.has(link.path)) throw new Error('release_tree_symlink_invalid');
@@ -101,7 +102,7 @@ export function verifyReleaseTreeManifest(tree, expected) {
     ...tree.files.map(item => item.path), ...links.map(item => item.path),
   ]);
   for (const link of links) {
-    if (SECRET_PATH.test(link.resolvedPath)
+    if (secretFilePath(link.resolvedPath)
       || (!reconstructablePaths.has(link.resolvedPath)
         && ![...reconstructablePaths].some(item => item.startsWith(`${link.resolvedPath}/`)))) {
       throw new Error('release_tree_symlink_target_missing');

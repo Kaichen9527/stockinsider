@@ -21,6 +21,10 @@ TASKBUDDY_SECRET_TARGET = "/opt/taskbuddy/shared/.env.production"
 TASKBUDDY_SECRET_POLICY = "taskbuddy-shared-env-production-v1"
 
 
+def secret_file_name(relative):
+    return bool(SECRET_NAME_RE.search(relative)) and not relative.endswith(".example")
+
+
 def canonical(value):
     return json.dumps(value, sort_keys=True, separators=(",", ":")).encode()
 
@@ -59,7 +63,7 @@ def classify_link(root, relative, target):
         raise RuntimeError("unapproved_absolute_symlink_rejected")
     if "\\" in relative or "\\" in target:
         raise RuntimeError("release_symlink_path_invalid")
-    if SECRET_NAME_RE.search(relative):
+    if secret_file_name(relative):
         raise RuntimeError("unapproved_secret_symlink_rejected")
     normalized = posixpath.normpath(posixpath.join(posixpath.dirname(relative), target))
     if (not target or target.startswith("/") or normalized in ("", ".", "..")
@@ -107,7 +111,7 @@ def scan(root):
                 continue
             if not stat.S_ISREG(metadata.st_mode):
                 raise RuntimeError("release_special_file_rejected")
-            if SECRET_NAME_RE.search(relative):
+            if secret_file_name(relative):
                 raise RuntimeError("release_secret_file_rejected")
             identity = (metadata.st_dev, metadata.st_ino, metadata.st_size,
                         stat.S_IMODE(metadata.st_mode), metadata.st_mtime_ns)
