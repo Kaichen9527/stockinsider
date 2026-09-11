@@ -1,5 +1,6 @@
 import { createHash } from 'crypto';
-import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
+import { getStockInsiderDataPlaneClient, resetStockInsiderDataPlaneClientForTests } from '../data-plane-runtime.ts';
 
 let cachedClient: SupabaseClient | null = null;
 
@@ -45,6 +46,10 @@ export function validateOpportunityV3ServiceTuple(input: {
 
 export function getOpportunityV3ServerClient(): SupabaseClient {
   if (cachedClient) return cachedClient;
+  if (process.env.STOCKINSIDER_DATA_PLANE === 'contabo') {
+    cachedClient = getStockInsiderDataPlaneClient();
+    return cachedClient;
+  }
   const tuple = {
     url: process.env.SUPABASE_URL ?? '',
     projectRef: process.env.OPPORTUNITY_V3_SUPABASE_PROJECT_REF ?? '',
@@ -52,12 +57,11 @@ export function getOpportunityV3ServerClient(): SupabaseClient {
     approvedDigest: process.env.OPPORTUNITY_V3_SERVICE_ROLE_KEY_SHA256 ?? '',
   };
   if (!validateOpportunityV3ServiceTuple(tuple)) throw new OpportunityV3ServiceUnavailable();
-  cachedClient = createClient(tuple.url, tuple.serviceRoleKey, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
+  cachedClient = getStockInsiderDataPlaneClient();
   return cachedClient;
 }
 
 export function resetOpportunityV3ClientForTests(): void {
   cachedClient = null;
+  resetStockInsiderDataPlaneClientForTests();
 }

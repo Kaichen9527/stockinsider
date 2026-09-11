@@ -77,7 +77,10 @@ export function hashThreadsSignedRequest(signedRequest: string): string {
 
 export function threadsDeletionStatusUrl(confirmationCode: string, redirectUri: string): string {
   const origin = new URL(redirectUri).origin;
-  if (origin !== 'https://stockinsider-three.vercel.app' && new URL(redirectUri).hostname !== 'localhost') {
+  const configuredOrigin = new URL(String(process.env.STOCKINSIDER_PUBLIC_ORIGIN
+    || 'https://stockinsider-three.vercel.app')).origin;
+  const localhost = new URL(redirectUri).hostname === 'localhost';
+  if ((origin !== configuredOrigin || !origin.startsWith('https://')) && !localhost) {
     throw new Error('threads_deletion_status_origin_invalid');
   }
   return new URL(`/api/auth/threads/data-deletion?code=${encodeURIComponent(confirmationCode)}`, origin).toString();

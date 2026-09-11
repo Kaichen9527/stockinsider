@@ -1,7 +1,7 @@
 # Private storage primitives — implementation slice
 
-These modules are deliberately not yet connected to production. This change does
-not migrate data, replace Vault, activate a connector, or claim system recovery.
+These modules are connected to the dormant Contabo runtime adapter, but this
+change does not migrate production data, activate the adapter or claim recovery.
 
 ## Artifact store
 
@@ -24,14 +24,43 @@ through AAD. A live trusted registry must supply the expected identity, not the
 stored envelope. Errors do not return credential bytes. Callers must clear their
 plaintext/key buffers.
 
-Still required before production: systemd encrypted credential loading, dedicated
-database/RLS migration, atomic generation-checked refresh/revoke transactions,
-principal and writer fences, runtime adapters, signed callback integration and a
-full restore/canary. Cryptographic envelope tests do not establish those properties.
+The Contabo adapter loads versioned root keys from systemd credentials. Encrypted
+provider rows use generation compare-and-swap for replacement and revocation, so
+a delayed refresh cannot resurrect a revoked token. Threads lifecycle requests
+remain signed, origin-bound and replay-deduplicated in the database.
+
+## Runtime and restore contract
+
+`STOCKINSIDER_DATA_PLANE=contabo` selects a SHA-256-pinned service-role JWT and
+loopback-only PostgREST. The exact Supabase project-host guard is unchanged for
+the compatibility mode. Candidate financial documents use the hash store in
+Contabo mode and record a receipt after the file is fsynced and re-read.
+
+The destination database first receives
+`deployment/vps/bootstrap-stockinsider-postgres.sql`. It creates the role names
+and pgcrypto extension required by the reviewed schema, but no login passwords
+or plaintext Vault compatibility objects. Legacy Vault-backed function
+definitions must be explicitly excluded from restore; the encrypted credential
+RPCs in `20260911_contabo_data_plane_v1.sql` supersede them.
+
+Generate a TOC with `pg_restore --list`, then run
+`node scripts/build-contabo-restore-list.mjs <input-list> <new-output-list>`.
+The 0600 output excludes only Vault namespace objects and the named legacy
+Threads/FinMind Vault functions. Review its exclusion count before using the
+list for rehearsal; the source archive is never rewritten.
+
+The identity fence is dormant after migration. During reviewed cutover, an
+operator registers exactly one backend UUID, runner principal and 40-character
+release, then activates the singleton. Writes still require the active release
+and production lease. PostgreSQL and PostgREST remain private/loopback-only.
+
+Still required before production: a complete schema/owner/grant/RLS restore,
+credential transfer in restricted memory, capacity rehearsal and external
+canary. These tests do not authorize migration or deployment.
 
 ## Verification
 
-Run `npm run test:contabo-data-plane` (seven cases) and `npm --prefix web run build`.
+Run `npm run test:contabo-data-plane` and `npm --prefix web run build`.
 Fixtures exercise two-link publication, concurrent idempotent puts, caller Buffer
 mutation, writable ancestors, traversal, symlink, tamper and cryptographic identity
 mutation. No real token or document is included in source control.

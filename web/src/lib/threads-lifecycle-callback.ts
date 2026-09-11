@@ -21,6 +21,12 @@ export async function processThreadsLifecycleCallback(input: {
   request: Request;
   revoke: (revocation: ThreadsLifecycleRevocation) => Promise<void>;
 }): Promise<Record<string, unknown>> {
+  const requestUrl = new URL(input.request.url);
+  const redirectOrigin = new URL(input.redirectUri).origin;
+  if (requestUrl.origin !== redirectOrigin
+    || (requestUrl.protocol !== 'https:' && requestUrl.hostname !== 'localhost')) {
+    throw new Error('threads_callback_origin_invalid');
+  }
   const signedRequest = await readThreadsSignedRequest(input.request);
   const payload = verifyThreadsSignedRequest(signedRequest, input.appSecret);
   const confirmationCode = createThreadsDeletionConfirmationCode(signedRequest, input.appSecret);
