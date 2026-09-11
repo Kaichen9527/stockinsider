@@ -1,8 +1,31 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { filterArelleValidatedFacts } from './candidate-financial-document-worker.ts';
 import { parseCandidateFinancialDocumentFacts } from './candidate-financial-documents.ts';
+import { parseCandidateFinancialLocalParserResult, type CandidateFinancialLocalParserResult } from './candidate-financial-local-parser.ts';
 import type { ParsedFact } from './candidate-official-financials.ts';
+
+function partialScopeFixture() {
+  return JSON.parse(readFileSync(new URL('../../../scripts/fixtures/candidate-financial-document-parser/partial-scope-contract.json', import.meta.url), 'utf8'));
+}
+function canonicalFixture(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(canonicalFixture);
+  if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value)
+    .sort(([left], [right]) => left < right ? -1 : left > right ? 1 : 0)
+    .map(([key, item]) => [key, canonicalFixture(item)]));
+  return value;
+}
+function sealFixture(report: ReturnType<typeof partialScopeFixture>) {
+  report.errorManifestSha256 = createHash('sha256').update(JSON.stringify(canonicalFixture(report.factAcceptance))).digest('hex');
+  return report as CandidateFinancialLocalParserResult;
+}
+function partialCandidate() {
+  return { ...fact({ xbrl_context: 'D-2026Q2', xbrl_concept: 'tifrs-full:Revenue' }),
+    locator: { xbrl_context: 'D-2026Q2', xbrl_concept: 'tifrs-full:Revenue',
+      structural_fact_key: 'c'.repeat(64), concept_namespace: 'urn:stockinsider:acceptance:tifrs-full' } };
+}
 
 function fact(locator: { xbrl_context: string; xbrl_concept: string }): ParsedFact {
   return {
@@ -21,18 +44,112 @@ test('document facts cross the boundary only when Arelle validated the exact con
   const accepted = fact({ xbrl_context: 'D-2026Q2', xbrl_concept: 'tifrs-full:Revenue' });
   const wrongContext = fact({ xbrl_context: 'D-2025Q2', xbrl_concept: 'tifrs-full:Revenue' });
   const result = filterArelleValidatedFacts([accepted, wrongContext], {
+    schema: 'candidate-financial-document-parser-v1', status: 'complete', parser: 'arelle',
+    inputSha256: 'a'.repeat(64), runtimeVersion: '2.44.7', taxonomySha256: 'b'.repeat(64), missingRequirements: [],
+    locators: [{ xbrl_context: 'D-2026Q2', xbrl_concept: 'tifrs-full:Revenue' }],
+    validatedFacts: [{ xbrl_context: 'D-2026Q2', xbrl_concept: 'tifrs-full:Revenue', value: '100', unit: 'TWD',
+      entity_identifier: '2330', period_start: '2026-04-01', period_end: '2026-06-30',
+      duration_kind: 'quarterly', dimension_count: 0 }],
+    validation: { errorCount: 0, errorCodes: [], validFactCount: 1, errorsTruncated: false },
+  });
+  assert.equal(result.length, 1);
+  assert.equal(result[0]?.sourceRef, accepted.sourceRef);
+  assert.equal(result[0]?.validation, undefined,
+    'structural xValid must not be promoted to an accounting-consistency receipt');
+});
+
+test('unscoped structural errors block the low-level fact filter even for individually typed numbers', () => {
+  const candidate = fact({ xbrl_context: 'D-2026Q2', xbrl_concept: 'tifrs-full:Revenue' });
+  const admitted = filterArelleValidatedFacts([candidate], {
     schema: 'candidate-financial-document-parser-v1', status: 'partial', parser: 'arelle',
-    inputSha256: 'a'.repeat(64), missingRequirements: ['arelle_validation_errors'],
+    inputSha256: 'a'.repeat(64), runtimeVersion: '2.44.7', taxonomySha256: 'b'.repeat(64),
+    missingRequirements: ['arelle_validation_errors'],
     locators: [{ xbrl_context: 'D-2026Q2', xbrl_concept: 'tifrs-full:Revenue' }],
     validatedFacts: [{ xbrl_context: 'D-2026Q2', xbrl_concept: 'tifrs-full:Revenue', value: '100', unit: 'TWD',
       entity_identifier: '2330', period_start: '2026-04-01', period_end: '2026-06-30',
       duration_kind: 'quarterly', dimension_count: 0 }],
     validation: { errorCount: 801, errorCodes: ['lxml.SCHEMAV_ELEMENT_CONTENT'], validFactCount: 1, errorsTruncated: false },
   });
-  assert.equal(result.length, 1);
-  assert.equal(result[0]?.sourceRef, accepted.sourceRef);
-  assert.equal(result[0]?.validation, undefined,
-    'structural xValid must not be promoted to an accounting-consistency receipt');
+  assert.deepEqual(admitted, [], 'xValid and matching locators alone cannot prove independence from unscoped errors');
+});
+
+test('scoped v2 admission preserves the entire partial-document error proof and remains pending accounting', () => {
+  const report = partialScopeFixture();
+  const parsed = parseCandidateFinancialLocalParserResult(JSON.stringify(report), report.inputSha256);
+  assert.equal(parsed.status, 'partial');
+  assert.deepEqual(parsed.missingRequirements, ['arelle_validation_errors']);
+  assert.equal(parsed.validation?.errorCount, 1);
+  assert.deepEqual((parsed as unknown as typeof report).factAcceptance, report.factAcceptance);
+  assert.equal((parsed as unknown as typeof report).errorManifestSha256, report.errorManifestSha256);
+  const admitted = filterArelleValidatedFacts([partialCandidate()], parsed);
+  assert.equal(admitted.length, 1);
+  assert.equal(admitted[0].validation, undefined, 'structural independence never substitutes for accounting validation');
+});
+
+test('raw XBRL declares extraction inapplicable without inventing a second validation pass', () => {
+  const report = partialScopeFixture();
+  report.factAcceptance.extractedInstanceSha256 = null;
+  report.factAcceptance.extractedValidationCompleted = false;
+  report.validatedFacts[0].extractedFactId = report.validatedFacts[0].sourceFactId;
+  const sealed = sealFixture(report);
+  const parsed = parseCandidateFinancialLocalParserResult(JSON.stringify(sealed), report.inputSha256);
+  assert.equal(parsed.status, 'partial');
+  assert.equal(filterArelleValidatedFacts([partialCandidate()], parsed).length, 1);
+  report.validatedFacts[0].extractedFactId = 'source:999';
+  assert.deepEqual(filterArelleValidatedFacts([partialCandidate()], sealFixture(report)), []);
+});
+
+test('direct, context, concept and calculation-dependent rejections cannot be overridden by xValid', () => {
+  for (const [code, objectId] of [
+    ['xmlSchema:valueError', 'revenue-safe'], ['xmlSchema:elementOccurrencesError', 'D-2026Q2'],
+    ['lxml.SCHEMAV_ELEMENT_CONTENT', 'concept-Revenue'], ['xbrl.5.2.5.2:calcInconsistency', 'calc-total-to-child'],
+    ['stockinsider:conflictingFactDuplicates', 'duplicate-revenue-group'],
+  ]) {
+    const report = partialScopeFixture();
+    report.factAcceptance.errors[0] = { phase: 'extracted', code,
+      refs: [{ href: `instance.xbrl#${objectId}`, objectId }], fatal: false };
+    report.validation.errorCodes = [code];
+    // The parser's complete transitive rejection closure explicitly contains
+    // the selected fact. A caller cannot declare that same fact safe again.
+    report.factAcceptance.rejections[0].factKey = 'c'.repeat(64);
+    assert.deepEqual(filterArelleValidatedFacts([partialCandidate()], sealFixture(report)), [], code);
+  }
+});
+
+test('fatal, unscoped, incomplete and tampered v2 proofs fail closed without dropping their errors', () => {
+  const mutations = [
+    (report: ReturnType<typeof partialScopeFixture>) => { report.factAcceptance.documentFatal = true; },
+    (report: ReturnType<typeof partialScopeFixture>) => { report.factAcceptance.errors[0].refs = []; },
+    (report: ReturnType<typeof partialScopeFixture>) => { report.factAcceptance.errors[0].fatal = true; },
+    (report: ReturnType<typeof partialScopeFixture>) => {
+      report.factAcceptance.errors[0].code = 'unknown:validationCondition'; report.validation.errorCodes = ['unknown:validationCondition'];
+    },
+    (report: ReturnType<typeof partialScopeFixture>) => { report.factAcceptance.manifestComplete = false; },
+    (report: ReturnType<typeof partialScopeFixture>) => { report.factAcceptance.sourceValidationCompleted = false; },
+    (report: ReturnType<typeof partialScopeFixture>) => { report.factAcceptance.extractedValidationCompleted = false; },
+    (report: ReturnType<typeof partialScopeFixture>) => { report.validation.errorsTruncated = true; },
+    (report: ReturnType<typeof partialScopeFixture>) => { report.validation.errorCount = 0; report.validation.errorCodes = []; },
+    (report: ReturnType<typeof partialScopeFixture>) => { report.status = 'complete'; report.missingRequirements = []; },
+    (report: ReturnType<typeof partialScopeFixture>) => { report.factAcceptance.rejections[0].errorIndexes = [1]; },
+  ];
+  for (const mutate of mutations) {
+    const report = partialScopeFixture(); mutate(report);
+    assert.deepEqual(filterArelleValidatedFacts([partialCandidate()], sealFixture(report)), []);
+  }
+  const tampered = partialScopeFixture();
+  tampered.factAcceptance.errors[0].code = 'changed-after-sealing';
+  assert.deepEqual(filterArelleValidatedFacts([partialCandidate()], tampered), []);
+});
+
+test('dimensional Equity and ProfitLoss cannot enter a scoped partial fact manifest', () => {
+  for (const concept of ['Equity', 'ProfitLoss']) {
+    const report = partialScopeFixture();
+    report.validatedFacts[0].dimension_count = 1;
+    report.validatedFacts[0].xbrl_concept = `tifrs-full:${concept}`;
+    report.locators[0].xbrl_concept = `tifrs-full:${concept}`;
+    const candidate = partialCandidate(); candidate.locator.xbrl_concept = `tifrs-full:${concept}`;
+    assert.deepEqual(filterArelleValidatedFacts([candidate], report), [], concept);
+  }
 });
 
 test('regex comments cannot replace the Arelle-validated entity or period', () => {

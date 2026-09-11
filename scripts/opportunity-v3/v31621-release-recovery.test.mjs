@@ -23,12 +23,13 @@ test('V31621 operator migration plan exactly matches the reviewed apply chain',(
   assert.deepEqual(planned,reviewed,'the displayed production plan cannot omit or reorder a reviewed migration');
   // Approved v6 evidence repair: receipt authority must precede job linkage;
   // the new queue/history jobs cannot replace or reorder the existing chain.
-  assert.deepEqual(planned.slice(-5),[
+  assert.deepEqual(planned.slice(-6),[
     'migrations/20260911_candidate_financial_fact_manifest_v8.sql',
     'migrations/20260911_02_financial_field_work_fairness.sql',
     'migrations/20260911_03_financial_document_job_links.sql',
     'migrations/20260911_04_taiwan_candidate_refresh_queue.sql',
     'migrations/20260911_candidate_history_backfill_v1.sql',
+    'migrations/20260911_05_financial_fact_isolation_v10.sql',
   ]);
 });
 
