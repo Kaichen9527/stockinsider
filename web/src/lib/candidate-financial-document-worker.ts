@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import {
   CANDIDATE_FINANCIAL_DOCUMENT_BUCKET,
+  candidateFinancialFactsFromValidatedManifest,
   MAX_CANDIDATE_FINANCIAL_DOCUMENT_BYTES,
   parseCandidateFinancialDocumentFacts,
   validateCandidateFinancialDocument,
@@ -133,6 +134,8 @@ export async function processCandidateFinancialDocumentReceipts(limit = 5) {
       }
       const verified = validateCandidateFinancialDocument({ bytes, contentType: String(receipt.content_type || '') });
       if ('error' in verified) throw new Error(verified.error);
+      const stock = await client.from('stocks').select('id,symbol').eq('id', String(receipt.stock_id || '')).maybeSingle();
+      if (stock.error || !stock.data || !/^\d{4,6}$/u.test(String(stock.data.symbol || ''))) throw new Error('document_stock_identity_missing');
       // This adapter is a mandatory local validation boundary. It runs Arelle
       // for XBRL/iXBRL and pdfplumber for PDFs with no shell or network access.
       // A parser deployment gap remains a receipt gap; raw regex output must
@@ -140,27 +143,27 @@ export async function processCandidateFinancialDocumentReceipts(limit = 5) {
       localParse = await runCandidateFinancialLocalParser({
         bytes, documentSha256: String(receipt.document_sha256), format: verified.format,
         allowDocling: true,
+        expectedEntity: String(stock.data.symbol), expectedPeriodEnd: String(receipt.period_end),
       });
       missing.push(...localParse.missingRequirements);
-      const stock = await client.from('stocks').select('id,symbol').eq('id', String(receipt.stock_id || '')).maybeSingle();
-      if (stock.error || !stock.data || !/^\d{4,6}$/u.test(String(stock.data.symbol || ''))) throw new Error('document_stock_identity_missing');
-      if (verified.format === 'xbrl' && localParse.locators.length > 0) {
-        facts = filterArelleValidatedFacts(parseCandidateFinancialDocumentFacts({
-          bytes, format: verified.format, documentSha256: String(receipt.document_sha256),
+      if (verified.format !== 'pdf' && localParse.locators.length > 0) {
+        facts = candidateFinancialFactsFromValidatedManifest({
+          bytes, parse: localParse, documentSha256: String(receipt.document_sha256),
           candidate: {
             stockId: String(stock.data.id), symbol: String(stock.data.symbol),
             exchange: String(receipt.exchange) === 'TPEX' ? 'TPEX' : 'TWSE',
           },
           periodEnd: String(receipt.period_end), sourceUrl: String(receipt.source_url), collectedAt: completedAt,
-        }), localParse);
+        });
       }
-      if (verified.format !== 'xbrl') missing.push('structured_xbrl_or_validated_pdf_manifest_required');
+      if (verified.format === 'pdf') missing.push('pdf_financial_extraction_not_supported_requires_verified_xbrl');
+      else if (localParse.validatedFacts?.length === 0) missing.push('structured_xbrl_document_required');
       if (facts.length === 0) missing.push('no_verified_financial_facts_extracted');
     } catch (error) {
       const message = error instanceof Error ? error.message.slice(0, 240) : 'document_parser_failed';
       // A local-runtime outage is an acquisition gap, not proof that a valid
       // issuer file is malicious. Integrity/magic failures above remain reject.
-      if (/^candidate_financial_local_parser_(?:not_configured|timeout|failed|spawn_failed|output_too_large|stdin_failed|socket_unavailable|invalid_json|invalid_shape|invalid_result)/u.test(message)) {
+      if (/^candidate_financial_local_parser_(?:not_configured|timeout|failed|spawn_failed|output_too_large|stdin_failed|socket_unavailable|invalid_json|invalid_shape|invalid_result|invalid_validation|invalid_fact_manifest)/u.test(message)) {
         missing.push(message);
       } else {
         rejected = [message];

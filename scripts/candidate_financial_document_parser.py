@@ -127,13 +127,17 @@ def normalized_unit(unit):
     measures = getattr(unit, "measures", None)
     if not measures or len(measures) != 2:
         return None
-    numerator = [str(value) for value in measures[0]]
-    denominator = [str(value) for value in measures[1]]
-    if denominator == [] and numerator == ["iso4217:TWD"]:
+    # Prefixes are local aliases, not identities. Resolve namespace and local
+    # name so a valid filing using a different currency/share prefix is usable.
+    numerator = [(value.namespaceURI, value.localName) for value in measures[0]]
+    denominator = [(value.namespaceURI, value.localName) for value in measures[1]]
+    currency = ("http://www.xbrl.org/2003/iso4217", "TWD")
+    shares = ("http://www.xbrl.org/2003/instance", "shares")
+    if denominator == [] and numerator == [currency]:
         return "TWD"
-    if denominator == [] and numerator == ["xbrli:shares"]:
+    if denominator == [] and numerator == [shares]:
         return "share"
-    if numerator == ["iso4217:TWD"] and denominator == ["xbrli:shares"]:
+    if numerator == [currency] and denominator == [shares]:
         return "TWD_per_share"
     return None
 
@@ -254,7 +258,8 @@ def parse_pdf(path, sha256):
     return result("partial", "pdfplumber", sha256, locators, ["validated_pdf_manifest_required"])
 
 
-def parse_arelle(path, sha256, taxonomy_path=None, taxonomy_sha256=None):
+def parse_arelle(path, sha256, taxonomy_path=None, taxonomy_sha256=None,
+                 expected_entity=None, expected_period_end=None):
     # Arelle is used as a local XBRL/iXBRL structural validator. It is offline:
     # unresolved remote taxonomies fail rather than being downloaded.
     from arelle import Cntlr, FileSource, Version, XmlValidateConst
@@ -295,6 +300,10 @@ def parse_arelle(path, sha256, taxonomy_path=None, taxonomy_sha256=None):
             value = normalized_numeric_value(fact)
             context_details = context_manifest(context)
             if unit is None or value is None or context_details is None:
+                continue
+            if expected_entity is not None and context_details["entity_identifier"] != expected_entity:
+                continue
+            if expected_period_end is not None and context_details["period_end"] != expected_period_end:
                 continue
             # The receipt RPC joins the exact document QName emitted by the
             # fact extractor. Dropping its prefix rejects every valid join and
@@ -361,9 +370,17 @@ def main():
     parser.add_argument("--docling-models-path")
     parser.add_argument("--taxonomy-path")
     parser.add_argument("--taxonomy-sha256")
+    parser.add_argument("--expected-entity")
+    parser.add_argument("--expected-period-end")
     args = parser.parse_args()
     if len(args.sha256) != 64 or any(char not in "0123456789abcdef" for char in args.sha256):
         raise ValueError("invalid_sha256")
+    if args.expected_entity is not None or args.expected_period_end is not None:
+        if (not args.expected_entity or not args.expected_entity.isascii()
+                or not args.expected_entity.isdigit() or not 4 <= len(args.expected_entity) <= 6
+                or not args.expected_period_end
+                or datetime.date.fromisoformat(args.expected_period_end).isoformat() != args.expected_period_end):
+            raise ValueError("invalid_expected_context")
     apply_limits()
     disable_network()
     payload = sys.stdin.buffer.read(args.max_bytes + 1)
@@ -375,7 +392,8 @@ def main():
         path = Path(stream.name)
     try:
         if args.format in ("html", "xbrl"):
-            output = parse_arelle(path, args.sha256, args.taxonomy_path, args.taxonomy_sha256)
+            output = parse_arelle(path, args.sha256, args.taxonomy_path, args.taxonomy_sha256,
+                                 args.expected_entity, args.expected_period_end)
         else:
             try:
                 output = parse_pdf(path, args.sha256)

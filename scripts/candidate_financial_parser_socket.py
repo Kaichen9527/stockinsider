@@ -2,6 +2,7 @@
 """Credential-free systemd socket boundary for candidate document parsing."""
 
 import json
+import datetime
 import os
 import socket
 import subprocess
@@ -32,6 +33,13 @@ def receive_request(connection):
         raise ValueError("parser_socket_request_invalid")
     if not isinstance(digest, str) or len(digest) != 64:
         raise ValueError("parser_socket_request_invalid")
+    entity = request.get("expectedEntity")
+    period_end = request.get("expectedPeriodEnd")
+    if entity is not None or period_end is not None:
+        if (not isinstance(entity, str) or not entity.isascii() or not entity.isdigit()
+                or not 4 <= len(entity) <= 6 or not isinstance(period_end, str)
+                or datetime.date.fromisoformat(period_end).isoformat() != period_end):
+            raise ValueError("parser_socket_context_invalid")
     payload = bytearray(remainder)
     while len(payload) < size:
         chunk = connection.recv(min(64 * 1024, size - len(payload)))
@@ -51,6 +59,8 @@ def serve(connection):
     # This remains inside systemd's PrivateTmp and does not expose credentials.
     with tempfile.TemporaryDirectory(prefix="stockinsider-arelle-") as config_home:
         command = [sys.executable, parser_script, "--format", request["format"], "--sha256", request["sha256"], "--max-bytes", str(MAX_BYTES)]
+        if request.get("expectedEntity") is not None:
+            command.extend(["--expected-entity", request["expectedEntity"], "--expected-period-end", request["expectedPeriodEnd"]])
         taxonomy_path = OFFICIAL_TAXONOMY_PATH
         if request["format"] in ("html", "xbrl"):
             identity_path = os.path.join(taxonomy_path, ".archive-sha256")

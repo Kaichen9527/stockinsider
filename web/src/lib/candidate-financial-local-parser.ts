@@ -56,12 +56,13 @@ function validLocator(value: unknown): value is CandidateFinancialDocumentLocato
   const concept = row.xbrl_concept;
   return (page === undefined || (Number.isInteger(page) && Number(page) >= 1 && Number(page) <= 200))
     && (table === undefined || (Number.isInteger(table) && Number(table) >= 1 && Number(table) <= 20))
-    && (context === undefined || (typeof context === 'string' && context.length <= 256))
-    && (concept === undefined || (typeof concept === 'string' && concept.length <= 256))
-    && Boolean(page || context || concept);
+    && (context === undefined || (typeof context === 'string' && context.length > 0 && context.length <= 256))
+    && (concept === undefined || (typeof concept === 'string' && concept.length > 0 && concept.length <= 256))
+    && ((page !== undefined && context === undefined && concept === undefined)
+      || (context !== undefined && concept !== undefined && page === undefined && table === undefined));
 }
 
-function parseResult(raw: string, inputSha256: string): CandidateFinancialLocalParserResult {
+export function parseCandidateFinancialLocalParserResult(raw: string, inputSha256: string): CandidateFinancialLocalParserResult {
   let parsed: unknown;
   try { parsed = JSON.parse(raw); } catch { throw new Error('candidate_financial_local_parser_invalid_json'); }
   if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('candidate_financial_local_parser_invalid_shape');
@@ -107,6 +108,17 @@ function parseResult(raw: string, inputSha256: string): CandidateFinancialLocalP
     || (validatedFacts.length > 0
       && (typeof result.taxonomySha256 !== 'string' || !/^[0-9a-f]{64}$/u.test(result.taxonomySha256)))
     )) throw new Error('candidate_financial_local_parser_invalid_fact_manifest');
+  if (Array.isArray(validatedFacts) && validatedFacts.length > 0) {
+    const report = validation as CandidateFinancialLocalParserResult['validation'];
+    if (result.parser !== 'arelle' || result.status !== 'complete' || result.missingRequirements.length !== 0
+      || !report || report.errorCount !== 0 || report.errorCodes.length !== 0 || report.errorsTruncated
+      || report.validFactCount !== validatedFacts.length) {
+      throw new Error('candidate_financial_local_parser_invalid_fact_manifest');
+    }
+  }
+  if (result.parser !== 'arelle' && result.status !== 'partial') {
+    throw new Error('candidate_financial_local_parser_invalid_fact_manifest');
+  }
   return {
     schema: 'candidate-financial-document-parser-v1', status: result.status as 'complete' | 'partial',
     parser: result.parser as 'arelle' | 'pdfplumber' | 'docling', inputSha256,
@@ -118,7 +130,10 @@ function parseResult(raw: string, inputSha256: string): CandidateFinancialLocalP
   };
 }
 
-async function runIsolatedSocketParser(input: { bytes: Uint8Array; documentSha256: string; format: CandidateFinancialDocumentFormat }) {
+async function runIsolatedSocketParser(input: {
+  bytes: Uint8Array; documentSha256: string; format: CandidateFinancialDocumentFormat;
+  expectedEntity?: string; expectedPeriodEnd?: string;
+}) {
   return await new Promise<CandidateFinancialLocalParserResult>((resolveResult, reject) => {
     const socket = net.createConnection({ path: PARSER_SOCKET_PATH });
     let output = ''; let settled = false;
@@ -130,7 +145,8 @@ async function runIsolatedSocketParser(input: { bytes: Uint8Array; documentSha25
     const timeout = setTimeout(() => finish(new Error('candidate_financial_local_parser_timeout')), PARSER_TIMEOUT_MS);
     socket.setEncoding('utf8');
     socket.on('connect', () => {
-      socket.write(`${JSON.stringify({ format: input.format, sha256: input.documentSha256, byteLength: input.bytes.byteLength })}\n`);
+      socket.write(`${JSON.stringify({ format: input.format, sha256: input.documentSha256, byteLength: input.bytes.byteLength,
+        expectedEntity: input.expectedEntity, expectedPeriodEnd: input.expectedPeriodEnd })}\n`);
       socket.write(input.bytes); socket.end();
     });
     socket.on('data', (chunk: string) => {
@@ -141,9 +157,13 @@ async function runIsolatedSocketParser(input: { bytes: Uint8Array; documentSha25
     socket.on('end', () => {
       try {
         const serviceError = JSON.parse(output) as { error?: unknown };
-        if (serviceError?.error) { finish(new Error('candidate_financial_local_parser_failed')); return; }
+        if (serviceError?.error) {
+          const code = String(serviceError.error);
+          const known = /^(?:official_taxonomy_unavailable|official_taxonomy_identity_mismatch|parser_runtime_identity_mismatch|parser_subprocess_failed)$/u.test(code);
+          finish(new Error(`candidate_financial_local_parser_failed${known ? `:${code}` : ''}`)); return;
+        }
       } catch { /* normal parser response is validated below */ }
-      try { finish(undefined, parseResult(output.trim(), input.documentSha256)); }
+      try { finish(undefined, parseCandidateFinancialLocalParserResult(output.trim(), input.documentSha256)); }
       catch (error) { finish(error instanceof Error ? error : new Error('candidate_financial_local_parser_invalid_result')); }
     });
   });
@@ -163,10 +183,19 @@ export async function runCandidateFinancialLocalParser(input: {
   pythonPath?: string;
   parserScriptPath?: string;
   allowDocling?: boolean;
+  expectedEntity?: string;
+  expectedPeriodEnd?: string;
 }): Promise<CandidateFinancialLocalParserResult> {
   if (input.bytes.byteLength < 1 || input.bytes.byteLength > MAX_CANDIDATE_FINANCIAL_DOCUMENT_BYTES
     || !/^[0-9a-f]{64}$/u.test(input.documentSha256)
     || createHash('sha256').update(input.bytes).digest('hex') !== input.documentSha256) throw new Error('candidate_financial_local_parser_input_invalid');
+  if (input.expectedEntity !== undefined || input.expectedPeriodEnd !== undefined) {
+    const period = input.expectedPeriodEnd || '';
+    if (!/^\d{4,6}$/u.test(input.expectedEntity || '') || !/^\d{4}-\d{2}-\d{2}$/u.test(period)
+      || !Number.isFinite(Date.parse(period)) || new Date(period).toISOString().slice(0, 10) !== period) {
+      throw new Error('candidate_financial_local_parser_input_invalid');
+    }
+  }
   // Production uses only the credential-free systemd socket service. Direct
   // process execution is retained solely as an injected test seam.
   if (!input.spawn) {
@@ -182,6 +211,7 @@ export async function runCandidateFinancialLocalParser(input: {
   if (!APPROVED_PYTHON_PATH.test(pythonPath) || !APPROVED_PYTHON_PATH.test(script)) throw new Error('candidate_financial_local_parser_not_configured');
   const spawn = input.spawn;
   const args = [script, '--format', input.format, '--sha256', input.documentSha256, '--max-bytes', String(MAX_CANDIDATE_FINANCIAL_DOCUMENT_BYTES)];
+  if (input.expectedEntity && input.expectedPeriodEnd) args.push('--expected-entity', input.expectedEntity, '--expected-period-end', input.expectedPeriodEnd);
   const doclingModelsPath = process.env.STOCKINSIDER_DOCUMENT_PARSER_DOCLING_MODELS ?? '';
   if (input.allowDocling === true && process.env.STOCKINSIDER_DOCUMENT_PARSER_ALLOW_DOCLING === 'true'
     && APPROVED_PYTHON_PATH.test(doclingModelsPath)) {
@@ -213,7 +243,7 @@ export async function runCandidateFinancialLocalParser(input: {
     child.on('error', () => finish(new Error('candidate_financial_local_parser_spawn_failed')));
     child.on('close', (code) => {
       if (code !== 0) return finish(new Error(`candidate_financial_local_parser_failed:${String(code)}`));
-      try { finish(undefined, parseResult(stdout, input.documentSha256)); } catch (error) { finish(error instanceof Error ? error : new Error('candidate_financial_local_parser_invalid_result')); }
+      try { finish(undefined, parseCandidateFinancialLocalParserResult(stdout, input.documentSha256)); } catch (error) { finish(error instanceof Error ? error : new Error('candidate_financial_local_parser_invalid_result')); }
     });
     child.stdin.on('error', () => finish(new Error('candidate_financial_local_parser_stdin_failed')));
     child.stdin.end(input.bytes);
