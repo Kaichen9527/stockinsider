@@ -3,6 +3,8 @@ import { spawn as spawnChild } from 'node:child_process';
 import net from 'node:net';
 import type { ChildProcessWithoutNullStreams } from 'node:child_process';
 import { MAX_CANDIDATE_FINANCIAL_DOCUMENT_BYTES, type CandidateFinancialDocumentFormat } from './candidate-financial-documents.ts';
+import { candidateFinancialStructuralAdmission, financialFactAcceptanceHash, isFinancialFactAcceptanceShape,
+  MAX_FINANCIAL_PARSER_EVIDENCE_BYTES, type CandidateFinancialFactAcceptance } from './candidate-financial-fact-acceptance.ts';
 
 const MAX_PARSER_STDOUT_BYTES = 2 * 1024 * 1024;
 const MAX_PARSER_STDERR_BYTES = 16 * 1024;
@@ -18,7 +20,7 @@ export type CandidateFinancialDocumentLocator = {
 };
 
 export type CandidateFinancialLocalParserResult = {
-  schema: 'candidate-financial-document-parser-v1';
+  schema: 'candidate-financial-document-parser-v1' | 'candidate-financial-document-parser-v2';
   status: 'complete' | 'partial';
   parser: 'arelle' | 'pdfplumber' | 'docling';
   inputSha256: string;
@@ -26,6 +28,8 @@ export type CandidateFinancialLocalParserResult = {
   missingRequirements: string[];
   runtimeVersion?: string;
   taxonomySha256?: string;
+  factAcceptance?: CandidateFinancialFactAcceptance;
+  errorManifestSha256?: string;
   validation?: {
     errorCount: number;
     errorCodes: string[];
@@ -42,6 +46,12 @@ export type CandidateFinancialLocalParserResult = {
     period_end: string;
     duration_kind: 'quarterly' | 'instant';
     dimension_count: 0;
+    factKey?: string;
+    xValid?: 'VALID';
+    structuralStatus?: 'structurally_validated';
+    sourceFactId?: string;
+    extractedFactId?: string;
+    concept_namespace?: string;
   }>;
 };
 
@@ -63,11 +73,12 @@ function validLocator(value: unknown): value is CandidateFinancialDocumentLocato
 }
 
 export function parseCandidateFinancialLocalParserResult(raw: string, inputSha256: string): CandidateFinancialLocalParserResult {
+  if (Buffer.byteLength(raw, 'utf8') > MAX_FINANCIAL_PARSER_EVIDENCE_BYTES) throw new Error('candidate_financial_local_parser_output_too_large');
   let parsed: unknown;
   try { parsed = JSON.parse(raw); } catch { throw new Error('candidate_financial_local_parser_invalid_json'); }
   if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('candidate_financial_local_parser_invalid_shape');
   const result = parsed as Record<string, unknown>;
-  if (result.schema !== 'candidate-financial-document-parser-v1' || result.inputSha256 !== inputSha256
+  if (!['candidate-financial-document-parser-v1', 'candidate-financial-document-parser-v2'].includes(String(result.schema)) || result.inputSha256 !== inputSha256
     || !['complete', 'partial'].includes(String(result.status))
     || !['arelle', 'pdfplumber', 'docling'].includes(String(result.parser))
     || !Array.isArray(result.locators) || result.locators.length > 200 || !result.locators.every(validLocator)
@@ -108,11 +119,16 @@ export function parseCandidateFinancialLocalParserResult(raw: string, inputSha25
     || (validatedFacts.length > 0
       && (typeof result.taxonomySha256 !== 'string' || !/^[0-9a-f]{64}$/u.test(result.taxonomySha256)))
     )) throw new Error('candidate_financial_local_parser_invalid_fact_manifest');
+  if (result.schema === 'candidate-financial-document-parser-v2'
+    && (!isFinancialFactAcceptanceShape(result.factAcceptance) || typeof result.errorManifestSha256 !== 'string'
+      || financialFactAcceptanceHash(result.factAcceptance) !== result.errorManifestSha256
+      || result.factAcceptance.documentSha256 !== inputSha256
+      || result.factAcceptance.taxonomySha256 !== result.taxonomySha256
+      || (Number((validation as Record<string, unknown> | undefined)?.errorCount) > 0 && result.status !== 'partial'))) {
+    throw new Error('candidate_financial_local_parser_invalid_fact_manifest');
+  }
   if (Array.isArray(validatedFacts) && validatedFacts.length > 0) {
-    const report = validation as CandidateFinancialLocalParserResult['validation'];
-    if (result.parser !== 'arelle' || result.status !== 'complete' || result.missingRequirements.length !== 0
-      || !report || report.errorCount !== 0 || report.errorCodes.length !== 0 || report.errorsTruncated
-      || report.validFactCount !== validatedFacts.length) {
+    if (!candidateFinancialStructuralAdmission(result as CandidateFinancialLocalParserResult)) {
       throw new Error('candidate_financial_local_parser_invalid_fact_manifest');
     }
   }
@@ -120,13 +136,15 @@ export function parseCandidateFinancialLocalParserResult(raw: string, inputSha25
     throw new Error('candidate_financial_local_parser_invalid_fact_manifest');
   }
   return {
-    schema: 'candidate-financial-document-parser-v1', status: result.status as 'complete' | 'partial',
+    schema: result.schema as CandidateFinancialLocalParserResult['schema'], status: result.status as 'complete' | 'partial',
     parser: result.parser as 'arelle' | 'pdfplumber' | 'docling', inputSha256,
     locators: result.locators as CandidateFinancialDocumentLocator[], missingRequirements: result.missingRequirements as string[],
     runtimeVersion: typeof result.runtimeVersion === 'string' ? result.runtimeVersion : undefined,
     taxonomySha256: typeof result.taxonomySha256 === 'string' ? result.taxonomySha256 : undefined,
     validation: validation as CandidateFinancialLocalParserResult['validation'],
     validatedFacts: validatedFacts as CandidateFinancialLocalParserResult['validatedFacts'],
+    factAcceptance: result.factAcceptance as CandidateFinancialFactAcceptance | undefined,
+    errorManifestSha256: typeof result.errorManifestSha256 === 'string' ? result.errorManifestSha256 : undefined,
   };
 }
 

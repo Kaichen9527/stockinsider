@@ -7,6 +7,7 @@ import {
   validateCandidateFinancialDocument,
 } from './candidate-financial-documents.ts';
 import { runCandidateFinancialLocalParser, type CandidateFinancialLocalParserResult } from './candidate-financial-local-parser.ts';
+import { candidateFinancialStructuralAdmission } from './candidate-financial-fact-acceptance.ts';
 import { validatePendingOfficialFinancials } from './official-financial-validation-worker.ts';
 import { fixedRunnerPrincipal } from './opportunity-v3/internal.ts';
 import { getOpportunityV3ServerClient } from './opportunity-v3/service-client.ts';
@@ -33,9 +34,10 @@ export function filterArelleValidatedFacts(
   facts: ReturnType<typeof parseCandidateFinancialDocumentFacts>,
   parse: CandidateFinancialLocalParserResult,
 ) {
+  if (!candidateFinancialStructuralAdmission(parse)) return [];
   const validated = new Map<string, Array<{
     value: number; unit: string; entityIdentifier: string; periodStart: string | null;
-    periodEnd: string; durationKind: string; dimensionCount: number;
+    periodEnd: string; durationKind: string; dimensionCount: number; structuralFactKey?: string; namespace?: string;
   }>>();
   for (const row of parse.validatedFacts || []) {
     const key = `${row.xbrl_context}\u0000${row.xbrl_concept}`;
@@ -43,7 +45,7 @@ export function filterArelleValidatedFacts(
     values.push({ value: Number(row.value), unit: row.unit,
       entityIdentifier: row.entity_identifier, periodStart: row.period_start,
       periodEnd: row.period_end, durationKind: row.duration_kind,
-      dimensionCount: row.dimension_count });
+      dimensionCount: row.dimension_count, structuralFactKey: row.factKey, namespace: row.concept_namespace });
     validated.set(key, values);
   }
   return facts.filter((fact) => {
@@ -54,19 +56,24 @@ export function filterArelleValidatedFacts(
       && match.entityIdentifier === fact.symbol
       && match.periodStart === fact.periodStart && match.periodEnd === fact.periodEnd
       && match.durationKind === fact.durationKind && match.dimensionCount === 0
-      && Math.abs(match.value - fact.value) <= Math.max(1e-6, Math.abs(match.value) * 1e-12));
+      && (parse.schema !== 'candidate-financial-document-parser-v2'
+        || (match.structuralFactKey === fact.locator?.structural_fact_key && match.namespace === fact.locator?.concept_namespace))
+      && match.value === fact.value);
   });
 }
 
-function parserEvidence(parse: CandidateFinancialLocalParserResult, documentSha256: string) {
+export function candidateFinancialParserEvidence(parse: CandidateFinancialLocalParserResult, documentSha256: string) {
   return {
-    schema: 'candidate-financial-parser-evidence-v8',
+    schema: parse.schema === 'candidate-financial-document-parser-v2'
+      ? 'candidate-financial-parser-evidence-v10' : 'candidate-financial-parser-evidence-v8',
     documentSha256,
     parser: parse.parser,
     parserVersion: parse.parser === 'arelle' ? parse.runtimeVersion : `${parse.parser}-bounded-v1`,
     taxonomySha256: parse.parser === 'arelle' ? parse.taxonomySha256 : null,
     validation: parse.validation || null,
     validatedFacts: parse.validatedFacts || [],
+    ...(parse.schema === 'candidate-financial-document-parser-v2' ? { documentStatus: parse.status,
+      factAcceptance: parse.factAcceptance, errorManifestSha256: parse.errorManifestSha256 } : {}),
   };
 }
 
@@ -161,6 +168,9 @@ export async function processCandidateFinancialDocumentReceipts(limit = 5) {
         expectedEntity: String(stock.data.symbol), expectedPeriodEnd: String(receipt.period_end),
       });
       missing.push(...localParse.missingRequirements);
+      if (localParse.status === 'partial' && Number(localParse.validation?.errorCount) > 0) {
+        missing.push('document_structural_validation_partial');
+      }
       if (verified.format !== 'pdf' && localParse.locators.length > 0) {
         facts = candidateFinancialFactsFromValidatedManifest({
           bytes, parse: localParse, documentSha256: String(receipt.document_sha256),
@@ -185,11 +195,12 @@ export async function processCandidateFinancialDocumentReceipts(limit = 5) {
       }
       facts = [];
     }
-    const evidence = localParse ? parserEvidence(localParse, String(receipt.document_sha256 || '')) : {
+    const evidence = localParse ? candidateFinancialParserEvidence(localParse, String(receipt.document_sha256 || '')) : {
       schema: 'candidate-financial-parser-evidence-v8', documentSha256: String(receipt.document_sha256 || ''),
       parser: null, parserVersion: null, taxonomySha256: null, validation: null, validatedFacts: [],
     };
-    const result = await client.rpc('complete_candidate_financial_document_receipt_parser_v8', {
+    const result = await client.rpc(evidence.schema === 'candidate-financial-parser-evidence-v10'
+      ? 'complete_candidate_financial_document_receipt_parser_v10' : 'complete_candidate_financial_document_receipt_parser_v8', {
       p_receipt_id: receiptId, p_owner: owner, p_caller_principal: owner,
       p_facts: facts.map((fact) => ({ input: factInput(fact), locator: fact.locator || {} })),
       p_parser_locators: localParse?.locators || [],

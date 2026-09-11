@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { parseCandidateMopsFacts, type CandidateOfficialFinancial, type ParsedFact } from './candidate-official-financials.ts';
 import type { CandidateFinancialLocalParserResult } from './candidate-financial-local-parser.ts';
+import { candidateFinancialStructuralAdmission } from './candidate-financial-fact-acceptance.ts';
 
 export const CANDIDATE_FINANCIAL_DOCUMENT_BUCKET = 'candidate-financial-documents-v6';
 export const MAX_CANDIDATE_FINANCIAL_DOCUMENT_BYTES = 50 * 1024 * 1024;
@@ -222,15 +223,18 @@ export function candidateFinancialFactsFromValidatedManifest(input: {
   collectedAt: string;
 }): ParsedFact[] {
   const { parse } = input;
-  if (parse.parser !== 'arelle' || parse.status !== 'complete' || parse.missingRequirements.length !== 0
-    || parse.validation?.errorCount !== 0 || parse.validation.errorCodes.length !== 0 || parse.validation.errorsTruncated
-    || parse.validation.validFactCount !== parse.validatedFacts?.length
+  if (!candidateFinancialStructuralAdmission(parse)
     || !/^[0-9a-f]{64}$/u.test(parse.taxonomySha256 || '') || parse.runtimeVersion !== '2.44.7'
     || parse.inputSha256 !== input.documentSha256
     || createHash('sha256').update(input.bytes).digest('hex') !== input.documentSha256
     || !isDate(input.periodEnd) || !isTimestamp(input.collectedAt)
     || Date.parse(input.periodEnd) > Date.parse(input.collectedAt)
     || !isApprovedDocumentUrl(input.sourceUrl)) return [];
+  // Inline extraction must have its own independently validated, hash-bound
+  // instance. A source-only result cannot attest inline transformations.
+  if (parse.schema === 'candidate-financial-document-parser-v2'
+    && /http:\/\/www[.]xbrl[.]org\/(?:2008|2013)\/inlineXBRL/u.test(new TextDecoder().decode(input.bytes))
+    && !parse.factAcceptance?.extractedInstanceSha256) return [];
   const collectedAt = new Date(input.collectedAt).toISOString();
   const locators = new Set(parse.locators.map((row) => `${row.xbrl_context}\u0000${row.xbrl_concept}`));
   const facts: ParsedFact[] = [];
@@ -249,7 +253,9 @@ export function candidateFinancialFactsFromValidatedManifest(input: {
       || (instant ? row.duration_kind !== 'instant' || row.period_start !== null
         : row.duration_kind !== 'quarterly' || !row.period_start || !isDate(row.period_start) || row.period_start > row.period_end)) continue;
     const identity = createHash('sha256').update(JSON.stringify({ context: row.xbrl_context,
-      concept: row.xbrl_concept, unit, factKey, value: row.value, start: row.period_start, end: row.period_end })).digest('hex');
+      concept: row.xbrl_concept, unit, factKey, value: row.value, start: row.period_start, end: row.period_end,
+      ...(parse.schema === 'candidate-financial-document-parser-v2' ? { namespace: row.concept_namespace,
+        structuralFactKey: row.factKey } : {}) })).digest('hex');
     facts.push({
       stockId: input.candidate.stockId, symbol: input.candidate.symbol, factKey,
       periodStart: row.period_start, periodEnd: row.period_end, durationKind: row.duration_kind,
@@ -260,7 +266,11 @@ export function candidateFinancialFactsFromValidatedManifest(input: {
       filingRestatementId: `issuer-document:${input.documentSha256}`,
       sourceRef: `issuer-document:${input.documentSha256}:${identity}`,
       locator: { xbrl_context: row.xbrl_context, xbrl_concept: row.xbrl_concept,
-        response_url: input.sourceUrl, semantic_mapper: 'validated-document-v1' },
+        response_url: input.sourceUrl, semantic_mapper: parse.schema === 'candidate-financial-document-parser-v2'
+          ? 'validated-document-v2' : 'validated-document-v1',
+        ...(parse.schema === 'candidate-financial-document-parser-v2' ? { concept_namespace: row.concept_namespace,
+          structural_fact_key: row.factKey, structural_status: row.structuralStatus,
+          source_fact_id: row.sourceFactId, extracted_fact_id: row.extractedFactId } : {}) },
     });
   }
   // Keep conflicting facts visible to the accounting validator. Do not select
