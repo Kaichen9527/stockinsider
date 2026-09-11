@@ -32,6 +32,7 @@ const { buildMarketAnalysis } = require('./market-analysis');
 const { runtimeBundleBytes } = require('./tracked-runtime-bundle');
 const { acquireApprovedSources, MAX_DOCUMENTS_PER_CONNECTOR } = require('./official-source-acquisition');
 const { nominationAuthorityForSource } = require('./candidate-nomination-authority');
+const { resolveInstrumentAuthorityJoin } = require('./instrument-authority-join');
 const { acquireFrozenProviderEnvelope } = require('./provider-acquisition-v31621');
 const approvedSourceRoster = require('../../config/runtime/approved-source-roster-v3.13.json');
 const { assertExactRuntimeEnvironment, hydrateRuntimeCredentials, resolveCredentialReference } = require('./credential-resolver');
@@ -349,6 +350,11 @@ function extractRevisionCandidates(bundle) {
     aliasByStock.set(row[0], selected);
   }
   const sectorByStock = new Map(rowsByKind('taxonomy').filter(Array.isArray).map((row) => [row[0], row[3]]));
+  const authorityRoster = roster.map((row) => ({ stockId: row[0], symbol: row[1], status: row[4],
+    officialName: typeof row[6] === 'string' ? row[6] : row[5] }));
+  const authorityAliases = [...aliasByStock.entries()].flatMap(([stockId, values]) => values.map((alias) => ({
+    stockId, alias, status: 'active',
+  })));
   const text = sourceText(frozen.rawFieldPayload);
   const collectedAt = typeof frozen.sourceCollectedAt === 'string'
     ? canonicalUtc(frozen.sourceCollectedAt, 'frozen source collected-at') : null;
@@ -362,6 +368,8 @@ function extractRevisionCandidates(bundle) {
     const nameMatch = [shortName, legalName, ...aliases].some((name) => nameHasStockContext(text, name, symbol));
     const tickerMatch = typeof symbol === 'string' && (nameMatch || tickerHasStockContext(text, symbol));
     if (!tickerMatch && !nameMatch) return [];
+    const link = resolveInstrumentAuthorityJoin({ symbol, roster: authorityRoster, aliases: authorityAliases });
+    if (link.disposition !== 'linked' || link.stockId !== stockId || link.symbol !== symbol) return [];
     const matched = extractMatchedEvidenceSnippet(text, { symbol: String(symbol), names: [shortName, legalName, ...aliases] });
     const raw = tickerMatch ? String(symbol) : String([shortName, ...aliases, legalName].find((name) => typeof name === 'string' && text.includes(name)));
     const claimId = uuidFromHash(`claim:${frozen.revisionId}:${stockId}:${raw}`);
@@ -372,7 +380,7 @@ function extractRevisionCandidates(bundle) {
       canonicalSector: sectorByStock.get(stockId) ?? 'unknown', raw, claimId,
       claimAsOf: sourceEffectiveAt,
       mentionId: uuidFromHash(`mention:${frozen.revisionId}:${stockId}:${raw}`), claimEligible: true,
-      link: { disposition: 'linked', stockId, symbol },
+      link,
       sourceClass: SOURCE_CLASS_BY_KEY[frozen.sourceKey] ?? 'community', nominationAuthority,
       structuredClaim:structuredAuthorized,rightsAttested:frozen.rightsAttested===true,
       sourceProfileId: typeof frozen.profileId==='string'?frozen.profileId:null }];
@@ -395,11 +403,15 @@ function extractRevisionCandidates(bundle) {
   const allRejectedTokens=[...new Set([...text.matchAll(/(^|[^0-9])([0-9]{4})(?=[^0-9]|$)/gu)].map((match)=>match[2]))]
     .filter((symbol)=>!linkedSymbols.has(symbol));
   const rejectedTokens=allRejectedTokens.slice(0,200);
-  const rejected=rejectedTokens.map((symbol)=>({
-    claimId:uuidFromHash(`claim:${frozen.revisionId}:rejected:${symbol}`),
-    mentionId:uuidFromHash(`mention:${frozen.revisionId}:rejected:${symbol}`),symbol,
-    outcome:'rejected',reason:'stock_context_or_master_authority_unavailable',stockId:null,
-  }));
+  const rejected=rejectedTokens.map((symbol)=>{
+    const authorityLink=resolveInstrumentAuthorityJoin({symbol,roster:authorityRoster,aliases:authorityAliases});
+    return {
+      claimId:uuidFromHash(`claim:${frozen.revisionId}:rejected:${symbol}`),
+      mentionId:uuidFromHash(`mention:${frozen.revisionId}:rejected:${symbol}`),symbol,
+      outcome:'rejected',reason:authorityLink.reason==='missing_instrument_authority'
+        ?'missing_instrument_authority':'stock_context_unverified',stockId:null,link:authorityLink,
+    };
+  });
   const overflowCount=Math.max(0,uniqueMatches.length-matches.length)+Math.max(0,allRejectedTokens.length-rejectedTokens.length);
   const overflow=overflowCount?[{claimId:uuidFromHash(`claim:${frozen.revisionId}:bounded-overflow`),
     mentionId:uuidFromHash(`mention:${frozen.revisionId}:bounded-overflow`),symbol:null,stockId:null,

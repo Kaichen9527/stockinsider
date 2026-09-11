@@ -1,7 +1,8 @@
 # Implementation boundary reconciliation — 2026-09-10
 
-Status: proposed successor mapping; independent requirements/architecture and
-protected-base registration pending. This document is not gate evidence or PASS.
+Status: successor implementation prepared; independent requirements/architecture,
+protected-base registration and exact review remain pending. This document is not
+gate evidence or PASS.
 Approved acceptance setup/expected behavior remains unchanged.
 
 Independent inspection of subject `7bdddd5f71994b9ae900fd8a26bc97dd3b024cd6`
@@ -34,8 +35,18 @@ Passing the 150 runtime tests does not resolve those missing dependencies.
 
 ## Current implementation delta
 
-The actual Radar GET route now returns retryable 503 on an enabled public-snapshot
-cache miss. Its six executable route tests cover miss, read failure, published
-single-read response, authorized producer, spoofed producer and disabled legacy
-compatibility. This is partial PCR-022 behavior evidence, not complete index,
-performance or graph approval evidence.
+The successor boundary catalog is now `source-led-opportunity-pcr-boundaries-v3.20.1`.
+It maps PCR-004 to the TypeScript health owner used by the real health route; PCR-008
+to the production KOL extraction caller; PCR-010 to the compact publisher; PCR-021
+and PCR-030 to the two-module publisher serializer chain; PCR-022 to the neutral
+reader wrapper; and PCR-023 to a base-owned aggregate validator called by the
+protected worker.
+
+Executable diagnostics now invoke the real health route with a failed database,
+exercise UUID/missing-authority outcomes through `extractRevisionCandidates`, prove
+seed-only and authorised total-outage suppression at `publishCompactRadarProjection`,
+exercise disabled/drain zero-query identity through the homepage layering boundary,
+run the indexed projection performance oracle, and reject missing/reordered/failed/
+unreviewed protected aggregate inputs. Existing mutation, browser and PostgreSQL
+oracles remain required. These diagnostics do not constitute independent review,
+protected registration, PCR fulfillment evidence or gate PASS.

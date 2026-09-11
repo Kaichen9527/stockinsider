@@ -857,7 +857,7 @@ function activeGraphOracle() {
   // graph hash to the exact reviewed tree instead.
   assert.match(activeGraphSha256,/^[0-9a-f]{64}$/u,'active graph is a canonical SHA-256');
   assert.equal(pcrBoundaries.schema, 'source-led-opportunity-pcr-implementation-boundaries-v1');
-  assert.equal(pcrBoundaries.version, 'source-led-opportunity-pcr-boundaries-v3.11.4');
+  assert.equal(pcrBoundaries.version, 'source-led-opportunity-pcr-boundaries-v3.20.1');
   assert.equal(pcrBoundaries.boundaries.length, 31, 'one immutable implemented boundary per PCR');
   assert.deepEqual(pcrBoundaries.boundaries.map(({ id }) => id),
     Array.from({ length: 31 }, (_, index) => `PCR-${String(index + 1).padStart(3, '0')}`));

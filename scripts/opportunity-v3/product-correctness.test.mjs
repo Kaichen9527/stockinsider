@@ -10,8 +10,10 @@ import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { canonicalJson } from '../../web/src/lib/opportunity-v3/canonical.ts';
 import { compactRadarEtag, selectCompactRadarProjectionRows, validateCompactRadarProjectionRow } from '../../web/src/lib/opportunity-v3/compact-radar-validation.ts';
+import { layerHomepageOpportunityV3 } from '../../web/src/lib/opportunity-v3/deployment.ts';
 import { validateIngestionValuesV3 } from '../../web/src/lib/opportunity-v3/request-values.ts';
 import { runControlledProjectionPerformanceOracle } from './performance-harness.mjs';
+import { executeHealthRouteFailureBoundary } from './internal-health-route-harness.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const change = path.join(root, '.loop-engineering/state/changes/source-led-opportunity-engine-v3');
@@ -74,7 +76,7 @@ for (const fixture of fixtures) {
 
 const boundaryContract = JSON.parse(readFileSync(path.join(change, 'pcr-implementation-boundaries-v3.json'), 'utf8'));
 assert.equal(boundaryContract.schema, 'source-led-opportunity-pcr-implementation-boundaries-v1');
-assert.equal(boundaryContract.version, 'source-led-opportunity-pcr-boundaries-v3.11.4');
+assert.equal(boundaryContract.version, 'source-led-opportunity-pcr-boundaries-v3.20.1');
 const plannedBoundaries = Object.freeze(Object.fromEntries(
   boundaryContract.boundaries.map((boundary) => [boundary.id, boundary]),
 ));
@@ -169,10 +171,11 @@ const checks = {
     assert.ok(!readFileSync(path.join(root, 'scripts/runtime/auth-source-worker-cli.js'), 'utf8').includes('.agent/'));
     const bundle = runtime('tracked-runtime-bundle.js');
     assert.deepEqual([...bundle.TRACKED_RUNTIME_PATHS].sort(), bundle.TRACKED_RUNTIME_PATHS);
-    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 59);
+    assert.equal(bundle.TRACKED_RUNTIME_PATHS.length, 60);
     assert.equal(bundle.runtimeBundleSha256(root), sha256(bundle.runtimeBundleBytes(root)));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/auth-source-worker-cli.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/provider-acquisition-v31621.js'));
+    assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/published-research-decision.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/research-next-step-v317.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/research-dossier-v318.js'));
     assert.ok(bundle.TRACKED_RUNTIME_PATHS.includes('scripts/runtime/research-readiness-v319.js'));
@@ -588,6 +591,10 @@ const checks = {
       'a terminal failed producer run must rollback before publishing health');
   },
   'PCR-004': async () => {
+    const actualHealthRoute = await executeHealthRouteFailureBoundary();
+    assert.equal(actualHealthRoute.response.status, 503);
+    assert.equal(actualHealthRoute.body.sourceLedRuntime.status, 'fail');
+    assert.ok(actualHealthRoute.body.sourceLedRuntime.reasons.includes('projection_missing'));
     const runtimeDoctor = require(path.join(root, 'scripts/runtime_doctor.js'));
     assert.equal(runtimeDoctor.oneShotSchedulerHealthy({ loaded: true, pid: null, lastExitCode: '0' }), true,
       'a loaded one-shot scheduler with a successful terminal exit is healthy');
@@ -1237,7 +1244,17 @@ const checks = {
     const join = runtime('instrument-authority-join.js').resolveInstrumentAuthorityJoin; const roster = [{ stockId: '00000000-0000-4000-8000-000000002337', symbol: '2337', officialName: '旺宏', status: 'active' }];
     assert.equal(join({ symbol: '2337', roster }).stockId, roster[0].stockId); assert.equal(join({ symbol: '', chineseName: '未知', roster }).reason, 'missing_instrument_authority');
     assert.equal(join({ symbol: '2337', roster }).stockId, roster[0].stockId);
-    assert.match(readFileSync(path.join(root, 'scripts/runtime/instrument-authority-join.js'), 'utf8'), /candidate\.stockId/u);
+    const extractor=runtime('auth-source-worker-cli.js');
+    const authorityPages=[['roster',null,null,[['00000000-0000-4000-8000-000000002337','2337','TWSE','common_stock','active','旺宏電子','旺宏']]]];
+    const linked=extractor.extractRevisionCandidates({frozenRevision:{revisionId:'00000000-0000-4000-8000-000000000008',
+      sourceKey:'threads',rawFieldPayload:{text:'旺宏 2337 股票列入觀察。'},sourceCollectedAt:'2026-08-01T00:00:00Z'},authorityPages});
+    assert.equal(linked.candidates[0].link.stockId,roster[0].stockId);
+    const uuidOnly=extractor.extractRevisionCandidates({frozenRevision:{revisionId:'00000000-0000-4000-8000-000023370008',
+      sourceKey:'threads',rawFieldPayload:{text:'一般市場文章，沒有股票代碼。'},sourceCollectedAt:'2026-08-01T00:00:00Z'},authorityPages});
+    assert.equal(uuidOnly.candidates.length,0,'revision UUID digits never become a stock symbol');
+    const absent=extractor.extractRevisionCandidates({frozenRevision:{revisionId:'00000000-0000-4000-8000-000000000009',
+      sourceKey:'threads',rawFieldPayload:{text:'9999 股票列入觀察。'},sourceCollectedAt:'2026-08-01T00:00:00Z'},authorityPages});
+    assert.equal(absent.entityOutcomes[0].reason,'missing_instrument_authority');
   },
   'PCR-009': () => {
     const disposition = runtime('discovery-disposition.js').deriveDiscoveryDisposition({ linked: { disposition: 'linked', stockId: 's', symbol: '9999' }, seedSymbols: seeds(), priorLedger: [], evidenceHash: 'x' });
@@ -1343,6 +1360,20 @@ const checks = {
     const select = runtime('candidate-funnel.js').selectLiveDiscoveryCards;
     assert.deepEqual(select({ candidateLedger: [], totalOutage: true }), { cards: [], fallback: 'total_outage_zero_cards' });
     assert.equal(select({ candidateLedger: [{ symbol: '2337', disposition: 'rejected' }] }).cards.length, 0);
+    assert.equal(select({candidateLedger:[{symbol:'2330',disposition:'promoted',sourceKey:'seed',seedOnly:true}]}).cards.length,0);
+    const published=runtime('compact-radar-projection.js').publishCompactRadarProjection({
+      decisions:[{symbol:'2330',disposition:'promoted'}],sourceCandidates:[{symbol:'2337',disposition:'promoted'}],
+      discoveryDelta:{added:['2330','2337'],exited:[],continued:[],unchangedReasons:[]},window:'daily',
+      asOf:'2026-08-01T00:00:00Z',producerIdentity:{commitSha:'a'.repeat(40)},
+      legacyPayload:{opportunities:[{symbol:'2454'}],scenarioUpsideCandidates:[{symbol:'2317'}],earlyWatchlist:[],
+        recentFormal7d:[],fallbackOpportunities90d:[],hotTracking:[],notifications:[{symbol:'2303'}]},
+      sourceAcquisitionHealth:{acquisitionAuthority:'authoritative',terminalStatus:'total_outage',
+        totalOutageAuthorized:true,acquisitionEvidenceRoot:'b'.repeat(64)},
+    });
+    for(const key of ['opportunities','scenarioUpsideCandidates','sourceSignals','notifications'])
+      assert.deepEqual(published.payload[key],[],`total outage health-only ${key}`);
+    assert.deepEqual(published.payload.discoveryDelta.added,[]);
+    assert.equal(published.payload.sourceAcquisitionHealth.terminalStatus,'total_outage');
   },
   'PCR-011': () => {
     const mentions = Array.from({ length: 1000 }, (_, index) => ({ raw: String(1000 + index) }));
@@ -1460,14 +1491,22 @@ const checks = {
     const second = append({ priorRevision: first.revision, input: { facts: { x: 1 } }, changedBecause: [], now: '2026-01-02T00:00:00Z' });
     assert.equal(first.disposition, 'appended'); assert.equal(second.disposition, 'unchanged'); assert.equal(second.revision.analysisGeneratedAt, '2026-01-01T00:00:00Z');
   },
-  'PCR-021': () => {
-    const serialize = runtime('public-projection.js').serializeOpportunityPublicProjection;
-    assert.equal(serialize({ mode: 'disabled' }), null); assert.equal(serialize({ mode: 'drain' }), null);
+  'PCR-021': async () => {
+    const legacy={opportunities:[{symbol:'9999'}],scenarioUpsideCandidates:[],earlyWatchlist:[],recentFormal7d:[],
+      fallbackOpportunities90d:[],hotTracking:[]};
+    for(const mode of ['disabled','drain']){
+      let reads=0;const layered=await layerHomepageOpportunityV3({legacyRadar:legacy,shadowEnabled:false,
+        loadShadowEngine:async()=>{reads+=1;return {mode};}});
+      assert.equal(layered.radar,legacy,`${mode} preserves legacy object identity`);assert.equal(reads,0,`${mode} has zero V3 query`);
+    }
     const fundamental = { thesis: '9999 已有可追溯基本面證據。', latestChange: '本次重新檢查基本面品質。',
       risks: ['仍須持續追蹤財務風險。'], evidenceRefs: ['official-9999'], asOf: '2026-08-01T00:00:00Z' };
-    const shadow = serialize({ mode: 'shadow', legacy: { legacyField: 7 }, cards: [{ symbol: '9999', action: 'valuation_review',
-      fundamental, lastEvaluatedAt: '2026-08-01T00:00:00Z' }] });
-    assert.equal(shadow.legacyField, 7); assert.equal(shadow.cards[0].symbol, '9999');
+    const published=runtime('compact-radar-projection.js').publishCompactRadarProjection({decisions:[{symbol:'9999',
+      action:'valuation_review',fundamental,lastEvaluatedAt:'2026-08-01T00:00:00Z'}],sourceCandidates:[],
+      discoveryDelta:{added:[],exited:[],continued:[],unchangedReasons:[]},window:'daily',
+      asOf:'2026-08-01T00:00:00Z',producerIdentity:{commitSha:'a'.repeat(40)},legacyPayload:legacy});
+    assert.equal(published.payload.opportunities[0].researchDecision.symbol,'9999');
+    assert.equal(published.payload.opportunities[0].researchDecision.fundamental.thesis,fundamental.thesis);
   },
   'PCR-022': async () => {
     const payload = { sourceLedCorrectness: { schema: 'legacy-radar-v3.11.3', window: 'daily', asOf: '2026-08-01T00:00:00Z' }, opportunities: [] };
@@ -1571,7 +1610,7 @@ const checks = {
     assert.equal(calculate({ roicScore: 80, growthScore: 80 }).qualityActionEligible, false);
   },
   'PCR-030': () => {
-    const serialize = runtime('public-projection.js').serializeCorrectnessPublicUnion;
+    const serialize = runtime('published-research-decision.js').serializePublishedResearchDecision;
     const fundamental = { thesis: '2337 已有可追溯基本面證據。', latestChange: '本次重新檢查基本面品質。',
       risks: ['仍須持續追蹤財務風險。'], evidenceRefs: ['official-2337'], asOf: '2026-08-01T00:00:00Z' };
     const value = serialize({ symbol: '2337', action: 'wait_trigger', researchMaturity: 'fundamental_review', fundamental, technical: { technicalState: 'reclaim_required', trigger: { kind: 'reclaim', threshold: 100, volumeRatioMinimum: 1 }, plane: { maDeviation: -0.08, bias: { availability: 'available', bias20Pct: -8 } } },

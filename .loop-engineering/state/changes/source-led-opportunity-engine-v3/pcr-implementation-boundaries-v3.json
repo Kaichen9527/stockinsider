@@ -53,7 +53,7 @@
       "operation": "assessTrackedRuntimeHealth",
       "owner": {
         "export": "assessTrackedRuntimeHealth",
-        "path": "scripts/runtime/runtime-health.js"
+        "path": "web/src/lib/opportunity-v3/runtime-health.ts"
       }
     },
     {
@@ -100,8 +100,8 @@
     },
     {
       "caller": {
-        "function": "extractRevisionMentions",
-        "path": "scripts/runtime/source-claim-extraction.js"
+        "function": "extractRevisionCandidates",
+        "path": "scripts/runtime/auth-source-worker-cli.js"
       },
       "effect": "returns one typed instrument-authority join result and never derives a symbol from a UUID substring",
       "id": "PCR-008",
@@ -288,16 +288,16 @@
       "effect": "serializes only declared additive V3 fields and preserves disabled/drain legacy byte identity with zero V3 query",
       "id": "PCR-021",
       "implementationState": "implemented",
-      "operation": "serializeOpportunityPublicProjection",
+      "operation": "serializePublishedResearchDecision",
       "owner": {
-        "export": "serializeOpportunityPublicProjection",
-        "path": "scripts/runtime/public-projection.js"
+        "export": "serializePublishedResearchDecision",
+        "path": "scripts/runtime/published-research-decision.js"
       }
     },
     {
       "caller": {
-        "function": "GET",
-        "path": "web/src/app/api/radar/daily/route.ts"
+        "function": "loadPublishedRadarProjection",
+        "path": "web/src/lib/radar-projection-read.ts"
       },
       "effect": "serves a precomputed compact projection through the exact indexed read, cache and size boundaries without producer work",
       "id": "PCR-022",
@@ -310,16 +310,16 @@
     },
     {
       "caller": {
-        "function": "executeCodeGate",
-        "path": "protected://stockinsider-v3-gate-root/execute-code-gate.mjs"
+        "function": "main",
+        "path": "scripts/opportunity-v3/protected-external-gate-worker.mjs"
       },
       "effect": "validates canonical leaf and aggregate evidence against one externally checked clean subject, preserving Code, Shadow and Promotion gate separation",
       "id": "PCR-023",
       "implementationState": "implemented",
-      "operation": "validateOpportunityGateEvidence",
+      "operation": "validateProtectedCodeGateAggregateInputs",
       "owner": {
-        "export": "validateOpportunityGateEvidence",
-        "path": "scripts/opportunity-v3/gate-evidence.mjs"
+        "export": "validateProtectedCodeGateAggregateInputs",
+        "path": "scripts/opportunity-v3/protected-code-gate-aggregate.mjs"
       }
     },
     {
@@ -408,8 +408,8 @@
     },
     {
       "caller": {
-        "function": "loadOpportunityEngineV3",
-        "path": "web/src/lib/opportunity-v3/projection.ts"
+        "function": "serializePublishedResearchDecision",
+        "path": "scripts/runtime/published-research-decision.js"
       },
       "effect": "serializes the closed reported-PE, valuation-review and timing-risk unions for the web projection response without inventing a material change",
       "id": "PCR-030",
@@ -436,5 +436,5 @@
     }
   ],
   "schema": "source-led-opportunity-pcr-implementation-boundaries-v1",
-  "version": "source-led-opportunity-pcr-boundaries-v3.11.4"
+  "version": "source-led-opportunity-pcr-boundaries-v3.20.1"
 }

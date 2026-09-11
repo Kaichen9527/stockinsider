@@ -220,11 +220,13 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
   });
 }
 
-function selectLiveDiscoveryCards({ candidateLedger, totalOutage = false }) {
+function selectLiveDiscoveryCards({ candidateLedger, totalOutage = false, preserveRows = false }) {
   if (totalOutage) return { cards: [], fallback: 'total_outage_zero_cards' };
   invariant(candidateLedger.length <= 60, 'candidate projection bound');
+  const live = candidateLedger.filter((candidate) => candidate.disposition !== 'rejected'
+    && candidate.seedOnly !== true && candidate.sourceKey !== 'seed');
   return {
-    cards: candidateLedger.filter((candidate) => candidate.disposition !== 'rejected').map((candidate) => ({
+    cards: preserveRows ? live : live.map((candidate) => ({
       symbol: candidate.symbol,
       researchMaturity: 'source_signal',
       newPositionAction: 'valuation_review',

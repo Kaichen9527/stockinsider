@@ -3,12 +3,46 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
+import { validateProtectedCodeGateAggregateInputs } from './protected-code-gate-aggregate.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const workflow = readFileSync(path.join(root, '.github/workflows/source-led-opportunity-external-gate.yml'), 'utf8');
 const diagnosticWorkflow = readFileSync(path.join(root, '.github/workflows/source-led-opportunity-v3.yml'), 'utf8');
 const action = readFileSync(path.join(root, '.github/actions/prepare-source-led-external-subject/action.yml'), 'utf8');
 const worker = readFileSync(path.join(root, 'scripts/opportunity-v3/protected-external-gate-worker.mjs'), 'utf8');
+
+test('PCR-023 actual protected aggregate rejects missing, reordered, failed and unreviewed inputs', () => {
+  const requiredChecks = ['requirements', 'architecture', 'product-runtime-code-gate',
+    'model-runner-code-gate', 'exact-review'];
+  const canonical = requiredChecks.map((check, index) => ({ result: {
+    check, evidenceSha256: String(index).repeat(64), status: 'pass',
+  } }));
+  const validateEnvelope = (value, expectedCheck) => {
+    assert.equal(value.result.check, expectedCheck, 'closed aggregate order');
+    assert.equal(value.result.status, 'pass', 'closed aggregate status');
+    return value;
+  };
+  const validateReviewBinding = (value, check) => {
+    if (['requirements', 'architecture', 'exact-review'].includes(check)) {
+      assert.equal(value.reviewBound, true, `${check} graph review binding`);
+    }
+  };
+  const valid = canonical.map((value) => ({ ...value,
+    reviewBound: ['requirements', 'architecture', 'exact-review'].includes(value.result.check) }));
+  assert.deepEqual(validateProtectedCodeGateAggregateInputs({ values: valid, requiredChecks,
+    validateEnvelope, validateReviewBinding }).map(({ check }) => check), requiredChecks);
+  assert.throws(() => validateProtectedCodeGateAggregateInputs({ values: valid.slice(0, -1), requiredChecks,
+    validateEnvelope, validateReviewBinding }), /input count/u);
+  const reordered = structuredClone(valid); [reordered[0], reordered[1]] = [reordered[1], reordered[0]];
+  assert.throws(() => validateProtectedCodeGateAggregateInputs({ values: reordered, requiredChecks,
+    validateEnvelope, validateReviewBinding }), /closed aggregate order/u);
+  const failed = structuredClone(valid); failed[2].result.status = 'failed';
+  assert.throws(() => validateProtectedCodeGateAggregateInputs({ values: failed, requiredChecks,
+    validateEnvelope, validateReviewBinding }), /closed aggregate status/u);
+  const unreviewed = structuredClone(valid); unreviewed[4].reviewBound = false;
+  assert.throws(() => validateProtectedCodeGateAggregateInputs({ values: unreviewed, requiredChecks,
+    validateEnvelope, validateReviewBinding }), /graph review binding/u);
+});
 
 function jobBlock(jobId, nextJobId = null) {
   const start = workflow.indexOf(`\n  ${jobId}:\n`);
