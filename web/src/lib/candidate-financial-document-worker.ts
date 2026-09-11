@@ -70,6 +70,18 @@ function parserEvidence(parse: CandidateFinancialLocalParserResult, documentSha2
   };
 }
 
+export async function reconcileCandidateFinancialDocumentJobs(
+  client: Pick<ReturnType<typeof getOpportunityV3ServerClient>, 'rpc'>,
+  owner: string,
+  receiptId: string | null = null,
+) {
+  const reconciled = await client.rpc('reconcile_pending_financial_document_jobs_v9', {
+    p_caller_principal: owner, p_limit: 40, p_receipt_id: receiptId,
+  });
+  return reconciled.error ? [{ receiptId,
+    error: `candidate_financial_document_job_reconciliation_failed:${reconciled.error.message}` }] : [];
+}
+
 async function reconcilePendingDocumentValidations(client: ReturnType<typeof getOpportunityV3ServerClient>, owner: string) {
   const now = new Date().toISOString();
   const pending = await client.from('candidate_financial_document_receipts_v6')
@@ -96,6 +108,8 @@ async function reconcilePendingDocumentValidations(client: ReturnType<typeof get
       if (status !== 'validated') throw new Error(`candidate_financial_validation_${status}`);
     } catch (error) {
       errors.push({ receiptId, error: error instanceof Error ? error.message : 'candidate_financial_validation_finalize_failed' });
+    } finally {
+      errors.push(...await reconcileCandidateFinancialDocumentJobs(client, owner, receiptId));
     }
   }
   return errors;
@@ -106,6 +120,7 @@ export async function processCandidateFinancialDocumentReceipts(limit = 5) {
   if (!owner) throw new Error('candidate_financial_document_runner_principal_missing');
   const client = getOpportunityV3ServerClient();
   const reconciliationErrors = await reconcilePendingDocumentValidations(client, owner);
+  reconciliationErrors.push(...await reconcileCandidateFinancialDocumentJobs(client, owner));
   const now = new Date().toISOString();
   const claim = await client.rpc('claim_candidate_financial_document_receipts_v6', {
     p_limit: Math.max(1, Math.min(20, Math.floor(limit))), p_owner: owner,
@@ -226,6 +241,11 @@ export async function processCandidateFinancialDocumentReceipts(limit = 5) {
       results.push({ receiptId, status: 'partial', parser: localParse?.parser || null,
         locatorCount: localParse?.locators.length || 0, missingRequirements: [...missing, 'official_fact_validation_failed'],
         rejectionReasons: rejected, error: error instanceof Error ? error.message.slice(0, 240) : 'official_fact_validation_failed' });
+    } finally {
+      // Includes parser-only partial/PDF and validation_pending paths. Replayed
+      // documents must release every linked acquisition lease, not only the
+      // immutable original receipt.acquisition_job_id.
+      reconciliationErrors.push(...await reconcileCandidateFinancialDocumentJobs(client, owner, receiptId));
     }
   }
   return { claimed: claimed.length, reconciliationErrors, results };
