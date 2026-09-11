@@ -75,25 +75,32 @@ async function reconcilePendingDocumentValidations(client: ReturnType<typeof get
   const pending = await client.from('candidate_financial_document_receipts_v6')
     .select('receipt_id,stock_id').eq('financial_validation_status', 'pending')
     .order('accepted_at').limit(20);
-  if (pending.error) throw new Error(`candidate_financial_validation_pending_read_failed:${pending.error.message}`);
+  if (pending.error) return [{ receiptId: null, error: `candidate_financial_validation_pending_read_failed:${pending.error.message}` }];
   const rows = (pending.data || []) as Row[];
+  const errors: Array<{ receiptId: string | null; error: string }> = [];
   for (const stockId of [...new Set(rows.map((row) => String(row.stock_id || '')).filter(Boolean))]) {
-    await validatePendingOfficialFinancials([stockId]);
+    try { await validatePendingOfficialFinancials([stockId]); }
+    catch (error) { errors.push({ receiptId: null, error: error instanceof Error ? error.message : 'candidate_financial_validation_failed' }); }
   }
   for (const row of rows) {
-    const finalized = await client.rpc('finalize_candidate_financial_document_validation_v8', {
-      p_receipt_id: String(row.receipt_id || ''), p_caller_principal: owner,
-      p_completed_at: new Date().toISOString(),
-    });
-    if (finalized.error) throw new Error(`candidate_financial_validation_finalize_failed:${finalized.error.message}`);
+    const receiptId = String(row.receipt_id || '');
+    try {
+      const finalized = await client.rpc('finalize_candidate_financial_document_validation_v8', {
+        p_receipt_id: receiptId, p_caller_principal: owner, p_completed_at: new Date().toISOString(),
+      });
+      if (finalized.error) throw new Error(`candidate_financial_validation_finalize_failed:${finalized.error.message}`);
+    } catch (error) {
+      errors.push({ receiptId, error: error instanceof Error ? error.message : 'candidate_financial_validation_finalize_failed' });
+    }
   }
+  return errors;
 }
 
 export async function processCandidateFinancialDocumentReceipts(limit = 5) {
   const owner = fixedRunnerPrincipal();
   if (!owner) throw new Error('candidate_financial_document_runner_principal_missing');
   const client = getOpportunityV3ServerClient();
-  await reconcilePendingDocumentValidations(client, owner);
+  const reconciliationErrors = await reconcilePendingDocumentValidations(client, owner);
   const now = new Date().toISOString();
   const claim = await client.rpc('claim_candidate_financial_document_receipts_v6', {
     p_limit: Math.max(1, Math.min(20, Math.floor(limit))), p_owner: owner,
@@ -191,5 +198,5 @@ export async function processCandidateFinancialDocumentReceipts(limit = 5) {
         rejectionReasons: rejected, error: error instanceof Error ? error.message.slice(0, 240) : 'official_fact_validation_failed' });
     }
   }
-  return { claimed: claimed.length, results };
+  return { claimed: claimed.length, reconciliationErrors, results };
 }
