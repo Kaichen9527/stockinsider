@@ -17,7 +17,9 @@ test('history completion is atomic, private, idempotent and preserves conflictin
     const result=spawnSync(binary(name),args,{input,encoding:'utf8',env:{...process.env,LC_ALL:'C'}});
     assert.equal(result.status,0,result.stderr||result.stdout);return result.stdout.trim();
   };
-  const args=['-X','-v','ON_ERROR_STOP=1','-h',socket,'-p',String(port),'-U',user,'-d','postgres','-At'];
+  // Quiet mode suppresses asynchronous command tags (for example `SET`) so
+  // concurrent sessions expose only the tuple payload being asserted.
+  const args=['-X','-q','-v','ON_ERROR_STOP=1','-h',socket,'-p',String(port),'-U',user,'-d','postgres','-At'];
   const sql=(value)=>command('psql',args,value);
   let started=false;
   try {

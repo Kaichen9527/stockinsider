@@ -1,0 +1,11 @@
+[Unit]
+Description=Check StockInsider disk and memory reserve hourly
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+AccuracySec=5min
+Unit=stockinsider-capacity-watch.service
+
+[Install]
+WantedBy=timers.target

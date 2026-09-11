@@ -1,0 +1,37 @@
+[Unit]
+Description=StockInsider Next.js standalone application
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=stockinsider
+Group=stockinsider
+WorkingDirectory=/opt/stockinsider/current/app
+EnvironmentFile=/etc/stockinsider/stockinsider.env
+Environment=NODE_ENV=production
+Environment=HOSTNAME=127.0.0.1
+Environment=PORT=3100
+ExecStartPre=/usr/bin/node /opt/stockinsider/current/scripts/verify-standalone-release.mjs /opt/stockinsider/current
+ExecStart=/usr/bin/node /opt/stockinsider/current/app/server.js
+Restart=on-failure
+RestartSec=5
+TimeoutStartSec=90
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ProtectControlGroups=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectKernelLogs=true
+LockPersonality=true
+RestrictSUIDSGID=true
+RuntimeDirectory=stockinsider
+RuntimeDirectoryMode=0750
+StateDirectory=stockinsider
+StateDirectoryMode=0750
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target
