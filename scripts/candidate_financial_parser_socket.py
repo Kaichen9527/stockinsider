@@ -75,7 +75,7 @@ def serve(connection):
             command,
             input=payload, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=25, check=False,
             env={"LANG": "C.UTF-8", "LC_ALL": "C.UTF-8", "PYTHONNOUSERSITE": "1", "PYTHONHASHSEED": "0",
-                 "XDG_CONFIG_HOME": config_home,
+                 "XDG_CONFIG_HOME": config_home, "TMPDIR": config_home,
                  "NO_PROXY": "*", "no_proxy": "*", "HF_HUB_OFFLINE": "1", "TRANSFORMERS_OFFLINE": "1"},
         )
     if completed.returncode != 0 or not completed.stdout or len(completed.stdout) > MAX_OUTPUT:

@@ -20,8 +20,14 @@ import socket
 import sys
 import tempfile
 import xml.etree.ElementTree as ElementTree
+from collections import defaultdict
 from contextlib import contextmanager
 from pathlib import Path
+
+# The socket runtime stages this helper beside the pinned parser script.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from candidate_financial_fact_scope import (all_facts, canonical_bytes, digest,
+    fact_admission_manifest, fact_occurrence_key, qname_identity, register_conflicting_duplicates, validation_records)
 
 MAX_PAGES = 200
 MAX_TABLES_PER_PAGE = 20
@@ -161,6 +167,22 @@ def context_manifest(context):
     """
     if context is None or len(getattr(context, "qnameDims", {}) or {}) != 0:
         return None
+    if any(str(getattr(node, "tag", "")) in (
+            "{http://www.xbrl.org/2003/instance}segment", "{http://www.xbrl.org/2003/instance}scenario")
+           for node in context.iterdescendants()):
+        return None
+    # Arelle advances DATE-only ends by a day, but does not do so for dateTime.
+    # Reject timestamp periods rather than silently shifting them to yesterday
+    # and manufacturing a match for the requested official quarter-end.
+    period_tags = {"{http://www.xbrl.org/2003/instance}" + name for name in ("instant", "startDate", "endDate")}
+    for node in context.iterdescendants():
+        if str(getattr(node, "tag", "")) in period_tags:
+            value = str(node.text or "").strip()
+            try:
+                if len(value) != 10 or datetime.date.fromisoformat(value).isoformat() != value:
+                    return None
+            except ValueError:
+                return None
     entity = getattr(context, "entityIdentifier", None)
     if not entity or len(entity) != 2:
         return None
@@ -262,8 +284,10 @@ def parse_arelle(path, sha256, taxonomy_path=None, taxonomy_sha256=None,
                  expected_entity=None, expected_period_end=None):
     # Arelle is used as a local XBRL/iXBRL structural validator. It is offline:
     # unresolved remote taxonomies fail rather than being downloaded.
-    from arelle import Cntlr, FileSource, Version, XmlValidateConst
+    from arelle import Cntlr, FileSource, Version, XmlValidateConst, ValidateXbrlDimensions
+    from arelle.ModelDocument import Type
     from arelle.ModelFormulaObject import FormulaOptions
+    from arelle.ValidateXbrlCalcs import ValidateCalcsMode
     runtime_version = str(Version.version)
     if taxonomy_path is not None and (not taxonomy_sha256 or len(taxonomy_sha256) != 64):
         raise ValueError("official_taxonomy_identity_missing")
@@ -278,21 +302,23 @@ def parse_arelle(path, sha256, taxonomy_path=None, taxonomy_sha256=None,
         controller = Cntlr.Cntlr(logFileName="logToBuffer")
         controller.webCache.workOffline = True
         controller.modelManager.formulaOptions = FormulaOptions()
+        controller.modelManager.validateCalcs = ValidateCalcsMode.XBRL_v2_1
         model = controller.modelManager.load(FileSource.FileSource(str(entrypoint), controller))
         if model is None:
             controller.close()
             return arelle_result("partial", [], ["arelle_model_load_failed"], None, [])
         controller.modelManager.validate()
-        errors = list(getattr(model, "errors", []))
-        locators = []
-        validated_facts = []
-        for fact in list(getattr(model, "facts", [])):
+        register_conflicting_duplicates(model)
+        source_records = validation_records(controller)
+        candidates, source_keys = [], {}
+        for fact in all_facts(model):
             context = getattr(fact, "context", None)
             qname = getattr(fact, "qname", None)
             context_id = str(getattr(context, "id", ""))
             # A document-level note/tuple error does not waive fact validation.
             # Only facts Arelle individually typed as valid are emitted.
-            if getattr(fact, "xValid", XmlValidateConst.UNVALIDATED) < XmlValidateConst.VALID:
+            if (getattr(fact, "xValid", XmlValidateConst.UNVALIDATED) != XmlValidateConst.VALID
+                    or not getattr(fact, "isNumeric", False) or getattr(fact, "isNil", True)):
                 continue
             if normalized_concept(qname) not in VALUATION_CONCEPTS:
                 continue
@@ -309,16 +335,100 @@ def parse_arelle(path, sha256, taxonomy_path=None, taxonomy_sha256=None,
             # fact extractor. Dropping its prefix rejects every valid join and
             # also collapses different taxonomies with the same local name.
             concept = str(qname) if qname is not None else ""
-            if context_id and concept:
-                locators.append({"xbrl_context": context_id, "xbrl_concept": concept})
-                validated_facts.append({
+            if (context_id and concept and getattr(fact, "concept", None) is not None
+                    and fact.concept.qname == qname and qname.namespaceURI):
+                key = fact_occurrence_key(fact, sha256)
+                source_keys[fact.objectIndex] = key
+                candidates.append((fact, {
                     "xbrl_context": context_id, "xbrl_concept": concept,
                     "value": value, "unit": unit, **context_details,
-                })
-            if len(locators) >= MAX_LOCATORS:
+                    "factKey": key, "xValid": "VALID", "structuralStatus": "structurally_validated",
+                    "sourceFactId": f"source:{fact.objectIndex}", "extractedFactId": f"source:{fact.objectIndex}",
+                    "concept_namespace": str(qname.namespaceURI),
+                }))
+            if len(candidates) >= MAX_LOCATORS:
                 break
-        summary = validation_summary(errors, len(locators))
-        if not locators:
+        extracted = None
+        extracted_sha256 = None
+        extracted_records = []
+        extracted_keys, matched = {}, {}
+        inline = model.modelDocument.type in (Type.INLINEXBRL, Type.INLINEXBRLDOCUMENTSET)
+        if inline:
+            # Extract ALL facts, including invalid tuples, without repairing,
+            # deduplicating or skipping anything. Reload the serialized output
+            # into the same hash-bound offline DTS and validate it separately.
+            from arelle.plugin.inlineXbrlDocumentSet import createTargetInstance
+            target_path = entrypoint.parent / (entrypoint.stem + "-validated-extraction.xbrl")
+            before_extraction = len(controller.logHandler.logRecordBuffer)
+            exact_schema_refs = {node.attrib["{http://www.w3.org/1999/xlink}href"]
+                                 for node in ElementTree.fromstring(path.read_bytes()).iter()
+                                 if node.tag == "{http://www.xbrl.org/2003/linkbase}schemaRef"}
+            if len(exact_schema_refs) != 1:
+                raise ValueError("arelle_extracted_taxonomy_identity_ambiguous")
+            target = createTargetInstance(model, str(target_path), exact_schema_refs,
+                                          set(), skipInvalid=False)
+            target.saveInstance(overrideFilepath=str(target_path))
+            extraction_records = validation_records(controller, before_extraction)
+            target.close()
+            extracted_sha256 = hashlib.sha256(target_path.read_bytes()).hexdigest()
+            before_reload = len(controller.logHandler.logRecordBuffer)
+            extracted = controller.modelManager.load(FileSource.FileSource(str(target_path), controller))
+            if extracted is None:
+                raise ValueError("arelle_extracted_instance_load_failed")
+            controller.modelManager.validate()
+            register_conflicting_duplicates(extracted)
+            extracted_records = validation_records(controller, before_reload)
+            target_path.unlink(missing_ok=True)
+            # A create/save failure cannot be hidden by a later clean reload.
+            # Its builder object IDs have different identity, so fail closed.
+            if extraction_records:
+                raise ValueError("arelle_extraction_validation_errors")
+            def signature(fact):
+                return (qname_identity(getattr(fact, "qname", None)), str(getattr(fact, "contextID", "")),
+                        normalized_unit(getattr(fact, "unit", None)), normalized_numeric_value(fact),
+                        str(fact.get("decimals")), str(fact.get("precision")))
+            by_signature = defaultdict(list)
+            for fact in all_facts(extracted):
+                by_signature[signature(fact)].append(fact)
+            for source, row in candidates:
+                matches = by_signature.get(signature(source), [])
+                if not matches:
+                    raise ValueError("arelle_extracted_fact_identity_missing")
+                fact = matches.pop(0)
+                if (getattr(fact, "xValid", None) != XmlValidateConst.VALID
+                        or context_manifest(fact.context) != context_manifest(source.context)):
+                    # This candidate is not admitted, but remains in the scope
+                    # map so its validation references stay in the manifest.
+                    matched[source.objectIndex] = (fact, False)
+                else:
+                    matched[source.objectIndex] = (fact, True)
+                extracted_keys[fact.objectIndex] = row["factKey"]
+                row["extractedFactId"] = f"extracted:{fact.objectIndex}"
+        manifest = fact_admission_manifest(sha256, taxonomy_sha256, extracted_sha256,
+            model, source_records, source_keys, extracted, extracted_records, extracted_keys)
+        rejected = {row["factKey"] for row in manifest["rejections"]}
+        validated_facts = []
+        for source, row in candidates:
+            safe = (not manifest["documentFatal"] and row["factKey"] not in rejected
+                    and ValidateXbrlDimensions.isFactDimensionallyValid(model, source))
+            if inline:
+                other, typed = matched[source.objectIndex]
+                safe = safe and typed and ValidateXbrlDimensions.isFactDimensionallyValid(extracted, other)
+            if safe:
+                validated_facts.append(row)
+        errors = [error["code"] for error in manifest["errors"]]
+        # Absence of an operator-pinned taxonomy identity never authorizes
+        # partial financial ingestion (legacy clean diagnostic fixtures remain).
+        if errors and not taxonomy_sha256:
+            validated_facts = []
+        locators = [{"xbrl_context": row["xbrl_context"], "xbrl_concept": row["xbrl_concept"]}
+                    for _, row in candidates]
+        summary = validation_summary(errors, len(validated_facts))
+        if taxonomy_sha256:
+            # Only the human-readable code summary is capped. The v2 manifest
+            # contains every error record; overflow raises before this point.
+            summary["errorsTruncated"] = False
+        if not candidates:
             # Keep a bounded locator-only partial result for documents whose
             # local taxonomy is unavailable offline. This never becomes a fact.
             raw = path.read_bytes()
@@ -331,23 +441,26 @@ def parse_arelle(path, sha256, taxonomy_path=None, taxonomy_sha256=None,
                         locators.append({"xbrl_context": context, "xbrl_concept": local})
                     if len(locators) >= MAX_LOCATORS:
                         break
-            model.close()
-            controller.close()
             missing = ["arelle_found_no_valid_valuation_fact"]
             if errors:
                 missing.insert(0, "arelle_validation_errors")
-            return arelle_result("partial", locators, missing, summary, [])
-        # A value becoming typed during model loading is not proof that instance
-        # validation completed. Any document validation error blocks the entire
-        # manifest; callers may retain locators for diagnosis but no fact may
-        # cross this boundary until the instance is clean.
-        status = "partial" if errors else "complete"
-        missing = ["arelle_validation_errors"] if errors else []
-        if errors:
-            validated_facts = []
+        else:
+            missing = ["arelle_validation_errors"] if errors else []
+        status = "partial" if errors or not validated_facts else "complete"
+        if manifest["documentFatal"]:
+            missing.append("arelle_unscoped_or_fatal_validation_error")
+        output = arelle_result(status, locators, missing, summary, validated_facts)
+        if taxonomy_sha256:
+            output["schema"] = "candidate-financial-document-parser-v2"
+            output["factAcceptance"] = manifest
+            output["errorManifestSha256"] = digest(manifest)
+        if len(canonical_bytes(output)) > 2 * 1024 * 1024:
+            raise ValueError("arelle_fact_scope_manifest_limit")
+        if extracted is not None:
+            extracted.close()
         model.close()
         controller.close()
-        return arelle_result(status, locators, missing, summary, validated_facts)
+        return output
 
 
 def parse_docling(path, sha256):

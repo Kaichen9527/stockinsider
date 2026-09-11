@@ -52,7 +52,25 @@ class SocketEnvironmentTest(unittest.TestCase):
         self.assertEqual(response["parser"], "arelle")
         self.assertTrue(response["locators"])
         self.assertNotIn("INTERNAL_API_KEY", environments[0])
+        self.assertEqual(environments[0]["TMPDIR"], environments[0]["XDG_CONFIG_HOME"])
         self.assertFalse(Path(environments[0]["XDG_CONFIG_HOME"]).exists())
+
+    def test_timed_out_child_cannot_leave_document_or_taxonomy_scratch_behind(self):
+        leftovers = []
+        def timeout(*_args, **kwargs):
+            scratch = Path(kwargs["env"]["TMPDIR"]) / "child-taxonomy-copy"
+            scratch.mkdir()
+            (scratch / "document.xhtml").write_bytes(b"temporary diagnostic")
+            leftovers.append(scratch)
+            raise subprocess.TimeoutExpired("isolated-parser", 25)
+        payload = b"%PDF-1.4"
+        with _pair() as (client, server):
+            client.sendall(json.dumps({"byteLength": len(payload), "format": "pdf",
+                "sha256": hashlib.sha256(payload).hexdigest()}).encode() + b"\n" + payload)
+            with patch.object(worker.subprocess, "run", timeout), self.assertRaises(subprocess.TimeoutExpired):
+                worker.serve(server)
+        self.assertEqual(len(leftovers), 1)
+        self.assertFalse(leftovers[0].exists())
 
     def test_xbrl_fails_closed_without_installed_taxonomy_identity(self):
         payload = (ROOT / "fixtures/candidate-financial-document-parser/validated-instance.xbrl").read_bytes()
