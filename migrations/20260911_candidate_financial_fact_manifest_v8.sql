@@ -33,7 +33,7 @@ ALTER TABLE public.candidate_financial_document_receipts_v6
   FOREIGN KEY(parser_evidence_id) REFERENCES public.candidate_financial_parser_evidence_v8(evidence_id) ON DELETE RESTRICT;
 ALTER TABLE public.candidate_financial_parser_evidence_v8 ENABLE ROW LEVEL SECURITY;
 REVOKE ALL ON public.candidate_financial_parser_evidence_v8 FROM PUBLIC,anon,authenticated,service_role;
-GRANT SELECT,INSERT ON public.candidate_financial_parser_evidence_v8 TO service_role;
+GRANT SELECT ON public.candidate_financial_parser_evidence_v8 TO service_role;
 
 CREATE TABLE IF NOT EXISTS public.candidate_financial_document_fact_links_v8 (
   receipt_id uuid NOT NULL REFERENCES public.candidate_financial_document_receipts_v6(receipt_id) ON DELETE RESTRICT,
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS public.candidate_financial_document_fact_links_v8 (
 );
 ALTER TABLE public.candidate_financial_document_fact_links_v8 ENABLE ROW LEVEL SECURITY;
 REVOKE ALL ON public.candidate_financial_document_fact_links_v8 FROM PUBLIC,anon,authenticated,service_role;
-GRANT SELECT,INSERT ON public.candidate_financial_document_fact_links_v8 TO service_role;
+GRANT SELECT ON public.candidate_financial_document_fact_links_v8 TO service_role;
 
 CREATE OR REPLACE FUNCTION public.complete_candidate_financial_document_receipt_parser_v8(
   p_receipt_id uuid,p_owner text,p_caller_principal uuid,p_facts jsonb,p_parser_locators jsonb,
