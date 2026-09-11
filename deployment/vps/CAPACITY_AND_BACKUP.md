@@ -114,3 +114,37 @@ tar-provided or unapproved links remain rejected. It emits a second private rece
 requires both receipts, their exact SHA-256 digests and matching host/release
 identity; even a successful preflight only reports eligibility and never removes
 the VPS release.
+
+## Exact SOHO rollback-image archive evidence
+
+`soho-image-retention-policy.json` freezes every current, retained rollback and
+obsolete image ref to its full image/config digest. The groups are disjoint. The
+exporter accepts only the fixed 11-ref obsolete set and the fixed production host;
+it invokes read-only `docker image inspect` before and after a streamed
+`docker image save`. The save stream is encrypted directly into the project-root
+backup and never lands as plaintext on the Mac or VPS.
+
+```bash
+npm run backup:soho-images:export -- \
+  "/Users/kaerchen/Desktop/Desktop - KC9527/20_stock/StockInsider/backup" \
+  "/absolute/private/key-directory"
+
+npm run backup:soho-images:verify -- \
+  "/Users/kaerchen/Desktop/Desktop - KC9527/20_stock/StockInsider/backup/<receipt>.manifest.json" \
+  "/absolute/private/key-directory"
+```
+
+Verification authenticates the complete archive first, then decrypts it directly
+into a non-production local Docker Desktop engine. It verifies every restored tag,
+config digest, platform and root-filesystem layer chain. It writes no plaintext tar
+and removes only the exact refs proven absent from that local engine before the
+test. If a local Docker engine is unavailable, already contains any candidate ref
+or image ID, or fails the isolated load, the backup is not cleanup evidence.
+
+Production deletion remains a separate, explicit operation. Immediately before
+it, recheck all running and stopped containers, compose/systemd/Nginx/cron paths,
+and active build processes; also re-verify all protected refs against the policy.
+Only the 11 exact obsolete tags may be passed to supported `docker image rm`.
+Never use `docker system prune`, `docker image prune`, force removal, a repository
+wildcard or an image ID. Measure disk and the full 27-container health set before
+and after.
