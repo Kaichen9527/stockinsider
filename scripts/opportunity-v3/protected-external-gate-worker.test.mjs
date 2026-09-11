@@ -1,14 +1,79 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
+import { treeIdentity } from './protected-external-gate-worker.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const workflow = readFileSync(path.join(root, '.github/workflows/source-led-opportunity-external-gate.yml'), 'utf8');
 const diagnosticWorkflow = readFileSync(path.join(root, '.github/workflows/source-led-opportunity-v3.yml'), 'utf8');
 const action = readFileSync(path.join(root, '.github/actions/prepare-source-led-external-subject/action.yml'), 'utf8');
 const worker = readFileSync(path.join(root, 'scripts/opportunity-v3/protected-external-gate-worker.mjs'), 'utf8');
+
+const sha256 = (value) => createHash('sha256').update(value).digest('hex');
+
+function canonicalJson(value) {
+  if (value === null) return 'null';
+  if (typeof value === 'boolean') return value ? 'true' : 'false';
+  if (typeof value === 'number') return JSON.stringify(value);
+  if (typeof value === 'string') return JSON.stringify(value);
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
+  return `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${canonicalJson(value[key])}`).join(',')}}`;
+}
+
+function git(cwd, args) {
+  return execFileSync('/usr/bin/git', args, { cwd, encoding: 'utf8' }).trim();
+}
+
+function writeFixture(repository, schema) {
+  const change = path.join(repository, '.loop-engineering/state/changes/source-led-opportunity-engine-v3');
+  mkdirSync(change, { recursive: true });
+  const catalog = schema === 'opportunity-active-artifact-catalog-v2'
+    ? {
+      activeFiles: ['active.md'],
+      historicalAuditFiles: ['audit/historical.md'],
+      incorporatedFiles: ['openspec/incorporated.md'],
+      schema,
+    }
+    : { activeFiles: ['active.md'], schema };
+  writeFileSync(path.join(change, 'active-artifact-catalog-v3.json'), `${JSON.stringify(catalog)}\n`);
+  writeFileSync(path.join(change, 'acceptance-tests.json'), '{"scriptValueRowsSha256":"fixture","version":"fixture"}\n');
+  writeFileSync(path.join(change, 'active.md'), 'active\n');
+  if (schema === 'opportunity-active-artifact-catalog-v2') {
+    mkdirSync(path.join(repository, 'openspec'), { recursive: true });
+    mkdirSync(path.join(repository, 'audit'), { recursive: true });
+    writeFileSync(path.join(repository, 'openspec/incorporated.md'), 'incorporated\n');
+    writeFileSync(path.join(repository, 'audit/historical.md'), 'historical\n');
+  }
+  git(repository, ['add', '.']);
+  git(repository, ['-c', 'user.name=StockInsider Test', '-c', 'user.email=test@example.invalid', 'commit', '-m', 'fixture']);
+  return { catalog, tree: git(repository, ['rev-parse', 'HEAD^{tree}']) };
+}
+
+function expectedFixtureGraph(repository, tree, catalog) {
+  const change = '.loop-engineering/state/changes/source-led-opportunity-engine-v3';
+  const blob = (repositoryPath) => execFileSync('/usr/bin/git', ['cat-file', 'blob', `${tree}:${repositoryPath}`], { cwd: repository });
+  const row = (repositoryPath, identityPath = repositoryPath) => {
+    const bytes = blob(repositoryPath);
+    return [identityPath, git(repository, ['rev-parse', `${tree}:${repositoryPath}`]), bytes.length, sha256(bytes)];
+  };
+  const catalogBytes = blob(`${change}/active-artifact-catalog-v3.json`);
+  const activeRows = catalog.activeFiles.map((file) => row(`${change}/${file}`, file));
+  const graphPreimage = catalog.schema === 'opportunity-active-artifact-catalog-v1'
+    ? ['opportunity-active-graph-v1', sha256(catalogBytes), activeRows]
+    : [
+      'opportunity-active-graph-v2',
+      sha256(catalogBytes),
+      activeRows,
+      catalog.incorporatedFiles.map((file) => row(file)),
+      catalog.historicalAuditFiles.map((file) => row(file)),
+    ];
+  return sha256(canonicalJson(graphPreimage));
+}
 
 function jobBlock(jobId, nextJobId = null) {
   const start = workflow.indexOf(`\n  ${jobId}:\n`);
@@ -176,15 +241,35 @@ test('the protected root selects closed graph-bound Requirements/Architecture ev
   assert.match(worker, /active graph evidence source/u);
 });
 
-test('the protected root dispatches the closed v1 and v2 graph algorithms and rejects unknown catalogs', () => {
-  assert.match(worker, /opportunity-active-artifact-catalog-v1/u);
-  assert.match(worker, /opportunity-active-artifact-catalog-v2/u);
-  assert.match(worker, /unknown active artifact catalog schema/u);
-  assert.match(worker, /catalog[.]schema === 'opportunity-active-artifact-catalog-v1'/u);
-  assert.match(worker, /'opportunity-active-graph-v1', sha256\(catalogBytes\), rows/u);
-  assert.match(worker, /'opportunity-active-graph-v2'/u);
-  assert.match(worker, /external\(catalog[.]incorporatedFiles, 'incorporated artifact'\)/u);
-  assert.match(worker, /external\(catalog[.]historicalAuditFiles, 'historical audit artifact'\)/u);
+test('the protected root executes the closed v1 and v2 graph algorithms and rejects unknown catalogs', () => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'stockinsider-protected-graph-'));
+  try {
+    for (const schema of [
+      'opportunity-active-artifact-catalog-v1',
+      'opportunity-active-artifact-catalog-v2',
+    ]) {
+      const repository = path.join(directory, schema);
+      mkdirSync(repository);
+      git(repository, ['init']);
+      const { catalog, tree } = writeFixture(repository, schema);
+      assert.equal(treeIdentity(repository, tree).activeGraphSha256, expectedFixtureGraph(repository, tree, catalog));
+    }
+
+    const repository = path.join(directory, 'unknown');
+    mkdirSync(repository);
+    git(repository, ['init']);
+    const { tree } = writeFixture(repository, 'opportunity-active-artifact-catalog-v999');
+    assert.throws(() => treeIdentity(repository, tree), /unknown active artifact catalog schema/u);
+  } finally {
+    rmSync(directory, { force: true, recursive: true });
+  }
+
+  const protectedTree = git(root, ['rev-parse', 'HEAD^{tree}']);
+  assert.equal(
+    treeIdentity(root, protectedTree).activeGraphSha256,
+    'c74be1cd14439580505e05f2ec5904ea7dc9732ee7a4164c9ec1573691ebe352',
+    'catalog-v1 protected pin remains byte-identical',
+  );
 });
 
 test('each candidate command is isolated in a process group that is cleared on return', () => {

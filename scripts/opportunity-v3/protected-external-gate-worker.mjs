@@ -382,7 +382,7 @@ function validateAttestation(attestation, subjectRoot) {
   cleanTree(subjectRoot, attestation.subjectCommitSha, attestation.subjectTreeSha);
 }
 
-function treeIdentity(subjectRoot, treeSha) {
+export function treeIdentity(subjectRoot, treeSha) {
   const catalogPath = `${changeRelative}/active-artifact-catalog-v3.json`;
   const catalogBytes = treeBlob(subjectRoot, treeSha, catalogPath, 'active catalog');
   const catalog = JSON.parse(catalogBytes);
@@ -1247,9 +1247,11 @@ function main() {
   process.stdout.write(`${canonicalJson({ check: result.check, evidenceSha256: result.evidenceSha256, status: 'pass', subjectCommitSha: attestation.subjectCommitSha })}\n`);
 }
 
-try {
-  main();
-} catch (error) {
-  process.stderr.write(`protected external gate worker failed: ${error instanceof Error ? error.message : String(error)}\n`);
-  process.exitCode = 1;
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  try {
+    main();
+  } catch (error) {
+    process.stderr.write(`protected external gate worker failed: ${error instanceof Error ? error.message : String(error)}\n`);
+    process.exitCode = 1;
+  }
 }
