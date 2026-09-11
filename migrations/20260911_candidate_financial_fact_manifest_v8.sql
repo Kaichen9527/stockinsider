@@ -193,7 +193,7 @@ CREATE OR REPLACE FUNCTION public.finalize_candidate_financial_document_validati
 ) RETURNS TABLE(validation_status text,validated_fact_count integer,rejected_fact_count integer,pending_fact_count integer)
 LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $function$
 DECLARE v_receipt public.candidate_financial_document_receipts_v6%ROWTYPE;
-  v_total integer; v_validated integer; v_rejected integer; v_pending integer; v_status text;
+  v_total integer; v_validated integer; v_rejected integer; v_pending integer; v_status text; v_receipt_status text;
 BEGIN
   IF NOT public.internal_principal_role_is_exact_v3_internal(p_caller_principal,'opportunity_runner',clock_timestamp())
   THEN RAISE EXCEPTION 'principal_role_unavailable'; END IF;
@@ -231,6 +231,16 @@ BEGIN
   WHERE link.receipt_id=p_receipt_id;
   v_pending:=v_total-v_validated-v_rejected;
   IF v_total=0 THEN RAISE EXCEPTION 'candidate_financial_validation_fact_set_empty'; END IF;
+  -- Terminal validation is immutable. A repeated scheduler call is an
+  -- idempotent observation, not a new attempt and cannot resurrect a receipt.
+  IF v_receipt.financial_validation_status IN ('validated','rejected') THEN
+    validation_status:=v_receipt.financial_validation_status;
+    validated_fact_count:=v_validated;
+    rejected_fact_count:=CASE WHEN v_receipt.financial_validation_status='rejected'
+      THEN GREATEST(v_rejected,v_total-v_validated) ELSE v_rejected END;
+    pending_fact_count:=CASE WHEN v_receipt.financial_validation_status='validated' THEN v_pending ELSE 0 END;
+    RETURN NEXT; RETURN;
+  END IF;
   IF v_pending>0 AND v_receipt.financial_validation_attempts>=19 THEN
     UPDATE public.candidate_financial_document_receipts_v6 SET
       financial_validation_status='rejected',receipt_status='partial',
@@ -259,22 +269,25 @@ BEGIN
     rejected_fact_count:=v_rejected; pending_fact_count:=v_pending; RETURN NEXT; RETURN;
   END IF;
   v_status:=CASE WHEN v_rejected=0 THEN 'validated' ELSE 'rejected' END;
+  v_receipt_status:=CASE WHEN v_status='validated'
+    AND jsonb_array_length(v_receipt.missing_requirements)=0
+    AND jsonb_array_length(v_receipt.rejection_reasons)=0 THEN 'accepted' ELSE 'partial' END;
   UPDATE public.candidate_financial_document_receipts_v6 SET
     financial_validation_status=v_status,
     financial_validation_next_attempt_at=NULL,
     financial_validation_terminal_reason=CASE WHEN v_status='validated' THEN NULL ELSE 'official_fact_validation_rejected' END,
-    receipt_status=CASE WHEN v_status='validated'
-      AND jsonb_array_length(missing_requirements)=0 AND jsonb_array_length(rejection_reasons)=0
-      THEN 'accepted' ELSE 'partial' END,
+    receipt_status=v_receipt_status,
     missing_requirements=CASE WHEN v_status='rejected' AND NOT (missing_requirements ? 'official_fact_validation_rejected')
       THEN missing_requirements||jsonb_build_array('official_fact_validation_rejected') ELSE missing_requirements END
   WHERE receipt_id=p_receipt_id;
   IF v_receipt.acquisition_job_id IS NOT NULL THEN
     UPDATE public.candidate_financial_acquisition_jobs_v4 SET status='terminal',
-      terminal_reason=CASE WHEN v_status='validated'
+      terminal_reason=CASE WHEN v_receipt_status='accepted'
         THEN 'complete'::public.financial_acquisition_terminal_reason_v4
         ELSE 'schema_unrecognized'::public.financial_acquisition_terminal_reason_v4 END,
-      terminal_detail=CASE WHEN v_status='validated' THEN NULL ELSE 'official_fact_validation_rejected' END,
+      terminal_detail=CASE WHEN v_receipt_status='accepted' THEN NULL
+        WHEN v_status='validated' THEN 'document_requirements_incomplete'
+        ELSE 'official_fact_validation_rejected' END,
       next_attempt_at=NULL,updated_at=p_completed_at
     WHERE job_id=v_receipt.acquisition_job_id AND status IN ('queued','running');
   END IF;

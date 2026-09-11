@@ -133,6 +133,40 @@ test('v8 parser evidence and exact fact validation survive a real PostgreSQL bou
     assert.match(sql(`SET ROLE service_role; SELECT * FROM public.finalize_candidate_financial_document_validation_v8('${receipt}','${principal}',clock_timestamp())`).split('\n').at(-1), /^validated\|1\|0\|0$/u);
     assert.equal(sql(`SELECT receipt_status||'|'||financial_validation_status FROM public.candidate_financial_document_receipts_v6 WHERE receipt_id='${receipt}'`), 'accepted|validated');
     assert.equal(sql(`SELECT status||'|'||terminal_reason FROM public.candidate_financial_acquisition_jobs_v4 WHERE job_id='${job}'`), 'terminal|complete');
+    const attempts = sql(`SELECT financial_validation_attempts FROM public.candidate_financial_document_receipts_v6 WHERE receipt_id='${receipt}'`);
+    assert.match(sql(`SET ROLE service_role; SELECT * FROM public.finalize_candidate_financial_document_validation_v8('${receipt}','${principal}',clock_timestamp())`).split('\n').at(-1), /^validated\|1\|0\|0$/u);
+    assert.equal(sql(`SELECT financial_validation_attempts FROM public.candidate_financial_document_receipts_v6 WHERE receipt_id='${receipt}'`), attempts);
+
+    const partialJob = '88888888-8888-4888-8888-888888888888';
+    const partialDoc = '99999999-9999-4999-8999-999999999999';
+    const partialReceipt = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
+    const partialHash = 'd'.repeat(64);
+    sql(`INSERT INTO public.candidate_financial_acquisition_jobs_v4(job_id,stock_id,status) VALUES('${partialJob}','${stock}','running');
+      INSERT INTO public.candidate_issuer_ir_document_queue_v4 VALUES('${partialDoc}');
+      INSERT INTO public.candidate_financial_document_receipts_v6(receipt_id,stock_id,acquisition_job_id,issuer_document_id,
+        source_url,exchange,period_end,document_sha256,receipt_status,parser_status,parser_owner,parser_lease_expires_at)
+      VALUES('${partialReceipt}','${stock}','${partialJob}','${partialDoc}','https://mops.twse.com.tw/partial','TWSE','2026-06-30',
+        '${partialHash}','accepted','running','runner',clock_timestamp()+interval '5 minutes');`);
+    const partialEvidence = { ...evidence,documentSha256:partialHash };
+    const partialFact = structuredClone(fact);
+    partialFact.input.source_ref = `issuer-document:${partialHash}:one`;
+    assert.match(sql(`SET ROLE service_role; SELECT * FROM public.complete_candidate_financial_document_receipt_parser_v8(
+      '${partialReceipt}','runner','${principal}','${JSON.stringify([partialFact])}',
+      '${JSON.stringify([{xbrl_context:'D',xbrl_concept:'tifrs-full:Revenue'}])}',
+      '${JSON.stringify(partialEvidence)}','["operating_bridge_incomplete"]','[]',clock_timestamp())`).split('\n').at(-1),
+    /^validation_pending\|1\|0$/u);
+    const partialValidation = { version:'official-financial-v1',schemaValid:true,unitValid:true,
+      pointInTimeValid:true,consistencyValid:true,reasons:[],checks:['source_identity'] };
+    assert.equal(sql(`SET ROLE service_role; SELECT public.record_official_financial_validation(
+      (SELECT fact_id FROM public.candidate_financial_document_fact_links_v8 WHERE receipt_id='${partialReceipt}'),
+      (SELECT fact_recorded_at FROM public.candidate_financial_document_fact_links_v8 WHERE receipt_id='${partialReceipt}'),
+      '${partialHash}','${'e'.repeat(64)}','${JSON.stringify(partialValidation)}')`).split('\n').at(-1), 't');
+    assert.match(sql(`SET ROLE service_role; SELECT * FROM public.finalize_candidate_financial_document_validation_v8(
+      '${partialReceipt}','${principal}',clock_timestamp())`).split('\n').at(-1), /^validated\|1\|0\|0$/u);
+    assert.equal(sql(`SELECT receipt_status||'|'||financial_validation_status FROM public.candidate_financial_document_receipts_v6
+      WHERE receipt_id='${partialReceipt}'`), 'partial|validated');
+    assert.equal(sql(`SELECT status||'|'||terminal_reason||'|'||terminal_detail FROM public.candidate_financial_acquisition_jobs_v4
+      WHERE job_id='${partialJob}'`), 'terminal|schema_unrecognized|document_requirements_incomplete');
 
     const pdfReceipt = '66666666-6666-4666-8666-666666666666';
     const pdfDoc = '77777777-7777-4777-8777-777777777777';

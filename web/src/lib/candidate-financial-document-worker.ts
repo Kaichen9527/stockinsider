@@ -208,9 +208,14 @@ export async function processCandidateFinancialDocumentReceipts(limit = 5) {
             validation, error: `official_fact_validation_${finalValidationStatus}` });
           continue;
         }
+        const receiptState = await client.from('candidate_financial_document_receipts_v6')
+          .select('receipt_status').eq('receipt_id', receiptId).maybeSingle();
+        if (receiptState.error || !receiptState.data) {
+          throw new Error(`candidate_financial_validation_receipt_read_failed:${receiptState.error?.message || 'missing'}`);
+        }
+        row.receipt_status = receiptState.data.receipt_status;
       }
-      const finalStatus = facts.length > 0 && missing.length === 0 && rejected.length === 0
-        ? 'accepted' : String(row.receipt_status || 'unknown');
+      const finalStatus = String(row.receipt_status || 'unknown');
       results.push({ receiptId, status: finalStatus, parser: localParse?.parser || null,
         locatorCount: localParse?.locators.length || 0, missingRequirements: missing, rejectionReasons: rejected,
         validation, error: null });
