@@ -76,6 +76,7 @@ test('v8 parser evidence and exact fact validation survive a real PostgreSQL bou
         id uuid PRIMARY KEY DEFAULT gen_random_uuid(),fact_id uuid,validator_version text,input_hash text,
         source_sha256 text,validation jsonb,validated_at timestamptz DEFAULT clock_timestamp(),
         receipt_sequence bigint GENERATED ALWAYS AS IDENTITY,prior_validation jsonb,effective_validation jsonb,
+        validator_principal uuid,
         UNIQUE(fact_id,validator_version,input_hash));
       CREATE FUNCTION public.internal_principal_role_is_exact_v3_internal(uuid,text,timestamptz) RETURNS boolean
         LANGUAGE sql AS 'SELECT $1=''55555555-5555-4555-8555-555555555555''::uuid AND $2=''opportunity_runner''';
@@ -135,6 +136,15 @@ test('v8 parser evidence and exact fact validation survive a real PostgreSQL bou
       (SELECT fact_id FROM public.opportunity_financial_facts_v3 LIMIT 1),
       (SELECT recorded_at FROM public.opportunity_financial_facts_v3 LIMIT 1),'${hash}','${'c'.repeat(64)}',
       '${JSON.stringify(validation)}'::jsonb)`).split('\n').at(-1), 't');
+    assert.match(sql(pendingFinalize).split('\n').at(-1), /^pending\|0\|0\|1$/u,
+      'the predecessor five-argument receipt is not principal-bound authority');
+    sql(`INSERT INTO public.official_financial_validation_receipts(
+        fact_id,validator_version,input_hash,source_sha256,validation,prior_validation,effective_validation,validator_principal
+      ) SELECT fact_id,'official-financial-v2','${'d'.repeat(64)}','${hash}',
+        '{"version":"official-financial-v2"}',
+        '{"validation_status":"pending"}',
+        '{"validation_status":"validated","schema_valid":true,"unit_valid":true,"point_in_time_valid":true,"consistency_valid":true}',
+        '${principal}' FROM public.opportunity_financial_facts_v3 LIMIT 1`);
     assert.match(sql(`SET ROLE service_role; SELECT * FROM public.finalize_candidate_financial_document_validation_v8('${receipt}','${principal}',clock_timestamp())`).split('\n').at(-1), /^validated\|1\|0\|0$/u);
     assert.equal(sql(`SELECT receipt_status||'|'||financial_validation_status FROM public.candidate_financial_document_receipts_v6 WHERE receipt_id='${receipt}'`), 'accepted|validated');
     assert.equal(sql(`SELECT status||'|'||terminal_reason FROM public.candidate_financial_acquisition_jobs_v4 WHERE job_id='${job}'`), 'terminal|complete');
@@ -167,6 +177,15 @@ test('v8 parser evidence and exact fact validation survive a real PostgreSQL bou
       (SELECT fact_id FROM public.candidate_financial_document_fact_links_v8 WHERE receipt_id='${partialReceipt}'),
       (SELECT fact_recorded_at FROM public.candidate_financial_document_fact_links_v8 WHERE receipt_id='${partialReceipt}'),
       '${partialHash}','${'e'.repeat(64)}','${JSON.stringify(partialValidation)}')`).split('\n').at(-1), 't');
+    assert.match(sql(`SET ROLE service_role; SELECT * FROM public.finalize_candidate_financial_document_validation_v8(
+      '${partialReceipt}','${principal}',clock_timestamp())`).split('\n').at(-1), /^pending\|0\|0\|1$/u);
+    sql(`INSERT INTO public.official_financial_validation_receipts(
+        fact_id,validator_version,input_hash,source_sha256,validation,prior_validation,effective_validation,validator_principal
+      ) SELECT fact_id,'official-financial-v2','${'f'.repeat(64)}','${partialHash}',
+        '{"version":"official-financial-v2"}',
+        '{"validation_status":"pending"}',
+        '{"validation_status":"validated","schema_valid":true,"unit_valid":true,"point_in_time_valid":true,"consistency_valid":true}',
+        '${principal}' FROM public.candidate_financial_document_fact_links_v8 WHERE receipt_id='${partialReceipt}'`);
     assert.match(sql(`SET ROLE service_role; SELECT * FROM public.finalize_candidate_financial_document_validation_v8(
       '${partialReceipt}','${principal}',clock_timestamp())`).split('\n').at(-1), /^validated\|1\|0\|0$/u);
     assert.equal(sql(`SELECT receipt_status||'|'||financial_validation_status FROM public.candidate_financial_document_receipts_v6

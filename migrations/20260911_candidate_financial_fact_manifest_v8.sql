@@ -203,31 +203,29 @@ BEGIN
     WHERE receipt_id=p_receipt_id FOR UPDATE;
   IF NOT FOUND OR v_receipt.parser_status<>'complete'
   THEN RAISE EXCEPTION 'candidate_financial_validation_receipt_unavailable'; END IF;
-  SELECT count(*),count(*) FILTER(WHERE fact.validation_status='validated'
-      AND fact.schema_valid IS TRUE AND fact.unit_valid IS TRUE
-      AND fact.point_in_time_valid IS TRUE AND fact.consistency_valid IS TRUE
-      AND EXISTS (
-        SELECT 1 FROM public.official_financial_validation_receipts validation_receipt
-        WHERE validation_receipt.fact_id=fact.fact_id
-          AND validation_receipt.validated_at<=p_completed_at
-          AND validation_receipt.source_sha256=(
-            SELECT provenance.source_sha256
-            FROM public.candidate_financial_fact_provenance_v4 provenance
-            WHERE provenance.fact_id=fact.fact_id
-              AND provenance.source_sha256=v_receipt.document_sha256
-            ORDER BY provenance.extracted_at DESC LIMIT 1
-          )
-          AND validation_receipt.effective_validation->>'validation_status'='validated'
-          AND (validation_receipt.effective_validation->>'schema_valid')::boolean IS TRUE
-          AND (validation_receipt.effective_validation->>'unit_valid')::boolean IS TRUE
-          AND (validation_receipt.effective_validation->>'point_in_time_valid')::boolean IS TRUE
-          AND (validation_receipt.effective_validation->>'consistency_valid')::boolean IS TRUE
-      )),
-    count(*) FILTER(WHERE fact.validation_status IN ('rejected','conflict','stale'))
+  -- Mutable fact columns and unbound V1 receipts are predecessor state. Only
+  -- the latest principal-bound V2 transition for this exact document counts.
+  SELECT count(*),count(*) FILTER(WHERE latest.effective_validation->>'validation_status'='validated'
+      AND (latest.effective_validation->>'schema_valid')::boolean IS TRUE
+      AND (latest.effective_validation->>'unit_valid')::boolean IS TRUE
+      AND (latest.effective_validation->>'point_in_time_valid')::boolean IS TRUE
+      AND (latest.effective_validation->>'consistency_valid')::boolean IS TRUE),
+    count(*) FILTER(WHERE latest.effective_validation->>'validation_status' IN ('rejected','conflict','stale'))
   INTO v_total,v_validated,v_rejected
   FROM public.candidate_financial_document_fact_links_v8 link
   JOIN public.opportunity_financial_facts_v3 fact
     ON fact.fact_id=link.fact_id AND fact.recorded_at=link.fact_recorded_at
+  LEFT JOIN LATERAL (
+    SELECT validation_receipt.effective_validation
+    FROM public.official_financial_validation_receipts validation_receipt
+    WHERE validation_receipt.fact_id=fact.fact_id
+      AND validation_receipt.source_sha256=v_receipt.document_sha256
+      AND validation_receipt.validator_version='official-financial-v2'
+      AND validation_receipt.validator_principal IS NOT NULL
+      AND validation_receipt.validated_at<=p_completed_at
+    ORDER BY validation_receipt.validated_at DESC,validation_receipt.receipt_sequence DESC
+    LIMIT 1
+  ) latest ON true
   WHERE link.receipt_id=p_receipt_id;
   v_pending:=v_total-v_validated-v_rejected;
   IF v_total=0 THEN RAISE EXCEPTION 'candidate_financial_validation_fact_set_empty'; END IF;

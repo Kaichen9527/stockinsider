@@ -101,6 +101,22 @@ test('v10 admits only isolated facts and never upgrades a partial document or it
     assert.equal(saved.errorHash, partial.report.errorManifestSha256);
     assert.equal(saved.summary.errorCount, 1);
     assert.deepEqual(saved.facts, partial.report.validatedFacts);
+    const partialFactId = sql(`SELECT fact_id FROM candidate_financial_document_fact_links_v8
+      WHERE receipt_id='${partial.receipt}'`);
+    const legacyValidation = { version: 'official-financial-v1', schemaValid: true, unitValid: true,
+      pointInTimeValid: true, consistencyValid: true, reasons: [], checks: ['unbound-predecessor'] };
+    sql(`INSERT INTO official_financial_validation_receipts(
+        fact_id,validator_version,input_hash,source_sha256,validation,prior_validation,effective_validation
+      ) VALUES('${partialFactId}','official-financial-v1','${'1'.repeat(64)}','${partial.hash}',${json(legacyValidation)},
+        '{"validation_status":"pending"}',
+        '{"validation_status":"validated","schema_valid":true,"unit_valid":true,"point_in_time_valid":true,"consistency_valid":true}');
+      UPDATE opportunity_financial_facts_v3 SET validation_status='validated',schema_valid=true,
+        unit_valid=true,point_in_time_valid=true,consistency_valid=true WHERE fact_id='${partialFactId}'`);
+    assert.match(finalize(partial), /^pending\|0\|0\|1$/u,
+      'an unbound V1 receipt and mutable fact flags cannot complete a document');
+    assert.match(sql(`SET ROLE service_role; SELECT job_status FROM reconcile_candidate_financial_document_job_v9(
+      '${partial.receipt}','${partial.job}','${principal}')`), /^queued$/u,
+    'job completion must also ignore unbound predecessor authority');
     assert.equal(validate(partial), 't');
     assert.match(finalize(partial), /^validated\|1\|0\|0$/u);
     assert.equal(sql(`SELECT receipt_status||'|'||financial_validation_status FROM candidate_financial_document_receipts_v6
@@ -225,7 +241,8 @@ test('v10 admits only isolated facts and never upgrades a partial document or it
         JOIN candidate_financial_parser_evidence_v8 e ON e.evidence_id=l.evidence_id
         JOIN candidate_financial_fact_provenance_v4 p ON p.fact_id=f.fact_id
         JOIN official_financial_validation_receipts v ON v.fact_id=f.fact_id
-        WHERE l.receipt_id='${subject.receipt}'`));
+        WHERE l.receipt_id='${subject.receipt}' AND v.validator_version='official-financial-v2'
+          AND v.validator_principal IS NOT NULL`));
       assert.equal(sql(`SET ROLE service_role; ${reader(rows.fact.fact_id, cutoff)}`), 'validated');
       const tables = { fact: 'opportunity_financial_facts_v3', receipt: 'candidate_financial_document_receipts_v6',
         evidence: 'candidate_financial_parser_evidence_v8', link: 'candidate_financial_document_fact_links_v8',

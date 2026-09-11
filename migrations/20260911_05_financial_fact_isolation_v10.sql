@@ -502,21 +502,25 @@ BEGIN
     SELECT fact.fact_key::text AS fact_key,
       fact.stock_id=p_stock_id AND fact.period_end=p_period_end
       AND fact.provider='mops' AND fact.authority_tier='official_filing'
-      AND fact.validation_status='validated' AND fact.schema_valid IS TRUE AND fact.unit_valid IS TRUE
-      AND fact.point_in_time_valid IS TRUE AND fact.consistency_valid IS TRUE
       AND fact.collected_at<=clock_timestamp() AND fact.recorded_at<=clock_timestamp()
-      AND EXISTS(SELECT 1 FROM public.official_financial_validation_receipts validation
-        JOIN public.candidate_financial_fact_provenance_v4 provenance ON provenance.fact_id=fact.fact_id
-          AND provenance.source_sha256=v_receipt.document_sha256
-        WHERE validation.fact_id=fact.fact_id AND validation.source_sha256=v_receipt.document_sha256
-          AND validation.validated_at<=clock_timestamp()
-          AND validation.effective_validation->>'validation_status'='validated'
-          AND (validation.effective_validation->>'schema_valid')::boolean IS TRUE
-          AND (validation.effective_validation->>'unit_valid')::boolean IS TRUE
-          AND (validation.effective_validation->>'point_in_time_valid')::boolean IS TRUE
-          AND (validation.effective_validation->>'consistency_valid')::boolean IS TRUE) AS valid
+      AND latest.effective_validation->>'validation_status'='validated'
+      AND (latest.effective_validation->>'schema_valid')::boolean IS TRUE
+      AND (latest.effective_validation->>'unit_valid')::boolean IS TRUE
+      AND (latest.effective_validation->>'point_in_time_valid')::boolean IS TRUE
+      AND (latest.effective_validation->>'consistency_valid')::boolean IS TRUE AS valid
     FROM public.candidate_financial_document_fact_links_v8 link
     JOIN public.opportunity_financial_facts_v3 fact ON fact.fact_id=link.fact_id AND fact.recorded_at=link.fact_recorded_at
+    LEFT JOIN LATERAL (
+      SELECT validation.effective_validation
+      FROM public.official_financial_validation_receipts validation
+      WHERE validation.fact_id=fact.fact_id
+        AND validation.source_sha256=v_receipt.document_sha256
+        AND validation.validator_version='official-financial-v2'
+        AND validation.validator_principal IS NOT NULL
+        AND validation.validated_at<=clock_timestamp()
+      ORDER BY validation.validated_at DESC,validation.receipt_sequence DESC
+      LIMIT 1
+    ) latest ON true
     WHERE link.receipt_id=p_receipt_id
   ) SELECT count(*),count(*) FILTER(WHERE checked.valid),
     COALESCE(jsonb_agg(DISTINCT checked.fact_key) FILTER(WHERE checked.valid),'[]'::jsonb)

@@ -10,6 +10,7 @@ const candidateRefresh = readFileSync(new URL('../web/src/lib/taiwan-candidate-r
 const candidateQueueMigration = readFileSync(new URL('../migrations/20260911_04_taiwan_candidate_refresh_queue.sql', import.meta.url), 'utf8');
 const finmindVault = readFileSync(new URL('../web/src/lib/finmind-vault.ts', import.meta.url), 'utf8');
 const financialDrainRoute = readFileSync(new URL('../web/src/app/api/internal/candidate-financial-queue-drain/route.ts', import.meta.url), 'utf8');
+const financialValidateRoute = readFileSync(new URL('../web/src/app/api/internal/official-financial-validate/route.ts', import.meta.url), 'utf8');
 const preliminaryRoute = readFileSync(new URL('../web/src/app/api/internal/radar-preliminary-publish/route.ts', import.meta.url), 'utf8');
 const runtime = readFileSync(new URL('../web/src/lib/taiwan-data-runtime.ts', import.meta.url), 'utf8');
 const masterCalendar = readFileSync(new URL('../deployment/vps/systemd/stockinsider-taiwan-data-master-calendar.timer', import.meta.url), 'utf8');
@@ -81,6 +82,12 @@ test('VPS-only authenticated routes queue and drain the durable provider plane',
   assert.match(financialDrainRoute, /refreshCandidateOfficialFinancials/u);
   assert.match(financialDrainRoute, /MAX_DRAIN_LIMIT = 20/u);
   assert.match(financialDrainRoute, /neq\('endpoint_key', 'issuer_ir_document'\)/u);
+  assert.match(financialDrainRoute, /validation\.status === 'success'/u);
+  assert.match(financialDrainRoute, /official_validation_incomplete/u);
+  assert.doesNotMatch(financialDrainRoute, /validation\.failed === 0/u);
+  assert.match(financialValidateRoute, /result\.status === 'success'/u);
+  assert.match(financialValidateRoute, /official_validation_incomplete/u);
+  assert.doesNotMatch(financialValidateRoute, /result\.failed === 0/u);
 });
 
 test('issuer IR acquisition jobs remain visible to the Browser-assisted receipt worker', () => {

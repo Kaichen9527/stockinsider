@@ -1,6 +1,15 @@
 # Financial evidence completion — implementation and release hold
 
-## Latest fact-scoped follow-up (code commit `5000964`)
+## Latest exact-review follow-up (pending commit)
+
+The integrated post-PR210 review found and fixed two release-blocking fail-open paths:
+
+1. Document and queue completion previously trusted mutable fact flags or any effective receipt, including the older five-argument V1 receipt. Both v8 and v10 completion boundaries now require the latest exact-document `official-financial-v2` receipt with a bound validator principal and a validation time no later than evaluation.
+2. The operator validation and queue-drain APIs previously returned HTTP 200 whenever the worker did not throw, even when it rejected facts, lacked provenance or returned a partial terminal. Both endpoints now succeed only for the explicit `success` terminal and return `official_validation_incomplete` otherwise.
+
+Regression fixtures prove that counterfeit V1 receipts and mutable validation flags cannot finalize a document or dequeue its job, while a valid principal-bound V2 receipt can. API contract tests prove partial validation cannot be reported as green. Serial product correctness is **151/151**; migration **79/79**; legacy **2/2**; runtime **207/207** with one intentional environment skip; PostgreSQL contracts **42/42**. ESLint (existing warnings only), TypeScript and production build pass.
+
+## Fact-scoped implementation follow-up (code commit `5000964`)
 
 The initial all-or-nothing canary below is retained as audit history. The follow-up does **not** certify any invalid document: it retains every source/extracted error and admits only exact `VALID`, non-dimensional occurrences unaffected by fact/context/unit/concept/tuple/continuation/calculation rejection closure. Unknown, ambiguous, duplicate-ID and damaged-DTS errors remain document-fatal. Exact source IDs and logical tuple paths prevent equal-valued occurrences from being swapped during extraction.
 
