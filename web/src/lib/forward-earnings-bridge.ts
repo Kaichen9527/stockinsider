@@ -1,3 +1,5 @@
+import { buildReconciledEarningsProjection, type EarningsProjectionOptions } from './company-earnings-projection.ts';
+
 export type ReportedFinancialFact = {
   factId: string;
   factKey: string;
@@ -25,7 +27,6 @@ function finite(value: unknown): number | null {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : null;
 }
-function clamp(value: number, low: number, high: number) { return Math.max(low, Math.min(high, value)); }
 function round(value: number, digits = 4) { const scale = 10 ** digits; return Math.round((value + Number.EPSILON) * scale) / scale; }
 function quarterStart(periodEnd: string) {
   const year = periodEnd.slice(0, 4);
@@ -142,7 +143,7 @@ function reportedQuarterValues(facts: ReportedFinancialFact[], factKey: string):
   return { points: points.sort((left, right) => left.periodEnd.localeCompare(right.periodEnd)), issues };
 }
 
-export function buildForwardEarningsBridge(facts: ReportedFinancialFact[]) {
+export function buildForwardEarningsBridge(facts: ReportedFinancialFact[], options: EarningsProjectionOptions = {}) {
   const flowKeys = ['quarterly_revenue', 'quarterly_gross_profit', 'quarterly_operating_income', 'quarterly_net_income_attributable_to_common'] as const;
   const series = Object.fromEntries(flowKeys.map((key) => [key, diagnoseDiscreteQuarters(facts, key)])) as Record<(typeof flowKeys)[number], SeriesDiagnosis>;
   const shares = reportedQuarterValues(facts, 'diluted_weighted_average_shares');
@@ -164,6 +165,7 @@ export function buildForwardEarningsBridge(facts: ReportedFinancialFact[]) {
   const operatingIncome = values('quarterly_operating_income');
   const netIncome = values('quarterly_net_income_attributable_to_common');
   const shareValues = requiredPeriods.map((period) => shares.points.find((row) => row.periodEnd === period)!.value);
+  if (shareValues.some((value) => !(value > 0))) return { status: 'insufficient' as const, missing: ['positive_reported_diluted_shares_required'] };
   const derivedEps = netIncome.map((income, index) => income / shareValues[index]);
   if (!derivedEps.every((eps, index) => closeEnough(eps, disclosedEps.points.find((row) => row.periodEnd === requiredPeriods[index])!.value))) {
     return { status: 'insufficient' as const, missing: ['diluted_eps_share_net_income_inconsistent'] };
@@ -178,29 +180,66 @@ export function buildForwardEarningsBridge(facts: ReportedFinancialFact[]) {
   const latestDilutedShares = shareValues.slice(4).reduce((total, value) => total + value, 0) / 4;
   if (!(priorRevenue > 0 && latestRevenue > 0 && latestEps !== 0 && latestDilutedShares > 0)) return { status: 'insufficient' as const, missing: ['positive_reported_ttm_denominator'] };
   const historicalGrowth = latestRevenue / priorRevenue - 1;
-  const baseGrowth = clamp(historicalGrowth * 0.5, -0.15, 0.2);
   const grossMargin = latestGross / latestRevenue;
   const operatingMargin = latestOperating / latestRevenue;
   const netMargin = latestNet / latestRevenue;
-  const scenario = (growthDelta: number, marginDelta: number) => {
-    const forwardRevenue = latestRevenue * (1 + clamp(baseGrowth + growthDelta, -0.25, 0.3));
-    const forwardNetIncome = forwardRevenue * (netMargin + marginDelta);
-    return { revenue: round(forwardRevenue, 2), grossMargin: round(grossMargin + marginDelta * 0.5), operatingMargin: round(operatingMargin + marginDelta * 0.75), netMargin: round(netMargin + marginDelta), netIncome: round(forwardNetIncome, 2), dilutedEps: round(forwardNetIncome / latestDilutedShares, 4) };
-  };
-  const allFactIds = [...new Set([
-    ...flowKeys.flatMap((key) => series[key].points.filter((row) => requiredPeriods.includes(row.periodEnd)).flatMap((row) => row.factIds)),
-    ...shares.points.filter((row) => requiredPeriods.includes(row.periodEnd)).flatMap((row) => row.factIds),
-    ...disclosedEps.points.filter((row) => requiredPeriods.includes(row.periodEnd)).flatMap((row) => row.factIds),
-  ])];
+  const latestPeriods = requiredPeriods.slice(-4);
+  const optionalKeys = ['quarterly_operating_expense', 'quarterly_non_operating_income', 'quarterly_pretax_income', 'quarterly_income_tax_expense', 'quarterly_net_income', 'quarterly_noncontrolling_interest'];
+  const optionalSeries = Object.fromEntries(optionalKeys.map((key) => [key, diagnoseDiscreteQuarters(facts, key)]));
+  const optionalIssues = optionalKeys.flatMap((key) => optionalSeries[key].issues.filter((issue) => latestPeriods.some((period) => issue.includes(period))));
+  if (optionalIssues.length) return { status: 'insufficient' as const, missing: optionalIssues.sort() };
+  const optionalTtm = (key: string) => latestPeriods.every((period) => optionalSeries[key].points.some((row) => row.periodEnd === period))
+    ? sum(latestPeriods.map((period) => optionalSeries[key].points.find((row) => row.periodEnd === period)!.value)) : null;
+  const pretax = optionalTtm('quarterly_pretax_income');
+  const tax = optionalTtm('quarterly_income_tax_expense');
+  const consolidatedNet = optionalTtm('quarterly_net_income');
+  const expense = optionalTtm('quarterly_operating_expense');
+  const nonOperating = optionalTtm('quarterly_non_operating_income');
+  const minority = optionalTtm('quarterly_noncontrolling_interest');
+  const reconciliationIssues = [
+    ...(expense != null && !closeEnough(latestGross - expense, latestOperating) ? ['reported_gross_expense_operating_inconsistent'] : []),
+    ...(pretax != null && nonOperating != null && !closeEnough(latestOperating + nonOperating, pretax) ? ['reported_operating_non_operating_pretax_inconsistent'] : []),
+    ...(pretax != null && tax != null && consolidatedNet != null && !closeEnough(pretax - tax, consolidatedNet) ? ['reported_pretax_tax_net_income_inconsistent'] : []),
+    ...(consolidatedNet != null && minority != null && !closeEnough(consolidatedNet - minority, latestNet) ? ['reported_net_minority_common_income_inconsistent'] : []),
+    ...(latestGross < latestOperating ? ['negative_implied_operating_expense_requires_investigation'] : []),
+  ];
+  // Annual offsets can hide contradictory quarters. Reconcile each disclosed
+  // component before aggregating, even when only some optional quarters exist.
+  for (const period of latestPeriods) {
+    const required = (key: (typeof flowKeys)[number]) => series[key].points.find((row) => row.periodEnd === period)!.value;
+    const optional = (key: string) => optionalSeries[key].points.find((row) => row.periodEnd === period)?.value ?? null;
+    const quarterlyExpense = optional('quarterly_operating_expense');
+    const quarterlyNonOperating = optional('quarterly_non_operating_income');
+    const quarterlyPretax = optional('quarterly_pretax_income');
+    const quarterlyTax = optional('quarterly_income_tax_expense');
+    const quarterlyNet = optional('quarterly_net_income');
+    const quarterlyMinority = optional('quarterly_noncontrolling_interest');
+    if (quarterlyExpense != null && !closeEnough(required('quarterly_gross_profit') - quarterlyExpense, required('quarterly_operating_income'))) reconciliationIssues.push(`quarterly_gross_expense_operating_inconsistent:${period}`);
+    if (quarterlyPretax != null && quarterlyNonOperating != null && !closeEnough(required('quarterly_operating_income') + quarterlyNonOperating, quarterlyPretax)) reconciliationIssues.push(`quarterly_operating_non_operating_pretax_inconsistent:${period}`);
+    if (quarterlyPretax != null && quarterlyTax != null && quarterlyNet != null && !closeEnough(quarterlyPretax - quarterlyTax, quarterlyNet)) reconciliationIssues.push(`quarterly_pretax_tax_net_income_inconsistent:${period}`);
+    if (quarterlyNet != null && quarterlyMinority != null && !closeEnough(quarterlyNet - quarterlyMinority, required('quarterly_net_income_attributable_to_common'))) reconciliationIssues.push(`quarterly_net_minority_common_income_inconsistent:${period}`);
+  }
+  if (reconciliationIssues.length) return { status: 'insufficient' as const, missing: reconciliationIssues };
+  const factIdsByMetric: Record<string, string[]> = Object.fromEntries([
+    ...flowKeys.map((key) => [key, series[key].points.filter((row) => requiredPeriods.includes(row.periodEnd)).flatMap((row) => row.factIds)]),
+    ['diluted_weighted_average_shares', shares.points.filter((row) => requiredPeriods.includes(row.periodEnd)).flatMap((row) => row.factIds)],
+    ['quarterly_diluted_eps', disclosedEps.points.filter((row) => requiredPeriods.includes(row.periodEnd)).flatMap((row) => row.factIds)],
+    ...optionalKeys.map((key) => [key, optionalSeries[key].points.filter((row) => latestPeriods.includes(row.periodEnd)).flatMap((row) => row.factIds)]),
+  ]);
+  const projection = buildReconciledEarningsProjection({ revenue: latestRevenue, grossProfit: latestGross, operatingIncome: latestOperating,
+    commonNetIncome: latestNet, dilutedShares: latestDilutedShares, historicalGrowth, latestPeriodEnd: requiredPeriods.at(-1)!, factIdsByMetric,
+    decomposition: pretax != null && tax != null && consolidatedNet != null ? {
+      nonOperatingIncome: pretax - latestOperating, pretaxIncome: pretax, incomeTaxExpense: tax, netIncome: consolidatedNet, noncontrollingInterest: consolidatedNet - latestNet,
+    } : null,
+  }, options);
+  if (Object.values(projection.scenarios).some((row) => Object.values(row).some((value) => value != null && !Number.isFinite(value)))) {
+    return { status: 'insufficient' as const, missing: ['non_finite_forward_projection'] };
+  }
   return {
     status: 'complete' as const,
     actual: { latestRevenue, latestGross, latestOperating, latestNet, latestEps, latestDilutedShares: round(latestDilutedShares, 2), historicalGrowth: round(historicalGrowth), grossMargin: round(grossMargin), operatingMargin: round(operatingMargin), netMargin: round(netMargin), impliedShares: round(latestDilutedShares, 2) },
-    scenarios: { bear: scenario(-0.08, -0.02), base: scenario(0, 0), bull: scenario(0.08, 0.02) },
-    assumptions: [
-      { key: 'revenue_growth', kind: 'model_assumption', value: round(baseGrowth), basis: '50% pass-through of latest four-quarter reported growth, capped -15%/+20%' },
-      { key: 'net_margin', kind: 'model_assumption', value: round(netMargin), basis: 'latest four discrete reported quarters' },
-      { key: 'scenario_margin_delta', kind: 'model_assumption', value: 0.02, basis: 'bear/base/bull sensitivity, not management guidance' },
-    ], factIds: allFactIds,
+    ...projection,
+    researchDepth: 'financial_statement_projection' as const,
     verifiedTurnaroundPath: latestNet > 0 && sum(netIncome.slice(0, 4)) <= 0 && netIncome.slice(-2).every((value) => value > 0),
   };
 }
