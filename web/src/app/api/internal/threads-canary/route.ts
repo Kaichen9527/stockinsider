@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { requireExactInternalBearer } from '@/lib/internal-auth';
 import { THREADS_KEYWORD_SEARCH_URL, THREADS_ME_URL, assertDedicatedThreadsAppConfigured } from '@/lib/threads-api';
 import { getThreadsTokenForRun, recordThreadsPublicSearchCanary } from '@/lib/threads-token';
+import { normalizeThreadsPermalink } from '@/lib/threads-discovery';
 
 function hash(value: string): string {
   return createHash('sha256').update(value).digest('hex');
@@ -33,11 +34,12 @@ export async function POST(request: Request) {
     searchEndpoint.searchParams.set('q', query);
     searchEndpoint.searchParams.set('search_type', 'RECENT');
     searchEndpoint.searchParams.set('fields', 'id,username,permalink,timestamp');
+    searchEndpoint.searchParams.set('since', String(Math.floor((Date.now() - 7 * 86_400_000) / 1000)));
     searchEndpoint.searchParams.set('limit', '25');
     searchEndpoint.searchParams.set('access_token', token.token);
     const result = await graphJson<{ data?: Array<{ id?: string; username?: string; permalink?: string; timestamp?: string }> }>(searchEndpoint);
     const self = me.username.replace(/^@/u, '').toLocaleLowerCase('en-US');
-    const publicPost = (result.data || []).find((row) => row.id && row.permalink && String(row.username || '').trim()
+    const publicPost = (result.data || []).find((row) => row.id && normalizeThreadsPermalink(String(row.permalink || '')) && String(row.username || '').trim()
       && String(row.username || '').replace(/^@/u, '').toLocaleLowerCase('en-US') !== self);
     if (!publicPost?.id) throw new Error('threads_non_self_public_post_canary_failed');
     const observedAt = new Date().toISOString();
@@ -56,7 +58,9 @@ export async function POST(request: Request) {
       activationRequired: 'set THREADS_OFFICIAL_CANARY_ACTIVE=true only after reviewing this receipt',
     }, { headers: { 'Cache-Control': 'private, no-store' } });
   } catch (error) {
-    return NextResponse.json({ ok: false, status: 'blocked_auth', error: (error as Error).message }, {
+    const message=(error as Error).message;
+    const authFailure=/vault|token|credential|oauth|http_(?:401|403)|owner|dedicated_app/iu.test(message);
+    return NextResponse.json({ ok: false, status: authFailure?'blocked_auth':'search_unverified', error: message }, {
       status: 409,
       headers: { 'Cache-Control': 'private, no-store' },
     });
