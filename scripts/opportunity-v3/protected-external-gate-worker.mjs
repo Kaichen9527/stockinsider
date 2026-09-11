@@ -238,6 +238,24 @@ const graphBoundReviewSources = Object.freeze({
       rangeLine: 'Full reviewed implementation range',
     }),
   }),
+  // The no-global-Shadow evidence/research closure introduces the catalog-v2
+  // graph preimage while preserving the independently reviewed product and
+  // architecture authority. Register its immutable direct-child review refs
+  // from the protected base so a candidate cannot select its own evidence.
+  'a4cf40d99dbfe7d23e0bdd39130f73cf6943a5535394d8313f2055de9a7d3058': Object.freeze({
+    requirements: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-6ed9d39a',
+      path: `${changeRelative}/requirements-review-v3.23.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+    architecture: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-6ed9d39a',
+      path: `${changeRelative}/architecture-review-v3.23.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed implementation range',
+    }),
+  }),
   '5f985e391799fd8332df16c2151f75cc95dfb643a087912d92df2845a435016e': Object.freeze({
     requirements: v319ReviewSources.requirements,
     architecture: v319ReviewSources.architecture,
@@ -364,7 +382,7 @@ function validateAttestation(attestation, subjectRoot) {
   cleanTree(subjectRoot, attestation.subjectCommitSha, attestation.subjectTreeSha);
 }
 
-function treeIdentity(subjectRoot, treeSha) {
+export function treeIdentity(subjectRoot, treeSha) {
   const catalogPath = `${changeRelative}/active-artifact-catalog-v3.json`;
   const catalogBytes = treeBlob(subjectRoot, treeSha, catalogPath, 'active catalog');
   const catalog = JSON.parse(catalogBytes);
@@ -373,9 +391,26 @@ function treeIdentity(subjectRoot, treeSha) {
     const bytes = treeBlob(subjectRoot, treeSha, repositoryPath, `active artifact ${file}`);
     return [file, git(subjectRoot, ['rev-parse', `${treeSha}:${repositoryPath}`]), bytes.length, sha256(bytes)];
   });
+  const external = (paths, label) => (paths ?? []).map((repositoryPath) => {
+    const bytes = treeBlob(subjectRoot, treeSha, repositoryPath, `${label} ${repositoryPath}`);
+    return [repositoryPath, git(subjectRoot, ['rev-parse', `${treeSha}:${repositoryPath}`]), bytes.length, sha256(bytes)];
+  });
   const inventory = JSON.parse(treeBlob(subjectRoot, treeSha, `${changeRelative}/acceptance-tests.json`, 'acceptance inventory'));
+  assert.ok([
+    'opportunity-active-artifact-catalog-v1',
+    'opportunity-active-artifact-catalog-v2',
+  ].includes(catalog.schema), 'unknown active artifact catalog schema');
+  const graphPreimage = catalog.schema === 'opportunity-active-artifact-catalog-v1'
+    ? ['opportunity-active-graph-v1', sha256(catalogBytes), rows]
+    : [
+      'opportunity-active-graph-v2',
+      sha256(catalogBytes),
+      rows,
+      external(catalog.incorporatedFiles, 'incorporated artifact'),
+      external(catalog.historicalAuditFiles, 'historical audit artifact'),
+    ];
   return {
-    activeGraphSha256: sha256(canonicalJson(['opportunity-active-graph-v1', sha256(catalogBytes), rows])),
+    activeGraphSha256: sha256(canonicalJson(graphPreimage)),
     inventory,
   };
 }
@@ -1212,9 +1247,11 @@ function main() {
   process.stdout.write(`${canonicalJson({ check: result.check, evidenceSha256: result.evidenceSha256, status: 'pass', subjectCommitSha: attestation.subjectCommitSha })}\n`);
 }
 
-try {
-  main();
-} catch (error) {
-  process.stderr.write(`protected external gate worker failed: ${error instanceof Error ? error.message : String(error)}\n`);
-  process.exitCode = 1;
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  try {
+    main();
+  } catch (error) {
+    process.stderr.write(`protected external gate worker failed: ${error instanceof Error ? error.message : String(error)}\n`);
+    process.exitCode = 1;
+  }
 }
