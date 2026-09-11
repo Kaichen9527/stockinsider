@@ -4,6 +4,7 @@ import importlib.util
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parent
 FIXTURES = ROOT / "fixtures/candidate-financial-document-parser"
@@ -67,6 +68,37 @@ class PartialFinancialFactScopeTests(unittest.TestCase):
                 output = self.parse_markup(instant=instant)
                 self.assertEqual(output["status"], "partial")
                 self.assertEqual(output["validatedFacts"], [])
+
+    def test_equal_values_inside_out_of_line_tuple_keep_exact_occurrence_identity(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory)
+            taxonomy = (FIXTURES / "validated-taxonomy.xsd").read_text().replace('xmlns:xbrli=',
+                'xmlns:test="urn:stockinsider:parser-test" xmlns:xbrli=').replace('</xs:schema>',
+                '<xs:element name="NoteTuple" id="NoteTuple" substitutionGroup="xbrli:tuple"><xs:complexType><xs:sequence>'
+                '<xs:element ref="test:Shares" minOccurs="0" maxOccurs="unbounded"/></xs:sequence>'
+                '<xs:attribute name="id" type="xs:ID"/></xs:complexType></xs:element></xs:schema>')
+            (target / "validated-taxonomy.xsd").write_text(taxonomy)
+            markup = (FIXTURES / "validated-inline.xhtml").read_text().replace(
+                '<p>Shares: <ix:nonFraction name="test:Shares" contextRef="FY2025" unitRef="shares" decimals="0">100</ix:nonFraction></p>',
+                '<p><ix:nonFraction id="inside" tupleRef="t1" order="1" name="test:Shares" contextRef="FY2025" unitRef="shares" decimals="0">100</ix:nonFraction></p>'
+                '<p><ix:nonFraction id="outside" name="test:Shares" contextRef="FY2025" unitRef="shares" decimals="0">100</ix:nonFraction></p>'
+                '<ix:tuple id="parent" tupleID="t1" name="test:NoteTuple"/>')
+            path = target / "document.xhtml"
+            path.write_text(markup)
+            identities = []
+            original = parser.logical_fact_paths
+            def capture(model):
+                identities.append({fact.objectIndex: fact.id for fact in parser.all_facts(model)})
+                return original(model)
+            with patch.object(parser, "logical_fact_paths", capture):
+                output = parser.parse_arelle(path, hashlib.sha256(path.read_bytes()).hexdigest(),
+                    taxonomy_sha256=hashlib.sha256(taxonomy.encode()).hexdigest())
+            self.assertEqual(output["status"], "complete", output)
+            self.assertEqual(len(output["validatedFacts"]), 2)
+            for row in output["validatedFacts"]:
+                source = identities[0][int(row["sourceFactId"].split(":")[1])]
+                extracted = identities[1][int(row["extractedFactId"].split(":")[1])]
+                self.assertEqual(source, extracted)
 
     def test_duplicate_xml_identifiers_are_document_fatal(self):
         extra = '''<xbrli:unit id="shares"><xbrli:measure>xbrli:shares</xbrli:measure></xbrli:unit>'''

@@ -27,7 +27,8 @@ from pathlib import Path
 # The socket runtime stages this helper beside the pinned parser script.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from candidate_financial_fact_scope import (all_facts, canonical_bytes, digest,
-    fact_admission_manifest, fact_occurrence_key, qname_identity, register_conflicting_duplicates, validation_records)
+    fact_admission_manifest, fact_occurrence_key, logical_fact_paths, qname_identity,
+    register_conflicting_duplicates, validation_records)
 
 MAX_PAGES = 200
 MAX_TABLES_PER_PAGE = 20
@@ -383,18 +384,22 @@ def parse_arelle(path, sha256, taxonomy_path=None, taxonomy_sha256=None,
             # Its builder object IDs have different identity, so fail closed.
             if extraction_records:
                 raise ValueError("arelle_extraction_validation_errors")
-            def signature(fact):
+            source_paths, extracted_paths = logical_fact_paths(model), logical_fact_paths(extracted)
+            def signature(fact, paths):
+                if fact.objectIndex not in paths:
+                    raise ValueError("arelle_extracted_fact_logical_identity_missing")
                 return (qname_identity(getattr(fact, "qname", None)), str(getattr(fact, "contextID", "")),
                         normalized_unit(getattr(fact, "unit", None)), normalized_numeric_value(fact),
-                        str(fact.get("decimals")), str(fact.get("precision")))
+                        str(fact.get("decimals")), str(fact.get("precision")),
+                        str(getattr(fact, "id", None) or ""), paths[fact.objectIndex])
             by_signature = defaultdict(list)
             for fact in all_facts(extracted):
-                by_signature[signature(fact)].append(fact)
+                by_signature[signature(fact, extracted_paths)].append(fact)
             for source, row in candidates:
-                matches = by_signature.get(signature(source), [])
-                if not matches:
-                    raise ValueError("arelle_extracted_fact_identity_missing")
-                fact = matches.pop(0)
+                matches = by_signature.get(signature(source, source_paths), [])
+                if len(matches) != 1:
+                    raise ValueError("arelle_extracted_fact_identity_ambiguous")
+                fact = matches[0]
                 if (getattr(fact, "xValid", None) != XmlValidateConst.VALID
                         or context_manifest(fact.context) != context_manifest(source.context)):
                     # This candidate is not admitted, but remains in the scope

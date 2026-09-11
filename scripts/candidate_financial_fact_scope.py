@@ -44,6 +44,24 @@ def all_facts(model):
     return sorted(getattr(model, "factsInInstance", set()), key=lambda item: item.objectIndex)
 
 
+def logical_fact_paths(model):
+    """Exact extraction order, including out-of-line tupleRef membership.
+
+    Arelle's extraction walks model.facts/modelTupleFacts, not DOM order. The
+    logical path and preserved id bind equal-valued occurrences unambiguously.
+    """
+    paths = {}
+    pending = [(fact, (index,)) for index, fact in enumerate(model.facts)]
+    while pending:
+        fact, path = pending.pop()
+        if fact.objectIndex in paths or len(paths) >= MAX_MODEL_NODES:
+            raise ValueError("arelle_logical_fact_identity_ambiguous")
+        paths[fact.objectIndex] = path
+        pending.extend((child, path + (index,))
+                       for index, child in enumerate(getattr(fact, "modelTupleFacts", [])))
+    return paths
+
+
 def fact_occurrence_key(fact, document_sha256):
     return digest({"document": document_sha256, "objectIndex": fact.objectIndex,
                    "concept": qname_identity(fact.qname), "context": fact.contextID,
