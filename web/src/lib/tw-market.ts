@@ -218,16 +218,20 @@ function officialHostCircuitIsOpen(circuitKey: string) {
   return (officialHostUnavailableUntil.get(circuitKey) || 0) > Date.now();
 }
 
-async function fetchOfficialJsonRequest<T>(url: string, timeoutMs: number, init?: RequestInit): Promise<T | null> {
+export type OfficialJsonFailure = 'official_circuit_open' | 'official_security_block' | 'official_rate_limit'
+  | 'official_http_error' | 'official_schema_error' | 'official_timeout' | 'official_network_error';
+
+async function fetchOfficialJsonRequest<T>(url: string, timeoutMs: number, init?: RequestInit,
+  onFailure?: (reason: OfficialJsonFailure, httpStatus?: number) => void): Promise<T | null> {
   const circuitKey = officialCircuitKey(url);
-  if (officialHostCircuitIsOpen(circuitKey)) return null;
+  if (officialHostCircuitIsOpen(circuitKey)) { onFailure?.('official_circuit_open'); return null; }
   return await withOfficialMarketSlot(async () => {
     // Re-check after acquiring both the global slot and the per-host lease.
     // Requests queued before a circuit opens must not clear it or start a new
     // round of requests against the unavailable host.
-    if (officialHostCircuitIsOpen(circuitKey)) return null;
+    if (officialHostCircuitIsOpen(circuitKey)) { onFailure?.('official_circuit_open'); return null; }
     return await withOfficialHostPace(url, async () => {
-      if (officialHostCircuitIsOpen(circuitKey)) return null;
+      if (officialHostCircuitIsOpen(circuitKey)) { onFailure?.('official_circuit_open'); return null; }
       try {
       const response = await fetch(url, {
         headers: { accept: 'application/json', 'user-agent': 'StockInsider/2.1 official-market-data' },
@@ -235,14 +239,24 @@ async function fetchOfficialJsonRequest<T>(url: string, timeoutMs: number, init?
         ...init,
       });
         if (!response.ok) {
+          onFailure?.([403, 428].includes(response.status) ? 'official_security_block'
+            : response.status === 429 ? 'official_rate_limit' : 'official_http_error', response.status);
           if (response.status === 403 || response.status === 428 || response.status === 429 || response.status >= 500) recordOfficialHostRetryableFailure(circuitKey);
           else recordOfficialHostSuccess(circuitKey);
+          return null;
+        }
+        if (response.headers.get('content-type')?.includes('text/html')) {
+          onFailure?.('official_security_block', response.status);
+          recordOfficialHostRetryableFailure(circuitKey);
           return null;
         }
         const data = await response.json() as T;
         recordOfficialHostSuccess(circuitKey);
         return data;
-      } catch {
+      } catch (error) {
+        onFailure?.(error instanceof SyntaxError ? 'official_schema_error'
+          : error instanceof Error && /timeout|abort/iu.test(`${error.name} ${error.message}`)
+            ? 'official_timeout' : 'official_network_error');
         // A single timeout or 5xx is transient evidence, not proof that every
         // symbol and month on the host is unavailable. Open the host circuit only
         // after consecutive retryable failures, then retain fail-closed behavior.
@@ -255,6 +269,18 @@ async function fetchOfficialJsonRequest<T>(url: string, timeoutMs: number, init?
 
 export async function fetchOfficialJson<T>(url: string, timeoutMs: number): Promise<T | null> {
   return await fetchOfficialJsonRequest<T>(url, timeoutMs);
+}
+
+/** Diagnostic sibling: old null-return callers retain their interface. */
+export async function fetchOfficialJsonOutcome<T>(url: string, timeoutMs: number): Promise<{
+  payload: T | null; terminalReason: OfficialJsonFailure | null; httpStatus: number | null;
+}> {
+  let terminalReason: OfficialJsonFailure | null = null;
+  let httpStatus: number | null = null;
+  const payload = await fetchOfficialJsonRequest<T>(url, timeoutMs, undefined, (reason, status) => {
+    terminalReason = reason; httpStatus = status ?? null;
+  });
+  return { payload, terminalReason: payload == null ? terminalReason || 'official_schema_error' : null, httpStatus };
 }
 
 async function withTwStockTimeout<T>(promise: Promise<T>, timeoutMs = TWSTOCK_REQUEST_TIMEOUT_MS): Promise<T> {
@@ -819,6 +845,64 @@ export async function fetchTwseMarketDailyRows(session: string): Promise<Map<str
   return request;
 }
 
+export function parseTwseStockDailyMonth(payload: Record<string, unknown>, sourceUrl: string): TwMarketDailyBar[] {
+  if (payload.stat !== 'OK' || !Array.isArray(payload.data)) return [];
+  return (payload.data as unknown[][]).flatMap((item): TwMarketDailyBar[] => {
+    const roc = String(item[0] || '').match(/^(\d{3})\/(\d{2})\/(\d{2})$/u);
+    const volume = ohlcNumber(item[1]);
+    const [open, high, low, close] = [item[3], item[4], item[5], item[6]].map(ohlcNumber);
+    if (!roc || open == null || high == null || low == null || close == null) return [];
+    return [{ time: `${Number(roc[1]) + 1911}-${roc[2]}-${roc[3]}`, open, high, low, close,
+      volume: volume == null ? null : Math.round(volume), sourceUrl,
+      provider: 'official_primary', authorityTier: 'official_primary', integrityStatus: 'valid' }];
+  });
+}
+
+export function twStockHistoryMonthUrl(job: {
+  symbol: string; exchange: 'TWSE' | 'TPEx'; dataset: 'price' | 'multiple'; month: string; lastSession: string | null;
+}) {
+  if (!/^\d{4,6}$/u.test(job.symbol) || !/^\d{4}-\d{2}-01$/u.test(job.month)
+    || (job.dataset === 'multiple' && !job.lastSession)) throw new Error('invalid_history_month_request');
+  const compact = job.month.replace(/-/gu, '');
+  return job.dataset === 'price'
+    ? job.exchange === 'TWSE'
+      ? `https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=${compact}&stockNo=${job.symbol}`
+      : `https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=${job.symbol}&date=${job.month.replace(/-/gu, '/')}&response=json`
+    : job.exchange === 'TWSE'
+      ? `https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU?date=${compact}&stockNo=${job.symbol}&response=json`
+      : `https://www.tpex.org.tw/www/zh-tw/afterTrading/peQryDate?date=${job.lastSession!.replace(/-/gu, '/')}&cate=&response=json`;
+}
+
+/** Exactly one official request. Durable scheduling/retries live in the caller. */
+export async function fetchTwStockHistoryMonth(job: {
+  symbol: string; exchange: 'TWSE' | 'TPEx'; dataset: 'price' | 'multiple'; month: string; lastSession: string | null;
+}) {
+  const sourceUrl = twStockHistoryMonthUrl(job);
+  const result = await fetchOfficialJsonOutcome<Record<string, unknown>>(sourceUrl, 8_000);
+  const empty = { bars: [] as TwMarketDailyBar[], multiples: [] as TwValuationHistoryPoint[], sourceUrl, httpStatus: result.httpStatus };
+  if (!result.payload) return { ...empty, terminalReason: result.terminalReason || 'official_schema_error' };
+  try {
+    if (job.dataset === 'price') {
+      const bars = job.exchange === 'TWSE' ? parseTwseStockDailyMonth(result.payload, sourceUrl)
+        : parseTpexTradingStockRows(result.payload, sourceUrl);
+      const recognized = job.exchange === 'TWSE' ? typeof result.payload.stat === 'string'
+        : Array.isArray(result.payload.tables) || Array.isArray(result.payload.aaData);
+      if (!recognized) return { ...empty, terminalReason: 'official_schema_error' };
+      return { ...empty, bars, terminalReason: bars.length ? 'complete' : 'official_no_rows' };
+    }
+    const rows = job.exchange === 'TWSE' ? parseTwseStockValuationHistory(result.payload, sourceUrl)
+      : [...parseTpexValuationPanel(result.payload, job.lastSession!, new Set([job.symbol])).values()];
+    if (job.exchange === 'TWSE' && !Array.isArray(result.payload.data) && typeof result.payload.stat !== 'string') {
+      return { ...empty, terminalReason: 'official_schema_error' };
+    }
+    // Monthly history stores the real latest close, never a calendar month end.
+    const point = rows.filter((row) => row.date <= job.lastSession!).sort((a, b) => a.date.localeCompare(b.date)).at(-1);
+    return { ...empty, multiples: point ? [point] : [], terminalReason: point ? 'complete' : 'official_no_rows' };
+  } catch {
+    return { ...empty, terminalReason: 'official_schema_error' };
+  }
+}
+
 export async function fetchTwStockDailyBars(
   symbol: string,
   daysBack = 120,
@@ -851,12 +935,13 @@ export async function fetchTwStockDailyBars(
   // 1,320 sessions in some five-year windows, so permit up to 76 months.
   const monthCount = Math.min(76, Math.max(2, Math.ceil(requiredCoverage / 18) + 2));
   const monthStarts = Array.from({ length: monthCount }, (_, offset) => {
-    const value = new Date();
+    const latestSession = officialSessions?.filter((session) => /^\d{4}-\d{2}-\d{2}$/u.test(session)).sort().at(-1);
+    const value = latestSession ? new Date(`${latestSession}T00:00:00Z`) : new Date();
     value.setUTCDate(1);
     value.setUTCMonth(value.getUTCMonth() - offset);
     return `${value.getUTCFullYear()}${String(value.getUTCMonth() + 1).padStart(2, '0')}01`;
   });
-  const monthlyResults = await Promise.all(monthStarts.map(async (date) => {
+  const monthlyResults = await Promise.all((exchange === 'TPEx' ? [] : monthStarts).map(async (date) => {
     try {
       // The newer `/rwd` endpoint is served behind a JavaScript-only CDN
       // challenge from the VPS network.  Use TWSE's still-official JSON
