@@ -273,6 +273,24 @@ const graphBoundReviewSources = Object.freeze({
       rangeLine: 'Full reviewed range',
     }),
   }),
+  // Final V3.16 host-pin reconciliation fixes the frozen script digest,
+  // protected-gate test/count prose and the active product acceptance totals.
+  // Both immutable direct-child reviews bind the resulting graph and are
+  // registered on the protected base before the candidate can consume them.
+  '6193ebf24dfd5dd6c6d1f52d03e7efda09e3335003ab36cf4a59d62d9598faf4': Object.freeze({
+    requirements: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-host-pin-v316-requirements-ba3124f',
+      path: `${changeRelative}/requirements-review-host-pin-v3.16-final.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+    architecture: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-host-pin-v316-architecture-ba3124f',
+      path: `${changeRelative}/architecture-review-host-pin-v3.16-final.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+  }),
   '5f985e391799fd8332df16c2151f75cc95dfb643a087912d92df2845a435016e': Object.freeze({
     requirements: v319ReviewSources.requirements,
     architecture: v319ReviewSources.architecture,

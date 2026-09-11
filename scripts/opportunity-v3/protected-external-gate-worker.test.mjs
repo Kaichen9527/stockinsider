@@ -250,6 +250,10 @@ test('the protected root selects closed graph-bound Requirements/Architecture ev
     'evidence/source-led-opportunity-v3-architecture-6ed9d39a',
     'requirements-review-v3.23.md',
     'architecture-review-v3.23.md',
+    'evidence/source-led-opportunity-v3-host-pin-v316-requirements-ba3124f',
+    'evidence/source-led-opportunity-v3-host-pin-v316-architecture-ba3124f',
+    'requirements-review-host-pin-v3.16-final.md',
+    'architecture-review-host-pin-v3.16-final.md',
   ]) assert.match(worker, new RegExp(reference.replace(/[.]/gu, '\\.'), 'u'));
   for (const graph of [
     '1c32b707a2e3d36e0ca01b4e78b9c20fa5bcef5eb34dce486063d9f694a2c9fc',
@@ -262,6 +266,7 @@ test('the protected root selects closed graph-bound Requirements/Architecture ev
     'c74be1cd14439580505e05f2ec5904ea7dc9732ee7a4164c9ec1573691ebe352',
     '5f985e391799fd8332df16c2151f75cc95dfb643a087912d92df2845a435016e',
     'a4cf40d99dbfe7d23e0bdd39130f73cf6943a5535394d8313f2055de9a7d3058',
+    '6193ebf24dfd5dd6c6d1f52d03e7efda09e3335003ab36cf4a59d62d9598faf4',
   ]) assert.match(worker, new RegExp(graph, 'u'), `${graph} graph mapping retained`);
   assert.match(worker, /evidence\/source-led-opportunity-v3-exact-review-\$\{attestation[.]subjectCommitSha\}/u);
   assert.match(worker, /function reviewSource\(check, attestation = null, identity = null\)/u);
@@ -377,6 +382,8 @@ test('candidate model code receives no credential and is enclosed by a base-owne
   assert.match(worker, /7700f1c0940dae14034c852e5ffe9e8a9f18439834bcc1c744876dc478470159/u);
   assert.match(worker, /evidence\/source-led-opportunity-v3-host-pin-v316-requirements-aa0c08b/u);
   assert.match(worker, /evidence\/source-led-opportunity-v3-host-pin-v316-architecture-aa0c08b/u);
+  assert.match(worker, /evidence\/source-led-opportunity-v3-host-pin-v316-requirements-ba3124f/u);
+  assert.match(worker, /evidence\/source-led-opportunity-v3-host-pin-v316-architecture-ba3124f/u);
   assert.match(worker, /model oracle successor requires protected-base approval/u);
   assert.match(worker, /model oracle successor listing must match the one reviewed digest/u);
   assert.match(worker, /const oracleRoot = authority === 'protected_base' \? baseRoot : subjectRoot/u);
