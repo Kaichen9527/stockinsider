@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { CandidateDetailPayload } from "@/lib/candidate-detail";
 import { sanitizePublicSourceUrl } from "@/lib/public-source-url.ts";
 import CandidateHistoryChart from "@/lib/candidate-history-chart";
+import LocalResearchWorkspace from "./LocalResearchWorkspace";
 
 type AnyRecord = Record<string, unknown>;
 
@@ -343,11 +344,11 @@ export default function CandidateDetailView({
       || !readableText(raw.label ?? raw.name, "");
   });
   return (
-    <main className="mx-auto min-h-screen max-w-5xl px-5 py-8 text-slate-900 dark:text-slate-100 sm:py-10">
-      <Link href="/" className="text-sm text-emerald-700 dark:text-emerald-300">
+    <main className="mx-auto min-h-screen max-w-6xl overflow-x-hidden px-4 py-6 text-stone-950 dark:text-stone-100 sm:px-6 sm:py-10">
+      <Link href="/" className="inline-flex min-h-11 items-center rounded-full border border-line px-4 text-sm font-semibold hover:border-orange-500 hover:text-orange-700 dark:hover:text-orange-300">
         ← 回到研究雷達
       </Link>
-      <header className="mt-6 rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950 sm:p-8">
+      <header className="decision-panel mt-5 overflow-hidden p-5 sm:p-8">
         <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
           <span className="rounded-full bg-slate-100 px-2.5 py-1 dark:bg-white/10">
             {detail.lifecycleStage === "actionable"
@@ -361,11 +362,12 @@ export default function CandidateDetailView({
             {publicationLabel}
           </span>
         </div>
-        <h1 className="mt-4 text-3xl font-semibold tracking-tight">
+        <p className="research-kicker mt-6">REVISION-BOUND RESEARCH</p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-[-0.035em] sm:text-5xl">
           {detail.chineseName}{" "}
           <span className="text-slate-400">{detail.symbol}</span>
         </h1>
-        <p className="mt-4 max-w-3xl text-base leading-8 text-slate-700 dark:text-slate-300">
+        <p className="mt-4 max-w-4xl text-base leading-8 text-stone-700 dark:text-stone-300">
           {hideIdentifiers(detail.summary)}
         </p>
         <p className="mt-3 text-xs text-slate-500">
@@ -385,7 +387,27 @@ export default function CandidateDetailView({
         ) : null}
         {hasUnresolvedSources ? <p className="mt-3 text-xs font-medium text-amber-700 dark:text-amber-300">部分來源名稱、日期、頁碼或連結尚待確認；未確認內容不作為正式結論。</p> : null}
       </header>
+      <section aria-labelledby="decision-summary-title" className="mt-6 grid gap-px overflow-hidden rounded-2xl border border-line bg-line lg:grid-cols-[1.15fr_.85fr]">
+        <div className="bg-stone-950 p-5 text-stone-50 sm:p-7">
+          <p className="research-kicker text-orange-300">DECISION SUMMARY</p>
+          <h2 id="decision-summary-title" className="mt-2 text-2xl font-semibold">{detail.lifecycleStage === 'actionable' ? '條件成立，仍由使用者決定' : detail.lifecycleStage === 'waiting' ? '估值有潛力，等待條件' : '來源命中，研究仍在補齊'}</h2>
+          <p className="mt-3 text-sm leading-6 text-stone-300">這是依同一研究 revision 彙整的估值、技術與證據狀態，不是上漲機率，也不是即時行情或個人化投資建議。</p>
+        </div>
+        <dl className="grid grid-cols-2 gap-px bg-line text-sm">
+          <div className="bg-[var(--surface)] p-4"><dt className="text-xs text-stone-500">研究狀態</dt><dd className="mt-1 font-semibold">{detail.detailKind === 'full' ? '完整研究版' : '事實研究版'}</dd></div>
+          <div className="bg-[var(--surface)] p-4"><dt className="text-xs text-stone-500">兩日確認</dt><dd className="mt-1 font-semibold">{detail.lifecycleStage === 'actionable' ? '已由分類門檻確認' : '尚未完成或不適用'}</dd></div>
+          <div className="bg-[var(--surface)] p-4"><dt className="text-xs text-stone-500">資料頻率</dt><dd className="mt-1 font-semibold">官方收盤後更新</dd></div>
+          <div className="bg-[var(--surface)] p-4"><dt className="text-xs text-stone-500">個人曝險</dt><dd className="mt-1 font-semibold">未評估</dd></div>
+        </dl>
+      </section>
       <ValuationSummary detail={detail} />
+      <LocalResearchWorkspace
+        symbol={detail.symbol}
+        revisionId={detail.revisionId}
+        currentPrice={detail.valuation.currentPrice ?? detail.technical.close ?? null}
+        atr14={detail.technical.atr14 ?? null}
+        baseTarget={detail.valuation.baseTarget ?? null}
+      />
       <section
         className="mt-6 grid gap-4 sm:grid-cols-2"
         aria-label="研究品質與執行條件"
