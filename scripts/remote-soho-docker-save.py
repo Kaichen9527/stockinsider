@@ -7,9 +7,6 @@ import sys
 
 
 CANDIDATES = {
-    "soho-rollback/soho-api:20260910T231911Z": "sha256:5bc8b33e7db261c4416dfef480d72cd1bc202a71fca1d9ef555db40601702928",
-    "soho-rollback/soho-web:20260910T231911Z": "sha256:38a1fc825a21b11d764946437c30d69a0caa955d23f0c965a77e2c64159d68d8",
-    "soho-rollback/soho-worker:20260910T231911Z": "sha256:305a4fd9a1adaad9900472bbeba1075c7e55cb2da312235f28809bca9c2a65b7",
     "soho-rollback/soho-live-canary-api:20260910T220957Z": "sha256:baf21214fa1d4d37ab480fd89f94debcd1945b3d120d8dffd787d9825e89d81f",
     "soho-rollback/soho-live-canary-calendar-worker:20260910T220957Z": "sha256:75b62a7e3288ffe942a6eaea36ab43f022e81c87f0c7d92a22c972bf2a6531d9",
     "soho-rollback/soho-live-canary-web:20260910T220957Z": "sha256:58a03c8f802ef6d459b3c1b8e2afa626cce54ce3c4450261f4426682c607e417",
@@ -59,7 +56,7 @@ def inspect_images(refs):
 
 def main():
     refs = sys.argv[1:]
-    if refs != sorted(CANDIDATES) or len(refs) != 11:
+    if refs != sorted(CANDIDATES) or len(refs) != 8:
         raise RuntimeError("exact_candidate_set_required")
     before = inspect_images(refs)
     emit({"phase": "before", "images": before})

@@ -23,17 +23,24 @@ const exactMap = (value, count, label) => {
 };
 
 export function validateSohoImagePolicy(policy) {
-  if (policy?.schema !== 'stockinsider-soho-image-retention-v1' || policy.host !== SOHO_VPS_HOST
+  if (policy?.schema !== 'stockinsider-soho-image-retention-v2' || policy.host !== SOHO_VPS_HOST
     || typeof policy.policy !== 'string' || !policy.policy.includes('Broad prune is forbidden')) {
     throw new Error('soho_image_policy_invalid');
   }
   exactMap(policy.current, 13, 'soho_current');
   exactMap(policy.retainedRollbacks, 21, 'soho_retained_rollbacks');
-  exactMap(policy.obsoleteCandidates, 11, 'soho_obsolete_candidates');
-  const groups = [policy.current, policy.retainedRollbacks, policy.obsoleteCandidates];
+  exactMap(policy.obsoleteCandidates, 8, 'soho_obsolete_candidates');
+  exactMap(policy.externallyAbsentBeforeVerifiedArchive, 3, 'soho_externally_absent');
+  if (policy.externallyAbsentDisposition !== 'externally_absent_before_verified_archive'
+    || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/u.test(policy.externallyAbsentDetectedAt || '')) {
+    throw new Error('soho_externally_absent_receipt_invalid');
+  }
+  const groups = [policy.current, policy.retainedRollbacks, policy.obsoleteCandidates,
+    policy.externallyAbsentBeforeVerifiedArchive];
   const refs = groups.flatMap(group => Object.keys(group));
   if (new Set(refs).size !== refs.length) throw new Error('soho_policy_ref_overlap');
-  const protectedIds = new Set([...Object.values(policy.current), ...Object.values(policy.retainedRollbacks)]);
+  const protectedIds = new Set([...Object.values(policy.current), ...Object.values(policy.retainedRollbacks),
+    ...Object.values(policy.externallyAbsentBeforeVerifiedArchive)]);
   if (Object.values(policy.obsoleteCandidates).some(id => protectedIds.has(id))) {
     throw new Error('soho_candidate_image_is_protected');
   }

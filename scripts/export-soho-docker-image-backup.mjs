@@ -14,7 +14,8 @@ import { canonical, loadSohoImagePolicy, SOHO_VPS_HOST } from './soho-image-poli
 const GIB = 1024 ** 3;
 
 function verifyObserved(images, policy) {
-  if (!Array.isArray(images) || images.length !== 11) throw new Error('soho_image_manifest_invalid');
+  const expectedCount = Object.keys(policy.obsoleteCandidates).length;
+  if (!Array.isArray(images) || images.length !== expectedCount) throw new Error('soho_image_manifest_invalid');
   const refs = new Set();
   for (const image of images) {
     if (!image || Object.keys(image).sort().join(',')
@@ -78,10 +79,13 @@ export async function exportSohoDockerImageBackup({ directory, keyDirectory, hos
     const images = await Promise.race([beforeReady,
       terminal.then(() => { throw new Error('remote_image_manifest_missing'); })]);
     verifyObserved(images, policy);
-    const manifest = { schema: 'stockinsider-soho-image-export-v1', host,
+    const manifest = { schema: 'stockinsider-soho-image-export-v2', host,
       createdAt: new Date().toISOString(), policySha256, images,
       candidateRefs, plaintextStoredOnMac: false, productionMutationPerformed: false,
-      broadPrunePerformed: false, restoreVerified: false };
+      broadPrunePerformed: false, restoreVerified: false,
+      externallyAbsentBeforeVerifiedArchive: policy.externallyAbsentBeforeVerifiedArchive,
+      externallyAbsentDetectedAt: policy.externallyAbsentDetectedAt,
+      externallyAbsentDisposition: policy.externallyAbsentDisposition };
     const contextSha256 = createHash('sha256').update(JSON.stringify(manifest)).digest('hex');
     const maximumPlaintextBytes = images.reduce((sum, image) => sum + image.size, 0) + 2 * GIB;
     if (!Number.isSafeInteger(maximumPlaintextBytes) || maximumPlaintextBytes >= 25 * GIB) {

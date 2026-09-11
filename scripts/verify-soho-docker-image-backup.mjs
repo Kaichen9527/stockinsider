@@ -83,10 +83,14 @@ export async function verifySohoDockerImageBackup({ manifestPath, keyDirectory }
       || (receiptMetadata.mode & 0o777) !== 0o600) throw new Error('soho_export_receipt_invalid');
     const receipt = JSON.parse(await receiptFile.readFile('utf8'));
     const manifest = receipt.manifest;
-    if (manifest?.schema !== 'stockinsider-soho-image-export-v1' || manifest.host !== SOHO_VPS_HOST
+    if (manifest?.schema !== 'stockinsider-soho-image-export-v2' || manifest.host !== SOHO_VPS_HOST
       || manifest.policySha256 !== policySha256 || manifest.plaintextStoredOnMac !== false
       || manifest.productionMutationPerformed !== false || manifest.broadPrunePerformed !== false
       || canonical(manifest.candidateRefs) !== canonical(candidateRefs)
+      || canonical(manifest.externallyAbsentBeforeVerifiedArchive)
+        !== canonical(policy.externallyAbsentBeforeVerifiedArchive)
+      || manifest.externallyAbsentDetectedAt !== policy.externallyAbsentDetectedAt
+      || manifest.externallyAbsentDisposition !== 'externally_absent_before_verified_archive'
       || canonical(manifest.images.map(image => [image.ref, image.imageId]).sort())
         !== canonical(Object.entries(policy.obsoleteCandidates).sort())) throw new Error('soho_export_manifest_invalid');
     const contextSha256 = createHash('sha256').update(JSON.stringify(manifest)).digest('hex');

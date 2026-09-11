@@ -7,10 +7,12 @@ import { verifyLoadedSohoImages } from './verify-soho-docker-image-backup.mjs';
 test('SOHO retention manifest is exact, disjoint and protects every retained identity', async () => {
   const { policy, candidateRefs, protectedRefs, policySha256 } = await loadSohoImagePolicy();
   assert.equal(policy.host, SOHO_VPS_HOST);
-  assert.equal(candidateRefs.length, 11);
+  assert.equal(candidateRefs.length, 8);
   assert.equal(protectedRefs.length, 34);
+  assert.equal(Object.keys(policy.externallyAbsentBeforeVerifiedArchive).length, 3);
   assert.match(policySha256, /^[0-9a-f]{64}$/u);
-  assert.equal(new Set([...candidateRefs, ...protectedRefs]).size, 45);
+  assert.equal(new Set([...candidateRefs, ...protectedRefs,
+    ...Object.keys(policy.externallyAbsentBeforeVerifiedArchive)]).size, 45);
   assert.throws(() => validateSohoImagePolicy({ ...policy,
     obsoleteCandidates: { ...policy.obsoleteCandidates,
       [candidateRefs[0]]: Object.values(policy.current)[0] } }), /soho_candidate_image_is_protected/u);
