@@ -253,7 +253,29 @@ test('production reruns retain a fixed financial availability cutoff', async () 
 test('price provenance is retained on persisted bars and blocks stage promotion when ineligible', async () => {
   const { readFile } = await import('node:fs/promises');
   const source = await readFile(new URL('./candidate-research.ts', import.meta.url), 'utf8');
-  assert.match(source, /provider: bar\.provider, authorityTier: bar\.authorityTier/u);
+  const history = await readFile(new URL('./candidate-history-backfill.ts', import.meta.url), 'utf8');
+  const migration = await readFile(new URL('../../../migrations/20260911_candidate_history_backfill_v1.sql', import.meta.url), 'utf8');
+  const dailyAppender = history.slice(history.indexOf('export async function persistCandidateDailyPriceEvidence'));
+  // Approved PIT repair: only newly acquired daily bars enter the append RPC.
+  // Cached history keeps its first availability and cannot be re-stamped by research.
+  assert.match(source, /await persistCandidateDailyPriceEvidence\(\{client:supabase,stockId:stock\.id,[\s\S]{0,180}bars:dailyBars \|\| \[\],officialSessions:marketSessions,latestSession:latestMarketSession/u);
+  assert.doesNotMatch(source, /from\('official_(?:price|multiple)_history'\)\s*\.(?:upsert|insert|update|delete)\(/u);
+  assert.match(dailyAppender, /options\.bars\.length > 5/u);
+  assert.match(dailyAppender, /bar\.provider !== 'official_primary' \|\| bar\.authorityTier !== 'official_primary'/u);
+  assert.match(dailyAppender, /if \(!officialPriceEndpoint\) continue/u);
+  assert.match(dailyAppender, /rpc\('complete_candidate_history_month_v1'/u);
+  assert.match(dailyAppender, /p_source_url: group\.sourceUrl[\s\S]{0,160}p_prices: group\.bars, p_multiples: \[\]/u);
+  assert.match(migration, /v_available_at TIMESTAMPTZ:=clock_timestamp\(\)/u);
+  assert.match(migration, /v_row->>'authorityTier' IS DISTINCT FROM 'official_primary'/u);
+  assert.match(migration, /v_row->>'provider' IS DISTINCT FROM 'official_primary'/u);
+  assert.match(migration, /v_row->>'sourceUrl' IS DISTINCT FROM p_source_url/u);
+  assert.match(migration, /ON CONFLICT\(stock_id,session_date\) DO NOTHING/u);
+  assert.match(source, /authority\.data\.filter\(\(row\) => isOfficialCandidatePriceProvider\(row\.provider\)\)/u);
+  assert.match(source, /return isOfficialCandidatePriceSource\(row\.source_url\)/u);
+  assert.match(source, /dailyHistoryConflicts:dailyEvidence\.conflicts/u);
+  assert.match(source, /const historyConflicts = \[\.\.\.officialHistoryBackfill\.conflicts,\.\.\.acquired\.dailyHistoryConflicts\]/u);
+  assert.match(source, /valuationPolicy\.canPublishTarget && historyConflictBlockers\.length === 0 \? rawValuation : null/u);
+  assert.match(source, /const usesFallbackEvidence = !priceEvidence\.promotionEligible/u);
   assert.match(source, /staleOrFallback: usesFallbackEvidence/u);
   assert.match(source, /publication_phase: baseInput\.staleOrFallback \? 'preliminary'/u);
   assert.doesNotMatch(source, /publication_phase: 'final' as const/u);
