@@ -67,6 +67,43 @@ test('history completion is atomic, private, idempotent and preserves conflictin
     assert.equal(sql(`SELECT has_function_privilege('authenticated','${signature}','EXECUTE')`),'f');
     assert.equal(sql(`SELECT has_function_privilege('service_role','${signature}','EXECUTE')`),'t');
 
+    // A different, clean daily close cannot adjudicate an unresolved conflict
+    // elsewhere in the same month. Even replaying a formerly successful attempt
+    // must now report the quarantine instead of restoring successful authority.
+    const stickyStock='55555555-5555-4555-8555-555555555555';
+    sql(`INSERT INTO stocks VALUES('${stickyStock}')`);
+    const initial=call([{...bar,time:'2025-08-27'}]).replaceAll(stock,stickyStock);
+    assert.equal(parsed(sql(initial)).status,'complete');
+    const stickyAvailable=sql(`SELECT available_at FROM official_price_history WHERE stock_id='${stickyStock}'`);
+    const conflict=call([{...bar,time:'2025-08-27',close:103}],'2026-01-02T00:00:00Z').replaceAll(stock,stickyStock);
+    assert.equal(parsed(sql(conflict)).status,'conflict');
+    const laterClean=call([{...bar,time:'2025-08-28'}],'2026-01-04T00:00:00Z').replaceAll(stock,stickyStock)
+      .replace("'complete','complete',NULL", "'retry','daily_refresh_partial','2026-01-05T00:00:00Z'");
+    assert.deepEqual(parsed(sql(laterClean)),{status:'conflict',terminal_reason:'official_history_existing_row_conflict'});
+    assert.equal(parsed(sql(call([bar],'2026-01-06T00:00:00Z').replaceAll(stock,stickyStock))).status,'conflict');
+    assert.equal(parsed(sql(initial)).status,'conflict');
+    assert.equal(sql(`SELECT status||':'||terminal_reason FROM candidate_history_backfill_months_v1 WHERE stock_id='${stickyStock}'`),
+      'conflict:official_history_existing_row_conflict');
+    assert.equal(sql(`SELECT count(*) FROM official_price_history WHERE stock_id='${stickyStock}'`),'1');
+    assert.equal(sql(`SELECT available_at FROM official_price_history WHERE stock_id='${stickyStock}'`),stickyAvailable);
+    assert.equal(sql(`SELECT count(*) FROM candidate_history_backfill_attempts_v1 WHERE stock_id='${stickyStock}'`),'4');
+
+    // Upstream provider disagreement is durable but must not import its chosen
+    // disputed price as verified evidence. Conflict-only writes accept no facts.
+    const providerStock='66666666-6666-4666-8666-666666666666';
+    sql(`INSERT INTO stocks VALUES('${providerStock}')`);
+    const providerCall=(rows,timestamp)=>call(rows,timestamp).replaceAll(stock,providerStock)
+      .replace("'complete','complete',NULL", "'conflict','official_history_provider_conflict',NULL");
+    assert.deepEqual(parsed(sql(providerCall([],'2026-01-07T00:00:00Z'))),
+      {status:'conflict',terminal_reason:'official_history_provider_conflict'});
+    assert.equal(parsed(sql(providerCall([],'2026-01-07T00:00:00Z'))).status,'conflict');
+    assert.deepEqual(parsed(sql(call([bar],'2026-01-08T00:00:00Z').replaceAll(stock,providerStock))),
+      {status:'conflict',terminal_reason:'official_history_provider_conflict'});
+    assert.equal(sql(`SELECT count(*) FROM official_price_history WHERE stock_id='${providerStock}'`),'0');
+    const disputedInsert=spawnSync(binary('psql'),args,{input:providerCall([bar],'2026-01-09T00:00:00Z'),encoding:'utf8'});
+    assert.notEqual(disputedInsert.status,0);
+    assert.equal(sql(`SELECT count(*) FROM candidate_history_backfill_attempts_v1 WHERE stock_id='${providerStock}'`),'2');
+
     // Genuine two-connection race: the normal writer's conflicting INSERT is
     // uncommitted (invisible to preflight), then the RPC waits on its unique key.
     // Release that writer only after PostgreSQL proves the RPC is lock-blocked.

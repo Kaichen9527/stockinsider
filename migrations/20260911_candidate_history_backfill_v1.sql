@@ -43,13 +43,14 @@ CREATE OR REPLACE FUNCTION public.complete_candidate_history_month_v1(
   p_source_url TEXT,p_parser_version TEXT,p_prices JSONB,p_multiples JSONB
 ) RETURNS JSONB LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $$
 DECLARE
-  v_row JSONB; v_session DATE; v_sessions JSONB:='[]'::jsonb; v_conflict BOOLEAN:=false;
+  v_row JSONB; v_session DATE; v_sessions JSONB:='[]'::jsonb; v_conflict BOOLEAN:=p_status='conflict';
   v_status TEXT:=p_status; v_reason TEXT:=p_terminal_reason; v_attempt public.candidate_history_backfill_attempts_v1;
   v_available_at TIMESTAMPTZ:=clock_timestamp();
+  v_prior_conflict_reason TEXT;
   v_price public.official_price_history; v_multiple public.official_multiple_history; v_fundamental public.fundamental_snapshots;
 BEGIN
   IF p_stock_id IS NULL OR p_dataset IS NULL OR p_dataset NOT IN ('price','multiple') OR p_month IS NULL OR extract(day FROM p_month)<>1
-    OR p_attempted_at IS NULL OR p_latest_session IS NULL OR p_status IS NULL OR p_status NOT IN ('complete','retry')
+    OR p_attempted_at IS NULL OR p_latest_session IS NULL OR p_status IS NULL OR p_status NOT IN ('complete','retry','conflict')
     OR p_terminal_reason IS NULL OR p_parser_version IS NULL OR p_parser_version<>'candidate-history-month-v1'
     OR p_latest_session>(v_available_at AT TIME ZONE 'Asia/Taipei')::date
     OR p_source_url IS NULL OR p_source_url!~'^https://www\.(twse\.com\.tw|tpex\.org\.tw)/'
@@ -59,12 +60,23 @@ BEGIN
     OR (p_dataset='multiple' AND jsonb_array_length(p_prices)>0)
     OR (p_status='complete' AND jsonb_array_length(p_prices)+jsonb_array_length(p_multiples)=0)
     OR (p_status='retry' AND (p_next_attempt_at IS NULL OR p_next_attempt_at<=p_attempted_at))
+    OR (p_status='conflict' AND (p_dataset<>'price' OR p_terminal_reason<>'official_history_provider_conflict'
+      OR jsonb_array_length(p_prices)+jsonb_array_length(p_multiples)<>0 OR p_next_attempt_at IS NOT NULL
+      OR p_observed_through IS NULL OR date_trunc('month',p_observed_through)::date<>p_month
+      OR p_observed_through>p_latest_session))
   THEN RAISE EXCEPTION 'candidate_history_completion_invalid'; END IF;
   -- Serialize per issuer-month and make a retry of the same completion idempotent.
   PERFORM pg_advisory_xact_lock(hashtextextended(p_stock_id::text||':'||p_dataset||':'||p_month::text,0));
+  -- A clean later session does not adjudicate an earlier contradictory value.
+  -- Keep the month quarantined until an explicit reviewed resolution exists.
+  SELECT terminal_reason INTO v_prior_conflict_reason FROM public.candidate_history_backfill_months_v1
+    WHERE stock_id=p_stock_id AND dataset=p_dataset AND month=p_month AND status='conflict';
+  IF FOUND THEN v_conflict:=true; END IF;
   SELECT * INTO v_attempt FROM public.candidate_history_backfill_attempts_v1
     WHERE stock_id=p_stock_id AND dataset=p_dataset AND month=p_month AND attempted_at=p_attempted_at;
-  IF FOUND THEN RETURN jsonb_build_object('status',v_attempt.status,'terminal_reason',v_attempt.terminal_reason); END IF;
+  IF FOUND THEN RETURN CASE WHEN v_prior_conflict_reason IS NOT NULL
+    THEN jsonb_build_object('status','conflict','terminal_reason',v_prior_conflict_reason)
+    ELSE jsonb_build_object('status',v_attempt.status,'terminal_reason',v_attempt.terminal_reason) END; END IF;
   FOR v_row IN SELECT value FROM jsonb_array_elements(CASE WHEN p_dataset='price' THEN p_prices ELSE p_multiples END) LOOP
     v_session:=COALESCE(v_row->>'time',v_row->>'date')::date;
     IF v_session IS NULL OR date_trunc('month',v_session)::date<>p_month OR v_session>p_latest_session
@@ -90,7 +102,8 @@ BEGIN
     END IF;
     v_sessions:=v_sessions||jsonb_build_array(v_session::text);
   END LOOP;
-  IF v_conflict THEN v_status:='conflict'; v_reason:='official_history_existing_row_conflict';
+  IF v_conflict THEN v_status:='conflict'; v_reason:=COALESCE(v_prior_conflict_reason,
+    CASE WHEN p_status='conflict' THEN p_terminal_reason ELSE 'official_history_existing_row_conflict' END);
   ELSE
     FOR v_row IN SELECT value FROM jsonb_array_elements(p_prices) LOOP
       v_session:=(v_row->>'time')::date;
@@ -134,7 +147,8 @@ BEGIN
       THEN v_conflict:=true; END IF;
     END LOOP;
   END IF;
-  IF v_conflict THEN v_status:='conflict'; v_reason:='official_history_existing_row_conflict'; END IF;
+  IF v_conflict THEN v_status:='conflict'; v_reason:=COALESCE(v_prior_conflict_reason,
+    CASE WHEN p_status='conflict' THEN p_terminal_reason ELSE 'official_history_existing_row_conflict' END); END IF;
   INSERT INTO public.candidate_history_backfill_attempts_v1(stock_id,dataset,month,attempted_at,status,terminal_reason,acquired_rows,source_url,parser_version)
     VALUES(p_stock_id,p_dataset,p_month,p_attempted_at,v_status,v_reason,jsonb_array_length(v_sessions),p_source_url,p_parser_version);
   INSERT INTO public.candidate_history_backfill_months_v1(stock_id,dataset,month,status,attempted_at,next_attempt_at,attempts,observed_through,observed_sessions,terminal_reason,source_url,parser_version)
