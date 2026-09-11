@@ -139,7 +139,7 @@ BEGIN
       WHERE queue.requested_session_date=p_session_date AND queue.refresh_phase=p_phase;
   END IF;
   WITH expected AS (SELECT DISTINCT unnest(v_keys) AS queue_key), states AS (
-    SELECT queue.job_id,queue.status,queue.terminal_status,queue.next_attempt_at,
+    SELECT queue.job_id,queue.status,queue.terminal_status,queue.next_attempt_at,queue.dataset,queue.symbol,
       EXISTS(SELECT 1 FROM public.taiwan_data_canonical_results_v5 canonical WHERE canonical.job_id=queue.job_id) AS persisted
     FROM expected LEFT JOIN public.taiwan_data_refresh_queue_v5 queue ON queue.queue_key=expected.queue_key
       AND queue.requested_session_date=p_session_date AND queue.refresh_phase=p_phase
@@ -147,10 +147,16 @@ BEGIN
     SELECT count(*) AS expected,
       count(*) FILTER(WHERE status='terminal' AND terminal_status='complete' AND persisted) AS completed,
       count(*) FILTER(WHERE status='terminal' AND (terminal_status IS DISTINCT FROM 'complete' OR NOT persisted)) AS failed,
+      count(*) FILTER(WHERE status='terminal' AND (terminal_status IS DISTINCT FROM 'complete' OR NOT persisted)
+        AND dataset='daily_price' AND symbol IS NOT NULL) AS "failedCandidate",
+      count(*) FILTER(WHERE status='terminal' AND (terminal_status IS DISTINCT FROM 'complete' OR NOT persisted)
+        AND (dataset<>'daily_price' OR symbol IS NULL)) AS "failedCritical",
       count(*) FILTER(WHERE status='queued') AS queued,count(*) FILTER(WHERE status='running') AS running,
       count(*) FILTER(WHERE job_id IS NULL) AS missing,
       count(*) FILTER(WHERE status='queued' AND next_attempt_at>statement_timestamp()) AS retrying FROM states
   ) SELECT to_jsonb(counts)||jsonb_build_object('ready',expected>0 AND completed=expected,
+    'settled',expected>0 AND completed+failed=expected,
+    'researchReady',expected>0 AND completed+failed=expected AND "failedCritical"=0,
     'scopeSource',v_source,'cutoffAt',v_cutoff) INTO v_result FROM counts;
   RETURN v_result;
 END $$;

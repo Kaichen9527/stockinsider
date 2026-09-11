@@ -117,6 +117,7 @@ test('Taiwan candidate scope, paging, publication and concurrent fair claims in 
     await Promise.all([parallelSql(register(keys.slice(0, 400))), parallelSql(register(keys.slice(300)))]);
     const progress = () => json(`SET ROLE service_role; SELECT read_taiwan_data_refresh_progress_v6(${session(day)},'final');`);
     assert.equal(progress().expected, 700); assert.equal(progress().missing, 700); assert.equal(progress().ready, false);
+    assert.equal(progress().settled, false); assert.equal(progress().researchReady, false);
     const entries = keys.map((queueKey, index) => ({ queueKey, dataset: 'daily_price', symbol: String(1000 + index), exchange: 'TWSE' }));
     const enqueue = items => `SELECT enqueue_taiwan_data_refresh_batch_v6(${quote(JSON.stringify(items))}::jsonb,'final',${session(day)},${at});`;
     assert.equal(json(`SET ROLE service_role; ${enqueue(entries.slice(0, 100))}`).queued, 100);
@@ -142,11 +143,24 @@ test('Taiwan candidate scope, paging, publication and concurrent fair claims in 
       UPDATE taiwan_data_refresh_queue_v5 SET status='terminal',terminal_status='complete',terminal_result='{}',completed_at=clock_timestamp() WHERE symbol='1103';`);
     assert.equal(progress().retrying, 1); assert.equal(progress().running, 1); assert.equal(progress().failed, 2);
     assert.equal(progress().ready, false); assert.equal(publication().datasetCompletenessPct, 14.29);
+    assert.equal(progress().settled, false); assert.equal(progress().researchReady, false);
+    markComplete("refresh_phase='final' AND symbol<>'1699'");
+    sql(`UPDATE taiwan_data_refresh_queue_v5 SET status='terminal',terminal_status='empty',terminal_result='{}',
+      completed_at=clock_timestamp() WHERE symbol='1699';`);
+    assert.equal(progress().completed, 699); assert.equal(progress().failedCandidate, 1); assert.equal(progress().failedCritical, 0);
+    assert.equal(progress().settled, true); assert.equal(progress().researchReady, true); assert.equal(progress().ready, false);
+    assert.equal(publication().datasetCompletenessPct, 99.86, 'isolated price failure allows research but never claims all data complete');
+    sql(`UPDATE taiwan_data_refresh_queue_v5 SET dataset='market_index',symbol=NULL WHERE queue_key='${keys[699]}';`);
+    assert.equal(progress().failedCandidate, 0); assert.equal(progress().failedCritical, 1);
+    assert.equal(progress().settled, true); assert.equal(progress().researchReady, false); assert.equal(progress().ready, false);
+    sql(`UPDATE taiwan_data_refresh_queue_v5 SET dataset='daily_price',symbol='1699' WHERE queue_key='${keys[699]}';`);
     markComplete("refresh_phase='final'");
     assert.equal(progress().ready, true); assert.equal(progress().completed, 700); assert.equal(publication().datasetCompletenessPct, 100);
+    assert.equal(progress().settled, true); assert.equal(progress().researchReady, true);
     assert.equal(sql(`SELECT dataset_completeness->'_refresh_scope_v6'->>'scopeSource' FROM taiwan_data_publication_metadata_v5 WHERE session_date=${session(day)} AND publication_phase='final'`), 'registered_scope');
     json(register(['a'.repeat(64)]));
     assert.equal(progress().expected, 701); assert.equal(progress().missing, 1); assert.equal(progress().ready, false);
+    assert.equal(progress().settled, false); assert.equal(progress().researchReady, false);
     assert.equal(Number(sql(`SELECT dataset_completeness_pct FROM taiwan_data_publication_metadata_v5 WHERE session_date=${session(day)} AND publication_phase='final'`)), 99.86,
       'scope growth invalidates stored complete metadata before any new enqueue');
 
