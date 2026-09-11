@@ -1,10 +1,11 @@
 import { createHash } from 'node:crypto';
 import {
-  CANDIDATE_FINANCIAL_DOCUMENT_BUCKET, MAX_CANDIDATE_FINANCIAL_DOCUMENT_BYTES,
+  MAX_CANDIDATE_FINANCIAL_DOCUMENT_BYTES,
   candidateFinancialDocumentObjectKey, isOfficialDocumentHost,
   parseCandidateFinancialDocumentMetadata, validateCandidateFinancialDocument,
   type CandidateFinancialDocumentMetadata,
 } from './candidate-financial-documents.ts';
+import { putCandidateFinancialArtifact } from './candidate-financial-artifact.ts';
 import type { getOpportunityV3ServerClient } from './opportunity-v3/service-client.ts';
 import { fixedRunnerPrincipal } from './opportunity-v3/internal.ts';
 
@@ -34,14 +35,8 @@ export async function persistDownloadedFinancialDocument(
   if ('error' in verified) throw new Error(verified.error);
   const hash = createHash('sha256').update(input.bytes).digest('hex');
   const objectKey = candidateFinancialDocumentObjectKey({ stockId: metadata.stockId, periodEnd: metadata.periodEnd, sha256: hash });
-  const immutableBytes = new Uint8Array(input.bytes.byteLength);
-  immutableBytes.set(input.bytes);
-  const stored = await db.storage.from(CANDIDATE_FINANCIAL_DOCUMENT_BUCKET).upload(objectKey,
-    new Blob([immutableBytes.buffer], { type: verified.normalizedContentType }),
-    { contentType: verified.normalizedContentType, upsert: false });
-  if (stored.error && !/already exists|duplicate/iu.test(stored.error.message)) {
-    throw new Error(`candidate_financial_document_storage_failed:${stored.error.message}`);
-  }
+  await putCandidateFinancialArtifact({ client: db, objectKey, sha256: hash,
+    bytes: input.bytes, contentType: verified.normalizedContentType });
   const receipt = await db.rpc('record_candidate_financial_document_receipt_v6', {
     p_stock_id: metadata.stockId, p_acquisition_job_id: metadata.acquisitionJobId,
     p_source_url: metadata.sourceUrl, p_exchange: metadata.exchange, p_period_end: metadata.periodEnd,

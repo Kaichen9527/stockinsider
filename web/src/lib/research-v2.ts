@@ -4,6 +4,7 @@ import { createHash, randomUUID } from 'crypto';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
 import { getSupabaseServerClient } from './supabase-server';
+import { putSourceAuditArtifact } from './source-audit-artifact';
 import { THREADS_CANONICAL_ORIGIN } from './source-auth';
 import { APPROVED_TELEGRAM_PUBLIC_CHANNELS, RETIRED_SOURCE_CONNECTORS, UNAVAILABLE_TELEGRAM_PUBLIC_CHANNELS, authorizedPodcastRssAllowlist, podcastContentAnalyzable } from './source-policy';
 import { bullTalkLicenseReadiness, parseLicensedBullTalkFeed } from './bulltalk-feed';
@@ -1720,30 +1721,33 @@ async function createSourceAudit(params: {
   let snapshotPath: string | null = null;
   let screenshotPath: string | null = null;
   const artifactErrors: string[] = [];
+  let artifactStorage = 'metadata_only';
   // Audits are metadata-only by default. A caller that explicitly provides a
   // diagnostic attachment stores it in a private Supabase bucket; the VPS
   // release directory is immutable and must never receive runtime artifacts.
   if (params.htmlContent) {
     snapshotPath = `${params.platform}/${auditId}.html`;
-    const upload = await supabase.storage.from(SOURCE_AUDIT_BUCKET).upload(
-      snapshotPath,
-      Buffer.from(params.htmlContent, 'utf8'),
-      { contentType: 'text/html; charset=utf-8', upsert: false },
-    );
-    if (upload.error) {
-      artifactErrors.push(`html:${upload.error.message}`);
+    try {
+      const stored = await putSourceAuditArtifact({ client: supabase, bucket: SOURCE_AUDIT_BUCKET,
+        objectKey: snapshotPath, bytes: Buffer.from(params.htmlContent, 'utf8'),
+        contentType: 'text/html; charset=utf-8' });
+      snapshotPath = stored.path;
+      artifactStorage = stored.storage;
+    } catch (cause) {
+      artifactErrors.push(`html:${cause instanceof Error ? cause.message : 'artifact_write_failed'}`);
       snapshotPath = null;
     }
   }
   if (params.screenshotBase64) {
     screenshotPath = `${params.platform}/${auditId}.png`;
-    const upload = await supabase.storage.from(SOURCE_AUDIT_BUCKET).upload(
-      screenshotPath,
-      Buffer.from(params.screenshotBase64, 'base64'),
-      { contentType: 'image/png', upsert: false },
-    );
-    if (upload.error) {
-      artifactErrors.push(`screenshot:${upload.error.message}`);
+    try {
+      const stored = await putSourceAuditArtifact({ client: supabase, bucket: SOURCE_AUDIT_BUCKET,
+        objectKey: screenshotPath, bytes: Buffer.from(params.screenshotBase64, 'base64'),
+        contentType: 'image/png' });
+      screenshotPath = stored.path;
+      artifactStorage = stored.storage;
+    } catch (cause) {
+      artifactErrors.push(`screenshot:${cause instanceof Error ? cause.message : 'artifact_write_failed'}`);
       screenshotPath = null;
     }
   }
@@ -1756,7 +1760,7 @@ async function createSourceAudit(params: {
     screenshot_path: screenshotPath,
     status: params.status,
     notes: params.notes || null,
-    metadata: { ...(params.metadata || {}), artifact_storage: 'private_supabase_storage', artifact_errors: artifactErrors },
+    metadata: { ...(params.metadata || {}), artifact_storage: artifactStorage, artifact_errors: artifactErrors },
   });
   if (error) throw new Error(error.message);
 }

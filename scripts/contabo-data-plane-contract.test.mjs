@@ -7,6 +7,7 @@ const bootstrap=readFileSync(new URL('../deployment/vps/bootstrap-stockinsider-p
 const service=readFileSync(new URL('../deployment/vps/systemd/stockinsider-postgrest.service',import.meta.url),'utf8');
 const config=readFileSync(new URL('../deployment/vps/postgrest-stockinsider.conf',import.meta.url),'utf8');
 const activation=readFileSync(new URL('../deployment/vps/activate-contabo-data-plane.sql',import.meta.url),'utf8');
+const acquisition=readFileSync(new URL('../web/src/lib/candidate-financial-document-acquisition.ts',import.meta.url),'utf8');
 
 test('portable bootstrap recreates required role names without a plaintext Vault shim',()=>{
   for(const role of ['anon','authenticated','service_role','authenticator','opportunity_v3_rpc_owner','legacy_correctness_rpc_owner','dashboard_user','stockinsider_runtime_v319'])
@@ -47,4 +48,9 @@ test('PostgREST is loopback-only and receives secrets through encrypted credenti
   assert.match(activation,/production_writer_releases[\s\S]*writer_kind='vps'/u);
   assert.match(activation,/internal_principal_role_is_exact_v3_internal/u);
   assert.match(activation,/identity_fence_enabled=true/u);
+});
+
+test('every official financial-document write uses the portable immutable artifact boundary',()=>{
+  assert.match(acquisition,/putCandidateFinancialArtifact/u);
+  assert.doesNotMatch(acquisition,/[.]storage[.]from/u);
 });
