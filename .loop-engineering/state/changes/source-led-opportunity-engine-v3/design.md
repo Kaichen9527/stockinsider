@@ -87,9 +87,9 @@ canonical authority tags immediately below are the only design-side declarations
 catalog identity, active-file topology and the shortened product-correctness owner.
 Their JSON payloads use RFC 8785 key order and are permitted exactly once only.
 
-<!-- GOV-004-AUTHORITY {"catalogBytes":6337,"catalogSha256":"6f8579883a04bd59d40adc3848065f43864d3237047b77235582d577b1365995","kind":"design-catalog-identity"} -->
+<!-- GOV-004-AUTHORITY {"catalogBytes":6337,"catalogSha256":"f6842952ff768be01fe0b9e91bf1f2aa089168bfcb7964d6113c44a71deb21e5","kind":"design-catalog-identity"} -->
 <!-- GOV-004-AUTHORITY {"activeFiles":55,"kind":"design-active-file-topology"} -->
-<!-- GOV-004-AUTHORITY {"kind":"design-product-correctness-owner","owner":"product-correctness-runtime-v3.11.11"} -->
+<!-- GOV-004-AUTHORITY {"kind":"design-product-correctness-owner","owner":"product-correctness-runtime-v3.11.12"} -->
 
 `GOV-004` parses every tag across the active graph, rejects a missing, repeated,
 non-canonical or conflicting tag, and normalizes case, key order and punctuation before
@@ -124,8 +124,8 @@ catalog and these current roots: `runtime-transaction-contract.md` v3.17,
 `factor-correctness-amendment.md` v3.11.6,
 `authority-supersession-contract.md` v3.2, `auth-principal-contract.md` v3.8,
 `trading-calendar-contract.md` v3.4, and `model-runner-contract.md` v3.6 with 875-byte identity SHA-256
-`f87259bc18fe03177f84c318cd2bff8fd016abb7b249368879c317a583897ed3`, host fixture
-SHA-256 `aaa70cc4dfc341224c5042c501e7392c2e63abce2164a66e87ba1fda5160fbca`,
+`f875e175cd7d84cb0010bddaf16de4badd4968ba81bdb033aecd611b1be00baa`, host fixture
+SHA-256 `25e485f32668470f002dedc89425ddb5370dacf1a8a22a8ed0ac3fd3602c7f02`,
 and acceptance `1.46.0/320`. Hash-preimage schema tags inside fenced canonical
 preimages are data, not active contract references. Model-runner identity remains
 independent of the opportunity runtime tuple.
