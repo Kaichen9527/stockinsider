@@ -41,7 +41,7 @@ test release contains no production credentials and is not a deployable commit.
 
 ## Verification
 
-- `npm run test:contabo-capacity-backup`: 39/39 passed, including traversal,
+- `npm run test:contabo-capacity-backup`: 41/41 passed, including traversal,
   internal-link reconstruction, absolute/unapproved link rejection, secret
   redaction, changed-content, fixed-host/path and no-persistent-plaintext cases.
 - `npm --prefix web run lint -- --quiet`: passed.

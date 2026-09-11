@@ -8,6 +8,7 @@ export const MAX_RELEASE_MANIFEST_BYTES = 16 * 1024 ** 2;
 const SECRET_PATH = /(^|\/)\.env(?:\..*)?$/;
 const TASKBUDDY_APP = /^taskbuddy(?:-v539|-v536)?$/;
 const EXTERNAL_SECRET_POLICY = 'taskbuddy-shared-env-production-v1';
+const MINDAY_SECRET_POLICY = 'minday-admin-env-local-rebind-v1';
 const canonical = value => value && typeof value === 'object'
   ? Array.isArray(value) ? `[${value.map(canonical).join(',')}]`
     : `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${canonical(value[key])}`).join(',')}}`
@@ -59,9 +60,11 @@ export function verifyReleaseTreeManifest(tree, expected) {
     || tree.fileCount !== tree.files?.length || !Number.isSafeInteger(tree.totalBytes)
     || !/^[0-9a-f]{64}$/.test(tree.treeSha256 || '')) throw new Error('release_tree_manifest_invalid');
   const links = tree.links ?? [], externalLinks = tree.externalSecretLinks ?? [];
-  if (!Array.isArray(links) || !Array.isArray(externalLinks)
+  const redactedSecretFiles = tree.redactedSecretFiles ?? [];
+  if (!Array.isArray(links) || !Array.isArray(externalLinks) || !Array.isArray(redactedSecretFiles)
     || (tree.symlinkCount ?? links.length) !== links.length
-    || (tree.externalSecretSymlinkCount ?? externalLinks.length) !== externalLinks.length) {
+    || (tree.externalSecretSymlinkCount ?? externalLinks.length) !== externalLinks.length
+    || (tree.redactedSecretFileCount ?? redactedSecretFiles.length) !== redactedSecretFiles.length) {
     throw new Error('release_tree_link_inventory_invalid');
   }
   const validRelative = value => typeof value === 'string' && value !== MANIFEST
@@ -98,6 +101,16 @@ export function verifyReleaseTreeManifest(tree, expected) {
     }
     paths.add(link.path);
   }
+  const mindayRelease = /^\/opt\/minday-admin-console-releases\/[^/]+$/.test(tree.releasePath);
+  for (const secret of redactedSecretFiles) {
+    const keys = Object.keys(secret || {}).sort().join(',');
+    if (keys !== 'archived,path,policyId,redacted' || !validRelative(secret.path) || paths.has(secret.path)
+      || !mindayRelease || secret.path !== '.env.local' || secret.policyId !== MINDAY_SECRET_POLICY
+      || secret.redacted !== true || secret.archived !== false) {
+      throw new Error('release_tree_redacted_secret_file_invalid');
+    }
+    paths.add(secret.path);
+  }
   const reconstructablePaths = new Set([
     ...tree.files.map(item => item.path), ...links.map(item => item.path),
   ]);
@@ -108,7 +121,7 @@ export function verifyReleaseTreeManifest(tree, expected) {
       throw new Error('release_tree_symlink_target_missing');
     }
   }
-  for (const linkPath of [...links, ...externalLinks].map(item => item.path)) {
+  for (const linkPath of [...links, ...externalLinks, ...redactedSecretFiles].map(item => item.path)) {
     if ([...paths].some(item => item !== linkPath && item.startsWith(`${linkPath}/`))) {
       throw new Error('release_tree_symlink_parent_conflict');
     }
@@ -237,7 +250,11 @@ export async function extractAndVerifyReleaseTar({ chunks, expectedTree, tempora
       externalSecretSymlinkCount: embedded.externalSecretLinks?.length ?? 0,
       externalSecretRebindPolicies: (embedded.externalSecretLinks ?? []).map(item => item.policyId),
       externalSecretRebindRequired: (embedded.externalSecretLinks?.length ?? 0) > 0,
-      externalSecretBytesArchived: 0, deploymentReconstructionPlanVerified: true,
+      redactedSecretFileCount: embedded.redactedSecretFiles?.length ?? 0,
+      redactedSecretRebindPolicies: (embedded.redactedSecretFiles ?? []).map(item => item.policyId),
+      redactedSecretRebindRequired: (embedded.redactedSecretFiles?.length ?? 0) > 0,
+      externalSecretBytesArchived: 0, redactedSecretBytesArchived: 0,
+      deploymentReconstructionPlanVerified: true,
       restoreVerified: true };
   } finally {
     await activeHandle?.close().catch(() => {});

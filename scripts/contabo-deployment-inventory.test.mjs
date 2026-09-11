@@ -72,6 +72,8 @@ test('cleanup evidence hashes and semantically binds the exact remote release to
     sourcePlaintextSha256: plaintextSha256, treeSha256: tree.treeSha256,
     fileCount: 1, totalBytes: 1, symlinkCount: 0, externalSecretSymlinkCount: 0,
     externalSecretRebindRequired: false, externalSecretRebindPolicies: [],
+    redactedSecretFileCount: 0, redactedSecretRebindRequired: false,
+    redactedSecretRebindPolicies: [], redactedSecretBytesArchived: 0,
     externalSecretBytesArchived: 0, externalSecretsArchived: false,
     deploymentReconstructionPlanVerified: true,
     restoreVerified: true, plaintextPersistedAfterVerification: false,
@@ -84,4 +86,19 @@ test('cleanup evidence hashes and semantically binds the exact remote release to
     restoreReceiptSha256: createHash('sha256').update(restoreBytes).digest('hex') };
   assert.equal(verifyCleanupEvidence(candidate, archiveBytes, restoreBytes), true);
   assert.equal(verifyCleanupEvidence({ ...candidate, path: '/opt/app/releases/b' }, archiveBytes, restoreBytes), false);
+});
+
+test('Minday legacy release cannot become eligible before its redacted secret is migrated', () => {
+  const now = Date.parse('2026-09-11T00:00:00Z');
+  const releasePath = '/opt/minday-admin-console-releases/20260803T153606Z';
+  const inventory = { schema: 'stockinsider-contabo-deployment-inventory-v1',
+    observedAt: new Date(now).toISOString(), host: 'vmi3152467', links: [],
+    releases: [{ path: releasePath }], services: [], containers: [], nginx: [] };
+  const policy = { schema: 'stockinsider-all-app-retention-policy-v1', host: 'vmi3152467',
+    retainedPaths: [], candidates: [{ path: releasePath }] };
+  const [blocked] = assessCleanupCandidates(inventory, policy, {}, { [releasePath]: true }, now);
+  assert.equal(blocked.eligible, false);
+  assert.ok(blocked.reasons.includes('external_prerequisite_missing:minday_admin_secret_migration_verified'));
+  assert.equal(assessCleanupCandidates(inventory, policy,
+    { minday_admin_secret_migration_verified: true }, { [releasePath]: true }, now)[0].eligible, true);
 });

@@ -76,6 +76,20 @@ function linkedTree({ internalTarget = '../pkg/bin.js', external = false } = {})
   return { tree: value, content };
 }
 
+function mindayTree() {
+  const content = { 'server.js': 'minday' };
+  const files = [{ path: 'server.js', bytes: 6, mode: 0o755, mtimeMs: 0,
+    sha256: createHash('sha256').update(content['server.js']).digest('hex') }];
+  const value = { schema: 'stockinsider-vps-release-tree-v1',
+    releasePath: '/opt/minday-admin-console-releases/20260803T153606Z',
+    fileCount: 1, totalBytes: 6, files, symlinkCount: 0, links: [],
+    externalSecretSymlinkCount: 0, externalSecretLinks: [], redactedSecretFileCount: 1,
+    redactedSecretFiles: [{ path: '.env.local', policyId: 'minday-admin-env-local-rebind-v1',
+      redacted: true, archived: false }] };
+  value.treeSha256 = createHash('sha256').update(canonical(value)).digest('hex');
+  return { tree: value, content };
+}
+
 function archive(value, fileContent = 'hello') {
   return tar([{ name: '.stockinsider-release-manifest.json', bytes: canonical(value), mode: 0o600 },
     { name: 'app/server.js', bytes: fileContent, mode: 0o755 }]);
@@ -120,6 +134,7 @@ spec = importlib.util.spec_from_file_location("release_stream", sys.argv[1])
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 result = {"approved": module.classify_link("/opt/taskbuddy/releases/v5.39", ".env.production", "/opt/taskbuddy/shared/.env.production")}
+result["minday"] = module.classify_redacted_secret("/opt/minday-admin-console-releases/20260803T153606Z", ".env.local")
 for name, target in (("absolute", "/etc/passwd"), ("traversal", "../../../escape")):
     try:
         module.classify_link("/opt/taskbuddy/releases/v5.39", "node_modules/.bin/tool", target)
@@ -135,6 +150,8 @@ print(json.dumps(result, sort_keys=True))
     policyId: 'taskbuddy-shared-env-production-v1', redacted: true }]);
   assert.equal(result.absolute, 'unapproved_absolute_symlink_rejected');
   assert.equal(result.traversal, 'release_symlink_traversal_rejected');
+  assert.deepEqual(result.minday, { archived: false, path: '.env.local',
+    policyId: 'minday-admin-env-local-rebind-v1', redacted: true });
   assert.equal(run.stdout.includes('/opt/taskbuddy/shared/.env.production'), false);
 });
 
@@ -194,6 +211,20 @@ test('approved external secret link is redacted metadata and no secret target or
   unapproved.tree.treeSha256 = createHash('sha256').update(canonical(unapproved.tree)).digest('hex');
   await assert.rejects(extractAndVerifyReleaseTar({ chunks: [linkedArchive(unapproved.tree, unapproved.content)],
     expectedTree: unapproved.tree, temporaryParent: dirs.restore }));
+});
+
+test('Minday live environment file is excluded and requires a separately verified rebind', async (t) => {
+  const dirs = await fixture(t), approved = mindayTree();
+  const bytes = linkedArchive(approved.tree, approved.content);
+  assert.equal(bytes.includes(Buffer.from('MINDAY_REAL_SECRET')), false);
+  assert.equal(bytes.includes(Buffer.from('.env.local\0')), false);
+  const result = await extractAndVerifyReleaseTar({ chunks: [bytes], expectedTree: approved.tree,
+    temporaryParent: dirs.restore });
+  assert.equal(result.redactedSecretFileCount, 1);
+  assert.equal(result.redactedSecretBytesArchived, 0);
+  assert.equal(result.redactedSecretRebindRequired, true);
+  assert.deepEqual(result.redactedSecretRebindPolicies, ['minday-admin-env-local-rebind-v1']);
+  assert.deepEqual(await readdir(dirs.restore), []);
 });
 
 test('release tar streams through the authenticated envelope without a plaintext file', async (t) => {

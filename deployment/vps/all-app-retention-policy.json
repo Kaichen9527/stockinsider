@@ -13,7 +13,8 @@
     "/var/lib/containerd"
   ],
   "externalPrerequisites": {
-    "taskbuddy_api_migration_verified": "TaskBuddy must prove that v5.39 and v5.36 contain every still-required API and route before older versions are eligible. This repository does not perform that migration."
+    "taskbuddy_api_migration_verified": "TaskBuddy must prove that v5.39 and v5.36 contain every still-required API and route before older versions are eligible. This repository does not perform that migration.",
+    "minday_admin_secret_migration_verified": "Minday's legacy .env.local is never archived with release code. It must be migrated to a separately protected release-external secret and its rebind verified before the legacy release can become cleanup-eligible."
   },
   "candidates": []
 }

@@ -77,6 +77,13 @@ in the manifest or tar stream. The restore receipt proves the rebind policy is
 known and required; the shared secret remains a separately protected deployment
 dependency. Any other live `.env` file or link is rejected.
 
+The reviewed Minday legacy release contains a regular `.env.local`. That file is
+also omitted from the archive and represented only by
+`minday-admin-env-local-rebind-v1`. Unlike TaskBuddy's already shared link, it is
+not release-external yet: cleanup preflight therefore requires a separate
+`minday_admin_secret_migration_verified` attestation before this release can ever
+be eligible. A verified code archive alone is insufficient deletion evidence.
+
 The SSH tar stream is fed directly to the existing AES-256-GCM backup envelope.
 No plaintext tar is written to the Mac. The encrypted artifact and its private
 receipt are placed under the project-root `backup/` directory and remain subject

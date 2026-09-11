@@ -19,10 +19,20 @@ TASKBUDDY_APP_RE = re.compile(r"^taskbuddy(?:-v539|-v536)?$")
 TASKBUDDY_SECRET_LINK_PATH = ".env.production"
 TASKBUDDY_SECRET_TARGET = "/opt/taskbuddy/shared/.env.production"
 TASKBUDDY_SECRET_POLICY = "taskbuddy-shared-env-production-v1"
+MINDAY_SECRET_PATH = ".env.local"
+MINDAY_SECRET_POLICY = "minday-admin-env-local-rebind-v1"
 
 
 def secret_file_name(relative):
     return bool(SECRET_NAME_RE.search(relative)) and not relative.endswith(".example")
+
+
+def classify_redacted_secret(root, relative):
+    if (root.startswith("/opt/minday-admin-console-releases/")
+            and relative == MINDAY_SECRET_PATH):
+        return {"path": relative, "policyId": MINDAY_SECRET_POLICY,
+                "redacted": True, "archived": False}
+    raise RuntimeError("release_secret_file_rejected")
 
 
 def canonical(value):
@@ -76,9 +86,10 @@ def scan(root):
     records = []
     links = []
     external_links = []
+    redacted_secret_files = []
     total = 0
     def append_link(kind, record):
-        if len(records) + len(links) + len(external_links) >= MAX_FILES:
+        if len(records) + len(links) + len(external_links) + len(redacted_secret_files) >= MAX_FILES:
             raise RuntimeError("release_tree_limit_exceeded")
         (links if kind == "internal" else external_links).append(record)
 
@@ -112,13 +123,17 @@ def scan(root):
             if not stat.S_ISREG(metadata.st_mode):
                 raise RuntimeError("release_special_file_rejected")
             if secret_file_name(relative):
-                raise RuntimeError("release_secret_file_rejected")
+                if len(records) + len(links) + len(external_links) + len(redacted_secret_files) >= MAX_FILES:
+                    raise RuntimeError("release_tree_limit_exceeded")
+                redacted_secret_files.append(classify_redacted_secret(root, relative))
+                continue
             identity = (metadata.st_dev, metadata.st_ino, metadata.st_size,
                         stat.S_IMODE(metadata.st_mode), metadata.st_mtime_ns)
             descriptor, digest = read_file(target, identity)
             os.close(descriptor)
             total += metadata.st_size
-            if total > MAX_BYTES or len(records) + len(links) + len(external_links) >= MAX_FILES:
+            if (total > MAX_BYTES
+                    or len(records) + len(links) + len(external_links) + len(redacted_secret_files) >= MAX_FILES):
                 raise RuntimeError("release_tree_limit_exceeded")
             records.append({"path": relative, "bytes": metadata.st_size,
                             "mode": stat.S_IMODE(metadata.st_mode), "mtimeMs": metadata.st_mtime_ns // 1_000_000,
@@ -126,11 +141,14 @@ def scan(root):
     records.sort(key=lambda item: item["path"])
     links.sort(key=lambda item: item["path"])
     external_links.sort(key=lambda item: item["path"])
+    redacted_secret_files.sort(key=lambda item: item["path"])
     tree = {"schema": "stockinsider-vps-release-tree-v1", "releasePath": root,
             "fileCount": len(records), "totalBytes": total, "files": records,
             "symlinkCount": len(links), "links": links,
             "externalSecretSymlinkCount": len(external_links),
-            "externalSecretLinks": external_links}
+            "externalSecretLinks": external_links,
+            "redactedSecretFileCount": len(redacted_secret_files),
+            "redactedSecretFiles": redacted_secret_files}
     tree["treeSha256"] = hashlib.sha256(canonical(tree)).hexdigest()
     return tree
 

@@ -60,6 +60,11 @@ export function verifyCleanupEvidence(candidate, archiveBytes, restoreBytes) {
       && restore.externalSecretRebindRequired === ((archive.manifest.tree.externalSecretLinks?.length ?? 0) > 0)
       && JSON.stringify(restore.externalSecretRebindPolicies)
         === JSON.stringify((archive.manifest.tree.externalSecretLinks ?? []).map(item => item.policyId))
+      && restore.redactedSecretFileCount === (archive.manifest.tree.redactedSecretFiles?.length ?? 0)
+      && restore.redactedSecretRebindRequired === ((archive.manifest.tree.redactedSecretFiles?.length ?? 0) > 0)
+      && JSON.stringify(restore.redactedSecretRebindPolicies)
+        === JSON.stringify((archive.manifest.tree.redactedSecretFiles ?? []).map(item => item.policyId))
+      && restore.redactedSecretBytesArchived === 0
       && restore.temporaryRestoreRemoved === true && restore.remoteDeletePerformed === false;
   } catch { return false; }
 }
@@ -91,6 +96,10 @@ export function assessCleanupCandidates(inventory, policy, prerequisites = {}, e
     }
     for (const prerequisite of candidate.requires || []) {
       if (prerequisites[prerequisite] !== true) reasons.push(`external_prerequisite_missing:${prerequisite}`);
+    }
+    if (candidate.path.startsWith('/opt/minday-admin-console-releases/')
+      && prerequisites.minday_admin_secret_migration_verified !== true) {
+      reasons.push('external_prerequisite_missing:minday_admin_secret_migration_verified');
     }
     for (const retained of policy.retainedPaths || []) {
       if (under(retained, candidate.path) || under(candidate.path, retained)) reasons.push('overlaps_retained_path');
