@@ -12,13 +12,22 @@ const canonical = value => value && typeof value === 'object'
 
 test('nginx inventory emits only local routes and filesystem dependencies', () => {
   const references = extractNginxReferences(`
+    server_name v539.5.104.83.211.nip.io preview.example.test;
+    location /api/ { proxy_pass http://127.0.0.1:3030/api/; }
     root /opt/taskbuddy-v539/current;
     proxy_pass http://127.0.0.1:3100/api;
     proxy_pass https://user:password@example.com/private;
     alias /srv/files/$tenant;
   `);
   assert.deepEqual(references.filesystem, ['/opt/taskbuddy-v539/current']);
-  assert.deepEqual(references.loopback, ['http://127.0.0.1:3100/api']);
+  assert.deepEqual(references.loopback, [
+    'http://127.0.0.1:3030/api/',
+    'http://127.0.0.1:3100/api',
+  ]);
+  assert.deepEqual(references.serverNames, [
+    'preview.example.test',
+    'v539.5.104.83.211.nip.io',
+  ]);
   assert.equal(JSON.stringify(references).includes('password'), false);
 });
 

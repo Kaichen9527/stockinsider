@@ -12,8 +12,14 @@ minutes. `contabo-cleanup-preflight.mjs` evaluates only explicit candidates in
 `all-app-retention-policy.json`. An unlisted path is retained.
 
 StockInsider keeps `current` and `previous`. TaskBuddy keeps v5.39 and v5.36, but
-the required API/route migration is owned by TaskBuddy and must have a verified
-external attestation before an older TaskBuddy path can even become eligible.
+the required frontend/API/worker migration is owned by TaskBuddy and must have a
+verified external attestation before an older TaskBuddy path can even become
+eligible. A matching browser-route list alone is insufficient: the retained
+frontend must have a working `/api/` binding, its compiled request contract must
+match the retained backend, human content approval must be recorded, and isolated
+demo data must never be rebound to production. The inventory records Nginx
+`server_name`, filesystem and loopback dependencies, including directives placed
+inline inside a `location` block.
 BabyCalendar, SOHO, databases, Docker/containerd stores and other App data are
 protected. Eligibility output is not deletion authorization.
 

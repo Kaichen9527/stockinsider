@@ -14,15 +14,25 @@ const safeExec = async (command, args) => (await execFile(command, args,
   { encoding: 'utf8', timeout: 30_000, maxBuffer: 8 * 1024 * 1024 })).stdout;
 
 export function extractNginxReferences(content) {
-  const filesystem = [], loopback = [];
-  for (const raw of content.split('\n')) {
-    const line = raw.replace(/#.*/, '').trim();
-    const fileMatch = line.match(/^(?:root|alias)\s+(\/[^;]+);$/);
-    if (fileMatch && !fileMatch[1].includes('$')) filesystem.push(path.normalize(fileMatch[1]));
-    const proxyMatch = line.match(/^proxy_pass\s+(https?:\/\/(?:127\.0\.0\.1|localhost):\d+(?:\/[^;]*)?);$/);
-    if (proxyMatch) loopback.push(proxyMatch[1]);
+  const filesystem = [], loopback = [], serverNames = [];
+  // Nginx permits multiple directives on one line. Scan directive boundaries so
+  // inline `location { proxy_pass ...; }` dependencies are not silently lost.
+  const uncommented = content.split('\n').map(raw => raw.replace(/#.*/, '')).join('\n');
+  const directives = /(?:^|[;{}])\s*(root|alias|proxy_pass|server_name)\s+([^;]+);/gmu;
+  for (const match of uncommented.matchAll(directives)) {
+    const [, name, rawValue] = match;
+    const value = rawValue.trim();
+    if ((name === 'root' || name === 'alias') && value.startsWith('/') && !value.includes('$')) {
+      filesystem.push(path.normalize(value));
+    } else if (name === 'proxy_pass'
+      && /^https?:\/\/(?:127\.0\.0\.1|localhost):\d+(?:\/[^;]*)?$/u.test(value)) {
+      loopback.push(value);
+    } else if (name === 'server_name') {
+      serverNames.push(...value.split(/\s+/u).filter(item => item && !item.includes('$')));
+    }
   }
-  return { filesystem: [...new Set(filesystem)].sort(), loopback: [...new Set(loopback)].sort() };
+  return { filesystem: [...new Set(filesystem)].sort(), loopback: [...new Set(loopback)].sort(),
+    serverNames: [...new Set(serverNames)].sort() };
 }
 
 async function collectLinksAndReleases(base) {
