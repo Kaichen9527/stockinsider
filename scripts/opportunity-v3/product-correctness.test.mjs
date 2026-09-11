@@ -1725,11 +1725,19 @@ const checks = {
     assert.match(bootstrap, /requiredKeys\(event, \['action', 'number', 'pull_request', 'repository'\]/u);
     assert.doesNotMatch(bootstrap, /exactKeys\(event, \['action', 'number', 'pull_request', 'repository'\]/u);
     assert.match(readFileSync(path.join(root, 'scripts/opportunity-v3/gate-evidence.mjs'), 'utf8'), /validateOpportunityGateEvidence/u);
-    const protectedWorker=readFileSync(path.join(root,'scripts/opportunity-v3/protected-external-gate-worker.mjs'),'utf8');
-    for(const token of ["catalog.schema==='opportunity-active-artifact-catalog-v1'",
-      "['opportunity-active-graph-v1',sha256(catalogBytes),rows]",
-      "['opportunity-active-graph-v2',sha256(catalogBytes),rows",
-      'unknown active artifact catalog schema'])assert.ok(protectedWorker.includes(token),`graph schema dispatch: ${token}`);
+    const protectedWorker = readFileSync(
+      path.join(root, 'scripts/opportunity-v3/protected-external-gate-worker.mjs'),
+      'utf8',
+    );
+    const graphDispatchContracts = [
+      [/catalog[.]schema\s*===\s*'opportunity-active-artifact-catalog-v1'/u, 'v1 catalog dispatch'],
+      [/\[\s*'opportunity-active-graph-v1',\s*sha256\(catalogBytes\),\s*rows\s*\]/u, 'v1 graph preimage'],
+      [/\[\s*'opportunity-active-graph-v2',\s*sha256\(catalogBytes\),\s*rows\s*,/u, 'v2 graph preimage'],
+      [/unknown active artifact catalog schema/u, 'closed unknown-schema rejection'],
+    ];
+    for (const [pattern, label] of graphDispatchContracts) {
+      assert.match(protectedWorker, pattern, `graph schema dispatch: ${label}`);
+    }
   },
   'PCR-024': () => {
     const component = readFileSync(path.join(root, 'web/src/app/components/RadarTabs.tsx'), 'utf8');
