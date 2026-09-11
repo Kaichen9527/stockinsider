@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { refreshCandidateOfficialFinancials, type CandidateOfficialFinancial } from '@/lib/candidate-official-financials';
 import { requireExactInternalBearer } from '@/lib/internal-auth';
 import { requireActiveVpsWriter, resolveLatestCompletedTaiwanSession } from '@/lib/taiwan-data-runtime';
+import { validatePendingOfficialFinancials } from '@/lib/official-financial-validation-worker';
 
 const BODY_LIMIT = 10_000;
 const MAX_DRAIN_LIMIT = 20;
@@ -43,20 +44,24 @@ export async function POST(request: Request) {
   }
   const stockIds = [...exchangeByStock.keys()];
   if (stockIds.length === 0) return NextResponse.json({ ok: true, result: { sessionDate, claimed: 0, writtenFacts: 0, failures: [], releaseId: writer.releaseId } });
-  const stocks = await writer.supabase.from('stocks').select('id,symbol').in('id', stockIds);
+  const stocks = await writer.supabase.from('stocks').select('id,symbol,name,sector').in('id', stockIds);
   if (stocks.error) return NextResponse.json({ ok: false, error: `candidate_financial_stock_read_failed:${stocks.error.message}` }, { status: 500 });
   const candidates = (stocks.data || []).flatMap((stock) => {
     const stockId = String(stock.id || '');
     const symbol = String(stock.symbol || '');
     const exchange = exchangeByStock.get(stockId);
-    return exchange && /^\d{4}$/u.test(symbol) ? [{ stockId, symbol, exchange }] : [];
+    return exchange && /^\d{4}$/u.test(symbol) ? [{ stockId, symbol, exchange,
+      statementKind: /證券|期貨|securities|futures/iu.test(`${stock.name || ''} ${stock.sector || ''}`) ? 'broker' as const : 'general' as const }] : [];
   });
   const result = await refreshCandidateOfficialFinancials(candidates, `${sessionDate}T13:30:00+08:00`, {
     enqueueMissing: false,
     maxJobs: limit,
   });
+  const validation = await validatePendingOfficialFinancials(candidates.map((stock) => stock.stockId));
+  const ok = result.failures.length === 0 && validation.status === 'success';
   return NextResponse.json({
-    ok: result.failures.length === 0,
-    result: { ...result, sessionDate, claimed: result.claimedJobs, releaseId: writer.releaseId },
-  }, { status: result.failures.length === 0 ? 200 : 500 });
+    ok,
+    ...(!ok ? { error: validation.status !== 'success' ? 'official_validation_incomplete' : 'candidate_financial_acquisition_failures' } : {}),
+    result: { ...result, validation, sessionDate, claimed: result.claimedJobs, releaseId: writer.releaseId },
+  }, { status: ok ? 200 : 500 });
 }

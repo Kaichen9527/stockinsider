@@ -435,6 +435,8 @@ export interface SourceFunnelSummaryV3 {
 export type DiscoveryEntrantReasonV3 =
   | 'new_in_seed_symbol' | 'new_out_of_seed_symbol' | 'new_source_evidence' | 'material_source_change';
 
+export type SourceSignalChangeReasonV3 = DiscoveryEntrantReasonV3 | 'same_material_evidence';
+
 export interface OpportunitySourceSignalV3 {
   symbol: string;
   chineseName: string | null;
@@ -447,7 +449,7 @@ export interface OpportunitySourceSignalV3 {
   valuationStatus: 'pending' | 'review_required';
   technicalState: 'below_support' | 'reclaim_required' | 'at_support' | 'breakout_pending' |
     'breakout_confirmed' | 'extended' | 'invalidated' | 'unavailable';
-  changedBecause: DiscoveryEntrantReasonV3;
+  changedBecause: SourceSignalChangeReasonV3;
 }
 
 export interface OpportunityDiscoveryDeltaV3 {

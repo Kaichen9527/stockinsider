@@ -1,6 +1,6 @@
 # External Gate Harness Contract
 
-Contract version: `source-led-external-gate-harness-v1.4`
+Contract version: `source-led-external-gate-harness-v1.5`
 
 ## Protected bootstrap and required administration
 
@@ -77,9 +77,12 @@ by subject processes, then emits the result envelope below.
 For `model_runner`, candidate processes receive only a non-credential placeholder HOME
 inside the base-owned read-only/network-denied sandbox. The two live pinned-host probes
 run later in the credentialed protected-base process only after `git ls-tree` proves the
-complete subject model-runner directory, wrapper and host-pin blob IDs byte-identical to
-the protected base. The candidate suite registers thirteen non-live tests with zero
-skip/todo; the exact-byte protected oracle registers the remaining two. The worker
+complete model-runner directory, wrapper and host-pin blob listing byte-identical to the
+reviewed subject. The subject listing must either equal the protected-base listing or
+match the exact content-addressed predecessor-to-successor transition approved by the
+protected base; no candidate-defined transition or learned/fallback value is accepted.
+The candidate suite registers nineteen non-live tests with zero skip/todo; the exact-byte
+protected oracle registers the remaining two. The worker
 derives the 28-ID partition count from the trace TAP summary and separately requires
 every mandatory suite/oracle summary to have zero failed/skipped/todo; it never writes a
 hard-coded passed count.

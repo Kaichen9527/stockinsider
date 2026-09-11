@@ -1,6 +1,6 @@
 # Source-led Opportunity Engine V3.11 — Product Correctness and Runtime Amendment
 
-Amendment version: `product-correctness-runtime-v3.11.11`
+Amendment version: `product-correctness-runtime-v3.11.12`
 
 ## Classification
 
@@ -74,6 +74,14 @@ dispositions as four distinct layers with explicit mapping/conservation.
 `legacy-radar-correctness-contract.md` and `data-contract.md`. Total-outage fixture
 fallback publishes zero cards; there is no production `fixture_fallback` card origin.
 
+This amendment closes two remaining publication
+authority gaps. Production total-outage suppression is derived from the complete
+persisted 17-profile by 5-connector terminal plane; a request or stage caller cannot
+authorize it with a Boolean. Every fresh candidate entrant also retains the exact
+producer run, scheduler configuration, legacy seed-set hash and database-derived seed
+membership used by the candidate funnel. The compact publisher rejects a cross-run,
+cross-config or substituted seed-membership entrant before publication.
+
 ## Point-in-time financial and valuation integrity
 
 `financial-data-contract.md` v3.3, `valuation-contract.md` v3.4,
@@ -118,8 +126,8 @@ unknown fields.
 
 ## Health, CI and release partitions
 
-`acceptance-evidence-contract.md` v3.13.0 is the sole owner of the exact 308-ID
-`143/159/6` classification, `20/28/260` track partition, executable owner/command,
+`acceptance-evidence-contract.md` v3.13.0 is the sole owner of the exact 320-ID
+`143/171/6` classification, `20/28/272` track partition, executable owner/command,
 no-skip binding, active-graph/code/evidence identity, canonical CI evidence and
 Code-vs-Promotion aggregate semantics.
 Runtime health is the exact payload in `runtime-installation-contract.md`.

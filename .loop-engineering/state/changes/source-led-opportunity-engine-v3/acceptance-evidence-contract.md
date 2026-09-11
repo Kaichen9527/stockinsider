@@ -198,7 +198,7 @@ graph; static fixtures and planned PCR boundaries are the immutable requirement 
 The active graph oracle validates the two canonical authority tags below, ASCII order,
 duplicate and active-graph closure,
 
-<!-- GOV-004-AUTHORITY {"catalogBytes":6337,"catalogSha256":"6f8579883a04bd59d40adc3848065f43864d3237047b77235582d577b1365995","kind":"evidence-catalog-identity"} -->
+<!-- GOV-004-AUTHORITY {"catalogBytes":6758,"catalogSha256":"6b3f8dfadc3c9101e853b9748ca5579934bca1501a437138853d3651f7954cce","kind":"evidence-catalog-identity"} -->
 <!-- GOV-004-AUTHORITY {"activeFiles":55,"kind":"evidence-file-owner-topology","owners":45} -->
 
 then recomputes every `[path,blobOid,byteLength,sha256]` row and compares the result to
@@ -225,7 +225,7 @@ remains permitted.
 `product-runtime-code-gate` runs all of the following in a clean checkout of the exact
 candidate commit and fails on the first nonzero/skip/todo/incomplete result:
 
-1. product-track traceability command above, reconciling exactly 260 registered IDs;
+1. product-track traceability command above, reconciling exactly 272 registered IDs;
 2. `npm run test:source-led-opportunity-v3`;
 3. `npm run test:source-led-opportunity-v3:product-correctness`;
 4. `npm run test:source-led-opportunity-v3:migration`;
@@ -255,29 +255,30 @@ registry-pinned command catalog; it does not trust an npm script as bootstrap au
 then runs the model track traceability reconciliation for exactly 28 IDs,
 `npm run test:model-runner-v3`, then
 `npm run v3:doctor -- --expect-mode disabled --require-host-pin
-model-runner-host-pins-v3.10`; doctor must reproduce the fixture's exact
-`codex-cli 0.148.0-alpha.21` bytes and report deployment mode disabled. It is a
+model-runner-host-pins-v3.16`; doctor must reproduce the fixture's exact
+`codex-cli 0.153.4` bytes and report deployment mode disabled. It is a
 required Code Gate input when a Code Gate is assembled; it is deliberately collected
 on the pinned self-hosted runner rather than represented as a skipped pull-request
 aggregate job.
 
 Candidate-side model execution receives no host credential and conditionally registers
-only the thirteen non-live tests, so its TAP has zero skipped/todo. A credentialed
+only the nineteen non-live tests, so its TAP has zero skipped/todo. A credentialed
 protected-base oracle executes the remaining two live tests only after proving the
 complete model-runner implementation/test/host-pin blob listing is byte-identical to
 the exact subject. The 28 reported passes are parsed from the acceptance trace owner;
 mandatory suite/oracle pass counts are checked independently and are not substituted for
 or added to the registered acceptance partition.
 
-`evaluation-governance` runs exactly the full
+`evaluation-governance` remains an audit-only diagnostic and runs exactly the full
 `verify:source-led-opportunity-v3:evaluation-governance` value frozen above: the
 20-ID traceability command, the two named point-in-time product/evaluation tests, then
 `evaluation-governance-gate.mjs --require-backtest-dates 120
 --require-live-dates 20 --require-attempt-roster 252`. It
 emits `blocked/non_fabricated_elapsed_cohorts_unavailable` when the immutable real
 120-date/20-live-date cohorts are not yet available; it cannot synthesize or backfill
-elapsed observations. That honest blocker is neutral for the Code Gate and blocking
-for Promotion Gate.
+elapsed observations. A pass, failure or honest blocker is neutral for the Code Gate
+and for current V6 publication, classification, homepage ordering, health and
+promotion. It is retained solely to reproduce historical evaluation evidence.
 
 The pull-request workflow has one diagnostic product/runtime check. It does not aggregate
 an unscheduled self-hosted model runner, and records evaluation governance as non-blocking
@@ -292,11 +293,15 @@ input fails that aggregate.
 For a Git tree `T`, parse the exact tracked `active-artifact-catalog-v3.json` from
 `T`. For each catalog `activeFiles` path, resolve the regular blob in `T` and create
 one row `[path,gitBlobOid,byteLength,sha256]`, preserving the catalog's strict ASCII
-path order. `sha256` hashes the exact blob bytes. The canonical active-graph preimage
+path order. Resolve `incorporatedFiles` and `historicalAuditFiles` from the repository
+root and build `incorporatedRows` and `historicalAuditRows` with the same four-member
+row shape and catalog order. Historical audit rows bind retained evidence bytes but do
+not restore them as publication, classification, health, or promotion authority.
+`sha256` hashes the exact blob bytes. The canonical active-graph preimage
 is:
 
 ```text
-["opportunity-active-graph-v1",catalogTrackedSha256,orderedBlobRows]
+["opportunity-active-graph-v2",catalogTrackedSha256,orderedBlobRows,incorporatedRows,historicalAuditRows]
 ```
 
 `activeGraphSha256` is lowercase SHA-256 of its RFC 8785 UTF-8 bytes. A missing,
@@ -414,7 +419,7 @@ sets both non-null and proves the closed 31-entry record above. Non-review leave
 For `status='pass'`, the compatibility validator requires the exact gate policy rather
 than merely equal nonzero counts: Requirements/Architecture/exact-review and aggregate
 checks are `partition=null, registeredCount=0, executedCount=0, commands=[]`;
-product/runtime is exactly `product_runtime,260,260` with sole command
+product/runtime is exactly `product_runtime,272,272` with sole command
 `product-runtime-track` / `protected://stockinsider-v3-gate-root/execute-track --track product_runtime`;
 model runner is exactly `model_runner,28,28` with `model-runner-track`; and evaluation
 is exactly `evaluation_governance,20,20` with `evaluation-governance-track`. Each sole
@@ -431,14 +436,13 @@ same subject commit/tree/active-graph/script-row identities. Aggregate validatio
 recomputes every nested review binding, including evidence-only diffs and exact-review
 range/child identity plus every PCR fulfillment fixture/owner/caller/execution; comparing
 outer fields alone is invalid. Commands are empty.
-`promotion-gate-aggregate.inputs` are exactly
-`code-gate-aggregate,evaluation-governance` under the same rules. Any omitted,
-additional, reordered, digest-mismatched or cross-tree input fails. The Code aggregate
-does not consume
-`evaluation-governance`, so honest blocked maturity cannot create an impossible PR
-aggregate. `promotion-gate-aggregate` is not a required PR check and passes only when
-the same Code Gate passes plus evaluation governance passes with real cohorts. A
-blocked evaluation can never be serialized as pass or full product verification.
+`promotion-gate-aggregate.inputs` are exactly `code-gate-aggregate` under the same
+rules. Any omitted, additional, digest-mismatched or cross-tree input fails. Neither
+the Code aggregate nor the Promotion aggregate consumes `evaluation-governance`, so
+historical cohort availability cannot block, reorder, label, suppress or promote a
+current V6 result. `promotion-gate-aggregate` is not a required PR check; it only
+preserves the pre-existing name as a code-evidence alias during compatibility cleanup.
+It never represents elapsed-cohort maturity or full product verification.
 
 `shadow-activation-gate` is a separate operational gate and is never a required PR
 Code check or a Promotion input. Its `inputs` contain exactly the passing

@@ -35,7 +35,13 @@ function graph() {
     const bytes = execFileSync('/usr/bin/git', ['cat-file', 'blob', oid], { cwd: root });
     return [file, oid, bytes.length, sha256(bytes)];
   });
-  return sha256(canonicalJson(['opportunity-active-graph-v1', sha256(catalogBytes), rows]));
+  const external=(paths)=>(paths??[]).map((filePath)=>{
+    const oid=git(['rev-parse',`${tree}:${filePath}`]);
+    const bytes=execFileSync('/usr/bin/git',['cat-file','blob',oid],{cwd:root});
+    return [filePath,oid,bytes.length,sha256(bytes)];
+  });
+  return sha256(canonicalJson(['opportunity-active-graph-v2',sha256(catalogBytes),rows,
+    external(catalog.incorporatedFiles),external(catalog.historicalAuditFiles)]));
 }
 
 function subject() {
@@ -246,6 +252,31 @@ test('shadow activation evidence requires the exact five-command catalog and ver
     rewriteEvidence(invalid);
     assert.throws(() => validateOpportunityGateResult(invalid, expected, nested));
   }
+});
+
+test('retired global Shadow evidence cannot enter the current promotion aggregate', () => {
+  const inventory = JSON.parse(readFileSync(path.join(change, 'acceptance-tests.json'), 'utf8'));
+  const currentSubject = subject();
+  const canonical = result('promotion-gate-aggregate', inventory, currentSubject);
+  const codeGate = { check: 'code-gate-aggregate', evidenceSha256: 'd'.repeat(64), status: 'pass' };
+  const evaluation = { check: 'evaluation-governance', evidenceSha256: 'e'.repeat(64), status: 'blocked' };
+  canonical.inputs = [{ check: codeGate.check, evidenceSha256: codeGate.evidenceSha256 }];
+  rewriteEvidence(canonical);
+  const expected = {
+    commitSha: currentSubject.commit,
+    treeSha: currentSubject.tree,
+    activeGraphSha256: currentSubject.graph,
+    inventory,
+  };
+  assert.doesNotThrow(() => validateOpportunityGateResult(canonical, expected, new Map([[codeGate.check, codeGate]])));
+
+  const invalid = structuredClone(canonical);
+  invalid.inputs.push({ check: evaluation.check, evidenceSha256: evaluation.evidenceSha256 });
+  rewriteEvidence(invalid);
+  assert.throws(() => validateOpportunityGateResult(invalid, expected, new Map([
+    [codeGate.check, codeGate],
+    [evaluation.check, evaluation],
+  ])), /promotion-gate-aggregate ordered inputs/u);
 });
 
 test('PCR-023 protected bootstrap workflow is base-owned and its registered release is byte-bound', () => {

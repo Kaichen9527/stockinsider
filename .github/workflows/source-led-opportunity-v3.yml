@@ -8,6 +8,8 @@ on:
       - '.loop-engineering/state/changes/source-led-opportunity-engine-v3/**'
       - 'migrations/20260724_source_led_opportunity_engine_v3.sql'
       - 'migrations/20260907*.sql'
+      - 'migrations/20260909*.sql'
+      - 'migrations/20260911*.sql'
       - 'deployment/vps/**'
       - 'scripts/model-runner-v3/**'
       - 'scripts/opportunity-v3/**'
@@ -57,6 +59,8 @@ jobs:
     timeout-minutes: 30
     env:
       PLAYWRIGHT_BROWSERS_PATH: "0"
+      STOCKINSIDER_DOCUMENT_PARSER_PYTHON: ${{ github.workspace }}/.parser-env/bin/python
+      STOCKINSIDER_DOCUMENT_PARSER_SCRIPT: ${{ github.workspace }}/scripts/candidate_financial_document_parser.py
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -76,9 +80,20 @@ jobs:
           echo "$postgres_bin" >> "$GITHUB_PATH"
       - name: Install root dependencies
         run: npm ci
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install isolated offline parser test dependencies
+        run: |
+          python -m venv .parser-env
+          .parser-env/bin/pip install -r scripts/requirements-candidate-financial-document-parser.txt
+          .parser-env/bin/python scripts/test_candidate_financial_parser_socket.py
+          .parser-env/bin/python scripts/test_candidate_financial_document_parser.py
       - name: Install web dependencies
         working-directory: web
         run: npm ci
+      - name: Verify candidate revision and historical date contracts
+        run: npm run test:candidate-revision-history
       - name: Install project-local Playwright Chromium
         working-directory: web
         run: ./node_modules/.bin/playwright install --with-deps chromium

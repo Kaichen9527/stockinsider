@@ -795,10 +795,10 @@ function activeGraphOracle() {
   assertCleanReviewedExecutionRoot(subjectTree);
   const catalogBlob = subjectTreeBlob(subjectTree, activeCatalogRepositoryPath);
   assert.deepEqual(catalogBlob.bytes, activeCatalogBytes, 'catalog working bytes equal reviewed subject tree');
-  assert.equal(catalogBlob.bytes.length, 6337, 'catalog exact tracked byte length including LF');
+  assert.equal(catalogBlob.bytes.length, 6758, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    '6f8579883a04bd59d40adc3848065f43864d3237047b77235582d577b1365995',
+    '6b3f8dfadc3c9101e853b9748ca5579934bca1501a437138853d3651f7954cce',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);
@@ -806,10 +806,14 @@ function activeGraphOracle() {
     .filter((file) => file.endsWith('-contract.md') && file !== 'data-contract.md')
     .sort();
   const activeContractFiles = readdirSync(change)
-    .filter((file) => file.endsWith('-contract.md') && file !== 'data-contract.md')
+    .filter((file) => file.endsWith('-contract.md') && !['data-contract.md','shadow-evaluation-contract.md'].includes(file))
     .sort();
   assert.deepEqual(activeContractFiles, expectedContractFiles);
   const activeArtifactFiles = activeCatalog.activeFiles;
+  assert.ok(!activeArtifactFiles.includes('shadow-evaluation-contract.md'),
+    'global Shadow predecessor is not active V6 authority');
+  assert.ok(activeArtifactFiles.includes('v6-no-global-shadow-authority-amendment.md'),
+    'approved V6 no-global-Shadow successor is active authority');
   assert.equal(activeArtifactFiles.length, 55);
   assert.equal(new Set(activeArtifactFiles).size, activeArtifactFiles.length);
   assert.deepEqual(activeArtifactFiles, [...activeArtifactFiles].toSorted(), 'catalog active-file ASCII order');
@@ -846,10 +850,19 @@ function activeGraphOracle() {
     '.loop-engineering/state/changes/source-led-opportunity-engine-v3/source-led-opportunity-engine-v3.14-actionability-recovery-amendment.md').bytes.toString('utf8');
   assert.match(recoveryText,/320 IDs, partitioned as\s*272 product\/runtime/u,
     'active V3.14 contract declares the canonical total and product/runtime partition');
+  const externalRows=(paths,label)=>(paths??[]).map((repositoryPath)=>{
+    const indexed=subjectTreeBlob(subjectTree,repositoryPath);
+    assert.ok(indexed.bytes.length>0,`${label} ${repositoryPath} nonempty`);
+    return [repositoryPath,indexed.oid,indexed.bytes.length,sha256(indexed.bytes)];
+  });
+  const incorporatedRows=externalRows(activeCatalog.incorporatedFiles,'incorporated');
+  const historicalRows=externalRows(activeCatalog.historicalAuditFiles,'historical audit');
   const activeGraphSha256 = sha256(canonicalJson([
-    'opportunity-active-graph-v1',
+    'opportunity-active-graph-v2',
     sha256(catalogBlob.bytes),
     orderedBlobRows,
+    incorporatedRows,
+    historicalRows,
   ]));
   // The immutable subject tree is the authority.  A literal copied from a
   // predecessor release turns every authorized active-artifact amendment into
@@ -857,7 +870,7 @@ function activeGraphOracle() {
   // graph hash to the exact reviewed tree instead.
   assert.match(activeGraphSha256,/^[0-9a-f]{64}$/u,'active graph is a canonical SHA-256');
   assert.equal(pcrBoundaries.schema, 'source-led-opportunity-pcr-implementation-boundaries-v1');
-  assert.equal(pcrBoundaries.version, 'source-led-opportunity-pcr-boundaries-v3.11.4');
+  assert.equal(pcrBoundaries.version, 'source-led-opportunity-pcr-boundaries-v3.20.2');
   assert.equal(pcrBoundaries.boundaries.length, 31, 'one immutable implemented boundary per PCR');
   assert.deepEqual(pcrBoundaries.boundaries.map(({ id }) => id),
     Array.from({ length: 31 }, (_, index) => `PCR-${String(index + 1).padStart(3, '0')}`));
@@ -876,7 +889,7 @@ function activeGraphOracle() {
   }
   assert.notEqual(
     activeGraphSha256,
-    sha256(canonicalJson(['opportunity-active-graph-v1', sha256(Buffer.concat([catalogBlob.bytes, Buffer.from('\n')])), orderedBlobRows])),
+    sha256(canonicalJson(['opportunity-active-graph-v2', sha256(Buffer.concat([catalogBlob.bytes, Buffer.from('\n')])), orderedBlobRows,incorporatedRows,historicalRows])),
     'active graph binds catalog bytes',
   );
   for (let rowIndex = 0; rowIndex < orderedBlobRows.length; rowIndex += 1) {
@@ -888,7 +901,7 @@ function activeGraphOracle() {
         : `${String(prior)[0] === '0' ? '1' : '0'}${String(prior).slice(1)}`;
       assert.notEqual(
         activeGraphSha256,
-        sha256(canonicalJson(['opportunity-active-graph-v1', sha256(catalogBlob.bytes), mutatedRows])),
+        sha256(canonicalJson(['opportunity-active-graph-v2', sha256(catalogBlob.bytes), mutatedRows,incorporatedRows,historicalRows])),
         `active graph binds row ${rowIndex} member ${memberIndex}`,
       );
     }
@@ -898,8 +911,32 @@ function activeGraphOracle() {
   }
   const design = readFileSync(path.join(change, 'design.md'), 'utf8');
   const evidenceContract = readFileSync(path.join(change, 'acceptance-evidence-contract.md'), 'utf8');
+  const externalHarnessContract = readFileSync(path.join(change, 'external-gate-harness-contract.md'), 'utf8');
+  const productCorrectnessAmendment = readFileSync(path.join(change, 'product-correctness-runtime-amendment.md'), 'utf8');
   assert.equal(inventory.evidenceContractVersion, 'opportunity-acceptance-evidence-v3.13.0');
   assert.match(evidenceContract, /^Version: `opportunity-acceptance-evidence-v3\.13\.0`$/mu);
+  assert.match(evidenceContract, /reconciling exactly 272 registered IDs/u,
+    'product runtime prose count matches the canonical verification partition');
+  assert.match(evidenceContract, /product\/runtime is exactly `product_runtime,272,272`/u,
+    'product runtime envelope prose count matches the protected gate policy');
+  assert.doesNotMatch(evidenceContract, /product_runtime,260,260|exactly 260 registered IDs/u,
+    'stale product runtime counts are absent from the active evidence contract');
+  assert.match(externalHarnessContract, /candidate suite registers nineteen non-live tests/u,
+    'external harness prose count matches the executable candidate model suite');
+  assert.doesNotMatch(externalHarnessContract, /candidate suite registers thirteen non-live tests/u,
+    'stale candidate model-suite count is absent from the active harness contract');
+  assert.match(externalHarnessContract,
+    /subject listing must either equal the protected-base listing or\s+match the exact content-addressed predecessor-to-successor transition approved by the\s+protected base/u,
+    'external harness documents the closed protected successor transition');
+  assert.doesNotMatch(externalHarnessContract,
+    /subject model-runner directory, wrapper and host-pin blob IDs byte-identical to\s+the protected base/u,
+    'external harness does not require unconditional equality with the predecessor listing');
+  assert.match(productCorrectnessAmendment,
+    /exact 320-ID\s+`143\/171\/6` classification, `20\/28\/272` track partition/u,
+    'product correctness amendment matches the current canonical inventory and partitions');
+  assert.doesNotMatch(productCorrectnessAmendment,
+    /exact 308-ID\s+`143\/159\/6` classification, `20\/28\/260` track partition/u,
+    'stale canonical inventory counts are absent from the active product correctness owner');
   const productCorrectnessOwner = expectedVersions.get('product-correctness-runtime-amendment.md');
   assert.match(productCorrectnessOwner ?? '', /^product-correctness-runtime-v\d+[.]\d+[.]\d+$/u,
     'catalog product-correctness owner version');
@@ -1147,7 +1184,7 @@ function activeGraphOracle() {
     /Amendment version: `hybrid-product-v3[.]2`/u,
   );
   const hostAmendment = readFileSync(path.join(change, 'host-pin-compatibility-amendment.md'), 'utf8');
-  assert.match(hostAmendment, /Amendment version: `model-runner-host-pin-amendment-v3[.]15`/u);
+  assert.match(hostAmendment, /Amendment version: `model-runner-host-pin-amendment-v3[.]16`/u);
   assert.match(hostAmendment, /codex-cli 0[.]153[.]4/u);
   assert.match(hostAmendment, /exact pin/u);
   const hostPinBytes = readFileSync(path.join(change, 'model-runner-host-pins-v3.json'), 'utf8');
@@ -1155,10 +1192,10 @@ function activeGraphOracle() {
   const hostPinCanonical = canonicalJson(hostPins);
   assert.equal(Buffer.byteLength(hostPinBytes), 2133);
   assert.equal(Buffer.byteLength(hostPinCanonical), 2132);
-  assert.equal(sha256(hostPinCanonical), 'aaa70cc4dfc341224c5042c501e7392c2e63abce2164a66e87ba1fda5160fbca');
-  assert.equal(hostPins.fixtureVersion, 'model-runner-host-pins-v3.15');
+  assert.equal(sha256(hostPinCanonical), '25e485f32668470f002dedc89425ddb5370dacf1a8a22a8ed0ac3fd3602c7f02');
+  assert.equal(hostPins.fixtureVersion, 'model-runner-host-pins-v3.16');
   assert.equal(hostPins.executables.find(({ name }) => name === 'codex')?.version, 'codex-cli 0.153.4');
-  assert.equal(runner.MODEL_RUNNER_IDENTITY_SHA256, 'f87259bc18fe03177f84c318cd2bff8fd016abb7b249368879c317a583897ed3');
+  assert.equal(runner.MODEL_RUNNER_IDENTITY_SHA256, 'f875e175cd7d84cb0010bddaf16de4badd4968ba81bdb033aecd611b1be00baa');
   assert.equal(Buffer.byteLength(canonicalJson(runner.MODEL_RUNNER_IDENTITY)), 875);
   const runtimeContract = readFileSync(path.join(change, 'runtime-transaction-contract.md'), 'utf8');
   assert.match(runtimeContract, /staticIdentityMembers` is the following exact 41-member/u);
@@ -1247,7 +1284,9 @@ function activeGraphOracle() {
     /([a-z0-9-]+-(?:contract|amendment)[.]md)(?:`)?(?:\s+version)?\s+`?v([0-9]+[.][0-9]+(?:[.][0-9]+)?)\b/giu,
   )];
   assert.ok(activeReferenceEdges.length > 0);
+  const historicalOwnerNames=new Set((activeCatalog.historicalAuditFiles??[]).map((file)=>path.basename(file)));
   for (const [, ownerFile, referencedVersion] of activeReferenceEdges) {
+    if(historicalOwnerNames.has(ownerFile))continue;
     const ownerVersion = expectedVersions.get(ownerFile);
     assert.ok(ownerVersion, `unknown active contract owner ${ownerFile}`);
     const ownerSuffix = ownerVersion.match(/-v([0-9]+[.][0-9]+(?:[.][0-9]+)?)$/u)?.[1];
@@ -1305,7 +1344,7 @@ const structuralExecutors = {
     }
     assert.equal(inventory.scriptValueRows.length, 14);
     assert.equal(sha256(canonicalJson(inventory.scriptValueRows)), inventory.scriptValueRowsSha256);
-    assert.equal(inventory.scriptValueRowsSha256, 'c15df6eb7cba7b03c188cbadf3c37019cded63ccb17cd171f462c6bbe6f986b1');
+    assert.equal(inventory.scriptValueRowsSha256, '925b38923d04bc93c926bc5e09b75225d46ef2dcadb5a1de98f8cbef8ded4351');
     const rootPackageScripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts;
     const webPackageScripts = JSON.parse(readFileSync(path.join(root, 'web/package.json'), 'utf8')).scripts;
     assert.deepEqual(inventory.scriptValueRows.map(([scriptKey]) => scriptKey), [
@@ -1397,7 +1436,7 @@ const structuralExecutors = {
       key === 'verify:source-led-opportunity-v3:model-runner')?.[1];
     assert.equal(
       modelAggregate,
-      'node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track model_runner && npm run test:model-runner-v3 && npm run v3:doctor -- --expect-mode disabled --require-host-pin model-runner-host-pins-v3.15',
+      'node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track model_runner && npm run test:model-runner-v3 && npm run v3:doctor -- --expect-mode disabled --require-host-pin model-runner-host-pins-v3.16',
       'model aggregate is the frozen fourteenth script authority',
     );
     const packageModelAggregate = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts[
@@ -2913,21 +2952,18 @@ const semanticExecutors = {
         break;
       }
       case 'EVAL-003': {
-        assert.equal(evaluatePromotion({
-          ...promotionInput,
-          v3Metrics: null,
-          legacyMetrics: null,
-        }).mode, 'shadow');
+        const currentPipeline = readFileSync(path.join(root, 'web/src/lib/domain.ts'), 'utf8');
+        const currentProjection = readFileSync(path.join(root, 'web/src/lib/radar-public-snapshot.ts'), 'utf8');
+        assert.match(currentPipeline, /const shadowObservation = null; \/\/ Legacy response field; global Shadow is retired[.]/u);
+        assert.match(currentProjection, /shadowProgress: undefined/u);
+        assert.doesNotMatch(currentPipeline, /recordCandidateShadowObservation\s*\(/u);
         break;
       }
       case 'EVAL-004': {
-        assert.equal(evaluatePromotion({
-          ...promotionInput,
-          backtestCount: 119,
-          liveCount: 19,
-          v3Metrics: null,
-          legacyMetrics: null,
-        }).pass, false);
+        const currentContract = readFileSync(path.join(change, 'v6-no-global-shadow-authority-amendment.md'), 'utf8');
+        const currentJobGraph = readFileSync(path.join(change, 'job-graph-contract.md'), 'utf8');
+        assert.match(currentContract, /cannot gate, promote, suppress or label a V6/u);
+        assert.match(currentJobGraph, /no successor, table, classification, publication, health or promotion rule depends on their metric values/u);
         break;
       }
       case 'EVAL-005': {

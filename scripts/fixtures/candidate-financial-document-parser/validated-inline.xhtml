@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+ xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"
+ xmlns:xbrli="http://www.xbrl.org/2003/instance"
+ xmlns:link="http://www.xbrl.org/2003/linkbase"
+ xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:test="urn:stockinsider:parser-test">
+ <head><title>Offline validation fixture</title></head>
+ <body>
+  <div style="display:none"><ix:header>
+   <ix:references><link:schemaRef xlink:type="simple" xlink:href="validated-taxonomy.xsd"/></ix:references>
+   <ix:resources>
+    <xbrli:context id="FY2025">
+     <xbrli:entity><xbrli:identifier scheme="http://www.twse.com.tw">2330</xbrli:identifier></xbrli:entity>
+     <xbrli:period><xbrli:instant>2025-12-31</xbrli:instant></xbrli:period>
+    </xbrli:context>
+    <xbrli:unit id="shares"><xbrli:measure>xbrli:shares</xbrli:measure></xbrli:unit>
+   </ix:resources>
+  </ix:header></div>
+  <p>Shares: <ix:nonFraction name="test:Shares" contextRef="FY2025" unitRef="shares" decimals="0">100</ix:nonFraction></p>
+ </body>
+</html>

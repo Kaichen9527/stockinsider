@@ -1,4 +1,5 @@
 import type { CandidateStageCard, RadarDailyPayload } from './types';
+import { candidateRevisionHref } from './candidate-revision-query.ts';
 
 export type CandidateStageKey = 'found' | 'waiting' | 'actionable';
 
@@ -37,6 +38,9 @@ export function compactCandidateStageForSnapshot(card: CandidateStageCard): Cand
     symbol: card.symbol,
     chineseName: card.chineseName,
     lifecycleStage: card.lifecycleStage,
+    detailRevisionId: card.detailRevisionId ?? null,
+    detailHref: candidateRevisionHref(card.symbol, card.detailRevisionId),
+    stale: card.stale === true,
     latestMentionAt: card.latestMentionAt,
     rawMentionCount: card.rawMentionCount,
     effectiveMentionCount: card.effectiveMentionCount,

@@ -13,7 +13,7 @@ export function ShadowOpportunityV3({ engine }: { engine: OpportunityEngineV3 })
   if (engine.availability === 'unavailable') {
     return (
       <section className="rounded-[2rem] border border-dashed border-amber-500/35 bg-amber-500/5 p-6">
-        <p className="text-xs tracking-[0.24em] text-amber-700 dark:text-amber-300">V3 影子研究</p>
+        <p className="text-xs tracking-[0.24em] text-amber-700 dark:text-amber-300">V3 歷史研究</p>
         <h2 className="mt-2 text-xl font-semibold">Source-led engine 正在累積不可變證據</h2>
         <p className="mt-2 text-sm text-slate-600 dark:text-emerald-100/65">
           目前沒有可安全顯示的 verified-change 摘要。此區不改動既有推薦排序，也不構成投資建議。
@@ -29,7 +29,7 @@ export function ShadowOpportunityV3({ engine }: { engine: OpportunityEngineV3 })
     <section className="rounded-[2rem] border border-amber-500/35 bg-amber-500/5 p-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-xs tracking-[0.24em] text-amber-700 dark:text-amber-300">V3 影子研究 — 非正式推薦／非投資建議</p>
+          <p className="text-xs tracking-[0.24em] text-amber-700 dark:text-amber-300">V3 歷史研究 — 非正式推薦／非投資建議</p>
           <h2 className="mt-2 text-2xl font-semibold">最近確認的變化</h2>
         </div>
         <span className="rounded-full border border-amber-500/30 px-3 py-1 text-xs">

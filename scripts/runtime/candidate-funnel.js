@@ -55,6 +55,10 @@ function retainedCandidate(prior,{currentSession,completedSessions,retentionSess
     ?'source_evidence_retained_within_20_sessions'
     :'source_unavailable_retained_last_good';
   return Object.freeze({ ...prior,
+    observedInCurrentRun:false,
+    discoveryProducerRunId:prior.discoveryProducerRunId??prior.producerRunId??null,
+    discoverySchedulerConfigSha256:prior.discoverySchedulerConfigSha256??prior.schedulerConfigSha256??null,
+    discoveryLegacySeedSetHash:prior.discoveryLegacySeedSetHash??prior.legacySeedSetHash??null,
     firstObservedSession:sessionId(prior.firstObservedSession)??sessionId(prior.lastObservedSession)??sessionId(currentSession),
     lastObservedSession:sessionId(prior.lastObservedSession)??sessionId(currentSession),
     retentionCountedThroughSession:sessionId(currentSession)
@@ -65,6 +69,7 @@ function retainedCandidate(prior,{currentSession,completedSessions,retentionSess
     // is semantically unchanged material evidence, while the V3.18-specific
     // explanation belongs in additive metadata rather than a new enum value.
     reason:'same_material_evidence',
+    discoveryDisposition:'unchanged',discoveryReason:'same_material_evidence',
     retentionReason,
     sourcePriority:Number.isFinite(prior.sourcePriority)?Math.max(0,prior.sourcePriority-0.01):0,
     evidence:Object.freeze(evidence),
@@ -73,7 +78,8 @@ function retainedCandidate(prior,{currentSession,completedSessions,retentionSess
 }
 
 function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvailable = true,
-  currentSession = null, completedSessions = [], retentionSessions = 20 }) {
+  currentSession = null, completedSessions = [], retentionSessions = 20,
+  producerRunId = null, schedulerConfigSha256 = null, legacySeedSetHash = null }) {
   invariant(Number.isInteger(retentionSessions)&&retentionSessions>0&&retentionSessions<=60,'candidate retention bound');
   const observations = [];
   const authorityRejected = [];
@@ -151,16 +157,28 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
         kolIdentity: row.kolIdentity, sourcePublishedAt: row.sourcePublishedAt,
         sourceCollectedAt: row.sourceCollectedAt, nominationAuthority: row.nominationAuthority,
         structuredClaim: row.structuredClaim, rightsAttested: row.rightsAttested, evidenceHash: row.evidenceHash })),
-      evidenceCount: evidence.length, ...disposition };
+      evidenceCount: evidence.length, ...disposition,
+      discoveryDisposition:disposition.disposition,discoveryReason:disposition.reason };
   });
-  const currentByStock=new Map(candidates.map((candidate)=>[candidate.stockId,Object.freeze({ ...candidate,
-    firstObservedSession:sessionId((priorLedger??[]).find((prior)=>prior?.stockId===candidate.stockId)?.firstObservedSession)
-      ??sessionId((priorLedger??[]).find((prior)=>prior?.stockId===candidate.stockId)?.lastObservedSession)
+  const prior = (priorLedger ?? []).filter((row) => row && typeof row === 'object');
+  const currentByStock=new Map(candidates.map((candidate)=>{
+    const priorCandidate=prior.find((row)=>row.stockId===candidate.stockId);
+    return [candidate.stockId,Object.freeze({ ...candidate,
+    ...(producerRunId ? { producerRunId } : {}),
+    ...(schedulerConfigSha256 ? { schedulerConfigSha256 } : {}),
+    ...(legacySeedSetHash ? { legacySeedSetHash } : {}),
+    observedInCurrentRun:true,
+    discoveryProducerRunId:priorCandidate?.discoveryProducerRunId??priorCandidate?.producerRunId??producerRunId,
+    discoverySchedulerConfigSha256:priorCandidate?.discoverySchedulerConfigSha256
+      ??priorCandidate?.schedulerConfigSha256??schedulerConfigSha256,
+    discoveryLegacySeedSetHash:priorCandidate?.discoveryLegacySeedSetHash
+      ??priorCandidate?.legacySeedSetHash??legacySeedSetHash,
+    firstObservedSession:sessionId(priorCandidate?.firstObservedSession)
+      ??sessionId(priorCandidate?.lastObservedSession)
       ??sessionId(currentSession),
     lastObservedSession:sessionId(currentSession),
     retentionCountedThroughSession:sessionId(currentSession),retainedSessionCount:0,
-  })]));
-  const prior = (priorLedger ?? []).filter((row) => row && typeof row === 'object');
+  })];}));
   // A completed ledger is already bounded to the coarse-universe cap.  Keep
   // that invariant explicit: if it is ever violated, silently choosing a
   // subset would turn a persistence defect into an unexplained disappearance.
@@ -220,11 +238,74 @@ function buildCandidateFunnel({ outcomes, seedSymbols, priorLedger, sourceAvaila
   });
 }
 
-function selectLiveDiscoveryCards({ candidateLedger, totalOutage = false }) {
+function validatePublishedEntrantAuthority({ candidates, producerRunId, schedulerConfigSha256,
+  legacySeedSetHash, seedSymbols, discoveryDelta }) {
+  const rows=candidates??[];
+  if(rows.length===0)return true;
+  invariant(typeof producerRunId === 'string' && /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/u.test(producerRunId),
+    'published entrant run authority');
+  invariant(typeof schedulerConfigSha256 === 'string' && /^[0-9a-f]{64}$/u.test(schedulerConfigSha256)
+    && typeof legacySeedSetHash === 'string' && /^[0-9a-f]{64}$/u.test(legacySeedSetHash)
+    && Array.isArray(seedSymbols), 'published entrant config authority');
+  const allowed=new Map([['new_in_seed_symbol','promoted'],['new_out_of_seed_symbol','promoted'],
+    ['material_source_change','refreshed'],['same_material_evidence','unchanged']]);
+  const symbols=new Set();const expectedAdded=[];const expectedContinued=[];const expectedUnchanged=[];
+  for (const candidate of rows) {
+    invariant(typeof candidate.symbol==='string'&&!symbols.has(candidate.symbol),'published discovery symbol authority');
+    symbols.add(candidate.symbol);
+    const hasPreservedAuthority=Object.prototype.hasOwnProperty.call(candidate,'candidateDisposition')
+      ||Object.prototype.hasOwnProperty.call(candidate,'candidateReason');
+    invariant(!hasPreservedAuthority||(Object.prototype.hasOwnProperty.call(candidate,'candidateDisposition')
+      &&Object.prototype.hasOwnProperty.call(candidate,'candidateReason')),'published discovery authority shape');
+    const canonicalDisposition=hasPreservedAuthority?candidate.candidateDisposition:candidate.disposition;
+    const canonicalReason=hasPreservedAuthority?candidate.candidateReason:candidate.reason;
+    invariant(allowed.has(candidate.discoveryReason)
+      &&candidate.discoveryDisposition===allowed.get(candidate.discoveryReason)
+      &&canonicalDisposition===candidate.discoveryDisposition&&canonicalReason===candidate.discoveryReason,
+    'published discovery authority enum');
+    const expectedMembership=seedSymbols.includes(candidate.symbol)?'in_seed':'out_of_seed';
+    const uuid=(value)=>typeof value==='string'&&/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/u.test(value);
+    const sha=(value)=>typeof value==='string'&&/^[0-9a-f]{64}$/u.test(value);
+    const currentObservation=candidate.observedInCurrentRun===true;
+    invariant(typeof candidate.observedInCurrentRun==='boolean'
+      &&uuid(candidate.producerRunId)&&sha(candidate.schedulerConfigSha256)&&sha(candidate.legacySeedSetHash)
+      &&uuid(candidate.discoveryProducerRunId)&&sha(candidate.discoverySchedulerConfigSha256)
+      &&sha(candidate.discoveryLegacySeedSetHash)
+      &&(currentObservation
+        ?candidate.producerRunId===producerRunId&&candidate.schedulerConfigSha256===schedulerConfigSha256
+          &&candidate.legacySeedSetHash===legacySeedSetHash
+        :candidate.discoveryDisposition==='unchanged'&&candidate.producerRunId!==producerRunId)
+      &&(candidate.discoveryDisposition==='promoted'
+        ?currentObservation&&candidate.discoveryProducerRunId===producerRunId
+          &&candidate.discoverySchedulerConfigSha256===schedulerConfigSha256
+          &&candidate.discoveryLegacySeedSetHash===legacySeedSetHash
+        :candidate.discoveryProducerRunId!==producerRunId)
+      && candidate.seedMembership === expectedMembership
+      &&(!candidate.discoveryReason.startsWith('new_')
+        ||candidate.discoveryReason === (expectedMembership === 'in_seed' ? 'new_in_seed_symbol' : 'new_out_of_seed_symbol'))
+      &&(candidate.discoveryDisposition!=='refreshed'||currentObservation),
+    'published entrant authority conflict');
+    if(candidate.discoveryDisposition==='promoted')expectedAdded.push(candidate.symbol);
+    else expectedContinued.push(candidate.symbol);
+    if(candidate.discoveryDisposition==='unchanged')expectedUnchanged.push(candidate.symbol);
+  }
+  invariant(discoveryDelta&&Array.isArray(discoveryDelta.added)&&Array.isArray(discoveryDelta.continued)
+    &&Array.isArray(discoveryDelta.unchangedReasons),'published discovery delta authority');
+  const same=(left,right)=>left.length===right.length&&[...left].sort().every((value,index)=>value===[...right].sort()[index]);
+  invariant(same(discoveryDelta.added,expectedAdded)&&same(discoveryDelta.continued,expectedContinued)
+    &&discoveryDelta.unchangedReasons.every((row)=>row?.reason==='same_material_evidence')
+    &&same(discoveryDelta.unchangedReasons.map((row)=>row?.symbol),expectedUnchanged),
+  'published discovery delta conflict');
+  return true;
+}
+
+function selectLiveDiscoveryCards({ candidateLedger, totalOutage = false, preserveRows = false }) {
   if (totalOutage) return { cards: [], fallback: 'total_outage_zero_cards' };
   invariant(candidateLedger.length <= 60, 'candidate projection bound');
+  const live = candidateLedger.filter((candidate) => candidate.disposition !== 'rejected'
+    && candidate.seedOnly !== true && candidate.sourceKey !== 'seed');
   return {
-    cards: candidateLedger.filter((candidate) => candidate.disposition !== 'rejected').map((candidate) => ({
+    cards: preserveRows ? live : live.map((candidate) => ({
       symbol: candidate.symbol,
       researchMaturity: 'source_signal',
       newPositionAction: 'valuation_review',
@@ -237,4 +318,5 @@ function selectLiveDiscoveryCards({ candidateLedger, totalOutage = false }) {
   };
 }
 
-module.exports = { buildCandidateFunnel, discoveryPriority, retainedSessionCount, selectLiveDiscoveryCards };
+module.exports = { buildCandidateFunnel, discoveryPriority, retainedSessionCount, selectLiveDiscoveryCards,
+  validatePublishedEntrantAuthority };

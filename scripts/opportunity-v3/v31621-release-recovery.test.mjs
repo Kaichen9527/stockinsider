@@ -21,7 +21,16 @@ test('V31621 operator migration plan exactly matches the reviewed apply chain',(
   const planned=declaredMigrationPaths(plan,'migrationPaths');
   const reviewed=declaredMigrationPaths(apply,'MIGRATIONS');
   assert.deepEqual(planned,reviewed,'the displayed production plan cannot omit or reorder a reviewed migration');
-  assert.equal(planned.at(-1),'migrations/20260830_v320_kol_retention_owner_boundary.sql');
+  // Approved v6 evidence repair: receipt authority must precede job linkage;
+  // the new queue/history jobs cannot replace or reorder the existing chain.
+  assert.deepEqual(planned.slice(-6),[
+    'migrations/20260911_candidate_financial_fact_manifest_v8.sql',
+    'migrations/20260911_02_financial_field_work_fairness.sql',
+    'migrations/20260911_03_financial_document_job_links.sql',
+    'migrations/20260911_04_taiwan_candidate_refresh_queue.sql',
+    'migrations/20260911_candidate_history_backfill_v1.sql',
+    'migrations/20260911_05_financial_fact_isolation_v10.sql',
+  ]);
 });
 
 test('V3.18 candidate retention reuses only the preceding immutable terminal ledger',()=>{

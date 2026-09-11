@@ -27,11 +27,12 @@ official closes passing all technical and market gates.
 
 ## Publication and Replay
 
-The 19:00 publication is preliminary. The 21:00 cycle freezes final provider metadata,
-ordered candidate inputs and model versions, then writes research, detail revisions,
-the atomic public snapshot and finally an independent replay observation. Replay reads
-only the frozen payload. Preliminary, weekend, duplicate, failed and backtest runs
-never increase the thirty-session count.
+The preliminary/final market-data distinction remains. The production cycle freezes
+its own provider metadata, ordered inputs and model versions after acquisition, then
+writes research, detail revisions and the atomic public snapshot. It does not depend
+on global Shadow manifests or observations. Historical Shadow tables remain audit-only.
+Individual-stock classification input hashes and two-adjacent-close confirmation
+remain mandatory; same-day retries never add a close.
 
 Public cards are compact and paginated; full articles, evidence and historical charts
 load from revision-bound detail APIs. A deterministic company-specific fact article is

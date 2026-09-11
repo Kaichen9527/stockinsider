@@ -1,0 +1,54 @@
+{
+  "schema": "candidate-financial-document-parser-v2",
+  "status": "partial",
+  "parser": "arelle",
+  "inputSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "runtimeVersion": "2.44.7",
+  "taxonomySha256": "4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869",
+  "locators": [{ "xbrl_context": "D-2026Q2", "xbrl_concept": "tifrs-full:Revenue" }],
+  "missingRequirements": ["arelle_validation_errors"],
+  "validation": {
+    "errorCount": 1,
+    "errorCodes": ["xbrldie:PrimaryItemDimensionallyInvalidError"],
+    "validFactCount": 1,
+    "errorsTruncated": false
+  },
+  "validatedFacts": [{
+    "xbrl_context": "D-2026Q2",
+    "xbrl_concept": "tifrs-full:Revenue",
+    "value": "100",
+    "unit": "TWD",
+    "entity_identifier": "2330",
+    "period_start": "2026-04-01",
+    "period_end": "2026-06-30",
+    "duration_kind": "quarterly",
+    "dimension_count": 0,
+    "factKey": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "xValid": "VALID",
+    "structuralStatus": "structurally_validated",
+    "sourceFactId": "source:10",
+    "extractedFactId": "extracted:10",
+    "concept_namespace": "urn:stockinsider:acceptance:tifrs-full"
+  }],
+  "factAcceptance": {
+    "policyVersion": "arelle-fact-scope-v1",
+    "documentSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "taxonomySha256": "4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869",
+    "extractedInstanceSha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "sourceValidationCompleted": true,
+    "extractedValidationCompleted": true,
+    "manifestComplete": true,
+    "documentFatal": false,
+    "errors": [{
+      "phase": "source",
+      "code": "xbrldie:PrimaryItemDimensionallyInvalidError",
+      "refs": [{ "href": "filing.xhtml#segment-equity", "objectId": "source:99", "sourceLine": 91 }],
+      "fatal": false
+    }],
+    "rejections": [{
+      "factKey": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "errorIndexes": [0]
+    }]
+  },
+  "errorManifestSha256": "c64e5b5c8ea4000acf28ac336a3ac30f816f17c193fc72bdbda81dc4ced41a0c"
+}

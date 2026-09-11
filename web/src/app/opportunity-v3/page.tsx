@@ -163,7 +163,7 @@ function WorkspaceShell({
         <div className="mb-7 flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-xs tracking-[0.24em] text-amber-700 dark:text-amber-300">
-              V3 影子研究 · 非投資建議
+              V3 歷史研究 · 非投資建議
             </p>
             <h1 className="mt-2 text-3xl font-semibold md:text-5xl">Verified-change workspace</h1>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600 dark:text-emerald-100/65">

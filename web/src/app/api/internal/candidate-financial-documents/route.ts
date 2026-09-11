@@ -10,6 +10,7 @@ import {
 } from '@/lib/candidate-financial-documents';
 import { requireExactInternalBearer } from '@/lib/internal-auth';
 import { requireActiveVpsWriter } from '@/lib/taiwan-data-runtime';
+import { fixedRunnerPrincipal } from '@/lib/opportunity-v3/internal';
 
 export const runtime = 'nodejs';
 
@@ -33,6 +34,8 @@ export async function POST(request: Request) {
   }
   const metadata = parseCandidateFinancialDocumentMetadata(request.headers.get('x-candidate-financial-document-metadata'));
   if (!metadata) return error(422, 'invalid_candidate_financial_document_metadata');
+  const runnerPrincipal = metadata.acquisitionJobId ? fixedRunnerPrincipal() : null;
+  if (metadata.acquisitionJobId && !runnerPrincipal) return error(503, 'candidate_financial_document_runner_principal_missing');
   const stock = await identity.writer.supabase.from('stocks').select('id,symbol').eq('id', metadata.stockId).maybeSingle();
   if (stock.error || !stock.data || String(stock.data.symbol || '') !== metadata.symbol) {
     return error(stock.error ? 500 : 422, stock.error?.message || 'candidate_financial_document_stock_mismatch');
@@ -75,6 +78,14 @@ export async function POST(request: Request) {
   });
   const row = Array.isArray(receipt.data) ? receipt.data[0] : receipt.data;
   if (receipt.error || !row) return error(500, `candidate_financial_document_receipt_failed:${receipt.error?.message || 'missing'}`);
+  if (metadata.acquisitionJobId) {
+    // Includes idempotent receipt replays: its original acquisition_job_id is
+    // immutable and must not hide the job associated with this upload.
+    const linked = await identity.writer.supabase.rpc('reconcile_candidate_financial_document_job_v9', {
+      p_receipt_id: row.receipt_id, p_job_id: metadata.acquisitionJobId, p_caller_principal: runnerPrincipal,
+    });
+    if (linked.error) return error(500, `candidate_financial_document_job_reconciliation_failed:${linked.error.message}`);
+  }
   return NextResponse.json({
     ok: true, receiptId: row.receipt_id, status: row.receipt_status,
     idempotentReplay: row.idempotent_replay === true,

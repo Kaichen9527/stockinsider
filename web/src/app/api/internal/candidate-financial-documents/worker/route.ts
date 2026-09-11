@@ -15,6 +15,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: 'invalid_candidate_financial_document_worker_request' }, { status: 422 });
   }
   const result = await processCandidateFinancialDocumentReceipts(limit);
-  const hasErrors = result.results.some((item) => item.error);
+  const hasErrors = result.reconciliationErrors.length > 0
+    || result.results.some((item) => item.error || item.status === 'rejected' || item.status === 'partial'
+      || item.status === 'validation_pending' || (item.missingRequirements?.length || 0) > 0);
   return NextResponse.json({ ok: !hasErrors, releaseId: writer.releaseId, result }, { status: hasErrors ? 500 : 200 });
 }

@@ -122,7 +122,7 @@ type SourceSignalCardV311 = {
   technicalState:'below_support'|'reclaim_required'|'at_support'|
     'breakout_pending'|'breakout_confirmed'|'extended'|'invalidated'|'unavailable';
   changedBecause:'new_in_seed_symbol'|'new_out_of_seed_symbol'|'new_source_evidence'|
-    'material_source_change';
+    'material_source_change'|'same_material_evidence';
 };
 type DiscoveryDeltaV311 = {
   asOf:string;

@@ -1,7 +1,7 @@
 'use strict';
 
 const { bounded, canonicalJson, immutableBundle, invariant, sha256 } = require('./codec');
-const { serializeCorrectnessPublicUnion } = require('./public-projection');
+const { serializePublishedResearchDecision } = require('./published-research-decision');
 const { compatibilityAction, unavailableDecisionEnvelope, overrideDecisionEnvelopeAction, validateDecisionEnvelopeV313,
   } = require('./decision-envelope');
 const { validateDecisionEnvelopeV314 } = require('./decision-envelope-v314');
@@ -11,6 +11,7 @@ const { buildResearchSnapshotV317 } = require('./research-snapshot-v317');
 const { buildResearchDossierV318 } = require('./research-dossier-v318');
 const { deriveResearchReadinessV319 } = require('./research-readiness-v319');
 const { hasCandidateNominationAuthority } = require('./candidate-nomination-authority');
+const { selectLiveDiscoveryCards } = require('./candidate-funnel');
 
 const CARD_BUCKETS = Object.freeze([
   'opportunities', 'scenarioUpsideCandidates', 'earlyWatchlist',
@@ -213,7 +214,7 @@ function unavailableResearchDecision(lastEvaluatedAt) {
 function availableResearchDecision(decision) {
   return Object.freeze({
     version: 'legacy-research-decision-v3.11.0', availability: 'available',
-    ...serializeCorrectnessPublicUnion(decision),
+    ...serializePublishedResearchDecision(decision),
   });
 }
 
@@ -462,7 +463,10 @@ function addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates =
       evidenceRefs: publicCitations.map((row) => row.ref),
       valuationStatus: publicView.decisionEnvelope.valuationReadiness, technicalState: decision.technical?.technicalState
         ?? decision.researchScore?.priceContext?.technicalState ?? 'unavailable',
-      changedBecause: signalReasons.has(decision.reason) ? decision.reason : 'new_source_evidence',
+      changedBecause: kolFirst
+        ? (signalReasons.has(decision.discoveryReason)||decision.discoveryReason==='same_material_evidence'
+          ?decision.discoveryReason:(()=>{throw new Error('published discovery authority enum');})())
+        : signalReasons.has(decision.reason) ? decision.reason : 'new_source_evidence',
       sourceProvenance, citations:publicCitations,
       decisionBrief,
       ...(researchNextStep?{researchNextStep}:{}),
@@ -566,6 +570,21 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
   invariant(decisions.length <= 60, 'radar card bound');
   invariant(legacyPayload && typeof legacyPayload === 'object' && !Array.isArray(legacyPayload), 'legacy radar payload required');
   invariant(decisions.length + sourceCandidates.length <= 60, 'radar discovery bound');
+  const totalOutage = sourceAcquisitionHealth?.terminalStatus === 'total_outage'
+    && sourceAcquisitionHealth?.sourceTerminalState?.schema === 'source-terminal-state-v3.20'
+    && sourceAcquisitionHealth.sourceTerminalState.terminalStatus === 'total_outage';
+  const liveRows = selectLiveDiscoveryCards({
+    candidateLedger: [...decisions, ...sourceCandidates], totalOutage, preserveRows: true,
+  }).cards;
+  const liveRowSet = new Set(liveRows);
+  const selectedDecisions = decisions.filter((row) => liveRowSet.has(row));
+  const selectedSourceCandidates = sourceCandidates.filter((row) => liveRowSet.has(row));
+  const selectedLegacyPayload = totalOutage
+    ? Object.fromEntries(Object.entries(legacyPayload).map(([key, value]) => [key,
+      ['opportunities','scenarioUpsideCandidates','earlyWatchlist','recentFormal7d','fallbackOpportunities90d','hotTracking',
+        'earlySignals','partiallyVerified','validatedIdeas','discoveredStocks','sourceSignals','recommendations','actions',
+        'notifications'].includes(key) && Array.isArray(value) ? [] : value]))
+    : legacyPayload;
   const publicMarketAnalysis = normalizedMarketAnalysis(marketAnalysis);
   // The captured legacy payload is research input, never current release
   // authority. Only the tracked run's frozen lineage may enable actions.
@@ -573,7 +592,7 @@ function publishCompactRadarProjection({ decisions, sourceCandidates = [], disco
   const researchSnapshotEnabled=['legacy-radar-v3.17.0','legacy-radar-v3.18.0','legacy-radar-v3.19.0','legacy-radar-v3.20.0'].includes(schemaVersion);
   const researchDossierEnabled=['legacy-radar-v3.18.0','legacy-radar-v3.19.0','legacy-radar-v3.20.0'].includes(schemaVersion);
   const researchReadinessEnabled=['legacy-radar-v3.19.0','legacy-radar-v3.20.0'].includes(schemaVersion);
-  const layered = addResearchDecisions(legacyPayload, decisions, asOf, sourceCandidates, publicMarketAnalysis,
+  const layered = addResearchDecisions(selectedLegacyPayload, selectedDecisions, asOf, selectedSourceCandidates, publicMarketAnalysis,
     {researchSnapshotEnabled,researchDossierEnabled,researchReadinessEnabled,
       kolFirst:schemaVersion==='legacy-radar-v3.20.0'});
   const publishableSourceSignals=selectLandingSourceSignals(layered.sourceSignals.filter((card)=>{

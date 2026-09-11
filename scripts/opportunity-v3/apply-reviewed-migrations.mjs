@@ -55,6 +55,16 @@ const MIGRATIONS = Object.freeze([
   'migrations/20260830_v320_expired_unclaimed_run_reaper.sql',
   'migrations/20260830_v320_kol_claim_payload_compaction.sql',
   'migrations/20260830_v320_kol_retention_owner_boundary.sql',
+  // Requires the financial-acquisition and evidence-contract planes already
+  // present on the reviewed production database; fails closed if absent.
+  'migrations/20260909_official_financial_validation_receipts.sql',
+  'migrations/20260911_v320_source_terminal_projection_authority.sql',
+  'migrations/20260911_candidate_financial_fact_manifest_v8.sql',
+  'migrations/20260911_02_financial_field_work_fairness.sql',
+  'migrations/20260911_03_financial_document_job_links.sql',
+  'migrations/20260911_04_taiwan_candidate_refresh_queue.sql',
+  'migrations/20260911_candidate_history_backfill_v1.sql',
+  'migrations/20260911_05_financial_fact_isolation_v10.sql',
 ]);
 const V3192_PROJECTION_DOSSIER_MIGRATION =
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql';

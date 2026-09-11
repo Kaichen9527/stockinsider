@@ -80,7 +80,7 @@ export function sourceExecutionPolicy(connector: string): SourceExecutionPolicy 
     const dedicatedAppConfirmed = enabled(process.env.THREADS_DEDICATED_APP_CONFIRMED);
     return enabled(process.env.THREADS_OFFICIAL_API_ENABLED) && dedicatedAppConfirmed && enabled(process.env.THREADS_OFFICIAL_CANARY_ACTIVE)
       ? { connector, disposition: 'active', licenseBasis: 'threads_official_api', terminalReason: null, cadenceHours: 6 }
-      : { connector, disposition: 'blocked_auth', licenseBasis: 'threads_official_api', terminalReason: !dedicatedAppConfirmed ? 'threads_dedicated_app_not_confirmed' : enabled(process.env.THREADS_OFFICIAL_API_ENABLED) ? 'threads_official_canary_inactive' : 'threads_app_review_or_vault_token_pending', cadenceHours: 6 };
+      : { connector, disposition: 'blocked_auth', licenseBasis: 'threads_official_api', terminalReason: !dedicatedAppConfirmed ? 'threads_dedicated_app_not_confirmed' : !enabled(process.env.THREADS_OFFICIAL_CANARY_ACTIVE) ? 'threads_official_canary_inactive' : 'threads_official_api_disabled', cadenceHours: 6 };
   }
   if (connector === 'telegram') {
     return enabled(process.env.TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED)
