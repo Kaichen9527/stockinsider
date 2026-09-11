@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 import { requireExactInternalBearer } from '@/lib/internal-auth';
-import { needsCompletedTradingSession, type TaiwanDataset, type TaiwanExchange } from '@/lib/taiwan-data-provider';
-import { parseTaiwanQueueRequest, requireActiveVpsWriter, resolveLatestCompletedTaiwanSession, taiwanRefreshQueueKey } from '@/lib/taiwan-data-runtime';
+import { needsCompletedTradingSession } from '@/lib/taiwan-data-provider';
+import { parseTaiwanQueueRequest, requireActiveVpsWriter, resolveLatestCompletedTaiwanSession } from '@/lib/taiwan-data-runtime';
+import { enqueueTaiwanRefreshScope, readTaiwanCandidateUniverse } from '@/lib/taiwan-candidate-refresh';
 
 const BODY_LIMIT = 100_000;
-const DAILY_CLOSE_CANDIDATE_CAP = 280;
 
 export async function POST(request: Request) {
   // These jobs are production writes. Cron-secret authentication is not enough:
@@ -34,40 +34,16 @@ export async function POST(request: Request) {
   // Financial history has its own durable, period-aware acquisition queue.
   // Enqueuing every candidate here on every close would duplicate that queue
   // and could never drain before the 21:00 final publication.
-  const candidateScoped = new Set<TaiwanDataset>(['daily_price']);
-  let symbols = input.symbols;
-  if (symbols.length === 0 && input.datasets.some((dataset) => candidateScoped.has(dataset))) {
-    const universe = await writer.supabase.rpc('read_taiwan_data_candidate_universe_v5', { p_limit: DAILY_CLOSE_CANDIDATE_CAP + 1 });
-    if (universe.error) return NextResponse.json({ ok: false, error: `taiwan_candidate_universe_read_failed:${universe.error.message}` }, { status: 500 });
-    const universeRows = (universe.data || []) as Array<{ symbol?: unknown; exchange?: unknown }>;
-    if (universeRows.length > DAILY_CLOSE_CANDIDATE_CAP) {
-      return NextResponse.json({ ok: false, error: 'taiwan_candidate_universe_exceeds_daily_close_capacity', result: { cap: DAILY_CLOSE_CANDIDATE_CAP, observedAtLeast: universeRows.length } }, { status: 503 });
-    }
-    symbols = universeRows.flatMap((row) => {
-      const symbol = String(row.symbol || ''); const exchange = String(row.exchange || '');
-      return /^\d{4}$/u.test(symbol) && (exchange === 'TWSE' || exchange === 'TPEX') ? [{ symbol, exchange: exchange as TaiwanExchange }] : [];
-    });
-  }
-  const entries: Array<{ dataset: TaiwanDataset; symbol: string | null; exchange: TaiwanExchange }> = [];
-  for (const dataset of input.datasets) {
-    if (candidateScoped.has(dataset)) {
-      entries.push(...symbols.map(({ symbol, exchange }) => ({ dataset, symbol, exchange })));
-    } else if (dataset === 'trading_calendar') {
-      entries.push({ dataset, symbol: null, exchange: 'TWSE' });
-    } else {
-      entries.push(...(['TWSE', 'TPEX'] as const).map((exchange) => ({ dataset, symbol: null, exchange })));
-    }
-  }
-  if (entries.length > 20_000) return NextResponse.json({ ok: false, error: 'queue_limit_exceeded' }, { status: 422 });
   const queuedAt = new Date().toISOString();
-  const queue = await Promise.all(entries.map(async (entry) => {
-    const queueKey = taiwanRefreshQueueKey({ ...entry, phase: input.phase, sessionDate });
-    const result = await writer.supabase.rpc('enqueue_taiwan_data_refresh_v5', {
-      p_queue_key: queueKey, p_dataset: entry.dataset, p_symbol: entry.symbol, p_exchange: entry.exchange,
-      p_refresh_phase: input.phase, p_requested_session_date: sessionDate, p_queued_at: queuedAt,
-    });
-    if (result.error) throw new Error(`taiwan_data_enqueue_failed:${result.error.message}`);
-    return String(result.data);
-  }));
-  return NextResponse.json({ ok: true, result: { queued: queue.length, candidateUniverse: symbols.length, jobIds: queue, phase: input.phase, sessionDate, releaseId: writer.releaseId } });
+  try {
+    const symbols = input.symbols.length === 0 && input.datasets.includes('daily_price')
+      ? await readTaiwanCandidateUniverse(writer.supabase, queuedAt) : input.symbols;
+    const result = await enqueueTaiwanRefreshScope(writer.supabase, { ...input, sessionDate }, symbols, queuedAt);
+    return NextResponse.json({ ok: result.enqueueComplete,
+      ...(result.enqueueComplete ? {} : { error: 'taiwan_refresh_scope_enqueue_incomplete' }),
+      result: { ...result, candidateUniverse: symbols.length, phase: input.phase, sessionDate, releaseId: writer.releaseId },
+    }, { status: result.enqueueComplete ? 200 : 503 });
+  } catch (error) {
+    return NextResponse.json({ ok: false, error: error instanceof Error ? error.message : 'taiwan_refresh_enqueue_failed' }, { status: 500 });
+  }
 }

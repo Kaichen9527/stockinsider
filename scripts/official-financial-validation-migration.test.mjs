@@ -34,7 +34,9 @@ test('validation covers the full candidate universe independently of acquisition
   assert.match(research,/validatePendingOfficialFinancials\(proposedUniverse\.map/u);
   assert.doesNotMatch(worker,/Set\(stockIds\)\]\)\.slice|Set\(stockIds\)\]\.slice/u);
   assert.match(worker,/acceptedHashes\.has/u);
-  assert.match(worker,/r[.]validator_version === 'official-financial-v2'/u);
-  assert.match(worker,/typeof r[.]validator_principal === 'string'/u);
+  assert.match(worker,/receipt[.]validator_version === 'official-financial-v2'/u);
+  assert.match(worker,/typeof receipt[.]validator_principal === 'string'/u);
+  assert.match(worker,/candidate_financial_document_fact_links_v8/u);
+  assert.match(worker,/structurallyLinked[.]has/u);
   assert.match(worker,/p_validator_principal: validatorPrincipal/u);
 });

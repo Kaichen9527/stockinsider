@@ -1,6 +1,18 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { isHistoryDate, monthlyCandidatePrices } from './candidate-price-history.ts';
+import { isHistoryDate, monthlyCandidatePrices, isOfficialCandidatePriceSource, isOfficialCandidatePriceProvider } from './candidate-price-history.ts';
+
+test('official price coverage recognizes actual adapters and never a mirror or hostname suffix', () => {
+  for (const url of ['https://www.twse.com.tw/exchangeReport/STOCK_DAY?stockNo=2330',
+    'https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX?date=20260910',
+    'https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=6488']) assert.equal(isOfficialCandidatePriceSource(url),true);
+  for (const url of ['https://api.finmindtrade.com/api/v4/data',
+    'https://example.test/https://www.twse.com.tw/exchangeReport/STOCK_DAY',
+    'https://www.twse.com.tw.evil.test/exchangeReport/STOCK_DAY',
+    'https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU?stockNo=2330']) assert.equal(isOfficialCandidatePriceSource(url),false);
+  for (const provider of ['twse','tpex']) assert.equal(isOfficialCandidatePriceProvider(provider),true);
+  for (const provider of ['finmind',null,undefined,'unknown']) assert.equal(isOfficialCandidatePriceProvider(provider),false);
+});
 
 test('monthly history retains real session dates regardless of input order', () => {
   assert.deepEqual(monthlyCandidatePrices([

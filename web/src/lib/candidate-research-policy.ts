@@ -15,6 +15,12 @@ export function candidatePriceRefreshDepth(knownSessions: string[], latestMarket
   return unique.at(-1) === latestMarketSession ? 0 : 5;
 }
 
+/** Deep history is handled by the durable monthly backfill queue, not by a
+ * repeated 1,320-request catch-up on the critical daily research path. */
+export function candidateDailyPriceRefreshDepth(knownSessions: string[], latestMarketSession: string) {
+  return knownSessions.includes(latestMarketSession) ? 0 : 5;
+}
+
 export function isTransientResearchInfrastructureError(reason: string) {
   return /(?:\b(?:429|500|502|503|504|520|522|524)\b|timeout|timed out|fetch failed|network|connection reset|econnreset|socket hang up|temporarily unavailable)/iu.test(reason);
 }

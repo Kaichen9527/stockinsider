@@ -6,8 +6,11 @@ const migration = readFileSync(new URL('../migrations/20260906_taiwan_data_provi
 const provider = readFileSync(new URL('../web/src/lib/taiwan-data-provider.ts', import.meta.url), 'utf8');
 const refreshRoute = readFileSync(new URL('../web/src/app/api/internal/taiwan-data-refresh/route.ts', import.meta.url), 'utf8');
 const drainRoute = readFileSync(new URL('../web/src/app/api/internal/taiwan-data-queue-drain/route.ts', import.meta.url), 'utf8');
+const candidateRefresh = readFileSync(new URL('../web/src/lib/taiwan-candidate-refresh.ts', import.meta.url), 'utf8');
+const candidateQueueMigration = readFileSync(new URL('../migrations/20260911_04_taiwan_candidate_refresh_queue.sql', import.meta.url), 'utf8');
 const finmindVault = readFileSync(new URL('../web/src/lib/finmind-vault.ts', import.meta.url), 'utf8');
 const financialDrainRoute = readFileSync(new URL('../web/src/app/api/internal/candidate-financial-queue-drain/route.ts', import.meta.url), 'utf8');
+const financialValidateRoute = readFileSync(new URL('../web/src/app/api/internal/official-financial-validate/route.ts', import.meta.url), 'utf8');
 const preliminaryRoute = readFileSync(new URL('../web/src/app/api/internal/radar-preliminary-publish/route.ts', import.meta.url), 'utf8');
 const runtime = readFileSync(new URL('../web/src/lib/taiwan-data-runtime.ts', import.meta.url), 'utf8');
 const masterCalendar = readFileSync(new URL('../deployment/vps/systemd/stockinsider-taiwan-data-master-calendar.timer', import.meta.url), 'utf8');
@@ -40,10 +43,23 @@ test('terminal outcome contract distinguishes API usage, timeout, schema and emp
 });
 
 test('VPS-only authenticated routes queue and drain the durable provider plane', () => {
-  assert.match(refreshRoute, /requireExactInternalBearer/u);
-  assert.match(refreshRoute, /requireActiveVpsWriter/u);
-  assert.match(refreshRoute, /enqueue_taiwan_data_refresh_v5/u);
-  assert.match(drainRoute, /claim_taiwan_data_refresh_jobs_v5/u);
+  for (const route of [refreshRoute, drainRoute]) {
+    assert.match(route, /requireExactInternalBearer\(request\)/u);
+    assert.match(route, /await requireActiveVpsWriter\(\)/u);
+    assert.match(route, /if \(!writer\.ok\) return NextResponse\.json/u);
+    assert.ok(route.indexOf('requireExactInternalBearer(request)') < route.indexOf('await requireActiveVpsWriter()'));
+  }
+  // Approved v6 queue repair delegates bounded work without moving the writer
+  // boundary. The batch RPC still enqueues through the durable v5 provider plane.
+  assert.match(refreshRoute, /await enqueueTaiwanRefreshScope\(writer\.supabase/u);
+  assert.match(candidateRefresh, /register_taiwan_data_refresh_scope_v6/u);
+  assert.match(candidateRefresh, /enqueue_taiwan_data_refresh_batch_v6/u);
+  assert.ok(candidateRefresh.indexOf("client.rpc('register_taiwan_data_refresh_scope_v6'")
+    < candidateRefresh.indexOf("client.rpc('enqueue_taiwan_data_refresh_batch_v6'"));
+  assert.match(candidateQueueMigration, /v_id:=public\.enqueue_taiwan_data_refresh_v5/u);
+  assert.match(drainRoute, /claim_taiwan_data_refresh_jobs_v6/u);
+  assert.match(drainRoute, /p_session_date: sessionDate, p_phase: input\.phase/u);
+  assert.match(candidateQueueMigration, /p_limit NOT BETWEEN 1 AND 100/u);
   assert.match(drainRoute, /complete_taiwan_data_refresh_job_v5/u);
   assert.match(drainRoute, /persist_taiwan_data_canonical_result_v5/u);
   assert.match(migration, /taiwan_data_canonical_results_v5/u);
@@ -66,6 +82,12 @@ test('VPS-only authenticated routes queue and drain the durable provider plane',
   assert.match(financialDrainRoute, /refreshCandidateOfficialFinancials/u);
   assert.match(financialDrainRoute, /MAX_DRAIN_LIMIT = 20/u);
   assert.match(financialDrainRoute, /neq\('endpoint_key', 'issuer_ir_document'\)/u);
+  assert.match(financialDrainRoute, /validation\.status === 'success'/u);
+  assert.match(financialDrainRoute, /official_validation_incomplete/u);
+  assert.doesNotMatch(financialDrainRoute, /validation\.failed === 0/u);
+  assert.match(financialValidateRoute, /result\.status === 'success'/u);
+  assert.match(financialValidateRoute, /official_validation_incomplete/u);
+  assert.doesNotMatch(financialValidateRoute, /result\.failed === 0/u);
 });
 
 test('issuer IR acquisition jobs remain visible to the Browser-assisted receipt worker', () => {
@@ -81,21 +103,69 @@ test('candidate-universe schedules include typed valuation, revenue and financia
     assert.match(provider, new RegExp(`'${dataset}'`, 'u'));
     assert.match(migration, new RegExp(`'${dataset}'`, 'u'));
   }
-  assert.match(refreshRoute, /read_taiwan_data_candidate_universe_v5/u);
-  assert.match(refreshRoute, /DAILY_CLOSE_CANDIDATE_CAP = 280/u);
-  assert.match(refreshRoute, /taiwan_candidate_universe_exceeds_daily_close_capacity/u);
+  // Approved v6 paginated deep acquisition replaces the old 280-stock ceiling;
+  // bounded pages and enqueue batches remain mandatory, not a truncated universe.
+  assert.match(refreshRoute, /await readTaiwanCandidateUniverse\(writer\.supabase, queuedAt\)/u);
+  assert.match(candidateRefresh, /read_taiwan_data_candidate_universe_v6/u);
+  assert.match(candidateRefresh, /p_cutoff: cutoff, p_after_symbol: after, p_limit: TAIWAN_UNIVERSE_PAGE_SIZE/u);
+  assert.match(candidateRefresh, /TAIWAN_UNIVERSE_PAGE_SIZE = 200/u);
+  assert.match(candidateRefresh, /TAIWAN_ENQUEUE_BATCH_SIZE = 100/u);
+  assert.match(candidateRefresh, /if \(result\.data\.length === 0\) break/u);
+  assert.match(candidateRefresh, /taiwan_candidate_universe_invalid_order_or_identity/u);
+  assert.match(candidateRefresh, /taiwan_candidate_universe_safety_bound_exceeded/u);
+  assert.doesNotMatch(refreshRoute, /DAILY_CLOSE_CANDIDATE_CAP|taiwan_candidate_universe_exceeds_daily_close_capacity/u);
   assert.match(migration, /read_taiwan_data_candidate_universe_v5/u);
+  assert.match(candidateQueueMigration, /CREATE OR REPLACE FUNCTION public\.read_taiwan_data_candidate_universe_v5/u);
+  assert.match(candidateQueueMigration, /public\.read_taiwan_data_candidate_universe_v6\(v_cutoff,v_after/u);
   const closeService = readFileSync(new URL('../deployment/vps/systemd/stockinsider-taiwan-data-close-preliminary.service', import.meta.url), 'utf8');
   assert.match(closeService, /daily_valuation/u);
   assert.match(closeService, /monthly_revenue/u);
   assert.doesNotMatch(closeService, /financial_statement/u);
   assert.match(closeService, /"limit":100/u);
-  assert.match(drainRoute, /MAX_DRAIN_LIMIT = 100/u);
+  assert.match(drainRoute, /parseTaiwanDrainOptions\(body\)/u);
+  assert.match(candidateRefresh, /Number\(row\.limit\) > 100/u);
   assert.match(drainRoute, /DRAIN_CONCURRENCY = 4/u);
   assert.match(closeService, /"limit":100/u);
   assert.match(drainRoute, /job\.symbol === null/u);
   assert.match(migration, /Aggregate valuation\/revenue responses are fetched once per exchange/u);
   assert.match(migration, /official_price_history[\s\S]*T13:30:00\+08:00/u);
+});
+
+test('candidate queue completeness retains missing work and cannot certify a single drained batch', () => {
+  // v6 persistent queue acceptance: expected scope is frozen before enqueue;
+  // a missing job, retry or absent canonical result remains incomplete.
+  assert.match(candidateQueueMigration, /taiwan_refresh_scope_required/u);
+  assert.match(candidateQueueMigration, /taiwan_refresh_batch_scope_mismatch/u);
+  assert.match(candidateQueueMigration, /FROM expected LEFT JOIN public\.taiwan_data_refresh_queue_v5/u);
+  assert.match(candidateQueueMigration, /count\(\*\) FILTER\(WHERE job_id IS NULL\) AS missing/u);
+  assert.match(candidateQueueMigration, /terminal_status='complete' AND persisted/u);
+  assert.match(candidateQueueMigration, /'ready',expected>0 AND completed=expected/u);
+  assert.match(candidateQueueMigration, /FROM PUBLIC,anon,authenticated/u);
+  assert.match(candidateQueueMigration, /TO service_role/u);
+  assert.match(refreshRoute, /result\.enqueueComplete \? 200 : 503/u);
+  assert.match(drainRoute, /read_taiwan_data_refresh_progress_v6/u);
+  assert.match(drainRoute, /isTaiwanRefreshComplete\(progressRead\.data\)/u);
+  assert.match(drainRoute, /dataComplete: scopeComplete/u);
+  assert.match(drainRoute, /status: ok \? 200 : errors\.length \? 500 : 503/u);
+  assert.match(candidateRefresh, /\['failed', 'queued', 'running', 'missing', 'retrying'\]\.every\(\(key\) => row\[key\] === 0\)/u);
+});
+
+test('terminal individual-price gaps permit isolated research but never claim complete data', () => {
+  // Approved candidate research acceptance: failures are isolated per stock.
+  // Only a settled per-stock price failure is noncritical; pending/missing work
+  // or any aggregate failure still blocks the next research step.
+  assert.match(candidateQueueMigration, /dataset='daily_price' AND symbol IS NOT NULL\) AS "failedCandidate"/u);
+  assert.match(candidateQueueMigration, /\(dataset<>'daily_price' OR symbol IS NULL\)\) AS "failedCritical"/u);
+  assert.match(candidateQueueMigration, /'settled',expected>0 AND completed\+failed=expected/u);
+  assert.match(candidateQueueMigration, /'researchReady',expected>0 AND completed\+failed=expected AND "failedCritical"=0/u);
+  assert.match(candidateRefresh, /row\.expected === Number\(row\.completed\) \+ Number\(row\.failed\)/u);
+  assert.match(candidateRefresh, /row\.failed === row\.failedCandidate && row\.failedCritical === 0/u);
+  assert.match(candidateRefresh, /row\.settled === true && row\.researchReady === true/u);
+  assert.match(candidateRefresh, /\['queued', 'running', 'missing', 'retrying'\]\.every\(\(key\) => row\[key\] === 0\)/u);
+  assert.match(drainRoute, /isTaiwanRefreshResearchReady\(progressRead\.data\)/u);
+  assert.match(drainRoute, /errors\.length === 0 && \(!input\.requireComplete \|\| researchReady\)/u);
+  assert.match(drainRoute, /status: scopeComplete \? 'complete' : researchReady \? 'partial_candidate_data' : 'incomplete'/u);
+  assert.match(drainRoute, /scopeComplete, dataComplete: scopeComplete, researchReady/u);
 });
 
 test('VPS timers separate the approved preliminary, final, pipeline and hourly drain cadences', () => {

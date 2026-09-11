@@ -1,7 +1,18 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { candidateMopsDownloadUrl, fetchCandidateMopsFiling, financialBridgeAcquisitionQuarters, parseCandidateMopsFacts, selectCandidateFilingPeriodFacts } from './candidate-official-financials.ts';
+import { candidateMopsDownloadUrl, fetchCandidateMopsFiling, financialBridgeAcquisitionQuarters, parseCandidateMopsFacts, selectCandidateFilingPeriodFacts, normalizeMopsDownloadedContentType } from './candidate-official-financials.ts';
 import { fetchFinMindFinancialFallback, parseFinMindFinancialFacts } from './finmind-financial-fallback.ts';
+
+test('official attachment empty MIME is normalized only for exact issuer standalone UTF-8 iXBRL', () => {
+  const xml = '<?xml version="1.0" encoding="UTF-8"?><html xmlns="http://www.w3.org/1999/xhtml" xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"><ix:header/></html>';
+  const input = { contentType:'; charset=iso-8859-1', contentDisposition:'attachment; filename=tifrs-fr1-m1-ci-cr-2330-2026Q2.html',
+    bytes:new TextEncoder().encode(xml), symbol:'2330',year:2026,quarter:2 };
+  assert.equal(normalizeMopsDownloadedContentType(input),'application/xhtml+xml');
+  assert.throws(() => normalizeMopsDownloadedContentType({ ...input,symbol:'2892' }),/missing_mime_unverified/);
+  assert.throws(() => normalizeMopsDownloadedContentType({ ...input,bytes:new TextEncoder().encode(`<html>${xml}</html>`) }),/missing_mime_unverified/);
+  assert.throws(() => normalizeMopsDownloadedContentType({ ...input,contentDisposition:null }),/missing_mime_unverified/);
+  assert.equal(normalizeMopsDownloadedContentType({ ...input,contentType:'application/pdf' }),'application/pdf','explicit mismatched MIME is not repaired');
+});
 
 test('MOPS acquisition downloads the official filing rather than attempting to parse the preview form', async () => {
   const original=globalThis.fetch;
@@ -85,7 +96,9 @@ test('official financial refresh completes durable MOPS and TPEx jobs atomically
   assert.match(source, /claim_candidate_financial_acquisition_jobs_v4/u);
   assert.match(source, /FINANCIAL_JOB_LEASE_MS = 45 \* 60_000/u);
   assert.match(source, /financialBridgeAcquisitionQuarters\(cutoff, 20\)/u);
-  assert.match(source, /requestedTpexQuarters = financialBridgeAcquisitionQuarters\(cutoff, 20\)/u);
+  assert.match(source, /requestedTpexQuarters = \[latestDueFinancialQuarter\(cutoff\)\]/u);
+  assert.match(source, /requiredAcquisitionPeriods\(candidate, fallbackPeriods\)/u);
+  assert.match(source, /persistDownloadedFinancialDocument/u);
   assert.match(source, /remainingJobs/u);
   assert.match(source, /claimedJobs: claimedJobCount/u);
   assert.match(source, /enqueueMissing !== false/u);

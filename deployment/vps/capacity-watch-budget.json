@@ -1,0 +1,11 @@
+{
+  "schema": "stockinsider-capacity-budget-v1",
+  "databaseRestoreBytes": 0,
+  "documentBytes": 0,
+  "peakWalBytes": 0,
+  "peakTemporaryBytes": 0,
+  "deploymentBytes": 0,
+  "localBackupStagingBytes": 0,
+  "peakMemoryBytes": 0,
+  "minimumAvailableMemoryBytes": 1610612736
+}

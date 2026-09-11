@@ -14,6 +14,14 @@ test('missing financial inputs are an evidence gap, not an impossibility conclus
   assert.equal(result.reason,'financial_equity_pb_roe_inputs_incomplete');
 });
 
+test('missing loss-making investigation is incomplete, never a completed no-method conclusion', () => {
+  const result = candidateValuationPolicy({ multipleMonthsCovered:60,next12mBridgeComplete:false,
+    verifiedTurnaroundPath:false,lossMaking:true });
+  assert.equal(result.basis,'turnaround_conditional');
+  assert.equal(result.canPublishTarget,false);
+  assert.equal(result.reason,'loss_making_investigation_required');
+});
+
 test('valuation routing is evidence-driven and fail closed', () => {
   assert.equal(VALUATION_REMEDIATION_SYMBOLS.size, 0);
   assert.equal(candidateValuationPolicy({ symbol: '2002', multipleMonthsCovered: 60, next12mBridgeComplete: false, verifiedTurnaroundPath: false }).reason, 'next_12m_earnings_bridge_incomplete');

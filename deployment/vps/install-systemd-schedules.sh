@@ -72,6 +72,7 @@ printf '[Service]\nSupplementaryGroups=stockinsider\nEnvironment=OPPORTUNITY_V3_
 chmod 0644 /etc/systemd/system/stockinsider-web.service.d/30-opportunity-runner-principal.conf
 systemctl daemon-reload
 systemctl enable --now stockinsider-financial-parser.socket
+systemctl enable --now stockinsider-capacity-watch.timer
 systemctl enable --now stockinsider-source-refresh.timer stockinsider-research-cycle.timer stockinsider-health-check.timer \
   stockinsider-taiwan-data-master-calendar.timer stockinsider-taiwan-data-close-preliminary.timer \
   stockinsider-taiwan-data-preliminary.timer stockinsider-taiwan-data-final-freeze.timer \
