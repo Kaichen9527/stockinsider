@@ -1,5 +1,4 @@
 # TaskBuddy consolidation dependency audit
-
 ## Outcome
 
 No TaskBuddy route, process, release, image, configuration or data was changed.
@@ -80,4 +79,3 @@ The deployment inventory parser previously missed inline Nginx dependencies such
 as `location /api/ { proxy_pass ...; }`. PR #211 now scans Nginx directive
 boundaries and records filesystem roots, loopback proxies and `server_name`
 identities without reading credentials or process/container environments.
-

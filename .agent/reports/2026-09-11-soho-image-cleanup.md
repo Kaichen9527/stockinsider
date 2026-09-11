@@ -1,7 +1,7 @@
 # SOHO exact image archive and cleanup evidence
 
-Date: 2026-09-11 (Asia/Taipei)  
-Host: `5.104.83.211`  
+Date: 2026-09-11 (Asia/Taipei)
+Host: `5.104.83.211`
 Policy commit at execution: `371e0e3` plus the post-delivery identity update in this report's commit
 
 ## Outcome
