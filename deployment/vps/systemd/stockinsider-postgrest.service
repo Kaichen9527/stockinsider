@@ -1,7 +1,8 @@
 [Unit]
 Description=StockInsider private PostgREST data plane
-After=network-online.target postgresql.service
+After=network-online.target postgresql@17-stockinsider.service
 Wants=network-online.target
+Requires=postgresql@17-stockinsider.service
 
 [Service]
 Type=simple

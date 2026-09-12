@@ -9,6 +9,7 @@ User=stockinsider
 Group=stockinsider
 WorkingDirectory=/opt/stockinsider/current/app
 EnvironmentFile=/etc/stockinsider/stockinsider.env
+EnvironmentFile=/etc/stockinsider/data-plane.env
 Environment=NODE_ENV=production
 Environment=HOSTNAME=127.0.0.1
 Environment=PORT=3100
@@ -23,6 +24,7 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectHome=true
 ProtectSystem=strict
+ReadWritePaths=/var/lib/stockinsider/artifacts
 ProtectControlGroups=true
 ProtectKernelModules=true
 ProtectKernelTunables=true
@@ -31,8 +33,6 @@ LockPersonality=true
 RestrictSUIDSGID=true
 RuntimeDirectory=stockinsider
 RuntimeDirectoryMode=0750
-StateDirectory=stockinsider
-StateDirectoryMode=0750
 UMask=0077
 
 [Install]

@@ -10,6 +10,7 @@ import { assessProjectionFreshness, type ProjectionHealth } from '@/lib/opportun
 import { resolveReviewedConsumerCommitSha } from '@/lib/opportunity-v3/reviewed-release-identity';
 import { deriveEffectiveProjectionHealth } from '@/lib/opportunity-v3/effective-health';
 import { activeSourceHealthFailures as evaluateActiveSourceHealth, type SourceHealthRun } from '@/lib/source-health';
+import { stockInsiderDataPlaneMode } from '@/lib/data-plane-runtime';
 
 type Row = Record<string, unknown>;
 
@@ -37,11 +38,24 @@ export async function GET(request: Request) {
   }
   const dataMode = resolveDataMode();
   const fallbackUsed = dataMode === 'demo';
+  const dataPlaneMode = stockInsiderDataPlaneMode();
+  const contaboDataPlaneConfigured = dataPlaneMode === 'contabo'
+    && process.env.STOCKINSIDER_POSTGREST_URL === 'http://127.0.0.1:3302/'
+    && !!process.env.STOCKINSIDER_BACKEND_ID
+    && !!process.env.OPPORTUNITY_V3_RUNNER_PRINCIPAL_ID
+    && !!process.env.STOCKINSIDER_WRITER_RELEASE_ID
+    && !!process.env.STOCKINSIDER_POSTGREST_JWT_SHA256
+    && !!process.env.CREDENTIALS_DIRECTORY;
+  const supabaseDataPlaneConfigured = dataPlaneMode === 'supabase'
+    && !!(process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL)
+    && !!(process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY);
   const env = {
     INTERNAL_API_KEY: !!process.env.INTERNAL_API_KEY,
     CRON_SECRET: !!process.env.CRON_SECRET,
     SUPABASE_URL: !!(process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL),
     SUPABASE_SERVICE_KEY: !!(process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY),
+    DATA_PLANE_MODE: dataPlaneMode,
+    DATA_PLANE_CONFIGURED: dataPlaneMode === 'contabo' ? contaboDataPlaneConfigured : supabaseDataPlaneConfigured,
     THREADS_OFFICIAL_API_ENABLED: process.env.THREADS_OFFICIAL_API_ENABLED === 'true',
     YOUTUBE_API_KEY: !!process.env.YOUTUBE_API_KEY,
     OPENAI_API_KEY: !!process.env.OPENAI_API_KEY,
