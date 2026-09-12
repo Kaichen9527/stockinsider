@@ -25,6 +25,7 @@ export async function executeHealthRouteFailureBoundary() {
     '@/lib/opportunity-v3/reviewed-release-identity': { resolveReviewedConsumerCommitSha: () => 'a'.repeat(40) },
     '@/lib/opportunity-v3/effective-health': { deriveEffectiveProjectionHealth: (value) => value },
     '@/lib/source-health': { activeSourceHealthFailures: () => [] },
+    '@/lib/data-plane-runtime': { stockInsiderDataPlaneMode: () => 'supabase' },
   };
   const exports = {};
   vm.runInNewContext(compiled, {
