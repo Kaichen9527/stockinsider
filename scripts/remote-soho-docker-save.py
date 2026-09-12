@@ -8,14 +8,20 @@ import sys
 
 
 CANDIDATES = {
-    "soho-rollback/soho-live-canary-api:20260910T220957Z": "sha256:baf21214fa1d4d37ab480fd89f94debcd1945b3d120d8dffd787d9825e89d81f",
-    "soho-rollback/soho-live-canary-calendar-worker:20260910T220957Z": "sha256:75b62a7e3288ffe942a6eaea36ab43f022e81c87f0c7d92a22c972bf2a6531d9",
-    "soho-rollback/soho-live-canary-web:20260910T220957Z": "sha256:58a03c8f802ef6d459b3c1b8e2afa626cce54ce3c4450261f4426682c607e417",
-    "soho-rollback/soho-live-canary-worker:20260910T220957Z": "sha256:25d30158cc2a755b755973352c550a8b86a5ca63ff60602a2c0bc796199af976",
-    "soho-rollback/soho-live-canary-api:20260910T233603Z": "sha256:6456d6328cba3355f295818bc99e7f22108998b3d38dfe04f56df1f6de741ad4",
-    "soho-rollback/soho-live-canary-calendar-worker:20260910T233603Z": "sha256:ec575d45893c157347a5cd0025d8f015845b7e4ac36d226ef2b992dd98c7084b",
-    "soho-rollback/soho-live-canary-web:20260910T233603Z": "sha256:63064c2dde1cd9382ba21771dd0f30d41ff6995ee6b9368ebd9f94ce8c9aac85",
-    "soho-rollback/soho-live-canary-worker:20260910T233603Z": "sha256:b920e8be5ef7b3ef4536b93b9021ca761457560159f2cfe38d4ef63cbf3b8503",
+    "soho-rollback/soho-api:20260911T151041Z": "sha256:62b8490d90544a132311fc4afd04f72c25733f51fc1ebe66422d672ea4d3af93",
+    "soho-rollback/soho-web:20260911T151041Z": "sha256:5037ade762b451bcf52e562c9ee1dce6ed195c4203dd7710eed83c37fb1e6293",
+    "soho-rollback/soho-worker:20260911T151041Z": "sha256:840b210f90f8f4a5c2c06d0283c5713c6dc9530345ea6fad60dd46a253627fb5",
+    "soho-rollback/soho-staging-api:20260912T004955Z": "sha256:aa239a511039edff6b52f4ad078118b48ae59ff8f45e3cb1af6348241f2d8737",
+    "soho-rollback/soho-staging-web:20260912T004955Z": "sha256:1e3a67e6af707dc3c7da76fa9184309e8ae17bd93e94e507210eb2773d75179a",
+    "soho-rollback/soho-staging-worker:20260912T004955Z": "sha256:65a53fe075fee77007a2c9bc6d84ca463a019cc259cd87ac1b4d0acb805bbf0a",
+    "soho-rollback/soho-live-canary-api:20260911T152751Z": "sha256:6466cec3ffd6604424cf882ea33eedaf80045daaaf67108924ca18e68a2b1a94",
+    "soho-rollback/soho-live-canary-calendar-worker:20260911T152751Z": "sha256:1bf56c4659e6a50ca447e18e2ae8aaa3d70e91f8023d25663bc6f54144b66f08",
+    "soho-rollback/soho-live-canary-web:20260911T152751Z": "sha256:3d13d731f09d5aab21380b886a54046bc5f7d7b76fcc6ec112cda4ecbb7db668",
+    "soho-rollback/soho-live-canary-worker:20260911T152751Z": "sha256:ad7b5e99088a94616702b4cadbc8b84f81b090af144383bab1ed348ddd5d6295",
+    "soho-rollback/soho-live-canary-api:20260911T153552Z": "sha256:6466cec3ffd6604424cf882ea33eedaf80045daaaf67108924ca18e68a2b1a94",
+    "soho-rollback/soho-live-canary-calendar-worker:20260911T153552Z": "sha256:1bf56c4659e6a50ca447e18e2ae8aaa3d70e91f8023d25663bc6f54144b66f08",
+    "soho-rollback/soho-live-canary-web:20260911T153552Z": "sha256:3d13d731f09d5aab21380b886a54046bc5f7d7b76fcc6ec112cda4ecbb7db668",
+    "soho-rollback/soho-live-canary-worker:20260911T153552Z": "sha256:ad7b5e99088a94616702b4cadbc8b84f81b090af144383bab1ed348ddd5d6295",
 }
 
 
@@ -59,7 +65,7 @@ def inspect_images(refs):
 
 def main():
     refs = sys.argv[1:]
-    if refs != sorted(CANDIDATES) or len(refs) != 8:
+    if refs != sorted(CANDIDATES) or len(refs) != len(CANDIDATES):
         raise RuntimeError("exact_candidate_set_required")
     before = inspect_images(refs)
     emit({"phase": "before", "images": before})

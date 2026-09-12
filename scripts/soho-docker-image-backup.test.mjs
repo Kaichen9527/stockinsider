@@ -46,10 +46,16 @@ test('isolated docker load verification binds refs, config digests, platform and
 });
 
 test('remote exporter is read-only and exact while verifier cannot reach production Docker', async () => {
+  const { policy } = await loadSohoImagePolicy();
   const remote = await readFile(new URL('./remote-soho-docker-save.py', import.meta.url), 'utf8');
   const exporter = await readFile(new URL('./export-soho-docker-image-backup.mjs', import.meta.url), 'utf8');
   const verifier = await readFile(new URL('./verify-soho-docker-image-backup.mjs', import.meta.url), 'utf8');
   assert.match(remote, /exact_candidate_set_required/u);
+  assert.match(remote, /len\(refs\) != len\(CANDIDATES\)/u);
+  for (const [ref, imageId] of Object.entries(policy.obsoleteCandidates)) {
+    assert.ok(remote.includes(`${JSON.stringify(ref)}: ${JSON.stringify(imageId)}`),
+      `remote helper must bind ${ref} to the reviewed image identity`);
+  }
   assert.match(remote, /"image", "save"/u);
   assert.doesNotMatch(remote, /\b(?:rmi|rm|prune|tag)\b/u);
   assert.match(exporter, /SOHO_VPS_HOST/u);
