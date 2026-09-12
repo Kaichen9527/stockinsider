@@ -16,6 +16,14 @@ BEGIN
       WHERE n.nspname='public' AND p.proname=ANY(ARRAY[
         'source_document_coverage','publish_radar_public_snapshots',
         'candidate_research_stock_authority_page']))<>3
+    OR to_regprocedure('public.claim_taiwan_data_refresh_jobs_v6(integer,text,timestamptz,timestamptz,date,text)') IS NULL
+    OR to_regprocedure('public.complete_candidate_financial_document_receipt_parser_v10(uuid,text,uuid,jsonb,jsonb,jsonb,jsonb,jsonb,timestamptz)') IS NULL
+    OR (SELECT pg_get_userbyid(c.relowner) FROM pg_class c
+      WHERE c.oid='public.opportunity_financial_facts_v3'::regclass)<>'opportunity_v3_rpc_owner'
+    OR (SELECT pg_get_userbyid(p.proowner) FROM pg_proc p
+      WHERE p.oid='public.internal_principal_role_is_exact_v3_internal(uuid,public.internal_principal_role_v3,timestamptz)'::regprocedure)<>'opportunity_v3_rpc_owner'
+    OR position('financial_validation_status_v3' IN pg_get_functiondef(
+      'public.record_official_financial_validation(uuid,timestamptz,text,text,jsonb,uuid)'::regprocedure))<>0
     OR (SELECT count(*) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
       WHERE n.nspname='public' AND c.relkind IN ('r','p') AND c.relname=ANY(ARRAY[
         'stockinsider_data_plane_settings_v1','stockinsider_backend_identities_v1',

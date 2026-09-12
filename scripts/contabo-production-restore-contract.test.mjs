@@ -8,8 +8,15 @@ const verify=readFileSync(new URL('../deployment/vps/verify-contabo-database.sql
 
 test('production restore is stdin-only, staged, local-only and never replaces a database',()=>{
   assert.equal(statSync(scriptPath).mode&0o777,0o755);
-  assert.match(script,/pg_restore --dbname="\$stage_database" --use-list="\$toc_path"[\s\S]*--no-owner/u,
-    'portable production restore must not recreate rehearsal or provider-owned object identities');
+  assert.match(script,/pg_restore --dbname="\$stage_database" --use-list="\$toc_path"[\s\S]*--exit-on-error --no-password/u);
+  assert.doesNotMatch(script,/--no-owner/u,
+    'the archive application owners must be replayed after compatibility roles are bootstrapped');
+  for(const migration of ['20260909_official_financial_validation_receipts.sql',
+    '20260911_02_financial_field_work_fairness.sql','20260911_03_financial_document_job_links.sql',
+    '20260911_candidate_financial_fact_manifest_v8.sql','20260911_04_taiwan_candidate_refresh_queue.sql',
+    '20260911_05_financial_fact_isolation_v10.sql','20260911_candidate_history_backfill_v1.sql',
+    '20260912_02_financial_validation_status_text_hotfix.sql','20260911_contabo_data_plane_v1.sql'])
+    assert.match(script,new RegExp(migration.replace(/[.]/gu,'[.]'),'u'));
   assert.match(script,/wal_level=minimal -c max_wal_senders=0 -c archive_mode=off/u);
   assert.match(script,/already exists; refusing replacement/u);
   assert.match(script,/createdb --template=template0 --encoding=UTF8 --locale=C "\$stage_database"/u);
@@ -33,4 +40,8 @@ test('restored application contract verifies private runtime and excludes Vault'
   assert.match(verify,/to_regnamespace\('vault'\) IS NOT NULL/u);
   assert.match(verify,/extname='supabase_vault'/u);
   assert.match(verify,/identityFenceEnabled/u);
+  assert.match(verify,/claim_taiwan_data_refresh_jobs_v6/u);
+  assert.match(verify,/complete_candidate_financial_document_receipt_parser_v10/u);
+  assert.match(verify,/opportunity_financial_facts_v3[\s\S]*opportunity_v3_rpc_owner/u);
+  assert.match(verify,/financial_validation_status_v3/u);
 });

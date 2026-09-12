@@ -58,9 +58,21 @@ sudo -u postgres createdb --template=template0 --encoding=UTF8 --locale=C "$stag
 sudo -u postgres psql --no-psqlrc --set=ON_ERROR_STOP=1 --dbname="$stage_database" \
   --file="$repo_root/deployment/vps/bootstrap-stockinsider-postgres.sql" >/dev/null
 sudo -u postgres pg_restore --dbname="$stage_database" --use-list="$toc_path" \
-  --exit-on-error --no-owner --no-password
-sudo -u postgres psql --no-psqlrc --set=ON_ERROR_STOP=1 --dbname="$stage_database" \
-  --file="$repo_root/migrations/20260911_contabo_data_plane_v1.sql" >/dev/null
+  --exit-on-error --no-password
+for migration in \
+  20260909_official_financial_validation_receipts.sql \
+  20260911_02_financial_field_work_fairness.sql \
+  20260911_03_financial_document_job_links.sql \
+  20260911_candidate_financial_fact_manifest_v8.sql \
+  20260911_04_taiwan_candidate_refresh_queue.sql \
+  20260911_05_financial_fact_isolation_v10.sql \
+  20260911_candidate_history_backfill_v1.sql \
+  20260912_02_financial_validation_status_text_hotfix.sql \
+  20260911_contabo_data_plane_v1.sql
+do
+  sudo -u postgres psql --no-psqlrc --set=ON_ERROR_STOP=1 --dbname="$stage_database" \
+    --file="$repo_root/migrations/$migration" >/dev/null
+done
 verification=$(sudo -u postgres psql --no-psqlrc --set=ON_ERROR_STOP=1 --tuples-only --no-align \
   --dbname="$stage_database" --file="$repo_root/deployment/vps/verify-contabo-database.sql")
 
