@@ -11,6 +11,21 @@ export type OfficialFinancialValidationFailure = {
   terminalReason: 'official_validation_structural_proof_missing';
 };
 
+// Facts written by the retired predecessor collectors before the provenance
+// contract shipped cannot be reconstructed safely: the response bytes and
+// row locators no longer exist. Keep those rows queryable for audit, but never
+// let them become valuation authority or make every later drain fail forever.
+// A fact written at or after this cutover remains a hard failure when proof is
+// missing, so a regression in the current collector cannot be hidden here.
+const LEGACY_PROVENANCE_CUTOVER = Date.parse('2026-09-01T00:00:00Z');
+const LEGACY_PROVENANCE_SOURCE = /^(?:twse|tpex)-(?:mops-inline|openapi):/u;
+
+export function isLegacyUnprovedFinancialFact(fact: OfficialValidationRow) {
+  const recordedAt = Date.parse(String(fact.recorded_at || ''));
+  return Number.isFinite(recordedAt) && recordedAt < LEGACY_PROVENANCE_CUTOVER
+    && LEGACY_PROVENANCE_SOURCE.test(String(fact.source_ref || ''));
+}
+
 /** Called only from an authenticated VPS writer, never from a public reader. */
 export async function validatePendingOfficialFinancials(stockIds: string[], dependencies: {
   client?: ReturnType<typeof getOpportunityV3ServerClient>;
@@ -20,7 +35,8 @@ export async function validatePendingOfficialFinancials(stockIds: string[], depe
   const db = dependencies.client ?? getOpportunityV3ServerClient();
   const validatorPrincipal = dependencies.runnerPrincipal?.() ?? fixedRunnerPrincipal();
   if (!validatorPrincipal) throw new Error('official_validation_runner_principal_unavailable');
-  const counts = { checked: 0, validated: 0, rejected: 0, missingProvenance: 0, unchanged: 0, failed: 0 };
+  const counts = { checked: 0, validated: 0, rejected: 0, missingProvenance: 0,
+    legacyUnproved: 0, unchanged: 0, unchangedRejected: 0, failed: 0 };
   const failedItems: OfficialFinancialValidationFailure[] = [];
   for (const stockId of [...new Set(stockIds)]) {
     const evaluatedAt = (dependencies.now?.() ?? new Date()).toISOString();
@@ -104,11 +120,20 @@ export async function validatePendingOfficialFinancials(stockIds: string[], depe
           ? peerFacts : [...peerFacts, fact];
         const receipt = validateOfficialFinancialFact(fact, peers, source, evaluatedAt);
         counts.checked++;
-        if (receipt.reasons.includes('official_provenance_missing')) { counts.missingProvenance++; continue; }
-        if (fact.validation_status === 'validated' && receipt.status === 'validated'
-          && fact.schema_valid === true && fact.unit_valid === true && fact.point_in_time_valid === true
-          && fact.consistency_valid === true && acceptedHashes.has(`${fact.fact_id}:${receipt.inputHash}`)) {
-          counts.unchanged++; continue;
+        if (receipt.reasons.includes('official_provenance_missing')) {
+          if (isLegacyUnprovedFinancialFact(fact)) counts.legacyUnproved++;
+          else counts.missingProvenance++;
+          continue;
+        }
+        const prior = latestTrustedReceipt.get(String(fact.fact_id));
+        const priorStatus = (prior?.effective_validation as OfficialValidationRow | null)?.validation_status;
+        if (prior?.input_hash === receipt.inputHash && priorStatus === receipt.status) {
+          if (receipt.status === 'rejected') { counts.unchangedRejected++; continue; }
+          if (fact.validation_status === 'validated'
+            && fact.schema_valid === true && fact.unit_valid === true && fact.point_in_time_valid === true
+            && fact.consistency_valid === true && acceptedHashes.has(`${fact.fact_id}:${receipt.inputHash}`)) {
+            counts.unchanged++; continue;
+          }
         }
         const result = await db.rpc('record_official_financial_validation', {
           p_fact_id: fact.fact_id, p_recorded_at: fact.recorded_at,

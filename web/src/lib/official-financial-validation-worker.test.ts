@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { validatePendingOfficialFinancials } from './official-financial-validation-worker.ts';
+import { isLegacyUnprovedFinancialFact, validatePendingOfficialFinancials } from './official-financial-validation-worker.ts';
+import { validateOfficialFinancialFact } from './official-financial-validation.ts';
 
 const stockId = '11111111-1111-1111-1111-111111111111';
 const sha = 'a'.repeat(64);
@@ -19,7 +20,7 @@ type DbError = { message: string; code: string };
 
 function fixture(options: {
   facts?: Row[]; rpcError?: DbError | null; errorFactId?: string; failTable?: string;
-  omitProvenance?: boolean; receiptAccepted?: boolean; unlinkedFactIds?: string[];
+  omitProvenance?: boolean; receiptAccepted?: boolean; unlinkedFactIds?: string[]; priorReceipts?: Row[];
 } = {}) {
   const facts = options.facts ?? [{ ...base, fact_id: 'legacy' }, { ...base, fact_id: 'linked' }];
   const calls: Array<{ name: string; args: Row }> = [];
@@ -36,7 +37,9 @@ function fixture(options: {
               fact_id: row.fact_id, source_url: 'https://mops.twse.com.tw/report.xhtml', source_sha256: sha,
               locator: { parser_evidence_id: `${row.fact_id}-evidence` },
             }))
-            : table === 'candidate_financial_document_fact_links_v8'
+          : table === 'official_financial_validation_receipts'
+            ? (options.priorReceipts ?? []).filter((row) => selectedIds?.includes(String(row.fact_id)))
+          : table === 'candidate_financial_document_fact_links_v8'
               ? facts.filter((row) => selectedIds?.includes(String(row.fact_id))
                 && !(options.unlinkedFactIds ?? ['legacy']).includes(String(row.fact_id)))
                 .map((row) => ({ fact_id: row.fact_id }))
@@ -128,4 +131,34 @@ test('missing provenance and rejected receipts remain partial; valid receipts al
   const complete = await validatePendingOfficialFinancials([stockId], { client: fixture({ rpcError: null }).client, now, runnerPrincipal });
   assert.equal(complete.status, 'success'); assert.equal(complete.validated, 2);
   assert.deepEqual(complete.failedItems, []); assert.equal(complete.failed, 0);
+});
+
+test('only predecessor collector rows before the proof cutover are quarantined as non-authority', async () => {
+  const legacy = { ...base, fact_id: 'legacy', source_ref: 'twse-openapi:legacy',
+    recorded_at: '2026-08-27T00:00:00Z' };
+  const current = { ...legacy, fact_id: 'current', recorded_at: '2026-09-01T00:00:00Z' };
+  const unrelated = { ...legacy, fact_id: 'other', source_ref: 'issuer-document:'.concat(sha, ':legacy') };
+  assert.equal(isLegacyUnprovedFinancialFact(legacy), true);
+  assert.equal(isLegacyUnprovedFinancialFact(current), false);
+  assert.equal(isLegacyUnprovedFinancialFact(unrelated), false);
+  const run = await validatePendingOfficialFinancials([stockId], {
+    client: fixture({ facts: [legacy], omitProvenance: true }).client, now, runnerPrincipal,
+  });
+  assert.equal(run.status, 'success'); assert.equal(run.legacyUnproved, 1);
+  assert.equal(run.missingProvenance, 0); assert.equal(run.validated, 0);
+});
+
+test('an unchanged trusted rejection stays auditable without re-failing every drain', async () => {
+  const rejectedFact = { ...base, fact_id: 'rejected', validation_status: 'rejected', unit: 'USD' };
+  const source = { fact_id: 'rejected', source_url: 'https://mops.twse.com.tw/report.xhtml', source_sha256: sha,
+    locator: { parser_evidence_id: 'rejected-evidence' }, issuer_host_approved: false };
+  const receipt = validateOfficialFinancialFact(rejectedFact, [rejectedFact], source, now().toISOString());
+  assert.equal(receipt.status, 'rejected');
+  const priorReceipts = [{ fact_id: 'rejected', input_hash: receipt.inputHash,
+    validator_version: 'official-financial-v2', validator_principal: runnerPrincipal(),
+    effective_validation: { ...receipt, validation_status: receipt.status }, receipt_sequence: 1 }];
+  const fx = fixture({ facts: [rejectedFact], priorReceipts });
+  const run = await validatePendingOfficialFinancials([stockId], { client: fx.client, now, runnerPrincipal });
+  assert.equal(run.status, 'success'); assert.equal(run.unchangedRejected, 1);
+  assert.equal(run.rejected, 0); assert.equal(fx.calls.length, 0);
 });
