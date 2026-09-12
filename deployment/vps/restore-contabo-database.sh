@@ -58,7 +58,7 @@ sudo -u postgres createdb --template=template0 --encoding=UTF8 --locale=C "$stag
 sudo -u postgres psql --no-psqlrc --set=ON_ERROR_STOP=1 --dbname="$stage_database" \
   --file="$repo_root/deployment/vps/bootstrap-stockinsider-postgres.sql" >/dev/null
 sudo -u postgres pg_restore --dbname="$stage_database" --use-list="$toc_path" \
-  --exit-on-error --no-password
+  --exit-on-error --no-owner --no-password
 sudo -u postgres psql --no-psqlrc --set=ON_ERROR_STOP=1 --dbname="$stage_database" \
   --file="$repo_root/migrations/20260911_contabo_data_plane_v1.sql" >/dev/null
 verification=$(sudo -u postgres psql --no-psqlrc --set=ON_ERROR_STOP=1 --tuples-only --no-align \
