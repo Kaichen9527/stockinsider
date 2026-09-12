@@ -327,6 +327,24 @@ const graphBoundReviewSources = Object.freeze({
       rangeLine: 'Full reviewed implementation range',
     }),
   }),
+  // The v3.17 acceptance JSON retained the predecessor fixture byte count
+  // while its Markdown mirror and signed fixture were already canonical. The
+  // protected base registers the independently reviewed corrected graph before
+  // a candidate can consume it; candidate bytes cannot select these refs.
+  'c563d77e416fdc2284b7aba50ca2eb03fd5f4cbed44f4edb1c918c63db96e3a2': Object.freeze({
+    requirements: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-contabo-requirements-f569888',
+      path: `${changeRelative}/requirements-review-contabo-gate-reconcile.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+    architecture: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-contabo-architecture-f569888',
+      path: `${changeRelative}/architecture-review-contabo-gate-reconcile.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed implementation range',
+    }),
+  }),
   '5f985e391799fd8332df16c2151f75cc95dfb643a087912d92df2845a435016e': Object.freeze({
     requirements: v319ReviewSources.requirements,
     architecture: v319ReviewSources.architecture,
