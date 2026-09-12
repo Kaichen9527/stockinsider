@@ -17,6 +17,7 @@ import { canonical, loadSohoImagePolicy, SOHO_VPS_HOST } from './soho-image-poli
 
 const execFile = promisify(execFileCallback);
 const DOCKER = '/usr/local/bin/docker';
+const ZSTD = '/opt/homebrew/bin/zstd';
 
 export function verifyLoadedSohoImages(expected, inspected) {
   if (!Array.isArray(expected) || !Array.isArray(inspected) || inspected.length !== expected.length) {
@@ -65,20 +66,34 @@ async function assertLocalImagesAbsent(images) {
 }
 
 async function loadStream(stream) {
+  const decompressor = spawn(ZSTD, ['-d', '-c'], { stdio: ['pipe', 'pipe', 'pipe'] });
   const child = spawn(DOCKER, ['image', 'load'], { stdio: ['pipe', 'pipe', 'pipe'] });
   let outputBytes = 0;
   const count = chunk => {
     outputBytes += chunk.length;
-    if (outputBytes > 1024 * 1024) child.kill('SIGTERM');
+    if (outputBytes > 1024 * 1024) {
+      decompressor.kill('SIGTERM'); child.kill('SIGTERM');
+    }
   };
   child.stdout.on('data', count); child.stderr.on('data', count);
-  const terminal = new Promise(resolve => {
+  decompressor.stderr.on('data', count);
+  const dockerTerminal = new Promise(resolve => {
     child.once('error', () => resolve({ code: null, signal: 'spawn_error' }));
     child.once('close', (code, signal) => resolve({ code, signal }));
   });
-  await pipeline(stream, child.stdin);
-  const result = await terminal;
-  if (result.code !== 0 || result.signal || outputBytes > 1024 * 1024) {
+  const decompressorTerminal = new Promise(resolve => {
+    decompressor.once('error', () => resolve({ code: null, signal: 'spawn_error' }));
+    decompressor.once('close', (code, signal) => resolve({ code, signal }));
+  });
+  let pipelineError;
+  try {
+    await Promise.all([pipeline(stream, decompressor.stdin), pipeline(decompressor.stdout, child.stdin)]);
+  } catch (error) {
+    pipelineError = error; decompressor.kill('SIGTERM'); child.kill('SIGTERM');
+  }
+  const [decompressorResult, dockerResult] = await Promise.all([decompressorTerminal, dockerTerminal]);
+  if (pipelineError || decompressorResult.code !== 0 || decompressorResult.signal
+    || dockerResult.code !== 0 || dockerResult.signal || outputBytes > 1024 * 1024) {
     throw new Error('isolated_docker_load_failed');
   }
 }
@@ -96,7 +111,8 @@ export async function verifySohoDockerImageBackup({ manifestPath, keyDirectory }
       || (receiptMetadata.mode & 0o777) !== 0o600) throw new Error('soho_export_receipt_invalid');
     const receipt = JSON.parse(await receiptFile.readFile('utf8'));
     const manifest = receipt.manifest;
-    if (manifest?.schema !== 'stockinsider-soho-image-export-v3' || manifest.host !== SOHO_VPS_HOST
+    if (manifest?.schema !== 'stockinsider-soho-image-export-v4' || manifest.host !== SOHO_VPS_HOST
+      || manifest.archiveEncoding !== 'zstd'
       || manifest.policySha256 !== policySha256 || manifest.plaintextStoredOnMac !== false
       || manifest.productionMutationPerformed !== false || manifest.broadPrunePerformed !== false
       || canonical(manifest.candidateRefs) !== canonical(candidateRefs)

@@ -8,16 +8,16 @@ import { verifyLoadedSohoImages } from './verify-soho-docker-image-backup.mjs';
 test('SOHO retention manifest is exact, disjoint and protects every retained identity', async () => {
   const { policy, candidateRefs, protectedRefs, policySha256 } = await loadSohoImagePolicy();
   assert.equal(policy.host, SOHO_VPS_HOST);
-  assert.equal(candidateRefs.length, 14);
-  assert.equal(new Set(Object.values(policy.obsoleteCandidates)).size, 10,
+  assert.equal(candidateRefs.length, 18);
+  assert.equal(new Set(Object.values(policy.obsoleteCandidates)).size, 14,
     'duplicate rollback tags may share an archived image but not inflate the unique image count');
   assert.equal(protectedRefs.length, 23);
-  assert.equal(Object.keys(policy.externallyAbsentBeforeVerifiedArchive).length, 3);
+  assert.equal(Object.keys(policy.externallyAbsentBeforeVerifiedArchive).length, 9);
   assert.equal(Object.keys(policy.externallyRemovedProtectedAliases).length, 3);
   assert.match(policySha256, /^[0-9a-f]{64}$/u);
   assert.equal(new Set([...candidateRefs, ...protectedRefs,
     ...Object.keys(policy.externallyAbsentBeforeVerifiedArchive),
-    ...Object.keys(policy.externallyRemovedProtectedAliases)]).size, 43);
+    ...Object.keys(policy.externallyRemovedProtectedAliases)]).size, 53);
   assert.throws(() => validateSohoImagePolicy({ ...policy,
     obsoleteCandidates: { ...policy.obsoleteCandidates,
       [candidateRefs[0]]: Object.values(policy.current)[0] } }), /soho_candidate_image_is_protected/u);
@@ -57,6 +57,7 @@ test('remote exporter is read-only and exact while verifier cannot reach product
       `remote helper must bind ${ref} to the reviewed image identity`);
   }
   assert.match(remote, /"image", "save"/u);
+  assert.match(remote, /"\/usr\/bin\/zstd", "-T1", "-3", "-c"/u);
   assert.doesNotMatch(remote, /\b(?:rmi|rm|prune|tag)\b/u);
   assert.match(exporter, /SOHO_VPS_HOST/u);
   assert.match(exporter, /ServerAliveInterval=15/u);
@@ -64,6 +65,7 @@ test('remote exporter is read-only and exact while verifier cannot reach product
   assert.match(exporter, /plaintextStoredOnMac: false/u);
   assert.match(exporter, /productionMutationPerformed: false/u);
   assert.doesNotMatch(verifier, /root@|\/usr\/bin\/ssh/u);
+  assert.match(verifier, /'\/opt\/homebrew\/bin\/zstd'/u);
   assert.match(verifier, /\['image', 'rm', \.\.\.candidateRefs\]/u);
   assert.doesNotMatch(verifier, /\['(?:system|image|builder)', 'prune'/u);
 });

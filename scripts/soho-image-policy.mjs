@@ -29,8 +29,8 @@ export function validateSohoImagePolicy(policy) {
   }
   exactMap(policy.current, 13, 'soho_current');
   exactMap(policy.retainedRollbacks, 10, 'soho_retained_rollbacks');
-  exactMap(policy.obsoleteCandidates, 14, 'soho_obsolete_candidates');
-  exactMap(policy.externallyAbsentBeforeVerifiedArchive, 3, 'soho_externally_absent');
+  exactMap(policy.obsoleteCandidates, 18, 'soho_obsolete_candidates');
+  exactMap(policy.externallyAbsentBeforeVerifiedArchive, 9, 'soho_externally_absent');
   exactMap(policy.externallyRemovedProtectedAliases, 3, 'soho_externally_removed_protected_aliases');
   if (policy.externallyAbsentDisposition !== 'externally_absent_before_verified_archive'
     || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/u.test(policy.externallyAbsentDetectedAt || '')) {
