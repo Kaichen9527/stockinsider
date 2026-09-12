@@ -2367,7 +2367,10 @@ async function listBrokerReportImportFiles() {
   const files: Array<{ fileName: string; filePath: string }> = [];
   for (const dir of dirs) {
     try {
-      const entries = await fs.readdir(dir);
+      // Broker imports are an operator-owned runtime directory. Tracing a
+      // dynamic absolute path would otherwise make Turbopack copy the complete
+      // repository into every standalone release.
+      const entries = await fs.readdir(/* turbopackIgnore: true */ dir);
       for (const fileName of entries) {
         if (!/\.(pdf|csv)$/i.test(fileName)) continue;
         files.push({ fileName, filePath: path.join(dir, fileName) });

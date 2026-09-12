@@ -11,6 +11,9 @@ test('restore rehearsal is socket-only and never persists the plaintext archive'
   assert.match(source,/constants\.O_NOFOLLOW/u);
   assert.match(source,/mode:0o600/u);
   assert.match(source,/identityFenceEnabled===false/u);
+  assert.match(source,/applicationValidationPassed:true/u);
+  assert.match(source,/applicationTables===7/u);
+  assert.match(source,/applicationFunctions===3/u);
   assert.doesNotMatch(source,/SUPABASE_SERVICE_ROLE_KEY|DATABASE_URL|PGPASSWORD/u);
 });
 

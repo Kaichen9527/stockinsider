@@ -5,7 +5,10 @@ import test from 'node:test';
 const migration=readFileSync(new URL('../migrations/20260911_contabo_data_plane_v1.sql',import.meta.url),'utf8');
 const bootstrap=readFileSync(new URL('../deployment/vps/bootstrap-stockinsider-postgres.sql',import.meta.url),'utf8');
 const service=readFileSync(new URL('../deployment/vps/systemd/stockinsider-postgrest.service',import.meta.url),'utf8');
+const webService=readFileSync(new URL('../deployment/vps/systemd/stockinsider-web-standalone.service',import.meta.url),'utf8');
 const config=readFileSync(new URL('../deployment/vps/postgrest-stockinsider.conf',import.meta.url),'utf8');
+const nginx=readFileSync(new URL('../deployment/vps/nginx/stockinsider-postgrest-loopback.conf',import.meta.url),'utf8');
+const installer=readFileSync(new URL('../deployment/vps/install-contabo-data-plane.sh',import.meta.url),'utf8');
 const activation=readFileSync(new URL('../deployment/vps/activate-contabo-data-plane.sql',import.meta.url),'utf8');
 const acquisition=readFileSync(new URL('../web/src/lib/candidate-financial-document-acquisition.ts',import.meta.url),'utf8');
 
@@ -45,6 +48,20 @@ test('PostgREST is loopback-only and receives secrets through encrypted credenti
   assert.match(service,/IPAddressDeny=any/u);
   assert.match(service,/IPAddressAllow=localhost/u);
   assert.doesNotMatch(service,/Environment=.*(?:PASSWORD|SECRET|TOKEN|URI)/u);
+  assert.match(webService,/LoadCredentialEncrypted=postgrest-service-role[.]jwt:/u);
+  assert.match(webService,/LoadCredentialEncrypted=provider-secrets-v1[.]key:/u);
+  assert.doesNotMatch(webService,/Environment=.*(?:PASSWORD|SECRET|TOKEN|URI)/u);
+  assert.match(nginx,/listen 127[.]0[.]0[.]1:3302/u);
+  assert.match(nginx,/location \/rest\/v1\//u);
+  assert.match(nginx,/proxy_pass http:\/\/127[.]0[.]0[.]1:3301\//u);
+  assert.match(nginx,/location \/[\s\S]*return 404/u);
+  assert.doesNotMatch(nginx,/listen\s+(?:0[.]0[.]0[.]0:)?3302|listen\s+3302/u);
+  assert.match(installer,/nginx -t/u);
+  assert.match(installer,/systemctl enable stockinsider-postgrest[.]service/u);
+  assert.doesNotMatch(installer,/systemctl (?:start|restart|enable --now) stockinsider-(?:postgrest|web)/u);
+  for(const name of ['stockinsider-postgrest-database-uri','stockinsider-postgrest-jwt-secret',
+    'stockinsider-postgrest-service-role-jwt','stockinsider-provider-secrets-v1-key'])
+    assert.match(installer,new RegExp(name,'u'));
   assert.match(activation,/production_writer_releases[\s\S]*writer_kind='vps'/u);
   assert.match(activation,/internal_principal_role_is_exact_v3_internal/u);
   assert.match(activation,/identity_fence_enabled=true/u);

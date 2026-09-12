@@ -40,8 +40,13 @@ function parseContaboUrl(value: string) {
     || url.pathname !== '/' || url.search || url.hash) {
     throw new Error('contabo_postgrest_must_be_loopback');
   }
+  // The Supabase client always speaks the `/rest/v1` shape.  Port 3302 is the
+  // dedicated loopback-only Nginx compatibility boundary which strips that
+  // prefix before forwarding to raw PostgREST on 3301.  Accepting an arbitrary
+  // loopback port here can silently select the raw endpoint and turn every
+  // application query into a 404 during cutover.
   const port = Number(url.port);
-  if (!Number.isInteger(port) || port < 1024 || port > 65535) throw new Error('contabo_postgrest_port_invalid');
+  if (port !== 3302) throw new Error('contabo_postgrest_port_invalid');
   return url.toString();
 }
 

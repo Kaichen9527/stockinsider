@@ -256,6 +256,8 @@ async function main(){
       'serviceRoleRoutineGrants',(SELECT count(*) FROM information_schema.routine_privileges WHERE grantee='service_role' AND routine_schema='public'),
       'dataPlaneTables',(SELECT count(*) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='public' AND c.relkind IN ('r','p') AND c.relname=ANY(ARRAY['stockinsider_data_plane_settings_v1','stockinsider_backend_identities_v1','provider_credentials_encrypted_v1','private_artifact_receipts_v1'])),
       'dataPlaneFunctions',(SELECT count(DISTINCT p.proname) FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='public' AND p.proname=ANY(ARRAY['assert_stockinsider_backend_request_v1','read_provider_credential_envelope_v1','read_provider_credential_state_v1','replace_provider_credential_cas_v1','revoke_provider_credential_cas_v1','register_private_artifact_receipt_v1'])),
+      'applicationTables',(SELECT count(*) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='public' AND c.relkind IN ('r','p') AND c.relname=ANY(ARRAY['source_run_ledger','candidate_source_mentions','candidate_research_runs','candidate_research_run_items','official_price_history','candidate_detail_snapshots','radar_public_snapshots'])),
+      'applicationFunctions',(SELECT count(DISTINCT p.proname) FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='public' AND p.proname=ANY(ARRAY['source_document_coverage','publish_radar_public_snapshots','candidate_research_stock_authority_page'])),
       'writerFenceFunctions',(SELECT count(*) FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='public' AND p.proname='enforce_production_writer_fence'),
       'writerFenceTriggers',(SELECT count(*) FROM pg_trigger t JOIN pg_proc p ON p.oid=t.tgfoid JOIN pg_namespace n ON n.oid=p.pronamespace WHERE NOT t.tgisinternal AND n.nspname='public' AND p.proname='enforce_production_writer_fence'),
       'identityFenceEnabled',(SELECT identity_fence_enabled FROM public.stockinsider_data_plane_settings_v1 WHERE singleton),
@@ -272,6 +274,9 @@ async function main(){
       &&checks.vaultSchemaPresent===false&&checks.vaultExtensionPresent===false
       &&checks.publicTables>0&&checks.publicFunctions>0&&checks.userTriggers>0&&checks.rlsTables>0&&checks.policies>0;
     if(!restoreVerified)throw new Error('portable_contract_verification_failed');
+    const applicationValidationPassed=checks.applicationTables===7&&checks.applicationFunctions===3
+      &&checks.serviceRoleTableGrants>0&&checks.serviceRoleRoutineGrants>0;
+    if(!applicationValidationPassed)throw new Error('application_contract_verification_failed');
     const finalFile=await open(archivePath,constants.O_RDONLY|constants.O_NOFOLLOW);
     let final;
     try{final=await finalFile.stat();}finally{await finalFile.close();}
@@ -287,11 +292,11 @@ async function main(){
         tocEntries,excludedVaultEntries:filtered.excluded,tocSha256:createHash('sha256').update(listResult.stdout).digest('hex'),
         filteredTocSha256:createHash('sha256').update(filtered.contents).digest('hex'),
         databaseBytes:Number(checks.databaseBytes),clusterBytes,portableMigrationApplied:true},
-      checks,restoreVerified:true,productionCutoverApproved:false,
+      checks,restoreVerified:true,applicationValidationPassed:true,productionCutoverApproved:false,
       limitations:['provider_credentials_not_decrypted_or_exercised','document_restore_is_a_separate_recovery_set','independent_key_escrow_not_verified']};
     receiptPath=path.join(receiptDirectory,`contabo-restore-rehearsal-${timestamp.replace(/[:.]/gu,'-')}.receipt.json`);
     await writeFile(receiptPath,`${JSON.stringify(receipt,null,2)}\n`,{flag:'wx',mode:0o600});
-    console.log(JSON.stringify({restoreVerified:true,receiptPath,databaseBytes:receipt.restore.databaseBytes,
+    console.log(JSON.stringify({restoreVerified:true,applicationValidationPassed:true,receiptPath,databaseBytes:receipt.restore.databaseBytes,
       clusterBytes,checks,excludedVaultEntries:filtered.excluded}));
   }finally{
     key?.fill(0);

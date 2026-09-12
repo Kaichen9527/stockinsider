@@ -1,7 +1,7 @@
 /** Complete local backup orchestrator. It serializes export phases, but only a
  * successful clean restore may publish a complete backup-set receipt.
  */
-import { mkdir, readdir, readFile, rmdir, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, rmdir } from 'node:fs/promises';
 import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -69,13 +69,13 @@ export async function runLocalBackup(config, scriptsDirectory = path.dirname(fil
     const afterProvider = new Set(await readdir(config.directory));
     const [providerManifest] = difference(afterProvider, afterStorage, /^provider-recovery-.+\.manifest\.json$/);
     if (!providerManifest) throw new Error('provider_manifest_missing');
-    const restoreLines = await runNode(path.join(scriptsDirectory, 'rehearse-local-database-restore.mjs'),
-      [path.join(config.directory, databaseManifest), config.keyDirectory]);
-    const restore = restoreLines.find(item => item.schema === 'stockinsider-restore-rehearsal-v1');
-    if (!restore) throw new Error('restore_receipt_missing');
-    const restoreReceipt = `restore-${path.basename(databaseManifest, '.manifest.json')}.json`;
-    await writeFile(path.join(config.directory, restoreReceipt), JSON.stringify(restore, null, 2) + '\n',
-      { flag: 'wx', mode: 0o600 });
+    const restoreLines = await runNode(path.join(scriptsDirectory, 'rehearse-contabo-database-restore.mjs'),
+      ['--manifest', path.join(config.directory, databaseManifest), '--key-directory', config.keyDirectory,
+        '--receipt-directory', config.directory]);
+    const restore = restoreLines.find(item => item.restoreVerified === true
+      && item.applicationValidationPassed === true && path.isAbsolute(item.receiptPath || ''));
+    if (!restore || path.dirname(restore.receiptPath) !== config.directory) throw new Error('restore_receipt_missing');
+    const restoreReceipt = path.basename(restore.receiptPath);
     return await assembleLocalBackupSet({ directory: config.directory, spec: { retentionClass: 'daily',
       databaseManifest, storageInventory, storageManifests, providerManifest, restoreReceipt } });
   } finally {

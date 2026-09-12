@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { CONFIRMED_BACKUP_DIRECTORY, validateBackupRunConfig } from './run-local-backup.mjs';
 
@@ -14,4 +15,11 @@ test('orchestrator is pinned to the confirmed project-root backup and explicit p
   }
   assert.throws(() => validateBackupRunConfig({ ...config, incomingBytes: 0 }));
   assert.throws(() => validateBackupRunConfig({ ...config, temporaryBytes: undefined }));
+});
+
+test('orchestrator requires the portable Contabo restore and its application validation receipt', () => {
+  const source = readFileSync(new URL('./run-local-backup.mjs', import.meta.url), 'utf8');
+  assert.match(source, /rehearse-contabo-database-restore[.]mjs/u);
+  assert.match(source, /applicationValidationPassed === true/u);
+  assert.doesNotMatch(source, /rehearse-local-database-restore[.]mjs/u);
 });

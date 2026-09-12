@@ -32,8 +32,11 @@ remain signed, origin-bound and replay-deduplicated in the database.
 ## Runtime and restore contract
 
 `STOCKINSIDER_DATA_PLANE=contabo` selects a SHA-256-pinned service-role JWT and
-loopback-only PostgREST. The exact Supabase project-host guard is unchanged for
-the compatibility mode. Candidate financial documents use the hash store in
+the loopback-only compatibility endpoint at `127.0.0.1:3302`. The Supabase SDK
+adds `/rest/v1`; a dedicated Nginx server on 3302 strips only that prefix and
+forwards to raw PostgREST on `127.0.0.1:3301`. Every other path returns 404 and
+neither port listens publicly. The exact Supabase project-host guard is
+unchanged for the compatibility mode. Candidate financial documents use the hash store in
 Contabo mode and record a receipt after the file is fsynced and re-read.
 
 The destination database first receives
@@ -66,10 +69,17 @@ source archive is never rewritten.
 `scripts/rehearse-contabo-database-restore.mjs` performs the clean local
 rehearsal. It authenticates the complete AES-GCM archive before SQL execution,
 restores owners and ACLs into a new Unix-socket-only cluster, applies the
-additive Contabo migration, and checks schema, RPC, trigger, RLS, grants and
-owner mappings. It writes a mode-0600 receipt without row data or secrets and
+additive Contabo migration, and checks schema, RPC, trigger, RLS, grants, owner
+mappings, and the application tables/RPCs required by source ingestion, research
+and publication. It writes a mode-0600 receipt without row data or secrets and
 then removes the disposable cluster. A passing receipt is recovery evidence,
 not production cutover approval.
+
+`deployment/vps/install-contabo-data-plane.sh` installs and validates the
+loopback proxy, PostgREST unit and standalone web unit only after all four
+encrypted systemd credentials exist with private ownership. It deliberately
+does not start the new writer or replace the current web service; activation is
+a separate reviewed cutover step.
 
 The identity fence is dormant after migration. During reviewed cutover, an
 operator registers exactly one backend UUID, runner principal and 40-character
