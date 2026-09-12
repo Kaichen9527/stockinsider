@@ -20,20 +20,13 @@ $guard$;
 BEGIN;
 SET LOCAL synchronous_commit = off;
 
-CREATE TABLE IF NOT EXISTS public.stockinsider_legacy_compaction_receipts_v1 (
-  receipt_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  policy_version TEXT NOT NULL CHECK (policy_version = 'legacy-runtime-v1'),
-  source_high_water_at TIMESTAMPTZ NOT NULL,
-  live_detail_cutoff_at TIMESTAMPTZ NOT NULL,
-  archived_run_count BIGINT NOT NULL CHECK (archived_run_count >= 0),
-  archived_run_root_hash TEXT NOT NULL CHECK (archived_run_root_hash ~ '^[0-9a-f]{64}$'),
-  removed_relation_counts JSONB NOT NULL CHECK (jsonb_typeof(removed_relation_counts) = 'object'),
-  retained_relation_counts JSONB NOT NULL CHECK (jsonb_typeof(retained_relation_counts) = 'object'),
-  cold_backup_id TEXT NOT NULL,
-  cold_backup_plaintext_sha256 TEXT NOT NULL CHECK (cold_backup_plaintext_sha256 ~ '^[0-9a-f]{64}$'),
-  cold_restore_verified BOOLEAN NOT NULL CHECK (cold_restore_verified),
-  created_at TIMESTAMPTZ NOT NULL DEFAULT clock_timestamp()
-);
+DO $receipt_contract$
+BEGIN
+  IF to_regclass('public.stockinsider_legacy_compaction_receipts_v1') IS NULL THEN
+    RAISE EXCEPTION 'legacy_compaction_receipt_migration_missing';
+  END IF;
+END;
+$receipt_contract$;
 
 CREATE TEMP TABLE compaction_archived_runs ON COMMIT DROP AS
 WITH high_water AS (

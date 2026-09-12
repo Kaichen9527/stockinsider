@@ -27,7 +27,8 @@ async function readMember(directory, filename) {
   return { ...member, json: JSON.parse(await readFile(path.join(directory, filename), 'utf8')) };
 }
 
-export function assessBackupSet({ database, storageInventory, storageManifests, provider, restore }) {
+export function assessBackupSet({ database, storageInventory, storageManifests, storageRestore,
+  provider, providerVerification, restore }) {
   const reasons = [];
   const databaseSchema = database.json?.manifest?.schema;
   if (!['stockinsider-database-export-v1', 'stockinsider-database-export-v2',
@@ -51,6 +52,22 @@ export function assessBackupSet({ database, storageInventory, storageManifests, 
       || item.json?.result?.envelopeVerified !== true)) reasons.push('storage_members_incomplete');
   if (provider.json?.manifest?.schema !== 'stockinsider-provider-recovery-v1'
     || provider.json?.result?.envelopeVerified !== true) reasons.push('provider_recovery_unverified');
+  if (providerVerification?.json?.schema !== 'stockinsider-provider-recovery-verification-v1'
+    || providerVerification.json.credentialsDecryptedAndValidated !== true
+    || providerVerification.json.secretsPrinted !== false
+    || providerVerification.json.source?.manifestFilename !== provider.filename
+    || providerVerification.json.source?.contextSha256 !== provider.json?.contextSha256
+    || providerVerification.json.source?.plaintextSha256 !== provider.json?.result?.plaintextSha256) {
+    reasons.push('provider_recovery_payload_unverified');
+  }
+  if (storageRestore?.json?.schema !== 'stockinsider-storage-restore-rehearsal-v1'
+    || storageRestore.json.source?.inventoryFilename !== storageInventory.filename
+    || storageRestore.json.source?.inventorySha256 !== storageInventory.sha256
+    || storageRestore.json.objectsRestored !== storageInventory.json?.objects
+    || storageRestore.json.privateHashAddressedLayoutVerified !== true
+    || storageRestore.json.objectHashesVerified !== true
+    || storageRestore.json.temporaryFilesRemoved !== true
+    || storageRestore.json.restoredPlaintextRetained !== false) reasons.push('storage_restore_unverified');
   const restoreVerified = restore.json?.schema === 'stockinsider-contabo-restore-rehearsal-v2'
     && restore.json?.restoreVerified === true
     && restore.json?.applicationValidationPassed === true
@@ -76,13 +93,16 @@ export async function assembleLocalBackupSet({ directory, spec, now = new Date()
     readPrivateFile(backupDirectory, item.json?.result?.filename)));
   const provider = await readMember(backupDirectory, spec.providerManifest);
   const providerArtifact = await readPrivateFile(backupDirectory, provider.json?.result?.filename);
+  const storageRestore = await readMember(backupDirectory, spec.storageRestoreReceipt);
+  const providerVerification = await readMember(backupDirectory, spec.providerVerificationReceipt);
   const restore = await readMember(backupDirectory, spec.restoreReceipt);
-  const assessment = assessBackupSet({ database, storageInventory, storageManifests, provider, restore });
+  const assessment = assessBackupSet({ database, storageInventory, storageManifests, storageRestore,
+    provider, providerVerification, restore });
   const members = [database, databaseArtifact, storageInventory, ...storageManifests, ...storageArtifacts,
-    provider, providerArtifact, restore]
+    storageRestore, provider, providerArtifact, providerVerification, restore]
     .map(({ filename, sha256: digest }) => ({ filename, sha256: digest }));
   const id = `backup-set-${now.toISOString().replace(/[:.]/g, '-')}-${randomUUID()}`;
-  const manifest = { schema: 'stockinsider-local-backup-set-v1', id, createdAt: now.toISOString(),
+  const manifest = { schema: 'stockinsider-local-backup-set-v2', id, createdAt: now.toISOString(),
     retentionClass: spec.retentionClass, members, ...assessment,
     localBudgetBytes: 25 * 1024 ** 3, independentOffsiteCopyVerified: false };
   const manifestSha256 = sha256(JSON.stringify(manifest));

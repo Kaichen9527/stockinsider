@@ -68,10 +68,25 @@ must be removed before the database manifest is published. `pg_dump` owns its
 single internally consistent snapshot; the IPv4 session pooler is not used for
 the long-running export.
 
-The current encrypted export is useful evidence but is not a complete recovery
-set because the strict clean restore and application validation have not passed.
-Do not retire Supabase, run database cleanup or start a Contabo restore until those
-gates pass and the current host has enough space. No automatic expansion exists.
+The 2026-09-12 compact rehearsal reduced the restored database from about
+3.775 GiB to 1,996,641,971 bytes without removing published research facts,
+five-year price history or 60-month valuation evidence. A second clean restore
+passed the database and application contract. The complete v2 local backup also
+restored all eight private documents and decrypted/validated the two provider
+credentials without exposing their values.
+
+After removing only reviewed unused Docker build cache and archived SOHO images,
+the host measured about 24.05 GiB free. The checked-in capacity budget reserves
+3.5 GiB for the database, 16 MiB for current documents, 1 GiB WAL, 0.5 GiB
+index/temporary work, 0.5 GiB deployment space and 2 GiB near-term growth. It
+projects about 17.1 GiB remaining, above the 15 GiB hard floor. Therefore no
+storage expansion is currently required. Re-run the time-bounded measurement
+under the heavy-operation lock immediately before restore; a stale estimate is
+not cutover admission.
+
+Do not retire Supabase until production restore, provider credential import,
+document canary, unique-writer activation and the seven-day rollback observation
+pass. No automatic expansion or subscription cancellation exists.
 
 ## Exact VPS release archive evidence
 

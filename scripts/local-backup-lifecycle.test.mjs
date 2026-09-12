@@ -4,16 +4,25 @@ import { assessBackupSet } from './local-backup-set.mjs';
 import { assessBackupFreshness } from './local-backup-freshness.mjs';
 import { planBackupRotation } from './local-backup-rotation.mjs';
 
-const member = json => ({ json });
+const member = (json, filename, sha256) => ({ json, filename, sha256 });
 const valid = () => ({
   database: member({ manifest: { schema: 'stockinsider-database-export-v2', snapshot: null,
     snapshotStrategy: 'pg_dump_internal_consistent_snapshot' }, remoteEphemeralCredentialsRemoved: true,
     contextSha256: 'c', result: { envelopeVerified: true, plaintextSha256: 'p' } }),
-  storageInventory: member({ inventoryStable: true, restoreVerified: false,
-    receipts: [{ contextSha256: 's' }] }),
+  storageInventory: member({ objects: 1, inventoryStable: true, restoreVerified: false,
+    receipts: [{ contextSha256: 's' }] }, 'storage-inventory.json', 'inventory-sha'),
   storageManifests: [member({ contextSha256: 's', manifest: { schema: 'stockinsider-storage-export-v1' },
     result: { envelopeVerified: true } })],
-  provider: member({ manifest: { schema: 'stockinsider-provider-recovery-v1' }, result: { envelopeVerified: true } }),
+  storageRestore: member({ schema: 'stockinsider-storage-restore-rehearsal-v1',
+    source: { inventoryFilename: 'storage-inventory.json', inventorySha256: 'inventory-sha' },
+    objectsRestored: 1, privateHashAddressedLayoutVerified: true, objectHashesVerified: true,
+    temporaryFilesRemoved: true, restoredPlaintextRetained: false }),
+  provider: member({ manifest: { schema: 'stockinsider-provider-recovery-v1' }, contextSha256: 'provider-context',
+    result: { envelopeVerified: true, plaintextSha256: 'provider-plain' } }, 'provider.manifest.json'),
+  providerVerification: member({ schema: 'stockinsider-provider-recovery-verification-v1',
+    credentialsDecryptedAndValidated: true, secretsPrinted: false,
+    source: { manifestFilename: 'provider.manifest.json', contextSha256: 'provider-context',
+      plaintextSha256: 'provider-plain' } }),
   restore: member({ schema: 'stockinsider-contabo-restore-rehearsal-v2', restoreVerified: true,
     applicationValidationPassed: true, source: { plaintextSha256: 'p', contextSha256: 'c' },
     restore: { unixSocketOnly: true, plaintextArchiveWritten: false, ownerAndAclReplay: true,
@@ -38,7 +47,7 @@ test('a backup set is complete only after all members and a clean application re
 
 test('Mac freshness ignores exports that were not restored', () => {
   const now = Date.parse('2026-09-11T12:00:00Z');
-  const complete = { manifest: { schema: 'stockinsider-local-backup-set-v1', id: 'one',
+  const complete = { manifest: { schema: 'stockinsider-local-backup-set-v2', id: 'one',
     createdAt: '2026-09-11T00:01:00Z', completeSystemBackup: true, restoreVerified: true } };
   assert.equal(assessBackupFreshness([complete], now).fresh, true);
   assert.equal(assessBackupFreshness([{ manifest: { ...complete.manifest, restoreVerified: false } }], now).fresh, false);
@@ -49,7 +58,7 @@ test('rotation retains fourteen days, four weekly copies, latest two and all col
   const now = Date.parse('2026-09-11T00:00:00Z');
   const receipts = [];
   for (let day = 0; day < 80; day += 4) receipts.push({ manifest: {
-    schema: 'stockinsider-local-backup-set-v1', id: `set-${day}`,
+    schema: 'stockinsider-local-backup-set-v2', id: `set-${day}`,
     createdAt: new Date(now - day * 86_400_000).toISOString(), retentionClass: day === 76 ? 'cold-unique' : 'daily',
     completeSystemBackup: true, restoreVerified: true, members: [] } });
   receipts.push({ manifest: { id: 'unverified', completeSystemBackup: false } });

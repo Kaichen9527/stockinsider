@@ -12,8 +12,9 @@ import { assembleLocalBackupSet } from './local-backup-set.mjs';
 export { CONFIRMED_BACKUP_DIRECTORY };
 
 export function validateBackupRunConfig(config) {
-  const paths = ['directory', 'environmentFile', 'caFile', 'keyDirectory', 'pgDump', 'pgRestore', 'pgModule'];
-  if (!config || config.schema !== 'stockinsider-local-backup-run-v1'
+  const paths = ['directory', 'environmentFile', 'caFile', 'keyDirectory', 'pgDump', 'pgRestore',
+    'pgModule', 'restoreScratchDirectory'];
+  if (!config || config.schema !== 'stockinsider-local-backup-run-v2'
     || paths.some(key => !path.isAbsolute(config[key] || ''))
     || config.directory !== CONFIRMED_BACKUP_DIRECTORY) throw new Error('backup_run_config_invalid');
   for (const key of ['incomingBytes', 'temporaryBytes']) {
@@ -71,11 +72,26 @@ export async function runLocalBackup(config, scriptsDirectory = path.dirname(fil
     const storageManifests = difference(afterStorage, afterDatabase, /^storage-.+\.manifest\.json$/);
     const [storageInventory] = difference(afterStorage, afterDatabase, /^storage-inventory-.+\.json$/);
     if (!storageInventory) throw new Error('storage_inventory_missing');
+    const storageRestoreLines = await runNode(path.join(scriptsDirectory, 'rehearse-local-storage-restore.mjs'),
+      [path.join(config.directory, storageInventory), config.keyDirectory, config.directory,
+        config.restoreScratchDirectory]);
+    const storageRestore = storageRestoreLines.find(item =>
+      item.schema === 'stockinsider-storage-restore-rehearsal-v1'
+      && item.objectsRestored === storageManifests.length && typeof item.filename === 'string');
+    if (!storageRestore) throw new Error('storage_restore_receipt_missing');
+    const storageRestoreReceipt = storageRestore.filename;
     await runNode(path.join(scriptsDirectory, 'export-local-provider-recovery.mjs'), [config.directory,
       config.environmentFile, config.caFile, config.keyDirectory, config.pgModule]);
     const afterProvider = new Set(await readdir(config.directory));
     const [providerManifest] = difference(afterProvider, afterStorage, /^provider-recovery-.+\.manifest\.json$/);
     if (!providerManifest) throw new Error('provider_manifest_missing');
+    const providerVerificationLines = await runNode(path.join(scriptsDirectory, 'verify-local-provider-recovery.mjs'),
+      [path.join(config.directory, providerManifest), config.keyDirectory, config.directory]);
+    const providerVerification = providerVerificationLines.find(item =>
+      item.schema === 'stockinsider-provider-recovery-verification-v1'
+      && item.credentialsDecryptedAndValidated === true && typeof item.filename === 'string');
+    if (!providerVerification) throw new Error('provider_verification_receipt_missing');
+    const providerVerificationReceipt = providerVerification.filename;
     const restoreLines = await runNode(path.join(scriptsDirectory, 'rehearse-contabo-database-restore.mjs'),
       ['--manifest', path.join(config.directory, databaseManifest), '--key-directory', config.keyDirectory,
         '--receipt-directory', config.directory]);
@@ -84,7 +100,8 @@ export async function runLocalBackup(config, scriptsDirectory = path.dirname(fil
     if (!restore || path.dirname(restore.receiptPath) !== config.directory) throw new Error('restore_receipt_missing');
     const restoreReceipt = path.basename(restore.receiptPath);
     return await assembleLocalBackupSet({ directory: config.directory, spec: { retentionClass: 'daily',
-      databaseManifest, storageInventory, storageManifests, providerManifest, restoreReceipt } });
+      databaseManifest, storageInventory, storageManifests, storageRestoreReceipt,
+      providerManifest, providerVerificationReceipt, restoreReceipt } });
   } finally {
     await rmdir(lock).catch(() => {});
   }

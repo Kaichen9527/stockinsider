@@ -6,7 +6,7 @@
     "pg": "^8.18.0"
   },
   "scripts": {
-    "test:contabo-capacity-backup": "node --test scripts/contabo-capacity-guard.test.mjs scripts/contabo-host-resource-check.test.mjs scripts/contabo-deployment-inventory.test.mjs scripts/local-backup-preflight.test.mjs scripts/local-backup-envelope.test.mjs scripts/local-backup-file-key.test.mjs scripts/local-backup-artifact.test.mjs scripts/local-backup-lifecycle.test.mjs scripts/run-local-backup.test.mjs scripts/package-standalone-release.test.mjs scripts/vps-release-backup.test.mjs scripts/soho-docker-image-backup.test.mjs",
+    "test:contabo-capacity-backup": "node --test scripts/contabo-capacity-guard.test.mjs scripts/contabo-host-resource-check.test.mjs scripts/contabo-deployment-inventory.test.mjs scripts/local-backup-preflight.test.mjs scripts/local-backup-envelope.test.mjs scripts/local-backup-file-key.test.mjs scripts/local-backup-artifact.test.mjs scripts/local-backup-lifecycle.test.mjs scripts/verify-local-provider-recovery.test.mjs scripts/rehearse-local-storage-restore.test.mjs scripts/run-local-backup.test.mjs scripts/package-standalone-release.test.mjs scripts/vps-release-backup.test.mjs scripts/soho-docker-image-backup.test.mjs",
     "ops:contabo:inventory": "node scripts/contabo-deployment-inventory.mjs",
     "backup:local:freshness": "node scripts/local-backup-freshness.mjs",
     "backup:local:run": "node scripts/run-local-backup.mjs",

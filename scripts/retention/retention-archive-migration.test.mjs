@@ -10,6 +10,7 @@ const migrationV2 = fs.readFileSync(new URL('../../migrations/20260911_retention
 const materializeV2 = fs.readFileSync(new URL('./materialize-legacy-content-v2.sql', import.meta.url), 'utf8');
 const compactMaterializeV1 = fs.readFileSync(new URL('./materialize-legacy-content-compact-v1.sql', import.meta.url), 'utf8');
 const compactionV1 = fs.readFileSync(new URL('./compact-legacy-runtime-v1.sql', import.meta.url), 'utf8');
+const compactionReceiptMigration = fs.readFileSync(new URL('../../migrations/20260912_legacy_runtime_compaction_receipts_v1.sql', import.meta.url), 'utf8');
 const legacyCleanup = fs.readFileSync(new URL('../supabase_retention_cleanup.js', import.meta.url), 'utf8');
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 
@@ -121,13 +122,24 @@ test('legacy compaction is restricted to a verified local restore and preserves 
   assert.match(compactionV1, /stockinsider-contabo-restore-/u);
   assert.match(compactionV1, /high_water[.]observed_at - interval '7 days'/u);
   assert.match(compactionV1, /run[.]status IN \('success','failed','cancelled'\)/u);
-  assert.match(compactionV1, /cold_restore_verified BOOLEAN NOT NULL CHECK \(cold_restore_verified\)/u);
+  assert.match(compactionV1, /legacy_compaction_receipt_migration_missing/u);
   assert.match(compactionV1, /legacy_compaction_reference_verification_failed/u);
   assert.match(compactionV1, /legacy_compaction_postcondition_failed/u);
   assert.doesNotMatch(compactionV1, /DELETE FROM public[.]legacy_producer_(?:runs|jobs)_v3_11/iu);
   for (const relation of ['job_payload_refs', 'job_result_refs', 'authority_page_refs', 'frozen_revision_refs']) {
     assert.match(compactionV1, new RegExp(`retention_legacy_${relation}_v2`, 'u'));
   }
+});
+
+test('compaction receipt schema is additive, immutable and service-role only', () => {
+  assert.match(compactionReceiptMigration, /^BEGIN;[\s\S]*COMMIT;\s*$/u);
+  assert.doesNotMatch(compactionReceiptMigration, /\b(?:DELETE\s+FROM|TRUNCATE|DROP\s+(?:TABLE|SCHEMA|TYPE))\b/iu);
+  assert.match(compactionReceiptMigration, /cold_restore_verified BOOLEAN NOT NULL CHECK \(cold_restore_verified\)/u);
+  assert.match(compactionReceiptMigration, /ENABLE ROW LEVEL SECURITY/u);
+  assert.match(compactionReceiptMigration, /FROM PUBLIC, anon, authenticated/u);
+  assert.match(compactionReceiptMigration, /TO service_role/u);
+  assert.match(compactionReceiptMigration, /BEFORE UPDATE OR DELETE/u);
+  assert.match(compactionReceiptMigration, /stockinsider_compaction_receipt_is_immutable/u);
 });
 
 test('cutover materializer keeps replay content online but leaves high-cardinality outcomes cold-only', () => {

@@ -14,7 +14,7 @@ const weekKey = timestamp => {
 
 export function planBackupRotation(receipts, now = Date.now()) {
   const complete = receipts.map(receipt => ({ receipt, timestamp: Date.parse(receipt?.manifest?.createdAt) }))
-    .filter(item => item.receipt?.manifest?.schema === 'stockinsider-local-backup-set-v1'
+    .filter(item => item.receipt?.manifest?.schema === 'stockinsider-local-backup-set-v2'
       && item.receipt.manifest.completeSystemBackup === true && item.receipt.manifest.restoreVerified === true
       && Number.isFinite(item.timestamp) && item.timestamp <= now)
     .sort((a, b) => b.timestamp - a.timestamp);
@@ -33,7 +33,7 @@ export function planBackupRotation(receipts, now = Date.now()) {
   const quarantineCandidates = complete.filter(item => !keep.has(item.receipt.manifest.id))
     .map(item => ({ id: item.receipt.manifest.id, createdAt: item.receipt.manifest.createdAt,
       members: (item.receipt.manifest.members || []).filter(member => !retainedMembers.has(member.filename)) }));
-  const manualReview = receipts.filter(receipt => receipt?.manifest?.schema !== 'stockinsider-local-backup-set-v1'
+  const manualReview = receipts.filter(receipt => receipt?.manifest?.schema !== 'stockinsider-local-backup-set-v2'
     || receipt.manifest.completeSystemBackup !== true || receipt.manifest.restoreVerified !== true)
     .map(receipt => receipt?.manifest?.id || 'invalid_or_unverified_receipt');
   const plan = { schema: 'stockinsider-local-backup-rotation-plan-v1', createdAt: new Date(now).toISOString(),

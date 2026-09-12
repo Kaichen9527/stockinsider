@@ -43,21 +43,28 @@ encrypt sensitive exports before writing, even though the requested destination 
   are verified. The seven-day database rollback observation remains separate from
   the removed stock Shadow policy.
 
-## Current recovery evidence and remaining gate
+## Current recovery evidence and remaining gate — 2026-09-12
 
-Destination confirmation and a live encrypted database export are complete.
-The project-root backup currently also contains an encrypted provider-recovery
-artifact and seven individually encrypted Storage objects. Envelope and archive
-decoding checks passed. The local Keychain returned OSStatus -25293 during key
-provisioning; this was not a database authentication error. The separately stored
-private file key described below was used instead.
+The project-root backup now has a v2 complete local recovery set. Its compact
+database archive was restored into a clean PostgreSQL 17 cluster and passed the
+application contract: 241 public tables, 210 public functions, 63 user triggers,
+184 RLS tables and 47 policies. The final compact archive restored to
+1,996,641,971 bytes and the disposable cluster occupied 3,164,811,264 bytes.
 
-These artifacts are not yet a complete recovery set: the Storage export was not
-frozen atomically with the database, independent recovery-key escrow is not proven,
-and the clean PostgreSQL rehearsal found target-platform compatibility errors.
-`run-local-backup.mjs` now serializes all phases and `local-backup-set.mjs` refuses
-to publish a complete set until a strict restore and application validation pass.
-Do not treat individual encrypted artifacts as a restorable system backup.
+All eight Storage objects (10,550,883 plaintext bytes) were authenticated,
+decrypted into the private hash-addressed layout, checked against their content
+hashes and removed from the rehearsal directory. The two reviewed provider
+credentials were also authenticated, decrypted and structurally validated in
+memory without printing or writing plaintext. `stockinsider-local-backup-set-v2`
+requires both receipts in addition to the database clean-restore receipt; older
+v1 sets no longer satisfy freshness or rotation eligibility.
+
+This proves local recovery material, not production cutover. The Storage and
+database exports are sequential rather than one distributed transaction,
+production credential import/revocation has not yet been exercised, and an
+independent recovery-key copy is not verified. Supabase must remain available
+until the Contabo cutover canary and the seven-day database rollback observation
+finish. Individual encrypted artifacts are never treated as a recovery set.
 
 ## Private local key alternative — 2026-09-10
 
@@ -77,6 +84,6 @@ The archive verifier decrypts a previously authenticated file into `pg_restore
 --file=/dev/null`. This validates decoding without executing SQL or writing a
 plaintext archive. It is NOT a complete database restore rehearsal.
 
-Supabase Storage inventory contains seven objects in one bucket. No production
+Supabase Storage inventory contains eight objects in one bucket. No production
 migration or cutover occurred. Mac sleep/offline time is measured as backup
 staleness; it is never reported as a successful recovery point.

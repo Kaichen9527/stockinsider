@@ -271,7 +271,8 @@ async function main(){
     let compactionResult=null,compactManifestPath=null;
     if(compact){
       phase='retention_migration';
-      for(const relative of ['../migrations/20260911_retention_archive_v1.sql','../migrations/20260911_retention_archive_v2.sql']){
+      for(const relative of ['../migrations/20260911_retention_archive_v1.sql','../migrations/20260911_retention_archive_v2.sql',
+        '../migrations/20260912_legacy_runtime_compaction_receipts_v1.sql']){
         const result=await run('psql',[...connection,'--no-psqlrc','--set=ON_ERROR_STOP=1','--file',
           fileURLToPath(new URL(relative,import.meta.url))],{timeoutMs:30*60*1000});
         if(result.exitCode!==0){const error=new Error('retention_migration_failed');error.restore=result;throw error;}
