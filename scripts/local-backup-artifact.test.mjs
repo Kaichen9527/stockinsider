@@ -44,3 +44,12 @@ test('invalid filename and oversized/empty input never publish a file', async (t
   await assert.rejects(writeEncryptedBackupArtifact({ ...config, input: [] }), /empty_backup/);
   assert.deepEqual(await readdir(config.directory), []);
 });
+
+test('accepts the bounded four-hour production export window', async (t) => {
+  const config = await fixture(t);
+  const result = await writeEncryptedBackupArtifact({ ...config, timeoutMs: 14_400_000 });
+  assert.equal(result.envelopeVerified, true);
+  await assert.rejects(writeEncryptedBackupArtifact({
+    ...config, filename: 'too-long.sib', timeoutMs: 14_400_001,
+  }), /backup_timeout_invalid/);
+});

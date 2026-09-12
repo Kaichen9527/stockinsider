@@ -86,7 +86,7 @@ try {
   }
   console.log(JSON.stringify({ phase: 'snapshot_acquired', databaseBytes: metadata.database_bytes }));
   const result = await writeEncryptedBackupArtifact({ directory, filename: `${id}.sib`,
-    input: dumpChunks(), key, contextSha256, maxPlaintextBytes: 8 * 1024 ** 3, timeoutMs: 3_600_000 });
+    input: dumpChunks(), key, contextSha256, maxPlaintextBytes: 8 * 1024 ** 3, timeoutMs: 14_400_000 });
   await client.query('ROLLBACK');
   await writeFile(path.join(directory, `${id}.manifest.json`), JSON.stringify({ manifest, contextSha256, result }, null, 2) + '\n',
     { flag: 'wx', mode: 0o600 });

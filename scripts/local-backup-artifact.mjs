@@ -14,7 +14,9 @@ import { inspectLocalBackupDirectory, assessLocalBackupCapacity } from './local-
 export async function writeEncryptedBackupArtifact({ directory, filename, input, key,
   contextSha256, maxPlaintextBytes, timeoutMs = 600_000 }) {
   if (!/^[a-zA-Z0-9][a-zA-Z0-9_-]{0,100}\.sib$/.test(filename || '')) throw new Error('backup_filename_invalid');
-  if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 3_600_000) throw new Error('backup_timeout_invalid');
+  // A full production dump currently takes longer than one hour. Keep the
+  // timeout bounded, but allow a four-hour unattended local export window.
+  if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 14_400_000) throw new Error('backup_timeout_invalid');
   const inventory = await inspectLocalBackupDirectory(directory);
   const admission = assessLocalBackupCapacity({ ...inventory,
     incomingBytes: maxPlaintextBytes + BACKUP_ENVELOPE_OVERHEAD_BYTES, temporaryBytes: 0 });
