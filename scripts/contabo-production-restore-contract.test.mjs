@@ -12,6 +12,8 @@ test('production restore is stdin-only, staged, local-only and never replaces a 
   assert.match(script,/wal_level=minimal -c max_wal_senders=0 -c archive_mode=off/u);
   assert.match(script,/already exists; refusing replacement/u);
   assert.match(script,/createdb --template=template0 --encoding=UTF8 --locale=C "\$stage_database"/u);
+  assert.ok(script.includes('^/run/stockinsider-restore/[0-9a-f]{40}[.]toc$'),
+    'the reviewed TOC must live in a dedicated runtime directory outside private artifacts');
   assert.match(script,/"\$toc_group" != postgres \|\| "\$toc_mode" != 640/u,
     'the postgres restore process must have read-only access to the reviewed TOC');
   assert.match(script,/ALTER DATABASE \$stage_database RENAME TO \$final_database/u);
