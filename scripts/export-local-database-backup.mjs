@@ -31,6 +31,7 @@ let dumpProcess;
 async function sshCommand(command, input) {
   const child = spawn(SSH, [...SSH_OPTIONS, `root@${BACKUP_HOST}`, command],
     { stdio: ['pipe', 'ignore', 'pipe'] });
+  child.stdin.on('error', () => {});
   child.stderr.resume();
   child.stdin.end(input);
   const result = await new Promise(resolve => {
