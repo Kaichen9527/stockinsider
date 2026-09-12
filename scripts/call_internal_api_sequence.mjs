@@ -11,10 +11,15 @@ try {
   process.stderr.write(`${error.message}\n`);
   process.exit(2);
 }
+let failed = false;
 for (const step of steps) {
   const result = spawnSync(process.execPath, ['scripts/call_internal_api.mjs', step.endpoint, JSON.stringify(step.payload || {})], {
     stdio: 'inherit',
     env: { ...process.env, INTERNAL_API_TIMEOUT_MS: String(step.timeoutMs) },
   });
-  if (result.error || result.signal || result.status !== 0) process.exit(result.status || 1);
+  if (result.error || result.signal || result.status !== 0) {
+    failed = true;
+    if (!step.continueOnError) process.exit(result.status || 1);
+  }
 }
+if (failed) process.exit(1);
