@@ -42,6 +42,9 @@ async function sshCommand(command, input) {
 }
 
 async function stageRemoteCredentials(password, ca) {
+  if (typeof password !== 'string' || password.length < 8 || password.length > 512
+    || /[\0\r\n]/u.test(password) || typeof ca !== 'string' || ca.length > 1024 * 1024
+    || !ca.includes('BEGIN CERTIFICATE')) throw new Error('remote_backup_credential_invalid');
   const remote = `/run/stockinsider-supabase-backup-${randomUUID()}`;
   const escapePgpass = value => String(value).replace(/([:\\])/gu, '\\$1');
   const pgpass = Buffer.from(`${escapePgpass(DIRECT_DB_HOST)}:5432:postgres:postgres:${escapePgpass(password)}\n`);
@@ -161,7 +164,8 @@ try {
 } catch (error) {
   const safeReasons = ['database_target_invalid', 'database_metadata_invalid', 'pg_dump_version_too_old',
     'backup_key_invalid', 'pg_dump_failed', 'pg_dump_lock_timeout', 'database_transport_interrupted',
-    'database_snapshot_expired', 'remote_backup_credential_io_failed', 'remote_backup_credential_path_invalid',
+    'database_snapshot_expired', 'remote_backup_credential_invalid', 'remote_backup_credential_io_failed',
+    'remote_backup_credential_path_invalid',
     'backup_size_limit_exceeded', 'backup_authentication_failed'];
   console.error(JSON.stringify({ phase: 'failed', reason: safeReasons.includes(error.message) ? error.message
     : error.code === '28P01' ? 'database_authentication_failed' : 'backup_export_failed', completeSystemBackup: false }));
