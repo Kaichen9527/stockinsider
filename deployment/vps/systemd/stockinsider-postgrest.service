@@ -7,6 +7,7 @@ Wants=network-online.target
 Type=simple
 User=stockinsider
 Group=stockinsider
+SupplementaryGroups=postgres
 ExecStart=/usr/local/bin/postgrest /etc/stockinsider/postgrest.conf
 LoadCredentialEncrypted=database-uri:/etc/credstore.encrypted/stockinsider-postgrest-database-uri
 LoadCredentialEncrypted=jwt-secret:/etc/credstore.encrypted/stockinsider-postgrest-jwt-secret
