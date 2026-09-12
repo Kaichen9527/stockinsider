@@ -24,7 +24,7 @@ if [[ $(id -u) -ne 0 ]]; then
   echo "restore-contabo-database.sh must run as root" >&2
   exit 1
 fi
-if [[ ! "$toc_path" =~ ^/var/lib/stockinsider/restore/[0-9a-f]{40}[.]toc$ ]]; then
+if [[ ! "$toc_path" =~ ^/run/stockinsider-restore/[0-9a-f]{40}[.]toc$ ]]; then
   echo "reviewed restore list path required" >&2
   exit 1
 fi
