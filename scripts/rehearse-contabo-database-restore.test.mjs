@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
 test('restore rehearsal is socket-only and never persists the plaintext archive',()=>{
@@ -22,7 +23,7 @@ test('restore rehearsal is socket-only and never persists the plaintext archive'
 });
 
 test('restore rehearsal rejects incomplete arguments before reading a backup',()=>{
-  assert.throws(()=>execFileSync(process.execPath,[new URL('./rehearse-contabo-database-restore.mjs',import.meta.url).pathname],{
+  assert.throws(()=>execFileSync(process.execPath,[fileURLToPath(new URL('./rehearse-contabo-database-restore.mjs',import.meta.url))],{
     encoding:'utf8',stdio:'pipe',
   }),error=>{
     const payload=JSON.parse(error.stderr.trim());
