@@ -11,6 +11,7 @@ test('production restore is stdin-only, staged, local-only and never replaces a 
   assert.match(script,/pg_restore --dbname="\$stage_database" --use-list="\$toc_path"/u);
   assert.match(script,/wal_level=minimal -c max_wal_senders=0 -c archive_mode=off/u);
   assert.match(script,/already exists; refusing replacement/u);
+  assert.match(script,/createdb --template=template0 --encoding=UTF8 --locale=C "\$stage_database"/u);
   assert.match(script,/ALTER DATABASE \$stage_database RENAME TO \$final_database/u);
   assert.match(script,/pg_ctlcluster 17 "\$cluster_name" start\nstarted=true\n/u,
     'a failed post-restart verification must stop the unverified cluster');
