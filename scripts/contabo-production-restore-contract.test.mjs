@@ -12,6 +12,8 @@ test('production restore is stdin-only, staged, local-only and never replaces a 
   assert.match(script,/wal_level=minimal -c max_wal_senders=0 -c archive_mode=off/u);
   assert.match(script,/already exists; refusing replacement/u);
   assert.match(script,/ALTER DATABASE \$stage_database RENAME TO \$final_database/u);
+  assert.match(script,/pg_ctlcluster 17 "\$cluster_name" start\nstarted=true\n/u,
+    'a failed post-restart verification must stop the unverified cluster');
   assert.match(script,/postgrestActivated.*false.*webSwitched.*false/u);
   assert.doesNotMatch(script,/\n(?:sudo\s+-u\s+postgres\s+)?pg_dump|DROP DATABASE|rm -rf|systemctl (?:start|restart) stockinsider/u);
 });

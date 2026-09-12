@@ -69,6 +69,7 @@ sudo -u postgres psql --no-psqlrc --set=ON_ERROR_STOP=1 --dbname=postgres \
 pg_ctlcluster 17 "$cluster_name" stop --mode fast
 started=false
 pg_ctlcluster 17 "$cluster_name" start
+started=true
 sudo -u postgres psql --no-psqlrc --set=ON_ERROR_STOP=1 --tuples-only --no-align \
   --dbname="$final_database" --command \
   "SELECT current_database()='$final_database' AND current_setting('listen_addresses')=''" | grep -qx t
