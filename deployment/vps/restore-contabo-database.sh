@@ -54,7 +54,7 @@ if sudo -u postgres psql --no-psqlrc --tuples-only --no-align --dbname=postgres 
   exit 1
 fi
 
-sudo -u postgres createdb --encoding=UTF8 --locale=C "$stage_database"
+sudo -u postgres createdb --template=template0 --encoding=UTF8 --locale=C "$stage_database"
 sudo -u postgres psql --no-psqlrc --set=ON_ERROR_STOP=1 --dbname="$stage_database" \
   --file="$repo_root/deployment/vps/bootstrap-stockinsider-postgres.sql" >/dev/null
 sudo -u postgres pg_restore --dbname="$stage_database" --use-list="$toc_path" \

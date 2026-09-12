@@ -80,6 +80,7 @@ if pg_lsclusters --no-header | grep -q .; then
 fi
 
 pg_createcluster 17 "$cluster_name" --port 5432 --start-conf manual --datadir "$cluster_data"
+install -d -o root -g postgres -m 0750 "/etc/postgresql/17/${cluster_name}/conf.d"
 install -o root -g postgres -m 0640 "$repo_root/deployment/vps/postgresql-stockinsider.conf" \
   "/etc/postgresql/17/${cluster_name}/conf.d/stockinsider.conf"
 install -o root -g postgres -m 0640 "$repo_root/deployment/vps/pg_hba-stockinsider.conf" \
