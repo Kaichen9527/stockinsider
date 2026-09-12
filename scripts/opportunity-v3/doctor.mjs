@@ -9,8 +9,8 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const requiredRuntime = ['SUPABASE_URL', 'OPPORTUNITY_V3_SUPABASE_PROJECT_REF',
   'SUPABASE_SERVICE_ROLE_KEY', 'OPPORTUNITY_V3_SERVICE_ROLE_KEY_SHA256'];
 const deployment = process.env.SOURCE_LED_OPPORTUNITY_V3 ?? 'disabled';
-const expectedHostPinSha256 = '25e485f32668470f002dedc89425ddb5370dacf1a8a22a8ed0ac3fd3602c7f02';
-const exactHostPinVersion = 'model-runner-host-pins-v3.16';
+const expectedHostPinSha256 = '723e35a7095d1948e78fc31a26a70e77964a1f8e8611268c80eda2b1e8be1417';
+const exactHostPinVersion = 'model-runner-host-pins-v3.17';
 const protectedGateCompatibilityVersion = 'model-runner-host-pins-v3.9';
 const { loadHostPins, verifyCurrentNode } = createRequire(import.meta.url)('../model-runner-v3/hostPreflight.js');
 
