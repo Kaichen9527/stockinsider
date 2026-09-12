@@ -7,8 +7,8 @@ const { spawnSync } = require('node:child_process');
 const { assert, RunnerError } = require('./artifacts');
 const { canonicalJson, parseJsonWithNoDuplicateKeys, sha256 } = require('./canonicalJson');
 
-const PIN_FIXTURE_SHA256 = '25e485f32668470f002dedc89425ddb5370dacf1a8a22a8ed0ac3fd3602c7f02';
-const PIN_FIXTURE_BYTES = 2133;
+const PIN_FIXTURE_SHA256 = '723e35a7095d1948e78fc31a26a70e77964a1f8e8611268c80eda2b1e8be1417';
+const PIN_FIXTURE_BYTES = 2143;
 const CANDIDATE_POLICY_ENV = 'OPPORTUNITY_V3_PROTECTED_CANDIDATE_POLICY';
 const CANDIDATE_SCRATCH_ENV = 'OPPORTUNITY_V3_PROTECTED_CANDIDATE_SCRATCH';
 const HOST_ORACLE_SCRATCH_ENV = 'OPPORTUNITY_V3_PROTECTED_HOST_PREFLIGHT_SCRATCH';
@@ -30,7 +30,7 @@ function loadHostPins(filename) {
   } catch {
     throw new RunnerError(5);
   }
-  assert(canonicalJson(fixture) === raw && fixture.fixtureVersion === 'model-runner-host-pins-v3.16', 5);
+  assert(canonicalJson(fixture) === raw && fixture.fixtureVersion === 'model-runner-host-pins-v3.17', 5);
   assert(fixture.platform === 'darwin' && fixture.architecture === 'arm64' && Array.isArray(fixture.executables), 5);
   const node = fixture.executables.find((entry) => entry.name === 'node');
   assert(node && typeof node.path === 'string' && typeof node.realpath === 'string' && node.version === 'v22.14.0', 5);

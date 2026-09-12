@@ -124,8 +124,8 @@ historical audit-only `shadow-evaluation-contract.md` v3.7 (never a publication 
 `factor-correctness-amendment.md` v3.11.6,
 `authority-supersession-contract.md` v3.2, `auth-principal-contract.md` v3.8,
 `trading-calendar-contract.md` v3.4, and `model-runner-contract.md` v3.6 with 875-byte identity SHA-256
-`f875e175cd7d84cb0010bddaf16de4badd4968ba81bdb033aecd611b1be00baa`, host fixture
-SHA-256 `25e485f32668470f002dedc89425ddb5370dacf1a8a22a8ed0ac3fd3602c7f02`,
+`7d5ee28105dae778b1f35025f38cddaf2aab501db0bfadbaeb2782a911f9fede`, host fixture
+SHA-256 `723e35a7095d1948e78fc31a26a70e77964a1f8e8611268c80eda2b1e8be1417`,
 and acceptance `1.46.0/320`. Hash-preimage schema tags inside fenced canonical
 preimages are data, not active contract references. Model-runner identity remains
 independent of the opportunity runtime tuple.
