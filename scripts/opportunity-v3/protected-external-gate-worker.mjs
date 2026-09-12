@@ -331,7 +331,7 @@ const graphBoundReviewSources = Object.freeze({
   // while its Markdown mirror and signed fixture were already canonical. The
   // protected base registers the independently reviewed corrected graph before
   // a candidate can consume it; candidate bytes cannot select these refs.
-  'bb471ec34f836d62ddb2da06883f58ec2dff1e617a63887b5a35e5a621d3ccbb': Object.freeze({
+  'c563d77e416fdc2284b7aba50ca2eb03fd5f4cbed44f4edb1c918c63db96e3a2': Object.freeze({
     requirements: Object.freeze({
       ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-contabo-requirements-f569888',
       path: `${changeRelative}/requirements-review-contabo-gate-reconcile.md`,
