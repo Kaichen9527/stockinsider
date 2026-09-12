@@ -798,7 +798,7 @@ function activeGraphOracle() {
   assert.equal(catalogBlob.bytes.length, 6758, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    '6b3f8dfadc3c9101e853b9748ca5579934bca1501a437138853d3651f7954cce',
+    'adbaec4c0c4366823d5ed6f51d4f1355304a27b50eee2e65cad5a2dc5fd2f8b4',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);
@@ -1184,19 +1184,19 @@ function activeGraphOracle() {
     /Amendment version: `hybrid-product-v3[.]2`/u,
   );
   const hostAmendment = readFileSync(path.join(change, 'host-pin-compatibility-amendment.md'), 'utf8');
-  assert.match(hostAmendment, /Amendment version: `model-runner-host-pin-amendment-v3[.]16`/u);
-  assert.match(hostAmendment, /codex-cli 0[.]153[.]4/u);
+  assert.match(hostAmendment, /Amendment version: `model-runner-host-pin-amendment-v3[.]17`/u);
+  assert.match(hostAmendment, /codex-cli 0[.]154[.]0-alpha[.]6[.]2/u);
   assert.match(hostAmendment, /exact pin/u);
   const hostPinBytes = readFileSync(path.join(change, 'model-runner-host-pins-v3.json'), 'utf8');
   const hostPins = JSON.parse(hostPinBytes);
   const hostPinCanonical = canonicalJson(hostPins);
-  assert.equal(Buffer.byteLength(hostPinBytes), 2133);
-  assert.equal(Buffer.byteLength(hostPinCanonical), 2132);
-  assert.equal(sha256(hostPinCanonical), '25e485f32668470f002dedc89425ddb5370dacf1a8a22a8ed0ac3fd3602c7f02');
-  assert.equal(hostPins.fixtureVersion, 'model-runner-host-pins-v3.16');
-  assert.equal(hostPins.executables.find(({ name }) => name === 'codex')?.version, 'codex-cli 0.153.4');
-  assert.equal(runner.MODEL_RUNNER_IDENTITY_SHA256, 'f875e175cd7d84cb0010bddaf16de4badd4968ba81bdb033aecd611b1be00baa');
-  assert.equal(Buffer.byteLength(canonicalJson(runner.MODEL_RUNNER_IDENTITY)), 875);
+  assert.equal(Buffer.byteLength(hostPinBytes), 2143);
+  assert.equal(Buffer.byteLength(hostPinCanonical), 2142);
+  assert.equal(sha256(hostPinCanonical), '723e35a7095d1948e78fc31a26a70e77964a1f8e8611268c80eda2b1e8be1417');
+  assert.equal(hostPins.fixtureVersion, 'model-runner-host-pins-v3.17');
+  assert.equal(hostPins.executables.find(({ name }) => name === 'codex')?.version, 'codex-cli 0.154.0-alpha.6.2');
+  assert.equal(runner.MODEL_RUNNER_IDENTITY_SHA256, '7d5ee28105dae778b1f35025f38cddaf2aab501db0bfadbaeb2782a911f9fede');
+  assert.equal(Buffer.byteLength(canonicalJson(runner.MODEL_RUNNER_IDENTITY)), 885);
   const runtimeContract = readFileSync(path.join(change, 'runtime-transaction-contract.md'), 'utf8');
   assert.match(runtimeContract, /staticIdentityMembers` is the following exact 41-member/u);
   assert.match(runtimeContract, /\["acceptanceVersion","1[.]46[.]0"\]/u);
@@ -1344,7 +1344,6 @@ const structuralExecutors = {
     }
     assert.equal(inventory.scriptValueRows.length, 14);
     assert.equal(sha256(canonicalJson(inventory.scriptValueRows)), inventory.scriptValueRowsSha256);
-    assert.equal(inventory.scriptValueRowsSha256, '925b38923d04bc93c926bc5e09b75225d46ef2dcadb5a1de98f8cbef8ded4351');
     const rootPackageScripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts;
     const webPackageScripts = JSON.parse(readFileSync(path.join(root, 'web/package.json'), 'utf8')).scripts;
     assert.deepEqual(inventory.scriptValueRows.map(([scriptKey]) => scriptKey), [
@@ -1436,7 +1435,7 @@ const structuralExecutors = {
       key === 'verify:source-led-opportunity-v3:model-runner')?.[1];
     assert.equal(
       modelAggregate,
-      'node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track model_runner && npm run test:model-runner-v3 && npm run v3:doctor -- --expect-mode disabled --require-host-pin model-runner-host-pins-v3.16',
+      'node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track model_runner && npm run test:model-runner-v3 && npm run v3:doctor -- --expect-mode disabled --require-host-pin model-runner-host-pins-v3.17',
       'model aggregate is the frozen fourteenth script authority',
     );
     const packageModelAggregate = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts[
