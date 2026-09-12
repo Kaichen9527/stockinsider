@@ -392,18 +392,12 @@ test('the protected model-oracle rotation executes the exact v3.15 to v3.16 list
   assert.equal(requiredModelRunnerHostPin(root, protectedV315Commit), 'model-runner-host-pins-v3.15');
   assert.equal(trustedModelOracleAuthorityForListings(baseListing, baseListing), 'protected_base');
 
-  const successorListing = modelOracleListing(root, 'HEAD');
-  assert.equal(
-    successorListing,
-    v316ModelOracleListing,
-    'production Git emits the exact reviewed v3.16 listing bytes',
-  );
+  const successorListing = v316ModelOracleListing;
   assert.equal(
     modelOracleListingSha256(successorListing),
     '70dbbd6ed3846ada9804c029321dcc5e97de60ddf4e63a75142d10f2efdde115',
-    'the reviewed successor listing uses the same trimmed bytes as production Git',
+    'the immutable reviewed successor listing remains byte-bound',
   );
-  assert.equal(requiredModelRunnerHostPin(root, 'HEAD'), 'model-runner-host-pins-v3.16');
   assert.equal(hostPinForModelOracleListing(successorListing), 'model-runner-host-pins-v3.16');
   assert.equal(
     trustedModelOracleAuthorityForListings(baseListing, successorListing),
@@ -430,15 +424,22 @@ test('the protected model-oracle rotation executes the exact v3.15 to v3.16 list
 });
 
 test('the protected model-oracle rotation approves only the exact v3.16 to v3.17 successor', () => {
+  const currentListing = modelOracleListing(root, 'HEAD');
+  assert.equal(
+    currentListing,
+    v317ModelOracleListing,
+    'production Git emits the exact reviewed v3.17 listing bytes',
+  );
+  assert.equal(requiredModelRunnerHostPin(root, 'HEAD'), 'model-runner-host-pins-v3.17');
   assert.equal(
     modelOracleListingSha256(v316ModelOracleListing),
     '70dbbd6ed3846ada9804c029321dcc5e97de60ddf4e63a75142d10f2efdde115',
   );
   assert.equal(
-    modelOracleListingSha256(v317ModelOracleListing),
+    modelOracleListingSha256(currentListing),
     '5eb11a767efdce7e9faf197b2a98d9450f555fcba9363155fd3b71b7c653adc6',
   );
-  assert.equal(hostPinForModelOracleListing(v317ModelOracleListing), 'model-runner-host-pins-v3.17');
+  assert.equal(hostPinForModelOracleListing(currentListing), 'model-runner-host-pins-v3.17');
   assert.equal(
     trustedModelOracleAuthorityForListings(v316ModelOracleListing, v317ModelOracleListing),
     'model-runner-host-pin-amendment-v3.17',
