@@ -149,7 +149,8 @@ or image ID, or fails the isolated load, the backup is not cleanup evidence.
 Production deletion remains a separate, explicit operation. Immediately before
 it, recheck all running and stopped containers, compose/systemd/Nginx/cron paths,
 and active build processes; also re-verify all protected refs against the policy.
-Only the 11 exact obsolete tags may be passed to supported `docker image rm`.
+Only the 14 exact obsolete tags (10 unique image identities) from the reviewed
+retention policy may be passed to supported `docker image rm`.
 Never use `docker system prune`, `docker image prune`, force removal, a repository
 wildcard or an image ID. Measure disk and the full 27-container health set before
 and after.
