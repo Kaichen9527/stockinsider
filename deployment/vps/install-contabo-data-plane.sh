@@ -60,7 +60,6 @@ install -o root -g root -m 0644 "$unit_source/stockinsider-web-standalone.servic
 
 /usr/sbin/nginx -t
 systemctl daemon-reload
-systemctl enable stockinsider-postgrest.service
 systemctl reload nginx
 
 # Deliberately do not start PostgREST or replace the current web service here.

@@ -65,7 +65,9 @@ async function stdinJson() {
 
 let payload;
 const temporary = [];
+const published = [];
 let environmentTemporary = null;
+let installed = false;
 try {
   if (process.getuid?.() !== 0) fail('root_required');
   payload = await stdinJson();
@@ -136,11 +138,14 @@ try {
   await writeFile(environmentTemporary, environment, { flag: 'wx', mode: 0o640 });
   await chown(environmentTemporary, 0, gid);
   for (const [index, { filename }] of Object.values(targets).entries()) {
-    await rename(temporary[index], `${credentialDirectory}/${filename}`);
+    const destination = `${credentialDirectory}/${filename}`;
+    await rename(temporary[index], destination);
+    published.push(destination);
   }
   temporary.length = 0;
   await rename(environmentTemporary, environmentPath);
   environmentTemporary = null;
+  installed = true;
   console.log(JSON.stringify({ schema: 'stockinsider-contabo-credential-provision-v1', installed: true,
     credentialCount: 4, dataPlaneEnvironmentInstalled: true, secretsPrinted: false }));
 } catch (error) {
@@ -152,5 +157,6 @@ try {
     if (typeof payload?.[value] === 'string') payload[value] = '';
   }
   await Promise.all(temporary.map((item) => rm(item, { force: true }).catch(() => {})));
+  if (!installed) await Promise.all(published.map((item) => rm(item, { force: true }).catch(() => {})));
   if (environmentTemporary) await rm(environmentTemporary, { force: true }).catch(() => {});
 }

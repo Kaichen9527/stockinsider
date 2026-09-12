@@ -1,8 +1,8 @@
 [Unit]
 Description=StockInsider Taiwan final market-index freeze
-After=network-online.target stockinsider-web.service
+After=network-online.target stockinsider-web-standalone.service
 Wants=network-online.target
-Requires=stockinsider-web.service
+Requires=stockinsider-web-standalone.service
 
 [Service]
 Type=oneshot

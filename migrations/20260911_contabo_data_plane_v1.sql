@@ -114,6 +114,46 @@ BEGIN
 END
 $function$;
 
+-- Release activation is the one transition where the newly restarted web
+-- process presents the successor release while the backend identity still
+-- names the predecessor. Register the writer release and rotate the identity
+-- in one database transaction so a failed rotation cannot strand the data
+-- plane with mismatched authorities.
+CREATE OR REPLACE FUNCTION public.activate_stockinsider_backend_release_v1(
+  p_release_id text,
+  p_metadata jsonb DEFAULT '{}'::jsonb
+)
+RETURNS boolean LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $function$
+DECLARE headers jsonb; claims jsonb; supplied_backend uuid; supplied_principal uuid;
+BEGIN
+  IF p_release_id !~ '^[0-9a-f]{40}$' THEN
+    RAISE EXCEPTION USING ERRCODE='22023',MESSAGE='stockinsider_release_invalid';
+  END IF;
+  BEGIN
+    headers:=COALESCE(NULLIF(current_setting('request.headers',true),''),'{}')::jsonb;
+    claims:=COALESCE(NULLIF(current_setting('request.jwt.claims',true),''),'{}')::jsonb;
+    supplied_backend:=(headers->>'x-stockinsider-backend-id')::uuid;
+    supplied_principal:=(headers->>'x-stockinsider-runner-principal')::uuid;
+  EXCEPTION WHEN OTHERS THEN
+    RAISE EXCEPTION USING ERRCODE='PT403',MESSAGE='stockinsider_backend_identity_rejected';
+  END;
+  IF claims->>'role' IS DISTINCT FROM 'service_role'
+    OR NOT public.internal_principal_role_is_exact_v3_internal(
+      supplied_principal,'opportunity_runner',clock_timestamp())
+    OR NOT EXISTS(SELECT 1 FROM public.stockinsider_backend_identities_v1
+      WHERE backend_id=supplied_backend AND principal_id=supplied_principal AND status='active'
+        AND valid_from<=clock_timestamp() AND (valid_to IS NULL OR valid_to>clock_timestamp())) THEN
+    RAISE EXCEPTION USING ERRCODE='PT403',MESSAGE='stockinsider_release_activation_rejected';
+  END IF;
+  PERFORM public.register_production_writer_release(p_release_id,
+    COALESCE(p_metadata,'{}'::jsonb)||jsonb_build_object('activated_at',clock_timestamp()));
+  UPDATE public.stockinsider_backend_identities_v1 SET release_id=p_release_id,
+    metadata=metadata||jsonb_build_object('release_rotated_at',clock_timestamp())
+    WHERE backend_id=supplied_backend AND principal_id=supplied_principal AND status='active';
+  RETURN FOUND;
+END
+$function$;
+
 CREATE OR REPLACE FUNCTION public.read_provider_credential_state_v1(p_provider text)
 RETURNS TABLE(credential_id uuid,generation bigint,status text)
 LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp AS $function$
@@ -245,6 +285,7 @@ ALTER TABLE public.private_artifact_receipts_v1 ENABLE ROW LEVEL SECURITY;
 REVOKE ALL ON TABLE public.stockinsider_data_plane_settings_v1,public.stockinsider_backend_identities_v1,
   public.provider_credentials_encrypted_v1,public.private_artifact_receipts_v1 FROM PUBLIC,anon,authenticated,service_role;
 REVOKE ALL ON FUNCTION public.assert_stockinsider_backend_request_v1(boolean),
+  public.activate_stockinsider_backend_release_v1(text,jsonb),
   public.read_provider_credential_envelope_v1(text),
   public.read_provider_credential_state_v1(text),
   public.replace_provider_credential_cas_v1(text,bigint,uuid,text,text,text,text,text,timestamptz,text),
@@ -252,6 +293,7 @@ REVOKE ALL ON FUNCTION public.assert_stockinsider_backend_request_v1(boolean),
   public.register_private_artifact_receipt_v1(text,bigint,text,text,jsonb)
   FROM PUBLIC,anon,authenticated;
 GRANT EXECUTE ON FUNCTION public.assert_stockinsider_backend_request_v1(boolean),
+  public.activate_stockinsider_backend_release_v1(text,jsonb),
   public.read_provider_credential_envelope_v1(text),
   public.read_provider_credential_state_v1(text),
   public.replace_provider_credential_cas_v1(text,bigint,uuid,text,text,text,text,text,timestamptz,text),

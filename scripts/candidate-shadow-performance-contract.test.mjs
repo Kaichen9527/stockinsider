@@ -94,7 +94,10 @@ test('GitHub write workflows are manual-only and VPS timers own the approved cad
   assert.match(installer, /TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED=true/u);
   assert.match(installer, /root-owned with mode 600 or 640/u);
   assert.match(installer, /groupadd --system stockinsider/u);
-  assert.match(installer, /SupplementaryGroups=stockinsider/u);
+  assert.match(installer, /STOCKINSIDER_DATA_PLANE=contabo/u);
+  assert.doesNotMatch(installer, /SUPABASE_SERVICE_ROLE_KEY|SUPABASE_PROJECT_REF/u);
+  const standaloneWebService = readFileSync(new URL('../deployment/vps/systemd/stockinsider-web-standalone.service', import.meta.url), 'utf8');
+  assert.match(standaloneWebService, /Group=stockinsider/u);
   const workflowDir = new URL('../.github/workflows/', import.meta.url);
   for (const name of readdirSync(workflowDir).filter((item) => /\.ya?ml$/u.test(item))) {
     assert.doesNotMatch(readFileSync(new URL(name, workflowDir), 'utf8'), /^\s*schedule:/mu, `${name} must remain manual-only`);
