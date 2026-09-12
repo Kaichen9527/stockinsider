@@ -12,6 +12,10 @@ export function parseInternalApiSequence(raw) {
     if (!Number.isInteger(timeoutMs) || timeoutMs < 1_000 || timeoutMs > 3_700_000) throw new Error('invalid internal API sequence timeout');
     totalTimeoutMs += timeoutMs;
     if (totalTimeoutMs > 7_200_000) throw new Error('internal API sequence exceeds two-hour bound');
-    return { endpoint: step.endpoint, payload: step.payload || {}, timeoutMs };
+    if (step.continueOnError !== undefined && typeof step.continueOnError !== 'boolean') {
+      throw new Error('invalid internal API sequence continueOnError');
+    }
+    return { endpoint: step.endpoint, payload: step.payload || {}, timeoutMs,
+      continueOnError: step.continueOnError === true };
   });
 }

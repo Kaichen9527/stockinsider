@@ -103,6 +103,7 @@ export async function packageStandaloneRelease({ sourceRepository, packagerRepos
     const runtimeScripts = path.join(releaseDirectory, 'scripts');
     await mkdir(runtimeScripts);
     for (const name of ['call_internal_api.mjs', 'call_internal_api_sequence.mjs',
+      'internal-api-sequence-policy.mjs',
       'contabo-capacity-guard.mjs', 'contabo-host-resource-check.mjs',
       'contabo-deployment-inventory.mjs', 'contabo-cleanup-preflight.mjs',
       'verify-standalone-release.mjs']) {

@@ -9,6 +9,17 @@ test('the scheduled 3,700,000 ms research request is valid while unbounded seque
   assert.equal(parseInternalApiSequence(JSON.stringify(steps))[1].timeoutMs, 3700000);
   assert.throws(() => parseInternalApiSequence(JSON.stringify([{ ...steps[1], timeoutMs: 3700001 }])), /timeout/);
   assert.throws(() => parseInternalApiSequence(JSON.stringify([steps[1], steps[1]])), /two-hour/);
+  assert.equal(parseInternalApiSequence(JSON.stringify([{ ...steps[0], continueOnError: true }]))[0].continueOnError, true);
+  assert.throws(() => parseInternalApiSequence(JSON.stringify([{ ...steps[0], continueOnError: 'yes' }])), /continueOnError/);
+});
+
+test('the financial queue drain continues to the document worker but still reports a failed unit', () => {
+  const unit = fs.readFileSync(new URL('../deployment/vps/systemd/stockinsider-taiwan-data-queue-drain.service', import.meta.url), 'utf8');
+  const steps = parseInternalApiSequence(unit.match(/call_internal_api_sequence\.mjs '([^']+)'/u)[1]);
+  const financial = steps.find((step) => step.endpoint.endsWith('/candidate-financial-queue-drain'));
+  const documents = steps.findIndex((step) => step.endpoint.endsWith('/candidate-financial-documents/worker'));
+  assert.equal(financial?.continueOnError, true);
+  assert.ok(documents > steps.indexOf(financial));
 });
 
 test('both scheduled research publications drain their full phase before invoking the pipeline', () => {

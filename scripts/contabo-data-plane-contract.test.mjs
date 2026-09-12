@@ -67,6 +67,7 @@ test('PostgREST is loopback-only and receives secrets through encrypted credenti
   assert.match(nginx,/listen 127[.]0[.]0[.]1:3302/u);
   assert.match(nginx,/location \/rest\/v1\//u);
   assert.match(nginx,/proxy_pass http:\/\/127[.]0[.]0[.]1:3301\//u);
+  assert.match(nginx,/large_client_header_buffers 4 32k/u);
   assert.match(nginx,/location \/[\s\S]*return 404/u);
   assert.doesNotMatch(nginx,/listen\s+(?:0[.]0[.]0[.]0:)?3302|listen\s+3302/u);
   assert.match(installer,/nginx -t/u);

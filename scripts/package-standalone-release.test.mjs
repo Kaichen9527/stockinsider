@@ -22,6 +22,7 @@ async function fixture(t) {
   await writeFile(path.join(sourceRepository, 'web', '.next', 'static', 'asset.js'), 'asset');
   await writeFile(path.join(sourceRepository, 'web', 'public', 'logo.txt'), 'logo');
   for (const name of ['call_internal_api.mjs', 'call_internal_api_sequence.mjs',
+    'internal-api-sequence-policy.mjs',
     'contabo-capacity-guard.mjs', 'contabo-host-resource-check.mjs',
     'contabo-deployment-inventory.mjs', 'contabo-cleanup-preflight.mjs',
     'verify-standalone-release.mjs']) {
@@ -52,6 +53,7 @@ test('packages only the standalone runtime and binds a full git identity', async
   assert.ok(receipt.manifest.files.some(item => item.path === 'app/.next/static/asset.js'));
   assert.ok(receipt.manifest.files.some(item => item.path === 'app/public/logo.txt'));
   assert.ok(receipt.manifest.files.some(item => item.path === 'deployment/vps/policy.json'));
+  assert.ok(receipt.manifest.files.some(item => item.path === 'scripts/internal-api-sequence-policy.mjs'));
   assert.equal((await verifyStandaloneRelease(result.releaseDirectory)).releaseVerified, true);
   await assert.rejects(packageStandaloneRelease(config));
 });
