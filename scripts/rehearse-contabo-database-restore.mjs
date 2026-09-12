@@ -6,10 +6,11 @@
 import { createDecipheriv, createHash } from 'node:crypto';
 import { spawn } from 'node:child_process';
 import { constants } from 'node:fs';
-import { chmod,lstat,mkdtemp,mkdir,open,readFile,rm,statfs,writeFile } from 'node:fs/promises';
+import { chmod,lstat,mkdtemp,mkdir,open,readFile,rm,rmdir,statfs,writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildContaboRestoreList } from './build-contabo-restore-list.mjs';
+import { writeEncryptedBackupArtifact } from './local-backup-artifact.mjs';
 
 const MAGIC=Buffer.from('SI-BACKUP-1\n'),IV_BYTES=12,CONTEXT_BYTES=32,TAG_BYTES=16;
 const HEADER_BYTES=MAGIC.length+IV_BYTES+CONTEXT_BYTES;
@@ -26,11 +27,12 @@ function parseArguments(argv){
     values.set(name.slice(2),value);
   }
   const manifestPath=values.get('manifest'),keyDirectory=values.get('key-directory');
-  const receiptDirectory=values.get('receipt-directory');
-  if(values.size!==3||![manifestPath,keyDirectory,receiptDirectory].every(path.isAbsolute)){
-    throw new Error('usage: --manifest ABSOLUTE --key-directory ABSOLUTE --receipt-directory ABSOLUTE');
+  const receiptDirectory=values.get('receipt-directory'),compact=values.get('compact')||null;
+  if(![3,4].includes(values.size)||![manifestPath,keyDirectory,receiptDirectory].every(path.isAbsolute)
+    ||(compact!==null&&compact!=='legacy-runtime-v1')){
+    throw new Error('usage: --manifest ABSOLUTE --key-directory ABSOLUTE --receipt-directory ABSOLUTE [--compact legacy-runtime-v1]');
   }
-  return {manifestPath,keyDirectory,receiptDirectory};
+  return {manifestPath,keyDirectory,receiptDirectory,compact};
 }
 
 function classifyError(line){
@@ -173,14 +175,32 @@ async function directoryBytes(directory){
   return kib*1024;
 }
 
+async function* pgDumpChunks(connection){
+  const child=spawn(path.join(PG_BIN,'pg_dump'),[...connection,'--format=custom','--compress=6','--no-password'],
+    {env:SAFE_ENV,stdio:['ignore','pipe','pipe']});
+  let diagnostic='';child.stderr.setEncoding('utf8');
+  child.stderr.on('data',chunk=>{diagnostic=(diagnostic+chunk).slice(-65536);});
+  const terminal=new Promise(resolve=>{
+    child.once('error',()=>resolve(-1));child.once('close',code=>resolve(code??-1));
+  });
+  for await(const chunk of child.stdout)yield chunk;
+  const exitCode=await terminal;
+  if(exitCode!==0){
+    const error=new Error('compact_pg_dump_failed');
+    error.restore={exitCode,errors:Object.fromEntries(diagnostic.split('\n').filter(line=>/\b(?:ERROR|FATAL):/u.test(line))
+      .map(classifyError).reduce((counts,item)=>counts.set(item,(counts.get(item)||0)+1),new Map()))};
+    throw error;
+  }
+}
+
 async function main(){
-  const {manifestPath,keyDirectory,receiptDirectory}=parseArguments(process.argv.slice(2));
+  const {manifestPath,keyDirectory,receiptDirectory,compact}=parseArguments(process.argv.slice(2));
   phase='preflight';
   await assertPrivateDirectory(receiptDirectory);
   const capacity=await statfs('/private/tmp',{bigint:true});
   if(capacity.bavail*capacity.bsize<MIN_FREE_BYTES)throw new Error('insufficient_rehearsal_capacity');
   const manifestReceipt=JSON.parse(await readFile(manifestPath,'utf8'));
-  if(!['stockinsider-database-export-v1','stockinsider-database-export-v2'].includes(manifestReceipt.manifest?.schema)
+  if(!['stockinsider-database-export-v1','stockinsider-database-export-v2','stockinsider-database-compact-v1'].includes(manifestReceipt.manifest?.schema)
     ||manifestReceipt.manifest?.format!=='pg_dump_custom')throw new Error('manifest_invalid');
   if(manifestReceipt.manifest.schema==='stockinsider-database-export-v2'
     &&(manifestReceipt.manifest.snapshot!==null
@@ -194,7 +214,11 @@ async function main(){
   if(contextSha256!==manifestReceipt.contextSha256
     ||!/^[A-Za-z0-9_-]+\.sib$/u.test(manifestReceipt.result?.filename||''))throw new Error('manifest_invalid');
   const archivePath=path.join(path.dirname(manifestPath),manifestReceipt.result.filename);
-  let key,clusterDirectory,started=false,receiptPath;
+  if(manifestReceipt.manifest.schema==='stockinsider-database-compact-v1'
+    &&(manifestReceipt.manifest.compactionPolicyVersion!=='legacy-runtime-v1'
+      ||manifestReceipt.manifest.sourceBackupId?.length<1
+      ||manifestReceipt.manifest.sourceBackupPlaintextSha256?.length!==64))throw new Error('manifest_invalid');
+  let key,clusterDirectory,started=false,receiptPath,backupLockOwned=false;
   try{
     key=await loadPrivateKey(keyDirectory);
     phase='authentication';
@@ -244,6 +268,48 @@ async function main(){
     const migrate=await run('psql',[...connection,'--no-psqlrc','--set=ON_ERROR_STOP=1','--file',
       fileURLToPath(new URL('../migrations/20260911_contabo_data_plane_v1.sql',import.meta.url))]);
     if(migrate.exitCode!==0){const error=new Error('portable_migration_failed');error.restore={exitCode:migrate.exitCode,errors:migrate.errors};throw error;}
+    let compactionResult=null,compactManifestPath=null;
+    if(compact){
+      phase='retention_migration';
+      for(const relative of ['../migrations/20260911_retention_archive_v1.sql','../migrations/20260911_retention_archive_v2.sql']){
+        const result=await run('psql',[...connection,'--no-psqlrc','--set=ON_ERROR_STOP=1','--file',
+          fileURLToPath(new URL(relative,import.meta.url))],{timeoutMs:30*60*1000});
+        if(result.exitCode!==0){const error=new Error('retention_migration_failed');error.restore=result;throw error;}
+      }
+      phase='content_materialization';
+      const materialized=await run('psql',[...connection,'--no-psqlrc','--set=ON_ERROR_STOP=1','--file',
+        fileURLToPath(new URL('./retention/materialize-legacy-content-compact-v1.sql',import.meta.url))],
+      {captureStdout:true,timeoutMs:60*60*1000});
+      if(materialized.exitCode!==0){const error=new Error('retention_materialization_failed');error.restore=materialized;throw error;}
+      phase='legacy_compaction';
+      const compacted=await run('psql',[...connection,'--no-psqlrc','--tuples-only','--no-align','--set=ON_ERROR_STOP=1',
+        `--set=cold_backup_id=${manifestReceipt.manifest.id}`,
+        `--set=cold_backup_plaintext_sha256=${authenticated.plaintextSha256}`,'--file',
+        fileURLToPath(new URL('./retention/compact-legacy-runtime-v1.sql',import.meta.url))],
+      {captureStdout:true,timeoutMs:2*60*60*1000});
+      if(compacted.exitCode!==0){const error=new Error('legacy_compaction_failed');error.restore=compacted;throw error;}
+      const resultLine=compacted.stdout.toString('utf8').trim().split('\n').reverse().find(line=>line.startsWith('{'));
+      if(!resultLine)throw new Error('legacy_compaction_receipt_missing');
+      compactionResult=JSON.parse(resultLine);
+      phase='compact_export';
+      await mkdir(path.join(receiptDirectory,'.database-export-lock'),{mode:0o700});backupLockOwned=true;
+      const compactId=`database-compact-${new Date().toISOString().replace(/[:.]/gu,'-')}`;
+      const compactManifest={schema:'stockinsider-database-compact-v1',id:compactId,
+        project:manifestReceipt.manifest.project,createdAt:new Date().toISOString(),format:'pg_dump_custom',
+        serverVersion:manifestReceipt.manifest.serverVersion,ownersAndGrantsIncluded:true,
+        sourceBackupId:manifestReceipt.manifest.id,sourceBackupPlaintextSha256:authenticated.plaintextSha256,
+        compactionPolicyVersion:compact,compactionReceiptId:compactionResult.receiptId,
+        databaseBytes:String(compactionResult.databaseBytes),storageFileBytesIncluded:false,
+        restoreVerified:false,keyReference:'private-local-file:aes256-v1',independentKeyEscrowVerified:false};
+      const compactContextSha256=createHash('sha256').update(JSON.stringify(compactManifest)).digest('hex');
+      const compactResult=await writeEncryptedBackupArtifact({directory:receiptDirectory,
+        filename:`${compactId}.sib`,input:pgDumpChunks(connection),key,contextSha256:compactContextSha256,
+        maxPlaintextBytes:MAX_ARCHIVE_BYTES,timeoutMs:4*60*60*1000});
+      compactManifestPath=path.join(receiptDirectory,`${compactId}.manifest.json`);
+      await writeFile(compactManifestPath,`${JSON.stringify({manifest:compactManifest,
+        contextSha256:compactContextSha256,result:compactResult},null,2)}\n`,{flag:'wx',mode:0o600});
+      await rmdir(path.join(receiptDirectory,'.database-export-lock'));backupLockOwned=false;
+    }
     const verificationSql=`SELECT json_build_object(
       'postgresVersion',current_setting('server_version'),
       'databaseBytes',pg_database_size(current_database()),
@@ -301,11 +367,12 @@ async function main(){
         filteredTocSha256:createHash('sha256').update(filtered.contents).digest('hex'),
         databaseBytes:Number(checks.databaseBytes),clusterBytes,portableMigrationApplied:true},
       checks,restoreVerified:true,applicationValidationPassed:true,productionCutoverApproved:false,
+      compaction:compact?{policyVersion:compact,result:compactionResult,compactManifestPath}:null,
       limitations:['provider_credentials_not_decrypted_or_exercised','document_restore_is_a_separate_recovery_set','independent_key_escrow_not_verified']};
     receiptPath=path.join(receiptDirectory,`contabo-restore-rehearsal-${timestamp.replace(/[:.]/gu,'-')}.receipt.json`);
     await writeFile(receiptPath,`${JSON.stringify(receipt,null,2)}\n`,{flag:'wx',mode:0o600});
     console.log(JSON.stringify({restoreVerified:true,applicationValidationPassed:true,receiptPath,databaseBytes:receipt.restore.databaseBytes,
-      clusterBytes,checks,excludedVaultEntries:filtered.excluded}));
+      clusterBytes,checks,excludedVaultEntries:filtered.excluded,compaction:receipt.compaction}));
   }finally{
     key?.fill(0);
     if(started&&clusterDirectory){
@@ -313,6 +380,7 @@ async function main(){
       if(stopped.exitCode!==0)throw new Error('rehearsal_shutdown_failed');
     }
     if(clusterDirectory)await rm(clusterDirectory,{recursive:true,force:false,maxRetries:2});
+    if(backupLockOwned)await rmdir(path.join(receiptDirectory,'.database-export-lock')).catch(()=>{});
   }
   return receiptPath;
 }

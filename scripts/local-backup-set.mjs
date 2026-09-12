@@ -30,10 +30,16 @@ async function readMember(directory, filename) {
 export function assessBackupSet({ database, storageInventory, storageManifests, provider, restore }) {
   const reasons = [];
   const databaseSchema = database.json?.manifest?.schema;
-  if (!['stockinsider-database-export-v1', 'stockinsider-database-export-v2'].includes(databaseSchema)
+  if (!['stockinsider-database-export-v1', 'stockinsider-database-export-v2',
+    'stockinsider-database-compact-v1'].includes(databaseSchema)
     || database.json?.result?.envelopeVerified !== true
     || (databaseSchema === 'stockinsider-database-export-v2'
-      && database.json?.remoteEphemeralCredentialsRemoved !== true)) reasons.push('database_export_unverified');
+      && database.json?.remoteEphemeralCredentialsRemoved !== true)
+    || (databaseSchema === 'stockinsider-database-compact-v1'
+      && (database.json?.manifest?.compactionPolicyVersion !== 'legacy-runtime-v1'
+        || typeof database.json?.manifest?.sourceBackupId !== 'string'
+        || !/^[0-9a-f]{64}$/u.test(database.json?.manifest?.sourceBackupPlaintextSha256 || '')
+        || typeof database.json?.manifest?.compactionReceiptId !== 'string'))) reasons.push('database_export_unverified');
   if (storageInventory.json?.inventoryStable !== true || storageInventory.json?.restoreVerified !== false) {
     reasons.push('storage_inventory_unverified');
   }

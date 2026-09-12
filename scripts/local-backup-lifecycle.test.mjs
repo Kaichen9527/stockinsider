@@ -24,6 +24,12 @@ test('a backup set is complete only after all members and a clean application re
   assert.equal(assessBackupSet(valid()).completeSystemBackup, true);
   const legacy = valid(); legacy.database.json.manifest = { schema: 'stockinsider-database-export-v1' };
   assert.equal(assessBackupSet(legacy).completeSystemBackup, true);
+  const compact = valid(); compact.database.json.manifest = { schema: 'stockinsider-database-compact-v1',
+    compactionPolicyVersion: 'legacy-runtime-v1', sourceBackupId: 'database-source',
+    sourceBackupPlaintextSha256: 'a'.repeat(64), compactionReceiptId: 'receipt' };
+  assert.equal(assessBackupSet(compact).completeSystemBackup, true);
+  compact.database.json.manifest.compactionReceiptId = null;
+  assert.ok(assessBackupSet(compact).reasons.includes('database_export_unverified'));
   const partial = valid(); partial.restore.json.applicationValidationPassed = false;
   assert.deepEqual(assessBackupSet(partial).reasons, ['clean_restore_not_verified']);
   const missing = valid(); missing.storageManifests = [];

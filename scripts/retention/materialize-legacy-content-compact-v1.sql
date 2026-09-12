@@ -1,14 +1,15 @@
 \set ON_ERROR_STOP on
 
--- This rehearsal is intentionally impossible to run against Supabase or the
--- VPS.  It only materializes an online, content-addressed copy; it never
--- deletes or updates legacy rows.
+-- Compact-cutover materializer.  Unlike the general lossless materializer,
+-- processing outcomes are intentionally kept only in the verified cold backup
+-- plus run/job/diagnostic summaries.  The four byte-bearing relations required
+-- by compatibility readers are deduplicated online.
 DO $guard$
 BEGIN
   IF inet_server_addr() IS NOT NULL
-    OR current_user<>'stockinsider_rehearsal'
-    OR current_setting('data_directory') !~ '^/private/tmp/stockinsider-(?:restore|contabo-restore)-[A-Za-z0-9]+/data$' THEN
-    RAISE EXCEPTION 'retention_compaction_rehearsal_requires_private_local_restore';
+    OR current_user <> 'stockinsider_rehearsal'
+    OR current_setting('data_directory') !~ '^/private/tmp/stockinsider-contabo-restore-[A-Za-z0-9]+/data$' THEN
+    RAISE EXCEPTION 'compact_materialization_requires_private_local_restore';
   END IF;
 END;
 $guard$;
@@ -24,10 +25,6 @@ SELECT content_hash,canonical_bytes,octet_length(canonical_bytes),min(recorded_a
   UNION ALL SELECT page_hash,page_canonical,recorded_at FROM public.legacy_producer_authority_pages_v3_11
   UNION ALL SELECT selected_revision_row_hash,selected_revision_row_canonical,recorded_at
     FROM public.legacy_frozen_source_revisions_v3_11
-  UNION ALL SELECT
-    encode(extensions.digest(convert_to(jsonb_build_array(scope,outcome,reason,symbol,stock_id)::TEXT,'UTF8'),'sha256'),'hex'),
-    convert_to(jsonb_build_array(scope,outcome,reason,symbol,stock_id)::TEXT,'UTF8'),recorded_at
-    FROM public.legacy_source_processing_outcomes_v3_13
 ) content GROUP BY content_hash,canonical_bytes
 ON CONFLICT(content_hash) DO NOTHING;
 
@@ -39,12 +36,9 @@ BEGIN
       UNION ALL SELECT result_hash,result_canonical FROM public.legacy_producer_job_results_v3_11
       UNION ALL SELECT page_hash,page_canonical FROM public.legacy_producer_authority_pages_v3_11
       UNION ALL SELECT selected_revision_row_hash,selected_revision_row_canonical FROM public.legacy_frozen_source_revisions_v3_11
-      UNION ALL SELECT encode(extensions.digest(convert_to(jsonb_build_array(scope,outcome,reason,symbol,stock_id)::TEXT,'UTF8'),'sha256'),'hex'),
-        convert_to(jsonb_build_array(scope,outcome,reason,symbol,stock_id)::TEXT,'UTF8')
-        FROM public.legacy_source_processing_outcomes_v3_13
     ) source JOIN public.retention_legacy_content_objects_v2 object USING(content_hash)
     WHERE source.canonical_bytes IS DISTINCT FROM object.canonical_bytes
-  ) THEN RAISE EXCEPTION 'retention_content_hash_collision'; END IF;
+  ) THEN RAISE EXCEPTION 'compact_materialization_hash_collision'; END IF;
 END;
 $collision$;
 
@@ -60,10 +54,6 @@ SELECT run_id,selection_ordinal,source_key,revision_id,selected_revision_row_has
   raw_field_payload_algorithm_version,ingestion_content_revision_sha256,
   canonical_content_algorithm_version,canonical_content_sha256,recorded_at
 FROM public.legacy_frozen_source_revisions_v3_11 ON CONFLICT DO NOTHING;
-INSERT INTO public.retention_legacy_processing_outcome_refs_v2
-SELECT source_run_id,revision_id,scope,outcome_id,parent_outcome_id,
-  encode(extensions.digest(convert_to(jsonb_build_array(scope,outcome,reason,symbol,stock_id)::TEXT,'UTF8'),'sha256'),'hex'),
-  recorded_at FROM public.legacy_source_processing_outcomes_v3_13 ON CONFLICT DO NOTHING;
 
 DO $verify$
 BEGIN
@@ -74,10 +64,8 @@ BEGIN
     OR (SELECT count(*) FROM public.retention_legacy_authority_page_refs_v2)
       IS DISTINCT FROM (SELECT count(*) FROM public.legacy_producer_authority_pages_v3_11)
     OR (SELECT count(*) FROM public.retention_legacy_frozen_revision_refs_v2)
-      IS DISTINCT FROM (SELECT count(*) FROM public.legacy_frozen_source_revisions_v3_11)
-    OR (SELECT count(*) FROM public.retention_legacy_processing_outcome_refs_v2)
-      IS DISTINCT FROM (SELECT count(*) FROM public.legacy_source_processing_outcomes_v3_13) THEN
-    RAISE EXCEPTION 'retention_content_reference_count_mismatch';
+      IS DISTINCT FROM (SELECT count(*) FROM public.legacy_frozen_source_revisions_v3_11) THEN
+    RAISE EXCEPTION 'compact_materialization_reference_count_mismatch';
   END IF;
   IF EXISTS (
     SELECT 1 FROM public.retention_legacy_job_payload_refs_v2 ref
@@ -99,14 +87,7 @@ BEGIN
     JOIN public.retention_legacy_content_objects_v2 object USING(content_hash)
     JOIN public.legacy_frozen_source_revisions_v3_11 source USING(run_id,selection_ordinal)
     WHERE object.canonical_bytes IS DISTINCT FROM source.selected_revision_row_canonical
-  ) OR EXISTS (
-    SELECT 1 FROM public.retention_legacy_processing_outcome_refs_v2 ref
-    JOIN public.retention_legacy_content_objects_v2 object USING(content_hash)
-    JOIN public.legacy_source_processing_outcomes_v3_13 source
-      USING(source_run_id,revision_id,scope,outcome_id)
-    WHERE convert_from(object.canonical_bytes,'UTF8')::jsonb IS DISTINCT FROM
-      jsonb_build_array(source.scope,source.outcome,source.reason,source.symbol,source.stock_id)
-  ) THEN RAISE EXCEPTION 'retention_content_round_trip_mismatch'; END IF;
+  ) THEN RAISE EXCEPTION 'compact_materialization_round_trip_mismatch'; END IF;
 END;
 $verify$;
 
@@ -119,5 +100,6 @@ SELECT json_build_object(
   'resultRefs',(SELECT count(*) FROM public.retention_legacy_job_result_refs_v2),
   'authorityPageRefs',(SELECT count(*) FROM public.retention_legacy_authority_page_refs_v2),
   'frozenRevisionRefs',(SELECT count(*) FROM public.retention_legacy_frozen_revision_refs_v2),
-  'processingOutcomeRefs',(SELECT count(*) FROM public.retention_legacy_processing_outcome_refs_v2)
+  'processingOutcomeRefs',0,
+  'processingOutcomesColdOnly',TRUE
 );

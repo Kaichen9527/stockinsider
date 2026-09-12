@@ -1,8 +1,8 @@
 {
   "schema": "stockinsider-capacity-budget-v2",
-  "measurementBasis": "2026-09-11 authenticated PostgreSQL 17 restore rehearsal plus conservative migration headroom",
-  "databaseRestoreBytes": 5368709120,
-  "documentBytes": 134217728,
+  "measurementBasis": "2026-09-12 compact backup clean PostgreSQL 17 restore: 3166892032-byte cluster, rounded to 3.5 GiB; 10550883-byte document set, rounded to 16 MiB",
+  "databaseRestoreBytes": 3758096384,
+  "documentBytes": 16777216,
   "peakWalBytes": 1073741824,
   "peakTemporaryBytes": 536870912,
   "deploymentBytes": 536870912,
