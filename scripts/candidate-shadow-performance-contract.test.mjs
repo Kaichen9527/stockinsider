@@ -201,6 +201,10 @@ test('production source writes require the active VPS release and production lea
   assert.match(activation, /release_production_write_lease/u);
   assert.ok(activation.indexOf('release_production_write_lease') < activation.indexOf('register_production_writer_release'), 'orphaned stopped-release lease must clear before activating the successor');
   assert.match(deployActivation, /for _attempt in \$\(seq 1 30\)/u);
+  assert.match(deployActivation, /writer-release[.]env/u);
+  assert.match(deployActivation, /install -o root -g stockinsider -m 0640 \/dev\/null/u);
+  assert.match(deployActivation, /EnvironmentFile=%s/u);
+  assert.doesNotMatch(deployActivation, /Environment=STOCKINSIDER_WRITER_RELEASE_ID/u);
   assert.match(deployActivation, /curl --fail --silent --show-error --max-time 2 http:\/\/127\.0\.0\.1:3100\//u);
   assert.ok(deployActivation.indexOf('curl --fail') < deployActivation.indexOf('/api/internal/writer-release-activate'), 'readiness must precede writer registration');
   assert.match(researchRoute, /acquireProductionWriteLease/u);
