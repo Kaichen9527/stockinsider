@@ -23,3 +23,16 @@ test('orchestrator requires the portable Contabo restore and its application val
   assert.match(source, /applicationValidationPassed === true/u);
   assert.doesNotMatch(source, /rehearse-local-database-restore[.]mjs/u);
 });
+
+test('database export uses one pg_dump-owned consistent snapshot over Contabo direct IPv6', () => {
+  const source = readFileSync(new URL('./export-local-database-backup.mjs', import.meta.url), 'utf8');
+  assert.match(source, /pg_dump_internal_consistent_snapshot/u);
+  assert.doesNotMatch(source, /pg_export_snapshot/u);
+  assert.doesNotMatch(source, /--snapshot=/u);
+  assert.match(source, /--lock-wait-timeout=5min/u);
+  assert.match(source, /contabo_ipv6_direct_tls/u);
+  assert.match(source, /postgres@sha256:[0-9a-f]{64}/u);
+  assert.match(source, /PGPASSFILE=\/run\/pgpass/u);
+  assert.doesNotMatch(source, /PGPASSWORD:/u);
+  assert.match(source, /remoteEphemeralCredentialsRemoved: true/u);
+});

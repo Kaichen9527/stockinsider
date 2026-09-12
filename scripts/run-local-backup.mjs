@@ -32,7 +32,14 @@ async function runNode(script, args, environment = {}) {
   child.stdout.on('data', chunk => { stdout = (stdout + chunk).slice(-262144); });
   child.stderr.on('data', chunk => { stderr = (stderr + chunk).slice(-65536); });
   const code = await new Promise(resolve => { child.once('error', () => resolve(-1)); child.once('close', resolve); });
-  if (code !== 0) throw new Error(`backup_phase_failed:${path.basename(script)}`);
+  if (code !== 0) {
+    const diagnostic = stderr.trim().split('\n').reverse().map(line => {
+      try { return JSON.parse(line); } catch { return null; }
+    }).find(Boolean);
+    const reason = typeof diagnostic?.reason === 'string' && /^[a-z][a-z0-9_]{0,80}$/u.test(diagnostic.reason)
+      ? diagnostic.reason : 'unknown';
+    throw new Error(`backup_phase_failed:${path.basename(script)}:${reason}`);
+  }
   return stdout.trim().split('\n').filter(Boolean).map(line => {
     try { return JSON.parse(line); } catch { return null; }
   }).filter(Boolean);

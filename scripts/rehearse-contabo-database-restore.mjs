@@ -180,8 +180,16 @@ async function main(){
   const capacity=await statfs('/private/tmp',{bigint:true});
   if(capacity.bavail*capacity.bsize<MIN_FREE_BYTES)throw new Error('insufficient_rehearsal_capacity');
   const manifestReceipt=JSON.parse(await readFile(manifestPath,'utf8'));
-  if(manifestReceipt.manifest?.schema!=='stockinsider-database-export-v1'
+  if(!['stockinsider-database-export-v1','stockinsider-database-export-v2'].includes(manifestReceipt.manifest?.schema)
     ||manifestReceipt.manifest?.format!=='pg_dump_custom')throw new Error('manifest_invalid');
+  if(manifestReceipt.manifest.schema==='stockinsider-database-export-v2'
+    &&(manifestReceipt.manifest.snapshot!==null
+      ||manifestReceipt.manifest.snapshotStrategy!=='pg_dump_internal_consistent_snapshot'
+      ||manifestReceipt.manifest.transport!=='contabo_ipv6_direct_tls'
+      ||manifestReceipt.manifest.credentialsInCommandOrArtifact!==false
+      ||manifestReceipt.remoteEphemeralCredentialsRemoved!==true)){
+    throw new Error('manifest_invalid');
+  }
   const contextSha256=createHash('sha256').update(JSON.stringify(manifestReceipt.manifest)).digest('hex');
   if(contextSha256!==manifestReceipt.contextSha256
     ||!/^[A-Za-z0-9_-]+\.sib$/u.test(manifestReceipt.result?.filename||''))throw new Error('manifest_invalid');

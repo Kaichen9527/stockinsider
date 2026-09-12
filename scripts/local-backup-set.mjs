@@ -29,8 +29,11 @@ async function readMember(directory, filename) {
 
 export function assessBackupSet({ database, storageInventory, storageManifests, provider, restore }) {
   const reasons = [];
-  if (database.json?.manifest?.schema !== 'stockinsider-database-export-v1'
-    || database.json?.result?.envelopeVerified !== true) reasons.push('database_export_unverified');
+  const databaseSchema = database.json?.manifest?.schema;
+  if (!['stockinsider-database-export-v1', 'stockinsider-database-export-v2'].includes(databaseSchema)
+    || database.json?.result?.envelopeVerified !== true
+    || (databaseSchema === 'stockinsider-database-export-v2'
+      && database.json?.remoteEphemeralCredentialsRemoved !== true)) reasons.push('database_export_unverified');
   if (storageInventory.json?.inventoryStable !== true || storageInventory.json?.restoreVerified !== false) {
     reasons.push('storage_inventory_unverified');
   }

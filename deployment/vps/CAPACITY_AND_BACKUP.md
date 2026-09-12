@@ -59,6 +59,15 @@ complete set that passed a clean restore and application validation. Sleeping or
 offline Macs therefore become overdue. Rotation retains 14 days, four weekly
 copies, the latest two and every unique cold archive; it only emits a quarantine plan.
 
+The database dump is initiated by the Mac but runs in the pinned PostgreSQL 17
+client image on Contabo, whose IPv6 route reaches the provider's direct TLS
+endpoint. A root-only credential and public CA exist only in a unique `/run`
+directory for the duration of the dump. They are delivered over SSH stdin, never
+appear in a command line, Docker environment, journal or backup artifact, and
+must be removed before the database manifest is published. `pg_dump` owns its
+single internally consistent snapshot; the IPv4 session pooler is not used for
+the long-running export.
+
 The current encrypted export is useful evidence but is not a complete recovery
 set because the strict clean restore and application validation have not passed.
 Do not retire Supabase, run database cleanup or start a Contabo restore until those
@@ -124,9 +133,10 @@ the VPS release.
 
 `soho-image-retention-policy.json` freezes every current, retained rollback and
 obsolete image ref to its full image/config digest. The groups are disjoint. The
-exporter accepts only the fixed 11-ref obsolete set and the fixed production host;
+exporter accepts only the fixed 18-ref obsolete set and the fixed production host;
 it invokes read-only `docker image inspect` before and after a streamed
-`docker image save`. The save stream is encrypted directly into the project-root
+`docker image save`. The tar stream is compressed with zstd on the VPS, then
+encrypted directly into the project-root
 backup and never lands as plaintext on the Mac or VPS.
 
 ```bash
@@ -139,8 +149,8 @@ npm run backup:soho-images:verify -- \
   "/absolute/private/key-directory"
 ```
 
-Verification authenticates the complete archive first, then decrypts it directly
-into a non-production local Docker Desktop engine. It verifies every restored tag,
+Verification authenticates the complete archive first, then decrypts and
+decompresses it directly into a non-production local Docker Desktop engine. It verifies every restored tag,
 config digest, platform and root-filesystem layer chain. It writes no plaintext tar
 and removes only the exact refs proven absent from that local engine before the
 test. If a local Docker engine is unavailable, already contains any candidate ref
@@ -149,7 +159,7 @@ or image ID, or fails the isolated load, the backup is not cleanup evidence.
 Production deletion remains a separate, explicit operation. Immediately before
 it, recheck all running and stopped containers, compose/systemd/Nginx/cron paths,
 and active build processes; also re-verify all protected refs against the policy.
-Only the 14 exact obsolete tags (10 unique image identities) from the reviewed
+Only the 18 exact obsolete tags (14 unique image identities) from the reviewed
 retention policy may be passed to supported `docker image rm`.
 Never use `docker system prune`, `docker image prune`, force removal, a repository
 wildcard or an image ID. Measure disk and the full 27-container health set before

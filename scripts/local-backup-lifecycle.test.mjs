@@ -6,7 +6,8 @@ import { planBackupRotation } from './local-backup-rotation.mjs';
 
 const member = json => ({ json });
 const valid = () => ({
-  database: member({ manifest: { schema: 'stockinsider-database-export-v1' },
+  database: member({ manifest: { schema: 'stockinsider-database-export-v2', snapshot: null,
+    snapshotStrategy: 'pg_dump_internal_consistent_snapshot' }, remoteEphemeralCredentialsRemoved: true,
     contextSha256: 'c', result: { envelopeVerified: true, plaintextSha256: 'p' } }),
   storageInventory: member({ inventoryStable: true, restoreVerified: false,
     receipts: [{ contextSha256: 's' }] }),
@@ -21,6 +22,8 @@ const valid = () => ({
 
 test('a backup set is complete only after all members and a clean application restore', () => {
   assert.equal(assessBackupSet(valid()).completeSystemBackup, true);
+  const legacy = valid(); legacy.database.json.manifest = { schema: 'stockinsider-database-export-v1' };
+  assert.equal(assessBackupSet(legacy).completeSystemBackup, true);
   const partial = valid(); partial.restore.json.applicationValidationPassed = false;
   assert.deepEqual(assessBackupSet(partial).reasons, ['clean_restore_not_verified']);
   const missing = valid(); missing.storageManifests = [];
