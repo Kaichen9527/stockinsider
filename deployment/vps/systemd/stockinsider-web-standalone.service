@@ -12,6 +12,8 @@ EnvironmentFile=/etc/stockinsider/stockinsider.env
 Environment=NODE_ENV=production
 Environment=HOSTNAME=127.0.0.1
 Environment=PORT=3100
+LoadCredentialEncrypted=postgrest-service-role.jwt:/etc/credstore.encrypted/stockinsider-postgrest-service-role-jwt
+LoadCredentialEncrypted=provider-secrets-v1.key:/etc/credstore.encrypted/stockinsider-provider-secrets-v1-key
 ExecStartPre=/usr/bin/node /opt/stockinsider/current/scripts/verify-standalone-release.mjs /opt/stockinsider/current
 ExecStart=/usr/bin/node /opt/stockinsider/current/app/server.js
 Restart=on-failure

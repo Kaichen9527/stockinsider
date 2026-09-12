@@ -25,9 +25,11 @@ test('job-link reconciliation failure is not swallowed or reported as completion
 
 test('manual ingress reconciles both new and replayed jobs after guarded immutable receipt creation', async () => {
   const source = await readFile(new URL('../app/api/internal/candidate-financial-documents/route.ts', import.meta.url), 'utf8');
+  const artifact = await readFile(new URL('./candidate-financial-artifact.ts', import.meta.url), 'utf8');
   assert.match(source, /requireExactInternalBearer/u);
   assert.match(source, /requireActiveVpsWriter/u);
-  assert.match(source, /upsert: false/u);
+  assert.match(source, /putCandidateFinancialArtifact/u);
+  assert.match(artifact, /upsert: false/u);
   assert.match(source, /p_job_id: metadata\.acquisitionJobId, p_caller_principal: runnerPrincipal/u);
   assert.ok(source.indexOf("rpc('reconcile_candidate_financial_document_job_v9'")
     > source.indexOf("rpc('record_candidate_financial_document_receipt_v6'"));

@@ -1,0 +1,27 @@
+[Unit]
+Description=StockInsider private PostgREST data plane
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=stockinsider
+Group=stockinsider
+ExecStart=/usr/local/bin/postgrest /etc/stockinsider/postgrest.conf
+LoadCredentialEncrypted=database-uri:/etc/credstore.encrypted/stockinsider-postgrest-database-uri
+LoadCredentialEncrypted=jwt-secret:/etc/credstore.encrypted/stockinsider-postgrest-jwt-secret
+Restart=on-failure
+RestartSec=5s
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+IPAddressDeny=any
+IPAddressAllow=localhost
+
+[Install]
+WantedBy=multi-user.target

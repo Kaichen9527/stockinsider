@@ -13,8 +13,10 @@ const valid = () => ({
   storageManifests: [member({ contextSha256: 's', manifest: { schema: 'stockinsider-storage-export-v1' },
     result: { envelopeVerified: true } })],
   provider: member({ manifest: { schema: 'stockinsider-provider-recovery-v1' }, result: { envelopeVerified: true } }),
-  restore: member({ restoreVerified: true, applicationValidationPassed: true,
-    sourcePlaintextSha256: 'p', contextSha256: 'c' }),
+  restore: member({ schema: 'stockinsider-contabo-restore-rehearsal-v2', restoreVerified: true,
+    applicationValidationPassed: true, source: { plaintextSha256: 'p', contextSha256: 'c' },
+    restore: { unixSocketOnly: true, plaintextArchiveWritten: false, ownerAndAclReplay: true,
+      portableMigrationApplied: true } }),
 });
 
 test('a backup set is complete only after all members and a clean application restore', () => {

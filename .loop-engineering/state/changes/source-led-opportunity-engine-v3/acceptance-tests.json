@@ -2337,7 +2337,7 @@
       "protected://stockinsider-v3-gate-root/execute-track --track product_runtime"
     ]
   ],
-  "scriptValueRowsSha256": "925b38923d04bc93c926bc5e09b75225d46ef2dcadb5a1de98f8cbef8ded4351",
+  "scriptValueRowsSha256": "14302b6813d6cefa4907bf33ed6b48c7243cbe980322c65dd5d201d1288786df",
   "scriptValueRows": [
     [
       "build:source-led-opportunity-v3",
@@ -4228,7 +4228,7 @@
       "id": "MR3-019",
       "requirement": "Safety",
       "layer": "macos/security/meta",
-      "setup": "Parse the 2,132-byte canonical host fixture, mutate its digest/schema/approval, absolute Node/Git/Codex path, stat/hash/version, bundle identifiers/CDHashes, Team ID, designated requirements and notarized assessment, then race observable replacements at every check.",
+      "setup": "Parse the 2,142-byte canonical host fixture, mutate its digest/schema/approval, absolute Node/Git/Codex path, stat/hash/version, bundle identifiers/CDHashes, Team ID, designated requirements and notarized assessment, then race observable replacements at every check.",
       "expected": "Only model-runner-host-pins-v3.17 with SHA-256 723e35a7095d1948e78fc31a26a70e77964a1f8e8611268c80eda2b1e8be1417 and every exact pinned identity passes; mismatch is exit 5 with no task model/apply/tuple, observable race authorizes no result and no learned/fallback value exists."
     },
     {

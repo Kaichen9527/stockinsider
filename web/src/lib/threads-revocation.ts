@@ -1,4 +1,6 @@
 import { getSupabaseServerClient } from './supabase-server';
+import { stockInsiderDataPlaneMode } from './data-plane-runtime';
+import { readProviderCredentialState } from './provider-credential-store';
 import { hashThreadsDeletionConfirmationCode, hashThreadsSignedRequest } from './threads-signed-request';
 
 export async function revokeThreadsCredential(input: {
@@ -8,7 +10,12 @@ export async function revokeThreadsCredential(input: {
   userIdHash: string;
 }): Promise<void> {
   const supabase = getSupabaseServerClient();
-  const { error } = await supabase.rpc('revoke_threads_source_credential_v7', {
+  const portable = stockInsiderDataPlaneMode() === 'contabo';
+  const state = portable ? await readProviderCredentialState({ provider: 'threads', client: supabase }) : null;
+  if (portable && !state) throw new Error('threads_credential_revocation_conflict');
+  const { error } = await supabase.rpc(portable
+    ? 'revoke_provider_credential_cas_v1' : 'revoke_threads_source_credential_v7', {
+    ...(portable ? { p_provider: 'threads', p_expected_generation: state!.generation } : {}),
     p_confirmation_code_hash: hashThreadsDeletionConfirmationCode(input.confirmationCode),
     p_request_kind: input.requestKind,
     p_request_digest: hashThreadsSignedRequest(input.signedRequest),

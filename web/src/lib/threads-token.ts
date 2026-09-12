@@ -1,5 +1,8 @@
-import { createHash } from 'crypto';
+import { createHash, randomUUID } from 'crypto';
 import { getSupabaseServerClient } from './supabase-server';
+import { stockInsiderDataPlaneMode } from './data-plane-runtime';
+import { readProviderCredential, readProviderCredentialState, replaceProviderCredential } from './provider-credential-store';
+import type { ProviderSecretIdentity } from './provider-secret-envelope';
 import { assertUsableThreadsToken, buildThreadsTokenRegistryMetadata, shouldRefreshThreadsToken } from './threads-token-policy';
 import {
   THREADS_GRAPH_VERSION,
@@ -40,7 +43,12 @@ function validIso(value: unknown): string | null {
   return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString();
 }
 
-async function readVaultToken() {
+async function readVaultToken(): Promise<{ token: string; portableIdentity: ProviderSecretIdentity | null }> {
+  if (stockInsiderDataPlaneMode() === 'contabo') {
+    const credential = await readProviderCredential({ provider: 'threads' });
+    try { return { token: credential.plaintext.toString('utf8'), portableIdentity: credential.identity }; }
+    finally { credential.plaintext.fill(0); }
+  }
   const supabase = getSupabaseServerClient();
   const { data, error } = await supabase.rpc('read_threads_source_secret');
   if (error) throw new Error(`threads_vault_read_failed:${error.message}`);
@@ -50,7 +58,7 @@ async function readVaultToken() {
       ? data[0]
       : '';
   if (!token) throw new Error('threads_vault_token_missing');
-  return token;
+  return { token, portableIdentity: null };
 }
 
 async function readCredentialMetadata(): Promise<CredentialMetadata> {
@@ -65,16 +73,28 @@ async function readCredentialMetadata(): Promise<CredentialMetadata> {
 }
 
 export async function assertThreadsTokenAvailable(): Promise<void> {
-  const [token, metadata] = await Promise.all([readVaultToken(), readCredentialMetadata()]);
+  const [record, metadata] = await Promise.all([readVaultToken(), readCredentialMetadata()]);
   const expiresAt = validIso(metadata.expires_at);
   if (!/^[0-9a-f]{64}$/u.test(String(metadata.owner_user_id_hash || ''))) {
     throw new Error('threads_token_owner_missing');
   }
-  assertUsableThreadsToken({ token, expiresAt });
+  assertUsableThreadsToken({ token: record.token, expiresAt });
 }
 
-async function persistRefreshedToken(token: string, refreshedAt: string, expiresAt: string, ownerUserIdHash: string) {
+async function persistRefreshedToken(token: string, refreshedAt: string, expiresAt: string, ownerUserIdHash: string,
+  portableIdentity: ProviderSecretIdentity | null = null) {
   if (!/^[0-9a-f]{64}$/u.test(ownerUserIdHash)) throw new Error('threads_token_owner_missing');
+  if (stockInsiderDataPlaneMode() === 'contabo') {
+    const state = portableIdentity ?? await readProviderCredentialState({ provider: 'threads' });
+    const plaintext = Buffer.from(token, 'utf8');
+    try {
+      await replaceProviderCredential({ provider: 'threads', plaintext,
+        expectedGeneration: state?.generation ?? 0, credentialId: state?.credentialId ?? randomUUID(),
+        keyVersion: portableIdentity?.keyVersion ?? String(process.env.STOCKINSIDER_PROVIDER_KEY_VERSION || 'v1'),
+        expiresAt, ownerUserIdHash });
+    } finally { plaintext.fill(0); }
+    return;
+  }
   const supabase = getSupabaseServerClient();
   const { error } = await supabase.rpc('refresh_threads_source_secret_v7', {
     p_owner_user_id_hash: ownerUserIdHash,
@@ -187,7 +207,8 @@ export async function recordThreadsPublicSearchCanary(receipt: {
 }
 
 export async function getThreadsTokenForRun(): Promise<ThreadsTokenState> {
-  const [token, metadata] = await Promise.all([readVaultToken(), readCredentialMetadata()]);
+  const [record, metadata] = await Promise.all([readVaultToken(), readCredentialMetadata()]);
+  const token = record.token;
   const lastRefreshedAt = validIso(metadata.last_refreshed_at);
   const expiresAt = validIso(metadata.expires_at);
   const ownerUserIdHash = typeof metadata.owner_user_id_hash === 'string' ? metadata.owner_user_id_hash : '';
@@ -200,7 +221,8 @@ export async function getThreadsTokenForRun(): Promise<ThreadsTokenState> {
   }
 
   const refreshed = await refreshToken(token);
-  await persistRefreshedToken(refreshed.token, refreshed.refreshedAt, refreshed.expiresAt, ownerUserIdHash);
+  await persistRefreshedToken(refreshed.token, refreshed.refreshedAt, refreshed.expiresAt, ownerUserIdHash,
+    record.portableIdentity);
   return {
     token: refreshed.token,
     lastRefreshedAt: refreshed.refreshedAt,

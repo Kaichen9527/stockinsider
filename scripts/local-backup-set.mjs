@@ -42,10 +42,15 @@ export function assessBackupSet({ database, storageInventory, storageManifests, 
       || item.json?.result?.envelopeVerified !== true)) reasons.push('storage_members_incomplete');
   if (provider.json?.manifest?.schema !== 'stockinsider-provider-recovery-v1'
     || provider.json?.result?.envelopeVerified !== true) reasons.push('provider_recovery_unverified');
-  const restoreVerified = restore.json?.restoreVerified === true
+  const restoreVerified = restore.json?.schema === 'stockinsider-contabo-restore-rehearsal-v2'
+    && restore.json?.restoreVerified === true
     && restore.json?.applicationValidationPassed === true
-    && restore.json?.sourcePlaintextSha256 === database.json?.result?.plaintextSha256
-    && restore.json?.contextSha256 === database.json?.contextSha256;
+    && restore.json?.source?.plaintextSha256 === database.json?.result?.plaintextSha256
+    && restore.json?.source?.contextSha256 === database.json?.contextSha256
+    && restore.json?.restore?.unixSocketOnly === true
+    && restore.json?.restore?.plaintextArchiveWritten === false
+    && restore.json?.restore?.ownerAndAclReplay === true
+    && restore.json?.restore?.portableMigrationApplied === true;
   if (!restoreVerified) reasons.push('clean_restore_not_verified');
   return { completeSystemBackup: reasons.length === 0, restoreVerified, reasons };
 }
