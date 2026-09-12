@@ -86,9 +86,12 @@ operator registers exactly one backend UUID, runner principal and 40-character
 release, then activates the singleton. Writes still require the active release
 and production lease. PostgreSQL and PostgREST remain private/loopback-only.
 
-Still required before production: a complete schema/owner/grant/RLS restore,
-credential transfer in restricted memory, capacity rehearsal and external
-canary. These tests do not authorize migration or deployment.
+The clean local PostgreSQL restore, bounded provider recovery validation, all
+eight document restore rehearsals and capacity rehearsal now pass. Still
+required before production: import the provider envelopes into the restored
+Contabo registry, restore documents into `/var/lib/stockinsider/artifacts`,
+activate the exact reviewed writer and run the external read/write canaries.
+These tests do not authorize migration or deployment by themselves.
 
 ## Verification
 

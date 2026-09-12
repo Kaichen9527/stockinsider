@@ -1,8 +1,8 @@
 [Unit]
 Description=StockInsider active source refresh and found-stage publication
-After=network-online.target stockinsider-web.service
+After=network-online.target stockinsider-web-standalone.service
 Wants=network-online.target
-Requires=stockinsider-web.service
+Requires=stockinsider-web-standalone.service
 
 [Service]
 Type=oneshot

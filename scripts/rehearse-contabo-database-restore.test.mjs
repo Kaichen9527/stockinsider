@@ -14,6 +14,10 @@ test('restore rehearsal is socket-only and never persists the plaintext archive'
   assert.match(source,/applicationValidationPassed:true/u);
   assert.match(source,/applicationTables===7/u);
   assert.match(source,/applicationFunctions===3/u);
+  assert.match(source,/stockinsider-database-compact-v1/u);
+  assert.match(source,/legacy-runtime-v1/u);
+  assert.match(source,/compact-legacy-runtime-v1[.]sql/u);
+  assert.match(source,/writeEncryptedBackupArtifact/u);
   assert.doesNotMatch(source,/SUPABASE_SERVICE_ROLE_KEY|DATABASE_URL|PGPASSWORD/u);
 });
 

@@ -18,6 +18,7 @@ for required in \
   "$nginx_config_source" \
   "$unit_source/stockinsider-postgrest.service" \
   "$unit_source/stockinsider-web-standalone.service" \
+  /etc/stockinsider/data-plane.env \
   /etc/credstore.encrypted/stockinsider-postgrest-database-uri \
   /etc/credstore.encrypted/stockinsider-postgrest-jwt-secret \
   /etc/credstore.encrypted/stockinsider-postgrest-service-role-jwt \
@@ -27,6 +28,14 @@ for required in \
     exit 1
   fi
 done
+
+read -r data_plane_owner data_plane_group data_plane_mode < <(stat -c '%U %G %a' /etc/stockinsider/data-plane.env)
+if [[ "$data_plane_owner" != root || "$data_plane_group" != stockinsider || "$data_plane_mode" != 640 ]]; then
+  echo "Contabo data-plane environment permissions invalid" >&2
+  exit 1
+fi
+grep -qx 'STOCKINSIDER_DATA_PLANE=contabo' /etc/stockinsider/data-plane.env
+grep -qx 'STOCKINSIDER_POSTGREST_URL=http://127.0.0.1:3302/' /etc/stockinsider/data-plane.env
 
 for credential in \
   /etc/credstore.encrypted/stockinsider-postgrest-database-uri \
@@ -42,6 +51,8 @@ for credential in \
 done
 
 install -d -o root -g stockinsider -m 0750 /etc/stockinsider
+install -d -o root -g stockinsider -m 0750 /var/lib/stockinsider
+install -d -o stockinsider -g stockinsider -m 0700 /var/lib/stockinsider/artifacts
 install -o root -g stockinsider -m 0640 "$postgrest_config_source" /etc/stockinsider/postgrest.conf
 install -o root -g root -m 0644 "$nginx_config_source" /etc/nginx/conf.d/stockinsider-postgrest-loopback.conf
 install -o root -g root -m 0644 "$unit_source/stockinsider-postgrest.service" /etc/systemd/system/stockinsider-postgrest.service
@@ -49,7 +60,6 @@ install -o root -g root -m 0644 "$unit_source/stockinsider-web-standalone.servic
 
 /usr/sbin/nginx -t
 systemctl daemon-reload
-systemctl enable stockinsider-postgrest.service
 systemctl reload nginx
 
 # Deliberately do not start PostgREST or replace the current web service here.

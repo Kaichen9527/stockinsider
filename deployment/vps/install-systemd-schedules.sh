@@ -6,6 +6,7 @@ unit_source="$repo_root/deployment/vps/systemd"
 unit_target=/etc/systemd/system
 runner_principal_id=a11d4e67-7d0a-4c44-8a9d-1d5c3b875001
 runtime_env_file=/etc/stockinsider/stockinsider.env
+data_plane_env_file=/etc/stockinsider/data-plane.env
 
 if [[ $(id -u) -ne 0 ]]; then
   echo "install-systemd-schedules.sh must run as root" >&2
@@ -13,6 +14,15 @@ if [[ $(id -u) -ne 0 ]]; then
 fi
 if [[ ! -f "$runtime_env_file" ]]; then
   echo "$runtime_env_file is missing" >&2
+  exit 1
+fi
+if [[ ! -f "$data_plane_env_file" ]] || ! grep -qx 'STOCKINSIDER_DATA_PLANE=contabo' "$data_plane_env_file"; then
+  echo "$data_plane_env_file is missing or not pinned to Contabo" >&2
+  exit 1
+fi
+read -r data_plane_owner data_plane_group data_plane_mode < <(stat -c '%U %G %a' "$data_plane_env_file")
+if [[ "$data_plane_owner" != root || "$data_plane_group" != stockinsider || "$data_plane_mode" != 640 ]]; then
+  echo "$data_plane_env_file permissions are invalid" >&2
   exit 1
 fi
 
@@ -35,29 +45,10 @@ if [[ "$env_owner" != root || ! "$env_mode" =~ ^(600|640)$ ]]; then
   exit 1
 fi
 
-# The V3 client deliberately requires a project-scoped tuple and an approved
-# digest in addition to the service-role key. Derive the non-secret tuple
-# metadata only after validating the protected runtime file.
-set -a
-# shellcheck disable=SC1091
-source "$runtime_env_file"
-set +a
-supabase_project_ref=${SUPABASE_PROJECT_REF:-}
-supabase_service_role_key=${SUPABASE_SERVICE_ROLE_KEY:-}
-if [[ ! "$supabase_project_ref" =~ ^[a-z0-9]{20}$ ]]; then
-  echo "SUPABASE_PROJECT_REF must be a 20-character project reference" >&2
-  exit 1
-fi
-if [[ ${#supabase_service_role_key} -lt 32 ]]; then
-  echo "SUPABASE_SERVICE_ROLE_KEY is unavailable" >&2
-  exit 1
-fi
 if ! getent group stockinsider >/dev/null; then
   groupadd --system stockinsider
 fi
-service_role_digest=$(printf '%s' "$supabase_service_role_key" | sha256sum | cut -d' ' -f1)
-unset supabase_service_role_key SUPABASE_SERVICE_ROLE_KEY
-for required in /opt/stockinsider/current/scripts/call_internal_api.mjs /opt/stockinsider/current/scripts/call_internal_api_sequence.mjs /usr/bin/node /etc/systemd/system/stockinsider-web.service; do
+for required in /opt/stockinsider/current/scripts/call_internal_api.mjs /opt/stockinsider/current/scripts/call_internal_api_sequence.mjs /usr/bin/node /etc/systemd/system/stockinsider-web-standalone.service; do
   if [[ ! -e "$required" ]]; then
     echo "required runtime dependency is missing: $required" >&2
     exit 1
@@ -65,11 +56,10 @@ for required in /opt/stockinsider/current/scripts/call_internal_api.mjs /opt/sto
 done
 
 install -m 0644 "$unit_source"/*.service "$unit_source"/*.timer "$unit_source"/*.socket "$unit_target"/
-install -d -m 0755 /etc/systemd/system/stockinsider-web.service.d
-printf '[Service]\nSupplementaryGroups=stockinsider\nEnvironment=OPPORTUNITY_V3_RUNNER_PRINCIPAL_ID=%s\nEnvironment=OPPORTUNITY_V3_SUPABASE_PROJECT_REF=%s\nEnvironment=OPPORTUNITY_V3_SERVICE_ROLE_KEY_SHA256=%s\n' \
-  "$runner_principal_id" "$supabase_project_ref" "$service_role_digest" \
-  > /etc/systemd/system/stockinsider-web.service.d/30-opportunity-runner-principal.conf
-chmod 0644 /etc/systemd/system/stockinsider-web.service.d/30-opportunity-runner-principal.conf
+if ! grep -qx "OPPORTUNITY_V3_RUNNER_PRINCIPAL_ID=$runner_principal_id" "$data_plane_env_file"; then
+  echo "Contabo runner principal does not match the reviewed scheduler identity" >&2
+  exit 1
+fi
 systemctl daemon-reload
 systemctl enable --now stockinsider-financial-parser.socket
 systemctl enable --now stockinsider-capacity-watch.timer

@@ -8,6 +8,9 @@ import { fileURLToPath } from 'node:url';
 const migration = fs.readFileSync(new URL('../../migrations/20260911_retention_archive_v1.sql', import.meta.url), 'utf8');
 const migrationV2 = fs.readFileSync(new URL('../../migrations/20260911_retention_archive_v2.sql', import.meta.url), 'utf8');
 const materializeV2 = fs.readFileSync(new URL('./materialize-legacy-content-v2.sql', import.meta.url), 'utf8');
+const compactMaterializeV1 = fs.readFileSync(new URL('./materialize-legacy-content-compact-v1.sql', import.meta.url), 'utf8');
+const compactionV1 = fs.readFileSync(new URL('./compact-legacy-runtime-v1.sql', import.meta.url), 'utf8');
+const compactionReceiptMigration = fs.readFileSync(new URL('../../migrations/20260912_legacy_runtime_compaction_receipts_v1.sql', import.meta.url), 'utf8');
 const legacyCleanup = fs.readFileSync(new URL('../supabase_retention_cleanup.js', import.meta.url), 'utf8');
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 
@@ -103,13 +106,48 @@ test('connector v2 candidate listing materializes pins once and never calls row 
 test('content-addressed materialization is local-only, lossless, and non-destructive', () => {
   assert.match(materializeV2, /inet_server_addr\(\) IS NOT NULL/u);
   assert.match(materializeV2, /current_user<>'stockinsider_rehearsal'/u);
-  assert.match(materializeV2, /\^\/private\/tmp\/stockinsider-restore-/u);
+  assert.match(materializeV2, /\^\/private\/tmp\/stockinsider-\(\?:restore\|contabo-restore\)-/u);
   assert.doesNotMatch(materializeV2, /\b(?:DELETE\s+FROM|TRUNCATE|DROP\s+TABLE)\b/iu);
   assert.match(materializeV2, /retention_content_hash_collision/u);
   assert.match(materializeV2, /retention_content_reference_count_mismatch/u);
   assert.match(materializeV2, /retention_content_round_trip_mismatch/u);
   for (const ref of ['job_payload_refs', 'job_result_refs', 'authority_page_refs', 'frozen_revision_refs', 'processing_outcome_refs']) {
     assert.match(materializeV2, new RegExp(`retention_legacy_${ref}_v2`, 'u'));
+  }
+});
+
+test('legacy compaction is restricted to a verified local restore and preserves a seven-day live window', () => {
+  assert.match(compactionV1, /inet_server_addr\(\) IS NOT NULL/u);
+  assert.match(compactionV1, /current_user <> 'stockinsider_rehearsal'/u);
+  assert.match(compactionV1, /stockinsider-contabo-restore-/u);
+  assert.match(compactionV1, /high_water[.]observed_at - interval '7 days'/u);
+  assert.match(compactionV1, /run[.]status IN \('success','failed','cancelled'\)/u);
+  assert.match(compactionV1, /legacy_compaction_receipt_migration_missing/u);
+  assert.match(compactionV1, /legacy_compaction_reference_verification_failed/u);
+  assert.match(compactionV1, /legacy_compaction_postcondition_failed/u);
+  assert.doesNotMatch(compactionV1, /DELETE FROM public[.]legacy_producer_(?:runs|jobs)_v3_11/iu);
+  for (const relation of ['job_payload_refs', 'job_result_refs', 'authority_page_refs', 'frozen_revision_refs']) {
+    assert.match(compactionV1, new RegExp(`retention_legacy_${relation}_v2`, 'u'));
+  }
+});
+
+test('compaction receipt schema is additive, immutable and service-role only', () => {
+  assert.match(compactionReceiptMigration, /^BEGIN;[\s\S]*COMMIT;\s*$/u);
+  assert.doesNotMatch(compactionReceiptMigration, /\b(?:DELETE\s+FROM|TRUNCATE|DROP\s+(?:TABLE|SCHEMA|TYPE))\b/iu);
+  assert.match(compactionReceiptMigration, /cold_restore_verified BOOLEAN NOT NULL CHECK \(cold_restore_verified\)/u);
+  assert.match(compactionReceiptMigration, /ENABLE ROW LEVEL SECURITY/u);
+  assert.match(compactionReceiptMigration, /FROM PUBLIC, anon, authenticated/u);
+  assert.match(compactionReceiptMigration, /TO service_role/u);
+  assert.match(compactionReceiptMigration, /BEFORE UPDATE OR DELETE/u);
+  assert.match(compactionReceiptMigration, /stockinsider_compaction_receipt_is_immutable/u);
+});
+
+test('cutover materializer keeps replay content online but leaves high-cardinality outcomes cold-only', () => {
+  assert.match(compactMaterializeV1, /compact_materialization_requires_private_local_restore/u);
+  assert.match(compactMaterializeV1, /processingOutcomesColdOnly',TRUE/u);
+  assert.doesNotMatch(compactMaterializeV1, /FROM public[.]legacy_source_processing_outcomes_v3_13/u);
+  for (const relation of ['job_payload_refs', 'job_result_refs', 'authority_page_refs', 'frozen_revision_refs']) {
+    assert.match(compactMaterializeV1, new RegExp(`retention_legacy_${relation}_v2`, 'u'));
   }
 });
 

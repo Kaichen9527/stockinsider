@@ -38,12 +38,25 @@ export async function POST(request: Request) {
       deploymentLeaseReleased = true;
     }
   }
-  const result = await supabase.rpc('register_production_writer_release', {
-    p_release_id: releaseId,
-    p_metadata: { activated_by: 'vps_internal_api', activated_at: new Date().toISOString() },
-  });
-  if (result.error) return NextResponse.json({ ok: false, error: result.error.message }, { status: 500 });
-  return NextResponse.json({ ok: true, releaseId, writerKind: 'vps', previousReleaseId: previousReleaseId || null, deploymentLeaseReleased });
+  let backendIdentityRotated = false;
+  if (process.env.STOCKINSIDER_DATA_PLANE === 'contabo') {
+    const rotated = await supabase.rpc('activate_stockinsider_backend_release_v1', {
+      p_release_id: releaseId,
+      p_metadata: { activated_by: 'vps_internal_api' },
+    });
+    if (rotated.error || rotated.data !== true) {
+      return NextResponse.json({ ok: false, error: rotated.error?.message || 'backend_release_activation_failed' }, { status: 500 });
+    }
+    backendIdentityRotated = true;
+  } else {
+    const result = await supabase.rpc('register_production_writer_release', {
+      p_release_id: releaseId,
+      p_metadata: { activated_by: 'vps_internal_api', activated_at: new Date().toISOString() },
+    });
+    if (result.error) return NextResponse.json({ ok: false, error: result.error.message }, { status: 500 });
+  }
+  return NextResponse.json({ ok: true, releaseId, writerKind: 'vps', previousReleaseId: previousReleaseId || null,
+    deploymentLeaseReleased, backendIdentityRotated });
 }
 
 export async function GET(request: Request) { return POST(request); }

@@ -23,14 +23,14 @@ const exactMap = (value, count, label) => {
 };
 
 export function validateSohoImagePolicy(policy) {
-  if (policy?.schema !== 'stockinsider-soho-image-retention-v2' || policy.host !== SOHO_VPS_HOST
+  if (policy?.schema !== 'stockinsider-soho-image-retention-v3' || policy.host !== SOHO_VPS_HOST
     || typeof policy.policy !== 'string' || !policy.policy.includes('Broad prune is forbidden')) {
     throw new Error('soho_image_policy_invalid');
   }
   exactMap(policy.current, 13, 'soho_current');
-  exactMap(policy.retainedRollbacks, 28, 'soho_retained_rollbacks');
-  exactMap(policy.obsoleteCandidates, 8, 'soho_obsolete_candidates');
-  exactMap(policy.externallyAbsentBeforeVerifiedArchive, 3, 'soho_externally_absent');
+  exactMap(policy.retainedRollbacks, 10, 'soho_retained_rollbacks');
+  exactMap(policy.obsoleteCandidates, 18, 'soho_obsolete_candidates');
+  exactMap(policy.externallyAbsentBeforeVerifiedArchive, 9, 'soho_externally_absent');
   exactMap(policy.externallyRemovedProtectedAliases, 3, 'soho_externally_removed_protected_aliases');
   if (policy.externallyAbsentDisposition !== 'externally_absent_before_verified_archive'
     || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/u.test(policy.externallyAbsentDetectedAt || '')) {

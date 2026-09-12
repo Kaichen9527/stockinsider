@@ -6,18 +6,19 @@ const input = {
   observedAt: new Date(now).toISOString(), availableBytes: 26 * GIB,
   databaseRestoreBytes: 4 * GIB, documentBytes: GIB / 8, peakWalBytes: GIB,
   peakTemporaryBytes: 2 * GIB, deploymentBytes: GIB / 2, localBackupStagingBytes: 0,
+  growthReserveBytes: 2 * GIB,
 };
 test('all simultaneous allocations count toward the required reserve', () => {
   const result = assessContaboCapacity(input, now);
-  assert.equal(result.additionalPeakBytes, 7.625 * GIB);
-  assert.equal(result.projectedAvailableBytes, 18.375 * GIB);
+  assert.equal(result.additionalPeakBytes, 9.625 * GIB);
+  assert.equal(result.projectedAvailableBytes, 16.375 * GIB);
   assert.equal(result.allowed, true);
   assert.equal(result.disposition, 'warning');
   assert.equal(assessContaboCapacity({ ...input, availableBytes: 21 * GIB }, now).allowed, false);
 });
 test('reserve equality is allowed but one byte short is blocked', () => {
-  assert.equal(assessContaboCapacity({ ...input, availableBytes: 22.625 * GIB }, now).allowed, true);
-  assert.equal(assessContaboCapacity({ ...input, availableBytes: 22.625 * GIB - 1 }, now).allowed, false);
+  assert.equal(assessContaboCapacity({ ...input, availableBytes: 24.625 * GIB }, now).allowed, true);
+  assert.equal(assessContaboCapacity({ ...input, availableBytes: 24.625 * GIB - 1 }, now).allowed, false);
 });
 test('unknown budgets never silently become zero', () => {
   for (const key of Object.keys(input).filter((key) => key !== 'observedAt')) {

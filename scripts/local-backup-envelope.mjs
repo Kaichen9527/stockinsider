@@ -91,3 +91,60 @@ export async function verifyBackupChunks(input, options) {
   return { envelopeVerified: true, plaintextBytes: bytes, plaintextSha256: hash.digest('hex'),
     restoreVerified: false, contextSha256 };
 }
+
+/** Decrypt a deliberately small recovery payload in memory.
+ *
+ * This is intentionally capped at 1 MiB and is only for structured recovery
+ * metadata such as provider credentials. Large database and document archives
+ * must continue to use streaming restore paths. The caller owns zeroizing the
+ * returned Buffer immediately after validation.
+ */
+export async function decryptSmallBackupPayload(input, options) {
+  validate(options);
+  if (options.maxPlaintextBytes > 1024 * 1024) throw new Error('small_backup_limit_exceeded');
+  const { key, contextSha256, maxPlaintextBytes } = options;
+  let header = Buffer.alloc(0);
+  let trailing = Buffer.alloc(0);
+  let decipher;
+  let bytes = 0;
+  const plaintextChunks = [];
+  try {
+    for await (const chunk of input) {
+      if (!Buffer.isBuffer(chunk)) throw new Error('backup_binary_input_required');
+      let pending = chunk;
+      if (header.length < HEADER_BYTES) {
+        const count = Math.min(HEADER_BYTES - header.length, pending.length);
+        header = Buffer.concat([header, pending.subarray(0, count)]);
+        pending = pending.subarray(count);
+        if (header.length < HEADER_BYTES) continue;
+        if (!header.subarray(0, MAGIC.length).equals(MAGIC)
+          || header.subarray(MAGIC.length + IV_BYTES).toString('hex') !== contextSha256) {
+          throw new Error('backup_envelope_context_invalid');
+        }
+        decipher = createDecipheriv('aes-256-gcm', key,
+          header.subarray(MAGIC.length, MAGIC.length + IV_BYTES), { authTagLength: TAG_BYTES });
+        decipher.setAAD(header);
+      }
+      const combined = Buffer.concat([trailing, pending]);
+      const dataLength = Math.max(0, combined.length - TAG_BYTES);
+      bytes += dataLength;
+      if (bytes > maxPlaintextBytes) throw new Error('backup_size_limit_exceeded');
+      if (dataLength > 0) plaintextChunks.push(decipher.update(combined.subarray(0, dataLength)));
+      trailing = Buffer.from(combined.subarray(dataLength));
+    }
+    if (!decipher || trailing.length !== TAG_BYTES || bytes === 0) throw new Error('backup_envelope_truncated');
+    decipher.setAuthTag(trailing);
+    plaintextChunks.push(decipher.final());
+    const plaintext = Buffer.concat(plaintextChunks);
+    if (plaintext.length === 0 || plaintext.length > maxPlaintextBytes) throw new Error('backup_size_limit_exceeded');
+    for (const chunk of plaintextChunks) chunk.fill(0);
+    return plaintext;
+  } catch (error) {
+    for (const chunk of plaintextChunks) chunk.fill(0);
+    throw error?.message === 'Unsupported state or unable to authenticate data'
+      ? new Error('backup_authentication_failed') : error;
+  } finally {
+    header.fill(0);
+    trailing.fill(0);
+  }
+}

@@ -5,7 +5,7 @@ import { inspectLocalBackupDirectory } from './local-backup-preflight.mjs';
 
 export function assessBackupFreshness(sets, now = Date.now(), maxAgeMs = 24 * 60 * 60 * 1000) {
   if (!Number.isSafeInteger(now) || !Number.isSafeInteger(maxAgeMs) || maxAgeMs <= 0) throw new Error('freshness_input_invalid');
-  const eligible = sets.filter(item => item?.manifest?.schema === 'stockinsider-local-backup-set-v1'
+  const eligible = sets.filter(item => item?.manifest?.schema === 'stockinsider-local-backup-set-v2'
     && item.manifest.completeSystemBackup === true && item.manifest.restoreVerified === true)
     .map(item => ({ ...item, timestamp: Date.parse(item.manifest.createdAt) }))
     .filter(item => Number.isFinite(item.timestamp) && item.timestamp <= now)

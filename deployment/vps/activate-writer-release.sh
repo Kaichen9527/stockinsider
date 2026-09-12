@@ -16,14 +16,14 @@ if [[ $(basename "$current_target") != "$release_id" ]]; then
   exit 1
 fi
 
-drop_in_dir=/etc/systemd/system/stockinsider-web.service.d
+drop_in_dir=/etc/systemd/system/stockinsider-web-standalone.service.d
 drop_in_file=$drop_in_dir/20-writer-release.conf
 install -d -m 0755 "$drop_in_dir"
 printf '[Service]\nEnvironment=STOCKINSIDER_WRITER_RELEASE_ID=%s\n' "$release_id" > "$drop_in_file"
 chmod 0644 "$drop_in_file"
 systemctl daemon-reload
-systemctl restart stockinsider-web.service
-systemctl is-active --quiet stockinsider-web.service
+systemctl restart stockinsider-web-standalone.service
+systemctl is-active --quiet stockinsider-web-standalone.service
 
 # `systemctl is-active` only proves that the process was spawned. Next.js can
 # still need a short interval before it binds loopback, so registering the

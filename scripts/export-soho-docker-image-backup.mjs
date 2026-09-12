@@ -12,6 +12,7 @@ import { loadLocalBackupKey } from './local-backup-file-key.mjs';
 import { canonical, loadSohoImagePolicy, SOHO_VPS_HOST } from './soho-image-policy.mjs';
 
 const GIB = 1024 ** 3;
+const EXPORT_TIMEOUT_MS = 4 * 60 * 60 * 1000;
 
 function verifyObserved(images, policy) {
   const expectedCount = Object.keys(policy.obsoleteCandidates).length;
@@ -77,12 +78,13 @@ export async function exportSohoDockerImageBackup({ directory, keyDirectory, hos
       child.once('error', () => resolve({ code: null, signal: 'spawn_error' }));
       child.once('close', (code, signal) => resolve({ code, signal }));
     });
-    timeout = setTimeout(() => child.kill('SIGTERM'), 60 * 60 * 1000);
+    timeout = setTimeout(() => child.kill('SIGTERM'), EXPORT_TIMEOUT_MS);
     const images = await Promise.race([beforeReady,
       terminal.then(() => { throw new Error('remote_image_manifest_missing'); })]);
     verifyObserved(images, policy);
-    const manifest = { schema: 'stockinsider-soho-image-export-v3', host,
+    const manifest = { schema: 'stockinsider-soho-image-export-v4', host,
       createdAt: new Date().toISOString(), policySha256, images,
+      archiveEncoding: 'zstd',
       candidateRefs, plaintextStoredOnMac: false, productionMutationPerformed: false,
       broadPrunePerformed: false, restoreVerified: false,
       externallyAbsentBeforeVerifiedArchive: policy.externallyAbsentBeforeVerifiedArchive,
@@ -104,7 +106,7 @@ export async function exportSohoDockerImageBackup({ directory, keyDirectory, hos
     const id = `soho-docker-images-${randomUUID()}`;
     const result = await writeEncryptedBackupArtifact({ directory, filename: `${id}.sib`,
       input: saveChunks(), key, contextSha256, maxPlaintextBytes: maximumPlaintextBytes,
-      timeoutMs: 3_600_000 });
+      timeoutMs: EXPORT_TIMEOUT_MS });
     const receipt = { manifest, contextSha256, result, postImages: after,
       identitiesStable: true, restoreVerified: false, completeImageBackup: false };
     const receiptPath = path.join(directory, `${id}.manifest.json`);

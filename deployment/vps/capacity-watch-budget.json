@@ -1,11 +1,13 @@
 {
-  "schema": "stockinsider-capacity-budget-v1",
-  "databaseRestoreBytes": 0,
-  "documentBytes": 0,
-  "peakWalBytes": 0,
-  "peakTemporaryBytes": 0,
-  "deploymentBytes": 0,
+  "schema": "stockinsider-capacity-budget-v2",
+  "measurementBasis": "2026-09-12 compact backup clean PostgreSQL 17 restore: 3166892032-byte cluster, rounded to 3.5 GiB; 10550883-byte document set, rounded to 16 MiB",
+  "databaseRestoreBytes": 3758096384,
+  "documentBytes": 16777216,
+  "peakWalBytes": 1073741824,
+  "peakTemporaryBytes": 536870912,
+  "deploymentBytes": 536870912,
   "localBackupStagingBytes": 0,
-  "peakMemoryBytes": 0,
+  "growthReserveBytes": 2147483648,
+  "peakMemoryBytes": 1073741824,
   "minimumAvailableMemoryBytes": 1610612736
 }

@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createHash, createDecipheriv, randomBytes } from 'node:crypto';
-import { encryptBackupChunks, verifyBackupChunks, BACKUP_ENVELOPE_OVERHEAD_BYTES, BACKUP_ENVELOPE_LAYOUT as layout } from './local-backup-envelope.mjs';
+import { decryptSmallBackupPayload, encryptBackupChunks, verifyBackupChunks,
+  BACKUP_ENVELOPE_OVERHEAD_BYTES, BACKUP_ENVELOPE_LAYOUT as layout } from './local-backup-envelope.mjs';
 
 const source = Buffer.from('fixture: financial records and immutable document manifest');
 const options = () => ({ key: randomBytes(32), contextSha256: 'a'.repeat(64), maxPlaintextBytes: 1024 });
@@ -37,6 +38,18 @@ test('arbitrary stream boundaries authenticate and report hash without returning
     assert.equal(result.restoreVerified, false);
     assert.equal('plaintext' in result, false);
   }
+});
+
+test('bounded recovery payload may be decrypted in memory and caller can zero it', async () => {
+  const config = options();
+  const artifact = await encrypted([source], config);
+  const plaintext = await decryptSmallBackupPayload([artifact], config);
+  assert.deepEqual(plaintext, source);
+  plaintext.fill(0);
+  assert.equal(plaintext.every(byte => byte === 0), true);
+  await assert.rejects(decryptSmallBackupPayload([artifact], {
+    ...config, maxPlaintextBytes: 1024 * 1024 + 1,
+  }), /small_backup_limit/);
 });
 
 test('nonce uniqueness, wrong key, wrong manifest and every modified byte', async () => {

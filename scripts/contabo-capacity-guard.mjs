@@ -5,7 +5,7 @@ export const GIB = 1024 ** 3;
 export const MINIMUM_RESERVE_BYTES = 15 * GIB;
 export const WARNING_RESERVE_BYTES = 20 * GIB;
 const BUDGET_KEYS = ['databaseRestoreBytes', 'documentBytes', 'peakWalBytes',
-  'peakTemporaryBytes', 'deploymentBytes', 'localBackupStagingBytes'];
+  'peakTemporaryBytes', 'deploymentBytes', 'localBackupStagingBytes', 'growthReserveBytes'];
 
 export function assessContaboCapacity(input, now = Date.now()) {
   const blocked = (reason) => ({ disposition: 'blocked', allowed: false, reasons: [reason],

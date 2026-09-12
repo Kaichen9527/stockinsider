@@ -15,8 +15,7 @@
   \quit 3
 \endif
 
-SELECT (:'release_id' ~ '^[0-9a-f]{40}$' AND EXISTS(SELECT 1 FROM public.production_writer_releases
-  WHERE release_id=:'release_id' AND active AND writer_kind='vps'))::int AS release_ok,
+SELECT (:'release_id' ~ '^[0-9a-f]{40}$')::int AS release_ok,
   public.internal_principal_role_is_exact_v3_internal(
     :'principal_id'::uuid,'opportunity_runner',clock_timestamp())::int AS principal_ok \gset
 \if :release_ok
@@ -31,6 +30,12 @@ SELECT (:'release_id' ~ '^[0-9a-f]{40}$' AND EXISTS(SELECT 1 FROM public.product
 \endif
 
 BEGIN;
+-- A restored lease belongs to the frozen Supabase writer and is never valid on
+-- this private database. Register the reviewed Contabo release before enabling
+-- the stronger backend identity fence.
+DELETE FROM public.production_write_leases WHERE lease_key='production-data-plane';
+SELECT public.register_production_writer_release(:'release_id',
+  jsonb_build_object('activated_by','reviewed_contabo_cutover','activated_at',clock_timestamp()));
 UPDATE public.stockinsider_backend_identities_v1 SET status='retired',valid_to=clock_timestamp()
   WHERE status='active' AND backend_id<>:'backend_id'::uuid;
 INSERT INTO public.stockinsider_backend_identities_v1(backend_id,principal_id,release_id,status,valid_from,metadata)
@@ -41,3 +46,11 @@ ON CONFLICT(backend_id) DO UPDATE SET principal_id=EXCLUDED.principal_id,release
 UPDATE public.stockinsider_data_plane_settings_v1 SET identity_fence_enabled=true,
   activated_at=clock_timestamp(),activated_by='reviewed_cutover' WHERE singleton;
 COMMIT;
+
+SELECT EXISTS(SELECT 1 FROM public.production_writer_releases
+  WHERE release_id=:'release_id' AND active AND writer_kind='vps')::int AS release_registered \gset
+\if :release_registered
+\else
+  \echo 'contabo_writer_release_registration_failed'
+  \quit 3
+\endif

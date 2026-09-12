@@ -1,12 +1,14 @@
 [Unit]
 Description=StockInsider private PostgREST data plane
-After=network-online.target postgresql.service
+After=network-online.target postgresql@17-stockinsider.service
 Wants=network-online.target
+Requires=postgresql@17-stockinsider.service
 
 [Service]
 Type=simple
 User=stockinsider
 Group=stockinsider
+SupplementaryGroups=postgres
 ExecStart=/usr/local/bin/postgrest /etc/stockinsider/postgrest.conf
 LoadCredentialEncrypted=database-uri:/etc/credstore.encrypted/stockinsider-postgrest-database-uri
 LoadCredentialEncrypted=jwt-secret:/etc/credstore.encrypted/stockinsider-postgrest-jwt-secret

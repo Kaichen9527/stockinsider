@@ -8,14 +8,16 @@ import { verifyLoadedSohoImages } from './verify-soho-docker-image-backup.mjs';
 test('SOHO retention manifest is exact, disjoint and protects every retained identity', async () => {
   const { policy, candidateRefs, protectedRefs, policySha256 } = await loadSohoImagePolicy();
   assert.equal(policy.host, SOHO_VPS_HOST);
-  assert.equal(candidateRefs.length, 8);
-  assert.equal(protectedRefs.length, 41);
-  assert.equal(Object.keys(policy.externallyAbsentBeforeVerifiedArchive).length, 3);
+  assert.equal(candidateRefs.length, 18);
+  assert.equal(new Set(Object.values(policy.obsoleteCandidates)).size, 14,
+    'duplicate rollback tags may share an archived image but not inflate the unique image count');
+  assert.equal(protectedRefs.length, 23);
+  assert.equal(Object.keys(policy.externallyAbsentBeforeVerifiedArchive).length, 9);
   assert.equal(Object.keys(policy.externallyRemovedProtectedAliases).length, 3);
   assert.match(policySha256, /^[0-9a-f]{64}$/u);
   assert.equal(new Set([...candidateRefs, ...protectedRefs,
     ...Object.keys(policy.externallyAbsentBeforeVerifiedArchive),
-    ...Object.keys(policy.externallyRemovedProtectedAliases)]).size, 55);
+    ...Object.keys(policy.externallyRemovedProtectedAliases)]).size, 53);
   assert.throws(() => validateSohoImagePolicy({ ...policy,
     obsoleteCandidates: { ...policy.obsoleteCandidates,
       [candidateRefs[0]]: Object.values(policy.current)[0] } }), /soho_candidate_image_is_protected/u);
@@ -44,11 +46,18 @@ test('isolated docker load verification binds refs, config digests, platform and
 });
 
 test('remote exporter is read-only and exact while verifier cannot reach production Docker', async () => {
+  const { policy } = await loadSohoImagePolicy();
   const remote = await readFile(new URL('./remote-soho-docker-save.py', import.meta.url), 'utf8');
   const exporter = await readFile(new URL('./export-soho-docker-image-backup.mjs', import.meta.url), 'utf8');
   const verifier = await readFile(new URL('./verify-soho-docker-image-backup.mjs', import.meta.url), 'utf8');
   assert.match(remote, /exact_candidate_set_required/u);
+  assert.match(remote, /len\(refs\) != len\(CANDIDATES\)/u);
+  for (const [ref, imageId] of Object.entries(policy.obsoleteCandidates)) {
+    assert.ok(remote.includes(`${JSON.stringify(ref)}: ${JSON.stringify(imageId)}`),
+      `remote helper must bind ${ref} to the reviewed image identity`);
+  }
   assert.match(remote, /"image", "save"/u);
+  assert.match(remote, /"\/usr\/bin\/zstd", "-T1", "-3", "-c"/u);
   assert.doesNotMatch(remote, /\b(?:rmi|rm|prune|tag)\b/u);
   assert.match(exporter, /SOHO_VPS_HOST/u);
   assert.match(exporter, /ServerAliveInterval=15/u);
@@ -56,6 +65,7 @@ test('remote exporter is read-only and exact while verifier cannot reach product
   assert.match(exporter, /plaintextStoredOnMac: false/u);
   assert.match(exporter, /productionMutationPerformed: false/u);
   assert.doesNotMatch(verifier, /root@|\/usr\/bin\/ssh/u);
+  assert.match(verifier, /'\/opt\/homebrew\/bin\/zstd'/u);
   assert.match(verifier, /\['image', 'rm', \.\.\.candidateRefs\]/u);
   assert.doesNotMatch(verifier, /\['(?:system|image|builder)', 'prune'/u);
 });

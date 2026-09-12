@@ -51,7 +51,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     const observed = await inspectHostResources('/');
     const capacity = { observedAt: observed.observedAt, availableBytes: observed.availableBytes };
     for (const key of ['databaseRestoreBytes', 'documentBytes', 'peakWalBytes', 'peakTemporaryBytes',
-      'deploymentBytes', 'localBackupStagingBytes']) capacity[key] = budget[key];
+      'deploymentBytes', 'localBackupStagingBytes', 'growthReserveBytes']) capacity[key] = budget[key];
     const result = assessHostResources({ capacity, availableMemoryBytes: observed.availableMemoryBytes,
       peakMemoryBytes: budget.peakMemoryBytes,
       minimumAvailableMemoryBytes: budget.minimumAvailableMemoryBytes ?? MINIMUM_AVAILABLE_MEMORY_BYTES });
