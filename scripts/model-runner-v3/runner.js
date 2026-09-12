@@ -10,19 +10,19 @@ const { loadHostPins, verifyCurrentNode } = require('./hostPreflight');
 const { executeOperation, readState, statePath, repositoryRoot } = require('./execution');
 
 const MODEL_RUNNER_IDENTITY = [
-  ['approvalPolicy', 'never'], ['codexVersion', '0.153.4'], ['contractVersion', 'model-runner-v3.6'],
+  ['approvalPolicy', 'never'], ['codexVersion', '0.154.0-alpha.6.2'], ['contractVersion', 'model-runner-v3.6'],
   ['gitVersion', '2.50.1 (Apple Git-155)'], ['hardIsolationClaims', ['external_user_read', 'authoritative_write', 'command_network']],
-  ['hostPinFixtureSha256', '25e485f32668470f002dedc89425ddb5370dacf1a8a22a8ed0ac3fd3602c7f02'],
-  ['hostPinVersion', 'model-runner-host-pins-v3.16'], ['journalVersion', 'model-runner-journal-v3.5'],
+  ['hostPinFixtureSha256', '723e35a7095d1948e78fc31a26a70e77964a1f8e8611268c80eda2b1e8be1417'],
+  ['hostPinVersion', 'model-runner-host-pins-v3.17'], ['journalVersion', 'model-runner-journal-v3.5'],
   ['manifestVersion', 'loop-model-manifest-v3.5'], ['nodeVersion', 'v22.14.0'],
   ['permissionProfileVersion', 'model-runner-permissions-v3.5'], ['promptPolicyVersion', 'model-runner-prompt-v3.5'],
   ['requestProtocol', 'loop-model-v3.5'], ['resultProtocol', 'loop-model-result-v3.5'],
   ['routingVersion', 'model-runner-routing-v3.5'], ['sourceViewVersion', 'model-runner-source-view-v3.5'],
   ['stateNamespace', 'model-runner-v3'], ['trustedApplyVersion', 'model-runner-trusted-apply-v3.5'],
 ];
-const MODEL_RUNNER_IDENTITY_SHA256 = 'f875e175cd7d84cb0010bddaf16de4badd4968ba81bdb033aecd611b1be00baa';
+const MODEL_RUNNER_IDENTITY_SHA256 = '7d5ee28105dae778b1f35025f38cddaf2aab501db0bfadbaeb2782a911f9fede';
 
-assert(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)) === 875 && sha256(canonicalJson(MODEL_RUNNER_IDENTITY)) === MODEL_RUNNER_IDENTITY_SHA256, 12);
+assert(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)) === 885 && sha256(canonicalJson(MODEL_RUNNER_IDENTITY)) === MODEL_RUNNER_IDENTITY_SHA256, 12);
 
 function parseArguments(argv) {
   assert(argv.length >= 1, 2);

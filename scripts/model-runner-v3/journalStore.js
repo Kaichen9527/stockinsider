@@ -7,7 +7,7 @@ const { RunnerError, assert } = require('./artifacts');
 const { canonicalJson, sha256 } = require('./canonicalJson');
 const { resourceAttemptKey } = require('./resourceJournal');
 
-const IDENTITY = 'f875e175cd7d84cb0010bddaf16de4badd4968ba81bdb033aecd611b1be00baa';
+const IDENTITY = '7d5ee28105dae778b1f35025f38cddaf2aab501db0bfadbaeb2782a911f9fede';
 
 function atSecond() {
   return new Date(Math.floor(Date.now() / 1000) * 1000).toISOString().replace('.000Z', 'Z');
