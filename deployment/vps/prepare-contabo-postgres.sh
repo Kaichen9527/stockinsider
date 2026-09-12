@@ -83,6 +83,10 @@ pg_createcluster 17 "$cluster_name" --port 5432 --start-conf manual --datadir "$
 install -d -o root -g postgres -m 0750 "/etc/postgresql/17/${cluster_name}/conf.d"
 install -o root -g postgres -m 0640 "$repo_root/deployment/vps/postgresql-stockinsider.conf" \
   "/etc/postgresql/17/${cluster_name}/conf.d/stockinsider.conf"
+# Ubuntu's pg_createcluster template leaves include_dir commented. Activate the
+# dedicated directory explicitly so the reviewed socket-only configuration is
+# effective instead of silently falling back to PostgreSQL's localhost default.
+pg_conftool 17 "$cluster_name" set include_dir conf.d
 install -o root -g postgres -m 0640 "$repo_root/deployment/vps/pg_hba-stockinsider.conf" \
   "/etc/postgresql/17/${cluster_name}/pg_hba.conf"
 

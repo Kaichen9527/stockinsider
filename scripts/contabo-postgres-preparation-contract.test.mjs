@@ -16,6 +16,8 @@ test('preparation is pinned, local-only, and never starts or replaces a cluster'
   assert.match(script,/B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8/u);
   assert.match(script,/pg_createcluster 17 "\$cluster_name" --port 5432 --start-conf manual/u);
   assert.match(script,/install -d -o root -g postgres -m 0750 "\/etc\/postgresql\/17\/\$\{cluster_name\}\/conf[.]d"/u);
+  assert.match(script,/pg_conftool 17 "\$cluster_name" set include_dir conf[.]d/u,
+    'the generated cluster must actually load the reviewed conf.d policy');
   assert.match(script,/unexpected PostgreSQL cluster exists/u);
   assert.match(script,/usermod --append --groups postgres stockinsider/u);
   assert.doesNotMatch(script,/pg_dropcluster|systemctl\s+(?:start|restart|enable)|pg_ctlcluster\s+17\s+stockinsider\s+start/u);
