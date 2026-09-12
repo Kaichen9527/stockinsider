@@ -33,7 +33,7 @@ if [[ ! -f "$toc_path" || -L "$toc_path" ]]; then
   exit 1
 fi
 read -r toc_owner toc_group toc_mode < <(stat -c '%U %G %a' "$toc_path")
-if [[ "$toc_owner" != root || "$toc_group" != root || "$toc_mode" != 600 ]]; then
+if [[ "$toc_owner" != root || "$toc_group" != postgres || "$toc_mode" != 640 ]]; then
   echo "reviewed restore list permissions invalid" >&2
   exit 1
 fi
