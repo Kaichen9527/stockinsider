@@ -25,7 +25,9 @@ async function fixture(t) {
     'internal-api-sequence-policy.mjs',
     'contabo-capacity-guard.mjs', 'contabo-host-resource-check.mjs',
     'contabo-deployment-inventory.mjs', 'contabo-cleanup-preflight.mjs',
-    'verify-standalone-release.mjs']) {
+    'verify-standalone-release.mjs',
+    'candidate_financial_parser_socket.py', 'candidate_financial_document_parser.py',
+    'candidate_financial_fact_scope.py']) {
     await writeFile(path.join(packagerRepository, 'scripts', name), name);
   }
   await writeFile(path.join(packagerRepository, 'deployment', 'vps', 'policy.json'), '{}');
@@ -54,6 +56,9 @@ test('packages only the standalone runtime and binds a full git identity', async
   assert.ok(receipt.manifest.files.some(item => item.path === 'app/public/logo.txt'));
   assert.ok(receipt.manifest.files.some(item => item.path === 'deployment/vps/policy.json'));
   assert.ok(receipt.manifest.files.some(item => item.path === 'scripts/internal-api-sequence-policy.mjs'));
+  assert.ok(receipt.manifest.files.some(item => item.path === 'scripts/candidate_financial_parser_socket.py'));
+  assert.ok(receipt.manifest.files.some(item => item.path === 'scripts/candidate_financial_document_parser.py'));
+  assert.ok(receipt.manifest.files.some(item => item.path === 'scripts/candidate_financial_fact_scope.py'));
   assert.equal((await verifyStandaloneRelease(result.releaseDirectory)).releaseVerified, true);
   await assert.rejects(packageStandaloneRelease(config));
 });

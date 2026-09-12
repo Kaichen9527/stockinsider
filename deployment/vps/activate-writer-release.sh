@@ -18,8 +18,14 @@ fi
 
 drop_in_dir=/etc/systemd/system/stockinsider-web-standalone.service.d
 drop_in_file=$drop_in_dir/20-writer-release.conf
+writer_env_file=/etc/stockinsider/writer-release.env
 install -d -m 0755 "$drop_in_dir"
-printf '[Service]\nEnvironment=STOCKINSIDER_WRITER_RELEASE_ID=%s\n' "$release_id" > "$drop_in_file"
+# EnvironmentFile values override Environment= regardless of textual order.
+# Keep the non-secret release identity in a dedicated later EnvironmentFile so
+# an older value in the protected runtime file cannot survive activation.
+install -o root -g stockinsider -m 0640 /dev/null "$writer_env_file"
+printf 'STOCKINSIDER_WRITER_RELEASE_ID=%s\n' "$release_id" > "$writer_env_file"
+printf '[Service]\nEnvironmentFile=%s\n' "$writer_env_file" > "$drop_in_file"
 chmod 0644 "$drop_in_file"
 systemctl daemon-reload
 systemctl restart stockinsider-web-standalone.service

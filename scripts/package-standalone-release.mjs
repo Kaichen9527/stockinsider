@@ -106,7 +106,9 @@ export async function packageStandaloneRelease({ sourceRepository, packagerRepos
       'internal-api-sequence-policy.mjs',
       'contabo-capacity-guard.mjs', 'contabo-host-resource-check.mjs',
       'contabo-deployment-inventory.mjs', 'contabo-cleanup-preflight.mjs',
-      'verify-standalone-release.mjs']) {
+      'verify-standalone-release.mjs',
+      'candidate_financial_parser_socket.py', 'candidate_financial_document_parser.py',
+      'candidate_financial_fact_scope.py']) {
       await cp(path.join(packager, 'scripts', name), path.join(runtimeScripts, name),
         { dereference: true, errorOnExist: true, force: false });
     }
