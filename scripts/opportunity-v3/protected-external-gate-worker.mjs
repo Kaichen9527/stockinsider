@@ -310,6 +310,23 @@ const graphBoundReviewSources = Object.freeze({
       rangeLine: 'Full reviewed range',
     }),
   }),
+  // The signed ChatGPT/Codex update and current macOS root-volume identity are
+  // independently reviewed before the one-time V3.17 successor is proposed.
+  // Candidate bytes cannot select or rewrite either immutable review source.
+  'dea5f4dee7aadf11435bd95f5f0d8024605e5f298f9a02645aa9352865099b7f': Object.freeze({
+    requirements: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-host-pin-v317-requirements-245cf0d',
+      path: `${changeRelative}/requirements-review-host-pin-v3.17.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+    architecture: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-host-pin-v317-architecture-245cf0d',
+      path: `${changeRelative}/architecture-review-host-pin-v3.17.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed implementation range',
+    }),
+  }),
   '5f985e391799fd8332df16c2151f75cc95dfb643a087912d92df2845a435016e': Object.freeze({
     requirements: v319ReviewSources.requirements,
     architecture: v319ReviewSources.architecture,
@@ -777,12 +794,17 @@ const modelOracleSuccessorApprovals = Object.freeze({
     approvalId: 'model-runner-host-pin-amendment-v3.16',
     subjectListingSha256: '70dbbd6ed3846ada9804c029321dcc5e97de60ddf4e63a75142d10f2efdde115',
   }),
+  '70dbbd6ed3846ada9804c029321dcc5e97de60ddf4e63a75142d10f2efdde115': Object.freeze({
+    approvalId: 'model-runner-host-pin-amendment-v3.17',
+    subjectListingSha256: '5eb11a767efdce7e9faf197b2a98d9450f555fcba9363155fd3b71b7c653adc6',
+  }),
 });
 
 const modelOracleHostPinByListingSha256 = Object.freeze({
   bcae305c4d7a757510eb99c2c0aeb92679a9e772aecb7270360d747144fa6eed: 'model-runner-host-pins-v3.14',
   cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5: 'model-runner-host-pins-v3.15',
   '70dbbd6ed3846ada9804c029321dcc5e97de60ddf4e63a75142d10f2efdde115': 'model-runner-host-pins-v3.16',
+  '5eb11a767efdce7e9faf197b2a98d9450f555fcba9363155fd3b71b7c653adc6': 'model-runner-host-pins-v3.17',
 });
 
 export function modelOracleListing(root, commit) {
