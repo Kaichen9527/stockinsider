@@ -45,4 +45,3 @@ SELECT json_build_object(
     FROM public.stockinsider_data_plane_settings_v1 WHERE singleton),
   'vaultExcluded',to_regnamespace('vault') IS NULL
 );
-
