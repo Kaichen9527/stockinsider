@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { candidateMopsDownloadUrl, fetchCandidateMopsFiling, financialBridgeAcquisitionQuarters, parseCandidateMopsFacts, selectCandidateFilingPeriodFacts, normalizeMopsDownloadedContentType } from './candidate-official-financials.ts';
+import { candidateMopsDownloadUrl, fetchCandidateMopsFiling, fetchTpexOfficialPayload, financialBridgeAcquisitionQuarters, parseCandidateMopsFacts, selectCandidateFilingPeriodFacts, normalizeMopsDownloadedContentType } from './candidate-official-financials.ts';
 import { fetchFinMindFinancialFallback, parseFinMindFinancialFacts } from './finmind-financial-fallback.ts';
 
 test('official attachment empty MIME is normalized only for exact issuer standalone UTF-8 iXBRL', () => {
@@ -103,6 +103,33 @@ test('official financial refresh completes durable MOPS and TPEx jobs atomically
   assert.match(source, /claimedJobs: claimedJobCount/u);
   assert.match(source, /enqueueMissing !== false/u);
   assert.doesNotMatch(source, /rpc\('append_financial_fact_v3'/u);
+});
+
+test('TPEx official fetch retries a truncated body and switches encoding without accepting partial JSON', async () => {
+  const encodings: Array<string | undefined> = [];
+  let calls = 0;
+  const fetchImpl: typeof fetch = async (_url, options) => {
+    calls += 1;
+    encodings.push((options?.headers as Record<string, string> | undefined)?.['accept-encoding']);
+    if (calls === 1) {
+      const stream = new ReadableStream<Uint8Array>({
+        start(controller) {
+          controller.enqueue(new TextEncoder().encode('[{"partial":'));
+          controller.error(Object.assign(new Error('terminated'), { code: 'ECONNRESET' }));
+        },
+      });
+      return new Response(stream, { status: 200, headers: { 'content-type': 'application/json' } });
+    }
+    return new Response('[{"公司代號":"6488"}]', { status: 200, headers: { 'content-type': 'application/json' } });
+  };
+  const result = await fetchTpexOfficialPayload('https://www.tpex.org.tw/openapi/v1/example', {
+    fetchImpl,
+    sleep: async () => undefined,
+  });
+  assert.equal(calls, 2);
+  assert.deepEqual(encodings, [undefined, 'identity']);
+  assert.deepEqual(JSON.parse(result.body), [{ 公司代號: '6488' }]);
+  assert.equal(result.responseBytes, Buffer.byteLength(result.body, 'utf8'));
 });
 
 test('a MOPS acquisition job persists only its requested period and leaves comparative contexts to their own job', () => {

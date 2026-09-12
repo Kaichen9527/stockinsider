@@ -364,6 +364,54 @@ async function mapLimit<T, R>(items: T[], limit: number, work: (item: T) => Prom
   return output;
 }
 
+const TPEX_RESPONSE_LIMIT_BYTES = 15_000_000;
+const TPEX_FETCH_ATTEMPTS = 3;
+
+export async function fetchTpexOfficialPayload(sourceUrl: string, dependencies: {
+  fetchImpl?: typeof fetch;
+  sleep?: (milliseconds: number) => Promise<void>;
+} = {}) {
+  const fetchImpl = dependencies.fetchImpl ?? fetch;
+  const sleep = dependencies.sleep ?? ((milliseconds: number) => new Promise((resolve) => setTimeout(resolve, milliseconds)));
+  let lastError: unknown = null;
+  for (let attempt = 0; attempt < TPEX_FETCH_ATTEMPTS; attempt += 1) {
+    try {
+      // TPEx occasionally closes a compressed response body early from the
+      // production VPS. Retry the bounded stream and switch encoding once so
+      // one truncated transfer cannot terminalize every job for the endpoint.
+      const headers: Record<string, string> = { Accept: 'application/json', 'user-agent': 'StockInsider/4.0' };
+      if (attempt === 1) headers['accept-encoding'] = 'identity';
+      const response = await fetchImpl(sourceUrl, {
+        headers, redirect: 'error', signal: AbortSignal.timeout(20_000),
+      });
+      if (!response.body) throw new Error('tpex_empty_response_body');
+      const reader = response.body.getReader();
+      const chunks: Uint8Array[] = [];
+      let responseBytes = 0;
+      try {
+        for (;;) {
+          const next = await reader.read();
+          if (next.done) break;
+          responseBytes += next.value.byteLength;
+          if (responseBytes > TPEX_RESPONSE_LIMIT_BYTES) {
+            await reader.cancel();
+            throw new Error('tpex_response_too_large');
+          }
+          chunks.push(next.value);
+        }
+      } finally {
+        reader.releaseLock();
+      }
+      const body = new TextDecoder('utf-8', { fatal: true }).decode(Buffer.concat(chunks));
+      return { response, body, responseBytes };
+    } catch (error) {
+      lastError = error;
+      if (attempt < TPEX_FETCH_ATTEMPTS - 1) await sleep(250 * (attempt + 1));
+    }
+  }
+  throw new Error(`tpex_transport_exhausted:${lastError instanceof Error ? lastError.message : String(lastError)}`);
+}
+
 async function consecutiveFailureCounts(
   client: ReturnType<typeof getOpportunityV3ServerClient>,
   claimed: Array<Record<string, unknown>>,
@@ -739,14 +787,13 @@ export async function refreshCandidateOfficialFinancials(
     for (const job of jobs) attemptedTpexSymbols.add(job.candidate.symbol);
     if (jobs.length === 0) continue;
     try {
-      const response = await fetch(sourceUrl, { headers: { Accept: 'application/json', 'user-agent': 'StockInsider/4.0' }, redirect: 'error', signal: AbortSignal.timeout(20_000) });
-      const body = await response.text();
+      const { response, body, responseBytes } = await fetchTpexOfficialPayload(sourceUrl);
       const rejected = classifyFinancialResponse(response.status, response.headers.get('content-type'), body);
       if (rejected) throw new Error(`tpex_${endpoint}_${rejected}`);
       const parsed = parseTpexFinancialEndpoint(endpoint as keyof typeof TPEX_FINANCIAL_ENDPOINTS, JSON.parse(body));
       if (parsed.terminalReason !== 'complete') throw new Error(`tpex_${endpoint}_${parsed.terminalReason}`);
       tpexFetchedEndpoints += 1;
-      const sourceSha256 = sha256(body); const responseBytes = Buffer.byteLength(body, 'utf8');
+      const sourceSha256 = sha256(body);
       await mapLimit(jobs, 4, async (job) => {
         const candidateFacts = parsed.facts.filter((fact) => fact.symbol === job.candidate.symbol);
         const facts = candidateFacts.filter((fact) => fact.periodEnd === job.periodEnd).map((fact) => toParsedTpexFact(fact, job.candidate, collectedAt));
