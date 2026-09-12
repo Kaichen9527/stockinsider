@@ -162,3 +162,18 @@ test('an unchanged trusted rejection stays auditable without re-failing every dr
   assert.equal(run.status, 'success'); assert.equal(run.unchangedRejected, 1);
   assert.equal(run.rejected, 0); assert.equal(fx.calls.length, 0);
 });
+
+test('an unchanged SQL-effective rejection remains terminal when the local validator is permissive', async () => {
+  const fact = { ...base, fact_id: 'sql-rejected', validation_status: 'rejected' };
+  const source = { fact_id: fact.fact_id, source_url: 'https://mops.twse.com.tw/report.xhtml', source_sha256: sha,
+    locator: { parser_evidence_id: 'sql-rejected-evidence' }, issuer_host_approved: false };
+  const localReceipt = validateOfficialFinancialFact(fact, [fact], source, now().toISOString());
+  assert.equal(localReceipt.status, 'validated');
+  const priorReceipts = [{ fact_id: fact.fact_id, input_hash: localReceipt.inputHash,
+    validator_version: 'official-financial-v2', validator_principal: runnerPrincipal(),
+    effective_validation: { validation_status: 'rejected' }, receipt_sequence: 1 }];
+  const fx = fixture({ facts: [fact], priorReceipts });
+  const run = await validatePendingOfficialFinancials([stockId], { client: fx.client, now, runnerPrincipal });
+  assert.equal(run.status, 'success'); assert.equal(run.unchangedRejected, 1);
+  assert.equal(run.validated, 0); assert.equal(run.rejected, 0); assert.equal(fx.calls.length, 0);
+});
