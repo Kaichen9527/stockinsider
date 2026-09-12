@@ -17,6 +17,7 @@ const localProvisioner=readFileSync(new URL('./provision-contabo-data-plane-cred
 const cutover=readFileSync(new URL('../deployment/vps/activate-contabo-cutover.sh',import.meta.url),'utf8');
 const schedules=readFileSync(new URL('../deployment/vps/install-systemd-schedules.sh',import.meta.url),'utf8');
 const writerActivation=readFileSync(new URL('../web/src/app/api/internal/writer-release-activate/route.ts',import.meta.url),'utf8');
+const validationStatusHotfix=readFileSync(new URL('../migrations/20260912_02_financial_validation_status_text_hotfix.sql',import.meta.url),'utf8');
 
 test('portable bootstrap recreates required role names without a plaintext Vault shim',()=>{
   for(const role of ['anon','authenticated','service_role','authenticator','opportunity_v3_rpc_owner','legacy_correctness_rpc_owner','dashboard_user','stockinsider_runtime_v319'])
@@ -110,4 +111,12 @@ test('PostgREST is loopback-only and receives secrets through encrypted credenti
 test('every official financial-document write uses the portable immutable artifact boundary',()=>{
   assert.match(acquisition,/putCandidateFinancialArtifact/u);
   assert.doesNotMatch(acquisition,/[.]storage[.]from/u);
+});
+
+test('financial validation hotfix preserves checked text status and reviewed RPC ownership',()=>{
+  assert.match(validationStatusHotfix,/udt_name <> 'text'/u);
+  assert.match(validationStatusHotfix,/replace\(v_definition,v_legacy_cast,'::text'\)/u);
+  assert.match(validationStatusHotfix,/ALTER FUNCTION public[.]internal_principal_role_is_exact_v3_internal[\s\S]*OWNER TO opportunity_v3_rpc_owner/u);
+  assert.match(validationStatusHotfix,/ALTER TABLE public[.]opportunity_financial_facts_v3 OWNER TO opportunity_v3_rpc_owner/u);
+  assert.doesNotMatch(validationStatusHotfix,/CREATE TYPE|CREATE DOMAIN|DROP TABLE|TRUNCATE/u);
 });
