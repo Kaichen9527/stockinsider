@@ -33,6 +33,10 @@ test('a backup set is complete only after all members and a clean application re
   assert.equal(assessBackupSet(valid()).completeSystemBackup, true);
   const legacy = valid(); legacy.database.json.manifest = { schema: 'stockinsider-database-export-v1' };
   assert.equal(assessBackupSet(legacy).completeSystemBackup, true);
+  const contabo = valid(); contabo.database.json.manifest = { schema: 'stockinsider-database-export-v3',
+    transport: 'contabo_ssh_local_unix_socket', credentialsInCommandOrArtifact: false,
+    remoteEphemeralCredentialsUsed: false };
+  assert.equal(assessBackupSet(contabo).completeSystemBackup, true);
   const compact = valid(); compact.database.json.manifest = { schema: 'stockinsider-database-compact-v1',
     compactionPolicyVersion: 'legacy-runtime-v1', sourceBackupId: 'database-source',
     sourceBackupPlaintextSha256: 'a'.repeat(64), compactionReceiptId: 'receipt' };
