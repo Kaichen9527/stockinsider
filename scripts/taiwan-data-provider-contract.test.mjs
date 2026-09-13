@@ -197,6 +197,14 @@ test('VPS timers separate the approved preliminary, final, pipeline and hourly d
   assert.match(readFileSync(new URL('../deployment/vps/systemd/stockinsider-research-cycle.timer', import.meta.url), 'utf8'), /21:00:00 Asia\/Taipei/u);
   assert.match(readFileSync(new URL('../deployment/vps/systemd/stockinsider-health-check.timer', import.meta.url), 'utf8'), /21:45:00 Asia\/Taipei/u);
   assert.match(drain, /00\.\.17,22\.\.23:10:00 Asia\/Taipei/u);
+  const historyTimer = readFileSync(new URL('../deployment/vps/systemd/stockinsider-candidate-history-backfill.timer', import.meta.url), 'utf8');
+  const historyService = readFileSync(new URL('../deployment/vps/systemd/stockinsider-candidate-history-backfill.service', import.meta.url), 'utf8');
+  assert.match(historyTimer, /00\.\.17,22\.\.23:25:00 Asia\/Taipei/u);
+  assert.match(historyService, /ExecStartPre=\/usr\/bin\/node scripts\/contabo-host-resource-check\.mjs/u);
+  assert.match(historyService, /\/api\/internal\/candidate-history-backfill/u);
+  assert.match(historyService, /"requestBudget":80,"perStockBudget":4/u);
+  assert.match(historyService, /stockinsider-production-write\.lock/u);
+  assert.match(installer, /stockinsider-candidate-history-backfill\.timer/u);
   const drainService = readFileSync(new URL('../deployment/vps/systemd/stockinsider-taiwan-data-queue-drain.service', import.meta.url), 'utf8');
   assert.match(drainService, /\/api\/internal\/taiwan-data-queue-drain/u);
   assert.match(drainService, /\/api\/internal\/candidate-financial-queue-drain/u);

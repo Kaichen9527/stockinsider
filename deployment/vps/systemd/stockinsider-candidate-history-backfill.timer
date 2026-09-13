@@ -1,0 +1,11 @@
+[Unit]
+Description=Continue bounded candidate history backfill hourly at minute 25 Asia/Taipei
+
+[Timer]
+OnCalendar=*-*-* 00..17,22..23:25:00 Asia/Taipei
+Persistent=true
+AccuracySec=1min
+Unit=stockinsider-candidate-history-backfill.service
+
+[Install]
+WantedBy=timers.target
