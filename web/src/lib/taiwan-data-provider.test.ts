@@ -149,6 +149,40 @@ test('uses current TPEx OpenAPI endpoints for exchange-wide valuation and index 
     officialTaiwanDataUrl({ ...input, exchange: 'TPEX', dataset: 'market_index', symbol: null }),
     'https://www.tpex.org.tw/openapi/v1/tpex_daily_trading_index',
   );
+  assert.equal(
+    officialTaiwanDataUrl({ ...input, exchange: 'TPEX', dataset: 'institutional_flow', symbol: null }),
+    'https://www.tpex.org.tw/openapi/v1/tpex_3insti_daily_trading',
+  );
+  assert.equal(
+    officialTaiwanDataUrl({ ...input, exchange: 'TPEX', dataset: 'margin_short', symbol: null }),
+    'https://www.tpex.org.tw/openapi/v1/tpex_mainboard_margin_balance',
+  );
+});
+
+test('canonicalizes TPEx institutional, margin and monthly-revenue OpenAPI object rows', async () => {
+  for (const dataset of ['institutional_flow', 'margin_short'] as const) {
+    const result = await acquireTaiwanDataset({ ...input, exchange: 'TPEX', dataset, symbol: null }, {
+      fetchImpl: async () => jsonResponse([
+        { Date: '1150903', SecuritiesCompanyCode: '5347', CompanyName: '世界' },
+        { Date: '1150904', SecuritiesCompanyCode: '5347', CompanyName: '世界' },
+        { Date: '1150904', SecuritiesCompanyCode: '00411A', CompanyName: 'ETF' },
+      ]),
+    });
+    assert.equal(result.terminal, 'complete');
+    assert.equal(result.canonical?.records.length, 1);
+    assert.equal(result.canonical?.records[0].stock_id, '5347');
+    assert.equal(result.canonical?.records[0].date, '2026-09-04');
+  }
+  const revenue = await acquireTaiwanDataset({ ...input, exchange: 'TPEX', dataset: 'monthly_revenue', symbol: null }, {
+    fetchImpl: async () => jsonResponse([
+      { 出表日期: '1150904', 資料年月: '11508', 公司代號: '5347', 公司名稱: '世界', '營業收入-當月營收': '12,345' },
+      { 出表日期: '1150904', 資料年月: '11508', 公司代號: '00411A', 公司名稱: 'ETF', '營業收入-當月營收': '1' },
+    ]),
+  });
+  assert.equal(revenue.terminal, 'complete');
+  assert.deepEqual(revenue.canonical?.records.map((row) => ({
+    stock_id: row.stock_id, revenue_month: row.revenue_month, monthly_revenue: row.monthly_revenue,
+  })), [{ stock_id: '5347', revenue_month: '11508', monthly_revenue: '12345' }]);
 });
 
 test('canonicalizes current TPEx OpenAPI valuation rows for the requested ROC session', async () => {

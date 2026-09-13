@@ -71,6 +71,10 @@ export type TaiwanProviderOptions = {
   now?: () => Date;
 };
 
+// Queue identities include this value. A provider URL/parser change must create
+// a new immutable attempt instead of silently reusing an earlier terminal job.
+export const TAIWAN_DATA_PROVIDER_CONTRACT_VERSION = 'taiwan-data-provider-v6' as const;
+
 const OFFICIAL_TIMEOUT_MS = 8_000;
 const FINMIND_TIMEOUT_MS = 12_000;
 const MAX_RESPONSE_BYTES = 2_000_000;
@@ -130,9 +134,8 @@ export function officialTaiwanDataUrl(input: TaiwanProviderInput): string | null
     if (input.dataset === 'daily_price' && symbol) return `https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock?code=${symbol}&date=${encodeURIComponent(`${date.slice(0, 4)}/${date.slice(4, 6)}/01`)}&response=json`;
     if (input.dataset === 'daily_valuation') return 'https://www.tpex.org.tw/openapi/v1/tpex_mainboard_peratio_analysis';
     if (input.dataset === 'monthly_revenue') return 'https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap05_O';
-    const slashDate = `${date.slice(0, 4)}/${date.slice(4, 6)}/${date.slice(6, 8)}`;
-    if (input.dataset === 'institutional_flow') return `https://www.tpex.org.tw/www/zh-tw/3insti/dailyTrade?date=${encodeURIComponent(slashDate)}&response=json`;
-    if (input.dataset === 'margin_short') return `https://www.tpex.org.tw/www/zh-tw/marginTrading/margin_balance?date=${encodeURIComponent(slashDate)}&response=json`;
+    if (input.dataset === 'institutional_flow') return 'https://www.tpex.org.tw/openapi/v1/tpex_3insti_daily_trading';
+    if (input.dataset === 'margin_short') return 'https://www.tpex.org.tw/openapi/v1/tpex_mainboard_margin_balance';
     if (input.dataset === 'market_index') return 'https://www.tpex.org.tw/openapi/v1/tpex_daily_trading_index';
   }
   return null;
@@ -222,7 +225,8 @@ function canonicalizePayload(payload: unknown, provider: TaiwanProvider, input: 
   // instead of relying on the original top-level container.
   if (provider === 'tpex'
     && rows.every((row) => row && typeof row === 'object' && !Array.isArray(row))) {
-    const datedRows = (rows as Record<string, unknown>[])
+    const objectRows = rows as Record<string, unknown>[];
+    const datedRows = objectRows
       .filter((row) => normalizedSessionDate(row.Date ?? row.date) === expected);
     if (input.dataset === 'daily_valuation') {
       const records = datedRows
@@ -246,6 +250,29 @@ function canonicalizePayload(payload: unknown, provider: TaiwanProvider, input: 
       return records.length > 0
         ? { records, detail: null }
         : { records: null, detail: datedRows.length > 0 ? 'official_fields_unrecognized' : 'expected_session_missing' };
+    }
+    if (input.dataset === 'institutional_flow' || input.dataset === 'margin_short') {
+      const records = datedRows
+        .map((row) => ({ ...row, date: expected, stock_id: String(row.SecuritiesCompanyCode || '') }))
+        .filter((row) => /^\d{4}$/u.test(row.stock_id));
+      return records.length > 0
+        ? { records, detail: null }
+        : { records: null, detail: datedRows.length > 0 ? 'official_fields_unrecognized' : 'expected_session_missing' };
+    }
+    if (input.dataset === 'monthly_revenue') {
+      const records = objectRows
+        .map((row) => ({
+          ...row,
+          stock_id: String(row['公司代號'] || ''),
+          revenue_month: String(row['資料年月'] || ''),
+          monthly_revenue: canonicalNumericOrNull(row['營業收入-當月營收']),
+        }))
+        .filter((row) => /^\d{4}$/u.test(row.stock_id)
+          && /^\d{5}$/u.test(row.revenue_month)
+          && row.monthly_revenue !== null);
+      return records.length > 0
+        ? { records, detail: null }
+        : { records: null, detail: 'official_fields_unrecognized' };
     }
   }
   if (provider === 'finmind') {

@@ -8,6 +8,7 @@ const refreshRoute = readFileSync(new URL('../web/src/app/api/internal/taiwan-da
 const drainRoute = readFileSync(new URL('../web/src/app/api/internal/taiwan-data-queue-drain/route.ts', import.meta.url), 'utf8');
 const candidateRefresh = readFileSync(new URL('../web/src/lib/taiwan-candidate-refresh.ts', import.meta.url), 'utf8');
 const candidateQueueMigration = readFileSync(new URL('../migrations/20260911_04_taiwan_candidate_refresh_queue.sql', import.meta.url), 'utf8');
+const providerContractMigration = readFileSync(new URL('../migrations/20260913_taiwan_provider_contract_v6.sql', import.meta.url), 'utf8');
 const finmindVault = readFileSync(new URL('../web/src/lib/finmind-vault.ts', import.meta.url), 'utf8');
 const financialDrainRoute = readFileSync(new URL('../web/src/app/api/internal/candidate-financial-queue-drain/route.ts', import.meta.url), 'utf8');
 const financialValidateRoute = readFileSync(new URL('../web/src/app/api/internal/official-financial-validate/route.ts', import.meta.url), 'utf8');
@@ -52,9 +53,10 @@ test('VPS-only authenticated routes queue and drain the durable provider plane',
   // Approved v6 queue repair delegates bounded work without moving the writer
   // boundary. The batch RPC still enqueues through the durable v5 provider plane.
   assert.match(refreshRoute, /await enqueueTaiwanRefreshScope\(writer\.supabase/u);
-  assert.match(candidateRefresh, /register_taiwan_data_refresh_scope_v6/u);
+  assert.match(candidateRefresh, /register_taiwan_data_refresh_scope_v7/u);
+  assert.match(candidateRefresh, /TAIWAN_DATA_PROVIDER_CONTRACT_VERSION/u);
   assert.match(candidateRefresh, /enqueue_taiwan_data_refresh_batch_v6/u);
-  assert.ok(candidateRefresh.indexOf("client.rpc('register_taiwan_data_refresh_scope_v6'")
+  assert.ok(candidateRefresh.indexOf("client.rpc('register_taiwan_data_refresh_scope_v7'")
     < candidateRefresh.indexOf("client.rpc('enqueue_taiwan_data_refresh_batch_v6'"));
   assert.match(candidateQueueMigration, /v_id:=public\.enqueue_taiwan_data_refresh_v5/u);
   assert.match(drainRoute, /claim_taiwan_data_refresh_jobs_v6/u);
@@ -150,14 +152,21 @@ test('candidate queue completeness retains missing work and cannot certify a sin
   assert.match(candidateRefresh, /\['failed', 'queued', 'running', 'missing', 'retrying'\]\.every\(\(key\) => row\[key\] === 0\)/u);
 });
 
-test('terminal individual-price gaps permit isolated research but never claim complete data', () => {
-  // Approved candidate research acceptance: failures are isolated per stock.
-  // Only a settled per-stock price failure is noncritical; pending/missing work
-  // or any aggregate failure still blocks the next research step.
-  assert.match(candidateQueueMigration, /dataset='daily_price' AND symbol IS NOT NULL\) AS "failedCandidate"/u);
-  assert.match(candidateQueueMigration, /\(dataset<>'daily_price' OR symbol IS NULL\)\) AS "failedCritical"/u);
-  assert.match(candidateQueueMigration, /'settled',expected>0 AND completed\+failed=expected/u);
-  assert.match(candidateQueueMigration, /'researchReady',expected>0 AND completed\+failed=expected AND "failedCritical"=0/u);
+test('a provider contract generation replaces the active scope without mutating terminal audit rows', () => {
+  assert.match(runtime, /schema: 'taiwan-data-refresh-queue-v6'/u);
+  assert.match(runtime, /providerContractVersion: TAIWAN_DATA_PROVIDER_CONTRACT_VERSION/u);
+  assert.match(providerContractMigration, /ADD COLUMN IF NOT EXISTS contract_version/u);
+  assert.match(providerContractMigration, /CREATE OR REPLACE FUNCTION public\.register_taiwan_data_refresh_scope_v7/u);
+  assert.match(providerContractMigration, /IF v_contract IS DISTINCT FROM p_contract_version/u);
+  assert.match(providerContractMigration, /unnest\(p_queue_keys\)/u);
+  assert.doesNotMatch(providerContractMigration, /DELETE FROM public\.taiwan_data_refresh_queue_v5|UPDATE public\.taiwan_data_refresh_queue_v5/u);
+});
+
+test('company data gaps permit isolated research while market-regime evidence remains critical', () => {
+  assert.match(providerContractMigration, /dataset NOT IN \('market_index','institutional_flow','stock_master','trading_calendar'\)\) AS "failedCandidate"/u);
+  assert.match(providerContractMigration, /dataset IN \('market_index','institutional_flow','stock_master','trading_calendar'\)\) AS "failedCritical"/u);
+  assert.match(providerContractMigration, /'settled',expected>0 AND completed\+failed=expected/u);
+  assert.match(providerContractMigration, /'researchReady',expected>0 AND completed\+failed=expected AND "failedCritical"=0/u);
   assert.match(candidateRefresh, /row\.expected === Number\(row\.completed\) \+ Number\(row\.failed\)/u);
   assert.match(candidateRefresh, /row\.failed === row\.failedCandidate && row\.failedCritical === 0/u);
   assert.match(candidateRefresh, /row\.settled === true && row\.researchReady === true/u);

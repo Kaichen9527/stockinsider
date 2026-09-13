@@ -55,6 +55,8 @@ test('Taiwan candidate scope, paging, publication and concurrent fair claims in 
     sql(baseline.slice(baseline.indexOf('CREATE OR REPLACE FUNCTION public.enqueue_taiwan_data_refresh_v5'), baseline.indexOf('END $enqueue$;') + 'END $enqueue$;'.length));
     const migration = fs.readFileSync(new URL('../migrations/20260911_04_taiwan_candidate_refresh_queue.sql', import.meta.url), 'utf8');
     sql(migration); sql(migration);
+    const providerContractMigration = fs.readFileSync(new URL('../migrations/20260913_taiwan_provider_contract_v6.sql', import.meta.url), 'utf8');
+    sql(providerContractMigration); sql(providerContractMigration);
     sql(`INSERT INTO stocks(symbol,market) SELECT n::text,'TW' FROM generate_series(1000,1699) n;
       INSERT INTO stocks(symbol,market) SELECT n::text,'TW' FROM generate_series(9000,9019) n;
       INSERT INTO stock_instruments_v3(stock_id,symbol,exchange,instrument_type,listing_status,recorded_at,source_timestamp,valid_from)
@@ -113,7 +115,8 @@ test('Taiwan candidate scope, paging, publication and concurrent fair claims in 
     const keys = Array.from({ length: 700 }, (_, index) => (index + 1).toString(16).padStart(64, '0'));
     const quote = value => `'${value.replaceAll("'", "''")}'`;
     const keyArray = items => `ARRAY[${items.map(quote).join(',')}]::text[]`;
-    const register = items => `SELECT register_taiwan_data_refresh_scope_v6(${session(day)},'final',${keyArray(items)},${at});`;
+    const register = items => `SELECT register_taiwan_data_refresh_scope_v7(${session(day)},'final',${keyArray(items)},${at},'taiwan-data-provider-v6');`;
+    assert.throws(() => sql(`SELECT register_taiwan_data_refresh_scope_v7(${session(day)},'final',${keyArray(keys.slice(0, 1))},${at},NULL);`), /invalid_taiwan_refresh_scope/u);
     await Promise.all([parallelSql(register(keys.slice(0, 400))), parallelSql(register(keys.slice(300)))]);
     const progress = () => json(`SET ROLE service_role; SELECT read_taiwan_data_refresh_progress_v6(${session(day)},'final');`);
     assert.equal(progress().expected, 700); assert.equal(progress().missing, 700); assert.equal(progress().ready, false);
@@ -164,6 +167,11 @@ test('Taiwan candidate scope, paging, publication and concurrent fair claims in 
     assert.equal(Number(sql(`SELECT dataset_completeness_pct FROM taiwan_data_publication_metadata_v5 WHERE session_date=${session(day)} AND publication_phase='final'`)), 99.86,
       'scope growth invalidates stored complete metadata before any new enqueue');
 
+    const replacement = Array.from({ length: 2 }, (_, index) => String(800 + index).padStart(64, '0'));
+    assert.equal(json(`SELECT register_taiwan_data_refresh_scope_v7(${session(day)},'final',${keyArray(replacement)},${at},'taiwan-data-provider-v7')`).expected, 2);
+    assert.equal(progress().expected, 2, 'a new provider generation replaces stale terminal scope keys');
+    assert.equal(progress().missing, 2);
+
     // A legacy writer without a registered scope still counts its whole phase.
     sql(`INSERT INTO taiwan_data_refresh_queue_v5(queue_key,dataset,symbol,exchange,refresh_phase,requested_session_date)
       VALUES(repeat('b',64),'daily_price','9990','TWSE','preliminary',${session(day)}),
@@ -199,6 +207,7 @@ test('Taiwan candidate scope, paging, publication and concurrent fair claims in 
     const signatures = [
       'read_taiwan_data_candidate_universe_v6(timestamptz,text,integer)', 'read_taiwan_data_candidate_universe_v5(integer)',
       'register_taiwan_data_refresh_scope_v6(date,text,text[],timestamptz)', 'enqueue_taiwan_data_refresh_batch_v6(jsonb,text,date,timestamptz)',
+      'register_taiwan_data_refresh_scope_v7(date,text,text[],timestamptz,text)',
       'read_taiwan_data_refresh_progress_v6(date,text)', 'record_taiwan_data_publication_metadata_v5(date,text,timestamptz,jsonb)',
       'claim_taiwan_data_refresh_jobs_v6(integer,text,timestamptz,timestamptz,date,text)', 'claim_taiwan_data_refresh_jobs_v5(integer,text,timestamptz,timestamptz)',
     ];

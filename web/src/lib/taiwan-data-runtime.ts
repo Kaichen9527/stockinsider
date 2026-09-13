@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { getSupabaseServerClient } from './supabase-server.ts';
-import type { TaiwanDataset, TaiwanExchange, TaiwanRefreshPhase } from './taiwan-data-provider.ts';
+import { TAIWAN_DATA_PROVIDER_CONTRACT_VERSION, type TaiwanDataset, type TaiwanExchange, type TaiwanRefreshPhase } from './taiwan-data-provider.ts';
 
 export type TaiwanQueueRequest = {
   datasets: TaiwanDataset[];
@@ -16,7 +16,11 @@ function taipeiDate() {
 }
 
 export function taiwanRefreshQueueKey(input: { dataset: TaiwanDataset; symbol: string | null; exchange: TaiwanExchange; phase: TaiwanRefreshPhase; sessionDate: string }) {
-  return createHash('sha256').update(JSON.stringify({ schema: 'taiwan-data-refresh-queue-v5', ...input })).digest('hex');
+  return createHash('sha256').update(JSON.stringify({
+    schema: 'taiwan-data-refresh-queue-v6',
+    providerContractVersion: TAIWAN_DATA_PROVIDER_CONTRACT_VERSION,
+    ...input,
+  })).digest('hex');
 }
 
 export function parseTaiwanQueueRequest(value: unknown): TaiwanQueueRequest | null {
