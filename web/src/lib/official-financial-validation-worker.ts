@@ -127,9 +127,17 @@ export async function validatePendingOfficialFinancials(stockIds: string[], depe
         }
         const prior = latestTrustedReceipt.get(String(fact.fact_id));
         const priorStatus = (prior?.effective_validation as OfficialValidationRow | null)?.validation_status;
-        if (prior?.input_hash === receipt.inputHash && priorStatus === receipt.status) {
-          if (receipt.status === 'rejected') { counts.unchangedRejected++; continue; }
+        if (prior?.input_hash === receipt.inputHash) {
+          // The SQL authority boundary can reject an otherwise locally valid
+          // fact (for example, because another persisted row conflicts).  Its
+          // effective terminal state is the authoritative result for this
+          // exact evidence hash.  Re-submitting the same hash cannot change
+          // that result and only creates duplicate receipts on every drain.
+          // A changed fact, peer set, provenance record, validator version or
+          // accounting policy changes the hash and therefore re-enters RPC.
+          if (priorStatus === 'rejected') { counts.unchangedRejected++; continue; }
           if (fact.validation_status === 'validated'
+            && priorStatus === receipt.status
             && fact.schema_valid === true && fact.unit_valid === true && fact.point_in_time_valid === true
             && fact.consistency_valid === true && acceptedHashes.has(`${fact.fact_id}:${receipt.inputHash}`)) {
             counts.unchanged++; continue;
