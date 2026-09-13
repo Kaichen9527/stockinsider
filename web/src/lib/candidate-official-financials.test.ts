@@ -170,6 +170,23 @@ test('TPEx range fallback rejects incomplete or contradictory range metadata', a
   }), /tpex_transport_exhausted:tpex_range_contract_invalid/u);
 });
 
+test('TPEx financial acquisition uses the bounded fixed-host transport after both undici paths fail', async () => {
+  const payload = '[{"公司代號":"6488"}]';
+  let boundedCalls = 0;
+  const result = await fetchTpexOfficialPayload('https://www.tpex.org.tw/openapi/v1/example', {
+    fetchImpl: async () => { throw new Error('terminated'); },
+    boundedFetchImpl: async (_url, options) => {
+      boundedCalls += 1;
+      assert.equal((options?.headers as Record<string, string>).Accept, 'application/json');
+      return new Response(payload, { status: 200, headers: { 'content-type': 'application/json' } });
+    },
+    sleep: async () => undefined,
+  });
+  assert.equal(boundedCalls, 1);
+  assert.deepEqual(JSON.parse(result.body), [{ 公司代號: '6488' }]);
+  assert.equal(result.responseBytes, Buffer.byteLength(payload, 'utf8'));
+});
+
 test('a MOPS acquisition job persists only its requested period and leaves comparative contexts to their own job', () => {
   const fact = (periodEnd: string) => ({
     stockId: '10000000-0000-4000-8000-000000000001', symbol: '2330', factKey: 'quarterly_revenue',

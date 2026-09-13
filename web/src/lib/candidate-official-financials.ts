@@ -5,6 +5,7 @@ import { classifyFinancialResponse, issuerIrDocumentQueueKey, parseTpexFinancial
 import { fetchFinMindFinancialFallback, finMindFinancialErrorDetail } from './finmind-financial-fallback.ts';
 import { requiredAcquisitionPeriods, type FinancialFieldGap } from './candidate-financial-work-plan.ts';
 import { latestDueFinancialQuarter } from './candidate-financial-policy.ts';
+import { boundedOfficialCurlFetch } from './bounded-official-curl-fetch.ts';
 
 const MOPS_INLINE_URL = 'https://mopsov.twse.com.tw/server-java/t164sb01';
 const MOPS_DOWNLOAD_URL = 'https://mopsov.twse.com.tw/server-java/FileDownLoad';
@@ -456,9 +457,15 @@ async function fetchTpexOfficialPayloadByRange(sourceUrl: string, fetchImpl: typ
 
 export async function fetchTpexOfficialPayload(sourceUrl: string, dependencies: {
   fetchImpl?: typeof fetch;
+  boundedFetchImpl?: typeof fetch;
   sleep?: (milliseconds: number) => Promise<void>;
 } = {}) {
   const fetchImpl = dependencies.fetchImpl ?? fetch;
+  // Keep injected fetch tests hermetic. Production gets the same fixed-host,
+  // credential-free curl TLS transport used by the market-data plane when
+  // undici and its Range fallback are both truncated by the TPEx edge.
+  const boundedFetchImpl = dependencies.boundedFetchImpl
+    ?? (dependencies.fetchImpl ? null : boundedOfficialCurlFetch);
   const sleep = dependencies.sleep ?? ((milliseconds: number) => new Promise((resolve) => setTimeout(resolve, milliseconds)));
   let lastError: unknown = null;
   for (let attempt = 0; attempt < TPEX_FETCH_ATTEMPTS; attempt += 1) {
@@ -483,6 +490,18 @@ export async function fetchTpexOfficialPayload(sourceUrl: string, dependencies: 
   }
   try { return await fetchTpexOfficialPayloadByRange(sourceUrl, fetchImpl, sleep); }
   catch (rangeError) {
+    if (boundedFetchImpl) {
+      try {
+        const response = await boundedFetchImpl(sourceUrl, { headers: { Accept: 'application/json' },
+          redirect: 'error', signal: AbortSignal.timeout(20_000) });
+        const complete = await readBoundedTpexBody(response);
+        return { response, body: new TextDecoder('utf-8', { fatal: true }).decode(complete.bytes),
+          responseBytes: complete.responseBytes };
+      } catch (boundedError) {
+        throw new Error(`tpex_transport_exhausted:${boundedError instanceof Error
+          ? boundedError.message : String(boundedError)}`);
+      }
+    }
     throw new Error(`tpex_transport_exhausted:${rangeError instanceof Error ? rangeError.message
       : lastError instanceof Error ? lastError.message : String(rangeError)}`);
   }
