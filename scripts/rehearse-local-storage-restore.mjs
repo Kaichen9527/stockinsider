@@ -5,7 +5,7 @@ import { constants, createReadStream, createWriteStream } from 'node:fs';
 import { createDecipheriv, createHash, randomUUID } from 'node:crypto';
 import { Transform } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
-import { chmod, lstat, link, mkdir, mkdtemp, open, readFile, readdir, realpath, rm, unlink, writeFile } from 'node:fs/promises';
+import { chmod, lstat, link, mkdir, mkdtemp, open, readFile, realpath, rm, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadLocalBackupKey } from './local-backup-file-key.mjs';
@@ -13,7 +13,7 @@ import { BACKUP_ENVELOPE_LAYOUT as layout } from './local-backup-envelope.mjs';
 
 const PROJECTS = new Set(['mgqpxfbdhmiygdytgswi', 'stockinsider-contabo']);
 const SHA256 = /^[a-f0-9]{64}$/u;
-const STORAGE_MANIFEST = /^storage-[a-zA-Z0-9-]+[.]manifest[.]json$/u;
+const STORAGE_MEMBER = /^(storage-[a-zA-Z0-9-]+)[.]sib$/u;
 const MAX_JSON_BYTES = 16 * 1024 * 1024;
 const MAX_OBJECT_BYTES = 128 * 1024 * 1024;
 
@@ -135,17 +135,19 @@ export async function rehearseLocalStorageRestore({ inventoryPath, keyDirectory,
   if (inventory?.inventoryStable !== true || inventory?.restoreVerified !== false
     || !Number.isSafeInteger(inventory?.objects) || inventory.objects < 1 || inventory.objects > 100
     || !Array.isArray(inventory.receipts) || inventory.receipts.length !== inventory.objects
+    || inventory.receipts.some(item => !STORAGE_MEMBER.test(String(item?.filename || '')))
+    || new Set(inventory.receipts.map(item => item.filename)).size !== inventory.objects
     || new Set(inventory.receipts.map(item => item.contextSha256)).size !== inventory.objects) {
     throw new Error('storage_inventory_invalid');
   }
   const byContext = new Map();
-  for (const name of await readdir(backupDirectory)) {
-    if (!STORAGE_MANIFEST.test(name)) continue;
-    const outer = await readPrivateJson(path.join(backupDirectory, name));
-    if (inventory.receipts.some(item => item.contextSha256 === outer?.contextSha256)) {
-      if (byContext.has(outer.contextSha256)) throw new Error('storage_manifest_context_ambiguous');
-      byContext.set(outer.contextSha256, outer);
+  for (const entry of inventory.receipts) {
+    const match = STORAGE_MEMBER.exec(entry.filename);
+    const outer = await readPrivateJson(path.join(backupDirectory, `${match[1]}.manifest.json`));
+    if (outer?.contextSha256 !== entry.contextSha256 || byContext.has(entry.contextSha256)) {
+      throw new Error('storage_recovery_manifest_invalid');
     }
+    byContext.set(entry.contextSha256, outer);
   }
   if (byContext.size !== inventory.objects) throw new Error('storage_manifest_missing');
   const scratchBase = await realpath(scratchParent);

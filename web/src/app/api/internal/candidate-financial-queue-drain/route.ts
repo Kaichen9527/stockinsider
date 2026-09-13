@@ -3,15 +3,35 @@ import { refreshCandidateOfficialFinancials, type CandidateOfficialFinancial } f
 import { requireExactInternalBearer } from '@/lib/internal-auth';
 import { requireActiveVpsWriter, resolveLatestCompletedTaiwanSession } from '@/lib/taiwan-data-runtime';
 import { validatePendingOfficialFinancials } from '@/lib/official-financial-validation-worker';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 const BODY_LIMIT = 10_000;
 const MAX_DRAIN_LIMIT = 20;
-const JOB_LOOKAHEAD_MULTIPLIER = 8;
+const JOB_PAGE_SIZE = 1_000;
+const MAX_JOB_SCAN_ROWS = 10_000;
 
 function parseLimit(value: unknown) {
   if (!value || typeof value !== 'object' || Array.isArray(value) || Object.keys(value as Record<string, unknown>).sort().join(',') !== 'limit') return null;
   const limit = (value as Record<string, unknown>).limit;
   return Number.isInteger(limit) && Number(limit) >= 1 && Number(limit) <= MAX_DRAIN_LIMIT ? Number(limit) : null;
+}
+
+async function readDueFinancialJobs(client: SupabaseClient, now: string) {
+  const rows: Array<{ stock_id: unknown; exchange: unknown; created_at: unknown }> = [];
+  for (let offset = 0; offset < MAX_JOB_SCAN_ROWS; offset += JOB_PAGE_SIZE) {
+    const page = await client.from('candidate_financial_acquisition_jobs_v4')
+      .select('stock_id,exchange,created_at')
+      .eq('status', 'queued')
+      .neq('endpoint_key', 'issuer_ir_document')
+      .or(`next_attempt_at.is.null,next_attempt_at.lte.${now}`)
+      .order('created_at', { ascending: true })
+      .order('job_id', { ascending: true })
+      .range(offset, offset + JOB_PAGE_SIZE - 1);
+    if (page.error) throw new Error(`candidate_financial_backlog_read_failed:${page.error.message}`);
+    rows.push(...(page.data || []));
+    if ((page.data || []).length < JOB_PAGE_SIZE) return rows;
+  }
+  throw new Error('candidate_financial_backlog_scan_limit_exceeded');
 }
 
 export async function POST(request: Request) {
@@ -27,17 +47,14 @@ export async function POST(request: Request) {
   if (!writer.ok) return NextResponse.json({ ok: false, error: writer.error }, { status: 409 });
   const now = new Date().toISOString();
   const sessionDate = await resolveLatestCompletedTaiwanSession(writer.supabase, now.slice(0, 10));
-  const jobs = await writer.supabase.from('candidate_financial_acquisition_jobs_v4')
-    .select('stock_id,exchange,created_at')
-    .eq('status', 'queued')
-    .neq('endpoint_key', 'issuer_ir_document')
-    .or(`next_attempt_at.is.null,next_attempt_at.lte.${now}`)
-    .order('created_at', { ascending: true })
-    .limit(limit * JOB_LOOKAHEAD_MULTIPLIER);
-  if (jobs.error) return NextResponse.json({ ok: false, error: `candidate_financial_backlog_read_failed:${jobs.error.message}` }, { status: 500 });
+  let jobs: Awaited<ReturnType<typeof readDueFinancialJobs>>;
+  try { jobs = await readDueFinancialJobs(writer.supabase, now); }
+  catch (error) {
+    return NextResponse.json({ ok: false, error: error instanceof Error ? error.message : 'candidate_financial_backlog_read_failed' }, { status: 500 });
+  }
 
   const exchangeByStock = new Map<string, CandidateOfficialFinancial['exchange']>();
-  for (const row of jobs.data || []) {
+  for (const row of jobs) {
     const stockId = String(row.stock_id || '');
     const exchange = String(row.exchange || '');
     if (stockId && (exchange === 'TWSE' || exchange === 'TPEX')) exchangeByStock.set(stockId, exchange);

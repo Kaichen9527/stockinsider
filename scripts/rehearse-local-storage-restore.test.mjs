@@ -57,6 +57,7 @@ test('every storage member restores into a verified private hash-addressed layou
 
 test('Contabo private artifacts restore into the same verified hash layout', async () => {
   const item = await fixture(true);
+  await writeFile(path.join(item.directory, 'storage-unrelated-old.manifest.json'), '{not-json', { mode: 0o600 });
   const result = await rehearseLocalStorageRestore({ inventoryPath: item.inventoryPath,
     keyDirectory: item.keys, receiptDirectory: item.directory, scratchParent: item.scratch });
   assert.equal(result.objectsRestored, 2);
