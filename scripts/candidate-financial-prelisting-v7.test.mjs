@@ -25,6 +25,14 @@ test('both enqueue and existing backlog paths use official listing authority', (
   assert.match(research, /listedOn: listedOnByStock/u);
 });
 
+test('financial drain scans the complete due backlog instead of starving jobs behind a fixed lookahead', () => {
+  assert.match(drain, /const JOB_PAGE_SIZE = 1_000/u);
+  assert.match(drain, /const MAX_JOB_SCAN_ROWS = 10_000/u);
+  assert.match(drain, /\.range\(offset, offset \+ JOB_PAGE_SIZE - 1\)/u);
+  assert.match(drain, /\.order\('job_id', \{ ascending: true \}\)/u);
+  assert.doesNotMatch(drain, /JOB_LOOKAHEAD_MULTIPLIER|\.limit\(limit \*/u);
+});
+
 test('TPEx transport retries bounded identity responses without accepting a partial body', () => {
   assert.match(financial, /const TPEX_FETCH_ATTEMPTS = 6/u);
   assert.match(financial, /'accept-encoding': 'identity', Connection: 'close'/u);
