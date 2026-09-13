@@ -63,6 +63,7 @@ install -o root -g root -m 0644 "$source_tmp" "$pgdg_source"
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get install --yes --no-install-recommends postgresql-17 postgresql-client-17 ca-certificates curl xz-utils
+"$repo_root/deployment/vps/install-tpex-ca-intermediate.sh"
 
 if ! getent passwd stockinsider >/dev/null; then
   echo "the existing StockInsider service account is missing" >&2
