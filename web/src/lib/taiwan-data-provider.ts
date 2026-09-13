@@ -73,11 +73,14 @@ export type TaiwanProviderOptions = {
 
 // Queue identities include this value. A provider URL/parser change must create
 // a new immutable attempt instead of silently reusing an earlier terminal job.
-export const TAIWAN_DATA_PROVIDER_CONTRACT_VERSION = 'taiwan-data-provider-v7' as const;
+export const TAIWAN_DATA_PROVIDER_CONTRACT_VERSION = 'taiwan-data-provider-v8' as const;
 
 const OFFICIAL_TIMEOUT_MS = 8_000;
 const FINMIND_TIMEOUT_MS = 12_000;
-const MAX_RESPONSE_BYTES = 2_000_000;
+// The official exchange-wide T86 response is currently a little over 2 MiB.
+// Keep a bounded ceiling, but leave enough room for that authoritative payload
+// so the VPS does not fall through to a less complete mirror solely by size.
+const MAX_RESPONSE_BYTES = 5_000_000;
 const FINMIND_DATA_URL = 'https://api.finmindtrade.com/api/v4/data';
 
 function sha256(value: string) {
@@ -122,8 +125,11 @@ export function officialTaiwanDataUrl(input: TaiwanProviderInput): string | null
     if (input.dataset === 'daily_valuation') return `https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_d?response=json&date=${date}&selectType=ALL`;
     if (input.dataset === 'monthly_revenue') return 'https://openapi.twse.com.tw/v1/opendata/t187ap05_L';
     if (input.dataset === 'financial_statement' && symbol) return `https://mopsov.twse.com.tw/server-java/t164sb01?step=1&CO_ID=${symbol}`;
-    if (input.dataset === 'institutional_flow') return `https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=${date}&selectType=ALLBUT0999`;
-    if (input.dataset === 'margin_short') return `https://www.twse.com.tw/rwd/zh/afterTrading/MI_MARGN?response=json&date=${date}&selectType=ALL`;
+    // The narrower ALLBUT0999 variant and the legacy afterTrading margin path
+    // are rejected by TWSE's overseas edge while these current RWD routes are
+    // served to the Contabo production address.
+    if (input.dataset === 'institutional_flow') return `https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=${date}&selectType=ALL`;
+    if (input.dataset === 'margin_short') return `https://www.twse.com.tw/rwd/zh/marginTrading/MI_MARGN?response=json&date=${date}&selectType=ALL`;
     // MI_INDEX?type=ALL is several megabytes and FMTQIK is blocked by TWSE's
     // edge security for the production VPS.  The official TAIEX history route
     // is bounded to one month and exposes the requested session's OHLC values.
@@ -189,18 +195,29 @@ function responseShapeIsUsable(payload: unknown, provider: TaiwanProvider, input
   return Array.isArray((object.tables as Record<string, unknown>[] | undefined)?.[0]?.data);
 }
 
-function payloadRows(payload: unknown, provider: TaiwanProvider) {
+function officialTableFor(payload: unknown, input: TaiwanProviderInput) {
+  const tables = (payload as Record<string, unknown>).tables as Record<string, unknown>[] | undefined;
+  if (!Array.isArray(tables)) return null;
+  if (input.dataset === 'margin_short' || input.dataset === 'institutional_flow') {
+    return tables.find((table) => Array.isArray(table.fields)
+      && table.fields.map((field) => String(field).replace(/\s+/gu, ''))
+        .some((field) => ['股票代號', '證券代號', '代號'].includes(field))) || tables[0] || null;
+  }
+  return tables[0] || null;
+}
+
+function payloadRows(payload: unknown, provider: TaiwanProvider, input: TaiwanProviderInput) {
   if (Array.isArray(payload)) return payload;
   const object = payload as Record<string, unknown>;
   if (Array.isArray(object.rows)) return object.rows;
   if (provider === 'finmind' || Array.isArray(object.data)) return object.data as unknown[];
-  return ((object.tables as Record<string, unknown>[] | undefined)?.[0]?.data || []) as unknown[];
+  return (officialTableFor(payload, input)?.data || []) as unknown[];
 }
 
-function fieldsFor(payload: unknown) {
+function fieldsFor(payload: unknown, input: TaiwanProviderInput) {
   const object = payload as Record<string, unknown>;
   if (Array.isArray(object.fields)) return object.fields.map(String);
-  const fields = (object.tables as Record<string, unknown>[] | undefined)?.[0]?.fields;
+  const fields = officialTableFor(payload, input)?.fields;
   return Array.isArray(fields) ? fields.map(String) : [];
 }
 
@@ -221,8 +238,8 @@ function canonicalNumericOrNull(value: unknown) {
 }
 
 function canonicalizePayload(payload: unknown, provider: TaiwanProvider, input: TaiwanProviderInput) {
-  const rows = payloadRows(payload, provider);
-  const fields = fieldsFor(payload);
+  const rows = payloadRows(payload, provider, input);
+  const fields = fieldsFor(payload, input);
   const normalizedFields = fields.map((field) => field.replace(/\s+/gu, ''));
   const expected = input.sessionDate || new Date().toISOString().slice(0, 10);
   if (rows.length === 0) return { records: [] as Record<string, unknown>[], detail: null };
@@ -290,11 +307,15 @@ function canonicalizePayload(payload: unknown, provider: TaiwanProvider, input: 
     return dated.length > 0 ? { records: dated, detail: null } : { records: null, detail: 'expected_session_missing' };
   }
   const requiresFields: Partial<Record<TaiwanDataset, string[]>> = {
-    daily_price: ['日期'], daily_valuation: ['本益比'], institutional_flow: ['證券代號'], margin_short: ['證券代號'],
+    daily_price: ['日期'], daily_valuation: ['本益比'],
     market_index: input.exchange === 'TWSE' ? ['收盤指數'] : ['日期'],
   };
   const required = requiresFields[input.dataset] || [];
   if (required.some((name) => !normalizedFields.includes(name))) return { records: null, detail: 'official_fields_unrecognized' };
+  if ((input.dataset === 'institutional_flow' || input.dataset === 'margin_short')
+    && !normalizedFields.some((field) => ['股票代號', '證券代號', '代號'].includes(field))) {
+    return { records: null, detail: 'official_fields_unrecognized' };
+  }
   if (!rows.every(Array.isArray) && !Array.isArray(payload)) return { records: null, detail: 'official_rows_unrecognized' };
   const dateIndex = normalizedFields.indexOf('日期');
   const dateRequired = ['daily_price', 'daily_valuation', 'institutional_flow', 'margin_short', 'market_index'].includes(input.dataset);
