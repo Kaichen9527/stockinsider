@@ -3,8 +3,10 @@ import { promisify } from 'node:util';
 
 const execFileAsync = promisify(execFile);
 const MAX_BODY_BYTES = 5_000_000;
-const MAX_OUTPUT_BYTES = MAX_BODY_BYTES + 1_000;
+const RANGE_CHUNK_BYTES = 200_000;
+const MAX_OUTPUT_BYTES = RANGE_CHUNK_BYTES + 1_000;
 const STATUS_MARKER = '\n__STOCKINSIDER_STATUS__:';
+const STATUS_MARKER_BUFFER = Buffer.from(STATUS_MARKER);
 const ALLOWED_HOSTS = new Set(['www.tpex.org.tw']);
 
 export function parseBoundedOfficialCurlOutput(output: string) {
@@ -14,6 +16,16 @@ export function parseBoundedOfficialCurlOutput(output: string) {
   if (!/^\d{3}$/u.test(statusText)) throw new Error('official_curl_status_invalid');
   const body = output.slice(0, marker);
   if (Buffer.byteLength(body, 'utf8') > MAX_BODY_BYTES) throw new Error('response_too_large');
+  return { body, status: Number(statusText) };
+}
+
+function parseBoundedOfficialCurlBuffer(output: Buffer) {
+  const marker = output.lastIndexOf(STATUS_MARKER_BUFFER);
+  if (marker < 0) throw new Error('official_curl_status_missing');
+  const statusText = output.subarray(marker + STATUS_MARKER_BUFFER.length).toString('ascii');
+  if (!/^\d{3}$/u.test(statusText)) throw new Error('official_curl_status_invalid');
+  const body = output.subarray(0, marker);
+  if (body.byteLength > RANGE_CHUNK_BYTES) throw new Error('response_too_large');
   return { body, status: Number(statusText) };
 }
 
@@ -33,18 +45,42 @@ export async function boundedOfficialCurlFetch(input: string, init: RequestInit 
   if (headers.has('authorization') || headers.has('cookie')) throw new Error('official_curl_credentials_not_allowed');
   if (init.body) throw new Error('official_curl_body_not_allowed');
   try {
-    const result = await execFileAsync('/usr/bin/curl', [
-      '--silent', '--show-error', '--location', '--http1.1',
-      '--proto', '=https', '--proto-redir', '=https',
-      '--connect-timeout', '5', '--max-time', '8', '--max-filesize', String(MAX_BODY_BYTES),
-      '--header', 'Accept: application/json',
-      '--header', 'User-Agent: StockInsider/taiwan-data-provider-v1',
-      '--write-out', `${STATUS_MARKER}%{http_code}`,
-      url.toString(),
-    ], { encoding: 'utf8', maxBuffer: MAX_OUTPUT_BYTES, timeout: 10_000 });
-    const parsed = parseBoundedOfficialCurlOutput(result.stdout);
-    return new Response(parsed.body, {
-      status: parsed.status,
+    const chunks: Buffer[] = [];
+    let offset = 0;
+    let responseStatus = 200;
+    while (offset < MAX_BODY_BYTES) {
+      if (init.signal?.aborted) throw new DOMException('request aborted', 'AbortError');
+      const end = Math.min(offset + RANGE_CHUNK_BYTES - 1, MAX_BODY_BYTES - 1);
+      const result = await execFileAsync('/usr/bin/curl', [
+        '--silent', '--show-error', '--location', '--http1.1',
+        '--proto', '=https', '--proto-redir', '=https',
+        '--connect-timeout', '5', '--max-time', '8', '--max-filesize', String(RANGE_CHUNK_BYTES),
+        '--range', `${offset}-${end}`,
+        '--header', 'Accept: application/json',
+        '--header', 'User-Agent: StockInsider/taiwan-data-provider-v1',
+        '--write-out', `${STATUS_MARKER}%{http_code}`,
+        url.toString(),
+      ], { encoding: 'buffer', maxBuffer: MAX_OUTPUT_BYTES, timeout: 10_000 });
+      const parsed = parseBoundedOfficialCurlBuffer(Buffer.from(result.stdout));
+      responseStatus = parsed.status;
+      if (responseStatus === 416 && chunks.length > 0) break;
+      if (responseStatus !== 200 && responseStatus !== 206) {
+        return new Response(parsed.body.toString('utf8'), {
+          status: responseStatus,
+          headers: { 'content-type': 'application/json; charset=utf-8' },
+        });
+      }
+      if (offset + parsed.body.byteLength > MAX_BODY_BYTES) throw new Error('response_too_large');
+      chunks.push(parsed.body);
+      offset += parsed.body.byteLength;
+      if (responseStatus === 200 || parsed.body.byteLength < RANGE_CHUNK_BYTES) break;
+      if (parsed.body.byteLength === 0) throw new Error('official_curl_range_empty');
+    }
+    if (offset >= MAX_BODY_BYTES && chunks.at(-1)?.byteLength === RANGE_CHUNK_BYTES) {
+      throw new Error('response_too_large');
+    }
+    return new Response(Buffer.concat(chunks).toString('utf8'), {
+      status: responseStatus === 206 ? 200 : responseStatus,
       headers: { 'content-type': 'application/json; charset=utf-8' },
     });
   } catch (error) {
