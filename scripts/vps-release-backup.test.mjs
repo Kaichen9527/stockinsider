@@ -8,7 +8,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { extractAndVerifyReleaseTar } from './vps-release-tar.mjs';
-import { validateReleaseExportInput, VPS_HOST } from './export-vps-release-backup.mjs';
+import { buildVpsReleaseBackupId, validateReleaseExportInput, VPS_HOST } from './export-vps-release-backup.mjs';
 import { writeEncryptedBackupArtifact } from './local-backup-artifact.mjs';
 import { verifyBackupChunks } from './local-backup-envelope.mjs';
 import { loadLocalBackupKey } from './local-backup-file-key.mjs';
@@ -124,6 +124,17 @@ test('host and release path are fixed and shell metacharacters are rejected', ()
     { host: VPS_HOST, releasePath: '/opt/other-admin-console-releases/20260803T153606Z' },
     { host: VPS_HOST, releasePath: '/' },
   ]) assert.throws(() => validateReleaseExportInput(input));
+});
+
+test('release backup filename remains inside the authenticated artifact limit', () => {
+  const id = buildVpsReleaseBackupId({ application: 'stockinsider-standalone',
+    release: '9551cb1663974bfb30e55d3b45d382e4defb3c07' },
+  '12345678-1234-1234-1234-123456789abc');
+  assert.match(`${id}.sib`, /^[a-zA-Z0-9][a-zA-Z0-9_-]{0,100}\.sib$/u);
+  assert.equal(id.includes('stockinsider-standalone'), true);
+  assert.equal(id.includes('9551cb1663974b'), true);
+  assert.throws(() => buildVpsReleaseBackupId({ application: 'bad/name', release: 'abc' },
+    '12345678-1234-1234-1234-123456789abc'));
 });
 
 test('remote helper redacts only the exact approved TaskBuddy external secret link', () => {

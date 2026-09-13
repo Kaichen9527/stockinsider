@@ -13,6 +13,14 @@ import { MAX_RELEASE_MANIFEST_BYTES, verifyReleaseTreeManifest } from './vps-rel
 import { VPS_HOST, validateReleaseExportInput } from './vps-release-identity.mjs';
 
 export { VPS_HOST, validateReleaseExportInput };
+export function buildVpsReleaseBackupId(identity, uuid = randomUUID()) {
+  if (!identity || !/^[A-Za-z0-9._-]+$/u.test(identity.application || '')
+    || !/^[A-Za-z0-9._-]+$/u.test(identity.release || '')
+    || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u.test(uuid)) {
+    throw new Error('release_backup_identity_invalid');
+  }
+  return `vps-release-${identity.application.slice(0, 24)}-${identity.release.slice(0, 16)}-${uuid}`;
+}
 const canonical = value => value && typeof value === 'object'
   ? Array.isArray(value) ? `[${value.map(canonical).join(',')}]`
     : `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${canonical(value[key])}`).join(',')}}`
@@ -85,7 +93,7 @@ export async function exportVpsReleaseBackup({ directory, keyDirectory, releaseP
       if (result.code !== 0 || result.signal || remoteFailure || !after
         || canonical(after) !== canonical(before)) throw new Error('remote_release_stream_failed_or_changed');
     }
-    const id = `vps-release-${identity.application}-${identity.release}-${randomUUID()}`;
+    const id = buildVpsReleaseBackupId(identity);
     const result = await writeEncryptedBackupArtifact({ directory, filename: `${id}.sib`,
       input: tarChunks(), key, contextSha256, maxPlaintextBytes: tarUpperBound(tree), timeoutMs: 3_600_000 });
     const receipt = { manifest, contextSha256, result, postTreeSha256: after.treeSha256,
