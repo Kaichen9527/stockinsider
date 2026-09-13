@@ -10,7 +10,7 @@ import { loadLocalBackupKey } from './local-backup-file-key.mjs';
 import { decryptSmallBackupPayload } from './local-backup-envelope.mjs';
 
 const [manifestPath, keyDirectory, host, releaseId] = process.argv.slice(2);
-const PROJECT = 'mgqpxfbdhmiygdytgswi';
+const PROJECTS = new Set(['mgqpxfbdhmiygdytgswi', 'stockinsider-contabo']);
 const expectedNames = ['stockinsider_finmind_api_token', 'threads_access_token'];
 const release = /^[0-9a-f]{40}$/u;
 const sha = /^[0-9a-f]{64}$/u;
@@ -29,7 +29,7 @@ try {
     throw new Error('provider_restore_manifest_not_private');
   }
   const outer = JSON.parse(await readFile(manifestPath, 'utf8'));
-  if (outer?.manifest?.schema !== 'stockinsider-provider-recovery-v1' || outer.manifest.project !== PROJECT
+  if (outer?.manifest?.schema !== 'stockinsider-provider-recovery-v1' || !PROJECTS.has(outer.manifest.project)
     || outer.manifest.credentialCount !== 2 || outer.manifest.productionRecoveryVerified !== false
     || !sha.test(outer.contextSha256 || '') || digest(JSON.stringify(outer.manifest)) !== outer.contextSha256
     || outer.result?.envelopeVerified !== true || !sha.test(outer.result?.plaintextSha256 || '')

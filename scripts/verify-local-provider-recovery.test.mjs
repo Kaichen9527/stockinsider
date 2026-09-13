@@ -10,7 +10,7 @@ import { verifyLocalProviderRecovery } from './verify-local-provider-recovery.mj
 
 const hash = value => createHash('sha256').update(value).digest('hex');
 
-async function fixture(mutate = value => value) {
+async function fixture(mutate = value => value, contabo = false) {
   const root = await realpath(await mkdtemp(path.join(os.tmpdir(), 'stockinsider-provider-verify-')));
   const directory = path.join(root, 'backup');
   const keyDirectory = path.join(root, 'keys');
@@ -18,10 +18,12 @@ async function fixture(mutate = value => value) {
     mkdir(directory, { mode: 0o700 }), mkdir(keyDirectory, { mode: 0o700 }),
   ]));
   const key = await loadLocalBackupKey(keyDirectory, { create: true });
-  const manifest = { schema: 'stockinsider-provider-recovery-v1', project: 'mgqpxfbdhmiygdytgswi',
+  const manifest = { schema: 'stockinsider-provider-recovery-v1',
+    project: contabo ? 'stockinsider-contabo' : 'mgqpxfbdhmiygdytgswi',
+    ...(contabo ? { source: 'contabo_encrypted_provider_store' } : {}),
     createdAt: '2026-09-12T00:00:00.000Z', credentialCount: 2,
     keyReference: 'private-local-file:aes256-v1', productionRecoveryVerified: false,
-    independentKeyEscrowVerified: false };
+    independentKeyEscrowVerified: contabo };
   const payload = mutate({ manifest, credentials: [
     { id: 'credential-one', name: 'threads_access_token', decrypted_secret: 't'.repeat(32),
       created_at: '2026-09-01T00:00:00Z', updated_at: '2026-09-01T00:00:00Z' },
@@ -48,6 +50,13 @@ test('provider recovery is authenticated and validated without exposing secrets'
   const receipt = JSON.parse(await readFile(path.join(item.directory, result.filename), 'utf8'));
   assert.equal(JSON.stringify(receipt).includes('t'.repeat(32)), false);
   assert.equal(JSON.stringify(receipt).includes('f'.repeat(32)), false);
+});
+
+test('portable Contabo provider recovery is independently escrowed and accepted', async () => {
+  const item = await fixture(value => value, true);
+  const result = await verifyLocalProviderRecovery({ ...item, receiptDirectory: item.directory });
+  assert.equal(result.credentialsDecryptedAndValidated, true);
+  assert.equal(result.credentialCount, 2);
 });
 
 test('provider recovery rejects unexpected credentials and non-private manifests', async () => {

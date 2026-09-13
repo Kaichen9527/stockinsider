@@ -10,7 +10,7 @@ import { rehearseLocalStorageRestore } from './rehearse-local-storage-restore.mj
 
 const digest = value => createHash('sha256').update(value).digest('hex');
 
-async function fixture() {
+async function fixture(contabo = false) {
   const root = await realpath(await mkdtemp(path.join(os.tmpdir(), 'stockinsider-storage-rehearse-')));
   const directory = path.join(root, 'backup');
   const keys = path.join(root, 'keys');
@@ -20,9 +20,13 @@ async function fixture() {
   const receipts = [];
   for (const [index, bytes] of [Buffer.from('%PDF one'), Buffer.from('<html>two</html>')].entries()) {
     const plaintextSha256 = digest(bytes);
-    const manifest = { schema: 'stockinsider-storage-export-v1', project: 'mgqpxfbdhmiygdytgswi',
-      createdAt: '2026-09-12T00:00:00Z', object: { id: `object-${index}`, bucket_id: 'candidate-financial-documents-v6',
-        name: `issuer/company/date/${plaintextSha256}`, metadata: { size: bytes.length } },
+    const manifest = { schema: contabo ? 'stockinsider-storage-export-v2' : 'stockinsider-storage-export-v1',
+      project: contabo ? 'stockinsider-contabo' : 'mgqpxfbdhmiygdytgswi',
+      ...(contabo ? { source: 'contabo_private_artifact_store' } : {}),
+      createdAt: '2026-09-12T00:00:00Z', object: { id: `object-${index}`,
+        bucket_id: contabo ? 'private-artifacts' : 'candidate-financial-documents-v6',
+        name: contabo ? `${plaintextSha256.slice(0, 2)}/${plaintextSha256}` : `issuer/company/date/${plaintextSha256}`,
+        metadata: { size: bytes.length, ...(contabo ? { sha256: plaintextSha256 } : {}) } },
       keyReference: 'private-local-file:aes256-v1', restoreVerified: false };
     const contextSha256 = digest(JSON.stringify(manifest));
     const filename = `storage-fixture-${index}.sib`;
@@ -49,6 +53,14 @@ test('every storage member restores into a verified private hash-addressed layou
   assert.equal(result.restoredPlaintextRetained, false);
   const receipt = JSON.parse(await readFile(path.join(item.directory, result.filename), 'utf8'));
   assert.equal(receipt.productionRestoreVerified, false);
+});
+
+test('Contabo private artifacts restore into the same verified hash layout', async () => {
+  const item = await fixture(true);
+  const result = await rehearseLocalStorageRestore({ inventoryPath: item.inventoryPath,
+    keyDirectory: item.keys, receiptDirectory: item.directory, scratchParent: item.scratch });
+  assert.equal(result.objectsRestored, 2);
+  assert.equal(result.objectHashesVerified, true);
 });
 
 test('manifest whose object path is not its content hash is rejected', async () => {
