@@ -73,7 +73,7 @@ export type TaiwanProviderOptions = {
 
 // Queue identities include this value. A provider URL/parser change must create
 // a new immutable attempt instead of silently reusing an earlier terminal job.
-export const TAIWAN_DATA_PROVIDER_CONTRACT_VERSION = 'taiwan-data-provider-v6' as const;
+export const TAIWAN_DATA_PROVIDER_CONTRACT_VERSION = 'taiwan-data-provider-v7' as const;
 
 const OFFICIAL_TIMEOUT_MS = 8_000;
 const FINMIND_TIMEOUT_MS = 12_000;
@@ -147,6 +147,12 @@ export function finMindTaiwanDataUrl(input: TaiwanProviderInput) {
   const url = new URL(FINMIND_DATA_URL);
   url.searchParams.set('dataset', finMindDataset(input.dataset));
   if (input.symbol) url.searchParams.set('data_id', input.symbol);
+  else if (input.dataset === 'market_index') {
+    // TaiwanStockTotalReturnIndex requires an explicit index identity. Without
+    // it FinMind returns HTTP 400, so a TWSE edge-security failure could never
+    // reach the configured mirror fallback.
+    url.searchParams.set('data_id', input.exchange === 'TWSE' ? 'TAIEX' : 'TPEx');
+  }
   if (input.sessionDate) url.searchParams.set('start_date', input.sessionDate);
   return url.toString();
 }
