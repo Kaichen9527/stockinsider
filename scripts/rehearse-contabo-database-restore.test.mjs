@@ -12,10 +12,15 @@ test('restore rehearsal is socket-only and never persists the plaintext archive'
   assert.match(source,/constants\.O_NOFOLLOW/u);
   assert.match(source,/mode:0o600/u);
   assert.match(source,/identityFenceEnabled===false/u);
+  assert.match(source,/sourceIdentityFenceDisabledForRehearsal:true/u);
+  assert.match(source,/SET identity_fence_enabled=false, activated_at=NULL, activated_by=NULL WHERE singleton/u);
   assert.match(source,/applicationValidationPassed:true/u);
   assert.match(source,/applicationTables===7/u);
   assert.match(source,/applicationFunctions===3/u);
   assert.match(source,/stockinsider-database-compact-v1/u);
+  assert.match(source,/stockinsider-database-export-v3/u);
+  assert.match(source,/contabo_ssh_local_unix_socket/u);
+  assert.match(source,/remoteEphemeralCredentialsUsed!==false/u);
   assert.match(source,/legacy-runtime-v1/u);
   assert.match(source,/compact-legacy-runtime-v1[.]sql/u);
   assert.match(source,/writeEncryptedBackupArtifact/u);

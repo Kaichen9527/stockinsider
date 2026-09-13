@@ -200,7 +200,7 @@ async function main(){
   const capacity=await statfs('/private/tmp',{bigint:true});
   if(capacity.bavail*capacity.bsize<MIN_FREE_BYTES)throw new Error('insufficient_rehearsal_capacity');
   const manifestReceipt=JSON.parse(await readFile(manifestPath,'utf8'));
-  if(!['stockinsider-database-export-v1','stockinsider-database-export-v2','stockinsider-database-compact-v1'].includes(manifestReceipt.manifest?.schema)
+  if(!['stockinsider-database-export-v1','stockinsider-database-export-v2','stockinsider-database-export-v3','stockinsider-database-compact-v1'].includes(manifestReceipt.manifest?.schema)
     ||manifestReceipt.manifest?.format!=='pg_dump_custom')throw new Error('manifest_invalid');
   if(manifestReceipt.manifest.schema==='stockinsider-database-export-v2'
     &&(manifestReceipt.manifest.snapshot!==null
@@ -208,6 +208,16 @@ async function main(){
       ||manifestReceipt.manifest.transport!=='contabo_ipv6_direct_tls'
       ||manifestReceipt.manifest.credentialsInCommandOrArtifact!==false
       ||manifestReceipt.remoteEphemeralCredentialsRemoved!==true)){
+    throw new Error('manifest_invalid');
+  }
+  if(manifestReceipt.manifest.schema==='stockinsider-database-export-v3'
+    &&(manifestReceipt.manifest.snapshot!==null
+      ||manifestReceipt.manifest.snapshotStrategy!=='pg_dump_internal_consistent_snapshot'
+      ||manifestReceipt.manifest.transport!=='contabo_ssh_local_unix_socket'
+      ||manifestReceipt.manifest.sourceEndpoint!=='local-unix-socket:stockinsider'
+      ||manifestReceipt.manifest.credentialsInCommandOrArtifact!==false
+      ||manifestReceipt.manifest.remoteEphemeralCredentialsUsed!==false
+      ||manifestReceipt.manifest.ownersAndGrantsIncluded!==true)){
     throw new Error('manifest_invalid');
   }
   const contextSha256=createHash('sha256').update(JSON.stringify(manifestReceipt.manifest)).digest('hex');
@@ -268,6 +278,14 @@ async function main(){
     const migrate=await run('psql',[...connection,'--no-psqlrc','--set=ON_ERROR_STOP=1','--file',
       fileURLToPath(new URL('../migrations/20260911_contabo_data_plane_v1.sql',import.meta.url))]);
     if(migrate.exitCode!==0){const error=new Error('portable_migration_failed');error.restore={exitCode:migrate.exitCode,errors:migrate.errors};throw error;}
+    // A backup taken from the active Contabo writer correctly contains an
+    // enabled identity fence.  The disposable rehearsal must never inherit
+    // production authority, so disable only the restored copy before running
+    // application checks.  This does not modify the encrypted archive or the
+    // production database.
+    const disarm=await run('psql',[...connection,'--no-psqlrc','--set=ON_ERROR_STOP=1','--command',
+      'UPDATE public.stockinsider_data_plane_settings_v1 SET identity_fence_enabled=false, activated_at=NULL, activated_by=NULL WHERE singleton']);
+    if(disarm.exitCode!==0)throw new Error('rehearsal_identity_fence_disarm_failed');
     let compactionResult=null,compactManifestPath=null;
     if(compact){
       phase='retention_migration';
@@ -364,6 +382,7 @@ async function main(){
         serverVersion:manifestReceipt.manifest.serverVersion,encryptedBytes:initial.size,encryptedSha256,
         plaintextBytes:authenticated.plaintextBytes,plaintextSha256:authenticated.plaintextSha256,contextSha256},
       restore:{postgresVersion:checks.postgresVersion,unixSocketOnly:true,plaintextArchiveWritten:false,ownerAndAclReplay:true,
+        sourceIdentityFenceDisabledForRehearsal:true,
         tocEntries,excludedVaultEntries:filtered.excluded,tocSha256:createHash('sha256').update(listResult.stdout).digest('hex'),
         filteredTocSha256:createHash('sha256').update(filtered.contents).digest('hex'),
         databaseBytes:Number(checks.databaseBytes),clusterBytes,portableMigrationApplied:true},
