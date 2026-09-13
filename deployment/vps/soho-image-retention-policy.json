@@ -1,24 +1,36 @@
 {
   "schema": "stockinsider-soho-image-retention-v3",
   "host": "5.104.83.211",
-  "observedAt": "2026-09-13T12:20:00Z",
+  "observedAt": "2026-09-13T14:15:06Z",
   "policy": "Only the exact obsolete refs below may be archived and considered for removal. Current and one retained rollback per environment are immutable protected identities. Broad prune is forbidden. Externally absent identities are audit-only and must never be represented as backed up.",
   "current": {
-    "soho-api:latest": "sha256:0b3fdfab3bce7138c618b49621a279d969fe4dfd1c9bf5828f8b6b3ed5b4ea3f",
-    "soho-media-worker:latest": "sha256:1e41de2ad61669be485bf17e05bbf6955003d37b187dd6ad49d9e7217fd2e0da",
-    "soho-web:latest": "sha256:9736fae613688c4cec8ebf5fbe81c647cc50d6a8542907d43be74b6406814deb",
-    "soho-worker:latest": "sha256:1fcc480a029e54814535c6d9161833cf0e7339b4da3727720ccd430ee0f317b7",
-    "soho-staging-api:latest": "sha256:c03be91489efb3f748e4832298493f63d7c06eabfe1a5b21d6422db4c4ba0558",
-    "soho-staging-media-worker:latest": "sha256:4194a4fb8aaebfe70f4c08c56cb98b3d31f155bc69d5e07e3762f346cf44c88e",
-    "soho-staging-web:latest": "sha256:d10b067f48bf049d2b3193ed86a921ad239086120e4bf8ff94c35939eb0593d7",
-    "soho-staging-worker:latest": "sha256:085a8b554e6630acf585b8594399ef3a4ef8e5171bb204498d74b324f9cab7db",
-    "soho-live-canary-api:latest": "sha256:7c0a8ad66edc6d6e664b7820dba79f5813ab7302eb54c00297bc031d774c1549",
-    "soho-live-canary-calendar-worker:latest": "sha256:56858af348bc515f2ce3a5469e0970a89ebda31c04b93f6704c9a922beae1d00",
-    "soho-live-canary-enrollment-worker:latest": "sha256:40ee8533d2e9ba40709e88acc1cda88150c4477e4f148f18675ebf66891d41f7",
-    "soho-live-canary-web:latest": "sha256:a8d1022aee48fef74e77960fcdcdab2ae648fd43e8d2f967324afce345b12921",
-    "soho-live-canary-worker:latest": "sha256:70bec9693044b5abe80bf3b9872fe7f96d981216c0280c825a2e8ef225989520"
+    "soho-api:latest": "sha256:71da1200a8d1de4936f2e50de5e0f0f6673a2fe108e56f4ab75e84b0550faf8b",
+    "soho-media-worker:latest": "sha256:404446a4c8f4c5b06c9436bf6aa89fd69f9449c2fa872977580c0135e8238b2a",
+    "soho-web:latest": "sha256:f8fe06d2689b634c6afee1204d0a3f766d12e77c6cb84883dc8a2fbd97a1de0b",
+    "soho-worker:latest": "sha256:bbb1a26a6254fc12c54d94faf51bc6a1e24a22e76ba2fbc1fc0d45e4a951cbf4",
+    "soho-staging-api:latest": "sha256:fff4ebbb7790d445bf016aad644e1afa4d1b9f4b668bcdd5d4a5759818d03f35",
+    "soho-staging-media-worker:latest": "sha256:663ad59c6f901e2fd766818399b21d2833f32c0909af8bb86b8b8e9f766731c3",
+    "soho-staging-web:latest": "sha256:3271c5d351e9265498dab008c9230ce52435828a4aafa497f09e7fb52b7701e4",
+    "soho-staging-worker:latest": "sha256:c98d01feaec8b41b83d484dc2504daf4f3d18ee2304cf3848a281ab65246cdba",
+    "soho-live-canary-api:latest": "sha256:06d2450086dc228537e1d9e664e3b7c432093c118071c66d9b92878b57945764",
+    "soho-live-canary-calendar-worker:latest": "sha256:bf5c2a682bdc394fd2eff13ef1315553e3572ce19930c0905c7f9733d0d770db",
+    "soho-live-canary-enrollment-worker:latest": "sha256:a44aa2d3e85bc6d36c3be0edf7fc0cb3db3414ef591fa8044d179f9baa1867cc",
+    "soho-live-canary-web:latest": "sha256:74c127e0e789948739c2d192b6309b28cf594f9f20813589d884f5bf648decac",
+    "soho-live-canary-worker:latest": "sha256:a01255e547a6789774893d9fe2cb8ae88256202b010828d804877e55b02d4cfa"
   },
   "retainedRollbacks": {
+    "soho-rollback/soho-api:20260913T133445Z": "sha256:0b3fdfab3bce7138c618b49621a279d969fe4dfd1c9bf5828f8b6b3ed5b4ea3f",
+    "soho-rollback/soho-web:20260913T133445Z": "sha256:9736fae613688c4cec8ebf5fbe81c647cc50d6a8542907d43be74b6406814deb",
+    "soho-rollback/soho-worker:20260913T133445Z": "sha256:1fcc480a029e54814535c6d9161833cf0e7339b4da3727720ccd430ee0f317b7",
+    "soho-rollback/soho-staging-api:20260913T131732Z": "sha256:c03be91489efb3f748e4832298493f63d7c06eabfe1a5b21d6422db4c4ba0558",
+    "soho-rollback/soho-staging-web:20260913T131732Z": "sha256:d10b067f48bf049d2b3193ed86a921ad239086120e4bf8ff94c35939eb0593d7",
+    "soho-rollback/soho-staging-worker:20260913T131732Z": "sha256:085a8b554e6630acf585b8594399ef3a4ef8e5171bb204498d74b324f9cab7db",
+    "soho-rollback/soho-live-canary-api:20260913T135624Z": "sha256:7c0a8ad66edc6d6e664b7820dba79f5813ab7302eb54c00297bc031d774c1549",
+    "soho-rollback/soho-live-canary-calendar-worker:20260913T135624Z": "sha256:56858af348bc515f2ce3a5469e0970a89ebda31c04b93f6704c9a922beae1d00",
+    "soho-rollback/soho-live-canary-web:20260913T135624Z": "sha256:a8d1022aee48fef74e77960fcdcdab2ae648fd43e8d2f967324afce345b12921",
+    "soho-rollback/soho-live-canary-worker:20260913T135624Z": "sha256:70bec9693044b5abe80bf3b9872fe7f96d981216c0280c825a2e8ef225989520"
+  },
+  "obsoleteCandidates": {
     "soho-rollback/soho-api:20260913T112602Z": "sha256:3875289564a8e9b43378c43bed2de257ea35e9ed9eab6c39b64755b878c60c9c",
     "soho-rollback/soho-web:20260913T112602Z": "sha256:88784daad15a2c445d42291d7203d226adf050bf16b6d3c66bb88775c05c0456",
     "soho-rollback/soho-worker:20260913T112602Z": "sha256:0134257c1ca37bb259505ae02ac9f1ce4172d06867573f4baf20e16c80c66654",
@@ -29,14 +41,6 @@
     "soho-rollback/soho-live-canary-calendar-worker:20260912T050458Z": "sha256:d15f254bdcf0e5297fcec5db83944b09b896937320442e3317a83e08ab1acd28",
     "soho-rollback/soho-live-canary-web:20260912T050458Z": "sha256:ec0d4e36011b532e4d113da316999dc0f35ecfea6efcec169ef5c687f3f4ab10",
     "soho-rollback/soho-live-canary-worker:20260912T050458Z": "sha256:a6914b83728eb4f57ec3ff302176f250df2ec863c8dfcf955bb684f4189e9fd4"
-  },
-  "obsoleteCandidates": {
-    "soho-rollback/soho-api:20260912T044928Z": "sha256:ecf6c4b00fb873819f4d19e7cd6857019d5e505c2da95616ece5d5fa5c5949ee",
-    "soho-rollback/soho-web:20260912T044928Z": "sha256:155893cf28ec08bd0e155be21f43c05e80e5f04f3bf5ffbc56091ceee194c785",
-    "soho-rollback/soho-worker:20260912T044928Z": "sha256:776a58ed0b99a0a2011045ee18cd7d55b9a37c26ff2301b9c1af40256bac71ef",
-    "soho-rollback/soho-staging-api:20260912T042955Z": "sha256:893bca7ea9a501be71e774617fff2fe62e3c448d7e57108b88f532407b4991b5",
-    "soho-rollback/soho-staging-web:20260912T042955Z": "sha256:b6598412b63bc96034c6488e7768029571dd6375eb0dd7a135631401b573aa14",
-    "soho-rollback/soho-staging-worker:20260912T042955Z": "sha256:fb380e128f58dc24e727efc3fdabc706a12ba1f5ab9f26b3defb2af1a701912a"
   },
   "externallyRemovedProtectedAliases": {
     "soho-rollback/soho-staging-api:20260911T020835Z": "sha256:2ed16057c06a82638ac8f0725b200631b320043c7eab5f5583d986f27d81927a",
