@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { candidateMopsDownloadUrl, fetchCandidateMopsFiling, fetchTpexOfficialPayload, financialBridgeAcquisitionQuarters, parseCandidateMopsFacts, selectCandidateFilingPeriodFacts, normalizeMopsDownloadedContentType } from './candidate-official-financials.ts';
+import { candidateFinancialPeriodPredatesListing, candidateMopsDownloadUrl, fetchCandidateMopsFiling, fetchTpexOfficialPayload, financialBridgeAcquisitionQuarters, parseCandidateMopsFacts, selectCandidateFilingPeriodFacts, normalizeMopsDownloadedContentType } from './candidate-official-financials.ts';
 import { fetchFinMindFinancialFallback, parseFinMindFinancialFacts } from './finmind-financial-fallback.ts';
 
 test('official attachment empty MIME is normalized only for exact issuer standalone UTF-8 iXBRL', () => {
@@ -152,7 +152,7 @@ test('TPEx official fetch reconstructs the exact response from verified byte ran
   const result = await fetchTpexOfficialPayload('https://www.tpex.org.tw/openapi/v1/example', {
     fetchImpl, sleep: async () => undefined,
   });
-  assert.equal(ordinaryCalls, 3); assert.deepEqual(ranges, ['bytes=0-49151']);
+  assert.equal(ordinaryCalls, 6); assert.deepEqual(ranges, ['bytes=0-49151']);
   assert.deepEqual(JSON.parse(result.body), [{ 公司代號: '6488' }]);
   assert.equal(result.response.headers.get('x-stockinsider-transport'), 'official-byte-ranges');
   assert.equal(result.responseBytes, payload.byteLength);
@@ -187,6 +187,14 @@ test('financial acquisition includes the earliest fiscal-year prerequisites need
     { year: 2024, quarter: 1 }, { year: 2024, quarter: 2 },
   ]);
   assert.equal(financialBridgeAcquisitionQuarters('2026-09-06T13:30:00+08:00').length, 10);
+});
+
+test('official listing authority distinguishes unavailable pre-listing periods from missing filings', () => {
+  const newlyListed = { listedOn: '2025-06-13T00:00:00+08:00' };
+  assert.equal(candidateFinancialPeriodPredatesListing(newlyListed, '2021-06-30'), true);
+  assert.equal(candidateFinancialPeriodPredatesListing(newlyListed, '2025-06-30'), false);
+  assert.equal(candidateFinancialPeriodPredatesListing({ listedOn: null }, '2021-06-30'), false);
+  assert.equal(candidateFinancialPeriodPredatesListing(newlyListed, 'invalid'), false);
 });
 
 test('instant balance and outstanding-share facts retain null periodStart', () => {

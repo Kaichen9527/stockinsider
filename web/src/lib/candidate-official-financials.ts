@@ -88,6 +88,9 @@ export type CandidateOfficialFinancial = {
   stockId: string;
   symbol: string;
   exchange: 'TWSE' | 'TPEX';
+  /** First official listing instant from stock_instruments_v3. Historical
+   * periods ending before this boundary are not missing filings. */
+  listedOn?: string | null;
   statementKind?: 'general' | 'broker' | 'financial';
   gaps?: FinancialFieldGap[];
 };
@@ -304,6 +307,16 @@ export function financialBridgeAcquisitionQuarters(cutoff: string, count = 8) {
   return [...requested, ...prerequisites];
 }
 
+export function candidateFinancialPeriodPredatesListing(
+  candidate: Pick<CandidateOfficialFinancial, 'listedOn'>,
+  periodEnd: string,
+) {
+  const listedOn = String(candidate.listedOn || '').slice(0, 10);
+  return /^\d{4}-\d{2}-\d{2}$/u.test(listedOn)
+    && /^\d{4}-\d{2}-\d{2}$/u.test(periodEnd)
+    && periodEnd < listedOn;
+}
+
 export async function fetchCandidateMopsFiling(candidate: CandidateOfficialFinancial, year: number, quarter: number) {
   const sourceUrl = candidateMopsDownloadUrl(candidate.symbol,year,quarter);
   const periodEnd = `${year}-${['03-31', '06-30', '09-30', '12-31'][quarter - 1]}`;
@@ -365,7 +378,7 @@ async function mapLimit<T, R>(items: T[], limit: number, work: (item: T) => Prom
 }
 
 const TPEX_RESPONSE_LIMIT_BYTES = 15_000_000;
-const TPEX_FETCH_ATTEMPTS = 3;
+const TPEX_FETCH_ATTEMPTS = 6;
 // The TPEx edge currently resets long responses from the production VPS after
 // roughly 56 KiB, while still advertising the full Content-Length. Its same
 // official endpoint supports byte ranges reliably, so use chunks below that
@@ -408,7 +421,7 @@ async function fetchTpexOfficialPayloadByRange(sourceUrl: string, fetchImpl: typ
     for (let attempt = 0; attempt < TPEX_FETCH_ATTEMPTS; attempt += 1) {
       try {
         const response = await fetchImpl(sourceUrl, { headers: { Accept: 'application/json',
-          'accept-encoding': 'identity', Range: `bytes=${offset}-${requestedEnd}`, 'user-agent': 'StockInsider/4.0' },
+          'accept-encoding': 'identity', Connection: 'close', Range: `bytes=${offset}-${requestedEnd}`, 'user-agent': 'StockInsider/5.1' },
         redirect: 'error', signal: AbortSignal.timeout(20_000) });
         contentType = response.headers.get('content-type') || contentType;
         if (offset === 0 && response.status === 200) {
@@ -429,7 +442,7 @@ async function fetchTpexOfficialPayloadByRange(sourceUrl: string, fetchImpl: typ
         break;
       } catch (error) {
         lastError = error;
-        if (attempt < TPEX_FETCH_ATTEMPTS - 1) await sleep(250 * (attempt + 1));
+        if (attempt < TPEX_FETCH_ATTEMPTS - 1) await sleep(Math.min(2_000, 250 * (2 ** attempt)));
       }
     }
     if (!accepted) throw lastError instanceof Error ? lastError : new Error('tpex_range_transport_failed');
@@ -453,8 +466,10 @@ export async function fetchTpexOfficialPayload(sourceUrl: string, dependencies: 
       // TPEx occasionally closes a compressed response body early from the
       // production VPS. Retry the bounded stream and switch encoding once so
       // one truncated transfer cannot terminalize every job for the endpoint.
-      const headers: Record<string, string> = { Accept: 'application/json', 'user-agent': 'StockInsider/4.0' };
-      if (attempt === 1) headers['accept-encoding'] = 'identity';
+      const headers: Record<string, string> = {
+        Accept: 'application/json', Connection: 'close', 'user-agent': 'StockInsider/5.1',
+      };
+      if (attempt >= 1) headers['accept-encoding'] = 'identity';
       const response = await fetchImpl(sourceUrl, {
         headers, redirect: 'error', signal: AbortSignal.timeout(20_000),
       });
@@ -463,7 +478,7 @@ export async function fetchTpexOfficialPayload(sourceUrl: string, dependencies: 
       return { response, body, responseBytes: complete.responseBytes };
     } catch (error) {
       lastError = error;
-      if (attempt < TPEX_FETCH_ATTEMPTS - 1) await sleep(250 * (attempt + 1));
+      if (attempt < TPEX_FETCH_ATTEMPTS - 1) await sleep(Math.min(2_000, 250 * (2 ** attempt)));
     }
   }
   try { return await fetchTpexOfficialPayloadByRange(sourceUrl, fetchImpl, sleep); }
@@ -607,6 +622,20 @@ async function deferUnpublishedAcquisitionJob(input: {
   if (result.error || !result.data) throw new Error(`candidate_financial_job_lease_lost:${result.error?.message || input.jobId}`);
 }
 
+async function terminalizePrelistingAcquisitionJob(input: {
+  client: ReturnType<typeof getOpportunityV3ServerClient>;
+  jobId: string;
+  owner: string;
+  collectedAt: string;
+}) {
+  const result = await input.client.rpc('terminalize_candidate_financial_prelisting_job_v7', {
+    p_job_id: input.jobId,
+    p_owner: input.owner,
+    p_collected_at: input.collectedAt,
+  });
+  if (result.error) throw new Error(`candidate_financial_prelisting_terminal_failed:${result.error.message}`);
+}
+
 function acquisitionTerminalReason(message: string) {
   if (/write_failed|completion_failed/iu.test(message)) return 'write_failed';
   if (/timeout/iu.test(message)) return 'timeout';
@@ -647,7 +676,8 @@ export async function refreshCandidateOfficialFinancials(
   const client = getOpportunityV3ServerClient();
   const fallbackPeriods = financialBridgeAcquisitionQuarters(cutoff, 20)
     .map(({ year, quarter }) => `${year}-${['03-31', '06-30', '09-30', '12-31'][quarter - 1]}`);
-  const desiredMopsJobs = mopsCandidates.flatMap((candidate) => requiredAcquisitionPeriods(candidate, fallbackPeriods).map((periodEnd) => {
+  const desiredMopsJobs = mopsCandidates.flatMap((candidate) => requiredAcquisitionPeriods(candidate, fallbackPeriods)
+    .filter((periodEnd) => !candidateFinancialPeriodPredatesListing(candidate, periodEnd)).map((periodEnd) => {
     const year = Number(periodEnd.slice(0, 4)), quarter = ['03-31','06-30','09-30','12-31'].indexOf(periodEnd.slice(5)) + 1;
     return {
     stock_id: candidate.stockId,
@@ -707,7 +737,15 @@ export async function refreshCandidateOfficialFinancials(
   });
   let claimedJobCount = claimedRows.length;
   remainingJobs = Number.isFinite(remainingJobs) ? Math.max(0, remainingJobs - claimedRows.length) : remainingJobs;
-  const outcomes = await mapLimit(claimedRows, 2, async ({ jobId, attempts, consecutiveFailures, candidate, year, quarter }) => {
+  const prelistingRows = claimedRows.filter(({ candidate, year, quarter }) => candidateFinancialPeriodPredatesListing(
+    candidate,
+    `${year}-${['03-31', '06-30', '09-30', '12-31'][quarter - 1]}`,
+  ));
+  await mapLimit(prelistingRows, 4, ({ jobId }) => terminalizePrelistingAcquisitionJob({
+    client, jobId, owner: runnerPrincipal, collectedAt,
+  }));
+  const applicableClaimedRows = claimedRows.filter((row) => !prelistingRows.includes(row));
+  const outcomes = await mapLimit(applicableClaimedRows, 2, async ({ jobId, attempts, consecutiveFailures, candidate, year, quarter }) => {
     try {
       const fetched = await fetchCandidateMopsFiling(candidate, year, quarter);
       return { jobId, attempts, consecutiveFailures, candidate, ...fetched, error: null, primaryError: null };
@@ -909,12 +947,17 @@ export async function refreshCandidateOfficialFinancials(
   return {
     candidateCount: candidates.length,
     claimedJobs: claimedJobCount,
-    fetchedFilings: Math.max(0, claimedRows.length - outcomes.filter((row) => row.error).length) + tpexFetchedEndpoints,
+    fetchedFilings: Math.max(0, applicableClaimedRows.length - outcomes.filter((row) => row.error).length) + tpexFetchedEndpoints,
     parsedFacts: facts.length,
     writtenFacts,
     documentReceipts,
     symbolsWithFacts: [...new Set(facts.map((fact) => fact.symbol))],
     attemptedSymbols: [...new Set([...claimedRows.map((job) => job.candidate.symbol), ...attemptedTpexSymbols])],
+    notApplicablePeriods: prelistingRows.map(({ candidate, year, quarter }) => ({
+      symbol: candidate.symbol,
+      periodEnd: `${year}-${['03-31', '06-30', '09-30', '12-31'][quarter - 1]}`,
+      reason: 'period_before_official_listing' as const,
+    })),
     finMindFallbackFilings: outcomes.filter((outcome) => outcome.fallbackUsed).length + tpexFinMindFallbackFilings,
     anonymousFinMindFallbackFilings: outcomes.filter((outcome) => outcome.fallbackUsed && outcome.credentialMode === 'anonymous').length + anonymousTpexFinMindFallbackFilings,
     mopsSecurityBlocks: outcomes.filter((outcome) => /security_blocked/iu.test(outcome.primaryError || '')).length,
