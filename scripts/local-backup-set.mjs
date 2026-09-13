@@ -31,11 +31,15 @@ export function assessBackupSet({ database, storageInventory, storageManifests, 
   provider, providerVerification, restore }) {
   const reasons = [];
   const databaseSchema = database.json?.manifest?.schema;
-  if (!['stockinsider-database-export-v1', 'stockinsider-database-export-v2',
+  if (!['stockinsider-database-export-v1', 'stockinsider-database-export-v2', 'stockinsider-database-export-v3',
     'stockinsider-database-compact-v1'].includes(databaseSchema)
     || database.json?.result?.envelopeVerified !== true
     || (databaseSchema === 'stockinsider-database-export-v2'
       && database.json?.remoteEphemeralCredentialsRemoved !== true)
+    || (databaseSchema === 'stockinsider-database-export-v3'
+      && (database.json?.manifest?.transport !== 'contabo_ssh_local_unix_socket'
+        || database.json?.manifest?.credentialsInCommandOrArtifact !== false
+        || database.json?.manifest?.remoteEphemeralCredentialsUsed !== false))
     || (databaseSchema === 'stockinsider-database-compact-v1'
       && (database.json?.manifest?.compactionPolicyVersion !== 'legacy-runtime-v1'
         || typeof database.json?.manifest?.sourceBackupId !== 'string'
