@@ -75,7 +75,7 @@ export type TaiwanProviderOptions = {
 
 // Queue identities include this value. A provider URL/parser change must create
 // a new immutable attempt instead of silently reusing an earlier terminal job.
-export const TAIWAN_DATA_PROVIDER_CONTRACT_VERSION = 'taiwan-data-provider-v10' as const;
+export const TAIWAN_DATA_PROVIDER_CONTRACT_VERSION = 'taiwan-data-provider-v11' as const;
 
 const OFFICIAL_TIMEOUT_MS = 8_000;
 const FINMIND_TIMEOUT_MS = 12_000;
