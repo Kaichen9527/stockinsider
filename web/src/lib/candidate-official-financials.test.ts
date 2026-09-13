@@ -132,6 +132,44 @@ test('TPEx official fetch retries a truncated body and switches encoding without
   assert.equal(result.responseBytes, Buffer.byteLength(result.body, 'utf8'));
 });
 
+test('TPEx official fetch reconstructs the exact response from verified byte ranges after edge resets', async () => {
+  const payload = Buffer.from('[{"公司代號":"6488"}]');
+  let ordinaryCalls = 0;
+  const ranges: string[] = [];
+  const fetchImpl: typeof fetch = async (_url, options) => {
+    const range = (options?.headers as Record<string, string> | undefined)?.Range;
+    if (!range) {
+      ordinaryCalls += 1;
+      throw new Error('terminated');
+    }
+    ranges.push(range);
+    const match = range.match(/^bytes=(\d+)-(\d+)$/u)!;
+    const start = Number(match[1]); const end = Math.min(Number(match[2]), payload.byteLength - 1);
+    return new Response(payload.subarray(start, end + 1), { status: 206, headers: {
+      'content-type': 'application/json', 'content-range': `bytes ${start}-${end}/${payload.byteLength}`,
+    } });
+  };
+  const result = await fetchTpexOfficialPayload('https://www.tpex.org.tw/openapi/v1/example', {
+    fetchImpl, sleep: async () => undefined,
+  });
+  assert.equal(ordinaryCalls, 3); assert.deepEqual(ranges, ['bytes=0-49151']);
+  assert.deepEqual(JSON.parse(result.body), [{ 公司代號: '6488' }]);
+  assert.equal(result.response.headers.get('x-stockinsider-transport'), 'official-byte-ranges');
+  assert.equal(result.responseBytes, payload.byteLength);
+});
+
+test('TPEx range fallback rejects incomplete or contradictory range metadata', async () => {
+  const fetchImpl: typeof fetch = async (_url, options) => {
+    const range = (options?.headers as Record<string, string> | undefined)?.Range;
+    if (!range) throw new Error('terminated');
+    return new Response('{}', { status: 206, headers: { 'content-type': 'application/json',
+      'content-range': 'bytes 1-2/10' } });
+  };
+  await assert.rejects(fetchTpexOfficialPayload('https://www.tpex.org.tw/openapi/v1/example', {
+    fetchImpl, sleep: async () => undefined,
+  }), /tpex_transport_exhausted:tpex_range_contract_invalid/u);
+});
+
 test('a MOPS acquisition job persists only its requested period and leaves comparative contexts to their own job', () => {
   const fact = (periodEnd: string) => ({
     stockId: '10000000-0000-4000-8000-000000000001', symbol: '2330', factKey: 'quarterly_revenue',
