@@ -9,6 +9,7 @@ const drainRoute = readFileSync(new URL('../web/src/app/api/internal/taiwan-data
 const candidateRefresh = readFileSync(new URL('../web/src/lib/taiwan-candidate-refresh.ts', import.meta.url), 'utf8');
 const candidateQueueMigration = readFileSync(new URL('../migrations/20260911_04_taiwan_candidate_refresh_queue.sql', import.meta.url), 'utf8');
 const providerContractMigration = readFileSync(new URL('../migrations/20260913_taiwan_provider_contract_v6.sql', import.meta.url), 'utf8');
+const attemptSizeMigration = readFileSync(new URL('../migrations/20260914_taiwan_provider_attempt_size_v9.sql', import.meta.url), 'utf8');
 const finmindVault = readFileSync(new URL('../web/src/lib/finmind-vault.ts', import.meta.url), 'utf8');
 const financialDrainRoute = readFileSync(new URL('../web/src/app/api/internal/candidate-financial-queue-drain/route.ts', import.meta.url), 'utf8');
 const financialValidateRoute = readFileSync(new URL('../web/src/app/api/internal/official-financial-validate/route.ts', import.meta.url), 'utf8');
@@ -41,6 +42,16 @@ test('terminal outcome contract distinguishes API usage, timeout, schema and emp
   assert.match(provider, /if \(response\.status === 429\)/u);
   assert.match(migration, /NULLIF\(v_attempt->'apiUsage','null'::jsonb\)/u);
   assert.match(migration, /NULLIF\(v_attempt->'normalizedPayload','null'::jsonb\)/u);
+});
+
+test('provider receipt storage accepts every response admitted by the bounded runtime', () => {
+  assert.match(provider, /const MAX_RESPONSE_BYTES = 5_000_000/u);
+  assert.match(provider, /responseBytes: MAX_RESPONSE_BYTES \+ 1/u);
+  assert.match(attemptSizeMigration, /CHECK \(response_bytes BETWEEN 0 AND 5000001\)/u);
+  assert.match(attemptSizeMigration, /responseBytes'\)::integer, -1\) NOT BETWEEN 0 AND 5000001/u);
+  assert.match(attemptSizeMigration, /VALIDATE CONSTRAINT taiwan_data_provider_attempts_v5_response_bytes_check/u);
+  assert.match(attemptSizeMigration, /REVOKE ALL ON FUNCTION public\.complete_taiwan_data_refresh_job_v5/u);
+  assert.doesNotMatch(attemptSizeMigration, /DROP TABLE|TRUNCATE/u);
 });
 
 test('VPS-only authenticated routes queue and drain the durable provider plane', () => {
