@@ -18578,8 +18578,10 @@ export async function searchSourceDocuments(params?: {
   const runId = compactText(params?.runId || '') || null;
   const evidenceLevel = (params?.evidenceLevel as '傳言層' | '佐證層' | '估值層' | undefined) || null;
   const includeContentSearch = Boolean(params?.includeContentSearch);
-  // The public source centre normally needs documents, not every operational
-  // audit row.  Diagnostics stay available for a specifically requested run.
+  // The public source centre always needs the compact latest-per-connector
+  // ledger summary. Full connector runs and audit rows remain opt-in for a
+  // specifically requested run so normal browsing does not fan out over the
+  // historical diagnostic tables.
   const includeDiagnostics = Boolean(params?.includeDiagnostics || runId);
   const from = params?.from ? String(params.from) : null;
   const to = params?.to ? String(params.to) : null;
@@ -18672,7 +18674,7 @@ export async function searchSourceDocuments(params?: {
       p_verification_status: effectiveVerificationStatus,
       p_theme_symbols: themeSymbols.length > 0 ? themeSymbols : null,
     }),
-    includeDiagnostics ? loadLatestSourceRunLedger() : Promise.resolve([]),
+    loadLatestSourceRunLedger(),
   ]);
   const { data, error, count } = docsRes;
   if (error) throw new Error(error.message);
