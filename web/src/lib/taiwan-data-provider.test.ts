@@ -96,7 +96,7 @@ test('supports valuation, revenue and financial-statement provider contracts wit
   assert.match(finMindTaiwanDataUrl({ ...input, dataset: 'daily_valuation' }), /dataset=TaiwanStockPER/u);
   assert.match(finMindTaiwanDataUrl({ ...input, dataset: 'monthly_revenue' }), /dataset=TaiwanStockMonthRevenue/u);
   assert.match(finMindTaiwanDataUrl({ ...input, dataset: 'financial_statement' }), /dataset=TaiwanStockFinancialStatements/u);
-  assert.match(officialTaiwanDataUrl({ ...input, dataset: 'daily_valuation', symbol: null }) || '', /BWIBBU/u);
+  assert.match(officialTaiwanDataUrl({ ...input, dataset: 'daily_valuation', symbol: null }) || '', /rwd\/zh\/afterTrading\/BWIBBU_d/u);
   assert.match(officialTaiwanDataUrl({ ...input, dataset: 'monthly_revenue', symbol: null }) || '', /openapi\.twse/u);
   assert.match(officialTaiwanDataUrl({ ...input, dataset: 'financial_statement' }) || '', /mopsov\.twse/u);
 });
@@ -119,7 +119,58 @@ test('rejects a source-shaped daily result when it does not contain the requeste
 
 test('pins FinMind credentials to its official API host and uses the bounded TWSE index endpoint', () => {
   assert.equal(new URL(finMindTaiwanDataUrl(input)).origin, 'https://api.finmindtrade.com');
-  assert.match(officialTaiwanDataUrl({ ...input, dataset: 'market_index', symbol: null }) || '', /exchangeReport\/FMTQIK/u);
+  assert.match(officialTaiwanDataUrl({ ...input, dataset: 'market_index', symbol: null }) || '', /rwd\/zh\/afterTrading\/FMTQIK/u);
+});
+
+test('uses current TPEx OpenAPI endpoints for exchange-wide valuation and index evidence', () => {
+  assert.equal(
+    officialTaiwanDataUrl({ ...input, exchange: 'TPEX', dataset: 'daily_valuation', symbol: null }),
+    'https://www.tpex.org.tw/openapi/v1/tpex_mainboard_peratio_analysis',
+  );
+  assert.equal(
+    officialTaiwanDataUrl({ ...input, exchange: 'TPEX', dataset: 'market_index', symbol: null }),
+    'https://www.tpex.org.tw/openapi/v1/tpex_daily_trading_index',
+  );
+});
+
+test('canonicalizes current TPEx OpenAPI valuation rows for the requested ROC session', async () => {
+  const result = await acquireTaiwanDataset({ ...input, exchange: 'TPEX', dataset: 'daily_valuation', symbol: null }, {
+    fetchImpl: async () => jsonResponse([
+      { Date: '1150903', SecuritiesCompanyCode: '5347', PriceEarningRatio: '17.40', PriceBookRatio: '2.10' },
+      { Date: '1150904', SecuritiesCompanyCode: '5347', PriceEarningRatio: '18.20', PriceBookRatio: '2.20' },
+    ]),
+  });
+  assert.equal(result.terminal, 'complete');
+  assert.equal(result.selectedAuthorityTier, 'official_primary');
+  assert.deepEqual(result.canonical?.records, [{
+    Date: '1150904', SecuritiesCompanyCode: '5347', PriceEarningRatio: '18.20', PriceBookRatio: '2.20',
+    date: '2026-09-04', stock_id: '5347', PER: '18.20', PBR: '2.20',
+  }]);
+});
+
+test('canonicalizes current TPEx OpenAPI index rows and rejects a missing requested session', async () => {
+  const providerInput = { ...input, exchange: 'TPEX' as const, dataset: 'market_index' as const, symbol: null };
+  const complete = await acquireTaiwanDataset(providerInput, {
+    fetchImpl: async () => jsonResponse([
+      { Date: '1150904', TradeVolume: '1000', TPExIndex: '301.25', Change: '1.20' },
+    ]),
+  });
+  assert.equal(complete.terminal, 'complete');
+  assert.equal(complete.canonical?.records[0].date, '2026-09-04');
+
+  let calls = 0;
+  const missing = await acquireTaiwanDataset(providerInput, {
+    finMindToken: 'token',
+    fetchImpl: async () => {
+      calls += 1;
+      return calls === 1
+        ? jsonResponse([{ Date: '1150903', TPExIndex: '300.05' }])
+        : jsonResponse({ data: [] }, 400);
+    },
+  });
+  assert.equal(missing.attempts[0].terminal, 'schema_invalid');
+  assert.equal(missing.attempts[0].detail, 'expected_session_missing');
+  assert.equal(missing.terminal, 'http_error');
 });
 
 test('stops oversized provider bodies while streaming', async () => {
