@@ -1352,8 +1352,14 @@ async function executeCandidateResearchCycle(options: {
         .select('fact_id,fact_key,value,period_end,available_at').eq('stock_id', stock.id)
         .gte('available_at',earliestFactAt).lte('available_at',evaluatedAt).order('fact_id').range(from,to),10000);
       if (factRead.data.length === 10000) throw new Error('candidate_detail_fact_window_overflow');
-      const revisionFacts = factRead.data.filter((fact) => wantedIds.has(identity({fact_key:fact.fact_key,period_end:fact.period_end,available_at:fact.available_at})));
-      if(revisionFacts.length !== wantedIds.size) throw new Error('candidate_detail_fact_revision_incomplete');
+      const revisionFactByIdentity = new Map(factRead.data.flatMap((fact) => {
+        const factIdentity = identity({fact_key:fact.fact_key,period_end:fact.period_end,available_at:fact.available_at});
+        return wantedIds.has(factIdentity) ? [[factIdentity, fact] as const] : [];
+      }));
+      if([...wantedIds].some((factIdentity) => !revisionFactByIdentity.has(factIdentity))) {
+        throw new Error('candidate_detail_fact_revision_incomplete');
+      }
+      const revisionFacts = [...wantedIds].map((factIdentity) => revisionFactByIdentity.get(factIdentity)!);
       const factIds = revisionFacts.map((row) => String(row.fact_id));
       const sectionFacts = revisionFacts.map((row) => ({ factId: String(row.fact_id), factKey: String(row.fact_key), value: numberOrNull(row.value), periodEnd: String(row.period_end || '') }));
       const sourceLinks = roundRobinSourceLinks(recentMentions.flatMap((row) => {

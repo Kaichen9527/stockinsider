@@ -248,6 +248,14 @@ test('missing official price history still publishes a source-specific fact deta
   assert.match(source, /failClosedWriteFailures = items\.filter\(\(item\) => item\.snapshotError \|\| item\.detailError\)/u);
 });
 
+test('candidate detail fact binding deduplicates historical rows but still requires every wanted identity', async () => {
+  const {readFile} = await import('node:fs/promises');
+  const source=await readFile(new URL('./candidate-research.ts',import.meta.url),'utf8');
+  assert.match(source,/const revisionFactByIdentity = new Map/u);
+  assert.match(source,/\[\.\.\.wantedIds\]\.some\(\(factIdentity\) => !revisionFactByIdentity\.has\(factIdentity\)\)/u);
+  assert.doesNotMatch(source,/revisionFacts\.length !== wantedIds\.size/u);
+});
+
 test('production reruns retain a fixed financial availability cutoff', async () => {
   const { readFile } = await import('node:fs/promises');
   const source = await readFile(new URL('./candidate-research.ts', import.meta.url), 'utf8');
