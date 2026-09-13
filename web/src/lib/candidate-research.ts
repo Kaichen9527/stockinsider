@@ -94,6 +94,28 @@ function stableHash(value: unknown) {
   return createHash('sha256').update(JSON.stringify(value)).digest('hex');
 }
 
+function countCandidateResearchValues(items: Row[], key: string) {
+  const counts: Record<string, number> = {};
+  for (const item of items) {
+    const value = String(item[key] || 'unknown');
+    counts[value] = (counts[value] || 0) + 1;
+  }
+  return counts;
+}
+
+function countFinancialGaps(gapsByStock: Map<string, Array<string | { factKey?: unknown; periodEnd?: unknown }>>) {
+  const counts: Record<string, number> = {};
+  for (const gaps of gapsByStock.values()) {
+    for (const gap of gaps) {
+      const key = typeof gap === 'string'
+        ? gap
+        : [gap.factKey, gap.periodEnd].filter(Boolean).map(String).join(':') || 'unknown';
+      counts[key] = (counts[key] || 0) + 1;
+    }
+  }
+  return counts;
+}
+
 async function waitForResearchRetry(attempt: number) {
   await new Promise((resolve) => setTimeout(resolve, 500 * (attempt + 1)));
 }
@@ -1725,7 +1747,12 @@ async function executeCandidateResearchCycle(options: {
   const technicalSessionDate = items.map((item) => String(item.technicalSessionDate || '')).filter(Boolean).sort().at(-1) || null;
   const runStatus = failedCount === items.length && items.length > 0 ? 'failed' : failedCount > 0 || partialCount > 0 ? 'partial' : 'success';
   const terminalReason = failedCount > 0 ? 'per_stock_failures' : partialCount > 0 ? 'per_stock_partial_research' : null;
-  const runUpdate = await supabase.from('candidate_research_runs').update({ status: runStatus, completed_count: completedCount, failed_count: failedCount, partial_count: partialCount, technical_session_date: technicalSessionDate, terminal_reason: terminalReason, summary: { items, partialCount, marketEvidence, officialFinancialRefresh, officialDocumentParsing, officialFinancialValidation, authorityCutoff, productionSourceCutoff, officialFinancialRefreshTargets: financialRefreshTargets.map((target) => target.symbol), officialFinancialRefreshBacklog: financialRefreshBacklog.length, officialFinancialGaps: Object.fromEntries(financialGapByStock), officialFinancialRefreshState: 'method_specific_field_period_v2' }, finished_at: new Date().toISOString() }).eq('id', runId);
+  // Per-stock results already live in candidate_research_run_items. Repeating
+  // their full metrics inside one JSONB summary made the final PATCH exceed
+  // the private PostgREST proxy request limit for a normal 280-stock run.
+  // Keep the run row operationally useful and bounded by storing aggregates;
+  // detailed evidence remains queryable from the item ledger.
+  const runUpdate = await supabase.from('candidate_research_runs').update({ status: runStatus, completed_count: completedCount, failed_count: failedCount, partial_count: partialCount, technical_session_date: technicalSessionDate, terminal_reason: terminalReason, summary: { itemCount: items.length, statusCounts: countCandidateResearchValues(items, 'status'), terminalReasonCounts: countCandidateResearchValues(items.filter((item) => item.terminalReason), 'terminalReason'), lifecycleStageCounts: countCandidateResearchValues(items, 'lifecycleStage'), valuationStatusCounts: countCandidateResearchValues(items, 'valuationStatus'), marketEvidence, officialFinancialRefresh, officialDocumentParsing, officialFinancialValidation, authorityCutoff, productionSourceCutoff, officialFinancialRefreshTargets: financialRefreshTargets.map((target) => target.symbol), officialFinancialRefreshBacklog: financialRefreshBacklog.length, officialFinancialGapCounts: countFinancialGaps(financialGapByStock), officialFinancialRefreshState: 'method_specific_field_period_v2' }, finished_at: new Date().toISOString() }).eq('id', runId);
   if (runUpdate.error) throw new Error(runUpdate.error.message);
   if (failClosedWriteFailures > 0) throw new Error(`candidate_fail_closed_snapshot_failed:${failClosedWriteFailures}`);
   return {
