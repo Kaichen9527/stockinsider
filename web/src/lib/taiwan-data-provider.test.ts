@@ -178,6 +178,19 @@ test('uses VPS-reachable TWSE RWD routes for institutional and margin evidence',
   );
 });
 
+test('exchange-wide TWSE flow canonicalization excludes non-common-stock identities', async () => {
+  const response = {
+    stat: 'OK', date: '20260904', fields: ['證券代號', '證券名稱', '三大法人買賣超股數'],
+    data: [['2330', '台積電', '1000'], ['00632R', '元大台灣50反1', '2000'], ['02001L', '富邦特選蘋果N', '3000']],
+  };
+  const result = await acquireTaiwanDataset(
+    { ...input, dataset: 'institutional_flow', symbol: null },
+    { fetchImpl: async () => new Response(JSON.stringify(response), { status: 200 }) },
+  );
+  assert.equal(result.terminal, 'complete');
+  assert.deepEqual(result.canonical?.records.map((row) => row['證券代號']), ['2330']);
+});
+
 test('selects the securities table from a multi-table TWSE margin response', async () => {
   const result = await acquireTaiwanDataset({ ...input, dataset: 'margin_short', symbol: null }, {
     fetchImpl: async () => jsonResponse({
