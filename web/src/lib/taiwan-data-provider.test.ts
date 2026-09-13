@@ -167,6 +167,35 @@ test('uses current TPEx OpenAPI endpoints for exchange-wide valuation and index 
   );
 });
 
+test('uses VPS-reachable TWSE RWD routes for institutional and margin evidence', () => {
+  assert.equal(
+    officialTaiwanDataUrl({ ...input, dataset: 'institutional_flow', symbol: null }),
+    'https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20260904&selectType=ALL',
+  );
+  assert.equal(
+    officialTaiwanDataUrl({ ...input, dataset: 'margin_short', symbol: null }),
+    'https://www.twse.com.tw/rwd/zh/marginTrading/MI_MARGN?response=json&date=20260904&selectType=ALL',
+  );
+});
+
+test('selects the securities table from a multi-table TWSE margin response', async () => {
+  const result = await acquireTaiwanDataset({ ...input, dataset: 'margin_short', symbol: null }, {
+    fetchImpl: async () => jsonResponse({
+      stat: 'OK', date: '20260904',
+      tables: [
+        { fields: ['項目', '買進', '賣出'], data: [['融資', '1', '2']] },
+        {
+          fields: ['股票代號', '股票名稱', '融資買進', '融資賣出'],
+          data: [['2330', '台積電', '100', '50']],
+        },
+      ],
+    }),
+  });
+  assert.equal(result.terminal, 'complete');
+  assert.equal(result.canonical?.records.length, 1);
+  assert.equal(result.canonical?.records[0]['股票代號'], '2330');
+});
+
 test('canonicalizes TPEx institutional, margin and monthly-revenue OpenAPI object rows', async () => {
   for (const dataset of ['institutional_flow', 'margin_short'] as const) {
     const result = await acquireTaiwanDataset({ ...input, exchange: 'TPEX', dataset, symbol: null }, {
@@ -257,7 +286,7 @@ test('canonicalizes current TPEx OpenAPI index rows and rejects a missing reques
 });
 
 test('stops oversized provider bodies while streaming', async () => {
-  const oversized = 'x'.repeat(2_000_001);
+  const oversized = 'x'.repeat(5_000_001);
   const result = await acquireTaiwanDataset(input, {
     fetchImpl: async () => new Response(oversized, { status: 200 }),
   });
