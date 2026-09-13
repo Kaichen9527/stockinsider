@@ -86,7 +86,7 @@ export default function ResearchOnlyDetail({ symbol, card, projectionBlockers = 
   return <main data-testid="research-only-detail" className="min-h-screen px-4 py-6 text-[var(--foreground)] sm:px-5 md:px-10 md:py-8">
     <section className="decision-panel mx-auto max-w-[980px] overflow-hidden p-5 sm:p-6 md:p-8">
       <Link href="/" className="inline-flex min-h-11 items-center rounded-full border border-current px-4 text-sm">回到雷達首頁</Link>
-      <p className="research-kicker mt-8">RESEARCH MODE · ACTION DISABLED</p>
+      <p className="research-kicker mt-8">研究模式 · 買進動作已停用</p>
       <h1 className="mt-2 text-3xl font-semibold">{name ? `${name} ` : ''}{symbol}</h1>
       <p className="mt-3 text-base leading-7">{sourceSummary}</p>
       {revisionId ? <p data-testid="research-only-decision-revision" className="mt-2 text-xs text-stone-500">研究版本已鎖定，可在後端稽核。</p> : null}
