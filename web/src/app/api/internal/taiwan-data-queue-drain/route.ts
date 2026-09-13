@@ -5,6 +5,7 @@ import { acquireTaiwanDataset, type TaiwanDataset, type TaiwanExchange, type Tai
 import { parseTaiwanQueueRequest, requireActiveVpsWriter, resolveLatestCompletedTaiwanSession } from '@/lib/taiwan-data-runtime';
 import { readFinMindVaultToken } from '@/lib/finmind-vault';
 import { isTaiwanRefreshComplete, isTaiwanRefreshResearchReady, parseTaiwanDrainOptions } from '@/lib/taiwan-candidate-refresh';
+import { boundedOfficialCurlFetch } from '@/lib/bounded-official-curl-fetch';
 
 const BODY_LIMIT = 10_000;
 const DRAIN_CONCURRENCY = 4;
@@ -53,7 +54,7 @@ export async function POST(request: Request) {
       const batch = await Promise.all(jobs.slice(offset, offset + DRAIN_CONCURRENCY).map(async (job) => {
         let result = await acquireTaiwanDataset(
           { dataset: job.dataset, symbol: job.symbol, exchange: job.exchange, phase: job.refresh_phase, sessionDate: job.requested_session_date },
-          { finMindToken },
+          { finMindToken, ...(job.exchange === 'TPEX' ? { officialFetchImpl: boundedOfficialCurlFetch } : {}) },
         );
         let persistence = 'not_persisted';
         if (result.terminal === 'complete' && job.dataset === 'financial_statement') {

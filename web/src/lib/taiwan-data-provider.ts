@@ -65,6 +65,8 @@ export type TaiwanProviderInput = {
 type FetchLike = (input: string, init?: RequestInit) => Promise<Response>;
 export type TaiwanProviderOptions = {
   fetchImpl?: FetchLike;
+  officialFetchImpl?: FetchLike;
+  finMindFetchImpl?: FetchLike;
   officialTimeoutMs?: number;
   finMindTimeoutMs?: number;
   finMindToken?: string;
@@ -73,7 +75,7 @@ export type TaiwanProviderOptions = {
 
 // Queue identities include this value. A provider URL/parser change must create
 // a new immutable attempt instead of silently reusing an earlier terminal job.
-export const TAIWAN_DATA_PROVIDER_CONTRACT_VERSION = 'taiwan-data-provider-v9' as const;
+export const TAIWAN_DATA_PROVIDER_CONTRACT_VERSION = 'taiwan-data-provider-v10' as const;
 
 const OFFICIAL_TIMEOUT_MS = 8_000;
 const FINMIND_TIMEOUT_MS = 12_000;
@@ -332,6 +334,13 @@ function canonicalizePayload(payload: unknown, provider: TaiwanProvider, input: 
     ? { ...Object.fromEntries(fields.map((field, index) => [field, row[index]])), fields, values: row }
     : row as Record<string, unknown>)
     .filter((row) => !input.symbol || symbolIndex < 0 || !Array.isArray(row['values']) || String(row['values'][symbolIndex] || '') === input.symbol);
+  if ((input.dataset === 'institutional_flow' || input.dataset === 'margin_short') && symbolIndex >= 0) {
+    // Exchange-wide feeds also contain ETFs, warrants, bonds and other
+    // securities. Candidate equity research accepts only four-digit common
+    // stock identities; retain raw provider evidence in the attempt receipt.
+    records = records.filter((row) => Array.isArray(row.values)
+      && /^\d{4}$/u.test(String(row.values[symbolIndex] || '').trim()));
+  }
   // Exchanges use dashes for an unavailable PE/PB (for example a loss-making
   // company). Preserve the absence as null so one missing multiple does not
   // abort persistence of every other company or hide a valid companion ratio.
@@ -459,13 +468,15 @@ export async function acquireTaiwanDataset(input: TaiwanProviderInput, options: 
     throw new Error('invalid_taiwan_provider_input');
   }
   const fetchImpl = options.fetchImpl || fetch;
+  const officialFetchImpl = options.officialFetchImpl || fetchImpl;
+  const finMindFetchImpl = options.finMindFetchImpl || fetchImpl;
   const officialUrl = officialTaiwanDataUrl(input);
   const officialProvider: TaiwanProvider = input.exchange === 'TWSE' ? 'twse' : 'tpex';
   const attempts: TaiwanProviderAttempt[] = [];
   if (!officialUrl) {
     attempts.push(terminalAttempt({ provider: officialProvider, authorityTier: 'official_primary', terminal: 'schema_invalid', sourceUrl: '', httpStatus: null, responseSha256: null, responseBytes: 0, apiUsage: null, normalizedPayload: null, detail: 'unsupported_official_dataset_identity' }, now));
   } else {
-    attempts.push(await acquireOne(officialProvider, 'official_primary', officialUrl, options.officialTimeoutMs || OFFICIAL_TIMEOUT_MS, fetchImpl, now, undefined, input));
+    attempts.push(await acquireOne(officialProvider, 'official_primary', officialUrl, options.officialTimeoutMs || OFFICIAL_TIMEOUT_MS, officialFetchImpl, now, undefined, input));
   }
   const official = attempts[0];
   if (official.terminal === 'complete' || official.terminal === 'empty') {
@@ -483,7 +494,7 @@ export async function acquireTaiwanDataset(input: TaiwanProviderInput, options: 
   if (!token) {
     attempts.push(terminalAttempt({ provider: 'finmind', authorityTier: 'finmind_fallback', terminal: 'not_configured', sourceUrl: fallbackUrl, httpStatus: null, responseSha256: null, responseBytes: 0, apiUsage: null, normalizedPayload: null, detail: 'finmind_api_token_missing' }, now));
   } else {
-    attempts.push(await acquireOne('finmind', 'finmind_fallback', fallbackUrl, options.finMindTimeoutMs || FINMIND_TIMEOUT_MS, fetchImpl, now, { authorization: `Bearer ${token}` }, input));
+    attempts.push(await acquireOne('finmind', 'finmind_fallback', fallbackUrl, options.finMindTimeoutMs || FINMIND_TIMEOUT_MS, finMindFetchImpl, now, { authorization: `Bearer ${token}` }, input));
   }
   const fallback = attempts.at(-1)!;
   const canonicalized = fallback.normalizedPayload ? canonicalizePayload(fallback.normalizedPayload, 'finmind', input) : { records: [], detail: null };
