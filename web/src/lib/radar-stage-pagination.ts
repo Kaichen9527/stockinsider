@@ -37,6 +37,7 @@ export function compactCandidateStageForSnapshot(card: CandidateStageCard): Cand
   return {
     symbol: card.symbol,
     chineseName: card.chineseName,
+    sector: card.sector ?? null,
     lifecycleStage: card.lifecycleStage,
     detailRevisionId: card.detailRevisionId ?? null,
     detailHref: candidateRevisionHref(card.symbol, card.detailRevisionId),

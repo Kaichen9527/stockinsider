@@ -16,7 +16,7 @@ export default defineConfig({
   reporter: [['list']],
   use: { baseURL },
   webServer: skipWebServer ? undefined : {
-    command: `bash -lc 'npm run build; set -a; source ../.env 2>/dev/null || true; set +a; DATA_MODE=demo SOURCE_LED_OPPORTUNITY_V3=disabled OPPORTUNITY_V3_UI_FIXTURE=enabled npm run start -- --port ${port}'`,
+    command: `bash -lc 'npm run build; mkdir -p .next/standalone/.next; cp -R .next/static .next/standalone/.next/static; if [ -d public ]; then cp -R public .next/standalone/public; fi; set -a; source ../.env 2>/dev/null || true; set +a; PORT=${port} HOSTNAME=127.0.0.1 DATA_MODE=demo SOURCE_LED_OPPORTUNITY_V3=disabled OPPORTUNITY_V3_UI_FIXTURE=enabled node .next/standalone/server.js'`,
     env: { ...process.env, INTERNAL_API_KEY: internalKey, DATA_MODE: 'demo', SOURCE_LED_OPPORTUNITY_V3: 'disabled', OPPORTUNITY_V3_UI_FIXTURE: 'enabled', RADAR_PUBLIC_SNAPSHOTS_ENABLED: 'disabled' },
     // Readiness must not hit the dynamic homepage: that route intentionally
     // reads live data and can stay pending while the fixture server is healthy.

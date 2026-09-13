@@ -2,7 +2,6 @@ import { getDailyRadarData, getPersistedRadarStages } from '@/lib/domain';
 import Link from 'next/link';
 import { HydrationSafeHome } from './components/HydrationSafeHome';
 import { RadarTabs } from './components/RadarTabs';
-import { ShadowOpportunityV3 } from './components/ShadowOpportunityV3';
 import { loadOpportunityEngineV3 } from '@/lib/opportunity-v3/projection';
 import { layerHomepageOpportunityV3, v3PublicEnabled } from '@/lib/opportunity-v3/deployment';
 import { loadPublishedRadarProjection } from '@/lib/radar-projection-read';
@@ -134,7 +133,6 @@ export default async function Home() {
     loadShadowEngine: () => loadOpportunityEngineV3(v3ProjectionCutoff).catch(() => null),
     shadowEnabled: v3PublicEnabled() && !publicSnapshot,
   });
-  const opportunityEngineV3 = layered.opportunityEngineV3;
   const radar = hasCandidateStageCards(layered.radar)
     ? layered.radar
     : { ...layered.radar, stages: radarPublicSnapshotsEnabled() ? await getPersistedRadarStages() : { found: [], waiting: [], actionable: [] } };
@@ -182,6 +180,11 @@ export default async function Home() {
   ]) {
     symbolNameMap.set(stage.symbol, stage.chineseName || stage.symbol);
   }
+  const candidateRevisionBySymbol = new Map([
+    ...(radar.stages?.found || []),
+    ...(radar.stages?.waiting || []),
+    ...(radar.stages?.actionable || []),
+  ].map((card) => [card.symbol, card.detailHref || `/stock/${card.symbol}`]));
   const decisionRevisionBySymbol = new Map((radar.sourceSignals || []).map((card) => [card.symbol, card.decisionRevisionId]));
   const visibleReports = (radar.reports || []).filter((memo) => {
     const relatedSymbol = memo.relatedSymbols[0] || null;
@@ -212,7 +215,29 @@ export default async function Home() {
     <main className="min-h-screen px-5 py-6 text-slate-950 dark:text-emerald-50 md:px-10 lg:px-14">
       <HydrationSafeHome>
         <div className="mx-auto flex max-w-[1440px] flex-col gap-8">
-        <section className="overflow-hidden rounded-[2rem] border border-line bg-surface shadow-[0_20px_80px_rgba(8,18,26,0.12)] backdrop-blur">
+        <section className="decision-panel overflow-hidden">
+          <div className="grid gap-px bg-line lg:grid-cols-[1.15fr_.85fr]">
+            <div className="bg-stone-950 px-5 py-6 text-stone-50 sm:px-8 sm:py-8">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <p className="research-kicker text-orange-300">STOCKINSIDER · DAILY RESEARCH DESK</p>
+                <Link href="/sources" className="inline-flex min-h-10 items-center rounded-full border border-stone-600 px-4 text-xs font-semibold hover:border-orange-300">全量來源檢索 →</Link>
+              </div>
+              <h1 className="mt-5 max-w-3xl text-3xl font-semibold tracking-[-0.045em] sm:text-5xl">今天有哪些股票值得<br className="hidden sm:block"/><span className="text-orange-300">繼續研究？</span></h1>
+              <p className="mt-4 max-w-2xl text-sm leading-6 text-stone-300">先看所有來源命中，再區分等待條件與現在可行動。估值、技術、大盤與資料缺口都會明確列出，不把研究分數當成上漲機率。</p>
+            </div>
+            <div className="grid grid-cols-2 gap-px bg-line">
+              <div className="bg-[var(--surface)] p-4 sm:p-5"><p className="text-xs text-stone-500">交易資料</p><p className="mt-2 font-semibold">{priceHealth?.priceRefreshStatus === 'fresh' ? '最近收盤已更新' : priceHealth?.priceRefreshStatus === 'stale' ? '收盤資料偏舊' : '收盤資料待補'}</p><p className="mt-1 text-xs text-stone-500">{formatTaipeiDateTime(priceHealth?.priceRefreshLastSuccessAt, 'short')}</p></div>
+              <div className="bg-[var(--surface)] p-4 sm:p-5"><p className="text-xs text-stone-500">大盤狀態</p><p className="mt-2 font-semibold">{underreactionMarket?.status === 'risk_on' ? '趨勢與廣度支持' : underreactionMarket?.status === 'selective_or_defensive' ? '選股／防守優先' : '證據未完整'}</p><p className="mt-1 text-xs text-stone-500">完整度 {underreactionMarket ? Math.round(underreactionMarket.completeness * 100) : 0}%</p></div>
+              <div className="bg-[var(--surface)] p-4 sm:p-5"><p className="text-xs text-stone-500">全部來源命中</p><p className="mt-2 text-2xl font-semibold tabular-nums">{initialStageCounts?.found ?? 0}</p><p className="mt-1 text-xs text-stone-500">最近七日</p></div>
+              <div className="bg-[var(--surface)] p-4 sm:p-5"><p className="text-xs text-stone-500">等待 / 可行動</p><p className="mt-2 text-2xl font-semibold tabular-nums">{initialStageCounts?.waiting ?? 0} / <span className="text-accent">{initialStageCounts?.actionable ?? 0}</span></p><p className="mt-1 text-xs text-stone-500">依嚴格門檻分類</p></div>
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line bg-[var(--surface-strong)] px-5 py-3 text-xs text-stone-500 sm:px-8">
+            <span>研究快照 {formatTaipeiDateTime(radar.snapshotPublishedAt || radar.asOf, 'short')}{radar.snapshotStale ? ' · 舊版唯讀' : ''}</span>
+            <span>{marketHighlight?.regimeLabel || '大盤狀態待補'} · {sourceHealth ? `${sourceHealth.successfulSources} 個來源正常` : '來源健康待補'}</span>
+          </div>
+        </section>
+        {false ? <section className="overflow-hidden rounded-[2rem] border border-line bg-surface shadow-[0_20px_80px_rgba(8,18,26,0.12)] backdrop-blur">
           <div className="grid gap-6 px-6 py-8 md:grid-cols-1 md:px-10">
             <div className="space-y-5">
               <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs tracking-[0.24em] text-amber-700 dark:text-amber-300">
@@ -261,14 +286,14 @@ export default async function Home() {
                   </p>
                   <p className="mt-2 text-xs leading-5 text-slate-600 dark:text-emerald-100/62">
                     {underreactionMarket?.summary || '等待加權、櫃買、市場廣度與外資資料。'}
-                    {underreactionMarket ? ` · 完整度 ${Math.round(underreactionMarket.completeness * 100)}%` : ''}
+                    {underreactionMarket ? ` · 完整度 ${Math.round((underreactionMarket?.completeness ?? 0) * 100)}%` : ''}
                   </p>
                   <p className="mt-2 text-xs font-medium text-amber-700 dark:text-amber-300">{underreactionMarket?.riskBudget || '資料未完整，不提供部位預算。'}</p>
                 </div>
                 <div className="rounded-2xl border border-line bg-surface-strong p-4">
                   <p className="text-xs tracking-[0.24em] text-slate-500 dark:text-emerald-100/50">資料刷新健康度</p>
                   <p className="mt-2 text-xl font-semibold">
-                    {sourceHealth ? `${sourceHealth.successfulSources} 正常 / ${sourceHealth.degradedSources} 待補` : '待補'}
+                    {sourceHealth ? `${sourceHealth?.successfulSources ?? 0} 正常 / ${sourceHealth?.degradedSources ?? 0} 待補` : '待補'}
                   </p>
                   <p className="mt-2 text-xs leading-5 text-slate-600 dark:text-emerald-100/62">
                     寫入 {sourceHealth?.recordsWritten24h ?? 0} 筆 · 最近成功 {formatTaipeiDateTime(sourceHealth?.lastSuccessfulRunAt || agentStatus.lastSuccessfulRunAt, 'short')}
@@ -333,18 +358,18 @@ export default async function Home() {
                 <div className="grid gap-3 lg:grid-cols-[1.2fr_0.8fr]">
                   <article className="rounded-[1.5rem] border border-line bg-surface-strong p-5">
                     <p className="text-xs tracking-[0.24em] text-slate-500 dark:text-emerald-100/50">推薦池更新證明</p>
-                    <h2 className="mt-2 text-xl font-semibold">{radar.discoveryFreshnessSummary.candidateSummary}</h2>
+                    <h2 className="mt-2 text-xl font-semibold">{radar.discoveryFreshnessSummary?.candidateSummary}</h2>
                     <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-emerald-100/72">
-                      {radar.discoveryFreshnessSummary.sourceSummary}
+                      {radar.discoveryFreshnessSummary?.sourceSummary}
                     </p>
                     <p className="mt-2 text-xs leading-5 text-slate-500 dark:text-emerald-100/55">
-                      名單未大幅變動原因：{radar.discoveryFreshnessSummary.unchangedReason}
+                      名單未大幅變動原因：{radar.discoveryFreshnessSummary?.unchangedReason}
                     </p>
                   </article>
                   <article className="rounded-[1.5rem] border border-line bg-surface-strong p-5">
                     <p className="text-xs tracking-[0.24em] text-slate-500 dark:text-emerald-100/50">海外 Lead-Lag 雷達</p>
                     <h2 className="mt-2 text-xl font-semibold">
-                      {radar.globalLeadLagSummary ? `${radar.globalLeadLagSummary.activeThemes} 個主題監控中` : '等待海外同族群資料'}
+                      {radar.globalLeadLagSummary ? `${radar.globalLeadLagSummary?.activeThemes ?? 0} 個主題監控中` : '等待海外同族群資料'}
                     </h2>
                     <p className="mt-2 text-sm leading-6 text-slate-700 dark:text-emerald-100/72">
                       {radar.globalLeadLagSummary?.summary || '海外同族群領漲只作候選與情境追蹤，不直接升正式推薦。'}
@@ -382,9 +407,9 @@ export default async function Home() {
                   </div>
                 </div>
               ) : null}
-              {radar.themeHypotheses && radar.themeHypotheses.length > 0 ? (
+              {(radar.themeHypotheses?.length ?? 0) > 0 ? (
                 <div className="grid gap-3 md:grid-cols-2">
-                  {radar.themeHypotheses.slice(0, 4).map((hypothesis) => (
+                  {(radar.themeHypotheses || []).slice(0, 4).map((hypothesis) => (
                     <article key={hypothesis.themeKey} className="rounded-2xl border border-line bg-surface-strong p-4">
                       <p className="text-xs tracking-[0.2em] text-slate-500 dark:text-emerald-100/55">{hypothesis.evidenceLevel}</p>
                       <h3 className="mt-2 text-sm font-semibold">{hypothesis.title}</h3>
@@ -398,10 +423,9 @@ export default async function Home() {
               ) : null}
             </div>
           </div>
-        </section>
+        </section> : null}
 
         <section className="rounded-[2rem] border border-line bg-surface p-6 backdrop-blur">
-          {opportunityEngineV3 ? <ShadowOpportunityV3 engine={opportunityEngineV3} /> : null}
           <RadarTabs radar={homeRadar} hydrateFromDaily initialStageCounts={initialStageCounts} />
         </section>
 
@@ -417,7 +441,7 @@ export default async function Home() {
               if (!relatedSymbol) return null;
               const relatedName = symbolNameMap.get(relatedSymbol) || null;
               if (!relatedName) return null;
-              const href = relatedSymbol ? `/stock/${relatedSymbol}` : '/sources';
+              const href = candidateRevisionBySymbol.get(relatedSymbol) || `/stock/${relatedSymbol}`;
               const relatedLabel = `[${relatedSymbol}] ${relatedName}`;
               return (
                 <Link key={memo.slug} href={href} className="block rounded-[1.5rem] border border-line bg-surface-strong p-5 transition hover:border-accent">
