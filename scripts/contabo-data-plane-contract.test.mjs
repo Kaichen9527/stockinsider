@@ -69,6 +69,7 @@ test('PostgREST is loopback-only and receives secrets through encrypted credenti
   assert.match(nginx,/location \/rest\/v1\//u);
   assert.match(nginx,/proxy_pass http:\/\/127[.]0[.]0[.]1:3301\//u);
   assert.match(nginx,/large_client_header_buffers 4 32k/u);
+  assert.match(nginx,/client_max_body_size 8m/u);
   assert.match(nginx,/proxy_buffer_size 128k/u);
   assert.match(nginx,/proxy_buffers 4 128k/u);
   assert.match(nginx,/proxy_busy_buffers_size 256k/u);

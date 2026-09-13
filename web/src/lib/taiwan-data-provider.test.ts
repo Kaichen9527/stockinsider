@@ -117,8 +117,16 @@ test('rejects a source-shaped daily result when it does not contain the requeste
   assert.ok(result.canonical?.records.length);
 });
 
-test('pins FinMind credentials to its official API host and uses the VPS-reachable official TAIEX endpoint', () => {
+test('pins FinMind credentials to its official API host and supplies explicit index identities', () => {
   assert.equal(new URL(finMindTaiwanDataUrl(input)).origin, 'https://api.finmindtrade.com');
+  assert.equal(
+    new URL(finMindTaiwanDataUrl({ ...input, dataset: 'market_index', symbol: null })).searchParams.get('data_id'),
+    'TAIEX',
+  );
+  assert.equal(
+    new URL(finMindTaiwanDataUrl({ ...input, exchange: 'TPEX', dataset: 'market_index', symbol: null })).searchParams.get('data_id'),
+    'TPEx',
+  );
   assert.match(officialTaiwanDataUrl({ ...input, dataset: 'market_index', symbol: null }) || '', /rwd\/zh\/TAIEX\/MI_5MINS_HIST/u);
 });
 
