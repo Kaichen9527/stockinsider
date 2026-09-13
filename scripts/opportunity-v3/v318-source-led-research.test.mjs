@@ -154,7 +154,7 @@ test('V3.18 Threads topic discovery accepts non-tracked public authors without i
   assert.deepEqual(threadDocuments.map((row)=>[row.stableConnectorDocumentId,row.sourceAuthor,row.trackedAuthor]),[
     ['gooaye-topic-1','stockcancer',true],['unapproved-1','unapproved',false],
   ]);
-  assert.ok(threadDocuments.every((row)=>row.sourceAssessment==='discovery_only_unverified'
+  assert.ok(threadDocuments.every((row)=>row.sourceAssessment==='public_keyword_discovery'
     &&row.profileMonitoringDisposition==='blocked_permission'
     &&row.profileMonitoringReason==='threads_profile_discovery_missing'));
   assert.equal(result.connectorAttempts.length,85);
@@ -185,12 +185,24 @@ test('source refresh preserves API failure through tee',()=>{
   assert.match(workflow,/set -euo pipefail[\s\S]*call_internal_api[.]mjs[\s\S]*[|] tee/u);
 });
 
-test('unverified Threads author discovery cannot impersonate approved KOL nomination authority',()=>{
+test('public Threads keyword discovery enters found without impersonating approved KOL authority',()=>{
   const authority=runtime('candidate-nomination-authority.js');
   assert.equal(authority.nominationAuthorityForSource({sourceKey:'threads',sourceAssessment:'discovery_only_unverified'}),null);
   assert.equal(authority.hasCandidateNominationAuthority({sourceKey:'threads',sourceAssessment:'discovery_only_unverified',
     nominationAuthority:'approved_kol_threads_api'}),false);
+  assert.equal(authority.nominationAuthorityForSource({sourceKey:'threads',sourceAssessment:'public_keyword_discovery'}),
+    'public_threads_keyword_search');
+  assert.equal(authority.hasCandidateNominationAuthority({sourceKey:'threads',sourceAssessment:'public_keyword_discovery',
+    nominationAuthority:'public_threads_keyword_search'}),true);
+  assert.equal(authority.hasCandidateNominationAuthority({sourceKey:'threads',sourceAssessment:'public_keyword_discovery',
+    nominationAuthority:'approved_kol_threads_api'}),false);
   assert.equal(authority.nominationAuthorityForSource({sourceKey:'threads'}),'approved_kol_threads_api');
+  const publicHit={...outcome('2330'),sourceKey:'threads',sourceAssessment:'public_keyword_discovery',
+    nominationAuthority:'public_threads_keyword_search'};
+  const funnel=runtime('candidate-funnel.js').buildCandidateFunnel({outcomes:[publicHit],seedSymbols:[],priorLedger:[],
+    currentSession:'2026-08-20',completedSessions:['2026-08-20']});
+  assert.deepEqual(funnel.candidateLedger.map((row)=>row.symbol),['2330']);
+  assert.equal(funnel.candidateLedger[0].nominationAuthority,'public_threads_keyword_search');
 });
 
 test('V3.20 preserves unauthorized paid-source and metadata-only terminals while accepting public Telegram claims',()=>{

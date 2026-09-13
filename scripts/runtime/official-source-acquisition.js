@@ -391,7 +391,7 @@ async function threads(profile,roster,credentials,fetchImpl,collectedAt) {
   const documents=rows.slice(0,MAX_DOCUMENTS_PER_CONNECTOR.threads).map((row)=>Object.freeze({...documentRevision({
     sourceKey:'threads',profile,stableId:row.id,title:`Threads · @${String(row.username).replace(/^@/u,'')}`,
     sourceUrl:approvedThreadsUrl(row.permalink),publishedAt:row.timestamp,transcript:row.text,collectedAt}),
-    sourceAuthor:String(row.username).replace(/^@/u,'').toLowerCase(),sourceAssessment:'discovery_only_unverified',
+    sourceAuthor:String(row.username).replace(/^@/u,'').toLowerCase(),sourceAssessment:'public_keyword_discovery',
     trackedAuthor:String(row.username).replace(/^@/u,'').toLowerCase()===approvedUsername,
     profileMonitoringDisposition:'blocked_permission',profileMonitoringReason:'threads_profile_discovery_missing'}));
   const items=documents.map((document)=>({sourceKey:'threads',profileId:profile.id,
