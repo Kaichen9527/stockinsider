@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { loadLocalBackupKey } from './local-backup-file-key.mjs';
 import { BACKUP_ENVELOPE_LAYOUT as layout } from './local-backup-envelope.mjs';
 
-const PROJECT = 'mgqpxfbdhmiygdytgswi';
+const PROJECTS = new Set(['mgqpxfbdhmiygdytgswi', 'stockinsider-contabo']);
 const SHA256 = /^[a-f0-9]{64}$/u;
 const STORAGE_MANIFEST = /^storage-[a-zA-Z0-9-]+[.]manifest[.]json$/u;
 const MAX_JSON_BYTES = 16 * 1024 * 1024;
@@ -64,13 +64,18 @@ async function restoreOne({ backupDirectory, root, entry, outer, key }) {
   const expectedBytes = outer?.result?.plaintextBytes;
   const object = outer?.manifest?.object;
   const pathSegments = String(object?.name || '').split('/');
-  if (outer?.manifest?.schema !== 'stockinsider-storage-export-v1' || outer.manifest.project !== PROJECT
+  if (!['stockinsider-storage-export-v1', 'stockinsider-storage-export-v2'].includes(outer?.manifest?.schema)
+    || !PROJECTS.has(outer.manifest.project)
     || digest(JSON.stringify(outer.manifest)) !== entry.contextSha256
     || outer.contextSha256 !== entry.contextSha256 || outer.result?.envelopeVerified !== true
     || outer.result?.filename !== entry.filename || !SHA256.test(expectedHash || '')
     || !Number.isSafeInteger(expectedBytes) || expectedBytes <= 0 || expectedBytes > MAX_OBJECT_BYTES
     || Number(object?.metadata?.size) !== expectedBytes || pathSegments.some(segment => !segment || segment === '.' || segment === '..')
-    || pathSegments.at(-1) !== expectedHash || !/^[a-z0-9][a-z0-9-]{0,100}$/u.test(object?.bucket_id || '')) {
+    || pathSegments.at(-1) !== expectedHash || !/^[a-z0-9][a-z0-9-]{0,100}$/u.test(object?.bucket_id || '')
+    || (outer.manifest.schema === 'stockinsider-storage-export-v2'
+      && (outer.manifest.project !== 'stockinsider-contabo'
+        || outer.manifest.source !== 'contabo_private_artifact_store'
+        || object?.metadata?.sha256 !== expectedHash))) {
     throw new Error('storage_recovery_manifest_invalid');
   }
   const artifactPath = path.join(backupDirectory, entry.filename);

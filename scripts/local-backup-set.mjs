@@ -52,7 +52,8 @@ export function assessBackupSet({ database, storageInventory, storageManifests, 
   const actualContexts = new Set(storageManifests.map(item => item.json?.contextSha256));
   if (expectedStorage.length !== storageManifests.length
     || expectedStorage.some(item => !actualContexts.has(item.contextSha256))
-    || storageManifests.some(item => item.json?.manifest?.schema !== 'stockinsider-storage-export-v1'
+    || storageManifests.some(item => !['stockinsider-storage-export-v1', 'stockinsider-storage-export-v2']
+      .includes(item.json?.manifest?.schema)
       || item.json?.result?.envelopeVerified !== true)) reasons.push('storage_members_incomplete');
   if (provider.json?.manifest?.schema !== 'stockinsider-provider-recovery-v1'
     || provider.json?.result?.envelopeVerified !== true) reasons.push('provider_recovery_unverified');

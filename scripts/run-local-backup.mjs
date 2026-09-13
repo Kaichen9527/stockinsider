@@ -58,16 +58,15 @@ export async function runLocalBackup(config, scriptsDirectory = path.dirname(fil
   await mkdir(lock, { mode: 0o700 });
   try {
     const before = new Set(await readdir(config.directory));
-    await runNode(path.join(scriptsDirectory, 'export-local-database-backup.mjs'), [config.directory,
-      config.environmentFile, config.caFile, config.keyDirectory, config.pgDump, config.pgModule],
-    { STOCKINSIDER_BACKUP_KEY_MODE: 'private-file' });
+    await runNode(path.join(scriptsDirectory, 'export-contabo-database-backup.mjs'),
+      [config.directory, config.keyDirectory]);
     const afterDatabase = new Set(await readdir(config.directory));
-    const [databaseManifest] = difference(afterDatabase, before, /^database-.+\.manifest\.json$/);
+    const [databaseManifest] = difference(afterDatabase, before, /^contabo-database-.+\.manifest\.json$/);
     if (!databaseManifest) throw new Error('database_manifest_missing');
     await runNode(path.join(scriptsDirectory, 'verify-local-database-archive.mjs'),
       [path.join(config.directory, databaseManifest), config.keyDirectory, config.pgRestore]);
-    await runNode(path.join(scriptsDirectory, 'export-local-storage-backup.mjs'), [config.directory,
-      config.environmentFile, config.caFile, config.keyDirectory, config.pgModule]);
+    await runNode(path.join(scriptsDirectory, 'export-contabo-private-artifacts.mjs'),
+      [config.directory, config.keyDirectory]);
     const afterStorage = new Set(await readdir(config.directory));
     const storageManifests = difference(afterStorage, afterDatabase, /^storage-.+\.manifest\.json$/);
     const [storageInventory] = difference(afterStorage, afterDatabase, /^storage-inventory-.+\.json$/);
@@ -80,8 +79,8 @@ export async function runLocalBackup(config, scriptsDirectory = path.dirname(fil
       && item.objectsRestored === storageManifests.length && typeof item.filename === 'string');
     if (!storageRestore) throw new Error('storage_restore_receipt_missing');
     const storageRestoreReceipt = storageRestore.filename;
-    await runNode(path.join(scriptsDirectory, 'export-local-provider-recovery.mjs'), [config.directory,
-      config.environmentFile, config.caFile, config.keyDirectory, config.pgModule]);
+    await runNode(path.join(scriptsDirectory, 'export-contabo-provider-recovery.mjs'),
+      [config.directory, config.keyDirectory]);
     const afterProvider = new Set(await readdir(config.directory));
     const [providerManifest] = difference(afterProvider, afterStorage, /^provider-recovery-.+\.manifest\.json$/);
     if (!providerManifest) throw new Error('provider_manifest_missing');

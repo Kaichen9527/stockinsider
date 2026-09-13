@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { loadLocalBackupKey } from './local-backup-file-key.mjs';
 import { decryptSmallBackupPayload } from './local-backup-envelope.mjs';
 
-const PROJECT = 'mgqpxfbdhmiygdytgswi';
+const PROJECTS = new Set(['mgqpxfbdhmiygdytgswi', 'stockinsider-contabo']);
 const EXPECTED_NAMES = ['stockinsider_finmind_api_token', 'threads_access_token'];
 const MAX_BYTES = 1024 * 1024;
 const SHA256 = /^[a-f0-9]{64}$/u;
@@ -64,7 +64,10 @@ export async function verifyLocalProviderRecovery({ manifestPath, keyDirectory, 
   }
   const outer = JSON.parse(await readFile(manifestReal, 'utf8'));
   if (outer?.manifest?.schema !== 'stockinsider-provider-recovery-v1'
-    || outer.manifest.project !== PROJECT || outer.manifest.credentialCount !== EXPECTED_NAMES.length
+    || !PROJECTS.has(outer.manifest.project) || outer.manifest.credentialCount !== EXPECTED_NAMES.length
+    || (outer.manifest.project === 'stockinsider-contabo'
+      && (outer.manifest.source !== 'contabo_encrypted_provider_store'
+        || outer.manifest.independentKeyEscrowVerified !== true))
     || outer.manifest.keyReference !== 'private-local-file:aes256-v1'
     || outer.manifest.productionRecoveryVerified !== false
     || !SHA256.test(outer.contextSha256 || '')

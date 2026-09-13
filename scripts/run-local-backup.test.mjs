@@ -20,11 +20,15 @@ test('orchestrator is pinned to the confirmed project-root backup and explicit p
 
 test('orchestrator requires the portable Contabo restore and its application validation receipt', () => {
   const source = readFileSync(new URL('./run-local-backup.mjs', import.meta.url), 'utf8');
+  assert.match(source, /export-contabo-database-backup[.]mjs/u);
+  assert.match(source, /export-contabo-private-artifacts[.]mjs/u);
+  assert.match(source, /export-contabo-provider-recovery[.]mjs/u);
   assert.match(source, /rehearse-contabo-database-restore[.]mjs/u);
   assert.match(source, /applicationValidationPassed === true/u);
   assert.match(source, /rehearse-local-storage-restore[.]mjs/u);
   assert.match(source, /verify-local-provider-recovery[.]mjs/u);
   assert.doesNotMatch(source, /rehearse-local-database-restore[.]mjs/u);
+  assert.doesNotMatch(source, /export-local-(?:database|storage|provider)/u);
 });
 
 test('database export uses one pg_dump-owned consistent snapshot over Contabo direct IPv6', () => {
