@@ -452,9 +452,34 @@ async function executeCandidateResearchCycle(options: {
   const selectedFinancialRefreshStocks = [...financialRefreshBacklog]
     .sort((left, right) => (cursorByStock.get(left.id) || 0) - (cursorByStock.get(right.id) || 0) || left.symbol.localeCompare(right.symbol))
     .slice(0, 30);
+  const listingAuthority = selectedFinancialRefreshStocks.length > 0
+    ? await supabase.from('stock_instruments_v3')
+      .select('stock_id,valid_from,recorded_at,source_timestamp')
+      .in('stock_id', selectedFinancialRefreshStocks.map((stock) => stock.id))
+      .eq('listing_status', 'active')
+      .eq('instrument_type', 'common_stock')
+      .lte('recorded_at', evaluatedAt)
+      .lte('source_timestamp', evaluatedAt)
+      .lte('valid_from', evaluatedAt)
+      .or(`valid_to.is.null,valid_to.gt.${evaluatedAt}`)
+      .order('stock_id')
+      .order('recorded_at', { ascending: false })
+      .order('source_timestamp', { ascending: false })
+      .limit(1_000)
+    : { data: [], error: null };
+  if (listingAuthority.error) throw new Error(`candidate_financial_listing_authority_read_failed:${listingAuthority.error.message}`);
+  const listedOnByStock = new Map<string,string>();
+  for (const instrument of (listingAuthority.data as Row[]) || []) {
+    const stockId = String(instrument.stock_id || '');
+    const validFrom = String(instrument.valid_from || '');
+    if (stockId && !listedOnByStock.has(stockId) && /^\d{4}-\d{2}-\d{2}/u.test(validFrom)) {
+      listedOnByStock.set(stockId, validFrom);
+    }
+  }
   const financialRefreshTargets = selectedFinancialRefreshStocks.flatMap((stock) => {
     const exchange = exchangeBySymbol.get(stock.symbol);
     return exchange ? [{ stockId: stock.id, symbol: stock.symbol, exchange: exchange === 'TPEx' ? 'TPEX' as const : 'TWSE' as const,
+      listedOn: listedOnByStock.get(stock.id) || null,
       statementKind: candidateStatementKind(stock.name, stock.sector || ''), gaps: financialGapByStock.get(stock.id) || [] }] : [];
   });
   const officialFinancialRefresh = financialRefreshTargets.length > 0

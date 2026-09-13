@@ -46,11 +46,33 @@ export async function POST(request: Request) {
   if (stockIds.length === 0) return NextResponse.json({ ok: true, result: { sessionDate, claimed: 0, writtenFacts: 0, failures: [], releaseId: writer.releaseId } });
   const stocks = await writer.supabase.from('stocks').select('id,symbol,name,sector').in('id', stockIds);
   if (stocks.error) return NextResponse.json({ ok: false, error: `candidate_financial_stock_read_failed:${stocks.error.message}` }, { status: 500 });
+  const instruments = await writer.supabase.from('stock_instruments_v3')
+    .select('stock_id,valid_from,recorded_at,source_timestamp')
+    .in('stock_id', stockIds)
+    .eq('listing_status', 'active')
+    .eq('instrument_type', 'common_stock')
+    .lte('recorded_at', now)
+    .lte('source_timestamp', now)
+    .lte('valid_from', now)
+    .or(`valid_to.is.null,valid_to.gt.${now}`)
+    .order('stock_id')
+    .order('recorded_at', { ascending: false })
+    .order('source_timestamp', { ascending: false })
+    .limit(1_000);
+  if (instruments.error) return NextResponse.json({ ok: false, error: `candidate_financial_listing_authority_read_failed:${instruments.error.message}` }, { status: 500 });
+  const listedOnByStock = new Map<string, string>();
+  for (const instrument of instruments.data || []) {
+    const stockId = String(instrument.stock_id || '');
+    const validFrom = String(instrument.valid_from || '');
+    if (stockId && !listedOnByStock.has(stockId) && /^\d{4}-\d{2}-\d{2}/u.test(validFrom)) {
+      listedOnByStock.set(stockId, validFrom);
+    }
+  }
   const candidates = (stocks.data || []).flatMap((stock) => {
     const stockId = String(stock.id || '');
     const symbol = String(stock.symbol || '');
     const exchange = exchangeByStock.get(stockId);
-    return exchange && /^\d{4}$/u.test(symbol) ? [{ stockId, symbol, exchange,
+    return exchange && /^\d{4}$/u.test(symbol) ? [{ stockId, symbol, exchange, listedOn: listedOnByStock.get(stockId) || null,
       statementKind: /證券|期貨|securities|futures/iu.test(`${stock.name || ''} ${stock.sector || ''}`) ? 'broker' as const : 'general' as const }] : [];
   });
   const result = await refreshCandidateOfficialFinancials(candidates, `${sessionDate}T13:30:00+08:00`, {
