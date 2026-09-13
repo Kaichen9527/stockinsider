@@ -3,12 +3,12 @@ import fs from 'node:fs';
 import test from 'node:test';
 import { parseInternalApiSequence } from './internal-api-sequence-policy.mjs';
 
-test('the scheduled 3,700,000 ms research request is valid while unbounded sequences are rejected', () => {
+test('the scheduled 5,520,000 ms research request is valid while unbounded sequences are rejected', () => {
   const steps = [{ endpoint: '/api/internal/taiwan-data-queue-drain', payload: { limit: 100 }, timeoutMs: 2700000 },
-    { endpoint: '/api/internal/pipeline-run', timeoutMs: 3700000 }];
-  assert.equal(parseInternalApiSequence(JSON.stringify(steps))[1].timeoutMs, 3700000);
-  assert.throws(() => parseInternalApiSequence(JSON.stringify([{ ...steps[1], timeoutMs: 3700001 }])), /timeout/);
-  assert.throws(() => parseInternalApiSequence(JSON.stringify([steps[1], steps[1]])), /two-hour/);
+    { endpoint: '/api/internal/pipeline-run', timeoutMs: 5520000 }];
+  assert.equal(parseInternalApiSequence(JSON.stringify(steps))[1].timeoutMs, 5520000);
+  assert.throws(() => parseInternalApiSequence(JSON.stringify([{ ...steps[1], timeoutMs: 5520001 }])), /timeout/);
+  assert.throws(() => parseInternalApiSequence(JSON.stringify([steps[1], steps[1]])), /systemd time budget/);
   assert.equal(parseInternalApiSequence(JSON.stringify([{ ...steps[0], continueOnError: true }]))[0].continueOnError, true);
   assert.throws(() => parseInternalApiSequence(JSON.stringify([{ ...steps[0], continueOnError: 'yes' }])), /continueOnError/);
 });
