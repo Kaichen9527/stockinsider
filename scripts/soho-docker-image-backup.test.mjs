@@ -8,16 +8,16 @@ import { verifyLoadedSohoImages } from './verify-soho-docker-image-backup.mjs';
 test('SOHO retention manifest is exact, disjoint and protects every retained identity', async () => {
   const { policy, candidateRefs, protectedRefs, policySha256 } = await loadSohoImagePolicy();
   assert.equal(policy.host, SOHO_VPS_HOST);
-  assert.equal(candidateRefs.length, 18);
-  assert.equal(new Set(Object.values(policy.obsoleteCandidates)).size, 14,
-    'duplicate rollback tags may share an archived image but not inflate the unique image count');
+  assert.equal(candidateRefs.length, 6);
+  assert.equal(new Set(Object.values(policy.obsoleteCandidates)).size, 6,
+    'every obsolete rollback tag is bound to one exact image identity');
   assert.equal(protectedRefs.length, 23);
   assert.equal(Object.keys(policy.externallyAbsentBeforeVerifiedArchive).length, 9);
   assert.equal(Object.keys(policy.externallyRemovedProtectedAliases).length, 3);
   assert.match(policySha256, /^[0-9a-f]{64}$/u);
   assert.equal(new Set([...candidateRefs, ...protectedRefs,
     ...Object.keys(policy.externallyAbsentBeforeVerifiedArchive),
-    ...Object.keys(policy.externallyRemovedProtectedAliases)]).size, 53);
+    ...Object.keys(policy.externallyRemovedProtectedAliases)]).size, 41);
   assert.throws(() => validateSohoImagePolicy({ ...policy,
     obsoleteCandidates: { ...policy.obsoleteCandidates,
       [candidateRefs[0]]: Object.values(policy.current)[0] } }), /soho_candidate_image_is_protected/u);
