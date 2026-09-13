@@ -366,6 +366,80 @@ async function mapLimit<T, R>(items: T[], limit: number, work: (item: T) => Prom
 
 const TPEX_RESPONSE_LIMIT_BYTES = 15_000_000;
 const TPEX_FETCH_ATTEMPTS = 3;
+// The TPEx edge currently resets long responses from the production VPS after
+// roughly 56 KiB, while still advertising the full Content-Length. Its same
+// official endpoint supports byte ranges reliably, so use chunks below that
+// boundary only after ordinary bounded retries fail.
+const TPEX_RANGE_CHUNK_BYTES = 48 * 1024;
+
+async function readBoundedTpexBody(response: Response, maximumBytes = TPEX_RESPONSE_LIMIT_BYTES) {
+  if (!response.body) throw new Error('tpex_empty_response_body');
+  const reader = response.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let responseBytes = 0;
+  try {
+    for (;;) {
+      const next = await reader.read();
+      if (next.done) break;
+      responseBytes += next.value.byteLength;
+      if (responseBytes > maximumBytes) {
+        await reader.cancel();
+        throw new Error('tpex_response_too_large');
+      }
+      chunks.push(next.value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  return { bytes: Buffer.concat(chunks), responseBytes };
+}
+
+async function fetchTpexOfficialPayloadByRange(sourceUrl: string, fetchImpl: typeof fetch,
+  sleep: (milliseconds: number) => Promise<void>) {
+  const chunks: Buffer[] = [];
+  let offset = 0;
+  let totalBytes: number | null = null;
+  let contentType = 'application/json';
+  while (totalBytes == null || offset < totalBytes) {
+    const requestedEnd = Math.min(offset + TPEX_RANGE_CHUNK_BYTES - 1,
+      totalBytes == null ? TPEX_RESPONSE_LIMIT_BYTES - 1 : totalBytes - 1);
+    let lastError: unknown = null;
+    let accepted = false;
+    for (let attempt = 0; attempt < TPEX_FETCH_ATTEMPTS; attempt += 1) {
+      try {
+        const response = await fetchImpl(sourceUrl, { headers: { Accept: 'application/json',
+          'accept-encoding': 'identity', Range: `bytes=${offset}-${requestedEnd}`, 'user-agent': 'StockInsider/4.0' },
+        redirect: 'error', signal: AbortSignal.timeout(20_000) });
+        contentType = response.headers.get('content-type') || contentType;
+        if (offset === 0 && response.status === 200) {
+          const full = await readBoundedTpexBody(response);
+          return { response, body: new TextDecoder('utf-8', { fatal: true }).decode(full.bytes),
+            responseBytes: full.responseBytes };
+        }
+        const match = response.headers.get('content-range')?.match(/^bytes (\d+)-(\d+)\/(\d+)$/u);
+        if (response.status !== 206 || !match) throw new Error('tpex_range_contract_invalid');
+        const start = Number(match[1]), end = Number(match[2]), advertisedTotal = Number(match[3]);
+        if (!Number.isSafeInteger(advertisedTotal) || advertisedTotal < 1 || advertisedTotal > TPEX_RESPONSE_LIMIT_BYTES
+          || start !== offset || end < start || end > requestedEnd
+          || (totalBytes != null && advertisedTotal !== totalBytes)) throw new Error('tpex_range_contract_invalid');
+        const segment = await readBoundedTpexBody(response, TPEX_RANGE_CHUNK_BYTES);
+        if (segment.responseBytes !== end - start + 1) throw new Error('tpex_range_length_mismatch');
+        totalBytes = advertisedTotal;
+        chunks.push(segment.bytes); offset = end + 1; accepted = true;
+        break;
+      } catch (error) {
+        lastError = error;
+        if (attempt < TPEX_FETCH_ATTEMPTS - 1) await sleep(250 * (attempt + 1));
+      }
+    }
+    if (!accepted) throw lastError instanceof Error ? lastError : new Error('tpex_range_transport_failed');
+  }
+  const bytes = Buffer.concat(chunks);
+  if (bytes.byteLength !== totalBytes) throw new Error('tpex_range_length_mismatch');
+  const response = new Response(null, { status: 200, headers: { 'content-type': contentType,
+    'x-stockinsider-transport': 'official-byte-ranges' } });
+  return { response, body: new TextDecoder('utf-8', { fatal: true }).decode(bytes), responseBytes: bytes.byteLength };
+}
 
 export async function fetchTpexOfficialPayload(sourceUrl: string, dependencies: {
   fetchImpl?: typeof fetch;
@@ -384,32 +458,19 @@ export async function fetchTpexOfficialPayload(sourceUrl: string, dependencies: 
       const response = await fetchImpl(sourceUrl, {
         headers, redirect: 'error', signal: AbortSignal.timeout(20_000),
       });
-      if (!response.body) throw new Error('tpex_empty_response_body');
-      const reader = response.body.getReader();
-      const chunks: Uint8Array[] = [];
-      let responseBytes = 0;
-      try {
-        for (;;) {
-          const next = await reader.read();
-          if (next.done) break;
-          responseBytes += next.value.byteLength;
-          if (responseBytes > TPEX_RESPONSE_LIMIT_BYTES) {
-            await reader.cancel();
-            throw new Error('tpex_response_too_large');
-          }
-          chunks.push(next.value);
-        }
-      } finally {
-        reader.releaseLock();
-      }
-      const body = new TextDecoder('utf-8', { fatal: true }).decode(Buffer.concat(chunks));
-      return { response, body, responseBytes };
+      const complete = await readBoundedTpexBody(response);
+      const body = new TextDecoder('utf-8', { fatal: true }).decode(complete.bytes);
+      return { response, body, responseBytes: complete.responseBytes };
     } catch (error) {
       lastError = error;
       if (attempt < TPEX_FETCH_ATTEMPTS - 1) await sleep(250 * (attempt + 1));
     }
   }
-  throw new Error(`tpex_transport_exhausted:${lastError instanceof Error ? lastError.message : String(lastError)}`);
+  try { return await fetchTpexOfficialPayloadByRange(sourceUrl, fetchImpl, sleep); }
+  catch (rangeError) {
+    throw new Error(`tpex_transport_exhausted:${rangeError instanceof Error ? rangeError.message
+      : lastError instanceof Error ? lastError.message : String(rangeError)}`);
+  }
 }
 
 async function consecutiveFailureCounts(
