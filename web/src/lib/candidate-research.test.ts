@@ -256,6 +256,16 @@ test('candidate detail fact binding deduplicates historical rows but still requi
   assert.doesNotMatch(source,/revisionFacts\.length !== wantedIds\.size/u);
 });
 
+test('candidate run summary stays bounded and leaves per-stock evidence in the item ledger', async () => {
+  const {readFile}=await import('node:fs/promises');
+  const source=await readFile(new URL('./candidate-research.ts',import.meta.url),'utf8');
+  const finalization=source.slice(source.indexOf('const items = await mapLimit'));
+  assert.match(finalization,/summary: \{ itemCount: items\.length, statusCounts:/u);
+  assert.match(finalization,/officialFinancialGapCounts: countFinancialGaps\(financialGapByStock\)/u);
+  assert.doesNotMatch(finalization,/summary: \{ items[,}]/u);
+  assert.doesNotMatch(finalization,/officialFinancialGaps: Object\.fromEntries\(financialGapByStock\)/u);
+});
+
 test('production reruns retain a fixed financial availability cutoff', async () => {
   const { readFile } = await import('node:fs/promises');
   const source = await readFile(new URL('./candidate-research.ts', import.meta.url), 'utf8');
