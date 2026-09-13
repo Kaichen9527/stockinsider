@@ -29,7 +29,7 @@ export function validateSohoImagePolicy(policy) {
   }
   exactMap(policy.current, 13, 'soho_current');
   exactMap(policy.retainedRollbacks, 10, 'soho_retained_rollbacks');
-  exactMap(policy.obsoleteCandidates, 6, 'soho_obsolete_candidates');
+  exactMap(policy.obsoleteCandidates, 10, 'soho_obsolete_candidates');
   exactMap(policy.externallyAbsentBeforeVerifiedArchive, 9, 'soho_externally_absent');
   exactMap(policy.externallyRemovedProtectedAliases, 3, 'soho_externally_removed_protected_aliases');
   if (policy.externallyAbsentDisposition !== 'externally_absent_before_verified_archive'
