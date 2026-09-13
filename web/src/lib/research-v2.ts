@@ -3251,6 +3251,7 @@ async function scrapeThreadsOfficialApi(symbolContext?: SymbolScopedStockContext
               source_account: row.username,
               tracked_author: trackedAuthors.has(row.username),
               author_assessment: 'discovery_only_unverified',
+              source_assessment: 'public_keyword_discovery',
               profile_monitoring_status: 'blocked_permission',
               profile_monitoring_reason: 'threads_profile_discovery_missing',
               query_keyword: row.query,
