@@ -30,7 +30,11 @@ test('all expected keys are registered before bounded enqueue; failure remains e
   let registered: unknown[] = [];
   const sizes: number[] = [];
   const client = { async rpc(name: string, args: Record<string, unknown>) {
-    if (name === 'register_taiwan_data_refresh_scope_v6') { registered = args.p_queue_keys as unknown[]; return { data: { expected: registered.length }, error: null }; }
+    if (name === 'register_taiwan_data_refresh_scope_v7') {
+      assert.equal(args.p_contract_version, 'taiwan-data-provider-v6');
+      registered = args.p_queue_keys as unknown[];
+      return { data: { expected: registered.length }, error: null };
+    }
     assert.equal(name, 'enqueue_taiwan_data_refresh_batch_v6');
     assert.equal(registered.length, 707);
     const batch = args.p_entries as Array<{ queueKey: string }>;

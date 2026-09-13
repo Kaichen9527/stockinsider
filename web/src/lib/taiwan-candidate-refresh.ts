@@ -1,5 +1,5 @@
 import { taiwanRefreshQueueKey, type TaiwanQueueRequest } from './taiwan-data-runtime.ts';
-import type { TaiwanDataset, TaiwanExchange } from './taiwan-data-provider.ts';
+import { TAIWAN_DATA_PROVIDER_CONTRACT_VERSION, type TaiwanDataset, type TaiwanExchange } from './taiwan-data-provider.ts';
 
 type RpcClient = { rpc(name: string, args: Record<string, unknown>): PromiseLike<{ data: unknown; error: { message: string } | null }> };
 export type TaiwanRefreshSymbol = { symbol: string; exchange: TaiwanExchange };
@@ -53,8 +53,9 @@ export async function enqueueTaiwanRefreshScope(client: RpcClient, input: Taiwan
   const entries = taiwanRefreshEntries(input, symbols).map((entry) => ({ ...entry,
     queueKey: taiwanRefreshQueueKey({ ...entry, phase: input.phase, sessionDate: input.sessionDate }),
   }));
-  const registered = await client.rpc('register_taiwan_data_refresh_scope_v6', {
+  const registered = await client.rpc('register_taiwan_data_refresh_scope_v7', {
     p_session_date: input.sessionDate, p_phase: input.phase, p_queue_keys: entries.map((entry) => entry.queueKey), p_cutoff: queuedAt,
+    p_contract_version: TAIWAN_DATA_PROVIDER_CONTRACT_VERSION,
   });
   if (registered.error) throw new Error(`taiwan_refresh_scope_registration_failed:${registered.error.message}`);
   const jobIds: string[] = [];
