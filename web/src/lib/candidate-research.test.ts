@@ -44,6 +44,10 @@ test('run freezes its authority cutoff after live acquisition, not the old globa
   const {readFile} = await import('node:fs/promises');
   const source=await readFile(new URL('./candidate-research.ts',import.meta.url),'utf8');
   assert.ok(source.indexOf('const acquiredRows = await mapLimit') < source.indexOf('const authorityCutoff = evaluatedAt'));
+  assert.match(source,/fetchTwStockRevenue\(stock\.symbol, 4\)/u);
+  assert.doesNotMatch(source,/fetchTwStockRevenue\(stock\.symbol,\s*16\)/u);
+  assert.equal((source.match(/rpc\('read_financial_facts_for_stocks_as_of'/gu) || []).length,2);
+  assert.doesNotMatch(source,/rpc\('read_financial_facts_as_of'/u);
   const classifier=source.slice(source.indexOf('const researchStock = async'));
   assert.doesNotMatch(classifier,/await fetchTwStockDailyBars\(/);
 });
@@ -242,6 +246,14 @@ test('missing official price history still publishes a source-specific fact deta
   assert.match(source, /valuation: \{ status: 'missing', currentPrice: null/u);
   assert.match(source, /research_readiness: result\.detailRevisionId \? 'data_gap' : 'unavailable'/u);
   assert.match(source, /failClosedWriteFailures = items\.filter\(\(item\) => item\.snapshotError \|\| item\.detailError\)/u);
+});
+
+test('candidate detail fact binding deduplicates historical rows but still requires every wanted identity', async () => {
+  const {readFile} = await import('node:fs/promises');
+  const source=await readFile(new URL('./candidate-research.ts',import.meta.url),'utf8');
+  assert.match(source,/const revisionFactByIdentity = new Map/u);
+  assert.match(source,/\[\.\.\.wantedIds\]\.some\(\(factIdentity\) => !revisionFactByIdentity\.has\(factIdentity\)\)/u);
+  assert.doesNotMatch(source,/revisionFacts\.length !== wantedIds\.size/u);
 });
 
 test('production reruns retain a fixed financial availability cutoff', async () => {
