@@ -8,7 +8,7 @@ import { displayResearchDiagnostic } from '@/lib/opportunity-v3/research-display
 import { sourceSignalLifecycleStage, type CandidateLifecycleStage } from '@/lib/stage-classifier';
 import { hasCandidateStageCards } from '@/lib/candidate-stage-contract';
 import type { CandidateStageKey, CandidateStagePage } from '@/lib/radar-stage-pagination';
-import { DEFAULT_CANDIDATE_STAGE_FILTERS, candidateStageFilterOptions, filterAndSortCandidateStages, type CandidateStageFilters } from '@/lib/radar-stage-view';
+import { DEFAULT_CANDIDATE_STAGE_FILTERS, candidateStageFilterOptions, filterAndSortCandidateStages, shouldShowClosestWaiting, type CandidateStageFilters } from '@/lib/radar-stage-view';
 import { LOCAL_RESEARCH_STORAGE_KEY, decodeLocalResearchState } from '@/lib/local-research-state';
 
 type Props = {
@@ -589,7 +589,8 @@ function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyPayload;
   const filterOptions = useMemo(() => candidateStageFilterOptions(allCards), [allCards]);
   const closest = filterAndSortCandidateStages(stages.waiting, { ...filters, sort: 'stage_rank' }, watchedSymbols).slice(0, 5);
   const actual = filterAndSortCandidateStages(stages[selected], filters, watchedSymbols);
-  const displayed = selected === 'actionable' && actual.length === 0 ? closest : actual;
+  const showClosestWaiting = shouldShowClosestWaiting(selected, totals.actionable);
+  const displayed = showClosestWaiting ? closest : actual;
   return (
     <div className="min-w-0">
       <header className="mb-5 border-b border-line pb-5">
@@ -617,7 +618,7 @@ function CandidateStagesView({ radar, stageCounts }: { radar: RadarDailyPayload;
           <span>{fullSnapshotReady ? `符合 ${actual.length} / ${stages[selected].length} 檔` : `正在載入完整快照 ${stages[selected].length} / ${totals[selected]} 檔`} · 快照 {radar.snapshotPublishedAt ? formatTaipeiDateTime(radar.snapshotPublishedAt, 'compact') : '待確認'}</span>
         </div>
       </section>
-      {selected === 'actionable' ? <p className="mb-4 rounded-2xl border border-amber-500/25 bg-amber-500/8 px-5 py-4 text-sm text-amber-800 dark:text-amber-200">逐檔驗證估值、資料與進場條件，並確認兩個相鄰交易日收盤。{actual.length === 0 && closest.length ? `目前未達完整硬門檻，以下顯示最接近的 ${closest.length} 檔等待標的。` : ''}</p> : null}
+      {selected === 'actionable' ? <p className="mb-4 rounded-2xl border border-amber-500/25 bg-amber-500/8 px-5 py-4 text-sm text-amber-800 dark:text-amber-200">逐檔驗證估值、資料與進場條件，並確認兩個相鄰交易日收盤。{showClosestWaiting && closest.length ? `目前未達完整硬門檻，以下顯示最接近的 ${closest.length} 檔等待標的。` : ''}</p> : null}
       <div className="grid min-w-0 gap-3 xl:grid-cols-2">
         {displayed.map((card) => <CandidateStageCardView key={`${selected}-${card.symbol}`} card={card} />)}
       </div>

@@ -51,3 +51,7 @@ export function filterAndSortCandidateStages(
     return right.scores.actionability - left.scores.actionability || right.scores.research - left.scores.research || right.scores.discovery - left.scores.discovery;
   });
 }
+
+export function shouldShowClosestWaiting(selected: 'found' | 'waiting' | 'actionable', actionableTotal: number) {
+  return selected === 'actionable' && actionableTotal === 0;
+}

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   LOCAL_RESEARCH_STORAGE_KEY,
+  LOCAL_RESEARCH_IMPORT_MAX_BYTES,
   calculatePosition,
   decodeLocalResearchState,
   emptyLocalResearchState,
@@ -73,6 +74,10 @@ export default function LocalResearchWorkspace({ symbol, revisionId, currentPric
   };
   const importState = async (file: File | undefined) => {
     if (!file) return;
+    if (file.size > LOCAL_RESEARCH_IMPORT_MAX_BYTES) {
+      window.alert('匯入失敗：個人研究檔案不可超過 2 MB。');
+      return;
+    }
     try { setState(parseLocalResearchState(JSON.parse(await file.text()))); }
     catch { window.alert('匯入失敗：檔案不是有效的 StockInsider 個人研究資料。'); }
   };

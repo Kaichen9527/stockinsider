@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { DEFAULT_CANDIDATE_STAGE_FILTERS, candidateStageFilterOptions, filterAndSortCandidateStages } from './radar-stage-view.ts';
+import { DEFAULT_CANDIDATE_STAGE_FILTERS, candidateStageFilterOptions, filterAndSortCandidateStages, shouldShowClosestWaiting } from './radar-stage-view.ts';
 import type { CandidateStageCard } from './types.ts';
 
 function card(symbol: string, input: Partial<CandidateStageCard> = {}): CandidateStageCard {
@@ -34,4 +34,10 @@ test('filters the complete stage snapshot by query, sector, source, signal and l
 test('sorts by valuation upside without treating missing values as zero', () => {
   const all = [card('1001'), card('1002', { valuation: { ...card('1').valuation, baseUpsidePct: -3 } }), card('1003', { valuation: { ...card('1').valuation, baseUpsidePct: 18 } })];
   assert.deepEqual(filterAndSortCandidateStages(all, { ...DEFAULT_CANDIDATE_STAGE_FILTERS, sort: 'upside' }).map((item) => item.symbol), ['1003', '1002', '1001']);
+});
+
+test('only substitutes closest waiting candidates when the actionable stage is truly empty', () => {
+  assert.equal(shouldShowClosestWaiting('actionable', 0), true);
+  assert.equal(shouldShowClosestWaiting('actionable', 3), false);
+  assert.equal(shouldShowClosestWaiting('waiting', 0), false);
 });
