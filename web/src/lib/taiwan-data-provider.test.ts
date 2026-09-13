@@ -117,9 +117,27 @@ test('rejects a source-shaped daily result when it does not contain the requeste
   assert.ok(result.canonical?.records.length);
 });
 
-test('pins FinMind credentials to its official API host and uses the bounded TWSE index endpoint', () => {
+test('pins FinMind credentials to its official API host and uses the VPS-reachable official TAIEX endpoint', () => {
   assert.equal(new URL(finMindTaiwanDataUrl(input)).origin, 'https://api.finmindtrade.com');
-  assert.match(officialTaiwanDataUrl({ ...input, dataset: 'market_index', symbol: null }) || '', /rwd\/zh\/afterTrading\/FMTQIK/u);
+  assert.match(officialTaiwanDataUrl({ ...input, dataset: 'market_index', symbol: null }) || '', /rwd\/zh\/TAIEX\/MI_5MINS_HIST/u);
+});
+
+test('canonicalizes only the requested session from official monthly TAIEX history', async () => {
+  const result = await acquireTaiwanDataset({ ...input, dataset: 'market_index', symbol: null }, {
+    fetchImpl: async () => jsonResponse({
+      stat: 'OK', date: '20260904',
+      fields: ['日期', '開盤指數', '最高指數', '最低指數', '收盤指數'],
+      data: [
+        ['115/09/03', '46,325.48', '46,517.45', '45,839.36', '45,857.66'],
+        ['115/09/04', '45,991.28', '46,620.96', '45,966.86', '46,551.13'],
+      ],
+    }),
+  });
+  assert.equal(result.terminal, 'complete');
+  assert.equal(result.selectedProvider, 'twse');
+  assert.equal(result.canonical?.records.length, 1);
+  assert.equal(result.canonical?.records[0]['日期'], '115/09/04');
+  assert.equal(result.canonical?.records[0]['收盤指數'], '46,551.13');
 });
 
 test('uses current TPEx OpenAPI endpoints for exchange-wide valuation and index evidence', () => {

@@ -120,9 +120,10 @@ export function officialTaiwanDataUrl(input: TaiwanProviderInput): string | null
     if (input.dataset === 'financial_statement' && symbol) return `https://mopsov.twse.com.tw/server-java/t164sb01?step=1&CO_ID=${symbol}`;
     if (input.dataset === 'institutional_flow') return `https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=${date}&selectType=ALLBUT0999`;
     if (input.dataset === 'margin_short') return `https://www.twse.com.tw/rwd/zh/afterTrading/MI_MARGN?response=json&date=${date}&selectType=ALL`;
-    // MI_INDEX?type=ALL is several megabytes and includes the full board. FMTQIK
-    // is the official, bounded monthly TAIEX series needed by this dataset.
-    if (input.dataset === 'market_index') return `https://www.twse.com.tw/rwd/zh/afterTrading/FMTQIK?response=json&date=${date}`;
+    // MI_INDEX?type=ALL is several megabytes and FMTQIK is blocked by TWSE's
+    // edge security for the production VPS.  The official TAIEX history route
+    // is bounded to one month and exposes the requested session's OHLC values.
+    if (input.dataset === 'market_index') return `https://www.twse.com.tw/rwd/zh/TAIEX/MI_5MINS_HIST?response=json&date=${date}`;
   }
   if (input.exchange === 'TPEX') {
     if (input.dataset === 'stock_master') return 'https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_O';
@@ -172,7 +173,7 @@ function responseShapeIsUsable(payload: unknown, provider: TaiwanProvider, input
   if (input.dataset === 'financial_statement') return false; // MOPS is HTML; a typed official adapter must parse it before promotion.
   if (input.dataset === 'market_index' && input.exchange === 'TWSE') {
     return Array.isArray(object.fields)
-      && object.fields.map(String).includes('發行量加權股價指數')
+      && object.fields.map(String).includes('收盤指數')
       && Array.isArray(object.data);
   }
   if (Array.isArray(object.data)) return true;
@@ -252,7 +253,7 @@ function canonicalizePayload(payload: unknown, provider: TaiwanProvider, input: 
   }
   const requiresFields: Partial<Record<TaiwanDataset, string[]>> = {
     daily_price: ['日期'], daily_valuation: ['本益比'], institutional_flow: ['證券代號'], margin_short: ['證券代號'],
-    market_index: input.exchange === 'TWSE' ? ['發行量加權股價指數'] : ['日期'],
+    market_index: input.exchange === 'TWSE' ? ['收盤指數'] : ['日期'],
   };
   const required = requiresFields[input.dataset] || [];
   if (required.some((name) => !normalizedFields.includes(name))) return { records: null, detail: 'official_fields_unrecognized' };
@@ -269,10 +270,10 @@ function canonicalizePayload(payload: unknown, provider: TaiwanProvider, input: 
     ? { ...Object.fromEntries(fields.map((field, index) => [field, row[index]])), fields, values: row }
     : row as Record<string, unknown>)
     .filter((row) => !input.symbol || symbolIndex < 0 || !Array.isArray(row['values']) || String(row['values'][symbolIndex] || '') === input.symbol);
-  // Monthly price endpoints return every session in the requested month. The
-  // persistence RPC writes one row for requested_session_date, so retain only
-  // that session instead of accidentally relabelling the month's first row.
-  if (input.dataset === 'daily_price' && dateIndex >= 0) {
+  // Monthly history endpoints return every session in the requested month.
+  // The persistence RPC writes one requested_session_date, so retain only that
+  // session rather than attaching a monthly response to the wrong trading day.
+  if (dateRequired && dateIndex >= 0) {
     records = records.filter((row) => Array.isArray(row.values)
       && normalizedSessionDate(row.values[dateIndex]) === expected);
   }
