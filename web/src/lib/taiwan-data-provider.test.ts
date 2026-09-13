@@ -166,6 +166,29 @@ test('canonicalizes current TPEx OpenAPI valuation rows for the requested ROC se
   }]);
 });
 
+test('normalizes unavailable official PE or PB markers without discarding the valid companion multiple', async () => {
+  const twse = await acquireTaiwanDataset({ ...input, dataset: 'daily_valuation', symbol: null }, {
+    fetchImpl: async () => jsonResponse({
+      stat: 'OK', date: '20260904',
+      fields: ['證券代號', '證券名稱', '本益比', '股價淨值比'],
+      data: [['2330', '台積電', '-', '8.45']],
+    }),
+  });
+  assert.equal(twse.terminal, 'complete');
+  assert.equal(twse.canonical?.records[0]['本益比'], null);
+  assert.equal(twse.canonical?.records[0]['股價淨值比'], '8.45');
+  assert.equal((twse.canonical?.records[0].values as unknown[])[2], null);
+
+  const tpex = await acquireTaiwanDataset({ ...input, exchange: 'TPEX', dataset: 'daily_valuation', symbol: null }, {
+    fetchImpl: async () => jsonResponse([
+      { Date: '1150904', SecuritiesCompanyCode: '5347', PriceEarningRatio: '-', PriceBookRatio: '2.20' },
+    ]),
+  });
+  assert.equal(tpex.terminal, 'complete');
+  assert.equal(tpex.canonical?.records[0].PER, null);
+  assert.equal(tpex.canonical?.records[0].PBR, '2.20');
+});
+
 test('canonicalizes current TPEx OpenAPI index rows and rejects a missing requested session', async () => {
   const providerInput = { ...input, exchange: 'TPEX' as const, dataset: 'market_index' as const, symbol: null };
   const complete = await acquireTaiwanDataset(providerInput, {

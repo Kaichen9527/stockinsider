@@ -206,6 +206,11 @@ function normalizedSessionDate(value: unknown) {
   return roc ? `${Number(roc[1]) + 1911}-${roc[2]}-${roc[3]}` : null;
 }
 
+function canonicalNumericOrNull(value: unknown) {
+  const text = String(value ?? '').replace(/,/gu, '').trim();
+  return /^-?(?:\d+(?:\.\d+)?|\.\d+)$/u.test(text) ? text : null;
+}
+
 function canonicalizePayload(payload: unknown, provider: TaiwanProvider, input: TaiwanProviderInput) {
   const rows = payloadRows(payload, provider);
   const fields = fieldsFor(payload);
@@ -225,11 +230,11 @@ function canonicalizePayload(payload: unknown, provider: TaiwanProvider, input: 
           ...row,
           date: expected,
           stock_id: String(row.SecuritiesCompanyCode || ''),
-          PER: row.PriceEarningRatio,
-          PBR: row.PriceBookRatio,
+          PER: canonicalNumericOrNull(row.PriceEarningRatio),
+          PBR: canonicalNumericOrNull(row.PriceBookRatio),
         }))
         .filter((row) => /^\d{4}$/u.test(row.stock_id)
-          && (String(row.PER || '').trim() !== '' || String(row.PBR || '').trim() !== ''));
+          && (row.PER !== null || row.PBR !== null));
       return records.length > 0
         ? { records, detail: null }
         : { records: null, detail: datedRows.length > 0 ? 'official_fields_unrecognized' : 'expected_session_missing' };
@@ -270,6 +275,24 @@ function canonicalizePayload(payload: unknown, provider: TaiwanProvider, input: 
     ? { ...Object.fromEntries(fields.map((field, index) => [field, row[index]])), fields, values: row }
     : row as Record<string, unknown>)
     .filter((row) => !input.symbol || symbolIndex < 0 || !Array.isArray(row['values']) || String(row['values'][symbolIndex] || '') === input.symbol);
+  // Exchanges use dashes for an unavailable PE/PB (for example a loss-making
+  // company). Preserve the absence as null so one missing multiple does not
+  // abort persistence of every other company or hide a valid companion ratio.
+  if (input.dataset === 'daily_valuation') {
+    const multipleIndexes = ['本益比', '股價淨值比']
+      .map((name) => normalizedFields.indexOf(name))
+      .filter((index) => index >= 0);
+    records = records.map((row) => {
+      if (!Array.isArray(row.values)) return row;
+      const values = [...row.values];
+      const normalized: Record<string, unknown> = { ...row, values };
+      for (const index of multipleIndexes) {
+        values[index] = canonicalNumericOrNull(values[index]);
+        normalized[fields[index]] = values[index];
+      }
+      return normalized;
+    });
+  }
   // Monthly history endpoints return every session in the requested month.
   // The persistence RPC writes one requested_session_date, so retain only that
   // session rather than attaching a monthly response to the wrong trading day.
