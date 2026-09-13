@@ -6,7 +6,10 @@ import { validatePendingOfficialFinancials } from '@/lib/official-financial-vali
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 const BODY_LIMIT = 10_000;
-const MAX_DRAIN_LIMIT = 20;
+// The acquisition layer keeps MOPS at two concurrent requests and caps each
+// TPEx endpoint claim at 60. A larger batch therefore improves backlog
+// throughput without increasing the per-provider concurrency ceiling.
+const MAX_DRAIN_LIMIT = 240;
 const JOB_PAGE_SIZE = 1_000;
 const MAX_JOB_SCAN_ROWS = 10_000;
 

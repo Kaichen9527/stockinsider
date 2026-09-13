@@ -93,7 +93,7 @@ test('VPS-only authenticated routes queue and drain the durable provider plane',
   assert.match(financialDrainRoute, /requireExactInternalBearer/u);
   assert.match(financialDrainRoute, /requireActiveVpsWriter/u);
   assert.match(financialDrainRoute, /refreshCandidateOfficialFinancials/u);
-  assert.match(financialDrainRoute, /MAX_DRAIN_LIMIT = 20/u);
+  assert.match(financialDrainRoute, /MAX_DRAIN_LIMIT = 240/u);
   assert.match(financialDrainRoute, /neq\('endpoint_key', 'issuer_ir_document'\)/u);
   assert.match(financialDrainRoute, /validation\.status === 'success'/u);
   assert.match(financialDrainRoute, /official_validation_incomplete/u);
@@ -201,7 +201,7 @@ test('VPS timers separate the approved preliminary, final, pipeline and hourly d
   assert.match(drainService, /\/api\/internal\/taiwan-data-queue-drain/u);
   assert.match(drainService, /\/api\/internal\/candidate-financial-queue-drain/u);
   assert.match(drainService, /\/api\/internal\/candidate-financial-documents\/worker/u);
-  assert.match(drainService, /"limit":20/u);
+  assert.match(drainService, /candidate-financial-queue-drain[^\n]+"limit":240/u);
   assert.doesNotMatch(installer, /FINMIND_API_TOKEN/u);
   assert.match(installer, /stockinsider-taiwan-data-master-calendar\.timer/u);
   assert.match(installer, /call_internal_api_sequence\.mjs/u);
