@@ -391,7 +391,10 @@ async function executeCandidateResearchCycle(options: {
   const existingCoreFinancialFacts = proposedUniverse.length === 0 ? [] : await collectBatchedAuthorityRows<string, Row>(
     proposedUniverse.map((stock) => stock.id),
     async (batch, from, to) => {
-      const page = await supabase.rpc('read_financial_facts_as_of', { p_cutoff: evaluatedAt })
+      const page = await supabase.rpc('read_financial_facts_for_stocks_as_of', {
+        p_cutoff: evaluatedAt,
+        p_stock_ids: batch,
+      })
         .select('fact_id,stock_id,fact_key,period_start,period_end,duration_kind,value,unit,estimate_kind,source_ref,filing_restatement_id,provider,authority_tier,validation_status,validation_recorded_at,schema_valid,unit_valid,point_in_time_valid,consistency_valid,filing_published_at,source_timestamp,collected_at,recorded_at')
         .in('stock_id', batch)
         .lte('recorded_at', evaluatedAt)
@@ -622,7 +625,10 @@ async function executeCandidateResearchCycle(options: {
         pagedResearchResult((from,to) => supabase.from('official_price_history').select('session_date,open,high,low,close,volume,source_url,provenance,available_at').eq('stock_id', stock.id).lte('available_at', evaluatedAt).order('session_date', { ascending: false }).range(from,to),1320),
         pagedResearchResult((from,to) => supabase.from('opportunity_price_observations_v3').select('session_id,raw_open,raw_high,raw_low,raw_close,volume,provider,source_ref,source_timestamp,collected_at,recorded_at').eq('stock_id', stock.id).lte('recorded_at', authorityCutoff).order('session_id', { ascending: false }).order('recorded_at', { ascending: true }).order('observation_id').range(from,to),10000),
         pagedResearchResult(async (from,to) => {
-          const page = await supabase.rpc('read_financial_facts_as_of', { p_cutoff: authorityCutoff }).select('fact_id,fact_key,period_start,period_end,duration_kind,value,unit,provider,authority_tier,validation_status,validation_recorded_at,schema_valid,unit_valid,point_in_time_valid,consistency_valid,upstream_provider,filing_published_at,source_timestamp,collected_at,recorded_at,source_ref,estimate_kind,estimate_horizon,filing_restatement_id').eq('stock_id', stock.id)
+          const page = await supabase.rpc('read_financial_facts_for_stocks_as_of', {
+            p_cutoff: authorityCutoff,
+            p_stock_ids: [stock.id],
+          }).select('fact_id,fact_key,period_start,period_end,duration_kind,value,unit,provider,authority_tier,validation_status,validation_recorded_at,schema_valid,unit_valid,point_in_time_valid,consistency_valid,upstream_provider,filing_published_at,source_timestamp,collected_at,recorded_at,source_ref,estimate_kind,estimate_horizon,filing_restatement_id')
           .lte('filing_published_at', authorityCutoff).lte('source_timestamp', authorityCutoff)
           .lte('collected_at', authorityCutoff).lte('recorded_at', authorityCutoff)
           .order('period_end', { ascending: false }).order('recorded_at', { ascending: false }).order('fact_id').range(from,to);

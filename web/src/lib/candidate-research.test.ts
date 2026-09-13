@@ -46,6 +46,8 @@ test('run freezes its authority cutoff after live acquisition, not the old globa
   assert.ok(source.indexOf('const acquiredRows = await mapLimit') < source.indexOf('const authorityCutoff = evaluatedAt'));
   assert.match(source,/fetchTwStockRevenue\(stock\.symbol, 4\)/u);
   assert.doesNotMatch(source,/fetchTwStockRevenue\(stock\.symbol,\s*16\)/u);
+  assert.equal((source.match(/rpc\('read_financial_facts_for_stocks_as_of'/gu) || []).length,2);
+  assert.doesNotMatch(source,/rpc\('read_financial_facts_as_of'/u);
   const classifier=source.slice(source.indexOf('const researchStock = async'));
   assert.doesNotMatch(classifier,/await fetchTwStockDailyBars\(/);
 });
