@@ -73,7 +73,7 @@ export type TaiwanProviderOptions = {
 
 // Queue identities include this value. A provider URL/parser change must create
 // a new immutable attempt instead of silently reusing an earlier terminal job.
-export const TAIWAN_DATA_PROVIDER_CONTRACT_VERSION = 'taiwan-data-provider-v8' as const;
+export const TAIWAN_DATA_PROVIDER_CONTRACT_VERSION = 'taiwan-data-provider-v9' as const;
 
 const OFFICIAL_TIMEOUT_MS = 8_000;
 const FINMIND_TIMEOUT_MS = 12_000;
@@ -128,8 +128,11 @@ export function officialTaiwanDataUrl(input: TaiwanProviderInput): string | null
     // The narrower ALLBUT0999 variant and the legacy afterTrading margin path
     // are rejected by TWSE's overseas edge while these current RWD routes are
     // served to the Contabo production address.
-    if (input.dataset === 'institutional_flow') return `https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=${date}&selectType=ALL`;
-    if (input.dataset === 'margin_short') return `https://www.twse.com.tw/rwd/zh/marginTrading/MI_MARGN?response=json&date=${date}&selectType=ALL`;
+    // Parameter order is significant at TWSE's overseas edge: the same query
+    // with response first is challenged, while the order emitted by the
+    // exchange page (date, selector, response) serves the JSON payload.
+    if (input.dataset === 'institutional_flow') return `https://www.twse.com.tw/rwd/zh/fund/T86?date=${date}&selectType=ALL&response=json`;
+    if (input.dataset === 'margin_short') return `https://www.twse.com.tw/rwd/zh/marginTrading/MI_MARGN?date=${date}&selectType=ALL&response=json`;
     // MI_INDEX?type=ALL is several megabytes and FMTQIK is blocked by TWSE's
     // edge security for the production VPS.  The official TAIEX history route
     // is bounded to one month and exposes the requested session's OHLC values.

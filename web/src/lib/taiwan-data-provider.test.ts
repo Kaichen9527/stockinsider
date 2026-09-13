@@ -170,11 +170,11 @@ test('uses current TPEx OpenAPI endpoints for exchange-wide valuation and index 
 test('uses VPS-reachable TWSE RWD routes for institutional and margin evidence', () => {
   assert.equal(
     officialTaiwanDataUrl({ ...input, dataset: 'institutional_flow', symbol: null }),
-    'https://www.twse.com.tw/rwd/zh/fund/T86?response=json&date=20260904&selectType=ALL',
+    'https://www.twse.com.tw/rwd/zh/fund/T86?date=20260904&selectType=ALL&response=json',
   );
   assert.equal(
     officialTaiwanDataUrl({ ...input, dataset: 'margin_short', symbol: null }),
-    'https://www.twse.com.tw/rwd/zh/marginTrading/MI_MARGN?response=json&date=20260904&selectType=ALL',
+    'https://www.twse.com.tw/rwd/zh/marginTrading/MI_MARGN?date=20260904&selectType=ALL&response=json',
   );
 });
 
