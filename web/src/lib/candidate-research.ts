@@ -550,7 +550,11 @@ async function executeCandidateResearchCycle(options: {
       const [institutional, eps, revenue] = await Promise.all([
         fetchTwStockInstitutional(stock.symbol).catch(() => null),
         fetchTwStockEpsTtm(stock.symbol).catch(() => null),
-        fetchTwStockRevenue(stock.symbol,16).catch(() => null),
+        // Long-range revenue history belongs to the durable official backfill
+        // queue. This live lane only needs the newest filing, so keep a small
+        // publication-lag window instead of rescanning sixteen months for
+        // every candidate on every daily run.
+        fetchTwStockRevenue(stock.symbol, 4).catch(() => null),
       ]);
       const backfilledBars = officialHistoryBackfill.prices.get(stock.id) || [];
       const alreadyCurrent = knownSessions.find((item) => item.stockId === stock.id)!.knownPriceSessions.includes(latestMarketSession)

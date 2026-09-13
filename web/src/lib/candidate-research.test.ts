@@ -44,6 +44,8 @@ test('run freezes its authority cutoff after live acquisition, not the old globa
   const {readFile} = await import('node:fs/promises');
   const source=await readFile(new URL('./candidate-research.ts',import.meta.url),'utf8');
   assert.ok(source.indexOf('const acquiredRows = await mapLimit') < source.indexOf('const authorityCutoff = evaluatedAt'));
+  assert.match(source,/fetchTwStockRevenue\(stock\.symbol, 4\)/u);
+  assert.doesNotMatch(source,/fetchTwStockRevenue\(stock\.symbol,\s*16\)/u);
   const classifier=source.slice(source.indexOf('const researchStock = async'));
   assert.doesNotMatch(classifier,/await fetchTwStockDailyBars\(/);
 });
