@@ -61,6 +61,19 @@ if ! grep -qx "OPPORTUNITY_V3_RUNNER_PRINCIPAL_ID=$runner_principal_id" "$data_p
   exit 1
 fi
 systemctl daemon-reload
+systemctl enable --now stockinsider-internal-worker.service
+worker_ready=false
+for _attempt in $(seq 1 30); do
+  if curl --fail --silent --show-error --max-time 2 http://127.0.0.1:3101/api/radar/daily >/dev/null; then
+    worker_ready=true
+    break
+  fi
+  sleep 1
+done
+if [[ "$worker_ready" != true ]]; then
+  echo "stockinsider internal worker did not become ready on 127.0.0.1:3101" >&2
+  exit 1
+fi
 systemctl enable --now stockinsider-financial-parser.socket
 systemctl enable --now stockinsider-capacity-watch.timer
 systemctl enable --now stockinsider-source-refresh.timer stockinsider-research-cycle.timer stockinsider-health-check.timer \

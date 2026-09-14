@@ -28,8 +28,12 @@ printf 'STOCKINSIDER_WRITER_RELEASE_ID=%s\n' "$release_id" > "$writer_env_file"
 printf '[Service]\nEnvironmentFile=%s\n' "$writer_env_file" > "$drop_in_file"
 chmod 0644 "$drop_in_file"
 systemctl daemon-reload
-systemctl restart stockinsider-web-standalone.service
-systemctl is-active --quiet stockinsider-web-standalone.service
+services=(stockinsider-web-standalone.service)
+if systemctl cat stockinsider-internal-worker.service >/dev/null 2>&1; then
+  services+=(stockinsider-internal-worker.service)
+fi
+systemctl restart "${services[@]}"
+for service in "${services[@]}"; do systemctl is-active --quiet "$service"; done
 
 # `systemctl is-active` only proves that the process was spawned. Next.js can
 # still need a short interval before it binds loopback, so registering the
@@ -48,9 +52,24 @@ if [[ "$app_ready" != true ]]; then
   exit 1
 fi
 
+if systemctl cat stockinsider-internal-worker.service >/dev/null 2>&1; then
+  worker_ready=false
+  for _attempt in $(seq 1 30); do
+    if curl --fail --silent --show-error --max-time 2 http://127.0.0.1:3101/api/radar/daily >/dev/null; then
+      worker_ready=true
+      break
+    fi
+    sleep 1
+  done
+  if [[ "$worker_ready" != true ]]; then
+    echo "stockinsider internal worker did not become ready on 127.0.0.1:3101" >&2
+    exit 1
+  fi
+fi
+
 set -a
 source /etc/stockinsider/stockinsider.env
 set +a
-APP_URL=http://127.0.0.1:3100 EXPECTED_APP_URL=http://127.0.0.1:3100 \
+APP_URL=http://127.0.0.1:3101 EXPECTED_APP_URL=http://127.0.0.1:3101 \
   /usr/bin/node /opt/stockinsider/current/scripts/call_internal_api.mjs \
   /api/internal/writer-release-activate "{\"releaseId\":\"$release_id\"}"

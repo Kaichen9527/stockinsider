@@ -1,0 +1,41 @@
+[Unit]
+Description=StockInsider private Next.js internal worker
+After=network-online.target stockinsider-postgrest.service
+Wants=network-online.target
+Requires=stockinsider-postgrest.service
+
+[Service]
+Type=simple
+User=stockinsider
+Group=stockinsider
+WorkingDirectory=/opt/stockinsider/current/app
+EnvironmentFile=/etc/stockinsider/stockinsider.env
+EnvironmentFile=/etc/stockinsider/data-plane.env
+EnvironmentFile=-/etc/stockinsider/writer-release.env
+Environment=NODE_ENV=production
+Environment=HOSTNAME=127.0.0.1
+Environment=PORT=3101
+LoadCredentialEncrypted=postgrest-service-role.jwt:/etc/credstore.encrypted/stockinsider-postgrest-service-role-jwt
+LoadCredentialEncrypted=provider-secrets-v1.key:/etc/credstore.encrypted/stockinsider-provider-secrets-v1-key
+ExecStartPre=/usr/bin/node /opt/stockinsider/current/scripts/verify-standalone-release.mjs /opt/stockinsider/current
+ExecStart=/usr/bin/node /opt/stockinsider/current/app/server.js
+Restart=on-failure
+RestartSec=5
+TimeoutStartSec=90
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/stockinsider/artifacts
+ProtectControlGroups=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectKernelLogs=true
+LockPersonality=true
+RestrictSUIDSGID=true
+RuntimeDirectory=stockinsider-worker
+RuntimeDirectoryMode=0750
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

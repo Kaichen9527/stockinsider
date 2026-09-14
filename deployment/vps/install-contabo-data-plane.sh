@@ -18,6 +18,7 @@ for required in \
   "$nginx_config_source" \
   "$unit_source/stockinsider-postgrest.service" \
   "$unit_source/stockinsider-web-standalone.service" \
+  "$unit_source/stockinsider-internal-worker.service" \
   /etc/stockinsider/data-plane.env \
   /etc/credstore.encrypted/stockinsider-postgrest-database-uri \
   /etc/credstore.encrypted/stockinsider-postgrest-jwt-secret \
@@ -57,6 +58,7 @@ install -o root -g stockinsider -m 0640 "$postgrest_config_source" /etc/stockins
 install -o root -g root -m 0644 "$nginx_config_source" /etc/nginx/conf.d/stockinsider-postgrest-loopback.conf
 install -o root -g root -m 0644 "$unit_source/stockinsider-postgrest.service" /etc/systemd/system/stockinsider-postgrest.service
 install -o root -g root -m 0644 "$unit_source/stockinsider-web-standalone.service" /etc/systemd/system/stockinsider-web-standalone.service
+install -o root -g root -m 0644 "$unit_source/stockinsider-internal-worker.service" /etc/systemd/system/stockinsider-internal-worker.service
 
 /usr/sbin/nginx -t
 systemctl daemon-reload

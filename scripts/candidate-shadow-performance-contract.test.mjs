@@ -10,6 +10,7 @@ const sourceTimer = readFileSync(new URL('../deployment/vps/systemd/stockinsider
 const researchTimer = readFileSync(new URL('../deployment/vps/systemd/stockinsider-research-cycle.timer', import.meta.url), 'utf8');
 const researchService = readFileSync(new URL('../deployment/vps/systemd/stockinsider-research-cycle.service', import.meta.url), 'utf8');
 const installer = readFileSync(new URL('../deployment/vps/install-systemd-schedules.sh', import.meta.url), 'utf8');
+const workerService = readFileSync(new URL('../deployment/vps/systemd/stockinsider-internal-worker.service', import.meta.url), 'utf8');
 const sourcePolicy = readFileSync(new URL('../web/src/lib/source-policy.ts', import.meta.url), 'utf8');
 const domain = readFileSync(new URL('../web/src/lib/domain.ts', import.meta.url), 'utf8');
 const snapshotPublisher = readFileSync(new URL('../web/src/lib/radar-public-snapshot.ts', import.meta.url), 'utf8');
@@ -91,6 +92,9 @@ test('GitHub write workflows are manual-only and VPS timers own the approved cad
   assert.match(researchService, /"recoverOrphanedLease":true/u);
   const sourceService = readFileSync(new URL('../deployment/vps/systemd/stockinsider-source-refresh.service', import.meta.url), 'utf8');
   assert.match(sourceService, /'\{"connector":"all","dryRun":false\}'/u);
+  assert.match(sourceService, /Requires=stockinsider-internal-worker[.]service/u);
+  assert.match(sourceService, /APP_URL=http:\/\/127[.]0[.]0[.]1:3101/u);
+  assert.doesNotMatch(sourceService, /127[.]0[.]0[.]1:3100/u);
   assert.match(installer, /TELEGRAM_PUBLIC_CHANNELS_AUTHORIZED=true/u);
   assert.match(installer, /root-owned with mode 600 or 640/u);
   assert.match(installer, /groupadd --system stockinsider/u);
@@ -98,6 +102,22 @@ test('GitHub write workflows are manual-only and VPS timers own the approved cad
   assert.doesNotMatch(installer, /SUPABASE_SERVICE_ROLE_KEY|SUPABASE_PROJECT_REF/u);
   const standaloneWebService = readFileSync(new URL('../deployment/vps/systemd/stockinsider-web-standalone.service', import.meta.url), 'utf8');
   assert.match(standaloneWebService, /Group=stockinsider/u);
+  assert.match(workerService, /Group=stockinsider/u);
+  assert.match(workerService, /Environment=HOSTNAME=127[.]0[.]0[.]1/u);
+  assert.match(workerService, /Environment=PORT=3101/u);
+  assert.match(workerService, /EnvironmentFile=-\/etc\/stockinsider\/writer-release[.]env/u);
+  assert.match(installer, /enable --now stockinsider-internal-worker[.]service/u);
+  assert.match(installer, /127[.]0[.]0[.]1:3101\/api\/radar\/daily/u);
+  for (const name of readdirSync(new URL('../deployment/vps/systemd/', import.meta.url))
+    .filter((item) => /[.]service$/u.test(item) && !['stockinsider-web-standalone.service',
+      'stockinsider-internal-worker.service', 'stockinsider-postgrest.service',
+      'stockinsider-financial-parser.service', 'stockinsider-capacity-watch.service'].includes(item))) {
+    const scheduledService = readFileSync(new URL(`../deployment/vps/systemd/${name}`, import.meta.url), 'utf8');
+    if (!scheduledService.includes('APP_URL=')) continue;
+    assert.match(scheduledService, /Requires=stockinsider-internal-worker[.]service/u, `${name} must require the private worker`);
+    assert.match(scheduledService, /127[.]0[.]0[.]1:3101/u, `${name} must call the private worker`);
+    assert.doesNotMatch(scheduledService, /127[.]0[.]0[.]1:3100/u, `${name} must not consume the public web event loop`);
+  }
   const workflowDir = new URL('../.github/workflows/', import.meta.url);
   for (const name of readdirSync(workflowDir).filter((item) => /\.ya?ml$/u.test(item))) {
     assert.doesNotMatch(readFileSync(new URL(name, workflowDir), 'utf8'), /^\s*schedule:/mu, `${name} must remain manual-only`);
@@ -206,6 +226,7 @@ test('production source writes require the active VPS release and production lea
   assert.match(deployActivation, /EnvironmentFile=%s/u);
   assert.doesNotMatch(deployActivation, /Environment=STOCKINSIDER_WRITER_RELEASE_ID/u);
   assert.match(deployActivation, /curl --fail --silent --show-error --max-time 2 http:\/\/127\.0\.0\.1:3100\//u);
+  assert.match(deployActivation, /APP_URL=http:\/\/127\.0\.0\.1:3101 EXPECTED_APP_URL=http:\/\/127\.0\.0\.1:3101[\s\S]{0,220}\/api\/internal\/writer-release-activate/u);
   assert.ok(deployActivation.indexOf('curl --fail') < deployActivation.indexOf('/api/internal/writer-release-activate'), 'readiness must precede writer registration');
   assert.match(researchRoute, /acquireProductionWriteLease/u);
   assert.match(researchRoute, /releaseProductionWriteLease/u);
