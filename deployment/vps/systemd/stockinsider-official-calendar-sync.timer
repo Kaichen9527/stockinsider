@@ -1,0 +1,12 @@
+[Unit]
+Description=Sync verified official Taiwan trading sessions before daily processing
+
+[Timer]
+OnCalendar=*-*-* 06:05:00 Asia/Taipei
+OnCalendar=*-*-* 18:20:00 Asia/Taipei
+Persistent=true
+AccuracySec=1min
+Unit=stockinsider-official-calendar-sync.service
+
+[Install]
+WantedBy=timers.target

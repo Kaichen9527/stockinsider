@@ -11,6 +11,7 @@ import path from 'path';
 import { Client as LineClient } from '@line/bot-sdk';
 import { getSupabaseServerClient } from './supabase-server';
 import { loadLatestSourceRunLedger, type SourceRunLedgerView } from './source-run-ledger';
+import { publicMatchedSymbols } from './source-health';
 import { scheduledSourceConnectorKeys, SOURCE_CONNECTOR_KEYS, sourceExecutionPolicy } from './source-policy';
 import { isDemoMode } from './data-mode';
 import { candidateMentionDiscoveryEligible } from './source-content-semantics';
@@ -18498,7 +18499,7 @@ async function getConnectorStatusSummary(): Promise<ConnectorStatusView[]> {
           connector === 'telegram'
             ? ['investanchors', 'twstockanalysis', 'Gooaye', 'johnstock888', 'eaglewealth', 'a178178', 'musclestock']
             : latestSearchedTargets.get(connector) || (latest ? ['visible_symbols', 'theme_keywords'] : []),
-        matchedSymbols: latestMatchedSymbols.get(connector) || ((written24h > 0 || terminalRecords > 0) ? ['records_written'] : []),
+        matchedSymbols: publicMatchedSymbols(latestMatchedSymbols.get(connector)),
       };
     });
   } catch {
