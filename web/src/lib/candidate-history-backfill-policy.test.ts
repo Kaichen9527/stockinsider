@@ -31,17 +31,29 @@ test('historical plan obeys both global and per-stock request limits, with cross
 test('an existing earlier month sample does not conceal a missing month-end multiple', () => {
   const jobs = planCandidateHistoryBackfill({ ...common, candidates: [{ ...candidate, knownMultipleSessions: ['2026-09-09','2026-08-28'] }], perStockBudget: 8 });
   assert.deepEqual(jobs.filter((job) => job.dataset === 'multiple').map((job) => [job.month,job.lastSession]),
-    [['2026-09-01','2026-09-10'],['2026-08-01','2026-08-31'],['2026-07-01','2026-07-31']]);
+    [['2026-07-01','2026-07-31'],['2026-08-01','2026-08-31'],['2026-09-01','2026-09-10']]);
+});
+
+test('deep acquisition starts with the oldest gap while daily refresh owns the current month', () => {
+  const jobs = planCandidateHistoryBackfill({ ...common, perStockBudget: 8 });
+  const priceMonths = jobs.filter((job) => job.dataset === 'price').map((job) => job.month);
+  const multipleMonths = jobs.filter((job) => job.dataset === 'multiple').map((job) => job.month);
+  assert.deepEqual(priceMonths, [...priceMonths].sort());
+  assert.deepEqual(multipleMonths, [...multipleMonths].sort());
+  assert(priceMonths[0] < '2026-09-01');
+  assert(multipleMonths[0] < '2026-09-01');
 });
 
 test('monthly checkpoints prevent repeated deep history but never hide a lost unpersisted result', () => {
   const completed = checkpoint({ status: 'complete', next_attempt_at: null, observed_through: '2026-09-10', observed_sessions: ['2026-09-09','2026-09-10'] });
-  const known = { ...candidate, knownPriceSessions: completed.observed_sessions };
-  const done = planCandidateHistoryBackfill({ ...common, candidates: [known], checkpoints: [completed] });
+  const recent = { ...candidate, listing: { date: '2026-07-01', sourceUrl: 'https://www.twse.com.tw/zh/listed/listed.html' } };
+  const known = { ...recent, knownPriceSessions: completed.observed_sessions };
+  const limits = { requestBudget: 12, perStockBudget: 12 };
+  const done = planCandidateHistoryBackfill({ ...common, ...limits, candidates: [known], checkpoints: [completed] });
   assert.equal(done.some((job) => job.dataset === 'price' && job.month === completed.month), false);
-  const lost = planCandidateHistoryBackfill({ ...common, checkpoints: [completed] });
+  const lost = planCandidateHistoryBackfill({ ...common, ...limits, candidates: [recent], checkpoints: [completed] });
   assert.equal(lost.some((job) => job.dataset === 'price' && job.month === completed.month), true);
-  const blocked = planCandidateHistoryBackfill({ ...common, checkpoints: [checkpoint()] });
+  const blocked = planCandidateHistoryBackfill({ ...common, ...limits, candidates: [recent], checkpoints: [checkpoint()] });
   assert.equal(blocked.some((job) => job.dataset === 'price' && job.month === completed.month), false);
 });
 

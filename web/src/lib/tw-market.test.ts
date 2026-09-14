@@ -32,6 +32,9 @@ test('bounded official history fetch requests one issuer-month and reports block
   assert.equal((await fetchTwStockHistoryMonth(job)).terminalReason,'official_security_block');
   assert.equal(calls,1);
   resetOfficialMarketRequestStateForTests();
+  globalThis.fetch=(async () => new Response('<html>FOR SECURITY REASONS</html>', {status:307})) as typeof fetch;
+  assert.equal((await fetchTwStockHistoryMonth(job)).terminalReason,'official_security_block');
+  resetOfficialMarketRequestStateForTests();
   globalThis.fetch=(async () => new Response(JSON.stringify({stat:'很抱歉，沒有符合條件的資料!'}),{headers:{'content-type':'application/json'}})) as typeof fetch;
   assert.equal((await fetchTwStockHistoryMonth(job)).terminalReason,'official_no_rows');
   resetOfficialMarketRequestStateForTests();

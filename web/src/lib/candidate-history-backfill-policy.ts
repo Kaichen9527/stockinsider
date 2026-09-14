@@ -86,7 +86,10 @@ export function planCandidateHistoryBackfill(options: {
     for (const dataset of ['price', 'multiple'] as const) {
       // The wider price horizon accommodates 1,320 *trading* days, not 1,320
       // calendar days. No calendar dates are fabricated as trading sessions.
-      const months = candidateHistoryMonths(options.latestSession, dataset === 'price' ? 76 : 60);
+      // Daily refresh owns the newest sessions. Deep acquisition starts at the
+      // oldest missing month so a transient/current-month discrepancy cannot
+      // consume every bounded run while the five-year archive never advances.
+      const months = candidateHistoryMonths(options.latestSession, dataset === 'price' ? 76 : 60).reverse();
       for (const month of months) {
         if (listingDate && month.slice(0, 7) < listingDate.slice(0, 7)) continue;
         if (dataset === 'price' && earliestRequired && month.slice(0, 7) < earliestRequired) continue;
