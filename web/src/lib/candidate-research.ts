@@ -1394,10 +1394,16 @@ async function executeCandidateResearchCycle(options: {
         ...officialFacts.map((fact) => ({...fact,period_end:technical.sessionDate,available_at:evaluatedAt})),
       ];
       const wantedIds = new Set(wantedFacts.map(identity));
-      const earliestFactAt = wantedFacts.map((fact) => fact.available_at).sort()[0] || evaluatedAt;
+      // Do not constrain this read to a timestamp equality window. PostgreSQL
+      // normalizes timestamptz spellings and the PostgREST round-trip can use a
+      // different offset/precision than the evaluatedAt string that was just
+      // written. New candidates with no older authority facts otherwise read
+      // an empty window even though their run facts committed successfully.
+      // The stock-specific hard cap still fails closed before a dossier could
+      // bind an incomplete fact set.
       const factRead = await pagedResearchResult((from,to) => supabase.from('candidate_official_facts')
         .select('fact_id,fact_key,value,period_end,available_at').eq('stock_id', stock.id)
-        .gte('available_at',earliestFactAt).lte('available_at',evaluatedAt).order('fact_id').range(from,to),10000);
+        .order('fact_id').range(from,to),10000);
       if (factRead.data.length === 10000) throw new Error('candidate_detail_fact_window_overflow');
       const revisionFactByIdentity = new Map(factRead.data.flatMap((fact) => {
         const factIdentity = identity({fact_key:fact.fact_key,period_end:fact.period_end,available_at:fact.available_at});

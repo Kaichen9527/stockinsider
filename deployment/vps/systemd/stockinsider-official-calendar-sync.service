@@ -10,7 +10,10 @@ User=root
 WorkingDirectory=/opt/stockinsider/current
 EnvironmentFile=/etc/stockinsider/stockinsider.env
 Environment=APP_URL=http://127.0.0.1:3100
-ExecStart=/usr/bin/flock -w 900 /run/lock/stockinsider-production-write.lock /usr/bin/node scripts/sync-official-trading-calendar.mjs
+# EnvironmentFile values override Environment= values. Pin the loopback target
+# in the executed process so a legacy public APP_URL can never route the
+# authenticated POST through the public reverse proxy.
+ExecStart=/usr/bin/flock -w 900 /run/lock/stockinsider-production-write.lock /usr/bin/env APP_URL=http://127.0.0.1:3100 /usr/bin/node scripts/sync-official-trading-calendar.mjs
 TimeoutStartSec=300
 NoNewPrivileges=true
 PrivateTmp=true
