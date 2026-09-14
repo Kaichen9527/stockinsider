@@ -254,6 +254,10 @@ test('candidate detail fact binding deduplicates historical rows but still requi
   assert.match(source,/const revisionFactByIdentity = new Map/u);
   assert.match(source,/\[\.\.\.wantedIds\]\.some\(\(factIdentity\) => !revisionFactByIdentity\.has\(factIdentity\)\)/u);
   assert.doesNotMatch(source,/revisionFacts\.length !== wantedIds\.size/u);
+  const factRead = source.slice(source.indexOf("const factRead = await pagedResearchResult"), source.indexOf("if (factRead.data.length === 10000)"));
+  assert.doesNotMatch(factRead,/gte\('available_at'/u);
+  assert.doesNotMatch(factRead,/lte\('available_at'/u);
+  assert.match(factRead,/\.eq\('stock_id', stock\.id\)[\s\S]*\.order\('fact_id'\)/u);
 });
 
 test('candidate run summary stays bounded and leaves per-stock evidence in the item ledger', async () => {

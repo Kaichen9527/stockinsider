@@ -201,6 +201,7 @@ test('VPS timers separate the approved preliminary, final, pipeline and hourly d
   assert.match(officialCalendarTimer, /18:20:00 Asia\/Taipei/u);
   assert.match(officialCalendarService, /sync-official-trading-calendar\.mjs/u);
   assert.match(officialCalendarService, /stockinsider-production-write\.lock/u);
+  assert.match(officialCalendarService, /\/usr\/bin\/env APP_URL=http:\/\/127[.]0[.]0[.]1:3100 \/usr\/bin\/node scripts\/sync-official-trading-calendar[.]mjs/u);
   assert.match(officialCalendarSync, /MI_5MINS_HIST/u);
   assert.match(officialCalendarSync, /afterTrading\/tradingIndex/u);
   assert.match(officialCalendarSync, /official_calendar_operator_backfill_v1/u);
