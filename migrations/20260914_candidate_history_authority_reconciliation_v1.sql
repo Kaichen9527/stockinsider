@@ -16,6 +16,8 @@ CREATE TABLE IF NOT EXISTS public.candidate_history_authority_reconciliations_v1
   parser_version TEXT NOT NULL,
   UNIQUE(stock_id,dataset,target_table,session_date,new_source_url,parser_version)
 );
+CREATE INDEX IF NOT EXISTS candidate_history_authority_reconciliations_recent_v1
+  ON public.candidate_history_authority_reconciliations_v1(replaced_at DESC,stock_id);
 ALTER TABLE public.candidate_history_authority_reconciliations_v1 ENABLE ROW LEVEL SECURITY;
 REVOKE ALL ON public.candidate_history_authority_reconciliations_v1 FROM PUBLIC,anon,authenticated,service_role;
 GRANT SELECT ON public.candidate_history_authority_reconciliations_v1 TO service_role;
