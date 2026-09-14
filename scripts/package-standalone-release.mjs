@@ -106,6 +106,7 @@ export async function packageStandaloneRelease({ sourceRepository, packagerRepos
       'internal-api-sequence-policy.mjs',
       'contabo-capacity-guard.mjs', 'contabo-host-resource-check.mjs',
       'contabo-deployment-inventory.mjs', 'contabo-cleanup-preflight.mjs',
+      'sync-official-trading-calendar.mjs',
       'verify-standalone-release.mjs',
       'candidate_financial_parser_socket.py', 'candidate_financial_document_parser.py',
       'candidate_financial_fact_scope.py']) {

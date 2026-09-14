@@ -16,6 +16,11 @@ const financialValidateRoute = readFileSync(new URL('../web/src/app/api/internal
 const preliminaryRoute = readFileSync(new URL('../web/src/app/api/internal/radar-preliminary-publish/route.ts', import.meta.url), 'utf8');
 const runtime = readFileSync(new URL('../web/src/lib/taiwan-data-runtime.ts', import.meta.url), 'utf8');
 const masterCalendar = readFileSync(new URL('../deployment/vps/systemd/stockinsider-taiwan-data-master-calendar.timer', import.meta.url), 'utf8');
+const masterCalendarService = readFileSync(new URL('../deployment/vps/systemd/stockinsider-taiwan-data-master-calendar.service', import.meta.url), 'utf8');
+const officialCalendarTimer = readFileSync(new URL('../deployment/vps/systemd/stockinsider-official-calendar-sync.timer', import.meta.url), 'utf8');
+const officialCalendarService = readFileSync(new URL('../deployment/vps/systemd/stockinsider-official-calendar-sync.service', import.meta.url), 'utf8');
+const officialCalendarSync = readFileSync(new URL('./sync-official-trading-calendar.mjs', import.meta.url), 'utf8');
+const standalonePackager = readFileSync(new URL('./package-standalone-release.mjs', import.meta.url), 'utf8');
 const closePreliminary = readFileSync(new URL('../deployment/vps/systemd/stockinsider-taiwan-data-close-preliminary.timer', import.meta.url), 'utf8');
 const preliminary = readFileSync(new URL('../deployment/vps/systemd/stockinsider-taiwan-data-preliminary.timer', import.meta.url), 'utf8');
 const finalFreeze = readFileSync(new URL('../deployment/vps/systemd/stockinsider-taiwan-data-final-freeze.timer', import.meta.url), 'utf8');
@@ -190,6 +195,17 @@ test('company data gaps permit isolated research while market-regime evidence re
 
 test('VPS timers separate the approved preliminary, final, pipeline and hourly drain cadences', () => {
   assert.match(masterCalendar, /06:00:00 Asia\/Taipei/u);
+  assert.match(masterCalendarService, /"datasets":\["stock_master"\]/u);
+  assert.doesNotMatch(masterCalendarService, /"trading_calendar"/u);
+  assert.match(officialCalendarTimer, /06:05:00 Asia\/Taipei/u);
+  assert.match(officialCalendarTimer, /18:20:00 Asia\/Taipei/u);
+  assert.match(officialCalendarService, /sync-official-trading-calendar\.mjs/u);
+  assert.match(officialCalendarService, /stockinsider-production-write\.lock/u);
+  assert.match(officialCalendarSync, /MI_5MINS_HIST/u);
+  assert.match(officialCalendarSync, /afterTrading\/tradingIndex/u);
+  assert.match(officialCalendarSync, /official_calendar_operator_backfill_v1/u);
+  assert.match(officialCalendarSync, /official-calendar-backfill/u);
+  assert.match(standalonePackager, /sync-official-trading-calendar\.mjs/u);
   assert.match(closePreliminary, /18:15:00 Asia\/Taipei/u);
   assert.match(preliminary, /19:00:00 Asia\/Taipei/u);
   assert.match(finalFreeze, /20:15:00 Asia\/Taipei/u);
@@ -212,6 +228,7 @@ test('VPS timers separate the approved preliminary, final, pipeline and hourly d
   assert.match(drainService, /candidate-financial-queue-drain[^\n]+"limit":240/u);
   assert.doesNotMatch(installer, /FINMIND_API_TOKEN/u);
   assert.match(installer, /stockinsider-taiwan-data-master-calendar\.timer/u);
+  assert.match(installer, /stockinsider-official-calendar-sync\.timer/u);
   assert.match(installer, /call_internal_api_sequence\.mjs/u);
   const preliminaryService = readFileSync(new URL('../deployment/vps/systemd/stockinsider-taiwan-data-preliminary.service', import.meta.url), 'utf8');
   assert.match(preliminaryService, /\/api\/internal\/pipeline-run/u);

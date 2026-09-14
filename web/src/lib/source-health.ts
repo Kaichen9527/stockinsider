@@ -23,6 +23,15 @@ export type SourceHealthFailure = {
 };
 
 /**
+ * Health counters and stock symbols are separate facts. A successful write may
+ * prove connector activity, but it must never be projected as a synthetic
+ * symbol in the public source-status payload.
+ */
+export function publicMatchedSymbols(symbols: readonly string[] | null | undefined): string[] {
+  return Array.from(new Set((symbols || []).filter((symbol) => /^\d{4}$/.test(symbol) && !/^(19|20)\d{2}$/.test(symbol))));
+}
+
+/**
  * Classify an ingestion result without comparing document counts to symbol-hit
  * counts. A single candidate document can legitimately contain several symbols.
  */
