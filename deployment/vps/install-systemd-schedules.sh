@@ -67,5 +67,5 @@ systemctl enable --now stockinsider-source-refresh.timer stockinsider-research-c
   stockinsider-taiwan-data-master-calendar.timer stockinsider-taiwan-data-close-preliminary.timer \
   stockinsider-taiwan-data-preliminary.timer stockinsider-taiwan-data-final-freeze.timer \
   stockinsider-taiwan-data-final-reconcile.timer stockinsider-taiwan-data-queue-drain.timer \
-  stockinsider-candidate-history-backfill.timer
+  stockinsider-candidate-history-backfill.timer stockinsider-official-calendar-sync.timer
 systemctl list-timers 'stockinsider-*' --no-pager

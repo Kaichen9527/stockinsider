@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { activeSourceHealthFailures, classifySourceSyncTerminal, type SourceHealthRun } from './source-health.ts';
+import { activeSourceHealthFailures, classifySourceSyncTerminal, publicMatchedSymbols, type SourceHealthRun } from './source-health.ts';
 
 function run(overrides: Partial<SourceHealthRun> = {}): SourceHealthRun {
   return {
@@ -98,4 +98,9 @@ test('a Threads dry run cannot be reported as a successful provider canary', () 
     degradedReason: null,
     timedOut: false,
   }), 'failed');
+});
+
+test('public matched symbols never invent a records-written placeholder', () => {
+  assert.deepEqual(publicMatchedSymbols(undefined), []);
+  assert.deepEqual(publicMatchedSymbols(['2330', 'records_written', '2330', '2026']), ['2330']);
 });
