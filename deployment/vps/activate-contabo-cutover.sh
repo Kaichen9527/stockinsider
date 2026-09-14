@@ -6,6 +6,7 @@ repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
 data_plane_env=/etc/stockinsider/data-plane.env
 legacy_service=stockinsider-web.service
 web_service=stockinsider-web-standalone.service
+worker_service=stockinsider-internal-worker.service
 postgrest_service=stockinsider-postgrest.service
 activated=false
 legacy_was_active=false
@@ -13,7 +14,7 @@ legacy_was_active=false
 rollback() {
   local status=$?
   if [[ "$status" -ne 0 && "$activated" != true ]]; then
-    systemctl disable --now "$web_service" "$postgrest_service" >/dev/null 2>&1 || true
+    systemctl disable --now "$worker_service" "$web_service" "$postgrest_service" >/dev/null 2>&1 || true
     if [[ "$legacy_was_active" == true ]]; then systemctl start "$legacy_service" >/dev/null 2>&1 || true; fi
   fi
 }
@@ -45,14 +46,15 @@ if [[ $(basename "$current_target") != "$release_id" ]]; then
 fi
 for required in "$repo_root/deployment/vps/activate-contabo-data-plane.sql" \
   /etc/systemd/system/stockinsider-postgrest.service \
-  /etc/systemd/system/stockinsider-web-standalone.service; do
+  /etc/systemd/system/stockinsider-web-standalone.service \
+  /etc/systemd/system/stockinsider-internal-worker.service; do
   if [[ ! -f "$required" ]]; then echo "cutover dependency missing: $required" >&2; exit 1; fi
 done
 if [[ $(pg_lsclusters --no-header | awk '$1==17&&$2=="stockinsider" {print $4}') != online ]]; then
   echo "verified StockInsider database is not online" >&2; exit 1
 fi
 if systemctl is-active --quiet "$legacy_service" 2>/dev/null; then legacy_was_active=true; fi
-systemd-analyze verify "$postgrest_service" "$web_service"
+systemd-analyze verify "$postgrest_service" "$web_service" "$worker_service"
 
 sudo -u postgres psql --no-psqlrc --set=ON_ERROR_STOP=1 --dbname=stockinsider \
   --set=backend_id="$backend_id" --set=principal_id="$principal_id" --set=release_id="$release_id" \
@@ -61,6 +63,7 @@ sudo -u postgres psql --no-psqlrc --set=ON_ERROR_STOP=1 --dbname=stockinsider \
 if [[ "$legacy_was_active" == true ]]; then systemctl stop "$legacy_service"; fi
 systemctl enable --now "$postgrest_service"
 systemctl enable --now "$web_service"
+systemctl enable --now "$worker_service"
 app_ready=false
 for _attempt in $(seq 1 30); do
   if curl --fail --silent --show-error --max-time 2 http://127.0.0.1:3100/api/radar/daily >/dev/null; then
@@ -70,6 +73,15 @@ for _attempt in $(seq 1 30); do
   sleep 1
 done
 if [[ "$app_ready" != true ]]; then echo "Contabo Radar canary did not become ready" >&2; exit 1; fi
+worker_ready=false
+for _attempt in $(seq 1 30); do
+  if curl --fail --silent --show-error --max-time 2 http://127.0.0.1:3101/api/radar/daily >/dev/null; then
+    worker_ready=true
+    break
+  fi
+  sleep 1
+done
+if [[ "$worker_ready" != true ]]; then echo "Contabo internal worker canary did not become ready" >&2; exit 1; fi
 if systemctl cat "$legacy_service" >/dev/null 2>&1; then systemctl disable "$legacy_service" >/dev/null 2>&1 || true; fi
 activated=true
-echo '{"schema":"stockinsider-contabo-cutover-v1","databaseActivated":true,"postgrestActivated":true,"webSwitched":true,"radarCanary":true}'
+echo '{"schema":"stockinsider-contabo-cutover-v1","databaseActivated":true,"postgrestActivated":true,"webSwitched":true,"workerIsolated":true,"radarCanary":true}'
