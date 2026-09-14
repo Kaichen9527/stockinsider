@@ -96,11 +96,13 @@ export function twMarketDailyEvidencePolicy(bars: TwMarketDailyBar[], expectedSe
   };
 }
 
-// Only provider-v5 datasets transactionally projected into the exact tables
-// candidate research reads may attest provider completeness. Market regime,
-// institutional flow, master and calendar retain their own typed authority
-// planes and are validated by candidate research and immutable replay.
-const TAIWAN_FINAL_DATASETS = ['daily_price', 'daily_valuation', 'monthly_revenue'] as const;
+// Only close-session datasets may attest the global final publication. Monthly
+// revenue is issuer evidence rather than a market-wide close component: it is
+// fetched and persisted per candidate by the research cycle (MOPS first, then
+// the official TWSE InfoHub fallback). A blocked exchange-wide MOPS catalogue
+// must remain visible in its provider ledger, but may not make every otherwise
+// complete candidate look globally incomplete.
+const TAIWAN_FINAL_DATASETS = ['daily_price', 'daily_valuation'] as const;
 
 export function resolveTaiwanFinalPublicationSemantics(metadata: unknown) {
   const row = metadata && typeof metadata === 'object' && !Array.isArray(metadata) ? metadata as Record<string, unknown> : {};
@@ -124,7 +126,9 @@ export function resolveTaiwanFinalPublicationSemantics(metadata: unknown) {
   });
   const reportedPct = Number(row.datasetCompletenessPct);
   const completenessPct = Number.isFinite(reportedPct) ? Math.max(0, Math.min(100, reportedPct)) : 0;
-  const confirmed = row.publicationPhase === 'final' && row.shadowEligible === true
+  // Global 30-day Shadow was retired. The legacy shadowEligible column remains
+  // for migration compatibility and must not participate in publication.
+  const confirmed = row.publicationPhase === 'final'
     && completenessPct === 100 && missingComponents.length === 0;
   const staleReadonly = !confirmed && [...terminalByDataset.values()].some((terminal) => terminal === 'conflict' || terminal === 'stale');
   return {

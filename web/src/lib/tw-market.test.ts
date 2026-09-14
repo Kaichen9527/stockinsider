@@ -438,11 +438,13 @@ test('FinMind-only or stale price history cannot become actionable', () => {
   assert.deepEqual(policy.blockers, ['price_history_uses_finmind_fallback', 'price_history_stale']);
 });
 
-test('final provider publication requires every typed research dataset and exposes missing components', () => {
-  const complete = Object.fromEntries(['daily_price', 'daily_valuation', 'monthly_revenue']
+test('final provider publication uses close datasets, not issuer revenue or retired global Shadow', () => {
+  const complete = Object.fromEntries(['daily_price', 'daily_valuation']
     .map((dataset) => [`${dataset}:TWSE`, { terminal: 'complete' }]));
   assert.deepEqual(resolveTaiwanFinalPublicationSemantics({
-    publicationPhase: 'final', datasetCompleteness: complete, datasetCompletenessPct: 100, shadowEligible: true,
+    publicationPhase: 'final', datasetCompleteness: {
+      ...complete, 'monthly_revenue:TWSE': { terminal: 'http_error' },
+    }, datasetCompletenessPct: 100, shadowEligible: false,
   }), { phase: 'final', status: 'confirmed', completenessPct: 100, missingComponents: [], confirmed: true });
 
   const conflict = resolveTaiwanFinalPublicationSemantics({
@@ -457,5 +459,5 @@ test('final provider publication requires every typed research dataset and expos
   const missing = resolveTaiwanFinalPublicationSemantics(null);
   assert.equal(missing.phase, 'preliminary');
   assert.equal(missing.completenessPct, 0);
-  assert.equal(missing.missingComponents.length, 3);
+  assert.equal(missing.missingComponents.length, 2);
 });

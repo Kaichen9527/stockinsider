@@ -116,7 +116,7 @@ test('issuer IR acquisition jobs remain visible to the Browser-assisted receipt 
   assert.match(pendingRoute, /officialFilingUrl: row[.]source_url/u);
 });
 
-test('candidate-universe schedules include typed valuation, revenue and financial datasets', () => {
+test('candidate research retains revenue support while close schedules exclude issuer-period revenue', () => {
   for (const dataset of ['daily_valuation', 'monthly_revenue', 'financial_statement']) {
     assert.match(provider, new RegExp(`'${dataset}'`, 'u'));
     assert.match(migration, new RegExp(`'${dataset}'`, 'u'));
@@ -137,8 +137,13 @@ test('candidate-universe schedules include typed valuation, revenue and financia
   assert.match(candidateQueueMigration, /public\.read_taiwan_data_candidate_universe_v6\(v_cutoff,v_after/u);
   const closeService = readFileSync(new URL('../deployment/vps/systemd/stockinsider-taiwan-data-close-preliminary.service', import.meta.url), 'utf8');
   assert.match(closeService, /daily_valuation/u);
-  assert.match(closeService, /monthly_revenue/u);
+  assert.doesNotMatch(closeService, /monthly_revenue/u);
   assert.doesNotMatch(closeService, /financial_statement/u);
+  const finalReconcileService = readFileSync(new URL('../deployment/vps/systemd/stockinsider-taiwan-data-final-reconcile.service', import.meta.url), 'utf8');
+  assert.doesNotMatch(finalReconcileService, /monthly_revenue/u);
+  const twMarket = readFileSync(new URL('../web/src/lib/tw-market.ts', import.meta.url), 'utf8');
+  assert.match(twMarket, /parseTwseInfoHubRevenue/u);
+  assert.match(twMarket, /company\/financial\?code=\$\{symbol\}/u);
   assert.match(closeService, /"limit":100/u);
   assert.match(drainRoute, /parseTaiwanDrainOptions\(body\)/u);
   assert.match(candidateRefresh, /Number\(row\.limit\) > 100/u);
