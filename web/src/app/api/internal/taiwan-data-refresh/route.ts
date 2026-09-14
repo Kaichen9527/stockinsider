@@ -28,12 +28,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: false, error: message }, { status: message.startsWith('latest_completed_trading_session_read_failed:') ? 500 : 503 });
     }
   }
-  // Official valuation and revenue endpoints are exchange-wide batches. Only
-  // price and statement requests are candidate-scoped; this prevents N
-  // candidates from requesting the identical official response N times.
+  // Close-session market data is separate from issuer-period evidence.
+  // Monthly revenue remains available to explicit provider jobs, but the
+  // candidate research cycle owns its official MOPS/InfoHub persistence.
   // Financial history has its own durable, period-aware acquisition queue.
-  // Enqueuing every candidate here on every close would duplicate that queue
-  // and could never drain before the 21:00 final publication.
   const queuedAt = new Date().toISOString();
   try {
     const symbols = input.symbols.length === 0 && input.datasets.includes('daily_price')
