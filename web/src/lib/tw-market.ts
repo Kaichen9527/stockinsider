@@ -1162,6 +1162,46 @@ export async function fetchTwStockInstitutional(symbol: string) {
   return null;
 }
 
+type TwseInfoHubFinancialPayload = {
+  info?: { status?: unknown; data?: { code?: unknown } };
+  chart?: {
+    revenue?: {
+      categories?: unknown;
+      series?: unknown;
+    };
+  };
+};
+
+export function parseTwseInfoHubRevenue(payload: TwseInfoHubFinancialPayload, symbol: string) {
+  if (!/^\d{4}$/u.test(symbol) || payload?.info?.status !== 'success'
+    || String(payload?.info?.data?.code || '') !== symbol) return null;
+  const categories = payload?.chart?.revenue?.categories;
+  const series = payload?.chart?.revenue?.series;
+  if (!Array.isArray(categories) || !Array.isArray(series)) return null;
+  const revenueSeries = series.find((item) => item && typeof item === 'object' && !Array.isArray(item)
+    && Array.isArray((item as { data?: unknown }).data)) as { data: unknown[] } | undefined;
+  if (!revenueSeries || revenueSeries.data.length !== categories.length) return null;
+  const observations = categories.flatMap((category, index) => {
+    const period = String(category || '');
+    const revenue = toFiniteNumber(revenueSeries.data[index]);
+    if (!/^\d{6}$/u.test(period) || revenue == null || revenue < 0) return [];
+    const year = Number(period.slice(0, 4));
+    const month = Number(period.slice(4, 6));
+    if (year < 1990 || month < 1 || month > 12) return [];
+    return [{ year, month, revenue }];
+  }).sort((left, right) => left.year - right.year || left.month - right.month);
+  const latest = observations.at(-1);
+  return latest ? {
+    asOfDate: `${latest.year}-${String(latest.month).padStart(2, '0')}-01`,
+    revenue: latest.revenue,
+    year: latest.year,
+    month: latest.month,
+    provider: 'official_primary' as const,
+    authorityTier: 'official_primary' as const,
+    sourceUrl: `https://www.twse.com.tw/rwd/zh/IIH/company/financial?code=${symbol}`,
+  } : null;
+}
+
 export async function fetchTwStockRevenue(symbol: string, monthsBack = 4) {
   const client = await getTwStockClient();
   if (client) for (let i = 0; i < monthsBack; i += 1) {
@@ -1183,6 +1223,15 @@ export async function fetchTwStockRevenue(symbol: string, monthsBack = 4) {
       continue;
     }
   }
+  // MOPS/OpenAPI currently returns an HTTP-200 security-block HTML page to the
+  // production VPS. TWSE's official Investment InfoHub JSON endpoint is served
+  // to that address and exposes the issuer's latest reported monthly revenue.
+  // Keep this owner-authority fallback ahead of FinMind and validate that the
+  // response identity matches the requested stock before accepting any value.
+  const infoHubUrl = `https://www.twse.com.tw/rwd/zh/IIH/company/financial?code=${symbol}`;
+  const infoHub = await fetchOfficialJson<TwseInfoHubFinancialPayload>(infoHubUrl, 8_000);
+  const officialRevenue = infoHub ? parseTwseInfoHubRevenue(infoHub, symbol) : null;
+  if (officialRevenue) return officialRevenue;
   const startDate = new Date(Date.now() - Math.max(120, monthsBack * 35) * 86_400_000).toISOString().slice(0, 10);
   const fallback = await fetchFinMindRows('TaiwanStockMonthRevenue', { symbol, startDate });
   const row = fallback?.rows.sort((left, right) => String(left.date || '').localeCompare(String(right.date || ''))).at(-1);

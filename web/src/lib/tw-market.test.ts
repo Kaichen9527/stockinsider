@@ -1,6 +1,26 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { fetchOfficialJson, fetchOfficialJsonOutcome, fetchTwStockHistoryMonth, fetchTwMarketTradingSessions, fetchTwStockDailyBars, isOfficialValuationSourceUrl, isValidatedFinMindValuationSource, mergeTwMarketDailyBars, parseFinMindDailyPriceRows, parseFinMindValuationRows, parseTpexMarketTradingSessions, parseTpexTradingStockRows, parseTpexValuationPanel, parseTwseStockValuationHistory, parseTwseValuationPanel, readBoundedFinMindJson, resetOfficialMarketRequestStateForTests, resolveTaiwanFinalPublicationSemantics, selectOfficialValuationBackfillMonths, twMarketDailyEvidencePolicy, type TwMarketDailyBar } from './tw-market.ts';
+import { fetchOfficialJson, fetchOfficialJsonOutcome, fetchTwStockHistoryMonth, fetchTwMarketTradingSessions, fetchTwStockDailyBars, isOfficialValuationSourceUrl, isValidatedFinMindValuationSource, mergeTwMarketDailyBars, parseFinMindDailyPriceRows, parseFinMindValuationRows, parseTpexMarketTradingSessions, parseTpexTradingStockRows, parseTpexValuationPanel, parseTwseInfoHubRevenue, parseTwseStockValuationHistory, parseTwseValuationPanel, readBoundedFinMindJson, resetOfficialMarketRequestStateForTests, resolveTaiwanFinalPublicationSemantics, selectOfficialValuationBackfillMonths, twMarketDailyEvidencePolicy, type TwMarketDailyBar } from './tw-market.ts';
+
+test('TWSE InfoHub revenue accepts only identity-bound aligned official observations', () => {
+  const valid = parseTwseInfoHubRevenue({
+    info: { status: 'success', data: { code: '2330' } },
+    chart: { revenue: { categories: ['202607', '202608'], series: [{ name: 'monthly revenue', data: [467_580_548_000, 514_805_337_000] }] } },
+  }, '2330');
+  assert.deepEqual(valid, {
+    asOfDate: '2026-08-01', revenue: 514_805_337_000, year: 2026, month: 8,
+    provider: 'official_primary', authorityTier: 'official_primary',
+    sourceUrl: 'https://www.twse.com.tw/rwd/zh/IIH/company/financial?code=2330',
+  });
+  assert.equal(parseTwseInfoHubRevenue({
+    info: { status: 'success', data: { code: '2317' } },
+    chart: { revenue: { categories: ['202608'], series: [{ data: [100] }] } },
+  }, '2330'), null);
+  assert.equal(parseTwseInfoHubRevenue({
+    info: { status: 'success', data: { code: '2330' } },
+    chart: { revenue: { categories: ['202608'], series: [{ data: [] }] } },
+  }, '2330'), null);
+});
 
 test('bounded official history fetch requests one issuer-month and reports blocked versus empty precisely', async (t) => {
   const originalFetch = globalThis.fetch;
