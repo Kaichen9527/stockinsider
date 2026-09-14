@@ -306,3 +306,15 @@ test('price provenance is retained on persisted bars and blocks stage promotion 
   assert.match(source, /publication_phase: baseInput\.staleOrFallback \? 'preliminary'/u);
   assert.doesNotMatch(source, /publication_phase: 'final' as const/u);
 });
+
+test('history authority reconciliation preserves displaced mirrors and never overwrites exchange-owner conflicts', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const migration = await readFile(new URL('../../../migrations/20260914_candidate_history_authority_reconciliation_v1.sql', import.meta.url), 'utf8');
+  assert.match(migration, /candidate_history_authority_reconciliations_v1/u);
+  assert.match(migration, /non_authoritative_cache_replaced_by_exchange/u);
+  assert.match(migration, /v_price\.source_url!~'\^https:\/\/www\\\.\(twse/u);
+  assert.match(migration, /ELSIF NOT v_values_equal THEN v_conflict:=true; END IF;/u);
+  assert.match(migration, /old_values,old_source_url,old_provenance,new_values,new_source_url/u);
+  assert.match(migration, /v_prior_conflict_reason<>'official_history_existing_row_conflict' OR p_status<>'complete'/u);
+  assert.doesNotMatch(migration, /UPDATE public\.official_price_history[\s\S]{0,500}WHERE stock_id=p_stock_id AND session_date=v_session;[\s\S]{0,120}DELETE/u);
+});

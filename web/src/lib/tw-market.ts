@@ -243,9 +243,12 @@ async function fetchOfficialJsonRequest<T>(url: string, timeoutMs: number, init?
         ...init,
       });
         if (!response.ok) {
-          onFailure?.([403, 428].includes(response.status) ? 'official_security_block'
+          // TWSE's CDN uses a terminal 307 response (with its bilingual
+          // security-block page) for blocked server ranges. It is not an
+          // ordinary redirect and must not be reported as a generic HTTP error.
+          onFailure?.([307, 403, 428].includes(response.status) ? 'official_security_block'
             : response.status === 429 ? 'official_rate_limit' : 'official_http_error', response.status);
-          if (response.status === 403 || response.status === 428 || response.status === 429 || response.status >= 500) recordOfficialHostRetryableFailure(circuitKey);
+          if ([307, 403, 428, 429].includes(response.status) || response.status >= 500) recordOfficialHostRetryableFailure(circuitKey);
           else recordOfficialHostSuccess(circuitKey);
           return null;
         }

@@ -27,7 +27,8 @@ test('monthly acquisition persists evidence and checkpoint together, records par
   }} as unknown as SupabaseClient;
   const bars=[{time:'2026-09-10',open:100,high:102,low:99,close:101,volume:1000,sourceUrl:'https://www.twse.com.tw/exchangeReport/STOCK_DAY',
     authorityTier:'official_primary' as const,provider:'official_primary' as const}];
-  const result=await runCandidateHistoryBackfill({client,candidates:[{stockId:'stock-a',symbol:'2330',exchange:'TWSE',knownPriceSessions:[],knownMultipleSessions:[]}],
+  const result=await runCandidateHistoryBackfill({client,candidates:[{stockId:'stock-a',symbol:'2330',exchange:'TWSE',knownPriceSessions:[],knownMultipleSessions:[],
+    listing:{date:'2026-09-01',sourceUrl:'https://www.twse.com.tw/zh/listed/listed.html'}}],
     officialSessions:['2026-09-09','2026-09-10'],latestSession:'2026-09-10',evaluationAt:'2026-09-11T00:00:00.000Z',requestBudget:2},
   {fetchMonth:async (job)=>({bars:job.dataset==='price'?bars:[],multiples:[],sourceUrl:bars[0].sourceUrl,httpStatus:null,terminalReason:job.dataset==='price'?'complete':'official_no_rows'})});
   assert.equal(result.attempted,2);
