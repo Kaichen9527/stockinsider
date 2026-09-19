@@ -10,6 +10,15 @@ test('method requirements include actual denominators and cycle periods',()=>{
   assert.ok(candidateFinancialRequirements('金融').keys.includes('common_shares_outstanding'));
 });
 
+test('AUO coverage follows its forward BVPS method instead of a global sector row count', () => {
+  const requirement = candidateFinancialRequirements('光電業', '2409');
+  assert.equal(requirement.quarters, 8);
+  assert.ok(requirement.keys.includes('common_equity_attributable_to_owners'));
+  assert.ok(requirement.keys.includes('common_shares_outstanding'));
+  assert.equal(financialCoverageSummary([], '光電業', '2026-09-19T12:00:00+08:00', '2409').requiredFieldPeriods, 50);
+  assert.equal(candidateFinancialRequirements('光電業', '2408').keys.includes('common_equity_attributable_to_owners'), false);
+});
+
 test('shared business classification gives all cyclical authority labels twenty financial quarters', () => {
   for (const sector of ['化工', '造紙', '原物料', '塑膠工業', '塑化', '鋼鐵', '水泥', '航運', '記憶體', '面板',
     'Chemical industry', 'Paper', 'Raw materials', 'Plastics']) {

@@ -1,7 +1,14 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { candidateFinancialPeriodPredatesListing, candidateMopsDownloadUrl, fetchCandidateMopsFiling, fetchTpexOfficialPayload, financialBridgeAcquisitionQuarters, parseCandidateMopsFacts, selectCandidateFilingPeriodFacts, normalizeMopsDownloadedContentType } from './candidate-official-financials.ts';
+import { candidateFinancialPeriodPredatesListing, candidateIssuerIrFallback, candidateMopsDownloadUrl, fetchCandidateMopsFiling, fetchTpexOfficialPayload, financialBridgeAcquisitionQuarters, parseCandidateMopsFacts, selectCandidateFilingPeriodFacts, normalizeMopsDownloadedContentType } from './candidate-official-financials.ts';
 import { fetchFinMindFinancialFallback, parseFinMindFinancialFacts } from './finmind-financial-fallback.ts';
+
+test('AUO issuer documents are pinned to the requested financial period', () => {
+  assert.match(candidateIssuerIrFallback('2409', '2026-06-30')?.documentUrl || '', /2Q26_Finance_Statement_English[.]pdf$/u);
+  assert.match(candidateIssuerIrFallback('2409', '2024-09-30')?.documentUrl || '', /3Q24_Finance_Statement_English[.]pdf$/u);
+  assert.equal(candidateIssuerIrFallback('2409', '2023-06-30'), null);
+  assert.equal(candidateIssuerIrFallback('2408', '2026-06-30'), null);
+});
 
 test('official attachment empty MIME is normalized only for exact issuer standalone UTF-8 iXBRL', () => {
   const xml = '<?xml version="1.0" encoding="UTF-8"?><html xmlns="http://www.w3.org/1999/xhtml" xmlns:ix="http://www.xbrl.org/2013/inlineXBRL"><ix:header/></html>';

@@ -104,6 +104,55 @@ export function buildForwardEarningsScenario(input: {
   };
 }
 
+export type ForwardBvpsScenarioInput = {
+  price: number;
+  startingCommonEquity: number;
+  endingCommonShares: number;
+  projectedCommonIncome: { bear: number; base: number; bull: number };
+  projectedDividends: { bear: number; base: number; bull: number };
+  projectedCapitalAndOci: { bear: number; base: number; bull: number };
+  historicalPbRatios: number[];
+  targetPeriodEnd: string;
+};
+
+/** Forward common-equity bridge for asset-intensive cyclicals.
+ * Values must use equity attributable to owners of the parent and ending
+ * common shares. Total equity and weighted-average EPS shares are different
+ * accounting concepts and are deliberately absent from this interface. */
+export function buildForwardBvpsPbScenario(input: ForwardBvpsScenarioInput) {
+  const sorted = input.historicalPbRatios.filter((value) => Number.isFinite(value) && value > 0).sort((left, right) => left - right);
+  if (sorted.length < 48 || input.price <= 0 || input.startingCommonEquity <= 0 || input.endingCommonShares <= 0
+    || !/^\d{4}-\d{2}-\d{2}$/u.test(input.targetPeriodEnd)) return null;
+  const scenarioKeys = ['bear', 'base', 'bull'] as const;
+  const endingCommonEquity = Object.fromEntries(scenarioKeys.map((key) => [key,
+    input.startingCommonEquity + input.projectedCommonIncome[key] - input.projectedDividends[key] + input.projectedCapitalAndOci[key],
+  ])) as Record<(typeof scenarioKeys)[number], number>;
+  if (scenarioKeys.some((key) => !Number.isFinite(endingCommonEquity[key]) || endingCommonEquity[key] <= 0)) return null;
+  const forwardBvps = Object.fromEntries(scenarioKeys.map((key) => [key, endingCommonEquity[key] / input.endingCommonShares])) as Record<(typeof scenarioKeys)[number], number>;
+  const at = (percentile: number) => sorted[Math.min(sorted.length - 1, Math.max(0, Math.round((sorted.length - 1) * percentile)))];
+  const multiples = { bear: at(0.25), base: at(0.5), bull: at(0.75) };
+  const metrics = scenarioValuationMetrics({
+    currentPrice: input.price,
+    bear: forwardBvps.bear * multiples.bear,
+    base: forwardBvps.base * multiples.base,
+    bull: forwardBvps.bull * multiples.bull,
+  });
+  return {
+    ...metrics,
+    primaryMethod: 'forward_bvps_pb' as const,
+    growthFactor: null,
+    operatingDriver: round(forwardBvps.base, 4),
+    operatingDriverSource: 'forward_common_equity_bridge' as const,
+    baseMultiple: round(multiples.base, 3),
+    historicalPercentile: round(sorted.filter((value) => value <= input.price / forwardBvps.base).length / sorted.length * 100, 2),
+    historicalSampleCount: sorted.length,
+    targetPeriodEnd: input.targetPeriodEnd,
+    forwardBvps: Object.fromEntries(scenarioKeys.map((key) => [key, round(forwardBvps[key], 4)])),
+    endingCommonEquity: Object.fromEntries(scenarioKeys.map((key) => [key, round(endingCommonEquity[key], 2)])),
+    pbMultiples: Object.fromEntries(scenarioKeys.map((key) => [key, round(multiples[key], 3)])),
+  };
+}
+
 /** EV/EBITDA is only publishable when the full capital structure is present.
  * In particular, total liabilities must never be substituted for debt and a
  * weighted-share denominator must be positive. */

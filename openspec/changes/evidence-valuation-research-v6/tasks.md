@@ -18,3 +18,15 @@
 - [ ] Rotate the exact model-runner host pin and make its gate required.
 - [ ] Pass migration, security, unit, integration, TypeScript, lint, build and runtime gates.
 - [ ] Deploy the reviewed release and verify production canaries before enabling schedules.
+- [ ] Complete AUO-first issuer-document validation and distinguish common equity,
+      total equity, ending shares and weighted-average shares.
+- [ ] Add the versioned AUO cyclical-asset profile, four-quarter operating/equity bridge
+      and forward-BVPS/PB valuation with normalized-earnings cross-check.
+- [x] Replace global/row-count completeness on candidate detail with method-specific
+      admitted evidence coverage and typed missing-data states.
+- [x] Publish the decision-first AUO detail hierarchy, daily price/MA chart and optional
+      evidence appendix while preserving immutable historical revisions.
+- [ ] Resume research exactly once when a previously incomplete Taiwan data scope becomes
+      research-ready; prove the real 2409 acquisition-to-publication path.
+- [ ] Reclaim only verified disposable shared-VPS cache/releases, remeasure capacity after
+      every batch and prepare an expansion cost decision if the 19 GiB threshold remains unmet.

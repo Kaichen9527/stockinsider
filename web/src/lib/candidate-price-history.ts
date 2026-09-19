@@ -2,6 +2,11 @@ export type MonthlyCandidatePrice = {
   date: string; month: string; frequency: 'monthly'; close: number;
 };
 
+export type DailyCandidatePrice = {
+  date: string; frequency: 'daily'; close: number;
+  ma5: number | null; ma20: number | null; ma60: number | null; ma120: number | null; ma240: number | null;
+};
+
 /** Price provenance is not a PE/PB endpoint. Parse the URL rather than
  * searching for an official hostname inside an untrusted URL string. */
 export function isOfficialCandidatePriceSource(value: unknown) {
@@ -42,4 +47,24 @@ export function monthlyCandidatePrices(bars: readonly { time: string; close: num
     }
   }
   return [...months.values()].sort((a, b) => a.date.localeCompare(b.date)).slice(-60);
+}
+
+/** Official daily sessions with rolling simple moving averages. Missing
+ * sessions are not interpolated and an MA stays null until its full window is
+ * present. */
+export function dailyCandidatePrices(bars: readonly { time: string; close: number }[]): DailyCandidatePrice[] {
+  const byDate = new Map<string, number>();
+  for (const bar of bars) {
+    if (!isHistoryDate(bar.time) || !Number.isFinite(bar.close) || bar.close <= 0) continue;
+    const previous = byDate.get(bar.time);
+    if (previous != null && previous !== bar.close) throw new Error('candidate_history_conflicting_session');
+    byDate.set(bar.time, bar.close);
+  }
+  const rows = [...byDate.entries()].sort(([left], [right]) => left.localeCompare(right));
+  return rows.slice(-260).map(([date, close], visibleIndex) => {
+    const sourceIndex = Math.max(0, rows.length - 260) + visibleIndex;
+    const average = (window: 5 | 20 | 60 | 120 | 240) => sourceIndex + 1 < window ? null
+      : Math.round(rows.slice(sourceIndex + 1 - window, sourceIndex + 1).reduce((sum, [, value]) => sum + value, 0) / window * 10000) / 10000;
+    return { date, frequency: 'daily' as const, close, ma5: average(5), ma20: average(20), ma60: average(60), ma120: average(120), ma240: average(240) };
+  });
 }

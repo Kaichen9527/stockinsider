@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { isHistoryDate, monthlyCandidatePrices, isOfficialCandidatePriceSource, isOfficialCandidatePriceProvider } from './candidate-price-history.ts';
+import { dailyCandidatePrices, isHistoryDate, monthlyCandidatePrices, isOfficialCandidatePriceSource, isOfficialCandidatePriceProvider } from './candidate-price-history.ts';
 
 test('official price coverage recognizes actual adapters and never a mirror or hostname suffix', () => {
   for (const url of ['https://www.twse.com.tw/exchangeReport/STOCK_DAY?stockNo=2330',
@@ -30,4 +30,15 @@ test('history does not turn month-only labels or invalid dates into trading sess
   assert.throws(() => monthlyCandidatePrices([
     { time: '2026-02-26', close: 100 }, { time: '2026-02-26', close: 101 },
   ]), /conflicting_session/);
+});
+
+test('daily history includes rolling moving averages without inventing sessions', () => {
+  const rows = dailyCandidatePrices(Array.from({ length: 20 }, (_, index) => ({
+    time: `2026-01-${String(index + 1).padStart(2, '0')}`, close: index + 1,
+  })));
+  assert.equal(rows.length, 20);
+  assert.equal(rows[3].ma5, null);
+  assert.equal(rows[4].ma5, 3);
+  assert.equal(rows[19].ma20, 10.5);
+  assert.equal(rows[19].ma60, null);
 });

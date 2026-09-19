@@ -2,35 +2,41 @@ import { isPromotionEligibleEvidence } from './evidence-valuation-contract.ts';
 import { financialFactAvailableAt } from './candidate-research-policy.ts';
 import { discreteReportedQuarters, preferOfficialReportedFinancialFacts, type ReportedFinancialFact } from './forward-earnings-bridge.ts';
 import { classifyCandidateBusiness, latestDueFinancialQuarters } from './candidate-financial-policy.ts';
+import { getCandidateBusinessProfile } from './candidate-business-profile.ts';
 
 type Fact = Record<string, unknown>;
 const FLOW_KEYS = ['quarterly_revenue', 'quarterly_gross_profit', 'quarterly_operating_income', 'quarterly_net_income_attributable_to_common', 'quarterly_diluted_eps', 'diluted_weighted_average_shares'];
 
 /** Requirements match the valuation readers, not the number of rows fetched. */
-export function candidateFinancialRequirements(sector: string) {
+export function candidateFinancialRequirements(sector: string, symbol?: string) {
+  const profile = symbol ? getCandidateBusinessProfile(symbol) : null;
+  if (profile?.businessModel === 'cyclical_asset') {
+    return { quarters: profile.reportedQuarterCount, keys: [...FLOW_KEYS, ...profile.requiredInstantFacts], latestInstantOnly: true };
+  }
   const business = classifyCandidateBusiness(sector);
   if (business === 'financial') {
-    return { quarters: 8, keys: ['quarterly_net_income_attributable_to_common', 'common_equity_attributable_to_owners', 'common_shares_outstanding'] };
+    return { quarters: 8, keys: ['quarterly_net_income_attributable_to_common', 'common_equity_attributable_to_owners', 'common_shares_outstanding'], latestInstantOnly: false };
   }
   if (business === 'cyclical') {
-    return { quarters: 20, keys: FLOW_KEYS };
+    return { quarters: 20, keys: FLOW_KEYS, latestInstantOnly: false };
   }
-  return { quarters: 8, keys: FLOW_KEYS };
+  return { quarters: 8, keys: FLOW_KEYS, latestInstantOnly: false };
 }
 
-export function financialCoverageSummary(facts: Fact[], sector: string, cutoff: string) {
-  const requirements = candidateFinancialRequirements(sector);
-  const missing = financialCoverageGaps(facts, sector, cutoff);
-  const requiredFieldPeriods = requirements.keys.reduce((count, key) => count + requirements.quarters
-    + (key === 'common_equity_attributable_to_owners' ? 1 : 0), 0);
+export function financialCoverageSummary(facts: Fact[], sector: string, cutoff: string, symbol?: string) {
+  const requirements = candidateFinancialRequirements(sector, symbol);
+  const missing = financialCoverageGaps(facts, sector, cutoff, symbol);
+  const requiredFieldPeriods = requirements.keys.reduce((count, key) => count
+    + (requirements.latestInstantOnly && ['common_equity_attributable_to_owners', 'common_shares_outstanding'].includes(key)
+      ? 1 : requirements.quarters + (key === 'common_equity_attributable_to_owners' ? 1 : 0)), 0);
   return { status: missing.length === 0 ? 'complete' as const : 'incomplete' as const,
     requiredFieldPeriods, verifiedFieldPeriods: requiredFieldPeriods - missing.length,
     completenessPct: Math.round((requiredFieldPeriods - missing.length) / requiredFieldPeriods * 10000) / 100,
     missing, evaluationAt: cutoff };
 }
 
-export function financialCoverageGaps(facts: Fact[], sector: string, cutoff: string) {
-  const required = candidateFinancialRequirements(sector);
+export function financialCoverageGaps(facts: Fact[], sector: string, cutoff: string, symbol?: string) {
+  const required = candidateFinancialRequirements(sector, symbol);
   const quarterEnds = latestDueFinancialQuarters(cutoff, required.quarters + 1).map((quarter) => quarter.periodEnd);
   const eligible = preferOfficialReportedFinancialFacts(facts.filter((fact) => fact.estimate_kind === 'reported'
     && typeof fact.value === 'number' && Number.isFinite(fact.value)
@@ -49,8 +55,9 @@ export function financialCoverageGaps(facts: Fact[], sector: string, cutoff: str
     filingRestatementId: fact.filing_restatement_id == null ? null : String(fact.filing_restatement_id),
   })));
   return required.keys.flatMap((key) => {
-    const expected = quarterEnds.slice(0, required.quarters + (key === 'common_equity_attributable_to_owners' ? 1 : 0));
     const instant = key === 'common_equity_attributable_to_owners' || key === 'common_shares_outstanding';
+    const expected = quarterEnds.slice(0, required.latestInstantOnly && instant ? 1
+      : required.quarters + (key === 'common_equity_attributable_to_owners' ? 1 : 0));
     // Use the valuation reader's conflict and monetary-flow decumulation rules.
     // EPS and weighted shares remain discrete-only in that shared consumer.
     const have = instant ? new Set(expected.filter((periodEnd) => {

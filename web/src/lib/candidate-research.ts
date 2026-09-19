@@ -1,5 +1,5 @@
 import { createHash, randomUUID } from 'crypto';
-import { monthlyCandidatePrices, isOfficialCandidatePriceSource, isOfficialCandidatePriceProvider } from './candidate-price-history';
+import { dailyCandidatePrices, monthlyCandidatePrices, isOfficialCandidatePriceSource, isOfficialCandidatePriceProvider } from './candidate-price-history';
 import { candidateRevisionHref } from './candidate-revision-query';
 import { freezeCandidateRevisionContext } from './candidate-revision-context.ts';
 import { getSupabaseServerClient } from './supabase-server';
@@ -25,7 +25,7 @@ import {
   type TwMarketDailyBar,
   type TwValuationHistoryPoint,
 } from './tw-market';
-import { buildConservativeOfficialScenario, buildDriverMultipleScenario, buildEvEbitdaScenario, buildFinancialPbRoeScenario, buildForwardEarningsScenario, buildTurnaroundEvSalesScenario } from './candidate-valuation';
+import { buildConservativeOfficialScenario, buildDriverMultipleScenario, buildEvEbitdaScenario, buildFinancialPbRoeScenario, buildForwardBvpsPbScenario, buildForwardEarningsScenario, buildTurnaroundEvSalesScenario } from './candidate-valuation';
 import { collectBatchedAuthorityRows, collectPagedAuthorityRows, financialFactAvailableAt, isCandidateHistoricalPriceAccessEnabled, isTransientResearchInfrastructureError } from './candidate-research-policy';
 import { runCandidateHistoryBackfill, persistCandidateDailyPriceEvidence } from './candidate-history-backfill';
 import { scheduledSourceConnectorKeys, sourceExecutionPolicy } from './source-policy';
@@ -48,6 +48,7 @@ import { processCandidateFinancialDocumentReceipts } from './candidate-financial
 import { validatePendingOfficialFinancials } from './official-financial-validation-worker';
 import { hasConsecutiveFiscalQuarters } from './candidate-financial-normalization';
 import { buildCandidateValuationInputs } from './candidate-valuation-inputs.ts';
+import { getCandidateBusinessProfile } from './candidate-business-profile.ts';
 import { fixedRunnerPrincipal } from './opportunity-v3/internal.ts';
 import { sanitizePublicSourceUrl } from './public-source-url.ts';
 import {
@@ -68,9 +69,9 @@ async function pagedResearchResult(read: (from: number, to: number) => PromiseLi
   return { data, error: null };
 }
 
-export const CANDIDATE_RESEARCH_MODEL_VERSION = 'candidate-research-v4.2.0';
+export const CANDIDATE_RESEARCH_MODEL_VERSION = 'candidate-research-v4.3.0';
 export const CANDIDATE_STAGE_MODEL_VERSION = 'candidate-stage-v4.0.0';
-export const CANDIDATE_VALUATION_MODEL_VERSION = 'valuation-v4.2.0';
+export const CANDIDATE_VALUATION_MODEL_VERSION = 'valuation-v4.3.0';
 export const ENTERPRISE_MULTIPLE_MODEL_VERSION = 'enterprise-multiple-v1';
 export const SHADOW_POLICY_VERSION = 'shadow-policy-v3';
 export const SHADOW_REQUIRED_SESSIONS = 30 as const;
@@ -203,7 +204,7 @@ function latestReportedInstant(facts: ReportedFinancialFact[], factKey: string) 
   // A latest-period value conflict must not fall through to a prior balance
   // sheet or a source-order accident.
   if (new Set(latest.map((fact) => fact.value)).size !== 1) return null;
-  return { value: latest[0].value, factIds: latest.map((fact) => fact.factId) };
+  return { value: latest[0].value, periodEnd: latestPeriod, factIds: latest.map((fact) => fact.factId) };
 }
 
 async function loadStockAuthority(supabase: ReturnType<typeof getSupabaseServerClient>, cutoff: string) {
@@ -435,7 +436,7 @@ async function executeCandidateResearchCycle(options: {
     coverageByStock.set(stockId, rows);
   }
   const financialGapByStock = new Map(proposedUniverse.map((stock) => [stock.id,
-    financialCoverageGaps(coverageByStock.get(stock.id) || [], stock.sector || '', evaluatedAt)]));
+    financialCoverageGaps(coverageByStock.get(stock.id) || [], stock.sector || '', evaluatedAt, stock.symbol)]));
   const financialRefreshBacklog = proposedUniverse.filter((stock) => financialGapByStock.get(stock.id)!.length > 0);
   const financialCursorRows = financialRefreshBacklog.length ? await collectBatchedAuthorityRows<string,Row>(
     financialRefreshBacklog.map((stock) => stock.id), async (batch,from,to) => {
@@ -731,7 +732,8 @@ async function executeCandidateResearchCycle(options: {
       const priceCoverageTerminal = technicalHistoryCoverageTerminalReason(bars.length);
       const queryError = priorRevenueRes.error || historicalFundamentalsRes.error || priorStageRes.error || priorFlowsRes.error || cachedBarsRes.error || authorityBarsRes.error || authorityFactsRes.error || peerRelationshipsRes.error || priorTechnicalRes.error || trackingRes.error || brokerConsensusRes.error || officialCompanyEventsRes.error || enterpriseMultiplesRes.error;
       if (queryError) throw new Error(queryError.message);
-      const financialGaps = financialCoverageGaps(authorityFactsRes.data,stock.sector || '',evaluatedAt);
+      const financialGaps = financialCoverageGaps(authorityFactsRes.data,stock.sector || '',evaluatedAt,stock.symbol);
+      const issuerResearchCoverage = financialCoverageSummary(authorityFactsRes.data,stock.sector || '',evaluatedAt,stock.symbol);
       result.dataCoverage = {priceSessions:bars.length,requestedPriceSessions:1320,financialGaps,
         historyAcquisition: [...officialHistoryBackfill.items.filter((item) => item.stockId === stock.id),...acquired.dailyHistoryItems], historyConflicts};
       const peerRelationships = ((peerRelationshipsRes.data as Row[]) || []).filter((relationship) => {
@@ -905,6 +907,14 @@ async function executeCandidateResearchCycle(options: {
       const grossProfitQuarterHistory = discreteReportedQuarters(reportedFacts, 'quarterly_gross_profit');
       const dilutedShareQuarterHistory = discreteReportedQuarters(reportedFacts, 'diluted_weighted_average_shares');
       const latestBookValueFact = latestReportedInstant(reportedFacts, 'book_value_per_share');
+      const latestCommonEquityFact = latestReportedInstant(reportedFacts, 'common_equity_attributable_to_owners');
+      const reportedCommonSharesFact = latestReportedInstant(reportedFacts, 'common_shares_outstanding');
+      const latestCommonSharesFact = reportedCommonSharesFact ?? (latestCommonEquityFact && latestBookValueFact
+        && latestCommonEquityFact.periodEnd === latestBookValueFact.periodEnd && latestBookValueFact.value > 0
+        ? { value: latestCommonEquityFact.value / latestBookValueFact.value,
+            periodEnd: latestCommonEquityFact.periodEnd,
+            factIds: [...new Set([...latestCommonEquityFact.factIds, ...latestBookValueFact.factIds])] }
+        : null);
       const latestCashFact = latestReportedInstant(reportedFacts, 'cash_and_equivalents');
       const latestDebtFact = latestReportedInstant(reportedFacts, 'total_debt');
       const latestBookValuePerShare = latestBookValueFact?.value ?? null;
@@ -921,6 +931,7 @@ async function executeCandidateResearchCycle(options: {
         : eps?.epsTtm != null ? eps.epsTtm <= 0 : false;
       const sectorText = String(stock.sector || '').toLowerCase();
       const companyType = classifyCandidateBusiness(sectorText);
+      const businessProfile = getCandidateBusinessProfile(stock.symbol);
       const financialBusiness = companyType === 'financial';
       const cyclicalBusiness = companyType === 'cyclical';
       const valuationInputs = buildCandidateValuationInputs(reportedFacts);
@@ -993,6 +1004,12 @@ async function executeCandidateResearchCycle(options: {
         ? enterpriseValue / ttmEbitda : null;
       const currentEvSales = enterpriseValue != null && enterpriseValue > 0 && ttmRevenue != null && ttmRevenue > 0
         ? enterpriseValue / ttmRevenue : null;
+      const forwardCommonEquityBridgeComplete = businessProfile?.businessModel === 'cyclical_asset'
+        && earningsBridge.status === 'complete'
+        && latestCommonEquityFact != null && latestCommonEquityFact.value > 0
+        && latestCommonSharesFact != null && latestCommonSharesFact.value > 0
+        && latestCommonEquityFact.periodEnd === latestCommonSharesFact.periodEnd
+        && historicalPbRatios.length >= 48;
       if ((currentEvEbitda != null && currentEvEbitda < 1000) || (currentEvSales != null && currentEvSales < 1000)) {
         const enterpriseWrite = await supabase.rpc('append_candidate_enterprise_multiple_snapshot_v6', {
           p_stock_id: stock.id, p_session_date: technical.sessionDate, p_model_version: ENTERPRISE_MULTIPLE_MODEL_VERSION,
@@ -1014,6 +1031,8 @@ async function executeCandidateResearchCycle(options: {
         next12mBridgeComplete,
         verifiedTurnaroundPath,
         businessModel: financialBusiness ? 'financial' : 'general',
+        businessProfile: businessProfile?.businessModel,
+        forwardBvpsPbComplete: forwardCommonEquityBridgeComplete,
         lossMaking,
         turnaround: {
           officialCommercializationEvidence,
@@ -1056,6 +1075,23 @@ async function executeCandidateResearchCycle(options: {
             totalDebt: latestTotalDebt,
             dilutedShares: currentDilutedShares,
           })
+        : valuationPolicy.basis === 'forward_bvps_pb'
+        ? earningsBridge.status === 'complete' && latestCommonEquityFact != null && latestCommonSharesFact != null
+          ? buildForwardBvpsPbScenario({
+              price: technical.close,
+              startingCommonEquity: latestCommonEquityFact.value,
+              endingCommonShares: latestCommonSharesFact.value,
+              projectedCommonIncome: {
+                bear: earningsBridge.scenarios.bear.netIncome,
+                base: earningsBridge.scenarios.base.netIncome,
+                bull: earningsBridge.scenarios.bull.netIncome,
+              },
+              projectedDividends: { bear: 0, base: 0, bull: 0 },
+              projectedCapitalAndOci: { bear: 0, base: 0, bull: 0 },
+              historicalPbRatios,
+              targetPeriodEnd: earningsBridge.forecastPeriod.end,
+            })
+          : null
         : valuationPolicy.basis === 'forward_12m'
         ? earningsBridge.status === 'complete'
           ? buildForwardEarningsScenario({
@@ -1110,6 +1146,11 @@ async function executeCandidateResearchCycle(options: {
       const includePoints = (points: Array<{ factIds: string[] }>) => points.forEach((point) => point.factIds.forEach((factId) => valuationFinancialFactIds.add(factId)));
       const includeInstant = (point: { factIds: string[] } | null) => point?.factIds.forEach((factId) => valuationFinancialFactIds.add(factId));
       if (valuation) {
+        if (valuationPolicy.basis === 'forward_bvps_pb' && earningsBridge.status === 'complete') {
+          earningsBridge.factIds.forEach((factId) => valuationFinancialFactIds.add(factId));
+          includeInstant(latestCommonEquityFact);
+          includeInstant(latestCommonSharesFact);
+        }
         if (valuationPolicy.basis === 'forward_12m' && earningsBridge.status === 'complete') earningsBridge.factIds.forEach((factId) => valuationFinancialFactIds.add(factId));
         if (valuationPolicy.basis === 'normalized_cycle' && valuationInputs.normalizedCycle.status === 'complete') {
           valuationInputs.normalizedCycle.factIds.forEach((factId) => valuationFinancialFactIds.add(factId));
@@ -1154,14 +1195,18 @@ async function executeCandidateResearchCycle(options: {
         const valuationWrite = await supabase.from('valuation_snapshots').upsert({
           stock_id: stock.id, session_date: technical.sessionDate, valuation_horizon_months: 12,
           primary_method: publishedPrimaryMethod, cross_check_method: null, current_price: valuation.currentPrice,
-          historical_pe_percentile: valuation.primaryMethod === 'forward_pb' ? null : valuation.historicalPercentile,
-          historical_pb_percentile: valuation.primaryMethod === 'forward_pb' ? valuation.historicalPercentile : null, bear_target: valuation.bearTarget,
+          historical_pe_percentile: ['forward_pb','forward_bvps_pb'].includes(valuation.primaryMethod) ? null : valuation.historicalPercentile,
+          historical_pb_percentile: ['forward_pb','forward_bvps_pb'].includes(valuation.primaryMethod) ? valuation.historicalPercentile : null, bear_target: valuation.bearTarget,
           base_target: valuation.baseTarget, bull_target: valuation.bullTarget, probability_weighted_target: valuation.probabilityWeightedTarget,
           base_upside_pct: valuation.baseUpsidePct, bear_downside_pct: valuation.bearDownsidePct, reward_risk_ratio: valuation.rewardRiskRatio,
           earnings_bridge: earningsBridge.status === 'complete'
             ? earningsBridge
             : { status: earningsBridge.status, missing: earningsBridge.missing, eps_ttm: eps?.epsTtm ?? null, exchange_implied_eps: valuation.operatingDriverSource === 'exchange_implied_ttm_eps' ? valuation.operatingDriver : null, operating_driver_source: valuation.operatingDriverSource, revenue_yoy_pct: revenueYoy, conservative_growth_factor: valuation.growthFactor },
-          assumption_ledger: [{ source: 'official_five_year_multiple_distribution', median_multiple: valuation.baseMultiple, sample_count: valuation.historicalSampleCount }, ...(earningsBridge.status === 'complete' ? earningsBridge.assumptions : [{ source: 'official_monthly_revenue', half_pass_through_cap: 0.15 }])],
+          assumption_ledger: [{ source: 'official_five_year_multiple_distribution', median_multiple: valuation.baseMultiple, sample_count: valuation.historicalSampleCount },
+            ...(valuationPolicy.basis === 'forward_bvps_pb' ? [
+              { source: 'model_assumption', key: 'forecast_dividends', value: 0, basis: 'No validated future dividend declaration is available; zero is an explicit scenario assumption, not a reported fact.' },
+              { source: 'model_assumption', key: 'forecast_capital_and_oci', value: 0, basis: 'No validated forward capital/OCI item is available; zero is an explicit scenario assumption, not a reported fact.' },
+            ] : []), ...(earningsBridge.status === 'complete' ? earningsBridge.assumptions : [{ source: 'official_monthly_revenue', half_pass_through_cap: 0.15 }])],
           catalysts: [], invalidation_conditions: ['official earnings bridge deteriorates'], as_of: `${technical.sessionDate}T13:30:00+08:00`,
           available_at: evaluatedAt, provenance: { research_run_id: runId, sources: usesFinMindFinancialEvidence ? ['TWSE/TPEx','MOPS','FinMind mirror'] : ['TWSE/TPEx','MOPS'] }, model_version: CANDIDATE_VALUATION_MODEL_VERSION,
           valuation_basis: valuationPolicy.basis, multiple_months_covered: multipleMonthsCovered, next_12m_bridge_complete: next12mBridgeComplete,
@@ -1319,9 +1364,9 @@ async function executeCandidateResearchCycle(options: {
         { fact_key: 'pb_ratio', value: values && !valuesUseUnvalidatedMirror ? values.pbRatio : null, unit: 'multiple', source_url: valuationSourceUrl, fact_kind: 'reported_numeric' as CandidateFactKind, derivation: {} },
         { fact_key: 'monthly_revenue', value: monthlyRevenueSourceUrl.includes('api.finmindtrade.com') ? null : numberOrNull(priorRevenue?.monthly_revenue), unit: 'TWD', source_url: monthlyRevenueSourceUrl, fact_kind: 'reported_numeric' as CandidateFactKind, derivation: {} },
         { fact_key: 'forward_base_eps', value: earningsBridge.status === 'complete' ? earningsBridge.scenarios.base.dilutedEps : null, unit: 'TWD/share', source_url: usesFinMindEarningsBridgeEvidence ? 'https://api.finmindtrade.com/api/v4/data' : 'https://mops.twse.com.tw/', fact_kind: 'derived_calculation', derivation: { model_version: CANDIDATE_VALUATION_MODEL_VERSION, reported_fact_ids: earningsBridge.status === 'complete' ? earningsBridge.factIds : [], includes_finmind_mirror: usesFinMindEarningsBridgeEvidence } },
-        { fact_key: 'bear_target', value: valuation?.bearTarget ?? null, unit: 'TWD', source_url: values?.sourceUrl || 'https://www.twse.com.tw/', fact_kind: 'derived_calculation', derivation: { model_version: CANDIDATE_VALUATION_MODEL_VERSION, formula: 'scenario_eps_x_historical_pe_p25' } },
-        { fact_key: 'base_target', value: valuation?.baseTarget ?? null, unit: 'TWD', source_url: values?.sourceUrl || 'https://www.twse.com.tw/', fact_kind: 'derived_calculation', derivation: { model_version: CANDIDATE_VALUATION_MODEL_VERSION, formula: 'scenario_eps_x_historical_pe_p50' } },
-        { fact_key: 'bull_target', value: valuation?.bullTarget ?? null, unit: 'TWD', source_url: values?.sourceUrl || 'https://www.twse.com.tw/', fact_kind: 'derived_calculation', derivation: { model_version: CANDIDATE_VALUATION_MODEL_VERSION, formula: 'scenario_eps_x_historical_pe_p75' } },
+        { fact_key: 'bear_target', value: valuation?.bearTarget ?? null, unit: 'TWD', source_url: values?.sourceUrl || 'https://www.twse.com.tw/', fact_kind: 'derived_calculation', derivation: { model_version: CANDIDATE_VALUATION_MODEL_VERSION, formula: valuationPolicy.basis === 'forward_bvps_pb' ? 'forward_bvps_x_historical_pb_p25' : 'scenario_eps_x_historical_pe_p25' } },
+        { fact_key: 'base_target', value: valuation?.baseTarget ?? null, unit: 'TWD', source_url: values?.sourceUrl || 'https://www.twse.com.tw/', fact_kind: 'derived_calculation', derivation: { model_version: CANDIDATE_VALUATION_MODEL_VERSION, formula: valuationPolicy.basis === 'forward_bvps_pb' ? 'forward_bvps_x_historical_pb_p50' : 'scenario_eps_x_historical_pe_p50' } },
+        { fact_key: 'bull_target', value: valuation?.bullTarget ?? null, unit: 'TWD', source_url: values?.sourceUrl || 'https://www.twse.com.tw/', fact_kind: 'derived_calculation', derivation: { model_version: CANDIDATE_VALUATION_MODEL_VERSION, formula: valuationPolicy.basis === 'forward_bvps_pb' ? 'forward_bvps_x_historical_pb_p75' : 'scenario_eps_x_historical_pe_p75' } },
         { fact_key: 'base_upside_pct', value: valuation?.baseUpsidePct ?? null, unit: 'percent', source_url: values?.sourceUrl || 'https://www.twse.com.tw/', fact_kind: 'derived_calculation', derivation: { model_version: CANDIDATE_VALUATION_MODEL_VERSION, formula: '(base_target-close)/close*100' } },
         { fact_key: 'ma20', value: technical.ma20, unit: 'TWD', source_url: priceSourceUrl, fact_kind: 'derived_calculation', derivation: { ruleset_version: technical.rulesetVersion, formula: 'simple_moving_average_20' } },
         { fact_key: 'ma60', value: technical.ma60, unit: 'TWD', source_url: priceSourceUrl, fact_kind: 'derived_calculation', derivation: { ruleset_version: technical.rulesetVersion, formula: 'simple_moving_average_60' } },
@@ -1444,7 +1489,7 @@ async function executeCandidateResearchCycle(options: {
         earningsBridge: earningsBridge.status === 'complete' ? earningsBridge as unknown as Record<string, unknown> : null,
         factorEvidence,
       });
-      const historicalPrices = monthlyCandidatePrices(bars);
+      const historicalPrices = [...dailyCandidatePrices(bars), ...monthlyCandidatePrices(bars)];
       const historicalMultiples = officialMultiples.slice(-60).map((point) => ({ date: point.date, peRatio: point.peRatio, pbRatio: point.pbRatio }));
       const priorTracking = ((trackingRes.data as Row[]) || [])[0] || null;
       const priorTechnical = ((priorTechnicalRes.data as Row[]) || [])[0] || null;
@@ -1490,6 +1535,19 @@ async function executeCandidateResearchCycle(options: {
           historicalPercentile: valuation?.historicalPercentile ?? null,
           historicalMultiples,
           historicalPrices,
+          forwardBvps: valuation && 'forwardBvps' in valuation ? valuation.forwardBvps : null,
+          targetPeriodEnd: valuation && 'targetPeriodEnd' in valuation ? valuation.targetPeriodEnd : null,
+          researchCoverage: issuerResearchCoverage,
+          businessProfile: businessProfile ? { version: businessProfile.version, businessModel: businessProfile.businessModel,
+            primaryValuationMethod: businessProfile.primaryValuationMethod, forecastHorizonMonths: businessProfile.forecastHorizonMonths,
+            operatingSegments: businessProfile.operatingSegments, sourceRefs: businessProfile.sourceRefs } : null,
+          forwardCommonEquityBridge: valuationPolicy.basis === 'forward_bvps_pb' ? {
+            status: valuation ? 'complete' : 'incomplete', startingCommonEquity: latestCommonEquityFact?.value ?? null,
+            endingCommonShares: latestCommonSharesFact?.value ?? null,
+            targetPeriodEnd: earningsBridge.status === 'complete' ? earningsBridge.forecastPeriod.end : null,
+            projectedDividends: { kind: 'model_assumption', bear: 0, base: 0, bull: 0 },
+            projectedCapitalAndOci: { kind: 'model_assumption', bear: 0, base: 0, bull: 0 },
+          } : null,
           earningsBridge,
           factorEvidence,
           unmetConditions: detailCard.unmetConditions,
@@ -1565,7 +1623,7 @@ async function executeCandidateResearchCycle(options: {
       // terminal. A missing valuation evidence set is partial, so aggregate run
       // health cannot claim success merely because the code path executed.
       const researchReadiness = valuation ? 'valuation_ready' : 'evidence_gap';
-      const factCompleteness = financialCoverageSummary((authorityFactsRes.data as Row[]) || [], stock.sector || '', evaluatedAt);
+      const factCompleteness = issuerResearchCoverage;
       const modelCompleteness = { status: valuation ? 'complete' : 'incomplete', method: valuationPolicy.basis,
         terminalReason: valuationTerminalReason, next12mBridgeComplete: earningsBridge.status === 'complete',
         missingBridgeInputs: earningsBridge.status === 'insufficient' ? earningsBridge.missing : [],

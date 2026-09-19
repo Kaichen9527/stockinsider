@@ -41,3 +41,18 @@ test('valuation routing is evidence-driven and fail closed', () => {
   assert.equal(candidateValuationPolicy({ symbol: '2330', multipleMonthsCovered: 47, next12mBridgeComplete: true, verifiedTurnaroundPath: false }).canPublishTarget, false);
   assert.equal(candidateValuationPolicy({ symbol: '2330', multipleMonthsCovered: 60, next12mBridgeComplete: false, verifiedTurnaroundPath: false }).canPublishTarget, false);
 });
+
+test('versioned cyclical asset profile routes to forward BVPS before loss-making turnaround', () => {
+  assert.deepEqual(candidateValuationPolicy({
+    symbol: '2409', multipleMonthsCovered: 60, next12mBridgeComplete: true,
+    verifiedTurnaroundPath: false, lossMaking: true, businessProfile: 'cyclical_asset',
+    forwardBvpsPbComplete: true,
+  }), { basis: 'forward_bvps_pb', canPublishTarget: true, reason: null });
+});
+
+test('forward BVPS route remains blocked until its equity bridge is complete', () => {
+  assert.deepEqual(candidateValuationPolicy({
+    multipleMonthsCovered: 60, next12mBridgeComplete: true,
+    verifiedTurnaroundPath: false, businessProfile: 'cyclical_asset', forwardBvpsPbComplete: false,
+  }), { basis: 'forward_bvps_pb', canPublishTarget: false, reason: 'forward_common_equity_bridge_incomplete' });
+});

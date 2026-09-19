@@ -9,7 +9,9 @@ import {
   recoverStaleProductionWriteLease,
   releaseProductionWriteLease,
 } from '@/lib/production-write-lease';
-import { requireActiveVpsWriter } from '@/lib/taiwan-data-runtime';
+import { requireActiveVpsWriter, resolveLatestCompletedTaiwanSession } from '@/lib/taiwan-data-runtime';
+import { isTaiwanRefreshResearchReady } from '@/lib/taiwan-candidate-refresh';
+import { CANDIDATE_RESEARCH_MODEL_VERSION } from '@/lib/candidate-research';
 
 // Vercel only hosts the HTTPS OAuth/policy surface. Production pipeline writes
 // run on the VPS systemd scheduler, while Hobby deployments reject values >300.
@@ -43,12 +45,33 @@ export async function POST(req: Request) {
   const inProcessRetry = body?.inProcessRetry === true;
   const syncTimeoutMs = Number(body?.syncTimeoutMs || process.env.PIPELINE_SYNC_TIMEOUT_MS || 18_000);
   const recoverOrphanedLease = body?.recoverOrphanedLease === true;
+  const skipIfResearchSessionComplete = body?.skipIfResearchSessionComplete === true;
   const leaseTtlSeconds = Math.max(60, Math.min(7_200, Math.ceil(syncTimeoutMs / 1000) + 300));
   let leaseOwner: string | null = null;
   let ongoingFlow: Promise<Awaited<ReturnType<typeof runPipelineFlow>>> | null = null;
   let flowFinished = false;
 
   try {
+    if (!dryRun && skipIfResearchSessionComplete) {
+      const taipeiToday = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+      const researchSession = await resolveLatestCompletedTaiwanSession(writer.supabase, taipeiToday);
+      const progress = await writer.supabase.rpc('read_taiwan_data_refresh_progress_v6', {
+        p_session_date: researchSession, p_phase: 'final',
+      });
+      if (progress.error) throw new Error(`research_resume_progress_failed:${progress.error.message}`);
+      if (!isTaiwanRefreshResearchReady(progress.data)) {
+        return NextResponse.json({ ok: true, result: { skipped: true, reason: 'final_data_not_research_ready', researchSession },
+          meta: { runId: null, dryRun, mode, timedOut: false, failedStep: null, stepStatus: [] } });
+      }
+      const prior = await writer.supabase.from('candidate_research_runs').select('id,status')
+        .eq('technical_session_date', researchSession).eq('model_version', CANDIDATE_RESEARCH_MODEL_VERSION)
+        .in('status', ['success', 'partial']).order('finished_at', { ascending: false }).limit(1).maybeSingle();
+      if (prior.error) throw new Error(`research_resume_receipt_read_failed:${prior.error.message}`);
+      if (prior.data) {
+        return NextResponse.json({ ok: true, result: { skipped: true, reason: 'research_session_already_completed', researchSession, researchRunId: prior.data.id },
+          meta: { runId: prior.data.id, dryRun, mode, timedOut: false, failedStep: null, stepStatus: [] } });
+      }
+    }
     if (!dryRun) {
       leaseOwner = await acquireProductionWriteLease(leaseTtlSeconds);
       if (!leaseOwner && recoverOrphanedLease) {

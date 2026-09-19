@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { classifyFinancialResponse, parseTpexFinancialEndpoint } from './candidate-financial-acquisition.ts';
+import { classifyFinancialResponse, parseExchangeFinancialEndpoint, parseTpexFinancialEndpoint } from './candidate-financial-acquisition.ts';
 
 test('TPEx general and stock-broker statements use their documented, distinct headers', () => {
   const general = parseTpexFinancialEndpoint('generalIncome', [{
@@ -50,4 +50,16 @@ test('TPEx accepts the live alternate statement labels without emitting competin
   assert.equal(result.facts.filter((fact) => fact.factKey === 'quarterly_gross_profit').length, 1);
   assert.equal(result.facts.find((fact) => fact.factKey === 'quarterly_net_income_attributable_to_common')?.value, 126188);
   assert.equal(result.facts.find((fact) => fact.factKey === 'quarterly_basic_eps')?.periodStart, '2026-01-01');
+});
+
+test('TWSE listed-company OpenAPI maps AUO common equity without confusing total equity', () => {
+  const result = parseExchangeFinancialEndpoint('twse', 'generalBalance', [{
+    出表日期: '1150919', 年度: '115', 季別: '2', 公司代號: '2409',
+    資產總計: '377676390.00', '歸屬於母公司業主之權益合計': '154397339.00',
+    權益總計: '166902188.00', 每股參考淨值: '20.46',
+  }]);
+  assert.equal(result.terminalReason, 'complete');
+  assert.equal(result.facts.find((fact) => fact.factKey === 'common_equity_attributable_to_owners')?.value, 154397339);
+  assert.equal(result.facts.find((fact) => fact.factKey === 'total_equity')?.value, 166902188);
+  assert.match(result.facts[0].sourceRef, /^twse-openapi:/u);
 });

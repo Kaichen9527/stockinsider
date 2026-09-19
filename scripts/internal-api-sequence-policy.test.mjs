@@ -20,6 +20,9 @@ test('the financial queue drain continues to the document worker but still repor
   const documents = steps.findIndex((step) => step.endpoint.endsWith('/candidate-financial-documents/worker'));
   assert.equal(financial?.continueOnError, true);
   assert.ok(documents > steps.indexOf(financial));
+  const resume = steps.find((step) => step.endpoint.endsWith('/pipeline-run'));
+  assert.equal(resume?.payload.skipIfResearchSessionComplete, true);
+  assert.equal(resume?.continueOnError, true);
 });
 
 test('both scheduled research publications drain their full phase before invoking the pipeline', () => {
