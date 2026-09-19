@@ -42,6 +42,7 @@ export function buildThreadsTokenRegistryMetadata(state: {
   tokenHash: string;
   ownerUserIdHash: string;
   refreshed: boolean;
+  nowMs?: number;
 }) {
   return {
     mode: 'threads_official_keyword_api',
@@ -50,6 +51,6 @@ export function buildThreadsTokenRegistryMetadata(state: {
     token_hash: state.tokenHash,
     owner_user_id_hash: state.ownerUserIdHash,
     token_refreshed_this_run: state.refreshed,
-    expiry_warning: threadsTokenExpiryWarning({ expiresAt: state.expiresAt }),
+    expiry_warning: threadsTokenExpiryWarning({ expiresAt: state.expiresAt, nowMs: state.nowMs }),
   };
 }

@@ -59,6 +59,7 @@ test('Threads registry metadata preserves the token owner binding across worker 
     tokenHash: 'b'.repeat(64),
     ownerUserIdHash,
     refreshed: false,
+    nowMs,
   }), {
     mode: 'threads_official_keyword_api',
     last_refreshed_at: '2026-08-01T00:00:00.000Z',
