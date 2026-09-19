@@ -7,6 +7,12 @@ export type CandidateBusinessProfile = {
   forecastHorizonMonths: 12;
   reportedQuarterCount: number;
   normalizedCycleQuarterCount: number;
+  requiredFlowFacts: readonly [
+    'quarterly_revenue',
+    'quarterly_gross_profit',
+    'quarterly_operating_income',
+    'quarterly_net_income_attributable_to_common',
+  ];
   requiredInstantFacts: readonly ['common_equity_attributable_to_owners', 'common_shares_outstanding'];
   operatingSegments: readonly string[];
   sourceRefs: readonly string[];
@@ -21,6 +27,12 @@ const AUO_PROFILE: CandidateBusinessProfile = Object.freeze({
   forecastHorizonMonths: 12,
   reportedQuarterCount: 8,
   normalizedCycleQuarterCount: 20,
+  requiredFlowFacts: [
+    'quarterly_revenue',
+    'quarterly_gross_profit',
+    'quarterly_operating_income',
+    'quarterly_net_income_attributable_to_common',
+  ] as const,
   requiredInstantFacts: ['common_equity_attributable_to_owners', 'common_shares_outstanding'] as const,
   operatingSegments: ['Display', 'Mobility Solutions', 'Vertical Solutions'],
   sourceRefs: [

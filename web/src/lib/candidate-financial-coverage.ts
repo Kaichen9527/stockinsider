@@ -11,7 +11,7 @@ const FLOW_KEYS = ['quarterly_revenue', 'quarterly_gross_profit', 'quarterly_ope
 export function candidateFinancialRequirements(sector: string, symbol?: string) {
   const profile = symbol ? getCandidateBusinessProfile(symbol) : null;
   if (profile?.businessModel === 'cyclical_asset') {
-    return { quarters: profile.reportedQuarterCount, keys: [...FLOW_KEYS, ...profile.requiredInstantFacts], latestInstantOnly: true };
+    return { quarters: profile.reportedQuarterCount, keys: [...profile.requiredFlowFacts, ...profile.requiredInstantFacts], latestInstantOnly: true };
   }
   const business = classifyCandidateBusiness(sector);
   if (business === 'financial') {

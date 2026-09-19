@@ -15,7 +15,9 @@ test('AUO coverage follows its forward BVPS method instead of a global sector ro
   assert.equal(requirement.quarters, 8);
   assert.ok(requirement.keys.includes('common_equity_attributable_to_owners'));
   assert.ok(requirement.keys.includes('common_shares_outstanding'));
-  assert.equal(financialCoverageSummary([], '光電業', '2026-09-19T12:00:00+08:00', '2409').requiredFieldPeriods, 50);
+  assert.equal(requirement.keys.includes('quarterly_diluted_eps'), false);
+  assert.equal(requirement.keys.includes('diluted_weighted_average_shares'), false);
+  assert.equal(financialCoverageSummary([], '光電業', '2026-09-19T12:00:00+08:00', '2409').requiredFieldPeriods, 34);
   assert.equal(candidateFinancialRequirements('光電業', '2408').keys.includes('common_equity_attributable_to_owners'), false);
 });
 

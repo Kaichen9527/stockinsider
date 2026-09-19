@@ -38,7 +38,7 @@ import { buildMarketEvidenceSnapshot } from './market-evidence';
 import { candidateMentionDiscoveryEligible, publisherKeyFor, relativeDiscussionBurst, roundRobinSourceLinks, sourceConcentration } from './source-content-semantics';
 import { buildFrozenShadowReplayPayload, replayFrozenCandidateClassification, shadowReplayConflicts } from './shadow-policy-v2';
 import { loadFrozenShadowReplayPayload, persistFrozenShadowReplayPayload } from './shadow-replay-store.ts';
-import { buildForwardEarningsBridge, discreteReportedQuarters, preferOfficialReportedFinancialFacts, type ReportedFinancialFact } from './forward-earnings-bridge';
+import { buildForwardCommonIncomeBridge, buildForwardEarningsBridge, discreteReportedQuarters, preferOfficialReportedFinancialFacts, type ReportedFinancialFact } from './forward-earnings-bridge';
 import { brokerEvidenceRowsFromSnapshots, brokerResearchFactor, buildPeerRelationshipEvidence, industryRotationActionabilityFactor, officialResearchEvidenceFactor, overseasPriceActionabilityFactor, relationshipFactor } from './candidate-factor-builder';
 import { refreshCandidateOfficialFinancials } from './candidate-official-financials';
 import { financialCoverageGaps, financialCoverageSummary } from './candidate-financial-coverage';
@@ -69,9 +69,9 @@ async function pagedResearchResult(read: (from: number, to: number) => PromiseLi
   return { data, error: null };
 }
 
-export const CANDIDATE_RESEARCH_MODEL_VERSION = 'candidate-research-v4.3.0';
+export const CANDIDATE_RESEARCH_MODEL_VERSION = 'candidate-research-v4.4.0';
 export const CANDIDATE_STAGE_MODEL_VERSION = 'candidate-stage-v4.0.0';
-export const CANDIDATE_VALUATION_MODEL_VERSION = 'valuation-v4.3.0';
+export const CANDIDATE_VALUATION_MODEL_VERSION = 'valuation-v4.4.0';
 export const ENTERPRISE_MULTIPLE_MODEL_VERSION = 'enterprise-multiple-v1';
 export const SHADOW_POLICY_VERSION = 'shadow-policy-v3';
 export const SHADOW_REQUIRED_SESSIONS = 30 as const;
@@ -300,6 +300,7 @@ async function loadCachedFundamentalHistory(
 async function executeCandidateResearchCycle(options: {
   dryRun?: boolean;
   pipelineRunId?: string | null;
+  symbols?: string[];
   seedSymbols?: Array<{ symbol: string; name: string; market: 'TW' | 'US'; sector: string | null }>;
 }, lifecycle?: { runId: string; evaluatedAt: string }) {
   const dryRun = Boolean(options.dryRun);
@@ -409,7 +410,17 @@ async function executeCandidateResearchCycle(options: {
       }
     }
   }
-  const proposedUniverse = [...candidates.values()].sort((left, right) => left.symbol.localeCompare(right.symbol));
+  const requestedSymbols = [...new Set((options.symbols || []).map((symbol) => String(symbol).trim().toUpperCase()))];
+  if (requestedSymbols.some((symbol) => !/^\d{4}$/u.test(symbol)) || requestedSymbols.length > 30) {
+    throw new Error('candidate_research_symbol_scope_invalid');
+  }
+  const proposedUniverse = [...candidates.values()]
+    .filter((stock) => requestedSymbols.length === 0 || requestedSymbols.includes(stock.symbol))
+    .sort((left, right) => left.symbol.localeCompare(right.symbol));
+  const missingRequestedSymbols = requestedSymbols.filter((symbol) => !proposedUniverse.some((stock) => stock.symbol === symbol));
+  if (missingRequestedSymbols.length > 0) {
+    throw new Error(`candidate_research_symbol_scope_missing:${missingRequestedSymbols.join(',')}`);
+  }
   const exchangeBySymbol = new Map(master.map((stock) => [stock.symbol, stock.exchange]));
   const existingCoreFinancialFacts = proposedUniverse.length === 0 ? [] : await collectBatchedAuthorityRows<string, Row>(
     proposedUniverse.map((stock) => stock.id),
@@ -899,7 +910,11 @@ async function executeCandidateResearchCycle(options: {
       });
       const reportedFacts = preferOfficialReportedFinancialFacts(reportedFactRows);
       const officialReportedFacts = reportedFacts.filter((fact) => fact.authorityTier === 'official_filing');
+      const businessProfile = getCandidateBusinessProfile(stock.symbol);
       const earningsBridge = buildForwardEarningsBridge(reportedFacts, { symbol: stock.symbol, evaluationAt: evaluatedAt });
+      const forwardCommonIncomeBridge = businessProfile?.businessModel === 'cyclical_asset'
+        ? buildForwardCommonIncomeBridge(reportedFacts, { symbol: stock.symbol, evaluationAt: evaluatedAt })
+        : null;
       const officialOperatingQuarterHistory = discreteReportedQuarters(officialReportedFacts, 'quarterly_operating_income');
       const officialCommonIncomeQuarterHistory = discreteReportedQuarters(officialReportedFacts, 'quarterly_net_income_attributable_to_common');
       const commonIncomeQuarterHistory = discreteReportedQuarters(reportedFacts, 'quarterly_net_income_attributable_to_common');
@@ -924,14 +939,15 @@ async function executeCandidateResearchCycle(options: {
         && officialOperatingQuarterHistory.slice(-2).every((row) => row.value < 0)
         && officialCommonIncomeQuarterHistory.slice(-2).length === 2
         && officialCommonIncomeQuarterHistory.slice(-2).every((row) => row.value < 0);
-      const next12mBridgeComplete = earningsBridge.status === 'complete';
+      const next12mBridgeComplete = businessProfile?.businessModel === 'cyclical_asset'
+        ? forwardCommonIncomeBridge?.status === 'complete'
+        : earningsBridge.status === 'complete';
       const latestFourCommonIncome = commonIncomeQuarterHistory.slice(-4);
       const lossMaking = latestFourCommonIncome.length === 4
         ? latestFourCommonIncome.reduce((sum, row) => sum + row.value, 0) <= 0
         : eps?.epsTtm != null ? eps.epsTtm <= 0 : false;
       const sectorText = String(stock.sector || '').toLowerCase();
       const companyType = classifyCandidateBusiness(sectorText);
-      const businessProfile = getCandidateBusinessProfile(stock.symbol);
       const financialBusiness = companyType === 'financial';
       const cyclicalBusiness = companyType === 'cyclical';
       const valuationInputs = buildCandidateValuationInputs(reportedFacts);
@@ -1005,7 +1021,7 @@ async function executeCandidateResearchCycle(options: {
       const currentEvSales = enterpriseValue != null && enterpriseValue > 0 && ttmRevenue != null && ttmRevenue > 0
         ? enterpriseValue / ttmRevenue : null;
       const forwardCommonEquityBridgeComplete = businessProfile?.businessModel === 'cyclical_asset'
-        && earningsBridge.status === 'complete'
+        && forwardCommonIncomeBridge?.status === 'complete'
         && latestCommonEquityFact != null && latestCommonEquityFact.value > 0
         && latestCommonSharesFact != null && latestCommonSharesFact.value > 0
         && latestCommonEquityFact.periodEnd === latestCommonSharesFact.periodEnd
@@ -1076,20 +1092,20 @@ async function executeCandidateResearchCycle(options: {
             dilutedShares: currentDilutedShares,
           })
         : valuationPolicy.basis === 'forward_bvps_pb'
-        ? earningsBridge.status === 'complete' && latestCommonEquityFact != null && latestCommonSharesFact != null
+        ? forwardCommonIncomeBridge?.status === 'complete' && latestCommonEquityFact != null && latestCommonSharesFact != null
           ? buildForwardBvpsPbScenario({
               price: technical.close,
               startingCommonEquity: latestCommonEquityFact.value,
               endingCommonShares: latestCommonSharesFact.value,
               projectedCommonIncome: {
-                bear: earningsBridge.scenarios.bear.netIncome,
-                base: earningsBridge.scenarios.base.netIncome,
-                bull: earningsBridge.scenarios.bull.netIncome,
+                bear: forwardCommonIncomeBridge.scenarios.bear.netIncome,
+                base: forwardCommonIncomeBridge.scenarios.base.netIncome,
+                bull: forwardCommonIncomeBridge.scenarios.bull.netIncome,
               },
               projectedDividends: { bear: 0, base: 0, bull: 0 },
               projectedCapitalAndOci: { bear: 0, base: 0, bull: 0 },
               historicalPbRatios,
-              targetPeriodEnd: earningsBridge.forecastPeriod.end,
+              targetPeriodEnd: forwardCommonIncomeBridge.forecastPeriod.end,
             })
           : null
         : valuationPolicy.basis === 'forward_12m'
@@ -1146,8 +1162,8 @@ async function executeCandidateResearchCycle(options: {
       const includePoints = (points: Array<{ factIds: string[] }>) => points.forEach((point) => point.factIds.forEach((factId) => valuationFinancialFactIds.add(factId)));
       const includeInstant = (point: { factIds: string[] } | null) => point?.factIds.forEach((factId) => valuationFinancialFactIds.add(factId));
       if (valuation) {
-        if (valuationPolicy.basis === 'forward_bvps_pb' && earningsBridge.status === 'complete') {
-          earningsBridge.factIds.forEach((factId) => valuationFinancialFactIds.add(factId));
+        if (valuationPolicy.basis === 'forward_bvps_pb' && forwardCommonIncomeBridge?.status === 'complete') {
+          forwardCommonIncomeBridge.factIds.forEach((factId) => valuationFinancialFactIds.add(factId));
           includeInstant(latestCommonEquityFact);
           includeInstant(latestCommonSharesFact);
         }
@@ -1178,8 +1194,11 @@ async function executeCandidateResearchCycle(options: {
         .filter((fact) => fact.authorityTier === 'finmind_mirror' || fact.provider === 'finmind')
         .map((fact) => fact.factId));
       const usesFinMindFinancialEvidence = [...valuationFinancialFactIds].some((factId) => finMindFinancialFactIds.has(factId));
-      const usesFinMindEarningsBridgeEvidence = earningsBridge.status === 'complete'
-        && earningsBridge.factIds.some((factId) => finMindFinancialFactIds.has(factId));
+      const valuationProjection = businessProfile?.businessModel === 'cyclical_asset'
+        ? forwardCommonIncomeBridge
+        : earningsBridge;
+      const usesFinMindEarningsBridgeEvidence = valuationProjection?.status === 'complete'
+        && valuationProjection.factIds.some((factId) => finMindFinancialFactIds.has(factId));
       const publishedPrimaryMethod = valuation
         ? valuationPolicy.basis === 'ttm_multiple_reference'
           ? valuation.primaryMethod === 'forward_pb' ? 'ttm_pb_reference' : 'ttm_pe_reference'
@@ -1199,14 +1218,14 @@ async function executeCandidateResearchCycle(options: {
           historical_pb_percentile: ['forward_pb','forward_bvps_pb'].includes(valuation.primaryMethod) ? valuation.historicalPercentile : null, bear_target: valuation.bearTarget,
           base_target: valuation.baseTarget, bull_target: valuation.bullTarget, probability_weighted_target: valuation.probabilityWeightedTarget,
           base_upside_pct: valuation.baseUpsidePct, bear_downside_pct: valuation.bearDownsidePct, reward_risk_ratio: valuation.rewardRiskRatio,
-          earnings_bridge: earningsBridge.status === 'complete'
-            ? earningsBridge
-            : { status: earningsBridge.status, missing: earningsBridge.missing, eps_ttm: eps?.epsTtm ?? null, exchange_implied_eps: valuation.operatingDriverSource === 'exchange_implied_ttm_eps' ? valuation.operatingDriver : null, operating_driver_source: valuation.operatingDriverSource, revenue_yoy_pct: revenueYoy, conservative_growth_factor: valuation.growthFactor },
+          earnings_bridge: valuationProjection?.status === 'complete'
+            ? valuationProjection
+            : { status: valuationProjection?.status || 'insufficient', missing: valuationProjection?.missing || [], eps_ttm: eps?.epsTtm ?? null, exchange_implied_eps: valuation.operatingDriverSource === 'exchange_implied_ttm_eps' ? valuation.operatingDriver : null, operating_driver_source: valuation.operatingDriverSource, revenue_yoy_pct: revenueYoy, conservative_growth_factor: valuation.growthFactor },
           assumption_ledger: [{ source: 'official_five_year_multiple_distribution', median_multiple: valuation.baseMultiple, sample_count: valuation.historicalSampleCount },
             ...(valuationPolicy.basis === 'forward_bvps_pb' ? [
               { source: 'model_assumption', key: 'forecast_dividends', value: 0, basis: 'No validated future dividend declaration is available; zero is an explicit scenario assumption, not a reported fact.' },
               { source: 'model_assumption', key: 'forecast_capital_and_oci', value: 0, basis: 'No validated forward capital/OCI item is available; zero is an explicit scenario assumption, not a reported fact.' },
-            ] : []), ...(earningsBridge.status === 'complete' ? earningsBridge.assumptions : [{ source: 'official_monthly_revenue', half_pass_through_cap: 0.15 }])],
+            ] : []), ...(valuationProjection?.status === 'complete' ? valuationProjection.assumptions : [{ source: 'official_monthly_revenue', half_pass_through_cap: 0.15 }])],
           catalysts: [], invalidation_conditions: ['official earnings bridge deteriorates'], as_of: `${technical.sessionDate}T13:30:00+08:00`,
           available_at: evaluatedAt, provenance: { research_run_id: runId, sources: usesFinMindFinancialEvidence ? ['TWSE/TPEx','MOPS','FinMind mirror'] : ['TWSE/TPEx','MOPS'] }, model_version: CANDIDATE_VALUATION_MODEL_VERSION,
           valuation_basis: valuationPolicy.basis, multiple_months_covered: multipleMonthsCovered, next_12m_bridge_complete: next12mBridgeComplete,
@@ -1271,7 +1290,7 @@ async function executeCandidateResearchCycle(options: {
         },
         research: {
           valuationMarginOfSafety: baseUpsidePct == null ? 0 : bounded(baseUpsidePct / 25 * 100),
-          financialBridge: earningsBridge.status === 'complete' ? 100 : financialCompleteness,
+          financialBridge: next12mBridgeComplete ? 100 : financialCompleteness,
           officialEvidenceAndCounterEvidence: officialEvidenceFactor.score,
           brokerEvidence: brokerFactor.score,
           industryRotation: industryRotationFactor.score,
@@ -1486,7 +1505,9 @@ async function executeCandidateResearchCycle(options: {
         card: detailCard, factIds, valuationBasis: valuationPolicy.basis, multipleMonthsCovered,
         sourceCount: recentMentions.length, publisherCount: concentration.publisherCount, platformCount: concentration.platformCount,
         sector: stock.sector, facts: sectionFacts, financialGaps,
-        earningsBridge: earningsBridge.status === 'complete' ? earningsBridge as unknown as Record<string, unknown> : null,
+        earningsBridge: valuationProjection?.status === 'complete'
+          ? valuationProjection as unknown as Record<string, unknown>
+          : null,
         factorEvidence,
       });
       const historicalPrices = [...dailyCandidatePrices(bars), ...monthlyCandidatePrices(bars)];
@@ -1544,11 +1565,12 @@ async function executeCandidateResearchCycle(options: {
           forwardCommonEquityBridge: valuationPolicy.basis === 'forward_bvps_pb' ? {
             status: valuation ? 'complete' : 'incomplete', startingCommonEquity: latestCommonEquityFact?.value ?? null,
             endingCommonShares: latestCommonSharesFact?.value ?? null,
-            targetPeriodEnd: earningsBridge.status === 'complete' ? earningsBridge.forecastPeriod.end : null,
+            targetPeriodEnd: forwardCommonIncomeBridge?.status === 'complete' ? forwardCommonIncomeBridge.forecastPeriod.end : null,
             projectedDividends: { kind: 'model_assumption', bear: 0, base: 0, bull: 0 },
             projectedCapitalAndOci: { kind: 'model_assumption', bear: 0, base: 0, bull: 0 },
           } : null,
           earningsBridge,
+          forwardCommonIncomeBridge,
           factorEvidence,
           unmetConditions: detailCard.unmetConditions,
         },
@@ -1625,8 +1647,8 @@ async function executeCandidateResearchCycle(options: {
       const researchReadiness = valuation ? 'valuation_ready' : 'evidence_gap';
       const factCompleteness = issuerResearchCoverage;
       const modelCompleteness = { status: valuation ? 'complete' : 'incomplete', method: valuationPolicy.basis,
-        terminalReason: valuationTerminalReason, next12mBridgeComplete: earningsBridge.status === 'complete',
-        missingBridgeInputs: earningsBridge.status === 'insufficient' ? earningsBridge.missing : [],
+        terminalReason: valuationTerminalReason, next12mBridgeComplete,
+        missingBridgeInputs: valuationProjection?.status === 'insufficient' ? valuationProjection.missing : [],
         multipleMonthsCovered, requiredMultipleMonths: 48 };
       Object.assign(result, { status: itemStatus, executionStatus: 'success', factCompleteness, modelCompleteness, researchReadiness, stage: stage.stage, technicalSessionDate: technical.sessionDate, technicalCoverageStatus: priceCoverageTerminal ? 'insufficient_history' : 'complete', valuationStatus, valuationBasis: valuationPolicy.basis, detailRevisionId, scores: stage.scores, unmetConditions: detailCard.unmetConditions, classificationInput, classificationReplayHash, riskAction: risk });
       const itemWrite = await supabase.from('candidate_research_run_items').upsert({ run_id: runId, stock_id: stock.id, symbol: stock.symbol, status: itemStatus, execution_status: 'success', research_readiness: researchReadiness, valuation_method: valuationPolicy.basis, narrative_kind: 'deterministic_fact', price_status: 'success', technical_status: priceCoverageTerminal ? 'insufficient_history' : 'success', fundamental_status: eps || values || priorRevenue || authorityFacts.length ? 'success' : 'missing', valuation_status: valuationStatus, classification_status: 'success', lifecycle_stage: stage.stage, terminal_reason: researchTerminalReason, technical_session_date: technical.sessionDate, metrics: result, started_at: startedAt, finished_at: new Date().toISOString() }, { onConflict: 'run_id,stock_id' });
@@ -1864,6 +1886,7 @@ async function executeCandidateResearchCycle(options: {
 export async function runCandidateResearchCycle(options: {
   dryRun?: boolean;
   pipelineRunId?: string | null;
+  symbols?: string[];
   seedSymbols?: Array<{ symbol: string; name: string; market: 'TW' | 'US'; sector: string | null }>;
 }) {
   if (options.dryRun) return executeCandidateResearchCycle(options);

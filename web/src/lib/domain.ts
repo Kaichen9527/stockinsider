@@ -22127,6 +22127,20 @@ export async function runPipelineResearchFlow(options?: { dryRun?: boolean }) {
   };
 }
 
+/** Bounded issuer canary used to prove the candidate research path without
+ * waking the full candidate universe. The lower-level cycle also applies the
+ * allowlist before acquisition, validation, price history and valuation. */
+export async function runCandidateResearchCanary(options: { symbols: string[]; dryRun?: boolean }) {
+  const symbols = [...new Set(options.symbols.map((symbol) => String(symbol).trim().toUpperCase()))];
+  if (symbols.length < 1 || symbols.length > 5 || symbols.some((symbol) => !/^\d{4}$/u.test(symbol))) {
+    throw new Error('candidate_research_canary_symbol_scope_invalid');
+  }
+  const seedSymbols = TW_STORY_RESEARCH_SEEDS
+    .filter((seed) => seed.market === 'TW' && symbols.includes(seed.symbol))
+    .map((seed) => ({ symbol: seed.symbol, name: seed.name, market: 'TW' as const, sector: seed.sector || null }));
+  return runCandidateResearchCycle({ dryRun: Boolean(options.dryRun), symbols, seedSymbols });
+}
+
 export async function runPipelineDispatchFlow(options?: { dryRun?: boolean }) {
   const dryRun = Boolean(options?.dryRun);
   const startedAt = Date.now();
