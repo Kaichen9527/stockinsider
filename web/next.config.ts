@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   // Contabo releases ship only the traced runtime. This prevents every rollback
   // copy from carrying the complete development dependency tree.
   output: "standalone",
+  // Isolated preview deployments may publish their immutable chunks under a
+  // namespaced nginx alias without touching the production app's chunk set.
+  assetPrefix: process.env.NEXT_PUBLIC_ASSET_PREFIX || undefined,
   // Local backups are not application dependencies, even when filesystem
   // tracing sees the parent repository. Git ignore rules do not govern tracing.
   outputFileTracingExcludes: {
