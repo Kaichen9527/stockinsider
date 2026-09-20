@@ -854,7 +854,7 @@ export async function refreshCandidateOfficialFinancials(
       documentSha256: null,
       metadata: { exchange: outcome.candidate.exchange, period_end: periodEnd, fallback_reason: outcome.error },
     };
-    return [[outcome.candidate.stockId, {
+    return [[`${outcome.candidate.stockId}:${periodEnd}`, {
       stock_id: outcome.candidate.stockId,
       queue_key: issuerIrDocumentQueueKey(item),
       listing_source_url: fallback.listingUrl,

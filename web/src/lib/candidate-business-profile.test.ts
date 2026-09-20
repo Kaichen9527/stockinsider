@@ -1,23 +1,28 @@
-import test from 'node:test';
 import assert from 'node:assert/strict';
-import { getCandidateBusinessProfile } from './candidate-business-profile.ts';
+import test from 'node:test';
+import { hasCompleteCandidateSegmentBridge } from './candidate-business-profile.ts';
 
-test('AUO uses an explicit versioned cyclical asset research profile', () => {
-  const profile = getCandidateBusinessProfile('2409');
-  assert.equal(profile?.version, 'auo-cyclical-asset-v1');
-  assert.equal(profile?.primaryValuationMethod, 'forward_bvps_pb');
-  assert.equal(profile?.forecastHorizonMonths, 12);
-  assert.deepEqual(profile?.requiredFlowFacts, [
-    'quarterly_revenue',
-    'quarterly_gross_profit',
-    'quarterly_operating_income',
-    'quarterly_net_income_attributable_to_common',
-  ]);
-  assert.deepEqual(profile?.requiredInstantFacts, ['common_equity_attributable_to_owners', 'common_shares_outstanding']);
-  assert.deepEqual(profile?.operatingSegments, ['Display', 'Mobility Solutions', 'Vertical Solutions']);
-});
+const cutoff = '2026-09-19T23:59:59+08:00';
+const event = {
+  event_type: 'earnings_call',
+  source_url: 'https://www.auo.com/en-global/News_Archive/detail/news_IR_20260730',
+  event_timestamp: '2026-07-30T08:00:00Z',
+  created_at: '2026-07-30T09:00:00Z',
+  extracted_signals: {
+    schema: 'official-segment-financials-v1', periodEnd: '2026-06-30', status: 'reported',
+    segments: [
+      { name: 'Display', revenue: 33_810, operatingIncome: -1_085, sourceRef: 'https://www.auo.com/en-global/News_Archive/detail/news_IR_20260730#display' },
+      { name: 'Mobility Solutions', revenue: 20_100, operatingIncome: 768, sourceRef: 'https://www.auo.com/en-global/News_Archive/detail/news_IR_20260730#mobility' },
+      { name: 'Vertical Solutions', revenue: 13_310, operatingIncome: 745, sourceRef: 'https://www.auo.com/en-global/News_Archive/detail/news_IR_20260730#vertical' },
+    ],
+  },
+};
 
-test('issuer-specific profile does not leak to peers by sector or symbol', () => {
-  assert.equal(getCandidateBusinessProfile('2408'), null);
-  assert.equal(getCandidateBusinessProfile('optoelectronics'), null);
+test('AUO target requires a complete official point-in-time segment bridge', () => {
+  assert.equal(hasCompleteCandidateSegmentBridge('2409', [event], { cutoff, periodEnd: '2026-06-30' }), true);
+  assert.equal(hasCompleteCandidateSegmentBridge('2409', [{ ...event, extracted_signals: {
+    ...event.extracted_signals, segments: event.extracted_signals.segments.slice(0, 2),
+  } }], { cutoff, periodEnd: '2026-06-30' }), false);
+  assert.equal(hasCompleteCandidateSegmentBridge('2409', [{ ...event, source_url: 'https://example.com/report' }], { cutoff, periodEnd: '2026-06-30' }), false);
+  assert.equal(hasCompleteCandidateSegmentBridge('2409', [{ ...event, created_at: '2026-09-20T00:00:00Z' }], { cutoff, periodEnd: '2026-06-30' }), false);
 });

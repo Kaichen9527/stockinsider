@@ -36,6 +36,23 @@ function quarterStart(periodEnd: string) {
 function quarterNumber(periodEnd: string) { return Math.floor((Number(periodEnd.slice(5, 7)) - 1) / 3) + 1; }
 function closeEnough(left: number, right: number) { return Math.abs(left - right) <= Math.max(0.0001, Math.abs(left) * 0.01, Math.abs(right) * 0.01); }
 
+/** The investment decision horizon is anchored to the research cutoff, not to
+ * whichever filing happened to be latest on that date. */
+export function decisionTargetQuarterEnd(evaluationAt: string | undefined, fallbackPeriodEnd: string) {
+  const parsed = evaluationAt ? new Date(evaluationAt) : null;
+  if (!parsed || !Number.isFinite(parsed.getTime())) {
+    return `${Number(fallbackPeriodEnd.slice(0, 4)) + 1}${fallbackPeriodEnd.slice(4)}`;
+  }
+  const taipeiParts = Object.fromEntries(new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit',
+  }).formatToParts(parsed).map((part) => [part.type, part.value]));
+  const month = Number(taipeiParts.month);
+  const quarterEndMonth = Math.ceil(month / 3) * 3;
+  const year = Number(taipeiParts.year) + 1;
+  const day = quarterEndMonth === 3 ? 31 : quarterEndMonth === 6 ? 30 : quarterEndMonth === 9 ? 30 : 31;
+  return `${year}-${String(quarterEndMonth).padStart(2, '0')}-${day}`;
+}
+
 /** A bridge needs eight *adjacent* fiscal quarters.  Counting eight rows is
  * insufficient: a missing Q2 otherwise turns two annual periods into a
  * deceptively plausible TTM. */
@@ -210,6 +227,7 @@ export function buildForwardCommonIncomeBridge(
     start: nextStart.toISOString().slice(0, 10),
     end: `${Number(latestPeriodEnd.slice(0, 4)) + 1}${latestPeriodEnd.slice(4)}`,
   };
+  const targetPeriodEnd = decisionTargetQuarterEnd(options.evaluationAt, latestPeriodEnd);
   const factIdsByMetric = Object.fromEntries(flowKeys.map((key) => [
     key,
     series[key].points.filter((row) => requiredPeriods.includes(row.periodEnd)).flatMap((row) => row.factIds),
@@ -221,6 +239,7 @@ export function buildForwardCommonIncomeBridge(
     issuerSymbol: options.symbol || null,
     evaluationAt: options.evaluationAt || null,
     forecastPeriod,
+    targetPeriodEnd,
     actual: {
       latestPeriodEnd,
       latestRevenue,

@@ -43,8 +43,12 @@ unvalidated mirror rows.
 
 - The AUO method requires eight reported quarters of revenue, gross profit,
   operating income and common income, plus latest-period common equity and ending
-  common shares. Its method-specific denominator is 34 explicit field-periods;
-  diluted EPS and weighted-average EPS shares are not P/B inputs.
+  common shares, plus reported revenue and operating income for Display,
+  Mobility Solutions and Vertical Solutions in the latest bridge quarter. Its
+  method-specific denominator is 40 explicit field-periods (34 consolidated and
+  6 segment field-periods); diluted EPS and weighted-average EPS shares are not
+  P/B inputs. The formal candidate path remains incomplete if those segment
+  rows have not entered through an official point-in-time event.
 - The forward equity bridge is `starting common equity + projected common income
   - projected dividends + projected capital/OCI`. Future dividends and capital/OCI
   are currently explicit zero model assumptions, not reported facts.

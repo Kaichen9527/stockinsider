@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { buildForwardCommonIncomeBridge, buildForwardEarningsBridge, discreteReportedQuarters, preferOfficialReportedFinancialFacts, type ReportedFinancialFact } from './forward-earnings-bridge.ts';
+import { buildForwardCommonIncomeBridge, buildForwardEarningsBridge, decisionTargetQuarterEnd, discreteReportedQuarters, preferOfficialReportedFinancialFacts, type ReportedFinancialFact } from './forward-earnings-bridge.ts';
 
 function fact(factKey: string, year: number, quarter: number, value: number, discrete = false): ReportedFinancialFact {
   const end = [`${year}-03-31`, `${year}-06-30`, `${year}-09-30`, `${year}-12-31`][quarter - 1];
@@ -65,6 +65,14 @@ test('forward common-income bridge supports AUO P/B without relabelling basic EP
   assert.ok(bridge.scenarios.base.netIncome < bridge.scenarios.bull.netIncome);
   assert.equal(bridge.factIds.length, 32);
   assert.equal(JSON.stringify(bridge).includes('dilutedEps'), false);
+  assert.deepEqual(bridge.forecastPeriod, { start: '2026-01-01', end: '2026-12-31' });
+  assert.equal(bridge.targetPeriodEnd, '2027-09-30');
+});
+
+test('decision target is cutoff-quarter end plus twelve months', () => {
+  assert.equal(decisionTargetQuarterEnd('2026-09-19T23:59:59+08:00', '2026-06-30'), '2027-09-30');
+  assert.equal(decisionTargetQuarterEnd('2026-09-30T16:30:00Z', '2026-06-30'), '2027-12-31');
+  assert.equal(decisionTargetQuarterEnd('invalid', '2026-06-30'), '2027-06-30');
 });
 
 test('YTD EPS and weighted-average shares are never subtracted as additive flows', () => {

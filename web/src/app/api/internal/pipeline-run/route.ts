@@ -63,10 +63,11 @@ export async function POST(req: Request) {
         return NextResponse.json({ ok: true, result: { skipped: true, reason: 'final_data_not_research_ready', researchSession },
           meta: { runId: null, dryRun, mode, timedOut: false, failedStep: null, stepStatus: [] } });
       }
-      const prior = await writer.supabase.from('candidate_research_runs').select('id,status')
+      const prior = await writer.supabase.from('candidate_research_runs').select('id,status,failed_count')
         .eq('technical_session_date', researchSession).eq('model_version', CANDIDATE_RESEARCH_MODEL_VERSION)
         .not('pipeline_run_id', 'is', null)
-        .in('status', ['success', 'partial']).order('finished_at', { ascending: false }).limit(1).maybeSingle();
+        .in('status', ['success', 'partial']).eq('failed_count', 0)
+        .order('finished_at', { ascending: false }).limit(1).maybeSingle();
       if (prior.error) throw new Error(`research_resume_receipt_read_failed:${prior.error.message}`);
       if (prior.data) {
         return NextResponse.json({ ok: true, result: { skipped: true, reason: 'research_session_already_completed', researchSession, researchRunId: prior.data.id },

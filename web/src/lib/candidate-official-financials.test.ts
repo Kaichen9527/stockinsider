@@ -110,6 +110,7 @@ test('official financial refresh completes durable MOPS and TPEx jobs atomically
   assert.match(source, /claimedJobs: claimedJobCount/u);
   assert.match(source, /enqueueMissing !== false/u);
   assert.doesNotMatch(source, /rpc\('append_financial_fact_v3'/u);
+  assert.match(source, /`\$\{outcome[.]candidate[.]stockId\}:\$\{periodEnd\}`/u);
 });
 
 test('TPEx official fetch retries a truncated body and switches encoding without accepting partial JSON', async () => {

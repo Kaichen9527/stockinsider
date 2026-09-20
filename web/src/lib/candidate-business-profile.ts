@@ -49,3 +49,59 @@ const AUO_PROFILE: CandidateBusinessProfile = Object.freeze({
 export function getCandidateBusinessProfile(symbol: string): CandidateBusinessProfile | null {
   return String(symbol).trim() === AUO_PROFILE.symbol ? AUO_PROFILE : null;
 }
+
+type SegmentEvidenceRow = {
+  event_type?: unknown;
+  source_url?: unknown;
+  event_timestamp?: unknown;
+  created_at?: unknown;
+  extracted_signals?: unknown;
+};
+
+function officialAuoUrl(value: unknown) {
+  try {
+    const host = new URL(String(value || '')).hostname.toLowerCase();
+    return host === 'auo.com' || host === 'www.auo.com';
+  } catch { return false; }
+}
+
+/** The general candidate model cannot infer AUO's segment economics from
+ * consolidated statements. Only an official, point-in-time event with all
+ * three reported segment rows may authorize its issuer-specific target. */
+export function hasCompleteCandidateSegmentBridge(
+  symbol: string,
+  rows: SegmentEvidenceRow[],
+  options: { cutoff: string; periodEnd: string | null },
+) {
+  if (symbol !== AUO_PROFILE.symbol || !options.periodEnd) return symbol !== AUO_PROFILE.symbol;
+  const required = new Set(AUO_PROFILE.operatingSegments.map((name) => name.toLowerCase()));
+  return rows.some((row) => {
+    const eventAt = String(row.event_timestamp || '');
+    const createdAt = String(row.created_at || '');
+    const cutoffMs = Date.parse(options.cutoff);
+    const eventMs = Date.parse(eventAt);
+    const createdMs = Date.parse(createdAt);
+    const sourceUrl = String(row.source_url || '');
+    if (!['earnings_call', 'financial_results'].includes(String(row.event_type || ''))
+      || !officialAuoUrl(sourceUrl) || !Number.isFinite(cutoffMs) || !Number.isFinite(eventMs)
+      || !Number.isFinite(createdMs) || eventMs > cutoffMs || createdMs > cutoffMs) return false;
+    const signals = row.extracted_signals;
+    if (!signals || typeof signals !== 'object' || Array.isArray(signals)) return false;
+    const signalRow = signals as Record<string, unknown>;
+    if (signalRow.schema !== 'official-segment-financials-v1'
+      || signalRow.periodEnd !== options.periodEnd || signalRow.status !== 'reported'
+      || !Array.isArray(signalRow.segments)) return false;
+    const admitted = new Set<string>();
+    for (const item of signalRow.segments) {
+      if (!item || typeof item !== 'object' || Array.isArray(item)) return false;
+      const segment = item as Record<string, unknown>;
+      const name = String(segment.name || '').toLowerCase();
+      const revenue = Number(segment.revenue);
+      const operatingIncome = Number(segment.operatingIncome);
+      if (!required.has(name) || admitted.has(name) || !(revenue > 0) || !Number.isFinite(operatingIncome)
+        || typeof segment.sourceRef !== 'string' || !segment.sourceRef.startsWith(sourceUrl)) return false;
+      admitted.add(name);
+    }
+    return admitted.size === required.size;
+  });
+}

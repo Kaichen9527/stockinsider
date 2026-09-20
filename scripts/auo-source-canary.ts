@@ -1,15 +1,15 @@
 import { createHash } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
-import { buildForwardCommonIncomeBridge, type ReportedFinancialFact } from '../web/src/lib/forward-earnings-bridge.ts';
+import { buildForwardCommonIncomeBridge } from '../web/src/lib/forward-earnings-bridge.ts';
 import { buildForwardBvpsPbScenario } from '../web/src/lib/candidate-valuation.ts';
 import { parseExchangeFinancialEndpoint, TWSE_FINANCIAL_ENDPOINTS } from '../web/src/lib/candidate-financial-acquisition.ts';
-import { validateAuoHistoricalPbRows } from './auo-source-canary-policy.ts';
+import { validateAuoHistoricalPbRows, validateAuoLedgerFacts, type AuoAdmittedLedgerFact } from './auo-source-canary-policy.ts';
 
 const SYMBOL = '2409';
 const COMPANY_PROFILE_URL = 'https://openapi.twse.com.tw/v1/opendata/t187ap03_L';
 
 type Ledger = {
-  facts: ReportedFinancialFact[];
+  facts: AuoAdmittedLedgerFact[];
   historicalPbRows: Array<{
     date: string; pb: number; close: number; bookValuePerShare: number;
     bookValuePeriodEnd: string; bookValueAvailableAt: string;
@@ -42,10 +42,11 @@ if (!ledgerPath || !outputPath) {
   throw new Error('usage: npx tsx scripts/auo-source-canary.ts --ledger <read-only-ledger.json> --out <report.json>');
 }
 const ledger = JSON.parse(await readFile(ledgerPath, 'utf8')) as Ledger;
-if (!Array.isArray(ledger.facts) || ledger.facts.length !== 32
-  || !(ledger.currentPrice > 0) || !/^\d{4}-\d{2}-\d{2}$/u.test(ledger.priceSession)) {
+if (!(ledger.currentPrice > 0) || !/^\d{4}-\d{2}-\d{2}$/u.test(ledger.priceSession)) {
   throw new Error('auo_canary_ledger_incomplete');
 }
+const researchCutoff = '2026-09-19T23:59:59+08:00';
+const admittedFacts = validateAuoLedgerFacts(ledger.facts, researchCutoff);
 const historicalPbRows = validateAuoHistoricalPbRows(ledger.historicalPbRows);
 const historicalPb = historicalPbRows.map((row) => row.pb);
 
@@ -72,9 +73,9 @@ if (Math.abs(derivedBvps - reportedBvps.value) > 0.02) {
   throw new Error('official_auo_bvps_reconciliation_failed');
 }
 
-const bridge = buildForwardCommonIncomeBridge(ledger.facts, {
+const bridge = buildForwardCommonIncomeBridge(admittedFacts, {
   symbol: SYMBOL,
-  evaluationAt: '2026-09-19T23:59:59+08:00',
+  evaluationAt: researchCutoff,
 });
 if (bridge.status !== 'complete') throw new Error(`auo_forward_common_income_bridge_incomplete:${bridge.missing.join(',')}`);
 const valuation = buildForwardBvpsPbScenario({
@@ -89,7 +90,7 @@ const valuation = buildForwardBvpsPbScenario({
   projectedDividends: { bear: 0, base: 0, bull: 0 },
   projectedCapitalAndOci: { bear: 0, base: 0, bull: 0 },
   historicalPbRatios: historicalPb,
-  targetPeriodEnd: bridge.forecastPeriod.end,
+  targetPeriodEnd: bridge.targetPeriodEnd,
 });
 if (!valuation) throw new Error('auo_forward_bvps_pb_valuation_incomplete');
 
@@ -104,7 +105,7 @@ const report = {
     { kind: 'twse_company_profile', url: COMPANY_PROFILE_URL, ...companySource },
   ].map(({ payload: _payload, ...receipt }) => receipt),
   sourceCoverage: {
-    reportedQuarterFacts: ledger.facts.length,
+    reportedQuarterFacts: admittedFacts.length,
     requiredQuarterFacts: 32,
     historicalPbObservations: historicalPb.length,
     requiredPbObservations: 48,
@@ -119,6 +120,7 @@ const report = {
     bvpsSourceRef: reportedBvps.sourceRef,
   },
   bridge,
+  financialFactReceipts: admittedFacts.map((fact) => ({ factId: fact.factId, ...fact.receipt })),
   valuation,
   historicalPbEvidence: historicalPbRows,
   market: {

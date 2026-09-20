@@ -21,6 +21,20 @@ export function candidateDailyPriceRefreshDepth(knownSessions: string[], latestM
   return knownSessions.includes(latestMarketSession) ? 0 : 5;
 }
 
+/** Valuation distributions are monthly samples. When several daily snapshots
+ * exist in a month, retain only that month's latest observation so one volatile
+ * month cannot receive accidental extra weight. */
+export function latestMonthlyPositiveValues(rows: Array<{ date: string; value: number | null }>) {
+  const monthly = new Map<string, { date: string; value: number }>();
+  for (const row of rows) {
+    if (!/^\d{4}-\d{2}-\d{2}$/u.test(row.date) || row.value == null || !(row.value > 0)) continue;
+    const month = row.date.slice(0, 7);
+    const prior = monthly.get(month);
+    if (!prior || row.date > prior.date) monthly.set(month, { date: row.date, value: row.value });
+  }
+  return [...monthly.values()].sort((left, right) => left.date.localeCompare(right.date));
+}
+
 export function isTransientResearchInfrastructureError(reason: string) {
   return /(?:\b(?:429|500|502|503|504|520|522|524)\b|timeout|timed out|fetch failed|network|connection reset|econnreset|socket hang up|temporarily unavailable)/iu.test(reason);
 }

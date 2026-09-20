@@ -28,6 +28,8 @@ test('the financial queue drain continues to the document worker but still repor
 test('hourly research resume ignores symbol-scoped canary receipts', () => {
   const route = fs.readFileSync(new URL('../web/src/app/api/internal/pipeline-run/route.ts', import.meta.url), 'utf8');
   assert.match(route, /[.]not\('pipeline_run_id', 'is', null\)/u);
+  assert.match(route, /select\('id,status,failed_count'\)/u);
+  assert.match(route, /[.]in\('status', \['success', 'partial'\]\)[.]eq\('failed_count', 0\)/u);
 });
 
 test('symbol-scoped research resolves official symbols without draining the global document queue', () => {

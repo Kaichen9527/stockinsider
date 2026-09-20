@@ -114,6 +114,9 @@ test('issuer IR acquisition jobs remain visible to the Browser-assisted receipt 
   assert.match(pendingRoute, /eq\('endpoint_key', 'issuer_ir_document'\)[.]eq\('status', 'queued'\)/u);
   assert.match(pendingRoute, /acquisitionJobId: row[.]job_id/u);
   assert.match(pendingRoute, /officialFilingUrl: row[.]source_url/u);
+  assert.match(pendingRoute, /queueByStockPeriod/u);
+  assert.match(pendingRoute, /metadata[.]period_end/u);
+  assert.match(pendingRoute, /String\(row[.]stock_id\).*String\(row[.]period_end\)/u);
 });
 
 test('candidate research retains revenue support while close schedules exclude issuer-period revenue', () => {
