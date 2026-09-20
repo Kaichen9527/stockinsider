@@ -342,6 +342,8 @@ test('TWSE valuation panel preserves official monthly PE/PB evidence for request
     parserVersion: 'twse-header-v1',
     provider: 'official_primary',
     authorityTier: 'official_primary',
+    bookValuePeriodEnd: '2026-03-31',
+    bookValueAvailableAt: '2026-08-28',
   });
   assert.equal(rows.get('2303')?.peRatio, null);
   assert.equal(rows.get('2303')?.pbRatio, 1.2);
@@ -379,6 +381,7 @@ test('TWSE per-stock monthly history normalizes ROC dates for the five-year back
   assert.deepEqual(rows.at(-1), {
     date: '2024-08-30', peRatio: 24.8, pbRatio: 7.2, sourceUrl, parserVersion: 'twse-stock-history-v1',
     provider: 'official_primary', authorityTier: 'official_primary',
+    bookValuePeriodEnd: '2024-06-30', bookValueAvailableAt: '2024-08-30',
   });
 });
 

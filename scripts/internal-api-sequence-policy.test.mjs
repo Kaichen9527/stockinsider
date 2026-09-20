@@ -28,7 +28,8 @@ test('the financial queue drain continues to the document worker but still repor
 test('hourly research resume ignores symbol-scoped canary receipts', () => {
   const route = fs.readFileSync(new URL('../web/src/app/api/internal/pipeline-run/route.ts', import.meta.url), 'utf8');
   assert.match(route, /[.]not\('pipeline_run_id', 'is', null\)/u);
-  assert.match(route, /select\('id,status,failed_count'\)/u);
+  assert.match(route, /select\('id,technical_session_date,status,failed_count'\)/u);
+  assert.match(route, /\[\.\.\.readySessions\][.]sort\(\)[.]find\(\(session\) => !completed[.]has\(session\)\)/u);
   assert.match(route, /[.]eq\('status', 'success'\)[.]eq\('failed_count', 0\)/u);
   assert.doesNotMatch(route, /[.]in\('status', \['success', 'partial'\]\)/u);
 });

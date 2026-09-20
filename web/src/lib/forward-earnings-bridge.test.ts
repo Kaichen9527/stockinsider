@@ -65,7 +65,8 @@ test('forward common-income bridge supports AUO P/B without relabelling basic EP
   assert.ok(bridge.scenarios.base.netIncome < bridge.scenarios.bull.netIncome);
   assert.equal(bridge.factIds.length, 32);
   assert.equal(JSON.stringify(bridge).includes('dilutedEps'), false);
-  assert.deepEqual(bridge.forecastPeriod, { start: '2026-01-01', end: '2026-12-31' });
+  assert.deepEqual(bridge.forecastPeriod, { start: '2026-01-01', end: '2027-09-30' });
+  assert.equal(bridge.forecastQuarterCount, 7);
   assert.equal(bridge.targetPeriodEnd, '2027-09-30');
 });
 

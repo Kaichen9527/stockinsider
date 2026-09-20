@@ -35,6 +35,87 @@ export function latestMonthlyPositiveValues(rows: Array<{ date: string; value: n
   return [...monthly.values()].sort((left, right) => left.date.localeCompare(right.date));
 }
 
+export type PointInTimePbObservation = {
+  date: string;
+  pbRatio: number;
+  close: number;
+  bookValuePerShare: number;
+  bookValuePeriodEnd: string;
+  bookValueAvailableAt: string;
+  sourceUrl: string;
+};
+
+/**
+ * A historical P/B observation is usable only when its official exchange
+ * numerator and the disclosed denominator period were both knowable then.
+ * This prevents a later book value from leaking into an earlier valuation.
+ */
+export function pointInTimeMonthlyPbObservations(
+  points: Array<{
+    date: string; pbRatio: number | null; sourceUrl: string;
+    authorityTier: string; bookValuePeriodEnd?: string | null; bookValueAvailableAt?: string | null;
+  }>,
+  bars: Array<{ time: string; close: number; authorityTier: string; integrityStatus?: string }>,
+  cutoff: string,
+): PointInTimePbObservation[] {
+  const cutoffDate = cutoff.slice(0, 10);
+  const officialClose = new Map(bars
+    .filter((bar) => /^\d{4}-\d{2}-\d{2}$/u.test(bar.time) && bar.time <= cutoffDate
+      && bar.authorityTier === 'official_primary' && bar.integrityStatus !== 'conflict'
+      && Number.isFinite(bar.close) && bar.close > 0)
+    .map((bar) => [bar.time, bar.close]));
+  const monthly = new Map<string, PointInTimePbObservation>();
+  for (const point of points) {
+    const close = officialClose.get(point.date);
+    const periodEnd = String(point.bookValuePeriodEnd || '');
+    const availableAt = String(point.bookValueAvailableAt || '');
+    if (!/^\d{4}-\d{2}-\d{2}$/u.test(point.date) || point.date > cutoffDate
+      || point.authorityTier !== 'official_primary'
+      || !/https:\/\/www\.(?:twse\.com\.tw|tpex\.org\.tw)\//u.test(point.sourceUrl)
+      || point.pbRatio == null || !Number.isFinite(point.pbRatio) || point.pbRatio <= 0
+      || close == null || !/^\d{4}-\d{2}-\d{2}$/u.test(periodEnd)
+      || !/^\d{4}-\d{2}-\d{2}$/u.test(availableAt)
+      || periodEnd > availableAt || availableAt > point.date) continue;
+    const row = {
+      date: point.date, pbRatio: point.pbRatio, close,
+      bookValuePerShare: close / point.pbRatio,
+      bookValuePeriodEnd: periodEnd, bookValueAvailableAt: availableAt, sourceUrl: point.sourceUrl,
+    };
+    const month = point.date.slice(0, 7);
+    if (!monthly.has(month) || point.date > monthly.get(month)!.date) monthly.set(month, row);
+  }
+  return [...monthly.values()].sort((left, right) => left.date.localeCompare(right.date));
+}
+
+/** Validate a versioned, source-linked exchange ledger used by a single-stock pilot. */
+export function pointInTimePbLedgerObservations(value: unknown, cutoff: string): PointInTimePbObservation[] {
+  if (!Array.isArray(value)) return [];
+  const cutoffDate = cutoff.slice(0, 10);
+  const rows = value.filter((item) => item && typeof item === 'object' && !Array.isArray(item)
+    && String((item as Record<string, unknown>).date || '') <= cutoffDate);
+  const months = new Set<string>();
+  return rows.flatMap((item) => {
+    const row = item as Record<string, unknown>;
+    const date = String(row.date || '');
+    const pbRatio = Number(row.pb);
+    const close = Number(row.close);
+    const bookValuePerShare = Number(row.bookValuePerShare);
+    const bookValuePeriodEnd = String(row.bookValuePeriodEnd || '');
+    const bookValueAvailableAt = String(row.bookValueAvailableAt || '');
+    const sourceUrl = String(row.sourceUrl || '');
+    const month = date.slice(0, 7);
+    if (!/^\d{4}-\d{2}-\d{2}$/u.test(date) || !/^\d{4}-\d{2}-\d{2}$/u.test(bookValuePeriodEnd)
+      || !/^\d{4}-\d{2}-\d{2}$/u.test(bookValueAvailableAt) || !(pbRatio > 0) || !(close > 0)
+      || !(bookValuePerShare > 0) || bookValuePeriodEnd > bookValueAvailableAt || bookValueAvailableAt > date
+      || !/^https:\/\/www\.twse\.com\.tw\/rwd\/zh\/afterTrading\/BWIBBU\?/u.test(sourceUrl)
+      || String(row.bookValueSourceRef || '') !== sourceUrl
+      || Math.abs(close / bookValuePerShare - pbRatio) > Math.max(0.02, pbRatio * 0.02)
+      || months.has(month)) return [];
+    months.add(month);
+    return [{ date, pbRatio, close, bookValuePerShare, bookValuePeriodEnd, bookValueAvailableAt, sourceUrl }];
+  }).sort((left, right) => left.date.localeCompare(right.date));
+}
+
 export function isTransientResearchInfrastructureError(reason: string) {
   return /(?:\b(?:429|500|502|503|504|520|522|524)\b|timeout|timed out|fetch failed|network|connection reset|econnreset|socket hang up|temporarily unavailable)/iu.test(reason);
 }

@@ -221,13 +221,31 @@ export function buildForwardCommonIncomeBridge(
     };
   };
   const latestPeriodEnd = requiredPeriods.at(-1)!;
+  const targetPeriodEnd = decisionTargetQuarterEnd(options.evaluationAt, latestPeriodEnd);
+  const quarterOrdinal = (periodEnd: string) => Number(periodEnd.slice(0, 4)) * 4
+    + Math.floor((Number(periodEnd.slice(5, 7)) - 1) / 3);
+  const forecastQuarterCount = quarterOrdinal(targetPeriodEnd) - quarterOrdinal(latestPeriodEnd);
+  if (!Number.isInteger(forecastQuarterCount) || forecastQuarterCount < 1 || forecastQuarterCount > 8) {
+    return { status: 'insufficient' as const, missing: ['decision_target_quarter_out_of_range'] };
+  }
+  // Scenario margins and annual growth are applied to the full period from the
+  // latest reported quarter through the decision target. A normal reporting
+  // lag therefore produces five projected quarters rather than labelling a
+  // four-quarter equity bridge with a later date.
+  const projectionScale = forecastQuarterCount / 4;
+  const projectThroughTarget = (scenario: keyof typeof scenarioInputs) => {
+    const projected = project(scenario);
+    return Object.fromEntries(Object.entries(projected).map(([key, value]) => [
+      key,
+      key === 'netMargin' ? value : value * projectionScale,
+    ])) as ReturnType<typeof project>;
+  };
   const nextStart = new Date(`${latestPeriodEnd}T00:00:00Z`);
   nextStart.setUTCDate(nextStart.getUTCDate() + 1);
   const forecastPeriod = {
     start: nextStart.toISOString().slice(0, 10),
-    end: `${Number(latestPeriodEnd.slice(0, 4)) + 1}${latestPeriodEnd.slice(4)}`,
+    end: targetPeriodEnd,
   };
-  const targetPeriodEnd = decisionTargetQuarterEnd(options.evaluationAt, latestPeriodEnd);
   const factIdsByMetric = Object.fromEntries(flowKeys.map((key) => [
     key,
     series[key].points.filter((row) => requiredPeriods.includes(row.periodEnd)).flatMap((row) => row.factIds),
@@ -239,6 +257,7 @@ export function buildForwardCommonIncomeBridge(
     issuerSymbol: options.symbol || null,
     evaluationAt: options.evaluationAt || null,
     forecastPeriod,
+    forecastQuarterCount,
     targetPeriodEnd,
     actual: {
       latestPeriodEnd,
@@ -257,7 +276,7 @@ export function buildForwardCommonIncomeBridge(
       { key: 'operating_expense_ratio', scenarios: Object.fromEntries(Object.entries(scenarioInputs).map(([key, value]) => [key, value.operatingExpenseRatio])), basis: 'Reported TTM operating expense ratio with ±0.5 percentage-point sensitivity', factIds: factsFor('quarterly_revenue', 'quarterly_gross_profit', 'quarterly_operating_income') },
       { key: 'below_operating_residual_ratio', scenarios: { bear: belowOperatingResidualRatio, base: belowOperatingResidualRatio, bull: belowOperatingResidualRatio }, basis: 'Reported TTM common income minus operating income, scaled by revenue; no unreported component is assumed to be zero', factIds: factsFor('quarterly_net_income_attributable_to_common', 'quarterly_operating_income') },
     ],
-    scenarios: { bear: project('bear'), base: project('base'), bull: project('bull') },
+    scenarios: { bear: projectThroughTarget('bear'), base: projectThroughTarget('base'), bull: projectThroughTarget('bull') },
     factIds: [...new Set(Object.values(factIdsByMetric).flat())].sort(),
   };
 }

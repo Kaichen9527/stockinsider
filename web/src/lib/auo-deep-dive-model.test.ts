@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import priceHistory from '../data/auo-price-history-v1.json' with { type: 'json' };
+import pbHistory from '../data/auo-pb-history-v1.json' with { type: 'json' };
 import {
   AUO_COMMON_EQUITY_MILLION,
   AUO_DILUTED_SHARES_MILLION,
@@ -17,6 +18,7 @@ import {
   calculateTechnicalSnapshot,
   classifyResearchVerdict,
   combineActualAndForecastYear,
+  historicalPbQuartiles,
   requiredEarningsAtMultiple,
   validateResearchInputs,
   type PriceBar,
@@ -31,6 +33,13 @@ test('segment rows add back to consolidated revenue and operating profit', () =>
   assert.equal(row.reportedEps, row.normalizedEps, 'future one-offs default to zero');
 });
 
+test('AUO P/B anchors are recalculated from 60 point-in-time TWSE monthly observations', () => {
+  const result = historicalPbQuartiles(pbHistory, '2026-09-18');
+  assert.equal(result.rows.length, 60);
+  assert.deepEqual({ p25: result.p25, p50: result.p50, p75: result.p75 }, { p25: 0.7, p50: 0.77, p75: 0.85 });
+  assert.throws(() => historicalPbQuartiles(pbHistory.slice(0, 47), '2026-09-18'), /evidence_incomplete/u);
+});
+
 test('bear base and bull cases preserve ordered 2027 earnings and valuation', () => {
   const rows = Object.entries(auoScenarioAdjustments).map(([id, adjustment]) => buildForecastScenario({
     id,
@@ -39,7 +48,7 @@ test('bear base and bull cases preserve ordered 2027 earnings and valuation', ()
     dilutedSharesMillion: AUO_DILUTED_SHARES_MILLION,
     startingCommonEquityMillion: AUO_COMMON_EQUITY_MILLION,
     endingCommonSharesMillion: AUO_ENDING_COMMON_SHARES_MILLION,
-    forwardQuarterCount: 4,
+    forwardQuarterCount: 5,
     valuationYear: 2027,
   }));
   const eps = rows.map((row) => row.annual.find((annual) => annual.year === 2027)!.normalizedEps);
@@ -50,6 +59,8 @@ test('bear base and bull cases preserve ordered 2027 earnings and valuation', ()
   assert.equal(rows[1].valuation.referenceValue, rows[1].valuation.pbValue, 'P/E is a cross-check, not a hidden blend');
   assert.ok(rows[0].valuation.forwardBvps < rows[1].valuation.forwardBvps);
   assert.ok(rows[1].valuation.forwardBvps < rows[2].valuation.forwardBvps);
+  assert.equal(rows.every((row) => row.valuation.projectedDividends === 0
+    && row.valuation.projectedCapitalAndOci === 0), true);
 });
 
 test('P/E fails closed for negative and near-zero EPS', () => {

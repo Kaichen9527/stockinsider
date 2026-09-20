@@ -22,6 +22,8 @@ export type ScenarioAdjustment = {
   marginDelta: Record<SegmentKey, number>;
   fairPe: number | null;
   fairPb: number;
+  projectedDividendsMillion: number;
+  projectedCapitalAndOciMillion: number;
 };
 
 export type ForecastQuarter = ForecastQuarterInput & {
@@ -53,6 +55,8 @@ export type ForecastScenario = {
     fairPb: number;
     forwardBvps: number;
     endingCommonEquity: number;
+    projectedDividends: number;
+    projectedCapitalAndOci: number;
     pbValue: number;
     referenceValue: number;
   };
@@ -106,6 +110,48 @@ export type EntryPlan = {
     rewardRisk: number | null;
   };
 };
+
+export type HistoricalPbRow = {
+  date: string; pb: number; close: number; bookValuePerShare: number;
+  bookValuePeriodEnd: string; bookValueAvailableAt: string;
+  bookValueSourceRef: string; sourceUrl: string;
+};
+
+function interpolatedPercentile(values: number[], fraction: number) {
+  const sorted = [...values].sort((left, right) => left - right);
+  const position = (sorted.length - 1) * fraction;
+  const lower = Math.floor(position);
+  const upper = Math.ceil(position);
+  return sorted[lower] + (sorted[upper] - sorted[lower]) * (position - lower);
+}
+
+/** Validate the committed exchange ledger before it can set a valuation anchor. */
+export function historicalPbQuartiles(value: unknown, cutoff: string) {
+  if (!Array.isArray(value) || value.length < 48) throw new Error('auo_historical_pb_evidence_incomplete');
+  const cutoffDate = cutoff.slice(0, 10);
+  const months = new Set<string>();
+  const rows = value.map((item) => {
+    const row = item as Partial<HistoricalPbRow>;
+    const date = String(row.date || '');
+    const periodEnd = String(row.bookValuePeriodEnd || '');
+    const availableAt = String(row.bookValueAvailableAt || '');
+    const pb = Number(row.pb);
+    const close = Number(row.close);
+    const bvps = Number(row.bookValuePerShare);
+    if (!/^\d{4}-\d{2}-\d{2}$/u.test(date) || !/^\d{4}-\d{2}-\d{2}$/u.test(periodEnd)
+      || !/^\d{4}-\d{2}-\d{2}$/u.test(availableAt) || date > cutoffDate
+      || periodEnd > availableAt || availableAt > date || !(pb > 0) || !(close > 0) || !(bvps > 0)
+      || Math.abs(close / bvps - pb) > Math.max(0.02, pb * 0.02)
+      || !/^https:\/\/www\.twse\.com\.tw\/rwd\/zh\/afterTrading\/BWIBBU\?/u.test(String(row.sourceUrl || ''))
+      || String(row.bookValueSourceRef || '') !== String(row.sourceUrl || '')) throw new Error(`auo_historical_pb_row_invalid:${date}`);
+    const month = date.slice(0, 7);
+    if (months.has(month)) throw new Error('auo_historical_pb_month_duplicate');
+    months.add(month);
+    return { ...row, date, pb, close, bookValuePerShare: bvps } as HistoricalPbRow;
+  });
+  const pbs = rows.map((row) => row.pb);
+  return { rows, p25: round(interpolatedPercentile(pbs, 0.25), 2), p50: round(interpolatedPercentile(pbs, 0.5), 2), p75: round(interpolatedPercentile(pbs, 0.75), 2) };
+}
 
 const round = (value: number, digits = 2) => {
   const factor = 10 ** digits;
@@ -241,7 +287,9 @@ export function buildForecastScenario(args: {
     throw new Error('forward_common_equity_inputs_incomplete');
   }
   const endingCommonEquity = args.startingCommonEquityMillion
-    + forwardRows.reduce((sum, row) => sum + row.normalizedNetIncome, 0);
+    + forwardRows.reduce((sum, row) => sum + row.normalizedNetIncome, 0)
+    - args.adjustment.projectedDividendsMillion
+    + args.adjustment.projectedCapitalAndOciMillion;
   const forwardBvps = round(endingCommonEquity / args.endingCommonSharesMillion, 4);
   const pbValue = round(forwardBvps * args.adjustment.fairPb, 1);
   // P/B is the primary method for the cyclical-asset profile. P/E remains a
@@ -259,6 +307,8 @@ export function buildForecastScenario(args: {
       fairPb: args.adjustment.fairPb,
       forwardBvps,
       endingCommonEquity: round(endingCommonEquity, 0),
+      projectedDividends: args.adjustment.projectedDividendsMillion,
+      projectedCapitalAndOci: args.adjustment.projectedCapitalAndOciMillion,
       pbValue,
       referenceValue,
     },

@@ -1,4 +1,5 @@
 import { createHash, randomUUID } from 'crypto';
+import auoPbHistory from '../data/auo-pb-history-v1.json' with { type: 'json' };
 import { dailyCandidatePrices, monthlyCandidatePrices, isOfficialCandidatePriceSource, isOfficialCandidatePriceProvider } from './candidate-price-history';
 import { candidateRevisionHref } from './candidate-revision-query';
 import { freezeCandidateRevisionContext } from './candidate-revision-context.ts';
@@ -26,7 +27,7 @@ import {
   type TwValuationHistoryPoint,
 } from './tw-market';
 import { buildConservativeOfficialScenario, buildDriverMultipleScenario, buildEvEbitdaScenario, buildFinancialPbRoeScenario, buildForwardBvpsPbScenario, buildForwardEarningsScenario, buildTurnaroundEvSalesScenario } from './candidate-valuation';
-import { collectBatchedAuthorityRows, collectPagedAuthorityRows, financialFactAvailableAt, isCandidateHistoricalPriceAccessEnabled, isTransientResearchInfrastructureError, latestMonthlyPositiveValues } from './candidate-research-policy';
+import { collectBatchedAuthorityRows, collectPagedAuthorityRows, financialFactAvailableAt, isCandidateHistoricalPriceAccessEnabled, isTransientResearchInfrastructureError, latestMonthlyPositiveValues, pointInTimeMonthlyPbObservations, pointInTimePbLedgerObservations } from './candidate-research-policy';
 import { runCandidateHistoryBackfill, persistCandidateDailyPriceEvidence } from './candidate-history-backfill';
 import { scheduledSourceConnectorKeys, sourceExecutionPolicy } from './source-policy';
 import { loadLatestSourceRunLedger } from './source-run-ledger';
@@ -69,9 +70,9 @@ async function pagedResearchResult(read: (from: number, to: number) => PromiseLi
   return { data, error: null };
 }
 
-export const CANDIDATE_RESEARCH_MODEL_VERSION = 'candidate-research-v4.4.0';
+export const CANDIDATE_RESEARCH_MODEL_VERSION = 'candidate-research-v4.4.1';
 export const CANDIDATE_STAGE_MODEL_VERSION = 'candidate-stage-v4.0.0';
-export const CANDIDATE_VALUATION_MODEL_VERSION = 'valuation-v4.4.0';
+export const CANDIDATE_VALUATION_MODEL_VERSION = 'valuation-v4.4.1';
 export const ENTERPRISE_MULTIPLE_MODEL_VERSION = 'enterprise-multiple-v1';
 export const SHADOW_POLICY_VERSION = 'shadow-policy-v3';
 export const SHADOW_REQUIRED_SESSIONS = 30 as const;
@@ -302,9 +303,14 @@ async function executeCandidateResearchCycle(options: {
   pipelineRunId?: string | null;
   symbols?: string[];
   seedSymbols?: Array<{ symbol: string; name: string; market: 'TW' | 'US'; sector: string | null }>;
+  targetSession?: string;
+  targetCutoffAt?: string;
 }, lifecycle?: { runId: string; evaluatedAt: string }) {
   const dryRun = Boolean(options.dryRun);
-  let evaluatedAt = lifecycle?.evaluatedAt || new Date().toISOString();
+  let evaluatedAt = options.targetCutoffAt || lifecycle?.evaluatedAt || new Date().toISOString();
+  if (options.targetSession && (!Number.isFinite(Date.parse(evaluatedAt)) || evaluatedAt.slice(0, 10) < options.targetSession)) {
+    throw new Error('candidate_research_target_cutoff_invalid');
+  }
   if (dryRun) return {
     runId: randomUUID(), dryRun: true, candidateCount: 0, completedCount: 0, failedCount: 0,
     partialCount: 0, technicalSessionDate: null, blocked: false, terminalReason: null, marketEvidence: null,
@@ -338,6 +344,12 @@ async function executeCandidateResearchCycle(options: {
       .filter((session) => session <= evaluatedAt.slice(0, 10))
       .sort()
       .slice(-1320);
+  }
+  if (options.targetSession) {
+    if (!/^\d{4}-\d{2}-\d{2}$/u.test(options.targetSession) || !marketSessions.includes(options.targetSession)) {
+      throw new Error('candidate_research_target_session_not_official');
+    }
+    marketSessions = marketSessions.filter((session) => session <= options.targetSession!);
   }
   if (master.length === 0) throw new Error('official_stock_authority_missing');
   if (marketSessions.length < 2) throw new Error('official_trading_calendar_missing');
@@ -893,8 +905,17 @@ async function executeCandidateResearchCycle(options: {
         peObservations.push({ date: point.date, value: point.peRatio });
         pbObservations.push({ date: point.date, value: point.pbRatio });
       }
+      const businessProfile = getCandidateBusinessProfile(stock.symbol);
       const monthlyPeObservations = latestMonthlyPositiveValues(peObservations);
-      const monthlyPbObservations = latestMonthlyPositiveValues(pbObservations);
+      const rawMonthlyPbObservations = latestMonthlyPositiveValues(pbObservations);
+      const pairedPbObservations = pointInTimeMonthlyPbObservations(officialMultiples, bars, evaluatedAt);
+      const committedPbObservations = stock.symbol === '2409'
+        ? pointInTimePbLedgerObservations(auoPbHistory, evaluatedAt)
+        : [];
+      const monthlyPbObservations = businessProfile
+        ? latestMonthlyPositiveValues([...pairedPbObservations, ...committedPbObservations]
+          .map((row) => ({ date: row.date, value: row.pbRatio })))
+        : rawMonthlyPbObservations;
       const historicalPeRatios = monthlyPeObservations.map((row) => row.value);
       const historicalPbRatios = monthlyPbObservations.map((row) => row.value);
       if (eps?.epsTtm != null || values?.peRatio != null || values?.pbRatio != null) {
@@ -932,7 +953,6 @@ async function executeCandidateResearchCycle(options: {
       });
       const reportedFacts = preferOfficialReportedFinancialFacts(reportedFactRows);
       const officialReportedFacts = reportedFacts.filter((fact) => fact.authorityTier === 'official_filing');
-      const businessProfile = getCandidateBusinessProfile(stock.symbol);
       const earningsBridge = buildForwardEarningsBridge(reportedFacts, { symbol: stock.symbol, evaluationAt: evaluatedAt });
       const forwardCommonIncomeBridge = businessProfile?.businessModel === 'cyclical_asset'
         ? buildForwardCommonIncomeBridge(reportedFacts, { symbol: stock.symbol, evaluationAt: evaluatedAt })
@@ -1943,11 +1963,13 @@ export async function runCandidateResearchCycle(options: {
   pipelineRunId?: string | null;
   symbols?: string[];
   seedSymbols?: Array<{ symbol: string; name: string; market: 'TW' | 'US'; sector: string | null }>;
+  targetSession?: string;
+  targetCutoffAt?: string;
 }) {
   if (options.dryRun) return executeCandidateResearchCycle(options);
   const supabase = getSupabaseServerClient();
   const runId = randomUUID();
-  const evaluatedAt = new Date().toISOString();
+  const evaluatedAt = options.targetCutoffAt || new Date().toISOString();
   const initialRun = await supabase.from('candidate_research_runs').insert({
     id: runId,
     evaluation_at: evaluatedAt,

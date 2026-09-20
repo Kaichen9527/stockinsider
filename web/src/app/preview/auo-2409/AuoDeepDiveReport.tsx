@@ -43,7 +43,7 @@ const scenarios = (Object.entries(auoScenarioAdjustments) as Array<[keyof typeof
   dilutedSharesMillion: AUO_DILUTED_SHARES_MILLION,
   startingCommonEquityMillion: AUO_COMMON_EQUITY_MILLION,
   endingCommonSharesMillion: AUO_ENDING_COMMON_SHARES_MILLION,
-  forwardQuarterCount: 4,
+  forwardQuarterCount: 5,
   valuationYear: 2027,
 }));
 

@@ -21834,7 +21834,7 @@ export async function runRevenueIngestion(options?: { dryRun?: boolean }) {
   return { runId: randomUUID(), dryRun, revenueRecords, fundamentalRecords };
 }
 
-export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestion?: boolean; mode?: 'core' | 'full' }) {
+export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestion?: boolean; mode?: 'core' | 'full'; researchSession?: string; researchCutoffAt?: string }) {
   const dryRun = Boolean(options?.dryRun);
   const skipIngestion = Boolean(options?.skipIngestion);
   const mode = options?.mode || (dryRun ? 'full' : 'core');
@@ -21933,6 +21933,8 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
         const result = await runCandidateResearchCycle({
           dryRun,
           pipelineRunId,
+          targetSession: options?.researchSession,
+          targetCutoffAt: options?.researchCutoffAt,
           seedSymbols: TW_STORY_RESEARCH_SEEDS.map((seed) => ({ symbol: seed.symbol, name: seed.name, market: seed.market, sector: seed.sector })),
         });
         if (!dryRun && result.blocked) {
