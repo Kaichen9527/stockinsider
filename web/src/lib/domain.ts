@@ -22135,10 +22135,7 @@ export async function runCandidateResearchCanary(options: { symbols: string[]; d
   if (symbols.length < 1 || symbols.length > 5 || symbols.some((symbol) => !/^\d{4}$/u.test(symbol))) {
     throw new Error('candidate_research_canary_symbol_scope_invalid');
   }
-  const seedSymbols = TW_STORY_RESEARCH_SEEDS
-    .filter((seed) => seed.market === 'TW' && symbols.includes(seed.symbol))
-    .map((seed) => ({ symbol: seed.symbol, name: seed.name, market: 'TW' as const, sector: seed.sector || null }));
-  return runCandidateResearchCycle({ dryRun: Boolean(options.dryRun), symbols, seedSymbols });
+  return runCandidateResearchCycle({ dryRun: Boolean(options.dryRun), symbols, seedSymbols: [] });
 }
 
 export async function runPipelineDispatchFlow(options?: { dryRun?: boolean }) {

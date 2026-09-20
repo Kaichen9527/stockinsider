@@ -42,15 +42,20 @@ unvalidated mirror rows.
 ## Valuation and presentation
 
 - The AUO method requires eight reported quarters of revenue, gross profit,
-  operating income, common income, diluted EPS and diluted weighted shares, plus
-  the latest common equity and ending common shares. Its denominator is 50 explicit
-  field-periods.
+  operating income and common income, plus latest-period common equity and ending
+  common shares. Its method-specific denominator is 34 explicit field-periods;
+  diluted EPS and weighted-average EPS shares are not P/B inputs.
 - The forward equity bridge is `starting common equity + projected common income
   - projected dividends + projected capital/OCI`. Future dividends and capital/OCI
   are currently explicit zero model assumptions, not reported facts.
-- At least 48 official P/B observations are required. Bear, base and bull targets
-  use the 25th, 50th and 75th percentile P/B respectively. If the equity bridge or
-  P/B history is incomplete, no target is published.
+- At least 48 distinct monthly official P/B observations are required. Each one
+  must reconcile to the BVPS that was public on that date, retaining the market
+  source and BVPS source. Bear, base and bull targets use the 25th, 50th and 75th
+  percentile P/B respectively. If the equity bridge or P/B history is incomplete,
+  no target is published.
+- The read-only preview now uses `starting common equity + the next four forecast
+  quarters of common income` divided by ending common shares. P/E is shown as a
+  cross-check and no longer enters the primary P/B target through a manual blend.
 - Candidate revisions now include actual daily sessions with MA5/20/60/120/240.
   Missing trading sessions are not interpolated. Existing monthly evidence remains
   separate.
@@ -66,6 +71,11 @@ successful or partial receipt for the current research model version. The shared
 systemd `flock` and production write lease continue to serialize the actual run.
 This contract is covered locally, but the real 2409 acquisition-to-publication
 path has not been executed on production in this change.
+
+The symbol-scoped canary resolves 2409 directly from the cutoff-bound official
+stock master, so it does not depend on a recent social mention or global seed. It
+also leaves the globally claimed document-receipt queue to the serialized document
+worker; a one-stock canary cannot lease or write another issuer's receipt.
 
 ## Capacity and cost decision
 
@@ -98,7 +108,7 @@ Official references:
 
 ## Verification
 
-- Focused Node/TypeScript contracts: 88 passed, 0 failed.
+- Focused AUO, source-provenance and scheduling contracts: passed.
 - TypeScript: passed.
 - ESLint: passed with repository-existing warnings only.
 - Next.js production build: passed; all 89 static pages generated.

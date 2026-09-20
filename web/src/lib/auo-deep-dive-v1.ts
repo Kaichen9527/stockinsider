@@ -5,6 +5,8 @@ export const AUO_AS_OF = '2026-09-18';
 export const AUO_PRICE = 30.35;
 export const AUO_DILUTED_SHARES_MILLION = 7_547;
 export const AUO_BOOK_VALUE_PER_SHARE = 20.46;
+export const AUO_COMMON_EQUITY_MILLION = 154_397.339;
+export const AUO_ENDING_COMMON_SHARES_MILLION = 7_547.098972;
 
 export const auoQuarterlyActuals = [
   { period: '2024Q3', revenue: 77_748, grossProfit: 8_454, operatingIncome: -310, commonNetIncome: -926, reportedEps: -0.12, grossMargin: 10.9 },
@@ -66,21 +68,21 @@ export const auoScenarioAdjustments: Record<'bear' | 'base' | 'bull', ScenarioAd
     revenueMultiplier: { mobility: 0.95, vertical: 0.94, display: 0.92, other: 0.95 },
     marginDelta: { mobility: -0.012, vertical: -0.015, display: -0.018, other: -0.01 },
     fairPe: null,
-    fairPb: 0.75,
+    fairPb: 0.70,
   },
   base: {
     label: '基本',
     revenueMultiplier: { mobility: 1, vertical: 1, display: 1, other: 1 },
     marginDelta: { mobility: 0, vertical: 0, display: 0, other: 0 },
     fairPe: 20,
-    fairPb: 1.0,
+    fairPb: 0.80,
   },
   bull: {
     label: '樂觀',
     revenueMultiplier: { mobility: 1.06, vertical: 1.07, display: 1.06, other: 1.04 },
     marginDelta: { mobility: 0.020, vertical: 0.020, display: 0.025, other: 0.012 },
     fairPe: 24,
-    fairPb: 1.35,
+    fairPb: 0.91,
   },
 };
 
@@ -202,8 +204,8 @@ export const auoArticleSections = [
     id: 'valuation', number: '06', title: '財務預估與估值：現價需要的獲利，比基本情境快兩步',
     paragraphs: [
       '模型由 2026Q2 已揭露的分部組成與營益率出發，下一個未公布季度遵循公司指引：Mobility 營收約持平、Vertical 低個位數增長、Display 小幅下降。2027 年的基本情境讓 Mobility 與 Vertical 維持中個位數增長，Display 到下半年才接近損平。分部營業利益加總後，再扣公司與其他成本、加入經常性業外、20%稅率與非控制權益，得到歸屬普通股正常化淨利。未指定的一次性處分、匯兌與減損一律為零。',
-      'P/E 在接近損平時非常敏感：EPS 從 0.3 元變成 0.6 元，倍數會直接減半，卻不代表企業價值減半。因此保守情境 EPS 為負或接近零時標示不適用；基本與樂觀情境才用 20 倍與 24 倍檢查成長能否支撐現價。同時以普通股權益推得每股淨值 20.46 元，套用 0.75、1.0、1.35 倍 P/B。參考價以 P/B 為主要權重，因為友達仍有大量循環資產與不穩定 EPS；P/E 是驗證轉型獲利的第二把尺。',
-      '即使基本情境持續改善，估值仍落在現價以下；樂觀情境必須同時滿足 Display 明顯改善、Mobility／Vertical 成長且提利潤，才接近現價。反推更直觀：30.35 元若給 20 倍，需要 EPS 1.52 元、約 115 億元歸屬普通股淨利。以約 2,830 億元年營收計算，淨利率約 4.1%。這不是不可能，但相較 2026 上半年接近損平，代表市場已把一大段尚未發生的改善買進去。',
+      'P/E 在接近損平時非常敏感：EPS 從 0.3 元變成 0.6 元，倍數會直接減半，卻不代表企業價值減半。因此保守情境 EPS 為負或接近零時標示不適用；基本與樂觀情境才用 20 倍與 24 倍檢查成長能否支撐現價。主要估值則從 2026Q2 歸屬普通股權益出發，加入未來四季各情境的正常化歸屬淨利，再除以期末普通股數得到 Forward BVPS，套用可驗證歷史 P/B 的第 25、50、75 百分位 0.70、0.80、0.91 倍。P/E 只作交叉檢查，不再以人工權重混入主目標價。',
+      '即使基本情境持續改善，估值仍落在現價以下；以可驗證的歷史 P/B 第 75 百分位交叉檢查，樂觀情境也仍低於現價。現價因此要求市場接受高於歷史上緣的 P/B，或要求 2027 獲利與 ROE 明顯超越本模型。反推更直觀：30.35 元若給 20 倍，需要 EPS 1.52 元、約 115 億元歸屬普通股淨利。以約 2,830 億元年營收計算，淨利率約 4.1%。這不是不可能，但相較 2026 上半年接近損平，代表市場已把一大段尚未發生的改善買進去。',
       '估值結論不是精確到小數點的目標價，而是條件區間。保守情境反映面板再轉弱與轉型利潤停滯；基本情境反映兩個新事業穩定貢獻、Display 緩慢損平；樂觀情境才包含三支柱同時上修。沒有可校準的歷史命中率，本研究不替三種情境填主觀機率，也不沿用舊版 16.55 元。',
     ], sources: ['S1', 'S2', 'S3'],
   },
@@ -240,6 +242,6 @@ export const auoAssumptions = [
   { id: 'A4', label: '2027 基本情境', value: 'Mobility／Vertical 中個位數成長，Display H2 接近損平', basis: '不是公司指引，依分部獲利與產業供需推估' },
   { id: 'A5', label: '一次性項目', value: '未來季度預設 0', basis: '資產處分、匯兌、減損未具可預測性，不灌入正常化 EPS' },
   { id: 'A6', label: '稅率與非控制權益', value: '正稅前利益 20%；每季非控制權益 1 億元', basis: '簡化假設，敏感度低於分部營益率；法說後更新' },
-  { id: 'A7', label: '估值權重', value: 'P/B 65%、P/E 35%', basis: 'EPS 接近損平且資產密集；P/E 作轉型獲利驗證' },
+  { id: 'A7', label: '估值錨點', value: '歷史 P/B 第 25／50／75 百分位為 0.70／0.80／0.91 倍', basis: 'Forward BVPS × 歷史 P/B 為主；P/E 只作轉型獲利交叉檢查，不混成主目標價' },
   { id: 'A8', label: '旺宏格式核對', value: '沿用已找回的章節要求，原 PDF 尚未重新逐頁核對', basis: '原檔仍為 iCloud 佔位，沒有用舊 seed 數字代替' },
 ];

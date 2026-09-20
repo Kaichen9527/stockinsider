@@ -30,6 +30,12 @@ test('hourly research resume ignores symbol-scoped canary receipts', () => {
   assert.match(route, /[.]not\('pipeline_run_id', 'is', null\)/u);
 });
 
+test('symbol-scoped research resolves official symbols without draining the global document queue', () => {
+  const research = fs.readFileSync(new URL('../web/src/lib/candidate-research.ts', import.meta.url), 'utf8');
+  assert.match(research, /for \(const symbol of requestedSymbols\)[\s\S]*stockMaster[.]get\(symbol\)[\s\S]*candidates[.]set\(official[.]stockId/u);
+  assert.match(research, /requestedSymbols[.]length === 0[\s\S]*processCandidateFinancialDocumentReceipts\(20\)[\s\S]*: \[\]/u);
+});
+
 test('both scheduled research publications drain their full phase before invoking the pipeline', () => {
   for (const service of ['stockinsider-taiwan-data-preliminary', 'stockinsider-research-cycle']) {
     const unit = fs.readFileSync(new URL(`../deployment/vps/systemd/${service}.service`, import.meta.url), 'utf8');

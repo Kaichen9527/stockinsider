@@ -351,6 +351,10 @@ async function executeCandidateResearchCycle(options: {
     loadPriorCandidateStages(supabase),
   ]);
   const stockMaster = new Map(master.map((item) => [item.symbol, item]));
+  const requestedSymbols = [...new Set((options.symbols || []).map((symbol) => String(symbol).trim().toUpperCase()))];
+  if (requestedSymbols.some((symbol) => !/^\d{4}$/u.test(symbol)) || requestedSymbols.length > 30) {
+    throw new Error('candidate_research_symbol_scope_invalid');
+  }
   const candidates = new Map<string, { id: string; symbol: string; name: string; storedName: string; market: 'TW' | 'US'; sector: string | null }>();
   const mentionsByStock = new Map<string, Row[]>();
   const eligibleMentionsAtRun = allMentions.filter((mention) => candidateMentionDiscoveryEligible(mention.provenance, String(mention.platform || '')));
@@ -410,9 +414,20 @@ async function executeCandidateResearchCycle(options: {
       }
     }
   }
-  const requestedSymbols = [...new Set((options.symbols || []).map((symbol) => String(symbol).trim().toUpperCase()))];
-  if (requestedSymbols.some((symbol) => !/^\d{4}$/u.test(symbol)) || requestedSymbols.length > 30) {
-    throw new Error('candidate_research_symbol_scope_invalid');
+  // A bounded canary names its complete authority scope explicitly. Resolve
+  // those symbols from the point-in-time official stock master even when they
+  // have no recent mention, prior stage, or global research seed.
+  for (const symbol of requestedSymbols) {
+    const official = stockMaster.get(symbol);
+    if (!official) continue;
+    candidates.set(official.stockId, {
+      id: official.stockId,
+      symbol,
+      name: official.name,
+      storedName: official.name,
+      market: 'TW',
+      sector: official.sector,
+    });
   }
   const proposedUniverse = [...candidates.values()]
     .filter((stock) => requestedSymbols.length === 0 || requestedSymbols.includes(stock.symbol))
@@ -499,7 +514,12 @@ async function executeCandidateResearchCycle(options: {
     : { candidateCount: 0, fetchedFilings: 0, parsedFacts: 0, writtenFacts: 0, symbolsWithFacts: [] as string[], attemptedSymbols: [] as string[], failures: [] as string[] };
   // Drain real document receipts before freezing the run's fact cutoff. Parser
   // failures remain per-document evidence gaps, never fabricated target prices.
-  const officialDocumentParsing = await processCandidateFinancialDocumentReceipts(20);
+  // The receipt worker claims globally. A symbol-scoped canary must never lease
+  // or mutate another issuer's pending document, so scoped runs leave receipt
+  // parsing to the separately serialized document worker.
+  const officialDocumentParsing = requestedSymbols.length === 0
+    ? await processCandidateFinancialDocumentReceipts(20)
+    : [];
   // Validation is not acquisition: a covered company can gain contradictory
   // evidence without entering the missing-fields refresh backlog.
   const officialFinancialValidation = await validatePendingOfficialFinancials(proposedUniverse.map((stock) => stock.id));

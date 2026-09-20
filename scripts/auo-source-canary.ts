@@ -3,14 +3,18 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { buildForwardCommonIncomeBridge, type ReportedFinancialFact } from '../web/src/lib/forward-earnings-bridge.ts';
 import { buildForwardBvpsPbScenario } from '../web/src/lib/candidate-valuation.ts';
 import { parseExchangeFinancialEndpoint, TWSE_FINANCIAL_ENDPOINTS } from '../web/src/lib/candidate-financial-acquisition.ts';
+import { validateAuoHistoricalPbRows } from './auo-source-canary-policy.ts';
 
 const SYMBOL = '2409';
 const COMPANY_PROFILE_URL = 'https://openapi.twse.com.tw/v1/opendata/t187ap03_L';
 
 type Ledger = {
   facts: ReportedFinancialFact[];
-  historicalPb: number[];
-  historicalPbRows: Array<{ date: string; pb: number; sourceUrl: string }>;
+  historicalPbRows: Array<{
+    date: string; pb: number; close: number; bookValuePerShare: number;
+    bookValuePeriodEnd: string; bookValueAvailableAt: string;
+    bookValueSourceRef: string; sourceUrl: string;
+  }>;
   currentPrice: number;
   priceSession: string;
 };
@@ -39,10 +43,11 @@ if (!ledgerPath || !outputPath) {
 }
 const ledger = JSON.parse(await readFile(ledgerPath, 'utf8')) as Ledger;
 if (!Array.isArray(ledger.facts) || ledger.facts.length !== 32
-  || !Array.isArray(ledger.historicalPb) || ledger.historicalPb.length < 48
   || !(ledger.currentPrice > 0) || !/^\d{4}-\d{2}-\d{2}$/u.test(ledger.priceSession)) {
   throw new Error('auo_canary_ledger_incomplete');
 }
+const historicalPbRows = validateAuoHistoricalPbRows(ledger.historicalPbRows);
+const historicalPb = historicalPbRows.map((row) => row.pb);
 
 const [incomeSource, balanceSource, companySource] = await Promise.all([
   officialJson(TWSE_FINANCIAL_ENDPOINTS.generalIncome),
@@ -83,7 +88,7 @@ const valuation = buildForwardBvpsPbScenario({
   },
   projectedDividends: { bear: 0, base: 0, bull: 0 },
   projectedCapitalAndOci: { bear: 0, base: 0, bull: 0 },
-  historicalPbRatios: ledger.historicalPb,
+  historicalPbRatios: historicalPb,
   targetPeriodEnd: bridge.forecastPeriod.end,
 });
 if (!valuation) throw new Error('auo_forward_bvps_pb_valuation_incomplete');
@@ -101,7 +106,7 @@ const report = {
   sourceCoverage: {
     reportedQuarterFacts: ledger.facts.length,
     requiredQuarterFacts: 32,
-    historicalPbObservations: ledger.historicalPb.length,
+    historicalPbObservations: historicalPb.length,
     requiredPbObservations: 48,
     latestOfficialPeriod: commonEquity.periodEnd,
   },
@@ -115,11 +120,12 @@ const report = {
   },
   bridge,
   valuation,
+  historicalPbEvidence: historicalPbRows,
   market: {
     currentPrice: ledger.currentPrice,
     priceSession: ledger.priceSession,
     currentPb: Math.round(ledger.currentPrice / derivedBvps * 100) / 100,
-    latestPbSource: ledger.historicalPbRows.at(-1)?.sourceUrl || null,
+    latestPbSource: historicalPbRows.at(-1)?.sourceUrl || null,
   },
 };
 await writeFile(outputPath, `${JSON.stringify(report, null, 2)}\n`, 'utf8');

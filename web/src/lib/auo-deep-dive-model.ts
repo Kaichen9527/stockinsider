@@ -51,6 +51,8 @@ export type ForecastScenario = {
     fairPe: number | null;
     peValue: number | null;
     fairPb: number;
+    forwardBvps: number;
+    endingCommonEquity: number;
     pbValue: number;
     referenceValue: number;
   };
@@ -205,7 +207,9 @@ export function buildForecastScenario(args: {
   baseQuarters: ForecastQuarterInput[];
   adjustment: ScenarioAdjustment;
   dilutedSharesMillion: number;
-  bookValuePerShare: number;
+  startingCommonEquityMillion: number;
+  endingCommonSharesMillion: number;
+  forwardQuarterCount: number;
   valuationYear: number;
 }): ForecastScenario {
   const quarters = args.baseQuarters.map((quarter) => calculateQuarter(
@@ -230,10 +234,20 @@ export function buildForecastScenario(args: {
   const peValue = valuationYear && args.adjustment.fairPe && valuationYear.normalizedEps > 0.1
     ? round(valuationYear.normalizedEps * args.adjustment.fairPe, 1)
     : null;
-  const pbValue = round(args.bookValuePerShare * args.adjustment.fairPb, 1);
-  const referenceValue = peValue === null
-    ? pbValue
-    : round(peValue * 0.35 + pbValue * 0.65, 1);
+  const forwardRows = quarters.slice(0, args.forwardQuarterCount);
+  if (forwardRows.length !== args.forwardQuarterCount
+    || !(args.startingCommonEquityMillion > 0)
+    || !(args.endingCommonSharesMillion > 0)) {
+    throw new Error('forward_common_equity_inputs_incomplete');
+  }
+  const endingCommonEquity = args.startingCommonEquityMillion
+    + forwardRows.reduce((sum, row) => sum + row.normalizedNetIncome, 0);
+  const forwardBvps = round(endingCommonEquity / args.endingCommonSharesMillion, 4);
+  const pbValue = round(forwardBvps * args.adjustment.fairPb, 1);
+  // P/B is the primary method for the cyclical-asset profile. P/E remains a
+  // separately displayed earnings cross-check and must not silently change the
+  // primary target through an arbitrary blend.
+  const referenceValue = pbValue;
   return {
     id: args.id,
     label: args.adjustment.label,
@@ -243,6 +257,8 @@ export function buildForecastScenario(args: {
       fairPe: args.adjustment.fairPe,
       peValue,
       fairPb: args.adjustment.fairPb,
+      forwardBvps,
+      endingCommonEquity: round(endingCommonEquity, 0),
       pbValue,
       referenceValue,
     },

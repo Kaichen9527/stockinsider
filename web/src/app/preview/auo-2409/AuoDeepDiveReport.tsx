@@ -1,8 +1,9 @@
 import priceHistory from '@/data/auo-price-history-v1.json';
 import {
   AUO_AS_OF,
-  AUO_BOOK_VALUE_PER_SHARE,
+  AUO_COMMON_EQUITY_MILLION,
   AUO_DILUTED_SHARES_MILLION,
+  AUO_ENDING_COMMON_SHARES_MILLION,
   AUO_PRICE,
   AUO_RESEARCH_VERSION,
   auoArticleSections,
@@ -40,7 +41,9 @@ const scenarios = (Object.entries(auoScenarioAdjustments) as Array<[keyof typeof
   baseQuarters: auoForecastBaseQuarters,
   adjustment,
   dilutedSharesMillion: AUO_DILUTED_SHARES_MILLION,
-  bookValuePerShare: AUO_BOOK_VALUE_PER_SHARE,
+  startingCommonEquityMillion: AUO_COMMON_EQUITY_MILLION,
+  endingCommonSharesMillion: AUO_ENDING_COMMON_SHARES_MILLION,
+  forwardQuarterCount: 4,
   valuationYear: 2027,
 }));
 
@@ -136,10 +139,10 @@ function ValuationTable() {
     <div className="table-scroll">
       <table>
         <caption>2027 情境估值｜P/B 為主、P/E 為交叉檢查</caption>
-        <thead><tr><th>情境</th><th>營收</th><th>營益率</th><th>正常化 EPS</th><th>現價 Forward P/E</th><th>合理 P/E 值</th><th>合理 P/B 值</th><th>參考價</th></tr></thead>
+        <thead><tr><th>情境</th><th>營收</th><th>營益率</th><th>正常化 EPS</th><th>現價 Forward P/E</th><th>合理 P/E 值</th><th>Forward BVPS</th><th>歷史 P/B 錨點</th><th>主要參考價</th></tr></thead>
         <tbody>{scenarios.map((scenario) => {
           const annual = scenario.annual.find((row) => row.year === 2027)!;
-          return <tr key={scenario.id}><th>{scenario.label}</th><td>{nf.format(annual.revenue)}</td><td>{fmt(annual.operatingIncome / annual.revenue * 100, '%')}</td><td>{annual.normalizedEps.toFixed(2)}</td><td>{fmt(calculateForwardPe(AUO_PRICE, annual.normalizedEps), 'x')}</td><td>{scenario.valuation.peValue === null ? '不適用' : `$${scenario.valuation.peValue.toFixed(1)}`}</td><td>${scenario.valuation.pbValue.toFixed(1)}</td><td className="value-cell">${scenario.valuation.referenceValue.toFixed(1)}</td></tr>;
+          return <tr key={scenario.id}><th>{scenario.label}</th><td>{nf.format(annual.revenue)}</td><td>{fmt(annual.operatingIncome / annual.revenue * 100, '%')}</td><td>{annual.normalizedEps.toFixed(2)}</td><td>{fmt(calculateForwardPe(AUO_PRICE, annual.normalizedEps), 'x')}</td><td>{scenario.valuation.peValue === null ? '不適用' : `$${scenario.valuation.peValue.toFixed(1)}`}</td><td>${scenario.valuation.forwardBvps.toFixed(2)}</td><td>{scenario.valuation.fairPb.toFixed(2)}x</td><td className="value-cell">${scenario.valuation.referenceValue.toFixed(1)}</td></tr>;
         })}</tbody>
       </table>
     </div>
@@ -223,7 +226,7 @@ export default function AuoDeepDiveReport() {
           <div className="price-stamp"><span>最新完整交易日</span><strong>NT$ {AUO_PRICE.toFixed(2)}</strong><small>{AUO_AS_OF} · TWSE</small></div>
         </div>
         <div className="verdict-grid">
-          <article><span>中期投資吸引力</span><strong className="caution">偏低</strong><p>基本情境參考價 ${baseScenario.valuation.referenceValue.toFixed(1)}；現價已接近樂觀情境。</p></article>
+          <article><span>中期投資吸引力</span><strong className="caution">偏低</strong><p>基本情境參考價 ${baseScenario.valuation.referenceValue.toFixed(1)}；現價高於歷史 P/B 上緣推得的樂觀情境。</p></article>
           <article><span>短期波段條件</span><strong className="watch">{technicalUnavailable ? '資料過期，停用價位' : '偏多，等待'}</strong><p>{technicalUnavailable ? `最後完整交易日 ${technical?.asOf ?? '待確認'}；取得新資料並重算前不提供進場價格。` : `均線多頭、動能為正；等回測承接或 ${fmt(entryPlan.breakout.trigger)} 元放量突破。`}</p></article>
           <article><span>2027 基本情境</span><strong>EPS {base2027.normalizedEps.toFixed(2)}</strong><p>Forward P/E {fmt(calculateForwardPe(AUO_PRICE, base2027.normalizedEps), 'x')}；接近損平時倍數敏感。</p></article>
         </div>

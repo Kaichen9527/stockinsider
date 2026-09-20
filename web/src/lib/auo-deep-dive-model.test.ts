@@ -2,8 +2,9 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import priceHistory from '../data/auo-price-history-v1.json' with { type: 'json' };
 import {
-  AUO_BOOK_VALUE_PER_SHARE,
+  AUO_COMMON_EQUITY_MILLION,
   AUO_DILUTED_SHARES_MILLION,
+  AUO_ENDING_COMMON_SHARES_MILLION,
   AUO_PRICE,
   auoForecastBaseQuarters,
   auoScenarioAdjustments,
@@ -36,7 +37,9 @@ test('bear base and bull cases preserve ordered 2027 earnings and valuation', ()
     baseQuarters: auoForecastBaseQuarters,
     adjustment,
     dilutedSharesMillion: AUO_DILUTED_SHARES_MILLION,
-    bookValuePerShare: AUO_BOOK_VALUE_PER_SHARE,
+    startingCommonEquityMillion: AUO_COMMON_EQUITY_MILLION,
+    endingCommonSharesMillion: AUO_ENDING_COMMON_SHARES_MILLION,
+    forwardQuarterCount: 4,
     valuationYear: 2027,
   }));
   const eps = rows.map((row) => row.annual.find((annual) => annual.year === 2027)!.normalizedEps);
@@ -44,6 +47,9 @@ test('bear base and bull cases preserve ordered 2027 earnings and valuation', ()
   assert.ok(rows[0].valuation.referenceValue < rows[1].valuation.referenceValue);
   assert.ok(rows[1].valuation.referenceValue < rows[2].valuation.referenceValue);
   assert.equal(rows[0].valuation.peValue, null, 'negative or near-break-even bear EPS cannot use P/E');
+  assert.equal(rows[1].valuation.referenceValue, rows[1].valuation.pbValue, 'P/E is a cross-check, not a hidden blend');
+  assert.ok(rows[0].valuation.forwardBvps < rows[1].valuation.forwardBvps);
+  assert.ok(rows[1].valuation.forwardBvps < rows[2].valuation.forwardBvps);
 });
 
 test('P/E fails closed for negative and near-zero EPS', () => {
