@@ -23,7 +23,9 @@ import {
   calculateTechnicalSnapshot,
   combineActualAndForecastYear,
   requiredEarningsAtMultiple,
+  type EntryPlan,
   type PriceBar,
+  type TechnicalSnapshot,
 } from '@/lib/auo-deep-dive-model';
 
 const nf = new Intl.NumberFormat('zh-TW', { maximumFractionDigits: 0 });
@@ -43,11 +45,6 @@ const scenarios = (Object.entries(auoScenarioAdjustments) as Array<[keyof typeof
 }));
 
 const baseScenario = scenarios.find((scenario) => scenario.id === 'base')!;
-const technical = calculateTechnicalSnapshot(
-  priceHistory as PriceBar[],
-  new Date('2026-09-19T00:00:00+08:00'),
-);
-const entryPlan = buildEntryPlan(technical);
 const reverse20 = requiredEarningsAtMultiple(AUO_PRICE, 20, AUO_DILUTED_SHARES_MILLION, 283_000);
 const sourceById = new Map(auoSources.map((source) => [source.id, source]));
 
@@ -90,7 +87,7 @@ function RevenueChart() {
   );
 }
 
-function PriceChart() {
+function PriceChart({ technical }: { technical: TechnicalSnapshot }) {
   const rows = (priceHistory as PriceBar[]).slice(-120);
   const width = 900;
   const height = 300;
@@ -191,20 +188,27 @@ function ActualTable() {
   );
 }
 
-function SectionExtras({ id }: { id: string }) {
+function SectionExtras({ id, technical, entryPlan }: {
+  id: string;
+  technical: TechnicalSnapshot | null;
+  entryPlan: EntryPlan;
+}) {
   if (id === 'history') return <ActualTable/>;
   if (id === 'business') return <RevenueChart/>;
   if (id === 'industry') return <div className="peer-grid">{auoPeerComparison.map((peer) => <article key={peer.company}><span>{peer.role}</span><h3>{peer.company}</h3><p className="peer-signal">{peer.signal}</p><p>{peer.implication}</p></article>)}</div>;
   if (id === 'growth') return <div className="driver-list">{auoGrowthDrivers.map((driver, index) => <article key={driver.title}><div className="driver-index">{String(index + 1).padStart(2, '0')}</div><div><h3>{driver.title}</h3><dl><dt>證據</dt><dd>{driver.evidence}</dd><dt>財務傳導</dt><dd>{driver.transmission}</dd><dt>何時反映</dt><dd>{driver.timing}</dd><dt>模型假設</dt><dd>{driver.financial}</dd><dt>反證</dt><dd>{driver.falsifier}</dd></dl><SourceLinks ids={driver.sources}/></div></article>)}</div>;
   if (id === 'valuation') return <><ForecastTable/><AnnualOutlookTable/><ValuationTable/><div className="reverse-box"><p className="eyebrow">現價反推</p><strong>20x P/E 需要 EPS {reverse20.eps.toFixed(2)} 元</strong><span>相當於歸屬普通股淨利約 {nf.format(reverse20.netIncome)} 百萬元、淨利率 {fmt(reverse20.netMargin * 100, '%')}。這比 2026H1 的獲利基礎高出一大段。</span></div></>;
-  if (id === 'entry' && technical) return <><PriceChart/><div className="indicator-strip">{[
+  if (id === 'entry' && technical) return <><PriceChart technical={technical}/><div className="indicator-strip">{[
     ['MA5', technical.ma5], ['MA20', technical.ma20], ['MA60', technical.ma60], ['MA120', technical.ma120], ['MA240', technical.ma240], ['MACD', technical.macd], ['RSI14', technical.rsi14], ['ATR14', technical.atr14],
-  ].map(([label, value]) => <div key={String(label)}><span>{label}</span><strong>{typeof value === 'number' ? value.toFixed(2) : '—'}</strong></div>)}</div><div className="scenario-cards"><article><span>劇本 A｜回測承接</span><h3>{fmt(entryPlan.pullback.lower)}–{fmt(entryPlan.pullback.upper)} 元</h3><p>量縮回測、守住區間並重新轉強才觸發。日收盤低於 {fmt(entryPlan.pullback.invalidation)} 元失效；目標 {fmt(entryPlan.pullback.firstTarget)}／{fmt(entryPlan.pullback.secondTarget)} 元，估算報酬風險比 {fmt(entryPlan.pullback.rewardRisk)}。</p></article><article><span>劇本 B｜放量突破</span><h3>收盤 &gt; {fmt(entryPlan.breakout.trigger)} 元</h3><p>成交量至少 {nf.format((entryPlan.breakout.minimumVolume ?? 0) / 1_000)} 張，且隔日不跌回。低於 {fmt(entryPlan.breakout.invalidation)} 元失效；量度目標 {fmt(entryPlan.breakout.secondTarget)} 元，報酬風險比 {fmt(entryPlan.breakout.rewardRisk)}。</p></article><article className="danger-card"><span>劇本 C｜條件失敗</span><h3>跌破 {fmt(entryPlan.pullback.invalidation)} 元</h3><p>或突破後兩日內跌回壓力下方，取消波段假設。期限二十個交易日，逾期用新資料重算。</p></article></div></>;
+  ].map(([label, value]) => <div key={String(label)}><span>{label}</span><strong>{typeof value === 'number' ? value.toFixed(2) : '—'}</strong></div>)}</div>{technical.stale ? <div className="reverse-box"><p className="eyebrow">技術資料已過期</p><strong>所有進場、目標與失效價暫停使用</strong><span>最後完整交易日為 {technical.asOf}；取得新資料並重算前，不顯示可執行價格。</span></div> : <div className="scenario-cards"><article><span>劇本 A｜回測承接</span><h3>{fmt(entryPlan.pullback.lower)}–{fmt(entryPlan.pullback.upper)} 元</h3><p>量縮回測、守住區間並重新轉強才觸發。日收盤低於 {fmt(entryPlan.pullback.invalidation)} 元失效；目標 {fmt(entryPlan.pullback.firstTarget)}／{fmt(entryPlan.pullback.secondTarget)} 元，估算報酬風險比 {fmt(entryPlan.pullback.rewardRisk)}。</p></article><article><span>劇本 B｜放量突破</span><h3>收盤 &gt; {fmt(entryPlan.breakout.trigger)} 元</h3><p>成交量至少 {nf.format((entryPlan.breakout.minimumVolume ?? 0) / 1_000)} 張，且隔日不跌回。低於 {fmt(entryPlan.breakout.invalidation)} 元失效；量度目標 {fmt(entryPlan.breakout.secondTarget)} 元，報酬風險比 {fmt(entryPlan.breakout.rewardRisk)}。</p></article><article className="danger-card"><span>劇本 C｜條件失敗</span><h3>跌破 {fmt(entryPlan.pullback.invalidation)} 元</h3><p>或突破後兩日內跌回壓力下方，取消波段假設。期限二十個交易日，逾期用新資料重算。</p></article></div>}</>;
   if (id === 'monitor') return <div className="table-scroll"><table><caption>研究更新條件</caption><thead><tr><th>頻率</th><th>追蹤項目</th><th>上修信號</th><th>下修信號</th></tr></thead><tbody>{auoMonitoringChecklist.map((row) => <tr key={row.metric}><th>{row.cadence}</th><td>{row.metric}</td><td>{row.upgrade}</td><td>{row.downgrade}</td></tr>)}</tbody></table></div>;
   return null;
 }
 
 export default function AuoDeepDiveReport() {
+  const technical = calculateTechnicalSnapshot(priceHistory as PriceBar[], new Date());
+  const entryPlan = buildEntryPlan(technical);
+  const technicalUnavailable = !technical || technical.stale;
   const base2027 = baseScenario.annual.find((row) => row.year === 2027)!;
   return (
     <main className="report-page">
@@ -220,7 +224,7 @@ export default function AuoDeepDiveReport() {
         </div>
         <div className="verdict-grid">
           <article><span>中期投資吸引力</span><strong className="caution">偏低</strong><p>基本情境參考價 ${baseScenario.valuation.referenceValue.toFixed(1)}；現價已接近樂觀情境。</p></article>
-          <article><span>短期波段條件</span><strong className="watch">偏多，等待</strong><p>均線多頭、動能為正；等回測承接或 {fmt(entryPlan.breakout.trigger)} 元放量突破。</p></article>
+          <article><span>短期波段條件</span><strong className="watch">{technicalUnavailable ? '資料過期，停用價位' : '偏多，等待'}</strong><p>{technicalUnavailable ? `最後完整交易日 ${technical?.asOf ?? '待確認'}；取得新資料並重算前不提供進場價格。` : `均線多頭、動能為正；等回測承接或 ${fmt(entryPlan.breakout.trigger)} 元放量突破。`}</p></article>
           <article><span>2027 基本情境</span><strong>EPS {base2027.normalizedEps.toFixed(2)}</strong><p>Forward P/E {fmt(calculateForwardPe(AUO_PRICE, base2027.normalizedEps), 'x')}；接近損平時倍數敏感。</p></article>
         </div>
         <p className="hero-footnote">研究用途，不構成個人化投資建議。事實、公司指引、研究估計與情境已分開標示。</p>
@@ -230,7 +234,7 @@ export default function AuoDeepDiveReport() {
         <aside className="toc"><p>章節</p>{auoArticleSections.map((section) => <a href={`#${section.id}`} key={section.id}><span>{section.number}</span>{section.title.split('：')[0]}</a>)}<a href="#appendix"><span>09</span>來源與假設</a></aside>
         <article className="article-body">
           <section className="opening-note"><p className="eyebrow">焦點內容</p><h2>這不是「面板會不會漲」的一題研究</h2><p>友達的估值分母仍是重資產面板，估值分子卻開始加入車用系統與垂直場域。正確的方法不是替整家公司挑一個漂亮的 P/E，而是分業務推演收入與利潤，再問市場價格要求哪一組假設同時成真。</p></section>
-          {auoArticleSections.map((section) => <section className="report-section" id={section.id} key={section.id}><div className="section-heading"><span>{section.number}</span><h2>{section.title}</h2></div>{section.paragraphs.map((paragraph, index) => <p key={index}>{paragraph}{index === section.paragraphs.length - 1 ? <SourceLinks ids={section.sources}/> : null}</p>)}<SectionExtras id={section.id}/></section>)}
+          {auoArticleSections.map((section) => <section className="report-section" id={section.id} key={section.id}><div className="section-heading"><span>{section.number}</span><h2>{section.title}</h2></div>{section.paragraphs.map((paragraph, index) => <p key={index}>{paragraph}{index === section.paragraphs.length - 1 ? <SourceLinks ids={section.sources}/> : null}</p>)}<SectionExtras id={section.id} technical={technical} entryPlan={entryPlan}/></section>)}
 
           <section className="report-section appendix" id="appendix">
             <div className="section-heading"><span>09</span><h2>來源、假設與可重算邊界</h2></div>

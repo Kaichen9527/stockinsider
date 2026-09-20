@@ -1,6 +1,19 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { candidateValuationPolicy, VALUATION_REMEDIATION_SYMBOLS } from './candidate-valuation-policy.ts';
+import { candidateValuationPolicy, isForwardBvpsPbAnchorAligned, VALUATION_REMEDIATION_SYMBOLS } from './candidate-valuation-policy.ts';
+
+test('forward BVPS anchor must match the latest reported bridge quarter', () => {
+  assert.equal(isForwardBvpsPbAnchorAligned({
+    bridgeLatestPeriodEnd: '2026-06-30',
+    commonEquityPeriodEnd: '2025-12-31',
+    commonSharesPeriodEnd: '2025-12-31',
+  }), false);
+  assert.equal(isForwardBvpsPbAnchorAligned({
+    bridgeLatestPeriodEnd: '2026-06-30',
+    commonEquityPeriodEnd: '2026-06-30',
+    commonSharesPeriodEnd: '2026-06-30',
+  }), true);
+});
 
 test('a complete forward bridge takes precedence over a generic PB reference', () => {
   assert.equal(candidateValuationPolicy({ multipleMonthsCovered:60,next12mBridgeComplete:true,verifiedTurnaroundPath:false,

@@ -31,7 +31,7 @@ import { runCandidateHistoryBackfill, persistCandidateDailyPriceEvidence } from 
 import { scheduledSourceConnectorKeys, sourceExecutionPolicy } from './source-policy';
 import { loadLatestSourceRunLedger } from './source-run-ledger';
 import type { CandidateShadowProgress, CandidateStageCard } from './types';
-import { candidateValuationPolicy, VALUATION_REMEDIATION_SYMBOLS } from './candidate-valuation-policy';
+import { candidateValuationPolicy, isForwardBvpsPbAnchorAligned, VALUATION_REMEDIATION_SYMBOLS } from './candidate-valuation-policy';
 import { buildDeterministicCandidateSections } from './candidate-detail';
 import { advanceRiskEpisode, candidateRiskAction } from './candidate-risk-action';
 import { buildMarketEvidenceSnapshot } from './market-evidence';
@@ -1024,7 +1024,12 @@ async function executeCandidateResearchCycle(options: {
         && forwardCommonIncomeBridge?.status === 'complete'
         && latestCommonEquityFact != null && latestCommonEquityFact.value > 0
         && latestCommonSharesFact != null && latestCommonSharesFact.value > 0
-        && latestCommonEquityFact.periodEnd === latestCommonSharesFact.periodEnd
+        && isForwardBvpsPbAnchorAligned({
+          bridgeLatestPeriodEnd: forwardCommonIncomeBridge?.status === 'complete'
+            ? forwardCommonIncomeBridge.actual.latestPeriodEnd : null,
+          commonEquityPeriodEnd: latestCommonEquityFact?.periodEnd ?? null,
+          commonSharesPeriodEnd: latestCommonSharesFact?.periodEnd ?? null,
+        })
         && historicalPbRatios.length >= 48;
       if ((currentEvEbitda != null && currentEvEbitda < 1000) || (currentEvSales != null && currentEvSales < 1000)) {
         const enterpriseWrite = await supabase.rpc('append_candidate_enterprise_multiple_snapshot_v6', {

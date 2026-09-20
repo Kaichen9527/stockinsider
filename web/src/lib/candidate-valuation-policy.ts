@@ -19,6 +19,16 @@ export type CandidateValuationBasis =
   | 'turnaround_conditional'
   | 'no_defensible_valuation_method';
 
+export function isForwardBvpsPbAnchorAligned(input: {
+  bridgeLatestPeriodEnd: string | null;
+  commonEquityPeriodEnd: string | null;
+  commonSharesPeriodEnd: string | null;
+}) {
+  return input.bridgeLatestPeriodEnd !== null
+    && input.bridgeLatestPeriodEnd === input.commonEquityPeriodEnd
+    && input.bridgeLatestPeriodEnd === input.commonSharesPeriodEnd;
+}
+
 type NormalizedCycleInputs = {
   normalizedEps?: number | null;
   cycleYearsObserved?: number | null;

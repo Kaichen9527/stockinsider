@@ -25,6 +25,11 @@ test('the financial queue drain continues to the document worker but still repor
   assert.equal(resume?.continueOnError, true);
 });
 
+test('hourly research resume ignores symbol-scoped canary receipts', () => {
+  const route = fs.readFileSync(new URL('../web/src/app/api/internal/pipeline-run/route.ts', import.meta.url), 'utf8');
+  assert.match(route, /[.]not\('pipeline_run_id', 'is', null\)/u);
+});
+
 test('both scheduled research publications drain their full phase before invoking the pipeline', () => {
   for (const service of ['stockinsider-taiwan-data-preliminary', 'stockinsider-research-cycle']) {
     const unit = fs.readFileSync(new URL(`../deployment/vps/systemd/${service}.service`, import.meta.url), 'utf8');

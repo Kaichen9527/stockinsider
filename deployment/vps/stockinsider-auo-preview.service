@@ -11,6 +11,7 @@ Environment=NODE_ENV=production
 Environment=HOSTNAME=127.0.0.1
 Environment=PORT=3102
 Environment=NEXT_PUBLIC_ASSET_PREFIX=/preview/auo-2409-assets
+ExecStartPre=/usr/bin/node verify-auo-preview-artifact.mjs
 ExecStart=/usr/bin/node server.js
 Restart=always
 RestartSec=3

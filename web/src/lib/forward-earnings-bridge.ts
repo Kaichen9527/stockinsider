@@ -222,6 +222,7 @@ export function buildForwardCommonIncomeBridge(
     evaluationAt: options.evaluationAt || null,
     forecastPeriod,
     actual: {
+      latestPeriodEnd,
       latestRevenue,
       latestGrossProfit,
       latestOperatingIncome,

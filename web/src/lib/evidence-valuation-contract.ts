@@ -82,6 +82,7 @@ export const CANDIDATE_VALUATION_METHODS = [
   'normalized_pe',
   'ev_ebitda',
   'forward_pb',
+  'forward_bvps_pb',
   'financial_pb_roe',
   'pb_reference',
   'ev_sales',

@@ -65,6 +65,7 @@ export async function POST(req: Request) {
       }
       const prior = await writer.supabase.from('candidate_research_runs').select('id,status')
         .eq('technical_session_date', researchSession).eq('model_version', CANDIDATE_RESEARCH_MODEL_VERSION)
+        .not('pipeline_run_id', 'is', null)
         .in('status', ['success', 'partial']).order('finished_at', { ascending: false }).limit(1).maybeSingle();
       if (prior.error) throw new Error(`research_resume_receipt_read_failed:${prior.error.message}`);
       if (prior.data) {
