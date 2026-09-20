@@ -82,7 +82,7 @@ export function hasCompleteCandidateSegmentBridge(
     const eventMs = Date.parse(eventAt);
     const createdMs = Date.parse(createdAt);
     const sourceUrl = String(row.source_url || '');
-    if (!['earnings_call', 'financial_results'].includes(String(row.event_type || ''))
+    if (!['earnings', 'conference'].includes(String(row.event_type || ''))
       || !officialAuoUrl(sourceUrl) || !Number.isFinite(cutoffMs) || !Number.isFinite(eventMs)
       || !Number.isFinite(createdMs) || eventMs > cutoffMs || createdMs > cutoffMs) return false;
     const signals = row.extracted_signals;

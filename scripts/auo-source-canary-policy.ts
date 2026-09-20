@@ -32,6 +32,25 @@ export type AuoAdmittedLedgerFact = ReportedFinancialFact & {
   };
 };
 
+export type AuoOfficialAnchor = {
+  periodEnd: string;
+  commonEquityTwd: number;
+  issuedCommonShares: number;
+  reportedBvps: number;
+  equitySourceUrl: string;
+  sharesSourceUrl: string;
+  equityAvailableAt: string;
+  sharesAvailableAt: string;
+  recordedAt: string;
+  receipt: {
+    receiptId: string;
+    validationReceiptId: string;
+    documentSha256: string;
+    inputHash: string;
+    anchorSha256: string;
+  };
+};
+
 function officialFinancialSource(value: unknown) {
   try {
     const host = new URL(String(value || '')).hostname.toLowerCase();
@@ -57,6 +76,46 @@ export function auoLedgerFactHash(fact: ReportedFinancialFact) {
     provider: fact.provider ?? null,
     authorityTier: fact.authorityTier ?? null,
   }), 'utf8').digest('hex');
+}
+
+export function auoOfficialAnchorHash(anchor: Omit<AuoOfficialAnchor, 'receipt'>) {
+  return createHash('sha256').update(JSON.stringify(anchor), 'utf8').digest('hex');
+}
+
+function officialAnchorSource(value: unknown, kind: 'equity' | 'shares') {
+  try {
+    const url = new URL(String(value || ''));
+    if (url.protocol !== 'https:' || url.hostname !== 'openapi.twse.com.tw') return false;
+    return kind === 'equity'
+      ? url.pathname === '/v1/opendata/t187ap07_L_ci'
+      : url.pathname === '/v1/opendata/t187ap03_L';
+  } catch { return false; }
+}
+
+export function validateAuoOfficialAnchor(value: unknown, cutoff: string): AuoOfficialAnchor {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('auo_official_anchor_invalid');
+  const anchor = value as AuoOfficialAnchor;
+  const cutoffMs = Date.parse(cutoff);
+  const equityAvailableMs = Date.parse(anchor.equityAvailableAt);
+  const sharesAvailableMs = Date.parse(anchor.sharesAvailableAt);
+  const recordedMs = Date.parse(anchor.recordedAt);
+  const receipt = anchor.receipt;
+  const payload = { ...anchor, receipt: undefined } as Omit<AuoOfficialAnchor, 'receipt'> & { receipt?: undefined };
+  delete payload.receipt;
+  const derivedBvps = anchor.commonEquityTwd / anchor.issuedCommonShares;
+  if (!canonicalDate(anchor.periodEnd) || !(anchor.commonEquityTwd > 0) || !(anchor.issuedCommonShares > 0)
+    || !(anchor.reportedBvps > 0) || Math.abs(derivedBvps - anchor.reportedBvps) > 0.02
+    || !officialAnchorSource(anchor.equitySourceUrl, 'equity')
+    || !officialAnchorSource(anchor.sharesSourceUrl, 'shares')
+    || !Number.isFinite(cutoffMs) || !Number.isFinite(equityAvailableMs)
+    || !Number.isFinite(sharesAvailableMs) || !Number.isFinite(recordedMs)
+    || equityAvailableMs > cutoffMs || sharesAvailableMs > cutoffMs || recordedMs > cutoffMs
+    || !receipt || !uuid(receipt.receiptId) || !uuid(receipt.validationReceiptId)
+    || !/^[0-9a-f]{64}$/u.test(receipt.documentSha256) || !/^[0-9a-f]{64}$/u.test(receipt.inputHash)
+    || receipt.anchorSha256 !== auoOfficialAnchorHash(payload)) {
+    throw new Error('auo_official_anchor_invalid');
+  }
+  return anchor;
 }
 
 export function validateAuoLedgerFacts(value: unknown, cutoff: string): AuoAdmittedLedgerFact[] {
@@ -104,7 +163,8 @@ function officialPbSource(value: unknown) {
   }
 }
 
-export function validateAuoHistoricalPbRows(value: unknown): AuoHistoricalPbRow[] {
+export function validateAuoHistoricalPbRows(value: unknown, cutoff: string): AuoHistoricalPbRow[] {
+  const cutoffDate = new Date(cutoff).toISOString().slice(0, 10);
   if (!Array.isArray(value) || value.length < 48) throw new Error('auo_historical_pb_evidence_incomplete');
   const rows = value.map((item) => {
     if (!item || typeof item !== 'object' || Array.isArray(item)) throw new Error('auo_historical_pb_row_invalid');
@@ -119,7 +179,7 @@ export function validateAuoHistoricalPbRows(value: unknown): AuoHistoricalPbRow[
     const bookValueSourceRef = String(row.bookValueSourceRef || '');
     if (!canonicalDate(date) || !canonicalDate(bookValuePeriodEnd) || !canonicalDate(bookValueAvailableAt)
       || !(pb > 0) || !(close > 0) || !(bookValuePerShare > 0)
-      || bookValuePeriodEnd > bookValueAvailableAt || bookValueAvailableAt > date
+      || bookValuePeriodEnd > bookValueAvailableAt || bookValueAvailableAt > date || date > cutoffDate
       || !officialPbSource(sourceUrl) || bookValueSourceRef.length < 8
       || Math.abs(close / bookValuePerShare - pb) > Math.max(0.02, pb * 0.02)) {
       throw new Error(`auo_historical_pb_row_invalid:${date || 'unknown'}`);

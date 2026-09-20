@@ -1,13 +1,10 @@
-import { createHash } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
 import { buildForwardCommonIncomeBridge } from '../web/src/lib/forward-earnings-bridge.ts';
 import { buildForwardBvpsPbScenario } from '../web/src/lib/candidate-valuation.ts';
-import { parseExchangeFinancialEndpoint, TWSE_FINANCIAL_ENDPOINTS } from '../web/src/lib/candidate-financial-acquisition.ts';
-import { validateAuoHistoricalPbRows, validateAuoLedgerFacts, type AuoAdmittedLedgerFact } from './auo-source-canary-policy.ts';
+import { validateAuoHistoricalPbRows, validateAuoLedgerFacts, validateAuoOfficialAnchor,
+  type AuoAdmittedLedgerFact, type AuoOfficialAnchor } from './auo-source-canary-policy.ts';
 
 const SYMBOL = '2409';
-const COMPANY_PROFILE_URL = 'https://openapi.twse.com.tw/v1/opendata/t187ap03_L';
-
 type Ledger = {
   facts: AuoAdmittedLedgerFact[];
   historicalPbRows: Array<{
@@ -17,22 +14,12 @@ type Ledger = {
   }>;
   currentPrice: number;
   priceSession: string;
+  officialAnchor: AuoOfficialAnchor;
 };
 
 function argument(name: string) {
   const index = process.argv.indexOf(name);
   return index >= 0 ? process.argv[index + 1] : null;
-}
-
-function sha256(value: string) {
-  return createHash('sha256').update(value).digest('hex');
-}
-
-async function officialJson(url: string) {
-  const response = await fetch(url, { headers: { accept: 'application/json' }, signal: AbortSignal.timeout(20_000) });
-  if (!response.ok) throw new Error(`official_source_http_${response.status}:${url}`);
-  const text = await response.text();
-  return { payload: JSON.parse(text) as unknown, sha256: sha256(text), bytes: Buffer.byteLength(text) };
 }
 
 async function main() {
@@ -46,32 +33,13 @@ if (!(ledger.currentPrice > 0) || !/^\d{4}-\d{2}-\d{2}$/u.test(ledger.priceSessi
   throw new Error('auo_canary_ledger_incomplete');
 }
 const researchCutoff = '2026-09-19T23:59:59+08:00';
+if (ledger.priceSession > new Date(researchCutoff).toISOString().slice(0, 10)) throw new Error('auo_canary_price_after_cutoff');
 const admittedFacts = validateAuoLedgerFacts(ledger.facts, researchCutoff);
-const historicalPbRows = validateAuoHistoricalPbRows(ledger.historicalPbRows);
+const historicalPbRows = validateAuoHistoricalPbRows(ledger.historicalPbRows, researchCutoff);
 const historicalPb = historicalPbRows.map((row) => row.pb);
-
-const [incomeSource, balanceSource, companySource] = await Promise.all([
-  officialJson(TWSE_FINANCIAL_ENDPOINTS.generalIncome),
-  officialJson(TWSE_FINANCIAL_ENDPOINTS.generalBalance),
-  officialJson(COMPANY_PROFILE_URL),
-]);
-const income = parseExchangeFinancialEndpoint('twse', 'generalIncome', incomeSource.payload);
-const balance = parseExchangeFinancialEndpoint('twse', 'generalBalance', balanceSource.payload);
-if (income.terminalReason !== 'complete' || balance.terminalReason !== 'complete') {
-  throw new Error(`official_statement_parse_failed:${income.terminalReason}:${balance.terminalReason}`);
-}
-const latestBalance = balance.facts.filter((fact) => fact.symbol === SYMBOL && fact.periodEnd === '2026-06-30');
-const commonEquity = latestBalance.find((fact) => fact.factKey === 'common_equity_attributable_to_owners');
-const reportedBvps = latestBalance.find((fact) => fact.factKey === 'book_value_per_share');
-const companyRows = Array.isArray(companySource.payload) ? companySource.payload as Array<Record<string, unknown>> : [];
-const company = companyRows.find((row) => String(row['公司代號'] || '') === SYMBOL);
-const issuedShares = Number(String(company?.['已發行普通股數或TDR原股發行股數'] || '').replace(/,/gu, ''));
-if (!commonEquity || !reportedBvps || !(issuedShares > 0)) throw new Error('official_auo_equity_denominator_missing');
-const commonEquityTwd = commonEquity.value * 1_000;
+const anchor = validateAuoOfficialAnchor(ledger.officialAnchor, researchCutoff);
+const { commonEquityTwd, issuedCommonShares: issuedShares, reportedBvps } = anchor;
 const derivedBvps = commonEquityTwd / issuedShares;
-if (Math.abs(derivedBvps - reportedBvps.value) > 0.02) {
-  throw new Error('official_auo_bvps_reconciliation_failed');
-}
 
 const bridge = buildForwardCommonIncomeBridge(admittedFacts, {
   symbol: SYMBOL,
@@ -99,25 +67,22 @@ const report = {
   generatedAt: new Date().toISOString(),
   symbol: SYMBOL,
   status: 'complete',
-  sourceReceipts: [
-    { kind: 'twse_income', url: TWSE_FINANCIAL_ENDPOINTS.generalIncome, ...incomeSource },
-    { kind: 'twse_balance', url: TWSE_FINANCIAL_ENDPOINTS.generalBalance, ...balanceSource },
-    { kind: 'twse_company_profile', url: COMPANY_PROFILE_URL, ...companySource },
-  ].map(({ payload: _payload, ...receipt }) => receipt),
+  sourceReceipts: [{ kind: 'twse_official_anchor', periodEnd: anchor.periodEnd,
+    equityUrl: anchor.equitySourceUrl, sharesUrl: anchor.sharesSourceUrl, ...anchor.receipt }],
   sourceCoverage: {
     reportedQuarterFacts: admittedFacts.length,
     requiredQuarterFacts: 32,
     historicalPbObservations: historicalPb.length,
     requiredPbObservations: 48,
-    latestOfficialPeriod: commonEquity.periodEnd,
+    latestOfficialPeriod: anchor.periodEnd,
   },
   officialAnchor: {
     commonEquityTwd,
     issuedCommonShares: issuedShares,
-    reportedBvps: reportedBvps.value,
+    reportedBvps,
     reconciledBvps: Math.round(derivedBvps * 10_000) / 10_000,
-    equitySourceRef: commonEquity.sourceRef,
-    bvpsSourceRef: reportedBvps.sourceRef,
+    equitySourceRef: anchor.equitySourceUrl,
+    bvpsSourceRef: anchor.equitySourceUrl,
   },
   bridge,
   financialFactReceipts: admittedFacts.map((fact) => ({ factId: fact.factId, ...fact.receipt })),
