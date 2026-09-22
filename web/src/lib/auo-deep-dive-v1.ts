@@ -108,7 +108,7 @@ export const auoSources = [
   { id: 'S11', type: '公司原始資料', title: '友達車用顯示產品', url: 'https://www.auo.com/en-global/products/index/Display_Panel_Products/Car_Display', date: '2026-09-19', supports: '車用顯示產品與應用範圍' },
   { id: 'S12', type: '公司原始資料', title: '友達 Micro LED 展示', url: 'https://www.auo.com/en-global/New_Archive/detail/News_Archive_Product_20260330', date: '2026-03-30', supports: 'Micro LED 展示與量產狀態界線' },
   { id: 'S13', type: '公司原始資料', title: '友達 CPO／GCS 技術展示', url: 'https://auo.com/zh-CN/News_Archive/detail/News_Archive_Product_20260831', date: '2026-08-31', supports: '研發展示，不視為已確認營收' },
-  { id: 'S14', type: '官方市場資料', title: 'TWSE 友達日成交資訊', url: 'https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20260901&stockNo=2409', date: '2026-09-18', supports: '最新完整交易日 OHLCV 與技術指標' },
+  { id: 'S14', type: '官方市場資料', title: 'TWSE 友達日成交資訊', url: 'https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20260901&stockNo=2409', date: '2026-09-22', supports: '最新完整交易日 OHLCV 與技術指標' },
   { id: 'S15', type: '公開資料鏡像', title: 'FinMind 台灣上市櫃月營收資料', url: 'https://api.finmindtrade.com/api/v4/data?dataset=TaiwanStockMonthRevenue&data_id=2409&start_date=2024-09-01&end_date=2026-09-30', date: '2026-09-09', supports: '24 個月營收序列；最近月份以公司公告交叉核對' },
   { id: 'S16', type: '產業研究', title: 'TrendForce：2026 年 9 月面板價格與 NB 需求', url: 'https://www.trendforce.com/news/2026/09/08/insights-early-september-panel-prices-tv-mnt-nb-prices-seen-flat-nb-demand-may-weaken-further-in-4q/', date: '2026-09-08', supports: '面板報價平、Q4 筆電需求下修風險' },
   { id: 'S17', type: '產業研究', title: 'Omdia：中國車用面板廠 2026H2 出貨占比估 65.2%', url: 'https://omdia.tech.informa.com/pr/2026/sep/china-based-panel-makers-to-capture-65percent-of-automotive-display-shipments-in-2h26', date: '2026-09-03', supports: '車用顯示供給擴張與價格壓力反證' },
@@ -217,7 +217,7 @@ export const auoArticleSections = [
       '短期面板環境是「價格尚穩、需求轉弱」。TrendForce 在 2026 年 9 月初觀察主要 TV、Monitor 與 Notebook 面板價格大致持平，但 NB 第三季採購可能季減 15%–20%，第四季仍有下修風險。這與友達第三季 Display 小幅下滑的指引一致。對財務模型的含義是，不能用價格平穩就假設 Display 立即恢復正常利潤；若稼動率或產品組合不改善，固定成本仍會壓住營益率。',
       '車用也不是避風港。Omdia 預估中國面板廠的車用顯示出貨占比，會由 2026H1 的 59%升到 H2 的 65.2%。供給增加會壓縮單純顯示器件的價格與市占空間，因此本模型只讓 Mobility 營益率緩慢提升。友達若要高於這個假設，必須證明 BHTC 帶來的 HMI、控制、軟體與整合內容增加得比面板價格下降更快，並在量產專案中反映。',
       '同業給了兩種路徑。LG Display 聚焦 OLED、高階 IT 與遊戲顯示，顯示高值化可以改善結構，但重整與資本負擔仍會造成季度波動。TCL 華星則以規模、車載高速增長與持續新產能向前推進。前者提醒友達技術升級需要資本與時間，後者提醒供給競爭沒有消失。Visteon 的座艙系統獲利與約 20 億美元新訂單，則提供 Mobility 更高層次的比較：重點是系統訂單、軟體與專案執行，不是車用螢幕出貨片數本身。',
-      '本地與資產面比較則應看群創與友達自身的歷史 P/B。兩者都受面板循環與重資產結構影響；友達可以因非顯示業務得到溢價，但溢價應由 ROE、自由現金流與獲利穩定性驗證。現價約 1.48 倍 P/B 已經先支付部分轉型成果，若 2027 年正常化 ROE 仍只有低個位數，這個溢價難以長期維持。',
+      '本地與資產面比較則應看群創與友達自身的歷史 P/B。兩者都受面板循環與重資產結構影響；友達可以因非顯示業務得到溢價，但溢價應由 ROE、自由現金流與獲利穩定性驗證。36.65 元相對 20.46 元帳面價值約為 1.79 倍 P/B，已高於這份 60 個月月底樣本的 1.65 倍最高值；這代表市場正在支付歷史資產框架之外的轉型期待，而不是證明該期待必然兑现。',
     ], sources: ['S1', 'S16', 'S17', 'S18', 'S19', 'S20'],
   },
   {

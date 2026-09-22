@@ -2,7 +2,7 @@
 
 Status: user-approved single-issuer preview scope
 
-Date: 2026-09-19
+Date: 2026-09-22
 
 ## Governance boundary
 
@@ -36,9 +36,10 @@ passes the real-data acceptance path.
   common equity. Missing segment margins may be modeled only at consolidated level.
   Facts, issuer guidance, model assumptions and derived calculations remain distinct.
 - Historical PB uses at least 48 monthly observations paired only with the BVPS that
-  was public on that date. The 25th/50th/75th percentiles are the initial
-  bear/base/bull anchors; every override requires cited ROE, recovery or capital
-  efficiency evidence.
+  was public on that date. The 25th/50th/75th percentiles are asset-value cross-checks,
+  not a ceiling for the combined operating and transformation case. The report shows
+  the observed sample minimum and maximum and explains any price outside that range.
+  Every multiple override requires cited ROE, recovery or capital-efficiency evidence.
 - Issuer completeness is method-specific and counts only admitted, receipt-backed
   fields and periods. Market publication completeness, linked-row counts and null gap
   markers must never appear as issuer research completeness.
@@ -70,3 +71,34 @@ component. The first screen contains the research conclusion, valuation range an
 separate medium-term and short-term judgments. Sources appear beside the paragraphs
 they support and in a complete appendix. The current deliverable remains read-only and
 does not activate a writer, market-wide backfill or automated recommendation.
+
+## Market-event amendment
+
+The AUO acceptance issuer also validates a twice-daily market-event path at 07:00 and
+18:00 Asia/Taipei, including weekends. Each run records the source surface actually
+attempted, the visible scope, success or failure, relevant-item count, publication time
+and first-observed time. A source access failure is never reported as an absence of
+news. New entities and relationship terms found in one item extend the next search;
+the seed set is not limited to issuer name and ticker.
+
+Rumors and single-source social posts may enter the research inbox as hypotheses before
+official confirmation. The inbox stores the canonical/root URL, bounded summary,
+author, timestamps, claim status, visibility and content hash. Reposts increase the
+attention signal but not the independent-confirmation count. Authenticated full text,
+cookies and session material remain local and are not stored. The protected import
+route uses `requireInternalAuth()` and existing source-document storage.
+
+Material events update a versioned event timeline and state exactly which operating,
+valuation or trading assumption changed. Unconfirmed CPO, glass-core-substrate and
+Intel cooperation claims do not enter base-period EPS. They may enter a separately
+identified transformation sensitivity whose customer-validation, pilot, production,
+yield, price, investment, timing and invalidation conditions are visible. Values that
+may arrive in 2028 or 2029 use the matching forward period and are discounted to the
+research date.
+
+Trading scenarios freeze their publication-time trigger, target, invalidation and
+expiry. Later complete trading days move the state through waiting, triggered,
+confirmed, failed, expired or target-reached without moving the original thresholds.
+The page may therefore show expensive fundamental valuation and confirmed momentum at
+the same time. Header, article, tables and scenario state always read the same accepted
+research version and the latest complete trading date.
