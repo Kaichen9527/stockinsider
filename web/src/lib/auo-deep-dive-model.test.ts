@@ -19,6 +19,9 @@ import {
   classifyResearchVerdict,
   combineActualAndForecastYear,
   historicalPbQuartiles,
+  evaluateFrozenBreakoutSetup,
+  discountedFutureValue,
+  requiredFutureEps,
   requiredEarningsAtMultiple,
   validateResearchInputs,
   type PriceBar,
@@ -36,7 +39,7 @@ test('segment rows add back to consolidated revenue and operating profit', () =>
 test('AUO P/B anchors are recalculated from 60 point-in-time TWSE monthly observations', () => {
   const result = historicalPbQuartiles(pbHistory, '2026-09-18');
   assert.equal(result.rows.length, 60);
-  assert.deepEqual({ p25: result.p25, p50: result.p50, p75: result.p75 }, { p25: 0.7, p50: 0.77, p75: 0.85 });
+  assert.deepEqual({ p25: result.p25, p50: result.p50, p75: result.p75, max: result.max }, { p25: 0.7, p50: 0.77, p75: 0.85, max: 1.65 });
   assert.throws(() => historicalPbQuartiles(pbHistory.slice(0, 47), '2026-09-18'), /evidence_incomplete/u);
 });
 
@@ -53,10 +56,10 @@ test('bear base and bull cases preserve ordered 2027 earnings and valuation', ()
   }));
   const eps = rows.map((row) => row.annual.find((annual) => annual.year === 2027)!.normalizedEps);
   assert.ok(eps[0] < eps[1] && eps[1] < eps[2]);
-  assert.ok(rows[0].valuation.referenceValue < rows[1].valuation.referenceValue);
-  assert.ok(rows[1].valuation.referenceValue < rows[2].valuation.referenceValue);
   assert.equal(rows[0].valuation.peValue, null, 'negative or near-break-even bear EPS cannot use P/E');
-  assert.equal(rows[1].valuation.referenceValue, rows[1].valuation.pbValue, 'P/E is a cross-check, not a hidden blend');
+  assert.equal(rows[1].valuation.referenceValue, rows[1].valuation.peValue, 'usable normalized earnings drive the scenario value');
+  assert.equal(rows[2].valuation.referenceValue, rows[2].valuation.peValue, 'P/B remains a separate asset cross-check');
+  assert.ok((rows[1].valuation.peValue ?? 0) < (rows[2].valuation.peValue ?? 0));
   assert.ok(rows[0].valuation.forwardBvps < rows[1].valuation.forwardBvps);
   assert.ok(rows[1].valuation.forwardBvps < rows[2].valuation.forwardBvps);
   assert.equal(rows.every((row) => row.valuation.projectedDividends === 0
@@ -91,8 +94,9 @@ test('2026 annual view combines published H1 with scenario H2 without mixing EPS
 });
 
 test('official daily history reproduces the page indicators and calculated entry levels', () => {
+  const pointInTimeBars = (priceHistory as PriceBar[]).filter((bar) => bar.date <= '115/09/18');
   const snapshot = calculateTechnicalSnapshot(
-    priceHistory as PriceBar[],
+    pointInTimeBars,
     new Date('2026-09-19T00:00:00+08:00'),
   );
   assert.ok(snapshot);
@@ -121,7 +125,7 @@ test('stale technical data disables all executable price levels', () => {
 });
 
 test('missing segments and conflicting sources remain visible as research blockers', () => {
-  const snapshot = calculateTechnicalSnapshot(priceHistory as PriceBar[], new Date('2026-09-19T00:00:00+08:00'));
+  const snapshot = calculateTechnicalSnapshot(priceHistory as PriceBar[], new Date('2026-09-22T12:00:00+08:00'));
   assert.deepEqual(validateResearchInputs({ segmentDataAvailable: false, sourceConflictCount: 2, technical: snapshot }), {
     complete: false,
     warnings: ['segment_data_missing', 'source_conflicts_require_review'],
@@ -129,9 +133,27 @@ test('missing segments and conflicting sources remain visible as research blocke
 });
 
 test('expensive valuation and bullish price trend produce separate conclusions', () => {
-  const snapshot = calculateTechnicalSnapshot(priceHistory as PriceBar[], new Date('2026-09-19T00:00:00+08:00'));
+  const snapshot = calculateTechnicalSnapshot(priceHistory as PriceBar[], new Date('2026-09-22T12:00:00+08:00'));
   assert.deepEqual(classifyResearchVerdict({ price: AUO_PRICE, baseReferenceValue: 20, technical: snapshot }), {
     mediumTerm: 'low_attractiveness',
     shortTerm: 'bullish_wait_for_trigger',
   });
+});
+
+test('frozen September breakout advances without moving its published thresholds', () => {
+  const evaluated = evaluateFrozenBreakoutSetup(priceHistory as PriceBar[], {
+    publishedAt: '115/09/18', trigger: 32.2, minimumVolume: 500_000_000,
+    invalidation: 28.4, target: 36.6, expiresAfterTradingSessions: 20,
+  });
+  assert.deepEqual({ status: evaluated.status, triggerDate: evaluated.triggerDate, terminalDate: evaluated.terminalDate }, {
+    status: 'target_reached', triggerDate: '115/09/21', terminalDate: '115/09/22',
+  });
+  assert.equal(evaluated.trigger, 32.2);
+  assert.equal(evaluated.target, 36.6);
+});
+
+test('transformation sensitivity is explicit and reversible', () => {
+  assert.equal(discountedFutureValue(2, 20, 2.25, 0.12), 31);
+  assert.equal(requiredFutureEps(36.65, 20, 2.25, 0.12), 2.36);
+  assert.equal(discountedFutureValue(-1, 20, 2, 0.12), null);
 });

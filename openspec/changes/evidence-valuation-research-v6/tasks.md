@@ -26,6 +26,10 @@
       admitted evidence coverage and typed missing-data states.
 - [x] Publish the decision-first AUO detail hierarchy, daily price/MA chart and optional
       evidence appendix while preserving immutable historical revisions.
+- [x] Re-evaluate the dated AUO breakout through 2026-09-22 without moving its trigger,
+      correct the P/B percentile label and separate traditional earnings from transformation sensitivity.
+- [x] Add an authenticated bounded research inbox for public and user-authorized social summaries
+      with immutable content hashes, first-observed timestamps and explicit claim states.
 - [ ] Resume research exactly once when a previously incomplete Taiwan data scope becomes
       research-ready; prove the real 2409 acquisition-to-publication path.
 - [ ] Reclaim only verified disposable shared-VPS cache/releases, remeasure capacity after

@@ -94,6 +94,7 @@ tbody th { font-family: ui-monospace, monospace; }
 .grid { stroke: rgba(21,29,37,.12); stroke-width: 1; }
 .bar { fill: rgba(7,63,99,.72); }
 .bar.hot { fill: var(--cyan); }
+.volume-bar { fill: rgba(10, 114, 125, .16); }
 .chart-note { margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
 .price-line { fill: none; stroke-width: 2; vector-effect: non-scaling-stroke; }
 .price-line.close { stroke: var(--ink); stroke-width: 2.8; }
@@ -122,6 +123,14 @@ tbody th { font-family: ui-monospace, monospace; }
 .driver-list dt { color: var(--blue); font-size: 12px; font-weight: 800; }
 .driver-list dd { margin: 0; line-height: 1.7; font-size: 14px; }
 
+.event-timeline { margin: 38px 0 48px; border-top: 4px solid var(--ink); }
+.event-timeline article { display: grid; grid-template-columns: 112px 1fr; gap: 22px; padding: 24px 0; border-bottom: 1px solid var(--rule); }
+.event-timeline time { color: var(--muted); font: 800 12px/1.4 ui-monospace, monospace; }
+.event-timeline span { display: inline-block; padding: 5px 8px; color: white; background: var(--blue); font: 800 10px/1 ui-monospace, monospace; letter-spacing: .08em; }
+.event-timeline h3 { margin: 10px 0 8px; font-size: 23px; }
+.event-timeline p { margin: 0 0 10px; font-size: 14px; line-height: 1.7; }
+.event-timeline strong { display: block; color: var(--blue); font-size: 13px; line-height: 1.65; }
+
 .reverse-box { display: grid; grid-template-columns: 130px 1fr; gap: 4px 22px; margin-top: 30px; padding: 28px; border-left: 6px solid var(--lime); background: var(--ink); color: white; }
 .reverse-box .eyebrow { grid-row: 1 / 3; margin: 4px 0; }
 .reverse-box strong { font-size: 24px; }
@@ -133,6 +142,7 @@ tbody th { font-family: ui-monospace, monospace; }
 .scenario-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
 .scenario-cards article { padding: 22px; color: white; background: var(--blue); }
 .scenario-cards .danger-card { background: var(--red); }
+.scenario-cards .completed-card { background: #0a727d; }
 .scenario-cards h3 { margin: 10px 0; font-size: 23px; }
 .scenario-cards p { margin: 0; color: rgba(255,255,255,.75); font-size: 13px; line-height: 1.65; }
 
@@ -184,6 +194,7 @@ tbody th { font-family: ui-monospace, monospace; }
   .reverse-box { grid-template-columns: 1fr; }
   .reverse-box .eyebrow { grid-row: auto; }
   .indicator-strip { grid-template-columns: repeat(2, 1fr); }
+  .event-timeline article { grid-template-columns: 1fr; gap: 8px; }
   .report-page footer { display: block; }
   .report-page footer span { display: block; margin-top: 8px; }
 }

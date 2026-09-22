@@ -10,12 +10,14 @@ import {
   auoAssumptions,
   auoForecastBaseQuarters,
   auoGrowthDrivers,
+  auoMarketEvents,
   auoMonitoringChecklist,
   auoMonthlyRevenue,
   auoPeerComparison,
   auoQuarterlyActuals,
   auoScenarioAdjustments,
   auoSources,
+  auoTransformationMilestones,
 } from '@/lib/auo-deep-dive-v1';
 import {
   buildEntryPlan,
@@ -23,8 +25,10 @@ import {
   calculateForwardPe,
   calculateTechnicalSnapshot,
   combineActualAndForecastYear,
+  discountedFutureValue,
+  evaluateFrozenBreakoutSetup,
   requiredEarningsAtMultiple,
-  type EntryPlan,
+  requiredFutureEps,
   type PriceBar,
   type TechnicalSnapshot,
 } from '@/lib/auo-deep-dive-model';
@@ -48,8 +52,25 @@ const scenarios = (Object.entries(auoScenarioAdjustments) as Array<[keyof typeof
 }));
 
 const baseScenario = scenarios.find((scenario) => scenario.id === 'base')!;
+const bullScenario = scenarios.find((scenario) => scenario.id === 'bull')!;
 const reverse20 = requiredEarningsAtMultiple(AUO_PRICE, 20, AUO_DILUTED_SHARES_MILLION, 283_000);
+const reverse24 = requiredEarningsAtMultiple(AUO_PRICE, 24, AUO_DILUTED_SHARES_MILLION, 283_000);
 const sourceById = new Map(auoSources.map((source) => [source.id, source]));
+const priceBars = priceHistory as PriceBar[];
+const originalBars = priceBars.filter((bar) => bar.date <= '115/09/18');
+const originalSnapshot = calculateTechnicalSnapshot(originalBars, new Date('2026-09-18T12:00:00Z'));
+const originalPlan = buildEntryPlan(originalSnapshot);
+const frozenBreakout = evaluateFrozenBreakoutSetup(priceBars, {
+  publishedAt: '115/09/18',
+  trigger: originalPlan.breakout.trigger ?? 32.2,
+  minimumVolume: originalPlan.breakout.minimumVolume ?? 0,
+  invalidation: originalPlan.breakout.invalidation ?? 28.4,
+  target: originalPlan.breakout.secondTarget ?? 36.6,
+  expiresAfterTradingSessions: 20,
+});
+const setupStatusLabel = {
+  waiting: '等待', triggered: '已觸發', confirmed: '已確認', failed: '已失效', expired: '已到期', target_reached: '目標已到達',
+} as const;
 
 function SourceLinks({ ids }: { ids: readonly string[] }) {
   return (
@@ -99,6 +120,7 @@ function PriceChart({ technical }: { technical: TechnicalSnapshot }) {
   const max = Math.max(...rows.map((row) => row.high)) * 1.04;
   const x = (index: number) => pad.left + index / (rows.length - 1) * (width - pad.left - pad.right);
   const y = (value: number) => pad.top + (max - value) / (max - min) * (height - pad.top - pad.bottom);
+  const maxVolume = Math.max(...rows.map((row) => row.volume));
   const line = (values: number[]) => values.map((value, index) => `${index ? 'L' : 'M'}${x(index).toFixed(1)},${y(value).toFixed(1)}`).join(' ');
   const rolling = (periods: number) => rows.map((_, index) => {
     const absolute = (priceHistory as PriceBar[]).length - rows.length + index;
@@ -109,6 +131,7 @@ function PriceChart({ technical }: { technical: TechnicalSnapshot }) {
     <figure className="chart-shell price-chart">
       <figcaption><strong>近 120 個交易日價格結構</strong><span>收盤價、MA20、MA60；資料至 {technical?.asOf}</span></figcaption>
       <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label="友達股價與二十日六十日均線圖">
+        {rows.map((row, index) => <rect key={`v-${row.date}`} x={x(index) - 2} y={height - pad.bottom - (row.volume / maxVolume) * 52} width="4" height={(row.volume / maxVolume) * 52} className="volume-bar"/>)}
         {[20, 25, 30, 35].filter((tick) => tick > min && tick < max).map((tick) => <g key={tick}><line x1={pad.left} x2={width - pad.right} y1={y(tick)} y2={y(tick)} className="grid"/><text x={pad.left - 8} y={y(tick) + 4} textAnchor="end">{tick}</text></g>)}
         <path d={line(rolling(60))} className="price-line ma60"/>
         <path d={line(rolling(20))} className="price-line ma20"/>
@@ -127,8 +150,8 @@ function ForecastTable() {
     <div className="table-scroll">
       <table>
         <caption>未來四個未公布季度｜基本情境（新台幣百萬元，EPS 為元）</caption>
-        <thead><tr><th>期間</th><th>Mobility</th><th>Vertical</th><th>Display</th><th>合併營收</th><th>營業利益</th><th>正常化淨利</th><th>正常化 EPS</th></tr></thead>
-        <tbody>{rows.map((row) => <tr key={row.period}><th>{row.period}</th><td>{nf.format(row.segments.mobility.revenue)}</td><td>{nf.format(row.segments.vertical.revenue)}</td><td>{nf.format(row.segments.display.revenue)}</td><td>{nf.format(row.revenue)}</td><td className={row.operatingIncome < 0 ? 'negative' : ''}>{nf.format(row.operatingIncome)}</td><td className={row.normalizedNetIncome < 0 ? 'negative' : ''}>{nf.format(row.normalizedNetIncome)}</td><td>{row.normalizedEps.toFixed(2)}</td></tr>)}</tbody>
+        <thead><tr><th>期間</th><th>Mobility</th><th>Vertical</th><th>Display</th><th>其他</th><th>合併營收</th><th>營業利益</th><th>正常化淨利</th><th>正常化 EPS</th></tr></thead>
+        <tbody>{rows.map((row) => <tr key={row.period}><th>{row.period}</th><td>{nf.format(row.segments.mobility.revenue)}</td><td>{nf.format(row.segments.vertical.revenue)}</td><td>{nf.format(row.segments.display.revenue)}</td><td>{nf.format(row.segments.other.revenue)}</td><td>{nf.format(row.revenue)}</td><td className={row.operatingIncome < 0 ? 'negative' : ''}>{nf.format(row.operatingIncome)}</td><td className={row.normalizedNetIncome < 0 ? 'negative' : ''}>{nf.format(row.normalizedNetIncome)}</td><td>{row.normalizedEps.toFixed(2)}</td></tr>)}</tbody>
       </table>
     </div>
   );
@@ -138,15 +161,26 @@ function ValuationTable() {
   return (
     <div className="table-scroll">
       <table>
-        <caption>2027 情境估值｜P/B 為主、P/E 為交叉檢查</caption>
-        <thead><tr><th>情境</th><th>營收</th><th>營益率</th><th>正常化 EPS</th><th>現價 Forward P/E</th><th>合理 P/E 值</th><th>Forward BVPS</th><th>歷史 P/B 錨點</th><th>主要參考價</th></tr></thead>
+        <caption>2027 傳統營運情境｜P/E 主估、P/B 作資產交叉檢查</caption>
+        <thead><tr><th>情境</th><th>營收</th><th>營益率</th><th>正常化 EPS</th><th>36.65 元 P/E</th><th>P/E 情境值</th><th>Forward BVPS</th><th>P/B 分位錨點</th><th>P/B 交叉值</th></tr></thead>
         <tbody>{scenarios.map((scenario) => {
           const annual = scenario.annual.find((row) => row.year === 2027)!;
-          return <tr key={scenario.id}><th>{scenario.label}</th><td>{nf.format(annual.revenue)}</td><td>{fmt(annual.operatingIncome / annual.revenue * 100, '%')}</td><td>{annual.normalizedEps.toFixed(2)}</td><td>{fmt(calculateForwardPe(AUO_PRICE, annual.normalizedEps), 'x')}</td><td>{scenario.valuation.peValue === null ? '不適用' : `$${scenario.valuation.peValue.toFixed(1)}`}</td><td>${scenario.valuation.forwardBvps.toFixed(2)}</td><td>{scenario.valuation.fairPb.toFixed(2)}x</td><td className="value-cell">${scenario.valuation.referenceValue.toFixed(1)}</td></tr>;
+          return <tr key={scenario.id}><th>{scenario.label}</th><td>{nf.format(annual.revenue)}</td><td>{fmt(annual.operatingIncome / annual.revenue * 100, '%')}</td><td>{annual.normalizedEps.toFixed(2)}</td><td>{fmt(calculateForwardPe(AUO_PRICE, annual.normalizedEps), 'x')}</td><td className="value-cell">{scenario.valuation.peValue === null ? '不適用' : `$${scenario.valuation.peValue.toFixed(1)}`}</td><td>${scenario.valuation.forwardBvps.toFixed(2)}</td><td>{scenario.valuation.fairPb.toFixed(2)}x</td><td>${scenario.valuation.pbValue.toFixed(1)}</td></tr>;
         })}</tbody>
       </table>
     </div>
   );
+}
+
+function EventTimeline() {
+  return <div className="event-timeline">{auoMarketEvents.map((event) => <article key={`${event.date}-${event.title}`}><time>{event.date}</time><div><span>{event.label}</span><h3>{event.title}</h3><p>{event.detail}</p><strong>{event.impact}</strong><SourceLinks ids={event.sources}/></div></article>)}</div>;
+}
+
+function TransformationTable() {
+  const epsRows = [1.5, 2, 2.5];
+  const multiples = [16, 20, 24];
+  const implied2029Eps = requiredFutureEps(AUO_PRICE, 20, 2.25, 0.12);
+  return <><div className="table-scroll"><table><caption>轉型證據階梯｜每跨一級才允許增加模型內容</caption><thead><tr><th>階段</th><th>目前狀態</th><th>必須看到</th><th>估值處理</th><th>反證</th></tr></thead><tbody>{auoTransformationMilestones.map((row) => <tr key={row.stage}><th>{row.stage}</th><td>{row.state}</td><td>{row.evidence}</td><td>{row.valuation}</td><td>{row.falsifier}</td></tr>)}</tbody></table></div><div className="table-scroll"><table><caption>2029 正常化 EPS 敏感度｜折現率 12%、約 2.25 年折回；單位：元</caption><thead><tr><th>2029 EPS</th>{multiples.map((multiple) => <th key={multiple}>{multiple}x</th>)}</tr></thead><tbody>{epsRows.map((eps) => <tr key={eps}><th>{eps.toFixed(1)}</th>{multiples.map((multiple) => <td key={multiple}>{fmt(discountedFutureValue(eps, multiple, 2.25, 0.12))}</td>)}</tr>)}</tbody></table><p className="table-note">這是條件敏感度，不是目標價。36.65 元若以 2029 年 20 倍、12%折現反推，需要 2029 EPS 約 {fmt(implied2029Eps)} 元；後續必須由客戶、產能、良率與毛利證據填入收入橋接。</p></div></>;
 }
 
 function AnnualOutlookTable() {
@@ -191,26 +225,24 @@ function ActualTable() {
   );
 }
 
-function SectionExtras({ id, technical, entryPlan }: {
+function SectionExtras({ id, technical }: {
   id: string;
   technical: TechnicalSnapshot | null;
-  entryPlan: EntryPlan;
 }) {
   if (id === 'history') return <ActualTable/>;
   if (id === 'business') return <RevenueChart/>;
   if (id === 'industry') return <div className="peer-grid">{auoPeerComparison.map((peer) => <article key={peer.company}><span>{peer.role}</span><h3>{peer.company}</h3><p className="peer-signal">{peer.signal}</p><p>{peer.implication}</p></article>)}</div>;
-  if (id === 'growth') return <div className="driver-list">{auoGrowthDrivers.map((driver, index) => <article key={driver.title}><div className="driver-index">{String(index + 1).padStart(2, '0')}</div><div><h3>{driver.title}</h3><dl><dt>證據</dt><dd>{driver.evidence}</dd><dt>財務傳導</dt><dd>{driver.transmission}</dd><dt>何時反映</dt><dd>{driver.timing}</dd><dt>模型假設</dt><dd>{driver.financial}</dd><dt>反證</dt><dd>{driver.falsifier}</dd></dl><SourceLinks ids={driver.sources}/></div></article>)}</div>;
-  if (id === 'valuation') return <><ForecastTable/><AnnualOutlookTable/><ValuationTable/><div className="reverse-box"><p className="eyebrow">現價反推</p><strong>20x P/E 需要 EPS {reverse20.eps.toFixed(2)} 元</strong><span>相當於歸屬普通股淨利約 {nf.format(reverse20.netIncome)} 百萬元、淨利率 {fmt(reverse20.netMargin * 100, '%')}。這比 2026H1 的獲利基礎高出一大段。</span></div></>;
+  if (id === 'growth') return <><EventTimeline/><div className="driver-list">{auoGrowthDrivers.map((driver, index) => <article key={driver.title}><div className="driver-index">{String(index + 1).padStart(2, '0')}</div><div><h3>{driver.title}</h3><dl><dt>證據</dt><dd>{driver.evidence}</dd><dt>財務傳導</dt><dd>{driver.transmission}</dd><dt>何時反映</dt><dd>{driver.timing}</dd><dt>模型假設</dt><dd>{driver.financial}</dd><dt>反證</dt><dd>{driver.falsifier}</dd></dl><SourceLinks ids={driver.sources}/></div></article>)}</div></>;
+  if (id === 'valuation') return <><ForecastTable/><AnnualOutlookTable/><ValuationTable/><TransformationTable/><div className="reverse-box"><p className="eyebrow">現價反推</p><strong>2027 EPS 需 {reverse20.eps.toFixed(2)} 元（20x）／{reverse24.eps.toFixed(2)} 元（24x）</strong><span>20 倍情境相當於歸屬普通股淨利約 {nf.format(reverse20.netIncome)} 百萬元、淨利率 {fmt(reverse20.netMargin * 100, '%')}。市場目前支付的是傳統營運改善加轉型選擇權。</span></div></>;
   if (id === 'entry' && technical) return <><PriceChart technical={technical}/><div className="indicator-strip">{[
     ['MA5', technical.ma5], ['MA20', technical.ma20], ['MA60', technical.ma60], ['MA120', technical.ma120], ['MA240', technical.ma240], ['MACD', technical.macd], ['RSI14', technical.rsi14], ['ATR14', technical.atr14],
-  ].map(([label, value]) => <div key={String(label)}><span>{label}</span><strong>{typeof value === 'number' ? value.toFixed(2) : '—'}</strong></div>)}</div>{technical.stale ? <div className="reverse-box"><p className="eyebrow">技術資料已過期</p><strong>所有進場、目標與失效價暫停使用</strong><span>最後完整交易日為 {technical.asOf}；取得新資料並重算前，不顯示可執行價格。</span></div> : <div className="scenario-cards"><article><span>劇本 A｜回測承接</span><h3>{fmt(entryPlan.pullback.lower)}–{fmt(entryPlan.pullback.upper)} 元</h3><p>量縮回測、守住區間並重新轉強才觸發。日收盤低於 {fmt(entryPlan.pullback.invalidation)} 元失效；目標 {fmt(entryPlan.pullback.firstTarget)}／{fmt(entryPlan.pullback.secondTarget)} 元，估算報酬風險比 {fmt(entryPlan.pullback.rewardRisk)}。</p></article><article><span>劇本 B｜放量突破</span><h3>收盤 &gt; {fmt(entryPlan.breakout.trigger)} 元</h3><p>成交量至少 {nf.format((entryPlan.breakout.minimumVolume ?? 0) / 1_000)} 張，且隔日不跌回。低於 {fmt(entryPlan.breakout.invalidation)} 元失效；量度目標 {fmt(entryPlan.breakout.secondTarget)} 元，報酬風險比 {fmt(entryPlan.breakout.rewardRisk)}。</p></article><article className="danger-card"><span>劇本 C｜條件失敗</span><h3>跌破 {fmt(entryPlan.pullback.invalidation)} 元</h3><p>或突破後兩日內跌回壓力下方，取消波段假設。期限二十個交易日，逾期用新資料重算。</p></article></div>}</>;
+  ].map(([label, value]) => <div key={String(label)}><span>{label}</span><strong>{typeof value === 'number' ? value.toFixed(2) : '—'}</strong></div>)}</div>{technical.stale ? <div className="reverse-box"><p className="eyebrow">技術資料已過期</p><strong>所有新進場價位暫停使用</strong><span>最後完整交易日為 {technical.asOf}；補齊資料前不產生新劇本。</span></div> : <div className="scenario-cards"><article className="completed-card"><span>9/19 原放量突破劇本</span><h3>{setupStatusLabel[frozenBreakout.status]}</h3><p>固定門檻 {fmt(frozenBreakout.trigger)} 元、最低量 {nf.format(frozenBreakout.minimumVolume / 1_000)} 張；{frozenBreakout.triggerDate ? `${frozenBreakout.triggerDate} 觸發` : '尚未觸發'}，{frozenBreakout.terminalDate ? `${frozenBreakout.terminalDate} 到達 ${fmt(frozenBreakout.target)} 元` : '尚未終止'}。</p></article><article><span>新部位｜等待整理</span><h3>不在 36.65 元追價</h3><p>原量度目標已完成。等待量縮整理、守住原突破區且重新轉強，再依新的完整價格結構計算報酬風險比。</p></article><article className="danger-card"><span>事件失效條件</span><h3>證據沒有跟上價格</h3><p>合作否認、驗證延後、跌回原突破區，或只有同源轉載而無新增獨立證據，均降低事件交易的勝率。</p></article></div>}</>;
   if (id === 'monitor') return <div className="table-scroll"><table><caption>研究更新條件</caption><thead><tr><th>頻率</th><th>追蹤項目</th><th>上修信號</th><th>下修信號</th></tr></thead><tbody>{auoMonitoringChecklist.map((row) => <tr key={row.metric}><th>{row.cadence}</th><td>{row.metric}</td><td>{row.upgrade}</td><td>{row.downgrade}</td></tr>)}</tbody></table></div>;
   return null;
 }
 
 export default function AuoDeepDiveReport() {
   const technical = calculateTechnicalSnapshot(priceHistory as PriceBar[], new Date());
-  const entryPlan = buildEntryPlan(technical);
   const technicalUnavailable = !technical || technical.stale;
   const base2027 = baseScenario.annual.find((row) => row.year === 2027)!;
   return (
@@ -220,15 +252,15 @@ export default function AuoDeepDiveReport() {
         <div className="hero-grid">
           <div>
             <p className="eyebrow">友達光電 2409 · 6–18 個月基本面／數週至三個月技術條件</p>
-            <h1>轉型已進財報，<br/>估值卻先跑到前面。</h1>
-            <p className="deck">Mobility 與 Vertical 已經獲利，但 Display 仍吞掉多數成果。30.35 元反映的不只是面板回溫，而是 2027 年三支柱同時改善。短線多頭結構成立，中期安全邊際尚未出現。</p>
+            <h1>市場先把未來<br/>買到 36.65 元。</h1>
+            <p className="deck">兩日上漲 20.76%不是模型可以忽略的雜訊。友達 8/31 已公開 CPO／GCS 進展，Intel 合作仍屬傳聞；現在要分清楚已確認技術、待驗證客戶與價格正在支付的轉型選擇權。</p>
           </div>
           <div className="price-stamp"><span>最新完整交易日</span><strong>NT$ {AUO_PRICE.toFixed(2)}</strong><small>{AUO_AS_OF} · TWSE</small></div>
         </div>
         <div className="verdict-grid">
-          <article><span>中期投資吸引力</span><strong className="caution">偏低</strong><p>基本情境參考價 ${baseScenario.valuation.referenceValue.toFixed(1)}；現價高於歷史 P/B 上緣推得的樂觀情境。</p></article>
-          <article><span>短期波段條件</span><strong className="watch">{technicalUnavailable ? '資料過期，停用價位' : '偏多，等待'}</strong><p>{technicalUnavailable ? `最後完整交易日 ${technical?.asOf ?? '待確認'}；取得新資料並重算前不提供進場價格。` : `均線多頭、動能為正；等回測承接或 ${fmt(entryPlan.breakout.trigger)} 元放量突破。`}</p></article>
-          <article><span>2027 基本情境</span><strong>EPS {base2027.normalizedEps.toFixed(2)}</strong><p>Forward P/E {fmt(calculateForwardPe(AUO_PRICE, base2027.normalizedEps), 'x')}；接近損平時倍數敏感。</p></article>
+          <article><span>中期判斷</span><strong className="caution">轉型待驗證</strong><p>傳統營運樂觀情境約 ${bullScenario.valuation.peValue?.toFixed(1)}；36.65 元另外包含尚未量化的商業化期待。</p></article>
+          <article><span>短期波段</span><strong className="watch">{technicalUnavailable ? '資料過期' : setupStatusLabel[frozenBreakout.status]}</strong><p>{technicalUnavailable ? `最後完整交易日 ${technical?.asOf ?? '待確認'}。` : `原 32.2 元突破已觸發，36.6 元量度目標已到；新部位等整理，不把目標往上搬。`}</p></article>
+          <article><span>現價反映</span><strong>2027E P/E {fmt(calculateForwardPe(AUO_PRICE, base2027.normalizedEps), 'x')}</strong><p>基本 EPS {base2027.normalizedEps.toFixed(2)}；20x／24x 分別需要 EPS {reverse20.eps.toFixed(2)}／{reverse24.eps.toFixed(2)} 元。</p></article>
         </div>
         <p className="hero-footnote">研究用途，不構成個人化投資建議。事實、公司指引、研究估計與情境已分開標示。</p>
       </header>
@@ -236,8 +268,8 @@ export default function AuoDeepDiveReport() {
       <div className="report-layout">
         <aside className="toc"><p>章節</p>{auoArticleSections.map((section) => <a href={`#${section.id}`} key={section.id}><span>{section.number}</span>{section.title.split('：')[0]}</a>)}<a href="#appendix"><span>09</span>來源與假設</a></aside>
         <article className="article-body">
-          <section className="opening-note"><p className="eyebrow">焦點內容</p><h2>這不是「面板會不會漲」的一題研究</h2><p>友達的估值分母仍是重資產面板，估值分子卻開始加入車用系統與垂直場域。正確的方法不是替整家公司挑一個漂亮的 P/E，而是分業務推演收入與利潤，再問市場價格要求哪一組假設同時成真。</p></section>
-          {auoArticleSections.map((section) => <section className="report-section" id={section.id} key={section.id}><div className="section-heading"><span>{section.number}</span><h2>{section.title}</h2></div>{section.paragraphs.map((paragraph, index) => <p key={index}>{paragraph}{index === section.paragraphs.length - 1 ? <SourceLinks ids={section.sources}/> : null}</p>)}<SectionExtras id={section.id} technical={technical} entryPlan={entryPlan}/></section>)}
+          <section className="opening-note"><p className="eyebrow">本次重估</p><h2>36.65 元是真實價格，不是已確認答案</h2><p>市場正在交易面板循環、車用與垂直場域，再加上 CPO／玻璃核心基板的技術選擇權。本文把三者拆開，保存消息時間線，也直接更正舊版把 P/B 第 75 百分位誤稱歷史上緣、突破後仍顯示等待的錯誤。</p></section>
+          {auoArticleSections.map((section) => <section className="report-section" id={section.id} key={section.id}><div className="section-heading"><span>{section.number}</span><h2>{section.title}</h2></div>{section.paragraphs.map((paragraph, index) => <p key={index}>{paragraph}{index === section.paragraphs.length - 1 ? <SourceLinks ids={section.sources}/> : null}</p>)}<SectionExtras id={section.id} technical={technical}/></section>)}
 
           <section className="report-section appendix" id="appendix">
             <div className="section-heading"><span>09</span><h2>來源、假設與可重算邊界</h2></div>

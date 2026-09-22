@@ -10,7 +10,9 @@ const service = readFileSync(new URL('../deployment/vps/stockinsider-auo-preview
 test('preview recalculates staleness at request time and hides stale price levels', () => {
   assert.match(page, /dynamic = 'force-dynamic'/u);
   assert.ok(report.includes('calculateTechnicalSnapshot(priceHistory as PriceBar[], new Date())'));
-  assert.match(report, /所有進場、目標與失效價暫停使用/u);
+  assert.match(report, /所有新進場價位暫停使用/u);
+  assert.match(report, /evaluateFrozenBreakoutSetup/u);
+  assert.match(report, /目標已到達/u);
 });
 
 test('preview asset namespace is embedded during build and verified before service start', () => {

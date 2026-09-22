@@ -111,6 +111,24 @@ export type EntryPlan = {
   };
 };
 
+export type TradeSetupStatus = 'waiting' | 'triggered' | 'confirmed' | 'failed' | 'expired' | 'target_reached';
+
+export type FrozenBreakoutSetup = {
+  publishedAt: string;
+  trigger: number;
+  minimumVolume: number;
+  invalidation: number;
+  target: number;
+  expiresAfterTradingSessions: number;
+};
+
+export type EvaluatedBreakoutSetup = FrozenBreakoutSetup & {
+  status: TradeSetupStatus;
+  triggerDate: string | null;
+  confirmationDate: string | null;
+  terminalDate: string | null;
+};
+
 export type HistoricalPbRow = {
   date: string; pb: number; close: number; bookValuePerShare: number;
   bookValuePeriodEnd: string; bookValueAvailableAt: string;
@@ -150,7 +168,14 @@ export function historicalPbQuartiles(value: unknown, cutoff: string) {
     return { ...row, date, pb, close, bookValuePerShare: bvps } as HistoricalPbRow;
   });
   const pbs = rows.map((row) => row.pb);
-  return { rows, p25: round(interpolatedPercentile(pbs, 0.25), 2), p50: round(interpolatedPercentile(pbs, 0.5), 2), p75: round(interpolatedPercentile(pbs, 0.75), 2) };
+  return {
+    rows,
+    p25: round(interpolatedPercentile(pbs, 0.25), 2),
+    p50: round(interpolatedPercentile(pbs, 0.5), 2),
+    p75: round(interpolatedPercentile(pbs, 0.75), 2),
+    min: round(Math.min(...pbs), 2),
+    max: round(Math.max(...pbs), 2),
+  };
 }
 
 const round = (value: number, digits = 2) => {
@@ -292,10 +317,10 @@ export function buildForecastScenario(args: {
     + args.adjustment.projectedCapitalAndOciMillion;
   const forwardBvps = round(endingCommonEquity / args.endingCommonSharesMillion, 4);
   const pbValue = round(forwardBvps * args.adjustment.fairPb, 1);
-  // P/B is the primary method for the cyclical-asset profile. P/E remains a
-  // separately displayed earnings cross-check and must not silently change the
-  // primary target through an arbitrary blend.
-  const referenceValue = pbValue;
+  // Use normalized earnings when the scenario has a usable earnings base.
+  // P/B remains a separately displayed asset-value cross-check; a historical
+  // percentile must never become an artificial ceiling on a changing business.
+  const referenceValue = peValue ?? pbValue;
   return {
     id: args.id,
     label: args.adjustment.label,
@@ -359,7 +384,7 @@ function movingAverage(values: number[], periods: number): number | null {
 export function calculateTechnicalSnapshot(
   bars: PriceBar[],
   asOfDate: Date,
-  staleAfterDays = 7,
+  staleAfterTradingDays = 1,
 ): TechnicalSnapshot | null {
   if (!bars.length) return null;
   const closes = bars.map((bar) => bar.close);
@@ -373,7 +398,15 @@ export function calculateTechnicalSnapshot(
     return new Date(Date.UTC(rocYear + 1911, month - 1, day));
   };
   const lastDate = parseRocDate(last.date);
-  const ageDays = Math.floor((asOfDate.getTime() - lastDate.getTime()) / 86_400_000);
+  let missingTradingDays = 0;
+  const cursor = new Date(lastDate);
+  cursor.setUTCDate(cursor.getUTCDate() + 1);
+  const cutoff = new Date(Date.UTC(asOfDate.getUTCFullYear(), asOfDate.getUTCMonth(), asOfDate.getUTCDate()));
+  while (cursor <= cutoff) {
+    const day = cursor.getUTCDay();
+    if (day !== 0 && day !== 6) missingTradingDays += 1;
+    cursor.setUTCDate(cursor.getUTCDate() + 1);
+  }
   const avgVolume20 = average(bars.slice(-20).map((bar) => bar.volume));
   return {
     asOf: last.date,
@@ -392,7 +425,7 @@ export function calculateTechnicalSnapshot(
     volumeRatio20: avgVolume20 === null ? null : round(last.volume / avgVolume20, 2),
     priorHigh20: round(Math.max(...bars.slice(-21, -1).map((bar) => bar.high)), 2),
     priorHigh60: round(Math.max(...bars.slice(-61, -1).map((bar) => bar.high)), 2),
-    stale: ageDays > staleAfterDays || ageDays < 0,
+    stale: missingTradingDays > staleAfterTradingDays || lastDate > cutoff,
   };
 }
 
@@ -431,8 +464,10 @@ export function buildEntryPlan(snapshot: TechnicalSnapshot | null): EntryPlan {
   const breakoutTrigger = snapshot.priorHigh20;
   const breakoutInvalidation = round(Math.max(snapshot.ma5, breakoutTrigger - snapshot.atr14 * 1.65), 1);
   const measuredMove = round(breakoutTrigger + (breakoutTrigger - snapshot.ma20), 1);
+  const breakoutActive = snapshot.close > breakoutTrigger
+    && (snapshot.volumeRatio20 ?? 0) >= 1.5;
   return {
-    status: 'wait',
+    status: breakoutActive ? 'active' : 'wait',
     pullback: {
       lower: round(lower, 1),
       upper: round(upper, 1),
@@ -450,6 +485,51 @@ export function buildEntryPlan(snapshot: TechnicalSnapshot | null): EntryPlan {
       rewardRisk: round((measuredMove - breakoutTrigger) / (breakoutTrigger - breakoutInvalidation), 1),
     },
   };
+}
+
+/** Evaluate a dated setup without moving its trigger, target or expiry on later runs. */
+export function evaluateFrozenBreakoutSetup(
+  bars: PriceBar[],
+  setup: FrozenBreakoutSetup,
+): EvaluatedBreakoutSetup {
+  const eligible = bars.filter((bar) => bar.date > setup.publishedAt);
+  const triggerIndex = eligible.findIndex((bar) => bar.close > setup.trigger && bar.volume >= setup.minimumVolume);
+  if (triggerIndex < 0) {
+    return {
+      ...setup,
+      status: eligible.length > setup.expiresAfterTradingSessions ? 'expired' : 'waiting',
+      triggerDate: null,
+      confirmationDate: null,
+      terminalDate: eligible.length > setup.expiresAfterTradingSessions ? eligible.at(-1)?.date ?? null : null,
+    };
+  }
+  const triggerBar = eligible[triggerIndex];
+  const later = eligible.slice(triggerIndex + 1);
+  const failed = later.find((bar) => bar.close < setup.invalidation);
+  if (failed) return { ...setup, status: 'failed', triggerDate: triggerBar.date, confirmationDate: null, terminalDate: failed.date };
+  const reached = [triggerBar, ...later].find((bar) => bar.high >= setup.target);
+  if (reached) {
+    return {
+      ...setup,
+      status: 'target_reached',
+      triggerDate: triggerBar.date,
+      confirmationDate: later[0]?.close >= setup.trigger ? later[0].date : null,
+      terminalDate: reached.date,
+    };
+  }
+  const confirmation = later.find((bar) => bar.close >= setup.trigger);
+  if (confirmation) return { ...setup, status: 'confirmed', triggerDate: triggerBar.date, confirmationDate: confirmation.date, terminalDate: null };
+  return { ...setup, status: 'triggered', triggerDate: triggerBar.date, confirmationDate: null, terminalDate: null };
+}
+
+export function discountedFutureValue(eps: number, multiple: number, years: number, discountRate: number) {
+  if (!(eps > 0) || !(multiple > 0) || !(years >= 0) || !(discountRate >= 0)) return null;
+  return round((eps * multiple) / ((1 + discountRate) ** years), 1);
+}
+
+export function requiredFutureEps(price: number, multiple: number, years: number, discountRate: number) {
+  if (!(price > 0) || !(multiple > 0) || !(years >= 0) || !(discountRate >= 0)) return null;
+  return round(price * ((1 + discountRate) ** years) / multiple, 2);
 }
 
 export function validateResearchInputs(args: {
