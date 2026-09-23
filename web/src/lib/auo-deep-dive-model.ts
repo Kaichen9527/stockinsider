@@ -1,3 +1,5 @@
+import marketCalendar from '../data/auo-trading-calendar-2026.json' with { type: 'json' };
+
 export type SegmentKey = 'mobility' | 'vertical' | 'display' | 'other';
 
 export type SegmentInput = {
@@ -128,6 +130,87 @@ export type EvaluatedBreakoutSetup = FrozenBreakoutSetup & {
   confirmationDate: string | null;
   terminalDate: string | null;
 };
+
+/** A conditional production bridge. Inputs are explicit so a rumor cannot become revenue. */
+export type CommercializationInputs = {
+  shippedCapacityUnits: number | null;
+  utilization: number | null;
+  yieldRate: number | null;
+  averageSellingPriceMillion: number | null;
+  grossMargin: number | null;
+  incrementalOpexMillion: number | null;
+  depreciationMillion: number | null;
+  taxRate: number;
+  attributableShare: number | null;
+  intercompanyRevenueMillion: number | null;
+  dilutedSharesMillion: number;
+};
+
+export function calculateCommercializationBridge(input: CommercializationInputs) {
+  const missing = (['shippedCapacityUnits', 'utilization', 'yieldRate', 'averageSellingPriceMillion',
+    'grossMargin', 'incrementalOpexMillion', 'depreciationMillion', 'attributableShare',
+    'intercompanyRevenueMillion'] as const)
+    .filter((key) => input[key] === null);
+  if (missing.length) return { status: 'incomplete' as const, missing };
+  const capacity = input.shippedCapacityUnits!;
+  const utilization = input.utilization!;
+  const yieldRate = input.yieldRate!;
+  const asp = input.averageSellingPriceMillion!;
+  const grossMargin = input.grossMargin!;
+  const opex = input.incrementalOpexMillion!;
+  const depreciation = input.depreciationMillion!;
+  const attributableShare = input.attributableShare!;
+  const intercompanyRevenueMillion = input.intercompanyRevenueMillion!;
+  if (capacity < 0 || utilization < 0 || utilization > 1 || yieldRate < 0 || yieldRate > 1
+    || asp < 0 || grossMargin < -1 || grossMargin > 1 || opex < 0 || depreciation < 0
+    || input.taxRate < 0 || input.taxRate > 1 || attributableShare < 0 || attributableShare > 1
+    || intercompanyRevenueMillion < 0 || input.dilutedSharesMillion <= 0) {
+    throw new Error('commercialization_inputs_invalid');
+  }
+  const saleableUnits = capacity * utilization * yieldRate;
+  const grossRevenue = saleableUnits * asp;
+  if (intercompanyRevenueMillion > grossRevenue) throw new Error('intercompany_revenue_exceeds_gross');
+  const consolidatedRevenue = grossRevenue - intercompanyRevenueMillion;
+  const operatingIncome = consolidatedRevenue * grossMargin - opex - depreciation;
+  const commonNetIncome = (operatingIncome - Math.max(operatingIncome, 0) * input.taxRate) * attributableShare;
+  return {
+    status: 'modeled' as const,
+    saleableUnits: round(saleableUnits, 0),
+    grossRevenueMillion: round(grossRevenue, 0),
+    consolidatedRevenueMillion: round(consolidatedRevenue, 0),
+    operatingIncomeMillion: round(operatingIncome, 0),
+    commonNetIncomeMillion: round(commonNetIncome, 0),
+    incrementalEps: round(commonNetIncome / input.dilutedSharesMillion, 2),
+  };
+}
+
+/** Reverse the price into incremental sales; margin is an assumption, not an order estimate. */
+export function reverseCommercializationRevenue(args: {
+  price: number; multiple: number; existingEps: number; dilutedSharesMillion: number;
+  afterTaxAttributableMargin: number;
+}) {
+  if (!(args.price > 0) || !(args.multiple > 0) || !(args.dilutedSharesMillion > 0)
+    || !(args.afterTaxAttributableMargin > 0)) return null;
+  const requiredEps = args.price / args.multiple;
+  const incrementalEps = Math.max(0, requiredEps - args.existingEps);
+  const incrementalCommonProfitMillion = incrementalEps * args.dilutedSharesMillion;
+  return {
+    requiredEps: round(requiredEps, 2), incrementalEps: round(incrementalEps, 2),
+    incrementalCommonProfitMillion: round(incrementalCommonProfitMillion, 0),
+    incrementalRevenueMillion: round(incrementalCommonProfitMillion / args.afterTaxAttributableMargin, 0),
+  };
+}
+
+export function calculateRelativePerformance(args: {
+  stockStart: number; stockEnd: number; indexStart: number; indexEnd: number;
+}) {
+  if (Object.values(args).some((value) => !Number.isFinite(value) || value <= 0)) return null;
+  const stockReturn = args.stockEnd / args.stockStart - 1;
+  const indexReturn = args.indexEnd / args.indexStart - 1;
+  return { stockReturnPercent: round(stockReturn * 100, 2),
+    indexReturnPercent: round(indexReturn * 100, 2),
+    relativePoints: round((stockReturn - indexReturn) * 100, 2) };
+}
 
 export type HistoricalPbRow = {
   date: string; pb: number; close: number; bookValuePerShare: number;
@@ -401,10 +484,19 @@ export function calculateTechnicalSnapshot(
   let missingTradingDays = 0;
   const cursor = new Date(lastDate);
   cursor.setUTCDate(cursor.getUTCDate() + 1);
-  const cutoff = new Date(Date.UTC(asOfDate.getUTCFullYear(), asOfDate.getUTCMonth(), asOfDate.getUTCDate()));
+  const taipei = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Taipei',
+    year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', hourCycle: 'h23' }).formatToParts(asOfDate);
+  const part = (type: Intl.DateTimeFormatPartTypes) => Number(taipei.find((value) => value.type === type)?.value);
+  const cutoff = new Date(Date.UTC(part('year'), part('month') - 1, part('day')));
+  // The close is 13:30 Taipei; allow publication/verification time until 15:00.
+  if (part('hour') < 15) cutoff.setUTCDate(cutoff.getUTCDate() - 1);
+  const closedWeekdays = new Set<string>(marketCalendar.closedWeekdays);
+  let calendarUnknown = cutoff.getUTCFullYear() !== marketCalendar.year || lastDate.getUTCFullYear() !== marketCalendar.year;
   while (cursor <= cutoff) {
     const day = cursor.getUTCDay();
-    if (day !== 0 && day !== 6) missingTradingDays += 1;
+    const date = cursor.toISOString().slice(0, 10);
+    if (cursor.getUTCFullYear() !== marketCalendar.year) calendarUnknown = true;
+    if (day !== 0 && day !== 6 && !closedWeekdays.has(date)) missingTradingDays += 1;
     cursor.setUTCDate(cursor.getUTCDate() + 1);
   }
   const avgVolume20 = average(bars.slice(-20).map((bar) => bar.volume));
@@ -425,7 +517,7 @@ export function calculateTechnicalSnapshot(
     volumeRatio20: avgVolume20 === null ? null : round(last.volume / avgVolume20, 2),
     priorHigh20: round(Math.max(...bars.slice(-21, -1).map((bar) => bar.high)), 2),
     priorHigh60: round(Math.max(...bars.slice(-61, -1).map((bar) => bar.high)), 2),
-    stale: missingTradingDays > staleAfterTradingDays || lastDate > cutoff,
+    stale: calendarUnknown || missingTradingDays > staleAfterTradingDays || lastDate > cutoff,
   };
 }
 
@@ -505,19 +597,21 @@ export function evaluateFrozenBreakoutSetup(
   }
   const triggerBar = eligible[triggerIndex];
   const later = eligible.slice(triggerIndex + 1);
-  const failed = later.find((bar) => bar.close < setup.invalidation);
-  if (failed) return { ...setup, status: 'failed', triggerDate: triggerBar.date, confirmationDate: null, terminalDate: failed.date };
-  const reached = [triggerBar, ...later].find((bar) => bar.high >= setup.target);
-  if (reached) {
-    return {
-      ...setup,
-      status: 'target_reached',
-      triggerDate: triggerBar.date,
-      confirmationDate: later[0]?.close >= setup.trigger ? later[0].date : null,
-      terminalDate: reached.date,
+  const confirmation = later.find((bar) => bar.close >= setup.trigger);
+  // First terminal event wins. A subsequent drop cannot rewrite a touched target.
+  for (const [index, bar] of eligible.entries()) {
+    if (index < triggerIndex) continue;
+    if (bar.high >= setup.target) return {
+      ...setup, status: 'target_reached', triggerDate: triggerBar.date,
+      confirmationDate: confirmation && confirmation.date <= bar.date ? confirmation.date : null,
+      terminalDate: bar.date,
+    };
+    if (index > triggerIndex && bar.close < setup.invalidation) return {
+      ...setup, status: 'failed', triggerDate: triggerBar.date,
+      confirmationDate: confirmation && confirmation.date <= bar.date ? confirmation.date : null,
+      terminalDate: bar.date,
     };
   }
-  const confirmation = later.find((bar) => bar.close >= setup.trigger);
   if (confirmation) return { ...setup, status: 'confirmed', triggerDate: triggerBar.date, confirmationDate: confirmation.date, terminalDate: null };
   return { ...setup, status: 'triggered', triggerDate: triggerBar.date, confirmationDate: null, terminalDate: null };
 }

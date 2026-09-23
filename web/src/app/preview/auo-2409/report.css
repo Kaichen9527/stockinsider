@@ -156,6 +156,23 @@ tbody th { font-family: ui-monospace, monospace; }
 .source-list a { font-size: 14px; font-weight: 800; }
 .method-note { margin-top: 34px; padding: 22px; border: 1px solid var(--rule); background: rgba(184,213,93,.18); }
 .method-note p { margin: 8px 0 0; line-height: 1.7; }
+.catalyst-grid { display: grid; gap: 16px; margin-top: 38px; }
+.catalyst-grid article { padding: 24px 28px; border: 1px solid var(--rule); background: var(--paper-strong); }
+.catalyst-grid h3, .bridge-panel h3 { margin: 0 0 16px; font-size: 25px; }
+.catalyst-grid p, .bridge-panel p { margin: 10px 0; font-size: 14px; line-height: 1.75; }
+.catalyst-grid p strong { color: var(--blue); }
+.bridge-panel { margin-top: 36px; padding: 24px 28px; border-left: 5px solid var(--cyan); background: #e8f0ed; }
+.data-gap-note { margin: 18px 0; padding: 15px 18px; border-left: 3px solid var(--red); color: var(--muted); background: rgba(159,57,47,.07); font-size: 13px; line-height: 1.7; }
+.market-context { margin: 22px 0; padding: 20px 24px; border-left: 4px solid var(--cyan); background: #e8f0ed; }
+.market-context h3 { margin: 0 0 10px; font-size: 18px; }
+.market-context p { margin: 8px 0; font-size: 13px; line-height: 1.7; }
+.research-toggle { margin: 24px 0; border: 1px solid var(--rule); background: var(--paper-strong); }
+.research-toggle summary { padding: 20px 22px; cursor: pointer; color: var(--blue); font-size: 17px; font-weight: 800; }
+.research-toggle summary:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
+.research-toggle[open] summary { border-bottom: 1px solid var(--rule); }
+.research-toggle > div { padding: 15px 22px 22px; }
+.research-toggle > div > p { font-size: 15px; line-height: 1.85; }
+.research-toggle td.ledger-detail { min-width: 330px; white-space: normal; text-align: left; line-height: 1.55; }
 
 .report-page footer { display: flex; justify-content: space-between; gap: 20px; padding: 24px max(28px, calc((100vw - 1200px) / 2)); color: rgba(255,255,255,.6); background: var(--ink); font: 700 10px/1.4 ui-monospace, monospace; letter-spacing: .08em; }
 

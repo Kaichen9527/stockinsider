@@ -102,3 +102,39 @@ confirmed, failed, expired or target-reached without moving the original thresho
 The page may therefore show expensive fundamental valuation and confirmed momentum at
 the same time. Header, article, tables and scenario state always read the same accepted
 research version and the latest complete trading date.
+
+## Focused-article amendment (2026-09-23)
+
+For the AUO read-only preview, the main article is a 4,000–6,000-character focused
+thesis. Its reading order is current market expectation, industry bottleneck and AUO's
+technical position, rumor/customer/order stage, profit transmission, current-price
+reverse valuation, entry conditions, then monitoring. Company history and full product
+background use a collapsed “了解友達” disclosure. Eight actual quarters, 24 monthly
+revenue observations and detailed forecast tables use a separate collapsed financial
+disclosure. Decision-relevant EPS, valuation and catalyst evidence stay visible in the
+main article. Each paragraph carries its own source references.
+
+For CPO and glass-core-substrate, show the full conditional bridge: saleable capacity,
+utilization, yield, ASP, consolidated external revenue after intercompany eliminations,
+gross profit, incremental expenses/depreciation, tax, non-controlling interest and
+diluted EPS. A missing public order, production or ownership input is an explicit
+missing value; it must not become a fictional forecast. Reverse-price tables may show
+the incremental revenue required at labeled after-tax attributable margins, not a
+claim about AUO orders. Intel collaboration is a hypothesis until the parties provide
+verifiable scope; the announced Intel–Lens Technology glass relationship is a
+competing path and must constrain assumed AUO share.
+
+The preview may show 20x/24x and 2029 discounted EPS as transparent sensitivity
+coordinates, but they are not calibrated consensus multiples or fair values. A future
+valuation revision must justify a multiple with persistent segment profitability,
+return on common equity, capital intensity and actual comparable business economics.
+The legacy P/B percentiles remain a distinct asset cross-check, never a combined
+business ceiling. This article amendment does not alter the separately governed
+Opportunity V3 primary-valuation authority above.
+
+Each premarket/aftermarket update must preserve this focused structure. It updates
+the claim-to-source mapping, catalyst stage, missing commercial inputs, forecast
+baseline date, price date and frozen trade state together. It logs source coverage
+failures explicitly and moves a catalyst into baseline EPS only after its revenue and
+ownership bridge is evidence-backed. The preview is deployed as a versioned,
+reversible artifact; formal mainline publication remains a separate decision.

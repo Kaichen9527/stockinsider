@@ -8,9 +8,13 @@ import {
   AUO_RESEARCH_VERSION,
   auoArticleSections,
   auoAssumptions,
+  auoBackground,
+  auoCatalysts,
+  auoCommercializationInputs,
+  auoEvidenceLedger,
   auoForecastBaseQuarters,
-  auoGrowthDrivers,
   auoMarketEvents,
+  auoMarketContext,
   auoMonitoringChecklist,
   auoMonthlyRevenue,
   auoPeerComparison,
@@ -22,11 +26,14 @@ import {
 import {
   buildEntryPlan,
   buildForecastScenario,
+  calculateCommercializationBridge,
   calculateForwardPe,
+  calculateRelativePerformance,
   calculateTechnicalSnapshot,
   combineActualAndForecastYear,
   discountedFutureValue,
   evaluateFrozenBreakoutSetup,
+  reverseCommercializationRevenue,
   requiredEarningsAtMultiple,
   requiredFutureEps,
   type PriceBar,
@@ -52,9 +59,19 @@ const scenarios = (Object.entries(auoScenarioAdjustments) as Array<[keyof typeof
 }));
 
 const baseScenario = scenarios.find((scenario) => scenario.id === 'base')!;
-const bullScenario = scenarios.find((scenario) => scenario.id === 'bull')!;
 const reverse20 = requiredEarningsAtMultiple(AUO_PRICE, 20, AUO_DILUTED_SHARES_MILLION, 283_000);
 const reverse24 = requiredEarningsAtMultiple(AUO_PRICE, 24, AUO_DILUTED_SHARES_MILLION, 283_000);
+const base2027Eps = baseScenario.annual.find((row) => row.year === 2027)!.normalizedEps;
+const revenueThresholds = [0.05, 0.10, 0.15].map((margin) => ({
+  margin,
+  at20: reverseCommercializationRevenue({ price: AUO_PRICE, multiple: 20, existingEps: base2027Eps, dilutedSharesMillion: AUO_DILUTED_SHARES_MILLION, afterTaxAttributableMargin: margin }),
+  at24: reverseCommercializationRevenue({ price: AUO_PRICE, multiple: 24, existingEps: base2027Eps, dilutedSharesMillion: AUO_DILUTED_SHARES_MILLION, afterTaxAttributableMargin: margin }),
+}));
+const relativePerformance = calculateRelativePerformance({
+  stockStart: auoMarketContext.baseline.stockClose, stockEnd: auoMarketContext.latest.stockClose,
+  indexStart: auoMarketContext.baseline.indexClose, indexEnd: auoMarketContext.latest.indexClose,
+});
+const recentForeignNetShares = auoMarketContext.institutionalFlow.reduce((sum, row) => sum + row.foreignNetShares, 0);
 const sourceById = new Map(auoSources.map((source) => [source.id, source]));
 const priceBars = priceHistory as PriceBar[];
 const originalBars = priceBars.filter((bar) => bar.date <= '115/09/18');
@@ -62,10 +79,10 @@ const originalSnapshot = calculateTechnicalSnapshot(originalBars, new Date('2026
 const originalPlan = buildEntryPlan(originalSnapshot);
 const frozenBreakout = evaluateFrozenBreakoutSetup(priceBars, {
   publishedAt: '115/09/18',
-  trigger: originalPlan.breakout.trigger ?? 32.2,
-  minimumVolume: originalPlan.breakout.minimumVolume ?? 0,
-  invalidation: originalPlan.breakout.invalidation ?? 28.4,
-  target: originalPlan.breakout.secondTarget ?? 36.6,
+  trigger: originalPlan.breakout.trigger!,
+  minimumVolume: originalPlan.breakout.minimumVolume!,
+  invalidation: originalPlan.breakout.invalidation!,
+  target: originalPlan.breakout.secondTarget!,
   expiresAfterTradingSessions: 20,
 });
 const setupStatusLabel = {
@@ -161,13 +178,13 @@ function ValuationTable() {
   return (
     <div className="table-scroll">
       <table>
-        <caption>2027 傳統營運情境｜P/E 主估、P/B 作資產交叉檢查</caption>
-        <thead><tr><th>情境</th><th>營收</th><th>營益率</th><th>正常化 EPS</th><th>{AUO_PRICE.toFixed(2)} 元 P/E</th><th>P/E 情境值</th><th>Forward BVPS</th><th>P/B 分位錨點</th><th>P/B 交叉值</th></tr></thead>
+        <caption>2027 既有營運情境｜P/E 為待校準敏感度，P/B 為資產交叉檢查</caption>
+        <thead><tr><th>情境</th><th>營收</th><th>營益率</th><th>正常化 EPS</th><th>{AUO_PRICE.toFixed(2)} 元 P/E</th><th>P/E 假設值</th><th>Forward BVPS</th><th>P/B 分位錨點</th><th>P/B 交叉值</th></tr></thead>
         <tbody>{scenarios.map((scenario) => {
           const annual = scenario.annual.find((row) => row.year === 2027)!;
           return <tr key={scenario.id}><th>{scenario.label}</th><td>{nf.format(annual.revenue)}</td><td>{fmt(annual.operatingIncome / annual.revenue * 100, '%')}</td><td>{annual.normalizedEps.toFixed(2)}</td><td>{fmt(calculateForwardPe(AUO_PRICE, annual.normalizedEps), 'x')}</td><td className="value-cell">{scenario.valuation.peValue === null ? '不適用' : `$${scenario.valuation.peValue.toFixed(1)}`}</td><td>${scenario.valuation.forwardBvps.toFixed(2)}</td><td>{scenario.valuation.fairPb.toFixed(2)}x</td><td>${scenario.valuation.pbValue.toFixed(1)}</td></tr>;
         })}</tbody>
-      </table>
+      </table><p className="table-note">20／24 倍沿用作透明的壓力測試座標，尚未由相近資本報酬與成長業務的同業充分校準；表中數值不是可執行目標價。</p>
     </div>
   );
 }
@@ -179,8 +196,46 @@ function EventTimeline() {
 function TransformationTable() {
   const epsRows = [1.5, 2, 2.5];
   const multiples = [16, 20, 24];
-  const implied2029Eps = requiredFutureEps(AUO_PRICE, 20, 2.25, 0.12);
-  return <><div className="table-scroll"><table><caption>轉型證據階梯｜每跨一級才允許增加模型內容</caption><thead><tr><th>階段</th><th>目前狀態</th><th>必須看到</th><th>估值處理</th><th>反證</th></tr></thead><tbody>{auoTransformationMilestones.map((row) => <tr key={row.stage}><th>{row.stage}</th><td>{row.state}</td><td>{row.evidence}</td><td>{row.valuation}</td><td>{row.falsifier}</td></tr>)}</tbody></table></div><div className="table-scroll"><table><caption>2029 正常化 EPS 敏感度｜折現率 12%、約 2.25 年折回；單位：元</caption><thead><tr><th>2029 EPS</th>{multiples.map((multiple) => <th key={multiple}>{multiple}x</th>)}</tr></thead><tbody>{epsRows.map((eps) => <tr key={eps}><th>{eps.toFixed(1)}</th>{multiples.map((multiple) => <td key={multiple}>{fmt(discountedFutureValue(eps, multiple, 2.25, 0.12))}</td>)}</tr>)}</tbody></table><p className="table-note">這是條件敏感度，不是目標價。{AUO_PRICE.toFixed(2)} 元若以 2029 年 20 倍、12%折現反推，需要 2029 EPS 約 {fmt(implied2029Eps)} 元；後續必須由客戶、產能、良率與毛利證據填入收入橋接。</p></div></>;
+  const yearsTo2029End = 3.25;
+  const implied2029Eps = requiredFutureEps(AUO_PRICE, 20, yearsTo2029End, 0.12);
+  return <><div className="table-scroll"><table><caption>轉型證據階梯｜每跨一級才允許增加模型內容</caption><thead><tr><th>階段</th><th>目前狀態</th><th>必須看到</th><th>估值處理</th><th>反證</th></tr></thead><tbody>{auoTransformationMilestones.map((row) => <tr key={row.stage}><th>{row.stage}</th><td>{row.state}</td><td>{row.evidence}</td><td>{row.valuation}</td><td>{row.falsifier}</td></tr>)}</tbody></table></div><div className="table-scroll"><table><caption>2029 年末正常化 EPS 敏感度｜折現率 12%、約 3.25 年折回；單位：元</caption><thead><tr><th>2029 EPS</th>{multiples.map((multiple) => <th key={multiple}>{multiple}x</th>)}</tr></thead><tbody>{epsRows.map((eps) => <tr key={eps}><th>{eps.toFixed(1)}</th>{multiples.map((multiple) => <td key={multiple}>{fmt(discountedFutureValue(eps, multiple, yearsTo2029End, 0.12))}</td>)}</tr>)}</tbody></table><p className="table-note">這是條件敏感度，不是目標價。{AUO_PRICE.toFixed(2)} 元若以 2029 年末 20 倍、12%折現反推，需要 2029 EPS 約 {fmt(implied2029Eps)} 元；後續必須由客戶、產能、良率與毛利證據填入收入橋接。</p></div></>;
+}
+
+function CatalystEvidence() {
+  return <div className="catalyst-grid">{auoCatalysts.map((catalyst) => <article key={catalyst.id}>
+    <span className="eyebrow">{catalyst.stage}</span><h3>{catalyst.title}</h3>
+    <p><strong>已知：</strong>{catalyst.evidence}</p><p><strong>下一步：</strong>{catalyst.nextProof}</p>
+    <p><strong>時間：</strong>{catalyst.timing}</p><p><strong>反證：</strong>{catalyst.falsifier}</p>
+    <SourceLinks ids={catalyst.sources}/>
+  </article>)}</div>;
+}
+
+const bridgeLabels: Record<string, string> = {
+  shippedCapacityUnits: '可出貨產能', utilization: '利用率', yieldRate: '良率',
+  averageSellingPriceMillion: '平均售價', grossMargin: '毛利率', incrementalOpexMillion: '新增費用',
+  depreciationMillion: '新增折舊', attributableShare: '歸屬普通股股東比例',
+  intercompanyRevenueMillion: '集團內部交易抵銷',
+};
+
+function CommercializationBridge() {
+  return <div className="bridge-panel"><h3>從量產到 EPS：目前還缺什麼</h3>
+    <p>可出貨產能 × 利用率 × 良率 × 售價 → 對外營收 → 毛利 − 費用 − 折舊 → 稅後歸屬普通股淨利 ÷ 稀釋股數。集團內交易與子公司少數股權需先扣除。</p>
+    {Object.entries(auoCommercializationInputs).map(([id, input]) => {
+      const result = calculateCommercializationBridge(input);
+      return <p key={id}><strong>{id.toUpperCase()}：</strong>{result.status === 'incomplete'
+        ? `尚無可核對的 ${result.missing.map((key) => bridgeLabels[key]).join('、')}；不產生商業化 EPS。`
+        : `條件情境新增營收 ${nf.format(result.consolidatedRevenueMillion)} 百萬元、EPS ${result.incrementalEps.toFixed(2)} 元。`}</p>;
+    })}
+    <SourceLinks ids={['S2', 'S23']}/>
+  </div>;
+}
+
+function RevenueThresholdTable() {
+  return <div className="table-scroll"><table><caption>現價反推：以 2027 基本 EPS 為起點，新增對外營收門檻（新台幣百萬元）</caption>
+    <thead><tr><th>新增收入的稅後歸屬利潤率</th><th>20x 要求的新增收入</th><th>24x 要求的新增收入</th></tr></thead>
+    <tbody>{revenueThresholds.map((row) => <tr key={row.margin}><th>{(row.margin * 100).toFixed(0)}%</th><td>{nf.format(row.at20!.incrementalRevenueMillion)}</td><td>{nf.format(row.at24!.incrementalRevenueMillion)}</td></tr>)}</tbody></table>
+    <p className="table-note">基準 EPS {base2027Eps.toFixed(2)} 元；假設新增利潤與既有事業不重複。5／10／15% 是敏感度，不是友達新技術利潤率預測；未有訂單或產能證據時，不把門檻當成營收財測。</p>
+  </div>;
 }
 
 function AnnualOutlookTable() {
@@ -225,18 +280,15 @@ function ActualTable() {
   );
 }
 
-function SectionExtras({ id, technical }: {
-  id: string;
-  technical: TechnicalSnapshot | null;
-}) {
-  if (id === 'history') return <ActualTable/>;
-  if (id === 'business') return <RevenueChart/>;
+function SectionExtras({ id, technical }: { id: string; technical: TechnicalSnapshot | null }) {
+  if (id === 'question') return <EventTimeline/>;
   if (id === 'industry') return <div className="peer-grid">{auoPeerComparison.map((peer) => <article key={peer.company}><span>{peer.role}</span><h3>{peer.company}</h3><p className="peer-signal">{peer.signal}</p><p>{peer.implication}</p></article>)}</div>;
-  if (id === 'growth') return <><EventTimeline/><div className="driver-list">{auoGrowthDrivers.map((driver, index) => <article key={driver.title}><div className="driver-index">{String(index + 1).padStart(2, '0')}</div><div><h3>{driver.title}</h3><dl><dt>證據</dt><dd>{driver.evidence}</dd><dt>財務傳導</dt><dd>{driver.transmission}</dd><dt>何時反映</dt><dd>{driver.timing}</dd><dt>模型假設</dt><dd>{driver.financial}</dd><dt>反證</dt><dd>{driver.falsifier}</dd></dl><SourceLinks ids={driver.sources}/></div></article>)}</div></>;
-  if (id === 'valuation') return <><ForecastTable/><AnnualOutlookTable/><ValuationTable/><TransformationTable/><div className="reverse-box"><p className="eyebrow">現價反推</p><strong>2027 EPS 需 {reverse20.eps.toFixed(2)} 元（20x）／{reverse24.eps.toFixed(2)} 元（24x）</strong><span>20 倍情境相當於歸屬普通股淨利約 {nf.format(reverse20.netIncome)} 百萬元、淨利率 {fmt(reverse20.netMargin * 100, '%')}。市場目前支付的是傳統營運改善加轉型選擇權。</span></div></>;
+  if (id === 'rumor') return <CatalystEvidence/>;
+  if (id === 'growth') return <CommercializationBridge/>;
+  if (id === 'valuation') return <><ValuationTable/><RevenueThresholdTable/><TransformationTable/><div className="reverse-box"><p className="eyebrow">現價反推</p><strong>2027 EPS 需 {reverse20.eps.toFixed(2)} 元（20x）／{reverse24.eps.toFixed(2)} 元（24x）</strong><span>20 倍情境相當於歸屬普通股淨利約 {nf.format(reverse20.netIncome)} 百萬元。相對基本情境的差額是模型門檻，不是已量到的市場轉型溢價。</span></div></>;
   if (id === 'entry' && technical) return <><PriceChart technical={technical}/><div className="indicator-strip">{[
     ['MA5', technical.ma5], ['MA20', technical.ma20], ['MA60', technical.ma60], ['MA120', technical.ma120], ['MA240', technical.ma240], ['MACD', technical.macd], ['RSI14', technical.rsi14], ['ATR14', technical.atr14],
-  ].map(([label, value]) => <div key={String(label)}><span>{label}</span><strong>{typeof value === 'number' ? value.toFixed(2) : '—'}</strong></div>)}</div>{technical.stale ? <div className="reverse-box"><p className="eyebrow">技術資料已過期</p><strong>所有新進場價位暫停使用</strong><span>最後完整交易日為 {technical.asOf}；補齊資料前不產生新劇本。</span></div> : <div className="scenario-cards"><article className="completed-card"><span>9/19 原放量突破劇本</span><h3>{setupStatusLabel[frozenBreakout.status]}</h3><p>固定門檻 {fmt(frozenBreakout.trigger)} 元、最低量 {nf.format(frozenBreakout.minimumVolume / 1_000)} 張；{frozenBreakout.triggerDate ? `${frozenBreakout.triggerDate} 觸發` : '尚未觸發'}，{frozenBreakout.terminalDate ? `${frozenBreakout.terminalDate} 到達 ${fmt(frozenBreakout.target)} 元` : '尚未終止'}。</p></article><article><span>新部位｜等待整理</span><h3>第一天回檔，不急著接</h3><p>9/23 收 34.70 元、成交 9.49 億股，仍高於 32.2 元原突破區，但尚未完成量縮整理與重新轉強。形成新價格結構後再計算報酬風險比。</p></article><article className="danger-card"><span>事件失效條件</span><h3>證據沒有跟上價格</h3><p>合作否認、驗證延後、跌回原突破區，或只有同源轉載而無新增獨立證據，均降低事件交易的勝率。</p></article></div>}</>;
+  ].map(([label, value]) => <div key={String(label)}><span>{label}</span><strong>{typeof value === 'number' ? value.toFixed(2) : '—'}</strong></div>)}</div><div className="market-context"><h3>相對大盤與官方籌碼</h3><p>{auoMarketContext.baseline.date} 至 {auoMarketContext.latest.date}：友達 {fmt(relativePerformance?.stockReturnPercent ?? null, "%")}、加權指數 {fmt(relativePerformance?.indexReturnPercent ?? null, "%")}；超額 {fmt(relativePerformance?.relativePoints ?? null, " 個百分點")}。<SourceLinks ids={["S14", "S30"]}/></p><p>外資 9/21–9/23 合計淨買超 {nf.format(recentForeignNetShares / 1_000)} 張，但 9/23 單日淨賣超 {nf.format(Math.abs(auoMarketContext.institutionalFlow.at(-1)!.foreignNetShares) / 1_000)} 張。這是資金與換手證據，並非合作訂單證據。<SourceLinks ids={["S31"]}/></p><p>收盤突破只代表訊號；漲停、跳空與流動性可能使實際成交價不同。</p></div>{technical.stale ? <div className="reverse-box"><p className="eyebrow">技術資料已過期</p><strong>所有新進場價位暫停使用</strong><span>最後完整交易日為 {technical.asOf}；補齊資料前不產生新劇本。</span></div> : <div className="scenario-cards"><article className="completed-card"><span>9/19 原放量突破劇本</span><h3>{setupStatusLabel[frozenBreakout.status]}</h3><p>固定門檻 {fmt(frozenBreakout.trigger)} 元、最低量 {nf.format(frozenBreakout.minimumVolume / 1_000)} 張；{frozenBreakout.triggerDate ? `${frozenBreakout.triggerDate} 觸發` : '尚未觸發'}，{frozenBreakout.terminalDate ? `${frozenBreakout.terminalDate} 價格碰觸 ${fmt(frozenBreakout.target)} 元` : '尚未終止'}。觸價不等於已成交。</p></article><article><span>新部位｜等待整理</span><h3>等待新價格結構</h3><p>{AUO_AS_OF} 收 {AUO_PRICE.toFixed(2)} 元，仍高於 {fmt(frozenBreakout.trigger)} 元原突破區，但尚未完成量縮整理與重新轉強。形成新價格結構後重算觸發、失效及報酬風險比。</p></article><article className="danger-card"><span>事件失效條件</span><h3>證據沒有跟上價格</h3><p>合作否認、驗證延後、跌回原突破區，或只有同源轉載而無新增獨立證據，均降低事件交易的吸引力。</p></article></div>}</>;
   if (id === 'monitor') return <div className="table-scroll"><table><caption>研究更新條件</caption><thead><tr><th>頻率</th><th>追蹤項目</th><th>上修信號</th><th>下修信號</th></tr></thead><tbody>{auoMonitoringChecklist.map((row) => <tr key={row.metric}><th>{row.cadence}</th><td>{row.metric}</td><td>{row.upgrade}</td><td>{row.downgrade}</td></tr>)}</tbody></table></div>;
   return null;
 }
@@ -252,32 +304,36 @@ export default function AuoDeepDiveReport() {
         <div className="hero-grid">
           <div>
             <p className="eyebrow">友達光電 2409 · 6–18 個月基本面／數週至三個月技術條件</p>
-            <h1>36.65 元後回落<br/>證據仍沒增加。</h1>
-            <p className="deck">9/23 收 34.70 元、成交 9.49 億股，從 36.65 元高點回落 5.32%。友達 8/31 已公開 CPO／GCS 進展，Intel 合作仍屬傳聞；價格先換手，客戶與量產證據仍待驗證。</p>
+            <h1>AI 互連的關鍵位置，<br/>還是提前交易的訂單？</h1>
+            <p className="deck">截至 {AUO_AS_OF} 收盤 {AUO_PRICE.toFixed(2)} 元。友達已展示 Micro LED CPO 與玻璃核心基板；Intel 合作仍屬待查傳聞。先拆技術位置、訂單階段與現價所需獲利，再決定進場條件。</p>
           </div>
           <div className="price-stamp"><span>最新完整交易日</span><strong>NT$ {AUO_PRICE.toFixed(2)}</strong><small>{AUO_AS_OF} · TWSE</small></div>
         </div>
         <div className="verdict-grid">
-          <article><span>中期判斷</span><strong className="caution">轉型待驗證</strong><p>傳統營運樂觀情境約 ${bullScenario.valuation.peValue?.toFixed(1)}；34.70 元仍包含尚未量化的商業化期待。</p></article>
-          <article><span>短期波段</span><strong className="watch">{technicalUnavailable ? '資料過期' : setupStatusLabel[frozenBreakout.status]}</strong><p>{technicalUnavailable ? `最後完整交易日 ${technical?.asOf ?? '待確認'}。` : `原 32.2 元突破已觸發、36.6 元量度目標已到；9/23 回檔但未跌破突破區，新部位等整理確認。`}</p></article>
+          <article><span>中期判斷</span><strong className="caution">既有獲利不足，待商業化</strong><p>模型的 2027 基本 EPS {base2027Eps.toFixed(2)} 元；新技術尚缺訂單、產能與毛利，不能列入基本 EPS。</p></article>
+          <article><span>短期波段</span><strong className="watch">{technicalUnavailable ? '資料過期' : '舊目標已碰觸，新部位等待'}</strong><p>{technicalUnavailable ? `最後完整交易日 ${technical?.asOf ?? '待確認'}；新價位暫停使用。` : `原 ${fmt(frozenBreakout.trigger)} 元突破與 ${fmt(frozenBreakout.target)} 元量度目標已到；等新結構及可成交條件。`}</p></article>
           <article><span>現價反映</span><strong>2027E P/E {fmt(calculateForwardPe(AUO_PRICE, base2027.normalizedEps), 'x')}</strong><p>基本 EPS {base2027.normalizedEps.toFixed(2)}；20x／24x 分別需要 EPS {reverse20.eps.toFixed(2)}／{reverse24.eps.toFixed(2)} 元。</p></article>
         </div>
         <p className="hero-footnote">研究用途，不構成個人化投資建議。事實、公司指引、研究估計與情境已分開標示。</p>
       </header>
 
       <div className="report-layout">
-        <aside className="toc"><p>章節</p>{auoArticleSections.map((section) => <a href={`#${section.id}`} key={section.id}><span>{section.number}</span>{section.title.split('：')[0]}</a>)}<a href="#appendix"><span>09</span>來源與假設</a></aside>
+        <aside className="toc"><p>章節</p>{auoArticleSections.map((section) => <a href={`#${section.id}`} key={section.id}><span>{section.number}</span>{section.title.split('：')[0]}</a>)}<a href="#appendix"><span>08</span>明細與來源</a></aside>
         <article className="article-body">
-          <section className="opening-note"><p className="eyebrow">本次重估</p><h2>34.70 元仍高於傳統營運樂觀值</h2><p>市場正在交易面板循環、車用與垂直場域，再加上 CPO／玻璃核心基板的技術選擇權。9/23 高檔回落並未帶來新的客戶或量產證據；本文保存原突破劇本，同時把最新價格、估值反推與後續等待條件更新到同一版本。</p></section>
-          {auoArticleSections.map((section) => <section className="report-section" id={section.id} key={section.id}><div className="section-heading"><span>{section.number}</span><h2>{section.title}</h2></div>{section.paragraphs.map((paragraph, index) => <p key={index}>{paragraph}{index === section.paragraphs.length - 1 ? <SourceLinks ids={section.sources}/> : null}</p>)}<SectionExtras id={section.id} technical={technical}/></section>)}
+          <section className="opening-note"><p className="eyebrow">核心命題</p><h2>技術展示已發生，商業化仍要逐級驗證</h2><p>友達在光互連整合與玻璃 RDL 有可查的角色；Intel 訂單尚未證實。現價反推所需 EPS，高於三事業的基本預測。中期觀察利潤與客戶驗證，短線等待新價量結構。</p></section>
+          {auoArticleSections.map((section) => <section className="report-section" id={section.id} key={section.id}><div className="section-heading"><span>{section.number}</span><h2>{section.title}</h2></div>{section.paragraphs.map((paragraph, index) => <p key={index}>{paragraph.text}<SourceLinks ids={paragraph.sources}/></p>)}<SectionExtras id={section.id} technical={technical}/></section>)}
 
           <section className="report-section appendix" id="appendix">
-            <div className="section-heading"><span>09</span><h2>來源、假設與可重算邊界</h2></div>
+            <div className="section-heading"><span>08</span><h2>背景、財務明細、來源與假設</h2></div>
             <p>重要數字優先回到友達法說、財報與交易所；產業研究與同業資料用來調整假設。月營收完整序列來自公開資料鏡像，最近月份已用公司公告交叉核對。研究沒有宣稱搜盡所有文章，也不把無法核對的說法寫成事實。</p>
+            <details className="research-toggle"><summary>了解友達｜公司沿革與三事業介紹</summary><div>{auoBackground.map((paragraph, index) => <p key={index}>{paragraph.text}<SourceLinks ids={paragraph.sources}/></p>)}</div></details>
+            <details className="research-toggle"><summary>財務與假設明細｜八季、24 個月、未來季度與年度財測</summary><div><ActualTable/><RevenueChart/><ForecastTable/><AnnualOutlookTable/></div></details>
+            <details className="research-toggle"><summary>事件與來源根源｜傳聞、轉載與首次觀測紀錄</summary><div><div className="table-scroll"><table><caption>證據帳本｜發布時間、根源與查證狀態</caption><thead><tr><th>主張</th><th>發布</th><th>首次觀測</th><th>根源</th><th>狀態／同源關係</th></tr></thead><tbody>{auoEvidenceLedger.map((row) => <tr key={row.claim}><th>{row.claim}</th><td>{row.publishedAt}</td><td>{row.firstObservedAt ?? '舊紀錄未留存'}</td><td><SourceLinks ids={[row.rootSource]}/></td><td className="ledger-detail">{row.status}；{row.relation}</td></tr>)}</tbody></table></div><p>後續更新須記錄精確首次觀測時間、查核時間及來源成功／失敗範圍；舊版未留的時間不能回填成事前發現。</p></div></details>
             <div className="assumption-list">{auoAssumptions.map((item) => <article key={item.id}><span>{item.id}</span><div><strong>{item.label}｜{item.value}</strong><p>{item.basis}</p></div></article>)}</div>
             <h3 className="appendix-title">完整來源明細</h3>
             <ol className="source-list">{auoSources.map((source) => <li key={source.id} id={`source-${source.id}`}><span>{source.id}</span><div><a href={source.url} target="_blank" rel="noreferrer">{source.title}</a><p>{source.type} · {source.date} · {source.supports}</p></div></li>)}</ol>
             <div className="method-note"><strong>旺宏格式說明</strong><p>本頁依已找回的「焦點內容／投資判斷／財務數據及估值」要求編排，並加入定錨式因果鏈與反證。原旺宏 PDF 仍是 iCloud 佔位檔，本版尚未重新逐頁核對其本文；沒有用舊 seed 數字冒充原報告內容。</p></div>
+            <div className="method-note"><strong>GitHub 方法參考</strong><p><a href="https://github.com/TauricResearch/TradingAgents">TradingAgents</a> 的看多／反證對照、<a href="https://github.com/AI4Finance-Foundation/FinRobot">FinRobot</a> 的計算與文字分離、<a href="https://github.com/JerBouma/FinanceToolkit">FinanceToolkit</a> 的期間一致性，以及 <a href="https://github.com/kernc/backtesting.py">backtesting.py</a> 的逐日訊號與成交區分，僅作研究方法參考；未引入套件，也不作友達營運事實來源。</p></div>
           </section>
         </article>
       </div>

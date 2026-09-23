@@ -13,8 +13,10 @@ import {
 import {
   buildEntryPlan,
   buildForecastScenario,
+  calculateCommercializationBridge,
   calculateForwardPe,
   calculateQuarter,
+  calculateRelativePerformance,
   calculateTechnicalSnapshot,
   classifyResearchVerdict,
   combineActualAndForecastYear,
@@ -22,6 +24,7 @@ import {
   evaluateFrozenBreakoutSetup,
   discountedFutureValue,
   requiredFutureEps,
+  reverseCommercializationRevenue,
   requiredEarningsAtMultiple,
   validateResearchInputs,
   type PriceBar,
@@ -125,7 +128,7 @@ test('stale technical data disables all executable price levels', () => {
 });
 
 test('missing segments and conflicting sources remain visible as research blockers', () => {
-  const snapshot = calculateTechnicalSnapshot(priceHistory as PriceBar[], new Date('2026-09-23T12:00:00+08:00'));
+  const snapshot = calculateTechnicalSnapshot(priceHistory as PriceBar[], new Date('2026-09-23T18:00:00+08:00'));
   assert.deepEqual(validateResearchInputs({ segmentDataAvailable: false, sourceConflictCount: 2, technical: snapshot }), {
     complete: false,
     warnings: ['segment_data_missing', 'source_conflicts_require_review'],
@@ -133,7 +136,7 @@ test('missing segments and conflicting sources remain visible as research blocke
 });
 
 test('expensive valuation and bullish price trend produce separate conclusions', () => {
-  const snapshot = calculateTechnicalSnapshot(priceHistory as PriceBar[], new Date('2026-09-23T12:00:00+08:00'));
+  const snapshot = calculateTechnicalSnapshot(priceHistory as PriceBar[], new Date('2026-09-23T18:00:00+08:00'));
   assert.deepEqual(classifyResearchVerdict({ price: AUO_PRICE, baseReferenceValue: 20, technical: snapshot }), {
     mediumTerm: 'low_attractiveness',
     shortTerm: 'bullish_wait_for_trigger',
@@ -156,4 +159,77 @@ test('transformation sensitivity is explicit and reversible', () => {
   assert.equal(discountedFutureValue(2, 20, 2.25, 0.12), 31);
   assert.equal(requiredFutureEps(34.70, 20, 2.25, 0.12), 2.24);
   assert.equal(discountedFutureValue(-1, 20, 2, 0.12), null);
+});
+
+test('commercialization stays unpriced without volume, price and ownership evidence', () => {
+  assert.deepEqual(calculateCommercializationBridge({
+    shippedCapacityUnits: null, utilization: null, yieldRate: null, averageSellingPriceMillion: null,
+    grossMargin: null, incrementalOpexMillion: null, depreciationMillion: null,
+    taxRate: 0.2, attributableShare: null, intercompanyRevenueMillion: null, dilutedSharesMillion: 7_547,
+  }), { status: 'incomplete', missing: [
+    'shippedCapacityUnits', 'utilization', 'yieldRate', 'averageSellingPriceMillion',
+    'grossMargin', 'incrementalOpexMillion', 'depreciationMillion', 'attributableShare',
+    'intercompanyRevenueMillion',
+  ] });
+});
+
+test('conditional production bridge eliminates intercompany sales and non-controlling interest', () => {
+  const result = calculateCommercializationBridge({
+    shippedCapacityUnits: 1_000, utilization: 0.8, yieldRate: 0.75, averageSellingPriceMillion: 2,
+    grossMargin: 0.3, incrementalOpexMillion: 80, depreciationMillion: 100,
+    taxRate: 0.2, attributableShare: 0.7, intercompanyRevenueMillion: 200, dilutedSharesMillion: 7_547,
+  });
+  assert.deepEqual(result, {
+    status: 'modeled', saleableUnits: 600, grossRevenueMillion: 1_200,
+    consolidatedRevenueMillion: 1_000, operatingIncomeMillion: 120,
+    commonNetIncomeMillion: 67, incrementalEps: 0.01,
+  });
+  assert.throws(() => calculateCommercializationBridge({
+    shippedCapacityUnits: 1, utilization: 1, yieldRate: 1, averageSellingPriceMillion: 1,
+    grossMargin: 0.3, incrementalOpexMillion: 0, depreciationMillion: 0,
+    taxRate: 0.2, attributableShare: 1, intercompanyRevenueMillion: 2, dilutedSharesMillion: 7_547,
+  }), /intercompany_revenue_exceeds_gross/u);
+});
+
+test('reverse commercialization is a revenue threshold, not a forecast', () => {
+  assert.deepEqual(reverseCommercializationRevenue({
+    price: 34.70, multiple: 20, existingEps: 0.62,
+    dilutedSharesMillion: 7_547, afterTaxAttributableMargin: 0.1,
+  }), { requiredEps: 1.74, incrementalEps: 1.12,
+    incrementalCommonProfitMillion: 8_415, incrementalRevenueMillion: 84_149 });
+});
+
+test('frozen setup keeps the first terminal event when price later breaks invalidation', () => {
+  const setup = { publishedAt: '115/09/18', trigger: 32.2, minimumVolume: 500,
+    invalidation: 28.4, target: 36.6, expiresAfterTradingSessions: 20 };
+  const bars: PriceBar[] = [
+    { date: '115/09/19', open: 32, high: 33, low: 31, close: 33, volume: 600 },
+    { date: '115/09/20', open: 34, high: 37, low: 33, close: 36, volume: 600 },
+    { date: '115/09/21', open: 29, high: 30, low: 27, close: 28, volume: 600 },
+  ];
+  assert.deepEqual({ status: evaluateFrozenBreakoutSetup(bars, setup).status,
+    terminalDate: evaluateFrozenBreakoutSetup(bars, setup).terminalDate },
+  { status: 'target_reached', terminalDate: '115/09/20' });
+  assert.equal(evaluateFrozenBreakoutSetup(bars.map((bar) => ({ ...bar, high: Math.min(bar.high, 36) })), setup).status, 'failed');
+});
+
+test('freshness uses completed Taiwan sessions and the official 2026 holiday calendar', () => {
+  const bars = priceHistory as PriceBar[];
+  assert.equal(calculateTechnicalSnapshot(bars, new Date('2026-09-24T08:00:00+08:00'))?.stale, false,
+    'next session has not completed before the open');
+  assert.equal(calculateTechnicalSnapshot(bars, new Date('2026-09-24T18:00:00+08:00'), 0)?.stale, true,
+    'missing completed Thursday is visible with zero grace');
+  assert.equal(calculateTechnicalSnapshot(bars, new Date('2026-09-28T18:00:00+08:00'), 1)?.stale, false,
+    'Friday and Monday were exchange holidays, not missing sessions');
+  assert.equal(calculateTechnicalSnapshot(bars, new Date('2027-01-04T18:00:00+08:00'))?.stale, true,
+    'unknown next-year calendar fails closed');
+});
+
+test('official index and stock closes produce point-in-time relative performance', () => {
+  assert.deepEqual(calculateRelativePerformance({ stockStart: 30.35, stockEnd: 34.70,
+    indexStart: 47_180.75, indexEnd: 48_157.29 }), {
+    stockReturnPercent: 14.33, indexReturnPercent: 2.07, relativePoints: 12.26,
+  });
+  assert.equal(calculateRelativePerformance({ stockStart: 0, stockEnd: 34.7,
+    indexStart: 47_180.75, indexEnd: 48_157.29 }), null);
 });
