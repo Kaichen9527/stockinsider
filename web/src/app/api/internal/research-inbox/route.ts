@@ -28,4 +28,3 @@ export async function POST(request: Request) {
     authSource: auth.authSource,
   });
 }
-

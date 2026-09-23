@@ -905,7 +905,7 @@ async function executeCandidateResearchCycle(options: {
         peObservations.push({ date: point.date, value: point.peRatio });
         pbObservations.push({ date: point.date, value: point.pbRatio });
       }
-      const businessProfile = getCandidateBusinessProfile(stock.symbol);
+      const businessProfile = getCandidateBusinessProfile(stock.symbol, evaluatedAt);
       const monthlyPeObservations = latestMonthlyPositiveValues(peObservations);
       const rawMonthlyPbObservations = latestMonthlyPositiveValues(pbObservations);
       const pairedPbObservations = pointInTimeMonthlyPbObservations(officialMultiples, bars, evaluatedAt);

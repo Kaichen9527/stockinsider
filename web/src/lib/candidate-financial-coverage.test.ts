@@ -12,6 +12,8 @@ test('method requirements include actual denominators and cycle periods',()=>{
 
 test('AUO coverage follows its forward BVPS method instead of a global sector row count', () => {
   const requirement = candidateFinancialRequirements('光電業', '2409');
+  assert.deepEqual(candidateFinancialRequirements('光電業', '2409', '2026-09-18T23:59:59+08:00'),
+    candidateFinancialRequirements('光電業'));
   assert.equal(requirement.quarters, 8);
   assert.ok(requirement.keys.includes('common_equity_attributable_to_owners'));
   assert.ok(requirement.keys.includes('common_shares_outstanding'));

@@ -8,8 +8,8 @@ type Fact = Record<string, unknown>;
 const FLOW_KEYS = ['quarterly_revenue', 'quarterly_gross_profit', 'quarterly_operating_income', 'quarterly_net_income_attributable_to_common', 'quarterly_diluted_eps', 'diluted_weighted_average_shares'];
 
 /** Requirements match the valuation readers, not the number of rows fetched. */
-export function candidateFinancialRequirements(sector: string, symbol?: string) {
-  const profile = symbol ? getCandidateBusinessProfile(symbol) : null;
+export function candidateFinancialRequirements(sector: string, symbol?: string, cutoff?: string) {
+  const profile = symbol ? getCandidateBusinessProfile(symbol, cutoff) : null;
   if (profile?.businessModel === 'cyclical_asset') {
     return { quarters: profile.reportedQuarterCount, keys: [...profile.requiredFlowFacts, ...profile.requiredInstantFacts], latestInstantOnly: true };
   }
@@ -24,7 +24,7 @@ export function candidateFinancialRequirements(sector: string, symbol?: string) 
 }
 
 export function financialCoverageSummary(facts: Fact[], sector: string, cutoff: string, symbol?: string) {
-  const requirements = candidateFinancialRequirements(sector, symbol);
+  const requirements = candidateFinancialRequirements(sector, symbol, cutoff);
   const missing = financialCoverageGaps(facts, sector, cutoff, symbol);
   const requiredFieldPeriods = requirements.keys.reduce((count, key) => count
     + (requirements.latestInstantOnly && ['common_equity_attributable_to_owners', 'common_shares_outstanding'].includes(key)
@@ -36,7 +36,7 @@ export function financialCoverageSummary(facts: Fact[], sector: string, cutoff: 
 }
 
 export function financialCoverageGaps(facts: Fact[], sector: string, cutoff: string, symbol?: string) {
-  const required = candidateFinancialRequirements(sector, symbol);
+  const required = candidateFinancialRequirements(sector, symbol, cutoff);
   const quarterEnds = latestDueFinancialQuarters(cutoff, required.quarters + 1).map((quarter) => quarter.periodEnd);
   const eligible = preferOfficialReportedFinancialFacts(facts.filter((fact) => fact.estimate_kind === 'reported'
     && typeof fact.value === 'number' && Number.isFinite(fact.value)

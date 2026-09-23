@@ -46,8 +46,13 @@ const AUO_PROFILE: CandidateBusinessProfile = Object.freeze({
 
 /** Issuer-specific research methods are opt-in and versioned. A sector label
  * alone must never silently apply AUO's model to another company. */
-export function getCandidateBusinessProfile(symbol: string): CandidateBusinessProfile | null {
-  return String(symbol).trim() === AUO_PROFILE.symbol ? AUO_PROFILE : null;
+export function getCandidateBusinessProfile(symbol: string, evaluationAt?: string): CandidateBusinessProfile | null {
+  if (String(symbol).trim() !== AUO_PROFILE.symbol) return null;
+  if (evaluationAt !== undefined) {
+    const cutoff = Date.parse(evaluationAt);
+    if (!Number.isFinite(cutoff) || cutoff < Date.parse(`${AUO_PROFILE.effectiveFrom}T00:00:00+08:00`)) return null;
+  }
+  return AUO_PROFILE;
 }
 
 type SegmentEvidenceRow = {

@@ -38,4 +38,3 @@ test('authenticated content stores only the submitted bounded summary', () => {
   assert.equal(row.content_text.includes('cookie'), false);
   assert.equal(row.content_text.includes('session'), false);
 });
-

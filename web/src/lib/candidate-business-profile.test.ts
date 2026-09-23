@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { hasCompleteCandidateSegmentBridge } from './candidate-business-profile.ts';
+import { getCandidateBusinessProfile, hasCompleteCandidateSegmentBridge } from './candidate-business-profile.ts';
 
 const cutoff = '2026-09-19T23:59:59+08:00';
 const event = {
@@ -17,6 +17,12 @@ const event = {
     ],
   },
 };
+
+test('AUO profile is unavailable before its effective time in historical replays', () => {
+  assert.equal(getCandidateBusinessProfile('2409', '2026-09-18T15:59:59+08:00'), null);
+  assert.equal(getCandidateBusinessProfile('2409', 'invalid'), null);
+  assert.equal(getCandidateBusinessProfile('2409', '2026-09-19T00:00:00+08:00')?.businessModel, 'cyclical_asset');
+});
 
 test('AUO target requires a complete official point-in-time segment bridge', () => {
   assert.equal(hasCompleteCandidateSegmentBridge('2409', [event], { cutoff, periodEnd: '2026-06-30' }), true);
