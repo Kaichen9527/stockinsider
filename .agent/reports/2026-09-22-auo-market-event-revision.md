@@ -33,3 +33,10 @@ The prior preview was not fit for a current entry decision. It froze price and p
 
 The inbox is a guarded import surface, not proof that every social platform is readable. A scheduled local Codex run must report each attempted source as read, empty or failed; authenticated content may contribute only a bounded summary and citation, never cookies, session material or member-only full text.
 
+## 2026-09-23 18:00 follow-up
+
+- TWSE recorded a 34.70 close, down 5.32%, after opening and trading as high as 36.65. Volume was 948,644,349 shares and turnover was NT$33.26 billion.
+- The frozen 9/19 breakout remains `target_reached` on 9/22. The 9/23 pullback does not rewrite that outcome and is only the first completed session after the target; it is not yet a completed pullback entry signal.
+- The reviewed AUO and Intel official pages contained no new partnership confirmation. The current MOPS open-data snapshot returned no new 2409 material announcement, and public news searches did not add an independent source beyond the existing rumor chain.
+- Public official, news and PTT coverage succeeded. Authenticated Threads, Instagram and Facebook were unavailable to this run and remain explicitly unreviewed rather than recorded as having no result.
+- The versioned preview was updated to 34.70, including the event timeline, reverse EPS requirements, P/B cross-check and post-target trading condition.

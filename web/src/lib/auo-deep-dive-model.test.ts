@@ -125,7 +125,7 @@ test('stale technical data disables all executable price levels', () => {
 });
 
 test('missing segments and conflicting sources remain visible as research blockers', () => {
-  const snapshot = calculateTechnicalSnapshot(priceHistory as PriceBar[], new Date('2026-09-22T12:00:00+08:00'));
+  const snapshot = calculateTechnicalSnapshot(priceHistory as PriceBar[], new Date('2026-09-23T12:00:00+08:00'));
   assert.deepEqual(validateResearchInputs({ segmentDataAvailable: false, sourceConflictCount: 2, technical: snapshot }), {
     complete: false,
     warnings: ['segment_data_missing', 'source_conflicts_require_review'],
@@ -133,7 +133,7 @@ test('missing segments and conflicting sources remain visible as research blocke
 });
 
 test('expensive valuation and bullish price trend produce separate conclusions', () => {
-  const snapshot = calculateTechnicalSnapshot(priceHistory as PriceBar[], new Date('2026-09-22T12:00:00+08:00'));
+  const snapshot = calculateTechnicalSnapshot(priceHistory as PriceBar[], new Date('2026-09-23T12:00:00+08:00'));
   assert.deepEqual(classifyResearchVerdict({ price: AUO_PRICE, baseReferenceValue: 20, technical: snapshot }), {
     mediumTerm: 'low_attractiveness',
     shortTerm: 'bullish_wait_for_trigger',
@@ -154,6 +154,6 @@ test('frozen September breakout advances without moving its published thresholds
 
 test('transformation sensitivity is explicit and reversible', () => {
   assert.equal(discountedFutureValue(2, 20, 2.25, 0.12), 31);
-  assert.equal(requiredFutureEps(36.65, 20, 2.25, 0.12), 2.36);
+  assert.equal(requiredFutureEps(34.70, 20, 2.25, 0.12), 2.24);
   assert.equal(discountedFutureValue(-1, 20, 2, 0.12), null);
 });

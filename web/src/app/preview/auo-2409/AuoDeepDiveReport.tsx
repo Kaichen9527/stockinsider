@@ -162,7 +162,7 @@ function ValuationTable() {
     <div className="table-scroll">
       <table>
         <caption>2027 傳統營運情境｜P/E 主估、P/B 作資產交叉檢查</caption>
-        <thead><tr><th>情境</th><th>營收</th><th>營益率</th><th>正常化 EPS</th><th>36.65 元 P/E</th><th>P/E 情境值</th><th>Forward BVPS</th><th>P/B 分位錨點</th><th>P/B 交叉值</th></tr></thead>
+        <thead><tr><th>情境</th><th>營收</th><th>營益率</th><th>正常化 EPS</th><th>{AUO_PRICE.toFixed(2)} 元 P/E</th><th>P/E 情境值</th><th>Forward BVPS</th><th>P/B 分位錨點</th><th>P/B 交叉值</th></tr></thead>
         <tbody>{scenarios.map((scenario) => {
           const annual = scenario.annual.find((row) => row.year === 2027)!;
           return <tr key={scenario.id}><th>{scenario.label}</th><td>{nf.format(annual.revenue)}</td><td>{fmt(annual.operatingIncome / annual.revenue * 100, '%')}</td><td>{annual.normalizedEps.toFixed(2)}</td><td>{fmt(calculateForwardPe(AUO_PRICE, annual.normalizedEps), 'x')}</td><td className="value-cell">{scenario.valuation.peValue === null ? '不適用' : `$${scenario.valuation.peValue.toFixed(1)}`}</td><td>${scenario.valuation.forwardBvps.toFixed(2)}</td><td>{scenario.valuation.fairPb.toFixed(2)}x</td><td>${scenario.valuation.pbValue.toFixed(1)}</td></tr>;
@@ -180,7 +180,7 @@ function TransformationTable() {
   const epsRows = [1.5, 2, 2.5];
   const multiples = [16, 20, 24];
   const implied2029Eps = requiredFutureEps(AUO_PRICE, 20, 2.25, 0.12);
-  return <><div className="table-scroll"><table><caption>轉型證據階梯｜每跨一級才允許增加模型內容</caption><thead><tr><th>階段</th><th>目前狀態</th><th>必須看到</th><th>估值處理</th><th>反證</th></tr></thead><tbody>{auoTransformationMilestones.map((row) => <tr key={row.stage}><th>{row.stage}</th><td>{row.state}</td><td>{row.evidence}</td><td>{row.valuation}</td><td>{row.falsifier}</td></tr>)}</tbody></table></div><div className="table-scroll"><table><caption>2029 正常化 EPS 敏感度｜折現率 12%、約 2.25 年折回；單位：元</caption><thead><tr><th>2029 EPS</th>{multiples.map((multiple) => <th key={multiple}>{multiple}x</th>)}</tr></thead><tbody>{epsRows.map((eps) => <tr key={eps}><th>{eps.toFixed(1)}</th>{multiples.map((multiple) => <td key={multiple}>{fmt(discountedFutureValue(eps, multiple, 2.25, 0.12))}</td>)}</tr>)}</tbody></table><p className="table-note">這是條件敏感度，不是目標價。36.65 元若以 2029 年 20 倍、12%折現反推，需要 2029 EPS 約 {fmt(implied2029Eps)} 元；後續必須由客戶、產能、良率與毛利證據填入收入橋接。</p></div></>;
+  return <><div className="table-scroll"><table><caption>轉型證據階梯｜每跨一級才允許增加模型內容</caption><thead><tr><th>階段</th><th>目前狀態</th><th>必須看到</th><th>估值處理</th><th>反證</th></tr></thead><tbody>{auoTransformationMilestones.map((row) => <tr key={row.stage}><th>{row.stage}</th><td>{row.state}</td><td>{row.evidence}</td><td>{row.valuation}</td><td>{row.falsifier}</td></tr>)}</tbody></table></div><div className="table-scroll"><table><caption>2029 正常化 EPS 敏感度｜折現率 12%、約 2.25 年折回；單位：元</caption><thead><tr><th>2029 EPS</th>{multiples.map((multiple) => <th key={multiple}>{multiple}x</th>)}</tr></thead><tbody>{epsRows.map((eps) => <tr key={eps}><th>{eps.toFixed(1)}</th>{multiples.map((multiple) => <td key={multiple}>{fmt(discountedFutureValue(eps, multiple, 2.25, 0.12))}</td>)}</tr>)}</tbody></table><p className="table-note">這是條件敏感度，不是目標價。{AUO_PRICE.toFixed(2)} 元若以 2029 年 20 倍、12%折現反推，需要 2029 EPS 約 {fmt(implied2029Eps)} 元；後續必須由客戶、產能、良率與毛利證據填入收入橋接。</p></div></>;
 }
 
 function AnnualOutlookTable() {
@@ -236,7 +236,7 @@ function SectionExtras({ id, technical }: {
   if (id === 'valuation') return <><ForecastTable/><AnnualOutlookTable/><ValuationTable/><TransformationTable/><div className="reverse-box"><p className="eyebrow">現價反推</p><strong>2027 EPS 需 {reverse20.eps.toFixed(2)} 元（20x）／{reverse24.eps.toFixed(2)} 元（24x）</strong><span>20 倍情境相當於歸屬普通股淨利約 {nf.format(reverse20.netIncome)} 百萬元、淨利率 {fmt(reverse20.netMargin * 100, '%')}。市場目前支付的是傳統營運改善加轉型選擇權。</span></div></>;
   if (id === 'entry' && technical) return <><PriceChart technical={technical}/><div className="indicator-strip">{[
     ['MA5', technical.ma5], ['MA20', technical.ma20], ['MA60', technical.ma60], ['MA120', technical.ma120], ['MA240', technical.ma240], ['MACD', technical.macd], ['RSI14', technical.rsi14], ['ATR14', technical.atr14],
-  ].map(([label, value]) => <div key={String(label)}><span>{label}</span><strong>{typeof value === 'number' ? value.toFixed(2) : '—'}</strong></div>)}</div>{technical.stale ? <div className="reverse-box"><p className="eyebrow">技術資料已過期</p><strong>所有新進場價位暫停使用</strong><span>最後完整交易日為 {technical.asOf}；補齊資料前不產生新劇本。</span></div> : <div className="scenario-cards"><article className="completed-card"><span>9/19 原放量突破劇本</span><h3>{setupStatusLabel[frozenBreakout.status]}</h3><p>固定門檻 {fmt(frozenBreakout.trigger)} 元、最低量 {nf.format(frozenBreakout.minimumVolume / 1_000)} 張；{frozenBreakout.triggerDate ? `${frozenBreakout.triggerDate} 觸發` : '尚未觸發'}，{frozenBreakout.terminalDate ? `${frozenBreakout.terminalDate} 到達 ${fmt(frozenBreakout.target)} 元` : '尚未終止'}。</p></article><article><span>新部位｜等待整理</span><h3>不在 36.65 元追價</h3><p>原量度目標已完成。等待量縮整理、守住原突破區且重新轉強，再依新的完整價格結構計算報酬風險比。</p></article><article className="danger-card"><span>事件失效條件</span><h3>證據沒有跟上價格</h3><p>合作否認、驗證延後、跌回原突破區，或只有同源轉載而無新增獨立證據，均降低事件交易的勝率。</p></article></div>}</>;
+  ].map(([label, value]) => <div key={String(label)}><span>{label}</span><strong>{typeof value === 'number' ? value.toFixed(2) : '—'}</strong></div>)}</div>{technical.stale ? <div className="reverse-box"><p className="eyebrow">技術資料已過期</p><strong>所有新進場價位暫停使用</strong><span>最後完整交易日為 {technical.asOf}；補齊資料前不產生新劇本。</span></div> : <div className="scenario-cards"><article className="completed-card"><span>9/19 原放量突破劇本</span><h3>{setupStatusLabel[frozenBreakout.status]}</h3><p>固定門檻 {fmt(frozenBreakout.trigger)} 元、最低量 {nf.format(frozenBreakout.minimumVolume / 1_000)} 張；{frozenBreakout.triggerDate ? `${frozenBreakout.triggerDate} 觸發` : '尚未觸發'}，{frozenBreakout.terminalDate ? `${frozenBreakout.terminalDate} 到達 ${fmt(frozenBreakout.target)} 元` : '尚未終止'}。</p></article><article><span>新部位｜等待整理</span><h3>第一天回檔，不急著接</h3><p>9/23 收 34.70 元、成交 9.49 億股，仍高於 32.2 元原突破區，但尚未完成量縮整理與重新轉強。形成新價格結構後再計算報酬風險比。</p></article><article className="danger-card"><span>事件失效條件</span><h3>證據沒有跟上價格</h3><p>合作否認、驗證延後、跌回原突破區，或只有同源轉載而無新增獨立證據，均降低事件交易的勝率。</p></article></div>}</>;
   if (id === 'monitor') return <div className="table-scroll"><table><caption>研究更新條件</caption><thead><tr><th>頻率</th><th>追蹤項目</th><th>上修信號</th><th>下修信號</th></tr></thead><tbody>{auoMonitoringChecklist.map((row) => <tr key={row.metric}><th>{row.cadence}</th><td>{row.metric}</td><td>{row.upgrade}</td><td>{row.downgrade}</td></tr>)}</tbody></table></div>;
   return null;
 }
@@ -252,14 +252,14 @@ export default function AuoDeepDiveReport() {
         <div className="hero-grid">
           <div>
             <p className="eyebrow">友達光電 2409 · 6–18 個月基本面／數週至三個月技術條件</p>
-            <h1>市場先把未來<br/>買到 36.65 元。</h1>
-            <p className="deck">兩日上漲 20.76%不是模型可以忽略的雜訊。友達 8/31 已公開 CPO／GCS 進展，Intel 合作仍屬傳聞；現在要分清楚已確認技術、待驗證客戶與價格正在支付的轉型選擇權。</p>
+            <h1>36.65 元後回落<br/>證據仍沒增加。</h1>
+            <p className="deck">9/23 收 34.70 元、成交 9.49 億股，從 36.65 元高點回落 5.32%。友達 8/31 已公開 CPO／GCS 進展，Intel 合作仍屬傳聞；價格先換手，客戶與量產證據仍待驗證。</p>
           </div>
           <div className="price-stamp"><span>最新完整交易日</span><strong>NT$ {AUO_PRICE.toFixed(2)}</strong><small>{AUO_AS_OF} · TWSE</small></div>
         </div>
         <div className="verdict-grid">
-          <article><span>中期判斷</span><strong className="caution">轉型待驗證</strong><p>傳統營運樂觀情境約 ${bullScenario.valuation.peValue?.toFixed(1)}；36.65 元另外包含尚未量化的商業化期待。</p></article>
-          <article><span>短期波段</span><strong className="watch">{technicalUnavailable ? '資料過期' : setupStatusLabel[frozenBreakout.status]}</strong><p>{technicalUnavailable ? `最後完整交易日 ${technical?.asOf ?? '待確認'}。` : `原 32.2 元突破已觸發，36.6 元量度目標已到；新部位等整理，不把目標往上搬。`}</p></article>
+          <article><span>中期判斷</span><strong className="caution">轉型待驗證</strong><p>傳統營運樂觀情境約 ${bullScenario.valuation.peValue?.toFixed(1)}；34.70 元仍包含尚未量化的商業化期待。</p></article>
+          <article><span>短期波段</span><strong className="watch">{technicalUnavailable ? '資料過期' : setupStatusLabel[frozenBreakout.status]}</strong><p>{technicalUnavailable ? `最後完整交易日 ${technical?.asOf ?? '待確認'}。` : `原 32.2 元突破已觸發、36.6 元量度目標已到；9/23 回檔但未跌破突破區，新部位等整理確認。`}</p></article>
           <article><span>現價反映</span><strong>2027E P/E {fmt(calculateForwardPe(AUO_PRICE, base2027.normalizedEps), 'x')}</strong><p>基本 EPS {base2027.normalizedEps.toFixed(2)}；20x／24x 分別需要 EPS {reverse20.eps.toFixed(2)}／{reverse24.eps.toFixed(2)} 元。</p></article>
         </div>
         <p className="hero-footnote">研究用途，不構成個人化投資建議。事實、公司指引、研究估計與情境已分開標示。</p>
@@ -268,7 +268,7 @@ export default function AuoDeepDiveReport() {
       <div className="report-layout">
         <aside className="toc"><p>章節</p>{auoArticleSections.map((section) => <a href={`#${section.id}`} key={section.id}><span>{section.number}</span>{section.title.split('：')[0]}</a>)}<a href="#appendix"><span>09</span>來源與假設</a></aside>
         <article className="article-body">
-          <section className="opening-note"><p className="eyebrow">本次重估</p><h2>36.65 元是真實價格，不是已確認答案</h2><p>市場正在交易面板循環、車用與垂直場域，再加上 CPO／玻璃核心基板的技術選擇權。本文把三者拆開，保存消息時間線，也直接更正舊版把 P/B 第 75 百分位誤稱歷史上緣、突破後仍顯示等待的錯誤。</p></section>
+          <section className="opening-note"><p className="eyebrow">本次重估</p><h2>34.70 元仍高於傳統營運樂觀值</h2><p>市場正在交易面板循環、車用與垂直場域，再加上 CPO／玻璃核心基板的技術選擇權。9/23 高檔回落並未帶來新的客戶或量產證據；本文保存原突破劇本，同時把最新價格、估值反推與後續等待條件更新到同一版本。</p></section>
           {auoArticleSections.map((section) => <section className="report-section" id={section.id} key={section.id}><div className="section-heading"><span>{section.number}</span><h2>{section.title}</h2></div>{section.paragraphs.map((paragraph, index) => <p key={index}>{paragraph}{index === section.paragraphs.length - 1 ? <SourceLinks ids={section.sources}/> : null}</p>)}<SectionExtras id={section.id} technical={technical}/></section>)}
 
           <section className="report-section appendix" id="appendix">
