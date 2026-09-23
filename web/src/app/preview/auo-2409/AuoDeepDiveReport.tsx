@@ -304,7 +304,7 @@ export default function AuoDeepDiveReport() {
         <div className="hero-grid">
           <div>
             <p className="eyebrow">友達光電 2409 · 6–18 個月基本面／數週至三個月技術條件</p>
-            <h1>AI 互連的關鍵位置，<br/>還是提前交易的訂單？</h1>
+            <h1>AI 互連已卡位，<br/>訂單證據在哪？</h1>
             <p className="deck">截至 {AUO_AS_OF} 收盤 {AUO_PRICE.toFixed(2)} 元。友達已展示 Micro LED CPO 與玻璃核心基板；Intel 合作仍屬待查傳聞。先拆技術位置、訂單階段與現價所需獲利，再決定進場條件。</p>
           </div>
           <div className="price-stamp"><span>最新完整交易日</span><strong>NT$ {AUO_PRICE.toFixed(2)}</strong><small>{AUO_AS_OF} · TWSE</small></div>
