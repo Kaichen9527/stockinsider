@@ -300,7 +300,7 @@ export default function AuoDeepDiveReport() {
   return (
     <main className="report-page">
       <header className="hero" id="top">
-        <div className="hero-rule"><span>STOCKINSIDER / DEEP RESEARCH</span><span>研究版本 {AUO_RESEARCH_VERSION}</span></div>
+        <div className="hero-rule"><span>友達研究示範 · 後續文章方向</span><span>研究版本 {AUO_RESEARCH_VERSION}</span></div>
         <div className="hero-grid">
           <div>
             <p className="eyebrow">友達光電 2409 · 6–18 個月基本面／數週至三個月技術條件</p>

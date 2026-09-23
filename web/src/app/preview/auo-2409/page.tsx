@@ -3,8 +3,8 @@ import AuoDeepDiveReport from './AuoDeepDiveReport';
 import './report.css';
 
 export const metadata: Metadata = {
-  title: '友達 2409 深度研究｜StockInsider',
-  description: '友達三大事業、財務預估、Forward P/E、P/B 與技術進場條件的版本化深度研究。',
+  title: '友達 2409 研究示範｜StockInsider',
+  description: '以友達為示範，呈現產業、技術、訂單證據、財務估值與進場條件的研究方向。',
 };
 
 // Re-evaluate technical freshness on every request. The research revision is
