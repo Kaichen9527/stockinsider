@@ -12,4 +12,3 @@ Existing acceptance expectations are not changed. Final report maps each ID to e
 | P1-08 | formal gates preserved; stale current view not actionable | existing stage tests; summary + UI checks |
 | P1-09 | immutable repeatability, old payload absent/unsupported | core + envelope tests |
 | P1-10 | desktop/360px readable; bounded compact radar without OHLCV | Playwright + compact summary tests |
-
