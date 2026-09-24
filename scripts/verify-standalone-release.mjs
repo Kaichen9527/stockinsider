@@ -56,7 +56,10 @@ export async function verifyStandaloneRelease(releaseDirectory) {
     manifestSha256: receipt.manifestSha256, bytes: total, entrypoint: receipt.manifest.entrypoint };
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+// Systemd invokes the verifier through the `current` release symlink. Compare
+// physical paths so an unresolved spelling cannot silently skip verification.
+if (process.argv[1] && await realpath(path.resolve(process.argv[1])).catch(() => null)
+  === await realpath(fileURLToPath(import.meta.url))) {
   try { console.log(JSON.stringify(await verifyStandaloneRelease(process.argv[2]))); }
   catch (error) { console.error(JSON.stringify({ releaseVerified: false, reason: error.message })); process.exitCode = 1; }
 }

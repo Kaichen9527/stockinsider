@@ -1,13 +1,14 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { execFileSync } from 'node:child_process';
-import { mkdir, mkdtemp, readFile, realpath, rm, writeFile } from 'node:fs/promises';
+import { execFileSync, spawnSync } from 'node:child_process';
+import { mkdir, mkdtemp, readFile, realpath, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { packageStandaloneRelease } from './package-standalone-release.mjs';
 import { verifyStandaloneRelease } from './verify-standalone-release.mjs';
 
-async function fixture(t) {
+async function fixture(t, bundledAssets = null) {
   const root = await mkdtemp(path.join(await realpath(tmpdir()), 'stockinsider-package-test-'));
   t.after(() => rm(root, { recursive: true, force: true }));
   const sourceRepository = path.join(root, 'source'), packagerRepository = path.join(root, 'packager');
@@ -21,6 +22,13 @@ async function fixture(t) {
   await writeFile(path.join(sourceRepository, 'web', '.next', 'standalone', 'server.js'), 'server');
   await writeFile(path.join(sourceRepository, 'web', '.next', 'static', 'asset.js'), 'asset');
   await writeFile(path.join(sourceRepository, 'web', 'public', 'logo.txt'), 'logo');
+  if (bundledAssets !== null) {
+    const bundledRoot = path.join(sourceRepository, 'web', '.next', 'standalone');
+    await mkdir(path.join(bundledRoot, '.next', 'static'), { recursive: true });
+    await mkdir(path.join(bundledRoot, 'public'), { recursive: true });
+    await writeFile(path.join(bundledRoot, '.next', 'static', 'asset.js'), bundledAssets.static);
+    await writeFile(path.join(bundledRoot, 'public', 'logo.txt'), bundledAssets.public);
+  }
   for (const name of ['call_internal_api.mjs', 'call_internal_api_sequence.mjs',
     'internal-api-sequence-policy.mjs',
     'contabo-capacity-guard.mjs', 'contabo-host-resource-check.mjs',
@@ -70,6 +78,27 @@ test('release verification rejects a modified runtime file', async (t) => {
   const result = await packageStandaloneRelease(config);
   await writeFile(path.join(result.releaseDirectory, 'app', 'server.js'), 'tampered');
   await assert.rejects(verifyStandaloneRelease(result.releaseDirectory), /metadata_invalid|hash_mismatch/);
+});
+
+test('accepts identical bundled static and public assets, but rejects mismatches', async (t) => {
+  const identical = await fixture(t, { static: 'asset', public: 'logo' });
+  const packaged = await packageStandaloneRelease(identical);
+  assert.equal((await verifyStandaloneRelease(packaged.releaseDirectory)).releaseVerified, true);
+  const changedStatic = await fixture(t, { static: 'different', public: 'logo' });
+  await assert.rejects(packageStandaloneRelease(changedStatic), /standalone_bundled_assets_mismatch/u);
+  const changedPublic = await fixture(t, { static: 'asset', public: 'different' });
+  await assert.rejects(packageStandaloneRelease(changedPublic), /standalone_bundled_assets_mismatch/u);
+});
+
+test('verification CLI cannot skip a release symlink invocation', async (t) => {
+  const root = await mkdtemp(path.join(await realpath(tmpdir()), 'stockinsider-release-cli-test-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const link = path.join(root, 'verify-standalone-release.mjs');
+  await symlink(fileURLToPath(new URL('./verify-standalone-release.mjs', import.meta.url)), link);
+  const result = spawnSync(process.execPath, [link, path.join(root, 'missing-release')], { encoding: 'utf8' });
+  assert.equal(result.status, 1);
+  assert.equal(result.stdout, '');
+  assert.equal(JSON.parse(result.stderr).releaseVerified, false);
 });
 
 test('rejects incomplete builds, short commit ids and traced backup or env files', async (t) => {
