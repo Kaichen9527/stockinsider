@@ -816,6 +816,10 @@ const modelOracleSuccessorApprovals = Object.freeze({
     approvalId: 'model-runner-host-pin-amendment-v3.17',
     subjectListingSha256: '5eb11a767efdce7e9faf197b2a98d9450f555fcba9363155fd3b71b7c653adc6',
   }),
+  '5eb11a767efdce7e9faf197b2a98d9450f555fcba9363155fd3b71b7c653adc6': Object.freeze({
+    approvalId: 'model-runner-host-pin-amendment-v3.18',
+    subjectListingSha256: 'fafab4f391e8bc077a0e2ec7ed10d1f4afc02bfbc77006ccdb436640e5e77161',
+  }),
 });
 
 const modelOracleHostPinByListingSha256 = Object.freeze({
@@ -823,6 +827,7 @@ const modelOracleHostPinByListingSha256 = Object.freeze({
   cb070b7f1b8acabd4f776e99c773693e96402c9375c2ae317b851138f73b62c5: 'model-runner-host-pins-v3.15',
   '70dbbd6ed3846ada9804c029321dcc5e97de60ddf4e63a75142d10f2efdde115': 'model-runner-host-pins-v3.16',
   '5eb11a767efdce7e9faf197b2a98d9450f555fcba9363155fd3b71b7c653adc6': 'model-runner-host-pins-v3.17',
+  fafab4f391e8bc077a0e2ec7ed10d1f4afc02bfbc77006ccdb436640e5e77161: 'model-runner-host-pins-v3.18',
 });
 
 export function modelOracleListing(root, commit) {

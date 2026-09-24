@@ -61,6 +61,28 @@ const v317ModelOracleListing = `100644 blob 1773b598f7a9e022a4e83e423280a9d6fa74
 100644 blob 8d09a3ab8aa80c9e3b006f6fb254b9d80d8e5de4\tscripts/model-runner-v3/transactionJournal.js
 100644 blob f35565fec192d2325dfb556522560ba26beb93f7\tscripts/model-runner-v3/trustedGit.js`;
 
+const v318ModelOracleListing = `100644 blob 31c61b3e2e2acb1eb017efd61be3b7413616c663	.loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json
+100644 blob 5405325e4adab71df87290c1691c1cb4cf2fa707	scripts/loop-model-runner-v3.js
+100644 blob 4d7d843c7b40b12706bb5bd34d4e3bd79ca99955	scripts/model-runner-v3/artifacts.js
+100644 blob c50e3e99a6e7567c28651ae11326310b12a4ff3a	scripts/model-runner-v3/canonicalJson.js
+100644 blob 4f941cb277d7bc5e27e9728f9063440fd3bbc9ac	scripts/model-runner-v3/codexAdapter.js
+100644 blob 11f262d5e0924ada1ebff6fb0851c23f82d150a9	scripts/model-runner-v3/execution.js
+100644 blob 3714079e1cb5a94fa53dbecaef651d893059cbda	scripts/model-runner-v3/hostPreflight.js
+100644 blob 6d764eefde3c691576f33b2e2edb89615bb8ac3d	scripts/model-runner-v3/journalStore.js
+100644 blob 9840ca2ef32e3ea6336ccd1e754ff7738214ab43	scripts/model-runner-v3/manifest.js
+100644 blob 1499d40dd241e6b7b7ab99161ed6ef004de2947e	scripts/model-runner-v3/model-runner-v3.test.js
+100644 blob 57a6225c3f1cc1a78e84ec64ce4abe6429a4764d	scripts/model-runner-v3/patchParser.js
+100644 blob 4f7e83eb28b8c08653ddc7c7dc2c9cf865902b99	scripts/model-runner-v3/real-model-attempt-worker.js
+100644 blob fcfb8c60c66619bc7382a9f6afea307763262fdd	scripts/model-runner-v3/real-model-attempt.js
+100644 blob 5b9e800dcb7331e8cd23040c3347f621fed966ed	scripts/model-runner-v3/resourceJournal.js
+100644 blob 43e6fdbef0743e462fe84c92a6b32f8c9d127d52	scripts/model-runner-v3/routing.js
+100644 blob 309f8500ead9c4dce68fda595f7fe1ed866c6169	scripts/model-runner-v3/runner.js
+100644 blob 2c07bc1d3f82c2407c84c3780c4421f635d34e3e	scripts/model-runner-v3/seal.js
+100644 blob 4bbffde1044258153b038e2ca9a53a2b36c6c133	scripts/model-runner-v3/source.js
+100644 blob 3987b4452bb2da4f109e470c8150c40cf3ed4523	scripts/model-runner-v3/sourceView.js
+100644 blob 8d09a3ab8aa80c9e3b006f6fb254b9d80d8e5de4	scripts/model-runner-v3/transactionJournal.js
+100644 blob f35565fec192d2325dfb556522560ba26beb93f7	scripts/model-runner-v3/trustedGit.js`;
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const workflow = readFileSync(path.join(root, '.github/workflows/source-led-opportunity-external-gate.yml'), 'utf8');
 const diagnosticWorkflow = readFileSync(path.join(root, '.github/workflows/source-led-opportunity-v3.yml'), 'utf8');
@@ -459,10 +481,42 @@ test('the protected model-oracle rotation approves only the exact v3.16 to v3.17
   );
   assert.throws(
     () => trustedModelOracleAuthorityForListings(v317ModelOracleListing, unapprovedSuccessor),
-    /model oracle successor requires protected-base approval/u,
+    /model oracle successor listing must match the one reviewed digest/u,
   );
   assert.throws(
     () => hostPinForModelOracleListing(unapprovedSuccessor),
+    /model runner host pin requires an exact protected listing/u,
+  );
+});
+
+test('the protected model-oracle rotation approves only the exact v3.17 to v3.18 successor', () => {
+  assert.equal(
+    modelOracleListingSha256(v317ModelOracleListing),
+    '5eb11a767efdce7e9faf197b2a98d9450f555fcba9363155fd3b71b7c653adc6',
+  );
+  assert.equal(
+    modelOracleListingSha256(v318ModelOracleListing),
+    'fafab4f391e8bc077a0e2ec7ed10d1f4afc02bfbc77006ccdb436640e5e77161',
+  );
+  assert.equal(hostPinForModelOracleListing(v318ModelOracleListing), 'model-runner-host-pins-v3.18');
+  assert.equal(
+    trustedModelOracleAuthorityForListings(v317ModelOracleListing, v318ModelOracleListing),
+    'model-runner-host-pin-amendment-v3.18',
+  );
+  assert.equal(
+    trustedModelOracleAuthorityForListings(v318ModelOracleListing, v318ModelOracleListing),
+    'protected_base',
+  );
+  const altered = v318ModelOracleListing.replace(
+    '31c61b3e2e2acb1eb017efd61be3b7413616c663',
+    '41c61b3e2e2acb1eb017efd61be3b7413616c663',
+  );
+  assert.throws(
+    () => trustedModelOracleAuthorityForListings(v317ModelOracleListing, altered),
+    /model oracle successor listing must match the one reviewed digest/u,
+  );
+  assert.throws(
+    () => hostPinForModelOracleListing(altered),
     /model runner host pin requires an exact protected listing/u,
   );
 });
