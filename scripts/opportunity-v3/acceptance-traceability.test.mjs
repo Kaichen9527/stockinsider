@@ -798,7 +798,7 @@ function activeGraphOracle() {
   assert.equal(catalogBlob.bytes.length, 6758, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    'adbaec4c0c4366823d5ed6f51d4f1355304a27b50eee2e65cad5a2dc5fd2f8b4',
+    '2045dcda35da1f5387a8451c0f38b5b5908ffb124d88be5a130007710d4c11bd',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);
@@ -1184,8 +1184,8 @@ function activeGraphOracle() {
     /Amendment version: `hybrid-product-v3[.]2`/u,
   );
   const hostAmendment = readFileSync(path.join(change, 'host-pin-compatibility-amendment.md'), 'utf8');
-  assert.match(hostAmendment, /Amendment version: `model-runner-host-pin-amendment-v3[.]17`/u);
-  assert.match(hostAmendment, /codex-cli 0[.]154[.]0-alpha[.]6[.]2/u);
+  assert.match(hostAmendment, /Amendment version: `model-runner-host-pin-amendment-v3[.]18`/u);
+  assert.match(hostAmendment, /codex-cli 0[.]155[.]0-alpha[.]16[.]3/u);
   assert.match(hostAmendment, /exact pin/u);
   const hostPinBytes = readFileSync(path.join(change, 'model-runner-host-pins-v3.json'), 'utf8');
   const hostPins = JSON.parse(hostPinBytes);

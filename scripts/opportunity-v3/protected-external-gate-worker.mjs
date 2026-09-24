@@ -365,6 +365,22 @@ const graphBoundReviewSources = Object.freeze({
       rangeLine: 'Full reviewed implementation range',
     }),
   }),
+  // V3.18 authority metadata is reconciled with the active catalog and host
+  // amendment. Bind the resulting graph to exact direct-child reviews.
+  '722095adecd208b54cc794f72e262dd5b77ed970da80f0ab5771a55259651625': Object.freeze({
+    requirements: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-v318-digest',
+      path: `${changeRelative}/requirements-review-v318-digest.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+    architecture: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-v318-digest',
+      path: `${changeRelative}/architecture-review-v318-digest.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed implementation range',
+    }),
+  }),
 });
 
 function reviewSource(check, attestation = null, identity = null) {

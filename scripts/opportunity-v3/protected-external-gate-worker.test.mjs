@@ -343,6 +343,10 @@ test('the protected root selects closed graph-bound Requirements/Architecture ev
     'evidence/source-led-opportunity-v3-architecture-pr279-graph',
     'requirements-review-pr279-graph-registration.md',
     'architecture-review-pr279-graph-registration.md',
+    'evidence/source-led-opportunity-v3-requirements-v318-digest',
+    'evidence/source-led-opportunity-v3-architecture-v318-digest',
+    'requirements-review-v318-digest.md',
+    'architecture-review-v318-digest.md',
   ]) assert.match(worker, new RegExp(reference.replace(/[.]/gu, '\\.'), 'u'));
   for (const graph of [
     '1c32b707a2e3d36e0ca01b4e78b9c20fa5bcef5eb34dce486063d9f694a2c9fc',
@@ -358,6 +362,7 @@ test('the protected root selects closed graph-bound Requirements/Architecture ev
     '10ddc6020b010a557f2ad000e11df7ebb2413432bb63351d3a4a5bdba26c46bf',
     '6193ebf24dfd5dd6c6d1f52d03e7efda09e3335003ab36cf4a59d62d9598faf4',
     'da0305fd3f28b39964617a4b6eb4fce7bd94d3db0884d0b4b3d47a3c0f047fd0',
+    '722095adecd208b54cc794f72e262dd5b77ed970da80f0ab5771a55259651625',
   ]) assert.match(worker, new RegExp(graph, 'u'), `${graph} graph mapping retained`);
   assert.match(worker, /evidence\/source-led-opportunity-v3-exact-review-\$\{attestation[.]subjectCommitSha\}/u);
   assert.match(worker, /function reviewSource\(check, attestation = null, identity = null\)/u);
