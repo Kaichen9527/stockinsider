@@ -424,13 +424,14 @@ test('the protected model-oracle rotation executes the exact v3.15 to v3.16 list
 });
 
 test('the protected model-oracle rotation approves only the exact v3.16 to v3.17 successor', () => {
-  const currentListing = modelOracleListing(root, 'HEAD');
+  const reviewedV317Commit = '623a2dcf397297c806aeddd6dd4e5f60254e92c3';
+  const currentListing = modelOracleListing(root, reviewedV317Commit);
   assert.equal(
     currentListing,
     v317ModelOracleListing,
-    'production Git emits the exact reviewed v3.17 listing bytes',
+    'historical Git emits the exact reviewed v3.17 listing bytes',
   );
-  assert.equal(requiredModelRunnerHostPin(root, 'HEAD'), 'model-runner-host-pins-v3.17');
+  assert.equal(requiredModelRunnerHostPin(root, reviewedV317Commit), 'model-runner-host-pins-v3.17');
   assert.equal(
     modelOracleListingSha256(v316ModelOracleListing),
     '70dbbd6ed3846ada9804c029321dcc5e97de60ddf4e63a75142d10f2efdde115',
