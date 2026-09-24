@@ -7,4 +7,4 @@
 - [x] Add plan panel, candlestick overlays and responsive fixtures.
 - [x] Run acceptance and existing affected regression tests, lint, typecheck, build.
 - [x] Independent implementation review; fix blocking/high findings.
-- [ ] Commit, push feature branch and open PR; no merge/deploy.
+- [x] Commit, push feature branch and open draft PR #279; no merge/deploy.

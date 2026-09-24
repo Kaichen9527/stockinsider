@@ -2,6 +2,8 @@
 
 Implementation is prepared for review against main `9fd86fe620ccc63c89c4acd208327bf2c4e15332`. User authorized direct implementation in this session. No production migration, execution, merge, release activation or schedule change was performed.
 
+Delivered on branch `codex/tw-entry-plan-v1` as [draft PR #279](https://github.com/Kaichen9527/stockinsider/pull/279). Initial implementation commit: `a3573a1639190be8b793198acb77d2f7271e6cfa`.
+
 ## Executed evidence
 
 | Check | Result |
