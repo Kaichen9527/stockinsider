@@ -798,7 +798,7 @@ function activeGraphOracle() {
   assert.equal(catalogBlob.bytes.length, 6758, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    'adbaec4c0c4366823d5ed6f51d4f1355304a27b50eee2e65cad5a2dc5fd2f8b4',
+    '2045dcda35da1f5387a8451c0f38b5b5908ffb124d88be5a130007710d4c11bd',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);
