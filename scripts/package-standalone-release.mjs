@@ -149,7 +149,8 @@ export async function packageStandaloneRelease({ sourceRepository, packagerRepos
   }
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (process.argv[1] && await realpath(path.resolve(process.argv[1])).catch(() => null)
+  === await realpath(fileURLToPath(import.meta.url))) {
   try {
     const [sourceRepository, packagerRepository, destinationRoot, sourceCommit, packagerCommit, ...extra]
       = process.argv.slice(2);

@@ -101,6 +101,17 @@ test('verification CLI cannot skip a release symlink invocation', async (t) => {
   assert.equal(JSON.parse(result.stderr).releaseVerified, false);
 });
 
+test('packager CLI cannot skip a checkout symlink invocation', async (t) => {
+  const root = await mkdtemp(path.join(await realpath(tmpdir()), 'stockinsider-package-cli-test-'));
+  t.after(() => rm(root, { recursive: true, force: true }));
+  const link = path.join(root, 'package-standalone-release.mjs');
+  await symlink(fileURLToPath(new URL('./package-standalone-release.mjs', import.meta.url)), link);
+  const result = spawnSync(process.execPath, [link], { encoding: 'utf8' });
+  assert.equal(result.status, 1);
+  assert.equal(result.stdout, '');
+  assert.equal(JSON.parse(result.stderr).error, 'standalone_packaging_failed');
+});
+
 test('rejects incomplete builds, short commit ids and traced backup or env files', async (t) => {
   const config = await fixture(t);
   await assert.rejects(packageStandaloneRelease({ ...config, sourceCommit: 'abc1234' }), /full_source_git/);
