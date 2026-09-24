@@ -349,6 +349,22 @@ const graphBoundReviewSources = Object.freeze({
     requirements: v319ReviewSources.requirements,
     architecture: v319ReviewSources.architecture,
   }),
+  // The already-active V3.18 graph on protected main has separately reviewed
+  // direct-child evidence refs. Register only this exact graph and these refs.
+  'da0305fd3f28b39964617a4b6eb4fce7bd94d3db0884d0b4b3d47a3c0f047fd0': Object.freeze({
+    requirements: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-requirements-pr279-graph',
+      path: `${changeRelative}/requirements-review-pr279-graph-registration.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed range',
+    }),
+    architecture: Object.freeze({
+      ref: 'refs/remotes/origin/evidence/source-led-opportunity-v3-architecture-pr279-graph',
+      path: `${changeRelative}/architecture-review-pr279-graph-registration.md`,
+      finalLine: 'Final reviewed implementation commit/tree',
+      rangeLine: 'Full reviewed implementation range',
+    }),
+  }),
 });
 
 function reviewSource(check, attestation = null, identity = null) {
