@@ -6,7 +6,9 @@ import {
   AUO_COMMON_EQUITY_MILLION,
   AUO_DILUTED_SHARES_MILLION,
   AUO_ENDING_COMMON_SHARES_MILLION,
+  AUO_AS_OF,
   AUO_PRICE,
+  auoMarketContext,
   auoForecastBaseQuarters,
   auoScenarioAdjustments,
 } from './auo-deep-dive-v1.ts';
@@ -114,6 +116,20 @@ test('official daily history reproduces the page indicators and calculated entry
   assert.ok((plan.pullback.invalidation ?? 0) < (plan.pullback.lower ?? 0));
 });
 
+test('latest official session binds the article price, market comparison and reverse EPS', () => {
+  const latest = (priceHistory as PriceBar[]).at(-1);
+  assert.ok(latest);
+  assert.deepEqual(latest, {
+    date: '115/09/24', volume: 542_503_236, turnover: 18_709_123_996,
+    open: 34.75, high: 35.95, low: 33.75, close: 34.2,
+  });
+  assert.equal(AUO_AS_OF, '2026-09-24');
+  assert.equal(AUO_PRICE, latest.close);
+  assert.equal(auoMarketContext.latest.stockClose, latest.close);
+  assert.equal(auoMarketContext.latest.indexClose, 48_024.60);
+  assert.equal(requiredEarningsAtMultiple(AUO_PRICE, 20, AUO_DILUTED_SHARES_MILLION, 283_000).eps, 1.71);
+});
+
 test('stale technical data disables all executable price levels', () => {
   const snapshot = calculateTechnicalSnapshot(
     priceHistory as PriceBar[],
@@ -128,7 +144,7 @@ test('stale technical data disables all executable price levels', () => {
 });
 
 test('missing segments and conflicting sources remain visible as research blockers', () => {
-  const snapshot = calculateTechnicalSnapshot(priceHistory as PriceBar[], new Date('2026-09-23T18:00:00+08:00'));
+  const snapshot = calculateTechnicalSnapshot(priceHistory as PriceBar[], new Date('2026-09-24T18:00:00+08:00'));
   assert.deepEqual(validateResearchInputs({ segmentDataAvailable: false, sourceConflictCount: 2, technical: snapshot }), {
     complete: false,
     warnings: ['segment_data_missing', 'source_conflicts_require_review'],
@@ -136,8 +152,9 @@ test('missing segments and conflicting sources remain visible as research blocke
 });
 
 test('expensive valuation and bullish price trend produce separate conclusions', () => {
-  const snapshot = calculateTechnicalSnapshot(priceHistory as PriceBar[], new Date('2026-09-23T18:00:00+08:00'));
-  assert.deepEqual(classifyResearchVerdict({ price: AUO_PRICE, baseReferenceValue: 20, technical: snapshot }), {
+  const historicalBars = (priceHistory as PriceBar[]).filter((bar) => bar.date <= '115/09/23');
+  const snapshot = calculateTechnicalSnapshot(historicalBars, new Date('2026-09-23T18:00:00+08:00'));
+  assert.deepEqual(classifyResearchVerdict({ price: 34.70, baseReferenceValue: 20, technical: snapshot }), {
     mediumTerm: 'low_attractiveness',
     shortTerm: 'bullish_wait_for_trigger',
   });
@@ -215,10 +232,13 @@ test('frozen setup keeps the first terminal event when price later breaks invali
 
 test('freshness uses completed Taiwan sessions and the official 2026 holiday calendar', () => {
   const bars = priceHistory as PriceBar[];
-  assert.equal(calculateTechnicalSnapshot(bars, new Date('2026-09-24T08:00:00+08:00'))?.stale, false,
+  const throughWednesday = bars.filter((bar) => bar.date <= '115/09/23');
+  assert.equal(calculateTechnicalSnapshot(throughWednesday, new Date('2026-09-24T08:00:00+08:00'))?.stale, false,
     'next session has not completed before the open');
-  assert.equal(calculateTechnicalSnapshot(bars, new Date('2026-09-24T18:00:00+08:00'), 0)?.stale, true,
+  assert.equal(calculateTechnicalSnapshot(throughWednesday, new Date('2026-09-24T18:00:00+08:00'), 0)?.stale, true,
     'missing completed Thursday is visible with zero grace');
+  assert.equal(calculateTechnicalSnapshot(bars, new Date('2026-09-25T18:00:00+08:00'), 0)?.stale, false,
+    'the completed Thursday remains current during Friday holiday');
   assert.equal(calculateTechnicalSnapshot(bars, new Date('2026-09-28T18:00:00+08:00'), 1)?.stale, false,
     'Friday and Monday were exchange holidays, not missing sessions');
   assert.equal(calculateTechnicalSnapshot(bars, new Date('2027-01-04T18:00:00+08:00'))?.stale, true,
@@ -226,9 +246,9 @@ test('freshness uses completed Taiwan sessions and the official 2026 holiday cal
 });
 
 test('official index and stock closes produce point-in-time relative performance', () => {
-  assert.deepEqual(calculateRelativePerformance({ stockStart: 30.35, stockEnd: 34.70,
-    indexStart: 47_180.75, indexEnd: 48_157.29 }), {
-    stockReturnPercent: 14.33, indexReturnPercent: 2.07, relativePoints: 12.26,
+  assert.deepEqual(calculateRelativePerformance({ stockStart: 30.35, stockEnd: AUO_PRICE,
+    indexStart: 47_180.75, indexEnd: 48_024.60 }), {
+    stockReturnPercent: 12.69, indexReturnPercent: 1.79, relativePoints: 10.9,
   });
   assert.equal(calculateRelativePerformance({ stockStart: 0, stockEnd: 34.7,
     indexStart: 47_180.75, indexEnd: 48_157.29 }), null);
