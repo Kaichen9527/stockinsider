@@ -1,4 +1,4 @@
-import { readFile, statfs } from 'node:fs/promises';
+import { readFile, realpath, statfs } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { assessContaboCapacity, GIB } from './contabo-capacity-guard.mjs';
@@ -43,7 +43,11 @@ export async function inspectHostResources(root = '/') {
     observedAt: new Date().toISOString() };
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+// Systemd and the heavy-operation wrapper invoke this script through the
+// release's `current` symlink. Compare physical paths so the CLI cannot
+// silently skip its admission check when Node resolves the module realpath.
+if (process.argv[1] && await realpath(path.resolve(process.argv[1])).catch(() => null)
+  === await realpath(fileURLToPath(import.meta.url))) {
   try {
     const [budgetPath, ...extra] = process.argv.slice(2);
     if (extra.length || !path.isAbsolute(budgetPath || '')) throw new Error('absolute_budget_path_required');

@@ -1,5 +1,10 @@
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import { mkdtempSync, symlinkSync, writeFileSync, rmSync } from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 import test from 'node:test';
+import { fileURLToPath } from 'node:url';
 import { assessHostResources, parseMeminfo } from './contabo-host-resource-check.mjs';
 import { GIB } from './contabo-capacity-guard.mjs';
 
@@ -26,4 +31,23 @@ test('Linux memory inventory requires explicit available and swap values', () =>
   assert.deepEqual(parseMeminfo('MemAvailable: 4096 kB\nSwapFree: 10 kB\n'), {
     availableMemoryBytes: 4194304, swapFreeBytes: 10240 });
   assert.throws(() => parseMeminfo('MemFree: 4 kB\n'));
+});
+
+test('the CLI enforces admission when invoked through a release symlink', () => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'stockinsider-capacity-link-'));
+  try {
+    const link = path.join(directory, 'contabo-host-resource-check.mjs');
+    const invalidBudget = path.join(directory, 'invalid-budget.json');
+    symlinkSync(fileURLToPath(new URL('./contabo-host-resource-check.mjs', import.meta.url)), link);
+    writeFileSync(invalidBudget, '{invalid');
+    const result = spawnSync(process.execPath, [link, invalidBudget], { encoding: 'utf8' });
+    assert.equal(result.status, 1);
+    assert.equal(result.stdout, '');
+    const output = JSON.parse(result.stderr);
+    assert.equal(output.schema, 'stockinsider-host-resource-check-v1');
+    assert.equal(output.allowed, false);
+    assert.equal(typeof output.reason, 'string');
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
 });
