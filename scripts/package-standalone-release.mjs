@@ -45,6 +45,26 @@ async function inspectTree(root) {
   return files;
 }
 
+async function ensureAssetTree(source, target) {
+  const existing = await lstat(target).catch(error => {
+    if (error?.code === 'ENOENT') return null;
+    throw error;
+  });
+  if (existing === null) {
+    await cp(source, target, { recursive: true, dereference: true, errorOnExist: true, force: false });
+    return;
+  }
+  // Node's recursive copy may normalize mode bits under the build host's
+  // umask. Identity of already bundled web assets is their path and bytes;
+  // the final copied modes are still bound by the release manifest.
+  const contentIdentity = async root => (await inspectTree(root))
+    .map(({ path: file, bytes, sha256 }) => [file, bytes, sha256]);
+  if (!existing.isDirectory() || existing.isSymbolicLink()
+    || JSON.stringify(await contentIdentity(source)) !== JSON.stringify(await contentIdentity(target))) {
+    throw new Error('standalone_bundled_assets_mismatch');
+  }
+}
+
 async function findEntrypoint(root) {
   if ((await stat(path.join(root, 'server.js')).catch(() => null))?.isFile()) return 'server.js';
   const matches = [];
@@ -93,12 +113,10 @@ export async function packageStandaloneRelease({ sourceRepository, packagerRepos
     const entrypoint = await findEntrypoint(app);
     const entrypointDirectory = path.dirname(path.join(app, entrypoint));
     await mkdir(path.join(entrypointDirectory, '.next'), { recursive: true });
-    await cp(staticDirectory, path.join(entrypointDirectory, '.next', 'static'),
-      { recursive: true, dereference: true, errorOnExist: true, force: false });
+    await ensureAssetTree(staticDirectory, path.join(entrypointDirectory, '.next', 'static'));
     const publicDirectory = path.join(source, 'web', 'public');
     if ((await stat(publicDirectory).catch(() => null))?.isDirectory()) {
-      await cp(publicDirectory, path.join(entrypointDirectory, 'public'),
-        { recursive: true, dereference: true, errorOnExist: true, force: false });
+      await ensureAssetTree(publicDirectory, path.join(entrypointDirectory, 'public'));
     }
     const runtimeScripts = path.join(releaseDirectory, 'scripts');
     await mkdir(runtimeScripts);
@@ -136,7 +154,8 @@ export async function packageStandaloneRelease({ sourceRepository, packagerRepos
   }
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (process.argv[1] && await realpath(path.resolve(process.argv[1])).catch(() => null)
+  === await realpath(fileURLToPath(import.meta.url))) {
   try {
     const [sourceRepository, packagerRepository, destinationRoot, sourceCommit, packagerCommit, ...extra]
       = process.argv.slice(2);
