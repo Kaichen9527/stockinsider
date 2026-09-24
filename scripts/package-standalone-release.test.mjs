@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { mkdir, mkdtemp, readFile, realpath, rm, symlink, writeFile } from 'node:fs/promises';
+import { chmod, mkdir, mkdtemp, readFile, realpath, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -22,6 +22,9 @@ async function fixture(t, bundledAssets = null) {
   await writeFile(path.join(sourceRepository, 'web', '.next', 'standalone', 'server.js'), 'server');
   await writeFile(path.join(sourceRepository, 'web', '.next', 'static', 'asset.js'), 'asset');
   await writeFile(path.join(sourceRepository, 'web', 'public', 'logo.txt'), 'logo');
+  if (bundledAssets?.sourceWritable) {
+    await chmod(path.join(sourceRepository, 'web', '.next', 'static', 'asset.js'), 0o664);
+  }
   if (bundledAssets !== null) {
     const bundledRoot = path.join(sourceRepository, 'web', '.next', 'standalone');
     await mkdir(path.join(bundledRoot, '.next', 'static'), { recursive: true });
@@ -81,7 +84,7 @@ test('release verification rejects a modified runtime file', async (t) => {
 });
 
 test('accepts identical bundled static and public assets, but rejects mismatches', async (t) => {
-  const identical = await fixture(t, { static: 'asset', public: 'logo' });
+  const identical = await fixture(t, { static: 'asset', public: 'logo', sourceWritable: true });
   const packaged = await packageStandaloneRelease(identical);
   assert.equal((await verifyStandaloneRelease(packaged.releaseDirectory)).releaseVerified, true);
   const changedStatic = await fixture(t, { static: 'different', public: 'logo' });

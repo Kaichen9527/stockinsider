@@ -54,8 +54,13 @@ async function ensureAssetTree(source, target) {
     await cp(source, target, { recursive: true, dereference: true, errorOnExist: true, force: false });
     return;
   }
+  // Node's recursive copy may normalize mode bits under the build host's
+  // umask. Identity of already bundled web assets is their path and bytes;
+  // the final copied modes are still bound by the release manifest.
+  const contentIdentity = async root => (await inspectTree(root))
+    .map(({ path: file, bytes, sha256 }) => [file, bytes, sha256]);
   if (!existing.isDirectory() || existing.isSymbolicLink()
-    || JSON.stringify(await inspectTree(source)) !== JSON.stringify(await inspectTree(target))) {
+    || JSON.stringify(await contentIdentity(source)) !== JSON.stringify(await contentIdentity(target))) {
     throw new Error('standalone_bundled_assets_mismatch');
   }
 }
