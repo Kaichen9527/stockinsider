@@ -1,6 +1,25 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { parseAuthorityBackfillRequest, planAuthorityJobs } from './entry-plan-authority-backfill.ts';
+import { parseAuthorityBackfillRequest, planAuthorityJobs, summarizeAuthorityJobPages } from './entry-plan-authority-backfill.ts';
+
+test('authority completion summary includes every page and fails on invalid status', async () => {
+  const jobs = Array.from({ length: 1001 }, (_, index) => ({
+    status: index === 1000 ? 'pending' : 'complete', accepted_rows: index === 1000 ? 0 : 1,
+    missing_rows: 0,
+  }));
+  const requests: Array<[number, number]> = [];
+  const summary = await summarizeAuthorityJobPages(async (from, to) => {
+    requests.push([from, to]);
+    return jobs.slice(from, to + 1);
+  });
+  assert.deepEqual(requests, [[0, 999], [1000, 1999]]);
+  assert.equal(summary.counts.pending, 1);
+  assert.equal(summary.counts.complete, 1000);
+  assert.equal(summary.acceptedRows, 1000);
+  await assert.rejects(summarizeAuthorityJobPages(async () => [
+    { status: 'toString', accepted_rows: 0, missing_rows: 0 },
+  ]), /entry_plan_jobs_status_invalid/u);
+});
 import { loadOfficialPriceHistoryMonth } from './generated/official-authority/official-twse-valuation.js';
 
 test('authority-only request accepts no caller-supplied prices, roster or fabricated sessions', () => {

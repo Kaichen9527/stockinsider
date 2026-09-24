@@ -178,6 +178,31 @@ async function executeJob(client: SupabaseClient, run: RunRow, job: JobRow, prin
       snapshot.events.map((event) => event.sourceRowRef)])) };
 }
 
+export async function summarizeAuthorityJobPages(readPage: (from: number, to: number) => Promise<Row[]>) {
+  const counts = { pending: 0, running: 0, retry: 0, complete: 0, failed: 0 };
+  let acceptedRows = 0;
+  let missingRows = 0;
+  const pageSize = 1000;
+  const maxRows = 100_000;
+  for (let offset = 0; offset <= maxRows; offset += pageSize) {
+    const rows = await readPage(offset, offset + pageSize - 1);
+    if (rows.length > pageSize) fail('entry_plan_jobs_page_oversized');
+    if (offset === maxRows && rows.length) fail('entry_plan_jobs_summary_overflow');
+    for (const row of rows) {
+      if (!Object.hasOwn(counts, String(row.status))) fail('entry_plan_jobs_status_invalid');
+      counts[row.status as keyof typeof counts]++;
+      const accepted = Number(row.accepted_rows);
+      const missing = Number(row.missing_rows);
+      if (!Number.isSafeInteger(accepted) || accepted < 0 || !Number.isSafeInteger(missing) || missing < 0)
+        fail('entry_plan_jobs_count_invalid');
+      acceptedRows += accepted;
+      missingRows += missing;
+    }
+    if (rows.length < pageSize) return { counts, acceptedRows, missingRows };
+  }
+  fail('entry_plan_jobs_summary_overflow');
+}
+
 export async function runEntryPlanAuthorityBackfill(client: SupabaseClient, request: AuthorityBackfillRequest) {
   const principal = fixedRunnerPrincipal();
   if (!principal) fail('entry_plan_runner_principal_missing');
@@ -224,11 +249,14 @@ export async function runEntryPlanAuthorityBackfill(client: SupabaseClient, requ
       processed.push({ jobKey: job.job_key, status, error: message });
     }
   }
-  const summary = await client.from('entry_plan_authority_jobs_v1').select('status,accepted_rows,missing_rows')
-    .eq('run_id', run.run_id);
-  if (summary.error || !summary.data) fail('entry_plan_jobs_summary_failed');
-  const counts = Object.fromEntries(['pending', 'running', 'retry', 'complete', 'failed'].map((status) =>
-    [status, summary.data.filter((row) => row.status === status).length]));
+  const summary = await summarizeAuthorityJobPages(async (from, to) => {
+    const page = await client.from('entry_plan_authority_jobs_v1')
+      .select('job_key,status,accepted_rows,missing_rows').eq('run_id', run.run_id)
+      .order('job_key').range(from, to);
+    if (page.error || !page.data) fail('entry_plan_jobs_summary_failed');
+    return page.data as Row[];
+  });
+  const { counts } = summary;
   let authorityCutoff = typeof run.authority_cutoff === 'string' ? run.authority_cutoff : null;
   if (run.status === 'running' && counts.pending + counts.running + counts.retry === 0) {
     const status = counts.failed ? 'failed' : 'complete';
@@ -242,7 +270,6 @@ export async function runEntryPlanAuthorityBackfill(client: SupabaseClient, requ
     sourceCutoff: run.source_cutoff, authorityCutoff, latestSession: run.latest_session,
     rosterCount: run.roster.length, excludedSymbols: run.excluded_symbols,
     rosterHash: run.roster_hash, calendarHash: run.calendar_hash,
-    counts, acceptedRows: summary.data.reduce((total, row) => total + Number(row.accepted_rows || 0), 0),
-    missingRows: summary.data.reduce((total, row) => total + Number(row.missing_rows || 0), 0),
+    counts, acceptedRows: summary.acceptedRows, missingRows: summary.missingRows,
     processed };
 }
