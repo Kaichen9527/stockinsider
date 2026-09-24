@@ -38,6 +38,11 @@ export type CandidateDetailPayload = {
     historicalPercentile?: number | null;
     historicalMultiples?: Array<{ date: string; peRatio: number | null; pbRatio: number | null }>;
     historicalPrices?: Array<{ month?: string; date?: string; frequency?: 'monthly' | 'daily'; close: number; ma5?: number | null; ma20?: number | null; ma60?: number | null; ma120?: number | null; ma240?: number | null }>;
+    researchCoverage?: { status: 'complete' | 'incomplete'; requiredFieldPeriods: number; verifiedFieldPeriods: number; completenessPct: number; missing: Array<{ factKey: string; periodEnd: string }>; evaluationAt: string };
+    businessProfile?: { version: string; businessModel: string; primaryValuationMethod: string; forecastHorizonMonths: number; operatingSegments: readonly string[]; sourceRefs: readonly string[] } | null;
+    forwardCommonEquityBridge?: { status: 'complete' | 'incomplete'; startingCommonEquity: number | null; endingCommonShares: number | null; targetPeriodEnd: string | null; projectedDividends: { kind: 'model_assumption'; bear: number; base: number; bull: number }; projectedCapitalAndOci: { kind: 'model_assumption'; bear: number; base: number; bull: number } } | null;
+    forwardBvps?: { bear: number; base: number; bull: number } | null;
+    targetPeriodEnd?: string | null;
   };
   technical: CandidateStageCard['technical'];
   scores: CandidateRevisionScores;
@@ -248,6 +253,9 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
     asOf: String(row.as_of), availableAt: String(row.available_at),
     publicationStatus: row.publication_phase === 'preliminary' ? 'preliminary' as const : 'final' as const,
     finalPublicationStatus: finalSemantics.status,
+    // This metadata describes the market-wide publication batch. It is kept
+    // for freshness/final-state semantics and must not be presented as this
+    // issuer's financial-research completeness.
     datasetCompletenessPct: finalSemantics.completenessPct,
     datasetMissingComponents: finalSemantics.missingComponents,
     narrativeKind: 'deterministic_fact' as const,

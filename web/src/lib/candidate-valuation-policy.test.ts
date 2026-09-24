@@ -1,6 +1,19 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { candidateValuationPolicy, VALUATION_REMEDIATION_SYMBOLS } from './candidate-valuation-policy.ts';
+import { candidateValuationPolicy, isForwardBvpsPbAnchorAligned, VALUATION_REMEDIATION_SYMBOLS } from './candidate-valuation-policy.ts';
+
+test('forward BVPS anchor must match the latest reported bridge quarter', () => {
+  assert.equal(isForwardBvpsPbAnchorAligned({
+    bridgeLatestPeriodEnd: '2026-06-30',
+    commonEquityPeriodEnd: '2025-12-31',
+    commonSharesPeriodEnd: '2025-12-31',
+  }), false);
+  assert.equal(isForwardBvpsPbAnchorAligned({
+    bridgeLatestPeriodEnd: '2026-06-30',
+    commonEquityPeriodEnd: '2026-06-30',
+    commonSharesPeriodEnd: '2026-06-30',
+  }), true);
+});
 
 test('a complete forward bridge takes precedence over a generic PB reference', () => {
   assert.equal(candidateValuationPolicy({ multipleMonthsCovered:60,next12mBridgeComplete:true,verifiedTurnaroundPath:false,
@@ -40,4 +53,19 @@ test('valuation routing is evidence-driven and fail closed', () => {
   assert.equal(candidateValuationPolicy({ symbol: '9999', multipleMonthsCovered: 0, next12mBridgeComplete: false, verifiedTurnaroundPath: true, lossMaking: true, turnaround: { ...turnaround, cashRunwayMonths: 11 } }).canPublishTarget, false);
   assert.equal(candidateValuationPolicy({ symbol: '2330', multipleMonthsCovered: 47, next12mBridgeComplete: true, verifiedTurnaroundPath: false }).canPublishTarget, false);
   assert.equal(candidateValuationPolicy({ symbol: '2330', multipleMonthsCovered: 60, next12mBridgeComplete: false, verifiedTurnaroundPath: false }).canPublishTarget, false);
+});
+
+test('versioned cyclical asset profile routes to forward BVPS before loss-making turnaround', () => {
+  assert.deepEqual(candidateValuationPolicy({
+    symbol: '2409', multipleMonthsCovered: 60, next12mBridgeComplete: true,
+    verifiedTurnaroundPath: false, lossMaking: true, businessProfile: 'cyclical_asset',
+    forwardBvpsPbComplete: true,
+  }), { basis: 'forward_bvps_pb', canPublishTarget: true, reason: null });
+});
+
+test('forward BVPS route remains blocked until its equity bridge is complete', () => {
+  assert.deepEqual(candidateValuationPolicy({
+    multipleMonthsCovered: 60, next12mBridgeComplete: true,
+    verifiedTurnaroundPath: false, businessProfile: 'cyclical_asset', forwardBvpsPbComplete: false,
+  }), { basis: 'forward_bvps_pb', canPublishTarget: false, reason: 'forward_common_equity_bridge_incomplete' });
 });

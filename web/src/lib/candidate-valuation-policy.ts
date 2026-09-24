@@ -10,6 +10,7 @@ export const VALUATION_REMEDIATION_SYMBOLS = new Set<string>();
 
 export type CandidateValuationBasis =
   | 'forward_12m'
+  | 'forward_bvps_pb'
   | 'normalized_cycle'
   | 'pb_reference'
   | 'ev_ebitda'
@@ -17,6 +18,16 @@ export type CandidateValuationBasis =
   | 'ttm_multiple_reference'
   | 'turnaround_conditional'
   | 'no_defensible_valuation_method';
+
+export function isForwardBvpsPbAnchorAligned(input: {
+  bridgeLatestPeriodEnd: string | null;
+  commonEquityPeriodEnd: string | null;
+  commonSharesPeriodEnd: string | null;
+}) {
+  return input.bridgeLatestPeriodEnd !== null
+    && input.bridgeLatestPeriodEnd === input.commonEquityPeriodEnd
+    && input.bridgeLatestPeriodEnd === input.commonSharesPeriodEnd;
+}
 
 type NormalizedCycleInputs = {
   normalizedEps?: number | null;
@@ -59,6 +70,8 @@ export function candidateValuationPolicy(input: {
   next12mBridgeComplete: boolean;
   verifiedTurnaroundPath: boolean;
   businessModel?: 'general' | 'financial';
+  businessProfile?: 'cyclical_asset';
+  forwardBvpsPbComplete?: boolean;
   lossMaking?: boolean;
   normalizedCycle?: NormalizedCycleInputs;
   financial?: FinancialInputs;
@@ -68,6 +81,11 @@ export function candidateValuationPolicy(input: {
   const lossMaking = input.lossMaking === true;
   const normalized = input.normalizedCycle;
   const financial = input.financial;
+  if (input.businessProfile === 'cyclical_asset') {
+    return input.forwardBvpsPbComplete === true && historyReady
+      ? { basis: 'forward_bvps_pb' as const, canPublishTarget: true, reason: null }
+      : { basis: 'forward_bvps_pb' as const, canPublishTarget: false, reason: historyReady ? 'forward_common_equity_bridge_incomplete' : 'official_pb_coverage_below_48_of_60' };
+  }
   if (lossMaking) {
     const turnaround = input.turnaround;
     const complete = input.verifiedTurnaroundPath && turnaround != null

@@ -36,6 +36,23 @@ function quarterStart(periodEnd: string) {
 function quarterNumber(periodEnd: string) { return Math.floor((Number(periodEnd.slice(5, 7)) - 1) / 3) + 1; }
 function closeEnough(left: number, right: number) { return Math.abs(left - right) <= Math.max(0.0001, Math.abs(left) * 0.01, Math.abs(right) * 0.01); }
 
+/** The investment decision horizon is anchored to the research cutoff, not to
+ * whichever filing happened to be latest on that date. */
+export function decisionTargetQuarterEnd(evaluationAt: string | undefined, fallbackPeriodEnd: string) {
+  const parsed = evaluationAt ? new Date(evaluationAt) : null;
+  if (!parsed || !Number.isFinite(parsed.getTime())) {
+    return `${Number(fallbackPeriodEnd.slice(0, 4)) + 1}${fallbackPeriodEnd.slice(4)}`;
+  }
+  const taipeiParts = Object.fromEntries(new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit',
+  }).formatToParts(parsed).map((part) => [part.type, part.value]));
+  const month = Number(taipeiParts.month);
+  const quarterEndMonth = Math.ceil(month / 3) * 3;
+  const year = Number(taipeiParts.year) + 1;
+  const day = quarterEndMonth === 3 ? 31 : quarterEndMonth === 6 ? 30 : quarterEndMonth === 9 ? 30 : 31;
+  return `${year}-${String(quarterEndMonth).padStart(2, '0')}-${day}`;
+}
+
 /** A bridge needs eight *adjacent* fiscal quarters.  Counting eight rows is
  * insufficient: a missing Q2 otherwise turns two annual periods into a
  * deceptively plausible TTM. */
@@ -121,6 +138,147 @@ export function preferOfficialReportedFinancialFacts(facts: ReportedFinancialFac
   return facts.filter((fact) => fact.authorityTier === 'official_filing'
     || (!officialIdentities.has(authorityIdentity(fact))
       && !officialQuarterKeys.has(`${fact.factKey}|${fact.periodEnd}`)));
+}
+
+/**
+ * Asset-intensive cyclicals valued on forward BVPS do not need an EPS/share
+ * bridge to project common income. Requiring diluted EPS and weighted-average
+ * shares here would make an unrelated PE input block a P/B valuation.
+ *
+ * This bridge still fails closed unless the issuer has eight adjacent,
+ * internally consistent quarters for revenue, gross profit, operating income
+ * and profit attributable to owners. The below-operating residual remains
+ * explicit; it is not silently renamed as tax, interest or minority interest.
+ */
+export function buildForwardCommonIncomeBridge(
+  facts: ReportedFinancialFact[],
+  options: Pick<EarningsProjectionOptions, 'symbol' | 'evaluationAt'> = {},
+) {
+  const flowKeys = [
+    'quarterly_revenue',
+    'quarterly_gross_profit',
+    'quarterly_operating_income',
+    'quarterly_net_income_attributable_to_common',
+  ] as const;
+  const series = Object.fromEntries(
+    flowKeys.map((key) => [key, diagnoseDiscreteQuarters(facts, key)]),
+  ) as Record<(typeof flowKeys)[number], SeriesDiagnosis>;
+  const requiredPeriods = series.quarterly_revenue.points.slice(-8).map((row) => row.periodEnd);
+  const contiguousWindow = hasConsecutiveQuarterEnds(series.quarterly_revenue.points.slice(-8), 8);
+  const missing = [
+    ...(contiguousWindow ? [] : ['eight_consecutive_fiscal_quarters_required']),
+    ...flowKeys
+      .filter((key) => requiredPeriods.length < 8
+        || requiredPeriods.some((period) => !series[key].points.some((row) => row.periodEnd === period)))
+      .map((key) => `${key}_8_discrete_quarters`),
+    ...flowKeys.flatMap((key) => series[key].issues),
+  ].sort();
+  if (missing.length > 0) return { status: 'insufficient' as const, missing };
+
+  const values = (key: (typeof flowKeys)[number]) => requiredPeriods.map(
+    (period) => series[key].points.find((row) => row.periodEnd === period)!.value,
+  );
+  const sum = (rows: number[]) => rows.reduce((total, value) => total + value, 0);
+  const revenue = values('quarterly_revenue');
+  const grossProfit = values('quarterly_gross_profit');
+  const operatingIncome = values('quarterly_operating_income');
+  const commonIncome = values('quarterly_net_income_attributable_to_common');
+  const priorRevenue = sum(revenue.slice(0, 4));
+  const latestRevenue = sum(revenue.slice(4));
+  const latestGrossProfit = sum(grossProfit.slice(4));
+  const latestOperatingIncome = sum(operatingIncome.slice(4));
+  const latestCommonIncome = sum(commonIncome.slice(4));
+  if (!(priorRevenue > 0 && latestRevenue > 0)) {
+    return { status: 'insufficient' as const, missing: ['positive_reported_ttm_revenue_required'] };
+  }
+  if (latestGrossProfit < latestOperatingIncome) {
+    return { status: 'insufficient' as const, missing: ['negative_implied_operating_expense_requires_investigation'] };
+  }
+
+  const clamp = (value: number, low: number, high: number) => Math.max(low, Math.min(high, value));
+  const historicalGrowth = latestRevenue / priorRevenue - 1;
+  const baseGrowth = clamp(historicalGrowth * 0.5, -0.15, 0.2);
+  const grossMargin = latestGrossProfit / latestRevenue;
+  const operatingExpenseRatio = (latestGrossProfit - latestOperatingIncome) / latestRevenue;
+  const belowOperatingResidualRatio = (latestCommonIncome - latestOperatingIncome) / latestRevenue;
+  const scenarioInputs = {
+    bear: { revenueGrowth: clamp(baseGrowth - 0.08, -0.25, 0.3), grossMargin: clamp(grossMargin - 0.02, -1, 1), operatingExpenseRatio: operatingExpenseRatio + 0.005 },
+    base: { revenueGrowth: baseGrowth, grossMargin, operatingExpenseRatio },
+    bull: { revenueGrowth: clamp(baseGrowth + 0.08, -0.25, 0.3), grossMargin: clamp(grossMargin + 0.02, -1, 1), operatingExpenseRatio: Math.max(0, operatingExpenseRatio - 0.005) },
+  } as const;
+  const project = (scenario: keyof typeof scenarioInputs) => {
+    const input = scenarioInputs[scenario];
+    const projectedRevenue = latestRevenue * (1 + input.revenueGrowth);
+    const projectedGrossProfit = projectedRevenue * input.grossMargin;
+    const projectedOperatingIncome = projectedGrossProfit - projectedRevenue * input.operatingExpenseRatio;
+    const netIncome = projectedOperatingIncome + projectedRevenue * belowOperatingResidualRatio;
+    return {
+      revenue: projectedRevenue,
+      grossProfit: projectedGrossProfit,
+      operatingIncome: projectedOperatingIncome,
+      netIncome,
+      netMargin: netIncome / projectedRevenue,
+    };
+  };
+  const latestPeriodEnd = requiredPeriods.at(-1)!;
+  const targetPeriodEnd = decisionTargetQuarterEnd(options.evaluationAt, latestPeriodEnd);
+  const quarterOrdinal = (periodEnd: string) => Number(periodEnd.slice(0, 4)) * 4
+    + Math.floor((Number(periodEnd.slice(5, 7)) - 1) / 3);
+  const forecastQuarterCount = quarterOrdinal(targetPeriodEnd) - quarterOrdinal(latestPeriodEnd);
+  if (!Number.isInteger(forecastQuarterCount) || forecastQuarterCount < 1 || forecastQuarterCount > 8) {
+    return { status: 'insufficient' as const, missing: ['decision_target_quarter_out_of_range'] };
+  }
+  // Scenario margins and annual growth are applied to the full period from the
+  // latest reported quarter through the decision target. A normal reporting
+  // lag therefore produces five projected quarters rather than labelling a
+  // four-quarter equity bridge with a later date.
+  const projectionScale = forecastQuarterCount / 4;
+  const projectThroughTarget = (scenario: keyof typeof scenarioInputs) => {
+    const projected = project(scenario);
+    return Object.fromEntries(Object.entries(projected).map(([key, value]) => [
+      key,
+      key === 'netMargin' ? value : value * projectionScale,
+    ])) as ReturnType<typeof project>;
+  };
+  const nextStart = new Date(`${latestPeriodEnd}T00:00:00Z`);
+  nextStart.setUTCDate(nextStart.getUTCDate() + 1);
+  const forecastPeriod = {
+    start: nextStart.toISOString().slice(0, 10),
+    end: targetPeriodEnd,
+  };
+  const factIdsByMetric = Object.fromEntries(flowKeys.map((key) => [
+    key,
+    series[key].points.filter((row) => requiredPeriods.includes(row.periodEnd)).flatMap((row) => row.factIds),
+  ])) as Record<string, string[]>;
+  const factsFor = (...keys: string[]) => [...new Set(keys.flatMap((key) => factIdsByMetric[key] || []))].sort();
+  return {
+    status: 'complete' as const,
+    modelVersion: 'forward-common-income-bridge-v1',
+    issuerSymbol: options.symbol || null,
+    evaluationAt: options.evaluationAt || null,
+    forecastPeriod,
+    forecastQuarterCount,
+    targetPeriodEnd,
+    actual: {
+      latestPeriodEnd,
+      latestRevenue,
+      latestGrossProfit,
+      latestOperatingIncome,
+      latestCommonIncome,
+      historicalGrowth: round(historicalGrowth),
+      grossMargin: round(grossMargin),
+      operatingExpenseRatio: round(operatingExpenseRatio),
+      belowOperatingResidualRatio: round(belowOperatingResidualRatio),
+    },
+    assumptions: [
+      { key: 'revenue_growth', scenarios: Object.fromEntries(Object.entries(scenarioInputs).map(([key, value]) => [key, value.revenueGrowth])), basis: '50% of reported TTM revenue growth, capped -15%/+20%; bear/bull sensitivity ±8 percentage points', factIds: factsFor('quarterly_revenue') },
+      { key: 'gross_margin', scenarios: Object.fromEntries(Object.entries(scenarioInputs).map(([key, value]) => [key, value.grossMargin])), basis: 'Reported TTM gross margin with ±2 percentage-point sensitivity', factIds: factsFor('quarterly_revenue', 'quarterly_gross_profit') },
+      { key: 'operating_expense_ratio', scenarios: Object.fromEntries(Object.entries(scenarioInputs).map(([key, value]) => [key, value.operatingExpenseRatio])), basis: 'Reported TTM operating expense ratio with ±0.5 percentage-point sensitivity', factIds: factsFor('quarterly_revenue', 'quarterly_gross_profit', 'quarterly_operating_income') },
+      { key: 'below_operating_residual_ratio', scenarios: { bear: belowOperatingResidualRatio, base: belowOperatingResidualRatio, bull: belowOperatingResidualRatio }, basis: 'Reported TTM common income minus operating income, scaled by revenue; no unreported component is assumed to be zero', factIds: factsFor('quarterly_net_income_attributable_to_common', 'quarterly_operating_income') },
+    ],
+    scenarios: { bear: projectThroughTarget('bear'), base: projectThroughTarget('base'), bull: projectThroughTarget('bull') },
+    factIds: [...new Set(Object.values(factIdsByMetric).flat())].sort(),
+  };
 }
 
 /** Weighted shares and EPS are rates/averages, not additive flows. */

@@ -10,6 +10,8 @@ import {
   releaseProductionWriteLease,
 } from '@/lib/production-write-lease';
 import { requireActiveVpsWriter } from '@/lib/taiwan-data-runtime';
+import { isTaiwanRefreshResearchReady } from '@/lib/taiwan-candidate-refresh';
+import { CANDIDATE_RESEARCH_MODEL_VERSION } from '@/lib/candidate-research';
 
 // Vercel only hosts the HTTPS OAuth/policy surface. Production pipeline writes
 // run on the VPS systemd scheduler, while Hobby deployments reject values >300.
@@ -43,12 +45,55 @@ export async function POST(req: Request) {
   const inProcessRetry = body?.inProcessRetry === true;
   const syncTimeoutMs = Number(body?.syncTimeoutMs || process.env.PIPELINE_SYNC_TIMEOUT_MS || 18_000);
   const recoverOrphanedLease = body?.recoverOrphanedLease === true;
+  const skipIfResearchSessionComplete = body?.skipIfResearchSessionComplete === true;
   const leaseTtlSeconds = Math.max(60, Math.min(7_200, Math.ceil(syncTimeoutMs / 1000) + 300));
   let leaseOwner: string | null = null;
   let ongoingFlow: Promise<Awaited<ReturnType<typeof runPipelineFlow>>> | null = null;
   let flowFinished = false;
+  let researchSession: string | undefined;
+  let researchCutoffAt: string | undefined;
 
   try {
+    if (!dryRun && skipIfResearchSessionComplete) {
+      const taipeiToday = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+      const sessionsRead = await writer.supabase.from('tw_trading_sessions_v3').select('session_id')
+        .eq('status', 'completed').lte('session_id', taipeiToday).lte('close_at', new Date().toISOString())
+        .order('session_id', { ascending: false }).limit(20);
+      if (sessionsRead.error) throw new Error(`research_resume_sessions_failed:${sessionsRead.error.message}`);
+      const sessions = (sessionsRead.data || []).map((row) => String(row.session_id || ''))
+        .filter((session) => /^\d{4}-\d{2}-\d{2}$/u.test(session));
+      const readySessions: string[] = [];
+      const cutoffBySession = new Map<string, string>();
+      for (const session of sessions) {
+        const progress = await writer.supabase.rpc('read_taiwan_data_refresh_progress_v6', {
+          p_session_date: session, p_phase: 'final',
+        });
+        if (progress.error) throw new Error(`research_resume_progress_failed:${progress.error.message}`);
+        if (isTaiwanRefreshResearchReady(progress.data)) {
+          readySessions.push(session);
+          const cutoffAt = String((progress.data as Record<string, unknown>).cutoffAt || '');
+          if (Number.isFinite(Date.parse(cutoffAt))) cutoffBySession.set(session, cutoffAt);
+        }
+      }
+      if (readySessions.length === 0) {
+        return NextResponse.json({ ok: true, result: { skipped: true, reason: 'final_data_not_research_ready', researchSession: sessions[0] || null },
+          meta: { runId: null, dryRun, mode, timedOut: false, failedStep: null, stepStatus: [] } });
+      }
+      const prior = await writer.supabase.from('candidate_research_runs').select('id,technical_session_date,status,failed_count')
+        .in('technical_session_date', readySessions).eq('model_version', CANDIDATE_RESEARCH_MODEL_VERSION)
+        .not('pipeline_run_id', 'is', null)
+        .eq('status', 'success').eq('failed_count', 0)
+        .order('finished_at', { ascending: false }).limit(100);
+      if (prior.error) throw new Error(`research_resume_receipt_read_failed:${prior.error.message}`);
+      const completed = new Set((prior.data || []).map((row) => String(row.technical_session_date || '')));
+      researchSession = [...readySessions].sort().find((session) => !completed.has(session));
+      if (!researchSession) {
+        return NextResponse.json({ ok: true, result: { skipped: true, reason: 'research_sessions_already_completed', researchSessions: readySessions },
+          meta: { runId: prior.data?.[0]?.id || null, dryRun, mode, timedOut: false, failedStep: null, stepStatus: [] } });
+      }
+      researchCutoffAt = cutoffBySession.get(researchSession);
+      if (!researchCutoffAt) throw new Error('research_resume_cutoff_missing');
+    }
     if (!dryRun) {
       leaseOwner = await acquireProductionWriteLease(leaseTtlSeconds);
       if (!leaseOwner && recoverOrphanedLease) {
@@ -71,10 +116,10 @@ export async function POST(req: Request) {
 
     const flowPromise = inProcessRetry
       ? withRetry(
-          () => runPipelineFlow({ dryRun, mode, ...(skipIngestion ? { skipIngestion: true } : {}) }),
+          () => runPipelineFlow({ dryRun, mode, ...(skipIngestion ? { skipIngestion: true } : {}), ...(researchSession ? { researchSession, researchCutoffAt } : {}) }),
           { retries: 3, delaysMs: [60_000, 5 * 60_000, 15 * 60_000] }
         )
-      : runPipelineFlow({ dryRun, mode, ...(skipIngestion ? { skipIngestion: true } : {}) });
+      : runPipelineFlow({ dryRun, mode, ...(skipIngestion ? { skipIngestion: true } : {}), ...(researchSession ? { researchSession, researchCutoffAt } : {}) });
     ongoingFlow = flowPromise;
     void flowPromise.then(() => { flowFinished = true; }, () => { flowFinished = true; });
 

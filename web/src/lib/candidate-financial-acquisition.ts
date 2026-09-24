@@ -7,6 +7,13 @@ export const TPEX_FINANCIAL_ENDPOINTS = {
   brokerBalance: 'https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap07_O_bd',
 } as const;
 
+export const TWSE_FINANCIAL_ENDPOINTS = {
+  generalIncome: 'https://openapi.twse.com.tw/v1/opendata/t187ap06_L_ci',
+  brokerIncome: 'https://openapi.twse.com.tw/v1/opendata/t187ap06_L_bd',
+  generalBalance: 'https://openapi.twse.com.tw/v1/opendata/t187ap07_L_ci',
+  brokerBalance: 'https://openapi.twse.com.tw/v1/opendata/t187ap07_L_bd',
+} as const;
+
 export type FinancialAcquisitionTerminalReason =
   | 'complete' | 'empty_official_response' | 'http_not_found' | 'http_rate_limited'
   | 'http_server_error' | 'network_error' | 'timeout' | 'html_rejected'
@@ -128,8 +135,16 @@ export function parseTpexFinancialEndpoint(
   endpoint: EndpointKind,
   payload: unknown,
 ): { facts: TpexFinancialFact[]; terminalReason: FinancialAcquisitionTerminalReason } {
+  return parseExchangeFinancialEndpoint('tpex', endpoint, payload);
+}
+
+export function parseExchangeFinancialEndpoint(
+  provider: 'twse' | 'tpex',
+  endpoint: EndpointKind,
+  payload: unknown,
+): { facts: TpexFinancialFact[]; terminalReason: FinancialAcquisitionTerminalReason } {
   if (!Array.isArray(payload)) return { facts: [], terminalReason: 'schema_unrecognized' };
-  const sourceUrl = TPEX_FINANCIAL_ENDPOINTS[endpoint];
+  const sourceUrl = provider === 'twse' ? TWSE_FINANCIAL_ENDPOINTS[endpoint] : TPEX_FINANCIAL_ENDPOINTS[endpoint];
   const facts: TpexFinancialFact[] = [];
   let recognizableRows = 0;
   for (const raw of payload) {
@@ -151,8 +166,8 @@ export function parseTpexFinancialEndpoint(
         symbol, factKey, periodStart: isBalance ? null : period.periodStart, periodEnd: period.periodEnd,
         durationKind: isBalance ? 'instant' : 'quarterly', value: selected.value,
         unit: factKey === 'book_value_per_share' || factKey.endsWith('_eps') ? 'TWD_per_share' : 'TWD_thousand',
-        sourceRef: `tpex-openapi:${endpoint}:${symbol}:${period.periodEnd}:${selected.header}`,
-        sourceTimestamp, filingRestatementId: `tpex:${restatement}`,
+        sourceRef: `${provider}-openapi:${endpoint}:${symbol}:${period.periodEnd}:${selected.header}`,
+        sourceTimestamp, filingRestatementId: `${provider}:${restatement}`,
       });
     }
   }

@@ -139,8 +139,12 @@ function ValuationSummary({ detail }: { detail: CandidateDetailPayload }) {
   );
   const method = String(valuation.method || valuation.basis || "");
   const usesPb = method.includes("pb");
+  const usesForwardBvps = method.includes("forward_bvps");
   const usesNormalizedEarnings = method.includes("normalized");
   const bookValuePerShare = getNumber(valuation, "bookValuePerShare");
+  const forwardBvps = valuation.forwardBvps && typeof valuation.forwardBvps === "object"
+    ? getNumber(valuation.forwardBvps as AnyRecord, "base")
+    : null;
   const currentPb =
     getNumber(valuation, "currentPb") ??
     (current != null && bookValuePerShare ? current / bookValuePerShare : null);
@@ -149,7 +153,7 @@ function ValuationSummary({ detail }: { detail: CandidateDetailPayload }) {
     ["現價", current == null ? "資料待補" : `NT$${value(current)}`],
     ["TTM EPS", value(ttmEps)],
     ["TTM PE", value(ttmPe, 1)],
-    [usesPb ? "每股淨值" : usesNormalizedEarnings ? "正常化 EPS" : "NTM EPS", value(usesPb ? bookValuePerShare : usesNormalizedEarnings ? normalizedEps : forwardEps)],
+    [usesForwardBvps ? "未來 BVPS" : usesPb ? "每股淨值" : usesNormalizedEarnings ? "正常化 EPS" : "NTM EPS", value(usesForwardBvps ? forwardBvps : usesPb ? bookValuePerShare : usesNormalizedEarnings ? normalizedEps : forwardEps)],
     [usesPb ? "目前 PB" : usesNormalizedEarnings ? "正常化 PE" : "目前 forward PE", value(usesPb ? currentPb : usesNormalizedEarnings && current != null && normalizedEps ? current / normalizedEps : forwardPe, 1)],
     [
       usesPb ? "合理 PB／Base" : "合理倍數／Base",
@@ -158,6 +162,12 @@ function ValuationSummary({ detail }: { detail: CandidateDetailPayload }) {
     ["Base 空間", percent(valuation.baseUpsidePct)],
     ["報酬風險比", value(valuation.rewardRiskRatio, 2)],
   ];
+  const methodLabel = ({
+    forward_bvps_pb: "未來 12 個月 BVPS × 歷史 P/B",
+    forward_12m: "未來 12 個月 EPS × 歷史 P/E",
+    normalized_cycle: "正常化獲利 × 歷史 P/E",
+    financial_pb_roe: "P/B 與 ROE",
+  } as Record<string, string>)[method] || method || "待補";
   return (
     <section
       aria-labelledby="valuation-summary-title"
@@ -210,7 +220,7 @@ function ValuationSummary({ detail }: { detail: CandidateDetailPayload }) {
       </div>
       <p className="mt-3 text-xs leading-5 text-slate-600 dark:text-emerald-100/65">
         下行風險 {percent(valuation.bearDownsidePct)} · 估值方法{" "}
-        {valuation.method || "待補"} · 歷史倍數覆蓋{" "}
+        {methodLabel} · 估值終點 {dateLabel(valuation.targetPeriodEnd)} · 歷史倍數覆蓋{" "}
         {valuation.monthsCovered == null
           ? "資料待補"
           : `${valuation.monthsCovered}/60 個月`}
@@ -300,7 +310,7 @@ export default function CandidateDetailView({
     ["行動", getNumber(scores, "actionability")],
     ["資料信心", getNumber(scores, "dataConfidence")],
   ];
-  const grouped = detail.sections.reduce<
+  const grouped = detail.sections.filter((section) => section.key !== "sources").reduce<
     Record<string, CandidateDetailPayload["sections"]>
   >((acc, section) => {
     const group = sectionGroups[section.key] || "研究筆記";
@@ -314,7 +324,6 @@ export default function CandidateDetailView({
   const gaps = [
     ...detail.unmetConditions,
     ...((valuation.missing as string[] | undefined) || []),
-    ...datasetMissingComponents,
   ].filter(Boolean);
   const publicationStatus = detailRecord.publicationStatus ?? detailRecord.status;
   const finalPublicationStatus = String(detailRecord.finalPublicationStatus || "preliminary");
@@ -331,12 +340,11 @@ export default function CandidateDetailView({
       : "初步研究版（終版資料尚未完整）";
   const asOf = dateLabel(detail.asOf);
   const availableAt = dateLabel(detail.availableAt);
-  const factCount = detail.facts.length;
-  const expectedFactCount = detail.factIds.length;
-  const completeness = datasetCompletenessPct != null
-    ? `${Math.max(0, Math.min(100, datasetCompletenessPct)).toFixed(datasetCompletenessPct % 1 === 0 ? 0 : 2)}%`
-    : expectedFactCount > 0
-    ? `${Math.min(100, Math.round((factCount / expectedFactCount) * 100))}%`
+  const researchCoverage = valuation.researchCoverage && typeof valuation.researchCoverage === "object"
+    ? valuation.researchCoverage
+    : null;
+  const completeness = researchCoverage
+    ? `${Math.max(0, Math.min(100, researchCoverage.completenessPct)).toFixed(researchCoverage.completenessPct % 1 === 0 ? 0 : 2)}%`
     : "尚待確認";
   const hasUnresolvedSources = [...detail.sources, ...detail.sourceLinks].some((source) => {
     const raw = source as AnyRecord;
@@ -378,13 +386,8 @@ export default function CandidateDetailView({
         <dl className="mt-4 grid gap-2 text-xs text-slate-500 sm:grid-cols-3">
           <div><dt>資料截止時間</dt><dd className="mt-1 font-medium text-slate-700 dark:text-slate-300">{asOf}</dd></div>
           <div><dt>資料可用時間</dt><dd className="mt-1 font-medium text-slate-700 dark:text-slate-300">{availableAt}</dd></div>
-          <div><dt>資料完整度</dt><dd className="mt-1 font-medium text-slate-700 dark:text-slate-300">{completeness}{datasetCompletenessPct == null ? "（終版完整度尚待確認）" : ""}</dd></div>
+          <div><dt>本估值方法資料完整度</dt><dd className="mt-1 font-medium text-slate-700 dark:text-slate-300">{completeness}{researchCoverage ? `（${researchCoverage.verifiedFieldPeriods}/${researchCoverage.requiredFieldPeriods} 欄位期別）` : "（尚未建立方法檢核）"}</dd></div>
         </dl>
-        {datasetMissingComponents.length > 0 ? (
-          <p className="mt-3 text-xs font-medium text-amber-700 dark:text-amber-300">
-            終版缺項：{datasetMissingComponents.join("、")}
-          </p>
-        ) : null}
         {hasUnresolvedSources ? <p className="mt-3 text-xs font-medium text-amber-700 dark:text-amber-300">部分來源名稱、日期、頁碼或連結尚待確認；未確認內容不作為正式結論。</p> : null}
       </header>
       <section aria-labelledby="decision-summary-title" className="mt-6 grid gap-px overflow-hidden rounded-2xl border border-line bg-line lg:grid-cols-[1.15fr_.85fr]">
@@ -396,18 +399,11 @@ export default function CandidateDetailView({
         <dl className="grid grid-cols-2 gap-px bg-line text-sm">
           <div className="bg-[var(--surface)] p-4"><dt className="text-xs text-stone-500">研究狀態</dt><dd className="mt-1 font-semibold">{detail.detailKind === 'full' ? '完整研究版' : '事實研究版'}</dd></div>
           <div className="bg-[var(--surface)] p-4"><dt className="text-xs text-stone-500">兩日確認</dt><dd className="mt-1 font-semibold">{detail.lifecycleStage === 'actionable' ? '已由分類門檻確認' : '尚未完成或不適用'}</dd></div>
-          <div className="bg-[var(--surface)] p-4"><dt className="text-xs text-stone-500">資料頻率</dt><dd className="mt-1 font-semibold">官方收盤後更新</dd></div>
+          <div className="bg-[var(--surface)] p-4"><dt className="text-xs text-stone-500">估值資料覆蓋</dt><dd className="mt-1 font-semibold">{completeness}</dd></div>
           <div className="bg-[var(--surface)] p-4"><dt className="text-xs text-stone-500">個人曝險</dt><dd className="mt-1 font-semibold">未評估</dd></div>
         </dl>
       </section>
       <ValuationSummary detail={detail} />
-      <LocalResearchWorkspace
-        symbol={detail.symbol}
-        revisionId={detail.revisionId}
-        currentPrice={detail.valuation.currentPrice ?? detail.technical.close ?? null}
-        atr14={detail.technical.atr14 ?? null}
-        baseTarget={detail.valuation.baseTarget ?? null}
-      />
       <section
         className="mt-6 grid gap-4 sm:grid-cols-2"
         aria-label="研究品質與執行條件"
@@ -425,9 +421,9 @@ export default function CandidateDetailView({
             ))}
           </dl>
           <p className="mt-4 text-xs text-slate-500">
-            官方資料覆蓋{" "}
-            {detail.factIds.length
-              ? `${detail.facts.length}/${detail.factIds.length} 筆`
+            估值必要欄位覆蓋{" "}
+            {researchCoverage
+              ? `${researchCoverage.verifiedFieldPeriods}/${researchCoverage.requiredFieldPeriods} 個欄位期別`
               : "待補"}
             {coveredWeight == null
               ? ""
@@ -493,34 +489,31 @@ export default function CandidateDetailView({
         ))}
       </div>
       <CandidateHistoryChart detail={detail} />
-      <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950">
-        <h2 className="text-lg font-semibold">官方資料明細</h2>
+      <details className="mt-8 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950">
+        <summary className="cursor-pointer text-base font-semibold">研究依據與原始資料</summary>
+        <p className="mt-2 text-sm text-slate-500">需要查核模型時再展開；估值與進場判斷已整理在上方。</p>
         {detail.facts.length ? (
           <ul className="mt-4 grid gap-2 sm:grid-cols-2">
             {detail.facts.slice(0, 100).map((fact) => (
-              <li
-                key={`${fact.factKey}-${fact.periodEnd}`}
-                className="rounded-xl border border-slate-200 p-3 text-sm dark:border-slate-800"
-              >
-                <span className="font-medium">
-                  {readableFactKey(fact.factKey)}
-                </span>
-                <span className="ml-2 text-slate-500">
-                  {dateLabel(fact.periodEnd)} ·{" "}
-                  {fact.value == null
-                    ? "資料待補"
-                    : `${fact.value}${fact.unit ? ` ${fact.unit}` : ""}`}
-                </span>
+              <li key={`${fact.factKey}-${fact.periodEnd}`} className="rounded-xl border border-slate-200 p-3 text-sm dark:border-slate-800">
+                <span className="font-medium">{readableFactKey(fact.factKey)}</span>
+                <span className="ml-2 text-slate-500">{dateLabel(fact.periodEnd)} · {fact.value == null ? "資料待補" : `${fact.value}${fact.unit ? ` ${fact.unit}` : ""}`}</span>
               </li>
             ))}
           </ul>
-        ) : (
-          <p className="mt-3 text-sm text-amber-700 dark:text-amber-300">
-            官方資料仍在回填。
-          </p>
-        )}
-      </section>
-      <EvidenceSources detail={detail} />
+        ) : <p className="mt-3 text-sm text-amber-700 dark:text-amber-300">官方資料仍在回填。</p>}
+        <EvidenceSources detail={detail} />
+      </details>
+      <details className="mt-4 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950">
+        <summary className="cursor-pointer text-base font-semibold">個人研究工具</summary>
+        <LocalResearchWorkspace
+          symbol={detail.symbol}
+          revisionId={detail.revisionId}
+          currentPrice={detail.valuation.currentPrice ?? detail.technical.close ?? null}
+          atr14={detail.technical.atr14 ?? null}
+          baseTarget={detail.valuation.baseTarget ?? null}
+        />
+      </details>
     </main>
   );
 }

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { buildForwardEarningsBridge, discreteReportedQuarters, preferOfficialReportedFinancialFacts, type ReportedFinancialFact } from './forward-earnings-bridge.ts';
+import { buildForwardCommonIncomeBridge, buildForwardEarningsBridge, decisionTargetQuarterEnd, discreteReportedQuarters, preferOfficialReportedFinancialFacts, type ReportedFinancialFact } from './forward-earnings-bridge.ts';
 
 function fact(factKey: string, year: number, quarter: number, value: number, discrete = false): ReportedFinancialFact {
   const end = [`${year}-03-31`, `${year}-06-30`, `${year}-09-30`, `${year}-12-31`][quarter - 1];
@@ -44,6 +44,36 @@ test('forward bridge is explicit, reproducible, and separates assumptions from r
   assert.ok(bridge.scenarios.base.dilutedEps < bridge.scenarios.bull.dilutedEps);
   assert.equal(bridge.assumptions.every((row) => row.kind === 'model_assumption'), true);
   assert.ok(bridge.factIds.length >= 40);
+});
+
+test('forward common-income bridge supports AUO P/B without relabelling basic EPS as diluted EPS', () => {
+  const facts: ReportedFinancialFact[] = [];
+  const metrics = {
+    quarterly_revenue: [100, 210, 330, 460, 125, 260, 405, 560],
+    quarterly_gross_profit: [40, 84, 132, 184, 50, 104, 162, 224],
+    quarterly_operating_income: [20, 42, 66, 92, 25, 52, 81, 112],
+    quarterly_net_income_attributable_to_common: [16, 34, 54, 76, 20, 42, 66, 92],
+  };
+  for (const [key, values] of Object.entries(metrics)) {
+    values.forEach((value, index) => facts.push(fact(key, index < 4 ? 2024 : 2025, index % 4 + 1, value)));
+  }
+  const bridge = buildForwardCommonIncomeBridge(facts, { symbol: '2409', evaluationAt: '2026-09-19T00:00:00Z' });
+  assert.equal(bridge.status, 'complete');
+  if (bridge.status !== 'complete') return;
+  assert.equal(bridge.modelVersion, 'forward-common-income-bridge-v1');
+  assert.ok(bridge.scenarios.bear.netIncome < bridge.scenarios.base.netIncome);
+  assert.ok(bridge.scenarios.base.netIncome < bridge.scenarios.bull.netIncome);
+  assert.equal(bridge.factIds.length, 32);
+  assert.equal(JSON.stringify(bridge).includes('dilutedEps'), false);
+  assert.deepEqual(bridge.forecastPeriod, { start: '2026-01-01', end: '2027-09-30' });
+  assert.equal(bridge.forecastQuarterCount, 7);
+  assert.equal(bridge.targetPeriodEnd, '2027-09-30');
+});
+
+test('decision target is cutoff-quarter end plus twelve months', () => {
+  assert.equal(decisionTargetQuarterEnd('2026-09-19T23:59:59+08:00', '2026-06-30'), '2027-09-30');
+  assert.equal(decisionTargetQuarterEnd('2026-09-30T16:30:00Z', '2026-06-30'), '2027-12-31');
+  assert.equal(decisionTargetQuarterEnd('invalid', '2026-06-30'), '2027-06-30');
 });
 
 test('YTD EPS and weighted-average shares are never subtracted as additive flows', () => {

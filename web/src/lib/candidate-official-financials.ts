@@ -1,7 +1,7 @@
 import { createHash } from 'crypto';
 import { fixedRunnerPrincipal } from './opportunity-v3/internal.ts';
 import { getOpportunityV3ServerClient } from './opportunity-v3/service-client.ts';
-import { classifyFinancialResponse, issuerIrDocumentQueueKey, parseTpexFinancialEndpoint, TPEX_FINANCIAL_ENDPOINTS } from './candidate-financial-acquisition.ts';
+import { classifyFinancialResponse, issuerIrDocumentQueueKey, parseExchangeFinancialEndpoint, parseTpexFinancialEndpoint, TPEX_FINANCIAL_ENDPOINTS, TWSE_FINANCIAL_ENDPOINTS } from './candidate-financial-acquisition.ts';
 import { fetchFinMindFinancialFallback, finMindFinancialErrorDetail } from './finmind-financial-fallback.ts';
 import { requiredAcquisitionPeriods, type FinancialFieldGap } from './candidate-financial-work-plan.ts';
 import { latestDueFinancialQuarter } from './candidate-financial-policy.ts';
@@ -50,13 +50,25 @@ const TPEX_JOB_KEYS = {
   generalIncome: 'tpex_general_income', brokerIncome: 'tpex_broker_income',
   generalBalance: 'tpex_general_balance', brokerBalance: 'tpex_broker_balance',
 } as const;
-const VERIFIED_ISSUER_IR_FALLBACKS: Record<string, { listingUrl: string; documentUrl: string; title: string }> = {
-  '2408': {
+const VERIFIED_ISSUER_IR_FALLBACKS: Record<string, Record<string, { listingUrl: string; documentUrl: string; title: string }>> = {
+  '2408': { '2025-06-30': {
     listingUrl: 'https://www.nanya.com/en/IR/39/Financial%20Reports?Year=2025',
     documentUrl: 'https://www.nanya.com/en/Activity?Action=Get_IRFinancialReport_FileName&Id=125',
     title: '2025 Q2 Consolidated Financial Report',
-  },
+  } },
+  '2409': Object.fromEntries([
+    ['2026-06-30','2Q26'], ['2026-03-31','1Q26'], ['2025-12-31','4Q25'], ['2025-09-30','3Q25'],
+    ['2025-06-30','2Q25'], ['2025-03-31','1Q25'], ['2024-12-31','4Q24'], ['2024-09-30','3Q24'],
+  ].map(([periodEnd, label]) => [periodEnd, {
+    listingUrl: 'https://www.auo.com/en-global/Investor_Conference/index',
+    documentUrl: `https://www.auo.com/upload/media/ir/Financial_Information/${label}_Finance_Statement_English.pdf`,
+    title: `${label} Condensed Consolidated Financial Statements`,
+  }])),
 };
+
+export function candidateIssuerIrFallback(symbol: string, periodEnd: string) {
+  return VERIFIED_ISSUER_IR_FALLBACKS[symbol]?.[periodEnd] ?? null;
+}
 const FLOW_FACTS: Record<string, string> = {
   revenue: 'quarterly_revenue', revenuefromcontractswithcustomers: 'quarterly_revenue',
   grossprofit: 'quarterly_gross_profit', grossprofitlossfromoperations: 'quarterly_gross_profit',
@@ -105,7 +117,7 @@ export type ParsedFact = {
   durationKind: 'quarterly' | 'instant';
   value: number;
   unit: 'TWD' | 'TWD_per_share' | 'share';
-  provider: 'mops' | 'tpex' | 'finmind';
+  provider: 'mops' | 'twse' | 'tpex' | 'finmind';
   authorityTier: 'official_filing' | 'finmind_mirror';
   estimateKind: 'reported';
   estimateHorizon: 'reported_period';
@@ -525,7 +537,7 @@ function toParsedTpexFact(fact: ReturnType<typeof parseTpexFinancialEndpoint>['f
     stockId: candidate.stockId, symbol: candidate.symbol,
     factKey: fact.factKey, periodStart: fact.periodStart, periodEnd: fact.periodEnd,
     durationKind: fact.durationKind, value: perShare ? fact.value : fact.value * 1000,
-    unit: perShare ? 'TWD_per_share' : 'TWD', provider: 'tpex', authorityTier: 'official_filing',
+    unit: perShare ? 'TWD_per_share' : 'TWD', provider: fact.sourceRef.startsWith('twse-openapi:') ? 'twse' : 'tpex', authorityTier: 'official_filing',
     estimateKind: 'reported', estimateHorizon: 'reported_period', filingPublishedAt: fact.sourceTimestamp,
     sourceTimestamp: fact.sourceTimestamp, collectedAt, filingRestatementId: fact.filingRestatementId,
     sourceRef: fact.sourceRef,
@@ -692,6 +704,7 @@ export async function refreshCandidateOfficialFinancials(
     : 60;
   const mopsCandidates = candidates;
   const tpexCandidates = candidates.filter((candidate) => candidate.exchange === 'TPEX');
+  const twseCandidates = candidates.filter((candidate) => candidate.exchange === 'TWSE');
   const client = getOpportunityV3ServerClient();
   const fallbackPeriods = financialBridgeAcquisitionQuarters(cutoff, 20)
     .map(({ year, quarter }) => `${year}-${['03-31', '06-30', '09-30', '12-31'][quarter - 1]}`);
@@ -717,16 +730,22 @@ export async function refreshCandidateOfficialFinancials(
   // OpenAPI financial summaries contain the latest published period, not a
   // historical archive. Historical missing fields are owned by filing jobs.
   const requestedTpexQuarters = [latestDueFinancialQuarter(cutoff)];
-  const desiredTpexJobs = Object.entries(TPEX_FINANCIAL_ENDPOINTS).flatMap(([endpoint, sourceUrl]) =>
-    requestedTpexQuarters.flatMap(({ year, quarter }) => tpexCandidates
+  const exchangeFinancialPlans = [
+    { provider: 'twse' as const, endpoints: TWSE_FINANCIAL_ENDPOINTS, candidates: twseCandidates },
+    { provider: 'tpex' as const, endpoints: TPEX_FINANCIAL_ENDPOINTS, candidates: tpexCandidates },
+  ];
+  const desiredTpexJobs = exchangeFinancialPlans.flatMap((plan) => Object.entries(plan.endpoints).flatMap(([endpoint, sourceUrl]) =>
+    requestedTpexQuarters.flatMap(({ year, quarter }) => plan.candidates
       .filter((candidate) => endpoint.startsWith(candidate.statementKind || 'general')).map((candidate) => ({
       stock_id: candidate.stockId, exchange: candidate.exchange,
       endpoint_key: TPEX_JOB_KEYS[endpoint as keyof typeof TPEX_JOB_KEYS],
       period_end: `${year}-${['03-31', '06-30', '09-30', '12-31'][quarter - 1]}`,
-      cursor_key: `${candidate.symbol}:${year}Q${quarter}`,
+      cursor_key:
+        plan.provider === 'tpex'
+          ? `${candidate.symbol}:${year}Q${quarter}`
+          : `${candidate.symbol}:twse:${year}Q${quarter}`,
       source_url: sourceUrl,
-    }))),
-  );
+    })))));
   if (enqueueMissing && desiredTpexJobs.length) {
     const queued = await client.from('candidate_financial_acquisition_jobs_v4').upsert(desiredTpexJobs, {
       onConflict: 'stock_id,endpoint_key,period_end,cursor_key', ignoreDuplicates: true,
@@ -738,7 +757,7 @@ export async function refreshCandidateOfficialFinancials(
     ? await client.rpc('claim_candidate_financial_acquisition_jobs_v4', {
       p_stock_ids: mopsCandidates.map((candidate) => candidate.stockId),
       p_endpoint_key: 'mops_inline',
-      p_limit: Math.min(60, tpexCandidates.some((candidate) => candidate.statementKind !== 'financial')
+      p_limit: Math.min(60, candidates.some((candidate) => candidate.statementKind !== 'financial')
         ? Math.max(1, Math.ceil(remainingJobs * 2 / 3)) : remainingJobs),
       p_owner: runnerPrincipal,
       p_claimed_at: collectedAt,
@@ -822,7 +841,8 @@ export async function refreshCandidateOfficialFinancials(
     }
   });
   const issuerFallbackRows = [...new Map(outcomes.filter((outcome) => outcome.error).flatMap((outcome) => {
-    const fallback = VERIFIED_ISSUER_IR_FALLBACKS[outcome.candidate.symbol];
+    const periodEnd = issuerDocumentPeriodEnd(outcome.error || '');
+    const fallback = periodEnd ? candidateIssuerIrFallback(outcome.candidate.symbol, periodEnd) : null;
     if (!fallback) return [];
     const item = {
       issuerId: outcome.candidate.symbol,
@@ -832,9 +852,9 @@ export async function refreshCandidateOfficialFinancials(
       publishedAt: null,
       mimeType: 'application/pdf',
       documentSha256: null,
-      metadata: { exchange: outcome.candidate.exchange, fallback_reason: outcome.error },
+      metadata: { exchange: outcome.candidate.exchange, period_end: periodEnd, fallback_reason: outcome.error },
     };
-    return [[outcome.candidate.stockId, {
+    return [[`${outcome.candidate.stockId}:${periodEnd}`, {
       stock_id: outcome.candidate.stockId,
       queue_key: issuerIrDocumentQueueKey(item),
       listing_source_url: fallback.listingUrl,
@@ -872,19 +892,21 @@ export async function refreshCandidateOfficialFinancials(
     });
     if (queued.error) throw new Error(`candidate_issuer_ir_document_job_enqueue_failed:${queued.error.message}`);
   }
-  const tpexById = new Map(tpexCandidates.map((candidate) => [candidate.stockId, candidate]));
+  const tpexById = new Map(candidates.map((candidate) => [candidate.stockId, candidate]));
   const tpexFacts: ParsedFact[] = [];
   const tpexFailures: string[] = [];
   const attemptedTpexSymbols = new Set<string>();
   let tpexFetchedEndpoints = 0;
   let tpexFinMindFallbackFilings = 0;
   let anonymousTpexFinMindFallbackFilings = 0;
-  const applicableTpexEndpoints = Object.entries(TPEX_FINANCIAL_ENDPOINTS).filter(([endpoint]) =>
-    tpexCandidates.some((candidate) => endpoint.startsWith(candidate.statementKind || 'general')));
-  for (const [endpointIndex, [endpoint, sourceUrl]] of applicableTpexEndpoints.entries()) {
+  const applicableTpexEndpoints = exchangeFinancialPlans.flatMap((plan) => Object.entries(plan.endpoints)
+    .filter(([endpoint]) => plan.candidates.some((candidate) => endpoint.startsWith(candidate.statementKind || 'general')))
+    .map(([endpoint, sourceUrl]) => ({ provider: plan.provider, endpoint, sourceUrl, candidates: plan.candidates })));
+  for (const [endpointIndex, endpointPlan] of applicableTpexEndpoints.entries()) {
     if (remainingJobs <= 0) break;
+    const { provider, endpoint, sourceUrl } = endpointPlan;
     const endpointKey = TPEX_JOB_KEYS[endpoint as keyof typeof TPEX_JOB_KEYS];
-    const endpointCandidates = tpexCandidates.filter((candidate) => endpoint.startsWith(candidate.statementKind || 'general'));
+    const endpointCandidates = endpointPlan.candidates.filter((candidate) => endpoint.startsWith(candidate.statementKind || 'general'));
     const claim = endpointCandidates.length ? await client.rpc('claim_candidate_financial_acquisition_jobs_v4', {
       p_stock_ids: endpointCandidates.map((candidate) => candidate.stockId), p_endpoint_key: endpointKey,
       p_limit: Math.min(60, Math.max(1, Math.floor(remainingJobs / (applicableTpexEndpoints.length - endpointIndex)))), p_owner: runnerPrincipal, p_claimed_at: collectedAt,
@@ -907,9 +929,9 @@ export async function refreshCandidateOfficialFinancials(
     try {
       const { response, body, responseBytes } = await fetchTpexOfficialPayload(sourceUrl);
       const rejected = classifyFinancialResponse(response.status, response.headers.get('content-type'), body);
-      if (rejected) throw new Error(`tpex_${endpoint}_${rejected}`);
-      const parsed = parseTpexFinancialEndpoint(endpoint as keyof typeof TPEX_FINANCIAL_ENDPOINTS, JSON.parse(body));
-      if (parsed.terminalReason !== 'complete') throw new Error(`tpex_${endpoint}_${parsed.terminalReason}`);
+      if (rejected) throw new Error(`${provider}_${endpoint}_${rejected}`);
+      const parsed = parseExchangeFinancialEndpoint(provider, endpoint as keyof typeof TPEX_FINANCIAL_ENDPOINTS, JSON.parse(body));
+      if (parsed.terminalReason !== 'complete') throw new Error(`${provider}_${endpoint}_${parsed.terminalReason}`);
       tpexFetchedEndpoints += 1;
       const sourceSha256 = sha256(body);
       await mapLimit(jobs, 4, async (job) => {
@@ -956,7 +978,7 @@ export async function refreshCandidateOfficialFinancials(
         }
       });
     } catch (error) {
-      const message = `TPEX:${endpoint}:${error instanceof Error ? error.message : String(error)}`;
+      const message = `${provider.toUpperCase()}:${endpoint}:${error instanceof Error ? error.message : String(error)}`;
       tpexFailures.push(message);
       await mapLimit(jobs, 8, (job) => failAcquisitionJob({ client, jobId: job.jobId, owner: runnerPrincipal, attempts: job.attempts, consecutiveFailures: job.consecutiveFailures, error: `${job.candidate.symbol}:${message}`, collectedAt }));
     }

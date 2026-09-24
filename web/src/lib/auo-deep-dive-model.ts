@@ -1,0 +1,639 @@
+import marketCalendar from '../data/auo-trading-calendar-2026.json' with { type: 'json' };
+
+export type SegmentKey = 'mobility' | 'vertical' | 'display' | 'other';
+
+export type SegmentInput = {
+  revenue: number;
+  operatingMargin: number;
+};
+
+export type ForecastQuarterInput = {
+  period: string;
+  year: number;
+  segments: Record<SegmentKey, SegmentInput>;
+  corporateAndOtherOperatingIncome: number;
+  recurringNonOperatingIncome: number;
+  taxRate: number;
+  nonControllingInterest: number;
+  oneOffAfterTax: number;
+};
+
+export type ScenarioAdjustment = {
+  label: string;
+  revenueMultiplier: Record<SegmentKey, number>;
+  marginDelta: Record<SegmentKey, number>;
+  fairPe: number | null;
+  fairPb: number;
+  projectedDividendsMillion: number;
+  projectedCapitalAndOciMillion: number;
+};
+
+export type ForecastQuarter = ForecastQuarterInput & {
+  revenue: number;
+  segmentOperatingIncome: number;
+  operatingIncome: number;
+  pretaxIncome: number;
+  normalizedNetIncome: number;
+  reportedNetIncome: number;
+  normalizedEps: number;
+  reportedEps: number;
+};
+
+export type ForecastScenario = {
+  id: string;
+  label: string;
+  quarters: ForecastQuarter[];
+  annual: Array<{
+    year: number;
+    revenue: number;
+    operatingIncome: number;
+    normalizedNetIncome: number;
+    normalizedEps: number;
+    reportedEps: number;
+  }>;
+  valuation: {
+    fairPe: number | null;
+    peValue: number | null;
+    fairPb: number;
+    forwardBvps: number;
+    endingCommonEquity: number;
+    projectedDividends: number;
+    projectedCapitalAndOci: number;
+    pbValue: number;
+    referenceValue: number;
+  };
+};
+
+export type PriceBar = {
+  date: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+};
+
+export type TechnicalSnapshot = {
+  asOf: string;
+  close: number;
+  ma5: number | null;
+  ma20: number | null;
+  ma60: number | null;
+  ma120: number | null;
+  ma240: number | null;
+  macd: number | null;
+  macdSignal: number | null;
+  macdHistogram: number | null;
+  rsi14: number | null;
+  atr14: number | null;
+  averageVolume20: number | null;
+  volumeRatio20: number | null;
+  priorHigh20: number | null;
+  priorHigh60: number | null;
+  stale: boolean;
+};
+
+export type EntryPlan = {
+  status: 'wait' | 'active' | 'invalid';
+  pullback: {
+    lower: number | null;
+    upper: number | null;
+    invalidation: number | null;
+    firstTarget: number | null;
+    secondTarget: number | null;
+    rewardRisk: number | null;
+  };
+  breakout: {
+    trigger: number | null;
+    minimumVolume: number | null;
+    invalidation: number | null;
+    firstTarget: number | null;
+    secondTarget: number | null;
+    rewardRisk: number | null;
+  };
+};
+
+export type TradeSetupStatus = 'waiting' | 'triggered' | 'confirmed' | 'failed' | 'expired' | 'target_reached';
+
+export type FrozenBreakoutSetup = {
+  publishedAt: string;
+  trigger: number;
+  minimumVolume: number;
+  invalidation: number;
+  target: number;
+  expiresAfterTradingSessions: number;
+};
+
+export type EvaluatedBreakoutSetup = FrozenBreakoutSetup & {
+  status: TradeSetupStatus;
+  triggerDate: string | null;
+  confirmationDate: string | null;
+  terminalDate: string | null;
+};
+
+/** A conditional production bridge. Inputs are explicit so a rumor cannot become revenue. */
+export type CommercializationInputs = {
+  shippedCapacityUnits: number | null;
+  utilization: number | null;
+  yieldRate: number | null;
+  averageSellingPriceMillion: number | null;
+  grossMargin: number | null;
+  incrementalOpexMillion: number | null;
+  depreciationMillion: number | null;
+  taxRate: number;
+  attributableShare: number | null;
+  intercompanyRevenueMillion: number | null;
+  dilutedSharesMillion: number;
+};
+
+export function calculateCommercializationBridge(input: CommercializationInputs) {
+  const missing = (['shippedCapacityUnits', 'utilization', 'yieldRate', 'averageSellingPriceMillion',
+    'grossMargin', 'incrementalOpexMillion', 'depreciationMillion', 'attributableShare',
+    'intercompanyRevenueMillion'] as const)
+    .filter((key) => input[key] === null);
+  if (missing.length) return { status: 'incomplete' as const, missing };
+  const capacity = input.shippedCapacityUnits!;
+  const utilization = input.utilization!;
+  const yieldRate = input.yieldRate!;
+  const asp = input.averageSellingPriceMillion!;
+  const grossMargin = input.grossMargin!;
+  const opex = input.incrementalOpexMillion!;
+  const depreciation = input.depreciationMillion!;
+  const attributableShare = input.attributableShare!;
+  const intercompanyRevenueMillion = input.intercompanyRevenueMillion!;
+  if (capacity < 0 || utilization < 0 || utilization > 1 || yieldRate < 0 || yieldRate > 1
+    || asp < 0 || grossMargin < -1 || grossMargin > 1 || opex < 0 || depreciation < 0
+    || input.taxRate < 0 || input.taxRate > 1 || attributableShare < 0 || attributableShare > 1
+    || intercompanyRevenueMillion < 0 || input.dilutedSharesMillion <= 0) {
+    throw new Error('commercialization_inputs_invalid');
+  }
+  const saleableUnits = capacity * utilization * yieldRate;
+  const grossRevenue = saleableUnits * asp;
+  if (intercompanyRevenueMillion > grossRevenue) throw new Error('intercompany_revenue_exceeds_gross');
+  const consolidatedRevenue = grossRevenue - intercompanyRevenueMillion;
+  const operatingIncome = consolidatedRevenue * grossMargin - opex - depreciation;
+  const commonNetIncome = (operatingIncome - Math.max(operatingIncome, 0) * input.taxRate) * attributableShare;
+  return {
+    status: 'modeled' as const,
+    saleableUnits: round(saleableUnits, 0),
+    grossRevenueMillion: round(grossRevenue, 0),
+    consolidatedRevenueMillion: round(consolidatedRevenue, 0),
+    operatingIncomeMillion: round(operatingIncome, 0),
+    commonNetIncomeMillion: round(commonNetIncome, 0),
+    incrementalEps: round(commonNetIncome / input.dilutedSharesMillion, 2),
+  };
+}
+
+/** Reverse the price into incremental sales; margin is an assumption, not an order estimate. */
+export function reverseCommercializationRevenue(args: {
+  price: number; multiple: number; existingEps: number; dilutedSharesMillion: number;
+  afterTaxAttributableMargin: number;
+}) {
+  if (!(args.price > 0) || !(args.multiple > 0) || !(args.dilutedSharesMillion > 0)
+    || !(args.afterTaxAttributableMargin > 0)) return null;
+  const requiredEps = args.price / args.multiple;
+  const incrementalEps = Math.max(0, requiredEps - args.existingEps);
+  const incrementalCommonProfitMillion = incrementalEps * args.dilutedSharesMillion;
+  return {
+    requiredEps: round(requiredEps, 2), incrementalEps: round(incrementalEps, 2),
+    incrementalCommonProfitMillion: round(incrementalCommonProfitMillion, 0),
+    incrementalRevenueMillion: round(incrementalCommonProfitMillion / args.afterTaxAttributableMargin, 0),
+  };
+}
+
+export function calculateRelativePerformance(args: {
+  stockStart: number; stockEnd: number; indexStart: number; indexEnd: number;
+}) {
+  if (Object.values(args).some((value) => !Number.isFinite(value) || value <= 0)) return null;
+  const stockReturn = args.stockEnd / args.stockStart - 1;
+  const indexReturn = args.indexEnd / args.indexStart - 1;
+  return { stockReturnPercent: round(stockReturn * 100, 2),
+    indexReturnPercent: round(indexReturn * 100, 2),
+    relativePoints: round((stockReturn - indexReturn) * 100, 2) };
+}
+
+export type HistoricalPbRow = {
+  date: string; pb: number; close: number; bookValuePerShare: number;
+  bookValuePeriodEnd: string; bookValueAvailableAt: string;
+  bookValueSourceRef: string; sourceUrl: string;
+};
+
+function interpolatedPercentile(values: number[], fraction: number) {
+  const sorted = [...values].sort((left, right) => left - right);
+  const position = (sorted.length - 1) * fraction;
+  const lower = Math.floor(position);
+  const upper = Math.ceil(position);
+  return sorted[lower] + (sorted[upper] - sorted[lower]) * (position - lower);
+}
+
+/** Validate the committed exchange ledger before it can set a valuation anchor. */
+export function historicalPbQuartiles(value: unknown, cutoff: string) {
+  if (!Array.isArray(value) || value.length < 48) throw new Error('auo_historical_pb_evidence_incomplete');
+  const cutoffDate = cutoff.slice(0, 10);
+  const months = new Set<string>();
+  const rows = value.map((item) => {
+    const row = item as Partial<HistoricalPbRow>;
+    const date = String(row.date || '');
+    const periodEnd = String(row.bookValuePeriodEnd || '');
+    const availableAt = String(row.bookValueAvailableAt || '');
+    const pb = Number(row.pb);
+    const close = Number(row.close);
+    const bvps = Number(row.bookValuePerShare);
+    if (!/^\d{4}-\d{2}-\d{2}$/u.test(date) || !/^\d{4}-\d{2}-\d{2}$/u.test(periodEnd)
+      || !/^\d{4}-\d{2}-\d{2}$/u.test(availableAt) || date > cutoffDate
+      || periodEnd > availableAt || availableAt > date || !(pb > 0) || !(close > 0) || !(bvps > 0)
+      || Math.abs(close / bvps - pb) > Math.max(0.02, pb * 0.02)
+      || !/^https:\/\/www\.twse\.com\.tw\/rwd\/zh\/afterTrading\/BWIBBU\?/u.test(String(row.sourceUrl || ''))
+      || String(row.bookValueSourceRef || '') !== String(row.sourceUrl || '')) throw new Error(`auo_historical_pb_row_invalid:${date}`);
+    const month = date.slice(0, 7);
+    if (months.has(month)) throw new Error('auo_historical_pb_month_duplicate');
+    months.add(month);
+    return { ...row, date, pb, close, bookValuePerShare: bvps } as HistoricalPbRow;
+  });
+  const pbs = rows.map((row) => row.pb);
+  return {
+    rows,
+    p25: round(interpolatedPercentile(pbs, 0.25), 2),
+    p50: round(interpolatedPercentile(pbs, 0.5), 2),
+    p75: round(interpolatedPercentile(pbs, 0.75), 2),
+    min: round(Math.min(...pbs), 2),
+    max: round(Math.max(...pbs), 2),
+  };
+}
+
+const round = (value: number, digits = 2) => {
+  const factor = 10 ** digits;
+  return Math.round((value + Number.EPSILON) * factor) / factor;
+};
+
+const roundNullable = (value: number | null, digits = 2) => value === null ? null : round(value, digits);
+
+function average(values: number[]): number | null {
+  if (!values.length) return null;
+  return values.reduce((sum, value) => sum + value, 0) / values.length;
+}
+
+export function calculateForwardPe(price: number, eps: number): number | null {
+  if (!Number.isFinite(price) || !Number.isFinite(eps) || eps <= 0.1) return null;
+  return round(price / eps, 1);
+}
+
+export function requiredEarningsAtMultiple(
+  price: number,
+  multiple: number,
+  dilutedSharesMillion: number,
+  revenueMillion: number,
+) {
+  const eps = price / multiple;
+  const netIncome = eps * dilutedSharesMillion;
+  return {
+    eps: round(eps, 2),
+    netIncome: round(netIncome, 0),
+    netMargin: round(netIncome / revenueMillion, 4),
+  };
+}
+
+export function combineActualAndForecastYear(args: {
+  actual: { revenue: number; operatingIncome: number; normalizedNetIncome: number; reportedNetIncome: number };
+  forecast: { revenue: number; operatingIncome: number; normalizedNetIncome: number; reportedNetIncome: number };
+  dilutedSharesMillion: number;
+}) {
+  const revenue = args.actual.revenue + args.forecast.revenue;
+  const operatingIncome = args.actual.operatingIncome + args.forecast.operatingIncome;
+  const normalizedNetIncome = args.actual.normalizedNetIncome + args.forecast.normalizedNetIncome;
+  const reportedNetIncome = args.actual.reportedNetIncome + args.forecast.reportedNetIncome;
+  return {
+    revenue: round(revenue, 0),
+    operatingIncome: round(operatingIncome, 0),
+    normalizedNetIncome: round(normalizedNetIncome, 0),
+    reportedNetIncome: round(reportedNetIncome, 0),
+    normalizedEps: round(normalizedNetIncome / args.dilutedSharesMillion, 2),
+    reportedEps: round(reportedNetIncome / args.dilutedSharesMillion, 2),
+  };
+}
+
+function applyAdjustment(
+  quarter: ForecastQuarterInput,
+  adjustment: ScenarioAdjustment,
+): ForecastQuarterInput {
+  const segments = Object.fromEntries(
+    (Object.entries(quarter.segments) as Array<[SegmentKey, SegmentInput]>).map(([key, segment]) => [
+      key,
+      {
+        revenue: segment.revenue * adjustment.revenueMultiplier[key],
+        operatingMargin: segment.operatingMargin + adjustment.marginDelta[key],
+      },
+    ]),
+  ) as Record<SegmentKey, SegmentInput>;
+  return { ...quarter, segments };
+}
+
+export function calculateQuarter(
+  input: ForecastQuarterInput,
+  dilutedSharesMillion: number,
+): ForecastQuarter {
+  const segmentRows = Object.values(input.segments);
+  const revenue = segmentRows.reduce((sum, segment) => sum + segment.revenue, 0);
+  const segmentOperatingIncome = segmentRows.reduce(
+    (sum, segment) => sum + segment.revenue * segment.operatingMargin,
+    0,
+  );
+  const operatingIncome = segmentOperatingIncome + input.corporateAndOtherOperatingIncome;
+  const pretaxIncome = operatingIncome + input.recurringNonOperatingIncome;
+  const tax = pretaxIncome > 0 ? pretaxIncome * input.taxRate : 0;
+  const normalizedNetIncome = pretaxIncome - tax - input.nonControllingInterest;
+  const reportedNetIncome = normalizedNetIncome + input.oneOffAfterTax;
+  return {
+    ...input,
+    revenue: round(revenue, 0),
+    segmentOperatingIncome: round(segmentOperatingIncome, 0),
+    operatingIncome: round(operatingIncome, 0),
+    pretaxIncome: round(pretaxIncome, 0),
+    normalizedNetIncome: round(normalizedNetIncome, 0),
+    reportedNetIncome: round(reportedNetIncome, 0),
+    normalizedEps: round(normalizedNetIncome / dilutedSharesMillion, 2),
+    reportedEps: round(reportedNetIncome / dilutedSharesMillion, 2),
+  };
+}
+
+export function buildForecastScenario(args: {
+  id: string;
+  baseQuarters: ForecastQuarterInput[];
+  adjustment: ScenarioAdjustment;
+  dilutedSharesMillion: number;
+  startingCommonEquityMillion: number;
+  endingCommonSharesMillion: number;
+  forwardQuarterCount: number;
+  valuationYear: number;
+}): ForecastScenario {
+  const quarters = args.baseQuarters.map((quarter) => calculateQuarter(
+    applyAdjustment(quarter, args.adjustment),
+    args.dilutedSharesMillion,
+  ));
+  const years = [...new Set(quarters.map((quarter) => quarter.year))];
+  const annual = years.map((year) => {
+    const rows = quarters.filter((quarter) => quarter.year === year);
+    const normalizedNetIncome = rows.reduce((sum, row) => sum + row.normalizedNetIncome, 0);
+    const reportedNetIncome = rows.reduce((sum, row) => sum + row.reportedNetIncome, 0);
+    return {
+      year,
+      revenue: round(rows.reduce((sum, row) => sum + row.revenue, 0), 0),
+      operatingIncome: round(rows.reduce((sum, row) => sum + row.operatingIncome, 0), 0),
+      normalizedNetIncome: round(normalizedNetIncome, 0),
+      normalizedEps: round(normalizedNetIncome / args.dilutedSharesMillion, 2),
+      reportedEps: round(reportedNetIncome / args.dilutedSharesMillion, 2),
+    };
+  });
+  const valuationYear = annual.find((row) => row.year === args.valuationYear);
+  const peValue = valuationYear && args.adjustment.fairPe && valuationYear.normalizedEps > 0.1
+    ? round(valuationYear.normalizedEps * args.adjustment.fairPe, 1)
+    : null;
+  const forwardRows = quarters.slice(0, args.forwardQuarterCount);
+  if (forwardRows.length !== args.forwardQuarterCount
+    || !(args.startingCommonEquityMillion > 0)
+    || !(args.endingCommonSharesMillion > 0)) {
+    throw new Error('forward_common_equity_inputs_incomplete');
+  }
+  const endingCommonEquity = args.startingCommonEquityMillion
+    + forwardRows.reduce((sum, row) => sum + row.normalizedNetIncome, 0)
+    - args.adjustment.projectedDividendsMillion
+    + args.adjustment.projectedCapitalAndOciMillion;
+  const forwardBvps = round(endingCommonEquity / args.endingCommonSharesMillion, 4);
+  const pbValue = round(forwardBvps * args.adjustment.fairPb, 1);
+  // Use normalized earnings when the scenario has a usable earnings base.
+  // P/B remains a separately displayed asset-value cross-check; a historical
+  // percentile must never become an artificial ceiling on a changing business.
+  const referenceValue = peValue ?? pbValue;
+  return {
+    id: args.id,
+    label: args.adjustment.label,
+    quarters,
+    annual,
+    valuation: {
+      fairPe: args.adjustment.fairPe,
+      peValue,
+      fairPb: args.adjustment.fairPb,
+      forwardBvps,
+      endingCommonEquity: round(endingCommonEquity, 0),
+      projectedDividends: args.adjustment.projectedDividendsMillion,
+      projectedCapitalAndOci: args.adjustment.projectedCapitalAndOciMillion,
+      pbValue,
+      referenceValue,
+    },
+  };
+}
+
+function ema(values: number[], periods: number): number[] {
+  if (!values.length) return [];
+  const multiplier = 2 / (periods + 1);
+  let current = values[0];
+  return values.map((value, index) => {
+    if (index === 0) return current;
+    current = value * multiplier + current * (1 - multiplier);
+    return current;
+  });
+}
+
+function wilderRsi(values: number[], periods: number): number | null {
+  if (values.length <= periods) return null;
+  const changes = values.slice(1).map((value, index) => value - values[index]);
+  let averageGain = changes.slice(0, periods).reduce((sum, value) => sum + Math.max(value, 0), 0) / periods;
+  let averageLoss = changes.slice(0, periods).reduce((sum, value) => sum + Math.max(-value, 0), 0) / periods;
+  for (const change of changes.slice(periods)) {
+    averageGain = (averageGain * (periods - 1) + Math.max(change, 0)) / periods;
+    averageLoss = (averageLoss * (periods - 1) + Math.max(-change, 0)) / periods;
+  }
+  if (averageLoss === 0) return 100;
+  return 100 - 100 / (1 + averageGain / averageLoss);
+}
+
+function wilderAtr(rows: PriceBar[], periods: number): number | null {
+  if (rows.length <= periods) return null;
+  const trueRanges = rows.map((row, index) => {
+    if (index === 0) return row.high - row.low;
+    const previousClose = rows[index - 1].close;
+    return Math.max(row.high - row.low, Math.abs(row.high - previousClose), Math.abs(row.low - previousClose));
+  });
+  let value = trueRanges.slice(1, periods + 1).reduce((sum, item) => sum + item, 0) / periods;
+  for (const range of trueRanges.slice(periods + 1)) value = (value * (periods - 1) + range) / periods;
+  return value;
+}
+
+function movingAverage(values: number[], periods: number): number | null {
+  if (values.length < periods) return null;
+  return average(values.slice(-periods));
+}
+
+export function calculateTechnicalSnapshot(
+  bars: PriceBar[],
+  asOfDate: Date,
+  staleAfterTradingDays = 1,
+): TechnicalSnapshot | null {
+  if (!bars.length) return null;
+  const closes = bars.map((bar) => bar.close);
+  const macdFast = ema(closes, 12);
+  const macdSlow = ema(closes, 26);
+  const macdLine = closes.map((_, index) => macdFast[index] - macdSlow[index]);
+  const signal = ema(macdLine, 9);
+  const last = bars.at(-1)!;
+  const parseRocDate = (value: string) => {
+    const [rocYear, month, day] = value.split('/').map(Number);
+    return new Date(Date.UTC(rocYear + 1911, month - 1, day));
+  };
+  const lastDate = parseRocDate(last.date);
+  let missingTradingDays = 0;
+  const cursor = new Date(lastDate);
+  cursor.setUTCDate(cursor.getUTCDate() + 1);
+  const taipei = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Taipei',
+    year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', hourCycle: 'h23' }).formatToParts(asOfDate);
+  const part = (type: Intl.DateTimeFormatPartTypes) => Number(taipei.find((value) => value.type === type)?.value);
+  const cutoff = new Date(Date.UTC(part('year'), part('month') - 1, part('day')));
+  // The close is 13:30 Taipei; allow publication/verification time until 15:00.
+  if (part('hour') < 15) cutoff.setUTCDate(cutoff.getUTCDate() - 1);
+  const closedWeekdays = new Set<string>(marketCalendar.closedWeekdays);
+  let calendarUnknown = cutoff.getUTCFullYear() !== marketCalendar.year || lastDate.getUTCFullYear() !== marketCalendar.year;
+  while (cursor <= cutoff) {
+    const day = cursor.getUTCDay();
+    const date = cursor.toISOString().slice(0, 10);
+    if (cursor.getUTCFullYear() !== marketCalendar.year) calendarUnknown = true;
+    if (day !== 0 && day !== 6 && !closedWeekdays.has(date)) missingTradingDays += 1;
+    cursor.setUTCDate(cursor.getUTCDate() + 1);
+  }
+  const avgVolume20 = average(bars.slice(-20).map((bar) => bar.volume));
+  return {
+    asOf: last.date,
+    close: last.close,
+    ma5: roundNullable(movingAverage(closes, 5), 2),
+    ma20: roundNullable(movingAverage(closes, 20), 2),
+    ma60: roundNullable(movingAverage(closes, 60), 2),
+    ma120: roundNullable(movingAverage(closes, 120), 2),
+    ma240: roundNullable(movingAverage(closes, 240), 2),
+    macd: macdLine.length ? round(macdLine.at(-1)!, 2) : null,
+    macdSignal: signal.length ? round(signal.at(-1)!, 2) : null,
+    macdHistogram: round((macdLine.at(-1) ?? 0) - (signal.at(-1) ?? 0), 2),
+    rsi14: round(wilderRsi(closes, 14) ?? Number.NaN, 1),
+    atr14: round(wilderAtr(bars, 14) ?? Number.NaN, 2),
+    averageVolume20: avgVolume20 === null ? null : round(avgVolume20, 0),
+    volumeRatio20: avgVolume20 === null ? null : round(last.volume / avgVolume20, 2),
+    priorHigh20: round(Math.max(...bars.slice(-21, -1).map((bar) => bar.high)), 2),
+    priorHigh60: round(Math.max(...bars.slice(-61, -1).map((bar) => bar.high)), 2),
+    stale: calendarUnknown || missingTradingDays > staleAfterTradingDays || lastDate > cutoff,
+  };
+}
+
+export function classifyResearchVerdict(args: {
+  price: number;
+  baseReferenceValue: number;
+  technical: TechnicalSnapshot | null;
+}) {
+  const mediumTerm = args.price > args.baseReferenceValue * 1.15
+    ? 'low_attractiveness'
+    : args.price < args.baseReferenceValue * 0.9 ? 'attractive' : 'fair';
+  const shortTerm = !args.technical || args.technical.stale
+    ? 'unavailable'
+    : args.technical.ma20 !== null && args.technical.ma60 !== null
+      && args.technical.close > args.technical.ma20 && args.technical.ma20 > args.technical.ma60
+      && (args.technical.macdHistogram ?? -1) > 0
+      ? 'bullish_wait_for_trigger'
+      : 'neutral_or_weak';
+  return { mediumTerm, shortTerm } as const;
+}
+
+export function buildEntryPlan(snapshot: TechnicalSnapshot | null): EntryPlan {
+  if (!snapshot || snapshot.stale || snapshot.ma5 === null || snapshot.ma20 === null || snapshot.atr14 === null
+    || snapshot.priorHigh20 === null || snapshot.priorHigh60 === null || snapshot.averageVolume20 === null) {
+    return {
+      status: 'invalid',
+      pullback: { lower: null, upper: null, invalidation: null, firstTarget: null, secondTarget: null, rewardRisk: null },
+      breakout: { trigger: null, minimumVolume: null, invalidation: null, firstTarget: null, secondTarget: null, rewardRisk: null },
+    };
+  }
+  const lower = Math.min(snapshot.ma20, snapshot.ma5);
+  const upper = Math.max(snapshot.ma20, snapshot.ma5);
+  const invalidation = round(snapshot.ma20 - snapshot.atr14 * 1.5, 1);
+  const pullbackEntry = (lower + upper) / 2;
+  const secondTarget = snapshot.priorHigh60;
+  const breakoutTrigger = snapshot.priorHigh20;
+  const breakoutInvalidation = round(Math.max(snapshot.ma5, breakoutTrigger - snapshot.atr14 * 1.65), 1);
+  const measuredMove = round(breakoutTrigger + (breakoutTrigger - snapshot.ma20), 1);
+  const breakoutActive = snapshot.close > breakoutTrigger
+    && (snapshot.volumeRatio20 ?? 0) >= 1.5;
+  return {
+    status: breakoutActive ? 'active' : 'wait',
+    pullback: {
+      lower: round(lower, 1),
+      upper: round(upper, 1),
+      invalidation,
+      firstTarget: breakoutTrigger,
+      secondTarget,
+      rewardRisk: round((secondTarget - pullbackEntry) / (pullbackEntry - invalidation), 1),
+    },
+    breakout: {
+      trigger: round(breakoutTrigger, 1),
+      minimumVolume: round(snapshot.averageVolume20 * 1.5, 0),
+      invalidation: breakoutInvalidation,
+      firstTarget: secondTarget,
+      secondTarget: measuredMove,
+      rewardRisk: round((measuredMove - breakoutTrigger) / (breakoutTrigger - breakoutInvalidation), 1),
+    },
+  };
+}
+
+/** Evaluate a dated setup without moving its trigger, target or expiry on later runs. */
+export function evaluateFrozenBreakoutSetup(
+  bars: PriceBar[],
+  setup: FrozenBreakoutSetup,
+): EvaluatedBreakoutSetup {
+  const eligible = bars.filter((bar) => bar.date > setup.publishedAt);
+  const triggerIndex = eligible.findIndex((bar) => bar.close > setup.trigger && bar.volume >= setup.minimumVolume);
+  if (triggerIndex < 0) {
+    return {
+      ...setup,
+      status: eligible.length > setup.expiresAfterTradingSessions ? 'expired' : 'waiting',
+      triggerDate: null,
+      confirmationDate: null,
+      terminalDate: eligible.length > setup.expiresAfterTradingSessions ? eligible.at(-1)?.date ?? null : null,
+    };
+  }
+  const triggerBar = eligible[triggerIndex];
+  const later = eligible.slice(triggerIndex + 1);
+  const confirmation = later.find((bar) => bar.close >= setup.trigger);
+  // First terminal event wins. A subsequent drop cannot rewrite a touched target.
+  for (const [index, bar] of eligible.entries()) {
+    if (index < triggerIndex) continue;
+    if (bar.high >= setup.target) return {
+      ...setup, status: 'target_reached', triggerDate: triggerBar.date,
+      confirmationDate: confirmation && confirmation.date <= bar.date ? confirmation.date : null,
+      terminalDate: bar.date,
+    };
+    if (index > triggerIndex && bar.close < setup.invalidation) return {
+      ...setup, status: 'failed', triggerDate: triggerBar.date,
+      confirmationDate: confirmation && confirmation.date <= bar.date ? confirmation.date : null,
+      terminalDate: bar.date,
+    };
+  }
+  if (confirmation) return { ...setup, status: 'confirmed', triggerDate: triggerBar.date, confirmationDate: confirmation.date, terminalDate: null };
+  return { ...setup, status: 'triggered', triggerDate: triggerBar.date, confirmationDate: null, terminalDate: null };
+}
+
+export function discountedFutureValue(eps: number, multiple: number, years: number, discountRate: number) {
+  if (!(eps > 0) || !(multiple > 0) || !(years >= 0) || !(discountRate >= 0)) return null;
+  return round((eps * multiple) / ((1 + discountRate) ** years), 1);
+}
+
+export function requiredFutureEps(price: number, multiple: number, years: number, discountRate: number) {
+  if (!(price > 0) || !(multiple > 0) || !(years >= 0) || !(discountRate >= 0)) return null;
+  return round(price * ((1 + discountRate) ** years) / multiple, 2);
+}
+
+export function validateResearchInputs(args: {
+  segmentDataAvailable: boolean;
+  sourceConflictCount: number;
+  technical: TechnicalSnapshot | null;
+}) {
+  const warnings: string[] = [];
+  if (!args.segmentDataAvailable) warnings.push('segment_data_missing');
+  if (args.sourceConflictCount > 0) warnings.push('source_conflicts_require_review');
+  if (!args.technical || args.technical.stale) warnings.push('technical_data_stale');
+  return { complete: warnings.length === 0, warnings };
+}

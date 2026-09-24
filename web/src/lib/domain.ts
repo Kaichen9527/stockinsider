@@ -21834,7 +21834,7 @@ export async function runRevenueIngestion(options?: { dryRun?: boolean }) {
   return { runId: randomUUID(), dryRun, revenueRecords, fundamentalRecords };
 }
 
-export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestion?: boolean; mode?: 'core' | 'full' }) {
+export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestion?: boolean; mode?: 'core' | 'full'; researchSession?: string; researchCutoffAt?: string }) {
   const dryRun = Boolean(options?.dryRun);
   const skipIngestion = Boolean(options?.skipIngestion);
   const mode = options?.mode || (dryRun ? 'full' : 'core');
@@ -21933,6 +21933,8 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
         const result = await runCandidateResearchCycle({
           dryRun,
           pipelineRunId,
+          targetSession: options?.researchSession,
+          targetCutoffAt: options?.researchCutoffAt,
           seedSymbols: TW_STORY_RESEARCH_SEEDS.map((seed) => ({ symbol: seed.symbol, name: seed.name, market: seed.market, sector: seed.sector })),
         });
         if (!dryRun && result.blocked) {
@@ -22125,6 +22127,17 @@ export async function runPipelineResearchFlow(options?: { dryRun?: boolean }) {
     researchReportBuild,
     deepDive,
   };
+}
+
+/** Bounded issuer canary used to prove the candidate research path without
+ * waking the full candidate universe. The lower-level cycle also applies the
+ * allowlist before acquisition, validation, price history and valuation. */
+export async function runCandidateResearchCanary(options: { symbols: string[]; dryRun?: boolean }) {
+  const symbols = [...new Set(options.symbols.map((symbol) => String(symbol).trim().toUpperCase()))];
+  if (symbols.length < 1 || symbols.length > 5 || symbols.some((symbol) => !/^\d{4}$/u.test(symbol))) {
+    throw new Error('candidate_research_canary_symbol_scope_invalid');
+  }
+  return runCandidateResearchCycle({ dryRun: Boolean(options.dryRun), symbols, seedSymbols: [] });
 }
 
 export async function runPipelineDispatchFlow(options?: { dryRun?: boolean }) {

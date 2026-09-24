@@ -28,7 +28,12 @@ export async function GET(request: Request) {
   ]);
   if (stocks.error || queueHints.error) return NextResponse.json({ ok: false, error: `candidate_financial_pending_join_failed:${stocks.error?.message || queueHints.error?.message}` }, { status: 500 });
   const stockById = new Map((stocks.data || []).map((row) => [String(row.id), row]));
-  const queueByStock = new Map((queueHints.data || []).map((row) => [String(row.stock_id), row]));
+  const queueByStockPeriod = new Map((queueHints.data || []).flatMap((row) => {
+    const metadata = row.metadata && typeof row.metadata === 'object' && !Array.isArray(row.metadata)
+      ? row.metadata as Record<string, unknown> : {};
+    const periodEnd = String(metadata.period_end || '');
+    return periodEnd ? [[`${String(row.stock_id)}:${periodEnd}`, row] as const] : [];
+  }));
   return NextResponse.json({
     ok: true,
     result: (acquisitionJobs.data || []).map((row) => ({
@@ -39,7 +44,7 @@ export async function GET(request: Request) {
       officialFilingUrl: row.source_url,
       symbol: stockById.get(String(row.stock_id))?.symbol || null,
       companyName: stockById.get(String(row.stock_id))?.name || null,
-      issuerDocumentHint: queueByStock.get(String(row.stock_id)) || null,
+      issuerDocumentHint: queueByStockPeriod.get(`${String(row.stock_id)}:${String(row.period_end)}`) || null,
     })),
     releaseId: writer.releaseId,
   });

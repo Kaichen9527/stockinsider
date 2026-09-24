@@ -1,0 +1,22 @@
+[Unit]
+Description=StockInsider AUO read-only research preview
+After=network.target
+
+[Service]
+Type=simple
+User=stockinsider
+Group=stockinsider
+WorkingDirectory=/opt/stockinsider-previews/auo-2409-app/current
+Environment=NODE_ENV=production
+Environment=HOSTNAME=127.0.0.1
+Environment=PORT=3102
+Environment=NEXT_PUBLIC_ASSET_PREFIX=/preview/auo-2409-assets
+ExecStartPre=/usr/bin/node verify-auo-preview-artifact.mjs
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

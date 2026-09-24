@@ -612,7 +612,23 @@ export type TwValuationHistoryPoint = {
   parserVersion?: string;
   provider: 'official_primary' | 'finmind_fallback';
   authorityTier: 'official_primary' | 'finmind_fallback';
+  /** Fiscal period identified by the exchange as the denominator available on this date. */
+  bookValuePeriodEnd?: string | null;
+  /** First date on which this exchange observation makes that denominator observable. */
+  bookValueAvailableAt?: string | null;
 };
+
+function officialBookValuePeriodEnd(value: unknown): string | null {
+  const text = String(value || '').trim();
+  const match = text.match(/^(\d{3,4})\s*(?:\/|Q)\s*([1-4])$/iu);
+  if (!match) return null;
+  const parsedYear = Number(match[1]);
+  const year = parsedYear < 1911 ? parsedYear + 1911 : parsedYear;
+  const quarter = Number(match[2]);
+  const month = quarter * 3;
+  const day = month === 3 || month === 12 ? 31 : 30;
+  return `${year}-${String(month).padStart(2, '0')}-${day}`;
+}
 
 export function isOfficialValuationSourceUrl(value: unknown) {
   const sourceUrl = String(value || '');
@@ -632,10 +648,11 @@ export function parseTwseValuationPanel(payload: Record<string, unknown>, date: 
   const symbolIndex = findOfficialFieldIndex(fields, ['證券代號', '股票代號']);
   const peIndex = findOfficialFieldIndex(fields, ['本益比']);
   const pbIndex = findOfficialFieldIndex(fields, ['股價淨值比']);
+  const bookValuePeriodIndex = findOfficialFieldIndex(fields, ['財報年/季', '財報年季']);
   const indexes = fields.length > 0
-    ? { symbol: symbolIndex, pe: peIndex, pb: pbIndex }
-    : { symbol: 0, pe: 5, pb: 6 };
-  if (Object.values(indexes).some((index) => index < 0)) throw new Error('twse_valuation_schema_invalid');
+    ? { symbol: symbolIndex, pe: peIndex, pb: pbIndex, bookValuePeriod: bookValuePeriodIndex }
+    : { symbol: 0, pe: 5, pb: 6, bookValuePeriod: 7 };
+  if (indexes.symbol < 0 || indexes.pe < 0 || indexes.pb < 0) throw new Error('twse_valuation_schema_invalid');
   const result = new Map<string, TwValuationHistoryPoint>();
   for (const row of rows) {
     const symbol = String(row[indexes.symbol] || '').trim();
@@ -651,6 +668,8 @@ export function parseTwseValuationPanel(payload: Record<string, unknown>, date: 
       parserVersion: 'twse-header-v1',
       provider: 'official_primary',
       authorityTier: 'official_primary',
+      bookValuePeriodEnd: indexes.bookValuePeriod >= 0 ? officialBookValuePeriodEnd(row[indexes.bookValuePeriod]) : null,
+      bookValueAvailableAt: date,
     });
   }
   return result;
@@ -713,6 +732,8 @@ export function parseTwseStockValuationHistory(payload: Record<string, unknown>,
       parserVersion: 'twse-stock-history-v1',
       provider: 'official_primary',
       authorityTier: 'official_primary',
+      bookValuePeriodEnd: officialBookValuePeriodEnd(row[5]),
+      bookValueAvailableAt: `${Number(roc[1]) + 1911}-${roc[2]}-${roc[3]}`,
     }];
   });
 }

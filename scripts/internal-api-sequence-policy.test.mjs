@@ -20,6 +20,24 @@ test('the financial queue drain continues to the document worker but still repor
   const documents = steps.findIndex((step) => step.endpoint.endsWith('/candidate-financial-documents/worker'));
   assert.equal(financial?.continueOnError, true);
   assert.ok(documents > steps.indexOf(financial));
+  const resume = steps.find((step) => step.endpoint.endsWith('/pipeline-run'));
+  assert.equal(resume?.payload.skipIfResearchSessionComplete, true);
+  assert.equal(resume?.continueOnError, true);
+});
+
+test('hourly research resume ignores symbol-scoped canary receipts', () => {
+  const route = fs.readFileSync(new URL('../web/src/app/api/internal/pipeline-run/route.ts', import.meta.url), 'utf8');
+  assert.match(route, /[.]not\('pipeline_run_id', 'is', null\)/u);
+  assert.match(route, /select\('id,technical_session_date,status,failed_count'\)/u);
+  assert.match(route, /\[\.\.\.readySessions\][.]sort\(\)[.]find\(\(session\) => !completed[.]has\(session\)\)/u);
+  assert.match(route, /[.]eq\('status', 'success'\)[.]eq\('failed_count', 0\)/u);
+  assert.doesNotMatch(route, /[.]in\('status', \['success', 'partial'\]\)/u);
+});
+
+test('symbol-scoped research resolves official symbols without draining the global document queue', () => {
+  const research = fs.readFileSync(new URL('../web/src/lib/candidate-research.ts', import.meta.url), 'utf8');
+  assert.match(research, /for \(const symbol of requestedSymbols\)[\s\S]*stockMaster[.]get\(symbol\)[\s\S]*candidates[.]set\(official[.]stockId/u);
+  assert.match(research, /requestedSymbols[.]length === 0[\s\S]*processCandidateFinancialDocumentReceipts\(20\)[\s\S]*: \[\]/u);
 });
 
 test('both scheduled research publications drain their full phase before invoking the pipeline', () => {

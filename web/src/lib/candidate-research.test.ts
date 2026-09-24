@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { buildConservativeOfficialScenario, buildEvEbitdaScenario, buildForwardEarningsScenario, buildTurnaroundEvSalesScenario } from './candidate-valuation.ts';
+import { buildConservativeOfficialScenario, buildEvEbitdaScenario, buildForwardBvpsPbScenario, buildForwardEarningsScenario, buildTurnaroundEvSalesScenario } from './candidate-valuation.ts';
 import { normalizedCycleYearsObserved } from './candidate-financial-normalization.ts';
 import { candidatePriceRefreshDepth, collectBatchedAuthorityRows, collectPagedAuthorityRows, financialFactAvailableAt, isCandidateHistoricalPriceAccessEnabled, isTransientResearchInfrastructureError, partitionCandidateMentionsByCutoff, rotatingShard } from './candidate-research-policy.ts';
 
@@ -129,6 +129,34 @@ test('forward valuation requires a complete 48-month multiple distribution', () 
   assert.equal(result?.primaryMethod, 'forward_pe');
   assert.ok((result?.bearTarget || 0) < (result?.baseTarget || 0));
   assert.ok((result?.baseTarget || 0) < (result?.bullTarget || 0));
+});
+
+test('forward BVPS x PB reconciles common equity and uses historical quartiles', () => {
+  const scenario = buildForwardBvpsPbScenario({
+    price: 20, startingCommonEquity: 1_000, endingCommonShares: 100,
+    projectedCommonIncome: { bear: 0, base: 100, bull: 200 },
+    projectedDividends: { bear: 10, base: 10, bull: 10 },
+    projectedCapitalAndOci: { bear: -10, base: 0, bull: 10 },
+    historicalPbRatios: Array(48).fill(1), targetPeriodEnd: '2027-06-30',
+  });
+  assert.ok(scenario);
+  assert.deepEqual(scenario.forwardBvps, { bear: 9.8, base: 10.9, bull: 12 });
+  assert.deepEqual(scenario.endingCommonEquity, { bear: 980, base: 1090, bull: 1200 });
+  assert.equal(scenario.baseTarget, 10.9);
+  assert.equal(scenario.primaryMethod, 'forward_bvps_pb');
+  assert.equal(scenario.targetPeriodEnd, '2027-06-30');
+});
+
+test('forward BVPS x PB refuses insufficient history or invalid ending shares', () => {
+  const input = {
+    price: 20, startingCommonEquity: 1_000, endingCommonShares: 100,
+    projectedCommonIncome: { bear: 0, base: 100, bull: 200 },
+    projectedDividends: { bear: 0, base: 0, bull: 0 },
+    projectedCapitalAndOci: { bear: 0, base: 0, bull: 0 },
+    historicalPbRatios: Array(47).fill(1), targetPeriodEnd: '2027-06-30',
+  };
+  assert.equal(buildForwardBvpsPbScenario(input), null);
+  assert.equal(buildForwardBvpsPbScenario({ ...input, endingCommonShares: 0, historicalPbRatios: Array(48).fill(1) }), null);
 });
 
 test('EV/EBITDA only publishes with explicit debt, cash, shares, and its own multiple history', () => {
