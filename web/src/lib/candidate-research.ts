@@ -52,6 +52,11 @@ import { buildCandidateValuationInputs } from './candidate-valuation-inputs.ts';
 import { getCandidateBusinessProfile, hasCompleteCandidateSegmentBridge } from './candidate-business-profile.ts';
 import { fixedRunnerPrincipal } from './opportunity-v3/internal.ts';
 import { sanitizePublicSourceUrl } from './public-source-url.ts';
+import { acquireTwEntryForwardCalendar, loadTwEntryPlanAuthority } from './tw-entry-plan-authority.ts';
+import { buildTwEntryPlans } from './tw-entry-plan.ts';
+import { appendCandidateDetailRevision } from './candidate-detail-revision-store.ts';
+import { bindCandidateTradePlan, readCandidateTradePlanSummary } from './candidate-trade-plan.ts';
+import type { TwEntryPlanBundle, TwEntryEligibility } from './tw-entry-plan-contract.ts';
 import {
   candidateResearchItemStatus,
   isCandidateFinancialFactKey,
@@ -668,8 +673,35 @@ async function executeCandidateResearchCycle(options: {
     }
   });
   const acquiredByStock = new Map(acquiredRows.map((row) => [row.stockId,row]));
+  // This read-only official schedule is acquired before fixing the source
+  // cutoff. The historical authority table contains no future opening rows.
+  const tradeForwardCalendar = await acquireTwEntryForwardCalendar();
   evaluatedAt = new Date().toISOString();
   const authorityCutoff = evaluatedAt;
+  const tradePlanCache = new Map<string, Promise<TwEntryPlanBundle>>();
+  const tradePlanForStock = (stock: (typeof universe)[number], session: string,
+    formalEligibility: TwEntryEligibility, missingData: string[] = []) => {
+    const key = stableHash([stock.id, session, formalEligibility, missingData]);
+    if (!tradePlanCache.has(key)) tradePlanCache.set(key, (async () => {
+      const exchange = exchangeBySymbol.get(stock.symbol);
+      const authority = exchange ? await loadTwEntryPlanAuthority(supabase, {
+        stockId: stock.id, symbol: stock.symbol, exchange: exchange === 'TPEx' ? 'TPEX' : 'TWSE', signalSession: session,
+        cutoff: authorityCutoff, forwardCalendar: tradeForwardCalendar,
+      }) : { bars: [], calendar: null, priceBasis: null,
+        sourceDatasetRevision: 'official_exchange_missing', missingData: ['official_exchange_missing'] };
+      // Freeze actual publication computation time once per candidate attempt.
+      // Never backdate a plan computed after the following session's opening.
+      const planPublicationAt = new Date().toISOString();
+      return buildTwEntryPlans({ ...authority, symbol: stock.symbol, candidateRevisionId: 'pending-binding',
+        dataAsOf: authorityCutoff, availableAt: planPublicationAt, computedAt: planPublicationAt,
+        formalEligibility,
+        // The active classifier has no audited execution-liquidity predicate.
+        // Expose this gap instead of inventing a volume qualification rule.
+        liquidityVerified: false, missingData: [...authority.missingData, ...missingData],
+      });
+    })());
+    return tradePlanCache.get(key)!;
+  };
   const marketRegime = marketEvidence.regime as MarketRiskRegime;
   const runInsert = await supabase.from('candidate_research_runs').update({
     evaluation_at: evaluatedAt,
@@ -1657,28 +1689,19 @@ async function executeCandidateResearchCycle(options: {
           pricePromotionEligible: priceEvidence.promotionEligible, priceBlockers: priceEvidence.blockers,
         },
       };
+      const tradeBundle = await tradePlanForStock(stock, technical.sessionDate, {
+        state: stage.stage === 'actionable' && !baseInput.staleOrFallback ? 'eligible' : 'blocked',
+        reasonCodes: stage.stage === 'actionable' && !baseInput.staleOrFallback ? []
+          : [...new Set([`candidate_stage_${stage.stage}`, ...detailCard.unmetConditions])],
+        policyVersion: STAGE_RULESET_VERSION,
+      });
+      detailPayload.available_at = tradeBundle.plans[0].availableAt;
       const revisionHash = stableHash(detailPayload);
-      const identicalDetail = await supabase.from('candidate_detail_snapshots').select('id')
-        .eq('stock_id', stock.id).eq('session_date', technical.sessionDate).eq('model_version', CANDIDATE_RESEARCH_MODEL_VERSION)
-        .eq('revision_hash', revisionHash).maybeSingle();
-      if (identicalDetail.error) throw new Error(identicalDetail.error.message);
-      let detailRevisionId = identicalDetail.data?.id ? String(identicalDetail.data.id) : null;
-      let appendedDetail = false;
-      if (!detailRevisionId) {
-        const priorDetail = await supabase.from('candidate_detail_snapshots').select('id')
-          .eq('stock_id', stock.id).eq('model_version', CANDIDATE_RESEARCH_MODEL_VERSION)
-          .order('available_at', { ascending: false }).limit(1).maybeSingle();
-        if (priorDetail.error) throw new Error(priorDetail.error.message);
-        const detailWrite = await supabase.from('candidate_detail_snapshots').insert({
-          ...detailPayload,
-          revision_hash: revisionHash,
-          supersedes_revision_id: priorDetail.data?.id || null,
-        }).select('id').single();
-        if (detailWrite.error || !detailWrite.data) throw new Error(detailWrite.error?.message || 'candidate_detail_write_failed');
-        detailRevisionId = String(detailWrite.data.id);
-        appendedDetail = true;
-      }
-      if (!detailRevisionId) throw new Error('candidate_detail_revision_missing');
+      const researchPayload = { ...detailPayload, provenance: { ...detailPayload.provenance, research_revision_hash: revisionHash } };
+      const boundDetail = { ...researchPayload, ...bindCandidateTradePlan(researchPayload, tradeBundle) };
+      const detailWrite = await appendCandidateDetailRevision(supabase, boundDetail);
+      const detailRevisionId = detailWrite.id;
+      const appendedDetail = detailWrite.appended;
       if (appendedDetail) {
         const dossierWrite = await supabase.from('candidate_research_dossiers').insert({
           detail_snapshot_id: detailRevisionId, narrative_kind: 'deterministic_fact',
@@ -1879,28 +1902,16 @@ async function executeCandidateResearchCycle(options: {
             available_at: evaluatedAt,
             provenance: { source: 'deterministic_candidate_research_data_gap', research_run_id: runId, terminal_reason: reason },
           };
+          const tradeBundle = await tradePlanForStock(stock, latestMarketSession, {
+            state: 'unavailable', reasonCodes: ['candidate_research_data_gap'], policyVersion: STAGE_RULESET_VERSION,
+          }, ['candidate_research_data_gap']);
+          detailPayload.available_at = tradeBundle.plans[0].availableAt;
           const revisionHash = stableHash(detailPayload);
-          const identicalDetail = await supabase.from('candidate_detail_snapshots').select('id')
-            .eq('stock_id', stock.id).eq('session_date', latestMarketSession).eq('model_version', CANDIDATE_RESEARCH_MODEL_VERSION)
-            .eq('revision_hash', revisionHash).maybeSingle();
-          if (identicalDetail.error) throw new Error(identicalDetail.error.message);
-          let detailRevisionId = identicalDetail.data?.id ? String(identicalDetail.data.id) : null;
-          let appendedDetail = false;
-          if (!detailRevisionId) {
-            const priorDetail = await supabase.from('candidate_detail_snapshots').select('id')
-              .eq('stock_id', stock.id).eq('model_version', CANDIDATE_RESEARCH_MODEL_VERSION)
-              .order('available_at', { ascending: false }).limit(1).maybeSingle();
-            if (priorDetail.error) throw new Error(priorDetail.error.message);
-            const detailWrite = await supabase.from('candidate_detail_snapshots').insert({
-              ...detailPayload,
-              revision_hash: revisionHash,
-              supersedes_revision_id: priorDetail.data?.id || null,
-            }).select('id').single();
-            if (detailWrite.error || !detailWrite.data) throw new Error(detailWrite.error?.message || 'candidate_detail_write_failed');
-            detailRevisionId = String(detailWrite.data.id);
-            appendedDetail = true;
-          }
-          if (!detailRevisionId) throw new Error('candidate_detail_revision_missing');
+          const researchPayload = { ...detailPayload, provenance: { ...detailPayload.provenance, research_revision_hash: revisionHash } };
+          const boundDetail = { ...researchPayload, ...bindCandidateTradePlan(researchPayload, tradeBundle) };
+          const detailWrite = await appendCandidateDetailRevision(supabase, boundDetail);
+          const detailRevisionId = detailWrite.id;
+          const appendedDetail = detailWrite.appended;
           if (appendedDetail) {
             const dossierWrite = await supabase.from('candidate_research_dossiers').insert({
               detail_snapshot_id: detailRevisionId,
@@ -2036,6 +2047,20 @@ export async function loadCandidateStageCards(): Promise<{ found: CandidateStage
   const persistedStockIds = [...stageByStock.entries()].filter(([, stage]) => ['waiting', 'actionable'].includes(String(stage.lifecycle_stage))).map(([stockId]) => stockId);
   const stockIds = [...new Set([...recentStockIds, ...persistedStockIds])];
   if (stockIds.length === 0) return { found: [], waiting: [], actionable: [] };
+  const detailIds = [...new Set(stockIds.flatMap((stockId) => {
+    const id = stageByStock.get(stockId)?.detail_revision_id;
+    return typeof id === 'string' ? [id] : [];
+  }))];
+  // Project only the saved compact summary, keyed by the exact linked detail
+  // revision. Never download 240 candles per home card or join another latest.
+  const tradeSummaries = await collectBatchedAuthorityRows<string, Row>(detailIds, async (ids, from, to) => {
+    const rows = await supabase.from('candidate_detail_snapshots')
+      .select('id,stock_id,trade_plan_summary:provenance->trade_plan_summary')
+      .in('id', ids).order('id').range(from, to);
+    if (rows.error) throw new Error(`candidate_trade_summary_read_failed:${rows.error.message}`);
+    return (rows.data || []) as Row[];
+  }, { batchSize: 50, pageSize: 50, maxRowsPerBatch: 50 });
+  const tradeSummaryByRevision = new Map(tradeSummaries.map((row) => [String(row.id), row]));
   const historicalOnlyIds = persistedStockIds.filter((stockId) => !recentStockIds.includes(stockId));
   const [historicalMentionsRes, technicalRes, valuationRes, trackingRes] = await Promise.all([
     historicalOnlyIds.length > 0
@@ -2123,6 +2148,9 @@ export async function loadCandidateStageCards(): Promise<{ found: CandidateStage
     const unmetConditions = stringArray(stage?.unmet_conditions);
     if (stale && !unmetConditions.includes('stale_or_fallback_data')) unmetConditions.push('stale_or_fallback_data');
     const valuationStale = !valuation?.available_at || Date.now() - Date.parse(String(valuation.available_at)) > 7 * 86_400_000;
+    const tradeSummaryRow = tradeSummaryByRevision.get(String(stage?.detail_revision_id || ''));
+    const tradePlanSummary = tradeSummaryRow?.stock_id === stockId
+      ? readCandidateTradePlanSummary(tradeSummaryRow.trade_plan_summary, { revisionId: String(stage?.detail_revision_id) }) : null;
     cardsByStock.set(stockId, {
       symbol: String(stock.symbol || ''), chineseName: String(stock.name || stock.symbol || ''), sector: stock.sector ? String(stock.sector) : null, market: String(stock.market || 'TW') === 'US' ? 'US' : 'TW', lifecycleStage,
       latestMentionAt, mentionCount: stockMentions.length, rawMentionCount: concentration.rawMentions,
@@ -2138,6 +2166,7 @@ export async function loadCandidateStageCards(): Promise<{ found: CandidateStage
       classificationReplayHash: hard.classification_replay_consistent === true && hard.classification_replay_hash ? String(hard.classification_replay_hash) : null,
       unmetConditions, promotionReasons: stringArray(stage?.promotion_reasons), dataAsOf, stale,
       detailRevisionId: stage?.detail_revision_id ? String(stage.detail_revision_id) : null,
+      tradePlanSummary,
       riskAction: trackingByStock.get(stockId) ? {
         state: String(trackingByStock.get(stockId)?.risk_action || 'data_incomplete') as 'hold' | 'trim_no_chase' | 'hard_exit' | 'data_incomplete',
         reasons: stringArray(trackingByStock.get(stockId)?.action_reasons),

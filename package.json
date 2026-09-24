@@ -177,7 +177,8 @@
     "audit:market-context-completeness-v3": "node scripts/audit_opportunity_v3.mjs market-context",
     "audit:valuation-calibration-v3": "node scripts/audit_opportunity_v3.mjs valuation",
     "audit:opportunity-action-v3": "node scripts/audit_opportunity_v3.mjs action",
-    "audit:opportunity-acceptance-traceability-v3": "node scripts/audit_opportunity_v3.mjs traceability"
+    "audit:opportunity-acceptance-traceability-v3": "node scripts/audit_opportunity_v3.mjs traceability",
+    "test:tw-entry-plan": "node web/scripts/sync-official-authority.mjs && node scripts/run-node22.js --experimental-strip-types --test web/scripts/sync-official-authority.test.mjs web/src/lib/tw-entry-plan.test.ts web/src/lib/tw-entry-plan-authority.test.ts web/src/lib/candidate-trade-plan.test.ts web/src/lib/candidate-trade-plan-transport.test.ts web/src/lib/candidate-detail-revision-store.test.ts web/src/lib/stage-classifier.test.ts web/src/lib/candidate-revision-context.test.ts web/src/lib/candidate-revision-query.test.ts web/src/lib/radar-stage-pagination.test.ts web/src/lib/radar-public-snapshot.test.ts"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.1",

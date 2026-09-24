@@ -40,6 +40,8 @@ export function compactCandidateStageForSnapshot(card: CandidateStageCard): Cand
     sector: card.sector ?? null,
     lifecycleStage: card.lifecycleStage,
     detailRevisionId: card.detailRevisionId ?? null,
+    ...(card.tradePlanSummary?.candidateRevisionId === card.detailRevisionId
+      ? { tradePlanSummary: card.tradePlanSummary } : {}),
     detailHref: candidateRevisionHref(card.symbol, card.detailRevisionId),
     stale: card.stale === true,
     latestMentionAt: card.latestMentionAt,

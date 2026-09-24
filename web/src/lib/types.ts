@@ -1,3 +1,5 @@
+import type { TwEntryPlanSummary } from './tw-entry-plan-contract';
+
 export type SignalFreshness = 'fresh' | 'stale' | 'missing';
 
 export type StrategyState = 'active' | 'hit_target' | 'hit_stop_loss' | 'invalidated' | 'closed';
@@ -1694,6 +1696,7 @@ export interface CandidateStageCard {
   dataAsOf: string | null;
   stale: boolean;
   detailRevisionId: string | null;
+  tradePlanSummary?: TwEntryPlanSummary | null;
   riskAction: { state: 'hold' | 'trim_no_chase' | 'hard_exit' | 'data_incomplete'; reasons: string[] } | null;
   detailHref: string;
 }
