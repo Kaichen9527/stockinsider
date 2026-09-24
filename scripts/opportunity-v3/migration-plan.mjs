@@ -56,6 +56,7 @@ const migrationPaths = [
   'migrations/20260911_04_taiwan_candidate_refresh_queue.sql',
   'migrations/20260911_candidate_history_backfill_v1.sql',
   'migrations/20260911_05_financial_fact_isolation_v10.sql',
+  'migrations/20260924_entry_plan_official_action_symbols.sql',
 ];
 const migrations = migrationPaths.map((relativePath) => {
   const bytes = fs.readFileSync(path.join(root, relativePath));

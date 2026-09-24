@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 // financial validators or files loaded from outside the standalone artifact.
 export const OFFICIAL_AUTHORITY_FILES = Object.freeze([
   'codec.js', 'official-market-authority-v314.js', 'official-calendar-v314.js',
+  'official-mops-v314.js', 'official-twse-valuation.js',
 ]);
 const defaultRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const hash = (bytes) => createHash('sha256').update(bytes).digest('hex');

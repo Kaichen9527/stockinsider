@@ -11,6 +11,27 @@ Use the exact final reviewed branch commit. Re-run required CI, Requirements, Ar
 After the required review and authorized merge, a Codex session with the existing Contabo VPS access can use the repository's reviewed standalone packaging, single-writer locks, health checks and rollback procedure. Follow `deployment/vps/CAPACITY_AND_BACKUP.md`; do not infer Vercel deployment from the older overview in AGENTS.md. No secrets belong in chat or this document.
 
 ## Full research refresh
+The entry-plan authority repair is available through authenticated
+`POST /api/internal/candidate-history-backfill` with
+`{"purpose":"entry_plan_authority","requestBudget":12}`. The first batch freezes
+the current screened ordinary-stock roster and both exchanges' last 240
+completed-session identities in `entry_plan_authority_runs_v1`; each response
+returns a `runId` for bounded continuation. Continue with the same `runId`
+until pending, retry and running job counts are zero, with no failed jobs.
+Each stock-month price report and each at-most-20-session action range keeps
+its source URL(s), response/evidence hash, accepted row count and explicit
+missing count in `entry_plan_authority_jobs_v1`. The endpoint accepts no caller
+supplied symbols, bars or corporate events. It does not publish research.
+
+Apply `20260924_entry_plan_official_action_symbols.sql` before activating the
+new standalone release. It preserves the entire official corporate-action
+feed, including non-four-digit instruments, while the candidate roster
+remains restricted to four-digit common stocks. While a repair is active or
+failed, the main pipeline returns a typed repair state before starting a
+public cycle, leaving the previous public snapshot intact. A completed repair
+does not by itself guarantee every candidate has 240 traded bars: listings,
+suspensions and confirmed empty official months remain explicit data gaps.
+
 Run the existing authenticated core pipeline with a real current cutoff and the existing single-writer lease. Do not restrict `symbols`, do not use `dryRun`, and explicitly avoid `skipIfResearchSessionComplete` for this first acceptance run. The bounded `candidate-research-run` endpoint is only a 1–5 stock canary and does not itself publish the full homepage/Radar dataset.
 
 The new producer version is `candidate-research-v4.4.2`. The strategy formula remains `tw-entry-plan-v0.1`; existing revisions stay immutable. A deployment alone does not create new analysis for historical rows.

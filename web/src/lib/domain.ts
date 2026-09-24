@@ -7433,6 +7433,12 @@ const TW_STORY_RESEARCH_SEEDS = [
 
 type ResearchSeed = (typeof TW_STORY_RESEARCH_SEEDS)[number];
 
+/** Use the producer's exact seed membership when freezing authority backfill. */
+export function candidateResearchSeedRoster() {
+  return TW_STORY_RESEARCH_SEEDS.map((seed) => ({ symbol: seed.symbol, name: seed.name,
+    market: seed.market, sector: seed.sector }));
+}
+
 // Chinese names for seeds whose `name` field is English
 const CHINESE_NAME_MAP: Record<string, string> = {
   '2330': '台積電',

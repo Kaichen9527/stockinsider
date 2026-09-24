@@ -102,6 +102,31 @@ test('verified event chain rescales prior prices to the unchanged signal-session
   assert.equal(data[tables.prices][0].raw_close, 200, 'immutable source remains raw');
 });
 
+test('market-wide corporate-action snapshots retain non-four-digit instruments without adjusting the candidate', async () => {
+  const { data, request } = fixture();
+  const snapshot = data[tables.snapshots][120];
+  const session = String(snapshot.session_id);
+  const event = { snapshot_id: snapshot.snapshot_id, event_ordinal: 0, symbol: '00984D',
+    event_kind: 'ex_right_dividend', pre_action_reference_price: 20, post_action_reference_price: 19,
+    feed_identity: feeds[0], daily_adjustment_factor: .95,
+    source_row_ref: hash(['corporate-action-source-row-v3.1', 'TWSE', session, '00984D', 'ex_right_dividend', 20, 19, feeds[0]]),
+    recorded_at: '2026-09-24T08:00:00Z' };
+  data[tables.events].push(event);
+  const feed = data[tables.feeds].find((row) => row.snapshot_id === snapshot.snapshot_id && row.feed_ordinal === 0)!;
+  feed.parsed_row_count = 1;
+  snapshot.declared_event_count = 1;
+  snapshot.dataset_hash = hash(['corporate-action-snapshot-v3.1', 'TWSE', session, snapshot.session_authority_id,
+    'tw-corporate-action-v3.1', 'twse', snapshot.collected_at,
+    data[tables.feeds].filter((row) => row.snapshot_id === snapshot.snapshot_id)
+      .map((row) => [row.feed_identity, row.response_byte_count, row.response_sha256, row.parsed_row_count]),
+    [[event.symbol, event.event_kind, event.pre_action_reference_price, event.post_action_reference_price,
+      event.feed_identity, event.source_row_ref]]]);
+  const result = await loadTwEntryPlanAuthority(mockClient(data).client, request);
+  assert.deepEqual(result.missingData, []);
+  assert.equal(result.bars[0].close, 100);
+  assert.equal(result.bars.at(-1)?.close, 100);
+});
+
 test('absent price/session/action authority and read failure never abort the candidate run', async () => {
   for (const table of [tables.calendar, tables.prices, tables.snapshots]) {
     const { data, request } = fixture(); data[table] = [];

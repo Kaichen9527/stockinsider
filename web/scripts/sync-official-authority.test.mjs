@@ -20,7 +20,7 @@ async function isolated(t) {
 test('official authority bridge generates exactly the canonical bytes from a clean source checkout', async (t) => {
   const root = await isolated(t);
   const result = await syncOfficialAuthority({ repositoryRoot: root });
-  assert.equal(result.length, 3);
+  assert.equal(result.length, OFFICIAL_AUTHORITY_FILES.length);
   for (const entry of result) {
     const original = await readFile(path.join(root, 'scripts/runtime', entry.filename));
     const copied = await readFile(path.join(destination(root), entry.filename));

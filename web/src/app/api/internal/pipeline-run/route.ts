@@ -113,6 +113,23 @@ export async function POST(req: Request) {
       if (!researchCutoffAt) throw new Error('research_resume_cutoff_missing');
       historicalResearchOnly = isHistoricalResearchSession(researchSession, readySessions);
     }
+    // An authority repair intentionally appends evidence after its frozen
+    // source cutoff. Do not start a new public cycle while that repair is
+    // unfinished; this return is outside runPipelineFlow's failure path and
+    // leaves the last published snapshots intact.
+    if (!dryRun && !historicalResearchOnly) {
+      const repair = await writer.supabase.from('entry_plan_authority_runs_v1')
+        .select('run_id,status,latest_session,source_cutoff')
+        .order('created_at', { ascending: false }).limit(1).maybeSingle();
+      if (repair.error) throw new Error(`entry_plan_authority_preflight_failed:${repair.error.message}`);
+      if (repair.data && repair.data.status !== 'complete') {
+        const failed = repair.data.status === 'failed';
+        return NextResponse.json({ ok: false, error: failed ? 'entry_plan_authority_repair_failed' : 'entry_plan_authority_repair_pending',
+          result: { repairRunId: repair.data.run_id, latestSession: repair.data.latest_session,
+            sourceCutoff: repair.data.source_cutoff, publicSnapshotUnchanged: true } },
+        { status: failed ? 503 : 202 });
+      }
+    }
     if (!dryRun) {
       leaseOwner = await acquireProductionWriteLease(leaseTtlSeconds);
       if (!leaseOwner && recoverOrphanedLease) {

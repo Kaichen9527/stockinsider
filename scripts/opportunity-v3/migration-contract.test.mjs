@@ -123,6 +123,8 @@ const sourceTerminalProjectionAuthorityMigrationPath = path.join(root,
   'migrations/20260911_v320_source_terminal_projection_authority.sql');
 const sourceTerminalProjectionAuthoritySql = fs.readFileSync(
   sourceTerminalProjectionAuthorityMigrationPath, 'utf8');
+const entryPlanAuthorityMigrationPath = path.join(root,
+  'migrations/20260924_entry_plan_official_action_symbols.sql');
 const legacyRuntimeConfigHex = fs.readFileSync(path.join(root, 'config/runtime/auth-source-dag.json')).toString('hex');
 const staticIdentityMembers = JSON.parse(
   sql.match(/v_static_identity_members jsonb := \$identity\$(\[[\s\S]*?\])\$identity\$::jsonb;/u)?.[1]
@@ -993,6 +995,10 @@ before(() => {
         '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', migration]);
     }
   }
+  for (let application = 0; application < 2; application += 1) {
+    command(pg.psql, ['-X', '-v', 'ON_ERROR_STOP=1', '-h', socket, '-p', String(port),
+      '-U', 'stockinsider_managed_migrator', '-d', 'postgres', '-f', entryPlanAuthorityMigrationPath]);
+  }
 });
 
 after(() => {
@@ -1003,6 +1009,24 @@ after(() => {
     env: { ...process.env, LC_ALL: 'C' },
   });
   fs.rmSync(cluster.directory, { recursive: true, force: true });
+});
+
+test('entry-plan authority migration accepts full market action symbols and keeps ledgers private', () => {
+  const value = JSON.parse(psql(`SELECT jsonb_build_object(
+    'symbolCheck', (SELECT pg_get_constraintdef(oid) FROM pg_constraint
+      WHERE conrelid='public.opportunity_corporate_action_events_v3'::regclass
+        AND conname='opportunity_corporate_action_events_v3_symbol_check'),
+    'runsRls', (SELECT relrowsecurity FROM pg_class WHERE oid='public.entry_plan_authority_runs_v1'::regclass),
+    'jobsRls', (SELECT relrowsecurity FROM pg_class WHERE oid='public.entry_plan_authority_jobs_v1'::regclass),
+    'publicRuns', has_table_privilege('anon','public.entry_plan_authority_runs_v1','SELECT'),
+    'publicJobs', has_table_privilege('authenticated','public.entry_plan_authority_jobs_v1','SELECT'),
+    'writerRuns', has_table_privilege('service_role','public.entry_plan_authority_runs_v1','INSERT'),
+    'writerJobs', has_table_privilege('service_role','public.entry_plan_authority_jobs_v1','UPDATE')
+  )::text;`, ['-At']));
+  assert.match(value.symbolCheck, /\[0-9A-Za-z\]\{2,12\}/u);
+  assert.equal(value.runsRls, true); assert.equal(value.jobsRls, true);
+  assert.equal(value.publicRuns, false); assert.equal(value.publicJobs, false);
+  assert.equal(value.writerRuns, true); assert.equal(value.writerJobs, true);
 });
 
 test('V3.14 acceptance upgrade accepts the deployed V3.11 predecessor identity', () => {

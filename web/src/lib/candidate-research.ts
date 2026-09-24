@@ -306,74 +306,15 @@ async function loadCachedFundamentalHistory(
   }, { batchSize: 20, maxRowsPerBatch: 5000 });
 }
 
-async function executeCandidateResearchCycle(options: {
-  dryRun?: boolean;
-  pipelineRunId?: string | null;
-  symbols?: string[];
-  screenedSymbols?: string[];
-  seedSymbols?: Array<{ symbol: string; name: string; market: 'TW' | 'US'; sector: string | null }>;
-  targetSession?: string;
-  targetCutoffAt?: string;
-}, lifecycle?: { runId: string; evaluatedAt: string }) {
-  const dryRun = Boolean(options.dryRun);
-  let evaluatedAt = options.targetCutoffAt || lifecycle?.evaluatedAt || new Date().toISOString();
-  if (options.targetSession && (!Number.isFinite(Date.parse(evaluatedAt)) || evaluatedAt.slice(0, 10) < options.targetSession)) {
-    throw new Error('candidate_research_target_cutoff_invalid');
-  }
-  if (dryRun) return {
-    runId: randomUUID(), dryRun: true, candidateCount: 0, completedCount: 0, failedCount: 0,
-    partialCount: 0, technicalSessionDate: null, blocked: false, terminalReason: null, marketEvidence: null,
-    manifestId: null, manifestHash: null, items: [], tradePlanCoverage: null, sourceCutoff: null, excludedScreenedSymbols: [] as string[],
-  };
-  const researchRunnerPrincipal = fixedRunnerPrincipal();
-  if (!researchRunnerPrincipal) throw new Error('candidate_research_runner_principal_missing');
-  const supabase = getSupabaseServerClient();
-  const runId = lifecycle?.runId || randomUUID();
-  const [authorityRows, persistedSessionRows] = await Promise.all([
-    loadStockAuthority(supabase, evaluatedAt),
-    loadOfficialSessions(supabase, evaluatedAt),
-  ]);
-  const master = (authorityRows.map((row) => ({
-    stockId: String(row.stock_id || ''), symbol: String(row.symbol || ''), name: String(row.name || ''),
-    exchange: String(row.exchange || '').toUpperCase() === 'TPEX' ? 'TPEx' as const : 'TWSE' as const,
-    sector: row.sector ? String(row.sector) : null,
-  })).filter((row) => row.stockId && /^\d{4}$/u.test(row.symbol) && row.name));
-  let marketSessions = (persistedSessionRows
-    .map((row) => String(row.session_date || ''))
-    .filter((session) => /^\d{4}-\d{2}-\d{2}$/u.test(session)))
-    .sort();
-  // The database authority remains primary, but its append-only calendar can be
-  // younger than the 1,320-session research horizon. Fill only the missing
-  // historical dates from TWSE's official monthly market feed, then keep the
-  // cutoff-bound union. This is real exchange history, never synthesized dates.
-  const latestOfficialWindow = await fetchTwMarketTradingSessions(marketSessions.length < 1320 ? 1320 : 90);
-  if (latestOfficialWindow.length > 0) {
-    const officialHistory = latestOfficialWindow;
-    marketSessions = [...new Set([...marketSessions, ...officialHistory])]
-      .filter((session) => session <= evaluatedAt.slice(0, 10))
-      .sort()
-      .slice(-1320);
-  }
-  if (options.targetSession) {
-    if (!/^\d{4}-\d{2}-\d{2}$/u.test(options.targetSession) || !marketSessions.includes(options.targetSession)) {
-      throw new Error('candidate_research_target_session_not_official');
-    }
-    marketSessions = marketSessions.filter((session) => session <= options.targetSession!);
-  }
-  if (master.length === 0) throw new Error('official_stock_authority_missing');
-  if (marketSessions.length < 2) throw new Error('official_trading_calendar_missing');
-  const latestMarketSession = marketSessions.at(-1)!;
-  const evaluationReferenceMs = Date.parse(`${latestMarketSession}T13:30:00+08:00`);
-  const productionSourceCutoff = evaluatedAt;
-  const cutoff = new Date(evaluationReferenceMs - 7 * 24 * 60 * 60 * 1000).toISOString();
-  const historyCutoff = new Date(evaluationReferenceMs - 35 * 24 * 60 * 60 * 1000).toISOString();
-  const [allMentions, priorStages, publishedSymbols] = await Promise.all([
-    loadCandidateMentions(supabase, historyCutoff, productionSourceCutoff),
-    loadPriorCandidateStages(supabase, productionSourceCutoff),
-    // Canary membership is explicit; a full cycle also carries every currently
-    // published screening symbol into research, independent of UI pagination.
-    options.symbols?.length ? Promise.resolve([] as string[]) : loadPublishedCandidateSymbols(supabase, productionSourceCutoff),
-  ]);
+type CandidateResearchMaster = { stockId: string; symbol: string; name: string; exchange: 'TWSE' | 'TPEx'; sector: string | null };
+type CandidateRosterOptions = { symbols?: string[]; screenedSymbols?: string[];
+  seedSymbols?: Array<{ symbol: string; name: string; market: 'TW' | 'US'; sector: string | null }> };
+
+async function resolveCandidateResearchRoster(
+  supabase: ReturnType<typeof getSupabaseServerClient>, master: CandidateResearchMaster[],
+  allMentions: Row[], priorStages: Row[], publishedSymbols: string[], options: CandidateRosterOptions,
+  cutoff: string, productionSourceCutoff: string,
+) {
   const stockMaster = new Map(master.map((item) => [item.symbol, item]));
   const requestedSymbols = [...new Set((options.symbols || []).map((symbol) => String(symbol).trim().toUpperCase()))];
   if (requestedSymbols.some((symbol) => !/^\d{4}$/u.test(symbol)) || requestedSymbols.length > 30) {
@@ -475,6 +416,107 @@ async function executeCandidateResearchCycle(options: {
   if (missingRequestedSymbols.length > 0) {
     throw new Error(`candidate_research_symbol_scope_missing:${missingRequestedSymbols.join(',')}`);
   }
+  return { stockMaster, mentionsByStock, olderMentionsByStock, excludedScreenedSymbols, proposedUniverse };
+}
+
+/** The authority backfill and producer resolve exactly the same frozen roster. */
+export async function readCandidateResearchRosterAt(
+  supabase: ReturnType<typeof getSupabaseServerClient>, evaluatedAt: string, latestMarketSession: string,
+  options: CandidateRosterOptions = {},
+) {
+  if (!Number.isFinite(Date.parse(evaluatedAt)) || !/^\d{4}-\d{2}-\d{2}$/u.test(latestMarketSession))
+    throw new Error('candidate_research_roster_cutoff_invalid');
+  const master = (await loadStockAuthority(supabase, evaluatedAt)).map((row) => ({
+    stockId: String(row.stock_id || ''), symbol: String(row.symbol || ''), name: String(row.name || ''),
+    exchange: String(row.exchange || '').toUpperCase() === 'TPEX' ? 'TPEx' as const : 'TWSE' as const,
+    sector: row.sector ? String(row.sector) : null,
+  })).filter((row) => row.stockId && /^\d{4}$/u.test(row.symbol) && row.name);
+  if (!master.length) throw new Error('official_stock_authority_missing');
+  const referenceMs = Date.parse(`${latestMarketSession}T13:30:00+08:00`);
+  const cutoff = new Date(referenceMs - 7 * 86_400_000).toISOString();
+  const historyCutoff = new Date(referenceMs - 35 * 86_400_000).toISOString();
+  const [mentions, stages, published] = await Promise.all([
+    loadCandidateMentions(supabase, historyCutoff, evaluatedAt),
+    loadPriorCandidateStages(supabase, evaluatedAt),
+    options.symbols?.length ? Promise.resolve([] as string[]) : loadPublishedCandidateSymbols(supabase, evaluatedAt),
+  ]);
+  const resolved = await resolveCandidateResearchRoster(supabase, master, mentions, stages, published, options, cutoff, evaluatedAt);
+  return { roster: resolved.proposedUniverse.map((item) => ({ stockId: item.id, symbol: item.symbol,
+    exchange: resolved.stockMaster.get(item.symbol)!.exchange })),
+    excludedScreenedSymbols: resolved.excludedScreenedSymbols, sourceCutoff: evaluatedAt, latestMarketSession };
+}
+
+async function executeCandidateResearchCycle(options: {
+  dryRun?: boolean;
+  pipelineRunId?: string | null;
+  symbols?: string[];
+  screenedSymbols?: string[];
+  seedSymbols?: Array<{ symbol: string; name: string; market: 'TW' | 'US'; sector: string | null }>;
+  targetSession?: string;
+  targetCutoffAt?: string;
+}, lifecycle?: { runId: string; evaluatedAt: string }) {
+  const dryRun = Boolean(options.dryRun);
+  let evaluatedAt = options.targetCutoffAt || lifecycle?.evaluatedAt || new Date().toISOString();
+  if (options.targetSession && (!Number.isFinite(Date.parse(evaluatedAt)) || evaluatedAt.slice(0, 10) < options.targetSession)) {
+    throw new Error('candidate_research_target_cutoff_invalid');
+  }
+  if (dryRun) return {
+    runId: randomUUID(), dryRun: true, candidateCount: 0, completedCount: 0, failedCount: 0,
+    partialCount: 0, technicalSessionDate: null, blocked: false, terminalReason: null, marketEvidence: null,
+    manifestId: null, manifestHash: null, items: [], tradePlanCoverage: null, sourceCutoff: null, excludedScreenedSymbols: [] as string[],
+  };
+  const researchRunnerPrincipal = fixedRunnerPrincipal();
+  if (!researchRunnerPrincipal) throw new Error('candidate_research_runner_principal_missing');
+  const supabase = getSupabaseServerClient();
+  const runId = lifecycle?.runId || randomUUID();
+  const [authorityRows, persistedSessionRows] = await Promise.all([
+    loadStockAuthority(supabase, evaluatedAt),
+    loadOfficialSessions(supabase, evaluatedAt),
+  ]);
+  const master = (authorityRows.map((row) => ({
+    stockId: String(row.stock_id || ''), symbol: String(row.symbol || ''), name: String(row.name || ''),
+    exchange: String(row.exchange || '').toUpperCase() === 'TPEX' ? 'TPEx' as const : 'TWSE' as const,
+    sector: row.sector ? String(row.sector) : null,
+  })).filter((row) => row.stockId && /^\d{4}$/u.test(row.symbol) && row.name));
+  let marketSessions = (persistedSessionRows
+    .map((row) => String(row.session_date || ''))
+    .filter((session) => /^\d{4}-\d{2}-\d{2}$/u.test(session)))
+    .sort();
+  // The database authority remains primary, but its append-only calendar can be
+  // younger than the 1,320-session research horizon. Fill only the missing
+  // historical dates from TWSE's official monthly market feed, then keep the
+  // cutoff-bound union. This is real exchange history, never synthesized dates.
+  const latestOfficialWindow = await fetchTwMarketTradingSessions(marketSessions.length < 1320 ? 1320 : 90);
+  if (latestOfficialWindow.length > 0) {
+    const officialHistory = latestOfficialWindow;
+    marketSessions = [...new Set([...marketSessions, ...officialHistory])]
+      .filter((session) => session <= evaluatedAt.slice(0, 10))
+      .sort()
+      .slice(-1320);
+  }
+  if (options.targetSession) {
+    if (!/^\d{4}-\d{2}-\d{2}$/u.test(options.targetSession) || !marketSessions.includes(options.targetSession)) {
+      throw new Error('candidate_research_target_session_not_official');
+    }
+    marketSessions = marketSessions.filter((session) => session <= options.targetSession!);
+  }
+  if (master.length === 0) throw new Error('official_stock_authority_missing');
+  if (marketSessions.length < 2) throw new Error('official_trading_calendar_missing');
+  const latestMarketSession = marketSessions.at(-1)!;
+  const evaluationReferenceMs = Date.parse(`${latestMarketSession}T13:30:00+08:00`);
+  const productionSourceCutoff = evaluatedAt;
+  const cutoff = new Date(evaluationReferenceMs - 7 * 24 * 60 * 60 * 1000).toISOString();
+  const historyCutoff = new Date(evaluationReferenceMs - 35 * 24 * 60 * 60 * 1000).toISOString();
+  const [allMentions, priorStages, publishedSymbols] = await Promise.all([
+    loadCandidateMentions(supabase, historyCutoff, productionSourceCutoff),
+    loadPriorCandidateStages(supabase, productionSourceCutoff),
+    // Canary membership is explicit; a full cycle also carries every currently
+    // published screening symbol into research, independent of UI pagination.
+    options.symbols?.length ? Promise.resolve([] as string[]) : loadPublishedCandidateSymbols(supabase, productionSourceCutoff),
+  ]);
+  const { stockMaster, mentionsByStock, olderMentionsByStock, excludedScreenedSymbols, proposedUniverse } =
+    await resolveCandidateResearchRoster(supabase, master, allMentions, priorStages, publishedSymbols,
+      options, cutoff, productionSourceCutoff);
   const exchangeBySymbol = new Map(master.map((stock) => [stock.symbol, stock.exchange]));
   const existingCoreFinancialFacts = proposedUniverse.length === 0 ? [] : await collectBatchedAuthorityRows<string, Row>(
     proposedUniverse.map((stock) => stock.id),
@@ -556,7 +598,7 @@ async function executeCandidateResearchCycle(options: {
   // The receipt worker claims globally. A symbol-scoped canary must never lease
   // or mutate another issuer's pending document, so scoped runs leave receipt
   // parsing to the separately serialized document worker.
-  const officialDocumentParsing = requestedSymbols.length === 0
+  const officialDocumentParsing = !options.symbols?.length
     ? await processCandidateFinancialDocumentReceipts(20)
     : [];
   // Validation is not acquisition: a covered company can gain contradictory

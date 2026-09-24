@@ -165,7 +165,7 @@ async function readSharedAuthority(client: TwEntryAuthorityClient, request: TwEn
     for (let i = 0; i < snapshotEvents.length; i++) {
       const row = snapshotEvents[i];
       const kind = ['ex_right_dividend', 'capital_reduction', 'par_value_change'].indexOf(text(row.event_kind));
-      requireAuthority(row.event_ordinal === i && /^\d{4}$/u.test(text(row.symbol)) && (i === 0 || text(row.symbol) > text(snapshotEvents[i - 1].symbol))
+      requireAuthority(row.event_ordinal === i && /^[0-9A-Za-z]{2,12}$/u.test(text(row.symbol)) && (i === 0 || text(row.symbol) > text(snapshotEvents[i - 1].symbol))
         && kind >= 0 && row.feed_identity === FEEDS[exchange][kind] && finitePositive(row.pre_action_reference_price) && finitePositive(row.post_action_reference_price)
         && finitePositive(row.daily_adjustment_factor) && Math.abs(row.daily_adjustment_factor - row.post_action_reference_price / row.pre_action_reference_price) < 1e-10
         && timestamp(row.recorded_at) <= timestamp(cutoff)
