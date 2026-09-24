@@ -12,3 +12,9 @@ The shared official runtime validators live outside the Next web root. Generate 
 The candidate UUID includes the complete base research metadata and unbound bundle. Rebinding the same payload is stable; changed run/cutoff/base metadata creates a new immutable revision. Plan identity is independent of candidate UUID and computedAt, but includes semantic availability/cutoff/evidence/policy. Cache the actual publication time within a retry; it is never backdated to source availability. Append collisions reuse only an exact UUID+hash match.
 
 The summary is projected from the saved bundle, capped at 1,800 UTF-8 bytes and bound to the exact detail revision. Public card transport never includes candle arrays. Current stale/preliminary/expired presentation does not rewrite the frozen plan or formal classification.
+
+## Full screened roster follow-up
+Read bounded current published home/daily/hot/weekly stock rosters at the producer's source cutoff, union them with eligible mention hits, retained stages and configured seeds, then resolve against official common-stock authority. Preserve editorial exclusions for scoring. Fail on incomplete source pagination.
+Record a compact coverage aggregate in the research run and per-stock terminal/revision in the existing run-item metrics. Validate immutable saved envelopes before counting a stock as covered. Gate new stage publication on exact same-run revision/summary reconciliation. Freeze source membership for the subsequent publication read to avoid introducing a mention that arrived mid-run.
+Bump the candidate research model version so a previously completed session under the old producer cannot satisfy the new version's scheduled completion check. Keep the candidate stage classifier and frozen strategy versions unchanged.
+Keep source decision links intact and add a separately labeled current-research navigation link. No public GET calculates, refreshes or writes plans.

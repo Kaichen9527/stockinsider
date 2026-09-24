@@ -49,3 +49,31 @@ test('P1-04/P1-07/P1-08: expired, preliminary and stale snapshots never imply cu
   await expect(page.getByTestId('trade-plan-publication-block')).toContainText('初步研究版本');
   await expect(page.getByRole('button', { name: /買進|下單|賣出/ })).toHaveCount(0);
 });
+
+test('source-signal current research navigation preserves exact historical decision links', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 900 });
+  await page.goto('/trade-plan-fixture?mode=source-navigation');
+  const cards = page.getByTestId('decision-card');
+  await expect(cards).toHaveCount(3);
+  const taiwan = cards.filter({ hasText: '合成來源 2330' });
+  await expect(taiwan.getByTestId('decision-detail-link')).toHaveAttribute('href', `/stock/2330?decisionRevisionId=${encodeURIComponent(`decision-v3.13:${'a'.repeat(64)}`)}`);
+  await expect(taiwan.getByTestId('current-technical-research-link')).toHaveAttribute('href', '/stock/2330');
+  await expect(taiwan.getByTestId('current-technical-research-link')).toHaveText('目前技術研究 →');
+  await expect(page.getByTestId('current-technical-research-link')).toHaveCount(1);
+  await expect(page.getByTestId('candidate-trade-summary')).toHaveCount(0);
+  await expect(taiwan).toContainText('連結不代表已有可用計畫');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
+
+  await page.goto('/v313-decision-fixture');
+  const frozenLink = page.getByTestId('decision-detail-link').first();
+  await expect(frozenLink).toHaveAttribute('href', `/stock/9101?decisionRevisionId=${encodeURIComponent(`decision-v3.13:${'a'.repeat(64)}`)}`);
+  await frozenLink.click();
+  await expect(page).toHaveURL(/\/stock\/9101\?decisionRevisionId=decision-v3\.13%3A/);
+  await expect(page.getByTestId('detail-entry')).toHaveText('101–103');
+  await expect(page.getByTestId('current-technical-research-link')).toHaveAttribute('href', '/stock/9101');
+  await expect(page.getByTestId('candidate-trade-plans')).toHaveCount(0);
+  await page.goto(`/stock/2303?decisionRevisionId=${encodeURIComponent(`decision-v3.13:${'3'.repeat(64)}`)}`);
+  await expect(page.getByTestId('research-only-detail')).toBeVisible();
+  await expect(page.getByTestId('current-technical-research-link')).toHaveAttribute('href', '/stock/2303');
+  await expect(page.getByTestId('candidate-trade-plans')).toHaveCount(0);
+});

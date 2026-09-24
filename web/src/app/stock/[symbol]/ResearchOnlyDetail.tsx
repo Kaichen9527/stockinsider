@@ -9,6 +9,7 @@ import {
   displayValuationStatus,
 } from '@/lib/opportunity-v3/research-display';
 import LocalResearchWorkspace from './LocalResearchWorkspace';
+import CurrentTechnicalResearchLink from '../../components/CurrentTechnicalResearchLink';
 
 function finiteNumber(value: unknown): number | null {
   return typeof value === 'number' && Number.isFinite(value) ? value : null;
@@ -89,6 +90,7 @@ export default function ResearchOnlyDetail({ symbol, card, projectionBlockers = 
       <p className="research-kicker mt-8">研究模式 · 買進動作已停用</p>
       <h1 className="mt-2 text-3xl font-semibold">{name ? `${name} ` : ''}{symbol}</h1>
       <p className="mt-3 text-base leading-7">{sourceSummary}</p>
+      <CurrentTechnicalResearchLink symbol={symbol} context="detail" />
       {revisionId ? <p data-testid="research-only-decision-revision" className="mt-2 text-xs text-stone-500">研究版本已鎖定，可在後端稽核。</p> : null}
       <div role="status" className="mt-5 rounded-xl border border-orange-300/60 bg-orange-50/70 p-4 text-sm leading-6 text-stone-800 dark:bg-orange-950/20 dark:text-stone-200">
         這是可追溯的研究快照，不是買進建議。正式決策資料尚未完整或目前版本不同步，因此所有買進型動作已停用。

@@ -56,6 +56,8 @@ import { acquireTwEntryForwardCalendar, loadTwEntryPlanAuthority } from './tw-en
 import { buildTwEntryPlans } from './tw-entry-plan.ts';
 import { appendCandidateDetailRevision } from './candidate-detail-revision-store.ts';
 import { bindCandidateTradePlan, readCandidateTradePlanSummary } from './candidate-trade-plan.ts';
+import { loadPublishedCandidateSymbols } from './candidate-screened-universe.ts';
+import { createSavedOutcome, reconcileCandidateTradePlanCoverage, type CandidateTradePlanCoverageOutcome } from './candidate-trade-plan-coverage.ts';
 import type { TwEntryPlanBundle, TwEntryEligibility } from './tw-entry-plan-contract.ts';
 import {
   candidateResearchItemStatus,
@@ -75,7 +77,7 @@ async function pagedResearchResult(read: (from: number, to: number) => PromiseLi
   return { data, error: null };
 }
 
-export const CANDIDATE_RESEARCH_MODEL_VERSION = 'candidate-research-v4.4.1';
+export const CANDIDATE_RESEARCH_MODEL_VERSION = 'candidate-research-v4.4.2';
 export const CANDIDATE_STAGE_MODEL_VERSION = 'candidate-stage-v4.0.0';
 export const CANDIDATE_VALUATION_MODEL_VERSION = 'valuation-v4.4.1';
 export const ENTERPRISE_MULTIPLE_MODEL_VERSION = 'enterprise-multiple-v1';
@@ -226,7 +228,7 @@ async function loadStockAuthority(supabase: ReturnType<typeof getSupabaseServerC
     } catch (error) {
       throw new Error(`official_stock_authority_read_failed:${error instanceof Error ? error.message : String(error)}`);
     }
-  }, { maxRows: 5000 });
+  }, { maxRows: 5000, requireComplete: true });
 }
 
 async function loadOfficialSessions(supabase: ReturnType<typeof getSupabaseServerClient>, cutoff: string) {
@@ -255,28 +257,29 @@ async function loadCandidateMentions(
       const page = await supabase.from('candidate_source_mentions')
         .select('stock_id,platform,source_name,author_name,source_url,stance,independent_content_hash,mentioned_at,available_at,confidence,publisher_key,publisher_name,content_semantics,provenance,stocks(id,symbol,name,market,sector)')
         .gte('available_at', historyCutoff).lte('available_at', sourceCutoff)
-        .order('available_at', { ascending: false }).range(from, to);
+        .order('available_at', { ascending: false }).order('id').range(from, to);
       if (page.error) throw page.error;
       return (page.data as Row[]) || [];
     } catch (error) {
       throw new Error(`candidate_mentions_read_failed:${error instanceof Error ? error.message : String(error)}`);
     }
-  }, { maxRows: 20000 });
+  }, { maxRows: 100000, requireComplete: true });
 }
 
-async function loadPriorCandidateStages(supabase: ReturnType<typeof getSupabaseServerClient>) {
+async function loadPriorCandidateStages(supabase: ReturnType<typeof getSupabaseServerClient>, cutoff: string) {
   return collectPagedAuthorityRows<Row>(async (from, to) => {
     try {
       const page = await supabase.from('candidate_daily_stage_snapshots')
         .select('stock_id,session_date,lifecycle_stage,hard_gate_results,stocks(id,symbol,name,market,sector)')
         .in('lifecycle_stage', ['waiting', 'actionable'])
-        .order('session_date', { ascending: false }).range(from, to);
+        .lte('available_at', cutoff)
+        .order('session_date', { ascending: false }).order('id').range(from, to);
       if (page.error) throw page.error;
       return (page.data as Row[]) || [];
     } catch (error) {
       throw new Error(`prior_candidate_stages_read_failed:${error instanceof Error ? error.message : String(error)}`);
     }
-  }, { maxRows: 3000 });
+  }, { maxRows: 100000, requireComplete: true });
 }
 
 async function loadCachedFundamentalHistory(
@@ -307,6 +310,7 @@ async function executeCandidateResearchCycle(options: {
   dryRun?: boolean;
   pipelineRunId?: string | null;
   symbols?: string[];
+  screenedSymbols?: string[];
   seedSymbols?: Array<{ symbol: string; name: string; market: 'TW' | 'US'; sector: string | null }>;
   targetSession?: string;
   targetCutoffAt?: string;
@@ -319,7 +323,7 @@ async function executeCandidateResearchCycle(options: {
   if (dryRun) return {
     runId: randomUUID(), dryRun: true, candidateCount: 0, completedCount: 0, failedCount: 0,
     partialCount: 0, technicalSessionDate: null, blocked: false, terminalReason: null, marketEvidence: null,
-    manifestId: null, manifestHash: null, items: [],
+    manifestId: null, manifestHash: null, items: [], tradePlanCoverage: null, sourceCutoff: null, excludedScreenedSymbols: [] as string[],
   };
   const researchRunnerPrincipal = fixedRunnerPrincipal();
   if (!researchRunnerPrincipal) throw new Error('candidate_research_runner_principal_missing');
@@ -363,9 +367,12 @@ async function executeCandidateResearchCycle(options: {
   const productionSourceCutoff = evaluatedAt;
   const cutoff = new Date(evaluationReferenceMs - 7 * 24 * 60 * 60 * 1000).toISOString();
   const historyCutoff = new Date(evaluationReferenceMs - 35 * 24 * 60 * 60 * 1000).toISOString();
-  const [allMentions, priorStages] = await Promise.all([
+  const [allMentions, priorStages, publishedSymbols] = await Promise.all([
     loadCandidateMentions(supabase, historyCutoff, productionSourceCutoff),
-    loadPriorCandidateStages(supabase),
+    loadPriorCandidateStages(supabase, productionSourceCutoff),
+    // Canary membership is explicit; a full cycle also carries every currently
+    // published screening symbol into research, independent of UI pagination.
+    options.symbols?.length ? Promise.resolve([] as string[]) : loadPublishedCandidateSymbols(supabase, productionSourceCutoff),
   ]);
   const stockMaster = new Map(master.map((item) => [item.symbol, item]));
   const requestedSymbols = [...new Set((options.symbols || []).map((symbol) => String(symbol).trim().toUpperCase()))];
@@ -377,7 +384,8 @@ async function executeCandidateResearchCycle(options: {
   const eligibleMentionsAtRun = allMentions.filter((mention) => candidateMentionDiscoveryEligible(mention.provenance, String(mention.platform || '')));
   const eligibleMentions = eligibleMentionsAtRun.filter((mention) =>
     Number.isFinite(Date.parse(String(mention.available_at))) && Date.parse(String(mention.available_at)) <= Date.parse(productionSourceCutoff));
-  const recentMentions = eligibleMentions.filter((mention) => String(mention.available_at || '') >= cutoff && String(mention.content_semantics || 'editorial_discussion') !== 'bulk_institutional_ranking');
+  const screenedMentions = eligibleMentions.filter((mention) => String(mention.available_at || '') >= cutoff);
+  const recentMentions = screenedMentions.filter((mention) => String(mention.content_semantics || 'editorial_discussion') !== 'bulk_institutional_ranking');
   const olderMentionsByStock = new Map<string, Row[]>();
   for (const mention of eligibleMentions.filter((mention) => String(mention.available_at || '') < cutoff)) {
     const stockId = String(mention.stock_id || '');
@@ -410,6 +418,20 @@ async function executeCandidateResearchCycle(options: {
     if (!official) continue;
     const storedName = String(stock.name || symbol);
     candidates.set(id, { id, symbol, name: official.name, storedName, market: 'TW', sector: official.sector || (stock.sector ? String(stock.sector) : null) });
+  }
+  // A public ranking hit is sufficient to request technical research, but it
+  // does not become editorial evidence or increase formal discovery scores.
+  const screenedSymbols = [...new Set([...publishedSymbols, ...screenedMentions.map((mention) =>
+    String(rowRelation(mention.stocks)?.symbol || '')), ...(options.screenedSymbols || [])])];
+  if ((options.screenedSymbols || []).length > 5000 || options.screenedSymbols?.some((symbol) => !/^\d{4}$/u.test(symbol))) {
+    throw new Error('candidate_screened_roster_invalid');
+  }
+  const excludedScreenedSymbols = screenedSymbols.filter((symbol) => /^\d{4}$/u.test(symbol) && !stockMaster.has(symbol));
+  for (const symbol of screenedSymbols) {
+    const official = stockMaster.get(symbol);
+    if (!official || candidates.has(official.stockId)) continue;
+    candidates.set(official.stockId, { id: official.stockId, symbol, name: official.name, storedName: official.name,
+      market: 'TW', sector: official.sector });
   }
   const seedSymbols = (options.seedSymbols || []).filter((seed) => seed.market === 'TW');
   const seedBySymbol = new Map(seedSymbols.map((seed) => [seed.symbol, seed]));
@@ -583,6 +605,9 @@ async function executeCandidateResearchCycle(options: {
       manifestId,
       manifestHash,
       items: [],
+      tradePlanCoverage: null,
+      sourceCutoff: productionSourceCutoff,
+      excludedScreenedSymbols,
     };
   }
   const historyStart = new Date(evaluationReferenceMs);
@@ -679,6 +704,7 @@ async function executeCandidateResearchCycle(options: {
   evaluatedAt = new Date().toISOString();
   const authorityCutoff = evaluatedAt;
   const tradePlanCache = new Map<string, Promise<TwEntryPlanBundle>>();
+  const tradePlanOutcomes = new Map<string, CandidateTradePlanCoverageOutcome>();
   const tradePlanForStock = (stock: (typeof universe)[number], session: string,
     formalEligibility: TwEntryEligibility, missingData: string[] = []) => {
     const key = stableHash([stock.id, session, formalEligibility, missingData]);
@@ -1749,8 +1775,11 @@ async function executeCandidateResearchCycle(options: {
         missingBridgeInputs: valuationProjection?.status === 'insufficient' ? valuationProjection.missing : [],
         multipleMonthsCovered, requiredMultipleMonths: 48 };
       Object.assign(result, { status: itemStatus, executionStatus: 'success', factCompleteness, modelCompleteness, researchReadiness, stage: stage.stage, technicalSessionDate: technical.sessionDate, technicalCoverageStatus: priceCoverageTerminal ? 'insufficient_history' : 'complete', valuationStatus, valuationBasis: valuationPolicy.basis, detailRevisionId, scores: stage.scores, unmetConditions: detailCard.unmetConditions, classificationInput, classificationReplayHash, riskAction: risk });
+      const tradeOutcome = createSavedOutcome({ symbol: stock.symbol, savedRevision: { ...boundDetail, id: detailRevisionId } });
+      result.tradePlanCoverage = reconcileCandidateTradePlanCoverage({ expectedSymbols: [stock.symbol], outcomes: [tradeOutcome] }).records[0];
       const itemWrite = await supabase.from('candidate_research_run_items').upsert({ run_id: runId, stock_id: stock.id, symbol: stock.symbol, status: itemStatus, execution_status: 'success', research_readiness: researchReadiness, valuation_method: valuationPolicy.basis, narrative_kind: 'deterministic_fact', price_status: 'success', technical_status: priceCoverageTerminal ? 'insufficient_history' : 'success', fundamental_status: eps || values || priorRevenue || authorityFacts.length ? 'success' : 'missing', valuation_status: valuationStatus, classification_status: 'success', lifecycle_stage: stage.stage, terminal_reason: researchTerminalReason, technical_session_date: technical.sessionDate, metrics: result, started_at: startedAt, finished_at: new Date().toISOString() }, { onConflict: 'run_id,stock_id' });
       if (itemWrite.error) throw new Error(itemWrite.error.message);
+      tradePlanOutcomes.set(stock.symbol, tradeOutcome);
       return result;
     } catch (error) {
       const reason = (error as Error).message.slice(0, 500);
@@ -1927,29 +1956,38 @@ async function executeCandidateResearchCycle(options: {
             .update({ detail_revision_id: detailRevisionId }).eq('id', String(failedSnapshot.data?.id || ''));
           if (detailLink.error) throw new Error(detailLink.error.message);
           Object.assign(result, { detailRevisionId, researchReadiness: 'data_gap', narrativeKind: 'deterministic_fact' });
+          tradePlanOutcomes.set(stock.symbol, createSavedOutcome({ symbol: stock.symbol, savedRevision: { ...boundDetail, id: detailRevisionId } }));
         } catch (detailError) {
           result.detailError = detailError instanceof Error ? detailError.message : String(detailError);
         }
       }
+      const terminalTradeOutcome = tradePlanOutcomes.get(stock.symbol) ?? { symbol: stock.symbol, status: 'failed' as const, reasonCodes: [reason] };
+      result.tradePlanCoverage = reconcileCandidateTradePlanCoverage({ expectedSymbols: [stock.symbol], outcomes: [terminalTradeOutcome] }).records[0];
       const failureWrite = await supabase.from('candidate_research_run_items').upsert({ run_id: runId, stock_id: stock.id, symbol: stock.symbol, status: 'failed', execution_status: 'failed', research_readiness: result.detailRevisionId ? 'data_gap' : 'unavailable', valuation_method: 'insufficient_official_evidence', narrative_kind: result.detailRevisionId ? 'deterministic_fact' : null, price_status: /price|bar/iu.test(reason) ? 'failed' : 'unknown', technical_status: 'failed', fundamental_status: 'unknown', valuation_status: 'missing', classification_status: 'failed', lifecycle_stage: 'found', terminal_reason: reason, technical_session_date: null, metrics: result, started_at: startedAt, finished_at: new Date().toISOString() }, { onConflict: 'run_id,stock_id' });
       if (failureWrite.error) result.ledgerError = failureWrite.error.message;
+      if (!tradePlanOutcomes.has(stock.symbol) || result.detailError || result.snapshotError || result.ledgerError) {
+        tradePlanOutcomes.set(stock.symbol, { symbol: stock.symbol, status: 'failed', reasonCodes: [reason] });
+      }
       return result;
     }
   };
   const items = await mapLimit(universe, 4, (stock) => researchStock(stock));
+  const tradePlanCoverage = reconcileCandidateTradePlanCoverage({ expectedSymbols: universe.map((stock) => stock.symbol),
+    outcomes: [...tradePlanOutcomes.values()] });
   const failedCount = items.filter((item) => item.status === 'failed').length;
   const partialCount = items.filter((item) => item.status === 'partial').length;
   const failClosedWriteFailures = items.filter((item) => item.snapshotError || item.detailError).length;
   const completedCount = items.filter((item) => item.status === 'success').length;
   const technicalSessionDate = items.map((item) => String(item.technicalSessionDate || '')).filter(Boolean).sort().at(-1) || null;
-  const runStatus = failedCount === items.length && items.length > 0 ? 'failed' : failedCount > 0 || partialCount > 0 ? 'partial' : 'success';
-  const terminalReason = failedCount > 0 ? 'per_stock_failures' : partialCount > 0 ? 'per_stock_partial_research' : null;
+  const runStatus = !tradePlanCoverage.complete || (failedCount === items.length && items.length > 0) ? 'failed' : failedCount > 0 || partialCount > 0 ? 'partial' : 'success';
+  const terminalReason = !tradePlanCoverage.complete ? 'candidate_trade_plan_coverage_incomplete'
+    : failedCount > 0 ? 'per_stock_failures' : partialCount > 0 ? 'per_stock_partial_research' : null;
   // Per-stock results already live in candidate_research_run_items. Repeating
   // their full metrics inside one JSONB summary made the final PATCH exceed
   // the private PostgREST proxy request limit for a normal 280-stock run.
   // Keep the run row operationally useful and bounded by storing aggregates;
   // detailed evidence remains queryable from the item ledger.
-  const runUpdate = await supabase.from('candidate_research_runs').update({ status: runStatus, completed_count: completedCount, failed_count: failedCount, partial_count: partialCount, technical_session_date: technicalSessionDate, terminal_reason: terminalReason, summary: { itemCount: items.length, statusCounts: countCandidateResearchValues(items, 'status'), terminalReasonCounts: countCandidateResearchValues(items.filter((item) => item.terminalReason), 'terminalReason'), lifecycleStageCounts: countCandidateResearchValues(items, 'lifecycleStage'), valuationStatusCounts: countCandidateResearchValues(items, 'valuationStatus'), marketEvidence, officialFinancialRefresh, officialDocumentParsing, officialFinancialValidation, authorityCutoff, productionSourceCutoff, officialFinancialRefreshTargets: financialRefreshTargets.map((target) => target.symbol), officialFinancialRefreshBacklog: financialRefreshBacklog.length, officialFinancialGapCounts: countFinancialGaps(financialGapByStock), officialFinancialRefreshState: 'method_specific_field_period_v2' }, finished_at: new Date().toISOString() }).eq('id', runId);
+  const runUpdate = await supabase.from('candidate_research_runs').update({ status: runStatus, completed_count: completedCount, failed_count: failedCount, partial_count: partialCount, technical_session_date: technicalSessionDate, terminal_reason: terminalReason, summary: { itemCount: items.length, statusCounts: countCandidateResearchValues(items, 'status'), terminalReasonCounts: countCandidateResearchValues(items.filter((item) => item.terminalReason), 'terminalReason'), lifecycleStageCounts: countCandidateResearchValues(items, 'lifecycleStage'), valuationStatusCounts: countCandidateResearchValues(items, 'valuationStatus'), marketEvidence, officialFinancialRefresh, officialDocumentParsing, officialFinancialValidation, authorityCutoff, productionSourceCutoff, officialFinancialRefreshTargets: financialRefreshTargets.map((target) => target.symbol), officialFinancialRefreshBacklog: financialRefreshBacklog.length, officialFinancialGapCounts: countFinancialGaps(financialGapByStock), officialFinancialRefreshState: 'method_specific_field_period_v2', tradePlanCoverage: tradePlanCoverage.summary, excludedScreenedSymbols, exclusionReason: 'not_in_cutoff_active_official_common_stock_master' }, finished_at: new Date().toISOString() }).eq('id', runId);
   if (runUpdate.error) throw new Error(runUpdate.error.message);
   if (failClosedWriteFailures > 0) throw new Error(`candidate_fail_closed_snapshot_failed:${failClosedWriteFailures}`);
   return {
@@ -1960,12 +1998,15 @@ async function executeCandidateResearchCycle(options: {
     failedCount,
     partialCount,
     technicalSessionDate,
-    blocked: false,
+    blocked: !tradePlanCoverage.complete,
     terminalReason,
     marketEvidence,
     manifestId,
     manifestHash,
     items,
+    tradePlanCoverage,
+    sourceCutoff: productionSourceCutoff,
+    excludedScreenedSymbols,
   };
 }
 
@@ -1973,6 +2014,7 @@ export async function runCandidateResearchCycle(options: {
   dryRun?: boolean;
   pipelineRunId?: string | null;
   symbols?: string[];
+  screenedSymbols?: string[];
   seedSymbols?: Array<{ symbol: string; name: string; market: 'TW' | 'US'; sector: string | null }>;
   targetSession?: string;
   targetCutoffAt?: string;
@@ -2010,9 +2052,11 @@ export async function runCandidateResearchCycle(options: {
   }
 }
 
-export async function loadCandidateStageCards(): Promise<{ found: CandidateStageCard[]; waiting: CandidateStageCard[]; actionable: CandidateStageCard[] }> {
+export async function loadCandidateStageCards(options: { sourceCutoff?: string } = {}): Promise<{ found: CandidateStageCard[]; waiting: CandidateStageCard[]; actionable: CandidateStageCard[] }> {
   const supabase = getSupabaseServerClient();
-  const cutoff = new Date(Date.now() - 7 * 86_400_000).toISOString();
+  const sourceCutoff = options.sourceCutoff || new Date().toISOString();
+  if (!Number.isFinite(Date.parse(sourceCutoff))) throw new Error('candidate_publication_source_cutoff_invalid');
+  const cutoff = new Date(Date.parse(sourceCutoff) - 7 * 86_400_000).toISOString();
   const mentionSelect = 'stock_id,platform,source_name,author_name,source_url,stance,independent_content_hash,mentioned_at,available_at,publisher_key,publisher_name,provenance,stocks(id,symbol,name,market,sector)';
   const latest = (rows: Row[]) => {
     const selected = new Map<string, Row>();
@@ -2026,24 +2070,25 @@ export async function loadCandidateStageCards(): Promise<{ found: CandidateStage
   // reset by the upstream proxy before Node receives a response. Page the
   // complete seven-day plane so publication remains complete without one
   // oversized fetch.
-  const stagePromise = supabase.from('candidate_daily_stage_snapshots')
-    .select('*,stocks(id,symbol,name,market,sector)').eq('ruleset_version', STAGE_RULESET_VERSION).eq('model_version', CANDIDATE_STAGE_MODEL_VERSION)
-    .order('session_date', { ascending: false }).order('available_at', { ascending: false }).limit(5000);
-  const recentMentions: Row[] = [];
-  const mentionPageSize = 750;
-  for (let from = 0; from < 10_000; from += mentionPageSize) {
-    const page = await supabase.from('candidate_source_mentions').select(mentionSelect)
-      .gte('available_at', cutoff).order('available_at', { ascending: false })
-      .range(from, from + mentionPageSize - 1);
-    if (page.error) throw new Error(page.error.message);
-    const rows = (page.data as Row[]) || [];
-    recentMentions.push(...rows.filter((row) => candidateMentionDiscoveryEligible(row.provenance, String(row.platform || ''))));
-    if (rows.length < mentionPageSize) break;
-  }
-  const stageRes = await stagePromise;
-  if (stageRes.error) throw new Error(stageRes.error.message || 'candidate_stage_read_failed');
+  const [stageRows, mentionRows] = await Promise.all([
+    collectPagedAuthorityRows<Row>(async (from, to) => {
+      const page = await supabase.from('candidate_daily_stage_snapshots')
+        .select('*,stocks(id,symbol,name,market,sector)').eq('ruleset_version', STAGE_RULESET_VERSION).eq('model_version', CANDIDATE_STAGE_MODEL_VERSION)
+        .order('session_date', { ascending: false }).order('available_at', { ascending: false }).order('id').range(from, to);
+      if (page.error) throw new Error(page.error.message || 'candidate_stage_read_failed');
+      return (page.data as Row[]) || [];
+    }, { pageSize: 500, maxRows: 100000, requireComplete: true }),
+    collectPagedAuthorityRows<Row>(async (from, to) => {
+      const page = await supabase.from('candidate_source_mentions').select(mentionSelect)
+        .gte('available_at', cutoff).lte('available_at', sourceCutoff)
+        .order('available_at', { ascending: false }).order('id').range(from, to);
+      if (page.error) throw new Error(page.error.message);
+      return (page.data as Row[]) || [];
+    }, { pageSize: 750, maxRows: 100000, requireComplete: true }),
+  ]);
+  const recentMentions = mentionRows.filter((row) => candidateMentionDiscoveryEligible(row.provenance, String(row.platform || '')));
   const recentStockIds = [...new Set(recentMentions.map((row) => String(row.stock_id || '')).filter(Boolean))];
-  const stageByStock = latest((stageRes.data as Row[]) || []);
+  const stageByStock = latest(stageRows);
   const persistedStockIds = [...stageByStock.entries()].filter(([, stage]) => ['waiting', 'actionable'].includes(String(stage.lifecycle_stage))).map(([stockId]) => stockId);
   const stockIds = [...new Set([...recentStockIds, ...persistedStockIds])];
   if (stockIds.length === 0) return { found: [], waiting: [], actionable: [] };

@@ -68,6 +68,9 @@ test('P1-10: representative 40-card Radar and 24-per-stage home transports retai
 test('P1-06: detail reader and public summary transport cannot recalculate or write a plan', () => {
   const detail = readFileSync(new URL('./candidate-detail.ts', import.meta.url), 'utf8');
   assert.match(detail, /readCandidateTradePlan\(/);
+  const query = detail.slice(detail.indexOf("let query = supabase.from('candidate_detail_snapshots')"), detail.indexOf('const { data, error } = await query.maybeSingle()'));
+  assert.match(query, /\.order\('session_date', \{ ascending: false \}\)[\s\S]*\.order\('available_at', \{ ascending: false \}\)/u);
+  assert.match(query, /if \(revisionId\) query = query\.eq\('id', revisionId\)/u);
   assert.doesNotMatch(detail, /buildTwEntryPlans|loadTwEntryPlanAuthority|\.insert\(|\.upsert\(|\.update\(/);
   const route = readFileSync(new URL('../app/api/radar/daily/route.ts', import.meta.url), 'utf8');
   assert.match(route, /tradePlanSummary: readCandidateTradePlanSummary\(/);

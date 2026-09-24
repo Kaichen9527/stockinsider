@@ -270,7 +270,10 @@ test('candidate research uses its own source and financial cutoffs without globa
 test('missing official price history still publishes a source-specific fact detail without promotion inputs', async () => {
   const { readFile } = await import('node:fs/promises');
   const source = await readFile(new URL('./candidate-research.ts', import.meta.url), 'utf8');
-  assert.match(source, /reason === 'official_price_history_missing'[\s\S]{0,9000}candidate_detail_snapshots/u);
+  assert.match(source, /reason === 'official_price_history_missing'[\s\S]{0,9000}appendCandidateDetailRevision\(supabase, boundDetail\)/u);
+  const revisionStore = await readFile(new URL('./candidate-detail-revision-store.ts', import.meta.url), 'utf8');
+  assert.match(revisionStore, /from\('candidate_detail_snapshots'\)[\s\S]{0,200}\.insert\(/u);
+  assert.doesNotMatch(revisionStore, /\.update\(|\.upsert\(/u);
   assert.match(source, /valuation: \{ status: 'missing', currentPrice: null/u);
   assert.match(source, /research_readiness: result\.detailRevisionId \? 'data_gap' : 'unavailable'/u);
   assert.match(source, /failClosedWriteFailures = items\.filter\(\(item\) => item\.snapshotError \|\| item\.detailError\)/u);

@@ -11,6 +11,7 @@ import type { CandidateStageKey, CandidateStagePage } from '@/lib/radar-stage-pa
 import { DEFAULT_CANDIDATE_STAGE_FILTERS, candidateStageFilterOptions, filterAndSortCandidateStages, shouldShowClosestWaiting, type CandidateStageFilters } from '@/lib/radar-stage-view';
 import { LOCAL_RESEARCH_STORAGE_KEY, decodeLocalResearchState } from '@/lib/local-research-state';
 import CandidateTradePlanSummary from './CandidateTradePlanSummary';
+import CurrentTechnicalResearchLink from './CurrentTechnicalResearchLink';
 
 type Props = {
   radar: RadarDailyPayload;
@@ -1449,6 +1450,7 @@ function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
             {revision?'查看決策摘要':'查看唯讀研究'} →
           </a>
         </div>
+        <CurrentTechnicalResearchLink symbol={signal.symbol} />
       </div>
 
       <details className="group border-t border-line bg-slate-950/[0.02] dark:bg-white/[0.02]">

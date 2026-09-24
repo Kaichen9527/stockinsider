@@ -1,16 +1,30 @@
 import { notFound } from 'next/navigation';
 import type { CandidateDetailPayload } from '@/lib/candidate-detail';
-import type { CandidateStageCard } from '@/lib/types';
+import type { CandidateStageCard, RadarDailyPayload } from '@/lib/types';
 import CandidateHistoryChart from '@/lib/candidate-history-chart';
 import CandidateTradePlanView from '../stock/[symbol]/CandidateTradePlanView';
 import CandidateTradePlanSummary from '../components/CandidateTradePlanSummary';
 import { tradePlanFixture } from './fixture-data';
+import { RadarTabs } from '../components/RadarTabs';
+import { v313FixtureSignals } from '../v313-decision-fixture/fixture-data';
 
 export const dynamic = 'force-dynamic';
 
 export default async function TradePlanFixture({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   if (process.env.NODE_ENV === 'production' || process.env.OPPORTUNITY_V3_UI_FIXTURE !== 'enabled') notFound();
   const { mode } = await searchParams;
+  if (mode === 'source-navigation') {
+    const sourceSignals = ['2330', 'AAPL', '006208'].map((symbol) => ({
+      ...v313FixtureSignals[0], symbol, chineseName: `合成來源 ${symbol}`,
+      detailHref: `/stock/${symbol}?decisionRevisionId=${encodeURIComponent(v313FixtureSignals[0].decisionRevisionId)}`,
+    }));
+    const radar = {
+      asOf: '2026-08-07T06:30:00Z', opportunities: [], scenarioUpsideCandidates: [], earlyWatchlist: [], hotTracking: [], hotThemes: [], discoveredStocks: [],
+      sourceSignals, sourceLedCorrectness: { schema: 'legacy-radar-v3.13.0', window: 'home', asOf: '2026-08-07T06:30:00Z' },
+      projectionHealth: { status: 'fresh', missedExpectedRuns: 0 },
+    } as unknown as RadarDailyPayload;
+    return <main className="min-w-0 px-4 py-6"><h1 className="text-xl font-semibold">合成來源導覽測試</h1><p className="mt-2 text-sm">僅驗證導覽與版本隔離，不代表實際研究或策略結果。</p><RadarTabs radar={radar} /></main>;
+  }
   const bundle = tradePlanFixture();
   const asOf = mode === 'expired' ? '2026-09-22T07:00:00Z' : '2026-09-20T08:00:00Z';
   if (mode === 'missing') bundle.ohlcv = [];

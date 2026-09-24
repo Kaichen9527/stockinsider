@@ -21,3 +21,10 @@ Let A be Wilder ATR14 on the final 240 completed bars; M20/M60 include signal-se
 
 ## Acceptance
 The executable inventory is P1-01 through P1-10 in acceptance-tests.md. Existing approved acceptance is unchanged.
+
+## All screened candidates — user clarification, 2026-09-24
+The user requested「我想要把所有有篩選到的標的都套上你的邏輯」. This authorizes the follow-up implementation on the same feature branch, without authorizing merge, deployment, production data writes or changed strategy/formal eligibility rules.
+Every currently screened active official Taiwan common stock must enter the normal full research cycle, including published source-signal and stage surfaces. A ranking hit can request research without becoming editorial or verified financial evidence. Non-Taiwan instruments and symbols absent from the cutoff-bound active common-stock master remain outside the strategy and are explicitly reported.
+The full cycle must reconcile its expected stock roster against saved, revision-verified two-strategy outcomes. Waiting, blocked and no-chase are evaluated results; missing authority is a separate data-insufficient result, never a usable price zone. Missing, duplicate, invalid or failed plan writes cannot report complete coverage. Bounded source scans must fail on overflow instead of silently truncating.
+Publication must check each Taiwan stage card against this run's exact saved revision and compact summary. Source-signal and historical decision pages may link separately to current technical research; they must not replace frozen revision evidence with newer data.
+Production authority coverage remains an operational acceptance task: a passing code test cannot establish 240-session adjustment evidence for live candidates.
