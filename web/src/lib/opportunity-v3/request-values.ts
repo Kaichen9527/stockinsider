@@ -373,7 +373,7 @@ function validateCorporateActionSnapshot(snapshot: Record<string, unknown>): boo
     const eventKind = event.eventKind as keyof typeof feedForEvent;
     if (
       typeof symbol !== 'string' ||
-      !/^[0-9]{4}$/u.test(symbol) ||
+      !/^[0-9A-Za-z]{2,12}$/u.test(symbol) ||
       (priorSymbol !== null && symbol <= priorSymbol) ||
       event.feedIdentity !== expectedFeeds[feedForEvent[eventKind]] ||
       event.sourceRowRef !== sourceRowRef(snapshot, event)

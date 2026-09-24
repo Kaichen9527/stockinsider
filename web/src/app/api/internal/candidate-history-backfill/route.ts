@@ -3,8 +3,8 @@ import { candidateHistoryBackfillResponse } from '@/lib/candidate-history-backfi
 
 export const runtime = 'nodejs';
 
-/** One bounded batch only. Operator retries do not run classification, publish
- * research, bypass backoff, or alter the scheduler. */
+/** One bounded batch only. The entry-plan purpose acquires frozen official
+ * authority; neither purpose classifies or publishes research. */
 export async function POST(request: Request) {
   const response = await candidateHistoryBackfillResponse(request);
   return NextResponse.json(response.body, { status: response.status });

@@ -6,11 +6,15 @@
     "node": ">=22"
   },
   "scripts": {
-    "prebuild": "node ../scripts/assert_canonical_vercel_project.mjs",
+    "postinstall": "node scripts/sync-official-authority.mjs",
+    "predev": "node scripts/sync-official-authority.mjs",
+    "prebuild": "node ../scripts/assert_canonical_vercel_project.mjs && node scripts/sync-official-authority.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "prelint": "node scripts/sync-official-authority.mjs",
     "lint": "eslint",
+    "pretypecheck": "node scripts/sync-official-authority.mjs",
     "typecheck": "tsc --noEmit --pretty false",
     "test:e2e": "playwright test",
     "test:e2e:investor": "playwright test investor.spec.ts",

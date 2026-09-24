@@ -12,6 +12,7 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "src/lib/generated/official-authority/**",
     // Vercel prebuilt artifacts (not source files)
     ".vercel/**",
     ".vercel/output/**",

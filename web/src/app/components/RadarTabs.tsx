@@ -10,6 +10,8 @@ import { hasCandidateStageCards } from '@/lib/candidate-stage-contract';
 import type { CandidateStageKey, CandidateStagePage } from '@/lib/radar-stage-pagination';
 import { DEFAULT_CANDIDATE_STAGE_FILTERS, candidateStageFilterOptions, filterAndSortCandidateStages, shouldShowClosestWaiting, type CandidateStageFilters } from '@/lib/radar-stage-view';
 import { LOCAL_RESEARCH_STORAGE_KEY, decodeLocalResearchState } from '@/lib/local-research-state';
+import CandidateTradePlanSummary from './CandidateTradePlanSummary';
+import CurrentTechnicalResearchLink from './CurrentTechnicalResearchLink';
 
 type Props = {
   radar: RadarDailyPayload;
@@ -498,6 +500,7 @@ function CandidateStageCardView({ card }: { card: CandidateStageCard }) {
         <p className="mt-2 text-slate-500">技術日 {card.technical.sessionDate || '待補'} · MA20 {card.technical.ma20?.toFixed(2) ?? '-'} · MA60 {card.technical.ma60?.toFixed(2) ?? '-'} · RSI {card.technical.rsi14?.toFixed(1) ?? '-'}</p>
         {card.riskAction ? <p className="mt-2 text-slate-500">風險狀態 {card.riskAction.state} · {card.riskAction.reasons.length ? card.riskAction.reasons.join('、') : '未觸發退出條件'}</p> : null}
       </div>
+      <CandidateTradePlanSummary card={card} />
     </article>
   );
 }
@@ -1447,6 +1450,7 @@ function SourceSignalCardView({ signal }: { signal: SourceSignalCard }) {
             {revision?'查看決策摘要':'查看唯讀研究'} →
           </a>
         </div>
+        <CurrentTechnicalResearchLink symbol={signal.symbol} />
       </div>
 
       <details className="group border-t border-line bg-slate-950/[0.02] dark:bg-white/[0.02]">

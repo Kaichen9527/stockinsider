@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
 import { NextRequest, NextResponse } from 'next/server';
+import { readCandidateTradePlanSummary } from '@/lib/candidate-trade-plan';
 import { getDailyRadarData, getPersistedRadarStages } from '@/lib/domain';
 import { legacyCorrectnessProjectionEnabled, loadPublishedRadarProjection,
   RadarProjectionUnavailableError } from '@/lib/radar-projection-read';
@@ -337,6 +338,9 @@ function compactCandidateStageCard(card: Record<string, unknown>) {
     unmetConditions: Array.isArray(card.unmetConditions) ? card.unmetConditions.slice(0, 8) : [],
     promotionReasons: Array.isArray(card.promotionReasons) ? card.promotionReasons.slice(0, 6) : [], dataAsOf: card.dataAsOf ?? null,
     stale: card.stale ?? null, detailRevisionId: card.detailRevisionId ?? null, riskAction: card.riskAction ?? null, detailHref: card.detailHref ?? null,
+    ...(typeof card.detailRevisionId === 'string' ? {
+      tradePlanSummary: readCandidateTradePlanSummary(card.tradePlanSummary, { revisionId: card.detailRevisionId }),
+    } : {}),
   };
 }
 

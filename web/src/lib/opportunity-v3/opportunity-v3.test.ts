@@ -1935,6 +1935,20 @@ describe('closed HTTP body value schemas', () => {
       corporateActionSnapshot: snapshot,
       exchangeReportedPe: null,
     }), true);
+    // Official corporate-action feeds are market-wide, so an ETF or a listed
+    // instrument with a suffix must not invalidate a stock's whole snapshot.
+    for (const symbol of ['00939', '00984D']) {
+      const sourceRowRef = sha256Canonical([
+        'corporate-action-source-row-v3.1', 'TWSE', '2026-07-24', symbol,
+        eventBase.eventKind, eventBase.preActionReferencePrice,
+        eventBase.postActionReferencePrice, eventBase.feedIdentity,
+      ]);
+      assert.equal(validateIngestionValuesV3('append_price_authority_v3', {
+        kind: 'corporate_action_snapshot', rawPrice: null,
+        corporateActionSnapshot: { ...snapshot, events: [{ ...eventBase, symbol, sourceRowRef }] },
+        exchangeReportedPe: null,
+      }), true);
+    }
     for (const invalidSnapshot of [
       { ...snapshot, provider: 'tpex' },
       { ...snapshot, corporateActionVersion: 'v-next' },

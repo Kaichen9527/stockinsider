@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Exact build-time copies of canonical scripts/runtime authority modules.
+/src/lib/generated/official-authority/

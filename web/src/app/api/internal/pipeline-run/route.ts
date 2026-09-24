@@ -12,6 +12,13 @@ import {
 import { requireActiveVpsWriter } from '@/lib/taiwan-data-runtime';
 import { isTaiwanRefreshResearchReady } from '@/lib/taiwan-candidate-refresh';
 import { CANDIDATE_RESEARCH_MODEL_VERSION } from '@/lib/candidate-research';
+import {
+  CANDIDATE_RESEARCH_COMPLETION_LIMIT,
+  candidateResearchPipelineRunIds,
+  completedCandidateResearchSessions,
+  isHistoricalResearchSession,
+  type CandidatePipelineCompletionReceipt,
+} from '@/lib/candidate-research-completion';
 
 // Vercel only hosts the HTTPS OAuth/policy surface. Production pipeline writes
 // run on the VPS systemd scheduler, while Hobby deployments reject values >300.
@@ -52,6 +59,7 @@ export async function POST(req: Request) {
   let flowFinished = false;
   let researchSession: string | undefined;
   let researchCutoffAt: string | undefined;
+  let historicalResearchOnly = false;
 
   try {
     if (!dryRun && skipIfResearchSessionComplete) {
@@ -79,13 +87,23 @@ export async function POST(req: Request) {
         return NextResponse.json({ ok: true, result: { skipped: true, reason: 'final_data_not_research_ready', researchSession: sessions[0] || null },
           meta: { runId: null, dryRun, mode, timedOut: false, failedStep: null, stepStatus: [] } });
       }
-      const prior = await writer.supabase.from('candidate_research_runs').select('id,technical_session_date,status,failed_count')
+      const prior = await writer.supabase.from('candidate_research_runs').select('id,technical_session_date,pipeline_run_id,status,failed_count')
         .in('technical_session_date', readySessions).eq('model_version', CANDIDATE_RESEARCH_MODEL_VERSION)
         .not('pipeline_run_id', 'is', null)
         .eq('status', 'success').eq('failed_count', 0)
-        .order('finished_at', { ascending: false }).limit(100);
+        .order('finished_at', { ascending: false }).limit(CANDIDATE_RESEARCH_COMPLETION_LIMIT);
       if (prior.error) throw new Error(`research_resume_receipt_read_failed:${prior.error.message}`);
-      const completed = new Set((prior.data || []).map((row) => String(row.technical_session_date || '')));
+      const researchRuns = prior.data || [];
+      const pipelineRunIds = candidateResearchPipelineRunIds(researchRuns);
+      const pipelineRuns: CandidatePipelineCompletionReceipt[] = [];
+      for (let offset = 0; offset < pipelineRunIds.length; offset += 50) {
+        const batchIds = pipelineRunIds.slice(offset, offset + 50);
+        const pipelines = await writer.supabase.from('pipeline_runs').select('id,status')
+          .in('id', batchIds).limit(batchIds.length);
+        if (pipelines.error) throw new Error(`research_resume_pipeline_read_failed:${pipelines.error.message}`);
+        pipelineRuns.push(...(pipelines.data || []));
+      }
+      const completed = completedCandidateResearchSessions({ researchRuns, requestedPipelineRunIds: pipelineRunIds, pipelineRuns });
       researchSession = [...readySessions].sort().find((session) => !completed.has(session));
       if (!researchSession) {
         return NextResponse.json({ ok: true, result: { skipped: true, reason: 'research_sessions_already_completed', researchSessions: readySessions },
@@ -93,6 +111,24 @@ export async function POST(req: Request) {
       }
       researchCutoffAt = cutoffBySession.get(researchSession);
       if (!researchCutoffAt) throw new Error('research_resume_cutoff_missing');
+      historicalResearchOnly = isHistoricalResearchSession(researchSession, readySessions);
+    }
+    // An authority repair intentionally appends evidence after its frozen
+    // source cutoff. Do not start a new public cycle while that repair is
+    // unfinished; this return is outside runPipelineFlow's failure path and
+    // leaves the last published snapshots intact.
+    if (!dryRun && !historicalResearchOnly) {
+      const repair = await writer.supabase.from('entry_plan_authority_runs_v1')
+        .select('run_id,status,latest_session,source_cutoff')
+        .order('created_at', { ascending: false }).limit(1).maybeSingle();
+      if (repair.error) throw new Error(`entry_plan_authority_preflight_failed:${repair.error.message}`);
+      if (repair.data && repair.data.status !== 'complete') {
+        const failed = repair.data.status === 'failed';
+        return NextResponse.json({ ok: false, error: failed ? 'entry_plan_authority_repair_failed' : 'entry_plan_authority_repair_pending',
+          result: { repairRunId: repair.data.run_id, latestSession: repair.data.latest_session,
+            sourceCutoff: repair.data.source_cutoff, publicSnapshotUnchanged: true } },
+        { status: failed ? 503 : 202 });
+      }
     }
     if (!dryRun) {
       leaseOwner = await acquireProductionWriteLease(leaseTtlSeconds);
@@ -116,10 +152,10 @@ export async function POST(req: Request) {
 
     const flowPromise = inProcessRetry
       ? withRetry(
-          () => runPipelineFlow({ dryRun, mode, ...(skipIngestion ? { skipIngestion: true } : {}), ...(researchSession ? { researchSession, researchCutoffAt } : {}) }),
+          () => runPipelineFlow({ dryRun, mode, ...(skipIngestion ? { skipIngestion: true } : {}), ...(researchSession ? { researchSession, researchCutoffAt, historicalResearchOnly } : {}) }),
           { retries: 3, delaysMs: [60_000, 5 * 60_000, 15 * 60_000] }
         )
-      : runPipelineFlow({ dryRun, mode, ...(skipIngestion ? { skipIngestion: true } : {}), ...(researchSession ? { researchSession, researchCutoffAt } : {}) });
+      : runPipelineFlow({ dryRun, mode, ...(skipIngestion ? { skipIngestion: true } : {}), ...(researchSession ? { researchSession, researchCutoffAt, historicalResearchOnly } : {}) });
     ongoingFlow = flowPromise;
     void flowPromise.then(() => { flowFinished = true; }, () => { flowFinished = true; });
 

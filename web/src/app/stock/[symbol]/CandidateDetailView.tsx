@@ -3,6 +3,7 @@ import type { CandidateDetailPayload } from "@/lib/candidate-detail";
 import { sanitizePublicSourceUrl } from "@/lib/public-source-url.ts";
 import CandidateHistoryChart from "@/lib/candidate-history-chart";
 import LocalResearchWorkspace from "./LocalResearchWorkspace";
+import CandidateTradePlanView from "./CandidateTradePlanView";
 
 type AnyRecord = Record<string, unknown>;
 
@@ -488,6 +489,7 @@ export default function CandidateDetailView({
           </section>
         ))}
       </div>
+      <CandidateTradePlanView bundle={detail.tradePlan} revisionId={detail.revisionId} publicationState={isStaleReadonly ? 'stale_readonly' : isFinalConfirmed ? 'confirmed' : 'preliminary'} />
       <CandidateHistoryChart detail={detail} />
       <details className="mt-8 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950">
         <summary className="cursor-pointer text-base font-semibold">研究依據與原始資料</summary>

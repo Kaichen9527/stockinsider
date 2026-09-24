@@ -728,6 +728,24 @@ test('V314-015b range corporate-action feed counts are scoped to each emitted se
   }
 });
 
+test('market-wide action rows retain alphanumeric instruments in PostgreSQL ordinal order', async () => {
+  const {CORPORATE_ACTION_FEEDS,loadCorporateActionSnapshotsRange}=runtime('official-twse-valuation.js');
+  const session='2026-08-07';
+  const fetchImpl=async(url)=>{
+    const feed=CORPORATE_ACTION_FEEDS.TWSE.find((item)=>String(url).includes(item.path));
+    assert.ok(feed);
+    const data=feed===CORPORATE_ACTION_FEEDS.TWSE[0]
+      ?[['2026/08/07','00984a','fixture','20','19'],['2026/08/07','00984A','fixture','20','19'],
+        ['2026/08/07','00939','fixture','20','19']]:[];
+    return new Response(JSON.stringify({stat:'OK',fields:feed.header,data}),{status:200});
+  };
+  const [snapshot]=await loadCorporateActionSnapshotsRange({calendarSessions:[{market:'TWSE',status:'completed',session}],
+    fetchImpl,collectedAt:'2026-08-08T00:00:00Z'});
+  assert.deepEqual(snapshot.events.map((event)=>event.symbol),['00939','00984A','00984a']);
+  assert.equal(snapshot.declaredEventCount,3);
+  assert.equal(snapshot.feedEvidence.reduce((sum,feed)=>sum+feed.parsedRowCount,0),3);
+});
+
 test('V314-016 official ingestion streams bounded idempotency-addressed chunks and one terminal root', async () => {
   const {streamOfficialIngestionV314}=runtime('auth-source-worker-cli.js');const seen=[];
   const rows=(length)=>Array.from({length},(_,ordinal)=>({ordinal}));

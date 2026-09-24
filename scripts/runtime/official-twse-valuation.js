@@ -169,11 +169,40 @@ function parseOfficialPriceHistory(payload,{exchange,symbol,sourceUrl,collectedA
   });
 }
 
+async function loadOfficialPriceHistoryMonth({exchange,symbol,month,fetchImpl=globalThis.fetch,collectedAt=null}){
+  if(!['TWSE','TPEX'].includes(exchange)||!/^[0-9]{4}$/u.test(String(symbol))
+      ||!/^[0-9]{4}-(?:0[1-9]|1[0-2])$/u.test(String(month))
+      ||(collectedAt!==null&&!Number.isFinite(Date.parse(collectedAt))))throw new Error('official_price_month_input');
+  const [year,number]=month.split('-');
+  const url=exchange==='TWSE'
+    ?`${TWSE_PRICE_HISTORY_URL}?date=${year}${number}01&stockNo=${symbol}&response=json`
+    :`${TPEX_PRICE_HISTORY_URL}?date=${encodeURIComponent(`${year}/${number}/01`)}&code=${symbol}&response=json`;
+  const bytes=await retryOfficial(()=>fetchBytesBounded(url,fetchImpl,4_000_000),4);
+  let payload;try{payload=JSON.parse(bytes.toString('utf8'));}catch{throw new Error('official_price_month_json');}
+  if(exchange==='TWSE'){
+    const noData=payload?.stat==='很抱歉，沒有符合條件的資料!';
+    if(!noData&&(payload?.stat!=='OK'||!Array.isArray(payload?.data)||!Array.isArray(payload?.fields)
+        ||payload.fields.slice(0,7).join('|')!=='日期|成交股數|成交金額|開盤價|最高價|最低價|收盤價'
+        ||!String(payload.title??'').includes(` ${symbol} `)))throw new Error('official_price_month_schema');
+  }else if(String(payload?.stat??'').toLowerCase()!=='ok'||String(payload?.code??'')!==symbol
+      ||!Array.isArray(payload?.tables?.[0]?.data)||!Array.isArray(payload?.tables?.[0]?.fields)
+      ||payload.tables[0].fields.slice(0,7).join('|')!=='日 期|成交張數|成交仟元|開盤|最高|最低|收盤'){
+    throw new Error('official_price_month_schema');
+  }
+  const completedAt=collectedAt??new Date().toISOString();
+  return {url,responseSha256:sha256(bytes),collectedAt:completedAt,
+    rows:parseOfficialPriceHistory(payload,{exchange,symbol,sourceUrl:url,collectedAt:completedAt})};
+}
+
 function parseActionSession(value){
   const normalized=String(value??'').trim().replace(/[年月]/gu,'/').replace(/日/gu,'');
   if(/^\d{7}$/u.test(normalized))return rocSession(normalized);
   return parseSlashSession(normalized);
 }
+
+// PostgreSQL's authority constraint and the web validator both use ordinal
+// text ordering. Locale collation can reorder mixed-length/alphanumeric codes.
+const compareActionSymbol=(left,right)=>left<right?-1:left>right?1:0;
 
 function parseCorporateActionResponse(bytes,{exchange,session,feed}={}){
   if(!Buffer.isBuffer(bytes)||bytes.length<1||bytes.length>8_388_608||!['TWSE','TPEX'].includes(exchange)
@@ -202,7 +231,7 @@ function parseCorporateActionResponse(bytes,{exchange,session,feed}={}){
     events.push({symbol,eventKind:feed.kind,preActionReferencePrice,postActionReferencePrice,
       feedIdentity:feed.identity,sourceRowRef:sha256(canonicalJson(sourceRow))});
   }
-  return events.sort((left,right)=>left.symbol.localeCompare(right.symbol));
+  return events.sort((left,right)=>compareActionSymbol(left.symbol,right.symbol));
 }
 
 function corporateActionUrl(exchange,session,feed){
@@ -462,7 +491,7 @@ async function loadCorporateActionSnapshots({sessions,fetchImpl,collectedAt}){
       acquired.push({feedEvidence:{feedIdentity:feed.identity,responseByteCount:bytes.length,
         responseSha256:sha256(bytes),parsedRowCount:events.length},events});
     }
-    const events=acquired.flatMap((row)=>row.events).sort((left,right)=>left.symbol.localeCompare(right.symbol));
+    const events=acquired.flatMap((row)=>row.events).sort((left,right)=>compareActionSymbol(left.symbol,right.symbol));
     if(new Set(events.map((event)=>event.symbol)).size!==events.length)throw new Error('corporate_action_cross_feed_conflict');
     return {exchange,session,provider:exchange.toLowerCase(),corporateActionVersion:'tw-corporate-action-v3.1',
       collectedAt,feedEvidence:acquired.map((row)=>row.feedEvidence),declaredEventCount:events.length,events};
@@ -505,7 +534,7 @@ function parseCorporateActionRangeResponse(bytes,{exchange,startSession,endSessi
     events.push({session,symbol,eventKind:feed.kind,preActionReferencePrice,postActionReferencePrice,
       feedIdentity:feed.identity,sourceRowRef:sha256(canonicalJson(sourceRow))});
   }
-  return events.sort((left,right)=>left.session.localeCompare(right.session)||left.symbol.localeCompare(right.symbol));
+  return events.sort((left,right)=>left.session.localeCompare(right.session)||compareActionSymbol(left.symbol,right.symbol));
 }
 
 async function loadCorporateActionSnapshotsRange({calendarSessions,fetchImpl,collectedAt}){
@@ -522,12 +551,13 @@ async function loadCorporateActionSnapshotsRange({calendarSessions,fetchImpl,col
       const events=parseCorporateActionRangeResponse(bytes,{exchange,startSession,endSession,feed});
       acquired.push({feedEvidence:{feedIdentity:feed.identity,responseByteCount:bytes.length,responseSha256:sha256(bytes)},events});
     }
+    const completedAt=collectedAt??new Date().toISOString();
     for(const session of sessions){
       const events=acquired.flatMap((row)=>row.events.filter((event)=>event.session===session)
-        .map(({session:ignored,...event})=>event)).sort((left,right)=>left.symbol.localeCompare(right.symbol));
+        .map(({session:ignored,...event})=>event)).sort((left,right)=>compareActionSymbol(left.symbol,right.symbol));
       if(new Set(events.map((event)=>event.symbol)).size!==events.length)throw new Error('corporate_action_cross_feed_conflict');
       output.push({exchange,session,provider:exchange.toLowerCase(),corporateActionVersion:'tw-corporate-action-v3.1',
-        collectedAt,feedEvidence:acquired.map((row)=>({...row.feedEvidence,
+        collectedAt:completedAt,feedEvidence:acquired.map((row)=>({...row.feedEvidence,
           parsedRowCount:row.events.filter((event)=>event.session===session).length})),declaredEventCount:events.length,events});
     }
   }
@@ -796,7 +826,7 @@ function dedupePriceObservations(rows){
 }
 
 module.exports = { SOURCE_URL,TPEX_SOURCE_URL,TWSE_REVENUE_URL,TPEX_REVENUE_URL,TWSE_INDEX_URL,TPEX_INDEX_URL,
-  TWSE_CLOSE_URL,TPEX_CLOSE_URL,TWSE_PRICE_HISTORY_URL,TPEX_PRICE_HISTORY_URL,parseOfficialCloseRows,parseOfficialPriceHistory,
+  TWSE_CLOSE_URL,TPEX_CLOSE_URL,TWSE_PRICE_HISTORY_URL,TPEX_PRICE_HISTORY_URL,parseOfficialCloseRows,parseOfficialPriceHistory,loadOfficialPriceHistoryMonth,
   CORPORATE_ACTION_FEEDS,TWSE_CORPORATE_ACTION_ORIGIN,corporateActionUrl,corporateActionRangeUrl,loadCorporateActionSnapshots,loadCorporateActionSnapshotsRange,
   parseCorporateActionResponse,
   loadOfficialTwMarketSnapshot,loadOfficialCoarseMarketSnapshot,parseIndexRows,parseRevenueRows,parseTpexForeignFlow,parseTpexHistoricalValuationRows,

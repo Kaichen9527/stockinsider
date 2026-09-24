@@ -1,6 +1,8 @@
 import { randomUUID } from 'crypto';
 import { normalizeRelatedStockSymbols, normalizeSourceDocumentSymbols } from './stock-symbol';
 import { loadActiveCandidateSourceErrors, loadCandidateStageCards, runCandidateResearchCycle } from './candidate-research';
+import { reconcilePublishedCandidateTradePlanCoverage } from './candidate-trade-plan-coverage';
+import { screenedCandidateSymbols } from './candidate-screened-universe';
 import { markRadarPublicSnapshotsFailed, publishRadarPublicSnapshots } from './radar-public-snapshot';
 import { MARKET_EVIDENCE_MODEL_VERSION, marketEvidenceToPublicSummary } from './market-evidence';
 import { formatOfficialMarketEvidenceComponent } from './market-evidence-format';
@@ -7430,6 +7432,12 @@ const TW_STORY_RESEARCH_SEEDS = [
 ] as const;
 
 type ResearchSeed = (typeof TW_STORY_RESEARCH_SEEDS)[number];
+
+/** Use the producer's exact seed membership when freezing authority backfill. */
+export function candidateResearchSeedRoster() {
+  return TW_STORY_RESEARCH_SEEDS.map((seed) => ({ symbol: seed.symbol, name: seed.name,
+    market: seed.market, sector: seed.sector }));
+}
 
 // Chinese names for seeds whose `name` field is English
 const CHINESE_NAME_MAP: Record<string, string> = {
@@ -21834,7 +21842,7 @@ export async function runRevenueIngestion(options?: { dryRun?: boolean }) {
   return { runId: randomUUID(), dryRun, revenueRecords, fundamentalRecords };
 }
 
-export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestion?: boolean; mode?: 'core' | 'full'; researchSession?: string; researchCutoffAt?: string }) {
+export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestion?: boolean; mode?: 'core' | 'full'; researchSession?: string; researchCutoffAt?: string; historicalResearchOnly?: boolean }) {
   const dryRun = Boolean(options?.dryRun);
   const skipIngestion = Boolean(options?.skipIngestion);
   const mode = options?.mode || (dryRun ? 'full' : 'core');
@@ -21930,8 +21938,12 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
     const candidateResearch = await executeStep(
       'candidate_research',
       async () => {
+        // Include current screens even when they have not appeared in a prior
+        // published snapshot. Membership requests research, never promotion.
+        const screenedSymbols = dryRun || options?.historicalResearchOnly ? [] : screenedCandidateSymbols(await getDailyRadarData());
         const result = await runCandidateResearchCycle({
           dryRun,
+          screenedSymbols,
           pipelineRunId,
           targetSession: options?.researchSession,
           targetCutoffAt: options?.researchCutoffAt,
@@ -21990,11 +22002,27 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
       { sent: 0, skipped: 0, failed: 0, attempts: 0, runId: 'skip-line-dispatch', dryRun },
     );
 
-    let publication: Record<string, unknown> = { publishedAt: null, results: [] };
+    let publication: Record<string, unknown> = { publishedAt: null, results: [],
+      ...(options?.historicalResearchOnly ? { skipped: true, reason: 'historical_research_only', researchSession: options.researchSession } : {}) };
     const shadowObservation = null; // Legacy response field; global Shadow is retired.
-    if (!dryRun) {
-      const stages = await executeStep('candidate_stage_projection', async () => loadCandidateStageCards());
+    if (!dryRun && !options?.historicalResearchOnly) {
+      const stages = await executeStep('candidate_stage_projection', async () => loadCandidateStageCards({
+        sourceCutoff: candidateResearch.sourceCutoff || undefined,
+      }));
+      await executeStep('candidate_trade_plan_publication_coverage', async () => {
+        if (!candidateResearch.tradePlanCoverage) throw new Error('candidate_trade_plan_coverage_missing');
+        const coverage = reconcilePublishedCandidateTradePlanCoverage({ coverage: candidateResearch.tradePlanCoverage,
+          cards: [...stages.found, ...stages.waiting, ...stages.actionable].filter((card) => card.market === 'TW' && /^\d{4}$/u.test(card.symbol)
+            && !candidateResearch.excludedScreenedSymbols.includes(card.symbol)) });
+        if (!coverage.complete) throw new Error('candidate_trade_plan_publication_coverage_incomplete');
+        return coverage;
+      });
       const radarPayload = await executeStep('radar_payload_build', async () => getDailyRadarData());
+      const accountedSymbols = new Set([...(candidateResearch.tradePlanCoverage?.records.map((row) => row.symbol) || []),
+        ...candidateResearch.excludedScreenedSymbols]);
+      if (screenedCandidateSymbols(radarPayload).some((symbol) => !accountedSymbols.has(symbol))) {
+        throw new Error('candidate_screened_roster_changed_before_publication');
+      }
       await executeStep('active_source_health', async () => loadActiveCandidateSourceErrors());
       const finalDatasetMetadata = await executeStep('final_dataset_metadata', async () => {
         if (!candidateResearch.technicalSessionDate || !supabaseServer) return null;
@@ -22078,7 +22106,7 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
     const failedStep = err.failedStep || stepStatus[stepStatus.length - 1]?.step || null;
     const timedOut = Boolean(err.timedOut);
     if (supabaseServer) {
-      await markRadarPublicSnapshotsFailed(err.message, nowIso()).catch(() => undefined);
+      if (!options?.historicalResearchOnly) await markRadarPublicSnapshotsFailed(err.message, nowIso()).catch(() => undefined);
       await supabaseServer
         .from('pipeline_runs')
         .update({

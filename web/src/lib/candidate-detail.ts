@@ -6,6 +6,8 @@ import type { CandidateDossierClaim } from './candidate-dossier-validation';
 import { sanitizePublicSourceUrl } from './public-source-url.ts';
 import { resolveTaiwanFinalPublicationSemantics } from './tw-market.ts';
 import { readCandidateRevisionContext, type CandidateRevisionScores } from './candidate-revision-context.ts';
+import { readCandidateTradePlan } from './candidate-trade-plan.ts';
+import type { TwEntryPlanBundle } from './tw-entry-plan-contract.ts';
 
 type Row = Record<string, unknown>;
 
@@ -19,6 +21,7 @@ export type CandidateDetailSection = {
 
 export type CandidateDetailPayload = {
   revisionId: string;
+  tradePlan?: TwEntryPlanBundle | null;
   symbol: string;
   chineseName: string;
   sessionDate: string;
@@ -175,7 +178,11 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
     // the revision and fact set were identical.
     .select('id,stock_id,session_date,lifecycle_stage,detail_kind,title,summary,sections,fact_ids,source_links,valuation,technical,as_of,available_at,publication_phase,provenance')
     .eq('stock_id', stockRead.data.id)
+    // Historical backfills may be appended later; current research remains the
+    // newest trading session. Explicit revision IDs still select that exact row.
+    .order('session_date', { ascending: false })
     .order('available_at', { ascending: false })
+    .order('id', { ascending: false })
     .limit(1);
   if (revisionId) query = query.eq('id', revisionId);
   const { data, error } = await query.maybeSingle();
@@ -233,6 +240,10 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
   const publicFactIds = [...new Set(factIds.map((factId) => references.get(factId)).filter((reference): reference is number => reference != null))].map((reference) => `[${reference}]`);
   const base = {
     revisionId: String(row.id), symbol: String(stock.symbol || symbol), chineseName: String(stock.name || symbol),
+    tradePlan: readCandidateTradePlan((row.provenance as Row | null)?.trade_plan, {
+      revisionId: String(row.id), symbol: String(stock.symbol || symbol),
+      sessionDate: String(row.session_date), availableAt: String(row.available_at),
+    }),
     sessionDate: String(row.session_date), lifecycleStage: String(row.lifecycle_stage) as CandidateDetailPayload['lifecycleStage'],
     detailKind: String(row.detail_kind) as CandidateDetailPayload['detailKind'], title: String(row.title), summary: String(row.summary),
     sections: publicSections((Array.isArray(row.sections) ? row.sections : []) as CandidateDetailSection[]), factIds: publicFactIds,
