@@ -62,7 +62,6 @@ jobs:
               i.provider,i.source_timestamp,i.recorded_at,i.valid_from,i.valid_to
             FROM public.stock_instruments_v3 i CROSS JOIN selected_run r WHERE i.stock_id IN (SELECT stock_id FROM selected_items)
               AND i.recorded_at<=r.evaluation_at AND i.source_timestamp<=r.evaluation_at AND i.valid_from<=r.evaluation_at
-              AND (i.valid_to IS NULL OR i.valid_to>r.evaluation_at)
             ORDER BY i.instrument_authority_id LIMIT 5001
           )
           SELECT json_build_object('schema','candidate-repeatable-read-audit-v1',
