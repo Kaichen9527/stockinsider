@@ -1,0 +1,102 @@
+{
+  "schema": "tw-strategy-robustness-proposal-review/v1",
+  "proposal_id": "tw-strategy-robustness-v2",
+  "reviewed_at": "2026-09-25T05:48:36Z",
+  "status": "revision_required_not_authorized",
+  "proposal_sha256": "94fd91733a0474a2ed65e5c96fc1c2bad4559a68354dfba4b2f57e980ddfbac5",
+  "source_run": 36081668572,
+  "source_commit": "e1fb505a894105e05fb08aa28fd0fb8ad8e520fa",
+  "holdout_accessed": false,
+  "new_trials_executed": 0,
+  "inputs": [
+    {
+      "path": "research/tw-strategy-lab/results/github-36081668572-1/S3-baseline.json",
+      "sha256": "118deaf9b19910e0f53dbdc0fed866a89df6f2152cd771d42afface65d6f9596"
+    },
+    {
+      "path": "research/tw-strategy-lab/results/github-36081668572-1/S3-cost_stress.json",
+      "sha256": "237070f87fff4557a6015eccc1755a81c2b88cd7dff71affe4fda96cc9dc657d"
+    },
+    {
+      "path": "research/tw-strategy-lab/results/github-36081668572-1-corporate-action-audit.json",
+      "sha256": "aa52070ebb6b8eed6b6dc76c8d00b22d2abf6909fc1ccf72c07b99eb4af9b667"
+    }
+  ],
+  "working_metric_definitions": {
+    "median_net_trade_return": "median of completed-trade net_return values",
+    "profit_factor": "sum of positive completed-trade net_pnl divided by the absolute sum of negative completed-trade net_pnl",
+    "largest_winner_share_of_realized_gross_profit": "largest positive completed-trade net_pnl divided by the sum of all positive completed-trade net_pnl",
+    "largest_symbol_share_positive_profit_interpretation": "largest, across symbols, sum of positive completed-trade net_pnl divided by the sum of all positive completed-trade net_pnl",
+    "terminal_return_ex_unavailable_receivables": "(ending_equity - ending_receivables) / initial_cash - 1; terminal accounting decomposition only, not a counterfactual path"
+  },
+  "r2_diagnostic": {
+    "scope_warning": "The gates were proposed after the development result was observed. This deterministic calculation is a specification review, not independent validation.",
+    "baseline": {
+      "completed_trades": 36,
+      "median_net_trade_return": -0.019557843507296564,
+      "profit_factor": 1.577267361308098,
+      "largest_winner_share_of_positive_profit": 0.42214036543033484,
+      "largest_symbol_share_of_positive_profit": 0.6487298151579685,
+      "largest_positive_profit_symbol": "8069",
+      "terminal_return_ex_unavailable_receivables": 0.05013121575000068
+    },
+    "cost_stress": {
+      "completed_trades": 36,
+      "median_net_trade_return": -0.025565224888618957,
+      "profit_factor": 1.3065667244973207,
+      "largest_winner_share_of_positive_profit": 0.45680262033625235,
+      "largest_symbol_share_of_positive_profit": 0.6333515839721257,
+      "largest_positive_profit_symbol": "8069",
+      "terminal_return_ex_unavailable_receivables": 0.025359601499999718
+    },
+    "gate_review": [
+      { "metric": "completed_trades_baseline", "observed": 36, "status": "pass" },
+      { "metric": "median_net_trade_return_baseline", "observed": -0.019557843507296564, "status": "fail" },
+      { "metric": "profit_factor_baseline", "observed": 1.577267361308098, "status": "pass" },
+      { "metric": "profit_factor_cost_stress", "observed": 1.3065667244973207, "status": "pass" },
+      { "metric": "largest_winner_share_of_realized_gross_profit", "observed": 0.42214036543033484, "status": "fail" },
+      {
+        "metric": "largest_symbol_share_of_realized_gross_profit",
+        "observed_under_positive_profit_interpretation": 0.6487298151579685,
+        "alternative_observed_using_net_symbol_pnl_over_positive_profit": 0.3150639750702507,
+        "status": "blocked_ambiguous_definition"
+      },
+      { "metric": "terminal_return_ex_unavailable_receivables_baseline", "observed": 0.05013121575000068, "status": "pass" },
+      { "metric": "terminal_return_ex_unavailable_receivables_cost_stress", "observed": 0.025359601499999718, "status": "pass" }
+    ],
+    "decision": "S3 remains exploratory because two unambiguous gates fail: median trade return is not positive and the largest winner exceeds 25% of positive realized profit. The ambiguous symbol-concentration gate is not assigned a formal pass/fail."
+  },
+  "required_amendments": [
+    {
+      "work_item": "R1",
+      "severity": "medium",
+      "finding": "Bit-for-bit acceptance does not specify a canonical comparison projection or which schema/identity fields may differ.",
+      "required_change": "Declare the exact normalized fields and ordering compared, and limit exclusions to named schema additions and run/source identity fields."
+    },
+    {
+      "work_item": "R2",
+      "severity": "blocker",
+      "finding": "Largest-symbol share is ambiguous: summing positive trades gives 64.87% and fails, while net symbol PnL over total positive profit gives 31.51% and passes.",
+      "required_change": "Declare numerator, denominator, symbol aggregation and zero-win/zero-loss edge cases for every concentration and profit-factor metric."
+    },
+    {
+      "work_item": "R4",
+      "severity": "blocker",
+      "finding": "registered_paths=10 is consistent with five strategies times two paths only if the study is baseline-only; applying all three fixed scenarios would create 30 paths.",
+      "required_change": "Name the execution scenarios included and update the finite path count before execution."
+    },
+    {
+      "work_item": "R4",
+      "severity": "blocker",
+      "finding": "Optimistic next-session release does not define whether cash becomes spendable before or after opening order sizing.",
+      "required_change": "Fix the session event ordering and state whether released cash may fund that session's open orders."
+    }
+  ],
+  "authorization": {
+    "r1_execute": false,
+    "r2_formal_gate": false,
+    "r3_execute": false,
+    "r4_execute": false,
+    "reason": "The original proposal hash is preserved, but material metric and trial-cardinality terms require a separately reviewed amendment. Exact normalized replay inputs are also still unavailable."
+  }
+}

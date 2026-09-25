@@ -99,6 +99,14 @@ S1/S2 原始 signal count 含不可下單的 `avoid_chase`，實際可下單為 
 
 15 份固定情境共 851 筆成交、615 個訊號及 1,446 個非空訊號價位通過 22,744 個針對性 assertions：非法 tick、非整張、非隔日買進、同開盤賣後買回及負現金均為 0。新增一項 engine/strategy tick 邊界一致性測試，不改策略或績效。仍缺逐日官方競價基準、處置／特殊交易狀態與委託簿，故 fills 只可稱保守 proxy；付款順序、費稅整元及重複公司行動防線列為低度後續。第一輪績效目前不失效，但也沒有升格。
 
+### 2026-09-25 robustness-v2 規格審查
+
+`proposals/robustness-study-v2-review.json` 與 `.agent/reports/2026-09-25T0548-tw-strategy-robustness-review.md` 對鎖定的 v2 提案做可計算性審查；沒有執行新試驗、改參數、連線或讀取 2024+。原提案 SHA256 維持 `94fd91733a0474a2ed65e5c96fc1c2bad4559a68354dfba4b2f57e980ddfbac5`，狀態改由審查收據阻擋，不回寫原檔。
+
+S3 的 36 筆 baseline 完成交易中，單筆淨報酬中位數為 **-1.96%**，profit factor 為 **1.58**，最大贏家占所有正獲利 **42.21%**；成本壓力 profit factor 為 **1.31**。扣除未知付款日應收款的終值拆分仍為 baseline **+5.01%**、成本壓力 **+2.54%**。中位數與最大贏家兩個明確門檻已失敗，因此 S3 維持 exploratory。
+
+正式 R2 決策仍被單一股票集中度定義阻擋：以正獲利交易按股票加總，8069 占 **64.87%**；若先把同股票虧損互抵再除以全體正獲利，則為 **31.51%**，會導致相反 gate 結果。另 R4 的十條路徑未說明是否只跑 baseline（若三個情境全跑應為三十條），也未固定次日股息是在開盤下單前或後可用；R1 的 bit-for-bit 比較欄位亦未完整列舉。故 R1–R4 均未授權執行，需另建有新雜湊的修訂案再審。
+
 2026-09-25 01:12 UTC 的實際狀態：Chat 執行環境以 network policy 中止 TWSE 連線，下載已停止，留有 155/684 個基礎來源及 5 個詳表；本地 continuation 已停止，不能再描述為仍在背景下載。`sources/local-acquisition-checkpoint.json` 記錄此阻擋。
 
 新增 `.github/workflows/tw-strategy-lab.yml` 使用 GitHub 的隔離研究 job，以唯讀權限、精確 PR head、90 分鐘上限執行同一份測試／bounded acquisition／固定研究。它是額外研究工作，不是現有 protected gate，也不授權 merge／部署；沒有正式 secrets、SSH、資料庫寫入或自動推送。只保存衍生研究結果與來源 manifest，不公開完整原始快取。需以實際 workflow run／artifact 確認是否成功，不能僅憑 YAML 存在宣稱已跑完。

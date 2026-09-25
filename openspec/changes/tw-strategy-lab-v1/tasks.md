@@ -68,6 +68,16 @@ Next bounded work: independently review engine order timing and price/tick handl
 - [x] Preserve residual limits: no per-session official auction-reference/disposition-status history or order book, conservative dividend-payment sequencing, fractional fee/tax rounding and no engine-level duplicate-action rejection. The v1 action input itself has unique keys.
 
 No high/blocker defect was demonstrated, so run 36081668572 is not invalidated or rerun. Its fills remain proxies and its performance remains exploratory. Next bounded work is independent review of the finite robustness-v2 proposal and whether each declared metric can be computed deterministically before any new trial is authorized.
+
+## Robustness-v2 specification checkpoint — 2026-09-25 05:48 UTC
+
+- [x] Preserve the original proposal and its SHA256 without silently clarifying terms after seeing the development output.
+- [x] Recompute the proposed S3 diagnostics from retained completed trades and terminal accounting fields without a new simulation.
+- [x] Record two unambiguous failures: baseline median trade return is -1.96% and the largest winner is 42.21% of positive realized profit.
+- [x] Block the symbol-concentration gate because positive-profit aggregation yields 64.87%, while net-symbol PnL over positive profit yields 31.51% and the proposal does not choose a formula.
+- [x] Block R4 until its execution-scenario cardinality and next-session cash-release ordering are exact; require an R1 canonical equality projection and metric edge-case rules.
+
+No robustness-v2 trial is authorized or executed. S3 remains exploratory even without resolving the ambiguous gate because two deterministic gates already fail. Next bounded work is to draft a separately hashed amendment for review or continue an independent low-level engine/source audit; do not run S4v2 or the dividend paths from the current proposal.
 - [ ] At the deadline, record completed/blocked work, exact artifact identities and next steps; holdout stays locked. (LAB-02, LAB-10)
 
 ## Operational work deferred to the final phase
