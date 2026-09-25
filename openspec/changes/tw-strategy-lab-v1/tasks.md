@@ -89,6 +89,16 @@ No robustness-v2 trial is authorized or executed. S3 remains exploratory even wi
 - [x] Validate 42 contract assertions and reconcile 31 new simulation paths plus two no-simulation diagnostic datasets.
 
 Execution remains false. The next step is review by someone other than the proposal author against this exact hash and restoration of the exact normalized inputs in an isolated runner. Do not treat structural completeness as permission to run, open holdout, publish, merge or deploy.
+
+## Broker factor rights checkpoint — 2026-09-25 07:50 UTC
+
+- [x] Confirm the real UBS/2454 record remains metadata-only with zero usable features and no factor-use grant.
+- [x] Demonstrate a separate production-mapper defect: manual/import modes could imply lawful use and a boolean could override explicit blocked/unknown rights.
+- [x] Make source modes provenance-only; require explicit licensed/permitted status and give blocked/unknown fail-closed precedence.
+- [x] Mark rebuilt snapshot metadata unknown rather than treating a user-supplied/imported document as an authorization basis.
+- [x] Add regressions for all three manual modes and explicit negative-status precedence; 8 targeted tests, TypeScript and the 91-page production build passed.
+
+This repair does not activate S7, invalidate the price-strategy run, alter production data or deploy code. After an eventual reviewed deployment, rebuild snapshots only through the guarded pipeline; missing factor-use grants must continue to score zero.
 - [ ] At the deadline, record completed/blocked work, exact artifact identities and next steps; holdout stays locked. (LAB-02, LAB-10)
 
 ## Operational work deferred to the final phase

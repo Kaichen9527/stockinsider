@@ -115,6 +115,14 @@ R1 固定五策略乘三情境共 15 次重播，完整舊 result object、原 s
 
 完整執行需 15 + 6 + 10 = **31 條新模擬路徑**；R2 只讀兩份登錄診斷資料、不新增模擬。現仍缺另一位審查者接受精確 v2.1 雜湊，以及 dataset hash `a89bf8e5cbcfc464463a53c29f1f5f68f6419d72f2a06befcaeb008e3cff5cca` 對應的 exact normalized inputs，故 execute 仍為 false；不能執行 S4v2、發文、合併或部署。
 
+### 2026-09-25 券商因子授權 fail-closed 修復
+
+`results/broker-factor-rights-fix-2026-09-25.json` 與 `.agent/reports/2026-09-25T0750-broker-factor-rights-fix.md` 記錄一項正式程式的高嚴重度缺陷及修復。舊 mapper 可把 `manual_pdf/manual_csv/imported_pdf` 視為 lawful，且 `lawful=true` 可能蓋過 `blocked`；三個未授權來源因而可能拿到完整券商證據分數。
+
+新 mapper 只接受明確 `licensed`／`permitted`，`blocked`／`unknown` 必定先拒絕；手動或匯入模式只保留為 provenance。snapshot rebuild 也明列 `license_status=unknown` 及 `source_mode_is_not_factor_use_grant`。專項 Node 測試 **8/8**、TypeScript、Next production build（91 pages）通過。
+
+UBS／2454 仍為 metadata-only、usable feature 0，S7 仍 blocked；第一輪價格策略 run 未使用券商因子，故不失效。本修復尚未部署或改正式資料。未來經審查部署後仍須以 guarded pipeline 重建 snapshots，且沒有獨立 factor-use grant 的舊資料繼續不得計分。
+
 2026-09-25 01:12 UTC 的實際狀態：Chat 執行環境以 network policy 中止 TWSE 連線，下載已停止，留有 155/684 個基礎來源及 5 個詳表；本地 continuation 已停止，不能再描述為仍在背景下載。`sources/local-acquisition-checkpoint.json` 記錄此阻擋。
 
 新增 `.github/workflows/tw-strategy-lab.yml` 使用 GitHub 的隔離研究 job，以唯讀權限、精確 PR head、90 分鐘上限執行同一份測試／bounded acquisition／固定研究。它是額外研究工作，不是現有 protected gate，也不授權 merge／部署；沒有正式 secrets、SSH、資料庫寫入或自動推送。只保存衍生研究結果與來源 manifest，不公開完整原始快取。需以實際 workflow run／artifact 確認是否成功，不能僅憑 YAML 存在宣稱已跑完。

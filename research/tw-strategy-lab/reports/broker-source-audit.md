@@ -54,6 +54,6 @@ EPS 只比較同財年、同會計基礎、同貨幣與每股單位。零基期�
 
 ## 正式程式後續修復項目
 
-本次只改研究目錄。現有 `web/src/lib/candidate-factor-builder.ts` 的 `brokerEvidenceRowsFromSnapshots()` 可因 manual/import 模式認定 lawful，即使沒有明確 grant，甚至 blocked 亦可能被模式覆蓋。此處應另立正式修復與回歸測試；不在本次研究模組內偷偷修改。
+後續有界修復已在同一研究分支另行完成：`web/src/lib/candidate-factor-builder.ts` 不再以 manual/import 模式推定 lawful，明確 `blocked`／`unknown` 優先於相容性旗標；snapshot rebuild 也明列 `license_status=unknown`。收據為 `results/broker-factor-rights-fix-2026-09-25.json`，8 項專項測試、TypeScript 與 91-page production build 通過。尚未部署或重建正式 snapshot，因此此段是 code-fixed、production-unchanged，不是正式資料已修復。
 
 正式接點仍是 `broker_consensus_snapshots` → `brokerResearchFactor()`。現有來源覆盖分與本模組的預期變動是不同指標，不能把媒體篇數直接加到來源廣度，更不能用目標價驗證自身策略的真實收益。
