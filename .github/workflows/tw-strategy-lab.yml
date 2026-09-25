@@ -8,23 +8,32 @@ on:
       - 'research/tw-strategy-lab/*.py'
       - 'research/tw-strategy-lab/preregistration.json'
       - 'research/tw-strategy-lab/preregistration.sha256'
+  workflow_dispatch:
+    inputs:
+      execute_frozen_development:
+        description: 'Explicitly acquire and run the frozen 2019-2023 v1 study (not robustness-v2.1 or holdout)'
+        type: boolean
+        required: true
+        default: false
 
 permissions:
   contents: read
 
 concurrency:
-  group: tw-strategy-lab-${{ github.event.pull_request.number }}
+  group: tw-strategy-lab-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: false
 
 jobs:
   offline-research:
-    if: github.head_ref == 'codex/tw-strategy-lab-v1' && github.event.pull_request.head.repo.full_name == github.repository
+    if: >-
+      (github.event_name == 'pull_request' && github.head_ref == 'codex/tw-strategy-lab-v1' && github.event.pull_request.head.repo.full_name == github.repository) ||
+      (github.event_name == 'workflow_dispatch' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/codex/tw-strategy-lab-v1'))
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, also pinned by existing protected workflows
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
@@ -32,9 +41,37 @@ jobs:
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.12'
+      - name: Record source and explicit research mode
+        env:
+          EXECUTE_FROZEN_DEVELOPMENT: ${{ github.event_name == 'workflow_dispatch' && inputs.execute_frozen_development }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/tw-strategy-evidence"
+          python - <<'PY'
+          import json, os, pathlib, subprocess
+          out = pathlib.Path(os.environ['RUNNER_TEMP']) / 'tw-strategy-evidence'
+          record = {
+              'schema': 'tw-strategy-ci-mode-v1',
+              'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
+              'source_tree': subprocess.check_output(['git', 'rev-parse', 'HEAD^{tree}'], text=True).strip(),
+              'event': os.environ['GITHUB_EVENT_NAME'],
+              'execute_frozen_development': os.environ['EXECUTE_FROZEN_DEVELOPMENT'] == 'true',
+              'independent_review_attestation': False,
+              'production_mutation_authorized': False,
+              'holdout_authorized': False,
+          }
+          (out / 'mode.json').write_text(json.dumps(record, indent=2) + '\n')
+          PY
       - name: Verify frozen research contracts
-        run: python -m unittest discover -s research/tw-strategy-lab -p 'test_*.py' -v
-      - name: Retrieve bounded official development data
+        run: |
+          set -o pipefail
+          python -m unittest discover -s research/tw-strategy-lab -p 'test_*.py' -v 2>&1 | tee "$RUNNER_TEMP/tw-strategy-evidence/unit-tests.log"
+      - name: Archive tracked source for reproducible read-only inspection
+        run: |
+          git archive --format=tar.gz --output="$RUNNER_TEMP/tw-strategy-evidence/tracked-source.tar.gz" HEAD
+          cd "$RUNNER_TEMP/tw-strategy-evidence"
+          sha256sum tracked-source.tar.gz > tracked-source.sha256
+      - name: Retrieve bounded official development data (explicit dispatch only)
+        if: github.event_name == 'workflow_dispatch' && inputs.execute_frozen_development
         timeout-minutes: 70
         run: |
           python research/tw-strategy-lab/official_data.py \
@@ -42,17 +79,20 @@ jobs:
             --cache "$RUNNER_TEMP/tw-strategy-data/cache" \
             --output research/tw-strategy-lab/data/normalized
       - name: Execute frozen development hypotheses or record data blockers
-        if: ${{ !cancelled() && hashFiles('research/tw-strategy-lab/data/normalized/manifest.json') != '' }}
+        if: >-
+          !cancelled() && github.event_name == 'workflow_dispatch' && inputs.execute_frozen_development &&
+          hashFiles('research/tw-strategy-lab/data/normalized/manifest.json') != ''
         run: |
           python research/tw-strategy-lab/run_research.py \
             --data research/tw-strategy-lab/data/normalized \
             --output research/tw-strategy-lab/results/github-${{ github.run_id }}-${{ github.run_attempt }}
-      - name: Preserve derived research evidence only
+      - name: Preserve source, tests and optional derived evidence
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: tw-strategy-research-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
+            ${{ runner.temp }}/tw-strategy-evidence/
             research/tw-strategy-lab/results/github-${{ github.run_id }}-${{ github.run_attempt }}/
             research/tw-strategy-lab/data/normalized/manifest.json
             research/tw-strategy-lab/preregistration.json
