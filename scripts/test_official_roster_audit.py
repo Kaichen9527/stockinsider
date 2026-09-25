@@ -50,6 +50,34 @@ class OfficialRosterTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             m.parse_master(b'[]')
 
+    def test_english_tpex_schema_supported_without_schema_guessing(self):
+        raw = json.dumps([{'SecuritiesCompanyCode': '6488', 'CompanyAbbreviation': 'test',
+                           'Date': '1150925', 'DateOfListing': '20111018'}]).encode()
+        self.assertEqual(m.parse_master(raw)['6488']['company_short_name'], 'test')
+
+    def test_non_four_digit_company_ids_do_not_poison_supported_cards(self):
+        rows = [{'公司代號': '2330', '公司簡稱': 'test'}, {'公司代號': '910861', '公司簡稱': 'other'}]
+        self.assertEqual(set(m.parse_master(json.dumps(rows))), {'2330'})
+
+    def test_csv_fallback_preserves_first_failure_receipt(self):
+        def fetch(url):
+            if not url.endswith('.csv'):
+                return b'<html>not JSON</html>'
+            symbol = '2330' if url == m.CSV_SOURCES['TWSE'] else '6488'
+            return ('出表日期,公司代號,公司簡稱\n1150925,' + symbol + ',test\n').encode()
+        result = m.audit([{'symbol': '2330', 'name': 'test'}], fetch)
+        self.assertEqual(len(result['source_receipts']), 4)
+        self.assertEqual(result['source_receipts'][0]['status'], 'unavailable')
+        self.assertEqual(result['identities'][0]['status'], 'official_company_match')
+
+    def test_csv_duplicate_header_rejected(self):
+        with self.assertRaises(ValueError):
+            m.parse_master('公司代號,公司代號,公司簡稱\n2330,2330,x\n', csv_mode=True)
+
+    def test_duplicate_json_keys_not_implicitly_overwritten(self):
+        with self.assertRaises(ValueError):
+            m.parse_master('[{"公司代號":"2330","公司代號":"6488","公司簡稱":"x"}]')
+
     def test_arbitrary_url_rejected_without_request(self):
         with self.assertRaises(ValueError):
             m.fetch_source('http://169.254.169.254/')
