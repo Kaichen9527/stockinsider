@@ -1,0 +1,108 @@
+name: Independently reviewed bounded robustness
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/reviewed-robustness.yml'
+      - 'research/tw-strategy-lab/**'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: reviewed-robustness-${{ github.event.pull_request.head.sha }}
+  cancel-in-progress: false
+
+jobs:
+  reviewed-replay:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'codex/tw-strategy-lab-v1'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Offline contracts and existing-result inspection
+        run: |
+          set -o pipefail
+          mkdir -p "$RUNNER_TEMP/robustness-evidence"
+          python -m unittest discover -s research/tw-strategy-lab -p 'test_*.py' -v 2>&1 | tee "$RUNNER_TEMP/robustness-evidence/tests.log"
+          python research/tw-strategy-lab/run_robustness.py --output "$RUNNER_TEMP/robustness-evidence/inspection"
+      - name: Verify genuine review and exact recovery artifact
+        id: admission
+        env:
+          READ_ONLY_GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json, os, pathlib, subprocess, sys
+          from urllib.request import Request, build_opener, ProxyHandler
+          sys.path.insert(0, 'research/tw-strategy-lab')
+          import run_robustness as r
+          head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+          base = 'https://api.github.com/repos/Kaichen9527/stockinsider/'
+          def get(path):
+              request = Request(base + path, headers={'Accept': 'application/vnd.github+json', 'Authorization': 'Bearer ' + os.environ['READ_ONLY_GITHUB_TOKEN'], 'User-Agent': 'StockInsider-research-admission/1'})
+              with build_opener(ProxyHandler({}), r.NoRedirect()).open(request, timeout=15) as response:
+                  if response.url != base + path or response.status != 200:
+                      raise ValueError('admission_transport_invalid')
+                  raw = response.read(1024 * 1024 + 1)
+              if len(raw) > 1024 * 1024:
+                  raise ValueError('admission_response_bound')
+              return r.strict_json(raw)
+          record = {'source_commit': head, 'execute': False, 'review': None, 'new_simulations': 0, 'production_authorized': False, 'release_gate_authority': False}
+          try:
+              accepted = []
+              for review in get('pulls/284/reviews?per_page=100'):
+                  try:
+                      accepted.append(r.verify_review_payload(review, head))
+                  except (ValueError, TypeError, KeyError):
+                      continue
+              if not accepted:
+                  raise ValueError('genuine_exact_head_contract_acceptance_missing')
+              review = max(accepted, key=lambda value: value['id'])
+              artifact = get('actions/artifacts/10871218499')
+              expected_digest = 'sha256:c1b8bd9a864ec18549110ab99bca8a09cde987bf9b58bdaf96e37e32c4434a00'
+              if artifact.get('expired') is not False or artifact.get('digest') != expected_digest or artifact.get('name') != 'replay-input-readiness-36149698934-1' or artifact.get('workflow_run', {}).get('head_sha') != '6e37672bbb3bd453283366cfc66c1d218472c34e' or artifact.get('workflow_run', {}).get('id') != 36149698934:
+                  raise ValueError('exact_recovery_artifact_identity_mismatch')
+              record.update(execute=True, review=review, recovery_artifact_id=10871218499, recovery_artifact_digest=expected_digest)
+          except Exception as exc:
+              record['blocker_class'] = type(exc).__name__
+              record['blocker'] = str(exc) if isinstance(exc, ValueError) else 'review_or_recovery_receipt_unavailable'
+          out = pathlib.Path(os.environ['RUNNER_TEMP']) / 'robustness-evidence'
+          (out / 'admission.json').write_text(json.dumps(record, indent=2) + '\n')
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as stream:
+              stream.write('execute=' + str(record['execute']).lower() + '\n')
+              if record['execute']:
+                  stream.write('review_id=' + str(record['review']['id']) + '\n')
+          print(json.dumps(record))
+          PY
+      - name: Download only the verified frozen recovery artifact
+        if: steps.admission.outputs.execute == 'true'
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: replay-input-readiness-36149698934-1
+          run-id: 36149698934
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/frozen-replay-inputs
+      - name: Execute exactly the reviewed finite R1-R4 paths
+        if: steps.admission.outputs.execute == 'true'
+        env:
+          REVIEW_ID: ${{ steps.admission.outputs.review_id }}
+        run: |
+          python research/tw-strategy-lab/run_robustness.py --execute \
+            --data "$RUNNER_TEMP/frozen-replay-inputs/replay-recovery" \
+            --review-id "$REVIEW_ID" --output "$RUNNER_TEMP/robustness-evidence/execution"
+      - name: Retain real outcomes including blocked or failed paths
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: reviewed-robustness-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/robustness-evidence/
+          retention-days: 14
+          if-no-files-found: error
