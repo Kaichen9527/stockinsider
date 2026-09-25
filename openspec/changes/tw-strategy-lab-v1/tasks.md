@@ -58,6 +58,16 @@ Next bounded work is source/corporate-action review and a preregistered proposal
 - [x] Record a finite robustness-v2 proposal as review-required and not executed; retain 2024+ holdout lock and identify result-informed S4v2 candidates as hypothesis generation only.
 
 Next bounded work: independently review engine order timing and price/tick handling, or review the proposed registry. Do not execute robustness-v2 until exact normalized inputs are available to the isolated runner and the finite registry is independently accepted.
+
+## Execution timing and price-grid checkpoint — 2026-09-25 04:52 UTC
+
+- [x] Cross-check common-stock opening order type, ordinary 10% limits and tick schedule against current TWSE/TPEx primary pages; reject a false positive caused by flattened multi-product table columns.
+- [x] Check 615 signals, 1,446 non-null signal prices and 851 fills across all 15 result files: 22,744 assertions passed with zero illegal ticks, non-lot fills, late/early buys, same-open reentries or negative cash rows.
+- [x] Confirm pre-open sizing and reservation occur before opening-bar reads and do not reuse same-opening sale proceeds or gap savings.
+- [x] Add one synthetic regression keeping duplicated engine and signal tick functions aligned at every common-stock boundary; this is test-only and does not change v1 performance.
+- [x] Preserve residual limits: no per-session official auction-reference/disposition-status history or order book, conservative dividend-payment sequencing, fractional fee/tax rounding and no engine-level duplicate-action rejection. The v1 action input itself has unique keys.
+
+No high/blocker defect was demonstrated, so run 36081668572 is not invalidated or rerun. Its fills remain proxies and its performance remains exploratory. Next bounded work is independent review of the finite robustness-v2 proposal and whether each declared metric can be computed deterministically before any new trial is authorized.
 - [ ] At the deadline, record completed/blocked work, exact artifact identities and next steps; holdout stays locked. (LAB-02, LAB-10)
 
 ## Operational work deferred to the final phase

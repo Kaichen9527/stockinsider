@@ -1,6 +1,7 @@
 import unittest
 from datetime import date, timedelta
-from engine import Assumptions, simulate
+from engine import Assumptions, round_price, simulate, tick
+from strategies import round_tw_price, tw_tick
 
 
 def fixture():
@@ -15,6 +16,18 @@ def fixture():
 class EngineTests(unittest.TestCase):
     def run_case(self, bars, signals, sessions, **kwargs):
         return simulate({'2330': bars}, signals, sessions, start=sessions[25], end=sessions[-1], **kwargs)
+
+    def test_engine_and_signal_tick_schedules_do_not_drift(self):
+        # TWSE/TPEx common-stock grid. Keep signal limits and simulated fills
+        # on the same legal prices at every boundary.
+        schedule = [(0.01, .01), (5, .01), (9.99, .01), (10, .05),
+                    (49.95, .05), (50, .1), (99.9, .1), (100, .5),
+                    (499.5, .5), (500, 1), (999, 1), (1000, 5)]
+        for price, expected in schedule:
+            self.assertEqual(tick(price), expected)
+            self.assertEqual(tw_tick(price), expected)
+            self.assertEqual(round_price(price), round_tw_price(price, 'down'))
+            self.assertEqual(round_price(price, up=True), round_tw_price(price, 'up'))
 
     def test_no_same_day_and_gap_below_band_really_fills(self):
         sessions, bars, signal = fixture()

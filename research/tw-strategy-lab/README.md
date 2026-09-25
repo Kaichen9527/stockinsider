@@ -93,6 +93,12 @@ S1/S2 原始 signal count 含不可下單的 `avoid_chase`，實際可下單為 
 
 新增 `proposals/robustness-study-v2.json` 但狀態為待審、未執行，SHA256 鎖定為 `94fd91733a0474a2ed65e5c96fc1c2bad4559a68354dfba4b2f57e980ddfbac5`。它只有限登錄報表修正、S3 集中度檢查、兩個結果知情的 S4v2 候選與股息可用日敏感度；不改 v1 freeze、不挑開發樣本最佳值、不動 2024+。完整 normalized prices 與獨立審查未補齊前不啟動。
 
+### 2026-09-25 成交時序與 tick 審查
+
+`results/github-36081668572-1-execution-audit.json` 與 `.agent/reports/2026-09-25T0452-tw-strategy-execution-review.md` 留下第三個有界審查。官方 TPEx 普通股表確認現有 tick schedule 正確；TWSE 多商品寬表的純文字欄位錯位曾形成候選 finding，但在交叉核對後否決，沒有誤改引擎或宣告舊 run 失效。
+
+15 份固定情境共 851 筆成交、615 個訊號及 1,446 個非空訊號價位通過 22,744 個針對性 assertions：非法 tick、非整張、非隔日買進、同開盤賣後買回及負現金均為 0。新增一項 engine/strategy tick 邊界一致性測試，不改策略或績效。仍缺逐日官方競價基準、處置／特殊交易狀態與委託簿，故 fills 只可稱保守 proxy；付款順序、費稅整元及重複公司行動防線列為低度後續。第一輪績效目前不失效，但也沒有升格。
+
 2026-09-25 01:12 UTC 的實際狀態：Chat 執行環境以 network policy 中止 TWSE 連線，下載已停止，留有 155/684 個基礎來源及 5 個詳表；本地 continuation 已停止，不能再描述為仍在背景下載。`sources/local-acquisition-checkpoint.json` 記錄此阻擋。
 
 新增 `.github/workflows/tw-strategy-lab.yml` 使用 GitHub 的隔離研究 job，以唯讀權限、精確 PR head、90 分鐘上限執行同一份測試／bounded acquisition／固定研究。它是額外研究工作，不是現有 protected gate，也不授權 merge／部署；沒有正式 secrets、SSH、資料庫寫入或自動推送。只保存衍生研究結果與來源 manifest，不公開完整原始快取。需以實際 workflow run／artifact 確認是否成功，不能僅憑 YAML 存在宣稱已跑完。
