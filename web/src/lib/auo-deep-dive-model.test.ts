@@ -8,6 +8,9 @@ import {
   AUO_ENDING_COMMON_SHARES_MILLION,
   AUO_AS_OF,
   AUO_PRICE,
+  auoAnnouncedAssetDisposals,
+  auoAssetDisposalSensitivity,
+  auoArticleSections,
   auoMarketContext,
   auoForecastBaseQuarters,
   auoScenarioAdjustments,
@@ -39,6 +42,18 @@ test('segment rows add back to consolidated revenue and operating profit', () =>
     .reduce((sum, segment) => sum + segment.revenue * segment.operatingMargin, 0)
     + row.corporateAndOtherOperatingIncome));
   assert.equal(row.reportedEps, row.normalizedEps, 'future one-offs default to zero');
+});
+
+test('announced asset gains stay conditional and separate from normalized operating EPS', () => {
+  assert.deepEqual(auoAnnouncedAssetDisposals.map((transaction) => transaction.expectedGainAfterEstimatedCostsAndTaxMillion), [13_390, 4_280]);
+  assert.equal(auoAssetDisposalSensitivity.expectedGainMillion, 17_670);
+  assert.equal(Number(auoAssetDisposalSensitivity.perShareIfFullyAttributable.toFixed(2)), 2.34);
+  assert.equal(auoAssetDisposalSensitivity.recognitionYear, null);
+  assert.equal(auoAssetDisposalSensitivity.attributableShare, null);
+  const valuation = auoArticleSections.find((section) => section.id === 'valuation');
+  assert.ok(valuation?.paragraphs.some((paragraph) => paragraph.text.includes('不是 2027 年預測')
+    && paragraph.sources.join(',').includes('S34') && paragraph.sources.join(',').includes('S35')));
+  assert.equal(auoForecastBaseQuarters.every((quarter) => quarter.oneOffAfterTax === 0), true);
 });
 
 test('AUO P/B anchors are recalculated from 60 point-in-time TWSE monthly observations', () => {

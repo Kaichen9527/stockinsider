@@ -1,7 +1,7 @@
 import pbHistory from '../data/auo-pb-history-v1.json' with { type: 'json' };
 import { historicalPbQuartiles, type CommercializationInputs, type ForecastQuarterInput, type ScenarioAdjustment } from './auo-deep-dive-model.ts';
 
-export const AUO_RESEARCH_VERSION = 'auo-2409-2026-09-25.v5';
+export const AUO_RESEARCH_VERSION = 'auo-2409-2026-09-25.v6';
 export const AUO_AS_OF = '2026-09-24';
 export const AUO_PRICE = 34.20;
 export const AUO_DILUTED_SHARES_MILLION = 7_547;
@@ -9,6 +9,17 @@ export const AUO_BOOK_VALUE_PER_SHARE = 20.46;
 export const AUO_COMMON_EQUITY_MILLION = 154_397.339;
 export const AUO_ENDING_COMMON_SHARES_MILLION = 7_547.098972;
 export const AUO_PB_HISTORY = historicalPbQuartiles(pbHistory, AUO_AS_OF);
+
+export const auoAnnouncedAssetDisposals = [
+  { date: '2026-07-28', asset: '桃園華亞廠', buyer: '廣達', expectedGainAfterEstimatedCostsAndTaxMillion: 13_390, source: 'S34' },
+  { date: '2026-07-30', asset: '高雄 C5E 廠', buyer: '日月光半導體', expectedGainAfterEstimatedCostsAndTaxMillion: 4_280, source: 'S35' },
+] as const;
+export const auoAssetDisposalSensitivity = {
+  expectedGainMillion: auoAnnouncedAssetDisposals.reduce((sum, transaction) => sum + transaction.expectedGainAfterEstimatedCostsAndTaxMillion, 0),
+  perShareIfFullyAttributable: auoAnnouncedAssetDisposals.reduce((sum, transaction) => sum + transaction.expectedGainAfterEstimatedCostsAndTaxMillion, 0) / AUO_DILUTED_SHARES_MILLION,
+  recognitionYear: null,
+  attributableShare: null,
+} as const;
 
 export const auoQuarterlyActuals = [
   { period: '2024Q3', revenue: 77_748, grossProfit: 8_454, operatingIncome: -310, commonNetIncome: -926, reportedEps: -0.12, grossMargin: 10.9 },
@@ -128,6 +139,11 @@ export const auoSources = [
   { id: 'S31', type: '官方市場資料', title: 'TWSE 友達三大法人買賣超日報', url: 'https://www.twse.com.tw/rwd/zh/fund/T86?date=20260924&selectType=ALL&response=json', date: '2026-09-24', supports: '9/24 友達外資、投信與自營商淨買賣；前幾日依同路徑日期查核' },
   { id: 'S32', type: '官方市場資料', title: 'TWSE 2026 年市場開休市日期', url: 'https://www.twse.com.tw/holidaySchedule/holidaySchedule?response=json&queryYear=2026', date: '2026-09-25', supports: '9/25 與 9/28 休市；技術資料過期判斷依交易日計算' },
   { id: 'S33', type: '同業原始資料', title: '京東方 2026-07-02 投資者交流紀錄', url: 'https://static.cninfo.com.cn/finalpage/2026-07-03/1225407620.PDF', date: '2026-07-03', supports: '京東方與康寧合作、Micro LED 光互連及玻璃載板 CPO 專案組；其新業務仍未量產' },
+  { id: 'S34', type: '公開資訊觀測站公告轉載', title: '友達 7/28 華亞廠處分重大訊息', url: 'https://www.moneydj.com/kmdj/news/newsviewer.aspx?a=d79d267f-ece8-4552-9ced-2b8068255de5', date: '2026-07-28', supports: '逐字轉載公告：廣達交易、預計處分利益 133.9 億元，已扣估計費用及稅；原 MOPS 歷史頁尚待核對' },
+  { id: 'S35', type: '公開資訊觀測站公告轉載', title: '友達 7/30 高雄廠處分重大訊息', url: 'https://pchome.megatime.com.tw/news/cat7/20260730/9700002409202607304.html', date: '2026-07-30', supports: '逐字轉載公告：日月光半導體交易、預計處分利益 42.8 億元，已扣估計費用及稅；原 MOPS 歷史頁尚待核對' },
+  { id: 'S36', type: '公開社群單一作者', title: 'Threads 公開貼文：鼎元訂單與友達 CPO／Intel 鏈之說', url: 'https://www.threads.com/@caiboren658/post/DdsyK13ksEL', date: '2026-09-25', supports: '9/25 觀測到的單一作者主帖及其續帖 https://www.threads.com/@caiboren658/post/DdsyK2dElWW；僅為待查假說，兩帖不算兩個獨立來源' },
+  { id: 'S37', type: '供應鏈公司原始資料', title: '鼎元公司沿革與 2025–2026 光通訊產品開發', url: 'https://www.tyntek.com.tw/about_01.php', date: '2026-09-25', supports: '鼎元自述 100G／200G lane PD 與 Micro-PD 開發；不含 Intel 或友達 CPO 訂單確認；頁面未標具體發布日，日期為查核日' },
+  { id: 'S38', type: '公開新聞', title: 'MoneyDJ：鼎元 PD 訂單能見度與 Micro LED CPO 仍在驗證', url: 'https://www.moneydj.com/KMDJ/news/newsviewer.aspx?a=72ab35d5-00c3-4978-891a-118a52253901', date: '2026-09-09', supports: '報導分別描述既有 PD 產品訂單能見度及友達／富采 Micro LED CPO 開發驗證；未確認 Threads 所稱 Intel 或具名 CSP 新單' },
 ] as const;
 
 export const auoMarketContext = {
@@ -148,15 +164,19 @@ export const auoEvidenceLedger = [
   { claim: 'Intel 與藍思科技玻璃封裝合作', rootSource: 'S28', publishedAt: '2026-07-24', firstObservedAt: null, status: 'Intel 正式公告；屬友達假說的競爭路線', relation: '獨立合作方原始公告' },
   { claim: '9/24 股價與法人流向', rootSource: 'S14', publishedAt: '2026-09-24', firstObservedAt: '2026-09-25T07:04:25+08:00', status: '交易所行情與三大法人資料已核對；不代表合作消息獲確認', relation: 'S14 為行情根源，S31 為法人流向根源；價格與籌碼是不同觀測，不增加傳聞的獨立確認數' },
   { claim: '京東方亦投入 Micro LED 光互連與玻璃載板 CPO', rootSource: 'S33', publishedAt: '2026-07-03', firstObservedAt: '2026-09-25T07:09:04+08:00', status: '京東方原始投資者紀錄確認研發專案與康寧合作；該業務尚未量產', relation: '獨立同業原始資料，限制友達技術獨占與遠期份額假設' },
+  { claim: '友達公告出售華亞廠及高雄 C5E 廠', rootSource: 'S34', publishedAt: '2026-07-28', firstObservedAt: '2026-09-25T18:05:41+08:00', status: '兩筆重大訊息逐字轉載載明預計處分利益；交割、認列年度與最終歸屬仍待核對', relation: 'S34 與 S35 為兩筆不同交易；新聞再轉載不增加獨立證據數' },
+  { claim: '鼎元已有新 Intel／CSP 訂單並帶動友達 CPO 量產', rootSource: 'S36', publishedAt: '2026-09-25（貼文相對時間）', firstObservedAt: '2026-09-25T18:08:00+08:00', status: '單一 Threads 作者的待查說法；鼎元官網只支持 PD 開發，公開報導將既有 PD 能見度與 Micro LED CPO 驗證分開；未見 Intel／CSP 具名新單或友達 CPO 量產證據', relation: '同作者主帖與續帖為一個消息根源；S38 是較早的 PD 報導，不能視為對新傳聞的獨立確認' },
 ] as const;
 
 export const auoMarketEvents = [
+  { date: '2026-07-30', label: '已公告，待認列', title: '友達兩筆廠房處分合計預計利益 176.7 億元', detail: '7/28 華亞廠與 7/30 高雄 C5E 廠公告的預計處分利益，分別為 133.9 億及 42.8 億元，公告稱已扣相關費用及預估稅。', impact: '報表 EPS 和淨值可能於交割認列時增加，但非持續營業獲利；認列年度與歸屬普通股比例未核定前，不灌入年度基本情境，也不乘持續獲利 P/E。', sources: ['S34', 'S35'] },
   { date: '2026-08-31', label: '已確認', title: '友達公開 CPO／GCS 階段性成果', detail: '友達揭露 Micro LED CPO 系統模組、RDL、光學耦合及與康寧合作的玻璃核心基板；尚未揭露客戶訂單、量產收入與毛利。', impact: '這是轉型可行性的事前證據，應建立條件式重估情境，但不直接增加 2027 EPS。', sources: ['S23'] },
   { date: '2026-09-20', label: '市場傳聞', title: '公開報導出現 Intel 合作說法', detail: '目前可核對的公開報導稱 Intel 洽談合作；尚未找到雙方聯名公告、採購合約或量產時程。', impact: '提高市場對友達由面板廠切入先進封裝／光互連的期待，先改變事件風險與倍數討論。', sources: ['S24', 'S25'] },
   { date: '2026-09-21', label: '價格確認', title: '突破原 32.2 元門檻', detail: '收盤 33.35 元、成交量 8.23 億股，符合原先 9/19 放量突破條件。', impact: '原波段劇本由等待轉為觸發；不能事後把門檻上移後仍顯示等待。', sources: ['S14'] },
   { date: '2026-09-22', label: '目標到達', title: '收盤 36.65 元，到達原量度目標', detail: '兩個交易日由 30.35 元上漲 20.76%，原 36.6 元技術量度目標已到達。', impact: '追價的報酬風險比惡化；下一個判斷改為等待整理、查證事件與重新建立劇本。', sources: ['S14'] },
   { date: '2026-09-23', label: '高檔換手', title: '目標到達後回落至 34.70 元', detail: '開盤與最高均為 36.65 元，最低 33.40 元，收 34.70 元、跌 5.32%，成交量 9.49 億股。', impact: '原突破劇本仍維持已完成，不事後移動目標；新部位尚未形成可重算的整理完成訊號，先觀察 32.2 元突破區及事件查證。', sources: ['S14'] },
   { date: '2026-09-24', label: '縮量續跌', title: '收 34.20 元，外資連兩日賣超', detail: '收盤較前日跌 1.44%，成交量 5.43 億股、仍為二十日均量約 1.22 倍；外資淨賣超約 8.00 萬張，9/23–24 合計淨賣超約 23.39 萬張。', impact: '原 36.6 元目標已達的狀態不變；相較前日縮量一天尚不足以證明整理完成，新部位繼續等待守住突破區及重新轉強。', sources: ['S14', 'S31'] },
+  { date: '2026-09-25', label: '社群待查', title: 'Threads 出現鼎元訂單與 Intel 供應鏈說法', detail: '單一作者兩篇連續貼文將鼎元既有 PD 訂單能見度、友達 Micro LED CPO 及 Intel 關聯串在一起；公開資料目前只支持 PD 產品開發與 CPO 驗證。', impact: '提升核對鼎元法說、具名客戶與 AUO CPO 試產的優先級；不增加訂單確認數，也不改基本 EPS。', sources: ['S36', 'S37', 'S38'] },
 ] as const;
 
 export const auoTransformationMilestones = [
@@ -214,7 +234,7 @@ export const auoGrowthDrivers = [
 ];
 
 export const auoCatalysts = [
-  { id: 'cpo', title: 'Micro LED CPO', stage: '技術展示', evidence: '友達公開模組與集團分工；未揭露客戶驗證、設計導入或訂單。京東方亦成立同方向專案組，但尚未量產。', nextProof: '具名客戶、光互連規格與可靠度驗證；之後才是試產、良率及量產出貨。', timing: '若成真，財務貢獻更可能是 2028–2029 年研究情境；非公司指引。', falsifier: '客戶採 LRO、NPO、京東方等替代供應商或其他光源；驗證、散熱、維修與良率不符經濟性。', sources: ['S23', 'S27', 'S29', 'S33'] },
+  { id: 'cpo', title: 'Micro LED CPO', stage: '技術展示', evidence: '友達公開模組與集團分工；未揭露客戶驗證、設計導入或訂單。京東方亦成立同方向專案組，但尚未量產。', nextProof: '具名客戶、光互連規格與可靠度驗證；核對鼎元既有 PD 訂單是否真的轉成友達 CPO 設計導入，之後才是試產、良率及量產出貨。', timing: '若成真，財務貢獻更可能是 2028–2029 年研究情境；非公司指引。', falsifier: '客戶採 LRO、NPO、京東方等替代供應商或其他光源；驗證、散熱、維修與良率不符經濟性。', sources: ['S23', 'S27', 'S29', 'S33', 'S36', 'S37', 'S38'] },
   { id: 'gcs', title: '玻璃核心基板／RDL', stage: '技術展示與可靠度驗證', evidence: '友達與康寧展示 GCS；官方明說 TGV、金屬化與可靠度仍在分階段推進。', nextProof: '客戶規格、TGV 良率、基板尺寸、每片售價、材料與製程分潤。', timing: '驗證與產線建置跨年；不得直接放進 2027 基本 EPS。', falsifier: 'Intel 已公告與藍思科技合作；京東方也與康寧合作，不能假設友達獨占其玻璃生態系。', sources: ['S23', 'S28', 'S33'] },
   { id: 'intel', title: 'Intel 合作說法', stage: '媒體傳聞', evidence: '9/20–21 公開報導與轉載；尚無友達、Intel 聯名公告或可核對採購合約。', nextProof: '雙方確認合作範圍、驗證節點、design win、採購承諾及歸屬友達的收入。', timing: '傳聞可即時改變交易價格；財報時間取決於驗證及量產，未知。', falsifier: '合作否認、合作範圍僅為樣品、選用其他玻璃或光互連供應商。', sources: ['S24', 'S25', 'S26', 'S28'] },
 ] as const;
@@ -252,6 +272,7 @@ export const auoArticleSections = [
     id: 'rumor', number: '03', title: 'Intel、客戶與訂單：把每一步證據放回正確階段',
     paragraphs: [
       { text: '9/20–21 的 Intel 說法目前能回溯到公開報導與轉載；PTT 再傳同一篇報導，只增加市場關注，不能當作第二個獨立確認。友達 8/31 公告能確認 CPO 與 GCS 展示及合作生態系，但沒有具名 Intel 客戶、採購金額、排程或量產承諾。Intel 自身的光學 I/O 研究與玻璃封裝路線，說明題材在技術上有交集，仍不能補上缺失的商務證據。', sources: ['S23', 'S24', 'S25', 'S26', 'S27', 'S28'] },
+      { text: '9/25 又出現單一 Threads 作者把「鼎元訂單能見度至 2028」延伸成「美系 CSP、Intel 供應鏈與友達 CPO 量產」的說法。這值得追查，不值得刪掉；但同一作者的主帖與續帖仍是一個根源。鼎元官網可確認高速 PD、Micro-PD 開發，較早新聞則把既有 PD 訂單與友達／富采 Micro LED CPO 的研發驗證分開敘述，未能證實貼文所稱的新 Intel／CSP 訂單、每月產能數字或友達可分得的營收。下一步須核對鼎元正式法說、具名客戶或採購文件，以及友達揭露的設計導入與量產節點；此線索目前只提高查證優先序，不改 2027 基本 EPS。', sources: ['S36', 'S37', 'S38', 'S23'] },
       { text: '對 CPO，第一步應見到特定距離與傳輸規格的客戶驗證；第二步是設計導入與試產；第三步才有產能利用率、良率及售價。對 GCS，還需要 TGV 孔洞、金屬化、翹曲及可靠度的客戶認證。合作可能只是一段製程、一項共同開發，或僅供樣品；範圍不同，友達可認列的營收和毛利差很多。研究表格逐項列「現在到哪一步」「下一個可驗證事實」「最強反證」，讓傳聞留在研究清單，但不假裝它已成收入。', sources: ['S23', 'S28'] },
       { text: '如果 Intel 或其他客戶確認設計導入，會先降低「能不能用」的不確定性，不會當天就形成下一季 EPS。若確認量產規格、產線資本支出與出貨起點，才可從出貨量及單價估 2028–2029 收入；若合作遭否認或同一需求由藍思、其他 CPO 光路滿足，轉型情境的成功條件就收緊。這些結果需要逐次更新，不以股價漲跌倒推消息真假。', sources: ['S23', 'S28', 'S29'] },
     ],
@@ -268,7 +289,8 @@ export const auoArticleSections = [
   {
     id: 'valuation', number: '05', title: '現價要多少成果才合理：先反推，再談倍數',
     paragraphs: [
-      { text: '既有營運的保守、基本和樂觀情境來自同一套分部假設，而非在最後任意填 EPS。保守情境若接近或低於損平，P/E 無意義，只看資產與現金流；基本情境以顯示虧損緩解、兩個新事業維持小幅增長；樂觀情境再加較好的產品組合與分部利潤率。2026 已公告上半年與尚未公布的季度分開；報表 EPS 仍列出，但正常化 EPS 排除未指定的一次性項目。完整表格收在文末供重算。', sources: ['S1', 'S2', 'S6'] },
+      { text: '既有營運的保守、基本和樂觀情境來自同一套分部假設，而非在最後任意填 EPS。保守情境若接近或低於損平，P/E 無意義，只看資產與現金流；基本情境以顯示虧損緩解、兩個新事業維持小幅增長；樂觀情境再加較好的產品組合與分部利潤率。2026 已公告上半年與尚未公布的季度分開；表中的報表 EPS 是尚未加入待認列資產處分的基準預測，正常化 EPS 則始終排除該類一次性項目。完整表格收在文末供重算。', sources: ['S1', 'S2', 'S6', 'S34', 'S35'] },
+      { text: `另有一個不能藏在「未指定一次性項目為零」後面的已公告事件：友達 7/28 與 7/30 分別公告出售華亞及高雄 C5E 廠，兩筆預計處分利益合計 ${(auoAssetDisposalSensitivity.expectedGainMillion / 100).toFixed(1)} 億元，公告稱已扣交易費用與預估稅費。單純以 ${AUO_DILUTED_SHARES_MILLION.toLocaleString('en-US')} 百萬股除，若全數歸屬普通股，算術上約每股 ${auoAssetDisposalSensitivity.perShareIfFullyAttributable.toFixed(2)} 元；這不是已認列 EPS，也不是 2027 年預測，交割、最終利益、歸屬及認列年度仍須核對。處分會使報表獲利與淨值改變，卻不會讓面板或 CPO 的持續利潤同步增加，因此不可把這筆利益再乘 20／24 倍，或在 P/E 與 P/B 交叉估值中重複計價。`, sources: ['S34', 'S35', 'S2'] },
       { text: '舊研究使用的 20／24 倍不是市場共識，也沒有足夠同業校準可稱「合理倍數」。對低 ROE、資本密集的 Display 適用這樣的 P/E 尤其需要證明獲利能持續。本版將倍數當成明示的檢驗座標，並保留 P/B 與普通股 ROE 交叉看：股價超過歷史 P/B 樣本區間，可以是新業務期權，也可能是短期資金追題材；歷史 P75 從來不是價格上限。任何正式提高倍數的理由，應同時見到更高的持續營益率和資本報酬。', sources: ['S1', 'S2', 'S22'] },
       { text: '以 9/24 收盤 34.20 元反推，20 倍 P/E 要求 1.71 元 EPS，24 倍要求約 1.43 元，兩者都高於現有基本情境的 2027 正常化 EPS。差額若只由新技術填補，就需要在既有業務之外產生可觀的歸屬普通股淨利；本文以 5%、10%、15%「稅後且歸屬友達」增量利潤率展示所需新增對外營收。這是反向門檻，未對 Intel 或 CPO 宣稱訂單規模；若需要比可核對市場容量更大的收入，便應降低倍數或價格假設。', sources: ['S1', 'S14', 'S23'] },
       { text: '遠期 2029 年試算另列年份與折現率。若量產證據始終缺席，轉型情境維持未量化，股價高於某個模型價只稱「模型差額」，不冒充市場真正付了多少轉型溢價。若出現可核對產能、良率、單價及歸屬收入，才把條件式商業化換成收入橋接；若被否認或延期，將該分支撤回並增加費用或折舊的下行情境。這比把傳聞直接乘高本益比更能回答目前的 34.20 元究竟要求什麼。', sources: ['S2', 'S14', 'S23', 'S24', 'S28'] },
@@ -305,7 +327,7 @@ export const auoAssumptions = [
   { id: 'A2', label: '稀釋股數', value: '7,547 百萬股', basis: '2026Q2 法說揭露加權平均股數；未假設庫藏股或增資' },
   { id: 'A3', label: '2026Q3 分部營收', value: 'Mobility 約持平、Vertical +3%、Display -5%', basis: '將公司定性指引量化，屬研究估計' },
   { id: 'A4', label: '2027 基本情境', value: 'Mobility／Vertical 中個位數成長，Display H2 接近損平', basis: '不是公司指引，依分部獲利與產業供需推估' },
-  { id: 'A5', label: '一次性項目', value: '未來季度預設 0', basis: '資產處分、匯兌、減損未具可預測性，不灌入正常化 EPS' },
+  { id: 'A5', label: '一次性項目', value: '基準預測 0；已公告處分另列敏感度', basis: '華亞與高雄 C5E 廠預計處分利益合計 176.7 億元；交割、最終歸屬與認列年度未核定，不塞進特定年度的基準報表 EPS，也不灌入正常化 EPS' },
   { id: 'A6', label: '稅率與非控制權益', value: '正稅前利益 20%；每季非控制權益 1 億元', basis: '簡化假設，敏感度低於分部營益率；法說後更新' },
   { id: 'A7', label: '普通股權益橋接', value: '2026Q2 普通股權益＋未來五季正常化淨利－股利＋資本／OCI', basis: '股利與資本／OCI 在三情境均明確假設為 0；這是模型假設，不是歷史實績，有公告或可核對證據後重算' },
   { id: 'A8', label: '旺宏格式核對', value: '沿用已找回的章節要求，原 PDF 尚未重新逐頁核對', basis: '原檔仍為 iCloud 佔位，沒有用舊 seed 數字代替' },
