@@ -1,0 +1,116 @@
+name: Contabo read-only readiness audit
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/contabo-readonly-readiness.yml'
+permissions:
+  contents: read
+jobs:
+  admit-once:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'codex/tw-strategy-lab-v1' && github.actor == github.repository_owner && github.triggering_actor == github.repository_owner
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    outputs:
+      execute: ${{ steps.admit.outputs.execute }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - id: admit
+        run: |
+          python3 - <<'PY'
+          from datetime import datetime, timezone
+          import os, subprocess
+          changed = subprocess.check_output(['git', 'diff', '--name-only', 'HEAD^', 'HEAD'], text=True).splitlines()
+          execute = changed == ['.github/workflows/contabo-readonly-readiness.yml'] and datetime.now(timezone.utc) < datetime(2026,9,26,12,tzinfo=timezone.utc)
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+              out.write('execute=' + str(execute).lower() + '\n')
+          PY
+  readonly-readiness:
+    needs: admit-once
+    if: needs.admit-once.outputs.execute == 'true'
+    runs-on: [self-hosted, macOS, ARM64]
+    timeout-minutes: 5
+    steps:
+      - name: Fixed known-host SSH with read-only bounded SQL and filesystem statistics
+        run: |
+          /usr/bin/python3 - <<'PY'
+          import hashlib, json, os, pathlib, subprocess
+          from datetime import datetime, timezone
+          output = pathlib.Path(os.environ['RUNNER_TEMP']) / 'contabo-readonly-readiness'
+          output.mkdir()
+          sql = """
+          BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY;
+          SET LOCAL statement_timeout = '20s';
+          SET LOCAL lock_timeout = '1s';
+          WITH selected_run AS (
+            SELECT id,evaluation_at,status,candidate_count,completed_count,failed_count,partial_count,started_at,finished_at
+            FROM public.candidate_research_runs WHERE status IN ('success','partial','failed')
+            ORDER BY finished_at DESC NULLS LAST,id DESC LIMIT 1
+          ), selected_items AS (
+            SELECT i.id,i.run_id,i.stock_id,i.symbol,i.status,i.finished_at,i.metrics->>'detailRevisionId' AS detail_revision_id
+            FROM public.candidate_research_run_items i JOIN selected_run r ON r.id=i.run_id ORDER BY i.id LIMIT 5001
+          ), selected_details AS (
+            SELECT d.id,d.stock_id,d.research_run_id,d.session_date,d.available_at,d.as_of
+            FROM public.candidate_detail_snapshots d WHERE d.id::text IN (SELECT detail_revision_id FROM selected_items)
+            ORDER BY d.id LIMIT 5001
+          ), selected_instruments AS (
+            SELECT i.instrument_authority_id,i.stock_id,i.symbol,i.exchange,i.instrument_type,i.listing_status,i.official_name,
+              i.provider,i.source_timestamp,i.recorded_at,i.valid_from,i.valid_to
+            FROM public.stock_instruments_v3 i CROSS JOIN selected_run r WHERE i.stock_id IN (SELECT stock_id FROM selected_items)
+              AND i.recorded_at<=r.evaluation_at AND i.source_timestamp<=r.evaluation_at AND i.valid_from<=r.evaluation_at
+              AND (i.valid_to IS NULL OR i.valid_to>r.evaluation_at)
+            ORDER BY i.instrument_authority_id LIMIT 5001
+          )
+          SELECT json_build_object('schema','candidate-repeatable-read-audit-v1',
+            'observed_at',clock_timestamp(),'snapshot',pg_current_snapshot()::text,
+            'transaction_read_only',current_setting('transaction_read_only'),
+            'transaction_isolation',current_setting('transaction_isolation'),
+            'database_bytes',pg_database_size(current_database())::text,
+            'run',(SELECT row_to_json(r) FROM selected_run r),
+            'items',COALESCE((SELECT json_agg(row_to_json(i) ORDER BY i.id) FROM selected_items i),'[]'::json),
+            'details',COALESCE((SELECT json_agg(row_to_json(d) ORDER BY d.id) FROM selected_details d),'[]'::json),
+            'instruments',COALESCE((SELECT json_agg(row_to_json(i) ORDER BY i.instrument_authority_id) FROM selected_instruments i),'[]'::json),
+            'full_current_app_universe',false,'publication_authorized',false,'production_written',false)::text;
+          COMMIT;
+          """
+          remote = "import json,os,subprocess,datetime\n"
+          remote += "result={'schema':'contabo-readonly-readiness-v1','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'host':'5.104.83.211','production_written':False,'credentials_exported':False,'filesystem':[]}\n"
+          remote += "for target in ('/','/opt','/var/lib/postgresql'):\n try:\n  s=os.statvfs(target);result['filesystem'].append({'path':target,'available_bytes':s.f_bavail*s.f_frsize,'total_bytes':s.f_blocks*s.f_frsize,'inode_available':s.f_favail})\n except OSError as exc: result['filesystem'].append({'path':target,'error_class':type(exc).__name__})\n"
+          remote += "sql="+repr(sql)+"\n"
+          remote += "try:\n p=subprocess.run(['sudo','-n','-u','postgres','psql','-X','--no-psqlrc','-q','--set','ON_ERROR_STOP=1','--dbname=stockinsider','--tuples-only','--no-align'],input=sql,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=35)\n if p.returncode!=0: result['database']={'status':'read_unavailable','exit_code':p.returncode}\n elif len(p.stdout.encode())>4*1024*1024: result['database']={'status':'response_bound_exceeded'}\n else: result['database']=json.loads(p.stdout.strip())\nexcept Exception as exc: result['database']={'status':'read_unavailable','error_class':type(exc).__name__}\n"
+          remote += "print(json.dumps(result,ensure_ascii=False,allow_nan=False))\n"
+          receipt={'schema':'contabo-operator-read-receipt-v1','observed_at':datetime.now(timezone.utc).isoformat(),
+                   'host':'5.104.83.211','ssh_user':'root','known_host_check':'strict','batch_mode':True,
+                   'remote_program_sha256':hashlib.sha256(remote.encode()).hexdigest(),'sql_sha256':hashlib.sha256(sql.encode()).hexdigest(),
+                   'production_written':False,'credentials_exported':False,'deployment_admitted':False}
+          (output/'read-only-query.sql').write_text(sql)
+          try:
+              p=subprocess.run(['/usr/bin/ssh','-o','BatchMode=yes','-o','StrictHostKeyChecking=yes','-o','ConnectTimeout=12',
+                    '-o','ConnectionAttempts=1','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',
+                    'root@5.104.83.211','python3 -'],input=remote,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=65)
+              if p.returncode!=0:
+                  receipt['status']='existing_ssh_channel_unavailable';receipt['exit_code']=p.returncode
+                  receipt['reason']='host_key_verification_failed' if 'Host key verification failed' in p.stderr else 'authentication_denied' if 'Permission denied' in p.stderr else 'ssh_connection_or_remote_execution_failed'
+              elif len(p.stdout.encode())>5*1024*1024: receipt['status']='response_bound_exceeded'
+              else:
+                  result=json.loads(p.stdout)
+                  if result.get('host')!='5.104.83.211' or result.get('production_written') is not False:raise ValueError('remote_read_identity')
+                  receipt['status']='read_complete' if result.get('database',{}).get('schema')=='candidate-repeatable-read-audit-v1' else 'filesystem_read_database_unavailable'
+                  receipt['response_sha256']=hashlib.sha256(p.stdout.encode()).hexdigest()
+                  (output/'observation.json').write_text(p.stdout)
+          except Exception as exc:
+              receipt['status']='read_unavailable';receipt['error_class']=type(exc).__name__
+          (output/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          print(json.dumps({'status':receipt['status'],'production_written':False,'deployment_admitted':False}))
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: ${{ !cancelled() }}
+        with:
+          name: contabo-readonly-readiness-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/contabo-readonly-readiness/
+          retention-days: 14
+          if-no-files-found: error
