@@ -144,7 +144,7 @@ def _signal(strategy_id, symbol, bars, lower, upper, stop, rank, exit_ma, max_ho
             "pit_membership_status": "not_verified_fixed_panel", "features": features}
 
 
-def _technical(strategy_id, symbol, bars, reconstructed):
+def _technical(strategy_id, symbol, bars, reconstructed, *, s4_compression_max=0.60):
     current, previous = bars[-1], bars[-2]
     close = current["close"]
     atr = wilder_atr(bars)
@@ -176,7 +176,7 @@ def _technical(strategy_id, symbol, bars, reconstructed):
         fast, slow = wilder_atr(bars[:-1], 5), wilder_atr(bars[:-1], 20)
         compression = fast / slow if fast is not None and slow is not None else math.inf
         prior10 = bars[-11:-1]
-        if compression > 0.60 or close < next_tw_price(max(bar["high"] for bar in prior10)) or current["volume"] < volume20 or close <= ma60:
+        if compression > s4_compression_max or close < next_tw_price(max(bar["high"] for bar in prior10)) or current["volume"] < volume20 or close <= ma60:
             return None
         features["atr5_atr20_prior"] = compression
         return _signal(strategy_id, symbol, bars, close, round_tw_price(close + 0.25 * atr),
@@ -194,12 +194,15 @@ def _technical(strategy_id, symbol, bars, reconstructed):
     return None
 
 
-def generate_signals(bars_by_symbol, strategy_id, actions_by_symbol=None, *, allow_reconstructed_history=False):
+def generate_signals(bars_by_symbol, strategy_id, actions_by_symbol=None, *, allow_reconstructed_history=False, s4_variant=None):
     """All decisions use <=t data. S5/S7 remain blocked even if events exist.
 
     Input calendar completeness and historical universe authority are separate
     dataset gates. Friday-only S3 avoids discovering week-end from future bars.
     """
+    variants = {None: 0.60, 'S4v2-070': 0.70, 'S4v2-075': 0.75}
+    if s4_variant not in variants or (s4_variant is not None and strategy_id != 'S4'):
+        raise ValueError('unregistered_s4_variant')
     if strategy_coverage(strategy_id)["status"] == "blocked":
         return []
     actions_by_symbol = actions_by_symbol or {}
@@ -216,8 +219,12 @@ def generate_signals(bars_by_symbol, strategy_id, actions_by_symbol=None, *, all
                 score = bars[-22]["close"] / bars[-127]["close"] - 1
                 weekly.setdefault(current["date"], []).append((score, symbol, bars, reconstructed))
             else:
-                signal = _technical(strategy_id, symbol, bars, reconstructed)
+                signal = _technical(strategy_id, symbol, bars, reconstructed, s4_compression_max=variants[s4_variant])
                 if signal is not None:
+                    if s4_variant is not None:
+                        signal.update(strategy_id=s4_variant, parent_strategy_id='S4',
+                                      atr5_over_atr20_max=variants[s4_variant],
+                                      validation_status='result_informed_development_hypothesis')
                     signals.append(signal)
     for session in sorted(weekly):
         ranked = sorted(weekly[session], key=lambda value: (-value[0], value[1]))

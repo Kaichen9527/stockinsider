@@ -211,7 +211,10 @@ def _validate_inputs(bars_by_symbol, signals, sessions, start, end, actions, a):
                     raise ValueError('payment_before_entitlement')
 
 
-def simulate(bars_by_symbol, signals, sessions, *, start, end, actions_by_symbol=None, assumptions=None):
+def simulate(bars_by_symbol, signals, sessions, *, start, end, actions_by_symbol=None, assumptions=None,
+             dividend_availability='recorded'):
+    if dividend_availability not in ('recorded', 'payment_date_unknown', 'optimistic_next_session_preopen'):
+        raise ValueError('unregistered_dividend_availability')
     a = Assumptions() if assumptions is None else assumptions
     actions = {} if actions_by_symbol is None else actions_by_symbol
     _validate_inputs(bars_by_symbol, signals, sessions, start, end, actions, a)
@@ -234,6 +237,11 @@ def simulate(bars_by_symbol, signals, sessions, *, start, end, actions_by_symbol
     curve = [dict(date=prior_session, equity=cash, cash=cash, receivables=0., exposure=0.)]
     for session in active:
         sold_today = set()
+        if dividend_availability == 'optimistic_next_session_preopen':
+            # R4 optimistic bound only: cash is available BEFORE order reservation.
+            paid = sum(payments.pop(due) for due in sorted(list(payments)) if due <= session)
+            cash += paid
+            receivables -= paid
         # Freeze share quantities and reserve cash BEFORE seeing this opening.
         # Same-auction sale proceeds are not assumed available for new orders.
         order_cash, planned = cash, {}
@@ -270,7 +278,9 @@ def simulate(bars_by_symbol, signals, sessions, *, start, end, actions_by_symbol
                 pos['dividends'] += entitlement
                 pos['stop'] *= event['price_factor']
                 marks[symbol] *= event['price_factor']
-                payment = event.get('payment_date')
+                payment = (None if dividend_availability == 'payment_date_unknown' else
+                           next_session.get(session) if dividend_availability == 'optimistic_next_session_preopen' else
+                           event.get('payment_date'))
                 if payment:
                     if payment < session:
                         raise ValueError('payment_before_entitlement')
@@ -372,7 +382,7 @@ def simulate(bars_by_symbol, signals, sessions, *, start, end, actions_by_symbol
         market_value = sum(p['shares'] * marks[s] for s, p in positions.items())
         equity = cash + receivables + market_value
         curve.append(dict(date=session, equity=equity, cash=cash, receivables=receivables, exposure=market_value / equity if equity else 0))
-    return dict(execution_model='daily_auction_limit_proxy', assumptions=asdict(a),
+    result = dict(execution_model='daily_auction_limit_proxy', assumptions=asdict(a),
                 status='invalid_missing_marks' if problems else 'exploratory',
                 metrics=performance(curve, trades, costs, a), curve=curve, trades=trades, fills=fills,
                 skipped_orders=skips, unresolved=problems, open_positions=positions,
@@ -381,3 +391,7 @@ def simulate(bars_by_symbol, signals, sessions, *, start, end, actions_by_symbol
                              'Slippage is charged through adverse execution prices; reported separately, not deducted twice.',
                              'Unpaid dividend receivables remain non-spendable; terminal holdings are marked, not sold.',
                              'Official historical data reconstructed today, not an immutable historical PIT archive.'])
+    if dividend_availability != 'recorded':
+        result['dividend_availability_model'] = dividend_availability
+        result['limitations'].append('R4 hypothetical cash-availability path; not a factual dividend payment schedule or promotion evidence.')
+    return result
