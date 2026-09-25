@@ -42,7 +42,7 @@ export async function GET(request: Request) {
       instruments: async (ids, cutoff, offset, limit) => rows(await db.from('stock_instruments_v3')
         .select('instrument_authority_id,stock_id,symbol,exchange,instrument_type,listing_status,official_name,provider,source_timestamp,recorded_at,valid_from,valid_to')
         .in('stock_id', ids).lte('recorded_at', cutoff).lte('source_timestamp', cutoff).lte('valid_from', cutoff)
-        .or(`valid_to.is.null,valid_to.gt.${cutoff}`).order('instrument_authority_id')
+        .order('instrument_authority_id')
         .range(offset, offset + limit - 1).abortSignal(controller.signal)),
     };
     const result = await exportCandidateAudit(reader, runId, new Date().toISOString());

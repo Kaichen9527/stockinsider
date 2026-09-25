@@ -85,15 +85,21 @@ export function projectCandidateAudit(run: AuditRow, items: AuditRow[], details:
     if (!detail) reasons.push('immutable_revision_missing');
     else if (detail.stock_id !== item.stock_id || detail.research_run_id !== run.id || !Number.isFinite(at(detail.available_at))
       || at(detail.available_at) > at(run.finished_at) || !Number.isFinite(at(detail.as_of)) || at(detail.as_of) > at(run.finished_at)) reasons.push('immutable_revision_binding_invalid');
-    const eligible = instruments.filter((row) => row.stock_id === item.stock_id && row.symbol === item.symbol
-      && row.instrument_type === 'common_stock' && row.listing_status === 'active'
-      && ((row.exchange === 'TWSE' && row.provider === 'twse') || (row.exchange === 'TPEX' && row.provider === 'tpex'))
-      && [row.source_timestamp, row.recorded_at, row.valid_from].every((value) => Number.isFinite(at(value)) && at(value) <= at(cutoff))
-      && (row.valid_to === null || (Number.isFinite(at(row.valid_to)) && at(row.valid_to) > at(cutoff))));
-    const names = new Set(eligible.map((row) => `${row.exchange}:${row.official_name}`));
-    const instrument = [...eligible].sort((a, b) => at(b.recorded_at) - at(a.recorded_at) || at(b.source_timestamp) - at(a.source_timestamp)
-      || String(a.instrument_authority_id).localeCompare(String(b.instrument_authority_id)))[0];
-    if (!instrument || names.size !== 1 || typeof instrument.official_name !== 'string' || instrument.official_name.length < 2
+    // Resolve the latest authority FIRST. Filtering active/common-stock rows
+    // before this step could resurrect an older row after delisting/retyping.
+    const known = instruments.filter((row) => row.stock_id === item.stock_id
+      && [row.source_timestamp, row.recorded_at, row.valid_from].every((value) => Number.isFinite(at(value)) && at(value) <= at(cutoff)));
+    const instrument = [...known].sort((a, b) => at(b.recorded_at) - at(a.recorded_at) || at(b.source_timestamp) - at(a.source_timestamp)
+      || at(b.valid_from) - at(a.valid_from) || String(b.instrument_authority_id).localeCompare(String(a.instrument_authority_id)))[0];
+    const heads = instrument ? known.filter((row) => ['recorded_at', 'source_timestamp', 'valid_from']
+      .every((key) => at(row[key]) === at(instrument[key]))) : [];
+    const states = new Set(heads.map((row) => hash(Object.fromEntries(
+      ['symbol', 'exchange', 'official_name', 'provider', 'instrument_type', 'listing_status', 'valid_to'].map((key) => [key, row[key]])))));
+    if (!instrument || states.size !== 1 || instrument.symbol !== item.symbol
+      || instrument.instrument_type !== 'common_stock' || instrument.listing_status !== 'active'
+      || !((instrument.exchange === 'TWSE' && instrument.provider === 'twse') || (instrument.exchange === 'TPEX' && instrument.provider === 'tpex'))
+      || !(instrument.valid_to === null || (Number.isFinite(at(instrument.valid_to)) && at(instrument.valid_to) > at(cutoff)))
+      || typeof instrument.official_name !== 'string' || instrument.official_name.length < 2
       || instrument.official_name.length > 40 || /[\x00-\x1f\x7f]/u.test(instrument.official_name)) reasons.push('official_common_stock_identity_unverified_or_conflicting');
     if (item.status !== 'success') reasons.push('terminal_research_not_complete');
     const detailBound = detail && !reasons.some((reason) => reason.startsWith('immutable_revision'));

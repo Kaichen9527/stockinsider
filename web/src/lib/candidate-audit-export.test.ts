@@ -103,3 +103,25 @@ test('impossible or timezone-free dates do not acquire cutoff authority', () => 
     const f = fixture(); f.run.evaluation_at = value; assert.throws(() => project(f), /time/);
   }
 });
+
+test('a newer delisting, expiry, changed symbol or non-common type cannot resurrect the old active authority', () => {
+  for (const change of [{ listing_status: 'delisted' }, { instrument_type: 'etf' }, { valid_to: '2026-09-25T10:00:00Z' }, { symbol: '9999' }]) {
+    const f = fixture(); f.instruments.push({ ...f.instruments[0], instrument_authority_id: uuid(888),
+      recorded_at: '2026-09-25T09:00:00Z', ...change });
+    assert.equal(project(f).candidates[0].security_type, null);
+    assert.equal(project(f).candidates[0].name, null);
+  }
+});
+test('the newest valid rename is usable without treating a historical name as a current conflict', () => {
+  const f = fixture(); f.instruments.push({ ...f.instruments[0], instrument_authority_id: uuid(889),
+    recorded_at: '2026-09-25T09:00:00Z', official_name: '新版名稱' });
+  assert.equal(project(f).candidates[0].name, '新版名稱');
+});
+test('same-time authority state conflicts fail even when the common-stock row would otherwise pass', () => {
+  const f = fixture(); f.instruments.push({ ...f.instruments[0], instrument_authority_id: uuid(890), listing_status: 'delisted' });
+  assert.equal(project(f).candidates[0].security_type, null);
+});
+test('the database query must retain expired authority heads for resolution', () => {
+  const source = readFileSync(new URL('../app/api/internal/candidate-audit-export/route.ts', import.meta.url), 'utf8');
+  assert.doesNotMatch(source, /valid_to\.gt/u);
+});
