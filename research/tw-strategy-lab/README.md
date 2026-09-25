@@ -107,6 +107,14 @@ S3 的 36 筆 baseline 完成交易中，單筆淨報酬中位數為 **-1.96%**�
 
 正式 R2 決策仍被單一股票集中度定義阻擋：以正獲利交易按股票加總，8069 占 **64.87%**；若先把同股票虧損互抵再除以全體正獲利，則為 **31.51%**，會導致相反 gate 結果。另 R4 的十條路徑未說明是否只跑 baseline（若三個情境全跑應為三十條），也未固定次日股息是在開盤下單前或後可用；R1 的 bit-for-bit 比較欄位亦未完整列舉。故 R1–R4 均未授權執行，需另建有新雜湊的修訂案再審。
 
+### 2026-09-25 robustness-v2.1 契約修訂
+
+新檔 `proposals/robustness-study-v2.1.json` 沒有改寫 v2；SHA256 為 `4379960b4d1406bee97fcf54fa0f99e832abdefa1ed9a5111d04f2d25748270a`，狀態為 `review_candidate_not_executed`。`proposals/robustness-study-v2.1-validation.json` 的 42 項結構斷言全數通過，但這只是契約完整性，不是回測或獨立審查證據。
+
+R1 固定五策略乘三情境共 15 次重播，完整舊 result object、原 signal rows 與六欄 ledger projection 必須 canonical equal；新增計數只能放在分離的報表物件。R2 明定 concentration 只加總各股票的正 `net_pnl`，不以同股虧損互抵，並固定零勝／零損處理。R3 仍是 0.70／0.75 乘三情境的六個結果知情假說。R4 明定只跑 baseline，五策略乘兩路徑為十條；樂觀路徑在次一交易日開盤下單 sizing 前釋放現金。
+
+完整執行需 15 + 6 + 10 = **31 條新模擬路徑**；R2 只讀兩份登錄診斷資料、不新增模擬。現仍缺另一位審查者接受精確 v2.1 雜湊，以及 dataset hash `a89bf8e5cbcfc464463a53c29f1f5f68f6419d72f2a06befcaeb008e3cff5cca` 對應的 exact normalized inputs，故 execute 仍為 false；不能執行 S4v2、發文、合併或部署。
+
 2026-09-25 01:12 UTC 的實際狀態：Chat 執行環境以 network policy 中止 TWSE 連線，下載已停止，留有 155/684 個基礎來源及 5 個詳表；本地 continuation 已停止，不能再描述為仍在背景下載。`sources/local-acquisition-checkpoint.json` 記錄此阻擋。
 
 新增 `.github/workflows/tw-strategy-lab.yml` 使用 GitHub 的隔離研究 job，以唯讀權限、精確 PR head、90 分鐘上限執行同一份測試／bounded acquisition／固定研究。它是額外研究工作，不是現有 protected gate，也不授權 merge／部署；沒有正式 secrets、SSH、資料庫寫入或自動推送。只保存衍生研究結果與來源 manifest，不公開完整原始快取。需以實際 workflow run／artifact 確認是否成功，不能僅憑 YAML 存在宣稱已跑完。

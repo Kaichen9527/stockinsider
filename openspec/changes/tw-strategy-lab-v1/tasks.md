@@ -78,6 +78,17 @@ No high/blocker defect was demonstrated, so run 36081668572 is not invalidated o
 - [x] Block R4 until its execution-scenario cardinality and next-session cash-release ordering are exact; require an R1 canonical equality projection and metric edge-case rules.
 
 No robustness-v2 trial is authorized or executed. S3 remains exploratory even without resolving the ambiguous gate because two deterministic gates already fail. Next bounded work is to draft a separately hashed amendment for review or continue an independent low-level engine/source audit; do not run S4v2 or the dividend paths from the current proposal.
+
+## Robustness-v2.1 amendment checkpoint — 2026-09-25 06:48 UTC
+
+- [x] Preserve v2 and its failed review; create a separately identified v2.1 candidate with SHA256 `4379960b4d1406bee97fcf54fa0f99e832abdefa1ed9a5111d04f2d25748270a`.
+- [x] Define exact R1 equality projections and the only allowed run-identity/reporting differences.
+- [x] Define R2 formulas and all empty/zero edge cases; use positive-profit-by-symbol without loss netting.
+- [x] Freeze R3 at two thresholds across three scenarios, with no development-winner selection.
+- [x] Freeze R4 at baseline only and ten paths; release the optimistic bound before next-session pre-open sizing.
+- [x] Validate 42 contract assertions and reconcile 31 new simulation paths plus two no-simulation diagnostic datasets.
+
+Execution remains false. The next step is review by someone other than the proposal author against this exact hash and restoration of the exact normalized inputs in an isolated runner. Do not treat structural completeness as permission to run, open holdout, publish, merge or deploy.
 - [ ] At the deadline, record completed/blocked work, exact artifact identities and next steps; holdout stays locked. (LAB-02, LAB-10)
 
 ## Operational work deferred to the final phase
