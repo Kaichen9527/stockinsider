@@ -1,0 +1,35 @@
+{
+  "schema_version": "tw-strategy-lab-remote-source-transport-repair-v1",
+  "validation_status": "repair_precondition_verified",
+  "failed_checks": {
+    "product_runtime_run_id": 36115793913,
+    "code_gate_run_id": 36115791000,
+    "error": "web/src/lib/research-v2.ts(1,1): error TS1490: File appears to be binary"
+  },
+  "corrupt_remote_blob": {
+    "commit": "7810eae66561f100d77ae180d5fb852472fb7514",
+    "path": "web/src/lib/research-v2.ts",
+    "git_blob_sha": "f11642231664b5f6f4968e5cda0cb8d5fd5bf482",
+    "bytes": 180061,
+    "utf8_fetchable": false
+  },
+  "intended_local_blob": {
+    "git_blob_sha": "bf1654ba05aa5728b47cbc2a9455df7f98d390c2",
+    "sha256": "d68e27cd4ea5f4242a2f86db1d0b071783040bdd44fdee1439b994e506123822",
+    "bytes": 280941,
+    "prefix_hex": "696d706f72742066732066726f6d202766732f70726f6d69736573273b0a696d"
+  },
+  "classification": {
+    "cause": "remote_blob_transport_truncation_or_encoding_error",
+    "strategy_logic_changed": false,
+    "development_results_invalidated": false,
+    "requires_new_commit_and_checks": true,
+    "protected_review_evidence_missing_separately": true
+  },
+  "scope_limits": {
+    "production_database_touched": false,
+    "deployment_performed": false,
+    "holdout_2024_plus_accessed": false,
+    "formal_articles_updated": 0
+  }
+}

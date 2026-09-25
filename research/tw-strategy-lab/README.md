@@ -131,6 +131,12 @@ UBS／2454 仍為 metadata-only、usable feature 0，S7 仍 blocked；第一輪�
 
 這仍不是正式全量驗收：本輪沒有讀寫正式資料庫、沒有跑 guarded pipeline、沒有發布文章。既有 40 份 blocked 預覽與正式更新 **0 篇**均不變；完整 authoritative snapshot 和其餘舊公開候選仍缺。
 
+### 2026-09-25 GitHub 遠端 source transport 修復
+
+PR head `7810eae66561f100d77ae180d5fb852472fb7514` 的 product-runtime check 在 TypeScript 起點失敗：GitHub 上的 `web/src/lib/research-v2.ts` 被判定為 binary。`results/remote-source-transport-repair-2026-09-25.json` 與 `.agent/reports/2026-09-25T0948-remote-source-transport-repair.md` 核對到遠端 blob 只有 180,061 bytes、無法 UTF-8 讀取；本地已通過上一輪 typecheck/build 的正確檔案為 280,941 bytes，Git blob `bf1654ba05aa5728b47cbc2a9455df7f98d390c2`。
+
+這是遠端傳輸損壞，不是策略或研究資料缺陷。修復必須以新 commit 上傳精確本地 bytes，保留 run `36115793913`／`36115791000` 的失敗紀錄並等待新 checks。Requirements／Architecture／Exact-review 另因最新 head 缺獨立 review branch 而失敗；不得用本修復假冒審查證據。
+
 2026-09-25 01:12 UTC 的實際狀態：Chat 執行環境以 network policy 中止 TWSE 連線，下載已停止，留有 155/684 個基礎來源及 5 個詳表；本地 continuation 已停止，不能再描述為仍在背景下載。`sources/local-acquisition-checkpoint.json` 記錄此阻擋。
 
 新增 `.github/workflows/tw-strategy-lab.yml` 使用 GitHub 的隔離研究 job，以唯讀權限、精確 PR head、90 分鐘上限執行同一份測試／bounded acquisition／固定研究。它是額外研究工作，不是現有 protected gate，也不授權 merge／部署；沒有正式 secrets、SSH、資料庫寫入或自動推送。只保存衍生研究結果與來源 manifest，不公開完整原始快取。需以實際 workflow run／artifact 確認是否成功，不能僅憑 YAML 存在宣稱已跑完。
