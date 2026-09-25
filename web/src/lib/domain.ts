@@ -22006,21 +22006,26 @@ export async function runPipelineFlow(options?: { dryRun?: boolean; skipIngestio
       ...(options?.historicalResearchOnly ? { skipped: true, reason: 'historical_research_only', researchSession: options.researchSession } : {}) };
     const shadowObservation = null; // Legacy response field; global Shadow is retired.
     if (!dryRun && !options?.historicalResearchOnly) {
+      const radarPayload = await executeStep('radar_payload_build', async () => getDailyRadarData());
+      const publicationScreenedSymbols = screenedCandidateSymbols(radarPayload);
+      const requiredPublishedSymbols = publicationScreenedSymbols
+        .filter((symbol) => !candidateResearch.excludedScreenedSymbols.includes(symbol));
       const stages = await executeStep('candidate_stage_projection', async () => loadCandidateStageCards({
         sourceCutoff: candidateResearch.sourceCutoff || undefined,
+        requiredSymbols: requiredPublishedSymbols,
       }));
       await executeStep('candidate_trade_plan_publication_coverage', async () => {
         if (!candidateResearch.tradePlanCoverage) throw new Error('candidate_trade_plan_coverage_missing');
         const coverage = reconcilePublishedCandidateTradePlanCoverage({ coverage: candidateResearch.tradePlanCoverage,
           cards: [...stages.found, ...stages.waiting, ...stages.actionable].filter((card) => card.market === 'TW' && /^\d{4}$/u.test(card.symbol)
-            && !candidateResearch.excludedScreenedSymbols.includes(card.symbol)) });
+            && !candidateResearch.excludedScreenedSymbols.includes(card.symbol)),
+          requiredSymbols: requiredPublishedSymbols });
         if (!coverage.complete) throw new Error('candidate_trade_plan_publication_coverage_incomplete');
         return coverage;
       });
-      const radarPayload = await executeStep('radar_payload_build', async () => getDailyRadarData());
       const accountedSymbols = new Set([...(candidateResearch.tradePlanCoverage?.records.map((row) => row.symbol) || []),
         ...candidateResearch.excludedScreenedSymbols]);
-      if (screenedCandidateSymbols(radarPayload).some((symbol) => !accountedSymbols.has(symbol))) {
+      if (publicationScreenedSymbols.some((symbol) => !accountedSymbols.has(symbol))) {
         throw new Error('candidate_screened_roster_changed_before_publication');
       }
       await executeStep('active_source_health', async () => loadActiveCandidateSourceErrors());

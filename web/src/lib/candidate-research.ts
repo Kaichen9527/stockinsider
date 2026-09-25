@@ -2094,10 +2094,15 @@ export async function runCandidateResearchCycle(options: {
   }
 }
 
-export async function loadCandidateStageCards(options: { sourceCutoff?: string } = {}): Promise<{ found: CandidateStageCard[]; waiting: CandidateStageCard[]; actionable: CandidateStageCard[] }> {
+export async function loadCandidateStageCards(options: { sourceCutoff?: string; requiredSymbols?: string[] } = {}): Promise<{ found: CandidateStageCard[]; waiting: CandidateStageCard[]; actionable: CandidateStageCard[] }> {
   const supabase = getSupabaseServerClient();
   const sourceCutoff = options.sourceCutoff || new Date().toISOString();
   if (!Number.isFinite(Date.parse(sourceCutoff))) throw new Error('candidate_publication_source_cutoff_invalid');
+  const requiredSymbols = new Set(options.requiredSymbols ?? []);
+  if (requiredSymbols.size !== (options.requiredSymbols?.length ?? 0)
+    || [...requiredSymbols].some((value) => !/^\d{4}$/u.test(value)) || requiredSymbols.size > 5000) {
+    throw new Error('candidate_publication_required_roster_invalid');
+  }
   const cutoff = new Date(Date.parse(sourceCutoff) - 7 * 86_400_000).toISOString();
   const mentionSelect = 'stock_id,platform,source_name,author_name,source_url,stance,independent_content_hash,mentioned_at,available_at,publisher_key,publisher_name,provenance,stocks(id,symbol,name,market,sector)';
   const latest = (rows: Row[]) => {
@@ -2132,7 +2137,14 @@ export async function loadCandidateStageCards(options: { sourceCutoff?: string }
   const recentStockIds = [...new Set(recentMentions.map((row) => String(row.stock_id || '')).filter(Boolean))];
   const stageByStock = latest(stageRows);
   const persistedStockIds = [...stageByStock.entries()].filter(([, stage]) => ['waiting', 'actionable'].includes(String(stage.lifecycle_stage))).map(([stockId]) => stockId);
-  const stockIds = [...new Set([...recentStockIds, ...persistedStockIds])];
+  // A current screened hit can be a found-stage candidate without a recent
+  // source mention. It still needs a public card and exact saved revision so
+  // the all-screened publication contract cannot silently omit it.
+  const requiredStockIds = [...stageByStock.entries()].flatMap(([stockId, stage]) => {
+    const stock = rowRelation(stage.stocks);
+    return stock && requiredSymbols.has(String(stock.symbol || '')) ? [stockId] : [];
+  });
+  const stockIds = [...new Set([...recentStockIds, ...persistedStockIds, ...requiredStockIds])];
   if (stockIds.length === 0) return { found: [], waiting: [], actionable: [] };
   const detailIds = [...new Set(stockIds.flatMap((stockId) => {
     const id = stageByStock.get(stockId)?.detail_revision_id;
@@ -2277,8 +2289,9 @@ export async function loadCandidateStageCards(options: { sourceCutoff?: string }
       || b.scores.research - a.scores.research,
   );
   const allCards = [...cardsByStock.values()];
+  const foundStockIds = [...new Set([...recentStockIds, ...requiredStockIds])];
   return {
-    found: sortFound(recentStockIds.flatMap((stockId) => cardsByStock.get(stockId) ? [cardsByStock.get(stockId)!] : [])),
+    found: sortFound(foundStockIds.flatMap((stockId) => cardsByStock.get(stockId) ? [cardsByStock.get(stockId)!] : [])),
     waiting: sortWaiting(allCards.filter((card) => card.lifecycleStage === 'waiting')),
     actionable: sortActionable(allCards.filter((card) => card.lifecycleStage === 'actionable' && !card.stale)),
   };

@@ -123,6 +123,14 @@ R1 固定五策略乘三情境共 15 次重播，完整舊 result object、原 s
 
 UBS／2454 仍為 metadata-only、usable feature 0，S7 仍 blocked；第一輪價格策略 run 未使用券商因子，故不失效。本修復尚未部署或改正式資料。未來經審查部署後仍須以 guarded pipeline 重建 snapshots，且沒有獨立 factor-use grant 的舊資料繼續不得計分。
 
+### 2026-09-25 當前篩選標的發布完整性修復
+
+`results/screened-publication-coverage-fix-2026-09-25.json` 與 `.agent/reports/2026-09-25T0850-screened-publication-coverage-fix.md` 記錄一項高嚴重度缺口。舊流程雖將當前篩選標的納入研究 ledger，發布核對卻只檢查已存在的 stage cards；只由篩選命中、沒有近期來源提及的 found 標的可能沒有公開卡片，仍不會形成 mismatch。
+
+修正後，當前篩選名單在排除 cutoff 官方普通股 master 之外的代碼後，會成為發布必需名單；stage projection 必須為每檔帶出卡片，且 publication gate 必須逐檔核對同輪 saved revision 與 compact trade-plan summary。缺卡、名單無效／重複、未進研究 roster、舊 revision 或摘要漂移均 fail closed。專項測試 **17/17**、TypeScript 與 Next production build（91 pages）通過。
+
+這仍不是正式全量驗收：本輪沒有讀寫正式資料庫、沒有跑 guarded pipeline、沒有發布文章。既有 40 份 blocked 預覽與正式更新 **0 篇**均不變；完整 authoritative snapshot 和其餘舊公開候選仍缺。
+
 2026-09-25 01:12 UTC 的實際狀態：Chat 執行環境以 network policy 中止 TWSE 連線，下載已停止，留有 155/684 個基礎來源及 5 個詳表；本地 continuation 已停止，不能再描述為仍在背景下載。`sources/local-acquisition-checkpoint.json` 記錄此阻擋。
 
 新增 `.github/workflows/tw-strategy-lab.yml` 使用 GitHub 的隔離研究 job，以唯讀權限、精確 PR head、90 分鐘上限執行同一份測試／bounded acquisition／固定研究。它是額外研究工作，不是現有 protected gate，也不授權 merge／部署；沒有正式 secrets、SSH、資料庫寫入或自動推送。只保存衍生研究結果與來源 manifest，不公開完整原始快取。需以實際 workflow run／artifact 確認是否成功，不能僅憑 YAML 存在宣稱已跑完。

@@ -1,0 +1,35 @@
+{
+  "schema_version": "tw-strategy-lab-screened-publication-coverage-fix-v1",
+  "validation_status": "code_fix_not_deployed",
+  "finding": {
+    "severity": "high",
+    "old_behavior": "A screened-only Taiwan symbol could be conserved in the research ledger but omitted from public stage cards when it had no recent source mention. Publication checked only cards that already existed, so the missing card was not itself a mismatch.",
+    "impact": "The pipeline could report complete research coverage without producing a same-run public card/article surface for every current screened symbol.",
+    "historical_article_count_changed": false
+  },
+  "fix": {
+    "required_roster": "current screened symbols intersected with the cutoff active official Taiwan common-stock roster",
+    "stage_projection": "includes required screened symbols even when they have no recent source mention",
+    "publication_gate": "requires at least one exact same-run card for every required screened symbol",
+    "fail_closed_reasons": [
+      "required_screened_card_missing",
+      "required_screened_symbol_not_in_research_roster",
+      "required_screened_symbol_invalid",
+      "required_screened_symbol_duplicate"
+    ]
+  },
+  "verification": {
+    "targeted_node_tests": { "passed": 17, "failed": 0 },
+    "new_regression_tests": 2,
+    "typescript": "passed",
+    "production_build": { "status": "passed", "pages": 91 }
+  },
+  "scope_limits": {
+    "production_database_read": false,
+    "production_database_write": false,
+    "formal_articles_updated": 0,
+    "deployment_performed": false,
+    "holdout_2024_plus_accessed": false,
+    "existing_preview_coverage": "40 blocked previews from an incomplete stale public snapshot; unchanged"
+  }
+}
