@@ -65,6 +65,18 @@ Snapshot 必须有 revision、帶時區的 as_of、complete、expected_count、c
 
 ## 後續 Chat 接續檢查點
 
+### 最新：2026-09-25 第一輪 CI 成果已核對
+
+研究 run `36081668572` 已於 `2026-09-25T01:35:22Z` 完成；執行 source 仍為 `e1fb505a894105e05fb08aa28fd0fb8ad8e520fa`，不是本次成果匯入 commit。原始衍生檔完整保留於 `results/github-36081668572-1/`，核對收據為 `results/github-36081668572-1-audit.json`；詳細解讀見 `.agent/reports/2026-09-25T0148-tw-strategy-ci-review.md`。
+
+684/684 基礎來源與 5 份詳表取得，不代表八檔都可回測。完整 cash-only 子樣本為 **1216、2330、5347、6488、8069**；2317、2603、2882 因公司行動／交易日缺口排除。十五個固定情境均執行，另保留 S5/S7 blocked；S4 三情境零訊號、零交易。沒有新增參數、改 freeze、開啟 2024+ 或重跑下載。
+
+基準淨年化：S1 **0.02%**、S2 **-1.03%**、S3 **1.23%**、S4 **0.00%（零交易）**、S6 **-0.10%**。同樣本買入持有參考為 **13.83%**，但曝險不相等，不能宣稱 alpha。這不是已找到「好策略」；下輪優先審查零訊號、成交拒絕與資料缺口，不用事後調參製造目標報酬。
+
+`results/public-article-preview-2026-09-25-v3/` 將實際結果接到原來 40 檔舊公開候選，逐股七策略 terminal 與稿件雜湊核對完成。只有 2330、5347、6488 與研究 panel 重疊；40 篇仍全為 blocked，正式文章更新 **0**。舊 v1/v2 均保留。完整 authoritative snapshot、逐股 authority、其餘 156 個舊公開卡片及當前全候選仍未取得。
+
+此核對只獨立重算衍生曲線與 fills；CI 未保存原始／normalized CSV，因此 manifest hash 可核對，但不能聲稱本地重新驗證其原始位元組或完整重播資料。後續可先完成獨立來源／引擎審查；不要把此收據當成 exact-review attestation 或部署許可。以下是保留的歷史起始紀錄。
+
 2026-09-25 01:12 UTC 的實際狀態：Chat 執行環境以 network policy 中止 TWSE 連線，下載已停止，留有 155/684 個基礎來源及 5 個詳表；本地 continuation 已停止，不能再描述為仍在背景下載。`sources/local-acquisition-checkpoint.json` 記錄此阻擋。
 
 新增 `.github/workflows/tw-strategy-lab.yml` 使用 GitHub 的隔離研究 job，以唯讀權限、精確 PR head、90 分鐘上限執行同一份測試／bounded acquisition／固定研究。它是額外研究工作，不是現有 protected gate，也不授權 merge／部署；沒有正式 secrets、SSH、資料庫寫入或自動推送。只保存衍生研究結果與來源 manifest，不公開完整原始快取。需以實際 workflow run／artifact 確認是否成功，不能僅憑 YAML 存在宣稱已跑完。

@@ -15,12 +15,12 @@ This is a task ledger, not test or gate evidence. Check an item only after recor
 
 ## Data and engine
 
-- [ ] Finish bounded 2018–2023 official-data acquisition with source manifests and coverage/exclusion counts. (LAB-04, LAB-11)
+- [x] Finish bounded 2018–2023 official-data acquisition with source manifests and coverage/exclusion counts. CI run 36081668572: 684/684 base + 5 details; only five cash-only stocks eligible. Original derived evidence and scope-limited audit imported without rewriting source identity. (LAB-04, LAB-11)
 - [x] Verify 2018 warmup handling and hard rejection of 2024+ inputs. (LAB-02)
 - [x] Implement and test deterministic cash/position engine, next-session orders, gap/ambiguity handling and exit timing. (LAB-03, LAB-05)
 - [x] Implement and test fees, sell tax, slippage, cash conservation, net metrics and same-filled-share cost-addback diagnostics and zero-trade cases. (LAB-06)
 - [x] Implement S1/S2/S3/S4/S6 and retain S5/S7 as blocked without invented events. (LAB-01, LAB-04, LAB-08)
-- [ ] Execute the five price configurations in three fixed execution scenarios (15 registered development runs) and retain descriptive half-year windows, all attempts, failures and exclusions. These are not OOS folds. (LAB-03, LAB-07, LAB-08)
+- [x] Execute the five price configurations in three fixed execution scenarios (15 registered development runs) and retain descriptive half-year windows, all attempts, failures and exclusions. Run a9123545831d8ee1a39b231c has 15 exploratory records plus two blocked event hypotheses; S4 has zero trades. These are not OOS folds. (LAB-03, LAB-07, LAB-08)
 
 ## Drafts and review
 
@@ -29,7 +29,15 @@ This is a task ledger, not test or gate evidence. Check an item only after recor
 - [x] Produce exactly one blocked article and dry-run queue entry for each of the 40 actual supplied public observations; retain the missing-export blocker. The other 156 entries counted by the old public snapshot and the complete current App roster remain unobserved. (LAB-09, LAB-10)
 - [ ] Review engine, data assumptions, full trial ledger and draft coverage independently; resolve all high/blocker findings. (LAB-04–LAB-11)
 - [x] Run focused tests, relevant regressions and `cd web && npm run build`; record actual results and any unresolved environment failures. (LAB-12)
-- [ ] Produce a development-only research report with all seven hypotheses, survivor bias, adjustment/PIT limitations, missing event history and no profitability guarantee. (LAB-08, LAB-11)
+- [x] Produce a development-only research report with all seven hypotheses, survivor bias, adjustment/PIT limitations, missing event history and no profitability guarantee. See results/github-36081668572-1/report.md and .agent/reports/2026-09-25T0148-tw-strategy-ci-review.md. (LAB-08, LAB-11)
+
+## First CI evidence checkpoint — 2026-09-25 01:48 UTC
+
+The earlier in-progress/never-computed status below is historical. Run 36081668572 completed successfully at 01:35:22 UTC, but research remains exploratory, not approved for trading. Exact code/registry/archive/manifest identities and all 18 strategy/reference outputs were checked; original normalized CSVs were not included in the artifact, so raw-data replay remains unverified. No engine or parameter changes were made. Full independent component review remains unchecked above.
+
+Article v3 consumes actual results and the same incomplete 40-row observation. All 40 drafts remain blocked; 40 queue entries are non-executable, hashes match, seven terminal rows are present per draft, and production updates remain zero. Three observed symbols overlap the research panel; no portfolio performance was imputed to individual stocks.
+
+Next bounded work: inspect S4 zero-signal mechanics and recorded rejection reasons without changing thresholds; review source/corporate-action evidence; determine a rights-safe reproducibility path for normalized data if needed. New actual code repairs require new commit/run and old evidence retained. No duplicate research download was launched by this evidence-only checkpoint.
 - [ ] At the deadline, record completed/blocked work, exact artifact identities and next steps; holdout stays locked. (LAB-02, LAB-10)
 
 ## Operational work deferred to the final phase
