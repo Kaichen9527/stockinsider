@@ -77,6 +77,14 @@ Snapshot 必须有 revision、帶時區的 as_of、complete、expected_count、c
 
 此核對只獨立重算衍生曲線與 fills；CI 未保存原始／normalized CSV，因此 manifest hash 可核對，但不能聲稱本地重新驗證其原始位元組或完整重播資料。後續可先完成獨立來源／引擎審查；不要把此收據當成 exact-review attestation 或部署許可。以下是保留的歷史起始紀錄。
 
+### 2026-09-25 訊號與成交漏斗診斷
+
+`results/github-36081668572-1-diagnostics.json` 與 `.agent/reports/2026-09-25T0250-tw-strategy-signal-diagnostics.md` 保留第二個有界迭代。沒有新回測或參數變更。
+
+S1/S2 原始 signal count 含不可下單的 `avoid_chase`，實際可下單為 76/162，不是 146/225；引擎只處理 eligible，績效未受影響，但報表語意需在未來新 runner 修正。S3 的 170 次可下單中 101 次因已有持倉而略過；正報酬高度集中於一筆 8069 大贏家。S6 勝率 60% 仍因平均虧損幅度而呈負總報酬。
+
+使用已保存的 155/684 checkpoint、未新增連線，檢查 1216/2330 的 2019 全年與 5347 至 2019-11-29：704 個有效視窗中，S4 的凍結 ATR5/ATR20 ≤0.60 壓縮門通過 0；最低值約 0.656，所有其他門都通過的最近候選約 0.731。程式、registry 與合成測試一致，尚無程式缺陷證據。任何放寬都是新假說，必須另開 registry／run，不能覆寫本次零訊號結果。
+
 2026-09-25 01:12 UTC 的實際狀態：Chat 執行環境以 network policy 中止 TWSE 連線，下載已停止，留有 155/684 個基礎來源及 5 個詳表；本地 continuation 已停止，不能再描述為仍在背景下載。`sources/local-acquisition-checkpoint.json` 記錄此阻擋。
 
 新增 `.github/workflows/tw-strategy-lab.yml` 使用 GitHub 的隔離研究 job，以唯讀權限、精確 PR head、90 分鐘上限執行同一份測試／bounded acquisition／固定研究。它是額外研究工作，不是現有 protected gate，也不授權 merge／部署；沒有正式 secrets、SSH、資料庫寫入或自動推送。只保存衍生研究結果與來源 manifest，不公開完整原始快取。需以實際 workflow run／artifact 確認是否成功，不能僅憑 YAML 存在宣稱已跑完。

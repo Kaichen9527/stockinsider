@@ -38,6 +38,15 @@ The earlier in-progress/never-computed status below is historical. Run 360816685
 Article v3 consumes actual results and the same incomplete 40-row observation. All 40 drafts remain blocked; 40 queue entries are non-executable, hashes match, seven terminal rows are present per draft, and production updates remain zero. Three observed symbols overlap the research panel; no portfolio performance was imputed to individual stocks.
 
 Next bounded work: inspect S4 zero-signal mechanics and recorded rejection reasons without changing thresholds; review source/corporate-action evidence; determine a rights-safe reproducibility path for normalized data if needed. New actual code repairs require new commit/run and old evidence retained. No duplicate research download was launched by this evidence-only checkpoint.
+
+## Signal and execution diagnostic checkpoint — 2026-09-25 02:50 UTC
+
+- [x] Reconcile raw confirmations, executable signals, baseline fills, completed trades, open positions and skip reasons for S1/S2/S3/S4/S6 without rerunning the study.
+- [x] Diagnose S4 against the preserved partial local checkpoint without network retries. Its preregistered compression gate passed 0/704 inspected basic-valid windows; no wiring defect was demonstrated.
+- [x] Record trade distribution and concentration: S3's largest 8069 winner supplied 42.2% of realized gross profit; S6's 60% win rate still had negative average trade return.
+- [x] Identify a medium reporting ambiguity: `signal_count` combines eligible and avoid-chase confirmations for S1/S2. Simulation remains correct; a future output-schema repair requires a new commit and new run.
+
+Next bounded work is source/corporate-action review and a preregistered proposal for a genuinely new robustness experiment. Do not execute new parameters until its finite registry, multiplicity accounting and review rules are committed. Full normalized CI inputs are unavailable in the artifact; do not claim full gate-level replay from the partial checkpoint.
 - [ ] At the deadline, record completed/blocked work, exact artifact identities and next steps; holdout stays locked. (LAB-02, LAB-10)
 
 ## Operational work deferred to the final phase
