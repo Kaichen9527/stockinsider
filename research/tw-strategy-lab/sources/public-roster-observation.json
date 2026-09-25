@@ -1,0 +1,561 @@
+{
+  "as_of": "2026-09-25T01:11:48.109557+00:00",
+  "authoritative_snapshot_available": false,
+  "blockers": [
+    "authoritative_candidate_snapshot_not_available",
+    "observed_public_snapshot_stale_readonly",
+    "public_card_security_master_authority_not_supplied",
+    "historical_research_does_not_verify_current_entry_points",
+    "one_or_more_public_surface_reads_unavailable"
+  ],
+  "candidates": [
+    {
+      "name": "富喬",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "a31524f0-2695-4e07-a466-6bc8e1d0ae73",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "1815"
+    },
+    {
+      "name": "聯電",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "d64cb7cf-f8e2-45a9-a8a3-c95ef0ee4396",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "2303"
+    },
+    {
+      "name": "台達電",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "916fcd0c-efe1-4dc9-912a-4611c047a708",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "2308"
+    },
+    {
+      "name": "國巨*",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "ea072724-c6bf-452b-9a21-d38bb53aa466",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "2327"
+    },
+    {
+      "name": "台積電",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "8bda2492-e680-4d94-9dc5-d4d64c9100be",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "2330"
+    },
+    {
+      "name": "旺宏",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "666ffe60-c655-4cc9-8b19-769dcfb86da4",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "2337"
+    },
+    {
+      "name": "華邦電",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "08c11744-045f-443f-b529-0e8b5275f2eb",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "2344"
+    },
+    {
+      "name": "智邦",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "7452f32c-bcff-4677-bd32-568a297f9c64",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "2345"
+    },
+    {
+      "name": "金像電",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "1e747a47-0668-40b4-9cb7-66a788dcdabc",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "2368"
+    },
+    {
+      "name": "台光電",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "a5066a89-dd70-484f-874c-c4479db95d06",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "2383"
+    },
+    {
+      "name": "南亞科",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "c7a6505a-582c-4923-859c-08343b2e41fe",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "2408"
+    },
+    {
+      "name": "友達",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "7adffb07-704c-4f9a-a8fb-f43681e58871",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "2409"
+    },
+    {
+      "name": "創見",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "44fbc392-c369-469f-a22f-c013aa1894a6",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "2451"
+    },
+    {
+      "name": "聯發科",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "e8ec8dd9-02db-4885-b348-a087f6938240",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "2454"
+    },
+    {
+      "name": "華新科",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "c7ed5704-ffb6-4be5-83fb-d4ef10383afd",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "2492"
+    },
+    {
+      "name": "禾伸堂",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "25a11db1-3a68-4ded-b7f0-ea522ca7fad6",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "3026"
+    },
+    {
+      "name": "智原",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "b0402ac5-06fb-4c09-b70b-ab8dc47be37c",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "3035"
+    },
+    {
+      "name": "欣興",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "ac4cb26c-67a5-4a5b-934b-998599741b81",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "3037"
+    },
+    {
+      "name": "景碩",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "8962d7c8-ea01-45c7-b2a4-93474110fffe",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "3189"
+    },
+    {
+      "name": "精材",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "2ef9c083-a028-46a5-a51d-389ab1d3da16",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "3374"
+    },
+    {
+      "name": "創意",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "cf668b67-ec75-4ed6-baee-191ee1813ef7",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "3443"
+    },
+    {
+      "name": "世芯-KY",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "ad649f4c-e3f1-4362-9349-96b040e178fe",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "3661"
+    },
+    {
+      "name": "日月光投控",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "59747ba3-f3a3-4c4f-9e82-a9cd5ef7d619",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "3711"
+    },
+    {
+      "name": "華星光",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "b521ab67-00fe-4843-8c24-7d32e596460f",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "4979"
+    },
+    {
+      "name": "信驊",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "00a0becb-8b59-469f-ba4d-12cada385b98",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "5274"
+    },
+    {
+      "name": "世界",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "b91fac2b-5368-46b3-a025-b6ab0eab1c2d",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "5347"
+    },
+    {
+      "name": "中美晶",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "63b12275-6695-4c57-a0bf-7014724a6300",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "5483"
+    },
+    {
+      "name": "聯茂",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "cc90c05f-a523-4306-bf76-a9c361948436",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "6213"
+    },
+    {
+      "name": "旺矽",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "f0b10068-85ca-4566-b624-03a60c092301",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "6223"
+    },
+    {
+      "name": "台燿",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "c2240457-3f97-4cdf-be7c-207be321ff4b",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "6274"
+    },
+    {
+      "name": "環球晶",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "62d4e4b4-b9b9-4824-be59-8f9717e29498",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "6488"
+    },
+    {
+      "name": "精測",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "58c22bf1-7d4f-4648-90ff-a9e45dd1cc20",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "6510"
+    },
+    {
+      "name": "穎崴",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "838815fe-3c7d-4b4e-b494-48515a7840bb",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "6515"
+    },
+    {
+      "name": "緯穎",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "d4521aaf-b56f-410a-a54c-2b73e57ece0a",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "6669"
+    },
+    {
+      "name": "鴻勁",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "a61fc196-9ed8-40aa-ae40-30b9fd5d2929",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "7769"
+    },
+    {
+      "name": "創新服務",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "565aaa4f-06c9-4a85-bcf9-55e466b77b40",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "7828"
+    },
+    {
+      "name": "台虹",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "e293d4ce-6b03-40bb-88b4-cc7ec1b18f0b",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "8039"
+    },
+    {
+      "name": "南電",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "46df0b6d-bea9-4ca3-906a-ceb4835d4229",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "8046"
+    },
+    {
+      "name": "群聯",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "b6fb773e-03c0-42c2-92b0-614e42c69500",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "8299"
+    },
+    {
+      "name": "金居",
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_surfaces": [
+        "stages.found"
+      ],
+      "revision": "cba08b51-2c7f-424a-809b-c8028dfd86f8",
+      "revision_scope": "public_card_detail_revision_only_not_verified_current_database_revision",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "symbol": "8358"
+    }
+  ],
+  "complete": false,
+  "completed_at": "2026-09-25T01:11:48.109557+00:00",
+  "expected_count": null,
+  "final_url": "http://5.104.83.211/api/radar/daily",
+  "full_app_candidate_coverage_verified": false,
+  "http_status": 200,
+  "ignored_non_common_identity_card_rows": 0,
+  "observation_conflicts": [],
+  "observed_at": "2026-09-25T01:09:14.303451+00:00",
+  "observed_bucket_counts": {
+    "earlyWatchlist": 0,
+    "fallbackOpportunities90d": 0,
+    "hotTracking": 0,
+    "opportunities": 0,
+    "recentFormal7d": 0,
+    "scenarioUpsideCandidates": 0,
+    "stages.actionable": 0,
+    "stages.found": 40,
+    "stages.waiting": 0
+  },
+  "observed_distinct_symbol_count": 40,
+  "pagination": {
+    "additional_pages_requested": false,
+    "public_snapshot_total_is_not_database_candidate_total": true,
+    "stage_default_limit": 40
+  },
+  "request_authenticated": false,
+  "request_method": "GET",
+  "response_bytes": 79629,
+  "response_sha256": "7f1f2515d2a13de413522b7263c82b5e424fd9046f2821c8d4cf111231c12619",
+  "revision": "public-observation-union:3d486ed85f201591ef2f770c69524be05ceae8d1b924d59e3ee93180d281ac32",
+  "schema_version": "tw-strategy-lab-public-roster-observation-v1",
+  "scope": "bounded_public_card_observation_only",
+  "snapshot_published_at_header": "2026-09-25T00:58:18.256+02:00",
+  "snapshot_stale_header": "true",
+  "source_content_as_of": "2026-09-12",
+  "source_projection_status": {
+    "acquisitionAuthority": "disabled",
+    "actionAuthority": "disabled",
+    "contentAsOf": "2026-09-12",
+    "freshnessStatus": "stale_readonly",
+    "integrityStatus": "valid",
+    "researchVisibility": "last_good_readonly",
+    "status": "stale_readonly"
+  },
+  "source_snapshot_published_at": "2026-09-25T00:58:18.256+02:00",
+  "source_stage_counts": {
+    "actionable": 0,
+    "found": 196,
+    "waiting": 0
+  },
+  "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+  "surface_observations": [
+    {
+      "final_url": "http://5.104.83.211/api/radar/daily",
+      "http_status": 200,
+      "observed_at": "2026-09-25T01:09:14.303451+00:00",
+      "observed_bucket_counts": {
+        "earlyWatchlist": 0,
+        "fallbackOpportunities90d": 0,
+        "hotTracking": 0,
+        "opportunities": 0,
+        "recentFormal7d": 0,
+        "scenarioUpsideCandidates": 0,
+        "stages.actionable": 0,
+        "stages.found": 40,
+        "stages.waiting": 0
+      },
+      "response_bytes": 79629,
+      "response_sha256": "7f1f2515d2a13de413522b7263c82b5e424fd9046f2821c8d4cf111231c12619",
+      "source_content_as_of": "2026-09-12",
+      "source_projection_status": {
+        "acquisitionAuthority": "disabled",
+        "actionAuthority": "disabled",
+        "contentAsOf": "2026-09-12",
+        "freshnessStatus": "stale_readonly",
+        "integrityStatus": "valid",
+        "researchVisibility": "last_good_readonly",
+        "status": "stale_readonly"
+      },
+      "source_snapshot_published_at": "2026-09-25T00:58:18.256+02:00",
+      "source_stage_counts": {
+        "actionable": 0,
+        "found": 196,
+        "waiting": 0
+      },
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/daily",
+      "surface": "daily"
+    },
+    {
+      "authenticated": false,
+      "blocker": "public_read_unavailable:TimeoutError",
+      "error": "timed out",
+      "observed_at": "2026-09-25T01:11:24.779208+00:00",
+      "request_method": "GET",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/hot",
+      "surface": "hot"
+    },
+    {
+      "authenticated": false,
+      "blocker": "public_read_unavailable:TimeoutError",
+      "error": "timed out",
+      "observed_at": "2026-09-25T01:11:24.780142+00:00",
+      "request_method": "GET",
+      "source_url": "https://stockinsider-three.vercel.app/api/radar/weekly",
+      "surface": "weekly"
+    }
+  ]
+}

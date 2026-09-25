@@ -1,0 +1,61 @@
+name: Taiwan strategy research lab
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/tw-strategy-lab.yml'
+      - 'research/tw-strategy-lab/*.py'
+      - 'research/tw-strategy-lab/preregistration.json'
+      - 'research/tw-strategy-lab/preregistration.sha256'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tw-strategy-lab-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  offline-research:
+    if: github.head_ref == 'codex/tw-strategy-lab-v1' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, also pinned by existing protected workflows
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .nvmrc
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - name: Verify frozen research contracts
+        run: python -m unittest discover -s research/tw-strategy-lab -p 'test_*.py' -v
+      - name: Retrieve bounded official development data
+        timeout-minutes: 70
+        run: |
+          python research/tw-strategy-lab/official_data.py \
+            --root "$RUNNER_TEMP/tw-strategy-data" \
+            --cache "$RUNNER_TEMP/tw-strategy-data/cache" \
+            --output research/tw-strategy-lab/data/normalized
+      - name: Execute frozen development hypotheses or record data blockers
+        if: ${{ !cancelled() && hashFiles('research/tw-strategy-lab/data/normalized/manifest.json') != '' }}
+        run: |
+          python research/tw-strategy-lab/run_research.py \
+            --data research/tw-strategy-lab/data/normalized \
+            --output research/tw-strategy-lab/results/github-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Preserve derived research evidence only
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: tw-strategy-research-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            research/tw-strategy-lab/results/github-${{ github.run_id }}-${{ github.run_attempt }}/
+            research/tw-strategy-lab/data/normalized/manifest.json
+            research/tw-strategy-lab/preregistration.json
+            research/tw-strategy-lab/preregistration.sha256
+          retention-days: 7
+          if-no-files-found: error
