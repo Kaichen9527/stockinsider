@@ -85,28 +85,140 @@ def performance(curve, trades, costs, assumptions):
     }
 
 
-def simulate(bars_by_symbol, signals, sessions, *, start, end, actions_by_symbol=None, assumptions=None):
-    a = assumptions or Assumptions()
-    if not (a.initial_cash > 0 and a.lot >= 1 and 0 < a.max_weight <= 1 and 0 < a.max_turnover_participation <= 1
-            and min(a.commission, a.minimum_commission, a.sell_tax, a.slippage_bps) >= 0):
+def _finite_number(value):
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return False
+    try:
+        return isfinite(value)
+    except OverflowError:
+        return False
+
+
+def _session(value, reason):
+    try:
+        if not isinstance(value, str) or len(value) != 10 or date.fromisoformat(value).isoformat() != value:
+            raise ValueError(reason)
+    except (TypeError, ValueError):
+        raise ValueError(reason) from None
+    return value
+
+
+def _validate_inputs(bars_by_symbol, signals, sessions, start, end, actions, a):
+    """Fail before accounting; never silently sort, deduplicate or repair inputs.
+
+    Missing bars keep the existing missing-mark/expired-order semantics. Missing
+    turnover keeps zero capacity. Passive controls may use zero stops/band floors.
+    Payment dates may be non-trading days; effective action dates may not.
+    Valid v1 inputs retain the exact v1 execution and result object.
+    """
+    numeric = ('initial_cash', 'commission', 'minimum_commission', 'sell_tax',
+               'slippage_bps', 'max_weight', 'max_turnover_participation')
+    if (not isinstance(a, Assumptions) or any(not _finite_number(getattr(a, key)) for key in numeric)
+            or type(a.lot) is not int or a.lot < 1 or a.initial_cash <= 0
+            or not 0 < a.max_weight <= 1 or not 0 < a.max_turnover_participation <= 1
+            or min(a.commission, a.minimum_commission, a.sell_tax, a.slippage_bps) < 0):
         raise ValueError('invalid_assumptions')
+    _session(start, 'invalid_session_range')
+    _session(end, 'invalid_session_range')
+    if start > end:
+        raise ValueError('invalid_session_range')
     if end >= '2024-01-01':
         raise ValueError('holdout_locked_2024_onward')
-    if sessions != sorted(set(sessions)):
+    if not isinstance(sessions, (list, tuple)):
         raise ValueError('invalid_calendar')
+    for session in sessions:
+        _session(session, 'invalid_calendar')
+        if session >= '2024-01-01':
+            raise ValueError('holdout_locked_2024_onward')
+    if list(sessions) != sorted(set(sessions)):
+        raise ValueError('invalid_calendar')
+    calendar = set(sessions)
+    if not isinstance(bars_by_symbol, dict):
+        raise ValueError('invalid_bars')
+    for symbol, bars in bars_by_symbol.items():
+        if not isinstance(symbol, str) or not symbol or not isinstance(bars, (list, tuple)):
+            raise ValueError('invalid_bars')
+        previous = ''
+        for bar in bars:
+            if not isinstance(bar, dict):
+                raise ValueError('invalid_bars')
+            session = _session(bar.get('date'), 'invalid_bar_date')
+            if session >= '2024-01-01':
+                raise ValueError('holdout_locked_2024_onward')
+            if session <= previous:
+                raise ValueError('bar_dates_must_be_unique_and_sorted')
+            previous = session
+            if session not in calendar:
+                raise ValueError('bar_not_on_calendar')
+            if any(not _finite_number(bar.get(k)) or bar[k] <= 0 for k in ('open', 'high', 'low', 'close')):
+                raise ValueError('invalid_ohlc')
+            if bar['high'] < max(bar['open'], bar['close']) or bar['low'] > min(bar['open'], bar['close']):
+                raise ValueError('invalid_ohlc_geometry')
+            if any(not _finite_number(bar.get(k, 0)) or bar.get(k, 0) < 0 for k in ('volume', 'turnover_twd')):
+                raise ValueError('invalid_volume_or_turnover')
+            if 'volume' not in bar:
+                raise ValueError('invalid_volume_or_turnover')
+    if not isinstance(signals, (list, tuple)):
+        raise ValueError('invalid_signal')
+    seen_signals = set()
+    for signal in signals:
+        if not isinstance(signal, dict):
+            raise ValueError('invalid_signal')
+        session = _session(signal.get('date'), 'invalid_signal_date')
+        if session not in calendar:
+            raise ValueError('signal_not_on_calendar')
+        symbol = signal.get('symbol')
+        if not isinstance(symbol, str) or symbol not in bars_by_symbol:
+            raise ValueError('signal_symbol_missing_bars')
+        if signal.get('plan_state') != 'eligible_proxy':
+            continue
+        key = (symbol, session)
+        if key in seen_signals:
+            raise ValueError('duplicate_symbol_signal_session')
+        seen_signals.add(key)
+        if (any(not _finite_number(signal.get(k)) for k in ('buy_limit', 'entry_lower', 'stop', 'rank'))
+                or signal['buy_limit'] <= 0 or signal['entry_lower'] < 0 or signal['stop'] < 0
+                or any(type(signal.get(k)) is not int or signal[k] < 1 for k in ('exit_ma', 'max_hold'))
+                or signal.get('exit_ma_direction', 'below') not in ('below', 'above')):
+            raise ValueError('invalid_signal')
+    if not isinstance(actions, dict):
+        raise ValueError('invalid_actions')
+    for symbol, events in actions.items():
+        if not isinstance(symbol, str) or symbol not in bars_by_symbol or not isinstance(events, (list, tuple)):
+            raise ValueError('invalid_actions')
+        seen = set()
+        for event in events:
+            if not isinstance(event, dict):
+                raise ValueError('invalid_actions')
+            session = _session(event.get('session'), 'invalid_action_session')
+            if session in seen:
+                raise ValueError('duplicate_action_session:' + symbol + ':' + session)
+            seen.add(session)
+            if session not in calendar:
+                raise ValueError('action_not_on_calendar')
+            if event.get('status') != 'verified' or not _finite_number(event.get('share_factor')) or event['share_factor'] != 1:
+                raise ValueError('unresolved_or_share_changing_event:' + symbol + ':' + session)
+            if not _finite_number(event.get('price_factor')) or event['price_factor'] <= 0:
+                raise ValueError('invalid_action_factor')
+            if not _finite_number(event.get('cash_dividend', 0)) or event.get('cash_dividend', 0) < 0:
+                raise ValueError('invalid_cash_dividend')
+            if not _finite_number(event.get('cash_return', 0)) or event.get('cash_return', 0) != 0:
+                raise ValueError('return_of_capital_execution_unmodeled')
+            payment = event.get('payment_date')
+            if payment is not None:
+                _session(payment, 'invalid_payment_date')
+                if payment < session:
+                    raise ValueError('payment_before_entitlement')
+
+
+def simulate(bars_by_symbol, signals, sessions, *, start, end, actions_by_symbol=None, assumptions=None):
+    a = Assumptions() if assumptions is None else assumptions
+    actions = {} if actions_by_symbol is None else actions_by_symbol
+    _validate_inputs(bars_by_symbol, signals, sessions, start, end, actions, a)
     active = [s for s in sessions if start <= s <= end]
     if len(active) < 2:
         raise ValueError('insufficient_sessions')
-    if any(x['date'] not in sessions for x in signals):
-        raise ValueError('signal_not_on_calendar')
-    actions = actions_by_symbol or {}
     lookup = {symbol: {b['date']: b for b in bars} for symbol, bars in bars_by_symbol.items()}
-    for symbol, events in actions.items():
-        for event in events:
-            if event['status'] != 'verified' or event.get('share_factor') != 1 or event.get('cash_dividend', 0) < 0:
-                raise ValueError(f'unresolved_or_share_changing_event:{symbol}:{event["session"]}')
-            if not (isfinite(event['price_factor']) and event['price_factor'] > 0):
-                raise ValueError('invalid_action_factor')
     incoming = {}
     next_session = dict(zip(sessions, sessions[1:]))
     for signal in signals:
