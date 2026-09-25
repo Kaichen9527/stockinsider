@@ -47,6 +47,17 @@ Next bounded work: inspect S4 zero-signal mechanics and recorded rejection reaso
 - [x] Identify a medium reporting ambiguity: `signal_count` combines eligible and avoid-chase confirmations for S1/S2. Simulation remains correct; a future output-schema repair requires a new commit and new run.
 
 Next bounded work is source/corporate-action review and a preregistered proposal for a genuinely new robustness experiment. Do not execute new parameters until its finite registry, multiplicity accounting and review rules are committed. Full normalized CI inputs are unavailable in the artifact; do not claim full gate-level replay from the partial checkpoint.
+
+## Corporate-action and dividend-accounting checkpoint — 2026-09-25 03:51 UTC
+
+- [x] Prove the saved corporate-action checkpoint is byte-identical to the CI manifest output: 14,538 bytes and SHA256 `6642de0cd619c1b5fc61e4220a7603d851fc9849e7487cd57f0d525246d5e8d5`.
+- [x] Reconcile all 69 action rows and 74 source/detail hash references; zero referenced hashes are absent from the 689-source manifest.
+- [x] Verify the five included symbols have 47/47 resolved cash-only rows and no non-unit share factor or cash-return event.
+- [x] Reproduce the seven unresolved action rows and calendar-gap evidence supporting exclusion of 2317, 2603 and 2882.
+- [x] Decompose terminal dividend receivables without presenting the subtraction as a counterfactual portfolio path.
+- [x] Record a finite robustness-v2 proposal as review-required and not executed; retain 2024+ holdout lock and identify result-informed S4v2 candidates as hypothesis generation only.
+
+Next bounded work: independently review engine order timing and price/tick handling, or review the proposed registry. Do not execute robustness-v2 until exact normalized inputs are available to the isolated runner and the finite registry is independently accepted.
 - [ ] At the deadline, record completed/blocked work, exact artifact identities and next steps; holdout stays locked. (LAB-02, LAB-10)
 
 ## Operational work deferred to the final phase
