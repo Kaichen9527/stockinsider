@@ -1,0 +1,168 @@
+{
+  "schema_version": "broker-source-audit-v1",
+  "audited_at": "2026-09-25T00:50:18Z",
+  "validation_status": "research_only",
+  "acquisition_status": "metadata_only",
+  "rights_grants": [],
+  "sources": [
+    {
+      "source_id": "wanglai-daily-report",
+      "url": "https://wowwow3100-ctrl.github.io/daily-report/stocks.html",
+      "source_type": "third_party_summary",
+      "rights_status": "unknown",
+      "factor_use": false,
+      "repository": "https://github.com/wowwow3100-ctrl/daily-report",
+      "audited_commit": "7d8ac61311a9eb2953ce0d6c375b407820a5b3e2",
+      "repository_created_at": "2026-09-19T10:52:43Z",
+      "repository_license": null,
+      "observations": [
+        "The stock page identifies its documents as summaries of public news, not original broker reports.",
+        "At the audited commit stocks.json contains 218 stock folders; historical filenames predate repository creation.",
+        "sync_reports.py converts local DOCX summaries; backfill_stocks.py regenerates stock pages from CSV.",
+        "wl-consensus.js derives rolling windows from the largest CSV date; it is not an immutable point-in-time ledger."
+      ]
+    },
+    {
+      "source_id": "udn-mediatek-20260924",
+      "url": "https://money.udn.com/money/story/5607/9776183",
+      "source_type": "media_reported",
+      "publisher": "經濟日報",
+      "article_published_at": "2026-09-24T19:16:37+08:00",
+      "first_seen_at": "2026-09-25T00:50:18Z",
+      "rights_status": "unknown",
+      "factor_use": false,
+      "observations": [
+        "The named UBS analyst and the target/EPS revisions were checked against this news article.",
+        "No original UBS document or its dissemination timestamp was obtained.",
+        "The page offers link sharing and states that unauthorized copying of article content is not permitted."
+      ]
+    },
+    {
+      "source_id": "dbs-official-industry-guide-example",
+      "url": "https://www.dbs.com/content/article/pdf/CIO/2025/202505/CIOIndustryGuide_May2025.pdf",
+      "source_type": "broker_original",
+      "rights_status": "unknown",
+      "factor_use": false,
+      "observations": [
+        "Official bank research has analyst, instrument, rating and target fields.",
+        "Page 65 states completion 2025-05-14 22:10:00 SGT and dissemination 22:22:41 SGT.",
+        "The disclosure limits copying and redistribution; public access is not an open-data license.",
+        "The TSM example is a USD-denominated US instrument; do not treat it as a TWD 2330 target."
+      ]
+    },
+    {
+      "source_id": "fubon-official-research-index",
+      "url": "https://fubonresearch.fubon.com/Research/Home/",
+      "source_type": "broker_original",
+      "rights_status": "unknown",
+      "factor_use": false,
+      "observations": [
+        "Official titles and dates are public; individual equity research generally directs readers to member login.",
+        "Numbers beside an instrument in a title must not be inferred to be target prices."
+      ]
+    },
+    {
+      "source_id": "sinopac-official-research",
+      "url": "https://scm.sinotrade.com.tw/",
+      "terms_url": "https://www.sinotrade.com.tw/Stock/Stock_3_1/Stock_3_1_2?ticker=4533",
+      "source_type": "broker_original",
+      "rights_status": "unknown",
+      "factor_use": false,
+      "observations": [
+        "Official research is offered through a membership service.",
+        "The securities site states that research reports may not be reproduced or excerpted without authorization."
+      ]
+    },
+    {
+      "source_id": "factset-licensed-estimates-prospect",
+      "url": "https://developer.factset.com/api-catalog/factset-estimates-api",
+      "methodology_url": "https://insight.factset.com/resources/at-a-glance-factset-estimates-point-in-time-consensus?hs_amp=true",
+      "source_type": "licensed_provider",
+      "rights_status": "unknown",
+      "factor_use": false,
+      "observations": [
+        "Official estimates API and a distinct point-in-time consensus product are documented.",
+        "The methodology article is dated 2020 and its stated coverage is as of 2019; current Taiwan coverage and entitlements require confirmation.",
+        "No subscription, API credential or redistribution right was acquired in this research."
+      ]
+    },
+    {
+      "source_id": "lseg-ibes-licensed-prospect",
+      "url": "https://www.lseg.com/en/data-catalogue/company-data/ibes-estimates/broker-estimates",
+      "methodology_url": "https://www.lseg.com/content/dam/data-analytics/en_us/documents/brochures/data-for-quant-research-brochure.pdf",
+      "source_type": "licensed_provider",
+      "rights_status": "unknown",
+      "factor_use": false,
+      "observations": [
+        "Broker Estimates documents forecast values, sources, fiscal periods, currencies and normalization attributes.",
+        "The product brochure distinguishes point-in-time snapshots from current and historical products.",
+        "No subscription, API credential or redistribution right was acquired in this research."
+      ]
+    }
+  ],
+  "research_events": [
+    {
+      "symbol": "2454",
+      "exchange": "TWSE",
+      "broker_id": "ubs",
+      "broker_group_id": "ubs",
+      "analyst": "林莉鈞",
+      "publisher": "經濟日報",
+      "source_type": "media_reported",
+      "source_url": "https://money.udn.com/money/story/5607/9776183",
+      "original_report_url": null,
+      "report_key": "media-linked:ubs:2454:udn-9776183",
+      "report_date": null,
+      "report_published_at": null,
+      "article_published_at": "2026-09-24T19:16:37+08:00",
+      "source_available_at": "2026-09-24T19:16:37+08:00",
+      "first_seen_at": "2026-09-25T00:50:18Z",
+      "recorded_at": "2026-09-25T00:50:18Z",
+      "availability_evidence": {
+        "kind": "publisher_timestamp",
+        "evidence_id": "udn-9776183-observed-20260925T005018Z",
+        "evidence_url": "https://money.udn.com/money/story/5607/9776183",
+        "known_at": "2026-09-25T00:50:18Z"
+      },
+      "rights_status": "unknown",
+      "rights_grant_id": null,
+      "rating": {
+        "raw": "買進",
+        "scale_id": null,
+        "previous": "買進",
+        "current": "買進",
+        "action": "reiterate"
+      },
+      "target": {
+        "previous": 6500,
+        "current": 7300,
+        "currency": "TWD",
+        "horizon_months": null,
+        "share_basis": "unknown"
+      },
+      "estimates": [
+        {
+          "metric": "eps",
+          "fiscal_period_end": "2028-12-31",
+          "accounting_basis": "unknown",
+          "currency": "TWD",
+          "unit": "unknown",
+          "previous": null,
+          "current": 362.63,
+          "reported_change_pct": 21
+        },
+        {
+          "metric": "eps",
+          "fiscal_period_end": "2029-12-31",
+          "accounting_basis": "unknown",
+          "currency": "TWD",
+          "unit": "unknown",
+          "previous": null,
+          "current": 432.81,
+          "reported_change_pct": 28
+        }
+      ],
+      "extraction_version": "manual-attributed-facts-v1"
+    }
+  ]
+}

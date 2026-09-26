@@ -1,0 +1,61 @@
+{
+  "schema": "tw-strategy-robustness-contract-validation/v1",
+  "validated_at": "2026-09-25T06:48:36Z",
+  "proposal_id": "tw-strategy-robustness-v2.1",
+  "proposal_sha256": "4379960b4d1406bee97fcf54fa0f99e832abdefa1ed9a5111d04f2d25748270a",
+  "status": "structurally_complete_pending_independent_review_and_inputs",
+  "holdout_accessed": false,
+  "network_requests": 0,
+  "new_trials_executed": 0,
+  "validation": {
+    "assertions": 42,
+    "failures": 0,
+    "checks": [
+      "proposal, parent, source commit, registry and dataset identities are explicit",
+      "development period ends before the locked 2024 holdout",
+      "R1 cardinality is five strategies times three scenarios equals 15",
+      "R1 names the exact existing result, signal-row and ledger projections that must remain equal",
+      "R2 has eight unique gates, exact formulas and deterministic zero-win/zero-loss behavior",
+      "R3 cardinality is two fixed variants times three scenarios equals 6",
+      "R4 cardinality is five strategies times baseline only times two paths equals 10",
+      "R4 optimistic release occurs before pre-open sizing and may fund that opening",
+      "total new simulation path arithmetic is 15 plus 6 plus 10 equals 31",
+      "S5/S7, target-return non-selection and no-promotion rules remain explicit"
+    ]
+  },
+  "resolved_findings": [
+    {
+      "from_v2_review": "R1 canonical equality projection",
+      "resolution": "Existing trial result objects and signal rows must remain canonically exact; six ledger fields are projected, and allowed identity/reporting differences are enumerated."
+    },
+    {
+      "from_v2_review": "R2 largest-symbol ambiguity",
+      "resolution": "Positive net_pnl trades are summed by symbol without netting losing trades, divided by all positive trade net_pnl."
+    },
+    {
+      "from_v2_review": "R2 metric edge cases",
+      "resolution": "Median, profit factor, winner share, symbol share and terminal-return null/empty behavior are fixed."
+    },
+    {
+      "from_v2_review": "R4 10-versus-30 path ambiguity",
+      "resolution": "R4 is baseline-only: five strategies times one scenario times two paths equals ten."
+    },
+    {
+      "from_v2_review": "R4 cash-release ordering",
+      "resolution": "The optimistic bound releases next-session receivables before sizing and reservation, so that cash may fund the same opening."
+    }
+  ],
+  "remaining_blockers": [
+    "A reviewer other than the proposal author must accept the exact v2.1 hash.",
+    "The isolated runner still lacks the exact normalized inputs identified by dataset hash a89bf8e5cbcfc464463a53c29f1f5f68f6419d72f2a06befcaeb008e3cff5cca.",
+    "R1 needs a new implementation commit and run; no prior evidence may be overwritten.",
+    "R3 remains result-informed hypothesis generation and cannot yield a development-selected deployable winner.",
+    "2024+ remains locked and cannot be opened merely to complete this contract."
+  ],
+  "authorization": {
+    "execute": false,
+    "merge": false,
+    "deploy": false,
+    "publish_articles": false
+  }
+}

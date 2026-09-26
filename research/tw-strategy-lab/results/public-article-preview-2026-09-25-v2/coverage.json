@@ -1,0 +1,26 @@
+{
+  "coverage": {
+    "all_valid_candidates_accounted_for": true,
+    "article_count": 40,
+    "blocked_count": 40,
+    "complete_snapshot_accounted_for": false,
+    "expected_count": null,
+    "full_app_coverage_verified": false,
+    "global_reason_codes": [
+      "research_not_supplied",
+      "snapshot_expected_count_mismatch",
+      "snapshot_not_complete"
+    ],
+    "input_count": 40,
+    "invalid_row_indexes": [],
+    "preview_ready_count": 0,
+    "production_updated": false,
+    "queue_count": 40,
+    "valid_unique_candidate_count": 40
+  },
+  "dry_run": true,
+  "research_reference": null,
+  "schema_version": "tw-strategy-lab-articles-v1",
+  "snapshot_hash": "e78cdfc317cd39032230c59a4dea2c68cf1f498cf6567694cfd98875c75529e0",
+  "validation_status": "research_only"
+}

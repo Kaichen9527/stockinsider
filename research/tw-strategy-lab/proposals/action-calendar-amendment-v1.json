@@ -1,0 +1,103 @@
+{
+  "schema": "tw-action-calendar-amendment-v1",
+  "amendment_id": "1216-20230803-market-closure-effective-session",
+  "status": "independent_review_required_before_application",
+  "original_robustness_proposal_sha256": "4379960b4d1406bee97fcf54fa0f99e832abdefa1ed9a5111d04f2d25748270a",
+  "original_clarification_sha256": "f44e230f54a13251c51c6919aea7e78088d7ecc6508bb51a3c4a2a88e430d8af",
+  "original_dataset_sha256": "a89bf8e5cbcfc464463a53c29f1f5f68f6419d72f2a06befcaeb008e3cff5cca",
+  "original_included_actions_sha256": "d869d8af56970ade2d8e4cb1cbc33a8fc2c178215ef40b145d8ec0e257ff31ed",
+  "corrected_included_actions_sha256": "9d37eea3d2c92bfab2e795c4342c3a267a4386ba9df678f4c786110664799ff0",
+  "transformation": {
+    "symbol": "1216",
+    "original_event": {
+      "session": "2023-08-03",
+      "status": "verified",
+      "price_factor": 0.9586614173228346,
+      "share_factor": 1.0,
+      "cash_dividend": 3.15,
+      "payment_date": null,
+      "knowledge_mode": "official_effective_date_reconstruction",
+      "source_sha256": "0fef5ad43d9b7353a224e68a83bf15bc4bb8dc6c61bf3e55c276de33112b4c68"
+    },
+    "only_changed_field": "session",
+    "reported_session": "2023-08-03",
+    "effective_session": "2023-08-04",
+    "previous_recorded_session": "2023-08-02",
+    "reason": "Official Taipei closure record, TWSE natural-disaster ex-date rule, and the issuer-specific first reopening price record resolve this single case. Missing bars alone do not authorize shifting actions."
+  },
+  "source_receipts": [
+    {
+      "id": "twse-ex-rights",
+      "url": "https://www.twse.com.tw/rwd/zh/exRight/TWT49U?startDate=20230803&endDate=20230804&response=json",
+      "observed_at": "2026-09-26T01:37:24.399787+00:00",
+      "sha256": "8ab56c79d9f0b93920f5afa042005193020a4d703cd56b2403b9b90ea1af45f6",
+      "bytes": 6316,
+      "bounded_fact": {
+        "symbol": "1216",
+        "reported_session": "2023-08-03",
+        "previous_close": 76.2,
+        "ex_reference": 73.05,
+        "cash_dividend": 3.15,
+        "opening_auction_reference": 73.1
+      },
+      "excluded_columns": "Rolling latest filing quarter, book value and EPS columns are explicitly NOT historical inputs. The endpoint appends current fields to dated historical rows."
+    },
+    {
+      "id": "twse-1216-prices",
+      "url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20230801&stockNo=1216",
+      "observed_at": "2026-09-26T01:37:25.099497+00:00",
+      "sha256": "8f2196d144305ae8ea7bbcca7e50470d71c1b04aac258efe3237ec643e23c75a",
+      "bytes": 2877,
+      "bounded_fact": {
+        "previous_date": "2023-08-02",
+        "previous_close": 76.2,
+        "next_date": "2023-08-04",
+        "next_open": 73.1,
+        "next_close": 71.1,
+        "session_count_in_month": 22,
+        "august_3_present": false
+      }
+    },
+    {
+      "id": "twse-disaster-faq",
+      "url": "https://www.twse.com.tw/zh/about/suspended_faq.html",
+      "observed_at": "2026-09-26T01:37:24.737999+00:00",
+      "sha256": "99c26bb24c89c061003009801ae9adf8a1d1a1d29e96f82a64e17d57dbfd827b",
+      "bytes": 22025,
+      "scope": "Q2 Taipei public-office all-day closure closes the market. Q5 the ex-rights/dividend opening reference and price limits for a closed day apply on the following day; issuer record dates are not fabricated or changed."
+    },
+    {
+      "id": "dgpa-20230803-archive",
+      "url": "https://www.dgpa.gov.tw/FileConversion?filename=dgpa%2Ffiles%2F202308%2Fd0fd6e9b-1901-419b-a66f-d8535da7e305.html&name=nds.html&nfix=",
+      "parent_url": "https://www.dgpa.gov.tw/information?pid=11469&uid=374",
+      "archive_page_published": "2023-08-04",
+      "content_updated_at": "2023-08-03T22:37:10+08:00",
+      "observed_at": "2026-09-26T01:41:18.175372+00:00",
+      "sha256": "b949a6f34ac3ad3cdf2f61f8081361a40bd4e08ad0105edd1b9cf9ee21c1ad1d",
+      "bytes": 20922,
+      "bounded_fact": {
+        "city": "Taipei",
+        "date": "2023-08-03",
+        "offices_closed": true,
+        "following_date": "2023-08-04",
+        "following_day_offices_open": true
+      }
+    }
+  ],
+  "acceptance_rules": [
+    "Independent exact-head reviewer must accept both unchanged v2.1 proposal/clarification and this amendment hash in native GitHub review text; ordinary no-major-issues comments are insufficient.",
+    "Apply only an in-memory session overlay for the exact full included-action digest. Never rewrite any recovered CSV, original manifest, baseline result, trial ledger, or original source timestamp.",
+    "Only 1216 session 2023-08-03 changes to 2023-08-04. Reject changed source action/amount/factor, missing or changed adjacent official bars, target collision, and any further off-calendar action.",
+    "R1 full canonical results, all signal rows and projected ledger must STILL equal the unchanged v1 artifacts on all 15 paths. No mismatch is waived. If any fails, retain the failure and all 16 blocked R3/R4 paths.",
+    "All 31 paths, two S4 thresholds, cost/capacity settings and R4 timing rules remain exactly unchanged. R2 failures remain failures. No additional sweep, winner selection or trading activation.",
+    "The earlier attempt at 24d3e24 remains a failed execution with zero completed paths, notwithstanding its erroneous green workflow wrapper.",
+    "The correction is reconstructed now from dated source records; it does not manufacture immutable historical PIT collection evidence, actual fill confirmations or dividend payment dates."
+  ],
+  "write_authority": {
+    "production": false,
+    "publication": false,
+    "merge": false,
+    "holdout": false,
+    "branch_protection_change": false
+  }
+}

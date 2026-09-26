@@ -1,0 +1,16 @@
+{
+  "schema_version": "tw-strategy-lab-acquisition-checkpoint-v1",
+  "observed_at": "2026-09-25T01:12:25Z",
+  "state": "stopped_policy_blocked",
+  "reason": "The Chat execution environment blocked network access to https://www.twse.com.tw:443. The downloader is no longer running.",
+  "available_base_sources": 155,
+  "expected_base_sources": 684,
+  "available_detail_sources": 5,
+  "complete_dataset": false,
+  "historical_performance_computed": false,
+  "holdout_accessed": false,
+  "local_continuation": "stopped; do not wait for a stopped downloader",
+  "next_execution_route": "repository GitHub Actions isolated research workflow; no protected gate replacement, production secret, DB write, merge or deployment",
+  "github_execution_confirmed": false,
+  "resume_requirement": "Use a permitted execution environment and the existing validated cache. Do not alter network policy or silently bypass access controls."
+}

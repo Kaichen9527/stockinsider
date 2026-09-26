@@ -2541,7 +2541,8 @@ async function rebuildBrokerConsensusSnapshots(supabase: ReturnType<typeof getSu
         metadata: {
           rebuilt_at: nowIso(),
           permitted_source_modes: [...AUTHORIZED_BROKER_SOURCE_MODES],
-          authorization_basis: 'user_supplied_or_imported_document',
+          license_status: 'unknown',
+          authorization_basis: 'source_mode_is_not_factor_use_grant',
         },
         updated_at: nowIso(),
       },
