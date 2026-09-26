@@ -16,5 +16,9 @@
   "capacity_deferred": true,
   "active_fixture_modified": false,
   "protection_modified": false,
-  "model_invoked": false
+  "model_invoked": false,
+  "supplemental_verification_sha256": "e9a872721909da34ba5bd21e783b5c82a389a172ddc4eee5fce1a7c0417da25d",
+  "scope_amendment": "Explicitly deny private operation parent and transport in the named profile, preserving source read/scratch write and every original permission probe. No existing test is relaxed. Requires renewed independent review.",
+  "security_finding": "Current minimal read rules permit synthetic siblings and transport auth.json under temporary directories. No real credential was read. A four-target smoke with explicit parent/transport denial passed; full guarded probe and model execution remain unrun.",
+  "independent_review_to_address": 5325163036
 }
