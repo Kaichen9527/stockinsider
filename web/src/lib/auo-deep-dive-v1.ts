@@ -1,7 +1,7 @@
 import pbHistory from '../data/auo-pb-history-v1.json' with { type: 'json' };
 import { historicalPbQuartiles, type CommercializationInputs, type ForecastQuarterInput, type ScenarioAdjustment } from './auo-deep-dive-model.ts';
 
-export const AUO_RESEARCH_VERSION = 'auo-2409-2026-09-26.v7';
+export const AUO_RESEARCH_VERSION = 'auo-2409-2026-09-27.v8';
 export const AUO_AS_OF = '2026-09-24';
 export const AUO_PRICE = 34.20;
 export const AUO_DILUTED_SHARES_MILLION = 7_547;
@@ -77,7 +77,7 @@ const quarter = (
 
 export const auoForecastBaseQuarters: ForecastQuarterInput[] = [
   quarter('2026Q3E', 2026, [20_560, 0.040], [13_870, 0.058], [32_350, -0.025], [2_720, 0.010], -250, -100),
-  quarter('2026Q4E', 2026, [20_970, 0.041], [14_290, 0.060], [30_730, -0.018], [2_610, 0.010], -220, -80),
+  quarter('2026Q4E', 2026, [20_970, 0.041], [14_290, 0.060], [30_730, -0.028], [2_610, 0.010], -220, -80),
   quarter('2027Q1E', 2027, [20_340, 0.042], [14_430, 0.060], [29_700, -0.013], [2_530, 0.010], -210, -80),
   quarter('2027Q2E', 2027, [21_150, 0.044], [14_870, 0.062], [32_850, -0.006], [2_630, 0.010], -200, -60),
   quarter('2027Q3E', 2027, [21_780, 0.046], [15_320, 0.064], [33_050, 0.002], [2_650, 0.010], -190, -40),
@@ -154,6 +154,8 @@ export const auoSources = [
   { id: 'S37', type: '供應鏈公司原始資料', title: '鼎元公司沿革與 2025–2026 光通訊產品開發', url: 'https://www.tyntek.com.tw/about_01.php', date: '2026-09-25', supports: '鼎元自述 100G／200G lane PD 與 Micro-PD 開發；不含 Intel 或友達 CPO 訂單確認；頁面未標具體發布日，日期為查核日' },
   { id: 'S38', type: '公開新聞', title: 'MoneyDJ：鼎元 PD 訂單能見度與 Micro LED CPO 仍在驗證', url: 'https://www.moneydj.com/KMDJ/news/newsviewer.aspx?a=72ab35d5-00c3-4978-891a-118a52253901', date: '2026-09-09', supports: '報導分別描述既有 PD 產品訂單能見度及友達／富采 Micro LED CPO 開發驗證；未確認 Threads 所稱 Intel 或具名 CSP 新單' },
   { id: 'S39', type: '材料供應商原始資料', title: '康寧：調整日圓計價顯示玻璃基板價格', url: 'https://www.corning.com/tw/zh_tw/products/display-glass/news/news-releases/2026/09/corning-announces-currency-and-inflation-adjustment-of-display-glass-substrate-prices.html', date: '2026-09-11', supports: '2026Q4 起全球日圓計價顯示玻璃基板漲價至少 15%；未揭露友達採購幣別、涵蓋量或轉嫁條件，亦非 GCS 價格公告' },
+  { id: 'S40', type: '產業研究原始發布', title: 'TrendForce：第四季面板成本、需求與中國廠稼動率', url: 'https://www.trendforce.com/presscenter/news/20260921-13247.html', date: '2026-09-21', supports: '預估 4Q26 電視面板總成本季增 4–7%、需求季減 4%，10 月五代以上產線稼動率降至 79.6%；此為產業預測，非友達實績' },
+  { id: 'S41', type: '產業研究原始發布', title: 'Omdia：10 月全球面板稼動率預估降至 80%', url: 'https://omdia.tech.informa.com/pr/2026/sep/global-display-panel-fab-utilization-to-fall-three-percentage-points-in-october-2026-amid-weaker-tv-and-it-demand', date: '2026-09-21', supports: '全球稼動率預估降至 80%；中國三大廠降四個百分點，IT 面板需求與庫存承壓，與 TrendForce 為不同研究機構' },
 ] as const;
 
 export const auoMarketContext = {
@@ -177,6 +179,7 @@ export const auoEvidenceLedger = [
   { claim: '友達公告出售華亞廠及高雄 C5E 廠', rootSource: 'S34', publishedAt: '2026-07-28', firstObservedAt: '2026-09-25T18:05:41+08:00', status: '兩筆重大訊息逐字轉載載明預計處分利益；交割、認列年度與最終歸屬仍待核對', relation: 'S34 與 S35 為兩筆不同交易；新聞再轉載不增加獨立證據數' },
   { claim: '鼎元已有新 Intel／CSP 訂單並帶動友達 CPO 量產', rootSource: 'S36', publishedAt: '2026-09-25（貼文相對時間）', firstObservedAt: '2026-09-25T18:08:00+08:00', status: '單一 Threads 作者的待查說法；鼎元官網只支持 PD 開發，公開報導將既有 PD 能見度與 Micro LED CPO 驗證分開；未見 Intel／CSP 具名新單或友達 CPO 量產證據', relation: '同作者主帖與續帖為一個消息根源；S38 是較早的 PD 報導，不能視為對新傳聞的獨立確認' },
   { claim: '康寧調漲部分顯示玻璃基板價格', rootSource: 'S39', publishedAt: '2026-09-11', firstObservedAt: '2026-09-26T18:05:44+08:00', status: '供應商已公告日圓計價品項自 2026Q4 漲價至少 15%；友達實際適用比例與轉嫁能力未公開', relation: '康寧原始公告；媒體轉載不算額外確認；不能推定半導體 GCS 同幅漲價' },
+  { claim: '2026Q4 面板成本升、需求與稼動率承壓', rootSource: 'S40', publishedAt: '2026-09-21', firstObservedAt: '2026-09-27T07:05:09+08:00', status: 'TrendForce 產業預測，非友達專屬指引；Omdia S41 獨立預測同方向，但口徑與數值不同', relation: '兩家研究機構各有原始發布；新聞及公開券商文章轉述不增加獨立確認數' },
 ] as const;
 
 export const auoMarketEvents = [
@@ -184,6 +187,7 @@ export const auoMarketEvents = [
   { date: '2026-08-31', label: '已確認', title: '友達公開 CPO／GCS 階段性成果', detail: '友達揭露 Micro LED CPO 系統模組、RDL、光學耦合及與康寧合作的玻璃核心基板；尚未揭露客戶訂單、量產收入與毛利。', impact: '這是轉型可行性的事前證據，應建立條件式重估情境，但不直接增加 2027 EPS。', sources: ['S23'] },
   { date: '2026-09-11', label: '已公告，影響待核', title: '康寧調高日圓計價顯示玻璃基板價格', detail: '康寧宣布 2026Q4 起對全球日圓計價顯示玻璃基板調價至少 15%；並未揭露友達採購幣別與合約適用比例。', impact: '對 Display 毛利是條件式成本風險，須核對採購暴露與面板售價轉嫁；不可把漲幅直接套到友達全部成本，亦不可當作 GCS 產品售價。', sources: ['S39'] },
   { date: '2026-09-20', label: '市場傳聞', title: '公開報導出現 Intel 合作說法', detail: '目前可核對的公開報導稱 Intel 洽談合作；尚未找到雙方聯名公告、採購合約或量產時程。', impact: '提高市場對友達由面板廠切入先進封裝／光互連的期待，先改變事件風險與倍數討論。', sources: ['S24', 'S25'] },
+  { date: '2026-09-21', label: '產業預測', title: '兩家研究機構預估第四季面板需求轉弱與減產', detail: 'TrendForce 估電視面板總成本季增 4–7%、需求季減 4%，中國主要廠 10 月假期減產；Omdia 估全球稼動率降至約 80%，IT 庫存壓力延續。', impact: '成本上升未必可完整轉嫁；本研究將 2026Q4E Display 營益率由 -1.8% 下修至 -2.8%，基本季度正常化 EPS 約少 0.03 元，仍待友達實績核對。', sources: ['S40', 'S41', 'S39'] },
   { date: '2026-09-21', label: '價格確認', title: '突破原 32.2 元門檻', detail: '收盤 33.35 元、成交量 8.23 億股，符合原先 9/19 放量突破條件。', impact: '原波段劇本由等待轉為觸發；不能事後把門檻上移後仍顯示等待。', sources: ['S14'] },
   { date: '2026-09-22', label: '目標到達', title: '收盤 36.65 元，到達原量度目標', detail: '兩個交易日由 30.35 元上漲 20.76%，原 36.6 元技術量度目標已到達。', impact: '追價的報酬風險比惡化；下一個判斷改為等待整理、查證事件與重新建立劇本。', sources: ['S14'] },
   { date: '2026-09-23', label: '高檔換手', title: '目標到達後回落至 34.70 元', detail: '開盤與最高均為 36.65 元，最低 33.40 元，收 34.70 元、跌 5.32%，成交量 9.49 億股。', impact: '原突破劇本仍維持已完成，不事後移動目標；新部位尚未形成可重算的整理完成訊號，先觀察 32.2 元突破區及事件查證。', sources: ['S14'] },
@@ -227,12 +231,12 @@ export const auoGrowthDrivers = [
   },
   {
     title: 'Display：仍是損益轉折的最大槓桿',
-    evidence: '2026Q2 Display 仍占 48%營收，營業虧損 10.85 億元、營益率 -3.2%；公司指引第三季小幅下滑。',
+    evidence: '2026Q2 Display 仍占 48%營收，營業虧損 10.85 億元、營益率 -3.2%；公司指引第三季小幅下滑。TrendForce 與 Omdia 另預估第四季成本及需求壓力。',
     transmission: '價格、稼動率與產品組合的微小變化，會在高固定成本下放大成營業利益；因此總體獲利仍不能只看轉型營收。',
     timing: '面板報價與品牌拉貨通常在一至兩季反映，2026Q4 筆電需求較弱，較明顯改善要等 2027 的供需紀律。',
-    financial: '基本情境僅讓 Display 營益率從負值走到 2027H2 接近損平；樂觀情境才給 2 個百分點以上改善。',
-    falsifier: '新供給、補貼拉貨透支或稼動率回升過快，再次壓低價格；這會同時打掉 EPS 與合理 P/B。',
-    sources: ['S1', 'S16', 'S19'],
+    financial: '2026Q4E Display 營益率下修至 -2.8%；基本情境僅讓 Display 到 2027H2 接近損平，樂觀情境才給更快改善。',
+    falsifier: '若材料成本無法轉嫁、IT 庫存繼續增加或稼動率回升過快，再次壓低價格，會同時打掉 EPS 與合理 P/B；若實際報價與產品組合優於預測，須上修折減。',
+    sources: ['S1', 'S16', 'S19', 'S39', 'S40', 'S41'],
   },
   {
     title: 'Micro LED CPO、GCS 與 Intel 傳聞：市場先重估，財務後驗證',
@@ -278,7 +282,8 @@ export const auoArticleSections = [
       { text: '友達提出的是十公尺左右短距離的 Micro LED 並行光路。公開分工中，友達負責巨量轉移、RDL 封裝、光學耦合與系統架構，集團富采、鼎元與達興材料分別提供發射、接收與材料，康寧參與光纖方案。這使友達卡在整合與製造的中間段，不只是把一片面板賣給資料中心；但它還不是晶片設計、整個交換系統或已取得的客戶訂單。要形成可持續毛利，友達必須證明模組在功耗、誤碼、可靠度和維修成本上勝過替代方案，且量產良率足以覆蓋折舊。', sources: ['S23', 'S29'] },
       { text: '玻璃核心基板處理的是大型高密度封裝的翹曲、尺寸穩定、訊號損耗及互連密度。康寧提供半導體級玻璃，友達展示 RDL 與大面積玻璃加工；官方同時表明 TGV、孔洞金屬化及可靠度仍分階段驗證。因此材料成功不等於友達取得全部基板價值，康寧供材、友達加工、最終封裝廠與客戶的價值分配都要拆開。Intel 已正式宣布與藍思科技合作探索玻璃基板製程；京東方的原始投資者紀錄也確認其與康寧合作並成立 Micro LED 光互連及玻璃載板 CPO 專案組，雖然其新業務同樣未量產。這使友達的遠期可得份額與倍數更需要客戶設計導入證據，不能以「Intel 需要玻璃」或「康寧合作」推成友達獨占供貨。', sources: ['S23', 'S28', 'S33'] },
       { text: '原有面板業務也仍決定短期獲利。TrendForce 觀察 9 月主要面板價格大致持平，筆電面板需求卻有下修風險；價格不跌並不代表高稼動率或正營益。Omdia 預估中國廠在 2026 下半年車用顯示出貨占比升至約 65%，因此車用成長的收入假設仍要扣除價格競爭。BHTC 若能增加控制器、軟體及整機內容，才可能比單片車用面板保住較高利潤；這也是本研究只讓 Mobility 利潤率緩升的原因。', sources: ['S1', 'S16', 'S17', 'S20'] },
-      { text: `還有一項短期成本反證。康寧已公告 2026Q4 起調高日圓計價的顯示玻璃基板價格至少 15%；這是顯示面板的材料訊號，不是友達與康寧合作的半導體玻璃核心基板報價。友達適用的採購幣別、數量、長約及能否轉嫁給客戶仍未公開，因此基本情境暫不改 Display 營益率。作為可重算的壓力測試，若 2027 年淨材料成本增加達 Display 預估營收的 1%，其他條件不變，稅後歸屬 EPS 約減少 ${auoDisplayInputCostSensitivity.afterTaxEpsImpact.toFixed(2)} 元；這個 1% 是測試門檻，不是已估出的實際成本。下一次法說應核對採購暴露、售價調整與毛利率。`, sources: ['S39', 'S1', 'S2'] },
+      { text: `還有一項短期成本反證。康寧已公告 2026Q4 起調高日圓計價的顯示玻璃基板價格至少 15%；這是顯示面板的材料訊號，不是友達與康寧合作的半導體玻璃核心基板報價。友達適用的採購幣別、數量、長約及能否轉嫁給客戶仍未公開，單靠這則公告不能精算友達毛利。作為可重算的壓力測試，若 2027 年淨材料成本增加達 Display 預估營收的 1%，其他條件不變，稅後歸屬 EPS 約減少 ${auoDisplayInputCostSensitivity.afterTaxEpsImpact.toFixed(2)} 元；這個 1% 是測試門檻，不是已估出的實際成本。下一次法說應核對採購暴露、售價調整與毛利率。`, sources: ['S39', 'S1', 'S2'] },
+      { text: '9/21 另有兩家研究機構的產業預測補上需求端。TrendForce 估第四季電視面板總成本季增 4–7%、需求量季減 4%，中國主要廠安排十月停工以穩住價格；Omdia 亦估全球十月稼動率降至約 80%，並指出 IT 面板庫存壓力。減產可能支撐報價，卻也證明需求不強，不能把中國廠提價意向當成友達已成功轉嫁成本。本文因此將 2026Q4E Display 營益率由 -1.8% 下修一個百分點至 -2.8%，對應約 3.07 億元季度營益、0.03 元正常化 EPS 減少；這一個百分點是研究折減，並非把產業 4–7% 成本漲幅直接套到友達。2027 假設仍須以實際面板報價、友達產品組合與法說毛利率重估。', sources: ['S40', 'S41', 'S39', 'S1'] },
     ],
   },
   {

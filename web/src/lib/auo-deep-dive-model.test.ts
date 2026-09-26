@@ -66,6 +66,21 @@ test('display glass input-cost stress is traceable and does not silently change 
   assert.equal(auoForecastBaseQuarters[2].segments.display.operatingMargin, -0.013);
 });
 
+test('fourth-quarter Display haircut follows the new industry cost and demand evidence', () => {
+  const q4 = auoForecastBaseQuarters.find((quarter) => quarter.period === '2026Q4E');
+  assert.ok(q4);
+  assert.equal(q4.segments.display.operatingMargin, -0.028);
+  const priorMargin = -0.018;
+  assert.equal(Math.round(q4.segments.display.revenue * (priorMargin - q4.segments.display.operatingMargin)), 307);
+  const before = calculateQuarter({ ...q4, segments: { ...q4.segments,
+    display: { ...q4.segments.display, operatingMargin: priorMargin } } }, AUO_DILUTED_SHARES_MILLION);
+  const after = calculateQuarter(q4, AUO_DILUTED_SHARES_MILLION);
+  assert.equal(Number((after.normalizedEps - before.normalizedEps).toFixed(2)), -0.03);
+  const industry = auoArticleSections.find((section) => section.id === 'industry');
+  assert.ok(industry?.paragraphs.some((paragraph) => paragraph.text.includes('由 -1.8% 下修一個百分點至 -2.8%')
+    && paragraph.sources.join(',').includes('S40') && paragraph.sources.join(',').includes('S41')));
+});
+
 test('AUO P/B anchors are recalculated from 60 point-in-time TWSE monthly observations', () => {
   const result = historicalPbQuartiles(pbHistory, '2026-09-18');
   assert.equal(result.rows.length, 60);
