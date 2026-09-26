@@ -1,4 +1,4 @@
-"""Three fixed official 2023 GETs to diagnose a closed-day action mismatch.
+"""One fixed official 2023 calendar GET to diagnose a closed-day action mismatch.
 
 No normalization rewrite, date inference, simulation, DB or publication. The
 original dataset stays immutable. New responses are observations made now.
@@ -12,9 +12,7 @@ import time
 from urllib.request import Request, build_opener, ProxyHandler, HTTPRedirectHandler
 
 URLS = {
-    'actions_20230803_04': 'https://www.twse.com.tw/rwd/zh/exRight/TWT49U?startDate=20230803&endDate=20230804&response=json',
-    'price_1216_202308': 'https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20230801&stockNo=1216',
-    'closed_calendar_2023': 'https://www.twse.com.tw/holidaySchedule/holidaySchedule?response=json&queryYear=2023',
+    'closed_calendar_2023_date_parameter': 'https://www.twse.com.tw/rwd/zh/holidaySchedule/holidaySchedule?response=json&date=20230101',
 }
 class NoRedirect(HTTPRedirectHandler):
     def redirect_request(self, *args, **kwargs):
@@ -37,14 +35,12 @@ def main():
                     raise ValueError('bounded_official_transport_failed')
             value = json.loads(raw)
             if not isinstance(value, dict): raise ValueError('response_shape')
-            if name == 'price_1216_202308' and value.get('date') != '20230801': raise ValueError('response_period_mismatch')
-            if name == 'actions_20230803_04':
-                params = value.get('params', {})
-                if (value.get('strDate', params.get('startDate')), value.get('endDate', params.get('endDate'))) != ('20230803','20230804'):
-                    raise ValueError('response_period_mismatch')
-            if name == 'closed_calendar_2023' and str(value.get('year')) not in ('2023','112'):
-                # A missing echoed year may still be diagnostic, but not admitted.
-                record['calendar_year_admitted'] = False
+            if value.get('date') != '20230101' or value.get('queryYear') != 2023:
+                raise ValueError('calendar_year_mismatch')
+            rows = value.get('data')
+            if not isinstance(rows, list) or len(rows) < 10 or any(not isinstance(row, list) or not row or not str(row[0]).startswith('2023-') for row in rows):
+                raise ValueError('calendar_rows_mismatch')
+            record['calendar_year_admitted'] = True
             (out / (name + '.json')).write_bytes(raw)
             record.update(status='raw_official_response_retained_not_effective_date_approval',
                           sha256=hashlib.sha256(raw).hexdigest(), bytes=len(raw))
