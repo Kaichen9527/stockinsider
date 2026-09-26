@@ -1,0 +1,258 @@
+{
+  "schema": "exact-argv-host-verification-v2",
+  "observed_at": "2026-09-26T08:24:31.323248+00:00",
+  "supersedes_only_missing_command_provenance_in": "host-observation.json",
+  "real_credentials_loaded": false,
+  "model_invoked": false,
+  "active_fixture_modified": false,
+  "executables": [
+    {
+      "path": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+      "realpath": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+      "sha256": "3e11ccc743e8198a5ef84fb57c89941d845b0ea0302485ed1fbac2f0821aca5a",
+      "stat": {
+        "device": "16777234",
+        "inode": "190136841",
+        "size": "238069168",
+        "uid": 501,
+        "gid": 80,
+        "mode": "100755"
+      },
+      "version_query": {
+        "argv": [
+          "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+          "--version"
+        ],
+        "executable": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "target": "--version",
+        "started_at": "2026-09-26T08:24:31.424768+00:00",
+        "finished_at": "2026-09-26T08:24:31.441001+00:00",
+        "exit_code": 0,
+        "stdout": "codex-cli 0.158.0-alpha.2.1\n",
+        "stderr": ""
+      },
+      "signing": {
+        "verification": {
+          "argv": [
+            "/usr/bin/codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
+          ],
+          "executable": "/usr/bin/codesign",
+          "target": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+          "started_at": "2026-09-26T08:24:31.441043+00:00",
+          "finished_at": "2026-09-26T08:24:31.643155+00:00",
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        "details": {
+          "argv": [
+            "/usr/bin/codesign",
+            "-d",
+            "--verbose=4",
+            "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
+          ],
+          "executable": "/usr/bin/codesign",
+          "target": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+          "started_at": "2026-09-26T08:24:31.643188+00:00",
+          "finished_at": "2026-09-26T08:24:31.670084+00:00",
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": "Executable=/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex\nIdentifier=codex\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20500 size=1845713 flags=0x10000(runtime) hashes=57668+7 location=embedded\nVersionPlatform=1\nVersionMin=720896\nVersionSDK=984320\nHash type=sha256 size=32\nCandidateCDHash sha256=1d7098925e8aa55df015a673e97c54a982bc878d\nCandidateCDHashFull sha256=1d7098925e8aa55df015a673e97c54a982bc878dcf9516d7bc82d716f7b4416c\nHash choices=sha256\nCMSDigest=1d7098925e8aa55df015a673e97c54a982bc878dcf9516d7bc82d716f7b4416c\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=225804288\nExecutable Segment flags=0x1\nPage size=4096\nCDHash=1d7098925e8aa55df015a673e97c54a982bc878d\nSignature size=9047\nAuthority=Developer ID Application: OpenAI OpCo, LLC (2DC432GLL2)\nAuthority=Developer ID Certification Authority\nAuthority=Apple Root CA\nTimestamp=Sep 26, 2026 at 12:43:16\u202fPM\nNotarization Ticket=stapled\nInfo.plist entries=5\nTeamIdentifier=2DC432GLL2\nRuntime Version=15.5.0\nSealed Resources version=2 rules=13 files=1\nInternal requirements count=1 size=168\n"
+        },
+        "requirement": {
+          "argv": [
+            "/usr/bin/codesign",
+            "-d",
+            "-r-",
+            "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
+          ],
+          "executable": "/usr/bin/codesign",
+          "target": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+          "started_at": "2026-09-26T08:24:31.670130+00:00",
+          "finished_at": "2026-09-26T08:24:31.695019+00:00",
+          "exit_code": 0,
+          "stdout": "designated => identifier codex and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = \"2DC432GLL2\"\n",
+          "stderr": "Executable=/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex\n"
+        }
+      }
+    },
+    {
+      "path": "/usr/bin/git",
+      "realpath": "/usr/bin/git",
+      "sha256": "b8763cf250e607a778bb4603cecb5b90338814d0a3dfcba0d57b1de242f610e9",
+      "stat": {
+        "device": "16777234",
+        "inode": "1152921500312571562",
+        "size": "118640",
+        "uid": 0,
+        "gid": 0,
+        "mode": "100755"
+      },
+      "version_query": {
+        "argv": [
+          "/usr/bin/git",
+          "--version"
+        ],
+        "executable": "/usr/bin/git",
+        "target": "--version",
+        "started_at": "2026-09-26T08:24:31.695755+00:00",
+        "finished_at": "2026-09-26T08:24:31.718283+00:00",
+        "exit_code": 0,
+        "stdout": "git version 2.50.1 (Apple Git-155)\n",
+        "stderr": ""
+      }
+    },
+    {
+      "path": "/usr/local/bin/node",
+      "realpath": "/usr/local/bin/node",
+      "sha256": "c583851fc85e4618b2374cda13399d59d373ad7cebfc4b55160820b88dcce67b",
+      "stat": {
+        "device": "16777234",
+        "inode": "1802834",
+        "size": "220243216",
+        "uid": 0,
+        "gid": 0,
+        "mode": "100755"
+      },
+      "version_query": {
+        "argv": [
+          "/usr/local/bin/node",
+          "--version"
+        ],
+        "executable": "/usr/local/bin/node",
+        "target": "--version",
+        "started_at": "2026-09-26T08:24:31.847493+00:00",
+        "finished_at": "2026-09-26T08:24:31.869029+00:00",
+        "exit_code": 0,
+        "stdout": "v22.14.0\n",
+        "stderr": ""
+      }
+    }
+  ],
+  "bundle": {
+    "path": "/Applications/ChatGPT.app",
+    "stat": {
+      "device": "16777234",
+      "inode": "190130403",
+      "size": "96",
+      "uid": 501,
+      "gid": 80,
+      "mode": "040755"
+    },
+    "verification": {
+      "argv": [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "/Applications/ChatGPT.app"
+      ],
+      "executable": "/usr/bin/codesign",
+      "target": "/Applications/ChatGPT.app",
+      "started_at": "2026-09-26T08:24:31.869088+00:00",
+      "finished_at": "2026-09-26T08:24:33.698944+00:00",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "details": {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "--verbose=4",
+        "/Applications/ChatGPT.app"
+      ],
+      "executable": "/usr/bin/codesign",
+      "target": "/Applications/ChatGPT.app",
+      "started_at": "2026-09-26T08:24:33.698988+00:00",
+      "finished_at": "2026-09-26T08:24:33.730130+00:00",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "Executable=/Applications/ChatGPT.app/Contents/MacOS/ChatGPT\nIdentifier=com.openai.codex\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20500 size=764 flags=0x10000(runtime) hashes=13+7 location=embedded\nVersionPlatform=1\nVersionMin=851968\nVersionSDK=1703936\nHash type=sha256 size=32\nCandidateCDHash sha256=4268f8d055027544a72f17830dd8a94462e57a29\nCandidateCDHashFull sha256=4268f8d055027544a72f17830dd8a94462e57a29b70371fd557d28780cef4331\nHash choices=sha256\nCMSDigest=4268f8d055027544a72f17830dd8a94462e57a29b70371fd557d28780cef4331\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=16384\nExecutable Segment flags=0x1\nPage size=4096\nCDHash=4268f8d055027544a72f17830dd8a94462e57a29\nSignature size=9047\nAuthority=Developer ID Application: OpenAI OpCo, LLC (2DC432GLL2)\nAuthority=Developer ID Certification Authority\nAuthority=Apple Root CA\nTimestamp=Sep 26, 2026 at 1:58:58\u202fPM\nNotarization Ticket=stapled\nInfo.plist entries=64\nTeamIdentifier=2DC432GLL2\nRuntime Version=26.0.0\nSealed Resources version=2 rules=13 files=3949\nInternal requirements count=1 size=176\n"
+    },
+    "requirement": {
+      "argv": [
+        "/usr/bin/codesign",
+        "-d",
+        "-r-",
+        "/Applications/ChatGPT.app"
+      ],
+      "executable": "/usr/bin/codesign",
+      "target": "/Applications/ChatGPT.app",
+      "started_at": "2026-09-26T08:24:33.730166+00:00",
+      "finished_at": "2026-09-26T08:24:33.761616+00:00",
+      "exit_code": 0,
+      "stdout": "designated => identifier \"com.openai.codex\" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = \"2DC432GLL2\"\n",
+      "stderr": "Executable=/Applications/ChatGPT.app/Contents/MacOS/ChatGPT\n"
+    },
+    "notarization": {
+      "argv": [
+        "/usr/sbin/spctl",
+        "-a",
+        "-vv",
+        "/Applications/ChatGPT.app"
+      ],
+      "executable": "/usr/sbin/spctl",
+      "target": "/Applications/ChatGPT.app",
+      "started_at": "2026-09-26T08:24:33.761656+00:00",
+      "finished_at": "2026-09-26T08:24:35.836803+00:00",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "/Applications/ChatGPT.app: accepted\nsource=Notarized Developer ID\norigin=Developer ID Application: OpenAI OpCo, LLC (2DC432GLL2)\n"
+    },
+    "info_plist_queries": [
+      {
+        "argv": [
+          "/usr/bin/plutil",
+          "-extract",
+          "CFBundleIdentifier",
+          "raw",
+          "/Applications/ChatGPT.app/Contents/Info.plist"
+        ],
+        "executable": "/usr/bin/plutil",
+        "target": "/Applications/ChatGPT.app/Contents/Info.plist",
+        "started_at": "2026-09-26T08:24:35.836886+00:00",
+        "finished_at": "2026-09-26T08:24:35.843257+00:00",
+        "exit_code": 0,
+        "stdout": "com.openai.codex\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "/usr/bin/plutil",
+          "-extract",
+          "CFBundleShortVersionString",
+          "raw",
+          "/Applications/ChatGPT.app/Contents/Info.plist"
+        ],
+        "executable": "/usr/bin/plutil",
+        "target": "/Applications/ChatGPT.app/Contents/Info.plist",
+        "started_at": "2026-09-26T08:24:35.843286+00:00",
+        "finished_at": "2026-09-26T08:24:35.847848+00:00",
+        "exit_code": 0,
+        "stdout": "26.924.22138\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "/usr/bin/plutil",
+          "-extract",
+          "CFBundleVersion",
+          "raw",
+          "/Applications/ChatGPT.app/Contents/Info.plist"
+        ],
+        "executable": "/usr/bin/plutil",
+        "target": "/Applications/ChatGPT.app/Contents/Info.plist",
+        "started_at": "2026-09-26T08:24:35.847880+00:00",
+        "finished_at": "2026-09-26T08:24:35.854316+00:00",
+        "exit_code": 0,
+        "stdout": "11645\n",
+        "stderr": ""
+      }
+    ]
+  }
+}

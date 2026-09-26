@@ -1,0 +1,117 @@
+{
+  "schema": "synthetic-credential-isolation-diagnostic-v2",
+  "observed_at": "2026-09-26T08:21:31.281087+00:00",
+  "real_credentials_loaded": false,
+  "model_invoked": false,
+  "base_argv": [
+    "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+    "--strict-config",
+    "sandbox",
+    "--profile",
+    "model-runner-v3",
+    "--permission-profile",
+    "model-runner-v3",
+    "-C",
+    "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/view",
+    "--"
+  ],
+  "environment": {
+    "PATH": "/usr/bin:/bin:/usr/sbin:/sbin",
+    "HOME": "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/scratch",
+    "CODEX_HOME": "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/transport",
+    "TMPDIR": "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/scratch",
+    "LANG": "C",
+    "LC_ALL": "C"
+  },
+  "checks": [
+    {
+      "name": "source",
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "--strict-config",
+        "sandbox",
+        "--profile",
+        "model-runner-v3",
+        "--permission-profile",
+        "model-runner-v3",
+        "-C",
+        "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/view",
+        "--",
+        "/bin/cat",
+        "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/view/source.txt"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error: `--strict-config` is not supported for `codex sandbox`\n",
+      "expected_denial": false,
+      "passed": false
+    },
+    {
+      "name": "transport_synthetic_auth",
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "--strict-config",
+        "sandbox",
+        "--profile",
+        "model-runner-v3",
+        "--permission-profile",
+        "model-runner-v3",
+        "-C",
+        "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/view",
+        "--",
+        "/bin/cat",
+        "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/transport/auth.json"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error: `--strict-config` is not supported for `codex sandbox`\n",
+      "expected_denial": true,
+      "passed": true
+    },
+    {
+      "name": "sibling_temp",
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "--strict-config",
+        "sandbox",
+        "--profile",
+        "model-runner-v3",
+        "--permission-profile",
+        "model-runner-v3",
+        "-C",
+        "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/view",
+        "--",
+        "/bin/cat",
+        "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/outside.txt"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error: `--strict-config` is not supported for `codex sandbox`\n",
+      "expected_denial": true,
+      "passed": true
+    },
+    {
+      "name": "user_cache_synthetic",
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "--strict-config",
+        "sandbox",
+        "--profile",
+        "model-runner-v3",
+        "--permission-profile",
+        "model-runner-v3",
+        "-C",
+        "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/view",
+        "--",
+        "/bin/cat",
+        "/Users/kaerchen/Library/Caches/stockinsider-sandbox-check-q816g35u/sentinel.txt"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Error: `--strict-config` is not supported for `codex sandbox`\n",
+      "expected_denial": true,
+      "passed": true
+    }
+  ],
+  "passed": false
+}

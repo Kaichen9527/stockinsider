@@ -1,0 +1,95 @@
+{
+  "schema": "synthetic-parent-denial-compatibility-probe-v1",
+  "observed_at": "2026-09-26T08:22:28.563167+00:00",
+  "scope": "diagnose stronger candidate policy only, not active host approval",
+  "real_credentials_loaded": false,
+  "model_invoked": false,
+  "profile_text": "default_permissions = \"model-runner-v3-closed-parent\"\n[permissions.model-runner-v3-closed-parent.filesystem]\n\":root\" = \"deny\"\n\":minimal\" = \"read\"\n\"/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/view\" = \"read\"\n\"/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/scratch\" = \"write\"\n\"/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb\" = \"deny\"\n\"/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/transport\" = \"deny\"\n[permissions.model-runner-v3-closed-parent.network]\nenabled = false\n",
+  "checks": [
+    {
+      "name": "source",
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "sandbox",
+        "--profile",
+        "model-runner-v3-closed-parent",
+        "--permission-profile",
+        "model-runner-v3-closed-parent",
+        "-C",
+        "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/view",
+        "--",
+        "/bin/cat",
+        "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/view/source.txt"
+      ],
+      "exit_code": 0,
+      "stdout": "synthetic-readable\n",
+      "stderr": "",
+      "expected_denial": false,
+      "passed": true
+    },
+    {
+      "name": "transport_synthetic_auth",
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "sandbox",
+        "--profile",
+        "model-runner-v3-closed-parent",
+        "--permission-profile",
+        "model-runner-v3-closed-parent",
+        "-C",
+        "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/view",
+        "--",
+        "/bin/cat",
+        "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/transport/auth.json"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "cat: /private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/transport/auth.json: Operation not permitted\n",
+      "expected_denial": true,
+      "passed": true
+    },
+    {
+      "name": "sibling_temp",
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "sandbox",
+        "--profile",
+        "model-runner-v3-closed-parent",
+        "--permission-profile",
+        "model-runner-v3-closed-parent",
+        "-C",
+        "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/view",
+        "--",
+        "/bin/cat",
+        "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/outside.txt"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "cat: /private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/outside.txt: Operation not permitted\n",
+      "expected_denial": true,
+      "passed": true
+    },
+    {
+      "name": "user_cache_synthetic",
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "sandbox",
+        "--profile",
+        "model-runner-v3-closed-parent",
+        "--permission-profile",
+        "model-runner-v3-closed-parent",
+        "-C",
+        "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/view",
+        "--",
+        "/bin/cat",
+        "/Users/kaerchen/Library/Caches/stockinsider-sandbox-check-q816g35u/sentinel.txt"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "cat: /Users/kaerchen/Library/Caches/stockinsider-sandbox-check-q816g35u/sentinel.txt: Operation not permitted\n",
+      "expected_denial": true,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

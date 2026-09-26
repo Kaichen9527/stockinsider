@@ -1,0 +1,160 @@
+TAP version 13
+# Subtest: authentication source is bound to the operating-system account, not mutable HOME
+ok 1 - authentication source is bound to the operating-system account, not mutable HOME
+  ---
+  duration_ms: 2.597875
+  ...
+# Subtest: manifest requires canonical LF-terminated JSON with unique keys
+ok 2 - manifest requires canonical LF-terminated JSON with unique keys
+  ---
+  duration_ms: 1.425292
+  ...
+# Subtest: permanent path exclusions outrank manifest selectors and prompts
+ok 3 - permanent path exclusions outrank manifest selectors and prompts
+  ---
+  duration_ms: 0.152875
+  ...
+# Subtest: routing never represents Luna and reports terra-only review/verify as blocked
+ok 4 - routing never represents Luna and reports terra-only review/verify as blocked
+  ---
+  duration_ms: 0.718
+  ...
+# Subtest: source-view identity binds sorted readable tracked entries
+ok 5 - source-view identity binds sorted readable tracked entries
+  ---
+  duration_ms: 0.228292
+  ...
+# Subtest: Codex profile is custom least privilege and never uses legacy sandbox
+ok 6 - Codex profile is custom least privilege and never uses legacy sandbox
+  ---
+  duration_ms: 0.143625
+  ...
+# Subtest: patch parser accepts only selected ordinary text paths
+ok 7 - patch parser accepts only selected ordinary text paths
+  ---
+  duration_ms: 0.511667
+  ...
+# Subtest: sealed terminal results enforce operation-specific result matrices
+ok 8 - sealed terminal results enforce operation-specific result matrices
+  ---
+  duration_ms: 0.221583
+  ...
+# Subtest: pinned Codex JSONL parser accepts one terminal agent message and rejects trailing events
+ok 9 - pinned Codex JSONL parser accepts one terminal agent message and rejects trailing events
+  ---
+  duration_ms: 0.425042
+  ...
+# Subtest: operation and resource identities are deterministic and bound
+ok 10 - operation and resource identities are deterministic and bound
+  ---
+  duration_ms: 0.906916
+  ...
+# Subtest: task locks, contiguous reservations and resource hash chains fail closed
+ok 11 - task locks, contiguous reservations and resource hash chains fail closed
+  ---
+  duration_ms: 99.437417
+  ...
+# Subtest: host pin fixture has an exact hash-bound format
+not ok 12 - host pin fixture has an exact hash-bound format
+  ---
+  duration_ms: 104.689166
+  location: '/private/tmp/stockinsider-authorized-20260926-TVwINv/host-candidate/scripts/model-runner-v3/model-runner-v3.test.js:315:1'
+  failureType: 'testCodeFailure'
+  error: 'routing or host preflight blocked'
+  code: 'ROUTING_BLOCKED'
+  stack: |-
+    assert (/private/tmp/stockinsider-authorized-20260926-TVwINv/host-candidate/scripts/model-runner-v3/artifacts.js:37:25)
+    hostProbeEnvironment (/private/tmp/stockinsider-authorized-20260926-TVwINv/host-candidate/scripts/model-runner-v3/hostPreflight.js:159:3)
+    checkedVersion (/private/tmp/stockinsider-authorized-20260926-TVwINv/host-candidate/scripts/model-runner-v3/hostPreflight.js:194:10)
+    verifyCurrentNode (/private/tmp/stockinsider-authorized-20260926-TVwINv/host-candidate/scripts/model-runner-v3/hostPreflight.js:239:9)
+    TestContext.<anonymous> (/private/tmp/stockinsider-authorized-20260926-TVwINv/host-candidate/scripts/model-runner-v3/model-runner-v3.test.js:321:16)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+  ...
+# Subtest: version probes admit only closed known sandbox diagnostics
+ok 13 - version probes admit only closed known sandbox diagnostics
+  ---
+  duration_ms: 0.330291
+  ...
+# Subtest: non-credential host probes retain only the verified private sandbox directory
+ok 14 - non-credential host probes retain only the verified private sandbox directory
+  ---
+  duration_ms: 0.665916
+  ...
+# Subtest: trusted live host probes admit only an explicit private cache scratch
+ok 15 - trusted live host probes admit only an explicit private cache scratch
+  ---
+  duration_ms: 0.204875
+  ...
+# Subtest: disabled doctor accepts only the protected v3.9 compatibility selector for the exact v3.19 fixture
+ok 16 - disabled doctor accepts only the protected v3.9 compatibility selector for the exact v3.19 fixture
+  ---
+  duration_ms: 5249.706125
+  ...
+# Subtest: only the explicit non-credential sandbox defers Gatekeeper to the trusted host oracle
+ok 17 - only the explicit non-credential sandbox defers Gatekeeper to the trusted host oracle
+  ---
+  duration_ms: 0.200084
+  ...
+# Subtest: CLI validates canonical input and fails closed before execution when the adjacent pin fixture is absent
+ok 18 - CLI validates canonical input and fails closed before execution when the adjacent pin fixture is absent
+  ---
+  duration_ms: 103.333584
+  ...
+# Subtest: maker execution materializes a tracked source view, applies the sealed patch, and persists its result ref
+ok 19 - maker execution materializes a tracked source view, applies the sealed patch, and persists its result ref
+  ---
+  duration_ms: 1942.769417
+  ...
+# Subtest: profile explicitly closes parent and transport while only reopening source and scratch
+ok 20 - profile explicitly closes parent and transport while only reopening source and scratch
+  ---
+  duration_ms: 0.827708
+  ...
+# Subtest: source and scratch cannot overlap
+ok 21 - source and scratch cannot overlap
+  ---
+  duration_ms: 0.196416
+  ...
+# Subtest: transport cannot be source or scratch
+ok 22 - transport cannot be source or scratch
+  ---
+  duration_ms: 0.096458
+  ...
+# Subtest: transport cannot be an ancestor or descendant of an allowed root
+ok 23 - transport cannot be an ancestor or descendant of an allowed root
+  ---
+  duration_ms: 0.097791
+  ...
+# Subtest: three roots must belong to the same private operation
+ok 24 - three roots must belong to the same private operation
+  ---
+  duration_ms: 0.052167
+  ...
+# Subtest: filesystem root cannot become an operation parent
+ok 25 - filesystem root cannot become an operation parent
+  ---
+  duration_ms: 0.040292
+  ...
+# Subtest: relative, noncanonical and control-character roots fail closed
+ok 26 - relative, noncanonical and control-character roots fail closed
+  ---
+  duration_ms: 0.185584
+  ...
+# Subtest: quoted directory names are TOML-escaped rather than inserted as raw policy
+ok 27 - quoted directory names are TOML-escaped rather than inserted as raw policy
+  ---
+  duration_ms: 0.084292
+  ...
+1..27
+# tests 27
+# suites 0
+# pass 26
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7571.299167

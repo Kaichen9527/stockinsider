@@ -10,16 +10,26 @@ const DISABLES = [
   'tool_suggest', 'enable_mcp_apps',
 ];
 
-function profileToml(viewPath, scratchPath) {
-  assert(path.isAbsolute(viewPath) && path.isAbsolute(scratchPath), 5);
+function profileToml(viewPath, scratchPath, transportPath) {
+  const roots = [viewPath, scratchPath, transportPath];
+  assert(roots.every((value) => typeof value === 'string' && path.isAbsolute(value)
+    && path.resolve(value) === value && !/[\u0000-\u001f\u007f]/u.test(value)), 5);
+  const parent = path.dirname(viewPath);
+  assert(parent !== path.parse(parent).root
+    && roots.every((value) => path.dirname(value) === parent)
+    && new Set(roots).size === 3, 5);
+  // Minimal runtime access may include the temporary parent. Explicitly close
+  // the owned operation and transport, then reopen only view and scratch.
   return [
     'default_permissions = "model-runner-v3"',
     '',
     '[permissions.model-runner-v3.filesystem]',
     '":root" = "deny"',
     '":minimal" = "read"',
-    '"' + viewPath + '" = "read"',
-    '"' + scratchPath + '" = "write"',
+    JSON.stringify(parent) + ' = "deny"',
+    JSON.stringify(transportPath) + ' = "deny"',
+    JSON.stringify(viewPath) + ' = "read"',
+    JSON.stringify(scratchPath) + ' = "write"',
     '',
     '[permissions.model-runner-v3.network]',
     'enabled = false',
