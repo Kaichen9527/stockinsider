@@ -31,7 +31,7 @@ const {
   writeExclusive,
 } = require('./journalStore');
 
-const RUNNER_IDENTITY = 'ba88a6551f8640036ecc4d31c4217fb8a55a10c44e82636e4b9739781068d9cf';
+const RUNNER_IDENTITY = '5ff9c6404c0c645e4845784923190195fe1fd5eb53dfef2be57c23e79e0fad64';
 
 function run(command, args, options = {}) {
   const result = spawnSync(command, args, {
@@ -205,7 +205,7 @@ function copyAuthenticationMaterial(transport) {
 
 function prepareTransport({ source, scratch, transport }) {
   fs.mkdirSync(transport, { recursive: true, mode: 0o700 });
-  const profile = profileToml(source.view, scratch);
+  const profile = profileToml(source.view, scratch, transport);
   fs.writeFileSync(path.join(transport, 'model-runner-v3.config.toml'), profile, {
     mode: 0o600,
     flag: 'wx',

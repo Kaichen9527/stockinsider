@@ -1,0 +1,153 @@
+
+> build:source-led-opportunity-v3
+> npm --prefix web run build
+
+
+> web@0.1.0 prebuild
+> node ../scripts/assert_canonical_vercel_project.mjs && node scripts/sync-official-authority.mjs
+
+Official authority build bridge verified (5 canonical modules).
+
+> web@0.1.0 build
+> next build
+
+▲ Next.js 16.3.4 (Turbopack)
+✓ Running next.config.ts took 1454ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 17.8s
+  Running TypeScript ...
+  Finished TypeScript in 17.0s ...
+  Collecting page data using 9 workers ...
+  Generating static pages using 9 workers (0/91) ...
+  Generating static pages using 9 workers (22/91) 
+  Generating static pages using 9 workers (45/91) 
+  Generating static pages using 9 workers (68/91) 
+✓ Generating static pages using 9 workers (91/91) in 414ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ○ /_not-found
+├ ƒ /api/auth/threads/callback
+├ ƒ /api/auth/threads/data-deletion
+├ ƒ /api/auth/threads/deauthorize
+├ ƒ /api/dashboard/daily
+├ ƒ /api/internal/agent-guard-check
+├ ƒ /api/internal/broker-report-ingest
+├ ƒ /api/internal/candidate-dossier-bundle
+├ ƒ /api/internal/candidate-dossier-outbox
+├ ƒ /api/internal/candidate-dossier-submission
+├ ƒ /api/internal/candidate-financial-documents
+├ ƒ /api/internal/candidate-financial-documents/[receiptId]
+├ ƒ /api/internal/candidate-financial-documents/pending
+├ ƒ /api/internal/candidate-financial-documents/retry
+├ ƒ /api/internal/candidate-financial-documents/worker
+├ ƒ /api/internal/candidate-financial-queue-drain
+├ ƒ /api/internal/candidate-history-backfill
+├ ƒ /api/internal/candidate-research-run
+├ ƒ /api/internal/deep-dive-build
+├ ƒ /api/internal/dynamic-mention-scan
+├ ƒ /api/internal/earnings-call-ingest
+├ ƒ /api/internal/financial-fact-v3
+├ ƒ /api/internal/finmind-token-bootstrap
+├ ƒ /api/internal/governance-check
+├ ƒ /api/internal/health-check
+├ ƒ /api/internal/ingestion-run
+├ ƒ /api/internal/instrument-roster-v3
+├ ƒ /api/internal/line-diagnostics
+├ ƒ /api/internal/line-dispatch
+├ ƒ /api/internal/market-observation-v3
+├ ƒ /api/internal/monitoring-check
+├ ƒ /api/internal/mops-filing-ingest
+├ ƒ /api/internal/official-calendar-backfill
+├ ƒ /api/internal/official-financial-validate
+├ ƒ /api/internal/official-market-index-backfill
+├ ƒ /api/internal/official-price-backfill
+├ ƒ /api/internal/opportunity-assistive-artifact-v3
+├ ƒ /api/internal/opportunity-link-audit-v3/adjudication
+├ ƒ /api/internal/opportunity-link-audit-v3/adjudicator-assignment
+├ ƒ /api/internal/opportunity-link-audit-v3/reviewer-assignment
+├ ƒ /api/internal/opportunity-link-audit-v3/reviewer-label
+├ ƒ /api/internal/opportunity-run
+├ ƒ /api/internal/opportunity-run/cron/enrich-rank
+├ ƒ /api/internal/opportunity-run/cron/label-outcomes
+├ ƒ /api/internal/opportunity-run/cron/shadow-evaluate
+├ ƒ /api/internal/opportunity-run/cron/source-scan
+├ ƒ /api/internal/opportunity-run/status/[runId]
+├ ƒ /api/internal/opportunity-worker-v3
+├ ƒ /api/internal/peer-relationship-authority-v3
+├ ƒ /api/internal/peer-reviewer-authority-v3
+├ ƒ /api/internal/pipeline-dispatch-run
+├ ƒ /api/internal/pipeline-research-run
+├ ƒ /api/internal/pipeline-run
+├ ƒ /api/internal/podcast-sync
+├ ƒ /api/internal/podcast-transcribe
+├ ƒ /api/internal/price-authority-v3
+├ ƒ /api/internal/provider-recovery-import
+├ ƒ /api/internal/publisher-verification-authority-v3
+├ ƒ /api/internal/radar-preliminary-publish
+├ ƒ /api/internal/recommendation-run
+├ ƒ /api/internal/report-build
+├ ƒ /api/internal/report-ingest
+├ ƒ /api/internal/research-inbox
+├ ƒ /api/internal/research-report-build
+├ ƒ /api/internal/revaluation-run
+├ ƒ /api/internal/source-discovery
+├ ƒ /api/internal/source-document-revision-v3
+├ ƒ /api/internal/source-identity-authority-v3
+├ ƒ /api/internal/source-sync
+├ ƒ /api/internal/stock-alias-v3
+├ ƒ /api/internal/stock-flow-observation-v3
+├ ƒ /api/internal/stock-research-refresh
+├ ƒ /api/internal/stock-sector-assignment-v3
+├ ƒ /api/internal/story-scan
+├ ƒ /api/internal/story-verify
+├ ƒ /api/internal/taiwan-data-queue-drain
+├ ƒ /api/internal/taiwan-data-refresh
+├ ƒ /api/internal/theme-scan
+├ ƒ /api/internal/thesis-rank
+├ ƒ /api/internal/thesis-refresh
+├ ƒ /api/internal/threads-canary
+├ ƒ /api/internal/threads-oauth-start
+├ ƒ /api/internal/threads-readiness
+├ ƒ /api/internal/trading-session-v3
+├ ƒ /api/internal/valuation-verification-v3
+├ ƒ /api/internal/writer-release-activate
+├ ƒ /api/line/bind
+├ ƒ /api/opportunity-v3
+├ ƒ /api/opportunity-v3/[runId]/[symbol]
+├ ƒ /api/radar/daily
+├ ƒ /api/radar/hot
+├ ƒ /api/radar/weekly
+├ ƒ /api/recommendations
+├ ƒ /api/sources/entity/[id]
+├ ƒ /api/sources/search
+├ ƒ /api/stocks/[symbol]/candidate-detail
+├ ƒ /api/stocks/[symbol]/deep-dive
+├ ƒ /api/stocks/[symbol]/insight
+├ ƒ /api/themes/[theme]
+├ ƒ /api/webhook/line
+├ ○ /data-deletion
+├ ƒ /opportunity-v3
+├ ƒ /opportunity-v3/[runId]/[symbol]
+├ ƒ /preview/auo-2409
+├ ○ /privacy
+├ ƒ /sources
+├ ƒ /stock/[symbol]
+├ ƒ /stock/[symbol]/technical
+├ ƒ /themes/[theme]
+├ ƒ /trade-plan-fixture
+├ ƒ /v3-correctness-fixture
+├ ƒ /v313-decision-fixture
+├ ƒ /v313-decision-fixture/detail
+├ ƒ /v314-readonly-fixture
+├ ƒ /v314-stale-decision-fixture
+└ ƒ /v317-research-fixture
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

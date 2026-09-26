@@ -7,8 +7,8 @@ const { spawnSync } = require('node:child_process');
 const { assert, RunnerError } = require('./artifacts');
 const { canonicalJson, parseJsonWithNoDuplicateKeys, sha256 } = require('./canonicalJson');
 
-const PIN_FIXTURE_SHA256 = '4e3a508b5120903ec7364771ba1aea8b98bd43e1d58f0ed1fcee1faaf8457008';
-const PIN_FIXTURE_BYTES = 2144;
+const PIN_FIXTURE_SHA256 = '953b898dfa786675dd5e6dda3af4265ad49086929fb519c989c3629682eeaca1';
+const PIN_FIXTURE_BYTES = 2219;
 const CANDIDATE_POLICY_ENV = 'OPPORTUNITY_V3_PROTECTED_CANDIDATE_POLICY';
 const CANDIDATE_SCRATCH_ENV = 'OPPORTUNITY_V3_PROTECTED_CANDIDATE_SCRATCH';
 const HOST_ORACLE_SCRATCH_ENV = 'OPPORTUNITY_V3_PROTECTED_HOST_PREFLIGHT_SCRATCH';
@@ -30,7 +30,7 @@ function loadHostPins(filename) {
   } catch {
     throw new RunnerError(5);
   }
-  assert(canonicalJson(fixture) === raw && fixture.fixtureVersion === 'model-runner-host-pins-v3.18', 5);
+  assert(canonicalJson(fixture) === raw && fixture.fixtureVersion === 'model-runner-host-pins-v3.19', 5);
   assert(fixture.platform === 'darwin' && fixture.architecture === 'arm64' && Array.isArray(fixture.executables), 5);
   const node = fixture.executables.find((entry) => entry.name === 'node');
   assert(node && typeof node.path === 'string' && typeof node.realpath === 'string' && node.version === 'v22.14.0', 5);
@@ -182,7 +182,7 @@ function validatedVersionOutput(command, stdout, stderr) {
   const admittedAppleGitDenial = command === '/usr/bin/git'
     && lines.length >= 1 && lines.length <= 2
     && lines.every((line) => appleGitSandboxCacheDenial.test(line));
-  const admittedCodexAliasWarning = command === '/Applications/ChatGPT.app/Contents/Resources/codex'
+  const admittedCodexAliasWarning = command === '/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex'
     && lines.length === 1 && codexPathAliasSandboxWarning.test(lines[0]);
   assert(admittedAppleGitDenial || admittedCodexAliasWarning, 5);
   return stdout;

@@ -154,7 +154,7 @@ ordinaryTest('source-view identity binds sorted readable tracked entries', () =>
 });
 
 ordinaryTest('Codex profile is custom least privilege and never uses legacy sandbox', () => {
-  const profile = profileToml('/private/view', '/private/scratch');
+  const profile = profileToml('/private/view', '/private/scratch', '/private/transport');
   assert.match(profile, /":root" = "deny"/);
   assert.match(profile, /":minimal" = "read"/);
   assert.match(profile, /"\/private\/scratch" = "write"/);
@@ -241,10 +241,10 @@ ordinaryTest('operation and resource identities are deterministic and bound', ()
     resourceAttemptOrdinal: 0,
   }), /^[a-f0-9]{64}$/);
   assert.equal(MODEL_RUNNER_IDENTITY_SHA256.length, 64);
-  assert.equal(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)), 886);
-  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'codexVersion'), ['codexVersion', '0.155.0-alpha.16.3']);
+  assert.equal(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)), 885);
+  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'codexVersion'), ['codexVersion', '0.158.0-alpha.2.1']);
   assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'contractVersion'), ['contractVersion', 'model-runner-v3.6']);
-  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'hostPinVersion'), ['hostPinVersion', 'model-runner-host-pins-v3.18']);
+  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'hostPinVersion'), ['hostPinVersion', 'model-runner-host-pins-v3.19']);
   for (const relativePath of ['execution.js', 'journalStore.js']) {
     const implementation = fs.readFileSync(path.join(__dirname, relativePath), 'utf8');
     assert.match(implementation, new RegExp(MODEL_RUNNER_IDENTITY_SHA256, 'u'));
@@ -316,8 +316,8 @@ ordinaryTest('host pin fixture has an exact hash-bound format', async () => {
   const fixture = path.resolve(__dirname, '../../.loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json');
   assert.equal(fs.statSync(fixture).size, PIN_FIXTURE_BYTES);
   const pins = loadHostPins(fixture);
-  assert.equal(pins.fixtureVersion, 'model-runner-host-pins-v3.18');
-  assert.equal(pins.executables.find((entry) => entry.name === 'codex').version, 'codex-cli 0.155.0-alpha.16.3');
+  assert.equal(pins.fixtureVersion, 'model-runner-host-pins-v3.19');
+  assert.equal(pins.executables.find((entry) => entry.name === 'codex').version, 'codex-cli 0.158.0-alpha.2.1');
   assert.equal(verifyCurrentNode(pins), true);
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-pins-'));
   const altered = path.join(directory, 'pins.json');
@@ -379,13 +379,13 @@ ordinaryTest('host pin fixture has an exact hash-bound format', async () => {
 ordinaryTest('version probes admit only closed known sandbox diagnostics', () => {
   const stdout = 'git version 2.50.1 (Apple Git-155)\n';
   const denial = "git: error: couldn't create cache file '/var/folders/pt/opaque_123/T/xcrun_db-Ab12Cd' (errno=Operation not permitted)\n";
-  const codex = '/Applications/ChatGPT.app/Contents/Resources/codex';
+  const codex = '/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex';
   const aliasWarning = 'WARNING: proceeding, even though we could not create PATH aliases: Operation not permitted (os error 1)\n';
   assert.equal(validatedVersionOutput('/usr/bin/git', stdout, ''), stdout);
   assert.equal(validatedVersionOutput('/usr/bin/git', stdout, denial), stdout);
   assert.equal(validatedVersionOutput('/usr/bin/git', stdout, `${denial}${denial}`), stdout);
-  assert.equal(validatedVersionOutput(codex, 'codex-cli 0.155.0-alpha.16.3\n', aliasWarning),
-    'codex-cli 0.155.0-alpha.16.3\n');
+  assert.equal(validatedVersionOutput(codex, 'codex-cli 0.158.0-alpha.2.1\n', aliasWarning),
+    'codex-cli 0.158.0-alpha.2.1\n');
   expectExit(5, () => validatedVersionOutput('/usr/bin/git', stdout, denial.trimEnd()));
   expectExit(5, () => validatedVersionOutput('/usr/bin/git', stdout, `${denial}${denial}${denial}`));
   expectExit(5, () => validatedVersionOutput('/usr/bin/git', stdout, `${denial}${denial}unexpected\n`));
@@ -491,7 +491,7 @@ ordinaryTest('trusted live host probes admit only an explicit private cache scra
   }
 });
 
-ordinaryTest('disabled doctor accepts only the protected v3.9 compatibility selector for the exact v3.18 fixture', () => {
+ordinaryTest('disabled doctor accepts only the protected v3.9 compatibility selector for the exact v3.19 fixture', () => {
   const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-doctor-scratch-'));
   const policy = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-doctor-policy-'));
   const original = {
