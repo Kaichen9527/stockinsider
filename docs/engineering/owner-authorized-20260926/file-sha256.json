@@ -1,5 +1,5 @@
 {
-  "README.md": "8951dd969de26983ec4c259124497ac5f683d817dcb7a3b9e9cd9bd76d7303f7",
+  "README.md": "da1828c0e2e71606a2a31235ea66d0911d1b9bd745006f36231c094c50f16013",
   "command-provenance.json": "c8323688ded3d3dcf0434dea5d591feac98c2834af9286a910340a44e7a133c4",
   "final-host-listing.json": "699cef589f4afc921d1362e03bdc89bd5b21ac36e935d7096ae3526c2067a7ac",
   "final-noncredential-tests.txt": "30e4cfc73203e0215b0828ee62a8ad9eefadf6aa2a9f55dffe55ebc56cf89a99",
@@ -8,6 +8,8 @@
   "host-actual-adapter-policy-canary.json": "7aa7b84d47c64ade4dee9e71144e104f7c29c2853903eeb3ea9585386ec9c88b",
   "host-candidate-main-to-a42a11a.patch": "918919156aed654a46c6361885ca5143e3ab21cc0b713e02daed4b3cb5e3e4e4",
   "host-candidate-validation.json": "cc8ef27d6cf4dc1f92dda4ddc4c38041ae85ebd8afcd6eb3b181e95a67f7a54d",
+  "host-code-native-comment-final.json": "949e7b4ff5911ce24f612f623e6e6bacc2e5f82b36cfe05b3cdb5bd54c841516",
+  "host-code-native-review-final.json": "4313c26dddfe484e3b566e3f589c118a190bf38599a8c99b1802d8ce658c0ddd",
   "host-final-native-comments-observed.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
   "host-final-native-reviews-observed.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
   "host-host-verification-v2.json": "e9a872721909da34ba5bd21e783b5c82a389a172ddc4eee5fce1a7c0417da25d",
@@ -27,5 +29,5 @@
   "product_ci.json": "b0e38d8196f34328f2aaae6e2a2f4e93da63219623d5b2c598e51b406474f1b5",
   "research-ci-c3522ea-to-54a45ef.patch": "fa66fbc571662f6e6af47d46df8be4080985d743763a86baf9ef4f3b395e1ead",
   "status-initial-capture.json": "c0ea253a3991d33e0e9c57fa1863b62924a5b2a50fb89c8a74faea8614d403a2",
-  "status.json": "3ecc5327707fd2c21e611e3037dc80c5c3f9f984ab6e398004b9a27d094bd064"
+  "status.json": "aa9120962b6d2fe7b0baf31a680fb00b8f80e6c8fde3fcc71b6c7459b5419387"
 }

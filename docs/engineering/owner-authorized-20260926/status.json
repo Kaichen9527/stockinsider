@@ -1,6 +1,6 @@
 {
   "schema": "owner-authorized-chat-execution-status-v1",
-  "observed_at": "2026-09-26T09:12:56.241147+00:00",
+  "observed_at": "2026-09-26T09:15:48.694575+00:00",
   "user_authorization_recorded": true,
   "product_source": "54a45ef7095d61e928b7e23bcd0d8961a505acee",
   "host_candidate": "a42a11af7cf6a829209b7127962e01bfe969b143",
@@ -21,7 +21,7 @@
   "host_actual_adapter_sandbox_checks_passed": 9,
   "registered_formal_model_gate_cases_passed": null,
   "live_model_test_executed": false,
-  "host_final_native_code_decision": "no_explicit_final_native_decision_captured",
+  "host_final_native_code_decision": "ACCEPT CODE, independent exact source, not protected release",
   "protected_gate_passed": false,
   "main_merged": false,
   "production_written": false,
@@ -50,5 +50,18 @@
     "conclusion": "success",
     "scope": "diagnostic product-runtime, not protected Code Gate"
   },
-  "host_final_native_comment_ids": []
+  "host_final_native_comment_ids": [
+    4110852975
+  ],
+  "host_independent_code_review": {
+    "review_id": 5325343295,
+    "comment_id": 4110852975,
+    "P0": 0,
+    "P1": 0,
+    "P2": 0,
+    "commit": "a42a11af7cf6a829209b7127962e01bfe969b143",
+    "tree": "07aa32453f2c911fda792cbcb85a3120eb496ec5",
+    "base": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+    "scope": "candidate CODE only; explicit exclusions in native reviewer body retained"
+  }
 }
