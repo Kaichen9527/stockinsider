@@ -1,0 +1,129 @@
+diff --git a/.github/workflows/reviewed-robustness.yml b/.github/workflows/reviewed-robustness.yml
+index 8e1d699e624ee5c16e1abbd7ecc5e1c6fcf28dc3..747c17532304a53fd49998dec910269e15cd3c09 100644
+--- a/.github/workflows/reviewed-robustness.yml
++++ b/.github/workflows/reviewed-robustness.yml
+@@ -117,7 +117,7 @@ jobs:
+         run: |
+           extra=()
+           if [ -n "$REVIEW_COMMENT_ID" ]; then extra=(--review-comment-id "$REVIEW_COMMENT_ID"); fi
+-          python research/tw-strategy-lab/run_robustness.py --execute \
++          python research/tw-strategy-lab/run_robustness.py --execute --apply-reviewed-calendar-amendment \
+             --data "$RUNNER_TEMP/frozen-replay-inputs/replay-recovery" \
+             --review-id "$REVIEW_ID" "${extra[@]}" --output "$RUNNER_TEMP/robustness-evidence/execution"
+       - name: Retain real outcomes including blocked or failed paths
+diff --git a/research/tw-strategy-lab/reports/2026-09-26-reviewed-ci-repair.md b/research/tw-strategy-lab/reports/2026-09-26-reviewed-ci-repair.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..07abeac596146ee88ef72125d58a2e6f44367ff5
+--- /dev/null
++++ b/research/tw-strategy-lab/reports/2026-09-26-reviewed-ci-repair.md
+@@ -0,0 +1,30 @@
++# Exact review finding repair — 2026-09-26
++
++Independent native review 5325166143 / comment 4110689295 on source c3522ea
++identified a missing --apply-reviewed-calendar-amendment argument in the guarded
++CI execution step. This repair adds that argument; the CLI still verifies both
++independent exact-head contracts before applying the single bounded overlay.
++No execution flag, native acceptance, artifact hash, original input, frozen
++proposal, 31-path budget, R1 equality or statistical criterion is relaxed.
++
++Three offline regression tests execute the actual workflow shell with an argv
++recorder in place of Python. They cover submitted and inline review forms,
++paths containing spaces, exactly one runner invocation, the amendment flag,
++and the existing execution/trigger boundary. They do not invoke the study or
++contact a network. On the old workflow two tests failed for the missing flag;
++after the fix all 240 research tests passed in the Chat Linux workspace.
++GitHub CI and new exact-head independent review must be checked separately.
++
++The completed c3522ea 31-path Mac study remains immutable; it is not rerun or
++retargeted to this repair. Its original 49-file inventory, including six missing
++logs, has now been restored byte-exact on evidence branch commit
++797e6f9f5492f568f1200b4660ee49594459c6c2. Archive run 36229261758 succeeded;
++artifact 10902450836 ZIP SHA256 is
++4ee7f33d76d2a655bd1352af72dfd9c89c2c5f2e3008fc4652d487316e49eed8.
++The downloaded ZIP was also independently hash-checked and all 49 inventory
++entries matched. Archive success is not a new research run or release approval.
++
++The user has authorized the new measured host-identity compatibility work in
++separate PR #285 and deferred capacity and production deployment. No host pin,
++protected authority, production data, article publication or trade is changed
++by this workflow repair. Full financial/article coverage remains unaccepted.
+diff --git a/research/tw-strategy-lab/test_reviewed_workflow.py b/research/tw-strategy-lab/test_reviewed_workflow.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..f96a675d40df78151a992f6f9b4c658bc018f5df
+--- /dev/null
++++ b/research/tw-strategy-lab/test_reviewed_workflow.py
+@@ -0,0 +1,74 @@
++"""Exercise the workflow's real shell argv without running a study or network."""
++import json
++import os
++from pathlib import Path
++import subprocess
++import sys
++import tempfile
++import textwrap
++import unittest
++
++ROOT = Path(__file__).resolve().parents[2]
++WORKFLOW = ROOT / '.github/workflows/reviewed-robustness.yml'
++
++
++def execution_step():
++    text = WORKFLOW.read_text()
++    start = text.index('      - name: Execute exactly the reviewed finite R1-R4 paths\n')
++    end = text.index('      - name: Retain real outcomes', start)
++    step = text[start:end]
++    body = textwrap.dedent(step.split('        run: |\n', 1)[1])
++    return step, body
++
++
++class ReviewedWorkflowTests(unittest.TestCase):
++    def invoke_shell(self, comment_id):
++        _, shell = execution_step()
++        with tempfile.TemporaryDirectory(prefix='workflow contract with spaces ') as tmp:
++            root = Path(tmp)
++            spy = root / 'python'
++            spy.write_text('#!' + sys.executable + '\n' +
++                           'import json, os, sys\n' +
++                           'with open(os.environ["ARG_LOG"], "a") as f:\n' +
++                           ' f.write(json.dumps(sys.argv[1:]) + "\\n")\n')
++            spy.chmod(0o700)
++            log = root / 'argv.jsonl'
++            env = {'PATH': str(root) + os.pathsep + '/usr/bin:/bin',
++                   'RUNNER_TEMP': str(root), 'REVIEW_ID': '5324139141',
++                   'REVIEW_COMMENT_ID': comment_id, 'ARG_LOG': str(log)}
++            result = subprocess.run(['/bin/bash', '-euo', 'pipefail', '-c', shell],
++                                    env=env, capture_output=True, text=True, timeout=10)
++            self.assertEqual(result.returncode, 0, result.stderr)
++            calls = [json.loads(line) for line in log.read_text().splitlines()]
++            self.assertEqual(len(calls), 1, 'Only one finite runner invocation is allowed')
++            args = calls[0]
++            self.assertEqual(args.count('--execute'), 1)
++            self.assertEqual(args.count('--apply-reviewed-calendar-amendment'), 1)
++            self.assertEqual(args[args.index('--data') + 1],
++                             str(root / 'frozen-replay-inputs/replay-recovery'))
++            self.assertEqual(args[args.index('--output') + 1],
++                             str(root / 'robustness-evidence/execution'))
++            self.assertEqual(args[args.index('--review-id') + 1], '5324139141')
++            self.assertNotIn('--skip-review', args)
++            self.assertNotIn('--force', args)
++            return args
++
++    def test_native_inline_review_id_preserved(self):
++        args = self.invoke_shell('4109827781')
++        self.assertEqual(args[args.index('--review-comment-id') + 1], '4109827781')
++
++    def test_submitted_review_without_inline_comment(self):
++        args = self.invoke_shell('')
++        self.assertNotIn('--review-comment-id', args)
++
++    def test_execution_is_gated_and_not_implicitly_retriggered_by_review(self):
++        step, _ = execution_step()
++        self.assertIn("if: steps.admission.outputs.execute == 'true'", step)
++        trigger = WORKFLOW.read_text().split('permissions:', 1)[0]
++        self.assertNotIn('pull_request_review:', trigger)
++        self.assertNotIn('issue_comment:', trigger)
++        self.assertIn('types: [opened, synchronize, reopened]', trigger)
++
++
++if __name__ == '__main__':
++    unittest.main()

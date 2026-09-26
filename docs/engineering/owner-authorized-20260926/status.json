@@ -1,0 +1,46 @@
+{
+  "schema": "owner-authorized-chat-execution-status-v1",
+  "observed_at": "2026-09-26T09:09:25.503882+00:00",
+  "user_authorization_recorded": true,
+  "product_source": "54a45ef7095d61e928b7e23bcd0d8961a505acee",
+  "host_candidate": "a42a11af7cf6a829209b7127962e01bfe969b143",
+  "main_unchanged": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "product_independent_code_review": {
+    "review_id": 5325215908,
+    "comment_id": 4110740313,
+    "P0": 0,
+    "P1": 0,
+    "P2": 0,
+    "scope": "CODE ONLY"
+  },
+  "research_offline_tests_passed": 240,
+  "product_PCR_suite_tests_passed": 38,
+  "PCR_cases_included": 31,
+  "host_noncredential_tests_passed": 28,
+  "host_identity_closure_tests_passed": 6,
+  "host_actual_adapter_sandbox_checks_passed": 9,
+  "registered_formal_model_gate_cases_passed": null,
+  "live_model_test_executed": false,
+  "host_final_native_code_decision": "pending_capture",
+  "protected_gate_passed": false,
+  "main_merged": false,
+  "production_written": false,
+  "capacity_work_performed": false,
+  "capacity_deferred_by_user": true,
+  "complete_financial_articles_accepted": 0,
+  "financial_field_period_gaps_remaining": 11560,
+  "archive_original_31_path_research": {
+    "source": "c3522eac9ec9f5712ae094c3864b1da50664e829",
+    "completed_paths": 31,
+    "rerun_in_this_turn": false,
+    "all_49_original_files_retained": true,
+    "archive_run": 36229261758,
+    "artifact_id": 10902450836,
+    "zip_sha256": "4ee7f33d76d2a655bd1352af72dfd9c89c2c5f2e3008fc4652d487316e49eed8"
+  },
+  "non_capacity_remaining": [
+    "missing_old_trusted_executor_blocks_unmodified_base_first_bootstrap",
+    "genuine_protected_host_model_proof_and_exact_release_envelopes",
+    "formal_financial_source_rights_and_full_article_validation"
+  ]
+}

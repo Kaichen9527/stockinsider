@@ -1,0 +1,62 @@
+{
+  "schema": "candidate-worktree-validation-v1",
+  "parent_commit": "c69610a75bb6e4eed9d21cadb434e8ab7d69a0e1",
+  "tested_candidate_file_sha256": {
+    ".loop-engineering/state/changes/source-led-opportunity-engine-v3/active-artifact-catalog-v3.json": "5e0186c93ef4bfc9bc8caea762279a5c186305bfe79b496d80d3c2c4a4db45b7",
+    ".loop-engineering/state/changes/source-led-opportunity-engine-v3/host-pin-compatibility-amendment.md": "1e37daba7261f633b18ecbe6c03dc1994f2ff9b63c2445e5d08ecdf5f420da84",
+    ".loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-contract.md": "a47370a723e92fb679c336a94032330cd2bb38d6f4b0661a3d8666f21c554dc2",
+    ".loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json": "ce6c6603e1635bed3f669e1417772865b6f208aa32590d98e6dc0a7672e4feb4",
+    ".loop-engineering/state/changes/source-led-opportunity-engine-v3/requirements.md": "ba317781bbe47753b2caccbc4483fc93f0664b79078db55f3066a15af346c6bd",
+    "package.json": "66b7c8c20a27423969e40d63512ecd0196b1a204c0995cc93aeb17900e61e1c3",
+    "scripts/model-runner-v3/codexAdapter.js": "2849bba82647dccfd2ec330d13c40969ba8b3891dfb90a23e53a67f6b94eb226",
+    "scripts/model-runner-v3/execution.js": "91c9f8a9f9e4c1bcb71c696785de42995d45fc5ba1915ca7fb162fcd0ba44a77",
+    "scripts/model-runner-v3/hostPreflight.js": "10f999271103f093cec4d2ba8a514d1b38bc99bc38f2d3731cc2f814828e9c14",
+    "scripts/model-runner-v3/journalStore.js": "99b60930482b130f6f8d226547d4db4a0df0da6a6a981750a10b6bc131179d31",
+    "scripts/model-runner-v3/model-runner-v3.test.js": "87295d0a2a7836243e3674a7777b0642fede355b5f90119afbf13c09726b2db3",
+    "scripts/model-runner-v3/profile-isolation.test.js": "56422247a3ea7c84acce7320d1757ba51ea81fcb1694fd3b0b328db32bf86977",
+    "scripts/model-runner-v3/runner.js": "330d5511fde35ae28fc066977a8432a4ae4d55b2ea0c950acf1b5c4fcb75fbbd",
+    "scripts/opportunity-v3/acceptance-traceability.test.mjs": "00507a50baafb307d91b38ffafe17bd9e7c6a9748010b8076c7dc895b4122392",
+    "scripts/opportunity-v3/doctor.mjs": "cdd14111a6aacab9adc76c017376c28d0ba3e0a495a8225b7335bc8fe40bb480",
+    "scripts/opportunity-v3/host-compatibility-canary.py": "600e77ce84f4a6cbc275b9f2e28cc3012fd778ac1be47e41ef72600ab162befc"
+  },
+  "identity": {
+    "fixture_sha256": "953b898dfa786675dd5e6dda3af4265ad49086929fb519c989c3629682eeaca1",
+    "runner_identity_sha256": "5ff9c6404c0c645e4845784923190195fe1fd5eb53dfef2be57c23e79e0fad64",
+    "runner_identity_bytes": 885,
+    "permission_profile_version": "model-runner-permissions-v3.6",
+    "protected_base_registration": false,
+    "production_authorized": false
+  },
+  "offline_unit_tests": {
+    "passed": 27,
+    "failed": 0,
+    "mode": "noncredential_candidate_with_explicit_private_scratch_and_policy",
+    "full_live_model_suite_executed": false
+  },
+  "actual_adapter_policy_canary": {
+    "passed": 9,
+    "failed": 0,
+    "sha256": "7aa7b84d47c64ade4dee9e71144e104f7c29c2853903eeb3ea9585386ec9c88b"
+  },
+  "web_build_passed": true,
+  "standalone_traceability": "rejected_by_existing_protected_harness_requirement_not_counted_as_pass",
+  "real_credentials_loaded": false,
+  "protected_authority_changed": false,
+  "merged_main": false,
+  "production_written": false,
+  "log_sha256": {
+    "offline-attempt-without-harness-paths.txt": "a114e38e50df7d96fa725e9d32874838baffa618b0465945e67c67890a1d54ca",
+    "offline-attempt-with-incomplete-paths.txt": "1668e12e12848dd450239f6fba8b301e6d60606261b6ead48f310a16a1cda823",
+    "candidate-noncredential-tests.txt": "646c66050f10fb16f1341cbf77468744e6eee24d5b47e401f6cd3710733ac7f6",
+    "standalone-traceability-rejection.txt": "d4d297e132420cf372c098b97806e7ba83a3fdb0b1cfd44dd7632da782eff201",
+    "candidate-web-build.txt": "517811c02137d27c767814b46acea1b093db0a3ccf5a392facb9922ec2500a12",
+    "candidate-web-build-original.json": "29c03051473a3cf2bfcbfd92e4019103342590e1627d5d3840486a8e3cf55fdf"
+  },
+  "build_log_representation": {
+    "original_sha256": "aa34f2b3edcedafde57448a0b2e0c539952b8a7d67fc1954392f7dd3d1d672f7",
+    "original_bytes_container": "candidate-validation/candidate-web-build-original.json",
+    "normalized_view": "candidate-validation/candidate-web-build.txt",
+    "transformation": "split line endings, rstrip per line, one final LF; original bytes retained exactly; no build rerun or changed outcome"
+  },
+  "original_implementation_commit": "6cf8fffec9c7ab859a67b9057e62f94caac3ebfa"
+}

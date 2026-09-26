@@ -1,0 +1,24 @@
+{
+  "schema": "actual-test-command-observation-v1",
+  "source_commit": "54a45ef7095d61e928b7e23bcd0d8961a505acee",
+  "source_tree": "b70674b657f9e2242d0ca538b77c22169cd94f5c",
+  "argv": [
+    "/usr/local/bin/node",
+    "--experimental-strip-types",
+    "--test",
+    "--test-concurrency=1",
+    "scripts/opportunity-v3/product-correctness.test.mjs"
+  ],
+  "cwd": "/tmp/stockinsider-authorized-20260926-TVwINv/reviewed-source-54a45ef",
+  "command_hash_encoding": "UTF-8 canonical JSON array, no final LF",
+  "command_sha256": "377d116fa6f5e761a69b551ecda9e4b47dbc3ef2d5f9cf71bbd457ffa530772b",
+  "stdout_sha256": "68a4b6eaf64356116736a02165dd7d51bfb1d4e27eff0fda6af6713d4b6ddc01",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "observed_process_id": 41503,
+  "process_exit_code": 0,
+  "tests_passed": 38,
+  "PCR_cases_included": 31,
+  "production_written": false,
+  "protected_gate_authority": false,
+  "native_review_scope": "independent whole-range CODE acceptance only, not full host or production release"
+}
