@@ -1,0 +1,20 @@
+{
+  "schema": "host-compatibility-proposal-v1",
+  "status": "owner_authorized_independent_review_pending_not_active",
+  "protected_base": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "parent_fixture": "model-runner-host-pins-v3.18",
+  "parent_fixture_pre_lf_sha256": "4e3a508b5120903ec7364771ba1aea8b98bd43e1d58f0ed1fcee1faaf8457008",
+  "parent_model_oracle_listing_sha256": "fafab4f391e8bc077a0e2ec7ed10d1f4afc02bfbc77006ccdb436640e5e77161",
+  "proposed_fixture": "model-runner-host-pins-v3.19",
+  "proposed_fixture_pre_lf_sha256": "953b898dfa786675dd5e6dda3af4265ad49086929fb519c989c3629682eeaca1",
+  "proposed_fixture_file_bytes": 2219,
+  "proposed_fixture_file_sha256": "ce6c6603e1635bed3f669e1417772865b6f208aa32590d98e6dc0a7672e4feb4",
+  "observation_sha256": "d2a9ca4d6c4cc1ffd2cba287764c65c02346c2a44a9b791bfaedc80baf9ec508",
+  "user_authorization_quote": "我都核准你可以直接，依原本程序核准新版執行器身分、取得正式發版審查，正式機容量之後處理，把容量當下一步，其他的都完成",
+  "authority_scope": "User authorizes implementing and independently reviewing the exact measured successor under the existing protected-base-first procedure. Not an independent review, fabricated gate success, ruleset bypass, deployment, trade, capacity cleanup, purchase or credential change.",
+  "production_deferred": true,
+  "capacity_deferred": true,
+  "active_fixture_modified": false,
+  "protection_modified": false,
+  "model_invoked": false
+}
