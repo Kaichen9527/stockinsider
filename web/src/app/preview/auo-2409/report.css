@@ -148,7 +148,8 @@ tbody th { font-family: ui-monospace, monospace; }
 
 .appendix-title { margin: 50px 0 15px; font-size: 25px; }
 .assumption-list { margin-top: 28px; border-top: 1px solid var(--rule); }
-.assumption-list article, .source-list li { display: grid; grid-template-columns: 48px 1fr; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--rule); }
+.assumption-list article, .source-list li { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--rule); }
+.source-list li > div { min-width: 0; overflow-wrap: anywhere; }
 .assumption-list article > span, .source-list li > span { color: var(--cyan); font: 800 12px ui-monospace, monospace; }
 .assumption-list strong { font-size: 14px; }
 .assumption-list p, .source-list p { margin: 5px 0 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
