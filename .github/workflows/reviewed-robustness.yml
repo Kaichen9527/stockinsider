@@ -57,12 +57,30 @@ jobs:
               return r.strict_json(raw)
           record = {'source_commit': head, 'execute': False, 'review': None, 'new_simulations': 0, 'production_authorized': False, 'release_gate_authority': False}
           try:
+              def pages(path):
+                  rows = []
+                  for page in range(1, 11):
+                      batch = get(path + '?per_page=100&page=' + str(page))
+                      if not isinstance(batch, list):
+                          raise ValueError('review_list_shape')
+                      rows.extend(batch)
+                      if len(batch) < 100:
+                          return rows
+                  raise ValueError('review_pagination_bound_exceeded')
+              reviews = pages('pulls/284/reviews')
+              comments = pages('pulls/284/comments')
+              if any(v.get('commit_id') == head and v.get('state') == 'CHANGES_REQUESTED' for v in reviews):
+                  raise ValueError('current_head_changes_requested')
               accepted = []
-              for review in get('pulls/284/reviews?per_page=100'):
+              for review in reviews:
                   try:
                       accepted.append(r.verify_review_payload(review, head))
                   except (ValueError, TypeError, KeyError):
-                      continue
+                      for comment in comments:
+                          try:
+                              accepted.append(r.verify_review_payload(review, head, comment=comment))
+                          except (ValueError, TypeError, KeyError):
+                              continue
               if not accepted:
                   raise ValueError('genuine_exact_head_contract_acceptance_missing')
               review = max(accepted, key=lambda value: value['id'])
@@ -80,6 +98,7 @@ jobs:
               stream.write('execute=' + str(record['execute']).lower() + '\n')
               if record['execute']:
                   stream.write('review_id=' + str(record['review']['id']) + '\n')
+                  stream.write('review_comment_id=' + str(record['review'].get('review_comment_id', '')) + '\n')
           print(json.dumps(record))
           PY
       - name: Download only the verified frozen recovery artifact
@@ -94,10 +113,13 @@ jobs:
         if: steps.admission.outputs.execute == 'true'
         env:
           REVIEW_ID: ${{ steps.admission.outputs.review_id }}
+          REVIEW_COMMENT_ID: ${{ steps.admission.outputs.review_comment_id }}
         run: |
+          extra=()
+          if [ -n "$REVIEW_COMMENT_ID" ]; then extra=(--review-comment-id "$REVIEW_COMMENT_ID"); fi
           python research/tw-strategy-lab/run_robustness.py --execute \
             --data "$RUNNER_TEMP/frozen-replay-inputs/replay-recovery" \
-            --review-id "$REVIEW_ID" --output "$RUNNER_TEMP/robustness-evidence/execution"
+            --review-id "$REVIEW_ID" "${extra[@]}" --output "$RUNNER_TEMP/robustness-evidence/execution"
       - name: Retain real outcomes including blocked or failed paths
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

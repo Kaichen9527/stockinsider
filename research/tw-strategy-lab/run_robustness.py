@@ -158,42 +158,15 @@ class NoRedirect(HTTPRedirectHandler):
         raise ValueError('review_redirect_rejected')
 
 
-def verify_review_payload(review, commit, now=None):
-    """Only called on a response retrieved from the fixed public GitHub API."""
-    marker = 'ROBUSTNESS_V2_1_ACCEPTED ' + PROPOSAL_SHA256 + ' ' + CLARIFICATION_SHA256
-    if not isinstance(review, dict) or not isinstance(review.get('user'), dict) or not isinstance(review.get('body'), str):
-        raise ValueError('invalid_review_payload')
-    user = review.get('user', {})
-    bots = {'chatgpt-codex-connector[bot]', 'copilot-pull-request-reviewer[bot]', 'Copilot'}
-    eligible = (user.get('type') == 'Bot' and user.get('login') in bots) or review.get('author_association') in {'OWNER', 'MEMBER', 'COLLABORATOR'}
-    if (not eligible or user.get('login') == 'Kaichen9527' or review.get('commit_id') != commit
-            or review.get('state') not in {'APPROVED', 'COMMENTED'} or marker not in str(review.get('body', '')).splitlines()):
-        raise ValueError('independent_exact_head_contract_acceptance_missing')
-    submitted = datetime.fromisoformat(str(review.get('submitted_at', '')).replace('Z', '+00:00'))
-    if submitted.tzinfo is None or submitted < datetime(2026, 9, 25, 6, 48, 36, tzinfo=timezone.utc) or submitted > (now or datetime.now(timezone.utc)):
-        raise ValueError('review_timestamp_invalid')
-    return {'id': review['id'], 'reviewer': user['login'], 'commit': commit,
-            'submitted_at': review['submitted_at'], 'proposal_sha256': PROPOSAL_SHA256,
-            'clarification_sha256': CLARIFICATION_SHA256,
-            'review_body_sha256': digest(review['body'].encode()), 'release_gate_authority': False}
+def verify_review_payload(review, commit, now=None, comment=None):
+    """Native review text only; an author comment or a new head is not accepted."""
+    from native_review import verify
+    return verify(review, commit, PROPOSAL_SHA256, CLARIFICATION_SHA256, now, comment)
 
 
-def fetch_contract_review(review_id, commit):
-    if type(review_id) is not int or review_id < 1:
-        raise ValueError('review_id_required')
-    url = f'https://api.github.com/repos/Kaichen9527/stockinsider/pulls/284/reviews/{review_id}'
-    request = Request(url, headers={'Accept': 'application/vnd.github+json', 'User-Agent': 'StockInsider-contract-review-verifier/1'})
-    with build_opener(ProxyHandler({}), NoRedirect()).open(request, timeout=15) as response:
-        if response.url != url or response.status != 200:
-            raise ValueError('review_transport_invalid')
-        raw = response.read(1024 * 1024 + 1)
-    if len(raw) > 1024 * 1024:
-        raise ValueError('review_response_bound')
-    review = strict_json(raw)
-    if review.get('id') != review_id:
-        raise ValueError('review_id_mismatch')
-    receipt = verify_review_payload(review, commit)
-    return {**receipt, 'url': url, 'response_sha256': digest(raw)}
+def fetch_contract_review(review_id, commit, comment_id=None):
+    from native_review import fetch
+    return fetch(review_id, commit, PROPOSAL_SHA256, CLARIFICATION_SHA256, comment_id)
 
 
 def enrich(result, benchmark):
@@ -285,10 +258,10 @@ def run_registered_paths(bars, actions, benchmark, bundle, proposal, output, ide
     return outcome
 
 
-def execute(data_directory, output, review_id):
+def execute(data_directory, output, review_id, review_comment_id=None):
     proposal, bundle = contract(), baseline_bundle()
     source = source_identity()
-    review = fetch_contract_review(review_id, source['commit'])
+    review = fetch_contract_review(review_id, source['commit'], review_comment_id)
     manifest, data_hash, bars, actions, benchmark, exclusions = load_dataset(data_directory)
     if data_hash != DATASET_SHA256 or sorted(bars) != proposal['scope']['universe']:
         raise ValueError('exact_replay_inputs_missing_or_universe_changed')
@@ -304,13 +277,14 @@ def main():
     parser.add_argument('--execute', action='store_true')
     parser.add_argument('--data', type=Path)
     parser.add_argument('--review-id', type=int)
+    parser.add_argument('--review-comment-id', type=int, help='Optional native inline acceptance belonging to this submitted review')
     args = parser.parse_args()
     if args.output.exists() or args.output.is_symlink():
         parser.error('output must be a new path')
     if args.execute:
         if args.data is None or args.review_id is None:
             parser.error('execution requires --data and --review-id')
-        result = execute(args.data, args.output, args.review_id)
+        result = execute(args.data, args.output, args.review_id, args.review_comment_id)
     else:
         result = inspect_retained()
         args.output.mkdir(parents=True, exist_ok=False)
