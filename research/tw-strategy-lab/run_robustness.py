@@ -258,40 +258,99 @@ def run_registered_paths(bars, actions, benchmark, bundle, proposal, output, ide
     return outcome
 
 
-def execute(data_directory, output, review_id, review_comment_id=None):
+def execute(data_directory, output, review_id, review_comment_id=None, apply_calendar_amendment=False):
     proposal, bundle = contract(), baseline_bundle()
     source = source_identity()
     review = fetch_contract_review(review_id, source['commit'], review_comment_id)
-    manifest, data_hash, bars, actions, benchmark, exclusions = load_dataset(data_directory)
+    amendment_acceptance = None
+    if apply_calendar_amendment:
+        from calendar_amendment import load_amendment, verify_additional_acceptance, validate_and_apply
+        amendment = load_amendment()
+        amendment_acceptance = verify_additional_acceptance(review)
+    from action_calendar_audit import load_frozen_dataset
+    (manifest, data_hash, bars, actions, benchmark, exclusions), _ = load_frozen_dataset(data_directory)
     if data_hash != DATASET_SHA256 or sorted(bars) != proposal['scope']['universe']:
         raise ValueError('exact_replay_inputs_missing_or_universe_changed')
     identity = {'source': source, 'proposal_sha256': PROPOSAL_SHA256, 'dataset_sha256': data_hash,
                 'review': review, 'clarification_sha256': CLARIFICATION_SHA256, 'observed_at': datetime.now(timezone.utc).isoformat(),
                 'normalized_source_reconstructed': manifest.get('knowledge_mode', 'official_effective_date_reconstruction'), 'exclusions': exclusions}
+    if apply_calendar_amendment:
+        actions, overlay = validate_and_apply(bars, actions, sorted(benchmark), amendment)
+        identity['action_calendar_overlay'] = overlay
+        identity['calendar_amendment_acceptance'] = amendment_acceptance
     return run_registered_paths(bars, actions, benchmark, bundle, proposal, output, identity)
 
 
-def main():
+def execution_exit_code(result):
+    """An executed failed study must not become a green job after saving evidence.
+
+    R2 hypothesis checks may fail in a successfully executed exploratory study;
+    they never confer trading authority. This validates execution completeness,
+    not profitability, and does not alter any simulation or frozen expectation.
+    """
+    if not isinstance(result, dict):
+        return 2
+    if (result.get('status') != 'development_only_complete'
+            or result.get('R1_canonical_replay_passed') is not True
+            or result.get('holdout_accessed') is not False
+            or result.get('production_authorized') is not False
+            or result.get('winner_selected') is not None):
+        return 2
+    paths = registered_paths()
+    expected = {path['id']: path for path in paths}
+    for key in ('registered_simulation_paths', 'retained_path_records', 'completed_simulation_paths'):
+        if type(result.get(key)) is not int or result[key] != len(paths):
+            return 2
+    trials = result.get('trials')
+    if not isinstance(trials, list) or len(trials) != len(paths):
+        return 2
+    seen = set()
+    for trial in trials:
+        if not isinstance(trial, dict) or not isinstance(trial.get('id'), str):
+            return 2
+        tid = trial['id']
+        if tid in seen or tid not in expected:
+            return 2
+        seen.add(tid)
+        if (any(trial.get(key) != value for key, value in expected[tid].items())
+                or trial.get('status') != 'exploratory'
+                or not isinstance(trial.get('result_file'), str) or not trial['result_file']):
+            return 2
+        if trial['work'] == 'R1':
+            checks = trial.get('canonical_equality')
+            if not isinstance(checks, dict) or any(checks.get(k) is not True for k in ('result', 'signals', 'ledger')):
+                return 2
+    return 0
+
+
+def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--execute', action='store_true')
+    parser.add_argument('--apply-reviewed-calendar-amendment', action='store_true',
+                        help='Apply only the frozen single-event amendment after a separate exact-head native acceptance')
     parser.add_argument('--data', type=Path)
     parser.add_argument('--review-id', type=int)
     parser.add_argument('--review-comment-id', type=int, help='Optional native inline acceptance belonging to this submitted review')
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     if args.output.exists() or args.output.is_symlink():
         parser.error('output must be a new path')
     if args.execute:
         if args.data is None or args.review_id is None:
             parser.error('execution requires --data and --review-id')
-        result = execute(args.data, args.output, args.review_id, args.review_comment_id)
+        result = execute(args.data, args.output, args.review_id, args.review_comment_id, args.apply_reviewed_calendar_amendment)
     else:
+        if args.apply_reviewed_calendar_amendment:
+            parser.error('calendar amendment requires explicit --execute and independent acceptance')
         result = inspect_retained()
         args.output.mkdir(parents=True, exist_ok=False)
         (args.output / 'inspection.json').write_bytes(canonical(result) + b'\n')
     print(json.dumps({'status': result.get('status', 'retained_inspection_only'),
-                      'new_simulations': result.get('completed_simulation_paths', 0), 'output': str(args.output)}))
+                      'completed_simulation_paths': result.get('completed_simulation_paths', 0),
+                      'registered_simulation_paths': result.get('registered_simulation_paths', 0),
+                      'exit_code': execution_exit_code(result) if args.execute else 0, 'output': str(args.output)}))
+    return execution_exit_code(result) if args.execute else 0
 
 
 if __name__ == '__main__':
-    main()
+    raise SystemExit(main())

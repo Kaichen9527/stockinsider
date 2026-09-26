@@ -195,7 +195,7 @@ def _validate_inputs(bars_by_symbol, signals, sessions, start, end, actions, a):
                 raise ValueError('duplicate_action_session:' + symbol + ':' + session)
             seen.add(session)
             if session not in calendar:
-                raise ValueError('action_not_on_calendar')
+                raise ValueError('action_not_on_calendar:' + symbol + ':' + session)
             if event.get('status') != 'verified' or not _finite_number(event.get('share_factor')) or event['share_factor'] != 1:
                 raise ValueError('unresolved_or_share_changing_event:' + symbol + ':' + session)
             if not _finite_number(event.get('price_factor')) or event['price_factor'] <= 0:
