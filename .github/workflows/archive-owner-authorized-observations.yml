@@ -1,0 +1,48 @@
+name: Archive owner-authorized Chat observations (not release)
+
+on:
+  push:
+    branches:
+      - 'evidence/chat-owner-authorized-20260926'
+
+permissions:
+  contents: read
+
+jobs:
+  archive:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Verify original observation bytes without executing candidate code
+        run: |
+          python3 - <<'PY'
+          import pathlib,hashlib,json,base64
+          root=pathlib.Path('docs/engineering/owner-authorized-20260926')
+          listing=json.loads((root/'file-sha256.json').read_text())
+          for name,digest in listing.items():
+              relative=pathlib.Path(name)
+              assert not relative.is_absolute() and '..' not in relative.parts
+              path=root/relative
+              assert path.is_file() and not path.is_symlink(), name
+              assert hashlib.sha256(path.read_bytes()).hexdigest()==digest, name
+          for name in ('pcr-stdout-original.json','pcr-stderr-original.json'):
+              record=json.loads((root/name).read_text())
+              raw=base64.b64decode(record['content'],validate=True)
+              assert len(raw)==record['bytes']
+              assert hashlib.sha256(raw).hexdigest()==record['sha256']
+          status=json.loads((root/'status.json').read_text())
+          assert status['product_source']=='54a45ef7095d61e928b7e23bcd0d8961a505acee'
+          assert status['host_candidate']=='a42a11af7cf6a829209b7127962e01bfe969b143'
+          assert status['protected_gate_passed'] is False and status['main_merged'] is False
+          assert status['production_written'] is False and status['capacity_work_performed'] is False
+          print('Existing captured bytes verified. No test, model, study, gate attestation or deployment performed by this archive job.')
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: owner-authorized-chat-${{ github.run_id }}
+          path: docs/engineering/owner-authorized-20260926/
+          retention-days: 30
+          if-no-files-found: error
