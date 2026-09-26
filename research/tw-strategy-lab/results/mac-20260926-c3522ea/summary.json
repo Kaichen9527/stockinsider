@@ -1,0 +1,80 @@
+{
+  "schema": "chat-observed-research-summary-v1",
+  "source_commit": "c3522eac9ec9f5712ae094c3864b1da50664e829",
+  "source_tree": "9e0dbafdd774e45cc2e3118c9c3154dae9fc62cb",
+  "execution_location": "connected_Mac_isolated_workspace",
+  "result_sha256": "5ee6c713fd4e25516d428c779572f18f47ce159a70fdc93ad2b15573af931c84",
+  "study_status": "development_only_complete",
+  "original_inputs_unchanged": true,
+  "registered_paths": 31,
+  "completed_paths": 31,
+  "canonical_R1_paths_passed": 15,
+  "R2_passed": 5,
+  "R2_check_count": 8,
+  "R2_failed_checks": [
+    {
+      "metric": "median_net_trade_return_baseline",
+      "operator": ">",
+      "passed": false,
+      "threshold": 0,
+      "value": -0.019557843507296564
+    },
+    {
+      "metric": "largest_winner_share_of_positive_profit_baseline",
+      "operator": "<=",
+      "passed": false,
+      "threshold": 0.25,
+      "value": 0.42214036543033484
+    },
+    {
+      "metric": "largest_symbol_share_of_positive_profit_baseline",
+      "operator": "<=",
+      "passed": false,
+      "threshold": 0.5,
+      "value": 0.6487298151579685
+    }
+  ],
+  "S4_variants": [
+    {
+      "id": "R3:S4v2-070:baseline",
+      "completed_trades": 2,
+      "net_cagr": -0.001618920388563927,
+      "net_return": -0.008071900500000062
+    },
+    {
+      "id": "R3:S4v2-070:cost_stress",
+      "completed_trades": 1,
+      "net_cagr": -0.0006872661730915608,
+      "net_return": -0.003433088000000084
+    },
+    {
+      "id": "R3:S4v2-070:small_capacity",
+      "completed_trades": 0,
+      "net_cagr": 1.6821679652778698e-05,
+      "net_return": 8.414749999996474e-05
+    },
+    {
+      "id": "R3:S4v2-075:baseline",
+      "completed_trades": 9,
+      "net_cagr": 0.00037376215408424507,
+      "net_return": 0.0018710154999996842
+    },
+    {
+      "id": "R3:S4v2-075:cost_stress",
+      "completed_trades": 8,
+      "net_cagr": 0.0005643554658634198,
+      "net_return": 0.0028261839999998983
+    },
+    {
+      "id": "R3:S4v2-075:small_capacity",
+      "completed_trades": 4,
+      "net_cagr": 1.3518804540479934e-05,
+      "net_return": 6.762499999979354e-05
+    }
+  ],
+  "holdout_accessed": false,
+  "winner_selected": null,
+  "production_written": false,
+  "main_merged": false,
+  "protected_release_approved": false
+}

@@ -1,0 +1,19 @@
+{
+  "source_commit": "c3522eac9ec9f5712ae094c3864b1da50664e829",
+  "started_at": "2026-09-26T02:07:02.707843+00:00",
+  "input_files_sha256": {
+    "../original-replay/replay-recovery/corporate_actions.csv": "6642de0cd619c1b5fc61e4220a7603d851fc9849e7487cd57f0d525246d5e8d5",
+    "../original-replay/replay-recovery/prices.csv": "93edcbdef0a510187d7adb8e65f91f10bf82937b4226dd0615c1d7bc230d77f8",
+    "../original-replay/replay-recovery/benchmark.csv": "2a8a70324663f087f1b9134bd507f1b480c9a14f428762d2c6951c93a9fe30aa",
+    "../original-replay/replay-recovery/manifest.json": "a89bf8e5cbcfc464463a53c29f1f5f68f6419d72f2a06befcaeb008e3cff5cca",
+    "../original-replay/replay-recovery/recovery.json": "54060eb724c6536b7f996384c0d5de3c92fa6a88e9aec3c194b89ee77ce60d56",
+    "../original-replay/replay-recovery/later-acquisition-manifest.json": "e59ec708817a6ec2e14ba75d4295c01d207449c6e780629220fc74cb42bb41fd"
+  },
+  "production_written": false,
+  "execution_host": "connected_Mac_isolated_workspace",
+  "review_id": 5324139141,
+  "review_comment_id": 4109827781,
+  "exit_code": 0,
+  "finished_at": "2026-09-26T02:07:16.657956+00:00",
+  "original_inputs_unchanged": true
+}
