@@ -1,7 +1,7 @@
 import pbHistory from '../data/auo-pb-history-v1.json' with { type: 'json' };
 import { historicalPbQuartiles, type CommercializationInputs, type ForecastQuarterInput, type ScenarioAdjustment } from './auo-deep-dive-model.ts';
 
-export const AUO_RESEARCH_VERSION = 'auo-2409-2026-09-25.v6';
+export const AUO_RESEARCH_VERSION = 'auo-2409-2026-09-26.v7';
 export const AUO_AS_OF = '2026-09-24';
 export const AUO_PRICE = 34.20;
 export const AUO_DILUTED_SHARES_MILLION = 7_547;
@@ -19,6 +19,15 @@ export const auoAssetDisposalSensitivity = {
   perShareIfFullyAttributable: auoAnnouncedAssetDisposals.reduce((sum, transaction) => sum + transaction.expectedGainAfterEstimatedCostsAndTaxMillion, 0) / AUO_DILUTED_SHARES_MILLION,
   recognitionYear: null,
   attributableShare: null,
+} as const;
+
+// A net one-percentage-point cost increase on forecast Display revenue is a
+// stress test, not an estimate of AUO's yen-priced Corning glass exposure.
+export const auoDisplayInputCostSensitivity = {
+  displayRevenue2027Million: 29_700 + 32_850 + 33_050 + 31_350,
+  netCostAsShareOfDisplayRevenue: 0.01,
+  afterTaxEpsImpact: ((29_700 + 32_850 + 33_050 + 31_350) * 0.01 * (1 - 0.2)) / AUO_DILUTED_SHARES_MILLION,
+  verifiedExposure: null,
 } as const;
 
 export const auoQuarterlyActuals = [
@@ -144,6 +153,7 @@ export const auoSources = [
   { id: 'S36', type: '公開社群單一作者', title: 'Threads 公開貼文：鼎元訂單與友達 CPO／Intel 鏈之說', url: 'https://www.threads.com/@caiboren658/post/DdsyK13ksEL', date: '2026-09-25', supports: '9/25 觀測到的單一作者主帖及其續帖 https://www.threads.com/@caiboren658/post/DdsyK2dElWW；僅為待查假說，兩帖不算兩個獨立來源' },
   { id: 'S37', type: '供應鏈公司原始資料', title: '鼎元公司沿革與 2025–2026 光通訊產品開發', url: 'https://www.tyntek.com.tw/about_01.php', date: '2026-09-25', supports: '鼎元自述 100G／200G lane PD 與 Micro-PD 開發；不含 Intel 或友達 CPO 訂單確認；頁面未標具體發布日，日期為查核日' },
   { id: 'S38', type: '公開新聞', title: 'MoneyDJ：鼎元 PD 訂單能見度與 Micro LED CPO 仍在驗證', url: 'https://www.moneydj.com/KMDJ/news/newsviewer.aspx?a=72ab35d5-00c3-4978-891a-118a52253901', date: '2026-09-09', supports: '報導分別描述既有 PD 產品訂單能見度及友達／富采 Micro LED CPO 開發驗證；未確認 Threads 所稱 Intel 或具名 CSP 新單' },
+  { id: 'S39', type: '材料供應商原始資料', title: '康寧：調整日圓計價顯示玻璃基板價格', url: 'https://www.corning.com/tw/zh_tw/products/display-glass/news/news-releases/2026/09/corning-announces-currency-and-inflation-adjustment-of-display-glass-substrate-prices.html', date: '2026-09-11', supports: '2026Q4 起全球日圓計價顯示玻璃基板漲價至少 15%；未揭露友達採購幣別、涵蓋量或轉嫁條件，亦非 GCS 價格公告' },
 ] as const;
 
 export const auoMarketContext = {
@@ -166,11 +176,13 @@ export const auoEvidenceLedger = [
   { claim: '京東方亦投入 Micro LED 光互連與玻璃載板 CPO', rootSource: 'S33', publishedAt: '2026-07-03', firstObservedAt: '2026-09-25T07:09:04+08:00', status: '京東方原始投資者紀錄確認研發專案與康寧合作；該業務尚未量產', relation: '獨立同業原始資料，限制友達技術獨占與遠期份額假設' },
   { claim: '友達公告出售華亞廠及高雄 C5E 廠', rootSource: 'S34', publishedAt: '2026-07-28', firstObservedAt: '2026-09-25T18:05:41+08:00', status: '兩筆重大訊息逐字轉載載明預計處分利益；交割、認列年度與最終歸屬仍待核對', relation: 'S34 與 S35 為兩筆不同交易；新聞再轉載不增加獨立證據數' },
   { claim: '鼎元已有新 Intel／CSP 訂單並帶動友達 CPO 量產', rootSource: 'S36', publishedAt: '2026-09-25（貼文相對時間）', firstObservedAt: '2026-09-25T18:08:00+08:00', status: '單一 Threads 作者的待查說法；鼎元官網只支持 PD 開發，公開報導將既有 PD 能見度與 Micro LED CPO 驗證分開；未見 Intel／CSP 具名新單或友達 CPO 量產證據', relation: '同作者主帖與續帖為一個消息根源；S38 是較早的 PD 報導，不能視為對新傳聞的獨立確認' },
+  { claim: '康寧調漲部分顯示玻璃基板價格', rootSource: 'S39', publishedAt: '2026-09-11', firstObservedAt: '2026-09-26T18:05:44+08:00', status: '供應商已公告日圓計價品項自 2026Q4 漲價至少 15%；友達實際適用比例與轉嫁能力未公開', relation: '康寧原始公告；媒體轉載不算額外確認；不能推定半導體 GCS 同幅漲價' },
 ] as const;
 
 export const auoMarketEvents = [
   { date: '2026-07-30', label: '已公告，待認列', title: '友達兩筆廠房處分合計預計利益 176.7 億元', detail: '7/28 華亞廠與 7/30 高雄 C5E 廠公告的預計處分利益，分別為 133.9 億及 42.8 億元，公告稱已扣相關費用及預估稅。', impact: '報表 EPS 和淨值可能於交割認列時增加，但非持續營業獲利；認列年度與歸屬普通股比例未核定前，不灌入年度基本情境，也不乘持續獲利 P/E。', sources: ['S34', 'S35'] },
   { date: '2026-08-31', label: '已確認', title: '友達公開 CPO／GCS 階段性成果', detail: '友達揭露 Micro LED CPO 系統模組、RDL、光學耦合及與康寧合作的玻璃核心基板；尚未揭露客戶訂單、量產收入與毛利。', impact: '這是轉型可行性的事前證據，應建立條件式重估情境，但不直接增加 2027 EPS。', sources: ['S23'] },
+  { date: '2026-09-11', label: '已公告，影響待核', title: '康寧調高日圓計價顯示玻璃基板價格', detail: '康寧宣布 2026Q4 起對全球日圓計價顯示玻璃基板調價至少 15%；並未揭露友達採購幣別與合約適用比例。', impact: '對 Display 毛利是條件式成本風險，須核對採購暴露與面板售價轉嫁；不可把漲幅直接套到友達全部成本，亦不可當作 GCS 產品售價。', sources: ['S39'] },
   { date: '2026-09-20', label: '市場傳聞', title: '公開報導出現 Intel 合作說法', detail: '目前可核對的公開報導稱 Intel 洽談合作；尚未找到雙方聯名公告、採購合約或量產時程。', impact: '提高市場對友達由面板廠切入先進封裝／光互連的期待，先改變事件風險與倍數討論。', sources: ['S24', 'S25'] },
   { date: '2026-09-21', label: '價格確認', title: '突破原 32.2 元門檻', detail: '收盤 33.35 元、成交量 8.23 億股，符合原先 9/19 放量突破條件。', impact: '原波段劇本由等待轉為觸發；不能事後把門檻上移後仍顯示等待。', sources: ['S14'] },
   { date: '2026-09-22', label: '目標到達', title: '收盤 36.65 元，到達原量度目標', detail: '兩個交易日由 30.35 元上漲 20.76%，原 36.6 元技術量度目標已到達。', impact: '追價的報酬風險比惡化；下一個判斷改為等待整理、查證事件與重新建立劇本。', sources: ['S14'] },
@@ -266,6 +278,7 @@ export const auoArticleSections = [
       { text: '友達提出的是十公尺左右短距離的 Micro LED 並行光路。公開分工中，友達負責巨量轉移、RDL 封裝、光學耦合與系統架構，集團富采、鼎元與達興材料分別提供發射、接收與材料，康寧參與光纖方案。這使友達卡在整合與製造的中間段，不只是把一片面板賣給資料中心；但它還不是晶片設計、整個交換系統或已取得的客戶訂單。要形成可持續毛利，友達必須證明模組在功耗、誤碼、可靠度和維修成本上勝過替代方案，且量產良率足以覆蓋折舊。', sources: ['S23', 'S29'] },
       { text: '玻璃核心基板處理的是大型高密度封裝的翹曲、尺寸穩定、訊號損耗及互連密度。康寧提供半導體級玻璃，友達展示 RDL 與大面積玻璃加工；官方同時表明 TGV、孔洞金屬化及可靠度仍分階段驗證。因此材料成功不等於友達取得全部基板價值，康寧供材、友達加工、最終封裝廠與客戶的價值分配都要拆開。Intel 已正式宣布與藍思科技合作探索玻璃基板製程；京東方的原始投資者紀錄也確認其與康寧合作並成立 Micro LED 光互連及玻璃載板 CPO 專案組，雖然其新業務同樣未量產。這使友達的遠期可得份額與倍數更需要客戶設計導入證據，不能以「Intel 需要玻璃」或「康寧合作」推成友達獨占供貨。', sources: ['S23', 'S28', 'S33'] },
       { text: '原有面板業務也仍決定短期獲利。TrendForce 觀察 9 月主要面板價格大致持平，筆電面板需求卻有下修風險；價格不跌並不代表高稼動率或正營益。Omdia 預估中國廠在 2026 下半年車用顯示出貨占比升至約 65%，因此車用成長的收入假設仍要扣除價格競爭。BHTC 若能增加控制器、軟體及整機內容，才可能比單片車用面板保住較高利潤；這也是本研究只讓 Mobility 利潤率緩升的原因。', sources: ['S1', 'S16', 'S17', 'S20'] },
+      { text: `還有一項短期成本反證。康寧已公告 2026Q4 起調高日圓計價的顯示玻璃基板價格至少 15%；這是顯示面板的材料訊號，不是友達與康寧合作的半導體玻璃核心基板報價。友達適用的採購幣別、數量、長約及能否轉嫁給客戶仍未公開，因此基本情境暫不改 Display 營益率。作為可重算的壓力測試，若 2027 年淨材料成本增加達 Display 預估營收的 1%，其他條件不變，稅後歸屬 EPS 約減少 ${auoDisplayInputCostSensitivity.afterTaxEpsImpact.toFixed(2)} 元；這個 1% 是測試門檻，不是已估出的實際成本。下一次法說應核對採購暴露、售價調整與毛利率。`, sources: ['S39', 'S1', 'S2'] },
     ],
   },
   {

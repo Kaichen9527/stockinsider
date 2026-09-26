@@ -10,6 +10,7 @@ import {
   AUO_PRICE,
   auoAnnouncedAssetDisposals,
   auoAssetDisposalSensitivity,
+  auoDisplayInputCostSensitivity,
   auoArticleSections,
   auoMarketContext,
   auoForecastBaseQuarters,
@@ -54,6 +55,15 @@ test('announced asset gains stay conditional and separate from normalized operat
   assert.ok(valuation?.paragraphs.some((paragraph) => paragraph.text.includes('不是 2027 年預測')
     && paragraph.sources.join(',').includes('S34') && paragraph.sources.join(',').includes('S35')));
   assert.equal(auoForecastBaseQuarters.every((quarter) => quarter.oneOffAfterTax === 0), true);
+});
+
+test('display glass input-cost stress is traceable and does not silently change base EPS', () => {
+  const displayRevenue = auoForecastBaseQuarters.filter((quarter) => quarter.year === 2027)
+    .reduce((sum, quarter) => sum + quarter.segments.display.revenue, 0);
+  assert.equal(auoDisplayInputCostSensitivity.displayRevenue2027Million, displayRevenue);
+  assert.equal(auoDisplayInputCostSensitivity.verifiedExposure, null);
+  assert.equal(Number(auoDisplayInputCostSensitivity.afterTaxEpsImpact.toFixed(2)), 0.13);
+  assert.equal(auoForecastBaseQuarters[2].segments.display.operatingMargin, -0.013);
 });
 
 test('AUO P/B anchors are recalculated from 60 point-in-time TWSE monthly observations', () => {
