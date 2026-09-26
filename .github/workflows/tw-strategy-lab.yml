@@ -6,6 +6,9 @@ on:
     paths:
       - '.github/workflows/tw-strategy-lab.yml'
       - 'research/tw-strategy-lab/*.py'
+      - 'scripts/test-support/process-close.mjs'
+      - 'scripts/process-close.test.mjs'
+      - 'scripts/candidate-history-backfill-postgres.test.mjs'
       - 'research/tw-strategy-lab/preregistration.json'
       - 'research/tw-strategy-lab/preregistration.sha256'
   workflow_dispatch:
@@ -61,6 +64,8 @@ jobs:
           }
           (out / 'mode.json').write_text(json.dumps(record, indent=2) + '\n')
           PY
+      - name: Verify process-output completion regressions
+        run: node --test scripts/process-close.test.mjs
       - name: Verify frozen research contracts
         run: |
           set -o pipefail
