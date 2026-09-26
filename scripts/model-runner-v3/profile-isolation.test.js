@@ -37,3 +37,20 @@ test('quoted directory names are TOML-escaped rather than inserted as raw policy
   assert.ok(text.includes(JSON.stringify(parent+'/transport')+' = "deny"'));
   assert.ok(text.includes(JSON.stringify(parent+'/view')+' = "read"'));
 });
+
+test('the normative profile template reproduces the actual adapter byte-for-byte', () => {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const filename = path.resolve(__dirname, '../../.loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-contract.md');
+  const section = fs.readFileSync(filename, 'utf8').split('## 8. Exact permission profile and Codex invocation')[1];
+  const block = section.match(/```toml\n([\s\S]*?)```/u)[1];
+  const parent = '/private/operation "quoted"';
+  let rendered = block;
+  for (const [placeholder, value] of [
+    ['absolute-private-operation-parent', parent],
+    ['absolute-private-transport', parent + '/transport'],
+    ['absolute-sanitized-view', parent + '/view'],
+    ['absolute-private-scratch', parent + '/scratch'],
+  ]) rendered = rendered.replace('"<' + placeholder + '>"', JSON.stringify(value));
+  assert.equal(rendered, profileToml(parent + '/view', parent + '/scratch', parent + '/transport'));
+});

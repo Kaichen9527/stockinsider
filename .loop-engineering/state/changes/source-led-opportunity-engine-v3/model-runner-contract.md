@@ -229,7 +229,7 @@ Entries sort by UTF-8 path bytes; `gitMode` is original `100644|100755` and `mat
 
 ## 8. Exact permission profile and Codex invocation
 
-The generated config profile is named `model-runner-v3.config.toml`; its `default_permissions` selects the same named permission profile. Trusted substitution supplies only the validated view/scratch realpaths:
+The generated config profile is named `model-runner-v3.config.toml`; its `default_permissions` selects the same named permission profile. Trusted substitution supplies the validated non-root operation-parent, transport, view and scratch realpaths. All three child roots are distinct canonical absolute siblings; substitute each complete TOML key using JSON.stringify escaping, not raw interpolation:
 
 ```toml
 default_permissions = "model-runner-v3"
@@ -237,6 +237,8 @@ default_permissions = "model-runner-v3"
 [permissions.model-runner-v3.filesystem]
 ":root" = "deny"
 ":minimal" = "read"
+"<absolute-private-operation-parent>" = "deny"
+"<absolute-private-transport>" = "deny"
 "<absolute-sanitized-view>" = "read"
 "<absolute-private-scratch>" = "write"
 

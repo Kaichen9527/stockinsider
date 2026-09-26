@@ -49,6 +49,14 @@
     "offline-attempt-with-incomplete-paths.txt": "1668e12e12848dd450239f6fba8b301e6d60606261b6ead48f310a16a1cda823",
     "candidate-noncredential-tests.txt": "646c66050f10fb16f1341cbf77468744e6eee24d5b47e401f6cd3710733ac7f6",
     "standalone-traceability-rejection.txt": "d4d297e132420cf372c098b97806e7ba83a3fdb0b1cfd44dd7632da782eff201",
-    "candidate-web-build.txt": "aa34f2b3edcedafde57448a0b2e0c539952b8a7d67fc1954392f7dd3d1d672f7"
-  }
+    "candidate-web-build.txt": "517811c02137d27c767814b46acea1b093db0a3ccf5a392facb9922ec2500a12",
+    "candidate-web-build-original.json": "29c03051473a3cf2bfcbfd92e4019103342590e1627d5d3840486a8e3cf55fdf"
+  },
+  "build_log_representation": {
+    "original_sha256": "aa34f2b3edcedafde57448a0b2e0c539952b8a7d67fc1954392f7dd3d1d672f7",
+    "original_bytes_container": "candidate-validation/candidate-web-build-original.json",
+    "normalized_view": "candidate-validation/candidate-web-build.txt",
+    "transformation": "split line endings, rstrip per line, one final LF; original bytes retained exactly; no build rerun or changed outcome"
+  },
+  "original_implementation_commit": "6cf8fffec9c7ab859a67b9057e62f94caac3ebfa"
 }
