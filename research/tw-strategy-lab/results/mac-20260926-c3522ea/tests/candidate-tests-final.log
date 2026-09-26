@@ -1,0 +1,115 @@
+TAP version 13
+# (node:64351) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:64351) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-chat-20260926-IQAh5T/repo/web/src/lib/candidate-audit-export.test.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-chat-20260926-IQAh5T/repo/web/package.json.
+# Subtest: read-only audit binds run, per-stock revision and PIT identity without publication authority
+ok 1 - read-only audit binds run, per-stock revision and PIT identity without publication authority
+  ---
+  duration_ms: 2.578625
+  ...
+# Subtest: pagination and batching retain every item beyond the first page
+ok 2 - pagination and batching retain every item beyond the first page
+  ---
+  duration_ms: 38.000291
+  ...
+# Subtest: two reads detect changed per-stock rows even when run summary is unchanged
+ok 3 - two reads detect changed per-stock rows even when run summary is unchanged
+  ---
+  duration_ms: 0.4535
+  ...
+# Subtest: run drift is rejected
+ok 4 - run drift is rejected
+  ---
+  duration_ms: 0.132292
+  ...
+# Subtest: partial and failed research stay visible but not complete
+ok 5 - partial and failed research stay visible but not complete
+  ---
+  duration_ms: 0.246292
+  ...
+# Subtest: future, expired and non-common-stock authorities cannot supply verified name or type
+ok 6 - future, expired and non-common-stock authorities cannot supply verified name or type
+  ---
+  duration_ms: 0.391333
+  ...
+# Subtest: conflicting official names are not silently selected
+ok 7 - conflicting official names are not silently selected
+  ---
+  duration_ms: 0.134959
+  ...
+# Subtest: missing or wrong-issuer revision is not a current revision
+ok 8 - missing or wrong-issuer revision is not a current revision
+  ---
+  duration_ms: 0.377792
+  ...
+# Subtest: duplicate identities, missing rows and incorrect counts fail
+ok 9 - duplicate identities, missing rows and incorrect counts fail
+  ---
+  duration_ms: 0.393042
+  ...
+# Subtest: invalid run IDs are rejected before database access
+ok 10 - invalid run IDs are rejected before database access
+  ---
+  duration_ms: 0.304041
+  ...
+# Subtest: missing, running, wrong-run and future runs are rejected
+ok 11 - missing, running, wrong-run and future runs are rejected
+  ---
+  duration_ms: 0.286708
+  ...
+# Subtest: oversized pages and repeated page identities are rejected
+ok 12 - oversized pages and repeated page identities are rejected
+  ---
+  duration_ms: 0.3645
+  ...
+# Subtest: raw private fields do not escape projection
+ok 13 - raw private fields do not escape projection
+  ---
+  duration_ms: 0.140709
+  ...
+# Subtest: order-independent audit identity and explicit stale label
+ok 14 - order-independent audit identity and explicit stale label
+  ---
+  duration_ms: 0.404333
+  ...
+# Subtest: route is exact-bearer GET only, bounded and performs no mutations
+ok 15 - route is exact-bearer GET only, bounded and performs no mutations
+  ---
+  duration_ms: 0.339042
+  ...
+# Subtest: impossible or timezone-free dates do not acquire cutoff authority
+ok 16 - impossible or timezone-free dates do not acquire cutoff authority
+  ---
+  duration_ms: 0.070208
+  ...
+# Subtest: a newer delisting, expiry, changed symbol or non-common type cannot resurrect the old active authority
+ok 17 - a newer delisting, expiry, changed symbol or non-common type cannot resurrect the old active authority
+  ---
+  duration_ms: 0.957958
+  ...
+# Subtest: the newest valid rename is usable without treating a historical name as a current conflict
+ok 18 - the newest valid rename is usable without treating a historical name as a current conflict
+  ---
+  duration_ms: 0.159583
+  ...
+# Subtest: same-time authority state conflicts fail even when the common-stock row would otherwise pass
+ok 19 - same-time authority state conflicts fail even when the common-stock row would otherwise pass
+  ---
+  duration_ms: 0.118458
+  ...
+# Subtest: the database query must retain expired authority heads for resolution
+ok 20 - the database query must retain expired authority heads for resolution
+  ---
+  duration_ms: 0.16525
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 127.407791

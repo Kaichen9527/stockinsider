@@ -1,0 +1,16 @@
+{
+  "schema": "observed-log-retention-repair-v1",
+  "source_commit": "c3522eac9ec9f5712ae094c3864b1da50664e829",
+  "restored_byte_exact_original_logs": [
+    "process.log",
+    "tests/build-final.log",
+    "tests/candidate-tests-final.log",
+    "tests/editorial-tests-python312.log",
+    "tests/process-tests-final.log",
+    "tests/research-tests-python312.log"
+  ],
+  "original_inventory_modified": false,
+  "research_rerun": false,
+  "production_written": false,
+  "gate_authority": false
+}

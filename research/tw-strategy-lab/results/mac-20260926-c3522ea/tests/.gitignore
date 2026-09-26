@@ -1,0 +1,6 @@
+# Original hash-bound test logs only.
+!build-final.log
+!candidate-tests-final.log
+!editorial-tests-python312.log
+!process-tests-final.log
+!research-tests-python312.log

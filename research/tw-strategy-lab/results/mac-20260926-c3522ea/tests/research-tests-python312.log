@@ -1,0 +1,8 @@
+.............................................................................................................................................................................................................................................
+----------------------------------------------------------------------
+Ran 237 tests in 1.750s
+
+OK
+{"status": "blocked_input_inconsistency", "issue_count": 1, "new_simulations": 0}
+{"all_valid_candidates_accounted_for": true, "article_count": 2, "blocked_count": 0, "complete_snapshot_accounted_for": true, "expected_count": 2, "full_app_coverage_verified": false, "global_reason_codes": [], "input_count": 2, "invalid_row_indexes": [], "preview_ready_count": 2, "production_updated": false, "queue_count": 2, "valid_unique_candidate_count": 2}
+{"all_valid_candidates_accounted_for": true, "article_count": 176, "blocked_count": 176, "complete_snapshot_accounted_for": false, "expected_count": 176, "full_app_coverage_verified": false, "global_reason_codes": ["snapshot_not_complete", "snapshot_revision_missing"], "input_count": 176, "invalid_row_indexes": [], "preview_ready_count": 0, "production_updated": false, "queue_count": 176, "valid_unique_candidate_count": 176}
