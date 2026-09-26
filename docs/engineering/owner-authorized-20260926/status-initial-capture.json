@@ -1,6 +1,6 @@
 {
   "schema": "owner-authorized-chat-execution-status-v1",
-  "observed_at": "2026-09-26T09:12:56.241147+00:00",
+  "observed_at": "2026-09-26T09:09:25.503882+00:00",
   "user_authorization_recorded": true,
   "product_source": "54a45ef7095d61e928b7e23bcd0d8961a505acee",
   "host_candidate": "a42a11af7cf6a829209b7127962e01bfe969b143",
@@ -21,7 +21,7 @@
   "host_actual_adapter_sandbox_checks_passed": 9,
   "registered_formal_model_gate_cases_passed": null,
   "live_model_test_executed": false,
-  "host_final_native_code_decision": "no_explicit_final_native_decision_captured",
+  "host_final_native_code_decision": "pending_capture",
   "protected_gate_passed": false,
   "main_merged": false,
   "production_written": false,
@@ -42,13 +42,5 @@
     "missing_old_trusted_executor_blocks_unmodified_base_first_bootstrap",
     "genuine_protected_host_model_proof_and_exact_release_envelopes",
     "formal_financial_source_rights_and_full_article_validation"
-  ],
-  "host_product_CI": {
-    "run_id": 36231491944,
-    "source_commit": "a42a11af7cf6a829209b7127962e01bfe969b143",
-    "status": "completed",
-    "conclusion": "success",
-    "scope": "diagnostic product-runtime, not protected Code Gate"
-  },
-  "host_final_native_comment_ids": []
+  ]
 }
