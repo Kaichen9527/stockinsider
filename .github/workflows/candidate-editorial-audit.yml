@@ -5,6 +5,7 @@ on:
     types: [opened, synchronize, reopened]
     paths:
       - '.github/workflows/candidate-editorial-audit.yml'
+      - 'scripts/project-terminal-audit.mjs'
       - 'web/src/lib/candidate-audit-export*'
       - 'web/src/app/api/internal/candidate-audit-export/**'
       - 'research/current-editorial/**'
