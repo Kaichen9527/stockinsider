@@ -117,7 +117,7 @@ jobs:
         run: |
           extra=()
           if [ -n "$REVIEW_COMMENT_ID" ]; then extra=(--review-comment-id "$REVIEW_COMMENT_ID"); fi
-          python research/tw-strategy-lab/run_robustness.py --execute \
+          python research/tw-strategy-lab/run_robustness.py --execute --apply-reviewed-calendar-amendment \
             --data "$RUNNER_TEMP/frozen-replay-inputs/replay-recovery" \
             --review-id "$REVIEW_ID" "${extra[@]}" --output "$RUNNER_TEMP/robustness-evidence/execution"
       - name: Retain real outcomes including blocked or failed paths
