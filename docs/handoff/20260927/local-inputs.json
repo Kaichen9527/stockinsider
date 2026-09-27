@@ -1,0 +1,34 @@
+{
+  "schema": "stockinsider-local-handoff-inputs-v1",
+  "directory": "~/Documents/StockInsider-Research-Inputs/20260927-q2-220-captured",
+  "files": [
+    {
+      "name": "official-attachments-unvalidated.zip",
+      "bytes": 6896113,
+      "sha256": "27d97aae85492783bed7de7d241161d69b0bdf710bc3cfc5575b6bfc55809ee7"
+    },
+    {
+      "name": "plan.json",
+      "bytes": 3165,
+      "sha256": "886ac268e0a8d88ee578c2cafc7c9832734fcda09e683fe12b7fdf757b41e815"
+    },
+    {
+      "name": "receipts.jsonl",
+      "bytes": 149922,
+      "sha256": "6f50c218eeae16a989081e0e0191232717cee3654f54b96f33c866e186a65b60"
+    },
+    {
+      "name": "stopped-summary.json",
+      "bytes": 1200,
+      "sha256": "c9a1f9ecf14d2857ffa512b1d7fbfbcc451cb3430c2d3e57b4129e8141c42212"
+    },
+    {
+      "name": "tifrs-20260331.zip",
+      "bytes": 3230798,
+      "sha256": "4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869"
+    }
+  ],
+  "financial_validation_passed": false,
+  "publicly_mirrored_raw_financial_filings": false,
+  "note": "Read the raw attachments on the same authorized Mac, or transfer through an explicitly authorized private storage channel. Do not assume repo access grants access to this directory or SSH credentials."
+}

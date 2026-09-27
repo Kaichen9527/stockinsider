@@ -1,0 +1,59 @@
+{
+  "schema": "stockinsider-handoff-capacity-v1",
+  "observed_at": "2026-09-27T02:00:39.174988+00:00",
+  "host": "5.104.83.211",
+  "measurement": "read_only_statvfs_and_proc_meminfo",
+  "minimum_reserve_bytes": 16106127360,
+  "production_written": false,
+  "cleanup_performed": false,
+  "filesystems": [
+    {
+      "path": "/",
+      "filesystem_device": 2049,
+      "total_bytes": 76887154688,
+      "available_to_nonroot_bytes": 13863075840,
+      "free_bytes_including_reserved": 13879853056,
+      "used_bytes": 63007301632,
+      "free_inodes": 8360412,
+      "total_inodes": 9699328
+    },
+    {
+      "path": "/opt/stockinsider",
+      "filesystem_device": 2049,
+      "total_bytes": 76887154688,
+      "available_to_nonroot_bytes": 13863075840,
+      "free_bytes_including_reserved": 13879853056,
+      "used_bytes": 63007301632,
+      "free_inodes": 8360412,
+      "total_inodes": 9699328
+    },
+    {
+      "path": "/var/lib/postgresql",
+      "filesystem_device": 2049,
+      "total_bytes": 76887154688,
+      "available_to_nonroot_bytes": 13863075840,
+      "free_bytes_including_reserved": 13879853056,
+      "used_bytes": 63007301632,
+      "free_inodes": 8360412,
+      "total_inodes": 9699328
+    }
+  ],
+  "memory": {
+    "MemTotal_bytes": 8326963200,
+    "MemAvailable_bytes": 2764853248,
+    "SwapTotal_bytes": 2147479552,
+    "SwapFree_bytes": 12779520
+  },
+  "note": "Same filesystem_device entries are not additive. No release staging, workload reservation or locked deployment preflight was performed.",
+  "summary": {
+    "total_gib": 71.60674285888672,
+    "available_gib": 12.910995483398438,
+    "reserve_floor_gib": 15,
+    "zero_workload_shortfall_bytes": 2243051520,
+    "zero_workload_shortfall_gib": 2.0890045166015625,
+    "deployment_capacity_admitted": false,
+    "staging_bytes_reserved": null,
+    "locked_admission_performed": false,
+    "memory_available_gib": 2.574970245361328
+  }
+}

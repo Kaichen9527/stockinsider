@@ -1,0 +1,28 @@
+{
+  "schema": "official-quarter-staging-stopped-observation-v1",
+  "observed_at": "2026-09-27T01:19:06.957177+00:00",
+  "source_run": "5159a811-dd93-48cb-a172-619ea4db486e",
+  "source_manifest_sha256": "0da974f3961a4614d1a2886b713b10aeb1eb927b0a8ae283f3b5f40be0ef6937",
+  "planned_count": 220,
+  "accounted_receipts": 220,
+  "unaccounted_symbols": [],
+  "retained_attachments": 141,
+  "retained_bytes": 101889221,
+  "states": {
+    "official_attachment_retained_not_validated": 141,
+    "not_an_identified_statement_attachment": 78,
+    "http_error": 1
+  },
+  "ledger_sha256": "6f50c218eeae16a989081e0e0191232717cee3654f54b96f33c866e186a65b60",
+  "malformed_ledger_lines": [],
+  "unaccounted_files": [],
+  "stop_reason": "Stopped own collection session after many HTTP200 replies omitted the expected attachment; this does not establish issuer non-filing or confirmed rate limiting. No alternate endpoint or retry was used.",
+  "process_exit": "terminated_by_operator_not_success",
+  "source_coverage_complete": false,
+  "structurally_validated": 0,
+  "financially_accepted": 0,
+  "articles_accepted": 0,
+  "articles_published": 0,
+  "production_written": false,
+  "capacity_work_performed": false
+}

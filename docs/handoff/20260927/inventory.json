@@ -1,0 +1,77 @@
+{
+  "schema": "stockinsider-handoff-file-inventory-v1",
+  "files": {
+    "CODEX_HANDOFF.md": {
+      "bytes": 11717,
+      "sha256": "08bbc65c2e99d866a04d237f58196705bdcd26d4f682e454ef21f586aca19d71"
+    },
+    "docs/handoff/20260927/README.md": {
+      "bytes": 233,
+      "sha256": "6dbafacc6cacc8b5f3e559dd635f54284b4a21e99650b7da01f0fae31c96f112"
+    },
+    "docs/handoff/20260927/assets/official-revenue-source.zip": {
+      "bytes": 426658,
+      "sha256": "3aa61cb15781615f1dc17cf363389dbffa9b54189b0dc40a1e651ee18bbb33a4"
+    },
+    "docs/handoff/20260927/assets/original-replay-inputs.zip": {
+      "bytes": 733034,
+      "sha256": "c1b8bd9a864ec18549110ab99bca8a09cde987bf9b58bdaf96e37e32c4434a00"
+    },
+    "docs/handoff/20260927/assets/owner-authorized-review.zip": {
+      "bytes": 100221,
+      "sha256": "9d52fb6795c1f980ec677bf234360fa6b72e78bba9943c30e079f46069ba3bab"
+    },
+    "docs/handoff/20260927/assets/protected-architecture.zip": {
+      "bytes": 1447,
+      "sha256": "973ba82346a1cf212befc46c193ed38702d0d2cf38c89416cd890d74033f130b"
+    },
+    "docs/handoff/20260927/assets/protected-exact-review.zip": {
+      "bytes": 1445,
+      "sha256": "d7aa3dfc9cb31197af7b2c6e42d7d7bff13a1dc7459370792a415ba706e6ce77"
+    },
+    "docs/handoff/20260927/assets/protected-product-runtime.zip": {
+      "bytes": 1358,
+      "sha256": "0c3c614586af05f294ce3b4352d29e4d551f69f81fd82d35edfd3f6b31b1e61f"
+    },
+    "docs/handoff/20260927/assets/protected-requirements.zip": {
+      "bytes": 1451,
+      "sha256": "c95b0b218e95fc8e47ee079ea210de02bd76ff06c219141276574ecd968355c0"
+    },
+    "docs/handoff/20260927/assets/study-31path-complete.zip": {
+      "bytes": 415512,
+      "sha256": "4ee7f33d76d2a655bd1352af72dfd9c89c2c5f2e3008fc4652d487316e49eed8"
+    },
+    "docs/handoff/20260927/assets-manifest.json": {
+      "bytes": 4561,
+      "sha256": "654c7a7887393b38ea588b755a871c1274d874fcc836382f2e1e87f291d86323"
+    },
+    "docs/handoff/20260927/capacity.json": {
+      "bytes": 1924,
+      "sha256": "dc9cce6b20c60768cd3382ccaced6980a4177d2cf6392b069b548bc98d0a24e2"
+    },
+    "docs/handoff/20260927/financial-source-receipts/plan.json": {
+      "bytes": 3165,
+      "sha256": "886ac268e0a8d88ee578c2cafc7c9832734fcda09e683fe12b7fdf757b41e815"
+    },
+    "docs/handoff/20260927/financial-source-receipts/receipts.jsonl": {
+      "bytes": 149922,
+      "sha256": "6f50c218eeae16a989081e0e0191232717cee3654f54b96f33c866e186a65b60"
+    },
+    "docs/handoff/20260927/financial-source-receipts/stopped-summary.json": {
+      "bytes": 1200,
+      "sha256": "c9a1f9ecf14d2857ffa512b1d7fbfbcc451cb3430c2d3e57b4129e8141c42212"
+    },
+    "docs/handoff/20260927/local-inputs.json": {
+      "bytes": 1242,
+      "sha256": "27169b91770330a81f12eca3af4d1fd749659879aca73df114255963f194fc85"
+    },
+    "docs/handoff/20260927/status.json": {
+      "bytes": 2311,
+      "sha256": "422bb846e557d0ac629be48e98db4ea886df931c2a0596cf79e618bdfa1555af"
+    },
+    "docs/handoff/20260927/verify_handoff.py": {
+      "bytes": 7253,
+      "sha256": "94f92add46c194aba423a9aa10c5e5737a55ca70fb5e6ef17f5f719187946790"
+    }
+  }
+}

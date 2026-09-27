@@ -1,0 +1,65 @@
+{
+  "schema": "stockinsider-codex-handoff-status-v1",
+  "observed_at": "2026-09-27T02:04:58.275767+00:00",
+  "repository": "Kaichen9527/stockinsider",
+  "repository_private": false,
+  "handoff_branch": "docs/codex-handoff-20260927",
+  "main_sha": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "prs": [
+    {
+      "number": 284,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "updated_at": "2026-09-27T01:25:21Z",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/pull/284",
+      "head_ref": "codex/tw-strategy-lab-v1",
+      "head_sha": "54a45ef7095d61e928b7e23bcd0d8961a505acee",
+      "base_sha": "169aad1b6cfa747f78ae3464b614f43c0749d806"
+    },
+    {
+      "number": 285,
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "updated_at": "2026-09-27T01:07:18Z",
+      "html_url": "https://github.com/Kaichen9527/stockinsider/pull/285",
+      "head_ref": "codex/host-v319-compatibility-20260926",
+      "head_sha": "a42a11af7cf6a829209b7127962e01bfe969b143",
+      "base_sha": "169aad1b6cfa747f78ae3464b614f43c0749d806"
+    }
+  ],
+  "protected_run": 36229829342,
+  "protected_run_attempt": 2,
+  "protected_results": {
+    "requirements": "pass",
+    "architecture": "pass",
+    "exact_review": "pass",
+    "product_runtime": "pass_272_of_272",
+    "model_runner": "failure_missing_old_executor",
+    "aggregate": "failure"
+  },
+  "code_source": "54a45ef7095d61e928b7e23bcd0d8961a505acee",
+  "host_candidate_source": "a42a11af7cf6a829209b7127962e01bfe969b143",
+  "study_source": "c3522eac9ec9f5712ae094c3864b1da50664e829",
+  "exact_review_evidence": "00cdb03ceac34e2a6e35f98c02d64d61fa2b01eb",
+  "study_complete_paths": 31,
+  "study_r2_checks_passed": 5,
+  "study_r2_checks_total": 8,
+  "monthly_factual_briefs": 220,
+  "full_investment_articles_accepted": 0,
+  "articles_published": 0,
+  "financial_source_snapshot": {
+    "planned": 220,
+    "retained": 141,
+    "http_200_missing_attachment": 78,
+    "http_502": 1,
+    "structurally_validated_in_last_session": 0,
+    "prior_fixed_batch_missing_field_periods": 11560
+  },
+  "deployment_ready": false,
+  "main_merged_by_this_task": false,
+  "production_written_by_this_task": false,
+  "capacity_work": "read_only_snapshot_only_no_cleanup_no_expansion",
+  "new_approval_or_attestation": false
+}

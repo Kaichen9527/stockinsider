@@ -1,0 +1,103 @@
+{
+  "schema": "stockinsider-handoff-assets-v1",
+  "repository": "Kaichen9527/stockinsider",
+  "assets": [
+    {
+      "file": "assets/protected-requirements.zip",
+      "bytes": 1451,
+      "sha256": "c95b0b218e95fc8e47ee079ea210de02bd76ff06c219141276574ecd968355c0",
+      "artifact_id": 10919955867,
+      "original_name": "opportunity-gate-result-requirements-54a45ef7095d61e928b7e23bcd0d8961a505acee",
+      "run_id": 36229829342,
+      "original_source_commit": "54a45ef7095d61e928b7e23bcd0d8961a505acee",
+      "original_expires_at": "2026-12-26T00:50:33Z",
+      "storage": "byte_identical_git_mirror_not_new_authority",
+      "archive_members": 1
+    },
+    {
+      "file": "assets/protected-architecture.zip",
+      "bytes": 1447,
+      "sha256": "973ba82346a1cf212befc46c193ed38702d0d2cf38c89416cd890d74033f130b",
+      "artifact_id": 10919229286,
+      "original_name": "opportunity-gate-result-architecture-54a45ef7095d61e928b7e23bcd0d8961a505acee",
+      "run_id": 36229829342,
+      "original_source_commit": "54a45ef7095d61e928b7e23bcd0d8961a505acee",
+      "original_expires_at": "2026-12-26T00:50:33Z",
+      "storage": "byte_identical_git_mirror_not_new_authority",
+      "archive_members": 1
+    },
+    {
+      "file": "assets/protected-exact-review.zip",
+      "bytes": 1445,
+      "sha256": "d7aa3dfc9cb31197af7b2c6e42d7d7bff13a1dc7459370792a415ba706e6ce77",
+      "artifact_id": 10919488571,
+      "original_name": "opportunity-gate-result-exact-review-54a45ef7095d61e928b7e23bcd0d8961a505acee",
+      "run_id": 36229829342,
+      "original_source_commit": "54a45ef7095d61e928b7e23bcd0d8961a505acee",
+      "original_expires_at": "2026-12-26T00:50:33Z",
+      "storage": "byte_identical_git_mirror_not_new_authority",
+      "archive_members": 1
+    },
+    {
+      "file": "assets/protected-product-runtime.zip",
+      "bytes": 1358,
+      "sha256": "0c3c614586af05f294ce3b4352d29e4d551f69f81fd82d35edfd3f6b31b1e61f",
+      "artifact_id": 10920217257,
+      "original_name": "opportunity-gate-result-product-runtime-code-gate-54a45ef7095d61e928b7e23bcd0d8961a505acee",
+      "run_id": 36229829342,
+      "original_source_commit": "54a45ef7095d61e928b7e23bcd0d8961a505acee",
+      "original_expires_at": "2026-12-26T00:50:33Z",
+      "storage": "byte_identical_git_mirror_not_new_authority",
+      "archive_members": 1
+    },
+    {
+      "file": "assets/study-31path-complete.zip",
+      "bytes": 415512,
+      "sha256": "4ee7f33d76d2a655bd1352af72dfd9c89c2c5f2e3008fc4652d487316e49eed8",
+      "artifact_id": 10902450836,
+      "original_name": "chat-observed-c3522ea-36229261758",
+      "run_id": 36229261758,
+      "original_source_commit": "797e6f9f5492f568f1200b4660ee49594459c6c2",
+      "original_expires_at": "2026-10-26T08:16:03Z",
+      "storage": "byte_identical_git_mirror_not_new_authority",
+      "archive_members": 53
+    },
+    {
+      "file": "assets/owner-authorized-review.zip",
+      "bytes": 100221,
+      "sha256": "9d52fb6795c1f980ec677bf234360fa6b72e78bba9943c30e079f46069ba3bab",
+      "artifact_id": 10903016248,
+      "original_name": "owner-authorized-chat-36232246718",
+      "run_id": 36232246718,
+      "original_source_commit": "cc4accce53704dd0dcef5162607efd5edcf9d4f8",
+      "original_expires_at": "2026-10-26T09:16:03Z",
+      "storage": "byte_identical_git_mirror_not_new_authority",
+      "archive_members": 32
+    },
+    {
+      "file": "assets/original-replay-inputs.zip",
+      "bytes": 733034,
+      "sha256": "c1b8bd9a864ec18549110ab99bca8a09cde987bf9b58bdaf96e37e32c4434a00",
+      "artifact_id": 10871218499,
+      "original_name": "replay-input-readiness-36149698934-1",
+      "run_id": 36149698934,
+      "original_source_commit": "6e37672bbb3bd453283366cfc66c1d218472c34e",
+      "original_expires_at": "2026-10-02T15:00:23Z",
+      "storage": "byte_identical_git_mirror_not_new_authority",
+      "archive_members": 10
+    },
+    {
+      "file": "assets/official-revenue-source.zip",
+      "bytes": 426658,
+      "sha256": "3aa61cb15781615f1dc17cf363389dbffa9b54189b0dc40a1e651ee18bbb33a4",
+      "artifact_id": 10872902251,
+      "original_name": "candidate-editorial-audit-36154762318-1",
+      "run_id": 36154762318,
+      "original_source_commit": "9db138ef0b153be55d39b1375cc1683a0acbb995",
+      "original_expires_at": "2026-10-09T15:31:57Z",
+      "storage": "byte_identical_git_mirror_not_new_authority",
+      "archive_members": 182
+    }
+  ],
+  "note": "These copies preserve bytes after artifact expiry but do not extend the original approval validity or authorize a new source."
+}
