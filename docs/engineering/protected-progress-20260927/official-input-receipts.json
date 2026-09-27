@@ -1,0 +1,19 @@
+{
+  "schema": "official-financial-input-staging-observation-v1",
+  "documents": [
+    {"symbol":"2330","year":2026,"quarter":2,"source_url":"https://mopsov.twse.com.tw/server-java/FileDownLoad?step=9&functionName=t164sb01&report_id=C&co_id=2330&year=2026&season=2","observed_at":"2026-09-27T00:51:17.827218+00:00","http_status":200,"content_type":"; charset=iso-8859-1","content_disposition":"attachment; filename=\"tifrs-fr1-m1-ci-cr-2330-2026Q2.html\"","bytes":759227,"sha256":"351b4e59781a71504b30cec9d977e060ab4f978d31695e027252ecfe793d1e55"},
+    {"symbol":"2409","year":2026,"quarter":2,"source_url":"https://mopsov.twse.com.tw/server-java/FileDownLoad?step=9&functionName=t164sb01&report_id=C&co_id=2409&year=2026&season=2","observed_at":"2026-09-27T00:51:24.146336+00:00","http_status":200,"content_type":"; charset=iso-8859-1","content_disposition":"attachment; filename=\"tifrs-fr1-m1-ci-cr-2409-2026Q2.html\"","bytes":1547550,"sha256":"d2c40a250aca315f0dda091de81b828f3c5cf09ee85d27e03ea8b28fdb61ca3e"}
+  ],
+  "taxonomy": {"url":"https://mopsov.twse.com.tw/nas/taxonomy/tifrs-20260331.zip","sha256":"4e44e67647b1a5a575d416ef44614d9c5651bb0d895621e12f6b6ca64a457869","bytes":3230798,"member_count":352,"original_pinned_hash_matches":true,"production_installed":false},
+  "isolated_dependencies": {"python":"3.12.13","arelle_release":"2.44.7","pdfplumber":"0.11.8","installation_completed":true},
+  "parser_execution": "platform_blocked_before_process_start",
+  "structural_validation": "not_executed_this_turn",
+  "accounting_validation": "not_executed_this_turn",
+  "formal_financial_receipts_created": 0,
+  "articles_accepted": 0,
+  "articles_published": 0,
+  "production_written": false,
+  "raw_document_location": "/private/tmp/stockinsider-completion-20260927-QXlW53/official-financial-probe",
+  "local_taxonomy_location": "/private/tmp/stockinsider-completion-20260927-QXlW53/parser-inputs/taxonomy",
+  "retrieval_is_not_financial_acceptance": true
+}

@@ -1,0 +1,21 @@
+{
+  "schema": "observed-protected-leaf-progress-v1",
+  "workflow_run": 36229829342,
+  "attempt": 2,
+  "source_commit": "54a45ef7095d61e928b7e23bcd0d8961a505acee",
+  "source_tree": "b70674b657f9e2242d0ca538b77c22169cd94f5c",
+  "base_commit": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "exact_evidence_commit": "00cdb03ceac34e2a6e35f98c02d64d61fa2b01eb",
+  "leaves": [
+    {"check":"requirements","job_id":108520354543,"artifact_id":10919955867,"status":"pass","zip_sha256":"c95b0b218e95fc8e47ee079ea210de02bd76ff06c219141276574ecd968355c0","envelope_sha256":"1b01e4fd78350abd4482f05817677705ec123159eb5afd748629d7407881147a"},
+    {"check":"architecture","job_id":108520354432,"artifact_id":10919229286,"status":"pass","zip_sha256":"973ba82346a1cf212befc46c193ed38702d0d2cf38c89416cd890d74033f130b","envelope_sha256":"d364137b7973380613e55264634322d0a873fd60bef336c9b59ab1b119e86e19"},
+    {"check":"exact-review","job_id":108520354524,"artifact_id":10919488571,"status":"pass","zip_sha256":"d7aa3dfc9cb31197af7b2c6e42d7d7bff13a1dc7459370792a415ba706e6ce77","envelope_sha256":"7fcea253a69df76e82b0e55e2f6604870cb169fdadd46cdd5e9de2eaa4f37fa7"}
+  ],
+  "model_job": {"id":108520396537,"status":"failure","error":"spawnSync /Applications/ChatGPT.app/Contents/Resources/codex ENOENT"},
+  "product_job": {"id":108520396582,"status_at_capture":"in_progress","passed_claimed":false},
+  "aggregate_passed": false,
+  "main_merged": false,
+  "production_written": false,
+  "capacity_work_performed": false,
+  "observation_not_new_authority": true
+}
