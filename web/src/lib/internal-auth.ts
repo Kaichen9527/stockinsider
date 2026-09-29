@@ -36,3 +36,14 @@ export function requireExactInternalBearer(request: Request): boolean {
     && secureTokenEquals(authorization.slice(7), expected) && !request.headers.has('x-internal-key')
     && requireInternalAuth(request).ok);
 }
+
+/** A separate review principal is required before research can grant entry eligibility. */
+export function requireIndependentResearchReviewer(request: Request): boolean {
+  const reviewKey = process.env.RESEARCH_REVIEW_KEY;
+  const writerKey = process.env.INTERNAL_API_KEY;
+  const cronKey = process.env.CRON_SECRET;
+  const header = request.headers.get('authorization');
+  return Boolean(reviewKey && writerKey && reviewKey !== writerKey && reviewKey !== cronKey
+    && header?.startsWith('Bearer ') && !request.headers.has('x-internal-key')
+    && secureTokenEquals(header.slice(7), reviewKey));
+}

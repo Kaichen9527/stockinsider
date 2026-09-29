@@ -4,6 +4,8 @@ import { requireExactInternalBearer } from '@/lib/internal-auth';
 import { getSupabaseServerClient } from '@/lib/supabase-server';
 import { validateCandidateDossierSubmission, type CandidateDossierFactMetadata } from '@/lib/candidate-dossier-validation';
 import { candidateDossierBundleId, candidateDossierInputHash, candidateFactLocator, isPaidInvestAnchorsReference, numberedCandidateSources, sanitizeRevisionScopedDossierEvidence, withoutPaidInvestAnchorsSourceLinks } from '@/lib/candidate-dossier-contract';
+import { deepArticleSourceIds, validateDeepResearchArticle, type DeepResearchArticle, type ValidatedDeepArticle } from '@/lib/research-deep-article';
+import { loadDeepArticleEvidence } from '@/lib/research-deep-evidence';
 
 type Row = Record<string, unknown>;
 
@@ -23,14 +25,24 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: 'candidate_dossier_bundle_id_mismatch' }, { status: 409 });
   }
   const supabase = getSupabaseServerClient();
-  const [detail, queuedBundle, publication] = await Promise.all([
+  const [detail, queuedBundle, publication, delivery] = await Promise.all([
     supabase.from('candidate_detail_snapshots').select('id,stock_id,session_date,lifecycle_stage,title,summary,fact_ids,source_links,sections,valuation,technical,as_of,available_at,stocks(symbol,name)').eq('id', revisionId).maybeSingle(),
     supabase.from('candidate_dossier_bundles').select('bundle_id,revision_id,published_revision_id,input_hash').eq('bundle_id', bundleId).eq('revision_id', revisionId).eq('input_hash', inputHash).maybeSingle(),
     supabase.from('candidate_daily_stage_snapshots').select('detail_revision_id').eq('detail_revision_id', revisionId).limit(1),
+    supabase.from('candidate_dossier_outbox_v5').select('job_id,status').eq('revision_id', revisionId).eq('input_hash', inputHash).maybeSingle(),
   ]);
   if (detail.error || !detail.data) return NextResponse.json({ ok: false, error: detail.error?.message || 'detail_revision_not_found' }, { status: detail.error ? 500 : 404 });
   if (queuedBundle.error) return NextResponse.json({ ok: false, error: queuedBundle.error.message }, { status: 500 });
   if (!queuedBundle.data) return NextResponse.json({ ok: false, error: 'candidate_dossier_bundle_not_queued' }, { status: 409 });
+  if (delivery.error) return NextResponse.json({ ok: false, error: delivery.error.message }, { status: 500 });
+  const jobId = String(body.jobId || '');
+  const owner = String(body.owner || '').trim();
+  if (delivery.data && (jobId !== String(delivery.data.job_id) || !owner || owner.length > 120)) {
+    return NextResponse.json({ ok: false, error: 'candidate_dossier_owned_lease_required' }, { status: 409 });
+  }
+  if (!delivery.data && (jobId || owner)) {
+    return NextResponse.json({ ok: false, error: 'candidate_dossier_job_not_found' }, { status: 409 });
+  }
   if (String(queuedBundle.data.published_revision_id || '') !== revisionId || publication.error || !(publication.data || []).length) {
     return NextResponse.json({ ok: false, error: publication.error?.message || 'candidate_dossier_revision_not_published' }, { status: publication.error ? 500 : 409 });
   }
@@ -90,35 +102,62 @@ export async function POST(request: Request) {
     if ((!symbol || !articleText.includes(symbol)) && (!name || !articleText.includes(name))) rejectionReasons.push('article_company_identity_missing');
   }
   const valid = rejectionReasons.length === 0;
+  let deepResearch: ValidatedDeepArticle | null = null;
+  if (body.deepResearch !== undefined) {
+    try {
+      const reviewId = String(body.deepReviewId || '');
+      const authorId = String(body.authorId || '');
+      if (!/^[0-9a-f-]{36}$/iu.test(reviewId) || !authorId) throw new Error('deep_article_review_required');
+      const article = body.deepResearch as DeepResearchArticle;
+      const documents = await loadDeepArticleEvidence(supabase, deepArticleSourceIds(article));
+      const reviewed = validateDeepResearchArticle({ article, documents, allowedOfficialFactIds: allowed,
+        expectedSymbol: String(stock?.symbol || ''), now: new Date().toISOString() });
+      const review = await supabase.from('candidate_deep_article_reviews_v1')
+        .select('id,revision_id,input_hash,article_hash,author_id,decision,source_document_ids')
+        .eq('id', reviewId).maybeSingle();
+      if (review.error || !review.data || review.data.decision !== 'accepted'
+        || review.data.revision_id !== revisionId || review.data.input_hash !== inputHash
+        || review.data.article_hash !== reviewed.articleHash || review.data.author_id !== authorId
+        || JSON.stringify(review.data.source_document_ids) !== JSON.stringify(reviewed.sourceDocumentIds)) {
+        throw new Error('deep_article_exact_review_missing');
+      }
+      deepResearch = reviewed;
+    } catch (error) {
+      rejectionReasons.push(error instanceof Error ? error.message : 'deep_article_validation_failed');
+    }
+  }
+  const finalValid = valid && rejectionReasons.length === 0;
   const sources = numberedCandidateSources(safeDetail, facts);
-  const submissionHash = createHash('sha256').update(JSON.stringify({ bundleId, revisionId, inputHash, summary, summaryFactIds, sections: normalized, claims })).digest('hex');
-  const persistence = await supabase.rpc('record_candidate_dossier_submission_v4', {
+  const submissionHash = createHash('sha256').update(JSON.stringify({ bundleId, revisionId, inputHash, summary, summaryFactIds,
+    sections: normalized, claims, deepResearch: deepResearch?.articleHash || null, deepReviewId: body.deepReviewId || null })).digest('hex');
+  const persistenceInput = {
     p_bundle_id: bundleId,
     p_revision_id: revisionId,
     p_input_hash: inputHash,
     p_submission_hash: submissionHash,
-    p_content: valid ? { summary, sections: normalized, claims, sources } : { redacted: true, submissionSha256: submissionHash },
-    p_claims: valid ? claims : [],
-    p_source_references: valid ? sources : [],
-    p_claim_fact_map: valid
+    p_content: finalValid ? { summary, sections: normalized, claims, sources,
+      ...(deepResearch ? { deepResearch } : {}) } : { redacted: true, submissionSha256: submissionHash },
+    p_claims: finalValid ? claims : [],
+    p_source_references: finalValid ? sources : [],
+    p_claim_fact_map: finalValid
       ? { summary: summaryFactIds, ...Object.fromEntries(normalized.map((section) => [section.key, section.factIds])), ...Object.fromEntries(claims.map((claim) => [claim.id, claim.factIds])) }
       : {},
-    p_validation_status: valid ? 'valid' : 'rejected',
+    p_validation_status: finalValid ? 'valid' : 'rejected',
     p_rejection_reasons: rejectionReasons,
-  });
+  };
+  const persistence = delivery.data
+    ? await supabase.rpc('record_candidate_dossier_submission_v6', {
+      ...persistenceInput, p_job_id: jobId, p_owner: owner,
+    })
+    : await supabase.rpc('record_candidate_dossier_submission_v4', persistenceInput);
   const receipt = Array.isArray(persistence.data) ? persistence.data[0] as Row | undefined : persistence.data as Row | null;
   if (persistence.error || !receipt) return NextResponse.json({ ok: false, error: persistence.error?.message || 'candidate_dossier_persistence_failed' }, { status: 500 });
   const accepted = receipt.status === 'accepted';
   // Delivery state is deliberately updated only after the append-only receipt
   // exists.  A failed update cannot make an article appear enriched because the
   // public reader independently verifies the receipt.
-  const outboxUpdate = await supabase.from('candidate_dossier_outbox_v5').update({
-    status: accepted ? 'accepted' : 'rejected', lease_owner: null, lease_expires_at: null,
-    receipt_id: receipt.submission_id, last_error: accepted ? null : JSON.stringify(receipt.rejection_reasons || rejectionReasons), updated_at: new Date().toISOString(),
-  }).eq('revision_id', revisionId).eq('input_hash', inputHash);
-  if (outboxUpdate.error && !/does not exist|schema cache/iu.test(outboxUpdate.error.message)) {
-    return NextResponse.json({ ok: false, error: `candidate_dossier_outbox_update_failed:${outboxUpdate.error.message}` }, { status: 500 });
-  }
+  // v6 records the receipt and closes the exact lease in one DB transaction.
+  // Legacy revisions with no outbox job still use the established v4 receipt.
   return NextResponse.json({
     ok: accepted, submissionId: receipt.submission_id, status: receipt.status,
     revisionId, inputHash, dossierId: receipt.dossier_id, validationStatus: accepted ? 'valid' : 'rejected',
