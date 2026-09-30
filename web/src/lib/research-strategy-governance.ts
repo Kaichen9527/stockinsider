@@ -74,6 +74,10 @@ const HASH = /^[0-9a-f]{64}$/u;
 const stamp = (value: string) => Number.isFinite(Date.parse(value)) && /T.*(?:Z|[+-]\d{2}:\d{2})$/u.test(value);
 const date = (value: string) => /^\d{4}-\d{2}-\d{2}$/u.test(value)
   && Number.isFinite(Date.parse(`${value}T00:00:00Z`));
+// The first strategy family consumes complete Taiwan daily bars. One symbol
+// has at most one independent signal per variant and arm on a market session.
+const taipeiSession = (value: string) => new Date(Date.parse(value) + 8 * 3600_000)
+  .toISOString().slice(0, 10);
 const arms: StrategyArm[] = ['technical_baseline', 'technical_research', 'technical_research_kol'];
 
 export function validateStrategyExperimentProposal(proposal: StrategyExperimentProposal) {
@@ -109,8 +113,8 @@ export function assessStrategyExperiment(input: {
   for (const row of input.observations) {
     if (!variants.has(row.variantId) || !arms.includes(row.arm) || !/^\d{4}$/u.test(row.symbol)
       || !stamp(row.signalAt) || !stamp(row.sourceAvailableAt)
-      || row.signalAt.slice(0, 10) < input.proposal.sampleStart
-      || row.signalAt.slice(0, 10) > input.proposal.sampleEnd
+      || taipeiSession(row.signalAt) < input.proposal.sampleStart
+      || taipeiSession(row.signalAt) > input.proposal.sampleEnd
       || Date.parse(row.sourceAvailableAt) > Date.parse(row.signalAt)
       || ![row.grossReturnFraction, row.roundTripCostFraction, row.maximumDrawdownFraction].every(Number.isFinite)
       || row.roundTripCostFraction < 0 || row.maximumDrawdownFraction < 0 || !row.regime.trim()) {
@@ -126,7 +130,7 @@ export function assessStrategyExperiment(input: {
       throw new Error('strategy_experiment_kol_lookahead');
     }
     // A daily signal cannot become independent evidence by repeating its result.
-    const signalKey = `${row.variantId}:${row.arm}:${row.symbol}:${row.signalAt}`;
+    const signalKey = `${row.variantId}:${row.arm}:${row.symbol}:${taipeiSession(row.signalAt)}`;
     if (seenSignals.has(signalKey)) throw new Error('strategy_experiment_duplicate_signal');
     seenSignals.add(signalKey);
   }

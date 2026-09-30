@@ -27,4 +27,19 @@ test('research schema extends the same attested operator plan and cannot use a s
   assert.match(reviewed, /research_agent_migration_prerequisite_missing/u);
   assert.match(reviewed, /record_candidate_deep_submission_v1/u);
   assert.match(reviewed, /if\(!result[.]apply\|\|!result[.]sourceCommit\|\|!result[.]attestationCommit\)throw new Error\('invalid_arguments'\)/u);
+  assert.match(reviewed, /research_agent_production_migration_authority_missing/u);
+  assert.match(reviewed, /--research-agent-extension/u);
+  assert.match(reviewed, /options[.]researchAgentExtension\s*\?/u);
+});
+
+test('approved V3 plan stays closed while the unapproved research extension is visible but disabled', async () => {
+  const { execFileSync } = await import('node:child_process');
+  const result = JSON.parse(execFileSync(process.execPath,
+    [path.join(root, 'scripts/opportunity-v3/migration-plan.mjs')], { cwd: root, encoding: 'utf8' }));
+  assert.equal(result.migrations.at(-1).migration,
+    'migrations/20260924_entry_plan_official_action_symbols.sql');
+  assert.deepEqual(result.researchAgentExtension.migrations.map((row) => row.migration),
+    extension(plan, 'researchAgentMigrationPaths'));
+  assert.equal(result.researchAgentExtension.applyAuthorized, false);
+  assert.equal(result.researchAgentExtension.dedicatedApplyCommand, null);
 });

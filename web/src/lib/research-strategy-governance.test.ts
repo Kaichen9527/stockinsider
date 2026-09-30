@@ -95,6 +95,20 @@ test('duplicated daily signals cannot manufacture thirty independent trades', ()
   assert.throws(() => assessStrategyExperiment({ proposal: proposal(), observations: rows,
     independentReviewerId: 'reviewer', evaluatedAt: '2026-09-29T01:00:00Z' }), /duplicate_signal/);
 });
+test('equivalent timestamps and different times within one Taiwan session are one daily signal', () => {
+  const original = { arm: 'technical_baseline' as const, variantId: 'baseline', symbol: '2409',
+    signalAt: '2023-09-01T06:00:00Z', sourceAvailableAt: '2023-08-31T06:00:00Z',
+    researchArticlePublishedAt: null, kolClaimObservedAt: null,
+    grossReturnFraction: 0.04, roundTripCostFraction: 0.01,
+    maximumDrawdownFraction: 0.1, regime: 'bull' };
+  for (const alias of ['2023-09-01T06:00:00.000Z', '2023-09-01T14:00:00+08:00',
+    '2023-09-01T07:00:00Z']) {
+    assert.throws(() => assessStrategyExperiment({ proposal: proposal(),
+      observations: [original, { ...original, signalAt: alias, grossReturnFraction: 0.5 }],
+      independentReviewerId: 'reviewer', evaluatedAt: '2026-09-29T01:00:00Z',
+    }), /duplicate_signal/u);
+  }
+});
 test('an omitted registered variant cannot pass on the first variant alone', () => {
   const registered = proposal();
   registered.variants.push({ id: 'untested', parameterHash: 'b'.repeat(64),

@@ -19,8 +19,20 @@ CREATE TABLE IF NOT EXISTS public.research_deep_jobs_v1 (
   CHECK ((status = 'running') = (lease_owner IS NOT NULL AND lease_expires_at IS NOT NULL)),
   CHECK (status <> 'completed' OR receipt_id IS NOT NULL)
 );
+ALTER TABLE public.research_deep_jobs_v1
+  ADD COLUMN IF NOT EXISTS completion_owner TEXT,
+  ADD COLUMN IF NOT EXISTS completion_outbox_owner TEXT,
+  ADD COLUMN IF NOT EXISTS completion_outbox_job_id UUID,
+  ADD COLUMN IF NOT EXISTS completion_review_id UUID,
+  ADD COLUMN IF NOT EXISTS completion_article_hash TEXT,
+  ADD COLUMN IF NOT EXISTS completion_submission_hash TEXT;
 CREATE INDEX IF NOT EXISTS idx_research_deep_jobs_claim_v1
   ON public.research_deep_jobs_v1 (status, week_start, queue_rank, created_at);
+
+-- A generic outbox claim cannot stand in for a fenced deep-study claim.
+ALTER TABLE public.candidate_dossier_outbox_v5
+  ADD COLUMN IF NOT EXISTS deep_job_id UUID REFERENCES public.research_deep_jobs_v1(job_id) ON DELETE RESTRICT,
+  ADD COLUMN IF NOT EXISTS deep_attempt INTEGER;
 
 CREATE TABLE IF NOT EXISTS public.research_deep_job_attempts_v1 (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -114,8 +126,72 @@ BEGIN
   RETURN QUERY SELECT v_job.job_id,v_job.symbol,v_job.priority_run_id,v_job.attempts,v_job.lease_expires_at;
 END $function$;
 
+CREATE OR REPLACE FUNCTION public.claim_candidate_deep_outbox_v1(
+  p_deep_job_id UUID, p_deep_owner TEXT, p_deep_attempt INTEGER,
+  p_revision_id UUID, p_input_hash TEXT, p_outbox_owner TEXT
+)
+RETURNS TABLE(job_id UUID, bundle_id UUID, lease_expires_at TIMESTAMPTZ)
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp
+AS $function$
+DECLARE
+  v_job public.research_deep_jobs_v1;
+  v_outbox public.candidate_dossier_outbox_v5;
+  v_stock UUID;
+BEGIN
+  SELECT * INTO v_job FROM public.research_deep_jobs_v1
+    WHERE research_deep_jobs_v1.job_id=p_deep_job_id FOR UPDATE;
+  IF NOT FOUND OR v_job.status<>'running' OR v_job.lease_owner IS DISTINCT FROM p_deep_owner
+    OR v_job.attempts<>p_deep_attempt OR v_job.lease_expires_at<=clock_timestamp() THEN
+    RAISE EXCEPTION 'research_deep_job_lease_lost';
+  END IF;
+  IF p_outbox_owner IS NULL OR length(trim(p_outbox_owner))<3 OR length(p_outbox_owner)>120 THEN
+    RAISE EXCEPTION 'research_deep_outbox_owner_invalid';
+  END IF;
+  SELECT detail.stock_id INTO v_stock FROM public.candidate_detail_snapshots detail
+    WHERE detail.id=p_revision_id;
+  IF v_stock IS DISTINCT FROM v_job.stock_id THEN
+    RAISE EXCEPTION 'research_deep_stock_revision_mismatch';
+  END IF;
+  SELECT * INTO v_outbox FROM public.candidate_dossier_outbox_v5 outbox
+    WHERE outbox.revision_id=p_revision_id AND outbox.input_hash=p_input_hash FOR UPDATE;
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'research_deep_outbox_unavailable';
+  END IF;
+  IF v_outbox.status='running' AND v_outbox.deep_job_id=p_deep_job_id
+    AND v_outbox.deep_attempt=p_deep_attempt
+    AND v_outbox.lease_owner=p_outbox_owner AND v_outbox.lease_expires_at>clock_timestamp() THEN
+    RETURN QUERY SELECT v_outbox.job_id,v_outbox.bundle_id,v_outbox.lease_expires_at;
+    RETURN;
+  END IF;
+  IF v_outbox.status NOT IN ('queued','rejected')
+    OR v_outbox.attempts>=12
+    OR (v_outbox.status='rejected' AND (p_deep_attempt<2 OR v_outbox.deep_job_id IS DISTINCT FROM p_deep_job_id
+      OR v_outbox.deep_attempt>=p_deep_attempt))
+    OR (v_outbox.next_attempt_at IS NOT NULL AND v_outbox.next_attempt_at>clock_timestamp()) THEN
+    RAISE EXCEPTION 'research_deep_outbox_lease_lost';
+  END IF;
+  UPDATE public.candidate_dossier_outbox_v5 outbox SET
+    status='running', attempts=outbox.attempts+1, lease_owner=p_outbox_owner,
+    lease_expires_at=LEAST(v_job.lease_expires_at,clock_timestamp()+interval '20 minutes'),
+    deep_job_id=p_deep_job_id, deep_attempt=p_deep_attempt,
+    next_attempt_at=NULL, updated_at=clock_timestamp()
+    WHERE outbox.job_id=v_outbox.job_id RETURNING * INTO v_outbox;
+  RETURN QUERY SELECT v_outbox.job_id,v_outbox.bundle_id,v_outbox.lease_expires_at;
+END $function$;
+
+-- Keep the older five-argument entry point fail closed on replayed migrations.
 CREATE OR REPLACE FUNCTION public.finish_research_deep_job_v1(
   p_job_id UUID, p_owner TEXT, p_success BOOLEAN, p_receipt_id UUID, p_reason TEXT
+)
+RETURNS BOOLEAN LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp
+AS $function$
+BEGIN
+  RAISE EXCEPTION 'research_deep_attempt_required';
+END $function$;
+
+CREATE OR REPLACE FUNCTION public.finish_research_deep_job_v2(
+  p_job_id UUID, p_owner TEXT, p_attempt INTEGER,
+  p_success BOOLEAN, p_receipt_id UUID, p_reason TEXT
 )
 RETURNS BOOLEAN
 LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp
@@ -124,22 +200,21 @@ DECLARE v_job public.research_deep_jobs_v1;
 BEGIN
   PERFORM pg_advisory_xact_lock(2409, 6002);
   SELECT * INTO v_job FROM public.research_deep_jobs_v1 WHERE job_id=p_job_id FOR UPDATE;
-  IF FOUND AND p_success AND v_job.status='completed' AND v_job.receipt_id=p_receipt_id THEN
+  IF FOUND AND p_success AND v_job.status='completed' AND v_job.receipt_id=p_receipt_id
+    AND v_job.attempts=p_attempt AND v_job.completion_owner=p_owner THEN
     RETURN TRUE;
   END IF;
   IF NOT FOUND OR v_job.status <> 'running' OR v_job.lease_owner IS DISTINCT FROM p_owner
-    OR v_job.lease_expires_at <= clock_timestamp() THEN
+    OR v_job.attempts<>p_attempt OR v_job.lease_expires_at <= clock_timestamp() THEN
     RAISE EXCEPTION 'research_deep_job_lease_lost';
   END IF;
-  IF p_success THEN
-    RAISE EXCEPTION 'research_deep_publication_receipt_required';
-  END IF;
+  IF p_success THEN RAISE EXCEPTION 'research_deep_publication_receipt_required'; END IF;
   UPDATE public.research_deep_jobs_v1 SET
-    status=CASE WHEN p_success THEN 'completed' WHEN attempts < 3 THEN 'queued' ELSE 'failed' END,
+    status=CASE WHEN attempts < 3 THEN 'queued' ELSE 'failed' END,
     lease_owner=NULL,lease_expires_at=NULL,
-    receipt_id=CASE WHEN p_success THEN p_receipt_id ELSE NULL END,
-    terminal_reason=CASE WHEN p_success THEN NULL ELSE left(coalesce(p_reason,'research_failed'),500) END,
-    finished_at=CASE WHEN p_success OR attempts >= 3 THEN clock_timestamp() ELSE NULL END
+    receipt_id=NULL,
+    terminal_reason=left(coalesce(p_reason,'research_failed'),500),
+    finished_at=CASE WHEN attempts >= 3 THEN clock_timestamp() ELSE NULL END
   WHERE research_deep_jobs_v1.job_id=p_job_id;
   RETURN TRUE;
 END $function$;
@@ -159,14 +234,44 @@ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp
 AS $function$
 DECLARE
   v_job public.research_deep_jobs_v1;
+  v_outbox public.candidate_dossier_outbox_v5;
   v_stock UUID;
   v_receipt RECORD;
 BEGIN
   SELECT * INTO v_job FROM public.research_deep_jobs_v1
     WHERE research_deep_jobs_v1.job_id=p_deep_job_id FOR UPDATE;
+  IF FOUND AND v_job.status='completed' AND v_job.attempts=p_deep_attempt
+    AND v_job.completion_owner=p_deep_owner
+    AND v_job.completion_outbox_owner=p_owner
+    AND v_job.completion_outbox_job_id=p_job_id
+    AND v_job.completion_review_id=p_deep_review_id
+    AND v_job.completion_article_hash=p_article_hash
+    AND v_job.completion_submission_hash=p_submission_hash
+    AND p_validation_status='valid'
+    AND p_content->'deepResearch'->>'articleHash'=p_article_hash THEN
+    RETURN QUERY SELECT receipt.submission_id,receipt.dossier_id,receipt.status,
+      receipt.rejection_reasons,TRUE
+      FROM public.candidate_dossier_submission_receipts receipt
+      JOIN public.candidate_research_dossiers dossier ON dossier.id=receipt.dossier_id
+      WHERE receipt.submission_id=v_job.receipt_id AND receipt.revision_id=p_revision_id
+        AND receipt.bundle_id=p_bundle_id AND receipt.input_hash=p_input_hash
+        AND receipt.submission_hash=p_submission_hash AND receipt.status='accepted'
+        AND dossier.content=p_content;
+    IF FOUND THEN RETURN; END IF;
+  END IF;
   IF NOT FOUND OR v_job.status<>'running' OR v_job.lease_owner IS DISTINCT FROM p_deep_owner
     OR v_job.attempts<>p_deep_attempt OR v_job.lease_expires_at<=clock_timestamp() THEN
     RAISE EXCEPTION 'research_deep_job_lease_lost';
+  END IF;
+  SELECT * INTO v_outbox FROM public.candidate_dossier_outbox_v5 outbox
+    WHERE outbox.job_id=p_job_id FOR UPDATE;
+  IF NOT FOUND OR v_outbox.deep_job_id IS DISTINCT FROM p_deep_job_id
+    OR v_outbox.deep_attempt IS DISTINCT FROM p_deep_attempt
+    OR v_outbox.lease_owner IS DISTINCT FROM p_owner
+    OR v_outbox.bundle_id IS DISTINCT FROM p_bundle_id
+    OR v_outbox.revision_id IS DISTINCT FROM p_revision_id
+    OR v_outbox.input_hash IS DISTINCT FROM p_input_hash THEN
+    RAISE EXCEPTION 'research_deep_outbox_binding_missing';
   END IF;
   SELECT detail.stock_id INTO v_stock FROM public.candidate_detail_snapshots detail
     WHERE detail.id=p_revision_id;
@@ -194,6 +299,12 @@ BEGIN
       WHEN attempts<3 THEN 'queued' ELSE 'failed' END,
     lease_owner=NULL,lease_expires_at=NULL,
     receipt_id=CASE WHEN v_receipt.status='accepted' THEN v_receipt.submission_id ELSE NULL END,
+    completion_owner=CASE WHEN v_receipt.status='accepted' THEN p_deep_owner ELSE NULL END,
+    completion_outbox_owner=CASE WHEN v_receipt.status='accepted' THEN p_owner ELSE NULL END,
+    completion_outbox_job_id=CASE WHEN v_receipt.status='accepted' THEN p_job_id ELSE NULL END,
+    completion_review_id=CASE WHEN v_receipt.status='accepted' THEN p_deep_review_id ELSE NULL END,
+    completion_article_hash=CASE WHEN v_receipt.status='accepted' THEN p_article_hash ELSE NULL END,
+    completion_submission_hash=CASE WHEN v_receipt.status='accepted' THEN p_submission_hash ELSE NULL END,
     terminal_reason=CASE WHEN v_receipt.status='accepted' THEN NULL ELSE 'dossier_rejected' END,
     finished_at=CASE WHEN v_receipt.status='accepted' OR attempts>=3 THEN clock_timestamp() ELSE NULL END
     WHERE research_deep_jobs_v1.job_id=p_deep_job_id;
@@ -209,11 +320,14 @@ GRANT ALL ON public.research_deep_jobs_v1, public.research_deep_job_attempts_v1 
 REVOKE ALL ON FUNCTION public.enqueue_research_deep_jobs_v1(UUID),
   public.claim_research_deep_job_v1(TEXT),
   public.finish_research_deep_job_v1(UUID,TEXT,BOOLEAN,UUID,TEXT),
+  public.finish_research_deep_job_v2(UUID,TEXT,INTEGER,BOOLEAN,UUID,TEXT),
+  public.claim_candidate_deep_outbox_v1(UUID,TEXT,INTEGER,UUID,TEXT,TEXT),
   public.record_candidate_deep_submission_v1(UUID,TEXT,INTEGER,UUID,TEXT,UUID,TEXT,UUID,UUID,TEXT,TEXT,JSONB,JSONB,JSONB,JSONB,TEXT,JSONB)
   FROM PUBLIC, anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.enqueue_research_deep_jobs_v1(UUID),
   public.claim_research_deep_job_v1(TEXT),
-  public.finish_research_deep_job_v1(UUID,TEXT,BOOLEAN,UUID,TEXT),
+  public.finish_research_deep_job_v2(UUID,TEXT,INTEGER,BOOLEAN,UUID,TEXT),
+  public.claim_candidate_deep_outbox_v1(UUID,TEXT,INTEGER,UUID,TEXT,TEXT),
   public.record_candidate_deep_submission_v1(UUID,TEXT,INTEGER,UUID,TEXT,UUID,TEXT,UUID,UUID,TEXT,TEXT,JSONB,JSONB,JSONB,JSONB,TEXT,JSONB)
   TO service_role;
 

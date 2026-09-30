@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { fillPaperOrder, markPaperPositions, newPaperBook, sizePaperOrder, type PaperOrder } from './research-paper-books.ts';
+import { fillPaperOrder, markPaperPositions, newPaperBook, settlePaperSession,
+  sizePaperOrder, type PaperOrder } from './research-paper-books.ts';
 
 const hash = 'a'.repeat(64);
 const order: PaperOrder = {
@@ -61,7 +62,8 @@ test('same-bar stop is conservatively resolved as a loss, not a winning trade', 
 test('existing positions keep their original strategy and are monitored after thesis invalidation', () => {
   const filled = fillPaperOrder({ book: newPaperBook('growth'), order, shares: 1000, bar,
     markPrices: {} });
-  const marked = markPaperPositions({ book: filled.book, session: '2026-09-24',
+  const firstClose = settlePaperSession({ book: filled.book, session: order.executionSession, bars: [bar] });
+  const marked = markPaperPositions({ book: firstClose, session: '2026-09-24',
     bars: [{ ...bar, session: '2026-09-24', open: 27, high: 29, low: 26, close: 28 }] });
   assert.equal(marked.positions.length, 0);
   assert.ok(marked.cash < 996_000);
@@ -69,8 +71,9 @@ test('existing positions keep their original strategy and are monitored after th
   assert.ok(marked.costs.sellTax > 0);
 });
 test('same session processes old-position risk, multiple distinct orders and rejects replay', () => {
-  const prior = fillPaperOrder({ book: newPaperBook('growth'), order,
+  const opened = fillPaperOrder({ book: newPaperBook('growth'), order,
     shares: 1000, bar, markPrices: {} }).book;
+  const prior = settlePaperSession({ book: opened, session: order.executionSession, bars: [bar] });
   const session = '2026-09-24';
   const nextOrder = { ...order, symbol: '2330', signalSession: '2026-09-23',
     executionSession: session };
@@ -92,6 +95,21 @@ test('same session processes old-position risk, multiple distinct orders and rej
     bar: nextBar, markPrices: { '2330': 30.9, '2317': 30.9 } }), /paper_fill_risk_not_admissible/);
   assert.throws(() => markPaperPositions({ book: second.book, session, bars: [] }),
     /paper_session_replay_or_reorder/);
+});
+test('the final close records new-position peak exactly once after same-day orders', () => {
+  const session = order.executionSession;
+  const premarked = markPaperPositions({ book: newPaperBook('growth'), session, bars: [] });
+  const risen = { ...bar, high: 33, close: 33 };
+  const filled = fillPaperOrder({ book: premarked, order, shares: 3000,
+    bar: risen, markPrices: {} });
+  assert.equal(filled.book.equityPeak, 1_000_000);
+  const settled = settlePaperSession({ book: filled.book, session, bars: [risen] });
+  assert.ok(settled.equityPeak > 1_005_000);
+  assert.throws(() => settlePaperSession({ book: settled, session, bars: [risen] }), /settlement_invalid/u);
+  assert.equal(sizePaperOrder({ book: settled, order: { ...order, symbol: '2330' },
+    markPrices: { '2409': 33 } }).shares, 0);
+  assert.throws(() => markPaperPositions({ book: filled.book, session: '2026-09-24',
+    bars: [{ ...risen, session: '2026-09-24' }] }), /prior_session_not_settled/u);
 });
 test('an unfilled order does not consume the other symbol\'s same-day opportunity', () => {
   const first = fillPaperOrder({ book: newPaperBook('growth'), order, shares: 1000,

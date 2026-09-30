@@ -58,14 +58,13 @@ const migrationPaths = [
   'migrations/20260911_05_financial_fact_isolation_v10.sql',
   'migrations/20260924_entry_plan_official_action_symbols.sql',
 ];
-// Preserve the approved V3 chain and append the research-agent schema as an
-// independently listed extension. The reviewed apply tool uses the same order.
+// Preserve the approved V3 chain. Research is a separately authorized extension.
 const researchAgentMigrationPaths = [
   'migrations/20260929_candidate_dossier_outbox_v6.sql',
   'migrations/20260929_research_agent_state_v1.sql',
   'migrations/20260929_research_deep_jobs_v1.sql',
 ];
-const migrations = [...migrationPaths, ...researchAgentMigrationPaths].map((relativePath) => {
+const describeMigration = (relativePath) => {
   const bytes = fs.readFileSync(path.join(root, relativePath));
   return {
     migration: relativePath,
@@ -73,9 +72,13 @@ const migrations = [...migrationPaths, ...researchAgentMigrationPaths].map((rela
     sha256: createHash('sha256').update(bytes).digest('hex'),
     additiveOnly: !/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu.test(bytes.toString('utf8')),
   };
-});
+};
+const migrations = migrationPaths.map(describeMigration);
+const researchAgentMigrations = researchAgentMigrationPaths.map(describeMigration);
 const productionDatabaseMigrationAuthorized =
   authority?.authority?.v314?.productionDatabaseMigrationAuthorized === true;
+const researchAgentProductionDatabaseMigrationAuthorized =
+  authority?.authority?.researchAgent?.productionDatabaseMigrationAuthorized === true;
 const orderedChainSha256 = createHash('sha256')
   .update(JSON.stringify(migrations.map(({ migration, sha256 }) => [migration, sha256])))
   .digest('hex');
@@ -84,6 +87,15 @@ process.stdout.write(JSON.stringify({
   protocol: 'source-led-opportunity-v3-migration-plan-v2',
   migrations,
   orderedChainSha256,
+  researchAgentExtension: {
+    migrations: researchAgentMigrations,
+    orderedChainSha256: createHash('sha256').update(JSON.stringify(researchAgentMigrations
+      .map(({ migration, sha256 }) => [migration, sha256]))).digest('hex'),
+    applyAuthorized: researchAgentProductionDatabaseMigrationAuthorized,
+    dedicatedApplyCommand: researchAgentProductionDatabaseMigrationAuthorized
+      ? 'npm run db:v3:apply-reviewed -- --research-agent-extension --source-commit <reviewed-commit> --attestation-commit <attestation-commit>'
+      : null,
+  },
   authorityArtifact: {
     path: path.relative(root, authorityArtifact),
     sha256: createHash('sha256').update(authorityBytes).digest('hex'),

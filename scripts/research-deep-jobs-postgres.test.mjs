@@ -32,12 +32,20 @@ test('weekly five-article cap and daily four-attempt/one-lease Mac queue fail cl
       sql(`CREATE ROLE anon NOLOGIN; CREATE ROLE authenticated NOLOGIN; CREATE ROLE service_role NOLOGIN;
         CREATE TABLE public.stocks(id uuid PRIMARY KEY, symbol text, market text);
         CREATE TABLE public.candidate_detail_snapshots(id uuid PRIMARY KEY,stock_id uuid);
+        CREATE TABLE public.candidate_dossier_bundles(bundle_id uuid PRIMARY KEY,revision_id uuid,published_revision_id uuid,input_hash text);
+        CREATE TABLE public.candidate_daily_stage_snapshots(detail_revision_id uuid);
         CREATE TABLE public.candidate_research_dossiers(id uuid PRIMARY KEY,content jsonb,validation_status text);
         CREATE TABLE public.candidate_dossier_submission_receipts(
-          submission_id uuid PRIMARY KEY,revision_id uuid,input_hash text,dossier_id uuid,status text);
+          submission_id uuid PRIMARY KEY,revision_id uuid,input_hash text,dossier_id uuid,status text,submission_hash text,bundle_id uuid,rejection_reasons jsonb);
         CREATE FUNCTION public.reject_candidate_dossier_revision_mutation_v4()
-          RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'immutable_revision'; END $$;`);
-      for (const name of ['20260929_research_agent_state_v1.sql', '20260929_research_deep_jobs_v1.sql']) {
+          RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'immutable_revision'; END $$;
+        CREATE FUNCTION public.record_candidate_dossier_submission_v4(
+          uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)
+          RETURNS TABLE(submission_id uuid,dossier_id uuid,status text,rejection_reasons jsonb,idempotent_replay boolean)
+          LANGUAGE sql AS $$ SELECT NULL::uuid,NULL::uuid,'rejected'::text,'[]'::jsonb,false $$;`);
+      for (const name of ['20260907_candidate_dossier_outbox_v5.sql',
+        '20260929_candidate_dossier_outbox_v6.sql',
+        '20260929_research_agent_state_v1.sql', '20260929_research_deep_jobs_v1.sql']) {
         run('psql', ['-X', '-v', 'ON_ERROR_STOP=1', '-h', temporary, '-p', String(port), '-d', 'postgres',
           '-f', path.join(root, 'migrations', name)]);
       }
@@ -58,23 +66,25 @@ test('weekly five-article cap and daily four-attempt/one-lease Mac queue fail cl
       const first = sql("SELECT job_id FROM public.claim_research_deep_job_v1('mac-codex-1')");
       assert.ok(first);
       assert.equal(sql("SELECT count(*) FROM public.claim_research_deep_job_v1('mac-codex-2')"), '0');
-      assert.throws(() => sql(`SELECT public.finish_research_deep_job_v1(
-        '${first}','mac-codex-2',true,NULL,NULL)`), /lease_lost/u);
-      assert.throws(() => sql(`SELECT public.finish_research_deep_job_v1(
-        '${first}','mac-codex-1',true,NULL,NULL)`), /publication_receipt_required/u);
-      assert.equal(sql(`SELECT public.finish_research_deep_job_v1(
-        '${first}','mac-codex-1',false,NULL,'source acquisition unavailable')`), 't');
+      assert.throws(() => sql(`SELECT public.finish_research_deep_job_v2(
+        '${first}','mac-codex-2',1,true,NULL,NULL)`), /lease_lost/u);
+      assert.throws(() => sql(`SELECT public.finish_research_deep_job_v2(
+        '${first}','mac-codex-1',1,true,NULL,NULL)`), /publication_receipt_required/u);
+      assert.equal(sql(`SELECT public.finish_research_deep_job_v2(
+        '${first}','mac-codex-1',1,false,NULL,'source acquisition unavailable')`), 't');
       for (let attempt = 2; attempt <= 3; attempt += 1) {
         const claimed = sql("SELECT job_id FROM public.claim_research_deep_job_v1('mac-codex-1')");
         assert.equal(claimed, first);
-        assert.equal(sql(`SELECT public.finish_research_deep_job_v1(
-          '${first}','mac-codex-1',false,NULL,'source acquisition unavailable')`), 't');
+        assert.throws(() => sql(`SELECT public.finish_research_deep_job_v2(
+          '${first}','mac-codex-1',${attempt - 1},false,NULL,'stale attempt')`), /lease_lost/u);
+        assert.equal(sql(`SELECT public.finish_research_deep_job_v2(
+          '${first}','mac-codex-1',${attempt},false,NULL,'source acquisition unavailable')`), 't');
       }
       assert.equal(sql(`SELECT status,attempts FROM public.research_deep_jobs_v1 WHERE job_id='${first}'`), 'failed|3');
       const fourth = sql("SELECT job_id FROM public.claim_research_deep_job_v1('mac-codex-1')");
       assert.ok(fourth && fourth !== first);
-      assert.equal(sql(`SELECT public.finish_research_deep_job_v1(
-        '${fourth}','mac-codex-1',false,NULL,'source acquisition unavailable')`), 't');
+      assert.equal(sql(`SELECT public.finish_research_deep_job_v2(
+        '${fourth}','mac-codex-1',1,false,NULL,'source acquisition unavailable')`), 't');
       assert.equal(sql("SELECT count(*) FROM public.claim_research_deep_job_v1('mac-codex-1')"), '0');
       assert.throws(() => sql('UPDATE public.research_deep_job_attempts_v1 SET owner=\'fake\''), /immutable_revision/u);
     } finally {

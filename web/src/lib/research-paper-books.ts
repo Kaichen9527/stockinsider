@@ -1,6 +1,6 @@
 import { PAPER_BOOKS } from './research-strategy-governance.ts';
 
-export const PAPER_BOOK_POLICY = 'paper-books-v2' as const;
+export const PAPER_BOOK_POLICY = 'paper-books-v3' as const;
 // Keep the auction-proxy assumptions aligned with PR #284's engine.py.
 export const PAPER_EXECUTION_COSTS = Object.freeze({
   commission: 0.001425, minimumCommission: 20, sellTax: 0.003, slippageBps: 10, lot: 1000,
@@ -16,6 +16,7 @@ export type PaperBook = {
   positions: PaperPosition[];
   lastProcessedSession: string | null;
   markedSession: string | null;
+  settledSession: string | null;
   processedOrderKeys: string[];
   costs: { commission: number; sellTax: number; slippage: number };
 };
@@ -52,7 +53,8 @@ export function newPaperBook(bookId: PaperBookId): PaperBook {
   if (!policy) throw new Error('paper_book_id_invalid');
   return { policyVersion: PAPER_BOOK_POLICY, bookId, cash: policy.initialCapital,
     realizedPnl: 0, equityPeak: policy.initialCapital, positions: [], lastProcessedSession: null,
-    markedSession: null, processedOrderKeys: [], costs: { commission: 0, sellTax: 0, slippage: 0 } };
+    markedSession: null, settledSession: null, processedOrderKeys: [],
+    costs: { commission: 0, sellTax: 0, slippage: 0 } };
 }
 export function sizePaperOrder(input: {
   book: PaperBook; order: PaperOrder; markPrices: Record<string, number>;
@@ -80,6 +82,9 @@ export function sizePaperOrder(input: {
   }
   if (book.positions.some((position) => position.symbol === order.symbol)) blockers.push('stock_already_held');
   if (book.lastProcessedSession && book.lastProcessedSession > order.executionSession) blockers.push('paper_order_past_session');
+  if (book.settledSession === order.executionSession) blockers.push('paper_session_already_settled');
+  if (book.lastProcessedSession && book.lastProcessedSession < order.executionSession
+    && book.settledSession !== book.lastProcessedSession) blockers.push('prior_session_not_settled');
   if (book.lastProcessedSession === order.executionSession && book.processedOrderKeys.includes(orderKey(order))) {
     blockers.push('paper_order_already_processed');
   }
@@ -181,6 +186,10 @@ export function markPaperPositions(input: {
     || book.markedSession === input.session) {
     throw new Error('paper_session_replay_or_reorder');
   }
+  if (book.lastProcessedSession && book.lastProcessedSession < input.session
+    && book.settledSession !== book.lastProcessedSession) {
+    throw new Error('paper_prior_session_not_settled');
+  }
   const bySymbol = new Map(input.bars.map((bar) => [bar.symbol, bar]));
   const remaining: PaperPosition[] = [];
   let cash = book.cash;
@@ -209,13 +218,35 @@ export function markPaperPositions(input: {
       exitSlippageTotal += position.shares * (reference - exitPrice);
     } else remaining.push(position);
   }
-  const marked = remaining.reduce((sum, position) => sum + position.shares
-    * (bySymbol.get(position.symbol)?.close ?? position.entryPrice), 0);
   return { ...book, cash, realizedPnl, positions: remaining,
     costs: { commission: book.costs.commission + exitCommissionTotal,
       sellTax: book.costs.sellTax + sellTaxTotal,
       slippage: book.costs.slippage + exitSlippageTotal },
-    equityPeak: Math.max(book.equityPeak, cash + marked), lastProcessedSession: input.session,
+    lastProcessedSession: input.session,
     markedSession: input.session,
     processedOrderKeys: book.lastProcessedSession === input.session ? book.processedOrderKeys : [] };
+}
+
+/** Record the final close once all same-session exits and new orders are done. */
+export function settlePaperSession(input: {
+  book: PaperBook; session: string; bars: PaperSessionBar[];
+}): PaperBook {
+  const { book, session } = input;
+  if (book.policyVersion !== PAPER_BOOK_POLICY || !/^\d{4}-\d{2}-\d{2}$/u.test(session)
+    || book.lastProcessedSession !== session || book.settledSession === session
+    || book.positions.some((position) => position.openedSession < session && book.markedSession !== session)) {
+    throw new Error('paper_session_settlement_invalid');
+  }
+  const bars = new Map(input.bars.map((bar) => [bar.symbol, bar]));
+  if (bars.size !== input.bars.length) throw new Error('paper_session_settlement_duplicate_bar');
+  const equity = book.positions.reduce((total, position) => {
+    const bar = bars.get(position.symbol);
+    if (!bar || !bar.officialFinal || bar.session !== session
+      || ![bar.open, bar.high, bar.low, bar.close].every((value) => finite(value) && value > 0)
+      || bar.high < Math.max(bar.open, bar.close) || bar.low > Math.min(bar.open, bar.close)) {
+      throw new Error('paper_session_final_bar_missing');
+    }
+    return total + position.shares * bar.close;
+  }, book.cash);
+  return { ...book, equityPeak: Math.max(book.equityPeak, equity), settledSession: session };
 }

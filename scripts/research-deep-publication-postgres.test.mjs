@@ -43,7 +43,11 @@ test('deep publication checks both leases and the exact review in one transactio
         CREATE TABLE public.candidate_dossier_bundles(bundle_id uuid PRIMARY KEY, revision_id uuid,
           published_revision_id uuid, input_hash text);
         CREATE TABLE public.candidate_daily_stage_snapshots(detail_revision_id uuid);
-        CREATE TABLE public.candidate_research_dossiers(id uuid PRIMARY KEY, content jsonb, validation_status text);
+        CREATE TABLE public.candidate_research_dossiers(id uuid PRIMARY KEY DEFAULT gen_random_uuid(), content jsonb, validation_status text,
+          detail_snapshot_id uuid,narrative_kind text,bundle_id uuid,input_hash text,claims jsonb,source_references jsonb,
+          claim_fact_map jsonb,rejection_reasons jsonb,bundle_hash text,detail_payload_hash text,published_at timestamptz);
+        CREATE UNIQUE INDEX uq_valid_dossier ON public.candidate_research_dossiers(detail_snapshot_id,narrative_kind,input_hash)
+          WHERE input_hash IS NOT NULL AND validation_status='valid';
         CREATE TABLE public.candidate_dossier_submission_receipts(
           submission_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), dossier_id uuid DEFAULT gen_random_uuid(),
           revision_id uuid, bundle_id uuid, input_hash text, submission_hash text UNIQUE,
@@ -65,6 +69,9 @@ test('deep publication checks both leases and the exact review in one transactio
               candidate_dossier_submission_receipts.status,
               candidate_dossier_submission_receipts.rejection_reasons,FALSE;
           END $$;`);
+      const v4 = fs.readFileSync(path.join(root, 'migrations/20260906_candidate_dossier_v4.sql'), 'utf8');
+      sql(v4.slice(v4.indexOf('CREATE OR REPLACE FUNCTION public.record_candidate_dossier_submission_v4'),
+        v4.indexOf('CREATE OR REPLACE FUNCTION public.reject_candidate_dossier_revision_mutation_v4')));
       for (const filename of [
         '20260907_candidate_dossier_outbox_v5.sql',
         '20260929_candidate_dossier_outbox_v6.sql',
@@ -86,20 +93,22 @@ test('deep publication checks both leases and the exact review in one transactio
         RETURNING run_id`).split('\n')[0];
       assert.equal(sql(`SELECT public.enqueue_research_deep_jobs_v1('${runId}')`), '1');
       const jobId = sql("SELECT job_id FROM public.claim_research_deep_job_v1('deep-owner')").split('|')[0];
-      assert.equal(sql("SELECT job_id FROM public.claim_candidate_dossier_outbox_v5('outbox-owner',1)"), ids.outbox);
+      const claimPublication = (attempt = 1) => sql(`SELECT job_id FROM public.claim_candidate_deep_outbox_v1(
+        '${jobId}','deep-owner',${attempt},'${ids.revision}','${inputHash}','outbox-owner')`);
+      assert.equal(claimPublication(), ids.outbox);
       const reviewId = sql(`INSERT INTO public.candidate_deep_article_reviews_v1
         (revision_id,input_hash,article_hash,author_id,reviewer_id,decision,findings,source_document_ids,reviewed_at)
         VALUES ('${ids.revision}','${inputHash}','${articleHash}','author','independent','accepted','{}','[]',clock_timestamp())
         RETURNING id`).split('\n')[0];
-      const submit = (attempt = 1) => sql(`SELECT status FROM public.record_candidate_deep_submission_v1(
+      const submit = (attempt = 1, validation = 'valid', hash = submissionHash) => sql(`SELECT status,idempotent_replay FROM public.record_candidate_deep_submission_v1(
         '${jobId}','deep-owner',${attempt},'${reviewId}','${articleHash}',
         '${ids.outbox}','outbox-owner','${ids.bundle}','${ids.revision}',
-        '${inputHash}','${submissionHash}',
+        '${inputHash}','${hash}',
         '{"deepResearch":{"articleHash":"${articleHash}"}}'::jsonb,
-        '[]'::jsonb,'[]'::jsonb,'{}'::jsonb,'valid','[]'::jsonb)`);
+        '[]'::jsonb,'[]'::jsonb,'{}'::jsonb,'${validation}','[]'::jsonb)`);
       assert.throws(() => submit(2), /research_deep_job_lease_lost/u);
-      assert.throws(() => sql(`SELECT public.finish_research_deep_job_v1(
-        '${jobId}','deep-owner',true,NULL,NULL)`), /publication_receipt_required/u);
+      assert.throws(() => sql(`SELECT public.finish_research_deep_job_v2(
+        '${jobId}','deep-owner',1,true,NULL,NULL)`), /publication_receipt_required/u);
       sql(`UPDATE public.research_deep_jobs_v1 SET lease_expires_at=clock_timestamp()-interval '1 second'
         WHERE job_id='${jobId}'`);
       assert.throws(() => submit(), /research_deep_job_lease_lost/u);
@@ -112,11 +121,20 @@ test('deep publication checks both leases and the exact review in one transactio
       assert.equal(sql(`SELECT status FROM public.research_deep_jobs_v1 WHERE job_id='${jobId}'`), 'running');
       sql(`UPDATE public.candidate_dossier_outbox_v5 SET lease_expires_at=clock_timestamp()+interval '20 minutes'
         WHERE job_id='${ids.outbox}'`);
-      assert.equal(submit(), 'accepted');
+      assert.equal(submit(1, 'rejected'), 'rejected|f');
+      assert.equal(sql(`SELECT status FROM public.research_deep_jobs_v1 WHERE job_id='${jobId}'`), 'queued');
+      assert.equal(sql("SELECT attempt FROM public.claim_research_deep_job_v1('deep-owner')"), '2');
+      assert.throws(() => sql(`SELECT public.finish_research_deep_job_v2(
+        '${jobId}','deep-owner',1,false,NULL,'stale attempt failure')`), /lease_lost/u);
+      assert.equal(sql(`SELECT status,attempts FROM public.research_deep_jobs_v1 WHERE job_id='${jobId}'`), 'running|2');
+      assert.equal(claimPublication(2), ids.outbox);
+      assert.equal(submit(2, 'valid', 'e'.repeat(64)), 'accepted|f');
       assert.equal(sql(`SELECT status,receipt_id IS NOT NULL FROM public.research_deep_jobs_v1
         WHERE job_id='${jobId}'`), 'completed|t');
-      assert.equal(sql('SELECT count(*) FROM public.candidate_dossier_submission_receipts'), '1');
-      assert.throws(() => submit(), /research_deep_job_lease_lost/u);
+      assert.equal(sql('SELECT count(*) FROM public.candidate_dossier_submission_receipts'), '2');
+      assert.equal(submit(2, 'valid', 'e'.repeat(64)), 'accepted|t');
+      assert.throws(() => submit(1), /research_deep_job_lease_lost/u);
+      assert.throws(() => submit(2, 'valid', 'f'.repeat(64)), /research_deep_job_lease_lost/u);
       // Reviewed production replay is idempotent and retains immutable receipts.
       for (const filename of [
         '20260929_candidate_dossier_outbox_v6.sql',
@@ -126,7 +144,7 @@ test('deep publication checks both leases and the exact review in one transactio
         '-d', 'postgres', '-f', path.join(root, 'migrations', filename)]);
       assert.equal(sql(`SELECT status,receipt_id IS NOT NULL FROM public.research_deep_jobs_v1
         WHERE job_id='${jobId}'`), 'completed|t');
-      assert.equal(sql('SELECT count(*) FROM public.candidate_dossier_submission_receipts'), '1');
+      assert.equal(sql('SELECT count(*) FROM public.candidate_dossier_submission_receipts'), '2');
     } finally {
       if (started) {
         try { run('pg_ctl', ['-D', cluster, '-m', 'immediate', '-w', 'stop']); }

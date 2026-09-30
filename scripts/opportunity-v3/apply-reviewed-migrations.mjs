@@ -92,10 +92,11 @@ async function reviewedMigrationIsSuperseded(client, relativePath) {
 }
 
 function parseArguments(argv) {
-  const result = { apply:false,sourceCommit:null,attestationCommit:null };
+  const result = { apply:false,researchAgentExtension:false,sourceCommit:null,attestationCommit:null };
   for (let index=0; index<argv.length; index+=1) {
     const value=argv[index];
     if(value==='--apply')result.apply=true;
+    else if(value==='--research-agent-extension')result.researchAgentExtension=true;
     else if(value==='--source-commit'&&SHA40.test(argv[index+1]??''))result.sourceCommit=argv[++index];
     else if(value==='--attestation-commit'&&SHA40.test(argv[index+1]??''))result.attestationCommit=argv[++index];
     else throw new Error('invalid_arguments');
@@ -115,7 +116,12 @@ function reviewedMigrationPlan(options) {
     '.loop-engineering/state/changes/source-led-opportunity-engine-v3/status.json'),'utf8'));
   if(status?.authority?.v314?.productionDatabaseMigrationAuthorized!==true)
     throw new Error('production_migration_authority_missing');
-  const migrations=[...MIGRATIONS,...RESEARCH_AGENT_MIGRATIONS].map((relativePath)=>{
+  if(options.researchAgentExtension
+    && status?.authority?.researchAgent?.productionDatabaseMigrationAuthorized!==true)
+    throw new Error('research_agent_production_migration_authority_missing');
+  const migrationPaths=options.researchAgentExtension
+    ? [...MIGRATIONS,...RESEARCH_AGENT_MIGRATIONS] : MIGRATIONS;
+  const migrations=migrationPaths.map((relativePath)=>{
     const bytes=fs.readFileSync(path.join(root,relativePath));
     if(/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu.test(bytes.toString('utf8')))
       throw new Error('non_additive_migration_rejected');
@@ -136,7 +142,8 @@ async function applyReviewedMigrations(options) {
   try {
     await client.query("SELECT pg_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0))");
     locked=true;
-    const researchPrerequisite=(await client.query(`SELECT
+    if(options.researchAgentExtension) {
+      const researchPrerequisite=(await client.query(`SELECT
       to_regclass('public.candidate_dossier_outbox_v5') IS NOT NULL AS outbox,
       to_regclass('public.candidate_dossier_submission_receipts') IS NOT NULL AS receipts,
       to_regclass('public.candidate_detail_snapshots') IS NOT NULL AS detail,
@@ -144,6 +151,7 @@ async function applyReviewedMigrations(options) {
       to_regprocedure('public.record_candidate_dossier_submission_v4(uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)') IS NOT NULL AS submission`)).rows[0];
     if(!researchPrerequisite||Object.values(researchPrerequisite).some((value)=>value!==true))
       throw new Error('research_agent_migration_prerequisite_missing');
+    }
     // Freeze successor detection before replaying any older migration. Earlier
     // migrations can temporarily replace the authoritative function body and
     // must not erase evidence that the stronger successor was already installed.
@@ -451,14 +459,15 @@ async function applyReviewedMigrations(options) {
         AND NOT has_schema_privilege('legacy_correctness_rpc_owner','public','CREATE')
     ) result`)).rows[0]?.result;
     if(!verified||Object.values(verified).some((value)=>value!==true))throw new Error('migration_postcondition_failed');
-    const researchVerified=(await client.query(`SELECT
+    const researchVerified=options.researchAgentExtension ? (await client.query(`SELECT
       to_regclass('public.research_priority_runs_v1') IS NOT NULL AS priority,
       to_regclass('public.candidate_deep_article_reviews_v1') IS NOT NULL AS reviews,
       to_regclass('public.candidate_thesis_qualifications_v1') IS NOT NULL AS thesis,
       to_regclass('public.candidate_technical_decisions_v1') IS NOT NULL AS technical,
       to_regclass('public.research_deep_jobs_v1') IS NOT NULL AS jobs,
-      to_regprocedure('public.record_candidate_deep_submission_v1(uuid,text,integer,uuid,text,uuid,text,uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)') IS NOT NULL AS deep_publication`)).rows[0];
-    if(!researchVerified||Object.values(researchVerified).some((value)=>value!==true))
+      to_regprocedure('public.record_candidate_deep_submission_v1(uuid,text,integer,uuid,text,uuid,text,uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)') IS NOT NULL AS deep_publication`)).rows[0] : null;
+    if(options.researchAgentExtension
+      && (!researchVerified||Object.values(researchVerified).some((value)=>value!==true)))
       throw new Error('research_agent_migration_postcondition_failed');
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',
       sourceCommit:options.sourceCommit,attestationCommit:options.attestationCommit,
