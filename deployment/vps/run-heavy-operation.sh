@@ -4,8 +4,8 @@ set -euo pipefail
 operation=${1:-}
 budget_file=${2:-}
 shift $(( $# >= 2 ? 2 : $# ))
-if [[ ! "$operation" =~ ^(build|restore|backfill)$ || ! "$budget_file" = /* || ${1:-} != -- || $# -lt 2 ]]; then
-  echo "usage: run-heavy-operation.sh build|restore|backfill ABSOLUTE_BUDGET_JSON -- ABSOLUTE_REVIEWED_COMMAND [args...]" >&2
+if [[ ! "$operation" =~ ^(build|restore|backfill|research|backtest)$ || ! "$budget_file" = /* || ${1:-} != -- || $# -lt 2 ]]; then
+  echo "usage: run-heavy-operation.sh build|restore|backfill|research|backtest ABSOLUTE_BUDGET_JSON -- ABSOLUTE_REVIEWED_COMMAND [args...]" >&2
   exit 64
 fi
 shift
@@ -29,5 +29,9 @@ if ! flock -n 9; then
   echo "the requested StockInsider operation is active" >&2
   exit 75
 fi
-/usr/bin/node /opt/stockinsider/current/scripts/contabo-host-resource-check.mjs "$budget_file"
+if [[ "$operation" = research || "$operation" = backtest ]]; then
+  /usr/bin/node /opt/stockinsider/current/scripts/research-host-resource-check.mjs "$budget_file"
+else
+  /usr/bin/node /opt/stockinsider/current/scripts/contabo-host-resource-check.mjs "$budget_file"
+fi
 exec "$@"

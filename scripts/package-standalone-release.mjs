@@ -123,6 +123,7 @@ export async function packageStandaloneRelease({ sourceRepository, packagerRepos
     for (const name of ['call_internal_api.mjs', 'call_internal_api_sequence.mjs',
       'internal-api-sequence-policy.mjs',
       'contabo-capacity-guard.mjs', 'contabo-host-resource-check.mjs',
+    'research-capacity-admission.mjs', 'research-host-resource-check.mjs',
       'contabo-deployment-inventory.mjs', 'contabo-cleanup-preflight.mjs',
       'sync-official-trading-calendar.mjs',
       'verify-standalone-release.mjs',

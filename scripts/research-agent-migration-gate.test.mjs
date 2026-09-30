@@ -32,7 +32,7 @@ test('research schema extends the same attested operator plan and cannot use a s
   assert.match(reviewed, /options[.]researchAgentExtension\s*\?/u);
 });
 
-test('approved V3 plan stays closed while the unapproved research extension is visible but disabled', async () => {
+test('base chain stays fixed and explicit extension authority never replaces reviewed apply', async (t) => {
   const { execFileSync } = await import('node:child_process');
   const result = JSON.parse(execFileSync(process.execPath,
     [path.join(root, 'scripts/opportunity-v3/migration-plan.mjs')], { cwd: root, encoding: 'utf8' }));
@@ -40,6 +40,24 @@ test('approved V3 plan stays closed while the unapproved research extension is v
     'migrations/20260924_entry_plan_official_action_symbols.sql');
   assert.deepEqual(result.researchAgentExtension.migrations.map((row) => row.migration),
     extension(plan, 'researchAgentMigrationPaths'));
-  assert.equal(result.researchAgentExtension.applyAuthorized, false);
-  assert.equal(result.researchAgentExtension.dedicatedApplyCommand, null);
+  assert.equal(result.researchAgentExtension.applyAuthorized, true);
+  assert.match(result.researchAgentExtension.dedicatedApplyCommand, /--source-commit <reviewed-commit> --attestation-commit <attestation-commit>/u);
+  // Exercise the actual planner without authority in an isolated repository.
+  const { tmpdir } = await import('node:os');
+  const isolated = fs.mkdtempSync(path.join(tmpdir(), 'research-migration-plan-'));
+  t.after(() => fs.rmSync(isolated, { recursive: true, force: true }));
+  const state = '.loop-engineering/state/changes/source-led-opportunity-engine-v3';
+  fs.mkdirSync(path.join(isolated, state), { recursive: true });
+  fs.mkdirSync(path.join(isolated, 'scripts/opportunity-v3'), { recursive: true });
+  fs.copyFileSync(path.join(root, 'scripts/opportunity-v3/migration-plan.mjs'),
+    path.join(isolated, 'scripts/opportunity-v3/migration-plan.mjs'));
+  fs.cpSync(path.join(root, 'migrations'), path.join(isolated, 'migrations'), { recursive: true });
+  for (const authority of [{ v314: { productionDatabaseMigrationAuthorized: true } },
+    { v314: { productionDatabaseMigrationAuthorized: true }, researchAgent: { productionDatabaseMigrationAuthorized: false } }]) {
+    fs.writeFileSync(path.join(isolated, state, 'status.json'), JSON.stringify({ authority }));
+    const denied = JSON.parse(execFileSync(process.execPath,
+      [path.join(isolated, 'scripts/opportunity-v3/migration-plan.mjs')], { encoding: 'utf8' }));
+    assert.equal(denied.researchAgentExtension.applyAuthorized, false);
+    assert.equal(denied.researchAgentExtension.dedicatedApplyCommand, null);
+  }
 });
