@@ -61,7 +61,7 @@ test('weekly five-article cap and daily four-attempt/one-lease Mac queue fail cl
       assert.throws(() => sql(`SELECT public.finish_research_deep_job_v1(
         '${first}','mac-codex-2',true,NULL,NULL)`), /lease_lost/u);
       assert.throws(() => sql(`SELECT public.finish_research_deep_job_v1(
-        '${first}','mac-codex-1',true,NULL,NULL)`), /accepted_article_missing/u);
+        '${first}','mac-codex-1',true,NULL,NULL)`), /publication_receipt_required/u);
       assert.equal(sql(`SELECT public.finish_research_deep_job_v1(
         '${first}','mac-codex-1',false,NULL,'source acquisition unavailable')`), 't');
       for (let attempt = 2; attempt <= 3; attempt += 1) {

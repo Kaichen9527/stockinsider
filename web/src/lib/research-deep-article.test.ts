@@ -14,6 +14,7 @@ const document = {
 const common: Omit<DeepResearchScenario, 'name' | 'incrementalRevenueMillions' | 'incrementalOperatingExpenseMillions'> = {
   fiscalYear: 2028, baselineEps: 0.6, grossMargin: 0.3, nonOperatingMillions: 0,
   baselineBridge: {
+    segmentBasis: 'issuer_reported', segmentNote: '依公司揭露事業分類重組，與合併損益對帳。',
     segments: [
       { business: 'display', revenueMillions: 2000, grossMargin: 0.3, operatingExpenseMillions: 100 },
       { business: 'mobility', revenueMillions: 1000, grossMargin: 0.3, operatingExpenseMillions: 100 },
@@ -44,11 +45,11 @@ function article(): DeepResearchArticle {
       strongestCounterEvidence: '尚未有可核對的訂單、良率與價格資訊。',
       falsifier: '客戶驗證延後或替代技術取得主要採購。' }],
     scenarios: [
-      { ...common, name: 'existing_business', incrementalRevenueMillions: 0, incrementalOperatingExpenseMillions: 0 },
-      { ...common, name: 'conditional_commercialization', incrementalRevenueMillions: 1000, incrementalOperatingExpenseMillions: 100,
+      { ...common, baselineBridge: structuredClone(common.baselineBridge), name: 'existing_business', incrementalRevenueMillions: 0, incrementalOperatingExpenseMillions: 0 },
+      { ...common, baselineBridge: structuredClone(common.baselineBridge), name: 'conditional_commercialization', incrementalRevenueMillions: 1000, incrementalOperatingExpenseMillions: 100,
         commercialization: { annualCapacityUnits: 10_000, utilization: 0.5, yieldRate: 0.5,
           averageSellingPriceMillion: 0.4, intercompanyRevenueMillions: 0, incrementalDepreciationMillions: 0 } },
-      { ...common, name: 'delay_or_failure', incrementalRevenueMillions: 0, incrementalOperatingExpenseMillions: 50 },
+      { ...common, baselineBridge: structuredClone(common.baselineBridge), name: 'delay_or_failure', incrementalRevenueMillions: 0, incrementalOperatingExpenseMillions: 50 },
     ],
   };
 }
@@ -66,6 +67,27 @@ test('conditional scenario computes attribution, diluted EPS and dated present v
   assert.equal(result.scenarios[1].totalEps, 0.728);
   assert.ok(Math.abs(result.scenarios[1].presentValue! - (0.728 * 20 / 1.1 ** 2)) < 1e-10);
   assert.equal(result.sourceDocumentIds.length, 1);
+});
+test('a different industry can use its actual issuer segments or a disclosed consolidated bridge', () => {
+  const input = options();
+  input.article.symbol = '2330';
+  input.expectedSymbol = '2330';
+  input.documents[0] = { ...document, symbols: ['2330'] };
+  for (const scenario of input.article.scenarios) {
+    scenario.baselineBridge = {
+      ...scenario.baselineBridge,
+      segmentBasis: 'consolidated_only',
+      segmentNote: '發行人只揭露合併營收與利潤，未將研究估計誤列為已揭露分部。',
+      segments: [{ business: 'foundry_consolidated', revenueMillions: 3500,
+        grossMargin: 0.3, operatingExpenseMillions: 300 }],
+    };
+  }
+  const result = validateDeepResearchArticle(input);
+  assert.equal(result.symbol, '2330');
+  assert.equal(result.scenarios[0].baselineRevenueMillions, 3500);
+  const unsupported = options();
+  unsupported.article.scenarios[0].baselineBridge.segmentBasis = 'consolidated_only';
+  assert.throws(() => validateDeepResearchArticle(unsupported), /baseline_bridge_invalid/);
 });
 test('rumor citations, retraction, future sources and unsupported text fail closed', () => {
   const noCitation = options();

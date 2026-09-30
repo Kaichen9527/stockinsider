@@ -43,6 +43,15 @@ export async function POST(request: Request) {
   if (!delivery.data && (jobId || owner)) {
     return NextResponse.json({ ok: false, error: 'candidate_dossier_job_not_found' }, { status: 409 });
   }
+  const deepRequested = body.deepResearch !== undefined;
+  const deepJobId = String(body.deepJobId || '');
+  const deepJobOwner = String(body.deepJobOwner || '');
+  const deepAttempt = Number(body.deepAttempt);
+  if (deepRequested && (!delivery.data || !/^[0-9a-f-]{36}$/iu.test(deepJobId)
+    || !/^[a-zA-Z0-9:_-]{3,120}$/u.test(deepJobOwner)
+    || !Number.isInteger(deepAttempt) || deepAttempt < 1 || deepAttempt > 3)) {
+    return NextResponse.json({ ok: false, error: 'research_deep_owned_lease_required' }, { status: 409 });
+  }
   if (String(queuedBundle.data.published_revision_id || '') !== revisionId || publication.error || !(publication.data || []).length) {
     return NextResponse.json({ ok: false, error: publication.error?.message || 'candidate_dossier_revision_not_published' }, { status: publication.error ? 500 : 409 });
   }
@@ -145,8 +154,14 @@ export async function POST(request: Request) {
     p_validation_status: finalValid ? 'valid' : 'rejected',
     p_rejection_reasons: rejectionReasons,
   };
-  const persistence = delivery.data
-    ? await supabase.rpc('record_candidate_dossier_submission_v6', {
+  const persistence = deepRequested
+    ? await supabase.rpc('record_candidate_deep_submission_v1', {
+      ...persistenceInput, p_job_id: jobId, p_owner: owner,
+      p_deep_job_id: deepJobId, p_deep_owner: deepJobOwner,
+      p_deep_attempt: deepAttempt, p_deep_review_id: body.deepReviewId,
+      p_article_hash: deepResearch?.articleHash || '',
+    })
+    : delivery.data ? await supabase.rpc('record_candidate_dossier_submission_v6', {
       ...persistenceInput, p_job_id: jobId, p_owner: owner,
     })
     : await supabase.rpc('record_candidate_dossier_submission_v4', persistenceInput);

@@ -56,7 +56,7 @@ test('a promising backtest cannot approve itself or omit independent holdout val
   const observations = ['technical_baseline', 'technical_research', 'technical_research_kol']
     .flatMap((arm) => Array.from({ length: 30 }, (_, index) => ({
       arm: arm as 'technical_baseline' | 'technical_research' | 'technical_research_kol',
-      variantId: 'baseline', symbol: '2409', signalAt: '2023-09-01T06:00:00Z',
+      variantId: 'baseline', symbol: '2409', signalAt: `2023-09-${String(index + 1).padStart(2, '0')}T06:00:00Z`,
       sourceAvailableAt: '2023-08-31T06:00:00Z',
       researchArticlePublishedAt: arm === 'technical_baseline' ? null : '2023-08-31T06:00:00Z',
       kolClaimObservedAt: arm === 'technical_research_kol' ? '2023-08-31T06:00:00Z' : null,
@@ -81,4 +81,36 @@ test('a promising backtest cannot approve itself or omit independent holdout val
   } });
   assert.equal(receipt.codeHash, proposal().codeHash);
   assert.match(receipt.receiptHash, /^[a-f0-9]{64}$/u);
+});
+test('duplicated daily signals cannot manufacture thirty independent trades', () => {
+  const rows = proposal().arms.flatMap((arm) => Array.from({ length: 30 }, (_, index) => ({
+    arm, variantId: 'baseline', symbol: '2409',
+    signalAt: index % 2 ? '2023-09-01T06:00:00Z' : '2023-09-02T06:00:00Z',
+    sourceAvailableAt: '2023-08-31T06:00:00Z',
+    researchArticlePublishedAt: arm === 'technical_baseline' ? null : '2023-08-31T06:00:00Z',
+    kolClaimObservedAt: arm === 'technical_research_kol' ? '2023-08-31T06:00:00Z' : null,
+    grossReturnFraction: 0.04, roundTripCostFraction: 0.01,
+    maximumDrawdownFraction: 0.1, regime: index % 2 ? 'bull' : 'bear',
+  })));
+  assert.throws(() => assessStrategyExperiment({ proposal: proposal(), observations: rows,
+    independentReviewerId: 'reviewer', evaluatedAt: '2026-09-29T01:00:00Z' }), /duplicate_signal/);
+});
+test('an omitted registered variant cannot pass on the first variant alone', () => {
+  const registered = proposal();
+  registered.variants.push({ id: 'untested', parameterHash: 'b'.repeat(64),
+    explanation: '預先登錄的第二組參數仍必須留下逐組結果' });
+  const rows = registered.arms.flatMap((arm) => Array.from({ length: 30 }, (_, index) => ({
+    arm, variantId: 'baseline', symbol: '2409',
+    signalAt: `2023-09-${String(index + 1).padStart(2, '0')}T06:00:00Z`,
+    sourceAvailableAt: '2023-08-31T06:00:00Z',
+    researchArticlePublishedAt: arm === 'technical_baseline' ? null : '2023-08-31T06:00:00Z',
+    kolClaimObservedAt: arm === 'technical_research_kol' ? '2023-08-31T06:00:00Z' : null,
+    grossReturnFraction: 0.04, roundTripCostFraction: 0.01,
+    maximumDrawdownFraction: 0.1, regime: index % 2 ? 'bull' : 'bear',
+  })));
+  const result = assessStrategyExperiment({ proposal: registered, observations: rows,
+    independentReviewerId: 'reviewer', evaluatedAt: '2026-09-29T01:00:00Z' });
+  assert.equal(result.status, 'researching');
+  assert.ok(result.reasons.includes('variant_arm_run_result_missing_or_zero'));
+  assert.equal(result.byVariantArm.filter((arm) => arm.variantId === 'untested').length, 3);
 });

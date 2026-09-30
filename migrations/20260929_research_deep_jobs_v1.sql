@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS public.research_deep_job_attempts_v1 (
   lease_expires_at TIMESTAMPTZ NOT NULL,
   UNIQUE (job_id, attempt)
 );
-CREATE TRIGGER trg_research_deep_job_attempts_immutable_v1
+CREATE OR REPLACE TRIGGER trg_research_deep_job_attempts_immutable_v1
   BEFORE UPDATE OR DELETE ON public.research_deep_job_attempts_v1
   FOR EACH ROW EXECUTE FUNCTION public.reject_candidate_dossier_revision_mutation_v4();
 
@@ -124,23 +124,15 @@ DECLARE v_job public.research_deep_jobs_v1;
 BEGIN
   PERFORM pg_advisory_xact_lock(2409, 6002);
   SELECT * INTO v_job FROM public.research_deep_jobs_v1 WHERE job_id=p_job_id FOR UPDATE;
+  IF FOUND AND p_success AND v_job.status='completed' AND v_job.receipt_id=p_receipt_id THEN
+    RETURN TRUE;
+  END IF;
   IF NOT FOUND OR v_job.status <> 'running' OR v_job.lease_owner IS DISTINCT FROM p_owner
     OR v_job.lease_expires_at <= clock_timestamp() THEN
     RAISE EXCEPTION 'research_deep_job_lease_lost';
   END IF;
-  IF p_success AND NOT EXISTS (
-    SELECT 1 FROM public.candidate_dossier_submission_receipts r
-    JOIN public.candidate_detail_snapshots detail ON detail.id=r.revision_id
-    JOIN public.candidate_research_dossiers dossier ON dossier.id=r.dossier_id
-    JOIN public.candidate_deep_article_reviews_v1 review
-      ON review.revision_id=r.revision_id AND review.input_hash=r.input_hash
-        AND review.article_hash=dossier.content->'deepResearch'->>'articleHash'
-        AND review.decision='accepted'
-    WHERE r.submission_id=p_receipt_id AND r.status='accepted'
-      AND detail.stock_id=v_job.stock_id AND dossier.validation_status='valid'
-      AND dossier.content ? 'deepResearch'
-  ) THEN
-    RAISE EXCEPTION 'research_deep_accepted_article_missing';
+  IF p_success THEN
+    RAISE EXCEPTION 'research_deep_publication_receipt_required';
   END IF;
   UPDATE public.research_deep_jobs_v1 SET
     status=CASE WHEN p_success THEN 'completed' WHEN attempts < 3 THEN 'queued' ELSE 'failed' END,
@@ -152,6 +144,63 @@ BEGIN
   RETURN TRUE;
 END $function$;
 
+-- The article receipt and the research-job fence are committed together.
+-- Publishing through the ordinary v6 path never completes a deep-study job.
+CREATE OR REPLACE FUNCTION public.record_candidate_deep_submission_v1(
+  p_deep_job_id UUID, p_deep_owner TEXT, p_deep_attempt INTEGER,
+  p_deep_review_id UUID, p_article_hash TEXT,
+  p_job_id UUID, p_owner TEXT, p_bundle_id UUID, p_revision_id UUID,
+  p_input_hash TEXT, p_submission_hash TEXT, p_content JSONB, p_claims JSONB,
+  p_source_references JSONB, p_claim_fact_map JSONB, p_validation_status TEXT,
+  p_rejection_reasons JSONB
+)
+RETURNS TABLE(submission_id UUID, dossier_id UUID, status TEXT, rejection_reasons JSONB, idempotent_replay BOOLEAN)
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp
+AS $function$
+DECLARE
+  v_job public.research_deep_jobs_v1;
+  v_stock UUID;
+  v_receipt RECORD;
+BEGIN
+  SELECT * INTO v_job FROM public.research_deep_jobs_v1
+    WHERE research_deep_jobs_v1.job_id=p_deep_job_id FOR UPDATE;
+  IF NOT FOUND OR v_job.status<>'running' OR v_job.lease_owner IS DISTINCT FROM p_deep_owner
+    OR v_job.attempts<>p_deep_attempt OR v_job.lease_expires_at<=clock_timestamp() THEN
+    RAISE EXCEPTION 'research_deep_job_lease_lost';
+  END IF;
+  SELECT detail.stock_id INTO v_stock FROM public.candidate_detail_snapshots detail
+    WHERE detail.id=p_revision_id;
+  IF v_stock IS DISTINCT FROM v_job.stock_id THEN
+    RAISE EXCEPTION 'research_deep_stock_revision_mismatch';
+  END IF;
+  IF p_validation_status='valid' AND (
+    p_content->'deepResearch'->>'articleHash' IS DISTINCT FROM p_article_hash
+    OR NOT EXISTS (
+      SELECT 1 FROM public.candidate_deep_article_reviews_v1 review
+      WHERE review.id=p_deep_review_id AND review.revision_id=p_revision_id
+        AND review.input_hash=p_input_hash AND review.article_hash=p_article_hash
+        AND review.decision='accepted' AND review.reviewed_at>=v_job.created_at
+    )
+  ) THEN
+    RAISE EXCEPTION 'research_deep_exact_review_missing';
+  END IF;
+  SELECT * INTO v_receipt FROM public.record_candidate_dossier_submission_v6(
+    p_job_id,p_owner,p_bundle_id,p_revision_id,p_input_hash,p_submission_hash,p_content,
+    p_claims,p_source_references,p_claim_fact_map,p_validation_status,p_rejection_reasons
+  );
+  IF NOT FOUND THEN RAISE EXCEPTION 'research_deep_publication_receipt_missing'; END IF;
+  UPDATE public.research_deep_jobs_v1 SET
+    status=CASE WHEN v_receipt.status='accepted' THEN 'completed'
+      WHEN attempts<3 THEN 'queued' ELSE 'failed' END,
+    lease_owner=NULL,lease_expires_at=NULL,
+    receipt_id=CASE WHEN v_receipt.status='accepted' THEN v_receipt.submission_id ELSE NULL END,
+    terminal_reason=CASE WHEN v_receipt.status='accepted' THEN NULL ELSE 'dossier_rejected' END,
+    finished_at=CASE WHEN v_receipt.status='accepted' OR attempts>=3 THEN clock_timestamp() ELSE NULL END
+    WHERE research_deep_jobs_v1.job_id=p_deep_job_id;
+  RETURN QUERY SELECT v_receipt.submission_id,v_receipt.dossier_id,v_receipt.status,
+    v_receipt.rejection_reasons,v_receipt.idempotent_replay;
+END $function$;
+
 ALTER TABLE public.research_deep_jobs_v1 ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.research_deep_job_attempts_v1 ENABLE ROW LEVEL SECURITY;
 REVOKE ALL ON public.research_deep_jobs_v1, public.research_deep_job_attempts_v1
@@ -159,9 +208,13 @@ REVOKE ALL ON public.research_deep_jobs_v1, public.research_deep_job_attempts_v1
 GRANT ALL ON public.research_deep_jobs_v1, public.research_deep_job_attempts_v1 TO service_role;
 REVOKE ALL ON FUNCTION public.enqueue_research_deep_jobs_v1(UUID),
   public.claim_research_deep_job_v1(TEXT),
-  public.finish_research_deep_job_v1(UUID,TEXT,BOOLEAN,UUID,TEXT) FROM PUBLIC, anon, authenticated;
+  public.finish_research_deep_job_v1(UUID,TEXT,BOOLEAN,UUID,TEXT),
+  public.record_candidate_deep_submission_v1(UUID,TEXT,INTEGER,UUID,TEXT,UUID,TEXT,UUID,UUID,TEXT,TEXT,JSONB,JSONB,JSONB,JSONB,TEXT,JSONB)
+  FROM PUBLIC, anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.enqueue_research_deep_jobs_v1(UUID),
   public.claim_research_deep_job_v1(TEXT),
-  public.finish_research_deep_job_v1(UUID,TEXT,BOOLEAN,UUID,TEXT) TO service_role;
+  public.finish_research_deep_job_v1(UUID,TEXT,BOOLEAN,UUID,TEXT),
+  public.record_candidate_deep_submission_v1(UUID,TEXT,INTEGER,UUID,TEXT,UUID,TEXT,UUID,UUID,TEXT,TEXT,JSONB,JSONB,JSONB,JSONB,TEXT,JSONB)
+  TO service_role;
 
 COMMIT;

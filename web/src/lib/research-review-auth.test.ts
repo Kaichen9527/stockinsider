@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { requireIndependentResearchReviewer } from './internal-auth.ts';
+import { requireIndependentResearchReviewer, requireInternalAuth } from './internal-auth.ts';
 
 test('research qualification requires a separate bearer identity', () => {
   const original = {
@@ -16,6 +16,9 @@ test('research qualification requires a separate bearer identity', () => {
         method: 'POST', headers: { authorization: `Bearer ${token}`, ...extra },
       });
     assert.equal(requireIndependentResearchReviewer(req('reviewer-test-secret')), true);
+    assert.equal(requireInternalAuth(req('reviewer-test-secret')).ok, false);
+    assert.deepEqual(requireInternalAuth(req('reviewer-test-secret'), { allowResearchReviewer: true }),
+      { ok: true, authSource: 'research_review_key' });
     assert.equal(requireIndependentResearchReviewer(req('writer-test-secret')), false);
     assert.equal(requireIndependentResearchReviewer(req('reviewer-test-secret', { 'x-internal-key': 'anything' })), false);
     process.env.RESEARCH_REVIEW_KEY = 'writer-test-secret';

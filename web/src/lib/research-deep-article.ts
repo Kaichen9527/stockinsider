@@ -28,8 +28,10 @@ export type DeepResearchCatalyst = {
   falsifier: string;
 };
 export type BaselineEarningsBridge = {
+  segmentBasis: 'issuer_reported' | 'consolidated_only' | 'research_estimate';
+  segmentNote: string;
   segments: Array<{
-    business: 'display' | 'mobility' | 'vertical';
+    business: string;
     revenueMillions: number; grossMargin: number; operatingExpenseMillions: number;
   }>;
   otherOperatingIncomeMillions: number;
@@ -131,10 +133,14 @@ export function deepArticleSourceIds(article: DeepResearchArticle): string[] {
 }
 function calculatedScenario(row: DeepResearchScenario): CalculatedDeepScenario {
   const bridge = row.baselineBridge;
-  if (!bridge || !Array.isArray(bridge.segments) || bridge.segments.length !== 3
-    || bridge.segments.map((segment) => segment.business).join(',') !== 'display,mobility,vertical'
+  if (!bridge || !['issuer_reported', 'consolidated_only', 'research_estimate'].includes(bridge.segmentBasis)
+    || !text(bridge.segmentNote, 10, 500)
+    || !Array.isArray(bridge.segments) || bridge.segments.length < 1 || bridge.segments.length > 20
+    || (bridge.segmentBasis === 'consolidated_only' && bridge.segments.length !== 1)
+    || new Set(bridge.segments.map((segment) => segment.business)).size !== bridge.segments.length
     || bridge.segments.some((segment) => ![segment.revenueMillions, segment.grossMargin,
       segment.operatingExpenseMillions].every(Number.isFinite)
+      || !text(segment.business, 2, 80)
       || segment.revenueMillions < 0 || segment.grossMargin < -1 || segment.grossMargin > 1
       || segment.operatingExpenseMillions < 0)
     || ![bridge.otherOperatingIncomeMillions, bridge.corporateOperatingIncomeMillions,

@@ -58,7 +58,14 @@ const migrationPaths = [
   'migrations/20260911_05_financial_fact_isolation_v10.sql',
   'migrations/20260924_entry_plan_official_action_symbols.sql',
 ];
-const migrations = migrationPaths.map((relativePath) => {
+// Preserve the approved V3 chain and append the research-agent schema as an
+// independently listed extension. The reviewed apply tool uses the same order.
+const researchAgentMigrationPaths = [
+  'migrations/20260929_candidate_dossier_outbox_v6.sql',
+  'migrations/20260929_research_agent_state_v1.sql',
+  'migrations/20260929_research_deep_jobs_v1.sql',
+];
+const migrations = [...migrationPaths, ...researchAgentMigrationPaths].map((relativePath) => {
   const bytes = fs.readFileSync(path.join(root, relativePath));
   return {
     migration: relativePath,

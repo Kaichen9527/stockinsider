@@ -51,6 +51,11 @@ export type StrategyExperimentAssessment = {
     worstDrawdownFraction: number | null; topFiveProfitShare: number | null;
     regimes: string[];
   }>;
+  byVariantArm: Array<{
+    variantId: string; arm: StrategyArm; trades: number;
+    meanNetReturnFraction: number | null; worstDrawdownFraction: number | null;
+    topFiveProfitShare: number | null; regimes: string[];
+  }>;
 };
 export type StrategyApprovalReceipt = {
   schemaVersion: 'strategy-user-approval-v1';
@@ -100,6 +105,7 @@ export function assessStrategyExperiment(input: {
     || !stamp(input.evaluatedAt) || Date.parse(input.evaluatedAt) < Date.parse(input.proposal.registeredAt)
     || input.observations.length > 100_000) throw new Error('strategy_experiment_reviewer_or_size_invalid');
   const variants = new Set(input.proposal.variants.map((variant) => variant.id));
+  const seenSignals = new Set<string>();
   for (const row of input.observations) {
     if (!variants.has(row.variantId) || !arms.includes(row.arm) || !/^\d{4}$/u.test(row.symbol)
       || !stamp(row.signalAt) || !stamp(row.sourceAvailableAt)
@@ -119,27 +125,35 @@ export function assessStrategyExperiment(input: {
       || !stamp(row.kolClaimObservedAt) || Date.parse(row.kolClaimObservedAt) > Date.parse(row.signalAt))) {
       throw new Error('strategy_experiment_kol_lookahead');
     }
+    // A daily signal cannot become independent evidence by repeating its result.
+    const signalKey = `${row.variantId}:${row.arm}:${row.symbol}:${row.signalAt}`;
+    if (seenSignals.has(signalKey)) throw new Error('strategy_experiment_duplicate_signal');
+    seenSignals.add(signalKey);
   }
-  const byArm = arms.map((arm) => {
-    const trades = input.observations.filter((row) => row.arm === arm);
+  const byVariantArm = input.proposal.variants.flatMap((variant) => arms.map((arm) => {
+    const trades = input.observations.filter((row) => row.arm === arm && row.variantId === variant.id);
     const net = trades.map((row) => row.grossReturnFraction - row.roundTripCostFraction);
     const profit = net.filter((value) => value > 0).sort((left, right) => right - left);
     const totalProfit = profit.reduce((sum, value) => sum + value, 0);
     return {
-      arm, trades: trades.length,
+      variantId: variant.id, arm, trades: trades.length,
       meanNetReturnFraction: trades.length ? net.reduce((sum, value) => sum + value, 0) / trades.length : null,
       worstDrawdownFraction: trades.length ? Math.max(...trades.map((row) => row.maximumDrawdownFraction)) : null,
       topFiveProfitShare: totalProfit > 0 ? profit.slice(0, 5).reduce((sum, value) => sum + value, 0) / totalProfit : null,
       regimes: [...new Set(trades.map((row) => row.regime))].sort(),
     };
-  });
+  }));
+  // The first preregistered variant is the fixed comparison; other variants
+  // remain visible and must pass independently rather than diluting failures.
+  const byArm = byVariantArm.filter((row) => row.variantId === input.proposal.variants[0].id);
   const reasons: string[] = [];
-  if (byArm.some((row) => row.trades < 30)) reasons.push('sample_below_30_per_arm');
-  if (byArm.some((row) => row.regimes.length < 2)) reasons.push('market_regime_coverage_incomplete');
-  if (byArm.some((row) => row.topFiveProfitShare != null && row.topFiveProfitShare > 0.5)) reasons.push('profit_concentration_above_half');
-  if (byArm.some((row) => row.meanNetReturnFraction == null || row.meanNetReturnFraction <= 0)) reasons.push('cost_adjusted_expectancy_not_positive');
+  if (byVariantArm.some((row) => row.trades === 0)) reasons.push('variant_arm_run_result_missing_or_zero');
+  if (byVariantArm.some((row) => row.trades < 30)) reasons.push('sample_below_30_per_arm');
+  if (byVariantArm.some((row) => row.regimes.length < 2)) reasons.push('market_regime_coverage_incomplete');
+  if (byVariantArm.some((row) => row.topFiveProfitShare != null && row.topFiveProfitShare > 0.5)) reasons.push('profit_concentration_above_half');
+  if (byVariantArm.some((row) => row.meanNetReturnFraction == null || row.meanNetReturnFraction <= 0)) reasons.push('cost_adjusted_expectancy_not_positive');
   return { proposalHash, status: reasons.length ? 'researching' : 'candidate_for_independent_review',
-    reasons, byArm };
+    reasons, byArm, byVariantArm };
 }
 
 /** Exact user approval is a separate act; an experiment assessment never enables trading. */

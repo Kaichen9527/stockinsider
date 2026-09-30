@@ -1,16 +1,23 @@
 import { PAPER_BOOKS } from './research-strategy-governance.ts';
 
-export const PAPER_BOOK_POLICY = 'paper-books-v1' as const;
+export const PAPER_BOOK_POLICY = 'paper-books-v2' as const;
+// Keep the auction-proxy assumptions aligned with PR #284's engine.py.
+export const PAPER_EXECUTION_COSTS = Object.freeze({
+  commission: 0.001425, minimumCommission: 20, sellTax: 0.003, slippageBps: 10, lot: 1000,
+});
 export type PaperBookId = keyof typeof PAPER_BOOKS;
 export type PaperPosition = {
   symbol: string; sector: string; shares: number; entryPrice: number; stopPrice: number;
-  initialRisk: number; strategyVersion: string; openedSession: string;
+  initialRisk: number; entryCostBasis: number; strategyVersion: string; openedSession: string;
 };
 export type PaperBook = {
   policyVersion: typeof PAPER_BOOK_POLICY; bookId: PaperBookId;
   cash: number; realizedPnl: number; equityPeak: number;
   positions: PaperPosition[];
   lastProcessedSession: string | null;
+  markedSession: string | null;
+  processedOrderKeys: string[];
+  costs: { commission: number; sellTax: number; slippage: number };
 };
 export type PaperOrder = {
   symbol: string; sector: string; strategyVersion: string;
@@ -25,6 +32,15 @@ export type PaperSessionBar = {
 };
 const HASH = /^[a-f0-9]{64}$/u;
 const finite = (value: number) => typeof value === 'number' && Number.isFinite(value);
+const commission = (notional: number) => Math.max(PAPER_EXECUTION_COSTS.minimumCommission,
+  notional * PAPER_EXECUTION_COSTS.commission);
+const tick = (price: number) => price < 10 ? 0.01 : price < 50 ? 0.05 : price < 100
+  ? 0.1 : price < 500 ? 0.5 : price < 1000 ? 1 : 5;
+const slip = (price: number) => Math.max(price * PAPER_EXECUTION_COSTS.slippageBps / 10_000, tick(price));
+const orderKey = (order: PaperOrder) => [order.symbol, order.strategyVersion, order.signalSession,
+  order.executionSession, order.entryLower, order.entryUpper, order.stopPrice].join('|');
+const estimatedRisk = (shares: number, entry: number, stop: number) => shares * (entry - stop + slip(stop))
+  + commission(shares * entry) + commission(shares * stop) + shares * stop * PAPER_EXECUTION_COSTS.sellTax;
 function prices(book: PaperBook, marks: Record<string, number>) {
   if (book.positions.some((position) => !finite(marks[position.symbol]) || marks[position.symbol] <= 0)) {
     throw new Error('paper_book_mark_missing');
@@ -35,7 +51,8 @@ export function newPaperBook(bookId: PaperBookId): PaperBook {
   const policy = PAPER_BOOKS[bookId];
   if (!policy) throw new Error('paper_book_id_invalid');
   return { policyVersion: PAPER_BOOK_POLICY, bookId, cash: policy.initialCapital,
-    realizedPnl: 0, equityPeak: policy.initialCapital, positions: [], lastProcessedSession: null };
+    realizedPnl: 0, equityPeak: policy.initialCapital, positions: [], lastProcessedSession: null,
+    markedSession: null, processedOrderKeys: [], costs: { commission: 0, sellTax: 0, slippage: 0 } };
 }
 export function sizePaperOrder(input: {
   book: PaperBook; order: PaperOrder; markPrices: Record<string, number>;
@@ -62,25 +79,38 @@ export function sizePaperOrder(input: {
     blockers.push('exact_strategy_code_not_user_approved');
   }
   if (book.positions.some((position) => position.symbol === order.symbol)) blockers.push('stock_already_held');
+  if (book.lastProcessedSession && book.lastProcessedSession > order.executionSession) blockers.push('paper_order_past_session');
+  if (book.lastProcessedSession === order.executionSession && book.processedOrderKeys.includes(orderKey(order))) {
+    blockers.push('paper_order_already_processed');
+  }
+  if (book.positions.some((position) => position.openedSession < order.executionSession)
+    && book.markedSession !== order.executionSession) blockers.push('prior_positions_not_marked');
   if ((book.equityPeak - equity) / book.equityPeak >= policy.drawdownActionFraction) {
     blockers.push('book_drawdown_action_threshold');
   }
   const existingSector = book.positions.filter((position) => position.sector === order.sector)
     .reduce((sum, position) => sum + position.shares * input.markPrices[position.symbol], 0);
   const existingRisk = book.positions.reduce((sum, position) => sum + position.initialRisk, 0);
-  const perShareRisk = order.entryUpper - order.stopPrice;
+  const perShareRisk = order.entryUpper - order.stopPrice + slip(order.stopPrice)
+    + order.entryUpper * PAPER_EXECUTION_COSTS.commission
+    + order.stopPrice * (PAPER_EXECUTION_COSTS.commission + PAPER_EXECUTION_COSTS.sellTax);
   const caps = [
-    Math.floor(equity * policy.initialRiskFraction / perShareRisk),
+    Math.floor(Math.max(0, equity * policy.initialRiskFraction - 2 * PAPER_EXECUTION_COSTS.minimumCommission) / perShareRisk),
     Math.floor(equity * policy.stockExposureFraction / order.entryUpper),
     Math.floor((equity * policy.sectorExposureFraction - existingSector) / order.entryUpper),
     Math.floor((equity * policy.totalExposureFraction - heldValue) / order.entryUpper),
-    Math.floor((equity * policy.totalInitialRiskFraction - existingRisk) / perShareRisk),
-    Math.floor(book.cash / order.entryUpper),
+    Math.floor(Math.max(0, equity * policy.totalInitialRiskFraction - existingRisk
+      - 2 * PAPER_EXECUTION_COSTS.minimumCommission) / perShareRisk),
+    Math.floor(Math.max(0, book.cash - PAPER_EXECUTION_COSTS.minimumCommission)
+      / (order.entryUpper * (1 + PAPER_EXECUTION_COSTS.commission))),
   ];
-  const shares = Math.max(0, Math.min(...caps));
-  if (shares < 1) blockers.push('paper_order_risk_or_exposure_limit');
+  let shares = Math.floor(Math.max(0, Math.min(...caps)) / PAPER_EXECUTION_COSTS.lot) * PAPER_EXECUTION_COSTS.lot;
+  while (shares > 0 && (estimatedRisk(shares, order.entryUpper, order.stopPrice) > equity * policy.initialRiskFraction
+    || existingRisk + estimatedRisk(shares, order.entryUpper, order.stopPrice) > equity * policy.totalInitialRiskFraction
+    || shares * order.entryUpper + commission(shares * order.entryUpper) > book.cash)) shares -= PAPER_EXECUTION_COSTS.lot;
+  if (shares < PAPER_EXECUTION_COSTS.lot) blockers.push('paper_order_risk_or_exposure_limit');
   return { shares: blockers.length ? 0 : shares, maxEntryPrice: order.entryUpper,
-    riskAmount: blockers.length ? 0 : shares * perShareRisk, blockers };
+    riskAmount: blockers.length ? 0 : estimatedRisk(shares, order.entryUpper, order.stopPrice), blockers };
 }
 /** A limit order can fill only after the signal session on final official OHLC. */
 export function fillPaperOrder(input: {
@@ -89,37 +119,54 @@ export function fillPaperOrder(input: {
 }): { book: PaperBook; fillPrice: number | null; outcome: 'filled' | 'no_fill' | 'stop_same_bar' } {
   const { book, order, bar } = input;
   if (!bar.officialFinal || bar.symbol !== order.symbol || bar.session !== order.executionSession
-    || book.lastProcessedSession && book.lastProcessedSession >= bar.session
+    || book.lastProcessedSession && book.lastProcessedSession > bar.session
     || ![bar.open, bar.high, bar.low, bar.close].every((value) => finite(value) && value > 0)
     || bar.high < Math.max(bar.open, bar.close) || bar.low > Math.min(bar.open, bar.close)) {
     throw new Error('paper_fill_session_invalid');
   }
-  if (!Number.isInteger(input.shares) || input.shares < 0) throw new Error('paper_fill_quantity_invalid');
+  if (!Number.isInteger(input.shares) || input.shares < 0
+    || input.shares % PAPER_EXECUTION_COSTS.lot !== 0) throw new Error('paper_fill_quantity_invalid');
   const sized = sizePaperOrder({ book, order, markPrices: input.markPrices });
-  if (input.shares > sized.shares) throw new Error('paper_fill_risk_not_admissible');
+  if (input.shares > sized.shares || sized.blockers.includes('paper_order_already_processed')) {
+    throw new Error('paper_fill_risk_not_admissible');
+  }
+  const processedOrderKeys = book.lastProcessedSession === bar.session
+    ? [...book.processedOrderKeys, orderKey(order)] : [orderKey(order)];
+  const sessionBook = { ...book, lastProcessedSession: bar.session, processedOrderKeys };
   if (!input.shares || bar.open < order.stopPrice || bar.low > order.entryUpper
     || bar.high < order.entryLower || book.cash < input.shares * order.entryUpper) {
-    return { book: { ...book, lastProcessedSession: bar.session }, fillPrice: null, outcome: 'no_fill' };
+    return { book: sessionBook, fillPrice: null, outcome: 'no_fill' };
   }
   // OHLC cannot reveal whether the stop came before or after a same-day fill.
   // Use the upper limit and stop-first ordering so the simulation is not optimistic.
-  const fillPrice = order.entryUpper;
-  const cost = input.shares * fillPrice;
+  const fillPrice = Math.min(order.entryUpper, bar.high);
+  const notional = input.shares * fillPrice;
+  const entryCommission = commission(notional);
+  const cost = notional + entryCommission;
+  const entrySlippage = input.shares * Math.max(0, fillPrice - bar.open);
   if (bar.low <= order.stopPrice) {
-    const exitPrice = Math.min(order.stopPrice, bar.open);
-    const loss = input.shares * (fillPrice - exitPrice);
-    const updated = { ...book, cash: book.cash - cost + input.shares * exitPrice,
-      realizedPnl: book.realizedPnl - loss, lastProcessedSession: bar.session };
+    const reference = Math.min(order.stopPrice, bar.open);
+    const exitPrice = Math.max(tick(reference), reference - slip(reference));
+    const proceeds = input.shares * exitPrice;
+    const exitCommission = commission(proceeds);
+    const sellTax = proceeds * PAPER_EXECUTION_COSTS.sellTax;
+    const updated = { ...sessionBook, cash: book.cash - cost + proceeds - exitCommission - sellTax,
+      realizedPnl: book.realizedPnl + proceeds - exitCommission - sellTax - cost,
+      costs: { commission: book.costs.commission + entryCommission + exitCommission,
+        sellTax: book.costs.sellTax + sellTax,
+        slippage: book.costs.slippage + entrySlippage + input.shares * (reference - exitPrice) } };
     return { book: updated, fillPrice, outcome: 'stop_same_bar' };
   }
   const position: PaperPosition = {
     symbol: order.symbol, sector: order.sector, shares: input.shares,
     entryPrice: fillPrice, stopPrice: order.stopPrice,
-    initialRisk: input.shares * (fillPrice - order.stopPrice),
+    initialRisk: estimatedRisk(input.shares, fillPrice, order.stopPrice),
+    entryCostBasis: cost,
     strategyVersion: order.strategyVersion, openedSession: bar.session,
   };
-  return { book: { ...book, cash: book.cash - cost, positions: [...book.positions, position],
-    lastProcessedSession: bar.session }, fillPrice, outcome: 'filled' };
+  return { book: { ...sessionBook, cash: book.cash - cost, positions: [...book.positions, position],
+    costs: { ...book.costs, commission: book.costs.commission + entryCommission,
+      slippage: book.costs.slippage + entrySlippage } }, fillPrice, outcome: 'filled' };
 }
 
 /** Existing positions are monitored even after a thesis becomes invalid. */
@@ -127,14 +174,22 @@ export function markPaperPositions(input: {
   book: PaperBook; session: string; bars: PaperSessionBar[];
 }) {
   const { book } = input;
-  if (book.lastProcessedSession && input.session <= book.lastProcessedSession) {
+  if (book.policyVersion !== PAPER_BOOK_POLICY || !/^\d{4}-\d{2}-\d{2}$/u.test(input.session)) {
+    throw new Error('paper_book_policy_or_session_invalid');
+  }
+  if (book.lastProcessedSession && input.session < book.lastProcessedSession
+    || book.markedSession === input.session) {
     throw new Error('paper_session_replay_or_reorder');
   }
   const bySymbol = new Map(input.bars.map((bar) => [bar.symbol, bar]));
   const remaining: PaperPosition[] = [];
   let cash = book.cash;
   let realizedPnl = book.realizedPnl;
+  let exitCommissionTotal = 0;
+  let sellTaxTotal = 0;
+  let exitSlippageTotal = 0;
   for (const position of book.positions) {
+    if (position.openedSession === input.session) { remaining.push(position); continue; }
     const bar = bySymbol.get(position.symbol);
     if (!bar || !bar.officialFinal || bar.session !== input.session) throw new Error('paper_position_final_bar_missing');
     if (![bar.open, bar.high, bar.low, bar.close].every((value) => finite(value) && value > 0)
@@ -142,12 +197,25 @@ export function markPaperPositions(input: {
       throw new Error('paper_position_bar_invalid');
     }
     if (bar.open <= position.stopPrice || bar.low <= position.stopPrice) {
-      const exitPrice = Math.min(bar.open, position.stopPrice);
-      cash += position.shares * exitPrice;
-      realizedPnl += position.shares * (exitPrice - position.entryPrice);
+      const reference = Math.min(bar.open, position.stopPrice);
+      const exitPrice = Math.max(tick(reference), reference - slip(reference));
+      const proceeds = position.shares * exitPrice;
+      const exitCommission = commission(proceeds);
+      const sellTax = proceeds * PAPER_EXECUTION_COSTS.sellTax;
+      cash += proceeds - exitCommission - sellTax;
+      realizedPnl += proceeds - exitCommission - sellTax - position.entryCostBasis;
+      exitCommissionTotal += exitCommission;
+      sellTaxTotal += sellTax;
+      exitSlippageTotal += position.shares * (reference - exitPrice);
     } else remaining.push(position);
   }
-  const marked = remaining.reduce((sum, position) => sum + position.shares * bySymbol.get(position.symbol)!.close, 0);
+  const marked = remaining.reduce((sum, position) => sum + position.shares
+    * (bySymbol.get(position.symbol)?.close ?? position.entryPrice), 0);
   return { ...book, cash, realizedPnl, positions: remaining,
-    equityPeak: Math.max(book.equityPeak, cash + marked), lastProcessedSession: input.session };
+    costs: { commission: book.costs.commission + exitCommissionTotal,
+      sellTax: book.costs.sellTax + sellTaxTotal,
+      slippage: book.costs.slippage + exitSlippageTotal },
+    equityPeak: Math.max(book.equityPeak, cash + marked), lastProcessedSession: input.session,
+    markedSession: input.session,
+    processedOrderKeys: book.lastProcessedSession === input.session ? book.processedOrderKeys : [] };
 }

@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS public.research_priority_runs_v1 (
 );
 CREATE INDEX IF NOT EXISTS idx_research_priority_runs_latest_v1
   ON public.research_priority_runs_v1 (as_of DESC, created_at DESC);
-CREATE TRIGGER trg_research_priority_runs_immutable_v1
+CREATE OR REPLACE TRIGGER trg_research_priority_runs_immutable_v1
   BEFORE UPDATE OR DELETE ON public.research_priority_runs_v1
   FOR EACH ROW EXECUTE FUNCTION public.reject_candidate_dossier_revision_mutation_v4();
 
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS public.candidate_deep_article_reviews_v1 (
 );
 CREATE INDEX IF NOT EXISTS idx_candidate_deep_article_reviews_v1
   ON public.candidate_deep_article_reviews_v1 (revision_id, reviewed_at DESC);
-CREATE TRIGGER trg_candidate_deep_article_reviews_immutable_v1
+CREATE OR REPLACE TRIGGER trg_candidate_deep_article_reviews_immutable_v1
   BEFORE UPDATE OR DELETE ON public.candidate_deep_article_reviews_v1
   FOR EACH ROW EXECUTE FUNCTION public.reject_candidate_dossier_revision_mutation_v4();
 
@@ -86,10 +86,10 @@ REVOKE ALL ON public.research_priority_runs_v1, public.candidate_thesis_qualific
 GRANT ALL ON public.research_priority_runs_v1, public.candidate_thesis_qualifications_v1,
   public.candidate_technical_decisions_v1, public.candidate_deep_article_reviews_v1 TO service_role;
 
-CREATE TRIGGER trg_candidate_thesis_qualifications_immutable_v1
+CREATE OR REPLACE TRIGGER trg_candidate_thesis_qualifications_immutable_v1
   BEFORE UPDATE OR DELETE ON public.candidate_thesis_qualifications_v1
   FOR EACH ROW EXECUTE FUNCTION public.reject_candidate_dossier_revision_mutation_v4();
-CREATE TRIGGER trg_candidate_technical_decisions_immutable_v1
+CREATE OR REPLACE TRIGGER trg_candidate_technical_decisions_immutable_v1
   BEFORE UPDATE OR DELETE ON public.candidate_technical_decisions_v1
   FOR EACH ROW EXECUTE FUNCTION public.reject_candidate_dossier_revision_mutation_v4();
 
