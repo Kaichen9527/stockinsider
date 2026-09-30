@@ -1,81 +1,14 @@
-# Model Runner Host-Pin Compatibility Amendment
+# Host identity and Astra-only successor amendment
 
-Amendment version: `model-runner-host-pin-amendment-v3.18`
+Amendment version: `model-runner-host-pin-amendment-v3.21`
+Status: candidate; not activated on protected main; independent final review pending.
 
-Status: active
+The user requires completion of implementation/deployment and Astra High for all further model work. This permits preparing the candidate, not bypassing GitHub protection. The September26 v3.19 proposal and evidence remain immutable in docs/engineering/host-v319-20260926 and Git history. This successor uses fresh noncredential observations in docs/engineering/host-astra-20260930/observation.json.
 
-V3.18 records the signed ChatGPT/Codex application update and macOS root-volume
-identity observed on 2026-09-24. Every path, stat identity, executable digest,
-version and CodeDirectory identity is measured rather than inferred. No broader
-device, version or path is admitted.
+Exact native binary, versions and code signatures are unchanged from v3.19; all measured executable/app filesystem device identities are16777230. Static checks remain exact. No wrapper, fallback, version range or learned runtime pin is admitted. The fixture is2219 bytes including LF; its pre-LF SHA256 is `c43c25a48f442dc0aa8902918243efc9fac354c4bfe3ef9af7432d093ed2aed9`.
 
-## Decision
+The new894-byte runner identity SHA256 is `0a34cc38c06e432c865aa842278cf05fae724ecf0313f795e753f2086d02cfe1`. Contract v3.7, manifest v3.6 and routing v3.6 allow only astra-only / gpt-6-astra / high. Runtime namespace model-runner-v3-astra-v1 prevents reopening historic jobs. Historical bytes and refs stay unchanged. All old strategies, waiver flags and unsupported direct model routes fail closed before model launch. Tool networking and descendant networking stay denied; only separately authorized trusted transport may use the account for a live model oracle.
 
-The repository-owned `model_runner_v3` host oracle is compatible with the
-currently installed Codex line only through the exact observed build string
-`codex-cli 0.155.0-alpha.16.3`. This is an exact pin, not a
-semver/range allowance: another alpha build, patch-suffixed build, or any later
-binary is rejected until a new compatibility amendment and fixture are
-reviewed.
+Protected base169aad1 cannot start its missing predecessor. A separately reviewed base-owned recovery must bind exact successor source/tree, authentic review evidence and the signed native identity, and repair both candidateSandbox executable selection and minimal/parent/transport permission behavior. This candidate does not register itself, alter protection or manufacture a passing status. Actual protected live-oracle and root gate success remain required before merge/activation.
 
-The active immutable fixture remains
-`model-runner-host-pins-v3.json`, version
-`model-runner-host-pins-v3.18`. Its canonical pre-LF payload is exactly 2,143
-UTF-8 bytes with SHA-256
-`4e3a508b5120903ec7364771ba1aea8b98bd43e1d58f0ed1fcee1faaf8457008`;
-the tracked LF-terminated file is exactly 2,144 bytes.
-
-## Verified host identity
-
-The compatibility evidence observed on the approved macOS arm64 host is:
-
-- lexical and real executable path:
-  `/Applications/ChatGPT.app/Contents/Resources/codex`
-- version: `codex-cli 0.155.0-alpha.16.3`
-- executable SHA-256:
-  `c67698d0990aae05211d9c43ab343ad9517e406824dea77eca103a2806232b3a`
-- stat identity: device `16777234`, inode `187722471`, size `235548432`,
-  uid `501`, gid `20`, mode `100755`
-- signing identifier: `codex`
-- signing Team ID: `2DC432GLL2`
-- full CodeDirectory SHA-256:
-  `ca7400ca48cc1ce76ba1cbaf002760d0017ef413c971ea21b6d6e3df52bed075`
-- bundle assessment: `Notarized Developer ID`
-
-The refreshed ChatGPT bundle, Node and Git stat identities are also exact fixture
-members: bundle device/inode `16777234/187721324`, Node `16777234/1802834`, Git
-`16777234/1152921500312571562`; the bundle CodeDirectory SHA-256 is
-`53d8ceac529c5ab21133d0b086b4c01e9833155c1a382032a3967feb48d2f303`.
-The runner and doctor must call the same host preflight and verify every fixture member
-and the static runner identity before granting model authority. They may not learn a
-replacement value from the executable under test or fall back to a different executable.
-
-## Compatibility boundary
-
-This amendment changes only the compatible host identity. It does not change
-the runner protocol, routing, approval policy, sandbox permissions, journal
-state machine, trusted Git apply boundary, proposal authority, product
-scoring, evaluation governance, deployment authority, or production mutation
-boundary. `model_runner_v3` remains an independent verification track with
-`influence: none`.
-
-Any observable path, stat, digest, version, signing, designated-requirement,
-Team-ID, CodeDirectory or notarization mismatch is fail-closed. A ChatGPT or
-Codex update therefore blocks the runner until another explicit amendment is
-created and reviewed.
-
-## One-time protected rotation
-
-The successor values above were measured independently with `stat`, SHA-256,
-`codesign --verify --deep --strict`, designated requirement, Team ID and
-`spctl -a -vv`. They are not learned by the candidate test. Before this fixture
-may be accepted in a PR, a protected-base owner must approve the exact trimmed
-Git model-oracle listing transition from predecessor SHA-256
-`5eb11a767efdce7e9faf197b2a98d9450f555fcba9363155fd3b71b7c653adc6` to successor
-SHA-256 `fafab4f391e8bc077a0e2ec7ed10d1f4afc02bfbc77006ccdb436640e5e77161`
-and bind that successor listing to `model-runner-host-pins-v3.18`. The candidate
-supplies only byte-exact model-oracle files that the already-reviewed protected
-base compares against that record; it cannot add or alter its own approval. The
-approval is single-use for this old-to-new listing pair. The protected listing
-map remains closed, so any later, unapproved listing or binary drift fails
-closed.
+The exact pin remains `codex-cli 0.158.0-alpha.2.1` at `/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex`.

@@ -79,8 +79,8 @@
           "MIG-",
           "MOD-",
           "OPS-",
-        "PCR-",
-        "REC-",
+          "PCR-",
+          "REC-",
           "SEC-"
         ],
         "exactIds": [
@@ -2337,7 +2337,7 @@
       "protected://stockinsider-v3-gate-root/execute-track --track product_runtime"
     ]
   ],
-  "scriptValueRowsSha256": "b3ef11c01c20ee7f9308ac8aff297316cd2e761252ef16326a76f550ee9277ab",
+  "scriptValueRowsSha256": "1c72c26cb84393b940df06cf65cc2e39f31c66653138635d50d9aa5126383784",
   "scriptValueRows": [
     [
       "build:source-led-opportunity-v3",
@@ -2385,7 +2385,7 @@
     ],
     [
       "verify:source-led-opportunity-v3:model-runner",
-      "node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track model_runner && npm run test:model-runner-v3 && npm run v3:doctor -- --expect-mode disabled --require-host-pin model-runner-host-pins-v3.18"
+      "node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track model_runner && npm run test:model-runner-v3 && npm run v3:doctor -- --expect-mode disabled --require-host-pin model-runner-host-pins-v3.21"
     ],
     [
       "verify:source-led-opportunity-v3:product-runtime",
@@ -4208,7 +4208,7 @@
       "requirement": "Safety",
       "layer": "contract/integration",
       "setup": "Enumerate canonical/noncanonical manifests and every validate/route/run/review/verify/status grammar, strategy, waiver, task state, round and failure precedence while hashing all pre-existing V1/V2 paths and refs.",
-      "expected": "The exact loop-model-manifest-v3.5 schema, run-to-make mapping, closed Sol/Terra route table, user-owned waiver, exit precedence, state transitions and canonical status reproduce; validate/route/status spawn nothing and every V1/V2 byte/ref remains unchanged."
+      "expected": "The exact loop-model-manifest-v3.6 schema, run-to-make mapping, Astra/high-only route table, rejection of legacy strategies and waivers, exit precedence, state transitions and canonical status reproduce; validate/route/status spawn nothing, old identity states cannot resume, and every historical byte/ref remains unchanged."
     },
     {
       "id": "MR3-017",
@@ -4228,8 +4228,8 @@
       "id": "MR3-019",
       "requirement": "Safety",
       "layer": "macos/security/meta",
-      "setup": "Parse the 2,143-byte canonical host fixture, mutate its digest/schema/approval, absolute Node/Git/Codex path, stat/hash/version, bundle identifiers/CDHashes, Team ID, designated requirements and notarized assessment, then race observable replacements at every check.",
-      "expected": "Only model-runner-host-pins-v3.18 with SHA-256 4e3a508b5120903ec7364771ba1aea8b98bd43e1d58f0ed1fcee1faaf8457008 and every exact pinned identity passes; mismatch is exit 5 with no task model/apply/tuple, observable race authorizes no result and no learned/fallback value exists."
+      "setup": "Parse the 2,218-byte canonical host fixture, mutate its digest/schema/approval, absolute Node/Git/Codex path, stat/hash/version, bundle identifiers/CDHashes, Team ID, designated requirements and notarized assessment, then race observable replacements at every check.",
+      "expected": "Only model-runner-host-pins-v3.21 with SHA-256 c43c25a48f442dc0aa8902918243efc9fac354c4bfe3ef9af7432d093ed2aed9 and every exact pinned identity passes; mismatch is exit 5 with no task model/apply/tuple, observable race authorizes no result and no learned/fallback value exists."
     },
     {
       "id": "MR3-020",

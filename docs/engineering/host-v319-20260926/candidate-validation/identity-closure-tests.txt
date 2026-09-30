@@ -1,0 +1,45 @@
+TAP version 13
+# (node:52131) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:52131) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///private/tmp/stockinsider-authorized-20260926-TVwINv/host-candidate/web/src/lib/opportunity-v3/canonical.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /private/tmp/stockinsider-authorized-20260926-TVwINv/host-candidate/web/package.json.
+# Subtest: all canonical inventory commands still match actual package scripts
+ok 1 - all canonical inventory commands still match actual package scripts
+  ---
+  duration_ms: 1.033208
+  ...
+# Subtest: MR3-019 freezes the actual candidate identity without changing denials
+ok 2 - MR3-019 freezes the actual candidate identity without changing denials
+  ---
+  duration_ms: 8.35425
+  ...
+# Subtest: human-readable MR3-019 matches the unchanged machine-owned criterion
+ok 3 - human-readable MR3-019 matches the unchanged machine-owned criterion
+  ---
+  duration_ms: 0.299416
+  ...
+# Subtest: design binds the exact candidate runner identity
+ok 4 - design binds the exact candidate runner identity
+  ---
+  duration_ms: 0.157083
+  ...
+# Subtest: shadow doctor and model aggregate use the same exact candidate pin
+ok 5 - shadow doctor and model aggregate use the same exact candidate pin
+  ---
+  duration_ms: 0.291166
+  ...
+# Subtest: active tagged catalog identities bind the actual catalog bytes
+ok 6 - active tagged catalog identities bind the actual catalog bytes
+  ---
+  duration_ms: 1.956458
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 90.942375
