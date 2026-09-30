@@ -296,6 +296,132 @@ function EvidenceSources({ detail }: { detail: CandidateDetailPayload }) {
   );
 }
 
+export function DeepResearchView({ article, sourceLinks, layoutPreview = false }: {
+  article: Pick<NonNullable<CandidateDetailPayload['deepResearch']>,
+    'summary' | 'authoredAt' | 'evidenceCutoffAt' | 'sections' | 'scenarios' | 'companyBackground'> | null;
+  sourceLinks: NonNullable<CandidateDetailPayload['deepResearchSources']>;
+  layoutPreview?: boolean;
+}) {
+  if (!article) return null;
+  const sources = new Map(sourceLinks.map((source) => [source.id, source]));
+  const sourceNumbers = new Map(sourceLinks.map((source, index) => [source.id, index + 1]));
+  const scenarioNames: Record<string, string> = {
+    existing_business: "既有營運", conditional_commercialization: "條件式商業化",
+    delay_or_failure: "延後或落空",
+  };
+  return (
+    <article className="mt-8" aria-labelledby="deep-research-title">
+      <div className="border-b border-line pb-5">
+        {layoutPreview ? <p className="mb-4 rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900">
+          版面預覽：沿用 2026-09-25 友達示範文章的已標日期內容。新流程尚未完成財測、獨立審查與正式發布；本頁沒有新目標價或進場訊號。
+        </p> : null}
+        <p className="research-kicker">DEEP RESEARCH · {dateLabel(article.authoredAt)}</p>
+        <h2 id="deep-research-title" className="mt-2 text-2xl font-semibold">產業變化、獲利傳導與進場判斷</h2>
+        <p className="mt-3 max-w-4xl leading-8 text-stone-700 dark:text-stone-300">{article.summary}</p>
+        <p className="mt-2 text-xs text-stone-500">文章證據截止 {dateLabel(article.evidenceCutoffAt)}；技術訊號與文章日期分開追蹤。</p>
+      </div>
+      <nav aria-label="文章章節" className="my-5 flex flex-wrap gap-2 text-sm">
+        {article.sections.map((section) => (
+          <a key={section.key} href={`#research-${section.key}`}
+            className="rounded-full border border-line px-3 py-2 hover:border-orange-500">{section.title}</a>
+        ))}
+      </nav>
+      <div className="space-y-10">
+        {article.sections.map((section) => (
+          <section key={section.key} id={`research-${section.key}`} className="scroll-mt-8">
+            <h3 className="text-xl font-semibold">{section.title}</h3>
+            <div className="mt-4 space-y-5">
+              {section.paragraphs.map((paragraph, index) => (
+                <div key={index}>
+                  <p className="max-w-4xl whitespace-pre-wrap leading-8 text-stone-700 dark:text-stone-300">{paragraph.text}</p>
+                  <div className="mt-1 flex flex-wrap gap-2 text-xs text-stone-500">
+                    {paragraph.kind === "rumor" ? <span className="font-semibold text-amber-700">未確認傳聞</span> : null}
+                    {paragraph.kind === "scenario" ? <span>條件情境，非已實現獲利</span> : null}
+                    {paragraph.officialFactIds.length ? <span>官方數據見下方研究依據</span> : null}
+                    {paragraph.sourceDocumentIds.map((id, sourceIndex) => {
+                      const source = sources.get(id);
+                      return source ? (
+                        <a key={id} href={source.url} target="_blank" rel="noopener noreferrer"
+                          className="underline underline-offset-2 hover:text-orange-700">
+                          [{sourceNumbers.get(id) ?? sourceIndex + 1}]{source.retracted ? "（已撤回）" : ""}
+                        </a>
+                      ) : <span key={id}>來源目前無法公開連結</span>;
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+      {article.scenarios.length ? <section className="mt-10 overflow-x-auto" aria-labelledby="deep-scenarios-title">
+        <h3 id="deep-scenarios-title" className="text-xl font-semibold">情境財測與折現</h3>
+        <p className="mt-2 text-sm text-stone-600 dark:text-stone-400">單位：新台幣元／股；負 EPS 不使用 P/E。營收與費用以百萬元計，屬研究假設。</p>
+        <table className="mt-4 min-w-[800px] w-full border-collapse text-left text-sm">
+          <thead><tr className="border-b border-line">
+            <th className="p-3">情境</th><th className="p-3">年度</th><th className="p-3">新增營收</th>
+            <th className="p-3">既有報表 EPS</th><th className="p-3">既有正常化 EPS</th>
+            <th className="p-3">歸屬淨利增量</th><th className="p-3">合計正常化 EPS</th>
+            <th className="p-3">倍數</th><th className="p-3">折現參考價</th>
+          </tr></thead>
+          <tbody>{article.scenarios.map((scenario) => (
+            <tr key={scenario.name} className="border-b border-line/70">
+              <th scope="row" className="p-3 font-medium">{scenarioNames[scenario.name]}</th>
+              <td className="p-3">{scenario.fiscalYear}</td>
+              <td className="p-3">{value(scenario.incrementalRevenueMillions, 0)}</td>
+              <td className="p-3">{value(scenario.baselineReportedEps)}</td>
+              <td className="p-3">{value(scenario.baselineEps)}</td>
+              <td className="p-3">{value(scenario.incrementalAttributableIncomeMillions, 0)}</td>
+              <td className="p-3">{value(scenario.totalEps)}</td>
+              <td className="p-3">{scenario.futurePrice == null ? "不適用" : `${value(scenario.peMultiple, 1)} 倍`}</td>
+              <td className="p-3">{scenario.presentValue == null ? "不適用" : `NT$${value(scenario.presentValue)}`}</td>
+            </tr>
+          ))}</tbody>
+        </table>
+      </section> : <p className="mt-8 rounded-lg border border-line p-4 text-sm">財測與估值：等待新三事業財務橋接及獨立審查；請勿將舊版價位當作本流程結論。</p>}
+      <details className="mt-8 rounded-2xl border border-line p-5">
+        <summary className="cursor-pointer font-semibold">了解公司與財務假設</summary>
+        {article.companyBackground ? <p className="mt-4 whitespace-pre-wrap leading-7">{article.companyBackground}</p> : null}
+        <ul className="mt-4 space-y-2 text-sm">
+          {article.scenarios.map((scenario) => <li key={scenario.name}><strong>{scenarioNames[scenario.name]}：</strong>
+            三事業營收 {value(scenario.baselineRevenueMillions, 0)} 百萬元、既有營業利益 {value(scenario.baselineOperatingIncomeMillions, 0)} 百萬元、
+            歸屬淨利 {value(scenario.baselineAttributableIncomeMillions, 0)} 百萬元；{scenario.assumptionNotes}</li>)}
+        </ul>
+      </details>
+      <details className="mt-5 rounded-2xl border border-line p-5">
+        <summary className="cursor-pointer font-semibold">逐段引用的來源與日期</summary>
+        <ol className="mt-4 space-y-3 text-sm">
+          {sourceLinks.map((source, index) => <li key={source.id}>
+            <a href={source.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">
+              [{index + 1}] {source.title}
+            </a>
+            <span className="ml-2 text-stone-500">{dateLabel(source.publishedAt)}{source.retracted ? ' · 已撤回' : ''}</span>
+          </li>)}
+        </ol>
+      </details>
+    </article>
+  );
+}
+
+function GeneralSections({ grouped }: { grouped: Record<string, CandidateDetailPayload["sections"]> }) {
+  return <div className="mt-8 space-y-8">
+    {Object.entries(grouped).map(([group, sections]) => {
+      const content = <div className="space-y-3">
+        {sections.map((section) => (
+          <article key={section.key}
+            className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950 sm:p-6">
+            <h3 className="text-base font-semibold">{hideIdentifiers(section.title)}</h3>
+            <p className="mt-3 whitespace-pre-wrap leading-7 text-slate-700 dark:text-slate-300">{hideIdentifiers(section.body)}</p>
+          </article>
+        ))}
+      </div>;
+      return group === "基本面脈絡" ? <details key={group} className="rounded-2xl border border-line p-5">
+        <summary className="cursor-pointer text-xl font-semibold">了解公司</summary><div className="mt-4">{content}</div>
+      </details> : <section key={group}><h2 className="mb-3 text-xl font-semibold">{group}</h2>{content}</section>;
+    })}
+  </div>;
+}
+
 export default function CandidateDetailView({
   detail,
 }: {
@@ -305,6 +431,8 @@ export default function CandidateDetailView({
     AnyRecord;
   const scores = detail.scores as unknown as AnyRecord;
   const coveredWeight = getNumber(valuation, "coveredWeight", "coverageWeight");
+  const newEntryReady = Boolean(detail.deepResearch && detail.thesisQualification?.entryResearchAllowed
+    && detail.latestTechnicalSnapshot?.entryResearchEligible);
   const scoreMetrics: Array<[string, number | null]> = [
     ["發現", getNumber(scores, "discovery")],
     ["研究", getNumber(scores, "research")],
@@ -360,7 +488,7 @@ export default function CandidateDetailView({
       <header className="decision-panel mt-5 overflow-hidden p-5 sm:p-8">
         <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
           <span className="rounded-full bg-slate-100 px-2.5 py-1 dark:bg-white/10">
-            {detail.lifecycleStage === "actionable"
+            {detail.deepResearch ? (newEntryReady ? "研究條件成立" : "研究中，暫無新進場資格") : detail.lifecycleStage === "actionable"
               ? "現在可行動"
               : detail.lifecycleStage === "waiting"
                 ? "等待條件"
@@ -387,29 +515,41 @@ export default function CandidateDetailView({
         <dl className="mt-4 grid gap-2 text-xs text-slate-500 sm:grid-cols-3">
           <div><dt>資料截止時間</dt><dd className="mt-1 font-medium text-slate-700 dark:text-slate-300">{asOf}</dd></div>
           <div><dt>資料可用時間</dt><dd className="mt-1 font-medium text-slate-700 dark:text-slate-300">{availableAt}</dd></div>
-          <div><dt>本估值方法資料完整度</dt><dd className="mt-1 font-medium text-slate-700 dark:text-slate-300">{completeness}{researchCoverage ? `（${researchCoverage.verifiedFieldPeriods}/${researchCoverage.requiredFieldPeriods} 欄位期別）` : "（尚未建立方法檢核）"}</dd></div>
+          {!detail.deepResearch ? <div><dt>本估值方法資料完整度</dt><dd className="mt-1 font-medium text-slate-700 dark:text-slate-300">{completeness}{researchCoverage ? `（${researchCoverage.verifiedFieldPeriods}/${researchCoverage.requiredFieldPeriods} 欄位期別）` : "（尚未建立方法檢核）"}</dd></div> : null}
         </dl>
         {hasUnresolvedSources ? <p className="mt-3 text-xs font-medium text-amber-700 dark:text-amber-300">部分來源名稱、日期、頁碼或連結尚待確認；未確認內容不作為正式結論。</p> : null}
       </header>
       <section aria-labelledby="decision-summary-title" className="mt-6 grid gap-px overflow-hidden rounded-2xl border border-line bg-line lg:grid-cols-[1.15fr_.85fr]">
         <div className="bg-stone-950 p-5 text-stone-50 sm:p-7">
           <p className="research-kicker text-orange-300">DECISION SUMMARY</p>
-          <h2 id="decision-summary-title" className="mt-2 text-2xl font-semibold">{detail.lifecycleStage === 'actionable' ? '條件成立，仍由使用者決定' : detail.lifecycleStage === 'waiting' ? '估值有潛力，等待條件' : '來源命中，研究仍在補齊'}</h2>
+          <h2 id="decision-summary-title" className="mt-2 text-2xl font-semibold">{detail.deepResearch
+            ? newEntryReady ? '研究與技術條件成立，仍需自行判斷' : '深度文章可讀，進場條件尚未成立'
+            : detail.lifecycleStage === 'actionable' ? '條件成立，仍由使用者決定' : detail.lifecycleStage === 'waiting' ? '估值有潛力，等待條件' : '來源命中，研究仍在補齊'}</h2>
           <p className="mt-3 text-sm leading-6 text-stone-300">這是依同一研究 revision 彙整的估值、技術與證據狀態，不是上漲機率，也不是即時行情或個人化投資建議。</p>
         </div>
         <dl className="grid grid-cols-2 gap-px bg-line text-sm">
-          <div className="bg-[var(--surface)] p-4"><dt className="text-xs text-stone-500">研究狀態</dt><dd className="mt-1 font-semibold">{detail.detailKind === 'full' ? '完整研究版' : '事實研究版'}</dd></div>
-          <div className="bg-[var(--surface)] p-4"><dt className="text-xs text-stone-500">兩日確認</dt><dd className="mt-1 font-semibold">{detail.lifecycleStage === 'actionable' ? '已由分類門檻確認' : '尚未完成或不適用'}</dd></div>
-          <div className="bg-[var(--surface)] p-4"><dt className="text-xs text-stone-500">估值資料覆蓋</dt><dd className="mt-1 font-semibold">{completeness}</dd></div>
+          <div className="bg-[var(--surface)] p-4"><dt className="text-xs text-stone-500">研究狀態</dt><dd className="mt-1 font-semibold">{detail.deepResearch ? detail.thesisQualification?.status || '待獨立論點審查' : detail.detailKind === 'full' ? '完整研究版' : '事實研究版'}</dd></div>
+          <div className="bg-[var(--surface)] p-4"><dt className="text-xs text-stone-500">{detail.deepResearch ? '獨立技術快照' : '兩日確認'}</dt><dd className="mt-1 font-semibold">{detail.deepResearch ? detail.latestTechnicalSnapshot?.signalState || '待完整交易日資料' : detail.lifecycleStage === 'actionable' ? '已由分類門檻確認' : '尚未完成或不適用'}</dd></div>
+          <div className="bg-[var(--surface)] p-4"><dt className="text-xs text-stone-500">{detail.deepResearch ? '文章證據截止' : '估值資料覆蓋'}</dt><dd className="mt-1 font-semibold">{detail.deepResearch ? dateLabel(detail.deepResearch.evidenceCutoffAt) : completeness}</dd></div>
           <div className="bg-[var(--surface)] p-4"><dt className="text-xs text-stone-500">個人曝險</dt><dd className="mt-1 font-semibold">未評估</dd></div>
         </dl>
       </section>
-      <ValuationSummary detail={detail} />
+      {detail.deepResearch ? <section className="mt-6 rounded-[1.75rem] border border-emerald-200/70 bg-emerald-50/60 p-5 dark:border-emerald-900/60 dark:bg-emerald-950/20 sm:p-7">
+        <h2 className="text-xl font-semibold">同一研究版本的估值情境</h2>
+        <p className="mt-1 text-sm text-stone-600 dark:text-stone-300">依正文假設計算；條件情境不是已取得訂單。負 EPS 不使用 P/E。</p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">{detail.deepResearch.scenarios.map((scenario) => (
+          <div key={scenario.name} className="rounded-xl bg-white/80 p-4 dark:bg-slate-950/50">
+            <span className="text-xs text-stone-500">{scenario.name === 'existing_business' ? '既有營運' : scenario.name === 'conditional_commercialization' ? '條件式商業化' : '延後／落空'} · {scenario.fiscalYear}</span>
+            <strong className="mt-2 block text-xl">{scenario.presentValue == null ? 'P/E 不適用' : `NT$${value(scenario.presentValue)}`}</strong>
+            <span className="text-xs text-stone-500">EPS {value(scenario.totalEps)} · 折現 {scenario.yearsToValue} 年</span>
+          </div>
+        ))}</div>
+      </section> : <ValuationSummary detail={detail} />}
       <section
-        className="mt-6 grid gap-4 sm:grid-cols-2"
+        className={`mt-6 grid gap-4 ${detail.deepResearch ? '' : 'sm:grid-cols-2'}`}
         aria-label="研究品質與執行條件"
       >
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950">
+        {!detail.deepResearch ? <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950">
           <h2 className="text-lg font-semibold">研究分數與覆蓋</h2>
           <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
             {scoreMetrics.map(([label, score]) => (
@@ -430,12 +570,15 @@ export default function CandidateDetailView({
               ? ""
               : ` · 權重 ${coveredWeight.toFixed(0)}%`}
           </p>
-        </div>
+        </div> : null}
         <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950">
           <h2 className="text-lg font-semibold">進場與退出條件</h2>
           <p className="mt-3 text-sm leading-6">
             進場：
-            {detail.lifecycleStage === "actionable"
+            {detail.deepResearch ? newEntryReady
+              ? "研究與交易條件已通過，但成交與風險需獨立確認。"
+              : `目前不能視為新進場訊號；${detail.latestTechnicalSnapshot?.blockers.join('、') || detail.thesisQualification?.reason || '論點與最新行情審查尚未齊備'}。`
+              : detail.lifecycleStage === "actionable"
               ? "階段條件已通過，仍須按現價與技術訊號執行。"
               : "等待研究、估值或技術條件完成。"}
           </p>
@@ -469,27 +612,18 @@ export default function CandidateDetailView({
           </ul>
         </section>
       ) : null}
-      <div className="mt-8 space-y-8">
-        {Object.entries(grouped).map(([group, sections]) => (
-          <section key={group}>
-            <h2 className="mb-3 text-xl font-semibold">{group}</h2>
-            <div className="space-y-3">
-              {sections.map((section) => (
-                <article
-                  key={section.key}
-                  className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950 sm:p-6"
-                >
-                  <h3 className="text-base font-semibold">{hideIdentifiers(section.title)}</h3>
-                  <p className="mt-3 whitespace-pre-wrap leading-7 text-slate-700 dark:text-slate-300">
-                    {hideIdentifiers(section.body)}
-                  </p>
-                </article>
-              ))}
-            </div>
-          </section>
-        ))}
-      </div>
-      <CandidateTradePlanView bundle={detail.tradePlan} revisionId={detail.revisionId} publicationState={isStaleReadonly ? 'stale_readonly' : isFinalConfirmed ? 'confirmed' : 'preliminary'} />
+      <DeepResearchView article={detail.deepResearch || null} sourceLinks={detail.deepResearchSources || []} />
+      {detail.deepResearch ? <details className="mt-8 rounded-2xl border border-line p-5">
+        <summary className="cursor-pointer font-semibold">通用研究與原始財務明細</summary>
+        <GeneralSections grouped={grouped} />
+      </details> : <GeneralSections grouped={grouped} />}
+      {detail.deepResearch ? <section className="mt-6 rounded-2xl border border-line p-5 text-sm" aria-label="最新技術監測">
+        <h2 className="text-lg font-semibold">最新技術監測</h2>
+        <p className="mt-2">{detail.latestTechnicalSnapshot
+          ? `${detail.latestTechnicalSnapshot.marketSession} 完整交易日 · ${detail.latestTechnicalSnapshot.signalState} · ${detail.latestTechnicalSnapshot.entryResearchEligible ? '研究進場資格成立' : '等待資格與成交條件'}`
+          : '尚無綁定本文論點版本的完整交易日技術快照。'}</p>
+        <p className="mt-1 text-stone-500">技術訊號與可成交價格分開；歷史文章不會因新行情自動改寫。</p>
+      </section> : <CandidateTradePlanView bundle={detail.tradePlan} revisionId={detail.revisionId} publicationState={isStaleReadonly ? 'stale_readonly' : isFinalConfirmed ? 'confirmed' : 'preliminary'} />}
       <CandidateHistoryChart detail={detail} />
       <details className="mt-8 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-950">
         <summary className="cursor-pointer text-base font-semibold">研究依據與原始資料</summary>

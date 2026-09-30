@@ -1,7 +1,7 @@
 import { timingSafeEqual } from 'node:crypto';
 
 export type InternalAuthResult =
-  | { ok: true; authSource: 'internal_api_key' | 'cron_secret' }
+  | { ok: true; authSource: 'internal_api_key' | 'cron_secret' | 'research_review_key' }
   | { ok: false; status: number; error: string };
 
 function secureTokenEquals(actual: string, expected: string): boolean {
@@ -10,11 +10,15 @@ function secureTokenEquals(actual: string, expected: string): boolean {
   return actualBytes.length === expectedBytes.length && timingSafeEqual(actualBytes, expectedBytes);
 }
 
-export function requireInternalAuth(req: Request): InternalAuthResult {
+export function requireInternalAuth(req: Request, options: { allowResearchReviewer?: boolean } = {}): InternalAuthResult {
   const expected = ([
     { source: 'internal_api_key' as const, value: process.env.INTERNAL_API_KEY },
     { source: 'cron_secret' as const, value: process.env.CRON_SECRET },
-  ]).filter((row): row is { source: 'internal_api_key' | 'cron_secret'; value: string } => Boolean(row.value));
+    ...(options.allowResearchReviewer && process.env.RESEARCH_REVIEW_KEY
+      && process.env.RESEARCH_REVIEW_KEY !== process.env.INTERNAL_API_KEY
+      && process.env.RESEARCH_REVIEW_KEY !== process.env.CRON_SECRET
+      ? [{ source: 'research_review_key' as const, value: process.env.RESEARCH_REVIEW_KEY }] : []),
+  ]).filter((row): row is { source: 'internal_api_key' | 'cron_secret' | 'research_review_key'; value: string } => Boolean(row.value));
   if (expected.length === 0) {
     return { ok: false, status: 500, error: 'INTERNAL_API_KEY/CRON_SECRET not configured' };
   }
@@ -35,4 +39,12 @@ export function requireExactInternalBearer(request: Request): boolean {
   return Boolean(expected && authorization?.startsWith('Bearer ')
     && secureTokenEquals(authorization.slice(7), expected) && !request.headers.has('x-internal-key')
     && requireInternalAuth(request).ok);
+}
+
+/** A separate review principal is required before research can grant entry eligibility. */
+export function requireIndependentResearchReviewer(request: Request): boolean {
+  const header = request.headers.get('authorization');
+  const auth = requireInternalAuth(request, { allowResearchReviewer: true });
+  return Boolean(process.env.INTERNAL_API_KEY && auth.ok && auth.authSource === 'research_review_key'
+    && header?.startsWith('Bearer ') && !request.headers.has('x-internal-key'));
 }
