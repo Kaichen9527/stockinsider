@@ -72,9 +72,9 @@ ordinaryTest('authentication source is bound to the operating-system account, no
   }
 });
 
-function manifestObject(strategy = 'hybrid') {
+function manifestObject(strategy = 'astra-only') {
   return {
-    protocol: 'loop-model-manifest-v3.5',
+    protocol: 'loop-model-manifest-v3.6',
     checkpoint: 'model_runner_v3',
     changeId: 'source-led-opportunity-engine-v3',
     base: 'a'.repeat(40),
@@ -128,13 +128,17 @@ ordinaryTest('permanent path exclusions outrank manifest selectors and prompts',
   assert.equal(promptPathAllowed('source-led-opportunity-engine-v3', '.loop-engineering/state/changes/source-led-opportunity-engine-v3/secret-contract.md'), false);
 });
 
-ordinaryTest('routing never represents Luna and reports terra-only review/verify as blocked', () => {
-  const hybrid = routeManifest(parsedManifest('hybrid'));
-  assert.equal(hybrid.routes[0].make.model, 'gpt-5.6-terra');
-  assert.equal(hybrid.routes[0].review.model, 'gpt-5.6-sol');
-  const terraOnly = routeManifest(parsedManifest('terra-only'));
-  assert.deepEqual(terraOnly.routes[0].review, { blocked: 'ROUTING_BLOCKED' });
-  assert.deepEqual(terraOnly.routes[0].verify, { blocked: 'ROUTING_BLOCKED' });
+ordinaryTest('only Astra High routes make review and verify; legacy manifests and routes fail', () => {
+  const routed = routeManifest(parsedManifest());
+  for (const operation of ['make', 'review', 'verify']) {
+    assert.deepEqual(routed.routes[0][operation], { model: 'gpt-6-astra', reasoningEffort: 'high', waiverRequired: false });
+    for (const legacy of ['hybrid', 'sol-only', 'terra-only', 'luna-only']) {
+      expectExit(3, () => parsedManifest(legacy));
+      expectExit(5, () => require('./routing').routeOperation(operation, legacy));
+    }
+  }
+  const oldManifest = { ...manifestObject(), protocol: 'loop-model-manifest-v3.5' };
+  expectExit(3, () => parseManifest(Buffer.from(canonicalJson(oldManifest) + '\n')));
 });
 
 ordinaryTest('source-view identity binds sorted readable tracked entries', () => {
@@ -159,7 +163,7 @@ ordinaryTest('Codex profile is custom least privilege and never uses legacy sand
   assert.match(profile, /":minimal" = "read"/);
   assert.match(profile, /"\/private\/scratch" = "write"/);
   const args = codexArgs({
-    model: 'gpt-5.6-terra',
+    model: 'gpt-6-astra',
     reasoningEffort: 'high',
     viewPath: '/private/view',
   });
@@ -169,7 +173,7 @@ ordinaryTest('Codex profile is custom least privilege and never uses legacy sand
   assert.equal(args.includes('--ignore-user-config'), true);
   assert.equal(args.includes('model_reasoning_effort="high"'), true);
   expectExit(5, () => codexArgs({
-    model: 'gpt-5.6-terra',
+    model: 'gpt-6-astra',
     reasoningEffort: 'xhigh',
     viewPath: '/private/view',
   }));
@@ -241,10 +245,10 @@ ordinaryTest('operation and resource identities are deterministic and bound', ()
     resourceAttemptOrdinal: 0,
   }), /^[a-f0-9]{64}$/);
   assert.equal(MODEL_RUNNER_IDENTITY_SHA256.length, 64);
-  assert.equal(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)), 885);
+  assert.equal(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)), 894);
   assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'codexVersion'), ['codexVersion', '0.158.0-alpha.2.1']);
-  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'contractVersion'), ['contractVersion', 'model-runner-v3.6']);
-  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'hostPinVersion'), ['hostPinVersion', 'model-runner-host-pins-v3.19']);
+  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'contractVersion'), ['contractVersion', 'model-runner-v3.7']);
+  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'hostPinVersion'), ['hostPinVersion', 'model-runner-host-pins-v3.21']);
   for (const relativePath of ['execution.js', 'journalStore.js']) {
     const implementation = fs.readFileSync(path.join(__dirname, relativePath), 'utf8');
     assert.match(implementation, new RegExp(MODEL_RUNNER_IDENTITY_SHA256, 'u'));
@@ -316,7 +320,7 @@ ordinaryTest('host pin fixture has an exact hash-bound format', async () => {
   const fixture = path.resolve(__dirname, '../../.loop-engineering/state/changes/source-led-opportunity-engine-v3/model-runner-host-pins-v3.json');
   assert.equal(fs.statSync(fixture).size, PIN_FIXTURE_BYTES);
   const pins = loadHostPins(fixture);
-  assert.equal(pins.fixtureVersion, 'model-runner-host-pins-v3.19');
+  assert.equal(pins.fixtureVersion, 'model-runner-host-pins-v3.21');
   assert.equal(pins.executables.find((entry) => entry.name === 'codex').version, 'codex-cli 0.158.0-alpha.2.1');
   assert.equal(verifyCurrentNode(pins), true);
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-pins-'));
@@ -491,7 +495,7 @@ ordinaryTest('trusted live host probes admit only an explicit private cache scra
   }
 });
 
-ordinaryTest('disabled doctor accepts only the protected v3.9 compatibility selector for the exact v3.19 fixture', () => {
+ordinaryTest('disabled doctor accepts only the exact successor and rejects historical selectors', () => {
   const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-doctor-scratch-'));
   const policy = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-v3-doctor-policy-'));
   const original = {
@@ -507,11 +511,11 @@ ordinaryTest('disabled doctor accepts only the protected v3.9 compatibility sele
     process.env.OPPORTUNITY_V3_PROTECTED_NO_LIVE_AUTH = '1';
     const doctor = path.resolve(__dirname, '../opportunity-v3/doctor.mjs');
     const compatible = spawnSync(process.execPath, [doctor, '--expect-mode', 'disabled', '--require-host-pin',
-      'model-runner-host-pins-v3.9'], { encoding: 'utf8', env: process.env });
+      'model-runner-host-pins-v3.21'], { encoding: 'utf8', env: process.env });
     assert.equal(compatible.status, 0, compatible.stderr);
     assert.equal(JSON.parse(compatible.stdout).checks.requested.status, 'pass');
     const rejected = spawnSync(process.execPath, [doctor, '--expect-mode', 'disabled', '--require-host-pin',
-      'model-runner-host-pins-v3.8'], { encoding: 'utf8', env: process.env });
+      'model-runner-host-pins-v3.9'], { encoding: 'utf8', env: process.env });
     assert.equal(rejected.status, 1);
   } finally {
     for (const [key, value] of Object.entries(original)) {
@@ -634,23 +638,9 @@ ordinaryTest('CLI validates canonical input and fails closed before execution wh
     expiresAt: '2026-07-27T00:00:00Z',
   };
   fs.writeFileSync(waiverPath, canonicalJson(waiver) + '\n', { mode: 0o600 });
-  const waiverIdentity = validateWaiver(waiverPath, {
-    parsed: parsedManifest('sol-only'),
-    task: parsedManifest('sol-only').manifest.tasks[0],
-    root: directory,
-    now,
-  });
-  assert.deepEqual(waiverIdentity, {
-    sha256: sha256(canonicalJson(waiver) + '\n'),
-    expiresAt: waiver.expiresAt,
-  });
-  fs.chmodSync(waiverPath, 0o644);
-  expectExit(5, () => validateWaiver(waiverPath, {
-    parsed: parsedManifest('sol-only'),
-    task: parsedManifest('sol-only').manifest.tasks[0],
-    root: directory,
-    now,
-  }));
+  expectExit(5, () => validateWaiver(waiverPath));
+  expectExit(2, () => parseArguments(['run', '--manifest', filename, '--task', 'runner-foundation',
+    '--strategy', 'astra-only', '--waiver', waiverPath]));
   fs.rmSync(waiverDirectory, { recursive: true, force: true });
   fs.rmSync(directory, { recursive: true, force: true });
 });
@@ -697,7 +687,7 @@ ordinaryTest('maker execution materializes a tracked source view, applies the se
       parsed,
       task,
       operation: 'review',
-      strategy: 'hybrid',
+      strategy: 'astra-only',
       pins: Object.freeze({ executables: [{ name: 'codex', version: 'codex-cli test' }] }),
       manifestPath,
       executeModelFn: () => {
@@ -710,7 +700,7 @@ ordinaryTest('maker execution materializes a tracked source view, applies the se
     parsed,
     task,
     operation: 'make',
-    strategy: 'hybrid',
+    strategy: 'astra-only',
     pins: Object.freeze({ executables: [{ name: 'codex', version: 'codex-cli test' }] }),
     manifestPath,
     prepareTransportFn: ({ transport }) => {
@@ -831,7 +821,7 @@ ordinaryTest('maker execution materializes a tracked source view, applies the se
     parsed,
     task,
     operation: 'make',
-    strategy: 'hybrid',
+    strategy: 'astra-only',
     pins: Object.freeze({ executables: [{ name: 'codex', version: 'codex-cli test' }] }),
     manifestPath,
     executeModelFn: () => {
@@ -884,7 +874,7 @@ ordinaryTest('maker execution materializes a tracked source view, applies the se
     parsed,
     task,
     operation: 'make',
-    strategy: 'hybrid',
+    strategy: 'astra-only',
     pins: Object.freeze({ executables: [{ name: 'codex', version: 'codex-cli test' }] }),
     manifestPath,
     executeModelFn: () => {
@@ -898,7 +888,7 @@ ordinaryTest('maker execution materializes a tracked source view, applies the se
       parsed,
       task,
       operation: 'review',
-      strategy: 'hybrid',
+      strategy: 'astra-only',
       pins: Object.freeze({ executables: [{ name: 'codex', version: 'codex-cli test' }] }),
       manifestPath,
       prepareTransportFn: ({ transport }) => {
@@ -976,7 +966,7 @@ ordinaryTest('maker execution materializes a tracked source view, applies the se
       parsed,
       task,
       operation: 'review',
-      strategy: 'hybrid',
+      strategy: 'astra-only',
       pins: Object.freeze({ executables: [{ name: 'codex', version: 'codex-cli test' }] }),
       manifestPath,
       executeModelFn: () => {
@@ -1014,7 +1004,7 @@ ordinaryTest('maker execution materializes a tracked source view, applies the se
     parsed,
     task,
     operation: 'verify',
-    strategy: 'hybrid',
+    strategy: 'astra-only',
     pins: Object.freeze({ executables: [{ name: 'codex', version: 'codex-cli test' }] }),
     manifestPath,
     executeModelFn: () => {
@@ -1068,4 +1058,50 @@ ordinaryTest('maker execution materializes a tracked source view, applies the se
     1,
   );
   fs.rmSync(directory, { recursive: true, force: true });
+});
+
+ordinaryTest('Astra adapter and direct model entry reject every unsupported route before probing or spawning', async () => {
+  for (const manifest of [{ ...manifestObject(), protocol: 'loop-model-manifest-v3.5' },
+    manifestObject('hybrid')]) {
+    await assert.rejects(executeOperation({ parsed: { manifest }, task: manifest.tasks[0],
+      operation: 'make', strategy: 'astra-only', manifestPath: '/missing/must-not-be-read' }),
+    error => error instanceof RunnerError && error.exit === 5);
+  }
+
+  for (const model of ['gpt-5.6-terra', 'gpt-5.6-sol', 'gpt-6-sol', 'gpt-6-luna', 'unknown']) {
+    expectExit(5, () => codexArgs({ model, reasoningEffort: 'high', viewPath: '/private/view' }));
+    await assert.rejects(executeModel({ source: { view: '/private/view' },
+      route: { model, reasoningEffort: 'high' },
+      verifyHostFn: () => assert.fail('host must not run'), spawnFn: () => assert.fail('no subprocess') }),
+    error => error instanceof RunnerError && error.exit === 5);
+  }
+  for (const effort of ['low', 'medium', 'xhigh', 'max']) {
+    expectExit(5, () => codexArgs({ model: 'gpt-6-astra', reasoningEffort: effort, viewPath: '/private/view' }));
+  }
+  for (const operation of ['make', 'review', 'verify']) {
+    const route = require('./routing').routeOperation(operation, 'astra-only');
+    const args = codexArgs({ ...route, viewPath: '/private/view' });
+    assert.equal(args[args.indexOf('--model') + 1], 'gpt-6-astra');
+    assert.ok(args.includes('model_reasoning_effort="high"'));
+  }
+});
+
+ordinaryTest('successor never resumes old ready reviewed recovery or sealed state and preserves historical bytes', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'runner-astra-history-'));
+  try {
+    const parsed = parsedManifest(), task = parsed.manifest.tasks[0];
+    const filename = statePath(root, parsed, task);
+    assert.ok(filename.includes('/runtime/model-runner-v3-astra-v1/'));
+    const initial = readState(filename, parsed, task);
+    fs.mkdirSync(path.dirname(filename), { recursive: true });
+    for (const state of ['proposal_ready', 'review_passed', 'recovery_required', 'verified']) {
+      const prior = { ...initial, state,
+        integrity: state === 'recovery_required' ? 'recovery_required' : 'ok',
+        modelRunnerIdentitySha256: '5ff9c6404c0c645e4845784923190195fe1fd5eb53dfef2be57c23e79e0fad64' };
+      const bytes = canonicalJson(prior) + '\n';
+      fs.writeFileSync(filename, bytes);
+      expectExit(11, () => readState(filename, parsed, task));
+      assert.equal(fs.readFileSync(filename, 'utf8'), bytes);
+    }
+  } finally { fs.rmSync(root, { recursive: true, force: true }); }
 });

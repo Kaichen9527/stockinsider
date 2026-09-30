@@ -40,8 +40,7 @@ function profileToml(viewPath, scratchPath, transportPath) {
 function codexArgs({ model, reasoningEffort, viewPath }) {
   assert(
     (
-      (model === 'gpt-5.6-sol' && reasoningEffort === 'xhigh') ||
-      (model === 'gpt-5.6-terra' && reasoningEffort === 'high')
+      model === 'gpt-6-astra' && reasoningEffort === 'high'
     ) &&
     path.isAbsolute(viewPath),
     5,

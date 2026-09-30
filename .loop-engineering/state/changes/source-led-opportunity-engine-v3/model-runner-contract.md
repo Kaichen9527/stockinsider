@@ -1,6 +1,6 @@
 # macOS Model Runner Contract: source-led-opportunity-engine-v3
 
-Version: `model-runner-v3.6`
+Version: `model-runner-v3.7`
 
 Checkpoint: `model_runner_v3`
 
@@ -8,7 +8,7 @@ Status: architecture only; implementation remains locked until fresh Requirement
 
 ## 1. Authority, scope and security claim
 
-This file is the sole active owner for new `model_runner_v3` operations. It does not reinterpret or mutate V1/V2 manifests, counters, findings, verdicts, artifacts, refs or state. `requirements.md`, `design.md`, `host-pin-compatibility-amendment.md`, `model-runner-host-pins-v3.json`, the canonical acceptance inventory and this contract are the complete implementation authority; Terra must stop on a missing decision rather than infer legacy behavior.
+This file is the sole active owner for new `model_runner_v3` operations. It does not reinterpret or mutate V1/V2 manifests, counters, findings, verdicts, artifacts, refs or state. `requirements.md`, `design.md`, `host-pin-compatibility-amendment.md`, `model-runner-host-pins-v3.json`, the canonical acceptance inventory and this contract are the complete implementation authority; The runner must stop on a missing decision rather than infer legacy behavior.
 
 The runner is local Loop Engineering development tooling, not a Vercel/Supabase worker and not a stock-selection factor. A maker returns only a sealed text patch proposal. Trusted local runner code alone may validate and apply it in a token-owned clean worktree. Reviewer and verifier results are typed findings/evidence and never mutate Git. No runner result enters candidate discovery, scoring, valuation, rank, action, allocation, promotion or any Supabase write.
 
@@ -36,10 +36,10 @@ The top-level object has exactly these seven keys:
 protocol,checkpoint,changeId,base,inputHead,defaultStrategy,tasks
 ```
 
-- `protocol` is `loop-model-manifest-v3.5`; `checkpoint` is `model_runner_v3`.
+- `protocol` is `loop-model-manifest-v3.6`; `checkpoint` is `model_runner_v3`.
 - `changeId` matches `[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?`.
 - `base` and `inputHead` are lowercase 40-hex commit OIDs; `base` is an ancestor of `inputHead`; `inputHead` has no replace/graft/shallow ambiguity and all required blobs are local.
-- `defaultStrategy` is `hybrid|sol-only|terra-only`.
+- `defaultStrategy` is `astra-only`.
 - `tasks` has 1..128 entries in execution order. IDs are unique, and `sequence` is exactly the zero-based array ordinal.
 
 Each task object has exactly:
@@ -67,16 +67,16 @@ The grammar is exactly:
 ```text
 loop-model-runner validate --manifest <path>
 loop-model-runner route --manifest <path> [--task <taskId>]
-loop-model-runner run --manifest <path> --task <taskId> [--strategy hybrid|sol-only|terra-only] [--waiver <path>]
-loop-model-runner review --manifest <path> --task <taskId> [--strategy hybrid|sol-only|terra-only] [--waiver <path>]
-loop-model-runner verify --manifest <path> --task <taskId> [--strategy hybrid|sol-only|terra-only] [--waiver <path>]
+loop-model-runner run --manifest <path> --task <taskId> [--strategy astra-only]
+loop-model-runner review --manifest <path> --task <taskId> [--strategy astra-only]
+loop-model-runner verify --manifest <path> --task <taskId> [--strategy astra-only]
 loop-model-runner status --manifest <path> --task <taskId>
 ```
 
 One flag consumes one following value. `--key=value`, duplicate/unknown flags, positional values, missing/empty values and command-inapplicable flags are usage failures. `run` maps only to protocol operation `make`; the other terminal operations are `review|verify`. `validate`, `route` and `status` spawn no model and no apply process. Every success writes exactly one canonical JSON object plus LF to stdout; diagnostics go to bounded redacted stderr. Their exact success objects are:
 
 - validate: `protocol='loop-model-validate-v3.5',manifestSha256,changeId,inputHead,taskCount,valid=true`;
-- route: `protocol='loop-model-route-v3.5',manifestSha256,strategy,routes`, where routes is manifest-task order (or the exact selected singleton) and each entry has exactly `taskId,assurance,make,review,verify`; each operation value is either `model,reasoningEffort,waiverRequired=false|true` or `blocked='ROUTING_BLOCKED'` according to the table below;
+- route: `protocol='loop-model-route-v3.6',manifestSha256,strategy,routes`, where routes is manifest-task order (or the exact selected singleton) and each entry has exactly `taskId,assurance,make,review,verify`; each operation value is either `model,reasoningEffort,waiverRequired=false|true` or `blocked='ROUTING_BLOCKED'` according to the table below;
 - terminal operation: `protocol='loop-model-operation-v3.5',manifestSha256,taskId,operation,round,status,exit,resultSha256,proposalCommit,resultRef`, where commit/ref are non-null only for a maker proposal and the remaining values equal the sealed result/journal;
 - status: the object in section 4.
 
@@ -100,16 +100,13 @@ The effective strategy is the CLI value when present, otherwise `defaultStrategy
 
 | Operation | Strategy | Exact model | Reasoning | Waiver |
 |---|---|---|---|---|
-| `make` | `hybrid` or `terra-only` | `gpt-5.6-terra` | `high` | forbidden |
-| `make` | `sol-only` | `gpt-5.6-sol` | `xhigh` | required |
-| `review` or `verify` | `hybrid` or `sol-only` | `gpt-5.6-sol` | `xhigh` | forbidden |
-| `review` or `verify` | `terra-only` | blocked | n/a | cannot override |
+| `make`, `review`, `verify` | `astra-only` | `gpt-6-astra` | `high` | forbidden |
 
-Luna and every other model/effort are unrepresentable; there is no automatic fallback. `route` reports the manifest-default row only. A waiver is accepted only with `run --strategy sol-only`. It is a UTF-8 canonical JSON plus LF file outside every repository, view, scratch and transport root; `lstat` must show one regular nonlinked file owned by the invoking UID with mode `0400|0600`. It has exactly `protocol='model-runner-waiver-v3.5'`, `checkpoint='model_runner_v3'`, `changeId`, `taskId`, `inputHead`, `strategy='sol-only'`, `approvedBy='repository-owner'`, `reason` of 1..1,024 bytes and whole-second UTC `expiresAt` greater than invocation time and no more than seven days later. Every identity must equal the manifest/task. The explicit user-owned file is the authority; repository/model bytes cannot create or select it.
+Every other model/effort and historical strategy is rejected; no automatic fallback or historical waiver can authorize the successor. `route` reports the manifest-default row only. New work requires a canonical v3.6 manifest. The CLI rejects `--waiver`; direct model invocation validates the same exact pair before any host probe or spawn. The v3.21 host/Astra successor does not rewrite or resume historical V3.5 manifests, journals, sealed results or runtime state.
 
 ## 4. State namespace, status and exits
 
-V3 durable state lives only at the validated repository root path `.loop-engineering/runtime/model-runner-v3/<manifestSha256>/`. The implementation adds this exact namespace to `.gitignore`. It never opens a V1/V2 runtime path for write, and every V3 command verifies that the byte/hash snapshot of existing V1/V2 runner state, counters, findings, verdicts, artifacts and refs is unchanged before return.
+V3 durable state lives only at the validated repository root path `.loop-engineering/runtime/model-runner-v3-astra-v1/<manifestSha256>/`. The implementation adds this exact namespace to `.gitignore`. It never opens a V1/V2 runtime path for write, and every V3 command verifies that the byte/hash snapshot of existing V1/V2 runner state, counters, findings, verdicts, artifacts and refs is unchanged before return.
 
 For task key `taskKey=SHA256(UTF8(taskId))`, exact paths below the manifest root are:
 
@@ -155,9 +152,9 @@ Primary-cause precedence is usage, manifest, Git, routing/preflight, state/lock,
 
 ## 5. Immutable host and executable oracle
 
-The sole pin oracle is tracked `model-runner-host-pins-v3.json`. Its pre-LF bytes must be RFC-8785 canonical JSON of exactly 2,218 bytes with SHA-256 `953b898dfa786675dd5e6dda3af4265ad49086929fb519c989c3629682eeaca1`; its LF-terminated file is 2,219 bytes. It is part of the active normative graph. Implementation cannot learn expected values from the executable under test.
+The sole pin oracle is tracked `model-runner-host-pins-v3.json`. Its pre-LF bytes must be RFC-8785 canonical JSON of exactly 2,218 bytes with SHA-256 `c43c25a48f442dc0aa8902918243efc9fac354c4bfe3ef9af7432d093ed2aed9`; its LF-terminated file is 2,219 bytes. It is part of the active normative graph. Implementation cannot learn expected values from the executable under test.
 
-The fixture pins `darwin/arm64`, absolute Node `/usr/local/bin/node` at `v22.14.0`, `/usr/bin/git` at `git version 2.50.1 (Apple Git-155)`, and `/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex` at `codex-cli 0.158.0-alpha.2.1`. It supplies exact lexical/real paths, decimal-string device/inode/size, uid/gid, octal type/mode and SHA-256 for each executable. Codex additionally binds the ChatGPT bundle stat, bundle/executable identifiers, both full CodeDirectory SHA-256 values, Team ID `2DC432GLL2`, exact designated requirements and notarized Developer ID assessment. The V3.19 candidate supersedes the V3.18 exact host identity and strengthens explicit private operation-parent/transport denials. It grants no additional read, write, network, route, journal, apply or production authority. Protected-base registration and release acceptance are separate and remain required.
+The fixture pins `darwin/arm64`, absolute Node `/usr/local/bin/node` at `v22.14.0`, `/usr/bin/git` at `git version 2.50.1 (Apple Git-155)`, and `/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex` at `codex-cli 0.158.0-alpha.2.1`. It supplies exact lexical/real paths, decimal-string device/inode/size, uid/gid, octal type/mode and SHA-256 for each executable. Codex additionally binds the ChatGPT bundle stat, bundle/executable identifiers, both full CodeDirectory SHA-256 values, Team ID `2DC432GLL2`, exact designated requirements and notarized Developer ID assessment. The V3.21 candidate supersedes the unactivated V3.19 host fixture with freshly observed device identities and Astra-only routing. It preserves the private operation-parent/transport denials and grants no additional read, write, tool network, apply or production authority. Protected-base registration and release acceptance are separate and remain required.
 
 Preflight rejects a non-regular executable, symlink/realpath difference, fixture/stat/hash/version mismatch, group/world-writable executable, failed `codesign --verify --deep --strict`, failed `spctl`, ad-hoc/unpinned signature or any unlisted path. Every ancestor is `lstat`-walked without following links; system ancestors must be real directories and no ancestor may change between checks. The already-running Node process must have `process.execPath` and executable identity equal to the Node fixture. The user-owned `/usr/local/bin` and ChatGPT bundle ancestry is not treated as immutable against the invoking UID; same-UID replacement is outside the confidentiality threat and is caught whenever observable.
 
@@ -166,10 +163,10 @@ Immediately before each spawn, after `spawn` returns and after child completion,
 The separate runner static identity is the RFC-8785 canonical form of this exact 18-member ASCII-name-sorted array:
 
 ```json
-[["approvalPolicy","never"],["codexVersion","0.158.0-alpha.2.1"],["contractVersion","model-runner-v3.6"],["gitVersion","2.50.1 (Apple Git-155)"],["hardIsolationClaims",["external_user_read","authoritative_write","command_network"]],["hostPinFixtureSha256","953b898dfa786675dd5e6dda3af4265ad49086929fb519c989c3629682eeaca1"],["hostPinVersion","model-runner-host-pins-v3.19"],["journalVersion","model-runner-journal-v3.5"],["manifestVersion","loop-model-manifest-v3.5"],["nodeVersion","v22.14.0"],["permissionProfileVersion","model-runner-permissions-v3.6"],["promptPolicyVersion","model-runner-prompt-v3.5"],["requestProtocol","loop-model-v3.5"],["resultProtocol","loop-model-result-v3.5"],["routingVersion","model-runner-routing-v3.5"],["sourceViewVersion","model-runner-source-view-v3.5"],["stateNamespace","model-runner-v3"],["trustedApplyVersion","model-runner-trusted-apply-v3.5"]]
+[["approvalPolicy","never"],["codexVersion","0.158.0-alpha.2.1"],["contractVersion","model-runner-v3.7"],["gitVersion","2.50.1 (Apple Git-155)"],["hardIsolationClaims",["external_user_read","authoritative_write","command_network"]],["hostPinFixtureSha256","c43c25a48f442dc0aa8902918243efc9fac354c4bfe3ef9af7432d093ed2aed9"],["hostPinVersion","model-runner-host-pins-v3.21"],["journalVersion","model-runner-journal-v3.5"],["manifestVersion","loop-model-manifest-v3.6"],["nodeVersion","v22.14.0"],["permissionProfileVersion","model-runner-permissions-v3.6"],["promptPolicyVersion","model-runner-prompt-v3.5"],["requestProtocol","loop-model-v3.5"],["resultProtocol","loop-model-result-v3.5"],["routingVersion","model-runner-routing-v3.6"],["sourceViewVersion","model-runner-source-view-v3.5"],["stateNamespace","model-runner-v3-astra-v1"],["trustedApplyVersion","model-runner-trusted-apply-v3.5"]]
 ```
 
-It is exactly 885 UTF-8 bytes with SHA-256 `5ff9c6404c0c645e4845784923190195fe1fd5eb53dfef2be57c23e79e0fad64`. The exact field name `modelRunnerIdentitySha256` carries this digest in every request, status, resource reservation, operation-journal line, resource-journal line and attempt record. Operation and resource-attempt key preimages also include the digest. A missing, additional-position, malformed or different identity member is never inferred from `protocol`: trusted request construction fails `INTERNAL_ERROR`/12 before model spawn, while any durable record/status mismatch is an integrity failure that preserves bytes, sets `state=integrity=recovery_required,lastExit=11` and returns the exact canonical `IO_ERROR` diagnostic without model retry or replay. It remains separate from the opportunity runtime's 41-member tuple; acceptance and product-contract versions belong only to that domain tuple.
+It is exactly 894 UTF-8 bytes with SHA-256 `0a34cc38c06e432c865aa842278cf05fae724ecf0313f795e753f2086d02cfe1`. The exact field name `modelRunnerIdentitySha256` carries this digest in every request, status, resource reservation, operation-journal line, resource-journal line and attempt record. Operation and resource-attempt key preimages also include the digest. A missing, additional-position, malformed or different identity member is never inferred from `protocol`: trusted request construction fails `INTERNAL_ERROR`/12 before model spawn, while any durable record/status mismatch is an integrity failure that preserves bytes, sets `state=integrity=recovery_required,lastExit=11` and returns the exact canonical `IO_ERROR` diagnostic without model retry or replay. It remains separate from the opportunity runtime's 41-member tuple; acceptance and product-contract versions belong only to that domain tuple.
 
 ## 6. Trusted anchor, scratch, transport and cleanup
 
@@ -280,7 +277,7 @@ promptFiles,sourceView,proposalDelta,reviewInput,verificationInput,priorFindingI
 assurance,terraWaiver
 ```
 
-`protocol` is `loop-model-v3.5`; `modelRunnerIdentitySha256` equals the exact section 5 digest; UUIDs are lowercase RFC-4122; operation/role is `make/maker|review/reviewer|verify/verifier`; model/effort/strategy follow section 3; hashes/OIDs and task fields equal the manifest; `round` is the derived positive operation round; assurance is `critical`. `sourceView` is exactly `viewPurpose,sourceCommit,proposalDeltaSha256,sourceViewSha256,entryCount,totalBytes` and equals the section 7 identity; `proposalDelta` is the exact section 7 array or null. For review, `reviewInput` is exactly `kind='proposal',proposalCommit,resultRef,makerResultSha256,sourceCommit,proposalDeltaSha256,sourceViewSha256`; for a maker following `changes_required` it is exactly `kind='repair',proposalCommit,resultRef,reviewResultSha256,status='changes_required',findings,sourceCommit,proposalDeltaSha256,sourceViewSha256` copied from the validated prior proposal/review; otherwise it is null. For verify, `verificationInput` is exactly `kind='review_pass',reviewResultSha256,proposalCommit,resultRef,sourceCommit,proposalDeltaSha256,sourceViewSha256`; for a maker following `verification_failed` it is exactly `kind='repair',proposalCommit,resultRef,verificationResultSha256,status='verification_failed',findings,evidence,sourceCommit,proposalDeltaSha256,sourceViewSha256`; otherwise it is null. Every non-null proposal/source identity equals the proven retained proposal and current view. `priorFindingIds` is the ASCII-sorted unique ID projection of non-null repair input, otherwise empty, and is at most 256. `terraWaiver` is null except Sol maker and then contains only its canonical SHA-256 and expiry, not raw bytes. Request/context live behind closure-private brands/WeakMaps; lookalikes or mutation fail.
+`protocol` is `loop-model-v3.5`; `modelRunnerIdentitySha256` equals the exact section 5 digest; UUIDs are lowercase RFC-4122; operation/role is `make/maker|review/reviewer|verify/verifier`; model/effort/strategy follow section 3; hashes/OIDs and task fields equal the manifest; `round` is the derived positive operation round; assurance is `critical`. `sourceView` is exactly `viewPurpose,sourceCommit,proposalDeltaSha256,sourceViewSha256,entryCount,totalBytes` and equals the section 7 identity; `proposalDelta` is the exact section 7 array or null. For review, `reviewInput` is exactly `kind='proposal',proposalCommit,resultRef,makerResultSha256,sourceCommit,proposalDeltaSha256,sourceViewSha256`; for a maker following `changes_required` it is exactly `kind='repair',proposalCommit,resultRef,reviewResultSha256,status='changes_required',findings,sourceCommit,proposalDeltaSha256,sourceViewSha256` copied from the validated prior proposal/review; otherwise it is null. For verify, `verificationInput` is exactly `kind='review_pass',reviewResultSha256,proposalCommit,resultRef,sourceCommit,proposalDeltaSha256,sourceViewSha256`; for a maker following `verification_failed` it is exactly `kind='repair',proposalCommit,resultRef,verificationResultSha256,status='verification_failed',findings,evidence,sourceCommit,proposalDeltaSha256,sourceViewSha256`; otherwise it is null. Every non-null proposal/source identity equals the proven retained proposal and current view. `priorFindingIds` is the ASCII-sorted unique ID projection of non-null repair input, otherwise empty, and is at most 256. `terraWaiver` remains a protocol field for shape compatibility and is always null in the Astra successor; it cannot authorize a historical route. Request/context live behind closure-private brands/WeakMaps; lookalikes or mutation fail.
 
 The result object has exactly:
 
@@ -393,6 +390,6 @@ Publication and every reservation/journal/result/snapshot write use exclusive cr
 
 ## 13. Gate, implementation and verification boundary
 
-Sol owns requirements/architecture, critical contracts, diff review and verification. Terra may implement one task only after fresh Architecture PASS and explicit handoff. Luna is ineligible for runner, contract, critical, integration, review and verification. This amendment authorizes no runner/App code, migration, scheduler, merge, push, PR, deployment, homepage promotion or model influence.
+The user requires GPT-6 Astra High for implementation, requirements/architecture, diff review and verification. Review roles remain independent from implementation even when they use the same model. No other model route is available. User implementation/deployment authorization does not replace protected-source review, resource admission, exact strategy approval or rollout acceptance; this contract does not activate production or authorize domain model influence.
 
 Implementation verification must retain all V1/V2 regressions, register every canonical V3 case one-to-one, and run real pinned macOS probes for non-Git view, permanent exclusion/prompt binding, profile precedence, external/sibling/secret read denial, authoritative-write denial, network/Unix sockets, allowed scratch, setsid/double-fork inheritance, post-transport FD closure, host fixture/codesign/version/replacement mismatch, JSONL/result limits, patch/commit/ref/journal interruption and V1/V2 nonmutation. It must also run `git diff --check`, unit tests, lint and production build. No test may be skipped or todo.

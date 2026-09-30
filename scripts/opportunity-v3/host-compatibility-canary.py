@@ -18,7 +18,10 @@ FIXTURE = ROOT / '.loop-engineering/state/changes/source-led-opportunity-engine-
 
 def digest(path):
     with Path(path).open('rb') as stream:
-        return hashlib.file_digest(stream, 'sha256').hexdigest()
+        result = hashlib.sha256()
+        for chunk in iter(lambda: stream.read(1024 * 1024), b''):
+            result.update(chunk)
+        return result.hexdigest()
 
 def main():
     parser = argparse.ArgumentParser()
@@ -28,7 +31,7 @@ def main():
     if output.exists():
         raise ValueError('existing evidence must not be overwritten')
     pin_bytes = FIXTURE.read_bytes()
-    if len(pin_bytes) != 2219 or hashlib.sha256(pin_bytes[:-1]).hexdigest() != '953b898dfa786675dd5e6dda3af4265ad49086929fb519c989c3629682eeaca1':
+    if len(pin_bytes) != 2219 or hashlib.sha256(pin_bytes[:-1]).hexdigest() != 'c43c25a48f442dc0aa8902918243efc9fac354c4bfe3ef9af7432d093ed2aed9':
         raise ValueError('exact frozen candidate fixture required')
     pins = json.loads(pin_bytes)
     native = next(row for row in pins['executables'] if row['name'] == 'codex')

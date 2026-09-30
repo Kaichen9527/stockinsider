@@ -31,7 +31,7 @@ const {
   writeExclusive,
 } = require('./journalStore');
 
-const RUNNER_IDENTITY = '5ff9c6404c0c645e4845784923190195fe1fd5eb53dfef2be57c23e79e0fad64';
+const RUNNER_IDENTITY = '0a34cc38c06e432c865aa842278cf05fae724ecf0313f795e753f2086d02cfe1';
 
 function run(command, args, options = {}) {
   const result = spawnSync(command, args, {
@@ -607,16 +607,13 @@ async function executeModel({
   verifyHostFn = verifyCurrentNode,
   spawnFn = spawn,
 }) {
+  const args = codexArgs({ model: route.model, reasoningEffort: route.reasoningEffort, viewPath: source.view });
   const codex = pins.executables.find((entry) => entry.name === 'codex');
   assert(codex, 5);
   await probePermissions({ pins, source, scratch, transport, verifyHostFn, spawnFn });
   return new Promise((resolve, reject) => {
     verifyHostFn(pins);
-    const child = spawnFn(codex.path, codexArgs({
-      model: route.model,
-      reasoningEffort: route.reasoningEffort,
-      viewPath: source.view,
-    }), {
+    const child = spawnFn(codex.path, args, {
       cwd: source.view,
       env: sanitizedEnvironment({ scratchPath: scratch, transportPath: transport }),
       shell: false,
@@ -1219,13 +1216,16 @@ async function executeOperation({
   removeOwnedResourceFn = removeOwnedResource,
   waiver = null,
 }) {
+  // Direct callers cannot use an override to revive a legacy manifest/waiver.
+  assert(parsed?.manifest?.protocol === 'loop-model-manifest-v3.6'
+    && parsed.manifest.defaultStrategy === 'astra-only' && waiver === null, 5);
+  const effectiveStrategy = strategy || parsed.manifest.defaultStrategy;
+  const route = routeOperation(operation, effectiveStrategy);
   const root = repositoryRoot(manifestPath);
   assert(gitOid(root, parsed.manifest.inputHead) === parsed.manifest.inputHead, 4);
   const paths = runtimePaths(root, parsed.manifestSha256, sha256(task.id));
   const filename = paths.status;
   const state = readState(filename, parsed, task);
-  const effectiveStrategy = strategy || parsed.manifest.defaultStrategy;
-  const route = routeOperation(operation, effectiveStrategy);
   assert((route.waiverRequired && waiver) || (!route.waiverRequired && waiver === null), 5);
   const activeState = operation === 'make' ? 'making' : operation === 'review' ? 'reviewing' : 'verifying';
   const inFlight = (state.state === activeState || state.state === 'recovery_required') &&

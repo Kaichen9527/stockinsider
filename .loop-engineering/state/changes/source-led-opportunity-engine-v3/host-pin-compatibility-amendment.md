@@ -1,35 +1,14 @@
-# Model Runner Host-Pin Compatibility Amendment
+# Host identity and Astra-only successor amendment
 
-Amendment version: `model-runner-host-pin-amendment-v3.19`
+Amendment version: `model-runner-host-pin-amendment-v3.21`
+Status: candidate; not activated on protected main; independent final review pending.
 
-Status: candidate — not activated on protected main
+The user requires completion of implementation/deployment and Astra High for all further model work. This permits preparing the candidate, not bypassing GitHub protection. The September26 v3.19 proposal and evidence remain immutable in docs/engineering/host-v319-20260926 and Git history. This successor uses fresh noncredential observations in docs/engineering/host-astra-20260930/observation.json.
 
-The user authorized the exact new native identity and formal review in Chat on
-2026-09-26. Proposal, original/supplemental command receipts and independent
-review records are under docs/engineering/host-v319-20260926. The independently
-measured exact pin is `codex-cli 0.158.0-alpha.2.1` at
-`/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex`. This admits no version range, wrapper, copied binary or fallback.
+Exact native binary, versions and code signatures are unchanged from v3.19; all measured executable/app filesystem device identities are16777230. Static checks remain exact. No wrapper, fallback, version range or learned runtime pin is admitted. The fixture is2219 bytes including LF; its pre-LF SHA256 is `c43c25a48f442dc0aa8902918243efc9fac354c4bfe3ef9af7432d093ed2aed9`.
 
-The fixture pre-LF payload is 2,218 bytes, SHA256 `953b898dfa786675dd5e6dda3af4265ad49086929fb519c989c3629682eeaca1`; the LF file is
-2,219 bytes. Node/Git identity, OpenAI Team ID and designated requirements remain
-unchanged; new native and bundle stat/CodeDirectory identities match the measured
-receipts. This candidate adds explicit operation-parent/transport deny rules to
-close the observed temporary-directory read issue. Source remains read-only,
-scratch is the sole writable root and command networking remains denied. Every
-original negative/descendant/network/descriptor test must still pass.
+The new894-byte runner identity SHA256 is `0a34cc38c06e432c865aa842278cf05fae724ecf0313f795e753f2086d02cfe1`. Contract v3.7, manifest v3.6 and routing v3.6 allow only astra-only / gpt-6-astra / high. Runtime namespace model-runner-v3-astra-v1 prevents reopening historic jobs. Historical bytes and refs stay unchanged. All old strategies, waiver flags and unsupported direct model routes fail closed before model launch. Tool networking and descendant networking stay denied; only separately authorized trusted transport may use the account for a live model oracle.
 
-Runner permission-profile version is model-runner-permissions-v3.6. Its separate
-static identity is 885 canonical bytes, SHA256 `5ff9c6404c0c645e4845784923190195fe1fd5eb53dfef2be57c23e79e0fad64`. Existing durable
-records are never rewritten to this new identity.
+Protected base169aad1 cannot start its missing predecessor. A separately reviewed base-owned recovery must bind exact successor source/tree, authentic review evidence and the signed native identity, and repair both candidateSandbox executable selection and minimal/parent/transport permission behavior. This candidate does not register itself, alter protection or manufacture a passing status. Actual protected live-oracle and root gate success remain required before merge/activation.
 
-Before activation a protected-base owner must independently register exactly
-one predecessor model-oracle listing to this candidate's final frozen listing.
-The predecessor listing is fafab4f391e8bc077a0e2ec7ed10d1f4afc02bfbc77006ccdb436640e5e77161.
-No candidate-authored map or claimed test success substitutes for that step.
-The old pinned executable is absent on the sole current runner; the unmodified
-base candidate sandbox therefore cannot perform the existing bootstrap. This
-candidate does not bypass that condition or claim an approved successor listing.
-
-Capacity, production writes, backfill publication, deployment and trading remain
-outside this work. Prior v3.18 amendment bytes are retained in the proposal's
-predecessor-host-pin-v3.18.md. This is not a new independent review decision.
+The exact pin remains `codex-cli 0.158.0-alpha.2.1` at `/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex`.

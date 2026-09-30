@@ -14,6 +14,7 @@ loop-engineering-starter-kit-v5/
 
 # V3 runner durable state (never source-controlled)
 .loop-engineering/runtime/model-runner-v3/
+.loop-engineering/runtime/model-runner-v3-astra-v1/
 
 # Node
 node_modules/

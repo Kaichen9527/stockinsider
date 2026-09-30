@@ -81,7 +81,7 @@ complete model-runner directory, wrapper and host-pin blob listing byte-identica
 reviewed subject. The subject listing must either equal the protected-base listing or
 match the exact content-addressed predecessor-to-successor transition approved by the
 protected base; no candidate-defined transition or learned/fallback value is accepted.
-The candidate suite registers nineteen non-live tests with zero skip/todo; the exact-byte
+The candidate suite registers twenty-one non-live tests with zero skip/todo; the exact-byte
 protected oracle registers the remaining two. The worker
 derives the 28-ID partition count from the trace TAP summary and separately requires
 every mandatory suite/oracle summary to have zero failed/skipped/todo; it never writes a

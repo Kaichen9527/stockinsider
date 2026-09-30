@@ -798,7 +798,7 @@ function activeGraphOracle() {
   assert.equal(catalogBlob.bytes.length, 6758, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    '2045dcda35da1f5387a8451c0f38b5b5908ffb124d88be5a130007710d4c11bd',
+    '91950a0f5f48dbca0af8e122038ad4a7bb17c7e46c579a77d21001e71a785d48',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);
@@ -921,7 +921,7 @@ function activeGraphOracle() {
     'product runtime envelope prose count matches the protected gate policy');
   assert.doesNotMatch(evidenceContract, /product_runtime,260,260|exactly 260 registered IDs/u,
     'stale product runtime counts are absent from the active evidence contract');
-  assert.match(externalHarnessContract, /candidate suite registers nineteen non-live tests/u,
+  assert.match(externalHarnessContract, /candidate suite registers twenty-one non-live tests/u,
     'external harness prose count matches the executable candidate model suite');
   assert.doesNotMatch(externalHarnessContract, /candidate suite registers thirteen non-live tests/u,
     'stale candidate model-suite count is absent from the active harness contract');
@@ -1184,7 +1184,7 @@ function activeGraphOracle() {
     /Amendment version: `hybrid-product-v3[.]2`/u,
   );
   const hostAmendment = readFileSync(path.join(change, 'host-pin-compatibility-amendment.md'), 'utf8');
-  assert.match(hostAmendment, /Amendment version: `model-runner-host-pin-amendment-v3[.]19`/u);
+  assert.match(hostAmendment, /Amendment version: `model-runner-host-pin-amendment-v3[.]21`/u);
   assert.match(hostAmendment, /codex-cli 0[.]158[.]0-alpha[.]2[.]1/u);
   assert.match(hostAmendment, /exact pin/u);
   const hostPinBytes = readFileSync(path.join(change, 'model-runner-host-pins-v3.json'), 'utf8');
@@ -1192,11 +1192,11 @@ function activeGraphOracle() {
   const hostPinCanonical = canonicalJson(hostPins);
   assert.equal(Buffer.byteLength(hostPinBytes), 2219);
   assert.equal(Buffer.byteLength(hostPinCanonical), 2218);
-  assert.equal(sha256(hostPinCanonical), '953b898dfa786675dd5e6dda3af4265ad49086929fb519c989c3629682eeaca1');
-  assert.equal(hostPins.fixtureVersion, 'model-runner-host-pins-v3.19');
+  assert.equal(sha256(hostPinCanonical), 'c43c25a48f442dc0aa8902918243efc9fac354c4bfe3ef9af7432d093ed2aed9');
+  assert.equal(hostPins.fixtureVersion, 'model-runner-host-pins-v3.21');
   assert.equal(hostPins.executables.find(({ name }) => name === 'codex')?.version, 'codex-cli 0.158.0-alpha.2.1');
-  assert.equal(runner.MODEL_RUNNER_IDENTITY_SHA256, '5ff9c6404c0c645e4845784923190195fe1fd5eb53dfef2be57c23e79e0fad64');
-  assert.equal(Buffer.byteLength(canonicalJson(runner.MODEL_RUNNER_IDENTITY)), 885);
+  assert.equal(runner.MODEL_RUNNER_IDENTITY_SHA256, '0a34cc38c06e432c865aa842278cf05fae724ecf0313f795e753f2086d02cfe1');
+  assert.equal(Buffer.byteLength(canonicalJson(runner.MODEL_RUNNER_IDENTITY)), 894);
   const runtimeContract = readFileSync(path.join(change, 'runtime-transaction-contract.md'), 'utf8');
   assert.match(runtimeContract, /staticIdentityMembers` is the following exact 41-member/u);
   assert.match(runtimeContract, /\["acceptanceVersion","1[.]46[.]0"\]/u);
@@ -1435,7 +1435,7 @@ const structuralExecutors = {
       key === 'verify:source-led-opportunity-v3:model-runner')?.[1];
     assert.equal(
       modelAggregate,
-      'node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track model_runner && npm run test:model-runner-v3 && npm run v3:doctor -- --expect-mode disabled --require-host-pin model-runner-host-pins-v3.19',
+      'node scripts/run-node22.js --experimental-strip-types scripts/opportunity-v3/gate-attestation.mjs --track model_runner && npm run test:model-runner-v3 && npm run v3:doctor -- --expect-mode disabled --require-host-pin model-runner-host-pins-v3.21',
       'model aggregate is the frozen fourteenth script authority',
     );
     const packageModelAggregate = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts[

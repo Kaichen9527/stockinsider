@@ -25,7 +25,7 @@ async function runRealModelAttempt() {
       source,
       scratch,
       transport,
-      route: { model: 'gpt-5.6-terra', reasoningEffort: 'high' },
+      route: { model: 'gpt-6-astra', reasoningEffort: 'high' },
       request: {
         protocol: 'loop-model-v3.5',
         operation: 'make',
