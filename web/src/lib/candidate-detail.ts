@@ -205,7 +205,7 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
     supabase.from('candidate_research_dossiers')
       .select('id,narrative_kind,content,validation_status,bundle_id,bundle_hash,input_hash,published_at,created_at')
       .eq('detail_snapshot_id', String(row.id)).eq('narrative_kind', 'codex_enriched').eq('validation_status', 'valid')
-      .order('created_at', { ascending: false }).limit(1),
+      .order('created_at', { ascending: false }).limit(20),
     // A valid-looking dossier is not publishable evidence by itself.  The
     // append-only receipt proves that the exact same revision and input hash
     // passed the submission boundary.
@@ -226,7 +226,12 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
       && String(receipt.input_hash || '') === expectedInputHash
       && String(receipt.status || '') === 'accepted')
     .map((receipt) => `${String(receipt.dossier_id || '')}:${String(receipt.bundle_id || '')}`));
-  const enriched = ((dossiers.data || []) as Row[]).find((dossier) =>
+  // Prefer accepted deep research even if the ordinary worker finishes later.
+  // Read by content so the public reader stays compatible during schema cutover.
+  const enriched = ((dossiers.data || []) as Row[])
+    .sort((left, right) => Number(Boolean((right.content as Row | null)?.deepResearch))
+      - Number(Boolean((left.content as Row | null)?.deepResearch)))
+    .find((dossier) =>
     String(dossier.bundle_hash || dossier.input_hash || '') === expectedInputHash
       && Boolean(dossier.published_at)
       && acceptedReceiptKeys.has(`${String(dossier.id || '')}:${String(dossier.bundle_id || '')}`)) || null;

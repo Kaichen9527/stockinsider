@@ -29,6 +29,15 @@ ALTER TABLE public.research_deep_jobs_v1
 CREATE INDEX IF NOT EXISTS idx_research_deep_jobs_claim_v1
   ON public.research_deep_jobs_v1 (status, week_start, queue_rank, created_at);
 
+-- A deep article is a distinct immutable successor, not a rewrite of the
+-- accepted ordinary article. Retain one valid publication of each kind.
+ALTER TABLE public.candidate_research_dossiers
+  ADD COLUMN IF NOT EXISTS is_deep_research BOOLEAN GENERATED ALWAYS AS (content ? 'deepResearch') STORED;
+DROP INDEX IF EXISTS public.uq_candidate_dossier_input_revision_v4;
+CREATE UNIQUE INDEX IF NOT EXISTS uq_candidate_dossier_kind_revision_v6
+  ON public.candidate_research_dossiers(detail_snapshot_id,narrative_kind,input_hash,is_deep_research)
+  WHERE input_hash IS NOT NULL AND validation_status='valid';
+
 -- A generic outbox claim cannot stand in for a fenced deep-study claim.
 ALTER TABLE public.candidate_dossier_outbox_v5
   ADD COLUMN IF NOT EXISTS deep_job_id UUID REFERENCES public.research_deep_jobs_v1(job_id) ON DELETE RESTRICT,
@@ -152,8 +161,13 @@ BEGIN
   IF v_stock IS DISTINCT FROM v_job.stock_id THEN
     RAISE EXCEPTION 'research_deep_stock_revision_mismatch';
   END IF;
+  INSERT INTO public.candidate_dossier_outbox_v5(bundle_id,revision_id,input_hash,publication_kind)
+    SELECT bundle.bundle_id,bundle.revision_id,bundle.input_hash,'deep' FROM public.candidate_dossier_bundles bundle
+    WHERE bundle.revision_id=p_revision_id AND bundle.input_hash=p_input_hash
+    ON CONFLICT (revision_id,input_hash,publication_kind) DO NOTHING;
   SELECT * INTO v_outbox FROM public.candidate_dossier_outbox_v5 outbox
-    WHERE outbox.revision_id=p_revision_id AND outbox.input_hash=p_input_hash FOR UPDATE;
+    WHERE outbox.revision_id=p_revision_id AND outbox.input_hash=p_input_hash
+      AND outbox.publication_kind='deep' FOR UPDATE;
   IF NOT FOUND THEN
     RAISE EXCEPTION 'research_deep_outbox_unavailable';
   END IF;
@@ -163,7 +177,9 @@ BEGIN
     RETURN QUERY SELECT v_outbox.job_id,v_outbox.bundle_id,v_outbox.lease_expires_at;
     RETURN;
   END IF;
-  IF v_outbox.status NOT IN ('queued','rejected')
+  IF NOT (v_outbox.status IN ('queued','rejected') OR
+      (v_outbox.status='running' AND v_outbox.lease_expires_at<=clock_timestamp()
+        AND v_outbox.deep_job_id=p_deep_job_id AND v_outbox.deep_attempt<=p_deep_attempt))
     OR v_outbox.attempts>=12
     OR (v_outbox.status='rejected' AND (p_deep_attempt<2 OR v_outbox.deep_job_id IS DISTINCT FROM p_deep_job_id
       OR v_outbox.deep_attempt>=p_deep_attempt))
@@ -209,6 +225,14 @@ BEGIN
     RAISE EXCEPTION 'research_deep_job_lease_lost';
   END IF;
   IF p_success THEN RAISE EXCEPTION 'research_deep_publication_receipt_required'; END IF;
+  -- Release the publication lease with the same deep attempt; a reported
+  -- failure must not strand the next attempt behind an active old lease.
+  UPDATE public.candidate_dossier_outbox_v5 SET
+    status=CASE WHEN v_job.attempts<3 THEN 'queued' ELSE 'failed' END,
+    lease_owner=NULL, lease_expires_at=NULL, next_attempt_at=NULL,
+    last_error=left(coalesce(p_reason,'research_failed'),500), updated_at=clock_timestamp()
+    WHERE publication_kind='deep' AND deep_job_id=p_job_id AND deep_attempt=p_attempt
+      AND status='running';
   UPDATE public.research_deep_jobs_v1 SET
     status=CASE WHEN attempts < 3 THEN 'queued' ELSE 'failed' END,
     lease_owner=NULL,lease_expires_at=NULL,
@@ -265,7 +289,8 @@ BEGIN
   END IF;
   SELECT * INTO v_outbox FROM public.candidate_dossier_outbox_v5 outbox
     WHERE outbox.job_id=p_job_id FOR UPDATE;
-  IF NOT FOUND OR v_outbox.deep_job_id IS DISTINCT FROM p_deep_job_id
+  IF NOT FOUND OR v_outbox.publication_kind<>'deep' OR v_outbox.status<>'running'
+    OR v_outbox.lease_expires_at<=clock_timestamp() OR v_outbox.deep_job_id IS DISTINCT FROM p_deep_job_id
     OR v_outbox.deep_attempt IS DISTINCT FROM p_deep_attempt
     OR v_outbox.lease_owner IS DISTINCT FROM p_owner
     OR v_outbox.bundle_id IS DISTINCT FROM p_bundle_id
@@ -289,11 +314,17 @@ BEGIN
   ) THEN
     RAISE EXCEPTION 'research_deep_exact_review_missing';
   END IF;
-  SELECT * INTO v_receipt FROM public.record_candidate_dossier_submission_v6(
-    p_job_id,p_owner,p_bundle_id,p_revision_id,p_input_hash,p_submission_hash,p_content,
+  SELECT * INTO v_receipt FROM public.record_candidate_dossier_submission_v4(
+    p_bundle_id,p_revision_id,p_input_hash,p_submission_hash,p_content,
     p_claims,p_source_references,p_claim_fact_map,p_validation_status,p_rejection_reasons
   );
   IF NOT FOUND THEN RAISE EXCEPTION 'research_deep_publication_receipt_missing'; END IF;
+  UPDATE public.candidate_dossier_outbox_v5 SET
+    status=v_receipt.status, lease_owner=NULL, lease_expires_at=NULL,
+    receipt_id=CASE WHEN v_receipt.status='accepted' THEN v_receipt.submission_id ELSE NULL END,
+    last_submission_hash=p_submission_hash,
+    last_error=CASE WHEN v_receipt.status='rejected' THEN v_receipt.rejection_reasons::text ELSE NULL END,
+    updated_at=clock_timestamp() WHERE job_id=p_job_id;
   UPDATE public.research_deep_jobs_v1 SET
     status=CASE WHEN v_receipt.status='accepted' THEN 'completed'
       WHEN attempts<3 THEN 'queued' ELSE 'failed' END,

@@ -34,7 +34,7 @@ test('weekly five-article cap and daily four-attempt/one-lease Mac queue fail cl
         CREATE TABLE public.candidate_detail_snapshots(id uuid PRIMARY KEY,stock_id uuid);
         CREATE TABLE public.candidate_dossier_bundles(bundle_id uuid PRIMARY KEY,revision_id uuid,published_revision_id uuid,input_hash text);
         CREATE TABLE public.candidate_daily_stage_snapshots(detail_revision_id uuid);
-        CREATE TABLE public.candidate_research_dossiers(id uuid PRIMARY KEY,content jsonb,validation_status text);
+        CREATE TABLE public.candidate_research_dossiers(id uuid PRIMARY KEY,content jsonb,validation_status text, detail_snapshot_id uuid,narrative_kind text,input_hash text);
         CREATE TABLE public.candidate_dossier_submission_receipts(
           submission_id uuid PRIMARY KEY,revision_id uuid,input_hash text,dossier_id uuid,status text,submission_hash text,bundle_id uuid,rejection_reasons jsonb);
         CREATE FUNCTION public.reject_candidate_dossier_revision_mutation_v4()

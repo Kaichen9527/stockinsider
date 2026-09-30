@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { execFileSync, spawnSync } from 'node:child_process';
+import { execFileSync, spawnSync, spawn } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -23,7 +23,7 @@ const ids = {
 };
 
 test('outbox v6 fences stale workers and atomically closes accepted and rejected receipts',
-  { skip: !available && 'local PostgreSQL tools unavailable' }, () => {
+  { skip: !available && 'local PostgreSQL tools unavailable' }, async () => {
     const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'stockinsider-outbox-v6-'));
     const cluster = path.join(temporary, 'cluster');
     const port = 54000 + process.pid % 10000;
@@ -81,8 +81,63 @@ test('outbox v6 fences stale workers and atomically closes accepted and rejected
             review_receipt_hash,status,horizon,payload,qualified_at,next_review_at)
         VALUES ('77777777-7777-4777-8777-777777777777','${ids.revision}',
           '88888888-8888-4888-8888-888888888888','${digest}','${digest}',
-          '${'e'.repeat(64)}','qualified','6-18m','{}',clock_timestamp(),clock_timestamp()+interval '30 days')`);
+          '${'e'.repeat(64)}','qualified','6-18m',
+          '{"reviewReceiptHash":"${'e'.repeat(64)}","status":"qualified","articleHash":"${digest}","materialEventIds":[],"qualifiedAt":"2026-09-28T10:00:00Z","nextReviewAt":"2026-10-28T10:00:00Z"}',
+          '2026-09-28T10:00:00Z','2026-10-28T10:00:00Z')`);
       assert.throws(() => sql(`UPDATE public.candidate_thesis_qualifications_v1 SET status='rejected'`), /immutable_revision/u);
+      const initialThesis = sql('SELECT id FROM public.candidate_thesis_qualifications_v1');
+      const appendThesis = (parent, status, hash, reviewedAt, dueAt, events, articleHash = digest) => sql(`
+        INSERT INTO public.candidate_thesis_qualifications_v1
+          (parent_id,stock_id,detail_revision_id,dossier_id,article_hash,evidence_snapshot_hash,
+            review_receipt_hash,status,horizon,payload,qualified_at,next_review_at)
+        SELECT ${parent ? `'${parent}'::uuid` : 'NULL'},stock_id,detail_revision_id,dossier_id,'${articleHash}',evidence_snapshot_hash,
+          '${hash}','${status}',horizon,
+          jsonb_build_object('reviewReceiptHash','${hash}','status','${status}','articleHash','${articleHash}',
+            'qualifiedAt','${reviewedAt}','nextReviewAt','${dueAt}','materialEventIds','${JSON.stringify(events)}'::jsonb),
+          '${reviewedAt}'::timestamptz,'${dueAt}'::timestamptz
+        FROM public.candidate_thesis_qualifications_v1 WHERE id='${initialThesis}' RETURNING id`).split('\n')[0];
+      const invalidation = appendThesis(initialThesis, 'invalidated', '1'.repeat(64),
+        '2026-09-28T10:00:00Z', '2026-09-29T10:00:00Z', ['denial']);
+      assert.throws(() => appendThesis(null, 'qualified', '2'.repeat(64),
+        '2026-09-28T10:00:00.000Z', '2026-10-28T10:00:00Z', []), /head_changed/u);
+      assert.throws(() => appendThesis(invalidation, 'qualified', '2'.repeat(64),
+        '2026-09-28T10:00:00.000Z', '2026-10-28T10:00:00Z', ['denial']), /review_not_newer/u);
+      assert.throws(() => appendThesis(invalidation, 'qualified', '2'.repeat(64),
+        '2026-09-30T10:00:00Z', '2026-10-30T10:00:00Z', []), /events_not_reconciled/u);
+      assert.throws(() => appendThesis(invalidation, 'qualified', '2'.repeat(64),
+        '2026-09-30T10:00:00Z', '2026-10-30T10:00:00Z', ['denial']), /revised_article_required/u);
+      const revised = appendThesis(invalidation, 'qualified', '2'.repeat(64),
+        '2026-09-30T10:00:00Z', '2026-10-30T10:00:00Z', ['denial'], 'b'.repeat(64));
+      assert.ok(revised);
+      assert.throws(() => appendThesis(invalidation, 'qualified', '3'.repeat(64),
+        '2026-09-30T11:00:00Z', '2026-10-30T11:00:00Z', ['denial'], 'c'.repeat(64)), /head_changed/u);
+      assert.equal(sql('SELECT count(*) FROM public.candidate_thesis_qualifications_v1'), '3');
+
+      const raceInsert = (receipt, when) => `INSERT INTO public.candidate_thesis_qualifications_v1
+        (parent_id,stock_id,detail_revision_id,dossier_id,article_hash,evidence_snapshot_hash,
+         review_receipt_hash,status,horizon,payload,qualified_at,next_review_at)
+        SELECT '${revised}',stock_id,detail_revision_id,dossier_id,article_hash,evidence_snapshot_hash,
+          '${receipt}','qualified',horizon,
+          jsonb_build_object('reviewReceiptHash','${receipt}','status','qualified','articleHash',article_hash,
+            'qualifiedAt','${when}','nextReviewAt','2026-11-01T00:00:00Z','materialEventIds','["denial"]'::jsonb),
+          '${when}'::timestamptz,'2026-11-01T00:00:00Z'::timestamptz
+        FROM public.candidate_thesis_qualifications_v1 WHERE id='${revised}';`;
+      const asyncSQL = query => new Promise(resolve => {
+        const child=spawn(path.join(binaries,'psql'),['-X','-A','-t','-v','ON_ERROR_STOP=1','-h',temporary,'-p',String(port),'-d','postgres','-c',query]);
+        let out='',err='';child.stdout.on('data',x=>out+=x);child.stderr.on('data',x=>err+=x);
+        child.on('exit',code=>resolve({code,out,err}));
+      });
+      const first=asyncSQL(`SET application_name='astra-thesis-first'; BEGIN; ${raceInsert('4'.repeat(64),'2026-10-01T10:00:00Z')} SELECT pg_sleep(1.0); COMMIT;`);
+      const deadline=Date.now()+3000;
+      while(sql("SELECT count(*) FROM pg_stat_activity WHERE application_name='astra-thesis-first' AND wait_event='PgSleep'")!=='1'){
+        assert.ok(Date.now()<deadline,'first writer never reached held transaction');
+        await new Promise(r=>setTimeout(r,10));
+      }
+      const second=asyncSQL(raceInsert('5'.repeat(64),'2026-10-01T11:00:00Z'));
+      const [a,b]=await Promise.all([first,second]);
+      assert.equal(a.code,0);assert.notEqual(b.code,0);assert.match(b.err,/research_thesis_head_changed/);
+      assert.equal(sql('SELECT count(*) FROM public.candidate_thesis_qualifications_v1'),'4');
+
       const insertJob = (job, attempts = 0) => sql(`INSERT INTO public.candidate_dossier_outbox_v5
         (job_id,bundle_id,revision_id,input_hash,attempts) VALUES
         ('${job}','${ids.bundle}','${ids.revision}','${digest}',${attempts})`);

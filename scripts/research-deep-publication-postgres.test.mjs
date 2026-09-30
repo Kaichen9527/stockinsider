@@ -21,7 +21,7 @@ const inputHash = 'a'.repeat(64);
 const articleHash = 'c'.repeat(64);
 const submissionHash = 'd'.repeat(64);
 
-test('deep publication checks both leases and the exact review in one transaction',
+for (const recovery of ['rejected', 'explicit_failure']) test(`deep publication preserves ordinary history and recovers ${recovery} plus expired leases`,
   { skip: !available && 'local PostgreSQL tools unavailable' }, () => {
     const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'stockinsider-deep-publication-'));
     const cluster = path.join(temporary, 'cluster');
@@ -46,7 +46,7 @@ test('deep publication checks both leases and the exact review in one transactio
         CREATE TABLE public.candidate_research_dossiers(id uuid PRIMARY KEY DEFAULT gen_random_uuid(), content jsonb, validation_status text,
           detail_snapshot_id uuid,narrative_kind text,bundle_id uuid,input_hash text,claims jsonb,source_references jsonb,
           claim_fact_map jsonb,rejection_reasons jsonb,bundle_hash text,detail_payload_hash text,published_at timestamptz);
-        CREATE UNIQUE INDEX uq_valid_dossier ON public.candidate_research_dossiers(detail_snapshot_id,narrative_kind,input_hash)
+        CREATE UNIQUE INDEX uq_candidate_dossier_input_revision_v4 ON public.candidate_research_dossiers(detail_snapshot_id,narrative_kind,input_hash)
           WHERE input_hash IS NOT NULL AND validation_status='valid';
         CREATE TABLE public.candidate_dossier_submission_receipts(
           submission_id uuid PRIMARY KEY DEFAULT gen_random_uuid(), dossier_id uuid DEFAULT gen_random_uuid(),
@@ -86,6 +86,12 @@ test('deep publication checks both leases and the exact review in one transactio
         INSERT INTO public.candidate_daily_stage_snapshots VALUES ('${ids.revision}');
         INSERT INTO public.candidate_dossier_outbox_v5(job_id,bundle_id,revision_id,input_hash)
           VALUES ('${ids.outbox}','${ids.bundle}','${ids.revision}','${inputHash}');`);
+      const ordinaryId = ids.outbox;
+      assert.equal(sql("SELECT job_id FROM public.claim_candidate_dossier_outbox_v5('ordinary-owner',1)"), ordinaryId);
+      assert.equal(sql(`SELECT status FROM public.record_candidate_dossier_submission_v6(
+        '${ordinaryId}','ordinary-owner','${ids.bundle}','${ids.revision}','${inputHash}','${'1'.repeat(64)}',
+        '{"summary":"ordinary article"}','[]','[]','{}','valid','[]')`), 'accepted');
+      const ordinaryReceipt = sql(`SELECT receipt_id FROM public.candidate_dossier_outbox_v5 WHERE job_id='${ordinaryId}'`);
       const runId = sql(`INSERT INTO public.research_priority_runs_v1
         (as_of,policy_version,input_hash,expected_count,accounted_count,source_attempts,rows,research_queue)
         VALUES(clock_timestamp()-interval '1 minute','research-priority-v1','${inputHash}',1,1,'[]','[]',
@@ -95,7 +101,15 @@ test('deep publication checks both leases and the exact review in one transactio
       const jobId = sql("SELECT job_id FROM public.claim_research_deep_job_v1('deep-owner')").split('|')[0];
       const claimPublication = (attempt = 1) => sql(`SELECT job_id FROM public.claim_candidate_deep_outbox_v1(
         '${jobId}','deep-owner',${attempt},'${ids.revision}','${inputHash}','outbox-owner')`);
+      ids.outbox = claimPublication();
+      assert.match(ids.outbox, /^[0-9a-f-]{36}$/u);
       assert.equal(claimPublication(), ids.outbox);
+      assert.notEqual(ids.outbox, ordinaryId);
+      assert.equal(sql(`SELECT public.heartbeat_candidate_dossier_outbox_v6('${ids.outbox}','outbox-owner')`), 'f');
+      assert.equal(sql(`SELECT public.release_candidate_dossier_outbox_v6('${ids.outbox}','outbox-owner',true,'retry')`), 'f');
+      assert.throws(() => sql(`SELECT status FROM public.record_candidate_dossier_submission_v6(
+        '${ids.outbox}','outbox-owner','${ids.bundle}','${ids.revision}','${inputHash}','${'2'.repeat(64)}',
+        '{}','[]','[]','{}','valid','[]')`), /identity_mismatch/u);
       const reviewId = sql(`INSERT INTO public.candidate_deep_article_reviews_v1
         (revision_id,input_hash,article_hash,author_id,reviewer_id,decision,findings,source_document_ids,reviewed_at)
         VALUES ('${ids.revision}','${inputHash}','${articleHash}','author','independent','accepted','{}','[]',clock_timestamp())
@@ -116,23 +130,34 @@ test('deep publication checks both leases and the exact review in one transactio
         WHERE job_id='${jobId}'`);
       sql(`UPDATE public.candidate_dossier_outbox_v5 SET lease_expires_at=clock_timestamp()-interval '1 second'
         WHERE job_id='${ids.outbox}'`);
-      assert.throws(() => submit(), /candidate_dossier_lease_lost/u);
-      assert.equal(sql('SELECT count(*) FROM public.candidate_dossier_submission_receipts'), '0');
+      assert.throws(() => submit(), /research_deep_outbox_binding_missing/u);
+      assert.equal(sql('SELECT count(*) FROM public.candidate_dossier_submission_receipts'), '1');
       assert.equal(sql(`SELECT status FROM public.research_deep_jobs_v1 WHERE job_id='${jobId}'`), 'running');
       sql(`UPDATE public.candidate_dossier_outbox_v5 SET lease_expires_at=clock_timestamp()+interval '20 minutes'
         WHERE job_id='${ids.outbox}'`);
-      assert.equal(submit(1, 'rejected'), 'rejected|f');
+      if (recovery === 'explicit_failure') {
+        assert.equal(sql(`SELECT public.finish_research_deep_job_v2('${jobId}','deep-owner',1,false,NULL,'model failed')`), 't');
+        assert.equal(sql(`SELECT status,lease_owner IS NULL FROM public.candidate_dossier_outbox_v5 WHERE job_id='${ids.outbox}'`), 'queued|t');
+      } else assert.equal(submit(1, 'rejected'), 'rejected|f');
       assert.equal(sql(`SELECT status FROM public.research_deep_jobs_v1 WHERE job_id='${jobId}'`), 'queued');
       assert.equal(sql("SELECT attempt FROM public.claim_research_deep_job_v1('deep-owner')"), '2');
       assert.throws(() => sql(`SELECT public.finish_research_deep_job_v2(
         '${jobId}','deep-owner',1,false,NULL,'stale attempt failure')`), /lease_lost/u);
       assert.equal(sql(`SELECT status,attempts FROM public.research_deep_jobs_v1 WHERE job_id='${jobId}'`), 'running|2');
       assert.equal(claimPublication(2), ids.outbox);
-      assert.equal(submit(2, 'valid', 'e'.repeat(64)), 'accepted|f');
+      sql(`UPDATE public.research_deep_jobs_v1 SET lease_expires_at=clock_timestamp()-interval '1 second' WHERE job_id='${jobId}';
+        UPDATE public.candidate_dossier_outbox_v5 SET lease_expires_at=clock_timestamp()-interval '1 second' WHERE job_id='${ids.outbox}'`);
+      assert.equal(sql("SELECT count(*) FROM public.claim_candidate_dossier_outbox_v5('ordinary-worker',5)"), '0');
+      assert.equal(sql("SELECT attempt FROM public.claim_research_deep_job_v1('deep-owner')"), '3');
+      assert.equal(claimPublication(3), ids.outbox);
+      assert.throws(() => submit(2), /research_deep_job_lease_lost/u);
+      assert.equal(submit(3, 'valid', 'e'.repeat(64)), 'accepted|f');
+      assert.equal(sql(`SELECT receipt_id FROM public.candidate_dossier_outbox_v5 WHERE job_id='${ordinaryId}'`), ordinaryReceipt);
+      assert.equal(sql("SELECT count(*) FROM public.candidate_research_dossiers WHERE validation_status='valid'"), '2');
       assert.equal(sql(`SELECT status,receipt_id IS NOT NULL FROM public.research_deep_jobs_v1
         WHERE job_id='${jobId}'`), 'completed|t');
-      assert.equal(sql('SELECT count(*) FROM public.candidate_dossier_submission_receipts'), '2');
-      assert.equal(submit(2, 'valid', 'e'.repeat(64)), 'accepted|t');
+      assert.equal(sql('SELECT count(*) FROM public.candidate_dossier_submission_receipts'), recovery === 'rejected' ? '3' : '2');
+      assert.equal(submit(3, 'valid', 'e'.repeat(64)), 'accepted|t');
       assert.throws(() => submit(1), /research_deep_job_lease_lost/u);
       assert.throws(() => submit(2, 'valid', 'f'.repeat(64)), /research_deep_job_lease_lost/u);
       // Reviewed production replay is idempotent and retains immutable receipts.
@@ -144,7 +169,7 @@ test('deep publication checks both leases and the exact review in one transactio
         '-d', 'postgres', '-f', path.join(root, 'migrations', filename)]);
       assert.equal(sql(`SELECT status,receipt_id IS NOT NULL FROM public.research_deep_jobs_v1
         WHERE job_id='${jobId}'`), 'completed|t');
-      assert.equal(sql('SELECT count(*) FROM public.candidate_dossier_submission_receipts'), '2');
+      assert.equal(sql('SELECT count(*) FROM public.candidate_dossier_submission_receipts'), recovery === 'rejected' ? '3' : '2');
     } finally {
       if (started) {
         try { run('pg_ctl', ['-D', cluster, '-m', 'immediate', '-w', 'stop']); }

@@ -65,7 +65,7 @@ export async function POST(request: Request) {
     qualified_at: changed.qualifiedAt, next_review_at: changed.nextReviewAt,
   }).select('id').single();
   if (saved.error && saved.error.code !== '23505') {
-    return NextResponse.json({ ok: false, error: saved.error.message }, { status: 500 });
+    return NextResponse.json({ ok: false, error: saved.error.message }, { status: saved.error.code === 'P0001' ? 409 : 500 });
   }
   const existing = saved.error ? await supabase.from('candidate_thesis_qualifications_v1')
     .select('id').eq('review_receipt_hash', changed.reviewReceiptHash).maybeSingle() : null;

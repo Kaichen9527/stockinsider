@@ -79,3 +79,10 @@ test('future research or a future market session cannot be used', () => {
   assert.throws(() => researchEntryQualification(reviewed(), '2026-09-27T10:00:00Z'), /future_review/);
   assert.throws(() => snapshot({ marketSession: '2026-09-30' }), /input_invalid/);
 });
+
+
+test('timestamp aliases cannot generate a new review identity', () => {
+  for (const reviewedAt of ['2026-09-28T10:00:00.000Z', '2026-09-28T18:00:00+08:00']) {
+    assert.deepEqual(reviewed({ reviewedAt }), reviewed());
+  }
+});

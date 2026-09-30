@@ -44,6 +44,8 @@ export type StrategyExperimentObservation = {
 };
 export type StrategyExperimentAssessment = {
   proposalHash: string;
+  evaluatedAt: string;
+  reviewerId: string;
   status: 'researching' | 'candidate_for_independent_review';
   reasons: string[];
   byArm: Array<{
@@ -156,7 +158,7 @@ export function assessStrategyExperiment(input: {
   if (byVariantArm.some((row) => row.regimes.length < 2)) reasons.push('market_regime_coverage_incomplete');
   if (byVariantArm.some((row) => row.topFiveProfitShare != null && row.topFiveProfitShare > 0.5)) reasons.push('profit_concentration_above_half');
   if (byVariantArm.some((row) => row.meanNetReturnFraction == null || row.meanNetReturnFraction <= 0)) reasons.push('cost_adjusted_expectancy_not_positive');
-  return { proposalHash, status: reasons.length ? 'researching' : 'candidate_for_independent_review',
+  return { proposalHash, evaluatedAt: new Date(input.evaluatedAt).toISOString(), reviewerId: input.independentReviewerId, status: reasons.length ? 'researching' : 'candidate_for_independent_review',
     reasons, byArm, byVariantArm };
 }
 
@@ -168,6 +170,8 @@ export function issueStrategyApproval(input: {
   independentValidation: {
     receiptHash: string; status: 'passed' | 'failed'; reviewerId: string;
     validatedAt: string; holdoutAndForwardChecked: boolean;
+    proposalHash: string; assessmentHash: string; codeHash: string;
+    parameterHashes: string[]; riskPolicyHash: string;
   };
   approvedBy: string;
   approvedAt: string;
@@ -175,7 +179,30 @@ export function issueStrategyApproval(input: {
   riskPolicyHash: string;
 }): StrategyApprovalReceipt {
   const proposalHash = validateStrategyExperimentProposal(input.proposal);
-  if (input.assessment.proposalHash !== proposalHash
+  const assessmentHash = researchCanonicalHash(input.assessment);
+  const { receiptHash, ...validationPayload } = input.independentValidation;
+  const expectedKeys = input.proposal.variants.flatMap((variant) => arms.map((arm) => `${variant.id}:${arm}`));
+  const actualKeys = input.assessment.byVariantArm.map((row) => `${row.variantId}:${row.arm}`);
+  const primary = input.assessment.byVariantArm.filter((row) => row.variantId === input.proposal.variants[0].id);
+  if (actualKeys.length !== expectedKeys.length || new Set(actualKeys).size !== actualKeys.length
+    || expectedKeys.some((key) => !actualKeys.includes(key))
+    || researchCanonicalHash(primary) !== researchCanonicalHash(input.assessment.byArm)
+    || input.assessment.byVariantArm.some((row) => !Number.isInteger(row.trades) || row.trades < 30
+      || !Number.isFinite(row.meanNetReturnFraction) || (row.meanNetReturnFraction ?? 0) <= 0
+      || !Number.isFinite(row.worstDrawdownFraction) || (row.worstDrawdownFraction ?? -1) < 0
+      || !Number.isFinite(row.topFiveProfitShare) || (row.topFiveProfitShare ?? 1) > 0.5
+      || new Set(row.regimes).size < 2)
+    || !stamp(input.assessment.evaluatedAt)
+    || Date.parse(input.assessment.evaluatedAt) < Date.parse(input.proposal.registeredAt)
+    || input.assessment.reviewerId !== input.independentReviewerId
+    || receiptHash !== researchCanonicalHash(validationPayload)
+    || validationPayload.proposalHash !== proposalHash || validationPayload.assessmentHash !== assessmentHash
+    || validationPayload.codeHash !== input.proposal.codeHash
+    || researchCanonicalHash(validationPayload.parameterHashes) !== researchCanonicalHash(input.proposal.variants.map((v) => v.parameterHash))
+    || validationPayload.riskPolicyHash !== input.riskPolicyHash
+    || Date.parse(validationPayload.validatedAt) < Date.parse(input.assessment.evaluatedAt)
+    || input.approvedBy === validationPayload.reviewerId
+    || input.assessment.proposalHash !== proposalHash
     || input.assessment.status !== 'candidate_for_independent_review'
     || input.assessment.reasons.length !== 0
     || !input.independentReviewerId || input.independentReviewerId === input.proposal.authorId
@@ -192,7 +219,6 @@ export function issueStrategyApproval(input: {
     || !HASH.test(input.riskPolicyHash)) {
     throw new Error('strategy_user_approval_not_independent_or_exact');
   }
-  const assessmentHash = researchCanonicalHash(input.assessment);
   const receipt = {
     schemaVersion: 'strategy-user-approval-v1' as const,
     proposalHash, assessmentHash,

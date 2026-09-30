@@ -96,7 +96,25 @@ export async function POST(request: Request) {
   } catch (error) {
     return NextResponse.json({ ok: false, error: error instanceof Error ? error.message : 'research_thesis_review_invalid' }, { status: 409 });
   }
+  const replay = await supabase.from('candidate_thesis_qualifications_v1')
+    .select('id,article_hash,evidence_snapshot_hash').eq('review_receipt_hash', qualification.reviewReceiptHash).maybeSingle();
+  if (replay.error) return NextResponse.json({ ok: false, error: replay.error.message }, { status: 500 });
+  const head = await supabase.from('candidate_thesis_qualifications_v1')
+    .select('id,payload,status').eq('stock_id', detail.stock_id)
+    .order('created_at', { ascending: false }).order('id', { ascending: false }).limit(1).maybeSingle();
+  if (head.error) return NextResponse.json({ ok: false, error: head.error.message }, { status: 500 });
+  if (replay.data) return NextResponse.json({ ok: true, qualificationId: replay.data.id,
+    idempotentReplay: true, isCurrent: head.data?.id === replay.data.id });
+  const articleSourceIds = deepArticle?.sourceDocumentIds;
+  const priorEvents = (head.data?.payload as Row | undefined)?.materialEventIds;
+  if (head.data && (!Array.isArray(priorEvents) || !priorEvents.every((id) => materialEventIds.includes(String(id)))
+    || (['stale', 'invalidated'].includes(head.data.status)
+      && (!Array.isArray(articleSourceIds)
+        || !priorEvents.every((id) => articleSourceIds.includes(id)))))) {
+    return NextResponse.json({ ok: false, error: 'research_thesis_events_not_reconciled' }, { status: 409 });
+  }
   const stored = await supabase.from('candidate_thesis_qualifications_v1').insert({
+    parent_id: head.data?.id || null,
     stock_id: detail.stock_id, detail_revision_id: detail.id, dossier_id: dossier.id,
     article_hash: qualification.articleHash, evidence_snapshot_hash: qualification.evidenceSnapshotHash,
     review_receipt_hash: qualification.reviewReceiptHash, status: qualification.status,
@@ -104,7 +122,7 @@ export async function POST(request: Request) {
     qualified_at: qualification.qualifiedAt, next_review_at: qualification.nextReviewAt,
   }).select('id').single();
   if (stored.error && stored.error.code !== '23505') {
-    return NextResponse.json({ ok: false, error: stored.error.message }, { status: 500 });
+    return NextResponse.json({ ok: false, error: stored.error.message }, { status: stored.error.code === 'P0001' ? 409 : 500 });
   }
   const existing = stored.error ? await supabase.from('candidate_thesis_qualifications_v1')
     .select('id,article_hash,evidence_snapshot_hash').eq('review_receipt_hash', qualification.reviewReceiptHash).maybeSingle() : null;

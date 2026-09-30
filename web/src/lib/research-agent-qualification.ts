@@ -66,7 +66,8 @@ export function issueThesisQualification(input: ReviewInput): ThesisQualificatio
     || uniq(input.support).length === 0 || uniq(input.invalidationConditions).length === 0)) {
     throw new Error('thesis_qualification_evidence_incomplete');
   }
-  const reviewReceiptHash = researchCanonicalHash(input);
+  const reviewedAt = new Date(input.reviewedAt).toISOString();
+  const reviewReceiptHash = researchCanonicalHash({ ...input, reviewedAt });
   return {
     symbol: input.symbol, thesisRevisionId: input.thesisRevisionId,
     articleRevisionId: input.articleRevisionId, articleHash: input.articleHash,
@@ -74,7 +75,7 @@ export function issueThesisQualification(input: ReviewInput): ThesisQualificatio
     policyVersion: THESIS_QUALIFICATION_POLICY, status: input.decision, horizon: input.horizon,
     support: uniq(input.support), counterEvidence: uniq(input.counterEvidence),
     invalidationConditions: uniq(input.invalidationConditions), materialEventIds: uniq(input.materialEventIds),
-    qualifiedAt: input.reviewedAt,
+    qualifiedAt: reviewedAt,
     nextReviewAt: new Date(Date.parse(input.reviewedAt) + 30 * 86400_000).toISOString(),
   };
 }
@@ -97,9 +98,9 @@ export function invalidateThesis(input: {
     || Date.parse(input.observedAt) < Date.parse(input.thesis.qualifiedAt)) throw new Error('thesis_event_clock_invalid');
   return { ...input.thesis, status: input.status,
     reviewReceiptHash: researchCanonicalHash({ priorReceipt: input.thesis.reviewReceiptHash,
-      eventId: input.eventId, observedAt: input.observedAt, status: input.status }),
+      eventId: input.eventId, observedAt: new Date(input.observedAt).toISOString(), status: input.status }),
     materialEventIds: uniq([...input.thesis.materialEventIds, input.eventId]),
-    nextReviewAt: input.observedAt };
+    nextReviewAt: new Date(input.observedAt).toISOString() };
 }
 
 /** A no-change review moves the review deadline without rewriting the article. */

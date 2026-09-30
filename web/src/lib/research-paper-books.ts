@@ -1,6 +1,7 @@
-import { PAPER_BOOKS } from './research-strategy-governance.ts';
+import { researchCanonicalHash } from './research-agent-qualification.ts';
+import { PAPER_BOOKS, type StrategyApprovalReceipt } from './research-strategy-governance.ts';
 
-export const PAPER_BOOK_POLICY = 'paper-books-v3' as const;
+export const PAPER_BOOK_POLICY = 'paper-books-v4' as const;
 // Keep the auction-proxy assumptions aligned with PR #284's engine.py.
 export const PAPER_EXECUTION_COSTS = Object.freeze({
   commission: 0.001425, minimumCommission: 20, sellTax: 0.003, slippageBps: 10, lot: 1000,
@@ -14,6 +15,9 @@ export type PaperBook = {
   policyVersion: typeof PAPER_BOOK_POLICY; bookId: PaperBookId;
   cash: number; realizedPnl: number; equityPeak: number;
   positions: PaperPosition[];
+  settledPrices: Record<string, number>;
+  sessionRisk: { session: string; cash: number; equity: number;
+    positions: Array<{ symbol: string; sector: string; value: number; risk: number }> } | null;
   lastProcessedSession: string | null;
   markedSession: string | null;
   settledSession: string | null;
@@ -25,12 +29,14 @@ export type PaperOrder = {
   signalSession: string; executionSession: string;
   entryLower: number; entryUpper: number; stopPrice: number;
   technicalSnapshotEligible: boolean; thesisQualified: boolean; liquidityVerified: boolean;
-  approvedCodeHash: string | null; expectedCodeHash: string;
+  approval: StrategyApprovalReceipt | null; expectedCodeHash: string; parameterHash: string;
 };
 export type PaperSessionBar = {
   symbol: string; session: string; open: number; high: number; low: number; close: number;
   officialFinal: boolean;
 };
+export const PAPER_RISK_POLICY_HASH = researchCanonicalHash({ version: PAPER_BOOK_POLICY, books: PAPER_BOOKS,
+  executionCosts: PAPER_EXECUTION_COSTS });
 const HASH = /^[a-f0-9]{64}$/u;
 const finite = (value: number) => typeof value === 'number' && Number.isFinite(value);
 const commission = (notional: number) => Math.max(PAPER_EXECUTION_COSTS.minimumCommission,
@@ -42,18 +48,25 @@ const orderKey = (order: PaperOrder) => [order.symbol, order.strategyVersion, or
   order.executionSession, order.entryLower, order.entryUpper, order.stopPrice].join('|');
 const estimatedRisk = (shares: number, entry: number, stop: number) => shares * (entry - stop + slip(stop))
   + commission(shares * entry) + commission(shares * stop) + shares * stop * PAPER_EXECUTION_COSTS.sellTax;
-function prices(book: PaperBook, marks: Record<string, number>) {
-  if (book.positions.some((position) => !finite(marks[position.symbol]) || marks[position.symbol] <= 0)) {
-    throw new Error('paper_book_mark_missing');
-  }
-  return book.positions.reduce((sum, position) => sum + position.shares * marks[position.symbol], 0);
+// Freeze funding and exposure before observing the execution session. Intraday
+// exits and unfilled reservations become available only at the next session.
+function sessionRisk(book: PaperBook, session: string): NonNullable<PaperBook['sessionRisk']> {
+  if (book.sessionRisk?.session === session) return book.sessionRisk;
+  const positions = book.positions.map((position) => {
+    const price = book.settledPrices[position.symbol];
+    if (!finite(price) || price <= 0) throw new Error('paper_book_prior_close_missing');
+    return { symbol: position.symbol, sector: position.sector,
+      value: position.shares * price, risk: position.initialRisk };
+  });
+  return { session, cash: book.cash,
+    equity: book.cash + positions.reduce((sum, position) => sum + position.value, 0), positions };
 }
 export function newPaperBook(bookId: PaperBookId): PaperBook {
   const policy = PAPER_BOOKS[bookId];
   if (!policy) throw new Error('paper_book_id_invalid');
   return { policyVersion: PAPER_BOOK_POLICY, bookId, cash: policy.initialCapital,
     realizedPnl: 0, equityPeak: policy.initialCapital, positions: [], lastProcessedSession: null,
-    markedSession: null, settledSession: null, processedOrderKeys: [],
+    markedSession: null, settledSession: null, processedOrderKeys: [], settledPrices: {}, sessionRisk: null,
     costs: { commission: 0, sellTax: 0, slippage: 0 } };
 }
 export function sizePaperOrder(input: {
@@ -71,16 +84,34 @@ export function sizePaperOrder(input: {
     || !(0 < order.stopPrice && order.stopPrice < order.entryLower && order.entryLower <= order.entryUpper)) {
     throw new Error('paper_order_geometry_invalid');
   }
-  const heldValue = prices(book, input.markPrices);
-  const equity = book.cash + heldValue;
+  // Caller-supplied marks are intentionally not used for funding. Only the
+  // prior completed session's official closes can influence order quantity.
+  if (book.lastProcessedSession && book.lastProcessedSession < order.executionSession
+    && book.settledSession !== book.lastProcessedSession) {
+    return { shares: 0, maxEntryPrice: order.entryUpper, riskAmount: 0, blockers: ['prior_session_not_settled'] };
+  }
+  const risk = sessionRisk(book, order.executionSession);
+  const heldValue = risk.positions.reduce((sum, position) => sum + position.value, 0);
+  const equity = risk.equity;
   if (!(equity > 0)) throw new Error('paper_book_equity_invalid');
   if (!order.technicalSnapshotEligible) blockers.push('technical_snapshot_not_eligible');
   if (!order.thesisQualified) blockers.push('thesis_not_qualified');
   if (!order.liquidityVerified) blockers.push('liquidity_not_verified');
-  if (!HASH.test(order.expectedCodeHash) || order.approvedCodeHash !== order.expectedCodeHash) {
-    blockers.push('exact_strategy_code_not_user_approved');
+  const { receiptHash, ...approvalPayload } = order.approval || {};
+  const signalCloseAt = Date.parse(`${order.signalSession}T13:30:00+08:00`);
+  if (!order.approval || receiptHash !== researchCanonicalHash(approvalPayload)
+    || order.approval.schemaVersion !== 'strategy-user-approval-v1'
+    || !HASH.test(order.expectedCodeHash) || order.approval.codeHash !== order.expectedCodeHash
+    || !HASH.test(order.parameterHash) || !order.approval.parameterHashes.includes(order.parameterHash)
+    || order.approval.riskPolicyHash !== PAPER_RISK_POLICY_HASH
+    || order.strategyVersion !== receiptHash
+    || !Number.isFinite(Date.parse(order.approval.effectiveFrom))
+    || !Number.isFinite(Date.parse(order.approval.approvedAt))
+    || Date.parse(order.approval.approvedAt) > Date.parse(order.approval.effectiveFrom)
+    || Date.parse(order.approval.effectiveFrom) > signalCloseAt) {
+    blockers.push('exact_strategy_version_not_user_approved');
   }
-  if (book.positions.some((position) => position.symbol === order.symbol)) blockers.push('stock_already_held');
+  if (risk.positions.some((position) => position.symbol === order.symbol)) blockers.push('stock_already_held');
   if (book.lastProcessedSession && book.lastProcessedSession > order.executionSession) blockers.push('paper_order_past_session');
   if (book.settledSession === order.executionSession) blockers.push('paper_session_already_settled');
   if (book.lastProcessedSession && book.lastProcessedSession < order.executionSession
@@ -93,9 +124,9 @@ export function sizePaperOrder(input: {
   if ((book.equityPeak - equity) / book.equityPeak >= policy.drawdownActionFraction) {
     blockers.push('book_drawdown_action_threshold');
   }
-  const existingSector = book.positions.filter((position) => position.sector === order.sector)
-    .reduce((sum, position) => sum + position.shares * input.markPrices[position.symbol], 0);
-  const existingRisk = book.positions.reduce((sum, position) => sum + position.initialRisk, 0);
+  const existingSector = risk.positions.filter((position) => position.sector === order.sector)
+    .reduce((sum, position) => sum + position.value, 0);
+  const existingRisk = risk.positions.reduce((sum, position) => sum + position.risk, 0);
   const perShareRisk = order.entryUpper - order.stopPrice + slip(order.stopPrice)
     + order.entryUpper * PAPER_EXECUTION_COSTS.commission
     + order.stopPrice * (PAPER_EXECUTION_COSTS.commission + PAPER_EXECUTION_COSTS.sellTax);
@@ -106,13 +137,13 @@ export function sizePaperOrder(input: {
     Math.floor((equity * policy.totalExposureFraction - heldValue) / order.entryUpper),
     Math.floor(Math.max(0, equity * policy.totalInitialRiskFraction - existingRisk
       - 2 * PAPER_EXECUTION_COSTS.minimumCommission) / perShareRisk),
-    Math.floor(Math.max(0, book.cash - PAPER_EXECUTION_COSTS.minimumCommission)
+    Math.floor(Math.max(0, risk.cash - PAPER_EXECUTION_COSTS.minimumCommission)
       / (order.entryUpper * (1 + PAPER_EXECUTION_COSTS.commission))),
   ];
   let shares = Math.floor(Math.max(0, Math.min(...caps)) / PAPER_EXECUTION_COSTS.lot) * PAPER_EXECUTION_COSTS.lot;
   while (shares > 0 && (estimatedRisk(shares, order.entryUpper, order.stopPrice) > equity * policy.initialRiskFraction
     || existingRisk + estimatedRisk(shares, order.entryUpper, order.stopPrice) > equity * policy.totalInitialRiskFraction
-    || shares * order.entryUpper + commission(shares * order.entryUpper) > book.cash)) shares -= PAPER_EXECUTION_COSTS.lot;
+    || shares * order.entryUpper + commission(shares * order.entryUpper) > risk.cash)) shares -= PAPER_EXECUTION_COSTS.lot;
   if (shares < PAPER_EXECUTION_COSTS.lot) blockers.push('paper_order_risk_or_exposure_limit');
   return { shares: blockers.length ? 0 : shares, maxEntryPrice: order.entryUpper,
     riskAmount: blockers.length ? 0 : estimatedRisk(shares, order.entryUpper, order.stopPrice), blockers };
@@ -132,12 +163,17 @@ export function fillPaperOrder(input: {
   if (!Number.isInteger(input.shares) || input.shares < 0
     || input.shares % PAPER_EXECUTION_COSTS.lot !== 0) throw new Error('paper_fill_quantity_invalid');
   const sized = sizePaperOrder({ book, order, markPrices: input.markPrices });
-  if (input.shares > sized.shares || sized.blockers.includes('paper_order_already_processed')) {
+  if (input.shares > sized.shares || sized.blockers.length > 0) {
     throw new Error('paper_fill_risk_not_admissible');
   }
   const processedOrderKeys = book.lastProcessedSession === bar.session
     ? [...book.processedOrderKeys, orderKey(order)] : [orderKey(order)];
-  const sessionBook = { ...book, lastProcessedSession: bar.session, processedOrderKeys };
+  const risk = sessionRisk(book, bar.session);
+  const reservation = input.shares * order.entryUpper;
+  const sessionBook = { ...book, lastProcessedSession: bar.session, processedOrderKeys,
+    sessionRisk: { ...risk, cash: risk.cash - reservation - commission(reservation),
+      positions: [...risk.positions, { symbol: order.symbol, sector: order.sector,
+        value: reservation, risk: estimatedRisk(input.shares, order.entryUpper, order.stopPrice) }] } };
   if (!input.shares || bar.open < order.stopPrice || bar.low > order.entryUpper
     || bar.high < order.entryLower || book.cash < input.shares * order.entryUpper) {
     return { book: sessionBook, fillPrice: null, outcome: 'no_fill' };
@@ -190,6 +226,7 @@ export function markPaperPositions(input: {
     && book.settledSession !== book.lastProcessedSession) {
     throw new Error('paper_prior_session_not_settled');
   }
+  const risk = sessionRisk(book, input.session);
   const bySymbol = new Map(input.bars.map((bar) => [bar.symbol, bar]));
   const remaining: PaperPosition[] = [];
   let cash = book.cash;
@@ -218,7 +255,7 @@ export function markPaperPositions(input: {
       exitSlippageTotal += position.shares * (reference - exitPrice);
     } else remaining.push(position);
   }
-  return { ...book, cash, realizedPnl, positions: remaining,
+  return { ...book, cash, realizedPnl, positions: remaining, sessionRisk: risk,
     costs: { commission: book.costs.commission + exitCommissionTotal,
       sellTax: book.costs.sellTax + sellTaxTotal,
       slippage: book.costs.slippage + exitSlippageTotal },
@@ -248,5 +285,6 @@ export function settlePaperSession(input: {
     }
     return total + position.shares * bar.close;
   }, book.cash);
-  return { ...book, equityPeak: Math.max(book.equityPeak, equity), settledSession: session };
+  return { ...book, equityPeak: Math.max(book.equityPeak, equity), settledSession: session,
+    settledPrices: Object.fromEntries(book.positions.map((position) => [position.symbol, bars.get(position.symbol)!.close])) };
 }

@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     supabase.from('candidate_detail_snapshots').select('id,stock_id,session_date,lifecycle_stage,title,summary,fact_ids,source_links,sections,valuation,technical,as_of,available_at,stocks(symbol,name)').eq('id', revisionId).maybeSingle(),
     supabase.from('candidate_dossier_bundles').select('bundle_id,revision_id,published_revision_id,input_hash').eq('bundle_id', bundleId).eq('revision_id', revisionId).eq('input_hash', inputHash).maybeSingle(),
     supabase.from('candidate_daily_stage_snapshots').select('detail_revision_id').eq('detail_revision_id', revisionId).limit(1),
-    supabase.from('candidate_dossier_outbox_v5').select('job_id,status').eq('revision_id', revisionId).eq('input_hash', inputHash).maybeSingle(),
+    supabase.from('candidate_dossier_outbox_v5').select('job_id,status').eq('revision_id', revisionId).eq('input_hash', inputHash).eq('publication_kind', body.deepResearch !== undefined ? 'deep' : 'ordinary').maybeSingle(),
   ]);
   if (detail.error || !detail.data) return NextResponse.json({ ok: false, error: detail.error?.message || 'detail_revision_not_found' }, { status: detail.error ? 500 : 404 });
   if (queuedBundle.error) return NextResponse.json({ ok: false, error: queuedBundle.error.message }, { status: 500 });

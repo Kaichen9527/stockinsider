@@ -20,11 +20,15 @@ export async function POST(request: Request) {
   }
   const body = await request.json().catch(() => ({})) as Row;
   const symbol = String(body.symbol || '');
-  const observedAt = String(body.observedAt || new Date().toISOString());
+  let observedAt = String(body.observedAt || new Date().toISOString());
   if (!SYMBOL.test(symbol) || !INSTANT.test(observedAt) || !Number.isFinite(Date.parse(observedAt))
     || Date.parse(observedAt) > Date.now()) {
     return NextResponse.json({ ok: false, error: 'research_technical_request_invalid' }, { status: 400 });
   }
+  // Freeze live evidence time only after acquisition. A historical request keeps
+  // its original cutoff and cannot use a calendar first observed today.
+  const forwardCalendar = await acquireTwEntryForwardCalendar();
+  if (!body.observedAt) observedAt = new Date().toISOString();
   const db = getSupabaseServerClient();
   try {
     const stockRead = await db.from('stocks').select('id,symbol').eq('symbol', symbol).eq('market', 'TW').maybeSingle();
@@ -84,7 +88,6 @@ export async function POST(request: Request) {
       && articleSources.every((source) => !source.retracted && source.publicCitation);
     // An acquisition failure produces a visible pending-data row. It never
     // downgrades a missing official bar into a usable third-party signal.
-    const forwardCalendar = await acquireTwEntryForwardCalendar();
     const authority = await loadTwEntryPlanAuthority(db, {
       stockId, symbol, exchange: exchange as 'TWSE' | 'TPEX', signalSession: sessionDate,
       cutoff: observedAt, forwardCalendar,

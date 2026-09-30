@@ -5,6 +5,7 @@ import {
   issueStrategyApproval, validateStrategyExperimentProposal, type StrategyExperimentProposal,
 } from './research-strategy-governance.ts';
 
+import { researchCanonicalHash } from './research-agent-qualification.ts';
 const digest = 'a'.repeat(64);
 const proposal = (): StrategyExperimentProposal => ({
   policyVersion: STRATEGY_EXPERIMENT_POLICY, authorId: 'strategy-agent',
@@ -69,16 +70,29 @@ test('a promising backtest cannot approve itself or omit independent holdout val
   const input = { proposal: proposal(), assessment, independentReviewerId: 'independent-reviewer',
     independentValidation: { receiptHash: digest, status: 'failed' as 'passed' | 'failed',
       reviewerId: 'holdout-reviewer', validatedAt: '2026-09-29T02:00:00Z',
-      holdoutAndForwardChecked: false },
+      holdoutAndForwardChecked: false, proposalHash: researchCanonicalHash(proposal()),
+      assessmentHash: researchCanonicalHash(assessment), codeHash: digest,
+      parameterHashes: [digest], riskPolicyHash: digest },
     approvedBy: 'owner', approvedAt: '2026-09-29T03:00:00Z',
     effectiveFrom: '2026-10-01T00:00:00Z', riskPolicyHash: digest };
   assert.throws(() => issueStrategyApproval(input), /not_independent_or_exact/);
   assert.throws(() => issueStrategyApproval({ ...input, approvedBy: 'strategy-agent',
     independentValidation: { ...input.independentValidation, status: 'passed',
       holdoutAndForwardChecked: true } }), /not_independent_or_exact/);
-  const receipt = issueStrategyApproval({ ...input, independentValidation: {
-    ...input.independentValidation, status: 'passed', holdoutAndForwardChecked: true,
-  } });
+  const { receiptHash: _oldHash, ...payload } = input.independentValidation;
+  void _oldHash;
+  const validation = { ...payload, status: 'passed' as const, holdoutAndForwardChecked: true };
+  const valid = { ...input, independentValidation: { ...validation, receiptHash: researchCanonicalHash(validation) } };
+  const receipt = issueStrategyApproval(valid);
+  assert.throws(() => issueStrategyApproval({ ...valid, approvedBy: validation.reviewerId }), /not_independent_or_exact/);
+  assert.throws(() => issueStrategyApproval({ ...valid, assessment: { ...assessment, byArm: [], byVariantArm: [] } }), /not_independent_or_exact/);
+  for (const mutation of [{ validatedAt: '2020-01-01T00:00:00Z' }, { codeHash: 'b'.repeat(64) },
+    { assessmentHash: 'b'.repeat(64) }, { proposalHash: 'b'.repeat(64) }, { riskPolicyHash: 'b'.repeat(64) }]) {
+    const changed = { ...validation, ...mutation };
+    assert.throws(() => issueStrategyApproval({ ...valid, independentValidation: {
+      ...changed, receiptHash: researchCanonicalHash(changed),
+    } }), /not_independent_or_exact/);
+  }
   assert.equal(receipt.codeHash, proposal().codeHash);
   assert.match(receipt.receiptHash, /^[a-f0-9]{64}$/u);
 });

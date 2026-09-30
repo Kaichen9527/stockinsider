@@ -1,15 +1,22 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { fillPaperOrder, markPaperPositions, newPaperBook, settlePaperSession,
-  sizePaperOrder, type PaperOrder } from './research-paper-books.ts';
+  sizePaperOrder, PAPER_RISK_POLICY_HASH, type PaperOrder } from './research-paper-books.ts';
 
+import { researchCanonicalHash } from './research-agent-qualification.ts';
 const hash = 'a'.repeat(64);
+// Synthetic receipt fixture: no live approval is persisted by these unit tests.
+const approvalPayload = { schemaVersion: 'strategy-user-approval-v1' as const,
+  proposalHash: hash, assessmentHash: hash, independentValidationHash: hash,
+  codeHash: hash, parameterHashes: [hash], riskPolicyHash: PAPER_RISK_POLICY_HASH,
+  approvedBy: 'fixture-owner', approvedAt: '2026-09-21T00:00:00Z', effectiveFrom: '2026-09-22T00:00:00Z' };
+const approval = { ...approvalPayload, receiptHash: researchCanonicalHash(approvalPayload) };
 const order: PaperOrder = {
-  symbol: '2409', sector: 'electronics', strategyVersion: 'approved-v1',
+  symbol: '2409', sector: 'electronics', strategyVersion: approval.receiptHash,
   signalSession: '2026-09-22', executionSession: '2026-09-23',
   entryLower: 30, entryUpper: 31, stopPrice: 28,
   technicalSnapshotEligible: true, thesisQualified: true, liquidityVerified: true,
-  approvedCodeHash: hash, expectedCodeHash: hash,
+  approval, expectedCodeHash: hash, parameterHash: hash,
 };
 const bar = { symbol: '2409', session: '2026-09-23', open: 30.5,
   high: 31.2, low: 29.8, close: 30.9, officialFinal: true };
@@ -25,11 +32,11 @@ test('two separately funded books enforce their risk and exposure caps', () => {
 
 test('unapproved strategy, missing qualification and missing liquidity never fill', () => {
   const blocked = sizePaperOrder({ book: newPaperBook('conservative'),
-    order: { ...order, approvedCodeHash: null, thesisQualified: false, liquidityVerified: false },
+    order: { ...order, approval: null, thesisQualified: false, liquidityVerified: false },
     markPrices: {} });
   assert.equal(blocked.shares, 0);
   assert.deepEqual(blocked.blockers, ['thesis_not_qualified', 'liquidity_not_verified',
-    'exact_strategy_code_not_user_approved']);
+    'exact_strategy_version_not_user_approved']);
 });
 
 test('a final next-session bar can fill, but a gap above the entry zone cannot', () => {
@@ -120,6 +127,20 @@ test('an unfilled order does not consume the other symbol\'s same-day opportunit
   assert.equal(second.outcome, 'filled');
 });
 
+test('zero-share orders cannot advance past an unsettled session or reopen a settled session', () => {
+  const filled = fillPaperOrder({ book: newPaperBook('growth'), order, shares: 3000,
+    bar: { ...bar, high: 33, close: 33 }, markPrices: {} }).book;
+  const nextOrder = { ...order, symbol: '2330', signalSession: order.executionSession,
+    executionSession: '2026-09-24' };
+  assert.throws(() => fillPaperOrder({ book: filled, order: nextOrder, shares: 0,
+    bar: { ...bar, symbol: '2330', session: nextOrder.executionSession }, markPrices: { '2409': 33 } }),
+  /paper_fill_risk_not_admissible/u);
+  const settled = settlePaperSession({ book: filled, session: order.executionSession,
+    bars: [{ ...bar, high: 33, close: 33 }] });
+  assert.throws(() => fillPaperOrder({ book: settled, order: { ...order, symbol: '2330' }, shares: 0,
+    bar: { ...bar, symbol: '2330' }, markPrices: { '2409': 33 } }), /paper_fill_risk_not_admissible/u);
+});
+
 test('unofficial data and same-session execution are rejected', () => {
   assert.throws(() => fillPaperOrder({ book: newPaperBook('growth'), order, shares: 100,
     bar, markPrices: {} }), /paper_fill_quantity_invalid/u);
@@ -130,4 +151,45 @@ test('unofficial data and same-session execution are rejected', () => {
   assert.throws(() => sizePaperOrder({ book: newPaperBook('growth'),
     order: { ...order, executionSession: order.signalSession }, markPrices: {} }),
   /paper_order_geometry_invalid/u);
+});
+
+
+test('intraday exits and same-day marks cannot finance or enlarge opening orders', () => {
+  let book = newPaperBook('growth');
+  const bars = [];
+  for (let index = 0; index < 5; index += 1) {
+    const symbol = String(2409 + index);
+    const oldBar = { ...bar, symbol, open: 31, high: 33, low: 30.85, close: 31 };
+    book = fillPaperOrder({ book, order: { ...order, symbol, sector: String(index),
+      entryLower: 30.9, stopPrice: 30.8 }, shares: 6000, bar: oldBar, markPrices: {} }).book;
+    bars.push(oldBar);
+  }
+  book = settlePaperSession({ book, session: order.executionSession, bars });
+  const openingCash = book.cash;
+  book = markPaperPositions({ book, session: '2026-09-24',
+    bars: bars.map((prior, index) => ({ ...prior, session: '2026-09-24', low: index ? 30.85 : 30.7 })) });
+  assert.ok(book.cash > openingCash);
+  const next = { ...order, symbol: '2330', sector: 'new', signalSession: '2026-09-23',
+    executionSession: '2026-09-24', entryLower: 30.9, stopPrice: 30.8 };
+  const sized = sizePaperOrder({ book, order: next, markPrices: {} });
+  assert.ok(sized.shares * next.entryUpper <= openingCash);
+  assert.deepEqual(sized, sizePaperOrder({ book, order: next,
+    markPrices: Object.fromEntries(bars.map((row) => [row.symbol, 1000])) }));
+  assert.throws(() => fillPaperOrder({ book, order: next, shares: 6000, markPrices: {},
+    bar: { ...bar, symbol: next.symbol, session: next.executionSession, open: 31, low: 30.85, close: 31 } }),
+  /paper_fill_risk_not_admissible/u);
+});
+
+
+test('paper adoption binds parameters, risk policy, effective time and receipt version', () => {
+  for (const changed of [{ ...order, parameterHash: 'b'.repeat(64) },
+    { ...order, strategyVersion: 'unapproved-name' }]) {
+    assert.equal(sizePaperOrder({ book: newPaperBook('growth'), order: changed, markPrices: {} }).shares, 0);
+  }
+  for (const mutation of [{ riskPolicyHash: 'b'.repeat(64) }, { effectiveFrom: '2026-09-24T00:00:00Z' }]) {
+    const payload = { ...approvalPayload, ...mutation };
+    const altered = { ...payload, receiptHash: researchCanonicalHash(payload) };
+    assert.equal(sizePaperOrder({ book: newPaperBook('growth'),
+      order: { ...order, approval: altered, strategyVersion: altered.receiptHash }, markPrices: {} }).shares, 0);
+  }
 });

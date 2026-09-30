@@ -4,12 +4,18 @@ BEGIN;
 -- This migration is additive to the deployed v5 table and retains its receipts.
 ALTER TABLE public.candidate_dossier_outbox_v5
   ADD COLUMN IF NOT EXISTS next_attempt_at TIMESTAMPTZ,
-  ADD COLUMN IF NOT EXISTS last_submission_hash TEXT;
+  ADD COLUMN IF NOT EXISTS last_submission_hash TEXT,
+  ADD COLUMN IF NOT EXISTS publication_kind TEXT NOT NULL DEFAULT 'ordinary'
+    CHECK (publication_kind IN ('ordinary','deep'));
+ALTER TABLE public.candidate_dossier_outbox_v5
+  DROP CONSTRAINT IF EXISTS candidate_dossier_outbox_v5_revision_id_input_hash_key;
+CREATE UNIQUE INDEX IF NOT EXISTS uq_candidate_outbox_publication_kind_v6
+  ON public.candidate_dossier_outbox_v5(revision_id,input_hash,publication_kind);
 
 UPDATE public.candidate_dossier_outbox_v5
 SET status = 'failed', lease_owner = NULL, lease_expires_at = NULL,
     last_error = 'candidate_dossier_attempt_limit_reached', updated_at = clock_timestamp()
-WHERE attempts >= 12 AND status IN ('queued', 'running');
+WHERE publication_kind='ordinary' AND attempts >= 12 AND status IN ('queued', 'running');
 
 CREATE OR REPLACE FUNCTION public.claim_candidate_dossier_outbox_v5(p_owner TEXT, p_limit INTEGER DEFAULT 5)
 RETURNS SETOF public.candidate_dossier_outbox_v5
@@ -22,11 +28,11 @@ BEGIN
   UPDATE public.candidate_dossier_outbox_v5
   SET status = 'failed', lease_owner = NULL, lease_expires_at = NULL,
       last_error = 'candidate_dossier_attempt_limit_reached', updated_at = clock_timestamp()
-  WHERE attempts >= 12 AND (status = 'queued' OR (status = 'running' AND lease_expires_at < clock_timestamp()));
+  WHERE publication_kind='ordinary' AND attempts >= 12 AND (status = 'queued' OR (status = 'running' AND lease_expires_at < clock_timestamp()));
   RETURN QUERY
   WITH candidates AS (
     SELECT job_id FROM public.candidate_dossier_outbox_v5
-    WHERE attempts < 12 AND (next_attempt_at IS NULL OR next_attempt_at <= clock_timestamp())
+    WHERE publication_kind='ordinary' AND attempts < 12 AND (next_attempt_at IS NULL OR next_attempt_at <= clock_timestamp())
       AND (status = 'queued' OR (status = 'running' AND lease_expires_at < clock_timestamp()))
     ORDER BY created_at, job_id FOR UPDATE SKIP LOCKED LIMIT p_limit
   ), claimed AS (
@@ -44,7 +50,7 @@ AS $function$
 BEGIN
   UPDATE public.candidate_dossier_outbox_v5
   SET lease_expires_at = clock_timestamp() + interval '20 minutes', updated_at = clock_timestamp()
-  WHERE job_id = p_job_id AND status = 'running' AND lease_owner = p_owner
+  WHERE job_id = p_job_id AND publication_kind='ordinary' AND status = 'running' AND lease_owner = p_owner
     AND lease_expires_at > clock_timestamp();
   RETURN FOUND;
 END;
@@ -67,7 +73,7 @@ BEGIN
           WHEN attempts <= 3 THEN interval '5 minutes' ELSE interval '15 minutes' END
         ELSE NULL END,
       last_error = p_reason, updated_at = clock_timestamp()
-  WHERE job_id = p_job_id AND status = 'running' AND lease_owner = p_owner
+  WHERE job_id = p_job_id AND publication_kind='ordinary' AND status = 'running' AND lease_owner = p_owner
     AND lease_expires_at > clock_timestamp();
   RETURN FOUND;
 END;
@@ -90,7 +96,7 @@ DECLARE
 BEGIN
   SELECT * INTO v_job FROM public.candidate_dossier_outbox_v5
   WHERE job_id = p_job_id FOR UPDATE;
-  IF NOT FOUND OR v_job.bundle_id <> p_bundle_id OR v_job.revision_id <> p_revision_id
+  IF NOT FOUND OR v_job.publication_kind<>'ordinary' OR p_content ? 'deepResearch' OR v_job.bundle_id <> p_bundle_id OR v_job.revision_id <> p_revision_id
     OR v_job.input_hash <> p_input_hash THEN
     RAISE EXCEPTION 'candidate_dossier_job_identity_mismatch';
   END IF;
