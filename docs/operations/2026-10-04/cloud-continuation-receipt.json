@@ -1,0 +1,116 @@
+{
+  "schemaVersion": "stockinsider-cloud-chat-continuation-receipt-v1",
+  "recordedAt": "2026-10-04T15:36:14.020309+00:00",
+  "continuationScope": "same Cloud chat, subsequent turn; retained artifacts and verify only",
+  "outcome": "verified_same_cloud_chat_new_turn",
+  "acceptanceReceipt": {
+    "file": "acceptance-receipt.json",
+    "bytes": 5363,
+    "sha256": "84fd8a78a4a7703cd0cd0e569016242a4d228d8e545b5359c35417bde384b008",
+    "unchanged": true
+  },
+  "artifactChecks": {
+    "input.json": {
+      "bytes": 10514,
+      "sha256": "2dbc3dd2d89e5eb2c305e38e9588bdcff4a05e1ec0855d4a3c0c0e79990bdfa8",
+      "matchesAcceptanceReceipt": true
+    },
+    "task.json": {
+      "bytes": 10641,
+      "sha256": "33d7252bcb8f97c7ed2f6458d95039d203f7905f39d05ee0f7e88440f4420b32",
+      "matchesAcceptanceReceipt": true
+    },
+    "result.json": {
+      "bytes": 6479,
+      "sha256": "67c8a22a7d6a592b53dcce1024a8d09b3b632837cfae48235c12bd8a27ab22bd",
+      "matchesAcceptanceReceipt": true
+    },
+    "handoff.json": {
+      "bytes": 684,
+      "sha256": "f3ead883a7fe9815c60c31e89b5b4d69db1003f4564c5eb81fda5342bb4be054",
+      "matchesAcceptanceReceipt": true
+    },
+    "negative-checks.json": {
+      "bytes": 869,
+      "sha256": "9988d1b3f85eb2b1156175c75d6a7b134a995823aa4a80a9e5ff4bcb20a8b956",
+      "matchesAcceptanceReceipt": true
+    },
+    "tests-postgres.log": {
+      "bytes": 7241,
+      "sha256": "71101b5974b409c5b0968daf1d8cf6c71b4376b5572ea7cbcfb64186704d1de5",
+      "matchesAcceptanceReceipt": true
+    },
+    "run.log": {
+      "bytes": 1492,
+      "sha256": "e2d61d195df4620d31ac372b1867955fb8e31e680d030072e0234bb23f3d4ab6",
+      "matchesAcceptanceReceipt": true
+    },
+    "run-time.txt": {
+      "bytes": 884,
+      "sha256": "3d2f2b8991f35d2db90f37f6da3d4e2d1484c3fa19e8f20dfbb70431ec30b9ad",
+      "matchesAcceptanceReceipt": true
+    }
+  },
+  "sourceCommit": "0faebfdd8c077808c6470a0a04895f94ab064914",
+  "sourceTrackedClean": true,
+  "nodeVersion": "v22.14.0",
+  "dataScope": "synthetic_acceptance",
+  "workHash": "9260c8ab4fa20ce970521fee7b4c8ae33c8884ea3391080e0262fc898bb47489",
+  "resultHash": "8b7fa52c6f8e93a357590d6ebd9d37a4c2b8eb11a33040f0a8e555b07ba35dae",
+  "originalIssuedAt": "2026-10-04T15:31:42.975Z",
+  "originalDeadlineAt": "2026-10-04T15:56:42.975Z",
+  "verifyStartedAt": "2026-10-04T15:36:13.467209+00:00",
+  "taskUnexpiredAtVerifyStart": true,
+  "originalDeadlineChanged": false,
+  "verify": {
+    "command": [
+      "npm",
+      "run",
+      "research:cloud",
+      "--",
+      "verify",
+      "--task",
+      "/workspace/cloud-acceptance-0faebfd/task.json",
+      "--result",
+      "/workspace/cloud-acceptance-0faebfd/result.json",
+      "--output",
+      "/workspace/cloud-acceptance-0faebfd/handoff-continuation.json"
+    ],
+    "workingDirectory": "/workspace/stockinsider",
+    "exitCode": 0,
+    "outputCreateOnly": true,
+    "handoff": {
+      "schemaVersion": "research-cloud-handoff-v1",
+      "workHash": "9260c8ab4fa20ce970521fee7b4c8ae33c8884ea3391080e0262fc898bb47489",
+      "resultHash": "8b7fa52c6f8e93a357590d6ebd9d37a4c2b8eb11a33040f0a8e555b07ba35dae",
+      "dataScope": "synthetic_acceptance",
+      "kind": "deep_article_validation",
+      "role": "independent_test",
+      "jobId": "22222222-2222-4222-8222-222222222222",
+      "attempt": 1,
+      "reservationId": "33333333-3333-4333-8333-333333333333",
+      "status": "verified_for_existing_submission",
+      "receivedAt": "2026-10-04T15:36:13.870Z",
+      "authoritativePublication": false,
+      "strategyApproved": false,
+      "requiresLiveReservationCheck": true,
+      "requiresIndependentReview": true
+    }
+  },
+  "oldArtifactsUnchangedAfterVerify": true,
+  "vmRecreationVerified": false,
+  "crossTaskPersistenceGuaranteed": false,
+  "realVpsVerified": false,
+  "authoritativePublication": false,
+  "strategyApproved": false,
+  "limitations": [
+    "This confirms only same-chat subsequent-turn artifact readability and verify.",
+    "No VM recreation or separate Cloud task was tested.",
+    "No real VPS reservation, authenticated result POST, deployment or schedule was tested."
+  ],
+  "newHandoffArtifact": {
+    "file": "handoff-continuation.json",
+    "bytes": 684,
+    "sha256": "c02771e9c748d56043310c52ee9e7b70ec73da135e09cab08109edb717bfec5c"
+  }
+}

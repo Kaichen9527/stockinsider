@@ -20,7 +20,12 @@
 
 - [x] Independent Astra code review of exact successor `960319d7`; P1 closed.
   Unsigned code-scope review is not protected release authority.
-- [ ] Actual Linux Cloud execution and measured peak memory/disk/lock contention.
+- [x] Actual Linux Cloud synthetic execution on `0faebfd`: 16 tests, zero skips;
+  prepare/run/verify, lock/source/overwrite tests pass. Measured run RSS 97,558,528
+  bytes and workspace ~2.50 GB; disk observations are not continuous peaks.
+- [x] Same Cloud chat next-turn continuation: eight artifacts hash-match and
+  unexpired original task verifies; no deadline reset.
+- [ ] VM recreation/cross-task persistence and full-workload continuous resource peaks.
 - [ ] Real VPS reservation -> Cloud execution -> authenticated VPS completion,
   including interruption/restart and durable duplicate receipts.
 - [ ] Rights-aware issuer projection and production job binding end-to-end.

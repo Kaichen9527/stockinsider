@@ -172,3 +172,43 @@ No merge, migration, production deploy, schedule activation or further cleanup
 was performed. Owner-controlled recovery and host capacity remain independent
 blockers. Actual Cloud mutation/run authorization is pending the targeted
 cross-chat request; the earlier authorization covered read-only hardware probing.
+
+### Authorized Cloud execution — 2026-10-04 23:31 Taipei
+
+The user explicitly confirmed cross-chat authorization; the earlier pending
+request is closed. Existing “Set up stockinsider” ran exact source
+`0faebfdd8c077808c6470a0a04895f94ab064914` in Linux Cloud, preserving tracked
+cleanliness. Node 22.14.0 / PostgreSQL 17.11: 16 tests pass, zero failures/skips.
+Initially missing PostgreSQL tools were supplied workspace-locally and the full
+suite was rerun. Synthetic prepare/run/verify and lock/source/overwrite cases pass.
+
+Cgroup CPU is 4-core equivalent; visible cgroup RAM limit 32 GiB. The single
+finance validation process measured 97,558,528 bytes maximum RSS (GNU time),
+0.47 s wall time. Workspace approximately 2.50 GB; filesystem availability
+approximately 30.84 GB. Capacity admission passed with project quota explicitly
+unknown. These measurements establish this bounded fixture, not full-universe
+research/backtest resource peaks or a permanent quota guarantee.
+
+[Returned synthetic result](./cloud-synthetic-result.json) and
+[returned handoff](./cloud-synthetic-handoff.json) contain no live financial facts,
+production credentials, publication authority or real reservation. The source
+chat reconstructed the versioned fixture using its observed issue time
+`2026-10-04T15:31:42.975Z`; work/result hashes and financial recomputation match.
+This reproducibility check is not a trusted production issuer packet or VPS
+acceptance. A separate same-chat next-turn continuation check is in progress.
+
+Same-chat next-turn continuation also passed at 23:36 Taipei: eight artifacts
+retain original bytes/SHA256; original unexpired deadline is unchanged and verify
+produced a new create-only handoff. This does not establish VM recreation or
+cross-task persistence. [Cloud acceptance](./cloud-acceptance-receipt.json) and
+[continuation receipt](./cloud-continuation-receipt.json) preserve full returned
+records. Three transferred artifacts (acceptance, result, handoff) were independently
+checked locally against original Cloud byte counts/SHA256, all matching.
+
+Latest source diagnostic for `0faebfd` passed:
+[37212324795](https://github.com/Kaichen9527/stockinsider/actions/runs/37212324795).
+Protected [37212322838](https://github.com/Kaichen9527/stockinsider/actions/runs/37212322838)
+failed the missing evidence-source checks; bootstrap passed, protected code gates
+skipped. No merge/migration/deployment occurred. Real VPS round trip and full
+research/strategy acceptance remain open; cross-chat authorization is no longer
+an outstanding blocker.
