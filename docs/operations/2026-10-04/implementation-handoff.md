@@ -116,3 +116,99 @@ actions, independent strategy-artifact verification, AUO plus another industry
 end-to-end publication, trusted gates, migration/deployment and five real
 trading-day observation. Tests of fixtures cannot close these real acceptance
 items or establish profitability.
+
+## Cloud implementation successor (separate branch, local acceptance)
+
+The inventory/docs checkpoint was committed as `21d3b2c` and pushed to #287.
+`codex/cloud-research-validation` now contains the bounded work/result contract,
+separate Cloud capacity profile, deterministic finance-validation CLI and an
+independent-tester-only internal receiver. The receiver uses existing durable
+reservation/completion SQL; it never publishes articles or approves strategies.
+See [Cloud runbook](../../cloud-research-validation.md) and
+[acceptance checklist](../../../openspec/changes/cloud-research-validation-v1/tasks.md).
+
+Local Cloud tests: 14 pass, zero skip. Full research regression before the last
+midnight fixture test: 90 pass, zero skip; types and build pass. These are local
+fixtures, not proof of real Cloud execution, VPS receipt or complete research.
+Actual Cloud execution, six-role consumption and schedules remain pending.
+
+Astra's new read-only recovery audit reconfirmed ruleset `20177392`, no bypass,
+required `stockinsider-v3-gate-root`, and failed protected run `37176485490`.
+The base lacks the current graph/listing review authority and has no callable
+owner recovery dispatch. An external trusted owner must establish the reviewed
+one-time control-plane recovery, independently signed exact-version evidence
+and atomic predecessor ledger before #288 can pass. User merge authorization
+is already present; it does not manufacture missing protected evidence.
+
+Independent Astra review of `525496df` found a P1: generic model completion
+could be mistaken for validated Cloud acceptance and bypass withdrawn sources
+on replay. The successor adds an immutable acceptance receipt and atomic SQL
+completion; the generic finish path cannot mint this receipt. Regression includes
+withdrawal/expiry forged replay and real PostgreSQL generic completion, exact
+replay, immutability and rollback. This narrow additive schema amendment is not
+applied to production and must receive exact-source review.
+
+Receipt amendment tests: 16/16 Cloud tests and 93/93 full research regression
+pass, zero skips, including real PostgreSQL transaction rollback and generic
+completion rejection. Type check passes. Exact successor review remains required.
+Final receipt amendment lint: zero errors, 33 pre-existing warnings; production
+build passed with the internal receiver compiled. No migration was applied to VPS.
+
+### Independent Cloud successor review and release status
+
+Astra approved implemented Cloud code at `960319d7ab5446161dba0e532997c85c17294e11`
+(tree `eace672e7365eb5994abd3526fb0c543f2237528`), with no open blocker in that
+scope. [Unsigned review record](./cloud-implemented-code-review.json) preserves
+five independent tests plus forced generic/Cloud completion race ordering.
+This documentation checkpoint does not promote that review to protected
+approval or complete-plan acceptance.
+
+[PR #289](https://github.com/Kaichen9527/stockinsider/pull/289) is a separate draft,
+base `codex/research-strategy-agents` (#287). The protected run for the reviewed
+code, [37212111293](https://github.com/Kaichen9527/stockinsider/actions/runs/37212111293),
+failed fetching exact/requirements/architecture evidence branches. Bootstrap
+passed; actual protected code gates were skipped. Required root remains failed.
+No merge, migration, production deploy, schedule activation or further cleanup
+was performed. Owner-controlled recovery and host capacity remain independent
+blockers. Actual Cloud mutation/run authorization is pending the targeted
+cross-chat request; the earlier authorization covered read-only hardware probing.
+
+### Authorized Cloud execution — 2026-10-04 23:31 Taipei
+
+The user explicitly confirmed cross-chat authorization; the earlier pending
+request is closed. Existing “Set up stockinsider” ran exact source
+`0faebfdd8c077808c6470a0a04895f94ab064914` in Linux Cloud, preserving tracked
+cleanliness. Node 22.14.0 / PostgreSQL 17.11: 16 tests pass, zero failures/skips.
+Initially missing PostgreSQL tools were supplied workspace-locally and the full
+suite was rerun. Synthetic prepare/run/verify and lock/source/overwrite cases pass.
+
+Cgroup CPU is 4-core equivalent; visible cgroup RAM limit 32 GiB. The single
+finance validation process measured 97,558,528 bytes maximum RSS (GNU time),
+0.47 s wall time. Workspace approximately 2.50 GB; filesystem availability
+approximately 30.84 GB. Capacity admission passed with project quota explicitly
+unknown. These measurements establish this bounded fixture, not full-universe
+research/backtest resource peaks or a permanent quota guarantee.
+
+[Returned synthetic result](./cloud-synthetic-result.json) and
+[returned handoff](./cloud-synthetic-handoff.json) contain no live financial facts,
+production credentials, publication authority or real reservation. The source
+chat reconstructed the versioned fixture using its observed issue time
+`2026-10-04T15:31:42.975Z`; work/result hashes and financial recomputation match.
+This reproducibility check is not a trusted production issuer packet or VPS
+acceptance. A separate same-chat next-turn continuation check is in progress.
+
+Same-chat next-turn continuation also passed at 23:36 Taipei: eight artifacts
+retain original bytes/SHA256; original unexpired deadline is unchanged and verify
+produced a new create-only handoff. This does not establish VM recreation or
+cross-task persistence. [Cloud acceptance](./cloud-acceptance-receipt.json) and
+[continuation receipt](./cloud-continuation-receipt.json) preserve full returned
+records. Three transferred artifacts (acceptance, result, handoff) were independently
+checked locally against original Cloud byte counts/SHA256, all matching.
+
+Latest source diagnostic for `0faebfd` passed:
+[37212324795](https://github.com/Kaichen9527/stockinsider/actions/runs/37212324795).
+Protected [37212322838](https://github.com/Kaichen9527/stockinsider/actions/runs/37212322838)
+failed the missing evidence-source checks; bootstrap passed, protected code gates
+skipped. No merge/migration/deployment occurred. Real VPS round trip and full
+research/strategy acceptance remain open; cross-chat authorization is no longer
+an outstanding blocker.

@@ -1,0 +1,177 @@
+{
+  "schemaVersion": "research-cloud-result-v1",
+  "workHash": "9260c8ab4fa20ce970521fee7b4c8ae33c8884ea3391080e0262fc898bb47489",
+  "sourceCommit": "0faebfdd8c077808c6470a0a04895f94ab064914",
+  "jobId": "22222222-2222-4222-8222-222222222222",
+  "attempt": 1,
+  "role": "independent_test",
+  "owner": "synthetic-controller",
+  "reservationId": "33333333-3333-4333-8333-333333333333",
+  "startedAt": "2026-10-04T15:31:50.970Z",
+  "completedAt": "2026-10-04T15:31:51.085Z",
+  "status": "completed",
+  "output": {
+    "articleHash": "603516ab5bda3156356d44f7f70a9b62b1c4d44b7fe82dc084edf8bede2f6767",
+    "scenarios": [
+      {
+        "fiscalYear": 2028,
+        "baselineEps": 0.6,
+        "baselineBridge": {
+          "segmentBasis": "research_estimate",
+          "segmentNote": "明確的合成會計測試資料，完全不是友達實際財務數字。",
+          "segments": [
+            {
+              "business": "synthetic",
+              "revenueMillions": 3500,
+              "grossMargin": 0.3,
+              "operatingExpenseMillions": 300
+            }
+          ],
+          "otherOperatingIncomeMillions": 0,
+          "corporateOperatingIncomeMillions": 0,
+          "nonOperatingMillions": 0,
+          "taxRate": 0.2,
+          "nonControllingIncomeMillions": 0,
+          "oneOffAfterTaxMillions": 100,
+          "dilutedSharesMillions": 1000
+        },
+        "grossMargin": 0.3,
+        "nonOperatingMillions": 0,
+        "taxRate": 0.2,
+        "ownershipFraction": 0.8,
+        "dilutedSharesMillions": 1000,
+        "peMultiple": 20,
+        "yearsToValue": 2,
+        "discountRate": 0.1,
+        "evidenceDocumentIds": [
+          "11111111-1111-4111-8111-111111111111"
+        ],
+        "officialFactIds": [],
+        "assumptionNotes": "合成情境只驗證程式計算與折現，不是實際訂單或友達投資建議。",
+        "name": "existing_business",
+        "incrementalRevenueMillions": 0,
+        "incrementalOperatingExpenseMillions": 0,
+        "baselineRevenueMillions": 3500,
+        "baselineOperatingIncomeMillions": 750,
+        "baselineAttributableIncomeMillions": 600,
+        "baselineReportedEps": 0.7,
+        "incrementalOperatingIncomeMillions": 0,
+        "incrementalAttributableIncomeMillions": 0,
+        "incrementalEps": 0,
+        "totalEps": 0.6,
+        "futurePrice": 12,
+        "presentValue": 9.917355371900825
+      },
+      {
+        "fiscalYear": 2028,
+        "baselineEps": 0.6,
+        "baselineBridge": {
+          "segmentBasis": "research_estimate",
+          "segmentNote": "明確的合成會計測試資料，完全不是友達實際財務數字。",
+          "segments": [
+            {
+              "business": "synthetic",
+              "revenueMillions": 3500,
+              "grossMargin": 0.3,
+              "operatingExpenseMillions": 300
+            }
+          ],
+          "otherOperatingIncomeMillions": 0,
+          "corporateOperatingIncomeMillions": 0,
+          "nonOperatingMillions": 0,
+          "taxRate": 0.2,
+          "nonControllingIncomeMillions": 0,
+          "oneOffAfterTaxMillions": 100,
+          "dilutedSharesMillions": 1000
+        },
+        "grossMargin": 0.3,
+        "nonOperatingMillions": 0,
+        "taxRate": 0.2,
+        "ownershipFraction": 0.8,
+        "dilutedSharesMillions": 1000,
+        "peMultiple": 20,
+        "yearsToValue": 2,
+        "discountRate": 0.1,
+        "evidenceDocumentIds": [
+          "11111111-1111-4111-8111-111111111111"
+        ],
+        "officialFactIds": [],
+        "assumptionNotes": "合成情境只驗證程式計算與折現，不是實際訂單或友達投資建議。",
+        "name": "conditional_commercialization",
+        "incrementalRevenueMillions": 1000,
+        "incrementalOperatingExpenseMillions": 100,
+        "commercialization": {
+          "annualCapacityUnits": 10000,
+          "utilization": 0.5,
+          "yieldRate": 0.5,
+          "averageSellingPriceMillion": 0.4,
+          "intercompanyRevenueMillions": 0,
+          "incrementalDepreciationMillions": 0
+        },
+        "baselineRevenueMillions": 3500,
+        "baselineOperatingIncomeMillions": 750,
+        "baselineAttributableIncomeMillions": 600,
+        "baselineReportedEps": 0.7,
+        "incrementalOperatingIncomeMillions": 200,
+        "incrementalAttributableIncomeMillions": 128,
+        "incrementalEps": 0.128,
+        "totalEps": 0.728,
+        "futurePrice": 14.559999999999999,
+        "presentValue": 12.033057851239667
+      },
+      {
+        "fiscalYear": 2028,
+        "baselineEps": 0.6,
+        "baselineBridge": {
+          "segmentBasis": "research_estimate",
+          "segmentNote": "明確的合成會計測試資料，完全不是友達實際財務數字。",
+          "segments": [
+            {
+              "business": "synthetic",
+              "revenueMillions": 3500,
+              "grossMargin": 0.3,
+              "operatingExpenseMillions": 300
+            }
+          ],
+          "otherOperatingIncomeMillions": 0,
+          "corporateOperatingIncomeMillions": 0,
+          "nonOperatingMillions": 0,
+          "taxRate": 0.2,
+          "nonControllingIncomeMillions": 0,
+          "oneOffAfterTaxMillions": 100,
+          "dilutedSharesMillions": 1000
+        },
+        "grossMargin": 0.3,
+        "nonOperatingMillions": 0,
+        "taxRate": 0.2,
+        "ownershipFraction": 0.8,
+        "dilutedSharesMillions": 1000,
+        "peMultiple": 20,
+        "yearsToValue": 2,
+        "discountRate": 0.1,
+        "evidenceDocumentIds": [
+          "11111111-1111-4111-8111-111111111111"
+        ],
+        "officialFactIds": [],
+        "assumptionNotes": "合成情境只驗證程式計算與折現，不是實際訂單或友達投資建議。",
+        "name": "delay_or_failure",
+        "incrementalRevenueMillions": 0,
+        "incrementalOperatingExpenseMillions": 50,
+        "baselineRevenueMillions": 3500,
+        "baselineOperatingIncomeMillions": 750,
+        "baselineAttributableIncomeMillions": 600,
+        "baselineReportedEps": 0.7,
+        "incrementalOperatingIncomeMillions": -50,
+        "incrementalAttributableIncomeMillions": -40,
+        "incrementalEps": -0.04,
+        "totalEps": 0.5599999999999999,
+        "futurePrice": 11.2,
+        "presentValue": 9.256198347107436
+      }
+    ],
+    "sourceDocumentIds": [
+      "11111111-1111-4111-8111-111111111111"
+    ]
+  },
+  "resultHash": "8b7fa52c6f8e93a357590d6ebd9d37a4c2b8eb11a33040f0a8e555b07ba35dae"
+}
