@@ -43,3 +43,76 @@ Observed free space fluctuates with existing jobs: initially approximately 15.13
 6. Clean reviewed schema cutover and deployment require real checks, exact independent review and capacity. Schedule activation and five actual trading-day observation have not occurred. Minute strategies remain future work; daily bars do not implement them.
 
 PR #287 retains the existing draft/dependency chain. Nothing was pushed to main, merged, migrated or deployed by this implementation batch. The current production site and paused heartbeat remain as they were.
+
+## Latest release and Cloud transition snapshot — 2026-10-04 evening
+
+The user authorized implementation of Cloud-primary research/development, VPS
+durable production data/results and a transitional Mac. The previous planning
+round performed only reads; the implementation now records those observations.
+This amendment does not authorize an unapproved strategy or bypass a protected
+check. AUO remains a dated demonstration of research direction.
+
+| PR | Source head at inventory | Base | Actual release state |
+|---|---|---|---|
+| #284 | `54a45ef` | main | Draft, root/model gate failed; unmerged |
+| #285 | `a42a11a` | main | Draft, ancestry included in #288; superseded, not merged separately |
+| #288 | `e94d21f9fe05dc436211a2458ea59adb52195e26` | main | Diagnostic passed; protected active-graph review missing |
+| #287 | `f2e711e0594c49836c44daf16280f838590e001a` | #284 branch | Diagnostic passed; exact review evidence source missing |
+
+Main remains `169aad1b6cfa747f78ae3464b614f43c0749d806`.
+The [implemented-code review](./implemented-code-review.json) is unsigned local
+Astra evidence, explicitly not protected approval or complete-plan acceptance.
+[Product diagnostic](https://github.com/Kaichen9527/stockinsider/actions/runs/37176901152)
+and [protected failure](https://github.com/Kaichen9527/stockinsider/actions/runs/37176899997)
+bind the inventoried #287 head. A subsequent documentation/code commit requires
+new exact-source evidence; these old runs do not approve a successor.
+
+Required merge-commit order: trusted external/base-owned recovery → #288 →
+mark #285 superseded → refresh/review #284 against new main → refresh/review
+#287 against new main. Cloud work belongs in a separate dependent PR.
+No external owner authority, independently signed packet, predecessor ledger or
+base registration has been established; see the #288 recovery amendment.
+
+### New measurements, not capacity guarantees
+
+- Contabo at 20:56–20:58 Taipei: 4 vCPU, 8.33 GB RAM; root 76.89 GB,
+  used 63.77 GB, available 13.10 GB. StockInsider plus the entire PostgreSQL
+  directory approximately 3.127 GB; database logical size 2.555 GB. Required
+  host availability remains approximately 20.40 GB. The five cleaned paths
+  are all absent. Formal release/preview remain `9fd86fe` / `8e2791`.
+- [Cloud probe](./cloud-read-only-probe.json) at 21:36 Taipei: 4-core time
+  quota, 32 GiB visible cgroup memory limit, 33.77 GB overlay filesystem,
+  32.03 GB visible availability, workspace 2.26 GB. Overlay df/du scopes differ;
+  per-project quota, publication time, automatic dispatch and persistent-volume
+  guarantees were not established. Cloud main is the older production source.
+- Mac cache clones total approximately 2.085 GB; approximately 2.003 GB deps/build
+  is rebuildable. Desktop logical 42.21 GB is almost entirely iCloud dataless
+  placeholders with less than 1 MB allocated locally. Unique backups, evidence,
+  the Mac runner, Keychain references and backup LaunchAgent remain required.
+  No Mac files were removed.
+
+### Transition and remaining acceptance
+
+Cloud performs bounded isolated research/calculation/tests; VPS retains durable
+queues, history, evidence, paper books, result validation and publication. Mac
+keeps authenticated social collection and protected development review until
+independently accepted replacements exist. Do not move cookies, auth.json,
+service-role credentials or formal approval keys into model workspaces.
+
+Cloud tasks must bind exact source, cutoff-visible evidence, job/attempt, role,
+reservation and deadline. Return through existing authenticated submission
+paths; neither local output nor a Cloud success message establishes publication.
+Manual Cloud tasks precede any unverified scheduled-dispatch adapter. No paid
+API fallback or VM cron is assumed to provide a durable scheduler.
+
+The target Cloud budget is 20 GB resident + 4 GB temporary + 8 GB reserve,
+with one heavy task and a measured <=8 GiB RAM target. Its separately reviewed
+validation profile does not relax Contabo's guard. Full candidate/PIT metadata
+is retained while large history/evidence is processed in bounded batches.
+
+Outstanding: actual source consumers, research/watchdog and renewal consumers,
+financial-series amendment, benchmark/flow and ranking enrichment, corporate
+actions, independent strategy-artifact verification, AUO plus another industry
+end-to-end publication, trusted gates, migration/deployment and five real
+trading-day observation. Tests of fixtures cannot close these real acceptance
+items or establish profitability.

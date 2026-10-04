@@ -36,3 +36,27 @@ The complete target remains discovery → Top 20 → independently reviewed rese
 
 ## Acceptance and release
 Reproduce rumor/reposts/denial/retraction/source failure; financial and temporal boundaries; complete candidate coverage; invalidation plus held-position monitoring; short weeks/gaps/late data; lease races/restarts/replay; budget exhaustion. Tests, types, lint and build pass. Exercise AUO and a different industry end to end, then desktop/mobile preview and production smoke. Complete authentic exact-source independent/protected reviews and coordinated schema/writer cutover before activation. Observe five real trading days; observation cannot be replaced by fixtures or presented as proof of profitability.
+
+## Approved Cloud transition amendment — 2026-10-04 evening
+
+The user explicitly approved Cloud-primary bounded development, research,
+article and strategy verification; VPS holds production data, durable work
+state, validation and publication; Mac remains transitional for authenticated
+social reading, existing protected reviews and backups. This supersedes the
+Mac-only location of research work, without relaxing role independence, PIT,
+source rights, exact approval, model budget or protected host identities.
+
+Cloud is not sole durable storage. Bind task inputs/results to immutable source
+SHA, cutoff-visible evidence, job/attempt, role/reservation and expiry, and use
+existing authenticated submission paths. Cloud model processes receive no
+production DB/service-role/strategy-approval credentials. Actual platform
+dispatch and resumption must be verified before automatic scheduling; until
+then tasks are explicitly started and Mac-supported paths remain transitional.
+No paid API fallback, cookie/auth.json migration or replacement of macOS pins
+with Linux placeholders is authorized.
+
+The Cloud validation profile targets at most20 GB resident,4 GB temporary and
+at least8 GB reserve in decimal units, one heavy task and <=8 GiB measured RAM.
+Count actual disk/quota admission separately from overlay workspace accounting.
+The VPS40 GB app limit, whole-host admission and heavy-work lock remain binding.
+Preserve candidate/PIT universes and necessary artifacts; batch large inputs.

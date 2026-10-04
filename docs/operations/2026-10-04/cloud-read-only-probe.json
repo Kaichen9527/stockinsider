@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "measuredAt": "2026-10-04T13:36:00Z",
+  "source": {
+    "threadId": "01a106b8-a883-7185-9962-f7372109a093",
+    "messageId": "msg_00a2feb47c9bf438016ac2569743a887d0b12e1490384058ee",
+    "kind": "authorized_read_only_cloud_probe"
+  },
+  "sourceCommit": "169aad1b6cfa747f78ae3464b614f43c0749d806",
+  "cpu": {
+    "quotaMicros": 400000,
+    "periodMicros": 100000,
+    "effectiveCpus": "0-4"
+  },
+  "memory": {
+    "visibleTotalBytes": 35743784960,
+    "cgroupMaxBytes": 34359738368,
+    "visibleSwapBytes": 0
+  },
+  "disk": {
+    "filesystem": "overlay",
+    "visibleTotalBytes": 33770192896,
+    "visibleAvailableBytes": 32034430976,
+    "workspaceAllocatedBytes": 2263740416,
+    "projectQuotaVerified": false,
+    "dfDuScopesDiffer": true
+  },
+  "platform": {
+    "status": "ready",
+    "publicationTimeVerified": false,
+    "automaticDispatchVerified": false,
+    "durableVolumeContractVerified": false
+  },
+  "credentialContentsRead": false,
+  "mutationsPerformed": false,
+  "protectedApproval": false
+}

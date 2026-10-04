@@ -28,3 +28,18 @@ Official financial fallback still hits the lifetime 128-fact series storage boun
 ## October 4 local verification
 
 77/77 research, route, calculation and real-PostgreSQL tests passed without skips. New suite membership is in `npm run test:research-agents`. Type/lint/build outcomes and independent exact-commit review are recorded in the implementation handoff. These results do not represent successful production source reading, an approved strategy, completed official refresh or profitability.
+
+## Cloud transition amendment — 2026-10-04 evening
+
+- [x] Reconcile completed source/code validation separately from live operation,
+  protected approval and deployment; save latest inventory and unsigned review.
+- [x] Authorized read-only Cloud hardware probe recorded; no quota or scheduling guarantee inferred.
+- [ ] Separate Cloud work package/result adapter and bounded resource admission.
+- [ ] Actual VPS → Cloud → independent review → authenticated result acceptance.
+- [ ] Cloud task recovery, platform-dispatch capability acceptance and production runtime acceptance.
+- [ ] Transitional Mac dependency removal only after social, review and backup replacements.
+
+Latest measured Contabo availability is 13.10 GB, superseding earlier inventory
+for present admission only; historical receipts remain intact. No new safe VPS
+cleanup paths were found. Full handoff and source hashes are in the existing
+October 4 implementation handoff.
