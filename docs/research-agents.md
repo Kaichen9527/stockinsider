@@ -1,6 +1,6 @@
-# Research cycle agent (Mac Codex, not yet scheduled)
+# Research cycle agent (Cloud-primary, transitional Mac, not yet scheduled)
 
-This runbook is for a future Mac Codex heartbeat after the independent Astra review. It does not authorize activating a schedule or promoting a strategy. The app uses one model job at a time, a 30-minute lease per attempt, at most four charged attempts (120 minutes) across all six roles per Taiwan day, and at most five new deep-study jobs per Taiwan ISO week. The VPS may collect public evidence and compute deterministic outputs; authenticated social reading stays on the Mac. Never copy cookies, credentials, private posts, or member-only full text into the research store.
+This runbook targets Cloud-primary research with transitional Mac collection/review and VPS durable state after independent Astra review. The approved [Cloud work adapter](cloud-research-validation.md) is explicitly started; automatic Cloud dispatch is not yet verified. It does not authorize activating a schedule or promoting a strategy. The app uses one model job at a time, a 30-minute lease per attempt, at most four charged attempts (120 minutes) across all six roles per Taiwan day, and at most five new deep-study jobs per Taiwan ISO week. The VPS may collect public evidence and compute deterministic outputs; authenticated social reading stays on the Mac. Never copy cookies, credentials, private posts, or member-only full text into the research store.
 
 ## Discovery (07:00 and 18:00 Asia/Taipei, including weekends)
 
@@ -43,3 +43,5 @@ Source input supports the thirteen reviewed platform names, public/publisher tra
 The approved routing is Sol 6.1 High for implementation and Astra High for independent review/verification. PR #288 contains an inactive recovery proposal for this exact routing. It still requires trusted base-worker repair, external signed authority and real protected checks; local unsigned facts are not activation evidence.
 
 Execution source identity includes the latest transitive SQL routines and technical identity upgrade. Runtime entry initialization/context and reviewed migration postconditions compare installed routine bodies, security-definer status, volatility and search-path configuration against that manifest. Exact approval input replay precedes fresh effective-time validation; newly submitted backdated approvals remain rejected.
+
+Cloud transition acceptance remains separate from the existing protected macOS host. The adapter can recompute accounting and bind return artifacts; it cannot activate the inactive runner, approve a strategy, or substitute fixtures for real source/platform acceptance.

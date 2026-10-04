@@ -116,3 +116,26 @@ actions, independent strategy-artifact verification, AUO plus another industry
 end-to-end publication, trusted gates, migration/deployment and five real
 trading-day observation. Tests of fixtures cannot close these real acceptance
 items or establish profitability.
+
+## Cloud implementation successor (separate branch, local acceptance)
+
+The inventory/docs checkpoint was committed as `21d3b2c` and pushed to #287.
+`codex/cloud-research-validation` now contains the bounded work/result contract,
+separate Cloud capacity profile, deterministic finance-validation CLI and an
+independent-tester-only internal receiver. The receiver uses existing durable
+reservation/completion SQL; it never publishes articles or approves strategies.
+See [Cloud runbook](../../../cloud-research-validation.md) and
+[acceptance checklist](../../../../openspec/changes/cloud-research-validation-v1/tasks.md).
+
+Local Cloud tests: 14 pass, zero skip. Full research regression before the last
+midnight fixture test: 90 pass, zero skip; types and build pass. These are local
+fixtures, not proof of real Cloud execution, VPS receipt or complete research.
+Actual Cloud execution, six-role consumption and schedules remain pending.
+
+Astra's new read-only recovery audit reconfirmed ruleset `20177392`, no bypass,
+required `stockinsider-v3-gate-root`, and failed protected run `37176485490`.
+The base lacks the current graph/listing review authority and has no callable
+owner recovery dispatch. An external trusted owner must establish the reviewed
+one-time control-plane recovery, independently signed exact-version evidence
+and atomic predecessor ledger before #288 can pass. User merge authorization
+is already present; it does not manufacture missing protected evidence.
