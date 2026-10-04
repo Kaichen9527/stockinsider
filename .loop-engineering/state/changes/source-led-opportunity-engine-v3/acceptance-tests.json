@@ -4208,7 +4208,7 @@
       "requirement": "Safety",
       "layer": "contract/integration",
       "setup": "Enumerate canonical/noncanonical manifests and every validate/route/run/review/verify/status grammar, strategy, waiver, task state, round and failure precedence while hashing all pre-existing V1/V2 paths and refs.",
-      "expected": "The exact loop-model-manifest-v3.6 schema, run-to-make mapping, Astra/high-only route table, rejection of legacy strategies and waivers, exit precedence, state transitions and canonical status reproduce; validate/route/status spawn nothing, old identity states cannot resume, and every historical byte/ref remains unchanged."
+      "expected": "The exact loop-model-manifest-v3.7 schema, run-to-make mapping, operation-bound Sol 6.1/high make and Astra/high review/verify route table, rejection of legacy strategies and waivers, exit precedence, state transitions and canonical status reproduce; validate/route/status spawn nothing, old identity states cannot resume, and every historical byte/ref remains unchanged."
     },
     {
       "id": "MR3-017",

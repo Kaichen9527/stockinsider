@@ -97,7 +97,8 @@ separate checkpoints.
 
 This candidate retains exact persistent device/inode/size/owner/mode, content
 hash/version and native/app signatures. It moves to fixture v3.22 and a fresh
-`model-runner-v3-astra-v2` state namespace. A future design may use release
+`model-runner-v3-sol61-astra-v1` state namespace under the separately documented
+operation-bound routing amendment. A future design may use release
 hash/signature as durable identity and measured device/inode only for one launch's
 TOCTOU checks. Such a change needs its own independently reviewed race/ownership
 and launch-boundary design; it is not silently adopted here.

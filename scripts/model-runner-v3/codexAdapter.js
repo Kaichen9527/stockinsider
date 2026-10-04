@@ -2,6 +2,7 @@
 
 const path = require('node:path');
 const { assert } = require('./artifacts');
+const { routeOperation } = require('./routing');
 
 const DISABLES = [
   'skill_search', 'plugins', 'apps', 'remote_plugin', 'hooks', 'multi_agent',
@@ -37,10 +38,12 @@ function profileToml(viewPath, scratchPath, transportPath) {
   ].join('\n');
 }
 
-function codexArgs({ model, reasoningEffort, viewPath }) {
+function codexArgs({ operation, model, reasoningEffort, viewPath }) {
+  assert(['make', 'review', 'verify'].includes(operation), 5);
+  const expected = routeOperation(operation, 'sol61-make-astra-review');
   assert(
     (
-      model === 'gpt-6-astra' && reasoningEffort === 'high'
+      model === expected.model && reasoningEffort === expected.reasoningEffort
     ) &&
     path.isAbsolute(viewPath),
     5,

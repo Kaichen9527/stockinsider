@@ -1,6 +1,6 @@
 # macOS Model Runner Contract: source-led-opportunity-engine-v3
 
-Version: `model-runner-v3.7`
+Version: `model-runner-v3.8`
 
 Checkpoint: `model_runner_v3`
 
@@ -36,10 +36,10 @@ The top-level object has exactly these seven keys:
 protocol,checkpoint,changeId,base,inputHead,defaultStrategy,tasks
 ```
 
-- `protocol` is `loop-model-manifest-v3.6`; `checkpoint` is `model_runner_v3`.
+- `protocol` is `loop-model-manifest-v3.7`; `checkpoint` is `model_runner_v3`.
 - `changeId` matches `[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?`.
 - `base` and `inputHead` are lowercase 40-hex commit OIDs; `base` is an ancestor of `inputHead`; `inputHead` has no replace/graft/shallow ambiguity and all required blobs are local.
-- `defaultStrategy` is `astra-only`.
+- `defaultStrategy` is `sol61-make-astra-review`.
 - `tasks` has 1..128 entries in execution order. IDs are unique, and `sequence` is exactly the zero-based array ordinal.
 
 Each task object has exactly:
@@ -67,16 +67,16 @@ The grammar is exactly:
 ```text
 loop-model-runner validate --manifest <path>
 loop-model-runner route --manifest <path> [--task <taskId>]
-loop-model-runner run --manifest <path> --task <taskId> [--strategy astra-only]
-loop-model-runner review --manifest <path> --task <taskId> [--strategy astra-only]
-loop-model-runner verify --manifest <path> --task <taskId> [--strategy astra-only]
+loop-model-runner run --manifest <path> --task <taskId> [--strategy sol61-make-astra-review]
+loop-model-runner review --manifest <path> --task <taskId> [--strategy sol61-make-astra-review]
+loop-model-runner verify --manifest <path> --task <taskId> [--strategy sol61-make-astra-review]
 loop-model-runner status --manifest <path> --task <taskId>
 ```
 
 One flag consumes one following value. `--key=value`, duplicate/unknown flags, positional values, missing/empty values and command-inapplicable flags are usage failures. `run` maps only to protocol operation `make`; the other terminal operations are `review|verify`. `validate`, `route` and `status` spawn no model and no apply process. Every success writes exactly one canonical JSON object plus LF to stdout; diagnostics go to bounded redacted stderr. Their exact success objects are:
 
 - validate: `protocol='loop-model-validate-v3.5',manifestSha256,changeId,inputHead,taskCount,valid=true`;
-- route: `protocol='loop-model-route-v3.6',manifestSha256,strategy,routes`, where routes is manifest-task order (or the exact selected singleton) and each entry has exactly `taskId,assurance,make,review,verify`; each operation value is either `model,reasoningEffort,waiverRequired=false|true` or `blocked='ROUTING_BLOCKED'` according to the table below;
+- route: `protocol='loop-model-route-v3.7',manifestSha256,strategy,routes`, where routes is manifest-task order (or the exact selected singleton) and each entry has exactly `taskId,assurance,make,review,verify`; each operation value is either `model,reasoningEffort,waiverRequired=false|true` or `blocked='ROUTING_BLOCKED'` according to the table below;
 - terminal operation: `protocol='loop-model-operation-v3.5',manifestSha256,taskId,operation,round,status,exit,resultSha256,proposalCommit,resultRef`, where commit/ref are non-null only for a maker proposal and the remaining values equal the sealed result/journal;
 - status: the object in section 4.
 
@@ -100,13 +100,16 @@ The effective strategy is the CLI value when present, otherwise `defaultStrategy
 
 | Operation | Strategy | Exact model | Reasoning | Waiver |
 |---|---|---|---|---|
-| `make`, `review`, `verify` | `astra-only` | `gpt-6-astra` | `high` | forbidden |
+| `make` | `sol61-make-astra-review` | `gpt-6.1-sol` | `high` | forbidden |
+| `review`, `verify` | `sol61-make-astra-review` | `gpt-6-astra` | `high` | forbidden |
 
-Every other model/effort and historical strategy is rejected; no automatic fallback or historical waiver can authorize the successor. `route` reports the manifest-default row only. New work requires a canonical v3.6 manifest. The CLI rejects `--waiver`; direct model invocation validates the same exact pair before any host probe or spawn. The v3.22 host/Astra successor does not rewrite or resume historical V3.5 manifests, journals, sealed results or runtime state.
+Every other operation/model/effort pairing and historical strategy is rejected; no automatic fallback or historical waiver can authorize the successor. `route` reports the manifest-default row only. New work requires a canonical v3.7 manifest. The CLI rejects `--model`, `--reasoning-effort` and `--waiver`; direct model invocation binds request operation, role, strategy, model and effort to this table and requires `terraWaiver=null` before any host probe or spawn. The prompt is serialized before asynchronous permission probes so the spawned model and its sealed request retain the same operation. The v3.23 routing successor does not rewrite or resume historical V3.5/V3.6 manifests, journals, sealed results or runtime state, including the unactivated Astra-only predecessor.
+
+The protected live model oracle remains one test registration, but now sequentially invokes all three exact operation routes in isolated view/scratch/transport roots: Sol 6.1 High make, Astra High review and Astra High verify. Each invocation has a 90-second model wall bound and must return the exact operation-tagged terminal object after real permission probes. The outer worker has a 360-second bound and emits `model-runner-real-attempt-v2` with the three completed route rows only after all three succeed. One successful route cannot cover another. Local noncredential tests do not execute this oracle or prove either live model is available; protected-base registration and successful live execution remain required.
 
 ## 4. State namespace, status and exits
 
-V3 durable state lives only at the validated repository root path `.loop-engineering/runtime/model-runner-v3-astra-v2/<manifestSha256>/`. The implementation adds this exact namespace to `.gitignore`. It never opens a V1/V2 runtime path for write, and every V3 command verifies that the byte/hash snapshot of existing V1/V2 runner state, counters, findings, verdicts, artifacts and refs is unchanged before return.
+V3 durable state lives only at the validated repository root path `.loop-engineering/runtime/model-runner-v3-sol61-astra-v1/<manifestSha256>/`. The implementation adds this exact namespace to `.gitignore`. It never opens a V1/V2 runtime path for write, and every V3 command verifies that the byte/hash snapshot of existing V1/V2 runner state, counters, findings, verdicts, artifacts and refs is unchanged before return.
 
 For task key `taskKey=SHA256(UTF8(taskId))`, exact paths below the manifest root are:
 
@@ -154,7 +157,7 @@ Primary-cause precedence is usage, manifest, Git, routing/preflight, state/lock,
 
 The sole pin oracle is tracked `model-runner-host-pins-v3.json`. Its pre-LF bytes must be RFC-8785 canonical JSON of exactly 2,201 bytes with SHA-256 `0c4f60b1db8aaf77b7be9fa1d81b3d2c719465736fc10b29d3d10640e2ef17f2`; its LF-terminated file is 2,202 bytes. It is part of the active normative graph. Implementation cannot learn expected values from the executable under test.
 
-The fixture pins `darwin/arm64`, absolute Node `/usr/local/bin/node` at `v22.14.0`, `/usr/bin/git` at `git version 2.50.1 (Apple Git-155)`, and `/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex` at `codex-cli 0.160.0`. It supplies exact lexical/real paths, decimal-string device/inode/size, uid/gid, octal type/mode and SHA-256 for each executable. Codex additionally binds the ChatGPT bundle stat, bundle/executable identifiers, both full CodeDirectory SHA-256 values, Team ID `2DC432GLL2`, exact designated requirements and notarized Developer ID assessment. The V3.22 candidate supersedes the unactivated V3.21 host fixture with freshly observed exact native 0.160.0, signature and filesystem identities, retaining Astra-only routing. It preserves the private operation-parent/transport denials and grants no additional read, write, tool network, apply or production authority. Protected-base registration and release acceptance are separate and remain required.
+The fixture pins `darwin/arm64`, absolute Node `/usr/local/bin/node` at `v22.14.0`, `/usr/bin/git` at `git version 2.50.1 (Apple Git-155)`, and `/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex` at `codex-cli 0.160.0`. It supplies exact lexical/real paths, decimal-string device/inode/size, uid/gid, octal type/mode and SHA-256 for each executable. Codex additionally binds the ChatGPT bundle stat, bundle/executable identifiers, both full CodeDirectory SHA-256 values, Team ID `2DC432GLL2`, exact designated requirements and notarized Developer ID assessment. The V3.22 candidate supersedes the unactivated V3.21 host fixture with freshly observed exact native 0.160.0, signature and filesystem identities, with the v3.23 routing amendment assigning Sol 6.1 High to make and Astra High to review/verify. It preserves the private operation-parent/transport denials and grants no additional read, write, tool network, apply or production authority. Protected-base registration and release acceptance are separate and remain required.
 
 Preflight rejects a non-regular executable, symlink/realpath difference, fixture/stat/hash/version mismatch, group/world-writable executable, failed `codesign --verify --deep --strict`, failed `spctl`, ad-hoc/unpinned signature or any unlisted path. Every ancestor is `lstat`-walked without following links; system ancestors must be real directories and no ancestor may change between checks. The already-running Node process must have `process.execPath` and executable identity equal to the Node fixture. The user-owned `/usr/local/bin` and ChatGPT bundle ancestry is not treated as immutable against the invoking UID; same-UID replacement is outside the confidentiality threat and is caught whenever observable.
 
@@ -163,10 +166,10 @@ Immediately before each spawn, after `spawn` returns and after child completion,
 The separate runner static identity is the RFC-8785 canonical form of this exact 18-member ASCII-name-sorted array:
 
 ```json
-[["approvalPolicy","never"],["codexVersion","0.160.0"],["contractVersion","model-runner-v3.7"],["gitVersion","2.50.1 (Apple Git-155)"],["hardIsolationClaims",["external_user_read","authoritative_write","command_network"]],["hostPinFixtureSha256","0c4f60b1db8aaf77b7be9fa1d81b3d2c719465736fc10b29d3d10640e2ef17f2"],["hostPinVersion","model-runner-host-pins-v3.22"],["journalVersion","model-runner-journal-v3.5"],["manifestVersion","loop-model-manifest-v3.6"],["nodeVersion","v22.14.0"],["permissionProfileVersion","model-runner-permissions-v3.6"],["promptPolicyVersion","model-runner-prompt-v3.5"],["requestProtocol","loop-model-v3.5"],["resultProtocol","loop-model-result-v3.5"],["routingVersion","model-runner-routing-v3.6"],["sourceViewVersion","model-runner-source-view-v3.5"],["stateNamespace","model-runner-v3-astra-v2"],["trustedApplyVersion","model-runner-trusted-apply-v3.5"]]
+[["approvalPolicy","never"],["codexVersion","0.160.0"],["contractVersion","model-runner-v3.8"],["gitVersion","2.50.1 (Apple Git-155)"],["hardIsolationClaims",["external_user_read","authoritative_write","command_network"]],["hostPinFixtureSha256","0c4f60b1db8aaf77b7be9fa1d81b3d2c719465736fc10b29d3d10640e2ef17f2"],["hostPinVersion","model-runner-host-pins-v3.22"],["journalVersion","model-runner-journal-v3.5"],["manifestVersion","loop-model-manifest-v3.7"],["nodeVersion","v22.14.0"],["permissionProfileVersion","model-runner-permissions-v3.6"],["promptPolicyVersion","model-runner-prompt-v3.5"],["requestProtocol","loop-model-v3.5"],["resultProtocol","loop-model-result-v3.5"],["routingVersion","model-runner-routing-v3.7"],["sourceViewVersion","model-runner-source-view-v3.5"],["stateNamespace","model-runner-v3-sol61-astra-v1"],["trustedApplyVersion","model-runner-trusted-apply-v3.5"]]
 ```
 
-It is exactly 884 UTF-8 bytes with SHA-256 `e93a5fb18ec784e58d7a00ba3f2b37b74e40256beb26e519f911a941c523ff00`. The exact field name `modelRunnerIdentitySha256` carries this digest in every request, status, resource reservation, operation-journal line, resource-journal line and attempt record. Operation and resource-attempt key preimages also include the digest. A missing, additional-position, malformed or different identity member is never inferred from `protocol`: trusted request construction fails `INTERNAL_ERROR`/12 before model spawn, while any durable record/status mismatch is an integrity failure that preserves bytes, sets `state=integrity=recovery_required,lastExit=11` and returns the exact canonical `IO_ERROR` diagnostic without model retry or replay. It remains separate from the opportunity runtime's 41-member tuple; acceptance and product-contract versions belong only to that domain tuple.
+It is exactly 890 UTF-8 bytes with SHA-256 `a2bf72cabbab4afd3749c3b2c7dede71f97ce2182d2ea674d0f62e140c456c4f`. The exact field name `modelRunnerIdentitySha256` carries this digest in every request, status, resource reservation, operation-journal line, resource-journal line and attempt record. Operation and resource-attempt key preimages also include the digest. A missing, additional-position, malformed or different identity member is never inferred from `protocol`: trusted request construction fails `INTERNAL_ERROR`/12 before model spawn, while any durable record/status mismatch is an integrity failure that preserves bytes, sets `state=integrity=recovery_required,lastExit=11` and returns the exact canonical `IO_ERROR` diagnostic without model retry or replay. It remains separate from the opportunity runtime's 41-member tuple; acceptance and product-contract versions belong only to that domain tuple.
 
 ## 6. Trusted anchor, scratch, transport and cleanup
 

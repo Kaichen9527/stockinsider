@@ -31,7 +31,7 @@ const {
   writeExclusive,
 } = require('./journalStore');
 
-const RUNNER_IDENTITY = 'e93a5fb18ec784e58d7a00ba3f2b37b74e40256beb26e519f911a941c523ff00';
+const RUNNER_IDENTITY = 'a2bf72cabbab4afd3749c3b2c7dede71f97ce2182d2ea674d0f62e140c456c4f';
 
 function run(command, args, options = {}) {
   const result = spawnSync(command, args, {
@@ -607,7 +607,15 @@ async function executeModel({
   verifyHostFn = verifyCurrentNode,
   spawnFn = spawn,
 }) {
-  const args = codexArgs({ model: route.model, reasoningEffort: route.reasoningEffort, viewPath: source.view });
+  // Bind the actual spawn to the request's operation and role, not merely a
+  // two-model allowlist. No caller may swap the maker into the reviewer slot.
+  assert(request && ['make', 'review', 'verify'].includes(request.operation)
+    && request.role === ({ make: 'maker', review: 'reviewer', verify: 'verifier' })[request.operation]
+    && request.strategy === 'sol61-make-astra-review' && request.terraWaiver === null && route
+    && request.model === route.model && request.reasoningEffort === route.reasoningEffort, 5);
+  const args = codexArgs({ operation: request.operation, model: route.model,
+    reasoningEffort: route.reasoningEffort, viewPath: source.view });
+  const sealedPrompt = promptFor(request);
   const codex = pins.executables.find((entry) => entry.name === 'codex');
   assert(codex, 5);
   await probePermissions({ pins, source, scratch, transport, verifyHostFn, spawnFn });
@@ -656,7 +664,7 @@ async function executeModel({
     child.once('spawn', () => {
       onStart(child.pid, child.pid);
       resetIdle();
-      child.stdin.end(promptFor(request));
+      child.stdin.end(sealedPrompt);
     });
     child.once('error', () => {
       if (settled) return;
@@ -1217,8 +1225,8 @@ async function executeOperation({
   waiver = null,
 }) {
   // Direct callers cannot use an override to revive a legacy manifest/waiver.
-  assert(parsed?.manifest?.protocol === 'loop-model-manifest-v3.6'
-    && parsed.manifest.defaultStrategy === 'astra-only' && waiver === null, 5);
+  assert(parsed?.manifest?.protocol === 'loop-model-manifest-v3.7'
+    && parsed.manifest.defaultStrategy === 'sol61-make-astra-review' && waiver === null, 5);
   const effectiveStrategy = strategy || parsed.manifest.defaultStrategy;
   const route = routeOperation(operation, effectiveStrategy);
   const root = repositoryRoot(manifestPath);

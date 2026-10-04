@@ -79,10 +79,10 @@ function parseManifest(buffer) {
     throw new RunnerError(3);
   }
   assert(canonicalJson(manifest) === raw && exactKeys(manifest, TOP_LEVEL_KEYS), 3);
-  assert(manifest.protocol === 'loop-model-manifest-v3.6' && manifest.checkpoint === 'model_runner_v3', 3);
+  assert(manifest.protocol === 'loop-model-manifest-v3.7' && manifest.checkpoint === 'model_runner_v3', 3);
   assert(typeof manifest.changeId === 'string' && CHANGE_ID.test(manifest.changeId), 3);
   assert(typeof manifest.base === 'string' && OID.test(manifest.base) && typeof manifest.inputHead === 'string' && OID.test(manifest.inputHead), 3);
-  assert(manifest.defaultStrategy === 'astra-only', 3);
+  assert(manifest.defaultStrategy === 'sol61-make-astra-review', 3);
   assert(Array.isArray(manifest.tasks) && manifest.tasks.length >= 1 && manifest.tasks.length <= 128, 3);
   manifest.tasks.forEach(validateTask);
   const ids = new Set(manifest.tasks.map((task) => task.id));

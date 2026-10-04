@@ -10,19 +10,19 @@ const { loadHostPins, verifyCurrentNode } = require('./hostPreflight');
 const { executeOperation, readState, statePath, repositoryRoot } = require('./execution');
 
 const MODEL_RUNNER_IDENTITY = [
-  ['approvalPolicy', 'never'], ['codexVersion', '0.160.0'], ['contractVersion', 'model-runner-v3.7'],
+  ['approvalPolicy', 'never'], ['codexVersion', '0.160.0'], ['contractVersion', 'model-runner-v3.8'],
   ['gitVersion', '2.50.1 (Apple Git-155)'], ['hardIsolationClaims', ['external_user_read', 'authoritative_write', 'command_network']],
   ['hostPinFixtureSha256', '0c4f60b1db8aaf77b7be9fa1d81b3d2c719465736fc10b29d3d10640e2ef17f2'],
   ['hostPinVersion', 'model-runner-host-pins-v3.22'], ['journalVersion', 'model-runner-journal-v3.5'],
-  ['manifestVersion', 'loop-model-manifest-v3.6'], ['nodeVersion', 'v22.14.0'],
+  ['manifestVersion', 'loop-model-manifest-v3.7'], ['nodeVersion', 'v22.14.0'],
   ['permissionProfileVersion', 'model-runner-permissions-v3.6'], ['promptPolicyVersion', 'model-runner-prompt-v3.5'],
   ['requestProtocol', 'loop-model-v3.5'], ['resultProtocol', 'loop-model-result-v3.5'],
-  ['routingVersion', 'model-runner-routing-v3.6'], ['sourceViewVersion', 'model-runner-source-view-v3.5'],
-  ['stateNamespace', 'model-runner-v3-astra-v2'], ['trustedApplyVersion', 'model-runner-trusted-apply-v3.5'],
+  ['routingVersion', 'model-runner-routing-v3.7'], ['sourceViewVersion', 'model-runner-source-view-v3.5'],
+  ['stateNamespace', 'model-runner-v3-sol61-astra-v1'], ['trustedApplyVersion', 'model-runner-trusted-apply-v3.5'],
 ];
-const MODEL_RUNNER_IDENTITY_SHA256 = 'e93a5fb18ec784e58d7a00ba3f2b37b74e40256beb26e519f911a941c523ff00';
+const MODEL_RUNNER_IDENTITY_SHA256 = 'a2bf72cabbab4afd3749c3b2c7dede71f97ce2182d2ea674d0f62e140c456c4f';
 
-assert(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)) === 884 && sha256(canonicalJson(MODEL_RUNNER_IDENTITY)) === MODEL_RUNNER_IDENTITY_SHA256, 12);
+assert(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)) === 890 && sha256(canonicalJson(MODEL_RUNNER_IDENTITY)) === MODEL_RUNNER_IDENTITY_SHA256, 12);
 
 function parseArguments(argv) {
   assert(argv.length >= 1, 2);
@@ -49,7 +49,7 @@ function parseArguments(argv) {
   assert(typeof flags['--manifest'] === 'string', 2);
   const requiresTask = ['run', 'review', 'verify', 'status'].includes(command);
   assert(!requiresTask || typeof flags['--task'] === 'string', 2);
-  assert(!flags['--strategy'] || flags['--strategy'] === 'astra-only', 2);
+  assert(!flags['--strategy'] || flags['--strategy'] === 'sol61-make-astra-review', 2);
   return { command, flags };
 }
 
@@ -80,7 +80,7 @@ function selectedTask(parsed, taskId) {
 }
 
 function validateWaiver() {
-  // Historical waivers never authorize the Astra-only successor.
+  // Historical waivers never authorize the operation-bound successor.
   throw new RunnerError(5);
 }
 
@@ -125,7 +125,7 @@ async function execute(argv) {
     return readState(statePath(root, parsed, task), parsed, task);
   }
   const effectiveStrategy = flags['--strategy'] || parsed.manifest.defaultStrategy;
-  assert(effectiveStrategy === 'astra-only' && !flags['--waiver'], 5);
+  assert(effectiveStrategy === 'sol61-make-astra-review' && !flags['--waiver'], 5);
   const pins = verifyExecutionHost(flags['--manifest']);
   const waiver = null;
   const result = await executeOperation({

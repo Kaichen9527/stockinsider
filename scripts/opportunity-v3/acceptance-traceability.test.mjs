@@ -798,7 +798,7 @@ function activeGraphOracle() {
   assert.equal(catalogBlob.bytes.length, 6758, 'catalog exact tracked byte length including LF');
   assert.equal(
     sha256(catalogBlob.bytes),
-    '1990477763b4319dc90d7fbe0530fe1919b952466cbea5864f8894815747e819',
+    'b03f67ec6633bc8e1fb3427daf6d10ae9b1d34ffdb54835bede59869708342c7',
     'catalog exact tracked SHA-256',
   );
   const expectedVersions = new Map(activeCatalog.owners);
@@ -1195,8 +1195,8 @@ function activeGraphOracle() {
   assert.equal(sha256(hostPinCanonical), '0c4f60b1db8aaf77b7be9fa1d81b3d2c719465736fc10b29d3d10640e2ef17f2');
   assert.equal(hostPins.fixtureVersion, 'model-runner-host-pins-v3.22');
   assert.equal(hostPins.executables.find(({ name }) => name === 'codex')?.version, 'codex-cli 0.160.0');
-  assert.equal(runner.MODEL_RUNNER_IDENTITY_SHA256, 'e93a5fb18ec784e58d7a00ba3f2b37b74e40256beb26e519f911a941c523ff00');
-  assert.equal(Buffer.byteLength(canonicalJson(runner.MODEL_RUNNER_IDENTITY)), 884);
+  assert.equal(runner.MODEL_RUNNER_IDENTITY_SHA256, 'a2bf72cabbab4afd3749c3b2c7dede71f97ce2182d2ea674d0f62e140c456c4f');
+  assert.equal(Buffer.byteLength(canonicalJson(runner.MODEL_RUNNER_IDENTITY)), 890);
   const runtimeContract = readFileSync(path.join(change, 'runtime-transaction-contract.md'), 'utf8');
   assert.match(runtimeContract, /staticIdentityMembers` is the following exact 41-member/u);
   assert.match(runtimeContract, /\["acceptanceVersion","1[.]46[.]0"\]/u);

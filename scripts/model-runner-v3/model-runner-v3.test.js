@@ -72,9 +72,9 @@ ordinaryTest('authentication source is bound to the operating-system account, no
   }
 });
 
-function manifestObject(strategy = 'astra-only') {
+function manifestObject(strategy = 'sol61-make-astra-review') {
   return {
-    protocol: 'loop-model-manifest-v3.6',
+    protocol: 'loop-model-manifest-v3.7',
     checkpoint: 'model_runner_v3',
     changeId: 'source-led-opportunity-engine-v3',
     base: 'a'.repeat(40),
@@ -128,17 +128,19 @@ ordinaryTest('permanent path exclusions outrank manifest selectors and prompts',
   assert.equal(promptPathAllowed('source-led-opportunity-engine-v3', '.loop-engineering/state/changes/source-led-opportunity-engine-v3/secret-contract.md'), false);
 });
 
-ordinaryTest('only Astra High routes make review and verify; legacy manifests and routes fail', () => {
+ordinaryTest('only Sol 6.1 High makes and Astra High reviews or verifies; legacy routes fail', () => {
   const routed = routeManifest(parsedManifest());
   for (const operation of ['make', 'review', 'verify']) {
-    assert.deepEqual(routed.routes[0][operation], { model: 'gpt-6-astra', reasoningEffort: 'high', waiverRequired: false });
-    for (const legacy of ['hybrid', 'sol-only', 'terra-only', 'luna-only']) {
+    assert.deepEqual(routed.routes[0][operation], { model: operation === 'make' ? 'gpt-6.1-sol' : 'gpt-6-astra', reasoningEffort: 'high', waiverRequired: false });
+    for (const legacy of ['astra-only', 'hybrid', 'sol-only', 'terra-only', 'luna-only']) {
       expectExit(3, () => parsedManifest(legacy));
       expectExit(5, () => require('./routing').routeOperation(operation, legacy));
     }
   }
-  const oldManifest = { ...manifestObject(), protocol: 'loop-model-manifest-v3.5' };
-  expectExit(3, () => parseManifest(Buffer.from(canonicalJson(oldManifest) + '\n')));
+  for (const protocol of ['loop-model-manifest-v3.5', 'loop-model-manifest-v3.6']) {
+    const oldManifest = { ...manifestObject(), protocol };
+    expectExit(3, () => parseManifest(Buffer.from(canonicalJson(oldManifest) + '\n')));
+  }
 });
 
 ordinaryTest('source-view identity binds sorted readable tracked entries', () => {
@@ -163,6 +165,7 @@ ordinaryTest('Codex profile is custom least privilege and never uses legacy sand
   assert.match(profile, /":minimal" = "read"/);
   assert.match(profile, /"\/private\/scratch" = "write"/);
   const args = codexArgs({
+    operation: 'review',
     model: 'gpt-6-astra',
     reasoningEffort: 'high',
     viewPath: '/private/view',
@@ -173,6 +176,7 @@ ordinaryTest('Codex profile is custom least privilege and never uses legacy sand
   assert.equal(args.includes('--ignore-user-config'), true);
   assert.equal(args.includes('model_reasoning_effort="high"'), true);
   expectExit(5, () => codexArgs({
+    operation: 'review',
     model: 'gpt-6-astra',
     reasoningEffort: 'xhigh',
     viewPath: '/private/view',
@@ -245,9 +249,9 @@ ordinaryTest('operation and resource identities are deterministic and bound', ()
     resourceAttemptOrdinal: 0,
   }), /^[a-f0-9]{64}$/);
   assert.equal(MODEL_RUNNER_IDENTITY_SHA256.length, 64);
-  assert.equal(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)), 884);
+  assert.equal(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)), 890);
   assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'codexVersion'), ['codexVersion', '0.160.0']);
-  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'contractVersion'), ['contractVersion', 'model-runner-v3.7']);
+  assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'contractVersion'), ['contractVersion', 'model-runner-v3.8']);
   assert.deepEqual(MODEL_RUNNER_IDENTITY.find(([name]) => name === 'hostPinVersion'), ['hostPinVersion', 'model-runner-host-pins-v3.22']);
   for (const relativePath of ['execution.js', 'journalStore.js']) {
     const implementation = fs.readFileSync(path.join(__dirname, relativePath), 'utf8');
@@ -581,15 +585,20 @@ function runIsolatedRealModelAttempt() {
     env: process.env,
     maxBuffer: 1024 * 1024,
     shell: false,
-    timeout: 150_000,
+    timeout: 360_000,
   });
   assert.equal(result.error, undefined, `real model worker error: ${result.error?.message ?? ''}`);
   assert.equal(result.signal, null, `real model worker signal: ${result.signal ?? ''}`);
   assert.equal(result.status, 0, `real model worker stderr: ${result.stderr}`);
   assert.equal(result.stderr, '');
   assert.deepEqual(JSON.parse(result.stdout), {
-    protocol: 'model-runner-real-attempt-v1',
+    protocol: 'model-runner-real-attempt-v2',
     status: 'pass',
+    completedRoutes: [
+      { operation: 'make', model: 'gpt-6.1-sol', reasoningEffort: 'high' },
+      { operation: 'review', model: 'gpt-6-astra', reasoningEffort: 'high' },
+      { operation: 'verify', model: 'gpt-6-astra', reasoningEffort: 'high' },
+    ],
   });
 }
 
@@ -640,7 +649,7 @@ ordinaryTest('CLI validates canonical input and fails closed before execution wh
   fs.writeFileSync(waiverPath, canonicalJson(waiver) + '\n', { mode: 0o600 });
   expectExit(5, () => validateWaiver(waiverPath));
   expectExit(2, () => parseArguments(['run', '--manifest', filename, '--task', 'runner-foundation',
-    '--strategy', 'astra-only', '--waiver', waiverPath]));
+    '--strategy', 'sol61-make-astra-review', '--waiver', waiverPath]));
   fs.rmSync(waiverDirectory, { recursive: true, force: true });
   fs.rmSync(directory, { recursive: true, force: true });
 });
@@ -687,7 +696,7 @@ ordinaryTest('maker execution materializes a tracked source view, applies the se
       parsed,
       task,
       operation: 'review',
-      strategy: 'astra-only',
+      strategy: 'sol61-make-astra-review',
       pins: Object.freeze({ executables: [{ name: 'codex', version: 'codex-cli test' }] }),
       manifestPath,
       executeModelFn: () => {
@@ -700,7 +709,7 @@ ordinaryTest('maker execution materializes a tracked source view, applies the se
     parsed,
     task,
     operation: 'make',
-    strategy: 'astra-only',
+    strategy: 'sol61-make-astra-review',
     pins: Object.freeze({ executables: [{ name: 'codex', version: 'codex-cli test' }] }),
     manifestPath,
     prepareTransportFn: ({ transport }) => {
@@ -821,7 +830,7 @@ ordinaryTest('maker execution materializes a tracked source view, applies the se
     parsed,
     task,
     operation: 'make',
-    strategy: 'astra-only',
+    strategy: 'sol61-make-astra-review',
     pins: Object.freeze({ executables: [{ name: 'codex', version: 'codex-cli test' }] }),
     manifestPath,
     executeModelFn: () => {
@@ -874,7 +883,7 @@ ordinaryTest('maker execution materializes a tracked source view, applies the se
     parsed,
     task,
     operation: 'make',
-    strategy: 'astra-only',
+    strategy: 'sol61-make-astra-review',
     pins: Object.freeze({ executables: [{ name: 'codex', version: 'codex-cli test' }] }),
     manifestPath,
     executeModelFn: () => {
@@ -888,7 +897,7 @@ ordinaryTest('maker execution materializes a tracked source view, applies the se
       parsed,
       task,
       operation: 'review',
-      strategy: 'astra-only',
+      strategy: 'sol61-make-astra-review',
       pins: Object.freeze({ executables: [{ name: 'codex', version: 'codex-cli test' }] }),
       manifestPath,
       prepareTransportFn: ({ transport }) => {
@@ -966,7 +975,7 @@ ordinaryTest('maker execution materializes a tracked source view, applies the se
       parsed,
       task,
       operation: 'review',
-      strategy: 'astra-only',
+      strategy: 'sol61-make-astra-review',
       pins: Object.freeze({ executables: [{ name: 'codex', version: 'codex-cli test' }] }),
       manifestPath,
       executeModelFn: () => {
@@ -1004,7 +1013,7 @@ ordinaryTest('maker execution materializes a tracked source view, applies the se
     parsed,
     task,
     operation: 'verify',
-    strategy: 'astra-only',
+    strategy: 'sol61-make-astra-review',
     pins: Object.freeze({ executables: [{ name: 'codex', version: 'codex-cli test' }] }),
     manifestPath,
     executeModelFn: () => {
@@ -1060,29 +1069,48 @@ ordinaryTest('maker execution materializes a tracked source view, applies the se
   fs.rmSync(directory, { recursive: true, force: true });
 });
 
-ordinaryTest('Astra adapter and direct model entry reject every unsupported route before probing or spawning', async () => {
+ordinaryTest('operation-bound adapter and direct entry reject swaps overrides and waivers before probes', async () => {
   for (const manifest of [{ ...manifestObject(), protocol: 'loop-model-manifest-v3.5' },
-    manifestObject('hybrid')]) {
+    { ...manifestObject(), protocol: 'loop-model-manifest-v3.6' }, manifestObject('astra-only'), manifestObject('hybrid')]) {
     await assert.rejects(executeOperation({ parsed: { manifest }, task: manifest.tasks[0],
-      operation: 'make', strategy: 'astra-only', manifestPath: '/missing/must-not-be-read' }),
+      operation: 'make', strategy: 'sol61-make-astra-review', manifestPath: '/missing/must-not-be-read' }),
     error => error instanceof RunnerError && error.exit === 5);
   }
-
-  for (const model of ['gpt-5.6-terra', 'gpt-5.6-sol', 'gpt-6-sol', 'gpt-6-luna', 'unknown']) {
-    expectExit(5, () => codexArgs({ model, reasoningEffort: 'high', viewPath: '/private/view' }));
-    await assert.rejects(executeModel({ source: { view: '/private/view' },
-      route: { model, reasoningEffort: 'high' },
-      verifyHostFn: () => assert.fail('host must not run'), spawnFn: () => assert.fail('no subprocess') }),
-    error => error instanceof RunnerError && error.exit === 5);
-  }
-  for (const effort of ['low', 'medium', 'xhigh', 'max']) {
-    expectExit(5, () => codexArgs({ model: 'gpt-6-astra', reasoningEffort: effort, viewPath: '/private/view' }));
-  }
+  await assert.rejects(executeOperation({ parsed: parsedManifest(), task: manifestObject().tasks[0],
+    operation: 'make', waiver: {}, manifestPath: '/missing/must-not-be-read' }),
+  error => error instanceof RunnerError && error.exit === 5);
   for (const operation of ['make', 'review', 'verify']) {
-    const route = require('./routing').routeOperation(operation, 'astra-only');
-    const args = codexArgs({ ...route, viewPath: '/private/view' });
-    assert.equal(args[args.indexOf('--model') + 1], 'gpt-6-astra');
+    const model = operation === 'make' ? 'gpt-6.1-sol' : 'gpt-6-astra';
+    const request = { operation, role: ({ make: 'maker', review: 'reviewer', verify: 'verifier' })[operation],
+      model, reasoningEffort: 'high', strategy: 'sol61-make-astra-review', terraWaiver: null };
+    const route = require('./routing').routeOperation(operation, 'sol61-make-astra-review');
+    const args = codexArgs({ operation, ...route, viewPath: '/private/view' });
+    assert.equal(args[args.indexOf('--model') + 1], model);
     assert.ok(args.includes('model_reasoning_effort="high"'));
+    const rejectDirect = async (badRequest, badRoute) => {
+      await assert.rejects(executeModel({ source: { view: '/private/view' }, request: badRequest,
+        route: badRoute, verifyHostFn: () => assert.fail('host must not run'),
+        spawnFn: () => assert.fail('no subprocess') }), error => error instanceof RunnerError && error.exit === 5);
+    };
+    for (const other of ['gpt-5.6-terra', 'gpt-5.6-sol', 'gpt-6-sol', 'gpt-6-luna', 'unknown',
+      operation === 'make' ? 'gpt-6-astra' : 'gpt-6.1-sol']) {
+      expectExit(5, () => codexArgs({ operation, model: other, reasoningEffort: 'high', viewPath: '/private/view' }));
+      await rejectDirect({ ...request, model: other }, { model: other, reasoningEffort: 'high' });
+      await rejectDirect(request, { model: other, reasoningEffort: 'high' });
+    }
+    for (const effort of ['low', 'medium', 'xhigh', 'max']) {
+      expectExit(5, () => codexArgs({ operation, model, reasoningEffort: effort, viewPath: '/private/view' }));
+      await rejectDirect({ ...request, reasoningEffort: effort }, { model, reasoningEffort: effort });
+    }
+    for (const mutation of [undefined, { ...request, operation: 'run' }, { ...request, role: 'unknown' },
+      { ...request, strategy: 'astra-only' }, { ...request, strategy: 'hybrid' },
+      { ...request, terraWaiver: {} }, { ...request, terraWaiver: undefined }]) await rejectDirect(mutation, route);
+  }
+  for (const operation of [undefined, 'run', 'unknown']) {
+    expectExit(5, () => codexArgs({ operation, model: 'gpt-6.1-sol', reasoningEffort: 'high', viewPath: '/private/view' }));
+  }
+  for (const flag of ['--model', '--reasoning-effort', '--waiver']) {
+    expectExit(2, () => parseArguments(['run', '--manifest', '/private/manifest', '--task', 'task', flag, 'unsupported']));
   }
 });
 
@@ -1091,13 +1119,13 @@ ordinaryTest('successor never resumes old ready reviewed recovery or sealed stat
   try {
     const parsed = parsedManifest(), task = parsed.manifest.tasks[0];
     const filename = statePath(root, parsed, task);
-    assert.ok(filename.includes('/runtime/model-runner-v3-astra-v2/'));
+    assert.ok(filename.includes('/runtime/model-runner-v3-sol61-astra-v1/'));
     const initial = readState(filename, parsed, task);
     fs.mkdirSync(path.dirname(filename), { recursive: true });
     for (const state of ['proposal_ready', 'review_passed', 'recovery_required', 'verified']) {
       const prior = { ...initial, state,
         integrity: state === 'recovery_required' ? 'recovery_required' : 'ok',
-        modelRunnerIdentitySha256: '5ff9c6404c0c645e4845784923190195fe1fd5eb53dfef2be57c23e79e0fad64' };
+        modelRunnerIdentitySha256: 'e93a5fb18ec784e58d7a00ba3f2b37b74e40256beb26e519f911a941c523ff00' };
       const bytes = canonicalJson(prior) + '\n';
       fs.writeFileSync(filename, bytes);
       expectExit(11, () => readState(filename, parsed, task));
