@@ -170,14 +170,19 @@ test('cross-role budget, revision heads and first-discovery gaps survive real Po
       record('c'.repeat(64),'validation','b'.repeat(64));
       record('d'.repeat(64),'approval','c'.repeat(64));
       assert.throws(()=>sql("DELETE FROM research_strategy_records_v1"),/immutable_revision/u);
-      const append=(key,parent,operation)=>sql(`INSERT INTO research_paper_book_revisions_v1
+      let activationAt=null;
+      const append=(key,parent,operation,activation=activationAt)=>sql(`INSERT INTO research_paper_book_revisions_v1
         (revision_hash,book_id,parent_hash,operation_key,input_hash,state,result)
         VALUES('${key}','growth',${parent ? "'"+parent+"'" : 'NULL'},'${operation}','${digest}',
-          '{"bookId":"growth","cash":1000000}','{"actualOrders":false}')`);
+          '${JSON.stringify({bookId:'growth',cash:1000000,inceptionAt:'2026-09-30T00:00:00Z',activationAt:activation})}',
+          '{"actualOrders":false}')`);
       append(digest,null,'initialize-v5');
+      activationAt=sql(`SELECT available_at FROM research_paper_book_revisions_v1 WHERE revision_hash='${digest}'`);
+      assert.throws(()=>append('e'.repeat(64),digest,'session:2026-09-01',null),/activation_invalid/u);
       append('b'.repeat(64),digest,'session:2026-09-01');
       assert.throws(()=>append('c'.repeat(64),digest,'session:2026-09-02'),/head_changed/u);
       append('c'.repeat(64),'b'.repeat(64),'session:2026-09-02');
+      assert.throws(()=>append('e'.repeat(64),'c'.repeat(64),'session:2026-09-03','2026-09-30T00:00:00Z'),/activation_changed/u);
       assert.equal(sql("SELECT count(*) FROM research_paper_book_revisions_v1"),'3');
       assert.throws(()=>sql("UPDATE research_paper_book_revisions_v1 SET state='{}'"),/immutable_revision/u);
     } finally {

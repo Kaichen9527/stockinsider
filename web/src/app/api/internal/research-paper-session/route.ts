@@ -42,16 +42,20 @@ export async function POST(request: Request) {
       const forwardCalendar = await acquireTwEntryForwardCalendar();
       const asOf = new Date().toISOString(); const session = String(body.session);
       const cutoffOpen = `${session}T09:00:00+08:00`;
-      if (!book.inceptionAt || !Number.isFinite(Date.parse(book.inceptionAt))
-        || Date.parse(cutoffOpen) <= Date.parse(book.inceptionAt)
-        || !book.lastProcessedSession && (!Number.isFinite(Date.parse(String(head.data.available_at)))
-          || Date.parse(cutoffOpen) <= Date.parse(String(head.data.available_at)))) throw new Error('paper_session_before_inception');
+      const inception = Date.parse(book.inceptionAt || '');
+      const initialRecordedAt = Date.parse(String(head.data.available_at));
+      const activationAt = book.activationAt || (!book.lastProcessedSession && Number.isFinite(inception)
+        && Number.isFinite(initialRecordedAt) ? new Date(Math.max(inception, initialRecordedAt)).toISOString() : null);
+      if (!Number.isFinite(inception) || !activationAt || !Number.isFinite(Date.parse(activationAt))
+        || Date.parse(activationAt) < inception || Date.parse(cutoffOpen) <= Date.parse(activationAt))
+        throw new Error('paper_session_before_inception');
+      book = { ...book, activationAt };
       if (!book.lastProcessedSession) {
         // Freeze the start by taking the earliest completed official session
         // whose open follows initialization. Callers cannot choose a later,
         // more favorable historical starting session on restart.
         const first = await db.from('tw_trading_sessions_v3').select('session_id')
-          .eq('status', 'completed').gt('open_at', book.inceptionAt)
+          .eq('status', 'completed').gt('open_at', activationAt)
           .lte('close_at', asOf).lte('recorded_at', asOf).order('session_id').limit(1).maybeSingle();
         if (first.error || first.data?.session_id !== session) throw new Error('paper_first_session_must_follow_inception');
       }

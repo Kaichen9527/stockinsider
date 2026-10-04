@@ -16,7 +16,7 @@ export const RESEARCH_STRATEGY_RELEASE = {
     },
     {
       "path": "migrations/20260929_research_agent_state_v1.sql",
-      "sha256": "8eda0ed1e943f42d57687a1724d3fa42d9ee280a59a8ca6b5177cbd705a5b11b"
+      "sha256": "fdf933015b113afbc151e7db33eb8f01654a1620c0a58a4a3d9f4c312355b79a"
     },
     {
       "path": "migrations/20261004_research_technical_identity_v2.sql",
@@ -24,7 +24,7 @@ export const RESEARCH_STRATEGY_RELEASE = {
     },
     {
       "path": "web/src/app/api/internal/research-paper-session/route.ts",
-      "sha256": "f4ef6e3016864a5da3c11a51c280148303c6f22d4c74edc002ba3432ce460582"
+      "sha256": "48e320c3d34706c0abaff483e05a14a396d1e3cb14271913c8b3f5eaeeb68e9b"
     },
     {
       "path": "web/src/app/api/internal/research-technical-snapshot/route.ts",
@@ -80,7 +80,7 @@ export const RESEARCH_STRATEGY_RELEASE = {
     },
     {
       "path": "web/src/lib/research-paper-books.ts",
-      "sha256": "9d119633e9b6e7f386c89831bf6dd9a0ee4ad3f5ff3e864bafdb0932f47df9d6"
+      "sha256": "44a4d45b6f2db7d1f124f2277042840e9c142f0a6fb869d2dd4e1408bd1a2830"
     },
     {
       "path": "web/src/lib/research-strategy-governance.ts",
@@ -129,7 +129,7 @@ export const RESEARCH_STRATEGY_RELEASE = {
     },
     {
       "name": "fence_research_paper_book_append_v1",
-      "bodySha256": "6909f9a80e2f71fc65026fb96fc2320fe6fe7d35f798f0f60d64d67a8979db6f",
+      "bodySha256": "ca7a460f0d8fb40d1df5edc07782c43ef812a0197c0e8328329e583f4acd9708",
       "securityDefiner": true,
       "volatility": "v",
       "argumentCount": 0,
@@ -239,13 +239,13 @@ export const RESEARCH_STRATEGY_RELEASE = {
     }
   ],
   "dependencyLockHash": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
-  "codeHash": "7b0aa05fff8b62375ea691b26f055023c5a3774d071088a990a95287aac63dc3",
+  "codeHash": "ede7496f78ea13a38c6de4f51a2b7ef032d6e52e4cb77526793e371822d38339",
   "parameterMode": "fixed_baseline_source_bound",
-  "parameterHash": "72880c65024ce1b0a38c30673142c309f9b90ffb1f1565ece2ae11edfad95c3b",
+  "parameterHash": "9101ef58a0d43f53e7dea0749eb03872f375bb3051cfd77e6147d9141e2334e4",
   "parameterFiles": [
     {
       "path": "web/src/lib/research-paper-books.ts",
-      "sha256": "9d119633e9b6e7f386c89831bf6dd9a0ee4ad3f5ff3e864bafdb0932f47df9d6"
+      "sha256": "44a4d45b6f2db7d1f124f2277042840e9c142f0a6fb869d2dd4e1408bd1a2830"
     },
     {
       "path": "web/src/lib/research-strategy-governance.ts",

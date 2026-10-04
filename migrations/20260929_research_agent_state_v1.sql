@@ -394,6 +394,13 @@ BEGIN
   IF NEW.parent_hash IS DISTINCT FROM v_head.revision_hash THEN RAISE EXCEPTION 'research_paper_book_head_changed'; END IF;
   IF v_head.revision_hash IS NOT NULL AND NEW.state->>'inceptionAt' IS DISTINCT FROM v_head.state->>'inceptionAt'
     THEN RAISE EXCEPTION 'research_paper_book_inception_changed'; END IF;
+  IF v_head.state->>'activationAt' IS NOT NULL
+    AND NEW.state->>'activationAt' IS DISTINCT FROM v_head.state->>'activationAt'
+    THEN RAISE EXCEPTION 'research_paper_book_activation_changed'; END IF;
+  IF v_head.state->>'inceptionAt' IS NOT NULL AND v_head.state->>'activationAt' IS NULL
+    AND (NEW.state->>'activationAt')::timestamptz IS DISTINCT FROM
+      greatest((v_head.state->>'inceptionAt')::timestamptz,v_head.available_at)
+    THEN RAISE EXCEPTION 'research_paper_book_activation_invalid'; END IF;
   IF NEW.available_at>clock_timestamp() OR (v_head.revision_hash IS NOT NULL AND NEW.available_at<=v_head.available_at)
     THEN RAISE EXCEPTION 'research_paper_book_revision_time_invalid'; END IF;
   RETURN NEW;
