@@ -29,6 +29,69 @@ ALTER TABLE public.research_deep_jobs_v1
 CREATE INDEX IF NOT EXISTS idx_research_deep_jobs_claim_v1
   ON public.research_deep_jobs_v1 (status, week_start, queue_rank, created_at);
 
+ALTER TABLE public.candidate_deep_article_reviews_v1
+  ADD COLUMN IF NOT EXISTS model_reservation_id UUID REFERENCES public.research_model_reservations_v1(reservation_id);
+
+-- Release only the author's model runtime, retaining the attempt/publication
+-- fence. The total deep workflow still has its original thirty-minute deadline.
+CREATE OR REPLACE FUNCTION public.handoff_research_deep_model_v1(
+  p_job_id UUID,p_owner TEXT,p_attempt INTEGER,p_article_hash TEXT
+) RETURNS BOOLEAN LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp
+AS $function$
+DECLARE v_job public.research_deep_jobs_v1; v_reservation uuid;
+BEGIN
+  PERFORM pg_advisory_xact_lock(2409,6002);
+  SELECT * INTO v_job FROM public.research_deep_jobs_v1 WHERE job_id=p_job_id FOR UPDATE;
+  IF NOT FOUND OR v_job.status<>'running' OR v_job.lease_owner IS DISTINCT FROM p_owner
+    OR v_job.attempts<>p_attempt OR v_job.lease_expires_at<=clock_timestamp()
+    OR p_article_hash IS NULL OR p_article_hash !~ '^[a-f0-9]{64}$' THEN RAISE EXCEPTION 'research_deep_handoff_fence_lost'; END IF;
+  SELECT reservation_id INTO v_reservation FROM public.research_model_reservations_v1
+    WHERE role='company_research' AND owner=p_owner AND work_key='deep:'||p_job_id||':'||p_attempt::text;
+  IF v_reservation IS NULL THEN RAISE EXCEPTION 'research_deep_model_reservation_missing'; END IF;
+  RETURN public.finish_research_model_v1(v_reservation,p_owner,'completed',p_article_hash);
+END $function$;
+
+CREATE OR REPLACE FUNCTION public.record_budgeted_deep_review_v1(
+  p_job_id UUID,p_attempt INTEGER,p_reservation_id UUID,p_review JSONB
+) RETURNS UUID LANGUAGE plpgsql SECURITY DEFINER SET search_path=public,pg_temp
+AS $function$
+DECLARE v_job public.research_deep_jobs_v1; v_model public.research_model_reservations_v1; v_id uuid;
+BEGIN
+  PERFORM pg_advisory_xact_lock(2409,6002);
+  SELECT * INTO v_job FROM public.research_deep_jobs_v1 WHERE job_id=p_job_id FOR UPDATE;
+  SELECT * INTO v_model FROM public.research_model_reservations_v1 WHERE reservation_id=p_reservation_id;
+  IF v_model.role IS DISTINCT FROM 'counter_review'
+    OR v_model.owner IS DISTINCT FROM p_review->>'reviewer_id'
+    OR v_model.work_key IS DISTINCT FROM 'deep-review:'||p_job_id||':'||p_attempt||':'||(p_review->>'article_hash')
+    OR p_review->>'author_id'=p_review->>'reviewer_id'
+    OR NOT EXISTS(SELECT 1 FROM public.research_model_reservations_v1 r
+      JOIN public.research_model_completions_v1 c USING(reservation_id)
+      WHERE r.role='company_research' AND r.work_key='deep:'||p_job_id||':'||p_attempt
+        AND c.outcome='completed' AND c.result_hash=p_review->>'article_hash')
+    OR NOT EXISTS(SELECT 1 FROM public.candidate_detail_snapshots d
+      WHERE d.id=(p_review->>'revision_id')::uuid AND d.stock_id=v_job.stock_id)
+    THEN RAISE EXCEPTION 'research_deep_review_model_binding_invalid'; END IF;
+  SELECT id INTO v_id FROM public.candidate_deep_article_reviews_v1
+    WHERE revision_id=(p_review->>'revision_id')::uuid AND input_hash=p_review->>'input_hash'
+      AND article_hash=p_review->>'article_hash' AND reviewer_id=p_review->>'reviewer_id'
+      AND decision=p_review->>'decision' AND findings=p_review->'findings'
+      AND author_id=p_review->>'author_id' AND source_document_ids=p_review->'source_document_ids'
+      AND reviewed_at=(p_review->>'reviewed_at')::timestamptz
+      AND model_reservation_id=p_reservation_id;
+  IF v_id IS NOT NULL THEN RETURN v_id; END IF;
+  IF v_job.status IS DISTINCT FROM 'running' OR v_job.attempts IS DISTINCT FROM p_attempt
+    OR v_job.lease_expires_at<=clock_timestamp()
+    OR v_model.lease_expires_at<=clock_timestamp() OR EXISTS(SELECT 1 FROM public.research_model_completions_v1
+    WHERE reservation_id=p_reservation_id) THEN RAISE EXCEPTION 'research_deep_review_model_lease_lost'; END IF;
+  INSERT INTO public.candidate_deep_article_reviews_v1(revision_id,input_hash,article_hash,author_id,reviewer_id,
+    decision,findings,source_document_ids,reviewed_at,model_reservation_id)
+  VALUES((p_review->>'revision_id')::uuid,p_review->>'input_hash',p_review->>'article_hash',p_review->>'author_id',
+    p_review->>'reviewer_id',p_review->>'decision',p_review->'findings',p_review->'source_document_ids',
+    (p_review->>'reviewed_at')::timestamptz,p_reservation_id) RETURNING id INTO v_id;
+  PERFORM public.finish_research_model_v1(p_reservation_id,v_model.owner,'completed',p_review->>'article_hash');
+  RETURN v_id;
+END $function$;
+
 -- A deep article is a distinct immutable successor, not a rewrite of the
 -- accepted ordinary article. Retain one valid publication of each kind.
 ALTER TABLE public.candidate_research_dossiers
@@ -253,7 +316,8 @@ BEGIN
     CASE WHEN p_success THEN 'completed' ELSE 'failed' END,
     encode(sha256(convert_to(COALESCE(p_receipt_id::text,p_reason),'UTF8')),'hex'))
   FROM public.research_model_reservations_v1 r WHERE r.role='company_research'
-    AND r.work_key='deep:'||p_job_id||':'||p_attempt::text;
+    AND r.work_key='deep:'||p_job_id||':'||p_attempt::text
+    AND NOT EXISTS(SELECT 1 FROM public.research_model_completions_v1 c WHERE c.reservation_id=r.reservation_id);
   RETURN TRUE;
 END $function$;
 
@@ -324,6 +388,11 @@ BEGIN
       WHERE review.id=p_deep_review_id AND review.revision_id=p_revision_id
         AND review.input_hash=p_input_hash AND review.article_hash=p_article_hash
         AND review.decision='accepted' AND review.reviewed_at>=v_job.created_at
+        AND EXISTS(SELECT 1 FROM public.research_model_completions_v1 c
+          JOIN public.research_model_reservations_v1 r USING(reservation_id)
+          WHERE c.reservation_id=review.model_reservation_id AND c.outcome='completed'
+            AND c.result_hash=p_article_hash AND r.role='counter_review'
+            AND r.work_key='deep-review:'||p_deep_job_id||':'||p_deep_attempt||':'||p_article_hash)
     )
   ) THEN
     RAISE EXCEPTION 'research_deep_exact_review_missing';
@@ -356,7 +425,8 @@ BEGIN
   PERFORM public.finish_research_model_v1(r.reservation_id,p_deep_owner,
     CASE WHEN v_receipt.status='accepted' THEN 'completed' ELSE 'failed' END,p_submission_hash)
   FROM public.research_model_reservations_v1 r WHERE r.role='company_research'
-    AND r.work_key='deep:'||p_deep_job_id||':'||p_deep_attempt::text;
+    AND r.work_key='deep:'||p_deep_job_id||':'||p_deep_attempt::text
+    AND NOT EXISTS(SELECT 1 FROM public.research_model_completions_v1 c WHERE c.reservation_id=r.reservation_id);
   RETURN QUERY SELECT v_receipt.submission_id,v_receipt.dossier_id,v_receipt.status,
     v_receipt.rejection_reasons,v_receipt.idempotent_replay;
 END $function$;
@@ -367,6 +437,8 @@ REVOKE ALL ON public.research_deep_jobs_v1, public.research_deep_job_attempts_v1
   FROM PUBLIC, anon, authenticated;
 GRANT ALL ON public.research_deep_jobs_v1, public.research_deep_job_attempts_v1 TO service_role;
 REVOKE ALL ON FUNCTION public.enqueue_research_deep_jobs_v1(UUID),
+  public.handoff_research_deep_model_v1(UUID,TEXT,INTEGER,TEXT),
+  public.record_budgeted_deep_review_v1(UUID,INTEGER,UUID,JSONB),
   public.claim_research_deep_job_v1(TEXT),
   public.finish_research_deep_job_v1(UUID,TEXT,BOOLEAN,UUID,TEXT),
   public.finish_research_deep_job_v2(UUID,TEXT,INTEGER,BOOLEAN,UUID,TEXT),
@@ -374,6 +446,8 @@ REVOKE ALL ON FUNCTION public.enqueue_research_deep_jobs_v1(UUID),
   public.record_candidate_deep_submission_v1(UUID,TEXT,INTEGER,UUID,TEXT,UUID,TEXT,UUID,UUID,TEXT,TEXT,JSONB,JSONB,JSONB,JSONB,TEXT,JSONB)
   FROM PUBLIC, anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.enqueue_research_deep_jobs_v1(UUID),
+  public.handoff_research_deep_model_v1(UUID,TEXT,INTEGER,TEXT),
+  public.record_budgeted_deep_review_v1(UUID,INTEGER,UUID,JSONB),
   public.claim_research_deep_job_v1(TEXT),
   public.finish_research_deep_job_v2(UUID,TEXT,INTEGER,BOOLEAN,UUID,TEXT),
   public.claim_candidate_deep_outbox_v1(UUID,TEXT,INTEGER,UUID,TEXT,TEXT),

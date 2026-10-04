@@ -392,6 +392,8 @@ BEGIN
   SELECT * INTO v_head FROM public.research_paper_book_revisions_v1 WHERE book_id=NEW.book_id
     ORDER BY available_at DESC,revision_hash DESC LIMIT 1;
   IF NEW.parent_hash IS DISTINCT FROM v_head.revision_hash THEN RAISE EXCEPTION 'research_paper_book_head_changed'; END IF;
+  IF v_head.revision_hash IS NOT NULL AND NEW.state->>'inceptionAt' IS DISTINCT FROM v_head.state->>'inceptionAt'
+    THEN RAISE EXCEPTION 'research_paper_book_inception_changed'; END IF;
   IF NEW.available_at>clock_timestamp() OR (v_head.revision_hash IS NOT NULL AND NEW.available_at<=v_head.available_at)
     THEN RAISE EXCEPTION 'research_paper_book_revision_time_invalid'; END IF;
   RETURN NEW;
@@ -459,5 +461,52 @@ BEGIN
 END $function$;
 REVOKE ALL ON FUNCTION public.research_thesis_heads_page_v1(timestamptz,integer,integer) FROM PUBLIC,anon,authenticated;
 GRANT EXECUTE ON FUNCTION public.research_thesis_heads_page_v1(timestamptz,integer,integer) TO service_role;
+
+CREATE INDEX IF NOT EXISTS idx_research_strategy_input_replay_v1
+  ON public.research_strategy_records_v1(kind,input_hash);
+
+-- Compare actual installed routine bodies/attributes against the reviewed
+-- application manifest. Candidate declarations alone cannot authorize entries.
+CREATE OR REPLACE FUNCTION public.research_execution_policy_matches_v1(p_expected jsonb)
+RETURNS boolean LANGUAGE plpgsql STABLE SECURITY INVOKER SET search_path=public,pg_temp
+AS $function$
+DECLARE v_item jsonb; v_proc record;
+BEGIN
+  IF jsonb_typeof(p_expected) IS DISTINCT FROM 'array' OR jsonb_array_length(p_expected) NOT BETWEEN 8 AND 100
+    THEN RETURN false; END IF;
+  FOR v_item IN SELECT value FROM jsonb_array_elements(p_expected) LOOP
+    IF v_item->>'name' !~ '^[a-z0-9_]+$' THEN RETURN false; END IF;
+    IF (SELECT count(*) FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
+      WHERE n.nspname='public' AND p.proname=v_item->>'name')<>1 THEN RETURN false; END IF;
+    SELECT p.* INTO v_proc FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
+      WHERE n.nspname='public' AND p.proname=v_item->>'name';
+    IF encode(sha256(convert_to(v_proc.prosrc,'UTF8')),'hex') IS DISTINCT FROM v_item->>'bodySha256'
+      OR v_proc.prosecdef IS DISTINCT FROM (v_item->>'securityDefiner')::boolean
+      OR v_proc.provolatile::text IS DISTINCT FROM v_item->>'volatility'
+      OR v_proc.pronargs IS DISTINCT FROM (v_item->>'argumentCount')::integer
+      OR oidvectortypes(v_proc.proargtypes) IS DISTINCT FROM v_item->>'argumentTypes'
+      OR (SELECT coalesce(jsonb_agg(regexp_replace(setting,'[[:space:]"]','','g') ORDER BY setting),'[]'::jsonb)
+        FROM unnest(v_proc.proconfig) setting) IS DISTINCT FROM v_item->'configuration'
+      THEN RETURN false; END IF;
+  END LOOP;
+  IF EXISTS(SELECT 1 FROM (VALUES
+      ('candidate_thesis_qualifications_v1','trg_candidate_thesis_append_fence_v1','fence_candidate_thesis_append_v1',7),
+      ('candidate_thesis_qualifications_v1','trg_candidate_thesis_qualifications_immutable_v1','reject_candidate_dossier_revision_mutation_v4',27),
+      ('candidate_technical_decisions_v1','trg_candidate_technical_decisions_immutable_v1','reject_candidate_dossier_revision_mutation_v4',27),
+      ('research_strategy_records_v1','trg_research_strategy_record_fence_v1','fence_research_strategy_record_v1',7),
+      ('research_strategy_records_v1','trg_research_strategy_records_immutable_v1','reject_candidate_dossier_revision_mutation_v4',27),
+      ('research_paper_book_revisions_v1','trg_research_paper_book_append_v1','fence_research_paper_book_append_v1',7),
+      ('research_paper_book_revisions_v1','trg_research_paper_book_immutable_v1','reject_candidate_dossier_revision_mutation_v4',27)
+    ) expected(table_name,trigger_name,function_name,trigger_type)
+    WHERE NOT EXISTS(SELECT 1 FROM pg_trigger t JOIN pg_proc p ON p.oid=t.tgfoid
+      JOIN pg_namespace n ON n.oid=p.pronamespace
+      WHERE t.tgrelid=to_regclass('public.'||expected.table_name) AND t.tgname=expected.trigger_name
+        AND n.nspname='public' AND p.proname=expected.function_name
+        AND t.tgenabled='O' AND t.tgtype=expected.trigger_type AND t.tgqual IS NULL)) THEN RETURN false; END IF;
+  RETURN EXISTS(SELECT 1 FROM pg_attribute WHERE attrelid='public.candidate_technical_decisions_v1'::regclass
+    AND attname='decision_input_hash' AND attnotnull AND NOT attisdropped);
+END $function$;
+REVOKE ALL ON FUNCTION public.research_execution_policy_matches_v1(jsonb) FROM PUBLIC,anon,authenticated;
+GRANT EXECUTE ON FUNCTION public.research_execution_policy_matches_v1(jsonb) TO service_role;
 
 COMMIT;

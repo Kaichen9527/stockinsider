@@ -23,6 +23,7 @@ export type PaperBook = {
   sessionRisk: { session: string; cash: number; equity: number;
     positions: Array<{ symbol: string; sector: string; value: number; risk: number }> } | null;
   lastProcessedSession: string | null;
+  inceptionAt: string | null;
   markedSession: string | null;
   settledSession: string | null;
   processedOrderKeys: string[];
@@ -66,12 +67,12 @@ function sessionRisk(book: PaperBook, session: string): NonNullable<PaperBook['s
   return { session, cash: book.cash,
     equity: book.cash + positions.reduce((sum, position) => sum + position.value, 0), positions };
 }
-export function newPaperBook(bookId: PaperBookId): PaperBook {
+export function newPaperBook(bookId: PaperBookId, inceptionAt: string | null = null): PaperBook {
   const policy = PAPER_BOOKS[bookId];
   if (!policy) throw new Error('paper_book_id_invalid');
   return { policyVersion: PAPER_BOOK_POLICY, bookId, cash: policy.initialCapital,
     realizedPnl: 0, equityPeak: policy.initialCapital, positions: [], lastProcessedSession: null,
-    markedSession: null, settledSession: null, processedOrderKeys: [], settledPrices: {}, sessionRisk: null,
+    markedSession: null, settledSession: null, inceptionAt, processedOrderKeys: [], settledPrices: {}, sessionRisk: null,
     costs: { commission: 0, sellTax: 0, slippage: 0 } };
 }
 export function sizePaperOrder(input: {

@@ -25,7 +25,9 @@ export async function POST(request: Request) {
   const decision = String(body.decision || '');
   const findings = body.findings as Row | null;
   const article = body.article as DeepResearchArticle;
-  if (!UUID.test(revisionId) || !HASH.test(inputHash) || !authorId || !reviewerId
+  if (!UUID.test(revisionId) || !UUID.test(String(body.deepJobId)) || !UUID.test(String(body.modelReservationId))
+    || !Number.isInteger(body.deepAttempt) || Number(body.deepAttempt) < 1 || Number(body.deepAttempt) > 3
+    || !HASH.test(inputHash) || !authorId || !reviewerId
     || authorId === reviewerId || authorId.length > 120 || reviewerId.length > 120
     || !Number.isFinite(Date.parse(reviewedAt)) || Date.parse(reviewedAt) > Date.now()
     || !['accepted', 'rejected'].includes(decision) || !findings || typeof findings !== 'object'
@@ -62,21 +64,15 @@ export async function POST(request: Request) {
       expectedSymbol: String(stock?.symbol || ''), now: reviewedAt,
     });
     if (Date.parse(reviewedAt) < Date.parse(article.authoredAt)) throw new Error('deep_article_review_before_authoring');
-    const saved = await db.from('candidate_deep_article_reviews_v1').insert({
+    const saved = await db.rpc('record_budgeted_deep_review_v1', {
+      p_job_id: body.deepJobId, p_attempt: body.deepAttempt, p_reservation_id: body.modelReservationId, p_review: {
       revision_id: revisionId, input_hash: inputHash, article_hash: validated.articleHash,
       author_id: authorId, reviewer_id: reviewerId, decision, findings,
       source_document_ids: validated.sourceDocumentIds, reviewed_at: reviewedAt,
-    }).select('id').single();
-    if (saved.error && saved.error.code !== '23505') throw new Error(saved.error.message);
-    const replay = saved.error ? await db.from('candidate_deep_article_reviews_v1')
-      .select('id,findings').eq('revision_id', revisionId).eq('input_hash', inputHash)
-      .eq('article_hash', validated.articleHash).eq('reviewer_id', reviewerId)
-      .eq('decision', decision).maybeSingle() : null;
-    if (replay?.error || (replay && (!replay.data || JSON.stringify(replay.data.findings) !== JSON.stringify(findings)))) {
-      throw new Error('deep_article_review_replay_mismatch');
-    }
-    return NextResponse.json({ ok: true, reviewId: saved.data?.id || replay?.data?.id,
-      articleHash: validated.articleHash, decision, idempotentReplay: Boolean(replay) });
+    } });
+    if (saved.error || !saved.data) throw new Error(saved.error?.message || 'deep_article_review_not_recorded');
+    return NextResponse.json({ ok: true, reviewId: saved.data,
+      articleHash: validated.articleHash, decision });
   } catch (error) {
     return NextResponse.json({ ok: false, error: error instanceof Error ? error.message : 'deep_article_review_failed' }, { status: 409 });
   }

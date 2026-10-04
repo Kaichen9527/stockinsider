@@ -16,6 +16,7 @@ test('release identity covers imported execution sources and rejects altered dep
     fs.mkdirSync(path.join(directory, 'scripts'), { recursive: true });
     fs.mkdirSync(path.join(directory, 'web'), { recursive: true });
     fs.cpSync(path.join(root, 'web/src'), path.join(directory, 'web/src'), { recursive: true });
+    fs.cpSync(path.join(root, 'migrations'), path.join(directory, 'migrations'), { recursive: true });
     fs.copyFileSync(path.join(root, 'scripts/sync-research-strategy-release.mjs'), path.join(directory, 'scripts/sync-research-strategy-release.mjs'));
     for (const name of ['package.json', 'package-lock.json']) fs.copyFileSync(path.join(root, 'web', name), path.join(directory, 'web', name));
     fs.symlinkSync(path.join(root, 'web/node_modules'), path.join(directory, 'web/node_modules'), 'dir');
@@ -25,6 +26,10 @@ test('release identity covers imported execution sources and rejects altered dep
     fs.appendFileSync(filename, '\n// Changed execution semantics fixture.\n');
     const changed = run(); assert.notEqual(changed.status, 0); assert.match(changed.stderr, /research_strategy_release_stale/u);
     fs.copyFileSync(path.join(root, 'web/src/lib/research-paper-books.ts'), filename);
+    const sql = path.join(directory, 'migrations/20260929_research_agent_state_v1.sql');
+    fs.appendFileSync(sql, '\n-- Changed database policy fixture.\n');
+    assert.notEqual(run().status, 0);
+    fs.copyFileSync(path.join(root, 'migrations/20260929_research_agent_state_v1.sql'), sql);
     fs.appendFileSync(path.join(directory, 'web/package-lock.json'), '\n');
     assert.notEqual(run().status, 0);
   } finally { fs.rmSync(directory, { recursive: true, force: true }); }

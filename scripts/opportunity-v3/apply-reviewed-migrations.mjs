@@ -470,6 +470,14 @@ async function applyReviewedMigrations(options) {
     if(options.researchAgentExtension
       && (!researchVerified||Object.values(researchVerified).some((value)=>value!==true)))
       throw new Error('research_agent_migration_postcondition_failed');
+    if(options.researchAgentExtension) {
+      const generated = fs.readFileSync(path.join(root,'web/src/lib/research-strategy-release.generated.ts'),'utf8');
+      const manifest = JSON.parse(generated.match(/export const RESEARCH_STRATEGY_RELEASE = ([\s\S]+) as const;/u)?.[1] || 'null');
+      const installed = await client.query('SELECT public.research_execution_policy_matches_v1($1::jsonb) AS valid',
+        [JSON.stringify(manifest?.databasePolicy)]);
+      if(installed.rows[0]?.valid!==true) throw new Error('research_agent_installed_policy_mismatch');
+      researchVerified.installedPolicyMatches = true;
+    }
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',
       sourceCommit:options.sourceCommit,attestationCommit:options.attestationCommit,
       orderedChainSha256:plan.chainSha256,migrations:plan.migrations.map(({relativePath,sha256})=>[relativePath,sha256]),

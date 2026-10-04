@@ -68,9 +68,9 @@ const KOL_SEEDS = [
     primaryPlatform: 'youtube',
     followerCount: 500000,
     contentFocus: 'tw_stocks',
-    profileUrl: 'https://www.youtube.com/@stockcancer',
+    profileUrl: 'https://www.youtube.com/@Gooaye',
     metadata: {
-      youtubeUrl: 'https://www.youtube.com/@stockcancer',
+      youtubeUrl: 'https://www.youtube.com/@Gooaye',
       instagramUrl: 'https://www.instagram.com/stockcancer/',
       threadsUsername: 'stockcancer',
       telegramUrl: 'https://t.me/s/Gooaye',

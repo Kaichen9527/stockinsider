@@ -1,10 +1,30 @@
 // Generated from actual imported application sources. Do not edit.
 export const RESEARCH_STRATEGY_RELEASE = {
-  "schema": "research-strategy-source-release-v1",
+  "schema": "research-strategy-source-release-v2",
   "files": [
     {
+      "path": "migrations/20260724_source_led_opportunity_engine_v3.sql",
+      "sha256": "fd20c4cde636943ddc878419a61888b25a08387eed05f8554b3a2a7043ec10f7"
+    },
+    {
+      "path": "migrations/20260809_decision_integrity_v3_13.sql",
+      "sha256": "5e843da1049bc2f075d5f8bf901095b3047c42215fc87ada01a1a984d240f95b"
+    },
+    {
+      "path": "migrations/20260906_candidate_dossier_v4.sql",
+      "sha256": "3f0369fa2eecfa30a64e3e77f8663a4a7ec838eb90a22819fe86402604e2d016"
+    },
+    {
+      "path": "migrations/20260929_research_agent_state_v1.sql",
+      "sha256": "8eda0ed1e943f42d57687a1724d3fa42d9ee280a59a8ca6b5177cbd705a5b11b"
+    },
+    {
+      "path": "migrations/20261004_research_technical_identity_v2.sql",
+      "sha256": "838a065672df9d0e69512f6b1efff23e9a73b9d8d2bf97ca1e95c9bba134b4c3"
+    },
+    {
       "path": "web/src/app/api/internal/research-paper-session/route.ts",
-      "sha256": "5539d381a2c9122bfa1b267e5dbda1dfbbcedcf4d7fc9ddf7624a6d58113b3e2"
+      "sha256": "f4ef6e3016864a5da3c11a51c280148303c6f22d4c74edc002ba3432ce460582"
     },
     {
       "path": "web/src/app/api/internal/research-technical-snapshot/route.ts",
@@ -56,11 +76,11 @@ export const RESEARCH_STRATEGY_RELEASE = {
     },
     {
       "path": "web/src/lib/research-execution-context.ts",
-      "sha256": "801e2022951c1b00d6c6aa17f1cc9f2c7b382e2110855c09fdd465e5796c2359"
+      "sha256": "1023a0d57e2096180444809f09fe62a2b21f928f2f97d19bd144f7c6b19d2e06"
     },
     {
       "path": "web/src/lib/research-paper-books.ts",
-      "sha256": "610dcb8b2683528c0ddb5bb066702c9c26184d2d44f52645c263b167af1bdf5c"
+      "sha256": "9d119633e9b6e7f386c89831bf6dd9a0ee4ad3f5ff3e864bafdb0932f47df9d6"
     },
     {
       "path": "web/src/lib/research-strategy-governance.ts",
@@ -95,14 +115,137 @@ export const RESEARCH_STRATEGY_RELEASE = {
       "sha256": "189e39552c59329a76e7306ebf08eacffac365d2f539d87b648f8582bcb6206c"
     }
   ],
+  "databasePolicy": [
+    {
+      "name": "fence_candidate_thesis_append_v1",
+      "bodySha256": "108ffb2c9a6c3497e25b485c98640865f9b8ccc53b0efc4a474b42a3c4fbee8b",
+      "securityDefiner": true,
+      "volatility": "v",
+      "argumentCount": 0,
+      "configuration": [
+        "search_path=public,pg_temp"
+      ],
+      "argumentTypes": ""
+    },
+    {
+      "name": "fence_research_paper_book_append_v1",
+      "bodySha256": "6909f9a80e2f71fc65026fb96fc2320fe6fe7d35f798f0f60d64d67a8979db6f",
+      "securityDefiner": true,
+      "volatility": "v",
+      "argumentCount": 0,
+      "configuration": [
+        "search_path=public,pg_temp"
+      ],
+      "argumentTypes": ""
+    },
+    {
+      "name": "fence_research_strategy_record_v1",
+      "bodySha256": "b8676128e7b3f01c17870c87e406cf83306921e9ba73f0ddbddf7717f2457d0b",
+      "securityDefiner": true,
+      "volatility": "v",
+      "argumentCount": 0,
+      "configuration": [
+        "search_path=public,pg_temp"
+      ],
+      "argumentTypes": ""
+    },
+    {
+      "name": "opportunity_authority_selected_stream_count_v3_internal",
+      "bodySha256": "4fba2da206272e4198b9c07fe58a9b094696cfc8bf9489d1b98d2ace888fc4eb",
+      "securityDefiner": true,
+      "volatility": "s",
+      "argumentCount": 2,
+      "configuration": [
+        "search_path="
+      ],
+      "argumentTypes": "authority_stream_family_v3, timestamp with time zone"
+    },
+    {
+      "name": "reject_candidate_dossier_revision_mutation_v4",
+      "bodySha256": "87fd68c92bfe46b131ca26f0468965bc5bab286c70b3b57f583b3335190fdb41",
+      "securityDefiner": false,
+      "volatility": "v",
+      "argumentCount": 0,
+      "configuration": [
+        "search_path=public"
+      ],
+      "argumentTypes": ""
+    },
+    {
+      "name": "research_evidence_heads_v1",
+      "bodySha256": "9eef1d732166fba094ba2763d22bf29aff28f2b3cd66a11ebc2d369c779aad61",
+      "securityDefiner": true,
+      "volatility": "v",
+      "argumentCount": 2,
+      "configuration": [
+        "search_path=public,pg_temp"
+      ],
+      "argumentTypes": "uuid[], timestamp with time zone"
+    },
+    {
+      "name": "research_execution_policy_matches_v1",
+      "bodySha256": "352bfd1e4673cc5bf502e1620e183981e3d097a72e2bc9bc15bad383ad270c90",
+      "securityDefiner": false,
+      "volatility": "s",
+      "argumentCount": 1,
+      "configuration": [
+        "search_path=public,pg_temp"
+      ],
+      "argumentTypes": "jsonb"
+    },
+    {
+      "name": "resolve_legacy_instrument_authority_v3_13",
+      "bodySha256": "5228b02ece581ad476f6feea3c1aa73d3937753d1ebb5b7838d97cab44b91a53",
+      "securityDefiner": true,
+      "volatility": "s",
+      "argumentCount": 2,
+      "configuration": [
+        "search_path="
+      ],
+      "argumentTypes": "uuid, timestamp with time zone"
+    },
+    {
+      "name": "resolve_legacy_instrument_authority_v3_13_internal",
+      "bodySha256": "afb9bcfddbd2c6020aab222bf36837cfacdd22184ebf8e8db12a745f355c7d06",
+      "securityDefiner": true,
+      "volatility": "s",
+      "argumentCount": 2,
+      "configuration": [
+        "search_path="
+      ],
+      "argumentTypes": "uuid, timestamp with time zone"
+    },
+    {
+      "name": "resolve_legacy_sector_authority_v3_13",
+      "bodySha256": "9bbfb5855f7d069feb1bffb9b4a09a1cc7c6eab78729f96d99b01680b44980b9",
+      "securityDefiner": true,
+      "volatility": "s",
+      "argumentCount": 3,
+      "configuration": [
+        "search_path="
+      ],
+      "argumentTypes": "uuid, tw_market_v3, timestamp with time zone"
+    },
+    {
+      "name": "resolve_legacy_sector_authority_v3_13_internal",
+      "bodySha256": "14281559d2667c9b4f4aa474b64ac5c1964fe89815f37de0c117bc028f0295d3",
+      "securityDefiner": true,
+      "volatility": "s",
+      "argumentCount": 3,
+      "configuration": [
+        "search_path="
+      ],
+      "argumentTypes": "uuid, tw_market_v3, timestamp with time zone"
+    }
+  ],
   "dependencyLockHash": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
-  "codeHash": "63fc448f3c4e59e531bd763eadf682eddc773d3f4f6500d2f02aacfda4341957",
+  "codeHash": "7b0aa05fff8b62375ea691b26f055023c5a3774d071088a990a95287aac63dc3",
   "parameterMode": "fixed_baseline_source_bound",
-  "parameterHash": "f3073bfb622459a8a2daa178e9ba2d8694bee7bd46fd8b1c649387b147ee2f54",
+  "parameterHash": "72880c65024ce1b0a38c30673142c309f9b90ffb1f1565ece2ae11edfad95c3b",
   "parameterFiles": [
     {
       "path": "web/src/lib/research-paper-books.ts",
-      "sha256": "610dcb8b2683528c0ddb5bb066702c9c26184d2d44f52645c263b167af1bdf5c"
+      "sha256": "9d119633e9b6e7f386c89831bf6dd9a0ee4ad3f5ff3e864bafdb0932f47df9d6"
     },
     {
       "path": "web/src/lib/research-strategy-governance.ts",

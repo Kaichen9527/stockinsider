@@ -1,0 +1,86 @@
+{
+  "checkedAt": "2026-10-04T03:44:59.265Z",
+  "rows": [
+    {
+      "platform": "official",
+      "url": "https://www.auo.com/zh-TW/News_Archive/index",
+      "scope": "公司官方新聞索引",
+      "observedAt": "2026-10-04T03:44:57.460Z",
+      "httpStatus": 200,
+      "status": "read_success",
+      "bytes": 59559,
+      "contentHash": "94ca26a0884b67dfec97badaa3892a2aa8113f9c2e084edeaa9d9d706204cb04",
+      "enabled": false,
+      "relevantArticles": null,
+      "limitation": "只檢查這個公開入口，未完成文章查證或來源啟用驗收"
+    },
+    {
+      "platform": "ptt",
+      "url": "https://www.ptt.cc/bbs/Stock/index.html",
+      "scope": "Stock 看板最新索引",
+      "observedAt": "2026-10-04T03:44:57.519Z",
+      "httpStatus": 200,
+      "status": "read_success",
+      "bytes": 26184,
+      "contentHash": "9a4025260eb2919b0892fd28af8e74146bff727e2a5dba4c182d690ca7e3c59a",
+      "enabled": false,
+      "relevantArticles": null,
+      "limitation": "只檢查這個公開入口，未完成文章查證或來源啟用驗收"
+    },
+    {
+      "platform": "investanchors",
+      "url": "https://investanchors.com/",
+      "scope": "定錨公開首頁",
+      "observedAt": "2026-10-04T03:44:57.522Z",
+      "httpStatus": 200,
+      "status": "read_success",
+      "bytes": 47778,
+      "contentHash": "75fd797d0f2d4f5fa31c52b9c9a75375d4460d0f58f37732fad8994ff523dc5d",
+      "enabled": false,
+      "relevantArticles": null,
+      "limitation": "只檢查這個公開入口，未完成文章查證或來源啟用驗收"
+    },
+    {
+      "platform": "podcast",
+      "url": "https://feeds.soundon.fm/podcasts/954689a5-3096-43a4-a80b-7810b219cef3.xml",
+      "scope": "股癌 RSS，僅索引與出版方欄位",
+      "observedAt": "2026-10-04T03:44:57.524Z",
+      "httpStatus": 200,
+      "status": "read_success",
+      "bytes": 3194971,
+      "contentHash": "3aa89663b8ee6ae8ce045dc013789bcab51acd5be8e3aee77e18d1e93dd37eb7",
+      "enabled": false,
+      "relevantArticles": null,
+      "limitation": "只檢查這個公開入口，未完成文章查證或來源啟用驗收",
+      "episodeCount": 702,
+      "transcriptReferenceCount": 0,
+      "chapterReferenceCount": 0,
+      "contentSemantics": "program_index_not_transcript"
+    }
+  ],
+  "note": "No credentials, cookies, private content or member full text read. No production writes or enablement.",
+  "browserChecks": [
+    {
+      "platform": "youtube",
+      "url": "https://www.youtube.com/@stockcancer",
+      "status": "failed",
+      "reason": "Channel unavailable in visible browser",
+      "enabled": false
+    },
+    {
+      "platform": "youtube",
+      "url": "https://www.youtube.com/@Gooaye",
+      "status": "read_success",
+      "scope": "Public official channel identity verified through visible YouTube search/channel page",
+      "enabled": false
+    },
+    {
+      "platform": "youtube",
+      "url": "https://www.youtube.com/watch?v=jnCOZwkndlg",
+      "status": "partial",
+      "scope": "EP702 public watch page; transcript export attempted",
+      "reason": "No transcript available; spoken content not analyzed",
+      "enabled": false
+    }
+  ]
+}

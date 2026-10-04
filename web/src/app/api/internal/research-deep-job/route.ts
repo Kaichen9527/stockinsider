@@ -44,6 +44,15 @@ export async function POST(request: Request) {
     const publication = Array.isArray(result.data) ? result.data[0] : result.data;
     return NextResponse.json({ ok: true, publication: publication || null });
   }
+  if (action === 'handoffModel') {
+    if (!UUID.test(String(body.jobId)) || !Number.isInteger(body.attempt) || Number(body.attempt) < 1
+      || Number(body.attempt) > 3 || !/^[a-f0-9]{64}$/u.test(String(body.articleHash)))
+      return NextResponse.json({ ok: false, error: 'research_deep_handoff_invalid' }, { status: 400 });
+    const result = await db.rpc('handoff_research_deep_model_v1', { p_job_id: body.jobId,
+      p_owner: owner, p_attempt: body.attempt, p_article_hash: body.articleHash });
+    return NextResponse.json({ ok: !result.error && result.data === true, error: result.error?.message || null },
+      { status: result.error ? 409 : 200 });
+  }
   if (action === 'finish') {
     const jobId = String(body.jobId || '');
     const attempt = Number(body.attempt);

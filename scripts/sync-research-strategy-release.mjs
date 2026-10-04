@@ -46,13 +46,55 @@ function visit(relative) {
   walk(source);
 }
 entries.forEach(visit);
+// Database routines are executable strategy policy too. Resolve their latest
+// reviewed source and transitive public-function calls, not environment labels.
+const sqlSources = fs.readdirSync(path.join(root, 'migrations')).filter((name) => name.endsWith('.sql')).sort();
+const definitions = new Map();
+for (const name of sqlSources) {
+  const file = 'migrations/' + name;
+  const source = fs.readFileSync(path.join(root, file), 'utf8');
+  const expression = /CREATE\s+(?:OR\s+REPLACE\s+)?FUNCTION\s+(?:public[.])?([a-z0-9_]+)\s*\(([\s\S]*?)\)\s*(RETURNS[\s\S]*?)\bAS\s+(\$[a-z0-9_]*\$)([\s\S]*?)\4/giu;
+  for (const match of source.matchAll(expression)) definitions.set(match[1].toLowerCase(), { file,
+    body: match[5], bodySha256: hash(match[5]), securityDefiner: /SECURITY\s+DEFINER/iu.test(match[3]),
+    volatility: /\bIMMUTABLE\b/iu.test(match[3]) ? 'i' : /\bSTABLE\b/iu.test(match[3]) ? 's' : 'v',
+    configuration: [...match[3].matchAll(/\bSET\s+([a-z_]+)\s*(?:=|TO)\s*([\s\S]*?)(?=\bSET\s+[a-z_]+\s*(?:=|TO)|$)/giu)]
+      .map((setting) => setting[1].toLowerCase() + '=' + setting[2].trim().replace(/''/gu,'').replace(/[\s"]/gu,'')).sort(),
+    argumentTypes: match[2].trim() ? match[2].split(',').map((argument) => {
+      const type = argument.trim().replace(/\s+DEFAULT[\s\S]*$/iu,'').replace(/^\w+\s+/u,'').replace(/^public[.]/u,'');
+      return ({timestamptz:'timestamp with time zone',int:'integer',int4:'integer',int8:'bigint',bool:'boolean'}[type] || type);
+    }).join(', ') : '',
+    argumentCount: match[2].trim() ? match[2].split(',').length : 0 });
+}
+const databaseFunctions = new Map();
+function sqlVisit(name) {
+  if (databaseFunctions.has(name)) return;
+  const definition = definitions.get(name);
+  if (!definition) throw new Error('strategy_database_function_missing:' + name);
+  databaseFunctions.set(name, definition);
+  for (const call of definition.body.matchAll(/\bpublic[.]([a-z0-9_]+)\s*\(/giu)) {
+    sqlVisit(call[1].toLowerCase());
+  }
+}
+['research_evidence_heads_v1','resolve_legacy_instrument_authority_v3_13',
+  'resolve_legacy_sector_authority_v3_13','fence_candidate_thesis_append_v1',
+  'fence_research_strategy_record_v1','fence_research_paper_book_append_v1',
+  'reject_candidate_dossier_revision_mutation_v4','research_execution_policy_matches_v1'].forEach(sqlVisit);
+const databasePolicy = [...databaseFunctions].sort(([a],[b]) => a.localeCompare(b)).map(([name, item]) => ({
+  name, bodySha256: item.bodySha256, securityDefiner: item.securityDefiner,
+  volatility: item.volatility, argumentCount: item.argumentCount,
+  configuration: item.configuration,
+  argumentTypes: item.argumentTypes,
+}));
+const databasePaths = [...new Set([...databaseFunctions.values()].map((item) => item.file)
+  .concat('migrations/20261004_research_technical_identity_v2.sql'))].sort();
+databasePaths.forEach((file) => visited.add(file));
 const files = [...visited].sort().map((file) => ({ path: file, sha256: hash(fs.readFileSync(path.join(root, file))) }));
 const parameterFiles = parameterPaths.sort().map((file) => {
   const selected = files.find((entry) => entry.path === file);
   if (!selected) throw new Error('strategy_parameter_source_missing');
   return selected;
 });
-const material = { schema: 'research-strategy-source-release-v1', files,
+const material = { schema: 'research-strategy-source-release-v2', files, databasePolicy,
   dependencyLockHash: hash(fs.readFileSync(path.join(root, 'web/package-lock.json'))) };
 const release = { ...material, codeHash: hash(canonical(material)),
   parameterMode: 'fixed_baseline_source_bound',

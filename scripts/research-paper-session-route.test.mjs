@@ -6,7 +6,8 @@ import ts from '../web/node_modules/typescript/lib/typescript.js';
 
 test('an inactive unheld entry cannot block monitoring an existing inactive position', async () => {
   const session = '2026-10-02'; const fetched = []; let marked; let saved;
-  const book = { bookId: 'growth', positions: [{ symbol: '2409', sector: 'old', shares: 1000 }], lastProcessedSession: null };
+  const book = { bookId: 'growth', positions: [{ symbol: '2409', sector: 'old', shares: 1000 }],
+    lastProcessedSession: '2026-10-01', inceptionAt: '2026-09-30T00:00:00Z' };
   const db = { rpc: async (name, args) => ({ error: null, data: name.includes('instrument')
     ? [{ symbol: args.p_stock_id, instrument_type: 'common_stock', exchange: 'TWSE', listing_status: 'inactive' }]
     : [] }), from(table) {
@@ -14,7 +15,7 @@ test('an inactive unheld entry cannot block monitoring an existing inactive posi
     const value = () => {
       if (table === 'research_paper_book_revisions_v1') {
         if (inserted) { saved = inserted; return { data: null, error: null }; }
-        return { data: filters.operation_key ? null : { revision_hash: 'parent', state: book }, error: null };
+        return { data: filters.operation_key ? null : { revision_hash: 'parent', state: book, available_at: '2026-10-04T00:00:00Z' }, error: null };
       }
       if (table === 'tw_trading_sessions_v3') return { data: { session_id: '2026-10-01' }, error: null };
       if (table === 'candidate_technical_decisions_v1') return { data: [{ stock_id: '2330', snapshot: {
@@ -37,9 +38,9 @@ test('an inactive unheld entry cannot block monitoring an existing inactive posi
     '@/lib/research-agent-qualification': { researchCanonicalHash: () => 'fixture', researchEntryQualification: () => { throw new Error('unheld entry must be skipped'); } },
     '@/lib/research-deep-evidence': {},
     '@/lib/research-paper-books': { markPaperPositions: (input) => { marked = input; return input.book; }, settlePaperSession: (input) => input.book },
-    '@/lib/research-execution-context': { loadResearchExecutionContext: async () => ({}) },
+    '@/lib/research-execution-context': { loadResearchExecutionContext: async () => ({}), assertResearchExecutionDatabasePolicy: async () => {} },
     '@/lib/tw-entry-plan-authority': { acquireTwEntryForwardCalendar: async () => ({}), loadTwEntryPlanAuthority: async (_db, input) => {
-      fetched.push(input.symbol); return { missingData: [], priceBasis: { status: 'verified' }, bars: [{ session, open: 30, high: 31, low: 29, close: 30, volume: 5000 }] };
+      fetched.push(input.symbol); return { missingData: [], priceBasis: { status: 'verified' }, calendar: { completedSessions: [session] }, bars: [{ session, open: 30, high: 31, low: 29, close: 30, volume: 5000 }] };
     } },
     '@/lib/technical-features-v2': { calculateTechnicalFeatures: () => ({ ma20: 30 }) },
   };
@@ -52,4 +53,10 @@ test('an inactive unheld entry cannot block monitoring an existing inactive posi
   assert.deepEqual(fetched, ['2409']); assert.equal(marked.bars.length, 1);
   assert.equal(marked.bars[0].symbol, '2409'); assert.equal(saved.parent_hash, 'parent');
   assert.equal(saved.result.outcomes[0].reason, 'listing_not_active_at_entry');
+  book.lastProcessedSession = null;
+  book.inceptionAt = '2026-10-04T00:00:00Z';
+  const backdated = await exports.POST({ json: async () => ({ bookId: 'growth', action: 'session', session }) });
+  assert.equal(backdated.status, 409);
+  assert.equal(backdated.body.error, 'paper_session_before_inception');
+  assert.deepEqual(fetched, ['2409'], 'a fresh book cannot observe a chosen historical bar');
 });

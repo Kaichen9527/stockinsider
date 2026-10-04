@@ -128,6 +128,35 @@ test('cross-role budget, revision heads and first-discovery gaps survive real Po
           '${digest}','${digest}','fixture-feature','fixture-strategy','{"sourceRetracted":true}',
           '2026-09-02T00:00:00Z','${'b'.repeat(64)}')`);
       assert.equal(sql("SELECT count(*) FROM candidate_technical_decisions_v1"),'2');
+      const policy = JSON.parse(sql(`SELECT jsonb_agg(jsonb_build_object('name',proname,
+        'bodySha256',encode(sha256(convert_to(prosrc,'UTF8')),'hex'),'securityDefiner',prosecdef,
+        'volatility',provolatile::text,'argumentCount',pronargs,
+        'argumentTypes',oidvectortypes(proargtypes),
+        'configuration',(SELECT coalesce(jsonb_agg(regexp_replace(setting,'[[:space:]"]','','g') ORDER BY setting),'[]'::jsonb)
+          FROM unnest(proconfig) setting))) FROM pg_proc JOIN pg_namespace n ON n.oid=pronamespace
+        WHERE n.nspname='public' AND proname IN ('research_evidence_heads_v1','fence_candidate_thesis_append_v1',
+        'fence_research_strategy_record_v1','fence_research_paper_book_append_v1','reject_candidate_dossier_revision_mutation_v4',
+        'research_source_heads_page_v1','reserve_research_model_v1','research_execution_policy_matches_v1')`));
+      const matches=()=>sql(`SELECT research_execution_policy_matches_v1('${JSON.stringify(policy)}')`);
+      const releaseText=fs.readFileSync(path.join(root,'web/src/lib/research-strategy-release.generated.ts'),'utf8');
+      const release=JSON.parse(releaseText.slice(releaseText.indexOf('= ')+2,releaseText.lastIndexOf(' as const;')));
+      const verified=release.databasePolicy.filter((expected)=>policy.some((actual)=>actual.name===expected.name)
+        && expected.name!=='reject_candidate_dossier_revision_mutation_v4');
+      assert.ok(verified.length>=5,'actual installed routines must match the source-generated release profile');
+      for(const expected of verified) assert.deepEqual(policy.find((actual)=>actual.name===expected.name),expected);
+      assert.equal(matches(),'t');
+      sql('ALTER FUNCTION fence_research_paper_book_append_v1() STABLE');
+      assert.equal(matches(),'f');
+      sql('ALTER FUNCTION fence_research_paper_book_append_v1() VOLATILE');
+      assert.equal(matches(),'t');
+      sql('ALTER FUNCTION fence_research_paper_book_append_v1() SET search_path=pg_temp,public');
+      assert.equal(matches(),'f');
+      sql('ALTER FUNCTION fence_research_paper_book_append_v1() SET search_path=public,pg_temp');
+      assert.equal(matches(),'t');
+      sql('ALTER TABLE research_paper_book_revisions_v1 DISABLE TRIGGER trg_research_paper_book_append_v1');
+      assert.equal(matches(),'f');
+      sql('ALTER TABLE research_paper_book_revisions_v1 ENABLE TRIGGER trg_research_paper_book_append_v1');
+      assert.equal(matches(),'t');
 
       // Durable proposals and paper books preserve losing/failed records and
       // fence stale appends across process restarts.

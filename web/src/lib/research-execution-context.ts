@@ -5,6 +5,10 @@ import type { StrategyApprovalReceipt } from './research-strategy-governance.ts'
 import { RESEARCH_STRATEGY_RELEASE } from './research-strategy-release.generated.ts';
 
 type Row = Record<string, unknown>;
+export async function assertResearchExecutionDatabasePolicy(db: Pick<SupabaseClient, 'rpc'>) {
+  const result = await db.rpc('research_execution_policy_matches_v1', { p_expected: RESEARCH_STRATEGY_RELEASE.databasePolicy });
+  if (result.error || result.data !== true) throw new Error('research_strategy_database_policy_mismatch');
+}
 export const LIQUIDITY_POLICY = 'official-turnover-lower-bound-v1';
 /** Shares × traded low is a conservative lower bound, never an invented turnover. */
 export function researchLiquidityCapacity(rows: Array<{ session: string; rawLow: number; volumeShares: number }>,
@@ -24,9 +28,10 @@ export function researchLiquidityCapacity(rows: Array<{ session: string; rawLow:
     reason: maximumShares >= 1000 ? null : 'liquidity_below_one_board_lot' };
 }
 
-export async function loadResearchExecutionContext(db: Pick<SupabaseClient, 'from'>, input: {
+export async function loadResearchExecutionContext(db: Pick<SupabaseClient, 'from' | 'rpc'>, input: {
   stockId: string; symbol: string; exchange: string; sessions: string[]; maximumEntryPrice: number; asOf: string;
 }) {
+  await assertResearchExecutionDatabasePolicy(db);
   const books = await Promise.all(['conservative', 'growth'].map(async (bookId) => {
     const result = await db.from('research_paper_book_revisions_v1').select('revision_hash,state,available_at')
       .eq('book_id', bookId).lte('available_at', input.asOf).order('available_at', { ascending: false }).limit(1).maybeSingle();

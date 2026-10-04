@@ -28,6 +28,19 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: 'research_strategy_role_not_authorized' }, { status: 403 });
   const db = getSupabaseServerClient();
   try {
+    const inputHash = researchCanonicalHash(body);
+    // Lost-response/restart retries preserve the accepted result even after its
+    // effective time. Fresh backdated approvals still fail temporal admission.
+    const existing = await db.from('research_strategy_records_v1').select('record_hash,kind,payload,input_payload')
+      .eq('input_hash', inputHash).eq('kind', kind).limit(2);
+    if (existing.error || !Array.isArray(existing.data) || existing.data.length > 1)
+      throw new Error(existing.error?.message || 'research_strategy_replay_conflict');
+    if (existing.data.length) {
+      if (researchCanonicalHash(existing.data[0].input_payload) !== inputHash)
+        throw new Error('research_strategy_replay_mismatch');
+      return NextResponse.json({ ok: true, kind, recordHash: existing.data[0].record_hash,
+        payload: existing.data[0].payload, idempotentReplay: true });
+    }
     let payload: Row; let proposalHash: string; let parentHash: string | null = null;
     let recordHash: string;
     const read = async (key: string, expectedKind: string) => {
@@ -88,7 +101,6 @@ export async function POST(request: Request) {
         }
       }
     }
-    const inputHash = researchCanonicalHash(body);
     const saved = await db.from('research_strategy_records_v1').insert({ record_hash: recordHash, kind,
       proposal_hash: proposalHash, parent_hash: parentHash, payload, input_hash: inputHash, input_payload: body }).select('record_hash').single();
     if (saved.error && saved.error.code !== '23505') throw new Error(saved.error.message);

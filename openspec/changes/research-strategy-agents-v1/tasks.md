@@ -11,7 +11,7 @@
 - [ ] Actual model consumer: total-budget claims for all roles, retry/restart and offline handling.
 - [x] Locally tested durable proposal/assessment/validation/approval and CAS paper-book APIs; actual independent artifact consumer remains pending.
 - [x] Original-root/revision/withdrawal handling, active-job priority and source-attempt/factor contracts.
-- [ ] Actual authenticated/public platform probes and source-attempt controller integration; relative-return ranking enrichment.
+- [ ] Complete authenticated/public content probes and source-attempt controller integration (four public entry/index probes performed); relative-return ranking enrichment.
 - [ ] Monthly renewal and qualified/held-position daily worklist consumer.
 - [ ] AUO complete evidence-to-publication and second-industry acceptance.
 - [ ] Formal schema cutover, production deployment, browser desktop/mobile verification.
@@ -27,4 +27,4 @@ Official financial fallback still hits the lifetime 128-fact series storage boun
 
 ## October 4 local verification
 
-76/76 research, route, calculation and real-PostgreSQL tests passed without skips. New suite membership is in `npm run test:research-agents`. Type/lint/build outcomes and independent exact-commit review are recorded in the implementation handoff. These results do not represent successful production source reading, an approved strategy, completed official refresh or profitability.
+77/77 research, route, calculation and real-PostgreSQL tests passed without skips. New suite membership is in `npm run test:research-agents`. Type/lint/build outcomes and independent exact-commit review are recorded in the implementation handoff. These results do not represent successful production source reading, an approved strategy, completed official refresh or profitability.

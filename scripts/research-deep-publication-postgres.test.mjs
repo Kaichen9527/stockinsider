@@ -110,7 +110,7 @@ for (const recovery of ['rejected', 'explicit_failure']) test(`deep publication 
       assert.throws(() => sql(`SELECT status FROM public.record_candidate_dossier_submission_v6(
         '${ids.outbox}','outbox-owner','${ids.bundle}','${ids.revision}','${inputHash}','${'2'.repeat(64)}',
         '{}','[]','[]','{}','valid','[]')`), /identity_mismatch/u);
-      const reviewId = sql(`INSERT INTO public.candidate_deep_article_reviews_v1
+      let reviewId = sql(`INSERT INTO public.candidate_deep_article_reviews_v1
         (revision_id,input_hash,article_hash,author_id,reviewer_id,decision,findings,source_document_ids,reviewed_at)
         VALUES ('${ids.revision}','${inputHash}','${articleHash}','author','independent','accepted','{}','[]',clock_timestamp())
         RETURNING id`).split('\n')[0];
@@ -151,11 +151,27 @@ for (const recovery of ['rejected', 'explicit_failure']) test(`deep publication 
       assert.equal(sql("SELECT attempt FROM public.claim_research_deep_job_v1('deep-owner')"), '3');
       assert.equal(claimPublication(3), ids.outbox);
       assert.throws(() => submit(2), /research_deep_job_lease_lost/u);
+      assert.equal(sql("SELECT count(*) FROM reserve_research_model_v1('counter_review','independent-2','blocked-while-maker-runs')"),'0');
+      assert.equal(sql(`SELECT handoff_research_deep_model_v1('${jobId}','deep-owner',3,'${articleHash}')`),'t');
+      assert.equal(sql(`SELECT handoff_research_deep_model_v1('${jobId}','deep-owner',3,'${articleHash}')`),'t');
+      assert.throws(()=>sql(`SELECT handoff_research_deep_model_v1('${jobId}','deep-owner',3,'${'f'.repeat(64)}')`),/replay_mismatch/u);
+      const modelReservation=sql(`SELECT reservation_id FROM reserve_research_model_v1('counter_review','independent-2',
+        'deep-review:${jobId}:3:${articleHash}')`);
+      assert.match(modelReservation,/^[a-f0-9-]{36}$/u);
+      const reviewed = {revision_id:ids.revision,input_hash:inputHash,article_hash:articleHash,
+        author_id:'author',reviewer_id:'independent-2',decision:'accepted',findings:{checked:true},
+        source_document_ids:[],reviewed_at:new Date().toISOString()};
+      reviewId=sql(`SELECT record_budgeted_deep_review_v1('${jobId}',3,'${modelReservation}','${JSON.stringify(reviewed)}')`);
+      assert.equal(sql(`SELECT record_budgeted_deep_review_v1('${jobId}',3,'${modelReservation}','${JSON.stringify(reviewed)}')`),reviewId);
+      assert.equal(sql(`SELECT count(*) FROM research_model_completions_v1 WHERE reservation_id='${modelReservation}'`),'1');
       assert.equal(submit(3, 'valid', 'e'.repeat(64)), 'accepted|f');
       assert.equal(sql(`SELECT receipt_id FROM public.candidate_dossier_outbox_v5 WHERE job_id='${ordinaryId}'`), ordinaryReceipt);
       assert.equal(sql("SELECT count(*) FROM public.candidate_research_dossiers WHERE validation_status='valid'"), '2');
       assert.equal(sql(`SELECT status,receipt_id IS NOT NULL FROM public.research_deep_jobs_v1
         WHERE job_id='${jobId}'`), 'completed|t');
+      assert.equal(sql(`SELECT record_budgeted_deep_review_v1('${jobId}',3,'${modelReservation}','${JSON.stringify(reviewed)}')`),reviewId);
+      assert.throws(()=>sql(`SELECT record_budgeted_deep_review_v1('${jobId}',3,'${modelReservation}',
+        '${JSON.stringify({...reviewed, author_id:'changed-author'})}')`),/model_lease_lost/u);
       assert.equal(sql('SELECT count(*) FROM public.candidate_dossier_submission_receipts'), recovery === 'rejected' ? '3' : '2');
       assert.equal(submit(3, 'valid', 'e'.repeat(64)), 'accepted|t');
       assert.throws(() => submit(1), /research_deep_job_lease_lost/u);

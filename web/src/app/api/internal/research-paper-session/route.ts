@@ -5,7 +5,7 @@ import { researchCanonicalHash, researchEntryQualification, type ThesisQualifica
 import { loadDeepArticleEvidence } from '@/lib/research-deep-evidence';
 import { fillPaperOrder, markPaperPositions, newPaperBook, settlePaperSession, sizePaperOrder,
   type PaperBook, type PaperBookId, type PaperOrder, type PaperSessionBar } from '@/lib/research-paper-books';
-import { loadResearchExecutionContext } from '@/lib/research-execution-context';
+import { loadResearchExecutionContext, assertResearchExecutionDatabasePolicy } from '@/lib/research-execution-context';
 import { acquireTwEntryForwardCalendar, loadTwEntryPlanAuthority } from '@/lib/tw-entry-plan-authority';
 import { calculateTechnicalFeatures } from '@/lib/technical-features-v2';
 
@@ -21,6 +21,7 @@ export async function POST(request: Request) {
   const operationKey = body.action === 'initialize' ? 'initialize-v5' : `session:${body.session}`;
   const inputHash = researchCanonicalHash({ action: body.action, bookId, session: body.session || null });
   try {
+    await assertResearchExecutionDatabasePolicy(db);
     const replay = await db.from('research_paper_book_revisions_v1').select('revision_hash,input_hash,state,result')
       .eq('book_id', bookId).eq('operation_key', operationKey).maybeSingle();
     if (replay.error) throw new Error(replay.error.message);
@@ -28,19 +29,32 @@ export async function POST(request: Request) {
       if (replay.data.input_hash !== inputHash) throw new Error('paper_session_replay_mismatch');
       return NextResponse.json({ ok: true, ...replay.data, idempotentReplay: true });
     }
-    const head = await db.from('research_paper_book_revisions_v1').select('revision_hash,state')
+    const head = await db.from('research_paper_book_revisions_v1').select('revision_hash,state,available_at')
       .eq('book_id', bookId).order('available_at', { ascending: false }).limit(1).maybeSingle();
     if (head.error) throw new Error(head.error.message);
     let book: PaperBook; const outcomes: Row[] = [];
     if (body.action === 'initialize') {
       if (head.data) throw new Error('paper_book_already_initialized');
-      book = newPaperBook(bookId);
+      book = newPaperBook(bookId, new Date().toISOString());
     } else {
       if (!head.data) throw new Error('paper_book_initialize_required');
       book = head.data.state as PaperBook;
       const forwardCalendar = await acquireTwEntryForwardCalendar();
       const asOf = new Date().toISOString(); const session = String(body.session);
       const cutoffOpen = `${session}T09:00:00+08:00`;
+      if (!book.inceptionAt || !Number.isFinite(Date.parse(book.inceptionAt))
+        || Date.parse(cutoffOpen) <= Date.parse(book.inceptionAt)
+        || !book.lastProcessedSession && (!Number.isFinite(Date.parse(String(head.data.available_at)))
+          || Date.parse(cutoffOpen) <= Date.parse(String(head.data.available_at)))) throw new Error('paper_session_before_inception');
+      if (!book.lastProcessedSession) {
+        // Freeze the start by taking the earliest completed official session
+        // whose open follows initialization. Callers cannot choose a later,
+        // more favorable historical starting session on restart.
+        const first = await db.from('tw_trading_sessions_v3').select('session_id')
+          .eq('status', 'completed').gt('open_at', book.inceptionAt)
+          .lte('close_at', asOf).lte('recorded_at', asOf).order('session_id').limit(1).maybeSingle();
+        if (first.error || first.data?.session_id !== session) throw new Error('paper_first_session_must_follow_inception');
+      }
       const priorSession = await db.from('tw_trading_sessions_v3').select('session_id')
         .eq('status', 'completed').lt('close_at', cutoffOpen).lte('recorded_at', cutoffOpen)
         .order('session_id', { ascending: false }).limit(1).maybeSingle();
