@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { loadDeepArticleEvidence } from './research-deep-evidence.ts';
+import { buildResearchInboxRow, type ResearchInboxItem } from './research-inbox.ts';
 import {
   DEEP_ARTICLE_SCHEMA, DEEP_ARTICLE_SECTION_ORDER, validateDeepResearchArticle,
   type DeepResearchArticle, type DeepResearchScenario,
@@ -55,6 +57,30 @@ function article(): DeepResearchArticle {
 }
 const options = () => ({ article: article(), documents: [document], allowedOfficialFactIds: new Set<string>(),
   expectedSymbol: '2409', now: '2026-09-29T01:00:00Z' });
+
+test('inbox revisions cannot travel backwards through article cutoff; chapter titles are not claim evidence', async () => {
+  const item: ResearchInboxItem = { sourcePlatform: 'youtube', sourceUrl: 'https://www.youtube.com/watch?v=fixture',
+    author: 'publisher', publishedAt: '2026-09-27T01:00:00Z', observedAt: '2026-10-04T00:00:00Z',
+    firstObservedAt: '2026-09-27T02:00:00Z', revisionObservedAt: '2026-10-04T00:00:00Z',
+    symbols: ['2409'], shortSummary: '出版方更正先前客戶驗證說法', catalyst: '仍待客戶確認', risk: '沒有公開訂單',
+    claimStatus: 'reported', visibility: 'public', contentForm: 'research_summary' };
+  const load = async (input: ResearchInboxItem) => {
+    const row = { id: sourceId, ...buildResearchInboxRow(input) };
+    const query = { select() { return this; }, in() { return this; },
+      limit: async () => ({ data: [row], error: null }) };
+    const db = { from: () => query, rpc: async () => ({ data: [
+      { id: sourceId, headId: sourceId, retracted: false, superseded: false }], error: null }) };
+    return loadDeepArticleEvidence(db as unknown as Parameters<typeof loadDeepArticleEvidence>[0], [sourceId], item.observedAt);
+  };
+  const revision = await load(item);
+  assert.equal(Date.parse(revision[0].observedAt), Date.parse(item.observedAt));
+  assert.throws(() => validateDeepResearchArticle({ ...options(), documents: revision }), /source_not_usable/u);
+  const chapter = await load({ ...item, observedAt: document.observedAt, revisionObservedAt: document.observedAt,
+    contentForm: 'chapter_titles', shortSummary: '節目章節標題：友達技術', });
+  assert.equal(chapter[0].publicCitation, true);
+  assert.equal(chapter[0].substantiveEvidence, false);
+  assert.throws(() => validateDeepResearchArticle({ ...options(), documents: chapter }), /source_not_usable/u);
+});
 
 test('conditional scenario computes attribution, diluted EPS and dated present value', () => {
   const result = validateDeepResearchArticle(options());

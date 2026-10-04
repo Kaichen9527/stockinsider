@@ -1,5 +1,20 @@
 # Taiwan research and strategy agents v1
 
+## Approved amendment — 2026-10-04
+The user approved the StockInsider completion plan: early discovery plus first
+breakout, eleven evidence factors, verified source acquisition, immutable first
+discovery prices, real all-role consumers, durable experiments and paper books.
+GPT-6.1 Sol High implements and tests; GPT-6 Astra High handles trust recovery and
+independent final review. This supersedes the earlier all-Astra implementation
+preference, without independently changing a protected runner's approved model
+allowlist. Reuse existing scoring weights as the baseline; shadow-test early
+ranking. Retired collectors remain retired; new permitted browser/transcript
+paths require actual acquisition receipts. The five exact VPS cleanup paths in
+the approved plan may be removed after identity/reference revalidation, without
+rollback archives. Historical data, evidence, shared caches and other apps stay.
+Production release remains conditional on authentic protected reviews, capacity,
+matching reviewed migrations, browser canaries and schedule acceptance.
+
 ## Authority and scope
 The user approved the full implementation plan in this conversation and on 2026-09-30 asked to finish all remaining work including deployment. The user also requires GPT-6 Astra High for all subsequent model work. These instructions supersede the earlier Sol implementation / Astra handoff preference. They authorize implementation, reviewed migrations, merging, production deployment and schedule activation after acceptance; they do not authorize bypassing protected checks, fabricating evidence, selecting an unapproved strategy, live trading or paid infrastructure purchases.
 

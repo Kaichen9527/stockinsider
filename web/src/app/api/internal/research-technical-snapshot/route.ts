@@ -8,6 +8,7 @@ import { createTechnicalDecisionSnapshot, researchCanonicalHash, type ThesisQual
 import { TW_ENTRY_PLAN_RULESET } from '@/lib/tw-entry-plan-contract';
 import { loadDeepArticleEvidence } from '@/lib/research-deep-evidence';
 import { aggregateOfficialWeeklyBars, WEEKLY_AGGREGATION_VERSION } from '@/lib/research-weekly-bars';
+import { loadResearchExecutionContext } from '@/lib/research-execution-context';
 
 type Row = Record<string, unknown>;
 const SYMBOL = /^\d{4}$/u;
@@ -34,18 +35,19 @@ export async function POST(request: Request) {
     const stockRead = await db.from('stocks').select('id,symbol').eq('symbol', symbol).eq('market', 'TW').maybeSingle();
     if (stockRead.error || !stockRead.data) throw new Error(stockRead.error?.message || 'research_technical_stock_missing');
     const stockId = String(stockRead.data.id);
-    const instrumentRead = await db.from('stock_instruments_v3')
-      .select('stock_id,symbol,exchange,provider,source_timestamp,recorded_at')
-      .eq('stock_id', stockId).eq('symbol', symbol).eq('instrument_type', 'common_stock')
-      .eq('listing_status', 'active').lte('source_timestamp', observedAt).lte('recorded_at', observedAt)
-      .lte('valid_from', observedAt).or(`valid_to.is.null,valid_to.gt.${observedAt}`)
-      .order('recorded_at', { ascending: false }).limit(2);
-    if (instrumentRead.error || !instrumentRead.data?.length) throw new Error(instrumentRead.error?.message || 'research_technical_common_stock_missing');
+    const instrumentRead = await db.rpc('resolve_legacy_instrument_authority_v3_13', {
+      p_stock_id: stockId, p_cutoff: observedAt,
+    });
+    if (instrumentRead.error || instrumentRead.data?.length !== 1
+      || instrumentRead.data[0].symbol !== symbol || instrumentRead.data[0].instrument_type !== 'common_stock')
+      throw new Error(instrumentRead.error?.message || 'research_technical_common_stock_missing');
     const instrument = instrumentRead.data[0];
     const exchange = String(instrument.exchange);
-    if (!['TWSE', 'TPEX'].includes(exchange) || instrumentRead.data.some((row) => row.exchange !== exchange)) {
+    if (!['TWSE', 'TPEX'].includes(exchange)) {
       throw new Error('research_technical_exchange_conflict');
     }
+    const instrumentActive = instrument.listing_status === 'active'
+      && (!instrument.valid_to || Date.parse(instrument.valid_to) > Date.parse(observedAt));
     const sessionRead = await db.from('tw_trading_sessions_v3')
       .select('session_id,status,market,provider,close_at,source_timestamp,collected_at,recorded_at,source_ref')
       .eq('market', exchange).eq('status', 'completed').lte('close_at', observedAt)
@@ -60,7 +62,8 @@ export async function POST(request: Request) {
     const sessionDate = String(session.session_id);
     const qualificationRead = await db.from('candidate_thesis_qualifications_v1')
       .select('id,stock_id,payload,status,article_hash,review_receipt_hash')
-      .eq('stock_id', stockId).order('created_at', { ascending: false }).order('id', { ascending: false })
+      .eq('stock_id', stockId).lte('qualified_at', observedAt).lte('created_at', observedAt)
+      .order('created_at', { ascending: false }).order('id', { ascending: false })
       .limit(1).maybeSingle();
     if (qualificationRead.error || !qualificationRead.data) {
       throw new Error(qualificationRead.error?.message || 'research_technical_thesis_missing');
@@ -83,9 +86,10 @@ export async function POST(request: Request) {
     if (!Array.isArray(sourceIds) || sourceIds.length === 0) {
       throw new Error('research_technical_article_sources_missing');
     }
-    const articleSources = await loadDeepArticleEvidence(db, sourceIds.map(String));
+    const articleSources = await loadDeepArticleEvidence(db, sourceIds.map(String), observedAt);
     const evidenceCurrent = articleSources.length === sourceIds.length
-      && articleSources.every((source) => !source.retracted && source.publicCitation);
+      && articleSources.every((source) => !source.retracted && !source.superseded
+        && source.substantiveEvidence !== false && source.publicCitation);
     // An acquisition failure produces a visible pending-data row. It never
     // downgrades a missing official bar into a usable third-party signal.
     const authority = await loadTwEntryPlanAuthority(db, {
@@ -93,15 +97,19 @@ export async function POST(request: Request) {
       cutoff: observedAt, forwardCalendar,
     });
     const plannedAt = new Date().toISOString();
+    const preliminaryFeatures = authority.bars.length ? calculateTechnicalFeatures(authority.bars) : null;
+    // Existing entry upper bounds are <= close + 0.25 ATR. Use the larger
+    // close + ATR for conservative lot-capacity admission before plan creation.
+    const maximumEntryPrice = preliminaryFeatures ? preliminaryFeatures.close + (preliminaryFeatures.atr14 || 0) : 0;
+    const execution = await loadResearchExecutionContext(db, { stockId, symbol, exchange,
+      sessions: authority.bars.slice(-20).map((bar) => bar.session), maximumEntryPrice, asOf: observedAt });
     const plans = buildTwEntryPlans({
       ...authority, symbol, candidateRevisionId: thesis.articleRevisionId,
       dataAsOf: observedAt, availableAt: plannedAt, computedAt: plannedAt,
       formalEligibility: { state: thesis.status === 'qualified' ? 'eligible' : 'blocked',
         reasonCodes: thesis.status === 'qualified' ? [] : [`thesis_${thesis.status}`],
         policyVersion: thesis.policyVersion },
-      // Production has no audited execution-liquidity predicate. Keep
-      // eligibility blocked while still calculating the raw research signal.
-      liquidityVerified: false, missingData: authority.missingData,
+      liquidityVerified: execution.liquidity.verified, missingData: authority.missingData,
     });
     const finalDatasetConfirmed = authority.missingData.length === 0 && plans.missingData.length === 0
       && authority.calendar?.signalSession === sessionDate && authority.priceBasis?.status === 'verified'
@@ -113,12 +121,14 @@ export async function POST(request: Request) {
       missingData: authority.missingData,
     });
     const calendarHash = researchCanonicalHash({ session, forwardCalendar: authority.calendar || null });
+    const strategyVersion = execution.approval?.receiptHash || TW_ENTRY_PLAN_RULESET;
     const decision = createTechnicalDecisionSnapshot({
       thesis, observedAt: plannedAt, marketSession: sessionDate, marketDatasetHash, calendarHash,
       finalDatasetConfirmed, featureVersion: TECHNICAL_FEATURE_RULESET_VERSION,
-      strategyVersion: TW_ENTRY_PLAN_RULESET, rawSignalConfirmed,
+      strategyVersion, rawSignalConfirmed,
       evidenceCurrent,
-      liquidityVerified: false, approvedStrategyVersion: null, existingPaperPosition: false,
+      liquidityVerified: execution.liquidity.verified, approvedStrategyVersion: execution.approval?.receiptHash || null,
+      existingPaperPosition: execution.existingPaperPosition, instrumentActive,
     });
     const features = finalDatasetConfirmed
       ? calculateTechnicalFeatures(authority.bars.map((bar) => ({
@@ -136,23 +146,28 @@ export async function POST(request: Request) {
     const completeWeeklyBars = weeklyBars.filter((bar) => bar.status === 'complete');
     const weeklyFeatures = completeWeeklyBars.length
       ? calculateTechnicalFeatures(completeWeeklyBars) : null;
+    const decisionInputHash = researchCanonicalHash({ marketDatasetHash, calendarHash, execution: execution.contextHash,
+      qualificationId: qualificationRead.data.id, evidenceCurrent, blockers: decision.blockers,
+      featureVersion: TECHNICAL_FEATURE_RULESET_VERSION, strategyVersion, signalState: decision.signalState });
     const stored = await db.from('candidate_technical_decisions_v1').insert({
       stock_id: stockId, thesis_qualification_id: qualificationRead.data.id,
       session_date: sessionDate, market_dataset_hash: marketDatasetHash, calendar_hash: calendarHash,
-      feature_version: TECHNICAL_FEATURE_RULESET_VERSION, strategy_version: TW_ENTRY_PLAN_RULESET,
+      feature_version: TECHNICAL_FEATURE_RULESET_VERSION, strategy_version: strategyVersion, decision_input_hash: decisionInputHash,
       snapshot: { ...decision, features, weeklyAggregationVersion: WEEKLY_AGGREGATION_VERSION,
         weeklyFeatures, lastWeeklyBar: completeWeeklyBars.at(-1) || null,
-        plans: plans.plans.map((plan) => ({
+        execution, plans: plans.plans.map((plan) => ({
         planId: plan.planId, strategyId: plan.strategyId, rawSignalState: plan.rawSignalState,
         planState: plan.planState, reasonCodes: plan.reasonCodes, entryLower: plan.entryLower,
         entryUpper: plan.entryUpper, invalidationPrice: plan.invalidationPrice,
+        signalSession: plan.signalSession, validFromSession: plan.validFromSession,
+        expiresAfterSession: plan.expiresAfterSession,
       })), missingData: plans.missingData }, observed_at: plannedAt,
     }).select('id').single();
     if (stored.error && stored.error.code !== '23505') throw new Error(stored.error.message);
     const replay = stored.error ? await db.from('candidate_technical_decisions_v1')
       .select('id').eq('stock_id', stockId).eq('thesis_qualification_id', qualificationRead.data.id)
       .eq('session_date', sessionDate).eq('market_dataset_hash', marketDatasetHash)
-      .eq('strategy_version', TW_ENTRY_PLAN_RULESET).maybeSingle() : null;
+      .eq('strategy_version', strategyVersion).eq('decision_input_hash', decisionInputHash).maybeSingle() : null;
     if (replay?.error || (replay && !replay.data)) throw new Error('research_technical_replay_failed');
     return NextResponse.json({ ok: true, snapshotId: stored.data?.id || replay?.data?.id,
       decision, missingData: plans.missingData, idempotentReplay: Boolean(replay) });

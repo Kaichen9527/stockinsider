@@ -1,7 +1,7 @@
 import { timingSafeEqual } from 'node:crypto';
 
 export type InternalAuthResult =
-  | { ok: true; authSource: 'internal_api_key' | 'cron_secret' | 'research_review_key' }
+  | { ok: true; authSource: 'internal_api_key' | 'cron_secret' | 'research_review_key' | 'strategy_approval_key' | 'research_test_key' }
   | { ok: false; status: number; error: string };
 
 function secureTokenEquals(actual: string, expected: string): boolean {
@@ -10,7 +10,7 @@ function secureTokenEquals(actual: string, expected: string): boolean {
   return actualBytes.length === expectedBytes.length && timingSafeEqual(actualBytes, expectedBytes);
 }
 
-export function requireInternalAuth(req: Request, options: { allowResearchReviewer?: boolean } = {}): InternalAuthResult {
+export function requireInternalAuth(req: Request, options: { allowResearchReviewer?: boolean; allowStrategyApprover?: boolean; allowResearchTester?: boolean } = {}): InternalAuthResult {
   const expected = ([
     { source: 'internal_api_key' as const, value: process.env.INTERNAL_API_KEY },
     { source: 'cron_secret' as const, value: process.env.CRON_SECRET },
@@ -18,7 +18,15 @@ export function requireInternalAuth(req: Request, options: { allowResearchReview
       && process.env.RESEARCH_REVIEW_KEY !== process.env.INTERNAL_API_KEY
       && process.env.RESEARCH_REVIEW_KEY !== process.env.CRON_SECRET
       ? [{ source: 'research_review_key' as const, value: process.env.RESEARCH_REVIEW_KEY }] : []),
-  ]).filter((row): row is { source: 'internal_api_key' | 'cron_secret' | 'research_review_key'; value: string } => Boolean(row.value));
+    ...(options.allowStrategyApprover && process.env.STRATEGY_APPROVAL_KEY
+      && ![process.env.INTERNAL_API_KEY, process.env.CRON_SECRET, process.env.RESEARCH_REVIEW_KEY,
+        process.env.RESEARCH_TEST_KEY].includes(process.env.STRATEGY_APPROVAL_KEY)
+      ? [{ source: 'strategy_approval_key' as const, value: process.env.STRATEGY_APPROVAL_KEY }] : []),
+    ...(options.allowResearchTester && process.env.RESEARCH_TEST_KEY
+      && ![process.env.INTERNAL_API_KEY, process.env.CRON_SECRET, process.env.RESEARCH_REVIEW_KEY,
+        process.env.STRATEGY_APPROVAL_KEY].includes(process.env.RESEARCH_TEST_KEY)
+      ? [{ source: 'research_test_key' as const, value: process.env.RESEARCH_TEST_KEY }] : []),
+  ]).filter((row): row is { source: 'internal_api_key' | 'cron_secret' | 'research_review_key' | 'strategy_approval_key' | 'research_test_key'; value: string } => Boolean(row.value));
   if (expected.length === 0) {
     return { ok: false, status: 500, error: 'INTERNAL_API_KEY/CRON_SECRET not configured' };
   }

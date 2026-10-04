@@ -19,7 +19,10 @@ export type ResearchSourceRoot = {
   url: string;
   publishedAt: string;
   firstObservedAt: string;
-  kind: 'official_verified' | 'primary_industry' | 'public_broker' | 'news' | 'social_rumor';
+  revisionObservedAt?: string;
+  revisionId?: string;
+  isOriginalSource?: boolean;
+  kind: 'official_verified' | 'primary_industry' | 'public_broker' | 'news' | 'social_rumor' | 'metadata_only';
   status: 'current' | 'retracted' | 'contradicted';
 };
 export type ResearchPriorityCandidate = {
@@ -62,15 +65,28 @@ function scoreCandidate(candidate: ResearchPriorityCandidate, asOf: string): Res
   const latestByRoot = new Map<string, ResearchSourceRoot>();
   for (const root of candidate.roots) {
     if (!root.rootId || !validTime(root.publishedAt) || !validTime(root.firstObservedAt)
-      || Date.parse(root.publishedAt) > cutoff || Date.parse(root.firstObservedAt) > cutoff) {
+      || Date.parse(root.publishedAt) > cutoff || Date.parse(root.firstObservedAt) > cutoff
+      || root.revisionObservedAt && (!validTime(root.revisionObservedAt) || Date.parse(root.revisionObservedAt) > cutoff
+        || Date.parse(root.revisionObservedAt) < Date.parse(root.firstObservedAt))) {
       throw new Error('research_priority_future_or_invalid_root');
     }
     const prior = latestByRoot.get(root.rootId);
-    if (!prior || Date.parse(root.firstObservedAt) >= Date.parse(prior.firstObservedAt)) latestByRoot.set(root.rootId, root);
+    const revisionTime = Date.parse(root.revisionObservedAt || root.firstObservedAt);
+    const priorTime = prior ? Date.parse(prior.revisionObservedAt || prior.firstObservedAt) : -Infinity;
+    const severity = { current: 0, contradicted: 1, retracted: 2 };
+    const original = root.isOriginalSource !== false;
+    const priorOriginal = prior?.isOriginalSource !== false;
+    const replace = !prior || original && !priorOriginal || original === priorOriginal && (revisionTime > priorTime || revisionTime === priorTime
+      && (severity[root.status] > severity[prior.status] || severity[root.status] === severity[prior.status]
+        && (root.revisionId || root.url).localeCompare(prior.revisionId || prior.url) > 0));
+    const firstObservedAt = prior && Date.parse(prior.firstObservedAt) < Date.parse(root.firstObservedAt)
+      ? prior.firstObservedAt : root.firstObservedAt;
+    if (replace) latestByRoot.set(root.rootId, { ...root, firstObservedAt });
+    else if (prior) latestByRoot.set(root.rootId, { ...prior, firstObservedAt });
   }
-  const roots = [...latestByRoot.values()].filter((root) => root.status === 'current');
+  const roots = [...latestByRoot.values()].filter((root) => root.status === 'current' && root.kind !== 'metadata_only');
   const evidenceRanks: Record<ResearchSourceRoot['kind'], number> = {
-    official_verified: 4, primary_industry: 3, public_broker: 2, news: 1, social_rumor: 1,
+    official_verified: 4, primary_industry: 3, public_broker: 2, news: 1, social_rumor: 1, metadata_only: 0,
   };
   const evidence = Math.max(0, ...roots.map((root) => evidenceRanks[root.kind]));
   const latestAttempts = new Map<string, ResearchSourceAttempt>();
@@ -78,12 +94,14 @@ function scoreCandidate(candidate: ResearchPriorityCandidate, asOf: string): Res
     if (!attempt.platform || !validTime(attempt.attemptedAt) || Date.parse(attempt.attemptedAt) > cutoff) {
       throw new Error('research_priority_attempt_invalid');
     }
-    const prior = latestAttempts.get(attempt.platform);
-    if (!prior || Date.parse(attempt.attemptedAt) >= Date.parse(prior.attemptedAt)) latestAttempts.set(attempt.platform, attempt);
+    const key = `${attempt.platform}|${attempt.scope || ''}`;
+    const prior = latestAttempts.get(key);
+    if (!prior || Date.parse(attempt.attemptedAt) > Date.parse(prior.attemptedAt)
+      || Date.parse(attempt.attemptedAt) === Date.parse(prior.attemptedAt) && attempt.status === 'failed') latestAttempts.set(key, attempt);
   }
   const missingPlatforms = latestAttempts.size === 0 ? ['source_coverage_unknown']
-    : [...latestAttempts.values()].filter((attempt) => attempt.status === 'failed' || attempt.status === 'not_attempted')
-      .map((attempt) => attempt.platform).sort();
+    : [...new Set([...latestAttempts.values()].filter((attempt) => attempt.status === 'failed' || attempt.status === 'not_attempted')
+      .map((attempt) => attempt.platform))].sort();
   const week = 7 * 86400_000;
   const thisWeek = roots.filter((root) => Date.parse(root.firstObservedAt) > cutoff - week).length;
   const priorWeek = roots.filter((root) => {

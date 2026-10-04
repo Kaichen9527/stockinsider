@@ -21,6 +21,26 @@ const order: PaperOrder = {
 const bar = { symbol: '2409', session: '2026-09-23', open: 30.5,
   high: 31.2, low: 29.8, close: 30.9, officialFinal: true };
 
+test('fills cannot exceed the entire official session volume and predecessor exits stay frozen', () => {
+  const denied = fillPaperOrder({ book: newPaperBook('growth'), order, shares: 1000,
+    bar: { ...bar, volumeShares: 999 }, markPrices: {} });
+  assert.equal(denied.outcome, 'no_fill');
+  const filled = fillPaperOrder({ book: newPaperBook('growth'), order, shares: 1000, bar, markPrices: {} }).book;
+  assert.deepEqual(filled.positions[0].exitRules, { maximumHoldingSessions: 20, exitBelowMa20: true });
+  const prior = settlePaperSession({ book: filled, session: bar.session, bars: [bar] });
+  const legacy = { ...prior, positions: prior.positions.map((position) => ({ ...position,
+    holdingSessions: 50, exitRules: undefined })) };
+  const nextBar = { ...bar, session: '2026-09-24', volumeShares: 5000 };
+  const marked = markPaperPositions({ book: legacy, session: nextBar.session, bars: [nextBar],
+    ma20BySymbol: { '2409': 32 } });
+  assert.equal(marked.positions[0].pendingExitAfterSession, null);
+  const illiquid = markPaperPositions({ book: prior, session: nextBar.session,
+    bars: [{ ...nextBar, low: 27, close: 28, volumeShares: 999 }] });
+  assert.equal(illiquid.positions.length, 1);
+  assert.equal(illiquid.cash, prior.cash);
+  assert.equal(illiquid.positions[0].pendingExitAfterSession, nextBar.session);
+});
+
 test('two separately funded books enforce their risk and exposure caps', () => {
   const conservative = sizePaperOrder({ book: newPaperBook('conservative'), order, markPrices: {} });
   const growth = sizePaperOrder({ book: newPaperBook('growth'), order, markPrices: {} });
@@ -192,4 +212,47 @@ test('paper adoption binds parameters, risk policy, effective time and receipt v
     assert.equal(sizePaperOrder({ book: newPaperBook('growth'),
       order: { ...order, approval: altered, strategyVersion: altered.receiptHash }, markPrices: {} }).shares, 0);
   }
+});
+
+test('flat and zero-volume bars cannot fabricate a fill or stopped-position cash', () => {
+  for (const blockedBar of [{ ...bar, volumeShares: 0 },
+    { ...bar, open: 31, high: 31, low: 31, close: 31 }]) {
+    assert.equal(fillPaperOrder({ book: newPaperBook('growth'), order, shares: 1000,
+      bar: blockedBar, markPrices: {} }).outcome, 'no_fill');
+  }
+  const opened = fillPaperOrder({ book: newPaperBook('growth'), order, shares: 1000,
+    bar, markPrices: {} }).book;
+  const settled = settlePaperSession({ book: opened, session: bar.session, bars: [bar] });
+  const locked = { ...bar, session: '2026-09-24', open: 27, high: 27, low: 27, close: 27, volumeShares: 0 };
+  const pending = markPaperPositions({ book: settled, session: locked.session, bars: [locked] });
+  assert.equal(pending.cash, settled.cash);
+  assert.equal(pending.positions.length, 1);
+  assert.equal(pending.positions[0].pendingExitAfterSession, locked.session);
+  const next = settlePaperSession({ book: pending, session: locked.session, bars: [locked] });
+  const exited = markPaperPositions({ book: next, session: '2026-09-25',
+    bars: [{ ...locked, session: '2026-09-25', open: 26, high: 28, low: 25, close: 27, volumeShares: 5000 }] });
+  assert.equal(exited.positions.length, 0);
+  assert.ok(exited.realizedPnl < -5000);
+});
+
+test('MA20 and time exits wait for the next tradable session and reject invalid volume', () => {
+  const opened = fillPaperOrder({ book: newPaperBook('growth'), order, shares: 1000, bar, markPrices: {} }).book;
+  const settled = settlePaperSession({ book: opened, session: bar.session, bars: [bar] });
+  for (const timeExit of [false, true]) {
+    const before = structuredClone(settled);
+    if (timeExit) before.positions[0].holdingSessions = 19;
+    const nextBar = { ...bar, session: '2026-09-24', volumeShares: 5000 };
+    const pending = markPaperPositions({ book: before, session: nextBar.session, bars: [nextBar],
+      ma20BySymbol: { '2409': timeExit ? 30 : 32 } });
+    assert.equal(pending.positions.length, 1);
+    assert.equal(pending.positions[0].pendingExitAfterSession, nextBar.session);
+    assert.equal(pending.cash, before.cash);
+    const marked = settlePaperSession({ book: pending, session: nextBar.session, bars: [nextBar] });
+    const exitBar = { ...nextBar, session: '2026-09-25', open: 30, low: 29 };
+    assert.equal(markPaperPositions({ book: marked, session: exitBar.session, bars: [exitBar] }).positions.length, 0);
+  }
+  assert.throws(() => fillPaperOrder({ book: newPaperBook('growth'), order, shares: 1000,
+    bar: { ...bar, volumeShares: -1 }, markPrices: {} }), /session_invalid/u);
+  assert.throws(() => markPaperPositions({ book: settled, session: '2026-09-24',
+    bars: [{ ...bar, session: '2026-09-24', volumeShares: NaN }] }), /bar_invalid/u);
 });

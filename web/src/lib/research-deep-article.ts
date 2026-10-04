@@ -100,7 +100,8 @@ export type ValidatedDeepArticle = Omit<DeepResearchArticle, 'scenarios'> & {
 };
 export type EvidenceDocument = {
   id: string; symbols: string[]; publishedAt: string; observedAt: string;
-  sourceUrl: string; retracted: boolean; publicCitation: boolean;
+  sourceUrl: string; retracted: boolean; publicCitation: boolean; superseded?: boolean;
+  substantiveEvidence?: boolean;
 };
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu;
 const instant = (value: string) => typeof value === 'string' && Number.isFinite(Date.parse(value))
@@ -117,7 +118,8 @@ function checkSourceIds(ids: string[], documents: Map<string, EvidenceDocument>,
       || Date.parse(source.publishedAt) > Date.parse(source.observedAt)
       || Date.parse(source.publishedAt) > Date.parse(article.evidenceCutoffAt)
       || Date.parse(source.observedAt) > Date.parse(article.evidenceCutoffAt)
-      || source.retracted || !source.publicCitation) throw new Error('deep_article_source_not_usable');
+      || source.retracted || source.superseded || source.substantiveEvidence === false
+      || !source.publicCitation) throw new Error('deep_article_source_not_usable');
   }
 }
 export function deepArticleSourceIds(article: DeepResearchArticle): string[] {

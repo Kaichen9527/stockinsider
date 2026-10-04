@@ -19,7 +19,8 @@ async function captureTechnicalCutoff(historical) {
       reviewReceiptHash: 'review', articleRevisionId: 'article' }, status: 'qualified', article_hash: 'hash', review_receipt_hash: 'review' },
     candidate_research_dossiers: { content: { deepResearch: { sourceDocumentIds: ['source'] } } },
   };
-  const db = { from(table) {
+  const db = { rpc: async () => ({ data: [{ exchange: 'TWSE', symbol: '2409', instrument_type: 'common_stock',
+    listing_status: 'active' }], error: null }), from(table) {
     const result = { data: rows[table], error: null };
     const query = { then: (resolve, reject) => Promise.resolve(result).then(resolve, reject), maybeSingle: async () => result };
     for (const method of ['select', 'eq', 'lte', 'or', 'order', 'limit']) query[method] = () => query;
@@ -36,6 +37,7 @@ async function captureTechnicalCutoff(historical) {
     '@/lib/research-agent-qualification': { researchCanonicalHash: () => 'hash' },
     '@/lib/research-deep-evidence': { loadDeepArticleEvidence: async () => [{ publicCitation: true, retracted: false }] },
     '@/lib/tw-entry-plan': {}, '@/lib/technical-features-v2': {}, '@/lib/tw-entry-plan-contract': {}, '@/lib/research-weekly-bars': {},
+    '@/lib/research-execution-context': {},
   };
   class Clock extends Date { constructor(...args) { super(...(args.length ? args : [now])); } static now() { return now; } }
   const exports = {};

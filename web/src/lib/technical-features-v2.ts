@@ -1,7 +1,7 @@
-import { obv, rsi, sma } from 'indicatorts';
+import { macd, obv, rsi, sma } from 'indicatorts';
 import { wilderAtr14 } from './candidate-risk-action.ts';
 
-export const TECHNICAL_FEATURE_RULESET_VERSION = 'technical-features-v3.0.0';
+export const TECHNICAL_FEATURE_RULESET_VERSION = 'technical-features-v3.1.0';
 export const MINIMUM_TECHNICAL_HISTORY_BARS = 240;
 
 export function technicalHistoryCoverageTerminalReason(barCount: number) {
@@ -46,7 +46,9 @@ export function normalizeInstitutionalFlows(days: InstitutionalFlowDay[]) {
   }
   const uniqueDays = [...uniqueBySession.values()];
   const normalized = (window: number) => {
-    const selected = uniqueDays.slice(0, window).filter((day) => day.net != null && Number.isFinite(day.net));
+    const selected = uniqueDays.slice(0, window);
+    if (selected.length !== window || selected.some((day) => day.net === null || !Number.isFinite(day.net)
+      || day.volume === null || !Number.isFinite(day.volume) || day.volume <= 0)) return null;
     const volume = selected.reduce((sum, day) => sum + (day.volume != null && Number.isFinite(day.volume) && day.volume > 0 ? day.volume : 0), 0);
     if (selected.length === 0 || volume <= 0) return null;
     const net = selected.reduce((sum, day) => sum + Number(day.net), 0);
@@ -80,6 +82,7 @@ export function calculateTechnicalFeatures(
   const atr14 = wilderAtr14(bars.map((bar) => ({ high: bar.high, low: bar.low, close: bar.close })));
   const rsi14 = lastFinite(rsi(closes, { period: 14 }), 15);
   const obvValue = lastFinite(obv(closes, volumes), 1);
+  const momentum = bars.length >= 34 ? macd(closes, { fast: 12, slow: 26, signal: 9 }) : null;
   return {
     sessionDate: bars.at(-1)!.session,
     close: closes.at(-1)!,
@@ -94,6 +97,9 @@ export function calculateTechnicalFeatures(
     atr14,
     rsi14,
     obv: obvValue,
+    macd12_26: momentum ? lastFinite(momentum.macdLine, 34) : null,
+    macdSignal9: momentum ? lastFinite(momentum.signalLine, 34) : null,
+    macdHistogram: momentum ? lastFinite(momentum.macdLine.map((value, index) => value - momentum.signalLine[index]), 34) : null,
     institutionalFlow5dNorm: institutionalFlows?.normalized5d ?? null,
     institutionalFlow20dNorm: institutionalFlows?.normalized20d ?? null,
     rulesetVersion: TECHNICAL_FEATURE_RULESET_VERSION,

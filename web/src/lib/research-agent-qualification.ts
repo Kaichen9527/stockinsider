@@ -156,6 +156,7 @@ export function createTechnicalDecisionSnapshot(input: {
   liquidityVerified: boolean;
   approvedStrategyVersion: string | null;
   existingPaperPosition: boolean;
+  instrumentActive?: boolean;
 }): TechnicalDecisionSnapshot {
   if (!date(input.observedAt) || !/^\d{4}-\d{2}-\d{2}$/u.test(input.marketSession)
     || !SHA256.test(input.marketDatasetHash) || !SHA256.test(input.calendarHash)
@@ -165,6 +166,7 @@ export function createTechnicalDecisionSnapshot(input: {
   }
   const qualification = researchEntryQualification(input.thesis, input.observedAt);
   const blockers = [
+    input.instrumentActive === false ? 'official_listing_not_active' : null,
     !input.finalDatasetConfirmed ? 'official_final_dataset_pending' : null,
     !qualification.allowed ? qualification.reason : null,
     !input.evidenceCurrent ? 'article_source_retracted_or_missing' : null,

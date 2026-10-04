@@ -1438,7 +1438,9 @@ async function executeCandidateResearchCycle(options: {
         hasPriceHistory: bars.length >= 240,
         hasInstitutionalFlow: institutional != null,
         hasMarketEvidence: marketEvidence.status === 'complete',
-        hasCounterEvidenceReview: officialReportedFacts.length > 0,
+        // Financial observations do not constitute an independent counter-review.
+        // Only the independently reviewed thesis path can grant this credit.
+        hasCounterEvidenceReview: false,
         asOf: latestMarketSession,
       });
       const brokerFactor = brokerResearchFactor(brokerEvidenceRowsFromSnapshots(((brokerConsensusRes.data as Row[]) || []).map((row) => {

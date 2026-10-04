@@ -6,17 +6,25 @@
 - [x] Library-level exact strategy approval and assessment bindings.
 - [x] Research suites wired into GitHub diagnostic;dedicated tests locally before final review.
 - [x] 40 GB /8 GB reserve admission composed with existing host guards and heavy-work lock.
-- [ ] Restore reviewed current-native/Astra-only protected model runner and bootstrap authority.
+- [ ] Activate reviewed current-native Sol 6.1 High make / Astra High review+verify runner via trusted external bootstrap authority; inactive recovery implementation exists in PR #288.
 - [ ] Full source/architecture review and exact implementation evidence for completed scope.
 - [ ] Actual model consumer: total-budget claims for all roles, retry/restart and offline handling.
-- [ ] Durable experiment, independent validation, human approval and paper book ledger/API.
-- [ ] Discovery source-root/revision corrections, active-job priority and complete-source attempt integration.
+- [x] Locally tested durable proposal/assessment/validation/approval and CAS paper-book APIs; actual independent artifact consumer remains pending.
+- [x] Original-root/revision/withdrawal handling, active-job priority and source-attempt/factor contracts.
+- [ ] Actual authenticated/public platform probes and source-attempt controller integration; relative-return ranking enrichment.
 - [ ] Monthly renewal and qualified/held-position daily worklist consumer.
 - [ ] AUO complete evidence-to-publication and second-industry acceptance.
 - [ ] Formal schema cutover, production deployment, browser desktop/mobile verification.
 - [ ] Enable verified schedules and observe five trading days.
 
-## Current deployment blockers (observed 2026-09-30)
-VPS physical disk80,530,636,800 bytes; root capacity76,887,154,688 bytes and available approximately16.05 GB. Only active StockInsider releases remain. Measured application inventory including all PostgreSQL approximately3.07 GB;2 GiB memory/3.76 GBdisk example peak fails whole-host admission. Existing production stays active.
+## Current deployment blockers (observed 2026-10-04)
 
-Protected base still executes a removed native path. PR285 successor device identity drifted16777234→16777230, and its active graph is not registered on protected base. Existing required gate cannot bootstrap itself through the unavailable predecessor. This requires a genuinely reviewed base-owned recovery authority; no check fabrication, ruleset disabling or candidate self-registration. Old model routing uses Terra/Sol and must be amended to the user's Astra-only requirement.
+VPS physical disk 80,530,636,800 bytes; root capacity 76,887,154,688 bytes. Exact approved cleanup removed 38,682,624 allocated bytes; available approximately 15.13 GB, still about 5.27 GB short of the current 20.40 GB heavy-operation admission. StockInsider plus the conservatively counted entire PostgreSQL tree is approximately 3.12 GB. Current site, worker, AUO preview, parser and database remain active. No history/evidence/shared cache/other app was deleted.
+
+Protected base still references a removed native runner and cannot self-activate the candidate recovery code. PR #288 successor e94d21f9fe05dc436211a2458ea59adb52195e26 prepares operation-bound routing and unsigned exact Git facts; trusted external authority, signed independent evidence, base-worker repair and new real checks remain required. No check fabrication, ruleset disabling or candidate self-registration.
+
+Official financial fallback still hits the lifetime 128-fact series storage bound. Repeated source collection times occupy revisions, but deduplication alone cannot admit unlimited genuine periods. The proposed historical-storage/read-window separation is documented for a separately reviewed schema amendment; no cap increase or historical deletion has been applied.
+
+## October 4 local verification
+
+76/76 research, route, calculation and real-PostgreSQL tests passed without skips. New suite membership is in `npm run test:research-agents`. Type/lint/build outcomes and independent exact-commit review are recorded in the implementation handoff. These results do not represent successful production source reading, an approved strategy, completed official refresh or profitability.

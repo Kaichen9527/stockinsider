@@ -71,6 +71,7 @@ const RESEARCH_AGENT_MIGRATIONS = Object.freeze([
   'migrations/20260929_candidate_dossier_outbox_v6.sql',
   'migrations/20260929_research_agent_state_v1.sql',
   'migrations/20260929_research_deep_jobs_v1.sql',
+  'migrations/20261004_research_technical_identity_v2.sql',
 ]);
 const V3192_PROJECTION_DOSSIER_MIGRATION =
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql';

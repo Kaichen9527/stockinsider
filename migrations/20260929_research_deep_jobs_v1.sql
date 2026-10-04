@@ -103,12 +103,18 @@ CREATE OR REPLACE FUNCTION public.claim_research_deep_job_v1(p_owner TEXT)
 RETURNS TABLE(job_id UUID, symbol TEXT, priority_run_id UUID, attempt INTEGER, lease_expires_at TIMESTAMPTZ)
 LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp
 AS $function$
-DECLARE v_job public.research_deep_jobs_v1;
+DECLARE v_job public.research_deep_jobs_v1; v_reservation uuid;
 BEGIN
   IF p_owner IS NULL OR length(trim(p_owner)) < 3 OR length(p_owner) > 120 THEN
     RAISE EXCEPTION 'research_deep_owner_invalid';
   END IF;
   PERFORM pg_advisory_xact_lock(2409, 6002);
+  INSERT INTO public.research_model_completions_v1(reservation_id,owner,outcome,result_hash)
+  SELECT r.reservation_id,r.owner,'failed',encode(sha256(convert_to('deep_lease_expired','UTF8')),'hex')
+  FROM public.research_model_reservations_v1 r JOIN public.research_deep_jobs_v1 j
+    ON r.role='company_research' AND r.work_key='deep:'||j.job_id||':'||j.attempts::text
+  WHERE j.status='running' AND j.lease_expires_at<=clock_timestamp()
+  ON CONFLICT(reservation_id) DO NOTHING;
   UPDATE public.research_deep_jobs_v1 AS jobs SET
     status = CASE WHEN attempts >= 3 THEN 'failed' ELSE 'queued' END,
     terminal_reason = CASE WHEN attempts >= 3 THEN 'lease_expired_max_attempts' ELSE terminal_reason END,
@@ -126,6 +132,9 @@ BEGIN
     ORDER BY jobs.week_start, jobs.queue_rank, jobs.created_at, jobs.job_id
     FOR UPDATE SKIP LOCKED LIMIT 1;
   IF NOT FOUND THEN RETURN; END IF;
+  SELECT reservation_id INTO v_reservation FROM public.reserve_research_model_v1(
+    'company_research',p_owner,'deep:'||v_job.job_id||':'||(v_job.attempts+1)::text);
+  IF v_reservation IS NULL THEN RETURN; END IF;
   UPDATE public.research_deep_jobs_v1 SET status='running', attempts=attempts+1,
     lease_owner=p_owner, lease_expires_at=clock_timestamp()+interval '30 minutes'
     WHERE research_deep_jobs_v1.job_id=v_job.job_id
@@ -240,6 +249,11 @@ BEGIN
     terminal_reason=left(coalesce(p_reason,'research_failed'),500),
     finished_at=CASE WHEN attempts >= 3 THEN clock_timestamp() ELSE NULL END
   WHERE research_deep_jobs_v1.job_id=p_job_id;
+  PERFORM public.finish_research_model_v1(r.reservation_id,p_owner,
+    CASE WHEN p_success THEN 'completed' ELSE 'failed' END,
+    encode(sha256(convert_to(COALESCE(p_receipt_id::text,p_reason),'UTF8')),'hex'))
+  FROM public.research_model_reservations_v1 r WHERE r.role='company_research'
+    AND r.work_key='deep:'||p_job_id||':'||p_attempt::text;
   RETURN TRUE;
 END $function$;
 
@@ -339,6 +353,10 @@ BEGIN
     terminal_reason=CASE WHEN v_receipt.status='accepted' THEN NULL ELSE 'dossier_rejected' END,
     finished_at=CASE WHEN v_receipt.status='accepted' OR attempts>=3 THEN clock_timestamp() ELSE NULL END
     WHERE research_deep_jobs_v1.job_id=p_deep_job_id;
+  PERFORM public.finish_research_model_v1(r.reservation_id,p_deep_owner,
+    CASE WHEN v_receipt.status='accepted' THEN 'completed' ELSE 'failed' END,p_submission_hash)
+  FROM public.research_model_reservations_v1 r WHERE r.role='company_research'
+    AND r.work_key='deep:'||p_deep_job_id||':'||p_deep_attempt::text;
   RETURN QUERY SELECT v_receipt.submission_id,v_receipt.dossier_id,v_receipt.status,
     v_receipt.rejection_reasons,v_receipt.idempotent_replay;
 END $function$;
