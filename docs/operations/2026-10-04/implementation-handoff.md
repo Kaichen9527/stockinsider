@@ -153,3 +153,22 @@ pass, zero skips, including real PostgreSQL transaction rollback and generic
 completion rejection. Type check passes. Exact successor review remains required.
 Final receipt amendment lint: zero errors, 33 pre-existing warnings; production
 build passed with the internal receiver compiled. No migration was applied to VPS.
+
+### Independent Cloud successor review and release status
+
+Astra approved implemented Cloud code at `960319d7ab5446161dba0e532997c85c17294e11`
+(tree `eace672e7365eb5994abd3526fb0c543f2237528`), with no open blocker in that
+scope. [Unsigned review record](./cloud-implemented-code-review.json) preserves
+five independent tests plus forced generic/Cloud completion race ordering.
+This documentation checkpoint does not promote that review to protected
+approval or complete-plan acceptance.
+
+[PR #289](https://github.com/Kaichen9527/stockinsider/pull/289) is a separate draft,
+base `codex/research-strategy-agents` (#287). The protected run for the reviewed
+code, [37212111293](https://github.com/Kaichen9527/stockinsider/actions/runs/37212111293),
+failed fetching exact/requirements/architecture evidence branches. Bootstrap
+passed; actual protected code gates were skipped. Required root remains failed.
+No merge, migration, production deploy, schedule activation or further cleanup
+was performed. Owner-controlled recovery and host capacity remain independent
+blockers. Actual Cloud mutation/run authorization is pending the targeted
+cross-chat request; the earlier authorization covered read-only hardware probing.

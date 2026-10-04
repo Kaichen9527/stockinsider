@@ -14,11 +14,12 @@
 - [x] Local tests for identity, time, withdrawal, accounting, capacity, body/auth,
   replay, overwrite and source checkout mismatch. Cloud suite: 16 pass, zero skips, including real PostgreSQL provenance/rollback tests.
 - [x] Type check passes. Full research suite: 93 pass, zero skips, including PostgreSQL tests.
-  Final lint/build of the receipt amendment are recorded separately in the handoff.
+  Final lint/build pass (zero errors, 33 baseline warnings); recorded in the handoff.
 
 ## Must remain open until actual evidence exists
 
-- [ ] Independent Astra review of the exact successor commit and resolution of findings.
+- [x] Independent Astra code review of exact successor `960319d7`; P1 closed.
+  Unsigned code-scope review is not protected release authority.
 - [ ] Actual Linux Cloud execution and measured peak memory/disk/lock contention.
 - [ ] Real VPS reservation -> Cloud execution -> authenticated VPS completion,
   including interruption/restart and durable duplicate receipts.
