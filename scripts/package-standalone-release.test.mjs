@@ -35,6 +35,7 @@ async function fixture(t, bundledAssets = null) {
   for (const name of ['call_internal_api.mjs', 'call_internal_api_sequence.mjs',
     'internal-api-sequence-policy.mjs',
     'contabo-capacity-guard.mjs', 'contabo-host-resource-check.mjs',
+    'research-capacity-admission.mjs', 'research-host-resource-check.mjs',
     'contabo-deployment-inventory.mjs', 'contabo-cleanup-preflight.mjs',
     'sync-official-trading-calendar.mjs',
     'verify-standalone-release.mjs',
@@ -72,6 +73,9 @@ test('packages only the standalone runtime and binds a full git identity', async
   assert.ok(receipt.manifest.files.some(item => item.path === 'scripts/candidate_financial_parser_socket.py'));
   assert.ok(receipt.manifest.files.some(item => item.path === 'scripts/candidate_financial_document_parser.py'));
   assert.ok(receipt.manifest.files.some(item => item.path === 'scripts/candidate_financial_fact_scope.py'));
+  for (const name of ['research-capacity-admission.mjs', 'research-host-resource-check.mjs']) {
+    assert.ok(receipt.manifest.files.some(item => item.path === `scripts/${name}`));
+  }
   assert.equal((await verifyStandaloneRelease(result.releaseDirectory)).releaseVerified, true);
   await assert.rejects(packageStandaloneRelease(config));
 });

@@ -17,6 +17,9 @@ import { canonicalContentHash, canonicalPublisherKey, classifyPttContentSemantic
 import { collectPagedAuthorityRows } from './candidate-research-policy';
 import { decodeSingleFileZip, gdeltGkgUrlsAfter, gdeltSearchableText, gdeltTransportReason, isRetiredNewsHost, matchGdeltStockSymbols, parseGdeltSeenDate, selectLatestGdeltGkgUrl } from './gdelt-gkg';
 import { isExpectedPttArticleMissing } from './ptt-policy';
+import { buildInsiderEvidence } from './research-insider-evidence';
+import { normalizeResearchPlatform } from './research-source-registry';
+import { parsePublicBrokerEps } from './research-broker-estimate';
 import { fetchPinnedHttpsText, isPublicNetworkAddress } from './pinned-https-fetch';
 
 type Row = Record<string, unknown>;
@@ -65,9 +68,9 @@ const KOL_SEEDS = [
     primaryPlatform: 'youtube',
     followerCount: 500000,
     contentFocus: 'tw_stocks',
-    profileUrl: 'https://www.youtube.com/@stockcancer',
+    profileUrl: 'https://www.youtube.com/@Gooaye',
     metadata: {
-      youtubeUrl: 'https://www.youtube.com/@stockcancer',
+      youtubeUrl: 'https://www.youtube.com/@Gooaye',
       instagramUrl: 'https://www.instagram.com/stockcancer/',
       threadsUsername: 'stockcancer',
       telegramUrl: 'https://t.me/s/Gooaye',
@@ -3754,31 +3757,24 @@ async function scrapeTwseInsider(symbolContext?: SymbolScopedStockContext | null
         const issueDate = compactText(row['出表日期']) || compactText(row['申報日期']) || '';
         const publishedAt = parseRocDateToIso(issueDate);
         const currentHolding = parseTwNumber(row['目前持股']);
-        const electedHolding = parseTwNumber(row['選任時持股'] || row['選任時持股 ']);
         const transferMethod = compactText(row['預定轉讓方式及股數-轉讓方式']);
         const transferShares = parseTwNumber(row['預定轉讓方式及股數-擬轉讓股數']);
-        const deltaHolding =
-          currentHolding != null && electedHolding != null
-            ? currentHolding - electedHolding
-            : null;
-        const sentimentLabel: 'bullish' | 'neutral' | 'bearish' =
-          dataset.kind === 'transfer'
-            ? 'bearish'
-            : deltaHolding != null && deltaHolding > 0
-              ? 'bullish'
-              : 'neutral';
-        const deltaText =
-          deltaHolding == null
-            ? '持股變化資料不足'
-            : `選任時 ${electedHolding?.toLocaleString() || '-'} 股，現在 ${currentHolding?.toLocaleString() || '-'} 股，變化 ${deltaHolding > 0 ? '+' : ''}${deltaHolding.toLocaleString()} 股`;
+        const evidence = buildInsiderEvidence({
+          kind: dataset.kind === 'transfer' ? 'transfer_declaration' : 'holding_snapshot',
+          symbol, person, role, reportPeriod: issueDate || 'unknown_period',
+          sourceUrl: dataset.url, transferMethod: transferMethod || null,
+          currentShares: currentHolding, comparablePriorShares: null,
+          declaredShares: transferShares, confirmedShares: null,
+        });
+        const sentimentLabel = 'neutral' as const;
         const summary =
           dataset.kind === 'transfer'
-            ? `${companyName}(${symbol}) ${role} ${person} 申報轉讓 ${transferShares?.toLocaleString() || '-'} 股（${transferMethod || '方式未標記'}）。`
-            : `${companyName}(${symbol}) ${role} ${person} 董監持股揭露：${deltaText}。`;
+            ? `${companyName}(${symbol}) ${role} ${person} 申報預定轉讓 ${transferShares?.toLocaleString() || '-'} 股（${transferMethod || '方式未標記'}），不是已成交證據。`
+            : `${companyName}(${symbol}) ${role} ${person} 持股快照：${currentHolding?.toLocaleString() || '-'} 股；尚無可比上期及實際交易證據。`;
         records.push({
           sourceEntityId: String(entity.id),
           platform: 'twse_insider',
-          documentUrl: dataset.url,
+          documentUrl: evidence.documentUrl,
           title: `${dataset.label}｜${companyName}(${symbol})`,
           summary: summary.slice(0, 500),
           contentText: JSON.stringify(row).slice(0, 4000),
@@ -3790,9 +3786,12 @@ async function scrapeTwseInsider(symbolContext?: SymbolScopedStockContext | null
             connector: 'openapi_twse',
             dataset: dataset.url,
             issue_date: issueDate || null,
+            report_period_status: issueDate ? 'published_period' : 'unknown_period_observed_only',
             role,
             person,
-            delta_holding: deltaHolding,
+            canonical_url: dataset.url,
+            insider_evidence: evidence,
+            delta_holding: null,
             transfer_shares: transferShares,
           },
         });
@@ -4094,13 +4093,12 @@ function detectSocialBrokerSignal(text: string) {
   const targetMatch =
     normalized.match(/(?:目標價|target price|TP|上看|調升至)\s*(?:NT\$|新台幣|台幣|TWD|\$|：|:)?\s*(\d{2,5}(?:\.\d{1,2})?)/i) ||
     normalized.match(/(?:目標價|target price|TP)[^\d]{0,20}(\d{2,5}(?:\.\d{1,2})?)/i);
-  const epsMatch =
-    normalized.match(/(?:Forward\s*)?EPS(?:\s*\(?\d{4}\)?)?[^\d]{0,20}(\d{1,4}(?:\.\d{1,2})?)/i) ||
-    normalized.match(/(?:每股盈餘|EPS預估|EPS估)[^\d]{0,20}(\d{1,4}(?:\.\d{1,2})?)/i);
+  const epsEstimate = parsePublicBrokerEps(normalized);
   return {
     brokerName,
     targetPrice: targetMatch ? Number(targetMatch[1]) : null,
-    forwardEps: epsMatch ? Number(epsMatch[1]) : null,
+    forwardEps: epsEstimate.period === 'annual' ? epsEstimate.eps : null,
+    epsEstimate,
     summary: normalized.slice(0, 700),
   };
 }
@@ -4111,7 +4109,7 @@ export async function runSourceDiscovery(options?: { dryRun?: boolean }) {
   const [docsRes, stocksRes] = await Promise.all([
     supabase
       .from('source_raw_documents')
-      .select('id,platform,title,summary,document_url,symbols,collected_at,published_at,metadata,source_entity_id,confidence')
+      .select('id,platform,title,summary,content_text,document_url,symbols,collected_at,published_at,metadata,source_entity_id,confidence')
       .neq('platform', 'investanchors')
       .order('collected_at', { ascending: false })
       .limit(80),
@@ -4130,7 +4128,7 @@ export async function runSourceDiscovery(options?: { dryRun?: boolean }) {
   const candidates: Array<{ platform: string; candidate_name: string; candidate_url: string | null; reason: string; evidence: Record<string, unknown> }> = [];
 
   for (const doc of documents) {
-    const content = `${doc.title || ''}\n${doc.summary || ''}\n${doc.document_url || ''}`;
+    const content = `${doc.title || ''}\n${doc.summary || ''}\n${doc.content_text || ''}\n${doc.document_url || ''}`;
     const urls = Array.from(String(content).matchAll(/https?:\/\/[^\s)]+/g)).map((match) => match[0]);
     for (const url of urls) {
       let platform = 'unknown';
@@ -4173,7 +4171,7 @@ export async function runSourceDiscovery(options?: { dryRun?: boolean }) {
   const socialBrokerCandidateRows: Array<Record<string, unknown>> = [];
   const socialBrokerSeen = new Set<string>();
   for (const doc of documents) {
-    const platform = compactText(doc.platform || '').toLowerCase();
+    const platform = normalizeResearchPlatform(compactText(doc.platform || ''));
     if (!['threads', 'instagram', 'telegram', 'bulltalk', 'ptt', 'kol', 'podcast'].includes(platform)) continue;
     const text = `${doc.title || ''}\n${doc.summary || ''}\n${doc.content_text || ''}`;
     const brokerSignal = detectSocialBrokerSignal(text);
@@ -4206,6 +4204,7 @@ export async function runSourceDiscovery(options?: { dryRun?: boolean }) {
           source_surface: (doc.metadata as Row | null)?.source_surface || null,
           query_keyword: (doc.metadata as Row | null)?.query_keyword || null,
           formal_base_eligible: false,
+          eps_estimate: brokerSignal.epsEstimate,
           boundary: 'social_broker_leak_requires_public_or_imported_confirmation',
         },
         collected_at: nowIso(),

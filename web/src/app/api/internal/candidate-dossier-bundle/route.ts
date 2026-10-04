@@ -82,8 +82,8 @@ async function handle(request: Request, body: Row) {
     })), { onConflict: 'revision_id,input_hash', ignoreDuplicates: true });
     if (queued.error) return NextResponse.json({ ok: false, error: queued.error.message }, { status: 500 });
     const outbox = await supabase.from('candidate_dossier_outbox_v5').upsert(bundles.map((bundle) => ({
-      bundle_id: bundle.bundleId, revision_id: bundle.revisionId, input_hash: bundle.inputHash,
-    })), { onConflict: 'revision_id,input_hash', ignoreDuplicates: true });
+      bundle_id: bundle.bundleId, revision_id: bundle.revisionId, input_hash: bundle.inputHash, publication_kind: 'ordinary',
+    })), { onConflict: 'revision_id,input_hash,publication_kind', ignoreDuplicates: true });
     if (outbox.error) return NextResponse.json({ ok: false, error: outbox.error.message }, { status: 500 });
   }
   const last = pageDetails.at(-1);
