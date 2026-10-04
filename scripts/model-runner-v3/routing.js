@@ -4,13 +4,8 @@ const { RunnerError, assert } = require('./artifacts');
 
 function routeOperation(operation, strategy) {
   assert(['make', 'review', 'verify'].includes(operation), 2);
-  assert(['hybrid', 'sol-only', 'terra-only'].includes(strategy), 2);
-  if (operation === 'make') {
-    if (strategy === 'sol-only') return { model: 'gpt-5.6-sol', reasoningEffort: 'xhigh', waiverRequired: true };
-    return { model: 'gpt-5.6-terra', reasoningEffort: 'high', waiverRequired: false };
-  }
-  if (strategy === 'terra-only') throw new RunnerError(5);
-  return { model: 'gpt-5.6-sol', reasoningEffort: 'xhigh', waiverRequired: false };
+  assert(strategy === 'sol61-make-astra-review', 5);
+  return { model: operation === 'make' ? 'gpt-6.1-sol' : 'gpt-6-astra', reasoningEffort: 'high', waiverRequired: false };
 }
 
 function routeManifest(parsed, taskId, strategy) {
@@ -26,7 +21,7 @@ function routeManifest(parsed, taskId, strategy) {
     }
   };
   return {
-    protocol: 'loop-model-route-v3.5',
+    protocol: 'loop-model-route-v3.7',
     manifestSha256: parsed.manifestSha256,
     strategy: effectiveStrategy,
     routes: tasks.map((task) => ({

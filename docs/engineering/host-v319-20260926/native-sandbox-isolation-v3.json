@@ -1,0 +1,113 @@
+{
+  "schema": "synthetic-credential-isolation-diagnostic-v3",
+  "observed_at": "2026-09-26T08:21:49.998086+00:00",
+  "correction": "sandbox does not support --strict-config; an unsupported-option exit is never counted as a sandbox denial",
+  "real_credentials_loaded": false,
+  "model_invoked": false,
+  "base_argv": [
+    "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+    "sandbox",
+    "--profile",
+    "model-runner-v3",
+    "--permission-profile",
+    "model-runner-v3",
+    "-C",
+    "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/view",
+    "--"
+  ],
+  "environment": {
+    "PATH": "/usr/bin:/bin:/usr/sbin:/sbin",
+    "HOME": "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/scratch",
+    "CODEX_HOME": "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/transport",
+    "TMPDIR": "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/scratch",
+    "LANG": "C",
+    "LC_ALL": "C"
+  },
+  "checks": [
+    {
+      "name": "source",
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "sandbox",
+        "--profile",
+        "model-runner-v3",
+        "--permission-profile",
+        "model-runner-v3",
+        "-C",
+        "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/view",
+        "--",
+        "/bin/cat",
+        "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/view/source.txt"
+      ],
+      "exit_code": 0,
+      "stdout": "synthetic-readable\n",
+      "stderr": "",
+      "expected_denial": false,
+      "passed": true
+    },
+    {
+      "name": "transport_synthetic_auth",
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "sandbox",
+        "--profile",
+        "model-runner-v3",
+        "--permission-profile",
+        "model-runner-v3",
+        "-C",
+        "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/view",
+        "--",
+        "/bin/cat",
+        "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/transport/auth.json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"synthetic\":true,\"contains_real_credentials\":false}\n",
+      "stderr": "",
+      "expected_denial": true,
+      "passed": false
+    },
+    {
+      "name": "sibling_temp",
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "sandbox",
+        "--profile",
+        "model-runner-v3",
+        "--permission-profile",
+        "model-runner-v3",
+        "-C",
+        "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/view",
+        "--",
+        "/bin/cat",
+        "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/outside.txt"
+      ],
+      "exit_code": 0,
+      "stdout": "synthetic-outside\n",
+      "stderr": "",
+      "expected_denial": true,
+      "passed": false
+    },
+    {
+      "name": "user_cache_synthetic",
+      "argv": [
+        "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex",
+        "sandbox",
+        "--profile",
+        "model-runner-v3",
+        "--permission-profile",
+        "model-runner-v3",
+        "-C",
+        "/private/tmp/stockinsider-authorized-20260926-TVwINv/sandbox-isolation-v2-_a8y85eb/view",
+        "--",
+        "/bin/cat",
+        "/Users/kaerchen/Library/Caches/stockinsider-sandbox-check-q816g35u/sentinel.txt"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "cat: /Users/kaerchen/Library/Caches/stockinsider-sandbox-check-q816g35u/sentinel.txt: Operation not permitted\n",
+      "expected_denial": true,
+      "passed": true
+    }
+  ],
+  "passed": false
+}

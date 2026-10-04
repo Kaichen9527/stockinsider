@@ -10,19 +10,19 @@ const { loadHostPins, verifyCurrentNode } = require('./hostPreflight');
 const { executeOperation, readState, statePath, repositoryRoot } = require('./execution');
 
 const MODEL_RUNNER_IDENTITY = [
-  ['approvalPolicy', 'never'], ['codexVersion', '0.155.0-alpha.16.3'], ['contractVersion', 'model-runner-v3.6'],
+  ['approvalPolicy', 'never'], ['codexVersion', '0.160.0'], ['contractVersion', 'model-runner-v3.8'],
   ['gitVersion', '2.50.1 (Apple Git-155)'], ['hardIsolationClaims', ['external_user_read', 'authoritative_write', 'command_network']],
-  ['hostPinFixtureSha256', '4e3a508b5120903ec7364771ba1aea8b98bd43e1d58f0ed1fcee1faaf8457008'],
-  ['hostPinVersion', 'model-runner-host-pins-v3.18'], ['journalVersion', 'model-runner-journal-v3.5'],
-  ['manifestVersion', 'loop-model-manifest-v3.5'], ['nodeVersion', 'v22.14.0'],
-  ['permissionProfileVersion', 'model-runner-permissions-v3.5'], ['promptPolicyVersion', 'model-runner-prompt-v3.5'],
+  ['hostPinFixtureSha256', '0c4f60b1db8aaf77b7be9fa1d81b3d2c719465736fc10b29d3d10640e2ef17f2'],
+  ['hostPinVersion', 'model-runner-host-pins-v3.22'], ['journalVersion', 'model-runner-journal-v3.5'],
+  ['manifestVersion', 'loop-model-manifest-v3.7'], ['nodeVersion', 'v22.14.0'],
+  ['permissionProfileVersion', 'model-runner-permissions-v3.6'], ['promptPolicyVersion', 'model-runner-prompt-v3.5'],
   ['requestProtocol', 'loop-model-v3.5'], ['resultProtocol', 'loop-model-result-v3.5'],
-  ['routingVersion', 'model-runner-routing-v3.5'], ['sourceViewVersion', 'model-runner-source-view-v3.5'],
-  ['stateNamespace', 'model-runner-v3'], ['trustedApplyVersion', 'model-runner-trusted-apply-v3.5'],
+  ['routingVersion', 'model-runner-routing-v3.7'], ['sourceViewVersion', 'model-runner-source-view-v3.5'],
+  ['stateNamespace', 'model-runner-v3-sol61-astra-v1'], ['trustedApplyVersion', 'model-runner-trusted-apply-v3.5'],
 ];
-const MODEL_RUNNER_IDENTITY_SHA256 = 'ba88a6551f8640036ecc4d31c4217fb8a55a10c44e82636e4b9739781068d9cf';
+const MODEL_RUNNER_IDENTITY_SHA256 = 'a2bf72cabbab4afd3749c3b2c7dede71f97ce2182d2ea674d0f62e140c456c4f';
 
-assert(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)) === 886 && sha256(canonicalJson(MODEL_RUNNER_IDENTITY)) === MODEL_RUNNER_IDENTITY_SHA256, 12);
+assert(Buffer.byteLength(canonicalJson(MODEL_RUNNER_IDENTITY)) === 890 && sha256(canonicalJson(MODEL_RUNNER_IDENTITY)) === MODEL_RUNNER_IDENTITY_SHA256, 12);
 
 function parseArguments(argv) {
   assert(argv.length >= 1, 2);
@@ -40,21 +40,16 @@ function parseArguments(argv) {
   const allowed = {
     validate: new Set(['--manifest']),
     route: new Set(['--manifest', '--task']),
-    run: new Set(['--manifest', '--task', '--strategy', '--waiver']),
-    review: new Set(['--manifest', '--task', '--strategy', '--waiver']),
-    verify: new Set(['--manifest', '--task', '--strategy', '--waiver']),
+    run: new Set(['--manifest', '--task', '--strategy']),
+    review: new Set(['--manifest', '--task', '--strategy']),
+    verify: new Set(['--manifest', '--task', '--strategy']),
     status: new Set(['--manifest', '--task']),
   }[command];
   for (const flag of Object.keys(flags)) assert(allowed.has(flag), 2);
   assert(typeof flags['--manifest'] === 'string', 2);
   const requiresTask = ['run', 'review', 'verify', 'status'].includes(command);
   assert(!requiresTask || typeof flags['--task'] === 'string', 2);
-  assert(!flags['--strategy'] || ['hybrid', 'sol-only', 'terra-only'].includes(flags['--strategy']), 2);
-  assert(!flags['--waiver'] || (command === 'run' && flags['--strategy'] === 'sol-only'), 2);
-  assert(
-    command !== 'run' || flags['--strategy'] !== 'sol-only' || typeof flags['--waiver'] === 'string',
-    2,
-  );
+  assert(!flags['--strategy'] || flags['--strategy'] === 'sol61-make-astra-review', 2);
   return { command, flags };
 }
 
@@ -84,56 +79,9 @@ function selectedTask(parsed, taskId) {
   return task;
 }
 
-function validateWaiver(filename, { parsed, task, root, now = new Date() }) {
-  let descriptor;
-  try {
-    assert(path.isAbsolute(filename), 5);
-    const stat = fs.lstatSync(filename);
-    assert(
-      stat.isFile() && !stat.isSymbolicLink() && stat.uid === process.getuid() &&
-      [0o400, 0o600].includes(stat.mode & 0o777),
-      5,
-    );
-    const real = fs.realpathSync(filename);
-    const relative = path.relative(fs.realpathSync(root), real);
-    assert(relative.startsWith('..' + path.sep) && relative !== '..', 5);
-    descriptor = fs.openSync(real, fs.constants.O_RDONLY | fs.constants.O_NOFOLLOW);
-    const bytes = fs.readFileSync(descriptor, 'utf8');
-    assert(Buffer.byteLength(bytes) <= 16_384 && bytes.endsWith('\n'), 5);
-    const waiver = parseJsonWithNoDuplicateKeys(bytes.slice(0, -1));
-    assert(canonicalJson(waiver) + '\n' === bytes, 5);
-    assert(
-      Object.keys(waiver).sort().join(',') === [
-        'approvedBy', 'changeId', 'checkpoint', 'expiresAt', 'inputHead',
-        'protocol', 'reason', 'strategy', 'taskId',
-      ].sort().join(',') &&
-      waiver.protocol === 'model-runner-waiver-v3.5' &&
-      waiver.checkpoint === parsed.manifest.checkpoint &&
-      waiver.changeId === parsed.manifest.changeId &&
-      waiver.taskId === task.id &&
-      waiver.inputHead === parsed.manifest.inputHead &&
-      waiver.strategy === 'sol-only' &&
-      waiver.approvedBy === 'repository-owner' &&
-      typeof waiver.reason === 'string' &&
-      Buffer.byteLength(waiver.reason) >= 1 &&
-      Buffer.byteLength(waiver.reason) <= 1024 &&
-      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/u.test(waiver.expiresAt),
-      5,
-    );
-    const invocation = now.getTime();
-    const expiry = Date.parse(waiver.expiresAt);
-    assert(
-      Number.isFinite(invocation) && Number.isFinite(expiry) &&
-      expiry > invocation && expiry <= invocation + 7 * 24 * 60 * 60 * 1000,
-      5,
-    );
-    return Object.freeze({ sha256: sha256(bytes), expiresAt: waiver.expiresAt });
-  } catch (error) {
-    if (error instanceof RunnerError) throw error;
-    throw new RunnerError(5);
-  } finally {
-    if (descriptor !== undefined) fs.closeSync(descriptor);
-  }
+function validateWaiver() {
+  // Historical waivers never authorize the operation-bound successor.
+  throw new RunnerError(5);
 }
 
 function validateOutput(parsed) {
@@ -177,14 +125,9 @@ async function execute(argv) {
     return readState(statePath(root, parsed, task), parsed, task);
   }
   const effectiveStrategy = flags['--strategy'] || parsed.manifest.defaultStrategy;
-  const waiverRequired = command === 'run' && effectiveStrategy === 'sol-only';
-  assert(!waiverRequired || flags['--strategy'] === 'sol-only', 2);
-  assert(Boolean(flags['--waiver']) === waiverRequired, 2);
+  assert(effectiveStrategy === 'sol61-make-astra-review' && !flags['--waiver'], 5);
   const pins = verifyExecutionHost(flags['--manifest']);
-  const root = repositoryRoot(flags['--manifest']);
-  const waiver = waiverRequired
-    ? validateWaiver(flags['--waiver'], { parsed, task, root })
-    : null;
+  const waiver = null;
   const result = await executeOperation({
     parsed,
     task,

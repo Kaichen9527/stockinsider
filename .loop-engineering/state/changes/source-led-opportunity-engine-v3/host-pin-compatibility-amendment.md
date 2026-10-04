@@ -1,81 +1,14 @@
-# Model Runner Host-Pin Compatibility Amendment
+# Host identity and Astra runner successor amendment
 
-Amendment version: `model-runner-host-pin-amendment-v3.18`
+Amendment version: `model-runner-host-pin-amendment-v3.23`
+Status: candidate; not activated on protected main; independent final review pending.
 
-Status: active
+The October 4 instruction assigns implementation to GPT-6.1 Sol High and trust recovery/final independent review to Astra High. This amendment now binds make to `gpt-6.1-sol/high` and review/verify to `gpt-6-astra/high`. It authorizes preparing the recovery candidate, not self-approval or a GitHub protection bypass. September 26 and September 30 observations and the frozen October 4 Astra-only commit remain historical. Fresh credential-free host evidence is `docs/engineering/host-recovery-20261004/observation.json`; the operation-bound successor is documented in `routing-amendment.md` in that directory.
 
-V3.18 records the signed ChatGPT/Codex application update and macOS root-volume
-identity observed on 2026-09-24. Every path, stat identity, executable digest,
-version and CodeDirectory identity is measured rather than inferred. No broader
-device, version or path is admitted.
+The exact native binary is `/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex`, version `codex-cli 0.160.0`, SHA-256 `6b582e8813ce7e8ed4c52814ee5cf230dba647bf2292df747a4003f2657ef201`. Native and application code signatures and notarization were observed successfully. Every device, inode, size, owner, mode, hash, version, designated requirement and signing identity remains exactly pinned. A future release-identity/session-stat split requires separate independent design review; this amendment does not introduce it.
 
-## Decision
+The unchanged fixture v3.22 is 2,202 bytes including LF; its pre-LF SHA-256 is `0c4f60b1db8aaf77b7be9fa1d81b3d2c719465736fc10b29d3d10640e2ef17f2`. The new 890-byte runner identity SHA-256 is `a2bf72cabbab4afd3749c3b2c7dede71f97ce2182d2ea674d0f62e140c456c4f`. Contract v3.8, manifest v3.7 and routing v3.7 admit only the operation-bound `sol61-make-astra-review` strategy. The separate `model-runner-v3-sol61-astra-v1` namespace preserves all earlier state. No wrapper, fallback, learned pin or version range is admitted. The product's 320-case inventory and 41-member stock runtime tuple are unchanged.
 
-The repository-owned `model_runner_v3` host oracle is compatible with the
-currently installed Codex line only through the exact observed build string
-`codex-cli 0.155.0-alpha.16.3`. This is an exact pin, not a
-semver/range allowance: another alpha build, patch-suffixed build, or any later
-binary is rejected until a new compatibility amendment and fixture are
-reviewed.
+Protected base `169aad1b6cfa747f78ae3464b614f43c0749d806` cannot launch its missing predecessor; its pre-authorized successor map ends at v3.18. The inactive external recovery protocol in `docs/engineering/host-recovery-20261004/recovery-amendment.md` binds predecessor, exact final source/tree/listing, graph, signed native fixture and independent review evidence. Its candidate verifier is not imported by the protected gate and cannot activate itself. The owner must establish the independent authority/control plane; this candidate does not provide a usable bootstrap under current rules. Existing protection remains fail-closed.
 
-The active immutable fixture remains
-`model-runner-host-pins-v3.json`, version
-`model-runner-host-pins-v3.18`. Its canonical pre-LF payload is exactly 2,143
-UTF-8 bytes with SHA-256
-`4e3a508b5120903ec7364771ba1aea8b98bd43e1d58f0ed1fcee1faaf8457008`;
-the tracked LF-terminated file is exactly 2,144 bytes.
-
-## Verified host identity
-
-The compatibility evidence observed on the approved macOS arm64 host is:
-
-- lexical and real executable path:
-  `/Applications/ChatGPT.app/Contents/Resources/codex`
-- version: `codex-cli 0.155.0-alpha.16.3`
-- executable SHA-256:
-  `c67698d0990aae05211d9c43ab343ad9517e406824dea77eca103a2806232b3a`
-- stat identity: device `16777234`, inode `187722471`, size `235548432`,
-  uid `501`, gid `20`, mode `100755`
-- signing identifier: `codex`
-- signing Team ID: `2DC432GLL2`
-- full CodeDirectory SHA-256:
-  `ca7400ca48cc1ce76ba1cbaf002760d0017ef413c971ea21b6d6e3df52bed075`
-- bundle assessment: `Notarized Developer ID`
-
-The refreshed ChatGPT bundle, Node and Git stat identities are also exact fixture
-members: bundle device/inode `16777234/187721324`, Node `16777234/1802834`, Git
-`16777234/1152921500312571562`; the bundle CodeDirectory SHA-256 is
-`53d8ceac529c5ab21133d0b086b4c01e9833155c1a382032a3967feb48d2f303`.
-The runner and doctor must call the same host preflight and verify every fixture member
-and the static runner identity before granting model authority. They may not learn a
-replacement value from the executable under test or fall back to a different executable.
-
-## Compatibility boundary
-
-This amendment changes only the compatible host identity. It does not change
-the runner protocol, routing, approval policy, sandbox permissions, journal
-state machine, trusted Git apply boundary, proposal authority, product
-scoring, evaluation governance, deployment authority, or production mutation
-boundary. `model_runner_v3` remains an independent verification track with
-`influence: none`.
-
-Any observable path, stat, digest, version, signing, designated-requirement,
-Team-ID, CodeDirectory or notarization mismatch is fail-closed. A ChatGPT or
-Codex update therefore blocks the runner until another explicit amendment is
-created and reviewed.
-
-## One-time protected rotation
-
-The successor values above were measured independently with `stat`, SHA-256,
-`codesign --verify --deep --strict`, designated requirement, Team ID and
-`spctl -a -vv`. They are not learned by the candidate test. Before this fixture
-may be accepted in a PR, a protected-base owner must approve the exact trimmed
-Git model-oracle listing transition from predecessor SHA-256
-`5eb11a767efdce7e9faf197b2a98d9450f555fcba9363155fd3b71b7c653adc6` to successor
-SHA-256 `fafab4f391e8bc077a0e2ec7ed10d1f4afc02bfbc77006ccdb436640e5e77161`
-and bind that successor listing to `model-runner-host-pins-v3.18`. The candidate
-supplies only byte-exact model-oracle files that the already-reviewed protected
-base compares against that record; it cannot add or alter its own approval. The
-approval is single-use for this old-to-new listing pair. The protected listing
-map remains closed, so any later, unapproved listing or binary drift fails
-closed.
+Credential-free compatibility results do not establish the pinned version's real model JSONL/transport behavior. Full protected live isolation/model oracles and all five external gate inputs remain mandatory after independently reviewed base recovery. No merge, deployment, database write, credential read or model invocation is authorized by this amendment.

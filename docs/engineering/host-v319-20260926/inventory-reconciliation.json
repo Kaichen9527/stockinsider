@@ -1,0 +1,26 @@
+{
+  "schema": "candidate-host-inventory-identity-reconciliation-v1",
+  "source_before": "586eb32b3fc99852f0c85d3f1083af3fcaeaeae2",
+  "review_id": 5325247402,
+  "finding_ids": [
+    4110768161,
+    4110768169
+  ],
+  "old_script_value_rows_sha256": "b3ef11c01c20ee7f9308ac8aff297316cd2e761252ef16326a76f550ee9277ab",
+  "new_script_value_rows_sha256": "54534d066117a31ebbde6260077659eea333ba4ef62e99339f637a1b6b840d75",
+  "owner_rows_unchanged": true,
+  "registered_case_count": 320,
+  "registered_case_ids_order_unchanged": true,
+  "classification_and_track_counts_unchanged": true,
+  "changed_case_ids": [
+    "MR3-019"
+  ],
+  "case_change": "Only exact expected fixture version/digest/byte size; all mismatch/race/no-fallback denial requirements preserved.",
+  "script_change": "Only exact model-runner verification selector matches package.json; no command or gate removed.",
+  "protected_base_mapping_modified": false,
+  "historical_review_digests_modified": false,
+  "production_authorized": false,
+  "additional_current_catalog_tags_updated": "Exact catalogSha256/catalogBytes in the two existing active authority comments; no historical review edited",
+  "closure_tests_passed": 6,
+  "closure_test_stdout_sha256": "17b45b6c5844c8113ba2dea1e3b37b1af51d15aa2802544943307d42a6fa3b0c"
+}

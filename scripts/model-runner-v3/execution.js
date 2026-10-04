@@ -31,7 +31,7 @@ const {
   writeExclusive,
 } = require('./journalStore');
 
-const RUNNER_IDENTITY = 'ba88a6551f8640036ecc4d31c4217fb8a55a10c44e82636e4b9739781068d9cf';
+const RUNNER_IDENTITY = 'a2bf72cabbab4afd3749c3b2c7dede71f97ce2182d2ea674d0f62e140c456c4f';
 
 function run(command, args, options = {}) {
   const result = spawnSync(command, args, {
@@ -205,7 +205,7 @@ function copyAuthenticationMaterial(transport) {
 
 function prepareTransport({ source, scratch, transport }) {
   fs.mkdirSync(transport, { recursive: true, mode: 0o700 });
-  const profile = profileToml(source.view, scratch);
+  const profile = profileToml(source.view, scratch, transport);
   fs.writeFileSync(path.join(transport, 'model-runner-v3.config.toml'), profile, {
     mode: 0o600,
     flag: 'wx',
@@ -607,16 +607,21 @@ async function executeModel({
   verifyHostFn = verifyCurrentNode,
   spawnFn = spawn,
 }) {
+  // Bind the actual spawn to the request's operation and role, not merely a
+  // two-model allowlist. No caller may swap the maker into the reviewer slot.
+  assert(request && ['make', 'review', 'verify'].includes(request.operation)
+    && request.role === ({ make: 'maker', review: 'reviewer', verify: 'verifier' })[request.operation]
+    && request.strategy === 'sol61-make-astra-review' && request.terraWaiver === null && route
+    && request.model === route.model && request.reasoningEffort === route.reasoningEffort, 5);
+  const args = codexArgs({ operation: request.operation, model: route.model,
+    reasoningEffort: route.reasoningEffort, viewPath: source.view });
+  const sealedPrompt = promptFor(request);
   const codex = pins.executables.find((entry) => entry.name === 'codex');
   assert(codex, 5);
   await probePermissions({ pins, source, scratch, transport, verifyHostFn, spawnFn });
   return new Promise((resolve, reject) => {
     verifyHostFn(pins);
-    const child = spawnFn(codex.path, codexArgs({
-      model: route.model,
-      reasoningEffort: route.reasoningEffort,
-      viewPath: source.view,
-    }), {
+    const child = spawnFn(codex.path, args, {
       cwd: source.view,
       env: sanitizedEnvironment({ scratchPath: scratch, transportPath: transport }),
       shell: false,
@@ -659,7 +664,7 @@ async function executeModel({
     child.once('spawn', () => {
       onStart(child.pid, child.pid);
       resetIdle();
-      child.stdin.end(promptFor(request));
+      child.stdin.end(sealedPrompt);
     });
     child.once('error', () => {
       if (settled) return;
@@ -1219,13 +1224,16 @@ async function executeOperation({
   removeOwnedResourceFn = removeOwnedResource,
   waiver = null,
 }) {
+  // Direct callers cannot use an override to revive a legacy manifest/waiver.
+  assert(parsed?.manifest?.protocol === 'loop-model-manifest-v3.7'
+    && parsed.manifest.defaultStrategy === 'sol61-make-astra-review' && waiver === null, 5);
+  const effectiveStrategy = strategy || parsed.manifest.defaultStrategy;
+  const route = routeOperation(operation, effectiveStrategy);
   const root = repositoryRoot(manifestPath);
   assert(gitOid(root, parsed.manifest.inputHead) === parsed.manifest.inputHead, 4);
   const paths = runtimePaths(root, parsed.manifestSha256, sha256(task.id));
   const filename = paths.status;
   const state = readState(filename, parsed, task);
-  const effectiveStrategy = strategy || parsed.manifest.defaultStrategy;
-  const route = routeOperation(operation, effectiveStrategy);
   assert((route.waiverRequired && waiver) || (!route.waiverRequired && waiver === null), 5);
   const activeState = operation === 'make' ? 'making' : operation === 'review' ? 'reviewing' : 'verifying';
   const inFlight = (state.state === activeState || state.state === 'recovery_required') &&
