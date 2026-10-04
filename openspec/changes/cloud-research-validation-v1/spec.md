@@ -15,7 +15,11 @@ never credentials, cookies, private/member full text or formal approval keys.
 Original controller-held input is required for result verification; result-provided
 input or hashes are never authority. The receiver rechecks math with the existing
 article validator; immutable replay and live lease acceptance remain the existing
-endpoint/database responsibility, not a new local publication store.
+endpoint/database responsibility, not a new local publication store. An additive
+immutable Cloud acceptance receipt and atomic SQL completion distinguish verified
+ingress from generic model accounting; only that receipt authorizes exact replay.
+Generic completion may never suppress source/fact checks. Apply this migration
+only through the independently reviewed production path.
 
 Cloud profile:20 GB resident,4 GB temporary,8 GB free reserve, measured8 GiB RAM
 peak target and one sandbox heavy-task lock. No production Contabo guard changes.

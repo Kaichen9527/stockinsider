@@ -42,12 +42,14 @@ export async function POST(request: Request) {
       || row.work_key !== cloudReservationWorkKey(work)
       || Date.parse(row.started_at) !== Date.parse(work.issuedAt)
       || Date.parse(row.lease_expires_at) !== Date.parse(work.deadlineAt)) throw new Error('cloud_live_reservation_mismatch');
-    const completed = await db.from('research_model_completions_v1')
-      .select('owner,outcome,result_hash,finished_at').eq('reservation_id', work.reservationId).maybeSingle();
+    const completed = await db.from('research_cloud_acceptances_v1')
+      .select('owner,outcome,result_hash,work_hash,source_commit,receiver_version').eq('reservation_id', work.reservationId).maybeSingle();
     if (completed.error) throw new Error('cloud_completion_read_failed');
     const now = new Date().toISOString();
     if (completed.data) {
       if (!result || completed.data.owner !== work.owner || completed.data.result_hash !== result.resultHash
+        || completed.data.work_hash !== work.workHash || completed.data.source_commit !== work.sourceCommit
+        || completed.data.receiver_version !== 'research-cloud-result-v1'
         || completed.data.outcome !== result.status || Date.parse(result.completedAt) > Date.parse(now))
         throw new Error('cloud_completion_replay_mismatch');
       // Replay an already durable identical result without reinterpreting new evidence.
@@ -73,9 +75,11 @@ export async function POST(request: Request) {
         throw new Error('cloud_server_facts_missing');
       validateDeepResearchArticle({ article, documents, allowedOfficialFactIds: new Set(ids), expectedSymbol: article.symbol, now });
     }
-    // Existing SQL enforces lease expiry and immutable exact replay atomically.
-    const saved = await db.rpc('finish_research_model_v1', { p_reservation: work.reservationId,
-      p_owner: work.owner, p_outcome: result.status, p_result_hash: result.resultHash });
+    // Atomic receipt + existing completion; generic finish alone is not proof
+    // that this receiver validated the packet or its cutoff-visible sources.
+    const saved = await db.rpc('accept_research_cloud_result_v1', { p_reservation: work.reservationId,
+      p_owner: work.owner, p_work_key: cloudReservationWorkKey(work), p_work_hash: work.workHash,
+      p_source_commit: work.sourceCommit, p_outcome: result.status, p_result_hash: result.resultHash });
     if (saved.error || saved.data !== true) throw new Error('cloud_reservation_completion_failed');
     return NextResponse.json({ ok: true, handoff, idempotentReplay: false,
       authoritativePublication: false, strategyApproved: false });

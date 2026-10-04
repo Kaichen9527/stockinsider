@@ -45,8 +45,9 @@ execution. Exact rejected/withdrawn/future evidence remains rejected.
    `{work,result}` to authenticated `research-cloud-result`. It accepts only
    non-synthetic independent-test packets bound to the actual immutable
    reservation work key and server timestamps. It rereads current source heads
-   and cutoff-visible official fact IDs, recomputes, then completes through the
-   existing SQL function. Exact durable retries replay the original completion;
+   and cutoff-visible official fact IDs, recomputes, then atomically records a Cloud acceptance receipt and the existing model
+   completion. Generic completion is never treated as acceptance. Exact durable
+   retries require the original immutable Cloud receipt;
    changed bytes or expired uncompleted work reject.
 5. The receipt completes test work only. Actual deep publication continues through
    `research-deep-review`, the exact outbox claim and `candidate-dossier-submission`;
@@ -85,3 +86,11 @@ synthetic and cannot enter the live result endpoint. Fixture values are not AUO
 financial facts or an article, and fixture reservation IDs do not consume or prove
 real model budget. Actual Cloud execution and real VPS acceptance are separately
 recorded; local fixtures do not close those tasks.
+
+The additive `20261004_research_cloud_receipts_v1.sql` migration is required
+for the receiver. It distinguishes validated ingress from generic budget
+accounting, preserving immutable work/result/source identity. Receipt and model
+completion share the existing advisory lock and one transaction; an expired
+unaccepted result or a generic pre-completion cannot mint a receipt. The migration
+requires normal independent review/capacity admission and has not been applied
+to production. No second article publishing or strategy adoption store is added.

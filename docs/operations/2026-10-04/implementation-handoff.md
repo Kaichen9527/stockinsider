@@ -124,8 +124,8 @@ The inventory/docs checkpoint was committed as `21d3b2c` and pushed to #287.
 separate Cloud capacity profile, deterministic finance-validation CLI and an
 independent-tester-only internal receiver. The receiver uses existing durable
 reservation/completion SQL; it never publishes articles or approves strategies.
-See [Cloud runbook](../../../cloud-research-validation.md) and
-[acceptance checklist](../../../../openspec/changes/cloud-research-validation-v1/tasks.md).
+See [Cloud runbook](../../cloud-research-validation.md) and
+[acceptance checklist](../../../openspec/changes/cloud-research-validation-v1/tasks.md).
 
 Local Cloud tests: 14 pass, zero skip. Full research regression before the last
 midnight fixture test: 90 pass, zero skip; types and build pass. These are local
@@ -139,3 +139,17 @@ owner recovery dispatch. An external trusted owner must establish the reviewed
 one-time control-plane recovery, independently signed exact-version evidence
 and atomic predecessor ledger before #288 can pass. User merge authorization
 is already present; it does not manufacture missing protected evidence.
+
+Independent Astra review of `525496df` found a P1: generic model completion
+could be mistaken for validated Cloud acceptance and bypass withdrawn sources
+on replay. The successor adds an immutable acceptance receipt and atomic SQL
+completion; the generic finish path cannot mint this receipt. Regression includes
+withdrawal/expiry forged replay and real PostgreSQL generic completion, exact
+replay, immutability and rollback. This narrow additive schema amendment is not
+applied to production and must receive exact-source review.
+
+Receipt amendment tests: 16/16 Cloud tests and 93/93 full research regression
+pass, zero skips, including real PostgreSQL transaction rollback and generic
+completion rejection. Type check passes. Exact successor review remains required.
+Final receipt amendment lint: zero errors, 33 pre-existing warnings; production
+build passed with the internal receiver compiled. No migration was applied to VPS.

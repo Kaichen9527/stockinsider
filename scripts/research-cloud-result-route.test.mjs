@@ -16,12 +16,13 @@ function fixture() {
   return { work, result };
 }
 async function run({ pair = fixture(), authorized = true, sourceRevoked = false, mismatch = false, completion = null,
-  time = now, dbExpired = false } = {}) {
+  time = now, dbExpired = false, genericCompletion = null } = {}) {
   const calls = [];
   const reservation = { reservation_id: pair.work.reservationId, role: pair.work.role, owner: pair.work.owner,
     work_key: mismatch ? 'another' : cloud.cloudReservationWorkKey(pair.work), started_at: pair.work.issuedAt, lease_expires_at: pair.work.deadlineAt };
   const db = { from(table) {
-    const value = { data: table === 'research_model_reservations_v1' ? reservation : completion, error: null };
+    const value = { data: table === 'research_model_reservations_v1' ? reservation
+      : table === 'research_cloud_acceptances_v1' ? completion : genericCompletion, error: null };
     const q = { then: (resolve, reject) => Promise.resolve(value).then(resolve, reject), maybeSingle: async () => value };
     for (const method of ['select', 'eq']) q[method] = () => q;
     return q;
@@ -44,7 +45,7 @@ async function run({ pair = fixture(), authorized = true, sourceRevoked = false,
 test('Cloud receive requires distinct tester auth and completes the existing reservation, never publishes', async () => {
   const denied = await run({ authorized: false }); assert.equal(denied.response.status, 401); assert.equal(denied.calls.length, 0);
   const accepted = await run(); assert.equal(accepted.response.status, 200);
-  assert.equal(accepted.calls[0].name, 'finish_research_model_v1'); assert.equal(accepted.response.body.authoritativePublication, false);
+  assert.equal(accepted.calls[0].name, 'accept_research_cloud_result_v1'); assert.equal(accepted.response.body.authoritativePublication, false);
   assert.equal(accepted.response.body.strategyApproved, false);
 });
 test('withdrawal, incorrect live binding, expiry during persistence and synthetic packets reject before acceptance', async () => {
@@ -55,9 +56,18 @@ test('withdrawal, incorrect live binding, expiry during persistence and syntheti
 });
 test('durable identical replay survives expiry; changed bytes do not recreate a completion', async () => {
   const pair = fixture();
-  const completion = { owner: pair.work.owner, outcome: pair.result.status, result_hash: pair.result.resultHash };
+  const completion = { owner: pair.work.owner, outcome: pair.result.status, result_hash: pair.result.resultHash,
+    work_hash: pair.work.workHash, source_commit: pair.work.sourceCommit, receiver_version: 'research-cloud-result-v1' };
   const replay = await run({ pair, completion, time: '2026-10-05T00:10:00Z', sourceRevoked: true });
   assert.equal(replay.response.status, 200); assert.equal(replay.response.body.idempotentReplay, true); assert.equal(replay.calls.length, 0);
   pair.result.output.changed = true;
   assert.equal((await run({ pair, completion, time: '2026-10-05T00:10:00Z' })).response.status, 409);
+});
+test('generic model accounting completion cannot bypass current source verification or mint an expired receipt', async () => {
+  const pair = fixture();
+  const genericCompletion = { owner: pair.work.owner, outcome: pair.result.status, result_hash: pair.result.resultHash };
+  for (const option of [{ sourceRevoked: true }, { time: '2026-10-05T00:10:00Z' }]) {
+    const denied = await run({ pair, genericCompletion, ...option });
+    assert.equal(denied.response.status, 409); assert.equal(denied.calls.length, 0);
+  }
 });

@@ -10,11 +10,11 @@
 - [x] Explicit prepare/run/verify CLI, clean exact checkout, create-only output,
   single sandbox lock and synthetic fixture clearly separated from live research.
 - [x] Authenticated independent-test result receiver uses existing reservation /
-  completion RPC, immutable replay and current server evidence/fact checks.
+  completion plus atomic Cloud acceptance receipt, immutable replay and current server evidence/fact checks.
 - [x] Local tests for identity, time, withdrawal, accounting, capacity, body/auth,
-  replay, overwrite and source checkout mismatch. Cloud suite: 14 pass, zero skip.
-- [x] Type check, lint (zero errors) and production build pass. Full research suite
-  before the added midnight test: 90 pass, zero skip, including PostgreSQL tests.
+  replay, overwrite and source checkout mismatch. Cloud suite: 16 pass, zero skips, including real PostgreSQL provenance/rollback tests.
+- [x] Type check passes. Full research suite: 93 pass, zero skips, including PostgreSQL tests.
+  Final lint/build of the receipt amendment are recorded separately in the handoff.
 
 ## Must remain open until actual evidence exists
 
