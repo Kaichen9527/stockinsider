@@ -31,7 +31,7 @@ const {
   writeExclusive,
 } = require('./journalStore');
 
-const RUNNER_IDENTITY = '0a34cc38c06e432c865aa842278cf05fae724ecf0313f795e753f2086d02cfe1';
+const RUNNER_IDENTITY = 'e93a5fb18ec784e58d7a00ba3f2b37b74e40256beb26e519f911a941c523ff00';
 
 function run(command, args, options = {}) {
   const result = spawnSync(command, args, {

@@ -31,7 +31,7 @@ def main():
     if output.exists():
         raise ValueError('existing evidence must not be overwritten')
     pin_bytes = FIXTURE.read_bytes()
-    if len(pin_bytes) != 2219 or hashlib.sha256(pin_bytes[:-1]).hexdigest() != 'c43c25a48f442dc0aa8902918243efc9fac354c4bfe3ef9af7432d093ed2aed9':
+    if len(pin_bytes) != 2202 or hashlib.sha256(pin_bytes[:-1]).hexdigest() != '0c4f60b1db8aaf77b7be9fa1d81b3d2c719465736fc10b29d3d10640e2ef17f2':
         raise ValueError('exact frozen candidate fixture required')
     pins = json.loads(pin_bytes)
     native = next(row for row in pins['executables'] if row['name'] == 'codex')
