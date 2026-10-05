@@ -7,6 +7,7 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { assertInstalledResearchSuccessorPlan } from './migration-successor-guard.mjs';
+import { migrationBodyInAtomicTransaction } from './atomic-migration-chain.mjs';
 
 const require = createRequire(import.meta.url);
 const { Client } = require('pg');
@@ -142,10 +143,13 @@ async function applyReviewedMigrations(options) {
     application_name:'stockinsider-reviewed-v3-migration',statement_timeout:180000,query_timeout:180000});
   await client.connect();
   let locked=false;
+  let transactionOpen=false;
   const supersededMigrations=[];
   try {
     await client.query("SELECT pg_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0))");
     locked=true;
+    await client.query('BEGIN');
+    transactionOpen=true;
     // Older chain replay overwrites the append/prepare bodies. Detect installed
     // successors before the first mutation; a base-only replay must fail closed.
     await assertInstalledResearchSuccessorPlan(client, { researchAgentExtension: options.researchAgentExtension,
@@ -170,7 +174,7 @@ async function applyReviewedMigrations(options) {
         supersededMigrations.push(migration.relativePath);
         continue;
       }
-      await client.query(migration.bytes.toString('utf8'));
+      await client.query(migrationBodyInAtomicTransaction(migration.bytes.toString('utf8')));
     }
     const verified=(await client.query(`SELECT jsonb_build_object(
       'v314Diagnostics',to_regclass('public.legacy_runtime_failure_diagnostics_v3_14') IS NOT NULL,
@@ -499,11 +503,17 @@ async function applyReviewedMigrations(options) {
       if(installed.rows[0]?.valid!==true) throw new Error('research_agent_installed_policy_mismatch');
       researchVerified.installedPolicyMatches = true;
     }
+    // Postconditions participate in the SAME transaction as every migration.
+    // A failed extension or disconnected client cannot leave an old predecessor
+    // body installed without its financial/Cloud successor.
+    await client.query('COMMIT');
+    transactionOpen=false;
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',
       sourceCommit:options.sourceCommit,attestationCommit:options.attestationCommit,
       orderedChainSha256:plan.chainSha256,migrations:plan.migrations.map(({relativePath,sha256})=>[relativePath,sha256]),
       supersededMigrations:Object.freeze(supersededMigrations),verified,researchVerified});
   } finally {
+    if(transactionOpen)try{await client.query('ROLLBACK');}catch{/* disconnect rolls back server-side */}
     if(locked)try{await client.query("SELECT pg_advisory_unlock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0))");}
       catch{/* session close releases the lock */}
     await client.end();

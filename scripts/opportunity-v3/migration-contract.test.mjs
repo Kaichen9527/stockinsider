@@ -9,6 +9,7 @@ import test, { after, before } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { canonicalJson, sha256Canonical } from '../../web/src/lib/opportunity-v3/canonical.ts';
 import { executeWorkerPayload } from '../../web/src/lib/opportunity-v3/worker-executors.ts';
+import { migrationBodyInAtomicTransaction } from './atomic-migration-chain.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const require = createRequire(import.meta.url);
@@ -8225,4 +8226,26 @@ test('financial history amendment admits genuine periods, preserves PIT revision
     sizeRejected: true, unauthorizedRejected: true, periodBound: true,
     noServiceInsert: true, privatePredecessor: true, noOwnerCreate: true });
   assert.doesNotMatch(financialHistorySql, /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+});
+
+test('financial atomic replay rollback retains installed successor after predecessor replacement and forced failure', () => {
+  psql(`SET ROLE stockinsider_managed_migrator; ${financialHistorySql}`);
+  const probe = () => JSON.parse(psql(`SELECT jsonb_build_object(
+    'periodBound',position('financial_period_revision_bound' IN pg_get_functiondef(
+      'public.prepare_opportunity_financial_fact_series_v3()'::regprocedure))>0,
+    'observationWrapper',position('opportunity_financial_observations_v1' IN pg_get_functiondef(
+      'public.append_financial_fact_v3(public.financial_fact_input_v3,uuid)'::regprocedure))>0)::text;`, ['-At']).trim());
+  assert.deepEqual(probe(), { periodBound: true, observationWrapper: true });
+  const error = rejectedSql(`BEGIN; SET ROLE stockinsider_managed_migrator;
+    ${migrationBodyInAtomicTransaction(decisionIntegritySql)}
+    ${migrationBodyInAtomicTransaction(financialFactRecollectionSql)}
+    DO $forced$
+    BEGIN
+      IF position('financial_period_revision_bound' IN pg_get_functiondef(
+        'public.prepare_opportunity_financial_fact_series_v3()'::regprocedure))>0
+        THEN RAISE EXCEPTION 'predecessor_not_replaced'; END IF;
+      RAISE EXCEPTION 'forced_extension_failure';
+    END $forced$;`);
+  assert.match(error, /forced_extension_failure/u);
+  assert.deepEqual(probe(), { periodBound: true, observationWrapper: true });
 });

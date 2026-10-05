@@ -31,3 +31,12 @@ Capacity-watch and history-backfill units are failed; this is consistent with
 remaining admission blockers, not successful refresh. No files or production
 data were changed during the inventory. No newly unused StockInsider releases
 have yet been proven safe to delete.
+
+Independent review found that base-only replay and a partially committed
+extension replay could restore older function bodies. Both paths are repaired:
+installed-successor detection rejects base-only/omitted-tail plans before any
+mutation; the complete reviewed chain plus installation postconditions now uses
+one transaction. A SQL-aware scanner preserves dollar-quoted functions, strings
+and nested comments while removing only standalone BEGIN/COMMIT wrappers, and
+rejects embedded control/nontransactional commands. Real PostgreSQL forced-failure
+testing confirms rollback retains the period bound and observation wrapper.

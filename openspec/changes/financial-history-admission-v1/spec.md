@@ -35,3 +35,10 @@ bounded correction storms, additive apply twice, and existing base regression.
 Installation uses only the existing independently reviewed extension path after
 exact review and whole-host capacity admission. Measure index/query/storage
 costs before production cutover; no raw emergency SQL or history pruning.
+
+Installed successors cannot be replayed with a base-only migration plan. The
+reviewed operator detects them before any mutation and requires their exact tail
+migrations. The complete chain and all postconditions commit in one transaction;
+only standalone transaction wrappers are removed using a SQL-aware scanner.
+Embedded transaction control or nontransactional commands reject. Forced failure
+after predecessor replacement must preserve the installed successor on rollback.
