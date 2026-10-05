@@ -25,7 +25,7 @@ Draft PRs #290, #291 and #292 isolate history, source and schema changes on top 
 the existing #289/#287/#284 stack. None is merged into main. The exact reviewed
 code commits and subsequent documentation commits are intentionally distinguished.
 
-## In progress
+## Further implemented and independently reviewed
 
 The deterministic tester controller now obtains the real server reservation,
 freezes the original packet and submits returned artifacts to the existing
@@ -33,9 +33,12 @@ authenticated receiver. Ambiguous responses are journaled without automatic
 reclaims; verified packets survive final destination-write failure. Independent
 review at 72e54dc passed 24 cases and stalled-body/recovery probes. This is one
 tester bridge, not six active model roles or an actual VPS/Cloud roundtrip.
-Combined controller/discovery integration passed 180 research tests with zero
-skips and the normal Mac production build. Independent approvals remain bound
-to their original code commits; this does not establish protected release approval.
+The subsequent transport review reproduced a GC-sensitive stalled-body timeout
+in both controllers. An explicit deadline race now covers fetch and body reads;
+monitor dispatch also rechecks the deadline after durable journaling. Review at
+3aa8710 approved these repairs, 13 monitor cases and three real-HTTP deadline
+probes. Independent approvals remain bound to their exact code commits; none is
+protected release approval.
 
 Cloud discovery enrichment at 8613458 passed 43 existing tests, but independent
 review requested changes for three real defects: a full historical calendar hits
@@ -48,9 +51,30 @@ zero errors (33 pre-existing warnings), and the normal Mac build passed. Ranking
 relative-return and price-phase adapters remain null/unknown. The exact review
 record is saved separately from protected and live acceptance.
 
-The fixed 32-read admission is not fair resume. Initial missing evidence remains
-an immutable first-discovery gap; later supplementary research must use separate
-receipts and must not backdate knowledge. That supplementation is still open.
+Later supplementary observations are now separate from the original immutable
+first-discovery quote. Review at 9cce051 passed 61 tests and three independent
+probes. The server prioritizes its Top 20 and active research, shares 32 reads
+between historical/current observations and preserves every gap. Invocation clocks
+bind the new run hash; late observations cannot overwrite earlier knowledge.
+Fair resume, adjusted benchmark, relative returns and price phase remain open.
+
+A bounded monitor now consumes the real worklist contract, processes all held
+symbols first and saves server-generated technical snapshots. It accounts for
+every skipped/deferred company, journals ambiguous responses and does not renew
+theses or pretend to process paper-position risk. Independent review at 3aa8710
+passed. This is a tested consumer, not an accepted live monitoring deployment.
+
+The integrated code at 3aa8710 passed 206 research/integration tests with zero
+failures or skips, and the normal Mac production build passed.
+Draft #296 retains these additions on the existing stack; main is unchanged.
+
+Public AUO research on October 5 read five article/document bodies and recorded
+two failed reads. Intel patent commentary is not confirmed AUO orders, and same-root
+reports are not independent confirmation. The original application is dated
+March 2024. The receipt preserves unknown publication timezones, unavailable raw
+body hashes and a media EPS/P/E inconsistency instead of admitting them as financial
+facts. IG, Facebook, PTT and transcripts were not attempted in this focused pass.
+These manual observations have not been imported or published as a new article.
 
 ## Live release barriers confirmed again
 
@@ -61,10 +85,13 @@ receipts and must not backdate knowledge. That supplementation is still open.
   (73e0aed, 46 tests). It enumerates 24 required external deployment fields and
   eight evidence obligations. Its validator does not install, reserve or activate;
   actual authority, CAS and installation/publication adapters remain external gaps.
+  Latest #296 protected run 37266338330 still cannot fetch the required exact-head
+  review and v318 requirements/architecture evidence branches. Its ordinary product
+  runtime check passed; this does not substitute for the failed protected checks.
 - Production runtime is NOLOGIN with connection limit -1, unlike the reviewed
   LOGIN/NOINHERIT/limit-6 contract. The preflight now refuses before mutation.
   No credential, role or main protection was modified.
-- VPS free disk was 13,023,440,896 bytes on the latest read-only check, below the
+- VPS free disk was 13,011,673,088 bytes on the latest read-only check, below the
   existing approximately 20.40 GB heavy-work floor. No expansion was observed.
   Web standalone, internal worker, PostgREST, preview, parser, PostgreSQL and
   Nginx are running; capacity watch and historical backfill are failed.

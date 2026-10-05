@@ -4,7 +4,8 @@
 - [x] Preserve held-first priority, due-review gaps, and every deferred symbol.
 - [x] Journal original membership and verified responses before output persistence.
 - [x] Exercise clock, identity, explicit rejection, offline and real-transport cases.
-- [ ] Complete exact-commit independent review and root integration checks.
+- [x] Exact-source independent review at3aa8710 after numeric, GC and deadline repairs.
+- [x] Root integration at3aa8710:206 research tests0skip and normal production build.
 - [ ] Exercise authenticated production monitoring after release prerequisites.
 - [ ] Add reviewed fair resume before claiming large-list daily coverage.
 - [ ] Independent renewal, held-position paper risk and six-role model consumers.

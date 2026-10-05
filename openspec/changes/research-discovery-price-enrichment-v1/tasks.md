@@ -22,7 +22,9 @@
 - [x] Record handoff, owned files, exact base, commands, counts and open gates.
 - [x] Source chat independently approved23dffca (49/49) and reports root integration.
 - [x] Supplement exact9cce051 independently approved:61 tests plus3 independent probes.
-- [ ] Root supplement integration tests/build and protected/live release acceptance.
+- [x] Root supplement integration:203 tests0skip and normal Mac build; subsequent
+  controller GC repair integration:205 tests0skip and normal Mac build.
+- [ ] Protected and live release acceptance, complete adapters and fair resume.
 - [x] New isolated supplement branch from exact approved23dffca; original10-file ownership.
 - [x] Independent current receipt beside immutable first context, included in inputHash/response.
 - [x] Server-selected Top20/DB active priority before outside lexical admission,32 total queries.

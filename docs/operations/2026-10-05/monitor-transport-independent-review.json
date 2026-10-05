@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "independent-code-scope-review-v1",
+  "head": "3aa8710732f301e3daf6cb4af24cb61524e85ffa",
+  "monitorBase": "473606ac694e387e6f50155e7040a52669914af6",
+  "transportFixCommit": "9940d15e096cc33190d5f3f603a94325486eb591",
+  "reviewerTask": "/root/astra_publication_review",
+  "decision": "approved",
+  "scope": "bounded monitor consumer, numeric identity and both controller deadlines",
+  "tests": {
+    "monitorPassed": 13,
+    "monitorSkipped": 0,
+    "transportGCPredecessorPassed": 24,
+    "transportGCPredecessorSkipped": 0,
+    "additionalRealHTTPDeadlineProbesPassed": 3
+  },
+  "resolvedFindings": [
+    "Numeric monthly/held symbol coercion",
+    "GC-sensitive body-abort propagation",
+    "Post-fsync negative timeout dispatch"
+  ],
+  "limits": [
+    "No fair resume or model/independent-renewal consumer",
+    "No paper-risk processing or strategy adoption",
+    "No actual authenticated production worklist or Cloud roundtrip"
+  ],
+  "protectedAttestation": false,
+  "productionAccepted": false,
+  "recordedBy": "root from independent reviewer message; unsigned"
+}

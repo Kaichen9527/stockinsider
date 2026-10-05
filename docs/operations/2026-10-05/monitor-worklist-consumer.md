@@ -44,7 +44,10 @@ orders. Current production lacks this stack and remains blocked by protected
 review, runtime role and disk prerequisites. Live monitoring, monthly renewal,
 paper-risk consumption and five real trading days are still open.
 
-Eleven focused tests passed without skips, including real loopback HTTP. These
+Thirteen focused tests passed without skips, including real loopback HTTP,
+forced-GC stalled response bodies and post-journal deadline exhaustion.
+Independent review approved exact3aa8710; the earlier numeric-symbol, GC timeout
+and negative-timeout findings were repaired before approval. These
 use synthetic membership and transport responses; they are not a production
 worklist or completed research/strategy acceptance. Exact review and full root
 checks are recorded separately after completion.
