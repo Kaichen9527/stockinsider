@@ -73,3 +73,14 @@ The first isolated build attempt rejected a `node_modules` symlink outside Turbo
 - **Reviewed company mentions remain input claims:** legacy company items do not include independently machine-verifiable mention spans. Changing the scope to `company_mentions` is not proof that the original author named that company.
 - **No activation:** public-site access, article rights, connector health, automatic imports and company associations still need their own observed receipts. No platform is marked enabled by this change.
 - **Independent review pending:** maker tests are not reviewer approval, protected attestations or permission to push, merge or deploy.
+# Integrated direct-mention guard
+
+The priority route now rejects explicit industry-only (and unknown/malformed)
+scope when constructing company roots and factor bindings. This prevents a
+current industry head from inheriting direct-company evidence solely through
+the RPC's unioned historical symbol tags. The industry's source root remains
+in the acquisition ledger; no old receipt or stock tag is deleted. Earlier
+published assessments and incomplete company-association/citation support are
+not retroactively repaired by this guard. An executable route comparison keeps
+the industry head's company rows/queue identical to the no-company-source
+baseline, while a genuine company-mention head remains usable.

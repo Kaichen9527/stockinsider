@@ -2,6 +2,14 @@ import { normalizeResearchPlatform } from './research-source-registry.ts';
 import type { ResearchSourceRoot } from './research-agent-priority.ts';
 
 type Row = Record<string, unknown>;
+/** A source head may union older stock tags. An explicitly industry-only
+ * current revision must never become direct company evidence from that union.
+ * This does not erase historical receipts or remove the industry's own root. */
+export function hasDirectCompanyMentionScope(row: Row): boolean {
+  if (row.metadata != null && (typeof row.metadata !== 'object' || Array.isArray(row.metadata))) return false;
+  const metadata = (row.metadata || {}) as Row;
+  return metadata.subject_scope === undefined || metadata.subject_scope === 'company_mentions';
+}
 /** Issuer domains must come from the reviewed domain registry, never a model claim. */
 export function researchRootKind(platform: string, host: string, metadata: Row, approvedIssuerHosts: string[] = []): ResearchSourceRoot['kind'] {
   const normalized = normalizeResearchPlatform(platform);

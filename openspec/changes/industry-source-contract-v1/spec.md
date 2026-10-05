@@ -30,3 +30,10 @@ Approved scope: implementation batch A, based on `7c05e7c6bdc491dad4671b0341c384
 No schema, SQL, ranking, article or nomination changes. Researcher association proof and article citation support are batches B/C, not implemented here. The validator cannot independently verify a submitter's claimed company mentions against an unavailable original body. Legacy company items therefore remain a reviewed input, not proof of true mentions.
 
 An empty-symbol revision does not clean previously mistagged roots: the existing source-head RPC unions historical symbols. Do not use this batch to relabel old company documents or claim existing misclassification repaired. SQL schema inspection and executable route tests are not production database acceptance.
+# Direct-company ranking integration
+
+Industry-only source roots remain traceable in the acquisition ledger but must
+not enter company attention or factor bindings, including when an existing
+head RPC unions historical symbol tags. Default legacy/company_mentions scope
+remains compatible. Unknown or malformed scope fails closed for that company
+projection. This does not erase history, create associations or alter weights.
