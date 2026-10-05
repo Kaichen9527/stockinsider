@@ -9,6 +9,8 @@ import * as priority from '../../../../lib/research-agent-priority.ts';
 import * as roots from '../../../../lib/research-source-roots.ts';
 import * as registry from '../../../../lib/research-source-registry.ts';
 import * as qualification from '../../../../lib/research-agent-qualification.ts';
+import * as association from '../../../../lib/research-source-association.ts';
+import { buildResearchInboxRow } from '../../../../lib/research-inbox.ts';
 
 const source=readFileSync(new URL('./route.ts',import.meta.url),'utf8');
 const compiled=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
@@ -20,7 +22,8 @@ class ServerDate extends Date {
   constructor(value: string | number = clock) { super(value); }
   static now() {return Date.parse(clock);}
 }
-function harness(first:unknown[]=[], config:{roster?:TestRow[];tables?:Record<string,TestRow[]>;sourceHeads?:TestRow[]}={}) {
+function harness(first:unknown[]=[], config:{roster?:TestRow[];tables?:Record<string,TestRow[]>;sourceHeads?:TestRow[];
+  evidenceHeads?:TestRow[];failTable?:string;storeError?:boolean}={}) {
   const calls:string[]=[];const inserts:Record<string,unknown>[]=[];const quoteStockIds:string[]=[];
   const db={from(table:string){
     calls.push(table);let inserted=false;
@@ -35,7 +38,7 @@ function harness(first:unknown[]=[], config:{roster?:TestRow[];tables?:Record<st
     const query:Record<string,unknown>={then(resolve:(result:unknown)=>void){
       const rows=data.filter((row)=>filters.every((filter)=>filter(row))).sort((a,b)=>{
         for(const order of orders){const diff=compare(a[order.key],b[order.key]);if(diff) return order.ascending ? diff : -diff;}return 0;
-      }).slice(low,high+1);resolve({data:rows,error:null});
+      }).slice(low,high+1);resolve({data:rows,error:config.failTable===table ? {message:'private DB diagnostic password=do-not-export'} : null});
     }};
     for(const method of ['select','lte','in','order','range','eq','abortSignal','limit']) query[method]=(...args:unknown[])=>{
       if(method==='eq') filters.push((row)=>compare(row[String(args[0])],args[1])===0);
@@ -46,17 +49,27 @@ function harness(first:unknown[]=[], config:{roster?:TestRow[];tables?:Record<st
       if(method==='range'){low=Number(args[0]);high=Number(args[1]);}
       if(method==='limit') high=Number(args[0])-1;return query;
     };
+    query.or=(filter:string)=>{
+      const parts=/^metadata->>canonical_url\.eq\.("(?:\\.|[^"\\])*"),and\(metadata->>canonical_url\.is\.null,document_url\.match\.("(?:\\.|[^"\\])*")\)$/u.exec(filter);
+      assert.ok(parts);const root=JSON.parse(parts[1]);const pattern=new RegExp(JSON.parse(parts[2]));
+      filters.push((row)=>(row.metadata as TestRow)?.canonical_url===root || (row.metadata as TestRow)?.canonical_url==null && pattern.test(String(row.document_url)));
+      return query;
+    };
     query.insert=(row:Record<string,unknown>)=>{assert.equal(table,'research_priority_runs_v1');inserted=true;inserts.push(row);return query;};
-    query.single=async()=>({data:inserted ? {run_id:uuid(99)} : null,error:null});
+    query.single=async()=>({data:inserted ? {run_id:uuid(99)} : null,error:config.storeError ? {code:'XX000',message:'private DB diagnostic password=do-not-export'} : null});
     return query;
-  },async rpc(name:string){
+  },rpc(name:string,args:{p_ids?:string[]}={}){
     calls.push(name);
-    if(name==='candidate_research_stock_authority_page') return {data:config.roster || [
+    let data:unknown;
+    if(name==='candidate_research_stock_authority_page') data=config.roster || [
       {symbol:'2409',stock_id:uuid(2409),exchange:'TWSE',sector:'display'},
-      {symbol:'2410',stock_id:uuid(2410),exchange:'TWSE',sector:'display'}],error:null};
-    if(name==='research_source_heads_page_v1') return {data:config.sourceHeads || [],error:null};
-    if(['enqueue_research_deep_jobs_v1','capture_research_first_discoveries_v1'].includes(name)) return {data:0,error:null};
-    throw new Error(`unexpected test RPC ${name}`);
+      {symbol:'2410',stock_id:uuid(2410),exchange:'TWSE',sector:'display'}];
+    else if(name==='research_source_heads_page_v1') data=config.sourceHeads || [];
+    else if(name==='research_evidence_heads_v1') data=(config.evidenceHeads || (config.tables?.source_raw_documents || [])
+      .map((row)=>({id:row.id,headId:row.id,retracted:false,superseded:false}))).filter((row)=>args.p_ids?.includes(String(row.id)));
+    else if(['enqueue_research_deep_jobs_v1','capture_research_first_discoveries_v1'].includes(name)) data=0;
+    else throw new Error(`unexpected test RPC ${name}`);
+    const promise=Promise.resolve({data,error:null});return Object.assign(promise,{abortSignal:()=>promise});
   }};
   const modules:Record<string,unknown>={
     'next/server':{NextResponse:{json:(body:unknown,init?:{status:number})=>({body,status:init?.status || 200})}},
@@ -65,8 +78,15 @@ function harness(first:unknown[]=[], config:{roster?:TestRow[];tables?:Record<st
     '@/lib/supabase-server':{getSupabaseServerClient:()=>{calls.push('getDB');return db;}},
     '@/lib/candidate-screened-universe':{loadPublishedCandidateSymbols:async()=>[]},
     '@/lib/research-agent-qualification':qualification,'@/lib/research-source-registry':registry,
-    '@/lib/research-source-roots':roots,'@/lib/research-discovery-evidence':evidence,
+    '@/lib/research-source-roots':roots,'@/lib/research-discovery-evidence':{...evidence,
+      validateDiscoverySourceBindings:(...args:Parameters<typeof evidence.validateDiscoverySourceBindings>)=>{
+        calls.push('validateDiscoverySourceBindings');
+        try{return evidence.validateDiscoverySourceBindings(...args);}catch(error){
+          calls.push(error instanceof Error ? error.message : 'unknown_binding_failure');throw error;
+        }
+      }},
     '@/lib/research-discovery-price-enrichment':enrichment,'@/lib/research-agent-priority':priority,
+    '@/lib/research-source-association':association,
   };
   const exports:Record<string,unknown>={};
   vm.runInNewContext(compiled,{exports,require:(name:string)=>{
@@ -233,4 +253,101 @@ test('DR10 active research outside Top20 has server priority; model inProgress c
   const rows=h.inserts[0].rows as Array<PriceRow & {inProgress:boolean}>;
   assert.ok(rows.filter((row)=>Number(row.symbol)<2410).every((row)=>!row.inProgress && !row.supplementaryObservation.attempted));
   assert.ok(rows.find((row)=>row.symbol==='2442')!.supplementaryObservation.missing.includes('price_read_admission_bound'));
+});
+
+function industryDoc():TestRow {
+  return {id:uuid(11),...buildResearchInboxRow({sourcePlatform:'threads',sourceUrl:'https://www.threads.com/@investanchors/post/Ddaum9QGFr_',
+    author:'Synthetic public author',publishedAt:'2026-08-01T01:00:00Z',observedAt:'2026-08-02T01:00:00Z',symbols:[],
+    subjectScope:'industry_context',industryTerms:['CPO','testing'],shortSummary:'Industry testing bottleneck; no direct issuer mention',
+    catalyst:'Unverified beneficiary hypothesis must be separate',risk:'No order or customer identified',claimStatus:'reported',visibility:'public'})};
+}
+function associationInput(doc=industryDoc()):association.IndustryAssociationInput {
+  return {relation:'industry_hypothesis',sourceDocumentId:String(doc.id),sourceContentHash:String(doc.canonical_content_hash),
+    sourceRootId:String((doc.metadata as TestRow).canonical_url),hypothesis:'Company could address part of an industry bottleneck',
+    rationale:'Researcher inference awaiting company-specific evidence',companyBasisDocumentIds:[],
+    strongestCounterEvidence:'Alternative suppliers and no customer order',associatedAt:'2026-10-01T01:00:00Z'};
+}
+function assessment(symbol='2409',items:unknown=[associationInput()]):TestRow {
+  const rated={level:0,reason:'Research assumption without verified company evidence'};
+  return {symbol,profitImpact:rated,novelty:rated,researchability:rated,lane:'general',disposition:'needs_evidence',inProgress:false,associations:items};
+}
+test('AR01 actual route rejects malformed/injected association authority before obtaining DB',async()=>{
+  for(const items of [[{...associationInput(),verified:true}],[{...associationInput(),usableAtCutoff:true}],
+    [{...associationInput(),sourceRootId:'https://example.test/?token=secret'}],Array(4).fill(associationInput()),'raw full text']) {
+    const h=harness();const response=await h.post(request({...payload(),assessments:[assessment('2409',items)]}));
+    assert.equal(response.status,400);assert.deepEqual(h.calls,[]);
+  }
+});
+test('AR02 old source outside discovery window persists a server-hashed supplementary cue with no new priority roots',async()=>{
+  const doc=industryDoc();const h=harness([],{tables:{source_raw_documents:[doc]}});
+  const baseline=harness();const body={...payload(),assessments:[assessment()]};
+  const {associations,...without}=assessment();void associations;
+  const a=await h.post(request(body));const b=await baseline.post(request({...payload(),assessments:[without]}));
+  assert.equal(a.status,200);assert.equal(b.status,200);
+  const row=(h.inserts[0].rows as TestRow[])[0];const receipt=(row.sourceAssociations as association.IndustryAssociationReceipt[])[0];
+  assert.equal(receipt.source?.publishedAt,'2026-08-01T01:00:00.000Z');
+  assert.equal(receipt.evidenceStatus,'needs_evidence');assert.equal(receipt.status,'hypothesis');assert.equal(row.hasResearchCue,true);
+  assert.equal(row.hasDiscoveryEvidence,false);assert.equal(row.firstSeenAt,null);assert.equal(row.disposition,'needs_evidence');
+  assert.equal(row.associationObservedAt,new Date(clock).toISOString());assert.equal(receipt.usableAtCutoff,false);
+  assert.equal(receipt.availableAt,new Date(clock).toISOString());assert.equal(receipt.dataCutoff,new Date(cutoff).toISOString());
+  const {associationHash,...bound}=receipt;assert.equal(associationHash,qualification.researchCanonicalHash(bound));
+  assert.equal(JSON.stringify(a.body.queue),JSON.stringify(b.body.queue));assert.notEqual(a.body.inputHash,b.body.inputHash);
+  const strip=(rows:TestRow[])=>rows.map(({sourceAssociations,associationObservedAt,hasResearchCue,...rest})=>{
+    void sourceAssociations;void associationObservedAt;void hasResearchCue;return rest;
+  });
+  assert.equal(JSON.stringify(strip(h.inserts[0].rows as TestRow[])),JSON.stringify(baseline.inserts[0].rows));
+  assert.equal(JSON.stringify(((a.body.sourceAssociations as TestRow[])[0].associations)),JSON.stringify(row.sourceAssociations));
+  assert.deepEqual(doc.symbols,[]);assert.equal(baseline.calls.includes('source_raw_documents'),false);
+  assert.equal(b.body.sourceAssociations,undefined);
+});
+test('AR03 one original associated with two issuers never creates company mentions, attention or discovery times',async()=>{
+  const doc=industryDoc();const h=harness([],{sourceHeads:[doc],tables:{source_raw_documents:[doc]}});
+  const response=await h.post(request({...payload(),assessments:[assessment('2409'),assessment('2410')]}));assert.equal(response.status,200);
+  const rows=h.inserts[0].rows as TestRow[];assert.equal(rows.length,2);
+  for(const row of rows) {assert.equal(row.firstSeenAt,null);assert.equal(row.hasDiscoveryEvidence,false);assert.equal(row.hasResearchCue,true);
+    const receipt=(row.sourceAssociations as association.IndustryAssociationReceipt[])[0];assert.equal(receipt.directSourceContribution,0);
+    assert.equal(receipt.source?.rootId,associationInput().sourceRootId);
+  }
+  assert.equal((response.body.queue as unknown[]).length,0);
+});
+test('AR04 denial/retraction/supersession stay as visible invalidated or needs-update receipts',async()=>{
+  for(const status of ['denied','retracted','superseded']) {
+    const doc=industryDoc();if(status==='denied') (doc.metadata as TestRow).claim_status='denied';
+    const heads=[{id:doc.id,headId:status==='superseded' ? uuid(12) : doc.id,retracted:status==='retracted',superseded:false}];
+    const h=harness([],{tables:{source_raw_documents:[doc]},evidenceHeads:heads});
+    const response=await h.post(request({...payload(),assessments:[assessment()]}));assert.equal(response.status,200);
+    const row=(h.inserts[0].rows as TestRow[])[0];const receipt=(row.sourceAssociations as association.IndustryAssociationReceipt[])[0];
+    assert.equal(receipt.status,'hypothesis');assert.equal(row.hasResearchCue,false);
+    assert.equal(receipt.evidenceStatus,status==='superseded' ? 'needs_update' : 'invalidated');
+    assert.equal(row.hasDiscoveryEvidence,false);assert.equal(row.firstSeenAt,null);
+  }
+});
+test('AR05 source DB failure accounts every association without claiming no news or leaking raw diagnostics',async()=>{
+  const h=harness([],{failTable:'source_raw_documents'});
+  const response=await h.post(request({...payload(),assessments:[assessment('2409'),assessment('2410')]}));
+  assert.equal(response.status,200);const receipts=(response.body.sourceAssociations as TestRow[])
+    .flatMap((row)=>row.associations as association.IndustryAssociationReceipt[]);
+  assert.equal(receipts.length,2);assert.ok(receipts.every((receipt)=>receipt.evidenceStatus==='unavailable' && !receipt.hasResearchCue));
+  assert.ok(!JSON.stringify(response.body).includes('password'));assert.equal((h.inserts[0].rows as TestRow[]).length,2);
+});
+test('AR06 association issuer must be an official common-stock roster member',async()=>{
+  const h=harness();const response=await h.post(request({...payload(),assessments:[assessment('9999')]}));
+  assert.equal(response.status,409);assert.equal(response.body.error,'research_priority_association_company_not_in_roster');
+  assert.equal(h.inserts.length,0);assert.equal(h.calls.includes('source_raw_documents'),false);
+});
+test('AR07 persistence/read errors remain bounded stable codes',async()=>{
+  for(const config of [{storeError:true},{failTable:'candidate_issuer_document_domains_v6'}]) {
+    const h=harness([],config);const response=await h.post(request(payload()));assert.equal(response.status,409);
+    assert.ok(!JSON.stringify(response.body).includes('password'));assert.ok(!JSON.stringify(response.body).includes('private DB'));
+  }
+});
+test('AR08 caller association cannot satisfy factor bindings or add a direct source claim',async()=>{
+  const doc=industryDoc();const h=harness([],{sourceHeads:[doc],tables:{source_raw_documents:[doc]}});
+  const factors:evidence.DiscoveryFactor[]=evidence.DISCOVERY_FACTORS.map((factor)=>({factor,status:'missing',explanation:'Missing company-specific direct evidence',documentIds:[],rootIds:[],availableAt:null}));
+  const patched:evidence.DiscoveryFactor[]=factors.map((factor,i)=>i===0 ? {...factor,status:'available',documentIds:[String(doc.id)],rootIds:[String((doc.metadata as TestRow).canonical_url)],availableAt:'2026-08-02T01:00:00Z'} : factor);
+  assert.doesNotThrow(()=>evidence.validateDiscoveryFactors(patched,cutoff));
+  assert.throws(()=>evidence.validateDiscoverySourceBindings(patched,[]),/research_priority_factor_source_binding_invalid/u);
+  const response=await h.post(request({...payload(),assessments:[{...assessment(),factors:patched}]}));
+  assert.equal(response.status,409);assert.equal(h.inserts.length,0);
+  assert.ok(h.calls.includes('research_priority_factor_source_binding_invalid'));
 });

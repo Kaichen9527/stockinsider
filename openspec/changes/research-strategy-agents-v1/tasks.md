@@ -90,8 +90,9 @@ Main, production migration/deployment and schedules remain unchanged.
 - [x] Industry-only source contract and direct-company projection guard,
   independently approved7956772/62d9d9a;255 integrated tests and actual bounded
   public summary. Sources remain distinct from company hypotheses.
-- [ ] Independently validated industry/company associations and correctly
-  scoped article citations; do not count an inference as an original mention.
+- [x] Independently validated supplementary industry/company associations and
+  correctly scoped public industry article citations;304 combined tests passed.
+  Actual source/model/review/publication acceptance remains outstanding.
 - [ ] Actual source/platform coverage, all-candidate strategy/forward evidence,
   production role/capacity/trusted recovery, deployment and five trading days.
 
