@@ -143,3 +143,21 @@ The successor actual retained-artifact execution, without new simulation:
 
 This new receipt binds the corrected auditor bytes. It does not replace the
 original evidence or change any unavailable/investment-validation result.
+
+## Independent review and root integration
+
+Independent review approved exact `9b6cb4d9d8716060eb12d3d8cb7374b845872857`
+against `c734d97ce4fff124a7928769af1b4e9bae4adf03`, closing both P2 findings.
+The reviewer reran 21 tests, the actual retained audit, the unsupported-runtime
+probe and directory replacement during artifact reads. This is unsigned scope
+review, not protected approval or investment validation.
+
+Root integrated with merge commit `d048882005af25c66745f8381e618af34e70846d`,
+reran all 21 tests and the retained audit at 2026-10-05T05:33:01.826285Z. The report
+hash and 73,590 bytes remain identical; root receipt SHA256 is
+`c8001e0ac763437c3a614768defa1aff0667ce012eafa3aeac6b5b0b39ff4343`.
+Private output lives at
+`/Users/kaerchen/.cache/stockinsider-workspaces/artifact-audit-root-d048882-oct05`
+with files mode0600. Original receipts remain preserved.
+Root `git diff --check` and the normal production build passed after integration;
+the build log is `/tmp/stockinsider-strategy-audit-root-build-oct05.log`.
