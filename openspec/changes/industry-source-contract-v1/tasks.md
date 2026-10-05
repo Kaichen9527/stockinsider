@@ -9,3 +9,8 @@
 - [ ] Independent review by the parent/reviewer (not maker self-approval).
 
 No push, deployment, production import or source-association activation is authorized by this batch.
+- [x] Integrated direct-company projection guard independently approved62d9d9a;
+  58 focused tests and16 extra checks preserve industry roots without attention.
+- [x] Root255 integrated tests, types/lint/build; actual Threads reread emitted
+  one bounded industry-only item with zero symbols, not submitted to production.
+- [ ] Company associations, article citation, protected approval and deployment.

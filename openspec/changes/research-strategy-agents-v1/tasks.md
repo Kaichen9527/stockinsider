@@ -87,11 +87,19 @@ Main, production migration/deployment and schedules remain unchanged.
   evidence, not protected approval. Draft #298 is not merged.
 - [ ] Rights-aware PIT author input, actual model dispatch, durable draft,
   independently budgeted review and fenced article submission remain open.
-- [ ] Industry-only source contract plus independently validated company
-  associations; do not count an inferred company as an original mention.
+- [x] Industry-only source contract and direct-company projection guard,
+  independently approved7956772/62d9d9a;255 integrated tests and actual bounded
+  public summary. Sources remain distinct from company hypotheses.
+- [ ] Independently validated industry/company associations and correctly
+  scoped article citations; do not count an inference as an original mention.
 - [ ] Actual source/platform coverage, all-candidate strategy/forward evidence,
   production role/capacity/trusted recovery, deployment and five trading days.
 
 Cross-chat implementation/testing is authorized and in use. No renewed user
 permission is requested; absent authentic recovery infrastructure and host
 capacity are still actual external technical barriers.
+
+Cloud exact139f6ef compatibility passed37/37 under Node22.14 with measured
+32GiB cgroup/four-core allocation and335MiB sampled process-group RSS. This
+confirms one bounded synthetic development run, not the still-open live
+VPS→Cloud→review→authenticated business-result acceptance.
