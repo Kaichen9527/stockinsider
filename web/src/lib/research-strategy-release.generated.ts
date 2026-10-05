@@ -20,7 +20,7 @@ export const RESEARCH_STRATEGY_RELEASE = {
     },
     {
       "path": "migrations/20261004_research_technical_identity_v2.sql",
-      "sha256": "838a065672df9d0e69512f6b1efff23e9a73b9d8d2bf97ca1e95c9bba134b4c3"
+      "sha256": "fd029de904e24b6dae16f51a73383acd5fafccd174871799697a87e34400939e"
     },
     {
       "path": "web/src/app/api/internal/research-paper-session/route.ts",
@@ -239,7 +239,7 @@ export const RESEARCH_STRATEGY_RELEASE = {
     }
   ],
   "dependencyLockHash": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
-  "codeHash": "ede7496f78ea13a38c6de4f51a2b7ef032d6e52e4cb77526793e371822d38339",
+  "codeHash": "60c4c72ced1c3f75276025d008de5eca1d3ec86f3afcc952448debe6676b71c0",
   "parameterMode": "fixed_baseline_source_bound",
   "parameterHash": "9101ef58a0d43f53e7dea0749eb03872f375bb3051cfd77e6147d9141e2334e4",
   "parameterFiles": [

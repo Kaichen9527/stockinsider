@@ -77,6 +77,9 @@ const RESEARCH_AGENT_MIGRATIONS = Object.freeze([
   'migrations/20261004_research_cloud_receipts_v1.sql',
   'migrations/20261005_financial_history_admission_v1.sql',
 ]);
+const RESEARCH_AGENT_PRELUDE_MIGRATIONS = Object.freeze([
+  'migrations/20261005_release_function_ownership_bridge_v1.sql',
+]);
 const V3192_PROJECTION_DOSSIER_MIGRATION =
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql';
 
@@ -87,13 +90,24 @@ async function reviewedMigrationIsSuperseded(client, relativePath) {
       'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)') IS NULL
       THEN false
     ELSE position('jsonb_typeof(v_item#>''{bundle,json,researchDossier}'')' IN pg_get_functiondef(
-      'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
+      to_regprocedure('public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)')))>0
       AND position('''dossierId''' IN pg_get_functiondef(
-      'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
+      to_regprocedure('public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)')))>0
       AND position('decision_revision_identity_conflict' IN pg_get_functiondef(
-      'public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)'::regprocedure))>0
+      to_regprocedure('public.complete_legacy_producer_job_authoritative_v3_19(uuid,uuid,uuid,bytea,jsonb,text)')))>0
     END AS superseded`);
   return result.rows[0]?.superseded === true;
+}
+
+async function assertExistingRuntimeRoleContract(client) {
+  const role=(await client.query(`SELECT rolcanlogin AND NOT rolinherit
+    AND NOT rolsuper AND NOT rolcreatedb AND NOT rolcreaterole AND NOT rolreplication
+    AND NOT rolbypassrls AND rolconnlimit=6 AS valid
+    FROM pg_roles WHERE rolname='stockinsider_runtime_v319'`)).rows[0];
+  // Existing reviewed migrations require this exact environment-specific
+  // contract. Report missing bootstrap before any migration mutation; do not
+  // activate a login, invent credentials or broaden a role automatically.
+  if(role && role.valid!==true) throw new Error('runtime_role_bootstrap_required');
 }
 
 function parseArguments(argv) {
@@ -125,7 +139,7 @@ function reviewedMigrationPlan(options) {
     && status?.authority?.researchAgent?.productionDatabaseMigrationAuthorized!==true)
     throw new Error('research_agent_production_migration_authority_missing');
   const migrationPaths=options.researchAgentExtension
-    ? [...MIGRATIONS,...RESEARCH_AGENT_MIGRATIONS] : MIGRATIONS;
+    ? [...RESEARCH_AGENT_PRELUDE_MIGRATIONS,...MIGRATIONS,...RESEARCH_AGENT_MIGRATIONS] : MIGRATIONS;
   const migrations=migrationPaths.map((relativePath)=>{
     const bytes=fs.readFileSync(path.join(root,relativePath));
     if(/\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu.test(bytes.toString('utf8')))
@@ -154,6 +168,7 @@ async function applyReviewedMigrations(options) {
     // successors before the first mutation; a base-only replay must fail closed.
     await assertInstalledResearchSuccessorPlan(client, { researchAgentExtension: options.researchAgentExtension,
       migrations: plan.migrations });
+    await assertExistingRuntimeRoleContract(client);
     if(options.researchAgentExtension) {
       const researchPrerequisite=(await client.query(`SELECT
       to_regclass('public.candidate_dossier_outbox_v5') IS NOT NULL AS outbox,
@@ -526,5 +541,5 @@ if(import.meta.url===`file://${process.argv[1]}`) {
     .catch(()=>{process.stderr.write('reviewed V3 migration apply failed\n');process.exitCode=1;});
 }
 
-export { MIGRATIONS, applyReviewedMigrations, parseArguments, reviewedMigrationIsSuperseded,
+export { MIGRATIONS, applyReviewedMigrations, parseArguments, reviewedMigrationIsSuperseded, assertExistingRuntimeRoleContract,
   reviewedMigrationPlan };

@@ -1,0 +1,21 @@
+{
+  "schema": "stockinsider-independent-code-review-record-v1",
+  "reviewedCommit": "75d0752ffb31a9b51cc072e4b6b35232779fdbee",
+  "baseCommit": "61a2fad322f6878daaea11a1a8c805a329abfce5",
+  "reviewer": "astra_publication_review",
+  "result": "approve",
+  "independentNamedTestsPassed": 36,
+  "skipped": 0,
+  "scope": "bounded source acquisition, rights, SSRF, publication clocks, summary hashes, root corrections and withdrawal handling",
+  "closedFindings": [
+    "known source publication cannot be backdated by a byte-matching summary",
+    "latest ancestor revision selected independently of historical input order",
+    "AUO indexes cannot establish article content",
+    "same-run repost order cannot revive a withdrawn root"
+  ],
+  "signed": false,
+  "protectedGateEvidence": false,
+  "productionAcceptance": false,
+  "fullAuoResearchAcceptance": false,
+  "canaryScope": "244b342 predecessor only; hashes verified, TWSE timeout retained, no relabeling as successor acquisition"
+}
