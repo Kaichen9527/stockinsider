@@ -4,6 +4,8 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { createServer } from 'node:http';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 import { monitorControllerCommand, validateMonitorWorklist } from './research-monitor-controller.mjs';
 import { researchCanonicalHash } from '../web/src/lib/research-agent-qualification.ts';
 
@@ -194,4 +196,33 @@ test('real transport uses finite authenticated routes and rejects redirects with
     real[4] = file('second.json'); real[6] = file('second.jsonl');
     assert.equal((await monitorControllerCommand(real, dependencies)).allTechnicalSnapshotsSaved, true);
   } finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
+}));
+
+test('GC cannot cancel the strongly held body deadline after response headers', async () => fixture(async ({ file }) => {
+  let snapshots = 0;
+  const server = createServer(async (request, reply) => {
+    for await (const _bytes of request) { /* drain request */ }
+    reply.setHeader('content-type', 'application/json');
+    if (request.url.endsWith('worklist')) reply.end(JSON.stringify(worklist()));
+    else { snapshots++; reply.writeHead(200); reply.write('{'); } // Body never completes.
+  });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  const emergency = setTimeout(() => server.closeAllConnections(), 4000);
+  try {
+    const args = ['batch', '--origin', `http://127.0.0.1:${server.address().port}`,
+      '--output', file('gc.json'), '--journal', file('gc.jsonl')];
+    const code = `import { monitorControllerCommand } from ${JSON.stringify(new URL('./research-monitor-controller.mjs', import.meta.url).href)};
+      let tick=0; const interval=setInterval(()=>global.gc(),50); const start=performance.now();
+      try { await monitorControllerCommand(${JSON.stringify(args)}, {env:{INTERNAL_API_KEY:${JSON.stringify(key)}},
+        source:()=>({commit:'b'.repeat(40),dirty:false}),now:()=>${JSON.stringify(clock)},
+        monotonic:()=>tick++<2?0:54000}); console.log(JSON.stringify({unexpectedSuccess:true})); }
+      catch(error) { console.log(JSON.stringify({error:error.message,elapsed:performance.now()-start})); }
+      finally { clearInterval(interval); }`;
+    const child = await promisify(execFile)(process.execPath, ['--expose-gc', '--experimental-strip-types', '--input-type=module', '-e', code],
+      { timeout: 6000, maxBuffer: 32_000, env: { PATH: process.env.PATH } });
+    const result = JSON.parse(child.stdout.trim());
+    assert.match(result.error, /outcome_uncertain/); assert.ok(result.elapsed >= 800 && result.elapsed < 3000, JSON.stringify(result));
+    assert.equal(snapshots, 1); assert.equal((await fs.stat(file('gc.json'))).size, 0);
+    assert.match(await fs.readFile(file('gc.jsonl'), 'utf8'), /outcome_uncertain/);
+  } finally { clearTimeout(emergency); server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
 }));

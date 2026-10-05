@@ -35,22 +35,37 @@ async function readJson(filename) {
 async function jsonPost(url, body, key) {
   const text = JSON.stringify(body);
   if (Buffer.byteLength(text) > MAX_BYTES) throw new Error('cloud_controller_request_bound');
-  const response = await fetch(url, { method: 'POST', redirect: 'error', signal: AbortSignal.timeout(15_000),
-    headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' }, body: text });
-  const reader = response.body?.getReader();
-  if (!reader) throw new Error('cloud_controller_response_missing');
-  const parts = []; let bytes = 0;
+  // Keep cancellation strongly reachable until the complete body is read.
+  // An inline timeout signal may be collected once fetch returns its headers.
+  const controller = new AbortController();
+  let timer;
+  const deadline = new Promise((_resolve, reject) => {
+    timer = setTimeout(() => { controller.abort(); reject(new Error('cloud_controller_transport_deadline')); }, 15_000);
+  });
+  // Race the awaited body itself: abort propagation alone can be lost by
+  // transport internals after headers, even with a strongly held signal.
+  const bounded = promise => Promise.race([promise, deadline]);
   try {
-    for (;;) {
-      const chunk = await reader.read();
-      if (chunk.done) break;
-      bytes += chunk.value.byteLength;
-      if (bytes > MAX_BYTES) { await reader.cancel(); throw new Error('cloud_controller_response_bound'); }
-      parts.push(chunk.value);
-    }
-  } finally { reader.releaseLock(); }
-  if (!response.ok) throw new Error('cloud_controller_server_rejected');
-  return JSON.parse(Buffer.concat(parts).toString('utf8'));
+    const response = await bounded(fetch(url, { method: 'POST', redirect: 'error', signal: controller.signal,
+      headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' }, body: text }));
+    const reader = response.body?.getReader();
+    if (!reader) throw new Error('cloud_controller_response_missing');
+    const parts = []; let bytes = 0;
+    try {
+      for (;;) {
+        const chunk = await bounded(reader.read());
+        if (chunk.done) break;
+        bytes += chunk.value.byteLength;
+        if (bytes > MAX_BYTES) { await bounded(reader.cancel()); throw new Error('cloud_controller_response_bound'); }
+        parts.push(chunk.value);
+      }
+    } catch (error) {
+      void reader.cancel().catch(() => {});
+      throw error;
+    } finally { reader.releaseLock(); }
+    if (!response.ok) throw new Error('cloud_controller_server_rejected');
+    return JSON.parse(Buffer.concat(parts).toString('utf8'));
+  } finally { clearTimeout(timer); }
 }
 const exactSource = () => ({
   commit: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim(),

@@ -25,23 +25,38 @@ function originUrl(origin) {
   return url;
 }
 async function jsonPost(url, body, key, timeoutMs) {
-  const response = await fetch(url, { method: 'POST', redirect: 'error', signal: AbortSignal.timeout(timeoutMs),
-    headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' }, body: JSON.stringify(body) });
-  const reader = response.body?.getReader();
-  if (!reader) throw new Error('monitor_controller_response_missing');
-  const parts = []; let bytes = 0;
+  // Keep cancellation strongly reachable until the complete body is read.
+  // An inline timeout signal may be collected once fetch returns its headers.
+  const controller = new AbortController();
+  let timer;
+  const deadline = new Promise((_resolve, reject) => {
+    timer = setTimeout(() => { controller.abort(); reject(new Error('monitor_controller_transport_deadline')); }, timeoutMs);
+  });
+  // Race the awaited body itself: abort propagation alone can be lost by
+  // transport internals after headers, even with a strongly held signal.
+  const bounded = promise => Promise.race([promise, deadline]);
   try {
-    for (;;) {
-      const item = await reader.read();
-      if (item.done) break;
-      bytes += item.value.byteLength;
-      if (bytes > MAX_BYTES) { await reader.cancel(); throw new Error('monitor_controller_response_bound'); }
-      parts.push(item.value);
-    }
-  } finally { reader.releaseLock(); }
-  // Never retain an arbitrary server error string (it may contain credentials).
-  if (!response.ok) return { rejected: true, status: response.status };
-  return { rejected: false, body: JSON.parse(Buffer.concat(parts).toString('utf8')) };
+    const response = await bounded(fetch(url, { method: 'POST', redirect: 'error', signal: controller.signal,
+      headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' }, body: JSON.stringify(body) }));
+    const reader = response.body?.getReader();
+    if (!reader) throw new Error('monitor_controller_response_missing');
+    const parts = []; let bytes = 0;
+    try {
+      for (;;) {
+        const item = await bounded(reader.read());
+        if (item.done) break;
+        bytes += item.value.byteLength;
+        if (bytes > MAX_BYTES) { await bounded(reader.cancel()); throw new Error('monitor_controller_response_bound'); }
+        parts.push(item.value);
+      }
+    } catch (error) {
+      void reader.cancel().catch(() => {});
+      throw error;
+    } finally { reader.releaseLock(); }
+    // Never retain an arbitrary server error string (it may contain credentials).
+    if (!response.ok) return { rejected: true, status: response.status };
+    return { rejected: false, body: JSON.parse(Buffer.concat(parts).toString('utf8')) };
+  } finally { clearTimeout(timer); }
 }
 export function validateMonitorWorklist(value, now) {
   if (!value || value.ok !== true || !instant(value.asOf) || !instant(now)
