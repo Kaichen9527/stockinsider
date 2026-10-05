@@ -131,6 +131,8 @@ test('missing held membership, duplicates, future or stale server clock, invalid
     list => { list.bookHeads.growth = 'unknown'; },
     list => { list.accountedTheses = 0; list.monthlyReviewsDue = []; },
     list => { list.technicalSymbols[1].newEntryQualified = true; },
+    list => { list.monthlyReviewsDue[0].symbol = 2409; list.technicalSymbols[1].newEntryQualified = true; },
+    list => { list.heldSymbols[0] = 2409; },
   ]) { const list = worklist(); mutate(list); assert.throws(() => validateMonitorWorklist(list, clock)); }
 });
 

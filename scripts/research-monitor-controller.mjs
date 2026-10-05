@@ -54,7 +54,7 @@ export function validateMonitorWorklist(value, now) {
     || !Array.isArray(value.monthlyReviewsDue) || value.monthlyReviewsDue.length > value.accountedTheses)
     throw new Error('monitor_controller_worklist_invalid');
   const held = new Set(value.heldSymbols);
-  if (held.size !== value.heldSymbols.length || [...held].some(symbol => !SYMBOL.test(symbol)))
+  if (held.size !== value.heldSymbols.length || [...held].some(symbol => typeof symbol !== 'string' || !SYMBOL.test(symbol)))
     throw new Error('monitor_controller_holdings_invalid');
   if (value.technicalSymbols.length > value.accountedTheses + held.size)
     throw new Error('monitor_controller_company_count_invalid');
@@ -70,7 +70,7 @@ export function validateMonitorWorklist(value, now) {
   if ([...held].some(symbol => !symbols.has(symbol))) throw new Error('monitor_controller_held_symbol_omitted');
   const due = new Set();
   const monthlyReviewsDue = value.monthlyReviewsDue.map(row => {
-    if (!row || !SYMBOL.test(row.symbol) || due.has(row.symbol)
+    if (!row || typeof row.symbol !== 'string' || !SYMBOL.test(row.symbol) || due.has(row.symbol)
       || typeof row.thesisRevisionId !== 'string' || !UUID.test(row.thesisRevisionId)
       || typeof row.articleRevisionId !== 'string' || !UUID.test(row.articleRevisionId)
       || !instant(row.nextReviewAt) || Date.parse(row.nextReviewAt) > Date.parse(value.asOf))
