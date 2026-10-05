@@ -240,3 +240,21 @@ test('SC19 corrected ancestors use the latest accepted revision regardless of in
   const run=assembleSourceControllerRun(input([scope,failed]),[obs(),obs({outcome:'read_failed',bodyPresent:false})],at);
   assert.equal(run.inboxRequest.items[0].parentSourceUrl,summary.sourceUrl);
 });
+
+test('SC20 all acquired scopes resolve before roots, so reversed repost order cannot revive a withdrawn root',()=>{
+  const original={...summary,retracted:true,revisionObservedAt:earlier};
+  const a={...summary,sourceUrl:'https://www.threads.net/@other/post/a',parentSourceUrl:summary.sourceUrl,
+    author:'reposter a',observedAt:at,firstObservedAt:at,revisionObservedAt:at};
+  const b={...a,sourceUrl:'https://www.threads.net/@other/post/b',parentSourceUrl:a.sourceUrl,author:'reposter b'};
+  const rated={level:0 as const,reason:'尚未完成人工評分'};
+  for(const copies of [[a,b],[b,a]]) {
+    const scopes=copies.map((copy,index)=>local({id:`copy${index}`,url:copy.sourceUrl,summary:copy}));
+    const run=assembleSourceControllerRun(input(scopes,[original]),[obs(),obs()],at);
+    assert.equal(run.inboxRequest.items.length,2);
+    assert.ok(run.inboxRequest.items.every((item)=>item.parentSourceUrl===original.sourceUrl));
+    const ranked=selectResearchPriority({asOf:at,candidates:[{symbol:'2409',sector:'test',roots:run.roots,
+      attempts:run.priorityRequest.sourceAttempts,profitImpact:rated,novelty:rated,researchability:rated,
+      lane:'general',inProgress:false,disposition:'queued'}]});
+    assert.equal(ranked.rows[0].independentRootCount,0);
+  }
+});

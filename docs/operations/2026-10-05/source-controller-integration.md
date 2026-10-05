@@ -27,7 +27,7 @@ audio/transcript was obtained, and no exhaustive platform search is claimed.
 Only response hashes, byte counts and bounded receipt metadata are retained.
 
 Root commands `research:sources` and `test:research-sources` are now available.
-The source tests participate in `test:research-agents`: 124 actual named tests
+The source tests participate in `test:research-agents`: 125 actual named tests
 passed, zero failed/skipped. Mac lint passed with the existing 33 warnings and
 zero errors; normal production build passed. This does not remove the separately
 recorded Cloud build/network limitations or supply protected review evidence.
@@ -54,3 +54,15 @@ scope summaries. AUO index article scope is rejected even if a teaser uses an
 `article` element. Regression cases SC16/18/19 exercise these reproductions.
 The previous canaries identify their original executing source hashes; they
 are not relabeled as acquisition evidence for a later changed tree.
+
+Review of successor `244b342c` found a same-run ordering defect: a repost could
+be resolved before its successfully acquired ancestor, bypassing a retained root
+withdrawal. The controller now validates all observations and stages all eligible
+summaries before resolving any source chains. Failed/future/hash-conflicting
+summaries remain excluded. SC20 verifies both input permutations leave zero
+independent current roots. Exact successor review remains pending.
+
+`source-controller-244b342-canary.json` separately preserves the actual retry of
+that exact predecessor: TWSE timed out, AUO body was available, both indexes
+remained metadata, zero items. The failure is not an empty-results claim, and the
+earlier successful TWSE read is not substituted for this run's missing coverage.

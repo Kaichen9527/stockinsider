@@ -54,9 +54,11 @@ October 4 implementation handoff.
 - [x] Bounded source-attempt CLI integrated from `832b0428`; Node 22 DNS callback,
   AUO official-body and RSS login-wording defects fixed after real Mac reads.
   Two actual bodies plus two metadata indexes obtained; zero invented summaries.
-- [x] Integrated research/source regression: 124 passed, zero skipped; lint/build pass.
+- [x] Integrated research/source regression: 125 passed, zero skipped; lint/build pass.
 - [x] Source publication, latest-parent revision and index-body review defects
   fixed with regressions; exact successor independent review remains required.
+- [x] Same-run repost ordering repair stages all successful scopes before parent
+  traversal; neither permutation can resurrect a retained withdrawn root.
 - [ ] Real source/search/model consumer, full AUO and second-company publication,
   relative-return enrichment and scheduled work consumers remain outstanding.
 - [ ] Existing release-function ownership drift found by schema-only isolated

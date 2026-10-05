@@ -229,8 +229,8 @@ export function assembleSourceControllerRun(input: SourceControllerInput, observ
   const prior = input.priorItems || [];
   const items: ResearchInboxItem[] = [];
   const knownHashes = new Set(prior.map(researchInboxContentHash));
-  const receipts = input.scopes.map((scope,index) => {
-    const observation = observations[index];
+  input.scopes.forEach((scope,index) => {
+    const observation=observations[index];
     if (!instant(observation.attemptedAt) || !instant(observation.completedAt)
       || Date.parse(observation.attemptedAt) > Date.parse(observation.completedAt) || Date.parse(observation.completedAt) > Date.parse(asOf)
       || Date.parse(observation.attemptedAt) < Date.parse(asOf) - 36 * 3600_000
@@ -251,6 +251,24 @@ export function assembleSourceControllerRun(input: SourceControllerInput, observ
     if (scope.method === 'public_read' && ['read_success','metadata_only','missing_transcript'].includes(observation.outcome)
       && (observation.httpStatus === null || observation.httpStatus < 200 || observation.httpStatus >= 300 || !observation.responseHash))
       throw new Error('source_controller_observation_invalid');
+  });
+  // Acquire/classify every scope before resolving any parent chain. A later
+  // successful scope has equal authority to an earlier one; failed, future,
+  // hash-mismatched or publication-conflicting summaries have none.
+  const acquiredSummaries = input.scopes.flatMap((scope,index) => {
+    const observation=observations[index];
+    const summary=scope.summary;
+    return summary && observation.outcome==='read_success' && observation.bodyPresent
+      && scope.contentScope!=='metadata_index'
+      && Date.parse(summary.observedAt)<=Date.parse(observation.attemptedAt)
+      && Date.parse(summary.publishedAt)<=Date.parse(observation.attemptedAt)
+      && (!observation.publishedAt || Date.parse(observation.publishedAt)<=Date.parse(observation.attemptedAt))
+      && (scope.method!=='public_read' || scope.summaryReadHash===observation.responseHash
+        && (!observation.publishedAt || Date.parse(summary.publishedAt)===Date.parse(observation.publishedAt)))
+      ? [summary] : [];
+  });
+  const receipts = input.scopes.map((scope,index) => {
+    const observation = observations[index];
     let outcome: SourceOutcome = observation.outcome;
     let errorCode: string | null = observation.errorCode;
     let accepted: ResearchInboxItem | null = null;
@@ -280,7 +298,7 @@ export function assembleSourceControllerRun(input: SourceControllerInput, observ
           // Unaccepted scope summaries have no acquisition authority. Among
           // retained/accepted revisions use the latest revision clock, never
           // input order; conflicting heads at the same instant fail closed.
-          const ancestors=[...prior,...items].filter((item)=>item.sourceUrl===parent);
+          const ancestors=[...prior,...acquiredSummaries].filter((item)=>item.sourceUrl===parent);
           const latest=Math.max(...ancestors.map((item)=>Date.parse(item.revisionObservedAt || item.observedAt)));
           const heads=ancestors.filter((item)=>Date.parse(item.revisionObservedAt || item.observedAt)===latest);
           if (new Set(heads.map(researchInboxContentHash)).size>1) throw new Error('source_controller_ancestor_revision_conflict');
