@@ -88,6 +88,16 @@ holdout/forward results remain unverified. Investment validation therefore stays
 failed_insufficient_evidence, promotion false and submission blocked. No engine,
 historical expectation, sealed input or strategy rule was changed.
 Normal production build and diff checks also passed after the audit integration.
+Final TypeScript check passed; lint has zero errors and 33 existing warnings.
+The audit is isolated in draft #297 on top of #296; neither is merged or deployed.
+
+The actual existing Mac Threads session subsequently read a public InvestAnchors
+post and one visible reply. A focused AUO/Intel search found two identical visible
+posts, with unresolved original provenance; only one rumor item was emitted by
+the existing local-summary controller, and it was not submitted to production.
+The industry-only post remains a mapping gap rather than a fabricated AUO mention.
+Cloud's new canary failed before HTTP response and stopped after one request.
+Read scope and limitations are saved in live-source-capacity-followup.md.
 
 ## Live release barriers confirmed again
 
