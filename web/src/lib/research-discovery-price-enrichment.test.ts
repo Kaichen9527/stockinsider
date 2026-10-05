@@ -272,6 +272,100 @@ function rawTables() {
     official_price_history:[{session_date:session,close:100,volume:10_000,source_url:url,
       as_of:`${session}T05:30:00Z`,available_at:`${session}T06:00:00Z`,provider:'official_primary',integrityStatus:'valid'}]};
 }
+const currentRun=(prioritySymbols=['2409'])=>({serverClock:'2026-10-05T09:00:00Z',prioritySymbols});
+function currentFixture(row:DiscoveryPriceCandidate):DiscoveryPriceRead {
+  const read=fixture();read.quote={...read.quote!,symbol:row.symbol,exchange:'TWSE',
+    sourceUrl:`https://www.twse.com.tw/exchangeReport/STOCK_DAY?stockNo=${row.symbol}&date=20261002&response=json`};
+  read.quoteProvenance={provider:'official_primary',integrityStatus:'valid',stockId:row.stockId,exchange:row.exchange,
+    publishedAt:'2026-10-02T05:30:00Z',observedAt:'2026-10-02T06:00:00Z',availableAt:read.quote.availableAt};
+  return read;
+}
+test('DS01 weak first quote and verified current raw observation coexist without promotion',async()=>{
+  for(const price of [fixture().quote,null]) {
+    const captured={symbol:'2409',run_id:uuid(1),first_seen_at:cutoff,captured_at:'2026-10-02T09:00:00Z',
+      snapshot:{price,priceStatus:price ? 'official_quote' : 'missing_at_discovery',gap:'price_read_admission_bound'}};
+    const before=JSON.stringify(captured);const {client}=mockClient({research_first_discoveries_v1:[captured]});
+    const baseline=await loadDiscoveryPriceEnrichment(client,[candidate()],'2026-10-05T08:00:00Z');
+    const loaded=await loadDiscoveryPriceEnrichment(client,[candidate()],'2026-10-05T08:00:00Z',{
+      currentRun:currentRun(),reader:async(_db,row)=>currentFixture(row)});
+    assert.deepEqual(loaded.contexts.get('2409'),baseline.contexts.get('2409'));
+    assert.equal(loaded.admittedReads,1);assert.equal(loaded.supplementAccountedCount,1);
+    const observation=loaded.supplements.get('2409')!;
+    assert.equal(observation.quoteStatus,'official_raw_quote');assert.equal(observation.knowledgeScope,'current_cutoff_only');
+    assert.equal(observation.cutoff,'2026-10-05T08:00:00Z');assert.equal(observation.serverClock,currentRun().serverClock);
+    assert.equal(observation.relative5d,null);assert.equal(observation.pricePhase,'unknown');
+    const {observationHash,...receipt}=observation;assert.equal(observationHash,researchCanonicalHash(receipt));
+    assert.equal(JSON.stringify(captured),before);
+  }
+});
+test('DS02 server priority at lexical rear consumes the shared32 budget first and accounts all45',async()=>{
+  const candidates=Array.from({length:45},(_,i)=>candidate(String(2400+i))).reverse();
+  const prioritySymbols=Array.from({length:20},(_,i)=>String(2425+i));const called:string[]=[];
+  const result=await loadDiscoveryPriceEnrichment(mockClient().client,candidates,cutoff,{
+    currentRun:currentRun(prioritySymbols),reader:async(_db,row)=>{called.push(row.symbol);return currentFixture(row);}});
+  assert.deepEqual(called.slice(0,20),prioritySymbols);assert.equal(called.length,32);
+  assert.equal(result.accountedCount,45);assert.equal(result.supplementAccountedCount,45);
+  assert.equal([...result.supplements.values()].filter((row)=>row.attempted).length,32);
+  for(const symbol of prioritySymbols) assert.equal(result.supplements.get(symbol)!.quoteStatus,'official_raw_quote');
+  assert.equal([...result.supplements.values()].filter((row)=>row.missing.includes('price_read_admission_bound')).length,13);
+  assert.deepEqual(candidates.map((row)=>row.symbol),Array.from({length:45},(_,i)=>String(2444-i)));
+});
+test('DS03 no future source clock/session or weak provenance enters an earlier current cutoff',async()=>{
+  for(const mutate of [(r:DiscoveryPriceRead)=>{r.quoteProvenance!.publishedAt='2026-10-02T09:00:00Z';},
+    (r:DiscoveryPriceRead)=>{r.quoteProvenance!.observedAt='2026-10-02T09:00:00Z';},
+    (r:DiscoveryPriceRead)=>{r.quote!.availableAt='2026-10-02T09:00:00Z';r.quoteProvenance!.availableAt=r.quote!.availableAt;},
+    (r:DiscoveryPriceRead)=>{r.quote!.session='2026-10-06';},
+    (r:DiscoveryPriceRead)=>{delete r.quoteProvenance;},
+    (r:DiscoveryPriceRead)=>{r.quoteProvenance!.exchange='TPEX';},
+    (r:DiscoveryPriceRead)=>{r.quoteProvenance!.observedAt='2026-10-02T05:00:00Z';}]) {
+    const read=currentFixture(candidate());mutate(read);
+    const loaded=await loadDiscoveryPriceEnrichment(mockClient().client,[candidate()],cutoff,
+      {currentRun:currentRun(),reader:async()=>read});
+    assert.equal(loaded.supplements.get('2409')!.quote,null);
+    assert.equal(loaded.supplements.get('2409')!.quoteStatus,'missing_at_current_cutoff');
+    assert.ok(loaded.supplements.get('2409')!.missing.includes('current_quote_provenance_invalid'));
+  }
+});
+test('DS04 current priority is independent of missing first evidence or registry read failure',async()=>{
+  const row={...candidate(),firstSeenAt:null,hasDiscoveryEvidence:false};
+  const loaded=await loadDiscoveryPriceEnrichment(mockClient({},'research_first_discoveries_v1').client,[row],cutoff,
+    {currentRun:currentRun(),reader:async()=>currentFixture(row)});
+  assert.equal(loaded.contexts.get(row.symbol)!.quote,null);
+  assert.ok(loaded.contexts.get(row.symbol)!.missing.includes('first_discovery_registry_read_failed'));
+  assert.equal(loaded.supplements.get(row.symbol)!.quoteStatus,'official_raw_quote');
+  assert.equal(loaded.admittedReads,1);
+});
+test('DS05 supplemental reads and earlier first reads share32 without leaking current data into first',async()=>{
+  const rows=Array.from({length:32},(_,i)=>({...candidate(String(2400+i)),firstSeenAt:'2026-10-01T08:00:00Z'}));
+  const called:string[]=[];
+  const result=await loadDiscoveryPriceEnrichment(mockClient().client,rows,cutoff,{
+    currentRun:currentRun(['2431']),reader:async(_db,row,at)=>{called.push(at);return currentFixture(row);}});
+  assert.equal(result.admittedReads,32);assert.ok(called.every((at)=>at===cutoff));
+  for(const row of rows){assert.equal(result.contexts.get(row.symbol)!.quote,null);
+    assert.equal(result.contexts.get(row.symbol)!.cutoff,row.firstSeenAt);
+    assert.ok(result.contexts.get(row.symbol)!.missing.includes('price_read_admission_bound'));}
+  assert.equal(result.supplements.get('2431')!.quoteStatus,'official_raw_quote');
+});
+test('DS06 invalid server clock/unknown priority rejects before reads; deadline accounts all candidates',async()=>{
+  for(const config of [{serverClock:'2026-10-01T00:00:00Z',prioritySymbols:['2409']},
+    {serverClock:'2026-02-30T00:00:00Z',prioritySymbols:['2409']},currentRun(['9999']),currentRun(['2409','2409'])]) {
+    const {client,calls}=mockClient();await assert.rejects(loadDiscoveryPriceEnrichment(client,[candidate()],cutoff,
+      {currentRun:config}),/discovery_current_run_invalid/u);assert.equal(calls.length,0);
+  }
+  const ticks=[0,DISCOVERY_PRICE_BOUNDS.readMs+1];let reads=0;
+  const result=await loadDiscoveryPriceEnrichment(mockClient().client,[candidate()],cutoff,{currentRun:currentRun(),
+    monotonicNow:()=>ticks.shift() ?? DISCOVERY_PRICE_BOUNDS.readMs+1,reader:async()=>{reads++;return fixture();}});
+  assert.equal(reads,0);assert.equal(result.supplementAccountedCount,1);
+  assert.ok(result.supplements.get('2409')!.missing.includes('price_read_deadline'));
+});
+test('DS07 a late completed read is discarded and cannot enter current or first receipt',async()=>{
+  let elapsed=0;
+  const result=await loadDiscoveryPriceEnrichment(mockClient().client,[candidate()],cutoff,{currentRun:currentRun(),
+    monotonicNow:()=>elapsed,reader:async(_db,row)=>{elapsed=DISCOVERY_PRICE_BOUNDS.readMs+1;return currentFixture(row);}});
+  assert.equal(result.admittedReads,1);assert.equal(result.supplements.get('2409')!.quote,null);
+  assert.equal(result.contexts.get('2409')!.quote,null);
+  assert.ok(result.supplements.get('2409')!.missing.includes('price_read_deadline'));
+});
 test('DP11 fixed DB reader obtains only cutoff-visible raw quote; absent adapters remain missing',async()=>{
   const {client,calls}=mockClient(rawTables());
   const read=await readDiscoveryRawQuote(client,candidate(),cutoff,new AbortController().signal);

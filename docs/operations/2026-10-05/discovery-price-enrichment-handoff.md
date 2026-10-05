@@ -1,12 +1,14 @@
 # Discovery price shadow enrichment handoff
 
 Recorded 2026-10-05 Asia/Taipei; Node 22.14.0, Next 16.3.8, Linux Cloud.
-Branch `codex/discovery-price-enrichment-oct05`, exact base
-`54edb2cdf04498914446229b451ee2d96810d3a4` (fetched from
-`codex/source-controller-integration-oct05`, not stale main).
-Final worker reply supplies the full pushed SHA.
-This revision addresses the independent review's REQUEST_CHANGES on
-`8613458a57502e387f0569a4c499a2148b09a293`; independent re-review remains pending.
+Current branch `codex/discovery-price-supplements-oct05`, exact approved base
+`23dffca8633f0ccfc799d45b47b4ad29dea54124` (not the root integration/main branch).
+Final worker reply supplies the full pushed SHA. Source chat reports independent
+APPROVE of this base (49/49), integration `d96649cee3aa6d05ce84a51a984b6a54b10142e9`
+with 169 research tests and normal Mac lint/build. Those results are for the root
+integration, not this new branch. This supplementary batch needs independent review.
+Earlier enrichment base was `54edb2cdf04498914446229b451ee2d96810d3a4`;
+review repairs on `8613458a57502e387f0569a4c499a2148b09a293` produced approved23dffca.
 
 ## Responsibility and behavior
 
@@ -46,14 +48,54 @@ quote/gap, null returns and unknown phase. Additional context lives in immutable
 linked run rows. This batch does not rewrite the first-capture function/table or
 backfill historical snapshots; any persistence extension belongs to root review.
 
-The 32-symbol lexical admission cap can leave first-run price context missing.
-When canonical first capture also stores a missing quote, that gap is permanent
-under this implementation: later data, admission or dates do not fill it. The
-canonical capture performs its separate raw-quote lookup, so an admission gap
-does not itself prove that capture's price is absent. All original run receipts
-remain immutable. A **separate supplementary research receipt** linked to the
-original discovery could describe later knowledge without rewriting first-known
-truth; that receipt/API is **not implemented** and remains a root integration task.
+## Current-run supplementary observations
+
+Each immutable run evidence row and API priceContexts entry now has a separate
+`supplementaryObservation` with its own `observationHash`. Existing `priceContext`,
+first-seen time, frozen quote/status and snapshot/context hash remain unchanged for
+retained first captures. Weak old raw quotes stay `unverified_historical_raw` even
+when the new receipt has `official_raw_quote`. First missing remains missing.
+The canonical capture still performs its separate DB lookup; an admission gap in
+run context alone never proves that capture's quote is absent.
+
+Selection finishes before read admission. Server queue order (up to general15 +
+emerging5), then remaining actual queued/running research symbols in symbol order,
+then eligible outside symbols in lexical order consume **32 total adapter calls**.
+The active set comes from the existing server DB queue, not model inProgress.
+Priority symbols may receive current reads without first discovery evidence.
+All candidates have an explicit current receipt, including admission/deadline/data
+failure. The32-call limit counts current and earlier-first reads together; a same-cutoff read is
+reused, and any additional historical first read can only spend the remaining
+budget after current admission. It never reuses a later-cutoff result as first data.
+Frozen first records are not read again for historical context.
+
+Current quote provenance must match candidate stock/market, known official provider,
+valid integrity and collector URL. `publishedAt` is the persisted quote `as_of`
+clock, not independently verified publication on a website; `observedAt` and
+`availableAt` use persisted `available_at` (explicit
+`observedClockBasis:persisted_available_at`), not a claim that this process read
+it in the past. They satisfy completed close <= published <= observed <= available
+<= run cutoff <= serverClock. serverClock is sampled by the actual server after
+selection, never accepted from HTTP/model. Historical cutoff is retained unchanged.
+`knowledgeScope:current_cutoff_only` says only cutoff-visible information; the
+receipt does not assert first-discovery knowledge or a fresh source acquisition.
+A read completing after the15-second deadline is discarded. Supplementary windows
+are intentionally disabled even for a future adapter: returns remain null and
+phase unknown in this batch. Only fixed existing DB surfaces are used.
+
+The receipt, including serverClock, participates in the existing inputHash before
+run insertion; no new table is needed. Consequently a later invocation with a new
+serverClock makes a new immutable run/hash even with the same asOf and quotes.
+The existing uniqueness/replay behavior still applies to identical full receipts;
+this change does not claim same-request replay across different physical clocks.
+No old run, snapshot or registry record is overwritten.
+
+**Remaining fairness limitation:** outside the priority set, admission remains
+lexical with no durable cursor/fair resume. Excess active research (>32 including
+Top20) is also explicitly bounded. No claim that all candidates eventually get a
+read, nor that every Top20 read succeeds when DB/calendar/deadline authority fails.
+The goal addressed here is removing permanent first-missing as an obstacle to
+subsequent Top20 current reads, while retaining that original missing knowledge.
 
 ## Available production source interface and remaining data gaps
 
@@ -82,7 +124,7 @@ missing/unknown parameters, wrong stock/month/day, market/host or credentials
 reject. Parameterless APIs and legacy endpoint forms without this binding remain
 outside the strict adapter; a frozen weak raw record may only remain unverified.
 
-Bounds: <=5000 candidates/first rows, <=32 lexically sorted new read admissions,
+Bounds: <=5000 candidates/first rows, <=32 total current/historical read admissions,
 <=15 seconds including registry IO, one calendar head plus <=124 head-tie rows
 (sentinel rejects), <=2
 quote rows, <=8 MB first-registry JSON, <=64 KB per calendar/quote JSON, AbortSignal
@@ -103,7 +145,8 @@ No current adapter issues the pure evaluator's synthetic verification receipts.
 The new enrichment always requires a complete aligned 61-session window for every
 5/20/60 return. Formula is `(stock_end/stock_start)/(benchmark_end/benchmark_start)-1`.
 The standalone helper retains its preexisting shorter-window calling contract for
-other consumers; the new adapter invokes `requireComplete61:true` unconditionally.
+other consumers; the full-window evaluator invokes `requireComplete61:true`; the raw-only
+supplement never supplies a window.
 Missing benchmarks, actions, official validation or latest session are unknown,
 never a statement that price has not risen. No calendar-day interpolation occurs.
 
@@ -121,16 +164,19 @@ not proof that research is qualified or a buy is approved.
 
 ## Validation and reproducibility
 
-49 named cases executed: the previous **43** plus **6 review regressions**,
-comprising 7 DE, 24 DP, 5 actual-route cases and 13 source-extension/priority/root
-regressions; 49 pass, 0 fail, 0 skip. Added DP19–DP24 exercise 124+ ordinary history,
-latest-head conflicts/cancellation/tie bounds, actual TWSE/TPEx collector-generated
-URLs and mismatches, strict rejection across later weak captures, and permanently
-retained missing discovery. Collector URL tests invoke its actual pure constructor
-with vault/network functions stubbed; they do not acquire live data.
-Route contracts execute the actual transpiled POST with controlled synthetic DB
-dependencies, including a nonempty queue. They prove quote evidence changes the
-immutable input hash while the exact scores/queue remain identical.
+61 named cases executed: all approved **49** plus **12 supplementary regressions**;
+61 pass,0 fail,0 skip. Inventory: DE01–DE07 (7), DP01–DP24 (24), DS01–DS07 (7),
+DR01–DR10 (10 actual-route cases), existing priority/source-extension regressions (13).
+DS01 weak/missing immutable first beside verified current; DS02 lexical-rear priority
+and32/all45 accounting; DS03 future clock/session/provenance rejection; DS04 registry
+failure does not block independent current observation; DS05 shared historical/current
+budget and no backward leakage; DS06 invalid server clock/priority and deadline;
+DS07 late read discard. DR06–DR10 execute the actual route with synthetic DB query
+filters: retained first/current coexistence, changed supplementary evidence hash
+without ranking change, actual general15/emerging5 Top20 first admission, later
+as_of/available_at exclusion, and DB active priority without model promotion.
+All existing DE/DP/DR01–05 and13 regressions stay passing. These are synthetic
+controlled DB reads, not actual official/production acquisition receipts.
 
 ```sh
 node scripts/run-node22.js --experimental-strip-types --test \
@@ -138,19 +184,18 @@ node scripts/run-node22.js --experimental-strip-types --test \
   web/src/lib/research-discovery-price-enrichment.test.ts \
   web/src/app/api/internal/research-priority-run/route.contract.test.ts \
   web/src/lib/research-agent-priority.test.ts \
-  web/src/lib/research-source-roots.test.ts \
   web/src/lib/research-source-extensions.test.ts
 cd web
 npm run typecheck
 npm run lint
-DATA_MODE=demo RADAR_PUBLIC_SNAPSHOTS_ENABLED=disabled NEXT_TELEMETRY_DISABLED=1 npm run build
 DATA_MODE=demo RADAR_PUBLIC_SNAPSHOTS_ENABLED=disabled NEXT_TELEMETRY_DISABLED=1 npm run build -- --webpack
 ```
 
 Full lint: zero errors, 33 unchanged baseline warnings.
-Full tsc/build acceptance is **not passed**. Default Turbopack cannot bind its
-internal processing port (`EPERM`), even with allowed escalation. Supported webpack
-compiles, then reports existing generated-route export errors:
+Full tsc/build acceptance is **not passed**. This batch's webpack compilation
+succeeded in6.6s, then reports the two existing generated-route export errors.
+The earlier batch's default Turbopack run could not bind its internal processing
+port (`EPERM`); this batch used webpack. Errors:
 `app/layout.tsx` exports `CANONICAL_APP_URL`; `app/opportunity-v3/page.tsx` exports
 `OpportunityV3Page`. The same errors were reproduced in the earlier pristine
 `3b448b...` archive; both route files and web dependency locks are unchanged at
@@ -158,11 +203,10 @@ this exact `54edb2c...` base. Current tsc reports those same two errors and no o
 file errors. Root owns any unrelated route corrections.
 
 Local logs retained outside the checkout:
-`/workspace/discovery-price-review-tests-v1.log`,
-`/workspace/discovery-price-review-typecheck.log`,
-`/workspace/discovery-price-review-lint.log`,
-`/workspace/discovery-price-build-final.log`,
-`/workspace/discovery-price-review-build-webpack.log`.
+`/workspace/discovery-price-supplements-tests.log`,
+`/workspace/discovery-price-supplements-typecheck.log`,
+`/workspace/discovery-price-supplements-lint.log`,
+`/workspace/discovery-price-supplements-build.log`.
 
 ## Actual acquisition and independent review
 

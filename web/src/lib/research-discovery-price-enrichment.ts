@@ -30,7 +30,9 @@ export type DiscoveryOfficialWindow = {
     breakout: 'confirmed' | 'waiting'; pullback: 'confirmed' | 'waiting' } | null;
 };
 export type DiscoveryPriceRead = { quote: DiscoveryQuote | null; window: DiscoveryOfficialWindow | null;
-  latestCompletedSession: string | null; missing: string[] };
+  latestCompletedSession: string | null; missing: string[];
+  quoteProvenance?: { provider: 'twse' | 'tpex' | 'official_primary'; integrityStatus: 'valid';
+    publishedAt: string; observedAt: string; availableAt: string; stockId: string; exchange: string } };
 const HASH = /^[a-f0-9]{64}$/u;
 const UUID = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/iu;
 const positive = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value) && value > 0;
@@ -225,6 +227,9 @@ export async function readDiscoveryRawQuote(client: Client, candidate: Discovery
       sourceUrl:String(row.source_url),availableAt:String(row.available_at),priceBasis:'raw_exchange_quote' as const,
       symbol:candidate.symbol,exchange:candidate.exchange as 'TWSE' | 'TPEX'};
     return {quote:validQuote(quote,cutoff) ? quote : null,window:null,latestCompletedSession,
+      quoteProvenance:{provider:row.provider as 'twse' | 'tpex' | 'official_primary',integrityStatus:'valid',
+        publishedAt:String(row.as_of),observedAt:String(row.available_at),availableAt:String(row.available_at),
+        stockId:candidate.stockId,exchange:candidate.exchange},
       missing:[...gaps,...(validQuote(quote,cutoff) ? [] : ['official_quote_validation_failed'])]};
   } catch { return empty(signal.aborted ? 'price_read_deadline' : 'official_price_read_failed'); }
 }
@@ -255,14 +260,52 @@ export type DiscoveryPriceContext = ReturnType<typeof evaluateDiscoveryPrice> & 
   origin: 'immutable_first_discovery' | 'cutoff_read' | 'not_read'; firstRunId: string | null;
   capturedAt: string | null; immutableSnapshotHash: string | null; contextHash?: string };
 
-/** Every candidate gets an immutable shadow receipt, even if admission or the
- * registry fails. Sorted symbol admission has no effect on existing Top20. */
+/** This receipt describes only information available at this run's cutoff.
+ * observedAt uses the persisted available_at clock, not a claim that this Cloud
+ * process read the row in the past. serverClock records this actual invocation. */
+export type DiscoverySupplementaryObservation = ReturnType<typeof supplementaryObservation> & { observationHash: string };
+function supplementaryObservation(read: DiscoveryPriceRead, candidate: DiscoveryPriceCandidate,
+  cutoff: string, serverClock: string, attempted: boolean) {
+  const p=read.quoteProvenance;
+  const verified=!!read.quote && validQuote(read.quote,cutoff) && !!p
+    && read.quote.symbol===candidate.symbol && read.quote.exchange===candidate.exchange && UUID.test(candidate.stockId)
+    && ['twse','tpex','official_primary'].includes(p.provider) && p.integrityStatus==='valid'
+    && (p.provider==='official_primary' || p.provider===candidate.exchange.toLowerCase())
+    && p.stockId===candidate.stockId && p.exchange===candidate.exchange
+    && known(p.publishedAt,cutoff) && known(p.observedAt,cutoff) && known(p.availableAt,cutoff)
+    && Date.parse(p.publishedAt)>=Date.parse(`${read.quote.session}T13:30:00+08:00`)
+    && Date.parse(p.publishedAt)<=Date.parse(p.observedAt) && Date.parse(p.observedAt)<=Date.parse(p.availableAt)
+    && Date.parse(p.availableAt)===Date.parse(read.quote.availableAt);
+  // Raw-only in this batch: even an adapter window cannot silently activate
+  // returns/phase or confer research/entry eligibility.
+  const context=evaluateDiscoveryPrice({...read,quote:verified ? read.quote : null,window:null,
+    missing:[...read.missing,...(read.quote && !verified ? ['current_quote_provenance_invalid'] : [])]},cutoff);
+  return {...context,policyVersion:'discovery-price-supplement-v1',origin:'current_run_observation' as const,
+    cutoff,serverClock,attempted,knowledgeScope:'current_cutoff_only' as const,
+    observedClockBasis:'persisted_available_at' as const,
+    publishedAt:verified ? p!.publishedAt : null,observedAt:verified ? p!.observedAt : null,
+    availableAt:verified ? p!.availableAt : null,provenance:verified ? {
+      provider:p!.provider,integrityStatus:p!.integrityStatus,stockId:p!.stockId,exchange:p!.exchange,
+      publishedAt:p!.publishedAt,observedAt:p!.observedAt,availableAt:p!.availableAt} : null,
+    quoteStatus:verified ? 'official_raw_quote' : 'missing_at_current_cutoff',
+    missing:context.missing.map((reason)=>reason.replace(/_at_discovery$/u,'_at_current_cutoff'))};
+}
+
+/** The legacy first-only call remains available. The route always supplies a
+ * server-selected currentRun: its queue/active symbols consume the shared read
+ * budget first. Existing first receipts are never upgraded or backfilled. */
 export async function loadDiscoveryPriceEnrichment(client: Client, candidates: DiscoveryPriceCandidate[], asOf: string,
-  options: { reader?: typeof readDiscoveryRawQuote; monotonicNow?: () => number } = {}) {
+  options: { reader?: typeof readDiscoveryRawQuote; monotonicNow?: () => number;
+    currentRun?: { serverClock: string; prioritySymbols: string[] } } = {}) {
   if (!discoveryInstant(asOf) || candidates.length > DISCOVERY_PRICE_BOUNDS.candidates
     || new Set(candidates.map((row)=>row.symbol)).size !== candidates.length
     || candidates.some((row)=>!/^\d{4}$/u.test(row.symbol) || row.firstSeenAt !== null && !known(row.firstSeenAt,asOf)))
     throw new Error('discovery_price_candidates_invalid');
+  const current=options.currentRun;
+  const symbols=new Set(candidates.map((row)=>row.symbol));
+  if(current && (!known(asOf,current.serverClock) || !discoveryInstant(current.serverClock)
+    || current.prioritySymbols.length>candidates.length || new Set(current.prioritySymbols).size!==current.prioritySymbols.length
+    || current.prioritySymbols.some((symbol)=>!symbols.has(symbol)))) throw new Error('discovery_current_run_invalid');
   const abort = new AbortController();
   const timer = setTimeout(()=>abort.abort(),DISCOVERY_PRICE_BOUNDS.readMs);
   const now = options.monotonicNow || (()=>performance.now());
@@ -290,7 +333,35 @@ export async function loadDiscoveryPriceEnrichment(client: Client, candidates: D
     ? error.message : 'first_discovery_registry_read_failed'; }
   const contexts = new Map<string,DiscoveryPriceContext>();
   let admitted = 0;
+  const supplements=new Map<string,DiscoverySupplementaryObservation>();
+  const currentReads=new Map<string,DiscoveryPriceRead>();
+  const empty=(reason:string):DiscoveryPriceRead=>({quote:null,window:null,latestCompletedSession:null,missing:[reason]});
+  const budgetReason=()=>admitted>=DISCOVERY_PRICE_BOUNDS.newReads ? 'price_read_admission_bound'
+    : now()>=deadline || abort.signal.aborted ? 'price_read_deadline' : null;
+  const perform=async(candidate:DiscoveryPriceCandidate,cutoff:string)=>{
+    admitted++;
+    try {
+      const read=await (options.reader || readDiscoveryRawQuote)(client,candidate,cutoff,abort.signal);
+      return now()>=deadline || abort.signal.aborted ? empty('price_read_deadline') : read;
+    }
+    catch {return empty('official_price_read_failed');}
+  };
   try {
+    if(current) {
+      const priority=new Set(current.prioritySymbols);
+      const bySymbol=new Map(candidates.map((candidate)=>[candidate.symbol,candidate]));
+      const ordered=[...current.prioritySymbols.map((symbol)=>bySymbol.get(symbol)!),
+        ...candidates.filter((candidate)=>!priority.has(candidate.symbol)).sort((a,b)=>a.symbol.localeCompare(b.symbol))];
+      for(const candidate of ordered) {
+        const reason=!priority.has(candidate.symbol) && !candidate.hasDiscoveryEvidence && !first.has(candidate.symbol)
+          ? 'discovery_evidence_missing' : budgetReason();
+        const read=reason ? empty(reason) : await perform(candidate,asOf);
+        if(!reason) currentReads.set(candidate.symbol,read);
+        const observation=supplementaryObservation(read,candidate,asOf,current.serverClock,!reason);
+        supplements.set(candidate.symbol,{...observation,observationHash:researchCanonicalHash(observation)});
+      }
+    }
+
     for(const candidate of [...candidates].sort((a,b)=>a.symbol.localeCompare(b.symbol))) {
       const cutoff=candidate.firstSeenAt || asOf;
       let context: DiscoveryPriceContext;
@@ -302,21 +373,18 @@ export async function loadDiscoveryPriceEnrichment(client: Client, candidates: D
         catch {context={...evaluateDiscoveryPrice({quote:null,window:null,latestCompletedSession:null,
           missing:['immutable_first_discovery_invalid']},cutoff),origin:'not_read',firstRunId:null,capturedAt:null,immutableSnapshotHash:null};}
       } else {
+        const reused=current && Date.parse(cutoff)===Date.parse(asOf) ? currentReads.get(candidate.symbol) : undefined;
         const reason=!candidate.hasDiscoveryEvidence || !candidate.firstSeenAt ? 'discovery_evidence_missing'
-          : admitted>=DISCOVERY_PRICE_BOUNDS.newReads ? 'price_read_admission_bound'
-          : now()>=deadline || abort.signal.aborted ? 'price_read_deadline' : null;
+          : reused ? null : budgetReason();
         let read:DiscoveryPriceRead={quote:null,window:null,latestCompletedSession:null,missing:reason ? [reason] : []};
-        if(!reason) {
-          admitted++;
-          try {read=await (options.reader || readDiscoveryRawQuote)(client,candidate,cutoff,abort.signal);}
-          catch {read={quote:null,window:null,latestCompletedSession:null,missing:['official_price_read_failed']};}
-        }
+        if(reused && !reason) read=reused;
+        else if(!reason) read=await perform(candidate,cutoff);
         context={...evaluateDiscoveryPrice(read,cutoff),origin:reason ? 'not_read' : 'cutoff_read',
           firstRunId:null,capturedAt:null,immutableSnapshotHash:null};
       }
       contexts.set(candidate.symbol,{...context,contextHash:researchCanonicalHash(context)});
     }
-    return {policyVersion:DISCOVERY_PRICE_POLICY,contexts,expectedCount:candidates.length,accountedCount:contexts.size,
+    return {policyVersion:DISCOVERY_PRICE_POLICY,contexts,supplements,supplementAccountedCount:supplements.size,expectedCount:candidates.length,accountedCount:contexts.size,
       admittedReads:admitted,bounds:DISCOVERY_PRICE_BOUNDS,rankingInfluence:false};
   } finally {clearTimeout(timer);}
 }

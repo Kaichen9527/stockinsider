@@ -183,9 +183,12 @@ export async function POST(request: Request) {
       symbol: row.symbol, stockId: String(roster.get(row.symbol)?.stock_id || ''),
       exchange: String(roster.get(row.symbol)?.exchange || ''), firstSeenAt: row.firstSeenAt,
       hasDiscoveryEvidence: row.hasDiscoveryEvidence,
-    })), asOf);
-    if (priceEnrichment.accountedCount !== run.accountedCount) throw new Error('research_priority_price_accounting_mismatch');
-    const evidenceRows = discoveryEvidenceRows.map((row) => ({ ...row, priceContext: priceEnrichment.contexts.get(row.symbol)! }));
+    })), asOf, {currentRun:{serverClock:new Date().toISOString(),
+      prioritySymbols:[...new Set([...run.queue.map((row)=>row.symbol),
+        ...candidates.filter((candidate)=>candidate.inProgress).map((candidate)=>candidate.symbol).sort()])]}});
+    if (priceEnrichment.accountedCount !== run.accountedCount || priceEnrichment.supplementAccountedCount !== run.accountedCount) throw new Error('research_priority_price_accounting_mismatch');
+    const evidenceRows = discoveryEvidenceRows.map((row) => ({ ...row, priceContext: priceEnrichment.contexts.get(row.symbol)!,
+      supplementaryObservation:priceEnrichment.supplements.get(row.symbol)! }));
     const inputHash = researchCanonicalHash({ asOf, attempts, candidates, evidenceRows, excluded });
     const stored = await db.from('research_priority_runs_v1').insert({
       as_of: asOf, policy_version: run.policyVersion, input_hash: inputHash,
@@ -204,9 +207,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true, runId,
       asOf, inputHash, expectedCount: run.expectedCount, accountedCount: run.accountedCount,
       priceEnrichment: { policyVersion: priceEnrichment.policyVersion, expectedCount: priceEnrichment.expectedCount,
-        accountedCount: priceEnrichment.accountedCount, admittedReads: priceEnrichment.admittedReads,
+        accountedCount: priceEnrichment.accountedCount, supplementAccountedCount:priceEnrichment.supplementAccountedCount, admittedReads: priceEnrichment.admittedReads,
         bounds: priceEnrichment.bounds, rankingInfluence: false },
-      priceContexts: evidenceRows.map((row) => ({ symbol: row.symbol, priceContext: row.priceContext })),
+      priceContexts: evidenceRows.map((row) => ({ symbol: row.symbol, priceContext: row.priceContext,
+        supplementaryObservation:row.supplementaryObservation })),
       queue: run.queue, excludedNonCommon: excluded, sourceAttempts: attempts,
       unselectedCount: run.unselected.length, newDeepResearchJobs: queued.data,
       firstDiscoveryCaptures: discoveries.data,
