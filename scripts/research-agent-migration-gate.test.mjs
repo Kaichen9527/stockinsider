@@ -17,6 +17,7 @@ test('research schema extends the same attested operator plan and cannot use a s
   const planned = extension(plan, 'researchAgentMigrationPaths');
   const applied = extension(reviewed, 'RESEARCH_AGENT_MIGRATIONS');
   assert.deepEqual(planned, applied);
+  assert.deepEqual(extension(plan,'researchAgentPreludePaths'),extension(reviewed,'RESEARCH_AGENT_PRELUDE_MIGRATIONS'));
   assert.deepEqual(planned, [
     'migrations/20260929_candidate_dossier_outbox_v6.sql',
     'migrations/20260929_research_agent_state_v1.sql',
@@ -47,6 +48,8 @@ test('base chain stays fixed and explicit extension authority never replaces rev
   assert.deepEqual(result.researchAgentExtension.migrations.map((row) => row.migration),
     extension(plan, 'researchAgentMigrationPaths'));
   assert.equal(result.researchAgentExtension.applyAuthorized, true);
+  assert.equal(result.researchAgentExtension.preludeMigrations[0].migration,
+    'migrations/20261005_release_function_ownership_bridge_v1.sql');
   assert.match(result.researchAgentExtension.dedicatedApplyCommand, /--source-commit <reviewed-commit> --attestation-commit <attestation-commit>/u);
   // Exercise the actual planner without authority in an isolated repository.
   const { tmpdir } = await import('node:os');

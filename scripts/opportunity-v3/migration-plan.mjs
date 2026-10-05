@@ -67,6 +67,7 @@ const researchAgentMigrationPaths = [
   'migrations/20261004_research_cloud_receipts_v1.sql',
   'migrations/20261005_financial_history_admission_v1.sql',
 ];
+const researchAgentPreludePaths = ['migrations/20261005_release_function_ownership_bridge_v1.sql'];
 const describeMigration = (relativePath) => {
   const bytes = fs.readFileSync(path.join(root, relativePath));
   return {
@@ -78,6 +79,7 @@ const describeMigration = (relativePath) => {
 };
 const migrations = migrationPaths.map(describeMigration);
 const researchAgentMigrations = researchAgentMigrationPaths.map(describeMigration);
+const researchAgentPreludeMigrations = researchAgentPreludePaths.map(describeMigration);
 const productionDatabaseMigrationAuthorized =
   authority?.authority?.v314?.productionDatabaseMigrationAuthorized === true;
 const researchAgentProductionDatabaseMigrationAuthorized =
@@ -91,8 +93,9 @@ process.stdout.write(JSON.stringify({
   migrations,
   orderedChainSha256,
   researchAgentExtension: {
+    preludeMigrations: researchAgentPreludeMigrations,
     migrations: researchAgentMigrations,
-    orderedChainSha256: createHash('sha256').update(JSON.stringify(researchAgentMigrations
+    orderedChainSha256: createHash('sha256').update(JSON.stringify([...researchAgentPreludeMigrations,...migrations,...researchAgentMigrations]
       .map(({ migration, sha256 }) => [migration, sha256]))).digest('hex'),
     applyAuthorized: researchAgentProductionDatabaseMigrationAuthorized,
     dedicatedApplyCommand: researchAgentProductionDatabaseMigrationAuthorized

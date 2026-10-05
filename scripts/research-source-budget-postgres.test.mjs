@@ -24,7 +24,8 @@ test('cross-role budget, revision heads and first-discovery gaps survive real Po
       run('initdb',['-D',cluster,'-A','trust','--no-instructions']);
       run('pg_ctl',['-D',cluster,'-l',path.join(temporary,'postgres.log'),'-o',`-h '' -k ${temporary} -p ${port}`,'-w','start']); started=true;
       sql(`CREATE ROLE anon NOLOGIN; CREATE ROLE authenticated NOLOGIN; CREATE ROLE service_role NOLOGIN;
-        CREATE EXTENSION IF NOT EXISTS pgcrypto;
+        CREATE SCHEMA extensions;
+        CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA extensions;
         CREATE TABLE public.stocks(id uuid PRIMARY KEY, symbol text, market text);
         CREATE TABLE public.candidate_detail_snapshots(id uuid PRIMARY KEY,stock_id uuid);
         CREATE TABLE public.candidate_dossier_bundles(bundle_id uuid PRIMARY KEY,revision_id uuid,published_revision_id uuid,input_hash text);

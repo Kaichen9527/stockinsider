@@ -7,7 +7,7 @@ ALTER TABLE public.candidate_technical_decisions_v1 ADD COLUMN IF NOT EXISTS dec
 -- remain intact; legacy identities cannot masquerade as current input hashes.
 DROP TRIGGER IF EXISTS trg_candidate_technical_decisions_immutable_v1 ON public.candidate_technical_decisions_v1;
 UPDATE public.candidate_technical_decisions_v1
-SET decision_input_hash=encode(public.digest(convert_to(
+SET decision_input_hash=encode(extensions.digest(convert_to(
   jsonb_build_array('legacy-technical-input-v1',id,stock_id,thesis_qualification_id,
     session_date,market_dataset_hash,calendar_hash,feature_version,strategy_version,snapshot,observed_at,created_at)::text,'UTF8'),'sha256'),'hex')
 WHERE decision_input_hash IS NULL;
