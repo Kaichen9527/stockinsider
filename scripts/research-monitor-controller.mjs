@@ -24,7 +24,7 @@ function originUrl(origin) {
     throw new Error('monitor_controller_origin_invalid');
   return url;
 }
-async function jsonPost(url, body, key, timeoutMs) {
+export async function jsonPost(url, body, key, timeoutMs) {
   if (!Number.isInteger(timeoutMs) || timeoutMs <= 0 || timeoutMs > 15_000)
     throw new Error('monitor_controller_transport_deadline');
   // Keep cancellation strongly reachable until the complete body is read.
