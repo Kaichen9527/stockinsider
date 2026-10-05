@@ -1,0 +1,6 @@
+- [x] Add explicit industry paragraph scope without changing default company scope.
+- [x] Separate industry source eligibility from legacy company/member policy.
+- [x] Reuse citation policy in admission and public source-link display.
+- [x] Add cutoff, rights, withdrawal, old-tag, catalyst and scenario regressions.
+- [ ] Independent exact-source review and combined type/lint/build verification.
+- [ ] Real article, protected deployment and desktop/mobile live acceptance.

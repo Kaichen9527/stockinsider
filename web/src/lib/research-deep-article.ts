@@ -9,6 +9,8 @@ export type DeepArticleSectionKey = typeof DEEP_ARTICLE_SECTION_ORDER[number];
 export type DeepResearchParagraph = {
   text: string;
   kind: 'verified' | 'reported' | 'rumor' | 'inference' | 'scenario';
+  /** Industry context is not a direct company mention or commercial evidence. */
+  evidenceScope?: 'company_mentions' | 'industry_context';
   sourceDocumentIds: string[];
   officialFactIds: string[];
 };
@@ -102,6 +104,7 @@ export type EvidenceDocument = {
   id: string; symbols: string[]; publishedAt: string; observedAt: string;
   sourceUrl: string; retracted: boolean; publicCitation: boolean; superseded?: boolean;
   substantiveEvidence?: boolean;
+  subjectScope?: 'company_mentions' | 'industry_context' | 'unknown';
 };
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu;
 const instant = (value: string) => typeof value === 'string' && Number.isFinite(Date.parse(value))
@@ -109,11 +112,15 @@ const instant = (value: string) => typeof value === 'string' && Number.isFinite(
 const text = (value: unknown, min = 1, max = 4000) => typeof value === 'string'
   && value.trim().length >= min && value.length <= max;
 const unique = (values: string[]) => values.length === new Set(values).size;
-function checkSourceIds(ids: string[], documents: Map<string, EvidenceDocument>, article: DeepResearchArticle) {
+function checkSourceIds(ids: string[], documents: Map<string, EvidenceDocument>, article: DeepResearchArticle,
+  scope: 'company_mentions' | 'industry_context' = 'company_mentions') {
   if (!Array.isArray(ids) || ids.length > 30 || !unique(ids)) throw new Error('deep_article_sources_invalid');
   for (const id of ids) {
     const source = documents.get(id);
-    if (!UUID.test(id) || !source || !source.symbols.includes(article.symbol)
+    if (!UUID.test(id) || !source
+      || (scope === 'industry_context' ? source.subjectScope !== 'industry_context'
+        : (source.subjectScope !== undefined && source.subjectScope !== 'company_mentions')
+          || !source.symbols.includes(article.symbol))
       || !instant(source.publishedAt) || !instant(source.observedAt)
       || Date.parse(source.publishedAt) > Date.parse(source.observedAt)
       || Date.parse(source.publishedAt) > Date.parse(article.evidenceCutoffAt)
@@ -232,7 +239,15 @@ export function validateDeepResearchArticle(input: {
         || !unique(paragraph.officialFactIds) || paragraph.officialFactIds.some((id) => !input.allowedOfficialFactIds.has(id))) {
         throw new Error('deep_article_paragraph_invalid');
       }
-      checkSourceIds(paragraph.sourceDocumentIds, documents, article);
+      const scope = paragraph.evidenceScope === undefined ? 'company_mentions' : paragraph.evidenceScope;
+      if (!['company_mentions', 'industry_context'].includes(scope)
+        || (scope === 'industry_context' && (section.key !== 'industry_position'
+          || !['reported', 'inference'].includes(paragraph.kind)
+          || paragraph.officialFactIds.length !== 0 || !Array.isArray(paragraph.sourceDocumentIds)
+          || paragraph.sourceDocumentIds.length === 0))) {
+        throw new Error('deep_article_paragraph_evidence_scope_invalid');
+      }
+      checkSourceIds(paragraph.sourceDocumentIds, documents, article, scope);
       if (paragraph.sourceDocumentIds.length === 0 && paragraph.officialFactIds.length === 0) {
         throw new Error('deep_article_paragraph_uncited');
       }

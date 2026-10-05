@@ -1,10 +1,11 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { isPaidInvestAnchorsReference } from './candidate-dossier-contract.ts';
 import { sanitizePublicSourceUrl } from './public-source-url.ts';
 import type { EvidenceDocument } from './research-deep-article.ts';
+import { deepSourceCitation } from './research-deep-source-rights.ts';
 
 type Row = Record<string, unknown>;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu;
+
 export async function loadDeepArticleEvidence(db: Pick<SupabaseClient, 'from' | 'rpc'>, ids: string[], asOf = new Date().toISOString()): Promise<EvidenceDocument[]> {
   if (ids.length > 100 || new Set(ids).size !== ids.length || ids.some((id) => !UUID.test(id))) {
     throw new Error('deep_article_source_id_bound_invalid');
@@ -28,8 +29,10 @@ export async function loadDeepArticleEvidence(db: Pick<SupabaseClient, 'from' | 
       ? row.metadata as Row : {};
     const candidateUrl = String(metadata.canonical_url || row.document_url || '').split('#si-revision-')[0];
     const url = sanitizePublicSourceUrl(candidateUrl);
+    const citation = deepSourceCitation(row.metadata, candidateUrl);
     return {
       id: String(row.id), symbols: Array.isArray(row.symbols) ? row.symbols.map(String) : [],
+      subjectScope: citation.subjectScope,
       // First discovery belongs to the story, not to the availability of this
       // revision. A correction first read today was not known last month.
       publishedAt: String(row.published_at || ''), observedAt: new Date(Math.max(
@@ -39,8 +42,7 @@ export async function loadDeepArticleEvidence(db: Pick<SupabaseClient, 'from' | 
       sourceUrl: url || '', retracted: Boolean(metadata.retracted_at || latest.get(String(row.id))?.retracted),
       superseded: latest.get(String(row.id))?.superseded === true || !latest.get(String(row.id))?.headId,
       substantiveEvidence: row.content_semantics !== 'metadata_only' && metadata.content_form !== 'chapter_titles',
-      publicCitation: Boolean(url) && metadata.visibility !== 'authenticated_summary'
-        && !isPaidInvestAnchorsReference(candidateUrl),
+      publicCitation: citation.url !== null,
     };
   });
 }

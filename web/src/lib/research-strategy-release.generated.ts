@@ -68,11 +68,15 @@ export const RESEARCH_STRATEGY_RELEASE = {
     },
     {
       "path": "web/src/lib/research-deep-article.ts",
-      "sha256": "7e4eddc67623b00f46d40940ef43cf357b820d8f2f76db1c24d4bdb47fa7bf0d"
+      "sha256": "3ef5cb7ccaa3b8dde09fefe1abfa9b894496ee85f3058a6b405d3aac122c11e2"
     },
     {
       "path": "web/src/lib/research-deep-evidence.ts",
-      "sha256": "53bd3abff9aa6157bd2fa4a5093bafd0ebe7a6fe19312b6440dac3bb33968469"
+      "sha256": "867e32a328813adeb01b6cbccb084c638318e31bcda35fa34af4b6d455d05531"
+    },
+    {
+      "path": "web/src/lib/research-deep-source-rights.ts",
+      "sha256": "b74ef052ea791d573cd9bc9f6b898746ccdc954cc38d9bd46afe747f3e8a1ffc"
     },
     {
       "path": "web/src/lib/research-execution-context.ts",
@@ -239,7 +243,7 @@ export const RESEARCH_STRATEGY_RELEASE = {
     }
   ],
   "dependencyLockHash": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
-  "codeHash": "60c4c72ced1c3f75276025d008de5eca1d3ec86f3afcc952448debe6676b71c0",
+  "codeHash": "a7b4f4d9ed315592e5eb591604cc16703e8c5a6fa0e7a15eedac1c9f9e19c179",
   "parameterMode": "fixed_baseline_source_bound",
   "parameterHash": "9101ef58a0d43f53e7dea0749eb03872f375bb3051cfd77e6147d9141e2334e4",
   "parameterFiles": [
