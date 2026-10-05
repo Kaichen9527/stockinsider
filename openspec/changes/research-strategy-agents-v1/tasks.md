@@ -34,7 +34,7 @@ Official financial fallback still hits the lifetime 128-fact series storage boun
 - [x] Reconcile completed source/code validation separately from live operation,
   protected approval and deployment; save latest inventory and unsigned review.
 - [x] Authorized read-only Cloud hardware probe recorded; no quota or scheduling guarantee inferred.
-- [ ] Separate Cloud work package/result adapter and bounded resource admission.
+- [x] Separate bounded Cloud work/result validation adapter and local resource admission (PR #289; deterministic validation roles only).
 - [ ] Actual VPS → Cloud → independent review → authenticated result acceptance.
 - [ ] Cloud task recovery, platform-dispatch capability acceptance and production runtime acceptance.
 - [ ] Transitional Mac dependency removal only after social, review and backup replacements.
@@ -43,3 +43,25 @@ Latest measured Contabo availability is 13.10 GB, superseding earlier inventory
 for present admission only; historical receipts remain intact. No new safe VPS
 cleanup paths were found. Full handoff and source hashes are in the existing
 October 4 implementation handoff.
+
+## October 5 integration evidence
+
+- [x] Financial per-period admission/read-window amendment implemented and tested;
+  independent Astra code review approves `6899996a`, recorded in PR #290.
+  Historical data is not deleted. This is not a protected-gate pass or production apply.
+- [x] Cloud receipt and history tail included in reviewed deployment plan; successor
+  preflight and one atomic migration transaction prevent partial base replay.
+- [x] Bounded source-attempt CLI integrated from `832b0428`; Node 22 DNS callback,
+  AUO official-body and RSS login-wording defects fixed after real Mac reads.
+  Two actual bodies plus two metadata indexes obtained; zero invented summaries.
+- [x] Integrated research/source regression: 122 passed, zero skipped; lint/build pass.
+- [ ] Real source/search/model consumer, full AUO and second-company publication,
+  relative-return enrichment and scheduled work consumers remain outstanding.
+- [ ] Existing release-function ownership drift found by schema-only isolated
+  rehearsal must be repaired through an exact reviewed bridge/preflight.
+
+VPS October 5 read-only probe: 13,030,166,528 available bytes; the 20.40 GB
+whole-host heavy-operation requirement is not met. The five approved cleanup
+paths remain absent; no additional historical/evidence data was deleted.
+Protected exact-version checks still lack external trusted recovery evidence.
+Main, production migration/deployment and schedules remain unchanged.

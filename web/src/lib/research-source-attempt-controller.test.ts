@@ -185,3 +185,21 @@ test('SC15 JSON primitive types and actual local terminal cannot be substituted'
   assert.throws(()=>validateSourceControllerInput(input([local({localRead:{attemptedAt:at,outcome:'read_failed',errorCode:999} as unknown as SourceScope['localRead']})]),at),/local_receipt_invalid/);
   assert.throws(()=>assembleSourceControllerRun(input([local({localRead:{attemptedAt:at,outcome:'read_failed'}})]),[obs()],at),/local_observation_mismatch/);
 });
+
+test('SC16 actual AUO detail markers establish body, but index/template drift do not',()=>{
+  const s=pub({url:'https://www.auo.com/zh-TW/News_Archive/detail/News_Archive_Product_20260831',contentScope:'article_body'});
+  const page='<h1 class="title font-32">Synthetic official release</h1><div class="html-edit"><p>'
+    + 'Synthetic public research text. '.repeat(8)+'</p></div>';
+  assert.equal(inspectSourceBody(s,page,'text/html').outcome,'read_success');
+  assert.equal(inspectSourceBody({...s,url:'https://www.auo.com/zh-TW/News_Archive/index'},page,'text/html').outcome,'metadata_only');
+  assert.equal(inspectSourceBody(s,page.replace('html-edit','changed-template'),'text/html').outcome,'metadata_only');
+  assert.equal(inspectSourceBody(s,page.replace(/<h1[\s\S]*?<\/h1>/u,''),'text/html').outcome,'metadata_only');
+});
+
+test('SC17 public RSS/JSON login wording is content, not authentication failure',()=>{
+  const podcast=pub({platform:'podcast',url:'https://feeds.soundon.fm/podcasts/954689a5-3096-43a4-a80b-7810b219cef3.xml',
+    contentScope:'metadata_index',rights:{basis:'creator_published_index',checkedAt:earlier,checkedBy:'creator-rss-policy'}});
+  assert.equal(inspectSourceBody(podcast,'<rss><item><title>登入後才能看會員內容</title></item></rss>','application/rss+xml').outcome,'metadata_only');
+  assert.equal(inspectSourceBody(pub(),'[{"note":"login required"}]','application/json').outcome,'read_success');
+  assert.equal(inspectSourceBody(pub(),'<html>sign in to continue</html>','text/html').outcome,'auth_required');
+});

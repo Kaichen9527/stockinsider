@@ -47,7 +47,11 @@ export async function readPinnedPublicSource(scope, { timeoutMs = SOURCE_CONTROL
         method:'GET',signal:controller.signal,servername:url.hostname,rejectUnauthorized:true,
         headers:{Accept:'text/html, application/json, application/rss+xml, text/csv;q=0.9',
           'Accept-Encoding':'identity','User-Agent':'StockInsider-Bounded-Source-Canary/1.0'},
-        lookup:(_host,_options,callback)=>callback(null,addresses[0].address,net.isIP(addresses[0].address)),
+        // Node's network family selection requests all answers. Return only
+        // the already validated/pinned set; never perform a second DNS lookup.
+        lookup:(_host,options,callback)=>options?.all
+          ? callback(null,addresses.map(({address})=>({address,family:net.isIP(address)})))
+          : callback(null,addresses[0].address,net.isIP(addresses[0].address)),
       },(res)=>{
         status=res.statusCode || 0;
         if (status < 200 || status >= 300) {

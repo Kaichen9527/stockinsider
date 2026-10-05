@@ -188,8 +188,20 @@ export function inspectSourceBody(scope: SourceScope, body: string, contentType:
   const responseHash = createHash('sha256').update(body).digest('hex');
   const withoutCode = body.replace(/<(script|style|noscript|template)\b[^>]*>[\s\S]*?<\/\1\s*>/giu,'');
   const visible = withoutCode.replace(/<[^>]*>/gu,' ').replace(/\s+/gu,' ').trim();
-  if (/<input\b[^>]*type\s*=\s*["']?password\b/iu.test(withoutCode)
-    || /(?:login required|sign in to (?:continue|read)|會員限定|請先登入|登入後才能)/iu.test(visible))
+  const html = /text\/html/iu.test(contentType);
+  const article = /<article\b[^>]*>([\s\S]*?)<\/article\s*>/iu.exec(withoutCode);
+  // The reviewed AUO detail template uses html-edit, not an article element.
+  // Require both that exact detail route and its title/body markers; navigation
+  // text, an index or an unrecognized template still cannot establish content.
+  const auoDetail = scope.platform === 'official' && scope.url.startsWith('https://www.auo.com/')
+    && /^\/(?:zh-TW|en-global)\/(?:News_Archive|Press_Release)\/detail\/[^/]+$/u.test(new URL(scope.url).pathname)
+    && /<h1\b[^>]*class=["'][^"']*\btitle\b[^"']*["'][^>]*>[^<]+<\/h1>/iu.test(withoutCode)
+    ? /<div\b[^>]*class=["']html-edit["'][^>]*>([\s\S]*?)<\/div\s*>/iu.exec(withoutCode) : null;
+  const articleText = (article?.[1] || auoDetail?.[1] || '').replace(/<[^>]*>/gu,' ').replace(/\s+/gu,' ').trim();
+  // RSS/JSON may legitimately contain episode titles or claims mentioning
+  // login. Such words do not prove a provider authentication wall.
+  if (html && (/<input\b[^>]*type\s*=\s*["']?password\b/iu.test(withoutCode)
+    || articleText.length < 80 && /(?:login required|sign in to (?:continue|read)|會員限定|請先登入|登入後才能)/iu.test(visible)))
     return { responseHash, bodyPresent:false, publishedAt:null, outcome:'auth_required' as const };
   const publishedMatch = /<meta\b[^>]*(?:property|name)=["'](?:article:published_time|datePublished)["'][^>]*content=["']([^"']+)["']/iu.exec(withoutCode)
     || /<time\b[^>]*datetime=["']([^"']+)["']/iu.exec(withoutCode);
@@ -201,10 +213,8 @@ export function inspectSourceBody(scope: SourceScope, body: string, contentType:
     if (/application\/json/iu.test(contentType)) {
       try { const parsed: unknown = JSON.parse(body); bodyPresent = Array.isArray(parsed) && parsed.length > 0 && object(parsed[0]); } catch { /* Not a JSON document. */ }
     } else bodyPresent = visible.length > 80 && visible.includes(',');
-  } else if (/text\/html/iu.test(contentType)) {
-    const article = /<article\b[^>]*>([\s\S]*?)<\/article\s*>/iu.exec(withoutCode);
-    const textBody = article?.[1].replace(/<[^>]*>/gu,' ').replace(/\s+/gu,' ').trim() || '';
-    bodyPresent = textBody.length >= 80;
+  } else if (html) {
+    bodyPresent = articleText.length >= 80;
   }
   return { responseHash,bodyPresent,publishedAt,outcome:bodyPresent ? 'read_success' as const : 'metadata_only' as const };
 }

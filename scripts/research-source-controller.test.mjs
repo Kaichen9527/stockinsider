@@ -47,6 +47,9 @@ test('SCT01 pins a validated public address, one page, no credentials, and keeps
   mocked.calls[0].options.lookup('ignored',{},(error,address,family)=>{
     assert.equal(error,null);assert.equal(address,'203.66.75.1');assert.equal(family,4);
   });
+  mocked.calls[0].options.lookup('ignored',{all:true},(error,addresses)=>{
+    assert.equal(error,null);assert.deepEqual(addresses,[{address:'203.66.75.1',family:4}]);
+  });
 });
 
 test('SCT02 private/mixed DNS answers reject before HTTP; no DNS-rebinding fallback',async()=>{
