@@ -9,6 +9,7 @@ import { readCandidateRevisionContext, type CandidateRevisionScores } from './ca
 import { readCandidateTradePlan } from './candidate-trade-plan.ts';
 import type { TwEntryPlanBundle } from './tw-entry-plan-contract.ts';
 import type { ValidatedDeepArticle } from './research-deep-article.ts';
+import { deepSourceCitation } from './research-deep-source-rights.ts';
 import { researchCanonicalHash, researchEntryQualification, type ThesisQualification, type TechnicalDecisionSnapshot } from './research-agent-qualification.ts';
 
 type Row = Record<string, unknown>;
@@ -311,8 +312,8 @@ export async function loadCandidateDetail(symbol: string, revisionId?: string | 
           deepResearchSources = (docs.data || []).flatMap((doc) => {
             const metadata = doc.metadata && typeof doc.metadata === 'object' ? doc.metadata as Row : {};
             const candidateUrl = String(metadata.canonical_url || doc.document_url || '').split('#si-revision-')[0];
-            const url = sanitizePublicSourceUrl(candidateUrl);
-            return url && !isPaidInvestAnchorsReference(url)
+            const { url } = deepSourceCitation(doc.metadata, candidateUrl);
+            return url
               ? [{ id: String(doc.id), title: String(metadata.title || new URL(url).hostname),
                 url, publishedAt: String(doc.published_at || ''),
                 retracted: Boolean(metadata.retracted_at) }] : [];

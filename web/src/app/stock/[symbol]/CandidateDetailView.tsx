@@ -335,6 +335,7 @@ export function DeepResearchView({ article, sourceLinks, layoutPreview = false }
                 <div key={index}>
                   <p className="max-w-4xl whitespace-pre-wrap leading-8 text-stone-700 dark:text-stone-300">{paragraph.text}</p>
                   <div className="mt-1 flex flex-wrap gap-2 text-xs text-stone-500">
+                    {paragraph.evidenceScope === "industry_context" ? <span>產業背景，非公司訂單證據</span> : null}
                     {paragraph.kind === "rumor" ? <span className="font-semibold text-amber-700">未確認傳聞</span> : null}
                     {paragraph.kind === "scenario" ? <span>條件情境，非已實現獲利</span> : null}
                     {paragraph.officialFactIds.length ? <span>官方數據見下方研究依據</span> : null}

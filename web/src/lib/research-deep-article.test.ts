@@ -153,3 +153,91 @@ test('a non-commercialized baseline and negative EPS do not get a fictitious P/E
   };
   assert.throws(() => validateDeepResearchArticle(inconsistent), /same_year_baseline_bridge_conflict/);
 });
+
+const industryId = '22222222-2222-4222-8222-222222222222';
+const industryDocument = { ...document, id: industryId, symbols: [], subjectScope: 'industry_context' as const };
+function withIndustryParagraph() {
+  const input = options();
+  const context = { ...industryDocument };
+  const sourceDocuments = [...input.documents, context];
+  input.article.sections[1].paragraphs.unshift({
+    text: '光引擎封裝良率與測試規格仍在演進，產業必須先解決可靠度瓶頸；這不代表友達已取得客戶訂單。',
+    kind: 'reported', evidenceScope: 'industry_context', sourceDocumentIds: [industryId], officialFactIds: [],
+  });
+  return { ...input, documents: sourceDocuments };
+}
+test('explicit industry paragraph cites empty-symbol context without promoting company evidence', () => {
+  const input = withIndustryParagraph();
+  const validated = validateDeepResearchArticle(input);
+  assert.deepEqual(validated.sourceDocumentIds, [sourceId, industryId]);
+  assert.equal(validated.sections[1].paragraphs[0].evidenceScope, 'industry_context');
+  assert.deepEqual(validated.scenarios, validateDeepResearchArticle(options()).scenarios);
+  const changed = withIndustryParagraph();
+  changed.article.sections[1].paragraphs[0].kind = 'inference';
+  assert.notEqual(validateDeepResearchArticle(changed).articleHash, validated.articleHash);
+});
+test('industry sources never satisfy a company paragraph, catalyst or EPS scenario, even with old tags', () => {
+  for (const target of ['paragraph', 'catalyst', 'scenario']) {
+    const input = withIndustryParagraph();
+    input.documents[1].symbols = ['2409']; // Old unioned tags are not authority.
+    if (target === 'paragraph') input.article.sections[0].paragraphs[0].sourceDocumentIds = [industryId];
+    if (target === 'catalyst') input.article.catalysts[0].evidenceDocumentIds = [industryId];
+    if (target === 'scenario') input.article.scenarios[1].evidenceDocumentIds = [industryId];
+    assert.throws(() => validateDeepResearchArticle(input), /source_not_usable/);
+  }
+});
+test('industry scope cannot be moved into orders or valuation, made verified, mixed or caller-malformed', () => {
+  for (const mutation of [
+    (input: ReturnType<typeof withIndustryParagraph>) => { input.article.sections[2].paragraphs = input.article.sections[1].paragraphs; },
+    (input: ReturnType<typeof withIndustryParagraph>) => { input.article.sections[4].paragraphs = input.article.sections[1].paragraphs; },
+    (input: ReturnType<typeof withIndustryParagraph>) => { input.article.sections[1].paragraphs[0].kind = 'verified'; },
+    (input: ReturnType<typeof withIndustryParagraph>) => { input.article.sections[1].paragraphs[0].kind = 'rumor'; },
+    (input: ReturnType<typeof withIndustryParagraph>) => { input.article.sections[1].paragraphs[0].officialFactIds = ['fact']; input.allowedOfficialFactIds.add('fact'); },
+    (input: ReturnType<typeof withIndustryParagraph>) => { input.article.sections[1].paragraphs[0].sourceDocumentIds = []; },
+    (input: ReturnType<typeof withIndustryParagraph>) => { input.article.sections[1].paragraphs[0].evidenceScope = null as never; },
+    (input: ReturnType<typeof withIndustryParagraph>) => { input.article.sections[1].paragraphs[0].evidenceScope = 'other' as never; },
+  ]) {
+    const input = withIndustryParagraph(); mutation(input);
+    assert.throws(() => validateDeepResearchArticle(input), /evidence_scope_invalid/);
+  }
+  const mixed = withIndustryParagraph();
+  mixed.article.sections[1].paragraphs[0].sourceDocumentIds.push(sourceId);
+  assert.throws(() => validateDeepResearchArticle(mixed), /source_not_usable/);
+});
+test('industry citation retains cutoff, content and withdrawal barriers', () => {
+  for (const patch of [
+    { retracted: true }, { superseded: true }, { substantiveEvidence: false }, { publicCitation: false },
+    { observedAt: '2026-09-30T00:00:00Z' }, { publishedAt: '2026-09-30T00:00:00Z' },
+    { subjectScope: 'unknown' as const },
+  ]) {
+    const input = withIndustryParagraph(); input.documents[1] = { ...industryDocument, ...patch };
+    assert.throws(() => validateDeepResearchArticle(input), /source_not_usable/);
+  }
+});
+async function loadIndustry(metadata: Record<string, unknown>, url = 'https://www.threads.com/@investanchors/post/Ddaum9QGFr_') {
+  const row = { id: industryId, document_url: url, published_at: document.publishedAt,
+    collected_at: document.observedAt, symbols: [], content_semantics: 'research_summary', metadata };
+  const query = { select() { return this; }, in() { return this; }, limit: async () => ({ data: [row], error: null }) };
+  const db = { from: () => query, rpc: async () => ({ data: [
+    { id: industryId, headId: industryId, retracted: false, superseded: false }], error: null }) };
+  return (await loadDeepArticleEvidence(db as unknown as Parameters<typeof loadDeepArticleEvidence>[0],
+    [industryId], document.observedAt))[0];
+}
+const publicIndustryMetadata = { subject_scope: 'industry_context', visibility: 'public',
+  rights_boundary: 'public_citation', acquisition_method: 'public_document' };
+test('loader preserves industry scope and only explicit public acquisition can cite a public social permalink', async () => {
+  const source = await loadIndustry(publicIndustryMetadata);
+  assert.equal(source.publicCitation, true); assert.equal(source.subjectScope, 'industry_context');
+  assert.deepEqual(source.symbols, []);
+  for (const patch of [
+    { visibility: 'authenticated_summary', rights_boundary: 'bounded_summary_only', acquisition_method: 'authenticated_browser_summary' },
+    { visibility: 'private' }, { rights_boundary: undefined }, { acquisition_method: 'user_authorized_document' },
+    { acquisition_method: ['public_document'] }, { acquisition_method: ['publisher_transcript'] },
+    { subject_scope: null }, { subject_scope: 'unknown' },
+  ]) assert.equal((await loadIndustry({ ...publicIndustryMetadata, ...patch })).publicCitation, false);
+  assert.equal((await loadIndustry(publicIndustryMetadata, 'https://www.investanchors.com/member/report')).publicCitation, false);
+  assert.equal((await loadIndustry(publicIndustryMetadata, 'https://www.threads.com/@investanchors')).publicCitation, false);
+  assert.equal((await loadIndustry(publicIndustryMetadata, 'https://evil.example/investanchors/post/Ddaum9QGFr_')).publicCitation, false);
+  assert.equal((await loadIndustry(publicIndustryMetadata, 'https://www.threads.com.evil.example/@investanchors/post/Ddaum9QGFr_')).publicCitation, false);
+  assert.equal((await loadIndustry({ ...publicIndustryMetadata, subject_scope: 'company_mentions' })).publicCitation, false);
+});
