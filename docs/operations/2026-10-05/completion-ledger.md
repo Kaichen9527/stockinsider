@@ -101,6 +101,29 @@ Read scope and limitations are saved in live-source-capacity-followup.md.
 
 ## Live release barriers confirmed again
 
+The deep-work claim/recovery boundary is now implemented and independently
+approved at139f6ef, isolated in draft #298 on top of #297. The guarded existing
+route returns its real company-research reservation and exposes only finite
+owner/attempt-scoped SELECTs for status. The consumer fsyncs its original request,
+binds every claim to a unique owner, and recovers lost responses without another
+claim, budget slot or deadline extension. Independent review first found a
+recovery attribution defect, which was reproduced and repaired before approval;
+37 focused cases and additional actual-HTTP probes pass with zero skips. Initial
+integration passed242 cases plus type/lint/build. Final repaired integration
+passed243 tests with zero skips and the normal build passed again. Cloud
+compatibility was dispatched to the existing authorized task, not yet accepted.
+This does not dispatch an author
+model, persist a draft or publish an article; rights-aware PIT input and the full
+review/submission consumer remain outstanding. No schema or strategy was changed.
+
+Fresh trusted-recovery discovery found no usable published entry. Repo admin
+access and the online Mac runner are real, but the active ruleset has no bypass
+actor; protected main has no recovery dispatch. The old pinned native executable
+is absent, the exact candidate review reference is missing, and the current
+registry has no authorized successor transition. Existing older review refs do
+not authorize the candidate. The inactive installer proposal is not an external
+trust root. No protected setting, signing authority or production role was changed.
+
 - #288 protected requirements, architecture, exact-review and root checks fail;
   ordinary diagnostic CI succeeds. #292 has the same separation. Authentic
   owner-controlled recovery and exact-version signed evidence remain missing.

@@ -74,3 +74,24 @@ whole-host heavy-operation requirement is not met. The five approved cleanup
 paths remain absent; no additional historical/evidence data was deleted.
 Protected exact-version checks still lack external trusted recovery evidence.
 Main, production migration/deployment and schedules remain unchanged.
+
+## October 5 consumer acceptance increment
+
+- [x] Deep-job claim now returns the real model reservation and immutable
+  original clocks. Owner/attempt-scoped status performs bounded SELECTs only.
+- [x] Trusted one-claim consumer journals before mutation and recovers using a
+  unique per-claim owner. Independent review found and repaired old-journal
+  attribution to a later claim;37 focused cases and actual HTTP probes pass.
+- [x] Integrated repaired243 tests, typecheck, lint (33 existing warnings,
+  zero errors) and production build. Code review139f6ef is unsigned scope
+  evidence, not protected approval. Draft #298 is not merged.
+- [ ] Rights-aware PIT author input, actual model dispatch, durable draft,
+  independently budgeted review and fenced article submission remain open.
+- [ ] Industry-only source contract plus independently validated company
+  associations; do not count an inferred company as an original mention.
+- [ ] Actual source/platform coverage, all-candidate strategy/forward evidence,
+  production role/capacity/trusted recovery, deployment and five trading days.
+
+Cross-chat implementation/testing is authorized and in use. No renewed user
+permission is requested; absent authentic recovery infrastructure and host
+capacity are still actual external technical barriers.
