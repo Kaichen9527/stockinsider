@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "independent-code-scope-review-v1",
+  "head": "9cce0516f73ad81a1497d4a9278a9b9d77c118d3",
+  "base": "23dffca8633f0ccfc799d45b47b4ad29dea54124",
+  "tree": "f4163182ee252a038c3928894dc0d53b7cbb04a3",
+  "reviewerTask": "/root/discovery_gap_audit_oct04",
+  "decision": "approved",
+  "scope": "8-file supplementary discovery-price diff",
+  "tests": {
+    "passed": 61,
+    "failed": 0,
+    "skipped": 0,
+    "additionalIndependentProbesPassed": 3
+  },
+  "limits": [
+    "No live acquisition or production DB acceptance",
+    "No fair resume outside Top20/active work",
+    "Benchmark, adjusted basis and price phase remain null/unknown",
+    "Holiday freshness remains unverified"
+  ],
+  "protectedAttestation": false,
+  "productionAccepted": false,
+  "recordedBy": "root from independent reviewer message; unsigned"
+}

@@ -4,6 +4,8 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { createServer } from 'node:http';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 import { cloudControllerCommand } from './research-cloud-controller.mjs';
 import { cloudArticleFixture } from './fixtures/research-cloud-article.ts';
 import { createCloudWork, createCloudResult, recomputeCloudArticle, verifyCloudResult } from '../web/src/lib/research-cloud-work.ts';
@@ -169,4 +171,30 @@ test('receiver cannot substitute role or strategy authority while reusing hashes
     handoff: { ...verifyCloudResult(work, result, clock), role: 'strategy_research' }, idempotentReplay: false,
     authoritativePublication: false, strategyApproved: false }) }), /outcome_uncertain/);
   assert.equal((await fs.stat(file('receipt.json'))).size, 0);
+}));
+
+test('GC after headers cannot defeat the fifteen-second Cloud response-body deadline', async () => fixture(async ({ file, args }) => {
+  let requests = 0;
+  const server = createServer(async (request, reply) => {
+    for await (const _chunk of request) { /* drain finite request */ }
+    requests++; reply.writeHead(200, { 'content-type': 'application/json' }); reply.write('{');
+  });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  const emergency = setTimeout(() => server.closeAllConnections(), 22_000);
+  try {
+    const real = [...args]; real[2] = `http://127.0.0.1:${server.address().port}`;
+    const code = `import {cloudControllerCommand} from ${JSON.stringify(new URL('./research-cloud-controller.mjs', import.meta.url).href)};
+      const interval=setInterval(()=>global.gc(),50); const start=performance.now();
+      try { await cloudControllerCommand(${JSON.stringify(real)}, {env:{RESEARCH_TEST_KEY:${JSON.stringify(key)}},
+        source:()=>({commit:'a'.repeat(40),dirty:false}),now:()=>${JSON.stringify(clock)}});
+        console.log(JSON.stringify({unexpectedSuccess:true})); }
+      catch(error) { console.log(JSON.stringify({error:error.message,elapsed:performance.now()-start})); }
+      finally { clearInterval(interval); }`;
+    const child = await promisify(execFile)(process.execPath, ['--expose-gc', '--experimental-strip-types', '--input-type=module', '-e', code],
+      { timeout: 25_000, maxBuffer: 32_000, env: { PATH: process.env.PATH } });
+    const result = JSON.parse(child.stdout.trim());
+    assert.match(result.error, /outcome_uncertain/); assert.ok(result.elapsed >= 14_000 && result.elapsed < 20_000, JSON.stringify(result));
+    assert.equal(requests, 1); assert.equal((await fs.stat(file('work.json'))).size, 0);
+    assert.match(await fs.readFile(file('reserve.jsonl'), 'utf8'), /outcome_uncertain/);
+  } finally { clearTimeout(emergency); server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
 }));
