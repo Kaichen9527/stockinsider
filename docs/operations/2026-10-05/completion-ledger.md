@@ -76,6 +76,29 @@ body hashes and a media EPS/P/E inconsistency instead of admitting them as finan
 facts. IG, Facebook, PTT and transcripts were not attempted in this focused pass.
 These manual observations have not been imported or published as a new article.
 
+The offline retained-strategy auditor is implemented and independently approved
+at 9b6cb4d after repairing runtime capability admission and ancestor-symlink
+traversal. Root integrated at d048882, reran 21 tests and audited all 24 pinned
+files/15 strategy-scenario paths. All 740 derived checks reconcile, with zero
+discrepancies and seven unavailable evidence groups. The report hash reproduces
+a50b3c86eb57c64f22b781a732beb3cf8ea269dde2c7730e22b2c3349083a7bf.
+This audits exported arithmetic; actual marks/fills, official action replay,
+historical PIT, all-market generalization, research/KOL comparison arms and
+holdout/forward results remain unverified. Investment validation therefore stays
+failed_insufficient_evidence, promotion false and submission blocked. No engine,
+historical expectation, sealed input or strategy rule was changed.
+Normal production build and diff checks also passed after the audit integration.
+Final TypeScript check passed; lint has zero errors and 33 existing warnings.
+The audit is isolated in draft #297 on top of #296; neither is merged or deployed.
+
+The actual existing Mac Threads session subsequently read a public InvestAnchors
+post and one visible reply. A focused AUO/Intel search found two identical visible
+posts, with unresolved original provenance; only one rumor item was emitted by
+the existing local-summary controller, and it was not submitted to production.
+The industry-only post remains a mapping gap rather than a fabricated AUO mention.
+Cloud's new canary failed before HTTP response and stopped after one request.
+Read scope and limitations are saved in live-source-capacity-followup.md.
+
 ## Live release barriers confirmed again
 
 - #288 protected requirements, architecture, exact-review and root checks fail;
