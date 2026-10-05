@@ -55,7 +55,7 @@ export async function ingestionHandler(request: Request, spec: IngestionSpec): P
       ) return response('authority_reference_unavailable', 404);
       if (
         result.error.code === 'PT409' &&
-        ['authority_conflict', 'bound_violation'].includes(result.error.message)
+        ['authority_conflict', 'bound_violation', 'financial_period_revision_bound'].includes(result.error.message)
       ) return response(result.error.message, 409);
       return response('ingestion_internal_error', 500);
     }

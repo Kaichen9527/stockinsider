@@ -6,6 +6,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
+import { assertInstalledResearchSuccessorPlan } from './migration-successor-guard.mjs';
+import { migrationBodyInAtomicTransaction } from './atomic-migration-chain.mjs';
 
 const require = createRequire(import.meta.url);
 const { Client } = require('pg');
@@ -72,6 +74,8 @@ const RESEARCH_AGENT_MIGRATIONS = Object.freeze([
   'migrations/20260929_research_agent_state_v1.sql',
   'migrations/20260929_research_deep_jobs_v1.sql',
   'migrations/20261004_research_technical_identity_v2.sql',
+  'migrations/20261004_research_cloud_receipts_v1.sql',
+  'migrations/20261005_financial_history_admission_v1.sql',
 ]);
 const V3192_PROJECTION_DOSSIER_MIGRATION =
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql';
@@ -139,10 +143,17 @@ async function applyReviewedMigrations(options) {
     application_name:'stockinsider-reviewed-v3-migration',statement_timeout:180000,query_timeout:180000});
   await client.connect();
   let locked=false;
+  let transactionOpen=false;
   const supersededMigrations=[];
   try {
     await client.query("SELECT pg_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0))");
     locked=true;
+    await client.query('BEGIN');
+    transactionOpen=true;
+    // Older chain replay overwrites the append/prepare bodies. Detect installed
+    // successors before the first mutation; a base-only replay must fail closed.
+    await assertInstalledResearchSuccessorPlan(client, { researchAgentExtension: options.researchAgentExtension,
+      migrations: plan.migrations });
     if(options.researchAgentExtension) {
       const researchPrerequisite=(await client.query(`SELECT
       to_regclass('public.candidate_dossier_outbox_v5') IS NOT NULL AS outbox,
@@ -163,7 +174,7 @@ async function applyReviewedMigrations(options) {
         supersededMigrations.push(migration.relativePath);
         continue;
       }
-      await client.query(migration.bytes.toString('utf8'));
+      await client.query(migrationBodyInAtomicTransaction(migration.bytes.toString('utf8')));
     }
     const verified=(await client.query(`SELECT jsonb_build_object(
       'v314Diagnostics',to_regclass('public.legacy_runtime_failure_diagnostics_v3_14') IS NOT NULL,
@@ -466,6 +477,20 @@ async function applyReviewedMigrations(options) {
       to_regclass('public.candidate_thesis_qualifications_v1') IS NOT NULL AS thesis,
       to_regclass('public.candidate_technical_decisions_v1') IS NOT NULL AS technical,
       to_regclass('public.research_deep_jobs_v1') IS NOT NULL AS jobs,
+      to_regclass('public.research_cloud_acceptances_v1') IS NOT NULL AS cloud_receipts,
+      to_regprocedure('public.accept_research_cloud_result_v1(uuid,text,text,text,text,text,text)') IS NOT NULL AS cloud_acceptance,
+      (SELECT relrowsecurity FROM pg_class WHERE oid='public.research_cloud_acceptances_v1'::regclass) AS cloud_rls,
+      NOT has_table_privilege('service_role','public.research_cloud_acceptances_v1','INSERT') AS cloud_no_direct_write,
+      NOT has_function_privilege('anon','public.accept_research_cloud_result_v1(uuid,text,text,text,text,text,text)','EXECUTE') AS cloud_no_public_rpc,
+      EXISTS(SELECT 1 FROM pg_trigger WHERE tgrelid='public.research_cloud_acceptances_v1'::regclass
+        AND tgname='trg_research_cloud_acceptances_immutable_v1' AND tgenabled='O' AND NOT tgisinternal
+        AND tgfoid='public.reject_candidate_dossier_revision_mutation_v4()'::regprocedure) AS cloud_immutable,
+      to_regclass('public.opportunity_financial_observations_v1') IS NOT NULL AS financial_observations,
+      to_regprocedure('public.read_financial_history_page_v1(uuid,public.financial_fact_key_v3,public.financial_duration_kind_v3,public.financial_estimate_kind_v3,public.financial_estimate_horizon_v3,date,date,timestamptz,uuid,integer,uuid)') IS NOT NULL AS financial_history_reader,
+      position('financial_period_revision_bound' IN pg_get_functiondef('public.prepare_opportunity_financial_fact_series_v3()'::regprocedure))>0 AS financial_period_admission,
+      NOT has_table_privilege('service_role','public.opportunity_financial_observations_v1','INSERT') AS financial_no_direct_write,
+      (SELECT relrowsecurity FROM pg_class WHERE oid='public.opportunity_financial_observations_v1'::regclass) AS financial_observation_rls,
+      NOT has_function_privilege('anon','public.read_financial_history_page_v1(uuid,public.financial_fact_key_v3,public.financial_duration_kind_v3,public.financial_estimate_kind_v3,public.financial_estimate_horizon_v3,date,date,timestamptz,uuid,integer,uuid)','EXECUTE') AS financial_no_public_reader,
       to_regprocedure('public.record_candidate_deep_submission_v1(uuid,text,integer,uuid,text,uuid,text,uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)') IS NOT NULL AS deep_publication`)).rows[0] : null;
     if(options.researchAgentExtension
       && (!researchVerified||Object.values(researchVerified).some((value)=>value!==true)))
@@ -478,11 +503,17 @@ async function applyReviewedMigrations(options) {
       if(installed.rows[0]?.valid!==true) throw new Error('research_agent_installed_policy_mismatch');
       researchVerified.installedPolicyMatches = true;
     }
+    // Postconditions participate in the SAME transaction as every migration.
+    // A failed extension or disconnected client cannot leave an old predecessor
+    // body installed without its financial/Cloud successor.
+    await client.query('COMMIT');
+    transactionOpen=false;
     return Object.freeze({protocol:'source-led-opportunity-v3-reviewed-migration-result-v1',
       sourceCommit:options.sourceCommit,attestationCommit:options.attestationCommit,
       orderedChainSha256:plan.chainSha256,migrations:plan.migrations.map(({relativePath,sha256})=>[relativePath,sha256]),
       supersededMigrations:Object.freeze(supersededMigrations),verified,researchVerified});
   } finally {
+    if(transactionOpen)try{await client.query('ROLLBACK');}catch{/* disconnect rolls back server-side */}
     if(locked)try{await client.query("SELECT pg_advisory_unlock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0))");}
       catch{/* session close releases the lock */}
     await client.end();

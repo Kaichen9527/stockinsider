@@ -2,6 +2,14 @@
 
 Status: design proposal, not a production migration or completed repair (2026-10-04).
 
+October5 implementation: the additive financial-history amendment now separates
+period revision admission from lifetime storage, adds atomic observation receipts
+and a bounded keyset reader. It preserves the legacy exact disclosure identity;
+it does not pretend that missing accounting scope or undated publication identity
+has been resolved. See `openspec/changes/financial-history-admission-v1/` and
+`migrations/20261005_financial_history_admission_v1.sql`. Local acceptance is
+distinct from independent review and a capacity-admitted production apply.
+
 `prepare_opportunity_financial_fact_series_v3()` enforces 128 stored facts for a stock/fact/duration/kind/horizon series across all periods and providers. Recollection timestamps also participate in fallback identities. A lifetime storage bound is different from the bounded reader needed for reliable requests. Deduplicating repeated observations delays exhaustion but does not allow new genuine periods indefinitely.
 
 The observed production fallback failure for 2330/2605 is therefore left visibly failed. This implementation does not raise 128, delete financial history, change availability dates or report the October 2 official refresh as complete.

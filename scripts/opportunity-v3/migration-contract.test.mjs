@@ -9,6 +9,7 @@ import test, { after, before } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { canonicalJson, sha256Canonical } from '../../web/src/lib/opportunity-v3/canonical.ts';
 import { executeWorkerPayload } from '../../web/src/lib/opportunity-v3/worker-executors.ts';
+import { migrationBodyInAtomicTransaction } from './atomic-migration-chain.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const require = createRequire(import.meta.url);
@@ -42,6 +43,8 @@ const analysisPayloadReuseSql = fs.readFileSync(analysisPayloadReuseMigrationPat
 const financialFactRecollectionMigrationPath = path.join(root,
   'migrations/20260816_financial_fact_recollection_idempotency_v3_16_16.sql');
 const financialFactRecollectionSql = fs.readFileSync(financialFactRecollectionMigrationPath, 'utf8');
+const financialHistorySql = fs.readFileSync(path.join(root,
+  'migrations/20261005_financial_history_admission_v1.sql'), 'utf8');
 const analysisPayloadExactReuseMigrationPath = path.join(root,
   'migrations/20260817_analysis_payload_exact_reuse_v3_16_18.sql');
 const analysisPayloadExactReuseSql = fs.readFileSync(analysisPayloadExactReuseMigrationPath, 'utf8');
@@ -8123,4 +8126,126 @@ test('V3.19.12 executes the production-shaped JSONB cardinality read and reconci
     newHelperExecute:result.newHelperExecute},
   {directExecuteCount:9,currentExecute:true,oldBaseExecute:false,preHandoffExecute:false,
     newHelperExecute:false});
+});
+
+test('financial history amendment admits genuine periods, preserves PIT revisions and bounds pages on the real predecessor chain', () => {
+  // Apply twice in a rollback-only local transaction. Existing base acceptance,
+  // including the old 128-series contract, remains unchanged on the base schema.
+  const amendment = financialHistorySql.replace(/^BEGIN;|^COMMIT;/gmu, '');
+  const result = JSON.parse(psql(`BEGIN; SET ROLE stockinsider_managed_migrator;
+    ${amendment}
+    ${amendment}
+    RESET ROLE;
+    INSERT INTO public.internal_principal_role_bindings_v3(principal_id,role,valid_from,valid_to,status,configuration_hash,recorded_at)
+    VALUES('a11d4e67-7d0a-4c44-8a9d-1d5c3b875001','opportunity_runner','2026-01-01',NULL,'active',repeat('8',64),clock_timestamp());
+    INSERT INTO public.stocks(id,symbol) VALUES('71300000-0000-4000-8000-000000000081','9181');
+    CREATE TEMP TABLE history_acceptance(value jsonb);
+    DO $history$
+    DECLARE i integer;v_start date;v_end date;v_input public.financial_fact_input_v3;
+      v_original uuid;v_again uuid;v_cutoff timestamptz;v_page jsonb;v_next jsonb;
+      v_bad_cursor boolean:=false;v_bad_size boolean:=false;v_unauthorized boolean:=false;v_bound boolean:=false;
+    BEGIN
+      FOR i IN 0..159 LOOP
+        v_start:=(date '2010-01-01'+i*interval '1 month')::date;
+        v_end:=(v_start+interval '1 month'-interval '1 day')::date;
+        v_input:=ROW('71300000-0000-4000-8000-000000000081','monthly_revenue',v_start,v_end,'monthly',
+          (100+i)::double precision,'TWD','twse','official_filing','reported','reported_period',
+          v_end::timestamptz+interval '45 days',v_end::timestamptz+interval '45 days','2025-01-01'::timestamptz,
+          NULL,'twse-openapi:history:'||i)::public.financial_fact_input_v3;
+        SELECT fact_id INTO v_again FROM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+        IF i=0 THEN v_original:=v_again;END IF;
+      END LOOP;
+      -- Exact later collection resolves the same immutable ID and stores its
+      -- actual timestamp; retrying the same input adds no duplicate receipt.
+      v_input:=ROW('71300000-0000-4000-8000-000000000081','monthly_revenue','2010-01-01','2010-01-31','monthly',
+        100,'TWD','twse','official_filing','reported','reported_period','2010-03-17','2010-03-17',
+        '2025-02-01',NULL,'twse-openapi:history:0')::public.financial_fact_input_v3;
+      SELECT fact_id INTO v_again FROM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+      IF v_again<>v_original THEN RAISE EXCEPTION 'recollection changed identity';END IF;
+      PERFORM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+      v_cutoff:=clock_timestamp();
+      PERFORM pg_sleep(0.002);
+      -- A changed value, unit, restatement or provider remains another claim.
+      v_input.value:=105;
+      v_input.filing_restatement_id:='correction-1';
+      v_input.filing_published_at:='2025-03-01';v_input.source_timestamp:='2025-03-01';v_input.collected_at:='2025-03-02';
+      PERFORM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+      v_input.unit:='TWD_thousand';
+      PERFORM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+      v_input.provider:='mops';
+      PERFORM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+      v_page:=public.read_financial_history_page_v1('71300000-0000-4000-8000-000000000081','monthly_revenue','monthly',
+        'reported','reported_period','2010-01-01','2024-12-31',v_cutoff,NULL,128,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+      IF jsonb_array_length(v_page->'rows')<>128 OR (v_page->>'has_more')::boolean IS NOT TRUE
+        THEN RAISE EXCEPTION 'first page lost sentinel';END IF;
+      v_next:=public.read_financial_history_page_v1('71300000-0000-4000-8000-000000000081','monthly_revenue','monthly',
+        'reported','reported_period','2010-01-01','2024-12-31',v_cutoff,(v_page->>'next_cursor')::uuid,128,
+        'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+      IF jsonb_array_length(v_next->'rows')<>32 OR (v_next->>'has_more')::boolean IS NOT FALSE
+        OR v_next->>'next_cursor' IS NOT NULL THEN RAISE EXCEPTION 'cutoff or page coverage';END IF;
+      IF (SELECT count(DISTINCT value->>'fact_id') FROM jsonb_array_elements((v_page->'rows')||(v_next->'rows')))<>160
+        THEN RAISE EXCEPTION 'duplicate or lost page rows';END IF;
+      BEGIN
+        PERFORM public.read_financial_history_page_v1('71300000-0000-4000-8000-000000000081','monthly_revenue','monthly',
+          'reported','reported_period','2010-01-01','2024-12-31',v_cutoff,extensions.gen_random_uuid(),128,
+          'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+      EXCEPTION WHEN SQLSTATE 'PT422' THEN v_bad_cursor:=true;END;
+      BEGIN
+        PERFORM public.read_financial_history_page_v1('71300000-0000-4000-8000-000000000081','monthly_revenue','monthly',
+          'reported','reported_period','2010-01-01','2024-12-31',v_cutoff,NULL,129,
+          'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+      EXCEPTION WHEN SQLSTATE 'PT422' THEN v_bad_size:=true;END;
+      BEGIN
+        PERFORM public.append_financial_fact_v3(v_input,extensions.gen_random_uuid());
+      EXCEPTION WHEN SQLSTATE 'PT403' THEN v_unauthorized:=true;END;
+      -- Same-period correction storms remain bounded; other periods are unaffected.
+      FOR i IN 1..124 LOOP
+        v_input.value:=1000+i;
+        PERFORM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+      END LOOP;
+      BEGIN
+        v_input.value:=9999;
+        PERFORM public.append_financial_fact_v3(v_input,'a11d4e67-7d0a-4c44-8a9d-1d5c3b875001');
+      EXCEPTION WHEN SQLSTATE 'PT409' THEN v_bound:=true;END;
+      INSERT INTO history_acceptance SELECT jsonb_build_object('originalRetained',
+        EXISTS(SELECT 1 FROM public.opportunity_financial_facts_v3 WHERE fact_id=v_original AND value=100),
+        'facts',(SELECT count(*) FROM public.opportunity_financial_facts_v3 WHERE stock_id=v_input.stock_id),
+        'observations',(SELECT count(*) FROM public.opportunity_financial_observations_v1 o
+          JOIN public.opportunity_financial_facts_v3 f USING(fact_id) WHERE f.stock_id=v_input.stock_id),
+        'cutoffCoverage',jsonb_array_length(v_page->'rows')+jsonb_array_length(v_next->'rows'),
+        'scope',v_page->>'accounting_scope','cursorRejected',v_bad_cursor,'sizeRejected',v_bad_size,
+        'unauthorizedRejected',v_unauthorized,'periodBound',v_bound,
+        'noServiceInsert',NOT has_table_privilege('service_role','public.opportunity_financial_observations_v1','INSERT'),
+        'privatePredecessor',NOT has_function_privilege('service_role',
+          'public.append_financial_fact_pre_history_v1(public.financial_fact_input_v3,uuid)','EXECUTE'),
+        'noOwnerCreate',NOT has_schema_privilege('opportunity_v3_rpc_owner','public','CREATE'));
+    END $history$;
+    SELECT value::text FROM history_acceptance; ROLLBACK;`, ['-At']).trim().split('\n').find((line) => line.startsWith('{')));
+  assert.deepEqual(result, { originalRetained: true, facts: 287, observations: 288,
+    cutoffCoverage: 160, scope: 'legacy_unspecified', cursorRejected: true,
+    sizeRejected: true, unauthorizedRejected: true, periodBound: true,
+    noServiceInsert: true, privatePredecessor: true, noOwnerCreate: true });
+  assert.doesNotMatch(financialHistorySql, /\b(?:DROP\s+(?:TABLE|SCHEMA|TYPE)|TRUNCATE)\b/iu);
+});
+
+test('financial atomic replay rollback retains installed successor after predecessor replacement and forced failure', () => {
+  psql(`SET ROLE stockinsider_managed_migrator; ${financialHistorySql}`);
+  const probe = () => JSON.parse(psql(`SELECT jsonb_build_object(
+    'periodBound',position('financial_period_revision_bound' IN pg_get_functiondef(
+      'public.prepare_opportunity_financial_fact_series_v3()'::regprocedure))>0,
+    'observationWrapper',position('opportunity_financial_observations_v1' IN pg_get_functiondef(
+      'public.append_financial_fact_v3(public.financial_fact_input_v3,uuid)'::regprocedure))>0)::text;`, ['-At']).trim());
+  assert.deepEqual(probe(), { periodBound: true, observationWrapper: true });
+  const error = rejectedSql(`BEGIN; SET ROLE stockinsider_managed_migrator;
+    ${migrationBodyInAtomicTransaction(decisionIntegritySql)}
+    ${migrationBodyInAtomicTransaction(financialFactRecollectionSql)}
+    DO $forced$
+    BEGIN
+      IF position('financial_period_revision_bound' IN pg_get_functiondef(
+        'public.prepare_opportunity_financial_fact_series_v3()'::regprocedure))>0
+        THEN RAISE EXCEPTION 'predecessor_not_replaced'; END IF;
+      RAISE EXCEPTION 'forced_extension_failure';
+    END $forced$;`);
+  assert.match(error, /forced_extension_failure/u);
+  assert.deepEqual(probe(), { periodBound: true, observationWrapper: true });
 });
