@@ -20,7 +20,7 @@ class ServerDate extends Date {
   constructor(value: string | number = clock) { super(value); }
   static now() {return Date.parse(clock);}
 }
-function harness(first:unknown[]=[], config:{roster?:TestRow[];tables?:Record<string,TestRow[]>}={}) {
+function harness(first:unknown[]=[], config:{roster?:TestRow[];tables?:Record<string,TestRow[]>;sourceHeads?:TestRow[]}={}) {
   const calls:string[]=[];const inserts:Record<string,unknown>[]=[];const quoteStockIds:string[]=[];
   const db={from(table:string){
     calls.push(table);let inserted=false;
@@ -54,7 +54,7 @@ function harness(first:unknown[]=[], config:{roster?:TestRow[];tables?:Record<st
     if(name==='candidate_research_stock_authority_page') return {data:config.roster || [
       {symbol:'2409',stock_id:uuid(2409),exchange:'TWSE',sector:'display'},
       {symbol:'2410',stock_id:uuid(2410),exchange:'TWSE',sector:'display'}],error:null};
-    if(name==='research_source_heads_page_v1') return {data:[],error:null};
+    if(name==='research_source_heads_page_v1') return {data:config.sourceHeads || [],error:null};
     if(['enqueue_research_deep_jobs_v1','capture_research_first_discoveries_v1'].includes(name)) return {data:0,error:null};
     throw new Error(`unexpected test RPC ${name}`);
   }};
@@ -80,6 +80,24 @@ function request(body:unknown,authorized=true,extraHeaders:Record<string,string>
     body:JSON.stringify(body)});
 }
 const payload=()=>({asOf:cutoff,sourceAttempts:[],assessments:[]});
+test('industry-only current head never gains company attention from unioned legacy symbols',async()=>{
+  const document={id:uuid(11),platform:'research_inbox_threads',
+    document_url:'https://www.threads.com/@investanchors/post/Ddaum9QGFr_',
+    symbols:['2409'],published_at:'2026-09-18T05:52:39Z',collected_at:'2026-10-02T07:00:00Z',
+    canonical_content_hash:'a'.repeat(64),content_semantics:'editorial_discussion',
+    metadata:{subject_scope:'industry_context',claim_status:'reported',
+      first_observed_at:'2026-10-02T07:00:00Z',revision_observed_at:'2026-10-02T07:00:00Z'}};
+  const industry=harness([],{sourceHeads:[document]});const baseline=harness();
+  const a=await industry.post(request(payload()));const b=await baseline.post(request(payload()));
+  assert.equal(a.status,200);assert.equal(b.status,200);
+  assert.equal(JSON.stringify(industry.inserts[0].rows),JSON.stringify(baseline.inserts[0].rows));
+  assert.equal(JSON.stringify(a.body.queue),JSON.stringify(b.body.queue));
+  assert.deepEqual(document.symbols,['2409']); // no historical deletion/rewrite.
+  const direct=harness([],{sourceHeads:[{...document,metadata:{...document.metadata,subject_scope:'company_mentions'}}]});
+  assert.equal((await direct.post(request(payload()))).status,200);
+  const row=(direct.inserts[0].rows as TestRow[]).find((item)=>item.symbol==='2409');
+  assert.equal(row?.hasDiscoveryEvidence,true);
+});
 test('DR01 executable route rejects absent/non-exact bearer before any DB read',async()=>{
   for(const req of [request(payload(),false),request(payload(),true,{'x-internal-key':'synthetic-contract-only'})]) {
     const h=harness();const result=await h.post(req);

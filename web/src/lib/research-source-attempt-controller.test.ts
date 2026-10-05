@@ -42,6 +42,58 @@ test('SC01 single authorized rumor survives; output matches existing inbox and p
   assert.equal(run.receipts[0].legacyConnectorDisposition,'blocked_auth');
 });
 
+const industrySummary: ResearchInboxItem = {...summary,symbols:[],subjectScope:'industry_context',industryTerms:['CPO','光學測試'],
+  shortSummary:'合成產業原文僅說明光學測試需求，未提及公司。',catalyst:'可提出產業研究問題，尚無個別公司關聯。',
+  risk:'產業需求不證明個別公司已有客戶或訂單。',claimStatus:'reported'};
+
+test('IS07 authorized industry-only content follows existing controller and inbox contracts',()=>{
+  const run=assembleSourceControllerRun(input([local({summary:industrySummary})]),[obs()],at);
+  assert.equal(run.inboxRequest.items.length,1);
+  assert.equal(validateResearchInboxItem(run.inboxRequest.items[0]),true);
+  assert.deepEqual(run.inboxRequest.items[0].symbols,[]);
+  assert.equal(run.inboxRequest.items[0].subjectScope,'industry_context');
+  assert.equal(run.priorityRequest.sourceAttempts[0].status,'success');
+  assert.equal('assessments' in run.priorityRequest,false);
+  assert.equal('associations' in run.inboxRequest.items[0],false);
+  assert.equal(run.authoritativePublication,false);assert.equal(run.strategyApproved,false);
+  for(const bad of [{...industrySummary,symbols:['2409']},{...industrySummary,associationSymbols:['2409']},
+    {...industrySummary,industryTerms:['CPO','cpo']}]) {
+    assert.throws(()=>validateSourceControllerInput(input([local({summary:bad})]),at));
+  }
+});
+
+test('IS08 industry replay, repost and withdrawal preserve source roots without company labels',()=>{
+  const first=assembleSourceControllerRun(input([local({summary:industrySummary})]),[obs()],at);
+  const prior=first.inboxRequest.items;
+  const replay=assembleSourceControllerRun(input([local({summary:industrySummary})],prior),[obs()],at);
+  assert.equal(replay.receipts[0].outcome,'duplicate');assert.equal(replay.inboxRequest.items.length,0);
+  const repost={...industrySummary,sourceUrl:'https://www.threads.net/@reposter/post/industry',parentSourceUrl:industrySummary.sourceUrl};
+  const echoed=assembleSourceControllerRun(input([local({url:repost.sourceUrl,summary:repost})],prior),[obs()],at);
+  assert.equal(new Set(echoed.roots.map((root)=>root.rootId)).size,1);
+  assert.deepEqual(echoed.inboxRequest.items[0].symbols,[]);
+  const withdrawn={...industrySummary,observedAt:at,revisionObservedAt:at,retracted:true};
+  const next=assembleSourceControllerRun(input([local({summary:withdrawn})],prior),[obs()],at);
+  assert.equal(next.inboxRequest.items[0].firstObservedAt,earlier);
+  assert.equal(next.inboxRequest.items[0].retracted,true);
+  assert.notEqual(researchInboxContentHash(next.inboxRequest.items[0]),researchInboxContentHash(prior[0]));
+  assert.equal(next.roots.at(-1)!.status,'retracted');
+  assert.equal(next.roots.at(-1)!.rootId,first.roots[0].rootId);
+  assert.deepEqual(prior[0].symbols,[]);assert.equal(prior[0].retracted,undefined);
+});
+
+test('IS09 industry scope cannot bypass metadata, rights, private content or cutoff failures',()=>{
+  const metadata=assembleSourceControllerRun(input([local({summary:industrySummary,
+    localRead:{attemptedAt:at,outcome:'metadata_only'}})]),[obs({outcome:'metadata_only',bodyPresent:false})],at);
+  assert.equal(metadata.inboxRequest.items.length,0);assert.equal(metadata.priorityRequest.sourceAttempts[0].status,'failed');
+  for(const scope of [
+    local({summary:{...industrySummary,publishedAt:'2026-02-30T00:00:00Z'}}),
+    local({summary:{...industrySummary,observedAt:'2026-10-05T01:00:00Z'}}),
+    local({summary:{...industrySummary,shortSummary:'cookie=private'}}),
+    local({summary:{...industrySummary,timedExcerpts:[{startSeconds:0,endSeconds:10,text:'private transcript'}]}}),
+    local({summary:industrySummary,rights:{basis:'official_public_document',checkedAt:earlier,checkedBy:'invalid-local-grant'}}),
+  ]) assert.throws(()=>validateSourceControllerInput(input([scope]),at));
+});
+
 test('SC02 failures, auth, metadata and missing transcript never become no_relevant',()=>{
   for(const outcome of ['read_failed','auth_required','metadata_only','missing_transcript'] as const) {
     const run=assembleSourceControllerRun(input([local({localRead:{attemptedAt:at,outcome}})]),

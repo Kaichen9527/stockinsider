@@ -101,6 +101,25 @@ Read scope and limitations are saved in live-source-capacity-followup.md.
 
 ## Live release barriers confirmed again
 
+Industry-only sources now enter the same immutable inbox without invented stock
+mentions. Independent contract review approved7956772; integration guard review
+approved62d9d9a,58 focused tests and16 extra boundary checks. Explicit industry
+heads are excluded from company roots/factor bindings even if old RPC tags are
+unioned. Their acquisition roots and historical records remain preserved.
+The integrated255-test suite, types, lint and normal build all passed. A fresh
+actual public Threads read produced one legitimate industry item with no stock
+symbols; the necessary-summary receipt and limitations are saved separately.
+No production ingestion or company qualification was performed. Company
+associations and industry article citations are the next separate implementation.
+
+Cloud compatibility of the repaired deep claim/recovery consumer is now verified
+at139f6ef:37/37 local synthetic tests under Node22.14, cgroup32GiB/four cores,
+sampled process-group335MiB, approximately30.07GB available and a29MB isolated
+worktree. Original Cloud checkout/evidence remained unchanged. The saved relay
+summary identifies the exact task and reported receipt hash; the full private
+artifact was not copied. This is not a permanent quota promise, a production
+model-budget receipt or a live VPS/Cloud research roundtrip.
+
 The deep-work claim/recovery boundary is now implemented and independently
 approved at139f6ef, isolated in draft #298 on top of #297. The guarded existing
 route returns its real company-research reservation and exposes only finite
@@ -111,7 +130,7 @@ recovery attribution defect, which was reproduced and repaired before approval;
 37 focused cases and additional actual-HTTP probes pass with zero skips. Initial
 integration passed242 cases plus type/lint/build. Final repaired integration
 passed243 tests with zero skips and the normal build passed again. Cloud
-compatibility was dispatched to the existing authorized task, not yet accepted.
+compatibility was subsequently verified as recorded above.
 This does not dispatch an author
 model, persist a draft or publish an article; rights-aware PIT input and the full
 review/submission consumer remain outstanding. No schema or strategy was changed.

@@ -4,7 +4,7 @@ import { getSupabaseServerClient } from '@/lib/supabase-server';
 import { loadPublishedCandidateSymbols } from '@/lib/candidate-screened-universe';
 import { researchCanonicalHash } from '@/lib/research-agent-qualification';
 import { RESEARCH_SOURCE_PLATFORMS } from '@/lib/research-source-registry';
-import { researchRootFromDocument } from '@/lib/research-source-roots';
+import { hasDirectCompanyMentionScope, researchRootFromDocument } from '@/lib/research-source-roots';
 import { DISCOVERY_FACTORS, validateDiscoveryFactors, validateDiscoverySourceBindings, type DiscoveryFactor } from '@/lib/research-discovery-evidence';
 import { discoveryInstant } from '@/lib/research-discovery-evidence';
 import { loadDiscoveryPriceEnrichment } from '@/lib/research-discovery-price-enrichment';
@@ -128,6 +128,7 @@ export async function POST(request: Request) {
     const activeSymbols = new Set(activeJobs.map((job) => String(job.symbol)));
     for (const symbol of activeSymbols) symbols.add(symbol);
     for (const document of documents) {
+      if (!hasDirectCompanyMentionScope(document)) continue;
       for (const rawSymbol of Array.isArray(document.symbols) ? document.symbols : []) {
         const symbol = String(rawSymbol);
         if (!SYMBOL.test(symbol) || !roster.has(symbol)) continue;
@@ -162,7 +163,7 @@ export async function POST(request: Request) {
         documentIds: [], rootIds: [], availableAt: null,
       }));
       validateDiscoveryFactors(factors, asOf);
-      const sourceBindings = documents.filter((document) => Array.isArray(document.symbols)
+      const sourceBindings = documents.filter((document) => hasDirectCompanyMentionScope(document) && Array.isArray(document.symbols)
         && document.symbols.includes(row.symbol)).flatMap((document) => {
         const root = researchRootFromDocument(document, asOf);
         return root ? [{ documentId: String(document.id), rootId: root.rootId,
