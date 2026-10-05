@@ -192,6 +192,9 @@ test('SC16 actual AUO detail markers establish body, but index/template drift do
     + 'Synthetic public research text. '.repeat(8)+'</p></div>';
   assert.equal(inspectSourceBody(s,page,'text/html').outcome,'read_success');
   assert.equal(inspectSourceBody({...s,url:'https://www.auo.com/zh-TW/News_Archive/index'},page,'text/html').outcome,'metadata_only');
+  const index={...s,url:'https://www.auo.com/zh-TW/News_Archive/index'};
+  assert.equal(publicSourceGrant(index),false);
+  assert.equal(inspectSourceBody(index,'<article>'+('Synthetic index teaser. '.repeat(8))+'</article>','text/html').outcome,'metadata_only');
   assert.equal(inspectSourceBody(s,page.replace('html-edit','changed-template'),'text/html').outcome,'metadata_only');
   assert.equal(inspectSourceBody(s,page.replace(/<h1[\s\S]*?<\/h1>/u,''),'text/html').outcome,'metadata_only');
 });
@@ -202,4 +205,38 @@ test('SC17 public RSS/JSON login wording is content, not authentication failure'
   assert.equal(inspectSourceBody(podcast,'<rss><item><title>登入後才能看會員內容</title></item></rss>','application/rss+xml').outcome,'metadata_only');
   assert.equal(inspectSourceBody(pub(),'[{"note":"login required"}]','application/json').outcome,'read_success');
   assert.equal(inspectSourceBody(pub(),'<html>sign in to continue</html>','text/html').outcome,'auth_required');
+});
+
+test('SC18 known public publication clock cannot be backdated by an exact-byte summary',()=>{
+  const item={...summary,sourcePlatform:'official' as const,sourceUrl:pub().url,visibility:'public' as const,
+    acquisitionMethod:'public_document' as const};
+  const s=pub({summary:item,summaryReadHash:'a'.repeat(64)});
+  const sourcePublishedAt='2026-10-04T22:30:00.000Z';
+  const conflict=assembleSourceControllerRun(input([s]),[obs({httpStatus:200,responseHash:'a'.repeat(64),publishedAt:sourcePublishedAt})],at);
+  assert.equal(conflict.inboxRequest.items.length,0);assert.equal(conflict.roots.length,0);
+  assert.equal(conflict.receipts[0].errorCode,'source_summary_publication_conflict');
+  assert.equal(conflict.receipts[0].sourcePublishedAt,sourcePublishedAt);
+  assert.equal(conflict.receipts[0].summaryPublishedAt,item.publishedAt);
+  assert.equal(conflict.receipts[0].publishedAt,sourcePublishedAt);
+  assert.equal(conflict.receipts[0].firstObservedAt,null);
+  const matched=assembleSourceControllerRun(input([pub({summary:{...item,publishedAt:sourcePublishedAt},summaryReadHash:'a'.repeat(64)})]),
+    [obs({httpStatus:200,responseHash:'a'.repeat(64),publishedAt:sourcePublishedAt})],at);
+  assert.equal(matched.inboxRequest.items.length,1);
+});
+
+test('SC19 corrected ancestors use the latest accepted revision regardless of input order',()=>{
+  const a='https://www.threads.net/@root/post/a',b='https://www.threads.net/@root/post/b';
+  const old={...summary,parentSourceUrl:a};
+  const corrected={...summary,parentSourceUrl:b,observedAt:at,revisionObservedAt:at};
+  const repost={...summary,sourceUrl:'https://www.threads.net/@other/post/c',parentSourceUrl:summary.sourceUrl,
+    observedAt:at,firstObservedAt:at,revisionObservedAt:at};
+  const scope=local({url:repost.sourceUrl,summary:repost});
+  for(const prior of [[old,corrected],[corrected,old]]) {
+    const run=assembleSourceControllerRun(input([scope],prior),[obs()],at);
+    assert.equal(run.inboxRequest.items[0].parentSourceUrl,b);
+  }
+  assert.throws(()=>assembleSourceControllerRun(input([scope],[corrected,{...corrected,parentSourceUrl:a}]),[obs()],at),/ancestor_revision_conflict/);
+  const failed=local({id:'failed-ancestor',summary:corrected,localRead:{attemptedAt:at,outcome:'read_failed'}});
+  const run=assembleSourceControllerRun(input([scope,failed]),[obs(),obs({outcome:'read_failed',bodyPresent:false})],at);
+  assert.equal(run.inboxRequest.items[0].parentSourceUrl,summary.sourceUrl);
 });

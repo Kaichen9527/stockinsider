@@ -106,7 +106,8 @@ export function publicSourceGrant(scope: SourceScope) {
     && scope.contentScope === 'metadata_index';
   if (scope.rights.basis !== 'official_public_document' || scope.platform !== 'official') return false;
   if (url.hostname === 'www.auo.com') return /^\/(?:zh-TW|en-global)\/(?:News_Archive|Press_Release)(?:\/|$)/u.test(url.pathname)
-    && ['article_body', 'metadata_index'].includes(scope.contentScope);
+    && (scope.contentScope === 'metadata_index' || scope.contentScope === 'article_body'
+      && /^\/(?:zh-TW|en-global)\/(?:News_Archive|Press_Release)\/detail\/[^/]+$/u.test(url.pathname));
   if (url.hostname === 'openapi.twse.com.tw') return /^\/v1\/[A-Za-z0-9_/-]+$/u.test(url.pathname)
     && scope.contentScope === 'official_document';
   return false;
@@ -207,6 +208,9 @@ export function inspectSourceBody(scope: SourceScope, body: string, contentType:
     || /<time\b[^>]*datetime=["']([^"']+)["']/iu.exec(withoutCode);
   const publishedAt = publishedMatch && instant(publishedMatch[1]) ? new Date(publishedMatch[1]).toISOString() : null;
   if (scope.contentScope === 'metadata_index') return {responseHash,bodyPresent:false,publishedAt,outcome:'metadata_only' as const};
+  if (scope.url.startsWith('https://www.auo.com/') && scope.contentScope === 'article_body'
+    && !/^\/(?:zh-TW|en-global)\/(?:News_Archive|Press_Release)\/detail\/[^/]+$/u.test(new URL(scope.url).pathname))
+    return {responseHash,bodyPresent:false,publishedAt,outcome:'metadata_only' as const};
   if (scope.contentScope === 'transcript') return {responseHash,bodyPresent:false,publishedAt,outcome:'missing_transcript' as const};
   let bodyPresent = false;
   if (scope.contentScope === 'official_document' && /(?:application\/json|text\/csv)/iu.test(contentType)) {
@@ -257,6 +261,11 @@ export function assembleSourceControllerRun(input: SourceControllerInput, observ
       else if (!scope.summary) { outcome='awaiting_summary'; errorCode='source_awaiting_summary'; }
       else if (scope.method === 'public_read' && scope.summaryReadHash !== observation.responseHash) {
         outcome='read_failed'; errorCode='source_summary_read_hash_mismatch';
+      } else if (scope.method === 'public_read' && observation.publishedAt !== null
+        && Date.parse(scope.summary.publishedAt) !== Date.parse(observation.publishedAt)) {
+        // Exact bytes alone cannot certify a supplied earlier publication time.
+        // Keep both clocks visible and reject rather than backdate the root.
+        outcome='read_failed'; errorCode='source_summary_publication_conflict';
       } else {
         const summary=scope.summary;
         if (Date.parse(summary.observedAt) > Date.parse(observation.attemptedAt)
@@ -268,7 +277,14 @@ export function assembleSourceControllerRun(input: SourceControllerInput, observ
         while (parent) {
           if (visited.has(parent)) throw new Error('source_controller_parent_cycle');
           visited.add(parent);
-          const ancestor=[...prior,...items,...input.scopes.flatMap((entry)=>entry.summary ? [entry.summary] : [])].find((item)=>item.sourceUrl===parent);
+          // Unaccepted scope summaries have no acquisition authority. Among
+          // retained/accepted revisions use the latest revision clock, never
+          // input order; conflicting heads at the same instant fail closed.
+          const ancestors=[...prior,...items].filter((item)=>item.sourceUrl===parent);
+          const latest=Math.max(...ancestors.map((item)=>Date.parse(item.revisionObservedAt || item.observedAt)));
+          const heads=ancestors.filter((item)=>Date.parse(item.revisionObservedAt || item.observedAt)===latest);
+          if (new Set(heads.map(researchInboxContentHash)).size>1) throw new Error('source_controller_ancestor_revision_conflict');
+          const ancestor=heads[0];
           if (!ancestor?.parentSourceUrl) break;
           parent=ancestor.parentSourceUrl;
         }
@@ -295,6 +311,7 @@ export function assembleSourceControllerRun(input: SourceControllerInput, observ
       readAttempted:observation.outcome!=='not_attempted',
       bodyPresent:observation.bodyPresent,responseHash:observation.responseHash,
       publishedAt:accepted?.publishedAt || observation.publishedAt,
+      sourcePublishedAt:observation.publishedAt,summaryPublishedAt:scope.summary?.publishedAt || null,
       firstObservedAt:accepted?.firstObservedAt || null,revisionObservedAt:accepted?.revisionObservedAt || null,
       rootUrl:accepted?.parentSourceUrl || accepted?.sourceUrl || null,
       contentHash:accepted ? researchInboxContentHash(accepted) : null,

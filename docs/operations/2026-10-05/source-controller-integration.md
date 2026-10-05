@@ -27,7 +27,7 @@ audio/transcript was obtained, and no exhaustive platform search is claimed.
 Only response hashes, byte counts and bounded receipt metadata are retained.
 
 Root commands `research:sources` and `test:research-sources` are now available.
-The source tests participate in `test:research-agents`: 122 actual named tests
+The source tests participate in `test:research-agents`: 124 actual named tests
 passed, zero failed/skipped. Mac lint passed with the existing 33 warnings and
 zero errors; normal production build passed. This does not remove the separately
 recorded Cloud build/network limitations or supply protected review evidence.
@@ -45,3 +45,12 @@ ownership preflight/bridge is required; no production owner, data, credential,
 role or check was modified. This is distinct from the independently approved
 financial-history tail and cannot be hidden by assigning all fixture objects to
 a local superuser.
+
+Independent review of `54edb2c` identified three additional boundary defects.
+Known source publication time is now checked against the supplied summary;
+conflicts reject and retain both clocks. Parent traversal selects the latest
+accepted revision, rejects contradictory equal-time heads and excludes failed
+scope summaries. AUO index article scope is rejected even if a teaser uses an
+`article` element. Regression cases SC16/18/19 exercise these reproductions.
+The previous canaries identify their original executing source hashes; they
+are not relabeled as acquisition evidence for a later changed tree.
