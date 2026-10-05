@@ -31,9 +31,12 @@ Cloud discovery enrichment at 8613458 passed 43 existing tests, but independent
 review requested changes for three real defects: a full historical calendar hits
 the read cap forever, the existing TPEx collector URL is rejected, and weak old
 first-discovery quotes can be promoted to verified official data. The authorized
-Cloud chat has been assigned fixes and regression tests. This branch is not yet
-integrated or approved. Ranking remains unchanged and incomplete relative-return
-and price-phase adapters remain null/unknown.
+Cloud chat fixed them at 23dffca; independent review passed 49 cases with zero
+skips and additional 600-row/cutoff/market probes. The reviewed branch has been
+integrated; 169 root research/integration tests passed with zero skips, lint had
+zero errors (33 pre-existing warnings), and the normal Mac build passed. Ranking remains unchanged and incomplete
+relative-return and price-phase adapters remain null/unknown. The exact review
+record is saved separately from protected and live acceptance.
 
 The fixed 32-read admission is not fair resume. Initial missing evidence remains
 an immutable first-discovery gap; later supplementary research must use separate

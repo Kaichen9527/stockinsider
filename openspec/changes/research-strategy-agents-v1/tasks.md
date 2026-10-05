@@ -61,8 +61,13 @@ October 4 implementation handoff.
   traversal; neither permutation can resurrect a retained withdrawn root.
 - [ ] Real source/search/model consumer, full AUO and second-company publication,
   relative-return enrichment and scheduled work consumers remain outstanding.
-- [ ] Existing release-function ownership drift found by schema-only isolated
-  rehearsal must be repaired through an exact reviewed bridge/preflight.
+- [x] Existing release-function ownership drift repaired through an exact finite
+  bridge/preflight at 56b244a; independent approval and frozen local rehearsal
+  recorded. Required production role attributes were simulated locally only.
+- [x] Source controller independently approved at 75d0752; discovery price shadow
+  integration approved at 23dffca after three defect repairs and 49 regressions.
+  Full source/price acquisition, benchmark/phase adapters and fair supplementation
+  remain outstanding and must not be inferred from these code approvals.
 
 VPS October 5 read-only probe: 13,030,166,528 available bytes; the 20.40 GB
 whole-host heavy-operation requirement is not met. The five approved cleanup
