@@ -72,6 +72,7 @@ const RESEARCH_AGENT_MIGRATIONS = Object.freeze([
   'migrations/20260929_research_agent_state_v1.sql',
   'migrations/20260929_research_deep_jobs_v1.sql',
   'migrations/20261004_research_technical_identity_v2.sql',
+  'migrations/20261004_research_cloud_receipts_v1.sql',
 ]);
 const V3192_PROJECTION_DOSSIER_MIGRATION =
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql';
@@ -466,6 +467,14 @@ async function applyReviewedMigrations(options) {
       to_regclass('public.candidate_thesis_qualifications_v1') IS NOT NULL AS thesis,
       to_regclass('public.candidate_technical_decisions_v1') IS NOT NULL AS technical,
       to_regclass('public.research_deep_jobs_v1') IS NOT NULL AS jobs,
+      to_regclass('public.research_cloud_acceptances_v1') IS NOT NULL AS cloud_receipts,
+      to_regprocedure('public.accept_research_cloud_result_v1(uuid,text,text,text,text,text,text)') IS NOT NULL AS cloud_acceptance,
+      (SELECT relrowsecurity FROM pg_class WHERE oid='public.research_cloud_acceptances_v1'::regclass) AS cloud_rls,
+      NOT has_table_privilege('service_role','public.research_cloud_acceptances_v1','INSERT') AS cloud_no_direct_write,
+      NOT has_function_privilege('anon','public.accept_research_cloud_result_v1(uuid,text,text,text,text,text,text)','EXECUTE') AS cloud_no_public_rpc,
+      EXISTS(SELECT 1 FROM pg_trigger WHERE tgrelid='public.research_cloud_acceptances_v1'::regclass
+        AND tgname='trg_research_cloud_acceptances_immutable_v1' AND tgenabled='O' AND NOT tgisinternal
+        AND tgfoid='public.reject_candidate_dossier_revision_mutation_v4()'::regprocedure) AS cloud_immutable,
       to_regprocedure('public.record_candidate_deep_submission_v1(uuid,text,integer,uuid,text,uuid,text,uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)') IS NOT NULL AS deep_publication`)).rows[0] : null;
     if(options.researchAgentExtension
       && (!researchVerified||Object.values(researchVerified).some((value)=>value!==true)))
