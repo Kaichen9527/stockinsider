@@ -57,6 +57,10 @@ receipts and must not backdate knowledge. That supplementation is still open.
 - #288 protected requirements, architecture, exact-review and root checks fail;
   ordinary diagnostic CI succeeds. #292 has the same separation. Authentic
   owner-controlled recovery and exact-version signed evidence remain missing.
+  Draft #295 now provides the independently reviewed inactive installer proposal
+  (73e0aed, 46 tests). It enumerates 24 required external deployment fields and
+  eight evidence obligations. Its validator does not install, reserve or activate;
+  actual authority, CAS and installation/publication adapters remain external gaps.
 - Production runtime is NOLOGIN with connection limit -1, unlike the reviewed
   LOGIN/NOINHERIT/limit-6 contract. The preflight now refuses before mutation.
   No credential, role or main protection was modified.
