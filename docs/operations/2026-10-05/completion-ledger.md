@@ -27,6 +27,16 @@ code commits and subsequent documentation commits are intentionally distinguishe
 
 ## In progress
 
+The deterministic tester controller now obtains the real server reservation,
+freezes the original packet and submits returned artifacts to the existing
+authenticated receiver. Ambiguous responses are journaled without automatic
+reclaims; verified packets survive final destination-write failure. Independent
+review at 72e54dc passed 24 cases and stalled-body/recovery probes. This is one
+tester bridge, not six active model roles or an actual VPS/Cloud roundtrip.
+Combined controller/discovery integration passed 180 research tests with zero
+skips and the normal Mac production build. Independent approvals remain bound
+to their original code commits; this does not establish protected release approval.
+
 Cloud discovery enrichment at 8613458 passed 43 existing tests, but independent
 review requested changes for three real defects: a full historical calendar hits
 the read cap forever, the existing TPEx collector URL is rejected, and weak old
@@ -47,6 +57,10 @@ receipts and must not backdate knowledge. That supplementation is still open.
 - #288 protected requirements, architecture, exact-review and root checks fail;
   ordinary diagnostic CI succeeds. #292 has the same separation. Authentic
   owner-controlled recovery and exact-version signed evidence remain missing.
+  Draft #295 now provides the independently reviewed inactive installer proposal
+  (73e0aed, 46 tests). It enumerates 24 required external deployment fields and
+  eight evidence obligations. Its validator does not install, reserve or activate;
+  actual authority, CAS and installation/publication adapters remain external gaps.
 - Production runtime is NOLOGIN with connection limit -1, unlike the reviewed
   LOGIN/NOINHERIT/limit-6 contract. The preflight now refuses before mutation.
   No credential, role or main protection was modified.
