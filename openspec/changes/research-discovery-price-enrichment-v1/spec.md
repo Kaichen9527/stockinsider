@@ -1,13 +1,16 @@
 # Discovery price shadow enrichment v1
 
-Base `54edb2cdf04498914446229b451ee2d96810d3a4`, branch
-`codex/discovery-price-enrichment-oct05`. This is the delegated isolated batch,
+Supplement batch base `23dffca8633f0ccfc799d45b47b4ad29dea54124`, branch
+`codex/discovery-price-supplements-oct05`, after independent APPROVE of the49-case
+repair. Earlier enrichment base was `54edb2cdf04498914446229b451ee2d96810d3a4`.
+This is the delegated isolated batch,
 not strategy approval or independent release review.
 
 ## Result and authority
 
 Every official candidate already accounted by `research-priority-run` receives a
-`priceContext` in immutable evidence rows, input hash and response. The original
+`priceContext` and independent `supplementaryObservation` in immutable evidence
+rows, input hash and response. The original
 selector runs before enrichment; its scores, Top20 queue and lane rules remain
 unchanged. Price phase is a research observation, never research qualification,
 entry permission, a prediction or a claim that the price has not risen.
@@ -32,7 +35,8 @@ raw price remains `unverified_historical_raw`; no later registry read promotes a
 row previously rejected by the strict reader. Preserve the original snapshot hash.
 If first capture is missing after bounded admission/acquisition, that first-known
 gap remains frozen. Separate supplementary research receipts for later knowledge
-are not implemented; no later data may rewrite the original discovery.
+are implemented only in each new priority-run evidence row; no later data may
+rewrite the original discovery.
 
 The fixed production adapter reads only `tw_trading_sessions_v3` and
 `official_price_history`, with cutoff-visible source/collection/recording clocks,
@@ -53,7 +57,12 @@ monthly data); daily TWSE MI_INDEX requires exact session/type=ALLBUT0999/JSON.
 Duplicate, missing/extra keys, wrong stock/date/market/host or credentials reject.
 Unsupported parameterless/legacy endpoints cannot issue verified quote results.
 
-Admission is deterministic symbol order, independent of selection: <=5000
+Current admission occurs after selection: server queue order, then remaining DB
+active research symbols in symbol order, then eligible outside symbols lexically.
+The32 total read budget includes current and new historical-first queries. A
+same-cutoff result may be reused; a later-cutoff read may never fill an earlier
+first context. Retained first context is never re-read or promoted. The original
+selector/Top20 receives no price input. Bounds: <=5000
 candidates/retained records, <=32 new reads, <=15 seconds including registry IO,
 one calendar head and 124 head-tie rows (sentinel rejects truncation), two quote rows, <=8 MB registry
 JSON and <=64 KB per calendar/quote response, AbortSignal on every query. Every
@@ -65,6 +74,37 @@ Completed rows alone cannot prove a later absent session/holiday. Unless the
 latest ledger completion is on the cutoff's Taipei civil date, the production
 adapter marks latest-session freshness unverified; it does not infer a weekend,
 holiday or missing scheduled day. The raw quote retains its exact session.
+
+## Independent current knowledge receipt
+
+Every candidate has a current receipt even if first capture is missing, weak or
+unreadable. Queue/active priority is passed by the server only after the existing
+selector finishes. Model/API prioritySymbols, supplementaryObservation, price
+contexts, serverClock and arbitrary verification flags are rejected. Model
+inProgress does not control the actual DB active set. Missing evidence outside
+priority, excess32, deadlines and source failures are explicit missing reasons.
+
+Store origin=current_run_observation, knowledgeScope=current_cutoff_only, cutoff,
+serverClock, attempted, quote/provenance/status/gaps and observationHash in the same
+immutable evidence row beside the first priceContext. Bind the stock/market,
+provider/integrity and endpoint contract. Quote as_of supplies publishedAt;
+available_at supplies observedAt/availableAt with explicit
+observedClockBasis=persisted_available_at. This is a persisted clock contract,
+not independent website publication evidence or proof of historical process reads.
+Completed close <= published <= observed <= available <= asOf <= actual serverClock.
+Future source clocks/session or mismatched provenance cannot verify a quote.
+The15-second AbortSignal budget covers registry and adapter queries; discard reads
+that finish too late. Current windows are disabled; relative returns and phase
+remain null/unknown regardless of optional adapter window contents.
+
+The new receipt and hash participate in existing priority inputHash. A later
+physical serverClock creates a new immutable receipt/run, not same-request replay
+across invocations. No new table, RPC or migration is introduced. Never alter
+firstSeenAt/firstPrice, frozen status or snapshot/context hash of retained first
+knowledge. Verified current knowledge does not promote weak old knowledge.
+Outside priority admission remains lexical without durable fair resume. More than
+32 active/Top20 symbols or a failed deadline/source can still leave missing current
+observations; do not claim all candidates were read or all platforms activated.
 
 ## Relative returns and phase
 
@@ -141,11 +181,23 @@ Each new ID maps to one non-skipped named `test()` case:
 | DR03 | All price contexts stored/hashed/returned with unchanged queue |
 | DR04 | Price changes hash, not scores/nonempty queue |
 | DR05 | Impossible cutoff rejects before acquisitions |
+| DS01 | Weak/missing first and current verified quote coexist without promotion |
+| DS02 | Lexical-rear priority first32 and full45 candidate accounting |
+| DS03 | Future source clocks/session and weak/mismatched provenance reject |
+| DS04 | Registry failure cannot erase independent current priority read |
+| DS05 | Shared32 historical/current budget; no later data enters first cutoff |
+| DS06 | Invalid server clock/priority and deadline fail visibly |
+| DS07 | Late completed read discarded from current and first receipts |
+| DR06 | Actual route first immutable beside current verified raw |
+| DR07 | Supplement changes inputHash, not first context, score or queue |
+| DR08 | Actual server Top20 admission ahead of outside lexical candidates |
+| DR09 | Actual DB predicates exclude later published/available rows |
+| DR10 | DB active research priority, not model inProgress promotion |
 
 DE tests: `web/src/lib/research-discovery-evidence.test.ts`.
-DP tests: `web/src/lib/research-discovery-price-enrichment.test.ts`.
+DP/DS tests: `web/src/lib/research-discovery-price-enrichment.test.ts`.
 DR tests: `web/src/app/api/internal/research-priority-run/route.contract.test.ts`
 execute the actual transpiled route with synthetic controlled dependencies.
-Existing source-extension/priority/root checks are separate regression cases.
+Existing source-extension/priority checks are separate regression cases.
 Actual official DB/live acquisition, full build and independent integration are
 separate gates; synthetic cases cannot satisfy them.
