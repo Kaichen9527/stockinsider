@@ -80,14 +80,15 @@ files or artifact-supplied executable modules.
 
 ## Reproduction and validation
 
-From the repository root, using a new output directory each time:
+From the repository root, using the verified `/usr/bin/python3` interpreter
+(Python 3.9.6 on this Mac) and a new physical output directory each time:
 
 ```sh
-python3 -m unittest discover -s research/tw-strategy-lab -p 'test_artifact_audit.py' -v
-python3 research/tw-strategy-lab/artifact_audit.py --output /absolute/new-audit-directory
+/usr/bin/python3 -m unittest discover -s research/tw-strategy-lab -p 'test_artifact_audit.py' -v
+/usr/bin/python3 research/tw-strategy-lab/artifact_audit.py --output /absolute/new-audit-directory
 ```
 
-Fourteen adversarial contract tests passed. They include modified results and
+The original fourteen adversarial contract tests passed. They include modified results and
 inventory, omitted or symlinked input, nonfinite/duplicate JSON, size limits,
 out-of-period and duplicate dates, altered costs, same-session signals,
 duplicate fills/trades, lost holdings, network prohibition, input allowlisting,
@@ -99,3 +100,46 @@ Exit 0 means `program_status=completed` and
 insufficient evidence. Exit 2 records admission or calculation discrepancies.
 Neither path manufactures proposal/assessment parents, calls an authenticated
 endpoint, runs a simulation or enables trading.
+
+## Successor addressing independent review findings
+
+The independent review identified two P2 issues: a Python build without
+descriptor-relative `os.open` failed after creating output, and a symlink in an
+input ancestor was accepted. The successor preflights runtime capabilities before
+auditing or creating output. It returns exit 2 with `unsupported_runtime` without
+creating a directory if the required no-follow/descriptor operations are absent.
+It never falls back to weaker filesystem operations. The actual installed
+`/usr/local/bin/python3` (Python 3.9.1) was checked: exit 2, `output_created=false`,
+and the requested output path remained absent. An unqualified `python3` command
+can select that unsupported interpreter depending on PATH.
+
+Every input and output parent is now traversed from `/` with directory
+descriptors, `O_NOFOLLOW` and device/inode checks. Parent traversal and symlink
+ancestors are refused; the admitted artifact directory stays pinned across all
+24 reads. Renaming a parent after it is opened cannot redirect subsequent reads
+to a replacement path. Use physical paths: ordinary macOS aliases such as `/tmp`
+or `/var` may be symlinks and are deliberately refused.
+
+Twenty-one tests passed under `/usr/bin/python3`, including simulated unsupported
+capabilities, actual-operation probe failure, symlink ancestors, directory
+replacement between stat and open, and path redirection after opening a parent.
+The adversarial fixtures are still only rejection tests, not investment evidence.
+`git diff --check` and the isolated web production build also passed. The build
+log is `/tmp/strategy-artifact-audit-successor-web-build.log`; no frontend,
+dependency, engine, schema or frozen artifact files changed.
+
+The successor actual retained-artifact execution, without new simulation:
+
+- Time: 2026-10-05 13:23:53 Asia/Taipei.
+- Auditor execution commit: `7e887ef642f9aeeb66ff0dae63ffc97825c9c234`.
+- Auditor Python bytes SHA256: `4e67d5c2a8c10d7a374ba2bcc5b1940178bd661ffac563529b77b8ec393252d3`.
+- Report: 73,590 bytes, SHA256 `a50b3c86eb57c64f22b781a732beb3cf8ea269dde2c7730e22b2c3349083a7bf`.
+- Receipt SHA256: `2b6d337287ddc1028964bb90d66023efe60c398fe68a8e46350831bab7aa6f7b`.
+- Private local output directory:
+  `/Users/kaerchen/.cache/stockinsider-workspaces/artifact-audit-20261005-7e887ef`.
+- All 24 pinned files and 15 paths passed the same 740 checks, with zero
+  discrepancies; report bytes are identical to the original run. Both new files
+  are mode 0600. Original hashes, artifacts and receipts remain untouched.
+
+This new receipt binds the corrected auditor bytes. It does not replace the
+original evidence or change any unavailable/investment-validation result.
