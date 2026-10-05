@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
+import { assertInstalledResearchSuccessorPlan } from './migration-successor-guard.mjs';
 
 const require = createRequire(import.meta.url);
 const { Client } = require('pg');
@@ -145,6 +146,10 @@ async function applyReviewedMigrations(options) {
   try {
     await client.query("SELECT pg_advisory_lock(hashtextextended('stockinsider-reviewed-v3-migration-v1',0))");
     locked=true;
+    // Older chain replay overwrites the append/prepare bodies. Detect installed
+    // successors before the first mutation; a base-only replay must fail closed.
+    await assertInstalledResearchSuccessorPlan(client, { researchAgentExtension: options.researchAgentExtension,
+      migrations: plan.migrations });
     if(options.researchAgentExtension) {
       const researchPrerequisite=(await client.query(`SELECT
       to_regclass('public.candidate_dossier_outbox_v5') IS NOT NULL AS outbox,
