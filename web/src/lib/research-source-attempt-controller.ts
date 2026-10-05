@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { sanitizePublicSourceUrl } from './public-source-url.ts';
 import { researchCanonicalHash } from './research-agent-qualification.ts';
-import { buildResearchInboxRow, researchInboxContentHash, validateResearchInboxItem, type ResearchInboxItem } from './research-inbox.ts';
+import { buildResearchInboxRow, researchInboxContentHash, validateResearchInboxItemAt, RESEARCH_INBOX_ITEM_KEYS, type ResearchInboxItem } from './research-inbox.ts';
 import { researchRootFromDocument } from './research-source-roots.ts';
 import { RESEARCH_SOURCE_PLATFORMS, type ResearchSourcePlatform } from './research-source-registry.ts';
 import { CREATOR_PUBLISHED_PODCAST_RSS_INDEX_ALLOWLIST, SOURCE_CONNECTOR_KEYS, sourceExecutionPolicy } from './source-policy.ts';
@@ -113,12 +113,10 @@ export function publicSourceGrant(scope: SourceScope) {
   return false;
 }
 
-const ITEM_KEYS = ['sourcePlatform','sourceUrl','author','publishedAt','observedAt','symbols','shortSummary','catalyst','risk',
-  'claimStatus','visibility','parentSourceUrl','contentForm','acquisitionMethod','timedExcerpts','firstObservedAt','revisionObservedAt','retracted'];
 function checkedItem(item: ResearchInboxItem, asOf: string) {
-  keys(item, ITEM_KEYS);
+  keys(item, [...RESEARCH_INBOX_ITEM_KEYS]);
   if (item.timedExcerpts) item.timedExcerpts.forEach((entry) => keys(entry, ['startSeconds','endSeconds','text']));
-  if (!validateResearchInboxItem(item) || !sourceCitationAllowed(item.sourcePlatform, item.sourceUrl)
+  if (!validateResearchInboxItemAt(item,asOf) || !sourceCitationAllowed(item.sourcePlatform, item.sourceUrl)
     || item.symbols.some((symbol)=>typeof symbol!=='string')
     || [item.publishedAt,item.observedAt,item.firstObservedAt || item.observedAt,item.revisionObservedAt || item.observedAt]
       .some((at) => !instant(at) || Date.parse(at) > Date.parse(asOf))) throw new Error('source_controller_item_invalid_or_future');
