@@ -11,7 +11,8 @@ const clock = '2026-10-05T01:01:00.000Z';
 const id = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
 const source = 'b'.repeat(40);
 const key = 'synthetic-deep-writer-12345';
-const owner = 'author-test';
+const workerOwner = 'author-test';
+const owner = `${workerOwner}:${id}`;
 const context = () => ({ schemaVersion: 'research-deep-claim-context-v1', observedAt: clock,
   job: { jobId: id, symbol: '2409', priorityRunId: id, attempt: 1, owner, leaseExpiresAt: '2026-10-05T01:30:00.010Z' },
   modelReservation: { reservationId: id, role: 'company_research', owner, workKey: `deep:${id}:1`,
@@ -20,10 +21,11 @@ const success = () => ({ rejected: false, body: { ok: true, context: context(), 
 async function fixture(fn) {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'si-deep-'));
   const file = name => path.join(dir, name);
-  const args = (action = 'claim') => [action, '--origin', 'https://example.org', '--owner', owner,
+  const args = (action = 'claim') => [action, '--origin', 'https://example.org', '--owner', workerOwner,
     '--output', file(`${action}.json`), '--journal', file(`${action}.jsonl`),
     ...(action === 'recover' ? ['--request-journal', file('claim.jsonl')] : [])];
-  const dependencies = { env: { INTERNAL_API_KEY: key }, source: () => ({ commit: source, dirty: false }), now: () => clock };
+  const dependencies = { env: { INTERNAL_API_KEY: key }, source: () => ({ commit: source, dirty: false }), now: () => clock,
+    claimId: () => id };
   try { await fn({ file, args, dependencies }); }
   finally { await fs.rm(dir, { recursive: true, force: true }); }
 }
@@ -62,6 +64,22 @@ test('completed accounting remains a handoff, and exact known attempt fences sta
   } });
   assert.equal(result.context.modelCompletion.outcome, 'completed');
   assert.equal(result.draftPersisted, false); assert.equal(result.authoritativePublication, false);
+}));
+test('old lost response cannot recover a later claim reusing the same worker label', async () => fixture(async ({ args, file, dependencies }) => {
+  await assert.rejects(deepControllerCommand(args(), { ...dependencies, post: async () => { throw new Error('lost'); } }), /uncertain/);
+  const laterId = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
+  const laterOwner = `${workerOwner}:${laterId}`;
+  const result = await deepControllerCommand(args('recover'), { ...dependencies,
+    // A recovery must use the original claim identity, not generate another.
+    claimId: () => { throw new Error('must not generate during recovery'); },
+    now: () => '2026-10-05T02:01:00Z', post: async (_url, body) => {
+      assert.equal(body.owner, owner); assert.notEqual(body.owner, laterOwner);
+      return { rejected: false, body: { ok: true, context: null, gap: 'no_active_owned_job' } };
+    } });
+  assert.equal(result.context, null); assert.equal(result.gap, 'no_active_owned_job');
+  const entries = (await fs.readFile(file('claim.jsonl'), 'utf8')).trim().split('\n').map(JSON.parse);
+  assert.equal(entries[0].request.claimId, id);
+  assert.equal(entries[0].request.workerOwner, workerOwner);
 }));
 test('empty claim and expired/lost owned job have different explicit gaps', async () => fixture(async ({ args, dependencies }) => {
   const first = await deepControllerCommand(args(), { ...dependencies, post: async () => ({ rejected: false, body: { ok: true, context: null, gap: 'no_claimable_job' } }) });

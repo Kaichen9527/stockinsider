@@ -1,6 +1,7 @@
 import { open } from 'node:fs/promises';
 import { constants } from 'node:fs';
 import { execFileSync } from 'node:child_process';
+import { randomUUID } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { researchCanonicalHash } from '../web/src/lib/research-agent-qualification.ts';
@@ -8,7 +9,8 @@ import { validateResearchDeepClaimContext } from '../web/src/lib/research-deep-c
 import { jsonPost } from './research-monitor-controller.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
-const OWNER = /^[A-Za-z0-9_:-]{3,120}$/u;
+// Reserve 37 characters for a unique claim identity within the API's 120 cap.
+const OWNER = /^[A-Za-z0-9_:-]{3,83}$/u;
 const SOURCE = /^[a-f0-9]{40}$/u;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu;
 const exactSource = () => ({
@@ -47,9 +49,11 @@ async function recoveryRequest(filename, owner, origin, source) {
     const entries = text.trimEnd().split('\n').map(line => JSON.parse(line));
     const first = entries[0]; const request = first?.request;
     if (first?.phase !== 'request_pending' || !request || request.schemaVersion !== 'research-deep-request-v1'
-      || request.action !== 'claim' || request.owner !== owner || request.origin !== origin
+      || request.action !== 'claim' || request.workerOwner !== owner || request.origin !== origin
+      || typeof request.claimId !== 'string' || !UUID.test(request.claimId)
+      || request.owner !== `${owner}:${request.claimId}`
       || request.sourceCommit !== source || first.requestHash !== researchCanonicalHash(request)
-      || Object.keys(request).sort().join(',') !== 'action,observedAt,origin,owner,schemaVersion,sourceCommit'
+      || Object.keys(request).sort().join(',') !== 'action,claimId,observedAt,origin,owner,schemaVersion,sourceCommit,workerOwner'
       || !Number.isFinite(Date.parse(request.observedAt))) throw new Error('deep_controller_recovery_binding_invalid');
     const verified = entries.filter(row => row.phase === 'response_verified');
     if (verified.length > 1) throw new Error('deep_controller_recovery_journal_invalid');
@@ -62,7 +66,8 @@ async function recoveryRequest(filename, owner, origin, source) {
     if (job && (typeof job.jobId !== 'string' || !UUID.test(job.jobId)
       || !Number.isInteger(job.attempt) || job.attempt < 1 || job.attempt > 3))
       throw new Error('deep_controller_recovery_job_invalid');
-    return { originalRequestHash: first.requestHash, ...(job ? { jobId: job.jobId, attempt: job.attempt } : {}) };
+    return { originalRequestHash: first.requestHash, owner: request.owner, claimId: request.claimId,
+      ...(job ? { jobId: job.jobId, attempt: job.attempt } : {}) };
   } finally { await handle.close(); }
 }
 
@@ -94,8 +99,13 @@ export async function deepControllerCommand(args, dependencies = {}) {
     ? await recoveryRequest(flags.get('--request-journal'), owner, origin.href, source.commit) : null;
   const clock = now();
   if (!Number.isFinite(Date.parse(clock))) throw new Error('deep_controller_clock_invalid');
+  const claimId = recovered?.claimId ?? (dependencies.claimId || randomUUID)();
+  if (typeof claimId !== 'string' || !UUID.test(claimId)) throw new Error('deep_controller_claim_identity_invalid');
+  // Reusing a stable worker label must never make an old lost response recover
+  // a different, later claim. Only this original opaque owner is queried.
+  const claimOwner = recovered?.owner ?? `${owner}:${claimId}`;
   const request = { schemaVersion: 'research-deep-request-v1', sourceCommit: source.commit,
-    origin: origin.href, owner, action, observedAt: clock };
+    origin: origin.href, workerOwner: owner, owner: claimOwner, claimId, action, observedAt: clock };
   const requestHash = researchCanonicalHash(request);
   const journal = await open(flags.get('--journal'), 'wx', 0o600);
   let output; let sending = false;
@@ -105,8 +115,8 @@ export async function deepControllerCommand(args, dependencies = {}) {
     await log({ phase: 'request_pending', request, requestHash,
       originalRequestHash: recovered?.originalRequestHash ?? null });
     sending = true;
-    const body = action === 'claim' ? { action: 'claim', owner }
-      : { action: 'status', owner, ...(recovered?.jobId ? { jobId: recovered.jobId, attempt: recovered.attempt } : {}) };
+    const body = action === 'claim' ? { action: 'claim', owner: claimOwner }
+      : { action: 'status', owner: claimOwner, ...(recovered?.jobId ? { jobId: recovered.jobId, attempt: recovered.attempt } : {}) };
     const reply = await (dependencies.post || jsonPost)(new URL('/api/internal/research-deep-job', origin).href, body, key, 15_000);
     if (reply.rejected) {
       // A claim may have committed before a server's context lookup failed.
@@ -119,7 +129,7 @@ export async function deepControllerCommand(args, dependencies = {}) {
     if (!envelope || envelope.ok !== true || !Object.hasOwn(envelope, 'context'))
       throw new Error('deep_controller_response_invalid');
     const context = envelope.context === null ? null : validateResearchDeepClaimContext(envelope.context,
-      { owner, ...(recovered?.jobId ? { jobId: recovered.jobId, attempt: recovered.attempt } : {}), now: now() });
+      { owner: claimOwner, ...(recovered?.jobId ? { jobId: recovered.jobId, attempt: recovered.attempt } : {}), now: now() });
     if (context && (Date.parse(context.observedAt) > Date.parse(now())
       || Date.parse(now()) - Date.parse(context.observedAt) > 120_000)) throw new Error('deep_controller_response_clock_invalid');
     if (context === null && envelope.gap !== (action === 'claim' ? 'no_claimable_job' : 'no_active_owned_job'))

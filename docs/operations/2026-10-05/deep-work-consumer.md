@@ -11,7 +11,12 @@ an article, activate a schedule or approve a strategy.
 returns the selected job and its actual `company_research` reservation. The
 context binds job ID, attempt, symbol, priority run, owner, reservation ID,
 `deep:<jobId>:<attempt>`, original start/deadline and any accounting completion.
-The controller does not accept caller-selected symbols or fabricate an ID.
+The controller does not accept caller-selected symbols or fabricate a job or
+reservation ID. It generates one UUID per claim and appends it to the worker's
+label as the actual server owner. The original opaque owner is retained for
+recovery, so reusing a worker label for a later job cannot misattribute the new
+job to an earlier lost response. Labels are limited to83 characters to stay
+within the server's120-character owner limit.
 
 The writer credential stays in the trusted process. It must differ from review,
 test, strategy-approval and cron credentials. Origins are HTTPS or an explicit
@@ -45,12 +50,12 @@ Example invocations, with the writer key supplied by the existing trusted
 runtime rather than command-line text:
 
 ```sh
-node scripts/run-node22.js scripts/research-deep-controller.mjs claim \
+node scripts/run-node22.js --experimental-strip-types scripts/research-deep-controller.mjs claim \
   --origin https://REVIEWED_INTERNAL_ORIGIN --owner company-author-01 \
   --output /ABSOLUTE_PRIVATE_DIR/claim.json \
   --journal /ABSOLUTE_PRIVATE_DIR/claim.jsonl
 
-node scripts/run-node22.js scripts/research-deep-controller.mjs recover \
+node scripts/run-node22.js --experimental-strip-types scripts/research-deep-controller.mjs recover \
   --origin https://REVIEWED_INTERNAL_ORIGIN --owner company-author-01 \
   --request-journal /ABSOLUTE_PRIVATE_DIR/claim.jsonl \
   --output /ABSOLUTE_PRIVATE_DIR/recovered.json \

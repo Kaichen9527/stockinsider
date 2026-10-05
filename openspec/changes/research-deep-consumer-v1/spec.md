@@ -7,6 +7,8 @@ transition. Implement only the existing writer claim/status boundary.
    caller-selected stocks, invented clocks/IDs and automatic retry are forbidden.
 2. Fsync a private original request before sending. On ambiguous response,
    recover by owner-scoped status only; preserve original job/attempt deadlines.
+   Generate a per-claim UUID owner suffix and retain it in the original journal;
+   a later claim using the same worker label must not recover under the old request.
 3. Bind recovery to original owner/origin/source/request and saved receipt hashes.
    Refuse shared credentials, unsafe origins, dirty source, aliased output paths,
    symlink journal, public journal permissions and malformed/future contexts.
