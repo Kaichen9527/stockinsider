@@ -65,6 +65,7 @@ const researchAgentMigrationPaths = [
   'migrations/20260929_research_deep_jobs_v1.sql',
   'migrations/20261004_research_technical_identity_v2.sql',
   'migrations/20261004_research_cloud_receipts_v1.sql',
+  'migrations/20261005_financial_history_admission_v1.sql',
 ];
 const describeMigration = (relativePath) => {
   const bytes = fs.readFileSync(path.join(root, relativePath));

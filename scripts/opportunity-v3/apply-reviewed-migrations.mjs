@@ -73,6 +73,7 @@ const RESEARCH_AGENT_MIGRATIONS = Object.freeze([
   'migrations/20260929_research_deep_jobs_v1.sql',
   'migrations/20261004_research_technical_identity_v2.sql',
   'migrations/20261004_research_cloud_receipts_v1.sql',
+  'migrations/20261005_financial_history_admission_v1.sql',
 ]);
 const V3192_PROJECTION_DOSSIER_MIGRATION =
   'migrations/20260827_decision_revision_dossier_projection_v3_19_2.sql';
@@ -475,6 +476,12 @@ async function applyReviewedMigrations(options) {
       EXISTS(SELECT 1 FROM pg_trigger WHERE tgrelid='public.research_cloud_acceptances_v1'::regclass
         AND tgname='trg_research_cloud_acceptances_immutable_v1' AND tgenabled='O' AND NOT tgisinternal
         AND tgfoid='public.reject_candidate_dossier_revision_mutation_v4()'::regprocedure) AS cloud_immutable,
+      to_regclass('public.opportunity_financial_observations_v1') IS NOT NULL AS financial_observations,
+      to_regprocedure('public.read_financial_history_page_v1(uuid,public.financial_fact_key_v3,public.financial_duration_kind_v3,public.financial_estimate_kind_v3,public.financial_estimate_horizon_v3,date,date,timestamptz,uuid,integer,uuid)') IS NOT NULL AS financial_history_reader,
+      position('financial_period_revision_bound' IN pg_get_functiondef('public.prepare_opportunity_financial_fact_series_v3()'::regprocedure))>0 AS financial_period_admission,
+      NOT has_table_privilege('service_role','public.opportunity_financial_observations_v1','INSERT') AS financial_no_direct_write,
+      (SELECT relrowsecurity FROM pg_class WHERE oid='public.opportunity_financial_observations_v1'::regclass) AS financial_observation_rls,
+      NOT has_function_privilege('anon','public.read_financial_history_page_v1(uuid,public.financial_fact_key_v3,public.financial_duration_kind_v3,public.financial_estimate_kind_v3,public.financial_estimate_horizon_v3,date,date,timestamptz,uuid,integer,uuid)','EXECUTE') AS financial_no_public_reader,
       to_regprocedure('public.record_candidate_deep_submission_v1(uuid,text,integer,uuid,text,uuid,text,uuid,uuid,text,text,jsonb,jsonb,jsonb,jsonb,text,jsonb)') IS NOT NULL AS deep_publication`)).rows[0] : null;
     if(options.researchAgentExtension
       && (!researchVerified||Object.values(researchVerified).some((value)=>value!==true)))
