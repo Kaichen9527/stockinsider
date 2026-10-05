@@ -29,6 +29,15 @@ production operation or strategy adoption belongs to this change.
 - Save a new mode-0700 output directory containing exclusive mode-0600 JSON report
   and receipt. Bind report bytes and auditor code hash; refuse overwriting an
   existing output. The receipt is local evidence, not a protected attestation.
+- Check descriptor-relative/no-follow capabilities before reading the bundle or
+  creating output. Unsupported interpreters return `unsupported_runtime` with
+  exit 2 and create nothing; security flags are never weakened as a fallback.
+  `/usr/bin/python3` is the verified interpreter on the current Mac.
+- Traverse all input and output parent directories from the filesystem root
+  using no-follow directory descriptors and inode/device identity checks.
+  Reject symlink ancestors and parent traversal. Keep the admitted artifact
+  directory descriptor pinned across every allowlisted read, so renaming a
+  parent cannot redirect a later read. Leaf replacements still fail closed.
 
 ## Acceptance
 
@@ -36,3 +45,6 @@ Adversarial tests cover pinned-byte tampering, alternate inventory, missing or
 symlinked inputs, duplicate/nonfinite JSON, bounds, altered metrics/costs,
 chronology and holdings. Run the actual retained artifact and preserve its real
 findings separately from synthetic test evidence. No profitable-strategy claim.
+Also cover unavailable runtime features before mkdir, ancestor symlinks,
+directory replacement between stat/open and path redirection after a parent
+descriptor has been pinned.

@@ -9,6 +9,7 @@ investment strategy passed. Reports always prohibit promotion and submission.
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
 from datetime import date, datetime, timezone
 import hashlib
 import json
@@ -69,13 +70,77 @@ def strict_json(raw):
     return json.loads(raw, object_pairs_hook=pairs, parse_constant=reject, parse_float=floating)
 
 
-def read_regular(path):
-    """Bounded no-follow read; reject replacement during the read."""
+class UnsupportedRuntime(ValueError):
+    pass
+
+
+def runtime_preflight():
+    """Check required descriptor operations without creating any output."""
+    required = (os.open, os.stat, os.mkdir)
+    if (os.name != 'posix' or any(fn not in os.supports_dir_fd for fn in required)
+            or os.stat not in os.supports_follow_symlinks
+            or any(not getattr(os, flag, 0) for flag in ('O_NOFOLLOW', 'O_DIRECTORY', 'O_NONBLOCK'))):
+        raise UnsupportedRuntime('required_descriptor_safety_unavailable')
+    descriptor = child = None
+    try:
+        descriptor = os.open('/', os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+        child = os.open('.', os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=descriptor)
+        os.stat('.', dir_fd=child, follow_symlinks=False)
+    except (OSError, NotImplementedError, TypeError, AttributeError) as error:
+        raise UnsupportedRuntime('required_descriptor_safety_unavailable') from error
+    finally:
+        if child is not None:
+            os.close(child)
+        if descriptor is not None:
+            os.close(descriptor)
+
+
+def absolute_input(path):
+    # Do not resolve symlinks or normalize away a traversal through an ancestor.
     path = Path(path)
-    before = path.lstat()
+    if '..' in path.parts:
+        raise ValueError('parent_path_traversal_refused')
+    return path if path.is_absolute() else Path.cwd() / path
+
+
+def open_child_directory(parent, name):
+    before = os.stat(name, dir_fd=parent, follow_symlinks=False)
+    if not stat.S_ISDIR(before.st_mode):
+        raise ValueError('input_ancestor_not_directory')
+    child = os.open(name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_NONBLOCK,
+                    dir_fd=parent)
+    try:
+        opened = os.fstat(child)
+        if not stat.S_ISDIR(opened.st_mode) or (before.st_dev, before.st_ino) != (opened.st_dev, opened.st_ino):
+            raise ValueError('input_ancestor_replaced')
+        return child
+    except BaseException:
+        os.close(child)
+        raise
+
+
+@contextmanager
+def open_directory(path):
+    """Pin every ancestor from root; never follow a path or replacement symlink."""
+    runtime_preflight()
+    path = absolute_input(path)
+    descriptor = os.open('/', os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    try:
+        for name in path.parts[1:]:
+            child = open_child_directory(descriptor, name)
+            os.close(descriptor)
+            descriptor = child
+        yield descriptor
+    finally:
+        os.close(descriptor)
+
+
+def read_regular_at(name, parent):
+    """Bounded relative no-follow read from an already pinned parent."""
+    before = os.stat(name, dir_fd=parent, follow_symlinks=False)
     if not stat.S_ISREG(before.st_mode):
         raise ValueError('input_not_regular_file')
-    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    fd = os.open(name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=parent)
     try:
         opened = os.fstat(fd)
         if not stat.S_ISREG(opened.st_mode):
@@ -95,6 +160,17 @@ def read_regular(path):
         return raw
     finally:
         os.close(fd)
+
+
+def read_regular(path, *, dir_fd=None):
+    path = Path(path)
+    if dir_fd is not None:
+        if path.is_absolute() or len(path.parts) != 1 or path.name in ('.', '..'):
+            raise ValueError('relative_leaf_required')
+        return read_regular_at(path.name, dir_fd)
+    path = absolute_input(path)
+    with open_directory(path.parent) as parent:
+        return read_regular_at(path.name, parent)
 
 
 class Checks:
@@ -273,18 +349,16 @@ def load_pinned_bundle(baseline, inventory):
     entries = strict_json(inventory_raw)
     if not isinstance(entries, dict) or set(entries) != FILE_NAMES:
         raise ValueError('frozen_inventory_scope_invalid')
-    baseline = Path(baseline)
-    if baseline.is_symlink() or not baseline.is_dir():
-        raise ValueError('artifact_directory_invalid')
     bundle, identities = {}, []
-    for name in sorted(FILE_NAMES):
-        raw = read_regular(baseline / name)
-        if digest(raw) != entries[name]:
-            raise ValueError('frozen_artifact_hash_mismatch:' + name)
-        value = ([strict_json(line) for line in raw.splitlines() if line.strip()]
-                 if name.endswith('.jsonl') else strict_json(raw))
-        bundle[name] = value
-        identities.append({'name': name, 'bytes': len(raw), 'sha256': entries[name]})
+    with open_directory(baseline) as parent:
+        for name in sorted(FILE_NAMES):
+            raw = read_regular(name, dir_fd=parent)
+            if digest(raw) != entries[name]:
+                raise ValueError('frozen_artifact_hash_mismatch:' + name)
+            value = ([strict_json(line) for line in raw.splitlines() if line.strip()]
+                     if name.endswith('.jsonl') else strict_json(raw))
+            bundle[name] = value
+            identities.append({'name': name, 'bytes': len(raw), 'sha256': entries[name]})
     return bundle, identities
 
 
@@ -386,9 +460,11 @@ def auditor_identity():
 
 def write_report(output, report):
     """New private directory and exclusive files; no overwrite or cleanup retry."""
-    output = Path(output)
-    os.mkdir(output, 0o700)
-    descriptor = os.open(output, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    runtime_preflight()
+    output = absolute_input(output)
+    with open_directory(output.parent) as parent:
+        os.mkdir(output.name, 0o700, dir_fd=parent)
+        descriptor = open_child_directory(parent, output.name)
     try:
         os.fchmod(descriptor, 0o700)
         raw = canonical(report)
@@ -419,10 +495,17 @@ def main(argv=None):
     parser.add_argument('--artifact', type=Path, default=BASELINE)
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args(argv)
+    try:
+        runtime_preflight()
+    except UnsupportedRuntime:
+        print(json.dumps({'program_status': 'unsupported_runtime', 'exit_code': 2,
+                          'reason': 'required_descriptor_safety_unavailable',
+                          'promotion_eligible': False, 'output_created': False}))
+        return 2
     report = audit(args.artifact)
     try:
         receipt = write_report(args.output, report)
-    except (OSError, ValueError):
+    except (OSError, ValueError, NotImplementedError):
         print(json.dumps({'program_status': 'output_refused', 'exit_code': 2,
                           'promotion_eligible': False}))
         return 2

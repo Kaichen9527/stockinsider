@@ -2,6 +2,9 @@
 import copy
 import hashlib
 import json
+import io
+import os
+from contextlib import redirect_stdout
 from pathlib import Path
 import shutil
 import socket
@@ -11,6 +14,8 @@ import unittest
 from unittest.mock import patch
 
 import artifact_audit as audit
+
+TEMP_ROOT = Path(tempfile.gettempdir()).resolve()
 
 
 class ArtifactAuditTests(unittest.TestCase):
@@ -44,7 +49,7 @@ class ArtifactAuditTests(unittest.TestCase):
         self.assertEqual({row['status'] for row in report['unavailable']}, {'unavailable'})
 
     def test_input_allowlist_never_opens_normalized_holdout_or_code(self):
-        with tempfile.TemporaryDirectory() as temp:
+        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as temp:
             path = Path(temp) / 'artifact'
             shutil.copytree(audit.BASELINE, path)
             (path / 'holdout-2024.json').write_text('private holdout sentinel')
@@ -52,9 +57,9 @@ class ArtifactAuditTests(unittest.TestCase):
             reads = []
             original = audit.read_regular
 
-            def observe(file):
+            def observe(file, **kwargs):
                 reads.append(Path(file).name)
-                return original(file)
+                return original(file, **kwargs)
 
             with patch.object(audit, 'read_regular', side_effect=observe):
                 report = audit.audit(path)
@@ -62,7 +67,7 @@ class ArtifactAuditTests(unittest.TestCase):
             self.assertEqual(set(reads), set(audit.FILE_NAMES) | {audit.INVENTORY.name})
 
     def test_tampering_frozen_cost_or_result_bytes_fails_admission(self):
-        with tempfile.TemporaryDirectory() as temp:
+        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as temp:
             path = Path(temp) / 'artifact'
             shutil.copytree(audit.BASELINE, path)
             changed = self.result()
@@ -74,7 +79,7 @@ class ArtifactAuditTests(unittest.TestCase):
             self.assertEqual(report['trials'], [])
 
     def test_modified_inventory_cannot_bless_modified_results(self):
-        with tempfile.TemporaryDirectory() as temp:
+        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as temp:
             inventory = Path(temp) / 'inventory.json'
             entries = json.loads(audit.INVENTORY.read_bytes())
             entries['S1-baseline.json'] = 'a' * 64
@@ -85,7 +90,7 @@ class ArtifactAuditTests(unittest.TestCase):
 
     def test_missing_or_symlink_artifact_cannot_become_verified(self):
         for mode in ('missing', 'symlink'):
-            with self.subTest(mode=mode), tempfile.TemporaryDirectory() as temp:
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory(dir=TEMP_ROOT) as temp:
                 path = Path(temp) / 'artifact'
                 shutil.copytree(audit.BASELINE, path)
                 target = path / 'S1-baseline.json'
@@ -96,11 +101,119 @@ class ArtifactAuditTests(unittest.TestCase):
                 self.assertEqual(report['exit_code'], 2)
                 self.assertFalse(report['promotion_eligible'])
 
+    def test_symlink_in_any_input_ancestor_is_rejected(self):
+        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as temp:
+            alias = Path(temp) / 'alias'
+            alias.symlink_to(audit.BASELINE.parent, target_is_directory=True)
+            report = audit.audit(alias / audit.BASELINE.name)
+            self.assertEqual(report['exit_code'], 2)
+            self.assertEqual(report['admission_error'], 'input_ancestor_not_directory')
+            self.assertEqual(report['artifacts'], [])
+            alias.unlink()
+            alias.symlink_to(audit.INVENTORY.parent, target_is_directory=True)
+            self.assertEqual(audit.audit(inventory=alias / audit.INVENTORY.name)['exit_code'], 2)
+            with self.assertRaisesRegex(ValueError, 'parent_path_traversal_refused'):
+                audit.read_regular(alias / '..' / 'other.json')
+
+    def test_ancestor_symlink_swap_between_stat_and_open_fails_closed(self):
+        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as temp:
+            parent = Path(temp) / 'parent'
+            parent.mkdir()
+            (parent / 'input').write_bytes(b'original')
+            original_open = os.open
+            replaced = False
+
+            def racing_open(path, flags, *args, **kwargs):
+                nonlocal replaced
+                if path == 'parent' and kwargs.get('dir_fd') is not None and not replaced:
+                    replaced = True
+                    parent.rename(Path(temp) / 'old')
+                    parent.symlink_to(Path(temp) / 'old', target_is_directory=True)
+                return original_open(path, flags, *args, **kwargs)
+
+            supported = os.supports_dir_fd | {racing_open}
+            with patch.object(os, 'open', racing_open), patch.object(os, 'supports_dir_fd', supported):
+                with self.assertRaises(OSError):
+                    audit.read_regular(parent / 'input')
+            self.assertTrue(replaced)
+
+    def test_parent_rename_after_open_cannot_redirect_pinned_read(self):
+        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as temp:
+            parent, other = Path(temp) / 'parent', Path(temp) / 'other'
+            parent.mkdir()
+            other.mkdir()
+            (parent / 'input').write_bytes(b'original')
+            (other / 'input').write_bytes(b'redirected')
+            original_read = audit.read_regular_at
+
+            def redirect(name, descriptor):
+                parent.rename(Path(temp) / 'old')
+                parent.symlink_to(other, target_is_directory=True)
+                return original_read(name, descriptor)
+
+            with patch.object(audit, 'read_regular_at', side_effect=redirect):
+                self.assertEqual(audit.read_regular(parent / 'input'), b'original')
+
+    def test_ancestor_directory_identity_swap_is_rejected(self):
+        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as temp:
+            parent = Path(temp) / 'parent'
+            parent.mkdir()
+            (parent / 'input').write_bytes(b'original')
+            original_open = os.open
+            replaced = False
+
+            def racing_open(path, flags, *args, **kwargs):
+                nonlocal replaced
+                if path == 'parent' and kwargs.get('dir_fd') is not None and not replaced:
+                    replaced = True
+                    parent.rename(Path(temp) / 'old')
+                    parent.mkdir()
+                    (parent / 'input').write_bytes(b'redirected')
+                return original_open(path, flags, *args, **kwargs)
+
+            supported = os.supports_dir_fd | {racing_open}
+            with patch.object(os, 'open', racing_open), patch.object(os, 'supports_dir_fd', supported):
+                with self.assertRaisesRegex(ValueError, 'input_ancestor_replaced'):
+                    audit.read_regular(parent / 'input')
+            self.assertTrue(replaced)
+
+    def test_unsupported_runtime_refuses_before_audit_or_output_creation(self):
+        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as temp:
+            output = Path(temp) / 'new'
+            with patch.object(os, 'supports_dir_fd', set()), patch.object(audit, 'audit') as run:
+                with redirect_stdout(io.StringIO()) as captured:
+                    code = audit.main(['--output', str(output)])
+                run.assert_not_called()
+                self.assertEqual(code, 2)
+                message = json.loads(captured.getvalue())
+                self.assertEqual(message['program_status'], 'unsupported_runtime')
+                self.assertFalse(message['output_created'])
+                with self.assertRaises(audit.UnsupportedRuntime):
+                    audit.write_report(output, {})
+            self.assertFalse(output.exists())
+
+    def test_runtime_operation_probe_rejects_not_implemented_without_output(self):
+        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as temp:
+            output = Path(temp) / 'new'
+            original_open = os.open
+
+            def unsupported_open(path, flags, *args, **kwargs):
+                if kwargs.get('dir_fd') is not None:
+                    raise NotImplementedError('dir_fd unavailable')
+                return original_open(path, flags, *args, **kwargs)
+
+            supported = os.supports_dir_fd | {unsupported_open}
+            with patch.object(os, 'open', unsupported_open), patch.object(os, 'supports_dir_fd', supported):
+                with redirect_stdout(io.StringIO()) as captured:
+                    self.assertEqual(audit.main(['--output', str(output)]), 2)
+                self.assertEqual(json.loads(captured.getvalue())['program_status'], 'unsupported_runtime')
+                self.assertFalse(output.exists())
+
     def test_strict_parser_rejects_duplicate_keys_nonfinite_and_size(self):
         for raw in (b'{"x":1,"x":2}', b'{"x":NaN}', b'{"x":Infinity}', b'{"x":1e999}'):
             with self.subTest(raw=raw), self.assertRaises(ValueError):
                 audit.strict_json(raw)
-        with tempfile.TemporaryDirectory() as temp:
+        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as temp:
             file = Path(temp) / 'large.json'
             file.write_bytes(b'12345')
             with patch.object(audit, 'MAX_BYTES', 4), self.assertRaisesRegex(ValueError, 'size_bound'):
@@ -160,7 +273,7 @@ class ArtifactAuditTests(unittest.TestCase):
             self.recompute(result)
 
     def test_report_is_private_bound_and_not_overwritten(self):
-        with tempfile.TemporaryDirectory() as temp:
+        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as temp:
             output = Path(temp) / 'new'
             report = audit.audit()
             receipt = audit.write_report(output, report)
@@ -178,8 +291,17 @@ class ArtifactAuditTests(unittest.TestCase):
             with self.assertRaises(FileExistsError):
                 audit.write_report(link, report)
 
+    def test_output_ancestor_symlink_is_refused_before_mkdir(self):
+        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as temp:
+            real, alias = Path(temp) / 'real', Path(temp) / 'alias'
+            real.mkdir()
+            alias.symlink_to(real, target_is_directory=True)
+            with self.assertRaisesRegex(ValueError, 'input_ancestor_not_directory'):
+                audit.write_report(alias / 'output', {})
+            self.assertFalse((real / 'output').exists())
+
     def test_failed_admission_still_has_a_truthful_immutable_receipt(self):
-        with tempfile.TemporaryDirectory() as temp:
+        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as temp:
             output = Path(temp) / 'failed'
             report = audit.audit(Path(temp) / 'missing')
             receipt = audit.write_report(output, report)

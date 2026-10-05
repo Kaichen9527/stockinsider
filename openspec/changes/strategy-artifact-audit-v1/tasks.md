@@ -4,6 +4,8 @@
 - [x] Preserve every strategy/scenario, exclusion, blocked hypothesis and limitation.
 - [x] Implement private immutable report/receipt output and distinct audit/investment statuses.
 - [x] Fourteen adversarial tests passed; actual retained audit checked all 24 files and 15 paths (740 derived checks, zero discrepancies). Exact hashes and all limits are recorded in `docs/operations/2026-10-05/strategy-artifact-audit.md`.
+- [x] Address the two independent P2 findings: preflight descriptor capabilities before output creation, and pin every path ancestor plus the artifact directory during reads. Preserve all frozen expectations and original receipts.
+- [ ] Re-run successor adversarial tests and actual retained artifact, record the interpreter and successor receipt separately from the original run.
 - [ ] Independent scope review and root integration.
 
 No network/submission/holdout/replay/production change is included or authorized
