@@ -8,6 +8,7 @@ import { hasDirectCompanyMentionScope, researchRootFromDocument } from '@/lib/re
 import { DISCOVERY_FACTORS, validateDiscoveryFactors, validateDiscoverySourceBindings, type DiscoveryFactor } from '@/lib/research-discovery-evidence';
 import { discoveryInstant } from '@/lib/research-discovery-evidence';
 import { loadDiscoveryPriceEnrichment } from '@/lib/research-discovery-price-enrichment';
+import { parseIndustryAssociations, loadIndustryAssociations, type AssociationRequests, type IndustryAssociationReceipt } from '@/lib/research-source-association';
 import {
   selectResearchPriority, type ResearchPriorityCandidate, type ResearchSourceAttempt, type ResearchSourceRoot,
 } from '@/lib/research-agent-priority';
@@ -30,7 +31,7 @@ async function pages<T>(read: (from: number, to: number) => PromiseLike<{ data: 
   const rows: T[] = [];
   for (let from = 0; from <= maximum; from += 500) {
     const result = await read(from, from + Math.min(500, maximum + 1 - from) - 1);
-    if (result.error || !Array.isArray(result.data)) throw new Error(result.error?.message || 'research_priority_read_failed');
+    if (result.error || !Array.isArray(result.data)) throw new Error('research_priority_read_failed');
     rows.push(...result.data);
     if (rows.length > maximum) throw new Error('research_priority_source_bound_exceeded');
     if (result.data.length < 500) break;
@@ -82,7 +83,7 @@ export async function POST(request: Request) {
   for (const item of assessmentsRaw) {
     const row = item as Row;
     const symbol = String(row?.symbol || '');
-    if (!row || Object.keys(row).some((key) => !['symbol','profitImpact','novelty','researchability','lane','disposition','inProgress','factors'].includes(key))
+    if (!row || Object.keys(row).some((key) => !['symbol','profitImpact','novelty','researchability','lane','disposition','inProgress','factors','associations'].includes(key))
       || !SYMBOL.test(symbol) || assessments.has(symbol) || !ordinal(row.profitImpact) || !ordinal(row.novelty)
       || !ordinal(row.researchability) || !['general', 'emerging'].includes(String(row.lane))
       || !['queued', 'researching', 'needs_evidence', 'rejected', 'qualified', 'stale'].includes(String(row.disposition))
@@ -90,6 +91,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: false, error: 'research_priority_assessment_invalid' }, { status: 400 });
     }
     assessments.set(symbol, row);
+  }
+  let associationRequests: AssociationRequests;
+  try {
+    associationRequests = parseIndustryAssociations([...assessments].map(([symbol, row]) => ({ symbol, associations: row.associations })), asOf);
+  } catch {
+    return NextResponse.json({ ok: false, error: 'research_priority_associations_invalid' }, { status: 400 });
   }
   const db = getSupabaseServerClient();
   try {
@@ -123,6 +130,9 @@ export async function POST(request: Request) {
     const roster = new Map(official.filter((row) => SYMBOL.test(String(row.symbol || '')))
       .map((row) => [String(row.symbol), row]));
     if (!roster.size) throw new Error('research_priority_official_roster_missing');
+    if ([...associationRequests].some(([symbol, associations]) => associations.length && !roster.has(symbol))) {
+      throw new Error('research_priority_association_company_not_in_roster');
+    }
     const symbols = new Set([...screened, ...roster.keys()]);
     const rootsBySymbol = new Map<string, ResearchSourceRoot[]>();
     const activeSymbols = new Set(activeJobs.map((job) => String(job.symbol)));
@@ -188,23 +198,31 @@ export async function POST(request: Request) {
       prioritySymbols:[...new Set([...run.queue.map((row)=>row.symbol),
         ...candidates.filter((candidate)=>candidate.inProgress).map((candidate)=>candidate.symbol).sort()])]}});
     if (priceEnrichment.accountedCount !== run.accountedCount || priceEnrichment.supplementAccountedCount !== run.accountedCount) throw new Error('research_priority_price_accounting_mismatch');
+    // Supplementary hypotheses are resolved only after ranking. Their own server
+    // observation clock is never a historical discovery time or a source count.
+    const hasAssociations = [...associationRequests.values()].some((items) => items.length > 0);
+    const associationObservedAt = new Date().toISOString();
+    const associations = hasAssociations ? await loadIndustryAssociations(db, associationRequests, asOf, associationObservedAt)
+      : new Map<string, IndustryAssociationReceipt[]>();
     const evidenceRows = discoveryEvidenceRows.map((row) => ({ ...row, priceContext: priceEnrichment.contexts.get(row.symbol)!,
-      supplementaryObservation:priceEnrichment.supplements.get(row.symbol)! }));
+      supplementaryObservation:priceEnrichment.supplements.get(row.symbol)!,
+      ...(associations.get(row.symbol)?.length ? { sourceAssociations: associations.get(row.symbol)!,
+        associationObservedAt, hasResearchCue: associations.get(row.symbol)!.some((item) => item.hasResearchCue) } : {}) }));
     const inputHash = researchCanonicalHash({ asOf, attempts, candidates, evidenceRows, excluded });
     const stored = await db.from('research_priority_runs_v1').insert({
       as_of: asOf, policy_version: run.policyVersion, input_hash: inputHash,
       expected_count: run.expectedCount, accounted_count: run.accountedCount,
       source_attempts: attempts, rows: evidenceRows, research_queue: run.queue,
     }).select('run_id').single();
-    if (stored.error && stored.error.code !== '23505') throw new Error(stored.error.message);
+    if (stored.error && stored.error.code !== '23505') throw new Error('research_priority_store_failed');
     const replay = stored.error ? await db.from('research_priority_runs_v1')
       .select('run_id').eq('policy_version', run.policyVersion).eq('input_hash', inputHash).maybeSingle() : null;
     if (replay?.error || (replay && !replay.data)) throw new Error('research_priority_replay_failed');
     const runId = String(stored.data?.run_id || replay?.data?.run_id || '');
     const queued = await db.rpc('enqueue_research_deep_jobs_v1', { p_run_id: runId });
-    if (queued.error) throw new Error(`research_priority_job_enqueue_failed:${queued.error.message}`);
+    if (queued.error) throw new Error('research_priority_job_enqueue_failed');
     const discoveries = await db.rpc('capture_research_first_discoveries_v1', { p_run_id: runId });
-    if (discoveries.error) throw new Error(`research_priority_discovery_capture_failed:${discoveries.error.message}`);
+    if (discoveries.error) throw new Error('research_priority_discovery_capture_failed');
     return NextResponse.json({ ok: true, runId,
       asOf, inputHash, expectedCount: run.expectedCount, accountedCount: run.accountedCount,
       priceEnrichment: { policyVersion: priceEnrichment.policyVersion, expectedCount: priceEnrichment.expectedCount,
@@ -215,8 +233,15 @@ export async function POST(request: Request) {
       queue: run.queue, excludedNonCommon: excluded, sourceAttempts: attempts,
       unselectedCount: run.unselected.length, newDeepResearchJobs: queued.data,
       firstDiscoveryCaptures: discoveries.data,
+      ...(hasAssociations ? { sourceAssociations: [...associations].filter(([, items]) => items.length > 0)
+        .map(([symbol, items]) => ({ symbol, associationObservedAt, associations: items })) } : {}),
       idempotentReplay: Boolean(replay) });
   } catch (error) {
-    return NextResponse.json({ ok: false, error: error instanceof Error ? error.message : 'research_priority_run_failed' }, { status: 409 });
+    const safeErrors = new Set(['research_priority_read_failed', 'research_priority_source_bound_exceeded',
+      'research_priority_official_roster_missing', 'research_priority_association_company_not_in_roster',
+      'research_priority_price_accounting_mismatch', 'research_priority_store_failed', 'research_priority_replay_failed',
+      'research_priority_job_enqueue_failed', 'research_priority_discovery_capture_failed', 'research_association_clock_invalid']);
+    return NextResponse.json({ ok: false, error: error instanceof Error && safeErrors.has(error.message)
+      ? error.message : 'research_priority_run_failed' }, { status: 409 });
   }
 }
