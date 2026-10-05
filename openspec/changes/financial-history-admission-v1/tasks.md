@@ -6,7 +6,8 @@
 - [x] Add bounded, cutoff-visible keyset history reader with sentinel/cursor checks.
 - [x] Exercise amendment against the actual predecessor migration chain in local PostgreSQL.
 - [x] Full base migration regression, application type/lint/build.
-- [ ] Exact independent schema/security review and index/storage/query measurements.
+- [x] Exact independent schema/security review and synthetic index/storage/query measurements.
+- [ ] Rehearse the complete production prerequisite schema and measure production admission.
 - [ ] Protected release, capacity-admitted reviewed apply and official refresh coverage.
 - [ ] Production history/read-window evidence and genuine company research acceptance.
 

@@ -40,3 +40,11 @@ one transaction. A SQL-aware scanner preserves dollar-quoted functions, strings
 and nested comments while removing only standalone BEGIN/COMMIT wrappers, and
 rejects embedded control/nontransactional commands. Real PostgreSQL forced-failure
 testing confirms rollback retains the period bound and observation wrapper.
+
+Astra independently approved code scope at6899996a/tree3bd0fa40 with no remaining
+schema/security blocker. The complete local migration suite now passes82 cases;
+guard/scanner/plan checks pass6 and research regression93, all without skips.
+The signed protected gate and real production apply remain incomplete. A10,000
+fact synthetic warm-cache probe measured786,432 B history index,122,880 B period
+index and1,744,896 B heap; page129 full-range0.086 ms and narrow-range0.208 ms.
+These measurements are bounded fixture evidence, not production sizing proof.
