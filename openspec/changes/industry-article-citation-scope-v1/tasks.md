@@ -3,5 +3,5 @@
 - [x] Reuse citation policy in admission and public source-link display.
 - [x] Add cutoff, rights, withdrawal, old-tag, catalyst and scenario regressions.
 - [x] Independent exact-source review; repaired normal build and synthetic shared-renderer desktop/mobile probes.
-- [ ] Combined source-association/citation regression and type/lint/build verification.
+- [x] Combined304-test regression, zero skips; typecheck/lint/normal Mac build.
 - [ ] Real article, protected deployment and desktop/mobile live acceptance.

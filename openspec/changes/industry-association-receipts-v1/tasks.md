@@ -11,3 +11,7 @@
 - [ ] Independent review by parent/reviewer; maker tests are not approval.
 
 No production calls, database/schema changes, push, merge, deployment or protected attestations are part of this implementation batch.
+
+- [x] Independent review reproduced same-clock rights/hash sibling P2; repair970b052 passed128 tests and real-PG three counterexamples plus valid control.
+- [x] Byte-identical reviewed integration plus combined304-test suite, typecheck/lint/normal Mac build.
+- [ ] Protected release and actual source-to-company/model/review/publication acceptance.

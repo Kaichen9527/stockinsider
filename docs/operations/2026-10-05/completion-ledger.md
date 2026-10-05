@@ -110,7 +110,9 @@ The integrated255-test suite, types, lint and normal build all passed. A fresh
 actual public Threads read produced one legitimate industry item with no stock
 symbols; the necessary-summary receipt and limitations are saved separately.
 No production ingestion or company qualification was performed. Company
-associations and industry article citations are the next separate implementation.
+associations and industry article citations were subsequently implemented and
+independently reviewed as recorded in the following increment; actual production
+use remains unverified.
 
 Cloud compatibility of the repaired deep claim/recovery consumer is now verified
 at139f6ef:37/37 local synthetic tests under Node22.14, cgroup32GiB/four cores,
@@ -188,3 +190,43 @@ trust root. No protected setting, signing authority or production role was chang
 Cloud remains the bounded research/test worker; VPS remains the durable production
 system; Mac retains authorized social reading and transitional trusted operations.
 No automatic strategy adoption or live orders are introduced.
+
+## Industry-to-company and article increment
+
+Company hypotheses now resolve exact stored industry evidence and direct-company
+basis without inventing stock mentions. Every maximum-clock sibling receives
+identity/time/rights checks; a real PostgreSQL counterexample found during
+independent review was repaired before approval at970b052. All receipts remain
+hypotheses, supplementary server-time observations, not historical knowledge,
+confirmed orders or independent news confirmations. Ranking, factors, first
+discovery price and enqueue rules are unchanged. Source-only cues remain visible
+with evidence gaps instead of promoting a company automatically.
+
+Deep articles can separately cite explicitly public industry context in their
+industry-position reported/inference paragraphs. Company catalysts, orders and
+financial scenarios keep their company-source requirements. Admission and source
+link rendering share the same rights policy. A malformed-method coercion found
+in independent review was repaired and approved at98b9a76. The actual authorized
+Threads summary remains authenticated/bounded and is not made publicly citable.
+Independent semantic source support remains mandatory.
+
+Combined source/citation regression passed304 tests with zero skips; typecheck,
+lint with33 existing warnings and normal Mac production build passed. Shared
+renderer desktop/mobile synthetic UI checks passed and remain labelled as
+synthetic, not completed real AUO research. Imported source identity now includes
+29 files, codeHash02b97f85fbe0d280a641033c5e6326926d614e239a650b1e49a2dc63db90ba10;
+parameterHash9101ef58a0d43f53e7dea0749eb03872f375bb3051cfd77e6147d9141e2334e4
+is unchanged. No existing strategy approval is silently extended to new code.
+
+Fresh read-only VPS df reports13,001,424,896 available bytes, filesystem capacity
+still76,887,154,688 bytes. Current approximately20.40GB heavy-work floor is not
+met. Fresh GitHub #288 still has failing protected requirements, architecture,
+exact-review and root checks; ordinary runtime passes. No additional source
+coverage, real article, main merge, production migration/deployment, schedule
+activation or five-trading-day operation was completed by this increment.
+
+The next functional gap remains rights-aware PIT author input and a real budgeted
+model/draft/independent-review/submission consumer, followed by AUO and a different
+industry end-to-end acceptance. Authentic external recovery, production role
+bootstrap and host capacity remain independent release barriers. All original
+unfinished product and forward-strategy work above remains open.
