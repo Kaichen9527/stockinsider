@@ -6,17 +6,18 @@ import { researchCanonicalHash } from '@/lib/research-agent-qualification';
 import { RESEARCH_SOURCE_PLATFORMS } from '@/lib/research-source-registry';
 import { researchRootFromDocument } from '@/lib/research-source-roots';
 import { DISCOVERY_FACTORS, validateDiscoveryFactors, validateDiscoverySourceBindings, type DiscoveryFactor } from '@/lib/research-discovery-evidence';
+import { discoveryInstant } from '@/lib/research-discovery-evidence';
+import { loadDiscoveryPriceEnrichment } from '@/lib/research-discovery-price-enrichment';
 import {
   selectResearchPriority, type ResearchPriorityCandidate, type ResearchSourceAttempt, type ResearchSourceRoot,
 } from '@/lib/research-agent-priority';
 
 type Row = Record<string, unknown>;
-const INSTANT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/u;
 const SYMBOL = /^\d{4}$/u;
 const MAX_DOCUMENTS = 20_000;
 const PLATFORMS: readonly string[] = RESEARCH_SOURCE_PLATFORMS;
 function instant(value: unknown) {
-  return typeof value === 'string' && INSTANT.test(value) && Number.isFinite(Date.parse(value));
+  return discoveryInstant(value);
 }
 function ordinal(value: unknown) {
   if (!value || typeof value !== 'object') return null;
@@ -46,7 +47,8 @@ export async function POST(request: Request) {
   const asOf = String(body?.asOf || '');
   const attemptsRaw = body?.sourceAttempts;
   const assessmentsRaw = body?.assessments;
-  if (!instant(asOf) || Date.parse(asOf) > Date.now() || !Array.isArray(attemptsRaw)
+  if (!body || Object.keys(body).some((key) => !['asOf','sourceAttempts','assessments'].includes(key))
+    || !instant(asOf) || Date.parse(asOf) > Date.now() || !Array.isArray(attemptsRaw)
     || attemptsRaw.length > 50 || !Array.isArray(assessmentsRaw) || assessmentsRaw.length > 5000) {
     return NextResponse.json({ ok: false, error: 'research_priority_request_invalid' }, { status: 400 });
   }
@@ -80,7 +82,8 @@ export async function POST(request: Request) {
   for (const item of assessmentsRaw) {
     const row = item as Row;
     const symbol = String(row?.symbol || '');
-    if (!SYMBOL.test(symbol) || assessments.has(symbol) || !ordinal(row.profitImpact) || !ordinal(row.novelty)
+    if (!row || Object.keys(row).some((key) => !['symbol','profitImpact','novelty','researchability','lane','disposition','inProgress','factors'].includes(key))
+      || !SYMBOL.test(symbol) || assessments.has(symbol) || !ordinal(row.profitImpact) || !ordinal(row.novelty)
       || !ordinal(row.researchability) || !['general', 'emerging'].includes(String(row.lane))
       || !['queued', 'researching', 'needs_evidence', 'rejected', 'qualified', 'stale'].includes(String(row.disposition))
       || typeof row.inProgress !== 'boolean') {
@@ -151,7 +154,7 @@ export async function POST(request: Request) {
       };
     });
     const run = selectResearchPriority({ candidates, asOf });
-    const evidenceRows = run.rows.map((row) => {
+    const discoveryEvidenceRows = run.rows.map((row) => {
       const candidate = candidates.find((candidate) => candidate.symbol === row.symbol)!;
       const supplied = assessments.get(row.symbol)?.factors;
       const factors: DiscoveryFactor[] = Array.isArray(supplied) ? supplied : DISCOVERY_FACTORS.map((factor) => ({
@@ -174,6 +177,15 @@ export async function POST(request: Request) {
       return { ...row, factors, firstSeenAt: contentRoots.length ? firstSeenAt : null,
         hasDiscoveryEvidence: contentRoots.length > 0 };
     });
+    // Server-owned, bounded PIT reads only. Price contexts cannot influence the
+    // selection already computed above or replace immutable discovery gaps.
+    const priceEnrichment = await loadDiscoveryPriceEnrichment(db, discoveryEvidenceRows.map((row) => ({
+      symbol: row.symbol, stockId: String(roster.get(row.symbol)?.stock_id || ''),
+      exchange: String(roster.get(row.symbol)?.exchange || ''), firstSeenAt: row.firstSeenAt,
+      hasDiscoveryEvidence: row.hasDiscoveryEvidence,
+    })), asOf);
+    if (priceEnrichment.accountedCount !== run.accountedCount) throw new Error('research_priority_price_accounting_mismatch');
+    const evidenceRows = discoveryEvidenceRows.map((row) => ({ ...row, priceContext: priceEnrichment.contexts.get(row.symbol)! }));
     const inputHash = researchCanonicalHash({ asOf, attempts, candidates, evidenceRows, excluded });
     const stored = await db.from('research_priority_runs_v1').insert({
       as_of: asOf, policy_version: run.policyVersion, input_hash: inputHash,
@@ -190,7 +202,11 @@ export async function POST(request: Request) {
     const discoveries = await db.rpc('capture_research_first_discoveries_v1', { p_run_id: runId });
     if (discoveries.error) throw new Error(`research_priority_discovery_capture_failed:${discoveries.error.message}`);
     return NextResponse.json({ ok: true, runId,
-      asOf, expectedCount: run.expectedCount, accountedCount: run.accountedCount,
+      asOf, inputHash, expectedCount: run.expectedCount, accountedCount: run.accountedCount,
+      priceEnrichment: { policyVersion: priceEnrichment.policyVersion, expectedCount: priceEnrichment.expectedCount,
+        accountedCount: priceEnrichment.accountedCount, admittedReads: priceEnrichment.admittedReads,
+        bounds: priceEnrichment.bounds, rankingInfluence: false },
+      priceContexts: evidenceRows.map((row) => ({ symbol: row.symbol, priceContext: row.priceContext })),
       queue: run.queue, excludedNonCommon: excluded, sourceAttempts: attempts,
       unselectedCount: run.unselected.length, newDeepResearchJobs: queued.data,
       firstDiscoveryCaptures: discoveries.data,

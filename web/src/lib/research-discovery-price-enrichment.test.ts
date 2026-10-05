@@ -1,0 +1,196 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import { researchCanonicalHash } from './research-agent-qualification.ts';
+import { TW_ENTRY_PLAN_RULESET } from './tw-entry-plan-contract.ts';
+import { DISCOVERY_PRICE_BOUNDS, discoveryWindowDatasetHash, evaluateDiscoveryPrice, loadDiscoveryPriceEnrichment,
+  readDiscoveryRawQuote, type DiscoveryPriceCandidate, type DiscoveryPriceRead, type DiscoveryOfficialWindow } from './research-discovery-price-enrichment.ts';
+
+const uuid=(n:number)=>`00000000-0000-4000-8000-${String(n).padStart(12,'0')}`;
+const session='2026-10-02'; const cutoff='2026-10-02T08:00:00Z';
+const url='https://www.twse.com.tw/exchangeReport/STOCK_DAY?stockNo=2409&date=20261002&response=json';
+function candidate(symbol='2409'): DiscoveryPriceCandidate {
+  return {symbol,stockId:uuid(Number(symbol)),exchange:'TWSE',firstSeenAt:cutoff,hasDiscoveryEvidence:true};
+}
+function fixture(): DiscoveryPriceRead {
+  const dates:string[]=[];
+  for(let time=Date.parse(`${session}T00:00:00Z`);dates.length<61;time-=86_400_000) {
+    const day=new Date(time); if([0,6].includes(day.getUTCDay()) || day.toISOString().slice(0,10)==='2026-09-25') continue;
+    dates.unshift(day.toISOString().slice(0,10));
+  }
+  const stock=dates.map((day)=>({session:day,close:100,availableAt:`${day}T06:00:00Z`}));
+  const window:DiscoveryOfficialWindow={stock,benchmark:structuredClone(stock),latestCompletedSession:session,
+    calendar:dates.map((day)=>({session:day,closeAt:`${day}T05:30:00Z`,availableAt:`${day}T06:00:00Z`})),
+    priceBasis:{kind:'adjusted_to_signal_session',anchorSession:session,evidenceHash:'a'.repeat(64),availableAt:`${session}T06:00:00Z`},
+    validation:null,phase:null};
+  const datasetHash=discoveryWindowDatasetHash(window);
+  window.validation={status:'passed',recordedAt:`${session}T06:30:00Z`,evidenceHash:'b'.repeat(64),datasetHash};
+  window.phase={ruleset:TW_ENTRY_PLAN_RULESET,session,availableAt:`${session}T07:00:00Z`,datasetHash,
+    close:100,ma20:99,atr14:3,rsi14:60,breakout:'confirmed',pullback:'waiting'};
+  return {quote:{session,close:100,volume:10_000,sourceUrl:url,availableAt:`${session}T06:00:00Z`,priceBasis:'raw_exchange_quote'},
+    window,latestCompletedSession:session,missing:[]};
+}
+function mockClient(tables:Record<string,unknown[]>={},failTable:string|null=null) {
+  const calls:Array<{table:string;method:string;args:unknown[]}>=[];
+  const client={from(table:string){
+    let low=0;let high=Infinity;
+    const query:Record<string,unknown>={then(resolve:(value:unknown)=>void){
+      resolve({data:(tables[table] || []).slice(low,high+1),error:table===failTable ? {message:'synthetic read failure'} : null});
+    }};
+    for(const method of ['select','lte','eq','order','abortSignal','limit','range']) query[method]=(...args:unknown[])=>{
+      calls.push({table,method,args});if(method==='range'){low=Number(args[0]);high=Number(args[1]);}
+      if(method==='limit') high=Number(args[0])-1;return query;
+    };
+    return query;
+  }};
+  return {client:client as unknown as Parameters<typeof loadDiscoveryPriceEnrichment>[0],calls};
+}
+test('DP01 approved synthetic window computes all horizons; breakout does not grant research eligibility',()=>{
+  const result=evaluateDiscoveryPrice(fixture(),cutoff);
+  assert.equal(result.relative5d,0);assert.equal(result.relative20d,0);assert.equal(result.relative60d,0);
+  assert.equal(result.pricePhase,'initial_breakout');assert.equal(result.researchEvidenceRequired,true);
+  assert.equal(result.rankingInfluence,false);assert.deepEqual(result.missing,[]);
+});
+test('DP02 wrong benchmark, incomplete calendar or stale last session never yields relative returns',()=>{
+  for(const mutate of [(read:DiscoveryPriceRead)=>{read.window!.benchmark[0].session='2026-06-01';},
+    (read:DiscoveryPriceRead)=>{read.window!.calendar.pop();},
+    (read:DiscoveryPriceRead)=>{read.latestCompletedSession='2026-10-01';}]) {
+    const read=fixture();mutate(read);const result=evaluateDiscoveryPrice(read,cutoff);
+    assert.equal(result.relative5d,null);assert.equal(result.relative60d,null);assert.equal(result.pricePhase,'unknown');
+  }
+});
+test('DP03 future available/session and validation clocks fail closed',()=>{
+  for(const mutate of [(read:DiscoveryPriceRead)=>{read.window!.stock[60].availableAt='2026-10-03T06:00:00Z';},
+    (read:DiscoveryPriceRead)=>{read.window!.stock[60].session='2026-10-03';},
+    (read:DiscoveryPriceRead)=>{read.window!.validation!.recordedAt='2026-10-03T06:00:00Z';},
+    (read:DiscoveryPriceRead)=>{read.window!.validation!.recordedAt='2026-10-02T05:00:00Z';}]) {
+    const read=fixture();mutate(read);const result=evaluateDiscoveryPrice(read,cutoff);
+    assert.equal(result.relative5d,null);assert.equal(result.pricePhase,'unknown');assert.ok(result.missing.length);
+  }
+});
+test('DP04 missing quotes, corporate actions and failed official verification are explicit unknowns',()=>{
+  const read=fixture();read.window!.validation!.status='failed';
+  assert.equal(evaluateDiscoveryPrice(read,cutoff).relative60d,null);
+  read.window!.priceBasis=null;assert.ok(evaluateDiscoveryPrice(read,cutoff).missing.includes('corporate_action_basis_missing'));
+  read.quote=null;assert.ok(evaluateDiscoveryPrice(read,cutoff).missing.includes('quote_missing_at_discovery'));
+  assert.equal(evaluateDiscoveryPrice({quote:null,window:null,latestCompletedSession:null,missing:[]},cutoff).pricePhase,'unknown');
+});
+test('DP05 valid returns do not invent a phase when metadata is absent, future or wrong ruleset',()=>{
+  for(const mutate of [(read:DiscoveryPriceRead)=>{read.window!.phase=null;},
+    (read:DiscoveryPriceRead)=>{read.window!.phase!.ruleset='model_guess';},
+    (read:DiscoveryPriceRead)=>{read.window!.phase!.availableAt='2026-10-03T06:00:00Z';}]) {
+    const read=fixture();mutate(read);const result=evaluateDiscoveryPrice(read,cutoff);
+    assert.equal(result.relative60d,0);assert.equal(result.pricePhase,'unknown');
+  }
+});
+test('DP06 overheating and established pullback preserve existing thresholds',()=>{
+  const read=fixture();read.window!.phase!.rsi14=75;
+  assert.equal(evaluateDiscoveryPrice(read,cutoff).pricePhase,'extended');
+  read.window!.phase!.rsi14=60;read.window!.phase!.breakout='waiting';read.window!.phase!.pullback='confirmed';
+  assert.equal(evaluateDiscoveryPrice(read,cutoff).pricePhase,'trend_pullback');
+  read.window!.phase!.rsi14=101;assert.equal(evaluateDiscoveryPrice(read,cutoff).pricePhase,'unknown');
+});
+test('DP07 immutable first quote/gap survives later reads and a changed current firstSeenAt',async()=>{
+  for(const price of [fixture().quote,null]) {
+    const first={symbol:'2409',run_id:uuid(1),first_seen_at:cutoff,captured_at:'2026-10-02T09:00:00Z',snapshot:{price,pricePhase:'unknown'}};
+    const {client}=mockClient({research_first_discoveries_v1:[first]});let reads=0;
+    const later={...candidate(),firstSeenAt:'2026-10-05T08:00:00Z'};
+    const result=await loadDiscoveryPriceEnrichment(client,[later],'2026-10-05T09:00:00Z',{
+      reader:async()=>{reads++;return fixture();}});
+    const context=result.contexts.get('2409')!;
+    assert.equal(reads,0);assert.equal(context.cutoff,cutoff);assert.equal(context.quote?.close || null,price?.close || null);
+    assert.equal(context.immutableSnapshotHash,researchCanonicalHash(first.snapshot));assert.equal(context.relative60d,null);
+    assert.deepEqual(first.snapshot,{price,pricePhase:'unknown'});
+  }
+});
+test('DP08 missing discovery, admitted success and failed read each account for a full symbol',async()=>{
+  const {client}=mockClient();let reads=0;
+  const result=await loadDiscoveryPriceEnrichment(client,[candidate('2409'),candidate('2410'),{...candidate('2411'),firstSeenAt:null,hasDiscoveryEvidence:false}],cutoff,{
+    reader:async(_db,row)=>{reads++;if(row.symbol==='2410') throw new Error('private upstream message');return fixture();}});
+  assert.equal(result.expectedCount,3);assert.equal(result.accountedCount,3);assert.equal(reads,2);
+  assert.ok(result.contexts.get('2410')!.missing.includes('official_price_read_failed'));
+  assert.ok(result.contexts.get('2411')!.missing.includes('discovery_evidence_missing'));
+  assert.equal(JSON.stringify([...result.contexts.values()]).includes('private upstream message'),false);
+});
+test('DP09 deterministic sorted admission caps reads at 32 without losing symbols',async()=>{
+  const {client}=mockClient();const candidates=Array.from({length:35},(_,i)=>candidate(String(2400+i))).reverse();
+  const called:string[]=[];
+  const result=await loadDiscoveryPriceEnrichment(client,candidates,cutoff,{reader:async(_db,row)=>{called.push(row.symbol);return fixture();}});
+  assert.equal(called.length,DISCOVERY_PRICE_BOUNDS.newReads);assert.equal(called[0],'2400');assert.equal(result.accountedCount,35);
+  assert.ok(result.contexts.get('2434')!.missing.includes('price_read_admission_bound'));
+  assert.deepEqual(candidates.map((row)=>row.symbol),Array.from({length:35},(_,i)=>String(2434-i)));
+});
+test('DP10 registry failure and read deadline do not backfill an unconfirmed first capture',async()=>{
+  const failed=mockClient({},'research_first_discoveries_v1');let reads=0;
+  const reader=async()=>{reads++;return fixture();};
+  const result=await loadDiscoveryPriceEnrichment(failed.client,[candidate()],cutoff,{reader});
+  assert.equal(reads,0);assert.ok(result.contexts.get('2409')!.missing.includes('first_discovery_registry_read_failed'));
+  const {client}=mockClient();const ticks=[0,DISCOVERY_PRICE_BOUNDS.readMs+1];
+  const timed=await loadDiscoveryPriceEnrichment(client,[candidate()],cutoff,{reader,monotonicNow:()=>ticks.shift()!});
+  assert.equal(reads,0);assert.equal(timed.accountedCount,1);assert.ok(timed.contexts.get('2409')!.missing.includes('price_read_deadline'));
+});
+function rawTables() {
+  return {tw_trading_sessions_v3:[{session_id:session,status:'completed',market:'TWSE',provider:'twse',
+    open_at:`${session}T01:00:00Z`,close_at:`${session}T05:30:00Z`,source_timestamp:`${session}T05:30:00Z`,
+    collected_at:`${session}T06:00:00Z`,recorded_at:`${session}T06:00:00Z`,source_ref:'twse-official-calendar'}],
+    official_price_history:[{session_date:session,close:100,volume:10_000,source_url:url,
+      as_of:`${session}T05:30:00Z`,available_at:`${session}T06:00:00Z`,provider:'official_primary',integrityStatus:'valid'}]};
+}
+test('DP11 fixed DB reader obtains only cutoff-visible raw quote; absent adapters remain missing',async()=>{
+  const {client,calls}=mockClient(rawTables());
+  const read=await readDiscoveryRawQuote(client,candidate(),cutoff,new AbortController().signal);
+  assert.equal(read.quote?.close,100);assert.equal(read.latestCompletedSession,session);assert.equal(read.window,null);
+  assert.ok(read.missing.includes('aligned_benchmark_adapter_unavailable'));
+  assert.equal(evaluateDiscoveryPrice(read,cutoff).relative5d,null);
+  assert.ok(calls.some((call)=>call.method==='lte' && call.args[0]==='available_at' && call.args[1]===cutoff));
+  assert.equal(calls.every((call)=>['tw_trading_sessions_v3','official_price_history'].includes(call.table)),true);
+});
+test('DP12 cache official conflicts, future availability and invalid price source never verify a quote',async()=>{
+  for(const mutate of [(tables:ReturnType<typeof rawTables>)=>{tables.official_price_history[0].integrityStatus='conflict';},
+    (tables:ReturnType<typeof rawTables>)=>{tables.official_price_history[0].available_at='2026-10-03T06:00:00Z';},
+    (tables:ReturnType<typeof rawTables>)=>{tables.official_price_history[0].source_url='https://attacker.test/twse.com.tw';}]) {
+    const tables=rawTables();mutate(tables);const {client}=mockClient(tables);
+    const result=await readDiscoveryRawQuote(client,candidate(),cutoff,new AbortController().signal);
+    assert.equal(result.quote,null);assert.ok(result.missing.includes('official_quote_validation_failed'));
+  }
+});
+test('DP13 no weekday or holiday guess certifies a stale latest completed session',async()=>{
+  const {client}=mockClient(rawTables());
+  const result=await readDiscoveryRawQuote(client,candidate(),'2026-10-05T08:00:00Z',new AbortController().signal);
+  assert.equal(result.quote?.session,session);assert.equal(result.latestCompletedSession,null);
+  assert.ok(result.missing.includes('latest_completed_session_freshness_unverified'));
+});
+test('DP14 calendar correction conflicts and incomplete clocks cannot become completed authority',async()=>{
+  const tables=rawTables();tables.tw_trading_sessions_v3.push({...tables.tw_trading_sessions_v3[0],status:'cancelled'});
+  const {client}=mockClient(tables);
+  assert.equal((await readDiscoveryRawQuote(client,candidate(),cutoff,new AbortController().signal)).quote,null);
+  tables.tw_trading_sessions_v3.pop();tables.tw_trading_sessions_v3[0].collected_at=`${session}T05:00:00Z`;
+  assert.ok((await readDiscoveryRawQuote(mockClient(tables).client,candidate(),cutoff,new AbortController().signal)).missing.includes('official_calendar_validation_failed'));
+});
+test('DP15 exchange/provider conflict and ambiguous integrity flags remain visible failures',async()=>{
+  const tables=rawTables();tables.official_price_history[0].source_url='https://www.tpex.org.tw/www/zh-tw/afterTrading/tradingStock';
+  assert.equal((await readDiscoveryRawQuote(mockClient(tables).client,candidate(),cutoff,new AbortController().signal)).quote,null);
+  const mixed=rawTables();Object.assign(mixed.official_price_history[0],{integrity_status:'conflict'});
+  assert.equal((await readDiscoveryRawQuote(mockClient(mixed).client,candidate(),cutoff,new AbortController().signal)).quote,null);
+});
+test('DP16 row clock before actual calendar close fails even with a recomputed dataset hash',()=>{
+  const read=fixture();read.window!.stock[60].availableAt=`${session}T05:00:00Z`;
+  const hash=discoveryWindowDatasetHash(read.window!);read.window!.validation!.datasetHash=hash;read.window!.phase!.datasetHash=hash;
+  const result=evaluateDiscoveryPrice(read,cutoff);
+  assert.equal(result.relative60d,null);assert.equal(result.pricePhase,'unknown');
+  assert.ok(result.missing.includes('price_session_or_validation_clock_invalid'));
+});
+test('DP17 malformed/future immutable registry record cannot be replaced by a current quote',async()=>{
+  const first={symbol:'2409',run_id:uuid(1),first_seen_at:cutoff,captured_at:'2026-10-06T09:00:00Z',snapshot:{price:fixture().quote}};
+  let reads=0;const {client}=mockClient({research_first_discoveries_v1:[first]});
+  const result=await loadDiscoveryPriceEnrichment(client,[candidate()],cutoff,{reader:async()=>{reads++;return fixture();}});
+  assert.equal(reads,0);assert.equal(result.contexts.get('2409')!.quote,null);
+  assert.ok(result.contexts.get('2409')!.missing.includes('immutable_first_discovery_invalid'));
+});
+test('DP18 registry over the fixed row bound accounts all candidates as missing without new reads',async()=>{
+  const first=Array.from({length:5001},(_,i)=>({symbol:String(1000+i),run_id:uuid(i),first_seen_at:cutoff,
+    captured_at:cutoff,snapshot:{price:null}}));
+  const {client}=mockClient({research_first_discoveries_v1:first});let reads=0;
+  const result=await loadDiscoveryPriceEnrichment(client,[candidate()],cutoff,{reader:async()=>{reads++;return fixture();}});
+  assert.equal(reads,0);assert.equal(result.accountedCount,1);
+  assert.ok(result.contexts.get('2409')!.missing.includes('first_discovery_registry_read_bound'));
+});

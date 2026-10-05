@@ -12,17 +12,39 @@ export type DiscoveryFactor = {
 };
 export type DiscoveryPriceBar = { session: string; close: number; availableAt: string };
 
+export function discoverySession(value: unknown): value is string {
+  return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/u.test(value)
+    && Number.isFinite(Date.parse(`${value}T00:00:00Z`))
+    && new Date(`${value}T00:00:00Z`).toISOString().slice(0, 10) === value;
+}
+export function discoveryInstant(value: unknown): value is string {
+  return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|[+-](?:[01]\d|2[0-3]):[0-5]\d)$/u.test(value)
+    && discoverySession(value.slice(0, 10)) && Number.isFinite(Date.parse(value));
+}
+export function discoveryTaipeiDate(value: string) {
+  if (!discoveryInstant(value)) throw new Error('discovery_cutoff_invalid');
+  return new Date(Date.parse(value) + 8 * 3600_000).toISOString().slice(0, 10);
+}
+
 /** Returns require aligned, complete windows; unknown prices are never "early". */
-export function discoveryRelativeReturns(stock: DiscoveryPriceBar[], benchmark: DiscoveryPriceBar[], asOf: string) {
+export function discoveryRelativeReturns(stock: DiscoveryPriceBar[], benchmark: DiscoveryPriceBar[], asOf: string,
+  options: { requireComplete61?: boolean } = {}) {
   const cutoff = Date.parse(asOf);
-  if (!Number.isFinite(cutoff)) throw new Error('discovery_cutoff_invalid');
+  if (!discoveryInstant(asOf)) throw new Error('discovery_cutoff_invalid');
   const select = (bars: DiscoveryPriceBar[]) => {
-    if (bars.some((bar, i) => !/^\d{4}-\d{2}-\d{2}$/u.test(bar.session)
-      || !Number.isFinite(bar.close) || bar.close <= 0 || !Number.isFinite(Date.parse(bar.availableAt))
+    if (bars.length > 1320 || bars.some((bar, i) => !discoverySession(bar.session)
+      || !Number.isFinite(bar.close) || bar.close <= 0 || !discoveryInstant(bar.availableAt)
+      || Date.parse(bar.availableAt) > cutoff || bar.session > discoveryTaipeiDate(asOf)
+      || discoveryTaipeiDate(bar.availableAt) < bar.session
       || (i > 0 && bar.session <= bars[i - 1].session))) throw new Error('discovery_price_invalid');
-    return bars.filter((bar) => Date.parse(bar.availableAt) <= cutoff);
+    return bars.slice(-61);
   };
   const prices = select(stock); const market = select(benchmark);
+  // The new enrichment mandates one complete aligned window for all horizons.
+  // Retain the existing standalone helper's shorter-window caller contract.
+  if (options.requireComplete61 && (prices.length !== 61 || market.length !== 61
+    || prices.some((bar, index) => bar.session !== market[index].session)))
+    return { relative5d: null, relative20d: null, relative60d: null };
   const result = (days: number) => {
     const own = prices.slice(-(days + 1)); const other = market.slice(-(days + 1));
     if (own.length !== days + 1 || other.length !== days + 1
@@ -34,13 +56,16 @@ export function discoveryRelativeReturns(stock: DiscoveryPriceBar[], benchmark: 
 
 export function discoveryPricePhase(input: {
   close: number | null; ma20: number | null; atr14: number | null; rsi14: number | null;
-  breakoutConfirmed: boolean; pullbackConfirmed: boolean; officialDatasetVerified: boolean;
+  breakoutConfirmed: boolean | null; pullbackConfirmed: boolean | null; officialDatasetVerified: boolean;
 }) {
-  if (!input.officialDatasetVerified || [input.close, input.ma20, input.atr14, input.rsi14]
+  if (input.officialDatasetVerified !== true || [input.close, input.ma20, input.atr14, input.rsi14]
     .some((value) => value === null || !Number.isFinite(value))
-    || input.close! <= 0 || input.ma20! <= 0 || input.atr14! <= 0) return 'unknown' as const;
+    || input.close! <= 0 || input.ma20! <= 0 || input.atr14! <= 0
+    || input.rsi14! < 0 || input.rsi14! > 100) return 'unknown' as const;
   // Reuse the existing entry-plan overheating predicates, not a return forecast.
   if (input.rsi14! >= 75 || input.close! > input.ma20! + 2 * input.atr14!) return 'extended' as const;
+  if (typeof input.breakoutConfirmed !== 'boolean' || typeof input.pullbackConfirmed !== 'boolean'
+    || input.breakoutConfirmed && input.pullbackConfirmed) return 'unknown' as const;
   if (input.breakoutConfirmed) return 'initial_breakout' as const;
   if (input.pullbackConfirmed) return 'trend_pullback' as const;
   return 'research_before_trigger' as const;
