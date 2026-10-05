@@ -95,6 +95,16 @@ test('total deadline defers work instead of pretending the monitoring run comple
   assert.equal(saved.deferred.every(item => item.reason === 'batch_deadline'), true);
 }));
 
+test('deadline exhausted while journaling does not dispatch a snapshot with a negative timeout', async () => fixture(async ({ file, args, dependencies }) => {
+  const clocks = [0, 0, 54000, 56000]; let calls = 0;
+  const saved = await monitorControllerCommand(args, { ...dependencies, monotonic: () => clocks.shift() ?? 56000,
+    post: async (url) => { calls++; assert.ok(url.endsWith('worklist')); return { rejected: false, body: worklist() }; } });
+  assert.equal(calls, 1); assert.equal(saved.outcomes.length, 0); assert.equal(saved.deferred.length, 2);
+  assert.equal(saved.deferred.every(item => item.reason === 'batch_deadline'), true);
+  assert.equal(saved.allTechnicalSnapshotsSaved, false);
+  assert.match(await fs.readFile(file('batch.jsonl'), 'utf8'), /request_not_sent/);
+}));
+
 test('explicit server gaps remain visible and do not stop another held stock from being checked', async () => fixture(async ({ args, dependencies }) => {
   const saved = await monitorControllerCommand(args, { ...dependencies, post: async (url, body) => {
     if (url.endsWith('worklist')) return { rejected: false, body: worklist() };

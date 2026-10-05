@@ -25,6 +25,8 @@ function originUrl(origin) {
   return url;
 }
 async function jsonPost(url, body, key, timeoutMs) {
+  if (!Number.isInteger(timeoutMs) || timeoutMs <= 0 || timeoutMs > 15_000)
+    throw new Error('monitor_controller_transport_deadline');
   // Keep cancellation strongly reachable until the complete body is read.
   // An inline timeout signal may be collected once fetch returns its headers.
   const controller = new AbortController();
@@ -157,7 +159,13 @@ export async function monitorControllerCommand(args, dependencies = {}) {
     output = await open(outputPath, 'wx', 0o600);
     pending = 'worklist';
     await log({ phase: 'request_pending', operation: pending, sourceCommit: source.commit, observedAt: now() });
-    const loaded = await post(new URL('/api/internal/research-monitor-worklist', origin).href, {}, key, timeout());
+    const firstTimeout = timeout();
+    if (firstTimeout < 1000) {
+      pending = null;
+      await log({ phase: 'request_not_sent', operation: 'worklist', reason: 'batch_deadline', observedAt: now() });
+      throw new Error('monitor_controller_batch_deadline');
+    }
+    const loaded = await post(new URL('/api/internal/research-monitor-worklist', origin).href, {}, key, firstTimeout);
     if (loaded.rejected) throw new Error('monitor_controller_worklist_rejected');
     const worklist = validateMonitorWorklist(loaded.body, now());
     const worklistHash = researchCanonicalHash(worklist);
@@ -169,10 +177,17 @@ export async function monitorControllerCommand(args, dependencies = {}) {
       if (outcomes.length >= MAX_TASKS || timeout() < 1000) { stopReason = outcomes.length >= MAX_TASKS ? 'batch_task_bound' : 'batch_deadline'; break; }
       pending = item.symbol;
       await log({ phase: 'request_pending', operation: 'technical_snapshot', symbol: item.symbol, worklistHash, observedAt: now() });
+      const remaining = timeout();
+      if (remaining < 1000) {
+        pending = null; stopReason = 'batch_deadline';
+        await log({ phase: 'request_not_sent', operation: 'technical_snapshot', symbol: item.symbol,
+          worklistHash, reason: stopReason, observedAt: now() });
+        break;
+      }
       // Let the server reacquire current authority and thesis. Passing the older
       // worklist cutoff would conceal later invalidations or fresh acquisitions.
       const reply = await post(new URL('/api/internal/research-technical-snapshot', origin).href,
-        { symbol: item.symbol }, key, timeout());
+        { symbol: item.symbol }, key, remaining);
       const result = reply.rejected ? { symbol: item.symbol, status: 'server_rejected', httpStatus: reply.status }
         : { symbol: item.symbol, status: 'snapshot_saved', ...projectSnapshot(reply.body, item.symbol, worklist.asOf, now()) };
       await log({ phase: 'response_verified', result, worklistHash, observedAt: now() });
