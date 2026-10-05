@@ -56,3 +56,11 @@ The repaired generated codeHash is
 `02b97f85fbe0d280a641033c5e6326926d614e239a650b1e49a2dc63db90ba10`;
 parameterHash and 29-source closure are unchanged. Prior review/test versions
 remain distinguishable; final repair review/build are not inferred from them.
+
+Independent exact98b9a76 review now approves the limited code scope after20 tests
+and21 additional malformed-rights assertions. The repaired ordinary build passed.
+Internal Browser checked the actual shared renderer using a clearly labelled
+synthetic local fixture at1280x800 and390x844: no document horizontal overflow,
+seven sections, one industry label, keyboard background toggle and clicked
+source toggle. Viewport/tab/server were restored/stopped. This is not full Next
+application acceptance, a completed real long article, or a production deploy.
