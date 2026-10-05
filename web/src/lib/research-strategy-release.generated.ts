@@ -76,7 +76,7 @@ export const RESEARCH_STRATEGY_RELEASE = {
     },
     {
       "path": "web/src/lib/research-deep-source-rights.ts",
-      "sha256": "b74ef052ea791d573cd9bc9f6b898746ccdc954cc38d9bd46afe747f3e8a1ffc"
+      "sha256": "a4f1d484a2fb379ac2c117ed89f4bb1a8cab8e3ecc009e88601578ddb292379b"
     },
     {
       "path": "web/src/lib/research-execution-context.ts",
@@ -243,7 +243,7 @@ export const RESEARCH_STRATEGY_RELEASE = {
     }
   ],
   "dependencyLockHash": "b4cb28ff8bbe703c4dde02fab70cd35ef0719f7eb62e32ff3203e29b30748516",
-  "codeHash": "a7b4f4d9ed315592e5eb591604cc16703e8c5a6fa0e7a15eedac1c9f9e19c179",
+  "codeHash": "02b97f85fbe0d280a641033c5e6326926d614e239a650b1e49a2dc63db90ba10",
   "parameterMode": "fixed_baseline_source_bound",
   "parameterHash": "9101ef58a0d43f53e7dea0749eb03872f375bb3051cfd77e6147d9141e2334e4",
   "parameterFiles": [

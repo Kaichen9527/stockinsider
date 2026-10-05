@@ -232,6 +232,7 @@ test('loader preserves industry scope and only explicit public acquisition can c
   for (const patch of [
     { visibility: 'authenticated_summary', rights_boundary: 'bounded_summary_only', acquisition_method: 'authenticated_browser_summary' },
     { visibility: 'private' }, { rights_boundary: undefined }, { acquisition_method: 'user_authorized_document' },
+    { acquisition_method: ['public_document'] }, { acquisition_method: ['publisher_transcript'] },
     { subject_scope: null }, { subject_scope: 'unknown' },
   ]) assert.equal((await loadIndustry({ ...publicIndustryMetadata, ...patch })).publicCitation, false);
   assert.equal((await loadIndustry(publicIndustryMetadata, 'https://www.investanchors.com/member/report')).publicCitation, false);

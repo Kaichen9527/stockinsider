@@ -48,3 +48,11 @@ covering 29 source files. Parameter identity remains
 `9101ef58a0d43f53e7dea0749eb03872f375bb3051cfd77e6147d9141e2334e4`;
 no trading rule, coefficient or approved version was changed or adopted.
 An old approval must not silently authorize a changed executable source identity.
+
+Independent review of 5fb04e4 reproduced a malformed acquisition-method array
+being coerced into a valid public method. The strict stored-string enum repair
+rejects arrays and custom coercion objects, with helper and actual loader cases.
+The repaired generated codeHash is
+`02b97f85fbe0d280a641033c5e6326926d614e239a650b1e49a2dc63db90ba10`;
+parameterHash and 29-source closure are unchanged. Prior review/test versions
+remain distinguishable; final repair review/build are not inferred from them.

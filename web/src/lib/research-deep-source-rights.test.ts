@@ -11,7 +11,9 @@ test('admission/display share explicit scope and public rights; account names do
     assert.deepEqual(deepSourceCitation(metadata, permalink), { subjectScope: 'unknown', url: null });
   for (const patch of [{ rights_boundary: null }, { visibility: null }, { acquisition_method: null },
     { visibility: 'authenticated_summary' }, { rights_boundary: 'bounded_summary_only' },
-    { acquisition_method: 'authenticated_browser_summary' }, { acquisition_method: 'user_authorized_document' }])
+    { acquisition_method: 'authenticated_browser_summary' }, { acquisition_method: 'user_authorized_document' },
+    { acquisition_method: ['public_document'] }, { acquisition_method: ['publisher_transcript'] },
+    { acquisition_method: { toString: () => 'public_document' } }])
     assert.equal(deepSourceCitation({ ...rights, ...patch }, permalink).url, null);
 });
 test('member, profile, host spoofing, credential, fragment and non-http URLs cannot use the social exception', () => {

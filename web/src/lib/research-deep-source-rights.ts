@@ -24,7 +24,8 @@ export function deepSourceCitation(metadata: unknown, candidateUrl: unknown): {
       && !isPaidInvestAnchorsReference(url) ? url : null };
   }
   if (data.visibility !== 'public' || data.rights_boundary !== 'public_citation'
-    || !['public_document', 'publisher_transcript'].includes(String(data.acquisition_method))) {
+    || typeof data.acquisition_method !== 'string'
+    || !['public_document', 'publisher_transcript'].includes(data.acquisition_method)) {
     return { subjectScope, url: null };
   }
   if (!isPaidInvestAnchorsReference(url)) return { subjectScope, url };
