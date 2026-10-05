@@ -5,7 +5,8 @@
 - [x] Implement exact bounded association request validation and server-only source/basis resolution.
 - [x] Preserve immutable run receipts without changing rankings, source counts, discovery clocks or queue eligibility.
 - [x] Add unit and executable actual-route contracts covering PIT, lineage, rights, failures and compatibility.
-- [x] Complete final tests (122 passed, no skips), typecheck, lint (0 errors, 33 existing warnings), ordinary Mac build and 15 disposable PostgreSQL evidence-head probes.
+- [x] Repair reviewer P2: validate all maximum-clock sibling invariants, bind metadata hash/excerpts, reproduce all three reported cases, reject malformed null/unknown scope without breaking omitted legacy scope, and exercise valid available-factor binding in AR08.
+- [x] Complete final tests (128 passed, no skips), typecheck, lint (0 errors, 33 existing warnings), ordinary Mac build and disposable PostgreSQL evidence-head probes.
 - [x] Record validation and limitations; batch B's seven owned files form the implementation commit.
 - [ ] Independent review by parent/reviewer; maker tests are not approval.
 

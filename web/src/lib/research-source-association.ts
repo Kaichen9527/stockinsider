@@ -104,15 +104,16 @@ function sqlCanonical(document: Row) {
 }
 function versionSignature(document: Row) {
   const meta = metadata(document) || {};
-  return researchCanonicalHash({ hash: document.canonical_content_hash ?? null, symbols: document.symbols ?? null,
+  return researchCanonicalHash({ hash: document.canonical_content_hash ?? null, metadataHash: meta.content_hash ?? null,
+    timedExcerpts: meta.timed_excerpts ?? null, symbols: document.symbols ?? null,
     published: document.published_at ?? null, first: meta.first_observed_at ?? null,
-    semantics: document.content_semantics ?? null, scope: meta.subject_scope ?? 'company_mentions',
+    semantics: document.content_semantics ?? null, scope: meta.subject_scope === undefined ? 'company_mentions' : meta.subject_scope,
     claim: meta.claim_status ?? null, retracted: meta.retracted_at ?? null, parent: meta.parent_source_url ?? null,
     rights: meta.rights_boundary ?? null, visibility: meta.visibility ?? null,
     acquisition: meta.acquisition_method ?? null, contentForm: meta.content_form ?? null });
 }
-function documentProof(document: Row, head: Row | undefined, cutoff: string,
-  conflict: string | undefined): { proof: AssociationDocumentProof | null; gap: string | null } {
+/** Shared invariants for both the requested document and every latest sibling. */
+function documentInvariantProof(document: Row, cutoff: string): { proof: AssociationDocumentProof | null; gap: string | null } {
   const fail = (gap: string) => ({ proof: null, gap }); const meta = metadata(document); const root = canonical(document);
   if (!meta || !root || typeof document.id !== 'string' || !UUID.test(document.id)
     || typeof document.canonical_content_hash !== 'string' || !HASH.test(document.canonical_content_hash)
@@ -126,11 +127,8 @@ function documentProof(document: Row, head: Row | undefined, cutoff: string,
   const [published, first, revised, collected] = clocks.map((value) => Date.parse(String(value)));
   if (!(published <= first && first <= revised && revised <= collected)) return fail('clock_invalid');
   if (collected > Date.parse(cutoff)) return fail('future_at_cutoff');
-  if (meta.retracted_at != null || head?.retracted === true) return fail('retracted');
+  if (meta.retracted_at != null) return fail('retracted');
   if (meta.claim_status === 'denied') return fail('denied');
-  if (!head || head.headId == null) return fail('head_missing');
-  if (head.headId !== document.id || head.superseded === true) return fail('superseded');
-  if (conflict) return fail(conflict);
   if (meta.parent_source_url != null && meta.parent_source_url !== root) return fail('parent_unresolved');
   if (!['rumor', 'reported', 'confirmed'].includes(String(meta.claim_status))) return fail('claim_status_invalid');
   if (document.content_semantics !== 'editorial_discussion' || !['research_summary', 'transcript_excerpt'].includes(String(meta.content_form))) return fail('substantive_content_missing');
@@ -143,12 +141,24 @@ function documentProof(document: Row, head: Row | undefined, cutoff: string,
   if (!Array.isArray(document.symbols) || document.symbols.length > 12
     || document.symbols.some((symbol) => typeof symbol !== 'string' || !/^\d{4}$/u.test(symbol))
     || new Set(document.symbols).size !== document.symbols.length) return fail('symbols_invalid');
+  const scope = meta.subject_scope === undefined ? 'company_mentions' : meta.subject_scope;
+  if (scope !== 'company_mentions' && scope !== 'industry_context') return fail('scope_invalid');
+  if (scope === 'industry_context' ? document.symbols.length !== 0 : document.symbols.length === 0) return fail('symbols_scope_invalid');
   return { gap: null, proof: { documentId: document.id, contentHash: document.canonical_content_hash, rootId: root,
-    platform: document.platform, subjectScope: String(meta.subject_scope || 'company_mentions'), symbols: [...document.symbols].sort(),
+    platform: document.platform, subjectScope: scope, symbols: [...document.symbols].sort(),
     publishedAt: new Date(published).toISOString(), firstObservedAt: new Date(first).toISOString(),
     revisionObservedAt: new Date(revised).toISOString(), collectedAt: new Date(collected).toISOString(), availableAt: new Date(collected).toISOString(),
     visibility: meta.visibility as AssociationDocumentProof['visibility'], rightsBoundary: meta.rights_boundary as AssociationDocumentProof['rightsBoundary'],
     acquisitionMethod: String(meta.acquisition_method), contentForm: String(meta.content_form), claimStatus: String(meta.claim_status) } };
+}
+function documentProof(document: Row, head: Row | undefined, cutoff: string,
+  conflict: string | undefined): { proof: AssociationDocumentProof | null; gap: string | null } {
+  const checked = documentInvariantProof(document, cutoff);
+  if (!checked.proof) return checked;
+  if (head?.retracted === true) return { proof: null, gap: 'retracted' };
+  if (!head || head.headId == null) return { proof: null, gap: 'head_missing' };
+  if (head.headId !== document.id || head.superseded === true) return { proof: null, gap: 'superseded' };
+  return conflict ? { proof: null, gap: conflict } : checked;
 }
 
 /** No fetching, body text, scoring or writes. Every submitted association receives a server-bound receipt. */
@@ -210,12 +220,20 @@ export async function loadIndustryAssociations(db: Pick<SupabaseClient, 'from' |
       }
       if (siblings.some((document) => !revision(document))) { conflicts.set(root, 'history_clock_invalid'); continue; }
       const eligible = siblings.filter((document) => Date.parse(revision(document)!) <= Date.parse(dataCutoff));
+      const latestTime = Math.max(...eligible.map((document) => Date.parse(revision(document)!)));
+      const newest = eligible.filter((document) => Date.parse(revision(document)!) === latestTime);
+      // A deterministic head winner cannot vouch for other same-clock versions.
+      // Validate every one with the exact same invariants as the requested row,
+      // including fields that do not otherwise distinguish revision signatures.
+      const siblingChecks = newest.map((document) => documentInvariantProof(document, dataCutoff));
+      if (new Set(newest.map(versionSignature)).size > 1) conflicts.set(root, 'conflicting_head');
+      else {
+        const invalid = siblingChecks.find((checked) => checked.gap);
+        if (invalid) conflicts.set(root, `history_${invalid.gap}`);
+      }
       for (const original of documents.values()) {
         if (canonical(original) !== root || identity(original) !== null) continue;
         if (!eligible.some((document) => document.id === original.id)) { documentGaps.set(String(original.id), 'history_identity_missing'); continue; }
-        const latestTime = Math.max(...eligible.map((document) => Date.parse(revision(document)!)));
-        const newest = eligible.filter((document) => Date.parse(revision(document)!) === latestTime);
-        if (new Set(newest.map(versionSignature)).size > 1) conflicts.set(root, 'conflicting_head');
         if (latestTime > Date.parse(revision(original) || dataCutoff)) documentGaps.set(String(original.id), 'superseded');
       }
     }

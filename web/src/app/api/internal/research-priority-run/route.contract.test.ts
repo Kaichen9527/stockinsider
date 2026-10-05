@@ -78,7 +78,13 @@ function harness(first:unknown[]=[], config:{roster?:TestRow[];tables?:Record<st
     '@/lib/supabase-server':{getSupabaseServerClient:()=>{calls.push('getDB');return db;}},
     '@/lib/candidate-screened-universe':{loadPublishedCandidateSymbols:async()=>[]},
     '@/lib/research-agent-qualification':qualification,'@/lib/research-source-registry':registry,
-    '@/lib/research-source-roots':roots,'@/lib/research-discovery-evidence':evidence,
+    '@/lib/research-source-roots':roots,'@/lib/research-discovery-evidence':{...evidence,
+      validateDiscoverySourceBindings:(...args:Parameters<typeof evidence.validateDiscoverySourceBindings>)=>{
+        calls.push('validateDiscoverySourceBindings');
+        try{return evidence.validateDiscoverySourceBindings(...args);}catch(error){
+          calls.push(error instanceof Error ? error.message : 'unknown_binding_failure');throw error;
+        }
+      }},
     '@/lib/research-discovery-price-enrichment':enrichment,'@/lib/research-agent-priority':priority,
     '@/lib/research-source-association':association,
   };
@@ -337,8 +343,11 @@ test('AR07 persistence/read errors remain bounded stable codes',async()=>{
 });
 test('AR08 caller association cannot satisfy factor bindings or add a direct source claim',async()=>{
   const doc=industryDoc();const h=harness([],{sourceHeads:[doc],tables:{source_raw_documents:[doc]}});
-  const factors=evidence.DISCOVERY_FACTORS.map((factor)=>({factor,status:'missing',explanation:'Missing company-specific direct evidence',documentIds:[],rootIds:[],availableAt:null}));
-  const patched=factors.map((factor,i)=>i===0 ? {...factor,status:'supported',documentIds:[String(doc.id)],rootIds:[String((doc.metadata as TestRow).canonical_url)],availableAt:'2026-08-02T01:00:00Z'} : factor);
+  const factors:evidence.DiscoveryFactor[]=evidence.DISCOVERY_FACTORS.map((factor)=>({factor,status:'missing',explanation:'Missing company-specific direct evidence',documentIds:[],rootIds:[],availableAt:null}));
+  const patched:evidence.DiscoveryFactor[]=factors.map((factor,i)=>i===0 ? {...factor,status:'available',documentIds:[String(doc.id)],rootIds:[String((doc.metadata as TestRow).canonical_url)],availableAt:'2026-08-02T01:00:00Z'} : factor);
+  assert.doesNotThrow(()=>evidence.validateDiscoveryFactors(patched,cutoff));
+  assert.throws(()=>evidence.validateDiscoverySourceBindings(patched,[]),/research_priority_factor_source_binding_invalid/u);
   const response=await h.post(request({...payload(),assessments:[{...assessment(),factors:patched}]}));
   assert.equal(response.status,409);assert.equal(h.inserts.length,0);
+  assert.ok(h.calls.includes('research_priority_factor_source_binding_invalid'));
 });

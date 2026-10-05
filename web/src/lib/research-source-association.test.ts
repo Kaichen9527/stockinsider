@@ -122,7 +122,7 @@ test('IA07 caller cannot bind a different root/hash or inject a direct symbol in
     const { receipt } = await resolve(document(), [], overrides); assert.equal(receipt.source, null); assert.ok(receipt.gaps.includes('source_binding_mismatch'));
   }
   const fake = document(); fake.symbols = ['2409']; const { receipt } = await resolve(fake);
-  assert.ok(receipt.gaps.includes('source_not_industry_only')); assert.equal(receipt.hasResearchCue, false);
+  assert.ok(receipt.gaps.includes('source_symbols_scope_invalid')); assert.equal(receipt.hasResearchCue, false);
 });
 test('IA08 same-row denied source invalidates even when the SQL RPC booleans are false', async () => {
   const source = document(); (source.metadata as Row).claim_status = 'denied';
@@ -267,4 +267,51 @@ test('IA27 requesting an old revision does not erase the valid current receipt f
   const receipts = (await loadIndustryAssociations(mock.db, requests([input(old), input(current)]), cutoff, clock)).get('2409')!;
   assert.ok(receipts.find((receipt) => receipt.sourceDocumentId === old.id)!.gaps.includes('source_superseded'));
   assert.equal(receipts.find((receipt) => receipt.sourceDocumentId === current.id)!.hasResearchCue, true);
+});
+for (const [caseId, label, patch] of [
+  ['IA28', 'nonempty authenticated excerpts', { timed_excerpts: [{ text: 'not permitted in an authenticated summary', startSeconds: 0, endSeconds: 10 }] }],
+  ['IA29', 'string authenticated excerpts', { timed_excerpts: 'malformed private transcript metadata' }],
+  ['IA30', 'mismatched metadata content hash', { content_hash: 'f'.repeat(64) }],
+] as const) test(`${caseId} the healthy UUID009 winner cannot hide UUID008 with ${label}`, async () => {
+  const source = document(); source.id = uuid(9);
+  Object.assign(source.metadata as Row, { visibility: 'authenticated_summary', rights_boundary: 'bounded_summary_only',
+    acquisition_method: 'authenticated_browser_summary' });
+  const sibling = structuredClone(source); sibling.id = uuid(8); sibling.platform = 'legacy_threads'; Object.assign(sibling.metadata as Row, patch);
+  // Exact RPC outcome reproduced in PostgreSQL: same root/revision/hash, UUID009
+  // wins the final ID tie break and both head booleans remain false.
+  const heads = [{ id: source.id, headId: source.id, retracted: false, superseded: false }];
+  const mock = dbMock([source, sibling], { heads });
+  const receipt = (await loadIndustryAssociations(mock.db, requests([input(source)]), cutoff, clock)).get('2409')![0];
+  assert.equal(receipt.source, null); assert.equal(receipt.hasResearchCue, false);
+  assert.equal(receipt.evidenceStatus, 'needs_update'); assert.ok(receipt.gaps.includes('source_conflicting_head'));
+  assert.equal(receipt.status, 'hypothesis'); assert.equal(receipt.directSourceContribution, 0);
+});
+test('IA31 every maximum-clock sibling must pass identity and clock invariants beyond signature fields', async () => {
+  for (const patch of [{ platform: 'Invalid platform' }, { document_url: `${root}#si-revision-wrong` },
+    { collected_at: '2026-08-01T02:00:00Z' }]) {
+    const source = document(); source.id = uuid(9); const sibling = structuredClone(source); sibling.id = uuid(8); sibling.platform = 'legacy_threads';
+    Object.assign(sibling, patch);
+    const mock = dbMock([source, sibling], { heads: [{ id: source.id, headId: source.id, retracted: false, superseded: false }] });
+    const receipt = (await loadIndustryAssociations(mock.db, requests([input(source)]), cutoff, clock)).get('2409')![0];
+    assert.equal(receipt.source, null); assert.equal(receipt.hasResearchCue, false); assert.equal(receipt.evidenceStatus, 'needs_update');
+    assert.ok(receipt.gaps.some((gap) => gap === 'source_history_identity_invalid' || gap === 'source_history_clock_invalid'));
+  }
+});
+test('IA32 null/unknown company-basis sibling scope cannot normalize into a valid legacy mention', async () => {
+  for (const scope of [null, 'unknown', 'industry_context']) {
+    const source = document(); const basis = document(9, '2409'); const sibling = structuredClone(basis);
+    sibling.id = uuid(8); sibling.platform = 'legacy_threads'; (sibling.metadata as Row).subject_scope = scope;
+    const mock = dbMock([source, basis, sibling], { heads: [source, basis].map((doc) => ({ id: doc.id, headId: doc.id, retracted: false, superseded: false })) });
+    const receipt = (await loadIndustryAssociations(mock.db, requests([input(source, [String(basis.id)])]), cutoff, clock)).get('2409')![0];
+    assert.equal(receipt.companyBasis.length, 0); assert.equal(receipt.hasResearchCue, false);
+    assert.equal(receipt.evidenceStatus, 'needs_update'); assert.ok(receipt.gaps.includes('basis_conflicting_head'));
+  }
+});
+test('IA33 a genuinely omitted legacy company scope remains compatible with explicit company_mentions', async () => {
+  const source = document(); const basis = document(9, '2409'); const sibling = structuredClone(basis);
+  sibling.id = uuid(8); sibling.platform = 'legacy_threads'; delete (sibling.metadata as Row).subject_scope;
+  const mock = dbMock([source, basis, sibling], { heads: [source, basis].map((doc) => ({ id: doc.id, headId: doc.id, retracted: false, superseded: false })) });
+  const receipt = (await loadIndustryAssociations(mock.db, requests([input(source, [String(basis.id)])]), cutoff, clock)).get('2409')![0];
+  assert.equal(receipt.evidenceStatus, 'awaiting_independent_review'); assert.equal(receipt.hasResearchCue, true);
+  assert.deepEqual(receipt.gaps, []);
 });
