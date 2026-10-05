@@ -14,7 +14,8 @@ type Client = Pick<SupabaseClient, 'from'>;
 export type DiscoveryPriceCandidate = { symbol: string; stockId: string; exchange: string;
   firstSeenAt: string | null; hasDiscoveryEvidence: boolean };
 export type DiscoveryQuote = { session: string; close: number; volume: number | null;
-  sourceUrl: string; availableAt: string; priceBasis: 'raw_exchange_quote' };
+  sourceUrl: string; availableAt: string; priceBasis: 'raw_exchange_quote';
+  symbol?: string; exchange?: 'TWSE' | 'TPEX' };
 /** Server-adapter contract only. This is NOT an HTTP/model supplied context.
  * A future approved adapter must read actual validation records at cutoff. The
  * existing raw-quote adapter below cannot issue these verification receipts. */
@@ -39,15 +40,44 @@ function officialUrl(value: unknown): value is string {
   if (typeof value !== 'string' || value.length > 800 || !isOfficialCandidatePriceSource(value)
     || sanitizePublicSourceUrl(value) !== value) return false;
   const url = new URL(value);
-  return !url.hash && [...url.searchParams].every(([key, member]) => ['date','response','stockNo','type','lang'].includes(key)
-    && /^[A-Za-z0-9_-]{1,40}$/u.test(member));
+  return !url.hash && [...url.searchParams].every(([key, member]) => ['date','response','stockNo','code','type','lang'].includes(key)
+    && /^[A-Za-z0-9_/-]{1,40}$/u.test(member));
 }
-function validQuote(quote: DiscoveryQuote, cutoff: string) {
+/** Collector endpoint contracts: monthly requests can use month-start or the
+ * exact row date; daily roster requests must use that exact completed date. */
+function officialQuoteUrl(value: unknown, symbol: string, exchange: string, session: string) {
+  if (!officialUrl(value) || !/^\d{4}$/u.test(symbol) || !discoverySession(session)) return false;
+  const url = new URL(value);
+  const exactKeys = (keys: string[]) => {
+    const present = [...url.searchParams.keys()];
+    return present.length === keys.length && new Set(present).size === present.length
+      && keys.every((key)=>url.searchParams.has(key));
+  };
+  if (url.searchParams.get('response') !== 'json') return false;
+  const monthStart = `${session.slice(0,7)}-01`;
+  if (exchange === 'TWSE' && ['www.twse.com.tw','twse.com.tw'].includes(url.hostname)) {
+    if (['/exchangeReport/STOCK_DAY','/rwd/zh/afterTrading/STOCK_DAY'].includes(url.pathname))
+      return exactKeys(['response','date','stockNo']) && url.searchParams.get('stockNo') === symbol
+        && [session,monthStart].some((date)=>date.replace(/-/gu,'') === url.searchParams.get('date'));
+    if (['/exchangeReport/MI_INDEX','/rwd/zh/afterTrading/MI_INDEX'].includes(url.pathname))
+      return exactKeys(['response','date','type']) && url.searchParams.get('type') === 'ALLBUT0999'
+        && url.searchParams.get('date') === session.replace(/-/gu,'');
+  }
+  if (exchange === 'TPEX' && ['www.tpex.org.tw','tpex.org.tw'].includes(url.hostname)
+    && url.pathname === '/www/zh-tw/afterTrading/tradingStock')
+    return exactKeys(['code','date','response']) && url.searchParams.get('code') === symbol
+      && [session,monthStart].some((date)=>date.replace(/-/gu,'/') === url.searchParams.get('date'));
+  return false;
+}
+function rawQuoteShape(quote: DiscoveryQuote, cutoff: string) {
   return discoverySession(quote.session) && quote.session <= discoveryTaipeiDate(cutoff)
     && positive(quote.close) && (quote.volume === null || typeof quote.volume === 'number' && Number.isFinite(quote.volume) && quote.volume >= 0)
     && officialUrl(quote.sourceUrl) && known(quote.availableAt, cutoff)
     && Date.parse(quote.availableAt) >= Date.parse(`${quote.session}T13:30:00+08:00`)
     && quote.priceBasis === 'raw_exchange_quote';
+}
+function validQuote(quote: DiscoveryQuote, cutoff: string) {
+  return rawQuoteShape(quote,cutoff) && officialQuoteUrl(quote.sourceUrl,quote.symbol || '',quote.exchange || '',quote.session);
 }
 export function discoveryWindowDatasetHash(window: Pick<DiscoveryOfficialWindow, 'stock' | 'benchmark' | 'calendar' | 'latestCompletedSession' | 'priceBasis'>) {
   return researchCanonicalHash({ stock: window.stock, benchmark: window.benchmark, calendar: window.calendar,
@@ -131,35 +161,43 @@ export async function readDiscoveryRawQuote(client: Client, candidate: Discovery
   const empty = (reason: string): DiscoveryPriceRead => ({ quote: null, window: null, latestCompletedSession: null, missing: [reason] });
   if (!UUID.test(candidate.stockId) || !['TWSE','TPEX'].includes(candidate.exchange)) return empty('official_instrument_identity_missing');
   try {
-    const calendar = await client.from('tw_trading_sessions_v3')
+    const calendarQuery = () => client.from('tw_trading_sessions_v3')
       .select('session_id,status,market,provider,open_at,close_at,source_timestamp,collected_at,recorded_at,source_ref')
-      .eq('market', candidate.exchange).lte('close_at', cutoff).lte('source_timestamp', cutoff)
-      .lte('collected_at', cutoff).lte('recorded_at', cutoff)
+      .eq('market', candidate.exchange).lte('session_id',discoveryTaipeiDate(cutoff)).lte('source_timestamp', cutoff)
+      .lte('collected_at', cutoff).lte('recorded_at', cutoff);
+    // Normal years of older sessions must not exhaust a recent-head bound.
+    // Read the newest session/head first, then all same-time ties for that head.
+    // Do not prefilter status/close: that can resurrect a superseded completion.
+    const headRead = await calendarQuery()
       .order('session_id', { ascending: false }).order('recorded_at', { ascending: false })
+      .limit(1).abortSignal(signal);
+    if (headRead.error || !Array.isArray(headRead.data)) return empty('official_calendar_read_failed');
+    if (!headRead.data.length) return empty('latest_completed_session_missing');
+    if (headRead.data.length !== 1 || Buffer.byteLength(JSON.stringify(headRead.data)) > DISCOVERY_PRICE_BOUNDS.perReadBytes)
+      return empty('official_calendar_read_bound');
+    const latest = headRead.data[0] as Row;
+    if (!discoverySession(latest.session_id) || !known(latest.recorded_at,cutoff)) return empty('official_calendar_validation_failed');
+    const calendar = await calendarQuery().eq('session_id',latest.session_id).eq('recorded_at',latest.recorded_at)
       .limit(DISCOVERY_PRICE_BOUNDS.calendarRows).abortSignal(signal);
     if (calendar.error || !Array.isArray(calendar.data)) return empty('official_calendar_read_failed');
     if (calendar.data.length >= DISCOVERY_PRICE_BOUNDS.calendarRows
       || Buffer.byteLength(JSON.stringify(calendar.data)) > DISCOVERY_PRICE_BOUNDS.perReadBytes) return empty('official_calendar_read_bound');
-    const heads = new Map<string, Row>();
+    if (!calendar.data.length) return empty('official_calendar_head_missing');
+    const semantic = (value: Row) => [value.status,value.provider,value.source_ref,
+      ...['open_at','close_at','source_timestamp','collected_at'].map((key)=>Date.parse(String(value[key])))];
     for (const row of calendar.data as Row[]) {
       if (!discoverySession(row.session_id) || !['completed','cancelled'].includes(String(row.status))
+        || row.session_id !== latest.session_id || Date.parse(String(row.recorded_at)) !== Date.parse(String(latest.recorded_at))
         || row.market !== candidate.exchange || row.provider !== candidate.exchange.toLowerCase()
         || !clockSequence(row, cutoff) || !known(row.open_at, cutoff) || !known(row.close_at, cutoff)
         || Date.parse(row.open_at) >= Date.parse(row.close_at) || discoveryTaipeiDate(row.close_at) !== row.session_id
         || discoveryTaipeiDate(row.open_at) !== row.session_id || typeof row.source_ref !== 'string' || !row.source_ref || row.source_ref.length > 512
         || row.status === 'completed' && Date.parse(String(row.recorded_at)) < Date.parse(row.close_at))
         return empty('official_calendar_validation_failed');
-      const previous = heads.get(row.session_id);
-      const semantic = (value: Row) => [value.status,value.provider,value.source_ref,
-        ...['open_at','close_at','source_timestamp','collected_at'].map((key)=>Date.parse(String(value[key])))];
-      if (previous && Date.parse(String(previous.recorded_at)) === Date.parse(String(row.recorded_at))
-        && researchCanonicalHash(semantic(previous)) !== researchCanonicalHash(semantic(row)))
+      if (researchCanonicalHash(semantic(latest)) !== researchCanonicalHash(semantic(row)))
         return empty('official_calendar_conflict');
-      if (!previous || Date.parse(String(row.recorded_at)) > Date.parse(String(previous.recorded_at))) heads.set(row.session_id, row);
     }
-    const latest = [...heads.values()].filter((row) => row.status === 'completed')
-      .sort((a,b) => String(b.session_id).localeCompare(String(a.session_id)))[0];
-    if (!latest) return empty('latest_completed_session_missing');
+    if (latest.status !== 'completed') return empty('latest_session_cancelled');
     const session = String(latest.session_id);
     const prices = await client.from('official_price_history')
       .select('session_date,close,volume,source_url,as_of,available_at,provider:provenance->>provider,integrityStatus:provenance->>integrityStatus,integrity_status:provenance->>integrity_status')
@@ -175,18 +213,17 @@ export async function readDiscoveryRawQuote(client: Client, candidate: Discovery
     if (!latestKnown) gaps.push('latest_completed_session_freshness_unverified');
     const latestCompletedSession = latestKnown ? session : null;
     if (prices.data.length !== 1 || !row) return { quote:null,window:null,latestCompletedSession,missing:[...gaps,'official_quote_missing_at_discovery'] };
-    if (!['twse','tpex','official_primary'].includes(String(row.provider))
+    if (row.session_date !== session || !['twse','tpex','official_primary'].includes(String(row.provider))
       || row.provider !== 'official_primary' && row.provider !== candidate.exchange.toLowerCase()
       || row.integrityStatus !== 'valid' && row.integrity_status !== 'valid'
       || row.integrityStatus === 'conflict' || row.integrity_status === 'conflict'
-      || !officialUrl(row.source_url)
-      || !(candidate.exchange === 'TWSE' ? ['www.twse.com.tw','twse.com.tw','openapi.twse.com.tw']
-        : ['www.tpex.org.tw','tpex.org.tw','openapi.tpex.org.tw']).includes(new URL(String(row.source_url)).hostname)
+      || !officialQuoteUrl(row.source_url,candidate.symbol,candidate.exchange,session)
       || !known(row.as_of, cutoff) || !known(row.available_at, cutoff)
       || Date.parse(row.as_of) < Date.parse(String(latest.close_at)) || Date.parse(row.as_of) > Date.parse(row.available_at))
       return {quote:null,window:null,latestCompletedSession,missing:[...gaps,'official_quote_validation_failed']};
     const quote = {session:String(row.session_date),close:row.close as number,volume:row.volume as number | null,
-      sourceUrl:String(row.source_url),availableAt:String(row.available_at),priceBasis:'raw_exchange_quote' as const};
+      sourceUrl:String(row.source_url),availableAt:String(row.available_at),priceBasis:'raw_exchange_quote' as const,
+      symbol:candidate.symbol,exchange:candidate.exchange as 'TWSE' | 'TPEX'};
     return {quote:validQuote(quote,cutoff) ? quote : null,window:null,latestCompletedSession,
       missing:[...gaps,...(validQuote(quote,cutoff) ? [] : ['official_quote_validation_failed'])]};
   } catch { return empty(signal.aborted ? 'price_read_deadline' : 'official_price_read_failed'); }
@@ -203,8 +240,14 @@ function frozenContext(row: FirstRow, cutoff: string) {
   // that frozen truth; a later reader must never fill its gaps with newer data.
   const projected = raw ? {session:raw.session,close:raw.close,volume:raw.volume,sourceUrl:raw.sourceUrl,
     availableAt:raw.availableAt,priceBasis:raw.priceBasis} : null;
-  return { ...evaluateDiscoveryPrice({quote:projected,window:null,latestCompletedSession:null,
-    missing:['immutable_capture_retained_without_backfill']},row.first_seen_at),
+  const historical = projected && rawQuoteShape(projected,row.first_seen_at) ? projected : null;
+  // The unchanged capture function omits provider/integrity/exchange evidence.
+  // Its priceStatus label cannot turn a weak historical row into verified data.
+  const assessed = evaluateDiscoveryPrice({quote:null,window:null,latestCompletedSession:null,
+    missing:['immutable_capture_retained_without_backfill',...(historical ? ['historical_raw_quote_unverified'] : [])]},row.first_seen_at);
+  return { ...assessed,quote:historical,
+    quoteStatus:historical ? 'unverified_historical_raw' : 'missing_at_discovery',
+    missing:historical ? assessed.missing.filter((reason)=>reason !== 'quote_missing_at_discovery') : assessed.missing,
     origin:'immutable_first_discovery' as const, firstRunId:row.run_id,
     capturedAt:row.captured_at, immutableSnapshotHash:researchCanonicalHash(row.snapshot) };
 }

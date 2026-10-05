@@ -95,6 +95,7 @@ test('DR04 price evidence changes immutable input hash without changing score or
   const before=await a.post(request(body));const after=await b.post(request(body));
   assert.equal(before.status,200);assert.equal(after.status,200);
   assert.notEqual(before.body.inputHash,after.body.inputHash);
+  assert.equal((before.body.priceContexts as Array<{priceContext:{quoteStatus:string}}>)[0].priceContext.quoteStatus,'unverified_historical_raw');
   assert.equal((before.body.queue as unknown[]).length,2);
   assert.equal(JSON.stringify(before.body.queue),JSON.stringify(after.body.queue));
   const strip=(h:ReturnType<typeof harness>)=>(h.inserts[0].rows as Record<string,unknown>[]).map(({priceContext,...row})=>{void priceContext;return row;});

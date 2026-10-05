@@ -1,5 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { readFileSync } from 'node:fs';
+import vm from 'node:vm';
+import ts from 'typescript';
 import { researchCanonicalHash } from './research-agent-qualification.ts';
 import { TW_ENTRY_PLAN_RULESET } from './tw-entry-plan-contract.ts';
 import { DISCOVERY_PRICE_BOUNDS, discoveryWindowDatasetHash, evaluateDiscoveryPrice, loadDiscoveryPriceEnrichment,
@@ -26,18 +29,33 @@ function fixture(): DiscoveryPriceRead {
   window.validation={status:'passed',recordedAt:`${session}T06:30:00Z`,evidenceHash:'b'.repeat(64),datasetHash};
   window.phase={ruleset:TW_ENTRY_PLAN_RULESET,session,availableAt:`${session}T07:00:00Z`,datasetHash,
     close:100,ma20:99,atr14:3,rsi14:60,breakout:'confirmed',pullback:'waiting'};
-  return {quote:{session,close:100,volume:10_000,sourceUrl:url,availableAt:`${session}T06:00:00Z`,priceBasis:'raw_exchange_quote'},
+  return {quote:{session,close:100,volume:10_000,sourceUrl:url,availableAt:`${session}T06:00:00Z`,priceBasis:'raw_exchange_quote',symbol:'2409',exchange:'TWSE'},
     window,latestCompletedSession:session,missing:[]};
 }
 function mockClient(tables:Record<string,unknown[]>={},failTable:string|null=null) {
   const calls:Array<{table:string;method:string;args:unknown[]}>=[];
   const client={from(table:string){
     let low=0;let high=Infinity;
+    const filters:Array<(row:Record<string,unknown>)=>boolean>=[];
+    const orders:Array<{key:string;ascending:boolean}>=[];
+    const compare=(a:unknown,b:unknown)=>{
+      const aTime=typeof a==='string' && a.includes('T') ? Date.parse(a) : NaN;
+      const bTime=typeof b==='string' && b.includes('T') ? Date.parse(b) : NaN;
+      return Number.isFinite(aTime) && Number.isFinite(bTime) ? aTime-bTime : String(a).localeCompare(String(b));
+    };
     const query:Record<string,unknown>={then(resolve:(value:unknown)=>void){
-      resolve({data:(tables[table] || []).slice(low,high+1),error:table===failTable ? {message:'synthetic read failure'} : null});
+      let rows=(tables[table] || []) as Record<string,unknown>[];
+      // Calendar mocks execute real predicates/order before LIMIT. Other table
+      // fixtures deliberately expose malformed returned rows to the validators.
+      if(table==='tw_trading_sessions_v3') rows=rows.filter((row)=>filters.every((filter)=>filter(row)))
+        .sort((a,b)=>{for(const order of orders){const diff=compare(a[order.key],b[order.key]);if(diff) return order.ascending ? diff : -diff;}return 0;});
+      resolve({data:rows.slice(low,high+1),error:table===failTable ? {message:'synthetic read failure'} : null});
     }};
     for(const method of ['select','lte','eq','order','abortSignal','limit','range']) query[method]=(...args:unknown[])=>{
       calls.push({table,method,args});if(method==='range'){low=Number(args[0]);high=Number(args[1]);}
+      if(method==='eq') filters.push((row)=>compare(row[String(args[0])],args[1])===0);
+      if(method==='lte') filters.push((row)=>compare(row[String(args[0])],args[1])<=0);
+      if(method==='order') orders.push({key:String(args[0]),ascending:(args[1] as {ascending?:boolean})?.ascending!==false});
       if(method==='limit') high=Number(args[0])-1;return query;
     };
     return query;
@@ -49,6 +67,125 @@ test('DP01 approved synthetic window computes all horizons; breakout does not gr
   assert.equal(result.relative5d,0);assert.equal(result.relative20d,0);assert.equal(result.relative60d,0);
   assert.equal(result.pricePhase,'initial_breakout');assert.equal(result.researchEvidenceRequired,true);
   assert.equal(result.rankingInfluence,false);assert.deepEqual(result.missing,[]);
+});
+
+function collectorMonthUrl(exchange:'TWSE' | 'TPEx') {
+  // Invoke the actual collector's pure URL constructor with credential/network
+  // modules stubbed out; no vault or environment secret is read by this test.
+  const code=readFileSync(new URL('./tw-market.ts',import.meta.url),'utf8');
+  const exports:Record<string,unknown>={};
+  vm.runInNewContext(ts.transpileModule(code,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText,
+    {exports,require:(name:string)=>{assert.equal(name,'./finmind-vault.ts');return {readFinMindVaultToken:()=>{throw new Error('vault must not be read');}};},
+      fetch:()=>{throw new Error('network must not be read');}},{timeout:1000});
+  return (exports.twStockHistoryMonthUrl as (job:Record<string,unknown>)=>string)({symbol:'2409',exchange,dataset:'price',month:'2026-10-01',lastSession:session});
+}
+test('DP19 124+ ordinary historical sessions do not exhaust latest-head admission',async()=>{
+  const tables=rawTables();const base=tables.tw_trading_sessions_v3[0];
+  for(let i=1;i<=200;i++) {
+    const day=new Date(Date.parse(`${session}T00:00:00Z`)-i*86_400_000).toISOString().slice(0,10);
+    tables.tw_trading_sessions_v3.push({...base,session_id:day,open_at:`${day}T01:00:00Z`,close_at:`${day}T05:30:00Z`,
+      source_timestamp:`${day}T05:30:00Z`,collected_at:`${day}T06:00:00Z`,recorded_at:`${day}T06:00:00Z`});
+  }
+  tables.tw_trading_sessions_v3.reverse();
+  const {client,calls}=mockClient(tables);const read=await readDiscoveryRawQuote(client,candidate(),cutoff,new AbortController().signal);
+  assert.equal(read.quote?.close,100);assert.equal(read.latestCompletedSession,session);
+  assert.equal(calls.filter((call)=>call.table==='tw_trading_sessions_v3' && call.method==='limit').length,2);
+  assert.ok(calls.some((call)=>call.method==='eq' && call.args[0]==='session_id' && call.args[1]===session));
+  assert.ok(calls.some((call)=>call.method==='eq' && call.args[0]==='recorded_at' && call.args[1]===`${session}T06:00:00Z`));
+  assert.equal(read.missing.includes('official_calendar_read_bound'),false);
+});
+test('DP20 newest head ties remain bounded and newer cancellation cannot resurrect a completion',async()=>{
+  const tied=rawTables();tied.tw_trading_sessions_v3.push({...tied.tw_trading_sessions_v3[0],status:'cancelled',recorded_at:`${session}T14:00:00+08:00`});
+  assert.ok((await readDiscoveryRawQuote(mockClient(tied).client,candidate(),cutoff,new AbortController().signal)).missing.includes('official_calendar_conflict'));
+  const cancelled=rawTables();cancelled.tw_trading_sessions_v3.push({...cancelled.tw_trading_sessions_v3[0],status:'cancelled',recorded_at:`${session}T07:00:00Z`});
+  const rejected=await readDiscoveryRawQuote(mockClient(cancelled).client,candidate(),cutoff,new AbortController().signal);
+  assert.equal(rejected.quote,null);assert.ok(rejected.missing.includes('latest_session_cancelled'));
+  const full=rawTables();full.tw_trading_sessions_v3=Array.from({length:124},()=>({...full.tw_trading_sessions_v3[0]}));
+  assert.ok((await readDiscoveryRawQuote(mockClient(full).client,candidate(),cutoff,new AbortController().signal)).missing.includes('official_calendar_read_bound'));
+  const futureClose=rawTables();futureClose.tw_trading_sessions_v3.push({...futureClose.tw_trading_sessions_v3[0],
+    status:'cancelled',recorded_at:`${session}T07:00:00Z`,close_at:`${session}T09:00:00Z`});
+  assert.equal((await readDiscoveryRawQuote(mockClient(futureClose).client,candidate(),cutoff,new AbortController().signal)).quote,null);
+});
+test('DP21 actual TWSE/TPEx collector month URLs and exact-day quotes are admitted',async()=>{
+  for(const exchange of ['TWSE','TPEX'] as const) {
+    const tables=rawTables();tables.tw_trading_sessions_v3[0].market=exchange;tables.tw_trading_sessions_v3[0].provider=exchange.toLowerCase();
+    tables.official_price_history[0].source_url=collectorMonthUrl(exchange==='TWSE' ? 'TWSE' : 'TPEx');
+    const row={...candidate(),exchange};
+    const read=await readDiscoveryRawQuote(mockClient(tables).client,row,cutoff,new AbortController().signal);
+    assert.equal(read.quote?.close,100);assert.equal(read.quote?.exchange,exchange);
+    assert.equal(evaluateDiscoveryPrice(read,cutoff).quoteStatus,'official_raw_quote');
+    if(exchange==='TPEX') {
+      tables.official_price_history[0].source_url=tables.official_price_history[0].source_url.replace('2026/10/01','2026/10/02');
+      assert.equal((await readDiscoveryRawQuote(mockClient(tables).client,row,cutoff,new AbortController().signal)).quote?.close,100);
+    }
+  }
+});
+test('DP22 endpoint-specific stock/date/host/parameter mismatches reject both exchanges',async()=>{
+  for(const exchange of ['TWSE','TPEX'] as const) {
+    const source=collectorMonthUrl(exchange==='TWSE' ? 'TWSE' : 'TPEx');
+    const symbolKey=exchange==='TWSE' ? 'stockNo' : 'code';
+    const mutations:Array<(url:URL)=>void>=[
+      (url)=>url.searchParams.set(symbolKey,'2330'),
+      (url)=>url.searchParams.set('date',exchange==='TWSE' ? '20260901' : '2026/09/01'),
+      (url)=>url.searchParams.set('date',exchange==='TWSE' ? '20261003' : '2026/10/03'),
+      (url)=>url.searchParams.set('date',exchange==='TWSE' ? '20260230' : '2026/02/30'),
+      (url)=>{url.hostname='www.twse.com.tw.attacker.test';},
+      (url)=>url.searchParams.append(symbolKey,'2409'),
+      (url)=>url.searchParams.delete('date'),
+      (url)=>url.searchParams.set('response','html'),
+      (url)=>url.searchParams.set(exchange==='TWSE' ? 'code' : 'stockNo','2409'),
+      (url)=>{url.username='credential';},
+    ];
+    for(const mutate of mutations) {
+      const altered=new URL(source);mutate(altered);const tables=rawTables();
+      tables.tw_trading_sessions_v3[0].market=exchange;tables.tw_trading_sessions_v3[0].provider=exchange.toLowerCase();
+      tables.official_price_history[0].source_url=altered.toString();
+      const read=await readDiscoveryRawQuote(mockClient(tables).client,{...candidate(),exchange},cutoff,new AbortController().signal);
+      assert.equal(read.quote,null);assert.ok(read.missing.includes('official_quote_validation_failed'));
+    }
+  }
+  const tables=rawTables();tables.official_price_history[0].source_url='https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20261002&type=ALLBUT0999';
+  assert.equal((await readDiscoveryRawQuote(mockClient(tables).client,candidate(),cutoff,new AbortController().signal)).quote?.close,100);
+  tables.official_price_history[0].source_url=tables.official_price_history[0].source_url.replace('20261002','20261001');
+  assert.equal((await readDiscoveryRawQuote(mockClient(tables).client,candidate(),cutoff,new AbortController().signal)).quote,null);
+  const wrongRow=rawTables();wrongRow.official_price_history[0].source_url=collectorMonthUrl('TWSE');
+  wrongRow.official_price_history[0].session_date='2026-10-01';
+  assert.equal((await readDiscoveryRawQuote(mockClient(wrongRow).client,candidate(),cutoff,new AbortController().signal)).quote,null);
+});
+test('DP23 strict-reader rejected row cannot be upgraded by a later weak immutable registry capture',async()=>{
+  for(const defect of ['provider_unknown','integrity_missing','market_unknown']) {
+    const tables=rawTables();const row=candidate();
+    if(defect==='provider_unknown') tables.official_price_history[0].provider='unknown';
+    if(defect==='integrity_missing') tables.official_price_history[0].integrityStatus='';
+    if(defect==='market_unknown') row.exchange='unknown';
+    const strict=await readDiscoveryRawQuote(mockClient(tables).client,row,cutoff,new AbortController().signal);
+    assert.equal(strict.quote,null);
+    const price={...fixture().quote!};delete price.symbol;delete price.exchange;
+    // The actual unchanged capture labels these weak raw rows official_quote
+    // while omitting provider, integrity and exchange from its frozen payload.
+    const captured={symbol:'2409',run_id:uuid(1),first_seen_at:cutoff,captured_at:'2026-10-02T09:00:00Z',
+      snapshot:{price,priceStatus:'official_quote',pricePhase:'unknown'}};
+    const before=JSON.stringify(captured);let rereads=0;
+    const loaded=await loadDiscoveryPriceEnrichment(mockClient({research_first_discoveries_v1:[captured]}).client,
+      [candidate()],'2026-10-05T09:00:00Z',{reader:async()=>{rereads++;return fixture();}});
+    const context=loaded.contexts.get('2409')!;
+    assert.equal(rereads,0);assert.equal(context.quote?.close,100);assert.equal(context.quoteStatus,'unverified_historical_raw');
+    assert.equal(context.relative60d,null);assert.equal(context.pricePhase,'unknown');
+    assert.ok(context.missing.includes('historical_raw_quote_unverified'));
+    assert.equal(context.immutableSnapshotHash,researchCanonicalHash(captured.snapshot));assert.equal(JSON.stringify(captured),before);
+  }
+});
+test('DP24 a first missing capture remains frozen after admission/date/available-data changes',async()=>{
+  const captured={symbol:'2434',run_id:uuid(1),first_seen_at:cutoff,captured_at:'2026-10-02T09:00:00Z',
+    snapshot:{price:null,priceStatus:'missing_at_discovery',gap:'price_read_admission_bound'}};
+  let reads=0;
+  const loaded=await loadDiscoveryPriceEnrichment(mockClient({research_first_discoveries_v1:[captured]}).client,
+    [{...candidate('2434'),firstSeenAt:'2026-10-05T08:00:00Z'}],'2026-10-05T09:00:00Z',
+    {reader:async()=>{reads++;return fixture();}});
+  assert.equal(reads,0);assert.equal(loaded.accountedCount,1);const context=loaded.contexts.get('2434')!;
+  assert.equal(context.quoteStatus,'missing_at_discovery');assert.equal(context.cutoff,cutoff);
+  assert.equal(context.immutableSnapshotHash,researchCanonicalHash(captured.snapshot));
+  assert.deepEqual(captured.snapshot,{price:null,priceStatus:'missing_at_discovery',gap:'price_read_admission_bound'});
 });
 test('DP02 wrong benchmark, incomplete calendar or stale last session never yields relative returns',()=>{
   for(const mutate of [(read:DiscoveryPriceRead)=>{read.window!.benchmark[0].session='2026-06-01';},

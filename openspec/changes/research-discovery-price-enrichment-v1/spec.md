@@ -26,15 +26,36 @@ unreadable, do not guess that no prior capture exists. Invalid records remain
 explicitly missing. New observations read only at `firstSeenAt`, not today's
 `asOf`. A missing discovery/source gets an explicit missing context.
 
+Legacy first capture omits provider/integrity/market verification. Its existing
+`official_quote` label cannot authorize a verified projection. A safe historical
+raw price remains `unverified_historical_raw`; no later registry read promotes a
+row previously rejected by the strict reader. Preserve the original snapshot hash.
+If first capture is missing after bounded admission/acquisition, that first-known
+gap remains frozen. Separate supplementary research receipts for later knowledge
+are not implemented; no later data may rewrite the original discovery.
+
 The fixed production adapter reads only `tw_trading_sessions_v3` and
 `official_price_history`, with cutoff-visible source/collection/recording clocks,
 official provider/path/market/integrity checks and price availability after the
 completed calendar close. Tied latest calendar heads must agree. Missing volume
 does not manufacture volume. Raw quotes are not adjusted returns.
 
+Read one latest cutoff-visible calendar session/head first, then query that
+session's exact recorded-time ties only. Do not apply an all-history limit that
+normal accumulated history always exhausts. Validate status/close after selecting
+the newest head: newer cancellation or close correction cannot resurrect an old
+completion. Same-time semantic conflict or excessive ties still fail closed.
+
+Strict URL validation matches collector endpoints: TWSE monthly STOCK_DAY has
+exact stockNo/date/response keys; TPEx tradingStock has exact code/date/response
+keys and YYYY/MM/DD date syntax. Bind stock and date (session or month-start for
+monthly data); daily TWSE MI_INDEX requires exact session/type=ALLBUT0999/JSON.
+Duplicate, missing/extra keys, wrong stock/date/market/host or credentials reject.
+Unsupported parameterless/legacy endpoints cannot issue verified quote results.
+
 Admission is deterministic symbol order, independent of selection: <=5000
 candidates/retained records, <=32 new reads, <=15 seconds including registry IO,
-124 calendar rows (sentinel rejects truncation), two quote rows, <=8 MB registry
+one calendar head and 124 head-tie rows (sentinel rejects truncation), two quote rows, <=8 MB registry
 JSON and <=64 KB per calendar/quote response, AbortSignal on every query. Every
 candidate still receives a result when admission, time, authority or IO fails.
 Response limits are validated on decoded DB responses, not a new streaming DB
@@ -109,6 +130,12 @@ Each new ID maps to one non-skipped named `test()` case:
 | DP16 | Row before actual close fails even with rehashed dataset |
 | DP17 | Invalid/future immutable capture is never replaced |
 | DP18 | Registry sentinel bound returns complete missing accounting |
+| DP19 | 124+ ordinary calendar history still admits latest session/head |
+| DP20 | Latest-head conflicts, cancellation and bounded same-time ties |
+| DP21 | Actual TWSE/TPEx collector URL constructors admitted |
+| DP22 | Endpoint-specific stock/date/parameter/host mismatch rejection |
+| DP23 | Strict rejected row remains unverified after legacy capture |
+| DP24 | Immutable missing capture persists through later admission/data |
 | DR01 | Actual route exact-bearer rejection before DB reads |
 | DR02 | HTTP/model price-context/verified-flag injection rejected |
 | DR03 | All price contexts stored/hashed/returned with unchanged queue |

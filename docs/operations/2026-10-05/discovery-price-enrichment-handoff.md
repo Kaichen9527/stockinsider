@@ -5,6 +5,8 @@ Branch `codex/discovery-price-enrichment-oct05`, exact base
 `54edb2cdf04498914446229b451ee2d96810d3a4` (fetched from
 `codex/source-controller-integration-oct05`, not stale main).
 Final worker reply supplies the full pushed SHA.
+This revision addresses the independent review's REQUEST_CHANGES on
+`8613458a57502e387f0569a4c499a2148b09a293`; independent re-review remains pending.
 
 ## Responsibility and behavior
 
@@ -32,10 +34,26 @@ reads fail, the worker does not assume a new first discovery. Otherwise the new
 read cutoff is earliest actual source `firstSeenAt`, not today's run time. Missing
 discovery, admission/deadline, data/official failure all get explicit receipts.
 
+The legacy capture omits provider, integrity and market validation evidence.
+Its `priceStatus:official_quote` label is not verification. A safe time-valid raw
+historical quote projects as `unverified_historical_raw`, with
+`historical_raw_quote_unverified`; the snapshot bytes/hash stay unchanged. Even a
+row rejected by the strict reader cannot become `official_raw_quote` merely by
+appearing in the registry on a later run. No current quote query upgrades it.
+
 The unchanged `capture_research_first_discoveries_v1` still freezes its own raw
 quote/gap, null returns and unknown phase. Additional context lives in immutable
 linked run rows. This batch does not rewrite the first-capture function/table or
 backfill historical snapshots; any persistence extension belongs to root review.
+
+The 32-symbol lexical admission cap can leave first-run price context missing.
+When canonical first capture also stores a missing quote, that gap is permanent
+under this implementation: later data, admission or dates do not fill it. The
+canonical capture performs its separate raw-quote lookup, so an admission gap
+does not itself prove that capture's price is absent. All original run receipts
+remain immutable. A **separate supplementary research receipt** linked to the
+original discovery could describe later knowledge without rewriting first-known
+truth; that receipt/API is **not implemented** and remains a root integration task.
 
 ## Available production source interface and remaining data gaps
 
@@ -47,8 +65,26 @@ provenance scalars, not entire provider metadata. It does not fetch today's HTTP
 data, call paid APIs or run arbitrary URLs. It returns actual raw quote/volume or
 missing; raw quotes never become adjusted relative returns.
 
+Calendar reads now select **one newest cutoff-visible session/head**, then query
+only that session's exact `recorded_at` ties (<=124-row sentinel); 200+ older rows
+do not consume this bound. Clock filters and AbortSignal apply to both queries.
+Status/close are validated after head selection so a newer cancellation or changed
+future close cannot resurrect an older completion. Same-time semantic conflicts
+or an overfull tie set remain missing, not an arbitrary selected head.
+
+URL contracts match the actual `tw-market.ts` collector constructor:
+TWSE `STOCK_DAY` uses exactly `stockNo`, compact `date`, `response=json`; TPEx
+`tradingStock` uses exactly `code`, slash-form `date`, `response=json`. Monthly
+URLs must bind the candidate symbol and either its exact session or that month's
+first day. TWSE `MI_INDEX` uses exact session date, `type=ALLBUT0999`, JSON response;
+the selected DB row binds the symbol for that market-wide response. Duplicate,
+missing/unknown parameters, wrong stock/month/day, market/host or credentials
+reject. Parameterless APIs and legacy endpoint forms without this binding remain
+outside the strict adapter; a frozen weak raw record may only remain unverified.
+
 Bounds: <=5000 candidates/first rows, <=32 lexically sorted new read admissions,
-<=15 seconds including registry IO, <=124 calendar rows (sentinel rejects), <=2
+<=15 seconds including registry IO, one calendar head plus <=124 head-tie rows
+(sentinel rejects), <=2
 quote rows, <=8 MB first-registry JSON, <=64 KB per calendar/quote JSON, AbortSignal
 on queries. All candidates remain accounted even when not admitted. Decoded-response
 size validation does not claim a new streaming database transfer bound.
@@ -85,8 +121,13 @@ not proof that research is qualified or a buy is approved.
 
 ## Validation and reproducibility
 
-43 named cases executed: **30 new** (7 DE, 18 DP, 5 actual-route contract cases),
-**13 existing** source-extension/priority/root regressions; 43 pass, 0 fail, 0 skip.
+49 named cases executed: the previous **43** plus **6 review regressions**,
+comprising 7 DE, 24 DP, 5 actual-route cases and 13 source-extension/priority/root
+regressions; 49 pass, 0 fail, 0 skip. Added DP19–DP24 exercise 124+ ordinary history,
+latest-head conflicts/cancellation/tie bounds, actual TWSE/TPEx collector-generated
+URLs and mismatches, strict rejection across later weak captures, and permanently
+retained missing discovery. Collector URL tests invoke its actual pure constructor
+with vault/network functions stubbed; they do not acquire live data.
 Route contracts execute the actual transpiled POST with controlled synthetic DB
 dependencies, including a nonempty queue. They prove quote evidence changes the
 immutable input hash while the exact scores/queue remain identical.
@@ -117,11 +158,11 @@ this exact `54edb2c...` base. Current tsc reports those same two errors and no o
 file errors. Root owns any unrelated route corrections.
 
 Local logs retained outside the checkout:
-`/workspace/discovery-price-tests-final-v2.log`,
-`/workspace/discovery-price-typecheck-final-v2.log`,
-`/workspace/discovery-price-lint-final-v2.log`,
+`/workspace/discovery-price-review-tests-v1.log`,
+`/workspace/discovery-price-review-typecheck.log`,
+`/workspace/discovery-price-review-lint.log`,
 `/workspace/discovery-price-build-final.log`,
-`/workspace/discovery-price-build-webpack-final-v2.log`.
+`/workspace/discovery-price-review-build-webpack.log`.
 
 ## Actual acquisition and independent review
 

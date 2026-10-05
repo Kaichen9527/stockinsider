@@ -17,3 +17,10 @@
 No root npm script or existing migration is changed. A future official adjusted
 stock/benchmark adapter needs actual cutoff-visible validation/calendar/action
 records; no adapter flag, model claim or synthetic verification can replace them.
+
+Review repair on `8613458`: restrict calendar bounds to latest head/ties, align
+exact stock/date/parameter contracts with each collector endpoint, and preserve
+legacy captures as unverified historical raw evidence. Execute all prior 43 plus
+DP19–DP24 regressions, then return the exact same-branch pushed SHA for independent
+re-review. A separate supplementary receipt for later knowledge remains pending;
+this repair never backfills the immutable first-known quote/gap.
