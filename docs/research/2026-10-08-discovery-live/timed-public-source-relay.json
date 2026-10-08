@@ -8,17 +8,15 @@
       "readSurfaceUrl": "https://t.me/s/investanchors",
       "publisher": "InvestAnchors",
       "sourcePlatform": "telegram",
-      "subjectScope": "company_mentions",
-      "symbols": [
-        "3037"
-      ],
+      "subjectScope": "industry_context",
+      "symbols": [],
       "industryTerms": [
         "先進封裝",
         "載板",
         "EMIB",
         "玻璃核心基板"
       ],
-      "summary": "定錨公開貼文認為AI封裝尺寸與載板層數增加，可能拉高單顆晶片消耗的載板產能，並提到欣興等廠商擴產方向。",
+      "summary": "定錨公開貼文認為AI封裝尺寸與載板層數增加，可能拉高單顆晶片消耗的載板產能，並討論全球擴產及新製程的資本密集度。",
       "risk": "這是7月公開分析，不是10月最新訂單確認；台系客戶、投資金額與獲利影響仍須回到公司資料查核。",
       "claimStatus": "reported",
       "access": "public",
@@ -116,9 +114,8 @@
     "Visible index spans message 863–882; latest visible 882 dated 2026-09-18. This is not proof of complete October coverage or no newer messages.",
     "All three same publisher; root IDs distinguish posts, not independent confirmation.",
     "Message 882 and same-author Threads CPO content are related propagation, not independent reports.",
-    "Cnyes request timed out; no successful content or timestamp asserted."
+    "Cnyes request timed out; no successful content or timestamp asserted.",
+    "Independent review found message 869 did not name Unimicron; corrected industry scope and removed 3037. Prior incorrect relay retained in Git history; must not ingest that earlier version."
   ],
-  "proposedCompanyScope": [
-    "3037"
-  ]
+  "proposedCompanyScope": []
 }
