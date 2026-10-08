@@ -15,3 +15,7 @@ Next queue is approved insiderc96 fresh-profile PG/Linuxjournal; full guarded Ne
 ## Insider c96 actual native checkpoint
 
 Exact c96f291 remains unchanged in a fresh detached worktree. Actual PG17.11:16TAP,7pass/9fail/0skip. First positive admission fails missing FROM-clause entry for table admit_insider_snapshot_v1 at the token-resolution UPDATE; later tests consequently lack the snapshot. Linux FD journal1/1pass0skip uses injected local response, not guarded HTTP. Red receipt: .agent/reports/2026-10-08T16-39-insider-c96-vm-red.json. Dedicated worker owns fixes and full transport/capacity acceptance; no activation or complete candidate coverage claimed.
+
+## Native0825 actual portable checkpoint
+
+Exact0825 remains inactive and unchanged. Actual parser50+lifecycle31+original five suites62 =143/143pass0skip. Original model-runner file actually executes23TAP,19pass/4fail0skip; the requested name pattern did not exclude host probes, so no filtered-suite success is claimed. Fail12 is current-node host preflight; fail16 doctor child status1 lacks detailed captured checks; fail18 fails auth transport creation with routing blocked; fail19 worker exits routing/host blocked without successful model result. No pin/permission/signing/activation change. Receipt .agent/reports/2026-10-08T16-44-native0825-vm.json preserves exact source hashes and command/log hashes. Native web tree equals1d92; no new native build is claimed. These are maker portable results, not a protected live oracle, Mac acceptance or original CI root-cause fix.
