@@ -29,9 +29,14 @@ for scenario in m['scenarios']:
   nonop=sum(D(a[key])for key in ['interestIncome','financeCosts','otherIncome','equityMethodProfit','fxAndOtherRecurring'])
   pretax=op+nonop;tax=max(max(pretax,0)*D(a['taxRate']),D(a['taxFloor']));owners=pretax-tax-D(a['nci'])
   for actual,field in [(sum(previous),'revenue'),(gross,'grossProfit'),(gross-op,'operatingExpenses'),(op,'operatingProfit'),(nonop,'nonOperating'),(pretax,'pretaxProfit'),(tax,'taxExpense'),(owners,'ownersNetProfit')]:check(actual,row[field])
-  check(owners/D(row['dilutedSharesMillionAssumed']),row['dilutedEpsConditional'])
+  potential=D('7547.099')*D(a['potentialSharesRatio']) if row['period'].startswith('2027') else D(0)
+  denominator=D('7547.099')+(potential if owners>0 else 0)
+  check(denominator,row['dilutedSharesMillionAssumed']);check(potential if owners<=0 else 0,row['antiDilutiveExcludedMillion'])
+  check(owners/denominator,row['dilutedEpsConditional'])
   independent.append(owners)
- check(sum(independent[2:])/D(scenario['calendar2027']['dilutedSharesMillionAssumed']),scenario['calendar2027']['dilutedEpsConditional'])
+ for group,profit,potential in [('calendar2027',sum(independent[2:]),D('7547.099')*D(a['potentialSharesRatio'])),('nextFourUnreported',sum(independent[:4]),D('7547.099')*D(a['potentialSharesRatio'])/2)]:
+  denominator=D('7547.099')+(potential if profit>0 else 0)
+  check(denominator,scenario[group]['dilutedSharesMillionAssumed']);check(profit/denominator,scenario[group]['dilutedEpsConditional'])
  check((D('199.555')+sum(independent[:2]))/D(scenario['calendar2026']['dilutedSharesMillionAssumed']),scenario['calendar2026']['dilutedEpsConditional'])
  check(sum(independent[:4])/D(scenario['nextFourUnreported']['dilutedSharesMillionAssumed']),scenario['nextFourUnreported']['dilutedEpsConditional'])
 for row in m['normalizationSensitivity']:

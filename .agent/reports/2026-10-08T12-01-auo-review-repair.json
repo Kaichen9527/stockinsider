@@ -1,0 +1,460 @@
+{
+  "schemaVersion": "auo-model-review-repair-v1",
+  "recordedAt": "2026-10-08T12:01:22.319280+00:00",
+  "subjectBefore": "eed55b15e920e9927e04c2f6802b6b105741cb43",
+  "review": "root-relayed Astra unsigned REQUEST_CHANGES; successor review pending",
+  "nativeMerged": "8e0437e65ffd8d4ac5ca22c057b96879fe58b2ee",
+  "nativeUnsignedApproval": "root relayed; not protected",
+  "focused": {
+    "pass": 38,
+    "fail": 0,
+    "skip": 0
+  },
+  "native": {
+    "pass": 12,
+    "fail": 0,
+    "skip": 0
+  },
+  "decimalChecks": 268,
+  "types": "pass",
+  "webLint": "pass:33 existing warnings; root MJS verified by focused cases",
+  "normalWebBuild": "pass",
+  "failureHistory": [
+    "original anti-dilution regression13pass1fail preserved",
+    "first Decimal wrapper127 Python not in minimal PATH; exact interpreter rerun",
+    "independent Decimal detected quarterly old ordinary denominator before final correction; terminal output retained; final268 pass"
+  ],
+  "stages": [
+    {
+      "stage": "auo-before",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-auo-four-segment-model.test.mjs"
+      ],
+      "startedAt": "2026-10-08T11:57:10.262Z",
+      "completedAt": "2026-10-08T11:57:10.653Z",
+      "elapsedSeconds": 0.39084126500529237,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 118902784,
+      "observedTaskDiskPeakBytes": 1280360448,
+      "availableBeforeBytes": 25744285696,
+      "availableAfterBytes": 25744273408,
+      "guardTermination": null
+    },
+    {
+      "stage": "auo-render",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs",
+        "2026-10-08T10:20:00Z"
+      ],
+      "startedAt": "2026-10-08T11:58:21.515Z",
+      "completedAt": "2026-10-08T11:58:21.805Z",
+      "elapsedSeconds": 0.2895728769944981,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 75100160,
+      "observedTaskDiskPeakBytes": 1280376832,
+      "availableBeforeBytes": 25744269312,
+      "availableAfterBytes": 25744248832,
+      "guardTermination": null
+    },
+    {
+      "stage": "auo-related",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-auo-four-segment-model.test.mjs",
+        "web/src/lib/auo-deep-dive-model.test.ts"
+      ],
+      "startedAt": "2026-10-08T11:58:21.835Z",
+      "completedAt": "2026-10-08T11:58:22.266Z",
+      "elapsedSeconds": 0.4310690089914715,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 203665408,
+      "observedTaskDiskPeakBytes": 1280401408,
+      "availableBeforeBytes": 25744244736,
+      "availableAfterBytes": 25744228352,
+      "guardTermination": null
+    },
+    {
+      "stage": "types",
+      "command": [
+        "npm",
+        "exec",
+        "tsc",
+        "--",
+        "--noEmit"
+      ],
+      "startedAt": "2026-10-08T11:58:44.247Z",
+      "completedAt": "2026-10-08T11:58:47.929Z",
+      "elapsedSeconds": 3.6823822949954774,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 576856064,
+      "observedTaskDiskPeakBytes": 1280430080,
+      "availableBeforeBytes": 25744224256,
+      "availableAfterBytes": 25740079104,
+      "guardTermination": null
+    },
+    {
+      "stage": "lint",
+      "command": [
+        "npm",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-08T11:58:47.967Z",
+      "completedAt": "2026-10-08T11:59:14.337Z",
+      "elapsedSeconds": 26.369835780002177,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1837068288,
+      "observedTaskDiskPeakBytes": 1284575232,
+      "availableBeforeBytes": 25740075008,
+      "availableAfterBytes": 25723912192,
+      "guardTermination": null
+    },
+    {
+      "stage": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T11:59:14.366Z",
+      "completedAt": "2026-10-08T11:59:21.412Z",
+      "elapsedSeconds": 7.0454798550053965,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 904912896,
+      "observedTaskDiskPeakBytes": 1300738048,
+      "availableBeforeBytes": 25723908096,
+      "availableAfterBytes": 25723125760,
+      "guardTermination": null
+    },
+    {
+      "stage": "auo-final-render",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs",
+        "2026-10-08T10:20:00Z"
+      ],
+      "startedAt": "2026-10-08T11:59:21.990Z",
+      "completedAt": "2026-10-08T11:59:22.282Z",
+      "elapsedSeconds": 0.29163583301124163,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 84414464,
+      "observedTaskDiskPeakBytes": 1301528576,
+      "availableBeforeBytes": 25723117568,
+      "availableAfterBytes": 25723109376,
+      "guardTermination": null
+    },
+    {
+      "stage": "auo-decimal",
+      "command": [
+        "python",
+        "docs/research/2026-10-08-auo-four-segment-model/verify-output.py"
+      ],
+      "startedAt": "2026-10-08T11:59:22.310Z",
+      "completedAt": "2026-10-08T11:59:22.491Z",
+      "elapsedSeconds": 0.18091578999883495,
+      "exitCode": 127,
+      "sampledAggregateRssPeakBytes": 0,
+      "observedTaskDiskPeakBytes": 1301540864,
+      "availableBeforeBytes": 25723105280,
+      "availableAfterBytes": 25723097088,
+      "guardTermination": null
+    },
+    {
+      "stage": "native-merged",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-local-inbox-dataplane.test.mjs"
+      ],
+      "startedAt": "2026-10-08T11:59:40.032Z",
+      "completedAt": "2026-10-08T11:59:46.131Z",
+      "elapsedSeconds": 6.099857994995546,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 352108544,
+      "observedTaskDiskPeakBytes": 1343062016,
+      "availableBeforeBytes": 25723092992,
+      "availableAfterBytes": 25681580032,
+      "guardTermination": null
+    },
+    {
+      "stage": "auo-sealed-render",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs",
+        "2026-10-08T10:20:00Z"
+      ],
+      "startedAt": "2026-10-08T12:00:08.387Z",
+      "completedAt": "2026-10-08T12:00:08.680Z",
+      "elapsedSeconds": 0.2927674219972687,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 83845120,
+      "observedTaskDiskPeakBytes": 1343070208,
+      "availableBeforeBytes": 25681575936,
+      "availableAfterBytes": 25681567744,
+      "guardTermination": null
+    },
+    {
+      "stage": "auo-decimal-fixed",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "docs/research/2026-10-08-auo-four-segment-model/verify-output.py"
+      ],
+      "startedAt": "2026-10-08T12:00:08.712Z",
+      "completedAt": "2026-10-08T12:00:08.908Z",
+      "elapsedSeconds": 0.196113771002274,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 651264,
+      "observedTaskDiskPeakBytes": 1343082496,
+      "availableBeforeBytes": 25681563648,
+      "availableAfterBytes": 25681555456,
+      "guardTermination": null
+    },
+    {
+      "stage": "auo-sealed-tests",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--test",
+        "scripts/research-auo-four-segment-model.test.mjs",
+        "web/src/lib/auo-deep-dive-model.test.ts"
+      ],
+      "startedAt": "2026-10-08T12:00:08.937Z",
+      "completedAt": "2026-10-08T12:00:09.335Z",
+      "elapsedSeconds": 0.3981327910005348,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 203743232,
+      "observedTaskDiskPeakBytes": 1343094784,
+      "availableBeforeBytes": 25681551360,
+      "availableAfterBytes": 25681534976,
+      "guardTermination": null
+    },
+    {
+      "stage": "normal-build-final",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T12:00:36.009Z",
+      "completedAt": "2026-10-08T12:00:42.636Z",
+      "elapsedSeconds": 6.627751349995378,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1215045632,
+      "observedTaskDiskPeakBytes": 1343119360,
+      "availableBeforeBytes": 25681530880,
+      "availableAfterBytes": 25680756736,
+      "guardTermination": null
+    }
+  ],
+  "privateFiles": [
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-before.json",
+      "bytes": 502,
+      "sha256": "1e9289350fd79f0f8cd8f01aef5c9282fa6d53d5312a9db2db63c9fbdeb056e4"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-before.log",
+      "bytes": 4611,
+      "sha256": "8d955e0a7c3891fed4980c164ccc5d76bbf4553ba584539013dfffda0ec3771e"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-before.time",
+      "bytes": 847,
+      "sha256": "ea5feab738e7ee26307047aea5e2c7879e7acb5ca54f5ecf5ba5927624aa5a17"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-render.json",
+      "bytes": 527,
+      "sha256": "f1a17e62fd18645d2f6c26768cf67554158f01c0776908f45813affde4c575a8"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-render.log",
+      "bytes": 1497,
+      "sha256": "20c5af9b66372e2e143cdfaf93a649e6dae2a7d56433e8a8c49676f383ac4f94"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-render.time",
+      "bytes": 836,
+      "sha256": "02cae6d352e15e1960a5c332348c6447e6e5475c38b02e108cc3708a35a7dbde"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-related.json",
+      "bytes": 549,
+      "sha256": "fd95aca2b6e857559e2436e628297395b0f287603a165085b939b85dc5ff64eb"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-related.log",
+      "bytes": 9171,
+      "sha256": "7fd5bc6d056ac23964d875c97e232a977012460a7e038b867eb6e5872ab2c34a"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-related.time",
+      "bytes": 850,
+      "sha256": "5b55ee3d04e2e773056b2bc4e9db3264805c9141571b204c0be74415ac323c33"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/types.json",
+      "bytes": 440,
+      "sha256": "db5ec52a22cc9152ffe8c6c22497030fa5c6e0f59569f6c87c4df6458b12e58f"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/types.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/types.time",
+      "bytes": 753,
+      "sha256": "62cc3802681307e038fab0179c4824fbe6fed8f90de942f6faad10466e00561a"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/lint.json",
+      "bytes": 414,
+      "sha256": "621b0831b3ced7492cbd85786b0af9993a7e33d08944aa579b1d4f355ceee53a"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/lint.log",
+      "bytes": 4760,
+      "sha256": "33a71dbfe5b1ff029d709b11d89e069122c96d9632df4458dba81e58362697fe"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/lint.time",
+      "bytes": 744,
+      "sha256": "06d769cc4f9b8a385d4958c7c2fa492f94bb310a72f8b6fcc5671637bbf09193"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/build.json",
+      "bytes": 415,
+      "sha256": "93acf1dc51942d4ccd683e01fecb73ba60c6482fc9d93c4d7fd39abfa4d12445"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/build.log",
+      "bytes": 6411,
+      "sha256": "ab7868498d7793aabeedf136851a7c7e37b4274ec91514a021116e720b9e375c"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/build.time",
+      "bytes": 745,
+      "sha256": "e737e6f77ff602253e8a4e46e75801d0e9c32219ff3d0538bf51b65529ac85ff"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-final-render.json",
+      "bytes": 534,
+      "sha256": "90ffda74bfbab7590afa03363339b936a280bfefad4d134704c7367748eeac9e"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-final-render.log",
+      "bytes": 1497,
+      "sha256": "1498c762f7b3f3fd083932afca444e9d88a8c71f2abf82365db8e50edb83e26c"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-final-render.time",
+      "bytes": 836,
+      "sha256": "57c68f1e1dbcf298e8b2eb69704c0b16489053e4120e614ce625ac2c8fd287c3"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-decimal.json",
+      "bytes": 467,
+      "sha256": "3e24b1b51b1fe99eabbd749c3defd530737a812a9c8ef253e452b5349923a830"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-decimal.log",
+      "bytes": 106,
+      "sha256": "8a31c6718844430914a7e0d4fefbe7aff94564d3722c1b5d73fad6d6140ef7f4"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-decimal.time",
+      "bytes": 824,
+      "sha256": "5711b8059cf80b84f6deda4dc7689389fe31a8915baee1dc0c1e7f701ec3f114"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/native-merged.json",
+      "bytes": 502,
+      "sha256": "4bc4c75efb491aa55d36d66e12d5413bbe56168ff1bf782ee52766a95eb84a97"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/native-merged.log",
+      "bytes": 3366,
+      "sha256": "498b68c8067a9c37cba0d88e9a7e40d305dcfd5a63cd3630e1dc91be98b66ade"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/native-merged.time",
+      "bytes": 813,
+      "sha256": "24a345c90d922219d511e9615c5ae66646fa7170fbe3cc0d8647b3974b4975d6"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-sealed-render.json",
+      "bytes": 534,
+      "sha256": "2c5af6f6de2f6ea764ec0385bb06783e329b43436c20224b6a6de8fdfb115ef1"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-sealed-render.log",
+      "bytes": 1497,
+      "sha256": "7bfa6133c196342ed611e3ba8c216b1889bf4d477cec750df8d4063f757a9aa1"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-sealed-render.time",
+      "bytes": 837,
+      "sha256": "30cb61e2963fb259d61e343288d1ad703391466192b39c76491ef72f872c300b"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-decimal-fixed.json",
+      "bytes": 540,
+      "sha256": "7b75f9ca48926d5cdaaa88fd8696fa2ac6d68545fe809bc49fc61df78b9d15f0"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-decimal-fixed.log",
+      "bytes": 214,
+      "sha256": "1f88bd33da5871ff461c660ad49c974a315999021d368cd493558c17e0ba5bbc"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-decimal-fixed.time",
+      "bytes": 853,
+      "sha256": "61b89fc7d097995698d6d1c3cebab7a558e857d076f80d5a1b9fc5ea58e57aaf"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-sealed-tests.json",
+      "bytes": 554,
+      "sha256": "0d6f6084dbd099d6a6ed752e86f98809aeef311570e2c1f96f393290c2b915df"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-sealed-tests.log",
+      "bytes": 9158,
+      "sha256": "efa029dac5199bc7ad8d2def896a42506677118716846e862c356937bb89f3c8"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/auo-sealed-tests.time",
+      "bytes": 850,
+      "sha256": "b40b0f833d7f35e60e36a574e9c0ecbeb90cf5f9a70626c541f05d8e0a3f07dd"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/normal-build-final.json",
+      "bytes": 428,
+      "sha256": "4654aba8c26f9a186a9263a2018968c9a0ee65c7337d6db2d51e66b87fe1086b"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/normal-build-final.log",
+      "bytes": 6411,
+      "sha256": "680566ec6ed984eca003b5a6811c6c30f5f6f80701defeccf978a5e549c76427"
+    },
+    {
+      "path": "/workspace/cloud-emc-model-artifacts-oct08/normal-build-final.time",
+      "bytes": 745,
+      "sha256": "1d3c74a9c504c27e0f0a133b74af3cb5608816af85d8aa0724fdf4d1f742d58a"
+    }
+  ],
+  "sampledPeakBytes": 1837068288,
+  "projectDiskQuota": "not confirmed; df availability not project quota",
+  "noProduction": true,
+  "EMC": "e722b8d evidence checkpoint; resume separate branch"
+}

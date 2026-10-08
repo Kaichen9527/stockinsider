@@ -1,35 +1,35 @@
 {
-  "canonicalModelHash": "8cb4a337d594f839f18b8d328d9c20cf00b2f25667f3060cc716d780460c0a68",
+  "canonicalModelHash": "f70ec46f8a7c5dc417f0abd9dbf2668c7bf0bf452a2a1888908f66bafc88abcc",
   "files": [
     {
       "file": "docs/research/2026-10-08-auo-four-segment-model/README.md",
-      "bytes": 3173,
-      "sha256": "b62b4c08307e3c96c3062be21cc97382f3403a27a9c7f0fb482eeb0571dccdc7"
+      "bytes": 3826,
+      "sha256": "0383f07972cdf261e7b9ebafe6f07f7e04b5ab758ba1490c553f808e96fa301c"
     },
     {
       "file": "docs/research/2026-10-08-auo-four-segment-model/article-template.md",
-      "bytes": 17660,
-      "sha256": "b512c9d38171b2274f41a4ef92a7dbd32b1e51f9da85e8f35aac9340177b3012"
+      "bytes": 18870,
+      "sha256": "9f874ecb1480e2d25bafbc25c566af773e7fdf7b958cd54f0776d3096abcc8dc"
     },
     {
       "file": "docs/research/2026-10-08-auo-four-segment-model/article.md",
-      "bytes": 19857,
-      "sha256": "e4b40903361c32c820ea318032b24dc63cb98ca0b7a75e1eabfca6c3074dc512"
+      "bytes": 21067,
+      "sha256": "5fd8f5a7a6043bd614efb7e781ad68372b83cf35c6a4853e8f8ae2418415905e"
     },
     {
       "file": "docs/research/2026-10-08-auo-four-segment-model/draft-metadata.json",
-      "bytes": 1213,
-      "sha256": "a1e37630eaccbeeea19e53024fe7cdaa7a1208d8b69aa2c7cea0cf4af58591ee"
+      "bytes": 1706,
+      "sha256": "bfa404d6078a33194ac8040a0d6e6b63509b328ce70c303edc9385e4d1444beb"
     },
     {
       "file": "docs/research/2026-10-08-auo-four-segment-model/model-results.json",
-      "bytes": 78175,
-      "sha256": "72e15fe44d09fd06117ae568ec58620335e38fe9457b5524ceffead66cf6c909"
+      "bytes": 88790,
+      "sha256": "0bcaec17c15cf6a74cb90688bb6b43264af7db733114ecd812771714239b5965"
     },
     {
       "file": "docs/research/2026-10-08-auo-four-segment-model/recompute.mjs",
-      "bytes": 16788,
-      "sha256": "bf3452356f10144de9fdda6aaca26d2dd8cd7fa3d2fff15101935d1684805e10"
+      "bytes": 17975,
+      "sha256": "66ae6b2dad0308e13f3c8a836ea85a00e634d8c47a428786c77a44d6c8c6c175"
     },
     {
       "file": "docs/research/2026-10-08-auo-four-segment-model/source-ledger.json",
@@ -38,8 +38,8 @@
     },
     {
       "file": "docs/research/2026-10-08-auo-four-segment-model/verify-output.py",
-      "bytes": 3597,
-      "sha256": "e82ac0e2b8ae3d8f21a6c35103cf353a9e643c1708c1a55f6efc91f340b88b01"
+      "bytes": 4119,
+      "sha256": "8cdd35ba5e48276ae02bcebbe8eca00f1caff6925b2846290622ac94c4ae622f"
     }
   ]
 }

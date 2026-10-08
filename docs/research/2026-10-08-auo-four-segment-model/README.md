@@ -21,3 +21,7 @@ Forecast mechanics: Q3 revenue is anchored to the three published rounded monthl
 Gain sensitivity: two held-for-sale pretax gains863.731m and1127.507m, separately weighted and taxed. June30 ownership does not establish transaction-date attribution; no exact normalized EPS asserted. Contract asset consideration is not gain. TestPE10/15/20/30 is not calibrated; no target or approved entry.
 
 Old32.2/36.6 paper references are preserved with raw daily first-target observation9/22 and no reactivation. This does not certify original publication, complete frozen-volume/invalidation metadata, corporate-action adjustment, fills or holdings. A no-hit adverse case cannot create a terminal date. EMC remains the next different-industry increment; overall Goal not complete.
+
+## 2026-10-08 修訂
+
+Independent Astra 對 eed55b15 指出反稀釋及引用錯向，原版本/原收據保留於 Git。新模型區分 ordinary / potential shares；potential 是無分子調整獎酬敏感度，不是已發行新普通股。虧損或零收益排除潛在股，年度與四季各自以整期利益及加權潛在股判定；issued ordinary 股數即使虧損仍按在外期間納入。未來實際股份/轉換工具與 numerator adjustment 仍未核實。專利、FY/Q3及每項海外/媒體線索已拆成原始連結。native8e0437已正常 merge，Astra unsigned scoped code approval（非protected），本次另重跑 native。

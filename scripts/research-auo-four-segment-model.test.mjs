@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { buildModel,loadInputs,forecastQuarter,scenarioInputs,renderArticle } from '../docs/research/2026-10-08-auo-four-segment-model/recompute.mjs';
+import { buildModel,loadInputs,forecastQuarter,scenarioInputs,renderArticle,conditionalEps,weightedOrdinaryShares } from '../docs/research/2026-10-08-auo-four-segment-model/recompute.mjs';
 const {values,context}=await loadInputs();const cutoff='2026-10-08T10:20:00Z';const model=buildModel(...values,cutoff,context);
 const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-6,`${a} / ${b}`);
 test('official exact four-segment H1/Q2 includes Other and reconciles',()=>{
@@ -69,3 +69,10 @@ test('paper target lifecycle does not invent a hit when no post-reference high r
   const result=buildModel(...copy,cutoff,context);
   assert.ok(result.legacyPaperPlanDaily.every(row=>row.firstTargetObserved===null&&row.paperTargetState==='before_first_target'));
 });
+
+test('potential shares are excluded for annual loss rather than reducing loss per share',()=>{ const s=model.scenarios[0].calendar2027; near(s.dilutedSharesMillionAssumed,7547.099); near(s.dilutedEpsConditional,s.ownersNetProfit/7547.099); });
+
+test('positive earnings include potential awards; losses exclude only potential shares',()=>{near(conditionalEps(110,100,10).dilutedEpsConditional,1);near(conditionalEps(-100,100,10).dilutedEpsConditional,-1);near(conditionalEps(0,100,10).dilutedSharesMillionAssumed,100);});
+test('issued ordinary shares remain in loss denominator with actual-period weight',()=>{near(conditionalEps(-110,weightedOrdinaryShares(100,20,.5),10).dilutedEpsConditional,-1);near(weightedOrdinaryShares(100,20,1),120);near(weightedOrdinaryShares(100,20,0),100);assert.notEqual(weightedOrdinaryShares(100,20,.25),weightedOrdinaryShares(100,20,.75));assert.throws(()=>weightedOrdinaryShares(100,20,1.01));});
+test('quarter and annual loss use their own profit and potential share weights',()=>{const s=model.scenarios[0];for(const q of s.quarters.slice(2)){near(q.ordinaryWeightedSharesMillionAssumed,7547.099);near(q.antiDilutiveExcludedMillion,7547.099*.01);}near(s.calendar2027.antiDilutiveExcludedMillion,7547.099*.01);near(s.nextFourUnreported.antiDilutiveExcludedMillion,7547.099*.005);assert.ok(model.scenarios[1].calendar2027.potentialIncludedMillion>0);});
+test('patent, annual and nine-month citations link directly to their primary sources',async()=>{const t=await readFile(new URL('../docs/research/2026-10-08-auo-four-segment-model/article-template.md',import.meta.url),'utf8');assert.match(t,/證據链。\[P\]/);assert.match(t,/\[H\]: https:\/\/www.auo.com.*4Q2025_TC.pdf/);assert.match(t,/\[HH\]: https:\/\/www.auo.com.*3Q2025_TC.pdf/);assert.ok(!/\[(N|I)\]: \.\.\//.test(t));});
