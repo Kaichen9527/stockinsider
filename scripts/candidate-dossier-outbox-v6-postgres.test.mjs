@@ -5,6 +5,10 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
+import { EventEmitter } from 'node:events';
+import { PassThrough } from 'node:stream';
+
+import { collectPipedChild } from './test-support/collect-piped-child.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const pgConfig = spawnSync('pg_config', ['--bindir'], { encoding: 'utf8' });
@@ -33,6 +37,7 @@ test('outbox v6 fences stale workers and atomically closes accepted and rejected
     const sql = (query) => run('psql', ['-X', '-A', '-t', '-v', 'ON_ERROR_STOP=1',
       '-h', temporary, '-p', String(port), '-d', 'postgres', '-c', query]);
     let started = false;
+    const runningQueries = new Set();
     try {
       run('initdb', ['-D', cluster, '-A', 'trust', '--no-instructions']);
       run('pg_ctl', ['-D', cluster, '-l', path.join(temporary, 'postgres.log'),
@@ -122,19 +127,31 @@ test('outbox v6 fences stale workers and atomically closes accepted and rejected
             'qualifiedAt','${when}','nextReviewAt','2026-11-01T00:00:00Z','materialEventIds','["denial"]'::jsonb),
           '${when}'::timestamptz,'2026-11-01T00:00:00Z'::timestamptz
         FROM public.candidate_thesis_qualifications_v1 WHERE id='${revised}';`;
-      const asyncSQL = query => new Promise(resolve => {
-        const child=spawn(path.join(binaries,'psql'),['-X','-A','-t','-v','ON_ERROR_STOP=1','-h',temporary,'-p',String(port),'-d','postgres','-c',query]);
-        let out='',err='';child.stdout.on('data',x=>out+=x);child.stderr.on('data',x=>err+=x);
-        child.on('exit',code=>resolve({code,out,err}));
-      });
+      const asyncSQL = query => {
+        const child = spawn(path.join(binaries,'psql'),['-X','-A','-t','-v','ON_ERROR_STOP=1','-h',temporary,'-p',String(port),'-d','postgres','-c',query]);
+        const collection = collectPipedChild(child);
+        runningQueries.add(collection);
+        // Attach rejection handling now, before awaiting the PgSleep barrier.
+        return collection.result.then(value => {
+          runningQueries.delete(collection); return { value };
+        }, error => {
+          runningQueries.delete(collection); return { error };
+        });
+      };
       const first=asyncSQL(`SET application_name='astra-thesis-first'; BEGIN; ${raceInsert('4'.repeat(64),'2026-10-01T10:00:00Z')} SELECT pg_sleep(1.0); COMMIT;`);
+      let firstSettled; void first.then(result => { firstSettled=result; });
       const deadline=Date.now()+3000;
       while(sql("SELECT count(*) FROM pg_stat_activity WHERE application_name='astra-thesis-first' AND wait_event='PgSleep'")!=='1'){
+        if (firstSettled?.error) throw firstSettled.error;
+        if (firstSettled?.value) throw new Error(`first writer ended before held transaction: ${firstSettled.value.err}`);
         assert.ok(Date.now()<deadline,'first writer never reached held transaction');
         await new Promise(r=>setTimeout(r,10));
       }
       const second=asyncSQL(raceInsert('5'.repeat(64),'2026-10-01T11:00:00Z'));
-      const [a,b]=await Promise.all([first,second]);
+      const [firstResult,secondResult]=await Promise.all([first,second]);
+      if (firstResult.error) throw firstResult.error;
+      if (secondResult.error) throw secondResult.error;
+      const a=firstResult.value,b=secondResult.value;
       assert.equal(a.code,0);assert.notEqual(b.code,0);assert.match(b.err,/research_thesis_head_changed/);
       assert.equal(sql('SELECT count(*) FROM public.candidate_thesis_qualifications_v1'),'4');
 
@@ -176,6 +193,7 @@ test('outbox v6 fences stale workers and atomically closes accepted and rejected
       assert.equal(sql(`SELECT status FROM public.candidate_dossier_outbox_v5 WHERE job_id='${ids.exhaustedJob}'`), 'failed');
       assert.equal(claim('another-owner'), '');
     } finally {
+      for (const collection of runningQueries) collection.cancel();
       if (started) {
         try { run('pg_ctl', ['-D', cluster, '-m', 'immediate', '-w', 'stop']); }
         catch { /* Preserve the failure from the test body when PostgreSQL already stopped. */ }
@@ -183,3 +201,73 @@ test('outbox v6 fences stale workers and atomically closes accepted and rejected
       fs.rmSync(temporary, { recursive: true, force: true });
     }
   });
+
+
+test('piped child waits for inherited stderr after the leader exits', { timeout: 5000 }, async () => {
+  const grandchild = `process.stderr.on('error',()=>{});setTimeout(()=>{process.stderr.write('late-stderr-marker');},100);setTimeout(()=>process.exit(0),180);`;
+  const leader = `const{spawn}=require('node:child_process');spawn(process.execPath,['-e',${JSON.stringify(grandchild)}],{stdio:['ignore','ignore',process.stderr],detached:true}).unref();process.exit(3);`;
+  const child = spawn(process.execPath, ['-e', leader], { stdio: ['ignore','pipe','pipe'] });
+  const { result } = collectPipedChild(child);
+  const captured = await result;
+  assert.equal(captured.code, 3);
+  assert.equal(captured.err, 'late-stderr-marker');
+});
+
+
+test('piped child preserves output and original normal/nonzero/signal exits', async () => {
+  for (const code of [0, 7]) {
+    const child = spawn(process.execPath, ['-e', `process.stdout.write('out');process.stderr.write('err');process.exitCode=${code};`], { stdio: ['ignore','pipe','pipe'] });
+    assert.deepEqual(await collectPipedChild(child).result, { code, signal:null, out:'out', err:'err' });
+  }
+  const child = spawn(process.execPath, ['-e', `process.kill(process.pid,'SIGTERM')`], { stdio: ['ignore','pipe','pipe'] });
+  const result = await collectPipedChild(child).result;
+  assert.equal(result.code, null); assert.equal(result.signal, 'SIGTERM');
+});
+
+test('piped child explicitly fails spawn and output limits', async () => {
+  const missing = spawn(path.join(os.tmpdir(), `missing-stockinsider-executable-${process.pid}`), [], { stdio: ['ignore','pipe','pipe'] });
+  await assert.rejects(collectPipedChild(missing).result, { code: 'ENOENT' });
+  for (const stream of ['stdout','stderr']) {
+    const noisy = spawn(process.execPath, ['-e', `process.${stream}.write('a'.repeat(1025));setInterval(()=>{},1000);`], { stdio: ['ignore','pipe','pipe'] });
+    await assert.rejects(collectPipedChild(noisy, { maxBytes:1024 }).result, /piped_child_output_limit/);
+  }
+});
+
+test('piped child bounds an inherited pipe that remains open after leader exit', { timeout:5000 }, async () => {
+  const descendant = `process.stderr.on('error',()=>{});setTimeout(()=>process.exit(0),700);`;
+  const leader = `const{spawn}=require('node:child_process');spawn(process.execPath,['-e',${JSON.stringify(descendant)}],{stdio:['ignore','ignore',process.stderr],detached:true}).unref();process.exit(4);`;
+  const child = spawn(process.execPath, ['-e',leader], { stdio:['ignore','pipe','pipe'] });
+  let kills=0; const kill=child.kill.bind(child); child.kill=(...args)=>{kills++;return kill(...args);};
+  await assert.rejects(collectPipedChild(child,{timeoutMs:200}).result,/piped_child_deadline/);
+  assert.equal(child.exitCode,4); assert.equal(kills,0);
+  assert.equal(child.stderr.destroyed,true); assert.equal(child.stdout.destroyed,true);
+});
+
+function fakePipedChild() {
+  const child=new EventEmitter(); child.stdout=new PassThrough(); child.stderr=new PassThrough();
+  child.exitCode=null; child.signalCode=null; child.kills=0; child.kill=()=>{child.kills++;return true;};
+  return child;
+}
+
+test('piped child rejects late close despite a delayed timer, and settles once', async () => {
+  const child=fakePipedChild(); let clock=100, callback, clears=0;
+  const collection=collectPipedChild(child,{timeoutMs:100,now:()=>clock,setTimer:f=>{callback=f;return 1;},clearTimer:()=>{clears++;}});
+  const rejected=assert.rejects(collection.result,/piped_child_deadline/);
+  child.emit('exit',0,null); clock=200; child.emit('close',0,null);
+  callback(); child.emit('error',new Error('late error')); child.stdout.emit('error',new Error('late stream error'));
+  await rejected; assert.equal(child.kills,0); assert.equal(clears,1);
+});
+
+test('piped child captures post-exit data, clears timer, and rejects stream errors/cancel', async () => {
+  const child=fakePipedChild(); let callback, clears=0;
+  const collection=collectPipedChild(child,{setTimer:f=>{callback=f;return 1;},clearTimer:()=>{clears++;}});
+  child.emit('exit',3,null); child.stderr.write('late'); child.emit('close',3,null); callback();
+  assert.deepEqual(await collection.result,{code:3,signal:null,out:'',err:'late'}); assert.equal(clears,1); assert.equal(child.kills,0);
+  for (const kind of ['stream','cancel']) {
+    const broken=fakePipedChild(); const attempt=collectPipedChild(broken);
+    const rejected=assert.rejects(attempt.result,kind==='stream'?/broken stream/:/piped_child_cancelled/);
+    if(kind==='stream') broken.stderr.emit('error',new Error('broken stream')); else attempt.cancel();
+    await rejected; assert.equal(broken.kills,1); assert.equal(broken.stderr.destroyed,true);
+    broken.emit('close',0,null); broken.emit('error',new Error('late'));
+  }
+});
