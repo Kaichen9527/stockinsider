@@ -1,0 +1,215 @@
+{
+  "schemaVersion": "native-successor-linux-development-receipt-v1",
+  "recordedAt": "2026-10-08T12:22:50.014320+00:00",
+  "subjectSha": "1d92e04e26c393c6d9c32b549854281e3f29f115",
+  "subjectWebTree": "a95cf75a86377a1f49c0bb54d2883e4c9b87f80a",
+  "sourceTreeAfterChecks": "",
+  "incrementStartedAt": "2026-10-08T12:18:09Z",
+  "deadlineAt": "2026-10-08T12:48:09Z",
+  "scope": "VM Linux exact-source development portability, no macOS executable/host probes/authentication/activation/model/oracle/owner grant",
+  "independentReviewAttribution": "root-relayed Astra UNSIGNED scoped inactivecode approval6/6lightweight22filefacts/hashes/graph; notVMmaker execution/protectedauthority",
+  "fiveRequestedFiles": {
+    "pass": 52,
+    "fail": 1,
+    "skip": 0,
+    "limitation": "acceptance-traceability.test.mjs fails before cases: GOV-004 requires protected-external-harness-v1 marker; no external harness release identity exists here, not fabricated",
+    "otherFourFiles": "52 namedcases pass, including6 native successor contracts; synthetic external evidence, no genuine ownerauthority"
+  },
+  "types": "pass",
+  "lint": "0errors33existingwarnings",
+  "normalBuild": "pass on same source with existing localhardlink dependencies",
+  "initialBuildFailure": "Turbopack invalid cross-worktree node_modules symlink; preserved, replaced only own dependency symlink with localhardlink copy of existingdeps; no install/config/codechange",
+  "exactCaseScope": "default product_runtime trace never admitted; no evaluation_governance/model_runner protected tracks or Macliveoracles claimed",
+  "resources": {
+    "node": "22.14.0",
+    "cgroupMemoryMax": 34359738368,
+    "cpuMax": "400000 100000",
+    "nproc": 5,
+    "rssMethod": "100msprocessgroupRSS+GNUtime-v; transientpeaks may be missed",
+    "rssPeakBytes": 1817513984,
+    "taskDiskPeakBytes": 1187758080,
+    "worktreeAfterBytes": 1248092160,
+    "filesystemAvailableBytes": 25317703680,
+    "diskQuota": null,
+    "quotaNote": "df filesystemvisibility notprojectguarantee; hardlinkeddependencydu notuniqueallocation",
+    "budget": "20GBresident+4GBtemp+8GBreserve, singleheavy<=8GiB; noVPSadmission"
+  },
+  "stages": [
+    {
+      "stage": "native-portable",
+      "command": [
+        "node",
+        "--test",
+        "scripts/opportunity-v3/native-successor-contract.test.mjs",
+        "scripts/opportunity-v3/host-recovery-packet.test.mjs",
+        "scripts/opportunity-v3/host-recovery-install-plan.test.mjs",
+        "scripts/opportunity-v3/protected-external-gate-worker.test.mjs",
+        "scripts/opportunity-v3/acceptance-traceability.test.mjs"
+      ],
+      "startedAt": "2026-10-08T12:19:17.362Z",
+      "completedAt": "2026-10-08T12:19:18.522Z",
+      "elapsedSeconds": 1.16064561100211,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 152666112,
+      "observedTaskDiskPeakBytes": 18993152,
+      "availableBeforeBytes": 25659015168,
+      "availableAfterBytes": 25658994688,
+      "guardTermination": null
+    },
+    {
+      "stage": "portable-types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-08T12:19:48.662Z",
+      "completedAt": "2026-10-08T12:20:03.573Z",
+      "elapsedSeconds": 14.911456832996919,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1142865920,
+      "observedTaskDiskPeakBytes": 19128320,
+      "availableBeforeBytes": 25658990592,
+      "availableAfterBytes": 25656668160,
+      "guardTermination": null
+    },
+    {
+      "stage": "portable-lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-08T12:20:03.611Z",
+      "completedAt": "2026-10-08T12:20:26.196Z",
+      "elapsedSeconds": 22.585318526995252,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1539670016,
+      "observedTaskDiskPeakBytes": 21331968,
+      "availableBeforeBytes": 25656664064,
+      "availableAfterBytes": 25640488960,
+      "guardTermination": null
+    },
+    {
+      "stage": "portable-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T12:20:26.228Z",
+      "completedAt": "2026-10-08T12:20:27.064Z",
+      "elapsedSeconds": 0.8356919520010706,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 186978304,
+      "observedTaskDiskPeakBytes": 37507072,
+      "availableBeforeBytes": 25640484864,
+      "availableAfterBytes": 25640189952,
+      "guardTermination": null
+    },
+    {
+      "stage": "portable-build-local-deps",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T12:21:14.148Z",
+      "completedAt": "2026-10-08T12:21:47.659Z",
+      "elapsedSeconds": 33.51039873700938,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1817513984,
+      "observedTaskDiskPeakBytes": 1187758080,
+      "availableBeforeBytes": 25628991488,
+      "availableAfterBytes": 25317720064,
+      "guardTermination": null
+    }
+  ],
+  "privateFiles": [
+    {
+      "path": "/workspace/cloud-native-portable-artifacts-oct08/native-portable.json",
+      "bytes": 736,
+      "sha256": "a78ee603ec5d25f7621982c7aca15204b0a47f426f56b56132e8ba2792f10d1e"
+    },
+    {
+      "path": "/workspace/cloud-native-portable-artifacts-oct08/native-portable.log",
+      "bytes": 14742,
+      "sha256": "eb61049b0f837170541e3c2ae8d6948082c1b51820e1038b83eabfa4a3b4871d"
+    },
+    {
+      "path": "/workspace/cloud-native-portable-artifacts-oct08/native-portable.time",
+      "bytes": 1066,
+      "sha256": "8188cd184c3a23172fb0a696c8b03a37de3cd1702080b034ed06932aba4d0de5"
+    },
+    {
+      "path": "/workspace/cloud-native-portable-artifacts-oct08/portable-types.json",
+      "bytes": 454,
+      "sha256": "b6aa32005fab24f75cb4e9dc65e1a2e92437dd5e6d2de706fc76dcb5f377a827"
+    },
+    {
+      "path": "/workspace/cloud-native-portable-artifacts-oct08/portable-types.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": "/workspace/cloud-native-portable-artifacts-oct08/portable-types.time",
+      "bytes": 759,
+      "sha256": "1dcc2b46f7d9eefebc02fef2ceede70c8fbe9a1463a38dd90e49d38f0b927997"
+    },
+    {
+      "path": "/workspace/cloud-native-portable-artifacts-oct08/portable-lint.json",
+      "bytes": 448,
+      "sha256": "4e55b02101ee716aba9888925777c395faf82e47ab70e60b0f571f77c3454ed0"
+    },
+    {
+      "path": "/workspace/cloud-native-portable-artifacts-oct08/portable-lint.log",
+      "bytes": 4697,
+      "sha256": "909a60dc95b40946fc3b925a5106e5f4310a060778a73c3c56e03a3a6683c8b3"
+    },
+    {
+      "path": "/workspace/cloud-native-portable-artifacts-oct08/portable-lint.time",
+      "bytes": 757,
+      "sha256": "398c403db39dca8ca844c99e436dc291493f5b77e877bac94f73b003dc0e3f12"
+    },
+    {
+      "path": "/workspace/cloud-native-portable-artifacts-oct08/portable-build.json",
+      "bytes": 449,
+      "sha256": "51255e03dd4b589ff92700de1c7130885ddca7e4aff427e8ebd6dd4a779d644c"
+    },
+    {
+      "path": "/workspace/cloud-native-portable-artifacts-oct08/portable-build.log",
+      "bytes": 3062,
+      "sha256": "98389b891473393e48738a39a1f2fab28a1d64e8391190b4425323bce985b6db"
+    },
+    {
+      "path": "/workspace/cloud-native-portable-artifacts-oct08/portable-build.time",
+      "bytes": 788,
+      "sha256": "5c385971496f7d556e8ab0eabbb450b5327cd8361bc8b507cef3b269ccd31742"
+    },
+    {
+      "path": "/workspace/cloud-native-portable-artifacts-oct08/portable-build-local-deps.json",
+      "bytes": 462,
+      "sha256": "6fc33ee1d91f1cd12b0a470ecc8d4a742c0855b5b2a4cf9aabbaef11277282a6"
+    },
+    {
+      "path": "/workspace/cloud-native-portable-artifacts-oct08/portable-build-local-deps.log",
+      "bytes": 5556,
+      "sha256": "33a51e5760bfdd67bba3a61df1c179b5f3455296a65fe45a121f685bb0ba09cd"
+    },
+    {
+      "path": "/workspace/cloud-native-portable-artifacts-oct08/portable-build-local-deps.time",
+      "bytes": 762,
+      "sha256": "bcbaf54c8d545be40d47339fe90f8a69d62db275e45af6e100da5e80a2d09ce1"
+    }
+  ],
+  "status": "development checks partial: protected trace still blocked, no activation",
+  "nextGoal": "read-onlyAUO/EMCpreview viaexistingarticlecontract; controlledconsumerstrategychain later"
+}
