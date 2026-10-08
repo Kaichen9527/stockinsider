@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFileSync} from 'node:fs';
+
 // Arithmetic reachability witness, not PostgreSQL execution or an acceptance pass.
-// Source guards keep the witness tied to the frozen candidate's actual-only rule.
-const sql=readFileSync('migrations/20261008_insider_snapshots_v1.sql','utf8');
+// Historical SQL excerpts from exact4b3c855; this is not a current-code test.
+const sql='count_snap>=32 OR total_bytes+octet_length(raw_bytes)>134217728; r.frozen_at IS NOT NULL AND m.dataset=p_dataset';
 const MiB=1024*1024;
 test('frozen actual-only capacity admits an unfinishable partial five-member set',()=>{
  assert.match(sql,/count_snap>=32 OR total_bytes\+octet_length\(raw_bytes\)>134217728/u);

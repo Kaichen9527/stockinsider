@@ -1,5 +1,12 @@
 -- Private bounded official-insider evidence. Candidate only: reviewed apply required.
 BEGIN;
+-- This slice is an unapplied migration revision, not a silent upgrade of an
+-- earlier experimental schema. Preserve any old candidate and refuse reapply.
+DO $preflight$ BEGIN
+ IF to_regclass('public.insider_run_members_v1') IS NOT NULL AND NOT EXISTS(
+  SELECT 1 FROM pg_attribute WHERE attrelid=to_regclass('public.insider_run_members_v1') AND attname='acquisition_token' AND NOT attisdropped)
+ THEN RAISE EXCEPTION 'insider_prior_candidate_schema_requires_reviewed_upgrade'; END IF;
+END $preflight$;
 CREATE TABLE IF NOT EXISTS public.insider_snapshots_v1 (
  id uuid PRIMARY KEY DEFAULT gen_random_uuid(), dataset integer NOT NULL CHECK(dataset BETWEEN 0 AND 4),
  raw bytea NOT NULL CHECK(octet_length(raw) BETWEEN 2 AND 12582912),
@@ -17,15 +24,42 @@ CREATE UNIQUE INDEX IF NOT EXISTS insider_one_active_snapshot_v1 ON public.insid
 CREATE TABLE IF NOT EXISTS public.insider_acquisition_runs_v1 (
  id uuid PRIMARY KEY, created_at timestamptz NOT NULL DEFAULT clock_timestamp(), frozen_at timestamptz
 );
+-- Pending tokens reserve real capacity; consumed tokens retain replay identity forever.
+CREATE TABLE IF NOT EXISTS public.insider_acquisitions_v1 (
+ id uuid PRIMARY KEY DEFAULT gen_random_uuid(), dataset integer NOT NULL CHECK(dataset BETWEEN 0 AND 4),
+ snapshot_id uuid UNIQUE REFERENCES public.insider_snapshots_v1(id),
+ created_at timestamptz NOT NULL DEFAULT clock_timestamp(), resolved_at timestamptz,
+ CHECK((snapshot_id IS NULL)=(resolved_at IS NULL))
+);
+CREATE UNIQUE INDEX IF NOT EXISTS insider_one_pending_acquisition_v1 ON public.insider_acquisitions_v1(dataset) WHERE snapshot_id IS NULL;
 CREATE TABLE IF NOT EXISTS public.insider_run_members_v1 (
  run_id uuid NOT NULL REFERENCES public.insider_acquisition_runs_v1(id), dataset integer NOT NULL CHECK(dataset BETWEEN 0 AND 4),
- snapshot_id uuid NOT NULL REFERENCES public.insider_snapshots_v1(id), PRIMARY KEY(run_id,dataset)
+ acquisition_token uuid NOT NULL REFERENCES public.insider_acquisitions_v1(id),
+ snapshot_id uuid REFERENCES public.insider_snapshots_v1(id), PRIMARY KEY(run_id,dataset)
 );
 -- No caller-controlled document IDs or projection hashes are trusted at commit.
 CREATE OR REPLACE FUNCTION public.insider_snapshot_immutable_v1() RETURNS trigger
  LANGUAGE plpgsql SET search_path=pg_catalog,public AS $$ BEGIN RAISE EXCEPTION 'insider_snapshot_immutable'; END $$;
 CREATE OR REPLACE TRIGGER insider_snapshot_immutable_v1 BEFORE UPDATE OR DELETE ON public.insider_snapshots_v1 FOR EACH ROW EXECUTE FUNCTION public.insider_snapshot_immutable_v1();
-CREATE OR REPLACE TRIGGER insider_member_immutable_v1 BEFORE UPDATE OR DELETE ON public.insider_run_members_v1 FOR EACH ROW EXECUTE FUNCTION public.insider_snapshot_immutable_v1();
+CREATE OR REPLACE FUNCTION public.insider_resolve_binding_v1() RETURNS trigger
+ LANGUAGE plpgsql SET search_path=pg_catalog,public AS $$
+BEGIN
+ IF TG_OP<>'UPDATE' THEN RAISE EXCEPTION 'insider_binding_immutable'; END IF;
+ IF TG_TABLE_NAME='insider_acquisitions_v1' THEN
+  IF OLD.id<>NEW.id OR OLD.dataset<>NEW.dataset OR OLD.created_at<>NEW.created_at OR OLD.snapshot_id IS NOT NULL
+   OR NEW.snapshot_id IS NULL OR NEW.resolved_at IS NULL OR NOT EXISTS(SELECT 1 FROM public.insider_snapshots_v1 s WHERE s.id=NEW.snapshot_id AND s.dataset=NEW.dataset)
+   THEN RAISE EXCEPTION 'insider_binding_immutable'; END IF;
+ ELSE
+  IF OLD.run_id<>NEW.run_id OR OLD.dataset<>NEW.dataset OR OLD.acquisition_token<>NEW.acquisition_token OR OLD.snapshot_id IS NOT NULL
+   OR NEW.snapshot_id IS NULL OR NOT EXISTS(SELECT 1 FROM public.insider_acquisitions_v1 a WHERE a.id=NEW.acquisition_token AND a.snapshot_id=NEW.snapshot_id AND a.dataset=NEW.dataset)
+   THEN RAISE EXCEPTION 'insider_binding_immutable'; END IF;
+ END IF;
+ RETURN NEW;
+END $$;
+CREATE OR REPLACE TRIGGER insider_member_immutable_v1 BEFORE UPDATE OR DELETE ON public.insider_run_members_v1 FOR EACH ROW EXECUTE FUNCTION public.insider_resolve_binding_v1();
+CREATE OR REPLACE TRIGGER insider_acquisition_identity_v1 BEFORE UPDATE OR DELETE ON public.insider_acquisitions_v1 FOR EACH ROW EXECUTE FUNCTION public.insider_resolve_binding_v1();
+ALTER TABLE public.insider_acquisitions_v1 ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON public.insider_acquisitions_v1 FROM PUBLIC,anon,authenticated,service_role;
 ALTER TABLE public.insider_snapshots_v1 ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.insider_snapshot_progress_v1 ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.insider_acquisition_runs_v1 ENABLE ROW LEVEL SECURITY;
@@ -106,40 +140,52 @@ BEGIN
 END $$;
 CREATE OR REPLACE FUNCTION public.insider_snapshot_run_v1(p_run uuid) RETURNS jsonb
  LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$
-DECLARE result jsonb;
+DECLARE result jsonb; d integer; token uuid; tokens uuid[]:='{}'; bytes_used bigint; records_used bigint; pending bigint;
 BEGIN
  IF p_run IS NULL THEN RAISE EXCEPTION 'insider_run_required'; END IF;
  PERFORM pg_advisory_xact_lock(2410,8001);
  IF NOT EXISTS(SELECT 1 FROM public.insider_acquisition_runs_v1 WHERE id=p_run) THEN
   IF (SELECT count(*) FROM public.insider_acquisition_runs_v1)>=128 THEN RAISE EXCEPTION 'insider_run_capacity'; END IF;
+  FOR d IN 0..4 LOOP
+   PERFORM pg_advisory_xact_lock(2411,d);
+   SELECT a.id INTO token FROM public.insider_acquisitions_v1 a JOIN public.insider_snapshot_progress_v1 p ON p.snapshot_id=a.snapshot_id WHERE a.dataset=d AND NOT p.complete;
+   IF token IS NULL THEN SELECT a.id INTO token FROM public.insider_acquisitions_v1 a WHERE a.dataset=d AND a.snapshot_id IS NULL; END IF;
+   IF token IS NULL THEN INSERT INTO public.insider_acquisitions_v1(dataset) VALUES(d) RETURNING id INTO token; END IF;
+   tokens:=array_append(tokens,token);
+  END LOOP;
+  SELECT coalesce(sum(octet_length(raw)),0),count(*) INTO bytes_used,records_used FROM public.insider_snapshots_v1;
+  SELECT count(*) INTO pending FROM public.insider_acquisitions_v1 WHERE snapshot_id IS NULL;
+  IF bytes_used+pending*12582912>134217728 OR records_used+pending>32 THEN RAISE EXCEPTION 'insider_acquisition_reserved_capacity'; END IF;
+  -- Exception above rolls back proposed tokens too. All five subscriptions precede fetch.
   INSERT INTO public.insider_acquisition_runs_v1(id) VALUES(p_run);
- END IF;
- -- Reuse active snapshots before any caller fetch. Completed pinned members are immutable.
- INSERT INTO public.insider_run_members_v1(run_id,dataset,snapshot_id)
-  SELECT p_run,p.dataset,p.snapshot_id FROM public.insider_snapshot_progress_v1 p WHERE NOT p.complete
-  ON CONFLICT(run_id,dataset) DO NOTHING;
- IF (SELECT count(*) FROM public.insider_run_members_v1 WHERE run_id=p_run)=5 THEN
-  UPDATE public.insider_acquisition_runs_v1 SET frozen_at=coalesce(frozen_at,clock_timestamp()) WHERE id=p_run;
+  INSERT INTO public.insider_run_members_v1(run_id,dataset,acquisition_token,snapshot_id)
+   SELECT p_run,a.dataset,a.id,a.snapshot_id FROM public.insider_acquisitions_v1 a WHERE a.id=ANY(tokens);
+  IF NOT EXISTS(SELECT 1 FROM public.insider_run_members_v1 WHERE run_id=p_run AND snapshot_id IS NULL) THEN
+   UPDATE public.insider_acquisition_runs_v1 SET frozen_at=clock_timestamp() WHERE id=p_run;
+  END IF;
  END IF;
  SELECT jsonb_build_object('runId',p_run,'frozen',r.frozen_at IS NOT NULL,'members',coalesce((
-  SELECT jsonb_agg(jsonb_build_object('dataset',m.dataset,'snapshotId',m.snapshot_id,'complete',p.complete,'offset',p.offset_rows,'generation',p.generation,'totalRows',s.row_count,'observedAt',s.observed_at,'attemptedAt',s.attempted_at,'hash',s.raw_sha256) ORDER BY m.dataset)
-  FROM public.insider_run_members_v1 m JOIN public.insider_snapshot_progress_v1 p ON p.snapshot_id=m.snapshot_id JOIN public.insider_snapshots_v1 s ON s.id=m.snapshot_id WHERE m.run_id=p_run),'[]'::jsonb)) INTO result FROM public.insider_acquisition_runs_v1 r WHERE r.id=p_run;
+  SELECT jsonb_agg(CASE WHEN m.snapshot_id IS NULL THEN jsonb_build_object('dataset',m.dataset,'snapshotId',NULL,'acquisitionToken',m.acquisition_token,'complete',false)
+   ELSE jsonb_build_object('dataset',m.dataset,'snapshotId',m.snapshot_id,'acquisitionToken',m.acquisition_token,'complete',p.complete,'offset',p.offset_rows,'generation',p.generation,'totalRows',s.row_count,'observedAt',s.observed_at,'attemptedAt',s.attempted_at,'hash',s.raw_sha256) END ORDER BY m.dataset)
+  FROM public.insider_run_members_v1 m LEFT JOIN public.insider_snapshot_progress_v1 p ON p.snapshot_id=m.snapshot_id LEFT JOIN public.insider_snapshots_v1 s ON s.id=m.snapshot_id WHERE m.run_id=p_run),'[]'::jsonb)) INTO result FROM public.insider_acquisition_runs_v1 r WHERE r.id=p_run;
  RETURN result;
 END $$;
-CREATE OR REPLACE FUNCTION public.admit_insider_snapshot_v1(p_run uuid,p_dataset integer,p_raw_base64 text,p_hash text,p_rows integer,p_attempted timestamptz,p_observed timestamptz,p_parser text,p_rights text) RETURNS jsonb
+CREATE OR REPLACE FUNCTION public.admit_insider_snapshot_v1(p_run uuid,p_dataset integer,p_token uuid,p_raw_base64 text,p_hash text,p_rows integer,p_attempted timestamptz,p_observed timestamptz,p_parser text,p_rights text) RETURNS jsonb
  LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public,extensions AS $$
-DECLARE raw_bytes bytea; rows jsonb; row_value jsonb; existing uuid; snapshot_id uuid; count_snap bigint; total_bytes bigint;
+DECLARE raw_bytes bytea; rows jsonb; row_value jsonb; binding public.insider_run_members_v1; acquisition public.insider_acquisitions_v1; snapshot_id uuid;
 BEGIN
  IF p_run IS NULL OR public.insider_dataset_v1(p_dataset) IS NULL THEN RAISE EXCEPTION 'insider_admission_identity'; END IF;
  PERFORM pg_advisory_xact_lock(2410,8001); PERFORM pg_advisory_xact_lock(2411,p_dataset);
  IF NOT EXISTS(SELECT 1 FROM public.insider_acquisition_runs_v1 WHERE id=p_run) THEN RAISE EXCEPTION 'insider_run_before_fetch_required'; END IF;
- SELECT m.snapshot_id INTO existing FROM public.insider_run_members_v1 m WHERE m.run_id=p_run AND m.dataset=p_dataset;
- IF existing IS NOT NULL THEN RETURN public.insider_snapshot_run_v1(p_run); END IF;
- SELECT p.snapshot_id INTO existing FROM public.insider_snapshot_progress_v1 p WHERE p.dataset=p_dataset AND NOT p.complete;
- IF existing IS NOT NULL THEN
-  INSERT INTO public.insider_run_members_v1 VALUES(p_run,p_dataset,existing);
+ SELECT * INTO binding FROM public.insider_run_members_v1 m WHERE m.run_id=p_run AND m.dataset=p_dataset;
+ IF NOT FOUND OR p_token IS NULL OR binding.acquisition_token<>p_token THEN RAISE EXCEPTION 'insider_acquisition_token_mismatch'; END IF;
+ SELECT * INTO STRICT acquisition FROM public.insider_acquisitions_v1 WHERE id=p_token;
+ IF acquisition.dataset<>p_dataset THEN RAISE EXCEPTION 'insider_acquisition_token_mismatch'; END IF;
+ IF binding.snapshot_id IS NOT NULL THEN
+  IF binding.snapshot_id IS DISTINCT FROM acquisition.snapshot_id THEN RAISE EXCEPTION 'insider_acquisition_binding_corrupt'; END IF;
   RETURN public.insider_snapshot_run_v1(p_run);
  END IF;
+ IF acquisition.snapshot_id IS NOT NULL THEN RAISE EXCEPTION 'insider_acquisition_binding_corrupt'; END IF;
  IF p_parser IS DISTINCT FROM 'insider-db-projection-v1' OR p_rights IS DISTINCT FROM 'official-insider-private-research-retain-v1' THEN RAISE EXCEPTION 'insider_admission_parser_or_rights'; END IF;
  IF p_raw_base64 IS NULL OR octet_length(p_raw_base64)>16777216 OR p_raw_base64 !~ '^[A-Za-z0-9+/]*={0,2}$' OR length(p_raw_base64)%4<>0 THEN RAISE EXCEPTION 'insider_raw_transport_bound'; END IF;
  IF p_attempted IS NULL OR p_observed IS NULL OR NOT isfinite(p_attempted) OR NOT isfinite(p_observed) OR p_attempted>p_observed OR p_observed>clock_timestamp() OR p_observed-p_attempted>interval '30 seconds' THEN RAISE EXCEPTION 'insider_source_clock_invalid'; END IF;
@@ -149,8 +195,6 @@ BEGIN
  IF jsonb_typeof(rows) IS DISTINCT FROM 'array' THEN RAISE EXCEPTION 'insider_schema_not_array'; END IF;
  IF p_rows IS NULL OR jsonb_array_length(rows)<>p_rows OR p_rows NOT BETWEEN 0 AND 50000 THEN RAISE EXCEPTION 'insider_row_bound'; END IF;
  FOR row_value IN SELECT value FROM jsonb_array_elements(rows) LOOP PERFORM public.insider_row_v1(row_value,p_dataset); END LOOP;
- SELECT count(*),coalesce(sum(octet_length(raw)),0) INTO count_snap,total_bytes FROM public.insider_snapshots_v1;
- IF count_snap>=32 OR total_bytes+octet_length(raw_bytes)>134217728 THEN RAISE EXCEPTION 'insider_snapshot_capacity'; END IF;
  INSERT INTO public.insider_snapshots_v1(dataset,raw,raw_sha256,row_count,attempted_at,observed_at,parser_identity,rights_identity)
   VALUES(p_dataset,raw_bytes,p_hash,p_rows,p_attempted,p_observed,p_parser,p_rights) RETURNING id INTO snapshot_id;
  -- Provisional row is transaction-private. Reject oversized derived pages before
@@ -158,7 +202,11 @@ BEGIN
  PERFORM public.insider_snapshot_projection_bound_v1(snapshot_id);
  -- Empty snapshots still require the frozen-run commit, ensuring a replay receipt.
  INSERT INTO public.insider_snapshot_progress_v1(snapshot_id,dataset) VALUES(snapshot_id,p_dataset);
- INSERT INTO public.insider_run_members_v1 VALUES(p_run,p_dataset,snapshot_id);
+ UPDATE public.insider_acquisitions_v1 SET snapshot_id=admit_insider_snapshot_v1.snapshot_id,resolved_at=clock_timestamp() WHERE id=p_token;
+ UPDATE public.insider_run_members_v1 SET snapshot_id=admit_insider_snapshot_v1.snapshot_id WHERE acquisition_token=p_token AND insider_run_members_v1.snapshot_id IS NULL;
+ UPDATE public.insider_acquisition_runs_v1 r SET frozen_at=clock_timestamp() WHERE r.frozen_at IS NULL
+  AND EXISTS(SELECT 1 FROM public.insider_run_members_v1 m WHERE m.run_id=r.id AND m.acquisition_token=p_token)
+  AND (SELECT count(*) FROM public.insider_run_members_v1 m WHERE m.run_id=r.id AND m.snapshot_id IS NOT NULL)=5;
  RETURN public.insider_snapshot_run_v1(p_run);
 END $$;
 CREATE OR REPLACE FUNCTION public.insider_expected_document_v1(p_id uuid,p_index integer,p_row jsonb) RETURNS jsonb
@@ -222,6 +270,6 @@ BEGIN
  RETURN public.read_insider_snapshot_page_v1(p_run,p_dataset,p_snapshot);
 END $$;
 -- All helper routines are private. Service callers receive only four narrow RPCs.
-REVOKE ALL ON FUNCTION public.insider_snapshot_projection_bound_v1(uuid),public.insider_trim_v1(text),public.insider_snapshot_immutable_v1(),public.insider_dataset_v1(integer),public.insider_row_v1(jsonb,integer),public.insider_snapshot_assert_v1(uuid),public.insider_expected_document_v1(uuid,integer,jsonb),public.insider_snapshot_run_v1(uuid),public.admit_insider_snapshot_v1(uuid,integer,text,text,integer,timestamptz,timestamptz,text,text),public.read_insider_snapshot_page_v1(uuid,integer,uuid),public.commit_insider_snapshot_page_v1(uuid,integer,uuid,integer,integer,integer) FROM PUBLIC,anon,authenticated,service_role;
-GRANT EXECUTE ON FUNCTION public.insider_snapshot_run_v1(uuid),public.admit_insider_snapshot_v1(uuid,integer,text,text,integer,timestamptz,timestamptz,text,text),public.read_insider_snapshot_page_v1(uuid,integer,uuid),public.commit_insider_snapshot_page_v1(uuid,integer,uuid,integer,integer,integer) TO service_role;
+REVOKE ALL ON FUNCTION public.insider_resolve_binding_v1(),public.insider_snapshot_projection_bound_v1(uuid),public.insider_trim_v1(text),public.insider_snapshot_immutable_v1(),public.insider_dataset_v1(integer),public.insider_row_v1(jsonb,integer),public.insider_snapshot_assert_v1(uuid),public.insider_expected_document_v1(uuid,integer,jsonb),public.insider_snapshot_run_v1(uuid),public.admit_insider_snapshot_v1(uuid,integer,uuid,text,text,integer,timestamptz,timestamptz,text,text),public.read_insider_snapshot_page_v1(uuid,integer,uuid),public.commit_insider_snapshot_page_v1(uuid,integer,uuid,integer,integer,integer) FROM PUBLIC,anon,authenticated,service_role;
+GRANT EXECUTE ON FUNCTION public.insider_snapshot_run_v1(uuid),public.admit_insider_snapshot_v1(uuid,integer,uuid,text,text,integer,timestamptz,timestamptz,text,text),public.read_insider_snapshot_page_v1(uuid,integer,uuid),public.commit_insider_snapshot_page_v1(uuid,integer,uuid,integer,integer,integer) TO service_role;
 COMMIT;

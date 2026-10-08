@@ -13,7 +13,9 @@ type Member = InsiderSnapshotPin & {
   complete: boolean; offset: number; generation: number; totalRows: number;
   observedAt: string; attemptedAt: string; hash: string;
 };
-type Run = { runId: string; frozen: boolean; members: Member[] };
+type PendingMember = { dataset: number; snapshotId: null; acquisitionToken: string; complete: false };
+type RunMember = Member & { acquisitionToken?: string };
+type Run = { runId: string; frozen: boolean; members: (RunMember | PendingMember)[] };
 type Page = Member & { runId: string; nextOffset: number; documents: InsiderSnapshotDocument[]; excludedRows: number };
 export type InsiderSnapshotProgress = {
   schema: 'insider_snapshot_progress_v1'; runId: string; pins: InsiderSnapshotPin[];
@@ -57,9 +59,17 @@ function member(value: unknown): Member {
 }
 function run(value: unknown, runId: string): Run {
   const r = object(value);
-  if (r.runId !== runId || typeof r.frozen !== 'boolean' || !Array.isArray(r.members) || r.members.length > 5) throw Error('insider_run_binding');
-  const members = r.members.map(member);
-  if (new Set(members.map(m => m.dataset)).size !== members.length || members.some((m, i) => i > 0 && m.dataset <= members[i - 1].dataset) || r.frozen !== (members.length === 5)) throw Error('insider_run_binding');
+  if (r.runId !== runId || typeof r.frozen !== 'boolean' || !Array.isArray(r.members) || r.members.length !== 5) throw Error('insider_run_binding');
+  const members = r.members.map((value, index): RunMember | PendingMember => {
+    const m = object(value);
+    if (m.dataset !== index || typeof m.acquisitionToken !== 'string' || !UUID.test(m.acquisitionToken)) throw Error('insider_acquisition_token_invalid');
+    if (m.snapshotId === null) {
+      if (m.complete !== false || Object.keys(m).some(k => !['dataset', 'snapshotId', 'acquisitionToken', 'complete'].includes(k))) throw Error('insider_pending_member_invalid');
+      return { dataset: index, snapshotId: null, acquisitionToken: m.acquisitionToken, complete: false };
+    }
+    return { ...member(m), acquisitionToken: m.acquisitionToken };
+  });
+  if (r.frozen !== members.every(m => m.snapshotId !== null)) throw Error('insider_run_binding');
   return { runId, frozen: r.frozen, members };
 }
 function page(value: unknown, runId: string, pin: InsiderSnapshotPin): Page {
@@ -113,34 +123,37 @@ export async function processInsiderSnapshotRun(input: InsiderSnapshotRequest, d
   const processingAttemptedAt = new Date(now()).toISOString(); const liveAcquisitions: number[] = [];
   let lastLiveAcquisitionAt: string | null = null;
   let state = run(await rpc('insider_snapshot_run_v1', { p_run: request.runId }), request.runId);
-  const pinsOf = (state: Run) => state.members.map(({ dataset, snapshotId }) => ({ dataset, snapshotId }));
+  const pinsOf = (state: Run): InsiderSnapshotPin[] => state.members.map(({ dataset, snapshotId }) => {
+    if (snapshotId === null) throw Error('insider_run_not_frozen'); return { dataset, snapshotId };
+  });
   if (request.pins && (!state.frozen || JSON.stringify(request.pins) !== JSON.stringify(pinsOf(state)))) throw Error('insider_run_binding');
   for (let dataset = 0; dataset < 5; dataset++) {
-    if (state.members.some(m => m.dataset === dataset)) continue;
+    const pending = state.members[dataset];
+    if (pending.snapshotId !== null) continue;
     const response = await acquire(OFFICIAL_INSIDER_DATASETS[dataset]);
-    state = run(await rpc('admit_insider_snapshot_v1', { p_run: request.runId, p_dataset: dataset,
+    state = run(await rpc('admit_insider_snapshot_v1', { p_run: request.runId, p_dataset: dataset, p_token: pending.acquisitionToken,
       p_raw_base64: response.raw.toString('base64'), p_hash: response.hash, p_rows: response.rows.length,
       p_attempted: response.attemptedAt, p_observed: response.observedAt, p_parser: INSIDER_SNAPSHOT_PARSER, p_rights: INSIDER_SNAPSHOT_RIGHTS }), request.runId);
     liveAcquisitions.push(dataset);
     lastLiveAcquisitionAt = response.observedAt;
   }
   if (!state.frozen) throw Error('insider_run_not_frozen');
-  const pins = pinsOf(state); let recordsWritten = 0; let processedRows = 0;
-  for (let i = 0; i < state.members.length; i++) {
-    const current = state.members[i]; if (current.complete) continue;
+  const pins = pinsOf(state); const members = state.members as Member[]; let recordsWritten = 0; let processedRows = 0;
+  for (let i = 0; i < members.length; i++) {
+    const current = members[i]; if (current.complete) continue;
     const before = page(await rpc('read_insider_snapshot_page_v1', { p_run: request.runId, p_dataset: current.dataset, p_snapshot: current.snapshotId }), request.runId, current);
-    if (before.complete) { state.members[i] = member(before); continue; }
+    if (before.complete) { members[i] = member(before); continue; }
     const written = await persist(before.documents);
     if (!integer(written, before.documents.length)) throw Error('insider_persist_count_invalid');
     const after = page(await rpc('commit_insider_snapshot_page_v1', { p_run: request.runId, p_dataset: current.dataset, p_snapshot: current.snapshotId,
       p_offset: before.offset, p_generation: before.generation, p_next: before.nextOffset }), request.runId, current);
     if (after.offset !== before.nextOffset || after.generation !== before.generation + 1) throw Error('insider_commit_progress_invalid');
-    state.members[i] = member(after); recordsWritten += written; processedRows += before.nextOffset - before.offset;
+    members[i] = member(after); recordsWritten += written; processedRows += before.nextOffset - before.offset;
   }
-  const remainingRows = state.members.reduce((n, m) => n + m.totalRows - m.offset, 0);
-  return { schema: 'insider_snapshot_progress_v1', runId: request.runId, pins, members: state.members,
-    outcome: state.members.every(m => m.complete) ? 'coverage_complete' : 'pages_remaining',
-    originalSourceObservedAt: new Date(Math.min(...state.members.map(m => Date.parse(m.observedAt)))).toISOString(),
+  const remainingRows = members.reduce((n, m) => n + m.totalRows - m.offset, 0);
+  return { schema: 'insider_snapshot_progress_v1', runId: request.runId, pins, members,
+    outcome: members.every(m => m.complete) ? 'coverage_complete' : 'pages_remaining',
+    originalSourceObservedAt: new Date(Math.min(...members.map(m => Date.parse(m.observedAt)))).toISOString(),
     processingAttemptedAt, processingCompletedAt: new Date(now()).toISOString(), lastLiveAcquisitionAt, liveAcquisitions, processedRows, recordsWritten, remainingRows };
 }
 export function insiderSnapshotDependencies(persist: Dependencies['persist']): Dependencies {

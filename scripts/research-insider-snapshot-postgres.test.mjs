@@ -19,8 +19,9 @@ test('actual PostgreSQL snapshot admission, document proof, replay, restart and 
  const json=query=>JSON.parse(sql(query));
  const rpc=(fn,args)=>json(`SET ROLE service_role; SELECT public.${fn}(${args});`);
  const begin=rid=>rpc('insider_snapshot_run_v1',`${literal(rid)}::uuid`);
- function admit(rid,dataset,rows,{raw=Buffer.from(JSON.stringify(rows)),hash=createHash('sha256').update(raw).digest('hex'),parser='insider-db-projection-v1',rights='official-insider-private-research-retain-v1',observed="clock_timestamp()-interval '1 second'",attempted="clock_timestamp()-interval '2 seconds'"}={}) {
-  return rpc('admit_insider_snapshot_v1',[literal(rid)+'::uuid',dataset,literal(raw.toString('base64')),literal(hash),rows.length,attempted,observed,literal(parser),literal(rights)].join(','));
+ function admit(rid,dataset,rows,{raw=Buffer.from(JSON.stringify(rows)),hash=createHash('sha256').update(raw).digest('hex'),parser='insider-db-projection-v1',rights='official-insider-private-research-retain-v1',tokenOverride=undefined,observed="clock_timestamp()-interval '1 second'",attempted="clock_timestamp()-interval '2 seconds'"}={}) {
+  const token=tokenOverride===undefined?sql(`SELECT acquisition_token FROM insider_run_members_v1 WHERE run_id=${literal(rid)}::uuid AND dataset=${dataset};`):tokenOverride;
+  return rpc('admit_insider_snapshot_v1',[literal(rid)+'::uuid',dataset,token?literal(token)+'::uuid':'NULL::uuid',literal(raw.toString('base64')),literal(hash),rows.length,attempted,observed,literal(parser),literal(rights)].join(','));
  }
  const page=(rid,m)=>rpc('read_insider_snapshot_page_v1',`${literal(rid)},${m.dataset},${literal(m.snapshotId)}`);
  const commit=(rid,p)=>rpc('commit_insider_snapshot_page_v1',`${literal(rid)},${p.dataset},${literal(p.snapshotId)},${p.offset},${p.generation},${p.nextOffset}`);
@@ -54,7 +55,7 @@ test('actual PostgreSQL snapshot admission, document proof, replay, restart and 
    const raw=Buffer.from(JSON.stringify(rows));assert.ok(raw.length<12*1024*1024);
    const metadataMinimum=Buffer.byteLength(JSON.stringify(rows.map(r=>({metadata:{insider_evidence:{person:r.姓名,companyName:r.公司名稱,role:r.職稱}}}))));assert.ok(metadataMinimum>4*1024*1024);
    assert.throws(()=>admit(rid,0,rows),/projection_transport_bound/);
-   assert.equal(sql('SELECT count(*) FROM insider_snapshots_v1;'),'0');assert.equal(begin(rid).members.length,0);
+   assert.equal(sql('SELECT count(*) FROM insider_snapshots_v1;'),'0');assert.ok(begin(rid).members.every(m=>m.snapshotId===null));
   });
   await t.test('five fixed members freeze before reading; mixed sizes and derived exclusions',()=>{
    const rows=Array.from({length:1001},(_,i)=>({...holding,姓名:`Synthetic ${i}`}));rows[123].公司代號='ETF';
@@ -90,5 +91,40 @@ test('actual PostgreSQL snapshot admission, document proof, replay, restart and 
   await t.test('reapply is non-destructive and preserves exact clocks, bytes, progress',()=>{
    const before=sql('SELECT md5(string_agg(id::text||raw_sha256||observed_at::text,\'\' ORDER BY id)) FROM insider_snapshots_v1;');sql(migration);assert.equal(sql('SELECT md5(string_agg(id::text||raw_sha256||observed_at::text,\'\' ORDER BY id)) FROM insider_snapshots_v1;'),before);assert.ok(begin(rid).members.every(m=>m.complete));
   });
+  // New disposable capacity fixture only; all preceding evidence is synthetic.
+  const reset=()=>sql('TRUNCATE insider_run_members_v1,insider_acquisition_runs_v1,insider_snapshot_progress_v1,insider_acquisitions_v1,insider_snapshots_v1,source_raw_documents;');
+  const retained=lengths=>sql(`DO $fixture$ DECLARE n integer; bytes bytea; sid uuid; BEGIN FOREACH n IN ARRAY ARRAY[${lengths.join(',')}] LOOP
+   bytes:=convert_to('[]'||repeat(' ',n-2),'UTF8');
+   INSERT INTO insider_snapshots_v1(dataset,raw,raw_sha256,row_count,attempted_at,observed_at,parser_identity,rights_identity)
+    VALUES(0,bytes,encode(extensions.digest(bytes,'sha256'),'hex'),0,clock_timestamp()-interval '2 seconds',clock_timestamp()-interval '1 second','insider-db-projection-v1','official-insider-private-research-retain-v1') RETURNING id INTO sid;
+   INSERT INTO insider_snapshot_progress_v1(snapshot_id,dataset,offset_rows,generation,complete,completed_at)VALUES(sid,0,0,1,true,clock_timestamp());
+   INSERT INTO insider_acquisitions_v1(dataset,snapshot_id,resolved_at)VALUES(0,sid,clock_timestamp());
+  END LOOP; END $fixture$;`);
+  await t.test('stranded112MiB example rejects entire reservation before fetch with no token/run leak',()=>{
+   reset();retained([...Array(9).fill(12*1024*1024),4*1024*1024]);
+   assert.throws(()=>begin(randomUUID()),/reserved_capacity/);
+   assert.equal(sql('SELECT count(*) FROM insider_acquisition_runs_v1;'),'0');assert.equal(sql('SELECT count(*) FROM insider_acquisitions_v1 WHERE snapshot_id IS NULL;'),'0');assert.equal(sql('SELECT sum(octet_length(raw)) FROM insider_snapshots_v1;'),String(112*1024*1024));
+  });
+  await t.test('actual+pending exact128MiB accepted, +1byte rejected atomically',()=>{
+   reset();retained([...Array(5).fill(12*1024*1024),8*1024*1024]);const first=randomUUID();const second=randomUUID();const one=begin(first);const two=begin(second);
+   assert.deepEqual(one.members.map(m=>m.acquisitionToken),two.members.map(m=>m.acquisitionToken));assert.equal(sql('SELECT count(*) FROM insider_acquisitions_v1 WHERE snapshot_id IS NULL;'),'5');
+   const shared=admit(first,0,[]);assert.equal(begin(second).members[0].snapshotId,shared.members[0].snapshotId);
+   assert.throws(()=>admit(first,1,[],{tokenOverride:one.members[0].acquisitionToken}),/token_mismatch/);
+   reset();retained([...Array(5).fill(12*1024*1024),8*1024*1024+1]);assert.throws(()=>begin(randomUUID()),/reserved_capacity/);assert.equal(sql('SELECT count(*) FROM insider_acquisitions_v1 WHERE snapshot_id IS NULL;'),'0');
+  });
+  await t.test('27actual+5pending exact32slots accepted;28actual refuses before partial activation',()=>{
+   reset();retained(Array(27).fill(2));assert.equal(begin(randomUUID()).members.length,5);
+   reset();retained(Array(28).fill(2));assert.throws(()=>begin(randomUUID()),/reserved_capacity/);assert.equal(sql('SELECT count(*) FROM insider_acquisitions_v1 WHERE snapshot_id IS NULL;'),'0');
+  });
+  await t.test('consumed token retains exact lost-response identity even after newer acquisition exists',()=>{
+   reset();const original=randomUUID();let before=begin(original);for(let d=0;d<5;d++)before=admit(original,d,[]);
+   const token=before.members[0].acquisitionToken;const snapshotId=before.members[0].snapshotId;
+   for(const m of before.members)commit(original,page(original,m));
+   const later=begin(randomUUID());assert.notEqual(later.members[0].acquisitionToken,token);
+   assert.equal(admit(original,0,[],{tokenOverride:token}).members[0].snapshotId,snapshotId);
+   assert.throws(()=>admit(later.runId,0,[],{tokenOverride:token}),/token_mismatch/);
+   assert.equal(sql(`SELECT snapshot_id FROM insider_acquisitions_v1 WHERE id=${literal(token)};`),snapshotId);
+  });
+
  } finally {if(started)run('pg_ctl',['-D',cluster,'-m','immediate','-w','stop']);const target=process.env.RESEARCH_LOCAL_DATAPLANE_ARTIFACTS;if(target&&fs.existsSync(path.join(tmp,'pg.log'))){fs.mkdirSync(target,{recursive:true,mode:0o700});fs.copyFileSync(path.join(tmp,'pg.log'),path.join(target,'insider-snapshot-postgres.log'));}fs.rmSync(tmp,{recursive:true,force:true});}
 });

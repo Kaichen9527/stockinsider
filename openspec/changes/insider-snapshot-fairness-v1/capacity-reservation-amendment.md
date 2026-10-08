@@ -1,6 +1,6 @@
 # Pending amendment: durable acquisition reservations
 
-Status: proposed for independent requirements/architecture review; **not approved or implemented**. The frozen implementation subject is4b3c85580e753d88220ff8384ffa6b1981b5389e (code9b3058200954fdd135c2b57d7fcfd7e5361a0ea2). Existing128MiB/32snapshot/128run/640member caps do not change.
+Status: unsigned independent requirements/design pass of proposal a006d60bc63235d0959f73dbaa8f42af70017827 reported by root on2026-10-09; implementation authorized. This is not protected release authority or maker approval. The frozen implementation subject is4b3c85580e753d88220ff8384ffa6b1981b5389e (code9b3058200954fdd135c2b57d7fcfd7e5361a0ea2). Existing128MiB/32snapshot/128run/640member caps do not change.
 
 ## Reachable defect in the frozen candidate
 
@@ -10,7 +10,7 @@ Checking future worst-case capacity only once while holding a transient advisory
 
 ## Proposed state and ownership
 
-A new private pending-acquisition reservation relation stores at most one pending token per fixed dataset. A token is an opaque UUID **reservation identity, never a source hash, snapshot ID, acquisition clock or evidence**. Each pending token reserves12MiB and one snapshot slot. Multiple runs waiting for the same dataset may reference the same token, so it is charged once.
+A new private acquisition-token relation stores at most one pending token per fixed dataset. Consumed tokens remain immutable replay identities linked to their real snapshot; only pending tokens are charged reserved capacity. All token/member tables are RLS-protected with no PUBLIC/anon/authenticated/service_role direct mutation or read grants; only the narrow existing service RPCs may use them. A token is an opaque UUID **reservation identity, never a source hash, snapshot ID, acquisition clock or evidence**. Each pending token reserves12MiB and one snapshot slot. Multiple runs waiting for the same dataset may reference the same token, so it is charged once.
 
 Use the existing run-member relation as the subscription map, with exactly five rows installed atomically at run initialization. Each member is either:
 
@@ -23,10 +23,10 @@ A pending→actual transition is permitted exactly once, under the admission tra
 
 1. `begin_run`: global budget lock first, dataset locks ascending0–4 second. Existing run returns its original map. A new run resolves each dataset to its current active snapshot, otherwise a shared pending token, otherwise a newly created pending token. Calculate actual admitted bytes/records plus **all distinct durable pending token reservations**, including proposed tokens. Reject the entire initialization if either cap would be exceeded. Insert the run and five bindings only after the check, in one transaction. The128run/640member limits still apply. No source fetch precedes successful initialization.
 2. `acquire`: caller reads its actual/pending bindings. Fetch only unresolved tokens, carrying the exact run/dataset/token identity. Network/schema failure leaves the token unchanged. A stale request cannot allocate under another token.
-3. `admit`: global then dataset lock; require the exact unresolved token or return its already resolved original snapshot. Recompute raw bytes/hash/schema/rights/clocks as before. Within one transaction consume the token's12MiB/1slot reservation, insert the real snapshot/progress and resolve **every subscribed member of that token** to the same snapshot. Remove the pending token only after all subscriptions resolve. Actual≤reserved, so total actual+reserved cannot increase. Freeze each run whose five members now contain real IDs. Lost responses reconstruct these actual bindings; no second fetch/admission.
+3. `admit`: global then dataset lock; require the exact unresolved token or return its already resolved original snapshot. Recompute raw bytes/hash/schema/rights/clocks as before. Within one transaction consume the token's12MiB/1slot reservation, insert the real snapshot/progress and resolve **every subscribed member of that token** to the same snapshot. Mark the token resolved only in the same transaction that resolves all subscriptions. Keep the token row and snapshot binding permanently; it is no longer charged reserved bytes/slots. Never delete a consumed token or reuse its identity for a newer acquisition. Actual≤reserved, so total actual+reserved cannot increase. Freeze each run whose five members now contain real IDs. Lost responses reconstruct these actual bindings; no second fetch/admission.
 4. `page/commit`: unchanged exact five-real-pin binding and document-before-CAS. Completion releases only the active slot. It never deletes retained raw bytes or reopens resolved members.
 5. `new independent run`: may reuse current active snapshots; if a previously completed dataset needs fresh acquisition, it needs a pending token and budget. Existing frozen/partial runs retain their original subscriptions. No later acquisition may consume another token's reserved capacity.
-6. `cancel before acquisition` (optional narrow RPC, only if approved): a run may cancel only while **none** of its five members has resolved to a real snapshot. Cancellation removes its pending subscriptions. Release a token only if no noncancelled run subscribes; stale in-flight admission with that token then rejects. Keep the cancelled run tombstone/idempotency identity within the same128run cap; never reuse its ID. A run that inherited an actual active member is not eligible for this narrow cancellation.
+6. **Cancellation is not implemented in this slice.** There is no cancel RPC, expiration cleanup or automatic release of unresolved subscriptions. Any future cancellation/abandon policy requires a separate reviewed amendment; it cannot be inferred from the optional alternative in the original proposal.
 
 ## Failure and retention boundary
 
@@ -42,7 +42,7 @@ A permanently unavailable or schema-incompatible source may therefore retain up 
 - Crash before/after fetch, before/after admission commit and lost response retain identical tokens or resolved IDs; no double charge or ghost capacity release.
 - Empty datasets consume a real raw snapshot and resolve the same token; completed replay does not reserve or reacquire them.
 - Partial initialization/source failure retains reservations; an existing frozen run continues at full capacity. Diagnostics distinguish source-blocked reserved capacity from retained actual raw.
-- Narrow cancellation (if adopted) releases only wholly unacquired and unshared tokens; shared/partly acquired cancellation is refused; stale admission cannot use cancelled tokens.
+- No cancellation endpoint or automatic token reclamation exists. Consumed token replay returns its original snapshot after a newer pending token exists for the same dataset; old tokens cannot be admitted against a new run/token binding.
 - Five-real-pin page/CAS, rights drift, source clocks, exact persisted documents and all previous bounds remain unchanged.
 
-Implementation and rollout remain blocked on this amendment's independent pass, exact-code review and VM actual transport/PG acceptance. Default source scheduling remains unchanged.
+Rollout remains blocked on independent exact-code review and VM actual transport/PG acceptance. The reported unsigned requirements/design pass authorizes this bounded implementation only. Default source scheduling remains unchanged.
