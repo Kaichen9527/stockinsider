@@ -1,0 +1,2171 @@
+{
+  "schemaVersion": "auo-four-segment-research-model-v1",
+  "symbol": "2409",
+  "asOf": "2026-10-08T10:20:00Z",
+  "unit": "TWD_million; EPS TWD/share",
+  "status": "draft/incomplete",
+  "historicalPITEligible": false,
+  "published": false,
+  "researchQualified": false,
+  "strategyApproved": false,
+  "price": 36.6,
+  "priceSession": "2026-10-08",
+  "actualH1": {
+    "revenue": 139922.549,
+    "cost": 122490.911,
+    "grossProfit": 17431.638,
+    "sellingExpenses": 3494.653,
+    "administrativeExpenses": 5474.372,
+    "researchDevelopmentExpenses": 8879.892,
+    "operatingExpenses": 17848.917,
+    "operatingProfit": -417.279,
+    "interestIncome": 493.554,
+    "otherIncome": 1246.092,
+    "otherGains": 1832.448,
+    "financeCosts": -1336.579,
+    "equityMethodProfit": 431.357,
+    "nonOperating": 2666.872,
+    "pretaxProfit": 2249.593,
+    "taxExpense": 1168.992,
+    "netProfit": 1080.601,
+    "ownersNetProfit": 199.555,
+    "nonControllingNetProfit": 881.046,
+    "reportedBasicEps": 0.03,
+    "reportedDilutedEps": 0.03
+  },
+  "actualQ2": {
+    "revenue": 70891.194,
+    "cost": 61643.043,
+    "grossProfit": 9248.151,
+    "sellingExpenses": 1790.26,
+    "administrativeExpenses": 2773.774,
+    "researchDevelopmentExpenses": 4465.788,
+    "operatingExpenses": 9029.822,
+    "operatingProfit": 218.329,
+    "interestIncome": 256.466,
+    "otherIncome": 686.109,
+    "otherGains": 1879.27,
+    "financeCosts": -659.218,
+    "equityMethodProfit": 370.059,
+    "nonOperating": 2532.686,
+    "pretaxProfit": 2751.015,
+    "taxExpense": 630.964,
+    "netProfit": 2120.051,
+    "ownersNetProfit": 1343.092,
+    "nonControllingNetProfit": 776.959,
+    "reportedBasicEps": 0.18,
+    "reportedDilutedEps": 0.18
+  },
+  "segmentActuals": [
+    {
+      "period": "2026Q2",
+      "revenue": [
+        34019.582,
+        20421.945,
+        13390.864,
+        3058.803
+      ],
+      "operatingProfit": [
+        -1084.607,
+        767.833,
+        744.759,
+        -209.656
+      ],
+      "segmentGrossMargins": null
+    },
+    {
+      "period": "2026H1",
+      "revenue": [
+        68144.009,
+        40176.684,
+        25417.412,
+        6184.444
+      ],
+      "operatingProfit": [
+        -2940.667,
+        1242.862,
+        1593.792,
+        -313.266
+      ],
+      "segmentGrossMargins": null
+    },
+    {
+      "period": "2026Q1",
+      "revenue": [
+        34124.427,
+        19754.739,
+        12026.548,
+        3125.641
+      ],
+      "operatingProfit": [
+        -2220.034,
+        1021.762,
+        666.274,
+        -103.61
+      ],
+      "segmentGrossMargins": null
+    }
+  ],
+  "segmentComparability": {
+    "effectiveFrom": "2026-01-01",
+    "priorYearRestated": false,
+    "sourceLabel": "2026q2-consolidated-tc",
+    "pdfPage": 68,
+    "original2026Q1": {
+      "period": "2026Q1",
+      "sourceLabel": "2026q1-consolidated-tc",
+      "pdfPage": 61,
+      "revenue": [
+        34124427,
+        19754739,
+        12026548,
+        3125641
+      ],
+      "operatingProfit": [
+        -2220034,
+        1021762,
+        666274,
+        -103610
+      ]
+    },
+    "derived2026Q1FromHalfYearMinusQ2": {
+      "method": "flow_difference_not_declared_restatement",
+      "revenue": [
+        34124427,
+        19754739,
+        12026548,
+        3125641
+      ],
+      "operatingProfit": [
+        -1856060,
+        475029,
+        849033,
+        -103610
+      ]
+    },
+    "derivedMinusOriginal": {
+      "revenue": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "operatingProfit": [
+        363974,
+        -546733,
+        182759,
+        0
+      ]
+    },
+    "explanation": "Revenue reconciles exactly, but segment operating profit attribution differs across original Q1 and H1-minus-Q2 by +363974 / -546733 / +182759 / 0 TWD thousands. Aggregate reconciles. Reason not established; keep both versions; do not infer comparable per-segment QoQ profitability."
+  },
+  "exactTtm": {
+    "revenue": 279971.672,
+    "operatingProfit": -4116.896000000001,
+    "nonOperating": 8186.999,
+    "ownersNetProfit": 1801.3040000000003
+  },
+  "q3KnownMonthlyRevenue": {
+    "sum": 66876,
+    "roundingRange": [
+      66874.5,
+      66877.5
+    ],
+    "precision": "three independently rounded monthly amounts; upper bound exclusive",
+    "months": [
+      {
+        "period": "2026-07",
+        "value": 20370,
+        "source": "https://www.auo.com/upload/media/ir/2026_Consolidated.pdf",
+        "observedAt": "2026-10-08T06:52:48Z",
+        "publicationInstant": null
+      },
+      {
+        "period": "2026-08",
+        "value": 23102,
+        "source": "https://www.auo.com/upload/media/ir/2026_Consolidated.pdf",
+        "observedAt": "2026-10-08T06:52:48Z",
+        "publicationInstant": null
+      },
+      {
+        "period": "2026-09",
+        "value": 23404,
+        "source": "https://www.auo.com/upload/media/ir/2026_Consolidated.pdf",
+        "observedAt": "2026-10-08T06:52:48Z",
+        "publicationInstant": null
+      }
+    ],
+    "q3EpsPublished": false
+  },
+  "dilutedShares": {
+    "q2ReportedMillion": 7547.099,
+    "futureVerified": false,
+    "annual2026Assumption": 7547.099,
+    "endingOutstandingSharesVerified": false
+  },
+  "scenarios": [
+    {
+      "id": "bear",
+      "assumptions": {
+        "q3Weights": [
+          0.94,
+          0.98,
+          1.01,
+          1
+        ],
+        "growth": [
+          [
+            -0.04,
+            -0.03,
+            0,
+            -0.05
+          ],
+          [
+            -0.1,
+            -0.02,
+            0,
+            -0.05
+          ],
+          [
+            0.01,
+            0.01,
+            0.01,
+            0
+          ],
+          [
+            -0.01,
+            0.01,
+            0.01,
+            0
+          ],
+          [
+            0.01,
+            0.01,
+            0.01,
+            0
+          ]
+        ],
+        "grossMargins": [
+          0.06,
+          0.19,
+          0.2,
+          0.07
+        ],
+        "opMargins": [
+          -0.045,
+          0.02,
+          0.035,
+          -0.075
+        ],
+        "quarterMarginStep": 0,
+        "interestIncome": 225,
+        "financeCosts": -700,
+        "otherIncome": 450,
+        "equityMethodProfit": 0,
+        "fxAndOtherRecurring": -100,
+        "taxRate": 0.25,
+        "taxFloor": 150,
+        "nci": 200,
+        "futureDilution": 0.01
+      },
+      "guidanceImpliedQ3Total": 68575.48882,
+      "monthlyTotalReconciliationScale": 0.9752172554765028,
+      "consolidatedGuidanceDifference": -1699.4888199999987,
+      "quarters": [
+        {
+          "period": "2026Q3",
+          "status": "known_monthly_total_unknown_profit_and_mix",
+          "segments": [
+            {
+              "key": "display",
+              "revenue": 31185.89438706797,
+              "grossMarginAssumed": 0.06,
+              "operatingMarginAssumed": -0.045,
+              "grossProfit": 1871.153663224078,
+              "operatingExpenses": 3274.5189106421367,
+              "operatingProfit": -1403.3652474180585,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "mobility",
+              "revenue": 19517.516491304246,
+              "grossMarginAssumed": 0.19,
+              "operatingMarginAssumed": 0.02,
+              "grossProfit": 3708.3281333478067,
+              "operatingExpenses": 3317.977803521722,
+              "operatingProfit": 390.35032982608493,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "vertical",
+              "revenue": 13189.591654924496,
+              "grossMarginAssumed": 0.2,
+              "operatingMarginAssumed": 0.035,
+              "grossProfit": 2637.9183309848995,
+              "operatingExpenses": 2176.2826230625424,
+              "operatingProfit": 461.63570792235737,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "other",
+              "revenue": 2982.9974667032934,
+              "grossMarginAssumed": 0.07,
+              "operatingMarginAssumed": -0.075,
+              "grossProfit": 208.80982266923056,
+              "operatingExpenses": 432.53463267197753,
+              "operatingProfit": -223.724810002747,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            }
+          ],
+          "revenue": 66876,
+          "grossProfit": 8426.209950226015,
+          "operatingExpenses": 9201.31396989838,
+          "operatingProfit": -775.1040196723643,
+          "interestIncome": 225,
+          "financeCosts": -700,
+          "otherIncome": 450,
+          "equityMethodProfit": 0,
+          "fxAndOtherRecurring": -100,
+          "nonOperating": -125,
+          "pretaxProfit": -900.1040196723643,
+          "taxExpense": 150,
+          "nonControllingNetProfit": 200,
+          "netProfit": -1050.1040196723643,
+          "ownersNetProfit": -1250.1040196723643,
+          "dilutedSharesMillionAssumed": 7547.099,
+          "dilutedEpsConditional": -0.16564033672704762,
+          "oneOffGainsIncluded": 0,
+          "newCpoGcsRevenueAssumed": null,
+          "existingHelper": {
+            "operatingIncome": -775,
+            "pretaxIncome": -900,
+            "ownersBeforeTaxFloor": -1100
+          },
+          "additionalJurisdictionTaxAssumed": 150
+        },
+        {
+          "period": "2026Q4",
+          "status": "research_forecast",
+          "segments": [
+            {
+              "key": "display",
+              "revenue": 29938.458611585247,
+              "grossMarginAssumed": 0.06,
+              "operatingMarginAssumed": -0.045,
+              "grossProfit": 1796.3075166951148,
+              "operatingExpenses": 3143.538154216451,
+              "operatingProfit": -1347.2306375213361,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "mobility",
+              "revenue": 18931.990996565117,
+              "grossMarginAssumed": 0.19,
+              "operatingMarginAssumed": 0.02,
+              "grossProfit": 3597.0782893473724,
+              "operatingExpenses": 3218.43846941607,
+              "operatingProfit": 378.6398199313023,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "vertical",
+              "revenue": 13189.591654924496,
+              "grossMarginAssumed": 0.2,
+              "operatingMarginAssumed": 0.035,
+              "grossProfit": 2637.9183309848995,
+              "operatingExpenses": 2176.2826230625424,
+              "operatingProfit": 461.63570792235737,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "other",
+              "revenue": 2833.8475933681284,
+              "grossMarginAssumed": 0.07,
+              "operatingMarginAssumed": -0.075,
+              "grossProfit": 198.36933153576902,
+              "operatingExpenses": 410.90790103837867,
+              "operatingProfit": -212.53856950260962,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            }
+          ],
+          "revenue": 64893.88885644298,
+          "grossProfit": 8229.673468563156,
+          "operatingExpenses": 8949.167147733442,
+          "operatingProfit": -719.4936791702858,
+          "interestIncome": 225,
+          "financeCosts": -700,
+          "otherIncome": 450,
+          "equityMethodProfit": 0,
+          "fxAndOtherRecurring": -100,
+          "nonOperating": -125,
+          "pretaxProfit": -844.4936791702858,
+          "taxExpense": 150,
+          "nonControllingNetProfit": 200,
+          "netProfit": -994.4936791702858,
+          "ownersNetProfit": -1194.4936791702858,
+          "dilutedSharesMillionAssumed": 7547.099,
+          "dilutedEpsConditional": -0.15827189747614093,
+          "oneOffGainsIncluded": 0,
+          "newCpoGcsRevenueAssumed": null,
+          "existingHelper": {
+            "operatingIncome": -719,
+            "pretaxIncome": -844,
+            "ownersBeforeTaxFloor": -1044
+          },
+          "additionalJurisdictionTaxAssumed": 150
+        },
+        {
+          "period": "2027Q1",
+          "status": "research_forecast",
+          "segments": [
+            {
+              "key": "display",
+              "revenue": 26944.612750426724,
+              "grossMarginAssumed": 0.06,
+              "operatingMarginAssumed": -0.045,
+              "grossProfit": 1616.6767650256033,
+              "operatingExpenses": 2829.1843387948056,
+              "operatingProfit": -1212.5075737692025,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "mobility",
+              "revenue": 18553.351176633812,
+              "grossMarginAssumed": 0.19,
+              "operatingMarginAssumed": 0.02,
+              "grossProfit": 3525.1367235604243,
+              "operatingExpenses": 3154.0697000277482,
+              "operatingProfit": 371.0670235326763,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "vertical",
+              "revenue": 13189.591654924496,
+              "grossMarginAssumed": 0.2,
+              "operatingMarginAssumed": 0.035,
+              "grossProfit": 2637.9183309848995,
+              "operatingExpenses": 2176.2826230625424,
+              "operatingProfit": 461.63570792235737,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "other",
+              "revenue": 2692.155213699722,
+              "grossMarginAssumed": 0.07,
+              "operatingMarginAssumed": -0.075,
+              "grossProfit": 188.45086495898056,
+              "operatingExpenses": 390.3625059864597,
+              "operatingProfit": -201.91164102747913,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            }
+          ],
+          "revenue": 61379.710795684754,
+          "grossProfit": 7968.182684529907,
+          "operatingExpenses": 8549.899167871556,
+          "operatingProfit": -581.7164833416482,
+          "interestIncome": 225,
+          "financeCosts": -700,
+          "otherIncome": 450,
+          "equityMethodProfit": 0,
+          "fxAndOtherRecurring": -100,
+          "nonOperating": -125,
+          "pretaxProfit": -706.7164833416482,
+          "taxExpense": 150,
+          "nonControllingNetProfit": 200,
+          "netProfit": -856.7164833416482,
+          "ownersNetProfit": -1056.7164833416482,
+          "dilutedSharesMillionAssumed": 7622.56999,
+          "dilutedEpsConditional": -0.13862994826258698,
+          "oneOffGainsIncluded": 0,
+          "newCpoGcsRevenueAssumed": null,
+          "existingHelper": {
+            "operatingIncome": -582,
+            "pretaxIncome": -707,
+            "ownersBeforeTaxFloor": -907
+          },
+          "additionalJurisdictionTaxAssumed": 150
+        },
+        {
+          "period": "2027Q2",
+          "status": "research_forecast",
+          "segments": [
+            {
+              "key": "display",
+              "revenue": 27214.05887793099,
+              "grossMarginAssumed": 0.06,
+              "operatingMarginAssumed": -0.045,
+              "grossProfit": 1632.8435326758595,
+              "operatingExpenses": 2857.476182182754,
+              "operatingProfit": -1224.6326495068945,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "mobility",
+              "revenue": 18738.88468840015,
+              "grossMarginAssumed": 0.19,
+              "operatingMarginAssumed": 0.02,
+              "grossProfit": 3560.388090796029,
+              "operatingExpenses": 3185.6103970280255,
+              "operatingProfit": 374.777693768003,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "vertical",
+              "revenue": 13321.48757147374,
+              "grossMarginAssumed": 0.2,
+              "operatingMarginAssumed": 0.035,
+              "grossProfit": 2664.2975142947485,
+              "operatingExpenses": 2198.0454492931676,
+              "operatingProfit": 466.252065001581,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "other",
+              "revenue": 2692.155213699722,
+              "grossMarginAssumed": 0.07,
+              "operatingMarginAssumed": -0.075,
+              "grossProfit": 188.45086495898056,
+              "operatingExpenses": 390.3625059864597,
+              "operatingProfit": -201.91164102747913,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            }
+          ],
+          "revenue": 61966.58635150461,
+          "grossProfit": 8045.980002725617,
+          "operatingExpenses": 8631.494534490406,
+          "operatingProfit": -585.5145317647894,
+          "interestIncome": 225,
+          "financeCosts": -700,
+          "otherIncome": 450,
+          "equityMethodProfit": 0,
+          "fxAndOtherRecurring": -100,
+          "nonOperating": -125,
+          "pretaxProfit": -710.5145317647894,
+          "taxExpense": 150,
+          "nonControllingNetProfit": 200,
+          "netProfit": -860.5145317647894,
+          "ownersNetProfit": -1060.5145317647894,
+          "dilutedSharesMillionAssumed": 7622.56999,
+          "dilutedEpsConditional": -0.13912821176533263,
+          "oneOffGainsIncluded": 0,
+          "newCpoGcsRevenueAssumed": null,
+          "existingHelper": {
+            "operatingIncome": -586,
+            "pretaxIncome": -711,
+            "ownersBeforeTaxFloor": -911
+          },
+          "additionalJurisdictionTaxAssumed": 150
+        },
+        {
+          "period": "2027Q3",
+          "status": "research_forecast",
+          "segments": [
+            {
+              "key": "display",
+              "revenue": 26941.91828915168,
+              "grossMarginAssumed": 0.06,
+              "operatingMarginAssumed": -0.045,
+              "grossProfit": 1616.5150973491006,
+              "operatingExpenses": 2828.901420360926,
+              "operatingProfit": -1212.3863230118254,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "mobility",
+              "revenue": 18926.273535284152,
+              "grossMarginAssumed": 0.19,
+              "operatingMarginAssumed": 0.02,
+              "grossProfit": 3595.991971703989,
+              "operatingExpenses": 3217.466500998306,
+              "operatingProfit": 378.52547070568306,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "vertical",
+              "revenue": 13454.702447188478,
+              "grossMarginAssumed": 0.2,
+              "operatingMarginAssumed": 0.035,
+              "grossProfit": 2690.9404894376958,
+              "operatingExpenses": 2220.0259037860988,
+              "operatingProfit": 470.9145856515968,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "other",
+              "revenue": 2692.155213699722,
+              "grossMarginAssumed": 0.07,
+              "operatingMarginAssumed": -0.075,
+              "grossProfit": 188.45086495898056,
+              "operatingExpenses": 390.3625059864597,
+              "operatingProfit": -201.91164102747913,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            }
+          ],
+          "revenue": 62015.04948532403,
+          "grossProfit": 8091.898423449766,
+          "operatingExpenses": 8656.756331131788,
+          "operatingProfit": -564.8579076820224,
+          "interestIncome": 225,
+          "financeCosts": -700,
+          "otherIncome": 450,
+          "equityMethodProfit": 0,
+          "fxAndOtherRecurring": -100,
+          "nonOperating": -125,
+          "pretaxProfit": -689.8579076820224,
+          "taxExpense": 150,
+          "nonControllingNetProfit": 200,
+          "netProfit": -839.8579076820224,
+          "ownersNetProfit": -1039.8579076820224,
+          "dilutedSharesMillionAssumed": 7622.56999,
+          "dilutedEpsConditional": -0.13641828268500064,
+          "oneOffGainsIncluded": 0,
+          "newCpoGcsRevenueAssumed": null,
+          "existingHelper": {
+            "operatingIncome": -565,
+            "pretaxIncome": -690,
+            "ownersBeforeTaxFloor": -890
+          },
+          "additionalJurisdictionTaxAssumed": 150
+        },
+        {
+          "period": "2027Q4",
+          "status": "research_forecast",
+          "segments": [
+            {
+              "key": "display",
+              "revenue": 27211.337472043197,
+              "grossMarginAssumed": 0.06,
+              "operatingMarginAssumed": -0.045,
+              "grossProfit": 1632.6802483225918,
+              "operatingExpenses": 2857.1904345645353,
+              "operatingProfit": -1224.5101862419438,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "mobility",
+              "revenue": 19115.536270636992,
+              "grossMarginAssumed": 0.19,
+              "operatingMarginAssumed": 0.02,
+              "grossProfit": 3631.9518914210284,
+              "operatingExpenses": 3249.6411660082886,
+              "operatingProfit": 382.3107254127399,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "vertical",
+              "revenue": 13589.249471660363,
+              "grossMarginAssumed": 0.2,
+              "operatingMarginAssumed": 0.035,
+              "grossProfit": 2717.849894332073,
+              "operatingExpenses": 2242.2261628239603,
+              "operatingProfit": 475.62373150811277,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "other",
+              "revenue": 2692.155213699722,
+              "grossMarginAssumed": 0.07,
+              "operatingMarginAssumed": -0.075,
+              "grossProfit": 188.45086495898056,
+              "operatingExpenses": 390.3625059864597,
+              "operatingProfit": -201.91164102747913,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            }
+          ],
+          "revenue": 62608.27842804027,
+          "grossProfit": 8170.932899034674,
+          "operatingExpenses": 8739.420269383243,
+          "operatingProfit": -568.4873703485691,
+          "interestIncome": 225,
+          "financeCosts": -700,
+          "otherIncome": 450,
+          "equityMethodProfit": 0,
+          "fxAndOtherRecurring": -100,
+          "nonOperating": -125,
+          "pretaxProfit": -693.4873703485691,
+          "taxExpense": 150,
+          "nonControllingNetProfit": 200,
+          "netProfit": -843.4873703485691,
+          "ownersNetProfit": -1043.4873703485691,
+          "dilutedSharesMillionAssumed": 7622.56999,
+          "dilutedEpsConditional": -0.13689442953197065,
+          "oneOffGainsIncluded": 0,
+          "newCpoGcsRevenueAssumed": null,
+          "existingHelper": {
+            "operatingIncome": -568,
+            "pretaxIncome": -693,
+            "ownersBeforeTaxFloor": -893
+          },
+          "additionalJurisdictionTaxAssumed": 150
+        }
+      ],
+      "calendar2026": {
+        "revenue": 271692.437856443,
+        "grossProfit": 34087.52141878917,
+        "operatingExpenses": 35999.39811763182,
+        "operatingProfit": -1911.87669884265,
+        "nonOperating": 2416.872,
+        "pretaxProfit": 504.9953011573498,
+        "taxExpense": 1468.992,
+        "netProfit": -963.99669884265,
+        "nonControllingNetProfit": 1281.046,
+        "ownersNetProfit": -2245.04269884265,
+        "dilutedSharesMillionAssumed": 7547.099,
+        "dilutedEpsConditional": -0.2974709486178266,
+        "composition": "reportedH1 + forecastQ3Q4; historical oneoffs retained; not normalized"
+      },
+      "calendar2027": {
+        "revenue": 247969.62506055366,
+        "grossProfit": 32276.994009739963,
+        "operatingExpenses": 34577.57030287699,
+        "operatingProfit": -2300.576293137029,
+        "nonOperating": -500,
+        "pretaxProfit": -2800.576293137029,
+        "taxExpense": 600,
+        "netProfit": -3400.576293137029,
+        "nonControllingNetProfit": 800,
+        "ownersNetProfit": -4200.576293137029,
+        "dilutedSharesMillionAssumed": 7622.56999,
+        "dilutedEpsConditional": -0.5510708722448909,
+        "composition": "four forecast quarters; no new CPO/GCS or asset-sale gains"
+      },
+      "nextFourUnreported": {
+        "revenue": 255116.18600363235,
+        "grossProfit": 32670.046106044694,
+        "operatingExpenses": 35331.87481999378,
+        "operatingProfit": -2661.8287139490876,
+        "nonOperating": -500,
+        "pretaxProfit": -3161.8287139490876,
+        "taxExpense": 600,
+        "netProfit": -3761.8287139490876,
+        "nonControllingNetProfit": 800,
+        "ownersNetProfit": -4561.828713949088,
+        "dilutedSharesMillionAssumed": 7584.834494999999,
+        "dilutedEpsConditional": -0.6014407719715298,
+        "periods": [
+          "2026Q3",
+          "2026Q4",
+          "2027Q1",
+          "2027Q2"
+        ],
+        "composition": "2026Q3–2027Q2, not rolling12months from October8"
+      },
+      "pe2027Conditional": null,
+      "targetPrice": null,
+      "multiplesCalibrated": false
+    },
+    {
+      "id": "base",
+      "assumptions": {
+        "q3Weights": [
+          0.97,
+          1,
+          1.03,
+          1
+        ],
+        "growth": [
+          [
+            -0.01,
+            0.02,
+            0.03,
+            0
+          ],
+          [
+            -0.05,
+            -0.02,
+            0.01,
+            0
+          ],
+          [
+            0.03,
+            0.03,
+            0.03,
+            0
+          ],
+          [
+            -0.01,
+            0.02,
+            0.03,
+            0
+          ],
+          [
+            0.02,
+            0.03,
+            0.04,
+            0
+          ]
+        ],
+        "grossMargins": [
+          0.08,
+          0.2,
+          0.22,
+          0.08
+        ],
+        "opMargins": [
+          -0.03,
+          0.04,
+          0.06,
+          -0.065
+        ],
+        "quarterMarginStep": 0.002,
+        "interestIncome": 250,
+        "financeCosts": -650,
+        "otherIncome": 650,
+        "equityMethodProfit": 100,
+        "fxAndOtherRecurring": 0,
+        "taxRate": 0.22,
+        "taxFloor": 300,
+        "nci": 450,
+        "futureDilution": 0.01
+      },
+      "guidanceImpliedQ3Total": 70272.33246,
+      "monthlyTotalReconciliationScale": 0.9516689948788416,
+      "consolidatedGuidanceDifference": -3396.332460000005,
+      "quarters": [
+        {
+          "period": "2026Q3",
+          "status": "known_monthly_total_unknown_profit_and_mix",
+          "segments": [
+            {
+              "key": "display",
+              "revenue": 31404.11996589418,
+              "grossMarginAssumed": 0.08,
+              "operatingMarginAssumed": -0.03,
+              "grossProfit": 2512.3295972715346,
+              "operatingExpenses": 3454.4531962483597,
+              "operatingProfit": -942.1235989768254,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "mobility",
+              "revenue": 19434.931871620985,
+              "grossMarginAssumed": 0.2,
+              "operatingMarginAssumed": 0.04,
+              "grossProfit": 3886.986374324197,
+              "operatingExpenses": 3109.589099459358,
+              "operatingProfit": 777.3972748648395,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "vertical",
+              "revenue": 13125.980185942442,
+              "grossMarginAssumed": 0.22,
+              "operatingMarginAssumed": 0.06,
+              "grossProfit": 2887.7156409073373,
+              "operatingExpenses": 2100.1568297507906,
+              "operatingProfit": 787.5588111565465,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "other",
+              "revenue": 2910.9679765423853,
+              "grossMarginAssumed": 0.08,
+              "operatingMarginAssumed": -0.065,
+              "grossProfit": 232.87743812339082,
+              "operatingExpenses": 422.0903565986458,
+              "operatingProfit": -189.21291847525504,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            }
+          ],
+          "revenue": 66875.99999999999,
+          "grossProfit": 9519.90905062646,
+          "operatingExpenses": 9086.289482057155,
+          "operatingProfit": 433.61956856930556,
+          "interestIncome": 250,
+          "financeCosts": -650,
+          "otherIncome": 650,
+          "equityMethodProfit": 100,
+          "fxAndOtherRecurring": 0,
+          "nonOperating": 350,
+          "pretaxProfit": 783.6195685693056,
+          "taxExpense": 300,
+          "nonControllingNetProfit": 450,
+          "netProfit": 483.61956856930556,
+          "ownersNetProfit": 33.61956856930556,
+          "dilutedSharesMillionAssumed": 7547.099,
+          "dilutedEpsConditional": 0.004454634631042412,
+          "oneOffGainsIncluded": 0,
+          "newCpoGcsRevenueAssumed": null,
+          "existingHelper": {
+            "operatingIncome": 434,
+            "pretaxIncome": 784,
+            "ownersBeforeTaxFloor": 161
+          },
+          "additionalJurisdictionTaxAssumed": 127.60369491475277
+        },
+        {
+          "period": "2026Q4",
+          "status": "research_forecast",
+          "segments": [
+            {
+              "key": "display",
+              "revenue": 31090.078766235238,
+              "grossMarginAssumed": 0.082,
+              "operatingMarginAssumed": -0.027999999999999997,
+              "grossProfit": 2549.3864588312895,
+              "operatingExpenses": 3419.908664285876,
+              "operatingProfit": -870.5222054545866,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "mobility",
+              "revenue": 19823.630509053404,
+              "grossMarginAssumed": 0.202,
+              "operatingMarginAssumed": 0.042,
+              "grossProfit": 4004.373362828788,
+              "operatingExpenses": 3171.7808814485447,
+              "operatingProfit": 832.592481380243,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "vertical",
+              "revenue": 13519.759591520717,
+              "grossMarginAssumed": 0.222,
+              "operatingMarginAssumed": 0.062,
+              "grossProfit": 3001.3866293175993,
+              "operatingExpenses": 2163.161534643315,
+              "operatingProfit": 838.2250946742844,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "other",
+              "revenue": 2910.9679765423853,
+              "grossMarginAssumed": 0.082,
+              "operatingMarginAssumed": -0.063,
+              "grossProfit": 238.6993740764756,
+              "operatingExpenses": 422.0903565986459,
+              "operatingProfit": -183.39098252217028,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            }
+          ],
+          "revenue": 67344.43684335174,
+          "grossProfit": 9793.845825054152,
+          "operatingExpenses": 9176.941436976382,
+          "operatingProfit": 616.9043880777699,
+          "interestIncome": 250,
+          "financeCosts": -650,
+          "otherIncome": 650,
+          "equityMethodProfit": 100,
+          "fxAndOtherRecurring": 0,
+          "nonOperating": 350,
+          "pretaxProfit": 966.9043880777699,
+          "taxExpense": 300,
+          "nonControllingNetProfit": 450,
+          "netProfit": 666.9043880777699,
+          "ownersNetProfit": 216.9043880777699,
+          "dilutedSharesMillionAssumed": 7547.099,
+          "dilutedEpsConditional": 0.028740101074302842,
+          "oneOffGainsIncluded": 0,
+          "newCpoGcsRevenueAssumed": null,
+          "existingHelper": {
+            "operatingIncome": 617,
+            "pretaxIncome": 967,
+            "ownersBeforeTaxFloor": 304
+          },
+          "additionalJurisdictionTaxAssumed": 87.28103462289062
+        },
+        {
+          "period": "2027Q1",
+          "status": "research_forecast",
+          "segments": [
+            {
+              "key": "display",
+              "revenue": 29535.574827923476,
+              "grossMarginAssumed": 0.084,
+              "operatingMarginAssumed": -0.026,
+              "grossProfit": 2480.988285545572,
+              "operatingExpenses": 3248.9132310715822,
+              "operatingProfit": -767.9249455260103,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "mobility",
+              "revenue": 19427.157898872334,
+              "grossMarginAssumed": 0.20400000000000001,
+              "operatingMarginAssumed": 0.044,
+              "grossProfit": 3963.1402113699564,
+              "operatingExpenses": 3108.345263819574,
+              "operatingProfit": 854.7949475503826,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "vertical",
+              "revenue": 13654.957187435924,
+              "grossMarginAssumed": 0.224,
+              "operatingMarginAssumed": 0.064,
+              "grossProfit": 3058.710409985647,
+              "operatingExpenses": 2184.7931499897477,
+              "operatingProfit": 873.9172599958991,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "other",
+              "revenue": 2910.9679765423853,
+              "grossMarginAssumed": 0.084,
+              "operatingMarginAssumed": -0.061,
+              "grossProfit": 244.52131002956037,
+              "operatingExpenses": 422.0903565986458,
+              "operatingProfit": -177.5690465690855,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            }
+          ],
+          "revenue": 65528.65789077412,
+          "grossProfit": 9747.360216930736,
+          "operatingExpenses": 8964.14200147955,
+          "operatingProfit": 783.2182154511866,
+          "interestIncome": 250,
+          "financeCosts": -650,
+          "otherIncome": 650,
+          "equityMethodProfit": 100,
+          "fxAndOtherRecurring": 0,
+          "nonOperating": 350,
+          "pretaxProfit": 1133.2182154511866,
+          "taxExpense": 300,
+          "nonControllingNetProfit": 450,
+          "netProfit": 833.2182154511866,
+          "ownersNetProfit": 383.21821545118655,
+          "dilutedSharesMillionAssumed": 7622.56999,
+          "dilutedEpsConditional": 0.050274148476685425,
+          "oneOffGainsIncluded": 0,
+          "newCpoGcsRevenueAssumed": null,
+          "existingHelper": {
+            "operatingIncome": 783,
+            "pretaxIncome": 1133,
+            "ownersBeforeTaxFloor": 434
+          },
+          "additionalJurisdictionTaxAssumed": 50.691992600738956
+        },
+        {
+          "period": "2027Q2",
+          "status": "research_forecast",
+          "segments": [
+            {
+              "key": "display",
+              "revenue": 30421.64207276118,
+              "grossMarginAssumed": 0.08600000000000001,
+              "operatingMarginAssumed": -0.024,
+              "grossProfit": 2616.2612182574617,
+              "operatingExpenses": 3346.38062800373,
+              "operatingProfit": -730.1194097462684,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "mobility",
+              "revenue": 20009.972635838505,
+              "grossMarginAssumed": 0.20600000000000002,
+              "operatingMarginAssumed": 0.046,
+              "grossProfit": 4122.0543629827325,
+              "operatingExpenses": 3201.5956217341613,
+              "operatingProfit": 920.4587412485712,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "vertical",
+              "revenue": 14064.605903059002,
+              "grossMarginAssumed": 0.226,
+              "operatingMarginAssumed": 0.066,
+              "grossProfit": 3178.6009340913347,
+              "operatingExpenses": 2250.3369444894406,
+              "operatingProfit": 928.2639896018942,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "other",
+              "revenue": 2910.9679765423853,
+              "grossMarginAssumed": 0.08600000000000001,
+              "operatingMarginAssumed": -0.059000000000000004,
+              "grossProfit": 250.34324598264516,
+              "operatingExpenses": 422.09035659864594,
+              "operatingProfit": -171.74711061600075,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            }
+          ],
+          "revenue": 67407.18858820107,
+          "grossProfit": 10167.259761314175,
+          "operatingExpenses": 9220.403550825979,
+          "operatingProfit": 946.8562104881967,
+          "interestIncome": 250,
+          "financeCosts": -650,
+          "otherIncome": 650,
+          "equityMethodProfit": 100,
+          "fxAndOtherRecurring": 0,
+          "nonOperating": 350,
+          "pretaxProfit": 1296.8562104881967,
+          "taxExpense": 300,
+          "nonControllingNetProfit": 450,
+          "netProfit": 996.8562104881967,
+          "ownersNetProfit": 546.8562104881967,
+          "dilutedSharesMillionAssumed": 7622.56999,
+          "dilutedEpsConditional": 0.07174171063114065,
+          "oneOffGainsIncluded": 0,
+          "newCpoGcsRevenueAssumed": null,
+          "existingHelper": {
+            "operatingIncome": 947,
+            "pretaxIncome": 1297,
+            "ownersBeforeTaxFloor": 562
+          },
+          "additionalJurisdictionTaxAssumed": 14.691633692596724
+        },
+        {
+          "period": "2027Q3",
+          "status": "research_forecast",
+          "segments": [
+            {
+              "key": "display",
+              "revenue": 30117.42565203357,
+              "grossMarginAssumed": 0.088,
+              "operatingMarginAssumed": -0.022,
+              "grossProfit": 2650.333457378954,
+              "operatingExpenses": 3312.9168217236925,
+              "operatingProfit": -662.5833643447385,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "mobility",
+              "revenue": 20410.172088555275,
+              "grossMarginAssumed": 0.20800000000000002,
+              "operatingMarginAssumed": 0.048,
+              "grossProfit": 4245.315794419497,
+              "operatingExpenses": 3265.6275341688442,
+              "operatingProfit": 979.6882602506532,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "vertical",
+              "revenue": 14486.544080150772,
+              "grossMarginAssumed": 0.228,
+              "operatingMarginAssumed": 0.068,
+              "grossProfit": 3302.9320502743763,
+              "operatingExpenses": 2317.8470528241237,
+              "operatingProfit": 985.0849974502526,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "other",
+              "revenue": 2910.9679765423853,
+              "grossMarginAssumed": 0.088,
+              "operatingMarginAssumed": -0.057,
+              "grossProfit": 256.1651819357299,
+              "operatingExpenses": 422.0903565986458,
+              "operatingProfit": -165.92517466291596,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            }
+          ],
+          "revenue": 67925.109797282,
+          "grossProfit": 10454.746484008558,
+          "operatingExpenses": 9318.481765315306,
+          "operatingProfit": 1136.2647186932518,
+          "interestIncome": 250,
+          "financeCosts": -650,
+          "otherIncome": 650,
+          "equityMethodProfit": 100,
+          "fxAndOtherRecurring": 0,
+          "nonOperating": 350,
+          "pretaxProfit": 1486.2647186932518,
+          "taxExpense": 326.9782381125154,
+          "nonControllingNetProfit": 450,
+          "netProfit": 1159.2864805807365,
+          "ownersNetProfit": 709.2864805807365,
+          "dilutedSharesMillionAssumed": 7622.56999,
+          "dilutedEpsConditional": 0.09305083213551922,
+          "oneOffGainsIncluded": 0,
+          "newCpoGcsRevenueAssumed": null,
+          "existingHelper": {
+            "operatingIncome": 1136,
+            "pretaxIncome": 1486,
+            "ownersBeforeTaxFloor": 709
+          },
+          "additionalJurisdictionTaxAssumed": 0
+        },
+        {
+          "period": "2027Q4",
+          "status": "research_forecast",
+          "segments": [
+            {
+              "key": "display",
+              "revenue": 30719.774165074243,
+              "grossMarginAssumed": 0.09,
+              "operatingMarginAssumed": -0.019999999999999997,
+              "grossProfit": 2764.7796748566816,
+              "operatingExpenses": 3379.1751581581666,
+              "operatingProfit": -614.3954833014848,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "mobility",
+              "revenue": 21022.477251211934,
+              "grossMarginAssumed": 0.21000000000000002,
+              "operatingMarginAssumed": 0.05,
+              "grossProfit": 4414.720222754507,
+              "operatingExpenses": 3363.59636019391,
+              "operatingProfit": 1051.1238625605968,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "vertical",
+              "revenue": 15066.005843356803,
+              "grossMarginAssumed": 0.23,
+              "operatingMarginAssumed": 0.06999999999999999,
+              "grossProfit": 3465.181343972065,
+              "operatingExpenses": 2410.560934937089,
+              "operatingProfit": 1054.620409034976,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "other",
+              "revenue": 2910.9679765423853,
+              "grossMarginAssumed": 0.09,
+              "operatingMarginAssumed": -0.055,
+              "grossProfit": 261.9871178888147,
+              "operatingExpenses": 422.0903565986459,
+              "operatingProfit": -160.1032387098312,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            }
+          ],
+          "revenue": 69719.22523618536,
+          "grossProfit": 10906.668359472069,
+          "operatingExpenses": 9575.422809887812,
+          "operatingProfit": 1331.2455495842569,
+          "interestIncome": 250,
+          "financeCosts": -650,
+          "otherIncome": 650,
+          "equityMethodProfit": 100,
+          "fxAndOtherRecurring": 0,
+          "nonOperating": 350,
+          "pretaxProfit": 1681.2455495842569,
+          "taxExpense": 369.8740209085365,
+          "nonControllingNetProfit": 450,
+          "netProfit": 1311.3715286757204,
+          "ownersNetProfit": 861.3715286757204,
+          "dilutedSharesMillionAssumed": 7622.56999,
+          "dilutedEpsConditional": 0.11300277069357816,
+          "oneOffGainsIncluded": 0,
+          "newCpoGcsRevenueAssumed": null,
+          "existingHelper": {
+            "operatingIncome": 1331,
+            "pretaxIncome": 1681,
+            "ownersBeforeTaxFloor": 861
+          },
+          "additionalJurisdictionTaxAssumed": 0
+        }
+      ],
+      "calendar2026": {
+        "revenue": 274142.9858433517,
+        "grossProfit": 36745.39287568061,
+        "operatingExpenses": 36112.14791903354,
+        "operatingProfit": 633.2449566470755,
+        "nonOperating": 3366.872,
+        "pretaxProfit": 4000.1169566470753,
+        "taxExpense": 1768.992,
+        "netProfit": 2231.1249566470756,
+        "nonControllingNetProfit": 1781.046,
+        "ownersNetProfit": 450.0789566470755,
+        "dilutedSharesMillionAssumed": 7547.099,
+        "dilutedEpsConditional": 0.05963602129070726,
+        "composition": "reportedH1 + forecastQ3Q4; historical oneoffs retained; not normalized"
+      },
+      "calendar2027": {
+        "revenue": 270580.18151244253,
+        "grossProfit": 41276.03482172554,
+        "operatingExpenses": 37078.45012750865,
+        "operatingProfit": 4197.584694216892,
+        "nonOperating": 1400,
+        "pretaxProfit": 5597.584694216892,
+        "taxExpense": 1296.8522590210519,
+        "netProfit": 4300.7324351958405,
+        "nonControllingNetProfit": 1800,
+        "ownersNetProfit": 2500.73243519584,
+        "dilutedSharesMillionAssumed": 7622.56999,
+        "dilutedEpsConditional": 0.32806946193692343,
+        "composition": "four forecast quarters; no new CPO/GCS or asset-sale gains"
+      },
+      "nextFourUnreported": {
+        "revenue": 267156.2833223269,
+        "grossProfit": 39228.374853925525,
+        "operatingExpenses": 36447.776471339064,
+        "operatingProfit": 2780.5983825864587,
+        "nonOperating": 1400,
+        "pretaxProfit": 4180.598382586459,
+        "taxExpense": 1200,
+        "netProfit": 2980.5983825864587,
+        "nonControllingNetProfit": 1800,
+        "ownersNetProfit": 1180.5983825864587,
+        "dilutedSharesMillionAssumed": 7584.834494999999,
+        "dilutedEpsConditional": 0.1556524909495021,
+        "periods": [
+          "2026Q3",
+          "2026Q4",
+          "2027Q1",
+          "2027Q2"
+        ],
+        "composition": "2026Q3–2027Q2, not rolling12months from October8"
+      },
+      "pe2027Conditional": 111.56173995565894,
+      "targetPrice": null,
+      "multiplesCalibrated": false
+    },
+    {
+      "id": "bull",
+      "assumptions": {
+        "q3Weights": [
+          0.98,
+          1.02,
+          1.05,
+          1
+        ],
+        "growth": [
+          [
+            0.02,
+            0.04,
+            0.05,
+            0.01
+          ],
+          [
+            -0.02,
+            0,
+            0.02,
+            0
+          ],
+          [
+            0.04,
+            0.04,
+            0.05,
+            0.01
+          ],
+          [
+            0.01,
+            0.04,
+            0.05,
+            0.01
+          ],
+          [
+            0.03,
+            0.04,
+            0.05,
+            0.01
+          ]
+        ],
+        "grossMargins": [
+          0.1,
+          0.22,
+          0.24,
+          0.09
+        ],
+        "opMargins": [
+          -0.01,
+          0.05,
+          0.075,
+          -0.055
+        ],
+        "quarterMarginStep": 0.003,
+        "interestIncome": 275,
+        "financeCosts": -625,
+        "otherIncome": 700,
+        "equityMethodProfit": 250,
+        "fxAndOtherRecurring": 0,
+        "taxRate": 0.2,
+        "taxFloor": 300,
+        "nci": 650,
+        "futureDilution": 0.015
+      },
+      "guidanceImpliedQ3Total": 71288.78446,
+      "monthlyTotalReconciliationScale": 0.9380998779341511,
+      "consolidatedGuidanceDifference": -4412.784459999995,
+      "quarters": [
+        {
+          "period": "2026Q3",
+          "status": "known_monthly_total_unknown_profit_and_mix",
+          "segments": [
+            {
+              "key": "display",
+              "revenue": 31275.490407139427,
+              "grossMarginAssumed": 0.1,
+              "operatingMarginAssumed": -0.01,
+              "grossProfit": 3127.5490407139428,
+              "operatingExpenses": 3440.303944785337,
+              "operatingProfit": -312.75490407139426,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "mobility",
+              "revenue": 19540.980593911507,
+              "grossMarginAssumed": 0.22,
+              "operatingMarginAssumed": 0.05,
+              "grossProfit": 4299.0157306605315,
+              "operatingExpenses": 3321.966700964956,
+              "operatingProfit": 977.0490296955754,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "vertical",
+              "revenue": 13190.066278024458,
+              "grossMarginAssumed": 0.24,
+              "operatingMarginAssumed": 0.075,
+              "grossProfit": 3165.61590672587,
+              "operatingExpenses": 2176.360935874036,
+              "operatingProfit": 989.2549708518343,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "other",
+              "revenue": 2869.462720924615,
+              "grossMarginAssumed": 0.09,
+              "operatingMarginAssumed": -0.055,
+              "grossProfit": 258.25164488321536,
+              "operatingExpenses": 416.07209453406915,
+              "operatingProfit": -157.82044965085382,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            }
+          ],
+          "revenue": 66876,
+          "grossProfit": 10850.43232298356,
+          "operatingExpenses": 9354.703676158399,
+          "operatingProfit": 1495.7286468251623,
+          "interestIncome": 275,
+          "financeCosts": -625,
+          "otherIncome": 700,
+          "equityMethodProfit": 250,
+          "fxAndOtherRecurring": 0,
+          "nonOperating": 600,
+          "pretaxProfit": 2095.7286468251623,
+          "taxExpense": 419.1457293650325,
+          "nonControllingNetProfit": 650,
+          "netProfit": 1676.58291746013,
+          "ownersNetProfit": 1026.58291746013,
+          "dilutedSharesMillionAssumed": 7547.099,
+          "dilutedEpsConditional": 0.1360235128040761,
+          "oneOffGainsIncluded": 0,
+          "newCpoGcsRevenueAssumed": null,
+          "existingHelper": {
+            "operatingIncome": 1496,
+            "pretaxIncome": 2096,
+            "ownersBeforeTaxFloor": 1027
+          },
+          "additionalJurisdictionTaxAssumed": 0
+        },
+        {
+          "period": "2026Q4",
+          "status": "research_forecast",
+          "segments": [
+            {
+              "key": "display",
+              "revenue": 31901.000215282216,
+              "grossMarginAssumed": 0.10300000000000001,
+              "operatingMarginAssumed": -0.007,
+              "grossProfit": 3285.8030221740687,
+              "operatingExpenses": 3509.1100236810444,
+              "operatingProfit": -223.30700150697552,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "mobility",
+              "revenue": 20322.619817667968,
+              "grossMarginAssumed": 0.223,
+              "operatingMarginAssumed": 0.053000000000000005,
+              "grossProfit": 4531.944219339957,
+              "operatingExpenses": 3454.845369003555,
+              "operatingProfit": 1077.0988503364024,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "vertical",
+              "revenue": 13849.569591925681,
+              "grossMarginAssumed": 0.243,
+              "operatingMarginAssumed": 0.078,
+              "grossProfit": 3365.4454108379405,
+              "operatingExpenses": 2285.1789826677373,
+              "operatingProfit": 1080.2664281702032,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "other",
+              "revenue": 2898.1573481338614,
+              "grossMarginAssumed": 0.093,
+              "operatingMarginAssumed": -0.052,
+              "grossProfit": 269.52863337644914,
+              "operatingExpenses": 420.23281547940996,
+              "operatingProfit": -150.7041821029608,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            }
+          ],
+          "revenue": 68971.34697300973,
+          "grossProfit": 11452.721285728414,
+          "operatingExpenses": 9669.367190831746,
+          "operatingProfit": 1783.3540948966674,
+          "interestIncome": 275,
+          "financeCosts": -625,
+          "otherIncome": 700,
+          "equityMethodProfit": 250,
+          "fxAndOtherRecurring": 0,
+          "nonOperating": 600,
+          "pretaxProfit": 2383.3540948966674,
+          "taxExpense": 476.6708189793335,
+          "nonControllingNetProfit": 650,
+          "netProfit": 1906.683275917334,
+          "ownersNetProfit": 1256.683275917334,
+          "dilutedSharesMillionAssumed": 7547.099,
+          "dilutedEpsConditional": 0.16651209635879083,
+          "oneOffGainsIncluded": 0,
+          "newCpoGcsRevenueAssumed": null,
+          "existingHelper": {
+            "operatingIncome": 1783,
+            "pretaxIncome": 2383,
+            "ownersBeforeTaxFloor": 1257
+          },
+          "additionalJurisdictionTaxAssumed": 0
+        },
+        {
+          "period": "2027Q1",
+          "status": "research_forecast",
+          "segments": [
+            {
+              "key": "display",
+              "revenue": 31262.98021097657,
+              "grossMarginAssumed": 0.10600000000000001,
+              "operatingMarginAssumed": -0.004,
+              "grossProfit": 3313.8759023635166,
+              "operatingExpenses": 3438.927823207423,
+              "operatingProfit": -125.05192084390629,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "mobility",
+              "revenue": 20322.619817667968,
+              "grossMarginAssumed": 0.226,
+              "operatingMarginAssumed": 0.056,
+              "grossProfit": 4592.9120787929605,
+              "operatingExpenses": 3454.845369003554,
+              "operatingProfit": 1138.0667097894063,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "vertical",
+              "revenue": 14126.560983764195,
+              "grossMarginAssumed": 0.246,
+              "operatingMarginAssumed": 0.081,
+              "grossProfit": 3475.134002005992,
+              "operatingExpenses": 2330.8825623210923,
+              "operatingProfit": 1144.2514396848999,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "other",
+              "revenue": 2898.1573481338614,
+              "grossMarginAssumed": 0.096,
+              "operatingMarginAssumed": -0.049,
+              "grossProfit": 278.2231054208507,
+              "operatingExpenses": 420.2328154794099,
+              "operatingProfit": -142.00971005855922,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            }
+          ],
+          "revenue": 68610.31836054259,
+          "grossProfit": 11660.14508858332,
+          "operatingExpenses": 9644.888570011479,
+          "operatingProfit": 2015.2565185718413,
+          "interestIncome": 275,
+          "financeCosts": -625,
+          "otherIncome": 700,
+          "equityMethodProfit": 250,
+          "fxAndOtherRecurring": 0,
+          "nonOperating": 600,
+          "pretaxProfit": 2615.2565185718413,
+          "taxExpense": 523.0513037143683,
+          "nonControllingNetProfit": 650,
+          "netProfit": 2092.205214857473,
+          "ownersNetProfit": 1442.205214857473,
+          "dilutedSharesMillionAssumed": 7660.305485,
+          "dilutedEpsConditional": 0.18826993488464946,
+          "oneOffGainsIncluded": 0,
+          "newCpoGcsRevenueAssumed": null,
+          "existingHelper": {
+            "operatingIncome": 2015,
+            "pretaxIncome": 2615,
+            "ownersBeforeTaxFloor": 1442
+          },
+          "additionalJurisdictionTaxAssumed": 0
+        },
+        {
+          "period": "2027Q2",
+          "status": "research_forecast",
+          "segments": [
+            {
+              "key": "display",
+              "revenue": 32513.499419415635,
+              "grossMarginAssumed": 0.10900000000000001,
+              "operatingMarginAssumed": -0.0009999999999999992,
+              "grossProfit": 3543.9714367163047,
+              "operatingExpenses": 3576.48493613572,
+              "operatingProfit": -32.51349941941561,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "mobility",
+              "revenue": 21135.524610374687,
+              "grossMarginAssumed": 0.229,
+              "operatingMarginAssumed": 0.059000000000000004,
+              "grossProfit": 4840.035135775804,
+              "operatingExpenses": 3593.039183763697,
+              "operatingProfit": 1246.9959520121065,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "vertical",
+              "revenue": 14832.889032952406,
+              "grossMarginAssumed": 0.249,
+              "operatingMarginAssumed": 0.08399999999999999,
+              "grossProfit": 3693.389369205149,
+              "operatingExpenses": 2447.426690437147,
+              "operatingProfit": 1245.962678768002,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "other",
+              "revenue": 2927.1389216152,
+              "grossMarginAssumed": 0.099,
+              "operatingMarginAssumed": -0.046,
+              "grossProfit": 289.78675323990484,
+              "operatingExpenses": 424.43514363420405,
+              "operatingProfit": -134.6483903942992,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            }
+          ],
+          "revenue": 71409.05198435792,
+          "grossProfit": 12367.182694937163,
+          "operatingExpenses": 10041.385953970768,
+          "operatingProfit": 2325.7967409663943,
+          "interestIncome": 275,
+          "financeCosts": -625,
+          "otherIncome": 700,
+          "equityMethodProfit": 250,
+          "fxAndOtherRecurring": 0,
+          "nonOperating": 600,
+          "pretaxProfit": 2925.7967409663943,
+          "taxExpense": 585.1593481932789,
+          "nonControllingNetProfit": 650,
+          "netProfit": 2340.6373927731156,
+          "ownersNetProfit": 1690.6373927731156,
+          "dilutedSharesMillionAssumed": 7660.305485,
+          "dilutedEpsConditional": 0.22070104072006413,
+          "oneOffGainsIncluded": 0,
+          "newCpoGcsRevenueAssumed": null,
+          "existingHelper": {
+            "operatingIncome": 2326,
+            "pretaxIncome": 2926,
+            "ownersBeforeTaxFloor": 1691
+          },
+          "additionalJurisdictionTaxAssumed": 0
+        },
+        {
+          "period": "2027Q3",
+          "status": "research_forecast",
+          "segments": [
+            {
+              "key": "display",
+              "revenue": 32838.63441360979,
+              "grossMarginAssumed": 0.112,
+              "operatingMarginAssumed": 0.002,
+              "grossProfit": 3677.9270543242965,
+              "operatingExpenses": 3612.249785497077,
+              "operatingProfit": 65.67726882721958,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "mobility",
+              "revenue": 21980.945594789675,
+              "grossMarginAssumed": 0.232,
+              "operatingMarginAssumed": 0.062,
+              "grossProfit": 5099.579377991205,
+              "operatingExpenses": 3736.760751114245,
+              "operatingProfit": 1362.8186268769598,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "vertical",
+              "revenue": 15574.533484600026,
+              "grossMarginAssumed": 0.252,
+              "operatingMarginAssumed": 0.087,
+              "grossProfit": 3924.7824381192067,
+              "operatingExpenses": 2569.7980249590046,
+              "operatingProfit": 1354.9844131602022,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "other",
+              "revenue": 2956.410310831352,
+              "grossMarginAssumed": 0.102,
+              "operatingMarginAssumed": -0.043,
+              "grossProfit": 301.55385170479786,
+              "operatingExpenses": 428.679495070546,
+              "operatingProfit": -127.12564336574813,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            }
+          ],
+          "revenue": 73350.52380383085,
+          "grossProfit": 13003.842722139507,
+          "operatingExpenses": 10347.488056640874,
+          "operatingProfit": 2656.354665498633,
+          "interestIncome": 275,
+          "financeCosts": -625,
+          "otherIncome": 700,
+          "equityMethodProfit": 250,
+          "fxAndOtherRecurring": 0,
+          "nonOperating": 600,
+          "pretaxProfit": 3256.354665498633,
+          "taxExpense": 651.2709330997267,
+          "nonControllingNetProfit": 650,
+          "netProfit": 2605.0837323989062,
+          "ownersNetProfit": 1955.0837323989062,
+          "dilutedSharesMillionAssumed": 7660.305485,
+          "dilutedEpsConditional": 0.2552226848168453,
+          "oneOffGainsIncluded": 0,
+          "newCpoGcsRevenueAssumed": null,
+          "existingHelper": {
+            "operatingIncome": 2656,
+            "pretaxIncome": 3256,
+            "ownersBeforeTaxFloor": 1955
+          },
+          "additionalJurisdictionTaxAssumed": 0
+        },
+        {
+          "period": "2027Q4",
+          "status": "research_forecast",
+          "segments": [
+            {
+              "key": "display",
+              "revenue": 33823.793446018084,
+              "grossMarginAssumed": 0.115,
+              "operatingMarginAssumed": 0.004999999999999999,
+              "grossProfit": 3889.7362462920796,
+              "operatingExpenses": 3720.6172790619894,
+              "operatingProfit": 169.1189672300904,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "mobility",
+              "revenue": 22860.183418581262,
+              "grossMarginAssumed": 0.235,
+              "operatingMarginAssumed": 0.065,
+              "grossProfit": 5372.143103366597,
+              "operatingExpenses": 3886.2311811588147,
+              "operatingProfit": 1485.911922207782,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "vertical",
+              "revenue": 16353.260158830028,
+              "grossMarginAssumed": 0.255,
+              "operatingMarginAssumed": 0.09,
+              "grossProfit": 4170.081340501657,
+              "operatingExpenses": 2698.2879262069546,
+              "operatingProfit": 1471.7934142947024,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            },
+            {
+              "key": "other",
+              "revenue": 2985.9744139396657,
+              "grossMarginAssumed": 0.105,
+              "operatingMarginAssumed": -0.04,
+              "grossProfit": 313.5273134636649,
+              "operatingExpenses": 432.9662900212515,
+              "operatingProfit": -119.43897655758663,
+              "status": "research_allocation_not_disclosed_segment_gross_margin"
+            }
+          ],
+          "revenue": 76023.21143736904,
+          "grossProfit": 13745.488003623997,
+          "operatingExpenses": 10738.10267644901,
+          "operatingProfit": 3007.3853271749867,
+          "interestIncome": 275,
+          "financeCosts": -625,
+          "otherIncome": 700,
+          "equityMethodProfit": 250,
+          "fxAndOtherRecurring": 0,
+          "nonOperating": 600,
+          "pretaxProfit": 3607.3853271749867,
+          "taxExpense": 721.4770654349974,
+          "nonControllingNetProfit": 650,
+          "netProfit": 2885.9082617399895,
+          "ownersNetProfit": 2235.9082617399895,
+          "dilutedSharesMillionAssumed": 7660.305485,
+          "dilutedEpsConditional": 0.29188238851808523,
+          "oneOffGainsIncluded": 0,
+          "newCpoGcsRevenueAssumed": null,
+          "existingHelper": {
+            "operatingIncome": 3007,
+            "pretaxIncome": 3607,
+            "ownersBeforeTaxFloor": 2236
+          },
+          "additionalJurisdictionTaxAssumed": 0
+        }
+      ],
+      "calendar2026": {
+        "revenue": 275769.89597300976,
+        "grossProfit": 39734.791608711974,
+        "operatingExpenses": 36872.987866990145,
+        "operatingProfit": 2861.8037417218297,
+        "nonOperating": 3866.872,
+        "pretaxProfit": 6728.67574172183,
+        "taxExpense": 2064.808548344366,
+        "netProfit": 4663.867193377464,
+        "nonControllingNetProfit": 2181.0460000000003,
+        "ownersNetProfit": 2482.8211933774637,
+        "dilutedSharesMillionAssumed": 7547.099,
+        "dilutedEpsConditional": 0.3289768947482289,
+        "composition": "reportedH1 + forecastQ3Q4; historical oneoffs retained; not normalized"
+      },
+      "calendar2027": {
+        "revenue": 289393.1055861004,
+        "grossProfit": 50776.65850928399,
+        "operatingExpenses": 40771.86525707213,
+        "operatingProfit": 10004.793252211855,
+        "nonOperating": 2400,
+        "pretaxProfit": 12404.793252211855,
+        "taxExpense": 2480.958650442371,
+        "netProfit": 9923.834601769484,
+        "nonControllingNetProfit": 2600,
+        "ownersNetProfit": 7323.834601769484,
+        "dilutedSharesMillionAssumed": 7660.305485,
+        "dilutedEpsConditional": 0.956076048939644,
+        "composition": "four forecast quarters; no new CPO/GCS or asset-sale gains"
+      },
+      "nextFourUnreported": {
+        "revenue": 275866.7173179102,
+        "grossProfit": 46330.481392232454,
+        "operatingExpenses": 38710.34539097239,
+        "operatingProfit": 7620.136001260065,
+        "nonOperating": 2400,
+        "pretaxProfit": 10020.136001260065,
+        "taxExpense": 2004.027200252013,
+        "netProfit": 8016.108801008052,
+        "nonControllingNetProfit": 2600,
+        "ownersNetProfit": 5416.108801008053,
+        "dilutedSharesMillionAssumed": 7603.7022425000005,
+        "dilutedEpsConditional": 0.712298907594691,
+        "periods": [
+          "2026Q3",
+          "2026Q4",
+          "2027Q1",
+          "2027Q2"
+        ],
+        "composition": "2026Q3–2027Q2, not rolling12months from October8"
+      },
+      "pe2027Conditional": 38.28147357168082,
+      "targetPrice": null,
+      "multiplesCalibrated": false
+    }
+  ],
+  "normalizationSensitivity": [
+    {
+      "taxRateAssumed": 0.1,
+      "bvxmWeightAssumed": 1,
+      "darwinWeightAssumed": 0.3,
+      "assumedOwnersGainMillion": 1081.7847900000002,
+      "q2OwnersAfterHypotheticalRemoval": 261.30720999999994,
+      "q2EpsAfterHypotheticalRemoval": 0.03462353018027191,
+      "h1OwnersAfterHypotheticalRemoval": -882.2297900000001,
+      "h1EpsAfterHypotheticalRemoval": -0.11689654395682368,
+      "status": "sensitivity_not_verified_normalized_earnings"
+    },
+    {
+      "taxRateAssumed": 0.1,
+      "bvxmWeightAssumed": 1,
+      "darwinWeightAssumed": 0.4105,
+      "assumedOwnersGainMillion": 1193.91536115,
+      "q2OwnersAfterHypotheticalRemoval": 149.17663885000002,
+      "q2EpsAfterHypotheticalRemoval": 0.019766090102965393,
+      "h1OwnersAfterHypotheticalRemoval": -994.36036115,
+      "h1EpsAfterHypotheticalRemoval": -0.1317539840341302,
+      "status": "sensitivity_not_verified_normalized_earnings"
+    },
+    {
+      "taxRateAssumed": 0.1,
+      "bvxmWeightAssumed": 1,
+      "darwinWeightAssumed": 0.5,
+      "assumedOwnersGainMillion": 1284.73605,
+      "q2OwnersAfterHypotheticalRemoval": 58.35595000000012,
+      "q2EpsAfterHypotheticalRemoval": 0.007732235922703561,
+      "h1OwnersAfterHypotheticalRemoval": -1085.18105,
+      "h1EpsAfterHypotheticalRemoval": -0.14378783821439203,
+      "status": "sensitivity_not_verified_normalized_earnings"
+    },
+    {
+      "taxRateAssumed": 0.2,
+      "bvxmWeightAssumed": 1,
+      "darwinWeightAssumed": 0.3,
+      "assumedOwnersGainMillion": 961.5864800000002,
+      "q2OwnersAfterHypotheticalRemoval": 381.50551999999993,
+      "q2EpsAfterHypotheticalRemoval": 0.0505499556849592,
+      "h1OwnersAfterHypotheticalRemoval": -762.0314800000001,
+      "h1EpsAfterHypotheticalRemoval": -0.1009701184521364,
+      "status": "sensitivity_not_verified_normalized_earnings"
+    },
+    {
+      "taxRateAssumed": 0.2,
+      "bvxmWeightAssumed": 1,
+      "darwinWeightAssumed": 0.4105,
+      "assumedOwnersGainMillion": 1061.2580988,
+      "q2OwnersAfterHypotheticalRemoval": 281.8339012000001,
+      "q2EpsAfterHypotheticalRemoval": 0.03734334228290898,
+      "h1OwnersAfterHypotheticalRemoval": -861.7030987999999,
+      "h1EpsAfterHypotheticalRemoval": -0.11417673185418661,
+      "status": "sensitivity_not_verified_normalized_earnings"
+    },
+    {
+      "taxRateAssumed": 0.2,
+      "bvxmWeightAssumed": 1,
+      "darwinWeightAssumed": 0.5,
+      "assumedOwnersGainMillion": 1141.9876000000002,
+      "q2OwnersAfterHypotheticalRemoval": 201.10439999999994,
+      "q2EpsAfterHypotheticalRemoval": 0.026646583011565098,
+      "h1OwnersAfterHypotheticalRemoval": -942.4326000000001,
+      "h1EpsAfterHypotheticalRemoval": -0.12487349112553049,
+      "status": "sensitivity_not_verified_normalized_earnings"
+    },
+    {
+      "taxRateAssumed": 0.3,
+      "bvxmWeightAssumed": 1,
+      "darwinWeightAssumed": 0.3,
+      "assumedOwnersGainMillion": 841.3881700000001,
+      "q2OwnersAfterHypotheticalRemoval": 501.70383000000004,
+      "q2EpsAfterHypotheticalRemoval": 0.06647638118964652,
+      "h1OwnersAfterHypotheticalRemoval": -641.8331700000001,
+      "h1EpsAfterHypotheticalRemoval": -0.0850436929474491,
+      "status": "sensitivity_not_verified_normalized_earnings"
+    },
+    {
+      "taxRateAssumed": 0.3,
+      "bvxmWeightAssumed": 1,
+      "darwinWeightAssumed": 0.4105,
+      "assumedOwnersGainMillion": 928.6008364499999,
+      "q2OwnersAfterHypotheticalRemoval": 414.49116355000024,
+      "q2EpsAfterHypotheticalRemoval": 0.05492059446285258,
+      "h1OwnersAfterHypotheticalRemoval": -729.0458364499998,
+      "h1EpsAfterHypotheticalRemoval": -0.09659947967424301,
+      "status": "sensitivity_not_verified_normalized_earnings"
+    },
+    {
+      "taxRateAssumed": 0.3,
+      "bvxmWeightAssumed": 1,
+      "darwinWeightAssumed": 0.5,
+      "assumedOwnersGainMillion": 999.23915,
+      "q2OwnersAfterHypotheticalRemoval": 343.8528500000001,
+      "q2EpsAfterHypotheticalRemoval": 0.04556093010042668,
+      "h1OwnersAfterHypotheticalRemoval": -799.68415,
+      "h1EpsAfterHypotheticalRemoval": -0.10595914403666892,
+      "status": "sensitivity_not_verified_normalized_earnings"
+    }
+  ],
+  "reversePriceSensitivity": [
+    {
+      "multipleTestParameter": 10,
+      "eps": 3.66,
+      "netIncome": 27622,
+      "netMargin": 0.1021,
+      "sharesAssumedNotFutureVerified": true
+    },
+    {
+      "multipleTestParameter": 15,
+      "eps": 2.44,
+      "netIncome": 18415,
+      "netMargin": 0.0681,
+      "sharesAssumedNotFutureVerified": true
+    },
+    {
+      "multipleTestParameter": 20,
+      "eps": 1.83,
+      "netIncome": 13811,
+      "netMargin": 0.051,
+      "sharesAssumedNotFutureVerified": true
+    },
+    {
+      "multipleTestParameter": 30,
+      "eps": 1.22,
+      "netIncome": 9207,
+      "netMargin": 0.034,
+      "sharesAssumedNotFutureVerified": true
+    }
+  ],
+  "commercialization": {
+    "status": "incomplete",
+    "missing": [
+      "shippedCapacityUnits",
+      "utilization",
+      "yieldRate",
+      "averageSellingPriceMillion",
+      "grossMargin",
+      "incrementalOpexMillion",
+      "depreciationMillion",
+      "attributableShare",
+      "intercompanyRevenueMillion"
+    ]
+  },
+  "legacyPaperPlanDaily": [
+    {
+      "session": "2026-09-21",
+      "close": 33.35,
+      "high": 33.35,
+      "originalPaperTrigger": 32.2,
+      "originalPaperTarget": 36.6,
+      "firstTargetObserved": "2026-09-22",
+      "paperTargetState": "before_first_target",
+      "approvedEntry": false
+    },
+    {
+      "session": "2026-09-22",
+      "close": 36.65,
+      "high": 36.65,
+      "originalPaperTrigger": 32.2,
+      "originalPaperTarget": 36.6,
+      "firstTargetObserved": "2026-09-22",
+      "paperTargetState": "target_already_observed_do_not_reactivate",
+      "approvedEntry": false
+    },
+    {
+      "session": "2026-09-23",
+      "close": 34.7,
+      "high": 36.65,
+      "originalPaperTrigger": 32.2,
+      "originalPaperTarget": 36.6,
+      "firstTargetObserved": "2026-09-22",
+      "paperTargetState": "target_already_observed_do_not_reactivate",
+      "approvedEntry": false
+    },
+    {
+      "session": "2026-09-24",
+      "close": 34.2,
+      "high": 35.95,
+      "originalPaperTrigger": 32.2,
+      "originalPaperTarget": 36.6,
+      "firstTargetObserved": "2026-09-22",
+      "paperTargetState": "target_already_observed_do_not_reactivate",
+      "approvedEntry": false
+    },
+    {
+      "session": "2026-09-29",
+      "close": 35.05,
+      "high": 35.8,
+      "originalPaperTrigger": 32.2,
+      "originalPaperTarget": 36.6,
+      "firstTargetObserved": "2026-09-22",
+      "paperTargetState": "target_already_observed_do_not_reactivate",
+      "approvedEntry": false
+    },
+    {
+      "session": "2026-09-30",
+      "close": 38.55,
+      "high": 38.55,
+      "originalPaperTrigger": 32.2,
+      "originalPaperTarget": 36.6,
+      "firstTargetObserved": "2026-09-22",
+      "paperTargetState": "target_already_observed_do_not_reactivate",
+      "approvedEntry": false
+    },
+    {
+      "session": "2026-10-01",
+      "close": 38.3,
+      "high": 40,
+      "originalPaperTrigger": 32.2,
+      "originalPaperTarget": 36.6,
+      "firstTargetObserved": "2026-09-22",
+      "paperTargetState": "target_already_observed_do_not_reactivate",
+      "approvedEntry": false
+    },
+    {
+      "session": "2026-10-02",
+      "close": 40.45,
+      "high": 40.85,
+      "originalPaperTrigger": 32.2,
+      "originalPaperTarget": 36.6,
+      "firstTargetObserved": "2026-09-22",
+      "paperTargetState": "target_already_observed_do_not_reactivate",
+      "approvedEntry": false
+    },
+    {
+      "session": "2026-10-05",
+      "close": 39.05,
+      "high": 43.55,
+      "originalPaperTrigger": 32.2,
+      "originalPaperTarget": 36.6,
+      "firstTargetObserved": "2026-09-22",
+      "paperTargetState": "target_already_observed_do_not_reactivate",
+      "approvedEntry": false
+    },
+    {
+      "session": "2026-10-06",
+      "close": 37.45,
+      "high": 39.5,
+      "originalPaperTrigger": 32.2,
+      "originalPaperTarget": 36.6,
+      "firstTargetObserved": "2026-09-22",
+      "paperTargetState": "target_already_observed_do_not_reactivate",
+      "approvedEntry": false
+    },
+    {
+      "session": "2026-10-07",
+      "close": 37.95,
+      "high": 38.15,
+      "originalPaperTrigger": 32.2,
+      "originalPaperTarget": 36.6,
+      "firstTargetObserved": "2026-09-22",
+      "paperTargetState": "target_already_observed_do_not_reactivate",
+      "approvedEntry": false
+    },
+    {
+      "session": "2026-10-08",
+      "close": 36.6,
+      "high": 37.75,
+      "originalPaperTrigger": 32.2,
+      "originalPaperTarget": 36.6,
+      "firstTargetObserved": "2026-09-22",
+      "paperTargetState": "target_already_observed_do_not_reactivate",
+      "approvedEntry": false
+    }
+  ],
+  "limitations": [
+    "Segment gross margins and expense allocation are research assumptions, not issuer disclosures",
+    "Q1 segment allocation conflict and nonrestated2025 comparability retained",
+    "Future tax/NCI/dilution assumed; loss-period tax can be positive",
+    "No precise original financial publication instant or historicalPIT",
+    "No calibrated PE, target price, certified current P/B, approved entry or model/lease IDs"
+  ],
+  "calculationComponent": "existing auo-deep-dive-model.calculateQuarter / requiredEarningsAtMultiple / calculateCommercializationBridge",
+  "canonicalHash": "8cb4a337d594f839f18b8d328d9c20cf00b2f25667f3060cc716d780460c0a68",
+  "inputManifest": [
+    {
+      "file": "docs/research/2026-10-08-auo-full-financial/financial-relay.json",
+      "bytes": 19837,
+      "sha256": "524a72ca86f7a653050d97d0a7cfea57046ebf7b2d922f614d6070cc7753decf"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-full-financial/historical-income-relay.json",
+      "bytes": 40271,
+      "sha256": "f56d8d4da10af9da518e22fe7539d4e210bc9a229a1185c75175f1f1887e94bb"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo/dataset.json",
+      "bytes": 86638,
+      "sha256": "d231112310925906da455fd87aced084ee25b0943a719ed7b8896bf350602a4a"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-market/dataset.json",
+      "bytes": 393280,
+      "sha256": "3de3a52fd589376621581f0bbd1578dfb4b011afd168277078aae85ace6a2582"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-full-financial/guidance-relay.json",
+      "bytes": 2910,
+      "sha256": "97a0acc32dc7d3f6cb7be4a30ffc5fc26edc708ead3c709c20900ddb2d0c9189"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-full-financial/ownership-relay.json",
+      "bytes": 3549,
+      "sha256": "cb6e81280a3c05bc5057bd2a7fb843e0ea9e2c878dad24107deeefbc8f3738b6"
+    },
+    {
+      "file": "docs/research/2026-10-08-auo-full-financial/technology-context-relay.json",
+      "bytes": 6599,
+      "sha256": "8923a9d0aab75e9f70944de645e9076a24c98865b55e30f03f88623d2eb23103"
+    }
+  ]
+}
