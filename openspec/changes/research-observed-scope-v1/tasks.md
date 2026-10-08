@@ -17,3 +17,6 @@
 - [x] Real1978 HTTP/PG/replay/concurrency/ACL acceptance; old1946 unchanged, formal409 retained.
 - [ ] Final types/lint/build after final harness/SQL corrections and exact code review.
 - [ ] Slice2 DB-clock/global quota/scoped priority; Slice3 typed job/claim/input; approved publication64f7 follows separately.
+
+- [x] Exact25ce3a5 final types/lint/normalbuild; final-checks receipt14:32, independent code review still pending.
+- [ ] Next separate Slice2/3 implementation; no job/input/Top20 completion inferred from Slice1 admission.
