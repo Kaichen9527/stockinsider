@@ -5,10 +5,18 @@ import {fileURLToPath} from 'node:url';
 import {continueInsiderSnapshots} from './research-insider-continuation.mjs';
 
 const MAX=32768;
-async function input(filename){
+export async function readInsiderContinuationInput(filename,{openFile=open}={}){
  if(!path.isAbsolute(filename||''))throw Error('insider_command_absolute_input');
- const f=await open(filename,constants.O_RDONLY|constants.O_NOFOLLOW);
- try{const before=await f.stat();if(!before.isFile()||before.size>MAX)throw Error('insider_command_input_bound');const bytes=await f.readFile();const after=await f.stat();if(bytes.length!==before.size||before.ctimeMs!==after.ctimeMs||before.ino!==after.ino)throw Error('insider_command_input_changed');return JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));}finally{await f.close();}
+ // Nonblocking open comes before fstat: FIFOs/devices must never wait for a writer.
+ const f=await openFile(filename,constants.O_RDONLY|constants.O_NONBLOCK|constants.O_NOFOLLOW);
+ try{
+  const before=await f.stat();if(!before.isFile()||before.size>MAX)throw Error('insider_command_input_bound');
+  const bytes=Buffer.alloc(MAX+1);let offset=0;
+  while(offset<bytes.length){const {bytesRead}=await f.read(bytes,offset,bytes.length-offset,offset);if(!bytesRead)break;offset+=bytesRead;}
+  if(offset>MAX)throw Error('insider_command_input_bound');
+  const after=await f.stat();if(!after.isFile()||offset!==before.size||after.size!==before.size||before.ctimeMs!==after.ctimeMs||before.ino!==after.ino||before.dev!==after.dev)throw Error('insider_command_input_changed');
+  return JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes.subarray(0,offset)));
+ }finally{await f.close();}
 }
 function origin(raw){const u=new URL(raw);if(u.protocol!=='http:'||u.hostname!=='127.0.0.1'||!u.port||Number(u.port)<1024||u.username||u.password||u.pathname!=='/'||u.search||u.hash)throw Error('insider_command_loopback_required');return u;}
 export async function insiderGuardedPost(url,body,key,{signal},transport=fetch){
@@ -29,7 +37,7 @@ export async function insiderContinuationCommand(args,{env=process.env,post=insi
  if(args.length!==6)throw Error('insider_command_arguments');const flags=new Map();for(let i=0;i<args.length;i+=2){if(!['--input','--origin','--journal'].includes(args[i])||flags.has(args[i]))throw Error('insider_command_arguments');flags.set(args[i],args[i+1]);}
  const base=origin(flags.get('--origin'));const journal=flags.get('--journal');if(!path.isAbsolute(journal||''))throw Error('insider_command_absolute_journal');
  const key=env.INTERNAL_API_KEY;if(typeof key!=='string'||key.length<16||/\s/u.test(key)||[env.CRON_SECRET,env.RESEARCH_REVIEW_KEY,env.STRATEGY_APPROVAL_KEY].includes(key))throw Error('insider_command_distinct_internal_key');
- const value=await input(flags.get('--input'));const request=value.schema==='insider_continuation_journal_v1'?value.request:value;
+ const value=await readInsiderContinuationInput(flags.get('--input'));const request=value.schema==='insider_continuation_journal_v1'?value.request:value;
  // Fresh directory only. No uncertain journal is silently retried/overwritten.
  await mkdir(journal,{mode:0o700});const directory=await open(journal,constants.O_RDONLY|constants.O_DIRECTORY|constants.O_NOFOLLOW);
  try{
