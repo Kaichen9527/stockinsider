@@ -48,3 +48,10 @@ node scripts/research-insider-continuation-command.mjs --input /private/run-requ
 ```
 
 The input is `{ "runId": "<UUID>" }` for initial acquisition. A prior journal entry can be an explicit resume input; a new journal directory is required. Every entry is mode0600 beneath a mode0700 FD-anchored directory. The command cannot select a non-loopback URL. Completed members remain pinned by the database even if an initial request is used after an uncertain HTTP result. This is explicit operator resume, never an automatic retry.
+
+## Independent-review repairs (successors of4b3)
+
+- Capacity P2 remains **open**, with a proposed durable reservation amendment in `openspec/changes/insider-snapshot-fairness-v1/capacity-reservation-amendment.md`. Arithmetic/source-bound witnesses demonstrate the stranded partial set and why a transient free-space check is insufficient. They are not actual PostgreSQL evidence. No capacity behavior has been weakened or silently changed.
+- CLI P2: reproduced a FIFO input waiting beyond700ms before `fstat` (`/tmp/insider-fifo-red.log`). Successor opens with `O_NONBLOCK|O_NOFOLLOW`, verifies a regular descriptor, reads at mostMAX+1bytes and rechecks identity/size/ctime. Three actual lightweight regressions pass, including controlled regular-file growth during read, exact/+1, symlink/directory and malformed UTF8.
+- Projection P2:500 valid holding rows with512U+0001 bytes in each of person/company/role fit under12MiB raw, but their projected metadata alone exceeds4MiB. New admission guard calculates every DB-derived page's serialized JSON size plus16KiB fixed-envelope reserve. A provisional snapshot is transaction-private; rejection rolls it back before active progress/member binding. The4MiB/500row limits are unchanged. The arithmetic counterexample passes locally; the actual PostgreSQL regression is added but **not yet run**, so this is a candidate fix awaiting VM and independent verification.
+- Targeted repair regression:23passed/0skipped. Neither the three findings nor full implementation acceptance is declared closed by the maker.

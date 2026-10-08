@@ -49,6 +49,13 @@ test('actual PostgreSQL snapshot admission, document proof, replay, restart and 
   await t.test('whole response validated before activation including row501',()=>{
    const rows=Array.from({length:501},()=>({...holding}));delete rows[500].職稱;assert.throws(()=>admit(rid,0,rows),/schema_required_field/);assert.equal(sql('SELECT count(*) FROM insider_snapshots_v1;'),'0');
   });
+  await t.test('escaped-control500row projection rejects before any snapshot/progress/member admission',()=>{
+   const rows=Array.from({length:500},()=>({...holding,姓名:'\u0001'.repeat(512),公司名稱:'\u0001'.repeat(512),職稱:'\u0001'.repeat(512)}));
+   const raw=Buffer.from(JSON.stringify(rows));assert.ok(raw.length<12*1024*1024);
+   const metadataMinimum=Buffer.byteLength(JSON.stringify(rows.map(r=>({metadata:{insider_evidence:{person:r.姓名,companyName:r.公司名稱,role:r.職稱}}}))));assert.ok(metadataMinimum>4*1024*1024);
+   assert.throws(()=>admit(rid,0,rows),/projection_transport_bound/);
+   assert.equal(sql('SELECT count(*) FROM insider_snapshots_v1;'),'0');assert.equal(begin(rid).members.length,0);
+  });
   await t.test('five fixed members freeze before reading; mixed sizes and derived exclusions',()=>{
    const rows=Array.from({length:1001},(_,i)=>({...holding,姓名:`Synthetic ${i}`}));rows[123].公司代號='ETF';
    state=admit(rid,0,rows);assert.equal(state.frozen,false);assert.throws(()=>page(rid,state.members[0]),/frozen_run_binding/);

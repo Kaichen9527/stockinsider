@@ -153,6 +153,9 @@ BEGIN
  IF count_snap>=32 OR total_bytes+octet_length(raw_bytes)>134217728 THEN RAISE EXCEPTION 'insider_snapshot_capacity'; END IF;
  INSERT INTO public.insider_snapshots_v1(dataset,raw,raw_sha256,row_count,attempted_at,observed_at,parser_identity,rights_identity)
   VALUES(p_dataset,raw_bytes,p_hash,p_rows,p_attempted,p_observed,p_parser,p_rights) RETURNING id INTO snapshot_id;
+ -- Provisional row is transaction-private. Reject oversized derived pages before
+ -- creating active progress or binding any member; exception rolls back the raw.
+ PERFORM public.insider_snapshot_projection_bound_v1(snapshot_id);
  -- Empty snapshots still require the frozen-run commit, ensuring a replay receipt.
  INSERT INTO public.insider_snapshot_progress_v1(snapshot_id,dataset) VALUES(snapshot_id,p_dataset);
  INSERT INTO public.insider_run_members_v1 VALUES(p_run,p_dataset,snapshot_id);
@@ -169,6 +172,21 @@ BEGIN
  IF octet_length(body)>500 THEN RAISE EXCEPTION 'insider_projection_content_bound'; END IF;
  metadata:=jsonb_build_object('connector','official_insider_snapshot_v1','dataset',d->>'url','market',d->>'market','snapshot_id',s.id,'raw_index',p_index,'row_sha256',row_hash,'response_sha256',s.raw_sha256,'observed_at',s.observed_at,'attempted_at',s.attempted_at,'parser_identity',s.parser_identity,'rights_identity',s.rights_identity,'issue_date',parsed->'outputDate','publication_precision',parsed->'publicationPrecision','source_report_period',parsed->'sourcePeriod','insider_evidence',parsed||jsonb_build_object('kind',CASE WHEN d->>'kind'='holding' THEN 'holding_snapshot' ELSE 'transfer_declaration' END),'delta_holding',NULL,'transfer_shares',NULL,'raw_retention','private_snapshot','content_representation','bounded_summary_linked_full_private_raw');
  RETURN jsonb_build_object('documentUrl',(d->>'url')||'#si-insider-snapshot-'||s.id||'-'||p_index||'-'||row_hash,'title','Official insider disclosure '||(parsed->>'symbol'),'summary',body,'contentText',body,'publishedAt',NULL,'symbols',jsonb_build_array(parsed->>'symbol'),'metadata',metadata);
+END $$;
+-- Bound serialized DB projections, not raw field lengths: JSON escaping can
+-- expand control characters sixfold. Reserve16KiB for the fixed response envelope.
+CREATE OR REPLACE FUNCTION public.insider_snapshot_projection_bound_v1(p_id uuid) RETURNS void
+ LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$
+DECLARE rows jsonb; doc jsonb; i integer; page_bytes bigint:=2;
+BEGIN
+ rows:=public.insider_snapshot_assert_v1(p_id);
+ IF jsonb_array_length(rows)=0 THEN RETURN; END IF;
+ FOR i IN 0..jsonb_array_length(rows)-1 LOOP
+  IF i%500=0 THEN page_bytes:=2; END IF;
+  doc:=public.insider_expected_document_v1(p_id,i,rows->i);
+  IF doc IS NOT NULL THEN page_bytes:=page_bytes+octet_length(doc::text)+2; END IF;
+  IF page_bytes>4194304-16384 THEN RAISE EXCEPTION 'insider_projection_transport_bound'; END IF;
+ END LOOP;
 END $$;
 CREATE OR REPLACE FUNCTION public.read_insider_snapshot_page_v1(p_run uuid,p_dataset integer,p_snapshot uuid) RETURNS jsonb
  LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,public AS $$
@@ -204,6 +222,6 @@ BEGIN
  RETURN public.read_insider_snapshot_page_v1(p_run,p_dataset,p_snapshot);
 END $$;
 -- All helper routines are private. Service callers receive only four narrow RPCs.
-REVOKE ALL ON FUNCTION public.insider_trim_v1(text),public.insider_snapshot_immutable_v1(),public.insider_dataset_v1(integer),public.insider_row_v1(jsonb,integer),public.insider_snapshot_assert_v1(uuid),public.insider_expected_document_v1(uuid,integer,jsonb),public.insider_snapshot_run_v1(uuid),public.admit_insider_snapshot_v1(uuid,integer,text,text,integer,timestamptz,timestamptz,text,text),public.read_insider_snapshot_page_v1(uuid,integer,uuid),public.commit_insider_snapshot_page_v1(uuid,integer,uuid,integer,integer,integer) FROM PUBLIC,anon,authenticated,service_role;
+REVOKE ALL ON FUNCTION public.insider_snapshot_projection_bound_v1(uuid),public.insider_trim_v1(text),public.insider_snapshot_immutable_v1(),public.insider_dataset_v1(integer),public.insider_row_v1(jsonb,integer),public.insider_snapshot_assert_v1(uuid),public.insider_expected_document_v1(uuid,integer,jsonb),public.insider_snapshot_run_v1(uuid),public.admit_insider_snapshot_v1(uuid,integer,text,text,integer,timestamptz,timestamptz,text,text),public.read_insider_snapshot_page_v1(uuid,integer,uuid),public.commit_insider_snapshot_page_v1(uuid,integer,uuid,integer,integer,integer) FROM PUBLIC,anon,authenticated,service_role;
 GRANT EXECUTE ON FUNCTION public.insider_snapshot_run_v1(uuid),public.admit_insider_snapshot_v1(uuid,integer,text,text,integer,timestamptz,timestamptz,text,text),public.read_insider_snapshot_page_v1(uuid,integer,uuid),public.commit_insider_snapshot_page_v1(uuid,integer,uuid,integer,integer,integer) TO service_role;
 COMMIT;

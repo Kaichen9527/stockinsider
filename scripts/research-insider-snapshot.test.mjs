@@ -25,3 +25,10 @@ test('mixed pinned run completes in3rounds including empty/completed members wit
 test('failed document persistence never invokes commit',async()=>{const h=harness({failPersist:true});await assert.rejects(snapshot.processInsiderSnapshotRun({runId},h.deps),/persist failed/);assert.equal(h.calls.includes('commit_insider_snapshot_page_v1'),false);assert.equal(h.members[0].offset,0);});
 test('changed or missing closed pins cannot reacquire or progress',async()=>{const h=harness();const result=await snapshot.processInsiderSnapshotRun({runId},h.deps);const pins=structuredClone(result.pins);pins[0].snapshotId=runId;await assert.rejects(snapshot.processInsiderSnapshotRun({runId,pins},h.deps),/binding/);assert.equal(h.fetched.length,5);await assert.rejects(snapshot.processInsiderSnapshotRun({runId,pins:pins.slice(1)},h.deps),/pins/);});
 test('partial initialization restart reads stable map and fetches missing datasets only',async()=>{const h=harness();const acquire=h.deps.acquire;h.deps.acquire=async d=>{if(h.fetched.length===2)throw Error('lost transport');return acquire(d);};await assert.rejects(snapshot.processInsiderSnapshotRun({runId},h.deps),/lost transport/);h.deps.acquire=acquire;await snapshot.processInsiderSnapshotRun({runId},h.deps);assert.deepEqual(h.fetched,[0,1,2,3,4]);});
+
+test('escaped-control500row witness: raw below12MiB can exceed4MiB in DB-derived metadata alone',()=>{
+ const row={公司代號:'2330',公司名稱:'\u0001'.repeat(512),職稱:'\u0001'.repeat(512),姓名:'\u0001'.repeat(512),出表日期:'1151007',資料年月:'11509',目前持股:'123456'};
+ const rows=Array.from({length:500},()=>row);official.validateOfficialInsiderResponseRows(rows,official.OFFICIAL_INSIDER_DATASETS[0]);
+ const raw=Buffer.byteLength(JSON.stringify(rows));const lowerBound=Buffer.byteLength(JSON.stringify(rows.map(r=>({metadata:{insider_evidence:{person:r.姓名,companyName:r.公司名稱,role:r.職稱}}}))));
+ assert.ok(raw<12*1024*1024);assert.ok(lowerBound>4*1024*1024);
+});
