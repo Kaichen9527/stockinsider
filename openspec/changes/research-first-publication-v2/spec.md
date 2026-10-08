@@ -1,0 +1,80 @@
+# First research publication v2 — proposed, exact review required
+
+## Outcome and existing constraints
+
+An observed research company must be able to publish an original, independently reviewed research article through the existing dossier/bundle/outbox/submission/receipt pipeline without first manufacturing a formal published candidate stage. Article quality is independent of investment qualification: bearish, unassessed or needs-evidence work may be readable research. This amendment does not grant a buy, strategy approval, formal instrument authority or qualification.
+
+The current v1 path requires candidate_detail_snapshots/published revision in dossier-v4, outbox-v5, author input, deep review and submission. Its article model also expects one baseline with commercialization scenarios, which cannot represent the separately reviewed AUO/EMC bear/base/bull operating forecasts. These are explicit additive v2 branches, not exceptions that weaken v1 validation. The observed-scope quota/identity contract86b8073 remains required.
+
+## One immutable research input revision
+
+Add private research_article_input_revisions_v2 under RLS, written only through existing authenticated bundle/preparation control and a restricted atomic RPC. No caller gets direct table writes; no model receives database/admin/internal bearer credentials. Seal:
+
+- independent research company UUID, TW symbol, observed scope/snapshot/member and validated optional existing stock mapping lineage;
+- priority run and immutable source revision manifest, rights, root/repost and withdrawal state, exact locators and acquisition verification limits;
+- financial observation manifest with period/unit/currency/attribution and actual admitted time; missing data is explicit, not fabricated financial fact UUIDs;
+- deterministic model inputs, approved calculator ID/version/code hash, schema/validator versions, original model cutoff, new research/data cutoff, and canonical input hash.
+
+DB admitted_at is real server knowledge time, distinct from source published date/instant and first observation. A new input cutoff must be after all inputs actually admitted; old model cutoff remains visible. Exact identical replay returns the original revision/receipt; different bytes cannot reuse a hash or identity. Updates/deletes are denied. All source rights and active revisions are rechecked at sealing and publication; revoked/withdrawn sources cannot silently remain publishable.
+
+## Typed revision union within the current publication tables
+
+Extend the existing bundle/outbox/dossier/submission receipt/deep review/job lineage using a closed revision discriminator:
+
+- legacy_detail_v1: retains existing required detail snapshot/revision FK, published-stage proof, stock binding and every existing gate;
+- research_input_v2: requires the sealed research input revision and research company/scope lineage. Legacy detail/publishedRevisionId may be null only in this branch.
+
+Exactly one branch must be valid through CHECK/FK/unique constraints plus cross-table validation. Merely dropping NOT NULL is forbidden. Existing rows default to v1; no existing row or immutable receipt is rewritten. Every transition binds its discriminator and exact input revision so a v2 packet cannot be downgraded or claim a v1 published stage. No stocks, instrument, sector, principal, release permission, published-stage or formal eligibility rows are created to make v2 succeed.
+
+Reuse current guarded bundle/deep-job/model-reservation/deep-review/dossier-submission endpoints and original outbox, not another publication service or public API. Extend action payloads with closed versioned shapes; reject unknown keys and mixed versions. Ordinary v1 claimers exclude v2 deliveries. v2 publishing follows the same deep-worker slot and receipt mechanism with its own explicit lawful input branch.
+
+## Real author and independent reviewer execution
+
+Current Cloud controller/runner/result supports deterministic validation only. Declared article_draft/counter_review types are not dispatch capability. Add explicit trusted-controller dispatch/result adapters using the existing work packet, journal, claim/input, draft and review components. No automatic paid API fallback or credential copying; the code patch model-runner is not a research dispatcher.
+
+The trusted controller obtains a real original job/owner/attempt/company_research reservation before dispatching a new author execution. Assignment binds exact prepared input, immutable input revision, provider task/turn if supported, server-derived role/principal and original clocks. Preserve actual dispatch/start/end/result hash and verification level; unknown model/provider identity remains unknown. A model output cannot choose its principal, authority, role, reservation or execution clocks. Trusted-controller observations of a real cross-chat tool invocation are attributed observations, not automatically server-verifiable model attestation.
+
+The server must resolve author and reviewer execution identities from the existing authenticated trusted-controller authorization, not caller authorId/reviewerId strings. Bind author identity to that company's original company_research reservation owner and assignment; reviewer identity to its independent counter_review assignment/credential and reservation. The same execution/principal cannot review itself under another string. The implementation must first inventory the genuine available identity authority; absent configured trusted identity/dispatch evidence fails closed. Do not invent a trusted registry or seed production principals to pass acceptance. Test principals/keys may exist only in explicitly isolated development fixtures, never as proof of real role execution.
+
+Author receive uses the exact original prepared packet/hash and claim journal, verifies new result, saves the create-only private draft, checks live status/fences, then uses existing handoffModel. CLI gains this bounded handoff; generic finish is not author-result proof. Reviewer reserve occurs before a new independent execution and receives the same immutable article/calculation/source pack. Require actual review start >= reservation.started_at, review end >= start and <= real server receive time, article.authoredAt and all original deadlines; an old review cannot be wrapped in a new reservation. record_budgeted_deep_review remains atomic with reviewer reservation completion.
+
+Preserve all budgets: one global model, fixed30-minute reservation charge with no refund,120minutes/day across roles,5new company jobs/week by server admission clock,3attempt cap. Two author/review reservations consume60minutes but do not extend the original approximately30-minute deep-job deadline. Preparation freshness120seconds does not restart any deadline. If author and reviewer do not finish in that original deadline, the attempt expires honestly; retry uses existing rules/budget, never retroactive work receipts. Manual engineering and prior unsigned article/review work cannot be backfilled as reserved product execution.
+
+## Business model and source-linked article v2
+
+Add business_scenarios_v2 as a closed model union alongside unchanged v1 commercialization-baseline semantics. Bear/base/bull may have different sales, margin, expenses and non-operating assumptions. Require the explicit chain: segment revenue → gross profit → operating costs/depreciation → operating income → non-operating/interest → tax/non-controlling interests → ordinary attributable profit → weighted/diluted EPS. Preserve units, periods, rounding and actual/estimated distinction; annual, next-four-quarter and normalized EPS cannot be mixed.
+
+Use fixed, trusted calculator wrappers for the reviewed AUO/EMC algorithms, with input schema/version/hash and actual re-execution. Never eval, execute or import caller-provided code/command/path. Existing reference algorithms are docs/research/2026-10-08-auo-four-segment-model/recompute.mjs and docs/research/2026-10-08-emc-company-model/recompute.mjs; extract/reuse deterministic logic through reviewed static wrappers, not execute arbitrary report scripts as runtime authority. Rehashing supplied model-results JSON alone is not recalculation.
+
+Keep AUO's fourth Other segment, reclassification conflicts, expense/tax/NCI/once-off/share and anti-dilution constraints. Keep EMC signed costs, EPS versus income share basis, weighted/diluted and conditional forward reverse-P/E assumptions. Unknown customer orders/production yields/capacity/ownership cannot become zero or invented basic EPS: use typed not_quantifiable with explicit gaps and conditional sensitivity. Uncalibrated multiples are sensitivity, not certified fair value/target. Far-year commercialization retains its year and discount assumptions; no double counting transformation value.
+
+Articles keep the seven focused chapters, original prose, collapsed background/full financial detail and paragraph-level references. Bind paragraph IDs to exact source revision/locator/fact observation or calculation node. Each important numeric claim is reported, derived, assumption or unknown; a gap receipt supports a gap statement, not a fact. Industry discussion cannot become company orders. Summary/table/chart values derive from the same calculation result; article hash binds prose, citations, models and all displayed tables.
+
+Publication precision is instant/date/unknown with original raw date/timezone and nullable normalized instant. Date-only evidence is allowed in current research with real observed/admitted time, never fake UTC midnight or historical knowledge. Preserve Mac relay attribution and inability to rehash raw bytes absent in VM. Updated EMC/AUO authoring uses a new cutoff after later ledger admission, leaving original model limitations intact. No copying paid/member full text/private material or credentials.
+
+## Review, publication transaction and withdrawal
+
+Review pack hash binds company/scope/input revision/bundle/article/calculation/source manifest/date precision/validator/job attempt and execution assignments. Any changed input, prose, table, model, source or cutoff requires a new review. The independent reviewer verifies citation support, financial recomputation, strongest countercase and article completeness. Application research approval is not a protected release attestation or strategy adoption approval.
+
+Submission transaction locks original job/attempt, delivery/outbox and bundle, rechecks identity/role/source heads/withdrawals/rights, hashes, model result, independent review and original live leases, then atomically inserts into the existing immutable research dossier and original submission receipt, accepts the same outbox and completes that research job. Failure rolls back all effects; exact replay returns original receipt without extra publications, reservations or lease extension. A stale worker or competing attempt cannot publish. No fake detail snapshot or completed receipt is manufactured.
+
+Use publishableResearch rather than ambiguous productionReady for v2. Research publication decision and thesis verdict are separate. For this initial branch researchQualified, strategyApproved and entryEligible remain false; v2 completion means article publication only. No writes to legacy story/thesis/recommendations/strategy_actions, formal qualification or paper ledger.
+
+Append-only withdrawal/supersession events retain original dossier/input/article/review/receipt bytes with actor/reason/server time. Reader shows withdrawn/superseded state and blocks new eligibility; do not erase audit history. If a source is withdrawn after publication, append the event and require re-review of replacements.
+
+## Shared read-only display
+
+Extend the current shared article projection/renderer with explicit working_draft / published_v1 / published_v2 / withdrawn states. Show published_v2 as 已發布研究・未取得投資資格, with separate article/model/quote/source-check dates, gaps, conditional assumptions and folded details. Working AUO/EMC demonstration artifacts retain their own flags/hashes; new v2 publication does not relabel old unsigned/manual drafts as formerly approved.
+
+Read v2 by research-company identity through the controlled existing projection, without creating stocks or enlarging the legacy radar. First acceptance uses the existing read-only research preview and shared component; production stock-page integration/deployment requires its own reviewed release. No internal evidence/keys/member raw content appears publicly. Loopback VM browser proof is not an external Internal Browser URL or production deploy claim.
+
+## Required executable acceptance
+
+1. One company absent from formal stocks/instruments/stage follows actual native guarded HTTP/PostgREST/PG input→bundle→claim→prepared input→new author result→independent review→same outbox/submission receipt→job completed→shared page. Formal catalogs/stages/qualification/paper/recommendation bytes stay unchanged.
+2. v1 without lawful published stage still rejects; v2 without sealed input rejects; mixed branch FKs, wrong company/snapshot/mapping/attempt/input/model/source/role/bundle hashes, ordinary claims of v2 and direct table writes reject.
+3. Wrong or self-asserted identity, self-review via renamed strings, old review before reservation, changed article after review, unsupported/absent trusted dispatch evidence, handoff without real bound result, expired/deadline-refreshed reservation and insufficient global budget reject. Development synthetic fixtures are explicitly distinct from actual product-model acceptance.
+4. Concurrency/restart/replay produce one receipt/job completion; injected transaction failure leaves no partial dossier/outbox/reservation changes. Author/reviewer/day/week limits survive crash/retry and original job deadline survives role handoff.
+5. Re-execute both company calculators and reject altered EPS/shares/NCI/period/units/source quantities and arbitrary calculator paths; negative EPS gives N/A P/E; missing orders keep conditional/unknown; table/summary/citation hashes remain consistent.
+6. Date-only/unknown publication precision is honest current research; future observed/admitted clocks, look-ahead and backdated review/input reject. Rights failure, source contradiction/retraction, model/runtime unavailability and partial acquisition remain explicit, never no-news claims.
+7. Withdrawal/supersession keeps original immutable bytes/receipts and correct reader state; published research never grants investment qualification. Desktop/mobile keyboard toggles/navigation/no overflow and direct citation match are checked.
+8. Related unit/adversarial/native integration, types, lint and normal build pass; exact independent code review and bounded VM resource evidence recorded. No protected approval, main merge, schedule activation, deployment or profitability inferred from these checks. Five real trading days remain a later operational observation.

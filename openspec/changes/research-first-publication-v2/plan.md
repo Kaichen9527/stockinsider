@@ -1,0 +1,11 @@
+# First research publication v2 implementation slices
+
+Base86b807392290fc6dffb9e4ad9285e88744900e30. This is a proposed additive contract, no schema/runtime activation. Obtain exact independent requirements/architecture approval before implementation. Continue insider and approved observed-scope work while review runs; VPS free space does not gate admitted VM work.
+
+1. Inventory exact existing revision/claim/review/submission constraints and available trusted dispatch identity authority. Implement immutable input revision and exclusive v1/v2 lineage through original tables/RPCs. No new publication system, stocks/stage/principal seeds or gate relaxation.
+2. Implement static trusted calculator wrappers, business_scenarios_v2 and date-precision/source-linked article contract using the two real reviewed company algorithms. Original working drafts/old receipts remain unchanged.
+3. Connect real author/reviewer assignment and result reception to original claims/reservations/journals/private draft/handoff and budgeted review. Fail closed where provider identity or execution evidence is unavailable; test-only fixtures cannot supply production authority. Preserve30-minute deep deadline across both30-minute charged role reservations.
+4. Extend original publication transaction/outbox/receipt and append-only withdrawal projection. Shared read-only preview shows research-only verdict and identical computed data; no formal strategy/entry qualification.
+5. Native isolated HTTP/PG/concurrency/replay/atomic-failure tests, independent exact code review, types/lint/build and actual browser/resource receipts. Genuine new role execution is separately accepted when trusted dispatch is available; synthetic integration alone is not complete operation.
+
+Potential code areas: additive reviewed migration; current research-deep article/input/draft/claim helpers and controller; existing guarded bundle/deep-job/model-reservation/deep-review/dossier submission; existing Cloud work/controller/result adapter; shared article projection/renderer. Final API/SQL signatures must remain closed and versioned and be independently reviewed per slice. Production migration and release remain separately gated.
