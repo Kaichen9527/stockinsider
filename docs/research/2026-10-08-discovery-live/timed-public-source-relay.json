@@ -1,0 +1,124 @@
+{
+  "schemaVersion": "stockinsider-attributed-discovery-evidence-relay-v1",
+  "recordedAt": "2026-10-08T09:19:09.719858+00:00",
+  "sourceRows": [
+    {
+      "id": "telegram-investanchors-869",
+      "sourceUrl": "https://t.me/investanchors/869",
+      "readSurfaceUrl": "https://t.me/s/investanchors",
+      "publisher": "InvestAnchors",
+      "sourcePlatform": "telegram",
+      "subjectScope": "company_mentions",
+      "symbols": [
+        "3037"
+      ],
+      "industryTerms": [
+        "先進封裝",
+        "載板",
+        "EMIB",
+        "玻璃核心基板"
+      ],
+      "summary": "定錨公開貼文認為AI封裝尺寸與載板層數增加，可能拉高單顆晶片消耗的載板產能，並提到欣興等廠商擴產方向。",
+      "risk": "這是7月公開分析，不是10月最新訂單確認；台系客戶、投資金額與獲利影響仍須回到公司資料查核。",
+      "claimStatus": "reported",
+      "access": "public",
+      "publishedAt": "2026-07-07T03:33:38+00:00",
+      "publicationPrecision": "datetime_with_explicit_offset",
+      "sourcePublishedDate": "2026-07-07",
+      "attemptedAt": "2026-10-08T09:18:05.873180+00:00",
+      "observedAt": "2026-10-08T09:18:07.785051+00:00",
+      "responseSha256": "31fae9b88725ce092aec24284e53f8b0054696b6e4786832062d33207a9f3d3c",
+      "responseBytes": 116691,
+      "readStatus": "read_success",
+      "historicalPITEligible": false
+    },
+    {
+      "id": "telegram-investanchors-881",
+      "sourceUrl": "https://t.me/investanchors/881",
+      "readSurfaceUrl": "https://t.me/s/investanchors",
+      "publisher": "InvestAnchors",
+      "sourcePlatform": "telegram",
+      "subjectScope": "industry_context",
+      "symbols": [],
+      "industryTerms": [
+        "探針卡",
+        "MEMS",
+        "高電流",
+        "CPO測試"
+      ],
+      "summary": "定錨公開貼文將AI晶片測試需求連結到探針數增加、MEMS及高電流要求，也提出維修與清潔耗材可能受惠的方向。",
+      "risk": "未點名台股公司，不能直接增加任何公司的獨立討論根源或當成訂單。未取得連結會員全文。",
+      "claimStatus": "reported",
+      "access": "public",
+      "publishedAt": "2026-09-14T12:10:13+00:00",
+      "publicationPrecision": "datetime_with_explicit_offset",
+      "sourcePublishedDate": "2026-09-14",
+      "attemptedAt": "2026-10-08T09:18:05.873180+00:00",
+      "observedAt": "2026-10-08T09:18:07.785051+00:00",
+      "responseSha256": "31fae9b88725ce092aec24284e53f8b0054696b6e4786832062d33207a9f3d3c",
+      "responseBytes": 116691,
+      "readStatus": "read_success",
+      "historicalPITEligible": false
+    },
+    {
+      "id": "telegram-investanchors-882",
+      "sourceUrl": "https://t.me/investanchors/882",
+      "readSurfaceUrl": "https://t.me/s/investanchors",
+      "publisher": "InvestAnchors",
+      "sourcePlatform": "telegram",
+      "subjectScope": "industry_context",
+      "symbols": [],
+      "industryTerms": [
+        "CPO",
+        "光引擎",
+        "檢測",
+        "良率"
+      ],
+      "summary": "定錨公開貼文指出光引擎檢測可能影響封裝良率，並明說當時檢測流程及供應鏈尚在形成。",
+      "risk": "沒有友達或其他台股客戶訂單確認。與同作者Threads相似內容屬同源傳播，不能算成另一獨立確認；未取得會員全文。",
+      "claimStatus": "reported",
+      "access": "public",
+      "publishedAt": "2026-09-18T05:52:16+00:00",
+      "publicationPrecision": "datetime_with_explicit_offset",
+      "sourcePublishedDate": "2026-09-18",
+      "attemptedAt": "2026-10-08T09:18:05.873180+00:00",
+      "observedAt": "2026-10-08T09:18:07.785051+00:00",
+      "responseSha256": "31fae9b88725ce092aec24284e53f8b0054696b6e4786832062d33207a9f3d3c",
+      "responseBytes": 116691,
+      "readStatus": "read_success",
+      "historicalPITEligible": false
+    }
+  ],
+  "attempts": [
+    {
+      "label": "telegram-investanchors",
+      "url": "https://t.me/s/investanchors",
+      "attemptedAt": "2026-10-08T09:18:05.873180+00:00",
+      "httpStatus": 200,
+      "status": "read_success",
+      "bytes": 116691,
+      "sha256": "31fae9b88725ce092aec24284e53f8b0054696b6e4786832062d33207a9f3d3c",
+      "observedAt": "2026-10-08T09:18:07.785051+00:00",
+      "rawFile": "telegram-investanchors-raw.html"
+    },
+    {
+      "label": "cnyes-emc-september",
+      "url": "https://news.cnyes.com/news/id/6621836",
+      "attemptedAt": "2026-10-08T09:18:07.785786+00:00",
+      "status": "read_failed",
+      "errorType": "timeout",
+      "observedAt": "2026-10-08T09:18:22.904131+00:00"
+    }
+  ],
+  "notes": [
+    "Actual public HTML message time datetime attributes retained; first observed on 2026-10-08, never backfilled as historically known.",
+    "Only three short original paraphrases; no member content retrieved.",
+    "Visible index spans message 863–882; latest visible 882 dated 2026-09-18. This is not proof of complete October coverage or no newer messages.",
+    "All three same publisher; root IDs distinguish posts, not independent confirmation.",
+    "Message 882 and same-author Threads CPO content are related propagation, not independent reports.",
+    "Cnyes request timed out; no successful content or timestamp asserted."
+  ],
+  "proposedCompanyScope": [
+    "3037"
+  ]
+}
