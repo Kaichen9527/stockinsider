@@ -109,7 +109,7 @@ export async function executeSourceController(value,{reader=readPinnedPublicSour
       // Mac sends only an attested bounded summary plus actual read terminal,
       // never a browser session, provider credential or raw member body.
       const local=scope.localRead;
-      observations.push({attemptedAt:local.attemptedAt,completedAt:now(),outcome:local.outcome,httpStatus:null,
+      observations.push({attemptedAt:local.attemptedAt,completedAt:local.completedAt || now(),outcome:local.outcome,httpStatus:null,
         bytes:0,responseHash:null,bodyPresent:local.outcome==='read_success' && scope.contentScope!=='metadata_index',
         publishedAt:scope.summary?.publishedAt || null,errorCode:local.errorCode || null});
     }

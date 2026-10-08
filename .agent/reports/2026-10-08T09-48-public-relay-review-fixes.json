@@ -1,0 +1,439 @@
+{
+  "schemaVersion": "public-relay-review-fix-delivery-v1",
+  "recordedAt": "2026-10-08T09:48:53.118607+00:00",
+  "reviewSubject": "65be363dea8a8a6865ce082f63d6c097ef432d37",
+  "reviewDecision": "REQUEST_CHANGES; unsigned independent review reported by root",
+  "oldIncrement": {
+    "nominalStart": "2026-10-08T09:00:00Z",
+    "nominalDeadline": "2026-10-08T09:30:00Z",
+    "codeCommitAlreadyPushed": "65be363dea8a8a6865ce082f63d6c097ef432d37",
+    "deliveryAndPushExtendedPastNominalDeadline": true,
+    "originalReceiptPreserved": true,
+    "modelLeaseExtended": false,
+    "automaticModelBudgetAccepted": false
+  },
+  "newIncrement": {
+    "authorizedAtMessage": "new independent <=30min increment after first freeze; then root prioritized review fixes",
+    "finalChecksOn65be": [
+      "types-final",
+      "lint-final",
+      "build-final"
+    ],
+    "scope": "three review findings and explicit-completed stale summary regression; no new DB feature"
+  },
+  "reproduction": {
+    "tests": 4,
+    "passed": 1,
+    "failed": 3,
+    "skipped": 0,
+    "failureReceipt": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-repro-before.json"
+  },
+  "verification": {
+    "tests": 132,
+    "passed": 132,
+    "failed": 0,
+    "skipped": 0,
+    "includesPostgreSQL": true,
+    "types": "pass",
+    "lint": "pass",
+    "normalWebBuild": "pass"
+  },
+  "fixes": [
+    "Recursive secret/prototype/size inspection across all original relay inputs before strict schema validation and whitelist projection",
+    "Every public summary requires attributed response SHA256/bytes/read-surface, exactly matching a successful acquisition URL/hash/bytes/clocks",
+    "Calendar-checked existing microsecond parser reused with extra nanoseconds; complete acquisition/current-summary chain validated; historical firstObservedAt kept separate"
+  ],
+  "stages": {
+    "review-repro-before": {
+      "stage": "review-repro-before",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--experimental-test-isolation=none",
+        "--test",
+        "scripts/research-discovery-relay-prepare.test.mjs"
+      ],
+      "startedAt": "2026-10-08T09:39:39.259Z",
+      "completedAt": "2026-10-08T09:39:39.656Z",
+      "elapsedSeconds": 0.39690444500593003,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 100712448,
+      "observedTaskDiskPeakBytes": 1333325824,
+      "availableBeforeBytes": 25996500992,
+      "availableAfterBytes": 25996492800,
+      "guardTermination": null
+    },
+    "review-fix-focused": {
+      "stage": "review-fix-focused",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--experimental-test-isolation=none",
+        "--test",
+        "scripts/research-discovery-relay-prepare.test.mjs",
+        "web/src/lib/research-public-relay.test.ts",
+        "web/src/lib/research-source-attempt-controller.test.ts",
+        "scripts/research-source-controller.test.mjs"
+      ],
+      "startedAt": "2026-10-08T09:42:22.823Z",
+      "completedAt": "2026-10-08T09:42:23.466Z",
+      "elapsedSeconds": 0.6422981179930503,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 101576704,
+      "observedTaskDiskPeakBytes": 1333346304,
+      "availableBeforeBytes": 25996480512,
+      "availableAfterBytes": 25996464128,
+      "guardTermination": null
+    },
+    "review-fix-regressions": {
+      "stage": "review-fix-regressions",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--experimental-test-isolation=none",
+        "--test",
+        "scripts/research-discovery-relay-prepare.test.mjs",
+        "web/src/lib/research-public-relay.test.ts",
+        "web/src/lib/research-source-attempt-controller.test.ts",
+        "scripts/research-source-controller.test.mjs"
+      ],
+      "startedAt": "2026-10-08T09:44:03.379Z",
+      "completedAt": "2026-10-08T09:44:04.093Z",
+      "elapsedSeconds": 0.7134391719882842,
+      "exitCode": 1,
+      "sampledAggregateRssPeakBytes": 114069504,
+      "observedTaskDiskPeakBytes": 1333370880,
+      "availableBeforeBytes": 25996455936,
+      "availableAfterBytes": 25996435456,
+      "guardTermination": null
+    },
+    "review-fix-related": {
+      "stage": "review-fix-related",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "--experimental-test-isolation=none",
+        "--test",
+        "scripts/research-discovery-relay-prepare.test.mjs",
+        "web/src/lib/research-public-relay.test.ts",
+        "web/src/lib/research-source-attempt-controller.test.ts",
+        "scripts/research-source-controller.test.mjs",
+        "scripts/research-source-priority-consumer.test.mjs",
+        "web/src/app/api/internal/research-priority-run/route.contract.test.ts",
+        "web/src/lib/research-inbox.test.ts",
+        "web/src/lib/research-source-association.test.ts",
+        "web/src/lib/research-source-roots.test.ts",
+        "web/src/lib/research-agent-priority.test.ts",
+        "scripts/research-source-budget-postgres.test.mjs",
+        "web/src/lib/research-deep-claim-context.test.ts"
+      ],
+      "startedAt": "2026-10-08T09:44:52.474Z",
+      "completedAt": "2026-10-08T09:44:55.934Z",
+      "elapsedSeconds": 3.459124458997394,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 237187072,
+      "observedTaskDiskPeakBytes": 1375150080,
+      "availableBeforeBytes": 25996447744,
+      "availableAfterBytes": 25996320768,
+      "guardTermination": null
+    },
+    "review-fix-types": {
+      "stage": "review-fix-types",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-08T09:45:04.903Z",
+      "completedAt": "2026-10-08T09:45:08.363Z",
+      "elapsedSeconds": 3.4598576630087337,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 565157888,
+      "observedTaskDiskPeakBytes": 1333530624,
+      "availableBeforeBytes": 25996300288,
+      "availableAfterBytes": 25996292096,
+      "guardTermination": null
+    },
+    "review-fix-lint": {
+      "stage": "review-fix-lint",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "lint",
+        "--",
+        "--quiet"
+      ],
+      "startedAt": "2026-10-08T09:45:33.694Z",
+      "completedAt": "2026-10-08T09:45:56.979Z",
+      "elapsedSeconds": 23.284977268995135,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1188147200,
+      "observedTaskDiskPeakBytes": 1334013952,
+      "availableBeforeBytes": 25995816960,
+      "availableAfterBytes": 25995808768,
+      "guardTermination": null
+    },
+    "review-fix-build": {
+      "stage": "review-fix-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "web",
+        "run",
+        "build"
+      ],
+      "startedAt": "2026-10-08T09:46:40.584Z",
+      "completedAt": "2026-10-08T09:46:47.515Z",
+      "elapsedSeconds": 6.930678729011561,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 1009602560,
+      "observedTaskDiskPeakBytes": 1334071296,
+      "availableBeforeBytes": 25995771904,
+      "availableAfterBytes": 25994977280,
+      "guardTermination": null
+    },
+    "review-fix-actual-relay": {
+      "stage": "review-fix-actual-relay",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "scripts/research-discovery-relay-prepare.mjs",
+        "/workspace/cloud-public-relay-priority-vm-oct08/docs/research/2026-10-08-discovery-live/public-source-relay.json",
+        "/workspace/cloud-public-relay-priority-vm-oct08/docs/research/2026-10-08-discovery-live/social-surface-observations.json",
+        "/workspace/cloud-public-relay-priority-vm-oct08/docs/research/2026-10-08-discovery-live/observed-security-classification.json",
+        "/workspace/cloud-public-relay-priority-vm-oct08/docs/research/2026-10-08-discovery-live/timed-public-source-relay.json",
+        "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-actual-relay-result.json"
+      ],
+      "startedAt": "2026-10-08T09:45:33.143Z",
+      "completedAt": "2026-10-08T09:45:33.439Z",
+      "elapsedSeconds": 0.2961472809984116,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 82341888,
+      "observedTaskDiskPeakBytes": 1333538816,
+      "availableBeforeBytes": 25996288000,
+      "availableAfterBytes": 25995821056,
+      "guardTermination": null
+    },
+    "review-fix-replay": {
+      "stage": "review-fix-replay",
+      "command": [
+        "/workspace/.tools/node22/node_modules/.bin/node",
+        "--experimental-strip-types",
+        "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-replay.mjs"
+      ],
+      "startedAt": "2026-10-08T09:46:33.279Z",
+      "completedAt": "2026-10-08T09:46:33.687Z",
+      "elapsedSeconds": 0.4077986759948544,
+      "exitCode": 0,
+      "sampledAggregateRssPeakBytes": 97026048,
+      "observedTaskDiskPeakBytes": 1334026240,
+      "availableBeforeBytes": 25995800576,
+      "availableAfterBytes": 25995759616,
+      "guardTermination": null
+    }
+  },
+  "privateReceipts": [
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-repro-before.json",
+      "bytes": 597,
+      "sha256": "3fb176f7bae041b3a6df9043cc071507a0c11d3746629cfd842a73bc8d9ccc60"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-repro-before.log",
+      "bytes": 3776,
+      "sha256": "710bf0926a2b1633db222f906193214903fa04077d3649c3629a942da5f9641e"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-repro-before.time",
+      "bytes": 925,
+      "sha256": "44ea67838881432efaed555ea6db1008d02fda2e38b3517b30256d4749e2832b"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-focused.json",
+      "bytes": 757,
+      "sha256": "fbb4d68cf711b5f9fd96ec803c85304548778619cf3f635aea4c9f9b8cd2ac45"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-focused.log",
+      "bytes": 11022,
+      "sha256": "3a1f49069383c952ccc08a9d06c616826d2b83af2f1c4d680ff7e52189d3912e"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-focused.time",
+      "bytes": 1029,
+      "sha256": "5f7003e74efcaedcaa6515d7ff5ac92a4d66c84010999f8c8f4539c10442995a"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-regressions.json",
+      "bytes": 761,
+      "sha256": "7ee765f501dd67d07a43a36f8ccc49514f6624e057a269c1ebdf1c645567c216"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-regressions.log",
+      "bytes": 14576,
+      "sha256": "a27b48b1bf7880eee2d155dd171f0880bcfffdd45668385bcb549082f04916e8"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-regressions.time",
+      "bytes": 1067,
+      "sha256": "27bf74f9d5d2d0974511a73c6f49a18e2f165e7226b72ddbd067fecede8c1822"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-related.json",
+      "bytes": 1199,
+      "sha256": "5049555ae85d906335e387c97156190ad2a0a0049a5bb08ade09c61cc7b8afe8"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-related.log",
+      "bytes": 29987,
+      "sha256": "c49c3d23e99e56f4ebea0fa52bd9eb168053857828cbf9aeaa580540af94476f"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-related.time",
+      "bytes": 1421,
+      "sha256": "8f26259124c2b15dd4823fad69f90cddb84710ce0bba89b7c97331e2290c8d28"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-types.json",
+      "bytes": 457,
+      "sha256": "f7589dce8c242315e8a8aaa34c541c41ba7eb848b3475ebe0b45208c713dcbdc"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-types.log",
+      "bytes": 188,
+      "sha256": "1f131ad6fe4e1751aff2ebed6ace7fd3cfd12dcb30b03394664c9372bf92c9ad"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-types.time",
+      "bytes": 756,
+      "sha256": "44f0395eb74a6c1fa1fed806f38bc9423fc99d0d19096c96665a5c51a5fb74bb"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-lint.json",
+      "bytes": 477,
+      "sha256": "a41a1a6298d7de9dd94ca3a8c1aad56dd4e46c1f6aabdb59f6cd6f25bb0064d0"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-lint.log",
+      "bytes": 331,
+      "sha256": "6ded7493442839d6ea7eff35f5384edef5914b7debe56bbf6331dc2844f6ea10"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-lint.time",
+      "bytes": 764,
+      "sha256": "09beae0cc874b3b254f7f96acf90012cbc4b34d609338a1056e08112c9bd4188"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-build.json",
+      "bytes": 453,
+      "sha256": "1f22f0dc2425e2ced8b051b1157da79a390a126c55de1ce7ab431f5fbf2d9704"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-build.log",
+      "bytes": 6411,
+      "sha256": "d4c9ecfbc06828b955e6f9781cd5ad81540954663f64674931edaf45b0408520"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-build.time",
+      "bytes": 758,
+      "sha256": "ba73a769b92e94acf0bcd8954a1d244365050ced46c022ac69977dd5ea08e89d"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-actual-relay.json",
+      "bytes": 1143,
+      "sha256": "4d3c6dbfaef3c01d2999526f37474d0cb54b3265cb30f3490c95bb29dd136c3a"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-actual-relay.log",
+      "bytes": 1354,
+      "sha256": "970b415954ee642c0c0324aa2af084be8edf18993120d55ff564f89bdc23671f"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-actual-relay.time",
+      "bytes": 1412,
+      "sha256": "7ac409cf4f132470553aa830bd963313c83debcc76f1188a307acca6b13e25ca"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-replay.json",
+      "bytes": 564,
+      "sha256": "55d36ba781100d7dbe01fc3fe1cec06e9baed34679dc872d6c50f51f69843753"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-replay.log",
+      "bytes": 746,
+      "sha256": "33ed38d97bf05426868cdc015139b99f41224bee4ac4123c40dcbc756ea96923"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-replay.time",
+      "bytes": 872,
+      "sha256": "b1fcb1a390779f00a238b7ca468462fec0ff536d25bb4fad6b2bfc294fc31c90"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-actual-relay-result.json",
+      "bytes": 455636,
+      "sha256": "51d68b9906e4cfcc6b5622444a93fb2d553710a1f09d698ba3fe7e615269e6f8"
+    },
+    {
+      "path": "/workspace/cloud-public-relay-priority-artifacts-oct08/review-fix-replay-result.json",
+      "bytes": 31100,
+      "sha256": "0c1c4ea93c7c1d6a6e52d1164191840d686cafaf13d8aa98230f3db2eed68f60"
+    }
+  ],
+  "codeReview": "successor awaiting independent exact review",
+  "productionImported": false,
+  "top20": null,
+  "limits": [
+    "Official authority RPC/data-plane still unavailable in actual local integration; no fake roster activation",
+    "Source raw bytes retained on Mac; attributed hashes are not VM raw-byte verification",
+    "Old local PostgreSQL acceptance used injected DB adapter; new native PostgREST workflow unrun",
+    "No paid model call, formal reservation, strategy approval, publish/deploy/schedule/VPS operation"
+  ],
+  "realRelay": {
+    "scopeCount": 9,
+    "inboxItems": 3,
+    "companyMentions": 0,
+    "runHash": "12fcadfac7417d8b8cfec7857e43c35980477bf4c369f4ece34a580cb0dbaf55",
+    "freshProcessReplayHash": "20607f2b33e537334182c8f09a41929a2e007151fc745b42a5738038cff40dcf",
+    "replayItems": 0,
+    "duplicates": 3,
+    "allIndustryOnly": true,
+    "wrong869VersionConsumed": false
+  },
+  "sourceInputs": [
+    {
+      "path": "docs/research/2026-10-08-discovery-live/observed-security-classification.json",
+      "bytes": 408377,
+      "sha256": "fd67de061af77d5098c65a0c5402f2e96d9b74b594122818a00cb13e5ecb8a57"
+    },
+    {
+      "path": "docs/research/2026-10-08-discovery-live/public-source-relay.json",
+      "bytes": 12608,
+      "sha256": "2cbe5937dbcbeb66e3bc052b5b725fef79a05bb081944cf076d0adeb67713a99"
+    },
+    {
+      "path": "docs/research/2026-10-08-discovery-live/social-surface-observations.json",
+      "bytes": 2716,
+      "sha256": "bfd7b09f14d00bcb6740d5f1d6ad4765175a926bb52c9d94ae94148c67439c4c"
+    },
+    {
+      "path": "docs/research/2026-10-08-discovery-live/timed-public-source-relay.json",
+      "bytes": 5523,
+      "sha256": "f3249ec57abea557a488b7e1f259c1cdfae247619bbdbd8501922945a337a7d0"
+    }
+  ],
+  "resources": {
+    "memoryMaxBytes": 34359738368,
+    "cpuMax": "400000 100000",
+    "nproc": 5,
+    "diskAvailableBytes": 25994956800,
+    "workspaceAllocatedBytes": 7192420352,
+    "projectDiskQuota": "unknown; df is not quota",
+    "rssMethod": "100ms aggregate process-group VmRSS sampling plus GNU time -v; not cgroup high-water mark",
+    "singleHeavyJob": true,
+    "vpsCapacityNotUsedForAdmission": true
+  }
+}

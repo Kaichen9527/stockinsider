@@ -230,7 +230,7 @@ export async function POST(request: Request) {
         bounds: priceEnrichment.bounds, rankingInfluence: false },
       priceContexts: evidenceRows.map((row) => ({ symbol: row.symbol, priceContext: row.priceContext,
         supplementaryObservation:row.supplementaryObservation })),
-      queue: run.queue, excludedNonCommon: excluded, sourceAttempts: attempts,
+      rows: run.rows, queue: run.queue, excludedNonCommon: excluded, sourceAttempts: attempts,
       unselectedCount: run.unselected.length, newDeepResearchJobs: queued.data,
       firstDiscoveryCaptures: discoveries.data,
       ...(hasAssociations ? { sourceAssociations: [...associations].filter(([, items]) => items.length > 0)

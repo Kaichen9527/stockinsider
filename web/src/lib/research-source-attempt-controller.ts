@@ -6,24 +6,29 @@ import { researchRootFromDocument } from './research-source-roots.ts';
 import { RESEARCH_SOURCE_PLATFORMS, type ResearchSourcePlatform } from './research-source-registry.ts';
 import { CREATOR_PUBLISHED_PODCAST_RSS_INDEX_ALLOWLIST, SOURCE_CONNECTOR_KEYS, sourceExecutionPolicy } from './source-policy.ts';
 import type { ResearchSourceAttempt } from './research-agent-priority.ts';
+import { researchDeepInstant } from './research-deep-claim-context.ts';
 
 export const SOURCE_CONTROLLER_POLICY = 'research-source-attempt-controller-v1';
 export const SOURCE_CONTROLLER_LIMITS = Object.freeze({ scopes: 20, pagesPerScope: 1,
   bodyBytes: 4_000_000, timeoutMs: 12_000, runMs: 60_000, inputBytes: 2_000_000, priorItems: 1000 });
 export type SourceContentScope = 'article_body' | 'official_document' | 'transcript' | 'metadata_index';
 export type SourceOutcome = 'read_success' | 'read_failed' | 'not_attempted' | 'auth_required' | 'metadata_only'
-  | 'missing_transcript' | 'awaiting_summary' | 'item_ready' | 'duplicate' | 'future_source';
+  | 'missing_transcript' | 'awaiting_summary' | 'item_ready' | 'duplicate' | 'future_source' | 'pending_publication_precision';
 export type SourceRights = { basis: 'official_public_document' | 'creator_published_index'
-  | 'authorized_local_summary'; checkedAt: string; checkedBy: string };
+  | 'authorized_local_summary' | 'public_summary_relay'; checkedAt: string; checkedBy: string };
 export type SourceScope = {
   id: string; platform: ResearchSourcePlatform; url: string; scope: string;
-  method: 'public_read' | 'local_authorized_summary'; contentScope: SourceContentScope;
+  method: 'public_read' | 'local_authorized_summary' | 'public_summary_relay'; contentScope: SourceContentScope;
   rights: SourceRights;
   /** Human-reviewed necessary summary; no model adapter or financial inference. */
   summary?: ResearchInboxItem;
   /** Binds a public summary to the exact bytes actually read, not just a URL. */
   summaryReadHash?: string;
-  localRead?: { attemptedAt: string; outcome: 'read_success' | 'read_failed' | 'auth_required'
+  /** Attributed public summary only; no claim of VM HTTP or historical availability. */
+  publicRelay?: { observer: string; observedAt: string; publication: {
+    precision: 'instant' | 'date' | 'unverified_timezone' | 'unknown'; value: string | null;
+  }; acquisition: { responseSha256: string; responseBytes: number; readSurfaceUrl: string }; pendingSummary?: string };
+  localRead?: { attemptedAt: string; completedAt?: string; readSurfaceUrl?: string; outcome: 'read_success' | 'read_failed' | 'auth_required'
     | 'metadata_only' | 'missing_transcript'; errorCode?: string };
 };
 export type SourceControllerInput = { runId: string; scopes: SourceScope[]; priorItems?: ResearchInboxItem[] };
@@ -33,9 +38,18 @@ export type SourceReadObservation = {
   responseHash: string | null; bodyPresent: boolean; publishedAt: string | null; errorCode: string | null;
 };
 
-const INSTANT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/u;
 const SHA = /^[0-9a-f]{64}$/u;
-const instant = (value: unknown): value is string => typeof value === 'string' && INSTANT.test(value) && Number.isFinite(Date.parse(value));
+/** Reuse the calendar/offset-checked microsecond parser; retain up to three
+ * extra digits for nanosecond ordering instead of silently truncating them. */
+export function sourceControllerInstant(value: unknown): bigint {
+  if (typeof value !== 'string') throw new Error('source_controller_clock_invalid');
+  const parts = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.(\d{1,9}))?(Z|[+-]\d{2}:\d{2})$/u.exec(value);
+  if (!parts) throw new Error('source_controller_clock_invalid');
+  const fraction = (parts[2] || '').padEnd(9, '0');
+  try { return researchDeepInstant(`${parts[1]}.${fraction.slice(0,6)}${parts[3]}`) * BigInt(1000) + BigInt(fraction.slice(6)); }
+  catch { throw new Error('source_controller_clock_invalid'); }
+}
+const instant = (value: unknown): value is string => { try { sourceControllerInstant(value); return true; } catch { return false; } };
 const uuid = (value: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu.test(value);
 const object = (value: unknown): value is Record<string, unknown> => !!value && typeof value === 'object' && !Array.isArray(value);
 function keys(value: object, allowed: string[]) {
@@ -92,8 +106,17 @@ const LOCAL_HOSTS: Record<ResearchSourcePlatform, readonly string[]> = {
   podcast: ['feeds.soundon.fm', 'podcasts.apple.com'], youtube: ['www.youtube.com', 'youtube.com', 'youtu.be'],
   telegram: ['t.me'], bulltalk: ['www.cmoney.tw', 'www.bulltalk.tw'], twse_insider: ['www.twse.com.tw', 'openapi.twse.com.tw'],
 };
+// Exact rights-reviewed public relay surfaces. These do not grant HTTP acquisition
+// or turn an overseas industry document into a Taiwan company mention.
+const PUBLIC_RELAY_CITATIONS = new Set([
+  'https://www.nittobo.co.jp/eng/business/electronicmaterials/index.htm',
+  'https://www.emctw.com/en-global/product_name/index',
+  'https://www.emctw.com/en-global/about_production/index',
+]);
 export function sourceCitationAllowed(platform: ResearchSourcePlatform, raw: string) {
-  return LOCAL_HOSTS[platform]?.includes(sourceControllerUrl(raw).hostname) === true;
+  const url = sourceControllerUrl(raw);
+  return LOCAL_HOSTS[platform]?.includes(url.hostname) === true
+    || platform === 'official' && PUBLIC_RELAY_CITATIONS.has(url.toString());
 }
 
 /** Reviewed, finite public surfaces only. Not an origin supplied by the input/model. */
@@ -119,7 +142,9 @@ function checkedItem(item: ResearchInboxItem, asOf: string) {
   if (!validateResearchInboxItemAt(item,asOf) || !sourceCitationAllowed(item.sourcePlatform, item.sourceUrl)
     || item.symbols.some((symbol)=>typeof symbol!=='string')
     || [item.publishedAt,item.observedAt,item.firstObservedAt || item.observedAt,item.revisionObservedAt || item.observedAt]
-      .some((at) => !instant(at) || Date.parse(at) > Date.parse(asOf))) throw new Error('source_controller_item_invalid_or_future');
+      .some((at) => !instant(at) || sourceControllerInstant(at) > sourceControllerInstant(asOf))) throw new Error('source_controller_item_invalid_or_future');
+  const clocks=[item.publishedAt,item.firstObservedAt || item.observedAt,item.revisionObservedAt || item.observedAt,item.observedAt,asOf].map(sourceControllerInstant);
+  if (clocks.some((at,index)=>index > 0 && at < clocks[index-1])) throw new Error('source_controller_item_invalid_or_future');
   if (item.parentSourceUrl && !RESEARCH_SOURCE_PLATFORMS.some((platform) => sourceCitationAllowed(platform, item.parentSourceUrl!)))
     throw new Error('source_controller_parent_url_rejected');
   if (!item.contentForm || !item.acquisitionMethod) throw new Error('source_controller_content_scope_required');
@@ -136,16 +161,16 @@ export function validateSourceControllerInput(value: unknown, now: string): Sour
   const identities = new Set<string>();
   for (const scope of input.scopes) {
     if (!object(scope)) throw new Error('source_controller_scope_invalid');
-    keys(scope, ['id','platform','url','scope','method','contentScope','rights','summary','summaryReadHash','localRead']);
+    keys(scope, ['id','platform','url','scope','method','contentScope','rights','summary','summaryReadHash','localRead','publicRelay']);
     if (!text(scope.id,80) || !/^[A-Za-z0-9_-]+$/u.test(scope.id) || identities.has(scope.id)
       || !(RESEARCH_SOURCE_PLATFORMS as readonly string[]).includes(scope.platform) || !text(scope.scope,300) || scope.scope.trim().length < 4
       || `${scope.id}: ${scope.scope} | ${scope.url}`.length > 500
-      || !['public_read','local_authorized_summary'].includes(scope.method)
+      || !['public_read','local_authorized_summary','public_summary_relay'].includes(scope.method)
       || !['article_body','official_document','transcript','metadata_index'].includes(scope.contentScope)
       || !object(scope.rights)) throw new Error('source_controller_scope_invalid');
     identities.add(scope.id); keys(scope.rights, ['basis','checkedAt','checkedBy']);
-    if (!['official_public_document','creator_published_index','authorized_local_summary'].includes(scope.rights.basis)
-      || !instant(scope.rights.checkedAt) || Date.parse(scope.rights.checkedAt) > Date.parse(now) || !text(scope.rights.checkedBy,100))
+    if (!['official_public_document','creator_published_index','authorized_local_summary','public_summary_relay'].includes(scope.rights.basis)
+      || !instant(scope.rights.checkedAt) || sourceControllerInstant(scope.rights.checkedAt) > sourceControllerInstant(now) || !text(scope.rights.checkedBy,100))
       throw new Error('source_controller_rights_invalid');
     if (!sourceCitationAllowed(scope.platform,scope.url)) throw new Error('source_controller_source_not_reviewed');
     if (scope.summary !== undefined) {
@@ -155,7 +180,7 @@ export function validateSourceControllerInput(value: unknown, now: string): Sour
         throw new Error('source_controller_summary_binding_invalid');
     }
     if (scope.method === 'public_read') {
-      if (scope.localRead || !publicSourceGrant(scope)) throw new Error('source_controller_public_grant_missing');
+      if (scope.localRead || scope.publicRelay || !publicSourceGrant(scope)) throw new Error('source_controller_public_grant_missing');
       if (scope.summaryReadHash !== undefined && (!scope.summary || !SHA.test(scope.summaryReadHash)))
         throw new Error('source_controller_summary_binding_invalid');
       if (scope.summary && (!SHA.test(scope.summaryReadHash || '') || scope.summary.visibility !== 'public'
@@ -163,16 +188,54 @@ export function validateSourceControllerInput(value: unknown, now: string): Sour
         || scope.summary.contentForm !== (scope.contentScope==='transcript' ? 'transcript_excerpt' : 'research_summary')))
         throw new Error('source_controller_summary_binding_invalid');
     } else {
-      if (scope.rights.basis !== 'authorized_local_summary' || !object(scope.localRead) || scope.summaryReadHash)
+      if (scope.rights.basis !== (scope.method === 'public_summary_relay' ? 'public_summary_relay' : 'authorized_local_summary') || !object(scope.localRead) || scope.summaryReadHash)
         throw new Error('source_controller_local_boundary_invalid');
-      keys(scope.localRead, ['attemptedAt','outcome','errorCode']);
-      if (!instant(scope.localRead.attemptedAt) || Date.parse(scope.localRead.attemptedAt) > Date.parse(now)
-        || Date.parse(scope.localRead.attemptedAt) < Date.parse(now) - 35 * 3600_000
-        || Date.parse(scope.rights.checkedAt) > Date.parse(scope.localRead.attemptedAt)
+      keys(scope.localRead, ['attemptedAt','completedAt','readSurfaceUrl','outcome','errorCode']);
+      if (!instant(scope.localRead.attemptedAt) || sourceControllerInstant(scope.localRead.attemptedAt) > sourceControllerInstant(now)
+        || sourceControllerInstant(scope.localRead.attemptedAt) < sourceControllerInstant(now) - BigInt(35 * 3600_000) * BigInt(1_000_000)
+        || scope.localRead.completedAt !== undefined && (!instant(scope.localRead.completedAt)
+          || sourceControllerInstant(scope.localRead.completedAt) < sourceControllerInstant(scope.localRead.attemptedAt)
+          || sourceControllerInstant(scope.localRead.completedAt) > sourceControllerInstant(now))
+        || scope.localRead.readSurfaceUrl !== undefined && !sourceCitationAllowed(scope.platform,scope.localRead.readSurfaceUrl)
+        || scope.method === 'local_authorized_summary' && scope.localRead.completedAt === undefined && sourceControllerInstant(scope.rights.checkedAt) > sourceControllerInstant(scope.localRead.attemptedAt)
+        || scope.localRead.completedAt !== undefined && scope.summary !== undefined
+          && sourceControllerInstant(scope.summary.observedAt) < sourceControllerInstant(scope.localRead.attemptedAt)
         || !['read_success','read_failed','auth_required','metadata_only','missing_transcript'].includes(scope.localRead.outcome)
         || scope.localRead.errorCode !== undefined && (typeof scope.localRead.errorCode!=='string' || !/^[a-z0-9_]{3,100}$/u.test(scope.localRead.errorCode)))
         throw new Error('source_controller_local_receipt_invalid');
-      if (scope.summary && (scope.summary.visibility !== 'authenticated_summary'
+      if (scope.method === 'public_summary_relay') {
+        const relay = scope.publicRelay;
+        if (!object(relay)) throw new Error('source_controller_public_relay_invalid');
+        keys(relay, ['observer','observedAt','publication','acquisition','pendingSummary']);
+        if (!text(relay.observer,100) || !instant(relay.observedAt)
+          || !instant(scope.localRead.completedAt)
+          || sourceControllerInstant(relay.observedAt) < sourceControllerInstant(scope.localRead.attemptedAt)
+          || sourceControllerInstant(relay.observedAt) > sourceControllerInstant(scope.localRead.completedAt) || !object(relay.publication)
+          || !object(relay.acquisition))
+          throw new Error('source_controller_public_relay_invalid');
+        keys(relay.acquisition, ['responseSha256','responseBytes','readSurfaceUrl']);
+        if (!SHA.test(relay.acquisition.responseSha256) || !Number.isInteger(relay.acquisition.responseBytes)
+          || relay.acquisition.responseBytes < 1 || relay.acquisition.responseBytes > SOURCE_CONTROLLER_LIMITS.bodyBytes
+          || !sourceCitationAllowed(scope.platform,relay.acquisition.readSurfaceUrl)
+          || relay.acquisition.readSurfaceUrl !== (scope.localRead.readSurfaceUrl || scope.url))
+          throw new Error('source_controller_public_relay_acquisition_invalid');
+        keys(relay.publication, ['precision','value']);
+        const {precision,value} = relay.publication;
+        if (!['instant','date','unverified_timezone','unknown'].includes(precision)
+          || precision === 'instant' && (!instant(value) || sourceControllerInstant(value) > sourceControllerInstant(relay.observedAt))
+          || precision === 'date' && (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/u.test(value)
+            || !Number.isFinite(Date.parse(value+'T00:00:00Z')) || new Date(value+'T00:00:00Z').toISOString().slice(0,10)!==value
+            || value > new Date(Number(sourceControllerInstant(relay.observedAt)/BigInt(1_000_000))+8*3600_000).toISOString().slice(0,10))
+          || precision === 'unknown' && value !== null
+          || precision === 'unverified_timezone' && !text(value,80)
+          || relay.pendingSummary !== undefined && !text(relay.pendingSummary,600)
+          || precision !== 'instant' && scope.summary !== undefined
+          || scope.summary && (scope.summary.publishedAt !== value || scope.summary.observedAt !== relay.observedAt
+            || scope.summary.visibility !== 'public' || scope.summary.acquisitionMethod !== 'public_document'
+            || scope.summary.contentForm !== 'research_summary'))
+          throw new Error('source_controller_public_relay_invalid');
+      } else if (scope.publicRelay) throw new Error('source_controller_public_relay_invalid');
+      if (scope.method === 'local_authorized_summary' && scope.summary && (scope.summary.visibility !== 'authenticated_summary'
         || scope.summary.acquisitionMethod !== 'authenticated_browser_summary'
         || scope.summary.contentForm !== 'research_summary')) throw new Error('source_controller_local_boundary_invalid');
     }
@@ -204,7 +267,7 @@ export function inspectSourceBody(scope: SourceScope, body: string, contentType:
     return { responseHash, bodyPresent:false, publishedAt:null, outcome:'auth_required' as const };
   const publishedMatch = /<meta\b[^>]*(?:property|name)=["'](?:article:published_time|datePublished)["'][^>]*content=["']([^"']+)["']/iu.exec(withoutCode)
     || /<time\b[^>]*datetime=["']([^"']+)["']/iu.exec(withoutCode);
-  const publishedAt = publishedMatch && instant(publishedMatch[1]) ? new Date(publishedMatch[1]).toISOString() : null;
+  const publishedAt = publishedMatch && instant(publishedMatch[1]) ? publishedMatch[1] : null;
   if (scope.contentScope === 'metadata_index') return {responseHash,bodyPresent:false,publishedAt,outcome:'metadata_only' as const};
   if (scope.url.startsWith('https://www.auo.com/') && scope.contentScope === 'article_body'
     && !/^\/(?:zh-TW|en-global)\/(?:News_Archive|Press_Release)\/detail\/[^/]+$/u.test(new URL(scope.url).pathname))
@@ -230,8 +293,8 @@ export function assembleSourceControllerRun(input: SourceControllerInput, observ
   input.scopes.forEach((scope,index) => {
     const observation=observations[index];
     if (!instant(observation.attemptedAt) || !instant(observation.completedAt)
-      || Date.parse(observation.attemptedAt) > Date.parse(observation.completedAt) || Date.parse(observation.completedAt) > Date.parse(asOf)
-      || Date.parse(observation.attemptedAt) < Date.parse(asOf) - 36 * 3600_000
+      || sourceControllerInstant(observation.attemptedAt) > sourceControllerInstant(observation.completedAt) || sourceControllerInstant(observation.completedAt) > sourceControllerInstant(asOf)
+      || sourceControllerInstant(observation.attemptedAt) < sourceControllerInstant(asOf) - BigInt(36 * 3600_000) * BigInt(1_000_000)
       || !Number.isInteger(observation.bytes) || observation.bytes < 0 || observation.bytes > SOURCE_CONTROLLER_LIMITS.bodyBytes
       || observation.responseHash !== null && !SHA.test(observation.responseHash)
       || typeof observation.bodyPresent !== 'boolean'
@@ -243,7 +306,8 @@ export function assembleSourceControllerRun(input: SourceControllerInput, observ
     const deadlineSkip=observation.outcome==='not_attempted' && observation.errorCode==='source_run_deadline'
       && observation.httpStatus===null && observation.responseHash===null && observation.bytes===0
       && observation.bodyPresent===false && observation.publishedAt===null;
-    if (scope.method==='local_authorized_summary' && !deadlineSkip && (observation.attemptedAt!==scope.localRead!.attemptedAt
+    if (scope.method!=='public_read' && !deadlineSkip && (observation.attemptedAt!==scope.localRead!.attemptedAt
+      || scope.localRead!.completedAt !== undefined && observation.completedAt !== scope.localRead!.completedAt
       || observation.outcome!==scope.localRead!.outcome || observation.httpStatus!==null
       || observation.responseHash!==null || observation.bytes!==0)) throw new Error('source_controller_local_observation_mismatch');
     if (scope.method === 'public_read' && ['read_success','metadata_only','missing_transcript'].includes(observation.outcome)
@@ -258,11 +322,11 @@ export function assembleSourceControllerRun(input: SourceControllerInput, observ
     const summary=scope.summary;
     return summary && observation.outcome==='read_success' && observation.bodyPresent
       && scope.contentScope!=='metadata_index'
-      && Date.parse(summary.observedAt)<=Date.parse(observation.attemptedAt)
-      && Date.parse(summary.publishedAt)<=Date.parse(observation.attemptedAt)
-      && (!observation.publishedAt || Date.parse(observation.publishedAt)<=Date.parse(observation.attemptedAt))
+      && sourceControllerInstant(summary.observedAt)<=sourceControllerInstant(scope.method === 'public_read' ? observation.attemptedAt : observation.completedAt)
+      && sourceControllerInstant(summary.publishedAt)<=sourceControllerInstant(observation.attemptedAt)
+      && (!observation.publishedAt || sourceControllerInstant(observation.publishedAt)<=sourceControllerInstant(observation.attemptedAt))
       && (scope.method!=='public_read' || scope.summaryReadHash===observation.responseHash
-        && (!observation.publishedAt || Date.parse(summary.publishedAt)===Date.parse(observation.publishedAt)))
+        && (!observation.publishedAt || sourceControllerInstant(summary.publishedAt)===sourceControllerInstant(observation.publishedAt)))
       ? [summary] : [];
   });
   const receipts = input.scopes.map((scope,index) => {
@@ -270,22 +334,25 @@ export function assembleSourceControllerRun(input: SourceControllerInput, observ
     let outcome: SourceOutcome = observation.outcome;
     let errorCode: string | null = observation.errorCode;
     let accepted: ResearchInboxItem | null = null;
-    if (observation.publishedAt && (!instant(observation.publishedAt) || Date.parse(observation.publishedAt) > Date.parse(observation.attemptedAt))) {
+    if (observation.publishedAt && (!instant(observation.publishedAt) || sourceControllerInstant(observation.publishedAt) > sourceControllerInstant(observation.attemptedAt))) {
       outcome='future_source'; errorCode='source_future_publication';
     } else if (outcome === 'read_success') {
       if (!observation.bodyPresent || scope.contentScope === 'metadata_index') { outcome='metadata_only'; errorCode='source_metadata_only'; }
+      else if (scope.method === 'public_summary_relay' && scope.publicRelay!.publication.precision !== 'instant') {
+        outcome='pending_publication_precision'; errorCode='source_publication_instant_missing';
+      }
       else if (!scope.summary) { outcome='awaiting_summary'; errorCode='source_awaiting_summary'; }
       else if (scope.method === 'public_read' && scope.summaryReadHash !== observation.responseHash) {
         outcome='read_failed'; errorCode='source_summary_read_hash_mismatch';
       } else if (scope.method === 'public_read' && observation.publishedAt !== null
-        && Date.parse(scope.summary.publishedAt) !== Date.parse(observation.publishedAt)) {
+        && sourceControllerInstant(scope.summary.publishedAt) !== sourceControllerInstant(observation.publishedAt)) {
         // Exact bytes alone cannot certify a supplied earlier publication time.
         // Keep both clocks visible and reject rather than backdate the root.
         outcome='read_failed'; errorCode='source_summary_publication_conflict';
       } else {
         const summary=scope.summary;
-        if (Date.parse(summary.observedAt) > Date.parse(observation.attemptedAt)
-          || Date.parse(summary.publishedAt) > Date.parse(observation.attemptedAt)) throw new Error('source_controller_future_summary');
+        if (sourceControllerInstant(summary.observedAt) > sourceControllerInstant(scope.method === 'public_read' ? observation.attemptedAt : observation.completedAt)
+          || sourceControllerInstant(summary.publishedAt) > sourceControllerInstant(observation.attemptedAt)) throw new Error('source_controller_future_summary');
         // Retain original discovery time across edits and reposts. No new root
         // is inferred merely from a different publisher URL.
         let parent = summary.parentSourceUrl || null;
@@ -297,8 +364,8 @@ export function assembleSourceControllerRun(input: SourceControllerInput, observ
           // retained/accepted revisions use the latest revision clock, never
           // input order; conflicting heads at the same instant fail closed.
           const ancestors=[...prior,...acquiredSummaries].filter((item)=>item.sourceUrl===parent);
-          const latest=Math.max(...ancestors.map((item)=>Date.parse(item.revisionObservedAt || item.observedAt)));
-          const heads=ancestors.filter((item)=>Date.parse(item.revisionObservedAt || item.observedAt)===latest);
+          const latest=ancestors.map((item)=>sourceControllerInstant(item.revisionObservedAt || item.observedAt)).sort((a,b)=>a<b ? 1 : a>b ? -1 : 0)[0];
+          const heads=ancestors.filter((item)=>sourceControllerInstant(item.revisionObservedAt || item.observedAt)===latest);
           if (new Set(heads.map(researchInboxContentHash)).size>1) throw new Error('source_controller_ancestor_revision_conflict');
           const ancestor=heads[0];
           if (!ancestor?.parentSourceUrl) break;
@@ -306,7 +373,7 @@ export function assembleSourceControllerRun(input: SourceControllerInput, observ
         }
         const previous=[...prior,...items].filter((item)=>item.sourceUrl===summary.sourceUrl);
         const first=[summary.firstObservedAt || summary.observedAt,...previous.map((item)=>item.firstObservedAt || item.observedAt)]
-          .sort((a,b)=>Date.parse(a)-Date.parse(b))[0];
+          .sort((a,b)=>sourceControllerInstant(a)<sourceControllerInstant(b) ? -1 : sourceControllerInstant(a)>sourceControllerInstant(b) ? 1 : 0)[0];
         accepted={...summary,parentSourceUrl:parent,firstObservedAt:first,
           revisionObservedAt:summary.revisionObservedAt || summary.observedAt};
         checkedItem(accepted,asOf);
@@ -322,7 +389,7 @@ export function assembleSourceControllerRun(input: SourceControllerInput, observ
     if (errorCode && !/^[a-z0-9_]{3,100}$/u.test(errorCode)) errorCode='source_read_failed';
     const receipt={ policyVersion:SOURCE_CONTROLLER_POLICY,runId:input.runId,scopeId:scope.id,
       platform:scope.platform,sourceUrl:scope.url,scope:scope.scope,method:scope.method,contentScope:scope.contentScope,
-      rights:scope.rights,attemptedAt:observation.attemptedAt,completedAt:observation.completedAt,
+      rights:scope.rights,...(scope.localRead?.readSurfaceUrl ? {readSurfaceUrl:scope.localRead.readSurfaceUrl} : {}),...(scope.publicRelay ? {publicRelay:scope.publicRelay,vmHttpRead:false,historicalPITEligible:false} : {}),attemptedAt:observation.attemptedAt,completedAt:observation.completedAt,
       readOutcome:observation.outcome,outcome,httpStatus:observation.httpStatus,bytes:observation.bytes,
       readAttempted:observation.outcome!=='not_attempted',
       bodyPresent:observation.bodyPresent,responseHash:observation.responseHash,
